@@ -20,6 +20,9 @@ dungeon-start:
 dungeon-area: []
 
 # 每日首通窗宝箱（表 2.3-B）— 参战 MM 掉落另见 EmberCalamity.yml
+# 2026-09-26 注意（暂未修 <player.name>）：本本无票/无权限门，任何玩家可 /dp start EmberCalamity（ember_calamity 菜单 T 位也可点）。
+#   一旦改成 %player_name%，每次通关必发 T3 护符 + 材料 = 无限刷。先加门（仅 OP / 票 / 次数）再改占位符。
+#   注：Boss 的 MM onDeath 掉落 + CoreRpg kill_rewards 在此实例里本来就会发（不经本段）。
 dungeon-reward-script:
   - "$message{type=text;text=§a灾厄暂息。§7全服共享了这一剑。§8（日箱限领后期接线）} @dungeon"
   - "$command{text=ni give <player.name> mat_ember_core_fragment 2;console=true} @player"

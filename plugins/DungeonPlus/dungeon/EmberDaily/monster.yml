@@ -17,7 +17,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-40,65,275;amount=2;scattered=2.5;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-42,65,273;amount=2;scattered=2.5;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=8} @system"
+    # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
+    - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=4} @system"
     start:
     - "$message{type=text;text=§e【庭院·混响】第二波：僵尸+骷髅 —— 先清远程} @dungeon"
     end:

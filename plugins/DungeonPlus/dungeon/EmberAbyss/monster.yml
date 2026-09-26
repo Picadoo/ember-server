@@ -1,6 +1,7 @@
 # 深渊 · Display：余烬深渊·潮尸/骨潮/混潮/蛮层/看守
 # 冲层+撤离：docs/ember-abyss-evacuate-spec.md · DESIGN-ember-abyss-evacuate.md
 # 清层 end：progress N → 播报+撤离提示 → 下一层（顶层 COMPLETE）
+# 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
 groups:
   floor1:
   - monster:
@@ -10,7 +11,7 @@ groups:
     start:
     - "$message{type=text;text=§5—— 第 §f1 §5层 —— §7潮尸×4} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 1;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 1;console=true} @player"
     - "$message{type=text;text=§a第 1 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$monstergroup{group=floor2;repeat=false;delay=3} @dungeon"
@@ -25,7 +26,7 @@ groups:
     start:
     - "$message{type=text;text=§5—— 第 §f2 §5层 —— §7混潮+骨潮} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 2;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 2;console=true} @player"
     - "$message{type=text;text=§a第 2 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$monstergroup{group=floor3;repeat=false;delay=3} @dungeon"
@@ -35,11 +36,12 @@ groups:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-40,65,275;amount=4;scattered=2.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=余烬深渊·骨潮;amount=7} @system"
+    # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
+    - "$kill{mobname=余烬深渊·骨潮;amount=4} @system"
     start:
     - "$message{type=text;text=§5—— 第 §f3 §5层 —— §7骨潮加压} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 3;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 3;console=true} @player"
     - "$message{type=text;text=§a第 3 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$monstergroup{group=floor4;repeat=false;delay=3} @dungeon"
@@ -54,7 +56,7 @@ groups:
     start:
     - "$message{type=text;text=§c—— 第 §f4 §5层 —— §7蛮层} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 4;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 4;console=true} @player"
     - "$message{type=text;text=§a第 4 层通过 · 看守将至} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$monstergroup{group=floor5;repeat=false;delay=3} @dungeon"
@@ -68,7 +70,7 @@ groups:
     start:
     - "$message{type=text;text=§4—— 第 §f5 §5层 —— §c看守凝视！躲开视线再打} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 5;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 5;console=true} @player"
     - "$message{type=text;text=§a第 5 层通过 · 继续下潜或撤离} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$monstergroup{group=floor6;repeat=false;delay=3} @dungeon"
@@ -83,7 +85,7 @@ groups:
     start:
     - "$message{type=text;text=§5—— 第 §f6 §5层 —— §7潮尸加压×6} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 6;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 6;console=true} @player"
     - "$message{type=text;text=§a第 6 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$monstergroup{group=floor7;repeat=false;delay=3} @dungeon"
@@ -98,7 +100,7 @@ groups:
     start:
     - "$message{type=text;text=§5—— 第 §f7 §5层 —— §7混潮+骨潮加压} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 7;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 7;console=true} @player"
     - "$message{type=text;text=§a第 7 层通过 · 深处看守将至} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$monstergroup{group=floor8;repeat=false;delay=3} @dungeon"
@@ -113,7 +115,7 @@ groups:
     start:
     - "$message{type=text;text=§4—— 第 §f8 §5层 —— §c深处看守+蛮层！} @dungeon"
     end:
-    - "$command{text=corerpg abyss progress <player.name> 8;console=true} @player"
+    - "$command{text=corerpg abyss progress %player_name% 8;console=true} @player"
     - "$message{type=text;text=§a第 8 层通过 · 本期顶层通关结算} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
     - "$end{type=text;text=§5余烬深渊 顶层通关！按最高层结算中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"

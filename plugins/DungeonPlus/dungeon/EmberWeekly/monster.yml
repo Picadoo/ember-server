@@ -16,7 +16,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,275;amount=3;scattered=3.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberWeeklySkeleton;location=-42,65,273;amount=4;scattered=3.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=深核廊僵尸,深核廊骷髅;amount=13} @system"
+    # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
+    - "$kill-any{mobname=深核廊僵尸,深核廊骷髅;amount=7} @system"
     start:
     - "$message{type=text;text=§e【深核·中核】混合增压：远程优先} @dungeon"
     end:

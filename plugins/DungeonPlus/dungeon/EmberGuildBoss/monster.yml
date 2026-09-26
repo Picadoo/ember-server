@@ -1,13 +1,14 @@
 # 轻量盟 Boss：2 波杂兵/精英 + EmberCalamityBoss
 # MM：EmberAbyssZombie / EmberAbyssSkeleton / EmberAbyssBrute / EmberCalamityBoss（已有，无新 MM）
-# $kill Display（无颜色）：余烬深渊僵尸 / 骷髅 / 蛮兵 / 余烬灾厄使
+# $kill Display（无颜色）：余烬深渊·潮尸 / 余烬深渊·骨潮 / 余烬深渊·蛮层 / 余烬灾厄使
 groups:
   wave1:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-40,65,275;amount=4;scattered=3.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=2;scattered=3.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=余烬深渊僵尸,余烬深渊骷髅;amount=6} @system"
+    # 2026-09-26 修：mobname 须与 MM Display 去色一致（EmberAbyss* 实际是 余烬深渊·潮尸/骨潮/蛮层），原名永不匹配 → 卡波
+    - "$kill-any{mobname=余烬深渊·潮尸,余烬深渊·骨潮;amount=6} @system"
     start:
     - "$message{type=text;text=§6盟 Boss 波次 1：§7深渊潮 · 僵尸与骨鸣} @dungeon"
     end:
@@ -20,7 +21,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,276;amount=2;scattered=2.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=余烬深渊蛮兵;amount=1} @system"
+    # 2026-09-26 修：mobname 须与 MM Display 去色一致（EmberAbyss* 实际是 余烬深渊·潮尸/骨潮/蛮层），原名永不匹配 → 卡波
+    - "$kill{mobname=余烬深渊·蛮层;amount=1} @system"
     start:
     - "$message{type=text;text=§d精英：§f余烬深渊蛮兵} @dungeon"
     end:

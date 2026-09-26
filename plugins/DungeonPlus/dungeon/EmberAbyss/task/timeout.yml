@@ -2,8 +2,9 @@
 auto-start:
   - "timeout false timing"
 
+# 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
 timeout:
   - 1500:
       - "$message{type=text;text=§c深渊合拢。强制结算最高层（深渊票不返还）} @dungeon"
-      - "$command{text=corerpg abyss settle <player.name>;console=true} @player"
+      - "$command{text=corerpg abyss settle %player_name%;console=true} @player"
       - "$end{type=text;text=§c余烬深渊 超时 · 已按最高层结算;reward=false;delay=1;end-type=FAILURE} @dungeon"

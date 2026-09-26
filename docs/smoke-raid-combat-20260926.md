@@ -54,6 +54,8 @@ Boss 的 MM 概率掉落（T2/T3）两轮都没出，属于正常概率。尾刀
 
 ## 4. 服务器状态 / 异常（需要知道）
 
+> **21:40 CST 更新：** 第 1、2 条已在 `docs/smoke-dungeons-clear-20260926.md` 里处理：Daily/Weekly/Abyss 已修复并实测 PASS；另外修了 GuildBoss 的 mobname 和 Abyss floor3。Calamity/GuildBoss 的奖励占位符因为没有门控暂缓。第 3 条（ops 为空）仍然成立。
+
 1. **其他副本也有同样的 `<player.name>` 占位符 bug，没修（不在本刀范围，也没实测）：** EmberAbyss（option 5 处 + monster 8 处，含每层 `corerpg abyss progress`）、EmberCalamity 5、EmberDaily 4、EmberGuildBoss 6、EmberWeekly 7。这些副本的通关箱、结算、回城很可能也从来没执行过。照 Bug 2 改成 `%player_name%` 就行，建议单开一刀修完再实测。
 2. **同样的 kill-any 累计写法：** EmberDaily wave2 `amount=8`（本波只刷 4 只）、EmberWeekly wave2 `amount=13`（本波只刷 7 只），大概率一样卡在第二波。没改。
 3. **已按要求 de-op 全部测试机器人**：MenuBot、PassBot2、RpgBot、OpReload、AbyssBot、Tester、DpBot、SetBot、WareBot（CalKill926 和团本机器人由脚本 deop）。`server-runtime/ops.json` 现在是 `[]`，login 服本来就是空的。**现在没有任何游戏内 op**，服务器也没开 RCON，进程是 nohup 起的（没有可交互的控制台）。以后跑冒烟要先停服改 `ops.json`，或者在控制台执行 `op RpgBot`，用完再 deop。

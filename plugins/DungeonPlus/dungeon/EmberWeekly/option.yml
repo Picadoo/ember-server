@@ -19,14 +19,15 @@ dungeon-start:
 
 dungeon-area: []
 
+# 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
 dungeon-reward-script:
   - "$message{type=text;text=§6周常通关奖励已发放} @dungeon"
-  - "$command{text=ni give <player.name> mat_ember_core_fragment 3;console=true} @player"
-  - "$command{text=ni give <player.name> crystal_ember_enchant 2;console=true} @player"
-  - "$command{text=ni give <player.name> mat_ember_shard 8;console=true} @player"
-  - "$command{text=ni give <player.name> mat_ember_bone_dust 4;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_core_fragment 3;console=true} @player"
+  - "$command{text=ni give %player_name% crystal_ember_enchant 2;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_shard 8;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_bone_dust 4;console=true} @player"
   # 装备保底：固定刃（下期可改随机）
   # T1 装备阶（DESIGN-ember-growth-curve.md）— 替换原 T0 保底刃
-  - "$command{text=ni give <player.name> gear_ember_t1_blade 1;console=true} @player"
-  - "$command{text=ni give <player.name> gear_ember_t1_talisman 1;console=true} @player"
-  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"
+  - "$command{text=ni give %player_name% gear_ember_t1_blade 1;console=true} @player"
+  - "$command{text=ni give %player_name% gear_ember_t1_talisman 1;console=true} @player"
+  - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

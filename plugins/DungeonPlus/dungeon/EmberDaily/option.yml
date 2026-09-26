@@ -21,9 +21,10 @@ dungeon-start:
 dungeon-area: []
 
 # 通关箱（Boss 死后 $end reward=true 触发）— 全队每人一份
+# 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
 dungeon-reward-script:
   - "$message{type=text;text=§a通关奖励已发放} @dungeon"
-  - "$command{text=ni give <player.name> mat_ember_core_fragment 1;console=true} @player"
-  - "$command{text=ni give <player.name> crystal_ember_enchant 1;console=true} @player"
-  - "$command{text=ni give <player.name> mat_ember_shard 5;console=true} @player"
-  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_core_fragment 1;console=true} @player"
+  - "$command{text=ni give %player_name% crystal_ember_enchant 1;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_shard 5;console=true} @player"
+  - "$command{text=mvtp %player_name% ember_hub;console=true} @player"
