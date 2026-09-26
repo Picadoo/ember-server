@@ -33,3 +33,12 @@ daily_chest:
   protect_scroll_chance: 0.10
 
 gate_mvtp_on_menu: true
+
+# 2026-09-27 participant scaling (CoreRpg 1.9.1): boss damage taken ÷ (1 + per_extra·(n−1)),
+#   n = players within radius of the boss + players who hit it in the last recent_seconds (3 → ×1.3, 5 → ×1.6, 10 → ×2.35).
+#   Hurt i-frames cap team DPS, so a small factor is enough (per_extra 0.6 made 3 bots take 96 s vs 36 s solo).
+scaling:
+  enabled: true
+  radius: 32
+  recent_seconds: 20
+  per_extra: 0.15

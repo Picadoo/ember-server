@@ -8,11 +8,13 @@ const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
 const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
 const ALL = {
+  daily: { n: 1, lv: 16, blade: 'gear_ember_blade', tal: 'gear_ember_charm', eb: 0, et: 0, sharp: 0, ticket: 'ticket_ember_daily', dp: 'EmberDaily',
+    boss: /Boss 蛮兵/, done: /余烬窟·日 通关/, waves: [/第一波|【/, /第二波完成/, /Boss 蛮兵/] },
   weekly: { n: 1, lv: 20, blade: 'gear_ember_t1_blade', tal: 'gear_ember_charm', eb: 2, et: 1, ticket: 'ticket_ember_weekly', dp: 'EmberWeekly',
     boss: /【深核·终局】/, done: /深核·周 通关/, waves: [/深核·前厅/, /深核·中核/, /深核·深室/, /深核·终局/] },
   abyss: { n: 1, lv: 25, blade: 'gear_ember_t1_blade', tal: 'gear_ember_t1_talisman', eb: 3, et: 2, ticket: 'ticket_ember_abyss', dp: 'EmberAbyss',
     boss: /第 8 层 ——/, done: /余烬深渊 顶层通关/, waves: [1, 2, 3, 4, 5, 6, 7, 8].map(i => new RegExp('第 ' + i + ' 层 ——')) },
-  calamity: { n: 1, lv: 30, blade: 'gear_ember_t2_blade', tal: 'gear_ember_t1_talisman', eb: 3, et: 2 },
+  calamity: { n: Number(process.env.CALN || 1), lv: 30, blade: 'gear_ember_t2_blade', tal: 'gear_ember_t1_talisman', eb: 3, et: 2 },
   guild: { n: 2, lv: 30, blade: 'gear_ember_t2_blade', tal: 'gear_ember_t1_talisman', eb: 3, et: 2, dp: 'EmberGuildBoss',
     boss: /终局：余烬灾厄使/, done: /余烬盟约 Boss 通关/, waves: [/波次 1/, /精英：/, /终局：/] },
   raid: { n: 3, lv: 35, blade: 'gear_ember_t2_blade', tal: 'gear_ember_t2_talisman', eb: 4, et: 3, ticket: 'ticket_ember_raid', dp: 'EmberRaid',
@@ -80,7 +82,7 @@ async function runOne(D, op) {
       }
     }
     const bl = find(b, BLADE); if (bl) { await b.equip(bl, 'hand'); await wait(300) }
-    if (SHARP > 0) await c(`/enchant ${b.username} sharpness ${SHARP}`)
+    const sh = CFG.sharp != null ? CFG.sharp : SHARP; if (sh > 0) await c(`/enchant ${b.username} sharpness ${sh}`)
     await c(`/clear ${b.username} minecraft:quartz`); // noop safety
     const n0 = b.chatLog.length; b.chat('/corerpg stats'); await wait(1200); r['stats_' + b.username] = strip(since(b, n0)).slice(0, 200)
     await c(`/effect ${b.username} saturation 1 20 true`); await c(`/effect ${b.username} instant_health 1 3 true`)
@@ -94,7 +96,7 @@ async function runOne(D, op) {
   const t0 = Date.now(); const n0 = L.chatLog.length
   let bossEntity = null, bossSeenAt = null, bossDeadAt = null
   if (D === 'calamity') {
-    for (const b of bots) { await c(`/mvtp ${b.username} ember_event`, 1500); await c(`/tp ${b.username} -96.5 64 262.5`, 1000) }
+    for (const [i, b] of bots.entries()) { await c(`/mvtp ${b.username} ember_event`, 1500); await c(`/tp ${b.username} ${(-98.5 + 2 * i).toFixed(1)} 64 262.5`, 1000) }
     await c('/mm m spawn EmberCalamityBoss 1 ember_event,-96.5,64,268.5', 1000)
     L.on('entityDead', e => { if (e.name === 'wither_skeleton' && !bossDeadAt) bossDeadAt = Date.now() })
     L.on('entityGone', e => { if (e.name === 'wither_skeleton' && !bossDeadAt && bossSeenAt) bossDeadAt = Date.now() })
@@ -121,6 +123,7 @@ async function runOne(D, op) {
       if (bossDeadAt) { doneAt = bossDeadAt; break }
     } else if (CFG.done.test(log)) { doneAt = Date.now(); break }
     if (bots.every((b, i) => sts[i].deaths > 0) || /挑战失败/.test(log)) break
+    if (CFG.waves && !Object.keys(waveT).length && Date.now() - t0 > 60000) { r.startFail = log.slice(-300); break }
     await wait(250)
   }
   endHp = bots.map(b => +(b.health || 0).toFixed(1))

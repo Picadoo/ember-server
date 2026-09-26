@@ -566,7 +566,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         LivingEntity entity = event.getEntity();
         Player killer = entity.getKiller();
         if (killer == null && questService != null && !(entity instanceof Player)) killer = questService.anyPlayerDamager(entity.getUniqueId(), entity.getWorld()); // 1.8.1: last player who hit it, same world, any time
-        if (calamityService != null && calamityService.isCalamityEntity(entity)) {
+        if (calamityService != null && calamityService.isPublicCalamityBoss(entity)) { // 2026-09-27: guild-boss variant no longer settles as calamity
             calamityService.onCalamityKilled(killer);
         }
         if (killer != null && setService != null && !(entity instanceof Player)) {

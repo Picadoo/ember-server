@@ -8,9 +8,9 @@ EmberCalamityBoss:
   Display: '&4余烬灾厄使'
   Health: 1600
   Damage: 1
-  # 2026-09-27: HP attribute capped at 2048 (spigot.yml) → melee taken ×0.8 ≈ 2000 effective HP (solo Lv30 T2 ≈ 45 s)
+  # 2026-09-27: HP attribute capped at 2048 (spigot.yml) → 2000 HP, no melee reduction (solo Lv30 T2 ≈ 45 s); crowds are handled by CoreRpg participant scaling
   DamageModifiers:
-  - ENTITY_ATTACK 0.8
+  - ENTITY_ATTACK 1.0
   Options:
     MovementSpeed: 0.22
     AlwaysShowName: true

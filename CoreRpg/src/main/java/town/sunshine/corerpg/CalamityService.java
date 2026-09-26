@@ -143,6 +143,10 @@ public final class CalamityService implements Listener {
         y = firstDouble(yml, "boss.y", cfg, "calamity.location.y", 64);
         z = firstDouble(yml, "boss.z", cfg, "calamity.location.z", 0);
         amount = Math.max(1, yml.getInt("boss.amount", 1));
+        scaleEnabled = yml.getBoolean("scaling.enabled", true);
+        scaleRadius = yml.getDouble("scaling.radius", 32.0);
+        scaleRecentMs = 1000L * yml.getLong("scaling.recent_seconds", 20L);
+        scalePerExtra = yml.getDouble("scaling.per_extra", 0.15);
         spawnTemplate = yml.getString("boss.spawn_command",
                 cfg.getString("calamity.spawn_command",
                         "mm m spawn EmberCalamityBoss 1 {world},{x},{y},{z}"));
@@ -402,6 +406,11 @@ public final class CalamityService implements Listener {
         }
     }
 
+    /** The public window boss only (the guild-boss variant shares the display name but lives in a DP world). */
+    public boolean isPublicCalamityBoss(LivingEntity entity) {
+        return entity != null && entity.getWorld().getName().equals(worldName) && isCalamityEntity(entity);
+    }
+
     public boolean isCalamityEntity(LivingEntity entity) {
         if (entity == null) return false;
         String name = entity.getCustomName();
@@ -446,10 +455,73 @@ public final class CalamityService implements Listener {
         }
     }
 
+    // ---- 2026-09-27 participant scaling: public boss damage taken ÷ m(n), n = players near the boss or who hit it recently.
+    // m(n) = 1 + perExtra·(n−1) (0.15 → 3 players ×1.3, 5 ×1.6, 10 ×2.35). Vanilla hurt i-frames (10 ticks) drop most
+    // overlapping hits, so team DPS barely grows with n: measured 3 bots at ×2.2 took 96 s vs 36 s solo (config calamity.yml scaling.*)
+    private boolean scaleEnabled = true;
+    private double scaleRadius = 32.0;
+    private long scaleRecentMs = 20000L;
+    private double scalePerExtra = 0.15;
+    private final java.util.Map<UUID, Long> recentHitters = new java.util.HashMap<UUID, Long>();
+    private int lastScaleN = 0;
+    private long lastScaleAt = 0L;
+    private int cachedN = 1;
+
+    public int participantCount(LivingEntity boss) {
+        long now = System.currentTimeMillis();
+        if (now - lastScaleAt < 1000L) return cachedN;
+        lastScaleAt = now;
+        Set<UUID> ids = new HashSet<UUID>();
+        double r2 = scaleRadius * scaleRadius;
+        for (Player p : boss.getWorld().getPlayers()) {
+            if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+            if (p.getLocation().distanceSquared(boss.getLocation()) <= r2) ids.add(p.getUniqueId());
+        }
+        java.util.Iterator<java.util.Map.Entry<UUID, Long>> it = recentHitters.entrySet().iterator();
+        while (it.hasNext()) {
+            java.util.Map.Entry<UUID, Long> e = it.next();
+            if (now - e.getValue().longValue() > scaleRecentMs) { it.remove(); continue; }
+            Player p = Bukkit.getPlayer(e.getKey());
+            if (p != null && p.isOnline() && p.getWorld().equals(boss.getWorld())) ids.add(e.getKey());
+        }
+        cachedN = Math.max(1, ids.size());
+        return cachedN;
+    }
+
+    public double scaleFor(int n) {
+        return 1.0 + scalePerExtra * (n - 1);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBossDamageScale(EntityDamageByEntityEvent event) {
+        if (!scaleEnabled || !(event.getEntity() instanceof LivingEntity)) return;
+        LivingEntity boss = (LivingEntity) event.getEntity();
+        if (!boss.getWorld().getName().equals(worldName) || !isCalamityEntity(boss)) return;
+        Entity src = event.getDamager();
+        Player p = src instanceof Player ? (Player) src
+                : (src instanceof Projectile && ((Projectile) src).getShooter() instanceof Player
+                ? (Player) ((Projectile) src).getShooter() : null);
+        if (p == null) return;
+        if (!recentHitters.containsKey(p.getUniqueId())) lastScaleAt = 0L; // new hitter → recount now
+        recentHitters.put(p.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
+        int n = participantCount(boss);
+        double m = scaleFor(n);
+        if (m > 1.0001) event.setDamage(event.getDamage() / m);
+        if (n != lastScaleN) {
+            lastScaleN = n;
+            String msg = ChatColor.DARK_RED + "[余烬灾厄] " + ChatColor.GRAY + "灾厄使感应到 " + ChatColor.WHITE + n
+                    + ChatColor.GRAY + " 名挑战者 · 护体 ×" + String.format("%.1f", m);
+            for (Player q : boss.getWorld().getPlayers()) {
+                if (q.getLocation().distanceSquared(boss.getLocation()) <= 48 * 48) q.sendMessage(msg);
+            }
+            plugin.getLogger().info("Calamity scaling n=" + n + " m=" + String.format("%.2f", m));
+        }
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onBossDamaged(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof LivingEntity)) return;
-        if (!isCalamityEntity((LivingEntity) event.getEntity())) return;
+        if (!isPublicCalamityBoss((LivingEntity) event.getEntity())) return;
         if (event.getFinalDamage() <= 0) return;
         Entity src = event.getDamager();
         Player p = null;

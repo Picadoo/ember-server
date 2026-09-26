@@ -170,3 +170,10 @@ Harness: `mineflayer-tests/dungeon-balance.js` (`D=weekly,abyss,calamity,guild,r
 - A second registration from that IP was refused (`maxRegPerIp: 1`). AuthMe exempts 127.0.0.1, which is why local test bots can register many accounts.
 - If a tunnel (playit/bore) is used later, it must speak PROXY protocol, and Waterfall `proxy_protocol` must be enabled. Otherwise every player shows as the tunnel's IP.
 - The test account IpTest8968 was deleted from the AuthMe table on 2026-09-27 at 05:40 CST (row id 69); its bot password entry is removed too.
+
+## 15. Calamity public boss scales with participants (CoreRpg 1.9.1)
+- Player damage to the public calamity boss is divided by `m(n) = 1 + per_extra·(n−1)`. Here n = players within 32 blocks plus players who hit it in the last 20 s (`calamity.yml` → `scaling.*`). When n changes, nearby players see "灾厄使感应到 N 名挑战者 · 护体 ×m".
+- `per_extra` is 0.15, so 3 players → ×1.3, 5 → ×1.6, 10 → ×2.35. Vanilla hurt i-frames (10 ticks) drop most overlapping hits, so team DPS barely grows with head count. At 0.6, 3 bots took 96 s against 36 s solo.
+- MM `EmberCalamity` ENTITY_ATTACK modifier is back to 1.0.
+- Measured (T2 blade, L30, on foot): 1 bot → boss TTK 36 s, ended at 43% HP. 3 bots → 48 s, ended at 82–100% HP, 0 deaths.
+- Fix: the MONITOR damage tracking and the death settlement now check the boss's world (`ember_event`). A guild boss with the same display name no longer settles as a calamity kill.
