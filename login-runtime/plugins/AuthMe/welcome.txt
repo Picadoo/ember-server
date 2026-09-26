@@ -1,3 +1,1 @@
-Welcome {PLAYER} on {SERVER} server
-
-This server uses AuthMeReloaded protection!
+Welcome {PLAYER} to Ember (余烬)! Sending you to the hub...

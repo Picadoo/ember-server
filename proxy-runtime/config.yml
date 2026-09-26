@@ -1,0 +1,57 @@
+network_compression_threshold: 256
+remote_ping_timeout: 5000
+online_mode: false
+remote_ping_cache: -1
+forge_support: false
+max_packets_per_second: 4096
+listeners:
+- query_port: 25577
+  motd: '&6&lEmber &7余烬'
+  tab_list: GLOBAL_PING
+  query_enabled: false
+  proxy_protocol: false
+  forced_hosts: {}
+  ping_passthrough: false
+  priorities:
+  - login
+  bind_local_address: true
+  host: 0.0.0.0:25565
+  max_players: 100
+  tab_size: 60
+  force_default_server: true
+disabled_commands:
+- server
+- send
+- glist
+- find
+max_packets_data_per_second: 33554432
+player_limit: -1
+reject_transfers: true
+log_commands: false
+connection_throttle_limit: 3
+prevent_proxy_connections: false
+connection_throttle: 4000
+log_pings: false
+groups: {}
+stats: 5c85e3a7-7d82-4a63-9548-9deef5533472
+servers:
+  login:
+    motd: '&6Ember &7登录'
+    address: 127.0.0.1:25566
+    restricted: false
+  play:
+    motd: '&6Ember'
+    address: 127.0.0.1:25567
+    restricted: true
+permissions:
+  default: []
+  admin:
+  - bungeecord.command.alert
+  - bungeecord.command.end
+  - bungeecord.command.ip
+  - bungeecord.command.reload
+  - bungeecord.command.kick
+ip_forward: true
+enforce_secure_profile: false
+server_connect_timeout: 5000
+timeout: 30000

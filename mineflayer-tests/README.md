@@ -1,6 +1,6 @@
 # mineflayer-tests（Paper 1.12.2 本地冒烟）
 
-用于连接本机 Paper 1.12.2 服务端（`localhost:25565`）的小型 Mineflayer 测试工程。
+用于连接本机 Paper 1.12.2 服务端的小型 Mineflayer 测试工程。自 2026-09-26 起经代理 `localhost:25565` → 登录服 → 游玩服，用 `lib/proxy-login.js` 的 `joinPlay()` 自动登录。
 
 ## 前置条件
 

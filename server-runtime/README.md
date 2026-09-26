@@ -10,7 +10,7 @@ cd /workspace/minecraft/server-runtime
 ./stop.sh
 ```
 
-配置：`eula=true`，`online-mode=false`，`max-players=40`，端口 `25565`。
+配置：`eula=true`，`online-mode=false`，`max-players=40`，端口 `127.0.0.1:25567`（在代理 :25565 之后，`bungeecord: true`）。
 
 ## 插件
 

@@ -9,7 +9,7 @@ if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
   exit 1
 fi
 mkdir -p logs
-echo "Starting LOGIN Paper on :25566"
+echo "Starting LOGIN Paper on 127.0.0.1:25566 (behind proxy :25565)"
 nohup "$JAVA_HOME/bin/java" -Xms256M -Xmx768M -jar "$JAR" nogui \
   > logs/stdout.log 2>&1 &
 echo $! > "$PIDFILE"

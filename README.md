@@ -4,8 +4,9 @@
 
 | 服务 | 目录 | 端口 | 说明 |
 |------|------|------|------|
-| 登录服 | `login-runtime/` | **25566** | AuthMe 登录/注册（MySQL 库 `authme`） |
-| 游玩服 | `server-runtime/` | **25565** | 主玩法：CoreRpg + Core* 系列插件、NeigeItems、MythicMobs、DungeonPlus 等 |
+| 代理（公网入口） | `proxy-runtime/` | **25565** | Waterfall（Java 21），新连接先到登录服，AuthMe 登录后送往游玩服；见 `docs/proxy-20260926.md` |
+| 登录服 | `login-runtime/` | 127.0.0.1:**25566** | AuthMe 登录/注册（MySQL 库 `authme`），`bungeecord: true` |
+| 游玩服 | `server-runtime/` | 127.0.0.1:**25567** | 主玩法：CoreRpg + Core* 系列插件、NeigeItems、MythicMobs、DungeonPlus 等 |
 | 数据库 | MariaDB | 3306 | 库 `ember`（CoreRpg）+ 库 `authme`（AuthMe），用户 `ember` |
 
 > 本仓库只含**源码 + 配置 + 文档**。世界存档、所有 jar、SQL 转储在 GitHub Release
@@ -73,9 +74,9 @@ secrets/mysql-ember.env.example   数据库凭据模板（真实 secrets/mysql-e
    解压到 `tools/jdk8u504-b01`，或 `export JAVA_HOME=/path/to/jdk8` 后再启动（env.sh 会优先用已有的 `JAVA_HOME`）。
 7. **启动顺序**：
    1. MariaDB
-   2. 登录服：`login-runtime/start.sh`（:25566）
-   3. 游玩服：`server-runtime/start.sh`（:25565，默认自动选 `paper-custom.jar`）
-   停止：各目录 `./stop.sh`（先游玩服，再登录服）。
+   2. 一键：`scripts/ember-up.sh`（登录服 127.0.0.1:25566 → 游玩服 127.0.0.1:25567 → 代理 0.0.0.0:25565）
+      代理需要 Java 11+（原环境为 `tools/jdk-21.0.12.1+1`，可用 `PROXY_JAVA=/path/to/java` 覆盖）；Waterfall jar 放在 `proxy-runtime/waterfall.jar`。
+   停止：`scripts/ember-down.sh`（先代理，再游玩服，再登录服）。后端只绑 127.0.0.1，内网穿透只能指向 25565。
 8. （可选）重新构建：`Core*/` 用 Maven（`mvn package`），Paper 核心见 `Paper/` 与 `PERF-CHANGELOG-paper-nms.md`、`HOOKS.md`；
    mineflayer 测试 `cd mineflayer-tests && npm install`。
 

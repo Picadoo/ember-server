@@ -1,9 +1,9 @@
 // Real new-player path smoke (2026-09-26). Fresh non-op name NEW (default NewP<rand>).
-// 1) login server :25566 — AuthMe /register (random password, not stored); 2) play server :25565 — first spawn in ember_hub,
+// 1) proxy :25565 → login server — AuthMe /register (password in secrets/bot-passwords.json); 2) AuthMe → play — first spawn in ember_hub,
 // /ember menu → 签到, 日常 → 开始挑战 → clear → rewards + xp + return hub; 战令 free track; 商城 日票 (no cash);
 // 仓库 overview/deposit; 工坊 enchanting table (catalyst crystal) + anvil repair with shards.
 // OP_BOT (RpgBot) only observes at the hub spawn and hands out the combat buffs / starter blade (noted in report).
-const mineflayer = require('mineflayer'); const { Vec3 } = require('vec3'); const crypto = require('crypto')
+const mineflayer = require('mineflayer'); const { joinPlay } = require('./lib/proxy-login'); const { Vec3 } = require('vec3'); const crypto = require('crypto')
 const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
 const NEW = process.env.NEW || ('NewP' + Math.floor(Math.random() * 90000 + 10000))
@@ -33,17 +33,13 @@ async function click(b, name) {
 async function path(b, ...names) { await menuOpen(b); const out = []; for (const n of names) out.push(await click(b, n)); return out.join(',') }
 ;(async () => {
   const r = { name: NEW }
-  // ---- 1. login server ----
-  const lg = await mk(NEW, 25566); await wait(2500)
-  r.login_prompt = lg.chatLog.join(' | ').slice(0, 200)
-  let n = lg.chatLog.length; lg.chat(`/register ${PW} ${PW}`); await wait(3000)
-  r.register = since(lg, n).slice(0, 300)
-  r.check_register = /registered|注册成功/i.test(r.register) ? 'PASS' : 'FAIL'
-  lg.quit(); await wait(1500)
-  // ---- 2. play server ----
-  const op = await mk(OP_BOT, 25565); await wait(1000)
+  // ---- 1+2. proxy :25565 → login server (AuthMe /register) → AuthMe sends to play ----
+  const op = await joinPlay(OP_BOT, { log: false }); await wait(1000)
   op.chat('/mvtp ember_hub'); await wait(3000); const hubPos = op.entity.position.clone()
-  const b = await mk(NEW, 25565); await wait(3000)
+  const b = await joinPlay(NEW, { log: false }); b.on('message', m => console.log(`[${NEW}]`, m.toString())); await wait(1500)
+  r.register = b.authLog.slice(0, 300)
+  r.check_register = /Successfully registered/i.test(r.register) ? 'PASS' : 'FAIL'
+  let n
   r.first_spawn_seen_in_hub = !!(op.players[NEW] && op.players[NEW].entity && op.players[NEW].entity.position.distanceTo(hubPos) < 20)
   r.check_first_spawn_hub = r.first_spawn_seen_in_hub ? 'PASS' : 'FAIL'
   r.join_chat = b.chatLog.join(' | ').slice(0, 400)
@@ -133,7 +129,7 @@ async function path(b, ...names) { await menuOpen(b); const out = []; for (const
   // server-side truth: client prediction can show a ghost anvil result, so re-login and re-read inventory
   try {
     b.quit(); await wait(2500)
-    const b2 = await mk(NEW, 25565); await wait(3000)
+    const b2 = await joinPlay(NEW, { log: false }); await wait(1500)
     const bl3 = b2.inventory.items().find(i => /gear_ember_(t\d_)?blade/.test(niId(i) || ''))
     const sh3 = b2.inventory.items().find(i => niId(i) === 'mat_ember_shard')
     r.relog = { durUsed: bl3 && bl3.durabilityUsed, xp: b2.experience.level, shards: sh3 && sh3.count, enchants: bl3 && bl3.enchants }

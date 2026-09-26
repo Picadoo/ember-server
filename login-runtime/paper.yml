@@ -13,15 +13,7 @@ verbose: false
 config-version: 13
 settings:
   load-permissions-yml-before-plugins: true
-  bungee-online-mode: true
-  save-player-data: true
-  sleep-between-chunk-saves: false
-  region-file-cache-size: 256
-  save-empty-scoreboard-teams: false
-  incoming-packet-spam-threshold: 300
-  remove-invalid-statistics: false
-  use-alternative-luck-formula: false
-  min-chunk-load-threads: 2
+  bungee-online-mode: false
   suggest-player-names-when-null-tab-completions: true
   watchdog:
     early-warning-every: 5000
@@ -32,14 +24,22 @@ settings:
   book-size:
     page-max: 2560
     total-multiplier: 0.98
+  sleep-between-chunk-saves: false
+  region-file-cache-size: 256
+  save-empty-scoreboard-teams: false
+  incoming-packet-spam-threshold: 300
+  remove-invalid-statistics: false
+  use-alternative-luck-formula: false
+  save-player-data: true
+  min-chunk-load-threads: 2
   enable-player-collisions: true
   player-auto-save-rate: -1
   max-player-auto-save-per-tick: -1
 messages:
   kick:
-    authentication-servers-down: ''
     flying-player: Flying is not enabled on this server
     flying-vehicle: Flying is not enabled on this server
+    authentication-servers-down: ''
 timings:
   enabled: true
   verbose: true
@@ -69,6 +69,27 @@ world-settings:
     use-chunk-inhabited-timer: true
     queue-light-updates: false
     portal-search-radius: 128
+    optimize-explosions: false
+    use-vanilla-world-scoreboard-name-coloring: false
+    delay-chunk-unloads-by: 10s
+    max-auto-save-chunks-per-tick: 24
+    save-queue-limit-for-auto-save: 50
+    max-chunk-sends-per-tick: 81
+    max-chunk-gens-per-tick: 10
+    game-mechanics:
+      allow-permanent-chunk-loaders: false
+      scan-for-legacy-ender-dragon: true
+      disable-end-credits: false
+      disable-player-crits: false
+      disable-sprint-interruption-on-attack: false
+      shield-blocking-delay: 5
+      disable-chest-cat-detection: false
+      disable-unloaded-chunk-enderpearl-exploit: true
+      village-sieges-enabled: true
+    prevent-moving-into-unloaded-chunks: false
+    max-growth-height:
+      cactus: 3
+      reeds: 3
     fishing-time-range:
       MinimumTicks: 100
       MaximumTicks: 600
@@ -100,27 +121,6 @@ world-settings:
       push-based: false
     duplicate-uuid-resolver: saferegen
     duplicate-uuid-saferegen-delete-range: 32
-    optimize-explosions: false
-    use-vanilla-world-scoreboard-name-coloring: false
-    delay-chunk-unloads-by: 10s
-    max-auto-save-chunks-per-tick: 24
-    save-queue-limit-for-auto-save: 50
-    max-chunk-sends-per-tick: 81
-    max-chunk-gens-per-tick: 10
-    game-mechanics:
-      allow-permanent-chunk-loaders: false
-      scan-for-legacy-ender-dragon: true
-      disable-end-credits: false
-      disable-player-crits: false
-      disable-sprint-interruption-on-attack: false
-      shield-blocking-delay: 5
-      disable-chest-cat-detection: false
-      disable-unloaded-chunk-enderpearl-exploit: true
-      village-sieges-enabled: true
-    prevent-moving-into-unloaded-chunks: false
-    max-growth-height:
-      cactus: 3
-      reeds: 3
     keep-spawn-loaded-range: 4
     auto-save-interval: -1
     nether-ceiling-void-damage: false
@@ -137,8 +137,8 @@ world-settings:
     grass-spread-tick-rate: 1
     use-alternate-fallingblock-onGround-detection: false
     bed-search-radius: 1
-    non-player-arrow-despawn-rate: -1
     prevent-tnt-from-moving-in-water: false
+    non-player-arrow-despawn-rate: -1
     armor-stands-tick: true
     keep-spawn-loaded: true
     anti-xray:

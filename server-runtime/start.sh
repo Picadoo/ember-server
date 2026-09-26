@@ -48,7 +48,7 @@ if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
 fi
 
 echo "Starting Paper ($MODE): $JAR"
-echo "  port=25565 online-mode=false plugins=/workspace/minecraft/plugins"
+echo "  127.0.0.1:25567 (behind proxy :25565, bungeecord=true) plugins=/workspace/minecraft/plugins"
 nohup "$JAVA_HOME/bin/java" -Xms512M -Xmx1536M -jar "$JAR" nogui \
   > logs/stdout.log 2>&1 &
 echo $! > "$PIDFILE"
