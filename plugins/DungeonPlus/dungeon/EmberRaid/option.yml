@@ -37,7 +37,7 @@ dungeon-reward-script:
   - "$command{text=ni give %player_name% crystal_ember_enchant 2;console=true} @player"
   - "$command{text=ni give %player_name% mat_ember_shard 10;console=true} @player"
   - "$command{text=ni give %player_name% mat_ember_bone_dust 6;console=true} @player"
-  - "$command{text=ni give %player_name% gem_ember_sharp 1;console=true} @player"
+  - "$command{text=corerpg loot %player_name% raid_gem;console=true} @player"
   # 周首通保底团戒（NI acc_ember_raid_ring）
   - "$command{text=corerpg raid grant-ring %player_name%;console=true} @player"
   - "$message{type=text;text=§6周首通保底 · 余烬团戒（戒+刃=同袍套装）} @dungeon"

@@ -32,7 +32,7 @@ dungeon-reward-script:
   - "$command{text=ni give %player_name% mat_ember_shard 8;console=true} @player"
   - "$command{text=ni give %player_name% cosmetic_calamity_shard 1;console=true} @player"
   - "$command{text=ni give %player_name% mat_ember_core_fragment 1;console=true} @player"
-  - "$command{text=ni give %player_name% gem_ember_sharp 1;console=true} @player"
+  - "$command{text=corerpg loot %player_name% guild_gem;console=true} @player"
   - "$command{text=ni give %player_name% mat_ember_bone_dust 4;console=true} @player"
   # 2026-09-26：战令赛季经验 + 余烬等级经验（CoreRpg progress.yml）
   - "$command{text=corerpg progress %player_name% guild_boss_clear;console=true} @player"

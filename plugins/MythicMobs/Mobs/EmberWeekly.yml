@@ -1,3 +1,4 @@
+# 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
 # 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 周常 EmberWeekly — 房间换挡 + 双蛮兵链
 
@@ -16,8 +17,8 @@ EmberWeeklyZombie:
   Skills:
   - skill{s=EmberCryptBleed} @target ~onAttack 0.2
   - skill{s=EmberWeeklyShiftCall} @self ~onTimer:200
-  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath 0.01
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t1_blade 1"} @Self ~onDeath 0.01
 
 EmberWeeklySkeleton:
   Type: SKELETON
@@ -33,8 +34,8 @@ EmberWeeklySkeleton:
   - BOW HAND
   Skills:
   - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.22
-  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_t1_talisman 1";asop=true} @Trigger ~onDeath 0.01
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t1_talisman 1"} @Self ~onDeath 0.01
 
 EmberWeeklyBruteA:
   Type: HUSK
@@ -53,12 +54,12 @@ EmberWeeklyBruteA:
   - IRON_SWORD HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
-  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.2
   - skill{s=EmberCryptBleed} @target ~onAttack 0.25
-  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath 0.18
-  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath 0.03
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t1_blade 1"} @Self ~onDeath 0.18
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_blade 1"} @Self ~onDeath 0.03
 
 EmberWeeklyBruteB:
   Type: HUSK
@@ -77,9 +78,9 @@ EmberWeeklyBruteB:
   - IRON_AXE HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
-  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.28
   - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.12
-  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_t1_talisman 1";asop=true} @Trigger ~onDeath 0.12
-  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath 0.2
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t1_talisman 1"} @Self ~onDeath 0.12
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_blade 1"} @Self ~onDeath 0.2

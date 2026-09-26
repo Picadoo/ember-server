@@ -1,5 +1,7 @@
+# 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
 # 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 深渊 EmberAbyss — 层系数上涨（潮/骨/混/蛮/看守）
+# 2026-09-27 宝石几率下调（目标活跃玩家约 2~3 天 1 颗，见 docs/critic-fixes-20260927.md）
 # DP 可用 level= 再叠 LevelModifiers；单路径 ni give
 
 EmberAbyssZombie:
@@ -19,9 +21,9 @@ EmberAbyssZombie:
   - damage 0.8
   Skills:
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.28
-  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath 0.03
-  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath 0.02
-  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath 0.4
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_sharp 1"} @Self ~onDeath 0.003
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_steady 1"} @Self ~onDeath 0.002
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.4
 
 EmberAbyssSkeleton:
   Type: SKELETON
@@ -41,9 +43,9 @@ EmberAbyssSkeleton:
   Skills:
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.3
   - skill{s=EmberCryptSlow} @target ~onAttack 0.2
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.03
-  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath 0.02
-  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath 0.4
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_gale 1"} @Self ~onDeath 0.003
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_drain 1"} @Self ~onDeath 0.002
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath 0.4
 
 EmberAbyssMix:
   Type: ZOMBIE
@@ -63,9 +65,9 @@ EmberAbyssMix:
   Skills:
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.32
   - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.15
-  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath 0.03
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.02
-  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath 0.08
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_sharp 1"} @Self ~onDeath 0.003
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_gale 1"} @Self ~onDeath 0.002
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.08
 
 EmberAbyssBrute:
   Type: HUSK
@@ -88,14 +90,14 @@ EmberAbyssBrute:
   - damage 1.2
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
-  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.3
   - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.18
-  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath 0.03
-  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath 0.02
-  - command{c="ni give <trigger.name> mat_ember_protect_scroll 1";asop=true} @Trigger ~onDeath 0.05
-  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath 0.08
-  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath 0.01
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_sharp 1"} @Self ~onDeath 0.003
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_steady 1"} @Self ~onDeath 0.002
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_protect_scroll 1"} @Self ~onDeath 0.05
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.08
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_blade 1"} @Self ~onDeath 0.01
 
 EmberAbyssWatcher:
   Type: WITHER_SKELETON
@@ -117,12 +119,12 @@ EmberAbyssWatcher:
   - damage 1.4
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
-  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberAbyssWatcherGaze} @self ~onTimer:120
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.35
   - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.12
-  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath 0.18
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.17
-  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath 0.05
-  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath 0.03
-  - command{c="ni give <trigger.name> gear_ember_t2_talisman 1";asop=true} @Trigger ~onDeath 0.02
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_drain 1"} @Self ~onDeath 0.03
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_gale 1"} @Self ~onDeath 0.02
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_stable_charm 1"} @Self ~onDeath 0.05
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_blade 1"} @Self ~onDeath 0.03
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_talisman 1"} @Self ~onDeath 0.02

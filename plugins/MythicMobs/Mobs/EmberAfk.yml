@@ -1,3 +1,4 @@
+# 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
 # 挂机庭 ember_afk — AFK 专用轻量怪（弱于 EmberDaily）
 # 掉落单路径：MM ~onDeath + @Trigger → ni give（MythicMobs + NeigeItems；非菜单发奖）
 # 材料必掉但无蛮兵/核心/装备；弱体+刷怪 CD 压低于日本小时产出
@@ -11,11 +12,12 @@ EmberAfkZombie:
     MovementSpeed: 0.21
     AlwaysShowName: true
     PreventOtherDrops: true
+    PreventSunburn: true
   Equipment:
   - LEATHER_HELMET HEAD
   Skills:
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.08
-  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
 
 EmberAfkSkeleton:
   Type: SKELETON
@@ -26,9 +28,10 @@ EmberAfkSkeleton:
     MovementSpeed: 0.23
     AlwaysShowName: true
     PreventOtherDrops: true
+    PreventSunburn: true
   Equipment:
   - LEATHER_HELMET HEAD
   - BOW HAND
   Skills:
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.06
-  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath

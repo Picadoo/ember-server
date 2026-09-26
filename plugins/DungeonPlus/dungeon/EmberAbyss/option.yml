@@ -30,8 +30,7 @@ dungeon-area: []
 dungeon-reward-script:
   - "$message{type=text;text=§5深渊结算：按本局最高层发箱（票不退）} @dungeon"
   - "$command{text=corerpg abyss settle %player_name%;console=true} @player"
-  - "$command{text=ni give %player_name% gear_ember_t2_blade 1;console=true} @player"
-  - "$command{text=ni give %player_name% gear_ember_t2_talisman 1;console=true} @player"
+  - "$command{text=corerpg loot %player_name% abyss_t2;console=true} @player"
   # 2026-09-26：战令赛季经验 + 余烬等级经验（CoreRpg progress.yml）
   - "$command{text=corerpg progress %player_name% abyss_clear;console=true} @player"
   - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

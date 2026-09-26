@@ -1,3 +1,5 @@
+# 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
+# 2026-09-27：尾刀锋利石 1.0→0.3，其余宝石 .04→.02，新增 T3 刃/护符各 0.01（菜单「低概率T3」）。
 # 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 灾厄 EmberCalamityBoss — 阶段削甲 → 狂暴砸（少技能、可播报）
 
@@ -20,17 +22,19 @@ EmberCalamityBoss:
   - DIAMOND_SWORD HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
-  - command{c="corerpg xpreward <trigger.name> boss"} @Trigger ~onDeath
+  - command{c="corerpg mmxp <caster.uuid> boss"} @Self ~onDeath
   - skill{s=EmberCalamityShred} @self ~onTimer:140
   - skill{s=EmberCalamityRampage} @target ~onAttack 0.22
   - skill{s=EmberCryptSlow} @target ~onAttack 0.2
   - speak{m="&4余烬灾厄使&7：灰烬将吞没此地。";cooldown=25} @PlayersInRadius{r=40} ~onCombat >0 0.12
-  - command{c="ni give <trigger.name> mat_calamity_ember 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath 0.04
-  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath 0.04
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.04
-  - command{c="ni give <trigger.name> core_ember_compact 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> mat_ember_core_fragment 2";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath 0.05
-  - command{c="ni give <trigger.name> cosmetic_calamity_shard 1";asop=true} @Trigger ~onDeath 0.2
+  - command{c="corerpg mmgive <caster.uuid> mat_calamity_ember 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_sharp 1"} @Self ~onDeath 0.3
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t3_blade 1"} @Self ~onDeath 0.01
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t3_talisman 1"} @Self ~onDeath 0.01
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_steady 1"} @Self ~onDeath 0.02
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_drain 1"} @Self ~onDeath 0.02
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_gale 1"} @Self ~onDeath 0.02
+  - command{c="corerpg mmgive <caster.uuid> core_ember_compact 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 2"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_stable_charm 1"} @Self ~onDeath 0.05
+  - command{c="corerpg mmgive <caster.uuid> cosmetic_calamity_shard 1"} @Self ~onDeath 0.2
