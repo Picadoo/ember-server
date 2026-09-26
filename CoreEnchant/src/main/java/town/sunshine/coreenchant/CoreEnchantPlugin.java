@@ -39,16 +39,38 @@ public final class CoreEnchantPlugin extends JavaPlugin {
         }
     }
 
-    private static final class OfferTable {
+    static final class OfferTable {
         final String id;
         final Set<Material> materials;
         final List<SlotOffer> offers;
+        /** When non-empty the table applies to exactly these NI ids (material is ignored). */
+        final Set<String> niIds;
+        /** Per-table factory enchant allowance; null → global ni_base_enchants. */
+        final Map<Enchantment, Integer> baseEnchants;
+        /** Crystals consumed on top of the per-slot cost (tier gating). */
+        final int extraCrystals;
 
-        OfferTable(String id, Set<Material> materials, List<SlotOffer> offers) {
+        OfferTable(String id, Set<Material> materials, List<SlotOffer> offers, Set<String> niIds,
+                   Map<Enchantment, Integer> baseEnchants, int extraCrystals) {
             this.id = id;
             this.materials = materials;
             this.offers = offers;
+            this.niIds = niIds;
+            this.baseEnchants = baseEnchants;
+            this.extraCrystals = extraCrystals;
         }
+    }
+
+    /** NI id → table (tables with ni_ids). Rebuilt on reload; read on the main thread only. */
+    private final Map<String, OfferTable> niTables = new java.util.HashMap<String, OfferTable>();
+
+    OfferTable tableForNi(String niId) {
+        return niId == null ? null : niTables.get(niId);
+    }
+
+    Map<Enchantment, Integer> baseAllowanceFor(String niId) {
+        OfferTable t = tableForNi(niId);
+        return t != null && t.baseEnchants != null ? t.baseEnchants : baseAllowance;
     }
 
     private final List<OfferTable> tables = new ArrayList<OfferTable>();
@@ -66,7 +88,8 @@ public final class CoreEnchantPlugin extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         hooksAvailable = probeHooks();
-        getServer().getPluginManager().registerEvents(new BaseEnchantListener(whitelistNi, baseAllowance), this);
+        getServer().getPluginManager().registerEvents(new BaseEnchantListener(this, whitelistNi), this);
+        getServer().getPluginManager().registerEvents(new TierCrystalListener(this), this);
         Bukkit.getScheduler().runTask(this, new Runnable() {
             @Override
             public void run() {
@@ -100,6 +123,7 @@ public final class CoreEnchantPlugin extends JavaPlugin {
 
     private void loadFromConfig() {
         tables.clear();
+        niTables.clear();
         whitelistNi.clear();
         overrideVanilla = getConfig().getBoolean("override_vanilla", true);
         requireNiItem = getConfig().getBoolean("require_ni_item", false);
@@ -172,7 +196,35 @@ public final class CoreEnchantPlugin extends JavaPlugin {
                     offers.add(new SlotOffer(slot, ench, level, cost, lapis));
                 }
             }
-            tables.add(new OfferTable(id, mats, offers));
+            Set<String> niIds = new HashSet<String>();
+            if (map.get("ni_ids") instanceof List) {
+                for (Object o : (List<?>) map.get("ni_ids")) {
+                    if (o != null) {
+                        niIds.add(String.valueOf(o));
+                    }
+                }
+            }
+            Map<Enchantment, Integer> tableBase = null;
+            if (map.get("base_enchants") instanceof Map) {
+                tableBase = new java.util.HashMap<Enchantment, Integer>();
+                for (Map.Entry<?, ?> e : ((Map<?, ?>) map.get("base_enchants")).entrySet()) {
+                    Enchantment be = Enchantment.getByName(String.valueOf(e.getKey()));
+                    if (be == null) {
+                        getLogger().warning("Unknown base enchantment '" + e.getKey() + "' in table " + id);
+                        continue;
+                    }
+                    tableBase.put(be, Integer.parseInt(String.valueOf(e.getValue())));
+                }
+            }
+            int extra = map.get("extra_crystals") != null ? Math.max(0, Integer.parseInt(String.valueOf(map.get("extra_crystals")))) : 0;
+            OfferTable table = new OfferTable(id, mats, offers, niIds, tableBase, extra);
+            tables.add(table);
+            for (String ni : niIds) {
+                niTables.put(ni, table);
+                if (!whitelistNi.contains(ni)) {
+                    getLogger().warning("Table " + id + " lists NI id " + ni + " that is not in whitelist_ni_ids (it will not be enchantable).");
+                }
+            }
             getLogger().info("Loaded offer table '" + id + "' with " + offers.size() + " slot offer(s).");
         }
     }
@@ -198,6 +250,7 @@ public final class CoreEnchantPlugin extends JavaPlugin {
         EnchantNmsHooks.setCatalystNiId(catalystNiId);
 
         final List<OfferTable> localTables = new ArrayList<OfferTable>(tables);
+        final Map<String, OfferTable> localNiTables = new java.util.HashMap<String, OfferTable>(niTables);
         final Set<String> localWhitelist = new HashSet<String>(whitelistNi);
         final boolean localRequireNi = requireNiItem;
         final String localCatalystId = catalystNiId;
@@ -240,9 +293,15 @@ public final class CoreEnchantPlugin extends JavaPlugin {
                     return new EnchantNmsHooks.Offer[3];
                 }
                 List<OfferTable> matched = new ArrayList<OfferTable>();
-                for (OfferTable t : localTables) {
-                    if (t.materials.isEmpty() || t.materials.contains(item.getType())) {
-                        matched.add(t);
+                ItemInfo niInfo = ItemManager.INSTANCE.isNiItem(item);
+                OfferTable byNi = niInfo != null ? localNiTables.get(niInfo.getId()) : null;
+                if (byNi != null) {
+                    matched.add(byNi);
+                } else {
+                    for (OfferTable t : localTables) {
+                        if (t.niIds.isEmpty() && (t.materials.isEmpty() || t.materials.contains(item.getType()))) {
+                            matched.add(t);
+                        }
                     }
                 }
                 if (matched.isEmpty()) {
@@ -319,7 +378,8 @@ public final class CoreEnchantPlugin extends JavaPlugin {
             }
             for (OfferTable t : tables) {
                 sender.sendMessage("[CoreEnchant] table=" + t.id + " offers=" + t.offers.size()
-                        + " mats=" + (t.materials.isEmpty() ? "*" : t.materials.toString()));
+                        + " mats=" + (t.materials.isEmpty() ? "*" : t.materials.toString())
+                        + (t.niIds.isEmpty() ? "" : " ni=" + t.niIds) + " extra_crystals=" + t.extraCrystals);
                 for (SlotOffer o : t.offers) {
                     sender.sendMessage("  slot " + o.slot + ": " + o.enchantment.getName()
                             + " " + o.level + " cost=" + o.cost + " lapis=" + o.lapisCost);

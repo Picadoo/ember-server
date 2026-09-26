@@ -21,12 +21,12 @@ import java.util.Set;
  */
 final class BaseEnchantListener implements Listener {
 
+    private final CoreEnchantPlugin plugin;
     private final Set<String> whitelist;
-    private final Map<Enchantment, Integer> baseAllowance;
 
-    BaseEnchantListener(Set<String> whitelist, Map<Enchantment, Integer> baseAllowance) {
+    BaseEnchantListener(CoreEnchantPlugin plugin, Set<String> whitelist) {
+        this.plugin = plugin;
         this.whitelist = whitelist;
-        this.baseAllowance = baseAllowance;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -42,6 +42,7 @@ final class BaseEnchantListener implements Listener {
         if (info == null || !whitelist.contains(info.getId())) {
             return;
         }
+        Map<Enchantment, Integer> baseAllowance = plugin.baseAllowanceFor(info.getId());
         for (Map.Entry<Enchantment, Integer> e : item.getEnchantments().entrySet()) {
             Integer max = baseAllowance.get(e.getKey());
             if (max == null || e.getValue() > max) {

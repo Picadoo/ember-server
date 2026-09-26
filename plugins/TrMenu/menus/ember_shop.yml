@@ -1,6 +1,6 @@
 # 余烬商城 — DESIGN-ember-economy-monetization.md §5 + DESIGN-ember-rpg-systems.md §8.1
 # 日票：command corerpg shop buy daily_ticket + tell 回退（DESIGN-ember-cash-monthly.md）
-# 其余：日票等已可购买（tell 占位价）· 软通货用 /corerpg coin
+# 在售：月卡、战令解锁、日票、周票（均为 CoreRpg 实装 SKU）· 软通货用 /corerpg coin
 
 Title: '§6余烬 · 商城'
 
@@ -10,18 +10,18 @@ Options:
   Hide-Player-Inventory: false
   Min-Click-Delay: 200
 
+# 2026-09-26：未接线的占位货架（首充、加速券、仓库扩容、外观·刃焰红、周礼包、节日礼包）已下架，
+#   不编造价格；接上支付/发货后再加回（备份见 git 历史 c3a1ce5）。仓库扩容走 仓库菜单 / corerpg warehouse unlock。
 Layout:
   - '#########'
   - '#$ P V  #'
-  - '#A B C  #'
-  - '#D E F G#'
-  - '#H I J  #'
+  - '#A B D E#'
   - '####R####'
 
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §6[商城] §7便利·外观·特权货架 · §c不卖毕业伤害'
+    - 'tell: §6[商城] §7便利·特权货架 · §c不卖毕业伤害'
     - 'tell: §8日票可直接买 · 月卡点图标尝试购买 · 余烬币 /corerpg coin'
 
 Icons:
@@ -121,27 +121,6 @@ Icons:
         - 'command: corerpg shop buy pass_unlock'
         - 'menu: ember_pass'
 
-  C:
-    display:
-      material: emerald
-      name: '§a首充礼包'
-      lore:
-        - ''
-        - '§6热销'
-        - '§7外观称号 + 日票 ×2 + 余烬币 500'
-        - '§8一次 · 转化钩子 · 无战力碾压'
-        - ''
-        - '§c占位档 §f6 §c（示意充值档）'
-        - '§8命令：/corerpg shop buy weekly_ticket'
-        - ''
-        - '§e➥ §f查看价目'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §a[热销·首充] §7示意 6 元档：外观称号 + 日票×2 + 余烬币500（一次）'
-        - 'tell: §8晶钻/充值支付尚未接线'
-
-  # —— 便利 ——
   D:
     display:
       material: paper
@@ -181,106 +160,6 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §6[便利·周票] §7尝试购买 · 价 §f180 晶钻 §7· 限购 1/周'
         - 'command: corerpg shop buy weekly_ticket'
-
-  F:
-    display:
-      material: sugar
-      name: '§d合成加速券'
-      lore:
-        - ''
-        - '§a便利 / 养成加速'
-        - '§7一次合成少 1 碎片'
-        - '§c不省核心'
-        - '§8限购 5/日'
-        - ''
-        - '§c占位价 §f12 §c晶钻'
-        - ''
-        - '§e➥ §f查看价目'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[便利·加速券] §7占位价 §f12 晶钻§7 · 一次合成少1碎片（不省核心）· 限5/日'
-        - 'tell: §8部分货架仍在上架中'
-
-  G:
-    display:
-      material: ender chest
-      name: '§3仓库扩容'
-      lore:
-        - ''
-        - '§a便利'
-        - '§7账户扩页（后期背包插件对接）'
-        - '§8本期占位'
-        - ''
-        - '§c占位价 §f18 §c晶钻'
-        - ''
-        - '§e➥ §f查看价目'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §3[便利·仓库] §7占位价 §f18 晶钻§7 · 账户扩容（插件未接）'
-        - 'tell: §8部分货架仍在上架中'
-
-  # —— 外观 ——
-  H:
-    display:
-      material: diamond sword
-      name: '§c外观·刃焰红'
-      lore:
-        - ''
-        - '§d外观'
-        - '§7仅显示名 / Lore / 粒子'
-        - '§7属性同 §fgear_ember_blade'
-        - '§8零战力 · 主推'
-        - ''
-        - '§c占位价 §f28 §c晶钻'
-        - ''
-        - '§e➥ §f查看价目'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c[外观·刃焰红] §7占位价 §f28 晶钻§7 · 仅皮肤/Lore/粒子，属性不变'
-        - 'tell: §8部分货架仍在上架中'
-
-  # —— 礼包 ——
-  I:
-    display:
-      material: chest
-      name: '§6周礼包'
-      lore:
-        - ''
-        - '§5礼包'
-        - '§7币 + 票 + 外观组合（示意）'
-        - '§8限购 · 绑 UUID'
-        - ''
-        - '§c占位价 §f98 §c晶钻'
-        - '§8内容旋钮见 economy 文档'
-        - ''
-        - '§e➥ §f查看价目'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[礼包·周] §7占位价 §f98 晶钻§7 · 币+票+外观（限购，内容待 economy.yml）'
-        - 'tell: §8部分货架仍在上架中'
-
-  J:
-    display:
-      material: redstone
-      name: '§4节日礼包'
-      lore:
-        - ''
-        - '§5礼包'
-        - '§7节日限定组合（币+券+皮）'
-        - '§8限购 · 活动窗开启后上架'
-        - ''
-        - '§c占位价 §f198 §c晶钻'
-        - ''
-        - '§e➥ §f查看价目'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §4[礼包·节日] §7占位价 §f198 晶钻§7 · 活动窗上架 · 限购'
-        - 'tell: §8部分货架仍在上架中'
 
   R:
     display:

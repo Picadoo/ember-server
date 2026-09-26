@@ -30,6 +30,8 @@ dungeon-reward-script:
   # T1 装备阶（DESIGN-ember-growth-curve.md）— 替换原 T0 保底刃
   - "$command{text=ni give %player_name% gear_ember_t1_blade 1;console=true} @player"
   - "$command{text=ni give %player_name% gear_ember_t1_talisman 1;console=true} @player"
-  # 2026-09-26 audit：服无经验球，附魔/铁砧需要经验等级 → 通关箱给 6 级（附魔 1～3 级/次，铁砧修理约 4 级）
+  # 2026-09-26 audit：服无经验球，附魔/铁砧需要经验等级 → 通关箱给 6 级（附魔 1～3 级/次，铁砧修理 2 级/片）
   - "$command{text=xp 6L %player_name%;console=true} @player"
+  # 2026-09-26：战令赛季经验（CoreRpg progress.yml）
+  - "$command{text=corerpg passxp %player_name% weekly_clear;console=true} @player"
   - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

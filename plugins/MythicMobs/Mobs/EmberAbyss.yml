@@ -87,6 +87,8 @@ EmberAbyssBrute:
   - health 10
   - damage 1.2
   Skills:
+  # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
+  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.3
   - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.18
   - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath 0.03
@@ -114,6 +116,8 @@ EmberAbyssWatcher:
   - health 12
   - damage 1.4
   Skills:
+  # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
+  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
   - skill{s=EmberAbyssWatcherGaze} @self ~onTimer:120
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.35
   - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.12

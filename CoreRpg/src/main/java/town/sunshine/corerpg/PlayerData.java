@@ -263,6 +263,23 @@ public final class PlayerData {
     public String getPassFreeClaimDate() { return passFreeClaimDate == null ? "" : passFreeClaimDate; }
     public void setPassFreeClaimDate(String v) { passFreeClaimDate = v == null ? "" : v; dirty = true; }
 
+    /** 1.5.0: MM elite/boss level rewards (daily cap) + season pass XP. */
+    private String killLevelsDate = "";
+    private int killLevelsToday;
+    private int passXp;
+    private String passXpDate = "";
+    private int passXpToday;
+    public String getKillLevelsDate() { return killLevelsDate == null ? "" : killLevelsDate; }
+    public void setKillLevelsDate(String v) { killLevelsDate = v == null ? "" : v; dirty = true; }
+    public int getKillLevelsToday() { return killLevelsToday; }
+    public void setKillLevelsToday(int v) { killLevelsToday = Math.max(0, v); dirty = true; }
+    public int getPassXp() { return passXp; }
+    public void setPassXp(int v) { passXp = Math.max(0, v); dirty = true; }
+    public String getPassXpDate() { return passXpDate == null ? "" : passXpDate; }
+    public void setPassXpDate(String v) { passXpDate = v == null ? "" : v; dirty = true; }
+    public int getPassXpToday() { return passXpToday; }
+    public void setPassXpToday(int v) { passXpToday = Math.max(0, v); dirty = true; }
+
     public int getVipTier() { return vipTier; }
     public void setVipTier(int v) { vipTier = Math.max(0, v); dirty = true; }
 

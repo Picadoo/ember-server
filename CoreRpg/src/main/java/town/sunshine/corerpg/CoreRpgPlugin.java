@@ -84,6 +84,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private SkillService skillService;
     private SetService setService;
     private RaidService raidService;
+    private ProgressService progressService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -123,6 +124,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         skillService = new SkillService(this, dataStore);
         setService = new SetService(this, niBridge);
         raidService = new RaidService(this, dataStore, niBridge);
+        progressService = new ProgressService(this, dataStore);
         dataStore.setTalentService(talentService);
         reloadLocal();
         Bukkit.getPluginManager().registerEvents(this, this);
@@ -189,6 +191,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public CovenantService getCovenantService() { return covenantService; }
     public TalentService getTalentService() { return talentService; }
     public CashService getCashService() { return cashService; }
+    public ProgressService getProgressService() { return progressService; }
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
     public ScrapService getScrapService() { return scrapService; }
     public MailService getMailService() { return mailService; }
@@ -366,6 +369,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private void reloadLocal() {
         reloadConfig();
+        if (progressService != null) progressService.reload();
         shardNeedle = getConfig().getString("shard_name_contains", "余烬碎片");
         dustNeedle = getConfig().getString("dust_name_contains", "余烬骨尘");
         crystalNeedle = getConfig().getString("crystal_name_contains", "余烬附魔晶");
@@ -640,6 +644,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("spawn".equals(sub)) return cmdSpawn(sender, args);
         if ("coin".equals(sub)) return cmdCoin(sender, args);
         if ("sign".equals(sub)) return cmdSign(sender);
+        if ("xpreward".equals(sub)) return progressService.cmdAdminGrant(sender, args, false);
+        if ("passxp".equals(sub)) return progressService.cmdAdminGrant(sender, args, true);
         if ("activity".equals(sub)) return cmdActivity(sender, args);
         if ("bounty".equals(sub)) return cmdBounty(sender, args);
         if ("enhance".equals(sub)) return cmdEnhance(sender, args);
@@ -726,7 +732,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GRAY + "  guild|alliance [create|info|invite|accept|leave|kick|donate|boss]");
         sender.sendMessage(ChatColor.GRAY + "  arena|pvp [queue 1v1|2v2|leave|stats|claim|forfeit] · auction [list|sell|buy|cancel]");
         sender.sendMessage(ChatColor.GRAY + "  warehouse [deposit|withdraw <slot|id> [n]|unlock [coin|cash]|info <slot>]");
-        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: enhance set · calamity forceopen/forceend · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
+        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: xpreward · passxp · enhance set · calamity forceopen/forceend · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
         sender.sendMessage(ChatColor.DARK_GRAY + "  storage — 显示 yaml|mysql 与 ping");
     }
 
@@ -833,6 +839,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         p.sendMessage(ChatColor.GREEN + "[余烬] 签到成功！获得" + coinName + " §f×" + signReward
                 + ChatColor.GREEN + "，活跃 +" + signActivity
                 + ChatColor.GRAY + "（余额 " + data.getCoin() + " · 活跃 " + data.getActivity() + "）");
+        if (progressService != null) progressService.grantPassXp(p, "sign");
         refreshBoard(p);
         return true;
     }

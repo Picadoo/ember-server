@@ -51,6 +51,8 @@ EmberRaidElite:
   - IRON_LEGGINGS LEGS
   - IRON_SWORD HAND
   Skills:
+  # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
+  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
   - skill{s=EmberRaidCallout} @target ~onAttack 0.12
   - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.15
   - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
@@ -75,6 +77,8 @@ EmberRaidBoss:
   - DIAMOND_BOOTS FEET
   - DIAMOND_SWORD HAND
   Skills:
+  # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
+  - command{c="corerpg xpreward <trigger.name> boss"} @Trigger ~onDeath
   - skill{s=EmberRaidCallout} @target ~onAttack 0.2
   - skill{s=EmberRaidSmash} @target ~onAttack 0.16
   - skill{s=EmberRaidSummonAid} @self ~onTimer:160

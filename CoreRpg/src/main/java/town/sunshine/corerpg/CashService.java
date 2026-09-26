@@ -56,6 +56,8 @@ public final class CashService {
     // light VIP stub
     private boolean vipEnabled = true;
     private int vipDailyClaimCoin = 120;
+    /** 1.5.0: tier 0 (no 勋阶) gets only a token amount. */
+    private int vipTier0ClaimCoin = 20;
 
     public CashService(JavaPlugin plugin, NiBridge ni, PlayerDataStore dataStore) {
         this.plugin = plugin;
@@ -142,9 +144,11 @@ public final class CashService {
         if (vip != null) {
             vipEnabled = vip.getBoolean("enabled", true);
             vipDailyClaimCoin = vip.getInt("daily_claim_coin", 120);
+            vipTier0ClaimCoin = vip.getInt("tier0_daily_claim_coin", 20);
         } else {
             vipEnabled = true;
             vipDailyClaimCoin = 120;
+            vipTier0ClaimCoin = 20;
         }
 
         ConfigurationSection monthly = cfg.getConfigurationSection("monthly");
@@ -500,7 +504,7 @@ public final class CashService {
         }
         String today = DailyService.today();
         boolean claimed = today.equals(data.getVipDailyClaimDate());
-        player.sendMessage(ChatColor.GRAY + "  日礼币 " + vipDailyClaimCoin
+        player.sendMessage(ChatColor.GRAY + "  日礼币 " + (tier <= 0 ? vipTier0ClaimCoin : vipDailyClaimCoin)
                 + " · 今日：" + (claimed ? ChatColor.GREEN + "已领" : ChatColor.YELLOW + "未领 /corerpg vip claim"));
     }
 
@@ -515,7 +519,7 @@ public final class CashService {
             player.sendMessage(ChatColor.YELLOW + "[勋阶] 今日日礼已领取");
             return;
         }
-        int coin = Math.max(0, vipDailyClaimCoin);
+        int coin = Math.max(0, data.getVipTier() <= 0 ? vipTier0ClaimCoin : vipDailyClaimCoin);
         if (coin > 0) data.addCoin(coin);
         data.setVipDailyClaimDate(today);
         dataStore.flushMutation(player.getUniqueId());
@@ -550,6 +554,10 @@ public final class CashService {
         boolean claimed = DailyService.today().equals(data.getPassFreeClaimDate());
         player.sendMessage(ChatColor.AQUA + "[战令] 付费轨：" + (data.isSeasonPassPaid() ? ChatColor.GREEN + "已开通" : ChatColor.GRAY + "未开通")
                 + ChatColor.GRAY + " · 免费轨今日补给：" + (claimed ? ChatColor.GREEN + "已领" : ChatColor.YELLOW + "未领 /corerpg pass free"));
+        if (plugin instanceof CoreRpgPlugin && ((CoreRpgPlugin) plugin).getProgressService() != null) {
+            player.sendMessage(ChatColor.AQUA + "[战令] " + ChatColor.WHITE + ((CoreRpgPlugin) plugin).getProgressService().passLine(data)
+                    + ChatColor.GRAY + "（签到 / 日本 / 周本通关获得）");
+        }
     }
 
     public void cmdMonthlyShow(Player player) {

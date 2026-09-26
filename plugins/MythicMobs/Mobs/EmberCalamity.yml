@@ -19,6 +19,8 @@ EmberCalamityBoss:
   - DIAMOND_BOOTS FEET
   - DIAMOND_SWORD HAND
   Skills:
+  # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
+  - command{c="corerpg xpreward <trigger.name> boss"} @Trigger ~onDeath
   - skill{s=EmberCalamityShred} @self ~onTimer:140
   - skill{s=EmberCalamityRampage} @target ~onAttack 0.22
   - skill{s=EmberCryptSlow} @target ~onAttack 0.2

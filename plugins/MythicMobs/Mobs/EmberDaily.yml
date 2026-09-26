@@ -49,6 +49,8 @@ EmberDailyBrute:
   - IRON_CHESTPLATE CHEST
   - IRON_SWORD HAND
   Skills:
+  # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
+  - command{c="corerpg xpreward <trigger.name> elite"} @Trigger ~onDeath
   - skill{s=EmberDailyBruteTap} @target ~onAttack 0.14
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.1
   - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath

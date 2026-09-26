@@ -1,0 +1,22 @@
+# CoreRpg progress — 2026-09-26（1.5.0）
+# 规格来源：DESIGN-ember-economy-monetization.md §5.3（战令经验来源 = 挂机击杀 / 日本 / 周本，有日上限）；
+#   数值规格未给出，以下为保守取值。
+
+# 第二经验等级来源：MM 精英/首领死亡 → console: corerpg xpreward <trigger.name> elite|boss
+kill_levels:
+  enabled: true
+  levels:
+    elite: 1
+    boss: 2
+  daily_cap: 6          # 每人每日最多 +6 级（日本 3 次 ×3 级 = 9；附魔 1~3 级/次、修理 2 级/片）
+
+# 战令赛季经验：签到（内部）+ DP 日/周本通关箱 console: corerpg passxp %player_name% daily_clear|weekly_clear
+pass_xp:
+  enabled: true
+  sources:
+    sign: 10
+    daily_clear: 20
+    weekly_clear: 40
+  daily_cap: 100
+  xp_per_level: 100
+  max_level: 30         # ≈ 30 天一季、每日满额约 1 级

@@ -7,6 +7,12 @@ override_vanilla: true
 whitelist_ni_ids:
   - gear_ember_blade
   - gear_ember_charm
+  - gear_ember_t1_blade
+  - gear_ember_t1_talisman
+  - gear_ember_t2_blade
+  - gear_ember_t2_talisman
+  - gear_ember_t3_blade
+  - gear_ember_t3_talisman
 
 # 2026-09-26 audit：白名单 NI 装备自带隐藏附魔（DURABILITY 1），原版 canEnchant() 因此拒绝上桌。
 #   仅当物品身上的附魔都在此「出厂底子」范围内时放行（= 尚未桌附过，一件一次，同原版）。
@@ -18,48 +24,183 @@ require_ni_item: true
 catalyst_ni_id: crystal_ember_enchant
 reject_vanilla_lapis: true
 
+# 2026-09-26 audit：服无经验球，新号 0 级 → 旧 cost 3/8/12 永远附不了。按设计方案 B 把等级门槛压到 = 晶数（1/2/3）；
+#   原版仍要求并扣除「晶数」级经验，经验来源 = 日/周本通关箱 xp（见 DP EmberDaily/EmberWeekly）。
 # 书架略抬级，仍便宜可控（推荐方案 B：少吃等级、多吃晶）
 bookshelf_cost_bump_cap: 2
 
 offer_tables:
-  # 余烬之刃 — IRON_SWORD / gear_ember_blade
+# 2026-09-26：表按 NI id 匹配（ni_ids），T1–T3 同样「一件一次」。
+#   等级花费各阶都是 1/2/3（经验稀缺）；按阶加收附魔晶 extra_crystals：
+#   T0 1/2/3 晶 · T1 2/3/4 · T2 3/4/5 · T3 4/5/6（原版客户端按 1/2/3 亮按钮，晶不够服务端拒绝并提示）。
+#   base_enchants = 该装备出厂自带的隐藏附魔（T3 自带 DURABILITY 2 + 刃 DAMAGE_ALL 1）。
+  # T0 余烬之刃 — IRON_SWORD
   - id: ember_blade
-    materials:
-      - IRON_SWORD
+    materials: [IRON_SWORD]
+    ni_ids: [gear_ember_blade]
+    extra_crystals: 0
     offers:
       - slot: 0
         enchantment: DAMAGE_ALL
         level: 1
-        cost: 3
+        cost: 1
         lapis_cost: 1
       - slot: 1
         enchantment: DAMAGE_ALL
         level: 2
-        cost: 8
+        cost: 2
         lapis_cost: 2
       - slot: 2
         enchantment: FIRE_ASPECT
         level: 1
-        cost: 12
+        cost: 3
         lapis_cost: 3
-
-  # 余烬护符 — GOLD_NUGGET / gear_ember_charm
+  # T0 余烬护符 — GOLD_NUGGET
   - id: ember_charm
-    materials:
-      - GOLD_NUGGET
+    materials: [GOLD_NUGGET]
+    ni_ids: [gear_ember_charm]
+    extra_crystals: 0
     offers:
       - slot: 0
         enchantment: DURABILITY
         level: 1
-        cost: 3
+        cost: 1
         lapis_cost: 1
       - slot: 1
         enchantment: DURABILITY
         level: 2
-        cost: 8
+        cost: 2
         lapis_cost: 2
       - slot: 2
         enchantment: PROTECTION_ENVIRONMENTAL
         level: 1
-        cost: 10
+        cost: 3
+        lapis_cost: 3
+  # T1 精炼之刃 — DIAMOND_SWORD
+  - id: ember_t1_blade
+    materials: [DIAMOND_SWORD]
+    ni_ids: [gear_ember_t1_blade]
+    extra_crystals: 1
+    offers:
+      - slot: 0
+        enchantment: DAMAGE_ALL
+        level: 1
+        cost: 1
+        lapis_cost: 1
+      - slot: 1
+        enchantment: DAMAGE_ALL
+        level: 2
+        cost: 2
+        lapis_cost: 2
+      - slot: 2
+        enchantment: FIRE_ASPECT
+        level: 1
+        cost: 3
+        lapis_cost: 3
+  # T1 精炼护符 — EMERALD
+  - id: ember_t1_talisman
+    materials: [EMERALD]
+    ni_ids: [gear_ember_t1_talisman]
+    extra_crystals: 1
+    offers:
+      - slot: 0
+        enchantment: DURABILITY
+        level: 2
+        cost: 1
+        lapis_cost: 1
+      - slot: 1
+        enchantment: PROTECTION_ENVIRONMENTAL
+        level: 1
+        cost: 2
+        lapis_cost: 2
+      - slot: 2
+        enchantment: PROTECTION_ENVIRONMENTAL
+        level: 2
+        cost: 3
+        lapis_cost: 3
+  # T2 深核之刃 — DIAMOND_SWORD
+  - id: ember_t2_blade
+    materials: [DIAMOND_SWORD]
+    ni_ids: [gear_ember_t2_blade]
+    extra_crystals: 2
+    offers:
+      - slot: 0
+        enchantment: DAMAGE_ALL
+        level: 2
+        cost: 1
+        lapis_cost: 1
+      - slot: 1
+        enchantment: DAMAGE_ALL
+        level: 3
+        cost: 2
+        lapis_cost: 2
+      - slot: 2
+        enchantment: FIRE_ASPECT
+        level: 1
+        cost: 3
+        lapis_cost: 3
+  # T2 深核护符 — DIAMOND
+  - id: ember_t2_talisman
+    materials: [DIAMOND]
+    ni_ids: [gear_ember_t2_talisman]
+    extra_crystals: 2
+    offers:
+      - slot: 0
+        enchantment: DURABILITY
+        level: 2
+        cost: 1
+        lapis_cost: 1
+      - slot: 1
+        enchantment: PROTECTION_ENVIRONMENTAL
+        level: 2
+        cost: 2
+        lapis_cost: 2
+      - slot: 2
+        enchantment: PROTECTION_ENVIRONMENTAL
+        level: 3
+        cost: 3
+        lapis_cost: 3
+  # T3 灾厄之刃 — DIAMOND_SWORD（自带锋利 I）
+  - id: ember_t3_blade
+    materials: [DIAMOND_SWORD]
+    ni_ids: [gear_ember_t3_blade]
+    base_enchants: {DURABILITY: 2, DAMAGE_ALL: 1}
+    extra_crystals: 3
+    offers:
+      - slot: 0
+        enchantment: DAMAGE_ALL
+        level: 2
+        cost: 1
+        lapis_cost: 1
+      - slot: 1
+        enchantment: DAMAGE_ALL
+        level: 3
+        cost: 2
+        lapis_cost: 2
+      - slot: 2
+        enchantment: FIRE_ASPECT
+        level: 2
+        cost: 3
+        lapis_cost: 3
+  # T3 灾厄护符 — NETHER_STAR
+  - id: ember_t3_talisman
+    materials: [NETHER_STAR]
+    ni_ids: [gear_ember_t3_talisman]
+    base_enchants: {DURABILITY: 2}
+    extra_crystals: 3
+    offers:
+      - slot: 0
+        enchantment: DURABILITY
+        level: 3
+        cost: 1
+        lapis_cost: 1
+      - slot: 1
+        enchantment: PROTECTION_ENVIRONMENTAL
+        level: 2
+        cost: 2
+        lapis_cost: 2
+      - slot: 2
+        enchantment: PROTECTION_ENVIRONMENTAL
+        level: 3
+        cost: 3
         lapis_cost: 3
