@@ -2,14 +2,13 @@
 // start condition (REFUND-TEST) → /corerpg guild boss must refund contribution + weekly use.
 // PHASE=fail  : set contribution to 20, run guild boss, expect 启动失败（已退还…）, contribution back to 20
 // PHASE=retry : (after the condition is removed + /dp reload) run guild boss again → must start (weekly use was refunded)
-const mineflayer = require('mineflayer')
+const { joinPlay } = require('./lib/proxy-login')
 const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
 const OP_BOT = process.env.OP_BOT || 'RpgBot', L_NAME = process.env.L || 'GbR926', PHASE = process.env.PHASE || 'fail'
 function mk(name) {
-  const b = mineflayer.createBot({ host: '127.0.0.1', port: 25565, username: name, version: '1.12.2', auth: 'offline' })
-  b.chatLog = []; b.on('message', m => { const s = m.toString(); b.chatLog.push(s); console.log(`[${name}]`, s) })
-  b.on('error', e => console.log(`[${name}] ERR`, e.message)); return new Promise(res => b.once('spawn', () => res(b)))
+  // 2026-09-26: via proxy :25565 → AuthMe login → play (lib/proxy-login.js)
+  return joinPlay(name)
 }
 const since = (b, n) => b.chatLog.slice(n).join(' | ')
 async function contrib(bot) { const n = bot.chatLog.length; bot.chat('/corerpg guild info'); await wait(1200); const m = strip(since(bot, n)).match(/我的贡献\s*(\d+)/); return m ? Number(m[1]) : null }

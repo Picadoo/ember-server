@@ -5,7 +5,7 @@
 // optional mid-raid claim-ring exploit probe, optional week-rollover check (WEEK_ROLL=1, needs MYSQL_* env).
 // env: RA/RB/RC (party; RA = leader, RC fights without a blade = set negative control), OUT (non-participant),
 //      OP_BOT (operator bot), RUNS (default 2), WEEK_ROLL=1, DEOP (default on)
-const mineflayer = require('mineflayer')
+const { joinPlay, ensureLevel } = require('./lib/proxy-login')
 const { execFileSync } = require('child_process')
 const HOST = '127.0.0.1', PORT = 25565
 const RA = process.env.RA || 'RdA926', RB = process.env.RB || 'RdB926', RC = process.env.RC || 'RdC926'
@@ -17,15 +17,12 @@ const MOBS = new Set(['zombie', 'skeleton', 'husk', 'wither_skeleton'])
 const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
 
-function mk(name) {
-  const b = mineflayer.createBot({ host: HOST, port: PORT, username: name, version: '1.12.2', auth: 'offline' })
-  b.chatLog = []
+async function mk(name) {
+  // 2026-09-26: via proxy :25565 → AuthMe login → play (lib/proxy-login.js)
+  const b = await joinPlay(name)
   b.satProcs = 0
-  b.on('message', m => { const s = m.toString(); b.chatLog.push(s); console.log(`[${name}]`, s) })
-  b.on('kicked', r => console.log(`[${name}] KICKED`, r))
-  b.on('error', e => console.log(`[${name}] ERR`, e.message))
   b.on('entityEffect', (e, eff) => { if (b.entity && e === b.entity && eff.id === 23) { b.satProcs++; console.log(`[${name}] SATURATION proc #${b.satProcs}`) } })
-  return new Promise(res => b.once('spawn', () => res(b)))
+  return b
 }
 function niCounts(bot) {
   const out = {}
@@ -120,6 +117,7 @@ async function fightRun(op, bots, leader, doneRe, label, maxMs) {
     if (it) { try { await bot.equip(it, 'hand') } catch (e) { r.notes.push('equip ' + bot.username + ' ' + e.message) } }
   }
   for (const b of party) await equipWeapon(b)
+  for (const b of party) await ensureLevel(op, b, 35) // CoreRpg 1.7.0 raid gate Lv.35
 
   // raid ring status before
   for (const b of party) { const n = b.chatLog.length; b.chat('/corerpg raid'); await wait(900); r['ringStatus0_' + b.username] = since(b, n) }

@@ -36,4 +36,13 @@ function joinPlay(name, opts = {}) {
     })
   })
 }
-module.exports = { joinPlay, pwFor }
+// Since CoreRpg 1.7.0 dungeon entry is level-gated (daily 10 · weekly 20 · abyss 25 · calamity 30 · raid 35).
+// ensureLevel: op bot pushes a non-op test bot to >= lvl with `/corerpg progress <p> raid_clear` (+250 ember XP each).
+async function ensureLevel(op, bot, lvl) {
+  const cur = async () => { const n = bot.chatLog.length; bot.chat('/corerpg level'); await wait(1200)
+    const m = bot.chatLog.slice(n).join(' ').replace(/§./g, '').match(/等级 Lv\.(\d+)/); return m ? Number(m[1]) : 0 }
+  let l = await cur()
+  for (let i = 0; i < 40 && l < lvl; i++) { op.chat(`/corerpg progress ${bot.username} raid_clear`); await wait(700); if (i % 4 === 3) l = await cur() }
+  l = await cur(); console.log(`[ensureLevel] ${bot.username} Lv.${l} (want ${lvl})`); return l
+}
+module.exports = { joinPlay, pwFor, ensureLevel }

@@ -1,5 +1,5 @@
 // Real-combat Calamity window test: kill EmberCalamityBoss as a player, verify A drops / daily chest B / daily limit / no 2nd spawn.
-const mineflayer = require('mineflayer')
+const { joinPlay } = require('./lib/proxy-login')
 const HOST = '127.0.0.1', PORT = 25565
 const FIGHTER = process.env.FIGHTER || 'CalBotA'
 const WATCHER = process.env.WATCHER || 'CalWatch'
@@ -12,12 +12,8 @@ const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
 
 function mk(name) {
-  const b = mineflayer.createBot({ host: HOST, port: PORT, username: name, version: '1.12.2', auth: 'offline' })
-  b.chatLog = []
-  b.on('message', m => { const s = m.toString(); b.chatLog.push(s); console.log(`[${name}]`, s) })
-  b.on('kicked', r => console.log(`[${name}] KICKED`, r))
-  b.on('error', e => console.log(`[${name}] ERR`, e.message))
-  return new Promise(res => b.once('spawn', () => res(b)))
+  // 2026-09-26: via proxy :25565 → AuthMe login → play (lib/proxy-login.js)
+  return joinPlay(name)
 }
 function niCounts(bot) {
   const out = {}

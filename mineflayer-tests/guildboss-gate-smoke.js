@@ -3,7 +3,7 @@
 // Checks: (a) bare `/dp start EmberGuildBoss` refused for non-op team; (b) `/corerpg guild boss` with 19 contribution refused,
 // nothing spent; (c) with 20: contribution spent, dungeon starts via console, both members enter, clear, reward box once per
 // member, return to ember_hub; (d) a second bare /dp start after the run is still refused (pass is one-time).
-const mineflayer = require('mineflayer')
+const { joinPlay } = require('./lib/proxy-login')
 const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
 const OP_BOT = process.env.OP_BOT || 'RpgBot'
@@ -13,10 +13,8 @@ const DONE = /盟约周 Boss 通关奖励已发放/
 const BOX = { mat_ember_shard: 8, cosmetic_calamity_shard: 1, mat_ember_core_fragment: 1, gem_ember_sharp: 1, mat_ember_bone_dust: 4 }
 const MOBS = new Set(['zombie', 'skeleton', 'husk', 'wither_skeleton', 'stray', 'zombie_villager', 'pig_zombie', 'vindication_illager', 'iron_golem', 'blaze'])
 function mk(name) {
-  const b = mineflayer.createBot({ host: '127.0.0.1', port: 25565, username: name, version: '1.12.2', auth: 'offline' })
-  b.chatLog = []; b.on('message', m => { const s = m.toString(); b.chatLog.push(s); console.log(`[${name}]`, s) })
-  b.on('kicked', r => console.log(`[${name}] KICKED`, r)); b.on('error', e => console.log(`[${name}] ERR`, e.message))
-  return new Promise(res => b.once('spawn', () => res(b)))
+  // 2026-09-26: via proxy :25565 → AuthMe login → play (lib/proxy-login.js)
+  return joinPlay(name)
 }
 function niCounts(bot) {
   const out = {}

@@ -1,15 +1,14 @@
-const mineflayer = require('mineflayer')
-const bot = mineflayer.createBot({
-  host: '127.0.0.1', port: 25565, username: 'RpgBot', version: '1.12.2', auth: 'offline'
-})
+// 2026-09-26: via proxy :25565 → AuthMe login → play (lib/proxy-login.js)
+const { joinPlay } = require('./lib/proxy-login')
+let bot
 const chat = []
-bot.on('message', m => { const s = m.toString(); chat.push(s); console.log('[chat]', s) })
+const onMsg = m => { const s = m.toString(); chat.push(s); console.log('[chat]', s) }
 const wait = ms => new Promise(r => setTimeout(r, ms))
 async function cmd(c, ms) { console.log('[cmd]', c); bot.chat(c); await wait(ms || 1200) }
 function since(n) { return chat.slice(n).join('\n') }
 function has(n, re) { return re.test(since(n)) }
 
-bot.once('spawn', async () => {
+async function main() {
   const r = { calamity_closed: 'SKIP', forceopen: 'SKIP', status_open: 'SKIP',
     no_second_spawn: 'SKIP', forceend: 'SKIP', status_closed: 'SKIP',
     raid_grant: 'SKIP', raid_deny: 'SKIP', set_off: 'SKIP', set_on: 'SKIP',
@@ -77,7 +76,13 @@ bot.once('spawn', async () => {
     process.exit(1)
   }
   process.exit(0)
-})
-bot.on('kicked', r => { console.error('kicked', r); process.exit(1) })
-bot.on('error', e => { console.error(e); process.exit(1) })
+}
 setTimeout(() => { console.error('timeout'); process.exit(2) }, 90000)
+
+;(async () => {
+  bot = await joinPlay('RpgBot', { log: false })
+  bot.on('message', onMsg)
+  bot.on('kicked', r => { console.error('kicked', r); process.exit(1) })
+  bot.on('error', e => { console.error(e); process.exit(1) })
+  await main()
+})().catch(e => { console.error(e); process.exit(1) })
