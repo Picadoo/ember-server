@@ -381,6 +381,26 @@ public final class TalentService {
         }
     }
 
+    /**
+     * 2026-09-27 one-time migration (costs 8/7/7 → 20 per tree, points from Lv16): cap earned points at the
+     * new formula for the player's level and refund the allocation (free reset).
+     * Marker stored in PlayerData lootWeekMarks as migr_talent=20260927.
+     */
+    public void migrateOnJoin(Player player) {
+        if (!enabled) return;
+        PlayerData data = dataStore.get(player.getUniqueId());
+        String marks = ";" + data.getLootWeekMarks() + ";";
+        if (marks.contains(";migr_talent=20260927;")) return;
+        data.addLootWeekMark("migr_talent", "20260927");
+        int want = computeStartingEarned(data.getEmberLevel());
+        boolean changed = false;
+        if (data.getTalentPointsEarned() > want) { data.setTalentPointsEarned(want); changed = true; }
+        if (!data.getTalentNodes().isEmpty() || data.getTalentPointsSpent() > 0) { data.clearTalentAllocation(); changed = true; }
+        dataStore.flushMutation(player.getUniqueId());
+        if (changed) player.sendMessage(ChatColor.GOLD + "[天赋] 天赋树已调整（整棵 20 点，Lv.16 起每级 +1）：已免费洗点，可用 "
+                + data.getTalentPointsAvailable() + " 点 · /ember → 天赋");
+    }
+
     public void cmdGrant(org.bukkit.command.CommandSender sender, String playerName, String amountStr) {
         if (playerName == null || amountStr == null) {
             sender.sendMessage(ChatColor.YELLOW + "/corerpg talent grant <player> <n>");

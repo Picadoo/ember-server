@@ -70,7 +70,7 @@ chapters:
     steps:
       - type: kill
         mobs: ['EmberDaily*']
-        count: 8
+        count: 6
         complete_on: daily_clear
         desc: 在 余烬窟·日 击败守墓者
         hint: /ember → 日常本（需日票）· 本次通关也算完成

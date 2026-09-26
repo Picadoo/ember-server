@@ -559,7 +559,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public void onDeath(EntityDeathEvent event) {
         LivingEntity entity = event.getEntity();
         Player killer = entity.getKiller();
-        if (killer == null && questService != null && !(entity instanceof Player)) killer = questService.lastPlayerDamager(entity); // 1.8.1
+        if (killer == null && questService != null && !(entity instanceof Player)) killer = questService.anyPlayerDamager(entity.getUniqueId(), entity.getWorld()); // 1.8.1: last player who hit it, same world, any time
         if (calamityService != null && calamityService.isCalamityEntity(entity)) {
             calamityService.onCalamityKilled(killer);
         }
@@ -1039,22 +1039,28 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
      * (which was "Unknown" when a mob, the sun or a skill landed the final blow).
      * /corerpg mmgive <mob uuid> <niId> [n] · /corerpg mmxp <mob uuid> <elite|boss>   (console, MM ~onDeath @Self)
      */
-    private boolean mmCreditDebug = false; // flip for "mmcredit" console lines
 
     private boolean cmdMmCredit(CommandSender sender, String[] args, boolean xp) {
         if (!sender.hasPermission("corerpg.admin")) return true;
         if (args.length < 3) return true;
         UUID id;
         try { id = UUID.fromString(args[1]); } catch (IllegalArgumentException e) { return true; }
-        Player p = questService == null ? null : questService.lastPlayerDamager(id);
+        org.bukkit.entity.Entity en = Bukkit.getEntity(id);
+        Player p = null;
         String via = "hit";
-        if (p == null) {
-            via = Bukkit.getEntity(id) == null ? "gone" : "near";
-            org.bukkit.entity.Entity en = Bukkit.getEntity(id);
-            if (en instanceof LivingEntity) p = ((LivingEntity) en).getKiller();
-            if (p == null && en != null) p = QuestService.nearestPlayer(en.getLocation(), 16);
+        if (en instanceof LivingEntity) { p = ((LivingEntity) en).getKiller(); via = "killer"; }
+        if (p == null && questService != null) { p = questService.anyPlayerDamager(id, en == null ? null : en.getWorld()); via = "hit"; }
+        // nobody ever hit it → no reward (mob died to environment / despawn cleanup)
+        if (getConfig().getBoolean("debug.mm_credit", false)) {
+            String cause = "?";
+            if (en != null && en.getLastDamageCause() != null) {
+                org.bukkit.event.entity.EntityDamageEvent ld = en.getLastDamageCause();
+                cause = ld.getCause().name() + (ld instanceof org.bukkit.event.entity.EntityDamageByEntityEvent
+                        ? "/" + ((org.bukkit.event.entity.EntityDamageByEntityEvent) ld).getDamager().getType().name() : "");
+            }
+            getLogger().info("mmcredit " + args[0] + " " + args[1] + " " + args[2] + " -> " + (p == null ? "none" : p.getName())
+                    + " (" + via + ", en=" + (en == null ? "gone" : en.getType().name()) + ", last=" + cause + ")");
         }
-        if (mmCreditDebug) getLogger().info("mmcredit " + args[0] + " " + args[1] + " " + args[2] + " -> " + (p == null ? "none" : p.getName()) + " (" + via + ")");
         if (p == null || !p.isOnline()) return true;
         if (xp) {
             progressService.grantKillLevels(p, args[2]);

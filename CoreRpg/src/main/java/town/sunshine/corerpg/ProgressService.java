@@ -219,6 +219,7 @@ public final class ProgressService {
         d.setEmberXp(xp);
         if (ups > 0) {
             d.setEmberLevel(level);
+            if (talentGain > 0 && ts != null) talentGain = Math.max(0, Math.min(talentGain, ts.getMaxSpendablePoints() - d.getTalentPointsEarned()));
             if (talentGain > 0) d.setTalentPointsEarned(d.getTalentPointsEarned() + talentGain);
         }
         dataStore.flushMutation(p.getUniqueId());

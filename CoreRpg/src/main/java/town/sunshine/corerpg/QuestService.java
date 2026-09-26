@@ -200,6 +200,11 @@ public final class QuestService implements Listener {
     // ---------------- flow ----------------
 
     public void onJoin(final Player p) {
+        if (plugin.getTalentServicePublic() != null) {
+            Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+                @Override public void run() { if (p.isOnline()) plugin.getTalentServicePublic().migrateOnJoin(p); }
+            }, 60L);
+        }
         if (!enabled) return;
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override public void run() {
@@ -585,16 +590,14 @@ public final class QuestService implements Listener {
         return p != null && p.isOnline() ? p : null;
     }
 
-    /** Fallback credit: nearest living, non-spectator player within r blocks (PvE: whoever was fighting there). */
-    public static Player nearestPlayer(org.bukkit.Location l, double r) {
-        if (l == null || l.getWorld() == null) return null;
-        Player best = null; double bd = r * r;
-        for (Player p : l.getWorld().getPlayers()) {
-            if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
-            double d = p.getLocation().distanceSquared(l);
-            if (d <= bd) { bd = d; best = p; }
-        }
-        return best;
+    /** Any player who ever damaged this entity (last one wins), no time limit; must be online and in world w (null = any). */
+    public Player anyPlayerDamager(UUID id, World w) {
+        Object[] v = lastHit.get(id);
+        if (v == null) return null;
+        Player p = Bukkit.getPlayer((UUID) v[0]);
+        if (p == null || !p.isOnline()) return null;
+        if (w != null && !w.equals(p.getWorld())) return null;
+        return p;
     }
 
     private static Player playerSource(Entity damager) {

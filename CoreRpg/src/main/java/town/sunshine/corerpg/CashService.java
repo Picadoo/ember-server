@@ -570,7 +570,7 @@ public final class CashService {
                 + ChatColor.GRAY + " · 免费轨今日补给：" + (claimed ? ChatColor.GREEN + "已领" : ChatColor.YELLOW + "未领 /corerpg pass free"));
         if (plugin instanceof CoreRpgPlugin && ((CoreRpgPlugin) plugin).getProgressService() != null) {
             player.sendMessage(ChatColor.AQUA + "[战令] " + ChatColor.WHITE + ((CoreRpgPlugin) plugin).getProgressService().passLine(data)
-                    + ChatColor.GRAY + "（签到 / 日本 / 周本通关获得）");
+                    + ChatColor.GRAY + "（签到 / 日本 / 周本 / 深渊 / 团本 / 盟Boss 通关 / 悬赏获得）");
         }
     }
 

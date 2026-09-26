@@ -21,9 +21,9 @@ pass_xp:
     raid_clear: 40
     guild_boss_clear: 20
     bounty: 15           # 1.7.0 悬赏（每日 1 次领取）
-  daily_cap: 100
-  xp_per_level: 100
-  max_level: 30         # ≈ 30 天一季、每日满额约 1 级
+  daily_cap: 120        # 2026-09-27 (critic): was 100/100 → 30 days with zero misses
+  xp_per_level: 80      # 2400 total: active F2P (~85–105/day) ≈ 23–28 days, casual ≈ Lv17
+  max_level: 30
 
 # ---------------------------------------------------------------------------
 # 1.6.0 余烬等级（DESIGN-ember-growth-curve §1：emberLevel 1～60，新号 10；天赋 1 点/级，talent.yml）
