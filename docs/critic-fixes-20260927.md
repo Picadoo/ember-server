@@ -169,4 +169,4 @@ Harness: `mineflayer-tests/dungeon-balance.js` (`D=weekly,abyss,calamity,guild,r
 - A bot joining via the box LAN address 172.30.0.2 was seen as 172.30.0.2 by the proxy, by AuthMe ("registered 172.30.0.2") and by the play server.
 - A second registration from that IP was refused (`maxRegPerIp: 1`). AuthMe exempts 127.0.0.1, which is why local test bots can register many accounts.
 - If a tunnel (playit/bore) is used later, it must speak PROXY protocol, and Waterfall `proxy_protocol` must be enabled. Otherwise every player shows as the tunnel's IP.
-- The test account IpTest8968 is still registered.
+- The test account IpTest8968 was deleted from the AuthMe table on 2026-09-27 at 05:40 CST (row id 69); its bot password entry is removed too.
