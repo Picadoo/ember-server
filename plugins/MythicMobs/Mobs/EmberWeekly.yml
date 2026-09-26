@@ -5,15 +5,14 @@
 EmberWeeklyZombie:
   Type: ZOMBIE
   Display: '&6深核廊僵尸'
-  Health: 36
-  Damage: 5
+  Health: 90
+  Damage: 4
   Options:
     MovementSpeed: 0.24
     AlwaysShowName: true
     PreventOtherDrops: true
   Equipment:
   - CHAINMAIL_HELMET HEAD
-  - IRON_SWORD HAND
   Skills:
   - skill{s=EmberCryptBleed} @target ~onAttack 0.2
   - skill{s=EmberWeeklyShiftCall} @self ~onTimer:200
@@ -23,8 +22,8 @@ EmberWeeklyZombie:
 EmberWeeklySkeleton:
   Type: SKELETON
   Display: '&6深核廊骷髅'
-  Health: 30
-  Damage: 6
+  Health: 70
+  Damage: 3
   Options:
     MovementSpeed: 0.26
     AlwaysShowName: true
@@ -40,8 +39,8 @@ EmberWeeklySkeleton:
 EmberWeeklyBruteA:
   Type: HUSK
   Display: '&6深核廊蛮兵·甲'
-  Health: 70
-  Damage: 9
+  Health: 350
+  Damage: 4
   Options:
     MovementSpeed: 0.21
     AlwaysShowName: true
@@ -49,9 +48,6 @@ EmberWeeklyBruteA:
     KnockbackResistance: 0.5
   Equipment:
   - IRON_HELMET HEAD
-  - IRON_CHESTPLATE CHEST
-  - IRON_LEGGINGS LEGS
-  - IRON_SWORD HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
@@ -64,18 +60,15 @@ EmberWeeklyBruteA:
 EmberWeeklyBruteB:
   Type: HUSK
   Display: '&6深核廊蛮兵·乙'
-  Health: 70
-  Damage: 9
+  Health: 1300
+  Damage: 1
   Options:
     MovementSpeed: 0.22
     AlwaysShowName: true
     PreventOtherDrops: true
-    KnockbackResistance: 0.5
+    KnockbackResistance: 0.3
   Equipment:
   - IRON_HELMET HEAD
-  - IRON_CHESTPLATE CHEST
-  - IRON_BOOTS FEET
-  - IRON_AXE HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath

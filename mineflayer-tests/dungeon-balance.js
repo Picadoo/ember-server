@@ -28,6 +28,9 @@ async function fighter(b, st, BLADE) {
   st.minHp = 99; st.deaths = 0; st.hits = 0; st.tl = []; let dead = false; const T0 = Date.now()
   b.on('health', () => { if (b.health > 0) { st.minHp = Math.min(st.minHp, b.health); dead = false } else if (!dead) { dead = true; st.deaths++ } })
   b.on('death', () => { if (!dead) { dead = true; st.deaths++ } })
+  let lastHp = 20; b.on('health', () => { if (b.health > 0) lastHp = b.health })
+  // world changes also fire 'respawn'; only count it as a death when HP was already near zero
+  b.on('respawn', () => { if (!dead && lastHp <= 6) st.deaths++; dead = false; lastHp = 20 })
   const iv = setInterval(() => { if (st.running) st.tl.push(Math.round(b.health || 0)) }, 2000)
   while (st.running) {
     if (!b.entity || b.health <= 0) { await wait(800); continue }

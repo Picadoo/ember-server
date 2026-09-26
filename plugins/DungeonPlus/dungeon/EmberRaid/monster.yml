@@ -12,6 +12,8 @@ groups:
     start:
     - "$message{type=text;text=§9【左道】卫兵压上——左边清！} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$message{type=text;text=§a左道肃清} @dungeon"
     - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
     auto-start: false
@@ -26,6 +28,8 @@ groups:
     start:
     - "$message{type=text;text=§9【右道】射手就位——右边先压远程！} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$message{type=text;text=§a通道打开 · 精英将至} @dungeon"
     - "$monstergroup{group=wave3;repeat=false;delay=3} @dungeon"
     auto-start: false
@@ -33,19 +37,22 @@ groups:
   wave3:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberRaidElite;location=-40,65,276;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-40,65,276;amount=3;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-40,65,276;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=团本·通道精英;amount=1} @system"
     start:
     - "$message{type=text;text=§d【汇合】通道精英挡住终厅门！} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$message{type=text;text=§4终厅裂开——使徒现身！} @dungeon"
     - "$monstergroup{group=boss;repeat=false;delay=4} @dungeon"
     auto-start: false
 
   boss:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberRaidBoss;location=-40,65,276;amount=1;scattered=1.0;level=1} @dungeon"
+    # 2026-09-27: boss (wither skeleton, 2.4 tall) moved to the room centre; at z 276 it sat in the 3-high outer ring and could not step onto the 2-high quartz ledge → never reached players
+    - "$mob{plugin=MythicMobs;name=EmberRaidBoss;location=-40,65,270;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=团本·终厅使徒;amount=1} @system"
     start:

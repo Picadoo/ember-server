@@ -5,15 +5,14 @@
 EmberRaidFootman:
   Type: ZOMBIE
   Display: '&c团本·通道卫兵'
-  Health: 38
-  Damage: 6
+  Health: 200
+  Damage: 8
   Options:
     MovementSpeed: 0.25
     AlwaysShowName: true
     PreventOtherDrops: true
   Equipment:
   - IRON_HELMET HEAD
-  - IRON_SWORD HAND
   Skills:
   - skill{s=EmberCryptBleed} @target ~onAttack 0.2
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5
@@ -22,8 +21,8 @@ EmberRaidFootman:
 EmberRaidArcher:
   Type: SKELETON
   Display: '&c团本·通道射手'
-  Health: 32
-  Damage: 7
+  Health: 150
+  Damage: 4
   Options:
     MovementSpeed: 0.26
     AlwaysShowName: true
@@ -39,8 +38,8 @@ EmberRaidArcher:
 EmberRaidElite:
   Type: HUSK
   Display: '&c团本·通道精英'
-  Health: 95
-  Damage: 10
+  Health: 900
+  Damage: 13
   Options:
     MovementSpeed: 0.22
     AlwaysShowName: true
@@ -48,9 +47,6 @@ EmberRaidElite:
     KnockbackResistance: 0.5
   Equipment:
   - IRON_HELMET HEAD
-  - IRON_CHESTPLATE CHEST
-  - IRON_LEGGINGS LEGS
-  - IRON_SWORD HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
@@ -63,8 +59,11 @@ EmberRaidElite:
 EmberRaidBoss:
   Type: WITHER_SKELETON
   Display: '&c团本·终厅使徒'
-  Health: 560
-  Damage: 13
+  Health: 2000
+  Damage: 3
+  # 2026-09-27: HP attribute is capped at 2048 (spigot.yml) → melee taken ×0.45 ≈ 4450 effective HP
+  DamageModifiers:
+  - ENTITY_ATTACK 0.45
   Options:
     MovementSpeed: 0.22
     AlwaysShowName: true
@@ -73,10 +72,6 @@ EmberRaidBoss:
     MaxCombatDistance: 36
   Equipment:
   - DIAMOND_HELMET HEAD
-  - DIAMOND_CHESTPLATE CHEST
-  - DIAMOND_LEGGINGS LEGS
-  - DIAMOND_BOOTS FEET
-  - DIAMOND_SWORD HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
   - command{c="corerpg mmxp <caster.uuid> boss"} @Self ~onDeath
