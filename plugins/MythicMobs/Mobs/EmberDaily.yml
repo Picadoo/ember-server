@@ -7,8 +7,8 @@
 EmberDailyZombie:
   Type: ZOMBIE
   Display: '&a灰烬庭院僵尸'
-  Health: 20
-  Damage: 2
+  Health: 45
+  Damage: 3
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -22,7 +22,7 @@ EmberDailyZombie:
 EmberDailySkeleton:
   Type: SKELETON
   Display: '&a灰烬庭院骷髅'
-  Health: 20
+  Health: 35
   Damage: 4
   Options:
     MovementSpeed: 0.25
@@ -38,8 +38,8 @@ EmberDailySkeleton:
 EmberDailyBrute:
   Type: HUSK
   Display: '&a灰烬庭院蛮兵'
-  Health: 40
-  Damage: 4
+  Health: 110
+  Damage: 2
   Options:
     MovementSpeed: 0.2
     AlwaysShowName: true

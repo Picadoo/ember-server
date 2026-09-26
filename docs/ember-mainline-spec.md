@@ -23,6 +23,9 @@ Implemented in CoreRpg 1.8.0, revised in 1.8.1 after the 09-26 playtest (`QuestS
 
 Vanilla levels for enchanting and repair: +5 (ch1), +3 (ch2), +5 at each of Lv25/30/35, on top of the levels the DP clears already give (`Given N levels`).
 
+## Gear power (CoreRpg 1.9.0)
+The tier gear lore now actually applies (CoreRpg `StatService`, `docs/ember-gear-stats.md`). Dungeons were balanced for exactly the gear each chapter hands out: weekly with the T1 blade + T0 charm, abyss with T1 + T1 talisman, calamity and guild with the T2 blade, raid with 3× T2 + T2 talisman, with light enhance (+2…+4) and Sharpness II. Results: `docs/critic-fixes-20260927.md` round 3.
+
 ## Pacing (curve 60+12·max(0,L−10) per level)
 | Gate | XP needed | From mainline | From the steps' own sources + dailies | Sessions |
 |---|---|---|---|---|

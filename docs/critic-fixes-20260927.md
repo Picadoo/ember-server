@@ -126,5 +126,47 @@ spawn free → walk to NPC and talk → menu 挂机庭 → 10 kills on foot → 
   - The brute drops the iron sword (+6) and is 40 hp / 4 dmg.
   - The chapter 2 kill step is 6.
   - Result: the no-op bot clears solo on foot in about 30 s with 0 deaths and ends at 4 HP. The brute is killed by the player, so elite XP counts (15/150).
-- Still open: AFK skeletons also suffocate inside the spawner hill (they give no drop, which is correct, but they waste spawns).
+- AFK skeletons suffocating in the spawner hill: fixed in round 3 (§12).
 - I also tried a CoreRpg "lift suffocating mobs" handler. I reverted it because lifted mobs vanished from the room and stalled waves.
+
+# Round 3 (2026-09-27 ~03:00–05:30 CST) — real-combat balance, CoreRpg 1.9.0
+
+## 11. Gear stats were cosmetic → CoreRpg stat layer
+- AttributePlus is parked, so the lore `物理伤害 / 生命力 / 物理防御` on every Ember blade and talisman did nothing: a T2 blade was a diamond sword, and talismans added nothing.
+- CoreRpg 1.9.0 `StatService` applies lore, enhance levels, gems, reforge affixes and talent stats 1:1. Details and the per-gate player numbers are in `docs/ember-gear-stats.md`.
+- Vanilla wither-skeleton on-hit Wither (10 s, ignores defense) is stripped for players. It was the main solo boss killer.
+- MythicMobs HP is capped at 2048 (spigot.yml), so the big bosses use `DamageModifiers ENTITY_ATTACK` for effective HP. The CoreRpg bonus runs at LOWEST priority so the modifier scales the whole hit.
+
+## 12. Dungeon balance (bots on foot, non-op; op only for level, gear, tickets)
+Harness: `mineflayer-tests/dungeon-balance.js` (`D=weekly,abyss,calamity,guild,raid`).
+- Fresh non-op bots are pushed to the gate level with the mainline gear, then enhanced for real with `/corerpg enhance`, and get Sharpness II.
+- They fight with pathfinder and attack at about full charge (every 650 ms). Bots face-tank and never dodge, so real players should end a bit higher.
+- Mob weapons and body armour were removed, so `Damage` is the real number; difficulty is easy.
+- Wave-end heals: Instant Health III (16 HP) in weekly, abyss, raid and guild; II in the daily. All `scattered` values are 1.0.
+
+| Dungeon | Party | Boss TTK | End HP (display) | Key mob numbers |
+|---|---|---|---|---|
+| Weekly | 1× Lv20, T1 blade +2, T0 charm +1 | 37 s (32–38 over 3 clears) | 31 % (29–65 %) | zombie 90/4, skeleton 70, BruteA 350/4, BruteB 1300/1 (skills do the damage) |
+| Abyss (8 floors) | 1× Lv25, T1 blade +3, T1 talisman +2 | floor-8 watcher 30 s (floor 5: ~30 s) | 69 % (last), earlier 29 % / 6 % before the last cut | zombie 110/5, skel 80, mix 130/5, brute 450/4, watcher 1100/1, KB-res 0; floor 8 = watcher + mix |
+| Calamity (public boss) | 1× Lv30, T2 blade +3, T1 talisman +2 | 43 s | 52 % | 2000 HP ×0.8 melee taken, dmg 1, Rampage 2, Shred = Weakness I |
+| Guild boss | 2× Lv30, T2 | 69 s | 32 % / 100 % | own variant `EmberGuildCalamity`: 2000 ×0.45, dmg 2, KB-res 0.3; waves 5 zombies + 3 skeletons, then brute + 3 zombies |
+| Raid | 3× Lv35, T2 blade +4, T2 talisman +3 | 64 s | 69 / 17 / 40 % (avg 42 %) | footman 200/8, archer 150, elite 900/13, boss 2000 ×0.45 / dmg 3, Smash 4, SummonAid 1 footman |
+
+- **Bosses that could never fight back:** the raid boss and the guild boss spawned at z 276. That is the raid map's 3-high outer ring, and the 2.4-block-tall wither skeleton cannot step onto the 2-high quartz ledge. They now spawn at the room centre (-40,65,270). The raid numbers above are with the boss actually engaging.
+- **Large run-to-run variance:** the same weekly setup ended at 2 %, 29 %, 31 % and 65 % across runs. The tables show the last passing run for each dungeon.
+- **Daily:** retuned for the T0 stats (14 per hit, 40 HP): zombie 45/3, skeleton 35, brute 110/2, heals III.
+  - Non-op newbie retest (`newbie-path-smoke.js`, 05:30 CST): all checks PASS.
+  - AFK chapter: 45 s on the moved spawners.
+  - Daily: clear in 31 s, 0 deaths, ending at 33/40 HP. Elite XP counts (15/150).
+
+## 13. AFK skeletons suffocating
+- `EmberAfk_S1/Z1/Z2` were at Y 70 in hills where the surface is at y 69–88, so mobs spawned inside blocks.
+- They moved to flat grass west-southwest of the landing point (surface 73–75): Z1 (-51,76,230), S1 (-57,75,224), Z2 (-63,76,221), radius 4. That is more than 45 blocks from the AFK respawn.
+- The chapter 1 hint now reads "落点往西偏南五十来格的草坡", and the newbie test walks toward (-55,74,226) when no mob is in view.
+
+## 14. AuthMe per-IP limits behind Waterfall
+- Waterfall has `ip_forward: true`, and both backends have `bungeecord: true`.
+- A bot joining via the box LAN address 172.30.0.2 was seen as 172.30.0.2 by the proxy, by AuthMe ("registered 172.30.0.2") and by the play server.
+- A second registration from that IP was refused (`maxRegPerIp: 1`). AuthMe exempts 127.0.0.1, which is why local test bots can register many accounts.
+- If a tunnel (playit/bore) is used later, it must speak PROXY protocol, and Waterfall `proxy_protocol` must be enabled. Otherwise every player shows as the tunnel's IP.
+- The test account IpTest8968 is still registered.

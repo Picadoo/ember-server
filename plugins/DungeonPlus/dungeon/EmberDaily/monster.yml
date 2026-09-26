@@ -13,7 +13,7 @@ groups:
     - "$message{type=text;text=§e【庭院·清潮】第一波：回廊僵尸×2 —— 别急着冲中央} @dungeon"
     end:
     - "$message{type=text;text=§a第一波完成 · 余烬回暖（+8 生命）} @dungeon"
-    - "$command{text=effect %player_name% instant_health 1 1 true;console=true} @player"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
     auto-start: false
 
@@ -28,7 +28,7 @@ groups:
     - "$message{type=text;text=§e【庭院·混响】第二波：僵尸+骷髅 —— 先清远程} @dungeon"
     end:
     - "$message{type=text;text=§a第二波完成 · 余烬回暖 · Boss 将至} @dungeon"
-    - "$command{text=effect %player_name% instant_health 1 1 true;console=true} @player"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
     auto-start: false
 
