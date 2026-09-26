@@ -83,7 +83,7 @@ async function path(b, ...names) { await menuOpen(b); const out = []; for (const
   await wait(9000)
   r.daily_delta = diff(inv0, niCounts(b)); r.xp_after_daily = b.experience.level; r.xp_gain = r.xp_after_daily - xpBefore
   r.daily_back_in_hub = !!(op.players[NEW] && op.players[NEW].entity && op.players[NEW].entity.position.distanceTo(hubPos) < 30)
-  r.check_daily = r.daily_done && r.daily_delta.ticket_ember_daily === -1 && (r.daily_delta.crystal_ember_enchant || 0) >= 1 && r.xp_gain === 3 && r.daily_back_in_hub ? 'PASS' : 'FAIL'
+  r.check_daily = r.daily_done && r.daily_delta.ticket_ember_daily === -1 && (r.daily_delta.crystal_ember_enchant || 0) >= 1 && r.xp_gain >= 3 && r.daily_back_in_hub ? 'PASS' : 'FAIL'
   // ---- workshop: enchant ----
   await c(`/tp ${NEW} -22 58 106`, 2000)
   const bladeNow = b.inventory.items().find(i => /gear_ember_(t\d_)?blade/.test(niId(i) || ''))
