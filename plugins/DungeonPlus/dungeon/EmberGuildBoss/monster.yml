@@ -1,10 +1,12 @@
+# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
+#   see docs/critic-fixes-20260927.md §10). Map ember_raid room: x -46..-34, z 264..276
 # 轻量盟 Boss：2 波杂兵/精英 + EmberCalamityBoss
 # MM：EmberAbyssZombie / EmberAbyssSkeleton / EmberAbyssBrute / EmberCalamityBoss（已有，无新 MM）
 # $kill Display（无颜色）：余烬深渊·潮尸 / 余烬深渊·骨潮 / 余烬深渊·蛮层 / 余烬灾厄使
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-40,65,275;amount=4;scattered=3.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-40,65,276;amount=4;scattered=1.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=2;scattered=3.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：mobname 须与 MM Display 去色一致（EmberAbyss* 实际是 余烬深渊·潮尸/骨潮/蛮层），原名永不匹配 → 卡波
@@ -18,7 +20,7 @@ groups:
 
   wave2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-40,65,276;amount=1;scattered=1.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,276;amount=2;scattered=2.5;level=1} @dungeon"
     condition:
     # 2026-09-26 修：mobname 须与 MM Display 去色一致（EmberAbyss* 实际是 余烬深渊·潮尸/骨潮/蛮层），原名永不匹配 → 卡波
@@ -32,7 +34,7 @@ groups:
 
   boss:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberCalamityBoss;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberCalamityBoss;location=-40,65,276;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬灾厄使;amount=1} @system"
     start:

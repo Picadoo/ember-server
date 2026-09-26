@@ -45,14 +45,13 @@ Icons:
         - '§7记录击杀过的余烬怪'
         - '§8地窟 / 深渊 / 灾厄 / 团本'
         - ''
-        - '§8命令占位：/corerpg bestiary mob'
+        - '§8暂未开放'
         - ''
         - '§c➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c[图录·怪物] §7击杀登记待 CoreRpg bestiary 接线'
-        - 'tell: §8详见 DESIGN-ember-pet-bestiary.md'
+        - 'tell: §c[图录·怪物] §7暂未开放，敬请期待'
 
   G:
     display:
@@ -63,13 +62,13 @@ Icons:
         - '§7刃 / 护符 / 饰品收集进度'
         - '§8首次获得即登记'
         - ''
-        - '§8命令占位：/corerpg bestiary gear'
+        - '§8暂未开放'
         - ''
         - '§6➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[图录·装备] §7获得登记待接线'
+        - 'tell: §6[图录·装备] §7暂未开放，敬请期待'
 
   P:
     display:
@@ -95,7 +94,7 @@ Icons:
         - '§7集齐阶段：称号 · 币 · 天赋点'
         - '§8对标收集强迫症日活'
         - ''
-        - '§8领取逻辑未接线'
+        - '§8暂未开放'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

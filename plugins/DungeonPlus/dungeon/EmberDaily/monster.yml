@@ -1,34 +1,40 @@
 # 日 · 新 MM Display（去色）：灰烬庭院僵尸/骷髅/蛮兵
+# 2026-09-27: the old points (-40,65,275 / -42,65,273 / -40,65,278) are inside solid stone in map ember_daily:
+#   every wave mob and the brute spawned in rock and suffocated (the ~1 min "clear", no kill credit, no elite XP).
+#   The playable room is x -42..-38, z 268..272, y65 (landing -40,65,270) → spawn in its corners.
+#   Waves are 2 zombies, then 1 zombie + 2 skeletons (was 4, then 2+2), and each wave end heals 8 HP (instant_health II).
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-40,65,275;amount=4;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-41,65,268;amount=2;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=灰烬庭院僵尸;amount=4} @system"
+    - "$kill{mobname=灰烬庭院僵尸;amount=2} @system"
     start:
-    - "$message{type=text;text=§e【庭院·清潮】第一波：回廊僵尸×4 —— 别急着冲中央} @dungeon"
+    - "$message{type=text;text=§e【庭院·清潮】第一波：回廊僵尸×2 —— 别急着冲中央} @dungeon"
     end:
-    - "$message{type=text;text=§a第一波完成} @dungeon"
+    - "$message{type=text;text=§a第一波完成 · 余烬回暖（+8 生命）} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 1 true;console=true} @player"
     - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   wave2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-40,65,275;amount=2;scattered=2.5;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-42,65,273;amount=2;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-39,65,272;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-41,65,272;amount=2;scattered=0.5;level=1} @dungeon"
     condition:
     # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
-    - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=4} @system"
+    - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=3} @system"
     start:
     - "$message{type=text;text=§e【庭院·混响】第二波：僵尸+骷髅 —— 先清远程} @dungeon"
     end:
-    - "$message{type=text;text=§a第二波完成 · Boss 将至} @dungeon"
+    - "$message{type=text;text=§a第二波完成 · 余烬回暖 · Boss 将至} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 1 true;console=true} @player"
     - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   boss:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyBrute;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyBrute;location=-39,65,268;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
     - "$kill{mobname=灰烬庭院蛮兵;amount=1} @system"
     start:

@@ -111,4 +111,4 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §e[寄售·税] §7成交税率 §e10%§7 · 卖方实收标价的 90%'
         - 'tell: §8绑定物、日周票、邮件附件不可上架'
-        - 'tell: §8不开放毕业伤害 / 核心直售 · 见 DESIGN-ember-arena-auction.md'
+        - 'tell: §8不开放毕业伤害 / 核心直售'

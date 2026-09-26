@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §7[设置] §7音效、提示与隐私。低优先级个人选项。逻辑待接线。'
+    - 'tell: §7[设置] §7音效、提示与隐私。个人选项，点下方切换。'
 
 Icons:
   '#':

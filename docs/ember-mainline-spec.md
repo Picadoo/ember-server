@@ -15,7 +15,7 @@ Implemented in CoreRpg 1.8.0, revised in 1.8.1 after the 09-26 playtest (`QuestS
 | Ch | 名称 | Lv | Steps | Quest XP | End reward |
 |---|---|---|---|---|---|
 | 1 | 余烬初醒 | 10 | talk 灰烛 · 6 EmberAfkZombie · 4 AFK zombie/skeleton · sign · talk (+5 vanilla levels) | 520 | daily ticket, enchant crystal, shards |
-| 2 | 残窟之门 | ~16 | 8 EmberDaily* · clear daily · enchant ×1 · anvil ×1 · **Lv20** (+3 levels) | 580 | **T1 blade**, weekly ticket |
+| 2 | 残窟之门 | ~16 | 6 EmberDaily* · clear daily · enchant ×1 · anvil ×1 · **Lv20** (+3 levels) | 580 | **T1 blade**, weekly ticket |
 | 3 | 周烬试炼 | 20 | talk · 15 EmberWeekly* · clear weekly · claim bounty · **Lv25** | 630 | T1 talisman, 2 abyss tickets |
 | 4 | 深渊回响 | 25 | 20 EmberAbyss* · clear abyss · clear abyss again · clear daily · **Lv30** | 820 | **T2 blade**, gem |
 | 5 | 灾厄之窗 | 30 | calamity join · fight the calamity boss · clear abyss · clear daily ×2 · **Lv35** | 1100 | T2 talisman, raid ticket |

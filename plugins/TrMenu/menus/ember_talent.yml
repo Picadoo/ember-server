@@ -59,8 +59,8 @@ Icons:
       name: '§d解锁说明'
       lore:
         - ''
-        - '§7每誓约一棵树 · 约 15～20 点硬顶'
-        - '§7节点有前置；终极点可耗 2 点'
+        - '§7每誓约一棵树 · 整棵 20 点（Lv.30 点满）'
+        - '§7节点有前置；根 2 点 · 终极点 5～7 点'
         - '§8命令：/corerpg talent unlock <nodeId>'
         - ''
         - '§8先 /corerpg talent info <nodeId>'
@@ -173,7 +173,6 @@ Icons:
         - '§73. §f洗点日免 1 · 额外 25 晶钻'
         - '§74. §f洗约清空天赋'
         - ''
-        - '§8详见 DESIGN-ember-covenant-talent.md'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

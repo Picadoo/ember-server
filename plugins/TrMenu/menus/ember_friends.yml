@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §a[好友] §7好友列表与组队邀请。可接师徒（可选）。逻辑待接线。'
+    - 'tell: §a[好友] §7好友列表与组队邀请。/corerpg friend add <名>。'
 
 Icons:
   '#':
@@ -109,4 +109,3 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §6[好友·师徒] §7建议：§f/corerpg friend mentor <名>'
         - 'tell: §8新人绑老手 · 双方活跃奖（币/外观）· 可选'
-        - 'tell: §8详见 DESIGN-ember-mail-friends.md'

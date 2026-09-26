@@ -1,3 +1,5 @@
+# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
+#   see docs/critic-fixes-20260927.md §10). Map ember_abyss room: x -43..-37, z 267..273
 # 深渊 · Display：余烬深渊·潮尸/骨潮/混潮/蛮层/看守
 # 冲层+撤离：docs/ember-abyss-evacuate-spec.md · DESIGN-ember-abyss-evacuate.md
 # 清层 end：progress N → 播报+撤离提示 → 下一层（顶层 COMPLETE）
@@ -5,7 +7,7 @@
 groups:
   floor1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-40,65,275;amount=4;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-41,65,273;amount=4;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·潮尸;amount=4} @system"
     start:
@@ -19,7 +21,7 @@ groups:
 
   floor2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-40,65,275;amount=2;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-41,65,273;amount=2;scattered=1.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=3;scattered=2.5;level=1} @dungeon"
     condition:
     - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=5} @system"
@@ -34,7 +36,7 @@ groups:
 
   floor3:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-40,65,275;amount=4;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-41,65,273;amount=4;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
     - "$kill{mobname=余烬深渊·骨潮;amount=4} @system"
@@ -49,8 +51,8 @@ groups:
 
   floor4:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,276;amount=2;scattered=2.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-41,65,273;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,273;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·蛮层;amount=1} @system"
     start:
@@ -64,7 +66,7 @@ groups:
 
   floor5:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-41,65,273;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·看守;amount=1} @system"
     start:
@@ -79,7 +81,7 @@ groups:
   # 6～8：加压克隆（层类型循环灰烬潮→混响→看守）；无尽语义靠 progress+撤离/超时 settle
   floor6:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-40,65,275;amount=6;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-41,65,273;amount=6;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·潮尸;amount=6} @system"
     start:
@@ -93,7 +95,7 @@ groups:
 
   floor7:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-40,65,275;amount=3;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-41,65,273;amount=3;scattered=1.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=4;scattered=2.5;level=1} @dungeon"
     condition:
     - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=7} @system"
@@ -108,8 +110,8 @@ groups:
 
   floor8:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-38,65,276;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-41,65,273;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-38,65,273;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·看守;amount=1} @system"
     start:

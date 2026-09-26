@@ -85,7 +85,6 @@ Icons:
         - '§7+7～+9 §c高危 · 可用保护券'
         - '§7+10 §b需稳固符 · 失败不掉档'
         - ''
-        - '§8详见 DESIGN-ember-enhance-socket.md'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

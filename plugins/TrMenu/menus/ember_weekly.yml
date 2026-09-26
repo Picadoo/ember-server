@@ -73,7 +73,6 @@ Icons:
         - '  §e碎片 ×8 · 骨尘 ×4'
         - '  §e刃或护符保底（落地二选一）'
         - ''
-        - '§8详见 DESIGN-dungeon-daily-weekly.md §6.4'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

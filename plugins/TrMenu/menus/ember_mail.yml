@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §f[邮寄] §7领取系统邮件、战令与维护补偿。奖励统一进邮箱。逻辑待接线。'
+    - 'tell: §f[邮寄] §7领取系统邮件、战令与维护补偿。奖励统一进邮箱。'
 
 Icons:
   '#':
@@ -85,15 +85,12 @@ Icons:
         - '§8附件：币 / 票 / 外观碎片'
         - '§8不发核心 / 毕业刃'
         - ''
-        - '§8运营：/corerpg mail send <玩家> <模板>'
         - ''
         - '§6➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §6[邮寄·系统] §7战令与维护补偿由系统投递'
-        - 'tell: §8运营占位：/corerpg mail send <玩家> <模板id>'
-        - 'tell: §8详见 DESIGN-ember-mail-friends.md'
 
   D:
     display:

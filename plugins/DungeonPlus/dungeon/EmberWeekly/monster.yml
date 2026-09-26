@@ -1,8 +1,10 @@
+# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
+#   see docs/critic-fixes-20260927.md §10). Map ember_weekly room: x -44..-36, z 266..274
 # 周 · Display：深核廊僵尸/骷髅/蛮兵·甲/蛮兵·乙
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,275;amount=6;scattered=3.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,274;amount=6;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=深核廊僵尸;amount=6} @system"
     start:
@@ -13,8 +15,8 @@ groups:
 
   wave2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,275;amount=3;scattered=3.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberWeeklySkeleton;location=-42,65,273;amount=4;scattered=3.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,274;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklySkeleton;location=-42,65,274;amount=4;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
     - "$kill-any{mobname=深核廊僵尸,深核廊骷髅;amount=7} @system"
@@ -26,8 +28,8 @@ groups:
 
   wave3:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteA;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-38,65,276;amount=2;scattered=2.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteA;location=-40,65,274;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-38,65,274;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=深核廊蛮兵·甲;amount=1} @system"
     start:
@@ -39,7 +41,7 @@ groups:
 
   boss:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteB;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteB;location=-40,65,274;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=深核廊蛮兵·乙;amount=1} @system"
     start:

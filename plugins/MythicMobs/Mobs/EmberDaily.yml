@@ -1,3 +1,4 @@
+# 2026-09-27: zombie 24hp/3dmg → 20/2 and no wood sword (+4), brute 48hp/6dmg → 40/4 and no iron sword (+6) (mobs now really spawn in the room instead of suffocating in rock)
 # 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
 # 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 日常 EmberDaily — 清潮轻压（灰烬庭院）
@@ -6,15 +7,14 @@
 EmberDailyZombie:
   Type: ZOMBIE
   Display: '&a灰烬庭院僵尸'
-  Health: 24
-  Damage: 3
+  Health: 20
+  Damage: 2
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
     PreventOtherDrops: true
   Equipment:
   - LEATHER_HELMET HEAD
-  - WOOD_SWORD HAND
   Skills:
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
@@ -38,8 +38,8 @@ EmberDailySkeleton:
 EmberDailyBrute:
   Type: HUSK
   Display: '&a灰烬庭院蛮兵'
-  Health: 48
-  Damage: 6
+  Health: 40
+  Damage: 4
   Options:
     MovementSpeed: 0.2
     AlwaysShowName: true
@@ -48,7 +48,6 @@ EmberDailyBrute:
   Equipment:
   - IRON_HELMET HEAD
   - IRON_CHESTPLATE CHEST
-  - IRON_SWORD HAND
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath

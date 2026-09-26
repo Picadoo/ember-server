@@ -69,6 +69,7 @@ async function talkNpc(b) {
   r.check_ch1_done = /第1章「余烬初醒」完成/.test(t2.text) && /原版经验 \+5/.test(t2.text) ? 'PASS' : 'FAIL'
   // 4) chapter 2 daily via menu, fought on foot
   n = b.chatLog.length
+  if (process.env.HPLOG) { const t0 = Date.now(); b.on('health', () => console.log('HP', ((Date.now() - t0) / 1000).toFixed(1), b.health.toFixed(1), b.entity && b.entity.position.toString(), (b.heldItem || {}).name)) }
   r.daily_click = await path(b, '日常 · 余烬窟', '开始挑战'); await wait(4000)
   r.daily_start = strip(since(b, n)).slice(0, 160)
   r.daily_fight = await fight(b, /余烬窟·日 通关！/, 6 * 60000, n)
