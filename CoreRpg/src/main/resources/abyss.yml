@@ -6,6 +6,7 @@ settle:
     - { min: 5, max: 9, shard: 12, bone: 4, core: 1, gem: 1 }
     - { min: 10, max: 999, shard: 16, bone: 6, core: 2, gem: 1 }
   gem_id: gem_ember_sharp
+  gem_chance: 0.1   # 2026-09-27: was a guaranteed gem every settle ≥5
   # Optional T2 blade once when floor >= grant_t2_at. Default 0 = off (avoid double with DP clear box).
   grant_t2_at: 0
   t2_id: gear_ember_t2_blade

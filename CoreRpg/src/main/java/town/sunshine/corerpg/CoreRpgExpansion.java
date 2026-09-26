@@ -17,6 +17,14 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
         PlayerData data = plugin.getDataStore().get(player.getUniqueId());
         String key = params.toLowerCase();
         if ("coin".equals(key)) return String.valueOf(data.getCoin());
+        if ("quest".equals(key) || "quest_objective".equals(key)) {
+            QuestService qs = plugin.getQuestService();
+            return qs == null ? "" : qs.objective(player);
+        }
+        if ("quest_chapter".equals(key)) {
+            QuestService qs = plugin.getQuestService();
+            return qs == null ? "" : qs.chapterLabel(player);
+        }
         if ("signed".equals(key)) return DailyService.isToday(data.getLastSignDate()) ? "1" : "0";
         if ("activity".equals(key)) return String.valueOf(data.getActivity());
         if ("abyss_used".equals(key)) return String.valueOf(data.getAbyssUsedToday());

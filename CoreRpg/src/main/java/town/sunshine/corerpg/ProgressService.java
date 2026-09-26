@@ -189,10 +189,21 @@ public final class ProgressService {
         }
         int tier = d.getVipTier();
         if (tier > 0 && vipXpBonusPerTier > 0) give += (give * tier * vipXpBonusPerTier + 50) / 100;
+        return applyEmberXp(p, d, give, !"kill".equals(key), null) ? give : 0;
+    }
+
+    /** 1.8.0: flat ember XP (mainline quest) — no daily caps, no VIP bonus. */
+    public int grantFlatEmberXp(Player p, int amount, String label) {
+        if (!emberEnabled || p == null || amount <= 0) return 0;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        return applyEmberXp(p, d, amount, true, label) ? amount : 0;
+    }
+
+    private boolean applyEmberXp(Player p, PlayerData d, int give, boolean announce, String label) {
         int level = d.getEmberLevel();
         if (level >= emberMaxLevel) {
             dataStore.flushMutation(p.getUniqueId());
-            return 0;
+            return false;
         }
         int xp = d.getEmberXp() + give;
         int ups = 0;
@@ -211,15 +222,19 @@ public final class ProgressService {
             if (talentGain > 0) d.setTalentPointsEarned(d.getTalentPointsEarned() + talentGain);
         }
         dataStore.flushMutation(p.getUniqueId());
-        if (!"kill".equals(key)) {
-            p.sendMessage(ChatColor.YELLOW + "[余烬] 等级经验 +" + give + ChatColor.GRAY + "（Lv." + level + " · "
+        if (announce) {
+            p.sendMessage(ChatColor.YELLOW + (label != null ? label + " " : "[余烬] ") + "等级经验 +" + give + ChatColor.GRAY + "（Lv." + level + " · "
                     + xp + "/" + (level >= emberMaxLevel ? "MAX" : String.valueOf(xpToNext(level))) + "）");
         }
         if (ups > 0) {
             p.sendMessage(ChatColor.GOLD + "[余烬] 升级！余烬等级 Lv." + level
                     + (talentGain > 0 ? ChatColor.GREEN + " · 天赋点 +" + talentGain : ""));
         }
-        return give;
+        if (ups > 0) {
+            QuestService qs = plugin.getQuestService();
+            if (qs != null) qs.onLevelChanged(p);
+        }
+        return true;
     }
 
     public void cmdLevel(Player p) {
@@ -440,6 +455,8 @@ public final class ProgressService {
         if (target == null) { sender.sendMessage(ChatColor.RED + "玩家不在线：" + args[1]); return true; }
         int px = grantPassXp(target, args[2]);
         int ex = grantEmberXp(target, args[2]);
+        QuestService qs = plugin.getQuestService();
+        if (qs != null) qs.onEvent(target, args[2]);
         if (!(sender instanceof Player) || sender != target) {
             sender.sendMessage("[CoreRpg] progress " + target.getName() + " " + args[2] + " → pass +" + px + " · ember +" + ex);
         }

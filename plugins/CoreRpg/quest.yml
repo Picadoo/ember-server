@@ -1,0 +1,260 @@
+# 余烬主线 · 第一卷「旧誓余烬」 — docs/ember-mainline-spec.md
+# step type: talk | kill (mobs: MythicMobs internal names, "Prefix*" ok) | event (event: sign/bounty/daily_clear/weekly_clear/
+#   abyss_clear/raid_clear/guild_boss_clear/enchant/anvil/craft/calamity_join/calamity_boss) | level (level: N)
+# kill steps may set complete_on: <event> — that clear also finishes the kill step (then counts for the next step).
+# levels = vanilla XP levels (enchant/anvil cost)
+# xp = flat ember XP (not subject to daily caps). items = NeigeItems id: amount.
+enabled: true
+auto_start: true
+title: '§6[主线]'
+npc:
+  enabled: true
+  id: ember_guide
+  name: '§6引路人 · 灰烛'
+  world: ember_hub
+  x: -16.5
+  y: 58.0
+  z: 106.5
+  yaw: 0.0
+  talk_radius: 8
+chapters:
+  1:
+    name: 余烬初醒
+    start_items: { gear_ember_blade: 1, gear_ember_charm: 1 }
+    intro:
+      - '§7你在灰烬里醒来，手边只有一柄旧刃。'
+      - '§7「醒了？拿好刃和护符，先来枢纽找我。」—— 远处有人举着一盏烛。'
+      - '§8（死亡不掉落 · 随时 /hub 回城）'
+    steps:
+      - type: talk
+        desc: 与枢纽的 引路人·灰烛 交谈
+        hint: 就在出生点北边几步、工坊旁，右键他
+        xp: 60
+        done:
+          - '§6灰烛：§f这城烧了三十年，火没灭，只是躲进了地底。'
+          - '§6灰烛：§f挂机庭有游荡的尸骸，先去活动活动筋骨。'
+      - type: kill
+        mobs: [EmberAfkZombie]
+        count: 6
+        desc: 在挂机庭击败 挂机庭僵尸
+        hint: /ember → 挂机庭 · 落点往西三十来格是怪区 · 手持余烬之刃 · 打不过就 /hub
+        xp: 100
+        done: ['§7腐肉里嵌着暗红的碎片，还带着余温。']
+      - type: kill
+        mobs: [EmberAfkSkeleton, EmberAfkZombie]
+        count: 4
+        desc: 再击败 4 只挂机庭的怪（僵尸或骷髅）
+        hint: 骷髅会放箭，贴近了再打 · 血少就后退或 /hub
+        xp: 100
+        done: ['§7骨头碎了，里面的火星却不肯熄。']
+      - type: event
+        event: sign
+        count: 1
+        desc: 在枢纽签到一次
+        hint: /ember → 签到，或 /corerpg sign
+        xp: 60
+        done: ['§6灰烛：§f每日点一次名，火种才认得你。']
+      - type: talk
+        desc: 回去向 灰烛 复命
+        hint: 枢纽出生点北边（工坊旁）
+        xp: 200
+        levels: 5
+        items: { ticket_ember_daily: 1, crystal_ember_enchant: 1, mat_ember_shard: 8 }
+        done:
+          - '§6灰烛：§f手还稳。日票拿去，地窟今天的门还开着。'
+          - '§6灰烛：§f附魔晶和碎片留着，从窟里回来就去工坊把刃磨好。'
+  2:
+    name: 残窟之门
+    intro:
+      - '§6灰烛：§f地窟的门每天只开一次。先下去看看，回来再磨刃。'
+    steps:
+      - type: kill
+        mobs: ['EmberDaily*']
+        count: 8
+        complete_on: daily_clear
+        desc: 在 余烬窟·日 击败守墓者
+        hint: /ember → 日常本（需日票）· 本次通关也算完成
+        xp: 80
+        done: ['§7窟里的尸骸穿着旧城卫的甲。']
+      - type: event
+        event: daily_clear
+        count: 1
+        desc: 通关 余烬窟·日
+        hint: 组队或单人皆可
+        xp: 300
+        done:
+          - '§6灰烛：§f你带回了窟底的火。回工坊把刃磨一磨，再往下是周烬试炼。'
+      - type: event
+        event: enchant
+        count: 1
+        desc: 在工坊附魔台附魔一次
+        hint: 出生点北侧工坊 · 放入 余烬附魔晶
+        xp: 100
+        done: ['§7刃身浮出一道暗纹，像旧誓的笔画。']
+      - type: event
+        event: anvil
+        count: 1
+        desc: 在工坊铁砧修理一次
+        hint: 刃 + 余烬碎片 放入铁砧
+        xp: 100
+        done: ['§7碎片熔进刃口，缺口合上了。']
+      - type: level
+        level: 20
+        desc: 达到余烬等级 Lv.20（解锁周本）
+        hint: 签到 / 日常 / 悬赏 / 挂机都能补经验
+        levels: 3
+        items: { gear_ember_t1_blade: 1, ticket_ember_weekly: 1 }
+        done: ['§6灰烛：§f这柄精炼刃配得上你了。周烬的门，已经为你开着。']
+  3:
+    name: 周烬试炼
+    intro:
+      - '§6灰烛：§f每周一次，地窟深处的火会醒来。守着它的，不是游尸。'
+    steps:
+      - type: talk
+        desc: 向 灰烛 询问周烬试炼
+        hint: 枢纽出生点北边（工坊旁）
+        xp: 60
+        done: ['§6灰烛：§f带上周票，最好叫上同伴。']
+      - type: kill
+        mobs: ['EmberWeekly*']
+        count: 15
+        complete_on: weekly_clear
+        desc: 击败周烬守卫
+        hint: 周本内的尸骸与蛮兵 · 本次通关也算完成
+        xp: 100
+        done: ['§7它们的甲上刻着同一个誓言。']
+      - type: event
+        event: weekly_clear
+        count: 1
+        desc: 通关 余烬窟·周
+        hint: /ember → 周常本
+        xp: 350
+        done: ['§7火堆熄灭时，你听见地底更深处有回响。']
+      - type: event
+        event: bounty
+        count: 1
+        desc: 完成并领取一次每日悬赏
+        hint: /corerpg bounty
+        xp: 120
+        done: ['§6灰烛：§f悬赏板上的名字，都是没能回来的人。']
+      - type: level
+        level: 25
+        desc: 达到余烬等级 Lv.25（解锁深渊）
+        hint: 日常 / 悬赏 / 签到
+        levels: 5
+        items: { gear_ember_t1_talisman: 1, ticket_ember_abyss: 2 }
+        done: ['§6灰烛：§f回响来自深渊。拿好护符，别在下面待太久。']
+  4:
+    name: 深渊回响
+    intro:
+      - '§6灰烛：§f深渊一层比一层热。撑不住就撤，火不会等你。'
+    steps:
+      - type: kill
+        mobs: ['EmberAbyss*']
+        count: 20
+        complete_on: abyss_clear
+        desc: 击败深渊中的余烬之物
+        hint: /ember → 深渊（需深渊票）· 本次结算也算完成
+        xp: 150
+        done: ['§7它们曾是守城的人。']
+      - type: event
+        event: abyss_clear
+        count: 1
+        desc: 在深渊结算一次
+        hint: 深渊结算
+        xp: 300
+        done: ['§7你在深渊壁上看见了烧焦的城徽。']
+      - type: event
+        event: abyss_clear
+        count: 1
+        desc: 再次深入深渊并结算
+        hint: 深渊每日有次数限制
+        xp: 250
+        done: ['§6灰烛：§f三十年前那场火，是从深渊烧上来的。']
+      - type: event
+        event: daily_clear
+        count: 1
+        desc: 通关一次 余烬窟·日
+        hint: 保持手感
+        xp: 120
+        done: ['§7窟里的火，比上次暗了些。']
+      - type: level
+        level: 30
+        desc: 达到余烬等级 Lv.30（解锁灾厄窗口）
+        hint: 深渊 / 日常 / 悬赏
+        levels: 5
+        items: { gear_ember_t2_blade: 1, gem_ember_sharp: 1 }
+        done: ['§6灰烛：§f深核刃。它见过火真正的样子。']
+  5:
+    name: 灾厄之窗
+    intro:
+      - '§6灰烛：§f每到窗期，灾厄使会降临祭坛。它就是当年点火的那个。'
+    steps:
+      - type: event
+        event: calamity_join
+        count: 1
+        desc: 奔赴灾厄窗口
+        hint: /ember → 灾厄 → 奔赴，或 /corerpg calamity join
+        xp: 150
+        done: ['§7祭坛上的灰烬在旋转。']
+      - type: event
+        event: calamity_boss
+        count: 1
+        desc: 参与击退 灾厄使
+        hint: 窗期内对灾厄使造成伤害
+        xp: 450
+        done: ['§6灰烛：§f它还会回来。但这次，城里有人记得它的名字。']
+      - type: event
+        event: abyss_clear
+        count: 1
+        desc: 深渊结算一次
+        hint: 深渊
+        xp: 200
+        done: ['§7深渊比以前安静。']
+      - type: event
+        event: daily_clear
+        count: 2
+        desc: 通关 余烬窟·日 两次
+        hint: 每日一次
+        xp: 300
+        done: ['§6灰烛：§f同袍们在集结。']
+      - type: level
+        level: 35
+        desc: 达到余烬等级 Lv.35（解锁团本）
+        hint: 深渊 / 日常 / 悬赏 / 灾厄
+        levels: 5
+        items: { gear_ember_t2_talisman: 1, ticket_ember_raid: 1 }
+        done: ['§6灰烛：§f团本需要三到五人。找齐你的同袍。']
+  6:
+    name: 同袍之誓
+    intro:
+      - '§6灰烛：§f当年守城的人立过誓：火不灭，人不退。'
+    steps:
+      - type: talk
+        desc: 听 灰烛 讲完旧誓
+        hint: 枢纽出生点北边（工坊旁）
+        xp: 60
+        done: ['§6灰烛：§f我是最后一个守誓人。现在，轮到你们了。']
+      - type: kill
+        mobs: ['EmberRaid*']
+        count: 20
+        complete_on: raid_clear
+        desc: 击败团本中的敌人
+        hint: /ember → 团本（3～5 人）· 本次通关也算完成
+        xp: 200
+        done: ['§7它们的誓言，你替它们守下了。']
+      - type: event
+        event: raid_clear
+        count: 1
+        desc: 与同袍通关团本
+        hint: /ember → 团本（3～5 人）
+        xp: 500
+        done: ['§7终厅的火，终于熄了。']
+      - type: talk
+        desc: 回到 灰烛 身边
+        hint: 枢纽出生点北边（工坊旁）
+        xp: 300
+        items: { core_ember_compact: 1, mat_ember_protect_scroll: 2 }
+        done:
+          - '§6灰烛：§f烛给你。第一卷，到此为止。'
+          - '§6灰烛：§f灰烬之下还有更深的东西……下回再说。'

@@ -50,6 +50,9 @@ monthly:
 weekly:
   free_tickets: 1
   ticket_ni_id: ticket_ember_weekly
+raid:
+  free_tickets: 1          # 2026-09-27: weekly login grant (menu promises 每周团本票×1)
+  ticket_ni_id: ticket_ember_raid
 abyss:
   free_tickets: 1
   ticket_ni_id: ticket_ember_abyss

@@ -85,6 +85,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private SetService setService;
     private RaidService raidService;
     private ProgressService progressService;
+    private QuestService questService;
+    private LootService lootService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -125,9 +127,17 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         setService = new SetService(this, niBridge);
         raidService = new RaidService(this, dataStore, niBridge);
         progressService = new ProgressService(this, dataStore);
+        questService = new QuestService(this, dataStore, niBridge);
+        lootService = new LootService(this, dataStore, niBridge);
         dataStore.setTalentService(talentService);
         reloadLocal();
         Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(questService, this);
+        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+            @Override public void run() {
+                if (questService != null) { questService.hookAdyeshach(); questService.ensureNpc(false); }
+            }
+        }, 100L);
         if (petService != null) {
             petService.reload();
             petService.start();
@@ -192,6 +202,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public TalentService getTalentService() { return talentService; }
     public CashService getCashService() { return cashService; }
     public ProgressService getProgressService() { return progressService; }
+    public QuestService getQuestService() { return questService; }
     public TalentService getTalentServicePublic() { return talentService; }
     public WarehouseService getWarehouseServicePublic() { return warehouseService; }
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
@@ -372,6 +383,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private void reloadLocal() {
         reloadConfig();
         if (progressService != null) progressService.reload();
+        if (questService != null) questService.reload();
+        if (lootService != null) lootService.reload();
         shardNeedle = getConfig().getString("shard_name_contains", "余烬碎片");
         dustNeedle = getConfig().getString("dust_name_contains", "余烬骨尘");
         crystalNeedle = getConfig().getString("crystal_name_contains", "余烬附魔晶");
@@ -528,6 +541,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                 if (player.isOnline()) refreshBoard(player);
             }
         }, 10L);
+        if (questService != null) questService.onJoin(player);
     }
 
     @EventHandler
@@ -545,12 +559,14 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public void onDeath(EntityDeathEvent event) {
         LivingEntity entity = event.getEntity();
         Player killer = entity.getKiller();
+        if (killer == null && questService != null && !(entity instanceof Player)) killer = questService.lastPlayerDamager(entity); // 1.8.1
         if (calamityService != null && calamityService.isCalamityEntity(entity)) {
             calamityService.onCalamityKilled(killer);
         }
         if (killer != null && setService != null && !(entity instanceof Player)) {
             setService.onKill(killer);
         }
+        if (killer != null && questService != null && !(entity instanceof Player)) questService.onKill(killer, entity);
         if (killer == null || !isQualifyingKill(entity)) return;
         ensureBounty(killer);
         PlayerData data = dataStore.get(killer.getUniqueId());
@@ -610,6 +626,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (title.length() > 32) title = title.substring(0, 32);
         obj.setDisplayName(title);
         PlayerData data = dataStore.get(player.getUniqueId());
+        if (questService != null && questService.isEnabled()) {
+            String q = questService.objective(player);
+            if (!q.isEmpty()) setLine(obj, ChatColor.GOLD + "主线 " + ChatColor.WHITE + q, 7);
+        }
         setLine(obj, ChatColor.GOLD + "币 " + ChatColor.WHITE + data.getCoin(), 6);
         setLine(obj, ChatColor.GREEN + "活跃 " + ChatColor.WHITE + data.getActivity() + "/100", 5);
         setLine(obj, ChatColor.YELLOW + "击杀 " + ChatColor.WHITE + data.getKillsToday(), 4);
@@ -627,6 +647,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (command.getName().equalsIgnoreCase("hub")) return cmdHub(sender);
         if (!command.getName().equalsIgnoreCase("corerpg")
                 && !label.equalsIgnoreCase("crpg") && !label.equalsIgnoreCase("rpg")) return false;
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) { sendHelp(sender); return true; }
@@ -650,6 +671,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("xpreward".equals(sub)) return progressService.cmdAdminGrant(sender, args, false);
         if ("passxp".equals(sub)) return progressService.cmdAdminGrant(sender, args, true);
         if ("progress".equals(sub)) return progressService.cmdProgress(sender, args);
+        if ("loot".equals(sub)) return lootService.cmd(sender, args);
+        if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
+        if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);
         if ("level".equals(sub) || "lv".equals(sub) || "等级".equals(sub)) {
             if (!requirePlayer(sender)) return true;
             progressService.cmdLevel((Player) sender);
@@ -730,6 +754,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GRAY + "  coin [give <玩家> <数量>] · sign · activity [claim] · bounty [claim]");
         sender.sendMessage(ChatColor.GRAY + "  enhance [info] · socket list|insert <gemId>|remove <slot>");
         sender.sendMessage(ChatColor.GRAY + "  scrap [info] · reforge");
+        sender.sendMessage(ChatColor.GOLD + "  quest" + ChatColor.GRAY + " · 主线（引路人·灰烛）");
         sender.sendMessage(ChatColor.GRAY + "  calamity [status|forceopen|forceend|trigger] · abyss [progress|settle|evacuate]");
         sender.sendMessage(ChatColor.GRAY + "  raid [ring|claim-ring|grant-ring] · set");
         sender.sendMessage(ChatColor.GRAY + "  covenant [set <id>|reset] · talent [info|unlock|reset|grant] · skill [info]");
@@ -852,6 +877,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             progressService.grantPassXp(p, "sign");
             progressService.grantEmberXp(p, "sign");
         }
+        if (questService != null) questService.onEvent(p, "sign");
         refreshBoard(p);
         return true;
     }
@@ -930,6 +956,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                 progressService.grantEmberXp(p, "bounty");
                 progressService.grantPassXp(p, "bounty");
             }
+            if (questService != null) questService.onEvent(p, "bounty");
             refreshBoard(p);
             return true;
         }
@@ -1007,6 +1034,61 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.YELLOW + "/corerpg socket list|insert <gemId>|remove <slot>");
         return true;
     }
+    /**
+     * 1.8.1: MythicMobs death rewards credited to the last player who hit the mob (15 s), not MM's &lt;trigger&gt;
+     * (which was "Unknown" when a mob, the sun or a skill landed the final blow).
+     * /corerpg mmgive <mob uuid> <niId> [n] · /corerpg mmxp <mob uuid> <elite|boss>   (console, MM ~onDeath @Self)
+     */
+    private boolean mmCreditDebug = false; // flip for "mmcredit" console lines
+
+    private boolean cmdMmCredit(CommandSender sender, String[] args, boolean xp) {
+        if (!sender.hasPermission("corerpg.admin")) return true;
+        if (args.length < 3) return true;
+        UUID id;
+        try { id = UUID.fromString(args[1]); } catch (IllegalArgumentException e) { return true; }
+        Player p = questService == null ? null : questService.lastPlayerDamager(id);
+        String via = "hit";
+        if (p == null) {
+            via = Bukkit.getEntity(id) == null ? "gone" : "near";
+            org.bukkit.entity.Entity en = Bukkit.getEntity(id);
+            if (en instanceof LivingEntity) p = ((LivingEntity) en).getKiller();
+            if (p == null && en != null) p = QuestService.nearestPlayer(en.getLocation(), 16);
+        }
+        if (mmCreditDebug) getLogger().info("mmcredit " + args[0] + " " + args[1] + " " + args[2] + " -> " + (p == null ? "none" : p.getName()) + " (" + via + ")");
+        if (p == null || !p.isOnline()) return true;
+        if (xp) {
+            progressService.grantKillLevels(p, args[2]);
+            progressService.grantEmberXp(p, args[2]);
+        } else {
+            int n = 1;
+            if (args.length >= 4) try { n = Math.max(1, Integer.parseInt(args[3])); } catch (NumberFormatException ignored) { }
+            niBridge.giveNiItem(p, args[2], n);
+        }
+        return true;
+    }
+
+    /** 1.8.1: /hub · /spawn — players had no way back from ember_afk (console mvtp to the hub spawn). */
+    private final Map<UUID, Long> hubCooldown = new HashMap<UUID, Long>();
+    private boolean cmdHub(CommandSender sender) {
+        if (!requirePlayer(sender)) return true;
+        Player p = (Player) sender;
+        String hub = getConfig().getString("hub_world", "ember_hub");
+        if (p.getWorld().getName().equals(hub) && p.getLocation().distance(p.getWorld().getSpawnLocation()) < 3) {
+            p.sendMessage(ChatColor.GRAY + "[余烬] 你已经在枢纽出生点了。");
+            return true;
+        }
+        Long last = hubCooldown.get(p.getUniqueId());
+        if (last != null && System.currentTimeMillis() - last < 5000) { p.sendMessage(ChatColor.RED + "[余烬] 稍等几秒再回城。"); return true; }
+        hubCooldown.put(p.getUniqueId(), System.currentTimeMillis());
+        if (questService != null && questService.isInstanceWorld(p.getWorld())) {
+            p.sendMessage(ChatColor.RED + "[余烬] 副本中请用 /dp leave 离开。");
+            return true;
+        }
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp " + p.getName() + " " + hub);
+        p.sendMessage(ChatColor.GREEN + "[余烬] 已回到枢纽。引路人·灰烛 在出生点北边。");
+        return true;
+    }
+
     private boolean cmdCalamity(CommandSender sender, String[] args) {
         String act = args.length >= 2 ? args[1].toLowerCase() : "status";
         if ("join".equals(act) || "go".equals(act)) {
@@ -1021,6 +1103,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             String world = getConfig().getString("calamity_world", "ember_event");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp " + p.getName() + " " + world);
             p.sendMessage(ChatColor.DARK_RED + "[灾厄] 已前往 " + world + " · /corerpg calamity status 查看窗口");
+            if (questService != null) questService.onEvent(p, "calamity_join");
             return true;
         }
         if ("forceopen".equals(act) || "trigger".equals(act) || "spawn".equals(act) || "force".equals(act)) {

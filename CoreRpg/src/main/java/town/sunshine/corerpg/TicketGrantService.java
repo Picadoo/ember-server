@@ -28,6 +28,8 @@ public final class TicketGrantService {
     private String weeklyTicketNiId = "ticket_ember_weekly";
     private int abyssFreeTickets = 1;
     private String abyssTicketNiId = "ticket_ember_abyss";
+    private int raidFreeTickets = 1;
+    private String raidTicketNiId = "ticket_ember_raid";
 
     public TicketGrantService(JavaPlugin plugin, NiBridge ni, PlayerDataStore dataStore) {
         this.plugin = plugin;
@@ -56,6 +58,9 @@ public final class TicketGrantService {
             weeklyFreeTickets = 1;
             weeklyTicketNiId = "ticket_ember_weekly";
         }
+        ConfigurationSection raid = cfg.getConfigurationSection("raid");
+        raidFreeTickets = raid != null ? raid.getInt("free_tickets", 1) : 1;
+        raidTicketNiId = raid != null ? raid.getString("ticket_ni_id", "ticket_ember_raid") : "ticket_ember_raid";
         ConfigurationSection abyss = cfg.getConfigurationSection("abyss");
         if (abyss != null) {
             abyssFreeTickets = abyss.getInt("free_tickets", 1);
@@ -86,6 +91,8 @@ public final class TicketGrantService {
         if (w > 0) parts.add("周票×" + w);
         int a = grantAbyssIfNeeded(player, data);
         if (a > 0) parts.add("深渊票×" + a);
+        int rd = grantRaidIfNeeded(player, data);
+        if (rd > 0) parts.add("团本票×" + rd);
         return parts;
     }
 
@@ -129,6 +136,21 @@ public final class TicketGrantService {
     public boolean needsWeeklyGrant(PlayerData data) {
         if (weeklyFreeTickets <= 0) return false;
         return !DailyService.weekId().equals(data.getWeeklyTicketGrantWeekId());
+    }
+
+    /** 1.8.1: weekly free raid ticket (menu promised 每周团本票×1). */
+    public int grantRaidIfNeeded(Player player, PlayerData data) {
+        int want = Math.max(0, raidFreeTickets);
+        if (want <= 0) return 0;
+        String week = DailyService.weekId();
+        if (week.equals(data.getRaidTicketGrantWeekId())) return 0;
+        if (!giveNi(player, raidTicketNiId, want)) return 0;
+        data.setRaidTicketGrantWeekId(week);
+        return want;
+    }
+
+    public boolean needsRaidGrant(PlayerData data) {
+        return raidFreeTickets > 0 && !DailyService.weekId().equals(data.getRaidTicketGrantWeekId());
     }
 
     public boolean needsAbyssGrant(PlayerData data) {

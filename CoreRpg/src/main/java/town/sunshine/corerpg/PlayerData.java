@@ -232,6 +232,22 @@ public final class PlayerData {
 
     /** ISO week id last weekly free ticket grant (DailyService.weekId()). */
     private String weeklyTicketGrantWeekId = "";
+    // 1.8.1: weekly free raid ticket + starter blade re-issue date
+    private String raidTicketGrantWeekId = "";
+    private String lootWeekMarks = ""; // "key=week;key=week"
+    public String getLootWeekMarks() { return lootWeekMarks == null ? "" : lootWeekMarks; }
+    public void setLootWeekMarks(String v) { lootWeekMarks = v == null ? "" : v; dirty = true; }
+    public void addLootWeekMark(String key, String week) {
+        StringBuilder sb = new StringBuilder();
+        for (String part : getLootWeekMarks().split(";")) if (!part.isEmpty() && !part.startsWith(key + "=")) sb.append(part).append(';');
+        sb.append(key).append('=').append(week);
+        setLootWeekMarks(sb.toString());
+    }
+    private String starterReissueDate = "";
+    public String getRaidTicketGrantWeekId() { return raidTicketGrantWeekId == null ? "" : raidTicketGrantWeekId; }
+    public void setRaidTicketGrantWeekId(String v) { raidTicketGrantWeekId = v == null ? "" : v; dirty = true; }
+    public String getStarterReissueDate() { return starterReissueDate == null ? "" : starterReissueDate; }
+    public void setStarterReissueDate(String v) { starterReissueDate = v == null ? "" : v; dirty = true; }
     /** yyyy-MM-dd last abyss free ticket grant (DailyService.today()). */
     private String abyssTicketGrantDate = "";
 
@@ -282,6 +298,19 @@ public final class PlayerData {
 
     /** 1.6.0: ember level XP (progress within current level) + daily caps; pass season/claims; VIP top-up. */
     private int emberXp;
+    // 1.8.0 mainline quest: chapter 0 = not started; questDone = whole volume finished
+    private int questChapter = 0;
+    private int questStep = 0;
+    private int questCount = 0;
+    private boolean questDone = false;
+    public int getQuestChapter() { return questChapter; }
+    public void setQuestChapter(int v) { questChapter = v; dirty = true; }
+    public int getQuestStep() { return questStep; }
+    public void setQuestStep(int v) { questStep = v; dirty = true; }
+    public int getQuestCount() { return questCount; }
+    public void setQuestCount(int v) { questCount = v; dirty = true; }
+    public boolean isQuestDone() { return questDone; }
+    public void setQuestDone(boolean v) { questDone = v; dirty = true; }
     private String emberXpDate = "";
     private int emberXpKillToday;
     private int emberXpCombatToday;

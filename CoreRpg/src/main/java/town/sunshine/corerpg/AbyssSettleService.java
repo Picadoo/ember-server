@@ -35,6 +35,7 @@ public final class AbyssSettleService {
     private boolean enabled = true;
     private final List<Tier> tiers = new ArrayList<Tier>();
     private String gemId = "gem_ember_sharp";
+    private double gemChance = 1.0;
     private String shardId = "mat_ember_shard";
     private String boneId = "mat_ember_bone_dust";
     private String coreId = "mat_ember_core_fragment";
@@ -81,6 +82,7 @@ public final class AbyssSettleService {
         tiers.clear();
         if (settle != null) {
             gemId = settle.getString("gem_id", "gem_ember_sharp");
+            gemChance = settle.getDouble("gem_chance", 1.0);
             shardId = settle.getString("shard_id", "mat_ember_shard");
             boneId = settle.getString("bone_id", "mat_ember_bone_dust");
             coreId = settle.getString("core_id", "mat_ember_core_fragment");
@@ -341,7 +343,7 @@ public final class AbyssSettleService {
         if (tier.shard > 0) ni.giveNiItem(player, shardId, tier.shard);
         if (tier.bone > 0) ni.giveNiItem(player, boneId, tier.bone);
         if (tier.core > 0) ni.giveNiItem(player, coreId, tier.core);
-        if (tier.gem > 0) ni.giveNiItem(player, gemId, tier.gem);
+        if (tier.gem > 0 && Math.random() < gemChance) ni.giveNiItem(player, gemId, tier.gem);
     }
 
     private String formatSettleMessage(Player target, SettleResult r) {
@@ -360,7 +362,7 @@ public final class AbyssSettleService {
         sb.append(ChatColor.WHITE).append("碎片×").append(t.shard)
                 .append(ChatColor.GRAY).append(" 骨尘×").append(t.bone);
         if (t.core > 0) sb.append(ChatColor.GRAY).append(" 核心×").append(t.core);
-        if (t.gem > 0) sb.append(ChatColor.GRAY).append(" 孔石×").append(t.gem);
+        if (t.gem > 0) sb.append(ChatColor.GRAY).append(" 孔石×").append(t.gem).append(gemChance < 1.0 ? "（" + Math.round(gemChance * 100) + "%）" : "");
         if (r.grantedT2) sb.append(ChatColor.GOLD).append(" +T2刃");
         return sb.toString();
     }

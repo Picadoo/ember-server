@@ -441,6 +441,8 @@ public final class CalamityService implements Listener {
         for (int i = 0; i < recipients.size(); i++) {
             grantKillRewardsA(recipients.get(i));
             grantDailyChestB(recipients.get(i));
+            QuestService qs = plugin.getQuestService();
+            if (qs != null) qs.onEvent(recipients.get(i), "calamity_boss");
         }
     }
 

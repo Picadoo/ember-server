@@ -260,6 +260,7 @@ public final class CashService {
         if (ticketGrantService != null) {
             if (ticketGrantService.needsWeeklyGrant(data)) return true;
             if (ticketGrantService.needsAbyssGrant(data)) return true;
+            if (ticketGrantService.needsRaidGrant(data)) return true;
         }
         return false;
     }

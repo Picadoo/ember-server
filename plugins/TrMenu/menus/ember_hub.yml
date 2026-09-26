@@ -18,7 +18,7 @@ Options:
   Min-Click-Delay: 200
 
 Layout:
-  - ' ABCDEF  '
+  - ' ABCDEF 1'
   - ' GHIJKL  '
   - ' MNOPQR  '
   - ' STUVWX  '
@@ -33,6 +33,21 @@ Events:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 
 Icons:
+  # —— 主线（CoreRpg 1.8.0 QuestService）——
+  '1':
+    display:
+      material: book
+      name: '§6§l主线 · 旧誓余烬'
+      lore:
+        - '§7%corerpg_quest_chapter%'
+        - '§f▶ %corerpg_quest%'
+        - ''
+        - '§8引路人·灰烛 在出生点北边（工坊旁）'
+        - '§e点击查看主线进度'
+    actions:
+      all:
+        - 'close'
+        - 'command: corerpg quest'
   # —— 第 1 行 · 角色养成 ——
   A:
     display:

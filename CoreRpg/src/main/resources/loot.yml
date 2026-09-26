@@ -1,0 +1,18 @@
+# 1.8.1 (2026-09-27): clear-box loot with weekly-first guarantees — docs/critic-fixes-20260927.md
+# /corerpg loot <player> <key>  (DP end scripts, console)
+#  first_per_week: items given on the player's first call of this key in the ISO week
+#  chance:         each item rolled independently on every other call (and also on the first call if listed)
+abyss_t2:
+  label: 深渊通关箱
+  first_per_week: { gear_ember_t2_blade: 1, gear_ember_t2_talisman: 1 }
+  chance: { gear_ember_t2_blade: 0.04, gear_ember_t2_talisman: 0.03 }
+weekly_t1:
+  label: 周本通关箱
+  first_per_week: { gear_ember_t1_blade: 1, gear_ember_t1_talisman: 1 }
+  chance: { gear_ember_t1_blade: 0.10, gear_ember_t1_talisman: 0.08 }
+raid_gem:
+  label: 团本通关箱
+  chance: { gem_ember_sharp: 0.5 }
+guild_gem:
+  label: 盟Boss通关箱
+  chance: { gem_ember_sharp: 0.5 }

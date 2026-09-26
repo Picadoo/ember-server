@@ -204,6 +204,9 @@ public final class PlayerDataStore {
         data.setDailyCashResetDate(yaml.getString("dailyCashResetDate", ""));
         data.setDailyFreeGranted(yaml.getBoolean("dailyFreeGranted", false));
         data.setWeeklyTicketGrantWeekId(yaml.getString("weeklyTicketGrantWeekId", ""));
+        data.setRaidTicketGrantWeekId(yaml.getString("raidTicketGrantWeekId", ""));
+        data.setStarterReissueDate(yaml.getString("starterReissueDate", ""));
+        data.setLootWeekMarks(yaml.getString("lootWeekMarks", ""));
         data.setAbyssTicketGrantDate(yaml.getString("abyssTicketGrantDate", ""));
         data.setWeeklyTicketsGranted(yaml.getInt("weeklyTicketsGranted", 0));
         data.setWeeklyTicketsBought(yaml.getInt("weeklyTicketsBought", 0));
@@ -218,6 +221,10 @@ public final class PlayerDataStore {
         data.setPassXpToday(yaml.getInt("passXpToday", 0));
         data.setEmberXp(yaml.getInt("emberXp", 0));
         data.setEmberXpDate(yaml.getString("emberXpDate", ""));
+        data.setQuestChapter(yaml.getInt("questChapter", 0));
+        data.setQuestStep(yaml.getInt("questStep", 0));
+        data.setQuestCount(yaml.getInt("questCount", 0));
+        data.setQuestDone(yaml.getBoolean("questDone", false));
         data.setEmberXpKillToday(yaml.getInt("emberXpKillToday", 0));
         data.setEmberXpCombatToday(yaml.getInt("emberXpCombatToday", 0));
         data.setPassSeasonId(yaml.getString("passSeasonId", ""));
@@ -347,6 +354,9 @@ public final class PlayerDataStore {
         yaml.set("dailyCashResetDate", data.getDailyCashResetDate());
         yaml.set("dailyFreeGranted", data.isDailyFreeGranted());
         yaml.set("weeklyTicketGrantWeekId", data.getWeeklyTicketGrantWeekId());
+        yaml.set("raidTicketGrantWeekId", data.getRaidTicketGrantWeekId());
+        yaml.set("starterReissueDate", data.getStarterReissueDate());
+        yaml.set("lootWeekMarks", data.getLootWeekMarks());
         yaml.set("abyssTicketGrantDate", data.getAbyssTicketGrantDate());
         yaml.set("weeklyTicketsGranted", data.getWeeklyTicketsGranted());
         yaml.set("weeklyTicketsBought", data.getWeeklyTicketsBought());
@@ -361,6 +371,10 @@ public final class PlayerDataStore {
         yaml.set("passXpToday", data.getPassXpToday());
         yaml.set("emberXp", data.getEmberXp());
         yaml.set("emberXpDate", data.getEmberXpDate());
+        yaml.set("questChapter", data.getQuestChapter());
+        yaml.set("questStep", data.getQuestStep());
+        yaml.set("questCount", data.getQuestCount());
+        yaml.set("questDone", data.isQuestDone());
         yaml.set("emberXpKillToday", data.getEmberXpKillToday());
         yaml.set("emberXpCombatToday", data.getEmberXpCombatToday());
         yaml.set("passSeasonId", data.getPassSeasonId());

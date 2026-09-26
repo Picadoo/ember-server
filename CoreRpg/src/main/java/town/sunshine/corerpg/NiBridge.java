@@ -136,6 +136,18 @@ public final class NiBridge {
      * Give NI item stacks into inventory (overflow drops at feet).
      * Falls back to console {@code ni give} if ItemManager.getItemStack fails.
      */
+    /** 1.8.0: display name of an NI item (colors stripped), or the id. */
+    public String displayName(String niId) {
+        try {
+            if (isReady() && hasNiDefinition(niId)) {
+                ItemStack s = ItemManager.INSTANCE.getItemStack(niId);
+                if (s != null && s.hasItemMeta() && s.getItemMeta().hasDisplayName())
+                    return org.bukkit.ChatColor.stripColor(s.getItemMeta().getDisplayName());
+            }
+        } catch (Throwable ignored) { }
+        return niId;
+    }
+
     public boolean giveNiItem(Player player, String niId, int amount) {
         if (player == null || niId == null || niId.isEmpty() || amount <= 0) return amount <= 0;
         if (isReady() && hasNiDefinition(niId)) {
