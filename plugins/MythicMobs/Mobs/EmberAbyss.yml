@@ -1,3 +1,4 @@
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 深渊 EmberAbyss — 层系数上涨（潮/骨/混/蛮/看守）
 # DP 可用 level= 再叠 LevelModifiers；单路径 ni give
 
@@ -18,9 +19,9 @@ EmberAbyssZombie:
   - damage 0.8
   Skills:
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.28
-  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath >0 0.35
-  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath >0 0.15
-  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath >0 0.4
+  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath 0.03
+  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath 0.02
+  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath 0.4
 
 EmberAbyssSkeleton:
   Type: SKELETON
@@ -40,9 +41,9 @@ EmberAbyssSkeleton:
   Skills:
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.3
   - skill{s=EmberCryptSlow} @target ~onAttack 0.2
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.35
-  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath >0 0.15
-  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath >0 0.4
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.03
+  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath 0.02
+  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath 0.4
 
 EmberAbyssMix:
   Type: ZOMBIE
@@ -62,9 +63,9 @@ EmberAbyssMix:
   Skills:
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.32
   - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.15
-  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath >0 0.3
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.3
-  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath >0 0.2
+  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath 0.03
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.02
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath 0.08
 
 EmberAbyssBrute:
   Type: HUSK
@@ -88,11 +89,11 @@ EmberAbyssBrute:
   Skills:
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.3
   - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.18
-  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath >0 0.45
-  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath >0 0.35
-  - command{c="ni give <trigger.name> mat_ember_protect_scroll 1";asop=true} @Trigger ~onDeath >0 0.12
-  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath >0 0.25
-  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.04
+  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath 0.03
+  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath 0.02
+  - command{c="ni give <trigger.name> mat_ember_protect_scroll 1";asop=true} @Trigger ~onDeath 0.05
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath 0.08
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath 0.01
 
 EmberAbyssWatcher:
   Type: WITHER_SKELETON
@@ -116,8 +117,8 @@ EmberAbyssWatcher:
   - skill{s=EmberAbyssWatcherGaze} @self ~onTimer:120
   - skill{s=EmberAbyssPressure} @target ~onAttack 0.35
   - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.12
-  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath >0 0.5
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.5
-  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath >0 0.2
-  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.08
-  - command{c="ni give <trigger.name> gear_ember_t2_talisman 1";asop=true} @Trigger ~onDeath >0 0.05
+  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath 0.18
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.17
+  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath 0.05
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath 0.03
+  - command{c="ni give <trigger.name> gear_ember_t2_talisman 1";asop=true} @Trigger ~onDeath 0.02

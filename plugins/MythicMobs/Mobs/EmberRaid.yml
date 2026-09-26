@@ -1,3 +1,4 @@
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 团本 EmberRaid — 通道杂兵 → 终厅机制战
 
 EmberRaidFootman:
@@ -14,8 +15,8 @@ EmberRaidFootman:
   - IRON_SWORD HAND
   Skills:
   - skill{s=EmberCryptBleed} @target ~onAttack 0.2
-  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath >0 0.5
-  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.05
+  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath 0.5
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath 0.02
 
 EmberRaidArcher:
   Type: SKELETON
@@ -31,8 +32,8 @@ EmberRaidArcher:
   - BOW HAND
   Skills:
   - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.2
-  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath >0 0.5
-  - command{c="ni give <trigger.name> gear_ember_t1_talisman 1";asop=true} @Trigger ~onDeath >0 0.04
+  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath 0.5
+  - command{c="ni give <trigger.name> gear_ember_t1_talisman 1";asop=true} @Trigger ~onDeath 0.02
 
 EmberRaidElite:
   Type: HUSK
@@ -53,8 +54,8 @@ EmberRaidElite:
   - skill{s=EmberRaidCallout} @target ~onAttack 0.12
   - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.15
   - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.02
-  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.05
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath 0.02
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath 0.05
 
 EmberRaidBoss:
   Type: WITHER_SKELETON
@@ -79,9 +80,9 @@ EmberRaidBoss:
   - skill{s=EmberRaidSummonAid} @self ~onTimer:160
   - speak{m="&c终厅使徒&7：分路已尽，留下余烬。";cooldown=20} @PlayersInRadius{r=40} ~onCombat >0 0.12
   # 团戒改通关箱周首通保底（option.yml），此处不发
-  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.15
-  - command{c="ni give <trigger.name> gear_ember_t2_talisman 1";asop=true} @Trigger ~onDeath >0 0.12
-  - command{c="ni give <trigger.name> gear_ember_t3_blade 1";asop=true} @Trigger ~onDeath >0 0.08
-  - command{c="ni give <trigger.name> gear_ember_t3_talisman 1";asop=true} @Trigger ~onDeath >0 0.06
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath 0.15
+  - command{c="ni give <trigger.name> gear_ember_t2_talisman 1";asop=true} @Trigger ~onDeath 0.12
+  - command{c="ni give <trigger.name> gear_ember_t3_blade 1";asop=true} @Trigger ~onDeath 0.08
+  - command{c="ni give <trigger.name> gear_ember_t3_talisman 1";asop=true} @Trigger ~onDeath 0.06
   - command{c="ni give <trigger.name> core_ember_compact 1";asop=true} @Trigger ~onDeath
   - command{c="ni give <trigger.name> mat_ember_core_fragment 2";asop=true} @Trigger ~onDeath

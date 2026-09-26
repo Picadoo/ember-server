@@ -1,3 +1,4 @@
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 灾厄 EmberCalamityBoss — 阶段削甲 → 狂暴砸（少技能、可播报）
 
 EmberCalamityBoss:
@@ -24,10 +25,10 @@ EmberCalamityBoss:
   - speak{m="&4余烬灾厄使&7：灰烬将吞没此地。";cooldown=25} @PlayersInRadius{r=40} ~onCombat >0 0.12
   - command{c="ni give <trigger.name> mat_calamity_ember 1";asop=true} @Trigger ~onDeath
   - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath >0 0.7
-  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath >0 0.5
-  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.5
+  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath 0.04
+  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath 0.04
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath 0.04
   - command{c="ni give <trigger.name> core_ember_compact 1";asop=true} @Trigger ~onDeath
   - command{c="ni give <trigger.name> mat_ember_core_fragment 2";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath >0 0.25
-  - command{c="ni give <trigger.name> cosmetic_calamity_shard 1";asop=true} @Trigger ~onDeath >0 0.35
+  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath 0.05
+  - command{c="ni give <trigger.name> cosmetic_calamity_shard 1";asop=true} @Trigger ~onDeath 0.2

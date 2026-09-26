@@ -12,6 +12,9 @@ dungeon-init-script:
 dungeon-start:
   condition:
     - "$team-condition{team=true;min=1;max=5;message=§c灾厄人数 1～5，当前 (<size>)} @system"
+    # 2026-09-26 门控：本实例只供 OP 调试（正式灾厄 = CoreRpg CalamityService 在 ember_event 的公共窗，不经 DP）。
+    #   DP 对每个队员逐一判定；PAPI Expansion-player 的 %player_is_op%（PAPI boolean → yes/no）
+    - "$js-condition{text='%player_is_op%'=='yes';message=§c灾厄 DP 实例仅供 OP 调试 · 正式灾厄请走公共窗口：/ember → 灾厄} @system"
   action-script:
     - "$message{type=text;text=§4灾厄降临时刻。§7灰烬巨像自地脉升起——打掉它的外壳！} @dungeon"
     - "$teleport{location=-40,65,270;defspawn=true} @player"
@@ -20,13 +23,14 @@ dungeon-start:
 dungeon-area: []
 
 # 每日首通窗宝箱（表 2.3-B）— 参战 MM 掉落另见 EmberCalamity.yml
-# 2026-09-26 注意（暂未修 <player.name>）：本本无票/无权限门，任何玩家可 /dp start EmberCalamity（ember_calamity 菜单 T 位也可点）。
-#   一旦改成 %player_name%，每次通关必发 T3 护符 + 材料 = 无限刷。先加门（仅 OP / 票 / 次数）再改占位符。
+# 2026-09-26 已修：<player.name> → %player_name%（旧写法不被解析，奖励从未发放）。
+#   先加了 OP 门（上方 dungeon-start js-condition，%player_is_op%），非 OP 的 /dp start 被拒，
+#   因此每次通关必发 T3 护符不再构成无限刷。见 docs/smoke-gating-drops-20260926.md。
 #   注：Boss 的 MM onDeath 掉落 + CoreRpg kill_rewards 在此实例里本来就会发（不经本段）。
 dungeon-reward-script:
   - "$message{type=text;text=§a灾厄暂息。§7全服共享了这一剑。§8（日箱限领后期接线）} @dungeon"
-  - "$command{text=ni give <player.name> mat_ember_core_fragment 2;console=true} @player"
-  - "$command{text=ni give <player.name> crystal_ember_enchant 1;console=true} @player"
-  - "$command{text=ni give <player.name> mat_calamity_ember 2;console=true} @player"
-  - "$command{text=ni give <player.name> gear_ember_t3_talisman 1;console=true} @player"
-  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_core_fragment 2;console=true} @player"
+  - "$command{text=ni give %player_name% crystal_ember_enchant 1;console=true} @player"
+  - "$command{text=ni give %player_name% mat_calamity_ember 2;console=true} @player"
+  - "$command{text=ni give %player_name% gear_ember_t3_talisman 1;console=true} @player"
+  - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

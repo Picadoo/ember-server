@@ -22,7 +22,9 @@ dungeon-area: []
 
 # 通关箱：币友好 — 碎片/外观/低档孔石/核心×1～2；不发 gear_ember_blade
 # 2026-09-26 注意（暂未修 <player.name>）：贡献/周次门控在 /corerpg guild boss，但它是以玩家身份 dispatch "dp start EmberGuildBoss"，
-#   玩家直接 /dp start EmberGuildBoss 即可绕过门控。改成 %player_name% 前需先堵住直开（如改 start-console 启动）。
+#   玩家直接 /dp start EmberGuildBoss 即可绕过门控（2026-09-26 实测：非 OP 直开成功）。纯配置无解：任何 DP 条件
+#   合法路径能过，直开也能过（同一玩家、同一命令）。需改 CoreRpg GuildService 代码（console 启动 / 发票），
+#   之后再改 %player_name%。奖励修复暂不应用 — 见 docs/smoke-gating-drops-20260926.md。
 dungeon-reward-script:
   - "$message{type=text;text=§6盟约周 Boss 通关奖励已发放} @dungeon"
   - "$command{text=ni give <player.name> mat_ember_shard 8;console=true} @player"

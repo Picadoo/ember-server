@@ -1,3 +1,4 @@
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 余烬地窟 — MythicMobs 4.11 / Paper 1.12.2（锁定：Mobs/EmberCrypt.yml）
 # 掉落只走一条：~onDeath + @Trigger → ni give <trigger.name>（进背包）
 # 已去掉 NeigeItems.Drops，避免与 ni give 叠双份
@@ -18,7 +19,7 @@ EmberCryptZombie:
   - skill{s=EmberCryptBleed} @target ~onAttack 0.22
   - skill{s=EmberCryptSlow} @target ~onAttack 0.18
   - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath >0 0.05
+  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath 0.05
 
 EmberCryptSkeleton:
   Type: SKELETON
@@ -36,7 +37,7 @@ EmberCryptSkeleton:
   - skill{s=EmberCryptBleed} @target ~onAttack 0.2
   - skill{s=EmberCryptSlow} @target ~onAttack 0.25
   - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath >0 0.05
+  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath 0.05
 
 EmberCryptBrute:
   Type: HUSK
@@ -59,5 +60,5 @@ EmberCryptBrute:
   - skill{s=EmberCryptSlow} @target ~onAttack 0.2
   - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.12
   - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath >0 0.18
-  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath >0 0.12
+  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath 0.18
+  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath 0.12

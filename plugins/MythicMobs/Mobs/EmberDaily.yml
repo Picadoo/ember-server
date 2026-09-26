@@ -1,3 +1,4 @@
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
 # 日常 EmberDaily — 清潮轻压（灰烬庭院）
 # 单路径 ni give；勿与地窟 Display 撞名（DP $kill 用去色 Display）
 
@@ -51,6 +52,6 @@ EmberDailyBrute:
   - skill{s=EmberDailyBruteTap} @target ~onAttack 0.14
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.1
   - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
-  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath >0 0.12
-  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath >0 0.08
-  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.03
+  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath 0.12
+  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath 0.08
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath 0.03
