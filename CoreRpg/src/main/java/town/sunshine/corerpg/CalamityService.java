@@ -8,8 +8,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -33,7 +40,7 @@ import java.util.logging.Level;
  * Primary config: plugins/CoreRpg/calamity.yml
  * State: calamity-state.yml
  */
-public final class CalamityService {
+public final class CalamityService implements Listener {
 
     private static final DateTimeFormatter HMS = DateTimeFormatter.ofPattern("HH:mm:ss");
     private static final int OPEN_GRACE_SECONDS = 120;
@@ -86,6 +93,8 @@ public final class CalamityService {
     private boolean bossSpawnedThisWindow;
     private boolean bossKilledThisWindow;
     private final Set<String> announcedPre = new HashSet<String>();
+    /** Players who dealt damage to the calamity boss since the last open/settlement (spec §3: A/B need damage). */
+    private final Set<UUID> damagers = new HashSet<UUID>();
 
     public CalamityService(CoreRpgPlugin plugin) {
         this.plugin = plugin;
@@ -93,7 +102,8 @@ public final class CalamityService {
         this.configFile = new File(plugin.getDataFolder(), "calamity.yml");
         loadState();
         reload();
-        plugin.getLogger().info("Calamity window service 1.4.7 loaded (world=" + worldName
+        Bukkit.getPluginManager().registerEvents(this, plugin);
+        plugin.getLogger().info("Calamity window service 1.4.8 loaded (world=" + worldName
                 + " " + (int) x + "," + (int) y + "," + (int) z
                 + " duration=" + durationMinutes + "m windows=" + joinTimes() + ")");
     }
@@ -312,6 +322,7 @@ public final class CalamityService {
         windowEndEpochMs = System.currentTimeMillis() + durationMinutes * 60L * 1000L;
         bossSpawnedThisWindow = false;
         bossKilledThisWindow = false;
+        damagers.clear();
         broadcast(messageOpen);
         if (!bossSpawnedThisWindow) {
             doSpawn();
@@ -414,28 +425,38 @@ public final class CalamityService {
             plugin.getLogger().info("Calamity boss killed this window — no second spawn until END");
         }
 
+        // Spec §3: only players who damaged the boss get A (参战) and are eligible for daily chest B.
         List<Player> recipients = new ArrayList<Player>();
         if (killer != null) recipients.add(killer);
-        World w = Bukkit.getWorld(worldName);
-        if (w != null) {
-            Location center = killer != null ? killer.getLocation() : new Location(w, x, y, z);
-            if (!worldName.equals(center.getWorld() != null ? center.getWorld().getName() : "")) {
-                center = new Location(w, x, y, z);
-            }
-            for (Player p : w.getPlayers()) {
-                if (p == null || recipients.contains(p)) continue;
-                if (p.getWorld() == null || !w.equals(p.getWorld())) continue;
-                if (p.getLocation().distanceSquared(center) <= 80.0 * 80.0) {
-                    recipients.add(p);
-                }
-            }
+        for (UUID id : damagers) {
+            Player p = Bukkit.getPlayer(id);
+            if (p == null || !p.isOnline() || recipients.contains(p)) continue;
+            recipients.add(p);
         }
+        damagers.clear();
+        plugin.getLogger().info("Calamity kill settled: killer=" + (killer != null ? killer.getName() : "-")
+                + " recipients=" + recipients.size());
         if (recipients.isEmpty()) return;
 
         for (int i = 0; i < recipients.size(); i++) {
             grantKillRewardsA(recipients.get(i));
             grantDailyChestB(recipients.get(i));
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onBossDamaged(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof LivingEntity)) return;
+        if (!isCalamityEntity((LivingEntity) event.getEntity())) return;
+        if (event.getFinalDamage() <= 0) return;
+        Entity src = event.getDamager();
+        Player p = null;
+        if (src instanceof Player) {
+            p = (Player) src;
+        } else if (src instanceof Projectile && ((Projectile) src).getShooter() instanceof Player) {
+            p = (Player) ((Projectile) src).getShooter();
+        }
+        if (p != null) damagers.add(p.getUniqueId());
     }
 
     private void grantKillRewardsA(Player player) {
