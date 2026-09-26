@@ -177,3 +177,13 @@ Harness: `mineflayer-tests/dungeon-balance.js` (`D=weekly,abyss,calamity,guild,r
 - MM `EmberCalamity` ENTITY_ATTACK modifier is back to 1.0.
 - Measured (T2 blade, L30, on foot): 1 bot → boss TTK 36 s, ended at 43% HP. 3 bots → 48 s, ended at 82–100% HP, 0 deaths.
 - Fix: the MONITOR damage tracking and the death settlement now check the boss's world (`ember_event`). A guild boss with the same display name no longer settles as a calamity kill.
+
+## 16. Weekly end-HP variance (was 2–65%)
+- Brute A and Brute B are ZOMBIE now (HUSK hunger blocked natural regen between waves), with PreventSunburn. Wave 1 is 3 zombies.
+- Brute B (1300 HP):
+  - Random bursts removed (ChainSlam knock-up and GuardPulse procs).
+  - Melee lowered to 2, KnockbackResistance raised to 0.6.
+  - New steady ember aura: 1 dmg every 2 s within 8 blocks, so damage still lands when the brute is kited or doesn't engage. Before this, fast-kill runs ended at 80–100%.
+  - Every 15 s it heals players within 20 blocks by 6 HP ("余烬回暖", a predictable mid-fight heal).
+- Result, 3 runs (L20, T1 blade, on foot): end HP 33 / 40 / 53%, boss TTK 34–36 s, 0 deaths.
+  - For comparison, melee 3.25 without the aura gave 82 / 46 / 35%.

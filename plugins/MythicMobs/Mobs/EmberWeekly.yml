@@ -5,7 +5,7 @@
 EmberWeeklyZombie:
   Type: ZOMBIE
   Display: '&6深核廊僵尸'
-  Health: 90
+  Health: 110
   Damage: 4
   Options:
     MovementSpeed: 0.24
@@ -37,7 +37,7 @@ EmberWeeklySkeleton:
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t1_talisman 1"} @Self ~onDeath 0.01
 
 EmberWeeklyBruteA:
-  Type: HUSK
+  Type: ZOMBIE
   Display: '&6深核廊蛮兵·甲'
   Health: 350
   Damage: 4
@@ -46,6 +46,7 @@ EmberWeeklyBruteA:
     AlwaysShowName: true
     PreventOtherDrops: true
     KnockbackResistance: 0.5
+    PreventSunburn: true
   Equipment:
   - IRON_HELMET HEAD
   Skills:
@@ -58,22 +59,27 @@ EmberWeeklyBruteA:
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_blade 1"} @Self ~onDeath 0.03
 
 EmberWeeklyBruteB:
-  Type: HUSK
+  # 2026-09-27 variance pass: zombie body (husk hunger stopped regen), steady melee only (no random knock-up / guard-pulse bursts),
+  #   a steady ember aura (1 dmg / 2 s within 8 blocks, so damage lands even when the brute is kited),
+  #   and an ember pulse every 15 s that heals nearby players 6 HP (predictable mid-fight heal)
+  Type: ZOMBIE
   Display: '&6深核廊蛮兵·乙'
   Health: 1300
-  Damage: 1
+  Damage: 2
   Options:
     MovementSpeed: 0.22
     AlwaysShowName: true
     PreventOtherDrops: true
-    KnockbackResistance: 0.3
+    KnockbackResistance: 0.6
+    PreventSunburn: true
   Equipment:
   - IRON_HELMET HEAD
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
-  - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.28
-  - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.12
+  - message{m="&6【深核廊】&7余烬回暖——你的伤口在愈合。"} @PlayersInRadius{r=20} ~onTimer:300
+  - damage{amount=1} @PlayersInRadius{r=8} ~onTimer:40
+  - heal{amount=6} @PlayersInRadius{r=20} ~onTimer:300
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t1_talisman 1"} @Self ~onDeath 0.12
   - command{c="corerpg mmgive <caster.uuid> gear_ember_blade 1"} @Self ~onDeath 0.2

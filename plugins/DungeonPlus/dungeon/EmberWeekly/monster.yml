@@ -4,11 +4,11 @@
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,274;amount=4;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,274;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill{mobname=深核廊僵尸;amount=4} @system"
+    - "$kill{mobname=深核廊僵尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【深核·前厅】清杂：僵尸×4} @dungeon"
+    - "$message{type=text;text=§e【深核·前厅】清杂：僵尸×3} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
