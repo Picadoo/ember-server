@@ -1,21 +1,19 @@
-# 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
-# 2026-09-27：尾刀锋利石 1.0→0.3，其余宝石 .04→.02，新增 T3 刃/护符各 0.01（菜单「低概率T3」）。
-# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
-# 灾厄 EmberCalamityBoss — 阶段削甲 → 狂暴砸（少技能、可播报）
+# 2026-09-27 real-combat balance: guild-boss variant (docs/critic-fixes-20260927.md round 3)
 
-EmberCalamityBoss:
+EmberGuildCalamity:
   Type: WITHER_SKELETON
   Display: '&4余烬灾厄使'
-  Health: 1600
-  Damage: 1
-  # 2026-09-27: HP attribute capped at 2048 (spigot.yml) → melee taken ×0.8 ≈ 2000 effective HP (solo Lv30 T2 ≈ 45 s)
+  Health: 2000
+  Damage: 2
+  # 2026-09-27: guild-boss variant of the calamity boss (same display/drops so the DP kill step and loot are unchanged),
+  #   tuned for a 2–3 player guild party (Lv30 T2): melee taken ×0.45 ≈ 4450 effective HP, harder hits, holds its ground
   DamageModifiers:
-  - ENTITY_ATTACK 0.8
+  - ENTITY_ATTACK 0.45
   Options:
     MovementSpeed: 0.22
     AlwaysShowName: true
     PreventOtherDrops: true
-    KnockbackResistance: 0.1
+    KnockbackResistance: 0.3
     MaxCombatDistance: 36
   Equipment:
   - DIAMOND_HELMET HEAD

@@ -7,12 +7,14 @@
 groups:
   floor1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-41,65,273;amount=4;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-41,65,273;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill{mobname=余烬深渊·潮尸;amount=4} @system"
+    - "$kill{mobname=余烬深渊·潮尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§5—— 第 §f1 §5层 —— §7潮尸×4} @dungeon"
+    - "$message{type=text;text=§5—— 第 §f1 §5层 —— §7潮尸×3} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 1;console=true} @player"
     - "$message{type=text;text=§a第 1 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
@@ -22,12 +24,14 @@ groups:
   floor2:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-41,65,273;amount=2;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=3;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=5} @system"
+    - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=4} @system"
     start:
     - "$message{type=text;text=§5—— 第 §f2 §5层 —— §7混潮+骨潮} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 2;console=true} @player"
     - "$message{type=text;text=§a第 2 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
@@ -36,13 +40,15 @@ groups:
 
   floor3:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-41,65,273;amount=4;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-41,65,273;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
-    - "$kill{mobname=余烬深渊·骨潮;amount=4} @system"
+    - "$kill{mobname=余烬深渊·骨潮;amount=3} @system"
     start:
     - "$message{type=text;text=§5—— 第 §f3 §5层 —— §7骨潮加压} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 3;console=true} @player"
     - "$message{type=text;text=§a第 3 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
@@ -52,12 +58,14 @@ groups:
   floor4:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-41,65,273;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,273;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,273;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·蛮层;amount=1} @system"
     start:
     - "$message{type=text;text=§c—— 第 §f4 §5层 —— §7蛮层} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 4;console=true} @player"
     - "$message{type=text;text=§a第 4 层通过 · 看守将至} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
@@ -72,6 +80,8 @@ groups:
     start:
     - "$message{type=text;text=§4—— 第 §f5 §5层 —— §c看守凝视！躲开视线再打} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 5;console=true} @player"
     - "$message{type=text;text=§a第 5 层通过 · 继续下潜或撤离} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
@@ -81,12 +91,14 @@ groups:
   # 6～8：加压克隆（层类型循环灰烬潮→混响→看守）；无尽语义靠 progress+撤离/超时 settle
   floor6:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-41,65,273;amount=6;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-41,65,273;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill{mobname=余烬深渊·潮尸;amount=6} @system"
+    - "$kill{mobname=余烬深渊·潮尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§5—— 第 §f6 §5层 —— §7潮尸加压×6} @dungeon"
+    - "$message{type=text;text=§5—— 第 §f6 §5层 —— §7潮尸加压×3} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 6;console=true} @player"
     - "$message{type=text;text=§a第 6 层通过} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
@@ -95,13 +107,15 @@ groups:
 
   floor7:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-41,65,273;amount=3;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=4;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-41,65,273;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=7} @system"
+    - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=4} @system"
     start:
     - "$message{type=text;text=§5—— 第 §f7 §5层 —— §7混潮+骨潮加压} @dungeon"
     end:
+    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 7;console=true} @player"
     - "$message{type=text;text=§a第 7 层通过 · 深处看守将至} @dungeon"
     - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
@@ -111,11 +125,12 @@ groups:
   floor8:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-41,65,273;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-38,65,273;amount=1;scattered=1.0;level=1} @dungeon"
+    # 2026-09-27: brute swapped for a mix (watcher + brute together wiped a solo Lv25 T1 in ~20 s)
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,65,273;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·看守;amount=1} @system"
     start:
-    - "$message{type=text;text=§4—— 第 §f8 §5层 —— §c深处看守+蛮层！} @dungeon"
+    - "$message{type=text;text=§4—— 第 §f8 §5层 —— §c深处看守+混潮！} @dungeon"
     end:
     - "$command{text=corerpg abyss progress %player_name% 8;console=true} @player"
     - "$message{type=text;text=§a第 8 层通过 · 本期顶层通关结算} @dungeon"
