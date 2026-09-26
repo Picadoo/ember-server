@@ -53,6 +53,23 @@ public final class ProgressService {
     private int vipXpBonusPerTier = 1;
     private int vipWarehouseSlotsPerTier = 1;
 
+    // ---- 1.7.0 level gates ----
+    private final Map<String, Integer> levelGates = new LinkedHashMap<String, Integer>();
+
+    public int gateLevel(String id) {
+        Integer v = levelGates.get(id == null ? "" : id.toLowerCase());
+        return v == null ? 0 : v;
+    }
+
+    public boolean passesGate(PlayerData d, String id) {
+        return d.getEmberLevel() >= gateLevel(id);
+    }
+
+    public String gateRefusal(PlayerData d, String id, String label) {
+        return ChatColor.RED + "[余烬] " + label + " 需要余烬等级 " + ChatColor.YELLOW + "Lv." + gateLevel(id)
+                + ChatColor.RED + "（当前 Lv." + d.getEmberLevel() + "）" + ChatColor.GRAY + " · /corerpg level 查看升级进度";
+    }
+
     public ProgressService(CoreRpgPlugin plugin, PlayerDataStore dataStore) {
         this.plugin = plugin;
         this.dataStore = dataStore;
@@ -107,6 +124,14 @@ public final class ProgressService {
         }
         vipXpBonusPerTier = Math.max(0, cfg.getInt("vip_tiers.ember_xp_bonus_percent_per_tier", 1));
         vipWarehouseSlotsPerTier = Math.max(0, cfg.getInt("vip_tiers.warehouse_slots_per_tier", 1));
+        levelGates.clear();
+        ConfigurationSection lg = cfg.getConfigurationSection("level_gates");
+        if (lg != null) {
+            for (String k : lg.getKeys(false)) levelGates.put(k.toLowerCase(), Math.max(0, lg.getInt(k)));
+        } else {
+            levelGates.put("daily", 10); levelGates.put("weekly", 20); levelGates.put("abyss", 25);
+            levelGates.put("calamity", 30); levelGates.put("raid", 35); levelGates.put("guild_boss", 0);
+        }
         File sf = new File(plugin.getDataFolder(), "season.yml");
         YamlConfiguration sy = YamlConfiguration.loadConfiguration(sf);
         seasonId = sy.getString("current_season_id", "S1");

@@ -56,6 +56,7 @@ Icons:
         - 'tell: §5深渊已开启。§7今日只有一次下潜——能走多深，就走多深。'
         - 'tell: §8撤离：§7/corerpg abyss evacuate §8· 按最高层结算 · 票不退'
         - 'tell: §8命令：§7/dp start EmberAbyss §8· 需 §5余烬深渊票§8×1'
+        - 'tell: §8需要余烬等级 §eLv.25§8（/corerpg level）'
         - 'command: dp start EmberAbyss'
         - close
 

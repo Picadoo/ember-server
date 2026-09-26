@@ -925,6 +925,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             p.sendMessage(ChatColor.GREEN + "[余烬] 悬赏完成！§e" + b.name
                     + ChatColor.GREEN + " → " + coinName + " §f×" + b.rewardCoin
                     + ChatColor.GREEN + "，活跃 +" + actBountyComplete);
+            // 1.7.0: bounty (1 claim/day) → ember XP + pass XP (progress.yml sources.bounty)
+            if (progressService != null) {
+                progressService.grantEmberXp(p, "bounty");
+                progressService.grantPassXp(p, "bounty");
+            }
             refreshBoard(p);
             return true;
         }
@@ -1004,6 +1009,20 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     }
     private boolean cmdCalamity(CommandSender sender, String[] args) {
         String act = args.length >= 2 ? args[1].toLowerCase() : "status";
+        if ("join".equals(act) || "go".equals(act)) {
+            // 1.7.0: public calamity world entry with level gate (players have no mvtp permission; console teleports)
+            if (!requirePlayer(sender)) return true;
+            Player p = (Player) sender;
+            PlayerData d = dataStore.get(p.getUniqueId());
+            if (progressService != null && !p.isOp() && !progressService.passesGate(d, "calamity")) {
+                p.sendMessage(progressService.gateRefusal(d, "calamity", "灾厄公共窗"));
+                return true;
+            }
+            String world = getConfig().getString("calamity_world", "ember_event");
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "mvtp " + p.getName() + " " + world);
+            p.sendMessage(ChatColor.DARK_RED + "[灾厄] 已前往 " + world + " · /corerpg calamity status 查看窗口");
+            return true;
+        }
         if ("forceopen".equals(act) || "trigger".equals(act) || "spawn".equals(act) || "force".equals(act)) {
             if (!sender.hasPermission("corerpg.admin")) {
                 sender.sendMessage(ChatColor.RED + "需要 corerpg.admin");

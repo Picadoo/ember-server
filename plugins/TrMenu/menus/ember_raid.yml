@@ -55,6 +55,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §9团本已点燃。§7分路推进——左卫兵、右射手，汇合后再闯终厅。'
         - 'tell: §8命令：§7/dp start EmberRaid §8· 需 §9余烬团本票§8×1 · 人数 3～5'
+        - 'tell: §8需要余烬等级 §eLv.35§8（/corerpg level）'
         - 'command: dp start EmberRaid'
         - close
 

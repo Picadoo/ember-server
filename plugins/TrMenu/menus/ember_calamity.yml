@@ -41,6 +41,7 @@ Icons:
       lore:
         - ''
         - '§7传送至公共世界 §fember_event'
+        - '§c需要余烬等级 Lv.30'
         - '§7仅在开放窗口内有 Boss 与领奖'
         - '§8建议窗：12:00 / 20:00 / 22:00（上海）'
         - ''
@@ -48,9 +49,8 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §4已送往灾厄祭坛。若未开窗，请等待下一时刻。'
-        # 2026-09-26 audit: players lack multiverse.teleport perms → run from console (fixed target world)
-        - 'console: mvtp %player_name% ember_event'
+        # 2026-09-26: CoreRpg 1.7.0 calamity join = level gate (Lv.30) + console mvtp (players lack multiverse perms)
+        - 'command: corerpg calamity join'
         - close
 
   P:

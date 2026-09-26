@@ -11,6 +11,8 @@ dungeon-init-script:
 dungeon-start:
   condition:
     - "$team-condition{team=true;min=1;max=2;message=§c日常本人数 1～2，当前 (<size>)} @system"
+    # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.daily=10；DP 逐队员判定；放在扣票条件前 → 被拒不扣票；OP 豁免）
+    - "$js-condition{text='%corerpg_gate_daily%'=='yes'||'%player_is_op%'=='yes';message=§c日常本需要余烬等级 §eLv.10§c · 队伍中有人等级不足（/corerpg level 查看）} @system"
     # 入场扣次：检测并扣除显示名「余烬日票」×1（过滤颜色）
     - "$js-condition{text='<item:余烬日票 *1 *true>'=='true';message=§c缺少§e余烬日票§c×1（每日共 3 张，进本即扣）} @system"
   action-script:

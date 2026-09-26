@@ -20,6 +20,7 @@ pass_xp:
     abyss_clear: 20
     raid_clear: 40
     guild_boss_clear: 20
+    bounty: 15           # 1.7.0 悬赏（每日 1 次领取）
   daily_cap: 100
   xp_per_level: 100
   max_level: 30         # ≈ 30 天一季、每日满额约 1 级
@@ -44,6 +45,7 @@ ember_xp:
     abyss_clear: 80
     raid_clear: 250
     guild_boss_clear: 100
+    bounty: 40           # 1.7.0 悬赏（每日 1 次领取 → 日上限 40）
     elite: 15
     boss: 40
     kill: 2              # 任意合格击杀（挂机庭等），受 kill_daily_cap
@@ -127,3 +129,16 @@ vip_tiers:
   thresholds: [68, 198, 488, 988, 1988, 3288, 4988, 7988, 12988, 19988]
   ember_xp_bonus_percent_per_tier: 1   # 勋阶 X = +10%
   warehouse_slots_per_tier: 1          # 晋升时一次性加格（受 warehouse max_slots）
+
+# ---------------------------------------------------------------------------
+# 1.7.0 进本等级门槛（DESIGN-ember-growth-curve §1「等级门槛建议」：日 10+ / 周 20+ / 深渊 25+ / 灾厄 30+ / 团本 35+ / 盟 Boss 在盟即可）
+#   DP：各 option.yml dungeon-start 第一条条件 js '%corerpg_gate_<id>%'=='yes'（OP 豁免），在扣票条件之前 → 被拒不扣票。
+#   灾厄公共窗：/corerpg calamity join（菜单「奔赴灾厄」）。按 1.6.0 曲线：Lv20 ≈ 1,140 经验（满勤 2～3 天），
+#   Lv25 ≈ 2,160（约 5 天），Lv30 ≈ 3,480（约 1 周），Lv35 ≈ 5,100（约 1.5～2 周）。改数字只改这里（DP 提示文案里的数字需同步）。
+level_gates:
+  daily: 10
+  weekly: 20
+  abyss: 25
+  calamity: 30
+  raid: 35
+  guild_boss: 0

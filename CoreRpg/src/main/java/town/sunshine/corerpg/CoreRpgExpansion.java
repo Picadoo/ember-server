@@ -29,6 +29,11 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
             return String.valueOf(data.getTalentPointsAvailable());
         }
         if ("ember_xp".equals(key)) return String.valueOf(data.getEmberXp());
+        if ("ember_level".equals(key) || "level".equals(key)) return String.valueOf(data.getEmberLevel());
+        if (key.startsWith("gate_")) {
+            ProgressService ps = plugin.getProgressService();
+            return ps == null || ps.passesGate(data, key.substring(5)) ? "yes" : "no";
+        }
         if ("ember_xp_need".equals(key)) {
             ProgressService ps = plugin.getProgressService();
             return ps == null ? "-" : String.valueOf(ps.xpToNext(data.getEmberLevel()));
