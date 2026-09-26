@@ -8,7 +8,7 @@ EmberDailyZombie:
   Type: ZOMBIE
   Display: '&a灰烬庭院僵尸'
   Health: 45
-  Damage: 3
+  Damage: 4
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -36,23 +36,25 @@ EmberDailySkeleton:
   - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
 
 EmberDailyBrute:
-  Type: HUSK
+  # 2026-09-27 consistency pass: zombie body (husk hunger blocked regen), no random tap/soft-hit procs,
+  #   a steady ember aura (0.5 dmg / 2 s within 6 blocks) so the fight costs about the same every run
+  Type: ZOMBIE
   Display: '&a灰烬庭院蛮兵'
-  Health: 110
+  Health: 180
   Damage: 2
   Options:
     MovementSpeed: 0.2
     AlwaysShowName: true
     PreventOtherDrops: true
-    KnockbackResistance: 0.35
+    KnockbackResistance: 0.6
+    PreventSunburn: true
   Equipment:
   - IRON_HELMET HEAD
   - IRON_CHESTPLATE CHEST
   Skills:
   # 2026-09-26：第二经验等级来源（CoreRpg progress.yml，精英 +1 / 首领 +2，每日上限）
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
-  - skill{s=EmberDailyBruteTap} @target ~onAttack 0.14
-  - skill{s=EmberDailySoftHit} @target ~onAttack 0.1
+  - damage{amount=0.5} @PlayersInRadius{r=6} ~onTimer:40
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> gear_ember_blade 1"} @Self ~onDeath 0.12
   - command{c="corerpg mmgive <caster.uuid> gear_ember_charm 1"} @Self ~onDeath 0.08

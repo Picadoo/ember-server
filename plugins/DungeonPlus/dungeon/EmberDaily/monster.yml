@@ -2,7 +2,7 @@
 # 2026-09-27: the old points (-40,65,275 / -42,65,273 / -40,65,278) are inside solid stone in map ember_daily:
 #   every wave mob and the brute spawned in rock and suffocated (the ~1 min "clear", no kill credit, no elite XP).
 #   The playable room is x -42..-38, z 268..272, y65 (landing -40,65,270) → spawn in its corners.
-#   Waves are 2 zombies, then 1 zombie + 2 skeletons (was 4, then 2+2), and each wave end heals 8 HP (instant_health II).
+#   Waves are 2 zombies, then 1 zombie + 2 skeletons (was 4, then 2+2), and each wave end heals 12 HP (instant_health III).
 groups:
   wave1:
   - monster:
@@ -12,7 +12,7 @@ groups:
     start:
     - "$message{type=text;text=§e【庭院·清潮】第一波：回廊僵尸×2 —— 别急着冲中央} @dungeon"
     end:
-    - "$message{type=text;text=§a第一波完成 · 余烬回暖（+8 生命）} @dungeon"
+    - "$message{type=text;text=§a第一波完成 · 余烬回暖（+12 生命）} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
     auto-start: false

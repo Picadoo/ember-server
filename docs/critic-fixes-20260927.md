@@ -187,3 +187,16 @@ Harness: `mineflayer-tests/dungeon-balance.js` (`D=weekly,abyss,calamity,guild,r
   - Every 15 s it heals players within 20 blocks by 6 HP ("余烬回暖", a predictable mid-fight heal).
 - Result, 3 runs (L20, T1 blade, on foot): end HP 33 / 40 / 53%, boss TTK 34–36 s, 0 deaths.
   - For comparison, melee 3.25 without the aura gave 82 / 46 / 35%.
+
+## 17. Daily tuned from ~80–100% end HP to ~50–60% (newbie on foot, 0 deaths)
+- Brute (`EmberDailyBrute`):
+  - ZOMBIE instead of HUSK (hunger), PreventSunburn.
+  - 180 HP, melee 2, KnockbackResistance 0.6.
+  - Random tap and soft-hit procs removed; they were replaced by a steady aura (0.5 dmg every 2 s within 6 blocks).
+- Wave-end heals are back to instant_health III (+12 HP). Waves are unchanged (zombie 45 HP / 4 dmg, skeleton 35 / 4).
+- The newbie harness (`newbie-path-smoke.js`, non-op, fresh account) also counts the vanilla death message now. The `death` event missed an instant respawn, and one earlier run died while reporting 0 deaths.
+- Newbie results:
+  - Brute 180: end 48%, lowest HP 47%, 0 deaths.
+  - Brute 200: end 58% and 42%, 0 deaths.
+  - The lowest point is at the end of wave 2, just before the heal.
+- The stronger balance bot (L16, blade + charm, Sharpness II) ended at 60–76% on the earlier, harder variant.

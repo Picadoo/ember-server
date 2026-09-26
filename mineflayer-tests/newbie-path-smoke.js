@@ -24,7 +24,10 @@ async function click(b, name) { const w = b.currentWindow; if (!w) return 'no-wi
 async function path(b, ...names) { await menuOpen(b); const out = []; for (const n of names) out.push(await click(b, n)); return out.join(',') }
 async function fight(b, untilRe, ms, n0, home) {
   const t0 = Date.now(); let deaths = 0
-  b.on('death', () => deaths++)
+  // 'death' can miss with instant respawn, so also count the vanilla death message (at most once per 3 s)
+  let lastD = 0; const onD = () => { if (Date.now() - lastD > 3000) { deaths++; lastD = Date.now() } }
+  b.on('death', onD)
+  b.on('messagestr', m => { if (m.startsWith(b.username + ' ') && /was slain|died|was shot|was killed|burned|drowned|fell/.test(m)) onD() })
   while (Date.now() - t0 < ms && !untilRe.test(strip(since(b, n0)))) {
     if (!b.entity || b.health <= 0) { await wait(1000); continue }
     const bl = blade(b); if (bl && (!b.heldItem || b.heldItem.slot !== bl.slot)) { try { await b.equip(bl, 'hand') } catch (e) {} }
