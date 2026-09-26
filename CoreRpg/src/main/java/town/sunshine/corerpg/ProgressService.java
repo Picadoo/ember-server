@@ -33,6 +33,26 @@ public final class ProgressService {
     private int passXpPerLevel = 100;
     private int passMaxLevel = 30;
 
+    // ---- 1.6.0 ember level ----
+    private boolean emberEnabled = true;
+    private final Map<String, Integer> emberSources = new LinkedHashMap<String, Integer>();
+    private int emberKillDailyCap = 100;
+    private int emberCombatDailyCap = 150;
+    private int emberBase = 60;
+    private int emberStep = 12;
+    private int emberStepFrom = 10;
+    private int emberMaxLevel = 60;
+
+    // ---- 1.6.0 pass rewards / season ----
+    private final Map<Integer, Map<String, Integer>> passFree = new java.util.TreeMap<Integer, Map<String, Integer>>();
+    private final Map<Integer, Map<String, Integer>> passPaid = new java.util.TreeMap<Integer, Map<String, Integer>>();
+    private String seasonId = "S1";
+
+    // ---- 1.6.0 vip tiers ----
+    private final java.util.List<Integer> vipThresholds = new java.util.ArrayList<Integer>();
+    private int vipXpBonusPerTier = 1;
+    private int vipWarehouseSlotsPerTier = 1;
+
     public ProgressService(CoreRpgPlugin plugin, PlayerDataStore dataStore) {
         this.plugin = plugin;
         this.dataStore = dataStore;
@@ -67,7 +87,253 @@ public final class ProgressService {
             passSources.put("daily_clear", 20);
             passSources.put("weekly_clear", 40);
         }
+        emberEnabled = cfg.getBoolean("ember_xp.enabled", true);
+        emberKillDailyCap = Math.max(0, cfg.getInt("ember_xp.kill_daily_cap", 100));
+        emberCombatDailyCap = Math.max(0, cfg.getInt("ember_xp.combat_daily_cap", 150));
+        emberBase = Math.max(1, cfg.getInt("ember_xp.curve.base", 60));
+        emberStep = Math.max(0, cfg.getInt("ember_xp.curve.step", 12));
+        emberStepFrom = cfg.getInt("ember_xp.curve.step_from", 10);
+        emberMaxLevel = Math.max(1, cfg.getInt("ember_xp.max_level", 60));
+        emberSources.clear();
+        ConfigurationSection es = cfg.getConfigurationSection("ember_xp.sources");
+        if (es != null) for (String k : es.getKeys(false)) emberSources.put(k.toLowerCase(), Math.max(0, es.getInt(k)));
+        passFree.clear();
+        passPaid.clear();
+        loadTrack(cfg.getConfigurationSection("pass_rewards.free"), passFree);
+        loadTrack(cfg.getConfigurationSection("pass_rewards.paid"), passPaid);
+        vipThresholds.clear();
+        for (Object o : cfg.getList("vip_tiers.thresholds", new java.util.ArrayList<Object>())) {
+            try { vipThresholds.add(Integer.parseInt(String.valueOf(o))); } catch (NumberFormatException ignored) {}
+        }
+        vipXpBonusPerTier = Math.max(0, cfg.getInt("vip_tiers.ember_xp_bonus_percent_per_tier", 1));
+        vipWarehouseSlotsPerTier = Math.max(0, cfg.getInt("vip_tiers.warehouse_slots_per_tier", 1));
+        File sf = new File(plugin.getDataFolder(), "season.yml");
+        YamlConfiguration sy = YamlConfiguration.loadConfiguration(sf);
+        seasonId = sy.getString("current_season_id", "S1");
+        if (!sf.exists()) saveSeason();
     }
+
+    private void loadTrack(ConfigurationSection sec, Map<Integer, Map<String, Integer>> out) {
+        if (sec == null) return;
+        for (String lv : sec.getKeys(false)) {
+            ConfigurationSection r = sec.getConfigurationSection(lv);
+            if (r == null) continue;
+            Map<String, Integer> m = new LinkedHashMap<String, Integer>();
+            for (String k : r.getKeys(false)) if (r.getInt(k) > 0) m.put(k, r.getInt(k));
+            try { out.put(Integer.parseInt(lv), m); } catch (NumberFormatException ignored) {}
+        }
+    }
+
+    private void saveSeason() {
+        File sf = new File(plugin.getDataFolder(), "season.yml");
+        YamlConfiguration sy = new YamlConfiguration();
+        sy.set("current_season_id", seasonId);
+        try { sy.save(sf); } catch (java.io.IOException e) { plugin.getLogger().warning("season.yml save failed: " + e.getMessage()); }
+    }
+
+    public String getSeasonId() { return seasonId; }
+
+    // ---------------- ember level ----------------
+
+    public int xpToNext(int level) {
+        return emberBase + emberStep * Math.max(0, level - emberStepFrom);
+    }
+
+    /** @return ember XP actually granted (after caps + VIP bonus). */
+    public int grantEmberXp(Player p, String source) {
+        if (!emberEnabled || p == null) return 0;
+        String key = source == null ? "" : source.toLowerCase();
+        Integer base = emberSources.get(key);
+        if (base == null || base <= 0) return 0;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        String today = DailyService.today();
+        if (!today.equals(d.getEmberXpDate())) {
+            d.setEmberXpDate(today);
+            d.setEmberXpKillToday(0);
+            d.setEmberXpCombatToday(0);
+        }
+        int give = base;
+        if ("kill".equals(key)) {
+            give = Math.min(give, Math.max(0, emberKillDailyCap - d.getEmberXpKillToday()));
+            if (give <= 0) return 0;
+            d.setEmberXpKillToday(d.getEmberXpKillToday() + give);
+        } else if ("elite".equals(key) || "boss".equals(key)) {
+            give = Math.min(give, Math.max(0, emberCombatDailyCap - d.getEmberXpCombatToday()));
+            if (give <= 0) return 0;
+            d.setEmberXpCombatToday(d.getEmberXpCombatToday() + give);
+        }
+        int tier = d.getVipTier();
+        if (tier > 0 && vipXpBonusPerTier > 0) give += (give * tier * vipXpBonusPerTier + 50) / 100;
+        int level = d.getEmberLevel();
+        if (level >= emberMaxLevel) {
+            dataStore.flushMutation(p.getUniqueId());
+            return 0;
+        }
+        int xp = d.getEmberXp() + give;
+        int ups = 0;
+        int talentGain = 0;
+        TalentService ts = plugin.getTalentServicePublic();
+        while (level < emberMaxLevel && xp >= xpToNext(level)) {
+            xp -= xpToNext(level);
+            level++;
+            ups++;
+            if (ts != null && level >= ts.getLevelPointsFrom()) talentGain += ts.getPointsPerLevel();
+        }
+        if (level >= emberMaxLevel) xp = 0;
+        d.setEmberXp(xp);
+        if (ups > 0) {
+            d.setEmberLevel(level);
+            if (talentGain > 0) d.setTalentPointsEarned(d.getTalentPointsEarned() + talentGain);
+        }
+        dataStore.flushMutation(p.getUniqueId());
+        if (!"kill".equals(key)) {
+            p.sendMessage(ChatColor.YELLOW + "[余烬] 等级经验 +" + give + ChatColor.GRAY + "（Lv." + level + " · "
+                    + xp + "/" + (level >= emberMaxLevel ? "MAX" : String.valueOf(xpToNext(level))) + "）");
+        }
+        if (ups > 0) {
+            p.sendMessage(ChatColor.GOLD + "[余烬] 升级！余烬等级 Lv." + level
+                    + (talentGain > 0 ? ChatColor.GREEN + " · 天赋点 +" + talentGain : ""));
+        }
+        return give;
+    }
+
+    public void cmdLevel(Player p) {
+        PlayerData d = dataStore.get(p.getUniqueId());
+        int level = d.getEmberLevel();
+        p.sendMessage(ChatColor.GOLD + "[余烬] 等级 Lv." + level + ChatColor.GRAY + " · 经验 " + d.getEmberXp() + "/"
+                + (level >= emberMaxLevel ? "MAX" : String.valueOf(xpToNext(level))) + " · 上限 Lv." + emberMaxLevel);
+        boolean today = DailyService.today().equals(d.getEmberXpDate());
+        p.sendMessage(ChatColor.GRAY + "  今日：击杀经验 " + (today ? d.getEmberXpKillToday() : 0) + "/" + emberKillDailyCap
+                + " · 精英/首领经验 " + (today ? d.getEmberXpCombatToday() : 0) + "/" + emberCombatDailyCap
+                + " · 天赋点 可用 " + d.getTalentPointsAvailable());
+        p.sendMessage(ChatColor.DARK_GRAY + "  来源：签到 / 日·周·深渊·团本·盟Boss 通关 / 精英·首领 / 击杀（日上限）");
+    }
+
+    // ---------------- pass season / rewards ----------------
+
+    /** Lazy season roll-over: a player's pass progress belongs to one season id. */
+    public void ensureSeason(PlayerData d) {
+        if (seasonId.equals(d.getPassSeasonId())) return;
+        boolean fresh = d.getPassSeasonId().isEmpty();
+        d.setPassSeasonId(seasonId);
+        if (!fresh) {
+            d.setPassXp(0);
+            d.setPassXpToday(0);
+            d.setPassFreeClaimedLevel(0);
+            d.setPassPaidClaimedLevel(0);
+            d.setSeasonPassPaid(false);
+        }
+    }
+
+    public void cmdPassClaim(Player p) {
+        PlayerData d = dataStore.get(p.getUniqueId());
+        ensureSeason(d);
+        int lv = passLevel(d);
+        MailService mail = plugin.getMailService();
+        if (mail == null) { p.sendMessage(ChatColor.RED + "[战令] 邮寄服务未就绪"); return; }
+        int sent = 0;
+        int from = d.getPassFreeClaimedLevel();
+        for (int l = from + 1; l <= lv; l++) {
+            Map<String, Integer> r = passFree.get(l);
+            if (r != null && !r.isEmpty()) {
+                if (!mail.deliverCustom(p.getUniqueId(), "pass_free_" + seasonId + "_" + l, "战令·免费轨 Lv." + l,
+                        "赛季 " + seasonId + " 免费轨等级奖励", r)) break;
+                sent++;
+            }
+            d.setPassFreeClaimedLevel(l);
+        }
+        if (d.isSeasonPassPaid()) {
+            for (int l = d.getPassPaidClaimedLevel() + 1; l <= lv; l++) {
+                Map<String, Integer> r = passPaid.get(l);
+                if (r != null && !r.isEmpty()) {
+                    if (!mail.deliverCustom(p.getUniqueId(), "pass_paid_" + seasonId + "_" + l, "战令·付费轨 Lv." + l,
+                            "赛季 " + seasonId + " 付费轨等级奖励", r)) break;
+                    sent++;
+                }
+                d.setPassPaidClaimedLevel(l);
+            }
+        }
+        dataStore.flushMutation(p.getUniqueId());
+        if (sent == 0) {
+            p.sendMessage(ChatColor.GRAY + "[战令] 没有可领取的等级奖励（Lv." + lv + "）");
+        } else {
+            p.sendMessage(ChatColor.GREEN + "[战令] 已寄出 " + sent + " 封等级奖励邮件 · /corerpg mail claim all");
+        }
+    }
+
+    public void cmdPassRewards(Player p) {
+        PlayerData d = dataStore.get(p.getUniqueId());
+        ensureSeason(d);
+        int lv = passLevel(d);
+        p.sendMessage(ChatColor.AQUA + "[战令] 赛季 " + seasonId + " · Lv." + lv + " · 免费轨已领至 " + d.getPassFreeClaimedLevel()
+                + " · 付费轨" + (d.isSeasonPassPaid() ? "已领至 " + d.getPassPaidClaimedLevel() : "未开通"));
+        for (int l = Math.max(1, lv); l <= Math.min(passMaxLevel, lv + 2); l++) {
+            p.sendMessage(ChatColor.GRAY + "  Lv." + l + " 免费 " + passFree.getOrDefault(l, new LinkedHashMap<String, Integer>())
+                    + " · 付费 " + passPaid.getOrDefault(l, new LinkedHashMap<String, Integer>()));
+        }
+    }
+
+    /** /corerpg pass season [reset <newId>] (admin for reset). */
+    public void cmdSeason(CommandSender sender, String[] args) {
+        if (args.length >= 4 && "reset".equalsIgnoreCase(args[2])) {
+            if (!sender.hasPermission("corerpg.admin")) { sender.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return; }
+            String next = args[3];
+            if (next.equals(seasonId)) { sender.sendMessage(ChatColor.RED + "新赛季 ID 与当前相同：" + seasonId); return; }
+            String old = seasonId;
+            seasonId = next;
+            saveSeason();
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                PlayerData d = dataStore.get(p.getUniqueId());
+                ensureSeason(d);
+                dataStore.flushMutation(p.getUniqueId());
+                p.sendMessage(ChatColor.GOLD + "[战令] 新赛季 " + seasonId + " 开始！战令经验与领取进度已重置。");
+            }
+            sender.sendMessage("[CoreRpg] 赛季 " + old + " → " + seasonId + "（离线玩家下次访问时重置）");
+            return;
+        }
+        sender.sendMessage("[战令] 当前赛季：" + seasonId + (sender.hasPermission("corerpg.admin") ? " · /corerpg pass season reset <新ID>" : ""));
+    }
+
+    // ---------------- VIP tiers ----------------
+
+    public int tierFor(int toppedUp) {
+        int t = 0;
+        for (int i = 0; i < vipThresholds.size(); i++) if (toppedUp >= vipThresholds.get(i)) t = i + 1;
+        return t;
+    }
+
+    public int nextThreshold(int tier) {
+        return tier < vipThresholds.size() ? vipThresholds.get(tier) : -1;
+    }
+
+    /** Record a top-up (positive crystal grant) and apply tier-ups + one-time perks. */
+    public void recordTopUp(Player p, int amount) {
+        if (p == null || amount <= 0) return;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        d.setVipToppedUp(d.getVipToppedUp() + amount);
+        int before = d.getVipTier();
+        int after = Math.max(before, tierFor(d.getVipToppedUp()));
+        if (after > before) {
+            d.setVipTier(after);
+            WarehouseService wh = plugin.getWarehouseServicePublic();
+            int slots = (after - before) * vipWarehouseSlotsPerTier;
+            if (wh != null && slots > 0) {
+                wh.ensureDefaults(d);
+                d.setWarehouseSlotsUnlocked(Math.min(wh.getMaxSlots(), d.getWarehouseSlotsUnlocked() + slots));
+            }
+            p.sendMessage(ChatColor.LIGHT_PURPLE + "[勋阶] 晋升 " + tierName(after) + ChatColor.GRAY
+                    + "（仓库 +" + slots + " 格 · 余烬经验 +" + (after * vipXpBonusPerTier) + "%）");
+        }
+        dataStore.flushMutation(p.getUniqueId());
+    }
+
+    public String tierName(int tier) {
+        String[] roman = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"};
+        return tier <= 0 ? "无" : ("勋阶" + (tier < roman.length ? roman[tier] : String.valueOf(tier)));
+    }
+
+    public int getVipXpBonusPerTier() { return vipXpBonusPerTier; }
+
 
     // ---------------- kill levels ----------------
 
@@ -108,6 +374,7 @@ public final class ProgressService {
         Integer want = passSources.get(source == null ? "" : source.toLowerCase());
         if (want == null || want <= 0) return 0;
         PlayerData d = dataStore.get(p.getUniqueId());
+        ensureSeason(d);
         String today = DailyService.today();
         if (!today.equals(d.getPassXpDate())) {
             d.setPassXpDate(today);
@@ -127,17 +394,32 @@ public final class ProgressService {
         p.sendMessage(ChatColor.AQUA + "[战令] 经验 +" + give + ChatColor.GRAY + "（Lv." + after + " · "
                 + (d.getPassXp() % passXpPerLevel) + "/" + passXpPerLevel + " · 今日 " + d.getPassXpToday() + "/" + passDailyCap + "）");
         if (after > before) {
-            p.sendMessage(ChatColor.GOLD + "[战令] 升级！赛季等级 Lv." + after);
+            p.sendMessage(ChatColor.GOLD + "[战令] 升级！赛季等级 Lv." + after + ChatColor.GRAY + " · /corerpg pass claim 领取等级奖励");
         }
         return give;
     }
 
     public String passLine(PlayerData d) {
-        return "赛季等级 Lv." + passLevel(d) + " · 经验 " + (d.getPassXp() % passXpPerLevel) + "/" + passXpPerLevel
+        ensureSeason(d);
+        return "赛季 " + seasonId + " · 等级 Lv." + passLevel(d) + " · 经验 " + (d.getPassXp() % passXpPerLevel) + "/" + passXpPerLevel
                 + " · 今日 " + (DailyService.today().equals(d.getPassXpDate()) ? d.getPassXpToday() : 0) + "/" + passDailyCap;
     }
 
     // ---------------- commands ----------------
+
+    /** /corerpg progress <player> <source> — clear rewards: pass XP + ember XP from one console call. */
+    public boolean cmdProgress(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("corerpg.admin")) { sender.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+        if (args.length < 3) { sender.sendMessage("/corerpg progress <player> <source>"); return true; }
+        Player target = Bukkit.getPlayerExact(args[1]);
+        if (target == null) { sender.sendMessage(ChatColor.RED + "玩家不在线：" + args[1]); return true; }
+        int px = grantPassXp(target, args[2]);
+        int ex = grantEmberXp(target, args[2]);
+        if (!(sender instanceof Player) || sender != target) {
+            sender.sendMessage("[CoreRpg] progress " + target.getName() + " " + args[2] + " → pass +" + px + " · ember +" + ex);
+        }
+        return true;
+    }
 
     /** /corerpg xpreward <player> <elite|boss> · /corerpg passxp <player> <source> */
     public boolean cmdAdminGrant(CommandSender sender, String[] args, boolean pass) {
@@ -156,6 +438,7 @@ public final class ProgressService {
             return true;
         }
         int got = pass ? grantPassXp(target, args[2]) : grantKillLevels(target, args[2]);
+        if (!pass) grantEmberXp(target, args[2]);
         if (!(sender instanceof Player) || sender != target) {
             sender.sendMessage("[CoreRpg] " + (pass ? "passxp " : "xpreward ") + target.getName() + " " + args[2] + " → +" + got);
         }

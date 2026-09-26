@@ -40,4 +40,6 @@ dungeon-reward-script:
   - "$command{text=corerpg raid grant-ring %player_name%;console=true} @player"
   - "$message{type=text;text=§6周首通保底 · 余烬团戒（戒+刃=同袍套装）} @dungeon"
   - "$message{type=text;text=§8同周再通不重复发戒（团票每周 1）· T3 不保底} @dungeon"
+  # 2026-09-26：战令赛季经验 + 余烬等级经验（CoreRpg progress.yml）
+  - "$command{text=corerpg progress %player_name% raid_clear;console=true} @player"
   - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

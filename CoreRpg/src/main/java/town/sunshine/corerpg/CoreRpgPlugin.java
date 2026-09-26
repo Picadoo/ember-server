@@ -192,6 +192,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public TalentService getTalentService() { return talentService; }
     public CashService getCashService() { return cashService; }
     public ProgressService getProgressService() { return progressService; }
+    public TalentService getTalentServicePublic() { return talentService; }
+    public WarehouseService getWarehouseServicePublic() { return warehouseService; }
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
     public ScrapService getScrapService() { return scrapService; }
     public MailService getMailService() { return mailService; }
@@ -562,6 +564,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                 data.addActivity(give);
             }
         }
+        if (progressService != null) progressService.grantEmberXp(killer, "kill");
         if (!data.isBountyClaimed()) {
             BountyDef b = findBounty(data.getBountyId());
             if (b != null && data.getBountyProgress() < b.killTarget) data.addBountyProgress(1);
@@ -646,6 +649,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("sign".equals(sub)) return cmdSign(sender);
         if ("xpreward".equals(sub)) return progressService.cmdAdminGrant(sender, args, false);
         if ("passxp".equals(sub)) return progressService.cmdAdminGrant(sender, args, true);
+        if ("progress".equals(sub)) return progressService.cmdProgress(sender, args);
+        if ("level".equals(sub) || "lv".equals(sub) || "等级".equals(sub)) {
+            if (!requirePlayer(sender)) return true;
+            progressService.cmdLevel((Player) sender);
+            return true;
+        }
         if ("activity".equals(sub)) return cmdActivity(sender, args);
         if ("bounty".equals(sub)) return cmdBounty(sender, args);
         if ("enhance".equals(sub)) return cmdEnhance(sender, args);
@@ -732,7 +741,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GRAY + "  guild|alliance [create|info|invite|accept|leave|kick|donate|boss]");
         sender.sendMessage(ChatColor.GRAY + "  arena|pvp [queue 1v1|2v2|leave|stats|claim|forfeit] · auction [list|sell|buy|cancel]");
         sender.sendMessage(ChatColor.GRAY + "  warehouse [deposit|withdraw <slot|id> [n]|unlock [coin|cash]|info <slot>]");
-        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: xpreward · passxp · enhance set · calamity forceopen/forceend · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
+        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: xpreward · passxp · progress · pass season reset · enhance set · calamity forceopen/forceend · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
         sender.sendMessage(ChatColor.DARK_GRAY + "  storage — 显示 yaml|mysql 与 ping");
     }
 
@@ -839,7 +848,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         p.sendMessage(ChatColor.GREEN + "[余烬] 签到成功！获得" + coinName + " §f×" + signReward
                 + ChatColor.GREEN + "，活跃 +" + signActivity
                 + ChatColor.GRAY + "（余额 " + data.getCoin() + " · 活跃 " + data.getActivity() + "）");
-        if (progressService != null) progressService.grantPassXp(p, "sign");
+        if (progressService != null) {
+            progressService.grantPassXp(p, "sign");
+            progressService.grantEmberXp(p, "sign");
+        }
         refreshBoard(p);
         return true;
     }
@@ -1106,7 +1118,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                 return true;
             }
             if (args.length < 4) {
-                sender.sendMessage(ChatColor.YELLOW + "/corerpg cash give <玩家> <数量>");
+                sender.sendMessage(ChatColor.YELLOW + "/corerpg cash give <玩家> <数量> [nocount]");
                 return true;
             }
             int amount;
@@ -1116,6 +1128,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             }
             if (cashService != null) {
                 cashService.cmdCashGive(sender, args[2], amount);
+                // 1.6.0: cash give is the top-up stand-in → counts toward 勋阶 unless "nocount" (compensation etc.)
+                boolean count = !(args.length >= 5 && "nocount".equalsIgnoreCase(args[4]));
+                Player tp = Bukkit.getPlayerExact(args[2]);
+                if (count && amount > 0 && tp != null && progressService != null) progressService.recordTopUp(tp, amount);
             }
             return true;
         }
@@ -1187,6 +1203,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     /** 1.4.10: /corerpg pass free — free-track supply, once per day (menu used to mail it on every click). */
     private boolean cmdPass(CommandSender sender, String[] args) {
+        if (args.length >= 2 && "season".equalsIgnoreCase(args[1]) && progressService != null) {
+            progressService.cmdSeason(sender, args);
+            return true;
+        }
         if (!requirePlayer(sender)) return true;
         if (!sender.hasPermission("corerpg.use")) {
             sender.sendMessage(ChatColor.RED + "需要 corerpg.use");
@@ -1198,6 +1218,14 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         if (args.length >= 2 && "free".equalsIgnoreCase(args[1])) {
             cashService.cmdPassFree((Player) sender);
+            return true;
+        }
+        if (args.length >= 2 && "claim".equalsIgnoreCase(args[1]) && progressService != null) {
+            progressService.cmdPassClaim((Player) sender);
+            return true;
+        }
+        if (args.length >= 2 && "rewards".equalsIgnoreCase(args[1]) && progressService != null) {
+            progressService.cmdPassRewards((Player) sender);
             return true;
         }
         cashService.cmdPassShow((Player) sender);

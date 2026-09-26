@@ -388,6 +388,11 @@ public final class MailService {
         return true;
     }
 
+    /** 1.6.0: ad-hoc system mail (pass level rewards). */
+    public boolean deliverCustom(UUID uuid, String id, String title, String body, Map<String, Integer> attachments) {
+        return deliver(uuid, new MailTemplate(id, title, body, new LinkedHashMap<String, Integer>(attachments)));
+    }
+
     public boolean deliverByTemplateId(UUID uuid, String templateId) {
         MailTemplate tpl = templates.get(templateId);
         if (tpl == null) return false;

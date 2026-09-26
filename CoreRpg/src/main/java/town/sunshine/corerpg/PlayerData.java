@@ -280,6 +280,32 @@ public final class PlayerData {
     public int getPassXpToday() { return passXpToday; }
     public void setPassXpToday(int v) { passXpToday = Math.max(0, v); dirty = true; }
 
+    /** 1.6.0: ember level XP (progress within current level) + daily caps; pass season/claims; VIP top-up. */
+    private int emberXp;
+    private String emberXpDate = "";
+    private int emberXpKillToday;
+    private int emberXpCombatToday;
+    private String passSeasonId = "";
+    private int passFreeClaimedLevel;
+    private int passPaidClaimedLevel;
+    private int vipToppedUp;
+    public int getEmberXp() { return emberXp; }
+    public void setEmberXp(int v) { emberXp = Math.max(0, v); dirty = true; }
+    public String getEmberXpDate() { return emberXpDate == null ? "" : emberXpDate; }
+    public void setEmberXpDate(String v) { emberXpDate = v == null ? "" : v; dirty = true; }
+    public int getEmberXpKillToday() { return emberXpKillToday; }
+    public void setEmberXpKillToday(int v) { emberXpKillToday = Math.max(0, v); dirty = true; }
+    public int getEmberXpCombatToday() { return emberXpCombatToday; }
+    public void setEmberXpCombatToday(int v) { emberXpCombatToday = Math.max(0, v); dirty = true; }
+    public String getPassSeasonId() { return passSeasonId == null ? "" : passSeasonId; }
+    public void setPassSeasonId(String v) { passSeasonId = v == null ? "" : v; dirty = true; }
+    public int getPassFreeClaimedLevel() { return passFreeClaimedLevel; }
+    public void setPassFreeClaimedLevel(int v) { passFreeClaimedLevel = Math.max(0, v); dirty = true; }
+    public int getPassPaidClaimedLevel() { return passPaidClaimedLevel; }
+    public void setPassPaidClaimedLevel(int v) { passPaidClaimedLevel = Math.max(0, v); dirty = true; }
+    public int getVipToppedUp() { return vipToppedUp; }
+    public void setVipToppedUp(int v) { vipToppedUp = Math.max(0, v); dirty = true; }
+
     public int getVipTier() { return vipTier; }
     public void setVipTier(int v) { vipTier = Math.max(0, v); dirty = true; }
 

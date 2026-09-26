@@ -1,4 +1,4 @@
-# 余烬勋阶 — 轻量可玩（查状态 + 日礼邮件）· LuckPerms 累进未接
+# 余烬勋阶 — 累计充值晶钻晋升 0～10（CoreRpg 1.6.0 progress.yml vip_tiers）· 日礼 1 次/日
 # DESIGN-ember-rpg-systems.md §8.2
 
 Title: '§6余烬 · 勋阶'
@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1'
-    - 'tell: §6[勋阶] §7QoL 为主 · 日礼可领 · §8正式累进层未接 LuckPerms'
+    - 'tell: §6[勋阶] §7QoL 为主 · 累计充值晶钻晋升 · 日礼每日 1 次'
 
 Icons:
   '#':
@@ -33,18 +33,16 @@ Icons:
       name: '§6勋阶状态'
       lore:
         - ''
-        - '§7规划层级 §f0～10§7（充值累进）'
-        - '§8本期：用晶钻余额作参考档'
+        - '§7层级 §f0～10§7（累计充值晶钻，不降级）'
+        - '§8I 68 · II 198 · III 488 · IV 988 · V 1988 …'
         - ''
-        - '§7特权方向：登录币 / 经验微加成 / 仓库 / 称号'
+        - '§7特权：日礼币 / 余烬经验 +1%/阶 / 仓库 +1 格/阶 / 称号'
         - ''
-        - '§e➥ §f查询晶钻'
+        - '§e➥ §f查看我的勋阶'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[勋阶] §7正式层级未接线 · 先看晶钻余额作参考'
         - 'command: corerpg vip'
-        - 'command: corerpg cash'
 
   Q:
     display:

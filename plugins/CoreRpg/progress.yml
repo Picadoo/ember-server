@@ -10,13 +10,120 @@ kill_levels:
     boss: 2
   daily_cap: 6          # 每人每日最多 +6 级（日本 3 次 ×3 级 = 9；附魔 1~3 级/次、修理 2 级/片）
 
-# 战令赛季经验：签到（内部）+ DP 日/周本通关箱 console: corerpg passxp %player_name% daily_clear|weekly_clear
+# 战令赛季经验：签到（内部）+ DP 通关箱 console: corerpg progress %player_name% <source>（同时给战令经验与余烬经验）
 pass_xp:
   enabled: true
   sources:
     sign: 10
     daily_clear: 20
     weekly_clear: 40
+    abyss_clear: 20
+    raid_clear: 40
+    guild_boss_clear: 20
   daily_cap: 100
   xp_per_level: 100
   max_level: 30         # ≈ 30 天一季、每日满额约 1 级
+
+# ---------------------------------------------------------------------------
+# 1.6.0 余烬等级（DESIGN-ember-growth-curve §1：emberLevel 1～60，新号 10；天赋 1 点/级，talent.yml）
+#   曲线规格未给数值 → 保守：升到下一级所需 = base + step × max(0, 等级 − step_from)
+#   Lv10→11 需 60，Lv30→31 需 300，Lv59→60 需 648；Lv10→60 合计 17,700。
+#   满勤约 450～500/日（签到 20 + 日本 3×60 + 精英/首领约 50 + 击杀 100 + 周/团/深渊/盟 摊到每日约 100）
+#   → 满勤约 5～6 周满级，休闲（~200/日）约 3 个月。
+ember_xp:
+  enabled: true
+  max_level: 60
+  curve:
+    base: 60
+    step: 12
+    step_from: 10
+  sources:
+    sign: 20
+    daily_clear: 60
+    weekly_clear: 200
+    abyss_clear: 80
+    raid_clear: 250
+    guild_boss_clear: 100
+    elite: 15
+    boss: 40
+    kill: 2              # 任意合格击杀（挂机庭等），受 kill_daily_cap
+  kill_daily_cap: 100    # 击杀经验日软顶（= 50 只）
+  combat_daily_cap: 150  # 精英/首领经验日软顶
+
+# ---------------------------------------------------------------------------
+# 1.6.0 战令等级奖励（/corerpg pass claim → 系统邮件；付费轨需本季已解锁）
+#   只用现有 NI 物品 + coin；免费轨无装备；Lv30 外观碎片（cosmetic_calamity_shard）。
+#   付费轨累计日票 ×5（Lv6/12/18/24/30，规格「日票×5 分散等级发」）。
+#   赛季：plugins/CoreRpg/season.yml current_season_id；管理员 /corerpg pass season reset <新ID>
+pass_rewards:
+  free:
+    1: {coin: 100}
+    2: {mat_ember_shard: 3}
+    3: {coin: 100}
+    4: {mat_ember_shard: 3}
+    5: {coin: 100, crystal_ember_enchant: 1, mat_ember_core_fragment: 1}
+    6: {mat_ember_shard: 3}
+    7: {coin: 100}
+    8: {mat_ember_shard: 3}
+    9: {coin: 100}
+    10: {mat_ember_shard: 3, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, ticket_ember_daily: 1}
+    11: {coin: 100}
+    12: {mat_ember_shard: 3}
+    13: {coin: 100}
+    14: {mat_ember_shard: 3}
+    15: {coin: 100, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, mat_ember_soul_dust: 3}
+    16: {mat_ember_shard: 3}
+    17: {coin: 100}
+    18: {mat_ember_shard: 3}
+    19: {coin: 100}
+    20: {mat_ember_shard: 3, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, ticket_ember_daily: 1}
+    21: {coin: 100}
+    22: {mat_ember_shard: 3}
+    23: {coin: 100}
+    24: {mat_ember_shard: 3}
+    25: {coin: 100, crystal_ember_enchant: 1, mat_ember_core_fragment: 1}
+    26: {mat_ember_shard: 3}
+    27: {coin: 100}
+    28: {mat_ember_shard: 3}
+    29: {coin: 100}
+    30: {mat_ember_shard: 3, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, cosmetic_calamity_shard: 1, coin: 300}
+  paid:
+    1: {coin: 100, mat_ember_bone_dust: 2}
+    2: {coin: 100, mat_ember_bone_dust: 2}
+    3: {coin: 100, mat_ember_bone_dust: 2}
+    4: {coin: 100, mat_ember_bone_dust: 2}
+    5: {coin: 100, mat_ember_bone_dust: 2, mat_ember_protect_scroll: 1}
+    6: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    7: {coin: 100, mat_ember_bone_dust: 2}
+    8: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
+    9: {coin: 100, mat_ember_bone_dust: 2}
+    10: {coin: 100, mat_ember_bone_dust: 2, gem_ember_sharp: 1}
+    11: {coin: 100, mat_ember_bone_dust: 2}
+    12: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    13: {coin: 100, mat_ember_bone_dust: 2}
+    14: {coin: 100, mat_ember_bone_dust: 2}
+    15: {coin: 100, mat_ember_bone_dust: 2, mat_ember_protect_scroll: 1}
+    16: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
+    17: {coin: 100, mat_ember_bone_dust: 2}
+    18: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    19: {coin: 100, mat_ember_bone_dust: 2}
+    20: {coin: 100, mat_ember_bone_dust: 2, gem_ember_steady: 1}
+    21: {coin: 100, mat_ember_bone_dust: 2}
+    22: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
+    23: {coin: 100, mat_ember_bone_dust: 2}
+    24: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    25: {coin: 100, mat_ember_bone_dust: 2, mat_ember_protect_scroll: 1}
+    26: {coin: 100, mat_ember_bone_dust: 2}
+    27: {coin: 100, mat_ember_bone_dust: 2}
+    28: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
+    29: {coin: 100, mat_ember_bone_dust: 2}
+    30: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1, cosmetic_calamity_shard: 3, mat_ember_stable_charm: 1}
+
+# ---------------------------------------------------------------------------
+# 1.6.0 勋阶（DESIGN-ember-rpg-systems §8.2「充值累进 0～10」；docs/ember-shop-pass-copy）
+#   累计充值晶钻（= /corerpg cash give，充值通道的替身；补偿发放用 nocount 不计）达到门槛即晋升，不降级。
+#   门槛规格未给 → 取常见档位。特权按规格：日礼币（cash.yml）、余烬经验微加成、仓库加格、专属称号；攻击加成本期关闭。
+vip_tiers:
+  thresholds: [68, 198, 488, 988, 1988, 3288, 4988, 7988, 12988, 19988]
+  ember_xp_bonus_percent_per_tier: 1   # 勋阶 X = +10%
+  warehouse_slots_per_tier: 1          # 晋升时一次性加格（受 warehouse max_slots）

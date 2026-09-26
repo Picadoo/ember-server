@@ -1,4 +1,4 @@
-# 余烬战令 — 轻量可领（邮件发货）· 赛季经验已接线（CoreRpg progress.yml：签到/日本/周本），等级奖励未定
+# 余烬战令 — 每日免费补给 + 赛季 Lv1～30 等级奖励（CoreRpg 1.6.0 progress.yml pass_rewards，邮件发货）
 # DESIGN-ember-economy-monetization.md §5.3
 
 Title: '§b余烬 · 战令'
@@ -13,13 +13,13 @@ Layout:
   - '#########'
   - '#       #'
   - '# F U I #'
-  - '# C     #'
+  - '# C L   #'
   - '####B####'
 
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1'
-    - 'tell: §b[战令] §7免费轨可领邮件补给 · 付费轨仍占位 · §c不出核心'
+    - 'tell: §b[战令] §7每日补给 + 等级奖励（Lv1～30）· 付费轨需解锁 · §c不出核心'
 
 Icons:
   '#':
@@ -85,6 +85,24 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §e[战令] §7约30天季 · 双轨 · 付费轨外观+券+票，无核心'
         - 'command: corerpg pass'
+
+  L:
+    display:
+      material: chest
+      name: '§6等级奖励 · 一键领取'
+      lore:
+        - ''
+        - '§7赛季 Lv1～30：币 / 碎片 / 附魔晶 / 日票'
+        - '§7Lv30 外观碎片 · §8免费轨无装备'
+        - '§7付费轨（已解锁）另有日票×5、保护券、孔石'
+        - ''
+        - '§e➥ §f领取已达成等级的奖励（邮件）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg pass claim'
+        - 'command: corerpg mail claim all'
+        - 'command: corerpg pass rewards'
 
   C:
     display:

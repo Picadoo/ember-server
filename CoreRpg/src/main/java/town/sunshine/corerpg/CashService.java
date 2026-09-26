@@ -418,6 +418,9 @@ public final class CashService {
             return;
         }
         PlayerData data = dataStore.get(player.getUniqueId());
+        if (plugin instanceof CoreRpgPlugin && ((CoreRpgPlugin) plugin).getProgressService() != null) {
+            ((CoreRpgPlugin) plugin).getProgressService().ensureSeason(data);
+        }
         if (data.isSeasonPassPaid()) {
             player.sendMessage(ChatColor.YELLOW + "[战令] 付费轨已开通，无需重复购买");
             return;
@@ -496,8 +499,15 @@ public final class CashService {
     public void cmdVipShow(Player player) {
         PlayerData data = dataStore.get(player.getUniqueId());
         int tier = data.getVipTier();
-        String tierLabel = tier <= 0 ? "无（0）" : ("勋阶 " + tier);
+        ProgressService ps = plugin instanceof CoreRpgPlugin ? ((CoreRpgPlugin) plugin).getProgressService() : null;
+        String tierLabel = tier <= 0 ? "无（0）" : (ps != null ? ps.tierName(tier) : "勋阶 " + tier);
         player.sendMessage(ChatColor.LIGHT_PURPLE + "[勋阶] 当前：" + ChatColor.WHITE + tierLabel);
+        if (ps != null) {
+            int next = ps.nextThreshold(tier);
+            player.sendMessage(ChatColor.GRAY + "  累计充值晶钻 " + data.getVipToppedUp()
+                    + (next > 0 ? " · 下一阶需 " + next : " · 已满阶")
+                    + " · 特权：日礼币、余烬经验 +" + (tier * ps.getVipXpBonusPerTier()) + "%、仓库加格、专属称号");
+        }
         if (!vipEnabled) {
             player.sendMessage(ChatColor.DARK_GRAY + "  日礼未启用");
             return;
@@ -551,6 +561,9 @@ public final class CashService {
 
     public void cmdPassShow(Player player) {
         PlayerData data = dataStore.get(player.getUniqueId());
+        if (plugin instanceof CoreRpgPlugin && ((CoreRpgPlugin) plugin).getProgressService() != null) {
+            ((CoreRpgPlugin) plugin).getProgressService().ensureSeason(data);
+        }
         boolean claimed = DailyService.today().equals(data.getPassFreeClaimDate());
         player.sendMessage(ChatColor.AQUA + "[战令] 付费轨：" + (data.isSeasonPassPaid() ? ChatColor.GREEN + "已开通" : ChatColor.GRAY + "未开通")
                 + ChatColor.GRAY + " · 免费轨今日补给：" + (claimed ? ChatColor.GREEN + "已领" : ChatColor.YELLOW + "未领 /corerpg pass free"));

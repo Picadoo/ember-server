@@ -142,6 +142,8 @@ public final class TalentService {
 
     public boolean isEnabled() { return enabled; }
     public int getMaxSpendablePoints() { return maxSpendablePoints; }
+    public int getPointsPerLevel() { return pointsPerLevel; }
+    public int getLevelPointsFrom() { return levelPointsFrom; }
     public int getStartingTalentPoints() { return startingTalentPoints; }
     public int getEmberLevelDefault() { return emberLevelDefault; }
 

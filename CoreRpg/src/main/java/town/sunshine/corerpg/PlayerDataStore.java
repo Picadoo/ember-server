@@ -216,6 +216,14 @@ public final class PlayerDataStore {
         data.setPassXp(yaml.getInt("passXp", 0));
         data.setPassXpDate(yaml.getString("passXpDate", ""));
         data.setPassXpToday(yaml.getInt("passXpToday", 0));
+        data.setEmberXp(yaml.getInt("emberXp", 0));
+        data.setEmberXpDate(yaml.getString("emberXpDate", ""));
+        data.setEmberXpKillToday(yaml.getInt("emberXpKillToday", 0));
+        data.setEmberXpCombatToday(yaml.getInt("emberXpCombatToday", 0));
+        data.setPassSeasonId(yaml.getString("passSeasonId", ""));
+        data.setPassFreeClaimedLevel(yaml.getInt("passFreeClaimedLevel", 0));
+        data.setPassPaidClaimedLevel(yaml.getInt("passPaidClaimedLevel", 0));
+        data.setVipToppedUp(yaml.getInt("vipToppedUp", 0));
 
         data.setFriends(stringList(yaml, "friends"));
         data.setPendingIn(stringList(yaml, "pendingIn"));
@@ -351,6 +359,14 @@ public final class PlayerDataStore {
         yaml.set("passXp", data.getPassXp());
         yaml.set("passXpDate", data.getPassXpDate());
         yaml.set("passXpToday", data.getPassXpToday());
+        yaml.set("emberXp", data.getEmberXp());
+        yaml.set("emberXpDate", data.getEmberXpDate());
+        yaml.set("emberXpKillToday", data.getEmberXpKillToday());
+        yaml.set("emberXpCombatToday", data.getEmberXpCombatToday());
+        yaml.set("passSeasonId", data.getPassSeasonId());
+        yaml.set("passFreeClaimedLevel", data.getPassFreeClaimedLevel());
+        yaml.set("passPaidClaimedLevel", data.getPassPaidClaimedLevel());
+        yaml.set("vipToppedUp", data.getVipToppedUp());
         yaml.set("friends", new ArrayList<String>(data.getFriends()));
         yaml.set("pendingIn", new ArrayList<String>(data.getPendingIn()));
         yaml.set("pendingOut", new ArrayList<String>(data.getPendingOut()));
