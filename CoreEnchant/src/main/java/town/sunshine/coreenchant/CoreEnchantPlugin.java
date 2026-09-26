@@ -60,11 +60,13 @@ public final class CoreEnchantPlugin extends JavaPlugin {
     private int bookshelfCostBumpCap = 0;
     private boolean hooksAvailable;
     private int pushedTables;
+    private final Map<Enchantment, Integer> baseAllowance = new java.util.concurrent.ConcurrentHashMap<Enchantment, Integer>();
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         hooksAvailable = probeHooks();
+        getServer().getPluginManager().registerEvents(new BaseEnchantListener(whitelistNi, baseAllowance), this);
         Bukkit.getScheduler().runTask(this, new Runnable() {
             @Override
             public void run() {
@@ -107,6 +109,18 @@ public final class CoreEnchantPlugin extends JavaPlugin {
             catalystNiId = "";
         }
         bookshelfCostBumpCap = Math.max(0, getConfig().getInt("bookshelf_cost_bump_cap", 0));
+        baseAllowance.clear();
+        org.bukkit.configuration.ConfigurationSection base = getConfig().getConfigurationSection("ni_base_enchants");
+        if (base != null) {
+            for (String key : base.getKeys(false)) {
+                Enchantment ench = Enchantment.getByName(key);
+                if (ench != null) {
+                    baseAllowance.put(ench, base.getInt(key));
+                } else {
+                    getLogger().warning("ni_base_enchants: unknown enchantment " + key);
+                }
+            }
+        }
         List<?> wl = getConfig().getList("whitelist_ni_ids");
         if (wl != null) {
             for (Object o : wl) {

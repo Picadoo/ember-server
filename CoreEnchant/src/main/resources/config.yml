@@ -8,6 +8,11 @@ whitelist_ni_ids:
   - gear_ember_blade
   - gear_ember_charm
 
+# 2026-09-26 audit：白名单 NI 装备自带隐藏附魔（DURABILITY 1），原版 canEnchant() 因此拒绝上桌。
+#   仅当物品身上的附魔都在此「出厂底子」范围内时放行（= 尚未桌附过，一件一次，同原版）。
+ni_base_enchants:
+  DURABILITY: 1
+
 require_ni_item: true
 
 catalyst_ni_id: crystal_ember_enchant

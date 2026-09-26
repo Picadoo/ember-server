@@ -8,11 +8,18 @@ whitelist_ni_ids:
   - gear_ember_blade
   - gear_ember_charm
 
+# 2026-09-26 audit：白名单 NI 装备自带隐藏附魔（DURABILITY 1），原版 canEnchant() 因此拒绝上桌。
+#   仅当物品身上的附魔都在此「出厂底子」范围内时放行（= 尚未桌附过，一件一次，同原版）。
+ni_base_enchants:
+  DURABILITY: 1
+
 require_ni_item: true
 
 catalyst_ni_id: crystal_ember_enchant
 reject_vanilla_lapis: true
 
+# 2026-09-26 audit：服无经验球，新号 0 级 → 旧 cost 3/8/12 永远附不了。按设计方案 B 把等级门槛压到 = 晶数（1/2/3）；
+#   原版仍要求并扣除「晶数」级经验，经验来源 = 日/周本通关箱 xp（见 DP EmberDaily/EmberWeekly）。
 # 书架略抬级，仍便宜可控（推荐方案 B：少吃等级、多吃晶）
 bookshelf_cost_bump_cap: 2
 
@@ -25,17 +32,17 @@ offer_tables:
       - slot: 0
         enchantment: DAMAGE_ALL
         level: 1
-        cost: 3
+        cost: 1
         lapis_cost: 1
       - slot: 1
         enchantment: DAMAGE_ALL
         level: 2
-        cost: 8
+        cost: 2
         lapis_cost: 2
       - slot: 2
         enchantment: FIRE_ASPECT
         level: 1
-        cost: 12
+        cost: 3
         lapis_cost: 3
 
   # 余烬护符 — GOLD_NUGGET / gear_ember_charm
@@ -46,15 +53,15 @@ offer_tables:
       - slot: 0
         enchantment: DURABILITY
         level: 1
-        cost: 3
+        cost: 1
         lapis_cost: 1
       - slot: 1
         enchantment: DURABILITY
         level: 2
-        cost: 8
+        cost: 2
         lapis_cost: 2
       - slot: 2
         enchantment: PROTECTION_ENVIRONMENTAL
         level: 1
-        cost: 10
+        cost: 3
         lapis_cost: 3

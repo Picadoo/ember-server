@@ -15,4 +15,6 @@ repair_ingredient_ni_ids:
   - mat_ember_shard
   - mat_ember_core_fragment
 
-material_repair_extra_cost: 3
+# 2026-09-26 audit：原 3 → 修 1 片碎片要 4 级，而新号每日本只给 3 级（且附魔还要 1~3 级）→ 实测新号修不了。
+#   保守降到 1：花费 = 碎片数 + 1（1 片 = 2 级）。
+material_repair_extra_cost: 1
