@@ -129,10 +129,13 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         progressService = new ProgressService(this, dataStore);
         questService = new QuestService(this, dataStore, niBridge);
         lootService = new LootService(this, dataStore, niBridge);
+        statService = new StatService(this, niBridge, dataStore);
         dataStore.setTalentService(talentService);
         reloadLocal();
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(questService, this);
+        Bukkit.getPluginManager().registerEvents(statService, this);
+        statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
             @Override public void run() {
                 if (questService != null) { questService.hookAdyeshach(); questService.ensureNpc(false); }
@@ -193,6 +196,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    private StatService statService;
+    public StatService getStatService() { return statService; }
     public PlayerDataStore getDataStore() { return dataStore; }
     public CalamityService getCalamityService() { return calamityService; }
     public SetService getSetService() { return setService; }
@@ -385,6 +390,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (progressService != null) progressService.reload();
         if (questService != null) questService.reload();
         if (lootService != null) lootService.reload();
+        if (statService != null) statService.reload();
         shardNeedle = getConfig().getString("shard_name_contains", "余烬碎片");
         dustNeedle = getConfig().getString("dust_name_contains", "余烬骨尘");
         crystalNeedle = getConfig().getString("crystal_name_contains", "余烬附魔晶");
@@ -672,6 +678,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("passxp".equals(sub)) return progressService.cmdAdminGrant(sender, args, true);
         if ("progress".equals(sub)) return progressService.cmdProgress(sender, args);
         if ("loot".equals(sub)) return lootService.cmd(sender, args);
+        if ("stats".equals(sub) || "属性".equals(sub)) return statService.cmd(sender, args);
         if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
         if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);
         if ("level".equals(sub) || "lv".equals(sub) || "等级".equals(sub)) {

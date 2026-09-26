@@ -1,0 +1,341 @@
+package town.sunshine.corerpg;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Gear stat layer (2026-09-27). AttributePlus is parked, so CoreRpg applies the NI lore stats itself:
+ * main-hand weapon lore (物理伤害 +N) + best accessory in inventory/offhand (生命力 / 物理防御)
+ * + enhance level × enhance.yml stat_per_level + socket gems + reforge affixes + unlocked talent stats.
+ * Scales/curve in config.yml {@code stats:}.
+ */
+public final class StatService implements Listener {
+
+    private static final Pattern P_DMG = Pattern.compile("物理伤害\\s*[:：]?\\s*\\+\\s*(\\d+(?:\\.\\d+)?)");
+    private static final Pattern P_HP = Pattern.compile("生命力\\s*[:：]?\\s*\\+\\s*(\\d+(?:\\.\\d+)?)");
+    private static final Pattern P_DEF = Pattern.compile("物理防御\\s*[:：]?\\s*\\+\\s*(\\d+(?:\\.\\d+)?)");
+
+    private final CoreRpgPlugin plugin;
+    private final NiBridge ni;
+    private final PlayerDataStore dataStore;
+    private final Map<UUID, Map<String, Double>> cache = new HashMap<UUID, Map<String, Double>>();
+
+    private boolean enabled = true;
+    private double damageScale = 1.0;
+    private double healthScale = 1.0;
+    private double defenseK = 20.0;
+    private double critMultiplier = 1.5;
+    private double lifeStealCap = 0.05;
+    private double heartsDisplayCap = 40.0;
+    private boolean stripWitherOnHit = true;
+    private final List<String> weaponIds = new ArrayList<String>();
+    private final List<String> accessoryIds = new ArrayList<String>();
+    private final Map<String, Map<String, Double>> perLevel = new HashMap<String, Map<String, Double>>();
+    private final Map<String, Map<String, Double>> gems = new HashMap<String, Map<String, Double>>();
+
+    public StatService(CoreRpgPlugin plugin, NiBridge ni, PlayerDataStore dataStore) {
+        this.plugin = plugin;
+        this.ni = ni;
+        this.dataStore = dataStore;
+    }
+
+    public void reload() {
+        FileConfiguration c = plugin.getConfig();
+        enabled = c.getBoolean("stats.enabled", true);
+        damageScale = c.getDouble("stats.damage_scale", 1.0);
+        healthScale = c.getDouble("stats.health_scale", 1.0);
+        defenseK = Math.max(1.0, c.getDouble("stats.defense_k", 20.0));
+        critMultiplier = c.getDouble("stats.crit_multiplier", 1.5);
+        heartsDisplayCap = c.getDouble("stats.hearts_display_cap", 40.0);
+        stripWitherOnHit = c.getBoolean("stats.strip_wither_on_hit", true);
+        weaponIds.clear();
+        accessoryIds.clear();
+        List<String> w = c.getStringList("stats.weapons");
+        List<String> a = c.getStringList("stats.accessories");
+        if (w == null || w.isEmpty()) {
+            w = java.util.Arrays.asList("gear_ember_blade", "gear_ember_t1_blade", "gear_ember_t2_blade", "gear_ember_t3_blade");
+        }
+        if (a == null || a.isEmpty()) {
+            a = java.util.Arrays.asList("gear_ember_charm", "gear_ember_t1_talisman", "gear_ember_t2_talisman", "gear_ember_t3_talisman");
+        }
+        weaponIds.addAll(w);
+        accessoryIds.addAll(a);
+        perLevel.clear();
+        gems.clear();
+        File ef = new File(plugin.getDataFolder(), "enhance.yml");
+        if (ef.exists()) {
+            YamlConfiguration e = YamlConfiguration.loadConfiguration(ef);
+            readMapOfMaps(e.getConfigurationSection("stat_per_level"), perLevel);
+            readMapOfMaps(e.getConfigurationSection("gems"), gems);
+            lifeStealCap = e.getDouble("caps.life_steal_pct", 0.05);
+        }
+        cache.clear();
+    }
+
+    private static void readMapOfMaps(ConfigurationSection s, Map<String, Map<String, Double>> out) {
+        if (s == null) return;
+        for (String k : s.getKeys(false)) {
+            ConfigurationSection g = s.getConfigurationSection(k);
+            if (g == null) continue;
+            Map<String, Double> m = new HashMap<String, Double>();
+            for (String st : g.getKeys(false)) m.put(st, Double.valueOf(g.getDouble(st)));
+            out.put(k, m);
+        }
+    }
+
+    public void start() {
+        Bukkit.getScheduler().runTaskTimer(plugin, new Runnable() {
+            @Override public void run() {
+                for (Player p : Bukkit.getOnlinePlayers()) refresh(p);
+            }
+        }, 40L, 20L);
+    }
+
+    // ---------------------------------------------------------------- compute
+
+    private static void add(Map<String, Double> m, String k, double v) {
+        if (v == 0) return;
+        Double o = m.get(k);
+        m.put(k, Double.valueOf((o == null ? 0 : o.doubleValue()) + v));
+    }
+
+    private static double get(Map<String, Double> m, String k) {
+        Double v = m.get(k);
+        return v == null ? 0 : v.doubleValue();
+    }
+
+    /** Stats of one ember gear item (lore base + enhance + sockets + affixes). */
+    private Map<String, Double> itemStats(ItemStack stack, String niId) {
+        Map<String, Double> m = new HashMap<String, Double>();
+        ItemMeta meta = stack.getItemMeta();
+        if (meta != null && meta.hasLore()) {
+            for (String line : meta.getLore()) {
+                if (line == null) continue;
+                String plain = ChatColor.stripColor(line);
+                if (plain == null || plain.startsWith("次要") || plain.startsWith("#")) continue;
+                Matcher x = P_DMG.matcher(plain);
+                if (x.find()) add(m, "phys_damage", Double.parseDouble(x.group(1)));
+                x = P_HP.matcher(plain);
+                if (x.find()) add(m, "max_health", Double.parseDouble(x.group(1)));
+                x = P_DEF.matcher(plain);
+                if (x.find()) add(m, "phys_defense", Double.parseDouble(x.group(1)));
+            }
+        }
+        int lv = GearLore.readEnhance(stack);
+        Map<String, Double> pl = perLevel.get(niId);
+        if (pl != null && lv > 0) {
+            for (Map.Entry<String, Double> e : pl.entrySet()) add(m, e.getKey(), e.getValue().doubleValue() * lv);
+        }
+        for (String g : GearLore.readSockets(stack, 6)) {
+            if (g == null || g.isEmpty()) continue;
+            Map<String, Double> gs = gems.get(g);
+            if (gs != null) for (Map.Entry<String, Double> e : gs.entrySet()) add(m, e.getKey(), e.getValue().doubleValue());
+        }
+        for (GearLore.Affix af : GearLore.readAffixes(stack)) {
+            if ("crit_chance".equals(af.id)) add(m, "crit_chance_pct", af.value / 100.0);
+            else if ("attack_speed".equals(af.id)) add(m, "attack_speed_pct", af.value / 100.0);
+            else add(m, af.id, af.value);
+        }
+        return m;
+    }
+
+    public Map<String, Double> compute(Player p) {
+        Map<String, Double> total = new LinkedHashMap<String, Double>();
+        PlayerInventory inv = p.getInventory();
+        ItemStack hand = inv.getItemInMainHand();
+        String hid = hand == null || hand.getType() == Material.AIR ? null : ni.getNiId(hand);
+        if (hid != null && weaponIds.contains(hid)) {
+            for (Map.Entry<String, Double> e : itemStats(hand, hid).entrySet()) add(total, e.getKey(), e.getValue());
+        }
+        // best single accessory anywhere in the inventory (incl. offhand)
+        Map<String, Double> best = null;
+        double bestScore = -1;
+        List<ItemStack> all = new ArrayList<ItemStack>();
+        for (ItemStack s : inv.getStorageContents()) all.add(s);
+        all.add(inv.getItemInOffHand());
+        for (ItemStack s : all) {
+            if (s == null || s.getType() == Material.AIR) continue;
+            String id = ni.getNiId(s);
+            if (id == null || !accessoryIds.contains(id)) continue;
+            Map<String, Double> st = itemStats(s, id);
+            double score = get(st, "max_health") + get(st, "phys_defense") * 3;
+            if (score > bestScore) { bestScore = score; best = st; }
+        }
+        Map<String, Double> talent = new HashMap<String, Double>();
+        PlayerData d = dataStore.peek(p.getUniqueId());
+        TalentService ts = plugin.getTalentService();
+        if (d != null && ts != null) {
+            for (String node : new ArrayList<String>(d.getTalentNodes())) {
+                TalentService.NodeDef nd = ts.getNode(node);
+                if (nd == null || nd.stats == null) continue;
+                for (Map.Entry<String, Double> e : nd.stats.entrySet()) add(talent, e.getKey(), e.getValue().doubleValue());
+            }
+        }
+        if (best != null) {
+            double bonus = 1.0 + get(talent, "charm_stat_bonus_pct");
+            for (Map.Entry<String, Double> e : best.entrySet()) add(total, e.getKey(), e.getValue() * bonus);
+        }
+        for (Map.Entry<String, Double> e : talent.entrySet()) {
+            if (!"charm_stat_bonus_pct".equals(e.getKey())) add(total, e.getKey(), e.getValue());
+        }
+        return total;
+    }
+
+    private Map<String, Double> stats(Player p) {
+        Map<String, Double> m = cache.get(p.getUniqueId());
+        if (m == null) { m = compute(p); cache.put(p.getUniqueId(), m); }
+        return m;
+    }
+
+    public void refresh(Player p) {
+        if (p == null || !p.isOnline()) return;
+        Map<String, Double> m = compute(p);
+        cache.put(p.getUniqueId(), m);
+        AttributeInstance ai = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (ai == null) return;
+        double want = enabled ? 20.0 + Math.floor(get(m, "max_health") * healthScale) : 20.0;
+        if (Math.abs(ai.getBaseValue() - want) > 0.01) {
+            ai.setBaseValue(want);
+            if (p.getHealth() > want) p.setHealth(want);
+        }
+        double scale = Math.min(heartsDisplayCap, Math.max(20.0, want));
+        if (!p.isHealthScaled() || Math.abs(p.getHealthScale() - scale) > 0.01) {
+            p.setHealthScale(scale);
+            p.setHealthScaled(true);
+        }
+    }
+
+    private void refreshLater(final Player p) {
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override public void run() { refresh(p); }
+        }, 1L);
+    }
+
+    // ---------------------------------------------------------------- events
+
+    @EventHandler public void onJoin(PlayerJoinEvent e) { refreshLater(e.getPlayer()); }
+    @EventHandler public void onRespawn(PlayerRespawnEvent e) { refreshLater(e.getPlayer()); }
+    @EventHandler public void onHeld(PlayerItemHeldEvent e) { refreshLater(e.getPlayer()); }
+
+    private final Map<UUID, Long> lastHit = new HashMap<UUID, Long>();
+    private final double swingMs = 625.0;
+
+    /** Player → mob flat bonus runs first (LOWEST) so MythicMobs DamageModifiers scale the whole hit. */
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    public void onDamage(EntityDamageByEntityEvent e) {
+        if (!enabled) return;
+        Entity victim = e.getEntity();
+        Entity damager = e.getDamager();
+        if (damager instanceof Player && victim instanceof LivingEntity && !(victim instanceof Player)
+                && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+            Player p = (Player) damager;
+            Map<String, Double> m = stats(p);
+            double flat = get(m, "phys_damage") * damageScale;
+            if (flat <= 0 && get(m, "crit_chance_pct") <= 0) return;
+            // attack-charge approximation (1.12 API has no getAttackCooldown): time since this player's last hit,
+            // vanilla curve 0.2 + 0.8·t² over the sword cooldown → spam-clicking gets ~20% of the bonus
+            long now = System.currentTimeMillis();
+            Long last = lastHit.put(p.getUniqueId(), Long.valueOf(now));
+            double t = last == null ? 1.0 : Math.min(1.0, (now - last.longValue()) / swingMs);
+            double charge = 0.2 + 0.8 * t * t;
+            double dmg = e.getDamage() + flat * charge;
+            if (charge > 0.9 && ThreadLocalRandom.current().nextDouble() < get(m, "crit_chance_pct")) {
+                dmg *= critMultiplier + get(m, "crit_damage_pct");
+            }
+            e.setDamage(dmg);
+            double ls = Math.min(lifeStealCap, get(m, "life_steal_pct"));
+            if (ls > 0) {
+                double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+                p.setHealth(Math.min(max, p.getHealth() + dmg * ls));
+            }
+        }
+    }
+
+    /** Mob → player defense runs late (HIGH) so it reduces the final hit. */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onDefend(EntityDamageByEntityEvent e) {
+        if (!enabled) return;
+        Entity victim = e.getEntity();
+        Entity damager = e.getDamager();
+        if (victim instanceof Player) {
+            Entity src = damager;
+            if (damager instanceof Projectile && ((Projectile) damager).getShooter() instanceof Entity) {
+                src = (Entity) ((Projectile) damager).getShooter();
+            }
+            if (src instanceof Player) return; // PvP untouched (arena balance)
+            Map<String, Double> m = stats((Player) victim);
+            double def = get(m, "phys_defense");
+            double mult = (1.0 - def / (def + defenseK)) * (1.0 + get(m, "damage_taken_pct"));
+            if (mult < 0.999) e.setDamage(e.getDamage() * Math.max(0.2, mult));
+            if (stripWitherOnHit && src instanceof org.bukkit.entity.WitherSkeleton) {
+                // vanilla wither-skeleton melee adds 10 s Wither I that ticks through defense; for Ember bosses
+                // (abyss watcher, calamity, raid) it dominated solo fights → strip it next tick (config stats.strip_wither_on_hit)
+                final Player pv = (Player) victim;
+                Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+                    @Override public void run() {
+                        for (org.bukkit.potion.PotionEffect pe : pv.getActivePotionEffects()) {
+                            if (pe.getType().equals(org.bukkit.potion.PotionEffectType.WITHER)
+                                    && pe.getAmplifier() == 0 && pe.getDuration() > 150) {
+                                pv.removePotionEffect(org.bukkit.potion.PotionEffectType.WITHER);
+                            }
+                        }
+                    }
+                }, 1L);
+            }
+        }
+    }
+
+    // ---------------------------------------------------------------- command
+
+    public boolean cmd(org.bukkit.command.CommandSender sender, String[] args) {
+        Player target = null;
+        if (args.length >= 2 && sender.hasPermission("corerpg.admin")) target = Bukkit.getPlayerExact(args[1]);
+        else if (sender instanceof Player) target = (Player) sender;
+        if (target == null) { sender.sendMessage(ChatColor.RED + "[属性] 找不到玩家"); return true; }
+        Map<String, Double> m = compute(target);
+        double def = get(m, "phys_defense");
+        sender.sendMessage(ChatColor.GOLD + "[属性] " + target.getName()
+                + ChatColor.GRAY + " 攻击 +" + fmt(get(m, "phys_damage") * damageScale)
+                + " · 生命 " + fmt(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
+                + " · 减伤 " + fmt(100.0 * def / (def + defenseK)) + "%"
+                + " · 暴击 " + fmt(100.0 * get(m, "crit_chance_pct")) + "%");
+        sender.sendMessage(ChatColor.DARK_GRAY + "  raw " + m);
+        return true;
+    }
+
+    private static String fmt(double v) {
+        return String.format("%.1f", v);
+    }
+}

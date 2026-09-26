@@ -8,6 +8,7 @@ const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
 const NEW = process.env.NEW || ('Newb' + Math.floor(Math.random() * 90000 + 10000))
 const NPC = new Vec3(-16.5, 58, 106.5)
+const AFK_HOME = new Vec3(-55, 74, 226) // 2026-09-27: AFK spawners moved to the flat grass WSW of the landing point
 const MOBS = new Set(['zombie', 'skeleton', 'husk', 'wither_skeleton', 'stray', 'zombie_villager', 'pig_zombie', 'vindication_illager'])
 const since = (b, n) => b.chatLog.slice(n).join(' | ')
 function niId(it) { try { for (const l of it.nbt.value.display.value.Lore.value.value) { const p = strip(l).trim(); if (/^[a-z0-9_]+$/.test(p)) return p } } catch (e) {} return null }
@@ -21,7 +22,7 @@ async function goto(b, pos, range, ms) {
 async function menuOpen(b) { if (b.currentWindow) { b.closeWindow(b.currentWindow); await wait(500) } b.chat('/ember'); for (let i = 0; i < 25 && !b.currentWindow; i++) await wait(200); await wait(400); return !!b.currentWindow }
 async function click(b, name) { const w = b.currentWindow; if (!w) return 'no-window'; const slot = w.slots.findIndex((it, i) => it && i < w.inventoryStart && nameOf(it) === name); if (slot < 0) return 'no-item:' + name; try { await b.clickWindow(slot, 0, 0) } catch (e) {} await wait(1600); return 'ok' }
 async function path(b, ...names) { await menuOpen(b); const out = []; for (const n of names) out.push(await click(b, n)); return out.join(',') }
-async function fight(b, untilRe, ms, n0) {
+async function fight(b, untilRe, ms, n0, home) {
   const t0 = Date.now(); let deaths = 0
   b.on('death', () => deaths++)
   while (Date.now() - t0 < ms && !untilRe.test(strip(since(b, n0)))) {
@@ -29,7 +30,7 @@ async function fight(b, untilRe, ms, n0) {
     const bl = blade(b); if (bl && (!b.heldItem || b.heldItem.slot !== bl.slot)) { try { await b.equip(bl, 'hand') } catch (e) {} }
     const e = Object.values(b.entities).filter(x => x && x !== b.entity && MOBS.has(x.name) && x.position.distanceTo(b.entity.position) < 60)
       .sort((x, y) => x.position.distanceTo(b.entity.position) - y.position.distanceTo(b.entity.position))[0]
-    if (!e) { b.pathfinder.setGoal(null); await wait(800); continue }
+    if (!e) { if (home && b.entity.position.distanceTo(home) > 6) b.pathfinder.setGoal(new goals.GoalNear(home.x, home.y, home.z, 3)); else b.pathfinder.setGoal(null); await wait(800); continue }
     const d = e.position.distanceTo(b.entity.position)
     if (d > 2.8) { b.pathfinder.setGoal(new goals.GoalFollow(e, 1.5), true) }
     else { b.pathfinder.setGoal(null); try { await b.lookAt(e.position.offset(0, (e.height || 1.8) * 0.85, 0), true) } catch (x) {} b.attack(e) }
@@ -59,7 +60,7 @@ async function talkNpc(b) {
   r.afk_click = await path(b, '挂机庭'); await wait(3500)
   r.afk_spawn = b.game && b.entity.position.toString()
   let n = b.chatLog.length
-  r.afk_fight = await fight(b, /在枢纽签到一次（|骨头碎了/, 6 * 60000, n)
+  r.afk_fight = await fight(b, /在枢纽签到一次（|骨头碎了/, 6 * 60000, n, AFK_HOME)
   r.check_afk = /骨头碎了/.test(strip(since(b, n))) ? 'PASS' : 'FAIL'
   r.blade_after_afk = !!blade(b)
   // 3) sign, /hub, walk to NPC

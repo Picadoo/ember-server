@@ -95,3 +95,16 @@ mysql:
 
 debug:
   mm_credit: false   # true = log every MM reward credit decision (corerpg mmgive/mmxp)
+
+# 2026-09-27 gear stat layer (AttributePlus parked → CoreRpg applies NI lore stats).
+# player→mob melee: + phys_damage × damage_scale (scaled by attack charge)
+# max HP = 20 + floor(max_health × health_scale); mob→player dmg × (1 − def/(def+defense_k))
+stats:
+  enabled: true
+  damage_scale: 1.0
+  health_scale: 1.0
+  defense_k: 20
+  crit_multiplier: 1.5
+  hearts_display_cap: 40
+  # vanilla wither-skeleton melee adds 10 s Wither I (ignores defense) → stripped next tick for players
+  strip_wither_on_hit: true

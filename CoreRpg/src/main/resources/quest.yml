@@ -37,7 +37,7 @@ chapters:
         mobs: [EmberAfkZombie]
         count: 6
         desc: 在挂机庭击败 挂机庭僵尸
-        hint: /ember → 挂机庭 · 落点往西三十来格是怪区 · 手持余烬之刃 · 打不过就 /hub
+        hint: /ember → 挂机庭 · 落点往西偏南五十来格的草坡是怪区 · 手持余烬之刃 · 打不过就 /hub
         xp: 100
         done: ['§7腐肉里嵌着暗红的碎片，还带着余温。']
       - type: kill

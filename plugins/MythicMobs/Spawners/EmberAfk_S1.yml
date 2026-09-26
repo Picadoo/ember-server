@@ -1,12 +1,12 @@
 EmberAfk_S1:
   MobName: EmberAfkSkeleton
   World: ember_afk
-  X: -48
-  Y: 70
-  Z: 240
+  X: -57
+  Y: 75
+  Z: 224
   Yaw: 0.0
   Pitch: 0.0
-  Radius: 5
+  Radius: 4
   UseTimer: true
   MaxMobs: '4'
   MobLevel: '1'

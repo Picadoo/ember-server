@@ -1,12 +1,12 @@
 EmberAfk_Z1:
   MobName: EmberAfkZombie
   World: ember_afk
-  X: -55
-  Y: 70
-  Z: 250
+  X: -51
+  Y: 76
+  Z: 230
   Yaw: 0.0
   Pitch: 0.0
-  Radius: 6
+  Radius: 4
   UseTimer: true
   MaxMobs: '6'
   MobLevel: '1'
