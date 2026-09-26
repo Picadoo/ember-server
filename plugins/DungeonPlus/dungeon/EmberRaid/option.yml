@@ -27,15 +27,17 @@ dungeon-area: []
 # 团戒：周首通保底。团票每周 1 张 ⇒ 同周再通需额外票；
 #   周首通去重：corerpg raid grant-ring（raidRingWeek=DailyService.weekId）
 # T2/T3：不保底；终厅 Boss MM 概率（15/12 · 8/6）
+# 2026-09-26 修：DP $command 不认 <player.name>（控制台实测 "NeigeItems > 玩家 <player.name> 不在线"，
+#   通关箱/团戒/回城从未发放）；改用 PAPI %player_name%（DP 自带 actionscript/example.yml 用法，Expansion-player 已装）
 dungeon-reward-script:
   - "$message{type=text;text=§a使徒倒下。§9同袍之证已结算。} @dungeon"
-  - "$command{text=ni give <player.name> mat_ember_core_fragment 4;console=true} @player"
-  - "$command{text=ni give <player.name> crystal_ember_enchant 2;console=true} @player"
-  - "$command{text=ni give <player.name> mat_ember_shard 10;console=true} @player"
-  - "$command{text=ni give <player.name> mat_ember_bone_dust 6;console=true} @player"
-  - "$command{text=ni give <player.name> gem_ember_sharp 1;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_core_fragment 4;console=true} @player"
+  - "$command{text=ni give %player_name% crystal_ember_enchant 2;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_shard 10;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_bone_dust 6;console=true} @player"
+  - "$command{text=ni give %player_name% gem_ember_sharp 1;console=true} @player"
   # 周首通保底团戒（NI acc_ember_raid_ring）
-  - "$command{text=corerpg raid grant-ring <player.name>;console=true} @player"
+  - "$command{text=corerpg raid grant-ring %player_name%;console=true} @player"
   - "$message{type=text;text=§6周首通保底 · 余烬团戒（戒+刃=同袍套装）} @dungeon"
   - "$message{type=text;text=§8同周再通不重复发戒（团票每周 1）· T3 不保底} @dungeon"
-  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"
+  - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

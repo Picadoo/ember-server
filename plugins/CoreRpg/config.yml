@@ -76,6 +76,10 @@ calamity:
   kill_rewards:
     - "ni give {player} mat_calamity_ember 1"
     - "ni give {player} cosmetic_calamity_shard 1"
+    # 助攻份额（2026-09-26）：kill_rewards 发给击杀者 + 本窗所有有伤害者；MM onDeath 只给尾刀者
+    # （凝核 core_ember_compact×1 + 核心碎片×2）。这里只补核心碎片×1（< 尾刀的 2），
+    # 不补凝核：固定数量最少 1，会与尾刀持平。
+    - "ni give {player} mat_ember_core_fragment 1"
 
 # Persistence 1.4.0+ — keep yaml unless ops explicitly switch (see config-mysql.example.yml)
 storage: mysql

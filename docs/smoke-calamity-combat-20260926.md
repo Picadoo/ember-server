@@ -73,3 +73,7 @@
 - 本次 `forceopen` 只记了 `force` 槽，今晚 20:00 / 22:00 的正式窗会照常自动开。
 - 测试号 `CalBotA/B/C`、`CalWatch`、`CalAssist`、`RpgBot` 今天的日箱已标记为已领（测试数据）。`CalBotA/B/C` 测后已 deop。
 - MariaDB 由 `mysqld_safe` 手动拉起（容器里没有 systemd），重启机器后需重新执行：`sudo mkdir -p /run/mysqld && sudo chown mysql:mysql /run/mysqld && sudo mysqld_safe --user=mysql &`。
+
+## 4. 追加（2026-09-26 21:05 CST）· 助攻份额
+
+`config.yml calamity.kill_rewards` 加 `ni give {player} mat_ember_core_fragment 1`：所有有伤害的参战者（含击杀者）各得核心碎片 ×1，比尾刀 MM 的 2 枚少；没加凝核（固定数量最少 1，会和尾刀持平）。三人实战复测（击杀者 / 砍 3 刀的助攻者 / 零伤害旁观者）全部 PASS，日箱每天限 1 次仍然有效。详见 `docs/smoke-raid-combat-20260926.md` §5。

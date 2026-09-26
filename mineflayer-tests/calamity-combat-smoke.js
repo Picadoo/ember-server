@@ -3,6 +3,10 @@ const mineflayer = require('mineflayer')
 const HOST = '127.0.0.1', PORT = 25565
 const FIGHTER = process.env.FIGHTER || 'CalBotA'
 const WATCHER = process.env.WATCHER || 'CalWatch'
+// HELPER (optional, 2026-09-26): a third bot that hits the boss 3 times per window but never lands the kill.
+// With HELPER set, WATCHER stays a pure zero-damage bystander. OP_BOT = operator bot issuing commands.
+const HELPER = process.env.HELPER || ''
+const OP_BOT = process.env.OP_BOT || 'RpgBot'
 const BX = -96.5, BY = 64, BZ = 266.5
 const wait = ms => new Promise(r => setTimeout(r, ms))
 const strip = s => String(s || '').replace(/§./g, '')
@@ -38,6 +42,24 @@ function bosses(bot) {
   return Object.values(bot.entities).filter(e => e && e.name === 'wither_skeleton' && e.position.distanceTo(bot.entity.position) < 64)
 }
 
+async function helperHits(op, h, f, label) {
+  const b0 = bosses(f)[0]
+  if (!b0) return 0
+  op.chat(`/tp ${h.username} ${(b0.position.x - 1.5).toFixed(1)} ${b0.position.y.toFixed(1)} ${b0.position.z.toFixed(1)}`)
+  await wait(1500)
+  let n = 0
+  for (let i = 0; i < 3; i++) {
+    const e = h.entities[b0.id]
+    if (!e || !e.isValid) break
+    await h.lookAt(e.position.offset(0, 1.6, 0), true); h.attack(e); n++
+    await wait(700)
+  }
+  op.chat(`/tp ${h.username} ${BX + 12} ${BY + 1} ${BZ - 22}`)
+  await wait(800)
+  console.log(`[${label}] helper ${h.username} hits=${n}`)
+  return n
+}
+
 async function fight(op, f, label) {
   const t0 = Date.now()
   let boss = null
@@ -66,15 +88,16 @@ async function fight(op, f, label) {
 
 ;(async () => {
   const r = { notes: [] }
-  const op = await mk('RpgBot')
+  const op = await mk(OP_BOT)
   await wait(1500)
   const f = await mk(FIGHTER)
   const w = await mk(WATCHER)
+  const h = HELPER ? await mk(HELPER) : null
   await wait(1500)
   const c = async (s, ms) => { console.log('[cmd]', s); op.chat(s); await wait(ms || 900) }
   await c(`/op ${FIGHTER}`)
   await c('/corerpg calamity forceend', 1500)
-  for (const p of [FIGHTER, WATCHER]) {
+  for (const p of [FIGHTER, WATCHER].concat(HELPER ? [HELPER] : [])) {
     await c(`/clear ${p}`); await c(`/gamemode survival ${p}`)
     await c(`/mvtp ${p} ember_event`, 2000)
     await c(`/effect ${p} resistance 900 4 true`); await c(`/effect ${p} regeneration 900 4 true`); await c(`/effect ${p} saturation 900 4 true`)
@@ -83,6 +106,7 @@ async function fight(op, f, label) {
   await c(`/give ${FIGHTER} diamond_sword 1`)
   await c(`/tp ${FIGHTER} ${BX} ${BY + 1} ${BZ - 4}`)
   await c(`/tp ${WATCHER} ${BX} ${BY + 1} ${BZ - 22}`, 2500)
+  if (HELPER) await c(`/tp ${HELPER} ${BX + 12} ${BY + 1} ${BZ - 22}`, 1500)
   await c('/mm mobs kill EmberCalamityBoss', 1500)
   r.fighterPos = f.entity.position.toString(); r.watcherPos = w.entity.position.toString()
   r.preexistingBosses = bosses(f).length
@@ -92,6 +116,7 @@ async function fight(op, f, label) {
   // ---- Window 1 ----
   let fn = f.chatLog.length, wn = w.chatLog.length
   let invF0 = niCounts(f), invW0 = niCounts(w)
+  let hn = h ? h.chatLog.length : 0, invH0 = h ? niCounts(h) : {}
   let n = op.chatLog.length
   await c('/corerpg calamity forceopen', 3000)
   r.w1_open = /强制开启|降临/.test(since(op, n)) ? 'PASS' : 'FAIL'
@@ -105,11 +130,13 @@ async function fight(op, f, label) {
       await c(`/tp ${WATCHER} ${BX} ${BY + 1} ${BZ - 22}`, 800)
     }
   }
+  if (h) r.w1_helperHits = await helperHits(op, h, f, 'W1')
   const k1 = await fight(op, f, 'W1')
   r.w1_kill = k1
   await wait(4000)
   r.w1_fighterDelta = diff(invF0, niCounts(f)); r.w1_watcherDelta = diff(invW0, niCounts(w))
   r.w1_fighterChat = since(f, fn).slice(0, 600); r.w1_watcherChat = since(w, wn).slice(0, 600)
+  if (h) { r.w1_helperDelta = diff(invH0, niCounts(h)); r.w1_helperChat = since(h, hn).slice(0, 600) }
 
   // same-window: no second spawn
   n = op.chatLog.length
@@ -133,15 +160,18 @@ async function fight(op, f, label) {
   await c(`/tp ${FIGHTER} ${BX} ${BY + 1} ${BZ - 4}`, 1500)
   fn = f.chatLog.length; wn = w.chatLog.length
   invF0 = niCounts(f); invW0 = niCounts(w)
+  if (h) { hn = h.chatLog.length; invH0 = niCounts(h) }
   n = op.chatLog.length
   await c('/corerpg calamity forceopen', 3000)
   r.w2_open = since(op, n)
   r.w2_bossCount = bosses(f).length
+  if (h) r.w2_helperHits = await helperHits(op, h, f, 'W2')
   const k2 = await fight(op, f, 'W2')
   r.w2_kill = k2
   await wait(4000)
   r.w2_fighterDelta = diff(invF0, niCounts(f)); r.w2_watcherDelta = diff(invW0, niCounts(w))
   r.w2_fighterChat = since(f, fn).slice(0, 600); r.w2_watcherChat = since(w, wn).slice(0, 600)
+  if (h) { r.w2_helperDelta = diff(invH0, niCounts(h)); r.w2_helperChat = since(h, hn).slice(0, 600) }
   n = op.chatLog.length
   await c('/corerpg calamity forceend', 1500)
   r.w2_end = since(op, n)
@@ -149,6 +179,7 @@ async function fight(op, f, label) {
   await c('/corerpg calamity', 1200)
   r.w2_status_after_end = since(op, n)
   r.finalBosses = bosses(f).length
+  if (process.env.DEOP !== '0') await c(`/deop ${FIGHTER}`)
 
   console.log('COMBAT_RESULT', JSON.stringify(r, null, 2))
   await wait(500)

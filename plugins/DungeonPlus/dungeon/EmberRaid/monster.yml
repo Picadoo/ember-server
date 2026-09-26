@@ -19,7 +19,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-48,65,275;amount=3;scattered=2.5;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberRaidArcher;location=-32,65,273;amount=4;scattered=2.5;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=团本·通道卫兵,团本·通道射手;amount=13} @system"
+    # 2026-09-26 修：kill-any 按本组计数（实战冒烟：wave2 的 3 卫兵 + 4 射手全灭后 amount=13 永不满足、卡波）
+    - "$kill-any{mobname=团本·通道卫兵,团本·通道射手;amount=7} @system"
     start:
     - "$message{type=text;text=§9【右道】射手就位——右边先压远程！} @dungeon"
     end:
