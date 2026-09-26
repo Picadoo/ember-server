@@ -1,5 +1,5 @@
 # 盟约子菜单壳 — DESIGN-ember-guild-ladder.md §1
-# 创建 / 捐献(盟课) / 周 Boss；命令可能尚未实装
+# 创建 / 捐献(盟课) / 周 Boss
 
 Title: '§2余烬 · 盟约'
 
@@ -50,7 +50,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §2[盟约] §7请执行 §f/corerpg guild §7（插件岗实装后生效）'
         - 'command: corerpg guild'
 
   C:
@@ -70,7 +69,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §a[盟约·创建] §7建议：§f/corerpg guild create <名>'
-        - 'tell: §8费用占位：币 5000 或 晶钻 40 · 命令可能尚未实装'
+        - 'tell: §8费用：币 5000 或 晶钻 40'
 
   D:
     display:
@@ -110,4 +109,5 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §c[盟约·Boss] §7建议：§f/corerpg guild boss'
-        - 'tell: §8周 1 次 · 奖励仅外观/币/票 · DP 本未接'
+        - 'tell: §8周 1 次 · 消耗贡献 20 · 需先组队（队长执行）'
+        - 'command: corerpg guild boss'

@@ -51,7 +51,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[寄售] §7请执行 §f/corerpg auction §7（插件岗实装后生效）'
         - 'tell: §8我的在售 / 已售 · 成交扣税 §e10%'
         - 'command: corerpg auction'
 
@@ -66,12 +65,12 @@ Icons:
         - ''
         - '§8命令：/corerpg auction list'
         - ''
-        - '§a➥ §f打开列表（占位）'
+        - '§a➥ §f打开列表'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §a[寄售·浏览] §7建议：§f/corerpg auction list'
-        - 'tell: §8白名单流通物 · 绑定物不可买 · 命令可能尚未实装'
+        - 'tell: §8白名单流通物 · 绑定物不可买'
         - 'command: corerpg auction list'
 
   S:

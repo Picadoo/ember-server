@@ -21,3 +21,9 @@ Suggested coords (AFK): `-44 67 265` / `-40 67 265` / `-36 67 265`
 Live create: `mineflayer-tests/hd-create-ember.js` (RpgBot OP).  
 PAPI smoke (after CoreRpg ladder deploy): `mineflayer-tests/ladder-papi-smoke.js`.  
 Note: `%corerpg_coin%` already works; ladder `%ember_ladder_*%` pending CoreRpg wiring.
+
+### 2026-09-26 audit
+HD 2.4.9 has **no PlaceholderAPI support** — the `%ember_ladder_*%` lines were shown raw in game.
+Since CoreRpg 1.4.10, `LadderService.refresh()` (every `refresh_seconds`) pushes resolved TOP lines with
+`hd setline <board> <line> <text>` (lines 3…N+2, only changed lines). The live `database.yml` therefore holds
+resolved names/values; the repo copy keeps the PAPI template for reference.

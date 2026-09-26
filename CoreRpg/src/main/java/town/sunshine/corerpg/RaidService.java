@@ -76,11 +76,12 @@ public final class RaidService {
                 return true;
             }
             Player p = (Player) sender;
-            if (sender.hasPermission("corerpg.admin") || isInRaidWorld(p)) {
+            // 1.4.10 audit: in-instance self-claim let players take the weekly ring before clearing → clear box only
+            if (sender.hasPermission("corerpg.admin")) {
                 grantRing(sender, p);
             } else {
                 sendRingStatus(p);
-                p.sendMessage(ChatColor.DARK_GRAY + "团戒由通关箱结算（或在本内 /corerpg raid claim-ring）");
+                p.sendMessage(ChatColor.DARK_GRAY + "团戒由团本通关箱自动结算（每周首通 1 枚）");
             }
             return true;
         }

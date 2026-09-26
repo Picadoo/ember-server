@@ -656,6 +656,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("shop".equals(sub)) return cmdShop(sender, args);
         if ("monthly".equals(sub)) return cmdMonthly(sender, args);
         if ("vip".equals(sub)) return cmdVip(sender, args);
+        if ("pass".equals(sub) || "战令".equals(sub)) return cmdPass(sender, args);
+        if ("enderchest".equals(sub) || "ec".equals(sub) || "末影箱".equals(sub)) return cmdEnderChest(sender);
         if ("scrap".equals(sub)) return cmdScrap(sender, args);
         if ("reforge".equals(sub)) return cmdReforge(sender, args);
         if ("mail".equals(sub)) {
@@ -709,7 +711,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(ChatColor.GOLD + "[CoreRpg] " + ChatColor.YELLOW
-                + "/corerpg spawn|status|coin|sign|activity|bounty|enhance|socket|scrap|reforge|calamity|abyss|raid|set|covenant|talent|skill|cash|tickets|shop|monthly|vip|mail|friend|settings|ladder|pet|guild|arena|pvp|auction|warehouse|storage|reload|help");
+                + "/corerpg spawn|status|coin|sign|activity|bounty|enhance|socket|scrap|reforge|calamity|abyss|raid|set|covenant|talent|skill|cash|tickets|shop|monthly|vip|pass|enderchest|mail|friend|settings|ladder|pet|guild|arena|pvp|auction|warehouse|storage|reload|help");
         sender.sendMessage(ChatColor.GRAY + "  coin [give <玩家> <数量>] · sign · activity [claim] · bounty [claim]");
         sender.sendMessage(ChatColor.GRAY + "  enhance [info] · socket list|insert <gemId>|remove <slot>");
         sender.sendMessage(ChatColor.GRAY + "  scrap [info] · reforge");
@@ -757,6 +759,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private boolean cmdSpawn(CommandSender sender, String[] args) {
         if (!requirePlayer(sender)) return true;
+        // 1.4.10 audit: was open to every player (console-dispatched mm spawn of any mob/amount)
+        if (!sender.hasPermission("corerpg.admin")) {
+            sender.sendMessage(ChatColor.RED + "需要 corerpg.admin");
+            return true;
+        }
         Player p = (Player) sender;
         Location loc = p.getLocation();
         String mob = spawnMob;
@@ -1168,6 +1175,37 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             return true;
         }
         cashService.cmdVipShow((Player) sender);
+        return true;
+    }
+
+    /** 1.4.10: /corerpg pass free — free-track supply, once per day (menu used to mail it on every click). */
+    private boolean cmdPass(CommandSender sender, String[] args) {
+        if (!requirePlayer(sender)) return true;
+        if (!sender.hasPermission("corerpg.use")) {
+            sender.sendMessage(ChatColor.RED + "需要 corerpg.use");
+            return true;
+        }
+        if (cashService == null) {
+            sender.sendMessage(ChatColor.RED + "[战令] 服务未就绪");
+            return true;
+        }
+        if (args.length >= 2 && "free".equalsIgnoreCase(args[1])) {
+            cashService.cmdPassFree((Player) sender);
+            return true;
+        }
+        cashService.cmdPassShow((Player) sender);
+        return true;
+    }
+
+    /** 1.4.10: /corerpg enderchest — open own ender chest (storage menu button; no plugin provided /enderchest). */
+    private boolean cmdEnderChest(CommandSender sender) {
+        if (!requirePlayer(sender)) return true;
+        if (!sender.hasPermission("corerpg.use")) {
+            sender.sendMessage(ChatColor.RED + "需要 corerpg.use");
+            return true;
+        }
+        Player p = (Player) sender;
+        p.openInventory(p.getEnderChest());
         return true;
     }
 

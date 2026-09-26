@@ -5,7 +5,9 @@ dungeon-init-script:
 # 地牢启动时
 dungeon-start:
   # 启动条件,条件满足是将传送至地牢内并执行 actionScript 脚本内容
-  condition: []
+  # 2026-09-26 audit: 地图编辑用空壳（无怪/无奖励/无设置），原本任何玩家可 /dp start 进入 → 仅 OP
+  condition:
+    - "$js-condition{text='%player_is_op%'=='yes';message=§c该地牢实例仅供 OP 编辑地图使用} @system"
   # 启动条件满足时触发
   action-script: []
 # null

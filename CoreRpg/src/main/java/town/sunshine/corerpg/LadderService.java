@@ -284,6 +284,44 @@ public final class LadderService {
             speedBoard.add(new Entry(s.name, s.value, s.uuid));
         }
         saveSnapshot();
+        syncHolograms();
+    }
+
+    /** 1.4.10: HolographicDisplays 2.4.9 has no PAPI → push resolved TOP lines via `hd setline` (only changed lines). */
+    private final java.util.Map<String, String> holoCache = new java.util.HashMap<String, String>();
+    private void syncHolograms() {
+        if (Bukkit.getPluginManager().getPlugin("HolographicDisplays") == null) return;
+        syncBoard("ember_ladder_power", powerBoard, powerSize, "&b", "");
+        syncBoard("ember_ladder_abyss", abyssBoard, abyssSize, "&d", "层");
+        syncBoard("ember_ladder_speed", speedBoard, speedSize, "&a", "s");
+    }
+    /** HD 2.4.9 internal registry (reflection; HD loads its holograms after CoreRpg enables). */
+    private static boolean hdHologramExists(String name) {
+        try {
+            Class<?> c = Class.forName("com.gmail.filoghost.holographicdisplays.object.NamedHologramManager");
+            Object o = c.getMethod("isExistingHologram", String.class).invoke(null, name);
+            return Boolean.TRUE.equals(o);
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+    private void syncBoard(String holo, List<Entry> board, int size, String topColor, String unit) {
+        if (!hdHologramExists(holo)) return;
+        for (int r = 1; r <= size; r++) {
+            Entry e = r <= board.size() ? board.get(r - 1) : null;
+            boolean top = r <= 3;
+            String line = (top ? "&e" : "&7") + r + ". &f" + nameOrEmpty(e) + " &7- " + (top ? topColor : "&7")
+                    + (e == null ? "-" : valueOrZero(e) + unit);
+            String key = holo + "#" + r;
+            if (line.equals(holoCache.get(key))) continue;
+            try {
+                if (Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "hd setline " + holo + " " + (r + 2) + " " + line)) {
+                    holoCache.put(key, line);
+                }
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.FINE, "hd setline failed", t);
+            }
+        }
     }
 
     private static final class Scored {

@@ -258,6 +258,10 @@ public final class PlayerData {
     /** Light VIP stub (no LuckPerms). */
     private int vipTier;
     private String vipDailyClaimDate = "";
+    /** 1.4.10: last day the free pass-track supply was claimed. */
+    private String passFreeClaimDate = "";
+    public String getPassFreeClaimDate() { return passFreeClaimDate == null ? "" : passFreeClaimDate; }
+    public void setPassFreeClaimDate(String v) { passFreeClaimDate = v == null ? "" : v; dirty = true; }
 
     public int getVipTier() { return vipTier; }
     public void setVipTier(int v) { vipTier = Math.max(0, v); dirty = true; }

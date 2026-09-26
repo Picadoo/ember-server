@@ -51,7 +51,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §a[使魔·图鉴] §7收集进度与出战位待 CoreRpg 接线'
+        - 'command: corerpg pet list'
         - 'tell: §8详见 DESIGN-ember-pet-bestiary.md'
 
   E:
@@ -72,6 +72,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §a[使魔·出战] §7建议：§f/corerpg pet summon <id> §8（未实装）'
         - 'tell: §8氪皮 / 经验瓶 · 不卖满级战力宠'
+        - 'command: corerpg pet list'
 
   S:
     display:
@@ -88,4 +89,5 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[使魔·投喂] §7魂尘升级 · /corerpg pet feed'
+        - 'tell: §6[使魔·投喂] §7魂尘升级 · /corerpg pet feed [数量]'
+        - 'command: corerpg pet feed'

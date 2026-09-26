@@ -20,7 +20,7 @@ schedule:
 announce:
   pre_minutes: [5, 1]
   message_pre: "§4[余烬灾厄] §e{minutes} 分钟后降临！§7/ember → 灾厄 → 奔赴"
-  message_open: "§4§l[余烬灾厄] §e灾厄使降临祭坛！§7/ember → 灾厄 → 奔赴 §8或 §f/mvtp ember_event"
+  message_open: "§4§l[余烬灾厄] §e灾厄使降临祭坛！§7/ember → 灾厄 → 奔赴"
   message_closed: "§c灾厄未苏醒。下一窗：§f{next_window}"
   message_end: "§4[余烬灾厄] §7本轮窗口结束，灰烬合拢。"
 

@@ -147,7 +147,8 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: mvtp %player_name% ember_afk'
+        # 2026-09-26 audit: players lack multiverse.teleport perms → run from console (fixed target world)
+        - 'console: mvtp %player_name% ember_afk'
         - 'tell: §a已传送至挂机庭（ember_afk）'
         - close
 

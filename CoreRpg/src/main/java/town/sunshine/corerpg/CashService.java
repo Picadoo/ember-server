@@ -523,6 +523,35 @@ public final class CashService {
                 + ChatColor.GRAY + "（勋阶 " + data.getVipTier() + "）");
     }
 
+    /** 1.4.10: free pass-track supply (mail template pass_track_free), once per day. */
+    public void cmdPassFree(Player player) {
+        PlayerData data = dataStore.get(player.getUniqueId());
+        String today = DailyService.today();
+        if (today.equals(data.getPassFreeClaimDate())) {
+            player.sendMessage(ChatColor.YELLOW + "[战令·免费轨] 今日补给已领取，明日再来");
+            return;
+        }
+        boolean delivered = false;
+        if (plugin instanceof CoreRpgPlugin) {
+            MailService mail = ((CoreRpgPlugin) plugin).getMailService();
+            if (mail != null) delivered = mail.deliverByTemplateId(player.getUniqueId(), "pass_track_free");
+        }
+        if (!delivered) {
+            player.sendMessage(ChatColor.RED + "[战令·免费轨] 发放失败（邮件模板缺失或收件箱已满），请稍后再试");
+            return;
+        }
+        data.setPassFreeClaimDate(today);
+        dataStore.flushMutation(player.getUniqueId());
+        player.sendMessage(ChatColor.GREEN + "[战令·免费轨] 今日补给已寄出（每日 1 次）");
+    }
+
+    public void cmdPassShow(Player player) {
+        PlayerData data = dataStore.get(player.getUniqueId());
+        boolean claimed = DailyService.today().equals(data.getPassFreeClaimDate());
+        player.sendMessage(ChatColor.AQUA + "[战令] 付费轨：" + (data.isSeasonPassPaid() ? ChatColor.GREEN + "已开通" : ChatColor.GRAY + "未开通")
+                + ChatColor.GRAY + " · 免费轨今日补给：" + (claimed ? ChatColor.GREEN + "已领" : ChatColor.YELLOW + "未领 /corerpg pass free"));
+    }
+
     public void cmdMonthlyShow(Player player) {
         PlayerData data = dataStore.get(player.getUniqueId());
         ensureCashDay(data);

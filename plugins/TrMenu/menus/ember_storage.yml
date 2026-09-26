@@ -87,7 +87,8 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_CHEST_OPEN-1-1'
-        - 'command: enderchest'
+        # 2026-09-26 audit: /enderchest did not exist → CoreRpg 1.4.10
+        - 'command: corerpg enderchest'
         - close
 
   X:

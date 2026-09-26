@@ -50,7 +50,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[誓约] §7请执行 §f/corerpg covenant §7查看（插件岗实装后生效）'
         - 'command: corerpg covenant'
 
   R:

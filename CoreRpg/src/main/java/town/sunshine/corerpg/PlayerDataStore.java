@@ -210,6 +210,7 @@ public final class PlayerDataStore {
         data.setWeeklyTicketShopWeekId(yaml.getString("weeklyTicketShopWeekId", ""));
         data.setVipTier(yaml.getInt("vipTier", 0));
         data.setVipDailyClaimDate(yaml.getString("vipDailyClaimDate", ""));
+        data.setPassFreeClaimDate(yaml.getString("passFreeClaimDate", ""));
 
         data.setFriends(stringList(yaml, "friends"));
         data.setPendingIn(stringList(yaml, "pendingIn"));
@@ -339,6 +340,7 @@ public final class PlayerDataStore {
         yaml.set("weeklyTicketShopWeekId", data.getWeeklyTicketShopWeekId());
         yaml.set("vipTier", Integer.valueOf(data.getVipTier()));
         yaml.set("vipDailyClaimDate", data.getVipDailyClaimDate());
+        yaml.set("passFreeClaimDate", data.getPassFreeClaimDate());
         yaml.set("friends", new ArrayList<String>(data.getFriends()));
         yaml.set("pendingIn", new ArrayList<String>(data.getPendingIn()));
         yaml.set("pendingOut", new ArrayList<String>(data.getPendingOut()));

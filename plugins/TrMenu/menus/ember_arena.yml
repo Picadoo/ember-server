@@ -51,7 +51,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c[竞技] §7请执行 §f/corerpg arena §7（插件岗实装后生效）'
         - 'tell: §8积分 · 段位 · 日奖励箱 · 只奖币与外观'
         - 'command: corerpg arena'
 
@@ -72,7 +71,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §c[竞技·1v1] §7正在排队…'
-        - 'tell: §8建议：§f/corerpg arena queue 1v1 §8· 命令可能尚未实装'
+        - 'tell: §8建议：§f/corerpg arena queue 1v1'
         - 'tell: §7匹配后进独立竞技世界 · 结算只发币与外观'
         - 'command: corerpg arena queue 1v1'
 
@@ -93,7 +92,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §6[竞技·2v2] §7正在排队…'
-        - 'tell: §8建议：§f/corerpg arena queue 2v2 §8· 命令可能尚未实装'
+        - 'tell: §8建议：§f/corerpg arena queue 2v2'
         - 'tell: §7建议先与好友组队 · 结算只发币与外观'
         - 'command: corerpg arena queue 2v2'
 
@@ -111,6 +110,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_BASS-1-0'
-        - 'tell: §7[竞技] §7已取消排队意图（占位）'
+        - 'tell: §7[竞技] §7已取消排队意图'
         - 'tell: §8建议：§f/corerpg arena leave'
         - 'command: corerpg arena leave'

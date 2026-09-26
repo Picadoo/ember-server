@@ -52,7 +52,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §f[邮寄] §7请执行 §f/corerpg mail §7（插件岗实装后生效）'
         - 'command: corerpg mail'
 
   C:
@@ -72,7 +71,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §a[邮寄·领取] §7建议：§f/corerpg mail claim all'
-        - 'tell: §8战令 / 维护补偿 / 活动箱走邮箱 · 命令可能尚未实装'
+        - 'tell: §8战令 / 维护补偿 / 活动箱走邮箱'
         - 'command: corerpg mail claim all'
 
   S:
@@ -112,4 +111,4 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-0'
         - 'tell: §7[邮寄·清理] §7建议：§f/corerpg mail delete <id>'
-        - 'tell: §8未领附件不可删 · 命令可能尚未实装'
+        - 'tell: §8未领附件不可删'

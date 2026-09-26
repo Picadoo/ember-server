@@ -47,15 +47,13 @@ Icons:
         - '§7查看本人战力 / 深渊 / 竞速'
         - ''
         - '§8命令：/corerpg ladder'
-        - '§8PAPI：%ember_power_score%'
-        - '§8币：%corerpg_coin%（已接线）'
+        - '§7战力展示分：§f%ember_power_score%'
+        - '§7余烬币：§f%corerpg_coin%'
         - ''
         - '§e➥ §f点击查询'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[天梯] §7请执行 §f/corerpg ladder §7（插件岗实装后生效）'
-        - 'tell: §8本人 PAPI：%ember_power_score% · %ember_abyss_best% · %ember_weekly_best_sec%'
         - 'command: corerpg ladder'
 
   M:
@@ -65,17 +63,14 @@ Icons:
       lore:
         - ''
         - '§7大厅战力 / 深渊 / 竞速全息'
-        - '§8ops：docs/ember-holograms.md'
-        - '§8/hd create ember_ladder_power …'
-        - '§8坐标：-44/-40/-36 · 67 · 265'
+        - '§7位置：主世界 §f-44/-40/-36 · 67 · 265'
+        - '§8每分钟自动刷新'
         - ''
         - '§7➥ §f聊天提示路径'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §7[天梯·全息] §fdocs/ember-holograms.md'
-        - 'tell: §8ops：/hd create ember_ladder_power|abyss|speed（PAPI TOP 行）'
-        - 'tell: §8站位：§fworld -44 67 265 §8/ §f-40 67 265 §8/ §f-36 67 265'
+        - 'tell: §7[天梯·全息] §f主世界 -44/-40/-36 67 265 §7· 每分钟自动刷新'
 
   P:
     display:
@@ -89,14 +84,13 @@ Icons:
         - ''
         - '§8命令：/corerpg ladder power'
         - '§8全息：ember_ladder_power'
-        - '§8PAPI：%ember_ladder_power_1_name%'
+        - '§7榜首：§f%ember_ladder_power_1_name% §7(%ember_ladder_power_1_value%)'
         - ''
         - '§b➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §b[天梯·战力] §7建议：§f/corerpg ladder power'
-        - 'tell: §8TOP PAPI：%ember_ladder_power_N_name% / _value%（N=1～10）'
+        - 'command: corerpg ladder power'
         - 'tell: §8全息板 §fember_ladder_power §8@ §f-44 67 265 §8（挂机区）'
         - 'tell: §7展示分 only · 不乘伤害 · 周结算外观称号'
 
@@ -112,16 +106,15 @@ Icons:
         - ''
         - '§8命令：/corerpg ladder abyss'
         - '§8全息：ember_ladder_abyss'
-        - '§8PAPI：%ember_ladder_abyss_1_value%'
+        - '§7榜首：§f%ember_ladder_abyss_1_name% §7(%ember_ladder_abyss_1_value%层)'
         - ''
         - '§5➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §5[天梯·深渊] §7建议：§f/corerpg ladder abyss'
+        - 'command: corerpg ladder abyss'
         - 'tell: §8层数越高越靠前 · 周结算外观 · 对齐 EmberAbyss'
         - 'tell: §8全息板 §fember_ladder_abyss §8@ §f-40 67 265 §8（挂机区）'
-        - 'tell: §8TOP PAPI：%ember_ladder_abyss_N_name% / _value%层'
 
   S:
     display:
@@ -135,13 +128,12 @@ Icons:
         - ''
         - '§8命令：/corerpg ladder speed'
         - '§8全息：ember_ladder_speed'
-        - '§8PAPI：%ember_ladder_speed_1_value%'
+        - '§7榜首：§f%ember_ladder_speed_1_name% §7(%ember_ladder_speed_1_value%s)'
         - ''
         - '§c➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §c[天梯·竞速] §7建议：§f/corerpg ladder speed'
+        - 'command: corerpg ladder speed'
         - 'tell: §8用时（秒）越低排名越高 · 只奖外观 · 禁核心'
         - 'tell: §8全息板 §fember_ladder_speed §8@ §f-36 67 265 §8（挂机区）'
-        - 'tell: §8TOP PAPI：%ember_ladder_speed_N_name% / _value%s'

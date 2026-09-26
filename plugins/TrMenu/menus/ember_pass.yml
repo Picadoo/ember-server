@@ -34,15 +34,15 @@ Icons:
       lore:
         - ''
         - '§7余烬币 80 + 碎片 ×2'
-        - '§8经系统邮件发放 · 再点 claim'
+        - '§8经系统邮件发放 · §e每日 1 次'
         - '§8赛季等级经验尚未接线'
         - ''
         - '§e➥ §f发送并尝试一键领取'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §a[战令·免费轨] §7正在发放补给邮件…'
-        - 'console: corerpg mail send %player_name% pass_track_free'
+        # 2026-09-26 audit: was console mail send on every click (unlimited coin/shards) → CoreRpg 1.4.10 daily-limited
+        - 'command: corerpg pass free'
         - 'command: corerpg mail claim all'
         - 'tell: §8若未自动入账，打开邮寄菜单 /corerpg mail'
 
