@@ -65,7 +65,10 @@ public final class GuildService {
     private String bossDungeonId = "EmberGuildBoss";
     private int bossContributionCost = 20;
     private int bossWeeklyLimit = 1;
-    private String bossStartCommand = "dp start EmberGuildBoss";
+    private String bossStartCommand = "dp start-console {player} EmberGuildBoss";
+    /** 1.4.9: one-time start pass (uuid → expiry ms) read by DP condition %corerpg_guildboss_pass%. */
+    private final Map<UUID, Long> bossPass = new ConcurrentHashMap<UUID, Long>();
+    private static final long BOSS_PASS_MS = 5000L;
 
     private final Map<String, Guild> byId = new ConcurrentHashMap<String, Guild>();
     private final Map<String, String> nameIndex = new ConcurrentHashMap<String, String>();
@@ -131,9 +134,9 @@ public final class GuildService {
         if (bossDungeonId == null || bossDungeonId.isEmpty()) bossDungeonId = "EmberGuildBoss";
         bossContributionCost = Math.max(0, cfg.getInt("boss.contribution_cost", 20));
         bossWeeklyLimit = Math.max(1, cfg.getInt("boss.weekly_limit", 1));
-        bossStartCommand = cfg.getString("boss.start_command", "dp start EmberGuildBoss");
+        bossStartCommand = cfg.getString("boss.start_command", "dp start-console {player} " + bossDungeonId);
         if (bossStartCommand == null || bossStartCommand.trim().isEmpty()) {
-            bossStartCommand = "dp start " + bossDungeonId;
+            bossStartCommand = "dp start-console {player} " + bossDungeonId;
         }
 
         guildsDir = new File(plugin.getDataFolder(), "guilds");
@@ -806,8 +809,24 @@ public final class GuildService {
                     + ChatColor.GRAY + "（donate 材料换贡献）");
             return;
         }
+        // 1.4.9: DP team — only the leader may start; collect members for the one-time pass
+        final List<UUID> party = new ArrayList<UUID>();
+        party.add(p.getUniqueId());
+        Object team = dpTeam(p);
+        if (team != null) {
+            UUID leader = dpTeamLeader(team);
+            if (leader != null && !leader.equals(p.getUniqueId())) {
+                p.sendMessage(PREFIX + ChatColor.RED + "请由 DP 队长执行 /corerpg guild boss。");
+                return;
+            }
+            if (dpTeamInDungeon(team)) {
+                p.sendMessage(PREFIX + ChatColor.RED + "你的队伍已在地牢中。");
+                return;
+            }
+            for (UUID u : dpTeamMembers(team)) if (!party.contains(u)) party.add(u);
+        }
         // spend personal contribution
-        String key = p.getUniqueId().toString();
+        final String key = p.getUniqueId().toString();
         g.contribution.put(key, Integer.valueOf(mine - bossContributionCost));
         g.dirty = true;
         saveGuild(g);
@@ -816,29 +835,118 @@ public final class GuildService {
         data.setGuildBossWeekId(week);
         dataStore.flushMutation(p.getUniqueId());
 
-        String cmd = bossStartCommand == null ? ("dp start " + bossDungeonId) : bossStartCommand.trim();
+        String tpl = bossStartCommand == null ? ("dp start-console {player} " + bossDungeonId) : bossStartCommand.trim();
+        // {player} template → run from console (DP start-console); legacy template → as the player
+        final boolean asConsole = tpl.contains("{player}");
+        final String cmd = tpl.replace("{player}", p.getName()).replace("{dungeon}", bossDungeonId);
         p.sendMessage(PREFIX + ChatColor.GREEN + "已消耗贡献 §f" + bossContributionCost
                 + ChatColor.GREEN + " · 启动 §f" + bossDungeonId
                 + ChatColor.GRAY + "（本周 " + data.getGuildBossUsed() + "/" + bossWeeklyLimit + "）");
-        boolean ok = false;
+        long exp = System.currentTimeMillis() + BOSS_PASS_MS;
+        for (UUID u : party) bossPass.put(u, Long.valueOf(exp));
+        boolean ok;
         try {
-            ok = Bukkit.dispatchCommand(p, cmd);
+            ok = Bukkit.dispatchCommand(asConsole ? Bukkit.getConsoleSender() : p, cmd);
         } catch (Throwable t) {
             plugin.getLogger().log(Level.WARNING, "guild boss dispatch failed for " + p.getName(), t);
             ok = false;
         }
         if (!ok) {
-            // refund contrib + weekly use
-            g.contribution.put(key, Integer.valueOf(contribOf(g, p.getUniqueId()) + bossContributionCost));
-            g.dirty = true;
-            saveGuild(g);
-            data.setGuildBossUsed(Math.max(0, data.getGuildBossUsed() - 1));
-            dataStore.flushMutation(p.getUniqueId());
-            p.sendMessage(PREFIX + ChatColor.RED + "启动失败（已退还贡献与次数）。"
-                    + ChatColor.GRAY + " 请确认已组队（1～5 人）后重试，或手动 /" + cmd);
+            clearBossPass(party);
+            refundBoss(g, p, key, data);
             return;
         }
-        p.sendMessage(ChatColor.DARK_GRAY + "  若未进本：先 /dp team 组队，再 /corerpg guild boss");
+        if (dpInDungeon(p)) {
+            clearBossPass(party);
+            plugin.getLogger().info("guild boss started by " + p.getName() + " party=" + party.size());
+            return;
+        }
+        // DP may start on a later tick — verify after 2s, refund if the team never entered
+        final Guild fg = g;
+        final PlayerData fdata = data;
+        final UUID pid = p.getUniqueId();
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override public void run() {
+                clearBossPass(party);
+                Player pp = Bukkit.getPlayer(pid);
+                if (pp != null && dpInDungeon(pp)) {
+                    plugin.getLogger().info("guild boss started (delayed) by " + pp.getName());
+                    return;
+                }
+                if (pp != null) refundBoss(fg, pp, key, fdata);
+            }
+        }, 40L);
+    }
+
+    private void refundBoss(Guild g, Player p, String key, PlayerData data) {
+        g.contribution.put(key, Integer.valueOf(contribOf(g, p.getUniqueId()) + bossContributionCost));
+        g.dirty = true;
+        saveGuild(g);
+        data.setGuildBossUsed(Math.max(0, data.getGuildBossUsed() - 1));
+        dataStore.flushMutation(p.getUniqueId());
+        p.sendMessage(PREFIX + ChatColor.RED + "启动失败（已退还贡献与次数）。"
+                + ChatColor.GRAY + " 请确认已组队（1～5 人、全员在线、由队长执行）后重试。");
+    }
+
+    /** PAPI %corerpg_guildboss_pass% — true only during a paid /corerpg guild boss start. */
+    public boolean hasBossPass(UUID id) {
+        if (id == null) return false;
+        Long exp = bossPass.get(id);
+        if (exp == null) return false;
+        if (System.currentTimeMillis() > exp.longValue()) { bossPass.remove(id); return false; }
+        return true;
+    }
+
+    private void clearBossPass(List<UUID> ids) {
+        for (UUID u : ids) bossPass.remove(u);
+    }
+
+    // ---- DungeonPlus (soft, via reflection; no compile dependency) ----
+    private Object dpTeam(Player p) {
+        try {
+            Class<?> c = Class.forName("org.serverct.ersha.dungeon.DungeonPlus");
+            Object tm = c.getField("teamManager").get(null);
+            if (tm == null) return null;
+            return tm.getClass().getMethod("getTeam", Player.class).invoke(tm, p);
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private UUID dpTeamLeader(Object team) {
+        try {
+            Object o = team.getClass().getField("leader").get(team);
+            return o instanceof UUID ? (UUID) o : null;
+        } catch (Throwable t) {
+            return null;
+        }
+    }
+
+    private List<UUID> dpTeamMembers(Object team) {
+        List<UUID> out = new ArrayList<UUID>();
+        try {
+            UUID l = dpTeamLeader(team);
+            if (l != null) out.add(l);
+            Object o = team.getClass().getField("players").get(team);
+            if (o instanceof List) {
+                for (Object x : (List<?>) o) if (x instanceof UUID && !out.contains(x)) out.add((UUID) x);
+            }
+        } catch (Throwable ignored) {
+        }
+        return out;
+    }
+
+    private boolean dpTeamInDungeon(Object team) {
+        try {
+            return team.getClass().getMethod("getTeamDungeon").invoke(team) != null;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    private boolean dpInDungeon(Player p) {
+        Object team = dpTeam(p);
+        return team != null && dpTeamInDungeon(team);
     }
 
     private void ensureDonateDaily(PlayerData data) {

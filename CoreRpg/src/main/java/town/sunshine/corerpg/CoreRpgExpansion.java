@@ -46,6 +46,10 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
             CashService cash = plugin.getCashService();
             return cash == null ? "6" : String.valueOf(cash.getHardCap());
         }
+        if ("guildboss_pass".equals(key)) {
+            GuildService gs = plugin.getGuildService();
+            return gs != null && gs.hasBossPass(player.getUniqueId()) ? "yes" : "no";
+        }
         if ("mail_unread".equals(key)) {
             MailService mail = plugin.getMailService();
             return mail == null ? "0" : String.valueOf(mail.countUnread(player.getUniqueId()));

@@ -16,15 +16,21 @@
   DP 会逐个队员判定，只要队里有一个非 OP，整队都会被拒。
 - 之后在 `dungeon-reward-script` 里把 5 行 `<player.name>` 改成 `%player_name%`（4 条 ni give + mvtp ember_hub）。
 
-### EmberGuildBoss：纯配置做不到，**奖励修复未应用**
-- 合法路径 `/corerpg guild boss`（GuildService）扣贡献，然后 **以玩家身份** `Bukkit.dispatchCommand(p, "dp start EmberGuildBoss")`
-  （`guild.yml boss.start_command` 只能改命令文本，执行者仍然是玩家本人）。
-- 因此合法路径能过的 DP 条件，玩家手打 `/dp start EmberGuildBoss` 同样能过：同一个人、同一条命令，
-  CoreRpg 也不会暴露"已付费未开本"这样的状态或占位符。实测非 OP 直开成功（见下）。
-- 所以按要求停手：`<player.name>` 保持不动（奖励仍然不发，也就刷不出来），只更新了 option.yml 的注释。
-- 代码方案（需要改 CoreRpg）：
-  1. GuildService 扣完贡献后改由 console 执行 DP 的控制台开本命令（`dp start-console`/等价命令），再给 DP 加 OP 门（同 Calamity）；或者
-  2. GuildService 扣完贡献后先通过 NiBridge 发一张一次性 `ticket_ember_guildboss`，DP 再加票据条件并消耗它。
+### EmberGuildBoss：CoreRpg 1.4.9 代码门控 + 已修 `%player_name%`（第四刀，21:49–21:57 CST）
+- 旧问题：`/corerpg guild boss` 以**玩家身份** dispatch `dp start EmberGuildBoss`，所以手打同一条命令就能绕过贡献门控，纯配置堵不住。
+- **CoreRpg 1.4.9（GuildService）改动：**
+  1. 贡献/周次检查通过后，通过反射（不加编译依赖）读取 DP 队伍：只有队长能发起，队伍已在地牢中则拒绝。
+  2. 扣贡献后，给**全队成员**发一次性通行（内存，5 s 过期），PAPI 占位符为 `%corerpg_guildboss_pass%`（yes/no，在 CoreRpgExpansion 中实现）。
+  3. 由**控制台**执行 `dp start-console <队长> EmberGuildBoss`（`guild.yml boss.start_command: "dp start-console {player} EmberGuildBoss"`；模板里不含 `{player}` 时退回旧的以玩家身份执行）。
+  4. 开本结果：立即检查一次，2 s 后再复核队伍是否已进地牢，确认后清除通行。没进本就退还贡献和周次。实测 DP 是在下一 tick 才开本，由 2 s 复核确认。
+- **为什么不能只靠控制台：** `start-console` 和 `start` 走同一个 `startDungeon`，开本条件仍然会逐个队员判定，
+  所以单纯 OP 条件会把合法的非 OP 队伍也拒掉。因此改成 OP **或** 一次性通行：
+  ```
+  $js-condition{text='%corerpg_guildboss_pass%'=='yes'||'%player_is_op%'=='yes';message=§c盟 Boss 需由队长执行 /corerpg guild boss（消耗盟约贡献）开启} @system
+  ```
+- 之后把奖励段 6 行 `<player.name>` 改成 `%player_name%`（5 条 ni give + mvtp ember_hub）。
+- 构建：先确认 1.4.8 源码重新构建后与线上 1.4.8 jar **逐字节一致**（750 个 class 加资源，`diff -r` 无差异），再改代码。
+  1.4.8 jar 已备份到 `backups/CoreRpg-1.4.8.jar`（sha256 a935780b…，不入库）。1.4.9 jar 的 sha256 为 b5106adb…。
 
 ## 2. MM 几率掉落
 
@@ -91,12 +97,24 @@ T2 在深渊杂兵上降到 0.01～0.03；灾厄 Boss 的 gem 0.5～0.7 → 0.04
 | 检查 | 结果 |
 |---|---|
 | 非 OP 两人队（GtA926+GtB926）`/dp start EmberCalamity` | **拒绝** ✅ 提示「灾厄 DP 实例仅供 OP 调试 · 正式灾厄请走公共窗口：/ember → 灾厄」 |
-| 非 OP `/dp start EmberGuildBoss` | **开本成功** ❌（门控缺口已确认，需代码，奖励仍不发） |
+| 非 OP `/dp start EmberGuildBoss`（第三刀，1.4.8） | 开本成功 ❌ → 第四刀已用 CoreRpg 1.4.9 堵上，见下方盟 Boss 测试 |
 | OP（CalA926，临时 op）从 `world` `/dp start EmberCalamity` → 实战击杀 Boss | 进本 ✅，20 s 通关 ✅，回 ember_hub ✅ |
 | 通关奖励只发一次 | `gear_ember_t3_talisman` **+1**（恰好 1 次）✅；DP 箱 core_fragment 2 / crystal 1 / calamity_ember 2 各发 1 次；另外 Boss MM 掉落 + CoreRpg kill_rewards 照常（总计 core_fragment +7、crystal +2、calamity_ember +6、cosmetic +1、gem_sharp +1、core_compact +1） |
 | 正式灾厄公共窗口（CalamityService） | 不经 DP，本次未改动（上一轮 smoke-calamity-combat 已验证） |
 | MM 掉落：在非 OP 机器人旁刷 EmberRaidFootman×8 + EmberAbyssZombie×8 并击杀 | `mat_ember_shard` **+7**（期望约 8×0.5+8×0.4≈7.2），修前是 0 ✅ |
 
+### 盟 Boss 测试（`mineflayer-tests/guildboss-gate-smoke.js`，21:53–21:55 CST；两名非 OP：GbL926 队长 + 盟员，GbM926 仅 DP 队友）
+
+| 检查 | 结果 |
+|---|---|
+| 非 OP 两人队手打 `/dp start EmberGuildBoss` | **拒绝** ✅「盟 Boss 需由队长执行 /corerpg guild boss（消耗盟约贡献）开启」 |
+| 贡献 19 执行 `/corerpg guild boss` | **拒绝** ✅「贡献不足：需要 20，当前 19」，贡献仍为 19，未开本 |
+| 贡献 20 执行 `/corerpg guild boss` | 扣贡献 20→0 ✅，控制台开本，两人都进本 ✅（队友靠通行通过逐人判定），41 s 通关 ✅ |
+| 奖励只发一次 | 每人「通关奖励已发放」1 次，`ni give 8 余烬碎片` / `4 骨尘` 各 1 次 ✅（其余增量来自 MM 掉落和灾厄结算） |
+| 回 ember_hub | 两人都回来了 ✅（开始时都在 `world`） |
+| 通关后再手打 `/dp start EmberGuildBoss` | **拒绝** ✅（通行只能用一次，已清除） |
+| 未测 | 开本失败的退款分支（代码路径：2 s 复核未进本 → 退还贡献和周次） |
+
 ## 4. 服务器状态
-- 已 `/dp reload`；最后一次停服后写入 `ops.json = []` 再启动，21:46 CST 启动完成，`ops.json` 为 `[]`。
+- 线上 CoreRpg 1.4.9。最后一次停服后写入 `ops.json = []` 再启动，21:56 CST 启动完成，`ops.json` 为 `[]`。
 - 测试用的临时 op（RpgBot、CalA926）已随 ops.json 清空全部撤销。

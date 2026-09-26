@@ -29,4 +29,6 @@ boss:
   dungeon_id: EmberGuildBoss
   contribution_cost: 20
   weekly_limit: 1
-  start_command: "dp start EmberGuildBoss"
+  # 1.4.9: {player} → 扣贡献后由控制台 dp start-console 启动，并给全队发一次性通行（%corerpg_guildboss_pass%，5s），
+  #   EmberGuildBoss 的 DP 条件只认 OP 或该通行 → 玩家手打 /dp start EmberGuildBoss 被拒。不含 {player} 则按旧方式以玩家身份执行。
+  start_command: "dp start-console {player} EmberGuildBoss"

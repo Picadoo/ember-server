@@ -1,5 +1,5 @@
 # 余烬盟约周 Boss（轻量）— CoreRpg guild boss 进本
-# 启动：玩家经 /corerpg guild boss → dispatch「dp start EmberGuildBoss」
+# 启动：玩家（DP 队长）经 /corerpg guild boss → 扣贡献 → 控制台「dp start-console <队长> EmberGuildBoss」（CoreRpg 1.4.9）
 # 无 NI 入场券；贡献消耗与周限由 CoreRpg 门控
 # 怪：复用 EmberAbyss* + EmberCalamityBoss（不新建 MM）
 # 地图：ember_raid（已注册）；否则可改 ember_arena
@@ -13,6 +13,9 @@ dungeon-init-script:
 dungeon-start:
   condition:
     - "$team-condition{team=true;min=1;max=5;message=§c盟 Boss 人数 1～5，当前 (<size>) · 请先组队} @system"
+    # 2026-09-26 门控（CoreRpg 1.4.9）：仅 OP，或持有 /corerpg guild boss 扣贡献后发给全队的一次性通行（5s，开本后即清）。
+    #   DP 对每个队员逐一判定；手打 /dp start EmberGuildBoss 没有通行 → 被拒。
+    - "$js-condition{text='%corerpg_guildboss_pass%'=='yes'||'%player_is_op%'=='yes';message=§c盟 Boss 需由队长执行 /corerpg guild boss（消耗盟约贡献）开启} @system"
   action-script:
     - "$message{type=text;text=§6盟约周 Boss 已点燃。§7进本由 §e/corerpg guild boss §7门控（贡献消耗）。} @dungeon"
     - "$teleport{location=-40,65,270;defspawn=true} @player"
@@ -21,15 +24,14 @@ dungeon-start:
 dungeon-area: []
 
 # 通关箱：币友好 — 碎片/外观/低档孔石/核心×1～2；不发 gear_ember_blade
-# 2026-09-26 注意（暂未修 <player.name>）：贡献/周次门控在 /corerpg guild boss，但它是以玩家身份 dispatch "dp start EmberGuildBoss"，
-#   玩家直接 /dp start EmberGuildBoss 即可绕过门控（2026-09-26 实测：非 OP 直开成功）。纯配置无解：任何 DP 条件
-#   合法路径能过，直开也能过（同一玩家、同一命令）。需改 CoreRpg GuildService 代码（console 启动 / 发票），
-#   之后再改 %player_name%。奖励修复暂不应用 — 见 docs/smoke-gating-drops-20260926.md。
+# 2026-09-26 已修：<player.name> → %player_name%（旧写法不被解析，奖励从未发放）。
+#   前提：上方 dungeon-start 门控（CoreRpg 1.4.9 一次性通行 / OP），直开被拒，奖励只经贡献路径发放。
+#   见 docs/smoke-gating-drops-20260926.md。
 dungeon-reward-script:
   - "$message{type=text;text=§6盟约周 Boss 通关奖励已发放} @dungeon"
-  - "$command{text=ni give <player.name> mat_ember_shard 8;console=true} @player"
-  - "$command{text=ni give <player.name> cosmetic_calamity_shard 1;console=true} @player"
-  - "$command{text=ni give <player.name> mat_ember_core_fragment 1;console=true} @player"
-  - "$command{text=ni give <player.name> gem_ember_sharp 1;console=true} @player"
-  - "$command{text=ni give <player.name> mat_ember_bone_dust 4;console=true} @player"
-  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_shard 8;console=true} @player"
+  - "$command{text=ni give %player_name% cosmetic_calamity_shard 1;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_core_fragment 1;console=true} @player"
+  - "$command{text=ni give %player_name% gem_ember_sharp 1;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_bone_dust 4;console=true} @player"
+  - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

@@ -37,7 +37,7 @@
 
 ## 2. ⚠️ 为什么 Calamity / GuildBoss 的奖励占位符没改（需要你拍板）
 
-> **后续（2026-09-26 第三刀）：** Calamity 已加 OP 门（`%player_is_op%` js-condition），并已修 `%player_name%`；GuildBoss 纯配置堵不住直开，需要改代码，奖励仍然暂缓。MM `>0` 几率行已审计并修复。见 [smoke-gating-drops-20260926.md](smoke-gating-drops-20260926.md)。
+> **后续（2026-09-26 第三刀）：** Calamity 已加 OP 门（`%player_is_op%` js-condition），并已修 `%player_name%`；GuildBoss 已由 CoreRpg 1.4.9 堵住（控制台开本 + 一次性通行），并已修 `%player_name%`。MM `>0` 几率行已审计并修复。见 [smoke-gating-drops-20260926.md](smoke-gating-drops-20260926.md)。
 - **EmberCalamity**：没有票，也没有权限门。`/dp start EmberCalamity` 人人可用，`ember_calamity` 菜单的 T 位（标着「测试实例（OP）」）也能直接点。一旦占位符生效，每次通关都会**必发 `gear_ember_t3_talisman`** + 核心碎片 2 + 附魔晶 + 灾厄余烬 2，变成无限刷 T3 的口子。
 - **EmberGuildBoss**：`/corerpg guild boss` 扣贡献后，是**以玩家身份** dispatch `dp start EmberGuildBoss`，所以玩家自己直接 `/dp start EmberGuildBoss` 就能绕开贡献和周次限制（本次测试就是这样直接开的）。
 - **已经存在的漏洞（和本次改动无关）：** 这两个实例的 Boss 都是 `EmberCalamityBoss`，所以现在就会触发 CoreRpg 灾厄结算（每次 kill_rewards + 每天 1 次日箱）和尾刀者的 MM 掉落（凝核、锋利石、碎片）。实测 GuildBoss 直开一次：尾刀者拿到核心碎片 +5、凝核 1、锋利石 1、晶 1…；Calamity 实例同理。
