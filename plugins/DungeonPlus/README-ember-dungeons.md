@@ -1,0 +1,59 @@
+# 余烬日/周本 — 路径清单
+
+设计：`/workspace/minecraft/DESIGN-dungeon-daily-weekly.md`  
+进本命令（官方）：`/dp start EmberDaily` · `/dp start EmberWeekly` · `/dp start EmberAbyss` · `/dp start EmberCalamity` · 盟 Boss：`/corerpg guild boss`→`dp start EmberGuildBoss`
+
+## 地牢配置
+
+| 路径 | 说明 |
+|------|------|
+| `plugins/DungeonPlus/dungeon/EmberDaily/option.yml` | 地图/出生/入场券条件/通关 ni give |
+| `plugins/DungeonPlus/dungeon/EmberDaily/monster.yml` | 三波 MM 怪 |
+| `plugins/DungeonPlus/dungeon/EmberDaily/obstacle.yml` | 空障碍（必填） |
+| `plugins/DungeonPlus/dungeon/EmberDaily/task/timeout.yml` | 720s 超时失败 |
+| `plugins/DungeonPlus/dungeon/EmberWeekly/option.yml` | 周本同上 |
+| `plugins/DungeonPlus/dungeon/EmberWeekly/monster.yml` | 四波加压 |
+| `plugins/DungeonPlus/dungeon/EmberWeekly/obstacle.yml` | 空障碍 |
+| `plugins/DungeonPlus/dungeon/EmberWeekly/task/timeout.yml` | 1500s 超时 |
+| `plugins/DungeonPlus/dungeon/EmberAbyss/` | 深渊 5 层 stub + 通关箱 5～9 档 |
+| `plugins/DungeonPlus/dungeon/EmberCalamity/` | 灾厄 Boss stub + 日箱表 |
+| `plugins/DungeonPlus/map/ember_arena/` | 共享回退 / `ember_arena` 本（保留） |
+| `plugins/DungeonPlus/map/ember_daily/` | EmberDaily 独立图（绿羊毛+绿宝石柱标记） |
+| `plugins/DungeonPlus/map/ember_weekly/` | EmberWeekly 独立图（蓝羊毛+青金石柱） |
+| `plugins/DungeonPlus/map/ember_abyss/` | EmberAbyss 独立图（黑曜石/紫陶瓦墙） |
+| `plugins/DungeonPlus/map/ember_calamity/` | EmberCalamity 独立图（地狱岩/岩浆块） |
+| `plugins/DungeonPlus/map/ember_raid/` | EmberRaid 独立图（石英大平台） |
+| `plugins/DungeonPlus/config.yml` | `dungeon-pre-folder` 已注册各 map |
+
+## 次数（入场券）
+
+DP 1.4 无原生「每日 N 次」字段，按官方「入场卷」做法：
+
+| NI ID | 显示名 | 规则 |
+|-------|--------|------|
+| `ticket_ember_daily` | 余烬日票 | 进本扣 1；日发 3 = 每日 3 次 |
+| `ticket_ember_weekly` | 余烬周票 | 进本扣 1；周发 1 = 每周 1 次 |
+| `ticket_ember_abyss` | 余烬深渊票 | 进本扣 1；日发 1 |
+
+物品草案：`plugins/NeigeItems/Items/ember-dungeon-tickets.yml`  
+发放：插件/CoreRpg 岗（未做自动发放前用 `/ni give <玩家> ticket_ember_daily 3` 测）
+
+## 菜单
+
+`plugins/TrMenu/menus/ember_daily.yml` / `ember_weekly.yml` 进本已改为 `dp start …`
+
+## 重载建议
+
+```
+/dp reload
+/ni reload   # 或重载 NI
+/trmenu reload
+```
+
+权限：玩家需 `dungeon.user` / `dungeon.start`（见 DP 文档）。
+
+## 已知占位
+
+- 地图已按本拆分（仍为测试区切片，出生 `-40,65,270`）；近出生点有主题方块标记；正式艺术面由 WorldEdit 再调。详见 `STATUS-ember-maps.md`。
+- `$kill` 依赖 MM Display「余烬地窟僵尸/骷髅/蛮兵」；若对不上，看 DP debug 或改 monster.yml。
+- 周本装备保底目前固定发刃。

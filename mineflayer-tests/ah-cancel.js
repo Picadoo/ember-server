@@ -1,0 +1,6 @@
+const mineflayer=require('mineflayer')
+const bot=mineflayer.createBot({host:'127.0.0.1',port:25565,username:'RpgBot',version:'1.12.2',auth:'offline'})
+bot.on('message',m=>console.log('[chat]',m.toString()))
+const wait=ms=>new Promise(r=>setTimeout(r,ms))
+bot.once('spawn',async()=>{await wait(1500);bot.chat('/corerpg auction cancel 3');await wait(1000);bot.chat('/corerpg auction list');await wait(1000);console.log('OK');process.exit(0)})
+setTimeout(()=>process.exit(2),20000)

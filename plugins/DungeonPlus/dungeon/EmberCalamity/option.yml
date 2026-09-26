@@ -1,0 +1,29 @@
+# 余烬灾厄 — docs/ember-abyss-calamity.md §2
+# 启动：/dp start EmberCalamity（窗内；窗外应由调度拒进，本期菜单侧 tell）
+# Boss：EmberCalamityBoss · 通关箱对齐表 2.3-B 每日首通窗宝箱
+# 日箱限领 1 次：后期 CoreRpg；本期每次通关都发（测试用，上线前加限）
+
+dungeon-init-script:
+  - "$setmap{name=ember_calamity} @init"
+  - "$setspawn{location=-40,65,270} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=true;number=5;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=5;message=§c灾厄人数 1～5，当前 (<size>)} @system"
+  action-script:
+    - "$message{type=text;text=§4灾厄降临时刻。§7灰烬巨像自地脉升起——打掉它的外壳！} @dungeon"
+    - "$teleport{location=-40,65,270;defspawn=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=2} @dungeon"
+
+dungeon-area: []
+
+# 每日首通窗宝箱（表 2.3-B）— 参战 MM 掉落另见 EmberCalamity.yml
+dungeon-reward-script:
+  - "$message{type=text;text=§a灾厄暂息。§7全服共享了这一剑。§8（日箱限领后期接线）} @dungeon"
+  - "$command{text=ni give <player.name> mat_ember_core_fragment 2;console=true} @player"
+  - "$command{text=ni give <player.name> crystal_ember_enchant 1;console=true} @player"
+  - "$command{text=ni give <player.name> mat_calamity_ember 2;console=true} @player"
+  - "$command{text=ni give <player.name> gear_ember_t3_talisman 1;console=true} @player"
+  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"

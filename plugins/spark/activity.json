@@ -1,0 +1,28 @@
+[
+  {
+    "user": {
+      "type": "player",
+      "name": "RpgBot",
+      "uniqueId": "148ec8b6-253f-36f4-bcd7-bf2395b8df80"
+    },
+    "time": 1789280949089,
+    "type": "Profiler",
+    "data": {
+      "type": "url",
+      "value": "https://spark.lucko.me/RuSjvQJvrT"
+    }
+  },
+  {
+    "user": {
+      "type": "player",
+      "name": "RpgBot",
+      "uniqueId": "148ec8b6-253f-36f4-bcd7-bf2395b8df80"
+    },
+    "time": 1789280932207,
+    "type": "Health report",
+    "data": {
+      "type": "url",
+      "value": "https://spark.lucko.me/gMFeLtooY4"
+    }
+  }
+]

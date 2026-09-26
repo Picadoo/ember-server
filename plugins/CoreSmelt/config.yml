@@ -1,0 +1,22 @@
+# CoreSmelt — NI-only furnace recipes (HYBRID: cook_time_ticks & result_amount enforced via FurnaceNmsHooks)
+recipes:
+  - input_ni_id: ore_ember_iron
+    result_ni_id: ingot_ember_iron
+    cook_time_ticks: 100
+    result_amount: 2
+    exp: 0.7
+  - input_ni_id: ore_ember_gold
+    result_ni_id: ingot_ember_gold
+    cook_time_ticks: 300
+    result_amount: 1
+    exp: 1.0
+  - input_ni_id: ore_ember_coal
+    result_ni_id: crystal_ember_carbon
+    cook_time_ticks: 150
+    result_amount: 3
+    exp: 0.1
+  - input_ni_id: raw_ember_flesh
+    result_ni_id: steak_ember
+    cook_time_ticks: 80
+    result_amount: 1
+    exp: 0.35

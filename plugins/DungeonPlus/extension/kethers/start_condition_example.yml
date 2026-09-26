@@ -1,0 +1,26 @@
+#从 1-100 随机一个数,如果大于 50 则 state 状态返回 true 否则返回 false
+#脚本例子: $kether-condition{name=random-condition} @system
+random-condition: |-
+  set random to random 1 to 100
+  if check &random > 50 then {
+      set state to true
+  } else {
+      set state to false
+  }
+  log inline "random-value: {{ &random }} start-state: {{ &state }}"
+  &state
+#更简易
+random-condition-2: |-
+  check random 1 to 100 >= 50
+
+
+#判断玩家等级是否满足条件,参数 [players=true] 时地牢队伍所有玩家满足条件才能启动地牢
+#脚本例子: $kether-condition{name=level-condition;players=true;args=100} @system
+level-condition: |-
+  if check papi %player_level% >= &args0 then {
+      set state to true
+  } else {
+      set state to false
+      message inline "§b你的等级不足 {{ &args0 }} 级,无法挑战该地牢"
+  }
+  &state

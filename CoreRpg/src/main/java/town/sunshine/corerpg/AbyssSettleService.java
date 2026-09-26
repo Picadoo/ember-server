@@ -1,0 +1,371 @@
+package town.sunshine.corerpg;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+/**
+ * Memory-session abyss progress + settle rewards (1.4.6).
+ * Session is NOT MySQL — Map&lt;UUID, AbyssSession&gt;, cleared on quit.
+ */
+public final class AbyssSettleService {
+
+    private static final String PREFIX = ChatColor.DARK_PURPLE + "[深渊] " + ChatColor.RESET;
+
+    private final JavaPlugin plugin;
+    private final NiBridge ni;
+    private final PlayerDataStore dataStore;
+    private final Map<UUID, AbyssSession> sessions = new HashMap<UUID, AbyssSession>();
+
+    private boolean enabled = true;
+    private final List<Tier> tiers = new ArrayList<Tier>();
+    private String gemId = "gem_ember_sharp";
+    private String shardId = "mat_ember_shard";
+    private String boneId = "mat_ember_bone_dust";
+    private String coreId = "mat_ember_core_fragment";
+    private String t2Id = "gear_ember_t2_blade";
+    private int grantT2At = 0;
+
+    static final class Tier {
+        final int min;
+        final int max;
+        final int shard;
+        final int bone;
+        final int core;
+        final int gem;
+        Tier(int min, int max, int shard, int bone, int core, int gem) {
+            this.min = min; this.max = max;
+            this.shard = shard; this.bone = bone; this.core = core; this.gem = gem;
+        }
+        boolean matches(int floor) {
+            return floor >= min && floor <= max;
+        }
+    }
+
+    public AbyssSettleService(JavaPlugin plugin, NiBridge ni, PlayerDataStore dataStore) {
+        this.plugin = plugin;
+        this.ni = ni;
+        this.dataStore = dataStore;
+    }
+
+    public void reload() {
+        File file = new File(plugin.getDataFolder(), "abyss.yml");
+        if (!file.exists()) {
+            plugin.saveResource("abyss.yml", false);
+        }
+        FileConfiguration cfg = YamlConfiguration.loadConfiguration(file);
+        InputStream in = plugin.getResource("abyss.yml");
+        if (in != null) {
+            YamlConfiguration def = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(in, StandardCharsets.UTF_8));
+            cfg.setDefaults(def);
+            cfg.options().copyDefaults(false);
+        }
+        enabled = cfg.getBoolean("enabled", true);
+        ConfigurationSection settle = cfg.getConfigurationSection("settle");
+        tiers.clear();
+        if (settle != null) {
+            gemId = settle.getString("gem_id", "gem_ember_sharp");
+            shardId = settle.getString("shard_id", "mat_ember_shard");
+            boneId = settle.getString("bone_id", "mat_ember_bone_dust");
+            coreId = settle.getString("core_id", "mat_ember_core_fragment");
+            t2Id = settle.getString("t2_id", "gear_ember_t2_blade");
+            grantT2At = settle.getInt("grant_t2_at", 0);
+            List<?> raw = settle.getList("tiers");
+            if (raw != null) {
+                for (Object o : raw) {
+                    if (!(o instanceof Map)) continue;
+                    Map<?, ?> m = (Map<?, ?>) o;
+                    tiers.add(new Tier(
+                            toInt(m.get("min"), 1),
+                            toInt(m.get("max"), 4),
+                            toInt(m.get("shard"), 0),
+                            toInt(m.get("bone"), 0),
+                            toInt(m.get("core"), 0),
+                            toInt(m.get("gem"), 0)));
+                }
+            }
+        }
+        if (tiers.isEmpty()) {
+            tiers.add(new Tier(1, 4, 8, 2, 0, 0));
+            tiers.add(new Tier(5, 9, 12, 4, 1, 1));
+            tiers.add(new Tier(10, 999, 16, 6, 2, 1));
+        }
+        if (ni != null) {
+            ni.warnMissingOnceIfAbsent(shardId);
+            ni.warnMissingOnceIfAbsent(boneId);
+            ni.warnMissingOnceIfAbsent(coreId);
+            ni.warnMissingOnceIfAbsent(gemId);
+            if (grantT2At > 0) ni.warnMissingOnceIfAbsent(t2Id);
+        }
+    }
+
+    private static int toInt(Object o, int def) {
+        if (o instanceof Number) return ((Number) o).intValue();
+        if (o != null) {
+            try { return Integer.parseInt(String.valueOf(o).trim()); }
+            catch (NumberFormatException ignored) {}
+        }
+        return def;
+    }
+
+    public boolean isEnabled() { return enabled; }
+
+    public AbyssSession getOrCreate(UUID uuid) {
+        AbyssSession s = sessions.get(uuid);
+        if (s == null) {
+            s = new AbyssSession();
+            sessions.put(uuid, s);
+        }
+        return s;
+    }
+
+    public AbyssSession getSession(UUID uuid) {
+        return sessions.get(uuid);
+    }
+
+    public void clearSession(UUID uuid) {
+        sessions.remove(uuid);
+    }
+
+    public void onPlayerQuit(Player player) {
+        if (player != null) sessions.remove(player.getUniqueId());
+    }
+
+    /** Command root: /corerpg abyss [progress|settle|evacuate|…] */
+    public boolean cmdRoot(CommandSender sender, String[] args) {
+        if (!enabled) {
+            sender.sendMessage(PREFIX + ChatColor.RED + "深渊结算未启用 (abyss.yml enabled=false)");
+            return true;
+        }
+        String act = args.length >= 2 ? args[1].toLowerCase() : "";
+        if (act.isEmpty() || "status".equals(act) || "info".equals(act)) {
+            return cmdStatus(sender);
+        }
+        if ("progress".equals(act)) {
+            return cmdProgress(sender, args);
+        }
+        if ("settle".equals(act)) {
+            return cmdSettle(sender, args);
+        }
+        if ("evacuate".equals(act) || "leave".equals(act) || "上浮".equals(act)) {
+            return cmdEvacuate(sender);
+        }
+        sender.sendMessage(PREFIX + ChatColor.YELLOW
+                + "/corerpg abyss | progress <玩家> <层> | settle [玩家] | evacuate");
+        return true;
+    }
+
+    private boolean cmdStatus(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(PREFIX + ChatColor.YELLOW + "控制台请用 progress / settle <玩家>");
+            return true;
+        }
+        Player p = (Player) sender;
+        AbyssSession session = getOrCreate(p.getUniqueId());
+        PlayerData data = dataStore.get(p.getUniqueId());
+        int tickets = ni == null ? 0 : ni.countInInventory(p, "ticket_ember_abyss");
+        p.sendMessage(PREFIX + ChatColor.LIGHT_PURPLE + "本局状态");
+        p.sendMessage(ChatColor.GRAY + "  本局最高层: " + ChatColor.AQUA + session.getFloor()
+                + ChatColor.GRAY + " · 已结算: "
+                + (session.isSettled() ? ChatColor.GREEN + "是" : ChatColor.YELLOW + "否"));
+        p.sendMessage(ChatColor.GRAY + "  历史最高 abyssBest: " + ChatColor.LIGHT_PURPLE + data.getAbyssBest()
+                + ChatColor.GRAY + " · 本周: " + ChatColor.LIGHT_PURPLE + data.effectiveAbyssWeek());
+        p.sendMessage(ChatColor.GRAY + "  背包深渊票: " + ChatColor.WHITE + tickets);
+        p.sendMessage(ChatColor.DARK_GRAY + "  提示: /corerpg abyss evacuate 上浮结算 · 或 settle");
+        return true;
+    }
+
+    private boolean cmdProgress(CommandSender sender, String[] args) {
+        if (!isAdmin(sender)) {
+            sender.sendMessage(PREFIX + ChatColor.RED + "需要 corerpg.admin 或控制台");
+            return true;
+        }
+        if (args.length < 4) {
+            sender.sendMessage(PREFIX + ChatColor.YELLOW + "用法: /corerpg abyss progress <玩家> <层>");
+            return true;
+        }
+        Player target = Bukkit.getPlayerExact(args[2]);
+        if (target == null) {
+            sender.sendMessage(PREFIX + ChatColor.RED + "玩家不在线: " + args[2]);
+            return true;
+        }
+        int floor;
+        try {
+            floor = Integer.parseInt(args[3]);
+        } catch (NumberFormatException e) {
+            sender.sendMessage(PREFIX + ChatColor.RED + "层数无效: " + args[3]);
+            return true;
+        }
+        if (floor < 0) floor = 0;
+        AbyssSession session = getOrCreate(target.getUniqueId());
+        int before = session.getFloor();
+        session.raiseFloor(floor);
+        sender.sendMessage(PREFIX + ChatColor.GREEN + target.getName()
+                + " 本局层 " + before + " → " + session.getFloor());
+        // optional notify target
+        if (target != sender) {
+            target.sendMessage(PREFIX + ChatColor.GRAY + "本局最高层更新为 "
+                    + ChatColor.AQUA + session.getFloor());
+        }
+        return true;
+    }
+
+    private boolean cmdSettle(CommandSender sender, String[] args) {
+        Player target;
+        if (args.length >= 3) {
+            if (!isAdmin(sender)) {
+                sender.sendMessage(PREFIX + ChatColor.RED + "需要 corerpg.admin 或控制台才能指定玩家");
+                return true;
+            }
+            target = Bukkit.getPlayerExact(args[2]);
+            if (target == null) {
+                sender.sendMessage(PREFIX + ChatColor.RED + "玩家不在线: " + args[2]);
+                return true;
+            }
+        } else {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(PREFIX + ChatColor.YELLOW + "用法: /corerpg abyss settle <玩家>");
+                return true;
+            }
+            target = (Player) sender;
+        }
+        SettleResult r = settle(target);
+        String msg = formatSettleMessage(target, r);
+        sender.sendMessage(msg);
+        if (target != sender) target.sendMessage(msg);
+        return true;
+    }
+
+    private boolean cmdEvacuate(CommandSender sender) {
+        if (!(sender instanceof Player)) {
+            sender.sendMessage(PREFIX + ChatColor.RED + "仅玩家可用 evacuate");
+            return true;
+        }
+        Player p = (Player) sender;
+        SettleResult r = settle(p);
+        p.sendMessage(formatSettleMessage(p, r));
+        p.sendMessage(PREFIX + ChatColor.AQUA + "上浮撤离 · 前往 hub");
+        try {
+            boolean ok = p.performCommand("dp leave");
+            if (!ok) {
+                Bukkit.dispatchCommand(p, "dp leave");
+            }
+        } catch (Throwable t) {
+            plugin.getLogger().warning("[深渊] dp leave failed for " + p.getName() + ": " + t.getMessage());
+            p.sendMessage(PREFIX + ChatColor.GRAY + "自动离本失败，请手动 /dp leave");
+        }
+        return true;
+    }
+
+    public enum SettleOutcome {
+        ALREADY, NO_CHEST, GRANTED
+    }
+
+    public static final class SettleResult {
+        public final SettleOutcome outcome;
+        public final int floor;
+        public final Tier tier; // may be null
+        public final boolean grantedT2;
+
+        SettleResult(SettleOutcome outcome, int floor, Tier tier, boolean grantedT2) {
+            this.outcome = outcome;
+            this.floor = floor;
+            this.tier = tier;
+            this.grantedT2 = grantedT2;
+        }
+    }
+
+    /**
+     * Idempotent settle for online player. Grants NI rewards by tier, records ladder, marks settled.
+     */
+    public SettleResult settle(Player player) {
+        if (player == null) {
+            return new SettleResult(SettleOutcome.ALREADY, 0, null, false);
+        }
+        AbyssSession session = getOrCreate(player.getUniqueId());
+        if (session.isSettled()) {
+            return new SettleResult(SettleOutcome.ALREADY, session.getFloor(), null, false);
+        }
+        int floor = session.getFloor();
+        if (floor < 1) {
+            session.setSettled(true);
+            return new SettleResult(SettleOutcome.NO_CHEST, floor, null, false);
+        }
+        Tier tier = findTier(floor);
+        if (tier == null) {
+            // no matching tier — still mark settled + record
+            session.setSettled(true);
+            PlayerData data = dataStore.get(player.getUniqueId());
+            data.recordAbyssFloor(floor);
+            dataStore.flushMutation(player.getUniqueId());
+            return new SettleResult(SettleOutcome.NO_CHEST, floor, null, false);
+        }
+        grantRewards(player, tier);
+        boolean gaveT2 = false;
+        if (grantT2At > 0 && floor >= grantT2At && t2Id != null && !t2Id.isEmpty()) {
+            if (ni != null) ni.giveNiItem(player, t2Id, 1);
+            gaveT2 = true;
+        }
+        PlayerData data = dataStore.get(player.getUniqueId());
+        data.recordAbyssFloor(floor);
+        dataStore.flushMutation(player.getUniqueId());
+        session.setSettled(true);
+        return new SettleResult(SettleOutcome.GRANTED, floor, tier, gaveT2);
+    }
+
+    private Tier findTier(int floor) {
+        for (Tier t : tiers) {
+            if (t.matches(floor)) return t;
+        }
+        return null;
+    }
+
+    private void grantRewards(Player player, Tier tier) {
+        if (ni == null) return;
+        if (tier.shard > 0) ni.giveNiItem(player, shardId, tier.shard);
+        if (tier.bone > 0) ni.giveNiItem(player, boneId, tier.bone);
+        if (tier.core > 0) ni.giveNiItem(player, coreId, tier.core);
+        if (tier.gem > 0) ni.giveNiItem(player, gemId, tier.gem);
+    }
+
+    private String formatSettleMessage(Player target, SettleResult r) {
+        if (r.outcome == SettleOutcome.ALREADY) {
+            return PREFIX + ChatColor.YELLOW + target.getName() + " 本局已结算，不再重复发放";
+        }
+        if (r.outcome == SettleOutcome.NO_CHEST) {
+            return PREFIX + ChatColor.GRAY + target.getName() + " 最高层 "
+                    + r.floor + " <1，无结算箱（已标记结算）";
+        }
+        Tier t = r.tier;
+        StringBuilder sb = new StringBuilder();
+        sb.append(PREFIX).append(ChatColor.GREEN).append(target.getName())
+                .append(" 结算完成 · 层 ").append(ChatColor.AQUA).append(r.floor)
+                .append(ChatColor.GREEN).append(" → ");
+        sb.append(ChatColor.WHITE).append("碎片×").append(t.shard)
+                .append(ChatColor.GRAY).append(" 骨尘×").append(t.bone);
+        if (t.core > 0) sb.append(ChatColor.GRAY).append(" 核心×").append(t.core);
+        if (t.gem > 0) sb.append(ChatColor.GRAY).append(" 孔石×").append(t.gem);
+        if (r.grantedT2) sb.append(ChatColor.GOLD).append(" +T2刃");
+        return sb.toString();
+    }
+
+    private static boolean isAdmin(CommandSender sender) {
+        return !(sender instanceof Player) || sender.hasPermission("corerpg.admin");
+    }
+}

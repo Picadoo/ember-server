@@ -1,0 +1,103 @@
+# --- CoreCraft demo outputs ---
+plate_ember_iron:
+  material: IRON_INGOT
+  name: '&f余烬铁板'
+  lore:
+    - '&7plate_ember_iron'
+    - '&8由余烬铁锭合成'
+
+rod_ember_iron:
+  material: BLAZE_ROD
+  name: '&f余烬铁棍'
+  lore:
+    - '&7rod_ember_iron'
+    - '&8由余烬铁锭合成'
+
+core_ember_compact:
+  material: NETHER_STAR
+  name: '&d余烬凝核'
+  lore:
+    - '&7core_ember_compact'
+    - '&8碳晶与余烬金锭凝练'
+
+# --- CoreFish catches ---
+fish_ember_cod:
+  material: RAW_FISH
+  damage: 0
+  name: '&b余烬鳕鱼'
+  lore:
+    - '&7fish_ember_cod'
+    - '&8钓鱼鱼类表'
+
+fish_ember_salmon:
+  material: RAW_FISH
+  damage: 1
+  name: '&c余烬鲑鱼'
+  lore:
+    - '&7fish_ember_salmon'
+    - '&8钓鱼鱼类表'
+
+fish_ember_puffer:
+  material: RAW_FISH
+  damage: 3
+  name: '&e余烬河豚'
+  lore:
+    - '&7fish_ember_puffer'
+    - '&8钓鱼鱼类表'
+
+treasure_ember_relic:
+  material: GOLD_NUGGET
+  name: '&6余烬遗物'
+  lore:
+    - '&7treasure_ember_relic'
+    - '&8钓鱼宝藏表'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+treasure_ember_pearl:
+  material: ENDER_PEARL
+  name: '&5余烬宝珠'
+  lore:
+    - '&7treasure_ember_pearl'
+    - '&8钓鱼宝藏表'
+
+junk_ember_boot:
+  material: LEATHER_BOOTS
+  name: '&8破旧余烬靴'
+  lore:
+    - '&7junk_ember_boot'
+    - '&8钓鱼垃圾表'
+
+junk_ember_bone:
+  material: BONE
+  name: '&8余烬碎骨'
+  lore:
+    - '&7junk_ember_bone'
+    - '&8钓鱼垃圾表'
+
+# --- CoreCombat ---
+totem_ember_life:
+  material: TOTEM
+  name: '&a余烬续命图腾'
+  lore:
+    - '&7totem_ember_life'
+    - '&8唯一有效的不死图腾'
+    - '&c原版图腾无效'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+shield_ember_guard:
+  material: SHIELD
+  name: '&9余烬守护盾'
+  lore:
+    - '&7shield_ember_guard'
+    - '&8唯一可格挡的盾牌'
+    - '&c原版盾无效'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

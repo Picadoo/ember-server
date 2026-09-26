@@ -1,0 +1,28 @@
+const mineflayer = require('mineflayer')
+const bot = mineflayer.createBot({ host:'127.0.0.1', port:25565, username:'RpgBot', version:'1.12.2', auth:'offline' })
+bot.on('message', m => console.log('[chat]', m.toString()))
+const wait = ms => new Promise(r => setTimeout(r, ms))
+async function chat(c){ console.log('[cmd]', c); bot.chat(c); await wait(1200) }
+bot.once('spawn', async () => {
+  try {
+    await wait(2000)
+    await chat('/mm reload')
+    await wait(2500)
+    await chat('/ni reload')
+    await wait(2000)
+    await chat('/trmenu reload')
+    await wait(1500)
+    await chat('/dp reload')
+    await wait(2000)
+    await chat('/ni give RpgBot ticket_ember_abyss 3')
+    await chat('/dp start EmberAbyss')
+    await wait(4000)
+    await chat('/dp start EmberCalamity')
+    await wait(2500)
+    console.log('ABYSS_SMOKE_DONE')
+    process.exit(0)
+  } catch (e) { console.error(e); process.exit(1) }
+})
+bot.on('kicked', r => { console.error('kicked', r); process.exit(1) })
+bot.on('error', e => { console.error(e); process.exit(1) })
+setTimeout(() => { console.error('timeout'); process.exit(2) }, 100000)

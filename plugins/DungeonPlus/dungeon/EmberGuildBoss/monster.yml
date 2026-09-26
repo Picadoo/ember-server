@@ -1,0 +1,41 @@
+# 轻量盟 Boss：2 波杂兵/精英 + EmberCalamityBoss
+# MM：EmberAbyssZombie / EmberAbyssSkeleton / EmberAbyssBrute / EmberCalamityBoss（已有，无新 MM）
+# $kill Display（无颜色）：余烬深渊僵尸 / 骷髅 / 蛮兵 / 余烬灾厄使
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-40,65,275;amount=4;scattered=3.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=2;scattered=3.0;level=1} @dungeon"
+    condition:
+    - "$kill-any{mobname=余烬深渊僵尸,余烬深渊骷髅;amount=6} @system"
+    start:
+    - "$message{type=text;text=§6盟 Boss 波次 1：§7深渊潮 · 僵尸与骨鸣} @dungeon"
+    end:
+    - "$message{type=text;text=§a第一波肃清 · 蛮兵将至} @dungeon"
+    - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,276;amount=2;scattered=2.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=余烬深渊蛮兵;amount=1} @system"
+    start:
+    - "$message{type=text;text=§d精英：§f余烬深渊蛮兵} @dungeon"
+    end:
+    - "$message{type=text;text=§4地脉裂口——§c余烬灾厄使§4现身！} @dungeon"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberCalamityBoss;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=余烬灾厄使;amount=1} @system"
+    start:
+    - "$message{type=text;text=§4终局：余烬灾厄使！§7全力输出。} @dungeon"
+    end:
+    - "$message{type=text;text=§a灾厄使倒下。§6盟约周 Boss 通关结算中…} @dungeon"
+    - "$end{type=text;text=§6余烬盟约 Boss 通关！;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

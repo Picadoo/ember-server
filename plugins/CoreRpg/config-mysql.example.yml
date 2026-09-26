@@ -1,0 +1,13 @@
+# Example MySQL storage — copy keys into plugins/CoreRpg/config.yml
+# Credentials aligned with secrets/mysql-ember.env (lab). Do NOT commit real prod passwords.
+# Default shipped config keeps storage: yaml.
+
+storage: mysql
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: ember
+  username: ember
+  password: "CHANGE_ME"
+  pool-size: 10
+  jdbc-params: "useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&serverTimezone=UTC"

@@ -1,0 +1,63 @@
+# 余烬地窟 — MythicMobs 4.11 / Paper 1.12.2（锁定：Mobs/EmberCrypt.yml）
+# 掉落只走一条：~onDeath + @Trigger → ni give <trigger.name>（进背包）
+# 已去掉 NeigeItems.Drops，避免与 ni give 叠双份
+
+EmberCryptZombie:
+  Type: ZOMBIE
+  Display: '&6余烬地窟僵尸'
+  Health: 28
+  Damage: 4
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - WOOD_SWORD HAND
+  Skills:
+  - skill{s=EmberCryptBleed} @target ~onAttack 0.22
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.18
+  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath >0 0.05
+
+EmberCryptSkeleton:
+  Type: SKELETON
+  Display: '&e余烬地窟骷髅'
+  Health: 22
+  Damage: 5
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberCryptBleed} @target ~onAttack 0.2
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.25
+  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath >0 0.05
+
+EmberCryptBrute:
+  Type: HUSK
+  Display: '&c余烬地窟蛮兵'
+  Health: 55
+  Damage: 7
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.45
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+  - IRON_BOOTS FEET
+  - IRON_SWORD HAND
+  Skills:
+  - skill{s=EmberCryptBleed} @target ~onAttack 0.3
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.2
+  - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.12
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath >0 0.18
+  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath >0 0.12

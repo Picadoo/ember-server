@@ -1,0 +1,8 @@
+# 超时失败（约 12 分钟）
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 720:
+      - "$message{type=text;text=§c挑战超时，本局失败（日票不返还）} @dungeon"
+      - "$end{type=text;text=§c余烬窟·日 超时失败;reward=false;delay=1;end-type=FAILURE} @dungeon"

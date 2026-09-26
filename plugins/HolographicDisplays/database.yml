@@ -1,0 +1,44 @@
+ember_ladder_power:
+  location: world, -43.500, 68.200, 265.500
+  lines:
+  - '&6余烬 · 战力天梯'
+  - '&7展示分 power_score · 不乘伤害'
+  - '&e1. &f%ember_ladder_power_1_name% &7- &b%ember_ladder_power_1_value%'
+  - '&e2. &f%ember_ladder_power_2_name% &7- &b%ember_ladder_power_2_value%'
+  - '&e3. &f%ember_ladder_power_3_name% &7- &b%ember_ladder_power_3_value%'
+  - '&74. &f%ember_ladder_power_4_name% &7- &7%ember_ladder_power_4_value%'
+  - '&75. &f%ember_ladder_power_5_name% &7- &7%ember_ladder_power_5_value%'
+  - '&76. &f%ember_ladder_power_6_name% &7- &7%ember_ladder_power_6_value%'
+  - '&77. &f%ember_ladder_power_7_name% &7- &7%ember_ladder_power_7_value%'
+  - '&78. &f%ember_ladder_power_8_name% &7- &7%ember_ladder_power_8_value%'
+  - '&79. &f%ember_ladder_power_9_name% &7- &7%ember_ladder_power_9_value%'
+  - '&710. &f%ember_ladder_power_10_name% &7- &7%ember_ladder_power_10_value%'
+  - '&8周结算：外观称号 only'
+ember_ladder_abyss:
+  location: world, -39.500, 68.200, 265.500
+  lines:
+  - '&5余烬 · 深渊天梯'
+  - '&7本周最高层'
+  - '&e1. &f%ember_ladder_abyss_1_name% &7- &d%ember_ladder_abyss_1_value%层'
+  - '&e2. &f%ember_ladder_abyss_2_name% &7- &d%ember_ladder_abyss_2_value%层'
+  - '&e3. &f%ember_ladder_abyss_3_name% &7- &d%ember_ladder_abyss_3_value%层'
+  - '&74. &f%ember_ladder_abyss_4_name% &7- &7%ember_ladder_abyss_4_value%层'
+  - '&75. &f%ember_ladder_abyss_5_name% &7- &7%ember_ladder_abyss_5_value%层'
+  - '&8对齐 EmberAbyss · 周结算外观'
+ember_ladder_speed:
+  location: world, -35.500, 68.200, 265.500
+  lines:
+  - '&c余烬 · 竞速天梯'
+  - '&7EmberWeekly 通关用时'
+  - '&e1. &f%ember_ladder_speed_1_name% &7- &a%ember_ladder_speed_1_value%s'
+  - '&e2. &f%ember_ladder_speed_2_name% &7- &a%ember_ladder_speed_2_value%s'
+  - '&e3. &f%ember_ladder_speed_3_name% &7- &a%ember_ladder_speed_3_value%s'
+  - '&74. &f%ember_ladder_speed_4_name% &7- &7%ember_ladder_speed_4_value%s'
+  - '&75. &f%ember_ladder_speed_5_name% &7- &7%ember_ladder_speed_5_value%s'
+  - '&8周结算：外观 only · 禁核心'
+ember_afk_hub:
+  location: ember_afk, -46.700, 70.000, 250.362
+  lines:
+  - '&6挂机庭 &7| Ember AFK'
+  - '&a碎片·骨尘 &8MM→NI'
+  - '&7EmberAfkZombie / EmberAfkSkeleton'

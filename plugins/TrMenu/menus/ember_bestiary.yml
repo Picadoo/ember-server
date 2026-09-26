@@ -1,0 +1,102 @@
+# 图录子菜单壳 — DESIGN-ember-pet-bestiary.md
+# 怪物 / 装备 / 使魔图鉴；阶段奖未接线
+
+Title: '§3余烬 · 图录'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# M G P #'
+  - '#  R    #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §3[图录] §7怪物 · 装备 · 使魔图鉴。集齐有奖（称号/币/天赋点）。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  M:
+    display:
+      material: skull item
+      name: '§c怪物图鉴'
+      lore:
+        - ''
+        - '§7记录击杀过的余烬怪'
+        - '§8地窟 / 深渊 / 灾厄 / 团本'
+        - ''
+        - '§8命令占位：/corerpg bestiary mob'
+        - ''
+        - '§c➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §c[图录·怪物] §7击杀登记待 CoreRpg bestiary 接线'
+        - 'tell: §8详见 DESIGN-ember-pet-bestiary.md'
+
+  G:
+    display:
+      material: diamond sword
+      name: '§6装备图鉴'
+      lore:
+        - ''
+        - '§7刃 / 护符 / 饰品收集进度'
+        - '§8首次获得即登记'
+        - ''
+        - '§8命令占位：/corerpg bestiary gear'
+        - ''
+        - '§6➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[图录·装备] §7获得登记待接线'
+
+  P:
+    display:
+      material: egg
+      name: '§a使魔图鉴'
+      lore:
+        - ''
+        - '§7与使魔系统共享收集进度'
+        - '§8可跳转使魔菜单'
+        - ''
+        - '§e➥ §f打开使魔'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_pet'
+
+  R:
+    display:
+      material: gold ingot
+      name: '§e阶段奖励'
+      lore:
+        - ''
+        - '§7集齐阶段：称号 · 币 · 天赋点'
+        - '§8对标收集强迫症日活'
+        - ''
+        - '§8领取逻辑未接线'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[图录·阶段奖] §7称号/币/天赋点 · 插件岗按 DESIGN 接线'

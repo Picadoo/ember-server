@@ -1,0 +1,15 @@
+name: CoreWorldRules
+main: town.sunshine.coreworldrules.CoreWorldRulesPlugin
+version: 1.2.0
+author: sunshine-town
+description: Ban villager trading, vanilla mob item drops, XP orbs, and vanilla natural/spawner spawns (blocks untouched)
+load: POSTWORLD
+commands:
+  coreworldrules:
+    description: Check / reload / testspawn CoreWorldRules
+    usage: /coreworldrules check|reload|testspawn
+    permission: coreworldrules.admin
+    aliases: [cwr]
+permissions:
+  coreworldrules.admin:
+    default: op

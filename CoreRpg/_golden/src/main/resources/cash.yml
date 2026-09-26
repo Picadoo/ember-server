@@ -1,0 +1,36 @@
+# CoreRpg cash — 晶钻 / 日票限购 / 月卡（DESIGN-ember-cash-monthly.md）
+# STUB：插件岗实现命令前可先落盘；挂到 /corerpg reload（落地后）
+# 红线：不直售碎片/晶/核心；日票硬顶是总进本 6（免费+氪+月卡）
+enabled: true
+
+timezone: Asia/Shanghai
+
+currency:
+  id: ember_crystal_cash
+  display: "余烬晶钻"
+  player_yml_key: ember_crystal_cash
+  # 现有 PlayerDataStore 已写 crystalCash；读时兼容，写契约键
+  legacy_yml_key: crystalCash
+
+# 日本：免费张数 + 总硬顶（进本/发票共用）
+daily:
+  free_tickets: 3
+  hard_cap: 6
+  ticket_ni_id: ticket_ember_daily
+
+shop:
+  daily_ticket:
+    id: daily_ticket
+    price: 60
+    sku_limit: 3          # 晶钻购买次数/日；仍受 daily.hard_cap 约束
+    grant_ni: true
+
+monthly:
+  enabled: true
+  duration_days: 30
+  price: 68
+  limit: 1                # 同时仅一张有效；续费从 expire 起顺延
+  immediate_daily_ticket: 1
+  daily_login:
+    coin: 200
+    daily_ticket: 1       # 计入 hard_cap，满则只发币

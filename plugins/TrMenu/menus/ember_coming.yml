@@ -1,0 +1,46 @@
+# 通用「即将点燃」占位页
+Title: '§8即将点燃'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '#   I   #'
+  - '#       #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_BASS-1-0'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  I:
+    display:
+      material: barrier
+      name: '§8即将点燃'
+      lore:
+        - ''
+        - '§7此功能尚未实装'
+        - '§8敬请期待余烬更新'
+    actions:
+      all:
+        - 'tell: §8此功能即将点燃，敬请期待。'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'

@@ -1,0 +1,33 @@
+# 灾厄 EmberCalamityBoss — 阶段削甲 → 狂暴砸（少技能、可播报）
+
+EmberCalamityBoss:
+  Type: WITHER_SKELETON
+  Display: '&4余烬灾厄使'
+  Health: 520
+  Damage: 12
+  Options:
+    MovementSpeed: 0.22
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.6
+    MaxCombatDistance: 36
+  Equipment:
+  - DIAMOND_HELMET HEAD
+  - DIAMOND_CHESTPLATE CHEST
+  - DIAMOND_LEGGINGS LEGS
+  - DIAMOND_BOOTS FEET
+  - DIAMOND_SWORD HAND
+  Skills:
+  - skill{s=EmberCalamityShred} @self ~onTimer:140
+  - skill{s=EmberCalamityRampage} @target ~onAttack 0.22
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.2
+  - speak{m="&4余烬灾厄使&7：灰烬将吞没此地。";cooldown=25} @PlayersInRadius{r=40} ~onCombat >0 0.12
+  - command{c="ni give <trigger.name> mat_calamity_ember 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath >0 0.7
+  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath >0 0.5
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.5
+  - command{c="ni give <trigger.name> core_ember_compact 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 2";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath >0 0.25
+  - command{c="ni give <trigger.name> cosmetic_calamity_shard 1";asop=true} @Trigger ~onDeath >0 0.35

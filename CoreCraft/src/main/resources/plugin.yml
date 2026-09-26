@@ -1,0 +1,16 @@
+name: CoreCraft
+main: town.sunshine.corecraft.CoreCraftPlugin
+version: 1.0.0
+author: sunshine-town
+description: Wipe most vanilla crafting; keep infrastructure whitelist; NI YAML recipes
+depend: [NeigeItems]
+softdepend: [CoreSmelt]
+load: POSTWORLD
+commands:
+  corecraft:
+    description: Check crafting wipe / NI recipe status
+    usage: /corecraft check|reload
+    permission: corecraft.admin
+permissions:
+  corecraft.admin:
+    default: op

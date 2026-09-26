@@ -1,0 +1,94 @@
+# 套装 · 余烬同袍 2 件（戒+刃）— docs/ember-raid-channel-spec.md
+# 背包持有即计件；击杀回能待 CoreRpg（plugins/CoreRpg/set.yml 旋钮）
+
+Title: '§9余烬 · 套装'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# B R E #'
+  - '#       #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §9[套装] §6余烬同袍 §7· 团戒 + 任意余烬之刃。背包同持即激活。'
+    - 'tell: §8效果：击杀微量回能（≤战力 2%）· 禁止大额攻击乘区 · YAML：CoreRpg/set.yml'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  B:
+    display:
+      material: diamond sword
+      name: '§6余烬之刃'
+      lore:
+        - ''
+        - '§7套装件 A · 武器位'
+        - '§8T0 gear_ember_blade'
+        - '§8T1/T2/T3 gear_ember_t*_blade'
+        - '§8与团戒同持激活 2 件'
+        - ''
+        - '§e➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[套装·刃] §7任意余烬之刃（T0～T3）+ 团戒 = §6余烬同袍§7。'
+
+  R:
+    display:
+      material: gold ingot
+      name: '§6余烬团本之戒'
+      lore:
+        - ''
+        - '§7套装件 B · NI acc_ember_raid_ring'
+        - '§8团本周首通保底'
+        - '§8背包持有即计件（不占饰品槽）'
+        - '§8与刃同持激活 2 件'
+        - ''
+        - '§e➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[套装·戒] §7acc_ember_raid_ring · 周首通保底。与刃同持即 §6余烬同袍 ✓'
+
+  E:
+    display:
+      material: nether star
+      name: '§9二件套 · 余烬同袍'
+      lore:
+        - ''
+        - '§6套装：余烬同袍 ✓'
+        - '§7戒 + 刃 → 击杀微量回能'
+        - '§8上限 ≤ 总战力 2%'
+        - '§8禁止大额攻击乘区'
+        - '§8日后 4 件（甲/饰品）再扩'
+        - '§8本期 §c不改方块甲'
+        - ''
+        - '§8旋钮：plugins/CoreRpg/set.yml'
+        - ''
+        - '§e➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §9[套装] §6余烬同袍 ✓ §7戒+刃。回能旋钮见 CoreRpg/set.yml；lore 已可见。'
+        - 'tell: §8护符线（旧刃+符）挂账，本期最小实现是戒+刃。'

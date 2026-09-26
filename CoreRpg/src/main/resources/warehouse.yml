@@ -1,0 +1,31 @@
+# 余烬材料仓 — DESIGN-ember-material-warehouse.md
+enabled: true
+default_slots: 8
+max_slots: 48
+per_slot_cap: 2000000000
+unlock:
+  coin_base: 5000
+  coin_step: 1500
+  cash_price: 28
+  allow_cash: true
+whitelist:
+  - mat_ember_shard
+  - crystal_ember_enchant
+  - crystal_ember_carbon
+  - ingredient_ember_crystal
+  - mat_ember_bone_dust
+  - mat_ember_core_fragment
+  - mat_ember_protect_scroll
+  - mat_ember_stable_charm
+  - mat_ember_reforge_stone
+  - mat_ember_soul_dust
+  - mat_ember_covenant_reset
+  - mat_ember_talent_reset
+  - gem_ember_sharp
+  - gem_ember_steady
+  - gem_ember_drain
+  - gem_ember_gale
+  - ticket_ember_daily
+  - ticket_ember_weekly
+  - ticket_ember_abyss
+  - ticket_ember_raid

@@ -1,0 +1,20 @@
+# 余烬地窟 — 简单近战附带效果（MythicMobs 4.11 / MC 1.12.2）
+EmberCryptBleed:
+  Cooldown: 3
+  Skills:
+  - potion{type=WITHER;duration=40;level=0} @target
+  - effect:particles{p=reddust;amount=12;hSpread=0.4;ySpread=0.5;speed=0} @target
+
+EmberCryptSlow:
+  Cooldown: 4
+  Skills:
+  - potion{type=SLOW;duration=50;level=0} @target
+
+EmberCryptBruteSlam:
+  Cooldown: 8
+  Conditions:
+  - targetwithin 4
+  Skills:
+  - damage{amount=3} @target
+  - throw{velocity=4;velocityY=3} @target
+  - effect:sound{s=mob.zombie.metal;volume=1.0;pitch=0.75} @self

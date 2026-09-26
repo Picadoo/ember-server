@@ -1,0 +1,33 @@
+# CoreRpg auction / 寄售 — coin listings, tax 10% (DESIGN-ember-arena-auction.md)
+enabled: true
+tax_rate: 0.10
+page_size: 8
+max_listings_per_player: 12
+min_price: 1
+max_price: 1000000
+# 禁卖强化 >= 此等级的装备（GearLore）；核心碎片可卖但走税
+ban_enhance_at: 7
+# 白名单流通物：材料 / 宝石 / 重铸石 / 保护卷 / 票 / 使魔蛋 / 外观碎片
+# 不含 gear_ember_blade / gear_ember_charm（毕业刃禁直售）
+whitelist_ni_ids:
+  - mat_ember_shard
+  - mat_ember_bone_dust
+  - mat_ember_core_fragment
+  - mat_ember_reforge_stone
+  - mat_ember_protect_scroll
+  - mat_ember_stable_charm
+  - mat_calamity_ember
+  - gem_ember_sharp
+  - gem_ember_steady
+  - gem_ember_drain
+  - gem_ember_gale
+  - ticket_ember_daily
+  - ticket_ember_weekly
+  - ticket_ember_abyss
+  - ticket_ember_raid
+  - pet_ember_ashling
+  - pet_ember_cinder
+  - cosmetic_calamity_shard
+# runtime listings written under listings: by AuctionService
+listings: {}
+next_id: 1

@@ -1,0 +1,29 @@
+# Ember: allow all players to use DungeonPlus start/leave (挑刺报告必改)
+dungeon.user:
+  description: DungeonPlus base user
+  default: true
+dungeon.start:
+  description: Start a dungeon
+  default: true
+dungeon.teleport:
+  description: Dungeon teleport
+  default: true
+dungeon.game.team:
+  description: Dungeon team
+  default: true
+dungeon.game.death:
+  description: Dungeon death UI
+  default: true
+dungeon.game.revive:
+  description: Dungeon revive
+  default: true
+dungeon.game.settlement:
+  description: Dungeon settlement
+  default: true
+
+spark:
+  description: spark profiler
+  default: op
+spark.*:
+  description: all spark
+  default: op

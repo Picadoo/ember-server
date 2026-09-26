@@ -1,0 +1,15 @@
+# 灾厄 Boss 战 stub — EmberCalamityBoss（Display：余烬灾厄使）
+# 完整阶段添头见 docs §2.2；本期单 Boss 清完即结算
+groups:
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberCalamityBoss;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=余烬灾厄使;amount=1} @system"
+    start:
+    - "$message{type=text;text=§7外壳坚固。先削甲！} @dungeon"
+    - "$message{type=text;text=§4余烬灾厄使 §7已降临。} @dungeon"
+    end:
+    - "$message{type=text;text=§a灾厄暂息。§7结算发放中…} @dungeon"
+    - "$end{type=text;text=§4余烬灾厄 通关！;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

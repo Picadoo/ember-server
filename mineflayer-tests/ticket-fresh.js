@@ -1,0 +1,12 @@
+const mineflayer=require('mineflayer')
+const bot=mineflayer.createBot({host:'127.0.0.1',port:25565,username:'TicketBot',version:'1.12.2',auth:'offline'})
+bot.on('message',m=>console.log('[chat]',m.toString()))
+const wait=ms=>new Promise(r=>setTimeout(r,ms))
+bot.once('spawn',async()=>{
+ await wait(4000)
+ bot.chat('/corerpg tickets')
+ await wait(1500)
+ console.log('[inv]', bot.inventory.items().map(i=>(i.customName||i.name)+'x'+i.count))
+ console.log('TICKET_FRESH_DONE'); process.exit(0)
+})
+setTimeout(()=>process.exit(2),30000)

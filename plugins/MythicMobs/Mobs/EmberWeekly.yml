@@ -1,0 +1,80 @@
+# 周常 EmberWeekly — 房间换挡 + 双蛮兵链
+
+EmberWeeklyZombie:
+  Type: ZOMBIE
+  Display: '&6深核廊僵尸'
+  Health: 36
+  Damage: 5
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - IRON_SWORD HAND
+  Skills:
+  - skill{s=EmberCryptBleed} @target ~onAttack 0.2
+  - skill{s=EmberWeeklyShiftCall} @self ~onTimer:200
+  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.04
+
+EmberWeeklySkeleton:
+  Type: SKELETON
+  Display: '&6深核廊骷髅'
+  Health: 30
+  Damage: 6
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.22
+  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_t1_talisman 1";asop=true} @Trigger ~onDeath >0 0.04
+
+EmberWeeklyBruteA:
+  Type: HUSK
+  Display: '&6深核廊蛮兵·甲'
+  Health: 70
+  Damage: 9
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.5
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+  - IRON_SWORD HAND
+  Skills:
+  - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.2
+  - skill{s=EmberCryptBleed} @target ~onAttack 0.25
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.18
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.03
+
+EmberWeeklyBruteB:
+  Type: HUSK
+  Display: '&6深核廊蛮兵·乙'
+  Health: 70
+  Damage: 9
+  Options:
+    MovementSpeed: 0.22
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.5
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_BOOTS FEET
+  - IRON_AXE HAND
+  Skills:
+  - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.28
+  - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.12
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_t1_talisman 1";asop=true} @Trigger ~onDeath >0 0.12
+  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath >0 0.2

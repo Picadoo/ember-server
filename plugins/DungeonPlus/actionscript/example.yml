@@ -1,0 +1,36 @@
+#脚本组功能
+#在地牢内可使用 dp script trigger 脚本组 <触发者> 命令触发脚本组内容，触发者可有可无
+#除了命令触发还有 script 脚本触发可以进行触发
+
+#节点名不可相同
+testScriptGroup:
+  #是否异步默认异步处理
+  async: false
+  action-script:
+    #必须是 @system 的判断脚本类型
+    #条件
+    - condition: []
+      #满足条件时触发
+      true:
+        - "actionbar *测试Kether语句 ~@ALL"
+        - "$message{type=text;text=%player_name%} @dungeon"
+      #不满足条件时触发
+      #false:
+      #  - "$message{type=text;text=测试数据值不等于 1} @self"
+
+
+#节点名不可相同
+test:
+  #是否异步默认异步处理
+  async: false
+  action-script:
+    #必须是 @system 的判断脚本类型
+    #条件
+    - condition:
+        - "$js-condition{text=<random:value *[0] *[100]>} <= 20} @system"
+      #满足条件时触发
+      true:
+        - "$message{type=text;text=触发! 20% 几率} @dungeon"
+      #不满足条件时触发
+      #false:
+      #  - "$message{type=text;text=测试数据值不等于 1} @self"

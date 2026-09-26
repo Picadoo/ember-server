@@ -1,0 +1,113 @@
+# 好友子菜单壳 — DESIGN-ember-mail-friends.md
+# 列表 / 申请 / 组队邀请 / 师徒（可选）；逻辑待 CoreRpg 接线
+
+Title: '§a余烬 · 好友'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# L A P #'
+  - '#  M    #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §a[好友] §7好友列表与组队邀请。可接师徒（可选）。逻辑待接线。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  L:
+    display:
+      material: book
+      name: '§e好友列表'
+      lore:
+        - ''
+        - '§7查看在线好友与备注'
+        - '§8基础社交 · 上限示意 50'
+        - ''
+        - '§8命令：/corerpg friend'
+        - ''
+        - '§e➥ §f点击查询'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §a[好友] §7请执行 §f/corerpg friend §7（插件岗实装后生效）'
+        - 'command: corerpg friend'
+
+  A:
+    display:
+      material: paper
+      name: '§a添加 / 删除'
+      lore:
+        - ''
+        - '§7申请加友或解除关系'
+        - '§8双方确认后入表'
+        - ''
+        - '§8命令：/corerpg friend add <名>'
+        - '§8命令：/corerpg friend remove <名>'
+        - ''
+        - '§a➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §a[好友·申请] §7建议：§f/corerpg friend add <名>'
+        - 'tell: §8删除：/corerpg friend remove <名> · 命令可能尚未实装'
+
+  P:
+    display:
+      material: fishing rod
+      name: '§b组队邀请'
+      lore:
+        - ''
+        - '§7向在线好友发组队邀请'
+        - '§8接团本 / 周本入口'
+        - '§8不强制进队'
+        - ''
+        - '§8命令：/corerpg friend invite <名>'
+        - ''
+        - '§b➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §b[好友·组队] §7建议：§f/corerpg friend invite <名>'
+        - 'tell: §8团本 3～5 人 · 邀请只发提示，不强制进队'
+
+  M:
+    display:
+      material: name tag
+      name: '§6师徒（可选）'
+      lore:
+        - ''
+        - '§7新人绑定老手，双方活跃奖'
+        - '§8可选模块 · 不挡主线'
+        - '§8奖：币 / 外观碎片，不发核心'
+        - ''
+        - '§8命令：/corerpg friend mentor <名>'
+        - ''
+        - '§6➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[好友·师徒] §7建议：§f/corerpg friend mentor <名>'
+        - 'tell: §8新人绑老手 · 双方活跃奖（币/外观）· 可选'
+        - 'tell: §8详见 DESIGN-ember-mail-friends.md'

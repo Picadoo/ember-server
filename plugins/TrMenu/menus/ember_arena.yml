@@ -1,0 +1,116 @@
+# 竞技子菜单壳 — DESIGN-ember-arena-auction.md §1
+# 1v1 / 2v2 排队 tell；积分赛季 · 奖币与外观；逻辑待插件岗
+
+Title: '§c余烬 · 竞技'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# A B R #'
+  - '#  I    #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §c[竞技] §71v1 / 2v2 积分赛。1v1 / 2v2 积分赛 · /corerpg arena|pvp'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  I:
+    display:
+      material: book
+      name: '§e我的战绩'
+      lore:
+        - ''
+        - '§7查看积分、段位与赛季箱'
+        - '§8赛季制 · 奖励绑外观与币'
+        - ''
+        - '§8命令：/corerpg arena'
+        - ''
+        - '§e➥ §f点击查询'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §c[竞技] §7请执行 §f/corerpg arena §7（插件岗实装后生效）'
+        - 'tell: §8积分 · 段位 · 日奖励箱 · 只奖币与外观'
+        - 'command: corerpg arena'
+
+  A:
+    display:
+      material: iron sword
+      name: '§c排队 · 1v1'
+      lore:
+        - ''
+        - '§7单挑积分赛'
+        - '§8独立竞技世界 · CoreCombat'
+        - '§8日奖励箱：币 / 外观币'
+        - ''
+        - '§8命令：/corerpg arena queue 1v1'
+        - ''
+        - '§c➥ §f加入 1v1 队列'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §c[竞技·1v1] §7正在排队…'
+        - 'tell: §8建议：§f/corerpg arena queue 1v1 §8· 命令可能尚未实装'
+        - 'tell: §7匹配后进独立竞技世界 · 结算只发币与外观'
+        - 'command: corerpg arena queue 1v1'
+
+  B:
+    display:
+      material: diamond sword
+      name: '§6排队 · 2v2'
+      lore:
+        - ''
+        - '§7双人组队积分赛'
+        - '§8可与好友组队后排队'
+        - '§8日奖励箱：币 / 外观币'
+        - ''
+        - '§8命令：/corerpg arena queue 2v2'
+        - ''
+        - '§6➥ §f加入 2v2 队列'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §6[竞技·2v2] §7正在排队…'
+        - 'tell: §8建议：§f/corerpg arena queue 2v2 §8· 命令可能尚未实装'
+        - 'tell: §7建议先与好友组队 · 结算只发币与外观'
+        - 'command: corerpg arena queue 2v2'
+
+  R:
+    display:
+      material: barrier
+      name: '§7取消排队'
+      lore:
+        - ''
+        - '§7离开当前匹配队列'
+        - ''
+        - '§8命令：/corerpg arena leave'
+        - ''
+        - '§7➥ §f取消'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+        - 'tell: §7[竞技] §7已取消排队意图（占位）'
+        - 'tell: §8建议：§f/corerpg arena leave'
+        - 'command: corerpg arena leave'

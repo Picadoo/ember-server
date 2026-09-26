@@ -1,0 +1,13 @@
+# CoreCombat — NI-only totem + shield
+totem:
+  disable_vanilla: true
+  allowed_ni_ids:
+    - totem_ember_life
+  # 0 = no cooldown
+  cooldown_seconds: 15
+
+shield:
+  disable_vanilla: true
+  allowed_ni_ids:
+    - shield_ember_guard
+  durability_loss_multiplier: 1.5

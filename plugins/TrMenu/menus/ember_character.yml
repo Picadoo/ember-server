@@ -1,0 +1,110 @@
+# 角色子菜单壳 — DESIGN-ember-character-storage.md
+# 等级/战力摘要 · 誓约 · 晶钻/币；命令已接线或 tell 回退
+
+Title: '§b余烬 · 角色'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# S C $ #'
+  - '#  M    #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §b[角色] §7等级、誓约与钱包摘要。点图标执行 /corerpg 查询。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  S:
+    display:
+      material: skull item
+      name: '§b战力 / 状态'
+      lore:
+        - ''
+        - '§7查看等级、战力与今日摘要'
+        - '§8挂机 / 日周票 / 签到一览'
+        - ''
+        - '§8命令：/corerpg status'
+        - ''
+        - '§e➥ §f点击查询'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §b[角色·状态] §7请执行 §f/corerpg status'
+        - 'command: corerpg status'
+
+  C:
+    display:
+      material: diamond sword
+      name: '§6当前誓约'
+      lore:
+        - ''
+        - '§7已选烬刃 / 灰行 / 守墓'
+        - '§8未选则先去枢纽「誓约」'
+        - ''
+        - '§8命令：/corerpg covenant'
+        - ''
+        - '§e➥ §f点击查询'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[角色·誓约] §7请执行 §f/corerpg covenant'
+        - 'command: corerpg covenant'
+
+  $:
+    display:
+      material: emerald
+      name: '§a晶钻 / 钱包'
+      lore:
+        - ''
+        - '§7晶钻余额 · 日票硬顶'
+        - '§8软通货另查 /corerpg coin'
+        - ''
+        - '§8命令：/corerpg cash'
+        - '§8命令：/corerpg coin'
+        - ''
+        - '§e➥ §f点击查晶钻'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §a[角色·晶钻] §7请执行 §f/corerpg cash §7· 币：§f/corerpg coin'
+        - 'command: corerpg cash'
+
+  M:
+    display:
+      material: watch
+      name: '§e月卡状态'
+      lore:
+        - ''
+        - '§7是否有效、到期日、今日礼'
+        - '§8开卡 / 续期见商城热销'
+        - ''
+        - '§8命令：/corerpg monthly'
+        - ''
+        - '§e➥ §f点击查询'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[角色·月卡] §7请执行 §f/corerpg monthly'
+        - 'command: corerpg monthly'

@@ -1,0 +1,32 @@
+# 余烬盟约 — 轻量公会（CoreRpg 1.3.7）
+# DESIGN-ember-guild-ladder.md §1 · create + donate + guild weekly boss
+enabled: true
+create:
+  coin_cost: 5000
+  crystal_cost: 40
+  # prefer coin if enough, else crystal
+  prefer_coin: true
+name:
+  min_chars: 2
+  max_chars: 8
+  banned:
+    - "管理"
+    - "官方"
+    - "GM"
+    - "运营"
+members:
+  max: 20
+donate:
+  daily_cap: 50
+  # items: amount of NI item per 1 contribution
+  rates:
+    mat_ember_shard: 10
+    mat_ember_bone_dust: 5
+  # activity points for 盟课 — 0 = skip (本期可选跳过)
+  activity_points: 0
+boss:
+  enabled: true
+  dungeon_id: EmberGuildBoss
+  contribution_cost: 20
+  weekly_limit: 1
+  start_command: "dp start EmberGuildBoss"

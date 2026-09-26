@@ -1,0 +1,92 @@
+# 设置子菜单壳 — DESIGN-ember-mail-friends.md §3
+# 音效 / 提示 / 隐私；低优先级，逻辑待接线
+
+Title: '§7余烬 · 设置'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# S T P #'
+  - '#       #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §7[设置] §7音效、提示与隐私。低优先级个人选项。逻辑待接线。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  S:
+    display:
+      material: note block
+      name: '§e音效'
+      lore:
+        - ''
+        - '§7菜单点击与领取提示音'
+        - '§8默认开 · 仅影响本人'
+        - ''
+        - '§8命令占位：/corerpg settings sound'
+        - ''
+        - '§e➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[设置·音效] §7建议：§f/corerpg settings sound'
+        - 'tell: §8默认开 · 仅本人 · 命令可能尚未实装'
+
+  T:
+    display:
+      material: paper
+      name: '§b提示'
+      lore:
+        - ''
+        - '§7签到 / 邮件 / 悬赏聊天提示'
+        - '§8可关刷屏，不关奖励'
+        - ''
+        - '§8命令占位：/corerpg settings tip'
+        - ''
+        - '§b➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §b[设置·提示] §7建议：§f/corerpg settings tip'
+        - 'tell: §8关提示不关奖励 · 命令可能尚未实装'
+
+  P:
+    display:
+      material: stained glass
+      name: '§d隐私'
+      lore:
+        - ''
+        - '§7好友申请与在线可见'
+        - '§8可拒陌生人申请'
+        - '§8不影响盟约 / 天梯展示'
+        - ''
+        - '§8命令占位：/corerpg settings privacy'
+        - ''
+        - '§d➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §d[设置·隐私] §7建议：§f/corerpg settings privacy'
+        - 'tell: §8拒陌生人申请 · 不影响盟约/天梯'

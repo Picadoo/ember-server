@@ -1,0 +1,32 @@
+# 余烬同袍 2 件套 — docs/ember-raid-channel-spec.md
+# CoreRpg 1.4.7：/corerpg set 显示激活；击杀按 effect.on_kill 短 Saturation。
+# 件：任意余烬之刃 + acc_ember_raid_ring；背包持有即计件。
+
+enabled: true
+sets:
+  ember_comrade:
+    display: 余烬同袍
+    pieces: 2
+    where: inventory
+    require:
+      blade:
+        - gear_ember_blade
+        - gear_ember_t1_blade
+        - gear_ember_t2_blade
+        - gear_ember_t3_blade
+      ring:
+        - acc_ember_raid_ring
+    effect:
+      name: 击杀回能
+      on_kill: saturation_1
+      heal_pct_max: 2
+      attack_multiplier: 0
+    lore_mark: "§6套装：余烬同袍 ✓"
+
+# 团戒周首通（option.yml 通关箱 ni give）
+# 团票每周 1 张 ⇒ 实践上每角色每周至多 1 次 COMPLETE。
+# 真去重：PlayerData.raidRingWeek = DailyService.weekId()；/corerpg raid grant-ring
+raid_ring:
+  ni_id: acc_ember_raid_ring
+  weekly_first: true
+  week_key: raidRingWeek

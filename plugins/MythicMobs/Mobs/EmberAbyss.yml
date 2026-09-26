@@ -1,0 +1,123 @@
+# 深渊 EmberAbyss — 层系数上涨（潮/骨/混/蛮/看守）
+# DP 可用 level= 再叠 LevelModifiers；单路径 ni give
+
+EmberAbyssZombie:
+  Type: ZOMBIE
+  Display: '&5余烬深渊·潮尸'
+  Health: 42
+  Damage: 6
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - IRON_SWORD HAND
+  LevelModifiers:
+  - health 6
+  - damage 0.8
+  Skills:
+  - skill{s=EmberAbyssPressure} @target ~onAttack 0.28
+  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath >0 0.35
+  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath >0 0.15
+  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath >0 0.4
+
+EmberAbyssSkeleton:
+  Type: SKELETON
+  Display: '&5余烬深渊·骨潮'
+  Health: 34
+  Damage: 7
+  Options:
+    MovementSpeed: 0.27
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+  LevelModifiers:
+  - health 5
+  - damage 0.9
+  Skills:
+  - skill{s=EmberAbyssPressure} @target ~onAttack 0.3
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.2
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.35
+  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath >0 0.15
+  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath >0 0.4
+
+EmberAbyssMix:
+  Type: ZOMBIE
+  Display: '&5余烬深渊·混潮'
+  Health: 50
+  Damage: 7
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_SWORD HAND
+  LevelModifiers:
+  - health 7
+  - damage 1.0
+  Skills:
+  - skill{s=EmberAbyssPressure} @target ~onAttack 0.32
+  - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.15
+  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath >0 0.3
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.3
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath >0 0.2
+
+EmberAbyssBrute:
+  Type: HUSK
+  Display: '&5余烬深渊·蛮层'
+  Health: 85
+  Damage: 10
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.5
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+  - IRON_BOOTS FEET
+  - IRON_SWORD HAND
+  LevelModifiers:
+  - health 10
+  - damage 1.2
+  Skills:
+  - skill{s=EmberAbyssPressure} @target ~onAttack 0.3
+  - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.18
+  - command{c="ni give <trigger.name> gem_ember_sharp 1";asop=true} @Trigger ~onDeath >0 0.45
+  - command{c="ni give <trigger.name> gem_ember_steady 1";asop=true} @Trigger ~onDeath >0 0.35
+  - command{c="ni give <trigger.name> mat_ember_protect_scroll 1";asop=true} @Trigger ~onDeath >0 0.12
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath >0 0.25
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.04
+
+EmberAbyssWatcher:
+  Type: WITHER_SKELETON
+  Display: '&5余烬深渊·看守'
+  Health: 140
+  Damage: 11
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.55
+    MaxCombatDistance: 28
+  Equipment:
+  - DIAMOND_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - DIAMOND_SWORD HAND
+  LevelModifiers:
+  - health 12
+  - damage 1.4
+  Skills:
+  - skill{s=EmberAbyssWatcherGaze} @self ~onTimer:120
+  - skill{s=EmberAbyssPressure} @target ~onAttack 0.35
+  - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.12
+  - command{c="ni give <trigger.name> gem_ember_drain 1";asop=true} @Trigger ~onDeath >0 0.5
+  - command{c="ni give <trigger.name> gem_ember_gale 1";asop=true} @Trigger ~onDeath >0 0.5
+  - command{c="ni give <trigger.name> mat_ember_stable_charm 1";asop=true} @Trigger ~onDeath >0 0.2
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.08
+  - command{c="ni give <trigger.name> gear_ember_t2_talisman 1";asop=true} @Trigger ~onDeath >0 0.05

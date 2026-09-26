@@ -1,0 +1,148 @@
+options:
+  #开启后脚本报错将输出异常信息,调试插件将输出调试信息
+  debug: false
+  lang: "zh_CN.yml"
+
+#全局设置
+setting:
+    #这个建议设置自己服务器的主城地图
+  - world: "world"
+    #玩家默认模式,地牢结束时切换为该模式
+    mode: "SURVIVAL"
+    #BungeeCord 跨服挑战地牢
+    #需要安装 BungeeCord 所用附属插件
+    bungee-cord:
+      - enable: false
+        #与 BungeeCord 插件配置对应
+        channel: "dungeon"
+
+#地牢全局设置
+dungeon:
+  #允许在地牢内输入的命令
+  #默认迷糊匹配,在配置行开头加上 $ 即可精准匹配
+  - command:
+      - "dp"
+      #精准匹配
+      #- "$m"
+    #地牢聊天模式,开启该模式再地牢内聊天仅队友可见
+    #在聊天内容开头加上 * 即可在地牢内发送全体消息,否则仅队友可见
+    dungeon-chat:
+      - enable: true
+        prefix: "&f[&6队内消息&f] &7<player.name>&f&l:"
+    #当地牢内所有队员死亡时超过一定时间无人复活则自动执行 leave 退出地牢 (单位/秒)
+    dungeon-timeout-revive: 10
+    #交互位置提示,仅存在 location 的交互脚本显示
+    interact-particle:
+      - enable: true
+        type: REDSTONE
+        amount: 10
+    #离线保护超时 (当玩家离线时间过长,自动退出当前地牢)
+    #如果地牢内只剩一人,那将直接结束地牢，在离线保护期间
+    #登录服务器还会在地牢内
+    offline-timeout:
+        #关闭时玩家掉线将直接退出地牢
+      - enable: true
+        #超时时间/秒
+        time: 120
+    #触发怪物组时立即检测一次是否满足怪物组条件
+    trigger-condition-check: false
+    #地牢视图,视图类型有 CHAT/BOOK
+    #即 dp start、dp team 的视图界面，推荐 BOOK
+    dungeon-view-type: "BOOK"
+    #当物品包含以下描述时,该物品在地牢结束时无法带出地牢
+    #登录服务器时也将进行一次检测,这里不要加颜色代码
+    dungeon-item-remove:
+      - "无法携带出地牢"
+    #地牢启动等待队列设置
+    #防止同一时间大量(取决于你机子的配置)地牢同时加载地图造成CPU使用率飙升100%
+    #如果你对你的机子很自信,那你可以不用开启该功能
+    dungeon-start-queue:
+      - enable: false
+        #等待时间间隔
+        wait-time: 5
+        #每次同时启动加载几个地牢
+        same-time-amount: 3
+    #禁止某些物品在地牢内右键
+    #填入物品英文ID即可,不能是数字ID
+    #开启DEBUG项后在地牢内使用物品会返回对应英文ID复制至下方列表即可
+    dungeon-item-right-click-ban: []
+    #地牢复活消息提醒 (即死亡后聊天栏显示的死亡消息,可以点击复活那个)
+    dungeon-revive-message: true
+    #地牢队伍伤害消息提醒 (开启后如果地牢无法造成队伍伤害时提示语言文件 'dungeon-game-pvp' 消息)
+    dungeon-team-damage-message: true
+    #地牢队伍玩家数量限制
+    dungeon-team-player-limit: 20
+    #地牢副本默认离线次数上限值，避免玩家挑战副本时使用离线遁躲避机制
+    #如果地牢没有使用 $setting 脚本调整 quit-number-limit 参数值,则默认为该值 (设 -1 关闭)
+    dungeon-default-quit-number: -1
+    #关闭后整个组队系统的命令都将被关闭
+    #一般用于兼容其他组队插件而关闭该项
+    dungeon-team-command: true
+    #地牢结束/启动失败时自动解散地牢队伍
+    #该功能用于兼容其他组队插件套用DP队伍
+    dungeon-end-auto-disband: false
+    #地牢创建时是否触发 WorldInitEvent 事件
+    dungeon-world-create-init-event: true
+    #地牢创建时是否触发 WorldLoadEvent 事件
+    dungeon-world-create-load-event: true
+    #地牢死亡自动跳过复活界面复活
+    #注意该功能可能会导致1.19.4及以上版本无法正常复活(请自行关闭该功能)
+    dungeon-death-auto-review: true
+    #地牢世界创建间隔【毫秒】 (避免部分核同一时刻多地牢创建而导致异常)
+    #该间隔检测仅在地牢等待队列关闭的情况下启用(以及部分插件兼容)
+    #地牢创建顺序: 地牢条件 -> 间隔检测(通过) -> 地牢启动
+    dungeon-world-create-interval: 1000
+    #地牢世界空闲区块自动卸载 (默认关闭)
+    #将每30秒对地牢内空闲的区块进行卸载,即无玩家、无实体的区块
+    dungeon-idle-chunk-unload: false
+    #地牢箱子探索功能（默认开启）
+    #开启后地牢世界地图中的箱子可被右键探索，探索后会将箱子内物品拾取到背包（不会弹出箱子界面）
+    #箱子内的物品可在编辑地牢世界时放入，每次启动副本都可探索一次。
+    dungeon-chest-explore: true
+
+#预复制地牢及地牢地图缓存功能(CatServer/Mohist不支持)
+#可避免高频地图复制IO消耗,有效降低硬盘IO延迟
+#缓存功能: 地图文件反复利用,若无空闲地图缓存可利用则创建新地图并缓存
+dungeon-pre-folder:
+  #启动该功能
+  enable: true
+  #地牢世界保持加载,地牢世界将以最低占用状态存在缓存中 (将占用一定内存)
+  #可避免反复加载世界区块所带来的消耗,更快速的启动地牢
+  #可使用 /dp save-region 命令保存记录需要在服务器启动时预加载的区块
+  #
+  #【楠木】：建议开启该功能，能加快副本的开启速度，因为高版本加载世界的消耗比较高且耗时（特别是1.16+及后续版本）
+  #该功能缓存实际测试下来占用内存并不会很多，开启预加载缓存30个世界，比没开启该功能额外消耗50MB左右内存，回报率极高
+  instance-keep: false
+  #副本启动间隔,玩家副本挑战结束后需要等待 5 秒后才可再次挑战副本
+  #开启该功能后可以更有效的利用到地牢缓存数据
+  start-interval: true
+  #服务器世界自动保存(将排除掉所有地牢副本世界),单位分钟
+  #开启该功能后服务器自带 AutoSave 自动保存功能将失效
+  #如果服务器安装其他自动保存插件建议删除,避免冲突
+  auto-save: 10.0
+  #自动保存过滤世界,列表中的世界将不进行自动保存
+  auto-save-filter:
+    - "test"
+  #地牢地图名(即 map 文件夹中的地图名)
+  # 余烬地图：各本独立 map；ember_arena 仍作共享回退/竞技场
+  ember_arena:
+    "ember_arena": 1
+  ember_daily:
+    "EmberDaily": 2
+  ember_weekly:
+    "EmberWeekly": 1
+  ember_abyss:
+    "EmberAbyss": 1
+  ember_calamity:
+    "EmberCalamity": 1
+  ember_raid:
+    "EmberRaid": 1
+    "EmberGuildBoss": 1
+
+#脚本全局设置
+action-script:
+    #脚本怪物名分隔,只读取下方所设字符左边内容
+    #例如 "小怪物:[HP.56]" 则读取 "小怪物" 防止数据储存不准确
+  - mob-name-separated: ":"
+
+auto-generate: []

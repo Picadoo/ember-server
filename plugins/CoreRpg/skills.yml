@@ -1,0 +1,41 @@
+# CoreRpg simple skills — DESIGN-ember-simple-skills.md
+# 数值全可控：flat 伤害 + 药水；不吃强化/孔石乘区
+enabled: true
+ignore_enhance_multiplier: true
+damage_cap_global: 12
+
+skills:
+  ember_blaze_slash:
+    covenant: blaze
+    display: "§6烬斩"
+    cooldown_seconds: 8
+    range: 3.0
+    arc_degrees: 90
+    damage: 6
+    damage_cap: 10
+    talent_bonus_max: 3
+    particles: FLAME
+    sound: ENTITY_PLAYER_ATTACK_SWEEP
+  ember_ash_familiar:
+    covenant: ash
+    display: "§7灰印"
+    cooldown_seconds: 10
+    range: 8.0
+    slow_amplifier: 0
+    slow_ticks: 60
+    mark_bonus_damage: 3
+    mark_duration_ticks: 80
+    damage_cap: 8
+    particles: SMOKE_NORMAL
+    sound: ENTITY_ENDERMITE_HURT
+  ember_warden_taunt:
+    covenant: warden
+    display: "§9守墓壁垒"
+    cooldown_seconds: 12
+    radius: 4.0
+    resistance_amplifier: 0
+    resistance_ticks: 80
+    slow_amplifier: 0
+    slow_ticks: 40
+    particles: CRIT
+    sound: ENTITY_IRONGOLEM_ATTACK

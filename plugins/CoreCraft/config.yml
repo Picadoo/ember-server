@@ -1,0 +1,63 @@
+# CoreCraft — wipe most vanilla crafting; keep infrastructure whitelist; NI→NI recipes
+wipe_vanilla: true
+
+# Keep vanilla recipes whose RESULT material is in this list (基建白名单)
+infrastructure_whitelist_results:
+  - WORKBENCH
+  - FURNACE
+  - CHEST
+  - STICK
+  - WOOD
+
+recipes:
+  # 2x2 plates from ember iron ingots
+  - id: plate_ember_iron
+    type: shaped
+    shape:
+      - "II"
+      - "II"
+    ingredients:
+      I: ingot_ember_iron
+    result_ni_id: plate_ember_iron
+    result_amount: 1
+
+  # rod from 2 ingots vertical
+  - id: rod_ember_iron
+    type: shaped
+    shape:
+      - "I"
+      - "I"
+    ingredients:
+      I: ingot_ember_iron
+    result_ni_id: rod_ember_iron
+    result_amount: 1
+
+  # compact core: carbon crystal + gold ingot (shapeless)
+  - id: core_ember_compact
+    type: shapeless
+    ingredients:
+      - crystal_ember_carbon
+      - ingot_ember_gold
+    result_ni_id: core_ember_compact
+    result_amount: 1
+
+  # 余烬附魔晶：3碎片+1骨尘 → 1晶（DESIGN-ember-enchant-anvil）
+  - id: crystal_ember_enchant_from_mats
+    type: shapeless
+    ingredients:
+      - mat_ember_shard
+      - mat_ember_shard
+      - mat_ember_shard
+      - mat_ember_bone_dust
+    result_ni_id: crystal_ember_enchant
+    result_amount: 1
+
+  # 余烬附魔晶：1核心碎片+2碎片 → 2晶（稀有更赚）
+  - id: crystal_ember_enchant_from_core
+    type: shapeless
+    ingredients:
+      - mat_ember_core_fragment
+      - mat_ember_shard
+      - mat_ember_shard
+    result_ni_id: crystal_ember_enchant
+    result_amount: 2

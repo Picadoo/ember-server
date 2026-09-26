@@ -1,0 +1,16 @@
+# 分解 / 重铸材料 — DESIGN-ember-rpg-systems.md §3.4 · STATUS-ember-disassemble.md
+# 产出：分解多余刃/护符、精英词缀残页、周本/深渊副产；不进地窟 MM 掉落表
+# 命令（插件岗待接）：/corerpg scrap · /corerpg reforge
+
+mat_ember_reforge_stone:
+  material: FIREBALL
+  name: '&6余烬重铸石'
+  lore:
+    - '&7mat_ember_reforge_stone'
+    - '&8重铸石 · 刷新次要词缀'
+    - '&8主词缀不随重铸乱飙'
+    - '&7用于 /corerpg reforge'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

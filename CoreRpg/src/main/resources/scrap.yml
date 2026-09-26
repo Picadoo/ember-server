@@ -1,0 +1,98 @@
+enabled: true
+whitelist_ni_ids:
+  - gear_ember_blade
+  - gear_ember_charm
+  - gear_ember_t1_blade
+  - gear_ember_t1_talisman
+  - gear_ember_t2_blade
+  - gear_ember_t2_talisman
+  - gear_ember_t3_blade
+  - gear_ember_t3_talisman
+  - acc_ember_raid_ring
+scrap:
+  gear_ember_blade:
+    guaranteed:
+      mat_ember_shard: [2, 4]
+    chance:
+      gem_ember_sharp: 0.08
+      gem_ember_steady: 0.05
+      gem_ember_drain: 0.05
+      gem_ember_gale: 0.05
+  gear_ember_charm:
+    guaranteed:
+      mat_ember_bone_dust: [2, 4]
+    chance:
+      gem_ember_sharp: 0.05
+      gem_ember_steady: 0.08
+      gem_ember_drain: 0.05
+      gem_ember_gale: 0.05
+  gear_ember_t1_blade:
+    guaranteed:
+      mat_ember_shard: [3, 5]
+    chance:
+      gem_ember_sharp: 0.10
+      gem_ember_steady: 0.06
+      gem_ember_drain: 0.06
+      gem_ember_gale: 0.06
+  gear_ember_t1_talisman:
+    guaranteed:
+      mat_ember_bone_dust: [3, 5]
+    chance:
+      gem_ember_sharp: 0.06
+      gem_ember_steady: 0.10
+      gem_ember_drain: 0.06
+      gem_ember_gale: 0.06
+  # 饰品：可分解，不进 enhance
+  acc_ember_raid_ring:
+    guaranteed:
+      mat_ember_shard: [1, 2]
+      mat_ember_bone_dust: [1, 2]
+    chance:
+      gem_ember_sharp: 0.04
+      gem_ember_steady: 0.04
+
+  gear_ember_t2_blade:
+    guaranteed:
+      mat_ember_shard: [6, 10]
+      mat_ember_core_fragment: [1, 2]
+    chance:
+      gem_ember_sharp: 0.15
+      gem_ember_steady: 0.10
+      gem_ember_drain: 0.10
+      gem_ember_gale: 0.10
+  gear_ember_t2_talisman:
+    guaranteed:
+      mat_ember_bone_dust: [6, 10]
+      mat_ember_core_fragment: [1, 2]
+    chance:
+      gem_ember_sharp: 0.10
+      gem_ember_steady: 0.15
+      gem_ember_drain: 0.10
+      gem_ember_gale: 0.10
+  gear_ember_t3_blade:
+    guaranteed:
+      mat_ember_shard: [8, 12]
+      mat_ember_core_fragment: [2, 3]
+    chance:
+      gem_ember_sharp: 0.18
+      gem_ember_steady: 0.12
+      gem_ember_drain: 0.12
+      gem_ember_gale: 0.12
+  gear_ember_t3_talisman:
+    guaranteed:
+      mat_ember_bone_dust: [8, 12]
+      mat_ember_core_fragment: [2, 3]
+    chance:
+      gem_ember_sharp: 0.12
+      gem_ember_steady: 0.18
+      gem_ember_drain: 0.12
+      gem_ember_gale: 0.12
+  enhance_bonus_per_levels: 2
+reforge:
+  stone_ni_id: mat_ember_reforge_stone
+  secondary_pool:
+    - { id: crit_chance, display: "暴击率", min: 1, max: 3, suffix: "%" }
+    - { id: attack_speed, display: "攻速", min: 1, max: 4, suffix: "%" }
+    - { id: max_health, display: "生命", min: 2, max: 8, suffix: "" }
+    - { id: phys_defense, display: "物理防御", min: 1, max: 3, suffix: "" }
+  rolls: 1

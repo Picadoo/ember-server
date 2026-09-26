@@ -1,0 +1,15 @@
+name: CoreBrew
+main: town.sunshine.corebrew.CoreBrewPlugin
+version: 1.0.0
+author: sunshine-town
+description: Custom NI brewing recipes + brew_time_ticks via BrewNmsHooks
+depend: [NeigeItems]
+load: POSTWORLD
+commands:
+  corebrew:
+    description: Check / reload CoreBrew recipes and hooks
+    usage: /corebrew check|reload
+    permission: corebrew.admin
+permissions:
+  corebrew.admin:
+    default: op

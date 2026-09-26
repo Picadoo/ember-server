@@ -1,0 +1,31 @@
+# 余烬盟约周 Boss（轻量）— CoreRpg guild boss 进本
+# 启动：玩家经 /corerpg guild boss → dispatch「dp start EmberGuildBoss」
+# 无 NI 入场券；贡献消耗与周限由 CoreRpg 门控
+# 怪：复用 EmberAbyss* + EmberCalamityBoss（不新建 MM）
+# 地图：ember_raid（已注册）；否则可改 ember_arena
+
+dungeon-init-script:
+  - "$setmap{name=ember_raid} @init"
+  - "$setspawn{location=-40,65,270} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=true;number=3;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=5;message=§c盟 Boss 人数 1～5，当前 (<size>) · 请先组队} @system"
+  action-script:
+    - "$message{type=text;text=§6盟约周 Boss 已点燃。§7进本由 §e/corerpg guild boss §7门控（贡献消耗）。} @dungeon"
+    - "$teleport{location=-40,65,270;defspawn=true} @player"
+    - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
+
+dungeon-area: []
+
+# 通关箱：币友好 — 碎片/外观/低档孔石/核心×1～2；不发 gear_ember_blade
+dungeon-reward-script:
+  - "$message{type=text;text=§6盟约周 Boss 通关奖励已发放} @dungeon"
+  - "$command{text=ni give <player.name> mat_ember_shard 8;console=true} @player"
+  - "$command{text=ni give <player.name> cosmetic_calamity_shard 1;console=true} @player"
+  - "$command{text=ni give <player.name> mat_ember_core_fragment 1;console=true} @player"
+  - "$command{text=ni give <player.name> gem_ember_sharp 1;console=true} @player"
+  - "$command{text=ni give <player.name> mat_ember_bone_dust 4;console=true} @player"
+  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"

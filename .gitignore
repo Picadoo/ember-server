@@ -1,0 +1,48 @@
+# ---- 机密 ----
+secrets/*
+!secrets/*.example
+*.env
+!*.env.example
+
+# ---- 二进制 / 构建产物 ----
+*.jar
+*.class
+build/
+target/
+out/
+.gradle/
+Paper/work/
+node_modules/
+tools/
+
+# ---- 运行时数据 ----
+logs/
+**/logs/
+cache/
+**/cache/
+dungeon-caches/
+*.log
+hs_err_*
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.lck
+usercache.json
+.executor-lock
+plugins/spark/tmp/
+
+# ---- 世界存档（在 Release 资产中）----
+server-runtime/world/
+server-runtime/world_nether/
+server-runtime/world_the_end/
+server-runtime/ember_hub/
+server-runtime/ember_afk/
+server-runtime/ember_event/
+login-runtime/world/
+login-runtime/world_the_end/
+plugins/DungeonPlus/map/
+server-runtime/assets/
+server-runtime/libraries/
+server-runtime/libs/

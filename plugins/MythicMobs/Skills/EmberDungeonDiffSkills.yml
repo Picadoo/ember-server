@@ -1,0 +1,98 @@
+# 五套本差异化技能 — MythicMobs 4.11 / MC 1.12.2
+# 日=轻压；周=换挡链；深渊=层压；团=点名/砸地/添头；灾厄=阶段削甲
+
+# --- 日常：轻压，可走位躲开 ---
+EmberDailySoftHit:
+  Cooldown: 5
+  Skills:
+  - potion{type=SLOW;duration=30;level=0} @target
+  - effect:particles{p=spell;amount=6;hSpread=0.3;ySpread=0.3;speed=0} @target
+
+EmberDailyBruteTap:
+  Cooldown: 10
+  Conditions:
+  - targetwithin 4
+  Skills:
+  - damage{amount=2} @target
+  - throw{velocity=2;velocityY=1.5} @target
+  - effect:sound{s=mob.zombie.wood;volume=0.7;pitch=1.1} @self
+
+# --- 周常：房间换挡感 + 双蛮兵链压迫 ---
+EmberWeeklyShiftCall:
+  Cooldown: 18
+  Skills:
+  - message{m="&6【深核廊】&7机制换挡——混合潮至！"} @PlayersInRadius{r=32}
+  - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=10}
+
+EmberWeeklyChainSlam:
+  Cooldown: 7
+  Conditions:
+  - targetwithin 5
+  Skills:
+  - damage{amount=4} @target
+  - throw{velocity=5;velocityY=3} @target
+  - potion{type=WITHER;duration=35;level=0} @target
+  - effect:sound{s=mob.zombie.metal;volume=1.0;pitch=0.65} @self
+
+EmberWeeklyGuardPulse:
+  Cooldown: 9
+  Skills:
+  - potion{type=SLOW;duration=50;level=1} @target
+  - damage{amount=3} @target
+
+# --- 深渊：层压（更狠的流血/减速） ---
+EmberAbyssPressure:
+  Cooldown: 4
+  Skills:
+  - potion{type=WITHER;duration=55;level=0} @target
+  - potion{type=SLOW;duration=40;level=0} @target
+  - effect:particles{p=reddust;amount=18;hSpread=0.5;ySpread=0.6;speed=0} @target
+
+EmberAbyssWatcherGaze:
+  Cooldown: 12
+  Skills:
+  - message{m="&5【深渊看守】&7注视锁定！"} @PlayersInRadius{r=24}
+  - potion{type=SLOW;duration=60;level=1} @PlayersInRadius{r=8}
+  - potion{type=WEAKNESS;duration=40;level=0} @PlayersInRadius{r=8}
+
+# --- 团本：点名 / 砸地 / 添头 ---
+EmberRaidCallout:
+  Cooldown: 14
+  Skills:
+  - message{m="&c【团本点名】&7目标 &f<target.name>&7！"} @PlayersInRadius{r=40}
+  - potion{type=SLOW;duration=45;level=0} @target
+  - damage{amount=5} @target
+
+EmberRaidSmash:
+  Cooldown: 10
+  Conditions:
+  - targetwithin 6
+  Skills:
+  - damage{amount=6;ignorearmor=true} @PlayersInRadius{r=4}
+  - throw{velocity=6;velocityY=4} @PlayersInRadius{r=4}
+  - effect:sound{s=mob.zombie.metal;volume=1.0;pitch=0.5} @self
+  - effect:explosion @Self
+
+EmberRaidSummonAid:
+  Cooldown: 22
+  Skills:
+  - message{m="&c【终厅】&7添头来袭！"} @PlayersInRadius{r=40}
+  - summon{mob=EmberRaidFootman;amount=2;noise=4} @Self
+
+# --- 灾厄：阶段削甲 → 添头感 → 狂暴砸 ---
+EmberCalamityShred:
+  Cooldown: 14
+  Skills:
+  - message{m="&4【灾厄阶段·削甲】&7护甲失效感袭来！"} @PlayersInRadius{r=40}
+  - potion{type=WEAKNESS;duration=100;level=1} @PlayersInRadius{r=18}
+  - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=18}
+  - effect:particles{p=crit;amount=50;hSpread=10;ySpread=1;speed=0} @Self
+
+EmberCalamityRampage:
+  Cooldown: 8
+  Conditions:
+  - targetwithin 5
+  Skills:
+  - damage{amount=8;ignorearmor=true} @target
+  - throw{velocity=7;velocityY=4} @target
+  - effect:sound{s=mob.wither.shoot;volume=0.8;pitch=0.7} @self

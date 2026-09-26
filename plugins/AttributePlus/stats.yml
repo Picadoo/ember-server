@@ -1,0 +1,142 @@
+#BOOK 则通过书本方式展示属性内容 (1.9+)
+#GUI 则通过箱子界面展示属性内容 (1.7+)
+options: "GUI"
+
+gui:
+  title: "&1&l&n玩家属性"
+  #选择界面大小 (必须为 9 的倍数,最高 54)
+  size: 27
+  #可以自由创建新的位置,但节点名不可以相同
+  list:
+    border:
+      #类型 1.12及以下版本  http://docs.zoyn.top/bukkitapi/1.12.2/
+      #类型 1.13+ https://bukkit.windit.net/javadoc/org/bukkit/Material.html
+      type: WHITE_STAINED_GLASS_PANE
+      slots: [0,1,2,3,4,5,6,7,8,9,17,18,19,20,21,22,23,24,25,26]
+      name: "&8边框"
+    info:
+      type: NETHER_STAR
+      slot: 4
+      name: "&6&l个人战力"
+      lore:
+        - "&6属性战力: &c%ap_combatpower%"
+    attack:
+      type: IRON_SWORD
+      slot: 11
+      name: "&6攻击属性"
+      lore:
+        - " "
+        - "&a物理伤害: &f%ap_attack%"
+        - "&aPVP伤害: &f%ap_pvp_attack%"
+        - "&aPVE伤害: &f%ap_pve_attack%"
+        - "&6真实伤害: &f%ap_real_attack%"
+        - "&6燃烧几率: &f%ap_fire:max%&8&l%"
+        - "&6燃烧伤害: &f%ap_fire_damage%"
+        - " "
+        - "&c暴击几率: &f%ap_crit:max%&8&l%"
+        - "&c暴击倍率: &f%ap_crit_rate:max%&8&l%"
+        - "&c吸血几率: &f%ap_vampire:max%&8&l%"
+        - "&c吸血倍率: &f%ap_vampire_rate:max%&8&l%"
+        - " "
+        - "&3命中几率: &f%ap_hit:max%&8&l%"
+        - "&3冰冻几率: &f%ap_frozen:max%&8&l%"
+        - "&3冰冻强度: &f%ap_frozen_intensity:max%&8&l%"
+        - "&3雷击几率: &f%ap_lightning:max%&8&l%"
+        - "&3雷击伤害: &f%ap_lightning_damage%"
+        - "&3破甲几率: &f%ap_sunder_armor:max%&8&l%"
+        - "&6护甲穿透: &f%ap_see_through:max%&8&l%"
+        - "&3破盾几率: &f%ap_break_shield:max%&8&l%"
+    defense:
+      type: IRON_CHESTPLATE
+      slot: 13
+      name: "&3防御属性"
+      lore:
+        - " "
+        - "&a护甲值: &f%ap_armor:max%&8&l%"
+        - "&a物理防御: &f%ap_defense%"
+        - "&aPVE防御: &f%ap_pvp_defense%"
+        - "&aPVE防御: &f%ap_pve_defense%"
+        - " "
+        - "&c暴击抗性: &f%ap_crit_resist:max%&8&l%"
+        - "&c吸血抗性: &f%ap_vampire_resist:max%&8&l%"
+        - " "
+        - "&6反弹几率: &f%ap_reflection:max%&8&l%"
+        - "&6反弹伤害: &f%ap_reflection_rate:max%&8&l%"
+        - "&6闪避几率: &f%ap_dodge:max%&8&l%"
+        - "&6盾牌格挡率: &f%ap_shield_block:max%&8&l%"
+        - "&6箭伤免疫率: &f%ap_remote_immune:max%&8&l%"
+    other:
+      type: BOOK
+      slot: 15
+      name: "&7其他属性"
+      lore:
+        - " "
+        - "&a生命力: &f%ap_health:max%&8&l%"
+        - "&a生命恢复: &f%ap_restore%"
+        - "&a百分比恢复: &f%ap_restore_ratio:max%&8&l%"
+        - " "
+        - "&6蓄力加成: &f%ap_accumulate_addition:max%&8&l%"
+        - "&6蓄力干扰: &f%ap_accumulate_disturb:max%&8&l%"
+        - "&6移速加成: &f%ap_moving:max%&8&l%"
+        - "&6经验加成: &f%ap_exp_addition:max%&8&l%"
+        - "&6召唤强度: &f%ap_summon_intensity:max%&8&l%"
+        - " "
+        - "&3弓箭射速: &f%ap_shoot_speed:max%&8&l%"
+        - "&3箭术精准: &f%ap_shoot_spread:max%&8&l%"
+        - "&3箭术穿透率: &f%ap_shoot_through:max%&8&l%"
+
+book:
+  attack:
+    - "         &6&l&n攻击属性"
+    - "&a物理伤害: &8%ap_attack%"
+    - "&aPVP伤害: &8%ap_pvp_attack%"
+    - "&aPVE伤害: &8%ap_pve_attack%"
+    - "&6真实伤害: &8%ap_real_attack%"
+    - "&6燃烧几率: &8%ap_fire:max%&8&l%"
+    - "&6燃烧伤害: &8%ap_fire_damage%"
+    - " "
+    - "&c暴击几率: &8%ap_crit:max%&8&l%"
+    - "&c暴击倍率: &8%ap_crit_rate:max%&8&l%"
+    - "&c吸血几率: &8%ap_vampire:max%&8&l%"
+    - "&c吸血倍率: &8%ap_vampire_rate:max%&8&l%"
+    - " "
+    - "&8命中几率: &8%ap_hit:max%&8&l%"
+    - "&8冰冻几率: &8%ap_frozen:max%&8&l%"
+    - "&8冰冻强度: &8%ap_frozen_intensity:max%&8&l%"
+    - "&8雷击几率: &8%ap_lightning:max%&8&l%"
+    - "&8雷击伤害: &8%ap_lightning_damage%"
+    - "&8破甲几率: &8%ap_sunder_armor:max%&8&l%"
+    - "&8护甲穿透: &8%ap_see_through:max%&8&l%"
+    - "&8破盾几率: &8%ap_break_shield:max%&8&l%"
+
+  defense:
+    - "     &3&l&n防御属性"
+    - "&a护甲值: &8%ap_armor:max%&8&l%"
+    - "&a物理防御: &8%ap_defense%"
+    - "&aPVE防御: &8%ap_pvp_defense%"
+    - "&aPVE防御: &8%ap_pve_defense%"
+    - " "
+    - "&c暴击抗性: &8%ap_crit_resist:max%&8&l%"
+    - "&c吸血抗性: &8%ap_vampire_resist:max%&8&l%"
+    - " "
+    - "&6反弹几率: &8%ap_reflection:max%&8&l%"
+    - "&6反弹伤害: &8%ap_reflection_rate:max%&8&l%"
+    - "&6闪避几率: &8%ap_dodge:max%&8&l%"
+    - "&6盾牌格挡率: &8%ap_shield_block:max%&8&l%"
+    - "&6箭伤免疫率: &8%ap_remote_immune:max%&8&l%"
+
+  other:
+    - "     &8&l&n其他属性"
+    - "&a生命力: &8%ap_health:max%&8&l%"
+    - "&a生命恢复: &8%ap_restore%"
+    - "&a百分比恢复: &8%ap_restore_ratio:max%&8&l%"
+    - " "
+    - "&6蓄力加成: &8%ap_accumulate_addition:max%&8&l%"
+    - "&6蓄力干扰: &8%ap_accumulate_disturb:max%&8&l%"
+    - "&6移速加成: &8%ap_moving:max%&8&l%"
+    - "&6经验加成: &8%ap_exp_addition:max%&8&l%"
+    - "&6召唤强度: &8%ap_summon_intensity:max%&8&l%"
+    - " "
+    - "&3弓箭射速: &8%ap_shoot_speed:max%&8&l%"
+    - "&3箭术精准: &8%ap_shoot_spread:max%&8&l%"
+    - "&3箭术穿透率: &8%ap_shoot_through:max%&8&l%"

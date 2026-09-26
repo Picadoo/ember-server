@@ -1,0 +1,17 @@
+#从 1.3.8 起废弃原 extension/kether 配置文件夹
+
+#地牢内使用 $kether 地牢脚本触发脚本组
+#可以在 Kether 执行内使用 &args0~N 获取对应传入的参数值
+#脚本例子: $kether{group=脚本组,...;args=值,...} @dungeon
+example: |-
+  dungeon *kether *dungeon params "group=params-example;args=DungeonPlus"
+  for i in dungeon-data players then {
+      switch &i
+      dungeon *message *self params "type=text;text=Example: <self:player-name>"
+  }
+
+params-example: |-
+  for i in dungeon-data players then {
+      switch &i
+      title inline "{{ &args0 }}" subtitle "§f传入参数示例" by 10 150 10
+  }

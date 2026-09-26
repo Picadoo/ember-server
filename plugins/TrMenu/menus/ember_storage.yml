@@ -1,0 +1,100 @@
+# 余烬仓库 — 材料仓（单种近无限 + 解锁格）+ 末影箱
+# DESIGN-ember-material-warehouse.md
+
+Title: '§3余烬 · 仓库'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 300
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# W D U #'
+  - '# E     #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0.8'
+    - 'tell: §3[仓库] §7材料仓：一格一种 · 数量近无限 · 可解锁新格'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  W:
+    display:
+      material: chest
+      name: '§6材料仓总览'
+      lore:
+        - ''
+        - '§7每格绑定一种材料，数量可叠到近二十亿'
+        - '§8默认 8 格 · 上限 48'
+        - ''
+        - '§e➥ §f/corerpg warehouse'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg warehouse'
+        - 'tell: §8取出：/corerpg warehouse withdraw <格号|id> [数量]'
+
+  D:
+    display:
+      material: hopper
+      name: '§a存入主手'
+      lore:
+        - ''
+        - '§7把手上的白名单 NI 材料全部存入'
+        - '§8同 id 合并 · 满格且无同 id 则失败'
+        - ''
+        - '§e➥ §fdeposit'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg warehouse deposit'
+
+  U:
+    display:
+      material: emerald
+      name: '§e解锁一格'
+      lore:
+        - ''
+        - '§7默认扣余烬币（阶梯涨价）'
+        - '§8也可：/corerpg warehouse unlock cash'
+        - '§8晶钻价 28（可配）'
+        - ''
+        - '§e➥ §funlock'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg warehouse unlock'
+        - 'command: corerpg warehouse'
+
+  E:
+    display:
+      material: ender chest
+      name: '§5末影箱'
+      lore:
+        - ''
+        - '§7普通物品 / 装备仍走末影箱'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_CHEST_OPEN-1-1'
+        - 'command: enderchest'
+        - close
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'

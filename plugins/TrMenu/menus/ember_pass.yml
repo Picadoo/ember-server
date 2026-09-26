@@ -1,0 +1,109 @@
+# 余烬战令 — 轻量可领（邮件发货）· 完整赛季经验未接线
+# DESIGN-ember-economy-monetization.md §5.3
+
+Title: '§b余烬 · 战令'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# F U I #'
+  - '# C     #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1'
+    - 'tell: §b[战令] §7免费轨可领邮件补给 · 付费轨仍占位 · §c不出核心'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  F:
+    display:
+      material: paper
+      name: '§a免费轨 · 领取补给'
+      lore:
+        - ''
+        - '§7余烬币 80 + 碎片 ×2'
+        - '§8经系统邮件发放 · 再点 claim'
+        - '§8赛季等级经验尚未接线'
+        - ''
+        - '§e➥ §f发送并尝试一键领取'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §a[战令·免费轨] §7正在发放补给邮件…'
+        - 'console: corerpg mail send %player_name% pass_track_free'
+        - 'command: corerpg mail claim all'
+        - 'tell: §8若未自动入账，打开邮寄菜单 /corerpg mail'
+
+  U:
+    display:
+      material: gold ingot
+      name: '§6解锁付费轨'
+      lore:
+        - ''
+        - '§7外观、币、累计日票 ×5（规划）'
+        - '§c不出核心、不出成品高伤装'
+        - ''
+        - '§c占位价 §f48 §c晶钻'
+        - '§8本期：查余额 + 欢迎礼邮件演示'
+        - ''
+        - '§e➥ §f查看晶钻并领欢迎礼'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §6[战令·付费轨] §7尝试解锁 · 价 §f48 §7晶钻'
+        - 'command: corerpg shop buy pass_unlock'
+        - 'command: corerpg cash'
+        - 'command: corerpg mail claim all'
+
+  I:
+    display:
+      material: book
+      name: '§e赛季规则'
+      lore:
+        - ''
+        - '§7约 30 天一季'
+        - '§7双轨并行 · 等级共享经验'
+        - '§8红线：不卖毕业伤害'
+        - ''
+        - '§e➥ §f查余烬币'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[战令] §7约30天季 · 双轨 · 付费轨外观+券+票，无核心'
+        - 'command: corerpg coin'
+
+  C:
+    display:
+      material: chest
+      name: '§e打开邮寄'
+      lore:
+        - ''
+        - '§7查看 / 领取战令邮件附件'
+        - ''
+        - '§e➥ §f/corerpg mail'
+    actions:
+      all:
+        - 'sound: BLOCK_CHEST_OPEN-1-0'
+        - 'command: corerpg mail'
+        - 'menu: ember_mail'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'

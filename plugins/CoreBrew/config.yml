@@ -1,0 +1,28 @@
+# CoreBrew — NI brewing recipes (HYBRID via BrewNmsHooks)
+# disable_vanilla: when true, PotionBrewer vanilla matches are ignored
+disable_vanilla: true
+
+# Raised stack limits for brew NI items + brewing-stand bottle/ingredient slots.
+# 127 is the honest 1.12 ceiling (NBT Count is a signed byte; vanilla client often glitches past that).
+stack:
+  max_stack: 127
+  apply_to_ingredients: true
+  apply_to_bottles: true
+  apply_to_results: true
+
+recipes:
+  - ingredient_ni_id: ingredient_ember_wart
+    input_bottle_ni_id: bottle_ember_water
+    result_ni_id: potion_ember_swift
+    brew_time_ticks: 100
+    result_amount: 8          # demo multi-output once bottle slots allow stacking
+  - ingredient_ni_id: ingredient_ember_blaze
+    input_bottle_ni_id: bottle_ember_water
+    result_ni_id: potion_ember_strength
+    brew_time_ticks: 200
+    result_amount: 1
+  - ingredient_ni_id: ingredient_ember_crystal
+    input_bottle_ni_id: bottle_ember_water
+    result_ni_id: potion_ember_night
+    brew_time_ticks: 80
+    result_amount: 1

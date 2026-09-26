@@ -1,0 +1,16 @@
+name: CoreEnchant
+main: town.sunshine.coreenchant.CoreEnchantPlugin
+version: 1.0.0
+author: sunshine-town
+description: Custom enchanting-table offers via EnchantNmsHooks + YAML
+depend: [NeigeItems]
+softdepend: []
+load: POSTWORLD
+commands:
+  coreenchant:
+    description: Check / reload CoreEnchant offer tables
+    usage: /coreenchant check|reload
+    permission: coreenchant.admin
+permissions:
+  coreenchant.admin:
+    default: op

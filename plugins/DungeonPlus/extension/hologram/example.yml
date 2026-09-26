@@ -1,0 +1,17 @@
+hologram:
+  - "§e击杀 §c狂暴村民x10 §f即可通关"
+  - "§e进度 §f<mob:kill-amount *狂暴村民>§f/§63"
+  - ""
+  - "<if:[<mob:kill-amount *狂暴村民>>=3] *&a&l完成 &f(点击通关) *&c未完成>"
+
+action:
+  #全息行数
+  4:
+    #包含以下文本内容才会触发
+    contain-text: "点击通关"
+    #脚本
+    action-script:
+      - condition: []
+        true:
+          - "$end{type=text;text=地牢挑战成功,即将返回主城;reward=true} @dungeon"
+        false: []

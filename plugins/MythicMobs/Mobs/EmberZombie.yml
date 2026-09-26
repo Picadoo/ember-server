@@ -1,0 +1,9 @@
+EmberZombie:
+  Type: ZOMBIE
+  Display: '&6Ember Zombie'
+  Health: 30
+  Damage: 5
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true

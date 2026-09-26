@@ -1,0 +1,95 @@
+# 日常副本子菜单 — EmberDaily
+# EmberDaily 进本
+
+Title: '§e日常 · 余烬窟'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# S P R #'
+  - '#       #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  S:
+    display:
+      material: iron sword
+      name: '§a开始挑战'
+      lore:
+        - ''
+        - '§7进本即扣 §f1 §7次今日次数'
+        - '§7失败不返还 · 请确认后再进'
+        - ''
+        - '§8流程：3 波小怪 → 蛮兵 → 通关箱'
+        - '§8时限约 8～12 分钟'
+        - ''
+        - '§e➥ §f点击进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §e[日] 正在尝试进入 §fEmberDaily§e …'
+        - 'tell: §8进本命令：§7/dp start EmberDaily'
+        - 'command: dp start EmberDaily'
+        - close
+
+  P:
+    display:
+      material: chest
+      name: '§6奖励预览'
+      lore:
+        - ''
+        - '§7战斗掉落（MM → NI）：'
+        - '  §f碎片 / 骨尘 / Boss 核心×1'
+        - '  §f刃 ~12% · 护符 ~8%'
+        - ''
+        - '§7通关箱：'
+        - '  §e核心碎片 ×1'
+        - '  §e附魔晶 ×1'
+        - '  §e碎片 ×5'
+        - ''
+        - '§8详见 DESIGN-dungeon-daily-weekly.md §5.4'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[日奖励] §7Boss 核心 + 通关箱（核心1 + 晶1 + 碎片5）'
+
+  R:
+    display:
+      material: watch
+      name: '§e次数说明'
+      lore:
+        - ''
+        - '§7每日 §f3 §7次'
+        - '§7重置：§f00:00 Asia/Shanghai'
+        - '§7进本即扣 · 失败不返还'
+        - ''
+        - '§7今日次数靠日票：进服赠 3 张，商城可补'
+        - '§7手持/背包看「余烬日票」数量'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e日常副本每日 3 次，0:00（上海时区）重置；进本即扣次。'

@@ -1,0 +1,15 @@
+name: CoreAnvil
+main: town.sunshine.coreanvil.CoreAnvilPlugin
+version: 1.0.0
+author: sunshine-town
+description: Custom anvil costs and combine rules via AnvilNmsHooks + YAML
+depend: [NeigeItems]
+load: POSTWORLD
+commands:
+  coreanvil:
+    description: Check / reload CoreAnvil policy
+    usage: /coreanvil check|reload
+    permission: coreanvil.admin
+permissions:
+  coreanvil.admin:
+    default: op

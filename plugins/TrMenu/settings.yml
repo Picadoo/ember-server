@@ -1,0 +1,129 @@
+Options:
+  # High, Normal, Low
+  Running-Performance: Normal
+  Multi-Thread: true
+  Async-Load-Menus: true
+  # 是否启用并发加载菜单
+  # 启用后会导致多级捕获器顺序错乱
+  Load-Menu-Concurrent: false
+  Static-Inventory:
+    Java: false
+    Bedrock: false
+  Packet-Inventory:
+    Create-Id: false
+  Dialogs:
+    Enable: true
+    Min-Version: '1.21.6'
+    Debug: false
+    Fallback-On-Error: true
+  # 代理类型: BUNGEE / VELOCITY / AUTO
+  # AUTO 模式下同时注册 BungeeCord 和 bungeecord:main 两个 channel
+  Proxy: AUTO
+  Bedrock-Open-Delay: 20
+
+  Placeholders:
+    JavaScript-Parse: false
+    Jexl-Parse: false
+
+Language:
+  Default: 'zh_CN'
+  # Parse the provided text as player language
+  # Leave it blank to use player locale instead
+  Player: ''
+  CodeTransfer:
+    zh_hans_cn: 'zh_CN'
+    zh_hant_cn: 'zh_TW'
+    en_ca: 'en_US'
+    en_au: 'en_US'
+    en_gb: 'en_US'
+    en_nz: 'en_US'
+
+Database:
+  # 使用旧版数据库储存
+  Use-Legacy-Database: false
+
+  # Local: SQLITE
+  # External: SQL
+  Method: SQLITE
+  Type:
+    SQLite:
+      file-name: data
+    SQL:
+      host: localhost
+      port: 3306
+      user: root
+      password: root
+      database: test
+  Index:
+    # UUID, USERNAME
+    Player: USERNAME
+
+  # 新版数据库模块
+  SQL:
+    # 启用 MYSQL, 否则使用 SQLITE
+    enable: false
+    host: localhost
+    port: 3306
+    user: root
+    password: root
+    database: minecraft
+    prefix: trmenu
+
+  # 进服延迟加载数据
+  Join-Load-Delay: 40
+  # 全局数据跨服同步间隔
+  Global-Data-Sync: 200
+
+Loader:
+  Listen-Files: true
+  Menu-Files:
+    - 'plugins/CustomMenusFolder'
+
+Menu:
+  Settings:
+    Bound-Item-Interval: 2000
+  Icon:
+    Inherit: false
+    Item:
+      Default-Name-Color: "&7"
+      Default-Lore-Color: "&7"
+      Pre-Color: false
+      Head-Connect-Timeout: 500
+      Head-Read-Timeout: 2500
+
+Action:
+  Using-Component: true
+  Title-Using-Component: true
+  Inputer:
+    Cancel-Words:
+      - 'cancel|quit|end'
+      - 'q'
+
+
+Shortcuts:
+  Offhand: [ ]
+  Sneaking-Offhand:
+    - condition: 'perm *trmenu.shortcut'
+      execute: 'open: Example'
+      deny: 'return'
+  Right-Click-Player: 'open: Profile'
+  Sneaking-Right-Click-Player: [ ]
+  PlayerInventory-Border-Left: [ ]
+  PlayerInventory-Border-Right: [ ]
+  PlayerInventory-Border-Middle: [ ]
+
+RegisterCommands:
+  openMenus:
+    aliases: [ ]
+    permission: null
+    execute:
+      - 'tell: &7Argument `example` Required!'
+    arguments:
+      example: 'open: example'
+
+Scripts:
+  Export-Hook-Plugin: true
+  Mozilla-Compat: true
+  # 是否启用 GraalJS 作为引擎
+  Enable-GraalJS: false
+  Binding-Map:

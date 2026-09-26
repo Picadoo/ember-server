@@ -1,0 +1,206 @@
+# Translated by GIGABAIT
+COMMANDS-ACTION-UNKNOWN-PLAYER: '&8[&3Tr&bMenu&8] &7Цей гравець не підключений.'
+COMMANDS-DEBUG-OFF: '&8[&3Tr&bMenu&8] &3DEBUG &8| &7Режим налагодження &cвимкнено&7.'
+COMMANDS-DEBUG-ON: '&8[&3Tr&bMenu&8] &3DEBUG &8| &7Режим налагодження &aувімкнено&7.'
+COMMANDS-ITEM-REPOSITORY-ADDED: '&8[&3Tr&bMenu&8] &3Додано предмет &a{0} &3до репозиторію предметів.'
+COMMANDS-ITEM-REPOSITORY-EXISTED: '&8[&3Tr&bMenu&8] &7Предмет з ID &f{0} &7вже існує.'
+COMMANDS-ITEM-REPOSITORY-GIVED: '&8[&3Tr&bMenu&8] &3Ви отримали предмет &a{0}&3.'
+COMMANDS-ITEM-REPOSITORY-NO-ITEM: '&8[&3Tr&bMenu&8] &7Ви повинні &fтримувати предмет &7для перетворення його на JSON.'
+COMMANDS-ITEM-REPOSITORY-NOT-EXIST: '&8[&3Tr&bMenu&8] &7Предмет з ID &f{0} &7не може бути знайдений.'
+COMMANDS-ITEM-REPOSITORY-REMOVED: '&8[&3Tr&bMenu&8] &3Предмет &a{0} &3видалено з репозиторію.'
+COMMANDS-ITEM-TO-JSON-CONVERTED:
+  ==: JSON
+  text: '&8\[&3Tr&bMenu&8\] &7Предмет було перетворено на JSON: [&3&nКлацніть, щоб скопіювати]'
+  args:
+  - hover: '&7Клацніть, щоб скопіювати'
+    suggest: '{0}'
+COMMANDS-ITEM-TO-JSON-NO-ITEM: '&8[&3Tr&bMenu&8] &7Ви повинні &fтримувати предмет &7для перетворення його на JSON.'
+COMMANDS-LIST-FORMAT:
+  ==: JSON
+  text: '&8- [&2{0}]&r'
+  args:
+  - hover: '&7Клацніть, щоб відкрити'
+    command: /trmenu open {0}
+COMMANDS-LIST-HEADER:
+- '&r'
+- '&8[&3Tr&bMenu&8] &7Завантажено &f{0} &7меню &8(фільтр: {1}): '
+- '&r'
+COMMANDS-OPEN-UNKNOWN-MENU: '&8[&3Tr&bMenu&8] &7Невідоме меню &6{0} &7.'
+COMMANDS-OPEN-UNKNOWN-PLAYER: '&8[&3Tr&bMenu&8] &7Цей гравець не підключений.'
+COMMANDS-TEMPLATE-EMPTY: '&8[&3Tr&bMenu&8] &7Шаблон порожній, створення меню скасовано...'
+COMMANDS-TEMPLATE-FAILED: '&8[&3Tr&bMenu&8] &cНе вдалося створити меню... перевірте ваше мережеве підключення!'
+COMMANDS-TEMPLATE-PROCESSING: '&8[&3Tr&bMenu&8] &7Створюємо ваше меню з шаблону...'
+COMMANDS-TEMPLATE-SUCCESS:
+  ==: JSON
+  text: '&8\[&3Tr&bMenu&8\] &3Меню успішно створено. Клацніть [&aтут] &3, щоб отримати посилання'
+  args:
+  - hover: '&7Клацніть, щоб отримати посилання на ваше меню'
+    url: '{0}'
+DEBUG-ACTIONS-REGISTERED: '&8[&fTr&7Menu&8] &3DEBUG &8| &6Зареєстровано &c{0} &6доступних дій &8({1} мс)'
+DEBUG-ACTIONS-SET-META: '&8[&fTr&7Menu&8] &3DEBUG &8| &6Встановлено мета для гравця &c{0}
+  &c{ key=&6{1}&c,value=&6{2}&c } &8(вихідне значення: {3})'
+DEBUG-ACTIONS-SET-META-FAILED: '&8[&fTr&7Menu&8] &3DEBUG &8| &6Не вдалося встановити мета для гравця &c{0} &8(вихідне значення: {3})'
+DEBUG-ARGUMENTS: '&8[&fTr&7Menu&8] &3DEBUG &8| &6Зміна аргументів для гравця &c{0} &c{ &8{1} &c}'
+DEBUG-EXPRESSION:
+- '&8[&fTr&7Menu&8] &3DEBUG &8| &6Переклад виразу умови:'
+- '&c- &8Вихідний: &7{0}'
+- '&c- &8Перекладений: &7{1}'
+DEBUG-ICON-SUB-ICON-REFRESHED: '&8[&fTr&7Menu&8] &3DEBUG &8| &6Оновлення умовної піктограми &c{0} &6на &e{1}'
+DEBUG-PRE-COMPILE-SCRIPT:
+- '&8[&fTr&7Menu&8] &3DEBUG &8| &6Кешування скрипту:'
+- '&c- &8Вихідний: {0}'
+- '&c- &8Перекладений: {1}'
+DEBUG-SESSION: '&8[&fTr&7Menu&8] &3DEBUG &8| &6Зміна сторінки меню для &c{0} &c{ &8{1}. Сторінка: {2} &c}'
+ERRORS-ACTION: '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Дія &c{0} &4не існує, перевірте правильність написання!'
+ERRORS-ARGUMENT-REPLACE:
+- '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Помилка заміни рядка &c{0} &4з аргументами та метами!'
+- '&8Причина: {1}'
+- '&8Стек: {2}'
+ERRORS-HOOK: '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Спроба викликати функцію з невизначеною та сумісною плагіном &c{0}'
+ERRORS-INT-RANGE:
+- '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Помилка перетворення рядка &c{0} &4у ціле число!'
+- '&8Причина: {1}'
+- '&8Стек: {2}'
+ERRORS-MATERIAL: '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Невідомий матеріал предмета (Material) &c{0}'
+ERRORS-PACKET:
+- '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Виникла невідома помилка під час відправки пакету даних &c{0}, перевірте наступну помилку!'
+- '&8Причина: {1}'
+- '&8Стек: {2}'
+ERRORS-PLAYER-HEAD:
+- '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Під час асинхронного отримання текстури голови гравця сталася помилка, перевірте наступні помилки!'
+- '&8Причина: {0}'
+- '&8Стек: {1}'
+ERRORS-SCRIPT:
+- '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Вираз &c{0} &4не вдалося кешувати, перевірте синтаксис!'
+- '&8Причина: {1}'
+- '&8Стек: {2}'
+ERRORS-SOUND: '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Ефект звуку &c{0} &4не існує. Не вдалося його відтворити для гравця &c{1}'
+ERRORS-WEB-DATA:
+- '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Під час читання даних з Інтернету &c{0}&4 виникла помилка!'
+- '&8Причина: {1}'
+- '&8Стек: {2}'
+HASTEBIN-FAILED: '&8[&3Tr&bMenu&8] &cПід час розміщення меню на Hastebin виникла помилка.'
+HASTEBIN-PROCESSING: '&8[&3Tr&bMenu&8] &7Завантаження, Будь ласка, зачекайте...'
+HASTEBIN-SUCCESS: '&8[&3Tr&bMenu&8] &3Ваше меню було розміщено на &a{0}'
+LOADER-ERRORS:
+- '&8[&3Tr&bMenu&8] &cПОМИЛКА &8| &4Під час завантаження меню &c{0}&4 сталася помилка.'
+- '&7Повідомлення: &8{1}'
+- '&7Стек: &8{2}'
+LOADER-MENU: '&8[&3Tr&bMenu&8] &aУСПІХ &8| &a{0} &3меню було завантажено &8({1} мс)'
+MENU-DEPEND-EXPANSIONS:
+- '&r'
+- '&8[&fTr&7Menu&8] &7Вам потрібно встановити розширення &f{0} &7для використання PlaceholderAPI в цьому меню.'
+- '&r'
+MENU-DEPEND-EXPANSIONS-FORMAT:
+  ==: JSON
+  text: '&8- [&3{0}]&r'
+  args:
+  - hover: '&7Клацніть, щоб завантажити'
+    command: /placeholderapi ecloud download {0}
+MIGRATE-EMPTY-FILE: '&8[&fTr&7Menu&8] &aМІГРАЦІЯ &8| &7Вказаний файл/каталог порожній.'
+MIGRATE-ERROR:
+- '&8[&3Tr&bMenu&8] &aМІГРАЦІЯ &8| &4Під час міграції &c{0}&4 сталася помилка.'
+- '&8Причина: {1}'
+- '&8Стек: {2}'
+MIGRATE-LOAD-ERROR: '&8[&3Tr&bMenu&8] &aМІГРАЦІЯ &8| &c{0} &7меню не вдалося завантажити, перевірте помилки у консолі...'
+MIGRATE-LOAD-SUCCESS: '&8[&3Tr&bMenu&8] &aМІГРАЦІЯ &8| &a{0} &3файлів меню було успішно мігровано й переміщено до `/plugins/TrMenu/migrated/`'
+MIGRATE-PROCESSING: '&8[&3Tr&bMenu&8] &aМІГРАЦІЯ &8| &f{0} &7файлів виявлено, міграція...'
+MIGRATE-UNKNOWN-FILE: '&8[&fTr&7Menu&8] &aМІГРАЦІЯ &8| &7Файл не підтримується або не існує &f{0}&7.'
+MIGRATE-UNSUPPORTED-PLUGIN: '&8[&3Tr&bMenu&8] &aМІГРАЦІЯ &8| &7Плагін &f{0} &7не підтримується...'
+PLUGIN-DEPEND-DOWNLOAD: '&8[&3Tr&bMenu&8] &eЗАЛЕЖНІСТЬ &8| &7Завантаження плагіна &f{0} &7...'
+PLUGIN-DEPEND-INSTALL: '&8[&3Tr&bMenu&8] &eЗАЛЕЖНІСТЬ &8| &7Успішно завантажено плагін &3{0} &7, перезапускаю сервер, щоб завершити установку...'
+PLUGIN-DEPEND-INSTALL-FAILED: '&8[&3Tr&bMenu&8] &eЗАЛЕЖНІСТЬ &8| &7Під час завантаження &c{0}&7 виникла помилка. Завантажте плагін вручну, щоб завершити установку, зупинка сервера...'
+PLUGIN-HOOKED: '&8[&3Tr&bMenu&8] &6ПІДКЛЮЧЕННЯ &8| &7Виявлено м`які залежності! Підключення до &f{0}&7.'
+PLUGIN-LOADED: '&8[&3Tr&bMenu&8] &bІНФО &8| &3Плагін завантажено! Поточна версія &2{0}&7.'
+PLUGIN-LOADING:
+- '&r'
+- '&7Завантаження &3Tr&bMenu &f&lPremium... &8{0}'
+- '&r'
+PLUGIN-UPDATE:
+- '&8[&3Tr&bMenu&8] &bОНОВЛЕННЯ &8| &3Оновлення &a{0}&3 знайдено! Завантажте його за посиланням нижче, щоб отримати нові функції та виправлення помилок!'
+- '&bhttps://www.spigotmc.org/resources/authors/435323/'
+
+Command-Item-Deleted: '&8[&3Tr&bMenu&8] &7Видалено предмет (ID: &f{0}&7) з репозиторію'
+Menu-Internal-Sounds-Title: 'Звуки / Сторінка: {0} ; Фільтр: {1}'
+Plugin-Update:
+- '&8[&3Tr&bMenu&8] &bОНОВЛЕННЯ &8| &3Оновлення &a{0}&3 знайдено! Завантажте його за посиланням нижче, щоб отримати нові функції та виправлення помилок!'
+- '&bhttps://www.spigotmc.org/resources/83120/'
+Paster-Processing: '&8[&3Tr&bMenu&8] &7Вставка вмісту...'
+Command-List-Header:
+- '&r'
+- '&8[&3Tr&bMenu&8] &aДОБРО &8| &7Завантажено &f{0} &7меню &8(Фільтр: {1}): '
+- '&r'
+Plugin-Enabled: '&8[&3Tr&bMenu&8] &bІНФО &8| &3Плагін був активований. Поточна версія &2{0}&7.'
+Command-Item-Saved: '&8[&3Tr&bMenu&8] &7Збережено предмет (ID: &f{0}&7) в репозиторій'
+Command-Action-Description: Виконати дії для тесту
+Command-List-Error: '&8[&3Tr&bMenu&8] &7НОРМ &8| &7Меню не знайдено... &8(Фільтр: {0})'
+Command-List-Format:
+- type: JSON
+  text: '&8- [&3{0}] &7| &8(Заголовок: {1} &8/ Іконки: {2})&r'
+  args:
+  - hover: '&7Клацніть, щоб відкрити'
+    command: /trmenu open {0}
+Plugin-Loading:
+- '&r'
+- '&7Завантаження &3Tr&bMenu &f&lPremium... &8{0}'
+- '&r'
+Command-Reload-Description: Перезавантажити всі меню
+Command-Template-Empty: '&8[&3Tr&bMenu&8] &7Інвентар шаблону пустий, створення меню скасовано.'
+Menu-Action-Sound: '&8[&3Tr&bMenu&8] &7Невідомий звук: &f{0}'
+Menu-Internal-Sounds-Stop-Playing: Зупинити відтворення
+Menu-Loader-Reloaded: '&8[&3Tr&bMenu&8] &aДОБРО &8| &7Меню &f{0} &8автоматично перезавантажено &8({1}мс)'
+Command-Open-Description: Відкрити меню для гравця
+Menu-Expansions-Format:
+- type: JSON
+  text: '&8- [&a{0}]&r'
+  args:
+  - hover: '&7Клацніть, щоб завантажити'
+    command: /papi ecloud download {0}
+Plugin-Dependency-Abuse: '&8[&3Tr&bMenu&8] &6ПІДКЛЮЧЕННЯ &8| &4Спроба використання плагіна з м`якою залежністю, який не встановлено &c{0}'
+Menu-Internal-Page-Previous: Попередня сторінка
+Menu-Loader-Loaded: '&8[&3Tr&bMenu&8] &aДОБРО &8| &a{0} &3меню було завантажено &8({1}мс)'
+Command-Open-Unknown-Player: '&8[&3Tr&bMenu&8] &7Гравець &f{0} &7не в мережі.'
+Command-Help-Type: Тип
+Command-Item-Description: Редагувати предмети
+Menu-Expansions-Header:
+- '&8[&3Tr&bMenu&8] &7Вам потрібно встановити розширення &f{0} &7для використання PlaceholderAPI в цьому меню.'
+- type: JSON
+  text: '&7Також не забудьте [&3&nперезавантажити]'
+  args:
+  - hover: '&7Клацніть, щоб перезавантажити розширення PAPI'
+    command: /papi reload
+Command-Open-Unknown-Menu: '&8[&3Tr&bMenu&8] &7Невідоме меню &6{0} &7.'
+Menu-Internal-Page-Next: Наступна сторінка
+Command-Item-No-Item: '&8[&3Tr&bMenu&8] &7Будь ласка, &fтримайте предмет &7в руці.'
+Paster-Success: '&8[&3Tr&bMenu&8] &3Вміст було вставлено до &a{0}'
+Command-List-Description: Список завантажених меню
+Command-Help-Args: Аргументи
+Command-Action-Unknown-Player: '&8[&3Tr&bMenu&8] &7Гравець &f{0} &7не в мережі.'
+Command-Sounds-Description: Перегляд та тестування звуків
+Command-Item-To-Json:
+- type: JSON
+  text: '&8\[&3Tr&bMenu&8\] &7Предмет було перетворено у JSON: [&3&nКлацніть, щоб скопіювати]'
+  args:
+  - hover: '&7Клацніть, щоб скопіювати'
+    suggest: '{0}'
+Menu-Internal-Sounds-Display:
+- '&r'
+- '&8· &7Натисніть &fQ &7для тону 0'
+- '&8· &7ЛКМ для тону 1'
+- '&8· &7ПКМ для тону 2'
+- '&r'
+- '&e▶ &6Натисніть середню кнопку для копіювання назви.'
+Paster-Failed: '&8[&3Tr&bMenu&8] &cВиникла помилка при вставці вмісту. Будь ласка, перевірте консоль.'
+Plugin-Dependency-Hooked: '&8[&3Tr&bMenu&8] &6ПІДКЛЮЧЕННЯ &8| &7Підключено м`яку залежність &f{0}'
+Menu-Loader-Failed: '&8[&3Tr&bMenu&8] &cПомилка &8| &4Під час завантаження меню &c{0} &4виникла помилка! Результат: {1}'
+
+Command-Convert-Description: Перетворити тип меню
+Command-Convert-Unknown-Menu: '&8[&3Tr&bMenu&8] &7Невідоме меню &6{0} &7.'
+Command-Convert-Type-Already: '&8[&3Tr&bMenu&8] &7Тип меню &6{0} &7вже є &b{1} &7.'
+Command-Convert-Unknown-Type: '&8[&3Tr&bMenu&8] &7Невідомий тип &b{0} &7.'
+Command-Convert-Converted: '&8[&3Tr&bMenu&8] &7Тип меню &6{0} &7було перетворено на &b{1}&7.'
+Menu-Loader-Loading: '&8[&3Tr&bMenu&8] &6ПОТІК &8| &3Завантаження меню...'
+Command-Data-Get: '&8[&3Tr&bMenu&8] &7Отримати дані про &6{1} &7гравців &6{0} {2} &7: &f{3}'
+Command-Data-Invalid-Modify: '&8[&3Tr&bMenu&8] &cInvalid modify type.'
+Command-Data-Description: 'Modify & get data'
+Dump-Info-Created: '&8[&3Tr&bMenu&8] &7File Created: &f{0}'

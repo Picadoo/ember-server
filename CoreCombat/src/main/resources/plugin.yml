@@ -1,0 +1,16 @@
+name: CoreCombat
+main: town.sunshine.corecombat.CoreCombatPlugin
+version: 1.0.0
+author: sunshine-town
+description: NI-only totem of undying + shield blocking via TotemNmsHooks / ShieldNmsHooks
+depend: [NeigeItems]
+load: POSTWORLD
+commands:
+  corecombat:
+    description: Check totem/shield NI combat hooks
+    usage: /corecombat check|reload
+    permission: corecombat.admin
+    aliases: [ccbt]
+permissions:
+  corecombat.admin:
+    default: op

@@ -1,0 +1,92 @@
+# 强化子菜单 — DESIGN-ember-enhance-socket.md §7
+# 壳：提示手持余烬装备 + 跑 /corerpg enhance
+
+Title: '§c余烬 · 强化'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# I E R #'
+  - '#       #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ANVIL_LAND-1-0.6'
+    - 'tell: §7请手持 §c余烬之刃 §7或 §e余烬护符 §7后再操作。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  I:
+    display:
+      material: paper
+      name: '§e强化预览'
+      lore:
+        - ''
+        - '§7查看当前 +N、下一档成功率'
+        - '§7与材料消耗（不扣物品）'
+        - ''
+        - '§8命令：/corerpg enhance info'
+        - ''
+        - '§e➥ §f点击预览'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[强化] §7请确认手持余烬装备…'
+        - 'command: corerpg enhance info'
+
+  E:
+    display:
+      material: anvil
+      name: '§c尝试强化 +1'
+      lore:
+        - ''
+        - '§7按表消耗碎片 / 骨尘 / 核心'
+        - '§7高危档可自动吃保护券'
+        - '§8+0～+10 · 失败可能掉级'
+        - ''
+        - '§8命令：/corerpg enhance'
+        - ''
+        - '§c➥ §f点击强化'
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-1-1'
+        - 'tell: §c[强化] §7正在尝试强化手持装备…'
+        - 'command: corerpg enhance'
+        - close
+
+  R:
+    display:
+      material: book
+      name: '§6规则速览'
+      lore:
+        - ''
+        - '§7+1～+3 §a高成功率 · 失败不变'
+        - '§7+4～+6 §e中危 · 失败掉 1'
+        - '§7+7～+9 §c高危 · 可用保护券'
+        - '§7+10 §b需稳固符 · 失败不掉档'
+        - ''
+        - '§8详见 DESIGN-ember-enhance-socket.md'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[强化规则] §7+1～3 稳 · +4～6 掉级 · +7～9 保护券 · +10 稳固符'

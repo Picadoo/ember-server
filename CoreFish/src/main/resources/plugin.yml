@@ -1,0 +1,15 @@
+name: CoreFish
+main: town.sunshine.corefish.CoreFishPlugin
+version: 1.0.0
+author: sunshine-town
+description: NI-only fishing loot tables + optional wait tick tuning via FishNmsHooks
+depend: [NeigeItems]
+load: POSTWORLD
+commands:
+  corefish:
+    description: Check fishing NI loot / hooks status
+    usage: /corefish check|reload
+    permission: corefish.admin
+permissions:
+  corefish.admin:
+    default: op

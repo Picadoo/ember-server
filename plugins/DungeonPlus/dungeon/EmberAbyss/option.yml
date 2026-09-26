@@ -1,0 +1,32 @@
+# 余烬深渊 — docs/ember-abyss-evacuate-spec.md · DESIGN-ember-abyss-evacuate.md
+# 启动：/dp start EmberAbyss
+# 次数：扣 NI「余烬深渊票」×1（id ticket_ember_abyss · 日 1 张）
+# 材料/孔石：corerpg abyss settle 按最高层查表；COMPLETE 额外 T2；战斗掉落仍走 MM
+
+dungeon-init-script:
+  - "$setmap{name=ember_abyss} @init"
+  - "$setspawn{location=-40,65,270} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=true;number=2;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=2;message=§c深渊人数 1～2，当前 (<size>)} @system"
+    - "$js-condition{text='<item:余烬深渊票 *1 *true>'=='true';message=§c缺少§5余烬深渊票§c×1（每日 1 张，进本即扣）} @system"
+  action-script:
+    - "$message{type=text;text=§5深渊已开启。§7已扣除深渊票 ×1 —— 能走多深，就走多深。} @dungeon"
+    - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
+    - "$teleport{location=-40,65,270;defspawn=true} @player"
+    - "$command{text=corerpg abyss progress <player.name> 0;console=true} @player"
+    - "$monstergroup{group=floor1;repeat=false;delay=2} @dungeon"
+
+dungeon-area: []
+
+# COMPLETE（本期顶层 floor8）触发：settle 发档位箱 + T2 刃/护符 + 回城
+# 撤离/超时走 jar evacuate 或 timeout settle，勿再走本脚本（reward=false）
+dungeon-reward-script:
+  - "$message{type=text;text=§5深渊结算：按本局最高层发箱（票不退）} @dungeon"
+  - "$command{text=corerpg abyss settle <player.name>;console=true} @player"
+  - "$command{text=ni give <player.name> gear_ember_t2_blade 1;console=true} @player"
+  - "$command{text=ni give <player.name> gear_ember_t2_talisman 1;console=true} @player"
+  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"

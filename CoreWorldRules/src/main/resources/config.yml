@@ -1,0 +1,38 @@
+# CoreWorldRules — villager trade ban + vanilla mob item-drop ban + spawn bans
+# Does NOT change block hardness or block drops.
+
+villager:
+  # Cancel right-click trade UI and clear merchant recipes (no trade items generated).
+  disable_trading: true
+
+mob_loot:
+  # Clear EntityDeathEvent item drops for non-player living entities.
+  clear_item_drops: true
+  # Zero EntityDeathEvent droppedExp (no orb-based kill XP). Orb entities are also blocked.
+  clear_xp: true
+  # Skip entities whose name/custom name contains these markers (MythicMobs later).
+  exclude_name_contains: []
+
+# Remove floating experience orb entities entirely.
+# Paper NMS World.addEntity / chunk-load also reject EntityExperienceOrb (CoreSystem-PERF).
+# Orb-based XP from kills/mining/furnace/fishing/bottles is GONE (not granted silently).
+# Enchant table / anvil still use the player's stored XP levels if already earned.
+experience_orbs:
+  remove: true
+  # Sweep worlds every N ticks to remove any leftover orbs (chunk edge cases). 0 = disable sweep.
+  sweep_interval_ticks: 100
+
+# Vanilla CreatureSpawnEvent bans (MythicMobs / plugins use CUSTOM).
+spawns:
+  # Cancel NATURAL, CHUNK_GEN, JOCKEY, MOUNT, BREEDING, SLIME_SPLIT, REINFORCEMENTS,
+  # VILLAGE_*, NETHER_PORTAL, LIGHTNING, EGG, DISPENSE_EGG, INFECTION, CURED,
+  # OCELOT_BABY, SILVERFISH_BLOCK, TRAP, ENDER_PEARL, SHOULDER_ENTITY, DEFAULT, etc.
+  disable_natural_spawns: true
+  # Cancel SPAWNER (mob spawner cages).
+  disable_spawners: true
+  # Allow SpawnReason.CUSTOM (MythicMobs, plugins).
+  allow_custom_spawns: true
+  # Allow SPAWNER_EGG for admin/testing.
+  allow_spawner_eggs: true
+  # Player-built snowman / iron golem / wither stay allowed when true.
+  allow_build_spawns: true

@@ -1,0 +1,15 @@
+const mineflayer = require('mineflayer')
+const bot = mineflayer.createBot({ host:'127.0.0.1', port:25565, username:'RpgBot', version:'1.12.2', auth:'offline' })
+bot.on('message', m => console.log('[chat]', m.toString()))
+const wait = ms => new Promise(r => setTimeout(r, ms))
+async function chat(c){ console.log('[cmd]', c); bot.chat(c); await wait(1100) }
+bot.once('spawn', async () => {
+  await wait(2000)
+  await chat('/corerpg mail send RpgBot maintenance_comp')
+  await chat('/corerpg mail')
+  await chat('/corerpg mail claim all')
+  await chat('/papi parse me %corerpg_mail_unread%')
+  console.log('MAIL2_DONE'); process.exit(0)
+})
+bot.on('kicked', r => { console.error(r); process.exit(1) })
+setTimeout(() => process.exit(2), 40000)

@@ -1,0 +1,33 @@
+# T2 深核装备 — docs/ember-gear-drop-t0-t3.md · DESIGN-ember-growth-curve.md §3
+# 命名：T0=charm · T1/T2+=talisman（与已落地 T1 一致；掉落表写 charm 处接线请用 talisman）
+# 勿改日/周通关箱数量
+
+gear_ember_t2_blade:
+  material: DIAMOND_SWORD
+  name: '&b余烬深核之刃'
+  lore:
+    - '&7gear_ember_t2_blade'
+    - '&6套装：余烬同袍 &8· 与团戒同持'
+    - '&b[T2] &8深核 · 深渊高层 / 团本通道'
+    - '&8建议强化上限 +8'
+    - ''
+    - '物理伤害: +22'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gear_ember_t2_talisman:
+  material: DIAMOND
+  name: '&b余烬深核护符'
+  lore:
+    - '&7gear_ember_t2_talisman'
+    - '&b[T2] &8深核 · 深渊高层 / 团本通道'
+    - '&8建议强化上限 +8'
+    - ''
+    - '生命力: +55'
+    - '物理防御: +10'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

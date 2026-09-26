@@ -1,0 +1,48 @@
+# 周 · Display：深核廊僵尸/骷髅/蛮兵·甲/蛮兵·乙
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,275;amount=6;scattered=3.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=深核廊僵尸;amount=6} @system"
+    start:
+    - "$message{type=text;text=§e【深核·前厅】清杂：僵尸×6} @dungeon"
+    end:
+    - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,275;amount=3;scattered=3.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklySkeleton;location=-42,65,273;amount=4;scattered=3.0;level=1} @dungeon"
+    condition:
+    - "$kill-any{mobname=深核廊僵尸,深核廊骷髅;amount=13} @system"
+    start:
+    - "$message{type=text;text=§e【深核·中核】混合增压：远程优先} @dungeon"
+    end:
+    - "$monstergroup{group=wave3;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave3:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteA;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-38,65,276;amount=2;scattered=2.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=深核廊蛮兵·甲;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【深核·深室】蛮兵·甲！清完还有终局·乙} @dungeon"
+    end:
+    - "$message{type=text;text=§a甲倒下 · 终局将至} @dungeon"
+    - "$monstergroup{group=boss;repeat=false;delay=4} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteB;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=深核廊蛮兵·乙;amount=1} @system"
+    start:
+    - "$message{type=text;text=§4【深核·终局】蛮兵·乙——别贪刀} @dungeon"
+    end:
+    - "$end{type=text;text=§6深核·周 通关！;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

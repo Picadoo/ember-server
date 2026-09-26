@@ -1,0 +1,97 @@
+# 分解 / 重铸子菜单壳 — STATUS-ember-disassemble.md
+# 逻辑未接线；命令占位 /corerpg scrap · /corerpg reforge（插件岗后生效）
+
+Title: '§7余烬 · 分解'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# S R I #'
+  - '#       #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §7[分解] §7请手持 §c余烬之刃 §7或 §e余烬护符 §7。逻辑待 CoreRpg 接线。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  S:
+    display:
+      material: flint and steel
+      name: '§7分解装备'
+      lore:
+        - ''
+        - '§7分解多余刃 / 护符'
+        - '§7换强化材料 + 低概率孔石'
+        - '§8清理背包友好'
+        - ''
+        - '§8命令占位：/corerpg scrap'
+        - ''
+        - '§7➥ §f点击分解'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §7[分解] §7请确认手持余烬装备…'
+        - 'tell: §8建议：§f/corerpg scrap §8（插件岗实装后生效）'
+        - 'command: corerpg scrap'
+        - close
+
+  R:
+    display:
+      material: fireball
+      name: '§6重铸词缀'
+      lore:
+        - ''
+        - '§7刷新次要词缀 · 主词缀不变'
+        - '§8消耗 §6余烬重铸石'
+        - '§8mat_ember_reforge_stone'
+        - ''
+        - '§8命令占位：/corerpg reforge'
+        - ''
+        - '§6➥ §f点击重铸'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §6[重铸] §7请确认手持装备且背包有重铸石…'
+        - 'tell: §8建议：§f/corerpg reforge §8（插件岗实装后生效）'
+        - 'command: corerpg reforge'
+        - close
+
+  I:
+    display:
+      material: book
+      name: '§e规则速览'
+      lore:
+        - ''
+        - '§7分解：多余刃 / 护符 → 碎片 / 骨尘'
+        - '§7低概率孔石（锋利 / 稳固 / 汲取 / 疾风）'
+        - '§7重铸：刷次要词缀，主词缀不乱飙'
+        - '§7消耗重铸石 · 不耗核心'
+        - ''
+        - '§8详见 STATUS-ember-disassemble.md'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[分解规则] §7分解换材料/孔石 · 重铸刷次要词缀（主词缀不变）'
+        - 'tell: §8命令占位 /corerpg scrap | /corerpg reforge'

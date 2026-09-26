@@ -1,0 +1,86 @@
+# Ember Crypt demo arena + spawn (Paper 1.12.2 console / op)
+# World spawn ≈ -48 64 256. Arena floor centered at -40 65 270.
+# Paste lines into server console (or run via rcon). Reload MM/NI first if just added YAML.
+
+# --- reload plugins (optional) ---
+# ni reload
+# mm reload
+
+# --- clear / floor 7x7 stone brick pavilion ---
+setblock -43 64 267 stonebrick
+setblock -42 64 267 stonebrick
+setblock -41 64 267 stonebrick
+setblock -40 64 267 stonebrick
+setblock -39 64 267 stonebrick
+setblock -38 64 267 stonebrick
+setblock -37 64 267 stonebrick
+setblock -43 64 268 stonebrick
+setblock -42 64 268 stonebrick
+setblock -41 64 268 stonebrick
+setblock -40 64 268 stonebrick
+setblock -39 64 268 stonebrick
+setblock -38 64 268 stonebrick
+setblock -37 64 268 stonebrick
+setblock -43 64 269 stonebrick
+setblock -42 64 269 stonebrick
+setblock -41 64 269 stonebrick
+setblock -40 64 269 stonebrick
+setblock -39 64 269 stonebrick
+setblock -38 64 269 stonebrick
+setblock -37 64 269 stonebrick
+setblock -43 64 270 stonebrick
+setblock -42 64 270 stonebrick
+setblock -41 64 270 stonebrick
+setblock -40 64 270 stonebrick
+setblock -39 64 270 stonebrick
+setblock -38 64 270 stonebrick
+setblock -37 64 270 stonebrick
+setblock -43 64 271 stonebrick
+setblock -42 64 271 stonebrick
+setblock -41 64 271 stonebrick
+setblock -40 64 271 stonebrick
+setblock -39 64 271 stonebrick
+setblock -38 64 271 stonebrick
+setblock -37 64 271 stonebrick
+setblock -43 64 272 stonebrick
+setblock -42 64 272 stonebrick
+setblock -41 64 272 stonebrick
+setblock -40 64 272 stonebrick
+setblock -39 64 272 stonebrick
+setblock -38 64 272 stonebrick
+setblock -37 64 272 stonebrick
+setblock -43 64 273 stonebrick
+setblock -42 64 273 stonebrick
+setblock -41 64 273 stonebrick
+setblock -40 64 273 stonebrick
+setblock -39 64 273 stonebrick
+setblock -38 64 273 stonebrick
+setblock -37 64 273 stonebrick
+
+# --- pillar corners (y=65..67) ---
+setblock -43 65 267 stonebrick
+setblock -43 66 267 stonebrick
+setblock -43 67 267 stonebrick
+setblock -37 65 267 stonebrick
+setblock -37 66 267 stonebrick
+setblock -37 67 267 stonebrick
+setblock -43 65 273 stonebrick
+setblock -43 66 273 stonebrick
+setblock -43 67 273 stonebrick
+setblock -37 65 273 stonebrick
+setblock -37 66 273 stonebrick
+setblock -37 67 273 stonebrick
+
+# --- simple roof slabs ---
+setblock -43 68 267 stone_slab
+setblock -40 68 270 stone_slab
+setblock -37 68 273 stone_slab
+
+# --- spawn 3 mob types (MM 4.11: /mm m spawn <type> <amount> <w,x,y,z>) ---
+mm m spawn EmberCryptZombie 1 world,-41,65,269
+mm m spawn EmberCryptSkeleton 1 world,-40,65,271
+mm m spawn EmberCryptBrute 1 world,-39,65,270
+
+# --- optional: give gear for AP lore check (needs AttributePlus jar) ---
+# ni give <player> gear_ember_blade 1
+# ni give <player> gear_ember_charm 1

@@ -1,0 +1,18 @@
+# CoreRpg ladder / power_score (display only — does NOT multiply damage)
+enabled: true
+refresh_seconds: 60
+power:
+  per_enhance_level: 8
+  per_socket_filled: 5
+  per_talent_node: 3
+  per_covenant: 10
+  # pet power_bonus from pet.yml when activePet set (display only)
+  use_pet_bonus: true
+  base: 100
+  # coin/100 contribution, hard-capped
+  coin_div: 100
+  coin_cap: 50
+boards:
+  power_size: 10
+  abyss_size: 5
+  speed_size: 5

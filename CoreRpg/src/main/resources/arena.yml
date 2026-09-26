@@ -1,0 +1,26 @@
+# CoreRpg arena — teleport + settle (1.3.11)
+enabled: true
+# 积分段位（按 min_points 升序，取最高达标）
+ranks:
+  - { id: bronze,   name: "青铜", min_points: 0 }
+  - { id: silver,   name: "白银", min_points: 100 }
+  - { id: gold,     name: "黄金", min_points: 250 }
+  - { id: platinum, name: "铂金", min_points: 500 }
+  - { id: diamond,  name: "钻石", min_points: 900 }
+# 日奖励箱：币 + 外观碎片（不发核心/毕业伤害）
+daily:
+  coin: 80
+  cosmetic_ni_id: cosmetic_calamity_shard
+  cosmetic_amount: 1
+# 匹配结算 + 传送垫
+match:
+  win_points: 15
+  lose_points: 5
+  participate_coin: 10
+  win_coin: 25
+  world: world
+  pad_a: { x: 100.5, y: 65, z: 100.5, yaw: 0 }
+  pad_b: { x: 110.5, y: 65, z: 100.5, yaw: 180 }
+  timeout_seconds: 120
+  # after settle delay before TP home
+  return_delay_ticks: 40

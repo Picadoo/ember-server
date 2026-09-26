@@ -1,0 +1,26 @@
+# 深渊 / 灾厄材料 — docs/ember-abyss-calamity.md
+# 深渊票 ticket_ember_abyss 在 ember-dungeon-tickets.yml（与日/周票同文件，避免重复 ID）
+
+mat_calamity_ember:
+  material: BLAZE_POWDER
+  name: '&4灾厄余烬'
+  lore:
+    - '&7mat_calamity_ember'
+    - '&8世界 Boss · 变异材料'
+    - '&8用于外观兑换 / 重铸'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+cosmetic_calamity_shard:
+  material: NETHER_STAR
+  name: '&d灾厄外观碎片'
+  lore:
+    - '&7cosmetic_calamity_shard'
+    - '&8灾厄掉落 · 外观碎片'
+    - '&8集齐可兑称号 / 特效'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

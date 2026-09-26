@@ -1,0 +1,82 @@
+# CoreRpg ladder / power_score (display only — does NOT multiply damage)
+enabled: true
+refresh_seconds: 60
+power:
+  per_enhance_level: 8
+  per_socket_filled: 5
+  per_talent_node: 3
+  per_covenant: 10
+  use_pet_bonus: true
+  base: 100
+  coin_div: 100
+  coin_cap: 50
+boards:
+  power_size: 10
+  abyss_size: 5
+  speed_size: 5
+snapshot:
+  power:
+    '1':
+      name: RpgBot
+      value: 167
+      uuid: 148ec8b6-253f-36f4-bcd7-bf2395b8df80
+    '2':
+      name: '00000000'
+      value: 150
+      uuid: 00000000-0000-0000-0000-000000000001
+    '3':
+      name: WareBot
+      value: 150
+      uuid: 8320d0f4-143c-3b0e-908c-87a56849129c
+    '4':
+      name: PickyBot
+      value: 110
+      uuid: d4c9e702-ba42-37f4-84db-6d664af813d0
+    '5':
+      name: Tester
+      value: 109
+      uuid: f3d28cb0-7225-3cb1-baeb-2dadd2be89ae
+    '6':
+      name: ArenaA
+      value: 101
+      uuid: ac3163b1-cbe0-38fb-86e9-799b907d0c63
+    '7':
+      name: AbyssBot
+      value: 100
+      uuid: e0ec5af3-7f9e-361c-b0e5-81a789e568b4
+    '8':
+      name: AbyssBot2
+      value: 100
+      uuid: 5b973ac5-24f6-340f-9c2d-de9ea4157d4a
+    '9':
+      name: AbyssBot3
+      value: 100
+      uuid: 41fc0ac1-fbb4-3ccd-a993-41454e28966b
+    '10':
+      name: ArenaB
+      value: 100
+      uuid: c48112d5-7395-390e-8a19-7b630361dcbb
+  abyss:
+    '1':
+      name: AbyssBot3
+      value: 12
+      uuid: 41fc0ac1-fbb4-3ccd-a993-41454e28966b
+    '2':
+      name: AbyssBot2
+      value: 7
+      uuid: 5b973ac5-24f6-340f-9c2d-de9ea4157d4a
+    '3':
+      name: RpgBot
+      value: 7
+      uuid: 148ec8b6-253f-36f4-bcd7-bf2395b8df80
+    '4':
+      name: AbyssBot
+      value: 3
+      uuid: e0ec5af3-7f9e-361c-b0e5-81a789e568b4
+  speed:
+    '1':
+      name: RpgBot
+      value: 95
+      uuid: 148ec8b6-253f-36f4-bcd7-bf2395b8df80
+  updated: 2026-09-13 17:54
+  weekId: 2026-W37

@@ -1,0 +1,8 @@
+# 超时失败（约 15 分钟）
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 900:
+      - "$message{type=text;text=§c盟 Boss 超时失败（贡献不返还）} @dungeon"
+      - "$end{type=text;text=§c余烬盟约 Boss 超时失败;reward=false;delay=1;end-type=FAILURE} @dungeon"

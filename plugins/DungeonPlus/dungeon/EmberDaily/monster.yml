@@ -1,0 +1,37 @@
+# 日 · 新 MM Display（去色）：灰烬庭院僵尸/骷髅/蛮兵
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-40,65,275;amount=4;scattered=2.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=灰烬庭院僵尸;amount=4} @system"
+    start:
+    - "$message{type=text;text=§e【庭院·清潮】第一波：回廊僵尸×4 —— 别急着冲中央} @dungeon"
+    end:
+    - "$message{type=text;text=§a第一波完成} @dungeon"
+    - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-40,65,275;amount=2;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-42,65,273;amount=2;scattered=2.5;level=1} @dungeon"
+    condition:
+    - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=8} @system"
+    start:
+    - "$message{type=text;text=§e【庭院·混响】第二波：僵尸+骷髅 —— 先清远程} @dungeon"
+    end:
+    - "$message{type=text;text=§a第二波完成 · Boss 将至} @dungeon"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyBrute;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=灰烬庭院蛮兵;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【庭院·中央垫】Boss 蛮兵！走位躲开砸击再输出} @dungeon"
+    end:
+    - "$end{type=text;text=§a余烬窟·日 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

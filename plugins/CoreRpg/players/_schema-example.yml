@@ -1,0 +1,37 @@
+# Example player YAML fields (written by CoreRpg PlayerDataStore)
+coin: 0
+lastSignDate: ""          # yyyy-MM-dd Asia/Shanghai
+signStreak: 0
+activity: 0
+activityClaimed: []
+onlineMinutesToday: 0
+onlineActivityGranted: 0
+killActivityToday: 0
+bountyId: ""
+bountyProgress: 0
+bountyTarget: 0
+bountyClaimedToday: 0
+lastActivityResetDate: "2026-09-12"
+
+# —— 誓约 / 天赋（DESIGN-ember-covenant-talent.md §4；插件岗写入）——
+covenant: none
+covenantChosenAt: ""
+talentPointsEarned: 0
+talentPointsSpent: 0
+talentNodes: []
+talentFreeResetDate: ""
+talentFreeResetsUsed: 0
+crystalCash: 0            # 晶钻（硬通货 E）；洗约/洗点优先扣 NI 券否则扣此
+emberLevel: 10            # 占位等级；earned==0 时按 talent.yml 公式播种
+
+# —— 晶钻 / 日票硬顶 / 月卡（DESIGN-ember-cash-monthly.md §4；插件岗写入）——
+ember_crystal_cash: 0      # 硬通货 E；读兼容 crystalCash
+monthlyCard: false
+monthlyExpireDate: ""      # yyyy-MM-dd Asia/Shanghai（含当日）
+monthlyLastGrantDate: ""
+dailyCashResetDate: ""
+dailyFreeGranted: false
+dailyTicketsGranted: 0     # 今日已发票（免费+氪+月卡），硬顶 6
+dailyTicketsBought: 0      # 今日晶钻购买次数，SKU 3
+dailyEntriesUsed: 0
+

@@ -1,0 +1,18 @@
+# CoreAnvil — 余烬成长闭环（DESIGN-ember-enchant-anvil.md）
+# 改名 + NI 材料修理；禁附魔书/同物品附魔合并；原版铁锭修理失效
+
+enabled: true
+
+rename_cost: 5
+max_level_cost: 30
+prior_work_factor: 2.0
+
+block_enchant_combines: true
+material_repair_only: true
+
+require_ni_repair_ingredient: true
+repair_ingredient_ni_ids:
+  - mat_ember_shard
+  - mat_ember_core_fragment
+
+material_repair_extra_cost: 3

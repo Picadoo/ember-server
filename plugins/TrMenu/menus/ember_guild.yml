@@ -1,0 +1,113 @@
+# 盟约子菜单壳 — DESIGN-ember-guild-ladder.md §1
+# 创建 / 捐献(盟课) / 周 Boss；命令可能尚未实装
+
+Title: '§2余烬 · 盟约'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# C D B #'
+  - '#  I    #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §2[盟约] §7创建公会 · 日捐盟课 · 周盟 Boss。逻辑待 CoreRpg 接线。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  I:
+    display:
+      material: book
+      name: '§e我的盟约'
+      lore:
+        - ''
+        - '§7查看所属盟、贡献与职务'
+        - ''
+        - '§8命令：/corerpg guild'
+        - ''
+        - '§e➥ §f点击查询'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §2[盟约] §7请执行 §f/corerpg guild §7（插件岗实装后生效）'
+        - 'command: corerpg guild'
+
+  C:
+    display:
+      material: banner
+      name: '§a创建盟约'
+      lore:
+        - ''
+        - '§7创建自己的公会'
+        - '§8费用：余烬币 5000 或 晶钻 40'
+        - '§8人数起步 cap 20'
+        - ''
+        - '§8命令：/corerpg guild create <名>'
+        - ''
+        - '§a➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §a[盟约·创建] §7建议：§f/corerpg guild create <名>'
+        - 'tell: §8费用占位：币 5000 或 晶钻 40 · 命令可能尚未实装'
+
+  D:
+    display:
+      material: chest
+      name: '§6捐献 · 盟课'
+      lore:
+        - ''
+        - '§7捐碎片 / 骨尘换盟贡献'
+        - '§8日个人贡献 cap 50'
+        - '§8可计活跃「盟课」+10'
+        - '§8不收核心 / 毕业刃'
+        - ''
+        - '§8命令：/corerpg guild donate <id> <amt>'
+        - ''
+        - '§6➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §6[盟约·捐献] §7建议：§f/corerpg guild donate mat_ember_shard 10'
+        - 'tell: §8碎片×10 / 骨尘×5 → 贡献 1 · 日 cap 50'
+
+  B:
+    display:
+      material: diamond sword
+      name: '§c周盟 Boss'
+      lore:
+        - ''
+        - '§7每周一次协作 Boss'
+        - '§8贡献排名奖：币 / 外观 / 票'
+        - '§8不出毕业伤害'
+        - '§8日后：dp start EmberGuildBoss'
+        - ''
+        - '§8命令：/corerpg guild boss'
+        - ''
+        - '§c➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §c[盟约·Boss] §7建议：§f/corerpg guild boss'
+        - 'tell: §8周 1 次 · 奖励仅外观/币/票 · DP 本未接'

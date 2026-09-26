@@ -1,0 +1,31 @@
+# CoreFish — NI-only fishing loot (fish / treasure / junk)
+override_vanilla_loot: true
+
+# Optional wait-tick override (-1 = use Paper paper.yml fishing-time-range)
+wait_ticks_min: 40
+wait_ticks_max: 120
+
+# Category roll weights (relative)
+category_weights:
+  fish: 80
+  treasure: 10
+  junk: 10
+
+tables:
+  fish:
+    - ni_id: fish_ember_cod
+      weight: 60
+    - ni_id: fish_ember_salmon
+      weight: 30
+    - ni_id: fish_ember_puffer
+      weight: 10
+  treasure:
+    - ni_id: treasure_ember_relic
+      weight: 70
+    - ni_id: treasure_ember_pearl
+      weight: 30
+  junk:
+    - ni_id: junk_ember_boot
+      weight: 60
+    - ni_id: junk_ember_bone
+      weight: 40

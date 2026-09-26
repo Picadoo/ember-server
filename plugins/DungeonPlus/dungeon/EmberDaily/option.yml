@@ -1,0 +1,29 @@
+# 余烬窟·日 — 对应 DESIGN-dungeon-daily-weekly.md §5
+# 启动：/dp start EmberDaily
+# 次数：扣 NI「余烬日票」×1（日发 3 张 = 每日 3 次；DP 无原生日限，用入场券实现）
+
+dungeon-init-script:
+  - "$setmap{name=ember_daily} @init"
+  - "$setspawn{location=-40,65,270} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=true;number=2;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=2;message=§c日常本人数 1～2，当前 (<size>)} @system"
+    # 入场扣次：检测并扣除显示名「余烬日票」×1（过滤颜色）
+    - "$js-condition{text='<item:余烬日票 *1 *true>'=='true';message=§c缺少§e余烬日票§c×1（每日共 3 张，进本即扣）} @system"
+  action-script:
+    - "$message{type=text;text=§e余烬窟·日 开始！已扣除日票 ×1} @dungeon"
+    - "$teleport{location=-40,65,270;defspawn=true} @player"
+    - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
+
+dungeon-area: []
+
+# 通关箱（Boss 死后 $end reward=true 触发）— 全队每人一份
+dungeon-reward-script:
+  - "$message{type=text;text=§a通关奖励已发放} @dungeon"
+  - "$command{text=ni give <player.name> mat_ember_core_fragment 1;console=true} @player"
+  - "$command{text=ni give <player.name> crystal_ember_enchant 1;console=true} @player"
+  - "$command{text=ni give <player.name> mat_ember_shard 5;console=true} @player"
+  - "$command{text=mvtp <player.name> ember_hub;console=true} @player"

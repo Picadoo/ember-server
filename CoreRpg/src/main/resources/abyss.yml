@@ -1,0 +1,14 @@
+# CoreRpg abyss session settle (memory session; rewards via NI)
+enabled: true
+settle:
+  tiers:
+    - { min: 1, max: 4, shard: 8, bone: 2, core: 0, gem: 0 }
+    - { min: 5, max: 9, shard: 12, bone: 4, core: 1, gem: 1 }
+    - { min: 10, max: 999, shard: 16, bone: 6, core: 2, gem: 1 }
+  gem_id: gem_ember_sharp
+  # Optional T2 blade once when floor >= grant_t2_at. Default 0 = off (avoid double with DP clear box).
+  grant_t2_at: 0
+  t2_id: gear_ember_t2_blade
+  shard_id: mat_ember_shard
+  bone_id: mat_ember_bone_dust
+  core_id: mat_ember_core_fragment

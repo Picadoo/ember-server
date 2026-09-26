@@ -1,0 +1,53 @@
+# 团本 · 通道分路 → 终厅（docs/ember-raid-channel-spec.md）
+# Display 保持：团本·通道卫兵/射手/精英 · 团本·终厅使徒
+# 不必真分图：文案 + 左右刷点错开做出分路压力
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-48,65,275;amount=6;scattered=3.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=团本·通道卫兵;amount=6} @system"
+    start:
+    - "$message{type=text;text=§9【左道】卫兵压上——左边清！} @dungeon"
+    end:
+    - "$message{type=text;text=§a左道肃清} @dungeon"
+    - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-48,65,275;amount=3;scattered=2.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidArcher;location=-32,65,273;amount=4;scattered=2.5;level=1} @dungeon"
+    condition:
+    - "$kill-any{mobname=团本·通道卫兵,团本·通道射手;amount=13} @system"
+    start:
+    - "$message{type=text;text=§9【右道】射手就位——右边先压远程！} @dungeon"
+    end:
+    - "$message{type=text;text=§a通道打开 · 精英将至} @dungeon"
+    - "$monstergroup{group=wave3;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave3:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberRaidElite;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-40,65,276;amount=3;scattered=2.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=团本·通道精英;amount=1} @system"
+    start:
+    - "$message{type=text;text=§d【汇合】通道精英挡住终厅门！} @dungeon"
+    end:
+    - "$message{type=text;text=§4终厅裂开——使徒现身！} @dungeon"
+    - "$monstergroup{group=boss;repeat=false;delay=4} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberRaidBoss;location=-40,65,278;amount=1;scattered=1.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=团本·终厅使徒;amount=1} @system"
+    start:
+    - "$message{type=text;text=§4【终厅】使徒！分摊砸击，别叠脸！} @dungeon"
+    end:
+    - "$message{type=text;text=§a使徒倒下。§9同袍之证已结算。} @dungeon"
+    - "$end{type=text;text=§9余烬团本 通关！;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

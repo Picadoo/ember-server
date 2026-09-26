@@ -1,0 +1,11 @@
+messages:
+- id: 1
+  template: maintenance_comp
+  title: 维护补偿
+  body: 感谢等待。附件为补偿。
+  attachments:
+    coin: 500
+    mat_ember_shard: 8
+  read: true
+  claimed: true
+  created: 1789271485059

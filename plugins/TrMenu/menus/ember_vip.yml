@@ -1,0 +1,103 @@
+# 余烬勋阶 — 轻量可玩（查状态 + 日礼邮件）· LuckPerms 累进未接
+# DESIGN-ember-rpg-systems.md §8.2
+
+Title: '§6余烬 · 勋阶'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# L Q S #'
+  - '# C     #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1'
+    - 'tell: §6[勋阶] §7QoL 为主 · 日礼可领 · §8正式累进层未接 LuckPerms'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  L:
+    display:
+      material: gold helmet
+      name: '§6勋阶状态'
+      lore:
+        - ''
+        - '§7规划层级 §f0～10§7（充值累进）'
+        - '§8本期：用晶钻余额作参考档'
+        - ''
+        - '§7特权方向：登录币 / 经验微加成 / 仓库 / 称号'
+        - ''
+        - '§e➥ §f查询晶钻'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[勋阶] §7正式层级未接线 · 先看晶钻余额作参考'
+        - 'command: corerpg vip'
+        - 'command: corerpg cash'
+
+  Q:
+    display:
+      material: emerald
+      name: '§a领取日礼'
+      lore:
+        - ''
+        - '§7轻量 QoL：余烬币 + 少量碎片'
+        - '§8经邮件发放 · 重复点会再发（实验室）'
+        - '§c不含攻击加成'
+        - ''
+        - '§e➥ §f领取'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §a[勋阶·日礼] §7尝试领取…'
+        - 'command: corerpg vip claim'
+        - 'command: corerpg vip'
+
+  S:
+    display:
+      material: gold block
+      name: '§e前往商城'
+      lore:
+        - ''
+        - '§7月卡 / 战令 / 票'
+        - ''
+        - '§e➥ §f打开商城'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_shop'
+
+  C:
+    display:
+      material: chest
+      name: '§e打开邮寄'
+      lore:
+        - ''
+        - '§7领取勋阶 / 战令附件'
+        - ''
+        - '§e➥ §f邮寄'
+    actions:
+      all:
+        - 'sound: BLOCK_CHEST_OPEN-1-0'
+        - 'command: corerpg mail'
+        - 'menu: ember_mail'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'

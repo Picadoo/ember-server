@@ -1,0 +1,22 @@
+# CoreRpg pet / 使魔 — cosmetic familiar only (no power pets for sale)
+# DESIGN-ember-pet-bestiary.md · NI ember-pets.yml
+enabled: true
+max_active: 1
+# follow teleport interval (ticks) and distance
+follow_ticks: 10
+follow_distance: 2.5
+feed:
+  enabled: true
+  item: mat_ember_soul_dust
+  max_level: 10
+  # dust cost to go from level L to L+1
+  cost_base: 1
+  cost_per_level: 1   # cost = base + (level-1)*per_level
+  power_per_level: 1  # display bonus += this per level above 1
+pets:
+  pet_ember_ashling:
+    display: "§a余烬灰灵"
+    power_bonus: 5
+  pet_ember_cinder:
+    display: "§6余烬烬火"
+    power_bonus: 5

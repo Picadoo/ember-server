@@ -1,0 +1,35 @@
+# 余烬邮寄 — 系统发奖模板（CoreRpg 1.3.3）
+enabled: true
+max_inbox: 50
+templates:
+  maintenance_comp:
+    title: "维护补偿"
+    body: "感谢等待。附件为补偿。"
+    attachments:
+      coin: 500
+      mat_ember_shard: 8
+  season_pass_stub:
+    title: "战令结算（占位）"
+    body: "赛季占位奖励。"
+    attachments:
+      ember_crystal_cash: 30
+      coin: 200
+
+  pass_track_free:
+    title: "战令·免费轨补给"
+    body: "赛季免费轨轻量补给（菜单一键领取）。重复点击会再发一封，请及时 claim。"
+    attachments:
+      coin: 80
+      mat_ember_shard: 2
+  pass_track_paid_welcome:
+    title: "战令·付费轨欢迎礼"
+    body: "付费轨占位欢迎礼（晶钻解锁尚未做完整记账时，用邮件演示发货）。"
+    attachments:
+      coin: 300
+      ticket_ember_daily: 1
+  event_box:
+    title: "活动箱"
+    body: "活动奖励。"
+    attachments:
+      ticket_ember_daily: 1
+      gem_ember_sharp: 1

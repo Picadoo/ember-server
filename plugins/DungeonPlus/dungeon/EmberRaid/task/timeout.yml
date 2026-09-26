@@ -1,0 +1,8 @@
+# 超时失败（约 40 分钟 · 对齐策划 30～40 分）
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 2400:
+      - "$message{type=text;text=§c团本超时失败（团本票不返还）} @dungeon"
+      - "$end{type=text;text=§c余烬团本 超时失败;reward=false;delay=1;end-type=FAILURE} @dungeon"

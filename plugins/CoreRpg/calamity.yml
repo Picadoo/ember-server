@@ -1,0 +1,35 @@
+# 灾厄公共窗 — docs/ember-calamity-window-spec.md
+# 主配置（CoreRpg 1.4.7+ 优先读本文件，config.yml calamity.* 仅作回退）
+enabled: true
+
+boss:
+  mythic_id: EmberCalamityBoss
+  display: "余烬灾厄使"
+  world: ember_event
+  x: -96.5
+  y: 64.0
+  z: 266.5
+  amount: 1
+  spawn_command: "mm m spawn EmberCalamityBoss 1 {world},{x},{y},{z}"
+
+schedule:
+  timezone: Asia/Shanghai
+  windows: ["12:00", "20:00", "22:00"]
+  duration_minutes: 10
+
+announce:
+  pre_minutes: [5, 1]
+  message_pre: "§4[余烬灾厄] §e{minutes} 分钟后降临！§7/ember → 灾厄 → 奔赴"
+  message_open: "§4§l[余烬灾厄] §e灾厄使降临祭坛！§7/ember → 灾厄 → 奔赴 §8或 §f/mvtp ember_event"
+  message_closed: "§c灾厄未苏醒。下一窗：§f{next_window}"
+  message_end: "§4[余烬灾厄] §7本轮窗口结束，灰烬合拢。"
+
+daily_chest:
+  limit_per_day: 1
+  rewards:
+    - { ni: mat_ember_core_fragment, amount: 2 }
+    - { ni: crystal_ember_enchant, amount: 1 }
+    - { ni: mat_calamity_ember, amount: 2 }
+  protect_scroll_chance: 0.10
+
+gate_mvtp_on_menu: true

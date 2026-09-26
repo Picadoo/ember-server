@@ -1,0 +1,7 @@
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 1500:
+      - "$message{type=text;text=§c周常超时失败（周票不返还）} @dungeon"
+      - "$end{type=text;text=§c深核·周 超时失败;reward=false;delay=1;end-type=FAILURE} @dungeon"

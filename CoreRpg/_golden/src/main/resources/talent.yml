@@ -1,0 +1,122 @@
+# CoreRpg talent — 余烬天赋树（DESIGN-ember-covenant-talent.md §6.2）
+# STUB：插件岗扩树与实现 unlock/reset；本文件为契约形状
+enabled: true
+
+# Seed for new players / earned==0 (plugin computes on load):
+# earned = min(max_spendable, max(starting_talent_points, (ember_level - level_points_from + 1) * points_per_level))
+ember_level: 10
+starting_talent_points: 5
+points_per_level: 1
+level_points_from: 2
+max_spendable_points: 20
+points_per_achievement_chunk: 1
+achievement_chunk_size: 50
+
+reset:
+  free_per_day: 1
+  extra_crystal_cash: 25
+  ticket_ni_id: mat_ember_talent_reset
+
+trees:
+  blaze:
+    nodes:
+      blaze_root:
+        display: "§6燃锋"
+        type: passive
+        cost: 1
+        requires: []
+        stats: { phys_damage: 1 }
+      blaze_crit1:
+        display: "§c燃眼"
+        type: passive
+        cost: 1
+        requires: [blaze_root]
+        stats: { crit_chance_pct: 0.01 }
+      blaze_leech1:
+        display: "§4饮烬"
+        type: passive
+        cost: 1
+        requires: [blaze_root]
+        stats: { life_steal_pct: 0.005 }
+      blaze_crit2:
+        display: "§c灼心"
+        type: passive
+        cost: 1
+        requires: [blaze_crit1]
+        stats: { crit_damage_pct: 0.05 }
+      blaze_slash:
+        display: "§6烬斩"
+        type: skill
+        cost: 2
+        requires: [blaze_crit1, blaze_leech1]
+        skill_id: ember_blaze_slash
+      blaze_cap:
+        display: "§6燎原"
+        type: passive
+        cost: 2
+        requires: [blaze_slash, blaze_crit2]
+        stats: { phys_damage: 2, crit_chance_pct: 0.01 }
+  ash:
+    nodes:
+      ash_root:
+        display: "§7灰踪"
+        type: passive
+        cost: 1
+        requires: []
+        stats: { attack_speed_pct: 0.02 }
+      ash_haste1:
+        display: "§e疾灰"
+        type: passive
+        cost: 1
+        requires: [ash_root]
+        stats: { attack_speed_pct: 0.02 }
+      ash_slow1:
+        display: "§8滞步"
+        type: passive
+        cost: 1
+        requires: [ash_root]
+        stats: { on_hit_slow_pct: 0.05 }
+      ash_fam:
+        display: "§7微尘使魔"
+        type: skill
+        cost: 2
+        requires: [ash_haste1]
+        skill_id: ember_ash_familiar
+      ash_cap:
+        display: "§7烟幕"
+        type: passive
+        cost: 2
+        requires: [ash_fam, ash_slow1]
+        stats: { move_speed_pct: 0.02, attack_speed_pct: 0.02 }
+  warden:
+    nodes:
+      warden_root:
+        display: "§9守碑"
+        type: passive
+        cost: 1
+        requires: []
+        stats: { phys_defense: 1 }
+      warden_guard1:
+        display: "§9石肤"
+        type: passive
+        cost: 1
+        requires: [warden_root]
+        stats: { damage_taken_pct: -0.02 }
+      warden_taunt:
+        display: "§1墓鸣"
+        type: skill
+        cost: 2
+        requires: [warden_root]
+        skill_id: ember_warden_taunt
+      warden_charm1:
+        display: "§e护符共鸣"
+        type: passive
+        cost: 1
+        requires: [warden_root]
+        stats: { charm_stat_bonus_pct: 0.03 }
+      warden_cap:
+        display: "§9永护"
+        type: passive
+        cost: 2
+        requires: [warden_taunt, warden_guard1, warden_charm1]
+        stats: { damage_taken_pct: -0.02, max_health: 4 }

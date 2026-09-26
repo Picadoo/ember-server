@@ -1,0 +1,60 @@
+# CoreEnchant — 余烬成长闭环（DESIGN-ember-enchant-anvil.md）
+# Paper 1.12.2 + EnchantNmsHooks；物品只认 NeigeItems
+
+override_vanilla: true
+
+# 仅白名单 NI 可附魔（原版铁剑等同材质一律拒）
+whitelist_ni_ids:
+  - gear_ember_blade
+  - gear_ember_charm
+
+require_ni_item: true
+
+catalyst_ni_id: crystal_ember_enchant
+reject_vanilla_lapis: true
+
+# 书架略抬级，仍便宜可控（推荐方案 B：少吃等级、多吃晶）
+bookshelf_cost_bump_cap: 2
+
+offer_tables:
+  # 余烬之刃 — IRON_SWORD / gear_ember_blade
+  - id: ember_blade
+    materials:
+      - IRON_SWORD
+    offers:
+      - slot: 0
+        enchantment: DAMAGE_ALL
+        level: 1
+        cost: 3
+        lapis_cost: 1
+      - slot: 1
+        enchantment: DAMAGE_ALL
+        level: 2
+        cost: 8
+        lapis_cost: 2
+      - slot: 2
+        enchantment: FIRE_ASPECT
+        level: 1
+        cost: 12
+        lapis_cost: 3
+
+  # 余烬护符 — GOLD_NUGGET / gear_ember_charm
+  - id: ember_charm
+    materials:
+      - GOLD_NUGGET
+    offers:
+      - slot: 0
+        enchantment: DURABILITY
+        level: 1
+        cost: 3
+        lapis_cost: 1
+      - slot: 1
+        enchantment: DURABILITY
+        level: 2
+        cost: 8
+        lapis_cost: 2
+      - slot: 2
+        enchantment: PROTECTION_ENVIRONMENTAL
+        level: 1
+        cost: 10
+        lapis_cost: 3

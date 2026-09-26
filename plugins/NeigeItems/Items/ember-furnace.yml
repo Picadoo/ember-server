@@ -1,0 +1,135 @@
+# Ember closed furnace economy — CoreSmelt + NeigeItems
+# Folder layout for NI 1.21.151: plugins/NeigeItems/Items/*.yml
+
+ore_ember_iron:
+  material: IRON_ORE
+  name: '&f余烬铁矿'
+  lore:
+    - '&7ore_ember_iron'
+    - '&8放入熔炉可冶炼为余烬铁锭'
+
+ingot_ember_iron:
+  material: IRON_INGOT
+  name: '&f余烬铁锭'
+  lore:
+    - '&7ingot_ember_iron'
+    - '&8由余烬铁矿冶炼而成'
+
+ore_ember_gold:
+  material: GOLD_ORE
+  name: '&6余烬金矿'
+  lore:
+    - '&7ore_ember_gold'
+    - '&8放入熔炉可冶炼为余烬金锭'
+
+ingot_ember_gold:
+  material: GOLD_INGOT
+  name: '&6余烬金锭'
+  lore:
+    - '&7ingot_ember_gold'
+    - '&8由余烬金矿冶炼而成'
+
+ore_ember_coal:
+  material: COAL_ORE
+  name: '&8余烬煤矿'
+  lore:
+    - '&7ore_ember_coal'
+    - '&8放入熔炉可冶炼为余烬碳晶'
+
+crystal_ember_carbon:
+  material: COAL
+  name: '&8余烬碳晶'
+  lore:
+    - '&7crystal_ember_carbon'
+    - '&8由余烬煤矿冶炼而成'
+
+raw_ember_flesh:
+  material: RAW_BEEF
+  name: '&c生余烬肉'
+  lore:
+    - '&7raw_ember_flesh'
+    - '&8放入熔炉可烤为余烬牛排'
+
+steak_ember:
+  material: COOKED_BEEF
+  name: '&c余烬牛排'
+  lore:
+    - '&7steak_ember'
+    - '&8由生余烬肉烤制而成'
+
+# --- CoreBrew demo items (extend, do not rename furnace IDs above) ---
+# Stack size: NeigeItems has no max-stack YAML key; CoreBrew/BrewNmsHooks raise
+# max stack to 127 for these IDs (bottles / ingredients / results). Client may
+# still visually cap at 64 — server Count byte ceiling is 127 on 1.12.
+bottle_ember_water:
+  material: POTION
+  name: '&b余烬水瓶'
+  lore:
+    - '&7bottle_ember_water'
+    - '&8酿造台基底'
+    - '&8max_stack via CoreBrew=127'
+
+ingredient_ember_wart:
+  material: NETHER_WART
+  name: '&d余烬疣'
+  lore:
+    - '&7ingredient_ember_wart'
+    - '&8酿造台催化剂'
+    - '&8max_stack via CoreBrew=127'
+
+potion_ember_swift:
+  material: POTION
+  name: '&a余烬迅捷药水'
+  lore:
+    - '&7potion_ember_swift'
+    - '&8由余烬疣酿造'
+    - '&8max_stack via CoreBrew=127'
+
+ingredient_ember_blaze:
+  material: BLAZE_POWDER
+  name: '&6余烬烈焰粉'
+  lore:
+    - '&7ingredient_ember_blaze'
+    - '&8强化酿造催化剂'
+    - '&8max_stack via CoreBrew=127'
+
+potion_ember_strength:
+  material: POTION
+  name: '&c余烬力量药水'
+  lore:
+    - '&7potion_ember_strength'
+    - '&8由余烬烈焰粉酿造'
+    - '&8max_stack via CoreBrew=127'
+
+ingredient_ember_crystal:
+  material: COAL
+  name: '&8余烬碳晶粉'
+  lore:
+    - '&7ingredient_ember_crystal'
+    - '&8碳晶酿造剂'
+    - '&8max_stack via CoreBrew=127'
+
+potion_ember_night:
+  material: POTION
+  name: '&8余烬夜视药水'
+  lore:
+    - '&7potion_ember_night'
+    - '&8由碳晶粉酿造'
+    - '&8max_stack via CoreBrew=127'
+
+# --- CoreEnchant catalyst (replaces vanilla lapis on enchanting table) ---
+# Base INK_SACK:4 so 1.12 client accepts the lapis slot; vanilla lapis rejected via NI id check.
+crystal_ember_enchant:
+  material: INK_SACK
+  damage: 4
+  name: '&d余烬附魔晶'
+  lore:
+    - '&7crystal_ember_enchant'
+    - '&8附魔台专用催化剂'
+    - '&8合成：3碎片+1骨尘 → 1'
+    - '&8合成：1核心+2碎片 → 2'
+    - '&c普通青金石无效'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

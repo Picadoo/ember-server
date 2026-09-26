@@ -1,0 +1,33 @@
+enabled: true
+whitelist_ni_ids: [gear_ember_blade, gear_ember_charm]
+scrap:
+  # base guaranteed
+  gear_ember_blade:
+    guaranteed:
+      mat_ember_shard: [2, 4]   # inclusive range
+    chance:
+      gem_ember_sharp: 0.08
+      gem_ember_steady: 0.05
+      gem_ember_drain: 0.05
+      gem_ember_gale: 0.05
+  gear_ember_charm:
+    guaranteed:
+      mat_ember_bone_dust: [2, 4]
+    chance:
+      gem_ember_sharp: 0.05
+      gem_ember_steady: 0.08
+      gem_ember_drain: 0.05
+      gem_ember_gale: 0.05
+  # bonus by enhance level: +1 shard/dust per 2 enhance levels (optional)
+  enhance_bonus_per_levels: 2
+reforge:
+  stone_ni_id: mat_ember_reforge_stone
+  # secondary affix pool — lore machine line §8§o#ember_aff:<id>
+  # display line §7次要: §f<name> +N
+  # main AP lines / #ember_en / #ember_sk / 孔N MUST stay
+  secondary_pool:
+    - { id: crit_chance, display: "暴击率", min: 1, max: 3, suffix: "%" }
+    - { id: attack_speed, display: "攻速", min: 1, max: 4, suffix: "%" }
+    - { id: max_health, display: "生命", min: 2, max: 8, suffix: "" }
+    - { id: phys_defense, display: "物理防御", min: 1, max: 3, suffix: "" }
+  rolls: 1   # how many secondary affixes after reforge

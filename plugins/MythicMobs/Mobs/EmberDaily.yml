@@ -1,0 +1,56 @@
+# 日常 EmberDaily — 清潮轻压（灰烬庭院）
+# 单路径 ni give；勿与地窟 Display 撞名（DP $kill 用去色 Display）
+
+EmberDailyZombie:
+  Type: ZOMBIE
+  Display: '&a灰烬庭院僵尸'
+  Health: 24
+  Damage: 3
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - WOOD_SWORD HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath
+
+EmberDailySkeleton:
+  Type: SKELETON
+  Display: '&a灰烬庭院骷髅'
+  Health: 20
+  Damage: 4
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath
+
+EmberDailyBrute:
+  Type: HUSK
+  Display: '&a灰烬庭院蛮兵'
+  Health: 48
+  Damage: 6
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.35
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_SWORD HAND
+  Skills:
+  - skill{s=EmberDailyBruteTap} @target ~onAttack 0.14
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.1
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_blade 1";asop=true} @Trigger ~onDeath >0 0.12
+  - command{c="ni give <trigger.name> gear_ember_charm 1";asop=true} @Trigger ~onDeath >0 0.08
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.03

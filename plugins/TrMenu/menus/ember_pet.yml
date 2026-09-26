@@ -1,0 +1,91 @@
+# 使魔子菜单壳 — DESIGN-ember-pet-bestiary.md
+# 使魔
+
+Title: '§a余烬 · 使魔'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# L E S #'
+  - '#       #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §a[使魔] §7收集出战 · 偏外观与微量助战（≤战力 5%）。逻辑待接线。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  L:
+    display:
+      material: book and quill
+      name: '§e使魔图鉴'
+      lore:
+        - ''
+        - '§7查看已收集使魔与碎片进度'
+        - '§8掉落蛋 / 碎片合成'
+        - ''
+        - '§8/corerpg pet list'
+        - ''
+        - '§e➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §a[使魔·图鉴] §7收集进度与出战位待 CoreRpg 接线'
+        - 'tell: §8详见 DESIGN-ember-pet-bestiary.md'
+
+  E:
+    display:
+      material: egg
+      name: '§a出战 / 收回'
+      lore:
+        - ''
+        - '§7同时出战 §f1 §7只'
+        - '§8默认偏外观；属性≤总战力 5%'
+        - '§8升级吃魂尘（挂机副产）'
+        - ''
+        - '§8/corerpg pet summon'
+        - ''
+        - '§a➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §a[使魔·出战] §7建议：§f/corerpg pet summon <id> §8（未实装）'
+        - 'tell: §8氪皮 / 经验瓶 · 不卖满级战力宠'
+
+  S:
+    display:
+      material: glowstone dust
+      name: '§6魂尘投喂'
+      lore:
+        - ''
+        - '§7挂机副产魂尘升级使魔'
+        - '§8不消耗核心 / 毕业刃'
+        - ''
+        - '§8/corerpg pet feed'
+        - ''
+        - '§6➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[使魔·投喂] §7魂尘升级 · /corerpg pet feed'

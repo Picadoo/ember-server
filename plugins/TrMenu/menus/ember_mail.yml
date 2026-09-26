@@ -1,0 +1,115 @@
+# 邮寄子菜单壳 — DESIGN-ember-mail-friends.md
+# 系统邮件 / 战令 / 维护补偿；逻辑待 CoreRpg 接线
+
+Title: '§f余烬 · 邮寄'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# I C S #'
+  - '#  D    #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §f[邮寄] §7领取系统邮件、战令与维护补偿。奖励统一进邮箱。逻辑待接线。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  I:
+    display:
+      material: book and quill
+      name: '§f收件箱'
+      lore:
+        - ''
+        - '§7查看未读与未领附件'
+        - '§8基础邮寄 · 系统发奖入口'
+        - ''
+        - '§8命令：/corerpg mail'
+        - '§8命令：/corerpg mail read <id>'
+        - ''
+        - '§e➥ §f点击查询'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §f[邮寄] §7请执行 §f/corerpg mail §7（插件岗实装后生效）'
+        - 'command: corerpg mail'
+
+  C:
+    display:
+      material: chest
+      name: '§a一键领取'
+      lore:
+        - ''
+        - '§7领取全部可领附件'
+        - '§8战令结算 · 维护补偿 · 日活箱'
+        - '§8奖励统一进邮箱，不弹背包散件'
+        - ''
+        - '§8命令：/corerpg mail claim all'
+        - ''
+        - '§a➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §a[邮寄·领取] §7建议：§f/corerpg mail claim all'
+        - 'tell: §8战令 / 维护补偿 / 活动箱走邮箱 · 命令可能尚未实装'
+        - 'command: corerpg mail claim all'
+
+  S:
+    display:
+      material: paper
+      name: '§6系统发奖'
+      lore:
+        - ''
+        - '§7战令、维护补偿由系统投递'
+        - '§8玩家互寄本期不做（防刷）'
+        - '§8附件：币 / 票 / 外观碎片'
+        - '§8不发核心 / 毕业刃'
+        - ''
+        - '§8运营：/corerpg mail send <玩家> <模板>'
+        - ''
+        - '§6➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §6[邮寄·系统] §7战令与维护补偿由系统投递'
+        - 'tell: §8运营占位：/corerpg mail send <玩家> <模板id>'
+        - 'tell: §8详见 DESIGN-ember-mail-friends.md'
+
+  D:
+    display:
+      material: hopper
+      name: '§7清理已领'
+      lore:
+        - ''
+        - '§7删除已领取的空信'
+        - '§8未领附件的邮件不可删'
+        - ''
+        - '§8命令：/corerpg mail delete <id>'
+        - ''
+        - '§7➥ §f查看说明'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'tell: §7[邮寄·清理] §7建议：§f/corerpg mail delete <id>'
+        - 'tell: §8未领附件不可删 · 命令可能尚未实装'

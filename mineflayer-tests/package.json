@@ -1,0 +1,17 @@
+{
+  "name": "mineflayer-tests",
+  "version": "1.0.0",
+  "description": "Mineflayer smoke tests against local Paper 1.12.2 (NeigeItems for items; core for recipes/fishing)",
+  "private": true,
+  "scripts": {
+    "smoke": "node scripts/smoke.js",
+    "test": "npm run smoke",
+    "gameplay": "node scripts/gameplay-suite.js"
+  },
+  "dependencies": {
+    "mineflayer": "^4.33.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

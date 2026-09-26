@@ -1,0 +1,830 @@
+diff --git a/src/main/java/net/minecraft/server/ChunkProviderServer.java b/src/main/java/net/minecraft/server/ChunkProviderServer.java
+index ad5485908..1e2bd4b36 100644
+--- a/src/main/java/net/minecraft/server/ChunkProviderServer.java
++++ b/src/main/java/net/minecraft/server/ChunkProviderServer.java
+@@ -340,6 +340,9 @@ public class ChunkProviderServer implements IChunkProvider {
+                 activityAccountant.startActivity(0.5);
+                 int targetSize = Math.min(this.unloadQueue.size() - 100,  (int) (this.unloadQueue.size() * UNLOAD_QUEUE_RESIZE_FACTOR)); // Paper - Make more aggressive
+                 // Spigot end
++                // CoreSystem-PERF: hard cap successful unloads per tick (in addition to time accountant)
++                int unloadedThisTick = 0;
++                final int maxUnloadPerTick = 40;
+ 
+                 Iterator iterator = this.unloadQueue.iterator();
+ 
+@@ -355,9 +358,10 @@ public class ChunkProviderServer implements IChunkProvider {
+                             continue;
+                         }
+                         // CraftBukkit end
++                        ++unloadedThisTick; // CoreSystem-PERF
+ 
+                         // Spigot start
+-                        if (this.unloadQueue.size() <= targetSize && activityAccountant.activityTimeIsExhausted()) {
++                        if (unloadedThisTick >= maxUnloadPerTick || (this.unloadQueue.size() <= targetSize && activityAccountant.activityTimeIsExhausted())) {
+                             break;
+                         }
+                         // Spigot end
+diff --git a/src/main/java/net/minecraft/server/ContainerAnvil.java b/src/main/java/net/minecraft/server/ContainerAnvil.java
+index 16ec67569..4a3ae48bd 100644
+--- a/src/main/java/net/minecraft/server/ContainerAnvil.java
++++ b/src/main/java/net/minecraft/server/ContainerAnvil.java
+@@ -135,6 +135,41 @@ public class ContainerAnvil extends Container {
+                 int l;
+                 int i1;
+ 
++                // CoreSystem hybrid — AnvilNmsHooks policy gates
++                boolean coreMaterialRepairOnly = pers.coresystem.paper.AnvilNmsHooks.isActive()
++                        && pers.coresystem.paper.AnvilNmsHooks.materialRepairOnly();
++                boolean coreBlockEnchant = pers.coresystem.paper.AnvilNmsHooks.isActive()
++                        && pers.coresystem.paper.AnvilNmsHooks.blockEnchantCombines();
++                if (pers.coresystem.paper.AnvilNmsHooks.isActive()) {
++                    org.bukkit.inventory.ItemStack bukkitLeft = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemstack);
++                    org.bukkit.inventory.ItemStack bukkitRight = org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemstack2);
++                    Boolean allowIng = pers.coresystem.paper.AnvilNmsHooks.allowRepairIngredient(bukkitLeft, bukkitRight);
++                    boolean isMatRepair = itemstack1.f() && itemstack1.getItem().a(itemstack, itemstack2);
++                    if (allowIng != null && isMatRepair && !allowIng.booleanValue()) {
++                        org.bukkit.craftbukkit.event.CraftEventFactory.callPrepareAnvilEvent(getBukkitView(), ItemStack.a);
++                        this.levelCost = 0;
++                        return;
++                    }
++                    if ((coreMaterialRepairOnly || coreBlockEnchant) && flag) {
++                        // Block enchanted-book combines
++                        org.bukkit.craftbukkit.event.CraftEventFactory.callPrepareAnvilEvent(getBukkitView(), ItemStack.a);
++                        this.levelCost = 0;
++                        return;
++                    }
++                    if (coreMaterialRepairOnly && !isMatRepair && !flag) {
++                        // Same-item merge / enchant transfer blocked when material-repair-only
++                        if (!(itemstack1.getItem() == itemstack2.getItem() && itemstack1.f() && !flag)) {
++                            org.bukkit.craftbukkit.event.CraftEventFactory.callPrepareAnvilEvent(getBukkitView(), ItemStack.a);
++                            this.levelCost = 0;
++                            return;
++                        }
++                        // also block same-item full merge (enchant stacking) under materialRepairOnly
++                        org.bukkit.craftbukkit.event.CraftEventFactory.callPrepareAnvilEvent(getBukkitView(), ItemStack.a);
++                        this.levelCost = 0;
++                        return;
++                    }
++                }
++
+                 if (itemstack1.f() && itemstack1.getItem().a(itemstack, itemstack2)) {
+                     k = Math.min(itemstack1.i(), itemstack1.k() / 4);
+                     if (k <= 0) {
+@@ -253,28 +288,37 @@ public class ContainerAnvil extends Container {
+                 }
+             }
+ 
++            int coreRenameCost = pers.coresystem.paper.AnvilNmsHooks.isActive()
++                    ? pers.coresystem.paper.AnvilNmsHooks.renameCost() : 1;
+             if (StringUtils.isBlank(this.renameText)) {
+                 if (itemstack.hasName()) {
+-                    b1 = 1;
+-                    i += b1;
++                    b1 = (byte) Math.min(127, coreRenameCost);
++                    i += coreRenameCost;
+                     itemstack1.s();
+                 }
+             } else if (!this.renameText.equals(itemstack.getName())) {
+-                b1 = 1;
+-                i += b1;
++                b1 = (byte) Math.min(127, coreRenameCost);
++                i += coreRenameCost;
+                 itemstack1.g(this.renameText);
+             }
+ 
+             this.levelCost = j + i;
++            boolean renameOnly = (b1 > 0 && b1 == i); // rename contributed entire additive cost
++            boolean materialRepair = (!itemstack2.isEmpty() && itemstack.f() && itemstack.getItem().a(itemstack, itemstack2));
++            if (pers.coresystem.paper.AnvilNmsHooks.isActive()) {
++                this.levelCost = pers.coresystem.paper.AnvilNmsHooks.adjustLevelCost(this.levelCost, renameOnly, materialRepair);
++            }
+             if (i <= 0) {
+                 itemstack1 = ItemStack.a;
+             }
+ 
+-            if (b1 == i && b1 > 0 && this.levelCost >= 40) {
+-                this.levelCost = 39;
++            int coreMax = pers.coresystem.paper.AnvilNmsHooks.isActive()
++                    ? pers.coresystem.paper.AnvilNmsHooks.maxLevelCost() : 40;
++            if (b1 == i && b1 > 0 && this.levelCost >= coreMax) {
++                this.levelCost = coreMax - 1;
+             }
+ 
+-            if (this.levelCost >= 40 && !this.m.abilities.canInstantlyBuild) {
++            if (this.levelCost >= coreMax && !this.m.abilities.canInstantlyBuild) {
+                 itemstack1 = ItemStack.a;
+             }
+ 
+@@ -286,7 +330,11 @@ public class ContainerAnvil extends Container {
+                 }
+ 
+                 if (b1 != i || b1 == 0) {
+-                    k2 = k2 * 2 + 1;
++                    if (pers.coresystem.paper.AnvilNmsHooks.isActive()) {
++                        k2 = pers.coresystem.paper.AnvilNmsHooks.nextRepairPenalty(k2);
++                    } else {
++                        k2 = k2 * 2 + 1;
++                    }
+                 }
+ 
+                 itemstack1.setRepairCost(k2);
+diff --git a/src/main/java/net/minecraft/server/ContainerBrewingStand.java b/src/main/java/net/minecraft/server/ContainerBrewingStand.java
+index 0c7ab4724..62ad043bf 100644
+--- a/src/main/java/net/minecraft/server/ContainerBrewingStand.java
++++ b/src/main/java/net/minecraft/server/ContainerBrewingStand.java
+@@ -3,6 +3,7 @@ package net.minecraft.server;
+ // CraftBukkit start
+ import org.bukkit.craftbukkit.inventory.CraftInventoryBrewer;
+ import org.bukkit.craftbukkit.inventory.CraftInventoryView;
++import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ // CraftBukkit end
+ 
+ public class ContainerBrewingStand extends Container {
+@@ -82,7 +83,8 @@ public class ContainerBrewingStand extends Container {
+                     if (!this.a(itemstack1, 3, 4, false)) {
+                         return ItemStack.a;
+                     }
+-                } else if (ContainerBrewingStand.SlotPotionBottle.c_(itemstack) && itemstack.getCount() == 1) {
++                } else if (ContainerBrewingStand.SlotPotionBottle.c_(itemstack)) {
++                    // CoreSystem — allow shift-moving stacks when bottle slot max > 1
+                     if (!this.a(itemstack1, 0, 3, false)) {
+                         return ItemStack.a;
+                     }
+@@ -151,11 +153,22 @@ public class ContainerBrewingStand extends Container {
+         }
+ 
+         public boolean isAllowed(ItemStack itemstack) {
+-            return PotionBrewer.a(itemstack);
++            // CoreSystem hybrid — custom brew ingredients
++            return PotionBrewer.a(itemstack) || pers.coresystem.paper.BrewNmsHooks.isAllowedIngredient(CraftItemStack.asCraftMirror(itemstack));
+         }
+ 
+         public int getMaxStackSize() {
+-            return 64;
++            int slot = pers.coresystem.paper.BrewNmsHooks.getSlotMaxStackSize();
++            return slot > 0 ? slot : 64;
++        }
++
++        public int getMaxStackSize(ItemStack itemstack) {
++            int hooked = pers.coresystem.paper.BrewNmsHooks.getMaxStackSize(CraftItemStack.asCraftMirror(itemstack));
++            if (hooked > 0) {
++                return hooked;
++            }
++            int slot = pers.coresystem.paper.BrewNmsHooks.getSlotMaxStackSize();
++            return slot > 0 ? Math.min(slot, 64) : 64;
+         }
+     }
+ 
+@@ -170,6 +183,17 @@ public class ContainerBrewingStand extends Container {
+         }
+ 
+         public int getMaxStackSize() {
++            // CoreSystem — raised when BrewNmsHooks stack limits enabled (default 127)
++            int slot = pers.coresystem.paper.BrewNmsHooks.getSlotMaxStackSize();
++            return slot > 0 ? slot : 1;
++        }
++
++        public int getMaxStackSize(ItemStack itemstack) {
++            int hooked = pers.coresystem.paper.BrewNmsHooks.getMaxStackSize(CraftItemStack.asCraftMirror(itemstack));
++            if (hooked > 0) {
++                return hooked;
++            }
++            // Keep vanilla potion/glass-bottle behaviour at 1 unless this stack is a custom brew item
+             return 1;
+         }
+ 
+@@ -187,7 +211,11 @@ public class ContainerBrewingStand extends Container {
+         public static boolean c_(ItemStack itemstack) {
+             Item item = itemstack.getItem();
+ 
+-            return item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE;
++            if (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE) {
++                return true;
++            }
++            // CoreSystem hybrid — custom bottle/base items
++            return pers.coresystem.paper.BrewNmsHooks.isAllowedBottle(CraftItemStack.asCraftMirror(itemstack));
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/ContainerEnchantTable.java b/src/main/java/net/minecraft/server/ContainerEnchantTable.java
+index edb929cb9..e80887799 100644
+--- a/src/main/java/net/minecraft/server/ContainerEnchantTable.java
++++ b/src/main/java/net/minecraft/server/ContainerEnchantTable.java
+@@ -62,6 +62,10 @@ public class ContainerEnchantTable extends Container {
+         });
+         this.a(new Slot(this.enchantSlots, 1, 35, 47) {
+             public boolean isAllowed(ItemStack itemstack) {
++                // CoreSystem hybrid — optional NI catalyst instead of vanilla lapis
++                if (pers.coresystem.paper.EnchantNmsHooks.hasCatalystOverride()) {
++                    return pers.coresystem.paper.EnchantNmsHooks.isValidCatalyst(CraftItemStack.asCraftMirror(itemstack));
++                }
+                 return itemstack.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack.getData()) == EnumColor.BLUE;
+             }
+         });
+@@ -157,6 +161,24 @@ public class ContainerEnchantTable extends Container {
+ 
+                     this.l.setSeed((long) this.f);
+ 
++                    // CoreSystem hybrid — optional custom offer tables via EnchantNmsHooks
++                    CraftItemStack item = CraftItemStack.asCraftMirror(itemstack);
++                    pers.coresystem.paper.EnchantNmsHooks.Offer[] coreOffers =
++                            pers.coresystem.paper.EnchantNmsHooks.resolveOffers(item, i, this.f);
++                    if (coreOffers != null) {
++                        for (j = 0; j < 3; ++j) {
++                            pers.coresystem.paper.EnchantNmsHooks.Offer offer = coreOffers[j];
++                            if (offer != null) {
++                                this.costs[j] = offer.levelCost;
++                                this.h[j] = offer.enchantmentId;
++                                this.i[j] = offer.enchantmentLevel;
++                            } else {
++                                this.costs[j] = 0;
++                                this.h[j] = -1;
++                                this.i[j] = -1;
++                            }
++                        }
++                    } else {
+                     for (j = 0; j < 3; ++j) {
+                         this.costs[j] = EnchantmentManager.a(this.l, j, i, itemstack);
+                         this.h[j] = -1;
+@@ -178,9 +200,9 @@ public class ContainerEnchantTable extends Container {
+                             }
+                         }
+                     }
++                    } // end coreOffers else
+ 
+                     // CraftBukkit start
+-                    CraftItemStack item = CraftItemStack.asCraftMirror(itemstack);
+                     org.bukkit.enchantments.EnchantmentOffer[] offers = new EnchantmentOffer[3];
+                     for (j = 0; j < 3; ++j) {
+                         org.bukkit.enchantments.Enchantment enchantment = (this.h[j] >= 0) ? org.bukkit.enchantments.Enchantment.getById(this.h[j]) : null;
+@@ -230,10 +252,18 @@ public class ContainerEnchantTable extends Container {
+     public boolean a(EntityHuman entityhuman, int i) {
+         ItemStack itemstack = this.enchantSlots.getItem(0);
+         ItemStack itemstack1 = this.enchantSlots.getItem(1);
+-        int j = i + 1;
++        // CoreSystem hybrid — configurable lapis cost
++        int j = pers.coresystem.paper.EnchantNmsHooks.isOverrideVanilla()
++                ? pers.coresystem.paper.EnchantNmsHooks.resolveLapisCost(i)
++                : (i + 1);
+ 
+         if ((itemstack1.isEmpty() || itemstack1.getCount() < j) && !entityhuman.abilities.canInstantlyBuild) {
+             return false;
++        // CoreSystem hybrid — reject non-catalyst in secondary slot when override is active
++        } else if (pers.coresystem.paper.EnchantNmsHooks.hasCatalystOverride()
++                && !entityhuman.abilities.canInstantlyBuild
++                && !pers.coresystem.paper.EnchantNmsHooks.isValidCatalyst(CraftItemStack.asCraftMirror(itemstack1))) {
++            return false;
+         } else if (this.costs[i] > 0 && !itemstack.isEmpty() && (entityhuman.expLevel >= j && entityhuman.expLevel >= this.costs[i] || entityhuman.abilities.canInstantlyBuild)) {
+             if (!this.world.isClientSide) {
+                 List list = this.a(itemstack, i, this.costs[i]);
+@@ -243,10 +273,18 @@ public class ContainerEnchantTable extends Container {
+                     // entityhuman.enchantDone(itemstack, j); // Moved down
+                     boolean flag = itemstack.getItem() == Items.BOOK;
+                     Map<org.bukkit.enchantments.Enchantment, Integer> enchants = new java.util.HashMap<org.bukkit.enchantments.Enchantment, Integer>();
++                    // Prefer the displayed custom offer (h/i) when EnchantNmsHooks override is on
++                    if (pers.coresystem.paper.EnchantNmsHooks.isOverrideVanilla() && this.h[i] >= 0) {
++                        org.bukkit.enchantments.Enchantment shown = org.bukkit.enchantments.Enchantment.getById(this.h[i]);
++                        if (shown != null) {
++                            enchants.put(shown, Integer.valueOf(this.i[i]));
++                        }
++                    } else {
+                     for (Object obj : list) {
+                         WeightedRandomEnchant instance = (WeightedRandomEnchant) obj;
+                         enchants.put(org.bukkit.enchantments.Enchantment.getById(Enchantment.getId(instance.enchantment)), instance.level);
+                     }
++                    }
+                     CraftItemStack item = CraftItemStack.asCraftMirror(itemstack);
+ 
+                     EnchantItemEvent event = new EnchantItemEvent((Player) entityhuman.getBukkitEntity(), this.getBukkitView(), this.world.getWorld().getBlockAt(position.getX(), position.getY(), position.getZ()), item, this.costs[i], enchants, i);
+@@ -353,7 +391,9 @@ public class ContainerEnchantTable extends Container {
+                 if (!this.a(itemstack1, 2, 38, true)) {
+                     return ItemStack.a;
+                 }
+-            } else if (itemstack1.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack1.getData()) == EnumColor.BLUE) {
++            } else if (pers.coresystem.paper.EnchantNmsHooks.hasCatalystOverride()
++                    ? pers.coresystem.paper.EnchantNmsHooks.isValidCatalyst(CraftItemStack.asCraftMirror(itemstack1))
++                    : (itemstack1.getItem() == Items.DYE && EnumColor.fromInvColorIndex(itemstack1.getData()) == EnumColor.BLUE)) {
+                 if (!this.a(itemstack1, 1, 2, true)) {
+                     return ItemStack.a;
+                 }
+diff --git a/src/main/java/net/minecraft/server/EntityArmorStand.java b/src/main/java/net/minecraft/server/EntityArmorStand.java
+index 907499248..3aed1dd0c 100644
+--- a/src/main/java/net/minecraft/server/EntityArmorStand.java
++++ b/src/main/java/net/minecraft/server/EntityArmorStand.java
+@@ -576,6 +576,8 @@ public class EntityArmorStand extends EntityLiving {
+ 
+     public void B_() {
+         if (!this.canTick) return;// Paper
++        // CoreSystem-PERF: marker stands are display-only — skip living tick work
++        if (this.isMarker()) return;
+         super.B_();
+         Vector3f vector3f = (Vector3f) this.datawatcher.get(EntityArmorStand.b);
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityExperienceOrb.java b/src/main/java/net/minecraft/server/EntityExperienceOrb.java
+index becb102c1..27c4d7dab 100644
+--- a/src/main/java/net/minecraft/server/EntityExperienceOrb.java
++++ b/src/main/java/net/minecraft/server/EntityExperienceOrb.java
+@@ -84,6 +84,17 @@ public class EntityExperienceOrb extends Entity {
+     protected void i() {}
+ 
+     public void B_() {
++        // CoreSystem-PERF: grounded idle orbs without a chase target — age only most ticks
++        if (this.onGround && this.targetPlayer == null
++                && (this.motX * this.motX + this.motY * this.motY + this.motZ * this.motZ) < 1.0E-8D
++                && (this.a % 8) != 0) {
++            ++this.a;
++            ++this.b;
++            if (this.b >= 6000) {
++                this.die();
++            }
++            return;
++        }
+         super.B_();
+         EntityHuman prevTarget = this.targetPlayer;// CraftBukkit - store old target
+         if (this.c > 0) {
+diff --git a/src/main/java/net/minecraft/server/EntityFishingHook.java b/src/main/java/net/minecraft/server/EntityFishingHook.java
+index 177d8582f..01985be07 100644
+--- a/src/main/java/net/minecraft/server/EntityFishingHook.java
++++ b/src/main/java/net/minecraft/server/EntityFishingHook.java
+@@ -397,7 +397,14 @@ public class EntityFishingHook extends Entity {
+                     this.at = MathHelper.nextInt(this.random, 20, 80);
+                 }
+             } else {
+-                this.h = MathHelper.nextInt(this.random, world.paperConfig.fishingMinTicks, world.paperConfig.fishingMaxTicks); // Paper
++                // CoreSystem hybrid — optional FishNmsHooks wait range
++                int fishMin = world.paperConfig.fishingMinTicks;
++                int fishMax = world.paperConfig.fishingMaxTicks;
++                if (pers.coresystem.paper.FishNmsHooks.hasWaitOverride()) {
++                    fishMin = pers.coresystem.paper.FishNmsHooks.getMinWaitTicks();
++                    fishMax = pers.coresystem.paper.FishNmsHooks.getMaxWaitTicks();
++                }
++                this.h = MathHelper.nextInt(this.random, fishMin, fishMax); // Paper + FishNmsHooks
+                 this.h -= this.ax * 20 * 5;
+             }
+         }
+@@ -429,10 +436,26 @@ public class EntityFishingHook extends Entity {
+                 this.world.broadcastEntityEffect(this, (byte) 31);
+                 i = this.hooked instanceof EntityItem ? 3 : 5;
+             } else if (this.g > 0) {
+-                LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
++                java.util.List<ItemStack> coreFishLoot = null;
++                // CoreSystem hybrid — FishNmsHooks may replace vanilla fishing loot with NI items
++                if (pers.coresystem.paper.FishNmsHooks.isOverrideLoot() && this.owner instanceof EntityPlayer) {
++                    org.bukkit.inventory.ItemStack bukkitLoot = pers.coresystem.paper.FishNmsHooks.resolveLoot(
++                            (org.bukkit.entity.Player) this.owner.getBukkitEntity(),
++                            (float) this.aw + this.owner.du());
++                    if (bukkitLoot != null) {
++                        coreFishLoot = new java.util.ArrayList<ItemStack>();
++                        coreFishLoot.add(org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(bukkitLoot));
++                    }
++                }
++                Iterator iterator;
++                if (coreFishLoot != null) {
++                    iterator = coreFishLoot.iterator();
++                } else {
++                    LootTableInfo.a loottableinfo_a = new LootTableInfo.a((WorldServer) this.world);
+ 
+-                loottableinfo_a.a((float) this.aw + this.owner.du());
+-                Iterator iterator = this.world.getLootTableRegistry().a(LootTables.aA).a(this.random, loottableinfo_a.a()).iterator();
++                    loottableinfo_a.a((float) this.aw + this.owner.du());
++                    iterator = this.world.getLootTableRegistry().a(LootTables.aA).a(this.random, loottableinfo_a.a()).iterator();
++                }
+ 
+                 while (iterator.hasNext()) {
+                     ItemStack itemstack = (ItemStack) iterator.next();
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index aa0b27f0e..e9bcce5e3 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -821,6 +821,8 @@ public abstract class EntityHuman extends EntityLiving {
+     protected void damageShield(float f) {
+         if (f >= 3.0F && this.activeItem.getItem() == Items.SHIELD) {
+             int i = 1 + MathHelper.d(f);
++            // CoreSystem hybrid — configurable durability loss multiplier
++            i = pers.coresystem.paper.ShieldNmsHooks.scaleDurabilityDamage(i);
+ 
+             this.activeItem.damage(i, this);
+             if (this.activeItem.isEmpty()) {
+diff --git a/src/main/java/net/minecraft/server/EntityInsentient.java b/src/main/java/net/minecraft/server/EntityInsentient.java
+index d6a1933ad..a8c97aebb 100644
+--- a/src/main/java/net/minecraft/server/EntityInsentient.java
++++ b/src/main/java/net/minecraft/server/EntityInsentient.java
+@@ -259,7 +259,18 @@ public abstract class EntityInsentient extends EntityLiving {
+ 
+     }
+ 
+-    protected float g(float f, float f1) {
++    // CoreSystem-PERF: while ActivationRange marks us inactive, drop cached path so we do not
++    // resume expensive navigation work on wake. MythicMobs near players stay active via range +
++    // goal-target / hurt immunities in ActivationRange.checkEntityImmunities.
++    @Override
++    public void inactiveTick() {
++        super.inactiveTick();
++        if (this.navigation != null && (this.ticksLived & 15) == 0 && !this.navigation.o()) {
++            this.navigation.p();
++        }
++    }
++
++        protected float g(float f, float f1) {
+         this.c.a();
+         return f1;
+     }
+diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
+index 4fafb4977..ecabd24f9 100644
+--- a/src/main/java/net/minecraft/server/EntityItem.java
++++ b/src/main/java/net/minecraft/server/EntityItem.java
+@@ -97,7 +97,9 @@ public class EntityItem extends Entity implements HopperPusher {
+             this.move(EnumMoveType.SELF, this.motX, this.motY, this.motZ);
+             boolean flag = (int) this.lastX != (int) this.locX || (int) this.lastY != (int) this.locY || (int) this.lastZ != (int) this.locZ;
+ 
+-            if (flag || this.ticksLived % 25 == 0) {
++            // CoreSystem-PERF: slightly more frequent merge attempts when grounded (radius still from spigot.yml)
++            int mergeInterval = this.onGround ? 15 : 25;
++            if (flag || this.ticksLived % mergeInterval == 0) {
+                 if (this.world.getType(new BlockPosition(this)).getMaterial() == Material.LAVA) {
+                     this.motY = 0.20000000298023224D;
+                     this.motX = (double) ((this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
+diff --git a/src/main/java/net/minecraft/server/EntityLiving.java b/src/main/java/net/minecraft/server/EntityLiving.java
+index 82c3a84ed..c5a80cef6 100644
+--- a/src/main/java/net/minecraft/server/EntityLiving.java
++++ b/src/main/java/net/minecraft/server/EntityLiving.java
+@@ -1025,7 +1025,15 @@ public abstract class EntityLiving extends Entity {
+                 EnumHand enumhand = aenumhand[j];
+                 itemstack1 = this.b(enumhand);
+ 
+-                if (itemstack1.getItem() == Items.cY) {
++                // CoreSystem hybrid — TotemNmsHooks may restrict to NI totems only
++                if (pers.coresystem.paper.TotemNmsHooks.hasOverride()) {
++                    if (!itemstack1.isEmpty() && pers.coresystem.paper.TotemNmsHooks.isValidTotem(
++                            (LivingEntity) this.getBukkitEntity(),
++                            org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemstack1))) {
++                        itemstack = itemstack1.cloneItemStack();
++                        break;
++                    }
++                } else if (itemstack1.getItem() == Items.cY) {
+                     itemstack = itemstack1.cloneItemStack();
+                     // itemstack1.subtract(1); // CraftBukkit
+                     break;
+@@ -2228,6 +2236,12 @@ public abstract class EntityLiving extends Entity {
+     protected void doTick() {}
+ 
+     protected void cB() {
++        // CoreSystem-PERF: harden collision path — free early-out when paper max is 0
++        final int maxCol = this.world.paperConfig.maxCollisionsPerEntity;
++        if (maxCol <= 0) {
++            return;
++        }
++
+         List list = this.world.getEntities(this, this.getBoundingBox(), IEntitySelector.a(this));
+ 
+         if (!list.isEmpty()) {
+@@ -2236,10 +2250,15 @@ public abstract class EntityLiving extends Entity {
+ 
+             if (i > 0 && list.size() > i - 1 && this.random.nextInt(4) == 0) {
+                 j = 0;
++                // CoreSystem-PERF: stop counting once over cramming threshold
++                final int cramLimit = i - 1;
+ 
+                 for (int k = 0; k < list.size(); ++k) {
+                     if (!((Entity) list.get(k)).isPassenger()) {
+                         ++j;
++                        if (j > cramLimit) {
++                            break;
++                        }
+                     }
+                 }
+ 
+@@ -2248,9 +2267,13 @@ public abstract class EntityLiving extends Entity {
+                 }
+             }
+ 
+-            numCollisions = Math.max(0, numCollisions - world.paperConfig.maxCollisionsPerEntity); // Paper
+-            for (j = 0; j < list.size() && numCollisions < world.paperConfig.maxCollisionsPerEntity; ++j) { // Paper
++            numCollisions = Math.max(0, numCollisions - maxCol); // Paper
++            for (j = 0; j < list.size() && numCollisions < maxCol; ++j) { // Paper
+                 Entity entity = (Entity) list.get(j);
++                // CoreSystem-PERF: skip peers that already exhausted their collision budget
++                if (entity.numCollisions >= maxCol) {
++                    continue;
++                }
+                 entity.numCollisions++; // Paper
+                 numCollisions++; // Paper
+ 
+@@ -2532,7 +2555,17 @@ public abstract class EntityLiving extends Entity {
+         if (this.isHandRaised() && !this.activeItem.isEmpty()) {
+             Item item = this.activeItem.getItem();
+ 
+-            return item.f(this.activeItem) != EnumAnimation.BLOCK ? false : item.e(this.activeItem) - this.bp >= getShieldBlockingDelay(); // Paper - shieldBlockingDelay
++            if (item.f(this.activeItem) != EnumAnimation.BLOCK) {
++                return false;
++            }
++            // CoreSystem hybrid — ShieldNmsHooks may reject vanilla / non-whitelisted shields
++            if (pers.coresystem.paper.ShieldNmsHooks.hasOverride()) {
++                if (!pers.coresystem.paper.ShieldNmsHooks.canBlock(
++                        org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(this.activeItem))) {
++                    return false;
++                }
++            }
++            return item.e(this.activeItem) - this.bp >= getShieldBlockingDelay(); // Paper - shieldBlockingDelay
+         } else {
+             return false;
+         }
+diff --git a/src/main/java/net/minecraft/server/ItemStack.java b/src/main/java/net/minecraft/server/ItemStack.java
+index c5f5fa4e7..d038a9e86 100644
+--- a/src/main/java/net/minecraft/server/ItemStack.java
++++ b/src/main/java/net/minecraft/server/ItemStack.java
+@@ -348,6 +348,15 @@ public final class ItemStack {
+     }
+ 
+     public int getMaxStackSize() {
++        // CoreSystem — raised max for CoreBrew NI bottles/ingredients/results (cap 127)
++        try {
++            int hooked = pers.coresystem.paper.BrewNmsHooks.getMaxStackSize(org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(this));
++            if (hooked > 0) {
++                return hooked;
++            }
++        } catch (Throwable ignored) {
++            // hooks absent / inactive
++        }
+         return this.getItem().getMaxStackSize();
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/TileEntityBrewingStand.java b/src/main/java/net/minecraft/server/TileEntityBrewingStand.java
+index 872c42c07..8d65aa798 100644
+--- a/src/main/java/net/minecraft/server/TileEntityBrewingStand.java
++++ b/src/main/java/net/minecraft/server/TileEntityBrewingStand.java
+@@ -131,7 +131,13 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
+             }
+         } else if (flag && this.fuelLevel > 0) {
+             --this.fuelLevel;
+-            this.brewTime = 400;
++            // CoreSystem hybrid — custom brew duration (default 400)
++            org.bukkit.inventory.ItemStack bukkitIngredient = CraftItemStack.asCraftMirror(itemstack1);
++            org.bukkit.inventory.ItemStack[] bukkitBottles = new org.bukkit.inventory.ItemStack[3];
++            for (int bi = 0; bi < 3; ++bi) {
++                bukkitBottles[bi] = CraftItemStack.asCraftMirror((ItemStack) this.items.get(bi));
++            }
++            this.brewTime = pers.coresystem.paper.BrewNmsHooks.resolveBrewTime(bukkitIngredient, bukkitBottles);
+             this.k = itemstack1.getItem();
+             this.update();
+         }
+@@ -174,13 +180,26 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
+ 
+         if (itemstack.isEmpty()) {
+             return false;
+-        } else if (!PotionBrewer.a(itemstack)) {
+-            return false;
+         } else {
++            org.bukkit.inventory.ItemStack bukkitIngredient = CraftItemStack.asCraftMirror(itemstack);
++            boolean customIngredient = pers.coresystem.paper.BrewNmsHooks.isAllowedIngredient(bukkitIngredient);
++            boolean vanillaIngredient = PotionBrewer.a(itemstack);
++            if (!customIngredient && !vanillaIngredient) {
++                return false;
++            }
++
++            org.bukkit.inventory.ItemStack[] bukkitBottles = new org.bukkit.inventory.ItemStack[3];
+             for (int i = 0; i < 3; ++i) {
+                 ItemStack itemstack1 = (ItemStack) this.items.get(i);
+-
+-                if (!itemstack1.isEmpty() && PotionBrewer.a(itemstack1, itemstack)) {
++                bukkitBottles[i] = CraftItemStack.asCraftMirror(itemstack1);
++                if (itemstack1.isEmpty()) {
++                    continue;
++                }
++                // Prefer custom match
++                if (pers.coresystem.paper.BrewNmsHooks.resolveMatch(bukkitIngredient, bukkitBottles[i]) != null) {
++                    return true;
++                }
++                if (pers.coresystem.paper.BrewNmsHooks.isVanillaEnabled() && PotionBrewer.a(itemstack1, itemstack)) {
+                     return true;
+                 }
+             }
+@@ -202,8 +221,33 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
+         }
+         // CraftBukkit end
+ 
++        org.bukkit.inventory.ItemStack bukkitIngredient = CraftItemStack.asCraftMirror(itemstack);
+         for (int i = 0; i < 3; ++i) {
+-            this.items.set(i, PotionBrewer.d(itemstack, (ItemStack) this.items.get(i)));
++            ItemStack bottle = (ItemStack) this.items.get(i);
++            if (bottle.isEmpty()) {
++                continue;
++            }
++            org.bukkit.inventory.ItemStack bukkitBottle = CraftItemStack.asCraftMirror(bottle);
++            pers.coresystem.paper.BrewNmsHooks.BrewMatch match = pers.coresystem.paper.BrewNmsHooks.resolveMatch(bukkitIngredient, bukkitBottle);
++            if (match != null && match.result != null) {
++                ItemStack custom = CraftItemStack.asNMSCopy(match.result);
++                if (!custom.isEmpty()) {
++                    int amt = match.resultAmount > 0 ? match.resultAmount : 1;
++                    custom.setCount(Math.min(amt, custom.getMaxStackSize()));
++                    // Consume one bottle from a raised stack; drop leftovers so multi-stacks are not wiped
++                    if (bottle.getCount() > 1) {
++                        ItemStack remain = bottle.cloneItemStack();
++                        remain.setCount(bottle.getCount() - 1);
++                        BlockPosition dropPos = this.getPosition();
++                        InventoryUtils.dropItem(this.world, (double) dropPos.getX(), (double) dropPos.getY(), (double) dropPos.getZ(), remain);
++                    }
++                    this.items.set(i, custom);
++                    continue;
++                }
++            }
++            if (pers.coresystem.paper.BrewNmsHooks.isVanillaEnabled()) {
++                this.items.set(i, PotionBrewer.d(itemstack, bottle));
++            }
+         }
+ 
+         itemstack.subtract(1);
+@@ -271,7 +315,9 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
+     }
+ 
+     public int getMaxStackSize() {
+-        return this.maxStack; // CraftBukkit
++        // CoreSystem — raise TE inventory ceiling when brew stack limits enabled
++        int hooked = pers.coresystem.paper.BrewNmsHooks.getSlotMaxStackSize();
++        return hooked > 0 ? hooked : this.maxStack; // CraftBukkit
+     }
+ 
+     public boolean a(EntityHuman entityhuman) {
+@@ -284,11 +330,33 @@ public class TileEntityBrewingStand extends TileEntityContainer implements ITick
+ 
+     public boolean b(int i, ItemStack itemstack) {
+         if (i == 3) {
+-            return PotionBrewer.a(itemstack);
++            // CoreSystem hybrid — allow custom ingredients
++            return PotionBrewer.a(itemstack) || pers.coresystem.paper.BrewNmsHooks.isAllowedIngredient(CraftItemStack.asCraftMirror(itemstack));
+         } else {
+             Item item = itemstack.getItem();
+ 
+-            return i == 4 ? item == Items.BLAZE_POWDER : (item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE) && this.getItem(i).isEmpty();
++            if (i == 4) {
++                return item == Items.BLAZE_POWDER;
++            }
++            boolean vanillaBottle = item == Items.POTION || item == Items.SPLASH_POTION || item == Items.LINGERING_POTION || item == Items.GLASS_BOTTLE;
++            org.bukkit.inventory.ItemStack bukkitIn = CraftItemStack.asCraftMirror(itemstack);
++            boolean customBottle = pers.coresystem.paper.BrewNmsHooks.isAllowedBottle(bukkitIn)
++                    || pers.coresystem.paper.BrewNmsHooks.isAllowedResult(bukkitIn);
++            if (!(vanillaBottle || customBottle)) {
++                return false;
++            }
++            ItemStack current = this.getItem(i);
++            if (current.isEmpty()) {
++                return true;
++            }
++            // Allow hopper/stack merge into occupied bottle slot for raised-stack custom items only
++            int max = pers.coresystem.paper.BrewNmsHooks.getMaxStackSize(bukkitIn);
++            if (max <= 0) {
++                return false; // vanilla: bottle slots stay empty-only
++            }
++            return current.getCount() < max
++                    && current.getItem() == itemstack.getItem()
++                    && ItemStack.equals(current, itemstack);
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/TileEntityFurnace.java b/src/main/java/net/minecraft/server/TileEntityFurnace.java
+index 7a1428105..8746efbe1 100644
+--- a/src/main/java/net/minecraft/server/TileEntityFurnace.java
++++ b/src/main/java/net/minecraft/server/TileEntityFurnace.java
+@@ -245,22 +245,32 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
+     }
+ 
+     public int a(ItemStack itemstack) {
+-        return 200;
++        // CoreSystem hybrid — custom cook time via FurnaceNmsHooks (default 200)
++        if (itemstack == null || itemstack.isEmpty()) {
++            return pers.coresystem.paper.FurnaceNmsHooks.DEFAULT_COOK_TIME;
++        }
++        return pers.coresystem.paper.FurnaceNmsHooks.resolveCookTime(CraftItemStack.asCraftMirror(itemstack));
+     }
+ 
+     private boolean canBurn() {
+         if (((ItemStack) this.items.get(0)).isEmpty()) {
+             return false;
+         } else {
+-            ItemStack itemstack = RecipesFurnace.getInstance().getResult((ItemStack) this.items.get(0));
++            ItemStack input = (ItemStack) this.items.get(0);
++            ItemStack itemstack = RecipesFurnace.getInstance().getResult(input);
+ 
+             if (itemstack.isEmpty()) {
+                 return false;
+             } else {
++                // CoreSystem hybrid — apply custom result amount for space checks
++                int resultAmount = pers.coresystem.paper.FurnaceNmsHooks.resolveResultAmount(CraftItemStack.asCraftMirror(input));
++                if (resultAmount < 1) {
++                    resultAmount = 1;
++                }
+                 ItemStack itemstack1 = (ItemStack) this.items.get(2);
+ 
+                 // CraftBukkit - consider resultant count instead of current count
+-                return itemstack1.isEmpty() ? true : (!itemstack1.doMaterialsMatch(itemstack) ? false : (itemstack1.getCount() + itemstack.getCount() <= this.getMaxStackSize() && itemstack1.getCount() + itemstack.getCount() < itemstack1.getMaxStackSize() ? true : itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize()));
++                return itemstack1.isEmpty() ? true : (!itemstack1.doMaterialsMatch(itemstack) ? false : (itemstack1.getCount() + resultAmount <= this.getMaxStackSize() && itemstack1.getCount() + resultAmount < itemstack1.getMaxStackSize() ? true : itemstack1.getCount() + resultAmount <= itemstack.getMaxStackSize()));
+             }
+         }
+     }
+@@ -271,6 +281,16 @@ public class TileEntityFurnace extends TileEntityContainer implements ITickable,
+             ItemStack itemstack1 = RecipesFurnace.getInstance().getResult(itemstack);
+             ItemStack itemstack2 = (ItemStack) this.items.get(2);
+ 
++            // CoreSystem hybrid — enforce custom result amount (clone; recipe map holds shared stacks)
++            if (!itemstack1.isEmpty()) {
++                int resultAmount = pers.coresystem.paper.FurnaceNmsHooks.resolveResultAmount(CraftItemStack.asCraftMirror(itemstack));
++                if (resultAmount < 1) {
++                    resultAmount = 1;
++                }
++                itemstack1 = itemstack1.cloneItemStack();
++                itemstack1.setCount(resultAmount);
++            }
++
+             // CraftBukkit start - fire FurnaceSmeltEvent
+             CraftItemStack source = CraftItemStack.asCraftMirror(itemstack);
+             org.bukkit.inventory.ItemStack result = CraftItemStack.asBukkitCopy(itemstack1);
+diff --git a/src/main/java/net/minecraft/server/TileEntityHopper.java b/src/main/java/net/minecraft/server/TileEntityHopper.java
+index 5198a590a..d99aa1213 100644
+--- a/src/main/java/net/minecraft/server/TileEntityHopper.java
++++ b/src/main/java/net/minecraft/server/TileEntityHopper.java
+@@ -130,12 +130,19 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+         if (this.world != null && !this.world.isClientSide) {
+             if (!this.J() && BlockHopper.f(this.v())) {
+                 boolean flag = false;
++                // CoreSystem-PERF: empty + full means nothing to push and nothing to pull — skip transfer work
++                // (does NOT disable InventoryMoveItemEvent; NeigeItems-safe)
++                final boolean empty = this.p();
++                final boolean full = this.r();
++                if (empty && full) {
++                    return false;
++                }
+ 
+-                if (!this.p()) {
++                if (!empty) {
+                     flag = this.s();
+                 }
+ 
+-                if (!this.r()) {
++                if (!full) {
+                     mayAcceptItems = true; // Paper - flag this hopper to be able to accept items
+                     flag = a((IHopper) this) || flag;
+                 }
+diff --git a/src/main/java/net/minecraft/server/World.java b/src/main/java/net/minecraft/server/World.java
+index bc231c7f2..80e536899 100644
+--- a/src/main/java/net/minecraft/server/World.java
++++ b/src/main/java/net/minecraft/server/World.java
+@@ -1120,6 +1120,12 @@ public abstract class World implements IBlockAccess {
+         if (entity == null) return false;
+         if (entity.valid) { MinecraftServer.LOGGER.error("Attempted Double World add on " + entity, new Throwable()); return true; } // Paper
+ 
++        // CoreSystem-PERF: reject experience orb entities entirely (no floating XP orbs / bandwidth)
++        if (entity instanceof EntityExperienceOrb) {
++            entity.dead = true;
++            return false;
++        }
++
+         org.bukkit.event.Cancellable event = null;
+         if (entity instanceof EntityLiving && !(entity instanceof EntityPlayer)) {
+             boolean isAnimal = entity instanceof EntityAnimal || entity instanceof EntityWaterAnimal || entity instanceof EntityGolem;
+@@ -2760,6 +2766,11 @@ public abstract class World implements IBlockAccess {
+             if (entity == null || entity.dead || entity.valid) { // Paper - prevent adding already added or dead entities
+                 continue;
+             }
++            // CoreSystem-PERF: drop experience orbs loaded from chunk NBT (no floating XP orbs)
++            if (entity instanceof EntityExperienceOrb) {
++                entity.dead = true;
++                continue;
++            }
+             this.entityList.add(entity);
+             // CraftBukkit end
+             this.b(entity);
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+index decdccdc7..77a1dc1c6 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+@@ -177,7 +177,8 @@ public final class CraftItemStack extends ItemStack {
+ 
+     @Override
+     public int getMaxStackSize() {
+-        return (handle == null) ? Material.AIR.getMaxStackSize() : handle.getItem().getMaxStackSize();
++        // CoreSystem — use NMS ItemStack.getMaxStackSize so BrewNmsHooks can raise brew NI stacks
++        return (handle == null) ? Material.AIR.getMaxStackSize() : handle.getMaxStackSize();
+     }
+ 
+     // Paper start
+diff --git a/src/main/java/org/spigotmc/ActivationRange.java b/src/main/java/org/spigotmc/ActivationRange.java
+index 4c8d94c87..3033c0929 100644
+--- a/src/main/java/org/spigotmc/ActivationRange.java
++++ b/src/main/java/org/spigotmc/ActivationRange.java
+@@ -302,9 +302,14 @@ public class ActivationRange
+                 isActive = true;
+             }
+             // Add a little performance juice to active entities. Skip 1/4 if not immune.
+-        } else if ( !entity.defaultActivationState && entity.ticksLived % 4 == 0 && !checkEntityImmunities( entity ) )
++            // CoreSystem-PERF: deepen skip for animals/misc (type 2/3); keep Paper 1/4 for monsters/water (MM-safe)
++        } else if ( !entity.defaultActivationState && !checkEntityImmunities( entity ) )
+         {
+-            isActive = false;
++            int skipMod = (entity.activationType == 1 || entity.activationType == 4) ? 4 : 3;
++            if ( entity.ticksLived % skipMod == 0 )
++            {
++                isActive = false;
++            }
+         }
+         //int x = MathHelper.floor( entity.locX ); // Paper
+         //int z = MathHelper.floor( entity.locZ ); // Paper

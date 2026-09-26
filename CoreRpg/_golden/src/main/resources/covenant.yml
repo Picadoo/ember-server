@@ -1,0 +1,40 @@
+# CoreRpg covenant — 余烬誓约（DESIGN-ember-covenant-talent.md §6.1）
+# STUB：插件岗实现命令前可先落盘；热重载进 /corerpg reload（落地后）
+enabled: true
+
+first_pick_free: true
+reset_clears_talent: true
+
+reset:
+  crystal_cash: 80
+  ticket_ni_id: mat_ember_covenant_reset
+  cooldown_hours: 0
+
+covenants:
+  blaze:
+    display: "§6烬刃"
+    description: "近战爆发 · 暴击 / 吸血 / 斩击"
+    weapon_bias: blade
+    stats:
+      crit_chance_pct: 0.03
+      life_steal_pct: 0.01
+  ash:
+    display: "§7灰行"
+    description: "持续风筝 · 攻速 / 减速 / 微弱使魔"
+    weapon_bias: hybrid
+    stats:
+      attack_speed_pct: 0.04
+      move_speed_pct: 0.02
+  warden:
+    display: "§9守墓"
+    description: "生存团队 · 减伤 / 嘲讽 / 护符加成"
+    weapon_bias: charm
+    stats:
+      damage_taken_pct: -0.04
+      charm_stat_bonus_pct: 0.05
+
+caps:
+  crit_chance_pct: 0.35
+  life_steal_pct: 0.05
+  move_speed_pct: 0.08
+  damage_taken_pct_floor: -0.25

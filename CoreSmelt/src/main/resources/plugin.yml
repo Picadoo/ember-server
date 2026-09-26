@@ -1,0 +1,15 @@
+name: CoreSmelt
+main: town.sunshine.coresmelt.CoreSmeltPlugin
+version: 1.0.0
+author: sunshine-town
+description: Wipe vanilla furnace recipes; register NeigeItems-only smelt chain from config.yml
+depend: [NeigeItems]
+load: POSTWORLD
+commands:
+  coresmelt:
+    description: Check furnace recipe wipe / NI chain status
+    usage: /coresmelt check|reload
+    permission: coresmelt.admin
+permissions:
+  coresmelt.admin:
+    default: op

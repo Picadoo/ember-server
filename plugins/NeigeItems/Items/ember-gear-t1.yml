@@ -1,0 +1,53 @@
+# T1 精炼装备 + 团本饰品 stub — DESIGN-ember-growth-curve.md §3
+# 来源：日本高难 / 周本 / 团本；奖励接线交给插件岗（勿改日周深渊箱数量）
+
+# --- T1 ---
+gear_ember_t1_blade:
+  material: DIAMOND_SWORD
+  name: '&b余烬精炼之刃'
+  lore:
+    - '&7gear_ember_t1_blade'
+    - '&a[T1] &8精炼 · 日本高难 / 周本'
+    - '&6套装：余烬同袍 &8· 与团戒同持'
+    - '&8建议强化上限 +6'
+    - ''
+    - '物理伤害: +14'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gear_ember_t1_talisman:
+  material: EMERALD
+  name: '&b余烬精炼护符'
+  lore:
+    - '&7gear_ember_t1_talisman'
+    - '&a[T1] &8精炼 · 日本高难 / 周本'
+    - '&8建议强化上限 +6'
+    - ''
+    - '生命力: +35'
+    - '物理防御: +6'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+# --- 团本饰品 stub ---
+acc_ember_raid_ring:
+  material: GOLD_INGOT
+  name: '&6余烬团本之戒'
+  lore:
+    - '&7acc_ember_raid_ring'
+    - '&6[团饰] &8EmberRaid · 周首通保底'
+    - '&6套装：余烬同袍'
+    - '&7与任意余烬之刃（T0～T3）同持激活 2 件'
+    - '&8效果：击杀微量回能（≤战力 2%）'
+    - '&8背包持有即计件 · 禁止大额攻击乘区'
+    - '&6套装：余烬同袍 ✓'
+    - ''
+    - '生命力: +10'
+    - '物理伤害: +3'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

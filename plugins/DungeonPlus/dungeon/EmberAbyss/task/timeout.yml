@@ -1,0 +1,9 @@
+# 超时强制结算最高层（reward=false 防双箱）— docs/ember-abyss-evacuate-spec.md
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 1500:
+      - "$message{type=text;text=§c深渊合拢。强制结算最高层（深渊票不返还）} @dungeon"
+      - "$command{text=corerpg abyss settle <player.name>;console=true} @player"
+      - "$end{type=text;text=§c余烬深渊 超时 · 已按最高层结算;reward=false;delay=1;end-type=FAILURE} @dungeon"

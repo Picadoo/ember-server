@@ -1,0 +1,62 @@
+#本配置正则私有占位符
+#@$ = \$ (请不要直接在配置内使用 \$ 否则报错)
+#@value = ([ +-]{0,9}[0-9]?[0-9.+-]+) 正则式(获取数值)
+
+#是否使用旧版处理方式
+#旧版本属性读取格式,读取逻辑算法 (性能较差)
+original-logic-format: false
+
+#读取格式 (正则匹配)
+#读取根据 @value 所在位置内的值,可以是 "100,-100,100-1000"
+#读取优先级从上往下依次读取,当数值被读取到则不继续往下
+attribute-read-format:
+  #属性标签 属性值 (属性值)
+  - ".*?{key}.*?@value.*?\\(@value\\).*?"
+  #属性标签 属性值
+  - ".*?{key}.*?@value"
+  #属性值 属性标签
+  - "@value.*?{key}.*?"
+
+#规则标签正则匹配
+#读取根据 @value 所在位置内的值
+condition-read-format:
+  #装备等级: 10 (至少大于等于)
+  #装备等级: 10-100 (等级需在该范围内)
+  level:
+    - "{key}.*?@value"
+  #职业: 剑士 (需拥有剑士权限)
+  #职业: 剑士/骑士 (需拥有任意一个权限)
+  professional:
+    - "{key}.*?: (.*?)@$"
+    - "{key}.*?:(.*?)@$"
+    - "{key}.*? (.*?)@$"
+  #装备类型: 主手 (需穿戴至主手)
+  #装备类型: 主手/副手 (可穿戴在主手或副手)
+  equipment-type:
+    - "{key}.*?: (.*?)@$"
+    - "{key}.*?:(.*?)@$"
+    - "{key}.*? (.*?)@$"
+
+#自定义规则标签
+custom-condition-component:
+  example:
+    #添加至物品的标签
+    key: "战力要求"
+    #读取格式
+    formats:
+      - "{key}.*?@value"
+    #{value_0-N} 代表获取到的值(未处理过的数据)
+    #{value_min_0-N} 表示获取到的最小值
+    #{value_max_0-N} 表示获取到的最大值,如果非范围值格式则返回 none
+    #{..._0-N} 0-N 每个对应上方 formats 配置的 @value 或 (.*?)
+    conditions:
+      - check '%ap_combatPower%' >= {value_min_0}
+      - any [ check '{value_max_0}' == 'none' check '%ap_combatPower%' <= {value_max_0} ]
+    #不满足时的提示
+    message: "&f你不满足 &6{item_name} &f物品的使用战力要求"
+
+#如果 custom-condition-component 配置项内
+#使用 AttributePlus 自带的变量时,需将变量配置进来
+cache-placeholder:
+  #- "attack"
+  - "combatPower"

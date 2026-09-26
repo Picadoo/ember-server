@@ -1,0 +1,103 @@
+# CoreRpg enhance + socket — 余烬成长层（DESIGN-ember-enhance-socket.md §6）
+enabled: true
+
+whitelist_ni_ids:
+  - gear_ember_blade
+  - gear_ember_charm
+  - gear_ember_t1_blade
+  - gear_ember_t2_blade
+  - gear_ember_t1_talisman
+  - gear_ember_t2_talisman
+  - gear_ember_t3_blade
+  - gear_ember_t3_talisman
+  # acc_ember_raid_ring — 饰品不强化，仅 scrap
+
+lore:
+  display_prefix: "§8强化 §f+"
+  marker_prefix: "§8§o#ember_en:"
+  socket_display_format: "§8孔{slot}: §f{value}"
+  socket_empty: "§7空"
+  socket_locked: "§7未解锁"
+  socket_marker_prefix: "§8§o#ember_sk:"
+
+auto_use_protect: true
+protect_scroll_ni_id: mat_ember_protect_scroll
+stable_charm_ni_id: mat_ember_stable_charm
+
+levels:
+  1: { chance: 1.00, fail: stay, costs: { mat_ember_shard: 3 } }
+  2: { chance: 0.90, fail: stay, costs: { mat_ember_shard: 5 } }
+  3: { chance: 0.80, fail: stay, costs: { mat_ember_shard: 8 } }
+  4: { chance: 0.70, fail: down1, costs: { mat_ember_shard: 10, mat_ember_bone_dust: 2 } }
+  5: { chance: 0.55, fail: down1, costs: { mat_ember_shard: 12, mat_ember_bone_dust: 3 } }
+  6: { chance: 0.40, fail: down1, costs: { mat_ember_shard: 15, mat_ember_bone_dust: 5 } }
+  7: { chance: 0.35, fail: down1, protect: true, costs: { mat_ember_core_fragment: 1, mat_ember_shard: 10 } }
+  8: { chance: 0.25, fail: down1, protect: true, costs: { mat_ember_core_fragment: 1, mat_ember_shard: 15 } }
+  9: { chance: 0.15, fail: down1, protect: true, costs: { mat_ember_core_fragment: 2, mat_ember_shard: 20 } }
+  10:
+    chance: 0.08
+    fail: set8
+    stable_required: true
+    costs:
+      mat_ember_core_fragment: 3
+      mat_ember_stable_charm: 1
+
+# T0 base · T1 略高 · T2 再高 · T3 顶档
+stat_per_level:
+  gear_ember_blade:
+    phys_damage: 2
+  gear_ember_charm:
+    max_health: 4
+    phys_defense: 1
+  gear_ember_t1_blade:
+    phys_damage: 3
+  gear_ember_t1_talisman:
+    max_health: 5
+    phys_defense: 2
+  gear_ember_t2_blade:
+    phys_damage: 4
+  gear_ember_t2_talisman:
+    max_health: 7
+    phys_defense: 3
+  gear_ember_t3_blade:
+    phys_damage: 5
+  gear_ember_t3_talisman:
+    max_health: 9
+    phys_defense: 4
+
+socket:
+  unique_gem_ids: false
+  gear_ember_blade:
+    max: 2
+    unlock_at: [0, 5]
+  gear_ember_charm:
+    max: 1
+    unlock_at: [3]
+  gear_ember_t1_blade:
+    max: 2
+    unlock_at: [0, 5]
+  gear_ember_t1_talisman:
+    max: 1
+    unlock_at: [3]
+  gear_ember_t2_blade:
+    max: 2
+    unlock_at: [0, 5]
+  gear_ember_t2_talisman:
+    max: 1
+    unlock_at: [3]
+  gear_ember_t3_blade:
+    max: 2
+    unlock_at: [0, 5]
+  gear_ember_t3_talisman:
+    max: 1
+    unlock_at: [3]
+
+gems:
+  gem_ember_sharp:  { phys_damage: 2 }
+  gem_ember_steady: { phys_defense: 2 }
+  gem_ember_drain:  { life_steal_pct: 0.01 }
+  gem_ember_gale:   { move_speed_pct: 0.02 }
+
+caps:
+  life_steal_pct: 0.05
+  move_speed_pct: 0.08

@@ -1,0 +1,17 @@
+[
+{
+  "modid": "emberstackdisplay",
+  "name": "Ember Stack Display",
+  "description": "Forces inventory/hotbar overlay to show the real ItemStack count (65-127) for Paper/CoreBrew oversized brew stacks. Client display only.",
+  "version": "1.0.0",
+  "mcversion": "1.12.2",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["ember"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": [],
+  "clientSideOnly": true
+}
+]

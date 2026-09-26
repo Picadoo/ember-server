@@ -1,0 +1,64 @@
+coin: 13015
+lastSignDate: '2026-09-12'
+activity: 30
+activityClaimed: []
+bountyId: crypt_sweep
+bountyProgress: 20
+bountyClaimed: false
+killsToday: 298
+playMinutesToday: 745
+lastActivityDate: '2026-09-13'
+activityFromKills: 15
+activityFromOnline: 15
+abyssUsedToday: 0
+covenant: blaze
+covenantChosenAt: 2026-09-12 15:22
+talentPointsEarned: 9
+talentPointsSpent: 1
+talentNodes:
+- blaze_root
+talentFreeResetDate: ''
+talentFreeResetsUsed: 0
+ember_crystal_cash: 132
+crystalCash: 132
+emberLevel: 10
+monthlyCard: true
+monthlyExpireDate: '2026-10-12'
+monthlyLastGrantDate: '2026-09-13'
+dailyTicketsGranted: 4
+dailyTicketsBought: 0
+dailyEntriesUsed: 0
+dailyCashResetDate: '2026-09-13'
+dailyFreeGranted: true
+weeklyTicketGrantWeekId: 2026-W37
+abyssTicketGrantDate: '2026-09-13'
+friends: []
+pendingIn: []
+pendingOut: []
+mentorName: ''
+mentorPending: ''
+settingsSound: false
+settingsTip: true
+settingsPrivacy: false
+powerScore: 170
+abyssBest: 7
+abyssBestWeek: 7
+abyssWeekId: 2026-W37
+weeklyBestSec: 95
+lastKnownName: RpgBot
+petsUnlocked:
+- pet_ember_ashling
+- pet_ember_cinder
+activePet: pet_ember_ashling
+petLevels:
+  pet_ember_ashling: 3
+guildId: 21a84f6f-2477-4a80-ae53-15854afd99d2
+guildDonateDate: '2026-09-13'
+guildDonateToday: 22
+guildBossWeekId: 2026-W37
+guildBossUsed: 1
+arenaPoints: 0
+arenaWins: 0
+arenaLosses: 0
+arenaDailyClaimDate: '2026-09-13'
+arenaQueueMode: ''

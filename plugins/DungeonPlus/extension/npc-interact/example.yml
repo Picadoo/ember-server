@@ -1,0 +1,15 @@
+#目前仅支持 Adyeshach 插件
+
+#NPC显示名匹配
+#NPC召唤示例：$npc{type=a;id=NPCid(任意);name=测试NPC实体;operation=spawn;location=37,18,20} @dungeon
+"测试NPC实体":
+  #触发后自动移除
+  auto-removed: true
+  #同一时刻(1秒)仅允许触发一次,默认关闭
+  sync-cooldown: true
+  #触发条件
+  conditions:
+    - $js-condition{text=%player_leve%>10;message=§e队友 %player_name% 等级小于10级,无法触发NPC脚本;pre-placeholder=false} @system
+  #触发动作
+  actions:
+    - $message{type=text;text=§a成功交互NPC对象} @self

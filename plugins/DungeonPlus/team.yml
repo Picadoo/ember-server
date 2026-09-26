@@ -1,0 +1,82 @@
+#服务器队伍列表
+teams:
+  title: "§f队伍列表"
+  layouts:
+    - "#########"
+    - "#@@@@@@@#"
+    - "#@@@@@@@#"
+    - "#########"
+    - "##P#C#N##"
+  team-info:
+    material: PLAYER_HEAD
+    name: "§6{leader} §f的队伍"
+    lore:
+      - " "
+      - "§f队伍人数 §7{team_size}/{team_max_size}"
+      - "§f队员列表"
+      - "{team_players}"
+      - " "
+      - "§6点击 §f申请加入队伍"
+  materials:
+    '@':
+      material: BARRIER
+      name: "§f空闲位置"
+      lore:
+        - "§f快点自己创建一个吧"
+    "C":
+      material: LEATHER_HELMET
+      name: "§6创建队伍"
+      lore:
+        - "§6左键 §f创建一个队伍"
+    "P":
+      material: PAPER
+      name: "§7上一页"
+      action: "PREVIOUS"
+    "N":
+      material: PAPER
+      name: "§7下一页"
+      action: "NEXT"
+
+#队伍信息
+infos:
+  title: "§f我的队伍"
+  layouts:
+    - "#########"
+    - "#@@@@@@@#"
+    - "##P###N##"
+    - "D#######Q"
+  player-info:
+    material: PLAYER_HEAD
+    name: "§f(§6{type}§f) §f{name}"
+    lore:
+      - " "
+      - " §f状态: §f{state}"
+      - " §f等级: §f{level}"
+      - " "
+      - "§7(队长可操作)"
+      - "§6右键 §f踢出队伍"
+      - "§6SHIFT+右键 §f转让队长"
+  materials:
+    '@':
+      material: BARRIER
+      name: "§f空闲位置"
+      lore:
+        - "§f快去邀请朋友加入吧"
+    "D":
+      material: BARRIER
+      name: "§c解散队伍"
+      lore:
+        - "§6左键 §f解散当前队伍"
+    "Q":
+      material: BARRIER
+      name: "§c退出队伍"
+      lore:
+        - "§6左键 §f退出当前队伍"
+    "P":
+      material: PAPER
+      name: "§7上一页"
+      action: "PREVIOUS"
+    "N":
+      material: PAPER
+      name: "§7下一页"
+      action: "NEXT"

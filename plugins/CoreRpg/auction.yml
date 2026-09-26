@@ -1,0 +1,28 @@
+# CoreRpg auction / 寄售 — coin listings, tax 10% (DESIGN-ember-arena-auction.md)
+enabled: true
+tax_rate: 0.1
+page_size: 8
+max_listings_per_player: 12
+min_price: 1
+max_price: 1000000
+ban_enhance_at: 7
+whitelist_ni_ids:
+- mat_ember_stable_charm
+- ticket_ember_daily
+- mat_ember_core_fragment
+- mat_calamity_ember
+- mat_ember_reforge_stone
+- ticket_ember_abyss
+- gem_ember_sharp
+- gem_ember_drain
+- cosmetic_calamity_shard
+- gem_ember_steady
+- gem_ember_gale
+- ticket_ember_raid
+- pet_ember_cinder
+- pet_ember_ashling
+- mat_ember_shard
+- ticket_ember_weekly
+- mat_ember_bone_dust
+- mat_ember_protect_scroll
+next_id: 4

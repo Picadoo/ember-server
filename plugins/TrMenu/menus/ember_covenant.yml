@@ -1,0 +1,133 @@
+# 誓约子菜单 — DESIGN-ember-covenant-talent.md §7
+# 誓约 + 技能释放
+
+Title: '§6余烬 · 誓约'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# B A W #'
+  - '#  I R  #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §7选定 §6烬刃§7 / §8灰行§7 / §9守墓§7。首次免费；洗约需晶钻或重置券。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  I:
+    display:
+      material: book
+      name: '§e查看当前誓约'
+      lore:
+        - ''
+        - '§7查询已选定誓约与洗约费用'
+        - ''
+        - '§8命令：/corerpg covenant'
+        - ''
+        - '§e➥ §f点击查看'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[誓约] §7请执行 §f/corerpg covenant §7查看（插件岗实装后生效）'
+        - 'command: corerpg covenant'
+
+  R:
+    display:
+      material: paper
+      name: '§c洗约说明'
+      lore:
+        - ''
+        - '§7首次选定 §a免费'
+        - '§7之后：§b晶钻 ×80 §7或 §e誓约重置券'
+        - '§7洗约会 §c清空天赋分配'
+        - ''
+        - '§8详见 DESIGN-ember-covenant-talent.md'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §c[誓约] §7首次免费；洗约 §b80 晶钻 §7或重置券，并清空天赋。'
+
+  B:
+    display:
+      material: diamond sword
+      name: '§6烬刃'
+      lore:
+        - ''
+        - '§7近战爆发 · 暴击 / 吸血 / 斩击'
+        - '§8推荐：余烬之刃'
+        - '§8ID: blaze'
+        - ''
+        - '§8命令：/corerpg covenant set blaze'
+        - ''
+        - '§6➥ §f点击选定（建议命令）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §6[誓约] §7建议执行：§f/corerpg covenant set blaze'
+        - 'tell: §8已接线 · /corerpg covenant'
+        - 'command: corerpg covenant set blaze'
+        - close
+
+  A:
+    display:
+      material: bow
+      name: '§7灰行'
+      lore:
+        - ''
+        - '§7持续风筝 · 攻速 / 减速 / 微弱使魔'
+        - '§8推荐：刃或远程倾向'
+        - '§8ID: ash'
+        - ''
+        - '§8命令：/corerpg covenant set ash'
+        - ''
+        - '§7➥ §f点击选定（建议命令）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §7[誓约] §7建议执行：§f/corerpg covenant set ash'
+        - 'tell: §8已接线 · /corerpg covenant'
+        - 'command: corerpg covenant set ash'
+        - close
+
+  W:
+    display:
+      material: shield
+      name: '§9守墓'
+      lore:
+        - ''
+        - '§7生存团队 · 减伤 / 嘲讽 / 护符加成'
+        - '§8推荐：余烬护符权重高'
+        - '§8ID: warden'
+        - ''
+        - '§8命令：/corerpg covenant set warden'
+        - ''
+        - '§9➥ §f点击选定（建议命令）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §9[誓约] §7建议执行：§f/corerpg covenant set warden'
+        - 'tell: §8已接线 · /corerpg covenant'
+        - 'command: corerpg covenant set warden'
+        - close

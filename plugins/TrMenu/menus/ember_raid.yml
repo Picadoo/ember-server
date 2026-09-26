@@ -1,0 +1,99 @@
+# 团本子菜单 — EmberRaid · DESIGN-ember-rpg-systems.md §4
+# /dp start EmberRaid · 扣余烬团本票 ×1 · 3～5 人
+
+Title: '§9团本 · 灰烬协奏'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# S P R #'
+  - '#       #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'tell: §9[团本] §7需 3～5 人 · 周 1 票 · 左道/右道 → 汇合 → 终厅使徒'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  S:
+    display:
+      material: beacon
+      name: '§a开始协作'
+      lore:
+        - ''
+        - '§7进本即扣 §9余烬团本票 §f×1'
+        - '§7失败不返还 · 请确认全队就绪'
+        - ''
+        - '§8流程：左道卫兵 → 右道射手 → 精英门 → 终厅'
+        - '§8周首通保底团戒 · 戒+刃=同袍套装'
+        - '§8人数 §f3～5 §8· 时限约 30～40 分'
+        - ''
+        - '§e➥ §f点击 · /dp start EmberRaid'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §9团本已点燃。§7分路推进——左卫兵、右射手，汇合后再闯终厅。'
+        - 'tell: §8命令：§7/dp start EmberRaid §8· 需 §9余烬团本票§8×1 · 人数 3～5'
+        - 'command: dp start EmberRaid'
+        - close
+
+  P:
+    display:
+      material: ender chest
+      name: '§6奖励预览'
+      lore:
+        - ''
+        - '§7战斗掉落：深渊 / 灾厄 MM 表'
+        - ''
+        - '§7通关箱（全队每人）：'
+        - '  §e核心碎片 ×4 · 附魔晶 ×2'
+        - '  §e碎片 ×10 · 骨尘 ×6'
+        - '  §e孔石锋利 ×1'
+        - ''
+        - '§7周首通保底 §6余烬团戒'
+        - '§7戒+刃=§6余烬同袍'
+        - '§7T2/T3 终厅低概率 · 不保底'
+        - '§8docs/ember-raid-channel-spec.md'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §9[团本奖励] §7材料箱 + 周首通团戒；T3 不保底'
+
+  R:
+    display:
+      material: watch
+      name: '§e次数说明'
+      lore:
+        - ''
+        - '§7每周 §f1 §7张团本票'
+        - '§7重置：§f周一 00:00 Asia/Shanghai'
+        - '§7进本即扣 · 失败不返还'
+        - '§7人数硬限 §f3～5'
+        - ''
+        - '§8/ni give <玩家> ticket_ember_raid 1'
+        - '§7每周团本票 ×1（进服发放）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §9团本每周 1 次，周一 0:00（上海）重置；需 3～5 人；进本即扣票。'

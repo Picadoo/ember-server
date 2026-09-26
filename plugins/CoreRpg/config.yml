@@ -1,0 +1,90 @@
+# CoreRpg — 余烬服 RPG：进度 HUD / 刷怪 / 余烬币 / 签到 / 活跃 / 悬赏
+# 余烬币 = 软通货 D（DESIGN-ember-economy-monetization.md）
+
+join_message:
+  - "§6§l[余烬服] §e目标：击杀地窟亡灵，收集碎片与骨尘，合成附魔晶，强化余烬装备。"
+  - "§7击杀僵尸拿碎片 · 骷髅拿骨尘 · 蛮兵拿核心碎片"
+  - "§7指令：§f/ember §7主菜单 · §f/corerpg enhance §7强化 · §f/corerpg socket §7镶嵌 · §f/corerpg sign §7签到"
+  - "§7深渊：§f/dp start EmberAbyss §7（余烬深渊票）· 灾厄：§f/corerpg calamity status"
+
+scoreboard:
+  title: "§6余烬进度"
+  enabled: true
+
+spawn:
+  mob: EmberCryptZombie
+  amount: 1
+  command_template: "mm m spawn {mob} {amount} {world},{x},{y},{z}"
+
+shard_name_contains: "余烬碎片"
+dust_name_contains: "余烬骨尘"
+crystal_name_contains: "余烬附魔晶"
+
+coin:
+  name: "余烬币"
+  starting: 0
+  kill_reward: 1
+
+sign:
+  reward: 100
+  activity_points: 10
+
+activity:
+  kill_points: 1
+  kill_cap: 15
+  online_interval_minutes: 4
+  online_points: 5
+  online_cap: 15
+  bounty_complete_points: 15
+  chests:
+    25: 50
+    50: 100
+    75: 150
+    100: 250
+
+bounties:
+  - id: clear_undead
+    name: "清剿亡灵"
+    killTarget: 30
+    rewardCoin: 80
+  - id: ember_hunt
+    name: "余烬猎杀"
+    killTarget: 50
+    rewardCoin: 120
+  - id: crypt_sweep
+    name: "地窟扫荡"
+    killTarget: 20
+    rewardCoin: 60
+
+calamity:
+  enabled: true
+  times:
+    - "12:00"
+    - "20:00"
+    - "22:00"
+  # MM 4.11: mm m spawn <mob> <amount> <w,x,y,z>
+  spawn_command: "mm m spawn EmberCalamityBoss 1 {world},{x},{y},{z}"
+  location:
+    world: ember_event
+    x: -96.5
+    y: 64.0
+    z: 266.5
+  warning_seconds: 10
+  warning_message: "&c[余烬] &4灾厄将至——灰烬正在苏醒…"
+  spawn_message: "&4[余烬] &c余烬灾厄使降临于 {world} ({x}, {y}, {z})！"
+  # 击杀额外 NI（MM onDeath 另发孔石/核心；此处只补物品岗灾厄奖）
+  kill_rewards:
+    - "ni give {player} mat_calamity_ember 1"
+    - "ni give {player} cosmetic_calamity_shard 1"
+
+# Persistence 1.4.0+ — keep yaml unless ops explicitly switch (see config-mysql.example.yml)
+storage: mysql
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  database: ember
+  username: ember
+  password: "CHANGE_ME"
+  pool-size: 10
+  jdbc-params: "useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&serverTimezone=UTC"
+

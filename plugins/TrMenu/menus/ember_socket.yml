@@ -1,0 +1,159 @@
+# 镶嵌子菜单 — DESIGN-ember-enhance-socket.md §7
+# 壳：提示手持装备 + 跑 /corerpg socket …
+
+Title: '§5余烬 · 镶嵌'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# L A B #'
+  - '# 1234  #'
+  - '####R####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §7请手持 §c余烬之刃 §7或 §e余烬护符 §7；宝石放在背包。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  R:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  L:
+    display:
+      material: book and quill
+      name: '§e查看孔位'
+      lore:
+        - ''
+        - '§7列出已解锁 / 空 / 已镶宝石'
+        - ''
+        - '§8刃：孔1@+0 · 孔2@+5'
+        - '§8护符：孔1@+3'
+        - ''
+        - '§8命令：/corerpg socket list'
+        - ''
+        - '§e➥ §f点击查看'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §e[镶嵌] §7请确认手持余烬装备…'
+        - 'command: corerpg socket list'
+
+  A:
+    display:
+      material: emerald
+      name: '§a卸下孔 1'
+      lore:
+        - ''
+        - '§7将孔 1 宝石退回背包'
+        - ''
+        - '§8命令：/corerpg socket remove 1'
+        - ''
+        - '§a➥ §f点击卸下'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §a[镶嵌] §7尝试卸下孔 1…'
+        - 'command: corerpg socket remove 1'
+
+  B:
+    display:
+      material: diamond
+      name: '§b卸下孔 2'
+      lore:
+        - ''
+        - '§7将孔 2 宝石退回背包（刃）'
+        - ''
+        - '§8命令：/corerpg socket remove 2'
+        - ''
+        - '§b➥ §f点击卸下'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §b[镶嵌] §7尝试卸下孔 2…'
+        - 'command: corerpg socket remove 2'
+
+  '1':
+    display:
+      material: quartz
+      name: '§c镶入 · 锋利石'
+      lore:
+        - ''
+        - '§7微量攻击 · gem_ember_sharp'
+        - '§8背包需有该石'
+        - ''
+        - '§c➥ §f点击镶入'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §c[镶嵌] §7尝试镶入锋利石…'
+        - 'command: corerpg socket insert gem_ember_sharp'
+        - close
+
+  '2':
+    display:
+      material: iron ingot
+      name: '§9镶入 · 稳固石'
+      lore:
+        - ''
+        - '§7微量防御 · gem_ember_steady'
+        - '§8背包需有该石'
+        - ''
+        - '§9➥ §f点击镶入'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §9[镶嵌] §7尝试镶入稳固石…'
+        - 'command: corerpg socket insert gem_ember_steady'
+        - close
+
+  '3':
+    display:
+      material: ghast tear
+      name: '§5镶入 · 汲取石'
+      lore:
+        - ''
+        - '§7微量吸血 · gem_ember_drain'
+        - '§8背包需有该石'
+        - ''
+        - '§5➥ §f点击镶入'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §5[镶嵌] §7尝试镶入汲取石…'
+        - 'command: corerpg socket insert gem_ember_drain'
+        - close
+
+  '4':
+    display:
+      material: feather
+      name: '§a镶入 · 疾风石'
+      lore:
+        - ''
+        - '§7微量移速 · gem_ember_gale'
+        - '§8背包需有该石'
+        - ''
+        - '§a➥ §f点击镶入'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §a[镶嵌] §7尝试镶入疾风石…'
+        - 'command: corerpg socket insert gem_ember_gale'
+        - close

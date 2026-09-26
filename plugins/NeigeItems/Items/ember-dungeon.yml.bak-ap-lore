@@ -1,0 +1,56 @@
+# Ember Crypt dungeon — mats + gear (AttributePlus lore lines)
+# Folder: plugins/NeigeItems/Items/*.yml (NI 1.21.151)
+# AP reads Chinese attribute lines from lore; rename keys later if AP attribute.yml differs.
+
+mat_ember_shard:
+  material: REDSTONE
+  name: '&c余烬碎片'
+  lore:
+    - '&7mat_ember_shard'
+    - '&8余烬地窟掉落 · 基础材料'
+
+mat_ember_bone_dust:
+  material: SULPHUR
+  name: '&7余烬骨尘'
+  lore:
+    - '&7mat_ember_bone_dust'
+    - '&8余烬地窟掉落 · 材料'
+
+mat_ember_core_fragment:
+  material: MAGMA_CREAM
+  name: '&6余烬核心碎片'
+  lore:
+    - '&7mat_ember_core_fragment'
+    - '&8余烬地窟掉落 · 稀有材料'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gear_ember_blade:
+  material: IRON_SWORD
+  name: '&c余烬之刃'
+  lore:
+    - '&7gear_ember_blade'
+    - '&8余烬地窟武器'
+    - ''
+    - '攻击力: +8'
+    - '生命值: +20'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gear_ember_charm:
+  material: GOLD_NUGGET
+  name: '&e余烬护符'
+  lore:
+    - '&7gear_ember_charm'
+    - '&8余烬地窟饰品'
+    - ''
+    - '生命值: +20'
+    - '防御力: +3'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

@@ -1,0 +1,76 @@
+# 强化保护 / 稳固符 + 镶嵌孔石 — CoreRpg 成长层（1.12.2 / NI 1.21.151）
+# 产出：氪金 / 周本 / 深渊 / 分解；不进地窟掉落表
+
+# --- 强化保护 ---
+mat_ember_protect_scroll:
+  material: PAPER
+  name: '&d余烬保护券'
+  lore:
+    - '&7mat_ember_protect_scroll'
+    - '&8强化失败时防止掉级'
+    - '&7用于 +7～+9 等高危强化'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+mat_ember_stable_charm:
+  material: NETHER_STAR
+  name: '&b余烬稳固符'
+  lore:
+    - '&7mat_ember_stable_charm'
+    - '&8+10 强化失败时不掉级'
+    - '&7仅失败，不掉档'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+# --- 镶嵌孔石（微量属性，由强化/镶嵌系统读取） ---
+gem_ember_sharp:
+  material: QUARTZ
+  name: '&c锋利石'
+  lore:
+    - '&7gem_ember_sharp'
+    - '&8镶嵌石 · 微量攻击'
+    - '&8刃 / 护符孔可用'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gem_ember_steady:
+  material: IRON_INGOT
+  name: '&9稳固石'
+  lore:
+    - '&7gem_ember_steady'
+    - '&8镶嵌石 · 微量防御'
+    - '&8刃 / 护符孔可用'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gem_ember_drain:
+  material: GHAST_TEAR
+  name: '&5汲取石'
+  lore:
+    - '&7gem_ember_drain'
+    - '&8镶嵌石 · 微量吸血'
+    - '&8刃 / 护符孔可用'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gem_ember_gale:
+  material: FEATHER
+  name: '&a疾风石'
+  lore:
+    - '&7gem_ember_gale'
+    - '&8镶嵌石 · 微量移速'
+    - '&8刃 / 护符孔可用'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

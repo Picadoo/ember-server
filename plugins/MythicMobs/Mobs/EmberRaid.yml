@@ -1,0 +1,87 @@
+# 团本 EmberRaid — 通道杂兵 → 终厅机制战
+
+EmberRaidFootman:
+  Type: ZOMBIE
+  Display: '&c团本·通道卫兵'
+  Health: 38
+  Damage: 6
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_SWORD HAND
+  Skills:
+  - skill{s=EmberCryptBleed} @target ~onAttack 0.2
+  - command{c="ni give <trigger.name> mat_ember_shard 1";asop=true} @Trigger ~onDeath >0 0.5
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.05
+
+EmberRaidArcher:
+  Type: SKELETON
+  Display: '&c团本·通道射手'
+  Health: 32
+  Damage: 7
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberWeeklyGuardPulse} @target ~onAttack 0.2
+  - command{c="ni give <trigger.name> mat_ember_bone_dust 1";asop=true} @Trigger ~onDeath >0 0.5
+  - command{c="ni give <trigger.name> gear_ember_t1_talisman 1";asop=true} @Trigger ~onDeath >0 0.04
+
+EmberRaidElite:
+  Type: HUSK
+  Display: '&c团本·通道精英'
+  Health: 95
+  Damage: 10
+  Options:
+    MovementSpeed: 0.22
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.5
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+  - IRON_SWORD HAND
+  Skills:
+  - skill{s=EmberRaidCallout} @target ~onAttack 0.12
+  - skill{s=EmberWeeklyChainSlam} @target ~onAttack 0.15
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.02
+  - command{c="ni give <trigger.name> gear_ember_t1_blade 1";asop=true} @Trigger ~onDeath >0 0.05
+
+EmberRaidBoss:
+  Type: WITHER_SKELETON
+  Display: '&c团本·终厅使徒'
+  Health: 560
+  Damage: 13
+  Options:
+    MovementSpeed: 0.22
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.65
+    MaxCombatDistance: 36
+  Equipment:
+  - DIAMOND_HELMET HEAD
+  - DIAMOND_CHESTPLATE CHEST
+  - DIAMOND_LEGGINGS LEGS
+  - DIAMOND_BOOTS FEET
+  - DIAMOND_SWORD HAND
+  Skills:
+  - skill{s=EmberRaidCallout} @target ~onAttack 0.2
+  - skill{s=EmberRaidSmash} @target ~onAttack 0.16
+  - skill{s=EmberRaidSummonAid} @self ~onTimer:160
+  - speak{m="&c终厅使徒&7：分路已尽，留下余烬。";cooldown=20} @PlayersInRadius{r=40} ~onCombat >0 0.12
+  # 团戒改通关箱周首通保底（option.yml），此处不发
+  - command{c="ni give <trigger.name> gear_ember_t2_blade 1";asop=true} @Trigger ~onDeath >0 0.15
+  - command{c="ni give <trigger.name> gear_ember_t2_talisman 1";asop=true} @Trigger ~onDeath >0 0.12
+  - command{c="ni give <trigger.name> gear_ember_t3_blade 1";asop=true} @Trigger ~onDeath >0 0.08
+  - command{c="ni give <trigger.name> gear_ember_t3_talisman 1";asop=true} @Trigger ~onDeath >0 0.06
+  - command{c="ni give <trigger.name> core_ember_compact 1";asop=true} @Trigger ~onDeath
+  - command{c="ni give <trigger.name> mat_ember_core_fragment 2";asop=true} @Trigger ~onDeath

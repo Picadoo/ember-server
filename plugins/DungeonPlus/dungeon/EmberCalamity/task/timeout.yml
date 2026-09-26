@@ -1,0 +1,8 @@
+# 单窗约 10 分钟
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 600:
+      - "$message{type=text;text=§c灰烬再度合拢…下次窗口再见。} @dungeon"
+      - "$end{type=text;text=§c余烬灾厄 超时失败;reward=false;delay=1;end-type=FAILURE} @dungeon"

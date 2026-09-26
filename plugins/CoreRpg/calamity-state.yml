@@ -1,0 +1,10 @@
+lastFireDate: '2026-09-13'
+firedTimes:
+- '12:00'
+- force
+currentWindowSlot: ''
+windowOpen: false
+windowEndEpochMs: 1789291477173
+bossSpawnedThisWindow: true
+bossKilledThisWindow: false
+announcedPre: []

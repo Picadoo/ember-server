@@ -1,0 +1,98 @@
+# 灾厄子菜单 — 主入口 MV ember_event；DP 仅测试
+# docs/ember-calamity-mv-entry.md · docs/ember-abyss-calamity.md
+Title: '§4灾厄 · 灰烬巨像'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# S P R #'
+  - '#   T   #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  S:
+    display:
+      material: magma cream
+      name: '§a奔赴灾厄'
+      lore:
+        - ''
+        - '§7传送至公共世界 §fember_event'
+        - '§7仅在开放窗口内有 Boss 与领奖'
+        - '§8建议窗：12:00 / 20:00 / 22:00（上海）'
+        - ''
+        - '§e➥ §f/mvtp ember_event'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §4已送往灾厄祭坛。若未开窗，请等待下一时刻。'
+        - 'command: mvtp ember_event'
+        - close
+
+  P:
+    display:
+      material: chest
+      name: '§6奖励预览'
+      lore:
+        - ''
+        - '§7参战：核心、灾厄余烬、外观碎片'
+        - '§7日箱：核心×2 + 附魔晶×1 + 余烬×2'
+        - '§7低概率 §cT3 §7装备'
+        - '§8docs/ember-gear-drop-t0-t3.md'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §4[灾厄] §7公共窗打巨像；日箱限 1；正式入口是 ember_event。'
+
+  R:
+    display:
+      material: watch
+      name: '§e窗口说明'
+      lore:
+        - ''
+        - '§7公共场：全服同图可见'
+        - '§7可多窗参战，§f日箱只领 1 次'
+        - '§7测试 Boss：§8/dp start EmberCalamity'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §4灾厄为限时公共事件；看好 12/20/22 点窗口。'
+
+  T:
+    display:
+      material: barrier
+      name: '§8测试实例（OP）'
+      lore:
+        - ''
+        - '§8DungeonPlus 隔离本，用于调 Boss'
+        - '§8正式游玩请用「奔赴灾厄」'
+        - '§e➥ §f/dp start EmberCalamity'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+        - 'tell: §8进入灾厄测试实例…'
+        - 'command: dp start EmberCalamity'
+        - close

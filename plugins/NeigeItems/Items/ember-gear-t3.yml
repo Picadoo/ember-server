@@ -1,0 +1,33 @@
+# T3 灾厄阶 — DESIGN-ember-growth-curve.md §3
+# 来源：团本终厅 / 灾厄窗；建议强化上限 +10
+
+gear_ember_t3_blade:
+  material: DIAMOND_SWORD
+  name: '&c余烬灾厄之刃'
+  lore:
+    - '&7gear_ember_t3_blade'
+    - '&6套装：余烬同袍 &8· 与团戒同持'
+    - '&c[T3] &8灾厄 · 团本终厅 / 灾厄窗'
+    - '&8建议强化上限 +10（需保护券）'
+    - ''
+    - '物理伤害: +30'
+  enchantments:
+    DURABILITY: 2
+    DAMAGE_ALL: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+gear_ember_t3_talisman:
+  material: NETHER_STAR
+  name: '&c余烬灾厄护符'
+  lore:
+    - '&7gear_ember_t3_talisman'
+    - '&c[T3] &8灾厄 · 团本终厅 / 灾厄窗'
+    - '&8建议强化上限 +10'
+    - ''
+    - '生命力: +80'
+    - '物理防御: +14'
+  enchantments:
+    DURABILITY: 2
+  hideflags:
+    - HIDE_ENCHANTS

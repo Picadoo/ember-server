@@ -1,0 +1,5 @@
+#副本创建坐标半径检测限制
+#玩家不在对应范围内无法启动创建副本
+create-location-range-limit:
+  #副本名: "世界,X,Y,Z 半径 消息(可选)"
+  "example_dungeon": "world,1,1,1 5.0 §7超出副本开启距离。"
