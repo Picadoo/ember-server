@@ -1,5 +1,21 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
+
+## Progress snapshot — 2026-09-28 00:31 Asia/Shanghai (总控)
+
+### 用户拍板（高优先）
+- **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
+- **日常 DNF 式地下城**：选本→进门→分房清怪→Boss；要好玩，非换皮短廊。
+- **同服多世界**：已有 Multiverse-Core(+Portals) + DP 实例图；**禁止一图一服**。
+
+### 进行中
+- 策划：`design-ember-stamina-dnf-daily.md`（体力 + DNF 日常 MVP）
+- B0.2 深渊 ΔTTK：测试岗并行（可被体力里程碑挤优先级）
+
+### 多世界现状（确认）
+- `plugins/Multiverse-Core.jar` + Portals；常驻 `ember_hub` / `ember_afk` / `ember_event` 等
+- 副本：DungeonPlus `map/ember_*` 同 play 服实例化
+
 **状态：仅文档**（2026-09-27 Asia/Shanghai）  
 **作者岗：** 余烬-策划  
 **用途：** 总控排期用的短清单——**优先玩法闭环与可维护性**，不铺新系统。  

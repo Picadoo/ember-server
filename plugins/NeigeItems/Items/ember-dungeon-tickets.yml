@@ -1,13 +1,14 @@
-# 日/周本/深渊/团本/精英 入场券 — 逻辑以 NI ID（ticket_ember_*）为准；显示名仅供玩家识别
-# DEBT: DungeonPlus 进本扣次仍走 <item:显示名>（原生限制）；发放/计数走 ItemManager + NI ID（CoreRpg NiBridge）
-# 日发 3× ticket_ember_daily；周发 1× ticket_ember_weekly；精英周发 1× ticket_ember_elite（发放逻辑交给插件/CoreRpg）
+# 日/周本/深渊/团本/精英 入场券 — 迁移期仍保留 NI ID（ticket_ember_*）供 ItemManager consumeExact 兑换体力
+# docs/design-ember-stamina-dnf-daily.md §A.4：停发由插件改 cash/progress；物品侧 id 稳定可引用
+# 进本已改体力制后不再作入场扣次；禁显示名匹配
 
 ticket_ember_daily:
   material: PAPER
   name: '&e余烬日票'
   lore:
-    - '&8日常 · 余烬窟 入场券'
-    - '&7每日可用 3 张 · 进本即扣'
+    - '&8旧入场券 · 迁移期可兑换为体力'
+    - '&7兑换 &e+30 &7体力 · 生活菜单「旧票兑换」'
+    - '&7逾期登录自动折算 · 不再用于进本'
   enchantments:
     DURABILITY: 1
   hideflags:
@@ -17,8 +18,9 @@ ticket_ember_weekly:
   material: PAPER
   name: '&6余烬周票'
   lore:
-    - '&8周常 · 深核 入场券'
-    - '&7每周可用 1 张 · 进本即扣'
+    - '&8旧入场券 · 迁移期可兑换为体力'
+    - '&7兑换 &6+45 &7体力 · 生活菜单「旧票兑换」'
+    - '&7逾期登录自动折算 · 不再用于进本'
   enchantments:
     DURABILITY: 1
   hideflags:
@@ -28,8 +30,9 @@ ticket_ember_abyss:
   material: PAPER
   name: '&5余烬深渊票'
   lore:
-    - '&8深渊 · 无尽波次 入场券'
-    - '&7每日可用 1 张 · 进本即扣'
+    - '&8旧入场券 · 迁移期可兑换为体力'
+    - '&7兑换 &5+30 &7体力 · 生活菜单「旧票兑换」'
+    - '&7逾期登录自动折算 · 不再用于进本'
   enchantments:
     DURABILITY: 1
   hideflags:
@@ -39,8 +42,9 @@ ticket_ember_raid:
   material: PAPER
   name: '&9余烬团本票'
   lore:
-    - '&8团本 · 灰烬协奏 入场券'
-    - '&7每周可用 1 张 · 进本即扣 · 需 3～5 人'
+    - '&8旧入场券 · 迁移期可兑换为体力'
+    - '&7兑换 &9+50 &7体力 · 生活菜单「旧票兑换」'
+    - '&7逾期登录自动折算 · 不再用于进本'
   enchantments:
     DURABILITY: 1
   hideflags:
@@ -50,9 +54,9 @@ ticket_ember_elite:
   material: PAPER
   name: '&c余烬精英票'
   lore:
-    - '&8精英试炼 · 词缀周常 入场券'
-    - '&7每周可用 1 张 · 进本即扣 · 不退还'
-    - '&7持有上限 1 · 需余烬 Lv.40'
+    - '&8旧入场券 · 迁移期可兑换为体力'
+    - '&7兑换 &c+40 &7体力 · 生活菜单「旧票兑换」'
+    - '&7逾期登录自动折算 · 不再用于进本'
   enchantments:
     DURABILITY: 1
   hideflags:

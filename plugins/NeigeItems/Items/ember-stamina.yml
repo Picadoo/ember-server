@@ -1,0 +1,29 @@
+# 体力药 — docs/design-ember-stamina-dnf-daily.md §A.4～A.5
+# 逻辑以 NI ID（consumable_ember_stamina_*）为准；消耗后由 CoreRpg 按 id 加体力（禁显示名匹配）
+# lore 不写指令；发放/日限/硬顶由 cash.yml / 插件负责
+
+consumable_ember_stamina_30:
+  material: POTION
+  name: '&a余烬体力药·小'
+  lore:
+    - '&8使用后回复体力 &a+30'
+    - '&7受当日药剂回体上限约束'
+    - '&8商城 / 战令发放 · 非直接战力'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+    - HIDE_POTION_EFFECTS
+
+consumable_ember_stamina_45:
+  material: POTION
+  name: '&6余烬体力药·周'
+  lore:
+    - '&8使用后回复体力 &6+45'
+    - '&7周限购 · 不与日常药剂池混算（由插件计）'
+    - '&8商城周本便利 · 非直接战力'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+    - HIDE_POTION_EFFECTS
