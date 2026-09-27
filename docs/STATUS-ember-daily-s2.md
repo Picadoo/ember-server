@@ -131,3 +131,9 @@
 粗胚可验走位（anvil/BFS；ash live 已过）。DP 波次/开门/菜单去灰/体力挂接 → 下一棒。
 未改体力；未 commit/push。
 ```
+
+---
+
+## 续 · DP/菜单（2026-09-28 03:57）
+
+已由本岗落地：见 **`docs/STATUS-ember-daily-s2-dp.md`**（CoreRpg **1.15.15** · EmberDailyAsh/Crypt · TrMenu 去灰）。

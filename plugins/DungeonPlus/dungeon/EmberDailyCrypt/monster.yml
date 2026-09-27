@@ -1,0 +1,77 @@
+# 日 · S2 线 C 残誓地窖：井口→上层→开门下阶→中层混编→开门→Boss 圆厅
+# 分房 $kill（禁 $kill-any）；门1 z=18@y72；门2 z=40@y66 · x=-1..1 → AIR
+# Display：$kill 对齐 MM 去色名 窖卫尸 / 誓印骷 / 残誓守墓
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptZombie;location=-6,72,6;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptZombie;location=5,72,6;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptZombie;location=-6,72,14;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptZombie;location=5,72,14;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=窖卫尸;amount=5} @system"
+    start:
+    - "$message{type=text;text=§e【上层厅】清尽窖卫尸再开下阶门} @dungeon"
+    end:
+    - "$message{type=text;text=§a上层已清 · 下阶门开了} @dungeon"
+    - "$operation-block{loc=-1,72,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,73,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,74,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,72,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,73,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,74,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,72,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,73,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,74,18;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  # 中层：wave2a 窖卫尸×3 → wave2b 誓印骷×3
+  wave2a:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptZombie;location=-5,66,30;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptZombie;location=4,66,30;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=窖卫尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【中层厅】混编来袭 —— 先清尸再开底层门} @dungeon"
+    end:
+    - "$message{type=text;text=§7中层前段已清 · 誓印骷压上} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  wave2b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptSkeleton;location=-5,66,36;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptSkeleton;location=4,66,36;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=誓印骷;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【中层·后段】誓印骷×3 —— 清完开底层门} @dungeon"
+    end:
+    - "$message{type=text;text=§a中层已清 · 底层门开了} @dungeon"
+    - "$operation-block{loc=-1,66,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,67,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,68,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,67,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,68,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,67,40;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,68,40;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyCryptWarden;location=0,60,48;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=残誓守墓;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【圆厅】残誓守墓！外廊风筝再输出} @dungeon"
+    end:
+    - "$end{type=text;text=§a余烬窟·残誓地窖 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

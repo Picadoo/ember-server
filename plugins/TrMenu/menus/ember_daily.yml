@@ -1,7 +1,7 @@
-# 日常副本子菜单 — EmberDaily（S0 体力）
-# 进本：corerpg enter daily · 消耗 30 体力
+# 日常副本子菜单 — EmberDaily / Ash / Crypt（S0 体力 · S2 去灰）
+# 进本：corerpg enter daily|daily_ash|daily_crypt · 各消耗 30 体力（同池）
 
-Title: '§e日常 · 余烬窟·庭院'
+Title: '§e日常 · 余烬窟'
 
 Options:
   Arguments: false
@@ -66,33 +66,43 @@ Icons:
 
   A:
     display:
-      material: coal
-      name: '§8余烬窟·焦骨甬道'
+      material: netherrack
+      name: '§c余烬窟·焦骨甬道'
       lore:
         - ''
-        - '§7狭长焦土甬道 · 岔路假门'
+        - '§7狭长焦土甬道 · 假岔 · 尽端鼓室'
         - ''
-        - '§c筹备中'
-        - '§8还债里程碑 S2'
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7进本失败退还 · 通关不退'
+        - ''
+        - '§e➥ §f点击进本'
     actions:
       all:
-        - 'sound: BLOCK_NOTE_BASS-1-0'
-        - 'tell: §c[日] 焦骨甬道筹备中，请先挑战庭院'
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §e[日] 正在进入 §c余烬窟·焦骨甬道§e …'
+        - 'command: corerpg enter daily_ash'
+        - close
 
   C:
     display:
-      material: cobblestone
+      material: mossy cobblestone
       name: '§8余烬窟·残誓地窖'
       lore:
         - ''
-        - '§7多层台阶地窖 · 下潜感'
+        - '§7多层下阶地窖 · 中厅 · 底层圆厅'
         - ''
-        - '§c筹备中'
-        - '§8还债里程碑 S2'
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7进本失败退还 · 通关不退'
+        - ''
+        - '§e➥ §f点击进本'
     actions:
       all:
-        - 'sound: BLOCK_NOTE_BASS-1-0'
-        - 'tell: §c[日] 残誓地窖筹备中，请先挑战庭院'
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §e[日] 正在进入 §8余烬窟·残誓地窖§e …'
+        - 'command: corerpg enter daily_crypt'
+        - close
 
   P:
     display:

@@ -13,6 +13,8 @@ public final class TicketEntryService {
 
     public enum Kind {
         DAILY("daily", "EmberDaily", "ticket_ember_daily", "余烬日常", "daily", "日常"),
+        DAILY_ASH("daily_ash", "EmberDailyAsh", "ticket_ember_daily", "余烬窟·焦骨甬道", "daily", "焦骨"),
+        DAILY_CRYPT("daily_crypt", "EmberDailyCrypt", "ticket_ember_daily", "余烬窟·残誓地窖", "daily", "残誓"),
         WEEKLY("weekly", "EmberWeekly", "ticket_ember_weekly", "余烬周本", "weekly", "周本"),
         ABYSS("abyss", "EmberAbyss", "ticket_ember_abyss", "余烬深渊", "abyss", "深渊"),
         RAID("raid", "EmberRaid", "ticket_ember_raid", "余烬团本", "raid", "团本"),
@@ -45,6 +47,8 @@ public final class TicketEntryService {
                 }
             }
             if ("日".equals(raw) || "日常".equals(raw)) return DAILY;
+            if ("ash".equals(s) || "焦骨".equals(raw) || "焦骨甬道".equals(raw)) return DAILY_ASH;
+            if ("crypt".equals(s) || "残誓".equals(raw) || "残誓地窖".equals(raw)) return DAILY_CRYPT;
             if ("周".equals(raw) || "周常".equals(raw)) return WEEKLY;
             if ("深渊".equals(raw)) return ABYSS;
             if ("团".equals(raw) || "团本".equals(raw)) return RAID;
@@ -131,20 +135,20 @@ public final class TicketEntryService {
         return true;
     }
 
-    /** /corerpg enter &lt;daily|weekly|abyss|raid|elite&gt; */
+    /** /corerpg enter &lt;daily|daily_ash|daily_crypt|weekly|abyss|raid|elite&gt; */
     public boolean cmdEnter(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("玩家专用：/corerpg enter <daily|weekly|abyss|raid|elite>");
+            sender.sendMessage("玩家专用：/corerpg enter <daily|daily_ash|daily_crypt|weekly|abyss|raid|elite>");
             return true;
         }
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|weekly|abyss|raid|elite>");
+            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|daily_ash|daily_crypt|weekly|abyss|raid|elite>");
             return true;
         }
         Kind kind = Kind.parse(args[1]);
         if (kind == null) {
             sender.sendMessage(ChatColor.RED + "未知副本：" + args[1]
-                    + ChatColor.GRAY + " · daily/weekly/abyss/raid/elite");
+                    + ChatColor.GRAY + " · daily/daily_ash/daily_crypt/weekly/abyss/raid/elite");
             return true;
         }
         return tryEnter((Player) sender, kind);

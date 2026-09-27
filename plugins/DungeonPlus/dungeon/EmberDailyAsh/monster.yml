@@ -1,0 +1,76 @@
+# 日 · S2 线 B 焦骨甬道：拱门→房1→开门→房2混编→开门→Boss 鼓室
+# 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=65..67 @ z=16/36 → AIR
+# Display：$kill 对齐 MM 去色名 焦骨尸 / 燃矢骷 / 焦核蛮兵
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=-3,65,8;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=3,65,8;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=0,65,13;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=焦骨尸;amount=5} @system"
+    start:
+    - "$message{type=text;text=§e【甬道·前段】清尽焦骨尸再开门 —— 别撞铁栅} @dungeon"
+    end:
+    - "$message{type=text;text=§a前段已清 · 门开了} @dungeon"
+    - "$operation-block{loc=-1,65,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,67,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,67,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,67,16;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  # 房2：wave2a 焦骨尸×3 → wave2b 燃矢骷×3（顺序单 $kill，无 kill-any）
+  wave2a:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=-2,65,24;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=0,65,22;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=焦骨尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【甬道·弯折】混编来袭 —— 先清尸再开鼓室门} @dungeon"
+    end:
+    - "$message{type=text;text=§7弯折前段已清 · 燃矢骷压上} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  wave2b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberAshSkeleton;location=1,65,28;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshSkeleton;location=-1,65,32;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=燃矢骷;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【甬道·后段】燃矢骷×3 —— 清完开鼓室门} @dungeon"
+    end:
+    - "$message{type=text;text=§a弯折已清 · 鼓室门开了} @dungeon"
+    - "$operation-block{loc=-1,65,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,67,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,67,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,36;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,67,36;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberAshBrute;location=0,65,44;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=焦核蛮兵;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【鼓室】焦核蛮兵！窄场走位再输出} @dungeon"
+    end:
+    - "$end{type=text;text=§a余烬窟·焦骨甬道 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

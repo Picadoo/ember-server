@@ -57,6 +57,8 @@ public final class StaminaService {
     private void defaults() {
         costs.clear();
         costs.put("daily", 30);
+        costs.put("daily_ash", 30);
+        costs.put("daily_crypt", 30);
         costs.put("weekly", 45);
         costs.put("elite", 40);
         costs.put("abyss", 30);
@@ -118,7 +120,11 @@ public final class StaminaService {
 
     public int costOf(String kind) {
         if (kind == null) return 0;
-        Integer v = costs.get(kind.toLowerCase());
+        String k = kind.toLowerCase();
+        Integer v = costs.get(k);
+        if (v == null && k.startsWith("daily_")) {
+            v = costs.get("daily"); // S2 ash/crypt 与庭院同池 30
+        }
         return v == null ? 0 : v.intValue();
     }
 
