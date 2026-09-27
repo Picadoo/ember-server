@@ -171,8 +171,9 @@ Icons:
       name: '§e日常 · 余烬窟'
       lore:
         - ''
-        - '§7短本冲击核心与附魔晶，日限次数'
-        - '§8灰烬庭院 · 回廊清潮后上中央垫'
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力闯余烬窟 · 多线可选'
+        - '§8庭院 · 焦骨 · 地窖 · 潮蚀 · 断塔'
+        - '§8当前体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
         - ''
         - '§e➥ §f打开日常副本菜单'
     actions:

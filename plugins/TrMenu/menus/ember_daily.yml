@@ -1,5 +1,5 @@
-# 日常副本子菜单 — EmberDaily / Ash / Crypt / Tide / Spire（S0 体力 · S3 五线）
-# 进本：corerpg enter daily|daily_ash|daily_crypt|daily_tide|daily_spire · 各消耗 30 体力（同池）
+# 日常副本子菜单 — EmberDaily / Ash / Crypt / Tide / Spire / Frost / Rail（S0 体力 · S4 七线）
+# 进本：corerpg enter daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail · 各消耗 30 体力（同池）
 
 Title: '§e日常 · 余烬窟'
 
@@ -13,8 +13,8 @@ Layout:
   - '#########'
   - '#  T    #'
   - '# S A C #'
-  - '# D E   #'
-  - '# P   R #'
+  - '# D E F #'
+  - '# G P R #'
   - '####B####'
 
 Events:
@@ -46,6 +46,26 @@ Icons:
         - 'menu: ember_hub'
 
   S:
+    icons:
+      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
+      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8余烬窟·庭院 · 体力不足'
+          lore:
+            - ''
+            - '§8门廊 → 前厅 → 回廊 → Boss 垫'
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
+
+    update: 20
     display:
       material: iron sword
       name: '§a余烬窟·庭院'
@@ -66,6 +86,26 @@ Icons:
         - close
 
   A:
+    icons:
+      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
+      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8余烬窟·焦骨甬道 · 体力不足'
+          lore:
+            - ''
+            - '§7狭长焦土甬道 · 假岔 · 尽端鼓室'
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
+
+    update: 20
     display:
       material: netherrack
       name: '§c余烬窟·焦骨甬道'
@@ -86,6 +126,26 @@ Icons:
         - close
 
   C:
+    icons:
+      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
+      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8余烬窟·残誓地窖 · 体力不足'
+          lore:
+            - ''
+            - '§7多层下阶地窖 · 中厅 · 底层圆厅'
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
+
+    update: 20
     display:
       material: mossy cobblestone
       name: '§8余烬窟·残誓地窖'
@@ -106,6 +166,26 @@ Icons:
         - close
 
   D:
+    icons:
+      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
+      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8余烬窟·潮蚀水道 · 体力不足'
+          lore:
+            - ''
+            - '§7淹水运河 · 桥闸横推 · 闸厅 Boss'
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
+
+    update: 20
     display:
       material: prismarine
       name: '§3余烬窟·潮蚀水道'
@@ -126,6 +206,26 @@ Icons:
         - close
 
   E:
+    icons:
+      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
+      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8余烬窟·断塔回廊 · 体力不足'
+          lore:
+            - ''
+            - '§7断塔上攀 · 中层环廊 · 顶台 Boss'
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
+
+    update: 20
     display:
       material: cobblestone
       name: '§7余烬窟·断塔回廊'
@@ -145,21 +245,58 @@ Icons:
         - 'command: corerpg enter daily_spire'
         - close
 
+  F:
+    display:
+      material: packed ice
+      name: '§b余烬窟·霜晶裂隙'
+      lore:
+        - ''
+        - '§7冰蓝裂隙 · 冻台横移 · 霜厅 Boss'
+        - ''
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7进本失败退还 · 通关不退'
+        - ''
+        - '§e➥ §f点击进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §e[日] 正在进入 §b余烬窟·霜晶裂隙§e …'
+        - 'command: corerpg enter daily_frost'
+        - close
+
+  G:
+    display:
+      material: rail
+      name: '§6余烬窟·锈轨矿道'
+      lore:
+        - ''
+        - '§7废弃矿轨 · 短支洞 · 机房 Boss'
+        - ''
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7进本失败退还 · 通关不退'
+        - ''
+        - '§e➥ §f点击进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §e[日] 正在进入 §6余烬窟·锈轨矿道§e …'
+        - 'command: corerpg enter daily_rail'
+        - close
+
   P:
     display:
       material: chest
       name: '§6奖励预览'
       lore:
         - ''
-        - '§7战斗掉落（MM → NI）：'
-        - '  §f碎片 / 骨尘 / Boss 核心×1'
-        - ''
-        - '§7通关箱：'
+        - '§7通关箱材料（各线相同）：'
         - '  §e核心碎片 ×1 · 附魔晶 ×1 · 碎片 ×5'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[日奖励] §7Boss 核心 + 通关箱'
+        - ''
+        - '§7Boss 掉落（各线对应材料）：'
+        - '  §fBoss 核心 ×1 · 碎片 / 骨尘'
+        - '  §f各线均有概率获得：刃 / 符 / T1 装备'
 
   R:
     display:
