@@ -87,6 +87,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private ProgressService progressService;
     private QuestService questService;
     private LifeService lifeService;
+    private ForgeService forgeService;
     private LootService lootService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
@@ -130,6 +131,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         progressService = new ProgressService(this, dataStore);
         questService = new QuestService(this, dataStore, niBridge);
         lifeService = new LifeService(this, dataStore, niBridge);
+        forgeService = new ForgeService(this, dataStore, niBridge);
         Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
             @Override public void run() { if (questService != null) questService.tickAll(); }
         }, 400L, 200L);
@@ -396,6 +398,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (progressService != null) progressService.reload();
         if (questService != null) questService.reload();
         if (lifeService != null) lifeService.reload();
+        if (forgeService != null) forgeService.reload();
         if (lootService != null) lootService.reload();
         if (statService != null) statService.reload();
         shardNeedle = getConfig().getString("shard_name_contains", "余烬碎片");
@@ -695,6 +698,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("progress".equals(sub)) return progressService.cmdProgress(sender, args);
         if ("loot".equals(sub)) return lootService.cmd(sender, args);
         if ("stats".equals(sub) || "属性".equals(sub)) return statService.cmd(sender, args);
+        if ("forge".equals(sub) || "锻造".equals(sub)) return forgeService.cmd(sender, args);
+        if ("mmgiveall".equals(sub)) return cmdMmGiveAll(sender, args);
         if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
         if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);
         if ("life".equals(sub) || "vendor".equals(sub) || "补给".equals(sub) || "生活".equals(sub)) return lifeService.cmd(sender, args);
@@ -1095,6 +1100,29 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             n = afkCapped(p, args[2], n);
             if (n > 0) niBridge.giveNiItem(p, args[2], n);
         }
+        return true;
+    }
+
+    /**
+     * 1.12.0: /corerpg mmgiveall <mob uuid> <niId> [n] — every player in the mob's world who hit it or is within
+     * 64 blocks (raid participants in the instance world). Falls back to mmgive credit when the mob is gone.
+     */
+    private boolean cmdMmGiveAll(CommandSender sender, String[] args) {
+        if (!sender.hasPermission("corerpg.admin") || args.length < 3) return true;
+        UUID id;
+        try { id = UUID.fromString(args[1]); } catch (IllegalArgumentException e) { return true; }
+        org.bukkit.entity.Entity en = Bukkit.getEntity(id);
+        if (en == null) return cmdMmCredit(sender, args, false);
+        int n = 1;
+        if (args.length >= 4) try { n = Math.max(1, Integer.parseInt(args[3])); } catch (NumberFormatException ignored) { }
+        int given = 0;
+        for (Player p : en.getWorld().getPlayers()) {
+            if (!p.isOnline()) continue;
+            if (p.getLocation().distanceSquared(en.getLocation()) > 64 * 64) continue;
+            niBridge.giveNiItem(p, args[2], n);
+            given++;
+        }
+        getLogger().info("mmgiveall " + args[2] + " x" + n + " -> " + given + " players in " + en.getWorld().getName());
         return true;
     }
 

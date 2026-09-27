@@ -271,6 +271,27 @@ public final class EnhanceService {
                 socketEmpty, socketLocked, socketMarkerPrefix);
     }
 
+    /**
+     * 1.12.0 forge: move enhance (×keep, floored), gems (slots still unlocked at the new level; others returned
+     * via {@code returned}) and affix lore from {@code from} onto the freshly created {@code to}. Returns new level.
+     */
+    public int forgeTransfer(ItemStack from, String fromId, ItemStack to, String toId, double keep, List<String> returned) {
+        int oldLv = GearLore.readEnhance(from);
+        int newLv = (int) Math.floor(oldLv * keep);
+        String[] oldSocks = GearLore.readSockets(from, socketDef(fromId).max);
+        SocketDef nd = socketDef(toId);
+        String[] socks = GearLore.syncSockets(null, newLv, nd.unlockAt, nd.max);
+        for (int i = 0; i < oldSocks.length; i++) {
+            String g = oldSocks[i];
+            if (g == null || g.isEmpty()) continue;
+            if (i < socks.length && socks[i] != null && socks[i].isEmpty()) socks[i] = g;
+            else if (returned != null) returned.add(g);
+        }
+        writeState(to, toId, newLv, socks);
+        GearLore.copyAffixLines(from, to);
+        return newLv;
+    }
+
     private ItemStack hand(Player p) { return p.getInventory().getItemInMainHand(); }
 
     private void setHand(Player p, ItemStack s) {

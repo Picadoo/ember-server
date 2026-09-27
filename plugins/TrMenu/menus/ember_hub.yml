@@ -20,7 +20,7 @@ Options:
 Layout:
   - ' ABCDEF 1'
   - ' GHIJKL k'
-  - ' MNOPQR  '
+  - ' MNOPQR l'
   - ' STUVWX  '
   - ' YZabcd  '
   - ' efghij  '
@@ -550,6 +550,22 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_life'
+  l:
+    display:
+      material: anvil
+      name: '§6余烬锻炉 · 锻造'
+      lore:
+        - ''
+        - '§7T1 → T2 · T2 → T3 保底锻造'
+        - '§7消耗核心碎片 / 凝核 / 灾厄余烬 / 余烬币'
+        - '§8保留 50% 强化、附魔、词条、宝石'
+        - '§8命令：/corerpg forge'
+        - ''
+        - '§e➥ §f打开锻炉'
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-1-1'
+        - 'menu: ember_forge'
 
   # —— 第 6 行 · 商城与收尾 ——
   e:

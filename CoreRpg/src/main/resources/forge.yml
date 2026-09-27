@@ -1,0 +1,23 @@
+# CoreRpg 1.12.0 锻造保底（/corerpg forge，枢纽「余烬锻炉」菜单 ember_forge）
+# 手持装备 → 同槽位下一阶。保留 floor(强化 × keep_enhance)；附魔取新旧较高；词条原样保留；
+# 新等级下仍解锁的孔位保留宝石，其余宝石退回背包。docs/ember-master-plan.md §6.1
+enabled: true
+keep_enhance: 0.5
+keep_enchants: true
+recipes:
+  gear_ember_t1_blade:
+    to: gear_ember_t2_blade
+    cost: { mat_ember_core_fragment: 10, mat_ember_shard: 40 }
+    coin: 1500
+  gear_ember_t1_talisman:
+    to: gear_ember_t2_talisman
+    cost: { mat_ember_core_fragment: 10, mat_ember_shard: 40 }
+    coin: 1500
+  gear_ember_t2_blade:
+    to: gear_ember_t3_blade
+    cost: { core_ember_compact: 3, mat_ember_core_fragment: 25, mat_calamity_ember: 6 }
+    coin: 5000
+  gear_ember_t2_talisman:
+    to: gear_ember_t3_talisman
+    cost: { core_ember_compact: 3, mat_ember_core_fragment: 25, mat_calamity_ember: 6 }
+    coin: 5000

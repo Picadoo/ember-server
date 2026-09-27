@@ -84,5 +84,7 @@ EmberRaidBoss:
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_talisman 1"} @Self ~onDeath 0.12
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t3_blade 1"} @Self ~onDeath 0.08
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t3_talisman 1"} @Self ~onDeath 0.06
-  - command{c="corerpg mmgive <caster.uuid> core_ember_compact 1"} @Self ~onDeath
+  # 1.12.0 锻造保底：凝核发给副本内每位参战者（64 格内），不再只给尾刀
+  - command{c="corerpg mmgiveall <caster.uuid> core_ember_compact 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_stable_charm 1"} @Self ~onDeath 0.05
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 2"} @Self ~onDeath

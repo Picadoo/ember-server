@@ -250,6 +250,23 @@ public final class GearLore {
         stack.setItemMeta(meta);
     }
 
+    /** 1.12.0 forge: copy 次要 display + #ember_aff marker lines verbatim (appended to {@code to}'s lore). */
+    public static void copyAffixLines(ItemStack from, ItemStack to) {
+        ItemMeta fm = from == null ? null : from.getItemMeta();
+        ItemMeta tm = to == null ? null : to.getItemMeta();
+        if (fm == null || tm == null || !fm.hasLore()) return;
+        List<String> add = new ArrayList<String>();
+        for (String line : fm.getLore()) {
+            String plain = line == null ? "" : ChatColor.stripColor(line);
+            if (plain.startsWith(AFF_MARKER) || DISPLAY_AFF.matcher(plain).find()) add.add(line);
+        }
+        if (add.isEmpty()) return;
+        List<String> lore = tm.hasLore() ? new ArrayList<String>(tm.getLore()) : new ArrayList<String>();
+        lore.addAll(add);
+        tm.setLore(lore);
+        to.setItemMeta(tm);
+    }
+
     public static List<Affix> readAffixes(ItemStack stack) {
         List<Affix> out = new ArrayList<Affix>();
         String marker = findPlainStarting(stack, AFF_MARKER);

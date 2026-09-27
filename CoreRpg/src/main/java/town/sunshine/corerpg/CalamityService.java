@@ -28,6 +28,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -80,6 +81,8 @@ public final class CalamityService implements Listener {
 
     private int chestLimit = 1;
     private double protectScrollChance = 0.10;
+    /** 1.12.0: first daily chest of the week also gives these (凝核 for the forge pity). */
+    private final Map<String, Integer> weeklyFirstRewards = new LinkedHashMap<String, Integer>();
     private final List<ChestReward> chestRewards = new ArrayList<ChestReward>();
     private final List<String> killRewardCommands = new ArrayList<String>();
     private boolean gateMvtpOnMenu = true;
@@ -169,6 +172,9 @@ public final class CalamityService implements Listener {
 
         chestLimit = Math.max(1, yml.getInt("daily_chest.limit_per_day", 1));
         protectScrollChance = yml.getDouble("daily_chest.protect_scroll_chance", 0.10);
+        weeklyFirstRewards.clear();
+        org.bukkit.configuration.ConfigurationSection wf = yml.getConfigurationSection("daily_chest.weekly_first");
+        if (wf != null) for (String k : wf.getKeys(false)) weeklyFirstRewards.put(k, Math.max(1, wf.getInt(k)));
         chestRewards.clear();
         loadChestRewards(yml);
         if (chestRewards.isEmpty()) {
@@ -583,6 +589,15 @@ public final class CalamityService implements Listener {
                         "ni give " + player.getName() + " " + PROTECT_SCROLL_ID + " 1");
             }
             player.sendMessage(ChatColor.LIGHT_PURPLE + "[余烬] 日箱额外掉落保护券。");
+        }
+        if (!weeklyFirstRewards.isEmpty() && ni != null) {
+            String wk = DailyService.weekId();
+            if (data.periodCount("calamity_weekly_first", wk) == 0) {
+                data.addPeriodCount("calamity_weekly_first", wk, 1);
+                for (Map.Entry<String, Integer> e : weeklyFirstRewards.entrySet()) ni.giveNiItem(player, e.getKey(), e.getValue());
+                player.sendMessage(ChatColor.GOLD + "[余烬] 本周首个灾厄日箱：额外获得 " + ChatColor.WHITE + weeklyFirstRewards.keySet()
+                        .stream().map(id -> ni.displayName(id) + "×" + weeklyFirstRewards.get(id)).collect(java.util.stream.Collectors.joining("，")));
+            }
         }
         data.setCalamityChestDate(today);
         store.flushMutation(player.getUniqueId());

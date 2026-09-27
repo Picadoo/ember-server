@@ -1,0 +1,58 @@
+# 1.12.0 (2026-09-27) 余烬锻炉 · 锻造保底 — CoreRpg ForgeService（forge.yml）
+Title: '§6余烬锻炉 · 锻造'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 500
+
+Layout:
+  - '#########'
+  - '# A B C #'
+  - '####I##Z#'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+  A:
+    display:
+      material: iron sword
+      name: '§eT1 → T2'
+      lore: ['', '§7手持 T1 刃 / 护符', '§7核心碎片×10 + 碎片×40 + 1500 币', '', '§e➥ §f查看配方与持有数量']
+    actions:
+      all:
+        - 'close'
+        - 'command: corerpg forge'
+  B:
+    display:
+      material: diamond sword
+      name: '§6T2 → T3'
+      lore: ['', '§7手持 T2 刃 / 护符', '§7凝核×3 + 核心碎片×25 + 灾厄余烬×6 + 5000 币', '§8凝核：团本通关每人 1 · 灾厄每周首个日箱 1', '', '§e➥ §f查看配方与持有数量']
+    actions:
+      all:
+        - 'close'
+        - 'command: corerpg forge'
+  C:
+    display:
+      material: anvil
+      name: '§a确认锻造（手持装备）'
+      lore: ['', '§7保留 50% 强化等级（向下取整）', '§7保留附魔、次要词条；宝石仍可用的孔位保留', '§7新等级下未解锁的孔位 → 宝石退回背包', '', '§c➥ §f立即锻造手持装备']
+    actions:
+      all:
+        - 'close'
+        - 'command: corerpg forge confirm'
+  I:
+    display:
+      material: book
+      name: '§f说明'
+      lore: ['', '§7手持装备后 /corerpg forge 预览', '§7/corerpg forge confirm 锻造']
+  Z:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'menu: ember_hub'

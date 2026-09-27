@@ -148,6 +148,17 @@ public final class NiBridge {
         return niId;
     }
 
+    /** 1.12.0: fresh NI stack (amount 1) or null. */
+    public ItemStack createNiItem(String niId) {
+        try {
+            if (isReady() && hasNiDefinition(niId)) {
+                ItemStack s = ItemManager.INSTANCE.getItemStack(niId);
+                if (s != null) { s = s.clone(); s.setAmount(1); return s; }
+            }
+        } catch (Throwable ignored) { }
+        return null;
+    }
+
     public boolean giveNiItem(Player player, String niId, int amount) {
         if (player == null || niId == null || niId.isEmpty() || amount <= 0) return amount <= 0;
         if (isReady() && hasNiDefinition(niId)) {

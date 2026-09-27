@@ -31,6 +31,8 @@ daily_chest:
     - { ni: crystal_ember_enchant, amount: 1 }
     - { ni: mat_calamity_ember, amount: 2 }
   protect_scroll_chance: 0.10
+  # 1.12.0 锻造保底：每周第一个灾厄日箱额外给凝核（团本每人 1 + 这里 1 → 每周 2）
+  weekly_first: { core_ember_compact: 1 }
 
 gate_mvtp_on_menu: true
 
