@@ -1,42 +1,69 @@
-# 日 · 新 MM Display（去色）：灰烬庭院僵尸/骷髅/蛮兵
-# 2026-09-27 P4: 灰烬庭院独立地图 — spawn 0,65,0；回廊刷点开放格；Boss 仅中央垫 0,66,12。
-#   Waves 数量/回血/kill 条件不变（2 僵尸 → 1僵尸+2骷髅 → 蛮兵×1；波末 instant_health III）。
+# 日 · S1 分房：门廊→房1前厅→开门→房2回廊→开门→Boss终厅
+# 2026-09-28 S1: 波次 僵尸×5 / 混编×6 / 蛮兵×1；阶段 $operation-block 撤铁门
+# Display 名仍：灰烬庭院僵尸/骷髅/蛮兵（MM 未改）
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-13,65,6;amount=2;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-5,65,7;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=5,65,7;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=0,65,10;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=灰烬庭院僵尸;amount=2} @system"
+    - "$kill{mobname=灰烬庭院僵尸;amount=5} @system"
     start:
-    - "$message{type=text;text=§e【庭院·清潮】第一波：回廊僵尸×2 —— 别急着冲中央} @dungeon"
+    - "$message{type=text;text=§e【前厅】清尽僵尸再开门 —— 别急着撞铁门} @dungeon"
     end:
-    - "$message{type=text;text=§a第一波完成 · 余烬回暖（+12 生命）} @dungeon"
+    - "$message{type=text;text=§a前厅已清 · 门开了} @dungeon"
+    - "$operation-block{loc=-2,65,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-2,66,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-2,67,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,65,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,67,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,67,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,13;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,67,13;mode=set;type=AIR} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   wave2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-13,65,24;amount=1;scattered=0.5;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=12,65,24;amount=2;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-6,65,17;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=6,65,17;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-6,65,21;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=6,65,21;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
-    - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=3} @system"
+    - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=6} @system"
     start:
-    - "$message{type=text;text=§e【庭院·混响】第二波：僵尸+骷髅 —— 先清远程} @dungeon"
+    - "$message{type=text;text=§e【回廊】混编来袭 —— 先清远程再推 Boss 门} @dungeon"
     end:
-    - "$message{type=text;text=§a第二波完成 · 余烬回暖 · Boss 将至} @dungeon"
+    - "$message{type=text;text=§a回廊已清 · Boss 门开了} @dungeon"
+    - "$operation-block{loc=-2,65,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-2,66,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-2,67,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,65,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,67,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,67,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,25;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,67,25;mode=set;type=AIR} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   boss:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyBrute;location=0,66,12;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyBrute;location=0,66,31;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
     - "$kill{mobname=灰烬庭院蛮兵;amount=1} @system"
     start:
-    - "$message{type=text;text=§c【庭院·中央垫】Boss 蛮兵！走位躲开砸击再输出} @dungeon"
+    - "$message{type=text;text=§c【终厅·中央垫】Boss 蛮兵！走位躲开砸击再输出} @dungeon"
     end:
-    - "$end{type=text;text=§a余烬窟·日 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    - "$end{type=text;text=§a余烬窟·庭院 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
     auto-start: false

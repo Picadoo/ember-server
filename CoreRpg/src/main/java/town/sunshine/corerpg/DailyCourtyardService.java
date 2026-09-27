@@ -20,43 +20,57 @@ import java.nio.file.StandardCopyOption;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
- * P4 (2026-09-27): ember_daily 灰烬庭院 — 四面回廊 + 中央抬高 Boss 垫 + 出入拱门。
- * Open / half-open courtyard (~32×32), distinct from weekly dark corridor / elite quartz.
+ * S1 (2026-09-28): ember_daily 余烬窟·庭院 — 门廊 → 房1前厅 → 门1 → 房2回廊 → 门2 → Boss 终厅。
+ * 保留灰烬庭院材质（石砖/砂砾/火盆），拉出独立前厅与第二房；禁止单房三波。
  * Admin: /corerpg dailybuild
  *
- * Local coords (design):
- *   spawn 0,65,0 (south arch inside, face +Z toward pad)
- *   boss pad center 0,66,12 (pad surface feet Y=66)
- *   wave1 corridor open cells; wave2 far corridor; boss pad only
+ * Coords (feet Y=65 corridor / 66 boss pad):
+ *   spawn 0,65,0 (porch, face +Z toward door1)
+ *   door1 z=13 (x=-2..1, y=65..67 IRON_FENCE) — opens after room1 clear
+ *   door2 z=25 — opens after room2 clear
+ *   room1 spawns ~z=6..10; room2 ~z=16..22; boss pad 0,66,31
  */
 public class DailyCourtyardService {
 
     static final String WORK_WORLD = "ember_daily_build";
     static final String MAP_REL = "plugins/DungeonPlus/map/ember_daily";
 
-    /** Feet Y on courtyard ground / corridor */
     static final int GROUND_Y = 65;
-    /** Feet Y on raised boss pad (+1) */
     static final int PAD_Y = 66;
 
     static final int SPAWN_X = 0;
     static final int SPAWN_Z = 0;
 
-    /** Outer courtyard bounds inclusive (~32×32) */
-    static final int X0 = -16;
-    static final int X1 = 15;
+    /** Outer bounds (elongated N-S; distinct from weekly dark corridor / abyss shaft) */
+    static final int X0 = -10;
+    static final int X1 = 9;
     static final int Z0 = -4;
-    static final int Z1 = 27;
+    static final int Z1 = 38;
 
-    /** Boss pad half-extent → ~8×8 centered (0,12) */
+    /** Door planes (IRON_FENCE gate fill) */
+    static final int DOOR1_Z = 13;
+    static final int DOOR2_Z = 25;
+    static final int DOOR_X0 = -2;
+    static final int DOOR_X1 = 1;
+
+    /** Room Z ranges (inclusive walkable) */
+    // porch Z0+1 .. 2 ; room1 3..12 ; room2 14..24 ; boss 26..Z1-1
+    static final int R1_Z0 = 3, R1_Z1 = 12;
+    static final int R2_Z0 = 14, R2_Z1 = 24;
+    static final int BOSS_Z0 = 26, BOSS_Z1 = 37;
+
     static final int BOSS_X = 0;
-    static final int BOSS_Z = 12;
-    static final int PAD_HALF = 4; // x/z from -4..3 relative → 8 wide
+    static final int BOSS_Z = 31;
+    static final int PAD_HALF = 4;
 
-    /** Wave spawn open cells (corridor) */
-    static final int W1_X = -13, W1_Z = 6;
-    static final int W2A_X = -13, W2A_Z = 24;
-    static final int W2B_X = 12, W2B_Z = 24;
+    /** Wave open cells */
+    static final int W1A_X = -5, W1A_Z = 7;
+    static final int W1B_X = 5, W1B_Z = 7;
+    static final int W1C_X = 0, W1C_Z = 10;
+    static final int W2A_X = -6, W2A_Z = 17;
+    static final int W2B_X = 6, W2B_Z = 17;
+    static final int W2C_X = -6, W2C_Z = 21;
+    static final int W2D_X = 6, W2D_Z = 21;
 
     private final CoreRpgPlugin plugin;
 
@@ -82,13 +96,19 @@ public class DailyCourtyardService {
     }
 
     private void dumpTable(CommandSender sender) {
-        sender.sendMessage(ChatColor.GOLD + "[dailybuild] spawn=(" + SPAWN_X + "," + GROUND_Y + "," + SPAWN_Z + ")");
-        sender.sendMessage(ChatColor.GRAY + "  bounds x=" + X0 + ".." + X1 + " z=" + Z0 + ".." + Z1
-                + " · padCenter=(" + BOSS_X + "," + PAD_Y + "," + BOSS_Z + ")");
-        sender.sendMessage(ChatColor.GRAY + "  w1=(" + W1_X + "," + GROUND_Y + "," + W1_Z + ")"
-                + " w2A=(" + W2A_X + "," + GROUND_Y + "," + W2A_Z + ")"
+        sender.sendMessage(ChatColor.GOLD + "[dailybuild] S1 门廊→房1→门1→房2→门2→Boss");
+        sender.sendMessage(ChatColor.GRAY + "  spawn=(" + SPAWN_X + "," + GROUND_Y + "," + SPAWN_Z + ")"
+                + " · bounds x=" + X0 + ".." + X1 + " z=" + Z0 + ".." + Z1);
+        sender.sendMessage(ChatColor.GRAY + "  door1 z=" + DOOR1_Z + " x=" + DOOR_X0 + ".." + DOOR_X1
+                + " · door2 z=" + DOOR2_Z + " · pad=(" + BOSS_X + "," + PAD_Y + "," + BOSS_Z + ")");
+        sender.sendMessage(ChatColor.GRAY + "  w1A=(" + W1A_X + "," + GROUND_Y + "," + W1A_Z + ")"
+                + " w1B=(" + W1B_X + "," + GROUND_Y + "," + W1B_Z + ")"
+                + " w1C=(" + W1C_X + "," + GROUND_Y + "," + W1C_Z + ")");
+        sender.sendMessage(ChatColor.GRAY + "  w2A=(" + W2A_X + "," + GROUND_Y + "," + W2A_Z + ")"
                 + " w2B=(" + W2B_X + "," + GROUND_Y + "," + W2B_Z + ")"
-                + " boss=(" + BOSS_X + "," + PAD_Y + "," + BOSS_Z + ")");
+                + " w2C=(" + W2C_X + "," + GROUND_Y + "," + W2C_Z + ")"
+                + " w2D=(" + W2D_X + "," + GROUND_Y + "," + W2D_Z + ")");
+        sender.sendMessage(ChatColor.GRAY + "  boss=(" + BOSS_X + "," + PAD_Y + "," + BOSS_Z + ")");
     }
 
     private boolean doBuild(CommandSender sender) {
@@ -119,7 +139,7 @@ public class DailyCourtyardService {
             return true;
         }
         w.setAutoSave(true);
-        sender.sendMessage(ChatColor.YELLOW + "[dailybuild] 开始分批施工灰烬庭院…");
+        sender.sendMessage(ChatColor.YELLOW + "[dailybuild] S1 分房施工（门廊→前厅→回廊→Boss）…");
 
         new BukkitRunnable() {
             int phase = 0;
@@ -132,37 +152,40 @@ public class DailyCourtyardService {
                         changed += scrubBuildVolume(w);
                         changed += scrubLegacyRoom(w);
                         phase = 1;
-                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] scrub → 底板+外墙");
+                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] scrub → 底板+外墙分区");
                         return;
                     }
                     if (phase == 1) {
-                        changed += buildFloorAndWalls(w);
+                        changed += buildShell(w);
                         phase = 2;
-                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] 外墙 → 回廊柱廊");
+                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] 外壳 → 门廊+房1");
                         return;
                     }
                     if (phase == 2) {
-                        changed += buildColonnade(w);
+                        changed += buildPorchAndRoom1(w);
                         phase = 3;
-                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] 柱廊 → 中央 Boss 垫");
+                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] 房1 → 房2回廊");
                         return;
                     }
                     if (phase == 3) {
-                        changed += buildBossPad(w);
+                        changed += buildRoom2(w);
                         phase = 4;
-                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] Boss垫 → 拱门");
+                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] 房2 → Boss终厅+门");
                         return;
                     }
                     if (phase == 4) {
-                        changed += buildArches(w);
+                        changed += buildBossHall(w);
+                        changed += placeDoors(w);
                         phase = 5;
-                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] 拱门 → 灯/火盆/告示");
+                        sender.sendMessage(ChatColor.GRAY + "[dailybuild] 门/Boss → 灯火告示");
                         return;
                     }
                     if (phase == 5) {
                         changed += placeBraziersAndLights(w);
                         changed += placeSigns(w);
                         changed += clearSpawnPads(w);
+                        // re-seal doors after clearSpawnPads (pads may punch air into door plane)
+                        changed += placeDoors(w);
                         phase = 6;
                         return;
                     }
@@ -196,6 +219,7 @@ public class DailyCourtyardService {
                         }
                         sender.sendMessage(ChatColor.GREEN + "[dailybuild] courtyard done · blocks≈" + changed
                                 + " · spawn=(" + SPAWN_X + "," + GROUND_Y + "," + SPAWN_Z + ")"
+                                + " · door1z=" + DOOR1_Z + " door2z=" + DOOR2_Z
                                 + " · pad=(" + BOSS_X + "," + PAD_Y + "," + BOSS_Z + ")"
                                 + " · unloaded=" + unloaded
                                 + " · exported → " + MAP_REL);
@@ -212,7 +236,6 @@ public class DailyCourtyardService {
         return true;
     }
 
-    /** Clear volume for new courtyard around origin. */
     private int scrubBuildVolume(World w) {
         int n = 0;
         for (int x = X0 - 4; x <= X1 + 4; x++) {
@@ -226,9 +249,16 @@ public class DailyCourtyardService {
         return n;
     }
 
-    /** Clear legacy ~5×5 room near old spawn so leftover never confuses. */
     private int scrubLegacyRoom(World w) {
         int n = 0;
+        // old P4 courtyard footprint + legacy far room
+        for (int x = -20; x <= 20; x++) {
+            for (int z = -8; z <= 40; z++) {
+                for (int y = 54; y <= 80; y++) {
+                    n += set(w.getBlockAt(x, y, z), Material.AIR);
+                }
+            }
+        }
         for (int x = -50; x <= -30; x++) {
             for (int z = 260; z <= 280; z++) {
                 for (int y = 60; y <= 75; y++) {
@@ -239,17 +269,16 @@ public class DailyCourtyardService {
         return n;
     }
 
-    private int buildFloorAndWalls(World w) {
+    /** Outer shell + cross walls at door planes (openings filled later by iron gates). */
+    private int buildShell(World w) {
         int n = 0;
-        int fy = GROUND_Y - 1; // 64
+        int fy = GROUND_Y - 1;
         for (int x = X0; x <= X1; x++) {
             for (int z = Z0; z <= Z1; z++) {
                 boolean edge = x == X0 || x == X1 || z == Z0 || z == Z1;
                 boolean corner = (x == X0 || x == X1) && (z == Z0 || z == Z1);
-                // floor mix: stone / gravel / cobble / occasional netherrack — not flat same material
                 n += set(w.getBlockAt(x, fy, z), floorMat(x, z));
                 n += set(w.getBlockAt(x, fy - 1, z), Material.STONE);
-                // clear air column (open sky)
                 for (int y = 0; y <= 8; y++) {
                     n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.AIR);
                 }
@@ -259,22 +288,193 @@ public class DailyCourtyardService {
                     for (int y = 0; y < h; y++) {
                         n += set(w.getBlockAt(x, GROUND_Y + y, z), wall);
                     }
-                    // rim / embattlement on top (partial cover, not full roof)
                     n += set(w.getBlockAt(x, GROUND_Y + h, z),
                             corner ? Material.COBBLESTONE : Material.SMOOTH_BRICK);
                 }
             }
         }
-        // partial corner roofs (3×3 lintels) for half-open feel — NOT full ceiling
-        int[][] roofCorners = {
-                {X0 + 1, Z0 + 1}, {X1 - 3, Z0 + 1},
-                {X0 + 1, Z1 - 3}, {X1 - 3, Z1 - 3}
-        };
-        for (int[] c : roofCorners) {
+        // partition walls at door Z (full width); gate openings punched + iron later
+        n += buildPartitionWall(w, DOOR1_Z);
+        n += buildPartitionWall(w, DOOR2_Z);
+        // south porch arch opening
+        for (int x = DOOR_X0; x <= DOOR_X1; x++) {
+            for (int y = 0; y <= 2; y++) {
+                n += set(w.getBlockAt(x, GROUND_Y + y, Z0), Material.AIR);
+            }
+        }
+        for (int x = DOOR_X0 - 1; x <= DOOR_X1 + 1; x++) {
+            n += set(w.getBlockAt(x, GROUND_Y + 3, Z0), Material.SMOOTH_BRICK);
+            n += set(w.getBlockAt(x, GROUND_Y + 4, Z0), Material.COBBLESTONE);
+        }
+        return n;
+    }
+
+    private int buildPartitionWall(World w, int z) {
+        int n = 0;
+        for (int x = X0; x <= X1; x++) {
+            for (int y = 0; y <= 4; y++) {
+                n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.SMOOTH_BRICK);
+            }
+            n += set(w.getBlockAt(x, GROUND_Y + 5, z), Material.COBBLESTONE);
+        }
+        // punch gate opening (air; iron bars placed in placeDoors)
+        for (int x = DOOR_X0; x <= DOOR_X1; x++) {
+            for (int y = 0; y <= 2; y++) {
+                n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.AIR);
+            }
+        }
+        // lintel
+        for (int x = DOOR_X0; x <= DOOR_X1; x++) {
+            n += set(w.getBlockAt(x, GROUND_Y + 3, z), Material.SMOOTH_BRICK);
+        }
+        return n;
+    }
+
+    private int buildPorchAndRoom1(World w) {
+        int n = 0;
+        // porch partial roof (z=-2..2)
+        for (int x = X0 + 1; x <= X1 - 1; x++) {
+            for (int z = Z0 + 1; z <= 2; z++) {
+                n += set(w.getBlockAt(x, GROUND_Y - 1, z), Material.SMOOTH_BRICK);
+                for (int y = 0; y <= 3; y++) {
+                    n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.AIR);
+                }
+                // covered porch ceiling
+                n += set(w.getBlockAt(x, GROUND_Y + 4, z), Material.SMOOTH_BRICK);
+            }
+        }
+        // room1 open court floor + side colonnade pillars (cover)
+        for (int x = X0 + 1; x <= X1 - 1; x++) {
+            for (int z = R1_Z0; z <= R1_Z1; z++) {
+                if (z == DOOR1_Z) continue;
+                n += set(w.getBlockAt(x, GROUND_Y - 1, z), floorMat(x, z));
+                for (int y = 0; y <= 5; y++) {
+                    n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.AIR);
+                }
+            }
+        }
+        // room1 side pillars every 3
+        for (int z = R1_Z0 + 1; z <= R1_Z1 - 1; z += 3) {
+            n += pillar(w, X0 + 3, z);
+            n += pillar(w, X1 - 3, z);
+        }
+        // room1 center low ash accent (not raised pad)
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                n += set(w.getBlockAt(dx, GROUND_Y - 1, 8 + dz), Material.NETHERRACK);
+            }
+        }
+        // ensure spawn open
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -1; dz <= 2; dz++) {
+                n += set(w.getBlockAt(SPAWN_X + dx, GROUND_Y - 1, SPAWN_Z + dz), Material.SMOOTH_BRICK);
+                n += set(w.getBlockAt(SPAWN_X + dx, GROUND_Y, SPAWN_Z + dz), Material.AIR);
+                n += set(w.getBlockAt(SPAWN_X + dx, GROUND_Y + 1, SPAWN_Z + dz), Material.AIR);
+            }
+        }
+        return n;
+    }
+
+    private int buildRoom2(World w) {
+        int n = 0;
+        for (int x = X0 + 1; x <= X1 - 1; x++) {
+            for (int z = R2_Z0; z <= R2_Z1; z++) {
+                if (z == DOOR1_Z || z == DOOR2_Z) continue;
+                n += set(w.getBlockAt(x, GROUND_Y - 1, z), floorMat(x, z));
+                for (int y = 0; y <= 5; y++) {
+                    n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.AIR);
+                }
+            }
+        }
+        // side alcove on +X (站位变化): bump wall inward on west, open east pocket
+        for (int z = 18; z <= 22; z++) {
+            // west cover wall stub
+            for (int y = 0; y <= 3; y++) {
+                n += set(w.getBlockAt(X0 + 2, GROUND_Y + y, z), Material.SMOOTH_BRICK);
+            }
+            // east alcove floor gravel
+            n += set(w.getBlockAt(X1 - 2, GROUND_Y - 1, z), Material.GRAVEL);
+            n += set(w.getBlockAt(X1 - 3, GROUND_Y - 1, z), Material.GRAVEL);
+        }
+        // room2 pillars (mask / cover)
+        for (int z = R2_Z0 + 2; z <= R2_Z1 - 2; z += 3) {
+            n += pillar(w, -3, z);
+            n += pillar(w, 3, z);
+        }
+        // partial corner roofs (half-open, not full ceiling — distinct from weekly deep corridor)
+        int[][] roofs = {{-8, 16}, {5, 16}, {-8, 21}, {5, 21}};
+        for (int[] c : roofs) {
             for (int dx = 0; dx <= 2; dx++) {
                 for (int dz = 0; dz <= 2; dz++) {
                     n += set(w.getBlockAt(c[0] + dx, GROUND_Y + 4, c[1] + dz), Material.SMOOTH_BRICK);
                 }
+            }
+        }
+        return n;
+    }
+
+    private int buildBossHall(World w) {
+        int n = 0;
+        for (int x = X0 + 1; x <= X1 - 1; x++) {
+            for (int z = BOSS_Z0; z <= BOSS_Z1; z++) {
+                if (z == DOOR2_Z) continue;
+                n += set(w.getBlockAt(x, GROUND_Y - 1, z), floorMat(x, z));
+                for (int y = 0; y <= 6; y++) {
+                    n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.AIR);
+                }
+            }
+        }
+        // raised pad
+        int padTop = PAD_Y - 1;
+        for (int dx = -PAD_HALF; dx < PAD_HALF; dx++) {
+            for (int dz = -PAD_HALF; dz < PAD_HALF; dz++) {
+                int x = BOSS_X + dx;
+                int z = BOSS_Z + dz;
+                boolean edge = Math.abs(dx) == PAD_HALF - 1 || Math.abs(dz) == PAD_HALF - 1
+                        || dx == -PAD_HALF || dz == -PAD_HALF;
+                n += set(w.getBlockAt(x, GROUND_Y - 1, z), Material.STONE);
+                Material top = edge ? Material.SMOOTH_BRICK : Material.COBBLESTONE;
+                if ((dx == 0 && dz == 0) || (Math.abs(dx) + Math.abs(dz) <= 1)) {
+                    top = Material.NETHERRACK;
+                }
+                n += set(w.getBlockAt(x, padTop, z), top);
+                n += set(w.getBlockAt(x, PAD_Y, z), Material.AIR);
+                n += set(w.getBlockAt(x, PAD_Y + 1, z), Material.AIR);
+                n += set(w.getBlockAt(x, PAD_Y + 2, z), Material.AIR);
+            }
+        }
+        // approach steps south of pad
+        int[][] steps = {
+                {BOSS_X, BOSS_Z - PAD_HALF - 1},
+                {BOSS_X - 1, BOSS_Z - PAD_HALF - 1},
+                {BOSS_X + 1, BOSS_Z - PAD_HALF - 1}
+        };
+        for (int[] s : steps) {
+            n += set(w.getBlockAt(s[0], GROUND_Y - 1, s[1]), Material.STONE);
+            n += set(w.getBlockAt(s[0], GROUND_Y, s[1]), Material.SMOOTH_BRICK);
+            n += set(w.getBlockAt(s[0], GROUND_Y + 1, s[1]), Material.AIR);
+        }
+        // hall side pillars
+        n += pillar(w, X0 + 3, 28);
+        n += pillar(w, X1 - 3, 28);
+        n += pillar(w, X0 + 3, 35);
+        n += pillar(w, X1 - 3, 35);
+        return n;
+    }
+
+    /** Closed iron-fence gates in door openings (DP clears to AIR on room clear). */
+    private int placeDoors(World w) {
+        int n = 0;
+        n += fillGate(w, DOOR1_Z);
+        n += fillGate(w, DOOR2_Z);
+        return n;
+    }
+
+    private int fillGate(World w, int z) {
+        int n = 0;
+        for (int x = DOOR_X0; x <= DOOR_X1; x++) {
+            for (int y = 0; y <= 2; y++) {
+                n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.IRON_FENCE);
             }
         }
         return n;
@@ -289,51 +489,6 @@ public class DailyCourtyardService {
         return Material.STONE;
     }
 
-    /** Inner colonnade defining corridor ~3 wide along four sides. */
-    private int buildColonnade(World w) {
-        int n = 0;
-        // corridor inner edge: 3 blocks in from outer wall
-        int ix0 = X0 + 4; // -12
-        int ix1 = X1 - 4; // 11
-        int iz0 = Z0 + 4; // 0
-        int iz1 = Z1 - 4; // 23
-        // pillars every 3 along the inner ring; skip arch midlines so spawn/north stay open
-        for (int x = ix0; x <= ix1; x += 3) {
-            if (x >= -2 && x <= 1) continue; // south/north arch gap
-            n += pillar(w, x, iz0);
-            n += pillar(w, x, iz1);
-        }
-        for (int z = iz0 + 3; z <= iz1 - 3; z += 3) {
-            n += pillar(w, ix0, z);
-            n += pillar(w, ix1, z);
-        }
-        // ensure corridor walkway (between wall and pillars) is open + solid floor
-        for (int x = X0 + 1; x <= X1 - 1; x++) {
-            for (int z = Z0 + 1; z <= Z1 - 1; z++) {
-                boolean inOuterRing =
-                        x <= X0 + 3 || x >= X1 - 3 || z <= Z0 + 3 || z >= Z1 - 3;
-                if (!inOuterRing) continue;
-                // skip if we just placed a pillar cell
-                Block b = w.getBlockAt(x, GROUND_Y, z);
-                if (b.getType() != Material.AIR && b.getType() != Material.TORCH) continue;
-                n += set(w.getBlockAt(x, GROUND_Y - 1, z), floorMat(x, z));
-                n += set(w.getBlockAt(x, GROUND_Y, z), Material.AIR);
-                n += set(w.getBlockAt(x, GROUND_Y + 1, z), Material.AIR);
-                n += set(w.getBlockAt(x, GROUND_Y + 2, z), Material.AIR);
-            }
-        }
-        // open court center floor (between pillars) — gravel/stone mix, same Y (not one flat plate only)
-        for (int x = ix0 + 1; x <= ix1 - 1; x++) {
-            for (int z = iz0 + 1; z <= iz1 - 1; z++) {
-                n += set(w.getBlockAt(x, GROUND_Y - 1, z), floorMat(x, z));
-                for (int y = 0; y <= 5; y++) {
-                    n += set(w.getBlockAt(x, GROUND_Y + y, z), Material.AIR);
-                }
-            }
-        }
-        return n;
-    }
-
     private int pillar(World w, int x, int z) {
         int n = 0;
         Material base = Material.SMOOTH_BRICK;
@@ -341,120 +496,26 @@ public class DailyCourtyardService {
         for (int y = 0; y <= 3; y++) {
             n += set(w.getBlockAt(x, GROUND_Y + y, z), base);
         }
-        n += set(w.getBlockAt(x, GROUND_Y + 4, z), Material.COBBLESTONE); // capital
-        // occasional torch on side
+        n += set(w.getBlockAt(x, GROUND_Y + 4, z), Material.COBBLESTONE);
         if (((x + z) & 1) == 0) {
             n += set(w.getBlockAt(x + 1, GROUND_Y + 2, z), Material.TORCH);
         }
         return n;
     }
 
-    private int buildBossPad(World w) {
-        int n = 0;
-        // pad top surface at y=65 (feet 66); ground elsewhere feet 65
-        int padTop = PAD_Y - 1; // 65
-        for (int dx = -PAD_HALF; dx < PAD_HALF; dx++) {
-            for (int dz = -PAD_HALF; dz < PAD_HALF; dz++) {
-                int x = BOSS_X + dx;
-                int z = BOSS_Z + dz;
-                boolean edge = Math.abs(dx) == PAD_HALF - 1 || Math.abs(dz) == PAD_HALF - 1
-                        || dx == -PAD_HALF || dz == -PAD_HALF;
-                // fill under pad
-                n += set(w.getBlockAt(x, GROUND_Y - 1, z), Material.STONE);
-                Material top = edge ? Material.SMOOTH_BRICK : Material.COBBLESTONE;
-                if ((dx == 0 && dz == 0) || (Math.abs(dx) + Math.abs(dz) <= 1)) {
-                    top = Material.NETHERRACK; // ash heart
-                }
-                n += set(w.getBlockAt(x, padTop, z), top);
-                // clear pad air
-                n += set(w.getBlockAt(x, PAD_Y, z), Material.AIR);
-                n += set(w.getBlockAt(x, PAD_Y + 1, z), Material.AIR);
-                n += set(w.getBlockAt(x, PAD_Y + 2, z), Material.AIR);
-            }
-        }
-        // step ring at ground level around pad (stairs into pad) — stone slab feel via full blocks cut as steps
-        // four mid-side step blocks at GROUND_Y (=65) as approach
-        int[][] steps = {
-                {BOSS_X, BOSS_Z - PAD_HALF - 1},
-                {BOSS_X, BOSS_Z + PAD_HALF},
-                {BOSS_X - PAD_HALF - 1, BOSS_Z},
-                {BOSS_X + PAD_HALF, BOSS_Z}
-        };
-        for (int[] s : steps) {
-            n += set(w.getBlockAt(s[0], GROUND_Y - 1, s[1]), Material.STONE);
-            n += set(w.getBlockAt(s[0], GROUND_Y, s[1]), Material.SMOOTH_BRICK); // step up
-            n += set(w.getBlockAt(s[0], GROUND_Y + 1, s[1]), Material.AIR);
-            n += set(w.getBlockAt(s[0], GROUND_Y + 2, s[1]), Material.AIR);
-        }
-        return n;
-    }
-
-    /** South main entrance arch (spawn) + north evacuation visual arch. */
-    private int buildArches(World w) {
-        int n = 0;
-        // SOUTH arch at z=Z0, opening x=-2..1 (4 wide), height 3
-        for (int x = -2; x <= 1; x++) {
-            for (int y = 0; y <= 2; y++) {
-                n += set(w.getBlockAt(x, GROUND_Y + y, Z0), Material.AIR);
-            }
-        }
-        // lintel
-        for (int x = -3; x <= 2; x++) {
-            n += set(w.getBlockAt(x, GROUND_Y + 3, Z0), Material.SMOOTH_BRICK);
-            n += set(w.getBlockAt(x, GROUND_Y + 4, Z0), Material.COBBLESTONE);
-        }
-        // pillars flanking arch
-        for (int y = 0; y <= 4; y++) {
-            n += set(w.getBlockAt(-3, GROUND_Y + y, Z0), Material.COBBLESTONE);
-            n += set(w.getBlockAt(2, GROUND_Y + y, Z0), Material.COBBLESTONE);
-        }
-        // small porch outside south (spawn approach floor)
-        for (int x = -2; x <= 1; x++) {
-            for (int z = Z0 - 2; z <= Z0 - 1; z++) {
-                n += set(w.getBlockAt(x, GROUND_Y - 1, z), Material.SMOOTH_BRICK);
-                n += set(w.getBlockAt(x, GROUND_Y, z), Material.AIR);
-                n += set(w.getBlockAt(x, GROUND_Y + 1, z), Material.AIR);
-            }
-        }
-        // ensure spawn cell open
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                n += set(w.getBlockAt(SPAWN_X + dx, GROUND_Y - 1, SPAWN_Z + dz), Material.SMOOTH_BRICK);
-                n += set(w.getBlockAt(SPAWN_X + dx, GROUND_Y, SPAWN_Z + dz), Material.AIR);
-                n += set(w.getBlockAt(SPAWN_X + dx, GROUND_Y + 1, SPAWN_Z + dz), Material.AIR);
-            }
-        }
-
-        // NORTH arch (evac visual) at z=Z1
-        for (int x = -2; x <= 1; x++) {
-            for (int y = 0; y <= 2; y++) {
-                n += set(w.getBlockAt(x, GROUND_Y + y, Z1), Material.AIR);
-            }
-        }
-        for (int x = -3; x <= 2; x++) {
-            n += set(w.getBlockAt(x, GROUND_Y + 3, Z1), Material.SMOOTH_BRICK);
-            n += set(w.getBlockAt(x, GROUND_Y + 4, Z1), Material.COBBLESTONE);
-        }
-        for (int y = 0; y <= 4; y++) {
-            n += set(w.getBlockAt(-3, GROUND_Y + y, Z1), Material.COBBLESTONE);
-            n += set(w.getBlockAt(2, GROUND_Y + y, Z1), Material.COBBLESTONE);
-        }
-        return n;
-    }
-
     private int placeBraziersAndLights(World w) {
         int n = 0;
-        // braziers: netherrack pedestal + glowstone (1.12-safe, no fire spread)
         int[][] braziers = {
-                {-14, 2}, {13, 2}, {-14, 24}, {13, 24},
-                {-8, 12}, {7, 12}, {0, 4}, {0, 20}
+                {-7, 1}, {6, 1},           // porch
+                {-7, 8}, {6, 8},           // room1
+                {-7, 18}, {6, 18}, {-7, 22}, {6, 22}, // room2
+                {-7, 30}, {6, 30}, {0, 36} // boss hall
         };
         for (int[] p : braziers) {
             n += set(w.getBlockAt(p[0], GROUND_Y - 1, p[1]), Material.COBBLESTONE);
             n += set(w.getBlockAt(p[0], GROUND_Y, p[1]), Material.NETHERRACK);
             n += set(w.getBlockAt(p[0], GROUND_Y + 1, p[1]), Material.GLOWSTONE);
         }
-        // sea lantern accents near spawn / pad
         n += set(w.getBlockAt(SPAWN_X + 3, GROUND_Y, SPAWN_Z), Material.SEA_LANTERN);
         n += set(w.getBlockAt(SPAWN_X - 3, GROUND_Y, SPAWN_Z), Material.SEA_LANTERN);
         n += set(w.getBlockAt(BOSS_X + 5, PAD_Y, BOSS_Z), Material.SEA_LANTERN);
@@ -464,21 +525,23 @@ public class DailyCourtyardService {
 
     private int placeSigns(World w) {
         int n = 0;
-        // spawn: theme + hub return (no /dp /hub teach)
         n += set(w.getBlockAt(SPAWN_X + 2, GROUND_Y - 1, SPAWN_Z), Material.SMOOTH_BRICK);
         n += writeSign(w.getBlockAt(SPAWN_X + 2, GROUND_Y, SPAWN_Z),
-                "§6灰烬庭院", "§7回廊清潮", "§7后上中央垫", "§8露天·庭院");
+                "§6余烬窟·庭院", "§7门廊安全区", "§e清尽前厅再开门", "§8→ 前方铁门");
         n += set(w.getBlockAt(SPAWN_X - 2, GROUND_Y - 1, SPAWN_Z), Material.SMOOTH_BRICK);
         n += writeSign(w.getBlockAt(SPAWN_X - 2, GROUND_Y, SPAWN_Z),
                 "§e回枢纽", "§7打开枢纽菜单", "§7未通关撤离", "§8不发通关箱");
-        // pad edge
+        // door1 hint (room1 side)
+        n += set(w.getBlockAt(DOOR_X1 + 2, GROUND_Y - 1, DOOR1_Z - 1), Material.SMOOTH_BRICK);
+        n += writeSign(w.getBlockAt(DOOR_X1 + 2, GROUND_Y, DOOR1_Z - 1),
+                "§e第一道门", "§7清尽前厅", "§7后铁门敞开", "§8→ 回廊");
+        // door2 hint
+        n += set(w.getBlockAt(DOOR_X1 + 2, GROUND_Y - 1, DOOR2_Z - 1), Material.SMOOTH_BRICK);
+        n += writeSign(w.getBlockAt(DOOR_X1 + 2, GROUND_Y, DOOR2_Z - 1),
+                "§eBoss门", "§7清尽回廊", "§7后进入终厅", "§8→ 中央垫");
         n += set(w.getBlockAt(BOSS_X + 5, PAD_Y - 1, BOSS_Z), Material.SMOOTH_BRICK);
         n += writeSign(w.getBlockAt(BOSS_X + 5, PAD_Y, BOSS_Z),
-                "§c中央垫", "§7蛮兵在此", "§7通关回枢纽", "§8菜单亦可回");
-        // north arch
-        n += set(w.getBlockAt(2, GROUND_Y - 1, Z1 - 1), Material.SMOOTH_BRICK);
-        n += writeSign(w.getBlockAt(2, GROUND_Y, Z1 - 1),
-                "§e回枢纽", "§7通关后自动", "§7或开菜单返回", "§8→ 枢纽");
+                "§c终厅·中央垫", "§7蛮兵在此", "§7通关回枢纽", "§8菜单亦可回");
         return n;
     }
 
@@ -486,22 +549,28 @@ public class DailyCourtyardService {
         int n = 0;
         int[][] pts = {
                 {SPAWN_X, GROUND_Y, SPAWN_Z},
-                {W1_X, GROUND_Y, W1_Z},
+                {W1A_X, GROUND_Y, W1A_Z},
+                {W1B_X, GROUND_Y, W1B_Z},
+                {W1C_X, GROUND_Y, W1C_Z},
                 {W2A_X, GROUND_Y, W2A_Z},
                 {W2B_X, GROUND_Y, W2B_Z},
+                {W2C_X, GROUND_Y, W2C_Z},
+                {W2D_X, GROUND_Y, W2D_Z},
                 {BOSS_X, PAD_Y, BOSS_Z}
         };
         for (int[] p : pts) {
             int feetY = p[1];
             for (int dx = -1; dx <= 1; dx++) {
                 for (int dz = -1; dz <= 1; dz++) {
-                    Material floor = (feetY == PAD_Y) ? Material.COBBLESTONE : Material.SMOOTH_BRICK;
-                    if (p[0] == W1_X || p[0] == W2A_X || p[0] == W2B_X) {
-                        floor = floorMat(p[0] + dx, p[2] + dz);
-                    }
-                    n += set(w.getBlockAt(p[0] + dx, feetY - 1, p[2] + dz), floor);
-                    n += set(w.getBlockAt(p[0] + dx, feetY, p[2] + dz), Material.AIR);
-                    n += set(w.getBlockAt(p[0] + dx, feetY + 1, p[2] + dz), Material.AIR);
+                    int bx = p[0] + dx;
+                    int bz = p[2] + dz;
+                    // never punch door planes open here
+                    if (bz == DOOR1_Z || bz == DOOR2_Z) continue;
+                    Material floor = (feetY == PAD_Y) ? Material.COBBLESTONE : floorMat(bx, bz);
+                    if (p[0] == SPAWN_X && p[2] == SPAWN_Z) floor = Material.SMOOTH_BRICK;
+                    n += set(w.getBlockAt(bx, feetY - 1, bz), floor);
+                    n += set(w.getBlockAt(bx, feetY, bz), Material.AIR);
+                    n += set(w.getBlockAt(bx, feetY + 1, bz), Material.AIR);
                 }
             }
         }

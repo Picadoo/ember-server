@@ -1,7 +1,6 @@
-# 余烬窟·日 — 对应 DESIGN-dungeon-daily-weekly.md §5
-# 启动：/dp start EmberDaily
-# 次数：S0 扣体力 30（CoreRpg StaminaService）；DP 无原生日限
-# S0: 扣体力由 CoreRpg TicketEntryService → StaminaService；本文件不扣次
+# 余烬窟·庭院 — S1 分房 MVP（门廊→前厅→回廊→Boss）
+# 启动：底层 dp start EmberDaily（玩家走菜单 / corerpg enter daily）
+# S0: 扣体力由 CoreRpg；本文件不扣次 / 不改体力数值
 
 dungeon-init-script:
   - "$setmap{name=ember_daily} @init"
@@ -12,25 +11,19 @@ dungeon-init-script:
 dungeon-start:
   condition:
     - "$team-condition{team=true;min=1;max=2;message=§c日常本人数 1～2，当前 (<size>)} @system"
-    # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.daily=10；DP 逐队员判定；放在扣票条件前 → 被拒不扣票；OP 豁免）
-    - "$js-condition{text='%corerpg_gate_daily%'=='yes'||'%player_is_op%'=='yes';message=§c日常本需要余烬等级 §eLv.10§c · 队伍中有人等级不足（/corerpg level 查看）} @system"
-    # S0: 体力已在 /corerpg enter 扣除；此处仅保留人数/等级门
+    - "$js-condition{text='%corerpg_gate_daily%'=='yes'||'%player_is_op%'=='yes';message=§c日常本需要余烬等级 §eLv.10§c · 队伍中有人等级不足} @system"
   action-script:
-    - "$message{type=text;text=§e灰烬庭院·日 开始！已消耗体力} @dungeon"
+    - "$message{type=text;text=§e余烬窟·庭院 开始！已消耗体力 · 门廊安全 · 清前厅开门} @dungeon"
     - "$teleport{location=0,65,0;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
 dungeon-area: []
 
-# 通关箱（Boss 死后 $end reward=true 触发）— 全队每人一份
-# 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
 dungeon-reward-script:
   - "$message{type=text;text=§a通关奖励已发放} @dungeon"
   - "$command{text=ni give %player_name% mat_ember_core_fragment 1;console=true} @player"
   - "$command{text=ni give %player_name% crystal_ember_enchant 1;console=true} @player"
   - "$command{text=ni give %player_name% mat_ember_shard 5;console=true} @player"
-  # 2026-09-26 audit：服无经验球，附魔/铁砧需要经验等级 → 通关箱给 3 级（附魔 1～3 级/次，铁砧修理 2 级/片）
   - "$command{text=xp 3L %player_name%;console=true} @player"
-  # 2026-09-26：战令赛季经验 + 余烬等级经验（CoreRpg progress.yml）
   - "$command{text=corerpg progress %player_name% daily_clear;console=true} @player"
   - "$command{text=mvtp %player_name% ember_hub;console=true} @player"
