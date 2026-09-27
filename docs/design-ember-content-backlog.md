@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 07:43 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 07:45 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 日常体验收口挑刺（七线波次+门吏+冷却/门宽后）
+- 收口可改打磨：锈轨真侧袭时序 + enter 冷却 chat 转发
 
 ### 刚结
+- 日常体验收口挑刺：**无挡级必改**（`STATUS-ember-daily-ux-closeout-review.md`）
 - 出本 5s 冷却提示 + 庭院门宽 ×9 **PASS**（CoreRpg 1.15.20 · `3299ae6` / 测 `faee945`）
 - 枢纽 hitbox purge + 灰烛 quest 去指令 **PASS**（CoreRpg 1.15.19）
 - **门吏 · 灰钥** `ember_dungeon_clerk`：设计→落地→验收 **PASS**（`7bf3de9` / 测报）
