@@ -22,6 +22,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * P2 (2026-09-27): ember_abyss vertical shaft — well-top spawn, ring platforms per floor,
+ * F2-stuck (2026-09-27): spawn CZ±6, rHole 2, 5x5 pads, full hole rails —
  * deeper Watcher chamber, evacuate-menu signs. Admin: /corerpg abyssbuild
  *
  * Axis kept near (-40, z=270). Builds into a temp world then exports region back to
@@ -73,18 +74,20 @@ public class AbyssShaftService {
         return FLOOR_Y[floor];
     }
 
-    /** Open spawn cell for floor (primary). */
+    /** Open spawn cell for floor (primary).
+     * 2026-09-27 F2-stuck fix: pads at CZ±6 (was ±4) so mobs/player sit farther from
+     * look-down hole (rHole≈2); B0 live TtkR9311 cleared F1 then stalled ~9min on F2. */
     public static int[] floorSpawnPrimary(int floor) {
         int y = floorFeetY(floor);
-        // alternate NE / SW open pads so ring feels spiral
-        if ((floor & 1) == 1) return new int[]{CX + 2, y, CZ + 4};
-        return new int[]{CX - 2, y, CZ - 4};
+        // alternate NE / SW open pads so ring feels spiral — outer rim, not hole lip
+        if ((floor & 1) == 1) return new int[]{CX + 2, y, CZ + 6};
+        return new int[]{CX - 2, y, CZ - 6};
     }
 
     public static int[] floorSpawnSecondary(int floor) {
         int y = floorFeetY(floor);
-        if ((floor & 1) == 1) return new int[]{CX - 2, y, CZ + 4};
-        return new int[]{CX + 2, y, CZ - 4};
+        if ((floor & 1) == 1) return new int[]{CX - 2, y, CZ + 6};
+        return new int[]{CX + 2, y, CZ - 6};
     }
 
     private void dumpTable(CommandSender sender) {
@@ -453,7 +456,8 @@ public class AbyssShaftService {
         int fy = feet - 1;
         boolean deep = floor >= 10;
         int rOuter = deep ? 12 : 8;
-        int rHole = deep ? (floor == 12 ? 0 : 2) : 3; // floor12 solid arena; 10-11 small hole
+        // F2-stuck fix: F1-9 rHole 3→2 (smaller look-down, spawn pads farther from lip)
+        int rHole = deep ? (floor == 12 ? 0 : 2) : 2; // floor12 solid arena; 10-11 small hole; F1-9 was 3
 
         // crescent / ring: emphasize one side for spiral readability
         int side = (floor & 1) == 1 ? 1 : -1; // +Z or -Z bias
@@ -467,12 +471,13 @@ public class AbyssShaftService {
                     continue;
                 }
                 // spiral bias: thin opposite arc (still walkable rim of width 2)
+                // F2-stuck fix: shrink weak-air carve 5→3 so preferred crescent stays wider near hole
                 if (!deep) {
                     boolean onPreferred = side > 0 ? dz >= -1 : dz <= 1;
                     boolean onRim = d2 >= (rOuter - 1) * (rOuter - 1);
                     if (!onPreferred && !onRim) {
                         // leave air on weak side so drop is visible — but keep 2-block walk ring
-                        if (d2 < 5 * 5) {
+                        if (d2 < 3 * 3) {
                             n += set(w.getBlockAt(CX + dx, fy, CZ + dz), Material.AIR);
                             continue;
                         }
@@ -493,9 +498,9 @@ public class AbyssShaftService {
             n += set(w.getBlockAt(p[0], fy, p[2]), deep ? Material.NETHER_BRICK : Material.SMOOTH_BRICK);
             n += set(w.getBlockAt(p[0], feet, p[2]), Material.AIR);
             n += set(w.getBlockAt(p[0], feet + 1, p[2]), Material.AIR);
-            // 3x3 clear around spawn
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dz = -1; dz <= 1; dz++) {
+            // 5x5 solid pad (was 3x3) — keeps Mix/Skeleton + pathfinder on preferred rim
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dz = -2; dz <= 2; dz++) {
                     n += set(w.getBlockAt(p[0] + dx, fy, p[2] + dz),
                             deep ? Material.NETHER_BRICK : Material.SMOOTH_BRICK);
                     n += set(w.getBlockAt(p[0] + dx, feet, p[2] + dz), Material.AIR);
@@ -504,22 +509,29 @@ public class AbyssShaftService {
             }
         }
 
-        // low rail on hole edge (non-deep)
+        // low rail on hole edge (non-deep) — F2-stuck fix: always collar+fence full ring
         if (!deep && rHole > 0) {
             for (int dx = -rHole - 1; dx <= rHole + 1; dx++) {
                 for (int dz = -rHole - 1; dz <= rHole + 1; dz++) {
                     int d2 = dx * dx + dz * dz;
                     if (d2 >= rHole * rHole && d2 <= (rHole + 1) * (rHole + 1)) {
                         Block below = w.getBlockAt(CX + dx, fy, CZ + dz);
-                        if (below.getType() != Material.AIR) {
-                            n += set(w.getBlockAt(CX + dx, feet, CZ + dz), Material.IRON_FENCE);
+                        if (below.getType() == Material.AIR) {
+                            // fill missing lip so fence has footing (anti fall-through gaps)
+                            n += set(below, Material.SMOOTH_BRICK);
+                            n += set(w.getBlockAt(CX + dx, fy - 1, CZ + dz), Material.STONE);
                         }
+                        n += set(w.getBlockAt(CX + dx, feet, CZ + dz), Material.IRON_FENCE);
                     }
                 }
             }
-            // clear rails off spawn pads
+            // clear rails off spawn pad centers only (5x5 pad stays walkable)
             for (int[] p : new int[][]{a, b}) {
-                n += set(w.getBlockAt(p[0], feet, p[2]), Material.AIR);
+                for (int dx = -1; dx <= 1; dx++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        n += set(w.getBlockAt(p[0] + dx, feet, p[2] + dz), Material.AIR);
+                    }
+                }
             }
         }
 

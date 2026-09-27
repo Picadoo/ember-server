@@ -1,3 +1,4 @@
+# 2026-09-27 F2-stuck: spawn CZ±6 (odd z=276 / even z=264); F2 scattered 0.5; hole rails via abyssbuild
 # 2026-09-27 P2 shaft: per-floor ring platforms (Y step~5; F10-12 wider). Teleport on wave start.
 # 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
 #   see docs/critic-fixes-20260927.md §10). Map ember_abyss room: x -43..-37, z 267..273
@@ -9,11 +10,11 @@
 groups:
   floor1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,85,274;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,85,276;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·潮尸;amount=3} @system"
     start:
-    - "$teleport{location=-38,85,274} @player"
+    - "$teleport{location=-38,85,276} @player"
     - "$message{type=text;text=§5—— 第 §f1 §5层 —— §7潮尸×3} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
@@ -26,12 +27,12 @@ groups:
 
   floor2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-42,80,266;amount=2;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-38,80,266;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-42,80,264;amount=2;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-38,80,264;amount=2;scattered=0.5;level=1} @dungeon"
     condition:
     - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=4} @system"
     start:
-    - "$teleport{location=-42,80,266} @player"
+    - "$teleport{location=-42,80,264} @player"
     - "$message{type=text;text=§5—— 第 §f2 §5层 —— §7混潮+骨潮} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
@@ -44,12 +45,12 @@ groups:
 
   floor3:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-38,75,274;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-38,75,276;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
     - "$kill{mobname=余烬深渊·骨潮;amount=3} @system"
     start:
-    - "$teleport{location=-38,75,274} @player"
+    - "$teleport{location=-38,75,276} @player"
     - "$message{type=text;text=§5—— 第 §f3 §5层 —— §7骨潮加压} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
@@ -62,12 +63,12 @@ groups:
 
   floor4:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-42,70,266;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,70,266;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-42,70,264;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,70,264;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·蛮层;amount=1} @system"
     start:
-    - "$teleport{location=-42,70,266} @player"
+    - "$teleport{location=-42,70,264} @player"
     - "$message{type=text;text=§c—— 第 §f4 §5层 —— §7蛮层} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
@@ -80,11 +81,11 @@ groups:
 
   floor5:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-38,65,274;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-38,65,276;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·看守;amount=1} @system"
     start:
-    - "$teleport{location=-38,65,274} @player"
+    - "$teleport{location=-38,65,276} @player"
     - "$message{type=text;text=§4—— 第 §f5 §5层 —— §c看守凝视！躲开视线再打} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
@@ -99,11 +100,11 @@ groups:
   # 9～12 见下方 stage4.1
   floor6:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-42,60,266;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-42,60,264;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·潮尸;amount=3} @system"
     start:
-    - "$teleport{location=-42,60,266} @player"
+    - "$teleport{location=-42,60,264} @player"
     - "$message{type=text;text=§5—— 第 §f6 §5层 —— §7潮尸加压×3} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
@@ -116,12 +117,12 @@ groups:
 
   floor7:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,55,274;amount=2;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,55,274;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,55,276;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,55,276;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=4} @system"
     start:
-    - "$teleport{location=-38,55,274} @player"
+    - "$teleport{location=-38,55,276} @player"
     - "$message{type=text;text=§5—— 第 §f7 §5层 —— §7混潮+骨潮加压} @dungeon"
     end:
     # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
@@ -134,13 +135,13 @@ groups:
 
   floor8:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-42,50,266;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcher;location=-42,50,264;amount=1;scattered=1.0;level=1} @dungeon"
     # 2026-09-27: brute swapped for a mix (watcher + brute together wiped a solo Lv25 T1 in ~20 s)
-    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,50,266;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,50,264;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·看守;amount=1} @system"
     start:
-    - "$teleport{location=-42,50,266} @player"
+    - "$teleport{location=-42,50,264} @player"
     - "$message{type=text;text=§4—— 第 §f8 §5层 —— §c深处看守+混潮！} @dungeon"
     end:
     # 2026-09-27 stage4.1: floor8 no longer COMPLETE — continue to floor9
@@ -154,12 +155,12 @@ groups:
   # 9～12：stage4.1 深渊续层（design-stage4-abyss-9-12.md）；顶层 COMPLETE=floor12
   floor9:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-38,45,274;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-42,45,274;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-38,45,276;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-42,45,276;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·蛮层;amount=1} @system"
     start:
-    - "$teleport{location=-38,45,274} @player"
+    - "$teleport{location=-38,45,276} @player"
     - "$message{type=text;text=§c—— 第 §f9 §5层 —— §7深处蛮压} @dungeon"
     end:
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
@@ -171,12 +172,12 @@ groups:
 
   floor10:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcherDeep;location=-42,38,266;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,38,266;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcherDeep;location=-42,38,264;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,38,264;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·看守·深;amount=1} @system"
     start:
-    - "$teleport{location=-42,38,266} @player"
+    - "$teleport{location=-42,38,264} @player"
     - "$message{type=text;text=§4—— 第 §f10 §5层 —— §c第二看守！视线更毒} @dungeon"
     end:
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
@@ -188,11 +189,11 @@ groups:
 
   floor11:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,33,274;amount=4;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,33,276;amount=4;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·潮尸;amount=4} @system"
     start:
-    - "$teleport{location=-38,33,274} @player"
+    - "$teleport{location=-38,33,276} @player"
     - "$message{type=text;text=§5—— 第 §f11 §5层 —— §7潮尸加压×4} @dungeon"
     end:
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
@@ -204,12 +205,12 @@ groups:
 
   floor12:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcherDeep;location=-42,28,266;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-38,28,266;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssWatcherDeep;location=-42,28,264;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-38,28,264;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬深渊·看守·深;amount=1} @system"
     start:
-    - "$teleport{location=-42,28,266} @player"
+    - "$teleport{location=-42,28,264} @player"
     - "$message{type=text;text=§4—— 第 §f12 §5层 —— §c深渊合拢·最终看守！} @dungeon"
     end:
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
