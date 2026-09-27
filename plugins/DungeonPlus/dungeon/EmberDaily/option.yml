@@ -1,7 +1,7 @@
 # 余烬窟·日 — 对应 DESIGN-dungeon-daily-weekly.md §5
 # 启动：/dp start EmberDaily
 # 次数：扣 NI id ticket_ember_daily ×1（显示名「余烬日票」；日发 3 = 每日 3 次；DP 无原生日限）
-# DEBT: DP <item:> 原生只认显示名（ersha wiki），不能写 NI ID；见 STATUS-ember-ticket-ni-audit.md
+# B0.1: 扣票改由 CoreRpg TicketEntryService（NI id）；本文件不再 <item:显示名> 扣次
 
 dungeon-init-script:
   - "$setmap{name=ember_daily} @init"
@@ -14,8 +14,7 @@ dungeon-start:
     - "$team-condition{team=true;min=1;max=2;message=§c日常本人数 1～2，当前 (<size>)} @system"
     # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.daily=10；DP 逐队员判定；放在扣票条件前 → 被拒不扣票；OP 豁免）
     - "$js-condition{text='%corerpg_gate_daily%'=='yes'||'%player_is_op%'=='yes';message=§c日常本需要余烬等级 §eLv.10§c · 队伍中有人等级不足（/corerpg level 查看）} @system"
-    # 入场扣次：DP <item:> 按显示名扣「余烬日票」×1 · NI id=ticket_ember_daily（过滤颜色）
-    - "$js-condition{text='<item:余烬日票 *1 *true>'=='true';message=§c缺少§e余烬日票§c×1（每日共 3 张，进本即扣）} @system"
+    # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§e灰烬庭院·日 开始！已扣除日票 ×1} @dungeon"
     - "$teleport{location=0,65,0;defspawn=true} @player"

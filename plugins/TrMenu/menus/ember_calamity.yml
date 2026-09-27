@@ -88,7 +88,7 @@ Icons:
         - ''
         - '§8DungeonPlus 隔离本，用于调 Boss'
         - '§8正式游玩请用「奔赴灾厄」'
-        - '§e➥ §f/dp start EmberCalamity'
+        - '§8仅管理/测试 · 正式请走奔赴'
     actions:
       all:
         - 'sound: BLOCK_NOTE_BASS-1-0'

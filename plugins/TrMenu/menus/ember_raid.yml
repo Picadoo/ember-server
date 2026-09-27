@@ -1,5 +1,5 @@
 # 团本子菜单 — EmberRaid · DESIGN-ember-rpg-systems.md §4
-# /dp start EmberRaid · 扣 ticket_ember_raid（余烬团本票）×1 · 3～5 人
+# 进本：corerpg enter raid · 扣 ticket_ember_raid ×1 · 3～5 人
 
 Title: '§9团本 · 灰烬协奏'
 
@@ -49,14 +49,14 @@ Icons:
         - '§8周首通保底团戒 · 戒+刃=同袍套装'
         - '§8人数 §f3～5 §8· 时限约 30～40 分'
         - ''
-        - '§e➥ §f点击 · /dp start EmberRaid'
+        - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §9团本已点燃。§7分路推进——左卫兵、右射手，汇合后再闯终厅。'
         - 'tell: §8需 §9余烬团本票§8×1 · 人数 3～5'
         - 'tell: §8需要余烬等级 §eLv.35§8（/corerpg level）'
-        - 'command: dp start EmberRaid'
+        - 'command: corerpg enter raid'
         - close
 
   P:

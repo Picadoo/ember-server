@@ -44,7 +44,6 @@ Icons:
         - ''
         - '§7查询已选定誓约与洗约费用'
         - ''
-        - '§8命令：/corerpg covenant'
         - ''
         - '§e➥ §f点击查看'
     actions:
@@ -77,9 +76,8 @@ Icons:
         - '§8推荐：余烬之刃'
         - '§8ID: blaze'
         - ''
-        - '§8命令：/corerpg covenant set blaze'
         - ''
-        - '§6➥ §f点击选定（建议命令）'
+        - '§6➥ §f点击选定'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -98,9 +96,8 @@ Icons:
         - '§8推荐：刃或远程倾向'
         - '§8ID: ash'
         - ''
-        - '§8命令：/corerpg covenant set ash'
         - ''
-        - '§7➥ §f点击选定（建议命令）'
+        - '§7➥ §f点击选定'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -119,9 +116,8 @@ Icons:
         - '§8推荐：余烬护符权重高'
         - '§8ID: warden'
         - ''
-        - '§8命令：/corerpg covenant set warden'
         - ''
-        - '§9➥ §f点击选定（建议命令）'
+        - '§9➥ §f点击选定'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'

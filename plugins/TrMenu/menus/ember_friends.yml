@@ -45,7 +45,6 @@ Icons:
         - '§7查看在线好友与备注'
         - '§8基础社交 · 上限示意 50'
         - ''
-        - '§8命令：/corerpg friend'
         - ''
         - '§e➥ §f点击查询'
     actions:
@@ -62,8 +61,6 @@ Icons:
         - '§7申请加友或解除关系'
         - '§8双方确认后入表'
         - ''
-        - '§8命令：/corerpg friend add <名>'
-        - '§8命令：/corerpg friend remove <名>'
         - ''
         - '§a➥ §f查看说明'
     actions:
@@ -82,7 +79,6 @@ Icons:
         - '§8接团本 / 周本入口'
         - '§8不强制进队'
         - ''
-        - '§8命令：/corerpg friend invite <名>'
         - ''
         - '§b➥ §f查看说明'
     actions:
@@ -101,7 +97,6 @@ Icons:
         - '§8可选模块 · 不挡主线'
         - '§8奖：币 / 外观碎片，不发核心'
         - ''
-        - '§8命令：/corerpg friend mentor <名>'
         - ''
         - '§6➥ §f查看说明'
     actions:

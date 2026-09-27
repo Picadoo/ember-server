@@ -45,7 +45,6 @@ Icons:
         - '§7查看等级、战力与今日摘要'
         - '§8挂机 / 日周票 / 签到一览'
         - ''
-        - '§8命令：/corerpg status'
         - ''
         - '§e➥ §f点击查询'
     actions:
@@ -63,7 +62,6 @@ Icons:
         - '§7已选烬刃 / 灰行 / 守墓'
         - '§8未选则先去枢纽「誓约」'
         - ''
-        - '§8命令：/corerpg covenant'
         - ''
         - '§e➥ §f点击查询'
     actions:
@@ -81,8 +79,6 @@ Icons:
         - '§7晶钻余额 · 日票硬顶'
         - '§8软通货另查 /corerpg coin'
         - ''
-        - '§8命令：/corerpg cash'
-        - '§8命令：/corerpg coin'
         - ''
         - '§e➥ §f点击查晶钻'
     actions:
@@ -100,7 +96,6 @@ Icons:
         - '§7是否有效、到期日、今日礼'
         - '§8开卡 / 续期见商城热销'
         - ''
-        - '§8命令：/corerpg monthly'
         - ''
         - '§e➥ §f点击查询'
     actions:

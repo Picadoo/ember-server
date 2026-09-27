@@ -45,8 +45,6 @@ Icons:
         - '§7查看未读与未领附件'
         - '§8基础邮寄 · 系统发奖入口'
         - ''
-        - '§8命令：/corerpg mail'
-        - '§8命令：/corerpg mail read <id>'
         - ''
         - '§e➥ §f点击查询'
     actions:
@@ -64,7 +62,6 @@ Icons:
         - '§8战令结算 · 维护补偿 · 日活箱'
         - '§8奖励统一进邮箱，不弹背包散件'
         - ''
-        - '§8命令：/corerpg mail claim all'
         - ''
         - '§a➥ §f查看说明'
     actions:
@@ -101,7 +98,6 @@ Icons:
         - '§7删除已领取的空信'
         - '§8未领附件的邮件不可删'
         - ''
-        - '§8命令：/corerpg mail delete <id>'
         - ''
         - '§7➥ §f查看说明'
     actions:

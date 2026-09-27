@@ -45,7 +45,6 @@ Icons:
         - '§7查看积分、段位与赛季箱'
         - '§8赛季制 · 奖励绑外观与币'
         - ''
-        - '§8命令：/corerpg arena'
         - ''
         - '§e➥ §f点击查询'
     actions:
@@ -64,7 +63,6 @@ Icons:
         - '§8独立竞技世界 · CoreCombat'
         - '§8日奖励箱：币 / 外观币'
         - ''
-        - '§8命令：/corerpg arena queue 1v1'
         - ''
         - '§c➥ §f加入 1v1 队列'
     actions:
@@ -85,7 +83,6 @@ Icons:
         - '§8可与好友组队后排队'
         - '§8日奖励箱：币 / 外观币'
         - ''
-        - '§8命令：/corerpg arena queue 2v2'
         - ''
         - '§6➥ §f加入 2v2 队列'
     actions:
@@ -104,7 +101,6 @@ Icons:
         - ''
         - '§7离开当前匹配队列'
         - ''
-        - '§8命令：/corerpg arena leave'
         - ''
         - '§7➥ §f取消'
     actions:

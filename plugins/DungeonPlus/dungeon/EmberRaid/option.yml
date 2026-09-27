@@ -1,7 +1,7 @@
 # 余烬团本 — docs/ember-raid-channel-spec.md · 通道→终厅
 # 启动：/dp start EmberRaid
 # 次数：扣 NI id ticket_ember_raid ×1（显示名「余烬团本票」；周发 1）= 周首通实践保底
-# DEBT: DP <item:> 原生只认显示名，不能写 NI ID；见 STATUS-ember-ticket-ni-audit.md
+# B0.1: 扣票改由 CoreRpg TicketEntryService（NI id）；本文件不再 <item:显示名> 扣次
 # 怪：EmberRaidFootman/Archer/Elite/Boss（勿改 EmberAbyss DP）
 # 通关箱：材料保底 + 周首通团戒；T3 不保底（终厅 MM 概率）
 
@@ -16,8 +16,7 @@ dungeon-start:
     - "$team-condition{team=true;min=3;max=5;message=§c团本人数 3～5，当前 (<size>)} @system"
     # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.raid=35；DP 逐队员判定；放在扣票条件前 → 被拒不扣票；OP 豁免）
     - "$js-condition{text='%corerpg_gate_raid%'=='yes'||'%player_is_op%'=='yes';message=§c团本需要余烬等级 §eLv.35§c · 队伍中有人等级不足（/corerpg level 查看）} @system"
-    # 入场扣次：DP <item:> 按显示名扣「余烬团本票」×1 · NI id=ticket_ember_raid
-    - "$js-condition{text='<item:余烬团本票 *1 *true>'=='true';message=§c缺少§9余烬团本票§c×1（每周 1 张，进本即扣）} @system"
+    # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§9团本已点燃。§7分路推进——左卫兵、右射手，汇合后再闯终厅。} @dungeon"
     - "$message{type=text;text=§8已扣除余烬团本票 ×1} @dungeon"

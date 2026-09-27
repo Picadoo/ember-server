@@ -1,5 +1,5 @@
 # 周常副本子菜单 — EmberWeekly
-# 进本命令：/dp start EmberWeekly
+# 进本：corerpg enter weekly
 
 Title: '§c周常 · 深核'
 
@@ -54,7 +54,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §c[周] 正在尝试进入 §fEmberWeekly§c …'
                 - 'tell: §8需要余烬等级 §eLv.20§8（打开角色面板可查看）'
-        - 'command: dp start EmberWeekly'
+        - 'command: corerpg enter weekly'
         - close
 
   P:

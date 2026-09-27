@@ -56,7 +56,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §5[深渊] §7尝试下潜……（需余烬 Lv.25 · 深渊票×1；等级不足不扣票）'
         - 'tell: §8需要撤离：打开本菜单 → 上浮撤离'
-        - 'command: dp start EmberAbyss'
+        - 'command: corerpg enter abyss'
         - close
 
   E:

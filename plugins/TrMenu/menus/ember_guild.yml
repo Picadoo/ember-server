@@ -44,7 +44,6 @@ Icons:
         - ''
         - '§7查看所属盟、贡献与职务'
         - ''
-        - '§8命令：/corerpg guild'
         - ''
         - '§e➥ §f点击查询'
     actions:
@@ -62,7 +61,6 @@ Icons:
         - '§8费用：余烬币 5000 或 晶钻 40'
         - '§8人数起步 cap 20'
         - ''
-        - '§8命令：/corerpg guild create <名>'
         - ''
         - '§a➥ §f查看说明'
     actions:
@@ -82,7 +80,6 @@ Icons:
         - '§8可计活跃「盟课」+10'
         - '§8不收核心 / 毕业刃'
         - ''
-        - '§8命令：/corerpg guild donate <id> <amt>'
         - ''
         - '§6➥ §f查看说明'
     actions:
@@ -102,7 +99,6 @@ Icons:
         - '§8不出毕业伤害'
         - '§8日后：dp start EmberGuildBoss'
         - ''
-        - '§8命令：/corerpg guild boss'
         - ''
         - '§c➥ §f查看说明'
     actions:

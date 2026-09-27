@@ -47,7 +47,6 @@ Icons:
         - '§8刃：孔1@+0 · 孔2@+5'
         - '§8护符：孔1@+3'
         - ''
-        - '§8命令：/corerpg socket list'
         - ''
         - '§e➥ §f点击查看'
     actions:
@@ -64,7 +63,6 @@ Icons:
         - ''
         - '§7将孔 1 宝石退回背包'
         - ''
-        - '§8命令：/corerpg socket remove 1'
         - ''
         - '§a➥ §f点击卸下'
     actions:
@@ -81,7 +79,6 @@ Icons:
         - ''
         - '§7将孔 2 宝石退回背包（刃）'
         - ''
-        - '§8命令：/corerpg socket remove 2'
         - ''
         - '§b➥ §f点击卸下'
     actions:

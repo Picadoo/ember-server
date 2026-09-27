@@ -37,7 +37,6 @@ Icons:
       lore:
         - ''
         - '§7软通货 D · 挂机/签到/悬赏产出'
-        - '§8命令：/corerpg coin'
         - ''
         - '§e➥ §f点击查询'
     actions:
@@ -132,7 +131,6 @@ Icons:
         - '§8限购 3/日 · 硬顶总进本 ≤6'
         - ''
         - '§c价 §f60 §c晶钻'
-        - '§8命令：/corerpg shop buy daily_ticket'
         - ''
         - '§e➥ §f点击购买'
     actions:
@@ -152,7 +150,6 @@ Icons:
         - '§8限购 1/周 · 硬顶免费1+氪≤2'
         - ''
         - '§c价 §f180 §c晶钻'
-        - '§8命令：/corerpg shop buy weekly_ticket'
         - ''
         - '§e➥ §f点击购买（插件未装则提示未知商品）'
     actions:

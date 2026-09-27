@@ -55,38 +55,15 @@ public final class EliteService {
     }
 
     /**
-     * /corerpg elite start — 校验后以玩家身份启动 DP（由 DP 扣票）.
-     * OP 可绕过等级/通关/票门槛（仍走 dp start，便于管理测试）.
+     * /corerpg elite start — B0.1：NI id 扣票后 console start-console（见 TicketEntryService）.
      */
     public boolean cmdStart(Player player) {
-        if (player == null) return true;
-        PlayerData data = dataStore.get(player.getUniqueId());
-        boolean op = player.isOp() || player.hasPermission("corerpg.admin");
-        if (!op) {
-            ProgressService ps = plugin.getProgressService();
-            int need = ps != null ? ps.gateLevel("elite") : GATE_LEVEL;
-            if (data.getEmberLevel() < need) {
-                player.sendMessage(ChatColor.RED + "精英试炼需要余烬 Lv." + need
-                        + ChatColor.GRAY + "（当前 Lv." + data.getEmberLevel() + "）");
-                return true;
-            }
-            if (isClearedThisWeek(data)) {
-                player.sendMessage(ChatColor.RED + "本周已通关精英试炼，下周再来");
-                return true;
-            }
-            int tickets = ni == null ? 0 : ni.countInInventory(player, TICKET_NI);
-            if (tickets < 1) {
-                player.sendMessage(ChatColor.RED + "缺少余烬精英票"
-                        + ChatColor.GRAY + "（每周一发放 1 张，持有上限 1，进本即扣）");
-                return true;
-            }
+        TicketEntryService entry = plugin.getTicketEntryService();
+        if (entry == null) {
+            player.sendMessage(ChatColor.RED + "[精英试炼] 进本服务未就绪");
+            return true;
         }
-        player.sendMessage(ChatColor.YELLOW + "[精英试炼] " + ChatColor.GRAY + "正在进入……");
-        boolean ok = Bukkit.dispatchCommand(player, "dp start " + DUNGEON_ID);
-        if (!ok) {
-            player.sendMessage(ChatColor.RED + "无法启动精英试炼，请稍后再试或联系管理");
-        }
-        return true;
+        return entry.tryEnter(player, TicketEntryService.Kind.ELITE);
     }
 
     /**
