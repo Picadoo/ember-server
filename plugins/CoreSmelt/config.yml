@@ -20,3 +20,14 @@ recipes:
     cook_time_ticks: 80
     result_amount: 1
     exp: 0.35
+  # 2026-09-27 生活玩法：钓到的鱼可自己用熔炉烤（燃料自备），或在 /corerpg life cook 让补给商代烤
+  - input_ni_id: fish_ember_cod
+    result_ni_id: food_ember_grilled_fish
+    cook_time_ticks: 100
+    result_amount: 1
+    exp: 0.35
+  - input_ni_id: fish_ember_salmon
+    result_ni_id: food_ember_grilled_fish
+    cook_time_ticks: 100
+    result_amount: 1
+    exp: 0.35

@@ -251,6 +251,7 @@ public final class PlayerDataStore {
         data.setPetsUnlocked(stringList(yaml, "petsUnlocked"));
         data.setActivePet(yaml.getString("activePet", ""));
         data.setPetLevels(intMap(yaml, "petLevels"));
+        data.setCounters(intMap(yaml, "counters"));
 
         data.setGuildId(yaml.getString("guildId", ""));
         data.setGuildDonateDate(yaml.getString("guildDonateDate", ""));
@@ -398,6 +399,7 @@ public final class PlayerDataStore {
         yaml.set("petsUnlocked", new ArrayList<String>(data.getPetsUnlocked()));
         yaml.set("activePet", data.getActivePet());
         yaml.set("petLevels", new LinkedHashMap<String, Integer>(data.getPetLevels()));
+        yaml.set("counters", new LinkedHashMap<String, Integer>(data.getCounters()));
         yaml.set("guildId", data.getGuildId());
         yaml.set("guildDonateDate", data.getGuildDonateDate());
         yaml.set("guildDonateToday", Integer.valueOf(data.getGuildDonateToday()));

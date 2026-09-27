@@ -24,6 +24,11 @@ auto_use_protect: true
 protect_scroll_ni_id: mat_ember_protect_scroll
 stable_charm_ni_id: mat_ember_stable_charm
 
+# 1.11.0 币消耗：每次尝试手续费 = base + per_level × 目标等级（+1 20 · +3 40 · +7 80 · +10 110）
+coin_fee:
+  base: 10
+  per_level: 10
+
 levels:
   1: { chance: 1.00, fail: stay, costs: { mat_ember_shard: 3 } }
   2: { chance: 0.90, fail: stay, costs: { mat_ember_shard: 5 } }

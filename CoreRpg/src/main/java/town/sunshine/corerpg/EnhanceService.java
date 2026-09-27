@@ -68,6 +68,13 @@ public final class EnhanceService {
         SocketDef(int max, int[] unlockAt) { this.max = max; this.unlockAt = unlockAt; }
     }
 
+    private int feeBase, feePerLevel;
+    /** 1.11.0: coin fee per attempt (coin sink). */
+    int coinFee(int next) { return Math.max(0, feeBase + feePerLevel * next); }
+    private PlayerData pdata(Player p) {
+        return (plugin instanceof CoreRpgPlugin) ? ((CoreRpgPlugin) plugin).getDataStore().get(p.getUniqueId()) : null;
+    }
+
     public EnhanceService(JavaPlugin plugin, NiBridge ni) {
         this.plugin = plugin;
         this.ni = ni;
@@ -113,6 +120,8 @@ public final class EnhanceService {
         autoUseProtect = cfg.getBoolean("auto_use_protect", true);
         protectId = cfg.getString("protect_scroll_ni_id", "mat_ember_protect_scroll");
         stableId = cfg.getString("stable_charm_ni_id", "mat_ember_stable_charm");
+        feeBase = cfg.getInt("coin_fee.base", 0);
+        feePerLevel = cfg.getInt("coin_fee.per_level", 0);
 
         ConfigurationSection lvlSec = cfg.getConfigurationSection("levels");
         if (lvlSec != null) {
@@ -307,7 +316,8 @@ public final class EnhanceService {
                 int pct = (int) Math.round(ld.chance * 100.0);
                 p.sendMessage(ChatColor.YELLOW + "  下一档 +" + next + " 成功率 §f" + pct + "%"
                         + ChatColor.GRAY + " · 失败: " + failText(ld));
-                p.sendMessage(ChatColor.GRAY + "  消耗: " + formatCosts(p, ld.costs));
+                p.sendMessage(ChatColor.GRAY + "  消耗: " + formatCosts(p, ld.costs)
+                        + (coinFee(next) > 0 ? ChatColor.GRAY + " + 手续费 §6" + coinFee(next) + " 余烬币" : ""));
                 if (ld.protect) {
                     int have = ni.countInInventory(p, protectId);
                     p.sendMessage(ChatColor.LIGHT_PURPLE + "  保护券 " + protectId + " ×" + have
@@ -362,6 +372,13 @@ public final class EnhanceService {
                 return;
             }
         }
+        int fee = coinFee(next);
+        PlayerData pd = pdata(p);
+        if (fee > 0 && pd != null && pd.getCoin() < fee) {
+            p.sendMessage(ChatColor.RED + "[强化] 余烬币不足：手续费 " + fee + "，拥有 " + pd.getCoin() + "（签到/悬赏/活跃宝箱可得）");
+            return;
+        }
+        if (fee > 0 && pd != null) pd.takeCoin(fee);
         // consume all listed costs (includes stable charm for +10)
         for (Map.Entry<String, Integer> e : need.entrySet()) {
             if (!ni.consumeExact(p, e.getKey(), e.getValue().intValue())) {
@@ -406,7 +423,8 @@ public final class EnhanceService {
         writeState(stack, gearId, newLevel, socks);
         setHand(p, stack);
         int pct = (int) Math.round(ld.chance * 100.0);
-        p.sendMessage(msg + ChatColor.GRAY + "（成功率 " + pct + "%）");
+        p.sendMessage(msg + ChatColor.GRAY + "（成功率 " + pct + "%" + (fee > 0 ? "，手续费 " + fee + " 币" : "") + "）");
+        if (plugin instanceof CoreRpgPlugin) ((CoreRpgPlugin) plugin).questRecheck(p);
     }
 
     /** Admin testing only — no player path to +10. */

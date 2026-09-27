@@ -50,18 +50,18 @@ treasure_ember_relic:
   name: '&6余烬遗物'
   lore:
     - '&7treasure_ember_relic'
-    - '&8钓鱼宝藏表'
+    - '&8钓鱼宝藏表 · 补给商：5 个换 1 重铸石（每周 5 次）'
   enchantments:
     DURABILITY: 1
   hideflags:
     - HIDE_ENCHANTS
 
 treasure_ember_pearl:
-  material: ENDER_PEARL
+  material: PRISMARINE_CRYSTALS
   name: '&5余烬宝珠'
   lore:
     - '&7treasure_ember_pearl'
-    - '&8钓鱼宝藏表'
+    - '&8钓鱼宝藏表 · 补给商：制稳固符（每周 1 次）'
 
 junk_ember_boot:
   material: LEATHER_BOOTS

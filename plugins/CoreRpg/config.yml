@@ -110,3 +110,16 @@ stats:
   strip_wither_on_hit: true
   # covenant pseudo-stats (crit / life steal / damage taken); coded in 1.10.0, parked until the phase-2 rebalance
   apply_covenant_stats: false
+
+# 1.11.0 (2026-09-27): 野外（挂机）掉落每日上限 + 递减 — 超过上限后每份只有 over_chance 概率掉落；副本/灾厄不受限
+afk_caps:
+  enabled: true
+  worlds: [ember_afk, world]
+  over_chance: 0.25
+  kill_coin: 150          # 野外击杀余烬币每日 150 后按 25%
+  items:
+    mat_ember_shard: 150
+    mat_ember_bone_dust: 80
+    mat_ember_core_fragment: 10
+    mat_ember_stable_charm: 1
+    mat_ember_protect_scroll: 2

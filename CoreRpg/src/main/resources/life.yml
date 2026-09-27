@@ -1,0 +1,59 @@
+# CoreRpg 1.11.0 生活玩法（docs/ember-master-plan.md §8）
+# /corerpg life  · 枢纽补给：食物/钓竿（币消耗）、代烤鱼、熬药、遗物/宝珠兑换（每周上限，不绕过战斗：稳固符需核心碎片）
+enabled: true
+
+# 生活等级：钓到 1 条 +fish_xp；代烤每条 +xp_each；配方 xp 字段
+fish_xp: 2
+level_xp: [0, 20, 60, 150, 300, 600, 1000, 1600]   # Lv1..Lv8 所需累计经验
+
+cook:
+  inputs: [fish_ember_cod, fish_ember_salmon]
+  output: food_ember_grilled_fish
+  coin_each: 1
+  max_per_use: 32
+  xp_each: 1
+
+offers:
+  bread:
+    name: '&e余烬面包 ×8'
+    coin: 40
+    give: { food_ember_bread: 8 }
+  rod:
+    name: '&b余烬钓竿'
+    coin: 60
+    give: { tool_ember_rod: 1 }
+  heal_potion:
+    name: '&c熬制 余烬回复药'
+    inputs: { fish_ember_puffer: 1, fish_ember_cod: 2 }
+    coin: 10
+    give: { potion_ember_heal: 1 }
+    life_level: 2
+    xp: 3
+  reforge_stone:
+    name: '&6遗物 → 余烬重铸石'
+    inputs: { treasure_ember_relic: 5 }
+    coin: 30
+    give: { mat_ember_reforge_stone: 1 }
+    weekly: 5
+    life_level: 3
+    xp: 5
+  stable_charm:
+    name: '&b宝珠 → 余烬稳固符'
+    inputs: { treasure_ember_pearl: 3, mat_ember_core_fragment: 3 }
+    coin: 300
+    give: { mat_ember_stable_charm: 1 }
+    weekly: 1
+    life_level: 5
+    xp: 10
+
+# 食用/饮用时附加效果：EFFECT:放大等级(0=I):持续tick；cooldown 秒
+consumables:
+  food_ember_grilled_fish: { effects: ['REGENERATION:0:120'] }
+  potion_ember_heal: { effects: ['HEAL:1:1'], cooldown: 20 }
+  potion_ember_swift: { effects: ['SPEED:0:3600'] }
+  potion_ember_strength: { effects: ['INCREASE_DAMAGE:0:1200'] }
+  potion_ember_night: { effects: ['NIGHT_VISION:0:3600'] }
+
+# 币消耗：铁砧修理每次手续费（强化手续费见 enhance.yml coin_fee）
+fees:
+  repair: 20

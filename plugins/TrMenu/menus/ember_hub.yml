@@ -19,7 +19,7 @@ Options:
 
 Layout:
   - ' ABCDEF 1'
-  - ' GHIJKL  '
+  - ' GHIJKL k'
   - ' MNOPQR  '
   - ' STUVWX  '
   - ' YZabcd  '
@@ -232,7 +232,7 @@ Icons:
       name: '§4灾厄'
       lore:
         - ''
-        - '§7限时公共世界事件 · 灰烬巨像'
+        - '§7限时公共世界事件 · 余烬灾厄使'
         - '§8世界 §fember_event §8· 日 2～3 窗'
         - '§8每日宝箱限 1 · 产余烬/外观/低概率T3'
         - '§e➥ §f打开灾厄菜单'
@@ -533,6 +533,24 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_settings'
 
+  # —— 1.11.0 生活 · 补给（CoreRpg LifeService）——
+  k:
+    display:
+      material: bread
+      name: '§a补给 · 生活'
+      lore:
+        - ''
+        - '§7面包 / 钓竿（余烬币）· 代烤鱼 · 熬回复药'
+        - '§7遗物换重铸石 · 宝珠制稳固符（每周限次）'
+        - '§8钓鱼 / 烹饪 / 熬药 提升生活等级'
+        - '§8命令：/corerpg life'
+        - ''
+        - '§e➥ §f打开补给菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_life'
+
   # —— 第 6 行 · 商城与收尾 ——
   e:
     display:
@@ -609,7 +627,8 @@ Icons:
         - '§71. §f挂机刷碎片 / 骨尘'
         - '§72. §f工作台合成 §e余烬附魔晶'
         - '§73. §f附魔台强化 §6余烬刃 / 护符'
-        - '§74. §f铁砧用碎片或核心修理'
+        - '§74. §f铁砧用碎片或核心修理（手续费 20 币）'
+        - '§74+. §f饿了吃面包/烤鱼，补给见「补给 · 生活」'
         - '§75. §f日 / 周本冲击核心与稀有装备'
         - '§76. §f签到 / 活跃 / 悬赏攒余烬币'
         - ''

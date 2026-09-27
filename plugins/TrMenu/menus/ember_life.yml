@@ -1,0 +1,84 @@
+# 1.11.0 (2026-09-27) 枢纽补给 · 生活 — CoreRpg LifeService（life.yml）
+Title: '§a补给 · 生活'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 300
+
+Layout:
+  - '#########'
+  - '# A B C #'
+  - '# D E F #'
+  - '####I##Z#'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+  A:
+    display:
+      material: bread
+      name: '§e余烬面包 ×8'
+      lore: ['', '§740 余烬币', '§8饱食 +5 / 个', '', '§e➥ §f购买']
+    actions:
+      all:
+        - 'command: corerpg life buy bread'
+  B:
+    display:
+      material: fishing rod
+      name: '§b余烬钓竿'
+      lore: ['', '§760 余烬币', '§8水边抛竿：鱼 / 遗物 / 宝珠', '§8每钓 1 条 +2 生活经验', '', '§e➥ §f购买']
+    actions:
+      all:
+        - 'command: corerpg life buy rod'
+  C:
+    display:
+      material: cooked fish
+      name: '§6代烤鱼'
+      lore: ['', '§7背包里的鳕鱼/鲑鱼 → 炭烤余烬鱼', '§7每条 1 币 · 一次最多 32 条', '§8烤鱼：饱食 +6 · 再生 I 6 秒', '', '§e➥ §f全部烤好']
+    actions:
+      all:
+        - 'command: corerpg life cook'
+  D:
+    display:
+      material: potion
+      name: '§c熬制 余烬回复药'
+      lore: ['', '§7河豚×1 + 鳕鱼×2 + 10 币', '§8立即回复 II · 冷却 20 秒', '§8需生活 Lv.2', '', '§e➥ §f熬制 1 瓶']
+    actions:
+      all:
+        - 'command: corerpg life buy heal_potion'
+  E:
+    display:
+      material: fireball
+      name: '§6遗物 → 余烬重铸石'
+      lore: ['', '§7余烬遗物×5 + 30 币', '§8每周 5 次 · 需生活 Lv.3', '', '§e➥ §f兑换']
+    actions:
+      all:
+        - 'command: corerpg life buy reforge_stone'
+  F:
+    display:
+      material: nether star
+      name: '§b宝珠 → 余烬稳固符'
+      lore: ['', '§7余烬宝珠×3 + 核心碎片×3 + 300 币', '§8每周 1 次 · 需生活 Lv.5', '§8（核心碎片来自副本，不绕过战斗）', '', '§e➥ §f制作']
+    actions:
+      all:
+        - 'command: corerpg life buy stable_charm'
+  I:
+    display:
+      material: book
+      name: '§f生活等级 / 次数'
+      lore: ['', '§7查看生活等级、每周剩余次数', '', '§e➥ §f查看']
+    actions:
+      all:
+        - 'close'
+        - 'command: corerpg life'
+  Z:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'menu: ember_hub'

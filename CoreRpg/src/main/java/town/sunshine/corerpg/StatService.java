@@ -383,6 +383,17 @@ public final class StatService implements Listener {
                 + " · 生命 " + fmt(target.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue())
                 + " · 减伤 " + fmt(100.0 * def / (def + defenseK)) + "%"
                 + " · 暴击 " + fmt(100.0 * get(m, "crit_chance_pct")) + "%");
+        PlayerData pd = dataStore.get(target.getUniqueId());
+        CovenantService cs = plugin.getCovenantService();
+        if (pd != null && cs != null) {
+            if (!pd.hasCovenant()) sender.sendMessage(ChatColor.GRAY + "  誓约：未选择（/corerpg covenant）");
+            else {
+                CovenantService.CovenantDef cd = cs.get(pd.getCovenant());
+                sender.sendMessage(ChatColor.GRAY + "  誓约：" + cs.displayColored(pd.getCovenant()) + ChatColor.GRAY
+                        + (cd == null ? "" : " " + cs.formatStats(cd))
+                        + (applyCovenantStats ? ChatColor.GREEN + "（已计入）" : ChatColor.DARK_GRAY + "（誓约属性待第 2 阶段平衡后生效，当前仅技能）"));
+            }
+        }
         sender.sendMessage(ChatColor.DARK_GRAY + "  raw " + m);
         return true;
     }

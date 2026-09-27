@@ -86,6 +86,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private RaidService raidService;
     private ProgressService progressService;
     private QuestService questService;
+    private LifeService lifeService;
     private LootService lootService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
@@ -128,12 +129,17 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         raidService = new RaidService(this, dataStore, niBridge);
         progressService = new ProgressService(this, dataStore);
         questService = new QuestService(this, dataStore, niBridge);
+        lifeService = new LifeService(this, dataStore, niBridge);
+        Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+            @Override public void run() { if (questService != null) questService.tickAll(); }
+        }, 400L, 200L);
         lootService = new LootService(this, dataStore, niBridge);
         statService = new StatService(this, niBridge, dataStore);
         dataStore.setTalentService(talentService);
         reloadLocal();
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(questService, this);
+        Bukkit.getPluginManager().registerEvents(lifeService, this);
         Bukkit.getPluginManager().registerEvents(statService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -389,6 +395,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         reloadConfig();
         if (progressService != null) progressService.reload();
         if (questService != null) questService.reload();
+        if (lifeService != null) lifeService.reload();
         if (lootService != null) lootService.reload();
         if (statService != null) statService.reload();
         shardNeedle = getConfig().getString("shard_name_contains", "余烬碎片");
@@ -577,7 +584,16 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         ensureBounty(killer);
         PlayerData data = dataStore.get(killer.getUniqueId());
         data.addKillToday();
-        if (coinKillReward > 0) data.addCoin(coinKillReward);
+        if (coinKillReward > 0) {
+            int capCoin = getConfig().getInt("afk_caps.kill_coin", -1);
+            boolean inst = !getConfig().getStringList("afk_caps.worlds").contains(killer.getWorld().getName());
+            if (!getConfig().getBoolean("afk_caps.enabled", false) || capCoin < 0 || inst
+                    || data.periodCount("afk_coin", DailyService.today()) < capCoin
+                    || Math.random() < getConfig().getDouble("afk_caps.over_chance", 0.25)) {
+                data.addCoin(coinKillReward);
+                if (!inst) data.addPeriodCount("afk_coin", DailyService.today(), coinKillReward);
+            }
+        }
         if (data.getActivityFromKills() < actKillCap) {
             int room = actKillCap - data.getActivityFromKills();
             int give = Math.min(actKillPoints, room);
@@ -681,6 +697,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("stats".equals(sub) || "属性".equals(sub)) return statService.cmd(sender, args);
         if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
         if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);
+        if ("life".equals(sub) || "vendor".equals(sub) || "补给".equals(sub) || "生活".equals(sub)) return lifeService.cmd(sender, args);
         if ("level".equals(sub) || "lv".equals(sub) || "等级".equals(sub)) {
             if (!requirePlayer(sender)) return true;
             progressService.cmdLevel((Player) sender);
@@ -1075,9 +1092,32 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         } else {
             int n = 1;
             if (args.length >= 4) try { n = Math.max(1, Integer.parseInt(args[3])); } catch (NumberFormatException ignored) { }
-            niBridge.giveNiItem(p, args[2], n);
+            n = afkCapped(p, args[2], n);
+            if (n > 0) niBridge.giveNiItem(p, args[2], n);
         }
         return true;
+    }
+
+    /** 1.11.0: open-world (non-instance) drop daily caps — above the cap each unit only drops with over_chance. */
+    private final java.util.Set<String> afkCapNotified = new java.util.HashSet<String>();
+    int afkCapped(Player p, String item, int n) {
+        if (!getConfig().getBoolean("afk_caps.enabled", false)) return n;
+        if (!getConfig().getStringList("afk_caps.worlds").contains(p.getWorld().getName())) return n;
+        int cap = getConfig().getInt("afk_caps.items." + item, -1);
+        if (cap < 0) return n;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        String today = DailyService.today();
+        double over = getConfig().getDouble("afk_caps.over_chance", 0.25);
+        int out = 0;
+        for (int i = 0; i < n; i++) {
+            int c = d.periodCount("afk_" + item, today);
+            if (c < cap || Math.random() < over) { out++; d.addPeriodCount("afk_" + item, today, 1); }
+            if (c >= cap && afkCapNotified.add(p.getUniqueId() + today)) {
+                p.sendMessage(ChatColor.GRAY + "[余烬] 今日野外掉落已达收益上限，之后掉率降为 " + (int) Math.round(over * 100)
+                        + "%。去打日常/周本/深渊，或钓鱼做饭吧。（每日 0 点重置）");
+            }
+        }
+        return out;
     }
 
     /** 1.8.1: /hub · /spawn — players had no way back from ember_afk (console mvtp to the hub spawn). */
@@ -1168,6 +1208,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         String act = args[1].toLowerCase();
         if ("set".equals(act)) {
             covenantService.cmdSet(p, args.length >= 3 ? args[2] : null);
+            questRecheck(p);
             return true;
         }
         if ("reset".equals(act) || "clear".equals(act)) {
@@ -1176,6 +1217,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         covenantService.cmdShow(p);
         return true;
+    }
+
+    /** 1.11.0: re-evaluate the mainline step next tick (enhance / covenant / talent done). */
+    public void questRecheck(Player p) {
+        if (questService != null) questService.onLevelChanged(p);
     }
 
     private boolean cmdTalent(CommandSender sender, String[] args) {
@@ -1206,6 +1252,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         if ("unlock".equals(act) || "learn".equals(act)) {
             talentService.cmdUnlock(p, args.length >= 3 ? args[2] : null);
+            questRecheck(p);
             return true;
         }
         if ("reset".equals(act)) {

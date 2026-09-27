@@ -187,6 +187,7 @@ public final class QuestService implements Listener {
     private String progressSuffix(Player p, PlayerData d, Step s) {
         if ("kill".equals(s.type) || ("event".equals(s.type) && s.count > 1)) return " " + Math.min(d.getQuestCount(), s.count) + "/" + s.count;
         if ("level".equals(s.type)) return " (Lv." + d.getEmberLevel() + "/" + s.level + ")";
+        if ("event".equals(s.type) && matches(s.event, "enhance") && p != null) return " (+" + maxEnhance(p) + "/+" + s.level + ")";
         return "";
     }
 
@@ -215,6 +216,13 @@ public final class QuestService implements Listener {
                     return;
                 }
                 if (d.isQuestDone()) return;
+                // 1.11.0 migration: ch2 was reordered and the T1 blade moved from the Lv20 step to the daily-clear step
+                if (d.getQuestChapter() == 2 && d.getQuestStep() >= 2 && d.periodCount("mig_quest_1110", "all") == 0) {
+                    d.addPeriodCount("mig_quest_1110", "all", 1);
+                    dataStore.flushMutation(p.getUniqueId());
+                    p.sendMessage(title + ChatColor.GRAY + " 第2章流程已调整（立誓 / 天赋 / 附魔 / 强化），补发精炼刃：");
+                    giveItems(p, java.util.Collections.singletonMap("gear_ember_t1_blade", 1));
+                }
                 Step s = step(d);
                 if (s != null) {
                     p.sendMessage(title + ChatColor.YELLOW + " " + chapterLabel(p) + ChatColor.GRAY + " · 当前：" + ChatColor.WHITE + objective(p));
@@ -229,6 +237,7 @@ public final class QuestService implements Listener {
         if (c == null) return;
         PlayerData d = dataStore.get(p.getUniqueId());
         d.setQuestChapter(no);
+        if (no == 2 && d.periodCount("mig_quest_1110", "all") == 0) d.addPeriodCount("mig_quest_1110", "all", 1); // new ch2 flow from the start
         d.setQuestStep(0);
         d.setQuestCount(0);
         dataStore.flushMutation(p.getUniqueId());
@@ -277,11 +286,75 @@ public final class QuestService implements Listener {
         checkPassive(p);
     }
 
-    /** Steps that can already be satisfied (level). */
-    private void checkPassive(Player p) {
+    /** Steps that can already be satisfied (level; 1.11.0: state-type events done earlier). */
+    public void checkPassive(Player p) {
+        if (!enabled || p == null || !p.isOnline()) return;
         PlayerData d = dataStore.get(p.getUniqueId());
+        if (d.isQuestDone()) return;
         Step s = step(d);
-        if (s != null && "level".equals(s.type) && d.getEmberLevel() >= s.level) completeStep(p, d, s);
+        if (s == null) return;
+        if ("level".equals(s.type) && d.getEmberLevel() >= s.level) { completeStep(p, d, s); return; }
+        if ("event".equals(s.type) && already(p, d, s)) {
+            p.sendMessage(title + ChatColor.GREEN + " 已完成过：" + ChatColor.stripColor(s.desc));
+            completeStep(p, d, s);
+        }
+    }
+
+    /** 1.11.0: state checks so a step whose action was done before the step started still counts. */
+    private boolean already(Player p, PlayerData d, Step s) {
+        for (String ev : s.event.split("\\|")) {
+            ev = ev.trim();
+            if ("sign".equals(ev) && DailyService.today().equals(d.getLastSignDate())) return true;
+            if ("bounty".equals(ev) && d.isBountyClaimed()) return true;
+            if ("covenant".equals(ev) && d.hasCovenant()) return true;
+            if ("talent".equals(ev) && d.getTalentPointsSpent() >= Math.max(1, s.count)) return true;
+            if ("enhance".equals(ev) && maxEnhance(p) >= Math.max(1, s.level)) return true;
+            if ("enchant".equals(ev) && (d.periodCount("ever_enchant", "all") > 0 || hasEnchantedGear(p))) return true;
+            if ("anvil".equals(ev) && d.periodCount("ever_anvil", "all") > 0) return true;
+        }
+        return false;
+    }
+
+    private int maxEnhance(Player p) {
+        int best = 0;
+        for (ItemStack it : allItems(p)) {
+            if (it == null || ni == null) continue;
+            String id = ni.getNiId(it);
+            if (id != null && id.startsWith("gear_ember")) best = Math.max(best, GearLore.readEnhance(it));
+        }
+        return best;
+    }
+
+    private boolean hasEnchantedGear(Player p) {
+        for (ItemStack it : allItems(p)) {
+            if (it == null || ni == null) continue;
+            String id = ni.getNiId(it);
+            if (id == null || !id.startsWith("gear_ember") || id.contains("t3")) continue;
+            for (Map.Entry<org.bukkit.enchantments.Enchantment, Integer> e : it.getEnchantments().entrySet()) {
+                if (!e.getKey().equals(org.bukkit.enchantments.Enchantment.DURABILITY) || e.getValue() > 1) return true;
+            }
+        }
+        return false;
+    }
+
+    private static List<ItemStack> allItems(Player p) {
+        List<ItemStack> out = new ArrayList<ItemStack>();
+        Collections.addAll(out, p.getInventory().getContents());
+        Collections.addAll(out, p.getInventory().getArmorContents());
+        return out;
+    }
+
+    private static boolean matches(String stepEvent, String event) {
+        for (String ev : stepEvent.split("\\|")) if (ev.trim().equalsIgnoreCase(event)) return true;
+        return false;
+    }
+
+    /** Every 10 s: re-evaluate passive steps for online players (covers actions from other plugins/menus). */
+    public void tickAll() {
+        if (!enabled) return;
+        for (Player p : Bukkit.getOnlinePlayers()) {
+            try { checkPassive(p); } catch (Throwable t) { plugin.getLogger().log(Level.WARNING, "quest tick", t); }
+        }
     }
 
     public void onLevelChanged(final Player p) {
@@ -304,7 +377,7 @@ public final class QuestService implements Listener {
             onEvent(p, event);
             return;
         }
-        if (!"event".equals(s.type) || !s.event.equalsIgnoreCase(event)) return;
+        if (!"event".equals(s.type) || !matches(s.event, event)) return;
         bump(p, d, s);
     }
 
@@ -434,7 +507,10 @@ public final class QuestService implements Listener {
     // ---------------- vanilla station hooks ----------------
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onEnchant(EnchantItemEvent e) { onEvent(e.getEnchanter(), "enchant"); }
+    public void onEnchant(EnchantItemEvent e) {
+        dataStore.get(e.getEnchanter().getUniqueId()).addPeriodCount("ever_enchant", "all", 1);
+        onEvent(e.getEnchanter(), "enchant");
+    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onCraft(CraftItemEvent e) {
@@ -447,6 +523,7 @@ public final class QuestService implements Listener {
         if (e.getRawSlot() != 2 || !(e.getWhoClicked() instanceof Player)) return;
         ItemStack cur = e.getCurrentItem();
         if (cur == null || cur.getType() == org.bukkit.Material.AIR) return;
+        dataStore.get(e.getWhoClicked().getUniqueId()).addPeriodCount("ever_anvil", "all", 1);
         onEvent((Player) e.getWhoClicked(), "anvil");
     }
 
@@ -650,16 +727,73 @@ public final class QuestService implements Listener {
         final Player p = e.getPlayer();
         if (!isInstanceWorld(p.getWorld())) return;
         for (Entity en : p.getWorld().getEntities()) removeIfRogue(en);
-        try { p.setHealth(p.getMaxHealth()); } catch (Throwable ignored) { }
-        p.setFoodLevel(20);
-        p.setFireTicks(0);
-        p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, 100, 4, true, false), true);
+        instanceGrace(p, 100);
+    }
+
+    /** 1.11.0: heal now and again after StatService re-applies max HP (the world change clamps HP to the vanilla 20-ish). */
+    private void instanceGrace(final Player p, final int resistTicks) {
+        final World w = p.getWorld();
+        Runnable heal = new Runnable() {
+            @Override public void run() {
+                if (!p.isOnline() || !p.getWorld().equals(w)) return;
+                try { p.setHealth(p.getMaxHealth()); } catch (Throwable ignored) { }
+                p.setFoodLevel(20);
+                p.setSaturation(10f);
+                p.setFireTicks(0);
+            }
+        };
+        heal.run();
+        p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, resistTicks, 4, true, false), true);
+        Bukkit.getScheduler().runTaskLater(plugin, heal, 5L);
+        Bukkit.getScheduler().runTaskLater(plugin, heal, 25L);
+        Bukkit.getScheduler().runTaskLater(plugin, heal, 45L);
+    }
+
+    /** 1.11.0: reconnecting straight into a dungeon instance → grace (heal + resistance) and a hint. */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onJoinInstance(org.bukkit.event.player.PlayerJoinEvent e) {
+        final Player p = e.getPlayer();
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override public void run() {
+                if (!p.isOnline() || !isInstanceWorld(p.getWorld())) return;
+                instanceGrace(p, 140);
+                p.sendMessage(ChatColor.GOLD + "[余烬] 你回到了副本中：已回满生命并获得 7 秒保护。" + ChatColor.GRAY + "想离开请 /dp leave");
+            }
+        }, 10L);
+    }
+
+    private static final java.util.Set<String> HUB_CMDS = new java.util.HashSet<String>(java.util.Arrays.asList(
+            "hub", "spawn", "lobby", "回城", "ember", "menu", "home", "warp", "back", "tpa", "mvtp", "mv"));
+    private final Map<UUID, Long> blockedHint = new HashMap<UUID, Long>();
+
+    /** 1.11.0: DungeonPlus silently cancels non-whitelisted commands in instances → explain. */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onDungeonCmdEarly(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
+        if (!isInstanceWorld(e.getPlayer().getWorld())) return;
+        String root = e.getMessage().replaceFirst("^/", "").trim().split("\\s+")[0].toLowerCase();
+        if (root.contains(":")) root = root.substring(root.indexOf(':') + 1);
+        if (HUB_CMDS.contains(root)) {
+            e.setCancelled(true);
+            e.getPlayer().sendMessage(ChatColor.RED + "[余烬] 副本中不能回城或开菜单，离开请用 " + ChatColor.YELLOW + "/dp leave"
+                    + ChatColor.GRAY + "（可用：/corerpg skill · quest · stats）");
+            blockedHint.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDungeonCmdBlocked(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
+        if (!e.isCancelled() || !isInstanceWorld(e.getPlayer().getWorld())) return;
+        Long last = blockedHint.get(e.getPlayer().getUniqueId());
+        if (last != null && System.currentTimeMillis() - last < 300) return;
+        blockedHint.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
+        e.getPlayer().sendMessage(ChatColor.RED + "[余烬] 副本中该命令不可用。" + ChatColor.GRAY + "可用：/dp leave · /corerpg skill · quest · stats");
     }
 
     // ---------------- util ----------------
 
     private void giveItems(Player p, Map<String, Integer> items) {
         if (items == null || items.isEmpty()) return;
+        if (items.containsKey("gear_ember_t1_blade")) dataStore.get(p.getUniqueId()).addPeriodCount("mig_quest_1110", "all", 1);
         List<String> got = new ArrayList<String>();
         for (Map.Entry<String, Integer> e : items.entrySet()) {
             if (ni != null && ni.giveNiItem(p, e.getKey(), e.getValue())) got.add(ni.displayName(e.getKey()) + "×" + e.getValue());

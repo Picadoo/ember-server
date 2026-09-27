@@ -485,6 +485,31 @@ public final class PlayerData {
         dirty = true;
     }
 
+    // —— 1.11.0: generic period counters (AFK caps, vendor weekly limits). key = name@period ——
+    private final Map<String, Integer> counters = new LinkedHashMap<String, Integer>();
+    public Map<String, Integer> getCounters() { return Collections.unmodifiableMap(counters); }
+    public void setCounters(Map<String, Integer> map) {
+        counters.clear();
+        if (map != null) for (Map.Entry<String, Integer> e : map.entrySet()) {
+            if (e.getKey() != null && e.getValue() != null) counters.put(e.getKey(), e.getValue());
+        }
+        dirty = true;
+    }
+    public int periodCount(String name, String period) {
+        Integer v = counters.get(name + "@" + period);
+        return v == null ? 0 : v.intValue();
+    }
+    /** Adds n to name@period and drops stale periods of the same name. Returns the new value. */
+    public int addPeriodCount(String name, String period, int n) {
+        String key = name + "@" + period;
+        java.util.Iterator<String> it = counters.keySet().iterator();
+        while (it.hasNext()) { String k = it.next(); if (k.startsWith(name + "@") && !k.equals(key)) it.remove(); }
+        int v = periodCount(name, period) + n;
+        counters.put(key, Integer.valueOf(v));
+        dirty = true;
+        return v;
+    }
+
     /** Record abyss floor progress; updates historical + current Asia/Shanghai week best. */
     public void recordAbyssFloor(int floor) {
         if (floor <= 0) return;
