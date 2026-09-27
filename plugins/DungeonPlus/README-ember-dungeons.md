@@ -1,7 +1,8 @@
 # 余烬日/周本 — 路径清单
 
 设计：`/workspace/minecraft/DESIGN-dungeon-daily-weekly.md`  
-进本命令（官方）：`/dp start EmberDaily` · `/dp start EmberWeekly` · `/dp start EmberAbyss` · `/dp start EmberCalamity` · 盟 Boss：`/corerpg guild boss`→`dp start EmberGuildBoss`
+玩家进本（B0.1）：`/corerpg enter daily|weekly|abyss|raid|elite`（TrMenu 按钮）· NI id 扣票  
+管理/测本：`dp start-console <玩家> <DungeonId>` · 灾厄测本 `/dp start EmberCalamity`（须标仅测试）· 盟 Boss：`/corerpg guild boss`
 
 ## 地牢配置
 

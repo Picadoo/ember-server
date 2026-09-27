@@ -32,15 +32,18 @@ public final class EliteService {
         // config lives in cash.yml (ticket grant) + progress.yml (level_gates.elite / sources)
     }
 
-    /** Placeholder / DP gate: Lv≥40 + 本周未通关 + 持有精英票. */
+    /**
+     * Placeholder / DP gate: Lv≥40 + 本周未通关。
+     * B0.1: 票改由 TicketEntryService 在 start 前 consumeExact；此处不再要求持票
+     *（否则扣票后再跑 %corerpg_gate_elite% 会假失败）。
+     */
     public boolean passesGate(Player player, PlayerData data) {
         if (player == null || data == null) return false;
         ProgressService ps = plugin.getProgressService();
         int need = ps != null ? ps.gateLevel("elite") : GATE_LEVEL;
         if (data.getEmberLevel() < need) return false;
         if (isClearedThisWeek(data)) return false;
-        int tickets = ni == null ? 0 : ni.countInInventory(player, TICKET_NI);
-        return tickets >= 1;
+        return true;
     }
 
     public boolean isClearedThisWeek(PlayerData data) {
