@@ -64,8 +64,8 @@
 | 线 | 显示名 | map / DP（建议） | 主题 | 债务 / 还债里程碑 |
 |----|--------|------------------|------|-------------------|
 | MVP | 余烬窟·庭院 | `ember_daily` / `EmberDaily` | 灰烬庭院 · 回廊开门 | S1 可玩+分房视觉 |
-| 线 B | 余烬窟·焦骨甬道 | `ember_daily_ash` / `EmberDailyAsh` | 狭长焦土甬道 · 岔路假门 | 债务：未建图 / 还债 **S2** / 此前玩法可测、观感不可宣称完成 |
-| 线 C | 余烬窟·残誓地窖 | `ember_daily_crypt` / `EmberDailyCrypt` | 多层台阶地窖 · 下潜感 | 债务：未建图 / 还债 **S2** / 同上 |
+| 线 B | 余烬窟·焦骨甬道 | `ember_daily_ash` / `EmberDailyAsh` | 狭长焦土甬道 · 岔路假门 | 设计已交 `docs/design-ember-daily-s2.md`；建图/脚本债务仍属 **S2 落地** |
+| 线 C | 余烬窟·残誓地窖 | `ember_daily_crypt` / `EmberDailyCrypt` | 多层台阶地窖 · 下潜感 | 同上 |
 
 三条线 **同服**：Multiverse 常驻模板世界 + DungeonPlus 开实例；**禁止**拆独立 Paper 服。
 
