@@ -143,7 +143,8 @@ public final class LifeService implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onFish(PlayerFishEvent e) {
         if (debug) plugin.getLogger().info("life fish " + e.getPlayer().getName() + " state=" + e.getState() + " cancelled=" + e.isCancelled()
-                + " caught=" + (e.getCaught() == null ? "-" : e.getCaught().getType().name()));
+                + " caught=" + (e.getCaught() == null ? "-" : e.getCaught().getType().name())
+                + (e.getHook() == null ? "" : " " + hookInfo(e.getHook())));
         if (!enabled || e.isCancelled() || e.getState() != PlayerFishEvent.State.CAUGHT_FISH) return;
         addXp(e.getPlayer(), fishXp);
     }
@@ -222,6 +223,15 @@ public final class LifeService implements Listener {
         String act = args.length > 1 ? args[1].toLowerCase() : "";
         if (!act.isEmpty() && plugin.getQuestService() != null && plugin.getQuestService().isInstanceWorld(p.getWorld())) {
             p.sendMessage(ChatColor.RED + "[生活] 副本内不能交易，出本后再来。");
+            return true;
+        }
+        if ("fishdebug".equals(act) && p.isOp()) { fishDebug(p); return true; }
+        if ("xp".equals(act) && p.isOp() && args.length > 3) {
+            Player t = plugin.getServer().getPlayerExact(args[2]);
+            if (t == null) { p.sendMessage(ChatColor.RED + "offline"); return true; }
+            addXp(t, Integer.parseInt(args[3]));
+            dataStore.flushMutation(t.getUniqueId());
+            p.sendMessage(ChatColor.GREEN + "[生活] " + t.getName() + " life Lv." + levelOf(t));
             return true;
         }
         if ("cook".equals(act) || "烹饪".equals(act)) { cook(p, d); return true; }
@@ -313,6 +323,38 @@ public final class LifeService implements Listener {
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GREEN + "[生活] 烤好了 " + ni.displayName(cookOutput) + "×" + cooked + ChatColor.GRAY + "（-" + cooked * cookCoinEach + " 币）");
         addXp(p, cooked * cookXp);
+    }
+
+    // ---------------- fishing diagnostics (op) ----------------
+
+    private final Map<UUID, Integer> fishDebugTasks = new HashMap<UUID, Integer>();
+
+    static String hookInfo(org.bukkit.entity.Entity h) {
+        org.bukkit.Location l = h.getLocation();
+        org.bukkit.block.Block b = l.getBlock();
+        org.bukkit.block.Block top = l.getWorld().getHighestBlockAt(l);
+        return String.format("hook@%.2f,%.2f,%.2f block=%s below=%s ground=%s sky=%d highestY=%d biome=%s rain=%s ticks=%d",
+                l.getX(), l.getY(), l.getZ(), b.getType(), b.getRelative(org.bukkit.block.BlockFace.DOWN).getType(),
+                h.isOnGround(), b.getLightFromSky(), top.getY(), b.getBiome(), l.getWorld().hasStorm(), h.getTicksLived());
+    }
+
+    /** Toggle: every 2 s report the player's fishing hook block / sky / biome (chat + log). */
+    private void fishDebug(final Player p) {
+        Integer old = fishDebugTasks.remove(p.getUniqueId());
+        if (old != null) { plugin.getServer().getScheduler().cancelTask(old); p.sendMessage(ChatColor.GRAY + "[生活] fishdebug off"); return; }
+        int id = plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+            @Override public void run() {
+                if (!p.isOnline()) { Integer t = fishDebugTasks.remove(p.getUniqueId()); if (t != null) plugin.getServer().getScheduler().cancelTask(t); return; }
+                org.bukkit.entity.FishHook hook = null;
+                for (org.bukkit.entity.FishHook h : p.getWorld().getEntitiesByClass(org.bukkit.entity.FishHook.class))
+                    if (h.getShooter() == p) hook = h;
+                String msg = hook == null ? "no hook" : hookInfo(hook);
+                p.sendMessage(ChatColor.DARK_GRAY + "[fishdebug] " + msg);
+                plugin.getLogger().info("fishdebug " + p.getName() + " " + msg);
+            }
+        }, 40L, 40L);
+        fishDebugTasks.put(p.getUniqueId(), id);
+        p.sendMessage(ChatColor.GRAY + "[生活] fishdebug on");
     }
 
     public boolean isEnabled() { return enabled; }
