@@ -319,4 +319,4 @@ Design and resource numbers: `docs/ember-master-plan.md` §8.
 
 - **Still open:** solo warden in the abyss, the 3-player calamity and raid end HP are still above 60% on average. The harness gives Saturation (fast vanilla regen), so real players will end lower. Re-check with a week of real data.
 - The jar was rebuilt: the bundled `life.yml` (and now `covenant.yml`, `set.yml`, `calamity.yml`) match the live configs.
-- Play-server restart: 10:10:07–10:10:20 CST. After that, only `/mm reload` and `/corerpg reload`.
+- Play-server restarts: 10:10:07–10:10:20 CST (1.13.0), then `/mm reload` and `/corerpg reload` only; 11:59:10–11:59:23 CST (rebuilt jar so its defaults match the live configs, passives debug off, ops.json []).
