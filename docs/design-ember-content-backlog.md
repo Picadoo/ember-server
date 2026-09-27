@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 06:19 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 07:39 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 工坊 hitbox 叠层 purge；灰烛 quest 仍含「/ember」指路（零指令债）
+- 日常软债收口测：出本 5s 冷却提示 + 庭院门宽 ×9（CoreRpg 1.15.20）
 
 ### 刚结
+- 枢纽 hitbox purge + 灰烛 quest 去指令 **PASS**（CoreRpg 1.15.19）
 - **门吏 · 灰钥** `ember_dungeon_clerk`：设计→落地→验收 **PASS**（`7bf3de9` / 测报）
 - **S4 霜晶裂隙 / 锈轨矿道**：设计→怪→图→DP/菜单→独立验收 **PASS**（CoreRpg 1.15.18）
 - 挑刺必改 1～3：Boss 装掉 / hub 七线文案 / 体力灰显 **PASS**
@@ -28,7 +29,7 @@
 ### 仍挂
 - B0.4 挂机日顶二档（经济债，文档标定即可）
 - 团本使徒 B0.2 TTK（人数门 SKIP）
-- 日常软债：奖励预览空壳、start-interval 提示、庭院门宽×12 vs ×9
+- 日常软债：奖励预览真分页（菜单 lore 已有摘要）
 
 ### 多世界现状（确认）
 - `plugins/Multiverse-Core.jar` + Portals；常驻 `ember_hub` / `ember_afk` / `ember_event` 等

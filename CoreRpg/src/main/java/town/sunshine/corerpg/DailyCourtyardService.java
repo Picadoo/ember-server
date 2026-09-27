@@ -26,7 +26,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  *
  * Coords (feet Y=65 corridor / 66 boss pad):
  *   spawn 0,65,0 (porch, face +Z toward door1)
- *   door1 z=13 (x=-2..1, y=65..67 IRON_FENCE) — opens after room1 clear
+ *   door1 z=13 (x=-1..1, y=65..67 IRON_FENCE ×9) — opens after room1 clear
  *   door2 z=25 — opens after room2 clear
  *   room1 spawns ~z=6..10; room2 ~z=16..22; boss pad 0,66,31
  */
@@ -50,7 +50,7 @@ public class DailyCourtyardService {
     /** Door planes (IRON_FENCE gate fill) */
     static final int DOOR1_Z = 13;
     static final int DOOR2_Z = 25;
-    static final int DOOR_X0 = -2;
+    static final int DOOR_X0 = -1;
     static final int DOOR_X1 = 1;
 
     /** Room Z ranges (inclusive walkable) */

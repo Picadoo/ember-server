@@ -3,6 +3,7 @@
 # 2026-09-28 门2修: wave2a 僵尸×3 + wave2b 骷髅×3（顺序单 $kill），开门链路无 kill-any
 # 2026-09-28 波次差异: 房2 先对射骷×2 → 再涌尸×4（禁旧「先3尸后3骷」）
 # Display 名仍：灰烬庭院僵尸/骷髅/蛮兵（MM 未改）
+# 2026-09-28 门宽对齐: 门1 z=13 / 门2 z=25 仅 x=-1..1 × y=65..67（AIR×9）；删 loc=-2
 groups:
   wave1:
   - monster:
@@ -15,9 +16,6 @@ groups:
     - "$message{type=text;text=§e【前厅】清尽僵尸再开门 —— 别急着撞铁门} @dungeon"
     end:
     - "$message{type=text;text=§a前厅已清 · 门开了} @dungeon"
-    - "$operation-block{loc=-2,65,13;mode=set;type=AIR} @dungeon"
-    - "$operation-block{loc=-2,66,13;mode=set;type=AIR} @dungeon"
-    - "$operation-block{loc=-2,67,13;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,65,13;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,66,13;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,67,13;mode=set;type=AIR} @dungeon"
@@ -57,9 +55,6 @@ groups:
     - "$message{type=text;text=§e【回廊·涌尸】僵尸×4 —— 清完开 Boss 门} @dungeon"
     end:
     - "$message{type=text;text=§a回廊已清 · Boss 门开了} @dungeon"
-    - "$operation-block{loc=-2,65,25;mode=set;type=AIR} @dungeon"
-    - "$operation-block{loc=-2,66,25;mode=set;type=AIR} @dungeon"
-    - "$operation-block{loc=-2,67,25;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,65,25;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,66,25;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,67,25;mode=set;type=AIR} @dungeon"
