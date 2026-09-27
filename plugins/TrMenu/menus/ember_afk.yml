@@ -1,0 +1,123 @@
+# 分层挂机子菜单 — CoreRpg 1.14.0 AfkTierService（/corerpg afk n 做等级门槛与传送）
+# 四层共用每日掉落上限（碎片 150 / 骨尘 80 / 核心碎片 10 / 魂尘 2 / 击杀币 150，超过后 25%）
+
+Title: '§a挂机庭 · 分层'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '# 1 2 3 #'
+  - '#   4   #'
+  - '#   I   #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  '1':
+    display:
+      material: grass
+      name: '§a① 灰坡 §7Lv10'
+      lore:
+        - ''
+        - '§7挂机庭僵尸 / 骷髅（新手先打僵尸）'
+        - '§f碎片 · 骨尘 · 魂尘 2%'
+        - '§8推荐：旧刃 + 护符'
+        - ''
+        - '§e➥ §f点击传送'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg afk 1'
+        - close
+
+  '2':
+    display:
+      material: smooth brick
+      name: '§e② 荒原 §7Lv20'
+      lore:
+        - ''
+        - '§7余烬尸鬼 / 余烬弓骸'
+        - '§f碎片 · 骨尘 · 核心碎片 1% · 魂尘 2%'
+        - '§8推荐：精炼刃 +2、护符 +1'
+        - ''
+        - '§e➥ §f点击传送（需 Lv20）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg afk 2'
+        - close
+
+  '3':
+    display:
+      material: nether brick
+      name: '§6③ 焦土 §7Lv30'
+      lore:
+        - ''
+        - '§7余烬焦兵 / 余烬霜骸'
+        - '§f碎片 · 骨尘 · 核心碎片 2% · 魂尘 3%'
+        - '§8推荐：深核刃 +3、精炼护符 +2'
+        - ''
+        - '§e➥ §f点击传送（需 Lv30）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg afk 3'
+        - close
+
+  '4':
+    display:
+      material: red nether brick
+      name: '§c④ 烬原深处 §7Lv40'
+      lore:
+        - ''
+        - '§7余烬灼尸 / 余烬凋骸'
+        - '§f碎片 · 骨尘 50% · 核心碎片 4% · 魂尘 3%'
+        - '§8推荐：深核刃 +4、深核护符 +3'
+        - ''
+        - '§e➥ §f点击传送（需 Lv40）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg afk 4'
+        - close
+
+  I:
+    display:
+      material: paper
+      name: '§f规则与今日上限'
+      lore:
+        - ''
+        - '§7死亡不掉落 · 复活在本层入口（5 秒无敌）'
+        - '§7四层共用每日上限，超过后掉率 25%：'
+        - '  §f碎片 150 · 骨尘 80 · 核心碎片 10'
+        - '  §f魂尘 2 · 击杀币 150 · 击杀经验 100'
+        - '§7高层只是更快打满，不会多给上限'
+        - ''
+        - '§e➥ §f点击查看今日进度'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg afk'
+        - close

@@ -37,3 +37,129 @@ EmberAfkSkeleton:
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.06
   - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.02
+
+# ---- 1.14.0 分层挂机（阶段 3）：Lv20 荒原 / Lv30 焦土 / Lv40 烬原深处 ----
+# 空中平台（/corerpg afk build n），掉落全部走 corerpg mmgive → afk_caps 每日上限（四层共用，按玩家+物品计，不分层）
+# 只掉材料：碎片 / 骨尘 / 核心碎片（日顶 10）/ 魂尘（日顶 2）；不掉装备、凝核、灾厄余烬
+# 名字带「余烬」→ 计入击杀币 / 击杀经验 / 悬赏（isQualifyingKill）
+
+EmberAfk2Husk:
+  Type: HUSK
+  Display: '&e余烬尸鬼 &7Lv20'
+  Health: 65
+  Damage: 3
+  Options:
+    MovementSpeed: 0.22
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    FollowRange: 20
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.10
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.01
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.02
+
+EmberAfk2Skeleton:
+  Type: SKELETON
+  Display: '&e余烬弓骸 &7Lv20'
+  Health: 55
+  Damage: 3
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    FollowRange: 20
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.01
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.02
+
+EmberAfk3Zombie:
+  Type: ZOMBIE
+  Display: '&6余烬焦兵 &7Lv30'
+  Health: 100
+  Damage: 5
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    FollowRange: 20
+    KnockbackResistance: 0.2
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath 0.3
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.02
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.03
+
+EmberAfk3Stray:
+  Type: STRAY
+  Display: '&6余烬霜骸 &7Lv30'
+  Health: 85
+  Damage: 4
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    FollowRange: 20
+  Equipment:
+  - IRON_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.3
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.02
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.03
+
+EmberAfk4Husk:
+  Type: HUSK
+  Display: '&c余烬灼尸 &7Lv40'
+  Health: 120
+  Damage: 6
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    FollowRange: 20
+    KnockbackResistance: 0.3
+  Equipment:
+  - DIAMOND_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath 0.5
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.04
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.03
+
+EmberAfk4WitherSkeleton:
+  Type: WITHER_SKELETON
+  Display: '&c余烬凋骸 &7Lv40'
+  Health: 110
+  Damage: 6
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    FollowRange: 20
+    KnockbackResistance: 0.3
+  Equipment:
+  - STONE_SWORD HAND
+  Skills:
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath 0.5
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.04
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.03

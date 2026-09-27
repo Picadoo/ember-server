@@ -39,7 +39,7 @@ chapters:
         mobs: [EmberAfkZombie]
         count: 6
         desc: 在挂机庭击败 挂机庭僵尸
-        hint: /ember → 挂机庭 · 落点往西偏南五十来格的草坡是怪区 · 手持余烬之刃 · 打不过就 /hub
+        hint: /ember → 挂机庭 → ① 灰坡 · 落点往西偏南五十来格的草坡是怪区 · 手持余烬之刃 · 打不过就 /hub
         xp: 100
         done: ['§7腐肉里嵌着暗红的碎片，还带着余温。']
       - type: kill
@@ -120,10 +120,12 @@ chapters:
       - type: level
         level: 20
         desc: 达到余烬等级 Lv.20（解锁周本）
-        hint: 签到 / 日常 / 悬赏 / 挂机都能补经验
+        hint: 签到 / 日常 / 悬赏 / 挂机（灰坡）都能补经验
         levels: 3
         items: { ticket_ember_weekly: 1, mat_ember_shard: 10, food_ember_bread: 8 }
-        done: ['§6灰烛：§f誓立了，刃磨了。周烬的门，已经为你开着。']
+        done:
+          - '§6灰烛：§f誓立了，刃磨了。周烬的门，已经为你开着。'
+          - '§a[挂机] 挂机庭 ② 荒原（Lv20）已开放：/ember → 挂机庭，或 /corerpg afk 2'
   3:
     name: 周烬试炼
     intro:
@@ -159,7 +161,7 @@ chapters:
       - type: level
         level: 25
         desc: 达到余烬等级 Lv.25（解锁深渊）
-        hint: 日常 / 悬赏 / 签到
+        hint: 日常 / 悬赏 / 签到 / 挂机 ② 荒原
         levels: 5
         items: { mat_ember_shard: 15, crystal_ember_enchant: 2, ticket_ember_abyss: 2 }
         done: ['§6灰烛：§f回响来自深渊。护符在周烬箱里（每周首通必出），别在下面待太久。']
@@ -200,10 +202,12 @@ chapters:
       - type: level
         level: 30
         desc: 达到余烬等级 Lv.30（解锁灾厄窗口）
-        hint: 深渊 / 日常 / 悬赏
+        hint: 深渊 / 日常 / 悬赏 / 挂机 ② 荒原
         levels: 5
         items: { gem_ember_sharp: 1, mat_ember_core_fragment: 5, mat_ember_protect_scroll: 1 }
-        done: ['§6灰烛：§f深核刃在深渊箱里等你（每周首次结算必出）。这颗锐石先镶上。']
+        done:
+          - '§6灰烛：§f深核刃在深渊箱里等你（每周首次结算必出）。这颗锐石先镶上。'
+          - '§a[挂机] 挂机庭 ③ 焦土（Lv30）已开放，偶尔掉核心碎片：/corerpg afk 3'
   5:
     name: 灾厄之窗
     intro:
@@ -240,7 +244,7 @@ chapters:
       - type: level
         level: 35
         desc: 达到余烬等级 Lv.35（解锁团本）
-        hint: 深渊 / 日常 / 悬赏 / 灾厄
+        hint: 深渊 / 日常 / 悬赏 / 灾厄 / 挂机 ③ 焦土
         levels: 5
         items: { mat_ember_stable_charm: 1, ticket_ember_raid: 1 }
         done: ['§6灰烛：§f团本需要三到五人。找齐你的同袍。']
@@ -277,3 +281,4 @@ chapters:
         done:
           - '§6灰烛：§f烛给你。第一卷，到此为止。'
           - '§6灰烛：§f灰烬之下还有更深的东西……下回再说。'
+          - '§a[挂机] 到 Lv40 可去挂机庭 ④ 烬原深处（/corerpg afk 4）继续攒锻造材料。'

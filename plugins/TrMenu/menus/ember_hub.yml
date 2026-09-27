@@ -155,17 +155,16 @@ Icons:
       name: '§a挂机庭'
       lore:
         - ''
-        - '§7刷碎片与骨尘（新手先打僵尸，骷髅会放箭）'
-        - '§8点击传送挂机区 · 死亡不掉落 · /hub 回城'
+        - '§7分层挂机：灰坡 Lv10 · 荒原 Lv20 · 焦土 Lv30 · 烬原深处 Lv40'
+        - '§7刷碎片 / 骨尘（高层有核心碎片），四层共用每日上限'
+        - '§8死亡不掉落 · 复活在本层入口 · /hub 回城'
         - ''
-        - '§e➥ §f点击传送'
+        - '§e➥ §f点击选层'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        # 2026-09-26 audit: players lack multiverse.teleport perms → run from console (fixed target world)
-        - 'console: mvtp %player_name% ember_afk'
-        - 'tell: §a已传送至挂机庭（ember_afk）'
-        - close
+        # 1.14.0: tier picker → /corerpg afk n (level gate + teleport in CoreRpg)
+        - 'menu: ember_afk'
 
   H:
     display:

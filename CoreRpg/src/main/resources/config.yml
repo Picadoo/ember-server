@@ -76,14 +76,13 @@ calamity:
   kill_rewards:
     - "ni give {player} mat_calamity_ember 1"
     - "ni give {player} cosmetic_calamity_shard 1"
+    # 助攻份额（2026-09-26）：kill_rewards 发给击杀者 + 本窗所有有伤害者；MM onDeath 只给尾刀者
+    # （凝核 core_ember_compact×1 + 核心碎片×2）。这里只补核心碎片×1（< 尾刀的 2），
+    # 不补凝核：固定数量最少 1，会与尾刀持平。
+    - "ni give {player} mat_ember_core_fragment 1"
 
-# ---------------------------------------------------------------------------
-# Persistence (1.4.0+)
-# storage: yaml  — players/*.yml, guilds/*.yml, auction.yml, mail/*.yml (default)
-# storage: mysql — HikariCP → DB ember (see config-mysql.example.yml / secrets)
-# On MySQL connect failure: FAIL-OPEN to yaml with severe log.
-# ---------------------------------------------------------------------------
-storage: yaml
+# Persistence 1.4.0+ — keep yaml unless ops explicitly switch (see config-mysql.example.yml)
+storage: yaml   # 1.4.0+: yaml | mysql (see config-mysql.example.yml)
 mysql:
   host: 127.0.0.1
   port: 3306
@@ -91,8 +90,30 @@ mysql:
   username: ember
   password: "changeme"
   pool-size: 10
-  # optional JDBC params (appended after ?)
   jdbc-params: "useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&serverTimezone=UTC"
+
+
+debug:
+  mm_credit: false   # true = log every MM reward credit decision (corerpg mmgive/mmxp)
+
+# 2026-09-27 gear stat layer (AttributePlus parked → CoreRpg applies NI lore stats).
+# player→mob melee: + phys_damage × damage_scale (scaled by attack charge)
+# max HP = 20 + floor(max_health × health_scale); mob→player dmg × (1 − def/(def+defense_k))
+stats:
+  enabled: true
+  damage_scale: 1.0
+  health_scale: 1.0
+  defense_k: 20
+  crit_multiplier: 1.5
+  hearts_display_cap: 40
+  # vanilla wither-skeleton melee adds 10 s Wither I (ignores defense) → stripped next tick for players
+  strip_wither_on_hit: true
+  # covenant pseudo-stats (crit / skill life steal / attack+move speed / damage taken) — on since 1.13.0 (phase 2)
+  apply_covenant_stats: true
+  caps:
+    attack_speed_pct: 0.10         # 灰行 4% → 普攻蓄力更快（GENERIC_ATTACK_SPEED ×）
+    skill_life_steal_pct: 0.15
+    skill_heal_per_cast_pct: 0.03  # 每次技能施放最多回复 3% 最大生命
 
 # 1.11.0 (2026-09-27): 野外（挂机）掉落每日上限 + 递减 — 超过上限后每份只有 over_chance 概率掉落；副本/灾厄不受限
 afk_caps:
@@ -106,3 +127,39 @@ afk_caps:
     mat_ember_core_fragment: 10
     mat_ember_stable_charm: 1
     mat_ember_protect_scroll: 2
+    mat_ember_soul_dust: 2    # 1.12.0 挂机怪 2% 魂尘，日顶 2
+
+# 1.14.0 (phase 3): 分层挂机 — 同一个 ember_afk 世界里的 4 层（掉落走 MM → corerpg mmgive，四层共用上面的 afk_caps 每日上限）
+# /corerpg afk [n] 进入（等级门槛）；层区域内等级不足会被送回；死亡不掉落并复活在本层入口（入口有 5 秒无敌）
+# build 层是空中平台：/corerpg afk build <n> 按配置重建（世界存档不进仓库）
+afk_tiers:
+  enabled: true
+  world: ember_afk
+  check_ticks: 40
+  spawn_protect_seconds: 5
+  debug: false
+  tiers:
+    1:
+      name: 灰坡
+      level: 10
+      desc: 僵尸→碎片 · 骷髅→骨尘 · 魂尘 2%
+      x: -4.5
+      y: 73.0
+      z: 250.5
+      yaw: 90
+    2:
+      name: 荒原
+      level: 20
+      desc: 尸鬼→碎片 · 弓骸→骨尘 · 核心碎片 1% · 魂尘 2%
+      build: { cx: 200, y: 110, cz: 250, r: 18, floor: SMOOTH_BRICK, wall: COBBLE_WALL, light: GLOWSTONE, region_margin: 24 }
+    3:
+      name: 焦土
+      level: 30
+      desc: 焦兵→碎片(+骨尘 30%) · 霜骸→骨尘(+碎片 30%) · 核心碎片 2% · 魂尘 3%
+      build: { cx: 400, y: 110, cz: 250, r: 18, floor: NETHER_BRICK, wall: NETHER_FENCE, light: GLOWSTONE, region_margin: 24 }
+    4:
+      name: 烬原深处
+      level: 40
+      desc: 灼尸 / 凋骸→碎片 + 骨尘 50% · 核心碎片 4% · 魂尘 3%
+      build: { cx: 600, y: 110, cz: 250, r: 18, floor: RED_NETHER_BRICK, wall: NETHER_FENCE, light: SEA_LANTERN, region_margin: 24 }
+

@@ -201,6 +201,7 @@ public final class ProgressService {
 
     private boolean applyEmberXp(Player p, PlayerData d, int give, boolean announce, String label) {
         int level = d.getEmberLevel();
+        final int fromLevel = level;
         if (level >= emberMaxLevel) {
             dataStore.flushMutation(p.getUniqueId());
             return false;
@@ -234,6 +235,8 @@ public final class ProgressService {
         if (ups > 0) {
             QuestService qs = plugin.getQuestService();
             if (qs != null) qs.onLevelChanged(p);
+            AfkTierService afk = plugin.getAfkTierService();
+            if (afk != null) afk.onLevelUp(p, fromLevel, level);
         }
         return true;
     }

@@ -1,0 +1,27 @@
+EmberAfk2_B:
+  MobName: EmberAfk2Husk
+  World: ember_afk
+  X: 208
+  Y: 111
+  Z: 258
+  Yaw: 0.0
+  Pitch: 0.0
+  Radius: 3
+  UseTimer: true
+  MaxMobs: '1'
+  MobLevel: '1'
+  MobsPerSpawn: 1
+  Cooldown: 10
+  CooldownTimer: 1
+  Warmup: 0
+  WarmupTimer: 0
+  CheckForPlayers: true
+  ActivationRange: 40
+  ScalingRange: 25.0
+  LeashRange: 16
+  HealOnLeash: false
+  ResetThreatOnLeash: false
+  ShowFlames: false
+  Breakable: false
+  Conditions: []
+  ActiveMobs: 0

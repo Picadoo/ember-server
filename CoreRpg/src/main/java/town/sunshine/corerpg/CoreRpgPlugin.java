@@ -89,6 +89,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private LifeService lifeService;
     private ForgeService forgeService;
     private GearPassiveService gearPassiveService;
+    private AfkTierService afkTierService;
     private LootService lootService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
@@ -134,6 +135,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         questService = new QuestService(this, dataStore, niBridge);
         lifeService = new LifeService(this, dataStore, niBridge);
         forgeService = new ForgeService(this, dataStore, niBridge);
+        afkTierService = new AfkTierService(this, dataStore);
         Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
             @Override public void run() { if (questService != null) questService.tickAll(); }
         }, 400L, 200L);
@@ -219,6 +221,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public CashService getCashService() { return cashService; }
     public ProgressService getProgressService() { return progressService; }
     public QuestService getQuestService() { return questService; }
+    public AfkTierService getAfkTierService() { return afkTierService; }
     public TalentService getTalentServicePublic() { return talentService; }
     public WarehouseService getWarehouseServicePublic() { return warehouseService; }
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
@@ -404,6 +407,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (forgeService != null) forgeService.reload();
         if (lootService != null) lootService.reload();
         if (statService != null) statService.reload();
+        if (afkTierService != null) afkTierService.reload();
         shardNeedle = getConfig().getString("shard_name_contains", "余烬碎片");
         dustNeedle = getConfig().getString("dust_name_contains", "余烬骨尘");
         crystalNeedle = getConfig().getString("crystal_name_contains", "余烬附魔晶");
@@ -707,6 +711,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("mmgiveall".equals(sub)) return cmdMmGiveAll(sender, args);
         if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
         if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);
+        if ("afk".equals(sub) || "挂机".equals(sub)) return afkTierService.cmd(sender, args);
         if ("life".equals(sub) || "vendor".equals(sub) || "补给".equals(sub) || "生活".equals(sub)) return lifeService.cmd(sender, args);
         if ("level".equals(sub) || "lv".equals(sub) || "等级".equals(sub)) {
             if (!requirePlayer(sender)) return true;

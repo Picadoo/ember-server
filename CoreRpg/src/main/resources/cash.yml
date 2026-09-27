@@ -27,6 +27,8 @@ shop:
   pass_unlock:
     id: pass_unlock
     price: 48
+    # 季内限购 1；插件落地后读 seasonPassPaid
+    season_limit: 1
     mail_template: pass_track_paid_welcome
   weekly_ticket:
     id: weekly_ticket

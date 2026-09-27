@@ -128,3 +128,38 @@ afk_caps:
     mat_ember_stable_charm: 1
     mat_ember_protect_scroll: 2
     mat_ember_soul_dust: 2    # 1.12.0 挂机怪 2% 魂尘，日顶 2
+
+# 1.14.0 (phase 3): 分层挂机 — 同一个 ember_afk 世界里的 4 层（掉落走 MM → corerpg mmgive，四层共用上面的 afk_caps 每日上限）
+# /corerpg afk [n] 进入（等级门槛）；层区域内等级不足会被送回；死亡不掉落并复活在本层入口（入口有 5 秒无敌）
+# build 层是空中平台：/corerpg afk build <n> 按配置重建（世界存档不进仓库）
+afk_tiers:
+  enabled: true
+  world: ember_afk
+  check_ticks: 40
+  spawn_protect_seconds: 5
+  debug: false
+  tiers:
+    1:
+      name: 灰坡
+      level: 10
+      desc: 僵尸→碎片 · 骷髅→骨尘 · 魂尘 2%
+      x: -4.5
+      y: 73.0
+      z: 250.5
+      yaw: 90
+    2:
+      name: 荒原
+      level: 20
+      desc: 尸鬼→碎片 · 弓骸→骨尘 · 核心碎片 1% · 魂尘 2%
+      build: { cx: 200, y: 110, cz: 250, r: 18, floor: SMOOTH_BRICK, wall: COBBLE_WALL, light: GLOWSTONE, region_margin: 24 }
+    3:
+      name: 焦土
+      level: 30
+      desc: 焦兵→碎片(+骨尘 30%) · 霜骸→骨尘(+碎片 30%) · 核心碎片 2% · 魂尘 3%
+      build: { cx: 400, y: 110, cz: 250, r: 18, floor: NETHER_BRICK, wall: NETHER_FENCE, light: GLOWSTONE, region_margin: 24 }
+    4:
+      name: 烬原深处
+      level: 40
+      desc: 灼尸 / 凋骸→碎片 + 骨尘 50% · 核心碎片 4% · 魂尘 3%
+      build: { cx: 600, y: 110, cz: 250, r: 18, floor: RED_NETHER_BRICK, wall: NETHER_FENCE, light: SEA_LANTERN, region_margin: 24 }
+
