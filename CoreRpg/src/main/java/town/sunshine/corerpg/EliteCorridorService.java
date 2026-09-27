@@ -23,6 +23,7 @@ import java.nio.file.attribute.BasicFileAttributes;
  * P3 (2026-09-27): ember_elite 试炼短廊 — 三厅，石英/金砖中轴（与周本深核暗色可辨）。
  * Axis along +X (weekly is +Z) for layout distinction.
  * Admin: /corerpg elitebuild
+ * B1.3 2026-09-27: seal R3 east door (was void cliff) + floor-embed lights.
  */
 public class EliteCorridorService {
 
@@ -182,6 +183,10 @@ public class EliteCorridorService {
                         changed += goldAxis(w, R3_X - 6, R3_X + 6, R3_Y, CZ);
                         changed += placeCover(w, R3_X, R3_Y, CZ - 5);
                         changed += placeCover(w, R3_X, R3_Y, CZ + 5);
+                        // B1.3 2026-09-27: buildRoom opens E/W mid-doors; R3 east leads to scrub void
+                        // (stone only at y59). Seal east door + apron so Boss/近战不会掉崖。
+                        changed += sealRoomEastDoor(w, R3_X, R3_Y, CZ, 7);
+                        changed += eastSafetyApron(w, R3_X + 7, R3_Y, CZ);
                         phase = 6;
                         return;
                     }
@@ -449,9 +454,45 @@ public class EliteCorridorService {
                 {R2_X, R2_Y, CZ},
                 {R3_X, R3_Y, CZ}
         };
+        // embed in floor (feetY-1) — avoid solid pillars at stand height that block bot/近战
         for (int[] p : pts) {
-            n += set(w.getBlockAt(p[0], p[1], p[2] + 3), Material.SEA_LANTERN);
-            n += set(w.getBlockAt(p[0], p[1], p[2] - 3), Material.GLOWSTONE);
+            n += set(w.getBlockAt(p[0], p[1] - 1, p[2] + 3), Material.SEA_LANTERN);
+            n += set(w.getBlockAt(p[0], p[1] - 1, p[2] - 3), Material.GLOWSTONE);
+            n += set(w.getBlockAt(p[0], p[1], p[2] + 3), Material.AIR);
+            n += set(w.getBlockAt(p[0], p[1] + 1, p[2] + 3), Material.AIR);
+            n += set(w.getBlockAt(p[0], p[1], p[2] - 3), Material.AIR);
+            n += set(w.getBlockAt(p[0], p[1] + 1, p[2] - 3), Material.AIR);
+        }
+        return n;
+    }
+
+    /** Seal east mid-doorway of a room (buildRoom always opens E/W). */
+    private int sealRoomEastDoor(World w, int cx, int feetY, int cz, int halfX) {
+        int n = 0;
+        int x = cx + halfX;
+        for (int dz = -1; dz <= 1; dz++) {
+            Material wall = (dz == 0) ? Material.GOLD_BLOCK : Material.QUARTZ_BLOCK;
+            n += set(w.getBlockAt(x, feetY - 1, cz + dz), wall);
+            for (int y = 0; y <= 3; y++) {
+                n += set(w.getBlockAt(x, feetY + y, cz + dz), wall);
+            }
+            n += set(w.getBlockAt(x, feetY + 4, cz + dz), Material.QUARTZ_BLOCK);
+        }
+        return n;
+    }
+
+    /** Short apron east of sealed door — soft landing if anything still slips out. */
+    private int eastSafetyApron(World w, int wallX, int feetY, int cz) {
+        int n = 0;
+        for (int x = wallX + 1; x <= wallX + 4; x++) {
+            for (int dz = -3; dz <= 3; dz++) {
+                Material fl = (dz == 0) ? Material.GOLD_BLOCK : Material.QUARTZ_BLOCK;
+                n += set(w.getBlockAt(x, feetY - 1, cz + dz), fl);
+                n += set(w.getBlockAt(x, feetY - 2, cz + dz), Material.STONE);
+                for (int y = 0; y <= 3; y++) {
+                    n += set(w.getBlockAt(x, feetY + y, cz + dz), Material.AIR);
+                }
+            }
         }
         return n;
     }
