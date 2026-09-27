@@ -297,3 +297,26 @@ Design and resource numbers: `docs/ember-master-plan.md` §8.
 - **Paid track (progress.yml).** Protect scroll 3 → 1 and steady gem 1 → 0. Sharp gem 1, protect scroll 1 and stable charm 1 are each about 18–25% of the free monthly amount (master plan §7.2).
 - **Master plan** §2.1, §2.2, §3.3, §6.1, §7.2 and §8 updated with these numbers.
 - Play-server restart: 09:25:25–09:25:38 CST. Config reload (`/corerpg reload`, `/trm reload`) at 10:05 CST.
+
+## 21. Phase 2 (CoreRpg 1.13.0) — gear passives, 同袍 resonance, covenant stats, combat retune
+
+- **Gear passives:** `GearPassiveService` (from the `/workspace/wip` draft) and `passives.yml`.
+  - T1 ignite, T2 crit heal, T3 burst. Basic swings only.
+  - Proc log with `debug: true`. Across the tests: ignite 105, crit heal 59, skill heal 142. T3 burst was not run.
+- **余烬同袍:** +5% damage with at least 2 wearers within 24 blocks (cap 25%), kill heal 2%, shown in `/corerpg set`. Harness `RING=1`.
+- **Covenant stats on:**
+  - Blaze's 1% basic-hit life steal became `skill_life_steal_pct` 0.04: real skill damage per cast, heal capped at 3% max HP per cast (about 1.3–2 HP per 烬斩).
+  - Ash attack speed and move speed now have an attribute layer (caps 10% / 8%). This also makes the 疾 gem work.
+  - Caps: crit 35%, damage taken −25%, basic-hit life steal 5%.
+- **Retune** (bots press skills on cooldown; full table in `docs/ember-skills-passives.md`):
+
+  | Content | Change | Result |
+  |---|---|---|
+  | Weekly | Brute B 1300 → 1500 | 36–37 s, 41% |
+  | Abyss L8 | Watcher 1100/1 → 1500/3 | Blaze 35 s, 38%. Warden 91% |
+  | Calamity | Damage 1 → 2; Shred deals 5 to everyone; per_extra 0.15 → 0.30 | Solo 35 s, 27%. 3 bots 65 s, 76–83% |
+  | Raid | Apostle damage 3 → 2.5; new EmberRaidEmberRain (12 to all, every 12 s) | 53–56 s. End HP swings with the warden taunt (59/60/100%, 87/34/100%) |
+
+- **Still open:** solo warden in the abyss, the 3-player calamity and raid end HP are still above 60% on average. The harness gives Saturation (fast vanilla regen), so real players will end lower. Re-check with a week of real data.
+- The jar was rebuilt: the bundled `life.yml` (and now `covenant.yml`, `set.yml`, `calamity.yml`) match the live configs.
+- Play-server restart: 10:10:07–10:10:20 CST. After that, only `/mm reload` and `/corerpg reload`.
