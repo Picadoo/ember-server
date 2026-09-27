@@ -38,7 +38,7 @@ groups:
     condition:
     - "$kill{mobname=灰烬庭院僵尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【回廊】混编来袭 —— 先清远程再推 Boss 门} @dungeon"
+    - "$message{type=text;text=§e【回廊】混编来袭 —— 先清僵尸再推 Boss 门} @dungeon"
     end:
     - "$message{type=text;text=§7回廊前段已清 · 骷髅压上} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"

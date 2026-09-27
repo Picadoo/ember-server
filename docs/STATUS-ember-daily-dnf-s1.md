@@ -3,9 +3,9 @@
 **日期：** 2026-09-28 03:38（Asia/Shanghai）  
 **岗：** 余烬-插件岗执行器  
 **依据：** 总控【派工 · S1 回廊近战化 · 便于门2验收闭环】；前序 `STATUS-ember-daily-dnf-s1-retest.md` FAIL（wave2b 骷髅远程不稳）  
-**CoreRpg 版本：** **1.15.13**（未 bump jar；本轮仅 MM YAML）  
+**CoreRpg 版本：** 近战化落地时 **1.15.13**；验收窗口已至 **1.15.14**（S2 建图 bump，见 retest2）  
 **方案：** **A（采用）** — `EmberDailySkeleton` 近战化；**未退 B**  
-**Verdict：** **✅ 回廊近战化落地 + 门2→Boss 垫实战闭环**
+**Verdict：** **✅ 回廊近战化落地**；独立验收见 `STATUS-ember-daily-dnf-s1-retest2.md` **PASS**（门2 AIR + Boss 通关）
 
 ---
 
@@ -111,7 +111,7 @@ EmberDailySkeleton:
 
 ## 6. 不做 / 债务
 
-1. 未改回廊 start 文案「先清远程」（flavor；骷髅已近战，文案可后续顺手改）  
+1. ~~回廊 start「先清远程」~~ → 已改为「先清僵尸」（随 S1 PASS 入库）  
 2. 未打 Boss 通关结算（本派工成功标准止于门2 AIR + Boss 垫可达）  
 3. 未改体力 / 未 bump jar / 未 commit/push  
 4. 备选 B 未用  
