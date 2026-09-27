@@ -1,0 +1,67 @@
+# S3 日常线 D · 余烬窟·潮蚀水道（EmberDailyTide）
+# 依据：docs/design-ember-daily-s3.md §4.3
+# 近战/桥面友好；Display 去色勿与庭院/焦骨/地窖撞名；掉落 corerpg mmgive
+
+EmberDailyTideZombie:
+  Type: ZOMBIE
+  Display: '&3潮蚀尸'
+  Health: 52
+  Damage: 4
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - LEATHER_BOOTS FEET
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - potion{type=SLOW;duration=30;level=0} @target ~onAttack 0.10
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberDailyTideSkeleton:
+  # 浪矢骷：桥栏可射，但移速略高 + SoftHit，可贴脸清；PreventRandomEquipment
+  Type: SKELETON
+  Display: '&3浪矢骷'
+  Health: 41
+  Damage: 4
+  Options:
+    MovementSpeed: 0.27
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.14
+  - potion{type=SLOW;duration=25;level=0} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberDailyTideBrute:
+  # 潮闸蛮兵：池边冲锋/拍水感；轻减速光环；异于庭院/焦核/残誓
+  Type: ZOMBIE
+  Display: '&3潮闸蛮兵'
+  Health: 205
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  - IRON_BOOTS FEET
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.2
+  - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5} ~onTimer:50
+  - damage{amount=0.4} @PlayersInRadius{r=5} ~onTimer:40
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

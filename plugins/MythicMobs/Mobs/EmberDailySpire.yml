@@ -1,0 +1,67 @@
+# S3 日常线 E · 余烬窟·断塔回廊（EmberDailySpire）
+# 依据：docs/design-ember-daily-s3.md §5.3
+# 环廊友好；Display 去色勿与既有日线撞名；掉落 corerpg mmgive
+
+EmberDailySpireZombie:
+  Type: ZOMBIE
+  Display: '&7断塔卫尸'
+  Health: 50
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.16
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberDailySpireSkeleton:
+  # 裂隙箭骷：环廊对射；移速够可贴脸；PreventRandomEquipment
+  Type: SKELETON
+  Display: '&7裂隙箭骷'
+  Health: 39
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.10
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberDailySpireWarden:
+  # 断塔守望：顶台压迫 + 偶发轻推离（弱 throw）；五别可辨
+  Type: SKELETON
+  Display: '&7断塔守望'
+  Health: 215
+  Damage: 3
+  Options:
+    MovementSpeed: 0.22
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.5
+    MaxCombatDistance: 24
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - WOOD_SWORD HAND
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - throw{velocity=2;velocityY=0.6} @target ~onAttack 0.12
+  - damage{amount=0.45} @PlayersInRadius{r=5} ~onTimer:45
+  - message{m="&7【断塔】&f守望者逼近——&e<trigger.name>&7！"} @PlayersInRadius{r=18} ~onTimer:180
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath 0.5
