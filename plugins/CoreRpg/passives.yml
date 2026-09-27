@@ -25,4 +25,4 @@ set_comrade:               # 余烬同袍（任意余烬刃 + 团戒）：半径
   damage_pct: 0.05
   radius: 24
   min_wearers: 2
-debug: true   # log procs (passive ignite/critheal/burst/set, skillheal)
+debug: false  # true = log procs (passive ignite/critheal/burst/set, skillheal)
