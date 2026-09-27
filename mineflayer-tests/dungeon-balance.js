@@ -2,6 +2,7 @@
 // Fresh NON-OP bots get their gate level (/corerpg progress raid_clear via the op bot), the tier gear the mainline hands out,
 // enhance levels via the real /corerpg enhance (op-given shards), Sharpness via /enchant, then fight ON FOOT (pathfinder,
 // attack at ~full charge every 650 ms). Logs HP min/end, deaths, per-wave times and boss TTK.
+// COV=blaze|ash|warden (comma list, per bot index): pick that covenant and press /corerpg skill whenever its CD is up in melee
 // env: D=weekly|abyss|calamity|guild|raid  N (players)  LV  BLADE (ni id)  TAL (ni id)  EB/ET (enhance levels)  SHARP
 const { joinPlay, ensureLevel } = require('./lib/proxy-login')
 const { pathfinder, Movements, goals } = require('mineflayer-pathfinder')
@@ -26,7 +27,8 @@ const since = (b, n) => b.chatLog.slice(n).join(' | ')
 function niId(it) { try { for (const l of it.nbt.value.display.value.Lore.value.value) { const p = strip(l).trim(); if (/^[a-z0-9_]+$/.test(p)) return p } } catch (e) {} return null }
 const find = (b, id) => b.inventory.items().find(i => niId(i) === id)
 
-async function fighter(b, st, BLADE) {
+async function fighter(b, st, BLADE, COVI) {
+  const SKCD = { blaze: 8, ash: 10, warden: 12 }[COVI] || 0; let lastSk = 0; st.casts = 0
   st.minHp = 99; st.deaths = 0; st.hits = 0; st.tl = []; let dead = false; const T0 = Date.now()
   b.on('health', () => { if (b.health > 0) { st.minHp = Math.min(st.minHp, b.health); dead = false } else if (!dead) { dead = true; st.deaths++ } })
   b.on('death', () => { if (!dead) { dead = true; st.deaths++ } })
@@ -45,6 +47,7 @@ async function fighter(b, st, BLADE) {
     b.pathfinder.setGoal(null)
     try { await b.lookAt(e.position.offset(0, (e.height || 1.8) * 0.85, 0), true) } catch (x) {}
     b.attack(e); st.hits++
+    if (SKCD && Date.now() - lastSk > SKCD * 1000 + 400) { await wait(120); b.chat('/corerpg skill'); lastSk = Date.now(); st.casts++ }
     await wait(650)
   }
   clearInterval(iv); b.pathfinder.setGoal(null)
@@ -56,7 +59,9 @@ async function runOne(D, op) {
   const N = CFG.n, LV = CFG.lv, BLADE = CFG.blade, TAL = CFG.tal, EB = CFG.eb, ET = CFG.et
   const tag = D.slice(0, 2).toUpperCase() + Math.floor(Math.random() * 9000 + 1000)
   const names = Array.from({ length: N }, (_, i) => `Bal${tag}${'abcde'[i]}`)
-  const r = { D, N, LV, BLADE, TAL, EB, ET, SHARP, names }
+  const COVS = (process.env.COV || '').split(',').filter(Boolean)
+  const covOf = i => COVS.length ? COVS[i % COVS.length] : null
+  const r = { D, N, LV, BLADE, TAL, EB, ET, SHARP, names, cov: names.map((_, i) => covOf(i)) }
   const c = (s, ms) => { opQ = opQ.then(async () => { op.chat(s); await wait(ms || 700) }); return opQ }
   const bots = []
   for (const n of names) {
@@ -84,6 +89,7 @@ async function runOne(D, op) {
     const bl = find(b, BLADE); if (bl) { await b.equip(bl, 'hand'); await wait(300) }
     const sh = CFG.sharp != null ? CFG.sharp : SHARP; if (sh > 0) await c(`/enchant ${b.username} sharpness ${sh}`)
     await c(`/clear ${b.username} minecraft:quartz`); // noop safety
+    const bi = bots.indexOf(b); if (covOf(bi)) { b.chat('/corerpg covenant set ' + covOf(bi)); await wait(1200); const k = b.chatLog.length; b.chat('/corerpg skill info'); await wait(1000); r['skill_' + b.username] = strip(since(b, k)).slice(0, 220) }
     const n0 = b.chatLog.length; b.chat('/corerpg stats'); await wait(1200); r['stats_' + b.username] = strip(since(b, n0)).slice(0, 200)
     await c(`/effect ${b.username} saturation 1 20 true`); await c(`/effect ${b.username} instant_health 1 3 true`)
   }
@@ -110,7 +116,7 @@ async function runOne(D, op) {
     for (const b of bots) await c(`/ni give ${b.username} ${CFG.ticket} 1`, 800)
     await wait(1000); L.chat(`/dp start ${CFG.dp}`)
   }
-  const fights = bots.map((b, i) => fighter(b, sts[i], BLADE))
+  const fights = bots.map((b, i) => fighter(b, sts[i], BLADE, covOf(i)))
   const waveT = {}; let bossStart = null, doneAt = null, endHp = null
   const maxMs = Number(process.env.MAXMS || 10 * 60000)
   while (Date.now() - t0 < maxMs) {
@@ -134,7 +140,7 @@ async function runOne(D, op) {
   r.bossTTK = bossStart && doneAt ? Math.round((doneAt - bossStart) / 1000) : null
   r.waveStartSec = waveT
   r.note = 'hp values are client-side (health scale caps the display at 40)'
-  r.players = bots.map((b, i) => ({ name: b.username, maxHp: maxHp[i], endHp: endHp[i], endPct: Math.round(100 * endHp[i] / Math.min(40, maxHp[i])), minHp: sts[i].minHp, deaths: sts[i].deaths, hits: sts[i].hits, hp2s: sts[i].tl.join(',') }))
+  r.players = bots.map((b, i) => ({ name: b.username, maxHp: maxHp[i], endHp: endHp[i], endPct: Math.round(100 * endHp[i] / Math.min(40, maxHp[i])), minHp: sts[i].minHp, deaths: sts[i].deaths, hits: sts[i].hits, casts: sts[i].casts, hp2s: sts[i].tl.join(',') }))
   if (!doneAt) r.tail = strip(since(L, n0)).slice(-600)
   console.log('BALANCE_RESULT', JSON.stringify(r))
   if (D === 'calamity' && !doneAt) { await c('/mvtp RpgBot ember_event', 1500); await c('/minecraft:kill @e[type=wither_skeleton]', 800); await c('/mvtp RpgBot ember_hub', 1000) }

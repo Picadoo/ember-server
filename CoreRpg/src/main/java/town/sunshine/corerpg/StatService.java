@@ -60,6 +60,8 @@ public final class StatService implements Listener {
     private double lifeStealCap = 0.05;
     private double heartsDisplayCap = 40.0;
     private boolean stripWitherOnHit = true;
+    /** config stats.apply_covenant_stats (default false): covenant pseudo-stats are coded but parked until the phase-2 rebalance */
+    private boolean applyCovenantStats = false;
     private final List<String> weaponIds = new ArrayList<String>();
     private final List<String> accessoryIds = new ArrayList<String>();
     private final Map<String, Map<String, Double>> perLevel = new HashMap<String, Map<String, Double>>();
@@ -80,6 +82,7 @@ public final class StatService implements Listener {
         critMultiplier = c.getDouble("stats.crit_multiplier", 1.5);
         heartsDisplayCap = c.getDouble("stats.hearts_display_cap", 40.0);
         stripWitherOnHit = c.getBoolean("stats.strip_wither_on_hit", true);
+        applyCovenantStats = c.getBoolean("stats.apply_covenant_stats", false);
         weaponIds.clear();
         accessoryIds.clear();
         List<String> w = c.getStringList("stats.weapons");
@@ -210,8 +213,50 @@ public final class StatService implements Listener {
         for (Map.Entry<String, Double> e : talent.entrySet()) {
             if (!"charm_stat_bonus_pct".equals(e.getKey())) add(total, e.getKey(), e.getValue());
         }
+        // covenant pseudo-stats (covenant.yml covenants.<id>.stats), only with stats.apply_covenant_stats: true (blaze 1% life steal
+        // alone lifted a solo weekly from ~45% to 93% end HP in the 1.10.0 skill test → parked for the phase-2 rebalance)
+        CovenantService cs = plugin.getCovenantService();
+        if (applyCovenantStats && d != null && cs != null && d.hasCovenant()) {
+            CovenantService.CovenantDef cd = cs.get(d.getCovenant());
+            if (cd != null) {
+                for (Map.Entry<String, Double> e : cd.stats.entrySet()) {
+                    if ("charm_stat_bonus_pct".equals(e.getKey())) continue; // folded into the accessory above
+                    add(total, e.getKey(), e.getValue().doubleValue());
+                }
+                if (best != null && cd.stats.containsKey("charm_stat_bonus_pct")) {
+                    double b = cd.stats.get("charm_stat_bonus_pct").doubleValue();
+                    add(total, "max_health", get(best, "max_health") * b);
+                    add(total, "phys_defense", get(best, "phys_defense") * b);
+                }
+            }
+        }
+        if (get(total, "crit_chance_pct") > 0.35) total.put("crit_chance_pct", Double.valueOf(0.35));
+        if (get(total, "damage_taken_pct") < -0.25) total.put("damage_taken_pct", Double.valueOf(-0.25));
         return total;
     }
+
+    public double stat(Player p, String key) { return get(stats(p), key); }
+
+    /**
+     * Full-charge basic melee hit right now: vanilla attack attribute (weapon) + Sharpness (0.5·lvl + 0.5) + gear phys_damage.
+     * No crit. Skills / passives scale off this (docs/ember-skills-passives.md).
+     */
+    public double fullHitDamage(Player p) {
+        double base = 1.0;
+        AttributeInstance ai = p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
+        if (ai != null) base = ai.getValue();
+        ItemStack hand = p.getInventory().getItemInMainHand();
+        if (hand != null && hand.getType() != Material.AIR) {
+            int sh = hand.getEnchantmentLevel(org.bukkit.enchantments.Enchantment.DAMAGE_ALL);
+            if (sh > 0) base += 0.5 * sh + 0.5;
+        }
+        return base + (enabled ? get(stats(p), "phys_damage") * damageScale : 0);
+    }
+
+    /** Per-player info about the last basic hit (for gear passives at MONITOR): charge 0..1 and whether it crit. */
+    private final Map<UUID, double[]> lastSwing = new HashMap<UUID, double[]>();
+    public double lastCharge(UUID u) { double[] v = lastSwing.get(u); return v == null ? 0 : v[0]; }
+    public boolean lastCrit(UUID u) { double[] v = lastSwing.get(u); return v != null && v[1] > 0; }
 
     private Map<String, Double> stats(Player p) {
         Map<String, Double> m = cache.get(p.getUniqueId());
@@ -260,10 +305,11 @@ public final class StatService implements Listener {
         Entity damager = e.getDamager();
         if (damager instanceof Player && victim instanceof LivingEntity && !(victim instanceof Player)
                 && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+            if (SkillService.internalDamage) return; // skill / passive damage already scales off fullHitDamage
             Player p = (Player) damager;
             Map<String, Double> m = stats(p);
             double flat = get(m, "phys_damage") * damageScale;
-            if (flat <= 0 && get(m, "crit_chance_pct") <= 0) return;
+            if (flat <= 0 && get(m, "crit_chance_pct") <= 0) { lastSwing.put(p.getUniqueId(), new double[] { 1.0, 0 }); return; }
             // attack-charge approximation (1.12 API has no getAttackCooldown): time since this player's last hit,
             // vanilla curve 0.2 + 0.8·t² over the sword cooldown → spam-clicking gets ~20% of the bonus
             long now = System.currentTimeMillis();
@@ -271,9 +317,15 @@ public final class StatService implements Listener {
             double t = last == null ? 1.0 : Math.min(1.0, (now - last.longValue()) / swingMs);
             double charge = 0.2 + 0.8 * t * t;
             double dmg = e.getDamage() + flat * charge;
+            boolean crit = false;
             if (charge > 0.9 && ThreadLocalRandom.current().nextDouble() < get(m, "crit_chance_pct")) {
                 dmg *= critMultiplier + get(m, "crit_damage_pct");
+                crit = true;
             }
+            // vanilla jump crit (falling, airborne, not sprinting) also counts as a crit for passives
+            if (!crit && charge > 0.9 && p.getFallDistance() > 0 && !p.isOnGround() && !p.isSprinting()
+                    && !p.isInsideVehicle() && !p.hasPotionEffect(org.bukkit.potion.PotionEffectType.BLINDNESS)) crit = true;
+            lastSwing.put(p.getUniqueId(), new double[] { charge, crit ? 1 : 0 });
             e.setDamage(dmg);
             double ls = Math.min(lifeStealCap, get(m, "life_steal_pct"));
             if (ls > 0) {

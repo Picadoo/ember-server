@@ -31,8 +31,9 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Simple covenant active skills — DESIGN-ember-simple-skills.md.
- * CD in-memory only; flat damage; ignore enhance multiplier.
+ * Covenant active skills — docs/ember-skills-passives.md (2026-09-27 rework).
+ * Damage scales off the caster's full-charge basic hit (StatService.fullHitDamage), clamped to max_hit_mult × that hit.
+ * CD in-memory only.
  */
 public final class SkillService implements Listener {
 
@@ -44,6 +45,11 @@ public final class SkillService implements Listener {
     private boolean enabled = true;
     private boolean ignoreEnhanceMultiplier = true;
     private double damageCapGlobal = 12.0;
+    /** 2026-09-27 rework: every skill multiplier is clamped to this × a full-charge basic hit */
+    private double maxHitMult = 2.5;
+    private double talentMultPerNode = 0.1;
+    /** true while CoreRpg itself deals skill / passive damage (StatService + passives skip it: no double bonus, no proc loops) */
+    public static boolean internalDamage = false;
 
     private final Map<String, SkillDef> skills = new LinkedHashMap<String, SkillDef>();
     /** covenant id -> skill id */
@@ -52,8 +58,11 @@ public final class SkillService implements Listener {
     /** UUID -> skillId -> expireMillis */
     private final Map<UUID, Map<String, Long>> cooldowns = new HashMap<UUID, Map<String, Long>>();
 
-    /** attacker UUID -> active ash mark */
+    /** victim UUID -> ash mark (any player's damage to the victim is amplified while it lasts) */
     private final Map<UUID, AshMark> ashMarks = new HashMap<UUID, AshMark>();
+    /** victim UUID -> taunting warden + expiry */
+    private final Map<UUID, UUID> tauntBy = new HashMap<UUID, UUID>();
+    private final Map<UUID, Long> tauntUntil = new HashMap<UUID, Long>();
 
     public static final class SkillDef {
         public final String id;
@@ -74,6 +83,10 @@ public final class SkillService implements Listener {
         public final int resistanceTicks;
         public final String particles;
         public final String sound;
+        public double damageMult;
+        public double markPct;
+        public double tauntSeconds;
+        public int maxTargets;
 
         SkillDef(String id, String covenant, String display, int cooldownSeconds,
                  double range, double arcDegrees, double damage, double damageCap,
@@ -103,15 +116,11 @@ public final class SkillService implements Listener {
     }
 
     private static final class AshMark {
-        final UUID victim;
         final long expireMillis;
-        final double bonusDamage;
-        final double damageCap;
-        AshMark(UUID victim, long expireMillis, double bonusDamage, double damageCap) {
-            this.victim = victim;
+        final double pct;
+        AshMark(long expireMillis, double pct) {
             this.expireMillis = expireMillis;
-            this.bonusDamage = bonusDamage;
-            this.damageCap = damageCap;
+            this.pct = pct;
         }
     }
 
@@ -143,6 +152,8 @@ public final class SkillService implements Listener {
         enabled = cfg.getBoolean("enabled", true);
         ignoreEnhanceMultiplier = cfg.getBoolean("ignore_enhance_multiplier", true);
         damageCapGlobal = cfg.getDouble("damage_cap_global", 12.0);
+        maxHitMult = Math.max(0.1, cfg.getDouble("max_hit_mult", 2.5));
+        talentMultPerNode = cfg.getDouble("talent_mult_per_node", 0.1);
         ConfigurationSection root = cfg.getConfigurationSection("skills");
         if (root == null) return;
         for (String id : root.getKeys(false)) {
@@ -168,6 +179,10 @@ public final class SkillService implements Listener {
                     sec.getInt("resistance_ticks", 80),
                     sec.getString("particles", null),
                     sec.getString("sound", null));
+            def.damageMult = sec.getDouble("damage_mult", 0.0);
+            def.markPct = sec.getDouble("mark_pct", 0.0);
+            def.tauntSeconds = sec.getDouble("taunt_seconds", 0.0);
+            def.maxTargets = Math.max(1, sec.getInt("max_targets", 6));
             skills.put(id, def);
             if (def.covenant != null && !def.covenant.isEmpty()) {
                 covenantToSkill.put(def.covenant, id);
@@ -227,18 +242,21 @@ public final class SkillService implements Listener {
         } else {
             cdRemain = ChatColor.GREEN + "就绪";
         }
-        int approxDmg = (int) Math.round(computeFlatDamage(player, def, def.damage));
+        double basic = basicHit(player);
+        int approxDmg = (int) Math.round(skillDamage(player, def));
         player.sendMessage(PREFIX + def.display + ChatColor.GRAY + " · " + cdRemain);
         player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s"
-                + " · 伤害约 " + approxDmg
-                + (ignoreEnhanceMultiplier ? " · 不吃强化加成" : ""));
+                + " · 普攻满蓄力约 " + (int) Math.round(basic)
+                + (approxDmg > 0 ? " · 技能伤害约 " + approxDmg : ""));
         if ("ember_blaze_slash".equals(def.id)) {
-            player.sendMessage(ChatColor.GRAY + "  前方挥砍，命中附近敌人");
-        } else if ("ember_ash_familiar".equals(def.id) || def.id.contains("ash")) {
-            double mark = Math.min(def.damageCap, Math.min(damageCapGlobal, def.markBonusDamage));
-            player.sendMessage(ChatColor.GRAY + "  给敌人上减速印，下次普攻约 +" + ((int) Math.round(mark)));
+            player.sendMessage(ChatColor.GRAY + "  前方 " + (int) def.arcDegrees + "° 挥砍，每个目标约 "
+                    + (int) Math.round(100 * effMult(player, def)) + "% 满蓄力普攻");
+        } else if ("ember_ash_familiar".equals(def.id)) {
+            player.sendMessage(ChatColor.GRAY + "  灰印 " + (def.markDurationTicks / 20) + "s：目标受到所有玩家伤害 +"
+                    + (int) Math.round(100 * def.markPct) + "%，并减速");
         } else if ("ember_warden_taunt".equals(def.id)) {
-            player.sendMessage(ChatColor.GRAY + "  自身减伤，周围敌人减速");
+            player.sendMessage(ChatColor.GRAY + "  抗性 " + (def.resistanceAmplifier + 1) + " 级 " + (def.resistanceTicks / 20)
+                    + "s · 嘲讽 " + (int) def.radius + " 格内敌人 " + (int) def.tauntSeconds + "s");
         }
         player.sendMessage(ChatColor.DARK_GRAY + "  /corerpg skill 释放");
     }
@@ -285,9 +303,10 @@ public final class SkillService implements Listener {
         Location eye = player.getEyeLocation();
         Vector look = eye.getDirection().normalize();
         double cosHalf = Math.cos(Math.toRadians(Math.max(1.0, def.arcDegrees) / 2.0));
-        double dmg = computeFlatDamage(player, def, def.damage);
+        double dmg = skillDamage(player, def);
         int hit = 0;
         for (Entity e : player.getNearbyEntities(def.range, def.range, def.range)) {
+            if (hit >= def.maxTargets) break;
             if (!isMonsterTarget(player, e)) continue;
             LivingEntity le = (LivingEntity) e;
             Vector to = le.getEyeLocation().toVector().subtract(eye.toVector());
@@ -295,7 +314,7 @@ public final class SkillService implements Listener {
             if (dist > def.range || dist < 0.05) continue;
             double dot = look.dot(to.normalize());
             if (dot < cosHalf) continue;
-            le.damage(dmg, player);
+            dealInternal(player, le, dmg);
             spawnParticles(le.getLocation().add(0, 1, 0), def.particles, 12);
             hit++;
         }
@@ -321,8 +340,9 @@ public final class SkillService implements Listener {
                 PotionEffectType.SLOW, Math.max(1, def.slowTicks), Math.max(0, def.slowAmplifier),
                 false, true), true);
         long expire = System.currentTimeMillis() + Math.max(1, def.markDurationTicks) * 50L;
-        ashMarks.put(player.getUniqueId(), new AshMark(
-                target.getUniqueId(), expire, def.markBonusDamage, def.damageCap));
+        ashMarks.put(target.getUniqueId(), new AshMark(expire, Math.min(def.markPct + talentBonus(player, def) * 0.02, maxHitMult - 1.0)));
+        double strike = skillDamage(player, def);
+        if (strike > 0) dealInternal(player, target, strike);
         spawnParticles(target.getLocation().add(0, 1, 0), def.particles, 16);
         playSound(target.getLocation(), def.sound);
         return true;
@@ -335,13 +355,22 @@ public final class SkillService implements Listener {
                 Math.max(0, def.resistanceAmplifier),
                 false, true), true);
         double r = def.radius > 0 ? def.radius : 4.0;
+        int n = 0;
         for (Entity e : player.getNearbyEntities(r, r, r)) {
             if (!isMonsterTarget(player, e)) continue;
             LivingEntity le = (LivingEntity) e;
             if (le.getLocation().distance(player.getLocation()) > r) continue;
+            if (n++ >= def.maxTargets) break;
             le.addPotionEffect(new PotionEffect(
                     PotionEffectType.SLOW, Math.max(1, def.slowTicks), Math.max(0, def.slowAmplifier),
                     false, true), true);
+            if (def.tauntSeconds > 0 && le instanceof org.bukkit.entity.Creature) {
+                ((org.bukkit.entity.Creature) le).setTarget(player);
+                tauntBy.put(le.getUniqueId(), player.getUniqueId());
+                tauntUntil.put(le.getUniqueId(), Long.valueOf(System.currentTimeMillis() + (long) (def.tauntSeconds * 1000)));
+            }
+            double wave = skillDamage(player, def);
+            if (wave > 0) dealInternal(player, le, wave);
             spawnParticles(le.getLocation().add(0, 1, 0), def.particles, 8);
         }
         spawnParticles(player.getLocation().add(0, 1, 0), def.particles, 24);
@@ -349,16 +378,49 @@ public final class SkillService implements Listener {
         return true;
     }
 
-    private double computeFlatDamage(Player player, SkillDef def, double baseDamage) {
-        int talentBonus = 0;
+    private int talentBonus(Player player, SkillDef def) {
         TalentService talent = plugin.getTalentService();
-        if (talent != null && def.talentBonusMax > 0) {
-            PlayerData data = dataStore.get(player.getUniqueId());
-            int count = talent.countUnlockedNodesForSkill(data, def.id);
-            talentBonus = Math.min(def.talentBonusMax, count);
+        if (talent == null || def.talentBonusMax <= 0) return 0;
+        PlayerData data = dataStore.get(player.getUniqueId());
+        return Math.min(def.talentBonusMax, talent.countUnlockedNodesForSkill(data, def.id));
+    }
+
+    /** Full-charge basic hit of this player right now (weapon + Sharpness + gear stats), from StatService. */
+    public double basicHit(Player player) {
+        StatService st = plugin.getStatService();
+        return st != null ? st.fullHitDamage(player) : 1.0;
+    }
+
+    private double effMult(Player player, SkillDef def) {
+        if (def.damageMult <= 0) return 0;
+        return Math.min(maxHitMult, def.damageMult + talentMultPerNode * talentBonus(player, def));
+    }
+
+    /** Skill damage = damage_mult (+ talent) × full-charge basic hit, clamped to max_hit_mult × basic hit. */
+    public double skillDamage(Player player, SkillDef def) {
+        return effMult(player, def) * basicHit(player);
+    }
+
+    /**
+     * Deal CoreRpg-owned damage as a player attack (MythicMobs modifiers / calamity scaling still apply) without
+     * eating the victim's hurt i-frames: noDamageTicks + lastDamage are restored so the player's next swing lands normally.
+     */
+    public static void dealInternal(Player player, LivingEntity le, double dmg) {
+        if (le == null || le.isDead() || dmg <= 0) return;
+        int ndt = le.getNoDamageTicks();
+        double last = le.getLastDamage();
+        boolean prev = internalDamage;
+        internalDamage = true;
+        try {
+            le.setNoDamageTicks(0);
+            le.damage(dmg, player);
+        } finally {
+            internalDamage = prev;
         }
-        double raw = baseDamage + talentBonus;
-        return Math.min(def.damageCap, Math.min(damageCapGlobal, raw));
+        if (!le.isDead()) {
+            le.setNoDamageTicks(ndt);
+            le.setLastDamage(last);
+        }
     }
 
     private boolean isMonsterTarget(Player player, Entity e) {
@@ -449,32 +511,46 @@ public final class SkillService implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    /** 灰印: any player damage to a marked mob × (1 + pct). HIGH so it multiplies the finished hit (after stat flat bonus). */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
-        if (!(event.getDamager() instanceof Player)) return;
-        if (!(event.getEntity() instanceof LivingEntity)) return;
-        if (event.getEntity() instanceof Player) return;
-        if (event.getEntity() instanceof ArmorStand) return;
-        Player attacker = (Player) event.getDamager();
-        AshMark mark = ashMarks.get(attacker.getUniqueId());
+        if (ashMarks.isEmpty()) return;
+        if (!(event.getEntity() instanceof LivingEntity) || event.getEntity() instanceof Player) return;
+        Entity d = event.getDamager();
+        if (d instanceof org.bukkit.entity.Projectile && ((org.bukkit.entity.Projectile) d).getShooter() instanceof Player) {
+            d = (Player) ((org.bukkit.entity.Projectile) d).getShooter();
+        }
+        if (!(d instanceof Player)) return;
+        AshMark mark = ashMarks.get(event.getEntity().getUniqueId());
         if (mark == null) return;
         if (System.currentTimeMillis() > mark.expireMillis) {
-            ashMarks.remove(attacker.getUniqueId());
+            ashMarks.remove(event.getEntity().getUniqueId());
             return;
         }
-        if (!mark.victim.equals(event.getEntity().getUniqueId())) return;
-        ashMarks.remove(attacker.getUniqueId());
-        double add = Math.min(mark.damageCap, Math.min(damageCapGlobal, mark.bonusDamage));
-        if (add > 0) {
-            event.setDamage(event.getDamage() + add);
-            spawnParticles(event.getEntity().getLocation().add(0, 1, 0), "SMOKE_NORMAL", 10);
+        event.setDamage(event.getDamage() * (1.0 + mark.pct));
+    }
+
+    /** Taunt: while it lasts, a taunted mob that switches to someone else is pointed back at the warden. */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onRetarget(org.bukkit.event.entity.EntityTargetLivingEntityEvent event) {
+        if (tauntBy.isEmpty()) return;
+        UUID mob = event.getEntity().getUniqueId();
+        UUID w = tauntBy.get(mob);
+        if (w == null) return;
+        Long until = tauntUntil.get(mob);
+        if (until == null || System.currentTimeMillis() > until.longValue()) {
+            tauntBy.remove(mob);
+            tauntUntil.remove(mob);
+            return;
         }
+        Player warden = Bukkit.getPlayer(w);
+        if (warden == null || !warden.isOnline() || warden.isDead() || !warden.getWorld().equals(event.getEntity().getWorld())) return;
+        if (event.getTarget() == null || !event.getTarget().getUniqueId().equals(w)) event.setTarget(warden);
     }
 
     /** Clear in-memory CD/marks on quit (optional hygiene). */
     public void onQuit(UUID uuid) {
         if (uuid == null) return;
         cooldowns.remove(uuid);
-        ashMarks.remove(uuid);
     }
 }

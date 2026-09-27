@@ -1,19 +1,24 @@
-# CoreRpg simple skills — DESIGN-ember-simple-skills.md
-# 数值全可控：flat 伤害 + 药水；不吃强化/孔石乘区
+# CoreRpg covenant skills — docs/ember-skills-passives.md (2026-09-27 rework, CoreRpg 1.10.0)
+# Damage scales off the caster's FULL-CHARGE BASIC HIT (weapon attribute + Sharpness + gear 物理伤害, no crit),
+# so skills keep pace with gear. Every multiplier is clamped to max_hit_mult × that hit.
+# Skill damage is dealt as the player's attack: MythicMobs damage modifiers and calamity scaling still apply;
+# it does not consume the target's hurt i-frames (the next swing lands normally) and it does not proc gear passives.
 enabled: true
-ignore_enhance_multiplier: true
-damage_cap_global: 12
+max_hit_mult: 2.5            # hard cap: no skill hit (incl. talent bonus, before 灰印 / set multipliers) above 2.5× a basic hit
+talent_mult_per_node: 0.1    # +0.1× per unlocked talent node of that skill (up to talent_bonus_max nodes)
+ignore_enhance_multiplier: true   # legacy key (enhance now enters through gear 物理伤害)
+damage_cap_global: 12             # legacy key, unused since the rework
 
 skills:
   ember_blaze_slash:
     covenant: blaze
     display: "§6烬斩"
     cooldown_seconds: 8
-    range: 3.0
-    arc_degrees: 90
-    damage: 6
-    damage_cap: 10
-    talent_bonus_max: 3
+    range: 3.5
+    arc_degrees: 100
+    damage_mult: 1.5         # 150% of a full-charge hit to every target in the arc
+    max_targets: 6
+    talent_bonus_max: 3      # → up to 1.8×
     particles: FLAME
     sound: ENTITY_PLAYER_ATTACK_SWEEP
   ember_ash_familiar:
@@ -21,20 +26,24 @@ skills:
     display: "§7灰印"
     cooldown_seconds: 10
     range: 8.0
-    slow_amplifier: 0
-    slow_ticks: 60
-    mark_bonus_damage: 3
-    mark_duration_ticks: 80
-    damage_cap: 8
+    damage_mult: 0.5         # light strike on cast
+    mark_pct: 0.20           # marked target takes +20% damage from ALL players (+2% per talent node)
+    mark_duration_ticks: 120 # 6 s (60% uptime at 10 s CD)
+    slow_amplifier: 1        # Slowness II
+    slow_ticks: 80
+    talent_bonus_max: 3
     particles: SMOKE_NORMAL
     sound: ENTITY_ENDERMITE_HURT
   ember_warden_taunt:
     covenant: warden
     display: "§9守墓壁垒"
     cooldown_seconds: 12
-    radius: 4.0
-    resistance_amplifier: 0
-    resistance_ticks: 80
+    radius: 5.0
+    damage_mult: 0.5         # shockwave to every mob in radius
+    max_targets: 8
+    resistance_amplifier: 1  # Resistance II (−40%) …
+    resistance_ticks: 60     # … for 3 s
+    taunt_seconds: 4         # mobs in radius target the warden; retargeting away is redirected back while it lasts
     slow_amplifier: 0
     slow_ticks: 40
     particles: CRIT

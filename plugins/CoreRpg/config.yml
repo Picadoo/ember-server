@@ -108,3 +108,5 @@ stats:
   hearts_display_cap: 40
   # vanilla wither-skeleton melee adds 10 s Wither I (ignores defense) → stripped next tick for players
   strip_wither_on_hit: true
+  # covenant pseudo-stats (crit / life steal / damage taken); coded in 1.10.0, parked until the phase-2 rebalance
+  apply_covenant_stats: false

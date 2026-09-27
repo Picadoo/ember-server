@@ -200,3 +200,16 @@ Harness: `mineflayer-tests/dungeon-balance.js` (`D=weekly,abyss,calamity,guild,r
   - Brute 200: end 58% and 42%, 0 deaths.
   - The lowest point is at the end of wave 2, just before the heal.
 - The stronger balance bot (L16, blade + charm, Sharpness II) ended at 60–76% on the earlier, harder variant.
+
+## 18. Skill rework (CoreRpg 1.10.0)
+- Skills now scale off the full-charge basic hit, with a hard cap of 2.5×. Details and tests are in `docs/ember-skills-passives.md`.
+  - 烬斩: 1.5× in the arc.
+  - 灰印: +20% damage taken from all players for 6 s, plus Slowness II.
+  - 壁垒: Resistance II for 3 s, plus a 4 s taunt.
+- Covenant pseudo-stats are coded but off: `stats.apply_covenant_stats: false`. With them on, blaze's 1% life steal lifted a solo weekly to 93% end HP.
+- Result with skills (covenant stats off):
+  - Weekly: boss TTK 32–33 s, end HP 48–49%.
+  - Raid: TTK 63 s, end HP 35 / 65 / 100%.
+- Play-server restarts, each about 13 s (the playtester was online):
+  - 08:06:40–08:06:53 CST: deploy 1.10.0.
+  - 08:15:16–08:15:29 CST: deploy the covenant-stats flag.
