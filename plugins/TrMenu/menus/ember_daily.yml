@@ -1,7 +1,7 @@
 # 日常副本子菜单 — EmberDaily
 # EmberDaily 进本
 
-Title: '§e日常 · 余烬窟'
+Title: '§e日常 · 灰烬庭院'
 
 Options:
   Arguments: false
@@ -41,6 +41,8 @@ Icons:
       name: '§a开始挑战'
       lore:
         - ''
+        - '§8灰烬庭院 · 回廊清潮后上中央垫'
+        - ''
         - '§7进本即扣 §f1 §7次今日次数'
         - '§7失败不返还 · 请确认后再进'
         - ''
@@ -51,8 +53,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在尝试进入 §fEmberDaily§e …'
-        - 'tell: §8进本命令：§7/dp start EmberDaily'
+        - 'tell: §e[日] 正在进入 §6灰烬庭院§e …'
         - 'command: dp start EmberDaily'
         - close
 
@@ -87,7 +88,7 @@ Icons:
         - '§7进本即扣 · 失败不返还'
         - ''
         - '§7今日次数靠日票：进服赠 3 张，商城可补'
-        - '§7手持/背包看「余烬日票」数量'
+        - '§7背包看 §e余烬日票 §7数量'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

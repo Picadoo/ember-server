@@ -36,6 +36,7 @@ DP 1.4 无原生「每日 N 次」字段，按官方「入场卷」做法：
 | `ticket_ember_abyss` | 余烬深渊票 | 进本扣 1；日发 1 |
 
 物品草案：`plugins/NeigeItems/Items/ember-dungeon-tickets.yml`  
+> **DEBT（票务 NI 对齐）：** 进本扣次仍用 DP `<item:显示名>`（官方只认物品名）；给票/计数已走 NI ID。详见 `/workspace/minecraft/STATUS-ember-ticket-ni-audit.md`。  
 发放：插件/CoreRpg 岗（未做自动发放前用 `/ni give <玩家> ticket_ember_daily 3` 测）
 
 ## 菜单

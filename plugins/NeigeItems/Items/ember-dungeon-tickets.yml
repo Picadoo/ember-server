@@ -1,11 +1,11 @@
-# 日/周本/深渊/团本/精英 入场券 — DungeonPlus 用显示名扣次（策划草案，物品岗可润色）
+# 日/周本/深渊/团本/精英 入场券 — 逻辑以 NI ID（ticket_ember_*）为准；显示名仅供玩家识别
+# DEBT: DungeonPlus 进本扣次仍走 <item:显示名>（原生限制）；发放/计数走 ItemManager + NI ID（CoreRpg NiBridge）
 # 日发 3× ticket_ember_daily；周发 1× ticket_ember_weekly；精英周发 1× ticket_ember_elite（发放逻辑交给插件/CoreRpg）
 
 ticket_ember_daily:
   material: PAPER
   name: '&e余烬日票'
   lore:
-    - '&7ticket_ember_daily'
     - '&8日常 · 余烬窟 入场券'
     - '&7每日可用 3 张 · 进本即扣'
   enchantments:
@@ -17,7 +17,6 @@ ticket_ember_weekly:
   material: PAPER
   name: '&6余烬周票'
   lore:
-    - '&7ticket_ember_weekly'
     - '&8周常 · 深核 入场券'
     - '&7每周可用 1 张 · 进本即扣'
   enchantments:
@@ -29,7 +28,6 @@ ticket_ember_abyss:
   material: PAPER
   name: '&5余烬深渊票'
   lore:
-    - '&7ticket_ember_abyss'
     - '&8深渊 · 无尽波次 入场券'
     - '&7每日可用 1 张 · 进本即扣'
   enchantments:
@@ -41,7 +39,6 @@ ticket_ember_raid:
   material: PAPER
   name: '&9余烬团本票'
   lore:
-    - '&7ticket_ember_raid'
     - '&8团本 · 灰烬协奏 入场券'
     - '&7每周可用 1 张 · 进本即扣 · 需 3～5 人'
   enchantments:
@@ -53,7 +50,6 @@ ticket_ember_elite:
   material: PAPER
   name: '&c余烬精英票'
   lore:
-    - '&7ticket_ember_elite'
     - '&8精英试炼 · 词缀周常 入场券'
     - '&7每周可用 1 张 · 进本即扣 · 不退还'
     - '&7持有上限 1 · 需余烬 Lv.40'
