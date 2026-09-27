@@ -1,16 +1,25 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 00:31 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 04:15 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
 - **日常 DNF 式地下城**：选本→进门→分房清怪→Boss；要好玩，非换皮短廊。
 - **同服多世界**：已有 Multiverse-Core(+Portals) + DP 实例图；**禁止一图一服**。
 
+### 已结（近期）
+- **S0 体力账户/进本扣**：PASS（PAPI parse 软债）
+- **S1 余烬窟·庭院**：门2→Boss **PASS**（`87e71a8`）
+- **S2 焦骨甬道 / 残誓地窖**：设计→怪→图→DP/菜单→独立验收 **PASS**（测报 `0a8dbdd`）
+
 ### 进行中
-- 策划：`design-ember-stamina-dnf-daily.md`（体力 + DNF 日常 MVP）
-- B0.2 深渊 ΔTTK：测试岗并行（可被体力里程碑挤优先级）
+- 插件：体力药 NI 右键/饮用闭环（`_30`/`_45`；修发放预扣日顶）
+- 策划：B0.3 菜单去指令残留文案表
+
+### 仍挂
+- B0.4 挂机日顶二档（经济债，文档标定即可）
+- 团本使徒 B0.2 TTK（人数门 SKIP）
 
 ### 多世界现状（确认）
 - `plugins/Multiverse-Core.jar` + Portals；常驻 `ember_hub` / `ember_afk` / `ember_event` 等
