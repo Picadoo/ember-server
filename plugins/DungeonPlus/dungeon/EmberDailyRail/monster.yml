@@ -1,7 +1,7 @@
 # 日 · S4 线 G 锈轨矿道：主巷→房1→开闸→房2混编(+支洞口)→开闸→Boss 机房
 # 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=64..66 @ z=15/33 → AIR
 # Display：$kill 对齐 MM 去色名 锈轨尸 / 矿矢骷 / 锈轨矿监
-# 2026-09-28 波次差异: 房2 主巷尸×3 → delay2s 支洞矿矢骷×3 计入 door2
+# 2026-09-28 真侧袭: 房2 wave2a start→wave2b delay1（勿等主巷 $kill）；door2 仍在支洞 wave2b $kill
 groups:
   wave1:
   - monster:
@@ -28,7 +28,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 房2：主巷尸×3 → delay2s 支洞矿矢骷×3（计入 door2）
+  # 房2：主巷开打即 delay1 刷支洞（对齐霜晶链式）；door2 在 wave2b $kill
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyRailZombie;location=-5,64,20;amount=2;scattered=0.8;level=1} @dungeon"
@@ -37,10 +37,10 @@ groups:
     - "$kill{mobname=锈轨尸;amount=3} @system"
     start:
     - "$message{type=text;text=§e【矿道·主巷】锈轨尸压上 —— 当心支洞侧袭} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=1} @dungeon"
     end:
-    - "$message{type=text;text=§7主巷已清 · 支洞矿矢骷压上} @dungeon"
+    - "$message{type=text;text=§7主巷已清} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
     auto-start: false
 
   wave2b:
