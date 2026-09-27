@@ -1,6 +1,7 @@
 # 日 · S3 线 E 断塔回廊：塔底→开门上阶→中层环廊混编→开门→顶台 Boss
 # 分房 $kill（禁 $kill-any）；门1 z=4@y64；门2 z=4@y70 · x=-1..1 → AIR
 # Display：$kill 对齐 MM 去色名 断塔卫尸 / 裂隙箭骷 / 断塔守望
+# 2026-09-28 波次差异: 环廊双侧裂隙箭骷 2+2 → 再卫尸×2（顺序单 $kill）
 groups:
   wave1:
   - monster:
@@ -27,28 +28,29 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
+  # 中层环廊：东西双侧对射骷 2+2 → 内侧卫尸×2
   wave2a:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=-6,70,0;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=6,70,0;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireSkeleton;location=-6,70,0;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireSkeleton;location=6,70,0;amount=2;scattered=0.8;level=1} @dungeon"
     condition:
-    - "$kill{mobname=断塔卫尸;amount=3} @system"
+    - "$kill{mobname=裂隙箭骷;amount=4} @system"
     start:
-    - "$message{type=text;text=§e【中层环廊】混编来袭 —— 先清尸再开顶门} @dungeon"
+    - "$message{type=text;text=§e【中层环廊·对射】双侧裂隙箭骷 —— 一上环廊就双边挨箭} @dungeon"
     end:
-    - "$message{type=text;text=§7环廊前段已清 · 裂隙箭骷压上} @dungeon"
+    - "$message{type=text;text=§7对射已清 · 卫尸压上} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   wave2b:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailySpireSkeleton;location=0,70,-6;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailySpireSkeleton;location=0,70,6;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=0,70,-6;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=0,70,2;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=裂隙箭骷;amount=3} @system"
+    - "$kill{mobname=断塔卫尸;amount=2} @system"
     start:
-    - "$message{type=text;text=§e【环廊·对射】裂隙箭骷×3 —— 清完开顶门} @dungeon"
+    - "$message{type=text;text=§e【环廊·卫尸】断塔卫尸×2 —— 清完开顶门} @dungeon"
     end:
     - "$message{type=text;text=§a环廊已清 · 顶门开了} @dungeon"
     - "$operation-block{loc=-1,70,4;mode=set;type=AIR} @dungeon"

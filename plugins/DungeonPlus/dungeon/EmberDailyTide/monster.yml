@@ -1,6 +1,7 @@
 # 日 · S3 线 D 潮蚀水道：干岸→房1→开闸→房2混编→开闸→Boss 闸厅
 # 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=64..66 @ z=18/38 → AIR
 # Display：$kill 对齐 MM 去色名 潮蚀尸 / 浪矢骷 / 潮闸蛮兵
+# 2026-09-28 波次差异: 房2 桥面先浪矢骷×3（对岸）→ 再潮蚀尸×3（桥头冲锋）
 groups:
   wave1:
   - monster:
@@ -26,28 +27,29 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
+  # 房2：先对岸浪矢骷×3 → 再本岸/桥中潮蚀尸×3
   wave2a:
-  - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=-2,64,26;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=1,64,34;amount=1;scattered=0.5;level=1} @dungeon"
-    condition:
-    - "$kill{mobname=潮蚀尸;amount=3} @system"
-    start:
-    - "$message{type=text;text=§e【水道·折桥】混编来袭 —— 先清尸再开闸厅门} @dungeon"
-    end:
-    - "$message{type=text;text=§7折桥前段已清 · 浪矢骷压上} @dungeon"
-    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
-    auto-start: false
-
-  wave2b:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyTideSkeleton;location=2,64,28;amount=2;scattered=0.8;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberDailyTideSkeleton;location=-1,64,32;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
     - "$kill{mobname=浪矢骷;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【水道·后段】浪矢骷×3 —— 清完开闸厅门} @dungeon"
+    - "$message{type=text;text=§e【水道·折桥】对岸浪矢骷 —— 先拆弓再推桥} @dungeon"
+    end:
+    - "$message{type=text;text=§7对岸弓已清 · 潮蚀尸冲锋} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2b;repeat=false;delay=4} @dungeon"
+    auto-start: false
+
+  wave2b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=-2,64,26;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=1,64,34;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=潮蚀尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【水道·桥头】潮蚀尸×3 —— 清完开闸厅门} @dungeon"
     end:
     - "$message{type=text;text=§a折桥已清 · 闸厅门开了} @dungeon"
     - "$operation-block{loc=-1,64,38;mode=set;type=AIR} @dungeon"

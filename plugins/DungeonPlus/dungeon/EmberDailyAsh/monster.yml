@@ -1,16 +1,18 @@
 # 日 · S2 线 B 焦骨甬道：拱门→房1→开门→房2混编→开门→Boss 鼓室
 # 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=65..67 @ z=16/36 → AIR
 # Display：$kill 对齐 MM 去色名 焦骨尸 / 燃矢骷 / 焦核蛮兵
+# 2026-09-28 波次差异: 房1 主甬×4 + 假岔尽头×2 同组计入 door1（假岔无怪/不计入=FAIL）
 groups:
   wave1:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=-3,65,8;amount=2;scattered=0.8;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=3,65,8;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=0,65,13;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=8,65,10;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=7,65,11;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=焦骨尸;amount=5} @system"
+    - "$kill{mobname=焦骨尸;amount=6} @system"
     start:
-    - "$message{type=text;text=§e【甬道·前段】清尽焦骨尸再开门 —— 别撞铁栅} @dungeon"
+    - "$message{type=text;text=§e【甬道·前段】主甬+假岔焦骨尸 —— 假岔也要清才开门} @dungeon"
     end:
     - "$message{type=text;text=§a前段已清 · 门开了} @dungeon"
     - "$operation-block{loc=-1,65,16;mode=set;type=AIR} @dungeon"
@@ -26,7 +28,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 房2：wave2a 焦骨尸×3 → wave2b 燃矢骷×3（顺序单 $kill，无 kill-any）
+  # 房2：保留尸×3 + 骷×3（总小怪≈12）
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=-2,65,24;amount=2;scattered=0.8;level=1} @dungeon"

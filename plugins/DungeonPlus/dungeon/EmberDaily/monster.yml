@@ -1,6 +1,7 @@
 # 日 · S1 分房：门廊→房1前厅→开门→房2回廊→开门→Boss终厅
 # 2026-09-28 S1: 波次 僵尸×5 / 混编×6 / 蛮兵×1；阶段 $operation-block 撤铁门
 # 2026-09-28 门2修: wave2a 僵尸×3 + wave2b 骷髅×3（顺序单 $kill），开门链路无 kill-any
+# 2026-09-28 波次差异: 房2 先对射骷×2 → 再涌尸×4（禁旧「先3尸后3骷」）
 # Display 名仍：灰烬庭院僵尸/骷髅/蛮兵（MM 未改）
 groups:
   wave1:
@@ -30,29 +31,30 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 2026-09-28 门2修：弃 kill-any；拆 wave2a(僵尸×3)→wave2b(骷髅×3)，每段单 $kill 与 wave1 同风格；门2 在 wave2b 清完后开
+  # 房2：先左右柱后对射骷×2 → 再门侧/中央涌尸×4（顺序单 $kill，无 kill-any）
   wave2a:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-6,65,17;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=6,65,17;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-6,65,21;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=6,65,21;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=灰烬庭院僵尸;amount=3} @system"
+    - "$kill{mobname=灰烬庭院骷髅;amount=2} @system"
     start:
-    - "$message{type=text;text=§e【回廊】混编来袭 —— 先清僵尸再推 Boss 门} @dungeon"
+    - "$message{type=text;text=§e【回廊·对射】左右柱后骷髅 —— 先躲柱清射} @dungeon"
     end:
-    - "$message{type=text;text=§7回廊前段已清 · 骷髅压上} @dungeon"
+    - "$message{type=text;text=§7对射已清 · 僵尸涌上} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=4} @dungeon"
     auto-start: false
 
   wave2b:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-6,65,21;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=6,65,21;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-6,65,17;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=6,65,17;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=0,65,19;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=灰烬庭院骷髅;amount=3} @system"
+    - "$kill{mobname=灰烬庭院僵尸;amount=4} @system"
     start:
-    - "$message{type=text;text=§e【回廊·后段】骷髅×3 —— 清完开 Boss 门} @dungeon"
+    - "$message{type=text;text=§e【回廊·涌尸】僵尸×4 —— 清完开 Boss 门} @dungeon"
     end:
     - "$message{type=text;text=§a回廊已清 · Boss 门开了} @dungeon"
     - "$operation-block{loc=-2,65,25;mode=set;type=AIR} @dungeon"
