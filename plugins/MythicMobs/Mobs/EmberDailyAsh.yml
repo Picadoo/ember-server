@@ -1,0 +1,63 @@
+# S2 日常线 B · 余烬窟·焦骨甬道（EmberDailyAsh）
+# 依据：docs/design-ember-daily-s2.md §4.3
+# Display 去色勿与庭院/地窟撞名；掉落 corerpg mmgive；近战优先少远程
+
+EmberAshZombie:
+  Type: ZOMBIE
+  Display: '&c焦骨尸'
+  Health: 50
+  Damage: 4
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.16
+  - skill{s=EmberEliteIgnite} @target ~onAttack 0.10
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberAshSkeleton:
+  # 燃矢：近战贴脸（木剑）；轻点燃体现「燃」，不给弓（派工：近战优先少远程）
+  Type: SKELETON
+  Display: '&c燃矢骷'
+  Health: 40
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - WOOD_SWORD HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.14
+  - skill{s=EmberEliteIgnite} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberAshBrute:
+  # 焦核蛮兵：窄场冲锋感；SoftHit 骨架 + 轻灼；Display/装备独立于庭院蛮兵
+  Type: HUSK
+  Display: '&c焦核蛮兵'
+  Health: 200
+  Damage: 3
+  Options:
+    MovementSpeed: 0.22
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.2
+  - skill{s=EmberEliteIgnite} @target ~onAttack 0.22
+  - damage{amount=0.5} @PlayersInRadius{r=5} ~onTimer:40
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5
