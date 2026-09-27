@@ -174,6 +174,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(questService, this);
         Bukkit.getPluginManager().registerEvents(hubNpcService, this);
         Bukkit.getPluginManager().registerEvents(lifeService, this);
+        Bukkit.getPluginManager().registerEvents(staminaService, this);
         Bukkit.getPluginManager().registerEvents(statService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {

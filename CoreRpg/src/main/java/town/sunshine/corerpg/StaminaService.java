@@ -1,11 +1,17 @@
 package town.sunshine.corerpg;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -14,6 +20,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -21,9 +28,19 @@ import java.util.Map;
  * S0 余烬体力 — 日 0:00 Asia/Shanghai 回满；进本扣体力；旧票兑换/逾期折算。
  * 设计：docs/design-ember-stamina-dnf-daily.md §A
  */
-public final class StaminaService {
+public final class StaminaService implements Listener {
 
     public static final String POTION_NI_ID = "consumable_ember_stamina_30";
+    public static final String POTION_NI_ID_45 = "consumable_ember_stamina_45";
+
+    /** NI id → stamina grant; only these ids (no display-name match). */
+    private static final Map<String, Integer> POTION_AMOUNTS;
+    static {
+        Map<String, Integer> m = new LinkedHashMap<String, Integer>();
+        m.put(POTION_NI_ID, Integer.valueOf(30));
+        m.put(POTION_NI_ID_45, Integer.valueOf(45));
+        POTION_AMOUNTS = Collections.unmodifiableMap(m);
+    }
 
     private static final DateTimeFormatter DAY = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -223,7 +240,7 @@ public final class StaminaService {
         return amount - left;
     }
 
-    /** Potion/shop path: respects potion_daily_cap. Returns false if capped. */
+    /** Potion/shop path: respects potion_daily_cap. Returns false if capped (no mutation). */
     public boolean addPotionStamina(Player player, PlayerData data, int amount) {
         if (player == null || data == null || amount <= 0) return false;
         ensure(data);
@@ -236,8 +253,10 @@ public final class StaminaService {
         dataStore.flushMutation(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "[体力] 回复 +" + applied
                 + ChatColor.GRAY + "（当前 " + data.getStamina() + "/" + resolveMax(data)
-                + (data.getStaminaBank() > 0 ? " · 银行 " + data.getStaminaBank() : "") + "）");
-        return applied > 0;
+                + (data.getStaminaBank() > 0 ? " · 银行 " + data.getStaminaBank() : "")
+                + " · 药剂今日 " + data.getPotionStaminaToday() + "/" + potionDailyCap + "）");
+        // Under-cap use always succeeds even if current+bank already full (amount still counted)
+        return true;
     }
 
     /** Monthly login / direct grant: +30, overflow to bank. */
@@ -373,29 +392,91 @@ public final class StaminaService {
         }
     }
 
-    /** Grant potion NI or fallback direct stamina (shop). */
+    /** Grant potion NI or fallback direct stamina (shop). NI path does NOT pre-count potionStaminaToday. */
     public boolean grantPotionOrStamina(Player player, int packs) {
         if (player == null || packs <= 0) return false;
         PlayerData data = dataStore.get(player.getUniqueId());
         ensure(data);
         int totalAmt = packs * potionGrantAmount;
-        if (data.getPotionStaminaToday() + totalAmt > potionDailyCap) {
-            player.sendMessage(ChatColor.RED + "[体力] 今日药剂回体将超上限 " + potionDailyCap);
-            return false;
-        }
-        // Prefer NI item if present
+        // Prefer NI item if present — day cap counted on actual use
         if (ni != null && ni.giveNiItem(player, POTION_NI_ID, packs)) {
-            data.setPotionStaminaToday(data.getPotionStaminaToday() + totalAmt);
-            dataStore.flushMutation(player.getUniqueId());
             player.sendMessage(ChatColor.GREEN + "[体力] 获得体力药 ×" + packs
                     + ChatColor.GRAY + "（使用后 +" + potionGrantAmount + "/瓶）");
             return true;
         }
-        // Fallback: direct +stamina (物品岗未上架时)
+        // Fallback: direct +stamina (物品岗未上架时) — still respects potion_daily_cap
         return addPotionStamina(player, data, totalAmt);
     }
 
-    /** Special reward key handling for mail/quest: stamina / consumable_ember_stamina_30 */
+    /** Give stamina potion NI by id (no pre-count). Unknown id → false. */
+    public boolean grantPotionNi(Player player, String niId, int packs) {
+        if (player == null || niId == null || packs <= 0) return false;
+        if (!POTION_AMOUNTS.containsKey(niId)) return false;
+        if (ni == null || !ni.giveNiItem(player, niId, packs)) return false;
+        int per = POTION_AMOUNTS.get(niId).intValue();
+        player.sendMessage(ChatColor.GREEN + "[体力] 获得体力药 ×" + packs
+                + ChatColor.GRAY + "（使用后 +" + per + "/瓶）");
+        return true;
+    }
+
+    /**
+     * Apply potion stamina from a consumed NI bottle. Returns false if over potion_daily_cap
+     * (caller must not consume the item). Counts full {@code amount} toward the day cap.
+     */
+    public boolean tryUsePotion(Player player, int amount) {
+        if (player == null || amount <= 0) return false;
+        PlayerData data = dataStore.get(player.getUniqueId());
+        return addPotionStamina(player, data, amount);
+    }
+
+    /** Resolve stamina amount for a potion NI id, or -1 if not a stamina potion. */
+    public int potionAmountOf(String niId) {
+        if (niId == null) return -1;
+        Integer v = POTION_AMOUNTS.get(niId);
+        return v == null ? -1 : v.intValue();
+    }
+
+    /** Drink / consume stamina potion NI — id only, no display-name match. */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onPotionConsume(PlayerItemConsumeEvent e) {
+        if (ni == null) return;
+        ItemStack stack = e.getItem();
+        if (stack == null || stack.getType() == Material.AIR) return;
+        String id = ni.getNiId(stack);
+        int amount = potionAmountOf(id);
+        if (amount <= 0) return;
+        final Player p = e.getPlayer();
+        PlayerData data = dataStore.get(p.getUniqueId());
+        ensure(data);
+        if (data.getPotionStaminaToday() + amount > potionDailyCap) {
+            e.setCancelled(true);
+            p.sendMessage(ChatColor.RED + "[体力] 今日药剂回体已达上限 " + potionDailyCap);
+            return;
+        }
+        // Allow vanilla consume (1 bottle), then apply stamina + strip leftover glass bottle
+        final boolean bottle = stack.getType() == Material.POTION;
+        if (!addPotionStamina(p, data, amount)) {
+            // Cap raced or apply failed — keep bottle
+            e.setCancelled(true);
+            return;
+        }
+        if (!bottle) return;
+        plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+            @Override public void run() {
+                if (!p.isOnline()) return;
+                ItemStack[] inv = p.getInventory().getContents();
+                for (int i = 0; i < inv.length; i++) {
+                    ItemStack it = inv[i];
+                    if (it == null || it.getType() != Material.GLASS_BOTTLE || ni.getNiId(it) != null) continue;
+                    if (it.getAmount() > 1) it.setAmount(it.getAmount() - 1);
+                    else p.getInventory().setItem(i, null);
+                    break;
+                }
+            }
+        });
+    }
+
+    /** Special reward key handling for mail/quest: stamina / consumable_ember_stamina_30|_45 */
     public boolean tryGrantRewardKey(Player player, String key, int amount) {
         if (player == null || key == null || amount <= 0) return false;
         PlayerData data = dataStore.get(player.getUniqueId());
@@ -406,6 +487,9 @@ public final class StaminaService {
         }
         if (POTION_NI_ID.equalsIgnoreCase(key)) {
             return grantPotionOrStamina(player, amount);
+        }
+        if (POTION_NI_ID_45.equalsIgnoreCase(key)) {
+            return grantPotionNi(player, POTION_NI_ID_45, amount);
         }
         return false;
     }

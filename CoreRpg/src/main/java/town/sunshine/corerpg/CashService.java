@@ -370,11 +370,8 @@ public final class CashService {
             player.sendMessage(ChatColor.RED + "[商城] 体力药限购已满（日 " + shopSkuLimit + "）");
             return;
         }
+        // potion_daily_cap is enforced on drink/use — do not gate purchase or pre-count
         StaminaService st = plugin instanceof CoreRpgPlugin ? ((CoreRpgPlugin) plugin).getStaminaService() : null;
-        if (st != null && data.getPotionStaminaToday() + st.getPotionGrantAmount() > st.getPotionDailyCap()) {
-            player.sendMessage(ChatColor.RED + "[商城] 今日药剂回体已达上限");
-            return;
-        }
         if (!data.takeCrystalCash(shopPrice)) {
             player.sendMessage(ChatColor.RED + "[商城] 晶钻不足（需 " + shopPrice + "）");
             return;
