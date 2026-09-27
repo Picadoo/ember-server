@@ -2,7 +2,7 @@
 
 **日期：** 2026-09-27 23:53 CST（Asia/Shanghai）<br>
 **依据：** `docs/design-ember-content-backlog.md` §B2.4 · `docs/design-ember-hub-workshop-npcs.md`
-**Verdict：** **✅ PASS（源码生成文本已清理；未提交 jar / 世界大文件）**
+**Verdict：** **✅ PASS（源码已清理；世界牌面已用 CoreRpg 1.15.11 重建；jar 由 F2 岗部署）**
 
 ## 结论
 
@@ -32,4 +32,36 @@
 - `CoreRpg/src/main/java/town/sunshine/corerpg/AfkTierService.java` — 分层入口牌去掉 `打开/ember`，改为「枢纽菜单」。
 - `docs/STATUS-ember-b24-signs.md` — 本验收记录。
 
-未触碰：jar、secret、`ops.json`、HolographicDisplays 数据库、世界目录及大型备份。运行中的世界牌面需在下一次 CoreRpg 构建/部署后由既有 `hubbuild` / `afk build` 生成器落盘。非告示的旧聊天 hint / 菜单后台命令属于 B0.3，不在本 B2.4 牌面清理范围内。
+非告示的旧聊天 hint / 菜单后台命令属于 B0.3，不在本 B2.4 牌面清理范围内。
+
+---
+
+## 部署节（B2.4 牌面落地 · 2026-09-28 00:00 CST）
+
+| 项 | 内容 |
+|---|---|
+| **CoreRpg 版本** | **1.15.11**（play 已启用；由深渊 F2 修复执行器升版并部署 jar，本岗**未**再打 jar / 未再换 jar） |
+| **jar 路径** | `plugins/CoreRpg.jar`（`server-runtime/plugins` → `../plugins` 软链同源） |
+| **源码告示** | commit `8a22023`：`HubPlazaService` 入口牌 →「右键灰烛·看主线 / 工坊：右键 NPC / 或打开枢纽菜单」；`AfkTierService` 分层入口牌 →「枢纽菜单 / →挂机庭换层」 |
+| **本岗动作** | 短停写入临时 OP（RpgBot）→ 热启 play → 重建告示 → `/deop`；`ops.json` 终态 **`[]`** |
+| **未改** | 玩法数值、票、掉落、Boss HP；未 commit / push |
+
+### 重建命令与结果
+
+| 命令 | 结果（日志 CST） |
+|---|---|
+| `/corerpg hubbuild` | `plaza done · blocks≈439` · spawn=(-18.5,58,110.5) · `hubbuild changed≈439`（00:00:29） |
+| `/corerpg afk build 2` | 荒原 @ 200,61,250 · changed=462 · 入口 200.5,62.0,250.5（00:00:34） |
+| `/corerpg afk build 3` | 焦土 @ 400,64,250 · changed=15857 · 入口 400.5,65.0,250.5（00:00:39） |
+| `/corerpg afk build 4` | 烬原深处 @ 600,63,250 · changed=369 · 入口 600.5,64.0,250.5（00:00:44） |
+
+层 1（灰坡）为自然地形、无 `afk build` 配置，无需重建。
+
+### 验收建议
+
+1. 进 `ember_hub`，看入口牌（约 -19,58,113）：应为「枢纽广场 / 右键灰烛·看主线 / 工坊：右键 NPC / 或打开枢纽菜单」，**不应**再出现「打开 /ember」。
+2. `/corerpg afk 2`（或菜单进②），入口北侧牌：标题行 +「枢纽菜单」+「→挂机庭换层」，**不应**再出现「打开/ember」。
+3. 抽检③④同理；回枢纽牌保持「打开枢纽菜单」。
+4. 日志确认版本：`CoreRpg 1.15.11 enabled`。
+5. 可复跑（勿在玩家堆物时盲跑）：`/corerpg hubbuild` · `/corerpg afk build 2|3|4`（需 `corerpg.admin` / OP）。
+
