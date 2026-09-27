@@ -1,62 +1,61 @@
 # STATUS · S1 日常 MVP「余烬窟·庭院」分房
 
-**日期：** 2026-09-28 02:47（Asia/Shanghai）  
+**日期：** 2026-09-28 03:38（Asia/Shanghai）  
 **岗：** 余烬-插件岗执行器  
-**依据：** `docs/STATUS-ember-daily-dnf-s1-test.md` FAIL（门2）；派工 · S1 门2 修复  
-**CoreRpg 版本：** **1.15.13**（未 bump jar；本轮仅 YAML）  
-**Verdict：** **✅ 门2 条件链已修复落地**（弃 `$kill-any` → `wave2a`/`wave2b` 顺序单 `$kill`；wave1+wave2a 实战击杀已闭环；门2 AIR 全链路交测试岗复测）
+**依据：** 总控【派工 · S1 回廊近战化 · 便于门2验收闭环】；前序 `STATUS-ember-daily-dnf-s1-retest.md` FAIL（wave2b 骷髅远程不稳）  
+**CoreRpg 版本：** **1.15.13**（未 bump jar；本轮仅 MM YAML）  
+**方案：** **A（采用）** — `EmberDailySkeleton` 近战化；**未退 B**  
+**Verdict：** **✅ 回廊近战化落地 + 门2→Boss 垫实战闭环**
 
 ---
 
 ## 一句话
 
-测试 FAIL 归因 `$kill-any` 不可靠。已将回廊混编改为 **wave2a（僵尸×3 · `$kill`）→ wave2b（骷髅×3 · `$kill`）**，门2 `$operation-block` 挂在 wave2b end。实战已打出「前厅已清」「回廊前段已清 · 骷髅压上」「【回廊·后段】骷髅×3」；自动化卡在骷髅远程/贴脸不稳，**未**在本岗单次跑通中采到门2 AIR 方块样，请测试岗只复测门2→Boss。
+将 `EmberDailySkeleton` 去弓改木剑贴脸（Display/`$kill` 名仍为「灰烬庭院骷髅」）。单次真击杀自动化跑通：wave1 → wave2a → wave2b → **「回廊已清 · Boss 门开了」** + 门2 z=25 **AIR×12** → 终厅播报「Boss 蛮兵」且垫可达。未改体力；未 bump jar；未 commit/push。
 
 ---
 
-## 1. 结构说明（未改地形）
+## 1. 结构说明（未改地形 / DP 波次）
 
 | 段 | Z（约） | 内容 |
 |----|---------|------|
 | 门廊（安全） | -4..2 | spawn `(0,65,0)` |
 | 房1 前厅 | 3..12 | 僵尸×5 · `$kill` → 门1 AIR |
 | **门1** | **z=13** | 铁栅×12 |
-| 房2 回廊 | 14..24 | **wave2a** 僵尸×3 → **wave2b** 骷髅×3 |
+| 房2 回廊 | 14..24 | **wave2a** 僵尸×3 → **wave2b** 骷髅×3（近战） |
 | **门2** | **z=25** | 铁栅×12 · wave2b 清完 → AIR +「回廊已清 · Boss 门开了」 |
 | Boss 终厅 | 26..38 | 蛮兵 `(0,66,31)` |
 
-体力 **-30 未改**。
+体力 **-30 未改**。`monster.yml` wave2a/wave2b 条件链本轮**未再改**（沿用门2修）。
 
 ---
 
-## 2. 条件新写法（核心变更）
+## 2. 方案 A 核心变更（MM）
 
-**改前（坏）：**
+**改前：**
 ```yaml
-wave2:
-  condition:
-  - "$kill-any{mobname=灰烬庭院僵尸,灰烬庭院骷髅;amount=6} @system"
+EmberDailySkeleton:
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
 ```
 
-**改后（好）：**
+**改后：**
 ```yaml
-# wave1 end → $monstergroup{group=wave2a;...}
-wave2a:
-  monster: EmberDailyZombie ×3（坐标同原回廊僵尸点）
-  condition:
-  - "$kill{mobname=灰烬庭院僵尸;amount=3} @system"
-  end: 「回廊前段已清 · 骷髅压上」+ $monstergroup{group=wave2b}
-
-wave2b:
-  monster: EmberDailySkeleton ×3（坐标同原回廊骷髅点）
-  condition:
-  - "$kill{mobname=灰烬庭院骷髅;amount=3} @system"
-  end: 「回廊已清 · Boss 门开了」+ 门2 十二格 AIR + boss 组
+EmberDailySkeleton:
+  # 2026-09-28 S1 回廊近战化：去弓 → 木剑贴脸；Display/$kill 名不变
+  Type: SKELETON
+  Display: '&a灰烬庭院骷髅'   # 不变 → DP $kill{mobname=灰烬庭院骷髅;amount=3}
+  Options:
+    PreventRandomEquipment: true   # 新增，避免随机回弓
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - WOOD_SWORD HAND               # 1.12.2 材质名（非 WOODEN_SWORD）
 ```
 
-- 开门链路上 **无 `$kill-any`**
-- 刷怪数量与 condition 一致：3+3=6
-- 与 wave1 同风格单 `$kill`（本组计数）
+- 无 Shoot/弓 skill（原本也无，远程来自原版弓 AI）
+- SoftHit / 死亡掉落 / Health35 Damage4 **未改**
+- **备选 B 未启用**（未把 wave2b 改刷僵尸）
 
 ---
 
@@ -64,63 +63,69 @@ wave2b:
 
 | 路径 | 变更 |
 |------|------|
-| `plugins/DungeonPlus/dungeon/EmberDaily/monster.yml` | wave2 → wave2a/wave2b；弃 kill-any |
+| `plugins/MythicMobs/Mobs/EmberDaily.yml` | EmberDailySkeleton：BOW→WOOD_SWORD + PreventRandomEquipment |
 | `docs/STATUS-ember-daily-dnf-s1.md` | 本文件 |
-| `server-runtime/config-backups/ember_daily-s1-gate2fix-20260928-014227/` | 改前 YAML 备份 |
+| `server-runtime/config-backups/ember_daily-s1-skel-melee-20260928-033209/` | 改前 MM + DP YAML 备份 |
 
-**未改：** 体力数值 / CoreRpg jar（仍 1.15.13）/ MM 血攻 / map region / option.yml spawn。  
+**未改：** 体力数值 / CoreRpg jar（仍 1.15.13）/ DP `monster.yml` 波次 / map region / option.yml。  
 **未 commit/push。**
 
 ---
 
-## 4. 验收证据
+## 4. 验收证据（真击杀 · 禁 killall）
+
+账号：`MeOp77` / `MeAc5991` · 日志 `/tmp/s1-skel-melee-verify.log` · JSON `/tmp/s1-skel-melee-verify.json`
 
 | 检查 | 结果 | 证据 |
 |------|------|------|
-| YAML 无 `$kill-any{` | ✅ | `monster.yml` wave2 开门链路 |
-| wave2a/wave2b 数量=3+3 | ✅ | 刷怪行与 `$kill` amount 对齐 |
-| 进本落地门廊 | ✅ | `(0,65,0)` +「门廊安全 · 清前厅开门」 |
-| 真击杀 wave1 → 门1 | ✅ | 「前厅已清 · 门开了」（例：hits=30 · ≈18s，`/tmp/s1-gate2-fasttp-verify.log`） |
-| 真击杀 wave2a | ✅ | 「回廊前段已清 · 骷髅压上」 |
+| MM 无 BOW · 有 WOOD_SWORD · Display 灰烬庭院骷髅 | ✅ | YAML 抽检 + checks |
+| YAML 无 `$kill-any` · wave2a/2b | ✅ | `monster.yml` |
+| 进本 · 体力 -30 | ✅ | 「[日常] 正在进入……（体力 -30）」 |
+| 真击杀 wave1 → 门1 | ✅ | 「前厅已清 · 门开了」（hits=20 · ≈13s） |
+| 真击杀 wave2a | ✅ | 「回廊前段已清 · 骷髅压上」（hits=12 · ≈8s） |
 | wave2b 启动 | ✅ | 「【回廊·后段】骷髅×3 —— 清完开 Boss 门」 |
-| 「回廊已清」+ 门2 AIR | 📎 | 本岗自动化多次卡在骷髅远程/实体贴脸不结算；**请测试岗复测** |
-| Boss 垫可达 | 📎 | 待门2 复测 |
-| 体力 | ✅ 未改 | 进本仍见「体力 -30」 |
-| `ops.json` | ✅ `[]` | 测后清空 |
-| jar bump | ❌ 未 bump | 纯 YAML |
-
-痕迹：`/tmp/s1-gate2-fasttp-verify.log` · `/tmp/s1-gate2-fasttp-verify.json` · 备份路径见上。
+| 真击杀 wave2b →「回廊已清」 | ✅ | 「**回廊已清 · Boss 门开了**」（hits=9 · ≈4s） |
+| 门2 z=25 AIR×12 | ✅ | iron=0 air=**12**（十二格全 AIR） |
+| Boss 垫可达 | ✅ | pos `(0.5,66,29.5)` +「【终厅·中央垫】Boss 蛮兵！…」 |
+| 无「was shot by」远程击杀 | ✅ | deaths=[] · `no_shot_death` |
+| 未用 `mm mobs killall` 推进 `$kill` | ✅ | 脚本仅真挥击（探针曾用 killall 清测试刷怪，与验收无关） |
+| 体力 | ✅ 未改 | 仍见「体力 -30」 |
+| `ops.json` | ✅ `[]` | play + login |
+| jar bump | ❌ 未 bump | 纯 YAML · CoreRpg 1.15.13 |
 
 ---
 
-## 5. 验收命令（建议测试岗）
+## 5. 验收命令（建议测试岗复测门2→Boss）
 
 ```
 /corerpg enter daily
 # 真打清前厅×5 → 「前厅已清 · 门开了」
 # 真打清回廊僵尸×3 → 「回廊前段已清 · 骷髅压上」
-# 真打清骷髅×3 → 「回廊已清 · Boss 门开了」；查 z=25 铁门变 AIR
-# 进 Boss 垫 (0,66,31)
+# 真打清骷髅×3（现为近战木剑）→ 「回廊已清 · Boss 门开了」；查 z=25 十二格 AIR
+# 进 Boss 垫 (0,66,31) → 终厅播报
 ```
 
-注意：`mm mobs killall` **不计** DP `$kill`。大改后若见旧波次：确认已读新 `monster.yml`（本岗已重启 play 加载）。
+注意：`mm mobs killall` **不计** DP `$kill`。大改后若见旧装备：确认 play 已加载新 `EmberDaily.yml`（本岗验收前已短重启 play）。
 
 ---
 
 ## 6. 不做 / 债务
 
-1. 本岗未在单次自动化中采到门2 AIR（mineflayer 对回廊骷髅不稳；非条件写法问题——wave2a 同风格 `$kill` 已实战触发 end）  
-2. 未改体力 / 未 bump jar / 未 commit/push  
-3. 线 B/C 仍筹备中  
+1. 未改回廊 start 文案「先清远程」（flavor；骷髅已近战，文案可后续顺手改）  
+2. 未打 Boss 通关结算（本派工成功标准止于门2 AIR + Boss 垫可达）  
+3. 未改体力 / 未 bump jar / 未 commit/push  
+4. 备选 B 未用  
 
 ---
 
 ## 7. 回报主代理 / 总控
 
-- **可派测试：** 只复测 **门2→Boss**（wave1/wave2a 条件链已实锤）  
+- **方案：** A（骷髅近战）· **未退 B**  
+- **可派测试：** priority true · 复测 **门2→Boss**（wave1/2a/2b + 门2 AIR 本岗已实锤）  
 - **STATUS：** `docs/STATUS-ember-daily-dnf-s1.md`  
-- **改了：** 仅 `EmberDaily/monster.yml`（wave2a/wave2b）  
-- **condition：** `$kill` 僵尸×3 + `$kill` 骷髅×3（顺序组）  
+- **改了：** 仅 `plugins/MythicMobs/Mobs/EmberDaily.yml`（EmberDailySkeleton）  
+- **Display/$kill：** 仍「灰烬庭院骷髅」  
 - **jar：** 未 bump（1.15.13）  
-- **备份：** `server-runtime/config-backups/ember_daily-s1-gate2fix-20260928-014227/`  
+- **备份：** `server-runtime/config-backups/ember_daily-s1-skel-melee-20260928-033209/`  
+- **证据：** `/tmp/s1-skel-melee-verify.json` · `/tmp/s1-skel-melee-verify.log`  
 - **ops：** `[]`  
