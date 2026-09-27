@@ -31,6 +31,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -490,7 +491,24 @@ public final class QuestService implements Listener {
         }
         if ("set".equals(act) || "reset".equals(act) || "event".equals(act) || "npc".equals(act)) {
             if (!sender.hasPermission("corerpg.admin")) { sender.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
-            if ("npc".equals(act)) { ensureNpc(true); sender.sendMessage("[CoreRpg] quest npc ensured (hooked=" + adyHooked + ")"); return true; }
+            if ("npc".equals(act)) {
+                String sub = args.length > 2 ? args[2].toLowerCase() : "ensure";
+                if ("purge".equals(sub)) {
+                    int removed = purgeStaleHitboxes();
+                    ensureNpc(true);
+                    sender.sendMessage("[CoreRpg] quest npc purged " + removed + " then ensured (hooked=" + adyHooked + ")");
+                    return true;
+                }
+                if ("count".equals(sub)) {
+                    sender.sendMessage("[CoreRpg] quest npc near_candidates=" + countNearbyHitboxCandidates()
+                            + " tagged_or_meta=" + countTaggedOrMeta()
+                            + " @ " + npcX + "," + npcY + "," + npcZ);
+                    return true;
+                }
+                ensureNpc(true);
+                sender.sendMessage("[CoreRpg] quest npc ensured (hooked=" + adyHooked + ")");
+                return true;
+            }
             Player t = args.length > 2 ? Bukkit.getPlayerExact(args[2]) : null;
             if (t == null) { sender.sendMessage(ChatColor.RED + "玩家不在线"); return true; }
             PlayerData d = dataStore.get(t.getUniqueId());
@@ -750,17 +768,21 @@ public final class QuestService implements Listener {
      * Real Bukkit hitbox at 灰烛 coords so vanilla / mineflayer use_entity always reaches talk().
      * Invisible Silent NoAI Nitwit villager — avoids trade UI, no path block, no second nametag clash with Ady.
      */
+    /**
+     * Bukkit metadata does not persist across chunk unload/restart; scoreboard tags do.
+     * Purge by meta/tag (near) + feature heuristic so orphaned invisible NoAI villagers
+     * (lost metadata) are cleared. Ady packet entities are never in World#getEntities*.
+     */
+    private static final double QUEST_HITBOX_PURGE_RADIUS_SQ = 16.0; // ≤4 blocks (slightly looser than hub)
+    private static final String TAG_QUEST_HB = "corerpg_quest_hb";
+    private static final String TAG_QUEST_HB_PREFIX = "corerpg_quest_hb:";
+
     public void ensureHitboxNpc() {
         if (!enabled || !npcEnabled) return;
         World w = Bukkit.getWorld(npcWorld);
         if (w == null) return;
         Location loc = new Location(w, npcX, npcY, npcZ, npcYaw, 0f);
-        // purge stale hitboxes in a small radius
-        for (Entity e : w.getEntitiesByClass(LivingEntity.class)) {
-            if (!e.hasMetadata(META_QUEST_NPC)) continue;
-            if (e.getLocation().distanceSquared(loc) > 16.0) continue;
-            e.remove();
-        }
+        purgeStaleHitboxes();
         Villager v;
         try {
             v = (Villager) w.spawnEntity(loc, EntityType.VILLAGER);
@@ -770,18 +792,7 @@ public final class QuestService implements Listener {
             return;
         }
         try {
-            v.setAI(false);
-            v.setSilent(true);
-            v.setInvulnerable(true);
-            v.setCollidable(false);
-            v.setRemoveWhenFarAway(false);
-            v.setCanPickupItems(false);
-            v.setCustomNameVisible(false);
-            // keep no custom name so Ady nametag is the only visible label
-            try { v.setProfession(Villager.Profession.NITWIT); } catch (Throwable ignored) {}
-            try { v.setRecipes(Collections.<org.bukkit.inventory.MerchantRecipe>emptyList()); } catch (Throwable ignored) {}
-            v.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false), true);
-            v.setMetadata(META_QUEST_NPC, new FixedMetadataValue(plugin, npcId));
+            configureQuestHitboxVillager(v);
             plugin.getLogger().info("Quest: Bukkit hitbox villager ensured at " + npcWorld
                     + " " + npcX + "," + npcY + "," + npcZ);
         } catch (Throwable t) {
@@ -789,6 +800,22 @@ public final class QuestService implements Listener {
             v.remove();
             ensureHitboxArmorStand(loc);
         }
+    }
+
+    private void configureQuestHitboxVillager(Villager v) {
+        v.setAI(false);
+        v.setSilent(true);
+        v.setInvulnerable(true);
+        v.setCollidable(false);
+        v.setRemoveWhenFarAway(false);
+        v.setCanPickupItems(false);
+        v.setCustomNameVisible(false);
+        try { v.setCustomName(null); } catch (Throwable ignored) {}
+        try { v.setProfession(Villager.Profession.NITWIT); } catch (Throwable ignored) {}
+        try { v.setRecipes(Collections.<org.bukkit.inventory.MerchantRecipe>emptyList()); } catch (Throwable ignored) {}
+        v.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false), true);
+        v.setMetadata(META_QUEST_NPC, new FixedMetadataValue(plugin, npcId));
+        tagQuestHitbox(v);
     }
 
     private void ensureHitboxArmorStand(Location loc) {
@@ -801,14 +828,134 @@ public final class QuestService implements Listener {
             as.setMarker(false); // keep clickable hitbox
             as.setSmall(false);
             as.setCustomNameVisible(false);
+            try { as.setCustomName(null); } catch (Throwable ignored) {}
             as.setInvulnerable(true);
             as.setCollidable(false);
             as.setRemoveWhenFarAway(false);
             as.setMetadata(META_QUEST_NPC, new FixedMetadataValue(plugin, npcId));
+            tagQuestHitbox(as);
             plugin.getLogger().info("Quest: Bukkit hitbox ArmorStand ensured at " + loc);
         } catch (Throwable t) {
             plugin.getLogger().log(Level.WARNING, "Quest: spawn hitbox ArmorStand failed", t);
         }
+    }
+
+    private void tagQuestHitbox(LivingEntity e) {
+        try {
+            e.getScoreboardTags().add(TAG_QUEST_HB);
+            e.getScoreboardTags().add(TAG_QUEST_HB_PREFIX + npcId);
+        } catch (Throwable ignored) {}
+    }
+
+    private void loadNearChunks(World w, Location loc) {
+        int cx = loc.getBlockX() >> 4;
+        int cz = loc.getBlockZ() >> 4;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                try { w.getChunkAt(cx + dx, cz + dz).load(true); } catch (Throwable ignored) {}
+            }
+        }
+    }
+
+    /** Purge meta/tag + feature-stale near 灰烛. Returns removed count. */
+    public int purgeStaleHitboxes() {
+        if (!npcEnabled) return 0;
+        World w = Bukkit.getWorld(npcWorld);
+        if (w == null) return 0;
+        Location loc = new Location(w, npcX, npcY, npcZ);
+        loadNearChunks(w, loc);
+        int removed = 0;
+        for (Entity e : w.getEntitiesByClass(LivingEntity.class)) {
+            if (e instanceof Player) continue;
+            boolean match = metaOrTagMatches(e);
+            boolean nearStale = !match && isFeatureStaleHitbox(e, loc);
+            if (!match && !nearStale) continue;
+            // only clear entities near the quest NPC (tag/meta without near = still near check for safety
+            // except exact meta/tag id which may drift slightly — still require within 2x radius)
+            if (e.getLocation().distanceSquared(loc) > QUEST_HITBOX_PURGE_RADIUS_SQ * 4) continue;
+            e.remove();
+            removed++;
+        }
+        if (removed > 0) {
+            plugin.getLogger().info("Quest: purged " + removed + " stale hitbox(es) for " + npcId);
+        }
+        return removed;
+    }
+
+    private boolean metaOrTagMatches(Entity e) {
+        if (e.hasMetadata(META_QUEST_NPC)) {
+            List<MetadataValue> vals = e.getMetadata(META_QUEST_NPC);
+            if (vals != null && !vals.isEmpty()
+                    && npcId.equals(String.valueOf(vals.get(0).value()))) {
+                return true;
+            }
+        }
+        try {
+            if (e.getScoreboardTags().contains(TAG_QUEST_HB_PREFIX + npcId)) return true;
+            if (e.getScoreboardTags().contains(TAG_QUEST_HB)) return true;
+        } catch (Throwable ignored) {}
+        return false;
+    }
+
+    private boolean isFeatureStaleHitbox(Entity e, Location anchor) {
+        if (e.getLocation().distanceSquared(anchor) > QUEST_HITBOX_PURGE_RADIUS_SQ) return false;
+        // leave hub workshop hitboxes alone
+        if (e.hasMetadata(HubNpcService.META_HUB_NPC)) return false;
+        try {
+            if (e.getScoreboardTags().contains("corerpg_hub_hb")) return false;
+        } catch (Throwable ignored) {}
+
+        if (e instanceof ArmorStand) {
+            ArmorStand as = (ArmorStand) e;
+            if (as.isVisible()) return false;
+            if (as.isCustomNameVisible()) return false;
+            String cn = as.getCustomName();
+            if (cn != null && !cn.isEmpty()) return false;
+            try { if (as.hasGravity()) return false; } catch (Throwable ignored) {}
+            try { if (!as.isInvulnerable()) return false; } catch (Throwable ignored) {}
+            try { if (as.isMarker()) return false; } catch (Throwable ignored) {}
+            return true;
+        }
+        if (!(e instanceof Villager)) return false;
+        Villager v = (Villager) e;
+        try { if (v.hasAI()) return false; } catch (Throwable ignored) { return false; }
+        try {
+            if (v.getRecipes() != null && !v.getRecipes().isEmpty()) return false;
+        } catch (Throwable ignored) {}
+        String cn = v.getCustomName();
+        if (v.isCustomNameVisible() && cn != null && !cn.isEmpty()) return false;
+        boolean invis = false;
+        try { invis = v.hasPotionEffect(PotionEffectType.INVISIBILITY); } catch (Throwable ignored) {}
+        boolean silentInvul = false;
+        try { silentInvul = v.isSilent() && v.isInvulnerable(); } catch (Throwable ignored) {}
+        return invis || silentInvul;
+    }
+
+    int countNearbyHitboxCandidates() {
+        World w = Bukkit.getWorld(npcWorld);
+        if (w == null) return 0;
+        Location loc = new Location(w, npcX, npcY, npcZ);
+        loadNearChunks(w, loc);
+        int c = 0;
+        for (Entity e : w.getEntitiesByClass(LivingEntity.class)) {
+            if (e instanceof Player) continue;
+            if (metaOrTagMatches(e) || isFeatureStaleHitbox(e, loc)) c++;
+        }
+        return c;
+    }
+
+    int countTaggedOrMeta() {
+        World w = Bukkit.getWorld(npcWorld);
+        if (w == null) return 0;
+        Location loc = new Location(w, npcX, npcY, npcZ);
+        loadNearChunks(w, loc);
+        int c = 0;
+        for (Entity e : w.getEntitiesByClass(LivingEntity.class)) {
+            if (!metaOrTagMatches(e)) continue;
+            if (e.getLocation().distanceSquared(loc) > QUEST_HITBOX_PURGE_RADIUS_SQ * 4) continue;
+            c++;
+        }
+        return c;
     }
 
     private boolean isQuestHitbox(Entity e) {

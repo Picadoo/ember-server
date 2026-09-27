@@ -895,7 +895,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GRAY + "  enhance [info] · socket list|insert <gemId>|remove <slot>");
         sender.sendMessage(ChatColor.GRAY + "  scrap [info] · reforge");
         sender.sendMessage(ChatColor.GOLD + "  quest" + ChatColor.GRAY + " · 主线（引路人·灰烛）");
-        sender.sendMessage(ChatColor.GOLD + "  hubnpc" + ChatColor.GRAY + " · 工坊 NPC ensure（烬砧/余晶/灰粮）");
+        sender.sendMessage(ChatColor.GOLD + "  hubnpc" + ChatColor.GRAY + " · 工坊 NPC ensure|purge|count|list|reload");
         sender.sendMessage(ChatColor.GRAY + "  calamity [status|forceopen|forceend|trigger] · abyss [progress|settle|evacuate] · elite [start|weekly-first|status]");
         sender.sendMessage(ChatColor.GRAY + "  raid [ring|claim-ring|grant-ring] · set");
         sender.sendMessage(ChatColor.GRAY + "  covenant [set <id>|reset] · talent [info|unlock|reset|grant] · skill [info]");
