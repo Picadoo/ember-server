@@ -1,4 +1,5 @@
 # 枢纽工坊 NPC（Adyeshach + Bukkit hitbox）— design-ember-hub-workshop-npcs.md
+# + 日常门吏 ember_dungeon_clerk — design-ember-hub-dungeon-clerk.md
 # ember_guide（灰烛）仍由 quest.yml / QuestService 管理，此处不列。
 enabled: true
 npcs:
@@ -42,4 +43,21 @@ npcs:
     action: life
     tell: '§a灰粮：§f面包、竿子、代烤，点菜单就行。'
     menu: ember_life
+    open_menu: true
+
+  ember_dungeon_clerk:
+    enabled: true
+    id: ember_dungeon_clerk
+    name: '§e门吏 · 灰钥'
+    world: ember_hub
+    x: -14.5
+    y: 58.0
+    z: 110.5
+    yaw: 90.0
+    action: daily
+    tell: |-
+      §e灰钥：§f日常窟靠体力进。顶栏能看见还剩多少，一条扣 30，0 点回满。
+      §7庭院、焦骨、地窖、潮蚀、断塔、霜晶、锈轨——点菜单选一条。
+      §e灰钥：§f点开选本。不够体力就改天或用药。
+    menu: ember_daily
     open_menu: true
