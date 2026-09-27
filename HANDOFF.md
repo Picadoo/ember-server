@@ -84,6 +84,7 @@ CoreRpg **1.14.0**（阶段 3 进行中）· CoreEnchant 1.2.0 · CoreWorldRules
 | **3 分层挂机** | Lv10/20/30/40 四层，只掉材料，共用日顶 | 🟡 **进行中**（见下） |
 | 4 | 主线第二卷（Lv35→60）等，见 master plan §5「I」 | 未开始 |
 | 5 | 外观系统（外观碎片去处）等，见 master plan §5「L」 | 未开始 |
+| 后续 · TODO | **地图美化**：现有地图（枢纽、挂机层空中平台、灾厄祭坛、副本模板）都是能用的占位图；以后换成有授权的预制地图（prefab）或用 WorldEdit 搭建。俯视预览图渲染脚本见 `scripts/render_topdown.py` | 未开始 |
 
 ### 阶段 3 现状（CoreRpg 1.14.0，commit `67c0cc3`）
 
