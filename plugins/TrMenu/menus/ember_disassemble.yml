@@ -1,5 +1,5 @@
 # 分解 / 重铸子菜单壳 — STATUS-ember-disassemble.md
-# 逻辑未接线；命令占位 /corerpg scrap · /corerpg reforge（插件岗后生效）
+# 分解 / 重铸 — 点击按钮即可（玩家可见文案不暴露命令）
 
 Title: '§7余烬 · 分解'
 
@@ -46,7 +46,7 @@ Icons:
         - '§7换强化材料 + 低概率孔石'
         - '§8清理背包友好'
         - ''
-        - '§8命令：/corerpg scrap'
+        - '§8手持余烬装备后点击分解'
         - ''
         - '§7➥ §f点击分解'
     actions:
@@ -66,7 +66,7 @@ Icons:
         - '§8消耗 §6余烬重铸石'
         - '§8mat_ember_reforge_stone'
         - ''
-        - '§8命令：/corerpg reforge'
+        - '§8手持装备且背包有重铸石后点击'
         - ''
         - '§6➥ §f点击重铸'
     actions:
@@ -92,4 +92,4 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §e[分解规则] §7分解换材料/孔石 · 重铸刷次要词缀（主词缀不变）'
-        - 'tell: §8命令 /corerpg scrap | /corerpg reforge'
+        - 'tell: §8点左侧按钮即可分解或重铸，无需手打命令'

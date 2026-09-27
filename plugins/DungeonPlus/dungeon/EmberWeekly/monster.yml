@@ -1,45 +1,42 @@
-# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
-#   see docs/critic-fixes-20260927.md §10). Map ember_weekly room: x -44..-36, z 266..274
+# P3 2026-09-27: 深核廊三室刷点 — 前厅Y65 / 中核Y68 / 深室Y63
 # 周 · Display：深核廊僵尸/骷髅/蛮兵·甲/蛮兵·乙
+# kill / heal / reward 逻辑保留；不改 MM 血伤掉落
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,274;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,280;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=深核廊僵尸;amount=3} @system"
     start:
     - "$message{type=text;text=§e【深核·前厅】清杂：僵尸×3} @dungeon"
     end:
-    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$teleport{location=-40,68,308} @player"
     - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   wave2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,65,274;amount=2;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberWeeklySkeleton;location=-42,65,274;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,68,308;amount=2;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklySkeleton;location=-42,68,312;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
-    # 2026-09-26 修：DP 击杀条件按本组计数，原数量 > 本组刷怪数 → 永远卡波
     - "$kill-any{mobname=深核廊僵尸,深核廊骷髅;amount=5} @system"
     start:
     - "$message{type=text;text=§e【深核·中核】混合增压：远程优先} @dungeon"
     end:
-    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$teleport{location=-40,63,340} @player"
     - "$monstergroup{group=wave3;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   wave3:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteA;location=-40,65,274;amount=1;scattered=1.0;level=1} @dungeon"
-    # 2026-09-27: escort zombie removed (it lingered into the boss fight; kill step is the brute only)
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteA;location=-40,63,340;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=深核廊蛮兵·甲;amount=1} @system"
     start:
     - "$message{type=text;text=§c【深核·深室】蛮兵·甲！清完还有终局·乙} @dungeon"
     end:
-    # 2026-09-27 real-combat balance: wave-end heal (Instant Health III, 16 HP)
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$message{type=text;text=§a甲倒下 · 终局将至} @dungeon"
     - "$monstergroup{group=boss;repeat=false;delay=4} @dungeon"
@@ -47,7 +44,7 @@ groups:
 
   boss:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteB;location=-40,65,274;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberWeeklyBruteB;location=-40,63,342;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=深核廊蛮兵·乙;amount=1} @system"
     start:

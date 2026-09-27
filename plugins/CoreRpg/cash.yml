@@ -59,6 +59,12 @@ abyss:
   free_tickets: 1
   ticket_ni_id: ticket_ember_abyss
 
+# Stage 4.4 精英试炼周票 — 周一 0:00 Asia/Shanghai 与周本同节奏；不进商城日票池；持有硬顶 1
+elite:
+  free_tickets: 1
+  ticket_ni_id: ticket_ember_elite
+  hard_cap: 1
+
 # 勋阶轻量 stub（无 LuckPerms）
 vip:
   enabled: true

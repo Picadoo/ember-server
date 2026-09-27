@@ -38,6 +38,7 @@ EmberAfkSkeleton:
   - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.02
 
+# 2026-09-27 怪物岗：T3 FAIL(minHpPct=1，霜骸射击)；霜骸 Damage 4→2、焦兵 5→4（保 Health/TTK，不动 T4）
 # ---- 1.14.0 分层挂机（阶段 3）：Lv20 荒原 / Lv30 焦土 / Lv40 烬原深处 ----
 # 空中平台（/corerpg afk build n），掉落全部走 corerpg mmgive → afk_caps 每日上限（四层共用，按玩家+物品计，不分层）
 # 只掉材料：碎片 / 骨尘 / 核心碎片（日顶 10）/ 魂尘（日顶 2）；不掉装备、凝核、灾厄余烬
@@ -85,7 +86,7 @@ EmberAfk3Zombie:
   Type: ZOMBIE
   Display: '&6余烬焦兵 &7Lv30'
   Health: 100
-  Damage: 5
+  Damage: 4
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -107,7 +108,7 @@ EmberAfk3Stray:
   Type: STRAY
   Display: '&6余烬霜骸 &7Lv30'
   Health: 85
-  Damage: 4
+  Damage: 2
   Options:
     MovementSpeed: 0.24
     AlwaysShowName: true

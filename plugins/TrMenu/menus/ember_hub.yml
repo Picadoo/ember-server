@@ -19,7 +19,7 @@ Options:
 
 Layout:
   - ' ABCDEF 1'
-  - ' GHIJKL k'
+  - ' GHI2JKLk'
   - ' MNOPQR l'
   - ' STUVWX  '
   - ' YZabcd  '
@@ -37,7 +37,7 @@ Icons:
   '1':
     display:
       material: book
-      name: '§6§l主线 · 旧誓余烬'
+      name: '§6§l主线 · 旧誓余烬 / 烬火未灭'
       lore:
         - '§7%corerpg_quest_chapter%'
         - '§f▶ %corerpg_quest%'
@@ -157,7 +157,7 @@ Icons:
         - ''
         - '§7分层挂机：灰坡 Lv10 · 荒原 Lv20 · 焦土 Lv30 · 烬原深处 Lv40'
         - '§7刷碎片 / 骨尘（高层有核心碎片），四层共用每日上限'
-        - '§8死亡不掉落 · 复活在本层入口 · /hub 回城'
+        - '§8死亡不掉落 · 复活在本层入口 · 打开枢纽菜单可返回'
         - ''
         - '§e➥ §f点击选层'
     actions:
@@ -188,13 +188,30 @@ Icons:
       lore:
         - ''
         - '§7高难爆发核心与稀有装备 · 每周免费票 1 张（可再购 1 张）'
-        - '§8进本扣余烬周票 · /dp start EmberWeekly'
+        - '§8进本扣余烬周票 · 通关回枢纽'
         - ''
         - '§e➥ §f打开周常副本菜单'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_weekly'
+
+  # —— 4.4 精英试炼（周常旁 · 一点进本，无套娃）——
+  '2':
+    display:
+      material: golden sword
+      name: '§e精英试炼'
+      lore:
+        - ''
+        - '§7每周 1 次 · 词缀精英 · 周首通稳定符'
+        - '§8需余烬 Lv.40'
+        - ''
+        - '§e➥ 点击进入'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg elite start'
+        - close
 
   J:
     display:
@@ -378,6 +395,7 @@ Icons:
         - ''
         - '§7余烬晶催化，白名单装备专属词缀'
         - '§8工坊：出生点北边 6 格（附魔台 -22,58,104）'
+        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
         - ''
         - '§e➥ §f回枢纽并提示位置'
     actions:
@@ -542,7 +560,8 @@ Icons:
         - '§7面包 / 钓竿（余烬币）· 代烤鱼 · 熬回复药'
         - '§7遗物换重铸石 · 宝珠制稳固符（每周限次）'
         - '§8钓鱼 / 烹饪 / 熬药 提升生活等级'
-        - '§8命令：/corerpg life'
+        - '§8点击打开补给与生活面板'
+        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
         - ''
         - '§e➥ §f打开补给菜单'
     actions:
@@ -558,7 +577,8 @@ Icons:
         - '§7T1 → T2 · T2 → T3 保底锻造'
         - '§7消耗核心碎片 / 凝核 / 灾厄余烬 / 余烬币'
         - '§8保留 50% 强化、附魔、词条、宝石'
-        - '§8命令：/corerpg forge'
+        - '§8点击打开锻炉（手持装备）'
+        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
         - ''
         - '§e➥ §f打开锻炉'
     actions:

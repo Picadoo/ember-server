@@ -30,6 +30,9 @@ public final class TicketGrantService {
     private String abyssTicketNiId = "ticket_ember_abyss";
     private int raidFreeTickets = 1;
     private String raidTicketNiId = "ticket_ember_raid";
+    private int eliteFreeTickets = 1;
+    private String eliteTicketNiId = "ticket_ember_elite";
+    private int eliteHardCap = 1;
 
     public TicketGrantService(JavaPlugin plugin, NiBridge ni, PlayerDataStore dataStore) {
         this.plugin = plugin;
@@ -69,9 +72,20 @@ public final class TicketGrantService {
             abyssFreeTickets = 1;
             abyssTicketNiId = "ticket_ember_abyss";
         }
+        ConfigurationSection elite = cfg.getConfigurationSection("elite");
+        if (elite != null) {
+            eliteFreeTickets = elite.getInt("free_tickets", 1);
+            eliteTicketNiId = elite.getString("ticket_ni_id", "ticket_ember_elite");
+            eliteHardCap = Math.max(1, elite.getInt("hard_cap", 1));
+        } else {
+            eliteFreeTickets = 1;
+            eliteTicketNiId = "ticket_ember_elite";
+            eliteHardCap = 1;
+        }
         if (ni != null) {
             ni.warnMissingOnceIfAbsent(weeklyTicketNiId);
             ni.warnMissingOnceIfAbsent(abyssTicketNiId);
+            ni.warnMissingOnceIfAbsent(eliteTicketNiId);
         }
     }
 
@@ -79,6 +93,8 @@ public final class TicketGrantService {
     public String getWeeklyTicketNiId() { return weeklyTicketNiId; }
     public int getAbyssFreeTickets() { return abyssFreeTickets; }
     public String getAbyssTicketNiId() { return abyssTicketNiId; }
+    public int getEliteFreeTickets() { return eliteFreeTickets; }
+    public String getEliteTicketNiId() { return eliteTicketNiId; }
 
     /**
      * Grant weekly + abyss free tickets if due. Returns parts for a combined [门票] message
@@ -93,6 +109,8 @@ public final class TicketGrantService {
         if (a > 0) parts.add("深渊票×" + a);
         int rd = grantRaidIfNeeded(player, data);
         if (rd > 0) parts.add("团本票×" + rd);
+        int el = grantEliteIfNeeded(player, data);
+        if (el > 0) parts.add("精英票×" + el);
         return parts;
     }
 
@@ -158,7 +176,34 @@ public final class TicketGrantService {
         return !DailyService.today().equals(data.getAbyssTicketGrantDate());
     }
 
-    public void cmdShowTickets(Player player) {
+    /** Stage 4.4: weekly free elite ticket; hard_cap hold (default 1); not in shop daily pool. */
+    public int grantEliteIfNeeded(Player player, PlayerData data) {
+        int want = Math.max(0, eliteFreeTickets);
+        if (want <= 0) return 0;
+        String week = DailyService.weekId();
+        if (week.equals(data.getEliteTicketGrantWeekId())) return 0;
+        int have = ni == null ? 0 : ni.countInInventory(player, eliteTicketNiId);
+        int room = Math.max(0, eliteHardCap - have);
+        int give = Math.min(want, room);
+        if (give <= 0) {
+            // Already at hard cap — still mark week so we do not retry forever
+            data.setEliteTicketGrantWeekId(week);
+            return 0;
+        }
+        if (!giveNi(player, eliteTicketNiId, give)) {
+            plugin.getLogger().warning("Failed to give free elite tickets to " + player.getName()
+                    + " — will retry next join/delay");
+            return 0;
+        }
+        data.setEliteTicketGrantWeekId(week);
+        return give;
+    }
+
+    public boolean needsEliteGrant(PlayerData data) {
+        return eliteFreeTickets > 0 && !DailyService.weekId().equals(data.getEliteTicketGrantWeekId());
+    }
+
+        public void cmdShowTickets(Player player) {
         if (player == null) return;
         PlayerData data = dataStore.get(player.getUniqueId());
         String week = DailyService.weekId();
@@ -183,6 +228,11 @@ public final class TicketGrantService {
                 + " · 购 " + data.getWeeklyTicketsBought() + "）");
         player.sendMessage(ChatColor.AQUA + "  深渊票背包 §f" + abyssBag
                 + ChatColor.GRAY + " · 今日免费已发：" + (abyssGranted ? ChatColor.GREEN + "是" : ChatColor.YELLOW + "否"));
+        int eliteBag = ni == null ? 0 : ni.countInInventory(player, eliteTicketNiId);
+        boolean eliteGranted = week.equals(data.getEliteTicketGrantWeekId());
+        player.sendMessage(ChatColor.AQUA + "  精英票背包 §f" + eliteBag
+                + ChatColor.GRAY + " · 本周免费已发：" + (eliteGranted ? ChatColor.GREEN + "是" : ChatColor.YELLOW + "否")
+                + ChatColor.DARK_GRAY + "（持有硬顶 " + eliteHardCap + "）");
     }
 
     private boolean giveNi(Player player, String niId, int amount) {

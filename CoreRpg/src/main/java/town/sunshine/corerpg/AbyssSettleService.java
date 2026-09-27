@@ -21,11 +21,16 @@ import java.util.UUID;
 
 /**
  * Memory-session abyss progress + settle rewards (1.4.6).
+ * Stage 4.1: settle(floor≥12) grants weekly first mat_ember_stable_charm via lootWeekMarks abyss_weekly12.
  * Session is NOT MySQL — Map&lt;UUID, AbyssSession&gt;, cleared on quit.
  */
 public final class AbyssSettleService {
 
     private static final String PREFIX = ChatColor.DARK_PURPLE + "[深渊] " + ChatColor.RESET;
+    /** lootWeekMarks key — same format as LootService (key=weekId). Stage 4.1 weekly stable charm. */
+    private static final String WEEKLY12_LOOT_KEY = "abyss_weekly12";
+    private static final String STABLE_CHARM_ID = "mat_ember_stable_charm";
+    private static final int WEEKLY12_MIN_FLOOR = 12;
 
     private final JavaPlugin plugin;
     private final NiBridge ni;
@@ -312,10 +317,12 @@ public final class AbyssSettleService {
         Tier tier = findTier(floor);
         if (tier == null) {
             // no matching tier — still mark settled + record
-            session.setSettled(true);
             PlayerData data = dataStore.get(player.getUniqueId());
             data.recordAbyssFloor(floor);
+            tryGrantWeekly12Charm(player, data, floor);
             dataStore.flushMutation(player.getUniqueId());
+            session.setSettled(true);
+            refreshQuestAbyss(player);
             return new SettleResult(SettleOutcome.NO_CHEST, floor, null, false);
         }
         grantRewards(player, tier);
@@ -326,9 +333,48 @@ public final class AbyssSettleService {
         }
         PlayerData data = dataStore.get(player.getUniqueId());
         data.recordAbyssFloor(floor);
+        // Stage 4.1: weekly first reach floor ≥12 → stable charm (idempotent via lootWeekMarks)
+        tryGrantWeekly12Charm(player, data, floor);
         dataStore.flushMutation(player.getUniqueId());
         session.setSettled(true);
+        refreshQuestAbyss(player);
         return new SettleResult(SettleOutcome.GRANTED, floor, tier, gaveT2);
+    }
+
+    /**
+     * First reach of floor ≥12 this ISO week (Asia/Shanghai): give mat_ember_stable_charm ×1.
+     * Uses lootWeekMarks key abyss_weekly12=&lt;weekId&gt; — same as LootService; second call same week is silent.
+     * Does NOT go through LootService.cmd (avoids "本周首通保底已领" noise).
+     */
+    private void tryGrantWeekly12Charm(Player player, PlayerData data, int floor) {
+        if (player == null || data == null || floor < WEEKLY12_MIN_FLOOR) return;
+        String week = DailyService.weekId();
+        String mark = WEEKLY12_LOOT_KEY + "=" + week;
+        if (data.getLootWeekMarks().contains(mark)) {
+            return; // already claimed this week — silent
+        }
+        data.addLootWeekMark(WEEKLY12_LOOT_KEY, week);
+        boolean given = ni != null && ni.giveNiItem(player, STABLE_CHARM_ID, 1);
+        if (given) {
+            player.sendMessage(ChatColor.GREEN + "[深渊] 本周首次抵达第 12 层，获得稳定符 ×1");
+        } else {
+            plugin.getLogger().warning("[深渊] weekly12 charm grant failed for " + player.getName()
+                    + " (NI missing or give failed); mark still recorded for " + week);
+        }
+    }
+
+    /** Stage 4.5: after historical best updates, re-check abyss_floor state steps. */
+    private void refreshQuestAbyss(Player player) {
+        if (player == null) return;
+        if (!(plugin instanceof CoreRpgPlugin)) return;
+        QuestService qs = ((CoreRpgPlugin) plugin).getQuestService();
+        if (qs == null) return;
+        try {
+            qs.checkPassive(player);
+            qs.onEvent(player, "abyss_floor");
+        } catch (Throwable t) {
+            plugin.getLogger().warning("[深渊] quest abyss_floor refresh: " + t.getMessage());
+        }
     }
 
     private Tier findTier(int floor) {

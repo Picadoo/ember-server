@@ -1,8 +1,10 @@
-# 余烬主线 · 第一卷「旧誓余烬」 — docs/ember-mainline-spec.md
+# 余烬主线 · 第一卷「旧誓余烬」+ 第二卷「烬火未灭」(ch7～10) — docs/ember-mainline-spec.md / design-stage4-quest-vol2.md
 # step type: talk | kill (mobs: MythicMobs internal names, "Prefix*" ok) | event (event: sign/bounty/daily_clear/weekly_clear/
-#   abyss_clear/raid_clear/guild_boss_clear/enchant/anvil/craft/calamity_join/calamity_boss/covenant/talent/enhance) | level (level: N)
-# 1.11.0: event may list alternatives "a|b". State-type events (sign, bounty, covenant, talent, enchant, anvil, enhance with level: N)
-#   also complete when already true at step start (signed today, bounty claimed today, covenant chosen, talent spent, gear enhanced …).
+#   abyss_clear/raid_clear/guild_boss_clear/enchant/anvil/craft/calamity_join/calamity_boss/covenant/talent/enhance/
+#   forge/abyss_floor/elite_weekly_clear) | level (level: N)
+# 1.11.0: event may list alternatives "a|b". State-type events (sign, bounty, covenant, talent, enchant, anvil, enhance with level: N,
+#   forge, abyss_floor with floor: N, elite_weekly_clear) also complete when already true at step start.
+# Stage 4.5: abyss_floor (historical best ≥ floor), elite_weekly_clear (lootWeekMarks this week), forge (ever_forge career).
 # kill steps may set complete_on: <event> — that clear also finishes the kill step (then counts for the next step).
 # levels = vanilla XP levels (enchant/anvil cost)
 # xp = flat ember XP (not subject to daily caps). items = NeigeItems id: amount.
@@ -26,7 +28,7 @@ chapters:
     intro:
       - '§7你在灰烬里醒来，手边只有一柄旧刃。'
       - '§7「醒了？拿好刃和护符，先来枢纽找我。」—— 远处有人举着一盏烛。'
-      - '§8（死亡不掉落 · 随时 /hub 回城 · 饿了吃面包，补给在 /corerpg life）'
+      - '§8（死亡不掉落 · 打开枢纽菜单可返回 · 饿了吃面包，补给走菜单生活）'
     steps:
       - type: talk
         desc: 与枢纽的 引路人·灰烛 交谈
@@ -39,14 +41,14 @@ chapters:
         mobs: [EmberAfkZombie]
         count: 6
         desc: 在挂机庭击败 挂机庭僵尸
-        hint: /ember → 挂机庭 → ① 灰坡 · 落点往西偏南五十来格的草坡是怪区 · 手持余烬之刃 · 打不过就 /hub
+        hint: /ember → 挂机庭 → ① 灰坡 · 落点往西偏南五十来格的草坡是怪区 · 手持余烬之刃 · 打不过就打开枢纽菜单返回
         xp: 100
         done: ['§7腐肉里嵌着暗红的碎片，还带着余温。']
       - type: kill
         mobs: [EmberAfkSkeleton, EmberAfkZombie]
         count: 4
         desc: 再击败 4 只挂机庭的怪（僵尸或骷髅）
-        hint: 骷髅会放箭，贴近了再打 · 血少就后退或 /hub
+        hint: 骷髅会放箭，贴近了再打 · 血少就后退或打开枢纽菜单返回
         xp: 100
         done: ['§7骨头碎了，里面的火星却不肯熄。']
       - type: event
@@ -282,3 +284,159 @@ chapters:
           - '§6灰烛：§f烛给你。第一卷，到此为止。'
           - '§6灰烛：§f灰烬之下还有更深的东西……下回再说。'
           - '§a[挂机] 到 Lv40 可去挂机庭 ④ 烬原深处（/corerpg afk 4）继续攒锻造材料。'
+
+  # ========== 第二卷「烬火未灭」==========
+  7:
+    name: 烬原之下
+    intro:
+      - '§6灰烛：§f第一卷的火，停在团本门口。底下还有四层挂机，你还没真正站过烬原深处。'
+      - '§6灰烛：§f去 ④ 层走走，再回工坊锻一次——火要会用，才算你的。'
+    steps:
+      - type: talk
+        desc: 向 灰烛 打听更深的烬原
+        hint: 枢纽出生点北边、工坊旁找灰烛（右键交谈）
+        xp: 80
+        done:
+          - '§6灰烛：§fLv40 才能在 ④ 层站稳。材料日顶四层共用，别贪。'
+      - type: kill
+        mobs: ['EmberAfk4*']
+        count: 12
+        desc: 在挂机庭 ④ 烬原深处击败 12 只怪
+        hint: 打开 /ember（或枢纽菜单）→ 挂机庭 → ④ 烬原深处（需 Lv40）；危险就回枢纽找灰烛
+        xp: 200
+        done: ['§7深处的灰是热的。']
+      - type: event
+        event: forge
+        count: 1
+        desc: 在余烬锻炉完成一次锻造
+        hint: 打开 /ember（或枢纽菜单）→ 余烬锻炉
+        xp: 220
+        done: ['§6灰烛：§f刃认新主了。']
+      - type: level
+        level: 40
+        desc: 达到余烬等级 Lv.40
+        hint: 打开 /ember → 日常本 / 深渊 / 挂机庭 / 悬赏
+        xp: 400
+        levels: 3
+        items: { mat_ember_stable_charm: 1, mat_ember_shard: 20 }
+        done:
+          - '§6灰烛：§f稳定符收好。接下来的井，比挂机庭深得多。'
+          - '§a[深渊] 可以试着下潜到第 9 层以外了。'
+
+  8:
+    name: 更深的井
+    intro:
+      - '§6灰烛：§f深渊以前停在第 8 层。现在井又开了——第 9 层起，看守换了脾气。'
+    steps:
+      - type: talk
+        desc: 听 灰烛 说深渊加层
+        hint: 枢纽工坊旁找灰烛（右键交谈）
+        xp: 80
+        done: ['§6灰烛：§f票还是一天一张。能走多深，就走多深。']
+      - type: event
+        event: abyss_clear
+        count: 1
+        desc: 完成一次深渊结算（任意层）
+        hint: 打开 /ember（或枢纽菜单）→ 深渊 → 开始下潜
+        xp: 200
+        done: ['§7井壁在往下退。']
+      - type: event
+        event: abyss_floor
+        floor: 9
+        count: 1
+        desc: 深渊历史最高层达到第 9 层
+        hint: 打开 /ember → 深渊，继续下潜（可多日累计到第 9 层）
+        xp: 400
+        done: ['§6灰烛：§f第 9 层的蛮压，你顶住了。']
+      - type: event
+        event: daily_clear
+        count: 2
+        desc: 通关 余烬窟·日 两次
+        hint: 打开 /ember → 日常本（每日免费日票）
+        xp: 200
+        done: ['§7日常仍是火种。']
+      - type: level
+        level: 45
+        desc: 达到余烬等级 Lv.45
+        hint: 打开 /ember → 深渊 / 日常本 / 灾厄 / 挂机庭
+        xp: 220
+        levels: 3
+        items: { gem_ember_steady: 1, mat_ember_core_fragment: 5 }
+        done:
+          - '§6灰烛：§f稳石给你。天赋若已点满一层，去看看第二层的脉。'
+
+  9:
+    name: 第二层誓火
+    intro:
+      - '§6灰烛：§f三十级以后，誓火还有一层。点之前，先去精英试炼证明你还站得住。'
+    steps:
+      - type: talk
+        desc: 向 灰烛 打听天赋二层与精英试炼
+        hint: 枢纽工坊旁找灰烛（右键交谈）
+        xp: 80
+        done: ['§6灰烛：§f试炼每周一次。稳定符在周首通里。']
+      - type: event
+        event: talent
+        count: 1
+        desc: 花费至少 1 点天赋（含二层）
+        hint: 打开 /ember（或枢纽菜单）→ 天赋（需已选誓约）
+        xp: 200
+        done: ['§7脉里又多了一点热。']
+      - type: event
+        event: elite_weekly_clear
+        count: 1
+        desc: 通关 余烬·精英试炼 一次
+        hint: 打开 /ember（或枢纽菜单）→ 精英试炼（每周 1 次）
+        xp: 500
+        done: ['§6灰烛：§f词缀怪比普通周本难缠。你过了。']
+      - type: level
+        level: 50
+        desc: 达到余烬等级 Lv.50
+        hint: 打开 /ember → 精英试炼 / 深渊 / 日常本
+        xp: 420
+        levels: 3
+        items: { core_ember_compact: 1, mat_ember_talent_reset: 1 }
+        done:
+          - '§6灰烛：§f凝核与洗点券——一攻一守。'
+          - '§6灰烛：§f最后一章，不必一个人走完。'
+
+  10:
+    name: 未灭之火
+    intro:
+      - '§6灰烛：§f满级不是熄火。是学会让火一直亮着。'
+    steps:
+      - type: talk
+        desc: 听 灰烛 说第二卷的结尾
+        hint: 枢纽工坊旁找灰烛（右键交谈）
+        xp: 100
+        done: ['§6灰烛：§f团本或灾厄，选你熟悉的那扇门。']
+      - type: event
+        event: raid_clear|calamity_boss
+        count: 1
+        desc: 通关团本 或 参与击退灾厄使
+        hint: 打开 /ember（或枢纽菜单）→ 团本 或 灾厄
+        xp: 400
+        done: ['§7同袍或祭坛——火都还在。']
+      - type: event
+        event: abyss_floor|elite_weekly_clear
+        floor: 10
+        count: 1
+        desc: 深渊历史最高达到第 10 层 或 再通关精英试炼
+        hint: 打开 /ember → 深渊（冲到第 10 层）或 → 精英试炼（本周未打过时）
+        xp: 400
+        done: ['§7井与试炼，你都碰过了。']
+      - type: talk
+        desc: 回到 灰烛 身边
+        hint: 枢纽工坊旁找灰烛（右键交谈）
+        xp: 200
+        done: ['§6灰烛：§f把火交到你手上的时候，我以为会灭。']
+      - type: level
+        level: 60
+        desc: 达到余烬等级 Lv.60（第二卷终）
+        hint: 打开 /ember → 日常本 / 深渊 / 精英试炼 / 团本 / 灾厄
+        xp: 300
+        levels: 5
+        items: { core_ember_compact: 1, mat_ember_stable_charm: 1, cosmetic_calamity_shard: 1 }
+        done:
+          - '§6灰烛：§f第二卷，到此为止。外观碎片先收着——以后有地方花。'
+          - '§a[第二卷完成] 烬火未灭。日常、深渊与试炼仍在。'

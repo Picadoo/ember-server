@@ -3,7 +3,7 @@
 
 join_message:
   - "§6§l[余烬服] §e跟着主线走：引路人·灰烛 就在出生点北边（/corerpg quest 查看目标）。"
-  - "§7挂机庭打僵尸拿碎片 · 骷髅拿骨尘 · 日本蛮兵拿核心碎片 · 死亡不掉落 · /hub 回城"
+  - "§7挂机庭打僵尸拿碎片 · 骷髅拿骨尘 · 日本蛮兵拿核心碎片 · 死亡不掉落 · 打开枢纽菜单可返回"
   - "§7指令：§f/ember §7主菜单 · §f/corerpg enhance §7强化 · §f/corerpg socket §7镶嵌 · §f/corerpg sign §7签到"
   - "§7进本门槛：周本 Lv.20 · 深渊 Lv.25 · 灾厄 Lv.30 · 团本 Lv.35（/ember 进入）"
 
@@ -131,7 +131,7 @@ afk_caps:
 
 # 1.14.0 (phase 3): 分层挂机 — 同一个 ember_afk 世界里的 4 层（掉落走 MM → corerpg mmgive，四层共用上面的 afk_caps 每日上限）
 # /corerpg afk [n] 进入（等级门槛）；层区域内等级不足会被送回；死亡不掉落并复活在本层入口（入口有 5 秒无敌）
-# build 层是空中平台：/corerpg afk build <n> 按配置重建（世界存档不进仓库）
+# P0: ②③④ 贴地/洞穴实景；/corerpg afk build <n> 探测地表、清旧 y110 空岛并重建
 afk_tiers:
   enabled: true
   world: ember_afk
@@ -139,7 +139,7 @@ afk_tiers:
   spawn_protect_seconds: 5
   debug: false
   tiers:
-    1:
+    '1':
       name: 灰坡
       level: 10
       desc: 僵尸→碎片 · 骷髅→骨尘 · 魂尘 2%
@@ -147,19 +147,69 @@ afk_tiers:
       y: 73.0
       z: 250.5
       yaw: 90
-    2:
+    '2':
       name: 荒原
       level: 20
       desc: 尸鬼→碎片 · 弓骸→骨尘 · 核心碎片 1% · 魂尘 2%
-      build: { cx: 200, y: 110, cz: 250, r: 18, floor: SMOOTH_BRICK, wall: COBBLE_WALL, light: GLOWSTONE, region_margin: 24 }
-    3:
+      x: 200.5
+      y: 62.0
+      z: 250.5
+      yaw: 0
+      build:
+        mode: ground
+        theme: ruins
+        cx: 200
+        y: 61
+        cz: 250
+        r: 18
+        floor: SMOOTH_BRICK
+        wall: COBBLE_WALL
+        accent: COBBLESTONE
+        light: GLOWSTONE
+        relief: true
+        clear_old_y: 110
+        region_margin: 24
+    '3':
       name: 焦土
       level: 30
       desc: 焦兵→碎片(+骨尘 30%) · 霜骸→骨尘(+碎片 30%) · 核心碎片 2% · 魂尘 3%
-      build: { cx: 400, y: 110, cz: 250, r: 18, floor: NETHER_BRICK, wall: NETHER_FENCE, light: GLOWSTONE, region_margin: 24 }
-    4:
+      x: 400.5
+      y: 70.0
+      z: 250.5
+      yaw: 0
+      build:
+        mode: ground
+        theme: scorched
+        cx: 400
+        y: 69
+        cz: 250
+        r: 18
+        floor: NETHER_BRICK
+        wall: NETHER_FENCE
+        accent: NETHERRACK
+        light: GLOWSTONE
+        relief: true
+        clear_old_y: 110
+        region_margin: 24
+    '4':
       name: 烬原深处
       level: 40
       desc: 灼尸 / 凋骸→碎片 + 骨尘 50% · 核心碎片 4% · 魂尘 3%
-      build: { cx: 600, y: 110, cz: 250, r: 18, floor: RED_NETHER_BRICK, wall: NETHER_FENCE, light: SEA_LANTERN, region_margin: 24 }
-
+      x: 600.5
+      y: 64.0
+      z: 250.5
+      yaw: 0
+      build:
+        mode: cave
+        theme: cave
+        cx: 600
+        y: 63
+        cz: 250
+        r: 18
+        floor: RED_NETHER_BRICK
+        wall: NETHER_FENCE
+        accent: NETHERRACK
+        light: SEA_LANTERN
+        relief: true
+        clear_old_y: 110
+        region_margin: 24

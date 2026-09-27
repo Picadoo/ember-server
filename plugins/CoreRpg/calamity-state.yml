@@ -1,10 +1,11 @@
-lastFireDate: '2026-09-13'
+lastFireDate: '2026-09-27'
 firedTimes:
-- '12:00'
-- force
+- '20:00'
 currentWindowSlot: ''
 windowOpen: false
-windowEndEpochMs: 1789291477173
+windowEndEpochMs: 1790511007204
 bossSpawnedThisWindow: true
 bossKilledThisWindow: false
-announcedPre: []
+announcedPre:
+- '20:00:1'
+- '20:00:5'

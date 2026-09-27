@@ -62,8 +62,10 @@
 
 ## 3. 插件版本（游玩服）
 
-CoreRpg **1.14.0**（阶段 3 进行中）· CoreEnchant 1.2.0 · CoreWorldRules 1.2.0 · CoreAnvil / CoreBrew / CoreCombat / CoreCraft / CoreFish / CoreSmelt 1.0.0 · MythicMobs 4.11.0 · NeigeItems 1.21.151 · DungeonPlus 1.4.5 · TrMenu 3.12.5 · Adyeshach 2.1.1 · HolographicDisplays 2.4.9 · Multiverse-Core 2.5.0-b727 · Multiverse-Portals 2.5.0-b751 · PlaceholderAPI 2.10.9 · ProtocolLib 4.4.0 · Vault 1.7.3 · spark 1.10.185。AttributePlus 已停用（`plugins/_parked`，属性层由 CoreRpg StatService 接管）。
+CoreRpg **1.15.1**（阶段 4 已验收）· CoreEnchant 1.2.0 · CoreWorldRules 1.2.0 · CoreAnvil / CoreBrew / CoreCombat / CoreCraft / CoreFish / CoreSmelt 1.0.0 · MythicMobs 4.11.0 · NeigeItems 1.21.151 · DungeonPlus 1.4.5 · TrMenu 3.12.5 · Adyeshach 2.1.1 · HolographicDisplays 2.4.9 · Multiverse-Core 2.5.0-b727 · Multiverse-Portals 2.5.0-b751 · LuckPerms **5.4.145** · PlaceholderAPI 2.10.9（PAPI Player expansion 已存在）· ProtocolLib 4.4.0 · Vault 1.7.3 · spark 1.10.185。AttributePlus 已停用（`plugins/_parked`，属性层由 CoreRpg StatService 接管）。
 登录服：AuthMe 5.4.0-b1877、ProtocolLib 4.4.0、Vault 1.7.3。代理：Waterfall 26.1 快照。
+
+**LuckPerms + PAPI Player 基建已完成：** `default` 组含 MV / TrMenu / DP user/start / CoreRpg 玩家节点，并显式拒绝 `corerpg.admin`；`admin` 组为 `*` + `luckperms.*`，无人自动加入。`%player_name%` / `%player_world%` 已复核正常。详见 `docs/STATUS-ember-luckperms-papi.md`。
 
 ## 4. 文档索引（按优先级）
 
@@ -81,8 +83,9 @@ CoreRpg **1.14.0**（阶段 3 进行中）· CoreEnchant 1.2.0 · CoreWorldRules
 | 0 止血 | 挂机日顶、币消耗口、死物资接线、生活玩法第一版、主线修复 | ✅ CoreRpg 1.11.0 |
 | 1 保底与补源 | 锻造 T1→T2→T3、凝核/断供补源、付费轨收紧 | ✅ 1.12.0 |
 | 2 手感 | 装备被动（引燃/炽愈/烬爆）、同袍共鸣、誓约属性开启+上限、吸血只算技能、Boss 重调 | ✅ 1.13.0 |
-| **3 分层挂机** | Lv10/20/30/40 四层，只掉材料，共用日顶 | 🟡 **进行中**（见下） |
-| 4 | 主线第二卷（Lv35→60）等，见 master plan §5「I」 | 未开始 |
+| **3 分层挂机** | Lv10/20/30/40 四层，只掉材料，共用日顶 | ✅ **1.14.0 验收通过**（见下） |
+| **4** | **后期内容：** I 主线 ch7～10 + J 天赋上限 20→30 + N 深渊 9～12 / `EmberEliteWeekly`；按 `docs/design-stage4-mainline-vol2.md` 冻结顺序实现 | ✅（有条件：7.2.4 TTK 估测未做）；CoreRpg **1.15.1**；4.1～4.6 已关闭 |
+| **下一步（queued）** | 多世界地图（LuckPerms + PAPI Player 基建已完成） | 待排队 |
 | 5 | 外观系统（外观碎片去处）等，见 master plan §5「L」 | 未开始 |
 | 后续 · TODO | **地图美化**：现有地图（枢纽、挂机层空中平台、灾厄祭坛、副本模板）都是能用的占位图；以后换成有授权的预制地图（prefab）或用 WorldEdit 搭建。俯视预览图渲染脚本见 `scripts/render_topdown.py` | 未开始 |
 
@@ -99,12 +102,15 @@ CoreRpg **1.14.0**（阶段 3 进行中）· CoreEnchant 1.2.0 · CoreWorldRules
 - 门槛拒绝（Lv10 进 ②）、传送到入口、区域踢回（Lv24 进 ④ → 送回 ②）、死亡保留物品 + 入口复活 + 抗性，都通过。怪物卡方块采样 0。
 - ② 荒原 Lv20（精炼刃 +2 / 护符 +1，烬刃）调参后：3 分钟 0 死亡，最低 HP 32%、平均 76%，14 杀/分钟，TTK 中位 2.8 秒。
 - ① 灰坡：测试 bot 不会躲箭，150 秒被骷髅射死 1 次（老数值，未改）。
+- ③ 焦土 Lv30：首跑 0 死亡、TTK 中位 3.6 秒，但最低 HP 1%（被霜骸射击，FAIL）；调伤后复测 0 死亡、最低 HP 70%、TTK 中位 2.8 秒、36 杀（PASS）。
+- ④ 烬原深处 Lv40：首跑 PASS，0 死亡、最低 HP 33%、TTK 中位 3.2 秒、40 杀。
+- ③/④ 战斗验收已完成；调参仅为 `EmberAfk3Stray Damage 4→2`、`EmberAfk3Zombie Damage 5→4`，Health/掉落/刷怪点未改，T4 未改。当前数值：焦兵 100/4、霜骸 85/2、灼尸 120/6、凋骸 110/6。详见 `STATUS-afk-tier-t3-t4.md`。
 
-**未完成（接手第一件事）：**
-1. ③ 焦土 / ④ 烬原深处的实战测试。当前数值：焦兵 100/5、霜骸 85/4、灼尸 120/6、凋骸 110/6（已热加载但没测）。运行 `T=3 DUR=180 node afk-tier-test.js`、`T=4 …`，目标 0 死亡、最低 HP 30% 以上、TTK 约 3 秒。
-2. 日顶触发测试：临时把 `afk_caps.items.mat_ember_shard` 调到 15、`kill_coin` 调到 20，`/corerpg reload`，在 ① 打一段再去 ② 打，确认计数合并、出现「今日野外掉落已达收益上限」、超过后约 25%，然后恢复 150/150。
-3. master plan §2.1 资源总账挂机行、§4.2 怪物表、§5 阶段 3 状态更新；`STATUS-ember-afk.md` 更新。
-4. 测试时 `afk_tiers.debug` 可临时开 true 看窒息日志，结束后改回 false（现在是 false）。
+**阶段 3 验收补充：**
+- `afk_caps` 日顶验收已通过：`CapM4518` 在 ① 结束为 12/15，切到 ② 仍为 12/15 并继续到 28/15；出现上限提示；达顶后 40 次碎片击杀实测 +12（约 30%，样本波动可接受）。详见 `STATUS-afk-caps.md`。配置已恢复 `shard/kill_coin=150/150`，`ops.json=[]`。
+
+**未完成 / 收尾：**
+- 已知设计债务（不阻塞阶段 3 验收）：日顶后的 25% 递减目前没有第二档，长时间挂机仍有线性产出（每小时约为未封顶时的 1/4）。
 
 ## 6. 已知问题 / 待复核
 

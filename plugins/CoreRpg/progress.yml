@@ -21,6 +21,7 @@ pass_xp:
     raid_clear: 40
     guild_boss_clear: 20
     bounty: 15           # 1.7.0 悬赏（每日 1 次领取）
+    elite_weekly: 15     # 4.4 精英试炼通关（周 1；计入战令日顶）
   daily_cap: 120        # 2026-09-27 (critic): was 100/100 → 30 days with zero misses
   xp_per_level: 80      # 2400 total: active F2P (~85–105/day) ≈ 23–28 days, casual ≈ Lv17
   max_level: 30
@@ -46,6 +47,7 @@ ember_xp:
     raid_clear: 250
     guild_boss_clear: 100
     bounty: 40           # 1.7.0 悬赏（每日 1 次领取 → 日上限 40）
+    elite_weekly: 80     # 4.4 精英试炼通关（周 1；门控防重复）
     elite: 15
     boss: 40
     kill: 2              # 任意合格击杀（挂机庭等），受 kill_daily_cap
@@ -142,3 +144,4 @@ level_gates:
   calamity: 30
   raid: 35
   guild_boss: 0
+  elite: 40              # 4.4 精英试炼

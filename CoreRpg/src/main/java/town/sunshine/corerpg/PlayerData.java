@@ -234,6 +234,8 @@ public final class PlayerData {
     private String weeklyTicketGrantWeekId = "";
     // 1.8.1: weekly free raid ticket + starter blade re-issue date
     private String raidTicketGrantWeekId = "";
+    /** Stage 4.4: ISO week id last elite free ticket grant. */
+    private String eliteTicketGrantWeekId = "";
     private String lootWeekMarks = ""; // "key=week;key=week"
     public String getLootWeekMarks() { return lootWeekMarks == null ? "" : lootWeekMarks; }
     public void setLootWeekMarks(String v) { lootWeekMarks = v == null ? "" : v; dirty = true; }
@@ -246,6 +248,8 @@ public final class PlayerData {
     private String starterReissueDate = "";
     public String getRaidTicketGrantWeekId() { return raidTicketGrantWeekId == null ? "" : raidTicketGrantWeekId; }
     public void setRaidTicketGrantWeekId(String v) { raidTicketGrantWeekId = v == null ? "" : v; dirty = true; }
+    public String getEliteTicketGrantWeekId() { return eliteTicketGrantWeekId == null ? "" : eliteTicketGrantWeekId; }
+    public void setEliteTicketGrantWeekId(String v) { eliteTicketGrantWeekId = v == null ? "" : v; dirty = true; }
     public String getStarterReissueDate() { return starterReissueDate == null ? "" : starterReissueDate; }
     public void setStarterReissueDate(String v) { starterReissueDate = v == null ? "" : v; dirty = true; }
     /** yyyy-MM-dd last abyss free ticket grant (DailyService.today()). */

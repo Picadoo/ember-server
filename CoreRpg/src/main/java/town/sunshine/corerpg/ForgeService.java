@@ -129,12 +129,19 @@ public final class ForgeService {
         p.getInventory().setItemInMainHand(out);
         for (String g : returned) ni.giveNiItem(p, g, 1);
         p.updateInventory();
+        // Stage 4.5: career forge mark for quest state-type + event bump
+        d.addPeriodCount("ever_forge", "all", 1);
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GREEN + "[锻造] 成功！" + ChatColor.WHITE + ni.displayName(r.to) + " +" + got
                 + ChatColor.GRAY + (ench.isEmpty() ? "" : "，保留附魔 " + String.join(", ", ench))
                 + (returned.isEmpty() ? "" : "，退回宝石 " + String.join(", ", returned)));
         plugin.getLogger().info("forge " + p.getName() + " " + r.from + "+" + lv + " -> " + r.to + "+" + got
                 + " ench=" + ench + " returned=" + returned + " coin=-" + r.coin);
+        QuestService qs = plugin.getQuestService();
+        if (qs != null) {
+            qs.onEvent(p, "forge");
+            qs.checkPassive(p);
+        }
         return true;
     }
 

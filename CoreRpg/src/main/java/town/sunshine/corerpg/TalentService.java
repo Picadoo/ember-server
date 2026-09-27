@@ -28,12 +28,18 @@ public final class TalentService {
     private boolean enabled = true;
     private int pointsPerLevel = 1;
     private int levelPointsFrom = 2;
-    private int maxSpendablePoints = 20;
+    private int maxSpendablePoints = 30;
     private int startingTalentPoints = 5;
     private int emberLevelDefault = 10;
     private int freePerDay = 1;
     private int extraCrystalCash = 25;
     private String ticketNiId = "mat_ember_talent_reset";
+
+    /** Stage 4.2 layer2: Lv31+ earned = min(max, baseAt30 + floor((L-30)/pointsPerLevels)). */
+    private boolean layer2Enabled = true;
+    private int layer2FromLevel = 31;
+    private int layer2PointsPerLevels = 3;
+    private int layer2BaseAt30 = 20;
 
     /** treeId -> (nodeId -> NodeDef) */
     private final Map<String, Map<String, NodeDef>> trees = new LinkedHashMap<String, Map<String, NodeDef>>();
@@ -89,9 +95,24 @@ public final class TalentService {
         enabled = cfg.getBoolean("enabled", true);
         pointsPerLevel = cfg.getInt("points_per_level", 1);
         levelPointsFrom = cfg.getInt("level_points_from", 2);
-        maxSpendablePoints = cfg.getInt("max_spendable_points", 20);
+        maxSpendablePoints = cfg.getInt("max_spendable_points", 30);
         startingTalentPoints = cfg.getInt("starting_talent_points", 5);
         emberLevelDefault = cfg.getInt("ember_level", 10);
+        ConfigurationSection layer2 = cfg.getConfigurationSection("layer2");
+        if (layer2 != null) {
+            layer2Enabled = layer2.getBoolean("enabled", true);
+            layer2FromLevel = layer2.getInt("from_level", 31);
+            layer2PointsPerLevels = layer2.getInt("points_per_levels", 3);
+            layer2BaseAt30 = layer2.getInt("base_at_30", 20);
+        } else {
+            layer2Enabled = true;
+            layer2FromLevel = 31;
+            layer2PointsPerLevels = 3;
+            layer2BaseAt30 = 20;
+        }
+        if (layer2PointsPerLevels <= 0) layer2PointsPerLevels = 3;
+        if (layer2BaseAt30 <= 0) layer2BaseAt30 = 20;
+        if (layer2FromLevel <= 0) layer2FromLevel = 31;
         ConfigurationSection reset = cfg.getConfigurationSection("reset");
         if (reset != null) {
             freePerDay = reset.getInt("free_per_day", 1);
@@ -146,21 +167,54 @@ public final class TalentService {
     public int getLevelPointsFrom() { return levelPointsFrom; }
     public int getStartingTalentPoints() { return startingTalentPoints; }
     public int getEmberLevelDefault() { return emberLevelDefault; }
+    public boolean isLayer2Enabled() { return layer2Enabled; }
+    public int getLayer2FromLevel() { return layer2FromLevel; }
+    public int getLayer2PointsPerLevels() { return layer2PointsPerLevels; }
+    public int getLayer2BaseAt30() { return layer2BaseAt30; }
 
     /**
-     * earned seed = max(starting_talent_points,
-     *   (ember_level - level_points_from + 1) * points_per_level),
-     * then min with max_spendable.
+     * Formula A (stage 4.2):
+     * legacySeed (layer1, matches ProgressService incremental): 
+     *   L < level_points_from → starting_talent_points
+     *   else → starting + (L - level_points_from + 1) * points_per_level
+     *   (Lv10=5, Lv16=6, …, Lv30=20)
+     * L < layer2FromLevel or !layer2: earned = min(maxSpendable, min(baseAt30, legacySeed))
+     * else: earned = min(maxSpendable, baseAt30 + floor((L - 30) / pointsPerLevels))
+     * — do NOT also add legacy per-level beyond baseAt30 (avoids double-add).
      */
     public int computeStartingEarned(int emberLevel) {
         int level = emberLevel > 0 ? emberLevel : emberLevelDefault;
-        int fromLevel = 0;
+        int legacySeed = startingTalentPoints > 0 ? startingTalentPoints : 5;
         if (level >= levelPointsFrom && pointsPerLevel > 0) {
-            fromLevel = (level - levelPointsFrom + 1) * pointsPerLevel;
+            // Additive with starting so Lv30 = 5 + 15 = 20 (critic / design table)
+            legacySeed = legacySeed + (level - levelPointsFrom + 1) * pointsPerLevel;
         }
-        int seed = Math.max(startingTalentPoints, fromLevel);
-        if (seed <= 0) seed = 5;
-        return Math.min(maxSpendablePoints, seed);
+        int baseAt30 = layer2BaseAt30 > 0 ? layer2BaseAt30 : 20;
+        if (!layer2Enabled || level < layer2FromLevel) {
+            return Math.min(maxSpendablePoints, Math.min(baseAt30, legacySeed));
+        }
+        int step = layer2PointsPerLevels > 0 ? layer2PointsPerLevels : 3;
+        int earned = baseAt30 + (level - 30) / step;
+        return Math.min(maxSpendablePoints, earned);
+    }
+
+    /**
+     * Raise earned to formula for current ember level; clamp to maxSpendable.
+     * Never lowers below formula except the hard cap (preserves admin grants above formula until cap).
+     * @return true if earned changed
+     */
+    public boolean syncEarnedToLevel(PlayerData data) {
+        if (data == null) return false;
+        int want = computeStartingEarned(data.getEmberLevel());
+        int cur = data.getTalentPointsEarned();
+        int next = cur;
+        if (next < want) next = want;
+        if (next > maxSpendablePoints) next = maxSpendablePoints;
+        if (next != cur) {
+            data.setTalentPointsEarned(next);
+            return true;
+        }
+        return false;
     }
 
     public NodeDef getNode(String nodeId) {
@@ -389,6 +443,10 @@ public final class TalentService {
     public void migrateOnJoin(Player player) {
         if (!enabled) return;
         PlayerData data = dataStore.get(player.getUniqueId());
+        // Always clamp / raise earned to formula A + maxSpendable (layer2 rollout safe).
+        boolean synced = syncEarnedToLevel(data);
+        if (synced) dataStore.flushMutation(player.getUniqueId());
+
         String marks = ";" + data.getLootWeekMarks() + ";";
         if (marks.contains(";migr_talent=20260927;")) return;
         data.addLootWeekMark("migr_talent", "20260927");

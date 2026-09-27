@@ -26,6 +26,11 @@ dungeon:
       - "corerpg quest"
       - "corerpg stats"
       - "corerpg skill"
+      # 2026-09-27: abyss in-dungeon menu evacuate (narrow — do NOT bare trmenu/corerpg)
+      - "corerpg abyss evacuate"
+      - "corerpg abyss leave"
+      - "trmenu open ember_abyss"
+      - "$corerpg abyss evacuate"
       - "corerpg 属性"
       - "corerpg 技能"
       - "corerpg 主线"
@@ -144,6 +149,8 @@ dungeon-pre-folder:
     "EmberDaily": 2
   ember_weekly:
     "EmberWeekly": 1
+  ember_elite:
+    "EmberEliteWeekly": 1
   ember_abyss:
     "EmberAbyss": 1
   ember_calamity:

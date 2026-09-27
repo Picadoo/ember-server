@@ -67,7 +67,7 @@ public final class PlayerDataStore {
     public void seedTalentIfNeeded(PlayerData data) {
         if (data.getTalentPointsEarned() > 0) return;
         int seed = 5;
-        int cap = 20;
+        int cap = 30;
         if (talentService != null) {
             seed = talentService.computeStartingEarned(data.getEmberLevel());
             cap = talentService.getMaxSpendablePoints();
@@ -205,6 +205,7 @@ public final class PlayerDataStore {
         data.setDailyFreeGranted(yaml.getBoolean("dailyFreeGranted", false));
         data.setWeeklyTicketGrantWeekId(yaml.getString("weeklyTicketGrantWeekId", ""));
         data.setRaidTicketGrantWeekId(yaml.getString("raidTicketGrantWeekId", ""));
+        data.setEliteTicketGrantWeekId(yaml.getString("eliteTicketGrantWeekId", ""));
         data.setStarterReissueDate(yaml.getString("starterReissueDate", ""));
         data.setLootWeekMarks(yaml.getString("lootWeekMarks", ""));
         data.setAbyssTicketGrantDate(yaml.getString("abyssTicketGrantDate", ""));
@@ -356,6 +357,7 @@ public final class PlayerDataStore {
         yaml.set("dailyFreeGranted", data.isDailyFreeGranted());
         yaml.set("weeklyTicketGrantWeekId", data.getWeeklyTicketGrantWeekId());
         yaml.set("raidTicketGrantWeekId", data.getRaidTicketGrantWeekId());
+        yaml.set("eliteTicketGrantWeekId", data.getEliteTicketGrantWeekId());
         yaml.set("starterReissueDate", data.getStarterReissueDate());
         yaml.set("lootWeekMarks", data.getLootWeekMarks());
         yaml.set("abyssTicketGrantDate", data.getAbyssTicketGrantDate());

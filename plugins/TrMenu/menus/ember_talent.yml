@@ -1,5 +1,5 @@
-# 天赋子菜单 — DESIGN-ember-covenant-talent.md §7
-# 壳：tell + 建议 /corerpg talent …
+# 天赋子菜单 — DESIGN-ember-covenant-talent.md §7 + stage4.2 layer2
+# 玩家点击解锁；命令仅灰字管理提示
 
 Title: '§d余烬 · 天赋'
 
@@ -13,13 +13,14 @@ Layout:
   - '#########'
   - '# V U Z #'
   - '# 12345 #'
-  - '#       #'
+  - '# abcde #'
+  - '# fghij #'
   - '####B####'
 
 Events:
   Open:
     - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-1-0.7'
-    - 'tell: §7请先选定誓约。天赋点来自等级；洗点日免费 1 次。'
+    - 'tell: §7请先选定誓约。点击节点解锁；二层需先点满一层顶（*_cap）。'
 
 Icons:
   '#':
@@ -43,14 +44,14 @@ Icons:
       lore:
         - ''
         - '§7可用点 / 已花 / 已点节点'
+        - '§7硬顶 §f30 §7点 · Lv.60 满二层'
         - ''
-        - '§8命令：/corerpg talent'
+        - '§8管理：/corerpg talent'
         - ''
         - '§e➥ §f点击查看'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[天赋] §7建议执行：§f/corerpg talent'
         - 'command: corerpg talent'
 
   U:
@@ -59,16 +60,17 @@ Icons:
       name: '§d解锁说明'
       lore:
         - ''
-        - '§7每誓约一棵树 · 整棵 20 点（Lv.30 点满）'
-        - '§7节点有前置；根 2 点 · 终极点 5～7 点'
-        - '§8命令：/corerpg talent unlock <nodeId>'
+        - '§7每誓约一棵树 · 一层 20 点（Lv.30）'
+        - '§7二层 +10 · 合计 30 点（Lv.60）'
+        - '§7二层需先点满一层顶（*_cap）'
+        - '§7点击下方节点即可解锁'
         - ''
-        - '§8先 /corerpg talent info <nodeId>'
+        - '§8管理：/corerpg talent unlock <nodeId>'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[天赋] §7用法：§f/corerpg talent unlock <nodeId>'
-        - 'tell: §8示例：/corerpg talent unlock blaze_root'
+        - 'tell: §d[天赋] §7点击节点解锁；二层需先点满 §f*_cap§7。'
+        - 'tell: §8硬顶 30 点 · Lv.60 满二层'
 
   Z:
     display:
@@ -80,14 +82,13 @@ Icons:
         - '§7额外：§b晶钻 ×25 §7或天赋重置券'
         - '§8不改变誓约，只清空节点'
         - ''
-        - '§8命令：/corerpg talent reset'
+        - '§8管理：/corerpg talent reset'
         - ''
-        - '§c➥ §f点击洗点（建议命令）'
+        - '§c➥ §f点击洗点'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c[天赋] §7建议执行：§f/corerpg talent reset'
-        - 'tell: §8（日免费 1 次；额外 25 晶钻或重置券）'
+        - 'tell: §c[天赋] §7洗点（日免费 1 次；额外 25 晶钻或重置券）'
         - 'command: corerpg talent reset'
 
   '1':
@@ -96,16 +97,15 @@ Icons:
       name: '§6烬刃 · 燃锋'
       lore:
         - ''
-        - '§7根节点 · passive · cost 1'
+        - '§7根节点 · passive · cost 2'
         - '§8nodeId: blaze_root'
         - ''
-        - '§8/corerpg talent unlock blaze_root'
+        - '§8管理：/corerpg talent unlock blaze_root'
         - ''
-        - '§6➥ §f建议解锁'
+        - '§6➥ §f点击解锁'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6[天赋] §7建议执行：§f/corerpg talent unlock blaze_root'
         - 'command: corerpg talent unlock blaze_root'
 
   '2':
@@ -114,16 +114,15 @@ Icons:
       name: '§7灰行 · 灰踪'
       lore:
         - ''
-        - '§7根节点 · passive · cost 1'
+        - '§7根节点 · passive · cost 2'
         - '§8nodeId: ash_root'
         - ''
-        - '§8/corerpg talent unlock ash_root'
+        - '§8管理：/corerpg talent unlock ash_root'
         - ''
-        - '§7➥ §f建议解锁'
+        - '§7➥ §f点击解锁'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §7[天赋] §7建议执行：§f/corerpg talent unlock ash_root'
         - 'command: corerpg talent unlock ash_root'
 
   '3':
@@ -132,16 +131,15 @@ Icons:
       name: '§9守墓 · 守碑'
       lore:
         - ''
-        - '§7根节点 · passive · cost 1'
+        - '§7根节点 · passive · cost 2'
         - '§8nodeId: warden_root'
         - ''
-        - '§8/corerpg talent unlock warden_root'
+        - '§8管理：/corerpg talent unlock warden_root'
         - ''
-        - '§9➥ §f建议解锁'
+        - '§9➥ §f点击解锁'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §9[天赋] §7建议执行：§f/corerpg talent unlock warden_root'
         - 'command: corerpg talent unlock warden_root'
 
   '4':
@@ -150,15 +148,16 @@ Icons:
       name: '§6烬刃 · 烬斩'
       lore:
         - ''
-        - '§7主动技 · skill · cost 2'
+        - '§7主动技 · skill · cost 4'
         - '§8前置：blaze_crit1 + blaze_leech1'
         - '§8nodeId: blaze_slash'
         - ''
-        - '§8/corerpg talent unlock blaze_slash'
+        - '§8管理：/corerpg talent unlock blaze_slash'
+        - ''
+        - '§6➥ §f点击解锁'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6[天赋] §7建议执行：§f/corerpg talent unlock blaze_slash'
         - 'tell: §8需前置节点 · 主动技烬斩'
         - 'command: corerpg talent unlock blaze_slash'
 
@@ -169,11 +168,198 @@ Icons:
       lore:
         - ''
         - '§71. §f先选誓约再点天赋'
-        - '§72. §f等级供给点数 · 硬顶 20'
-        - '§73. §f洗点日免 1 · 额外 25 晶钻'
-        - '§74. §f洗约清空天赋'
+        - '§72. §f等级供给点数 · 硬顶 30（Lv.60）'
+        - '§73. §f一层 20 点（Lv.30）· 二层 +10'
+        - '§74. §f二层需先点满一层顶（*_cap）'
+        - '§75. §f洗点日免 1 · 额外 25 晶钻'
+        - '§76. §f洗约清空天赋'
         - ''
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[天赋] §7先誓约 → 再 unlock 节点；日免洗 1 次。'
+        - 'tell: §d[天赋] §7先誓约 → 再点击节点解锁；二层需 *_cap；日免洗 1 次。'
+
+  # —— 二层 · 烬刃 ——
+  a:
+    display:
+      material: magma cream
+      name: '§6烬刃 · 余烬脉'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 3'
+        - '§8nodeId: blaze_ember2'
+        - '§e先点满一层顶（*_cap）'
+        - '§7phys_damage +1'
+        - ''
+        - '§8管理：/corerpg talent unlock blaze_ember2'
+        - ''
+        - '§6➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock blaze_ember2'
+
+  b:
+    display:
+      material: fireball
+      name: '§c烬刃 · 炽脉'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 3'
+        - '§8nodeId: blaze_heat2'
+        - '§e先点满一层顶（*_cap）'
+        - '§8前置：blaze_ember2'
+        - '§7crit_damage_pct +0.03'
+        - ''
+        - '§8管理：/corerpg talent unlock blaze_heat2'
+        - ''
+        - '§c➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock blaze_heat2'
+
+  c:
+    display:
+      material: nether brick
+      name: '§6烬刃 · 再燃'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 4'
+        - '§8nodeId: blaze_second'
+        - '§e先点满一层顶（*_cap）'
+        - '§8前置：blaze_ember2'
+        - '§7crit_chance_pct +0.005 · phys_damage +1'
+        - ''
+        - '§8管理：/corerpg talent unlock blaze_second'
+        - ''
+        - '§6➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock blaze_second'
+
+  # —— 二层 · 灰行 ——
+  d:
+    display:
+      material: feather
+      name: '§7灰行 · 灰纱'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 3'
+        - '§8nodeId: ash_veil2'
+        - '§e先点满一层顶（*_cap）'
+        - '§7move_speed_pct +0.01'
+        - ''
+        - '§8管理：/corerpg talent unlock ash_veil2'
+        - ''
+        - '§7➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock ash_veil2'
+
+  e:
+    display:
+      material: sugar
+      name: '§e灰行 · 细尘'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 3'
+        - '§8nodeId: ash_dust2'
+        - '§e先点满一层顶（*_cap）'
+        - '§8前置：ash_veil2'
+        - '§7attack_speed_pct +0.01'
+        - ''
+        - '§8管理：/corerpg talent unlock ash_dust2'
+        - ''
+        - '§e➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock ash_dust2'
+
+  f:
+    display:
+      material: web
+      name: '§8灰行 · 掩息'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 4'
+        - '§8nodeId: ash_shroud'
+        - '§e先点满一层顶（*_cap）'
+        - '§8前置：ash_veil2'
+        - '§7on_hit_slow_pct +0.03 · attack_speed_pct +0.01'
+        - ''
+        - '§8管理：/corerpg talent unlock ash_shroud'
+        - ''
+        - '§8➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock ash_shroud'
+
+  # —— 二层 · 守墓 ——
+  g:
+    display:
+      material: brick
+      name: '§9守墓 · 叠壁'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 3'
+        - '§8nodeId: warden_bulwark2'
+        - '§e先点满一层顶（*_cap）'
+        - '§7damage_taken_pct -0.01'
+        - ''
+        - '§8管理：/corerpg talent unlock warden_bulwark2'
+        - ''
+        - '§9➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock warden_bulwark2'
+
+  h:
+    display:
+      material: golden apple
+      name: '§9守墓 · 护冢'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 3'
+        - '§8nodeId: warden_aegis2'
+        - '§e先点满一层顶（*_cap）'
+        - '§8前置：warden_bulwark2'
+        - '§7max_health +2'
+        - ''
+        - '§8管理：/corerpg talent unlock warden_aegis2'
+        - ''
+        - '§9➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock warden_aegis2'
+
+  i:
+    display:
+      material: obsidian
+      name: '§1守墓 · 誓碑'
+      lore:
+        - ''
+        - '§7二层 · passive · cost 4'
+        - '§8nodeId: warden_vow2'
+        - '§e先点满一层顶（*_cap）'
+        - '§8前置：warden_bulwark2'
+        - '§7phys_defense +1 · damage_taken_pct -0.01'
+        - ''
+        - '§8管理：/corerpg talent unlock warden_vow2'
+        - ''
+        - '§1➥ §f点击解锁'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg talent unlock warden_vow2'
+
+  j:
+    display:
+      material: stained glass pane
+      name: '§8 '

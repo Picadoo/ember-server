@@ -1,0 +1,101 @@
+# 阶段 4.4 · EmberEliteWeekly 精英试炼怪物
+# 依据：docs/design-stage4-elite-weekly.md §4
+# Display 须与 DP $kill 明文一字不差（去色后）；稳定符不走 MM 掉落（仅周首通箱）
+# 勿进 afk 世界刷怪名单；勿改 EmberAbyss / EmberAfk
+# 4.4f：波血保持；波伤再≈-20%；Ignite×0.75；Boss/Pulse/Rush 禁止改（目标死亡≤2）
+
+EmberEliteZombie:
+  Type: ZOMBIE
+  Display: '&e余烬试炼·炽尸'
+  Health: 5250
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  Skills:
+  - skill{s=EmberEliteRush} @self ~onSpawn
+  - skill{s=EmberEliteRush} @self ~onTimer:200
+  - skill{s=EmberEliteIgnite} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.45
+
+EmberEliteSkeleton:
+  Type: SKELETON
+  Display: '&e余烬试炼·骨刺'
+  Health: 3300
+  Damage: 4
+  Options:
+    MovementSpeed: 0.27
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.22
+  - skill{s=EmberEliteIgnite} @target ~onAttack 0.07
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath 0.45
+
+EmberEliteMix:
+  Type: ZOMBIE
+  Display: '&e余烬试炼·混纹'
+  Health: 2700
+  Damage: 4
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  Skills:
+  - skill{s=EmberAbyssPressure} @target ~onAttack 0.22
+  - skill{s=EmberEliteIgnite} @target ~onAttack 0.08
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.35
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.06
+
+EmberEliteBrute:
+  Type: HUSK
+  Display: '&e余烬试炼·蛮纹'
+  Health: 10500
+  Damage: 5
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.5
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.2
+  - skill{s=EmberEliteIgnite} @target ~onAttack 0.10
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.25
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.4
+
+EmberEliteBoss:
+  # 4.4f：Boss 5200/12、Pulse100、Rush200 禁止改。稳定符禁止 MM 掉落。
+  Type: WITHER_SKELETON
+  Display: '&e余烬试炼·烬纹执行官'
+  Health: 5200
+  Damage: 12
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.35
+    MaxCombatDistance: 28
+    PreventSunburn: true
+  Equipment:
+  - DIAMOND_HELMET HEAD
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberEliteBossPulse} @self ~onTimer:100
+  - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.14
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath 0.5
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6

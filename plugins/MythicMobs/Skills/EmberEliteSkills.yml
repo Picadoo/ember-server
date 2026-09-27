@@ -1,0 +1,19 @@
+# 精英试炼 EmberEliteWeekly — 轻量词缀（加速 / 点燃）
+# 1.12.2；勿绑稳定符掉落
+
+EmberEliteRush:
+  Skills:
+  - potion{type=SPEED;duration=100;level=0} @self
+  - effect:particles{p=flame;amount=12;hSpread=0.5;ySpread=0.4;speed=0.01} @self
+
+EmberEliteIgnite:
+  Skills:
+  - ignite{ticks=50} @target
+  - effect:particles{p=flame;amount=10;hSpread=0.4;ySpread=0.5;speed=0.02} @target
+  - effect:sound{s=fire.fire;volume=0.5;pitch=1.2} @target
+
+EmberEliteBossPulse:
+  # 4.4c：短缓速；Boss 侧 ~onTimer:100（原 80）
+  Skills:
+  - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=6}
+  - effect:particles{p=lava;amount=16;hSpread=2;ySpread=0.5;speed=0} @self

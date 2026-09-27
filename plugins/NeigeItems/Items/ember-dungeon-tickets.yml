@@ -1,5 +1,5 @@
-# 日/周本入场券 — DungeonPlus 用显示名扣次（策划草案，物品岗可润色）
-# 日发 3× ticket_ember_daily；周发 1× ticket_ember_weekly（发放逻辑交给插件/CoreRpg）
+# 日/周本/深渊/团本/精英 入场券 — DungeonPlus 用显示名扣次（策划草案，物品岗可润色）
+# 日发 3× ticket_ember_daily；周发 1× ticket_ember_weekly；精英周发 1× ticket_ember_elite（发放逻辑交给插件/CoreRpg）
 
 ticket_ember_daily:
   material: PAPER
@@ -44,6 +44,19 @@ ticket_ember_raid:
     - '&7ticket_ember_raid'
     - '&8团本 · 灰烬协奏 入场券'
     - '&7每周可用 1 张 · 进本即扣 · 需 3～5 人'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+ticket_ember_elite:
+  material: PAPER
+  name: '&c余烬精英票'
+  lore:
+    - '&7ticket_ember_elite'
+    - '&8精英试炼 · 词缀周常 入场券'
+    - '&7每周可用 1 张 · 进本即扣 · 不退还'
+    - '&7持有上限 1 · 需余烬 Lv.40'
   enchantments:
     DURABILITY: 1
   hideflags:

@@ -71,6 +71,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private TalentService talentService;
     private CashService cashService;
     private TicketGrantService ticketGrantService;
+    private EliteService eliteService;
     private ScrapService scrapService;
     private MailService mailService;
     private FriendService friendService;
@@ -90,6 +91,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private ForgeService forgeService;
     private GearPassiveService gearPassiveService;
     private AfkTierService afkTierService;
+    private HubPlazaService hubPlazaService;
+    private HubNpcService hubNpcService;
+    private AbyssShaftService abyssShaftService;
+    private WeeklyCorridorService weeklyCorridorService;
+    private EliteCorridorService eliteCorridorService;
     private LootService lootService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
@@ -117,6 +123,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         cashService = new CashService(this, niBridge, dataStore);
         ticketGrantService = new TicketGrantService(this, niBridge, dataStore);
         cashService.setTicketGrantService(ticketGrantService);
+        eliteService = new EliteService(this, dataStore, niBridge);
         scrapService = new ScrapService(this, niBridge);
         mailService = new MailService(this, niBridge, dataStore);
         friendService = new FriendService(this, dataStore);
@@ -136,6 +143,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         lifeService = new LifeService(this, dataStore, niBridge);
         forgeService = new ForgeService(this, dataStore, niBridge);
         afkTierService = new AfkTierService(this, dataStore);
+        hubPlazaService = new HubPlazaService(this);
+        hubNpcService = new HubNpcService(this);
+        abyssShaftService = new AbyssShaftService(this);
+        weeklyCorridorService = new WeeklyCorridorService(this);
+        eliteCorridorService = new EliteCorridorService(this);
         Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
             @Override public void run() { if (questService != null) questService.tickAll(); }
         }, 400L, 200L);
@@ -145,12 +157,24 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         reloadLocal();
         Bukkit.getPluginManager().registerEvents(this, this);
         Bukkit.getPluginManager().registerEvents(questService, this);
+        Bukkit.getPluginManager().registerEvents(hubNpcService, this);
         Bukkit.getPluginManager().registerEvents(lifeService, this);
         Bukkit.getPluginManager().registerEvents(statService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
             @Override public void run() {
                 if (questService != null) { questService.hookAdyeshach(); questService.ensureNpc(false); }
+                if (hubNpcService != null) {
+                    hubNpcService.reload();
+                    hubNpcService.hookAdyeshach();
+                    hubNpcService.ensureAll(false);
+                    // re-ensure after chunks settle so stale persisted hitboxes get purged
+                    Bukkit.getScheduler().runTaskLater(CoreRpgPlugin.this, new Runnable() {
+                        @Override public void run() {
+                            if (hubNpcService != null) hubNpcService.ensureAll(false);
+                        }
+                    }, 200L);
+                }
             }
         }, 100L);
         if (petService != null) {
@@ -221,10 +245,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public CashService getCashService() { return cashService; }
     public ProgressService getProgressService() { return progressService; }
     public QuestService getQuestService() { return questService; }
+    public HubNpcService getHubNpcService() { return hubNpcService; }
     public AfkTierService getAfkTierService() { return afkTierService; }
     public TalentService getTalentServicePublic() { return talentService; }
     public WarehouseService getWarehouseServicePublic() { return warehouseService; }
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
+    public EliteService getEliteService() { return eliteService; }
     public ScrapService getScrapService() { return scrapService; }
     public MailService getMailService() { return mailService; }
     public FriendService getFriendService() { return friendService; }
@@ -402,7 +428,23 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private void reloadLocal() {
         reloadConfig();
         if (progressService != null) progressService.reload();
-        if (questService != null) questService.reload();
+        if (questService != null) {
+            questService.reload();
+            // refresh hitbox after npc coords reload (hooks stay from enable)
+            Bukkit.getScheduler().runTask(this, new Runnable() {
+                @Override public void run() {
+                    if (questService != null) questService.ensureNpc(false);
+                }
+            });
+        }
+        if (hubNpcService != null) {
+            hubNpcService.reload();
+            Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+                @Override public void run() {
+                    if (hubNpcService != null) hubNpcService.ensureAll(false);
+                }
+            }, 40L);
+        }
         if (lifeService != null) lifeService.reload();
         if (forgeService != null) forgeService.reload();
         if (lootService != null) lootService.reload();
@@ -486,6 +528,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         if (cashService != null) cashService.reload();
         if (ticketGrantService != null) ticketGrantService.reload();
+        if (eliteService != null) eliteService.reload();
         if (scrapService != null) scrapService.reload();
         if (mailService != null) mailService.reload();
         if (friendService != null) friendService.reload();
@@ -711,6 +754,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("mmgiveall".equals(sub)) return cmdMmGiveAll(sender, args);
         if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
         if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);
+        if ("hubbuild".equals(sub) || "hubplaza".equals(sub)) return hubPlazaService.cmd(sender, args);
+        if ("hubnpc".equals(sub) || "workshopnpc".equals(sub)) return hubNpcService.cmd(sender, args);
+        if ("abyssbuild".equals(sub) || "abyssshaft".equals(sub)) return abyssShaftService.cmd(sender, args);
+        if ("weeklybuild".equals(sub) || "weeklycorridor".equals(sub)) return weeklyCorridorService.cmd(sender, args);
+        if ("elitebuild".equals(sub) || "elitecorridor".equals(sub)) return eliteCorridorService.cmd(sender, args);
         if ("afk".equals(sub) || "挂机".equals(sub)) return afkTierService.cmd(sender, args);
         if ("life".equals(sub) || "vendor".equals(sub) || "补给".equals(sub) || "生活".equals(sub)) return lifeService.cmd(sender, args);
         if ("level".equals(sub) || "lv".equals(sub) || "等级".equals(sub)) {
@@ -726,6 +774,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("abyss".equals(sub)) {
             if (abyssSettleService != null) return abyssSettleService.cmdRoot(sender, args);
             return cmdAbyss(sender);
+        }
+        if ("elite".equals(sub) || "eliteweekly".equals(sub) || "精英试炼".equals(sub)) {
+            if (eliteService != null) return eliteService.cmdRoot(sender, args);
+            sender.sendMessage(ChatColor.RED + "[精英试炼] 服务未就绪");
+            return true;
         }
         if ("covenant".equals(sub)) return cmdCovenant(sender, args);
         if ("talent".equals(sub)) return cmdTalent(sender, args);
@@ -789,12 +842,13 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(ChatColor.GOLD + "[CoreRpg] " + ChatColor.YELLOW
-                + "/corerpg spawn|status|coin|sign|activity|bounty|enhance|socket|scrap|reforge|calamity|abyss|raid|set|covenant|talent|skill|cash|tickets|shop|monthly|vip|pass|enderchest|mail|friend|settings|ladder|pet|guild|arena|pvp|auction|warehouse|storage|reload|help");
+                + "/corerpg spawn|status|coin|sign|activity|bounty|enhance|socket|scrap|reforge|calamity|abyss|elite|raid|set|covenant|talent|skill|cash|tickets|shop|monthly|vip|pass|enderchest|mail|friend|settings|ladder|pet|guild|arena|pvp|auction|warehouse|storage|reload|help");
         sender.sendMessage(ChatColor.GRAY + "  coin [give <玩家> <数量>] · sign · activity [claim] · bounty [claim]");
         sender.sendMessage(ChatColor.GRAY + "  enhance [info] · socket list|insert <gemId>|remove <slot>");
         sender.sendMessage(ChatColor.GRAY + "  scrap [info] · reforge");
         sender.sendMessage(ChatColor.GOLD + "  quest" + ChatColor.GRAY + " · 主线（引路人·灰烛）");
-        sender.sendMessage(ChatColor.GRAY + "  calamity [status|forceopen|forceend|trigger] · abyss [progress|settle|evacuate]");
+        sender.sendMessage(ChatColor.GOLD + "  hubnpc" + ChatColor.GRAY + " · 工坊 NPC ensure（烬砧/余晶/灰粮）");
+        sender.sendMessage(ChatColor.GRAY + "  calamity [status|forceopen|forceend|trigger] · abyss [progress|settle|evacuate] · elite [start|weekly-first|status]");
         sender.sendMessage(ChatColor.GRAY + "  raid [ring|claim-ring|grant-ring] · set");
         sender.sendMessage(ChatColor.GRAY + "  covenant [set <id>|reset] · talent [info|unlock|reset|grant] · skill [info]");
         sender.sendMessage(ChatColor.GRAY + "  cash · tickets · shop buy daily_ticket|pass_unlock|weekly_ticket · monthly [buy] · vip [claim]");

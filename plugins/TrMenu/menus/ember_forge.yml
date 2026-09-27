@@ -10,6 +10,7 @@ Options:
 Layout:
   - '#########'
   - '# A B C #'
+  - '# E   S #'
   - '####I##Z#'
 
 Icons:
@@ -44,11 +45,27 @@ Icons:
       all:
         - 'close'
         - 'command: corerpg forge confirm'
+  E:
+    display:
+      material: anvil
+      name: '§c去强化'
+      lore: ['', '§7强化刃 / 护符 +0～+10', '', '§e➥ §f打开强化']
+    actions:
+      all:
+        - 'menu: ember_enhance'
+  S:
+    display:
+      material: emerald
+      name: '§e去镶嵌'
+      lore: ['', '§7孔石嵌入刃与护符', '', '§e➥ §f打开镶嵌']
+    actions:
+      all:
+        - 'menu: ember_socket'
   I:
     display:
       material: book
       name: '§f说明'
-      lore: ['', '§7手持装备后 /corerpg forge 预览', '§7/corerpg forge confirm 锻造']
+      lore: ['', '§7手持装备后点左侧预览配方与材料', '§7确认：点「确认锻造」按钮（勿手打命令）']
   Z:
     display:
       material: arrow

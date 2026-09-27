@@ -261,6 +261,7 @@ public final class CashService {
             if (ticketGrantService.needsWeeklyGrant(data)) return true;
             if (ticketGrantService.needsAbyssGrant(data)) return true;
             if (ticketGrantService.needsRaidGrant(data)) return true;
+            if (ticketGrantService.needsEliteGrant(data)) return true;
         }
         return false;
     }

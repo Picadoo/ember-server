@@ -17,66 +17,70 @@ boards:
 snapshot:
   power:
     '1':
-      name: RpgBot
-      value: 167
-      uuid: 148ec8b6-253f-36f4-bcd7-bf2395b8df80
+      name: ElB182437
+      value: 257
+      uuid: 0af6230f-8ade-34e2-a4aa-384bfb1d3db3
     '2':
-      name: '00000000'
-      value: 150
-      uuid: 00000000-0000-0000-0000-000000000001
+      name: ElC444c
+      value: 257
+      uuid: a6b4146a-1b5e-32ba-8043-a5b782a320f3
     '3':
-      name: WareBot
-      value: 150
-      uuid: 8320d0f4-143c-3b0e-908c-87a56849129c
+      name: ElD184540
+      value: 257
+      uuid: 5edce18f-19a6-365b-bba1-10cd94fc8da1
     '4':
-      name: PickyBot
-      value: 110
-      uuid: d4c9e702-ba42-37f4-84db-6d664af813d0
+      name: ElD185857
+      value: 257
+      uuid: 01eb5468-a0d9-3dca-8a90-92bc27610290
     '5':
-      name: Tester
-      value: 109
-      uuid: f3d28cb0-7225-3cb1-baeb-2dadd2be89ae
+      name: ElE4e928
+      value: 257
+      uuid: 8dbaee8d-1cee-3335-840f-f0fc47461499
     '6':
-      name: ArenaA
-      value: 101
-      uuid: ac3163b1-cbe0-38fb-86e9-799b907d0c63
+      name: ElF8838
+      value: 257
+      uuid: bbd15a9c-6108-3b88-83c9-cb30f4fa987a
     '7':
-      name: AbyssBot
-      value: 100
-      uuid: e0ec5af3-7f9e-361c-b0e5-81a789e568b4
+      name: ElOk1344
+      value: 257
+      uuid: 0f92c444-0a38-3063-8eff-eba984fc9e0f
     '8':
-      name: AbyssBot2
-      value: 100
-      uuid: 5b973ac5-24f6-340f-9c2d-de9ea4157d4a
+      name: ElB182262
+      value: 254
+      uuid: cac40a6b-66db-3daa-9e4f-ef230b2af2c8
     '9':
-      name: AbyssBot3
-      value: 100
-      uuid: 41fc0ac1-fbb4-3ccd-a993-41454e28966b
+      name: Atk2_4288
+      value: 225
+      uuid: 737ac435-7e9a-3908-bee2-f2de40ef056d
     '10':
-      name: ArenaB
-      value: 100
-      uuid: c48112d5-7395-390e-8a19-7b630361dcbb
+      name: Atk43_5102
+      value: 225
+      uuid: 814c7dbf-9034-30f1-9391-ff93014943aa
   abyss:
     '1':
+      name: Ab9x3744
+      value: 12
+      uuid: e7a3dfa5-e41f-38d6-89ed-60b6a5f5c2cd
+    '2':
       name: AbyssBot3
       value: 12
       uuid: 41fc0ac1-fbb4-3ccd-a993-41454e28966b
-    '2':
-      name: AbyssBot2
-      value: 7
-      uuid: 5b973ac5-24f6-340f-9c2d-de9ea4157d4a
     '3':
-      name: RpgBot
-      value: 7
-      uuid: 148ec8b6-253f-36f4-bcd7-bf2395b8df80
+      name: Atk2_4288
+      value: 12
+      uuid: 737ac435-7e9a-3908-bee2-f2de40ef056d
     '4':
-      name: AbyssBot
-      value: 3
-      uuid: e0ec5af3-7f9e-361c-b0e5-81a789e568b4
+      name: Atk43_5102
+      value: 12
+      uuid: 814c7dbf-9034-30f1-9391-ff93014943aa
+    '5':
+      name: Atk43b_8302
+      value: 12
+      uuid: 6f744a62-f1b1-3fc8-8004-88a3e12c15d2
   speed:
     '1':
       name: RpgBot
       value: 95
       uuid: 148ec8b6-253f-36f4-bcd7-bf2395b8df80
-  updated: 2026-09-13 17:54
-  weekId: 2026-W37
+  updated: 2026-09-27 21:37
+  weekId: 2026-W39

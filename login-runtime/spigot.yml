@@ -14,15 +14,15 @@ config-version: 11
 settings:
   save-user-cache-on-stop-only: false
   sample-count: 12
+  bungeecord: true
+  late-bind: false
+  player-shuffle: 0
   filter-creative-items: true
   user-cache-size: 1000
   int-cache-limit: 1024
   moved-wrongly-threshold: 0.0625
   moved-too-quickly-multiplier: 10.0
   item-dirty-ticks: 20
-  bungeecord: true
-  late-bind: false
-  player-shuffle: 0
   timeout-time: 60
   restart-on-crash: true
   restart-script: ./start.sh

@@ -1,0 +1,40 @@
+{
+  "equipment": {},
+  "isDie": false,
+  "isNitwit": false,
+  "moveSpeed": 0.2,
+  "isNameTagVisible": true,
+  "isCollision": true,
+  "glowingColor": "WHITE",
+  "canSeeInvisible": false,
+  "visibleDistance": -1.0,
+  "visibleAfterLoaded": true,
+  "modelEngineName": "",
+  "passengers": [],
+  "controller": [],
+  "clientPosition": {
+    "world": "ember_hub",
+    "x": -16.5,
+    "y": 58.0,
+    "z": 106.5,
+    "yaw": 0.0,
+    "pitch": 0.0
+  },
+  "entityType": "VILLAGER",
+  "persistentTag": {},
+  "metadata": {
+    "isCustomNameVisible": true,
+    "customName": "§6引路人 · 灰烛"
+  },
+  "metadataMask": {},
+  "uniqueId": "02bdedbe-3461-4d92-974d-adfffff28d2d",
+  "id": "ember_guide",
+  "position": {
+    "world": "ember_hub",
+    "x": -16.5,
+    "y": 58.0,
+    "z": 106.5,
+    "yaw": 0.0,
+    "pitch": 0.0
+  }
+}

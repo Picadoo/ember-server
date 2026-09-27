@@ -1,0 +1,45 @@
+# 枢纽工坊 NPC（Adyeshach + Bukkit hitbox）— design-ember-hub-workshop-npcs.md
+# ember_guide（灰烛）仍由 quest.yml / QuestService 管理，此处不列。
+enabled: true
+npcs:
+  ember_smith:
+    enabled: true
+    id: ember_smith
+    name: '§6锻炉师 · 烬砧'
+    world: ember_hub
+    x: -11.5
+    y: 58.0
+    z: 105.5
+    yaw: 90.0
+    action: forge
+    tell: '§6烬砧：§f刃与护符，放到菜单里锻。材料不够就去挂机庭。'
+    menu: ember_forge
+    open_menu: true
+  ember_enchanter:
+    enabled: true
+    id: ember_enchanter
+    name: '§d咒火师 · 余晶'
+    world: ember_hub
+    x: -21.5
+    y: 58.0
+    z: 104.5
+    yaw: 270.0
+    action: enchant_guide
+    tell: |-
+      §d余晶：§f手持附魔晶点附魔台——把晶放在热键栏，对着旁边的附魔台用。
+      §7刃与护符分表；晶不够去日常或补给看看。
+    menu: ember_enchant_guide
+    open_menu: true
+  ember_quartermaster:
+    enabled: true
+    id: ember_quartermaster
+    name: '§a补给官 · 灰粮'
+    world: ember_hub
+    x: -18.5
+    y: 58.0
+    z: 114.5
+    yaw: 0.0
+    action: life
+    tell: '§a灰粮：§f面包、竿子、代烤，点菜单就行。'
+    menu: ember_life
+    open_menu: true

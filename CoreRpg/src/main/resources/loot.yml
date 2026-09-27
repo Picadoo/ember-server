@@ -17,3 +17,22 @@ raid_gem:
 guild_gem:
   label: 盟Boss通关箱
   chance: { gem_ember_sharp: 0.5 }
+
+# 2026-09-27 stage4.1：第12层周首通稳定符（手工测 /corerpg loot <p> abyss_weekly12）
+# 线上 COMPLETE/撤离只走 AbyssSettleService.settle(floor≥12)，勿在 DP reward 再调本 key（防双提示）
+abyss_weekly12:
+  label: 深渊第12层周首通
+  first_per_week: { mat_ember_stable_charm: 1 }
+
+# Stage 4.4 精英试炼：通关随机孔石一枚 + 周首通稳定符（亦可走 corerpg elite weekly-first）
+elite_gem:
+  label: 精英试炼孔石
+  pick_one:
+    - gem_ember_sharp
+    - gem_ember_steady
+    - gem_ember_drain
+    - gem_ember_gale
+elite_weekly_first:
+  label: 精英试炼周首通
+  first_per_week: { mat_ember_stable_charm: 1 }
+

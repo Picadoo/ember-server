@@ -1,0 +1,194 @@
+{
+  "metadata": {
+    "generatedBy": "ember-lp-setup",
+    "generatedAt": "2026-09-27 20:15:00 CST",
+    "note": "mirror of H2 groups after setup"
+  },
+  "groups": {
+    "admin": {
+      "nodes": [
+        {
+          "type": "permission",
+          "key": "*",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "luckperms.*",
+          "value": true
+        },
+        {
+          "type": "weight",
+          "key": "weight.100",
+          "value": true
+        }
+      ]
+    },
+    "default": {
+      "nodes": [
+        {
+          "type": "permission",
+          "key": "multiverse.access.*",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "multiverse.teleport.self.*",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "multiverse.portal.access.*",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "multiverse.core.spawn.self",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "multiverse.core.list.worlds",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "multiverse.core.coord",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "trmenu.use",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "trmenu.command.open",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "dungeon.user",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "dungeon.start",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "dungeon.teleport",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.use",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.enhance",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.socket",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.covenant",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.talent",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.skill",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.cash",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.shop",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.monthly",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.scrap",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.reforge",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.mail",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.friend",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.settings",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.pet",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.guild",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.arena",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.auction",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.warehouse",
+          "value": true
+        },
+        {
+          "type": "permission",
+          "key": "corerpg.admin",
+          "value": false
+        },
+        {
+          "type": "weight",
+          "key": "weight.0",
+          "value": true
+        }
+      ]
+    }
+  },
+  "tracks": {},
+  "users": {}
+}

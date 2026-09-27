@@ -120,3 +120,33 @@ EmberAbyssWatcher:
   - command{c="corerpg mmgive <caster.uuid> mat_ember_stable_charm 1"} @Self ~onDeath 0.05
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_blade 1"} @Self ~onDeath 0.03
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_talisman 1"} @Self ~onDeath 0.02
+
+# 阶段 4.1 · 深渊 9～12：第二看守（设计稿 docs/design-stage4-abyss-9-12.md §2.2 / §3）
+# Display 须与 DP $kill「余烬深渊·看守·深」一字不差（含中间点）；稳定符不走战斗掉落（周首通）
+EmberAbyssWatcherDeep:
+  # 4.3c：7500/18 → 6000/18（4.3b TTK≈91–98s/剩血偏高→略削血；Damage 18 能逼复活勿抬）；LM health=0；Gaze/掉落/Display 不变
+  Type: WITHER_SKELETON
+  Display: '&5余烬深渊·看守·深'
+  Health: 6000
+  Damage: 18
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    KnockbackResistance: 0.0
+    MaxCombatDistance: 28
+  Equipment:
+  - DIAMOND_HELMET HEAD
+  LevelModifiers:
+  - health 0
+  - damage 1.4
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberAbyssWatcherGaze} @self ~onTimer:100
+  - skill{s=EmberCryptBruteSlam} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_sharp 1"} @Self ~onDeath 0.1125
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_steady 1"} @Self ~onDeath 0.1125
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_drain 1"} @Self ~onDeath 0.1125
+  - command{c="corerpg mmgive <caster.uuid> gem_ember_gale 1"} @Self ~onDeath 0.1125
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_protect_scroll 1"} @Self ~onDeath 0.12

@@ -1,11 +1,13 @@
 # 余烬深渊 — docs/ember-abyss-evacuate-spec.md · DESIGN-ember-abyss-evacuate.md
-# 启动：/dp start EmberAbyss
+# 启动：/dp start EmberAbyss（玩家走菜单按钮，勿在 tell 里强调指令）
 # 次数：扣 NI「余烬深渊票」×1（id ticket_ember_abyss · 日 1 张）
-# 材料/孔石：corerpg abyss settle 按最高层查表；COMPLETE 额外 T2；战斗掉落仍走 MM
+# 材料/孔石：corerpg abyss settle 按最高层查表；COMPLETE 额外 T2 周首；战斗掉落仍走 MM
+# 2026-09-27 P2 shaft：井顶 spawn (-40,90,274)；层平台见 monster.yml / STATUS-ember-abyss-maps-p2
+# 2026-09-27 stage4.1：COMPLETE 顶层 = floor12（非 floor8）；周首通稳定符在 settle(floor≥12) 内发
 
 dungeon-init-script:
   - "$setmap{name=ember_abyss} @init"
-  - "$setspawn{location=-40,65,270} @init"
+  - "$setspawn{location=-40,90,274} @init"
   - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
   - "$revive-setting{revive=true;number=2;death-location=true} @init"
 
@@ -16,16 +18,17 @@ dungeon-start:
     - "$js-condition{text='%corerpg_gate_abyss%'=='yes'||'%player_is_op%'=='yes';message=§c深渊需要余烬等级 §eLv.25§c · 队伍中有人等级不足（/corerpg level 查看）} @system"
     - "$js-condition{text='<item:余烬深渊票 *1 *true>'=='true';message=§c缺少§5余烬深渊票§c×1（每日 1 张，进本即扣）} @system"
   action-script:
-    - "$message{type=text;text=§5深渊已开启。§7已扣除深渊票 ×1 —— 能走多深，就走多深。} @dungeon"
-    - "$message{type=text;text=§8撤离：/corerpg abyss evacuate · 按最高层结算 · 票不退} @dungeon"
-    - "$teleport{location=-40,65,270;defspawn=true} @player"
+    - "$message{type=text;text=§5深渊已开启。§7已扣除深渊票 ×1 —— 能走多深，就走多深。本期可下潜至第 §f12 §7层。} @dungeon"
+    - "$message{type=text;text=§8需要撤离：打开菜单 → 深渊 → 撤离 · 按最高层结算 · 票不退} @dungeon"
+    - "$teleport{location=-40,90,274;defspawn=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 0;console=true} @player"
     - "$monstergroup{group=floor1;repeat=false;delay=2} @dungeon"
 
 dungeon-area: []
 
-# COMPLETE（本期顶层 floor8）触发：settle 发档位箱 + T2 刃/护符 + 回城
+# COMPLETE（本期顶层 floor12）触发：settle 发档位箱 + 周首通稳定符(≥12) + T2 刃/护符 + 回城
 # 撤离/超时走 jar evacuate 或 timeout settle，勿再走本脚本（reward=false）
+# 周首通稳定符只在 AbyssSettleService.settle(floor≥12) 发，此处勿再调 corerpg loot abyss_weekly12
 # 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
 dungeon-reward-script:
   - "$message{type=text;text=§5深渊结算：按本局最高层发箱（票不退）} @dungeon"

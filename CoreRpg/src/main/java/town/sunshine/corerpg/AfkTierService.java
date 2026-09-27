@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.LivingEntity;
@@ -27,9 +28,7 @@ import java.util.UUID;
 
 /**
  * 1.14.0 (phase 3): tiered public AFK zones in the AFK world (Lv10/20/30/40).
- * Level-gated entry (/corerpg afk n, menu), region enforcement, keepInventory + safe respawn on the tier's pad,
- * spawn protection, suffocation guard, level-up unlock hints. Drops stay in MythicMobs → corerpg mmgive, so every
- * tier shares the same per-player daily caps (afk_caps, keyed by item, not by tier).
+ * P0 (2026-09-27): tiers 2–4 build as ground/cave scenic pads (no y110 sky islands).
  */
 public class AfkTierService implements Listener {
 
@@ -37,10 +36,18 @@ public class AfkTierService implements Listener {
         int n; String name; int level; String desc;
         double x, y, z; float yaw;
         boolean hasRegion; int minX, minZ, maxX, maxZ;
-        // build (sky arena) — null floor = natural terrain, no build
-        int cx, by, cz, r; String floor, wall, light;
+        // build — floor==null means natural terrain (tier 1), no build
+        int cx, by, cz, r; String floor, wall, light, accent;
+        String mode; // sky | ground | cave (theme also via mode/theme)
+        String theme; // ruins | scorched | cave
+        boolean relief;
+        int clearOldY;
         boolean inside(Location l) {
             return hasRegion && l.getBlockX() >= minX && l.getBlockX() <= maxX && l.getBlockZ() >= minZ && l.getBlockZ() <= maxZ;
+        }
+        boolean isGroundish() {
+            return "ground".equalsIgnoreCase(mode) || "cave".equalsIgnoreCase(mode)
+                    || "ruins".equalsIgnoreCase(theme) || "scorched".equalsIgnoreCase(theme) || "cave".equalsIgnoreCase(theme);
         }
     }
 
@@ -78,15 +85,36 @@ public class AfkTierService implements Listener {
             t.desc = c.getString("desc", "");
             ConfigurationSection b = c.getConfigurationSection("build");
             if (b != null) {
-                t.cx = b.getInt("cx"); t.by = b.getInt("y"); t.cz = b.getInt("cz"); t.r = Math.max(6, b.getInt("r", 18));
-                t.floor = b.getString("floor", "SMOOTH_BRICK"); t.wall = b.getString("wall", "COBBLE_WALL"); t.light = b.getString("light", "GLOWSTONE");
-                // pad = north edge inside the arena, facing south (+z) toward the spawners
-                t.x = t.cx + 0.5; t.y = t.by + 1; t.z = t.cz - t.r + 2.5; t.yaw = 0f;
+                t.cx = b.getInt("cx"); t.by = b.getInt("y", b.getInt("base_y", 70)); t.cz = b.getInt("cz");
+                t.r = Math.max(6, b.getInt("r", 18));
+                t.floor = b.getString("floor", "SMOOTH_BRICK");
+                t.wall = b.getString("wall", "COBBLE_WALL");
+                t.light = b.getString("light", "GLOWSTONE");
+                t.accent = b.getString("accent", "COBBLESTONE");
+                t.mode = b.getString("mode", "sky");
+                t.theme = b.getString("theme", t.mode);
+                t.relief = b.getBoolean("relief", true);
+                t.clearOldY = b.getInt("clear_old_y", 110);
+                // P0: ground/cave spawn at center pad; legacy sky = north edge facing +z
+                t.x = t.cx + 0.5;
+                t.y = t.by + 1;
+                if (t.isGroundish()) {
+                    t.z = t.cz + 0.5;
+                    t.yaw = 0f;
+                } else {
+                    t.z = t.cz - t.r + 2.5;
+                    t.yaw = 0f;
+                }
                 int m = Math.max(0, b.getInt("region_margin", 24));
                 t.hasRegion = true; t.minX = t.cx - t.r - m; t.maxX = t.cx + t.r + m; t.minZ = t.cz - t.r - m; t.maxZ = t.cz + t.r + m;
             } else {
                 t.x = c.getDouble("x"); t.y = c.getDouble("y"); t.z = c.getDouble("z"); t.yaw = (float) c.getDouble("yaw", 0);
             }
+            // explicit spawn override (optional)
+            if (c.contains("x")) t.x = c.getDouble("x");
+            if (c.contains("y")) t.y = c.getDouble("y");
+            if (c.contains("z")) t.z = c.getDouble("z");
+            if (c.contains("yaw")) t.yaw = (float) c.getDouble("yaw");
             List<Integer> reg = c.getIntegerList("region");
             if (reg.size() == 4) { t.hasRegion = true; t.minX = reg.get(0); t.minZ = reg.get(1); t.maxX = reg.get(2); t.maxZ = reg.get(3); }
             tiers.add(t);
@@ -217,7 +245,7 @@ public class AfkTierService implements Listener {
         for (Tier t : tiers) {
             if (t.level > from && t.level <= to && t.level > 10) {
                 p.sendMessage(ChatColor.GREEN + "[挂机] 新挂机层解锁：" + ChatColor.YELLOW + t.name + ChatColor.GREEN + "（Lv." + t.level + "）"
-                        + ChatColor.GRAY + " · /ember → 挂机庭，或 /corerpg afk " + t.n);
+                        + ChatColor.GRAY + " · 打开 /ember → 挂机庭");
             }
         }
     }
@@ -234,21 +262,21 @@ public class AfkTierService implements Listener {
         int n;
         try { n = Integer.parseInt(a); } catch (NumberFormatException e) { list(p); return true; }
         Tier t = tier(n);
-        if (t == null) { p.sendMessage(ChatColor.RED + "[挂机] 没有第 " + n + " 层。/corerpg afk 查看"); return true; }
+        if (t == null) { p.sendMessage(ChatColor.RED + "[挂机] 没有第 " + n + " 层。打开 /ember → 挂机庭"); return true; }
         if (!p.isOp() && level(p) < t.level) {
             p.sendMessage(ChatColor.RED + "[挂机] " + t.name + " 需要余烬等级 " + ChatColor.YELLOW + "Lv." + t.level
-                    + ChatColor.RED + "（当前 Lv." + level(p) + "）" + ChatColor.GRAY + " · /corerpg level 查看升级进度");
+                    + ChatColor.RED + "（当前 Lv." + level(p) + "）" + ChatColor.GRAY + " · 打开 /ember 查看进度");
             return true;
         }
         QuestService qs = plugin.getQuestService();
-        if (qs != null && qs.isInstanceWorld(p.getWorld())) { p.sendMessage(ChatColor.RED + "[挂机] 副本中请先 /dp leave。"); return true; }
+        if (qs != null && qs.isInstanceWorld(p.getWorld())) { p.sendMessage(ChatColor.RED + "[挂机] 副本中请先离开副本。"); return true; }
         Location to = pad(t);
         if (to == null) { p.sendMessage(ChatColor.RED + "[挂机] 挂机世界未加载。"); return true; }
         p.teleport(to);
         protect(p);
         p.sendMessage(ChatColor.GREEN + "[挂机] 已到达 " + ChatColor.YELLOW + t.name + ChatColor.GREEN + "（Lv." + t.level + "）"
                 + ChatColor.GRAY + " · " + t.desc);
-        p.sendMessage(ChatColor.GRAY + "  死亡不掉落，复活在本层入口 · 掉落与其它层共用每日上限（" + capLine(p) + "）· /hub 回城");
+        p.sendMessage(ChatColor.GRAY + "  死亡不掉落，复活在本层入口 · 掉落与其它层共用每日上限（" + capLine(p) + "）· 打开枢纽菜单可返回");
         return true;
     }
 
@@ -258,9 +286,9 @@ public class AfkTierService implements Listener {
         for (Tier t : tiers) {
             boolean ok = lv >= t.level;
             p.sendMessage((ok ? ChatColor.GREEN + " ✔ " : ChatColor.DARK_GRAY + " ✖ ") + t.n + ". " + t.name + " Lv." + t.level
-                    + ChatColor.GRAY + " · " + t.desc + (ok ? ChatColor.YELLOW + "  /corerpg afk " + t.n : ""));
+                    + ChatColor.GRAY + " · " + t.desc + (ok ? ChatColor.YELLOW + "  可进入" : ""));
         }
-        p.sendMessage(ChatColor.GRAY + " 今日：" + capLine(p));
+        p.sendMessage(ChatColor.GRAY + " 今日：" + capLine(p) + " · 打开 /ember → 挂机庭");
     }
 
     String capLine(Player p) {
@@ -279,7 +307,7 @@ public class AfkTierService implements Listener {
         return sb.toString();
     }
 
-    /** /corerpg afk build <n> — (re)build a tier's sky arena from config (the world save is not in git). */
+    /** /corerpg afk build <n> — (re)build a tier pad from config (world save is not in git). */
     private boolean cmdBuild(CommandSender sender, String[] args) {
         if (!sender.hasPermission("corerpg.admin")) { sender.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
         if (args.length < 3) { sender.sendMessage("/corerpg afk build <n>"); return true; }
@@ -287,6 +315,335 @@ public class AfkTierService implements Listener {
         try { t = tier(Integer.parseInt(args[2])); } catch (NumberFormatException e) { t = null; }
         World w = world();
         if (t == null || t.floor == null || w == null) { sender.sendMessage(ChatColor.RED + "该层没有 build 配置或世界未加载"); return true; }
+
+        int cleared = clearOldSkyIsland(w, t);
+        int changed;
+        String theme = t.theme != null ? t.theme.toLowerCase() : "";
+        String mode = t.mode != null ? t.mode.toLowerCase() : "";
+        if ("cave".equals(theme) || "cave".equals(mode) || t.n == 4) {
+            changed = buildCave(w, t);
+        } else if ("scorched".equals(theme) || "ground".equals(mode) && t.n == 3 || t.n == 3) {
+            changed = buildScorched(w, t);
+        } else if ("ruins".equals(theme) || "ground".equals(mode) || t.n == 2) {
+            changed = buildRuins(w, t);
+        } else {
+            changed = buildLegacySky(w, t);
+        }
+
+        // refresh spawn pad from tier fields set by builders
+        plugin.getConfig().set("afk_tiers.tiers." + t.n + ".build.y", t.by);
+        plugin.getConfig().set("afk_tiers.tiers." + t.n + ".x", t.x);
+        plugin.getConfig().set("afk_tiers.tiers." + t.n + ".y", t.y);
+        plugin.getConfig().set("afk_tiers.tiers." + t.n + ".z", t.z);
+        plugin.saveConfig();
+
+        sender.sendMessage(ChatColor.GREEN + "[挂机] 已构建 " + t.name + " @ " + t.cx + "," + t.by + "," + t.cz
+                + " r=" + t.r + " mode=" + mode + "/" + theme
+                + "（改动 " + changed + " · 清旧岛 " + cleared + "）入口 " + fmt(t.x) + "," + fmt(t.y) + "," + fmt(t.z));
+        plugin.getLogger().info("afk build tier " + t.n + " y=" + t.by + " spawn=" + t.x + "," + t.y + "," + t.z
+                + " changed=" + changed + " cleared=" + cleared);
+        return true;
+    }
+
+    private static String fmt(double d) {
+        return String.format(java.util.Locale.US, "%.1f", d);
+    }
+
+    /** Air-out leftover y≈110 sky platforms so getHighestBlockYAt / players don't stick there. */
+    private int clearOldSkyIsland(World w, Tier t) {
+        int oldY = t.clearOldY > 0 ? t.clearOldY : 110;
+        int R = t.r + 3;
+        int changed = 0;
+        for (int dx = -R; dx <= R; dx++) {
+            for (int dz = -R; dz <= R; dz++) {
+                int x = t.cx + dx, z = t.cz + dz;
+                for (int y = oldY - 3; y <= oldY + 14; y++) {
+                    Block b = w.getBlockAt(x, y, z);
+                    if (b.getType() != Material.AIR) changed += set(b, Material.AIR);
+                }
+            }
+        }
+        return changed;
+    }
+
+    /** Highest solid non-barrier under yMax (after sky clear). */
+    private int probeSurface(World w, int x, int z) {
+        // Scan down from y85 so leftover floating pads above do not win.
+        for (int y = 85; y >= 40; y--) {
+            Material m = w.getBlockAt(x, y, z).getType();
+            if (m.isSolid() && m != Material.BARRIER) return tClamp(y);
+        }
+        int hi = w.getHighestBlockYAt(x, z);
+        return tClamp(hi > 0 ? hi : 64);
+    }
+
+    private static int tClamp(int y) {
+        if (y < 55) return 64;
+        if (y > 85) return 78;
+        return y;
+    }
+
+    /** Deterministic low-amp height offset. */
+    private static int reliefAt(int dx, int dz, int amp) {
+        if (amp <= 0) return 0;
+        int h = dx * 374761393 + dz * 668265263;
+        h = (h ^ (h >> 13)) * 1274126177;
+        h = (h ^ (h >> 16)) & 0x7fffffff;
+        return (h % (amp * 2 + 1)) - amp;
+    }
+
+    private static boolean nearCenter(int dx, int dz, int clearR) {
+        return dx * dx + dz * dz <= clearR * clearR;
+    }
+
+    // ---- theme builders ----
+
+    /** ② 荒原：贴地碎砖缓坡 + 半墙掩体 */
+    private int buildRuins(World w, Tier t) {
+        Material floor = mat(t.floor, Material.SMOOTH_BRICK);
+        Material wall = mat(t.wall, Material.COBBLE_WALL);
+        Material accent = mat(t.accent, Material.COBBLESTONE);
+        Material light = mat(t.light, Material.GLOWSTONE);
+        Material gravel = Material.GRAVEL;
+        Material grass = Material.GRASS;
+
+        int surface = probeSurface(w, t.cx, t.cz);
+        // sample a few neighbors for stability
+        surface = (surface + probeSurface(w, t.cx + 8, t.cz) + probeSurface(w, t.cx, t.cz + 8)) / 3;
+        surface = tClamp(surface);
+        t.by = surface;
+
+        int changed = 0;
+        int R = t.r;
+        int amp = t.relief ? 2 : 0;
+
+        for (int dx = -R; dx <= R; dx++) {
+            for (int dz = -R; dz <= R; dz++) {
+                int x = t.cx + dx, z = t.cz + dz;
+                int hOff = reliefAt(dx, dz, amp);
+                // gentle slope toward +z south
+                hOff += dz / 9;
+                int fy = surface + hOff;
+                if (fy < surface - 2) fy = surface - 2;
+                if (fy > surface + 3) fy = surface + 3;
+
+                boolean edge = Math.abs(dx) == R || Math.abs(dz) == R;
+                boolean open = nearCenter(dx, dz, 6);
+
+                // fill column from a bit below to floor
+                for (int y = surface - 4; y < fy; y++) changed += set(w.getBlockAt(x, y, z), accent);
+                Material top = floor;
+                int mix = Math.abs(reliefAt(dx + 3, dz - 2, 5));
+                if (mix == 0) top = accent;
+                else if (mix == 1) top = gravel;
+                else if (mix == 2 && !edge) top = grass;
+                changed += set(w.getBlockAt(x, fy, z), top);
+                if (!edge && dx % 7 == 0 && dz % 7 == 0 && !open) changed += set(w.getBlockAt(x, fy, z), light);
+
+                // clear stand space
+                for (int y = 1; y <= 6; y++) changed += set(w.getBlockAt(x, fy + y, z), Material.AIR);
+
+                // perimeter low wall (no barrier cage)
+                if (edge) {
+                    changed += set(w.getBlockAt(x, fy + 1, z), wall);
+                }
+            }
+        }
+
+        // half-wall cover props (2–3 clusters), away from center
+        int[][] covers = { { -10, -6 }, { 9, -8 }, { -7, 10 }, { 11, 7 } };
+        for (int[] c : covers) {
+            int bx = t.cx + c[0], bz = t.cz + c[1];
+            int fy = w.getHighestBlockYAt(bx, bz);
+            if (fy > 90) fy = surface;
+            for (int i = 0; i < 4; i++) {
+                int x = bx + (i % 2), z = bz + (i / 2);
+                int y0 = Math.min(fy, surface + 2);
+                changed += set(w.getBlockAt(x, y0, z), floor);
+                changed += set(w.getBlockAt(x, y0 + 1, z), wall);
+                changed += set(w.getBlockAt(x, y0 + 2, z), wall);
+                changed += set(w.getBlockAt(x, y0 + 3, z), Material.AIR);
+            }
+        }
+
+        // entry pad + signs at center
+        changed += placeEntryPad(w, t, surface, Material.QUARTZ_BLOCK);
+        changed += placeTierSigns(w, t, surface, "§a挂机·②荒原");
+        return changed;
+    }
+
+    /** ③ 焦土：焦裂谷地，落差 4～8，熔岩装饰沟+护栏 */
+    private int buildScorched(World w, Tier t) {
+        Material floor = mat(t.floor, Material.NETHER_BRICK);
+        Material wall = mat(t.wall, Material.NETHER_FENCE);
+        Material accent = mat(t.accent, Material.NETHERRACK);
+        Material light = mat(t.light, Material.GLOWSTONE);
+        Material obsidian = Material.OBSIDIAN;
+        Material magma = Material.MAGMA;
+
+        int surface = tClamp(probeSurface(w, t.cx, t.cz));
+        // valley floor ~ surface-5
+        int valley = surface - 5;
+        if (valley < 58) valley = 58;
+        t.by = valley;
+
+        int changed = 0;
+        int R = t.r;
+
+        for (int dx = -R; dx <= R; dx++) {
+            for (int dz = -R; dz <= R; dz++) {
+                int x = t.cx + dx, z = t.cz + dz;
+                double dist = Math.sqrt(dx * dx + dz * dz) / (double) R;
+                // rim higher, center lower — drop ~4–8
+                int drop = (int) Math.round((1.0 - dist) * 6.0);
+                if (drop < 0) drop = 0;
+                if (drop > 7) drop = 7;
+                int fy = surface - drop + reliefAt(dx, dz, t.relief ? 1 : 0);
+                if (fy < valley - 1) fy = valley - 1;
+                if (fy > surface + 1) fy = surface + 1;
+
+                boolean edge = Math.abs(dx) == R || Math.abs(dz) == R;
+                boolean open = nearCenter(dx, dz, 5);
+
+                for (int y = valley - 3; y < fy; y++) {
+                    Material fill = (y < fy - 1) ? accent : floor;
+                    changed += set(w.getBlockAt(x, y, z), fill);
+                }
+                Material top = floor;
+                int mix = Math.abs(reliefAt(dx, dz + 1, 4));
+                if (mix == 0) top = accent;
+                else if (mix == 1) top = obsidian;
+                changed += set(w.getBlockAt(x, fy, z), top);
+
+                // decorative magma groove ring around r≈8, fenced
+                int ad = Math.abs((int) Math.round(Math.sqrt(dx * dx + dz * dz)) - 8);
+                if (ad == 0 && !open) {
+                    changed += set(w.getBlockAt(x, fy, z), magma);
+                    changed += set(w.getBlockAt(x, fy + 1, z), wall);
+                } else {
+                    for (int y = 1; y <= 7; y++) changed += set(w.getBlockAt(x, fy + y, z), Material.AIR);
+                    if (!edge && dx % 6 == 0 && dz % 6 == 0) changed += set(w.getBlockAt(x, fy, z), light);
+                }
+
+                if (edge) {
+                    changed += set(w.getBlockAt(x, fy + 1, z), wall);
+                    // short barrier only on steep rim cliff drops into void-ish — skip if solid below
+                }
+            }
+        }
+
+        // a few raised nether-brick shelves
+        int[][] shelves = { { -9, 4 }, { 8, -5 }, { -5, -9 } };
+        for (int[] s : shelves) {
+            int bx = t.cx + s[0], bz = t.cz + s[1];
+            int fy = valley + 3;
+            for (int i = -1; i <= 1; i++) for (int j = -1; j <= 1; j++) {
+                changed += set(w.getBlockAt(bx + i, fy, bz + j), floor);
+                for (int y = 1; y <= 4; y++) changed += set(w.getBlockAt(bx + i, fy + y, bz + j), Material.AIR);
+            }
+        }
+
+        changed += placeEntryPad(w, t, valley, Material.QUARTZ_BLOCK);
+        changed += placeTierSigns(w, t, valley, "§6挂机·③焦土");
+        return changed;
+    }
+
+    /** ④ 烬原深处：竖井/坡道 → 扩厅 + 柱，开阔防窒息 */
+    private int buildCave(World w, Tier t) {
+        Material floor = mat(t.floor, Material.RED_NETHER_BRICK);
+        Material wall = mat(t.wall, Material.NETHER_FENCE);
+        Material accent = mat(t.accent, Material.NETHERRACK);
+        Material light = mat(t.light, Material.SEA_LANTERN);
+        Material obsidian = Material.OBSIDIAN;
+
+        int surface = tClamp(probeSurface(w, t.cx, t.cz));
+        int hall = surface - 8;
+        if (hall < 52) hall = 52;
+        if (hall > surface - 6) hall = surface - 6;
+        t.by = hall;
+
+        int changed = 0;
+        int R = t.r;
+        int hallR = R - 2;
+
+        // dig / shape hall volume
+        for (int dx = -hallR; dx <= hallR; dx++) {
+            for (int dz = -hallR; dz <= hallR; dz++) {
+                if (dx * dx + dz * dz > hallR * hallR) continue;
+                int x = t.cx + dx, z = t.cz + dz;
+                boolean open = nearCenter(dx, dz, 5);
+                int hOff = reliefAt(dx, dz, t.relief ? 1 : 0);
+                int fy = hall + hOff;
+                if (fy < hall - 1) fy = hall - 1;
+                if (fy > hall + 2) fy = hall + 2;
+
+                // floor + subfill
+                for (int y = hall - 3; y < fy; y++) changed += set(w.getBlockAt(x, y, z), accent);
+                Material top = floor;
+                if (Math.abs(reliefAt(dx + 1, dz, 3)) == 0) top = accent;
+                if (Math.abs(reliefAt(dx, dz + 2, 5)) == 1) top = obsidian;
+                changed += set(w.getBlockAt(x, fy, z), top);
+
+                // open hall headroom (prevent suffocation)
+                for (int y = 1; y <= 6; y++) changed += set(w.getBlockAt(x, fy + y, z), Material.AIR);
+
+                // roof shell lightly
+                changed += set(w.getBlockAt(x, fy + 7, z), accent);
+                if (!open && dx % 5 == 0 && dz % 5 == 0) changed += set(w.getBlockAt(x, fy, z), light);
+            }
+        }
+
+        // pillars (not in center open)
+        int[][] pillars = { { -8, -8 }, { 8, -8 }, { -8, 8 }, { 8, 8 }, { 0, -10 }, { 0, 10 } };
+        for (int[] p : pillars) {
+            int x = t.cx + p[0], z = t.cz + p[1];
+            for (int y = hall; y <= hall + 6; y++) changed += set(w.getBlockAt(x, y, z), floor);
+            changed += set(w.getBlockAt(x, hall + 7, z), light);
+        }
+
+        // raised side platforms
+        for (int side = -1; side <= 1; side += 2) {
+            int bx = t.cx + side * 10, bz = t.cz;
+            for (int i = -2; i <= 2; i++) for (int j = -2; j <= 2; j++) {
+                changed += set(w.getBlockAt(bx + i, hall + 2, bz + j), floor);
+                for (int y = 3; y <= 6; y++) changed += set(w.getBlockAt(bx + i, hall + y, bz + j), Material.AIR);
+            }
+        }
+
+        // shaft + stair ramp from surface south approach into hall (+z side)
+        int sx = t.cx, sz = t.cz + 4;
+        for (int step = 0; step <= 8; step++) {
+            int y = surface - step;
+            int z = sz + (step < 2 ? 2 : 0);
+            // clear shaft column
+            for (int yy = hall + 1; yy <= surface + 2; yy++) {
+                changed += set(w.getBlockAt(sx, yy, sz), Material.AIR);
+                changed += set(w.getBlockAt(sx + 1, yy, sz), Material.AIR);
+                changed += set(w.getBlockAt(sx - 1, yy, sz), Material.AIR);
+            }
+            // ramp blocks
+            int rz = t.cz + 12 - step;
+            changed += set(w.getBlockAt(sx, y, rz), floor);
+            changed += set(w.getBlockAt(sx + 1, y, rz), floor);
+            changed += set(w.getBlockAt(sx - 1, y, rz), floor);
+            changed += set(w.getBlockAt(sx, y + 1, rz), Material.AIR);
+            changed += set(w.getBlockAt(sx, y + 2, rz), Material.AIR);
+            changed += set(w.getBlockAt(sx, y + 3, rz), Material.AIR);
+        }
+        // surface collar + fence around shaft mouth
+        for (int dx = -2; dx <= 2; dx++) for (int dz = -2; dz <= 2; dz++) {
+            if (Math.abs(dx) != 2 && Math.abs(dz) != 2) continue;
+            changed += set(w.getBlockAt(sx + dx, surface, sz + dz), floor);
+            changed += set(w.getBlockAt(sx + dx, surface + 1, sz + dz), wall);
+        }
+
+        changed += placeEntryPad(w, t, hall, Material.QUARTZ_BLOCK);
+        changed += placeTierSigns(w, t, hall, "§c挂机·④烬原");
+        return changed;
+    }
+
+    /** Legacy flat sky arena (kept for compatibility; not used by P0 tiers). */
+    private int buildLegacySky(World w, Tier t) {
         Material floor = mat(t.floor, Material.SMOOTH_BRICK), wall = mat(t.wall, Material.COBBLE_WALL), light = mat(t.light, Material.GLOWSTONE);
         int changed = 0;
         int R = t.r + 1;
@@ -305,12 +662,55 @@ public class AfkTierService implements Listener {
                 }
             }
         }
-        // entry pad marker (3×3)
         int px = (int) Math.floor(t.x), pz = (int) Math.floor(t.z);
         for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) changed += set(w.getBlockAt(px + dx, t.by, pz + dz), Material.QUARTZ_BLOCK);
-        sender.sendMessage(ChatColor.GREEN + "[挂机] 已构建 " + t.name + " @ " + t.cx + "," + t.by + "," + t.cz + " r=" + t.r + "（改动 " + changed + " 格）");
-        plugin.getLogger().info("afk build tier " + t.n + " changed " + changed);
-        return true;
+        t.x = t.cx + 0.5; t.y = t.by + 1; t.z = t.cz - t.r + 2.5;
+        return changed;
+    }
+
+    private int placeEntryPad(World w, Tier t, int floorY, Material pad) {
+        int changed = 0;
+        // design: spawn at (cx+0.5, floorY+1, cz+0.5)
+        t.x = t.cx + 0.5;
+        t.y = floorY + 1;
+        t.z = t.cz + 0.5;
+        t.by = floorY;
+        for (int dx = -1; dx <= 1; dx++) for (int dz = -1; dz <= 1; dz++) {
+            changed += set(w.getBlockAt(t.cx + dx, floorY, t.cz + dz), pad);
+            for (int y = 1; y <= 3; y++) changed += set(w.getBlockAt(t.cx + dx, floorY + y, t.cz + dz), Material.AIR);
+        }
+        return changed;
+    }
+
+    private int placeTierSigns(World w, Tier t, int floorY, String title) {
+        int changed = 0;
+        // entry sign north of pad
+        int ex = t.cx, ez = t.cz - 3;
+        changed += set(w.getBlockAt(ex, floorY, ez), mat(t.floor, Material.SMOOTH_BRICK));
+        changed += writeSign(w.getBlockAt(ex, floorY + 1, ez), title, "§7打开/ember", "§7→挂机庭换层", "§8死亡回入口");
+        // evacuate sign south of pad
+        int vx = t.cx, vz = t.cz + 3;
+        changed += set(w.getBlockAt(vx, floorY, vz), mat(t.floor, Material.SMOOTH_BRICK));
+        changed += writeSign(w.getBlockAt(vx, floorY + 1, vz), "§e回枢纽", "§7打开枢纽菜单", "§7返回", "");
+        return changed;
+    }
+
+    private int writeSign(Block b, String l0, String l1, String l2, String l3) {
+        b.setType(Material.SIGN_POST, false);
+        if (b.getState() instanceof Sign) {
+            Sign s = (Sign) b.getState();
+            s.setLine(0, color(l0));
+            s.setLine(1, color(l1));
+            s.setLine(2, color(l2));
+            s.setLine(3, color(l3));
+            s.update(true, false);
+            return 1;
+        }
+        return 0;
+    }
+
+    private static String color(String s) {
+        return s == null ? "" : s;
     }
 
     private static Material mat(String s, Material def) {

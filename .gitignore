@@ -46,3 +46,12 @@ plugins/DungeonPlus/map/
 server-runtime/assets/
 server-runtime/libraries/
 server-runtime/libs/
+
+# ---- runtime / local junk (sync 2026-09-27) ----
+*.pid
+*.bak
+**/__pycache__/
+ember-binaries-*.tar.xz
+ember-binaries-*.tar.xz.sha256
+server-runtime/config-backups/
+server-runtime/ember_abyss_build/

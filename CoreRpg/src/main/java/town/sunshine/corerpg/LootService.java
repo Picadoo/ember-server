@@ -50,6 +50,12 @@ public final class LootService {
             ConfigurationSection ch = sec.getConfigurationSection("chance");
             if (ch != null) for (String id : ch.getKeys(false)) if (rnd.nextDouble() < ch.getDouble(id)) { if (ni.giveNiItem(p, id, 1)) got.add(ni.displayName(id)); }
         }
+        // Stage 4.4: pick exactly one NI id from list (e.g. elite gem pool)
+        java.util.List<String> pick = sec.getStringList("pick_one");
+        if (pick != null && !pick.isEmpty()) {
+            String id = pick.get(rnd.nextInt(pick.size()));
+            if (id != null && !id.isEmpty() && ni.giveNiItem(p, id, 1)) got.add(ni.displayName(id));
+        }
         dataStore.flushMutation(p.getUniqueId());
         String label = sec.getString("label", args[2]);
         if (!got.isEmpty()) p.sendMessage(ChatColor.GOLD + "[" + label + "] " + (firstNow ? "本周首通保底：" : "幸运掉落：") + ChatColor.WHITE + String.join("，", got));

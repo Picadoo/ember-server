@@ -10,19 +10,32 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.enchantment.EnchantItemEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -40,6 +53,7 @@ import java.util.logging.Level;
  * 1.8.0 (2026-09-26): mainline quest 「旧誓余烬」. Chapters/steps in quest.yml; progress in PlayerData (MySQL blob).
  * Hooks: MythicMobs kills (reflection), DP clears via /corerpg progress, sign, bounty, enchant/anvil/craft (vanilla events),
  * calamity join/boss, ember level-ups, Adyeshach NPC interact (reflection, soft).
+ * Stage 4.5: abyss_floor / elite_weekly_clear / forge state-type events; volume 2 chapters 7–10.
  */
 public final class QuestService implements Listener {
 
@@ -50,6 +64,8 @@ public final class QuestService implements Listener {
         List<String> mobs = new ArrayList<String>();
         int count = 1;
         int level = 0;
+        /** abyss_floor target (historical best ≥ floor). Shared on multi-select steps. */
+        int floor = 0;
         String desc = "";
         String hint = "";
         int xp = 0;
@@ -82,6 +98,12 @@ public final class QuestService implements Listener {
     private double talkRadius = 8;
     private final Map<UUID, Long> talkCooldown = new HashMap<UUID, Long>();
     private boolean adyHooked = false;
+    /** Bukkit hitbox metadata key; value = npc id (ember_guide). */
+    static final String META_QUEST_NPC = "corerpg_quest_npc";
+    private static final String[] ADY_INTERACT_EVENTS = {
+            "ink.ptms.adyeshach.core.event.AdyeshachEntityInteractEvent",
+            "ink.ptms.adyeshach.api.event.AdyeshachEntityInteractEvent"
+    };
     // MythicMobs reflection cache
     private Object mmApi;
     private Method mmIsMythic, mmGetInstance, mmGetType, mmInternalName;
@@ -140,6 +162,7 @@ public final class QuestService implements Listener {
         if (mobs instanceof List) for (Object o : (List<Object>) mobs) s.mobs.add(String.valueOf(o));
         s.count = Math.max(1, num(m.get("count"), 1));
         s.level = num(m.get("level"), 0);
+        s.floor = num(m.get("floor"), 0);
         s.desc = color(str(m.get("desc"), ""));
         s.hint = color(str(m.get("hint"), ""));
         s.xp = Math.max(0, num(m.get("xp"), 0));
@@ -178,7 +201,7 @@ public final class QuestService implements Listener {
     public String objective(Player p) {
         if (!enabled || p == null) return "";
         PlayerData d = dataStore.get(p.getUniqueId());
-        if (d.isQuestDone()) return "第一卷已完成";
+        if (d.isQuestDone()) return d.getQuestChapter() >= 7 ? "第二卷已完成" : "第一卷已完成";
         Step s = step(d);
         if (s == null) return "找 灰烛 开始主线";
         return ChatColor.stripColor(s.desc) + progressSuffix(p, d, s);
@@ -194,8 +217,12 @@ public final class QuestService implements Listener {
     public String chapterLabel(Player p) {
         PlayerData d = dataStore.get(p.getUniqueId());
         Chapter c = chapter(d);
-        if (d.isQuestDone()) return "旧誓余烬 · 完";
-        return c == null ? "-" : ("第" + c.no + "章 " + c.name);
+        if (d.isQuestDone()) {
+            return d.getQuestChapter() >= 7 ? "烬火未灭 · 完" : "旧誓余烬 · 完";
+        }
+        if (c == null) return "-";
+        if (c.no >= 7) return "第二卷 · " + c.name;
+        return "第" + c.no + "章 " + c.name;
     }
 
     // ---------------- flow ----------------
@@ -215,7 +242,16 @@ public final class QuestService implements Listener {
                     if (autoStart && !chapters.isEmpty()) startChapter(p, chapters.firstKey());
                     return;
                 }
-                if (d.isQuestDone()) return;
+                if (d.isQuestDone()) {
+                    // Stage 4.5: volume 2 chapters added after vol1 was marked done → reopen next chapter
+                    Integer nk = chapters.higherKey(d.getQuestChapter());
+                    if (nk != null) {
+                        d.setQuestDone(false);
+                        dataStore.flushMutation(p.getUniqueId());
+                        startChapter(p, nk);
+                    }
+                    return;
+                }
                 // 1.11.0 migration: ch2 was reordered and the T1 blade moved from the Lv20 step to the daily-clear step
                 if (d.getQuestChapter() == 2 && d.getQuestStep() >= 2 && d.periodCount("mig_quest_1110", "all") == 0) {
                     d.addPeriodCount("mig_quest_1110", "all", 1);
@@ -276,7 +312,11 @@ public final class QuestService implements Listener {
             if (nk == null) {
                 d.setQuestDone(true);
                 dataStore.flushMutation(p.getUniqueId());
-                p.sendMessage(title + ChatColor.GOLD + " 主线第一卷「旧誓余烬」完成。");
+                if (ch >= 7) {
+                    p.sendMessage(title + ChatColor.GOLD + " 主线第二卷「烬火未灭」完成。");
+                } else {
+                    p.sendMessage(title + ChatColor.GOLD + " 主线第一卷「旧誓余烬」完成。");
+                }
                 return;
             }
             startChapter(p, nk);
@@ -311,8 +351,18 @@ public final class QuestService implements Listener {
             if ("enhance".equals(ev) && maxEnhance(p) >= Math.max(1, s.level)) return true;
             if ("enchant".equals(ev) && (d.periodCount("ever_enchant", "all") > 0 || hasEnchantedGear(p))) return true;
             if ("anvil".equals(ev) && d.periodCount("ever_anvil", "all") > 0) return true;
+            // Stage 4.5 state-type events
+            if ("forge".equals(ev) && d.periodCount("ever_forge", "all") > 0) return true;
+            if ("abyss_floor".equals(ev) && d.getAbyssBest() >= Math.max(1, s.floor)) return true;
+            if ("elite_weekly_clear".equals(ev) && hasEliteWeeklyClear(d)) return true;
         }
         return false;
+    }
+
+    private static boolean hasEliteWeeklyClear(PlayerData d) {
+        String week = DailyService.weekId();
+        if (week == null || week.isEmpty()) return false;
+        return d.getLootWeekMarks().contains(EliteService.CLEAR_MARK + "=" + week);
     }
 
     private int maxEnhance(Player p) {
@@ -451,9 +501,25 @@ public final class QuestService implements Listener {
                 return true;
             }
             if ("event".equals(act)) {
-                if (args.length < 4) { sender.sendMessage("/corerpg quest event <player> <event>"); return true; }
-                onEvent(t, args[3]);
-                sender.sendMessage("[CoreRpg] quest event " + t.getName() + " " + args[3] + " → " + objective(t));
+                if (args.length < 4) { sender.sendMessage("/corerpg quest event <player> <event> [extra]"); return true; }
+                String evName = args[3].toLowerCase();
+                // Stage 4.5: quest event <p> abyss_floor <N> — raise historical best then refresh
+                if ("abyss_floor".equals(evName) && args.length >= 5) {
+                    int fl = num(args[4], 0);
+                    if (fl > 0) {
+                        d.recordAbyssFloor(fl);
+                        dataStore.flushMutation(t.getUniqueId());
+                    }
+                    checkPassive(t);
+                    onEvent(t, "abyss_floor");
+                    sender.sendMessage("[CoreRpg] quest event " + t.getName() + " abyss_floor " + fl
+                            + " (best=" + d.getAbyssBest() + ") → " + objective(t));
+                    return true;
+                }
+                onEvent(t, evName);
+                // state-type may already be satisfied without a bump (forge mark / elite mark)
+                checkPassive(t);
+                sender.sendMessage("[CoreRpg] quest event " + t.getName() + " " + evName + " → " + objective(t));
                 return true;
             }
             if (args.length < 5) { sender.sendMessage("/corerpg quest set <player> <chapter> <step>"); return true; }
@@ -469,7 +535,10 @@ public final class QuestService implements Listener {
         Player p = (Player) sender;
         PlayerData d = dataStore.get(p.getUniqueId());
         p.sendMessage(title + ChatColor.GOLD + " " + chapterLabel(p));
-        if (d.isQuestDone()) { p.sendMessage(ChatColor.GRAY + "  第一卷已完成。"); return true; }
+        if (d.isQuestDone()) {
+            p.sendMessage(ChatColor.GRAY + "  " + (d.getQuestChapter() >= 7 ? "第二卷已完成。" : "第一卷已完成。"));
+            return true;
+        }
         Chapter c = chapter(d);
         if (c == null) { p.sendMessage(ChatColor.GRAY + "  找枢纽的 " + npcName + ChatColor.GRAY + " 开始主线"); return true; }
         for (int i = 0; i < c.steps.size(); i++) {
@@ -556,49 +625,95 @@ public final class QuestService implements Listener {
         }
     }
 
-    // ---------------- Adyeshach NPC (reflection, soft) ----------------
+    // ---------------- Adyeshach NPC (reflection, soft) + Bukkit hitbox ----------------
 
     public void hookAdyeshach() {
         if (!enabled || !npcEnabled || adyHooked) return;
         final Plugin ady = Bukkit.getPluginManager().getPlugin("Adyeshach");
         if (ady == null || !ady.isEnabled()) return;
-        try {
-            final ClassLoader cl = ady.getClass().getClassLoader();
-            @SuppressWarnings("unchecked")
-            final Class<? extends Event> evt = (Class<? extends Event>) Class.forName("ink.ptms.adyeshach.core.event.AdyeshachEntityInteractEvent", true, cl);
-            final Method getEntity = evt.getMethod("getEntity");
-            final Method getPlayer = evt.getMethod("getPlayer");
-            final Method isMain = evt.getMethod("isMainHand");
-            Bukkit.getPluginManager().registerEvent(evt, this, EventPriority.NORMAL, new EventExecutor() {
-                @Override public void execute(Listener l, Event event) {
-                    if (!evt.isInstance(event)) return;
-                    try {
-                        if (!(Boolean) isMain.invoke(event)) return;
-                        Object ent = getEntity.invoke(event);
-                        String id = String.valueOf(ent.getClass().getMethod("getId").invoke(ent));
-                        if (!npcId.equals(id)) return;
-                        final Player p = (Player) getPlayer.invoke(event);
-                        Bukkit.getScheduler().runTask(plugin, new Runnable() {
-                            @Override public void run() { if (p.isOnline()) talk(p); }
-                        });
-                    } catch (Throwable t) {
-                        plugin.getLogger().log(Level.WARNING, "Adyeshach interact hook", t);
+        final ClassLoader cl = ady.getClass().getClassLoader();
+        int registered = 0;
+        for (String className : ADY_INTERACT_EVENTS) {
+            try {
+                @SuppressWarnings("unchecked")
+                final Class<? extends Event> evt = (Class<? extends Event>) Class.forName(className, true, cl);
+                final Method getEntity = evt.getMethod("getEntity");
+                final Method getPlayer = evt.getMethod("getPlayer");
+                // isMainHand intentionally ignored — off-hand / protocol quirks must still talk
+                Bukkit.getPluginManager().registerEvent(evt, this, EventPriority.NORMAL, new EventExecutor() {
+                    @Override public void execute(Listener l, Event event) {
+                        if (!evt.isInstance(event)) return;
+                        try {
+                            Object ent = getEntity.invoke(event);
+                            if (!matchesAdyNpc(ent)) return;
+                            final Player p = (Player) getPlayer.invoke(event);
+                            if (p == null) return;
+                            Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                                @Override public void run() { if (p.isOnline()) talk(p); }
+                            });
+                        } catch (Throwable t) {
+                            plugin.getLogger().log(Level.WARNING, "Adyeshach interact hook (" + className + ")", t);
+                        }
                     }
-                }
-            }, plugin);
+                }, plugin);
+                registered++;
+                plugin.getLogger().info("Quest: Adyeshach interact hook registered: " + className + " (npc id " + npcId + ")");
+            } catch (ClassNotFoundException cnf) {
+                plugin.getLogger().info("Quest: Adyeshach event class absent (ok): " + className);
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.WARNING, "Quest: Adyeshach hook failed for " + className, t);
+            }
+        }
+        if (registered > 0) {
             adyHooked = true;
-            plugin.getLogger().info("Quest: Adyeshach interact hook registered (npc id " + npcId + ")");
-        } catch (Throwable t) {
-            plugin.getLogger().log(Level.WARNING, "Quest: Adyeshach hook failed", t);
+            plugin.getLogger().info("Quest: Adyeshach interact hooks active=" + registered + " (npc id " + npcId + ")");
         }
     }
 
-    /** Create the hub quest-giver in Adyeshach's persistent manager if it is missing. */
+    /** Match Ady NPC by id, custom-name containing 灰烛, or distance ≤2 to configured coords. */
+    private boolean matchesAdyNpc(Object ent) {
+        if (ent == null) return false;
+        try {
+            String id = String.valueOf(ent.getClass().getMethod("getId").invoke(ent));
+            if (npcId.equals(id)) return true;
+        } catch (Throwable ignored) {}
+        try {
+            Object cn = ent.getClass().getMethod("getCustomName").invoke(ent);
+            if (cn != null) {
+                String plain = ChatColor.stripColor(String.valueOf(cn));
+                if (plain != null && plain.contains("灰烛")) return true;
+            }
+        } catch (Throwable ignored) {}
+        try {
+            Object locObj = null;
+            for (String m : new String[]{"getLocation", "getWorldPosition", "getExactLocation"}) {
+                try {
+                    Method gm = ent.getClass().getMethod(m);
+                    locObj = gm.invoke(ent);
+                    if (locObj instanceof Location) break;
+                } catch (NoSuchMethodException ignored) {}
+            }
+            if (locObj instanceof Location) {
+                Location loc = (Location) locObj;
+                World w = Bukkit.getWorld(npcWorld);
+                if (w != null && w.equals(loc.getWorld())
+                        && loc.distanceSquared(new Location(w, npcX, npcY, npcZ)) <= 4.0) {
+                    return true;
+                }
+            }
+        } catch (Throwable ignored) {}
+        return false;
+    }
+
+    /** Create the hub quest-giver in Adyeshach's persistent manager if it is missing; always ensure Bukkit hitbox. */
     public void ensureNpc(boolean force) {
         if (!enabled || !npcEnabled) return;
         Plugin ady = Bukkit.getPluginManager().getPlugin("Adyeshach");
         World w = Bukkit.getWorld(npcWorld);
-        if (ady == null || !ady.isEnabled() || w == null) return;
+        if (ady == null || !ady.isEnabled() || w == null) {
+            ensureHitboxNpc();
+            return;
+        }
         try {
             ClassLoader cl = ady.getClass().getClassLoader();
             Class<?> adyC = Class.forName("ink.ptms.adyeshach.core.Adyeshach", true, cl);
@@ -628,9 +743,127 @@ public final class QuestService implements Listener {
         } catch (Throwable t) {
             plugin.getLogger().log(Level.WARNING, "Quest: ensure Adyeshach NPC failed", t);
         }
+        ensureHitboxNpc();
     }
 
-    /** 1.8.1: lost the starter blade (death before keepInventory, dropped…) → 灰烛 hands a new T0 blade, once per day. */
+    /**
+     * Real Bukkit hitbox at 灰烛 coords so vanilla / mineflayer use_entity always reaches talk().
+     * Invisible Silent NoAI Nitwit villager — avoids trade UI, no path block, no second nametag clash with Ady.
+     */
+    public void ensureHitboxNpc() {
+        if (!enabled || !npcEnabled) return;
+        World w = Bukkit.getWorld(npcWorld);
+        if (w == null) return;
+        Location loc = new Location(w, npcX, npcY, npcZ, npcYaw, 0f);
+        // purge stale hitboxes in a small radius
+        for (Entity e : w.getEntitiesByClass(LivingEntity.class)) {
+            if (!e.hasMetadata(META_QUEST_NPC)) continue;
+            if (e.getLocation().distanceSquared(loc) > 16.0) continue;
+            e.remove();
+        }
+        Villager v;
+        try {
+            v = (Villager) w.spawnEntity(loc, EntityType.VILLAGER);
+        } catch (Throwable t) {
+            plugin.getLogger().log(Level.WARNING, "Quest: spawn hitbox villager failed, trying ArmorStand", t);
+            ensureHitboxArmorStand(loc);
+            return;
+        }
+        try {
+            v.setAI(false);
+            v.setSilent(true);
+            v.setInvulnerable(true);
+            v.setCollidable(false);
+            v.setRemoveWhenFarAway(false);
+            v.setCanPickupItems(false);
+            v.setCustomNameVisible(false);
+            // keep no custom name so Ady nametag is the only visible label
+            try { v.setProfession(Villager.Profession.NITWIT); } catch (Throwable ignored) {}
+            try { v.setRecipes(Collections.<org.bukkit.inventory.MerchantRecipe>emptyList()); } catch (Throwable ignored) {}
+            v.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false), true);
+            v.setMetadata(META_QUEST_NPC, new FixedMetadataValue(plugin, npcId));
+            plugin.getLogger().info("Quest: Bukkit hitbox villager ensured at " + npcWorld
+                    + " " + npcX + "," + npcY + "," + npcZ);
+        } catch (Throwable t) {
+            plugin.getLogger().log(Level.WARNING, "Quest: configure hitbox villager failed", t);
+            v.remove();
+            ensureHitboxArmorStand(loc);
+        }
+    }
+
+    private void ensureHitboxArmorStand(Location loc) {
+        try {
+            ArmorStand as = (ArmorStand) loc.getWorld().spawnEntity(loc, EntityType.ARMOR_STAND);
+            as.setVisible(false);
+            as.setGravity(false);
+            as.setBasePlate(false);
+            as.setArms(false);
+            as.setMarker(false); // keep clickable hitbox
+            as.setSmall(false);
+            as.setCustomNameVisible(false);
+            as.setInvulnerable(true);
+            as.setCollidable(false);
+            as.setRemoveWhenFarAway(false);
+            as.setMetadata(META_QUEST_NPC, new FixedMetadataValue(plugin, npcId));
+            plugin.getLogger().info("Quest: Bukkit hitbox ArmorStand ensured at " + loc);
+        } catch (Throwable t) {
+            plugin.getLogger().log(Level.WARNING, "Quest: spawn hitbox ArmorStand failed", t);
+        }
+    }
+
+    private boolean isQuestHitbox(Entity e) {
+        return e != null && e.hasMetadata(META_QUEST_NPC);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
+    public void onHitboxInteract(PlayerInteractEntityEvent e) {
+        if (!enabled || !npcEnabled) return;
+        Entity clicked = e.getRightClicked();
+        if (!isQuestHitbox(clicked)) return;
+        // 1.9+ fires once per hand; accept both, but cancel trade/UI
+        try {
+            if (e.getHand() != null && e.getHand() != EquipmentSlot.HAND && e.getHand() != EquipmentSlot.OFF_HAND) {
+                return;
+            }
+        } catch (Throwable ignored) {}
+        e.setCancelled(true);
+        final Player p = e.getPlayer();
+        Bukkit.getScheduler().runTask(plugin, new Runnable() {
+            @Override public void run() { if (p.isOnline()) talk(p); }
+        });
+    }
+
+    /** Near-miss fallback: right-click air/block while looking toward 灰烛 within 3 blocks. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onLookTalk(PlayerInteractEvent e) {
+        if (!enabled || !npcEnabled) return;
+        Action a = e.getAction();
+        if (a != Action.RIGHT_CLICK_AIR && a != Action.RIGHT_CLICK_BLOCK) return;
+        try {
+            if (e.getHand() != null && e.getHand() != EquipmentSlot.HAND && e.getHand() != EquipmentSlot.OFF_HAND) return;
+        } catch (Throwable ignored) {}
+        Player p = e.getPlayer();
+        World w = Bukkit.getWorld(npcWorld);
+        if (w == null || !p.getWorld().equals(w)) return;
+        Location npcLoc = new Location(w, npcX, npcY + 1.0, npcZ);
+        if (p.getLocation().distanceSquared(npcLoc) > 9.0) return; // ≤3 blocks
+        Vector toNpc = npcLoc.toVector().subtract(p.getEyeLocation().toVector());
+        if (toNpc.lengthSquared() < 1.0e-6) {
+            talk(p);
+            return;
+        }
+        toNpc.normalize();
+        Vector look = p.getEyeLocation().getDirection().normalize();
+        if (look.dot(toNpc) < 0.72) return; // roughly facing NPC
+        talk(p);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = false)
+    public void onHitboxDamage(EntityDamageEvent e) {
+        if (isQuestHitbox(e.getEntity())) e.setCancelled(true);
+    }
+
+    /** 1.8.1: lost the starter blade    /** 1.8.1: lost the starter blade (death before keepInventory, dropped…) → 灰烛 hands a new T0 blade, once per day. */
     private void reissueStarter(Player p, PlayerData d) {
         if (ni == null || d.getQuestChapter() <= 0) return;
         for (ItemStack it : p.getInventory().getContents()) {
@@ -766,18 +999,39 @@ public final class QuestService implements Listener {
             "hub", "spawn", "lobby", "回城", "ember", "menu", "home", "warp", "back", "tpa", "mvtp", "mv"));
     private final Map<UUID, Long> blockedHint = new HashMap<UUID, Long>();
 
-    /** 1.11.0: DungeonPlus silently cancels non-whitelisted commands in instances → explain. */
+    /** 1.11.0: DungeonPlus silently cancels non-whitelisted commands in instances → explain.
+     * 2026-09-27: in EmberAbyss, /ember|/menu opens ember_abyss (evacuate path) instead of hub block. */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onDungeonCmdEarly(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
         if (!isInstanceWorld(e.getPlayer().getWorld())) return;
         String root = e.getMessage().replaceFirst("^/", "").trim().split("\\s+")[0].toLowerCase();
         if (root.contains(":")) root = root.substring(root.indexOf(':') + 1);
-        if (HUB_CMDS.contains(root)) {
+        if (!HUB_CMDS.contains(root)) return;
+
+        final Player p = e.getPlayer();
+        String worldName = p.getWorld().getName();
+        boolean inAbyss = worldName != null && worldName.toLowerCase().contains("abyss");
+
+        // Abyss only: /ember or /menu → open deep-abyss menu (evacuate), not hub
+        if (inAbyss && ("ember".equals(root) || "menu".equals(root))) {
             e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + "[余烬] 副本中不能回城或开菜单，离开请用 " + ChatColor.YELLOW + "/dp leave"
-                    + ChatColor.GRAY + "（可用：/corerpg skill · quest · stats）");
-            blockedHint.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
+            blockedHint.put(p.getUniqueId(), System.currentTimeMillis()); // suppress MONITOR duplicate
+            final String name = p.getName();
+            Bukkit.getScheduler().runTask(plugin, new Runnable() {
+                @Override public void run() {
+                    if (!p.isOnline()) return;
+                    // Console bypasses DP player command whitelist
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open ember_abyss " + name);
+                }
+            });
+            p.sendMessage(ChatColor.DARK_GRAY + "[深渊] 本内菜单 · 点「上浮撤离」");
+            return;
         }
+
+        e.setCancelled(true);
+        e.getPlayer().sendMessage(ChatColor.RED + "[余烬] 副本中不能回城或开菜单，离开请用 " + ChatColor.YELLOW + "/dp leave"
+                + ChatColor.GRAY + "（可用：/corerpg skill · quest · stats）");
+        blockedHint.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -786,7 +1040,12 @@ public final class QuestService implements Listener {
         Long last = blockedHint.get(e.getPlayer().getUniqueId());
         if (last != null && System.currentTimeMillis() - last < 300) return;
         blockedHint.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
-        e.getPlayer().sendMessage(ChatColor.RED + "[余烬] 副本中该命令不可用。" + ChatColor.GRAY + "可用：/dp leave · /corerpg skill · quest · stats");
+        String w = e.getPlayer().getWorld().getName();
+        boolean inAbyss = w != null && w.toLowerCase().contains("abyss");
+        String avail = inAbyss
+                ? "可用：菜单撤离（本内 /ember 开深渊菜单）· /dp leave · skill/quest/stats"
+                : "可用：/dp leave · /corerpg skill · quest · stats";
+        e.getPlayer().sendMessage(ChatColor.RED + "[余烬] 副本中该命令不可用。" + ChatColor.GRAY + avail);
     }
 
     // ---------------- util ----------------

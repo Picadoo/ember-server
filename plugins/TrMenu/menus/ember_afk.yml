@@ -13,7 +13,7 @@ Layout:
   - '#########'
   - '# 1 2 3 #'
   - '#   4   #'
-  - '#   I   #'
+  - '#  I H #'
   - '####B####'
 
 Events:
@@ -101,6 +101,21 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg afk 4'
+        - close
+
+  H:
+    display:
+      material: ender pearl
+      name: '§e回枢纽'
+      lore:
+        - ''
+        - '§7打开枢纽菜单返回'
+        - ''
+        - '§e➥ §f点击返回枢纽'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'command: hub'
         - close
 
   I:

@@ -1,5 +1,5 @@
-# 深渊 — docs/ember-abyss-evacuate-spec.md / DESIGN-ember-abyss-evacuate.md
-# /dp start EmberAbyss · 扣余烬深渊票 ×1 · 撤离按最高层结算 · 票不退
+# 深渊 — docs/ember-abyss-evacuate-spec.md / design-stage4-abyss-9-12.md
+# 玩家走菜单按钮进本/撤离；action 内保留 dp start / evacuate 指令（菜单执行，勿在 lore/tell 强调手打）
 
 Title: '§5深渊 · 无尽层'
 
@@ -45,18 +45,17 @@ Icons:
         - '§7冲层 · 撤离按最高层结算'
         - '§7撤离不退票'
         - ''
-        - '§7共 8 层：潮尸→混潮→骨潮→蛮层→看守→加压…'
-        - '§8清第 5 层后续潜；随时可撤离'
-        - '§8时限约 25 分 · 人数 1～2'
+        - '§7本期可下潜至第 §f12 §7层 · 第12层周首通稳定符'
+        - '§7共 12 层：潮尸→混潮→骨潮→蛮层→看守→…→最终看守'
+        - '§8清层后续潜；随时可打开本菜单撤离'
+        - '§8时限约 25 分 · 人数 1～2 · 需余烬 Lv.25'
         - ''
-        - '§e➥ §f点击 · /dp start EmberAbyss'
+        - '§e➥ §f点击开始下潜'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §5[深渊] §7尝试下潜……（需余烬 Lv.25 · 深渊票×1；等级不足不扣票）'
-        - 'tell: §8撤离：§7/corerpg abyss evacuate §8· 按最高层结算 · 票不退'
-        - 'tell: §8命令：§7/dp start EmberAbyss §8· 需 §5余烬深渊票§8×1'
-        - 'tell: §8需要余烬等级 §eLv.25§8（/corerpg level）'
+        - 'tell: §8需要撤离：打开本菜单 → 上浮撤离'
         - 'command: dp start EmberAbyss'
         - close
 
@@ -71,12 +70,12 @@ Icons:
         - '§c撤离不退票'
         - ''
         - '§8需在深渊本内使用'
-        - '§e➥ §f点击 · /corerpg abyss evacuate'
+        - '§8打开深渊菜单点击撤离即可'
+        - '§e➥ §f点击撤离'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §5[深渊] §7撤离按最高层结算 · §c票不退'
-        - 'tell: §8执行：§7/corerpg abyss evacuate'
         - 'command: corerpg abyss evacuate'
         - close
 
@@ -90,14 +89,17 @@ Icons:
         - ''
         - '§7撤离/超时结算箱（按最高层）：'
         - '  §e1～4 §7碎片8 骨尘2'
-        - '  §e5～8 §7碎片12 骨尘4 核心1 · 10% 孔石'
+        - '  §e5～9 §7碎片12 骨尘4 核心1 · 孔石(概率)'
+        - '  §e10～14 §7碎片16 骨尘6 核心2 · 孔石(概率)'
         - ''
-        - '§7通关：本周首通 T2 刃+护符 · 之后 4% / 3%'
+        - '§7通关 COMPLETE：本周首通 T2 刃+护符 · 之后 4% / 3%'
+        - '§7第 §f12 §7层周首通：§a稳定符 ×1'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §5[深渊] §7结算按最高层档：1～4 / 5～8（共 8 层）'
+        - 'tell: §5[深渊] §7结算按最高层档：1～4 / 5～9 / 10～14（本期顶层 12）'
         - 'tell: §8战斗中怪物另有碎片 / 骨尘 / 孔石 / 核心掉落'
+        - 'tell: §8第12层周首通另发稳定符 ×1（同周再达静默）'
 
   R:
     display:
@@ -110,7 +112,7 @@ Icons:
         - '§7硬顶建议 ≤2/日（免费+购）'
         - ''
         - '§7撤离 / 超时 / 团灭均不退票'
-        - '§8/ni give <玩家> ticket_ember_abyss 1'
+        - '§8管理补票：打开商店或请 OP'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

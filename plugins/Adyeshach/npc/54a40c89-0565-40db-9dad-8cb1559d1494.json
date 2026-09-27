@@ -1,0 +1,40 @@
+{
+  "equipment": {},
+  "isDie": false,
+  "isNitwit": false,
+  "moveSpeed": 0.2,
+  "isNameTagVisible": true,
+  "isCollision": true,
+  "glowingColor": "WHITE",
+  "canSeeInvisible": false,
+  "visibleDistance": -1.0,
+  "visibleAfterLoaded": true,
+  "modelEngineName": "",
+  "passengers": [],
+  "controller": [],
+  "clientPosition": {
+    "world": "ember_hub",
+    "x": -18.5,
+    "y": 58.0,
+    "z": 114.5,
+    "yaw": 0.0,
+    "pitch": 0.0
+  },
+  "entityType": "VILLAGER",
+  "persistentTag": {},
+  "metadata": {
+    "isCustomNameVisible": true,
+    "customName": "§a补给官 · 灰粮"
+  },
+  "metadataMask": {},
+  "uniqueId": "54a40c89-0565-40db-9dad-8cb1559d1494",
+  "id": "ember_quartermaster",
+  "position": {
+    "world": "ember_hub",
+    "x": -18.5,
+    "y": 58.0,
+    "z": 114.5,
+    "yaw": 0.0,
+    "pitch": 0.0
+  }
+}

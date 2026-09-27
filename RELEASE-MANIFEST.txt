@@ -1,0 +1,11 @@
+余烬服 ember-binaries-20260926 —— 解压到仓库根目录（与 git clone 的目录合并）
+  tar -xJf ember-binaries-20260926.tar.xz -C <仓库根目录>
+内容：
+  server-runtime/{world,world_nether,world_the_end,ember_hub,ember_afk,ember_event}  游玩服世界
+  login-runtime/{world,world_the_end}                                                登录服世界
+  plugins/DungeonPlus/map/                                                            DungeonPlus 副本地图
+  server-runtime/libs, server-runtime/libraries                                       运行库缓存（可选，离线启动用）
+  **/*.jar                                                                            paper-custom.jar、原版 paper-1.12.2-1620.jar、全部插件 jar、客户端 mod
+  plugins/**/*.db, login-runtime/plugins/AuthMe/authme.db                             插件本地数据（sqlite）
+  sql/ember.sql, sql/authme.sql                                                       MariaDB 转储（来自 2026-09-13 归档；导出时数据库未运行）
+不含：secrets/（请从 secrets/mysql-ember.env.example 复制填写）、日志、缓存、JDK。

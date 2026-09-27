@@ -1,0 +1,40 @@
+{
+  "equipment": {},
+  "isDie": false,
+  "isNitwit": false,
+  "moveSpeed": 0.2,
+  "isNameTagVisible": true,
+  "isCollision": true,
+  "glowingColor": "WHITE",
+  "canSeeInvisible": false,
+  "visibleDistance": -1.0,
+  "visibleAfterLoaded": true,
+  "modelEngineName": "",
+  "passengers": [],
+  "controller": [],
+  "clientPosition": {
+    "world": "ember_hub",
+    "x": -11.5,
+    "y": 58.0,
+    "z": 105.5,
+    "yaw": 90.0,
+    "pitch": 0.0
+  },
+  "entityType": "VILLAGER",
+  "persistentTag": {},
+  "metadata": {
+    "isCustomNameVisible": true,
+    "customName": "§6锻炉师 · 烬砧"
+  },
+  "metadataMask": {},
+  "uniqueId": "2caf2486-2cb8-4746-af1e-231474831d39",
+  "id": "ember_smith",
+  "position": {
+    "world": "ember_hub",
+    "x": -11.5,
+    "y": 58.0,
+    "z": 105.5,
+    "yaw": 90.0,
+    "pitch": 0.0
+  }
+}

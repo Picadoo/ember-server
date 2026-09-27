@@ -130,7 +130,7 @@ public final class ProgressService {
             for (String k : lg.getKeys(false)) levelGates.put(k.toLowerCase(), Math.max(0, lg.getInt(k)));
         } else {
             levelGates.put("daily", 10); levelGates.put("weekly", 20); levelGates.put("abyss", 25);
-            levelGates.put("calamity", 30); levelGates.put("raid", 35); levelGates.put("guild_boss", 0);
+            levelGates.put("calamity", 30); levelGates.put("raid", 35); levelGates.put("guild_boss", 0); levelGates.put("elite", 40);
         }
         File sf = new File(plugin.getDataFolder(), "season.yml");
         YamlConfiguration sy = YamlConfiguration.loadConfiguration(sf);
@@ -210,18 +210,25 @@ public final class ProgressService {
         int ups = 0;
         int talentGain = 0;
         TalentService ts = plugin.getTalentServicePublic();
+        int earnedBefore = d.getTalentPointsEarned();
         while (level < emberMaxLevel && xp >= xpToNext(level)) {
             xp -= xpToNext(level);
             level++;
             ups++;
-            if (ts != null && level >= ts.getLevelPointsFrom()) talentGain += ts.getPointsPerLevel();
         }
         if (level >= emberMaxLevel) xp = 0;
         d.setEmberXp(xp);
         if (ups > 0) {
             d.setEmberLevel(level);
-            if (talentGain > 0 && ts != null) talentGain = Math.max(0, Math.min(talentGain, ts.getMaxSpendablePoints() - d.getTalentPointsEarned()));
-            if (talentGain > 0) d.setTalentPointsEarned(d.getTalentPointsEarned() + talentGain);
+            // Formula A via TalentService: L<=30 legacy; L>30 = 20 + floor((L-30)/3), no double-add
+            if (ts != null) {
+                int want = ts.computeStartingEarned(level);
+                talentGain = Math.max(0, want - earnedBefore);
+                if (talentGain > 0) {
+                    talentGain = Math.min(talentGain, Math.max(0, ts.getMaxSpendablePoints() - earnedBefore));
+                }
+            }
+            if (talentGain > 0) d.setTalentPointsEarned(earnedBefore + talentGain);
         }
         dataStore.flushMutation(p.getUniqueId());
         if (announce) {
@@ -457,9 +464,33 @@ public final class ProgressService {
         if (args.length < 3) { sender.sendMessage("/corerpg progress <player> <source>"); return true; }
         Player target = Bukkit.getPlayerExact(args[1]);
         if (target == null) { sender.sendMessage(ChatColor.RED + "玩家不在线：" + args[1]); return true; }
+        String src = args[2] == null ? "" : args[2].toLowerCase();
+        // Stage 4.4: elite_weekly once per ISO week (Asia/Shanghai) — mark + skip double XP
+        // Stage 4.5: also fire quest elite_weekly_clear (dual-trigger with DP COMPLETE script)
+        boolean eliteAlready = false;
+        if ("elite_weekly".equals(src)) {
+            PlayerData d = dataStore.get(target.getUniqueId());
+            String week = DailyService.weekId();
+            String mark = EliteService.CLEAR_MARK + "=" + week;
+            if (d.getLootWeekMarks().contains(mark)) {
+                eliteAlready = true;
+                sender.sendMessage("[CoreRpg] progress " + target.getName() + " elite_weekly → already marked " + week);
+            } else {
+                d.addLootWeekMark(EliteService.CLEAR_MARK, week);
+                dataStore.flushMutation(target.getUniqueId());
+            }
+        }
+        QuestService qs = plugin.getQuestService();
+        if ("elite_weekly".equals(src)) {
+            // Always notify quest (even on re-mark) so mainline is not stuck if DP quest line missed
+            if (qs != null) {
+                qs.onEvent(target, "elite_weekly_clear");
+                qs.checkPassive(target);
+            }
+            if (eliteAlready) return true; // skip double XP
+        }
         int px = grantPassXp(target, args[2]);
         int ex = grantEmberXp(target, args[2]);
-        QuestService qs = plugin.getQuestService();
         if (qs != null) qs.onEvent(target, args[2]);
         if (!(sender instanceof Player) || sender != target) {
             sender.sendMessage("[CoreRpg] progress " + target.getName() + " " + args[2] + " → pass +" + px + " · ember +" + ex);

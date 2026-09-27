@@ -1,0 +1,64 @@
+# 咒火师 · 余晶 薄引导菜单 — design-ember-hub-workshop-npcs.md §2.3
+# 教会「手持附魔晶点附魔台」；禁 /enchant 教学
+Title: '§d咒火师 · 附魔引导'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 300
+
+Layout:
+  - '#########'
+  - '#   I   #'
+  - '#  E F  #'
+  - '#       #'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-1-1'
+    - 'tell: §d余晶：§7手持附魔晶点附魔台（热键栏持晶，右键旁边附魔台）。不要打指令。'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+  I:
+    display:
+      material: enchanted book
+      name: '§d如何附魔'
+      lore:
+        - ''
+        - '§e核心：§f手持附魔晶点附魔台'
+        - '§71. §f把 §d余烬附魔晶 §f放在热键栏'
+        - '§72. §f带着原版经验，走到工坊附魔台'
+        - '§7   §8坐标约 (-22, 58, 104)'
+        - '§73. §f右键附魔台（刃 / 护符分表）'
+        - ''
+        - '§c禁止 /enchant 等指令'
+        - '§8晶不够：日常副本或补给看看'
+  E:
+    display:
+      material: anvil
+      name: '§c打开强化'
+      lore: ['', '§7附魔后常接着强化', '', '§e➥ §f打开强化菜单']
+    actions:
+      all:
+        - 'menu: ember_enhance'
+  F:
+    display:
+      material: furnace
+      name: '§6打开锻炉'
+      lore: ['', '§7需要升阶时找烬砧 / 锻炉', '', '§e➥ §f打开锻炉']
+    actions:
+      all:
+        - 'menu: ember_forge'
+  Z:
+    display:
+      material: barrier
+      name: '§7关闭'
+    actions:
+      all:
+        - close
