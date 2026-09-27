@@ -249,7 +249,7 @@ public class HubPlazaService {
         // Entrance / menu — south of spawn (behind player when facing 灰烛)
         n += set(w.getBlockAt(CX, FLOOR_Y, CZ + 3), Material.SMOOTH_BRICK);
         n += writeSign(w.getBlockAt(CX, FLOOR_Y + 1, CZ + 3),
-                "§6枢纽广场", "§7打开 /ember", "§7看菜单与玩法", "§8勿手打指令");
+                "§6枢纽广场", "§7右键灰烛·看主线", "§7工坊：右键 NPC", "§8或打开枢纽菜单");
         // 灰烛 pointer near path
         n += set(w.getBlockAt(NPC_X - 2, FLOOR_Y, NPC_Z + 1), Material.SMOOTH_BRICK);
         n += writeSign(w.getBlockAt(NPC_X - 2, FLOOR_Y + 1, NPC_Z + 1),

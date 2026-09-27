@@ -687,7 +687,7 @@ public class AfkTierService implements Listener {
         // entry sign north of pad
         int ex = t.cx, ez = t.cz - 3;
         changed += set(w.getBlockAt(ex, floorY, ez), mat(t.floor, Material.SMOOTH_BRICK));
-        changed += writeSign(w.getBlockAt(ex, floorY + 1, ez), title, "§7打开/ember", "§7→挂机庭换层", "§8死亡回入口");
+        changed += writeSign(w.getBlockAt(ex, floorY + 1, ez), title, "§7枢纽菜单", "§7→挂机庭换层", "§8死亡回入口");
         // evacuate sign south of pad
         int vx = t.cx, vz = t.cz + 3;
         changed += set(w.getBlockAt(vx, floorY, vz), mat(t.floor, Material.SMOOTH_BRICK));
