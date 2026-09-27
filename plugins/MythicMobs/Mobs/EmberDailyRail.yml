@@ -1,0 +1,66 @@
+# S4 日常线 G · 余烬窟·锈轨矿道（EmberDailyRail）
+# 依据：docs/design-ember-daily-s4.md §5.4
+# 巷道友好；Display 去色勿与既有五线撞名；掉落 corerpg mmgive
+
+EmberDailyRailZombie:
+  Type: ZOMBIE
+  Display: '&6锈轨尸'
+  Health: 50
+  Damage: 4
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.16
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberDailyRailSkeleton:
+  # 矿矢骷：柱间/支洞口可射；可贴脸；PreventRandomEquipment
+  Type: SKELETON
+  Display: '&6矿矢骷'
+  Health: 40
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - skill{s=EmberCryptSlow} @target ~onAttack 0.10
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberDailyRailWarden:
+  # 锈轨矿监：机房柱间压迫 + 短冲锋感（SoftHit 偏高）；七线可辨
+  Type: ZOMBIE
+  Display: '&6锈轨矿监'
+  Health: 210
+  Damage: 3
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.5
+    MaxCombatDistance: 20
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  - IRON_PICKAXE HAND
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.22
+  - damage{amount=0.5} @PlayersInRadius{r=4} ~onTimer:40
+  - message{m="&6【锈轨】&7矿监逼近——&f<trigger.name>&7！"} @PlayersInRadius{r=18} ~onTimer:170
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath 0.5
