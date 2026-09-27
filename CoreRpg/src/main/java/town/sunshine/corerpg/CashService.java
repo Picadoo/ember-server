@@ -230,29 +230,13 @@ public final class CashService {
         PlayerData data = dataStore.get(player.getUniqueId());
         ensureCashDay(data);
 
-        List<String> parts = new ArrayList<String>();
-        int dailyGave = grantFreeTicketsIfNeeded(player, data);
-        if (dailyGave > 0) parts.add("日票×" + dailyGave);
-
+        grantFreeTicketsIfNeeded(player, data);
         processMonthlyLogin(player, data);
-
         if (ticketGrantService != null) {
-            parts.addAll(ticketGrantService.grantOnJoin(player, data));
+            ticketGrantService.grantOnJoin(player, data);
         }
-
         if (data.isDirty()) dataStore.flushMutation(player.getUniqueId());
-
-        if (announce && !parts.isEmpty()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append(ChatColor.GREEN).append("[门票] ");
-            for (int i = 0; i < parts.size(); i++) {
-                if (i > 0) sb.append(ChatColor.GRAY).append(" · ");
-                sb.append(ChatColor.WHITE).append(parts.get(i));
-            }
-            player.sendMessage(sb.toString());
-        }
-
-        return needsRetry(data);
+        return false; // S0: no NI ticket retries
     }
 
     private boolean needsRetry(PlayerData data) {
@@ -284,27 +268,12 @@ public final class CashService {
     /**
      * @return amount newly given this call (0 if already granted, capped, or NI failed)
      */
+    /** S0: 停发日票；日体力由 StaminaService 0:00 回满。 */
     public int grantFreeTicketsIfNeeded(Player player, PlayerData data) {
-        if (data.isDailyFreeGranted()) return 0;
-        int want = Math.max(0, freeTickets);
-        if (want <= 0) {
+        if (!data.isDailyFreeGranted()) {
             data.setDailyFreeGranted(true);
-            return 0;
         }
-        int room = hardCap - data.getDailyTicketsGranted();
-        int give = Math.min(want, Math.max(0, room));
-        if (give <= 0) {
-            data.setDailyFreeGranted(true);
-            return 0;
-        }
-        if (!giveTickets(player, give)) {
-            plugin.getLogger().warning("Failed to give free daily tickets to " + player.getName()
-                    + " — will retry next join/delay");
-            return 0; // leave dailyFreeGranted false for retry
-        }
-        data.setDailyTicketsGranted(data.getDailyTicketsGranted() + give);
-        data.setDailyFreeGranted(true);
-        return give;
+        return 0;
     }
 
     public void processMonthlyLogin(Player player, PlayerData data) {
@@ -319,22 +288,19 @@ public final class CashService {
         if (today.equals(data.getMonthlyLastGrantDate())) return;
 
         data.addCoin(monthlyLoginCoin);
-        boolean ticketGiven = false;
-        if (monthlyLoginTicket > 0 && data.getDailyTicketsGranted() < hardCap) {
-            int give = Math.min(monthlyLoginTicket, hardCap - data.getDailyTicketsGranted());
-            if (give > 0 && giveTickets(player, give)) {
-                data.setDailyTicketsGranted(data.getDailyTicketsGranted() + give);
-                ticketGiven = true;
-            } else if (give > 0) {
-                // NI failed — still count? Design: grant via NI. If fail, don't increment granted.
-                plugin.getLogger().warning("Monthly login ticket give failed for " + player.getName());
+        int staminaAmt = 0;
+        if (monthlyLoginTicket > 0 && plugin instanceof CoreRpgPlugin) {
+            StaminaService st = ((CoreRpgPlugin) plugin).getStaminaService();
+            if (st != null) {
+                // design A.5: 每日登录 币200 + 体力+30（溢出进 bank）
+                staminaAmt = st.grantMonthlyStamina(player, data, monthlyLoginTicket * 30);
             }
         }
         data.setMonthlyLastGrantDate(today);
-        if (ticketGiven) {
-            player.sendMessage(ChatColor.GREEN + "[月卡] 登录礼：余烬币 +" + monthlyLoginCoin + " · 日票 +1");
+        if (staminaAmt > 0) {
+            player.sendMessage(ChatColor.GREEN + "[月卡] 登录礼：余烬币 +" + monthlyLoginCoin + " · 体力 +" + staminaAmt);
         } else {
-            player.sendMessage(ChatColor.GREEN + "[月卡] 登录礼：余烬币 +" + monthlyLoginCoin + " · 日票已达硬顶未发放");
+            player.sendMessage(ChatColor.GREEN + "[月卡] 登录礼：余烬币 +" + monthlyLoginCoin);
         }
     }
 
@@ -354,8 +320,18 @@ public final class CashService {
         grantFreeTicketsIfNeeded(player, data);
         if (data.isDirty()) dataStore.flushMutation(player.getUniqueId());
         player.sendMessage(ChatColor.AQUA + "[晶钻] 余额：" + data.getCrystalCash());
-        player.sendMessage(ChatColor.AQUA + "[晶钻] 今日日票 §f" + data.getDailyTicketsGranted()
-                + "§7/" + hardCap + " §8（晶钻购 " + data.getDailyTicketsBought() + "/" + shopSkuLimit + "）");
+        if (plugin instanceof CoreRpgPlugin) {
+            StaminaService st = ((CoreRpgPlugin) plugin).getStaminaService();
+            if (st != null) {
+                st.ensure(data);
+                player.sendMessage(ChatColor.AQUA + "[体力] §f" + data.getStamina() + "§7/" + st.resolveMax(data)
+                        + " §8（药剂今日 " + data.getPotionStaminaToday() + "/" + st.getPotionDailyCap()
+                        + " · 购 " + data.getDailyTicketsBought() + "/" + shopSkuLimit + "）");
+                return;
+            }
+        }
+        player.sendMessage(ChatColor.AQUA + "[晶钻] 今日体力药购 §f" + data.getDailyTicketsBought()
+                + "§7/" + shopSkuLimit);
     }
 
     public void cmdCashGive(org.bukkit.command.CommandSender sender, String playerName, int amount) {
@@ -391,27 +367,29 @@ public final class CashService {
             return;
         }
         if (data.getDailyTicketsBought() >= shopSkuLimit) {
-            player.sendMessage(ChatColor.RED + "[商城] 日票限购已满");
+            player.sendMessage(ChatColor.RED + "[商城] 体力药限购已满（日 " + shopSkuLimit + "）");
             return;
         }
-        if (data.getDailyTicketsGranted() >= hardCap) {
-            player.sendMessage(ChatColor.RED + "[商城] 已达日票硬顶 " + hardCap);
+        StaminaService st = plugin instanceof CoreRpgPlugin ? ((CoreRpgPlugin) plugin).getStaminaService() : null;
+        if (st != null && data.getPotionStaminaToday() + st.getPotionGrantAmount() > st.getPotionDailyCap()) {
+            player.sendMessage(ChatColor.RED + "[商城] 今日药剂回体已达上限");
             return;
         }
         if (!data.takeCrystalCash(shopPrice)) {
             player.sendMessage(ChatColor.RED + "[商城] 晶钻不足（需 " + shopPrice + "）");
             return;
         }
-        if (shopGrantNi && !giveTickets(player, 1)) {
-            data.addCrystalCash(shopPrice); // refund
+        boolean ok = st != null && st.grantPotionOrStamina(player, 1);
+        if (!ok) {
+            data.addCrystalCash(shopPrice);
             dataStore.flushMutation(player.getUniqueId());
-            player.sendMessage(ChatColor.RED + "[商城] 发放日票失败（NI），已退还晶钻");
+            player.sendMessage(ChatColor.RED + "[商城] 发放体力药失败，已退还晶钻");
             return;
         }
         data.setDailyTicketsBought(data.getDailyTicketsBought() + 1);
         data.setDailyTicketsGranted(data.getDailyTicketsGranted() + 1);
         dataStore.flushMutation(player.getUniqueId());
-        player.sendMessage(ChatColor.GREEN + "[商城] 已购买日票 ×1（-" + shopPrice + " 晶钻）");
+        player.sendMessage(ChatColor.GREEN + "[商城] 已购买体力药 ×1（-" + shopPrice + " 晶钻）");
     }
 
     public void cmdShopBuyPassUnlock(Player player) {
@@ -452,13 +430,16 @@ public final class CashService {
         }
         // Template missing/fail: grant the same attachments, keep paid flag.
         data.addCoin(300);
-        boolean ticketOk = giveTickets(player, 1);
+        boolean staminaOk = false;
+        if (plugin instanceof CoreRpgPlugin) {
+            StaminaService st = ((CoreRpgPlugin) plugin).getStaminaService();
+            if (st != null) staminaOk = st.grantPotionOrStamina(player, 1);
+        }
         dataStore.flushMutation(player.getUniqueId());
-        if (ticketOk) {
-            player.sendMessage(ChatColor.GREEN + "[战令] 欢迎礼已发放：余烬币 +300 · 日票 ×1");
+        if (staminaOk) {
+            player.sendMessage(ChatColor.GREEN + "[战令] 欢迎礼已发放：余烬币 +300 · 体力药 ×1");
         } else {
             player.sendMessage(ChatColor.GREEN + "[战令] 欢迎礼已发放：余烬币 +300");
-            player.sendMessage(ChatColor.YELLOW + "[战令] 日票发放失败，付费轨仍已开通");
         }
     }
 
@@ -471,11 +452,11 @@ public final class CashService {
         ensureWeeklyTicketWeek(data);
 
         if (data.getWeeklyTicketsBought() >= weeklyShopSkuLimit) {
-            player.sendMessage(ChatColor.RED + "[商城] 周票限购已满");
+            player.sendMessage(ChatColor.RED + "[商城] 周体力包限购已满");
             return;
         }
         if (data.getWeeklyTicketsGranted() >= weeklyHardCap) {
-            player.sendMessage(ChatColor.RED + "[商城] 已达周票硬顶 " + weeklyHardCap);
+            player.sendMessage(ChatColor.RED + "[商城] 已达周体力包硬顶 " + weeklyHardCap);
             return;
         }
         if (data.getCrystalCash() < weeklyShopPrice) {
@@ -486,16 +467,21 @@ public final class CashService {
             player.sendMessage(ChatColor.RED + "[商城] 晶钻不足（需 " + weeklyShopPrice + "）");
             return;
         }
-        if (weeklyShopGrantNi && !giveWeeklyTickets(player, 1)) {
-            data.addCrystalCash(weeklyShopPrice); // refund
+        StaminaService st = plugin instanceof CoreRpgPlugin ? ((CoreRpgPlugin) plugin).getStaminaService() : null;
+        int applied = 0;
+        if (st != null) {
+            applied = st.addStamina(data, 45, true);
+        }
+        if (applied <= 0) {
+            data.addCrystalCash(weeklyShopPrice);
             dataStore.flushMutation(player.getUniqueId());
-            player.sendMessage(ChatColor.RED + "[商城] 发放周票失败（NI），已退还晶钻");
+            player.sendMessage(ChatColor.RED + "[商城] 发放周体力失败，已退还晶钻");
             return;
         }
         data.setWeeklyTicketsBought(data.getWeeklyTicketsBought() + 1);
         data.setWeeklyTicketsGranted(data.getWeeklyTicketsGranted() + 1);
         dataStore.flushMutation(player.getUniqueId());
-        player.sendMessage(ChatColor.GREEN + "[商城] 已购买周票 ×1（-" + weeklyShopPrice + " 晶钻）");
+        player.sendMessage(ChatColor.GREEN + "[商城] 已购买周体力 +" + applied + "（-" + weeklyShopPrice + " 晶钻）");
     }
 
     public void cmdVipShow(Player player) {
@@ -584,7 +570,7 @@ public final class CashService {
             String granted = today.equals(data.getMonthlyLastGrantDate()) ? "已领" : "未领";
             player.sendMessage(ChatColor.YELLOW + "[月卡] 生效中 · 至 " + data.getMonthlyExpireDate());
             player.sendMessage(ChatColor.GRAY + "  今日登录礼：" + granted
-                    + " · 每日 币" + monthlyLoginCoin + " + 日票×" + monthlyLoginTicket);
+                    + " · 每日 币" + monthlyLoginCoin + " + 体力+" + (monthlyLoginTicket * 30));
         } else {
             if (data.isMonthlyCard()) data.setMonthlyCard(false);
             player.sendMessage(ChatColor.GRAY + "[月卡] 未开通 · /corerpg monthly buy");
@@ -621,22 +607,17 @@ public final class CashService {
         data.setMonthlyExpireDate(newExpire);
         data.setMonthlyCard(true);
 
-        boolean ticketOk = false;
-        if (monthlyImmediateTicket > 0 && data.getDailyTicketsGranted() < hardCap) {
-            int give = Math.min(monthlyImmediateTicket, hardCap - data.getDailyTicketsGranted());
-            if (give > 0 && giveTickets(player, give)) {
-                data.setDailyTicketsGranted(data.getDailyTicketsGranted() + give);
-                ticketOk = true;
-            } else if (give > 0) {
-                player.sendMessage(ChatColor.YELLOW + "[月卡] 日票发放失败（NI），卡已开通");
+        int staminaOk = 0;
+        if (monthlyImmediateTicket > 0 && plugin instanceof CoreRpgPlugin) {
+            StaminaService st = ((CoreRpgPlugin) plugin).getStaminaService();
+            if (st != null) {
+                staminaOk = st.grantMonthlyStamina(player, data, monthlyImmediateTicket * 30);
             }
-        } else if (monthlyImmediateTicket > 0) {
-            player.sendMessage(ChatColor.YELLOW + "[月卡] 日票已达硬顶未发放");
         }
 
         dataStore.flushMutation(player.getUniqueId());
         player.sendMessage(ChatColor.GREEN + "[月卡] 已开通/续期至 " + newExpire
-                + (ticketOk ? ChatColor.GRAY + " · 日票 +1" : ""));
+                + (staminaOk > 0 ? ChatColor.GRAY + " · 体力 +" + staminaOk : ""));
     }
 
     private boolean giveTickets(Player player, int amount) {

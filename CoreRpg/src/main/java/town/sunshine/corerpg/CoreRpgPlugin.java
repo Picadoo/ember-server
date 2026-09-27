@@ -72,6 +72,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private CashService cashService;
     private TicketGrantService ticketGrantService;
     private TicketEntryService ticketEntryService;
+    private StaminaService staminaService;
     private EliteService eliteService;
     private ScrapService scrapService;
     private MailService mailService;
@@ -128,6 +129,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         ticketGrantService = new TicketGrantService(this, niBridge, dataStore);
         cashService.setTicketGrantService(ticketGrantService);
         ticketEntryService = new TicketEntryService(this, dataStore, niBridge);
+        staminaService = new StaminaService(this, dataStore, niBridge);
+        staminaService.setCashService(cashService);
         eliteService = new EliteService(this, dataStore, niBridge);
         scrapService = new ScrapService(this, niBridge);
         mailService = new MailService(this, niBridge, dataStore);
@@ -225,7 +228,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             }, period, period);
         }
         registerPapi();
-        getLogger().info("CoreRpg " + getDescription().getVersion() + " enabled (storage=" + storageMode + "; coin/sign/activity/bounty/enhance/socket/scrap/reforge/calamity/abyss-settle/covenant/talent/skill/cash/shop/monthly/tickets/mail/friend/settings/ladder/pet/guild/arena/auction/warehouse/raid/set).");
+        getLogger().info("CoreRpg " + getDescription().getVersion() + " enabled (storage=" + storageMode + "; coin/sign/activity/bounty/enhance/socket/scrap/reforge/calamity/abyss-settle/covenant/talent/skill/cash/shop/monthly/stamina/tickets/mail/friend/settings/ladder/pet/guild/arena/auction/warehouse/raid/set).");
     }
 
     @Override
@@ -259,6 +262,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public WarehouseService getWarehouseServicePublic() { return warehouseService; }
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
     public TicketEntryService getTicketEntryService() { return ticketEntryService; }
+    public StaminaService getStaminaService() { return staminaService; }
     public EliteService getEliteService() { return eliteService; }
     public ScrapService getScrapService() { return scrapService; }
     public MailService getMailService() { return mailService; }
@@ -538,6 +542,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (cashService != null) cashService.reload();
         if (ticketGrantService != null) ticketGrantService.reload();
         if (ticketEntryService != null) ticketEntryService.reload();
+        if (staminaService != null) { staminaService.reload(); staminaService.setCashService(cashService); }
         if (eliteService != null) eliteService.reload();
         if (scrapService != null) scrapService.reload();
         if (mailService != null) mailService.reload();
@@ -607,6 +612,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         PlayerData joinData = dataStore.get(player.getUniqueId()); // ensureDaily + talent seed
         joinData.setLastKnownName(player.getName());
         ensureBounty(player);
+        if (staminaService != null) staminaService.onJoin(player);
         if (cashService != null) cashService.onJoin(player);
         if (ladderService != null) ladderService.recomputePower(player);
         List<?> lines = getConfig().getList("join_message");
@@ -796,6 +802,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("covenant".equals(sub)) return cmdCovenant(sender, args);
         if ("talent".equals(sub)) return cmdTalent(sender, args);
         if ("cash".equals(sub)) return cmdCash(sender, args);
+        if ("stamina".equals(sub) || "体力".equals(sub)) {
+            if (staminaService != null) return staminaService.cmdRoot(sender, args);
+            sender.sendMessage(ChatColor.RED + "[体力] 服务未就绪");
+            return true;
+        }
         if ("enter".equals(sub) || "进本".equals(sub)) {
             if (ticketEntryService != null) return ticketEntryService.cmdEnter(sender, args);
             sender.sendMessage(ChatColor.RED + "[进本] 服务未就绪");
@@ -860,7 +871,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private void sendHelp(CommandSender sender) {
         sender.sendMessage(ChatColor.GOLD + "[CoreRpg] " + ChatColor.YELLOW
-                + "/corerpg spawn|status|coin|sign|activity|bounty|enhance|socket|scrap|reforge|calamity|abyss|elite|raid|enter|set|covenant|talent|skill|cash|tickets|shop|monthly|vip|pass|enderchest|mail|friend|settings|ladder|pet|guild|arena|pvp|auction|warehouse|storage|reload|help");
+                + "/corerpg spawn|status|coin|sign|activity|bounty|enhance|socket|scrap|reforge|calamity|abyss|elite|raid|enter|set|covenant|talent|skill|cash|stamina|tickets|shop|monthly|vip|pass|enderchest|mail|friend|settings|ladder|pet|guild|arena|pvp|auction|warehouse|storage|reload|help");
         sender.sendMessage(ChatColor.GRAY + "  coin [give <玩家> <数量>] · sign · activity [claim] · bounty [claim]");
         sender.sendMessage(ChatColor.GRAY + "  enhance [info] · socket list|insert <gemId>|remove <slot>");
         sender.sendMessage(ChatColor.GRAY + "  scrap [info] · reforge");

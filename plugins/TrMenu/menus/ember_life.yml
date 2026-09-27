@@ -12,7 +12,7 @@ Layout:
   - '# A B C #'
   - '# D E F #'
   - '#G K H J#'
-  - '####I##Z#'
+  - '##V#I##Z#'
 
 Icons:
   '#':
@@ -99,6 +99,25 @@ Icons:
     actions:
       all:
         - 'command: corerpg life buy pet_cinder'
+
+  V:
+    display:
+      material: paper
+      name: '§e旧票 → 余烬体力'
+      lore:
+        - ''
+        - '§7迁移期：背包旧票折算体力'
+        - '§7日+30 · 周+45 · 精英+40'
+        - '§7深渊+30 · 团+50'
+        - ''
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - ''
+        - '§e➥ §f一键兑换'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg stamina convert'
+
   I:
     display:
       material: book

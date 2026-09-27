@@ -1,5 +1,5 @@
 # 周常副本子菜单 — EmberWeekly
-# 进本：corerpg enter weekly
+# 进本：corerpg enter weekly · S0 体力 45 / 本周首次免费
 
 Title: '§c周常 · 深核'
 
@@ -41,7 +41,8 @@ Icons:
       name: '§a开始挑战'
       lore:
         - ''
-        - '§7进本消耗 §f1 §7张 §6余烬周票'
+        - '§7消耗 §e%corerpg_stamina_cost_weekly% §7体力（本周首次免费抵扣）'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
         - '§7失败不返还 · 请确认后再进'
         - ''
         - '§8高难多波 + 终局蛮兵'
@@ -84,13 +85,13 @@ Icons:
       name: '§e次数说明'
       lore:
         - ''
-        - '§7每周免费 §f1 §7张周票（周一登录发放）'
+        - '§7本周首次免费（账户抵扣）· 其后扣 45 体力'
         - '§7商城可再补 §f1 §7张 · 主线第 2 章送 1 张'
         - '§7重置：§f周一 00:00 Asia/Shanghai'
         - '§7进本即扣 · 失败不返还'
         - ''
-        - '§8次数 = 背包 §6余烬周票 §8数量'
+        - '§8体力 §f%corerpg_stamina%§8/§f%corerpg_stamina_max%'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c周本每周免费 1 张周票（商城可补 1 张），周一 0:00（上海时区）发放；进本扣 1 张。'
+        - 'tell: §6周本本周首次免费，其后消耗 45 体力；每日 0:00 回满体力。'

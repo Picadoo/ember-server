@@ -1055,7 +1055,17 @@ public final class QuestService implements Listener {
         if (items.containsKey("gear_ember_t1_blade")) dataStore.get(p.getUniqueId()).addPeriodCount("mig_quest_1110", "all", 1);
         List<String> got = new ArrayList<String>();
         for (Map.Entry<String, Integer> e : items.entrySet()) {
-            if (ni != null && ni.giveNiItem(p, e.getKey(), e.getValue())) got.add(ni.displayName(e.getKey()) + "×" + e.getValue());
+            String key = e.getKey();
+            int amt = e.getValue().intValue();
+            if ("stamina".equalsIgnoreCase(key) || "余烬体力".equals(key)
+                    || StaminaService.POTION_NI_ID.equalsIgnoreCase(key)) {
+                StaminaService st = plugin.getStaminaService();
+                if (st != null && st.tryGrantRewardKey(p, key, amt)) {
+                    got.add(("stamina".equalsIgnoreCase(key) ? "体力" : "体力药") + "×" + amt);
+                    continue;
+                }
+            }
+            if (ni != null && ni.giveNiItem(p, key, amt)) got.add(ni.displayName(key) + "×" + amt);
         }
         if (!got.isEmpty()) p.sendMessage(title + ChatColor.AQUA + " 获得：" + ChatColor.WHITE + String.join("，", got));
     }

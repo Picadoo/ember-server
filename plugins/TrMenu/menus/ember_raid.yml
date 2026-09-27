@@ -1,5 +1,5 @@
 # 团本子菜单 — EmberRaid · DESIGN-ember-rpg-systems.md §4
-# 进本：corerpg enter raid · 扣 ticket_ember_raid ×1 · 3～5 人
+# 进本：corerpg enter raid · S0 体力 50 / 本周首次免费 · 3～5 人
 
 Title: '§9团本 · 大厅通道'
 
@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §9[团本] §7需 3～5 人 · 周 1 票 · 左道/右道 → 汇合 → 终厅使徒'
+    - 'tell: §9[团本] §7需 3～5 人 · 消耗 50 体力（本周首次免费）'
 
 Icons:
   '#':
@@ -42,7 +42,8 @@ Icons:
       name: '§a开始协作'
       lore:
         - ''
-        - '§7进本即扣 §9余烬团本票 §f×1'
+        - '§7消耗 §e%corerpg_stamina_cost_raid% §7体力（本周首次免费）'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
         - '§7失败不返还 · 请确认全队就绪'
         - ''
         - '§8大厅集结 → 左道卫兵 → 右道射手 → 汇合 → 终厅'
@@ -54,7 +55,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §9团本已点燃。§7分路推进——左卫兵、右射手，汇合后再闯终厅。'
-        - 'tell: §8需 §9余烬团本票§8×1 · 人数 3～5'
+        - 'tell: §8消耗 §e50 §8体力 · 人数 3～5'
         - 'tell: §8需要余烬等级 §eLv.35§8（见菜单等级要求）'
         - 'command: corerpg enter raid'
         - close
@@ -86,13 +87,13 @@ Icons:
       name: '§e次数说明'
       lore:
         - ''
-        - '§7每周 §f1 §7张团本票'
+        - '§7本周首次免费 · 其后 50 体力'
         - '§7重置：§f周一 00:00 Asia/Shanghai'
         - '§7进本即扣 · 失败不返还'
         - '§7人数硬限 §f3～5'
         - ''
-        - '§7每周团本票 ×1（进服发放）'
+        - '§7体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §9团本每周 1 次，周一 0:00（上海）重置；需 3～5 人；进本即扣票。'
+        - 'tell: §9团本本周首次免费，其后 50 体力；需 3～5 人。'

@@ -437,6 +437,13 @@ public final class MailService {
                 data.addCrystalCash(amt);
                 continue;
             }
+            if ("stamina".equalsIgnoreCase(key) || "余烬体力".equals(key)
+                    || StaminaService.POTION_NI_ID.equalsIgnoreCase(key)) {
+                if (plugin instanceof CoreRpgPlugin) {
+                    StaminaService st = ((CoreRpgPlugin) plugin).getStaminaService();
+                    if (st != null && st.tryGrantRewardKey(p, key, amt)) continue;
+                }
+            }
             if (ni == null || !ni.giveNiItem(p, key, amt)) {
                 plugin.getLogger().warning("Mail NI grant failed: " + key + " x" + amt + " -> " + p.getName());
                 // still continue other grants; mark overall success if coin/cash already applied

@@ -1,5 +1,5 @@
 # 余烬商城 — DESIGN-ember-economy-monetization.md §5 + DESIGN-ember-rpg-systems.md §8.1
-# 日票：command corerpg shop buy daily_ticket + tell 回退（DESIGN-ember-cash-monthly.md）
+# S0：体力药 / 周体力包（原日票/周票）
 # 在售：月卡、战令解锁、日票、周票（均为 CoreRpg 实装 SKU）· 软通货用 /corerpg coin
 
 Title: '§6余烬 · 商城'
@@ -22,7 +22,7 @@ Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §6[商城] §7便利·特权货架 · §c不卖毕业伤害'
-    - 'tell: §8日票可直接买 · 月卡点图标尝试购买 · 余烬币 /corerpg coin'
+    - 'tell: §8体力药可直接买 · 月卡点图标购买 · 余烬币走生活菜单'
 
 Icons:
   '#':
@@ -83,9 +83,9 @@ Icons:
       lore:
         - ''
         - '§6热销'
-        - '§7立即：日票 ×1'
-        - '§7每日登录：余烬币 200 + 日票 ×1'
-        - '§8日票计入硬顶（免费3+氪≤6）'
+        - '§7立即：体力 +30'
+        - '§7每日登录：余烬币 200 + 体力 +30'
+        - '§8上限 120（月卡）· 溢出进银行'
         - ''
         - '§6价 §f68 §6晶钻'
         - '§8限购 1 · /corerpg monthly buy'
@@ -106,7 +106,7 @@ Icons:
         - ''
         - '§6热销'
         - '§7解锁本季付费轨'
-        - '§7外观 + 币 + 累计日票 ×5（赛季内发）'
+        - '§7外观 + 币 + 累计体力药 ×5（赛季内发）'
         - '§8付费轨不出核心'
         - ''
         - '§6价 §f48 §6晶钻'
@@ -123,11 +123,12 @@ Icons:
   D:
     display:
       material: paper
-      name: '§e日票 ×1'
+      name: '§e体力药 · 小 ×1'
       lore:
         - ''
         - '§a便利'
-        - '§7获得 §e余烬日票 §7×1'
+        - '§7获得体力药（+30）或直加体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
         - '§8限购 3/日 · 硬顶总进本 ≤6'
         - ''
         - '§c价 §f60 §c晶钻'
@@ -136,17 +137,17 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[便利·日票] §7尝试购买 · 价 §f60 晶钻 §7· 日硬顶 §f6'
+        - 'tell: §e[便利·体力药] §7尝试购买 · 价 §f60 晶钻 §7· 日限 3 / 药剂回体≤90'
         - 'command: corerpg shop buy daily_ticket'
 
   E:
     display:
       material: map
-      name: '§6周票 ×1'
+      name: '§6周体力包 · +45'
       lore:
         - ''
         - '§a便利'
-        - '§7获得 §6余烬周票 §7×1'
+        - '§7直接回复 §e45 §7体力'
         - '§8限购 1/周 · 硬顶免费1+氪≤2'
         - ''
         - '§c价 §f180 §c晶钻'
@@ -155,7 +156,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[便利·周票] §7尝试购买 · 价 §f180 晶钻 §7· 限购 1/周'
+        - 'tell: §6[便利·周体力] §7尝试购买 · 价 §f180 晶钻 §7· 限购 1/周'
         - 'command: corerpg shop buy weekly_ticket'
 
   R:

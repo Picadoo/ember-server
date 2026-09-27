@@ -70,7 +70,7 @@ pass_rewards:
     7: {coin: 100}
     8: {mat_ember_shard: 3}
     9: {coin: 100}
-    10: {mat_ember_shard: 3, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, ticket_ember_daily: 1}
+    10: {mat_ember_shard: 3, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, consumable_ember_stamina_30: 1}
     11: {coin: 100}
     12: {mat_ember_shard: 3}
     13: {coin: 100}
@@ -80,7 +80,7 @@ pass_rewards:
     17: {coin: 100}
     18: {mat_ember_shard: 3}
     19: {coin: 100}
-    20: {mat_ember_shard: 3, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, ticket_ember_daily: 1}
+    20: {mat_ember_shard: 3, crystal_ember_enchant: 1, mat_ember_core_fragment: 1, consumable_ember_stamina_30: 1}
     21: {coin: 100}
     22: {mat_ember_shard: 3}
     23: {coin: 100}
@@ -97,31 +97,31 @@ pass_rewards:
     3: {coin: 100, mat_ember_bone_dust: 2}
     4: {coin: 100, mat_ember_bone_dust: 2}
     5: {coin: 100, mat_ember_bone_dust: 2, mat_ember_protect_scroll: 1}
-    6: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    6: {coin: 100, mat_ember_bone_dust: 2, consumable_ember_stamina_30: 1}
     7: {coin: 100, mat_ember_bone_dust: 2}
     8: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
     9: {coin: 100, mat_ember_bone_dust: 2}
     10: {coin: 100, mat_ember_bone_dust: 2, gem_ember_sharp: 1}
     11: {coin: 100, mat_ember_bone_dust: 2}
-    12: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    12: {coin: 100, mat_ember_bone_dust: 2, consumable_ember_stamina_30: 1}
     13: {coin: 100, mat_ember_bone_dust: 2}
     14: {coin: 100, mat_ember_bone_dust: 2}
     15: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}   # 1.12.0 保护卷 → 附魔晶（付费战力 ≤ 免费月产 30%）
     16: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
     17: {coin: 100, mat_ember_bone_dust: 2}
-    18: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    18: {coin: 100, mat_ember_bone_dust: 2, consumable_ember_stamina_30: 1}
     19: {coin: 100, mat_ember_bone_dust: 2}
     20: {coin: 100, mat_ember_bone_dust: 2, cosmetic_calamity_shard: 2}   # 1.12.0 稳石 → 外观碎片（稳石免费月产约 2）
     21: {coin: 100, mat_ember_bone_dust: 2}
     22: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
     23: {coin: 100, mat_ember_bone_dust: 2}
-    24: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
+    24: {coin: 100, mat_ember_bone_dust: 2, consumable_ember_stamina_30: 1}
     25: {coin: 200, mat_ember_bone_dust: 2}   # 1.12.0 保护卷 → 币
     26: {coin: 100, mat_ember_bone_dust: 2}
     27: {coin: 100, mat_ember_bone_dust: 2}
     28: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
     29: {coin: 100, mat_ember_bone_dust: 2}
-    30: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1, cosmetic_calamity_shard: 3, mat_ember_stable_charm: 1}
+    30: {coin: 100, mat_ember_bone_dust: 2, consumable_ember_stamina_30: 1, cosmetic_calamity_shard: 3, mat_ember_stable_charm: 1}
 
 # ---------------------------------------------------------------------------
 # 1.6.0 勋阶（DESIGN-ember-rpg-systems §8.2「充值累进 0～10」；docs/ember-shop-pass-copy）

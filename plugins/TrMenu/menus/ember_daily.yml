@@ -1,7 +1,7 @@
-# 日常副本子菜单 — EmberDaily
-# EmberDaily 进本
+# 日常副本子菜单 — EmberDaily（S0 体力）
+# 进本：corerpg enter daily · 消耗 30 体力
 
-Title: '§e日常 · 灰烬庭院'
+Title: '§e日常 · 余烬窟·庭院'
 
 Options:
   Arguments: false
@@ -11,9 +11,9 @@ Options:
 
 Layout:
   - '#########'
-  - '#       #'
-  - '# S P R #'
-  - '#       #'
+  - '#  T    #'
+  - '# S A C #'
+  - '#   P R #'
   - '####B####'
 
 Events:
@@ -25,6 +25,15 @@ Icons:
     display:
       material: stained glass pane
       name: '§8 '
+
+  T:
+    display:
+      material: glowstone dust
+      name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+      lore:
+        - ''
+        - '§7每日 §f0:00 §7（上海）回满'
+        - '§7日常消耗 §e%corerpg_stamina_cost_daily% §7体力'
 
   B:
     display:
@@ -38,24 +47,52 @@ Icons:
   S:
     display:
       material: iron sword
-      name: '§a开始挑战'
+      name: '§a余烬窟·庭院'
       lore:
         - ''
-        - '§8灰烬庭院 · 回廊清潮后上中央垫'
+        - '§8门廊 → 前厅 → 回廊 → Boss 垫'
         - ''
-        - '§7进本即扣 §f1 §7次今日次数'
-        - '§7失败不返还 · 请确认后再进'
-        - ''
-        - '§8流程：2 波小怪 → 蛮兵（首领）→ 通关箱'
-        - '§8单人约 1 分钟一局 · 波间回血'
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7进本失败退还 · 通关不退'
         - ''
         - '§e➥ §f点击进本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §6灰烬庭院§e …'
+        - 'tell: §e[日] 正在进入 §6余烬窟·庭院§e …'
         - 'command: corerpg enter daily'
         - close
+
+  A:
+    display:
+      material: coal
+      name: '§8余烬窟·焦骨甬道'
+      lore:
+        - ''
+        - '§7狭长焦土甬道 · 岔路假门'
+        - ''
+        - '§c筹备中'
+        - '§8还债里程碑 S2'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+        - 'tell: §c[日] 焦骨甬道筹备中，请先挑战庭院'
+
+  C:
+    display:
+      material: cobblestone
+      name: '§8余烬窟·残誓地窖'
+      lore:
+        - ''
+        - '§7多层台阶地窖 · 下潜感'
+        - ''
+        - '§c筹备中'
+        - '§8还债里程碑 S2'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+        - 'tell: §c[日] 残誓地窖筹备中，请先挑战庭院'
 
   P:
     display:
@@ -65,31 +102,25 @@ Icons:
         - ''
         - '§7战斗掉落（MM → NI）：'
         - '  §f碎片 / 骨尘 / Boss 核心×1'
-        - '  §f刃 ~12% · 护符 ~8%'
         - ''
         - '§7通关箱：'
-        - '  §e核心碎片 ×1'
-        - '  §e附魔晶 ×1'
-        - '  §e碎片 ×5'
-        - ''
+        - '  §e核心碎片 ×1 · 附魔晶 ×1 · 碎片 ×5'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[日奖励] §7Boss 核心 + 通关箱（核心1 + 晶1 + 碎片5）'
+        - 'tell: §6[日奖励] §7Boss 核心 + 通关箱'
 
   R:
     display:
       material: watch
-      name: '§e次数说明'
+      name: '§e体力说明'
       lore:
         - ''
-        - '§7每日 §f3 §7次'
-        - '§7重置：§f00:00 Asia/Shanghai'
-        - '§7进本即扣 · 失败不返还'
-        - ''
-        - '§7今日次数靠日票：进服赠 3 张，商城可补'
-        - '§7背包看 §e余烬日票 §7数量'
+        - '§7日常消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7上限 §f%corerpg_stamina_max% §7（月卡 +30）'
+        - '§7重置：§f今日 0:00'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e日常副本每日 3 次，0:00（上海时区）重置；进本即扣次。'
+        - 'tell: §e日常消耗 30 体力，0:00（上海）回满；不足无法进本。'

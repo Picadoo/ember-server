@@ -17,7 +17,7 @@ dungeon-start:
     - "$js-condition{text='%corerpg_gate_weekly%'=='yes'||'%player_is_op%'=='yes';message=§c周常本需要余烬等级 §eLv.20§c · 队伍中有人等级不足（/corerpg level 查看）} @system"
     # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
   action-script:
-    - "$message{type=text;text=§c深核·周 开始！已扣除周票 ×1} @dungeon"
+    - "$message{type=text;text=§c深核·周 开始！已消耗体力 ×1} @dungeon"
     - "$teleport{location=-40,65,270;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 

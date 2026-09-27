@@ -198,6 +198,17 @@ public final class PlayerDataStore {
         data.setSeasonPassPaid(yaml.getBoolean("seasonPassPaid", false));
         data.setMonthlyExpireDate(yaml.getString("monthlyExpireDate", ""));
         data.setMonthlyLastGrantDate(yaml.getString("monthlyLastGrantDate", ""));
+        // S0 stamina
+        data.setStamina(yaml.getInt("stamina", 0));
+        data.setStaminaBank(yaml.getInt("staminaBank", 0));
+        data.setStaminaResetDate(yaml.getString("staminaResetDate", ""));
+        data.setPotionStaminaToday(yaml.getInt("potionStaminaToday", 0));
+        data.setWeeklyGrantCreditWeekId(yaml.getString("weeklyGrantCreditWeekId", ""));
+        data.setWeeklyGrantCreditWeekly(yaml.getInt("weeklyGrantCreditWeekly", 0));
+        data.setWeeklyGrantCreditElite(yaml.getInt("weeklyGrantCreditElite", 0));
+        data.setWeeklyGrantCreditRaid(yaml.getInt("weeklyGrantCreditRaid", 0));
+        data.setStaminaInitialized(yaml.getBoolean("staminaInitialized", yaml.contains("stamina")));
+
         data.setDailyTicketsGranted(yaml.getInt("dailyTicketsGranted", 0));
         data.setDailyTicketsBought(yaml.getInt("dailyTicketsBought", 0));
         data.setDailyEntriesUsed(yaml.getInt("dailyEntriesUsed", 0));
@@ -350,6 +361,15 @@ public final class PlayerDataStore {
         yaml.set("seasonPassPaid", Boolean.valueOf(data.isSeasonPassPaid()));
         yaml.set("monthlyExpireDate", data.getMonthlyExpireDate());
         yaml.set("monthlyLastGrantDate", data.getMonthlyLastGrantDate());
+        yaml.set("staminaInitialized", Boolean.valueOf(data.isStaminaInitialized()));
+        yaml.set("stamina", Integer.valueOf(data.getStamina()));
+        yaml.set("staminaBank", Integer.valueOf(data.getStaminaBank()));
+        yaml.set("staminaResetDate", data.getStaminaResetDate());
+        yaml.set("potionStaminaToday", Integer.valueOf(data.getPotionStaminaToday()));
+        yaml.set("weeklyGrantCreditWeekId", data.getWeeklyGrantCreditWeekId());
+        yaml.set("weeklyGrantCreditWeekly", Integer.valueOf(data.getWeeklyGrantCreditWeekly()));
+        yaml.set("weeklyGrantCreditElite", Integer.valueOf(data.getWeeklyGrantCreditElite()));
+        yaml.set("weeklyGrantCreditRaid", Integer.valueOf(data.getWeeklyGrantCreditRaid()));
         yaml.set("dailyTicketsGranted", data.getDailyTicketsGranted());
         yaml.set("dailyTicketsBought", data.getDailyTicketsBought());
         yaml.set("dailyEntriesUsed", data.getDailyEntriesUsed());

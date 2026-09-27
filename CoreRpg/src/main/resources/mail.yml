@@ -32,10 +32,10 @@ templates:
     body: "付费轨已开通。欢迎礼见附件，请到邮箱领取。"
     attachments:
       coin: 300
-      ticket_ember_daily: 1
+      consumable_ember_stamina_30: 1
   event_box:
     title: "活动箱"
     body: "活动奖励。"
     attachments:
-      ticket_ember_daily: 1
+      consumable_ember_stamina_30: 1
       gem_ember_sharp: 1

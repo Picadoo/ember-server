@@ -692,6 +692,44 @@ public final class PlayerData {
     }
 
 
+    // —— S0 余烬体力 (design-ember-stamina-dnf-daily §A) ——
+    private boolean staminaInitialized;
+    private int stamina;
+    private int staminaBank;
+    private String staminaResetDate = "";
+    private int potionStaminaToday;
+    private String weeklyGrantCreditWeekId = "";
+    private int weeklyGrantCreditWeekly;
+    private int weeklyGrantCreditElite;
+    private int weeklyGrantCreditRaid;
+
+    public boolean isStaminaInitialized() { return staminaInitialized; }
+    public void setStaminaInitialized(boolean v) { staminaInitialized = v; dirty = true; }
+
+    public int getStamina() { return stamina; }
+    public void setStamina(int v) { stamina = Math.max(0, v); dirty = true; }
+
+    public int getStaminaBank() { return staminaBank; }
+    public void setStaminaBank(int v) { staminaBank = Math.max(0, v); dirty = true; }
+
+    public String getStaminaResetDate() { return staminaResetDate == null ? "" : staminaResetDate; }
+    public void setStaminaResetDate(String v) { staminaResetDate = v == null ? "" : v; dirty = true; }
+
+    public int getPotionStaminaToday() { return potionStaminaToday; }
+    public void setPotionStaminaToday(int v) { potionStaminaToday = Math.max(0, v); dirty = true; }
+
+    public String getWeeklyGrantCreditWeekId() { return weeklyGrantCreditWeekId == null ? "" : weeklyGrantCreditWeekId; }
+    public void setWeeklyGrantCreditWeekId(String v) { weeklyGrantCreditWeekId = v == null ? "" : v; dirty = true; }
+
+    public int getWeeklyGrantCreditWeekly() { return weeklyGrantCreditWeekly; }
+    public void setWeeklyGrantCreditWeekly(int v) { weeklyGrantCreditWeekly = Math.max(0, v); dirty = true; }
+
+    public int getWeeklyGrantCreditElite() { return weeklyGrantCreditElite; }
+    public void setWeeklyGrantCreditElite(int v) { weeklyGrantCreditElite = Math.max(0, v); dirty = true; }
+
+    public int getWeeklyGrantCreditRaid() { return weeklyGrantCreditRaid; }
+    public void setWeeklyGrantCreditRaid(int v) { weeklyGrantCreditRaid = Math.max(0, v); dirty = true; }
+
     // —— calamity daily chest (Shanghai day, yyyy-MM-dd) ——
     private String calamityChestDate = "";
 

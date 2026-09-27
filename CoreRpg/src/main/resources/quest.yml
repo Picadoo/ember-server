@@ -63,7 +63,7 @@ chapters:
         hint: 枢纽出生点北边（工坊旁）
         xp: 200
         levels: 5
-        items: { ticket_ember_daily: 1, crystal_ember_enchant: 1, mat_ember_shard: 8 }
+        items: { consumable_ember_stamina_30: 1, crystal_ember_enchant: 1, mat_ember_shard: 8 }
         done:
           - '§6灰烛：§f手还稳。日票拿去，地窟今天的门还开着。'
           - '§6灰烛：§f附魔晶和碎片留着，从窟里回来就去工坊把刃磨好。'
@@ -124,7 +124,7 @@ chapters:
         desc: 达到余烬等级 Lv.20（解锁周本）
         hint: 签到 / 日常 / 悬赏 / 挂机（灰坡）都能补经验
         levels: 3
-        items: { ticket_ember_weekly: 1, mat_ember_shard: 10, food_ember_bread: 8 }
+        items: { consumable_ember_stamina_30: 1, mat_ember_shard: 10, food_ember_bread: 8 }
         done:
           - '§6灰烛：§f誓立了，刃磨了。周烬的门，已经为你开着。'
           - '§a[挂机] 挂机庭 ② 荒原（Lv20）已开放：/ember → 挂机庭，或 /corerpg afk 2'
@@ -165,7 +165,7 @@ chapters:
         desc: 达到余烬等级 Lv.25（解锁深渊）
         hint: 日常 / 悬赏 / 签到 / 挂机 ② 荒原
         levels: 5
-        items: { mat_ember_shard: 15, crystal_ember_enchant: 2, ticket_ember_abyss: 2 }
+        items: { mat_ember_shard: 15, crystal_ember_enchant: 2, consumable_ember_stamina_30: 2 }
         done: ['§6灰烛：§f回响来自深渊。护符在周烬箱里（每周首通必出），别在下面待太久。']
   4:
     name: 深渊回响
@@ -248,7 +248,7 @@ chapters:
         desc: 达到余烬等级 Lv.35（解锁团本）
         hint: 深渊 / 日常 / 悬赏 / 灾厄 / 挂机 ③ 焦土
         levels: 5
-        items: { mat_ember_stable_charm: 1, ticket_ember_raid: 1 }
+        items: { mat_ember_stable_charm: 1, consumable_ember_stamina_30: 1 }
         done: ['§6灰烛：§f团本需要三到五人。找齐你的同袍。']
   6:
     name: 同袍之誓

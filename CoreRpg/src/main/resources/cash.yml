@@ -5,6 +5,30 @@ enabled: true
 
 timezone: Asia/Shanghai
 
+# S0 余烬体力（design-ember-stamina-dnf-daily §A）— 停发票；进本扣体力
+stamina:
+  base_max: 90
+  monthly_bonus: 30
+  bank_cap: 30
+  potion_daily_cap: 90
+  potion_grant_amount: 30
+  migration_t0: "2026-09-28"
+  migration_days: 7
+  costs:
+    daily: 30
+    weekly: 45
+    elite: 40
+    abyss: 30
+    raid: 50
+    calamity: 0
+  ticket_convert:
+    ticket_ember_daily: 30
+    ticket_ember_weekly: 45
+    ticket_ember_abyss: 30
+    ticket_ember_raid: 50
+    ticket_ember_elite: 40
+
+
 currency:
   id: ember_crystal_cash
   display: "余烬晶钻"
@@ -14,7 +38,7 @@ currency:
 
 # 日本：免费张数 + 总硬顶（进本/发票共用）
 daily:
-  free_tickets: 3
+  free_tickets: 0  # S0: 停发日票，改体力日回满
   hard_cap: 6
   ticket_ni_id: ticket_ember_daily
 
@@ -23,7 +47,7 @@ shop:
     id: daily_ticket
     price: 60
     sku_limit: 3          # 晶钻购买次数/日；仍受 daily.hard_cap 约束
-    grant_ni: true
+    grant_ni: false  # S0: 发体力药/直加体力
   pass_unlock:
     id: pass_unlock
     price: 48
@@ -44,24 +68,24 @@ monthly:
   duration_days: 30
   price: 68
   limit: 1                # 同时仅一张有效；续费从 expire 起顺延
-  immediate_daily_ticket: 1
+  immediate_daily_ticket: 1  # S0: 开通立即 +30 体力
   daily_login:
     coin: 200
-    daily_ticket: 1       # 计入 hard_cap，满则只发币
+    daily_ticket: 1       # S0: 每点折算体力+30（非 NI 票）
 
 weekly:
-  free_tickets: 1
+  free_tickets: 0
   ticket_ni_id: ticket_ember_weekly
 raid:
-  free_tickets: 1          # 2026-09-27: weekly login grant (menu promises 每周团本票×1)
+  free_tickets: 0          # 2026-09-27: weekly login grant (menu promises 每周团本票×1)
   ticket_ni_id: ticket_ember_raid
 abyss:
-  free_tickets: 1
+  free_tickets: 0
   ticket_ni_id: ticket_ember_abyss
 
 # Stage 4.4 精英试炼周票 — 周一 0:00 Asia/Shanghai 与周本同节奏；不进商城日票池；持有硬顶 1
 elite:
-  free_tickets: 1
+  free_tickets: 0
   ticket_ni_id: ticket_ember_elite
   hard_cap: 1
 

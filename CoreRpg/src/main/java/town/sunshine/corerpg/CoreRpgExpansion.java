@@ -82,6 +82,23 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
             MailService mail = plugin.getMailService();
             return mail == null ? "0" : String.valueOf(mail.countUnread(player.getUniqueId()));
         }
+        // S0 stamina (design A.6)
+        StaminaService st = plugin.getStaminaService();
+        if (st != null) {
+            PlayerData d = data;
+            if ("stamina".equals(key)) return String.valueOf(st.getStamina(d));
+            if ("stamina_max".equals(key)) return String.valueOf(st.getMax(d));
+            if ("stamina_bank".equals(key)) { st.ensure(d); return String.valueOf(d.getStaminaBank()); }
+            if ("stamina_cost_daily".equals(key)) return String.valueOf(st.costOf("daily"));
+            if ("stamina_cost_weekly".equals(key)) return String.valueOf(st.costOf("weekly"));
+            if ("stamina_cost_abyss".equals(key)) return String.valueOf(st.costOf("abyss"));
+            if ("stamina_cost_elite".equals(key)) return String.valueOf(st.costOf("elite"));
+            if ("stamina_cost_raid".equals(key)) return String.valueOf(st.costOf("raid"));
+            if ("stamina_reset".equals(key)) return "今日 0:00";
+            if ("stamina_credit_weekly".equals(key)) { st.ensure(d); return String.valueOf(d.getWeeklyGrantCreditWeekly()); }
+            if ("stamina_credit_elite".equals(key)) { st.ensure(d); return String.valueOf(d.getWeeklyGrantCreditElite()); }
+            if ("stamina_credit_raid".equals(key)) { st.ensure(d); return String.valueOf(d.getWeeklyGrantCreditRaid()); }
+        }
         return null;
     }
 }
