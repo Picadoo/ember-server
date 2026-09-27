@@ -20,6 +20,8 @@ stamina:
     daily_crypt: 30
     daily_tide: 30
     daily_spire: 30
+    daily_frost: 30
+    daily_rail: 30
     weekly: 45
     elite: 40
     abyss: 30

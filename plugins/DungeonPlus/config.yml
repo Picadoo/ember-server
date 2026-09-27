@@ -155,6 +155,10 @@ dungeon-pre-folder:
     "EmberDailyTide": 1
   ember_daily_spire:
     "EmberDailySpire": 1
+  ember_daily_frost:
+    "EmberDailyFrost": 1
+  ember_daily_rail:
+    "EmberDailyRail": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

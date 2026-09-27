@@ -246,6 +246,26 @@ Icons:
         - close
 
   F:
+    icons:
+      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
+      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8余烬窟·霜晶裂隙 · 体力不足'
+          lore:
+            - ''
+            - '§7冰蓝裂隙 · 冻台横移 · 霜厅 Boss'
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
+
+    update: 20
     display:
       material: packed ice
       name: '§b余烬窟·霜晶裂隙'
@@ -266,6 +286,26 @@ Icons:
         - close
 
   G:
+    icons:
+      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
+      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8余烬窟·锈轨矿道 · 体力不足'
+          lore:
+            - ''
+            - '§7废弃矿轨 · 短支洞 · 机房 Boss'
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
+
+    update: 20
     display:
       material: rail
       name: '§6余烬窟·锈轨矿道'

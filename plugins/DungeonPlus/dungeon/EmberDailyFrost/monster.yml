@@ -1,0 +1,76 @@
+# 日 · S4 线 F 霜晶裂隙：冻台→房1→开闸→房2混编→开闸→Boss 霜厅
+# 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=70..72 @ z=16/34 → AIR
+# Display：$kill 对齐 MM 去色名 霜晶尸 / 霜矢骷 / 霜核蛮兵
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=-3,70,8;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=3,70,8;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=0,70,12;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=-3,70,14;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=霜晶尸;amount=5} @system"
+    start:
+    - "$message{type=text;text=§e【裂隙·冻台】清尽霜晶尸再开冰闸 —— 别撞铁栅} @dungeon"
+    end:
+    - "$message{type=text;text=§a冻台已清 · 冰闸开了} @dungeon"
+    - "$operation-block{loc=-1,70,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,71,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,72,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,70,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,71,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,72,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,70,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,71,16;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,72,16;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2a:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=-4,70,24;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=0,70,30;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=霜晶尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【裂隙·折台】混编来袭 —— 先清尸再开霜厅门} @dungeon"
+    end:
+    - "$message{type=text;text=§7折台前段已清 · 霜矢骷压上} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  wave2b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostSkeleton;location=4,70,28;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostSkeleton;location=4,70,22;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=霜矢骷;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【裂隙·后段】霜矢骷×3 —— 清完开霜厅门} @dungeon"
+    end:
+    - "$message{type=text;text=§a折台已清 · 霜厅门开了} @dungeon"
+    - "$operation-block{loc=-1,70,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,71,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,72,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,70,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,71,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,72,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,70,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,71,34;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,72,34;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostBrute;location=0,70,48;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=霜核蛮兵;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【霜厅】霜核蛮兵！冻厅绕打再输出} @dungeon"
+    end:
+    - "$end{type=text;text=§a余烬窟·霜晶裂隙 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

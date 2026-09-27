@@ -1,0 +1,29 @@
+# 余烬窟·锈轨矿道 — S4 线 G（废弃矿轨 · 支洞横推 · 机房）
+# 启动：corerpg enter daily_rail（TrMenu）；扣体力 30（同池）
+# 地图：ember_daily_rail · spawn (0,64,0)
+
+dungeon-init-script:
+  - "$setmap{name=ember_daily_rail} @init"
+  - "$setspawn{location=0,64,0} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=true;number=2;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=2;message=§c日常本人数 1～2，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_gate_daily%'=='yes'||'%player_is_op%'=='yes';message=§c日常本需要余烬等级 §eLv.10§c · 队伍中有人等级不足} @system"
+  action-script:
+    - "$message{type=text;text=§e余烬窟·锈轨矿道 开始！已消耗体力 · 矿口安全 · 清主巷开闸} @dungeon"
+    - "$teleport{location=0,64,0;defspawn=true} @player"
+    - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
+
+dungeon-area: []
+
+dungeon-reward-script:
+  - "$message{type=text;text=§a通关奖励已发放} @dungeon"
+  - "$command{text=ni give %player_name% mat_ember_core_fragment 1;console=true} @player"
+  - "$command{text=ni give %player_name% crystal_ember_enchant 1;console=true} @player"
+  - "$command{text=ni give %player_name% mat_ember_shard 5;console=true} @player"
+  - "$command{text=xp 3L %player_name%;console=true} @player"
+  - "$command{text=corerpg progress %player_name% daily_clear;console=true} @player"
+  - "$command{text=mvtp %player_name% ember_hub;console=true} @player"

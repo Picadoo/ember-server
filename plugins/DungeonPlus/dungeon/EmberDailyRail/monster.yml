@@ -1,0 +1,76 @@
+# 日 · S4 线 G 锈轨矿道：主巷→房1→开闸→房2混编(+支洞口)→开闸→Boss 机房
+# 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=64..66 @ z=15/33 → AIR
+# Display：$kill 对齐 MM 去色名 锈轨尸 / 矿矢骷 / 锈轨矿监
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailZombie;location=-4,64,6;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailZombie;location=4,64,6;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailZombie;location=0,64,10;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailZombie;location=-4,64,12;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=锈轨尸;amount=5} @system"
+    start:
+    - "$message{type=text;text=§e【矿道·前段】清尽锈轨尸再开轨闸 —— 别撞铁栅} @dungeon"
+    end:
+    - "$message{type=text;text=§a主巷前段已清 · 轨闸开了} @dungeon"
+    - "$operation-block{loc=-1,64,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,65,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,64,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,64,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,15;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,15;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2a:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailZombie;location=-5,64,20;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailZombie;location=0,64,22;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=锈轨尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【矿道·后段】混编来袭 —— 支洞可探 · 先清尸} @dungeon"
+    end:
+    - "$message{type=text;text=§7后段前排已清 · 矿矢骷压上} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  wave2b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailSkeleton;location=5,64,24;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailSkeleton;location=5,64,30;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=矿矢骷;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【矿道·支洞口】矿矢骷×3 —— 清完开机房门} @dungeon"
+    end:
+    - "$message{type=text;text=§a后段已清 · 机房门开了} @dungeon"
+    - "$operation-block{loc=-1,64,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,65,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,64,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,64,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,33;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,33;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyRailWarden;location=0,64,46;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=锈轨矿监;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【机房】锈轨矿监！柱间绕打再输出} @dungeon"
+    end:
+    - "$end{type=text;text=§a余烬窟·锈轨矿道 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false
