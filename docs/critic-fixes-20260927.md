@@ -272,3 +272,28 @@ Design and resource numbers: `docs/ember-master-plan.md` §8.
 
     Still inside the 30–60% band, so no retune.
 - Play-server restarts: 08:38:22–08:38:34 and 08:51:19–08:51:32 CST.
+
+## 20. Phase 1 (CoreRpg 1.12.0) — fishing root cause, forge pity, free sources, paid-track balance
+
+- **Fishing ("no bites in ~20 casts").**
+  - CoreFish (wait 40–120 ticks, override loot) and Paper's FishNmsHooks are fine. No core change.
+  - Root cause: the old spot (33, 57, 107) is 1-deep **flowing** water over obsidian, under the hub roof (sky light 0), next to lava. `/corerpg life fishdebug` (new, op) showed the bobber drifting onto stone or lava within about 4 s, so it never reached the bobbing state. The only event was FAILED_ATTEMPT on reel.
+  - In still water at the east pond (stand at 62, 70, 104 and cast north), a non-op bot fishing for 30 min got 87 catches. Bite median 12.9 s (p10 9.0 s, p90 17.1 s); about 2.9 fish per minute including recasts. 14 casts timed out or missed because the pond is small.
+  - The rod button in the `ember_life` menu now names the pond and warns about flowing water or lava.
+- **End to end (non-op bot, fished items).** relic ×5 → reforge stone; pearl ×3 + core fragment ×3 → stable charm (a second one is blocked by the weekly limit of 1); bone ×2 → soul dust; soul dust ×10 → pet egg; `/corerpg pet summon` unlocked the pet. Top-ups printed by `life-e2e.js`: life XP 300 (the bot was Lv4 with 174 XP), core fragment 3 (a dungeon material) and soul dust 9.
+- **Forge pity** (`/corerpg forge [confirm]`, TrMenu `ember_forge`, hub button 'l', `forge.yml`).
+  - T1→T2: core fragment ×10 + shard ×40 + 1500 coins.
+  - T2→T3: 凝核 ×3 + core fragment ×25 + 灾厄余烬 ×6 + 5000 coins.
+  - Keeps floor(enhance ÷ 2), vanilla enchants (the higher of old and new), affix lines, and gems in slots that are still unlocked. Gems in slots that become locked go back to the inventory.
+  - Bot test: T1 +7 → T2 +3 (Fire Aspect kept, steady gem returned) → T3 +1 (base Sharpness I and Unbreaking II plus Fire Aspect).
+- **凝核 sources.**
+  - Raid boss: `corerpg mmgiveall` gives one to every player within 64 blocks in the instance. A 3-bot raid cleared (boss TTK 51 s) and all 3 got one.
+  - Calamity: the first daily chest of each week gives 1 more. A bot saw "本周首个灾厄日箱：额外获得 余烬凝核×1".
+  - That makes 2 per week, so one T3 takes about 1.5 weeks of 凝核, and a blade plus talisman takes about 3–4 weeks (coins are the bottleneck).
+- **Free sources.**
+  - Soul dust: 旧靴 ×2 or 碎骨 ×2 + 5c (2 per day each, life Lv2), and AFK mobs at 2% (cap 2 per day).
+  - Pet eggs: soul dust ×10 + 600c (weekly 1 each, life Lv4).
+  - Stable charm: weekly Brute B 4% and raid boss 5%, on top of life 1 per week.
+- **Paid track (progress.yml).** Protect scroll 3 → 1 and steady gem 1 → 0. Sharp gem 1, protect scroll 1 and stable charm 1 are each about 18–25% of the free monthly amount (master plan §7.2).
+- **Master plan** §2.1, §2.2, §3.3, §6.1, §7.2 and §8 updated with these numbers.
+- Play-server restart: 09:25:25–09:25:38 CST. Config reload (`/corerpg reload`, `/trm reload`) at 10:05 CST.
