@@ -20,7 +20,7 @@ Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §9[套装] §6余烬同袍 §7· 团戒 + 任意余烬之刃。背包同持即激活。'
-    - 'tell: §8效果：击杀微量回能（≤战力 2%）· 禁止大额攻击乘区 · YAML：CoreRpg/set.yml'
+    - 'tell: §8击杀微量回能（≤战力 2%），无大额攻击乘区'
 
 Icons:
   '#':
@@ -84,11 +84,11 @@ Icons:
         - '§8日后 4 件（甲/饰品）再扩'
         - '§8本期 §c不改方块甲'
         - ''
-        - '§8旋钮：plugins/CoreRpg/set.yml'
+        - '§8具体数值以服内说明为准'
         - ''
         - '§e➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §9[套装] §6余烬同袍 ✓ §7戒+刃。回能旋钮见 CoreRpg/set.yml；lore 已可见。'
+        - 'tell: §9[套装] §6余烬同袍 ✓ §7戒+刃。击杀微量回能，无大额攻击乘区。'
         - 'tell: §8护符线（旧刃+符）挂账，本期最小实现是戒+刃。'

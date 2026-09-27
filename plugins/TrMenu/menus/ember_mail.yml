@@ -67,7 +67,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[邮寄·领取] §7建议：§f/corerpg mail claim all'
+        - 'tell: §a[邮寄] §7正在领取全部…'
         - 'tell: §8战令 / 维护补偿 / 活动箱走邮箱'
         - 'command: corerpg mail claim all'
 
@@ -103,5 +103,5 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-0'
-        - 'tell: §7[邮寄·清理] §7建议：§f/corerpg mail delete <id>'
+        - 'tell: §7[邮寄] §7点击邮件清理；无需手打编号'
         - 'tell: §8未领附件不可删'

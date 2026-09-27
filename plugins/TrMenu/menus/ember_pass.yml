@@ -44,7 +44,7 @@ Icons:
         # 2026-09-26 audit: was console mail send on every click (unlimited coin/shards) → CoreRpg 1.4.10 daily-limited
         - 'command: corerpg pass free'
         - 'command: corerpg mail claim all'
-        - 'tell: §8若未自动入账，打开邮寄菜单 /corerpg mail'
+        - 'tell: §8若未自动入账，打开枢纽 → 邮寄 领取'
 
   U:
     display:
@@ -112,7 +112,7 @@ Icons:
         - ''
         - '§7查看 / 领取战令邮件附件'
         - ''
-        - '§e➥ §f/corerpg mail'
+        - '§e➥ §f打开邮寄'
     actions:
       all:
         - 'sound: BLOCK_CHEST_OPEN-1-0'

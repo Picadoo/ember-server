@@ -45,7 +45,7 @@ Icons:
         - '§7查看已收集使魔与碎片进度'
         - '§8掉落蛋 / 碎片合成'
         - ''
-        - '§8/corerpg pet list'
+        - '§8点击查看已拥有使魔'
         - ''
         - '§e➥ §f查看说明'
     actions:
@@ -63,13 +63,13 @@ Icons:
         - '§8默认偏外观；属性≤总战力 5%'
         - '§8升级吃魂尘（挂机副产）'
         - ''
-        - '§8/corerpg pet summon'
+        - '§8点击出战'
         - ''
         - '§a➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[使魔·出战] §7建议：§f/corerpg pet summon <id> §8（未实装）'
+        - 'tell: §a[使魔] §7出战（未实装则：§8功能筹备中）'
         - 'tell: §8氪皮 / 经验瓶 · 不卖满级战力宠'
         - 'command: corerpg pet list'
 
@@ -82,11 +82,11 @@ Icons:
         - '§7挂机副产魂尘升级使魔'
         - '§8不消耗核心 / 毕业刃'
         - ''
-        - '§8/corerpg pet feed'
+        - '§8点击投喂'
         - ''
         - '§6➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[使魔·投喂] §7魂尘升级 · /corerpg pet feed [数量]'
+        - 'tell: §6[使魔] §7投喂魂尘升级'
         - 'command: corerpg pet feed'

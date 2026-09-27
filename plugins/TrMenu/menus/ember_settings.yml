@@ -45,13 +45,13 @@ Icons:
         - '§7菜单点击与领取提示音'
         - '§8默认开 · 仅影响本人'
         - ''
-        - '§8点击切换：/corerpg settings sound'
+        - '§8点击切换音效'
         - ''
         - '§e➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[设置·音效] §7建议：§f/corerpg settings sound'
+        - 'tell: §e[设置·音效] §7已切换（或：点击即可切换）'
         - 'command: corerpg settings sound'
 
   T:
@@ -63,13 +63,13 @@ Icons:
         - '§7签到 / 邮件 / 悬赏聊天提示'
         - '§8可关刷屏，不关奖励'
         - ''
-        - '§8点击切换：/corerpg settings tip'
+        - '§8点击切换提示'
         - ''
         - '§b➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §b[设置·提示] §7建议：§f/corerpg settings tip'
+        - 'tell: §b[设置·提示] §7已切换'
         - 'command: corerpg settings tip'
 
   P:
@@ -82,12 +82,12 @@ Icons:
         - '§8可拒陌生人申请'
         - '§8不影响盟约 / 天梯展示'
         - ''
-        - '§8点击切换：/corerpg settings privacy'
+        - '§8点击切换隐私'
         - ''
         - '§d➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[设置·隐私] §7建议：§f/corerpg settings privacy'
+        - 'tell: §d[设置·隐私] §7已切换'
         - 'tell: §8拒陌生人申请 · 不影响盟约/天梯'
         - 'command: corerpg settings privacy'

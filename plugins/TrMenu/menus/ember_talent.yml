@@ -46,7 +46,6 @@ Icons:
         - '§7可用点 / 已花 / 已点节点'
         - '§7硬顶 §f30 §7点 · Lv.60 满二层'
         - ''
-        - '§8管理：/corerpg talent'
         - ''
         - '§e➥ §f点击查看'
     actions:
@@ -65,7 +64,6 @@ Icons:
         - '§7二层需先点满一层顶（*_cap）'
         - '§7点击下方节点即可解锁'
         - ''
-        - '§8管理：/corerpg talent unlock <nodeId>'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -82,7 +80,6 @@ Icons:
         - '§7额外：§b晶钻 ×25 §7或天赋重置券'
         - '§8不改变誓约，只清空节点'
         - ''
-        - '§8管理：/corerpg talent reset'
         - ''
         - '§c➥ §f点击洗点'
     actions:
@@ -100,7 +97,6 @@ Icons:
         - '§7根节点 · passive · cost 2'
         - '§8nodeId: blaze_root'
         - ''
-        - '§8管理：/corerpg talent unlock blaze_root'
         - ''
         - '§6➥ §f点击解锁'
     actions:
@@ -117,7 +113,6 @@ Icons:
         - '§7根节点 · passive · cost 2'
         - '§8nodeId: ash_root'
         - ''
-        - '§8管理：/corerpg talent unlock ash_root'
         - ''
         - '§7➥ §f点击解锁'
     actions:
@@ -134,7 +129,6 @@ Icons:
         - '§7根节点 · passive · cost 2'
         - '§8nodeId: warden_root'
         - ''
-        - '§8管理：/corerpg talent unlock warden_root'
         - ''
         - '§9➥ §f点击解锁'
     actions:
@@ -152,7 +146,6 @@ Icons:
         - '§8前置：blaze_crit1 + blaze_leech1'
         - '§8nodeId: blaze_slash'
         - ''
-        - '§8管理：/corerpg talent unlock blaze_slash'
         - ''
         - '§6➥ §f点击解锁'
     actions:
@@ -191,7 +184,6 @@ Icons:
         - '§e先点满一层顶（*_cap）'
         - '§7phys_damage +1'
         - ''
-        - '§8管理：/corerpg talent unlock blaze_ember2'
         - ''
         - '§6➥ §f点击解锁'
     actions:
@@ -211,7 +203,6 @@ Icons:
         - '§8前置：blaze_ember2'
         - '§7crit_damage_pct +0.03'
         - ''
-        - '§8管理：/corerpg talent unlock blaze_heat2'
         - ''
         - '§c➥ §f点击解锁'
     actions:
@@ -231,7 +222,6 @@ Icons:
         - '§8前置：blaze_ember2'
         - '§7crit_chance_pct +0.005 · phys_damage +1'
         - ''
-        - '§8管理：/corerpg talent unlock blaze_second'
         - ''
         - '§6➥ §f点击解锁'
     actions:
@@ -251,7 +241,6 @@ Icons:
         - '§e先点满一层顶（*_cap）'
         - '§7move_speed_pct +0.01'
         - ''
-        - '§8管理：/corerpg talent unlock ash_veil2'
         - ''
         - '§7➥ §f点击解锁'
     actions:
@@ -271,7 +260,6 @@ Icons:
         - '§8前置：ash_veil2'
         - '§7attack_speed_pct +0.01'
         - ''
-        - '§8管理：/corerpg talent unlock ash_dust2'
         - ''
         - '§e➥ §f点击解锁'
     actions:
@@ -291,7 +279,6 @@ Icons:
         - '§8前置：ash_veil2'
         - '§7on_hit_slow_pct +0.03 · attack_speed_pct +0.01'
         - ''
-        - '§8管理：/corerpg talent unlock ash_shroud'
         - ''
         - '§8➥ §f点击解锁'
     actions:
@@ -311,7 +298,6 @@ Icons:
         - '§e先点满一层顶（*_cap）'
         - '§7damage_taken_pct -0.01'
         - ''
-        - '§8管理：/corerpg talent unlock warden_bulwark2'
         - ''
         - '§9➥ §f点击解锁'
     actions:
@@ -331,7 +317,6 @@ Icons:
         - '§8前置：warden_bulwark2'
         - '§7max_health +2'
         - ''
-        - '§8管理：/corerpg talent unlock warden_aegis2'
         - ''
         - '§9➥ §f点击解锁'
     actions:
@@ -351,7 +336,6 @@ Icons:
         - '§8前置：warden_bulwark2'
         - '§7phys_defense +1 · damage_taken_pct -0.01'
         - ''
-        - '§8管理：/corerpg talent unlock warden_vow2'
         - ''
         - '§1➥ §f点击解锁'
     actions:

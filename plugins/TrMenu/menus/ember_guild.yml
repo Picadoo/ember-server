@@ -66,7 +66,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[盟约·创建] §7建议：§f/corerpg guild create <名>'
+        - 'tell: §a[盟约] §7点击创建；按提示填写名称'
         - 'tell: §8费用：币 5000 或 晶钻 40'
 
   D:
@@ -85,7 +85,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6[盟约·捐献] §7建议：§f/corerpg guild donate mat_ember_shard 10'
+        - 'tell: §6[盟约] §7点击捐献今日盟课'
         - 'tell: §8碎片×10 / 骨尘×5 → 贡献 1 · 日 cap 50'
 
   B:
@@ -97,13 +97,13 @@ Icons:
         - '§7每周一次协作 Boss'
         - '§8贡献排名奖：币 / 外观 / 票'
         - '§8不出毕业伤害'
-        - '§8日后：dp start EmberGuildBoss'
+        - '§8日后开放周盟 Boss 入口'
         - ''
         - ''
         - '§c➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §c[盟约·Boss] §7建议：§f/corerpg guild boss'
+        - 'tell: §c[盟约] §7点击前往盟 Boss'
         - 'tell: §8周 1 次 · 消耗贡献 20 · 需先组队（队长执行）'
         - 'command: corerpg guild boss'

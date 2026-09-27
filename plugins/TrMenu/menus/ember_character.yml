@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §b[角色] §7等级、誓约与钱包摘要。点图标执行 /corerpg 查询。'
+    - 'tell: §b[角色] §7等级、誓约与钱包摘要。点下方查看。'
 
 Icons:
   '#':
@@ -50,7 +50,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §b[角色·状态] §7请执行 §f/corerpg status'
+        - 'tell: §b[角色·状态] §7已刷新摘要'
         - 'command: corerpg status'
 
   C:
@@ -67,7 +67,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[角色·誓约] §7请执行 §f/corerpg covenant'
+        - 'tell: §6[角色·誓约] §7打开誓约页可重选（有冷却则以实际为准）'
         - 'command: corerpg covenant'
 
   $:
@@ -77,14 +77,14 @@ Icons:
       lore:
         - ''
         - '§7晶钻余额 · 日票硬顶'
-        - '§8软通货另查 /corerpg coin'
+        - '§8余烬币见钱包行'
         - ''
         - ''
         - '§e➥ §f点击查晶钻'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §a[角色·晶钻] §7请执行 §f/corerpg cash §7· 币：§f/corerpg coin'
+        - 'tell: §a[角色·晶钻] §7余额已显示在本页'
         - 'command: corerpg cash'
 
   M:
@@ -101,5 +101,5 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[角色·月卡] §7请执行 §f/corerpg monthly'
+        - 'tell: §e[角色·月卡] §7状态见本页；续费请打开商城'
         - 'command: corerpg monthly'

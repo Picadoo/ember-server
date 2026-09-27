@@ -36,12 +36,12 @@ Icons:
         - '§7每格绑定一种材料，数量可叠到近二十亿'
         - '§8默认 8 格 · 上限 48'
         - ''
-        - '§e➥ §f/corerpg warehouse'
+        - '§e➥ §f点击打开仓库'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg warehouse'
-        - 'tell: §8取出：/corerpg warehouse withdraw <格号|id> [数量]'
+        - 'tell: §8[仓库] §7点击格位取出；或用本页取出按钮'
 
   D:
     display:
@@ -65,7 +65,7 @@ Icons:
       lore:
         - ''
         - '§7默认扣余烬币（阶梯涨价）'
-        - '§8也可：/corerpg warehouse unlock cash'
+        - '§8也可在本页解锁格位（晶钻）'
         - '§8晶钻价 28（可配）'
         - ''
         - '§e➥ §funlock'

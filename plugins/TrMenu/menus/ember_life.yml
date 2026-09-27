@@ -87,7 +87,7 @@ Icons:
     display:
       material: monster egg
       name: '§a孵化 余烬灰灵（使魔）'
-      lore: ['', '§7魂尘×10 + 600 币', '§8每周 1 次 · 需生活 Lv.4', '§8手持后 /corerpg pet 召唤', '', '§e➥ §f孵化']
+      lore: ['', '§7魂尘×10 + 600 币', '§8每周 1 次 · 需生活 Lv.4', '§8孵化后打开使魔菜单出战', '', '§e➥ §f孵化']
     actions:
       all:
         - 'command: corerpg life buy pet_ashling'
@@ -95,7 +95,7 @@ Icons:
     display:
       material: monster egg
       name: '§6孵化 余烬烬火（使魔）'
-      lore: ['', '§7魂尘×10 + 600 币', '§8每周 1 次 · 需生活 Lv.4', '§8手持后 /corerpg pet 召唤', '', '§e➥ §f孵化']
+      lore: ['', '§7魂尘×10 + 600 币', '§8每周 1 次 · 需生活 Lv.4', '§8孵化后打开使魔菜单出战', '', '§e➥ §f孵化']
     actions:
       all:
         - 'command: corerpg life buy pet_cinder'

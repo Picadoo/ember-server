@@ -67,7 +67,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[寄售·浏览] §7建议：§f/corerpg auction list'
+        - 'tell: §a[寄售] §7正在刷新列表…'
         - 'tell: §8白名单流通物 · 绑定物不可买'
         - 'command: corerpg auction list'
 
@@ -86,7 +86,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6[寄售·上架] §7建议：§f/corerpg auction sell <价>'
+        - 'tell: §6[寄售] §7手持物品后点上架，按提示定价'
         - 'tell: §8手持白名单物品 · 成交卖方实收 = 标价 × 90%（税 10%）'
         - 'tell: §c禁止：§8核心、毕业刃、满孔装、战力扭蛋直售'
         - 'command: corerpg auction sell'
