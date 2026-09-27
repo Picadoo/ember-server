@@ -55,7 +55,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §9团本已点燃。§7分路推进——左卫兵、右射手，汇合后再闯终厅。'
         - 'tell: §8需 §9余烬团本票§8×1 · 人数 3～5'
-        - 'tell: §8需要余烬等级 §eLv.35§8（/corerpg level）'
+        - 'tell: §8需要余烬等级 §eLv.35§8（见菜单等级要求）'
         - 'command: corerpg enter raid'
         - close
 
@@ -91,7 +91,6 @@ Icons:
         - '§7进本即扣 · 失败不返还'
         - '§7人数硬限 §f3～5'
         - ''
-        - '§8/ni give <玩家> ticket_ember_raid 1'
         - '§7每周团本票 ×1（进服发放）'
     actions:
       all:
