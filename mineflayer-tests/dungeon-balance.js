@@ -76,6 +76,7 @@ async function runOne(D, op) {
     await c(`/clear ${b.username}`)
     await c(`/ni give ${b.username} ${BLADE} 1`, 1000); await c(`/ni give ${b.username} ${TAL} 1`, 1000)
     await c(`/ni give ${b.username} mat_ember_shard 64`, 800); await c(`/ni give ${b.username} mat_ember_bone_dust 20`, 800)
+    await c(`/corerpg coin give ${b.username} 2000`, 800) // 1.11.0: enhance has a coin fee
     for (const [id, lv] of [[TAL, ET], [BLADE, EB]]) {
       for (let i = 0; i < 12; i++) {
         const it = find(b, id); if (!it) break

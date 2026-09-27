@@ -90,6 +90,10 @@ public final class CoreEnchantPlugin extends JavaPlugin {
         hooksAvailable = probeHooks();
         getServer().getPluginManager().registerEvents(new BaseEnchantListener(this, whitelistNi), this);
         getServer().getPluginManager().registerEvents(new TierCrystalListener(this), this);
+        if (getServer().getPluginManager().getPlugin("ProtocolLib") != null) {
+            try { getServer().getPluginManager().registerEvents(new EnchantClickHint(this), this); }
+            catch (Throwable t) { getLogger().warning("EnchantClickHint disabled: " + t); }
+        }
         Bukkit.getScheduler().runTask(this, new Runnable() {
             @Override
             public void run() {

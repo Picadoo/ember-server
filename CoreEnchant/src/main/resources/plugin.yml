@@ -1,10 +1,10 @@
 name: CoreEnchant
 main: town.sunshine.coreenchant.CoreEnchantPlugin
-version: 1.1.0
+version: 1.2.0
 author: sunshine-town
 description: Custom enchanting-table offers via EnchantNmsHooks + YAML
 depend: [NeigeItems]
-softdepend: []
+softdepend: [ProtocolLib]
 load: POSTWORLD
 commands:
   coreenchant:

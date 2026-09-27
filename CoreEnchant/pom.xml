@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>town.sunshine</groupId>
   <artifactId>CoreEnchant</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
   <packaging>jar</packaging>
   <name>CoreEnchant</name>
   <properties>
@@ -26,6 +26,13 @@
       <version>1.21.151</version>
       <scope>system</scope>
       <systemPath>${project.basedir}/../plugins/NeigeItems-1.21.151.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>com.comphenix.protocol</groupId>
+      <artifactId>protocollib</artifactId>
+      <version>local</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/../server-runtime/plugins/ProtocolLib.jar</systemPath>
     </dependency>
   </dependencies>
   <build>

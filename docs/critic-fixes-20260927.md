@@ -213,3 +213,62 @@ Harness: `mineflayer-tests/dungeon-balance.js` (`D=weekly,abyss,calamity,guild,r
 - Play-server restarts, each about 13 s (the playtester was online):
   - 08:06:40–08:06:53 CST: deploy 1.10.0.
   - 08:15:16–08:15:29 CST: deploy the covenant-stats flag.
+
+## 19. Phase 0 (CoreRpg 1.11.0, CoreEnchant 1.2.0) — life skills + report top items
+Design and resource numbers: `docs/ember-master-plan.md` §8.
+- **Food.** Chapter 1 starts with 16 余烬面包. The hub vendor (`/corerpg life`, /ember → 补给 · 生活) sells bread 40 币/8 and a rod for 60 币. It also cooks cod or salmon for 1 币 each into 炭烤余烬鱼 (Regeneration I for 6 s). A CoreSmelt furnace recipe does the same.
+- **Brewing and exchanges.**
+  - 余烬回复药: Instant Health II, 20 s cooldown.
+  - Relic ×5 → 重铸石: 5 per week.
+  - Pearl ×3 + core fragment ×3 + 300 币 → 稳定符: 1 per week.
+  - Life level (fishing, cooking, brewing) only unlocks recipes.
+- **Quest state checks.** When a step starts, and again every 10 s, it completes if its state is already true:
+  - signed today, or bounty claimed today;
+  - covenant chosen, or a talent point spent;
+  - any ember gear enchanted, or at +N;
+  - level reached.
+  - Steps may also list alternative events as `a|b`.
+- **Chapter 2** is now: daily kills → daily clear (T1 blade + 2 crystals + 10 shards) → covenant → talent → enchant → enhance +3 → Lv20 (weekly ticket).
+  - Players already past step 1 of the old flow get the T1 blade once on join.
+  - Resources for a new player are enough: 18 shards, 3 crystals, 100+ 币, 9 talent points.
+- **Duplicate gear removed.**
+
+  | Source | Now gives |
+  |---|---|
+  | Weekly first clear | T1 talisman only |
+  | Ch3 end | Shards 15 + crystals 2 + abyss tickets 2 |
+  | Ch4 end | Sharp gem + core fragments 5 + protect scroll |
+  | Ch5 end | Stable charm + raid ticket |
+  | Abyss first clear | T2 blade + T2 talisman (unchanged, the only T2 guarantee) |
+
+- **Menus.**
+  - Weekly: about 2–3 min per run, 1 free ticket per week, 1 more from the shop, and 1 from chapter 2.
+  - The ch2 intro and the ch5 hint no longer say "once a day".
+  - Calamity: the OP test button is removed, and 灰烬巨像 is renamed 余烬灾厄使.
+- **Dungeons.**
+  - The DP whitelist now allows `corerpg quest|stats|skill`.
+    - **Before this fix `/corerpg skill` was silently blocked inside dungeons, so the 1.10.0 "with skills" numbers in §18 were really without skills.**
+  - `/hub`, `/spawn`, `/ember` and similar now reply "离开请用 /dp leave". Any other blocked command gets a short hint.
+  - Reconnecting inside an instance gives a full heal, Resistance V for 7 s and a message.
+  - On entry, the heal is repeated at 5, 25 and 45 ticks. A bot sample showed 40/40 on arrival.
+- **Small fixes.**
+  - Clicking an enchant slot without enough crystals or levels now explains why (ProtocolLib ENCHANT_ITEM listener).
+  - `/corerpg stats` shows the covenant and whether its stats are applied.
+- **Economy.**
+  - AFK caps (ember_afk/world only): shards 150, bone dust 80, core fragments 10, kill coin 150 per day, then 25%.
+  - Enhance fee: 10 + 10 × target level.
+  - Anvil repair fee: 20 币.
+- **Tests.**
+  - `mineflayer-tests/phase0-smoke.js`: all checks pass (starter food, vendor, cook, level gate, covenant/talent/enhance quest steps, already-done check, fee, dungeon hints, stats/quest/skill in dungeon, reconnect grace).
+  - `newbie-path-smoke.js`: ch1 → daily pass, and the quest moves on to the covenant step.
+  - Fishing: a bot's bobber lands in water, but about 20 casts saw no bite (no BITE event). This needs a human check.
+  - Weekly re-test now that skills really fire (L20, T1 blade +2, charm +1, Sharpness II; the harness now also gives coins for the enhance fee):
+
+    | Covenant | Boss TTK | End HP |
+    |---|---|---|
+    | blaze + 烬斩 | 33 s | 62% |
+    | blaze + 烬斩 | 35 s | 47% |
+    | no skill | 31 s | 27% |
+
+    Still inside the 30–60% band, so no retune.
+- Play-server restarts: 08:38:22–08:38:34 and 08:51:19–08:51:32 CST.

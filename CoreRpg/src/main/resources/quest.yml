@@ -1,6 +1,8 @@
 # 余烬主线 · 第一卷「旧誓余烬」 — docs/ember-mainline-spec.md
 # step type: talk | kill (mobs: MythicMobs internal names, "Prefix*" ok) | event (event: sign/bounty/daily_clear/weekly_clear/
-#   abyss_clear/raid_clear/guild_boss_clear/enchant/anvil/craft/calamity_join/calamity_boss) | level (level: N)
+#   abyss_clear/raid_clear/guild_boss_clear/enchant/anvil/craft/calamity_join/calamity_boss/covenant/talent/enhance) | level (level: N)
+# 1.11.0: event may list alternatives "a|b". State-type events (sign, bounty, covenant, talent, enchant, anvil, enhance with level: N)
+#   also complete when already true at step start (signed today, bounty claimed today, covenant chosen, talent spent, gear enhanced …).
 # kill steps may set complete_on: <event> — that clear also finishes the kill step (then counts for the next step).
 # levels = vanilla XP levels (enchant/anvil cost)
 # xp = flat ember XP (not subject to daily caps). items = NeigeItems id: amount.
@@ -20,11 +22,11 @@ npc:
 chapters:
   1:
     name: 余烬初醒
-    start_items: { gear_ember_blade: 1, gear_ember_charm: 1 }
+    start_items: { gear_ember_blade: 1, gear_ember_charm: 1, food_ember_bread: 16 }
     intro:
       - '§7你在灰烬里醒来，手边只有一柄旧刃。'
       - '§7「醒了？拿好刃和护符，先来枢纽找我。」—— 远处有人举着一盏烛。'
-      - '§8（死亡不掉落 · 随时 /hub 回城）'
+      - '§8（死亡不掉落 · 随时 /hub 回城 · 饿了吃面包，补给在 /corerpg life）'
     steps:
       - type: talk
         desc: 与枢纽的 引路人·灰烛 交谈
@@ -66,7 +68,8 @@ chapters:
   2:
     name: 残窟之门
     intro:
-      - '§6灰烛：§f地窟的门每天只开一次。先下去看看，回来再磨刃。'
+      - '§6灰烛：§f地窟的门每天开三次（每日 3 张免费日票，主线再送 1 张）。先下去看看。'
+      - '§6灰烛：§f回来之后，立誓、点天赋、附魔、强化——做完这些再去周烬试炼。'
     steps:
       - type: kill
         mobs: ['EmberDaily*']
@@ -80,31 +83,47 @@ chapters:
         event: daily_clear
         count: 1
         desc: 通关 余烬窟·日
-        hint: 组队或单人皆可
+        hint: 组队或单人皆可 · 约 1～2 分钟
         xp: 300
+        items: { gear_ember_t1_blade: 1, crystal_ember_enchant: 2, mat_ember_shard: 10 }
         done:
-          - '§6灰烛：§f你带回了窟底的火。回工坊把刃磨一磨，再往下是周烬试炼。'
+          - '§6灰烛：§f窟底带回一柄精炼刃，比旧刃强得多。先立誓，再磨它。'
+      - type: event
+        event: covenant
+        count: 1
+        desc: 选择一个誓约（烬刃 / 灰印 / 守墓）
+        hint: /ember → 誓约，或 /corerpg covenant set blaze|ash|warden · 首次免费 · 决定你的技能
+        xp: 100
+        done: ['§6灰烛：§f誓言立下，火就认得你的刃了。试试 /corerpg skill。']
+      - type: event
+        event: talent
+        count: 1
+        desc: 点亮一个天赋节点
+        hint: /ember → 天赋，或 /corerpg talent 查看 · /corerpg talent unlock <节点>（Lv10 起有 5 点）
+        xp: 100
+        done: ['§7一缕火沿着经脉亮起。']
       - type: event
         event: enchant
         count: 1
-        desc: 在工坊附魔台附魔一次
-        hint: 出生点北侧工坊 · 放入 余烬附魔晶
+        desc: 附魔一次（推荐精炼刃）
+        hint: 出生点北侧工坊附魔台 · 右侧放余烬附魔晶（精炼刃需多 1 颗）· 以前附魔过也算
         xp: 100
         done: ['§7刃身浮出一道暗纹，像旧誓的笔画。']
       - type: event
-        event: anvil
+        event: enhance
+        level: 3
         count: 1
-        desc: 在工坊铁砧修理一次
-        hint: 刃 + 余烬碎片 放入铁砧
-        xp: 100
-        done: ['§7碎片熔进刃口，缺口合上了。']
+        desc: 把一件余烬装备强化到 +3
+        hint: 手持装备 /ember → 强化，或 /corerpg enhance · 耗碎片 + 少量余烬币
+        xp: 150
+        done: ['§6灰烛：§f刃口稳了。周烬的守卫可不讲情面。']
       - type: level
         level: 20
         desc: 达到余烬等级 Lv.20（解锁周本）
         hint: 签到 / 日常 / 悬赏 / 挂机都能补经验
         levels: 3
-        items: { gear_ember_t1_blade: 1, ticket_ember_weekly: 1 }
-        done: ['§6灰烛：§f这柄精炼刃配得上你了。周烬的门，已经为你开着。']
+        items: { ticket_ember_weekly: 1, mat_ember_shard: 10, food_ember_bread: 8 }
+        done: ['§6灰烛：§f誓立了，刃磨了。周烬的门，已经为你开着。']
   3:
     name: 周烬试炼
     intro:
@@ -142,8 +161,8 @@ chapters:
         desc: 达到余烬等级 Lv.25（解锁深渊）
         hint: 日常 / 悬赏 / 签到
         levels: 5
-        items: { gear_ember_t1_talisman: 1, ticket_ember_abyss: 2 }
-        done: ['§6灰烛：§f回响来自深渊。拿好护符，别在下面待太久。']
+        items: { mat_ember_shard: 15, crystal_ember_enchant: 2, ticket_ember_abyss: 2 }
+        done: ['§6灰烛：§f回响来自深渊。护符在周烬箱里（每周首通必出），别在下面待太久。']
   4:
     name: 深渊回响
     intro:
@@ -183,8 +202,8 @@ chapters:
         desc: 达到余烬等级 Lv.30（解锁灾厄窗口）
         hint: 深渊 / 日常 / 悬赏
         levels: 5
-        items: { gear_ember_t2_blade: 1, gem_ember_sharp: 1 }
-        done: ['§6灰烛：§f深核刃。它见过火真正的样子。']
+        items: { gem_ember_sharp: 1, mat_ember_core_fragment: 5, mat_ember_protect_scroll: 1 }
+        done: ['§6灰烛：§f深核刃在深渊箱里等你（每周首次结算必出）。这颗锐石先镶上。']
   5:
     name: 灾厄之窗
     intro:
@@ -215,7 +234,7 @@ chapters:
         event: daily_clear
         count: 2
         desc: 通关 余烬窟·日 两次
-        hint: 每日一次
+        hint: 每日 3 张免费日票
         xp: 300
         done: ['§6灰烛：§f同袍们在集结。']
       - type: level
@@ -223,7 +242,7 @@ chapters:
         desc: 达到余烬等级 Lv.35（解锁团本）
         hint: 深渊 / 日常 / 悬赏 / 灾厄
         levels: 5
-        items: { gear_ember_t2_talisman: 1, ticket_ember_raid: 1 }
+        items: { mat_ember_stable_charm: 1, ticket_ember_raid: 1 }
         done: ['§6灰烛：§f团本需要三到五人。找齐你的同袍。']
   6:
     name: 同袍之誓

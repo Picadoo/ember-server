@@ -1,6 +1,6 @@
 # 灾厄子菜单 — 主入口 MV ember_event；DP 仅测试
 # docs/ember-calamity-mv-entry.md · docs/ember-abyss-calamity.md
-Title: '§4灾厄 · 灰烬巨像'
+Title: '§4灾厄 · 余烬灾厄使'
 
 Options:
   Arguments: false
@@ -12,7 +12,7 @@ Layout:
   - '#########'
   - '#       #'
   - '# S P R #'
-  - '#   T   #'
+  - '#       #'
   - '####B####'
 
 Events:
@@ -65,7 +65,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §4[灾厄] §7公共窗打巨像；日箱限 1；正式入口是 ember_event。'
+        - 'tell: §4[灾厄] §7公共窗打灾厄使；日箱限 1；正式入口是 ember_event。'
 
   R:
     display:
@@ -75,7 +75,6 @@ Icons:
         - ''
         - '§7公共场：全服同图可见'
         - '§7可多窗参战，§f日箱只领 1 次'
-        - '§7测试 Boss：§8/dp start EmberCalamity'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

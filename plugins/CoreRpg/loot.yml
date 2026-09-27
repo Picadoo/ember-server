@@ -8,7 +8,8 @@ abyss_t2:
   chance: { gear_ember_t2_blade: 0.04, gear_ember_t2_talisman: 0.03 }
 weekly_t1:
   label: 周本通关箱
-  first_per_week: { gear_ember_t1_blade: 1, gear_ember_t1_talisman: 1 }
+  # 1.11.0: 精炼刃改由主线第 2 章（日常首通）给；周本首通只保底护符，避免与主线重复
+  first_per_week: { gear_ember_t1_talisman: 1 }
   chance: { gear_ember_t1_blade: 0.10, gear_ember_t1_talisman: 0.08 }
 raid_gem:
   label: 团本通关箱

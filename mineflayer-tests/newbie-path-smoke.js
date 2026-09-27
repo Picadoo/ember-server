@@ -80,7 +80,7 @@ async function talkNpc(b) {
   await wait(12000)
   const t = strip(since(b, n))
   r.check_daily = /余烬窟·日 通关！/.test(t) ? 'PASS' : 'FAIL'
-  r.check_daily_quest = /窟里的尸骸穿着旧城卫的甲/.test(t) && /你带回了窟底的火/.test(t) ? 'PASS' : 'FAIL'
+  r.check_daily_quest = /窟里的尸骸穿着旧城卫的甲/.test(t) && /(你带回了窟底的火|窟底带回一柄精炼刃)/.test(t) ? 'PASS' : 'FAIL'
   r.elite_xp = /击杀精英|首领/.test(t)
   n = b.chatLog.length; b.chat('/corerpg quest'); await wait(1500); r.quest_now = strip(since(b, n)).slice(0, 260)
   n = b.chatLog.length; b.chat('/corerpg level'); await wait(1500); r.level_now = strip(since(b, n)).slice(0, 120)

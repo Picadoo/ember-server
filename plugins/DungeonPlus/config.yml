@@ -22,6 +22,19 @@ dungeon:
   #默认迷糊匹配,在配置行开头加上 $ 即可精准匹配
   - command:
       - "dp"
+      # 2026-09-27 (critic): quest/stats/skill usable in dungeons; /hub etc. get a hint from CoreRpg
+      - "corerpg quest"
+      - "corerpg stats"
+      - "corerpg skill"
+      - "corerpg 属性"
+      - "corerpg 技能"
+      - "corerpg 主线"
+      - "rpg quest"
+      - "rpg stats"
+      - "rpg skill"
+      - "crpg quest"
+      - "crpg stats"
+      - "crpg skill"
       #精准匹配
       #- "$m"
     #地牢聊天模式,开启该模式再地牢内聊天仅队友可见
