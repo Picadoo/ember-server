@@ -1,12 +1,12 @@
-# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
-#   see docs/critic-fixes-20260927.md §10). Map ember_raid room: x -46..-34, z 264..276
+# P5 2026-09-27: hall→corridor→boss hall open cells (spawn 0,65,0 · boss pad 40,66,0)
+#   Legacy room x -46..-34,z 264..276 scrubbed.
 # 团本 · 通道分路 → 终厅（docs/ember-raid-channel-spec.md）
 # Display 保持：团本·通道卫兵/射手/精英 · 团本·终厅使徒
 # 不必真分图：文案 + 左右刷点错开做出分路压力
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-46,65,275;amount=6;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=18,65,-7;amount=6;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=团本·通道卫兵;amount=6} @system"
     start:
@@ -20,8 +20,8 @@ groups:
 
   wave2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-46,65,275;amount=3;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberRaidArcher;location=-34,65,273;amount=4;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=18,65,-7;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidArcher;location=22,65,7;amount=4;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：kill-any 按本组计数（实战冒烟：wave2 的 3 卫兵 + 4 射手全灭后 amount=13 永不满足、卡波）
     - "$kill-any{mobname=团本·通道卫兵,团本·通道射手;amount=7} @system"
@@ -36,8 +36,8 @@ groups:
 
   wave3:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberRaidElite;location=-40,65,276;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=-40,65,276;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidElite;location=30,65,0;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidFootman;location=30,65,0;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=团本·通道精英;amount=1} @system"
     start:
@@ -52,7 +52,7 @@ groups:
   boss:
   - monster:
     # 2026-09-27: boss (wither skeleton, 2.4 tall) moved to the room centre; at z 276 it sat in the 3-high outer ring and could not step onto the 2-high quartz ledge → never reached players
-    - "$mob{plugin=MythicMobs;name=EmberRaidBoss;location=-40,65,270;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberRaidBoss;location=40,66,0;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=团本·终厅使徒;amount=1} @system"
     start:

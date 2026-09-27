@@ -1,6 +1,6 @@
 # P5 · 灾厄祭坛盆地 + 团本大厅通道（独立视觉）
 
-**状态：仅文档**（2026-09-27 Asia/Shanghai）  
+**状态：已落地（见 STATUS-ember-calamity-raid-maps-p5.md）**（2026-09-27 Asia/Shanghai）
 **作者岗：** 余烬-策划  
 **承接：** `design-ember-multiworld-maps.md` P5 · `DESIGN-ember-map-plan.md` §3.4–3.5 · `RETRO-ember-design-20260927.md` 硬条  
 **约束：** **不改数值**（窗时、Boss 缩放、日箱/团票、波次人数、掉落表均不动）；玩家入口只走 TrMenu；物仍 NI。  

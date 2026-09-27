@@ -3,6 +3,7 @@
 enabled: true
 
 boss:
+  # P5: Boss 台中心保持；玩家落点/MV spawn = (-96.5,65,282.5) 南侧入口（≠ Boss 脚）
   mythic_id: EmberCalamityBoss
   display: "余烬灾厄使"
   world: ember_event

@@ -6,7 +6,7 @@
 
 dungeon-init-script:
   - "$setmap{name=ember_raid} @init"
-  - "$setspawn{location=-40,65,270} @init"
+  - "$setspawn{location=0,65,0} @init"
   - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
   - "$revive-setting{revive=true;number=3;death-location=true} @init"
 
@@ -18,7 +18,7 @@ dungeon-start:
     - "$js-condition{text='%corerpg_guildboss_pass%'=='yes'||'%player_is_op%'=='yes';message=§c盟 Boss 需由队长执行 /corerpg guild boss（消耗盟约贡献）开启} @system"
   action-script:
     - "$message{type=text;text=§6盟约周 Boss 已点燃。§7进本由 §e/corerpg guild boss §7门控（贡献消耗）。} @dungeon"
-    - "$teleport{location=-40,65,270;defspawn=true} @player"
+    - "$teleport{location=0,65,0;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
 dungeon-area: []

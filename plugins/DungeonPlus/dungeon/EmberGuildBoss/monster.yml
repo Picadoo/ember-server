@@ -1,13 +1,12 @@
-# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
-#   see docs/critic-fixes-20260927.md §10). Map ember_raid room: x -46..-34, z 264..276
+# P5 2026-09-27: realign to ember_raid hall/corridor/boss open cells (数值未改)
 # 轻量盟 Boss：2 波杂兵/精英 + EmberCalamityBoss
 # MM：EmberAbyssZombie / EmberAbyssSkeleton / EmberAbyssBrute / EmberCalamityBoss（已有，无新 MM）
 # $kill Display（无颜色）：余烬深渊·潮尸 / 余烬深渊·骨潮 / 余烬深渊·蛮层 / 余烬灾厄使
 groups:
   wave1:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-40,65,276;amount=5;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,65,273;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=4,65,-6;amount=5;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=4,65,6;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：mobname 须与 MM Display 去色一致（EmberAbyss* 实际是 余烬深渊·潮尸/骨潮/蛮层），原名永不匹配 → 卡波
     - "$kill-any{mobname=余烬深渊·潮尸,余烬深渊·骨潮;amount=8} @system"
@@ -22,8 +21,8 @@ groups:
 
   wave2:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-40,65,276;amount=1;scattered=1.0;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=-38,65,276;amount=3;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=20,65,0;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAbyssZombie;location=20,65,0;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：mobname 须与 MM Display 去色一致（EmberAbyss* 实际是 余烬深渊·潮尸/骨潮/蛮层），原名永不匹配 → 卡波
     - "$kill{mobname=余烬深渊·蛮层;amount=1} @system"
@@ -39,7 +38,7 @@ groups:
   boss:
   - monster:
     # 2026-09-27: boss (wither skeleton, 2.4 tall) moved to the room centre; at z 276 it sat in the 3-high outer ring and could not step onto the 2-high quartz ledge → never reached players
-    - "$mob{plugin=MythicMobs;name=EmberGuildCalamity;location=-40,65,270;amount=1;scattered=1.0;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberGuildCalamity;location=40,66,0;amount=1;scattered=1.0;level=1} @dungeon"
     condition:
     - "$kill{mobname=余烬灾厄使;amount=1} @system"
     start:

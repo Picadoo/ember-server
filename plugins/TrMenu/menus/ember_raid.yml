@@ -1,7 +1,7 @@
 # 团本子菜单 — EmberRaid · DESIGN-ember-rpg-systems.md §4
 # 进本：corerpg enter raid · 扣 ticket_ember_raid ×1 · 3～5 人
 
-Title: '§9团本 · 灰烬协奏'
+Title: '§9团本 · 大厅通道'
 
 Options:
   Arguments: false
@@ -45,7 +45,7 @@ Icons:
         - '§7进本即扣 §9余烬团本票 §f×1'
         - '§7失败不返还 · 请确认全队就绪'
         - ''
-        - '§8流程：左道卫兵 → 右道射手 → 精英门 → 终厅'
+        - '§8大厅集结 → 左道卫兵 → 右道射手 → 汇合 → 终厅'
         - '§8周首通保底团戒 · 戒+刃=同袍套装'
         - '§8人数 §f3～5 §8· 时限约 30～40 分'
         - ''

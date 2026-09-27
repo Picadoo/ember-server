@@ -98,6 +98,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private WeeklyCorridorService weeklyCorridorService;
     private EliteCorridorService eliteCorridorService;
     private DailyCourtyardService dailyCourtyardService;
+    private RaidHallService raidHallService;
+    private CalamityBasinService calamityBasinService;
     private LootService lootService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
@@ -152,6 +154,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         weeklyCorridorService = new WeeklyCorridorService(this);
         eliteCorridorService = new EliteCorridorService(this);
         dailyCourtyardService = new DailyCourtyardService(this);
+        raidHallService = new RaidHallService(this);
+        calamityBasinService = new CalamityBasinService(this);
         Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
             @Override public void run() { if (questService != null) questService.tickAll(); }
         }, 400L, 200L);
@@ -766,6 +770,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("weeklybuild".equals(sub) || "weeklycorridor".equals(sub)) return weeklyCorridorService.cmd(sender, args);
         if ("elitebuild".equals(sub) || "elitecorridor".equals(sub)) return eliteCorridorService.cmd(sender, args);
         if ("dailybuild".equals(sub) || "dailycourtyard".equals(sub) || "courtyard".equals(sub)) return dailyCourtyardService.cmd(sender, args);
+        if ("raidbuild".equals(sub) || "raidhall".equals(sub)) return raidHallService.cmd(sender, args);
+        if ("calamitybuild".equals(sub) || "eventbuild".equals(sub) || "calamitybasin".equals(sub)) return calamityBasinService.cmd(sender, args);
         if ("afk".equals(sub) || "挂机".equals(sub)) return afkTierService.cmd(sender, args);
         if ("life".equals(sub) || "vendor".equals(sub) || "补给".equals(sub) || "生活".equals(sub)) return lifeService.cmd(sender, args);
         if ("level".equals(sub) || "lv".equals(sub) || "等级".equals(sub)) {
