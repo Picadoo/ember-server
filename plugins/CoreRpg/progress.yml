@@ -104,17 +104,17 @@ pass_rewards:
     12: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
     13: {coin: 100, mat_ember_bone_dust: 2}
     14: {coin: 100, mat_ember_bone_dust: 2}
-    15: {coin: 100, mat_ember_bone_dust: 2, mat_ember_protect_scroll: 1}
+    15: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}   # 1.12.0 保护卷 → 附魔晶（付费战力 ≤ 免费月产 30%）
     16: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
     17: {coin: 100, mat_ember_bone_dust: 2}
     18: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
     19: {coin: 100, mat_ember_bone_dust: 2}
-    20: {coin: 100, mat_ember_bone_dust: 2, gem_ember_steady: 1}
+    20: {coin: 100, mat_ember_bone_dust: 2, cosmetic_calamity_shard: 2}   # 1.12.0 稳石 → 外观碎片（稳石免费月产约 2）
     21: {coin: 100, mat_ember_bone_dust: 2}
     22: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}
     23: {coin: 100, mat_ember_bone_dust: 2}
     24: {coin: 100, mat_ember_bone_dust: 2, ticket_ember_daily: 1}
-    25: {coin: 100, mat_ember_bone_dust: 2, mat_ember_protect_scroll: 1}
+    25: {coin: 200, mat_ember_bone_dust: 2}   # 1.12.0 保护卷 → 币
     26: {coin: 100, mat_ember_bone_dust: 2}
     27: {coin: 100, mat_ember_bone_dust: 2}
     28: {coin: 100, mat_ember_bone_dust: 2, crystal_ember_enchant: 1}

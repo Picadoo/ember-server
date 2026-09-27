@@ -18,6 +18,7 @@ EmberAfkZombie:
   Skills:
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.08
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.02
 
 EmberAfkSkeleton:
   Type: SKELETON
@@ -35,3 +36,4 @@ EmberAfkSkeleton:
   Skills:
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.06
   - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_soul_dust 1"} @Self ~onDeath 0.02

@@ -144,6 +144,7 @@ async function runOne(D, op) {
   r.players = bots.map((b, i) => ({ name: b.username, maxHp: maxHp[i], endHp: endHp[i], endPct: Math.round(100 * endHp[i] / Math.min(40, maxHp[i])), minHp: sts[i].minHp, deaths: sts[i].deaths, hits: sts[i].hits, casts: sts[i].casts, hp2s: sts[i].tl.join(',') }))
   if (!doneAt) r.tail = strip(since(L, n0)).slice(-600)
   console.log('BALANCE_RESULT', JSON.stringify(r))
+  for (const b of bots) { const hit = (b.chatLog || []).map(strip).filter(s => /日箱|凝核|锻造/.test(s)); if (hit.length) console.log('REWARD_CHAT', b.username, JSON.stringify(hit)) }
   if (D === 'calamity' && !doneAt) { await c('/mvtp RpgBot ember_event', 1500); await c('/minecraft:kill @e[type=wither_skeleton]', 800); await c('/mvtp RpgBot ember_hub', 1000) }
   for (const b of bots) await c(`/mvtp ${b.username} ember_hub`, 600)
   await wait(1000); for (const b of bots) b.quit()

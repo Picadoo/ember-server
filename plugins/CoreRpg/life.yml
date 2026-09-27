@@ -46,7 +46,41 @@ offers:
     life_level: 5
     xp: 10
 
-# 食用/饮用时附加效果：EFFECT:放大等级(0=I):持续tick；cooldown 秒
+# 食用/饮用时附加效果：EFFECT:放大等级(0=I):持续tick；cooldown 秒  # 1.12.0 断供补源：魂尘（钓鱼杂物）与使魔蛋（魂尘 + 币）。使魔只有展示战力，不进属性层。
+  #   钓鱼杂物 10%（旧靴 60 / 碎骨 40），实测约 2.9 条/分钟 → 约 17 件杂物/小时
+  soul_dust:
+    name: '&d旧靴 → 余烬魂尘'
+    inputs: { junk_ember_boot: 2 }
+    coin: 5
+    give: { mat_ember_soul_dust: 1 }
+    daily: 2
+    life_level: 2
+    xp: 1
+  soul_dust_bone:
+    name: '&d碎骨 → 余烬魂尘'
+    inputs: { junk_ember_bone: 2 }
+    coin: 5
+    give: { mat_ember_soul_dust: 1 }
+    daily: 2
+    life_level: 2
+    xp: 1
+  pet_ashling:
+    name: '&a孵化 余烬灰灵'
+    inputs: { mat_ember_soul_dust: 10 }
+    coin: 600
+    give: { pet_ember_ashling: 1 }
+    weekly: 1
+    life_level: 4
+    xp: 5
+  pet_cinder:
+    name: '&6孵化 余烬烬火'
+    inputs: { mat_ember_soul_dust: 10 }
+    coin: 600
+    give: { pet_ember_cinder: 1 }
+    weekly: 1
+    life_level: 4
+    xp: 5
+
 consumables:
   food_ember_grilled_fish: { effects: ['REGENERATION:0:120'] }
   potion_ember_heal: { effects: ['HEAL:1:1'], cooldown: 20 }
