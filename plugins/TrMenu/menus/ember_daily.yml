@@ -28,6 +28,7 @@ Icons:
       name: '§8 '
 
   T:
+    update: 20
     display:
       material: glowstone dust
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
@@ -47,8 +48,8 @@ Icons:
 
   S:
     icons:
-      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
-      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+      # 体力不足：灰显；condition 用字面量 30（日常 cost 固定），双侧 PAPI 比较在 3.12.5 不成立。
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         inherit: true
         display:
@@ -66,6 +67,7 @@ Icons:
             - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
 
     update: 20
+    refresh: 20
     display:
       material: iron sword
       name: '§a余烬窟·庭院'
@@ -87,8 +89,8 @@ Icons:
 
   A:
     icons:
-      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
-      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+      # 体力不足：灰显；condition 用字面量 30（日常 cost 固定），双侧 PAPI 比较在 3.12.5 不成立。
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         inherit: true
         display:
@@ -106,6 +108,7 @@ Icons:
             - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
 
     update: 20
+    refresh: 20
     display:
       material: netherrack
       name: '§c余烬窟·焦骨甬道'
@@ -127,8 +130,8 @@ Icons:
 
   C:
     icons:
-      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
-      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+      # 体力不足：灰显；condition 用字面量 30（日常 cost 固定），双侧 PAPI 比较在 3.12.5 不成立。
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         inherit: true
         display:
@@ -146,6 +149,7 @@ Icons:
             - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
 
     update: 20
+    refresh: 20
     display:
       material: mossy cobblestone
       name: '§8余烬窟·残誓地窖'
@@ -167,8 +171,8 @@ Icons:
 
   D:
     icons:
-      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
-      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+      # 体力不足：灰显；condition 用字面量 30（日常 cost 固定），双侧 PAPI 比较在 3.12.5 不成立。
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         inherit: true
         display:
@@ -186,6 +190,7 @@ Icons:
             - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
 
     update: 20
+    refresh: 20
     display:
       material: prismarine
       name: '§3余烬窟·潮蚀水道'
@@ -207,8 +212,8 @@ Icons:
 
   E:
     icons:
-      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
-      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+      # 体力不足：灰显；condition 用字面量 30（日常 cost 固定），双侧 PAPI 比较在 3.12.5 不成立。
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         inherit: true
         display:
@@ -226,6 +231,7 @@ Icons:
             - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
 
     update: 20
+    refresh: 20
     display:
       material: cobblestone
       name: '§7余烬窟·断塔回廊'
@@ -247,8 +253,8 @@ Icons:
 
   F:
     icons:
-      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
-      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+      # 体力不足：灰显；condition 用字面量 30（日常 cost 固定），双侧 PAPI 比较在 3.12.5 不成立。
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         inherit: true
         display:
@@ -266,6 +272,7 @@ Icons:
             - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
 
     update: 20
+    refresh: 20
     display:
       material: packed ice
       name: '§b余烬窟·霜晶裂隙'
@@ -287,8 +294,8 @@ Icons:
 
   G:
     icons:
-      # 体力不足：灰显并保留底层 enter 校验，避免无效点击关闭菜单。
-      - condition: 'check papi *%corerpg_stamina% < *%corerpg_stamina_cost_daily%'
+      # 体力不足：灰显；condition 用字面量 30（日常 cost 固定），双侧 PAPI 比较在 3.12.5 不成立。
+      - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         inherit: true
         display:
@@ -306,6 +313,7 @@ Icons:
             - 'tell: §c体力不足，需 %corerpg_stamina_cost_daily% 点体力；每日 0:00 回满。'
 
     update: 20
+    refresh: 20
     display:
       material: rail
       name: '§6余烬窟·锈轨矿道'
