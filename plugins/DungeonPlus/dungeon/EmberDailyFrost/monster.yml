@@ -1,17 +1,32 @@
 # 日 · S4 线 F 霜晶裂隙：冻台→房1→开闸→房2混编→开闸→Boss 霜厅
 # 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=70..72 @ z=16/34 → AIR
 # Display：$kill 对齐 MM 去色名 霜晶尸 / 霜矢骷 / 霜核蛮兵
-# 2026-09-28 波次差异: 房1 左冻台×3 立刻 + delay3s 右冻台×2（wave1 $kill×5 合并计入 door1）
+# 2026-09-28 波次差异: 房1 左×3→delay3s 右×2（链式，对齐锈轨；$kill 按组独立，开门在 wave1b）
+# 2026-09-28 返工: wave1 勿 $kill×5 合并（跨组不计）；wave1 kill×3 不开门；wave1b kill×2 开门
 groups:
   wave1:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=-3,70,8;amount=2;scattered=0.8;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=-3,70,14;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=霜晶尸;amount=5} @system"
+    - "$kill{mobname=霜晶尸;amount=3} @system"
     start:
     - "$message{type=text;text=§e【裂隙·左冻台】霜晶尸压上 —— 右侧将交错刷出} @dungeon"
     - "$monstergroup{group=wave1b;repeat=false;delay=3} @dungeon"
+    end:
+    - "$message{type=text;text=§7左侧冻台已清} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    auto-start: false
+
+  # 右冻台：本组 $kill×2 完成才开门（DP $kill 按组独立，不可并入 wave1）
+  wave1b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=3,70,8;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=3,70,6;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=霜晶尸;amount=2} @system"
+    start:
+    - "$message{type=text;text=§e【裂隙·右冻台】交错侧袭 —— 跨缝清对侧} @dungeon"
     end:
     - "$message{type=text;text=§a冻台已清 · 冰闸开了} @dungeon"
     - "$operation-block{loc=-1,70,16;mode=set;type=AIR} @dungeon"
@@ -25,19 +40,6 @@ groups:
     - "$operation-block{loc=1,72,16;mode=set;type=AIR} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
-    auto-start: false
-
-  # 右冻台侧袭：仅刷怪；door1 由 wave1 的 $kill×5 合并计数（含本组×2）
-  wave1b:
-  - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=3,70,8;amount=1;scattered=0.5;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=3,70,6;amount=1;scattered=0.5;level=1} @dungeon"
-    condition:
-    - "$kill{mobname=霜晶尸;amount=2} @system"
-    start:
-    - "$message{type=text;text=§e【裂隙·右冻台】交错侧袭 —— 跨缝清对侧} @dungeon"
-    end:
-    - "$message{type=text;text=§7右侧冻台已清} @dungeon"
     auto-start: false
 
   wave2a:

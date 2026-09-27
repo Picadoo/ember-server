@@ -1,15 +1,15 @@
 # STATUS · 日常七线波次节奏差异（挑刺必改4）
 
-**日期：** 2026-09-28 05:39（Asia/Shanghai）  
+**日期：** 2026-09-28 06:07（Asia/Shanghai）· 霜晶 door1 返工  
 **岗：** 余烬-插件岗执行器  
-**依据：** `docs/design-ember-daily-wave-variance.md` §3（已批准）；总控【派工 · 必改4 七线波次】  
-**Verdict：** **✅ 七线 `EmberDaily*/monster.yml` 已按设计改 groups；门/Boss/体力/通关箱/Display 去色名未动；YAML 合法 · 无 `$kill-any`；小怪 11～12 + Boss；ops=`[]`；未 commit/push**
+**依据：** `docs/design-ember-daily-wave-variance.md` §3；测报 `STATUS-ember-daily-wave-variance-test.md` FAIL 霜晶；总控【返工 · 霜晶 door1】  
+**Verdict：** **✅ 霜晶已返工**：`$kill` 按组独立 → 对齐锈轨链式；wave1 kill×3 不开门；wave1b kill×2 **开门**；交错 delay3s 保留；门/Boss/去色名未动；YAML 合法；未 commit/push
 
 ---
 
 ## 一句话
 
-每线只改一房节拍：庭院房2 先对射后涌尸；焦骨房1 主甬+假岔计入 door1；地窖中层先弓；潮蚀房2 桥面先射；断塔环廊双侧对射；霜晶房1 左右交错；锈轨房2 支洞侧袭计入 door2。顺序组仿现有 wave2a/2b（单 `$kill`）。请派测抽检节拍。
+七线波次已落地；测报 6 PASS · **霜晶 FAIL**（wave1 `$kill×5` 不计 wave1b）。已返工霜晶：左×3→delay3s 右×2→**wave1b 末开门**（对齐锈轨）。请**只复测霜晶 door1**。
 
 ---
 
@@ -22,7 +22,7 @@
 | 地窖 | `EmberDailyCrypt` | **房2** | 高台誓印骷×3 → delay5s 地面窖卫×3 | 5+3+3=**11** | door1 窖卫×5；door2 誓印骷×3→窖卫×3 |
 | 潮蚀 | `EmberDailyTide` | **房2** | 对岸浪矢骷×3 → delay4s 桥头潮蚀尸×3 | 5+3+3=**11** | door1 潮蚀尸×5；door2 浪矢骷×3→潮蚀尸×3 |
 | 断塔 | `EmberDailySpire` | **房2** | 东西裂隙箭骷 2+2 → delay3s 卫尸×2 | 5+4+2=**11** | door1 卫尸×5；door2 裂隙箭骷×4→卫尸×2 |
-| 霜晶 | `EmberDailyFrost` | **房1** | 左×3 立刻 + **start delay3s** 右×2 | 3+2+3+3=**11** | door1 霜晶尸×**5**（wave1 合并；wave1b 侧计×2）；door2 旧序 |
+| 霜晶 | `EmberDailyFrost` | **房1** | 左×3 → start delay3s 右×2（**链式**） | 3+2+3+3=**11** | door1：**wave1** 霜晶尸×3（不开门）→ **wave1b** ×2 **开门**；door2 旧序 |
 | 锈轨 | `EmberDailyRail` | **房2** | 主巷尸×3 → delay2s 支洞矿矢骷×3 | 5+3+3=**11** | door1 锈轨尸×5；door2 锈轨尸×3→矿矢骷×3（支洞计入） |
 
 **未改房 / Boss：** 各线未点名房与 Boss 数量级、坐标、`$operation-block` 门位、`$end` 通关文案均保持。
@@ -74,15 +74,16 @@
 | **wave2a** | **裂隙箭骷 2+2** @ (-6,70,0)×2 (6,70,0)×2 | 裂隙箭骷×**4** | → wave2b delay3 |
 | **wave2b** | **卫尸×2** @ (0,70,-6)(0,70,2) 近阶 | 断塔卫尸×2 | 门2 z=4@y70 → boss |
 
-### 2.6 霜晶 `EmberDailyFrost` · 房1 交错
+### 2.6 霜晶 `EmberDailyFrost` · 房1 交错（2026-09-28 返工）
 
 | 组 | 刷点 | `$kill` | 链 |
 |----|------|---------|-----|
-| **wave1** | **左** (-3,70,8)×2 (-3,70,14)×1 | 霜晶尸×**5**（含右） | start→**wave1b delay3**；清完门1 z=16 |
-| **wave1b** | **右** (3,70,8)(3,70,6) | 霜晶尸×2（组内收尾） | 不单独开门 |
+| **wave1** | **左** (-3,70,8)×2 (-3,70,14)×1 | 霜晶尸×**3** | start→**wave1b delay3**；end **不开门**（仅「左侧冻台已清」） |
+| **wave1b** | **右** (3,70,8)(3,70,6) | 霜晶尸×**2** | end：**门1 z=16 AIR×9** +「冻台已清 · 冰闸开了」→ wave2a |
 | wave2a/b（旧序保留） | 尸×3 → 霜矢骷×3 | … | 门2 z=34 → boss |
 
-实现说明：禁 `$kill-any` 且左右同 Display 名，故 door1 用 wave1 单 `$kill×5` 合并计数；右波由 wave1 **start** 链 `delay=3` 刷出（左未必要清完即可侧袭），对齐设计「交错」。
+**根因（测报）：** DP `$kill` **按组独立**；旧版 wave1 `$kill×5` 不计入 wave1b 的 2 击杀 → 全清后门仍铁栅。  
+**修法：** 对齐锈轨链式——开门条件放在**末波 end**；交错仍靠 wave1 **start** `delay=3` 刷右（左未必要清完即可侧袭）。焦骨能过是同组刷 6；锈轨能过是开门在末波。
 
 ### 2.7 锈轨 `EmberDailyRail` · 房2 支洞
 
@@ -106,7 +107,7 @@
 | `plugins/DungeonPlus/dungeon/EmberDailyCrypt/monster.yml` | 中层先骷后尸 |
 | `plugins/DungeonPlus/dungeon/EmberDailyTide/monster.yml` | 房2 先桥射后冲锋 |
 | `plugins/DungeonPlus/dungeon/EmberDailySpire/monster.yml` | 环廊 2+2 对射→卫尸 |
-| `plugins/DungeonPlus/dungeon/EmberDailyFrost/monster.yml` | 房1 左右交错 + wave1b |
+| `plugins/DungeonPlus/dungeon/EmberDailyFrost/monster.yml` | 房1 左右交错 + wave1b；**返工** 链式开门 |
 | `plugins/DungeonPlus/dungeon/EmberDailyRail/monster.yml` | 房2 支洞骷计入 door2 |
 | `docs/STATUS-ember-daily-wave-variance.md` | 本文件 |
 
@@ -125,22 +126,22 @@
 | 门 `$operation-block` 坐标与 Boss 未改 | ✅ 抽样比对 |
 | Display `$kill` 去色名未改 | ✅ |
 | 热更 `/dp reload` | ⚠ **未成功**（play 端无 OP 树权限；RCON `25575` 未启用 `ECONNREFUSED`）；文件已在 `server-runtime/plugins`→`../plugins` **同源 symlink**，测前请控制台/`dp reload` 一次 |
-| 结构抽样 | ✅ Ash 假岔 (8,65,10)+kill×6；Frost wave1b delay3 + kill×5 合并 |
+| 结构抽样 | ✅ Ash 假岔 kill×6 同组；Frost **返工** wave1×3→wave1b×2 开门（无跨组合并） |
 | `ops.json` play+login | ✅ **`[]`** |
 | commit/push | ✅ **未做** |
 
 ---
 
-## 5. 给总控的结案转发正文
+## 5. 给总控的结案转发正文（霜晶返工）
 
 ```
-【结案 · 必改4 七线波次】priority=true
+【结案 · 霜晶 door1 返工】priority=true
 岗：余烬-插件
-DP：七线 EmberDaily{,Ash,Crypt,Tide,Spire,Frost,Rail}/monster.yml 已按 design §3 改一房节拍
-- 庭院房2：先骷×2→尸×4｜焦骨房1：主甬4+假岔2 计入 door1｜地窖中层：先骷×3→尸×3
-- 潮蚀房2：先浪矢×3→尸×3｜断塔环廊：箭骷2+2→卫尸×2｜霜晶房1：左3+delay3s右2｜锈轨房2：主巷尸×3→支洞矿矢×3 计入 door2
-硬约束：门/Boss/体力/箱/去色名未动；仅 $kill（无 kill-any）；小怪 11～12+Boss
-自检：YAML 合法；ops=[]；热更需测前控制台 dp reload（RCON 关）
-未 commit/push。请派测：七线各打一房节拍可辨 + 焦骨假岔/锈轨支洞计入开门。
+修：EmberDailyFrost/monster.yml 对齐锈轨链式
+- wave1：左×3，$kill×3；start 仍 delay3s→wave1b；end 不开门
+- wave1b：右×2，$kill×2；end 开门（z=16 AIR×9）+「冻台已清 · 冰闸开了」→wave2a
+硬约束：小怪合计/去色名/门坐标/Boss 未动；无 kill-any
+自检：YAML 合法；STATUS 已记修法；未 commit/push
+测前控制台 dp reload。请只复测霜晶 door1：左刷≈3s 右刷 + 左右全清后门 AIR。
 ```
 
