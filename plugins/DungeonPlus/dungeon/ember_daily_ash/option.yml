@@ -1,0 +1,18 @@
+# 地牢启动时初始化
+dungeon-init-script:
+- $setmap{name=ember_daily_ash} @init
+# null
+# 地牢启动时
+dungeon-start:
+  # 启动条件,条件满足是将传送至地牢内并执行 actionScript 脚本内容
+  condition: []
+  # 启动条件满足时触发
+  action-script: []
+# null
+# 地牢区域设置
+dungeon-area: []
+# - "TEST-AREA": "X,Y,Z/X,Y,Z"
+#  "TEST-AREA2": "X,Y,Z/X,Y,Z"
+# null
+# 地牢通关时触发
+dungeon-reward-script: []

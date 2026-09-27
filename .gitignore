@@ -40,6 +40,8 @@ server-runtime/world_the_end/
 server-runtime/ember_hub/
 server-runtime/ember_afk/
 server-runtime/ember_event/
+server-runtime/ember_daily_ash/
+server-runtime/ember_daily_crypt/
 login-runtime/world/
 login-runtime/world_the_end/
 plugins/DungeonPlus/map/
