@@ -64,4 +64,7 @@ EmberDailyTideBrute:
   - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5} ~onTimer:50
   - damage{amount=0.4} @PlayersInRadius{r=5} ~onTimer:40
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_blade 1"} @Self ~onDeath 0.12
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_charm 1"} @Self ~onDeath 0.08
+  - command{c="corerpg mmgive <caster.uuid> gear_ember_t1_blade 1"} @Self ~onDeath 0.03
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5
