@@ -58,6 +58,9 @@ public final class StatService implements Listener {
     private double defenseK = 20.0;
     private double critMultiplier = 1.5;
     private double lifeStealCap = 0.05;
+    /** 1.13.0 phase 2: caps for covenant / gem pseudo-stats that now have an attribute layer */
+    private double moveSpeedCap = 0.08, attackSpeedCap = 0.10, skillLifeStealCap = 0.15, skillHealPerCastPct = 0.08;
+    private static final UUID AS_MOD = UUID.fromString("6e6d6265-722d-4153-2d6d-6f6400000001");
     private double heartsDisplayCap = 40.0;
     private boolean stripWitherOnHit = true;
     /** config stats.apply_covenant_stats (default false): covenant pseudo-stats are coded but parked until the phase-2 rebalance */
@@ -82,7 +85,10 @@ public final class StatService implements Listener {
         critMultiplier = c.getDouble("stats.crit_multiplier", 1.5);
         heartsDisplayCap = c.getDouble("stats.hearts_display_cap", 40.0);
         stripWitherOnHit = c.getBoolean("stats.strip_wither_on_hit", true);
-        applyCovenantStats = c.getBoolean("stats.apply_covenant_stats", false);
+        applyCovenantStats = c.getBoolean("stats.apply_covenant_stats", true);
+        attackSpeedCap = c.getDouble("stats.caps.attack_speed_pct", 0.10);
+        skillLifeStealCap = c.getDouble("stats.caps.skill_life_steal_pct", 0.15);
+        skillHealPerCastPct = c.getDouble("stats.caps.skill_heal_per_cast_pct", 0.08);
         weaponIds.clear();
         accessoryIds.clear();
         List<String> w = c.getStringList("stats.weapons");
@@ -103,6 +109,7 @@ public final class StatService implements Listener {
             readMapOfMaps(e.getConfigurationSection("stat_per_level"), perLevel);
             readMapOfMaps(e.getConfigurationSection("gems"), gems);
             lifeStealCap = e.getDouble("caps.life_steal_pct", 0.05);
+            moveSpeedCap = e.getDouble("caps.move_speed_pct", 0.08);
         }
         cache.clear();
     }
@@ -238,6 +245,23 @@ public final class StatService implements Listener {
     public double stat(Player p, String key) { return get(stats(p), key); }
 
     /**
+     * 1.13.0: skill life steal (blaze covenant) — heal a share of the damage one skill cast dealt, capped per cast
+     * (skill_heal_per_cast_pct × max HP). Basic-hit life steal stays gem-only (life_steal_pct, cap 5%).
+     */
+    public double skillHeal(Player p, double dealt) {
+        if (!enabled || p == null || dealt <= 0) return 0;
+        double pct = Math.min(skillLifeStealCap, get(stats(p), "skill_life_steal_pct"));
+        if (pct <= 0) return 0;
+        double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double heal = Math.min(dealt * pct, max * skillHealPerCastPct);
+        if (heal <= 0 || p.isDead()) return 0;
+        p.setHealth(Math.min(max, p.getHealth() + heal));
+        GearPassiveService gp = plugin.getGearPassiveService();
+        if (gp != null) gp.log("skillheal " + p.getName() + " dealt=" + String.format("%.1f", dealt) + " +" + String.format("%.1f", heal));
+        return heal;
+    }
+
+    /**
      * Full-charge basic melee hit right now: vanilla attack attribute (weapon) + Sharpness (0.5·lvl + 0.5) + gear phys_damage.
      * No crit. Skills / passives scale off this (docs/ember-skills-passives.md).
      */
@@ -274,6 +298,20 @@ public final class StatService implements Listener {
         if (Math.abs(ai.getBaseValue() - want) > 0.01) {
             ai.setBaseValue(want);
             if (p.getHealth() > want) p.setHealth(want);
+        }
+        // 1.13.0: move / attack speed pseudo-stats (gale gem, 灰行 covenant) — capped, vanilla attribute layer
+        float ws = (float) (0.2 * (1.0 + (enabled ? Math.min(moveSpeedCap, Math.max(0, get(m, "move_speed_pct"))) : 0)));
+        if (Math.abs(p.getWalkSpeed() - ws) > 0.0005) p.setWalkSpeed(ws);
+        AttributeInstance as = p.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+        if (as != null) {
+            double asp = enabled ? Math.min(attackSpeedCap, Math.max(0, get(m, "attack_speed_pct"))) : 0;
+            org.bukkit.attribute.AttributeModifier old = null;
+            for (org.bukkit.attribute.AttributeModifier am : as.getModifiers()) if (AS_MOD.equals(am.getUniqueId())) old = am;
+            if (old == null || Math.abs(old.getAmount() - asp) > 1e-6) {
+                if (old != null) as.removeModifier(old);
+                if (asp > 0) as.addModifier(new org.bukkit.attribute.AttributeModifier(AS_MOD, "ember_attack_speed", asp,
+                        org.bukkit.attribute.AttributeModifier.Operation.MULTIPLY_SCALAR_1));
+            }
         }
         double scale = Math.min(heartsDisplayCap, Math.max(20.0, want));
         if (!p.isHealthScaled() || Math.abs(p.getHealthScale() - scale) > 0.01) {
@@ -314,7 +352,8 @@ public final class StatService implements Listener {
             // vanilla curve 0.2 + 0.8·t² over the sword cooldown → spam-clicking gets ~20% of the bonus
             long now = System.currentTimeMillis();
             Long last = lastHit.put(p.getUniqueId(), Long.valueOf(now));
-            double t = last == null ? 1.0 : Math.min(1.0, (now - last.longValue()) / swingMs);
+            double swing = swingMs / (1.0 + Math.min(attackSpeedCap, Math.max(0, get(m, "attack_speed_pct"))));
+            double t = last == null ? 1.0 : Math.min(1.0, (now - last.longValue()) / swing);
             double charge = 0.2 + 0.8 * t * t;
             double dmg = e.getDamage() + flat * charge;
             boolean crit = false;

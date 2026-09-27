@@ -17,7 +17,8 @@ covenants:
     weapon_bias: blade
     stats:
       crit_chance_pct: 0.03
-      life_steal_pct: 0.01
+      # 1.13.0: 吸血只算技能伤害（普攻 1% 吸血让单人周本剩 93%）；每次施放回复上限 = 最大生命 × stats.caps.skill_heal_per_cast_pct
+      skill_life_steal_pct: 0.04
   ash:
     display: "§7灰行"
     description: "持续风筝 · 攻速 / 减速 / 微弱使魔"

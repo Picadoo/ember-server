@@ -97,6 +97,8 @@ public final class SetService {
         p.sendMessage(ChatColor.GRAY + "  刃 " + (hasBlade ? ChatColor.GREEN + "✓" : ChatColor.DARK_GRAY + "✗")
                 + ChatColor.GRAY + "  戒 " + (hasRing ? ChatColor.GREEN + "✓" : ChatColor.DARK_GRAY + "✗")
                 + ChatColor.DARK_GRAY + "  背包持有即计件");
+        GearPassiveService gp = plugin.getGearPassiveService();
+        if (gp != null) p.sendMessage(gp.describeSet(p));
         if (active) {
             p.sendMessage(colorize(loreMark));
             p.sendMessage(ChatColor.GRAY + "  击杀效果: " + onKill);

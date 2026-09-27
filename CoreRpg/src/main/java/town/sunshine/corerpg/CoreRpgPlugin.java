@@ -88,6 +88,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private QuestService questService;
     private LifeService lifeService;
     private ForgeService forgeService;
+    private GearPassiveService gearPassiveService;
     private LootService lootService;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
@@ -127,6 +128,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         abyssSettleService = new AbyssSettleService(this, niBridge, dataStore);
         skillService = new SkillService(this, dataStore);
         setService = new SetService(this, niBridge);
+        gearPassiveService = new GearPassiveService(this, niBridge);
         raidService = new RaidService(this, dataStore, niBridge);
         progressService = new ProgressService(this, dataStore);
         questService = new QuestService(this, dataStore, niBridge);
@@ -209,6 +211,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public PlayerDataStore getDataStore() { return dataStore; }
     public CalamityService getCalamityService() { return calamityService; }
     public SetService getSetService() { return setService; }
+    public GearPassiveService getGearPassiveService() { return gearPassiveService; }
     public RaidService getRaidService() { return raidService; }
     public NiBridge getNiBridge() { return niBridge; }
     public CovenantService getCovenantService() { return covenantService; }
@@ -491,6 +494,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (abyssSettleService != null) abyssSettleService.reload();
         if (skillService != null) skillService.reload();
         if (setService != null) setService.reload();
+        if (gearPassiveService != null) gearPassiveService.reload();
         if (raidService != null) raidService.reload();
     }
 
@@ -567,6 +571,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (arenaService != null) arenaService.onPlayerQuit(event.getPlayer());
         if (abyssSettleService != null) abyssSettleService.onPlayerQuit(event.getPlayer());
         if (skillService != null) skillService.onQuit(id);
+        if (gearPassiveService != null) gearPassiveService.onQuit(id);
         boards.remove(id);
         dataStore.unload(id);
     }

@@ -284,6 +284,7 @@ public final class SkillService implements Listener {
         }
 
         boolean ok;
+        castDealt = 0;
         if ("ember_blaze_slash".equals(def.id)) {
             ok = castBlazeSlash(player, def);
         } else if ("ember_ash_familiar".equals(def.id)) {
@@ -295,6 +296,9 @@ public final class SkillService implements Listener {
             return;
         }
         if (!ok) return;
+        StatService stS = plugin.getStatService();
+        if (stS != null && castDealt > 0) stS.skillHeal(player, castDealt);
+        castDealt = 0;
         startCooldown(player.getUniqueId(), def.id, def.cooldownSeconds);
         player.sendMessage(PREFIX + ChatColor.GREEN + "释放 " + def.display);
     }
@@ -314,7 +318,7 @@ public final class SkillService implements Listener {
             if (dist > def.range || dist < 0.05) continue;
             double dot = look.dot(to.normalize());
             if (dot < cosHalf) continue;
-            dealInternal(player, le, dmg);
+            dealSkill(player, le, dmg);
             spawnParticles(le.getLocation().add(0, 1, 0), def.particles, 12);
             hit++;
         }
@@ -342,7 +346,7 @@ public final class SkillService implements Listener {
         long expire = System.currentTimeMillis() + Math.max(1, def.markDurationTicks) * 50L;
         ashMarks.put(target.getUniqueId(), new AshMark(expire, Math.min(def.markPct + talentBonus(player, def) * 0.02, maxHitMult - 1.0)));
         double strike = skillDamage(player, def);
-        if (strike > 0) dealInternal(player, target, strike);
+        if (strike > 0) dealSkill(player, target, strike);
         spawnParticles(target.getLocation().add(0, 1, 0), def.particles, 16);
         playSound(target.getLocation(), def.sound);
         return true;
@@ -370,7 +374,7 @@ public final class SkillService implements Listener {
                 tauntUntil.put(le.getUniqueId(), Long.valueOf(System.currentTimeMillis() + (long) (def.tauntSeconds * 1000)));
             }
             double wave = skillDamage(player, def);
-            if (wave > 0) dealInternal(player, le, wave);
+            if (wave > 0) dealSkill(player, le, wave);
             spawnParticles(le.getLocation().add(0, 1, 0), def.particles, 8);
         }
         spawnParticles(player.getLocation().add(0, 1, 0), def.particles, 24);
@@ -405,6 +409,15 @@ public final class SkillService implements Listener {
      * Deal CoreRpg-owned damage as a player attack (MythicMobs modifiers / calamity scaling still apply) without
      * eating the victim's hurt i-frames: noDamageTicks + lastDamage are restored so the player's next swing lands normally.
      */
+    /** 1.13.0: skill damage (not passives) — tracked per cast for the covenant skill life steal. */
+    private double castDealt = 0;
+    private void dealSkill(Player player, LivingEntity le, double dmg) {
+        if (le == null || le.isDead() || dmg <= 0) return;
+        double before = le.getHealth();
+        dealInternal(player, le, dmg);
+        castDealt += Math.max(0, before - (le.isDead() ? 0 : le.getHealth()));
+    }
+
     public static void dealInternal(Player player, LivingEntity le, double dmg) {
         if (le == null || le.isDead() || dmg <= 0) return;
         int ndt = le.getNoDamageTicks();

@@ -1,0 +1,28 @@
+# CoreRpg 1.13.0 装备被动 + 余烬同袍共鸣（GearPassiveService，docs/ember-skills-passives.md）
+# 只有普攻触发（技能 / 被动伤害不再触发）；伤害都按「满蓄力普攻」倍率，受 MythicMobs 伤害修正与灾厄人数缩放。
+enabled: true
+min_charge: 0.7            # 蓄力 ≥ 70% 的普攻才算「蓄力命中」
+t1_ignite:                 # T1 刃 · 余烬引燃
+  ni_id: gear_ember_t1_blade
+  chance: 0.15
+  seconds: 3
+  dot_mult_per_second: 0.12
+  icd_seconds: 6
+t2_crit_heal:              # T2 刃 · 炽愈（CoreRpg 暴击或原版跳劈）
+  ni_id: gear_ember_t2_blade
+  heal: 2.0
+  heal_pct_max: 0.04
+  icd_seconds: 3
+t3_burst:                  # T3 刃 · 烬爆：每 N 次蓄力命中
+  ni_id: gear_ember_t3_blade
+  every_hits: 5
+  damage_mult: 0.6         # 上限 2.5
+  radius: 3.0
+  max_targets: 5
+  icd_seconds: 2.5
+set_comrade:               # 余烬同袍（任意余烬刃 + 团戒）：半径内同袍 ≥ min_wearers（含自己）→ 伤害 +damage_pct（上限 25%）
+  enabled: true
+  damage_pct: 0.05
+  radius: 24
+  min_wearers: 2
+debug: true   # log procs (passive ignite/critheal/burst/set, skillheal)

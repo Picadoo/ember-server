@@ -18,7 +18,7 @@ sets:
         - acc_ember_raid_ring
     effect:
       name: 击杀回能
-      on_kill: saturation_1
+      on_kill: saturation_1,heal   # 1.13.0 击杀回复 heal_pct_max% 最大生命（2%）
       heal_pct_max: 2
       attack_multiplier: 0
     lore_mark: "§6套装：余烬同袍 ✓"
