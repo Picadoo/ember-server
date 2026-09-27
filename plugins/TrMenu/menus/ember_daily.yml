@@ -1,5 +1,5 @@
-# 日常副本子菜单 — EmberDaily / Ash / Crypt（S0 体力 · S2 去灰）
-# 进本：corerpg enter daily|daily_ash|daily_crypt · 各消耗 30 体力（同池）
+# 日常副本子菜单 — EmberDaily / Ash / Crypt / Tide / Spire（S0 体力 · S3 五线）
+# 进本：corerpg enter daily|daily_ash|daily_crypt|daily_tide|daily_spire · 各消耗 30 体力（同池）
 
 Title: '§e日常 · 余烬窟'
 
@@ -13,7 +13,8 @@ Layout:
   - '#########'
   - '#  T    #'
   - '# S A C #'
-  - '#   P R #'
+  - '# D E   #'
+  - '# P   R #'
   - '####B####'
 
 Events:
@@ -102,6 +103,46 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'tell: §e[日] 正在进入 §8余烬窟·残誓地窖§e …'
         - 'command: corerpg enter daily_crypt'
+        - close
+
+  D:
+    display:
+      material: prismarine
+      name: '§3余烬窟·潮蚀水道'
+      lore:
+        - ''
+        - '§7淹水运河 · 桥闸横推 · 闸厅 Boss'
+        - ''
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7进本失败退还 · 通关不退'
+        - ''
+        - '§e➥ §f点击进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §e[日] 正在进入 §3余烬窟·潮蚀水道§e …'
+        - 'command: corerpg enter daily_tide'
+        - close
+
+  E:
+    display:
+      material: cobblestone
+      name: '§7余烬窟·断塔回廊'
+      lore:
+        - ''
+        - '§7断塔上攀 · 中层环廊 · 顶台 Boss'
+        - ''
+        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
+        - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§7进本失败退还 · 通关不退'
+        - ''
+        - '§e➥ §f点击进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §e[日] 正在进入 §7余烬窟·断塔回廊§e …'
+        - 'command: corerpg enter daily_spire'
         - close
 
   P:

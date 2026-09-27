@@ -151,6 +151,10 @@ dungeon-pre-folder:
     "EmberDailyAsh": 1
   ember_daily_crypt:
     "EmberDailyCrypt": 1
+  ember_daily_tide:
+    "EmberDailyTide": 1
+  ember_daily_spire:
+    "EmberDailySpire": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

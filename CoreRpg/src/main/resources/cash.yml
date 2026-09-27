@@ -18,6 +18,8 @@ stamina:
     daily: 30
     daily_ash: 30
     daily_crypt: 30
+    daily_tide: 30
+    daily_spire: 30
     weekly: 45
     elite: 40
     abyss: 30

@@ -1,0 +1,76 @@
+# 日 · S3 线 E 断塔回廊：塔底→开门上阶→中层环廊混编→开门→顶台 Boss
+# 分房 $kill（禁 $kill-any）；门1 z=4@y64；门2 z=4@y70 · x=-1..1 → AIR
+# Display：$kill 对齐 MM 去色名 断塔卫尸 / 裂隙箭骷 / 断塔守望
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=-5,64,-3;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=5,64,-3;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=-5,64,2;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=5,64,2;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=断塔卫尸;amount=5} @system"
+    start:
+    - "$message{type=text;text=§e【塔底厅】清尽断塔卫尸再开上阶门} @dungeon"
+    end:
+    - "$message{type=text;text=§a底层已清 · 上阶门开了} @dungeon"
+    - "$operation-block{loc=-1,64,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,65,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,64,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,64,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,4;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2a:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=-6,70,0;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=6,70,0;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=断塔卫尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【中层环廊】混编来袭 —— 先清尸再开顶门} @dungeon"
+    end:
+    - "$message{type=text;text=§7环廊前段已清 · 裂隙箭骷压上} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  wave2b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireSkeleton;location=0,70,-6;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireSkeleton;location=0,70,6;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=裂隙箭骷;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【环廊·对射】裂隙箭骷×3 —— 清完开顶门} @dungeon"
+    end:
+    - "$message{type=text;text=§a环廊已清 · 顶门开了} @dungeon"
+    - "$operation-block{loc=-1,70,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,71,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,72,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,70,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,71,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,72,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,70,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,71,4;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,72,4;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireWarden;location=0,76,0;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=断塔守望;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【顶台】断塔守望！有栏可绕 · 当心推离} @dungeon"
+    end:
+    - "$end{type=text;text=§a余烬窟·断塔回廊 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false

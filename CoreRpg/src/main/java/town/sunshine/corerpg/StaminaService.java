@@ -76,6 +76,8 @@ public final class StaminaService implements Listener {
         costs.put("daily", 30);
         costs.put("daily_ash", 30);
         costs.put("daily_crypt", 30);
+        costs.put("daily_tide", 30);
+        costs.put("daily_spire", 30);
         costs.put("weekly", 45);
         costs.put("elite", 40);
         costs.put("abyss", 30);

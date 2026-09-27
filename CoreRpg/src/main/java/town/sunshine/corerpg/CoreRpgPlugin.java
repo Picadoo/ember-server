@@ -101,6 +101,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private DailyCourtyardService dailyCourtyardService;
     private DailyAshCorridorService dailyAshCorridorService;
     private DailyCryptService dailyCryptService;
+    private DailyTideService dailyTideService;
+    private DailySpireService dailySpireService;
     private RaidHallService raidHallService;
     private CalamityBasinService calamityBasinService;
     private LootService lootService;
@@ -161,6 +163,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         dailyCourtyardService = new DailyCourtyardService(this);
         dailyAshCorridorService = new DailyAshCorridorService(this);
         dailyCryptService = new DailyCryptService(this);
+        dailyTideService = new DailyTideService(this);
+        dailySpireService = new DailySpireService(this);
         raidHallService = new RaidHallService(this);
         calamityBasinService = new CalamityBasinService(this);
         Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
@@ -783,6 +787,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("dailybuild".equals(sub) || "dailycourtyard".equals(sub) || "courtyard".equals(sub)) return dailyCourtyardService.cmd(sender, args);
         if ("ashbuild".equals(sub) || "dailyash".equals(sub) || "ashcorridor".equals(sub)) return dailyAshCorridorService.cmd(sender, args);
         if ("cryptbuild".equals(sub) || "dailycrypt".equals(sub) || "crypt".equals(sub)) return dailyCryptService.cmd(sender, args);
+        if ("tidebuild".equals(sub) || "dailytide".equals(sub) || "tide".equals(sub)) return dailyTideService.cmd(sender, args);
+        if ("spirebuild".equals(sub) || "dailyspire".equals(sub) || "spire".equals(sub)) return dailySpireService.cmd(sender, args);
         if ("raidbuild".equals(sub) || "raidhall".equals(sub)) return raidHallService.cmd(sender, args);
         if ("calamitybuild".equals(sub) || "eventbuild".equals(sub) || "calamitybasin".equals(sub)) return calamityBasinService.cmd(sender, args);
         if ("afk".equals(sub) || "挂机".equals(sub)) return afkTierService.cmd(sender, args);

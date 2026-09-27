@@ -1,0 +1,75 @@
+# 日 · S3 线 D 潮蚀水道：干岸→房1→开闸→房2混编→开闸→Boss 闸厅
+# 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=64..66 @ z=18/38 → AIR
+# Display：$kill 对齐 MM 去色名 潮蚀尸 / 浪矢骷 / 潮闸蛮兵
+groups:
+  wave1:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=-2,64,8;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=2,64,8;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=0,64,14;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=潮蚀尸;amount=5} @system"
+    start:
+    - "$message{type=text;text=§e【水道·沿岸】清尽潮蚀尸再开闸 —— 别撞铁栅} @dungeon"
+    end:
+    - "$message{type=text;text=§a沿岸已清 · 桥闸开了} @dungeon"
+    - "$operation-block{loc=-1,64,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,65,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,64,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,64,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,18;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,18;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  wave2a:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=-2,64,26;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=1,64,34;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=潮蚀尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【水道·折桥】混编来袭 —— 先清尸再开闸厅门} @dungeon"
+    end:
+    - "$message{type=text;text=§7折桥前段已清 · 浪矢骷压上} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  wave2b:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideSkeleton;location=2,64,28;amount=2;scattered=0.8;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideSkeleton;location=-1,64,32;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=浪矢骷;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【水道·后段】浪矢骷×3 —— 清完开闸厅门} @dungeon"
+    end:
+    - "$message{type=text;text=§a折桥已清 · 闸厅门开了} @dungeon"
+    - "$operation-block{loc=-1,64,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,65,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=-1,66,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,64,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,65,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=0,66,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,64,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,65,38;mode=set;type=AIR} @dungeon"
+    - "$operation-block{loc=1,66,38;mode=set;type=AIR} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    auto-start: false
+
+  boss:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideBrute;location=0,64,46;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=潮闸蛮兵;amount=1} @system"
+    start:
+    - "$message{type=text;text=§c【闸厅】潮闸蛮兵！池边绕打再输出} @dungeon"
+    end:
+    - "$end{type=text;text=§a余烬窟·潮蚀水道 通关！奖励发放中…;reward=true;delay=2;end-type=COMPLETE} @dungeon"
+    auto-start: false
