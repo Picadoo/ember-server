@@ -64,7 +64,7 @@ EmberWeeklyBruteB:
   #   and an ember pulse every 15 s that heals nearby players 6 HP (predictable mid-fight heal)
   Type: ZOMBIE
   Display: '&6深核廊蛮兵·乙'
-  Health: 1300
+  Health: 1500   # 1.13.0 phase 2 (was 1300): passives + covenant stats cut solo blaze TTK to 26 s
   Damage: 2
   Options:
     MovementSpeed: 0.22

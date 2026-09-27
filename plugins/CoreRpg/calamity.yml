@@ -43,4 +43,4 @@ scaling:
   enabled: true
   radius: 32
   recent_seconds: 20
-  per_extra: 0.15
+  per_extra: 0.30   # 1.13.0 phase 2 (was 0.15): 3 bots with passives/covenant stats killed it in 27 s

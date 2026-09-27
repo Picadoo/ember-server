@@ -86,6 +86,8 @@ EmberCalamityShred:
   - message{m="&4【灾厄阶段·削甲】&7护甲失效感袭来！"} @PlayersInRadius{r=40}
   - potion{type=WEAKNESS;duration=60;level=0} @PlayersInRadius{r=18}
   - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=18}
+  # 1.13.0 phase 2: shred also bites everyone (the boss only chased the tank; dps ended at 100% HP)
+  - damage{amount=5} @PlayersInRadius{r=18}
   - effect:particles{p=crit;amount=50;hSpread=10;ySpread=1;speed=0} @Self
 
 EmberCalamityRampage:
@@ -96,3 +98,11 @@ EmberCalamityRampage:
   - damage{amount=2;ignorearmor=true} @target
   - throw{velocity=7;velocityY=4} @target
   - effect:sound{s=mob.wither.shoot;volume=0.8;pitch=0.7} @self
+
+# 1.13.0 phase 2: raid-wide ember rain — taunt kept the apostle on the warden, so blaze/ash ended at 100% HP
+EmberRaidEmberRain:
+  Cooldown: 12
+  Skills:
+  - message{m="&c【终厅·余烬雨】&7灰烬落向所有人！"} @PlayersInRadius{r=40}
+  - damage{amount=12} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=60;hSpread=8;ySpread=2;speed=0} @Self

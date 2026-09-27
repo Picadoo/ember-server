@@ -75,6 +75,7 @@ async function runOne(D, op) {
     await ensureLevel(op, b, LV)
     await c(`/clear ${b.username}`)
     await c(`/ni give ${b.username} ${BLADE} 1`, 1000); await c(`/ni give ${b.username} ${TAL} 1`, 1000)
+    if (process.env.RING) await c(`/ni give ${b.username} acc_ember_raid_ring 1`, 800)
     await c(`/ni give ${b.username} mat_ember_shard 64`, 800); await c(`/ni give ${b.username} mat_ember_bone_dust 20`, 800)
     await c(`/corerpg coin give ${b.username} 2000`, 800) // 1.11.0: enhance has a coin fee
     for (const [id, lv] of [[TAL, ET], [BLADE, EB]]) {

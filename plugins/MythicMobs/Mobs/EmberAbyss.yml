@@ -96,8 +96,8 @@ EmberAbyssBrute:
 EmberAbyssWatcher:
   Type: WITHER_SKELETON
   Display: '&5余烬深渊·看守'
-  Health: 1100
-  Damage: 1
+  Health: 1500   # 1.13.0 phase 2 (was 1100): layer 8 took 27-29 s
+  Damage: 3   # 1.13.0 phase 2 (was 1): 2 left solo blaze at 100%, 4 left it at 6% (warden 80%)
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true

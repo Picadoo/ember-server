@@ -7,7 +7,7 @@ EmberCalamityBoss:
   Type: WITHER_SKELETON
   Display: '&4余烬灾厄使'
   Health: 1600
-  Damage: 1
+  Damage: 2   # 1.13.0 phase 2 (was 1): 1 and 3 bots ended at 79-100% HP
   # 2026-09-27: HP attribute capped at 2048 (spigot.yml) → 2000 HP, no melee reduction (solo Lv30 T2 ≈ 45 s); crowds are handled by CoreRpg participant scaling
   DamageModifiers:
   - ENTITY_ATTACK 1.0
