@@ -119,3 +119,15 @@ EmberFrostNovaCast:
   - damage{amount=1.2} @PlayersInRadius{r=5}
   - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5}
   - effect:particles{p=crit;amount=30;hSpread=5;ySpread=0.8;speed=0} @Self
+
+# --- 日常第三拍扩线 · 锈轨 Boss 砸地读条（可躲；无 SLOW，异于霜晶）---
+EmberRailSlamCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&6【锈轨】&f矿监蓄力砸地——&7拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=36;hSpread=3.5;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=crit;amount=20;hSpread=3;ySpread=0.6;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.55} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=28;hSpread=5;ySpread=0.6;speed=0.01} @Self

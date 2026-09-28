@@ -40,7 +40,7 @@ EmberDailyRailSkeleton:
   - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
 
 EmberDailyRailWarden:
-  # 锈轨矿监：机房柱间压迫 + 短冲锋感（SoftHit 偏高）；七线可辨
+  # 锈轨矿监：砸地读条可躲（第三拍扩线）；逼近文案保留；七线可辨
   Type: ZOMBIE
   Display: '&6锈轨矿监'
   Health: 210
@@ -60,7 +60,7 @@ EmberDailyRailWarden:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.22
-  - damage{amount=0.5} @PlayersInRadius{r=4} ~onTimer:40
+  - skill{s=EmberRailSlamCast} @self ~onTimer:80
   - message{m="&6【锈轨】&7矿监逼近——&f<trigger.name>&7！"} @PlayersInRadius{r=18} ~onTimer:170
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> gear_ember_blade 1"} @Self ~onDeath 0.12
