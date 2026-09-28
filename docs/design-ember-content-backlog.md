@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.35** NI 汲取石 `gem_ember_drain` tip（`docs/design-ember-gem-drain-ni-lore-copy.md`；**待批 A**）；其余 gem（gale）/ `/corerpg` 斜杠 / cosmetic / pet soft（勿双上）；精英壳勿硬开；**勿宣称 B0.1 已清**。live `&7gem_*` 当前 2；`&7mat_*` 本轨已归零。
+- 文案薄窗：**B2.35 已批 A** NI `&7gem_*` lore（汲取石 `gem_ember_drain`；设计 `c9cdb28` · 批准 `bf3bf4b`；交物品删 L54）；其余 gem（gale）/ `/corerpg` 斜杠 / cosmetic / pet soft（勿双上）；精英壳勿硬开；**勿宣称 B0.1 已清**。live `&7gem_*` 当前 2，施工后预期 1；`&7mat_*` 本轨已归零。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -134,7 +134,7 @@
 - ~~**B2.32** NI 稳固符 lore 裸 id~~ → **PASS · 勾销**（设计 `cf7eaaf` · 批准 `c4194e4` · 施工 `1cdf73b` · 测 `0c70273` · close `42054ad`；报告 `docs/STATUS-ember-mat-stable-charm-ni-lore-copy-test.md`；live `&7mat_*` 本轨归零）
 - ~~**B2.33** NI 锋利石 lore 裸 id~~ → **PASS · 勾销**（设计 `48b5218` · 批准 `6a43ab1` · 施工 `fbef72e` · 测 `90797d7` · close `973e941`；报告 `docs/STATUS-ember-gem-sharp-ni-lore-copy-test.md`；`&7gem_*` 剩 3）
 - ~~**B2.34** NI 稳固石 lore 裸 id~~ → **PASS · 勾销**（设计 `baa2705` · 批准 `19a8982` · 施工 `c5647d3` · 测 `7bc605a` · close `5b47896`；报告 `docs/STATUS-ember-gem-steady-ni-lore-copy-test.md`；`&7gem_*` 剩 2）
-- **B2.35** NI 汲取石 `gem_ember_drain` lore 裸 id（`docs/design-ember-gem-drain-ni-lore-copy.md`；**待批 A**；荐只删实际 L54 1 行，保留 L55/L56 两行说明；live `&7gem_*` 当前 2、施工后预期 1；其余 gale / 斜杠 / cosmetic / pet soft 勿双上；精英壳勿硬开；**勿宣称 B0.1 已清**）
+- **B2.35** NI 余烬汲取石 lore 裸 id（`gem_ember_drain`；**已批 A**；设计 `c9cdb28` · 批准 `bf3bf4b`；单件薄窗；只删实际 L54，保留 L55/L56；其余 gale、斜杠、cosmetic / pet soft 勿双上；精英壳勿硬开；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -201,7 +201,7 @@
 - ~~**B2.32**~~ → **PASS · 勾销**（`1cdf73b` / `0c70273` · close `42054ad`；live `&7mat_*` 本轨归零）。
 - ~~**B2.33**~~ → **PASS · 勾销**（`fbef72e` / `90797d7` · close `973e941`；`&7gem_*`=3）。
 - ~~**B2.34**~~ → **PASS · 勾销**（`c5647d3` / `7bc605a` · close `5b47896`；`&7gem_*`=2）。
-- **B2.35** → NI 汲取石 `gem_ember_drain` lore 裸 id（tip `docs/design-ember-gem-drain-ni-lore-copy.md`；**待批 A**；施工后 `&7gem_*` 预期 1）。
+- **B2.35** → NI 余烬汲取石 lore 裸 id（**已批 A**；设计 `c9cdb28` · 批准 `bf3bf4b`；交物品）。
 
 ---
 
@@ -383,7 +383,7 @@
 烬砧窗：    **B-anvil-1** 灰箍 **PASS · 勾销**（设计 `ab33c21` · 批准 `f10779b` · NI `57a6540` · 插件 `72281d9` · 测 `0ab09ef` · close 本提交；CoreRpg **1.15.26**）
 文案窗：**B2.18**～**B2.24** **PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 已批 A · 施工中**
 软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结；~~碎片 lore 裸 id~~ → B2.24 已结；~~骨尘 lore 裸 id~~ → B2.25 已结；~~核心碎片 lore 裸 id~~ → **B2.26 PASS · 勾销**（close `f796f3a`）；~~誓约重置券 lore 裸 id~~ → **B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 已批 A · 施工中**
-软观察：    ~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；B2.35 汲取石 tip **待批 A** / 其余 `&7gem_*` / `/corerpg` 斜杠 / cosmetic / pet soft（勿双上）/ 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+软观察：    ~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；B2.35 目标汲取石（已批 A · 施工中） / 其余 `&7gem_*` / `/corerpg` 斜杠 / cosmetic / pet soft（勿双上）/ 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 策划挑选排除：刚结 B2.6–B2.33 / B-flex-1 / B-flex-2 / B-anvil-1；其它 NI 厚批 mat 双上 / 精英壳；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上。
 ```
 
