@@ -1,6 +1,6 @@
 # 设计稿 · 天赋菜单「*_cap」玩家可见文案人话化（B2.13）
 
-> **未批准前不施工。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` lore / Open·tell 中字面 `*_cap` → 一层顶中文名；**禁**改 `talent.yml` 节点键 / cost / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。  
+> **已批 A · 待插件施工。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` lore / Open·tell 中字面 `*_cap` → 一层顶中文名；**禁**改 `talent.yml` 节点键 / cost / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。
 > 债源：硬债空；B2.12 close `483215f` 后旁扫总控点名；`ember_talent.yml` **14** 处玩家句仍写字面 `*_cap`，与一层顶显示名「燎原 / 烟幕 / 永护」脱节。  
 > 对齐：`design-ember-afk-ladder-id-copy.md`（B2.9 去内部代号）· UX「文案短清楚 · 少打指令 · TrMenu」。  
 > 排除本轮：刚结 B2.6–B2.12；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔升 B；B0.1 除非新证据；精英预览壳；isomorphic 空壳 tell→真页；新进度/货币/副本类型；Citizens；Paper。
@@ -14,7 +14,8 @@
 | 稿件 | 天赋 TrMenu · **`*_cap` 玩家可见文案人话化**（UX · 内部代号 · B2.13） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 00:06 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_talent.yml` · `plugins/CoreRpg/talent.yml` 一层顶 display · B2.12 close `483215f` |
-| 状态 | **待批 · 未施工** |
+| 状态 | **已批 A · 待插件施工** |
+| 批准记录（总控） | 2026-09-29 00:07 Asia/Shanghai：余烬-总控批准 **A**；批准 tip `c86ebd6` 已推至 `origin/main`。仅允许插件另开施工改 `ember_talent.yml` 14 个玩家可见 `*_cap` 字面；本批准 commit 不改 YAML。 |
 | 关联 STATUS / 稿 | backlog · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
@@ -139,6 +140,6 @@
 
 ## 9. 回总控一句话
 
-**硬债空；荐 A——仅改 `ember_talent.yml` 十四处字面 `*_cap` 为人话一层顶（燎原/烟幕/永护），零动 talent 键与 unlock command；引 B2.12 close `483215f`。待批。**
+**硬债空；已批 A——仅改 `ember_talent.yml` 十四处字面 `*_cap` 为人话一层顶（燎原/烟幕/永护），零动 talent 键与 unlock command；引 B2.12 close `483215f`。当前：已批 A · 待插件施工。**
 
 **专岗：** **策划**（本稿）→ **插件**（已批后改 1× TrMenu YAML 文案）→ **测试**（静态 rg `*_cap`=0 + 开菜单目视 Open/二层 lore）
