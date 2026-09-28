@@ -14,7 +14,7 @@
 | 稿件 | 天赋 TrMenu · **§8 `nodeId` / 前置内部 id 人话化**（UX · B2.13 方案 B 残留 · B2.14） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 00:15 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_talent.yml` · `plugins/CoreRpg/talent.yml` display · B2.13 close `33218c8` |
-| 状态 | **未批准 · 待总控批 A/B** |
+| 状态 | **已批 A · 待插件施工** |
 | 关联 STATUS / 稿 | backlog · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
@@ -101,7 +101,7 @@
 
 ## 4. 验收（≤5）
 
-1. **批准前：** 本稿落盘；玩法 YAML / `talent.yml` / 解锁 command **零 diff**（本 commit 仅文档 + backlog）。  
+1. **本批准 commit：** 本稿落盘；玩法 YAML / `talent.yml` / 解锁 command **零 diff**（本 commit 仅文档 + backlog）。
 2. **若批 A：** `ember_talent.yml` **无** `§8nodeId:`；**无** `§8前置：` 后接 `blaze_`/`ash_`/`warden_` 英 id；前置已为中文 display 名；`rg '§8nodeId:'` 与 `rg '§8前置：.*(blaze_|ash_|warden_)'` → **0**。  
 3. **若批 A：** 所有 `command: corerpg talent unlock …` 与 `talent.yml` 节点键 / cost / requires / stats **相对批前零 diff**。  
 4. **若批 A · 禁项：** 未改洗点价、硬顶 30、其它菜单；**不**宣称奖励页 NI id / 套装 `gear_ember_*` / B0.1 已清；裸属性键未清不挡 A PASS。  
@@ -160,6 +160,15 @@
 
 ## 9. 回总控一句话
 
-**硬债空；荐 A——仅改 `ember_talent.yml`：删 13×`§8nodeId:` + 7×前置英 id→中文 display；零动 talent 键与 unlock command；引 B2.13 close `33218c8`。当前：未批准 · 待总控批。**
+**硬债空；已批 A——仅改 `ember_talent.yml`：删 13×`§8nodeId:` + 7×前置英 id→中文 display；零动 talent 键与 unlock command；引 B2.13 close `33218c8`。当前：已批 A · 待插件施工。**
+
+## 总控批准记录
+
+**已批方案 A**（2026-09-29 00:16 Asia/Shanghai · 余烬-总控）
+
+- 批准依据：设计 tip `9e129cc`（已推至 `origin/main`）；只处理 `plugins/TrMenu/menus/ember_talent.yml` 的玩家可见 §8 内部 id 残留。
+- 批准范围：A1 整行删除 13×`§8nodeId: …`；A2 将 7×英前置替换为 `燃眼 + 饮烬`、`余烬脉`、`灰纱`、`叠壁`（按替换表）。
+- 硬边界：不做方案 B；不改裸属性键（`phys_damage` 等）、`talent.yml`、节点键、requires/cost/stats、unlock command 实参、其它菜单或 runtime/player/world。
+- 本批准 commit 只改文档；插件 tip 落地后再施工、reload 并由测试按 §4 静态验收。不得宣称 B0.1 已清。
 
 **专岗：** **策划**（本稿）→ **插件**（已批后改 1× TrMenu YAML 文案）→ **测试**（静态 rg nodeId/英前置=0 + 开菜单目视根/二层/烬斩前置）
