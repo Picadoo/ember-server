@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬骨尘 lore 裸 id 人话对齐（B2.25）
 
-> **STATUS：待批 A**（总控未批前 **不改** NI YAML / 玩法）。本稿只定 **玩家可见** NeigeItems `ember-dungeon.yml` 中 `mat_ember_bone_dust` **1** 行 lore 裸 NI id；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。  
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-mat-bone-dust-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `ember-dungeon.yml` 中 `mat_ember_bone_dust` **1** 行 lore 裸 NI id；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。  
 > 债源：B2.24 tip / backlog 软观察「其余 NI `&7mat_*`（可升 B2.25 · 下一件最薄荐骨尘）」；B2.24 **PASS · 勾销** close **`95783b3`**（设计 `9931476` · 批准 `60f43b7` · 施工 `e004458` · 测 `f004152`）。  
 > 对齐：B2.22/B2.24 已对重铸石/碎片删 lore 裸 id；UX「显示名已中文则灰字裸 id 可删 · 悬停即见 · 键/管理侧可留」。  
 > 排除本轮：刚结 B2.6–B2.24 / B-flex-1/2 / B-anvil-1；其它 NI 材 lore `&7mat_*` **整批/双上**（旁附 soft · 约 7 件）；其它 NI `/corerpg` 斜杠（誓约/天赋/使魔 · soft）；精英预览厚壳（hub 一点进本、无 P / 无独立 rewards → 证据不足勿硬开）；墙钟/DPS；霜锈前压；断塔无证据升 B；B0.1 除非新证据；四件甲/锻炉重做/誓约大改。**勿宣称 B0.1 已清。** 与 B-flex / B-anvil **不捆**。
@@ -14,7 +14,7 @@
 | 稿件 | NI 余烬骨尘 · **玩家可见 lore 裸 id `mat_ember_bone_dust` 对齐**（UX · B2.25） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 02:30 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-dungeon.yml` · B2.24 旁附「下一件 `&7mat_*`」荐骨尘 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.25** · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
