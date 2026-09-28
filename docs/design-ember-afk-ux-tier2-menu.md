@@ -14,7 +14,7 @@
 | 稿件 | 挂机 · 二档落地后 **菜单/规则 UX 对齐**（非改数） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 21:51 Asia/Shanghai |
 | 关联 | `ember_afk` TrMenu · `ember_hub` 挂机入口 lore（可选）· 现网一/二档 chat（已 PASS） |
-| 状态 | **待总控批 A/B · 未批准不施工** |
+| 状态 | **已批 A · 可施工**（总控 2026-09-28 21:53 Asia/Shanghai） |
 | 关联 STATUS / 稿 | `STATUS-ember-afk-b04-tier2-test.md` · `design-ember-afk-b04-tier2.md` · `design-ember-content-backlog.md` |
 
 ### 硬约束（本稿）
@@ -153,4 +153,10 @@
 
 ## 总控批注
 
-（待填）
+**批准方案 A**（2026-09-28 21:53 Asia/Shanghai · 余烬-总控）
+
+- 仅对齐 `ember_afk` 规则 I lore（+ 头注释）为双软顶人话；日顶数字不变。
+- **硬禁**改 `over_chance` / `over_chance_2` / cap / Java `afkCapped` / 一·二档 chat。
+- hub 挂机入口半句「双软顶」**可选**，不做不挡主验收。
+- 禁宣称封死通胀；禁写裸 `0.08`；禁玩家面斜杠教学。
+- 施工：插件 TrMenu → `trmenu reload` → STATUS 未 push → 总控代推 → 测岗冒烟。
