@@ -1,0 +1,98 @@
+{
+  "tip": "f73c0db",
+  "design": "a76d248",
+  "startedAt": "2026-09-28T10:22:10.561Z",
+  "a1": {
+    "teamChat": "[战令] 今日战令经验已达上限 120 | [余烬] 等级经验 +250（Lv.33 · 334/336） | [战令] 今日战令经验已达上限 120 | [余烬] 等级经验 +250（Lv.34 · 248/348） | [余烬] 升级！余烬等级 Lv.34 | [余烬] 等级 Lv.34 · 经验 248/348 · 上限 Lv.60 |   今日：击杀经验 0/100 · 精英/首领经验 0/150 · 天赋点 可用 21 |   来源：签到 / 日·周·深渊·团本·盟Boss 通关 / 精英·首领 / 击杀（日上限） | [战令] 今日战令经验已达上限 120 | [余烬] 等级经验 +250（Lv.35 · 150/360） | [余烬] 升级！余烬等级 Lv.35 | [战令] 今日战令经验已达上限 120 | [余烬] 等级经验 +250（Lv.36 · 40/372） | ",
+    "entered": true,
+    "enterMs": 502,
+    "enterProof": "banner:团本大厅已集结",
+    "worldEvidence": "",
+    "enterChat": [
+      "KaRa928:[团本] 正在进入……（本周首次免费） | 团本大厅已集结。左道卫兵 · 右道射手 · 汇合后终厅使徒。 | 已扣除余烬团本票 ×1",
+      "KaRb928:团本大厅已集结。左道卫兵 · 右道射手 · 汇合后终厅使徒。 | 已扣除余烬团本票 ×1",
+      "KaRc928:团本大厅已集结。左道卫兵 · 右道射手 · 汇合后终厅使徒。 | 已扣除余烬团本票 ×1"
+    ],
+    "worldHints": [
+      {
+        "n": "KaRa928",
+        "dim": "overworld",
+        "wn": "",
+        "pos": {
+          "x": 0,
+          "y": 65,
+          "z": 0
+        }
+      },
+      {
+        "n": "KaRb928",
+        "dim": "overworld",
+        "wn": "",
+        "pos": {
+          "x": 0,
+          "y": 65,
+          "z": 0
+        }
+      },
+      {
+        "n": "KaRc928",
+        "dim": "overworld",
+        "wn": "",
+        "pos": {
+          "x": 0,
+          "y": 65,
+          "z": 0
+        }
+      }
+    ],
+    "wave1AtMs": 14407,
+    "wave2StartAtMs": 18409,
+    "wave2Banner": "【右道】射手就位——右边先压远程！",
+    "spotGuardsClearedArchersLeft": 4,
+    "spotPartialNoPass": true,
+    "wave2ClearAtMs": 56022,
+    "wave2ClearBanner": "通道打开 · 精英将至",
+    "hits": {
+      "KaRa928": 40,
+      "KaRb928": 46,
+      "KaRc928": 55
+    },
+    "fightMs": 56339,
+    "wave1Done": true,
+    "wave2Start": true,
+    "wave2Cleared": true,
+    "spotPartialOk": true,
+    "fightChatTail": "[DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | 左道肃清 | 【右道】射手就位——右边先压远程！ | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | KaRa928 has made the advancement [Monster Hunter] | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | [DungeonPlus] 当前地牢无法对队友造成伤害! | 通道打开 · 精英将至",
+    "result": "PASS"
+  },
+  "a2": {
+    "guildCreate": "[盟约] 盟约 杀债2385 已创建！（消耗 余烬币 ×5000） |   /corerpg guild invite <玩家> · donate …",
+    "guildName": "杀债2385",
+    "donateChat": "[盟约] 捐献成功！ 消耗 mat_ember_shard ×200 → 贡献 +20（今日 20/50 · 个人累计 20）",
+    "guildInfo": "[盟约] 杀债2385 · 成员 1/20 |   盟主 KaGb928 · 总贡献 20 · 创建 2026-09-28 18:26 |   我的贡献 20 · 今日捐献 20/50 |   invite|leave|kick|donate <niId> <amt>|boss",
+    "contrib": 20,
+    "entered": true,
+    "enterMs": 502,
+    "enterChat": "[盟约] 已消耗贡献 20 · 启动 EmberGuildBoss（本周 1/1） | 盟约周 Boss 已点燃。进本由 /corerpg guild boss 门控（贡献消耗）。",
+    "worldEvidence": "",
+    "wave1StartAtMs": 1101,
+    "spotZombiesClearedSkeletonsLeft": 3,
+    "spotPartialNoPass": true,
+    "wave1ClearAtMs": 34130,
+    "wave1ClearBanner": "第一波肃清 · 蛮兵将至",
+    "hits": 32,
+    "fightMs": 34131,
+    "wave1Start": true,
+    "wave1Cleared": true,
+    "spotPartialOk": true,
+    "fightChatTail": "盟 Boss 波次 1：深渊潮 · 僵尸与骨鸣 | KaGb928 has made the advancement [Monster Hunter] | 第一波肃清 · 蛮兵将至",
+    "result": "PASS"
+  },
+  "notes": [],
+  "opsEnd": {
+    "play": [],
+    "login": []
+  },
+  "finishedAt": "2026-09-28T10:27:01.136Z",
+  "overall": "PASS"
+}
