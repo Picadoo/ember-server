@@ -1,6 +1,6 @@
 # 设计稿 · NI 誓约重置券 lore 裸 id 人话对齐（B2.27）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** NeigeItems `ember-covenant-talent.yml` 中 `mat_ember_covenant_reset` **1** 行 lore 裸 NI id；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。  
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-mat-covenant-reset-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `ember-covenant-talent.yml` 中 `mat_ember_covenant_reset` **1** 行 lore 裸 NI id；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。  
 > 债源：B2.26 tip / backlog 软观察「其余 NI `&7mat_*`（可升 B2.27 · 下一件最薄荐誓约重置券）」；B2.26 **PASS · 勾销** close **`f796f3a`**（设计 `0e76453` · 批准 `28a5048` · 施工 `ba460a7` · 测 `75d0831`）。  
 > 对齐：B2.22/B2.24–26 已对重铸石/碎片/骨尘/核心碎片删 lore 裸 id；UX「显示名已中文则灰字裸 id 可删 · 悬停即见 · 键/管理侧可留」。  
 > 排除本轮：刚结 B2.6–B2.26 / B-flex-1/2 / B-anvil-1；其它 NI 材 lore `&7mat_*` **整批/双上**（旁附 soft · 约 5 件）；同物 `/corerpg` 斜杠（L10 · **勿与本窗双上** · soft）；其它 NI `/corerpg` 斜杠（天赋重置/使魔 · soft）；精英预览厚壳（hub 一点进本、无 P / 无独立 rewards → 证据不足勿硬开）；墙钟/DPS；霜锈前压；断塔无证据升 B；B0.1 除非新证据；四件甲/锻炉重做/誓约大改。**勿宣称 B0.1 已清。** 与 B-flex / B-anvil **不捆**。
@@ -14,7 +14,7 @@
 | 稿件 | NI 誓约重置券 · **玩家可见 lore 裸 id `mat_ember_covenant_reset` 对齐**（UX · B2.27） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 02:40 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-covenant-talent.yml` · B2.26 旁附「下一件 `&7mat_*`」荐誓约重置券 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.27** · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
