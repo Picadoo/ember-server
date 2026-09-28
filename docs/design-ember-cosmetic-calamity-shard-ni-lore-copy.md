@@ -1,6 +1,6 @@
 # 设计稿 · NI 灾厄外观碎片 lore 裸 id 人话对齐（B2.37）
 
-> **STATUS：待批 A**（总控待批）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-abyss-calamity.yml` 内 `cosmetic_calamity_shard` **1** 行 lore 灰字裸 id；批后由物品岗改 NI Items YAML。不改 NI 数值、配方、给物、掉落或其它物品。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-cosmetic-calamity-shard-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-abyss-calamity.yml` 内 `cosmetic_calamity_shard` **1** 行 lore 灰字裸 id；批后由物品岗改 NI Items YAML。不改 NI 数值、配方、给物、掉落或其它物品。
 >
 > B2.36 已 **PASS · 勾销**（设计 `eca16cd` · 批准 `dd582c8` · 施工 `3e3c63b` · 测 `a531ebf` · close `54ef5c4`）。当前 live Items `&7gem_*` / `&7mat_*` 本轨已归零；`&7cosmetic_*` 仅剩本件 1 件。本窗只处理灾厄外观碎片，批准并施工后预期 `&7cosmetic_*` **归零**，仅表示 cosmetic 本件收口，不宣称 pet、斜杠或 B0.1 已清。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 灾厄外观碎片 · **玩家可见 lore 裸 id `cosmetic_calamity_shard` 对齐**（UX · B2.37） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:30 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 | live `plugins/NeigeItems/Items/ember-abyss-calamity.yml` · B2.36 疾风石 PASS 后 cosmetic 单件薄窗 |
 | 专岗 | **物品**；验收 **`rg` + 悬停** |
 
@@ -50,7 +50,7 @@ cosmetic_calamity_shard:
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **待批 A；批后交物品岗施工** |
+| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **已批 A；交物品岗施工** |
 | A′ | 改为灰字「灾厄外观碎片」 | 不荐：与显示名重复 |
 | B | 顺手处理 pet、斜杠或精英壳 | **仅作 soft，勿双上** |
 
