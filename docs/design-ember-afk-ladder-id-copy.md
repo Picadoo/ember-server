@@ -14,8 +14,8 @@
 | 稿件 | 挂机庭 / 天梯 · **去内部代号**（UX · 入口文案一致性 · B2.9） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 23:20 Asia/Shanghai |
 | 关联 | `plugins/HolographicDisplays/database.yml` · `plugins/TrMenu/menus/ember_ladder.yml` |
-| 状态 | **已批 A · 待插件**（未施工） |
-| 关联 STATUS / 稿 | `docs/STATUS-ember-afk-ladder-id-copy-approve.md` · backlog 已批 A · 待插件 · B2.8 PASS `944c017` |
+| 状态 | **PASS · 勾销** |
+| 关联 STATUS / 稿 | `docs/STATUS-ember-afk-ladder-id-copy-approve.md` · backlog **PASS · 勾销** · B2.8 PASS `944c017` |
 
 ### 硬约束（本稿）
 
@@ -153,6 +153,6 @@
 
 ## 9. 回总控一句话
 
-**无高杠杆硬债；扫入口新脏点：荐批 A——挂机庭/天梯全息说明行 + 天梯菜单 lore/tell 去内部代号，零改 location/数值/PAPI 键。**
+**无高杠杆硬债；B2.9 已 PASS · 勾销——挂机庭/天梯全息说明行 + 天梯菜单 lore/tell 已去内部代号，零改 location/数值/PAPI 键。**
 
 **专岗：** **策划**（本稿）→ **落地岗/插件**（批后改 HD `database.yml` lines + `ember_ladder.yml` 文案；热更 HD/TrMenu）→ **测试**（静态 rg + 挂机落地/天梯点开冒烟）

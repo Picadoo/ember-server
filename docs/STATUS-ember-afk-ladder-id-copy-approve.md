@@ -2,7 +2,7 @@
 
 **日期：** 2026-09-28 23:22 CST（Asia/Shanghai）  
 **依据：** `docs/design-ember-afk-ladder-id-copy.md` · parent design tip `a8b8ef2`  
-**Verdict：** **APPROVED A · 待插件**
+**Verdict：** **PASS · 勾销**
 
 ## 结论
 
@@ -33,5 +33,5 @@ TrMenu 只改 `ember_ladder.yml` 玩家可见 Open / 说明按钮 / 三个榜单
 
 ## 交接
 
-- **插件：** 按批准 A 施工；完整替换清单见批准消息，不要触碰 YAML 之外范围。
-- **策划：** 已批 A，等待插件施工；本记录仅为批准，不宣称已落地或已验收。
+- **结案：** 方案 A 已施工并通过测试；施工 tip `d0c9ef4` · 测试 tip `796dc1b`。
+- **范围：** 仅玩家可见文案；灾厄 OP #6 及其它排除项保持不动。

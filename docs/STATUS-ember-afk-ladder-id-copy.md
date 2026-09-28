@@ -2,7 +2,8 @@
 
 **时间：** 2026-09-28 23:25 CST（Asia/Shanghai）
 **依据：** 批准 tip `ed4f54c` · 设计 tip `a8b8ef2` · `docs/design-ember-afk-ladder-id-copy.md` 方案 A（A1+A2+A3）
-**交付：** `fix(ux): B2.9 afk/ladder copy no internal ids`（本地 commit，未 push）
+**交付：** `fix(ux): B2.9 afk/ladder copy no internal ids`（施工 tip `d0c9ef4`，已 push）
+**结果：** **PASS · 勾销**（测试 tip `796dc1b`）
 
 ## 施工结果
 
@@ -38,5 +39,5 @@ trmenu reload
 
 ## 版本控制
 
-- 建议提交：`fix(ux): B2.9 afk/ladder copy no internal ids`
-- **未 push**。
+- 施工 commit：`d0c9ef4` · 已 push。
+- 测试 commit：`796dc1b` · 已 push。

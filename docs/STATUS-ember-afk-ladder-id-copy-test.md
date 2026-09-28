@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗  
 **依据：** 施工 tip `d0c9ef4` · 批准 `ed4f54c` · 设计 `a8b8ef2` · 方案 A  
 **口径：** 静态 rg + 可选短冒烟；**禁改**玩法 YAML；**禁教玩家斜杠**  
-**Verdict：** ✅ **PASS** · STATUS **未 push**（交总控代推）
+**Verdict：** ✅ **PASS · 勾销** · STATUS 已 push
 
 ---
 
@@ -108,8 +108,8 @@ M  plugins/TrMenu/menus/ember_ladder.yml
 ## 版本控制
 
 - 本验收 STATUS：`docs/STATUS-ember-afk-ladder-id-copy-test.md`
-- 建议提交：`test(ux): B2.9 afk/ladder id-copy A PASS`
-- **未 push** · tip 交总控代推
+- 测试 commit：`796dc1b` · 已 push。
+- backlog close 由总控文档提交。
 
 ## 阻塞点
 
