@@ -1,6 +1,6 @@
 # 设计稿 · NI 重铸石物品 lore 裸 id 人话对齐（B2.22）
 
-> **STATUS：待批 A**（总控派 · 下一窗 · 薄设计）。本稿只定 **玩家可见** NeigeItems `ember-disassemble.yml` 中重铸石物品 **1** 行 lore 裸 NI id；**禁**改 NI 数值 / 配方 / 给物逻辑 / scrap·reforge 消耗 / 词缀池 / 掉落 / 体力 / TrMenu / CoreRpg Java。  
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-reforge-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `ember-disassemble.yml` 中重铸石物品 **1** 行 lore 裸 NI id；**禁**改 NI 数值 / 配方 / 给物逻辑 / scrap·reforge 消耗 / 词缀池 / 掉落 / 体力 / TrMenu / CoreRpg Java。  
 > 债源：B2.21 tip §B soft（`docs/design-ember-reforge-need-copy.md`）；backlog 软观察「NI 物品 lore 同 id（可升 B2.22）」；B2.21 **PASS · 勾销** `79f5d7e`（施工 `16b5334` · 测 `5b255e9` · CoreRpg **1.15.27**）。  
 > 对齐：B2.20 已清 TrMenu 拆解页；B2.21 已清缺料 chat；UX「文案短清楚 · 悬停物品即见 · NI 键/管理侧可留」。  
 > 排除本轮：刚结 B2.6–B2.21 / B-flex-1/2 / B-anvil-1；精英预览厚壳（hub 一点进本、无 P / 无独立 rewards → 证据不足勿硬开）；其它 NI 材 lore `&7mat_*` 整批（旁附 soft · 勿与 A 双上厚扫）；墙钟/DPS；霜锈前压；断塔无证据升 B；B0.1 除非新证据；四件甲/锻炉重做/誓约大改。**勿宣称 B0.1 已清。** 与 B-flex / B-anvil **不捆**。
@@ -14,7 +14,7 @@
 | 稿件 | NI 重铸石 · **玩家可见 lore 裸 id `mat_ember_reforge_stone` 对齐**（UX · B2.22） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 02:14 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-disassemble.yml` · B2.21 旁附 B1 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.22** · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
