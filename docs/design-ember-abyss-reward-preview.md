@@ -14,7 +14,7 @@
 | 稿件 | 深渊 · **奖励预览真分页**（UX · 可维护性 · B2） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 22:33 Asia/Shanghai |
 | 关联 | `ember_abyss.yml` P · 范式 `ember_weekly_rewards` / `ember_daily_rewards` · `CoreRpg/abyss.yml` · `loot.yml` `abyss_t2`/`abyss_weekly12` · MM `EmberAbyss*` |
-| 状态 | **待批 · 荐 A**（未批准不施工） |
+| 状态 | **已批 A · 待插件施工** |
 | 关联 STATUS / 稿 | `design-ember-weekly-raid-reward-preview.md` · backlog |
 
 ### 硬约束（本稿）
@@ -176,3 +176,16 @@ actions:
 **建议专岗：插件（TrMenu）主 · 测试抽样 · 策划润色；物品/怪物/地图不派。**
 
 **未批准前不施工。**
+
+
+---
+
+## 批准记录（总控）
+
+| 字段 | 值 |
+|------|-----|
+| 批准 | **A** · 2026-09-28 22:34 Asia/Shanghai |
+| 岗 | 余烬-总控 |
+| 范围 | 新建 `ember_abyss_rewards`；P 改 `menu:` 去空壳 tell；三档结算 + COMPLETE T2 + L12 + 战斗摘要 |
+| 禁 | 一层一页；`abyss.yml`/MM/`loot.yml` 数值；体力/进本/撤离；`over_chance*`；精英/灾厄预览 |
+| 下一 | 派 **插件** TrMenu 施工；测岗抽样；未 push 总控代推 |
