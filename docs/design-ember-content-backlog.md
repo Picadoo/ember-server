@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 02:40 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-29 02:44 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.27** NI 誓约重置券 lore 裸 id（tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md` · **STATUS 待批 A** · 荐删 L8）；其余 5 件 mat / `/corerpg` 斜杠 soft（勿双上）；精英壳勿硬开；**勿宣称 B0.1 已清**。
+- 文案薄窗：**B2.28** 下一件 NI `&7mat_*` lore（荐天赋重置券 `mat_ember_talent_reset`；策划交稿待批）；其余 mat / `/corerpg` 斜杠 soft（勿双上）；精英壳勿硬开；**勿宣称 B0.1 已清**。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
+- ~~**B2.27 NI 誓约重置券 lore 裸 id**~~ → **PASS · 勾销**（设计 `8bb16c9` · 批准 `1d659d0` · 施工 `d0830a7` · 测 `1d71c6c` · close 本提交；报告 `docs/STATUS-ember-mat-covenant-reset-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.28**；斜杠仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.26 NI 余烬核心碎片 lore 裸 id**~~ → **PASS · 勾销**（设计 `0e76453` · 批准 `28a5048` · 施工 `ba460a7` · 测 `75d0831` · close `f796f3a`；报告 `docs/STATUS-ember-mat-core-fragment-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.27**；斜杠仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.25 NI 余烬骨尘 lore 裸 id**~~ → **PASS · 勾销**（设计 `355603e` · 批准 `1b52ef9` · 施工 `e6df747` · 测 `220cb2a` · close `35abc98`；报告 `docs/STATUS-ember-mat-bone-dust-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.26**；斜杠仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.24 NI 余烬碎片 lore 裸 id**~~ → **PASS · 勾销**（设计 `9931476` · 批准 `60f43b7` · 施工 `e004458` · 测 `f004152` · close `95783b3`；报告 `docs/STATUS-ember-mat-shard-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.25**；斜杠仍 soft；**勿宣称 B0.1 已清**）
@@ -118,7 +119,8 @@
 - ~~**B2.24** NI 余烬碎片 lore 裸 id~~ → **PASS · 勾销**（设计 `9931476` · 批准 `60f43b7` · 施工 `e004458` · 测 `f004152` · close `95783b3`；报告 `docs/STATUS-ember-mat-shard-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.25**）
 - ~~**B2.25** NI 余烬骨尘 lore 裸 id~~ → **PASS · 勾销**（设计 `355603e` · 批准 `1b52ef9` · 施工 `e6df747` · 测 `220cb2a` · close `35abc98`；报告 `docs/STATUS-ember-mat-bone-dust-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.26**）
 - ~~**B2.26** NI 余烬核心碎片 lore 裸 id~~ → **PASS · 勾销**（设计 `0e76453` · 批准 `28a5048` · 施工 `ba460a7` · 测 `75d0831` · close `f796f3a`；报告 `docs/STATUS-ember-mat-core-fragment-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.27**）
-- **B2.27** NI 誓约重置券 lore 裸 id（tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md` · **待批 A** · 荐删 L8；其余 5 件 mat / `/corerpg` 斜杠 soft（勿双上）；精英壳勿硬开；**勿宣称 B0.1 已清**）
+- ~~**B2.27** NI 誓约重置券 lore 裸 id~~ → **PASS · 勾销**（设计 `8bb16c9` · 批准 `1d659d0` · 施工 `d0830a7` · 测 `1d71c6c` · close 本提交；报告 `docs/STATUS-ember-mat-covenant-reset-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.28**）
+- **B2.28** 下一件 NI `&7mat_*` lore（荐 `mat_ember_talent_reset`；单件薄窗；其余 mat / `/corerpg` 斜杠 soft 勿双上；精英壳勿硬开；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -177,7 +179,8 @@
 - ~~**B2.24**~~ → **PASS · 勾销**（`e004458` / `f004152` · close `95783b3`）。
 - ~~**B2.25**~~ → **PASS · 勾销**（`e6df747` / `220cb2a` · close `35abc98`）。
 - ~~**B2.26**~~ → **PASS · 勾销**（`ba460a7` / `75d0831` · close `f796f3a`）。
-- **B2.27** → tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md` · **待批 A**（荐删 `mat_ember_covenant_reset` lore L8）。
+- ~~**B2.27**~~ → **PASS · 勾销**（`d0830a7` / `1d71c6c` · close 本提交）。
+- **B2.28** → 下一件 `&7mat_*`（荐 `mat_ember_talent_reset`；交稿待批）。
 
 ---
 
@@ -306,7 +309,7 @@
 | **B2.24** | NI 余烬碎片物品 lore 裸 id 人话对齐 | `ember-dungeon.yml` 内 `mat_ember_shard` lore 无字面 id（荐删 L9；显示名已有「余烬碎片」）；零改 NI 数值/配方/给物/掉落；其它 8 件 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `9931476` · 批准 `60f43b7` · 施工 `e004458` · 测 `f004152` · close `95783b3`） |
 | **B2.25** | NI 余烬骨尘物品 lore 裸 id 人话对齐 | `ember-dungeon.yml` 内 `mat_ember_bone_dust` lore 无字面 id（荐删 L15；显示名已有「余烬骨尘」）；零改 NI 数值/配方/给物/掉落；其它 7 件 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `355603e` · 批准 `1b52ef9` · 施工 `e6df747` · 测 `220cb2a` · close `35abc98`） |
 | **B2.26** | NI 余烬核心碎片物品 lore 裸 id 人话对齐 | `ember-dungeon.yml` 内 `mat_ember_core_fragment` lore 无字面 id（荐删 L21；显示名已有「余烬核心碎片」）；零改 NI 数值/配方/给物/掉落；其它 6 件 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `0e76453` · 批准 `28a5048` · 施工 `ba460a7` · 测 `75d0831` · close `f796f3a`） |
-| **B2.27** | NI 誓约重置券物品 lore 裸 id 人话对齐 | `ember-covenant-talent.yml` 内 `mat_ember_covenant_reset` lore 无字面 id（荐删 L8；显示名已有「誓约重置券」）；零改 NI 数值/配方/给物；不动 L10 `/corerpg`；其它 5 件 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **待批 A**（tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md`） |
+| **B2.27** | NI 誓约重置券物品 lore 裸 id 人话对齐 | `ember-covenant-talent.yml` 内 `mat_ember_covenant_reset` lore 无字面 id（荐删 L8；显示名已有「誓约重置券」）；零改 NI 数值/配方/给物；不动 L10 `/corerpg`；其它 5 件 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `8bb16c9` · 批准 `1d659d0` · 施工 `d0830a7` · 测 `1d71c6c` · close 本提交）|
 
 ---
 
@@ -343,16 +346,16 @@
 
 
 ```
-可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.24 已结**；**B2.24 PASS · 勾销**（close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 待批 A**
+可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.24 已结**；**B2.24 PASS · 勾销**（close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**；**B2.28 进行中**
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
 内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close `ba47f3e`；CoreRpg **1.15.25**）
 烬砧窗：    **B-anvil-1** 灰箍 **PASS · 勾销**（设计 `ab33c21` · 批准 `f10779b` · NI `57a6540` · 插件 `72281d9` · 测 `0ab09ef` · close 本提交；CoreRpg **1.15.26**）
-文案窗：**B2.18**～**B2.24** **PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 待批 A**（tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md` · 荐删 covenant_reset L8）
-软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结；~~碎片 lore 裸 id~~ → B2.24 已结；~~骨尘 lore 裸 id~~ → B2.25 已结；~~核心碎片 lore 裸 id~~ → **B2.26 PASS · 勾销**（close `f796f3a`）；~~誓约重置券 lore 裸 id~~ → **B2.27 待批 A**
-软观察：    ~~B2.18–26 文案轨~~ → PASS；其余 5 件 NI `&7mat_*`（B2.27 旁附 soft · 勿双上）/ 其它 `/corerpg` 斜杠 soft（勿双上）/ 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
-策划挑选排除：刚结 B2.6–B2.26 / B-flex-1 / B-flex-2 / B-anvil-1；其它 NI 厚批 mat 双上 / 精英壳；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上。
+文案窗：**B2.18**～**B2.24** **PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**；**B2.28 进行中**（tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md` · 荐删 covenant_reset L8）
+软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结；~~碎片 lore 裸 id~~ → B2.24 已结；~~骨尘 lore 裸 id~~ → B2.25 已结；~~核心碎片 lore 裸 id~~ → **B2.26 PASS · 勾销**（close `f796f3a`）；~~誓约重置券 lore 裸 id~~ → **B2.27 PASS · 勾销**；**B2.28 进行中**
+软观察：    ~~B2.18–26 文案轨~~ → PASS；其余 4 件 NI `&7mat_*`（B2.28 旁附 soft · 勿双上）/ 其它 `/corerpg` 斜杠 soft（勿双上）/ 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+策划挑选排除：刚结 B2.6–B2.27 / B-flex-1 / B-flex-2 / B-anvil-1；其它 NI 厚批 mat 双上 / 精英壳；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上。
 ```
 
 **不建议本额度新开：** 新养成线、新货币、新副本类型、Citizens、改 Paper/NMS。
@@ -363,9 +366,9 @@
 
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
-- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.24 等已结；**B2.18～B2.24 PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 待批 A**
+- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.24 等已结；**B2.18～B2.24 PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**；**B2.28 进行中**
 - **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）
 - **烬砧窗：** **B-anvil-1** 灰箍 **PASS · 勾销**（close `e39172f`；CoreRpg **1.15.26**）；灵活三窗已结
-- **文案窗：** **B2.18**～**B2.25** **PASS · 勾销**（B2.25 close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 待批 A**（tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md` · 荐删 L8）
-- 软观察：其余 5 件 NI `&7mat_*`（B2.27 旁附 soft · 勿双上）/ 其它 `/corerpg` 斜杠 soft（勿双上）/ 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+- **文案窗：** **B2.18**～**B2.25** **PASS · 勾销**（B2.25 close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**；**B2.28 进行中**（tip `docs/design-ember-mat-covenant-reset-ni-lore-copy.md` · 荐删 L8）
+- 软观察：其余 4 件 NI `&7mat_*`（B2.28 旁附 soft · 勿双上）/ 其它 `/corerpg` 斜杠 soft（勿双上）/ 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
