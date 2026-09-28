@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 日常第三拍试点：策划薄设计（非再堆 prep/链式）
+- 日常第三拍试点：设计稿待批（`design-ember-daily-third-beat.md` · 荐 A 霜晶 Boss 读条可躲 · MM；未批准不施工）
 
 ### 刚结
 - **周本深室 Boss 前压评估**：已批 **B 不施工**（`design-ember-weekly-boss-prep.md`）
