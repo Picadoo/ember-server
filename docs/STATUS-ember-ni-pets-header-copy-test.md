@@ -5,7 +5,7 @@
 **依据：** 施工 tip `07c918e` · 批准 `96e493e` · tip `docs/design-ember-ni-pets-header-copy.md`  
 **参考：** B2.54 测报 tip `c642e4f`  
 **口径：** 纯静态 · 禁开服测 · 禁长测/挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS**
+**Verdict：** ✅ **PASS** · STATUS 已 push (`7765927`)
 
 ---
 
@@ -100,8 +100,8 @@ git show 07c918e --numstat
 |----|-----|
 | 总评 | **PASS** |
 | 施工 tip SHA | `07c918e` |
-| 测报 tip short SHA | （本 commit） |
-| 是否已 push | （commit 后填） |
+| 测报 tip short SHA | `7765927` |
+| 是否已 push | 是 (`7765927`) |
 | 报告路径 | `docs/STATUS-ember-ni-pets-header-copy-test.md` |
 | ops | `[]` |
 | 阻塞点 | 无 |
