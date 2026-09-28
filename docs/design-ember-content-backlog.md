@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 04:47 Asia/Shanghai (总控 · B2.46 已批 A · 交插件 TrMenu)
+## Progress snapshot — 2026-09-29 04:51 Asia/Shanghai (总控 · B2.46 PASS · 勾销 · 升 B2.47 拆解 Open tell)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.46 已批 A**（设计 `50a272d` · 批准本提交 · tip `docs/design-ember-disassemble-menu-admin-copy.md` · L89→「点左侧即可分解或重铸」；交插件；**勿**改拆解数值；禁长测/挑刺；**勿宣称 B0.1 已清**）。~~B-flex-4~~ → PASS · 勾销；灵活轨 B-flex-1～4 PASS；精英壳勿硬开。
+- 文案薄窗：**B2.47 待交稿**（`ember_disassemble.yml` Open tell 去「逻辑待 CoreRpg 接线」管理口吻；**勿**改 scrap/reforge；禁长测/挑刺；**勿宣称 B0.1 已清**）。~~B2.46~~ → PASS · 勾销；灵活轨 B-flex-1～4 PASS；精英壳勿硬开；guild/friends/mail 同句旁记 soft 不捆。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -33,6 +33,7 @@
 - ~~**B-flex-3 副手守腕/生坠薄获取（灰粮 stub）**~~ → **PASS · 勾销**（设计 `8a605f3` · 批准 `440e632` · 施工 `58baffe` · 测 `4a3b373` · close 本提交；报告 `docs/STATUS-ember-flex-offhand-thin-acquire-test.md`；下一窗升 **B2.45** 灰箍抢口文案；踏步热键仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.45 烬砧灰箍抢口文案**~~ → **PASS · 勾销**（设计 `ab67790` · 批准 `a040ce2` · 插件 `3066746` · 测 `d6768d9`/`c69bd4d` · close 本提交；报告 `docs/STATUS-ember-ash-brace-contention-copy-test.md`；下一窗升 **B-flex-4**；踏步热键升窗；**勿宣称 B0.1 已清**）
 - ~~**B-flex-4 踏步少开菜单热键**~~ → **PASS · 勾销**（设计 `a9311ac` · 批准 `7b4a8b6` · 插件 `005a03b` · 测 `a1d5f7c` · close `6b0ce3d`；报告 `docs/STATUS-ember-flex-hotkey-sneak-drop-test.md`；CoreRpg **1.15.28**；下一窗升 **B2.46**；**勿宣称 B0.1 已清**）
+- ~~**B2.46 拆解菜单管理注释人话化**~~ → **PASS · 勾销**（设计 `50a272d` · 批准 `b2b2f7a` · 插件 `530c2f8` · 测 `89b1117` · close 本提交；报告 `docs/STATUS-ember-disassemble-rule-copy-test.md`；下一窗升 **B2.47**；**勿宣称 B0.1 已清**）
 - ~~**B2.35 NI 汲取石 lore 裸 id**~~ → **PASS · 勾销**（设计 `c9cdb28` · 批准 `bf3bf4b` · 施工 `1ef8a41` · 测 `9b2333f` · close `bab3b39`；报告 `docs/STATUS-ember-gem-drain-ni-lore-copy-test.md`；`&7gem_*` 剩 1；下一窗升 **B2.36**；斜杠 / cosmetic / pet 仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.34 NI 稳固石 lore 裸 id**~~ → **PASS · 勾销**（设计 `baa2705` · 批准 `19a8982` · 施工 `c5647d3` · 测 `7bc605a` · close `5b47896`；报告 `docs/STATUS-ember-gem-steady-ni-lore-copy-test.md`；`&7gem_*` 剩 2；下一窗升 **B2.35**；斜杠 / cosmetic / pet 仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.33 NI 锋利石 lore 裸 id**~~ → **PASS · 勾销**（设计 `48b5218` · 批准 `6a43ab1` · 施工 `fbef72e` · 测 `90797d7` · close `973e941`；报告 `docs/STATUS-ember-gem-sharp-ni-lore-copy-test.md`；`&7gem_*` 剩 3；下一窗升 **B2.34**；斜杠 / cosmetic / pet 仍 soft；**勿宣称 B0.1 已清**）
@@ -160,7 +161,8 @@
 - ~~**B-flex-3**~~ 副手守腕/生坠薄获取 → **PASS · 勾销**（见上）
 - ~~**B2.45** 烬砧灰箍抢口文案~~ → **PASS · 勾销**（设计 `ab67790` · 批准 `a040ce2` · 插件 `3066746` · 测 `d6768d9`/`c69bd4d` · close 本提交；报告 `docs/STATUS-ember-ash-brace-contention-copy-test.md`；下一窗升 **B-flex-4** 踏步热键；disassemble 管理注释仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B-flex-4** 踏步少开菜单热键~~ → **PASS · 勾销**（设计 `a9311ac` · 批准 `7b4a8b6` · 插件 `005a03b` · 测 `a1d5f7c` · close `6b0ce3d`；报告 `docs/STATUS-ember-flex-hotkey-sneak-drop-test.md`；CoreRpg **1.15.28**；下一窗升 **B2.46** 拆解管理注释；**勿宣称 B0.1 已清**）
-- **B2.46** 拆解菜单管理注释人话化（**已批 A** · 设计 `50a272d` · 批准本提交 · tip `docs/design-ember-disassemble-menu-admin-copy.md`；L89 人话替换；交插件；**勿**改拆解/重铸数值；禁长测/挑刺；**勿宣称 B0.1 已清**）
+- ~~**B2.46** 拆解菜单管理注释人话化~~ → **PASS · 勾销**（设计 `50a272d` · 批准 `b2b2f7a` · 插件 `530c2f8` · 测 `89b1117` · close 本提交；报告 `docs/STATUS-ember-disassemble-rule-copy-test.md`；下一窗升 **B2.47** 拆解 Open tell；**勿宣称 B0.1 已清**）
+- **B2.47** 拆解菜单 Open tell 管理口吻（**待交稿**；去「逻辑待 CoreRpg 接线」；**勿**改 scrap/reforge；禁长测/挑刺；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -240,7 +242,8 @@
 - ~~**B-flex-3**~~ → **PASS · 勾销**（close 本提交）。
 - ~~**B2.45**~~ → 烬砧灰箍抢口文案（**PASS · 勾销** · close `7dc96c9`）。
 - ~~**B-flex-4**~~ → 踏步少开菜单热键（**PASS · 勾销** · close `6b0ce3d` · CoreRpg **1.15.28**）。
-- **B2.46** → 拆解菜单管理注释人话化（**已批 A** · 设计 `50a272d` · 批准本提交；交插件）。
+- ~~**B2.46**~~ → 拆解菜单管理注释人话化（**PASS · 勾销** · close 本提交）。
+- **B2.47** → 拆解菜单 Open tell 管理口吻（**待交稿**；去「逻辑待 CoreRpg 接线」）。
 
 ---
 
@@ -389,7 +392,8 @@
 | ~~**B2.44**~~ | NI 余烬魂尘物品 lore feed 斜杠去指令化 | L34 → `&a用于枢纽 · 使魔 · 投喂`；L33/L35 保留 | **PASS · 勾销**（设计 `8ef2acb` · 批准 `a82321d` · 施工 `513bf8b` · 测 `4f628b5` · close 本提交） |
 | **B2.45** | 烬砧灰箍抢口文案（优先沉铁锭） | forge P 插主句；part A 插主句；part I 插旁句；消耗 ×12/×2 保留；**勿**改 part.yml | **PASS · 勾销**（设计 `ab67790` · 批准 `a040ce2` · 插件 `3066746` · 测 `d6768d9`/`c69bd4d` · close 本提交；报告 `docs/STATUS-ember-ash-brace-contention-copy-test.md`） |
 | **B-flex-4** | 踏步少开菜单热键（挑刺 #2） | 潜行+Q → cancel+cast；菜单口保留；**勿**改 CD14/距离5 | **PASS · 勾销**（设计 `a9311ac` · 批准 `7b4a8b6` · 插件 `005a03b` · 测 `a1d5f7c` · close `6b0ce3d`；报告 `docs/STATUS-ember-flex-hotkey-sneak-drop-test.md`；CoreRpg **1.15.28**） |
-| **B2.46** | 拆解菜单管理注释人话化 | `ember_disassemble.yml` L89→`§8点左侧即可分解或重铸`；零改拆解/重铸数值 | **已批 A**（设计 `50a272d` · 批准本提交；交插件） |
+| **B2.46** | 拆解菜单管理注释人话化 | L89→`§8点左侧即可分解或重铸`；零改拆解/重铸数值 | **PASS · 勾销**（设计 `50a272d` · 批准 `b2b2f7a` · 插件 `530c2f8` · 测 `89b1117` · close 本提交；报告 `docs/STATUS-ember-disassemble-rule-copy-test.md`） |
+| **B2.47** | 拆解菜单 Open tell 管理口吻 | Open tell 无「逻辑待 CoreRpg 接线」；人话持装提示保留；零改 scrap/reforge | **待交稿** |
 
 ---
 
@@ -410,7 +414,8 @@
 - ~~副手薄获取~~ → **B-flex-3 PASS · 勾销**（close 本提交）
 - ~~灰箍碎片抢口文案~~ → **B2.45 PASS · 勾销**（文案表）
 - ~~踏步热键~~ → **B-flex-4 PASS · 勾销**（潜行+Q）
-- ~~拆解管理注释~~ → **B2.46 已批 A**（交插件 · tip `docs/design-ember-disassemble-menu-admin-copy.md`）
+- ~~拆解管理注释~~ → **B2.46 PASS · 勾销**
+- 拆解 Open tell「逻辑待 CoreRpg 接线」→ 已升 **B2.47 待交稿**
 
 **明确未做/未清：** 四件甲 · 誓约主动大改 · 锻炉重做 · 位移+保命双上 · **勿宣称 B0.1 已清**
 
@@ -436,11 +441,11 @@
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close `ba47f3e`；CoreRpg **1.15.25**）；**B-flex-3** 副手薄获取 **PASS · 勾销**（close 本提交）；**B2.45** 灰箍抢口文案 **PASS · 勾销**；**B-flex-4** 踏步热键 **PASS · 勾销**（close `6b0ce3d` · CoreRpg **1.15.28**）；**B2.46** 拆解管理注释 **已批 A · 施工中**
+内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close `ba47f3e`；CoreRpg **1.15.25**）；**B-flex-3** 副手薄获取 **PASS · 勾销**（close 本提交）；**B2.45** 灰箍抢口文案 **PASS · 勾销**；**B-flex-4** 踏步热键 **PASS · 勾销**（close `6b0ce3d` · CoreRpg **1.15.28**）；**B2.46** 拆解管理注释 **PASS · 勾销**；**B2.47** 拆解 Open tell **待交稿**
 烬砧窗：    **B-anvil-1** 灰箍 **PASS · 勾销**（设计 `ab33c21` · 批准 `f10779b` · NI `57a6540` · 插件 `72281d9` · 测 `0ab09ef` · close 本提交；CoreRpg **1.15.26**）
 文案窗：**B2.18**～**B2.24** **PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 PASS · 勾销**；**B2.41 PASS · 勾销**；**B2.42 PASS · 勾销**；**B2.43 PASS · 勾销**；**B2.44 PASS · 勾销**；**B-flex-3 PASS · 勾销**；**B2.45 PASS · 勾销**（close 本提交）
 软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结；~~碎片 lore 裸 id~~ → B2.24 已结；~~骨尘 lore 裸 id~~ → B2.25 已结；~~核心碎片 lore 裸 id~~ → **B2.26 PASS · 勾销**（close `f796f3a`）；~~誓约重置券 lore 裸 id~~ → **B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 PASS · 勾销**；**B2.41 PASS · 勾销**；**B2.42 PASS · 勾销**；**B2.43 PASS · 勾销**；**B2.44 PASS · 勾销**；**B-flex-3 PASS · 勾销**；**B2.45 PASS · 勾销**（close 本提交）
-软观察：    ~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；~~B2.39 cinder~~ → PASS（pet 本轨归零）；~~B2.40 covenant_reset~~ → PASS；~~B2.41 talent_reset~~ → PASS；~~B2.42 ashling summon~~ → PASS；~~B2.43 cinder summon~~ → PASS；~~B2.44 soul_dust feed~~ → PASS（Items 玩家可见 `/corerpg` lore 本轨归零）；~~B-flex-3~~ → PASS；~~B2.45~~ → PASS；~~B-flex-4~~ → PASS（close `6b0ce3d`）；**B2.46** 拆解管理注释已批 A · 施工中**勿宣称 B0.1 已清**
+软观察：    ~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；~~B2.39 cinder~~ → PASS（pet 本轨归零）；~~B2.40 covenant_reset~~ → PASS；~~B2.41 talent_reset~~ → PASS；~~B2.42 ashling summon~~ → PASS；~~B2.43 cinder summon~~ → PASS；~~B2.44 soul_dust feed~~ → PASS（Items 玩家可见 `/corerpg` lore 本轨归零）；~~B-flex-3~~ → PASS；~~B2.45~~ → PASS；~~B-flex-4~~ → PASS（close `6b0ce3d`）；~~B2.46~~ → PASS；**B2.47** 拆解 Open tell 待交稿**勿宣称 B0.1 已清**
 策划挑选排除：刚结 B2.6–B2.44 / B-flex-1 / B-flex-2 / B-flex-3 / B-anvil-1；刚结 B2.45；刚结 B-flex-4；本窗做 B2.46（拆解管理注释 · 已批 A · 交插件）；其它 NI 厚批 mat 双上 / 精英壳；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上。
 ```
 
@@ -453,8 +458,8 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.24 等已结；**B2.18～B2.24 PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 PASS · 勾销**；**B2.41 PASS · 勾销**；**B2.42 PASS · 勾销**；**B2.43 PASS · 勾销**；**B2.44 PASS · 勾销**；**B-flex-3 PASS · 勾销**；**B2.45 PASS · 勾销**（close 本提交）
-- **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）；**B-flex-3** 副手薄获取 **PASS · 勾销**（close 本提交）；**B2.45** 灰箍抢口文案 **PASS · 勾销**；**B-flex-4** 踏步热键 **PASS · 勾销**（close `6b0ce3d` · CoreRpg **1.15.28**）；**B2.46** 拆解管理注释 **已批 A · 施工中**
+- **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）；**B-flex-3** 副手薄获取 **PASS · 勾销**（close 本提交）；**B2.45** 灰箍抢口文案 **PASS · 勾销**；**B-flex-4** 踏步热键 **PASS · 勾销**（close `6b0ce3d` · CoreRpg **1.15.28**）；**B2.46** 拆解管理注释 **PASS · 勾销**；**B2.47** 拆解 Open tell **待交稿**
 - **烬砧窗：** **B-anvil-1** 灰箍 **PASS · 勾销**（close `e39172f`；CoreRpg **1.15.26**）；灵活三窗已结
 - **文案窗：** **B2.18**～**B2.25** **PASS · 勾销**（B2.25 close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 PASS · 勾销**；**B2.41 PASS · 勾销**；**B2.42 PASS · 勾销**；**B2.43 PASS · 勾销**；**B2.44 PASS · 勾销**；**B-flex-3 PASS · 勾销**；**B2.45 PASS · 勾销**（close 本提交）
-- 软观察：~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；~~B2.39 cinder~~ → PASS（pet 本轨归零）；~~B2.40 covenant_reset~~ → PASS；~~B2.41 talent_reset~~ → PASS；~~B2.42 ashling summon~~ → PASS；~~B2.43 cinder summon~~ → PASS；~~B2.44 soul_dust feed~~ → PASS（Items 玩家可见 `/corerpg` lore 本轨归零）；~~B-flex-3~~ → PASS；~~B2.45~~ → PASS；~~B-flex-4~~ → PASS（close `6b0ce3d`）；**B2.46** 拆解管理注释已批 A · 施工中**勿宣称 B0.1 已清**
+- 软观察：~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；~~B2.39 cinder~~ → PASS（pet 本轨归零）；~~B2.40 covenant_reset~~ → PASS；~~B2.41 talent_reset~~ → PASS；~~B2.42 ashling summon~~ → PASS；~~B2.43 cinder summon~~ → PASS；~~B2.44 soul_dust feed~~ → PASS（Items 玩家可见 `/corerpg` lore 本轨归零）；~~B-flex-3~~ → PASS；~~B2.45~~ → PASS；~~B-flex-4~~ → PASS（close `6b0ce3d`）；~~B2.46~~ → PASS；**B2.47** 拆解 Open tell 待交稿**勿宣称 B0.1 已清**
 
