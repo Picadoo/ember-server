@@ -1,6 +1,6 @@
 # 设计稿 · hub AFK 入口注释功能摘要去斜杠（B2.53）
 
-> **STATUS：待批 A（总控 · 2026-09-29 05:24 Asia/Shanghai）。**
+> **STATUS：已批 A（总控 · 2026-09-29 05:25 Asia/Shanghai）。**
 > 本稿只定 TrMenu `ember_hub.yml` **actions 内 L188 注释** 1 行：去掉命令教学，改成功能摘要。
 > **本窗只处理维护者可见注释（非玩家 UI / 非 Open tell）；新句不写斜杠、不写 STATUS 路径。**
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批 A 后由专岗只改 hub L188 注释）。
@@ -16,7 +16,7 @@
 | 稿件 | hub AFK 入口注释去命令教学，改功能摘要（UX · B2.53） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 05:24 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_hub.yml` · B2.52 PASS 旁证 |
-| 状态 | **待批 A** · 交总控审批 |
+| 状态 | **已批 A** · 交插件 TrMenu |
 | tip 路径 | `docs/design-ember-hub-afk-comment-copy.md` |
 | 上游 | B2.52 close `55045e9` · shop 已清；升本窗收 hub L188 |
 
@@ -131,7 +131,7 @@ git diff -- plugins/TrMenu/menus/ember_hub.yml
 
 ## 7. 总控批示
 
-- [ ] **批 A** · 仅 `ember_hub.yml` L188 按上表荐案改功能摘要；actions / Icons / Open / 玩法零改
+- [x] **批 A** · 仅 `ember_hub.yml` L188 按上表荐案改功能摘要；actions / Icons / Open / 玩法零改
 - [ ] **驳回** · 说明
 
-**批示摘要：** 待批 A。只替换 hub L188 actions 注释；`menu: ember_afk`、Icons、Open 零改；NI 旁记不捆；禁长测/挑刺；勿宣称 B0.1。
+**批示摘要：** 批 A。仅 hub L188 改功能摘要；`menu: ember_afk`/Icons/Open 零改；NI 旁记不捆；禁长测/挑刺；勿宣称 B0.1。
