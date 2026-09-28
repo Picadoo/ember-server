@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 02:26 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-29 02:30 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.24** NI 余烬碎片 lore 裸 id · tip `docs/design-ember-mat-shard-ni-lore-copy.md` · **待批 A**（荐删 `ember-dungeon.yml` L9；其它 8 件 `&7mat_*` / `/corerpg` 斜杠 soft；精英壳勿硬开）；**勿宣称 B0.1 已清**。
+- 文案薄窗：**B2.25** 下一件 NI `&7mat_*` lore（荐骨尘 `mat_ember_bone_dust`；策划交稿待批）；其余 mat / `/corerpg` 斜杠 soft；精英壳勿硬开；**勿宣称 B0.1 已清**。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
+- ~~**B2.24 NI 余烬碎片 lore 裸 id**~~ → **PASS · 勾销**（设计 `9931476` · 批准 `60f43b7` · 施工 `e004458` · 测 `f004152` · close 本提交；报告 `docs/STATUS-ember-mat-shard-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.25**；斜杠仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.23 NI 重铸石 lore 去斜杠**~~ → **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close `7da4dbf`；报告 `docs/STATUS-ember-reforge-ni-slash-copy-test.md`；其它 `&7mat_*` 已升 **B2.24**；斜杠仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.22 NI 重铸石 lore 裸 id**~~ → **PASS · 勾销**（设计 `115ebab` · 批准 `7724338` · 施工 `b24510c` · 测 `eff6037` · close `48647e0`；报告 `docs/STATUS-ember-reforge-ni-lore-copy-test.md`；斜杠已升 **B2.23**；其它 `&7mat_*` 仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.21 CoreRpg 重铸缺料 chat**~~ → **PASS · 勾销**（设计 `e81c904` · 批准 `92d6ee3` · 施工 `16b5334` · 测 `5b255e9` · close `79f5d7e`；报告 `docs/STATUS-ember-reforge-need-copy-test.md`；CoreRpg **1.15.27**；NI lore 已升 **B2.22**；**勿宣称 B0.1 已清**）
@@ -112,7 +113,8 @@
 - ~~**B2.21** CoreRpg 重铸缺料 chat~~ → **PASS · 勾销**（设计 `e81c904` · 批准 `92d6ee3` · 施工 `16b5334` · 测 `5b255e9` · close `79f5d7e`；CoreRpg **1.15.27**；NI lore 已升 **B2.22**）
 - ~~**B2.22** NI 重铸石 lore 裸 id~~ → **PASS · 勾销**（设计 `115ebab` · 批准 `7724338` · 施工 `b24510c` · 测 `eff6037` · close `48647e0`；斜杠已升 **B2.23**）
 - ~~**B2.23** NI 重铸石 lore 去斜杠~~ → **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close `7da4dbf`；其它 `&7mat_*` 已升 **B2.24**）
-- **B2.24** NI 余烬碎片 lore 裸 id · tip `docs/design-ember-mat-shard-ni-lore-copy.md` · **待批 A**（荐删 `ember-dungeon.yml` L9；其余 8 件 `&7mat_*` / 其它 `/corerpg` 斜杠 soft；精英壳勿硬开；**勿宣称 B0.1 已清**）
+- ~~**B2.24** NI 余烬碎片 lore 裸 id~~ → **PASS · 勾销**（设计 `9931476` · 批准 `60f43b7` · 施工 `e004458` · 测 `f004152` · close 本提交；报告 `docs/STATUS-ember-mat-shard-ni-lore-copy-test.md`；其余 `&7mat_*` 已升 **B2.25**）
+- **B2.25** 下一件 NI `&7mat_*` lore（荐 `mat_ember_bone_dust`；单件薄窗；其余 mat / `/corerpg` 斜杠 soft；精英壳勿硬开；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
