@@ -20,7 +20,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-1-0.7'
-    - 'tell: §7请先选定誓约。点击节点解锁；二层需先点满一层顶（*_cap）。'
+    - 'tell: §7请先选定誓约。点击节点解锁；二层需先点满一层顶（燎原 / 烟幕 / 永护）。'
 
 Icons:
   '#':
@@ -61,13 +61,13 @@ Icons:
         - ''
         - '§7每誓约一棵树 · 一层 20 点（Lv.30）'
         - '§7二层 +10 · 合计 30 点（Lv.60）'
-        - '§7二层需先点满一层顶（*_cap）'
+        - '§7二层需先点满一层顶（燎原 / 烟幕 / 永护）'
         - '§7点击下方节点即可解锁'
         - ''
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[天赋] §7点击节点解锁；二层需先点满 §f*_cap§7。'
+        - 'tell: §d[天赋] §7点击节点解锁；二层需先点满一层顶 §f燎原 / 烟幕 / 永护§7。'
         - 'tell: §8硬顶 30 点 · Lv.60 满二层'
 
   Z:
@@ -163,14 +163,14 @@ Icons:
         - '§71. §f先选誓约再点天赋'
         - '§72. §f等级供给点数 · 硬顶 30（Lv.60）'
         - '§73. §f一层 20 点（Lv.30）· 二层 +10'
-        - '§74. §f二层需先点满一层顶（*_cap）'
+        - '§74. §f二层需先点满一层顶（燎原 / 烟幕 / 永护）'
         - '§75. §f洗点日免 1 · 额外 25 晶钻'
         - '§76. §f洗约清空天赋'
         - ''
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[天赋] §7先誓约 → 再点击节点解锁；二层需 *_cap；日免洗 1 次。'
+        - 'tell: §d[天赋] §7先誓约 → 再点击节点解锁；二层需一层顶（燎原 / 烟幕 / 永护）；日免洗 1 次。'
 
   # —— 二层 · 烬刃 ——
   a:
@@ -181,7 +181,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 3'
         - '§8nodeId: blaze_ember2'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「燎原」'
         - '§7phys_damage +1'
         - ''
         - ''
@@ -199,7 +199,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 3'
         - '§8nodeId: blaze_heat2'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「燎原」'
         - '§8前置：blaze_ember2'
         - '§7crit_damage_pct +0.03'
         - ''
@@ -218,7 +218,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 4'
         - '§8nodeId: blaze_second'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「燎原」'
         - '§8前置：blaze_ember2'
         - '§7crit_chance_pct +0.005 · phys_damage +1'
         - ''
@@ -238,7 +238,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 3'
         - '§8nodeId: ash_veil2'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「烟幕」'
         - '§7move_speed_pct +0.01'
         - ''
         - ''
@@ -256,7 +256,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 3'
         - '§8nodeId: ash_dust2'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「烟幕」'
         - '§8前置：ash_veil2'
         - '§7attack_speed_pct +0.01'
         - ''
@@ -275,7 +275,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 4'
         - '§8nodeId: ash_shroud'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「烟幕」'
         - '§8前置：ash_veil2'
         - '§7on_hit_slow_pct +0.03 · attack_speed_pct +0.01'
         - ''
@@ -295,7 +295,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 3'
         - '§8nodeId: warden_bulwark2'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「永护」'
         - '§7damage_taken_pct -0.01'
         - ''
         - ''
@@ -313,7 +313,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 3'
         - '§8nodeId: warden_aegis2'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「永护」'
         - '§8前置：warden_bulwark2'
         - '§7max_health +2'
         - ''
@@ -332,7 +332,7 @@ Icons:
         - ''
         - '§7二层 · passive · cost 4'
         - '§8nodeId: warden_vow2'
-        - '§e先点满一层顶（*_cap）'
+        - '§e先点满一层顶「永护」'
         - '§8前置：warden_bulwark2'
         - '§7phys_defense +1 · damage_taken_pct -0.01'
         - ''
