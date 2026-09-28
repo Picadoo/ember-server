@@ -1,6 +1,6 @@
 # 设计稿 · 踏步少开菜单热键（B-flex-4）
 
-> **STATUS：待批 A。** 本稿只定「装配余烬踏步后，战斗里少开菜单也能释放」的**额外释放入口**（热键/快捷愿望）。  
+> **STATUS：已批 A（总控 · 2026-09-29 04:35 Asia/Shanghai）。** 本稿只定「装配余烬踏步后，战斗里少开菜单也能释放」的**额外释放入口**（热键/快捷愿望）。  
 > **本窗 commit 只写 docs；玩法 / skills.yml / TrMenu YAML 零改。**  
 > **禁**动踏步 CD/数值、誓约三主动、位移+保命双上、四件甲、锻炉重做、体力日周门；禁长测/挑刺；**勿宣称 B0.1 已清**。  
 > disassemble 管理注释、精英壳 **不捆**本窗。  
@@ -15,7 +15,7 @@
 | 稿件 | 踏步 · **少开菜单热键**（B-flex-4） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:32 Asia/Shanghai |
 | 关联 | TrMenu `ember_flex_skill.yml` / `ember_hub.yml` · CoreRpg `FlexSkillService` / `skills.yml` · 挑刺 `STATUS-ember-flex-trilogy-picky.md` #2 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** · 交插件 CoreRpg + 可选 TrMenu lore |
 | tip 路径 | `docs/design-ember-flex-step-hotkey.md` |
 | 上游 | B-flex-2 PASS · B2.45 close `7dc96c9` · 挑刺 tip `43bf843` 域 |
 
@@ -181,3 +181,12 @@
 | STATUS | **待批 A** |
 | 荐案 | CoreRpg · **潜行+Q** 代理释放（候选 3） |
 | 本窗 | docs only · 玩法 YAML **零改** · **勿 push** |
+
+---
+
+## 11. 总控批示
+
+- [x] **批 A** · 候选 3（潜行+Q / `PlayerDropItemEvent`）（总控 · tip 本提交）
+- [ ] **驳回** · 说明
+
+**批示摘要：** 采纳「潜行+Q」代理释放；**勿**裸 F/裸 Q/快捷栏符；**勿**改 `skills.yml` CD14/距离5；菜单装配/释放保留。交 **余烬-插件**：`FlexSkillService` implements Listener + Drop 事件 + `registerEvents`；可选 TrMenu lore 半行；config `flex.hotkey` 荐有非硬。禁长测/挑刺；勿宣称 B0.1 已清。验收：静态 rg + 按键/菜单轻测（禁 wall-clock/DPS）。

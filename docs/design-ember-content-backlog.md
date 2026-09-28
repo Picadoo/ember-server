@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 04:33 Asia/Shanghai (总控 · B-flex-4 tip 交稿 · 待批 A)
+## Progress snapshot — 2026-09-29 04:35 Asia/Shanghai (总控 · B-flex-4 已批 A · 交插件 潜行+Q)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -385,7 +385,7 @@
 | ~~**B2.43**~~ | NI 余烬烬火物品 lore summon 斜杠去指令化 | L22 → `&7用于枢纽 · 使魔`；L20/L21 保留 | **PASS · 勾销**（设计 `e8d3704` · 批准 `2d2fcf8` · 施工 `94ad273` · 测 `3c30405` · close `7a00524`） |
 | ~~**B2.44**~~ | NI 余烬魂尘物品 lore feed 斜杠去指令化 | L34 → `&a用于枢纽 · 使魔 · 投喂`；L33/L35 保留 | **PASS · 勾销**（设计 `8ef2acb` · 批准 `a82321d` · 施工 `513bf8b` · 测 `4f628b5` · close 本提交） |
 | **B2.45** | 烬砧灰箍抢口文案（优先沉铁锭） | forge P 插主句；part A 插主句；part I 插旁句；消耗 ×12/×2 保留；**勿**改 part.yml | **PASS · 勾销**（设计 `ab67790` · 批准 `a040ce2` · 插件 `3066746` · 测 `d6768d9`/`c69bd4d` · close 本提交；报告 `docs/STATUS-ember-ash-brace-contention-copy-test.md`） |
-| **B-flex-4** | 踏步少开菜单热键（挑刺 #2） | 装配踏步后少开菜单释放（荐 CoreRpg 潜行+Q）；**勿**技能数值大改、位移+保命双上、四件甲、锻炉重做；禁长测/挑刺 | **待批 A**（tip `docs/design-ember-flex-step-hotkey.md`） |
+| **B-flex-4** | 踏步少开菜单热键（挑刺 #2） | 潜行+Q → cancel+cast；菜单口保留；**勿**改 CD14/距离5；勿裸 F/快捷栏符 | **已批 A**（设计 `a9311ac` · 批准本提交；交插件） |
 
 ---
 
