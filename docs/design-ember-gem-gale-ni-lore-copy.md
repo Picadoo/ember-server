@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬疾风石 lore 裸 id 人话对齐（B2.36）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_gale` **1** 行 lore 灰字裸 id；获批后由物品岗改 NI Items YAML。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-gem-gale-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_gale` **1** 行 lore 灰字裸 id；批后由物品岗改 NI Items YAML。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
 >
 > B2.35 已 **PASS · 勾销**（设计 `c9cdb28` · 批准 `bf3bf4b` · 施工 `1ef8a41` · 测 `9b2333f` · close `bab3b39`）。当前 `&7gem_*` 有 **1** 件（疾风石）；本窗只处理疾风石，批准并施工后预期 Items 下 `&7gem_*` **归零**，仅表示 gem 本轨收口，不宣称斜杠、cosmetic、pet 或其它 soft 已清。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 余烬疾风石 · **玩家可见 lore 裸 id `gem_ember_gale` 对齐**（UX · B2.36） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:25 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 | live `plugins/NeigeItems/Items/ember-enhance-gems.yml` · B2.35 汲取石 PASS 后 gem 轨最后单件薄窗 |
 | 专岗 | **物品**；验收 **`rg` + 悬停** |
 
@@ -50,7 +50,7 @@ gem_ember_gale:
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **待批 A；批后交物品岗施工** |
+| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **已批 A；交物品岗施工** |
 | A′ | 改为灰字「疾风石」 | 不荐：与显示名重复 |
 | B | 顺手处理斜杠、cosmetic/pet 或精英壳 | **仅作 soft，勿双上** |
 
