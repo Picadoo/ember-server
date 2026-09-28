@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 08:30 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 08:38 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 焦骨房2链式重叠扩线：**已批**，插件施工中（`design-ember-daily-ash-room2.md`）
+- （额度内续推）地窖等剩余线第二房杠杆（待设计）
 
 ### 刚结
-- **日常第二房/Boss前压试点**（庭院·潮蚀·断塔）：**PASS**（`3459d53` · 测报本 commit）
+- **焦骨房2链式重叠**：**PASS**（`2ad874e` · 测报本 commit）
+- **日常第二房/Boss前压试点**（庭院·潮蚀·断塔）：**PASS**（`3459d53` / 测 `cce784b`）
 - **日常软债 · 奖励预览真分页**：**PASS**（`ember_daily_rewards` · `4517021` / 测 `6e2abc6`）
 - 锈轨真侧袭 + enter 冷却 chat **PASS**（CoreRpg 1.15.21）
 - 日常体验收口挑刺：**无挡级必改**（`STATUS-ember-daily-ux-closeout-review.md`）
