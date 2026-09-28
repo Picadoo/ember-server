@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `da31d54` · 设计 `0da490f` · 批准 `8e57a22` · tip `docs/design-ember-ni-disassemble-header-copy.md`  
 **口径：** 纯静态 · 禁开服测 · 禁长测/挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS** · STATUS 已 push (`aacfa31`)
+**Verdict：** ✅ **PASS** · STATUS 已 push (`c642e4f`)
 
 ---
 
@@ -93,7 +93,7 @@ plugins/NeigeItems/Items/ember-disassemble.yml | 2 +-
 | 总评 | **PASS** |
 | 各点 | 1 PASS · 2 PASS · 3 PASS |
 | 施工 tip SHA | `da31d54` |
-| 测报 tip short SHA | `aacfa31` |
+| 测报 tip short SHA | `c642e4f` |
 | 是否已 push | **是** |
 | 报告路径 | `docs/STATUS-ember-ni-disassemble-header-copy-test.md` |
 | ops | `[]` |
