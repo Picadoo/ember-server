@@ -13,7 +13,7 @@
 
 ## 一句话
 
-**PASS：** `ember_talent` 类型 lore 已无 `passive`/`skill`：根×3「被动 · cost 2」、烬斩「主动技 · cost 4」（无 skill）、二层×9「被动 · cost 3|4」；cost 数字原样；方案 B（cost→消耗）未做；相对施工 tip 仅目标菜单十三行 + 施工 STATUS；`talent.yml` / unlock 实参 / 其它菜单 **零 diff**；枢纽→天赋冒烟绿；**ops=[]**；本 commit **未 push**（交总控代推若本岗 push 失败）。**不**宣称 B0.1 已清。
+**PASS：** `ember_talent` 类型 lore 已无 `passive`/`skill`：根×3「被动 · cost 2」、烬斩「主动技 · cost 4」（无 skill）、二层×9「被动 · cost 3|4」；cost 数字原样；方案 B（cost→消耗）未做；相对施工 tip 仅目标菜单十三行 + 施工 STATUS；`talent.yml` / unlock 实参 / 其它菜单 **零 diff**；枢纽→天赋冒烟绿；**ops=[]**；本 commit **已 push** `e342990`。**不**宣称 B0.1 已清。
 
 ---
 
