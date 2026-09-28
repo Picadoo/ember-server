@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬烬火 lore summon 去斜杠（B2.43）
 
-> **STATUS：待批 A。** 本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-pets.yml` 内 `pet_ember_cinder` **1** 行 lore summon 斜杠句的人话替换；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-pet-cinder-ni-slash-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-pets.yml` 内 `pet_ember_cinder` **1** 行 lore summon 斜杠句的人话替换；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。
 > 债源：B2.42 **PASS · 勾销** close `ef6ff87`（测 `d855ce3` · 施工 `1dbcb88`；设计 tip `696c80c` · 批准 `48dc3d1`）。B2.43 同轨 cinder summon 单件薄窗。
 > 对齐：B2.42 灰灵「用于枢纽 · 使魔」；同构 B2.40 誓约 / B2.41 天赋枢纽短句。**未批准前不改 NI Items YAML。**
 > 排除本轮：`pet_ember_ashling`（B2.42 已清 · 禁回改）；`mat_ember_soul_dust` feed；talent/covenant 已清项；其它 NI `/corerpg` 斜杠；其它 `&7mat_*` / `&7pet_*` / `&7gem_*` / `&7cosmetic_*` 批扫；精英预览壳；数值 / 配方 / 给物 / 掉落 / 体力；B0.1；git push。**勿宣称其它斜杠或 B0.1 已清。**
@@ -14,7 +14,7 @@
 | 稿件 | NI `pet_ember_cinder` · **玩家可见 lore `/corerpg pet summon` → 枢纽人话**（UX · B2.43） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:03 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-pets.yml` · B2.42 close 后升窗 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.43** · 批后另开施工 / 测报 |
 
 ### 硬约束（本稿）
@@ -143,7 +143,7 @@ rg -n "/corerpg" plugins/NeigeItems/Items/
 
 - 新号：**B2.43**（B2 文案可维护轨 · 单件物品 · 与 B-flex / B-anvil **不捆**）
 - B2.42 **PASS · 勾销**保持：close `ef6ff87`（测 `d855ce3` · 施工 `1dbcb88`；设计 `696c80c` · 批准 `48dc3d1`）；ashling summon 斜杠本轨已清
-- B2.43：`pet_ember_cinder` L22 `/corerpg pet summon` → **待批 A**；荐 `&7用于枢纽 · 使魔`；soul_dust feed / 其它斜杠仍 soft；**勿宣称 B0.1 已清**
+- B2.43：`pet_ember_cinder` L22 `/corerpg pet summon` → **已批 A**；荐 `&7用于枢纽 · 使魔`；soul_dust feed / 其它斜杠仍 soft；**勿宣称 B0.1 已清**
 
 ---
 
