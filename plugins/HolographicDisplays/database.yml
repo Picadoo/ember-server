@@ -2,7 +2,7 @@ ember_ladder_power:
   location: world, -43.500, 68.200, 265.500
   lines:
   - '&6余烬 · 战力天梯'
-  - '&7展示分 power_score · 不乘伤害'
+  - '&7展示分 · 不乘伤害'
   - '&e1. &fElB182437 &7- &b257'
   - '&e2. &fElC444c &7- &b257'
   - '&e3. &fElD184540 &7- &b257'
@@ -13,7 +13,7 @@ ember_ladder_power:
   - '&78. &fElB182262 &7- &7254'
   - '&79. &fAtk2_4288 &7- &7225'
   - '&710. &fAtk43_5102 &7- &7225'
-  - '&8周结算：外观称号 only'
+  - '&8周结算：外观称号'
 ember_ladder_abyss:
   location: world, -39.500, 68.200, 265.500
   lines:
@@ -24,21 +24,21 @@ ember_ladder_abyss:
   - '&e3. &fAtk2_4288 &7- &d12层'
   - '&74. &fAtk43_5102 &7- &712层'
   - '&75. &fAtk43b_8302 &7- &712层'
-  - '&8对齐 EmberAbyss · 周结算外观'
+  - '&8对齐深渊层数 · 周结算外观'
 ember_ladder_speed:
   location: world, -35.500, 68.200, 265.500
   lines:
   - '&c余烬 · 竞速天梯'
-  - '&7EmberWeekly 通关用时'
+  - '&7周本通关用时'
   - '&e1. &fRpgBot &7- &a95s'
   - '&e2. &f--- &7- &a-'
   - '&e3. &f--- &7- &a-'
   - '&74. &f--- &7- &7-'
   - '&75. &f--- &7- &7-'
-  - '&8周结算：外观 only · 禁核心'
+  - '&8周结算：外观 · 禁核心'
 ember_afk_hub:
   location: ember_afk, -46.700, 70.000, 250.362
   lines:
-  - '&6挂机庭 &7| Ember AFK'
-  - '&a碎片·骨尘 &8MM→NI'
-  - '&7EmberAfkZombie / EmberAfkSkeleton'
+  - '&6挂机庭'
+  - '&a掉落：碎片 · 骨尘'
+  - '&7打僵尸拿碎片 · 打骷髅拿骨尘'

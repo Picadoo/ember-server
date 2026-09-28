@@ -21,7 +21,7 @@ Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §e[天梯] §7战力 · 深渊层数 · 周本竞速。周结算只发外观。'
-    - 'tell: §8全息板在挂机点附近 §f-40 70 265 §8一带（power/abyss/speed）。'
+    - 'tell: §8全息板在挂机庭附近 · 战力 / 深渊 / 竞速三块'
 
 Icons:
   '#':
@@ -61,15 +61,14 @@ Icons:
       name: '§7全息榜说明'
       lore:
         - ''
-        - '§7大厅战力 / 深渊 / 竞速全息'
-        - '§7位置：主世界 §f-44/-40/-36 · 67 · 265'
-        - '§8每分钟自动刷新'
+        - '§7挂机庭西侧三块全息（战力·深渊·竞速）· 每分钟刷新'
+        - '§8位置：主世界 §f-44/-40/-36 · 67 · 265'
         - ''
         - '§7➥ §f聊天提示路径'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §7[天梯·全息] §f主世界 -44/-40/-36 67 265 §7· 每分钟自动刷新'
+        - 'tell: §7[天梯·全息] §f挂机庭西侧三块全息（战力·深渊·竞速）§7 · 每分钟刷新'
 
   P:
     display:
@@ -77,11 +76,11 @@ Icons:
       name: '§b战力榜'
       lore:
         - ''
-        - '§7按 power_score 排名'
+        - '§7按展示分排名'
         - '§8展示分 · 不乘伤害公式'
         - '§8周结算：外观称号'
         - ''
-        - '§8全息：ember_ladder_power'
+        - '§8全息：战力榜'
         - '§7榜首：§f%ember_ladder_power_1_name% §7(%ember_ladder_power_1_value%)'
         - ''
         - '§b➥ §f查看说明'
@@ -89,8 +88,8 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg ladder power'
-        - 'tell: §8全息板 §fember_ladder_power §8@ §f-44 67 265 §8（挂机区）'
-        - 'tell: §7展示分 only · 不乘伤害 · 周结算外观称号'
+        - 'tell: §8挂机庭全息 · 战力'
+        - 'tell: §7展示分 · 不乘伤害 · 周结算外观称号'
 
   A:
     display:
@@ -99,10 +98,10 @@ Icons:
       lore:
         - ''
         - '§7本周 / 历史最高层'
-        - '§8对齐 EmberAbyss'
+        - '§8对齐深渊层数'
         - '§8周结算：外观'
         - ''
-        - '§8全息：ember_ladder_abyss'
+        - '§8全息：深渊榜'
         - '§7榜首：§f%ember_ladder_abyss_1_name% §7(%ember_ladder_abyss_1_value%层)'
         - ''
         - '§5➥ §f查看说明'
@@ -110,8 +109,8 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg ladder abyss'
-        - 'tell: §8层数越高越靠前 · 周结算外观 · 对齐 EmberAbyss'
-        - 'tell: §8全息板 §fember_ladder_abyss §8@ §f-40 67 265 §8（挂机区）'
+        - 'tell: §8层数越高越靠前 · 周结算外观 · 对齐深渊层数'
+        - 'tell: §8挂机庭全息 · 深渊'
 
   S:
     display:
@@ -119,11 +118,11 @@ Icons:
       name: '§c周本竞速榜'
       lore:
         - ''
-        - '§7EmberWeekly 通关秒数'
+        - '§7周本通关秒数'
         - '§8越低越好'
         - '§8周结算：外观'
         - ''
-        - '§8全息：ember_ladder_speed'
+        - '§8全息：竞速榜'
         - '§7榜首：§f%ember_ladder_speed_1_name% §7(%ember_ladder_speed_1_value%s)'
         - ''
         - '§c➥ §f查看说明'
@@ -132,4 +131,4 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg ladder speed'
         - 'tell: §8用时（秒）越低排名越高 · 只奖外观 · 禁核心'
-        - 'tell: §8全息板 §fember_ladder_speed §8@ §f-36 67 265 §8（挂机区）'
+        - 'tell: §8挂机庭全息 · 竞速'
