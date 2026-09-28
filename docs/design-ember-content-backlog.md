@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 21:51 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 21:58 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **挂机二档菜单 UX 对齐（非改数）**：已批 **A**（`design-ember-afk-ux-tier2-menu.md` · tip `27ad2f9`）· 待插件 TrMenu
+- ~~**挂机二档菜单 UX 对齐（非改数）**~~ → **PASS · 勾销**（施工 `0deda12` · 测 `f0ce1fd` · TrMenu 双软顶 lore）
 
 ### 刚结
+- **挂机二档菜单 UX 对齐**：**PASS · 勾销**（施工 `0deda12` · 测 `f0ce1fd` · 枢纽/规则双软顶 · over_chance* 未动）
 - **B0.4 / B2.5 挂机二档施工+短样**：**PASS · 勾销**（施工 `5301556` · 测 `99898cc` · CoreRpg **1.15.22** · 一档 0.25 / 二档 0.08 @≥2×cap · 短样 0.263/0.080 · 外推 ~3.3×→~2.4× · **不宣称封死通胀** · 禁墙钟 2h）
 - **B0.4 / B2.5 挂机二档定稿设计**：已批 **A**（`design-ember-afk-b04-tier2.md` · `over_chance_2=0.08` @≥2×cap · 短样外推验收）
 - **B0.4 挂机 2h 产出基线 A2**：**PASS · 计算外推**（`STATUS-ember-afk-b04-2h-baseline.md` · tip `09aa341` · 用户否决墙钟 2h · 短样→表 · **未改** `over_chance`）
