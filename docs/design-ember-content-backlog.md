@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 11:08 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 11:12 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -9,7 +9,7 @@
 - **同服多世界**：已有 Multiverse-Core(+Portals) + DP 实例图；**禁止一图一服**。
 
 ### 已结（近期）
-- **S0 体力账户/进本扣**：PASS（PAPI parse 软债）
+- **S0 体力账户/进本扣**：PASS（PAPI parse 软债已勾销）
 - **S1 余烬窟·庭院**：门2→Boss **PASS**（`87e71a8`）
 - **S2 焦骨甬道 / 残誓地窖**：设计→怪→图→DP/菜单→独立验收 **PASS**（测报 `0a8dbdd`）
 - **S3 潮蚀水道 / 断塔回廊**：设计→怪→图→DP/菜单→独立验收 **PASS**（`ae0ecd4` · 测报待推 · CoreRpg 1.15.17）
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- PAPI 体力 parse 冒烟软债复测（S0 尾巴）
+- 周本深室→Boss 是否前压：策划薄评估
 
 ### 刚结
+- **PAPI 体力 parse 软债**：**勾销**（`STATUS-ember-papi-stamina-parse-retest.md` · 在线自解析 12 stub PASS）
 - **精英厅二链式评估**：已批 **B 不施工**（`design-ember-elite-hall2-chain.md`）
 - **B2.2 断塔 wave2b 坐标同步**（`55d1b58` · 对齐防坠落地）
 - **断塔环廊防坠方案 A**：**PASS**（施工 `29fb133` / 测 `870aba0` · 近阶偶发掉底厅软观察不挡）

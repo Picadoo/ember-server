@@ -4,7 +4,7 @@
 **岗：** 余烬-插件岗执行器  
 **依据：** `docs/design-ember-stamina-dnf-daily.md` §A；派工 · S0 优先  
 **CoreRpg 版本：** **1.15.12**（已部署 play：`plugins/CoreRpg.jar`）  
-**Verdict：** **✅ S0 冒烟结案 PASS**（功能项全绿；`papi parse` 冒烟软债务，见下）  
+**Verdict：** **✅ S0 冒烟结案 PASS**（功能项全绿；`papi parse` 软债已于 2026-09-28 复测勾销，见 `STATUS-ember-papi-stamina-parse-retest.md`）  
 **S1：** **未开**（总控：等 S0 结案后再开）
 
 ---
@@ -27,9 +27,9 @@
 | convert API | ✅ PASS | 无旧票时提示「没有可兑换的旧票」 |
 | 进本失败退还（代码） | ✅ PASS | `TicketEntryService.refundEnter` 已接线（冒烟未造 start-console=false） |
 | `ops.json` 终态 | ✅ **`[]`** | 测后 `/deop RpgBot` + 写空 |
-| PAPI `%corerpg_stamina%` 等 | 📎 **软债务** | Expansion **已注册**（见下）；冒烟用 OP `/papi parse <名>` 报 `Failed to find player`（时机/解析脚本问题，非缺占位） |
+| PAPI `%corerpg_stamina%` 等 | ✅ **已勾销** | Expansion 注册；在线玩家自解析 12 stub PASS（`STATUS-ember-papi-stamina-parse-retest.md` · tip `114b7bc`）。跨玩家逐名 parse 仍可能 Failed-to-find-player，属测法脚本债，非产品缺占位。 |
 
-**总判：** 功能冒烟 **PASS**；PAPI 记「注册 OK，parse 冒烟软债务」。
+**总判：** 功能冒烟 **PASS**；PAPI parse 软债 **已勾销**（菜单/进本基线仍采信 S0）。
 
 ---
 
@@ -76,6 +76,6 @@
 
 - **版本：** CoreRpg **1.15.12**  
 - **STATUS：** `docs/STATUS-ember-stamina-s0.md`  
-- **冒烟：** **PASS**（进本扣/拒/周首免/二次 45/convert/ops=[]）；PAPI parse 冒烟 **软债务**（Expansion 已注册）  
+- **冒烟：** **PASS**（进本扣/拒/周首免/二次 45/convert/ops=[]）；PAPI parse **已勾销**（2026-09-28 复测）  
 - **S1：** 未开  
 - **ops.json：** `[]`
