@@ -1,6 +1,6 @@
 # 设计稿 · 奖励预览页 `§8NI id:` 人话对齐（B2.18）
 
-> **STATUS：待批 · 未批准前不施工。** 本稿只定 **玩家可见** 五入口奖励预览 TrMenu 里灰字裸 NI id 的薄清；**禁**改 loot / DP / MM / 体力 cost / 掉率 / 套装数值 / NI 物品文件。  
+> **STATUS：已批 A · 待插件施工。** 本稿只定 **玩家可见** 五入口奖励预览 TrMenu 里灰字裸 NI id 的薄清；**禁**改 loot / DP / MM / 体力 cost / 掉率 / 套装数值 / NI 物品文件。  
 > 债源：backlog 软观察「奖励页 NI id / 套装 `gear_ember_*` 未宣称已清」；B2.15～B2.17 旁扫反复点名；总控本派单例举为合法薄方向。  
 > 对齐：`design-ember-daily-reward-preview.md` 等五入口真分页已结 · UX「文案短清楚 · TrMenu 点击 · NI ID（逻辑侧保留）」。  
 > 排除本轮：刚结 B2.6–B2.17 / B-flex-1/2 / B-anvil-1；精英预览厚壳（hub 一点进本、无 P/无独立菜单 → 证据不足勿硬开）；五入口空壳 tell→真页（已结）；非日常体力灰显；挂机 over_chance*；B1.3；墙钟/DPS；霜锈前压；断塔无证据升 B；B0.1 除非新证据；四件甲/锻炉重做/誓约大改；位移+保命双上；灰箍+骨饰双上；挑刺里程碑。**勿宣称 B0.1 已清。**
@@ -14,7 +14,7 @@
 | 稿件 | 奖励预览 TrMenu · **玩家可见 `§8NI id:` / `§8NI:` 灰字对齐**（UX · B2.18） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 01:34 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_{daily,weekly,raid,abyss,calamity}_rewards.yml` · 软观察 backlog |
-| 状态 | **待批 · 未批准前不施工** |
+| 状态 | **已批 A · 待插件** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.18** · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
