@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬魂尘 lore feed 去斜杠（B2.44）
 
-> **STATUS：待批 A。** 本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-pets.yml` 内 `mat_ember_soul_dust` **1** 行 lore feed 斜杠句的人话替换；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-soul-dust-ni-slash-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-pets.yml` 内 `mat_ember_soul_dust` **1** 行 lore feed 斜杠句的人话替换；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。
 > 债源：B2.43 **PASS · 勾销** close `7a00524`（测 `3c30405` · 施工 `94ad273`；设计 tip `e8d3704` · 批准 `2d2fcf8`）。总控声明：pet summon 玩家可见斜杠本轨已清；剩 feed。
 > 对齐：B2.42/B2.43「用于枢纽 · 使魔」；本窗因 feed 动作比 summon 更需叠功能名，荐叠「· 投喂」并 **保留 `&a`**。同构 B2.40 誓约 / B2.41 天赋枢纽短句骨架。**未批准前不改 NI Items YAML。**
 > 排除本轮：`pet_ember_ashling` / `pet_ember_cinder`（B2.42/B2.43 已清 · 禁回改）；`ember-disassemble.yml` 文件头管理注释（非玩家可见 lore · 本窗不推）；talent/covenant 已清项；其它 NI `/corerpg` 斜杠；其它 `&7mat_*` / `&7pet_*` / `&7gem_*` / `&7cosmetic_*` 批扫；精英预览壳；数值 / 配方 / 给物 / 掉落 / 体力；B0.1；git push。**勿宣称其它斜杠或 B0.1 已清。**
@@ -14,7 +14,7 @@
 | 稿件 | NI `mat_ember_soul_dust` · **玩家可见 lore `/corerpg pet feed` → 枢纽人话**（UX · B2.44） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:08 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-pets.yml` · B2.43 close 后升窗 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.44** · 批后另开施工 / 测报 |
 
 ### 硬约束（本稿）
@@ -150,7 +150,7 @@ rg -n "/corerpg" plugins/NeigeItems/Items/
 
 - 新号：**B2.44**（B2 文案可维护轨 · 单件物品 · 与 B-flex / B-anvil **不捆**）
 - B2.43 **PASS · 勾销**保持：close `7a00524`（测 `3c30405` · 施工 `94ad273`；设计 `e8d3704` · 批准 `2d2fcf8`）；pet summon 玩家可见斜杠本轨已清
-- B2.44：`mat_ember_soul_dust` L34 `/corerpg pet feed` → **待批 A**；荐 `&a用于枢纽 · 使魔 · 投喂`；disassemble 管理注释 / 其它斜杠仍 soft；**勿宣称 B0.1 已清**
+- B2.44：`mat_ember_soul_dust` L34 `/corerpg pet feed` → **已批 A**；荐 `&a用于枢纽 · 使魔 · 投喂`；disassemble 管理注释 / 其它斜杠仍 soft；**勿宣称 B0.1 已清**
 
 ---
 
