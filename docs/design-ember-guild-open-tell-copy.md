@@ -1,6 +1,6 @@
 # 设计稿 · 公会菜单 Open tell 管理口吻（B2.48）
 
-> **STATUS：待批 A（策划交稿 · 2026-09-29 04:58 Asia/Shanghai）。**  
+> **STATUS：已批 A（总控 · 2026-09-29 04:59 Asia/Shanghai）。**  
 > 本稿只定 TrMenu `ember_guild.yml` **Open Events tell** **1** 句：去掉「逻辑待 CoreRpg 接线」管理口吻，保留「创建公会 · 日捐盟课 · 周盟 Boss」人话提示。  
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批后由专岗改 TrMenu）。  
 > **禁**改 icons / 其它 actions、公会数值与逻辑；禁长测/挑刺；**勿宣称 B0.1 已清**；精英壳不捆。  
@@ -16,7 +16,7 @@
 | 稿件 | 公会菜单 · **Open tell 管理口吻人话化**（UX · B2.48） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:58 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_guild.yml` · B2.47 PASS 旁证（拆解 Open tell 已清） |
-| 状态 | **待批 A** · 交总控 |
+| 状态 | **已批 A** · 交插件 TrMenu |
 | tip 路径 | `docs/design-ember-guild-open-tell-copy.md` |
 | 上游 | B2.47 close `1561dac` · 拆解 Open tell 已清；升本窗 |
 
@@ -178,7 +178,7 @@ rg -n '逻辑待 CoreRpg' plugins/TrMenu/menus/
 
 ## 8. 总控批示
 
-- [ ] **批 A** · L22 替换为荐句（去「逻辑待 CoreRpg 接线」；保留创建/日捐/周盟 Boss；可点下方）
+- [x] **批 A** · L22 替换为荐句（去「逻辑待 CoreRpg 接线」；保留创建/日捐/周盟 Boss；可点下方）
 - [ ] **驳回** · 说明
 
 **批示摘要（待填）：** —

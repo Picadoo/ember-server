@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 04:58 Asia/Shanghai (策划 · B2.48 tip 交稿 · 待批 A · 公会 Open tell)
+## Progress snapshot — 2026-09-29 04:59 Asia/Shanghai (总控 · B2.48 已批 A · 交插件 TrMenu)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
