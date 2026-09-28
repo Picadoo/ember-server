@@ -2,10 +2,10 @@
 # 余烬币 = 软通货 D（DESIGN-ember-economy-monetization.md）
 
 join_message:
-  - "§6§l[余烬服] §e跟着主线走：引路人·灰烛 就在出生点北边（/corerpg quest 查看目标）。"
+  - "§6§l[余烬服] §e跟着主线走：引路人·灰烛就在出生点北边——右键他看当前目标。"
   - "§7挂机庭打僵尸拿碎片 · 骷髅拿骨尘 · 日本蛮兵拿核心碎片 · 死亡不掉落 · 打开枢纽菜单可返回"
-  - "§7指令：§f/ember §7主菜单 · §f/corerpg enhance §7强化 · §f/corerpg socket §7镶嵌 · §f/corerpg sign §7签到"
-  - "§7进本门槛：周本 Lv.20 · 深渊 Lv.25 · 灾厄 Lv.30 · 团本 Lv.35（/ember 进入）"
+  - "§7打开枢纽菜单：主页 · 强化 · 镶嵌 · 签到 · 生活补给。工坊 NPC 也可右键进入。"
+  - "§7进本门槛：周本 Lv.20 · 深渊 Lv.25 · 灾厄 Lv.30 · 团本 Lv.35——打开枢纽菜单进入。"
 
 scoreboard:
   title: "§6余烬进度"
