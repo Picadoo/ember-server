@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.53 待交稿**（`ember_hub.yml` L188 AFK 注释去「/corerpg afk」教斜杠；tip 建议 `docs/design-ember-hub-afk-comment-copy.md`；**仅**该行注释；NI 旁记 soft；禁长测/挑刺；**勿宣称 B0.1 已清**）。~~B2.52~~ → PASS · 勾销；menus「逻辑待」本轨归零；精英壳勿硬开。
+- 文案薄窗：**B2.53 待批 A**（`ember_hub.yml` L188 AFK 注释去「/corerpg afk」教斜杠；tip 建议 `docs/design-ember-hub-afk-comment-copy.md`；**仅**该行注释；NI 旁记 soft；禁长测/挑刺；**勿宣称 B0.1 已清**）。~~B2.52~~ → PASS · 勾销；menus「逻辑待」本轨归零；精英壳勿硬开。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -168,7 +168,7 @@
 - ~~**B2.50 arena/settings/set 文件头管理口吻**~~ → **PASS · 勾销**（设计 `da20e44` · 批准 `d808398` · 插件 `4e84455` · 测 `b84e948` · close 本提交；报告 `docs/STATUS-ember-shell-menu-header-copy-test.md`；menus「逻辑待」本轨归零；下一窗升 **B2.51**；**勿宣称 B0.1 已清**）
 - ~~**B2.51 enhance/socket 文件头教斜杠**~~ → **PASS · 勾销**（设计 `aa4c825` · 批准 `25d5871` · 插件 `84dd76d` · 测 `929206e` · close 本提交；报告 `docs/STATUS-ember-enhance-socket-header-copy-test.md`；下一窗升 **B2.52**；**勿宣称 B0.1 已清**）
 - ~~**B2.52 shop 文件头教斜杠**~~ → **PASS · 勾销**（设计 `63db349` · 批准 `037b6ad` · 插件 `838d492` · 测 `38eeecc` · close 本提交；报告 `docs/STATUS-ember-shop-header-copy-test.md`；下一窗升 **B2.53**；**勿宣称 B0.1 已清**）
-- **B2.53** hub AFK 注释教斜杠（**待交稿** · tip 建议 `docs/design-ember-hub-afk-comment-copy.md`；仅 hub L188；NI 不捆；禁长测/挑刺；**勿宣称 B0.1 已清**）
+- **B2.53** hub AFK 注释教斜杠（**待批 A** · tip 建议 `docs/design-ember-hub-afk-comment-copy.md`；仅 hub L188；NI 不捆；禁长测/挑刺；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
