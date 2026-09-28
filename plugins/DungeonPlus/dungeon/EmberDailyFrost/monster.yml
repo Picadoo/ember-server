@@ -3,6 +3,7 @@
 # Display：$kill 对齐 MM 去色名 霜晶尸 / 霜矢骷 / 霜核蛮兵
 # 2026-09-28 波次差异: 房1 左×3→delay3s 右×2（链式，对齐锈轨；$kill 按组独立，开门在 wave1b）
 # 2026-09-28 返工: wave1 勿 $kill×5 合并（跨组不计）；wave1 kill×3 不开门；wave1b kill×2 开门
+# 2026-09-28 房2链式: wave2a.start→wave2b delay=2；开门+boss 仍在 wave2b.end（房1零动）
 groups:
   wave1:
   - monster:
@@ -42,6 +43,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
+  # 房2：链式重叠（对齐焦骨）—— wave2a.start 即刷 wave2b；开门仅在 wave2b
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyFrostZombie;location=-4,70,24;amount=2;scattered=0.8;level=1} @dungeon"
@@ -49,11 +51,11 @@ groups:
     condition:
     - "$kill{mobname=霜晶尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【裂隙·折台】混编来袭 —— 先清尸再开霜厅门} @dungeon"
-    end:
-    - "$message{type=text;text=§7折台前段已清 · 霜矢骷压上} @dungeon"
-    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$message{type=text;text=§e【裂隙·折台】霜晶尸来袭 —— 霜矢将交错压上} @dungeon"
     - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    end:
+    - "$message{type=text;text=§7折台尸侧已清} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     auto-start: false
 
   wave2b:
@@ -63,7 +65,7 @@ groups:
     condition:
     - "$kill{mobname=霜矢骷;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【裂隙·后段】霜矢骷×3 —— 清完开霜厅门} @dungeon"
+    - "$message{type=text;text=§e【裂隙·后段】霜矢骷重叠压上 —— 清完开霜厅门} @dungeon"
     end:
     - "$message{type=text;text=§a折台已清 · 霜厅门开了} @dungeon"
     - "$operation-block{loc=-1,70,34;mode=set;type=AIR} @dungeon"
