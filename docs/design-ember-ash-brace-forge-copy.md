@@ -1,6 +1,6 @@
 # 设计稿 · 烬砧灰箍抢口文案（B2.45）
 
-> **STATUS：待批 A。** 本稿只定 `ember_forge` / `ember_part` **玩家可见** lore 薄改——点明「有铁锭时：碎片优先沉铁锭炼灰箍」。  
+> **STATUS：已批 A（总控 · 2026-09-29 04:26 Asia/Shanghai）。** 本稿只定 `ember_forge` / `ember_part` **玩家可见** lore 薄改——点明「有铁锭时：碎片优先沉铁锭炼灰箍」。  
 > **本窗 commit 只写 docs；玩法 / NI / TrMenu YAML 零改**（批后由专岗改 TrMenu）。  
 > **禁**改 `part.yml` shard×12 / ingot×2 配方数值；禁四件甲 / 锻炉重做；踏步热键不捆；禁长测 / 挑刺；**勿宣称 B0.1 已清**。  
 > 对齐挑刺 #3 soft（只读 · 勿开挑刺流程）。前序 B-flex-3 close `5bf35c0`。
@@ -14,7 +14,7 @@
 | 稿件 | 烬砧 · **灰箍抢口文案**（碎片优先沉铁锭 · B2.45） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:24 Asia/Shanghai |
 | 关联 | TrMenu `ember_forge.yml` / `ember_part.yml` · CoreRpg `part.yml`（数值**勿改**） · 挑刺 `STATUS-ember-flex-trilogy-picky.md` #3 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** · 交插件改 TrMenu |
 | tip 路径 | `docs/design-ember-ash-brace-forge-copy.md` |
 | 上游 | B-anvil-1 PASS · B-flex-3 close `5bf35c0` · 挑刺 tip `43bf843` 域 |
 
@@ -196,3 +196,11 @@
 - 硬禁：配方数值 / 四件甲 / 锻炉重做 / 踏步热键 / 长测挑刺 / B0.1 声称
 - 本窗只 docs；YAML 零改待批
 
+---
+
+## 9. 总控批示
+
+- [x] **批 A** · 方案 A（forge 插 1 + part 灰箍插 1 + part 说明插 1）（总控 · tip 本提交）
+- [ ] **驳回** · 说明
+
+**批示摘要：** 采纳荐句「有铁锭时：碎片优先沉铁锭炼灰箍」+ 说明旁句「强化另用碎片；有铁锭先炼灰箍沉底」；**勿**改 `part.yml` 12/2；勿 hub/NI 旁附本窗；禁长测/挑刺；勿宣称 B0.1 已清。交 **余烬-插件** 改 `ember_forge.yml` / `ember_part.yml`。
