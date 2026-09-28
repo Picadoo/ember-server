@@ -177,7 +177,7 @@ chapters:
         count: 20
         complete_on: abyss_clear
         desc: 击败深渊中的余烬之物
-        hint: 打开枢纽菜单 → 深渊（需深渊票）· 本次结算也算完成
+        hint: 打开枢纽菜单 → 深渊（耗体力）· 本次结算也算完成
         xp: 150
         done: ['§7它们曾是守城的人。']
       - type: event
@@ -332,7 +332,7 @@ chapters:
         desc: 听 灰烛 说深渊加层
         hint: 枢纽工坊旁找灰烛（右键交谈）
         xp: 80
-        done: ['§6灰烛：§f票还是一天一张。能走多深，就走多深。']
+        done: ['§6灰烛：§f体力日回，能走多深就走多深。']
       - type: event
         event: abyss_clear
         count: 1
