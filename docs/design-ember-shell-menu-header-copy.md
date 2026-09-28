@@ -1,6 +1,6 @@
 # 设计稿 · arena/settings/set 文件头管理口吻（B2.50）
 
-> **STATUS：待批 A（策划交稿 · 2026-09-29 05:09 Asia/Shanghai）。**  
+> **STATUS：已批 A（总控 · 2026-09-29 05:10 Asia/Shanghai）。**  
 > 本稿只定 TrMenu `ember_arena.yml` / `ember_settings.yml` / `ember_set.yml` **YAML 文件头 L2 注释**各 1 行：去掉「逻辑待* / 待 CoreRpg」管理尾句（含仓库路径），保留功能摘要。  
 > **对齐 B2.49：纯文件头注释（非玩家 UI / 非 Open tell）；本窗收同族 soft×3。**  
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批后由专岗改 TrMenu）。  
@@ -17,7 +17,7 @@
 | 稿件 | arena/settings/set · **文件头注释管理口吻人话化**（UX · B2.50） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 05:09 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_arena.yml` · `ember_settings.yml` · `ember_set.yml` · B2.49 PASS 旁证 |
-| 状态 | **待批 A** · 交总控 |
+| 状态 | **已批 A** · 交插件 TrMenu |
 | tip 路径 | `docs/design-ember-shell-menu-header-copy.md` |
 | 上游 | B2.49 close `cc15352` · friends/mail 已清；升本窗收 soft×3 |
 
@@ -173,7 +173,7 @@ rg -n '逻辑待|待 CoreRpg' plugins/TrMenu/menus/
 
 ## 8. 总控批示
 
-- [ ] **批 A** · 三文件 L2 按上表荐案去管理尾（settings 去「低优先级」；set 用「击杀回能另计」· 勿写路径）
+- [x] **批 A** · 三文件 L2 按上表荐案去管理尾（settings 去「低优先级」；set 用「击杀回能另计」· 勿写路径）
 - [ ] **驳回** · 说明
 
 **批示摘要（待填）：** —
