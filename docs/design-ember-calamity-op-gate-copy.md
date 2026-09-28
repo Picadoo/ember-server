@@ -14,8 +14,8 @@
 | 稿件 | 灾厄 DP · **OP 调试拒门去斜杠**（UX · B0.3/B2.8 域外残留 · B2.12） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 23:56 Asia/Shanghai |
 | 关联 | live `plugins/DungeonPlus/dungeon/EmberCalamity/option.yml` L17 · 债源 B2.8 #6 / B2.11 close `5378b23` |
-| 状态 | **待批准**（未施工） |
-| 关联 STATUS / 稿 | 批后：`STATUS-ember-calamity-op-gate-copy.md` · 测报 · backlog |
+| 状态 | **已批 A · 待插件施工** |
+| 关联 STATUS / 稿 | `STATUS-ember-calamity-op-gate-copy-approve.md` · 测报 · backlog |
 
 ### 硬约束（本稿）
 
@@ -127,6 +127,21 @@
 
 ## 9. 回总控一句话
 
-**硬债空；荐批 A——仅改 `EmberCalamity` OP 调试拒门一句去 `/ember`，对齐公共窗「枢纽菜单 → 灾厄」；闭环 B2.8～B2.11 残留 #6。未批不施工。**
+**硬债空；已批 A——仅改 `EmberCalamity` OP 调试拒门一句去 `/ember`，对齐公共窗「枢纽菜单 → 灾厄」；闭环 B2.8～B2.11 残留 #6。待插件施工。**
 
-**专岗：** **策划**（本稿）→ **插件**（批后改 1× option.yml message）→ **测试**（静态 rg + 非 OP `/dp start EmberCalamity` 拒门冒烟）
+**专岗：** **策划**（本稿）→ **插件**（已批后改 1× option.yml message）→ **测试**（静态 rg + 非 OP `/dp start EmberCalamity` 拒门冒烟）
+
+
+---
+
+## 批准记录（总控）
+
+| 字段 | 值 |
+|------|-----|
+| 批准 | **A** · 2026-09-28 23:57 Asia/Shanghai |
+| 岗 | 余烬-总控 |
+| 依据 | parent design tip `1e109b3`，已在 `main` / `origin/main` 核验 |
+| 范围 | 仅 `plugins/DungeonPlus/dungeon/EmberCalamity/option.yml` L17 `message=` 的 C6 玩家可见字符串替换；完整替换见 `docs/STATUS-ember-calamity-op-gate-copy-approve.md` |
+| 禁 | `text=` / team condition；人数门；loot / MM / TrMenu；`calamity.yml`；小写 stub `ember_calamity`；B0.1 与其它残余债不得宣称已清；本批准 commit 不改 YAML |
+| 下一 | **待插件施工**（仅一条 `message=` 字符串） |
+| 状态 | **已批 A · 待插件施工** |
