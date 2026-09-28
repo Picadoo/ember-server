@@ -1,6 +1,6 @@
 # 设计稿 · 团本使徒 TTK 可测性（单人校准档）
 
-> **未批准前不施工。** 玩法 YAML / MM HP / 票 / 掉落 / jar **零改**，直至总控批 A 或 B。  
+> **已批准方案 A（总控 · 2026-09-28）。** 临时 min=1 校准测 → 采完当日还原 min=3；禁砍 HP / 改票掉落 / 永久改玩家门。  
 > 债源：`docs/design-ember-content-backlog.md`「仍挂 · 团本使徒 TTK（人数门 3～5 SKIP）」· `STATUS-ember-raid-apostle-ttk-debt.md` · B0.2 leftover。  
 > 对照：周本 ΔTTK / 深渊 10·12 ΔTTK 已 PASS（`STATUS-ember-b02-abyss-ttk.md`）；使徒项长期 SKIP。  
 > 排除本轮：**不**开霜晶/锈轨 Boss 前压；**不**升断塔环廊方案 B；**不**动空许愿旁支；**不**重开周本 prep B / 精英厅二 B。
@@ -14,7 +14,7 @@
 | 稿件 | 团本使徒 TTK · 可测性薄窗（降门槛校准 / 继续 SKIP） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | **仅** `EmberRaid` 进本人数门可测性；使徒战斗数值 **不**在本窗改 |
-| 状态 | **未批准 · 待总控勾 A/B** |
+| 状态 | **已批准 A · 待插件降门 → 测岗采数 → 还原** |
 | 关联 STATUS | `STATUS-ember-raid-apostle-ttk-debt.md` · B0.2 · kill-any Raid live SKIP |
 
 ### 硬约束（本稿）
@@ -126,3 +126,13 @@
 
 **未批准前不施工。**
 
+---
+
+## 总控批注
+
+**批准方案 A**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 插件岗：`EmberRaid/option.yml` `$team-condition` **仅** `min=3`→`min=1`（max/等级/票零改）；测服同步树。
+- 测岗：单 bot L1 满 / L2 满使徒 TTK；Δ% 写入 STATUS；**测毕当日还原 min=3** 并双树 cmp。
+- 禁砍 `EmberRaidBoss` HP；结果标「校准 ΔTTK」，不宣称单人正式通关时长。
+- 表述对外仍「团本 3～5」。

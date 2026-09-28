@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 11:29 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 11:31 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -20,7 +20,8 @@
 - 策划薄设计挑窗：**团本使徒 TTK 可测性**独立稿待批（`design-ember-raid-apostle-ttk-calib.md` · 荐 A 临时 min=1 校准后还原）
 
 ### 刚结
-- **日常第三拍双线收口**：霜晶霜暴 + 锈轨砸地 **均 PASS**（霜 `3e8c969`/`0de8c50` · 锈 `d1e57ef`/测报本 commit）
+- **团本使徒 TTK 可测性设计**：已批 **A**（`design-ember-raid-apostle-ttk-calib.md` · 临时 min=1 校准）
+- **日常第三拍双线收口**：霜晶霜暴 + 锈轨砸地 **均 PASS**（霜 `3e8c969`/`0de8c50` · 锈 `d1e57ef`/`affd058`）
 - **锈轨第三拍同构设计**：已批 **A**（`design-ember-daily-rail-third-beat.md` · 矿监砸地读条）
 - **日常第三拍方案 A（霜晶霜暴）**：**PASS**（施工 `3e8c969` / 测 `0de8c50` · 五条全过）
 - **日常第三拍试点设计**：已批 **A**（`design-ember-daily-third-beat.md` · 霜晶霜暴读条）
