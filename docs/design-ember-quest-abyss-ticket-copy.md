@@ -1,7 +1,7 @@
 # 设计稿 · 主线 quest「深渊票」台词薄扫（B2.11）
 
 > **未批准前不施工。** 本稿只定 **玩家可见** `quest.yml` 灰烛 done / step hint 两句（假「深渊票/票」→体力口径）；**禁**改步骤 `type` / `event` / `count` / `mobs` / `complete_on` / `items` 键与数量、体力 cost、进本、TrMenu、`cash.yml` 数值、DP/MM/loot。  
-> 债源：硬债已空；B2.7 只 rg「日票|周票」漏网；B2.10 方案 A 已清 DP 局内假票，**方案 B 残余 Q1/Q2** 仍挂（close `ddaeb46`）。  
+> 债源：硬债已空；B2.7 只 rg「日票|周票」漏网；B2.10 方案 A 已清 DP 局内假票，**方案 B 残余 Q1/Q2** 已由本窗 B2.11 方案 A 清账（close `ddaeb46`）。
 > 对齐：`design-ember-dp-ticket-stamina-copy.md`（B2.10-B Q1/Q2）· `design-ember-quest-stamina-copy.md`（B2.7）· `design-ember-stamina-dnf-daily.md` · UX「文案短清楚」。  
 > 排除本轮：刚结 B2.6–B2.10；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔升 B；B0.1 除非新证据；精英预览壳；isomorphic 空壳 tell→真页；新进度/货币/副本类型；Citizens；Paper。
 
@@ -14,8 +14,8 @@
 | 稿件 | 主线 `quest.yml` · **「深渊票」两句薄扫**（UX · 文案一致性 · B2.11） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 23:46 Asia/Shanghai |
 | 关联 | live `plugins/CoreRpg/quest.yml` · 镜像 `CoreRpg/src/main/resources/quest.yml` · 债源 B2.10 close `ddaeb46` |
-| 状态 | **已批 A · 待插件施工** |
-| 关联 STATUS / 稿 | `docs/STATUS-ember-quest-abyss-ticket-copy-approve.md` · backlog · `design-ember-dp-ticket-stamina-copy.md` §方案 B · `design-ember-quest-stamina-copy.md` |
+| 状态 | **PASS · 已关闭**（施工 `8605d10` · 验收 `a538d26`） |
+| 关联 STATUS / 稿 | `docs/STATUS-ember-quest-abyss-ticket-copy.md` · `docs/STATUS-ember-quest-abyss-ticket-copy-test.md` · backlog close |
 
 ### 硬约束（本稿）
 
@@ -128,9 +128,9 @@
 
 ## 9. 回总控一句话
 
-**硬债空；B2.10 close `ddaeb46` 后挂 B2.11——荐批 A：主线 quest「深渊票/票还是一天一张」live+src 双路径改体力口径；灾厄 OP #6 作方案 B。**
+**硬债空；B2.11 方案 A PASS · 已关闭——主线 quest「深渊票/票还是一天一张」已在 live+src 双路径改为体力口径；灾厄 OP #6 保留为剩余薄候选。**
 
-**专岗：** **策划**（本稿）→ **插件**（批后改 live+src quest 两句；若批 B 再改灾厄 OP message）→ **测试**（静态 rg + 主线 hint/灰烛冒烟）
+**专岗：** **策划**（设计）→ **插件**（`8605d10` 落地）→ **测试**（`a538d26` PASS）→ **已关闭**
 
 
 ---
@@ -144,5 +144,5 @@
 | 依据 | parent design tip `4a2a671`，已在 `main` / `origin/main` 核验 |
 | 范围 | 仅 live + src `quest.yml` 的 Q1/Q2 两个玩家可见字符串；完整替换见 `docs/STATUS-ember-quest-abyss-ticket-copy-approve.md` |
 | 禁 | 灾厄 OP #6；步骤 `type` / `event` / `count` / `mobs` / `complete_on` / `floor`；`items` 键与数量；体力 `costs.*` / `free_tickets`；进本、TrMenu、DP/MM/loot；任何非文档改动 |
-| 下一 | 派 **插件** 双路径施工 + reload；测岗待插件 tip 后再派 |
-| 状态 | **已批 A · 待插件施工** |
+| 下一 | **已关闭**（施工 `8605d10` · 测试 `a538d26`） |
+| 状态 | **PASS · 已关闭**（施工 `8605d10` · 验收 `a538d26`） |
