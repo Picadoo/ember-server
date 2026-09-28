@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 03:43 Asia/Shanghai (总控 · B2.39 已批 A · 物品施工)
+## Progress snapshot — 2026-09-29 03:46 Asia/Shanghai (总控 · B2.39 PASS · 勾销 · 升 B2.40 斜杠)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,13 +17,14 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.39 已批 A**（余烬烬火 `pet_ember_cinder`；设计 `88c53bd` · 批准本提交；交物品删 L20；**L23 summon 斜杠保留**）；斜杠 soft 下一窗；精英壳勿硬开；**勿宣称 B0.1 已清**。live Items `&7gem_*`/`&7mat_*`/`&7cosmetic_*` 本轨已归零；`&7pet_*` 现 1，施工后预期本轨归零。
+- 文案薄窗：**B2.40 待交稿**（荐 `mat_ember_covenant_reset` lore 斜杠 → 枢纽人话，对齐 B2.23；单件；勿动 talent_reset / pet summon|feed）；精英壳勿硬开；**勿宣称 B0.1 已清**。live Items `&7gem_*`/`&7mat_*`/`&7cosmetic_*`/`&7pet_*` 本轨已归零；斜杠仍 soft。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
 - ~~**B2.36 NI 疾风石 lore 裸 id**~~ → **PASS · 勾销**（设计 `eca16cd` · 批准 `dd582c8` · 施工 `3e3c63b` · 测 `a531ebf` · close `54ef5c4`；报告 `docs/STATUS-ember-gem-gale-ni-lore-copy-test.md`；live Items `&7gem_*` **本轨归零**；下一窗升 **B2.37** cosmetic；斜杠 / pet 仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.37 NI 灾厄外观碎片 lore 裸 id**~~ → **PASS · 勾销**（设计 `3717031` · 批准 `d786875` · 施工 `3c49b53` · 测 `7f21335` · close `da8088d`；报告 `docs/STATUS-ember-cosmetic-calamity-shard-ni-lore-copy-test.md`；live Items `&7cosmetic_*` **本轨归零**；下一窗升 **B2.38** pet_ashling；斜杠 / 另一 pet 仍 soft；**勿宣称 B0.1 已清**）
-- ~~**B2.38 NI 余烬灰灵 lore 裸 id**~~ → **PASS · 勾销**（设计 `965ab2b` · 批准 `bbded5f` · 施工 `7dbf09c` · 测 `72b544e` · close 本提交；报告 `docs/STATUS-ember-pet-ashling-ni-lore-copy-test.md`；`&7pet_` 现仅 cinder=1；下一窗升 **B2.39** pet_cinder；斜杠仍 soft；**勿宣称 B0.1 已清**）
+- ~~**B2.38 NI 余烬灰灵 lore 裸 id**~~ → **PASS · 勾销**（设计 `965ab2b` · 批准 `bbded5f` · 施工 `7dbf09c` · 测 `72b544e` · close `b59d150`；报告 `docs/STATUS-ember-pet-ashling-ni-lore-copy-test.md`；`&7pet_` 现仅 cinder=1；下一窗升 **B2.39** pet_cinder；斜杠仍 soft；**勿宣称 B0.1 已清**）
+- ~~**B2.39 NI 余烬烬火 lore 裸 id**~~ → **PASS · 勾销**（设计 `88c53bd` · 批准 `8e2ef70` · 施工 `6e08d32` · 测 `a188a8b` · close 本提交；报告 `docs/STATUS-ember-pet-cinder-ni-lore-copy-test.md`；live `&7pet_*` **本轨归零**；下一窗升 **B2.40** 誓约重置券斜杠；其它斜杠仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.35 NI 汲取石 lore 裸 id**~~ → **PASS · 勾销**（设计 `c9cdb28` · 批准 `bf3bf4b` · 施工 `1ef8a41` · 测 `9b2333f` · close `bab3b39`；报告 `docs/STATUS-ember-gem-drain-ni-lore-copy-test.md`；`&7gem_*` 剩 1；下一窗升 **B2.36**；斜杠 / cosmetic / pet 仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.34 NI 稳固石 lore 裸 id**~~ → **PASS · 勾销**（设计 `baa2705` · 批准 `19a8982` · 施工 `c5647d3` · 测 `7bc605a` · close `5b47896`；报告 `docs/STATUS-ember-gem-steady-ni-lore-copy-test.md`；`&7gem_*` 剩 2；下一窗升 **B2.35**；斜杠 / cosmetic / pet 仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.33 NI 锋利石 lore 裸 id**~~ → **PASS · 勾销**（设计 `48b5218` · 批准 `6a43ab1` · 施工 `fbef72e` · 测 `90797d7` · close `973e941`；报告 `docs/STATUS-ember-gem-sharp-ni-lore-copy-test.md`；`&7gem_*` 剩 3；下一窗升 **B2.34**；斜杠 / cosmetic / pet 仍 soft；**勿宣称 B0.1 已清**）
@@ -142,7 +143,8 @@
 - ~~**B2.36** NI 疾风石 lore 裸 id~~ → **PASS · 勾销**（设计 `eca16cd` · 批准 `dd582c8` · 施工 `3e3c63b` · 测 `a531ebf` · close `54ef5c4`；报告 `docs/STATUS-ember-gem-gale-ni-lore-copy-test.md`；live `&7gem_*` **本轨归零**）
 - ~~**B2.37**~~ NI 灾厄外观碎片 lore 裸 id → **PASS · 勾销**（见上）
 - ~~**B2.38**~~ NI 余烬使魔·灰灵 lore 裸 id → **PASS · 勾销**（见上）
-- **B2.39** NI 余烬使魔·烬火 lore 裸 id（`pet_ember_cinder`；**已批 A**；设计 `88c53bd` · 批准本提交；单件薄窗；只删实际 L20，保留 L21/L22/L23 summon；精英壳勿硬开；**勿宣称 B0.1 已清**）
+- ~~**B2.39**~~ NI 余烬使魔·烬火 lore 裸 id → **PASS · 勾销**（见上）
+- **B2.40** NI 誓约重置券 lore 去斜杠（荐 `mat_ember_covenant_reset`；单件薄窗；对齐 B2.23 枢纽人话；勿动 talent_reset / pet summon|feed；精英壳勿硬开；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -213,7 +215,8 @@
 - ~~**B2.36**~~ → **PASS · 勾销**（`3e3c63b` / `a531ebf` · close `54ef5c4`；live `&7gem_*`=0）。
 - ~~**B2.37**~~ → **PASS · 勾销**（close `da8088d`）。
 - ~~**B2.38**~~ → **PASS · 勾销**（close 本提交）。
-- **B2.39** → NI 余烬使魔·烬火 lore 裸 id（**已批 A**；设计 `88c53bd` · 批准本提交；交物品）。
+- ~~**B2.39**~~ → **PASS · 勾销**（close 本提交）。
+- **B2.40** → NI 誓约重置券 lore 去斜杠（荐 `mat_ember_covenant_reset`；**待交稿**；对齐 B2.23）。
 
 ---
 
@@ -354,7 +357,8 @@
 | **B2.36** | NI 余烬疾风石物品 lore 裸 id 人话对齐 | `ember-enhance-gems.yml` 内 `gem_ember_gale` lore 只删实际 L65 灰字裸 id；显示名「疾风石」不改，L66/L67 两行说明保留；零改 NI 数值/配方/给物/镶嵌逻辑；斜杠、cosmetic/pet 不做（B soft）；精英壳勿硬开；B0.1 仍挂 | **PASS · 勾销**（设计 `eca16cd` · 批准 `dd582c8` · 施工 `3e3c63b` · 测 `a531ebf` · close `54ef5c4`；live `&7gem_*`=0） |
 | ~~**B2.37**~~ | NI 灾厄外观碎片物品 lore 裸 id 人话对齐 | 只删 lore 灰字裸 id；显示名与两行说明保留 | **PASS · 勾销**（设计 `3717031` · 批准 `d786875` · 施工 `3c49b53` · 测 `7f21335` · close 本提交；`&7cosmetic_`=0） |
 | ~~**B2.38**~~ | NI 余烬使魔·灰灵物品 lore 裸 id 人话对齐 | 只删 lore 灰字裸 id；显示名与说明、summon 斜杠保留 | **PASS · 勾销**（设计 `965ab2b` · 批准 `bbded5f` · 施工 `7dbf09c` · 测 `72b544e` · close 本提交；`&7pet_` 仅剩 cinder） |
-| **B2.39** | NI 余烬使魔·烬火物品 lore 裸 id 人话对齐 | `ember-pets.yml` 内 `pet_ember_cinder` lore 只删实际 L20 灰字裸 id；显示名「余烬烬火」不改，L21/L22 与 L23 `/corerpg pet summon` 保留；零改数值/给物；勿动 ashling；勿删斜杠；精英壳勿硬开；B0.1 仍挂 | **已批 A**（设计 `88c53bd` · 批准本提交；交物品；验收该件无字面 pet_ember_cinder；施工后 `&7pet_*` 本轨归零；单件薄窗） |
+| ~~**B2.39**~~ | NI 余烬使魔·烬火物品 lore 裸 id 人话对齐 | 只删 lore 灰字裸 id；显示名与说明、summon 斜杠保留 | **PASS · 勾销**（设计 `88c53bd` · 批准 `8e2ef70` · 施工 `6e08d32` · 测 `a188a8b` · close 本提交；`&7pet_*` 本轨归零） |
+| **B2.40** | NI 誓约重置券物品 lore 斜杠去指令化 | `ember-covenant-talent.yml` 内 `mat_ember_covenant_reset` lore 无字面 `/corerpg`（荐 L9 → 枢纽人话，对齐 B2.23）；零改 NI 数值/配方/给物；talent_reset / pet summon|feed 不做（B soft）；精英壳勿硬开；B0.1 仍挂 | **待交稿**（策划；验收该件 lore 无 `/corerpg`；单件薄窗） |
 
 ---
 
@@ -391,15 +395,15 @@
 
 
 ```
-可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.24 已结**；**B2.24 PASS · 勾销**（close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 已批 A · 施工中**
+可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.24 已结**；**B2.24 PASS · 勾销**（close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 待交稿**
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
 内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close `ba47f3e`；CoreRpg **1.15.25**）
 烬砧窗：    **B-anvil-1** 灰箍 **PASS · 勾销**（设计 `ab33c21` · 批准 `f10779b` · NI `57a6540` · 插件 `72281d9` · 测 `0ab09ef` · close 本提交；CoreRpg **1.15.26**）
-文案窗：**B2.18**～**B2.24** **PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 已批 A · 施工中**
-软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结；~~碎片 lore 裸 id~~ → B2.24 已结；~~骨尘 lore 裸 id~~ → B2.25 已结；~~核心碎片 lore 裸 id~~ → **B2.26 PASS · 勾销**（close `f796f3a`）；~~誓约重置券 lore 裸 id~~ → **B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 已批 A · 施工中**
-软观察：    ~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；B2.39 目标 `pet_ember_cinder`（已批 A · 施工中）/ 斜杠 soft / `/corerpg` 斜杠（勿与裸 id 双上）/ 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+文案窗：**B2.18**～**B2.24** **PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 待交稿**
+软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结；~~碎片 lore 裸 id~~ → B2.24 已结；~~骨尘 lore 裸 id~~ → B2.25 已结；~~核心碎片 lore 裸 id~~ → **B2.26 PASS · 勾销**（close `f796f3a`）；~~誓约重置券 lore 裸 id~~ → **B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 待交稿**
+软观察：    ~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；~~B2.39 cinder~~ → PASS（pet 本轨归零）；B2.40 目标誓约重置券斜杠（待交稿）/ talent_reset·pet summon|feed 斜杠 soft / 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 策划挑选排除：刚结 B2.6–B2.33 / B-flex-1 / B-flex-2 / B-anvil-1；其它 NI 厚批 mat 双上 / 精英壳；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上。
 ```
 
@@ -411,9 +415,9 @@
 
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
-- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.24 等已结；**B2.18～B2.24 PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 已批 A · 施工中**
+- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.24 等已结；**B2.18～B2.24 PASS · 勾销**（B2.24：`e004458` / `f004152` · close `95783b3`）；**B2.25 PASS · 勾销**（close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 待交稿**
 - **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）
 - **烬砧窗：** **B-anvil-1** 灰箍 **PASS · 勾销**（close `e39172f`；CoreRpg **1.15.26**）；灵活三窗已结
-- **文案窗：** **B2.18**～**B2.25** **PASS · 勾销**（B2.25 close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 已批 A · 施工中**
-- 软观察：~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；B2.39 目标 `pet_ember_cinder`（已批 A · 施工中）/ 斜杠 soft / `/corerpg` 斜杠（勿与裸 id 双上）/ 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+- **文案窗：** **B2.18**～**B2.25** **PASS · 勾销**（B2.25 close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 PASS · 勾销**；**B2.36 PASS · 勾销**；**B2.37 PASS · 勾销**；**B2.38 PASS · 勾销**；**B2.39 PASS · 勾销**；**B2.40 待交稿**
+- 软观察：~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；~~B2.35 汲取石~~ → PASS；~~B2.36 疾风石~~ → PASS（gem 本轨归零）；~~B2.37 cosmetic~~ → PASS（cosmetic 本轨归零）；~~B2.38 ashling~~ → PASS；~~B2.39 cinder~~ → PASS（pet 本轨归零）；B2.40 目标誓约重置券斜杠（待交稿）/ talent_reset·pet summon|feed 斜杠 soft / 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
