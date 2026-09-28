@@ -1,6 +1,6 @@
 # 设计稿 · CoreRpg 重铸缺料 chat 人话对齐（B2.21）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** CoreRpg `cmdReforge` 缺料 `sendMessage` **1** 句；**禁**改重铸消耗数 / `stone_ni_id` / 词缀池 / 掉落 / 体力 / TrMenu / NI 物品文件（除非另批 B）。  
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-reforge-need-copy-approve.md）。本稿只定 **玩家可见** CoreRpg `cmdReforge` 缺料 `sendMessage` **1** 句；**禁**改重铸消耗数 / `stone_ni_id` / 词缀池 / 掉落 / 体力 / TrMenu / NI 物品文件（除非另批 B）。  
 > 债源：B2.20 轻测旁证（`docs/STATUS-ember-disassemble-reforge-copy-test.md`）；backlog 软观察「CoreRpg 重铸缺料 tell 裸 id 可升 B2.21」；B2.20 PASS · 勾销 `5bbaab0`。  
 > 对齐：B2.20 已清拆解页 lore 裸 id；UX「文案短清楚 · 玩家点击即见 · NI ID 管理侧可留」。  
 > 排除本轮：刚结 B2.6–B2.20 / B-flex-1/2 / B-anvil-1；精英预览厚壳（hub 一点进本、无 P / 无独立 rewards → 证据不足勿硬开）；NI 物品 lore 内 `&7mat_ember_reforge_stone`（物品岗 · 方案 B soft · 勿与 A 双上）；墙钟/DPS；霜锈前压；断塔无证据升 B；B0.1 除非新证据；四件甲/锻炉重做/誓约大改。**勿宣称 B0.1 已清。** 与 B-flex / B-anvil **不捆**。
@@ -14,7 +14,7 @@
 | 稿件 | CoreRpg 重铸 · **缺料 chat 裸 NI id →「余烬重铸石」**（UX · B2.21） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 01:55 Asia/Shanghai |
 | 关联 | live `CoreRpg/.../ScrapService.java` · `scrap.yml` `stone_ni_id` · B2.20 测旁证 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.21** · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
