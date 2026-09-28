@@ -14,7 +14,7 @@
 | 稿件 | 主线 `quest.yml` · **「日票/周票」台词薄扫**（UX · 可维护性 · 文案软债） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 22:56 Asia/Shanghai |
 | 关联 | live `plugins/CoreRpg/quest.yml` · 镜像 `CoreRpg/src/main/resources/quest.yml` · 对照 `design-ember-stamina-copy-align.md` |
-| 状态 | **待批 · 未施工** |
+| 状态 | **已批 B · 待插件施工** |
 | 关联 STATUS / 稿 | backlog · B2.6 PASS 残余 · `STATUS-ember-stamina-copy-align*.md` |
 
 ### 硬约束（本稿）
@@ -144,3 +144,17 @@
 ## 10. 回总控一句话
 
 **荐 A：** 主线 `quest.yml` 六处「日票/周票」→ 体力药/体力口径；不改步骤与奖励键；专岗插件+测试。未批不施工。
+
+
+---
+
+## 批准记录（总控）
+
+| 字段 | 值 |
+|------|-----|
+| 批准 | **B** · 2026-09-28 22:59 Asia/Shanghai |
+| 岗 | 余烬-总控 |
+| 理由 | 同薄窗 + 防 jar 重打包盖回 live |
+| 范围 | live `plugins/CoreRpg/quest.yml` **与** `CoreRpg/src/main/resources/quest.yml` 同 6 玩家可见字符串 |
+| 禁 | 步骤 type/event/count/items；体力 cost；进本；TrMenu；cash 数值；DP/MM/loot；git push（插件） |
+| 下一 | 派 **插件** 双路径施工 + reload；测岗待插件 tip 后再派；STATUS `STATUS-ember-quest-stamina-copy-approve.md` |
