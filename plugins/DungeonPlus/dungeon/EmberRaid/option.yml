@@ -15,7 +15,7 @@ dungeon-start:
   condition:
     - "$team-condition{team=true;min=3;max=5;message=§c团本人数 3～5，当前 (<size>)} @system"
     # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.raid=35；DP 逐队员判定；放在扣票条件前 → 被拒不扣票；OP 豁免）
-    - "$js-condition{text='%corerpg_gate_raid%'=='yes'||'%player_is_op%'=='yes';message=§c团本需要余烬等级 §eLv.35§c · 队伍中有人等级不足（/corerpg level 查看）} @system"
+    - "$js-condition{text='%corerpg_gate_raid%'=='yes'||'%player_is_op%'=='yes';message=§c团本需要余烬等级 §eLv.35§c · 队伍中有人等级不足 · 打开枢纽 → 角色查看等级} @system"
     # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§9团本大厅已集结。§7左道卫兵 · 右道射手 · 汇合后终厅使徒。} @dungeon"

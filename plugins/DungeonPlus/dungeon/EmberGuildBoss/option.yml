@@ -15,9 +15,9 @@ dungeon-start:
     - "$team-condition{team=true;min=1;max=5;message=§c盟 Boss 人数 1～5，当前 (<size>) · 请先组队} @system"
     # 2026-09-26 门控（CoreRpg 1.4.9）：仅 OP，或持有 /corerpg guild boss 扣贡献后发给全队的一次性通行（5s，开本后即清）。
     #   DP 对每个队员逐一判定；手打 /dp start EmberGuildBoss 没有通行 → 被拒。
-    - "$js-condition{text='%corerpg_guildboss_pass%'=='yes'||'%player_is_op%'=='yes';message=§c盟 Boss 需由队长执行 /corerpg guild boss（消耗盟约贡献）开启} @system"
+    - "$js-condition{text='%corerpg_guildboss_pass%'=='yes'||'%player_is_op%'=='yes';message=§c盟 Boss 需由队长在枢纽 → 盟约 →「周盟 Boss」开启（消耗盟约贡献）} @system"
   action-script:
-    - "$message{type=text;text=§6盟约周 Boss 已点燃。§7进本由 §e/corerpg guild boss §7门控（贡献消耗）。} @dungeon"
+    - "$message{type=text;text=§6盟约周 Boss 已点燃。§7进本由盟约菜单「周盟 Boss」门控（贡献消耗）。} @dungeon"
     - "$teleport{location=0,65,0;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
