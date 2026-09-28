@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 01:03 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-29 01:22 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗暂缓；**B-flex-2 可装配轻技**已批 A · 待插件（荐 A · 位移 · `design-ember-flex-skill-slot-pilot.md`；批准 `d1e88e4`）；与 B2.x / 文案薄窗 **不捆**。
+- 文案薄窗暂缓；B-flex-1 / B-flex-2 已结；下一窗待策划交 **烬砧材料→部件** 薄设计（soft 升窗 · 非锻炉重做）。
 
 ### 刚结
+- ~~**B-flex-2 可装配轻技 1 槽试点**~~ → **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 补记 `3841f4f` · 测 `1c36873` · close 本提交；报告 `docs/STATUS-ember-flex-skill-slot-pilot-test.md`；CoreRpg **1.15.25**；轻测 PASS；烬砧材料→部件仍 soft；四件甲/誓约主动大改/锻炉重做未做；**勿宣称 B0.1 已清**）
 - ~~**B-flex-1 副手/饰品位试点**~~ → **PASS · 勾销**（设计 `7dda194` · 批准 `eb3c843` · NI `52f817a` · 插件 `08b4cd4` · 测 `1453a7c` · close `d333b01`；报告 `docs/STATUS-ember-offhand-slot-pilot-test.md`；CoreRpg **1.15.24**；轻测 PASS；技能装配已升 **B-flex-2**；烬砧材料→部件仍 soft；四件甲/锻炉大改未做；**勿宣称 B0.1 已清**）
 - **B2.17 天赋菜单同句英词 `cost`→消耗**：**PASS · 勾销**（设计 `3a3a226` · 批准 `0eb15c2` · 施工 `9631343` · 测 `dabf579` · close 本提交；报告 `docs/STATUS-ember-talent-cost-copy-test.md`；13 行类型 lore，数值 2/3/4 不变；不改 talent.yml / unlock / cost 数值；不附 NI/套装/精英壳）
 - **B2.16 天赋菜单类型英词 `passive`/`skill` 人话化**：**PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close `22c2d40`；报告 `docs/STATUS-ember-talent-type-copy-test.md`；13 行类型 lore：`passive`→被动、`skill` 去冗余；cost 数字不变，方案 B 已由 **B2.17** 勾销）
@@ -95,7 +96,7 @@
 - ~~**灾厄奖励预览空壳 tell**~~ → **PASS · 勾销**（`62f444a` / `da75e9e`）
 - 精英奖励预览：hub 一点进本、**无 P / 无独立菜单** → 本轮不挂「空壳 P」债（若要做须另开子菜单壳；证据不足勿硬开厚壳）
 - ~~**B-flex-1 副手/饰品位试点**~~ → **PASS · 勾销**（设计 `7dda194` · 批准 `eb3c843` · NI `52f817a` · 插件 `08b4cd4` · 测 `1453a7c` · close `d333b01`；报告 `docs/STATUS-ember-offhand-slot-pilot-test.md`；CoreRpg **1.15.24**；轻测 PASS；技能装配已升 **B-flex-2**；烬砧材料→部件仍 soft；四件甲/技能与锻炉大改未做；**勿宣称 B0.1 已清**）
-- **B-flex-2 可装配轻技 1 槽试点** → **已批 A · 待插件**（设计 `d1e88e4`；批准 `docs/STATUS-ember-flex-skill-slot-pilot-approve.md`；荐 A · **位移**「余烬踏步」· `docs/design-ember-flex-skill-slot-pilot.md`；1 槽 TrMenu；勿两套一起上；不动誓约主动/体力门/四件甲/锻炉/刃护符；验收静态 rg+菜单轻测；禁 wall-clock/DPS；不叫挑刺；软挂烬砧材料→部件；与文案薄窗无关；**勿捆 B2.x**；**勿宣称 B0.1 已清**）
+- ~~**B-flex-2 可装配轻技 1 槽试点**~~ → **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 补记 `3841f4f` · 测 `1c36873` · close 本提交；报告 `docs/STATUS-ember-flex-skill-slot-pilot-test.md`；CoreRpg **1.15.25**；烬砧材料→部件仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.17 天赋同句 `cost`→消耗**~~ → **PASS · 勾销**（设计 `3a3a226` · 批准 `0eb15c2` · 施工 `9631343` · 测 `dabf579` · close 本提交；报告 `docs/STATUS-ember-talent-cost-copy-test.md`；与 B-flex 不捆；文案薄窗暂缓）
 - 奖励页 NI id / 套装 `gear_ember_*` 未宣称已清
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
@@ -273,13 +274,13 @@
 | ID | 项 | 验收硬条（摘要） | 状态 |
 |----|----|------------------|------|
 | **B-flex-1** | 刃+护符之外 +1 **副手/饰品位**（NI 白名单 + 菜单展示 + 极简属性） | 静态 `rg` 试点 id / offhand 白名单 / Stat OffHand 钩子；TrMenu hub 或 set 目视「副手」说明；**禁** wall-clock / DPS 盲调；**禁**动 T0–T3 刃护符数值、体力日周门；**不做**四件甲/技能大改/锻炉产线重做 | **PASS · 勾销**（设计 `7dda194` · 批准 `eb3c843` · NI `52f817a` · 插件 `08b4cd4` · 测 `1453a7c` · close `d333b01`；报告 `docs/STATUS-ember-offhand-slot-pilot-test.md`；CoreRpg **1.15.24**） |
-| **B-flex-2** | **可装配轻技 1 槽**（位移 **或** 保命择一；荐 A · 位移「余烬踏步」；TrMenu 点击；零体力） | 静态 `rg` 轻技 id / 1 槽字段；菜单装配+释放轻测；**禁** wall-clock / DPS；不叫挑刺；**禁**动誓约三主动数值、体力日周门、四件甲、锻炉大改、T0–T3 刃护符；**勿**位移+保命双上 | **已批 A · 待插件**（设计 `d1e88e4`；`docs/STATUS-ember-flex-skill-slot-pilot-approve.md`） |
+| **B-flex-2** | **可装配轻技 1 槽**（位移 **或** 保命择一；荐 A · 位移「余烬踏步」；TrMenu 点击；零体力） | 静态 `rg` 轻技 id / 1 槽字段；菜单装配+释放轻测；**禁** wall-clock / DPS；不叫挑刺；**禁**动誓约三主动数值、体力日周门、四件甲、锻炉大改、T0–T3 刃护符；**勿**位移+保命双上 | **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 补记 `3841f4f` · 测 `1c36873` · close 本提交；报告 `docs/STATUS-ember-flex-skill-slot-pilot-test.md`；CoreRpg **1.15.25**） |
 
-**并行不捆：** **B2.17** 已 **PASS · 勾销**；文案薄窗暂缓；**勿捆 B2.x**；B-flex-1 已结（`d333b01`）；B-flex-2 **已批 A · 待插件**。
+**并行不捆：** **B2.17** 已 **PASS · 勾销**；文案薄窗暂缓；**勿捆 B2.x**；B-flex-1 已结（`d333b01`）；B-flex-2 已结（close 本提交）。
 
 **本窗软挂（标「不捆」）：**
 - ~~技能可装配~~ → 已升 **B-flex-2**（本表）
-- 烬砧材料→部件产线（现网=升阶+强化/镶嵌/分解入口，非多部位锻炉）→ **仍 soft · 后续**
+- 烬砧材料→部件产线（现网=升阶+强化/镶嵌/分解入口，非多部位锻炉）→ **仍 soft · 下一窗待策划薄设计**
 
 **明确未做/未清：** 四件甲 · 誓约主动大改 · 锻炉重做 · 位移+保命双上 · **勿宣称 B0.1 已清**
 
@@ -293,11 +294,11 @@
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 可装配轻技 **已批 A · 待插件**（荐 A · 位移 · `design-ember-flex-skill-slot-pilot.md`；批准 `d1e88e4`；优先于非文案内容窗；与文案薄窗无关；**勿捆 B2.x**）
+内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close 本提交；CoreRpg **1.15.25**）
 文案窗：**B2.17** 已 **PASS · 勾销**；**暂缓再挑文案薄窗**。
-软挂不捆：  烬砧材料→部件产线（技能装配已升 B-flex-2）
+软挂升窗：  烬砧材料→部件产线（薄设计 · 非锻炉重做）
 软观察：    奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
-策划挑选排除：刚结 B2.6–B2.17 / B-flex-1；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上（B-flex-2 明确择一）。
+策划挑选排除：刚结 B2.6–B2.17 / B-flex-1 / B-flex-2；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上。
 ```
 
 **不建议本额度新开：** 新养成线、新货币、新副本类型、Citizens、改 Paper/NMS。
@@ -309,7 +310,7 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.17 等已结；**B2.17 PASS · 勾销**（设计 `3a3a226` · 批准 `0eb15c2` · 施工 `9631343` · 测 `dabf579` · close 本提交）
-- **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 可装配轻技 **已批 A · 待插件**（荐 A · 位移「余烬踏步」· `design-ember-flex-skill-slot-pilot.md`；批准 `d1e88e4`；1 槽；勿两套一起上；软挂烬砧材料→部件；与文案薄窗无关；**勿捆 B2.x**）
-- **文案窗：** **B2.17** 已 **PASS · 勾销**；**暂缓再挑文案薄窗**；优先 B-flex-2（内容灵活）
+- **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close 本提交；CoreRpg **1.15.25**）；下一窗：**烬砧材料→部件** 薄设计
+- **文案窗：** **B2.17** 已 **PASS · 勾销**；**暂缓再挑文案薄窗**
 - 软观察：奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳 / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
