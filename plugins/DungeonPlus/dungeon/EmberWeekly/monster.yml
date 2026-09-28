@@ -1,6 +1,7 @@
 # P3 2026-09-27: 深核廊三室刷点 — 前厅Y65 / 中核Y68 / 深室Y63
 # 周 · Display：深核廊僵尸/骷髅/蛮兵·甲/蛮兵·乙
 # kill / heal / reward 逻辑保留；不改 MM 血伤掉落
+# 2026-09-28 中核链式: wave2→wave2a/2b；$kill 分组；消 kill-any；传深室挂 wave2b.end
 groups:
   wave1:
   - monster:
@@ -12,18 +13,32 @@ groups:
     end:
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$teleport{location=-40,68,308} @player"
-    - "$monstergroup{group=wave2;repeat=false;delay=3} @dungeon"
+    - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  wave2:
+  # 中核链式重叠（对齐日常房2）：wave2a 尸 start 即刷 wave2b 骷；传深室仅在 wave2b.end；禁 kill-any
+  wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberWeeklyZombie;location=-40,68,308;amount=2;scattered=1.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=深核廊僵尸;amount=2} @system"
+    start:
+    - "$message{type=text;text=§e【深核·中核】僵尸贴上 —— 骷髅将交错压上} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    end:
+    - "$message{type=text;text=§7中核尸侧已清} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    auto-start: false
+
+  wave2b:
+  - monster:
     - "$mob{plugin=MythicMobs;name=EmberWeeklySkeleton;location=-42,68,312;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=深核廊僵尸,深核廊骷髅;amount=5} @system"
+    - "$kill{mobname=深核廊骷髅;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【深核·中核】混合增压：远程优先} @dungeon"
+    - "$message{type=text;text=§e【深核·中核】骷髅重叠压上 —— 清完进入深室} @dungeon"
     end:
+    - "$message{type=text;text=§a中核已清 · 转入深室} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$teleport{location=-40,63,340} @player"
     - "$monstergroup{group=wave3;repeat=false;delay=3} @dungeon"
