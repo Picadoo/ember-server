@@ -1,6 +1,6 @@
 # 设计稿 · 拆解菜单 Open tell 管理口吻（B2.47）
 
-> **STATUS：待批 A（总控 · 交稿 · 2026-09-29 04:51 Asia/Shanghai）。**  
+> **STATUS：已批 A（总控 · 2026-09-29 04:52 Asia/Shanghai）。**  
 > 本稿只定 TrMenu `ember_disassemble.yml` **Open Events tell** **1** 句：去掉「逻辑待 CoreRpg 接线」管理口吻，保留手持刃/护符人话提示。  
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批后由专岗改 TrMenu）。  
 > **禁**改 scrap/reforge 数值与逻辑、体力门、四件甲、锻炉；禁长测/挑刺；**勿宣称 B0.1 已清**；精英壳不捆。  
@@ -16,7 +16,7 @@
 | 稿件 | 拆解菜单 · **Open tell 管理口吻人话化**（UX · B2.47） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:51 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_disassemble.yml` · B2.46 PASS 旁证 L89 |
-| 状态 | **待批 A** · 交总控 |
+| 状态 | **已批 A** · 交插件改 TrMenu |
 | tip 路径 | `docs/design-ember-disassemble-open-tell-copy.md` |
 | 上游 | B2.46 close `f04c01b` · 规则速览管理注释已清 |
 
@@ -160,7 +160,7 @@ rg -n '逻辑待 CoreRpg' plugins/TrMenu/menus/
 
 ## 7. 回总控摘要
 
-- **STATUS：待批 A** · tip `docs/design-ember-disassemble-open-tell-copy.md`
+- **STATUS：已批 A** · tip `docs/design-ember-disassemble-open-tell-copy.md`
 - **荐案：L22** → `tell: §7[分解] §7请手持 §c余烬之刃 §7或 §e余烬护符 §7，点左侧即可。`
 - **实际行号：** 脏点 **L22**；旁证 L89 已人话（B2.46 · 勿回改）
 - **旁附 soft 计数：3**（guild L22 · friends L2 · mail L2）· **不捆**
@@ -171,7 +171,7 @@ rg -n '逻辑待 CoreRpg' plugins/TrMenu/menus/
 
 ## 8. 总控批示
 
-- [ ] **批 A** · L22 替换为荐句（去「逻辑待 CoreRpg 接线」；保留持装；可点左侧）
+- [x] **批 A** · L22 替换为荐句（去「逻辑待 CoreRpg 接线」；保留持装；可点左侧）（总控 · tip 本提交）
 - [ ] **驳回** · 说明
 
-**待批摘要（交总控）：** 荐 A · Open tell 去管理口吻；guild/friends/mail 旁记 soft 不捆；L89 旁证勿回改。交 **余烬-插件** 批后只改 `ember_disassemble.yml` L22。禁长测/挑刺；勿宣称 B0.1 已清。验收：Open tell 无「逻辑待 CoreRpg」+ 开菜单轻测。
+**批示摘要：** 采纳荐句；guild/friends/mail 旁记 soft 不捆；L89 旁证勿回改。交 **余烬-插件** 只改 `ember_disassemble.yml` L22。禁长测/挑刺；勿宣称 B0.1 已清。验收：Open tell 无「逻辑待 CoreRpg」+ 开菜单轻测。
