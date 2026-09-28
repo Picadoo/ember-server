@@ -1,0 +1,119 @@
+# 灾厄奖励预览真分页 A — 日箱 / 尾刀摘要
+# 入口：ember_calamity 图标 P · 返回：底栏 B → ember_calamity
+# 纯展示：不奔赴、不进本、不发物；尾刀奖励仅结算最后一击玩家
+
+Title: '§4灾厄 · 奖励预览'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#   H   #'
+  - '# D Q W #'
+  - '# L C T #'
+  - '#       #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-1'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  H:
+    display:
+      material: chest
+      name: '§4灾厄奖励预览'
+      lore:
+        - ''
+        - '§7公共窗奖励摘要 · 日箱与尾刀分开结算'
+        - '§8纯展示 · 不奔赴 · 不进本 · 不发物'
+
+  D:
+    display:
+      material: chest
+      name: '§e日箱 · 每日限 1 次'
+      lore:
+        - ''
+        - '§7核心碎片 §f×2'
+        - '§7附魔晶 §f×1'
+        - '§7灾厄余烬 §f×2'
+        - '§8NI id: mat_ember_core_fragment / crystal_ember_enchant'
+        - '§8NI id: mat_calamity_ember'
+        - '§8现网日箱 · 每日限领 1 次'
+
+  Q:
+    display:
+      material: paper
+      name: '§d保护券 · 约 10%'
+      lore:
+        - ''
+        - '§7日箱附加机会：余烬保护券 §e约 10%'
+        - '§c非必给 · 仅展示现网概率'
+        - '§8NI id: mat_ember_protect_scroll'
+
+  W:
+    display:
+      material: nether star
+      name: '§6周首次日箱 · 凝核 ×1'
+      lore:
+        - ''
+        - '§7本周首次领取灾厄日箱：凝核 §f×1'
+        - '§8随日箱结算 · 同周不重复'
+        - '§8NI id: core_ember_compact'
+
+  L:
+    display:
+      material: diamond sword
+      name: '§c尾刀必给 · 最后一击'
+      lore:
+        - ''
+        - '§7灾厄余烬 §f×1'
+        - '§7凝核 §f×1'
+        - '§7核心碎片 §f×2'
+        - '§c仅最后一击玩家结算，非全员参战奖励'
+        - '§8NI id: mat_calamity_ember / core_ember_compact'
+        - '§8NI id: mat_ember_core_fragment'
+
+  C:
+    display:
+      material: flint
+      name: '§b尾刀概率 · 孔石 / 外观'
+      lore:
+        - ''
+        - '§7锋利石 §e约 30%'
+        - '§7稳固石 / 汲取石 / 疾风石 §e各约 2%'
+        - '§7稳定符 §e约 5% · 外观碎片 §e约 20%'
+        - '§8均为最后一击结算机会，非必给'
+        - '§8NI id: gem_ember_sharp / gem_ember_steady'
+        - '§8NI id: gem_ember_drain / gem_ember_gale'
+        - '§8NI id: mat_ember_stable_charm / cosmetic_calamity_shard'
+
+  T:
+    display:
+      material: nether star
+      name: '§cT3 刃 / 护符 · 各约 1%'
+      lore:
+        - ''
+        - '§7T3 余烬之刃 §e约 1%'
+        - '§7T3 余烬护符 §e约 1%'
+        - '§c均为尾刀概率，均不保底'
+        - '§c不是全员参战奖励，也不是必掉'
+        - '§8NI id: gear_ember_t3_blade / gear_ember_t3_talisman'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回灾厄'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_calamity'

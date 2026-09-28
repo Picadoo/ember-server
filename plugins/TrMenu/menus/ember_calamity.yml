@@ -59,13 +59,15 @@ Icons:
       name: '§6奖励预览'
       lore:
         - ''
-        - '§7参战：核心、灾厄余烬、外观碎片'
+        - '§7尾刀结算：核心、灾厄余烬、外观碎片'
         - '§7日箱：核心×2 + 附魔晶×1 + 余烬×2'
         - '§7尾刀低概率 §cT3 §7装备（刃 / 护符各 1%）'
+        - ''
+        - '§e➥ §f点击查看'
     actions:
       all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §4[灾厄] §7公共窗打灾厄使；日箱限 1；正式入口是 ember_event。'
+        - 'sound: BLOCK_CHEST_OPEN-1-1'
+        - 'menu: ember_calamity_rewards'
 
   R:
     display:
