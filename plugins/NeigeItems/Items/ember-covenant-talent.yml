@@ -17,7 +17,7 @@ mat_ember_talent_reset:
   name: '&b天赋重置券'
   lore:
     - '&8额外洗点 · 免晶钻'
-    - '&7用于 /corerpg talent reset（日免费用尽后）'
+    - '&7用于枢纽 · 天赋（日免费用尽后）'
   enchantments:
     DURABILITY: 1
   hideflags:
