@@ -2,14 +2,14 @@
 # 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=64..66 @ z=18/38 → AIR
 # Display：$kill 对齐 MM 去色名 潮蚀尸 / 浪矢骷 / 潮闸蛮兵
 # 2026-09-28 波次差异: 房2 桥面先浪矢骷×3（对岸）→ 再潮蚀尸×3（桥头冲锋）
+# 2026-09-28 第二房/Boss前压试点: wave1 裁至4；door2→boss_prep(门槛浪矢×2)→boss；房2不动
 groups:
   wave1:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=-2,64,8;amount=2;scattered=0.8;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=2,64,8;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailyTideZombie;location=0,64,14;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=潮蚀尸;amount=5} @system"
+    - "$kill{mobname=潮蚀尸;amount=4} @system"
     start:
     - "$message{type=text;text=§e【水道·沿岸】清尽潮蚀尸再开闸 —— 别撞铁栅} @dungeon"
     end:
@@ -51,7 +51,7 @@ groups:
     start:
     - "$message{type=text;text=§e【水道·桥头】潮蚀尸×3 —— 清完开闸厅门} @dungeon"
     end:
-    - "$message{type=text;text=§a折桥已清 · 闸厅门开了} @dungeon"
+    - "$message{type=text;text=§a折桥已清 · 闸厅门开了 · 门槛卫} @dungeon"
     - "$operation-block{loc=-1,64,38;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,65,38;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,66,38;mode=set;type=AIR} @dungeon"
@@ -62,7 +62,22 @@ groups:
     - "$operation-block{loc=1,65,38;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,66,38;mode=set;type=AIR} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    - "$monstergroup{group=boss_prep;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  # Boss 前门压：闸厅入口内侧两侧浪矢点射（门 z=38 与 Boss z=46 之间）
+  boss_prep:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideSkeleton;location=-3,64,41;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyTideSkeleton;location=3,64,41;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=浪矢骷;amount=2} @system"
+    start:
+    - "$message{type=text;text=§e【闸厅·门槛】两侧浪矢点射 —— 清完才出蛮兵} @dungeon"
+    end:
+    - "$message{type=text;text=§7门槛卫已清 · 潮闸蛮兵现身} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=2} @dungeon"
     auto-start: false
 
   boss:

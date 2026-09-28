@@ -4,14 +4,14 @@
 # 2026-09-28 波次差异: 房2 先对射骷×2 → 再涌尸×4（禁旧「先3尸后3骷」）
 # Display 名仍：灰烬庭院僵尸/骷髅/蛮兵（MM 未改）
 # 2026-09-28 门宽对齐: 门1 z=13 / 门2 z=25 仅 x=-1..1 × y=65..67（AIR×9）；删 loc=-2
+# 2026-09-28 第二房/Boss前压试点: wave1 裁至4；door2→boss_prep(门槛尸×2)→boss；房2不动
 groups:
   wave1:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-5,65,7;amount=2;scattered=0.8;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=5,65,7;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=0,65,10;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill{mobname=灰烬庭院僵尸;amount=5} @system"
+    - "$kill{mobname=灰烬庭院僵尸;amount=4} @system"
     start:
     - "$message{type=text;text=§e【前厅】清尽僵尸再开门 —— 别急着撞铁门} @dungeon"
     end:
@@ -54,7 +54,7 @@ groups:
     start:
     - "$message{type=text;text=§e【回廊·涌尸】僵尸×4 —— 清完开 Boss 门} @dungeon"
     end:
-    - "$message{type=text;text=§a回廊已清 · Boss 门开了} @dungeon"
+    - "$message{type=text;text=§a回廊已清 · Boss 门开了 · 终厅门槛压} @dungeon"
     - "$operation-block{loc=-1,65,25;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,66,25;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,67,25;mode=set;type=AIR} @dungeon"
@@ -65,7 +65,22 @@ groups:
     - "$operation-block{loc=1,66,25;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,67,25;mode=set;type=AIR} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    - "$monstergroup{group=boss_prep;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  # Boss 前门压：终厅门槛内侧两侧尸贴脸（door2 z=25 与 Boss z=31 之间）
+  boss_prep:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-3,65,27;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=3,65,27;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=灰烬庭院僵尸;amount=2} @system"
+    start:
+    - "$message{type=text;text=§e【终厅·门槛】两侧僵尸贴脸 —— 清完才出蛮兵} @dungeon"
+    end:
+    - "$message{type=text;text=§7门槛已清 · 蛮兵现身} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=2} @dungeon"
     auto-start: false
 
   boss:

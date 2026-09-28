@@ -2,6 +2,7 @@
 # 分房 $kill（禁 $kill-any）；门1 z=4@y64；门2 z=4@y70 · x=-1..1 → AIR
 # Display：$kill 对齐 MM 去色名 断塔卫尸 / 裂隙箭骷 / 断塔守望
 # 2026-09-28 波次差异: 环廊双侧裂隙箭骷 2+2 → 再卫尸×2（顺序单 $kill）
+# 2026-09-28 第二房/Boss前压试点: 房2 start 链式重叠（对齐霜晶/锈轨）；wave2a start→wave2b delay2；开门在 wave2b
 groups:
   wave1:
   - monster:
@@ -28,7 +29,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 中层环廊：东西双侧对射骷 2+2 → 内侧卫尸×2
+  # 中层环廊：对射 start 即链式刷卫尸（重叠压）；开门仅在 wave2b $kill
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailySpireSkeleton;location=-6,70,0;amount=2;scattered=0.8;level=1} @dungeon"
@@ -36,11 +37,11 @@ groups:
     condition:
     - "$kill{mobname=裂隙箭骷;amount=4} @system"
     start:
-    - "$message{type=text;text=§e【中层环廊·对射】双侧裂隙箭骷 —— 一上环廊就双边挨箭} @dungeon"
+    - "$message{type=text;text=§e【中层环廊·对射】双侧裂隙箭骷 —— 一上环廊就双边挨箭 · 卫尸将交错压上} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
     end:
-    - "$message{type=text;text=§7对射已清 · 卫尸压上} @dungeon"
+    - "$message{type=text;text=§7对射侧已清} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=3} @dungeon"
     auto-start: false
 
   wave2b:
@@ -50,7 +51,7 @@ groups:
     condition:
     - "$kill{mobname=断塔卫尸;amount=2} @system"
     start:
-    - "$message{type=text;text=§e【环廊·卫尸】断塔卫尸×2 —— 清完开顶门} @dungeon"
+    - "$message{type=text;text=§e【环廊·卫尸】断塔卫尸×2 —— 与对射重叠压 · 清完开顶门} @dungeon"
     end:
     - "$message{type=text;text=§a环廊已清 · 顶门开了} @dungeon"
     - "$operation-block{loc=-1,70,4;mode=set;type=AIR} @dungeon"
