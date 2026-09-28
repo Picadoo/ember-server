@@ -1,6 +1,6 @@
 # 设计稿 · NI disassemble 文件头去命令教学（B2.54）
 
-> **STATUS：待批 A（总控交稿 · 2026-09-29 05:30 Asia/Shanghai）。**
+> **STATUS：已批 A（总控 · 2026-09-29 05:31 Asia/Shanghai）。**
 > 本稿只定 `plugins/NeigeItems/Items/ember-disassemble.yml` **YAML 文件头 L3 注释** 1 行：去掉命令教学，改成功能摘要。
 > **本窗只处理维护者可见注释（非玩家 UI）；新句不写斜杠、不写 STATUS 路径。**
 > **本窗 commit 只写 docs；NI 玩法 YAML、物品 lore、数值、配方及其它 NI 文件零改**（批 A 后由**物品岗**只改 NI L3，非插件 TrMenu）。
@@ -16,7 +16,7 @@
 | 稿件 | NI disassemble 文件头 L3 去命令教学，改功能摘要（UX · B2.54） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 05:30 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-disassemble.yml` · B2.53 PASS 旁证 |
-| 状态 | **待批 A** · 批后交**物品岗（NI）**，非插件 TrMenu |
+| 状态 | **已批 A** · 交**物品岗（NI）**，非插件 TrMenu |
 | tip 路径 | `docs/design-ember-ni-disassemble-header-copy.md` |
 | 上游 | B2.53 close `b265f0b` · hub AFK 已清；升本窗收 NI disassemble L3 |
 
@@ -139,5 +139,7 @@ git diff -- plugins/NeigeItems/Items/ember-disassemble.yml
 
 ## 8. 总控批示
 
-- [ ] **批 A** · 仅 `ember-disassemble.yml` L3 按上表荐案改功能摘要；物品内容、其它 NI、玩法零改
+- [x] **批 A** · 仅 `ember-disassemble.yml` L3 按上表荐案改功能摘要；物品内容、其它 NI、玩法零改
 - [ ] **驳回** · 说明
+
+**批示摘要：** 批 A。仅 NI `ember-disassemble.yml` L3 改功能摘要；lore/数值/配方零改；pets 不捆；施工交物品岗；禁长测/挑刺；勿宣称 B0.1。
