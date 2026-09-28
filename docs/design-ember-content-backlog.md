@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 19:45 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 21:16 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B0.4 挂机 2h 产出基线采数**：已批 **A**（`design-ember-afk-b04-2h-baseline.md`）· 测岗采数中 · **只采数不改 `afk_caps`**
+- （无）
 
 ### 刚结
+- **B0.4 挂机 2h 产出基线 A2**：**PASS · 计算外推**（`STATUS-ember-afk-b04-2h-baseline.md` · 用户否决墙钟 2h · 短样→表 · **未改** `over_chance`）
 - **B0.4 挂机 2h 基线采数设计**：已批 **A**（`design-ember-afk-b04-2h-baseline.md` · 只采数不改 `afk_caps`）
 - **B1.3 精英 Boss TTK 关账采数 A**：**PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · Boss TTK **65.5s** · 全本 **535.3s** · 剩血 62% 观察 · 保持 5200/12 · 非砍血）
 - **B1.3 精英 Boss TTK 关账设计**：已批 **A**（`design-ember-b13-elite-boss-ttk.md` · 默认不动 5200/12）
@@ -70,7 +71,7 @@
 ### 仍挂
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
-- **B0.4 挂机日顶二档数值**：文档债已闭环；**2h 基线采数已批 A · 测岗中**（`design-ember-afk-b04-2h-baseline.md`）· **禁止**本窗改 `over_chance` · 经济 B1 另批
+- **B0.4 挂机日顶二档数值**：文档债已闭环；**2h 计算基线已落**（`STATUS-ember-afk-b04-2h-baseline.md`）· **禁止**无另批强开经济改数 · 经济 B1 另批
 - ~~**B1.3 精英 Boss TTK**~~ → **关账采数 PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · 65.5s / 535.3s · 5200/12 不动 · 剩血 62% 观察不砍血）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
 - B0.2 周本/深渊/使徒校准 ΔTTK 均 PASS（正式团本人数门仍 3～5）
@@ -91,7 +92,7 @@
 
 - **B0.1 / B0.3：** 已完成（更早关闭）。
 - **B0.2：** 周本 / 深渊 10·12 / **使徒校准** ΔTTK 均 **PASS**（使徒见 `STATUS-ember-raid-apostle-ttk-debt.md` · 门已还原 3～5）。
-- **B0.4：** **方案 A 文档债已闭环**（`design-ember-afk-b04-softcap.md` / `STATUS-ember-afk-b04-debt.md`）；**2h 基线采数已批 A**（`design-ember-afk-b04-2h-baseline.md`）；数值二档仍待经济窗另批 B1。
+- **B0.4：** 文档债已闭环；**2h 产量表已按短样外推落盘**（`STATUS-ember-afk-b04-2h-baseline.md` · 非墙钟实挂）；数值二档仍待经济窗另批 B1。
 - **B1.1～B1.4、B2.1～B2.4：** 已完成；相关交付记录：模板 `5f19c31`、坐标 `97d4029`、告示 `8a22023` / `193ab82`。
 - **B2.5：** 等同 B0.4 经济项，随该债务处理。
 

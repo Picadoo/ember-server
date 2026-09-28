@@ -15,7 +15,7 @@
 | 稿件 | B0.4 · 挂机 **2h 同账号产出基线采数**（默认定数 · 非改软顶） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | `ember_afk` · `afk_caps` · NI `mat_ember_*` · TrMenu `ember_hub`→`ember_afk` |
-| 状态 | **已批 A · 待测岗采数** |
+| 状态 | **已批 A2 · 短样外推（用户改口径）** |
 | 关联 STATUS | `STATUS-ember-afk-b04-debt.md` · `design-ember-afk-b04-softcap.md` · `STATUS-afk-caps.md`（若在仓） |
 
 ### 硬约束（本稿）
@@ -164,3 +164,14 @@ UX 否决：零手打指令 **PASS（沿用）** · NI id **PASS** · 无新功�
 
 设计 tip `871702f`；本批注 commit 后派测。
 
+
+---
+
+## 总控批注 · 口径修正（2026-09-28 21:16 Asia/Shanghai）
+
+**用户否决墙钟 2h 实挂**：「几分钟采样即可计算」。
+
+- **原批 A（墙钟 ≥120 min）作废执行**；测岗长挂已停。
+- **改批 A2（短样 + 外推）**：复用 / 新采 **数分钟** kills/min，按 `over_chance=0.25` 与日顶拼 **2h 期望表**；**禁止**再派 2h 实挂验收。
+- 结案见 `STATUS-ember-afk-b04-2h-baseline.md`（计算基线 PASS）。
+- **仍禁**本窗改 `afk_caps`；经济 B1 另批。
