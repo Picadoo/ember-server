@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 09:17 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 09:18 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 精英周本厅一链式+消 kill-any：插件施工（本轮 · 设计已批）
+- 精英周本厅一链式：测岗短抽（本轮）
 
 ### 刚结
-- **精英周本波次差异设计**：已批方案 A（`design-ember-elite-wave-variance.md` · 本 commit）
+- **精英周本厅一链式+消 kill-any**（施工 `03ee076` · 测中）
+- **精英周本波次差异设计**：已批方案 A（`design-ember-elite-wave-variance.md` / `eb2d042`）
 - **周本中核链式重叠**：**PASS**（`75e06b0` / 测 `a63bbfb`）
 - **周本波次差异设计**：已批方案 A（`design-ember-weekly-wave-variance.md` / `6a1f8c2`）
 - **霜晶房2链式重叠**：**PASS**（`36e98c8` / 测 `91eee00`）
