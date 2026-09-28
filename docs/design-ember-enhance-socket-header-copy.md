@@ -1,6 +1,6 @@
 # 设计稿 · enhance/socket 文件头斜杠教学口吻（B2.51）
 
-> **STATUS：待批 A（总控 · 2026-09-29 05:15 Asia/Shanghai）。**
+> **STATUS：已批 A（总控 · 2026-09-29 05:16 Asia/Shanghai）。**
 > 本稿只定 TrMenu `ember_enhance.yml` / `ember_socket.yml` **YAML 文件头 L2 注释**各 1 行：去掉「跑命令」教学，保留功能摘要。
 > **本窗只处理维护者可见注释（非玩家 UI / 非 Open tell）；新句不写斜杠、不写 STATUS 路径。**
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批 A 后由专岗只改两行 TrMenu L2）。
@@ -17,7 +17,7 @@
 | 稿件 | enhance/socket · **文件头命令教学去除，保留功能摘要**（UX · B2.51） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 05:15 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_enhance.yml` · `ember_socket.yml` · B2.50 PASS 旁证 |
-| 状态 | **待批 A** · 批后交插件 TrMenu |
+| 状态 | **已批 A** · 交插件 TrMenu |
 | tip 路径 | `docs/design-ember-enhance-socket-header-copy.md` |
 | 上游 | B2.50 close `30ca5c8` · menus「逻辑待」本轨已归零 |
 
@@ -160,7 +160,7 @@ git diff -- plugins/TrMenu/menus/ember_enhance.yml plugins/TrMenu/menus/ember_so
 
 ## 7. 总控批示
 
-- [ ] **批 A** · 两文件 L2 按上表荐案去命令教学、保留功能摘要
+- [x] **批 A** · 两文件 L2 按上表荐案去命令教学、保留功能摘要
 - [ ] **驳回** · 说明
 
-**批示摘要（待填）：** —
+**批示摘要：** 批 A。仅 `ember_enhance.yml` / `ember_socket.yml` 各改 L2 为荐案功能摘要；Icons/Open 零改；shop/hub/NI 旁记不捆；禁长测/挑刺；勿宣称 B0.1。
