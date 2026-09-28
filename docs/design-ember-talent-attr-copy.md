@@ -1,6 +1,6 @@
 # 设计稿 · 天赋菜单裸属性键人话化（B2.15）
 
-> **未批准前不施工。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` 二层节点 lore 中裸属性键（`phys_damage` / `crit_*` / …）→ 短中文属性名；**禁**改 `talent.yml` 节点键 / cost / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。
+> **已批准 A · 待插件施工。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` 二层节点 lore 中裸属性键（`phys_damage` / `crit_*` / …）→ 短中文属性名；**禁**改 `talent.yml` 节点键 / cost / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。
 > 债源：B2.14 方案 B 残留 · close `3b00eff` 旁扫点名；`nodeId`/前置已清，同文件仍 **9** 行裸属性键 lore（可选附带 `passive`/`skill` 类型英词）。  
 > 对齐：`design-ember-talent-nodeid-copy.md`（B2.14）· `design-ember-talent-cap-copy.md`（B2.13）· UX「文案短清楚 · 少打指令 · TrMenu」。  
 > 排除本轮：刚结 B2.6–B2.14；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔升 B；B0.1 除非新证据；精英预览壳；isomorphic 空壳 tell→真页；新进度/货币/副本类型；Citizens；Paper。**勿宣称 B0.1 已清。**
@@ -14,14 +14,15 @@
 | 稿件 | 天赋 TrMenu · **裸属性键人话化**（UX · B2.14 方案 B 残留 · B2.15） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 00:25 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_talent.yml` · `plugins/CoreRpg/talent.yml` stats 键 · B2.14 close `3b00eff` |
-| 状态 | **未批准 · 待总控批 A/B** |
-| 关联 STATUS / 稿 | backlog · 批后 STATUS-approve / 测报 |
+| 状态 | **已批 A · 待插件施工** |
+| 批准记录（总控） | 2026-09-29 00:27 Asia/Shanghai：余烬-总控批准 **A**；批准设计 tip `26d7895` 已推至 `origin/main`。仅允许插件另开施工改 `ember_talent.yml` 9 个裸属性 lore；本批准 commit 不改 YAML。 |
+| 关联 STATUS / 稿 | `docs/STATUS-ember-talent-attr-copy-approve.md` · backlog · 测报 |
 
 ### 硬约束（本稿）
 
-| 可动（**仅若批 A/B 且另开施工**） | 不可动（硬禁 · 含本稿 commit） |
+| 可动（**仅批 A 后另开施工**） | 不可动（硬禁 · 含本稿 commit） |
 |--------------------------------|--------------------------------|
-| `ember_talent.yml` 玩家可见 lore 中裸属性键行（方案 B 另含类型英词） | `talent.yml` 节点 id 与 requires/cost/**stats 键名与数值** |
+| `ember_talent.yml` 玩家可见 lore 中裸属性键行（方案 B 类型英词不在本轮） | `talent.yml` 节点 id 与 requires/cost/**stats 键名与数值** |
 | 热更 / TrMenu reload（服约定） | `command: corerpg talent unlock <nodeId>` 实参；洗点价；誓约树结构 |
 | | 改点数硬顶 30、Lv 门槛、日免洗；其它菜单；git push；奖励页 `NI id:` / 套装 `gear_ember_*`（另窗） |
 
@@ -161,6 +162,6 @@
 
 ## 9. 回总控一句话
 
-**硬债空；荐 A——仅改 `ember_talent.yml`：9×二层效果裸属性键→短中文（物攻/暴伤/…）；零动 talent 键与 unlock/stats；引 B2.14 close `3b00eff`。当前：未批准 · 待总控批。**
+**硬债空；荐 A——仅改 `ember_talent.yml`：9×二层效果裸属性键→短中文（物攻/暴伤/…）；零动 talent 键与 unlock/stats；引 B2.14 close `3b00eff`。当前：已批 A · 待插件施工。**
 
 **专岗：** **策划**（本稿）→ **插件**（批后改 1× TrMenu YAML 文案）→ **测试**（静态 rg 英属性键=0 + 开菜单目视二层九节点效果行）

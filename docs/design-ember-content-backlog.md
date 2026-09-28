@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.15 天赋菜单裸属性键人话化**：设计已交 · **未批准**（`docs/design-ember-talent-attr-copy.md` · 荐 A；引 B2.14 close `3b00eff`）
+- **B2.15 天赋菜单裸属性键人话化**：设计已交 · **已批 A · 待插件**（`docs/design-ember-talent-attr-copy.md` · 批准 tip `26d7895`；引 B2.14 close `3b00eff`）
 
 ### 刚结
 - **B2.14 天赋菜单 §8 `nodeId`/前置人话化**：**PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；报告 `docs/STATUS-ember-talent-nodeid-copy-test.md`；裸属性键已挂 **B2.15**；passive·skill / 奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
@@ -96,7 +96,7 @@
 - B0.1 无新证据不重开
 - ~~**B2.13 天赋 `*_cap` 文案**~~ → **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close `33218c8`；报告 `docs/STATUS-ember-talent-cap-copy-test.md`）
 - ~~**B2.14 天赋 §8 nodeId/前置**~~ → **PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；报告 `docs/STATUS-ember-talent-nodeid-copy-test.md`）
-- **B2.15 天赋裸属性键人话化** → 设计已交 · **未批准**（`design-ember-talent-attr-copy.md` · 荐 A · 单文件 9 行；`passive`/`skill` / 奖励页 NI id / 套装 `gear_ember_*` 未宣称已清；引 close `3b00eff`）
+- **B2.15 天赋裸属性键人话化** → 设计已交 · **已批 A · 待插件**（`design-ember-talent-attr-copy.md` · 批准 tip `26d7895` · 单文件 9 行；`passive`/`skill` / 奖励页 NI id / 套装 `gear_ember_*` 未宣称已清；引 close `3b00eff`）
 - ~~**B2.12 灾厄 OP #6**~~ → **PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`）
 - ~~**B2.11** quest「深渊票」两句~~ → **PASS · 勾销**（设计 `4a2a671` · 批准 `ca68b64` · 施工 `8605d10` · 测 `a538d26` · 双路径 live+src；灾厄 OP #6 已由 B2.12 闭环）
 - ~~**B2.7 主线 `quest.yml`「日票/周票」台词**~~ → **PASS · 勾销**（设计 `b7ccbb8` · 批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25` · close `e950efe`）
@@ -133,7 +133,7 @@
 - **B2.12：** **PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`；EmberCalamity OP 拒门去 `/ember`）。
 - **B2.13：** **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close `33218c8`；天赋菜单 `*_cap` 人话化）。
 - **B2.14：** **PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；天赋菜单 §8 nodeId/前置人话化）。
-- **B2.15：** 设计已交 · **未批准**（`design-ember-talent-attr-copy.md` · 荐 A · 天赋裸属性键人话化；引 close `3b00eff`）。
+- **B2.15：** 设计已交 · **已批 A · 待插件**（`design-ember-talent-attr-copy.md` · 批准 tip `26d7895` · 天赋裸属性键人话化；引 close `3b00eff`）。
 
 ---
 
