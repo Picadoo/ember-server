@@ -5,7 +5,6 @@ mat_ember_covenant_reset:
   material: PAPER
   name: '&6誓约重置券'
   lore:
-    - '&7mat_ember_covenant_reset'
     - '&8洗约 · 免晶钻'
     - '&7用于 /corerpg covenant set|reset'
   enchantments:
