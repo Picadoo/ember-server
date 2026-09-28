@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `7af95b6` · 设计 `d9c5f02` · 批准 `c79e480`  
 **口径：** 纯静态 · 禁开菜单长测 · 禁挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS** · STATUS 已 push (`4f52d81`)
+**Verdict：** ✅ **PASS** · STATUS 已 push (`fac8df7`)
 
 ---
 
@@ -86,7 +86,7 @@ Title / Icons / Open 等正文相对 tip parent **零 diff**。本岗未碰服 �
 |----|-----|
 | 总评 | **PASS** |
 | 施工 tip SHA | `7af95b6` |
-| 测报 tip short SHA | `4f52d81` |
+| 测报 tip short SHA | `fac8df7` |
 | 是否已 push | **是** |
 | 报告路径 | `docs/STATUS-ember-friends-mail-header-copy-test.md` |
 | ops | `[]` |
