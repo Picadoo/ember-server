@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §2[盟约] §7创建公会 · 日捐盟课 · 周盟 Boss。逻辑待 CoreRpg 接线。'
+    - 'tell: §2[盟约] §7创建公会 · 日捐盟课 · 周盟 Boss，点下方即可。'
 
 Icons:
   '#':
