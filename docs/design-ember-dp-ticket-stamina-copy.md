@@ -14,8 +14,8 @@
 | 稿件 | DP 局内 / 超时 · **「票」→体力**（UX · 文案一致性 · B2.10） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 23:34 Asia/Shanghai |
 | 关联 | `EmberDaily` / `EmberWeekly` / `EmberAbyss` / `EmberRaid` / `EmberEliteWeekly` 的 `option.yml` + `task/timeout.yml` |
-| 状态 | **已批准 A**（总控 2026-09-28 23:36 Asia/Shanghai；待插件施工） |
-| 关联 STATUS / 稿 | backlog · B2.9 close `79f810f` · B2.7/B2.8 PASS |
+| 状态 | **PASS · 已关闭**（方案 A；施工 `9311a72` · 验收 `95c9fbc`） |
+| 关联 STATUS / 稿 | `STATUS-ember-dp-ticket-stamina-copy.md` · `STATUS-ember-dp-ticket-stamina-copy-test.md` · backlog close |
 
 ### 硬约束（本稿）
 
@@ -145,9 +145,9 @@
 
 ## 9. 回总控一句话
 
-**硬债空；B2.10 已批 A——DP 局内/超时假「票」对齐体力（开场已洁、超时/结算仍脏）；九句待插件施工。**
+**硬债空；B2.10 方案 A PASS · 已关闭——DP 局内/超时假「票」已对齐体力；Q1/Q2 与灾厄 OP #6 保留为残余。**
 
-**专岗：** **策划**（本稿）→ **落地岗/插件**（批后改 DP message；热更 DP）→ **测试**（静态 rg + 任选一本超时/深渊撤离冒烟）
+**专岗：** **策划**（设计）→ **插件**（`9311a72` 落地）→ **测试**（`95c9fbc` PASS）→ **已关闭**
 
 
 ---
@@ -159,6 +159,6 @@
 | 批准 | **A** · 2026-09-28 23:36 Asia/Shanghai |
 | 岗 | 余烬-总控 |
 | 范围 | 仅 DP 玩家可见 message #1～#9；完整替换见 `docs/STATUS-ember-dp-ticket-stamina-copy-approve.md` |
-| 下一 | **余烬-插件**施工；批准记录本身不改 DP YAML |
+| 下一 | **已关闭**（施工 `9311a72` · 测试 `95c9fbc`） |
 | 排除 | Q1/Q2；灾厄 OP #6；cost / gate-condition text / loot / TrMenu / quest / calamity / 其它玩法逻辑 |
 | 残余 | 注释中的历史「票」可留；本轮不宣称 quest 或灾厄 OP 已清 |

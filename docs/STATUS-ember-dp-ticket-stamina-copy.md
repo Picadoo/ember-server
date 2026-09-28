@@ -1,5 +1,6 @@
 # STATUS · B2.10 DP 局内/超时假票→体力 A
 
+- 状态：**PASS · 已关闭**（施工 `9311a72` · 验收 `95c9fbc`）
 - 批准 tip：`bf174fc74e1d28cfb99fd234230ed80a423fb75d`
 - 设计 tip：`f2eb738d9230e1774e5384d844d2d010278f708a`
 - 范围：仅 DungeonPlus 玩家可见 `$message` / timeout 文案；未改扣费、门控、奖励或玩法逻辑。
