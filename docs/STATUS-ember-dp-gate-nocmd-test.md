@@ -7,7 +7,7 @@
 | 施工 tip | `e7bc1eb` · `fix(dp): B2.8 entry gate messages no slash` |
 | 批准 tip | `4c99c21` · 批准 A |
 | 设计 tip | `83d641a` · `docs/design-ember-dp-gate-nocmd.md` |
-| Verdict | **✅ PASS** |
+| Verdict | **✅ PASS · 勾销** |
 | JSON | `/tmp/b28-dp-gate-smoke3.json` · `/tmp/b28-dp-raid-smoke.json` · 菜单旁证 `/tmp/b28-dp-gate-smoke2.json` |
 
 ---

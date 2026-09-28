@@ -3,7 +3,7 @@
 - **批复 tip:** `4c99c21` — `docs: approve B2.8 DP gate no-cmd (A)`
 - **设计 tip:** `83d641a` — `docs: design B2.8 DP gate no-cmd thin window (A); sync backlog`
 - **施工时间:** 2026-09-28 23:10 CST (UTC+8)
-- **结果:** OK；只改玩家可见 message 字符串 #1～#5；未 push。
+- **结果:** **PASS · 勾销**；只改玩家可见 message 字符串 #1～#5；未 push。
 
 ## 5 处精确替换
 

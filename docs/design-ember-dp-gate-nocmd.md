@@ -14,7 +14,7 @@
 | 稿件 | DP 进本拒门 · **去斜杠教学**（UX · 可维护性 · B0.3 域外） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 23:06 Asia/Shanghai |
 | 关联 | `EmberWeekly` / `EmberRaid` / `EmberAbyss` / `EmberGuildBoss` `option.yml` · 对照日常/精英已洁句 |
-| 状态 | **已批 A · 待插件施工** |
+| 状态 | **PASS · 勾销** |
 | 关联 STATUS / 稿 | backlog · `design-ember-b03-menu-no-cmd.md` · `STATUS-ember-b03-menu-no-cmd-test.md` |
 
 ### 硬约束（本稿）
