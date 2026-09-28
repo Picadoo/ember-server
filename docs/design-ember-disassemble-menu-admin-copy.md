@@ -1,6 +1,6 @@
 # 设计稿 · 拆解菜单管理注释人话化（B2.46）
 
-> **STATUS：待批 A**（总控 · 2026-09-29 04:46 Asia/Shanghai）。  
+> **STATUS：已批 A（总控 · 2026-09-29 04:47 Asia/Shanghai）。**  
 > 本稿只定 TrMenu `ember_disassemble.yml` **规则速览** 玩家 lore **1** 行：去掉「STATUS-ember-disassemble.md」管理路径，改玩家人话。  
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批后由专岗改 TrMenu）。  
 > **禁**改拆解/重铸消耗与逻辑、体力门、四件甲、锻炉；禁长测/挑刺；**勿宣称 B0.1 已清**；精英壳不捆。  
@@ -15,7 +15,7 @@
 | 稿件 | 拆解菜单 · **规则速览管理注释人话化**（UX · B2.46） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:46 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_disassemble.yml` · B2.20 PASS 旁附 soft |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** · 交插件改 TrMenu |
 | tip 路径 | `docs/design-ember-disassemble-menu-admin-copy.md` |
 | 上游 | B-flex-4 close `6b0ce3d` · 灵活三窗挑刺本轨清 |
 
@@ -143,9 +143,18 @@ rg -n "STATUS-ember-disassemble|详见" plugins/TrMenu/menus/ember_disassemble.y
 
 ## 7. 回总控摘要
 
-- **STATUS：待批 A** · tip `docs/design-ember-disassemble-menu-admin-copy.md`
+- **STATUS：已批 A** · tip `docs/design-ember-disassemble-menu-admin-copy.md`
 - **荐案：人话替换 L89** → `§8点左侧即可分解或重铸`（删行备选不荐）
 - **实际行号：** 脏点 **L89**；对照 L84–87 / L94
 - **本窗零改：** TrMenu / NI / CoreRpg / 玩法 YAML **未动**
 - **旁记 soft：** YAML L1 文件头；NI `ember-disassemble.yml` 文件头（另一轨）；Open tell L22 管理口吻
 - **勿 push**；批后专岗改 TrMenu · 禁长测/挑刺 · **勿宣称 B0.1 已清**
+
+---
+
+## 8. 总控批示
+
+- [x] **批 A** · L89 人话替换为 `§8点左侧即可分解或重铸`（总控 · tip 本提交）
+- [ ] **驳回** · 说明
+
+**批示摘要：** 采纳荐句；**勿**删行优先于替换；YAML L1 / NI 文件头 / Open tell L22 本窗不推（旁记 soft）。交 **余烬-插件** 只改 `ember_disassemble.yml` L89。禁长测/挑刺；勿宣称 B0.1 已清。验收：玩家 lore `STATUS-ember-disassemble`=0 + 悬停轻测。

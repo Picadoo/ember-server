@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 04:46 Asia/Shanghai (总控 · B2.46 tip 交稿 · 待批 A · B-flex-4 close `6b0ce3d`)
+## Progress snapshot — 2026-09-29 04:47 Asia/Shanghai (总控 · B2.46 已批 A · 交插件 TrMenu)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.46 待批 A**（tip `docs/design-ember-disassemble-menu-admin-copy.md`；荐案：L89 人话替换「点左侧即可分解或重铸」；**勿**改拆解/重铸数值；禁长测/挑刺；**勿宣称 B0.1 已清**）。~~B-flex-4~~ → PASS · 勾销 `6b0ce3d`（CoreRpg **1.15.28**）；灵活轨 B-flex-1～4 PASS；精英壳勿硬开。
+- 文案薄窗：**B2.46 已批 A**（设计 `50a272d` · 批准本提交 · tip `docs/design-ember-disassemble-menu-admin-copy.md` · L89→「点左侧即可分解或重铸」；交插件；**勿**改拆解数值；禁长测/挑刺；**勿宣称 B0.1 已清**）。~~B-flex-4~~ → PASS · 勾销；灵活轨 B-flex-1～4 PASS；精英壳勿硬开。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -160,7 +160,7 @@
 - ~~**B-flex-3**~~ 副手守腕/生坠薄获取 → **PASS · 勾销**（见上）
 - ~~**B2.45** 烬砧灰箍抢口文案~~ → **PASS · 勾销**（设计 `ab67790` · 批准 `a040ce2` · 插件 `3066746` · 测 `d6768d9`/`c69bd4d` · close 本提交；报告 `docs/STATUS-ember-ash-brace-contention-copy-test.md`；下一窗升 **B-flex-4** 踏步热键；disassemble 管理注释仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B-flex-4** 踏步少开菜单热键~~ → **PASS · 勾销**（设计 `a9311ac` · 批准 `7b4a8b6` · 插件 `005a03b` · 测 `a1d5f7c` · close `6b0ce3d`；报告 `docs/STATUS-ember-flex-hotkey-sneak-drop-test.md`；CoreRpg **1.15.28**；下一窗升 **B2.46** 拆解管理注释；**勿宣称 B0.1 已清**）
-- **B2.46** 拆解菜单管理注释人话化（**待批 A**；tip `docs/design-ember-disassemble-menu-admin-copy.md`；荐案 L89→「点左侧即可分解或重铸」；**勿**改拆解/重铸数值；禁长测/挑刺；**勿宣称 B0.1 已清**）
+- **B2.46** 拆解菜单管理注释人话化（**已批 A** · 设计 `50a272d` · 批准本提交 · tip `docs/design-ember-disassemble-menu-admin-copy.md`；L89 人话替换；交插件；**勿**改拆解/重铸数值；禁长测/挑刺；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -240,7 +240,7 @@
 - ~~**B-flex-3**~~ → **PASS · 勾销**（close 本提交）。
 - ~~**B2.45**~~ → 烬砧灰箍抢口文案（**PASS · 勾销** · close `7dc96c9`）。
 - ~~**B-flex-4**~~ → 踏步少开菜单热键（**PASS · 勾销** · close `6b0ce3d` · CoreRpg **1.15.28**）。
-- **B2.46** → 拆解菜单管理注释人话化（**待批 A**；tip `design-ember-disassemble-menu-admin-copy.md`；荐 L89 人话替换）。
+- **B2.46** → 拆解菜单管理注释人话化（**已批 A** · 设计 `50a272d` · 批准本提交；交插件）。
 
 ---
 
@@ -389,7 +389,7 @@
 | ~~**B2.44**~~ | NI 余烬魂尘物品 lore feed 斜杠去指令化 | L34 → `&a用于枢纽 · 使魔 · 投喂`；L33/L35 保留 | **PASS · 勾销**（设计 `8ef2acb` · 批准 `a82321d` · 施工 `513bf8b` · 测 `4f628b5` · close 本提交） |
 | **B2.45** | 烬砧灰箍抢口文案（优先沉铁锭） | forge P 插主句；part A 插主句；part I 插旁句；消耗 ×12/×2 保留；**勿**改 part.yml | **PASS · 勾销**（设计 `ab67790` · 批准 `a040ce2` · 插件 `3066746` · 测 `d6768d9`/`c69bd4d` · close 本提交；报告 `docs/STATUS-ember-ash-brace-contention-copy-test.md`） |
 | **B-flex-4** | 踏步少开菜单热键（挑刺 #2） | 潜行+Q → cancel+cast；菜单口保留；**勿**改 CD14/距离5 | **PASS · 勾销**（设计 `a9311ac` · 批准 `7b4a8b6` · 插件 `005a03b` · 测 `a1d5f7c` · close `6b0ce3d`；报告 `docs/STATUS-ember-flex-hotkey-sneak-drop-test.md`；CoreRpg **1.15.28**） |
-| **B2.46** | 拆解菜单管理注释人话化 | `ember_disassemble.yml` 规则速览 L89 无字面 `STATUS-ember-disassemble.md`；荐人话「点左侧即可分解或重铸」；零改拆解/重铸数值 | **待批 A**（tip `docs/design-ember-disassemble-menu-admin-copy.md`） |
+| **B2.46** | 拆解菜单管理注释人话化 | `ember_disassemble.yml` L89→`§8点左侧即可分解或重铸`；零改拆解/重铸数值 | **已批 A**（设计 `50a272d` · 批准本提交；交插件） |
 
 ---
 
