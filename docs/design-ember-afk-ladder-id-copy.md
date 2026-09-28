@@ -14,8 +14,8 @@
 | 稿件 | 挂机庭 / 天梯 · **去内部代号**（UX · 入口文案一致性 · B2.9） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 23:20 Asia/Shanghai |
 | 关联 | `plugins/HolographicDisplays/database.yml` · `plugins/TrMenu/menus/ember_ladder.yml` |
-| 状态 | **待批**（未施工） |
-| 关联 STATUS / 稿 | backlog · B2.8 PASS `944c017` · B2.4 告示 PASS（HD 当时无命令教学，未清内部代号） |
+| 状态 | **已批 A · 待插件**（未施工） |
+| 关联 STATUS / 稿 | `docs/STATUS-ember-afk-ladder-id-copy-approve.md` · backlog 已批 A · 待插件 · B2.8 PASS `944c017` |
 
 ### 硬约束（本稿）
 

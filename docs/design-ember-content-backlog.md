@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 23:21 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 23:22 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.9 挂机庭/天梯去内部代号**：设计待批（`docs/design-ember-afk-ladder-id-copy.md` · 荐 A：HD 四板说明行 + `ember_ladder` lore/tell；未批不施工）
+- **B2.9 挂机庭/天梯去内部代号**：**已批 A · 待插件**（批准 `docs/STATUS-ember-afk-ladder-id-copy-approve.md` · HD 四板说明行 + `ember_ladder` lore/tell；未施工）
 
 ### 刚结
 - **B2.8 DP 进本拒门去斜杠**：**PASS · 勾销**（设计 `83d641a` · 批准 `4c99c21` · 施工 `e7bc1eb` · 测 `12846c7` · backlog close `944c017` · 周/团/深渊 level 拒门 + 盟 Boss 拒门/开场文案已去斜杠；灾厄 OP #6 按 A 未做，作可选残留 / 可并 B2.9 方案 B）
@@ -95,7 +95,7 @@
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
 - ~~B0.2 周本/深渊/使徒 ΔTTK~~ → **均 PASS**（正式团本人数门仍 3～5）
 - ~~Raid/GuildBoss kill-any live~~ → **PASS**（静态+live · `STATUS-ember-killany-live-retest.md`）
-- **B2.9 挂机庭/天梯去内部代号**（设计待批）：HD `ember_afk_hub`/`ember_ladder_*` 说明行 + `ember_ladder.yml` lore/tell 仍露 `MM→NI` / `EmberAfk*` / `EmberAbyss` / `EmberWeekly` / board id；荐 A；灾厄 OP #6 可选并 B
+- **B2.9 挂机庭/天梯去内部代号**（**已批 A · 待插件**）：HD `ember_afk_hub`/`ember_ladder_*` 说明行 + `ember_ladder.yml` lore/tell 去 `MM→NI` / `EmberAfk*` / `EmberAbyss` / `EmberWeekly` / board id；灾厄 OP #6 不在本批
 
 ### 多世界现状（确认）
 - `plugins/Multiverse-Core.jar` + Portals；常驻 `ember_hub` / `ember_afk` / `ember_event` 等
@@ -225,7 +225,7 @@
 | B2.6 | S0 迁后菜单「日票」假文案对齐 | 战令/角色/寄售玩家句无「日票/日周票」；与商城体力药口径一致；零改数 | **PASS · 勾销** `71473da`/`8340ac3` |
 | B2.7 | 主线 quest「日票/周票」台词薄扫 | live `quest.yml` 玩家句无「日票/周票」；不改步骤/items 键；与日回体力口径一致 | **PASS · 勾销** 设计 `b7ccbb8` · 批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25` · close `e950efe` |
 | B2.8 | DP 进本拒门去斜杠（B0.3 域外） | 周/团/深渊/盟 Boss 玩家 message 无 `/corerpg`；不改门控 text/人数；对齐日常/精英 | **PASS · 勾销** 设计 `83d641a` · 批准 `4c99c21` · 施工 `e7bc1eb` · 测 `12846c7` · close `944c017` |
-| B2.9 | 挂机庭/天梯全息·菜单去内部代号 | HD 说明行 + `ember_ladder` lore/tell 无 `MM→NI`/`EmberAfk*`/`EmberAbyss`/`EmberWeekly`/字面 board id；不改 location/数值/PAPI 键 | **设计待批** `design-ember-afk-ladder-id-copy.md`（荐 A） |
+| B2.9 | 挂机庭/天梯全息·菜单去内部代号 | HD 说明行 + `ember_ladder` lore/tell 无 `MM→NI`/`EmberAfk*`/`EmberAbyss`/`EmberWeekly`/字面 board id；不改 location/数值/PAPI 键 | **已批 A · 待插件** `design-ember-afk-ladder-id-copy.md` · `STATUS-ember-afk-ladder-id-copy-approve.md` |
 
 ---
 
@@ -236,7 +236,7 @@
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-下一薄窗：  **B2.9 挂机庭/天梯去内部代号**（设计待批 · 荐 A · `design-ember-afk-ladder-id-copy.md`）
+下一薄窗：  **B2.9 挂机庭/天梯去内部代号**（**已批 A · 待插件** · `design-ember-afk-ladder-id-copy.md`）
 软观察：    断塔近阶掉底厅（无证据不升 B）；霜晶/锈轨无 prep（刻意）；AFK 二档未封死通胀；B0.1 无新证据不重开；精英预览壳（一点进本 · 另开）；灾厄 OP #6（可选并 B2.9 方案 B）
 ```
 
@@ -249,5 +249,5 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1～B0.4 / B2.5 数值+挂机菜单 UX 均已结；进本冷却 chat **勾销**（1.15.21）；**无高杠杆硬债**（B0.1 无新证据不重开）  
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6/B2.7 等已结  
-- **当前薄窗：** **B2.9** 挂机庭/天梯去内部代号（设计待批 · 荐 A · `design-ember-afk-ladder-id-copy.md`）；B2.8 **PASS · 勾销**（close `944c017` · 设计 `83d641a` · 批准 `4c99c21` · 施工 `e7bc1eb` · 测 `12846c7`）；软观察：断塔观察 / 霜锈前压 / AFK 二档未封死通胀 / B0.1 无新证据不重开 / 精英预览壳 / 灾厄 OP #6 可选并 B2.9-B
+- **当前薄窗：** **B2.9** 挂机庭/天梯去内部代号（**已批 A · 待插件** · `design-ember-afk-ladder-id-copy.md`）；B2.8 **PASS · 勾销**（close `944c017` · 设计 `83d641a` · 批准 `4c99c21` · 施工 `e7bc1eb` · 测 `12846c7`）；软观察：断塔观察 / 霜锈前压 / AFK 二档未封死通胀 / B0.1 无新证据不重开 / 精英预览壳 / 灾厄 OP #6 可选并 B2.9-B
 
