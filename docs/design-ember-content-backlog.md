@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 02:25 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-29 02:26 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,11 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：B2.23 已结；下一窗待策划（荐下一件 `&7mat_*` 最薄，如 `mat_ember_shard`；其它斜杠 soft；精英壳勿硬开）；**勿宣称 B0.1 已清**。
+- 文案薄窗：**B2.24** NI 余烬碎片 lore 裸 id · tip `docs/design-ember-mat-shard-ni-lore-copy.md` · **待批 A**（荐删 `ember-dungeon.yml` L9；其它 8 件 `&7mat_*` / `/corerpg` 斜杠 soft；精英壳勿硬开）；**勿宣称 B0.1 已清**。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
-- ~~**B2.23 NI 重铸石 lore 去斜杠**~~ → **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close 本提交；报告 `docs/STATUS-ember-reforge-ni-slash-copy-test.md`；其它 `&7mat_*` / 斜杠仍 soft；**勿宣称 B0.1 已清**）
+- ~~**B2.23 NI 重铸石 lore 去斜杠**~~ → **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close `7da4dbf`；报告 `docs/STATUS-ember-reforge-ni-slash-copy-test.md`；其它 `&7mat_*` 已升 **B2.24**；斜杠仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.22 NI 重铸石 lore 裸 id**~~ → **PASS · 勾销**（设计 `115ebab` · 批准 `7724338` · 施工 `b24510c` · 测 `eff6037` · close `48647e0`；报告 `docs/STATUS-ember-reforge-ni-lore-copy-test.md`；斜杠已升 **B2.23**；其它 `&7mat_*` 仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.21 CoreRpg 重铸缺料 chat**~~ → **PASS · 勾销**（设计 `e81c904` · 批准 `92d6ee3` · 施工 `16b5334` · 测 `5b255e9` · close `79f5d7e`；报告 `docs/STATUS-ember-reforge-need-copy-test.md`；CoreRpg **1.15.27**；NI lore 已升 **B2.22**；**勿宣称 B0.1 已清**）
 - ~~**B2.20 拆解菜单重铸石灰字**~~ → **PASS · 勾销**（设计 `c6d8b8b` · 批准 `e7574a3` · 施工 `3ab2b19` · 测 `492f996` · close 本提交；报告 `docs/STATUS-ember-disassemble-reforge-copy-test.md`；CoreRpg 缺料 tell / NI lore 仍 soft；**勿宣称 B0.1 已清**）
@@ -111,7 +111,8 @@
 - ~~**B2.20** 拆解菜单重铸石灰字~~ → **PASS · 勾销**（设计 `c6d8b8b` · 批准 `e7574a3` · 施工 `3ab2b19` · 测 `492f996` · close `5bbaab0`）
 - ~~**B2.21** CoreRpg 重铸缺料 chat~~ → **PASS · 勾销**（设计 `e81c904` · 批准 `92d6ee3` · 施工 `16b5334` · 测 `5b255e9` · close `79f5d7e`；CoreRpg **1.15.27**；NI lore 已升 **B2.22**）
 - ~~**B2.22** NI 重铸石 lore 裸 id~~ → **PASS · 勾销**（设计 `115ebab` · 批准 `7724338` · 施工 `b24510c` · 测 `eff6037` · close `48647e0`；斜杠已升 **B2.23**）
-- ~~**B2.23** NI 重铸石 lore 去斜杠~~ → **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close 本提交；其它 `&7mat_*` / 斜杠 soft）
+- ~~**B2.23** NI 重铸石 lore 去斜杠~~ → **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close `7da4dbf`；其它 `&7mat_*` 已升 **B2.24**）
+- **B2.24** NI 余烬碎片 lore 裸 id · tip `docs/design-ember-mat-shard-ni-lore-copy.md` · **待批 A**（荐删 `ember-dungeon.yml` L9；其余 8 件 `&7mat_*` / 其它 `/corerpg` 斜杠 soft；精英壳勿硬开；**勿宣称 B0.1 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -166,7 +167,8 @@
 - ~~**B2.20**~~ → **PASS · 勾销**（`3ab2b19` / `492f996` · close `5bbaab0`）。
 - ~~**B2.21**~~ → **PASS · 勾销**（`16b5334` / `5b255e9` · close `79f5d7e`）。
 - ~~**B2.22**~~ → **PASS · 勾销**（`b24510c` / `eff6037` · close `48647e0`）。
-- ~~**B2.23**~~ → **PASS · 勾销**（`47baea0` / `c509e57` · close 本提交）。
+- ~~**B2.23**~~ → **PASS · 勾销**（`47baea0` / `c509e57` · close `7da4dbf`）。
+- **B2.24** → **待批 A**（tip `docs/design-ember-mat-shard-ni-lore-copy.md` · 荐删 shard lore L9）。
 
 ---
 
@@ -291,7 +293,8 @@
 | B2.20 | 拆解菜单重铸石灰字 `mat_ember_reforge_stone` 人话对齐 | `ember_disassemble.yml` 重铸 lore 无字面 `mat_ember_reforge_stone`（荐删 L67；上行已有「余烬重铸石」）；零改拆解数值/掉落/体力；NI 物品 lore 不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `c6d8b8b` · 批准 `e7574a3` · 施工 `3ab2b19` · 测 `492f996` · close `5bbaab0`） |
 | B2.21 | CoreRpg 重铸缺料 chat 裸 id 人话对齐 | `ScrapService.cmdReforge` 缺料 sendMessage 无字面 `mat_ember_reforge_stone`（→「余烬重铸石」）；零改消耗 ×1 / `stone_ni_id` / 词缀逻辑；NI 物品 lore 不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `e81c904` · 批准 `92d6ee3` · 施工 `16b5334` · 测 `5b255e9` · close `79f5d7e`；CoreRpg **1.15.27**） |
 | B2.22 | NI 重铸石物品 lore 裸 id 人话对齐 | `ember-disassemble.yml` 内 `mat_ember_reforge_stone` lore 无字面 id（荐删 L9；显示名已有「余烬重铸石」）；零改 NI 数值/配方/给物/`stone_ni_id`/消耗；其它 `&7mat_*` 不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `115ebab` · 批准 `7724338` · 施工 `b24510c` · 测 `eff6037` · close `48647e0`） |
-| **B2.23** | NI 重铸石物品 lore 斜杠去指令化 | `ember-disassemble.yml` 内 `mat_ember_reforge_stone` lore 无字面 `/corerpg`（荐 L11 →「用于枢纽 · 拆解 → 重铸」）；零改 NI 数值/配方/给物/`stone_ni_id`/消耗；其它 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close 本提交） |
+| **B2.23** | NI 重铸石物品 lore 斜杠去指令化 | `ember-disassemble.yml` 内 `mat_ember_reforge_stone` lore 无字面 `/corerpg`（荐 L11 →「用于枢纽 · 拆解 → 重铸」）；零改 NI 数值/配方/给物/`stone_ni_id`/消耗；其它 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **PASS · 勾销**（设计 `6485a89` · 批准 `75ff5e7` · 施工 `47baea0` · 测 `c509e57` · close `7da4dbf`） |
+| **B2.24** | NI 余烬碎片物品 lore 裸 id 人话对齐 | `ember-dungeon.yml` 内 `mat_ember_shard` lore 无字面 id（荐删 L9；显示名已有「余烬碎片」）；零改 NI 数值/配方/给物/掉落；其它 8 件 `&7mat_*` / 其它斜杠不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **待批 A**（tip `docs/design-ember-mat-shard-ni-lore-copy.md`） |
 
 ---
 
@@ -328,16 +331,16 @@
 
 
 ```
-可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.23 已结**；**B2.23 PASS · 勾销**（NI lore 去斜杠 · close 本提交）
+可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.23 已结**；**B2.23 PASS · 勾销**（close `7da4dbf`）；**B2.24 待批 A**
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
 内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close `ba47f3e`；CoreRpg **1.15.25**）
 烬砧窗：    **B-anvil-1** 灰箍 **PASS · 勾销**（设计 `ab33c21` · 批准 `f10779b` · NI `57a6540` · 插件 `72281d9` · 测 `0ab09ef` · close 本提交；CoreRpg **1.15.26**）
-文案窗：**B2.18**～**B2.23** **PASS · 勾销**（B2.23：`47baea0` / `c509e57` · close 本提交）；下一窗可升下一件 `&7mat_*`。
-软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结
-软观察：    ~~B2.18–23 文案轨~~ → PASS；其它 NI `&7mat_*`（可升 B2.24 · 下一件最薄如 shard）/ 其它 `/corerpg` 斜杠 soft / 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
-策划挑选排除：刚结 B2.6–B2.22 / B-flex-1 / B-flex-2 / B-anvil-1；其它 NI 厚批 / 精英壳；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上。
+文案窗：**B2.18**～**B2.23** **PASS · 勾销**（B2.23：`47baea0` / `c509e57` · close `7da4dbf`）；**B2.24 待批 A**（tip `docs/design-ember-mat-shard-ni-lore-copy.md` · 荐删 shard L9）
+软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → B2.19 已结；~~拆解菜单旁附~~ → B2.20 已结；~~CoreRpg 重铸缺料 tell~~ → B2.21 已结；~~NI 重铸石 lore 裸 id~~ → B2.22 已结；~~同物 lore 斜杠~~ → B2.23 已结；~~下一件 `&7mat_*`~~ → **B2.24 待批**
+软观察：    ~~B2.18–23 文案轨~~ → PASS；其余 8 件 NI `&7mat_*`（B2.24 旁附 soft · 勿双上）/ 其它 `/corerpg` 斜杠 soft / 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+策划挑选排除：刚结 B2.6–B2.23 / B-flex-1 / B-flex-2 / B-anvil-1；其它 NI 厚批 9 件双上 / 精英壳；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上。
 ```
 
 **不建议本额度新开：** 新养成线、新货币、新副本类型、Citizens、改 Paper/NMS。
@@ -348,9 +351,9 @@
 
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
-- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.23 等已结；**B2.18～B2.23 PASS · 勾销**（B2.23：`47baea0` / `c509e57` · close 本提交）
+- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.23 等已结；**B2.18～B2.23 PASS · 勾销**（B2.23：`47baea0` / `c509e57` · close `7da4dbf`）；**B2.24 待批 A**
 - **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）
 - **烬砧窗：** **B-anvil-1** 灰箍 **PASS · 勾销**（close `e39172f`；CoreRpg **1.15.26**）；灵活三窗已结
-- **文案窗：** **B2.18**～**B2.23** **PASS · 勾销**（B2.23 close 本提交）
-- 软观察：其它 NI `&7mat_*`（可升 B2.24 · 下一件最薄）/ 其它 `/corerpg` 斜杠 soft / 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+- **文案窗：** **B2.18**～**B2.23** **PASS · 勾销**（B2.23 close `7da4dbf`）；**B2.24** tip `docs/design-ember-mat-shard-ni-lore-copy.md` · **待批 A**（荐删 shard lore L9）
+- 软观察：其余 8 件 NI `&7mat_*`（B2.24 旁附 soft · 勿双上）/ 其它 `/corerpg` 斜杠 soft / 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
