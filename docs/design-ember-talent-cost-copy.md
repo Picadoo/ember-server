@@ -1,6 +1,6 @@
 # 设计稿 · 天赋菜单同句英词 `cost` 人话化（B2.17）
 
-> **未批准前不施工。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` 类型行同句英文 `cost` → 短中文「消耗」；**禁**改 `talent.yml` 节点键 / cost **数值** / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。
+> **已批 A；插件施工另开。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` 类型行同句英文 `cost` → 短中文「消耗」；**禁**改 `talent.yml` 节点键 / cost **数值** / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。
 > 债源：B2.16 方案 B 残留 · close `22c2d40` 旁扫点名；`passive`/`skill` 已清，同文件类型行仍 **13** 处英词 `cost`。  
 > 对齐：`design-ember-talent-type-copy.md`（B2.16）· `design-ember-talent-attr-copy.md`（B2.15）· UX「文案短清楚 · 少打指令 · TrMenu」。  
 > 排除本轮：刚结 B2.6–B2.16；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔升 B；B0.1 除非新证据；精英预览壳（证据不足勿硬开厚壳）；isomorphic 空壳 tell→真页；新进度/货币/副本类型；Citizens；Paper。**勿宣称 B0.1 已清。**
@@ -14,7 +14,7 @@
 | 稿件 | 天赋 TrMenu · **同句英词 `cost`→消耗**（UX · B2.16 方案 B 残留 · B2.17） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 00:46 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_talent.yml` · B2.16 close `22c2d40` |
-| 状态 | **未批 · 待总控批 A** |
+| 状态 | **已批 A · 待插件施工** |
 | 关联 STATUS / 稿 | backlog · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
@@ -24,6 +24,23 @@
 | `ember_talent.yml` 玩家可见类型行中字面 `cost`→`消耗`（数值 2/3/4 **原样**） | `talent.yml` 节点 id 与 requires/**cost 数值**/stats 键名与数值 |
 | 热更 / TrMenu reload（服约定） | `command: corerpg talent unlock <nodeId>` 实参；洗点价；誓约树结构 |
 | | 改点数硬顶 30、Lv 门槛、日免洗；其它菜单字面 `cost`；git push；奖励页 `NI id:` / 套装 `gear_ember_*` / 精英预览壳（另窗） |
+
+
+---
+
+## 批准记录
+
+| 字段 | 值 |
+|---|---|
+| 时间 | 2026-09-29 00:48 Asia/Shanghai |
+| 决策 | **APPROVED A**（不附 B） |
+| 设计 tip | `3a3a226` · 已推送并核验 `main` / `origin/main` |
+| 父 close | B2.16 `22c2d40` |
+| 下一岗 | **余烬-插件 · priority true · 已批 A · 待插件施工** |
+| 批准范围 | 仅 `plugins/TrMenu/menus/ember_talent.yml` 的 13 条类型行：`cost`→`消耗`；2/3/4 原样 |
+| 批准 commit 边界 | 仅文档；本 commit 不改 YAML，不碰 runtime/player/world |
+
+批准 **A**：插件施工时只替换上述 13 条玩家可见类型行。**不附方案 B**；不得改 `talent.yml`、unlock 实参、cost 数值、requires、stats、其它菜单或任何运行时/玩家/世界文件；不得宣称 B0.1 已清。
 
 ---
 
@@ -136,6 +153,6 @@
 
 ## 9. 回总控一句话
 
-**硬债空；荐 A——仅改 `ember_talent.yml`：13×类型行同句 `cost`→`消耗`；数值原样；零动 talent 键与 unlock/stats；不附 B；引 B2.16 close `22c2d40`。当前：设计已交 · 待批 A。**
+**硬债空；荐 A——仅改 `ember_talent.yml`：13×类型行同句 `cost`→`消耗`；数值原样；零动 talent 键与 unlock/stats；不附 B；引 B2.16 close `22c2d40`。当前：已批 A · 待插件施工。**
 
 **专岗：** **策划**（本稿）→ **插件**（批后改 1× TrMenu YAML 文案）→ **测试**（静态 rg `· cost `=0 + 开菜单目视根/二层/烬斩费用行）
