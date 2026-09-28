@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `4e84455` · 设计 `da20e44` · 批准 `d808398`  
 **口径：** 纯静态 · 禁开菜单长测 · 禁挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS** · STATUS 已 push (`1cc9c1f`)
+**Verdict：** ✅ **PASS** · STATUS 已 push (`b84e948`)
 
 ---
 
@@ -98,7 +98,7 @@ Title / Icons / Open 等正文相对 tip parent **零 diff**。
 |----|-----|
 | 总评 | **PASS** |
 | 施工 tip SHA | `4e84455` |
-| 测报 tip short SHA | `1cc9c1f` |
+| 测报 tip short SHA | `b84e948` |
 | 是否已 push | **是** |
 | 报告路径 | `docs/STATUS-ember-shell-menu-header-copy-test.md` |
 | ops | `[]` |
