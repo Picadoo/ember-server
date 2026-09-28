@@ -3,7 +3,7 @@
 **日期：** 2026-09-28 08:50 CST（Asia/Shanghai）  
 **岗：** 余烬-插件  
 **依据：** 总控【派工 · 源码模板/灾厄广播去指令同步】· B1.4 测报轻债  
-**Verdict：** ✅ 可结案 · `corerpg reload` ✅ · **未 push**
+**Verdict：** ✅ **施工+短抽 PASS**（`30886e2` · 测报另 commit）
 
 ---
 
@@ -59,3 +59,10 @@
 ## Blocker
 
 无。
+
+## Checklist
+
+- [x] src join_message 对齐 live
+- [x] calamity 广播双端去 `/ember`
+- [x] quest.yml 未回退
+- [x] 静态短抽 **PASS**（`STATUS-ember-src-join-calamity-sync-test.md`）

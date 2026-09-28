@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 08:50 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 08:53 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 源码模板 join/灾厄广播与 live 对齐（防 package 回退旧斜杠句）
+- 日常七线第二房节奏扩线：挑刺收口（本轮）
 
 ### 刚结
-- **B1.4 软抛光**（8 条等级 hint）：**PASS**（`ee3cfbc` · 测报本 commit）
+- **源码 join / 灾厄广播去指令同步**：**PASS**（`30886e2` · 测报本 commit）
+- **B1.4 软抛光**（8 条等级 hint）：**PASS**（`ee3cfbc` / 测 `30261bd`）
 - **B1.4 硬验收**（quest/join 无斜杠命令教学）：**PASS**（`design-ember-b14-quest-join-copy.md`）
 - **地窖房2链式重叠**：**PASS**（`dd99538` · 测报本 commit）
 - **焦骨房2链式重叠**：**PASS**（`2ad874e` / 测 `495c1ea`）
@@ -37,7 +38,6 @@
 - 挑刺必改 4 波次差异：七线落地；霜晶 door1 链式返工复测 **PASS**（`14464c6`）
 
 ### 仍挂
-- 源码 `CoreRpg/src/main/resources/config.yml` join 与 live 不同步（旧 /corerpg|/ember）；灾厄广播仍含 `/ember →`（施工中）
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - 团本使徒 TTK（人数门 3～5 SKIP）
 - B0.2 周本/深渊天赋二层 ΔTTK 已 PASS；使徒仍 SKIP
