@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **深渊奖励预览真分页设计**：待批 · 荐 **A**（`design-ember-abyss-reward-preview.md` · 摘要三档同屏 · 禁一层一页 · 未批不施工）
+- **深渊奖励预览真分页**：已批 **A**（`design-ember-abyss-reward-preview.md`）· 待插件 TrMenu 摘要页
 
 ### 刚结
 - **周本/团本奖励预览真分页**：**PASS · 勾销**（施工 `991e863` · 测 `22616e5` · TrMenu 双真页 · 空壳 tell 已删 · DP/MM/loot 未动）
@@ -75,7 +75,7 @@
 
 ### 仍挂
 - ~~**周本/团本奖励预览空壳 tell**~~ → **PASS · 勾销**（`991e863` / `22616e5`）
-- **深渊奖励预览空壳 tell** → 设计稿待批 · 荐 A（`design-ember-abyss-reward-preview.md` · 摘要三档 + COMPLETE + L12 · 禁一层一页）
+- **深渊奖励预览空壳 tell**：已批 **A**（`design-ember-abyss-reward-preview.md`）· 待插件施工
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - ~~**挂机二档菜单 UX**（非改数）~~ → **PASS · 勾销**（`0deda12` / `f0ce1fd`）
@@ -222,7 +222,7 @@
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-下一薄窗：  深渊奖励预览真分页 · 设计待批荐 A（`design-ember-abyss-reward-preview.md`）
+下一薄窗：  深渊奖励预览真分页（**已批 A** · 待插件 · `design-ember-abyss-reward-preview.md`）
 软观察：    断塔近阶掉底厅（无证据不升 B）；霜晶/锈轨无 prep（刻意）
 ```
 
@@ -235,5 +235,5 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1～B0.4 / B2.5 数值+挂机菜单 UX 均已结；进本冷却 chat **勾销**（1.15.21）  
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮等已结  
-- **下一薄窗：** 深渊奖励预览 · 设计待批荐 A（`design-ember-abyss-reward-preview.md`）；周/团预览已勾销 `991e863`/`22616e5`；软观察不断塔 B / 霜锈前压  
+- **下一薄窗：** 深渊奖励预览真分页（**已批 A** · 待插件 · tip `18b96f4`）；周/团预览已勾销；软观察不断塔 B / 霜锈前压  
 
