@@ -86,7 +86,7 @@ Icons:
         - '§7重铸：刷次要词缀，主词缀不乱飙'
         - '§7消耗重铸石 · 不耗核心'
         - ''
-        - '§8详见 STATUS-ember-disassemble.md'
+        - '§8点左侧即可分解或重铸'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
