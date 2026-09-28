@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-29 00:35 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-29 00:44 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,11 +17,12 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.16 天赋菜单类型英词 `passive`/`skill` 人话化**：设计已交 · **已批 A · 待插件**（`docs/design-ember-talent-type-copy.md` · 批准 tip `34e61dd`；引 B2.15 close `a43010d`）
+- 当前无新增进行中项；B2.16 已转入下方「刚结」。
 
 ### 刚结
-- **B2.15 天赋菜单裸属性键人话化**：**PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close `a43010d`；报告 `docs/STATUS-ember-talent-attr-copy-test.md`；passive·skill 已挂 **B2.16**；奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
-- **B2.14 天赋菜单 §8 `nodeId`/前置人话化**：**PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；报告 `docs/STATUS-ember-talent-nodeid-copy-test.md`；裸属性键已挂 **B2.15**；passive·skill / 奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
+- **B2.16 天赋菜单类型英词 `passive`/`skill` 人话化**：**PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close 本提交；报告 `docs/STATUS-ember-talent-type-copy-test.md`；13 行类型 lore：`passive`→被动、`skill` 去冗余；cost 数字不变，方案 B 未做；同句英文 `cost` 可挂软观察）
+- **B2.15 天赋菜单裸属性键人话化**：**PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close `a43010d`；报告 `docs/STATUS-ember-talent-attr-copy-test.md`；奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
+- **B2.14 天赋菜单 §8 `nodeId`/前置人话化**：**PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；报告 `docs/STATUS-ember-talent-nodeid-copy-test.md`；裸属性键已挂 **B2.15**；奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
 - **B2.13 天赋菜单 `*_cap` 文案人话化**：**PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close `33218c8`；报告 `docs/STATUS-ember-talent-cap-copy-test.md`；§8 nodeId/前置 已挂 B2.14；奖励页 NI id、套装 `gear_ember_*` 未宣称已清）
 - **B2.12 灾厄 OP 调试拒门去斜杠**：**PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`；不改 `text=`/人数/loot；灾厄 OP #6 已闭环）
 - **B2.11 主线 quest「深渊票」两句薄扫**：**PASS · 勾销**（设计 `4a2a671` · 批准 `ca68b64` · 施工 `8605d10` · 测 `a538d26` · close `5378b23` · 双路径 live+src；灾厄 OP #6 已由 B2.12 闭环）
@@ -91,14 +92,16 @@
 - ~~**深渊奖励预览空壳 tell**~~ → **PASS · 勾销**（`4805c11` / `efed44b`）
 - ~~**灾厄奖励预览空壳 tell**~~ → **PASS · 勾销**（`62f444a` / `da75e9e`）
 - 精英奖励预览：hub 一点进本、**无 P / 无独立菜单** → 本轮不挂「空壳 P」债（若要做须另开子菜单壳）
+- 同句英文 `cost` 可挂软观察（B2.16 方案 B 未做）
+- 奖励页 NI id / 套装 `gear_ember_*` 未宣称已清
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
 - B0.1 无新证据不重开
 - ~~**B2.13 天赋 `*_cap` 文案**~~ → **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close `33218c8`；报告 `docs/STATUS-ember-talent-cap-copy-test.md`）
 - ~~**B2.14 天赋 §8 nodeId/前置**~~ → **PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；报告 `docs/STATUS-ember-talent-nodeid-copy-test.md`）
-- ~~**B2.15 天赋裸属性键人话化**~~ → **PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close `a43010d`；报告 `docs/STATUS-ember-talent-attr-copy-test.md`；passive·skill 已挂 **B2.16**；奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
-- **B2.16 天赋类型英词 `passive`/`skill` 人话化** → 设计已交 · **已批 A · 待插件**（`docs/design-ember-talent-type-copy.md` · 批准 tip `34e61dd` · 引 close `a43010d`；奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
+- ~~**B2.15 天赋裸属性键人话化**~~ → **PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close `a43010d`；报告 `docs/STATUS-ember-talent-attr-copy-test.md`；奖励页 NI id / 套装 `gear_ember_*` 未宣称已清）
+- ~~**B2.16 天赋类型英词 `passive`/`skill` 人话化**~~ → **PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close 本提交；报告 `docs/STATUS-ember-talent-type-copy-test.md`；方案 B `cost`→`消耗`未做，英文 `cost` 可挂软观察）
 - ~~**B2.12 灾厄 OP #6**~~ → **PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`）
 - ~~**B2.11** quest「深渊票」两句~~ → **PASS · 勾销**（设计 `4a2a671` · 批准 `ca68b64` · 施工 `8605d10` · 测 `a538d26` · 双路径 live+src；灾厄 OP #6 已由 B2.12 闭环）
 - ~~**B2.7 主线 `quest.yml`「日票/周票」台词**~~ → **PASS · 勾销**（设计 `b7ccbb8` · 批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25` · close `e950efe`）
@@ -124,7 +127,7 @@
 
 ## 进度快照（截至 2026-09-28，Asia/Shanghai）
 
-- **B0.1 / B0.3：** 已完成（更早关闭）。
+- **B0.3：** 已完成；**B0.1：** 仍挂，无新证据不重开。
 - **B0.2：** 周本 / 深渊 10·12 / **使徒校准** ΔTTK 均 **PASS**（使徒见 `STATUS-ember-raid-apostle-ttk-debt.md` · 门已还原 3～5）。
 - **B0.4：** **勾销**（文档债 + 计算基线 + 二档施工/短样 · tip `99898cc`）；菜单 UX **亦勾销**（`0deda12` / `f0ce1fd`）。
 - **B1.1～B1.4、B2.1～B2.4：** 已完成；相关交付记录：模板 `5f19c31`、坐标 `97d4029`、告示 `8a22023` / `193ab82`。
@@ -135,7 +138,8 @@
 - **B2.12：** **PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`；EmberCalamity OP 拒门去 `/ember`）。
 - **B2.13：** **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close `33218c8`；天赋菜单 `*_cap` 人话化）。
 - **B2.14：** **PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；天赋菜单 §8 nodeId/前置人话化）。
-- **B2.15：** **PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close 本提交；天赋裸属性键人话化）。
+- **B2.15：** **PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close `a43010d`；天赋裸属性键人话化）。
+- **B2.16：** **PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close 本提交；报告 `docs/STATUS-ember-talent-type-copy-test.md`；方案 B `cost`→`消耗`未做）。
 
 ---
 
@@ -253,20 +257,20 @@
 | B2.13 | 天赋菜单 `*_cap` 文案人话化 | `ember_talent.yml` 玩家 lore/tell 无字面 `*_cap`；改为一层顶「燎原/烟幕/永护」；不改 talent 键/unlock command/cost | **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close `33218c8`） |
 | B2.14 | 天赋菜单 §8 `nodeId`/前置人话化 | `ember_talent.yml` 无 `§8nodeId:`；前置无英 id（→中文 display）；不改 talent 键/unlock/cost；裸属性键不动，不做方案 B | **PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`） |
 | B2.15 | 天赋菜单裸属性键人话化 | `ember_talent.yml` 二层效果 lore 无字面 `phys_damage`/`crit_*`/…（→物攻/暴伤/…）；不改 talent.yml stats 键/数值/unlock；类型英词默认不动（方案 B 另附） | **PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close `a43010d`） |
-| B2.16 | 天赋菜单类型英词 `passive`/`skill` 人话化 | `ember_talent.yml` 类型行无字面 `passive`/`skill`（→被动 / 去冗余）；不改 talent.yml / unlock / cost 数值；同句 `cost`→消耗不做（方案 B） | **设计已交 · 已批 A · 待插件**（`design-ember-talent-type-copy.md` · 批准 tip `34e61dd` · 引 `a43010d`） |
+| B2.16 | 天赋菜单类型英词 `passive`/`skill` 人话化 | `ember_talent.yml` 13 行类型 lore 无字面 `passive`/`skill`（→被动 / 去冗余）；不改 talent.yml / unlock / cost 数值；同句 `cost`→消耗不做（方案 B） | **PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close 本提交；报告 `docs/STATUS-ember-talent-type-copy-test.md`） |
 
 ---
 
 ## 4. 建议排期（额度内）
 
 ```
-可维护性：  B0.1 / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.15 已结**（B2.15 PASS · close `a43010d`）
+可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.16 已结**（B2.16 PASS · close 本提交）
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-下一薄窗：  **B2.16** 天赋类型英词（设计已交 · **已批 A · 待插件**）
-软观察：    断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳；旁扫 奖励页 NI id / 套装 `gear_ember_*`（未宣称已清）；**勿宣称 B0.1 已清**
-策划挑选排除：刚结 B2.6–B2.15；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence。
+下一薄窗：  B2.16 已结；下一窗优先挑**薄 A**：同句英文 `cost` / 奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳
+软观察：    同句英文 `cost` 可挂软观察 / 奖励页 NI id / 套装 `gear_ember_*` / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+策划挑选排除：刚结 B2.6–B2.16；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence。
 ```
 
 **不建议本额度新开：** 新养成线、新货币、新副本类型、Citizens、改 Paper/NMS。
@@ -276,7 +280,7 @@
 ## 5. 回总控摘要
 
 - 文档：`docs/design-ember-content-backlog.md`  
-- **B0 硬债：** B0.1～B0.4 / B2.5 数值+挂机菜单 UX 均已结；进本冷却 chat **勾销**（1.15.21）；**无高杠杆硬债**（B0.1 无新证据不重开）  
-- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.15 等已结；**B2.15 PASS · 勾销**（设计 `26d7895` · 批准 `f4e2bcd` · 施工 `da17196` · 测 `790dc32` · close `a43010d`）
-- **当前薄窗：** **B2.16** 天赋类型英词 `passive`/`skill`（设计已交 · **已批 A · 待插件** · `design-ember-talent-type-copy.md` · 批准 tip `34e61dd`）；软观察：断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳；旁扫 奖励页 NI id / 套装 `gear_ember_*`（未宣称已清）；**勿宣称 B0.1 已清**
+- **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
+- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.16 等已结；**B2.16 PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close 本提交）
+- **当前薄窗：** B2.16 已结；下一窗优先挑**薄 A**：同句英文 `cost` / 奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳；软观察：断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
