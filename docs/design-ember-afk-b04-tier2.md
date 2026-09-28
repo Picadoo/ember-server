@@ -13,7 +13,7 @@
 | 稿件 | B0.4 / B2.5 · 挂机日顶**二档数值定稿**（有基线后的经济薄窗） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 21:19 Asia/Shanghai |
 | 关联 | `ember_afk` · `afk_caps` · `CoreRpgPlugin.afkCapped` · ④ 烬原深处 |
-| 状态 | **待总控批 A/B · 未施工** |
+| 状态 | **已批 A · 待插件施工** |
 | 关联 STATUS / 稿 | `STATUS-ember-afk-b04-2h-baseline.md` · `STATUS-ember-afk-b04-debt.md` · `design-ember-afk-b04-softcap.md` · `design-ember-afk-b04-2h-baseline.md` |
 
 ### 硬约束（本稿）
@@ -166,3 +166,15 @@ backlog / STATUS 明文「基线已落 · 二档数值本轮不批」；**不得
 
 **未批准前不施工。**
 
+---
+
+## 总控批注
+
+**已批方案 A**（2026-09-28 21:21 Asia/Shanghai · 余烬-总控）
+
+- 钉死：`over_chance` **保持 0.25**；`over_chance_2=0.08`；触发 **当日 `periodCount ≥ 2×cap`**（材料与击杀币同源）。
+- 验收：**短样外推**（禁墙钟 ≥2h）；对照表期望 2h shard ≈3.3×→≈2.4× 日顶。
+- 禁宣称「封死通胀」；禁改体力/日常/MM。
+- 未选 B。下一步：插件施工 → 测岗短样。
+
+设计 tip `a288791`。

@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 21:19 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 21:21 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B0.4 / B2.5 挂机二档数值定稿**：设计交稿待批（`design-ember-afk-b04-tier2.md` · 荐 A：0.25→0.08 @2×cap · **未批准前不施工**）
+- **B0.4 / B2.5 挂机二档**：已批 **A**（`design-ember-afk-b04-tier2.md`）· **插件施工中** · 0.25 / 0.08 @2×cap
 
 ### 刚结
+- **B0.4 / B2.5 挂机二档定稿设计**：已批 **A**（`design-ember-afk-b04-tier2.md` · `over_chance_2=0.08` @≥2×cap · 短样外推验收）
 - **B0.4 挂机 2h 产出基线 A2**：**PASS · 计算外推**（`STATUS-ember-afk-b04-2h-baseline.md` · tip `09aa341` · 用户否决墙钟 2h · 短样→表 · **未改** `over_chance`）
 - **B0.4 挂机 2h 基线采数设计**：已批 **A**（`design-ember-afk-b04-2h-baseline.md` · 只采数不改 `afk_caps`）
 - **B1.3 精英 Boss TTK 关账采数 A**：**PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · Boss TTK **65.5s** · 全本 **535.3s** · 剩血 62% 观察 · 保持 5200/12 · 非砍血）
@@ -71,7 +72,7 @@
 ### 仍挂
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
-- **B0.4 / B2.5 挂机二档数值**：文档债+**2h 计算基线已落**（`STATUS-ember-afk-b04-2h-baseline.md` · tip `09aa341`）· **定稿设计待批**（`design-ember-afk-b04-tier2.md` · 荐 A：`over_chance` 保持 0.25 · `over_chance_2=0.08` @计数≥2×cap · 短样外推验收）· **禁止**无批强开改数
+- **B0.4 / B2.5 挂机二档数值**：已批 A · **施工中**（`design-ember-afk-b04-tier2.md` · 0.25/0.08@2×cap · 短样外推）
 - ~~**B1.3 精英 Boss TTK**~~ → **关账采数 PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · 65.5s / 535.3s · 5200/12 不动 · 剩血 62% 观察不砍血）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
 - ~~B0.2 周本/深渊/使徒 ΔTTK~~ → **均 PASS**（正式团本人数门仍 3～5）
@@ -92,9 +93,9 @@
 
 - **B0.1 / B0.3：** 已完成（更早关闭）。
 - **B0.2：** 周本 / 深渊 10·12 / **使徒校准** ΔTTK 均 **PASS**（使徒见 `STATUS-ember-raid-apostle-ttk-debt.md` · 门已还原 3～5）。
-- **B0.4：** 文档债已闭环；**2h 产量表已按短样外推落盘**（`STATUS-ember-afk-b04-2h-baseline.md` · tip `09aa341` · 非墙钟实挂）；**二档数值定稿设计待批**（`design-ember-afk-b04-tier2.md` · 荐 A · 未批不施工）。
+- **B0.4：** 文档债+计算基线已闭环；**二档定稿已批 A**（`design-ember-afk-b04-tier2.md`）· 施工中。
 - **B1.1～B1.4、B2.1～B2.4：** 已完成；相关交付记录：模板 `5f19c31`、坐标 `97d4029`、告示 `8a22023` / `193ab82`。
-- **B2.5：** 等同 B0.4 经济项；与 `design-ember-afk-b04-tier2.md` 同窗待批。
+- **B2.5：** 等同 B0.4；与二档定稿同窗已批 A · 施工中。
 
 ---
 
