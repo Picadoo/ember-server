@@ -14,7 +14,7 @@
 | 稿件 | 主线 `quest.yml` · **「日票/周票」台词薄扫**（UX · 可维护性 · 文案软债） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 22:56 Asia/Shanghai |
 | 关联 | live `plugins/CoreRpg/quest.yml` · 镜像 `CoreRpg/src/main/resources/quest.yml` · 对照 `design-ember-stamina-copy-align.md` |
-| 状态 | **已批 B · 待插件施工** |
+| 状态 | **PASS · 勾销**（批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25`） |
 | 关联 STATUS / 稿 | backlog · B2.6 PASS 残余 · `STATUS-ember-stamina-copy-align*.md` |
 
 ### 硬约束（本稿）

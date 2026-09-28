@@ -4,6 +4,7 @@
 - **执行：** 余烬-测试岗执行器
 - **依据：** `docs/design-ember-quest-stamina-copy.md`（`b7ccbb8`）· 批准 B `a6c48bc` · 施工 tip `4eb9af8`
 - **Verdict：** **✅ PASS**（验收点 1–3 全绿 · 可选 4 静态+热更抽检 · ops=`[]` · **未**宣称 B0.1 票扣显示名已清）
+- **关账：** **PASS · 勾销**（tip `f2edc25` 已 push · backlog close）
 - **禁项：** 未改 YAML；未扩扫非本窗
 
 ---

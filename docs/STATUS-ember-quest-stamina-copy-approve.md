@@ -6,7 +6,8 @@
 | 岗 | 余烬-总控 |
 | 批准 | **B** |
 | 设计 tip | `b7ccbb8` · `docs/design-ember-quest-stamina-copy.md`（已 push `origin/main`） |
-| 下一 | **余烬-插件** 双路径 6 句替换 + reload；**未**派测试 |
+| 下一 | ~~插件施工~~ → 已结 |
+| 状态 | **PASS · 勾销**（施工 `4eb9af8` · 测 `f2edc25` · backlog close） |
 
 ---
 

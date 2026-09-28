@@ -6,7 +6,7 @@
 | 批准 | `a6c48bc` |
 | 设计 tip | `b7ccbb8` · `docs/design-ember-quest-stamina-copy.md` |
 | 范围 | live 与 src 镜像各 6 处玩家可见字符串 |
-| 状态 | 已施工；未 push |
+| 状态 | **PASS · 勾销**（测 `f2edc25` · tip 已 push） |
 
 ## 双路径 6 处
 
