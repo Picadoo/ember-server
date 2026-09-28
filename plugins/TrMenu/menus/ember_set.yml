@@ -45,8 +45,8 @@ Icons:
       lore:
         - ''
         - '§7套装件 A · 武器位'
-        - '§8T0 gear_ember_blade'
-        - '§8T1/T2/T3 gear_ember_t*_blade'
+        - '§8T0 余烬之刃'
+        - '§8T1/T2/T3 精炼/深核/灾厄之刃'
         - '§8与团戒同持激活 2 件'
         - ''
         - '§e➥ §f查看说明'
@@ -61,7 +61,7 @@ Icons:
       name: '§6余烬团本之戒'
       lore:
         - ''
-        - '§7套装件 B · NI acc_ember_raid_ring'
+        - '§7套装件 B · 余烬团本之戒'
         - '§8团本周首通保底'
         - '§8背包持有即计件（不占饰品槽）'
         - '§8与刃同持激活 2 件'
@@ -70,7 +70,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[套装·戒] §7acc_ember_raid_ring · 周首通保底。与刃同持即 §6余烬同袍 ✓'
+        - 'tell: §6[套装·戒] §7余烬团本之戒 · 周首通保底。与刃同持即 §6余烬同袍 ✓'
 
   E:
     display:
