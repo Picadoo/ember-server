@@ -30,7 +30,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-42,80,264;amount=2;scattered=0.5;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-38,80,264;amount=2;scattered=0.5;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=4} @system"
+    - "$kill{mobname=余烬深渊·混潮;amount=2} @system"
+    - "$kill{mobname=余烬深渊·骨潮;amount=2} @system"
     start:
     - "$teleport{location=-42,80,264} @player"
     - "$message{type=text;text=§5—— 第 §f2 §5层 —— §7混潮+骨潮} @dungeon"
@@ -120,7 +121,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberAbyssMix;location=-38,55,276;amount=2;scattered=1.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=-42,55,276;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=余烬深渊·混潮,余烬深渊·骨潮;amount=4} @system"
+    - "$kill{mobname=余烬深渊·混潮;amount=2} @system"
+    - "$kill{mobname=余烬深渊·骨潮;amount=2} @system"
     start:
     - "$teleport{location=-38,55,276} @player"
     - "$message{type=text;text=§5—— 第 §f7 §5层 —— §7混潮+骨潮加压} @dungeon"

@@ -9,7 +9,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberAbyssSkeleton;location=4,65,6;amount=3;scattered=1.0;level=1} @dungeon"
     condition:
     # 2026-09-26 修：mobname 须与 MM Display 去色一致（EmberAbyss* 实际是 余烬深渊·潮尸/骨潮/蛮层），原名永不匹配 → 卡波
-    - "$kill-any{mobname=余烬深渊·潮尸,余烬深渊·骨潮;amount=8} @system"
+    - "$kill{mobname=余烬深渊·潮尸;amount=5} @system"
+    - "$kill{mobname=余烬深渊·骨潮;amount=3} @system"
     start:
     - "$message{type=text;text=§6盟 Boss 波次 1：§7深渊潮 · 僵尸与骨鸣} @dungeon"
     end:
