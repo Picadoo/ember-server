@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 11:05 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 11:08 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,12 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- B2.2 断塔 wave2b 坐标同步（防坠落地后）
+- PAPI 体力 parse 冒烟软债复测（S0 尾巴）
 
 ### 刚结
-- **断塔环廊防坠方案 A**：**PASS**（施工 `29fb133` / 测本 commit · 乱序清对射可开门；近阶偶发掉底厅软观察不挡）
+- **精英厅二链式评估**：已批 **B 不施工**（`design-ember-elite-hall2-chain.md`）
+- **B2.2 断塔 wave2b 坐标同步**（`55d1b58` · 对齐防坠落地）
+- **断塔环廊防坠方案 A**：**PASS**（施工 `29fb133` / 测 `870aba0` · 近阶偶发掉底厅软观察不挡）
 - **断塔环廊防坠设计**：已批方案 A（`design-ember-daily-spire-ringfall.md`）
 - **断塔环廊防坠设计**：已批方案 A（`design-ember-daily-spire-ringfall.md`）
 - **日常节奏全杠杆里程碑挑刺**：**无挡级**（`STATUS-ember-daily-rhythm-leverage-closeout-review.md` · 软债1～3还清）

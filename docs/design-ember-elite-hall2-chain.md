@@ -1,6 +1,6 @@
 # 设计稿 · 精英厅二是否套 start 链式重叠
 
-> **未批准前不施工。** 本稿只做薄设计；**禁止**改 `monster.yml` / option / MM / 票体力。  
+> **已批准方案 B（总控 · 2026-09-28）：本轮不施工。** 厅二维持同帧双 `$kill` AND、无 start 链。  
 > tip 背景：`870aba0`（断塔环廊防坠短抽 PASS）；厅一链式已落地见既批 `design-ember-elite-wave-variance.md`。  
 > 债源 / 派工：总控【精英厅二是否套 start 链式 · 薄设计】  
 > live：`plugins/DungeonPlus/dungeon/EmberEliteWeekly/monster.yml`
@@ -14,7 +14,7 @@
 | 稿件 | 精英周常 · 厅二（蛮纹+混纹）是否对齐厅一 start 链式重叠 |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | **仅** `EmberEliteWeekly/monster.yml` 厅二组表时序（若批）；厅一 / 厅三 / option / MM **零 diff** |
-| 状态 | **未批准 · 设计稿** |
+| 状态 | **已批准 B · 本轮零改 YAML** |
 | 对照 | 厅一 `wave1→wave1b` 链式；既往 `design-ember-elite-wave-variance.md` §3.2 / §6.5（厅二曾定 **no chain**） |
 
 ### 硬约束（本条）
@@ -165,3 +165,13 @@ wave2 / wave2b.condition: 各自独立 $kill（禁 kill-any）
 - **备选 A：** wave2a.start→delay2→wave2b；独立 `$kill`；传厅三挂末组（须总控明示批准）。  
 - **改动文件（若批 A）：** 仅 `EmberEliteWeekly/monster.yml`；批 B 则 **零 diff**。  
 - **落盘：** `docs/design-ember-elite-hall2-chain.md`
+
+---
+
+## 10. 总控批注
+
+**批准方案 B**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 厅二同帧蛮纹+混纹 + 双独立 `$kill` 已够；链式叠压抬难大于对称收益。
+- **本轮不改** `EmberEliteWeekly/monster.yml`；方案 A 搁置，除非日后口碑点名再开。
+- 验收口径：相对 tip `monster.yml` 零 diff。
