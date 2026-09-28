@@ -1,0 +1,29 @@
+# B-flex-1 批 A · 副手/饰品试点 — docs/design-ember-offhand-slot-pilot.md
+# 仅 Off Hand 生效（stats.offhand 白名单 · 插件另接）；勿进 accessories 护符 best
+# 禁改 T0–T3 刃/护符数值；勿宣称 B0.1 已清
+
+acc_ember_offhand_ward:
+  material: IRON_NUGGET
+  name: '&a余烬守腕'
+  lore:
+    - '&8副手饰品 · 放副手槽生效'
+    - '&7守向薄样 · 微量物防，远低于护符'
+    - ''
+    - '物理防御: +2'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
+
+acc_ember_offhand_vita:
+  material: EMERALD
+  name: '&a余烬生坠'
+  lore:
+    - '&8副手饰品 · 放副手槽生效'
+    - '&7生向薄样 · 微量生命，远低于护符'
+    - ''
+    - '生命力: +8'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
