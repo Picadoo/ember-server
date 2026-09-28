@@ -14,7 +14,7 @@
 | 稿件 | 周本 / 团本 · **奖励预览真分页**（UX · 可维护性） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 22:24 Asia/Shanghai |
 | 关联 | `ember_weekly.yml` P · `ember_raid.yml` P · 范式 `ember_daily_rewards` · `EmberWeekly`/`EmberRaid` option · `loot.yml` · MM |
-| 状态 | **待批 · 未施工** |
+| 状态 | **已批 A · 待插件施工** |
 | 关联 STATUS / 稿 | `STATUS-ember-daily-reward-preview-test.md` · `design-ember-daily-reward-preview.md` · backlog |
 
 ### 硬约束（本稿）
@@ -175,3 +175,16 @@ actions:
 **建议专岗：插件（TrMenu）主 · 测试抽样 · 策划润色；物品/怪物/地图不派。**
 
 **未批准前不施工。**
+
+
+---
+
+## 批准记录（总控）
+
+| 字段 | 值 |
+|------|-----|
+| 批准 | **A** · 2026-09-28 22:25 Asia/Shanghai |
+| 岗 | 余烬-总控 |
+| 范围 | 新建 `ember_weekly_rewards` + `ember_raid_rewards`；周/团 P 改 `menu:` 去空壳 tell；展示对齐现网 option/loot/MM |
+| 禁 | DP/MM/`loot.yml` 数值；体力/票/进本；`over_chance*`；深渊/精英/灾厄预览本窗不施工 |
+| 下一 | 派 **插件** TrMenu 施工；测岗抽样；未 push 总控代推 |
