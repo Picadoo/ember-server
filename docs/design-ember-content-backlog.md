@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.8 DP 进本拒门去斜杠**：**设计待批**（`design-ember-dp-gate-nocmd.md` · 荐 **A** · 周/团/深渊 level 拒门 + 盟 Boss 拒门/开场 · **未施工**）
+- **B2.8 DP 进本拒门去斜杠**：**已批 A · 待插件**（`design-ember-dp-gate-nocmd.md` · 批准 tip `83d641a` · 周/团/深渊 level 拒门 + 盟 Boss 拒门/开场 · **未施工**）
 
 ### 刚结
 - **B2.7 主线 quest「日票/周票」台词薄扫**：**PASS · 勾销**（设计 `b7ccbb8` · 批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25` · backlog close `e950efe` · 双路径 6 句 · live/src 无「日票/周票」）
@@ -78,7 +78,7 @@
 - 挑刺必改 4 波次差异：七线落地；霜晶 door1 链式返工复测 **PASS**（`14464c6`）
 
 ### 仍挂
-- **B2.8 DP 进本拒门去斜杠**（B0.3 域外）：周/团/深渊 `（/corerpg level 查看）` · 盟 Boss 教 `/corerpg guild boss` → 设计待批 `design-ember-dp-gate-nocmd.md`（荐 A）
+- **B2.8 DP 进本拒门去斜杠**（B0.3 域外）：周/团/深渊 `（/corerpg level 查看）` · 盟 Boss 教 `/corerpg guild boss` → **已批 A · 待插件**（`design-ember-dp-gate-nocmd.md` · 批准 tip `83d641a`）
 - ~~**S0 菜单「日票」假文案**~~ → **PASS · 勾销**（`71473da` / `8340ac3`）；~~quest 台词 B2.7~~ → **PASS · 勾销**（`4eb9af8` / `f2edc25` · close `e950efe`）
 - ~~**周本/团本奖励预览空壳 tell**~~ → **PASS · 勾销**（`991e863` / `22616e5`）
 - ~~**深渊奖励预览空壳 tell**~~ → **PASS · 勾销**（`4805c11` / `efed44b`）
@@ -223,18 +223,18 @@
 | B2.5 | `afk_caps` 第二档（若总控开经济） | 数值 **勾销**（同 B0.4 · `99898cc`）；菜单 UX **勾销**（`0deda12`/`f0ce1fd`） | 已结 |
 | B2.6 | S0 迁后菜单「日票」假文案对齐 | 战令/角色/寄售玩家句无「日票/日周票」；与商城体力药口径一致；零改数 | **PASS · 勾销** `71473da`/`8340ac3` |
 | B2.7 | 主线 quest「日票/周票」台词薄扫 | live `quest.yml` 玩家句无「日票/周票」；不改步骤/items 键；与日回体力口径一致 | **PASS · 勾销** 设计 `b7ccbb8` · 批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25` · close `e950efe` |
-| B2.8 | DP 进本拒门去斜杠（B0.3 域外） | 周/团/深渊/盟 Boss 玩家 message 无 `/corerpg`；不改门控 text/人数；对齐日常/精英 | **设计待批** `design-ember-dp-gate-nocmd.md` 荐 A |
+| B2.8 | DP 进本拒门去斜杠（B0.3 域外） | 周/团/深渊/盟 Boss 玩家 message 无 `/corerpg`；不改门控 text/人数；对齐日常/精英 | **已批 A · 待插件** `design-ember-dp-gate-nocmd.md` · 批准 tip `83d641a` |
 
 ---
 
 ## 4. 建议排期（额度内）
 
 ```
-可维护性：  B0.1 / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B0.3 域外 DP 拒门 → B2.8 待批**
+可维护性：  B0.1 / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B0.3 域外 DP 拒门 → B2.8 已批 A · 待插件**
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-下一薄窗：  **B2.8 DP 拒门去斜杠**（设计待批 · 荐 A · `design-ember-dp-gate-nocmd.md`）；B2.7 **PASS · 勾销**（`4eb9af8`/`f2edc25`/`e950efe`）
+下一薄窗：  **B2.8 DP 拒门去斜杠**（已批 A · 待插件 · `design-ember-dp-gate-nocmd.md` · tip `83d641a`）；B2.7 **PASS · 勾销**（`4eb9af8`/`f2edc25`/`e950efe`）
 软观察：    断塔近阶掉底厅（无证据不升 B）；霜晶/锈轨无 prep（刻意）；精英预览壳（一点进本 · 另开）
 ```
 
@@ -247,5 +247,5 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1～B0.4 / B2.5 数值+挂机菜单 UX 均已结；进本冷却 chat **勾销**（1.15.21）；**无高杠杆硬债**（B0.1 无新证据不重开）  
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6/B2.7 等已结  
-- **下一薄窗：** **B2.8 DP 拒门去斜杠** 设计待批（荐 A · `design-ember-dp-gate-nocmd.md`）；B2.7 **PASS · 勾销**（`4eb9af8`/`f2edc25`/`e950efe`）；软观察：断塔近阶 / 霜锈前压 / AFK 二档不封死通胀 / 精英预览壳  
+- **当前薄窗：** **B2.8 DP 拒门去斜杠** 已批 A · 待插件（`design-ember-dp-gate-nocmd.md` · tip `83d641a`）；B2.7 **PASS · 勾销**（`4eb9af8`/`f2edc25`/`e950efe`）；软观察：断塔近阶 / 霜锈前压 / AFK 二档不封死通胀 / 精英预览壳
 
