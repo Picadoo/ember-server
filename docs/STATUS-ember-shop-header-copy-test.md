@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `838d492` · 设计 `63db349` · 批准 `037b6ad` · tip `docs/design-ember-shop-header-copy.md`  
 **口径：** 纯静态 · 禁开菜单 · 禁长测/挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS**
+**Verdict：** ✅ **PASS** · STATUS 已 push (`38eeecc`)
 
 ---
 
@@ -86,8 +86,8 @@ plugins/TrMenu/menus/ember_shop.yml | 2 +-
 | 总评 | **PASS** |
 | 各点 | 1 PASS · 2 PASS · 3 PASS |
 | 施工 tip SHA | `838d492` |
-| 测报 tip short SHA | （本 tip，push 后以 git log 为准） |
-| 是否已 push | **否（即将 push）** |
+| 测报 tip short SHA | `38eeecc` |
+| 是否已 push | **是** |
 | 报告路径 | `docs/STATUS-ember-shop-header-copy-test.md` |
 | ops | `[]` |
 | 阻塞点 | 无 |
