@@ -18,7 +18,6 @@ mat_ember_core_fragment:
   material: MAGMA_CREAM
   name: '&6余烬核心碎片'
   lore:
-    - '&7mat_ember_core_fragment'
     - '&8余烬地窟掉落 · 稀有材料'
   enchantments:
     DURABILITY: 1
