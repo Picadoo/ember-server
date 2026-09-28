@@ -1,14 +1,28 @@
 # P3 2026-09-27: ember_elite 试炼短廊刷点 — 厅一Y70 / 厅二Y72 / 厅三Y68
 # Display 与 MythicMobs EmberEliteWeekly.yml 去色明文对齐；不改 MM 血伤掉落
+# 2026-09-28 厅一链式: wave1 炽尸 start→wave1b 骨刺；传厅二挂 wave1b.end；wave2 双 $kill AND；消 kill-any
 groups:
+  # 零碰 option：dungeon-start 仍调 wave1（=炽尸组）；start 拉 wave1b
   wave1:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberEliteZombie;location=-30,70,270;amount=3;scattered=1.0;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=余烬试炼·炽尸;amount=3} @system"
+    start:
+    - "$message{type=text;text=§e【试炼·厅一】炽尸贴上 —— 骨刺将交错压上} @dungeon"
+    - "$monstergroup{group=wave1b;repeat=false;delay=2} @dungeon"
+    end:
+    - "$message{type=text;text=§7厅一炽尸侧已清} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    auto-start: false
+
+  wave1b:
+  - monster:
     - "$mob{plugin=MythicMobs;name=EmberEliteSkeleton;location=-28,70,272;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=余烬试炼·炽尸,余烬试炼·骨刺;amount=5} @system"
+    - "$kill{mobname=余烬试炼·骨刺;amount=2} @system"
     start:
-    - "$message{type=text;text=§e—— 试炼一：词缀苏醒 ——} @dungeon"
+    - "$message{type=text;text=§e【试炼·厅一】骨刺重叠压上 —— 清完进入蛮压} @dungeon"
     end:
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$message{type=text;text=§7第一层词缀散了。} @dungeon"
@@ -21,7 +35,8 @@ groups:
     - "$mob{plugin=MythicMobs;name=EmberEliteBrute;location=-4,72,270;amount=1;scattered=1.0;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberEliteMix;location=-6,72,268;amount=2;scattered=1.0;level=1} @dungeon"
     condition:
-    - "$kill-any{mobname=余烬试炼·蛮纹,余烬试炼·混纹;amount=3} @system"
+    - "$kill{mobname=余烬试炼·蛮纹;amount=1} @system"
+    - "$kill{mobname=余烬试炼·混纹;amount=2} @system"
     start:
     - "$message{type=text;text=§c—— 试炼二：蛮压词缀 ——} @dungeon"
     end:
