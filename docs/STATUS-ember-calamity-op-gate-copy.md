@@ -25,7 +25,7 @@
 已执行：
 
 ```text
-printf 'dp reload\\n' > server-runtime/console.in
+printf 'dp reload\n' > server-runtime/console.in
 ```
 
 日志证据（Asia/Shanghai，2026-09-29）：
