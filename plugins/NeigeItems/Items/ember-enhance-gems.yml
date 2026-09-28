@@ -51,7 +51,6 @@ gem_ember_drain:
   material: GHAST_TEAR
   name: '&5汲取石'
   lore:
-    - '&7gem_ember_drain'
     - '&8镶嵌石 · 微量吸血'
     - '&8刃 / 护符孔可用'
   enchantments:
