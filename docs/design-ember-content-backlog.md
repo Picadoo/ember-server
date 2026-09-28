@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B-flex-1 副手/饰品位试点**：设计已交 · **未批**（`docs/design-ember-offhand-slot-pilot.md` · 荐 A；极薄 B 旁附；与 **B2.17 并行不捆**；技能装配/烬砧部件产线 **soft 挂 · 本窗不捆**；**勿宣称 B0.1 已清**）
+- **B-flex-1 副手/饰品位试点**：设计已交 · **已批 A · 待物品+插件施工**（`docs/design-ember-offhand-slot-pilot.md` · 不附 B；与 **B2.17 并行不捆**；技能装配/烬砧部件产线 **soft 挂 · 本窗不捆**；**勿宣称 B0.1 已清**）
 - **B2.17 天赋菜单同句英词 `cost`→消耗**：**已批 A · 待插件**（设计 `3a3a226`；`docs/STATUS-ember-talent-cost-copy-approve.md`；不附 B；引 B2.16 close `22c2d40`；**与 B-flex-1 并行不捆**）
 
 ### 刚结
@@ -93,7 +93,7 @@
 - ~~**深渊奖励预览空壳 tell**~~ → **PASS · 勾销**（`4805c11` / `efed44b`）
 - ~~**灾厄奖励预览空壳 tell**~~ → **PASS · 勾销**（`62f444a` / `da75e9e`）
 - 精英奖励预览：hub 一点进本、**无 P / 无独立菜单** → 本轮不挂「空壳 P」债（若要做须另开子菜单壳；证据不足勿硬开厚壳）
-- **B-flex-1 副手/饰品位试点** → 设计已交 · **未批**（`docs/design-ember-offhand-slot-pilot.md` · 荐 A；与 B2.17 并行不捆；软挂：技能装配、烬砧材料→部件；**勿宣称 B0.1 已清**）
+- **B-flex-1 副手/饰品位试点** → 设计已交 · **已批 A · 待物品+插件施工**（`docs/design-ember-offhand-slot-pilot.md` · 不附 B；与 B2.17 并行不捆；软挂：技能装配、烬砧材料→部件；**勿宣称 B0.1 已清**）
 - **B2.17 天赋同句 `cost`→消耗** → **已批 A · 待插件**（设计 `3a3a226`；`docs/STATUS-ember-talent-cost-copy-approve.md`；引 close `22c2d40`；与 B-flex-1 并行不捆）
 - 奖励页 NI id / 套装 `gear_ember_*` 未宣称已清
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
@@ -269,7 +269,7 @@
 
 | ID | 项 | 验收硬条（摘要） | 状态 |
 |----|----|------------------|------|
-| **B-flex-1** | 刃+护符之外 +1 **副手/饰品位**（NI 白名单 + 菜单展示 + 极简属性） | 静态 `rg` 试点 id / offhand 白名单 / Stat OffHand 钩子；TrMenu hub 或 set 目视「副手」说明；**禁** wall-clock / DPS 盲调；**禁**动 T0–T3 刃护符数值、体力日周门；**不做**四件甲/技能大改/锻炉产线重做 | **设计已交 · 未批**（`design-ember-offhand-slot-pilot.md` · 荐 A；极薄 B 可选） |
+| **B-flex-1** | 刃+护符之外 +1 **副手/饰品位**（NI 白名单 + 菜单展示 + 极简属性） | 静态 `rg` 试点 id / offhand 白名单 / Stat OffHand 钩子；TrMenu hub 或 set 目视「副手」说明；**禁** wall-clock / DPS 盲调；**禁**动 T0–T3 刃护符数值、体力日周门；**不做**四件甲/技能大改/锻炉产线重做 | **已批 A · 待物品+插件施工**（`design-ember-offhand-slot-pilot.md`；不附 B） |
 
 **并行不捆：** **B2.17**（天赋同句 `cost`→消耗）另线文案窗，互不阻塞。
 
@@ -289,7 +289,7 @@
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-内容灵活窗：**B-flex-1** 副手/饰品位试点（设计已交 · 未批 · 荐 A · `design-ember-offhand-slot-pilot.md`；优先于非文案内容窗）
+内容灵活窗：**B-flex-1** 副手/饰品位试点（已批 A · 待物品+插件施工 · `design-ember-offhand-slot-pilot.md`；优先于非文案内容窗）
 文案并行窗：**B2.17** 天赋同句 `cost`→消耗（已批 A · 待插件 · 不附 B；**与 B-flex-1 不捆**）
 软挂不捆：  技能可装配 · 烬砧材料→部件产线
 软观察：    奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
@@ -305,7 +305,7 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.16 等已结；**B2.16 PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close `22c2d40`）
-- **内容灵活窗：** **B-flex-1** 副手/饰品位试点（设计已交 · 未批 · 荐 A · `design-ember-offhand-slot-pilot.md`；极薄 B 旁附；与 B2.17 并行不捆；软挂技能装配/烬砧部件）
+- **内容灵活窗：** **B-flex-1** 副手/饰品位试点（已批 A · 待物品+插件施工 · `design-ember-offhand-slot-pilot.md`；不附 B；与 B2.17 并行不捆；软挂技能装配/烬砧部件）
 - **文案并行窗：** **B2.17** 天赋同句英词 `cost`→消耗（已批 A · 待插件 · 不附 B · `design-ember-talent-cost-copy.md`）
 - 软观察：奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳 / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 

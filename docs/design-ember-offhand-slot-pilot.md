@@ -1,6 +1,6 @@
 # 设计稿 · 副手/饰品位试点（B-flex-1）
 
-> **未批准前不施工。** 本稿只定「刃+护符之外 +1 副手/饰品位」的薄试点：NI 白名单 + 菜单展示 + 极简属性。  
+> **已批 A；待物品+插件施工。** 本稿只定「刃+护符之外 +1 副手/饰品位」的薄试点：NI 白名单 + 菜单展示 + 极简属性。  
 > **禁**全套四件甲、技能大改、本窗重做锻炉产线；**禁**动体力日周门与现有 T0–T3 刃/护符数值。  
 > 对齐：用户「稍微灵活」· 总控自决拍板 · UX「TrMenu · 少打指令 · NI 自定义物 · 文案短清楚」。  
 > **并行不捆：** B2.17（天赋 `cost`→消耗）另线；技能可装配、烬砧材料→部件产线仅 **soft backlog**。  
@@ -15,7 +15,7 @@
 | 稿件 | 装备灵活试点 · **+1 副手/饰品位**（B-flex-1） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 00:48 Asia/Shanghai |
 | 关联 | `StatService` · NI `ember-gear-*.yml` / `ember-dungeon.yml` · TrMenu `ember_hub`/`ember_set`/`ember_forge` · `hub_npcs.yml` 烬砧 |
-| 状态 | **未批 · 待总控批 A（或极薄 B）** |
+| 状态 | **已批 A · 待物品+插件施工** |
 | 关联 STATUS / 稿 | backlog `B-flex-1` · 批后 STATUS-approve / 测报（仅 rg+目视） |
 
 ### 硬约束（本稿）
@@ -145,8 +145,8 @@
 
 **设计窗（本 commit）**
 
-- [ ] 本稿落盘；玩法 YAML / NI / TrMenu **零 diff**（仅 docs + backlog）
-- [ ] backlog 已挂 **B-flex-1**；注明与 **B2.17 并行不捆**；软挂项单列
+- [x] 本稿落盘；玩法 YAML / NI / TrMenu **零 diff**（仅 docs + backlog）
+- [x] backlog 已挂 **B-flex-1**；注明与 **B2.17 并行不捆**；软挂项单列
 
 **若批 A 施工后（另 commit）**
 
@@ -212,3 +212,18 @@
 - **锻炉澄清：** 现网=强化/镶嵌/分解+同槽升阶，**不是**多部位锻炉；本窗不重做。  
 - **未捆：** B2.17 / 锻炉产线 / 技能大改 / 四件甲 / B0.1。  
 - **验收：** 静态 rg + 菜单目视。
+
+## 13. 批准记录
+
+| 字段 | 记录 |
+|------|------|
+| 决策 | **APPROVED A**（不附 B） |
+| 批准时间 | 2026-09-29 00:50 Asia/Shanghai |
+| 设计 tip | `7dda194`（已推送并核验 `origin/main`） |
+| 状态 | **已批 A · 待物品+插件施工** |
+| 下一棒 | **余烬-物品 · priority true**：两件 NI 试点；**余烬-插件 · priority true**：白名单、StatService OffHand 钩子、hub/set 薄展示 |
+| 验收 | 施工后仅静态 `rg` + 菜单打开目视；不做 wall-clock / DPS 测试 |
+
+批准范围固定为：独立 Off Hand 白名单；NI `acc_ember_offhand_ward`（`phys_defense +2`）与 `acc_ember_offhand_vita`（`max_health +8`）；hub/set 薄展示；`StatService` OffHand 读取钩子。两件试点物不进入既有护符 `accessories` best-one 逻辑。
+
+本窗口明确禁止：全套四件甲、技能重做、锻炉重做、与 B2.17 捆绑、声称 B0.1 已清、wall-clock/DPS 测试。软挂仍为技能可装配、烬砧材料→部件；均不在本窗口施工。
