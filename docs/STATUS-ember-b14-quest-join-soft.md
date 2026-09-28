@@ -3,7 +3,7 @@
 **日期：** 2026-09-28 08:48 CST（Asia/Shanghai）  
 **岗：** 余烬-插件  
 **依据：** 总控【批准 · B1.4 硬关单 + 软抛光 8 条】· `docs/design-ember-b14-quest-join-copy.md` §4.2 / §10  
-**Verdict：** ✅ 软抛光可结案 · 硬关单 **PASS（本轮未再改）** · `corerpg reload` ✅ · **未 push**
+**Verdict：** ✅ **软抛光+短抽 PASS**（`ee3cfbc` · 测报另 commit）· 硬关单 PASS
 
 ---
 
@@ -62,3 +62,10 @@
 ## Blocker
 
 无。
+
+## Checklist
+
+- [x] §4.2 S1～S8 hint 落地
+- [x] resources/quest.yml 同步
+- [x] corerpg reload
+- [x] 短抽 ch2/ch3/ch7 **PASS**（`STATUS-ember-b14-quest-join-soft-test.md`）
