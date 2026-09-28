@@ -15,7 +15,7 @@
 | 稿件 | S0 迁体力后 · **菜单「日票」假文案对齐**（UX · 可维护性 · 文案软债） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 22:49 Asia/Shanghai |
 | 关联 | `ember_pass` / `ember_character` / `ember_auction` · 对照 `ember_shop` · `progress.yml` pass_rewards |
-| 状态 | **待批 · 未施工** |
+| 状态 | **已批 A · 待插件施工** |
 | 关联 STATUS / 稿 | backlog · `design-ember-stamina-dnf-daily.md` · `STATUS-ember-stamina-items-s0.md` |
 
 ### 硬约束（本稿）
@@ -148,3 +148,17 @@
 ## 10. 回总控一句话
 
 **荐 A：** 战令/角色/寄售「日票」假文案对齐商城与 `consumable_ember_stamina_30` 实发；零改数；专岗插件+测试。未批不施工。
+
+
+---
+
+## 批准记录（总控）
+
+| 字段 | 值 |
+|------|-----|
+| 批准 | **A** · 2026-09-28 22:51 Asia/Shanghai |
+| 岗 | 余烬-总控 |
+| 范围 | `ember_pass` / `ember_character` / `ember_auction` 玩家 lore/tell「日票/日周票」→ 体力药/体力口径；可选 shop 头注释 |
+| 禁 | `progress.yml`/`cash.yml` 数值；体力 cost/进本；`quest.yml`（B 另窗）；精英预览壳 |
+| 残余 | 主线灰烛/hint「日票」台词仍挂，不宣称本窗已清 |
+| 下一 | 派 **插件** TrMenu 按替换表施工；测岗抽检；未 push 总控代推 |
