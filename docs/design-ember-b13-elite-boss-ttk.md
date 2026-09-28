@@ -1,6 +1,6 @@
 # 设计稿 · B1.3 精英 Boss TTK 关账采数
 
-> **未批准前不施工。** 本稿仅文档；玩法 YAML / MM / 票 / 掉落 **零改**（除非总控另批「出窗后的怪物微抬」——**不在本薄窗默认施工清单**）。  
+> **已批准方案 A（总控 · 2026-09-28）。** 测岗关账采数；默认 MM/DP **零改**；出窗只记数，微抬须另批。  
 > 债源：`docs/design-ember-content-backlog.md` **B1.3** · `STATUS-ember-elite-weekly-4.4.md` §7「Boss 数值初值需 bot 再调」· 上一窗未选语：「数值精调，先打通多人 live」。  
 > 前置已结：Raid/GuildBoss kill-any live **PASS**（`STATUS-ember-killany-live-retest.md` · tip `87b9193`/`7c8e61b`）；团本使徒校准 **PASS**（禁重开）。  
 > 排除本轮：霜晶/锈轨前压；断塔方案 B；已批 B 不施工（周本 prep / 精英厅二）；空许愿；**再开 kill-any YAML** / 重开 `design-ember-raid-guildboss-live-harness.md`。
@@ -14,7 +14,7 @@
 | 稿件 | B1.3 · 精英试炼 Boss TTK **关账采数**（默认定数 · 非砍血） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | `EmberEliteWeekly` + MM `EmberEliteBoss`；对照 4.4f / B1.3 图修复测 |
-| 状态 | **待总控批 A/B** |
+| 状态 | **已批准 A · 待测岗关账采数** |
 | 关联 STATUS | `STATUS-ember-elite-weekly-4.4.md` · `STATUS-ember-b13-elite-map-check.md` · `STATUS-ember-b13-elite-retest.md` · `STATUS-ember-elite-weekly-4.4-close.md` |
 
 ### 硬约束（本稿）
@@ -168,3 +168,14 @@ STATUS/backlog 明文「本轮选 B · B1.3 继续挂 · 图修复测仅旁证�
 一句话理由：多人 live 已通，精英 TTK 差的是正式关账不是砍血——先采数锁结论，避免把已 4.4f 锁的 Boss 再当「初值」误削。
 
 **未批准前不施工。**
+
+---
+
+## 总控批注
+
+**批准方案 A**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 测岗：同装单人 `/corerpg elite start` 通关；记 Boss TTK / 全本 / 剩血 / 死亡。
+- 窗内（TTK 45～75 · 全本 480～720 · 无掉崖）→ 勾销 B1.3；**保持 5200/12**。
+- 剩血 56～60 且有复活灌血说明 → 软 PASS 不挡关账。
+- 出窗或掉崖 → 只记数；禁静默改 YAML；掉崖回图岗。
