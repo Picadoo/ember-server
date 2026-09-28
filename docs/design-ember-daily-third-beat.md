@@ -1,6 +1,6 @@
 # 设计稿 · 日常第三拍试点（异于重叠刷怪 / 门槛怪）
 
-> **未批准前不施工。** 玩法 YAML / MM 技能 / 地图零改；本稿仅策划。  
+> **已批准方案 A（总控 · 2026-09-28）。** 仅 MythicMobs：霜晶 Boss 霜暴读条；DP/门/房2/prep/体力/掉落零改。  
 > tip：`81c77f7`（周本 boss_prep 批 B；Next: daily third-beat pilot design）  
 > 债源：`docs/STATUS-ember-daily-rhythm-leverage-closeout-review.md` 软债#4「宏观骨架仍像亲戚」；backlog「日常第三拍试点」  
 > **硬禁本轮再堆：** 房2 start 链式变体、Boss 前压扩霜晶/锈轨、周本/精英再对齐。
@@ -14,7 +14,7 @@
 | 稿件 | 日常 · 1～2 线「第三拍」试点（非重叠 / 非门槛） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | 优先读七线 `monster.yml` + live DP action + Ember* Boss MM；对照挑刺收口 |
-| 状态 | **待总控批 A 或 B · 未批准前零改** |
+| 状态 | **已批准 A · 待怪物岗落 MM** |
 | 推荐 | **方案 A · 霜晶 Boss「霜暴读条」可躲**（仅 MythicMobs） |
 
 ### 硬约束
@@ -254,3 +254,13 @@ Boss 挂载草案：
 | 否掉 | 限时旁支窗、CoreRpg 本内失败支线、暖点站位、假退路陷阱、霜晶/锈轨 prep |
 | 状态 | **未批准前不施工** |
 
+---
+
+## 12. 总控批注
+
+**批准方案 A**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 霜晶 `EmberDailyFrostBrute`：删无预警 `~onTimer:45` 双光环；挂 `EmberFrostNovaCast`（message→粒子→delay≈25→r5 伤+慢）。
+- 仅 MM Skills + Frost Boss 挂载；**DP `monster.yml` 零 diff**；禁抬 Boss HP / 改掉落 / 加 prep。
+- 粒子名 1.12 以测岗可视为准（`snowballpoof` 无效则改 `cloud`/`crit`）。
+- 锈轨同构扩线：本轮不开，PASS 后再议。

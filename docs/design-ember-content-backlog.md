@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 11:14 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 11:16 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 日常第三拍试点：设计稿待批（`design-ember-daily-third-beat.md` · 荐 A 霜晶 Boss 读条可躲 · MM；未批准不施工）
+- 日常第三拍试点方案 A：怪物岗落霜晶 Boss 霜暴读条（设计已批）
 
 ### 刚结
+- **日常第三拍试点设计**：已批 **A**（`design-ember-daily-third-beat.md` · 霜晶霜暴读条）
 - **周本深室 Boss 前压评估**：已批 **B 不施工**（`design-ember-weekly-boss-prep.md`）
 - **PAPI 体力 parse 软债**：**勾销**（`STATUS-ember-papi-stamina-parse-retest.md` · 在线自解析 12 stub PASS）
 - **精英厅二链式评估**：已批 **B 不施工**（`design-ember-elite-hall2-chain.md`）
