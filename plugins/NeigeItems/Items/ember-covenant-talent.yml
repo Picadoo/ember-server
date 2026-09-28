@@ -16,7 +16,6 @@ mat_ember_talent_reset:
   material: PAPER
   name: '&b天赋重置券'
   lore:
-    - '&7mat_ember_talent_reset'
     - '&8额外洗点 · 免晶钻'
     - '&7用于 /corerpg talent reset（日免费用尽后）'
   enchantments:
