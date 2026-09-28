@@ -399,5 +399,5 @@
 - **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）
 - **烬砧窗：** **B-anvil-1** 灰箍 **PASS · 勾销**（close `e39172f`；CoreRpg **1.15.26**）；灵活三窗已结
 - **文案窗：** **B2.18**～**B2.25** **PASS · 勾销**（B2.25 close `35abc98`）；**B2.26 PASS · 勾销**（close `f796f3a`）；**B2.27 PASS · 勾销**（close `2aaffe3`）；**B2.28 PASS · 勾销**（close `edc0d9b`）；**B2.29 PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）；**B2.30 PASS · 勾销**（设计 `3e7e1ba` · 批准 `a9f95e5` · 施工 `b9b1786` · 测 `2f2ba60` · close `72d37b3`）；**B2.31 PASS · 勾销**；**B2.32 PASS · 勾销**（live `&7mat_*` 本轨归零）；**B2.33 PASS · 勾销**；**B2.34 PASS · 勾销**；**B2.35 已批 A · 施工中**
-- 软观察：~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；B2.35 汲取石 tip **待批 A** / 其余 `&7gem_*` / `/corerpg` 斜杠 / cosmetic / pet soft（勿双上）/ 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+- 软观察：~~B2.18–32 mat~~ → PASS；~~B2.33 锋利石~~ → PASS；~~B2.34 稳固石~~ → PASS；B2.35 目标汲取石（已批 A · 施工中） / 其余 `&7gem_*` / `/corerpg` 斜杠 / cosmetic / pet soft（勿双上）/ 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
