@@ -6,7 +6,6 @@ mat_ember_protect_scroll:
   material: PAPER
   name: '&d余烬保护券'
   lore:
-    - '&7mat_ember_protect_scroll'
     - '&8强化失败时防止掉级'
     - '&7用于 +7～+9 等高危强化'
   enchantments:
