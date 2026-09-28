@@ -289,9 +289,9 @@ wave2b.end:   door2 ×9 AIR @ z=40 y66 + heal + $monstergroup{boss;delay=3}
 - [x] 杠杆比选写清（推荐房2链式；前压不优先并写明竖井理由；刷点差异为辅）。
 - [x] 可执行组表 / delay / `$kill` / 开门条件 / 与必改4叠加关系已写。
 - [x] 验收硬条 + 不动清单 + 专岗（DP + 可选 MM 核验）已写。
-- [ ] **待总控批准** — 未批准前 **禁止** 改 `EmberDailyCrypt` 或任何现网 YAML；策划不自称落地。
+- [x] **已批准**（总控 2026-09-28 Asia/Shanghai）— 插件可改现网 YAML；测岗按 §10。
 
-**最终结论：** **未完成 · 建议批准后本额度施工（方案 A）。** 仅改 `EmberDailyCrypt/monster.yml` 房2链式（默认坐标不动；§6.3 默认不勾）；wave1/boss/门/MM/option 不动；非地窖线零 diff；测岗 §10。
+**最终结论：** **已批准 · 本额度施工（方案 A）。** 仅改 `EmberDailyCrypt/monster.yml` 房2链式（默认坐标不动；§6.3 不勾）；仍先刷高台骷；wave1/boss/门/MM/option 不动；非地窖线零 diff；测岗 §10。
 
 ---
 
