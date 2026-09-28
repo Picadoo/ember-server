@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §7[分解] §7请手持 §c余烬之刃 §7或 §e余烬护符 §7。逻辑待 CoreRpg 接线。'
+    - 'tell: §7[分解] §7请手持 §c余烬之刃 §7或 §e余烬护符 §7，点左侧即可。'
 
 Icons:
   '#':
