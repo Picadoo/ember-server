@@ -65,12 +65,12 @@ chapters:
         levels: 5
         items: { consumable_ember_stamina_30: 1, crystal_ember_enchant: 1, mat_ember_shard: 8 }
         done:
-          - '§6灰烛：§f手还稳。日票拿去，地窟今天的门还开着。'
+          - '§6灰烛：§f手还稳。体力药拿去，地窟今天的门还开着。'
           - '§6灰烛：§f附魔晶和碎片留着，从窟里回来就去工坊把刃磨好。'
   2:
     name: 残窟之门
     intro:
-      - '§6灰烛：§f地窟的门每天开三次（每日 3 张免费日票，主线再送 1 张）。先下去看看。'
+      - '§6灰烛：§f地窟的门每天大约开三次（日回体力约可刷 3 次日常，主线再送 1 瓶体力药）。先下去看看。'
       - '§6灰烛：§f回来之后，立誓、点天赋、附魔、强化——做完这些再去周烬试炼。'
     steps:
       - type: kill
@@ -78,7 +78,7 @@ chapters:
         count: 6
         complete_on: daily_clear
         desc: 在 余烬窟·日 击败守墓者
-        hint: 打开枢纽菜单 → 日常本（需日票）· 本次通关也算完成
+        hint: 打开枢纽菜单 → 日常本（耗体力）· 本次通关也算完成
         xp: 80
         done: ['§7窟里的尸骸穿着旧城卫的甲。']
       - type: event
@@ -137,7 +137,7 @@ chapters:
         desc: 向 灰烛 询问周烬试炼
         hint: 枢纽出生点北边（工坊旁）
         xp: 60
-        done: ['§6灰烛：§f带上周票，最好叫上同伴。']
+        done: ['§6灰烛：§f留够体力，最好叫上同伴。']
       - type: kill
         mobs: ['EmberWeekly*']
         count: 15
@@ -240,7 +240,7 @@ chapters:
         event: daily_clear
         count: 2
         desc: 通关 余烬窟·日 两次
-        hint: 每日 3 张免费日票
+        hint: 日回体力约可刷 3 次日常
         xp: 300
         done: ['§6灰烛：§f同袍们在集结。']
       - type: level
@@ -352,7 +352,7 @@ chapters:
         event: daily_clear
         count: 2
         desc: 通关 余烬窟·日 两次
-        hint: 打开枢纽菜单 → 日常本（每日免费日票）
+        hint: 打开枢纽菜单 → 日常本（日回体力）
         xp: 200
         done: ['§7日常仍是火种。']
       - type: level
