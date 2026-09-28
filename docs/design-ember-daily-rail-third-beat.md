@@ -1,6 +1,6 @@
 # 设计稿 · 日常第三拍扩线（锈轨 · Boss 读条可躲）
 
-> **未批准前不施工。** 玩法 YAML / MythicMobs **零改**直至总控批 A。  
+> **已批准方案 A（总控 · 2026-09-28）。** 仅 MythicMobs：锈轨 Boss 工业砸地读条；DP/门/房2/prep/体力/掉落零改。  
 > 交叉引用：霜晶试点规格与 PASS 见 `docs/design-ember-daily-third-beat.md`、`docs/STATUS-ember-daily-third-beat-test.md`（施工 tip `3e8c969` · 五条全过）。  
 > 本稿为 **独立扩线稿**，不代替霜晶 appendix；仅锈轨 `EmberDailyRailWarden` 同构评估。
 
@@ -13,7 +13,7 @@
 | 稿件 | 日常 · 第三拍扩线 · 锈轨 Boss「读条可躲」 |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | 霜晶 PASS → 锈轨同构窗；live `EmberDailyRail.yml` + `EmberFrostNovaCast` |
-| 状态 | **未批准 · 待总控批 A/B** |
+| 状态 | **已批准 A · 待怪物岗落 MM** |
 | 推荐 | **方案 A · 锈轨同构 MM 读条**（工业风文案/粒子；仅 MythicMobs） |
 
 ### 硬约束
@@ -198,3 +198,13 @@ Boss 挂载草案：
 ## 9. 总控批注
 
 （待填）
+
+---
+
+## 总控批注
+
+**批准方案 A**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 锈轨 `EmberDailyRailWarden`：删无预警 `damage 0.5 r4 ~onTimer:40`；挂 `EmberRailSlamCast`（工业文案 → lava/crit → delay 25 → damage 1.2 r5；**不加 SLOW**）。
+- 保留逼近 message / SoftHit / 掉落 / HP 210；仅 MM；禁 DP / prep / 抬伤超同档。
+- 粒子 1.12：`lava`/`flame`/`crit` 以测岗可视为准。
