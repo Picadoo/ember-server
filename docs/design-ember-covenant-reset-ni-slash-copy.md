@@ -1,6 +1,6 @@
 # 设计稿 · NI 誓约重置券 lore 去斜杠（B2.40）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-covenant-talent.yml` 内 `mat_ember_covenant_reset` **1** 行 lore 斜杠句的人话替换；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-covenant-reset-ni-slash-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-covenant-talent.yml` 内 `mat_ember_covenant_reset` **1** 行 lore 斜杠句的人话替换；**禁**改 NI 数值 / 配方 / 给物逻辑 / 掉落 / 体力 / TrMenu / CoreRpg Java。
 > 债源：B2.39 **PASS · 勾销** `f0f6255`（测 `a188a8b` · 施工 `6e08d32`；设计 tip `88c53bd` · 批准 `8e2ef70`）。B2.40 承接同一物品先前 B2.27 裸 id 已清后的剩余 `/corerpg` 斜杠软债。
 > 对齐：B2.23 重铸石已批口径「用于枢纽 · 拆解 → 重铸」；本窗继续采用「用于枢纽 · …」的人话提示。**未批准前不改 NI Items YAML。**
 > 排除本轮：`mat_ember_talent_reset`；pet summon/feed；其它 NI `/corerpg` 斜杠；其它 `&7mat_*` / `&7pet_*` / `&7gem_*` / `&7cosmetic_*` 批扫；精英预览壳；数值 / 配方 / 给物 / 掉落 / 体力；B0.1；git push。**勿宣称其它斜杠或 B0.1 已清。**
@@ -14,7 +14,7 @@
 | 稿件 | NI `mat_ember_covenant_reset` · **玩家可见 lore `/corerpg` → 枢纽人话**（UX · B2.40） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:47 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-covenant-talent.yml` · B2.39 close 后升窗 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.40** · 批后另开施工 / 测报 |
 
 ### 硬约束（本稿）
@@ -143,7 +143,7 @@ rg -n "/corerpg" plugins/NeigeItems/Items/ember-covenant-talent.yml
 
 - 新号：**B2.40**（B2 文案可维护轨 · 单件物品 · 与 B-flex / B-anvil **不捆**）
 - B2.39 **PASS · 勾销**保持：close `f0f6255`（测 `a188a8b` · 施工 `6e08d32`；设计 `88c53bd` · 批准 `8e2ef70`）；live `&7pet_*` 本轨已归零
-- B2.40：`mat_ember_covenant_reset` L9 `/corerpg` → **待批 A**；荐 `&7用于枢纽 · 誓约`；`talent_reset` 与 pet summon/feed / 其它斜杠仍 soft；**勿宣称 B0.1 已清**
+- B2.40：`mat_ember_covenant_reset` L9 `/corerpg` → **已批 A**；荐 `&7用于枢纽 · 誓约`；`talent_reset` 与 pet summon/feed / 其它斜杠仍 soft；**勿宣称 B0.1 已清**
 
 ---
 
