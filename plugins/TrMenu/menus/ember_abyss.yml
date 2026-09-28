@@ -36,6 +36,25 @@ Icons:
         - 'menu: ember_hub'
 
   S:
+    icons:
+      # 体力不足：灰显；深渊无周免费，字面量 30（禁双侧 PAPI）
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8开始下潜 · 体力不足'
+          lore:
+            - ''
+            - '§7需要 §e30 §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 30 点体力；每日 0:00 回满。'
+
+    update: 20
+    refresh: 20
     display:
       material: obsidian
       name: '§a开始下潜'

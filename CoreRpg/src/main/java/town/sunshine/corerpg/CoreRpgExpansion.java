@@ -98,6 +98,22 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
             if ("stamina_credit_weekly".equals(key)) { st.ensure(d); return String.valueOf(d.getWeeklyGrantCreditWeekly()); }
             if ("stamina_credit_elite".equals(key)) { st.ensure(d); return String.valueOf(d.getWeeklyGrantCreditElite()); }
             if ("stamina_credit_raid".equals(key)) { st.ensure(d); return String.valueOf(d.getWeeklyGrantCreditRaid()); }
+            // Non-daily enter gray: blocked=1 when no weekly free credit AND stamina < cost (read-only).
+            if ("stamina_blocked_weekly".equals(key)) {
+                st.ensure(d);
+                if (d.getWeeklyGrantCreditWeekly() > 0) return "0";
+                return st.getStamina(d) < st.costOf("weekly") ? "1" : "0";
+            }
+            if ("stamina_blocked_raid".equals(key)) {
+                st.ensure(d);
+                if (d.getWeeklyGrantCreditRaid() > 0) return "0";
+                return st.getStamina(d) < st.costOf("raid") ? "1" : "0";
+            }
+            if ("stamina_blocked_elite".equals(key)) {
+                st.ensure(d);
+                if (d.getWeeklyGrantCreditElite() > 0) return "0";
+                return st.getStamina(d) < st.costOf("elite") ? "1" : "0";
+            }
         }
         return null;
     }

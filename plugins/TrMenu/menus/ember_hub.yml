@@ -199,6 +199,25 @@ Icons:
 
   # —— 4.4 精英试炼（周常旁 · 一点进本，无套娃）——
   '2':
+    icons:
+      # 无周免费且体力不足：灰显；blocked_elite 已合 credit+cost，右侧字面量（禁双侧 PAPI）
+      - condition: 'check papi %corerpg_stamina_blocked_elite% > 0'
+        priority: 2
+        inherit: true
+        display:
+          material: gray stained glass pane
+          name: '§8精英试炼 · 体力不足'
+          lore:
+            - ''
+            - '§7需要 §e%corerpg_stamina_cost_elite% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§c本周免费已用完 · 体力不足 · 每日 0:00 回满'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_elite% 点体力（本周免费已用完）；每日 0:00 回满。'
+
+    update: 20
+    refresh: 20
     display:
       material: golden sword
       name: '§e精英试炼'
