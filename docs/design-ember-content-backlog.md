@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 18:30 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 19:40 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- B1.3 精英 Boss TTK 关账采数（方案 A）：测岗通关记数
+- （无）
 
 ### 刚结
+- **B1.3 精英 Boss TTK 关账采数 A**：**PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · Boss TTK **65.5s** · 全本 **535.3s** · 无掉崖 · 保持 5200/12 · 非砍血）
 - **B1.3 精英 Boss TTK 关账设计**：已批 **A**（`design-ember-b13-elite-boss-ttk.md` · 默认不动 5200/12）
 - **Raid/GuildBoss kill-any live 复测**：**PASS**（`STATUS-ember-killany-live-retest.md` · tip `87b9193`/`7c8e61b` · 静态+live 可关）
 - **Raid/GuildBoss kill-any live 测法设计**：已批 **A**（`design-ember-raid-guildboss-live-harness.md` · 零玩法改）
@@ -70,7 +71,7 @@
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - B0.4 挂机日顶二档：**已文档标定**（仍无 2h 产出基线 · **继续挂** · 经济窗另批 B1）
-- **B1.3 精英 Boss TTK**：图修复测旁证已回窗 · **待关账采数批**（`design-ember-b13-elite-boss-ttk.md`）
+- ~~**B1.3 精英 Boss TTK**~~ → **关账采数 PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · 65.5s / 535.3s · 5200/12 不动）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
 - B0.2 周本/深渊/使徒校准 ΔTTK 均 PASS（正式团本人数门仍 3～5）
 - ~~Raid/GuildBoss kill-any live~~ → **PASS**（静态+live · `STATUS-ember-killany-live-retest.md`）
@@ -172,14 +173,13 @@
 
 **硬条：** 一律「禁换皮算过」；玩法可测 ≠ 观感完成（复盘 §4）。
 
-### B1.3 精英 Boss TTK 初值未 bot 精调
+### B1.3 精英 Boss TTK 初值未 bot 精调 — **已勾销**（2026-09-28）
 
 | | |
 |--|--|
-| **问题** | `EmberEliteBoss` HP/伤为初值；STATUS-4.4 注明需 bot 再调。 |
-| **建议** | 与 B0.2 同次测试窗复测；目标时长 8～12 分、单人可过。 |
-| **验收硬条** | 单人烬刃合理装：通关率与时长落在设计窗；**不**改票与周首通稳定符规则。 |
-| **专岗** | **测试** · **怪物** |
+| **问题** | ~~初值待精调~~ → 现网已是 4.4f 锁数 5200/12；缺正式关账采数。 |
+| **结案** | 关账采数 A **PASS**（`STATUS-ember-b13-elite-ttk-close.md`）：Boss TTK 65.5s · 全本 535.3s · 无掉崖；**保持 5200/12**，非砍血。 |
+| **专岗** | **测试**（已结） |
 
 ### B1.4 主线第一卷 hint / join 文案扫尾
 
