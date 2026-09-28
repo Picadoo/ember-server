@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 10:00 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 10:02 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 深渊/团本/公会Boss 实杀 `$kill-any` 消债：策划薄设计（本轮）
+- 消 kill-any 剩债：插件施工（方案 A 已批 · 本轮）
 
 ### 刚结
-- **精英周本厅一链式+消 kill-any**：**PASS**（施工 `03ee076` / 测 `STATUS-ember-elite-wave-variance-test.md` · 本 commit）
+- **消 kill-any 剩债设计**：已批方案 A（`design-ember-killany-debt-cleanup.md` · 本 commit）
+- **精英周本厅一链式+消 kill-any**：**PASS**（施工 `03ee076` / 测 `44f8ac1`）
 - **精英周本波次差异设计**：已批方案 A（`design-ember-elite-wave-variance.md` / `eb2d042`）
 - **周本中核链式重叠**：**PASS**（`75e06b0` / 测 `a63bbfb`）
 - **周本波次差异设计**：已批方案 A（`design-ember-weekly-wave-variance.md` / `6a1f8c2`）
@@ -44,7 +45,7 @@
 - 挑刺必改 4 波次差异：七线落地；霜晶 door1 链式返工复测 **PASS**（`14464c6`）
 
 ### 仍挂
-- 深渊 F2/F7 · 团本 wave2 · 公会Boss wave1 实杀 `$kill-any`（本轮薄设计）
+- 深渊 F2/F7 · 团本 wave2 · 公会Boss wave1 实杀 `$kill-any`（方案 A 已批 · 插件施工中）
 - 庭院/潮蚀房2 故意等清 + Boss 前压覆盖不均（软债，本轮不动）
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - 团本使徒 TTK（人数门 3～5 SKIP）
