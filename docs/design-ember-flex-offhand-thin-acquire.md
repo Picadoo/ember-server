@@ -1,6 +1,6 @@
 # 设计稿 · 副手守腕/生坠薄获取口（B-flex-3）
 
-> **STATUS：待批 A。** 本稿只定路人拿到 `acc_ember_offhand_ward`（守腕）/`acc_ember_offhand_vita`（生坠）的**薄获取口**——二选一荐案已定：**灰粮 stub 兑换/购买**。  
+> **STATUS：已批 A（总控 · 2026-09-29 04:17 Asia/Shanghai）。** 本稿只定路人拿到 `acc_ember_offhand_ward`（守腕）/`acc_ember_offhand_vita`（生坠）的**薄获取口**——二选一荐案已定：**灰粮 stub 兑换/购买**。  
 > **本窗 commit 只写 docs；玩法/NI YAML 零改。**  
 > **禁**四件甲、锻炉重做、动 T0–T3 刃护符数值与体力日周门；灰箍配方数值本窗不动；踏步热键 / 灰箍抢口文案不捆。  
 > 对齐挑刺 #1 soft（只读 · 勿开挑刺流程）。旁记：B2.44 close `5d65f54`（本窗不是斜杠文案窗）。  
@@ -15,7 +15,7 @@
 | 稿件 | 副手 **守腕/生坠薄获取口**（B-flex-3） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 04:15 Asia/Shanghai |
 | 关联 | NI `ember-gear-offhand.yml` · `stats.offhand` · TrMenu `ember_life` · CoreRpg `life.yml` · 灰粮 NPC `ember_quartermaster` · 挑刺 `STATUS-ember-flex-trilogy-picky.md` #1 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** · 交插件施工 |
 | 上游 | B-flex-1 PASS close `d333b01` · B-anvil-1 灰箍 PASS · B2.44 close `5d65f54`（旁记） |
 | tip 路径 | `docs/design-ember-flex-offhand-thin-acquire.md` |
 
@@ -168,7 +168,9 @@
 
 ## 10. 总控批示位
 
-- [ ] **批 A** · 按荐案（灰粮 stub）开施工  
-- [ ] **批 A′** · 改走日箱低权（用 §6.2）  
+- [x] **批 A** · 按荐案（灰粮 stub）开施工（总控 · tip 本提交）  
+- [ ] **批 A′** · 改走日箱低权（用 §6.2）——**未选**  
 - [ ] **驳回** · 说明  
+
+**批示摘要：** 采纳灰粮 stub 币购（`offhand_ward`/`offhand_vita` · coin 80 · weekly 1 · 无 life_level）；日箱低权不选；NI 属性/灰箍/体力门/T0–T3 刃护符不动；禁长测/挑刺；勿宣称 B0.1 已清。交 **余烬-插件**（`life.yml` + `ember_life.yml`）；可选 hub/set 半行文案可裁。
 
