@@ -2,6 +2,7 @@
 # 分房 $kill（禁 $kill-any）；门 IRON_FENCE x=-1..1 y=65..67 @ z=16/36 → AIR
 # Display：$kill 对齐 MM 去色名 焦骨尸 / 燃矢骷 / 焦核蛮兵
 # 2026-09-28 波次差异: 房1 主甬×4 + 假岔尽头×2 同组计入 door1（假岔无怪/不计入=FAIL）
+# 2026-09-28 房2链式: wave2a.start→wave2b delay=2；开门+boss 仍在 wave2b.end
 groups:
   wave1:
   - monster:
@@ -28,7 +29,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 房2：保留尸×3 + 骷×3（总小怪≈12）
+  # 房2：尸×3+燃矢×3 链式重叠（对齐断塔）；开门仅在 wave2b
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=-2,65,24;amount=2;scattered=0.8;level=1} @dungeon"
@@ -36,11 +37,11 @@ groups:
     condition:
     - "$kill{mobname=焦骨尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【甬道·弯折】混编来袭 —— 先清尸再开鼓室门} @dungeon"
-    end:
-    - "$message{type=text;text=§7弯折前段已清 · 燃矢骷压上} @dungeon"
-    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$message{type=text;text=§e【甬道·弯折】焦骨尸来袭 —— 燃矢将交错贴脸压上} @dungeon"
     - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
+    end:
+    - "$message{type=text;text=§7弯折尸侧已清} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     auto-start: false
 
   wave2b:
@@ -50,7 +51,7 @@ groups:
     condition:
     - "$kill{mobname=燃矢骷;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【甬道·后段】燃矢骷×3 —— 清完开鼓室门} @dungeon"
+    - "$message{type=text;text=§e【甬道·后段】燃矢骷重叠压上 —— 清完开鼓室门} @dungeon"
     end:
     - "$message{type=text;text=§a弯折已清 · 鼓室门开了} @dungeon"
     - "$operation-block{loc=-1,65,36;mode=set;type=AIR} @dungeon"
