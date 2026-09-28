@@ -8,7 +8,7 @@ mat_ember_reforge_stone:
   lore:
     - '&8重铸石 · 刷新次要词缀'
     - '&8主词缀不随重铸乱飙'
-    - '&7用于 /corerpg reforge'
+    - '&7用于枢纽 · 拆解 → 重铸'
   enchantments:
     DURABILITY: 1
   hideflags:
