@@ -40,7 +40,6 @@ gem_ember_steady:
   material: IRON_INGOT
   name: '&9稳固石'
   lore:
-    - '&7gem_ember_steady'
     - '&8镶嵌石 · 微量防御'
     - '&8刃 / 护符孔可用'
   enchantments:
