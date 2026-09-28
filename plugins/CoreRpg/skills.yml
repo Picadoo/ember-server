@@ -48,3 +48,12 @@ skills:
     slow_ticks: 40
     particles: CRIT
     sound: ENTITY_IRONGOLEM_ATTACK
+
+  # B-flex-2 pilot: equipable light skill (no covenant; zero stamina; parallel to SkillService.cast)
+  flex_ember_step:
+    type: step
+    display: "§a余烬踏步"
+    cooldown_seconds: 14
+    distance: 5.0
+    particles: CLOUD
+    sound: ENTITY_ENDERDRAGON_FLAP

@@ -18,7 +18,7 @@ Options:
   Min-Click-Delay: 200
 
 Layout:
-  - ' ABCDEF 1'
+  - ' ABCDEFm1'
   - ' GHI2JKLk'
   - ' MNOPQR l'
   - ' STUVWX  '
@@ -131,6 +131,28 @@ Icons:
       shift_all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg skill info'
+
+
+  m:
+    display:
+      material: feather
+      name: '§a轻技'
+      lore:
+        - ''
+        - '§7可装配轻技槽 · 试点余烬踏步'
+        - '§7短位移 · CD 14s · 零体力'
+        - '§8与誓约主动并行 · 当前 §f%corerpg_flex_skill_name%'
+        - ''
+        - '§e➥ §f打开轻技页'
+        - '§7潜行点击直接释放轻技'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_flex_skill'
+      shift_all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg flex cast'
+        - close
 
   F:
     display:

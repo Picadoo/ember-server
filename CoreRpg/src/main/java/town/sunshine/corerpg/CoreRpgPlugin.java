@@ -85,6 +85,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private WarehouseService warehouseService;
     private AbyssSettleService abyssSettleService;
     private SkillService skillService;
+    private FlexSkillService flexSkillService;
     private SetService setService;
     private RaidService raidService;
     private ProgressService progressService;
@@ -149,6 +150,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         warehouseService = new WarehouseService(this, dataStore, niBridge);
         abyssSettleService = new AbyssSettleService(this, niBridge, dataStore);
         skillService = new SkillService(this, dataStore);
+        flexSkillService = new FlexSkillService(this, dataStore);
         setService = new SetService(this, niBridge);
         gearPassiveService = new GearPassiveService(this, niBridge);
         raidService = new RaidService(this, dataStore, niBridge);
@@ -288,6 +290,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public WarehouseService getWarehouseService() { return warehouseService; }
     public AbyssSettleService getAbyssSettleService() { return abyssSettleService; }
     public SkillService getSkillService() { return skillService; }
+    public FlexSkillService getFlexSkillService() { return flexSkillService; }
     public EnhanceService getEnhanceService() { return enhanceService; }
     public MysqlStorage getMysqlStorage() { return mysqlStorage; }
     public String getStorageMode() { return storageMode; }
@@ -568,6 +571,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (warehouseService != null) warehouseService.reload();
         if (abyssSettleService != null) abyssSettleService.reload();
         if (skillService != null) skillService.reload();
+        if (flexSkillService != null) flexSkillService.reload();
         if (setService != null) setService.reload();
         if (gearPassiveService != null) gearPassiveService.reload();
         if (raidService != null) raidService.reload();
@@ -647,6 +651,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (arenaService != null) arenaService.onPlayerQuit(event.getPlayer());
         if (abyssSettleService != null) abyssSettleService.onPlayerQuit(event.getPlayer());
         if (skillService != null) skillService.onQuit(id);
+        if (flexSkillService != null) flexSkillService.onQuit(id);
         if (gearPassiveService != null) gearPassiveService.onQuit(id);
         boards.remove(id);
         dataStore.unload(id);
@@ -879,6 +884,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             if (skillService != null) skillService.cmdRoot(sender, args);
             return true;
         }
+        if ("flex".equals(sub) || "轻技".equals(sub)) {
+            if (flexSkillService != null) flexSkillService.cmdRoot(sender, args);
+            return true;
+        }
         if ("raid".equals(sub) || "团本".equals(sub)) {
             if (raidService != null) raidService.cmdRoot(sender, args);
             return true;
@@ -901,7 +910,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GOLD + "  hubnpc" + ChatColor.GRAY + " · 工坊 NPC ensure|purge|count|list|reload");
         sender.sendMessage(ChatColor.GRAY + "  calamity [status|forceopen|forceend|trigger] · abyss [progress|settle|evacuate] · elite [start|weekly-first|status]");
         sender.sendMessage(ChatColor.GRAY + "  raid [ring|claim-ring|grant-ring] · set");
-        sender.sendMessage(ChatColor.GRAY + "  covenant [set <id>|reset] · talent [info|unlock|reset|grant] · skill [info]");
+        sender.sendMessage(ChatColor.GRAY + "  covenant [set <id>|reset] · talent [info|unlock|reset|grant] · skill [info] · flex [equip|unequip|cast|info]");
         sender.sendMessage(ChatColor.GRAY + "  cash · tickets · shop buy daily_ticket|pass_unlock|weekly_ticket · monthly [buy] · vip [claim]");
         sender.sendMessage(ChatColor.GRAY + "  mail [read|claim|delete|send] · friend [add|accept|deny|remove|invite|mentor]");
         sender.sendMessage(ChatColor.GRAY + "  settings [sound|tip|privacy]");

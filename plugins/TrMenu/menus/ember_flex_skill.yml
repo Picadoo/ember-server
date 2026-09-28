@@ -1,0 +1,109 @@
+# B-flex-2 · 可装配轻技 1 槽试点 A · 余烬踏步
+# 装配 / 卸下 / 释放；玩家 lore 不教手打 /corerpg
+
+Title: '§a余烬 · 轻技'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#       #'
+  - '# E U C #'
+  - '#   I   #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §7轻技槽 · 当前 §f%corerpg_flex_skill_name%§7 · 与誓约主动并行'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  E:
+    display:
+      material: feather
+      name: '§a装配 · 余烬踏步'
+      lore:
+        - ''
+        - '§7朝看向方向短位移约 §f5 §7格'
+        - '§7不穿墙 · 无伤害 · 零体力'
+        - '§8冷却 §f14§8 秒'
+        - ''
+        - '§8当前装配：§f%corerpg_flex_skill_name%'
+        - ''
+        - '§a➥ §f点击装配'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg flex equip flex_ember_step'
+        - 'tell: §a[轻技] §7已请求装配余烬踏步'
+
+  U:
+    display:
+      material: barrier
+      name: '§c卸下轻技'
+      lore:
+        - ''
+        - '§7清空轻技槽'
+        - '§8卸下后无法释放轻技'
+        - ''
+        - '§8当前装配：§f%corerpg_flex_skill_name%'
+        - ''
+        - '§c➥ §f点击卸下'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0.6'
+        - 'command: corerpg flex unequip'
+        - 'tell: §e[轻技] §7已请求卸下'
+
+  C:
+    display:
+      material: blaze powder
+      name: '§e释放轻技'
+      lore:
+        - ''
+        - '§7释放当前已装配的轻技'
+        - '§8需先装配 · CD 中会提示'
+        - ''
+        - '§8当前装配：§f%corerpg_flex_skill_name%'
+        - ''
+        - '§e➥ §f立即释放'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg flex cast'
+        - close
+
+  I:
+    display:
+      material: book
+      name: '§b轻技说明'
+      lore:
+        - ''
+        - '§7试点：§a余烬踏步'
+        - '§7与誓约主动（烬斩/灰印/守墓）并行'
+        - '§7枢纽「技能」仍释放誓约主动'
+        - '§8全员可装配 · 本窗仅 1 槽'
+        - ''
+        - '§e➥ §f查看状态'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg flex info'

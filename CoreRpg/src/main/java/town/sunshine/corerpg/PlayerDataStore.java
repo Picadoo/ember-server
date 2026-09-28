@@ -169,6 +169,7 @@ public final class PlayerDataStore {
 
         data.setCovenant(yaml.getString("covenant", "none"));
         data.setCovenantChosenAt(yaml.getString("covenantChosenAt", ""));
+        data.setFlexSkillId(yaml.getString("flex_skill_id", yaml.getString("flexSkillId", "none")));
         data.setTalentPointsEarned(yaml.getInt("talentPointsEarned", 0));
         data.setTalentPointsSpent(yaml.getInt("talentPointsSpent", 0));
         List<String> nodes = new ArrayList<String>();
@@ -348,6 +349,7 @@ public final class PlayerDataStore {
 
         yaml.set("covenant", data.getCovenant());
         yaml.set("covenantChosenAt", data.getCovenantChosenAt());
+        yaml.set("flex_skill_id", data.getFlexSkillId());
         yaml.set("talentPointsEarned", data.getTalentPointsEarned());
         yaml.set("talentPointsSpent", data.getTalentPointsSpent());
         yaml.set("talentNodes", new ArrayList<String>(data.getTalentNodes()));

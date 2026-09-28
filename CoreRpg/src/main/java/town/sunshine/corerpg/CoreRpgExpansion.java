@@ -1,6 +1,7 @@
 package town.sunshine.corerpg;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class CoreRpgExpansion extends PlaceholderExpansion {
@@ -33,6 +34,13 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
             return c == null ? "-" : c.nextWindowLabel();
         }
         if ("covenant".equals(key)) return data.getCovenant();
+        if ("flex_skill".equals(key) || "flex_skill_id".equals(key)) return data.getFlexSkillId();
+        if ("flex_skill_name".equals(key) || "flex_display".equals(key)) {
+            FlexSkillService fs = plugin.getFlexSkillService();
+            if (fs == null || !data.hasFlexSkill()) return "未装配";
+            FlexSkillService.FlexDef def = fs.getFlex(data.getFlexSkillId());
+            return def == null ? data.getFlexSkillId() : ChatColor.stripColor(def.display);
+        }
         if ("talent_points".equals(key) || "talent_available".equals(key)) {
             return String.valueOf(data.getTalentPointsAvailable());
         }

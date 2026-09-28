@@ -121,6 +121,22 @@ public final class PlayerData {
         return c != null && !"none".equalsIgnoreCase(c) && !c.isEmpty();
     }
 
+    // —— B-flex-2: equipable light skill slot (empty = none) ——
+    private String flexSkillId = "none";
+
+    public String getFlexSkillId() {
+        return flexSkillId == null || flexSkillId.isEmpty() ? "none" : flexSkillId;
+    }
+    public void setFlexSkillId(String v) {
+        if (v == null || v.isEmpty() || "none".equalsIgnoreCase(v)) flexSkillId = "none";
+        else flexSkillId = v.toLowerCase();
+        dirty = true;
+    }
+    public boolean hasFlexSkill() {
+        String id = getFlexSkillId();
+        return id != null && !"none".equalsIgnoreCase(id) && !id.isEmpty();
+    }
+
     public String getCovenantChosenAt() { return covenantChosenAt; }
     public void setCovenantChosenAt(String v) { covenantChosenAt = v == null ? "" : v; dirty = true; }
 
