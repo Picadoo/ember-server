@@ -14,8 +14,8 @@
 | 稿件 | 主线 `quest.yml` · **「深渊票」两句薄扫**（UX · 文案一致性 · B2.11） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 23:46 Asia/Shanghai |
 | 关联 | live `plugins/CoreRpg/quest.yml` · 镜像 `CoreRpg/src/main/resources/quest.yml` · 债源 B2.10 close `ddaeb46` |
-| 状态 | **待批准 · 未施工** |
-| 关联 STATUS / 稿 | backlog · `design-ember-dp-ticket-stamina-copy.md` §方案 B · `design-ember-quest-stamina-copy.md` |
+| 状态 | **已批 A · 待插件施工** |
+| 关联 STATUS / 稿 | `docs/STATUS-ember-quest-abyss-ticket-copy-approve.md` · backlog · `design-ember-dp-ticket-stamina-copy.md` §方案 B · `design-ember-quest-stamina-copy.md` |
 
 ### 硬约束（本稿）
 
@@ -131,3 +131,18 @@
 **硬债空；B2.10 close `ddaeb46` 后挂 B2.11——荐批 A：主线 quest「深渊票/票还是一天一张」live+src 双路径改体力口径；灾厄 OP #6 作方案 B。**
 
 **专岗：** **策划**（本稿）→ **插件**（批后改 live+src quest 两句；若批 B 再改灾厄 OP message）→ **测试**（静态 rg + 主线 hint/灰烛冒烟）
+
+
+---
+
+## 批准记录（总控）
+
+| 字段 | 值 |
+|------|-----|
+| 批准 | **A** · 2026-09-28 23:48 Asia/Shanghai |
+| 岗 | 余烬-总控 |
+| 依据 | parent design tip `4a2a671`，已在 `main` / `origin/main` 核验 |
+| 范围 | 仅 live + src `quest.yml` 的 Q1/Q2 两个玩家可见字符串；完整替换见 `docs/STATUS-ember-quest-abyss-ticket-copy-approve.md` |
+| 禁 | 灾厄 OP #6；步骤 `type` / `event` / `count` / `mobs` / `complete_on` / `floor`；`items` 键与数量；体力 `costs.*` / `free_tickets`；进本、TrMenu、DP/MM/loot；任何非文档改动 |
+| 下一 | 派 **插件** 双路径施工 + reload；测岗待插件 tip 后再派 |
+| 状态 | **已批 A · 待插件施工** |

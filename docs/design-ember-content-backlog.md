@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.11 主线 quest「深渊票」两句薄扫**：设计待批（`docs/design-ember-quest-abyss-ticket-copy.md` · 荐 A 双路径 live+src；方案 B=灾厄 OP #6）· 债源 B2.10 close `ddaeb46` · **未批准不施工**
+- **B2.11 主线 quest「深渊票」两句薄扫**：**已批 A · 待插件**（设计 tip `4a2a671` · 双路径 live+src；方案 B=灾厄 OP #6 不做）· 债源 B2.10 close `ddaeb46`
 
 ### 刚结
 - **B2.10 DP 局内/超时「票」→体力文案**：**PASS · 勾销**（设计 `f2eb738` · 批准 `bf174fc` · 施工 `9311a72` · 测 `95c9fbc` · 九句 DP 玩家 message 已对齐；Q1/Q2 与灾厄 OP #6 保留为残余）
@@ -91,7 +91,7 @@
 - AFK 二档未封死通胀（软残余）
 - B0.1 无新证据不重开
 - 灾厄 OP #6（可选薄候选）
-- **B2.11** quest「深渊票」两句 → **进行中 · 设计待批**（`design-ember-quest-abyss-ticket-copy.md` · 债源 B2.10 close `ddaeb46`）
+- **B2.11** quest「深渊票」两句 → **已批 A · 待插件**（设计 tip `4a2a671` · 双路径 live+src；灾厄 OP #6 不做 · 债源 B2.10 close `ddaeb46`）
 - ~~**B2.7 主线 `quest.yml`「日票/周票」台词**~~ → **PASS · 勾销**（设计 `b7ccbb8` · 批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25` · close `e950efe`）
 - ~~**挂机二档菜单 UX**（非改数）~~ → **PASS · 勾销**（`0deda12` / `f0ce1fd`）
 - ~~进本 `start-interval` 冷却 chat 转发~~ → **PASS · 勾销**（CoreRpg 1.15.21 启发式 tell+退还 · 测 `STATUS-ember-daily-rail-flank-cooldown-chat-test.md` · 非捕 DP 回执）
@@ -122,7 +122,7 @@
 - **B2.5：** 等同 B0.4；**勾销**（同 `99898cc`）；菜单 UX 同上已勾销。
 - **B2.9：** **PASS · 勾销**（设计 `a8b8ef2` · 批准 `ed4f54c` · 施工 `d0c9ef4` · 测 `796dc1b` · close `79f810f`）；挂机庭/天梯玩家可见文案已去内部代号。
 - **B2.10：** **PASS · 勾销**（设计 `f2eb738` · 批准 `bf174fc` · 施工 `9311a72` · 测 `95c9fbc` · close `ddaeb46`）。
-- **B2.11：** **进行中 · 设计待批**（`design-ember-quest-abyss-ticket-copy.md` · 荐 A · 债源 `ddaeb46`）。
+- **B2.11：** **已批 A · 待插件**（设计 tip `4a2a671` · 双路径 live+src；灾厄 OP #6 不做 · 债源 `ddaeb46`）。
 
 ---
 
@@ -235,7 +235,7 @@
 | B2.8 | DP 进本拒门去斜杠（B0.3 域外） | 周/团/深渊/盟 Boss 玩家 message 无 `/corerpg`；不改门控 text/人数；对齐日常/精英 | **PASS · 勾销** 设计 `83d641a` · 批准 `4c99c21` · 施工 `e7bc1eb` · 测 `12846c7` · close `944c017` |
 | B2.9 | 挂机庭/天梯全息·菜单去内部代号 | HD 说明行 + `ember_ladder` lore/tell 无 `MM→NI`/`EmberAfk*`/`EmberAbyss`/`EmberWeekly`/字面 board id；不改 location/数值/PAPI 键 | **PASS · 勾销** 设计 `a8b8ef2` · 批准 `ed4f54c` · 施工 `d0c9ef4` · 测 `796dc1b` · close `79f810f` |
 | B2.10 | DP 局内/超时「票」→体力文案 | 日/周/深/团/精 玩家 `$message`/timeout 无日票·周票·团本票·深渊票·票不退·票已扣；对齐开场「已消耗体力」；零改 cost/门控 | **PASS · 勾销** 设计 `f2eb738` · 批准 `bf174fc` · 施工 `9311a72` · 测 `95c9fbc` |
-| B2.11 | 主线 quest「深渊票」两句薄扫 | live+src `quest.yml` 无「深渊票」「票还是一天一张」；对齐耗体力/体力日回；不改步骤/items/cost；可选 B 绑灾厄 OP #6 | **进行中 · 设计待批** `design-ember-quest-abyss-ticket-copy.md`（荐 A）· 债源 close `ddaeb46` |
+| B2.11 | 主线 quest「深渊票」两句薄扫 | live+src `quest.yml` 无「深渊票」「票还是一天一张」；对齐耗体力/体力日回；不改步骤/items/cost；灾厄 OP #6 不做 | **已批 A · 待插件**（设计 tip `4a2a671`）· 债源 close `ddaeb46` |
 
 ---
 
@@ -246,7 +246,7 @@
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-下一薄窗：  **B2.11** 主线 quest「深渊票」两句（设计待批 · 荐 A · 债源 `ddaeb46`）
+下一薄窗：  **B2.11** 主线 quest「深渊票」两句（**已批 A · 待插件** · 设计 tip `4a2a671` · 债源 `ddaeb46`）
 软观察：    断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳 / 灾厄 OP #6（B2.11 方案 B）
 策划挑选排除：刚结 B2.6–B2.10；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence。
 ```
@@ -260,5 +260,5 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1～B0.4 / B2.5 数值+挂机菜单 UX 均已结；进本冷却 chat **勾销**（1.15.21）；**无高杠杆硬债**（B0.1 无新证据不重开）  
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6/B2.7/B2.8/B2.9/B2.10 等已结；**B2.10 PASS · 勾销**（设计 `f2eb738` · 批准 `bf174fc` · 施工 `9311a72` · 测 `95c9fbc` · close `ddaeb46`）
-- **当前薄窗：** **B2.11** 主线 quest「深渊票」两句 · 设计待批（`design-ember-quest-abyss-ticket-copy.md` · 荐 A）；软观察：断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳 / 灾厄 OP #6（作 B2.11-B）
+- **当前薄窗：** **B2.11** 主线 quest「深渊票」两句 · **已批 A · 待插件**（设计 tip `4a2a671` · 双路径 live+src）；软观察：断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳 / 灾厄 OP #6（本轮不做）
 
