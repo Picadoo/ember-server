@@ -9,7 +9,7 @@
 | 版本 | CoreRpg **1.15.25**（自 1.15.24） |
 | 热更 | play 短重启 Enabling **v1.15.25** @ **01:09:40 CST** · enabled @ **01:09:41** · Done @ **01:09:42 CST** · `trmenu reload` 37 菜单 @ **01:09:55 CST** |
 | NI | **本窗未写**（批准：非必需） |
-| push | 总控要求完工推 tip → 见交付 commit |
+| push | tip `fc89225` → origin/main ✅ |
 
 ---
 
@@ -114,7 +114,7 @@ printf 'trmenu reload\n' > server-runtime/console.in
 ## 7. 回传摘要（母代理）
 
 1. STATUS：`docs/STATUS-ember-flex-skill-slot-pilot.md`
-2. tip：见本 commit 短 hash · push origin/main
+2. tip：`fc89225` · push origin/main ✅
 3. CoreRpg **1.15.25** Enabling **01:09:40 CST**；TrMenu 37 @ **01:09:55**
 4. rg：flex 槽 + 踏步 + 双路径 skills + 菜单
 5. 禁项：**EMPTY**
