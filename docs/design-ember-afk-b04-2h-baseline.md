@@ -15,7 +15,7 @@
 | 稿件 | B0.4 · 挂机 **2h 同账号产出基线采数**（默认定数 · 非改软顶） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | `ember_afk` · `afk_caps` · NI `mat_ember_*` · TrMenu `ember_hub`→`ember_afk` |
-| 状态 | **待总控批 A/B** |
+| 状态 | **已批 A · 待测岗采数** |
 | 关联 STATUS | `STATUS-ember-afk-b04-debt.md` · `design-ember-afk-b04-softcap.md` · `STATUS-afk-caps.md`（若在仓） |
 
 ### 硬约束（本稿）
@@ -155,4 +155,12 @@ UX 否决：零手打指令 **PASS（沿用）** · NI id **PASS** · 无新功�
 
 ## 总控批注
 
-（待批）
+**已批方案 A**（2026-09-28 Asia/Shanghai · 余烬-总控）
+
+- 批准依据：与 B1.3「先采数不砍血」同构；解「无 2h 基线」卡点；**明确禁止**本窗改 `over_chance` / 加二档 / 宣称封死通胀。
+- 测岗：④ 烬原同账号连续挂机 ≥2h（或 T0+105min 取严）；写 `docs/STATUS-ember-afk-b04-2h-baseline.md`；测前测后 `afk_caps` md5 一致。
+- 经济 B1（二档数值）**不**随本窗批准；基线齐后另批。
+- 未选 B：继续空转。
+
+设计 tip `871702f`；本批注 commit 后派测。
+
