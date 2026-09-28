@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 18:20 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 18:28 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- Raid/GuildBoss kill-any live 测法（方案 A）：测岗三 bot + 植盟
+- kill-any live 收口后下一项：策划薄设计挑窗
 
 ### 刚结
+- **Raid/GuildBoss kill-any live 复测**：**PASS**（测报本 commit · 三 bot Raid wave2 + 植盟 GuildBoss wave1 · 玩法零 diff）
 - **Raid/GuildBoss kill-any live 测法设计**：已批 **A**（`design-ember-raid-guildboss-live-harness.md` · 零玩法改）
 - **团本使徒 TTK 校准**：校准 ΔTTK **PASS**（L1 63.7s / L2 56.8s · Δ=+10.83% · 门已还原 min=3 · `aff517c`）
 - **团本使徒 TTK 可测性设计**：已批 **A**（`design-ember-raid-apostle-ttk-calib.md` · 临时 min=1 校准）
@@ -70,7 +71,7 @@
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
 - B0.2 周本/深渊/使徒校准 ΔTTK 均 PASS（正式团本人数门仍 3～5）
-- Raid/GuildBoss kill-any live 复测（静态已 PASS · live SKIP 不挡）
+- ~~Raid/GuildBoss kill-any live~~ → **PASS**（`STATUS-ember-killany-live-retest.md`）
 
 ### 多世界现状（确认）
 - `plugins/Multiverse-Core.jar` + Portals；常驻 `ember_hub` / `ember_afk` / `ember_event` 等
