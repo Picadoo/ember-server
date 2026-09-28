@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 策划薄设计挑窗：**团本使徒 TTK 可测性**独立稿待批（`design-ember-raid-apostle-ttk-calib.md` · 荐 A 临时 min=1 校准后还原）
+- 使徒校准收口后下一项：策划薄设计挑窗
 
 ### 刚结
 - **团本使徒 TTK 校准**：校准 ΔTTK **PASS**（L1 63.7s / L2 56.8s · Δ=+10.83% · 门已还原 min=3 · 测报本 commit）
@@ -68,7 +68,7 @@
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
-- B0.2 周本/深渊天赋二层 ΔTTK 已 PASS；使徒仍 SKIP
+- B0.2 周本/深渊/使徒校准 ΔTTK 均 PASS（正式团本人数门仍 3～5）
 - Raid/GuildBoss kill-any live 复测（静态已 PASS · live SKIP 不挡）
 
 ### 多世界现状（确认）
@@ -85,7 +85,7 @@
 ## 进度快照（截至 2026-09-28，Asia/Shanghai）
 
 - **B0.1 / B0.3：** 已完成（更早关闭）。
-- **B0.2：** 周本 ΔTTK **PASS**；深渊 F2 修复并复测 **PASS**；深渊 10/12 ΔTTK **PASS**；团本使徒本轮 **SKIP**，债务记录见 `STATUS-ember-raid-apostle-ttk-debt.md`。
+- **B0.2：** 周本 / 深渊 10·12 / **使徒校准** ΔTTK 均 **PASS**（使徒见 `STATUS-ember-raid-apostle-ttk-debt.md` · 门已还原 3～5）。
 - **B0.4：** **方案 A 文档债已闭环**（`design-ember-afk-b04-softcap.md` / `STATUS-ember-afk-b04-debt.md`）；数值待经济窗批 B1。
 - **B1.1～B1.4、B2.1～B2.4：** 已完成；相关交付记录：模板 `5f19c31`、坐标 `97d4029`、告示 `8a22023` / `193ab82`。
 - **B2.5：** 等同 B0.4 经济项，随该债务处理。
