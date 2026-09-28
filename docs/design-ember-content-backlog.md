@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 10:26 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 10:33 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 庭院/潮蚀房2 start链式：测岗短抽（施工 `eb81942` · 本轮）
+- Boss 前压扩线（断塔/焦骨/地窖）：策划薄设计（本轮 · 解锁软债）
 
 ### 刚结
-- **庭院/潮蚀房2 start链式施工**（`eb81942` · 测中 · `STATUS-ember-daily-courtyard-tide-room2-chain.md`）
+- **庭院/潮蚀房2 start链式**：**PASS**（施工 `eb81942` / 测 `STATUS-ember-daily-courtyard-tide-room2-chain-test.md` · 本 commit）
 - **庭院/潮蚀房2 start链式设计**：已批方案 A（`design-ember-daily-courtyard-tide-room2-chain.md` / `f62bb35`）
 - **消 kill-any 剩债**：**PASS**（施工 `3194355` / 测 `79d4ccb`；Raid/GuildBoss live SKIP 不挡）
 - **消 kill-any 剩债设计**：已批方案 A（`design-ember-killany-debt-cleanup.md` / `082dc0e`）
@@ -48,7 +48,7 @@
 - 挑刺必改 4 波次差异：七线落地；霜晶 door1 链式返工复测 **PASS**（`14464c6`）
 
 ### 仍挂
-- 庭院/潮蚀房2 start链式：施工已入仓 · 短抽中；Boss 前压覆盖不均仍软挂
+- Boss 前压仅庭院/潮蚀 → **本轮解锁**：断塔/焦骨/地窖薄扩（设计中）；霜晶/锈轨用既有杠杆可不加 prep
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - 团本使徒 TTK（人数门 3～5 SKIP）
 - B0.2 周本/深渊天赋二层 ΔTTK 已 PASS；使徒仍 SKIP
