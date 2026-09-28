@@ -5,7 +5,6 @@ mat_calamity_ember:
   material: BLAZE_POWDER
   name: '&4灾厄余烬'
   lore:
-    - '&7mat_calamity_ember'
     - '&8世界 Boss · 变异材料'
     - '&8用于外观兑换 / 重铸'
   enchantments:
