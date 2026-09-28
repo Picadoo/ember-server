@@ -1,0 +1,16 @@
+# B-anvil-1 批 A · 烬砧材料→部件短链 — docs/design-ember-anvil-mat-to-part-pilot.md
+# 产物进 stats.offhand（插件另接）；配方 shard×12 + ingot×2 由插件/菜单扣给
+# 勿改 mat_ember_shard / ingot_ember_iron / 刃护符 / 守腕生坠；勿宣称 B0.1 已清
+
+part_ember_ash_brace:
+  material: FLINT
+  name: '&a余烬灰箍'
+  lore:
+    - '&8部件 · 放副手槽生效'
+    - '&7烬砧材料炼成 · 微量物防（薄于守腕）'
+    - ''
+    - '物理防御: +1'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS
