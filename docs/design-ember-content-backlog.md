@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗暂缓；B-flex-1 / B-flex-2 已结；**B-anvil-1 烬砧材料→部件** 薄设计已交 · **待批 A**（`docs/design-ember-anvil-mat-to-part-pilot.md` · 未批准前不施工 · 与 B2.x 不捆）。
+- 文案薄窗暂缓；**B-anvil-1** 材料→灰箍 **已批 A · 待物品+插件**（设计 `ab33c21`；批准 `docs/STATUS-ember-anvil-mat-to-part-pilot-approve.md`；不附 B）。
 
 ### 刚结
 - ~~**B-flex-2 可装配轻技 1 槽试点**~~ → **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 补记 `3841f4f` · 测 `1c36873` · close 本提交；报告 `docs/STATUS-ember-flex-skill-slot-pilot-test.md`；CoreRpg **1.15.25**；轻测 PASS；烬砧材料→部件仍 soft；四件甲/誓约主动大改/锻炉重做未做；**勿宣称 B0.1 已清**）
@@ -280,7 +280,7 @@
 
 **本窗软挂（标「不捆」）：**
 - ~~技能可装配~~ → 已升 **B-flex-2**（本表）
-- ~~烬砧材料→部件产线~~ → 已升 **B-anvil-1**（§3c · 薄设计已交 · 待批）
+- ~~烬砧材料→部件产线~~ → 已升 **B-anvil-1**（§3c · **已批 A · 待物品+插件**）
 
 **明确未做/未清：** 四件甲 · 誓约主动大改 · 锻炉重做 · 位移+保命双上 · **勿宣称 B0.1 已清**
 
@@ -290,7 +290,7 @@
 
 | ID | 项 | 验收硬条（摘要） | 状态 |
 |----|----|------------------|------|
-| **B-anvil-1** | 烬砧 **材料→部件** 一条短链（荐 A：`mat_ember_shard`×12 + `ingot_ember_iron`×2 → `part_ember_ash_brace`「余烬灰箍」· 副手物防 +1；TrMenu `ember_forge` 点击；复用 B-flex-1 offhand） | 静态 `rg` 部件 id / 配方 / offhand 白名单；菜单轻测炼成；**禁** wall-clock / DPS；不叫挑刺；**禁**动四件甲、`forge.yml` 升阶、强化表、誓约、体力日周门、B-flex 已结物；**勿**灰箍+骨饰双上 | **待批 A · 未批准前不施工**（设计本稿；报告 `docs/design-ember-anvil-mat-to-part-pilot.md`） |
+| **B-anvil-1** | 烬砧 **材料→部件** 一条短链（荐 A：`mat_ember_shard`×12 + `ingot_ember_iron`×2 → `part_ember_ash_brace`「余烬灰箍」· 副手物防 +1；TrMenu `ember_forge` 点击；复用 B-flex-1 offhand） | 静态 `rg` 部件 id / 配方 / offhand 白名单；菜单轻测炼成；**禁** wall-clock / DPS；不叫挑刺；**禁**动四件甲、`forge.yml` 升阶、强化表、誓约、体力日周门、B-flex 已结物；**勿**灰箍+骨饰双上 | **已批 A · 待物品+插件**（设计 `ab33c21`；批准见 STATUS-ember-anvil-mat-to-part-pilot-approve.md） |
 
 **并行不捆：** 文案薄窗暂缓；**勿捆 B2.x**；B-flex-1/2 已结不回改。
 
@@ -307,11 +307,11 @@
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
 内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close `ba47f3e`；CoreRpg **1.15.25**）
-烬砧窗：    **B-anvil-1** 材料→部件薄设计 **待批 A**（`docs/design-ember-anvil-mat-to-part-pilot.md` · 未批准前不施工）
+烬砧窗：    **B-anvil-1** 材料→灰箍 **已批 A · 待物品+插件**（设计 `ab33c21`；不附 B）
 文案窗：**B2.17** 已 **PASS · 勾销**；**暂缓再挑文案薄窗**。
 软挂升窗：  ~~烬砧材料→部件~~ → 已升 B-anvil-1
 软观察：    奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
-策划挑选排除：刚结 B2.6–B2.17 / B-flex-1 / B-flex-2；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；B-anvil-1 未批前勿施工。
+策划挑选排除：刚结 B2.6–B2.17 / B-flex-1 / B-flex-2；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；B-anvil-1 骨饰 B 勿与 A 双上。
 ```
 
 **不建议本额度新开：** 新养成线、新货币、新副本类型、Citizens、改 Paper/NMS。
@@ -324,7 +324,7 @@
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.17 等已结；**B2.17 PASS · 勾销**（设计 `3a3a226` · 批准 `0eb15c2` · 施工 `9631343` · 测 `dabf579` · close 本提交）
 - **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）
-- **烬砧窗：** **B-anvil-1** 材料→部件薄设计 **待批 A**（`docs/design-ember-anvil-mat-to-part-pilot.md` · 未批准前不施工 · 与 B2.x 不捆）
+- **烬砧窗：** **B-anvil-1** 材料→灰箍 **已批 A · 待物品+插件**（设计 `ab33c21`；不附 B；与 B2.x 不捆）
 - **文案窗：** **B2.17** 已 **PASS · 勾销**；**暂缓再挑文案薄窗**
 - 软观察：奖励页 NI id / 套装 `gear_ember_*` / 精英预览壳 / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
