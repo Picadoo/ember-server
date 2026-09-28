@@ -1,4 +1,5 @@
 # 1.12.0 (2026-09-27) 余烬锻炉 · 锻造保底 — CoreRpg ForgeService（forge.yml）
+# 1.15.26 B-anvil-1：P=炼部件（ember_part）— 勿改升阶 A/B/C
 Title: '§6余烬锻炉 · 锻造'
 
 Options:
@@ -10,7 +11,7 @@ Options:
 Layout:
   - '#########'
   - '# A B C #'
-  - '# E   S #'
+  - '# E P S #'
   - '####I##Z#'
 
 Icons:
@@ -61,6 +62,20 @@ Icons:
     actions:
       all:
         - 'menu: ember_socket'
+  P:
+    display:
+      material: flint
+      name: '§a炼部件'
+      lore:
+        - ''
+        - '§7材料炼成可装备部件'
+        - '§7灰箍：碎片×12 + 余烬铁锭×2'
+        - '§8放副手槽生效 · 微量物防'
+        - ''
+        - '§e➥ §f打开炼部件'
+    actions:
+      all:
+        - 'menu: ember_part'
   I:
     display:
       material: book

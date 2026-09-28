@@ -92,6 +92,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private QuestService questService;
     private LifeService lifeService;
     private ForgeService forgeService;
+    private PartService partService;
     private GearPassiveService gearPassiveService;
     private AfkTierService afkTierService;
     private HubPlazaService hubPlazaService;
@@ -158,6 +159,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         questService = new QuestService(this, dataStore, niBridge);
         lifeService = new LifeService(this, dataStore, niBridge);
         forgeService = new ForgeService(this, dataStore, niBridge);
+        partService = new PartService(this, niBridge);
         afkTierService = new AfkTierService(this, dataStore);
         hubPlazaService = new HubPlazaService(this);
         hubNpcService = new HubNpcService(this);
@@ -243,7 +245,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             }, period, period);
         }
         registerPapi();
-        getLogger().info("CoreRpg " + getDescription().getVersion() + " enabled (storage=" + storageMode + "; coin/sign/activity/bounty/enhance/socket/scrap/reforge/calamity/abyss-settle/covenant/talent/skill/cash/shop/monthly/stamina/tickets/mail/friend/settings/ladder/pet/guild/arena/auction/warehouse/raid/set).");
+        getLogger().info("CoreRpg " + getDescription().getVersion() + " enabled (storage=" + storageMode + "; coin/sign/activity/bounty/enhance/socket/scrap/reforge/calamity/abyss-settle/covenant/talent/skill/cash/shop/monthly/stamina/tickets/mail/friend/settings/ladder/pet/guild/arena/auction/warehouse/raid/set/part).");
     }
 
     @Override
@@ -476,6 +478,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         if (lifeService != null) lifeService.reload();
         if (forgeService != null) forgeService.reload();
+        if (partService != null) partService.reload();
         if (lootService != null) lootService.reload();
         if (statService != null) statService.reload();
         if (afkTierService != null) afkTierService.reload();
@@ -788,6 +791,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("loot".equals(sub)) return lootService.cmd(sender, args);
         if ("stats".equals(sub) || "属性".equals(sub)) return statService.cmd(sender, args);
         if ("forge".equals(sub) || "锻造".equals(sub)) return forgeService.cmd(sender, args);
+        if ("part".equals(sub) || "部件".equals(sub)) return partService.cmd(sender, args);
         if ("mmgiveall".equals(sub)) return cmdMmGiveAll(sender, args);
         if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
         if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);

@@ -1,0 +1,66 @@
+# 1.15.26 B-anvil-1 烬砧材料→部件 · 薄页（从 ember_forge「炼部件」进入）
+# 玩家 lore 不教手打 /corerpg；底层 command 供 TrMenu 调用
+Title: '§a烬砧 · 炼部件'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 800
+
+Layout:
+  - '#########'
+  - '#   A   #'
+  - '#   C   #'
+  - '####I##Z#'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+  A:
+    display:
+      material: flint
+      name: '§a余烬灰箍'
+      lore:
+        - ''
+        - '§8部件 · 放副手槽生效'
+        - '§7烬砧材料炼成 · 微量物防'
+        - '§7物理防御: +1'
+        - ''
+        - '§e消耗'
+        - '§7  余烬碎片 ×12'
+        - '§7  余烬铁锭 ×2'
+        - ''
+        - '§8材料不足时不会扣除'
+  C:
+    display:
+      material: anvil
+      name: '§a确认炼制'
+      lore:
+        - ''
+        - '§7立即消耗材料炼成 1 件灰箍'
+        - '§7不足则提示，不扣物'
+        - ''
+        - '§c➥ §f确认炼制'
+    actions:
+      all:
+        - 'close'
+        - 'command: corerpg part craft ash_brace'
+  I:
+    display:
+      material: book
+      name: '§f说明'
+      lore:
+        - ''
+        - '§7在烬砧用材料炼成副手部件'
+        - '§7点「确认炼制」即可'
+        - '§8与升阶锻造无关'
+  Z:
+    display:
+      material: arrow
+      name: '§7返回锻炉'
+    actions:
+      all:
+        - 'menu: ember_forge'

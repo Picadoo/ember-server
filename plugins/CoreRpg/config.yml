@@ -95,6 +95,7 @@ stats:
   offhand:
   - acc_ember_offhand_ward
   - acc_ember_offhand_vita
+  - part_ember_ash_brace
 afk_caps:
   enabled: true
   worlds:

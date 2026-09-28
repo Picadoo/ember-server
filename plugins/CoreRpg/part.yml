@@ -1,0 +1,11 @@
+# CoreRpg 1.15.26 B-anvil-1 烬砧材料→部件短链（/corerpg part craft，TrMenu ember_forge / ember_part）
+# 与 forge.yml 升阶正交；本文件零币零体力。docs/design-ember-anvil-mat-to-part-pilot.md
+enabled: true
+recipes:
+  ash_brace:
+    output: part_ember_ash_brace
+    amount: 1
+    name: 余烬灰箍
+    cost:
+      mat_ember_shard: 12
+      ingot_ember_iron: 2
