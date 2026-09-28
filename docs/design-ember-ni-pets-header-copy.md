@@ -1,6 +1,6 @@
 # 设计稿 · NI pets 文件头去管理口吻（B2.55）
 
-> **STATUS：待批 A（总控 · 2026-09-29 05:34 Asia/Shanghai）。**
+> **STATUS：已批 A（总控 · 2026-09-29 05:36 Asia/Shanghai）。**
 > 本稿只定 `plugins/NeigeItems/Items/ember-pets.yml` **YAML 文件头 L1 注释** 1 行：去掉模块待接的管理口吻，改成功能摘要。
 > **本窗只处理维护者可见注释（非玩家 UI）；新句不写「待 CoreRpg」、不写斜杠、不写 STATUS 路径。**
 > **本窗 commit 只写 docs；NI 玩法 YAML、物品 lore、数值、配方、产出、消耗及其它 NI 文件零改**（批 A 后由**物品岗（NI）**只改 L1，非插件 TrMenu）。
@@ -16,7 +16,7 @@
 | 稿件 | NI pets 文件头 L1 去管理口吻，改功能摘要（UX · B2.55） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 05:34 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-pets.yml` · B2.54 close `ee02ed6` |
-| 状态 | **待批 A** · 批后交**物品岗（NI）**，非插件 TrMenu |
+| 状态 | **已批 A** · 交**物品岗（NI）**，非插件 TrMenu |
 | tip 路径 | `docs/design-ember-ni-pets-header-copy.md` |
 | 上游 | B2.54 close `ee02ed6` · disassemble 已清；本窗收 pets 文件头旁记 |
 
@@ -126,7 +126,7 @@ B2.54 disassemble 已清；本窗只收 pets 文件头旁记，不扩到玩家 U
 
 ## 7. 回总控摘要
 
-- **STATUS：待批 A** · tip `docs/design-ember-ni-pets-header-copy.md`
+- **STATUS：已批 A** · tip `docs/design-ember-ni-pets-header-copy.md` · 批准本提交
 - **荐案：** `ember-pets.yml` **L1** → `# 功能摘要：外观收集使魔蛋；用于枢纽使魔`
 - **旧/新已全文对照：** 仅 L1 1 行；L2、lore、数值、配方、产出、消耗、逻辑及其它 NI **零改**
 - **批后施工岗：** **物品岗（NI）**，**非插件 TrMenu**
@@ -138,5 +138,5 @@ B2.54 disassemble 已清；本窗只收 pets 文件头旁记，不扩到玩家 U
 
 ## 8. 总控批示
 
-- [ ] **批 A** · 仅 `ember-pets.yml` L1 按上表荐案改功能摘要；L2/lore/数值/其它 NI 零改
+- [x] **批 A** · 仅 `ember-pets.yml` L1 按上表荐案改功能摘要；L2/lore/数值/其它 NI 零改
 - [ ] **驳回** · 说明
