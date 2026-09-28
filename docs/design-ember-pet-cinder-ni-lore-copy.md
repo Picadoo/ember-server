@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬烬火 lore 裸 id 人话对齐（B2.39）
 
-> **STATUS：待批 A**。本稿只定玩家可见 NeigeItems `plugins/NeigeItems/Items/ember-pets.yml` 内 `pet_ember_cinder` lore **1 行**灰字裸 id；批准后由物品岗施工。玩法 YAML 本窗零改，不改数值、给物、召唤/喂养逻辑或其它物品。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-pet-cinder-ni-lore-copy-approve.md）。本稿只定玩家可见 NeigeItems `plugins/NeigeItems/Items/ember-pets.yml` 内 `pet_ember_cinder` lore **1 行**灰字裸 id；批准后由物品岗施工。玩法 YAML 本窗零改，不改数值、给物、召唤/喂养逻辑或其它物品。
 >
 > B2.38 已 **PASS · 勾销**（设计 `965ab2b` · 批准 `bbded5f` · 测 `72b544e` · 施工 `7dbf09c` · close `b59d150`）。本窗只升 `pet_ember_cinder`；`pet_ember_ashling` 已清，任何斜杠行、精英壳与 B0.1 均不在 A 内。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 余烬使魔·烬火 · **玩家可见 lore 裸 id `pet_ember_cinder` 对齐**（UX · B2.39） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:42 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 文件 / 键 | `plugins/NeigeItems/Items/ember-pets.yml` / `pet_ember_cinder:` |
 | 专岗 / 验收 | **物品** / `rg` + 悬停 |
 
@@ -45,7 +45,7 @@ rg -n "&7pet_" plugins/NeigeItems/Items/
 
 因此本窗目标实际行号是 **L20**，同件斜杠实际行号是 **L23**；ashling 裸 id 已无。
 
-## 3. 推荐方案 A（待批）
+## 3. 推荐方案 A（已批）
 
 **A · 荐：只删 `pet_ember_cinder` 实际 L20 的 `- '&7pet_ember_cinder'` 1 行。**
 
@@ -60,7 +60,7 @@ rg -n "&7pet_" plugins/NeigeItems/Items/
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 只删 cinder 裸 id lore 1 行（L20） | **待批 A** |
+| **A · 荐** | 只删 cinder 裸 id lore 1 行（L20） | **已批 A** |
 | A′ | 把裸 id 改成重复中文 | 不荐：name 已足够，增加重复 |
 | B | 顺手删 summon/feed 或处理 ashling、其它 pet | **排除；勿与 A 双上** |
 
@@ -85,7 +85,7 @@ rg -n "&7pet_" plugins/NeigeItems/Items/
 ## 6. 回总控
 
 - **tip：**`docs/design-ember-pet-cinder-ni-lore-copy.md`
-- **状态：**待批 A
+- **状态：**已批 A
 - **荐 A：**只删实际 **L20** 的 `- '&7pet_ember_cinder'` 1 行；不动实际 **L23** `/corerpg pet summon`；不动已清的 ashling。
 - **当前 live `&7pet_*`：**1 命中（仅 cinder L20）；批后预期 **0**（本轨归零）。
 - **边界：**tip + backlog 可 commit；NI/玩法 YAML 本窗零改；勿 push；**勿宣称斜杠/B0.1 已清**。
