@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B1.3 精英 Boss TTK 关账采数设计**：待批（`design-ember-b13-elite-boss-ttk.md` · 荐 A 默认定数不动 HP）
+- B1.3 精英 Boss TTK 关账采数（方案 A）：测岗通关记数
 
 ### 刚结
+- **B1.3 精英 Boss TTK 关账设计**：已批 **A**（`design-ember-b13-elite-boss-ttk.md` · 默认不动 5200/12）
 - **Raid/GuildBoss kill-any live 复测**：**PASS**（`STATUS-ember-killany-live-retest.md` · tip `87b9193`/`7c8e61b` · 静态+live 可关）
 - **Raid/GuildBoss kill-any live 测法设计**：已批 **A**（`design-ember-raid-guildboss-live-harness.md` · 零玩法改）
 - **团本使徒 TTK 校准**：校准 ΔTTK **PASS**（L1 63.7s / L2 56.8s · Δ=+10.83% · 门已还原 min=3 · `aff517c`）
