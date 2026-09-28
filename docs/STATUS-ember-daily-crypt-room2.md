@@ -3,7 +3,7 @@
 **日期：** 2026-09-28 08:41 CST（Asia/Shanghai）  
 **岗：** 余烬-插件  
 **依据：** 总控【批准 · 地窖房2链式】· `docs/design-ember-daily-crypt-room2.md`（方案 A）  
-**Verdict：** ✅ 可结案（链式已落地 · `dp reload` ✅ · 本地 commit · **未 push**）
+**Verdict：** ✅ **施工+验收 PASS**（`dd99538` · 测报另 commit）
 
 ---
 
@@ -41,7 +41,7 @@
 
 ---
 
-## 验收要点（设计 §10 · 交测）
+## 验收要点（设计 §10 · ✅ PASS · `STATUS-ember-daily-crypt-room2-test.md`）
 
 1. 下阶后仍先见高台誓印骷，约 **2s** 内地面窖卫出现  
 2. 底层门仅在 wave2b `$kill` 窖卫×3 后开；wave2a 清完不开门  
@@ -59,3 +59,10 @@
 ## Blocker
 
 无。进本短抽交测岗。
+
+## Checklist
+
+- [x] 设计批准
+- [x] `EmberDailyCrypt/monster.yml` 房2链式落地 + dp reload
+- [x] 非地窖六线零 diff
+- [x] §10 短抽 **PASS**（`STATUS-ember-daily-crypt-room2-test.md`）
