@@ -185,7 +185,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        # 1.14.0: tier picker → /corerpg afk n (level gate + teleport in CoreRpg)
+        # 1.14.0：选择挂机档位并进入挂机菜单（等级门槛 + 传送）
         - 'menu: ember_afk'
 
   H:
