@@ -1,6 +1,6 @@
 # 设计稿 · 拆解菜单重铸石灰字 `mat_ember_reforge_stone` 人话对齐（B2.20）
 
-> **STATUS：待批 A。** 本稿只定 **玩家可见** TrMenu `ember_disassemble.yml` 中 **1** 行灰字裸 NI id；**禁**改拆解/重铸数值 / 掉落 / 体力 / NI 物品文件 / loot / DP / MM / scrap·reforge 逻辑。  
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-disassemble-reforge-copy-approve.md）。 本稿只定 **玩家可见** TrMenu `ember_disassemble.yml` 中 **1** 行灰字裸 NI id；**禁**改拆解/重铸数值 / 掉落 / 体力 / NI 物品文件 / loot / DP / MM / scrap·reforge 逻辑。  
 > 债源：B2.19 PASS 旁附 B soft（`b3a00b8` / tip `design-ember-set-gear-id-copy.md` §B）；backlog 软观察「拆解 `mat_ember_reforge_stone` 可升 B2.20」。  
 > 对齐：B2.19 已清套装页 4 句；UX「文案短清楚 · TrMenu 点击 · NI ID 管理侧可留」。  
 > 排除本轮：刚结 B2.6–B2.19 / B-flex-1/2 / B-anvil-1；精英预览厚壳（hub 一点进本、无 P / 无独立 rewards → 证据不足勿硬开）；NI 物品 lore 内 `&7mat_ember_reforge_stone` 等（物品岗另软挂 · 勿与 A 双上）；墙钟/DPS；霜锈前压；断塔无证据升 B；B0.1 除非新证据；四件甲/锻炉重做/誓约大改。**勿宣称 B0.1 已清。** 与 B-flex / B-anvil **不捆**。
@@ -14,7 +14,7 @@
 | 稿件 | 拆解菜单 · **玩家可见 `mat_ember_reforge_stone` 灰字对齐**（UX · B2.20） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 01:48 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_disassemble.yml` · B2.19 旁附 B1 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.20** · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
