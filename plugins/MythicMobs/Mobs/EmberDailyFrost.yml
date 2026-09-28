@@ -41,7 +41,7 @@ EmberDailyFrostSkeleton:
   - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
 
 EmberDailyFrostBrute:
-  # 霜核蛮兵：霜厅慢压 + 冻步减速区；异于潮闸冲锋 / 焦核窄冲
+  # 霜核蛮兵：霜暴读条可躲（第三拍）；异于潮闸冲锋 / 焦核窄冲
   Type: HUSK
   Display: '&b霜核蛮兵'
   Health: 210
@@ -59,8 +59,7 @@ EmberDailyFrostBrute:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
-  - potion{type=SLOW;duration=50;level=0} @PlayersInRadius{r=6} ~onTimer:45
-  - damage{amount=0.4} @PlayersInRadius{r=5} ~onTimer:45
+  - skill{s=EmberFrostNovaCast} @self ~onTimer:80
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> gear_ember_blade 1"} @Self ~onDeath 0.12
   - command{c="corerpg mmgive <caster.uuid> gear_ember_charm 1"} @Self ~onDeath 0.08

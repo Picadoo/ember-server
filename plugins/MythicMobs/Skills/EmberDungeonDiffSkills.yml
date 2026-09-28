@@ -106,3 +106,16 @@ EmberRaidEmberRain:
   - message{m="&c【终厅·余烬雨】&7灰烬落向所有人！"} @PlayersInRadius{r=40}
   - damage{amount=12} @PlayersInRadius{r=24}
   - effect:particles{p=lava;amount=60;hSpread=8;ySpread=2;speed=0} @Self
+
+# --- 日常第三拍 · 霜晶 Boss 霜暴读条（可躲）---
+# 蓄力粒子用 cloud（1.12）；snowballpoof 无效故未用
+EmberFrostNovaCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&b【霜厅】&f霜核蓄力——&7拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=40;hSpread=4;ySpread=1;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.6;pitch=0.7} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=30;hSpread=5;ySpread=0.8;speed=0} @Self
