@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬汲取石 lore 裸 id 人话对齐（B2.35）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_drain` **1** 行 lore 灰字裸 id；获批后由物品岗改 NI Items YAML。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-gem-drain-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_drain` **1** 行 lore 灰字裸 id；批后由物品岗改 NI Items YAML。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
 >
 > B2.34 已 **PASS · 勾销**（设计 `baa2705` · 批准 `19a8982` · 施工 `c5647d3` · 测 `7bc605a` · close `5b47896`）。当前 `&7gem_*` 有 **2** 件（汲取石、疾风石）；本窗只处理汲取石，批准并施工后预期剩 **1** 件。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 余烬汲取石 · **玩家可见 lore 裸 id `gem_ember_drain` 对齐**（UX · B2.35） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:19 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 | live `plugins/NeigeItems/Items/ember-enhance-gems.yml` · B2.34 稳固石 PASS 后 gem 轨单件薄窗 |
 | 专岗 | **物品**；验收 **`rg` + 悬停** |
 
@@ -50,7 +50,7 @@ gem_ember_drain:
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **待批 A；批后交物品岗施工** |
+| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **已批 A；交物品岗施工** |
 | A′ | 改为灰字「汲取石」 | 不荐：与显示名重复 |
 | B | 顺手处理 `gem_ember_gale`、斜杠、cosmetic/pet 或精英壳 | **仅作 soft，勿双上** |
 
