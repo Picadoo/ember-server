@@ -11,6 +11,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.util.Vector;
 
 import java.io.File;
@@ -25,8 +30,9 @@ import java.util.UUID;
 /**
  * B-flex-2: one equipable light-skill slot (parallel to covenant SkillService.cast).
  * Pilot: flex_ember_step — horizontal look-dir dash ~5 blocks, no wall clip, no damage, CD 14s, zero stamina.
+ * B-flex-4: sneak+Q (PlayerDropItemEvent) world hotkey proxy → cast when flex equipped.
  */
-public final class FlexSkillService {
+public final class FlexSkillService implements Listener {
 
     private static final String PREFIX = ChatColor.GREEN + "[轻技] " + ChatColor.RESET;
     public static final String PILOT_ID = "flex_ember_step";
@@ -35,6 +41,8 @@ public final class FlexSkillService {
     private final PlayerDataStore dataStore;
 
     private boolean enabled = true;
+    /** B-flex-4: world hotkey proxy (sneak+drop). skills.yml flex.hotkey; off/false disables. */
+    private boolean hotkeyEnabled = true;
     private final Map<String, FlexDef> flexSkills = new LinkedHashMap<String, FlexDef>();
     /** UUID -> skillId -> expireMillis */
     private final Map<UUID, Map<String, Long>> cooldowns = new HashMap<UUID, Map<String, Long>>();
@@ -84,6 +92,12 @@ public final class FlexSkillService {
     private void loadFrom(FileConfiguration cfg) {
         flexSkills.clear();
         enabled = cfg.getBoolean("enabled", true);
+        String hotkey = cfg.getString("flex.hotkey", "sneak_drop");
+        hotkeyEnabled = hotkey != null
+                && !hotkey.isEmpty()
+                && !"off".equalsIgnoreCase(hotkey)
+                && !"false".equalsIgnoreCase(hotkey)
+                && !"none".equalsIgnoreCase(hotkey);
         ConfigurationSection root = cfg.getConfigurationSection("skills");
         if (root == null) return;
         for (String id : root.getKeys(false)) {
@@ -374,6 +388,25 @@ public final class FlexSkillService {
             loc.getWorld().playSound(loc, s, 0.7f, 1.35f);
         } catch (IllegalArgumentException ignored) {
         }
+    }
+
+    /**
+     * B-flex-4: sneak + Q (drop) → cancel drop + cast when flex equipped and not in a GUI.
+     * Bare Q / unequipped / hotkey off: do not cancel (vanilla drop).
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onDropHotkey(PlayerDropItemEvent event) {
+        if (!enabled || !hotkeyEnabled) return;
+        Player player = event.getPlayer();
+        if (player == null || !player.isOnline()) return;
+        if (!player.isSneaking()) return;
+        PlayerData data = dataStore.get(player.getUniqueId());
+        if (data == null || !data.hasFlexSkill()) return;
+        // Skip when a real GUI/menu is open (crafting/creative view = world inventory)
+        InventoryType top = player.getOpenInventory().getType();
+        if (top != InventoryType.CRAFTING && top != InventoryType.CREATIVE) return;
+        event.setCancelled(true);
+        cast(player);
     }
 
     public void onQuit(UUID uuid) {

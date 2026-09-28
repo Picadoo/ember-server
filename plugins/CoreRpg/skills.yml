@@ -4,6 +4,9 @@
 # Skill damage is dealt as the player's attack: MythicMobs damage modifiers and calamity scaling still apply;
 # it does not consume the target's hurt i-frames (the next swing lands normally) and it does not proc gear passives.
 enabled: true
+# B-flex-4: world hotkey proxy for equipped flex (sneak+Q). off/false/none disables.
+flex:
+  hotkey: sneak_drop
 max_hit_mult: 2.5            # hard cap: no skill hit (incl. talent bonus, before 灰印 / set multipliers) above 2.5× a basic hit
 talent_mult_per_node: 0.1    # +0.1× per unlocked talent node of that skill (up to talent_bonus_max nodes)
 ignore_enhance_multiplier: true   # legacy key (enhance now enters through gear 物理伤害)
