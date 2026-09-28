@@ -6,7 +6,7 @@
 
 ## Verdict
 
-**✅ UI 可用**（仅 TrMenu · 真预览子菜单落地）
+**✅ UI 可用 · 短抽 PASS**（测报 `STATUS-ember-daily-reward-preview-test.md` · `6e2abc6`）
 
 - 新菜单：`ember_daily_rewards`（Title `§6日常 · 奖励预览`）
 - 入口：`ember_daily` 图标 **P** → sound + `menu: ember_daily_rewards`
@@ -22,7 +22,8 @@
 - [x] Options 对齐日常（Arguments false / Default-Layout 0 / Hide-Player-Inventory false / Min-Click-Delay 200）
 - [x] 热重载 TrMenu（见下）
 - [x] `ops.json` 保持 `[]`
-- [x] 本地 git commit（**未 push**）
+- [x] git commit+push（`4517021` 落地 · `6e2abc6` 测报）
+- [x] 短抽 §7 **PASS**
 
 ## 改动文件
 

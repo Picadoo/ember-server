@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 07:57 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 08:05 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -20,6 +20,7 @@
 - （额度内日常 UX 软债已清；下一项待排）
 
 ### 刚结
+- **日常软债 · 奖励预览真分页**：**PASS**（`ember_daily_rewards` · `4517021` / 测 `6e2abc6`）
 - 锈轨真侧袭 + enter 冷却 chat **PASS**（CoreRpg 1.15.21）
 - 日常体验收口挑刺：**无挡级必改**（`STATUS-ember-daily-ux-closeout-review.md`）
 - 出本 5s 冷却提示 + 庭院门宽 ×9 **PASS**（CoreRpg 1.15.20 · `3299ae6` / 测 `faee945`）
@@ -33,7 +34,6 @@
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - 团本使徒 TTK（人数门 3～5 SKIP）
 - B0.2 周本/深渊天赋二层 ΔTTK 已 PASS；使徒仍 SKIP
-- 日常软债：奖励预览真分页 **已还**（`ember_daily_rewards` PASS）
 
 ### 多世界现状（确认）
 - `plugins/Multiverse-Core.jar` + Portals；常驻 `ember_hub` / `ember_afk` / `ember_event` 等
