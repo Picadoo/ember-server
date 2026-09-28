@@ -14,7 +14,7 @@
 | 稿件 | 灾厄 · **奖励预览真分页**（UX · 可维护性 · B2） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 22:39 Asia/Shanghai |
 | 关联 | `ember_calamity.yml` P · 范式 `ember_*_rewards` · `CoreRpg/calamity.yml` · MM `EmberCalamityBoss` |
-| 状态 | **待批 · 未施工** |
+| 状态 | **已批 A · 待插件施工** |
 | 关联 STATUS / 稿 | backlog · `design-ember-abyss-reward-preview.md` · `ember-calamity-window-spec.md` |
 
 ### 硬约束（本稿）
@@ -171,3 +171,16 @@ actions:
 **建议专岗：插件（TrMenu）主 · 测试抽样 · 策划润色；物品/怪物/地图不派。**
 
 **未批准前不施工。**
+
+
+---
+
+## 批准记录（总控）
+
+| 字段 | 值 |
+|------|-----|
+| 批准 | **A** · 2026-09-28 22:41 Asia/Shanghai |
+| 岗 | 余烬-总控 |
+| 范围 | 新建 `ember_calamity_rewards`；P 改 `menu:` 去空壳 tell；日箱限领 + 周首次凝核 + 尾刀必给/概率（含 T3 各 1%） |
+| 禁 | `calamity.yml`/MM/`loot.yml` 数值；窗期/奔赴；`over_chance*`；精英预览（无独立 P）本窗不施工；禁写成全员参战保底 T3 |
+| 下一 | 派 **插件** TrMenu 施工；测岗抽样；未 push 总控代推 |
