@@ -35,7 +35,8 @@ printf 'dp reload\\n' > server-runtime/console.in
 
 ## 静态检查
 
-- `rg -n '/ember' plugins/DungeonPlus/dungeon/EmberCalamity/option.yml`：0 行。
+- 字面执行 `rg -n '/ember' plugins/DungeonPlus/dungeon/EmberCalamity/option.yml`：命中 1 行既有注释路径 `docs/ember-abyss-calamity.md`（L1）；该非 `message=` 注释未改，因本批硬边界为仅改 `message=`。
+- `rg -n 'message=.*\/ember' plugins/DungeonPlus/dungeon/EmberCalamity/option.yml`：0 行；玩家可见 `message=` 已无 `/ember`。
 - `rg -n '枢纽菜单 → 灾厄' plugins/DungeonPlus/dungeon/EmberCalamity/option.yml`：命中 L17 `message=`。
 - 目标文件 diff：仅一条 `message=` 玩家可见字符串替换。
 
