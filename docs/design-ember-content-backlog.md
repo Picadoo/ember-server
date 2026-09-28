@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 09:02 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 09:04 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 周本深核廊波次差异：策划薄设计（本轮）
+- 周本深核廊中核链式：插件施工（本轮 · 设计已批）
 
 ### 刚结
-- **霜晶房2链式重叠**：**PASS**（`36e98c8` · 测报本 commit）
+- **周本波次差异设计**：已批方案 A（`design-ember-weekly-wave-variance.md` · 本 commit）
+- **霜晶房2链式重叠**：**PASS**（`36e98c8` / 测 `91eee00`）
 - **日常七线第二房节奏扩线收口挑刺**：**无挡级**（`STATUS-ember-daily-room2-expand-closeout-review.md` · 本 commit）
 - **源码 join / 灾厄广播去指令同步**：**PASS**（`30886e2` / 测 `ec7dc6f`）
 - **B1.4 软抛光**（8 条等级 hint）：**PASS**（`ee3cfbc` / 测 `30261bd`）
