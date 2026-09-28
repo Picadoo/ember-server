@@ -1,6 +1,6 @@
 # 设计稿 · friends/mail 文件头管理口吻（B2.49）
 
-> **STATUS：待批 A（总控 · 2026-09-29 05:05 Asia/Shanghai）。**  
+> **STATUS：已批 A（总控 · 2026-09-29 05:06 Asia/Shanghai）。**  
 > 本稿只定 TrMenu `ember_friends.yml` / `ember_mail.yml` **YAML 文件头 L2 注释**各 1 行：去掉尾「；逻辑待 CoreRpg 接线」，保留功能摘要。  
 > **比 B2.48 更薄：纯文件头注释（非玩家 UI / 非 Open tell）。**  
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批后由专岗改 TrMenu）。  
@@ -17,7 +17,7 @@
 | 稿件 | friends/mail · **文件头注释管理口吻人话化**（UX · B2.49） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 05:05 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_friends.yml` · `ember_mail.yml` · B2.48 PASS 旁证 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** · 交插件 TrMenu |
 | tip 路径 | `docs/design-ember-friends-mail-header-copy.md` |
 | 上游 | B2.48 close `800aa05` · 公会 Open tell 已清；升本窗 |
 
@@ -169,7 +169,7 @@ rg -n '逻辑待 CoreRpg' plugins/TrMenu/menus/
 
 ## 8. 总控批示
 
-- [ ] **批 A** · 两文件 L2 各删「；逻辑待 CoreRpg 接线」尾，保留功能摘要
+- [x] **批 A** · 两文件 L2 各删「；逻辑待 CoreRpg 接线」尾，保留功能摘要
 - [ ] **驳回** · 说明
 
 **批示摘要（待填）：** —
