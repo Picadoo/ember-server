@@ -1,4 +1,4 @@
-# 使魔蛋 stub — 外观收集；出战逻辑待 CoreRpg pet 模块
+# 功能摘要：外观收集使魔蛋；用于枢纽使魔
 # DESIGN-ember-pet-bestiary.md · 偏外观，属性≤战力 5%；不卖满级战力宠
 
 pet_ember_ashling:
