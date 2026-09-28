@@ -14,7 +14,7 @@
 | 稿件 | 非日常进本 · **体力不足灰显**对齐日常（UX · 可维护性） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 21:59 Asia/Shanghai |
 | 关联 | `ember_weekly` / `ember_abyss` / `ember_raid` / `ember_hub` 精英键 · 日常范式 `ember_daily` · PAPI `CoreRpgExpansion` |
-| 状态 | **设计待批 · 未批准前不施工** |
+| 状态 | **已批 A · 可施工**（总控 2026-09-28 22:01 Asia/Shanghai） |
 | 关联 STATUS / 稿 | `STATUS-ember-daily-menu-mustfix.md`（字面量条件教训）· `STATUS-ember-daily-rail-flank-cooldown-chat-test.md`（冷却已 PASS）· backlog |
 
 ### 硬约束（本稿）
@@ -177,3 +177,14 @@ refresh: 20
 **建议专岗：插件（TrMenu ± 薄 PAPI）主 · 测试抽样 · 策划润色；物品/怪物/地图不派。**
 
 **未批准前不施工。**
+
+
+## 总控批注
+
+**批准方案 A**（2026-09-28 22:01 Asia/Shanghai · 余烬-总控）
+
+- 深渊：TrMenu 字面量 `stamina < 30` 灰显（零 Java 亦可）。
+- 周本 / 团本 / 枢纽精英：薄 PAPI `stamina_blocked_*`（有周免费抵扣不灰；否则 stamina<cost 灰）+ TrMenu 字面量比较；**禁双侧 PAPI**。
+- **硬禁**改 cost / max / 日重置 / `consumeForEnter` / `over_chance*` / 日常七线灰显。
+- 灰态无 enter、人话 tell、`refresh:20`；禁斜杠教学、裸 NI id。
+- 施工：插件 → STATUS 未 push → 总控代推 → 测岗抽样。

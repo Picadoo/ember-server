@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 21:59 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 22:01 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -76,7 +76,7 @@
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - ~~**挂机二档菜单 UX**（非改数）~~ → **PASS · 勾销**（`0deda12` / `f0ce1fd`）
 - ~~进本 `start-interval` 冷却 chat 转发~~ → **PASS · 勾销**（CoreRpg 1.15.21 启发式 tell+退还 · 测 `STATUS-ember-daily-rail-flank-cooldown-chat-test.md` · 非捕 DP 回执）
-- **非日常进本体力灰显**（周本/深渊/团本/枢纽精英 · 设计 `design-ember-enter-stamina-gray.md` 荐 A · 待批）
+- **非日常进本体力灰显**：已批 **A**（`design-ember-enter-stamina-gray.md`）· 待插件 TrMenu±PAPI
 - ~~**B0.4 / B2.5 挂机二档数值**~~ → **施工+短样 PASS · 勾销**（`5301556` / `99898cc` · 0.25/0.08 · 外推 ~2.4× · 不封死通胀）
 - ~~**B1.3 精英 Boss TTK**~~ → **关账采数 PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · 65.5s / 535.3s · 5200/12 不动 · 剩血 62% 观察不砍血）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
