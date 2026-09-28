@@ -1,6 +1,6 @@
 # 设计稿 · 断塔环廊坠落 `$kill`（wave2b 刷点内收）
 
-> **未批准前不施工。** 本稿仅文档；不改任何现网玩法 YAML；勿 git push。  
+> **已批准方案 A（总控 · 2026-09-28）。** 可施工；仅 Spire `monster.yml` wave2b location。  
 > tip 参考：`97f1110`（节奏杠杆里程碑收口 · Next: Spire ringfall）  
 > 债源：`docs/STATUS-ember-daily-rhythm-leverage-closeout-review.md` 软债#1「断塔坠落 `$kill`」；首跑笔记 `docs/STATUS-ember-daily-boss-prep-expand-test.md`  
 > 坐标真相：`plugins/DungeonPlus/dungeon/EmberDailySpire/monster.yml` + `docs/STATUS-ember-b22-dp-coords.md` §3
@@ -14,7 +14,7 @@
 | 稿件 | 日常 · 断塔中层环廊 wave2b 卫尸防坠（刷点内收） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | **仅** `EmberDailySpire/monster.yml` 的 **wave2b** 两条 `$mob` location（默认） |
-| 状态 | **待总控批准 · 未施工** |
+| 状态 | **已批准方案 A · 待插件施工** |
 | 对照 | 原 wave-variance 意图「环廊内侧近阶处」；S3「环廊须有栏/宽台防误坠」；庭院/潮蚀无同构坠崖债 |
 
 ### 硬约束
@@ -131,3 +131,13 @@ Boss前压短抽首跑（`BpS653`）：玩家 **先清对射（wave2a）** 时�
 ## 8. 给总控一句话
 
 **推荐方案 A：** wave2b `(0,70,-6)→(0,70,-4)`、`(0,70,2)→(0,70,1)`；不碰 door2 / `$kill`；批准后再派插件施工。
+
+---
+
+## 9. 总控批注
+
+**批准方案 A**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 仅内收 wave2b：`(0,70,-6)→(0,70,-4)`、`(0,70,2)→(0,70,1)`；施工前核可站，允许 ±1 微调但禁外扩回崖。
+- 禁门/kill-any/降 amount；禁动链式 / door2 / boss_prep / 他线。
+- 验收按 §5；A 测后仍坠再升 B（矮栏）另批。
