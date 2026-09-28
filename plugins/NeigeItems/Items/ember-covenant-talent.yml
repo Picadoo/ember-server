@@ -6,7 +6,7 @@ mat_ember_covenant_reset:
   name: '&6誓约重置券'
   lore:
     - '&8洗约 · 免晶钻'
-    - '&7用于 /corerpg covenant set|reset'
+    - '&7用于枢纽 · 誓约'
   enchantments:
     DURABILITY: 1
   hideflags:
