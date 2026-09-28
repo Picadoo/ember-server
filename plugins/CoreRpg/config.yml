@@ -91,6 +91,10 @@ stats:
     attack_speed_pct: 0.1
     skill_life_steal_pct: 0.15
     skill_heal_per_cast_pct: 0.03
+  # B-flex-1: independent OffHand whitelist (NOT accessories; only getItemInOffHand counts)
+  offhand:
+  - acc_ember_offhand_ward
+  - acc_ember_offhand_vita
 afk_caps:
   enabled: true
   worlds:

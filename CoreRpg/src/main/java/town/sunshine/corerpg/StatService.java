@@ -18,6 +18,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -38,8 +41,9 @@ import java.util.regex.Pattern;
 /**
  * Gear stat layer (2026-09-27). AttributePlus is parked, so CoreRpg applies the NI lore stats itself:
  * main-hand weapon lore (物理伤害 +N) + best accessory in inventory/offhand (生命力 / 物理防御)
+ * + independent OffHand whitelist ({@code stats.offhand}, B-flex-1) stacked in parallel with the accessory
  * + enhance level × enhance.yml stat_per_level + socket gems + reforge affixes + unlocked talent stats.
- * Scales/curve in config.yml {@code stats:}.
+ * Scales/curve in config.yml {@code stats:}. Offhand pilot ids must NOT be listed under accessories.
  */
 public final class StatService implements Listener {
 
@@ -67,6 +71,8 @@ public final class StatService implements Listener {
     private boolean applyCovenantStats = false;
     private final List<String> weaponIds = new ArrayList<String>();
     private final List<String> accessoryIds = new ArrayList<String>();
+    /** B-flex-1: independent OffHand-only whitelist (parallel to accessory best-one). Empty when unset. */
+    private final List<String> offhandIds = new ArrayList<String>();
     private final Map<String, Map<String, Double>> perLevel = new HashMap<String, Map<String, Double>>();
     private final Map<String, Map<String, Double>> gems = new HashMap<String, Map<String, Double>>();
 
@@ -91,16 +97,21 @@ public final class StatService implements Listener {
         skillHealPerCastPct = c.getDouble("stats.caps.skill_heal_per_cast_pct", 0.08);
         weaponIds.clear();
         accessoryIds.clear();
+        offhandIds.clear();
         List<String> w = c.getStringList("stats.weapons");
         List<String> a = c.getStringList("stats.accessories");
+        List<String> o = c.getStringList("stats.offhand");
         if (w == null || w.isEmpty()) {
             w = java.util.Arrays.asList("gear_ember_blade", "gear_ember_t1_blade", "gear_ember_t2_blade", "gear_ember_t3_blade");
         }
         if (a == null || a.isEmpty()) {
             a = java.util.Arrays.asList("gear_ember_charm", "gear_ember_t1_talisman", "gear_ember_t2_talisman", "gear_ember_t3_talisman");
         }
+        // offhand: empty list when unset — do NOT seed accessory defaults (B-flex-1)
+        if (o == null) o = java.util.Collections.emptyList();
         weaponIds.addAll(w);
         accessoryIds.addAll(a);
+        offhandIds.addAll(o);
         perLevel.clear();
         gems.clear();
         File ef = new File(plugin.getDataFolder(), "enhance.yml");
@@ -189,7 +200,8 @@ public final class StatService implements Listener {
         if (hid != null && weaponIds.contains(hid)) {
             for (Map.Entry<String, Double> e : itemStats(hand, hid).entrySet()) add(total, e.getKey(), e.getValue());
         }
-        // best single accessory anywhere in the inventory (incl. offhand)
+        // best single accessory anywhere in the inventory (incl. offhand);
+        // skip ids that belong to the independent offhand whitelist (prevents double-count if misconfigured)
         Map<String, Double> best = null;
         double bestScore = -1;
         List<ItemStack> all = new ArrayList<ItemStack>();
@@ -199,6 +211,7 @@ public final class StatService implements Listener {
             if (s == null || s.getType() == Material.AIR) continue;
             String id = ni.getNiId(s);
             if (id == null || !accessoryIds.contains(id)) continue;
+            if (offhandIds.contains(id)) continue;
             Map<String, Double> st = itemStats(s, id);
             double score = get(st, "max_health") + get(st, "phys_defense") * 3;
             if (score > bestScore) { bestScore = score; best = st; }
@@ -216,6 +229,14 @@ public final class StatService implements Listener {
         if (best != null) {
             double bonus = 1.0 + get(talent, "charm_stat_bonus_pct");
             for (Map.Entry<String, Double> e : best.entrySet()) add(total, e.getKey(), e.getValue() * bonus);
+        }
+        // B-flex-1: independent OffHand slot — only getItemInOffHand(), id ∈ stats.offhand; stacks with accessory
+        ItemStack off = inv.getItemInOffHand();
+        if (off != null && off.getType() != Material.AIR && !offhandIds.isEmpty()) {
+            String oid = ni.getNiId(off);
+            if (oid != null && offhandIds.contains(oid)) {
+                for (Map.Entry<String, Double> e : itemStats(off, oid).entrySet()) add(total, e.getKey(), e.getValue());
+            }
         }
         for (Map.Entry<String, Double> e : talent.entrySet()) {
             if (!"charm_stat_bonus_pct".equals(e.getKey())) add(total, e.getKey(), e.getValue());
@@ -331,6 +352,31 @@ public final class StatService implements Listener {
     @EventHandler public void onJoin(PlayerJoinEvent e) { refreshLater(e.getPlayer()); }
     @EventHandler public void onRespawn(PlayerRespawnEvent e) { refreshLater(e.getPlayer()); }
     @EventHandler public void onHeld(PlayerItemHeldEvent e) { refreshLater(e.getPlayer()); }
+
+    /** F-key / swap hands — OffHand contents change (B-flex-1). */
+    @EventHandler public void onSwapHand(PlayerSwapHandItemsEvent e) { refreshLater(e.getPlayer()); }
+
+    /** Inventory click that touches the OffHand slot (player inv slot 40 on 1.12.2). */
+    @EventHandler public void onInvClick(InventoryClickEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) return;
+        // CraftInventoryPlayer: off-hand is slot 40 on 1.12.2
+        if (e.getSlot() == 40) {
+            refreshLater((Player) e.getWhoClicked());
+            return;
+        }
+        // Clicking while the clicked inventory is the bottom player inv and raw slot maps to offhand (45 in some views)
+        if (e.getRawSlot() == 45 && e.getView().getBottomInventory() instanceof PlayerInventory) {
+            refreshLater((Player) e.getWhoClicked());
+        }
+    }
+
+    /** Drag that includes the OffHand slot. */
+    @EventHandler public void onInvDrag(InventoryDragEvent e) {
+        if (!(e.getWhoClicked() instanceof Player)) return;
+        if (e.getInventorySlots().contains(Integer.valueOf(40)) || e.getRawSlots().contains(Integer.valueOf(45))) {
+            refreshLater((Player) e.getWhoClicked());
+        }
+    }
 
     private final Map<UUID, Long> lastHit = new HashMap<UUID, Long>();
     private final double swingMs = 625.0;

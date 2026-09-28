@@ -114,6 +114,10 @@ stats:
     attack_speed_pct: 0.10         # 灰行 4% → 普攻蓄力更快（GENERIC_ATTACK_SPEED ×）
     skill_life_steal_pct: 0.15
     skill_heal_per_cast_pct: 0.03  # 每次技能施放最多回复 3% 最大生命
+  # B-flex-1: independent OffHand whitelist (NOT accessories; only getItemInOffHand counts)
+  offhand:
+  - acc_ember_offhand_ward
+  - acc_ember_offhand_vita
 
 # 1.11.0 (2026-09-27): 野外（挂机）掉落每日上限 + 递减 — 超过上限后每份只有 over_chance 概率掉落；副本/灾厄不受限
 afk_caps:
