@@ -20,7 +20,7 @@ dungeon-start:
     # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§5深渊已开启。§7已消耗体力 ×1 —— 能走多深，就走多深。本期可下潜至第 §f12 §7层。} @dungeon"
-    - "$message{type=text;text=§8需要撤离：打开菜单 → 深渊 → 撤离 · 按最高层结算 · 票不退} @dungeon"
+    - "$message{type=text;text=§8需要撤离：打开菜单 → 深渊 → 撤离 · 按最高层结算 · 体力不退} @dungeon"
     - "$teleport{location=-40,90,274;defspawn=true} @player"
     - "$command{text=corerpg abyss progress %player_name% 0;console=true} @player"
     - "$monstergroup{group=floor1;repeat=false;delay=2} @dungeon"
@@ -32,7 +32,7 @@ dungeon-area: []
 # 周首通稳定符只在 AbyssSettleService.settle(floor≥12) 发，此处勿再调 corerpg loot abyss_weekly12
 # 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
 dungeon-reward-script:
-  - "$message{type=text;text=§5深渊结算：按本局最高层发箱（票不退）} @dungeon"
+  - "$message{type=text;text=§5深渊结算：按本局最高层发箱（体力不退）} @dungeon"
   - "$command{text=corerpg abyss settle %player_name%;console=true} @player"
   - "$command{text=corerpg loot %player_name% abyss_t2;console=true} @player"
   # 2026-09-26：战令赛季经验 + 余烬等级经验（CoreRpg progress.yml）

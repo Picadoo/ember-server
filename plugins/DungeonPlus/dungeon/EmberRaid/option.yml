@@ -19,7 +19,7 @@ dungeon-start:
     # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§9团本大厅已集结。§7左道卫兵 · 右道射手 · 汇合后终厅使徒。} @dungeon"
-    - "$message{type=text;text=§8已扣除余烬团本票 ×1} @dungeon"
+    - "$message{type=text;text=§8已消耗体力 ×1} @dungeon"
     - "$teleport{location=0,65,0;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
@@ -42,7 +42,7 @@ dungeon-reward-script:
   # 周首通保底团戒（NI acc_ember_raid_ring）
   - "$command{text=corerpg raid grant-ring %player_name%;console=true} @player"
   - "$message{type=text;text=§6周首通保底 · 余烬团戒（戒+刃=同袍套装）} @dungeon"
-  - "$message{type=text;text=§8同周再通不重复发戒（团票每周 1）· T3 不保底} @dungeon"
+  - "$message{type=text;text=§8同周再通不重复发戒（周首通一次）· T3 不保底} @dungeon"
   # 2026-09-26：战令赛季经验 + 余烬等级经验（CoreRpg progress.yml）
   - "$command{text=corerpg progress %player_name% raid_clear;console=true} @player"
   - "$command{text=mvtp %player_name% ember_hub;console=true} @player"
