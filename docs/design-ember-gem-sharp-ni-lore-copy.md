@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬锋利石 lore 裸 id 人话对齐（B2.33）
 
-> **STATUS：待批 A**（总控 2026-09-29 · 本稿）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_sharp` **1** 行 lore 裸 NI id；**未获批前不改 NI Items YAML**。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-gem-sharp-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_sharp` **1** 行 lore 裸 NI id；**未获批前不改 NI Items YAML**。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
 >
 > B2.32 已 **PASS · 勾销**（设计 `cf7eaaf` · 批准 `c4194e4` · 施工 `1cdf73b` · 测 `0c70273` · close `42054ad`）。live `&7mat_*` 仅本轨已归零；本窗新开 gem 轨，**勿宣称 B0.1 已清**。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 余烬锋利石 · **玩家可见 lore 裸 id `gem_ember_sharp` 对齐**（UX · B2.33） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:09 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 | live `plugins/NeigeItems/Items/ember-enhance-gems.yml` · B2.32 mat 轨勾销后首件 gem |
 | 专岗 | **物品**；验收 **`rg` + 悬停** |
 
@@ -50,7 +50,7 @@ gem_ember_sharp:
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **待批 A；交物品岗施工** |
+| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **已批 A；交物品岗施工** |
 | A′ | 改为灰字「锋利石」 | 不荐：与显示名重复 |
 | B | 顺手处理其它 gem / 斜杠 / cosmetic / pet | **只作 soft，勿双上** |
 
