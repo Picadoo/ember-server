@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `84dd76d` · 设计 `aa4c825` · 批准 `25d5871` · tip `docs/design-ember-enhance-socket-header-copy.md`  
 **口径：** 纯静态 · 禁开菜单 · 禁长测/挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS**
+**Verdict：** ✅ **PASS** · STATUS 已 push (`88b32e6`)
 
 ---
 
@@ -98,8 +98,8 @@ plugins/TrMenu/menus/ember_socket.yml  | 2 +-
 | 总评 | **PASS** |
 | 各点 | 1 PASS · 2 PASS · 3 PASS · 4 PASS |
 | 施工 tip SHA | `84dd76d` |
-| 测报 tip short SHA | （本提交） |
-| 是否已 push | （见 commit 后） |
+| 测报 tip short SHA | `88b32e6` |
+| 是否已 push | **是** |
 | 报告路径 | `docs/STATUS-ember-enhance-socket-header-copy-test.md` |
 | ops | `[]` |
 | 阻塞点 | 无 |
