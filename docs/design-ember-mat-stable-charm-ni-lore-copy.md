@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬稳固符 lore 裸 id 人话对齐（B2.32）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `mat_ember_stable_charm` **1** 行 lore 裸 NI id；**未获批前不改 NI Items YAML**。不改 NI 数值、配方、给物、强化逻辑或其它物品。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-mat-stable-charm-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `mat_ember_stable_charm` **1** 行 lore 裸 NI id；**未获批前不改 NI Items YAML**。不改 NI 数值、配方、给物、强化逻辑或其它物品。
 >
 > B2.31 已 **PASS · 勾销**（设计 `1bdacd8` · 批准 `4359e89` · 施工 `c0e8fcc` · 测 `b2d9773` · close `c8ab22c`）。本窗承接 live 最后 1 件 `&7mat_*`；只推稳固符 1 件，**勿宣称 B0.1 已清**。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 余烬稳固符 · **玩家可见 lore 裸 id `mat_ember_stable_charm` 对齐**（UX · B2.32） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:03 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 | live `plugins/NeigeItems/Items/ember-enhance-gems.yml` · B2.31 勾销后 live 最后 1 件 `&7mat_*` |
 | 专岗 | **物品**；验收 **`rg` + 悬停** |
 
@@ -50,7 +50,7 @@ mat_ember_stable_charm:
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **待批 A；批后交物品岗施工** |
+| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **已批 A；交物品岗施工** |
 | A′ | 改为灰字「余烬稳固符」 | 不荐：与显示名重复 |
 | B | 顺手处理其它 mat / gem / 斜杠 | **只作 soft，勿双上** |
 
