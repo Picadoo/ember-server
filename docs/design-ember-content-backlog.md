@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 10:55 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 10:58 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,12 +17,12 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 日常节奏全杠杆里程碑挑刺收口（霜晶/庭院潮蚀房2链式 + Boss前压扩线后）
+- 断塔环廊坠落 `$kill` 防坠软债（挑刺仍刺 · 薄设计）
 
 ### 刚结
+- **日常节奏全杠杆里程碑挑刺**：**无挡级**（`STATUS-ember-daily-rhythm-leverage-closeout-review.md` · 软债1～3还清）
 - **B2.2 DP 坐标总表刷新**（`8c8c38e` · 七线分表 + 房2/前压/周本中核/精英厅一）
 - **Boss 前压扩线（断塔/焦骨/地窖）**：**PASS**（施工 `8a69b97` / 测 `10cdc36` · 五条全过 · 合计 +6）
-- **Boss 前压扩线设计**：已批方案 A（`design-ember-daily-boss-prep-expand.md` / `3336efd`）
 - **庭院/潮蚀房2 start链式**：**PASS**（施工 `eb81942` / 测 `b310aa4`）
 - **庭院/潮蚀房2 start链式设计**：已批方案 A（`design-ember-daily-courtyard-tide-room2-chain.md` / `f62bb35`）
 - **消 kill-any 剩债**：**PASS**（施工 `3194355` / 测 `79d4ccb`；Raid/GuildBoss live SKIP 不挡）
@@ -51,8 +51,8 @@
 - 挑刺必改 4 波次差异：七线落地；霜晶 door1 链式返工复测 **PASS**（`14464c6`）
 
 ### 仍挂
-- 日常节奏里程碑挑刺收口（本轮）
-- 断塔环廊坠落 `$kill` 测法/防坠软债（玩家抱怨再动）
+- 断塔环廊坠落 `$kill` 防坠（本轮薄设计→施工）
+- 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - 团本使徒 TTK（人数门 3～5 SKIP）
 - B0.2 周本/深渊天赋二层 ΔTTK 已 PASS；使徒仍 SKIP
