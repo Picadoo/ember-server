@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `7a9886a` · 设计 `0273967` · 批准 `d4c8121` · tip `docs/design-ember-hub-afk-comment-copy.md`  
 **口径：** 纯静态 · 禁开菜单 · 禁长测/挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS** · STATUS 已 push ()
+**Verdict：** ✅ **PASS** · STATUS 已 push (`8c76d55`)
 
 ---
 
@@ -91,7 +91,7 @@ plugins/TrMenu/menus/ember_hub.yml | 2 +-
 | 总评 | **PASS** |
 | 各点 | 1 PASS · 2 PASS · 3 PASS |
 | 施工 tip SHA | `7a9886a` |
-| 测报 tip short SHA |  |
+| 测报 tip short SHA | `8c76d55` |
 | 是否已 push | **是** |
 | 报告路径 | `docs/STATUS-ember-hub-afk-comment-copy-test.md` |
 | ops | `[]` |
