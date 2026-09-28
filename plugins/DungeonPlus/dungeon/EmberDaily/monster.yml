@@ -5,6 +5,7 @@
 # Display 名仍：灰烬庭院僵尸/骷髅/蛮兵（MM 未改）
 # 2026-09-28 门宽对齐: 门1 z=13 / 门2 z=25 仅 x=-1..1 × y=65..67（AIR×9）；删 loc=-2
 # 2026-09-28 第二房/Boss前压试点: wave1 裁至4；door2→boss_prep(门槛尸×2)→boss；房2不动
+# 2026-09-28 庭院房2链式: wave2a.start→wave2b delay=2；开门仍 wave2b.end→boss_prep
 groups:
   wave1:
   - monster:
@@ -29,7 +30,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 房2：先左右柱后对射骷×2 → 再门侧/中央涌尸×4（顺序单 $kill，无 kill-any）
+  # 房2链式：wave2a 对射骷 start→delay2 wave2b 涌尸；开门仍 wave2b.end→boss_prep；无 kill-any
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailySkeleton;location=-6,65,21;amount=1;scattered=0.5;level=1} @dungeon"
@@ -37,11 +38,11 @@ groups:
     condition:
     - "$kill{mobname=灰烬庭院骷髅;amount=2} @system"
     start:
-    - "$message{type=text;text=§e【回廊·对射】左右柱后骷髅 —— 先躲柱清射} @dungeon"
+    - "$message{type=text;text=§e【回廊·对射】左右柱后骷髅 —— 涌尸将重叠压上} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
     end:
-    - "$message{type=text;text=§7对射已清 · 僵尸涌上} @dungeon"
+    - "$message{type=text;text=§7对射侧已清} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=4} @dungeon"
     auto-start: false
 
   wave2b:
@@ -52,7 +53,7 @@ groups:
     condition:
     - "$kill{mobname=灰烬庭院僵尸;amount=4} @system"
     start:
-    - "$message{type=text;text=§e【回廊·涌尸】僵尸×4 —— 清完开 Boss 门} @dungeon"
+    - "$message{type=text;text=§e【回廊·涌尸】僵尸重叠压上 —— 清完开 Boss 门} @dungeon"
     end:
     - "$message{type=text;text=§a回廊已清 · Boss 门开了 · 终厅门槛压} @dungeon"
     - "$operation-block{loc=-1,65,25;mode=set;type=AIR} @dungeon"

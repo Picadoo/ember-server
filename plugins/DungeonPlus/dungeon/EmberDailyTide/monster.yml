@@ -3,6 +3,7 @@
 # Display：$kill 对齐 MM 去色名 潮蚀尸 / 浪矢骷 / 潮闸蛮兵
 # 2026-09-28 波次差异: 房2 桥面先浪矢骷×3（对岸）→ 再潮蚀尸×3（桥头冲锋）
 # 2026-09-28 第二房/Boss前压试点: wave1 裁至4；door2→boss_prep(门槛浪矢×2)→boss；房2不动
+# 2026-09-28 潮蚀房2链式: wave2a.start→wave2b delay=2；开门仍 wave2b.end→boss_prep
 groups:
   wave1:
   - monster:
@@ -27,7 +28,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 房2：先对岸浪矢骷×3 → 再本岸/桥中潮蚀尸×3
+  # 房2链式：wave2a 浪矢 start→delay2 wave2b 潮蚀尸；开门仍 wave2b.end→boss_prep；无 kill-any
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyTideSkeleton;location=2,64,28;amount=2;scattered=0.8;level=1} @dungeon"
@@ -35,11 +36,11 @@ groups:
     condition:
     - "$kill{mobname=浪矢骷;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【水道·折桥】对岸浪矢骷 —— 先拆弓再推桥} @dungeon"
+    - "$message{type=text;text=§e【水道·折桥】对岸浪矢骷 —— 潮蚀尸将重叠冲锋} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
     end:
-    - "$message{type=text;text=§7对岸弓已清 · 潮蚀尸冲锋} @dungeon"
+    - "$message{type=text;text=§7对岸弓侧已清} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=4} @dungeon"
     auto-start: false
 
   wave2b:
@@ -49,7 +50,7 @@ groups:
     condition:
     - "$kill{mobname=潮蚀尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【水道·桥头】潮蚀尸×3 —— 清完开闸厅门} @dungeon"
+    - "$message{type=text;text=§e【水道·桥头】潮蚀尸重叠压上 —— 清完开闸厅门} @dungeon"
     end:
     - "$message{type=text;text=§a折桥已清 · 闸厅门开了 · 门槛卫} @dungeon"
     - "$operation-block{loc=-1,64,38;mode=set;type=AIR} @dungeon"
