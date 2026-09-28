@@ -382,7 +382,7 @@ public final class ScrapService {
             return;
         }
         if (ni.countInInventory(p, stoneNiId) < 1) {
-            p.sendMessage(ChatColor.RED + "[重铸] 需要 " + stoneNiId + " ×1");
+            p.sendMessage(ChatColor.RED + "[重铸] 需要 余烬重铸石 ×1");
             return;
         }
         if (!ni.consumeExact(p, stoneNiId, 1)) {
