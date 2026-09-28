@@ -97,6 +97,7 @@ afk_caps:
   - ember_afk
   - world
   over_chance: 0.25
+  over_chance_2: 0.08  # 1.15.22 B0.4: periodCount>=2×cap 用二档；一档保持 0.25
   kill_coin: 150
   items:
     mat_ember_shard: 150

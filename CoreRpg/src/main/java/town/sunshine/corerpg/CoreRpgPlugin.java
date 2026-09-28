@@ -671,9 +671,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (coinKillReward > 0) {
             int capCoin = getConfig().getInt("afk_caps.kill_coin", -1);
             boolean inst = !getConfig().getStringList("afk_caps.worlds").contains(killer.getWorld().getName());
-            if (!getConfig().getBoolean("afk_caps.enabled", false) || capCoin < 0 || inst
-                    || data.periodCount("afk_coin", DailyService.today()) < capCoin
-                    || Math.random() < getConfig().getDouble("afk_caps.over_chance", 0.25)) {
+            boolean allowCoin = !getConfig().getBoolean("afk_caps.enabled", false) || capCoin < 0 || inst;
+            if (!allowCoin) {
+                int cc = data.periodCount("afk_coin", DailyService.today());
+                allowCoin = cc < capCoin || Math.random() < afkOverChance(cc, capCoin);
+            }
+            if (allowCoin) {
                 data.addCoin(coinKillReward);
                 if (!inst) data.addPeriodCount("afk_coin", DailyService.today(), coinKillReward);
             }
@@ -1238,8 +1241,15 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         return true;
     }
 
-    /** 1.11.0: open-world (non-instance) drop daily caps — above the cap each unit only drops with over_chance. */
+    /** 1.11.0: open-world drop daily caps; 1.15.22: tier-2 softcap when periodCount >= 2×cap. */
     private final java.util.Set<String> afkCapNotified = new java.util.HashSet<String>();
+
+    /** Softcap roll chance by count: [cap, 2×cap) → over_chance; ≥2×cap → over_chance_2. */
+    double afkOverChance(int count, int cap) {
+        if (count >= 2 * cap) return getConfig().getDouble("afk_caps.over_chance_2", 0.08);
+        return getConfig().getDouble("afk_caps.over_chance", 0.25);
+    }
+
     int afkCapped(Player p, String item, int n) {
         if (!getConfig().getBoolean("afk_caps.enabled", false)) return n;
         if (!getConfig().getStringList("afk_caps.worlds").contains(p.getWorld().getName())) return n;
@@ -1247,14 +1257,18 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (cap < 0) return n;
         PlayerData d = dataStore.get(p.getUniqueId());
         String today = DailyService.today();
-        double over = getConfig().getDouble("afk_caps.over_chance", 0.25);
+        double over1 = getConfig().getDouble("afk_caps.over_chance", 0.25);
         int out = 0;
         for (int i = 0; i < n; i++) {
             int c = d.periodCount("afk_" + item, today);
+            double over = afkOverChance(c, cap);
             if (c < cap || Math.random() < over) { out++; d.addPeriodCount("afk_" + item, today, 1); }
-            if (c >= cap && afkCapNotified.add(p.getUniqueId() + today)) {
-                p.sendMessage(ChatColor.GRAY + "[余烬] 今日野外掉落已达收益上限，之后掉率降为 " + (int) Math.round(over * 100)
+            if (c >= cap && afkCapNotified.add(p.getUniqueId() + ":" + today + ":t1")) {
+                p.sendMessage(ChatColor.GRAY + "[余烬] 今日野外掉落已达收益上限，之后掉率降为 " + (int) Math.round(over1 * 100)
                         + "%。去打日常/周本/深渊，或钓鱼做饭吧。（每日 0 点重置）");
+            }
+            if (c >= 2 * cap && afkCapNotified.add(p.getUniqueId() + ":" + today + ":t2")) {
+                p.sendMessage(ChatColor.DARK_GRAY + "[余烬] 挂机收益再降，建议去打日常/周本。");
             }
         }
         return out;
