@@ -96,8 +96,8 @@ part.yml
 
 - **总评：** PASS
 - **施工 tip SHA：** `3066746`
-- **测报 tip short SHA：** （本 commit，push 后填）
-- **是否已 push：** （本 commit 后）
+- **测报 tip short SHA：** `d6768d9`
+- **是否已 push：** 是（`d6768d9` → origin/main）
 - **报告路径：** `docs/STATUS-ember-ash-brace-contention-copy-test.md`
 - **ops：** `[]`
 - **rg 计数证据：** 优先沉铁锭=2 · 有铁锭先炼灰箍沉底=1 · part.yml ZERO · ×12/×2 保留
