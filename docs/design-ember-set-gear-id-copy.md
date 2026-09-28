@@ -1,6 +1,6 @@
 # 设计稿 · 套装菜单 `gear_ember_*` / 团戒 NI 人话对齐（B2.19）
 
-> **STATUS：待批 A。** 本稿只定 **玩家可见** TrMenu `ember_set.yml` 中 4 句裸 NI id → 中文；**禁**改套装数值 / 掉落 / 体力 / NI 物品文件 / loot / DP / MM。  
+> **STATUS：已批 A · 待插件施工。** 本稿只定 **玩家可见** TrMenu `ember_set.yml` 中 4 句裸 NI id → 中文；**禁**改套装数值 / 掉落 / 体力 / NI 物品文件 / loot / DP / MM。  
 > 债源：B2.18 PASS 旁附（`91061b3` / tip `design-ember-reward-ni-id-align.md` §B）；backlog 软观察「套装 `gear_ember_*` 可升 B2.19」。  
 > 对齐：B2.18 已清五入口奖励页 `§8NI`；UX「文案短清楚 · TrMenu 点击 · NI ID 管理侧可留」。  
 > 排除本轮：刚结 B2.6–B2.18 / B-flex-1/2 / B-anvil-1；精英预览厚壳（hub 一点 `corerpg elite start`、无 P / 无独立 rewards → 证据不足勿硬开）；NI 物品 lore 内 `&7gear_ember_*`（另软挂）；拆解页 `mat_ember_reforge_stone`（方案 B soft · 勿双上）；墙钟/DPS；霜锈前压；断塔无证据升 B；B0.1 除非新证据；四件甲/锻炉重做/誓约大改。**勿宣称 B0.1 已清。** 与 B-flex / B-anvil **不捆**。
@@ -14,7 +14,7 @@
 | 稿件 | 套装菜单 · **玩家可见 `gear_ember_*` / `acc_ember_raid_ring` 人话对齐**（UX · B2.19） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 01:43 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_set.yml` · B2.18 旁附 B1～B4 |
-| 状态 | **待批 A** |
+| 状态 | **已批 A · 待插件** |
 | 关联 STATUS / 稿 | backlog 挂 **B2.19** · 批后 STATUS-approve / 测报 |
 
 ### 硬约束（本稿）
@@ -169,7 +169,7 @@ rg -n 'gear_ember_|acc_ember_raid_ring' plugins/TrMenu/menus/ember_set.yml
 ## 11. 回总控摘要
 
 - **荐 A：** `ember_set.yml` 4 句玩家可见裸 NI → 中文（刃 lore×2 + 戒 lore + 戒 tell）；零改套装数值/掉落/体力。  
-- **路径：** `docs/design-ember-set-gear-id-copy.md` · **B2.19** · STATUS **待批 A**。  
+- **路径：** `docs/design-ember-set-gear-id-copy.md` · **B2.19** · STATUS **已批 A · 待插件** · 批准见 STATUS-ember-set-gear-id-copy-approve.md。  
 - **证据：** L48/49/64/73；升自 B2.18 旁附 B1～B4；NI 中文名已对照。  
 - **B 旁附 soft：** 拆解页 1 行 `mat_ember_reforge_stone`；**勿双上**。  
 - **未动：** 精英厚壳 / NI 物品 lore / 套装数值·掉落·体力 / B0.1 / 四件甲·锻炉·誓约。  
