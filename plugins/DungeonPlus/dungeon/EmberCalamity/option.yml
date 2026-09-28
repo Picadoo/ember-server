@@ -14,7 +14,7 @@ dungeon-start:
     - "$team-condition{team=true;min=1;max=5;message=§c灾厄人数 1～5，当前 (<size>)} @system"
     # 2026-09-26 门控：本实例只供 OP 调试（正式灾厄 = CoreRpg CalamityService 在 ember_event 的公共窗，不经 DP）。
     #   DP 对每个队员逐一判定；PAPI Expansion-player 的 %player_is_op%（PAPI boolean → yes/no）
-    - "$js-condition{text='%player_is_op%'=='yes';message=§c灾厄 DP 实例仅供 OP 调试 · 正式灾厄请走公共窗口：/ember → 灾厄} @system"
+    - "$js-condition{text='%player_is_op%'=='yes';message=§c灾厄 DP 实例仅供 OP 调试 · 正式灾厄请走公共窗口：枢纽菜单 → 灾厄} @system"
   action-script:
     - "$message{type=text;text=§4灾厄降临时刻。§7灰烬巨像自地脉升起——打掉它的外壳！} @dungeon"
     - "$teleport{location=-40,65,270;defspawn=true} @player"
