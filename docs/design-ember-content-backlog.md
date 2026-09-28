@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 19:40 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 19:42 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- （无）
+- **B0.4 挂机 2h 产出基线采数**：设计待批（`design-ember-afk-b04-2h-baseline.md` · 荐 A · **只采数不改 `afk_caps`**）
 
 ### 刚结
-- **B1.3 精英 Boss TTK 关账采数 A**：**PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · Boss TTK **65.5s** · 全本 **535.3s** · 无掉崖 · 保持 5200/12 · 非砍血）
+- **B1.3 精英 Boss TTK 关账采数 A**：**PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · Boss TTK **65.5s** · 全本 **535.3s** · 剩血 62% 观察 · 保持 5200/12 · 非砍血）
 - **B1.3 精英 Boss TTK 关账设计**：已批 **A**（`design-ember-b13-elite-boss-ttk.md` · 默认不动 5200/12）
 - **Raid/GuildBoss kill-any live 复测**：**PASS**（`STATUS-ember-killany-live-retest.md` · tip `87b9193`/`7c8e61b` · 静态+live 可关）
 - **Raid/GuildBoss kill-any live 测法设计**：已批 **A**（`design-ember-raid-guildboss-live-harness.md` · 零玩法改）
@@ -36,7 +36,6 @@
 - **B2.2 断塔 wave2b 坐标同步**（`55d1b58` · 对齐防坠落地）
 - **断塔环廊防坠方案 A**：**PASS**（施工 `29fb133` / 测 `870aba0` · 近阶偶发掉底厅软观察不挡）
 - **断塔环廊防坠设计**：已批方案 A（`design-ember-daily-spire-ringfall.md`）
-- **断塔环廊防坠设计**：已批方案 A（`design-ember-daily-spire-ringfall.md`）
 - **日常节奏全杠杆里程碑挑刺**：**无挡级**（`STATUS-ember-daily-rhythm-leverage-closeout-review.md` · 软债1～3还清）
 - **B2.2 DP 坐标总表刷新**（`8c8c38e` · 七线分表 + 房2/前压/周本中核/精英厅一）
 - **Boss 前压扩线（断塔/焦骨/地窖）**：**PASS**（施工 `8a69b97` / 测 `10cdc36` · 五条全过 · 合计 +6）
@@ -49,14 +48,14 @@
 - **周本中核链式重叠**：**PASS**（`75e06b0` / 测 `a63bbfb`）
 - **周本波次差异设计**：已批方案 A（`design-ember-weekly-wave-variance.md` / `6a1f8c2`）
 - **霜晶房2链式重叠**：**PASS**（`36e98c8` / 测 `91eee00`）
-- **日常七线第二房节奏扩线收口挑刺**：**无挡级**（`STATUS-ember-daily-room2-expand-closeout-review.md` · 本 commit）
+- **日常七线第二房节奏扩线收口挑刺**：**无挡级**（`STATUS-ember-daily-room2-expand-closeout-review.md`）
 - **源码 join / 灾厄广播去指令同步**：**PASS**（`30886e2` / 测 `ec7dc6f`）
 - **B1.4 软抛光**（8 条等级 hint）：**PASS**（`ee3cfbc` / 测 `30261bd`）
 - **B1.4 硬验收**（quest/join 无斜杠命令教学）：**PASS**（`design-ember-b14-quest-join-copy.md`）
-- **地窖房2链式重叠**：**PASS**（`dd99538` · 测报本 commit）
+- **地窖房2链式重叠**：**PASS**（`dd99538`）
 - **焦骨房2链式重叠**：**PASS**（`2ad874e` / 测 `495c1ea`）
 - **日常第二房/Boss前压试点**（庭院·潮蚀·断塔）：**PASS**（`3459d53` / 测 `cce784b`）
-- **日常软尾巴「第二房复印机」扩线**：七线杠杆齐（庭院/潮蚀前压 · 断塔/焦骨/地窖链式 · 霜晶/锈轨既有链式）
+- **日常软尾巴「第二房复印机」扩线**：七线杠杆齐
 - **日常软债 · 奖励预览真分页**：**PASS**（`ember_daily_rewards` · `4517021` / 测 `6e2abc6`）
 - 锈轨真侧袭 + enter 冷却 chat **PASS**（CoreRpg 1.15.21）
 - 日常体验收口挑刺：**无挡级必改**（`STATUS-ember-daily-ux-closeout-review.md`）
@@ -70,8 +69,8 @@
 ### 仍挂
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
-- B0.4 挂机日顶二档：**已文档标定**（仍无 2h 产出基线 · **继续挂** · 经济窗另批 B1）
-- ~~**B1.3 精英 Boss TTK**~~ → **关账采数 PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · 65.5s / 535.3s · 5200/12 不动）
+- **B0.4 挂机日顶二档数值**：文档债已闭环；**2h 基线采数设计待批**（`design-ember-afk-b04-2h-baseline.md`）· **禁止**无基线强开经济改数 · 基线齐后经济 B1 另批
+- ~~**B1.3 精英 Boss TTK**~~ → **关账采数 PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · 65.5s / 535.3s · 5200/12 不动 · 剩血 62% 观察不砍血）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
 - B0.2 周本/深渊/使徒校准 ΔTTK 均 PASS（正式团本人数门仍 3～5）
 - ~~Raid/GuildBoss kill-any live~~ → **PASS**（静态+live · `STATUS-ember-killany-live-retest.md`）
@@ -91,7 +90,7 @@
 
 - **B0.1 / B0.3：** 已完成（更早关闭）。
 - **B0.2：** 周本 / 深渊 10·12 / **使徒校准** ΔTTK 均 **PASS**（使徒见 `STATUS-ember-raid-apostle-ttk-debt.md` · 门已还原 3～5）。
-- **B0.4：** **方案 A 文档债已闭环**（`design-ember-afk-b04-softcap.md` / `STATUS-ember-afk-b04-debt.md`）；数值待经济窗批 B1。
+- **B0.4：** **方案 A 文档债已闭环**（`design-ember-afk-b04-softcap.md` / `STATUS-ember-afk-b04-debt.md`）；**2h 基线采数设计待批**（`design-ember-afk-b04-2h-baseline.md` · 荐 A）；数值二档仍待经济窗另批 B1。
 - **B1.1～B1.4、B2.1～B2.4：** 已完成；相关交付记录：模板 `5f19c31`、坐标 `97d4029`、告示 `8a22023` / `193ab82`。
 - **B2.5：** 等同 B0.4 经济项，随该债务处理。
 
