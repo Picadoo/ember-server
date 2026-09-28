@@ -3,6 +3,7 @@
 # Display：$kill 对齐 MM 去色名 焦骨尸 / 燃矢骷 / 焦核蛮兵
 # 2026-09-28 波次差异: 房1 主甬×4 + 假岔尽头×2 同组计入 door1（假岔无怪/不计入=FAIL）
 # 2026-09-28 房2链式: wave2a.start→wave2b delay=2；开门+boss 仍在 wave2b.end
+# 2026-09-28 Boss前压: wave2b.end→boss_prep(燃矢×2 @ ±2,65,38)→boss；房2链式零动
 groups:
   wave1:
   - monster:
@@ -53,7 +54,7 @@ groups:
     start:
     - "$message{type=text;text=§e【甬道·后段】燃矢骷重叠压上 —— 清完开鼓室门} @dungeon"
     end:
-    - "$message{type=text;text=§a弯折已清 · 鼓室门开了} @dungeon"
+    - "$message{type=text;text=§a弯折已清 · 鼓室门开了 · 门槛压} @dungeon"
     - "$operation-block{loc=-1,65,36;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,66,36;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,67,36;mode=set;type=AIR} @dungeon"
@@ -64,7 +65,22 @@ groups:
     - "$operation-block{loc=1,66,36;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,67,36;mode=set;type=AIR} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    - "$monstergroup{group=boss_prep;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  # Boss 前门压：鼓室入口内侧两侧燃矢贴脸（door2 z=36 与 Boss (0,65,44) 之间）
+  boss_prep:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberAshSkeleton;location=-2,65,38;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshSkeleton;location=2,65,38;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=燃矢骷;amount=2} @system"
+    start:
+    - "$message{type=text;text=§e【鼓室·门槛】两侧燃矢贴脸 —— 清完才出焦核} @dungeon"
+    end:
+    - "$message{type=text;text=§7门槛已清 · 焦核现身} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=2} @dungeon"
     auto-start: false
 
   boss:

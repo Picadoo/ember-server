@@ -3,6 +3,7 @@
 # Display：$kill 对齐 MM 去色名 断塔卫尸 / 裂隙箭骷 / 断塔守望
 # 2026-09-28 波次差异: 环廊双侧裂隙箭骷 2+2 → 再卫尸×2（顺序单 $kill）
 # 2026-09-28 第二房/Boss前压试点: 房2 start 链式重叠（对齐霜晶/锈轨）；wave2a start→wave2b delay2；开门在 wave2b
+# 2026-09-28 Boss前压: wave2b.end→boss_prep(卫尸×2 @ ±3,76,2)→boss；房2链式零动
 groups:
   wave1:
   - monster:
@@ -53,7 +54,7 @@ groups:
     start:
     - "$message{type=text;text=§e【环廊·卫尸】断塔卫尸×2 —— 与对射重叠压 · 清完开顶门} @dungeon"
     end:
-    - "$message{type=text;text=§a环廊已清 · 顶门开了} @dungeon"
+    - "$message{type=text;text=§a环廊已清 · 顶门开了 · 门槛压} @dungeon"
     - "$operation-block{loc=-1,70,4;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,71,4;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=-1,72,4;mode=set;type=AIR} @dungeon"
@@ -64,7 +65,22 @@ groups:
     - "$operation-block{loc=1,71,4;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,72,4;mode=set;type=AIR} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=boss;repeat=false;delay=3} @dungeon"
+    - "$monstergroup{group=boss_prep;repeat=false;delay=2} @dungeon"
+    auto-start: false
+
+  # Boss 前门压：顶台门槛两侧卫尸贴脸（door2 z=4@y70 上顶后 → Boss (0,76,0)）
+  boss_prep:
+  - monster:
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=-3,76,2;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=3,76,2;amount=1;scattered=0.5;level=1} @dungeon"
+    condition:
+    - "$kill{mobname=断塔卫尸;amount=2} @system"
+    start:
+    - "$message{type=text;text=§e【顶台·门槛】两侧断塔卫尸贴脸 —— 清完才出守望} @dungeon"
+    end:
+    - "$message{type=text;text=§7门槛已清 · 守望现身} @dungeon"
+    - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
+    - "$monstergroup{group=boss;repeat=false;delay=2} @dungeon"
     auto-start: false
 
   boss:
