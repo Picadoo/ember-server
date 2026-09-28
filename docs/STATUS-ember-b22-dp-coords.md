@@ -72,7 +72,7 @@
 | wave1 · 底层卫尸 | 64 | `(-5,64,-3)` | `EmberDailySpireZombie ×2`；另 `(5,64,-3)`×1、`(-5,64,2)`×1、`(5,64,2)`×1。 |
 | door1 | 64 | `x=-1..1,y=64..66,z=4` | wave1.end → AIR×9。 |
 | wave2a · 中层裂隙箭 | 70 | `(-6,70,0)` | **新增** 链式；`EmberDailySpireSkeleton ×2`；次点 `(6,70,0)`：`×2`。 |
-| wave2b · 中层卫尸 | 70 | `(0,70,-6)` | **新增**；`EmberDailySpireZombie ×1`；次点 `(0,70,2)`：`×1`。 |
+| wave2b · 中层卫尸 | 70 | `(0,70,-4)` | **新增**；`EmberDailySpireZombie ×1`；次点 `(-1,69,1)`：`×1`；**环廊防坠内收**（施工 `29fb133`；原 `(0,70,-6)`/`(0,70,2)`）。 |
 | door2 | 70 | `x=-1..1,y=70..72,z=4` | wave2b.end → AIR×9 → boss_prep。 |
 | boss_prep · 顶台门槛 | 76 | `(-3,76,2)` | **新增**（Boss前压扩线）；`EmberDailySpireZombie ×1`；次点 `(3,76,2)`：`×1`。 |
 | boss · 顶台守望 | 76 | `(0,76,0)` | `EmberDailySpireWarden ×1`。 |
