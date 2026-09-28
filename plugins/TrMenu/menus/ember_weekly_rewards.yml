@@ -1,0 +1,143 @@
+# 周本奖励预览真分页 — 通关箱 / 周首通 / 再通概率 / 终厅摘要
+# 入口：ember_weekly 图标 P · 返回：底栏 B → ember_weekly
+# 纯展示：不进本、不发物
+
+Title: '§6周本 · 奖励预览'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#   H   #'
+  - '#A C I D#'
+  - '#E F X Y#'
+  - '# T M   #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-1'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  H:
+    display:
+      material: chest
+      name: '§6周本奖励预览'
+      lore:
+        - ''
+        - '§7通关箱、周首通与终厅掉落一览'
+        - '§8纯展示 · 不进本 · 不发物'
+
+  A:
+    display:
+      material: nether star
+      name: '§e余烬核心碎片 §f×3'
+      lore:
+        - ''
+        - '§8通关箱'
+        - '§8NI id: mat_ember_core_fragment'
+
+  C:
+    display:
+      material: glowstone dust
+      name: '§d余烬附魔晶 §f×2'
+      lore:
+        - ''
+        - '§8通关箱'
+        - '§8NI id: crystal_ember_enchant'
+
+  I:
+    display:
+      material: redstone
+      name: '§c余烬碎片 §f×8'
+      lore:
+        - ''
+        - '§8通关箱'
+        - '§8NI id: mat_ember_shard'
+
+  D:
+    display:
+      material: bone
+      name: '§7余烬骨尘 §f×4'
+      lore:
+        - ''
+        - '§8通关箱'
+        - '§8NI id: mat_ember_bone_dust'
+
+  E:
+    display:
+      material: experience bottle
+      name: '§b原版经验 §f+6 级'
+      lore:
+        - ''
+        - '§8通关结算经验'
+        - '§8非背包物品 · 仅展示'
+
+  F:
+    display:
+      material: gold nugget
+      name: '§6周首通 · 精炼护符 §f×1'
+      lore:
+        - ''
+        - '§e每周首次通关保底'
+        - '§8同周再通不重复发放此项'
+        - '§8NI id: gear_ember_t1_talisman'
+
+  X:
+    display:
+      material: iron sword
+      name: '§c同周再通 · 概率掉落'
+      lore:
+        - ''
+        - '§7精炼刃 §e约 10%'
+        - '§7精炼护符 §e约 8%'
+        - '§8来自 weekly_t1 · 仅展示概率'
+
+  Y:
+    display:
+      material: enchanted book
+      name: '§d终厅摘要'
+      lore:
+        - ''
+        - '§7核心 §a×1（必掉）'
+        - '§7余烬之刃 §e约 20%'
+        - '§7精炼护符 §e约 12%'
+        - '§7稳定符 §e约 4%'
+        - '§8终厅机会均非额外保底'
+
+  T:
+    display:
+      material: nether star
+      name: '§6终厅核心'
+      lore:
+        - ''
+        - '§e核心 ×1 §7必掉'
+        - '§8终厅 EmberWeeklyBruteB'
+        - '§8NI id: mat_ember_core_fragment'
+
+  M:
+    display:
+      material: iron sword
+      name: '§8中核一句'
+      lore:
+        - ''
+        - '§7中核另有较低 T1/T2 刃机会'
+        - '§8仅作掉落摘要，不代表保底'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回周本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_weekly'

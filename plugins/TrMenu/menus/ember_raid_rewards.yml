@@ -1,0 +1,116 @@
+# 团本奖励预览真分页 — 全队每人结算 / 周首通团戒 / 终厅 T2/T3
+# 入口：ember_raid 图标 P · 返回：底栏 B → ember_raid
+# 纯展示：不进本、不发物
+
+Title: '§6团本 · 奖励预览'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#   H   #'
+  - '#A C I D#'
+  - '# X R   #'
+  - '# T     #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-1'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  H:
+    display:
+      material: chest
+      name: '§6团本奖励预览'
+      lore:
+        - ''
+        - '§7全队每人结算 · 通关箱与终厅掉落一览'
+        - '§8纯展示 · 不进本 · 不发物'
+
+  A:
+    display:
+      material: nether star
+      name: '§e余烬核心碎片 §f×4'
+      lore:
+        - ''
+        - '§8通关箱 · 全队每人结算'
+        - '§8NI id: mat_ember_core_fragment'
+
+  C:
+    display:
+      material: glowstone dust
+      name: '§d余烬附魔晶 §f×2'
+      lore:
+        - ''
+        - '§8通关箱 · 全队每人结算'
+        - '§8NI id: crystal_ember_enchant'
+
+  I:
+    display:
+      material: redstone
+      name: '§c余烬碎片 §f×10'
+      lore:
+        - ''
+        - '§8通关箱 · 全队每人结算'
+        - '§8NI id: mat_ember_shard'
+
+  D:
+    display:
+      material: bone
+      name: '§7余烬骨尘 §f×6'
+      lore:
+        - ''
+        - '§8通关箱 · 全队每人结算'
+        - '§8NI id: mat_ember_bone_dust'
+
+  X:
+    display:
+      material: flint
+      name: '§d锋利石 §e约 50%'
+      lore:
+        - ''
+        - '§7通关箱附加机会 · 全队每人结算'
+        - '§c非必给 · 不是固定 ×1'
+        - '§8来自 raid_gem'
+        - '§8NI id: gem_ember_sharp'
+
+  R:
+    display:
+      material: gold nugget
+      name: '§6周首通 · 余烬团本之戒'
+      lore:
+        - ''
+        - '§e每周首次通关发放'
+        - '§7戒 + 刃 = §6余烬同袍'
+        - '§8同周再通不重复发戒'
+        - '§8NI id: acc_ember_raid_ring'
+
+  T:
+    display:
+      material: diamond sword
+      name: '§b终厅使徒 · T2/T3'
+      lore:
+        - ''
+        - '§7T2 刃 §e约 15% §8/ §7T2 符 §e约 12%'
+        - '§7T3 刃 §e约 8% §8/ §7T3 符 §e约 6%'
+        - '§c以上均不保底'
+        - '§8终厅核心 ×2 等掉落另按现网结算'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回团本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_raid'
