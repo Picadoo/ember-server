@@ -6,7 +6,6 @@ mat_ember_shard:
   material: REDSTONE
   name: '&c余烬碎片'
   lore:
-    - '&7mat_ember_shard'
     - '&8余烬地窟掉落 · 基础材料'
 
 mat_ember_bone_dust:
