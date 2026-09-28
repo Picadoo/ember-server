@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗暂缓；B-flex-1/2 + B-anvil-1 已结；下一窗待策划挑（软观察薄窗优先；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做）。
+- 文案薄窗暂缓；灵活三窗挑刺 **无挡级**（tip 本提交）；下一窗待策划挑软观察薄窗（**勿**无证据重开 B0.1；**勿**四件甲）。
 
 ### 刚结
 - ~~**B-anvil-1 烬砧材料→部件（余烬灰箍）**~~ → **PASS · 勾销**（设计 `ab33c21` · 批准 `f10779b` · NI `57a6540` · 插件 `72281d9` · 测 `0ab09ef` · close 本提交；报告 `docs/STATUS-ember-anvil-mat-to-part-pilot-test.md`；CoreRpg **1.15.26**；轻测 PASS；`forge.yml` 升阶 ZERO；四件甲/骨饰 B/锻炉重做未做；**勿宣称 B0.1 已清**）
@@ -103,6 +103,7 @@
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
+- 灵活三窗挑刺软债（无挡级 · tip `docs/STATUS-ember-flex-trilogy-picky.md`）：守腕/生坠薄获取；踏步少开菜单热键愿望；灰箍 shard×12 抢强化口粮 / +1 偏怂——**勿**据此开四件甲大改
 - B0.1 无新证据不重开
 - ~~**B2.13 天赋 `*_cap` 文案**~~ → **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close `33218c8`；报告 `docs/STATUS-ember-talent-cap-copy-test.md`）
 - ~~**B2.14 天赋 §8 nodeId/前置**~~ → **PASS · 勾销**（设计 `9e129cc` · 批准 `1460fa0` · 施工 `37c4bd6` · 测 `2f6120b` · close `3b00eff`；报告 `docs/STATUS-ember-talent-nodeid-copy-test.md`）
