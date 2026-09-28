@@ -80,6 +80,16 @@ offers:
     weekly: 1
     life_level: 4
     xp: 5
+  offhand_ward:
+    name: '&a余烬守腕'
+    coin: 80
+    weekly: 1
+    give: { acc_ember_offhand_ward: 1 }
+  offhand_vita:
+    name: '&a余烬生坠'
+    coin: 80
+    weekly: 1
+    give: { acc_ember_offhand_vita: 1 }
 
 consumables:
   food_ember_grilled_fish: { effects: ['REGENERATION:0:120'] }

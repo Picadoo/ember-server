@@ -12,7 +12,7 @@ Layout:
   - '# A B C #'
   - '# D E F #'
   - '#G K H J#'
-  - '##V#I##Z#'
+  - '#OV#I#WZ#'
 
 Icons:
   '#':
@@ -99,6 +99,23 @@ Icons:
     actions:
       all:
         - 'command: corerpg life buy pet_cinder'
+
+  O:
+    display:
+      material: iron nugget
+      name: '§a余烬守腕'
+      lore: ['', '§780 余烬币', '§8每周 1 次', '§8副手饰品 · 放副手槽生效', '', '§e➥ §f购买']
+    actions:
+      all:
+        - 'command: corerpg life buy offhand_ward'
+  W:
+    display:
+      material: emerald
+      name: '§a余烬生坠'
+      lore: ['', '§780 余烬币', '§8每周 1 次', '§8副手饰品 · 放副手槽生效', '', '§e➥ §f购买']
+    actions:
+      all:
+        - 'command: corerpg life buy offhand_vita'
 
   V:
     display:
