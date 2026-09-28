@@ -4,6 +4,7 @@
 # 2026-09-28 波次差异: 环廊双侧裂隙箭骷 2+2 → 再卫尸×2（顺序单 $kill）
 # 2026-09-28 第二房/Boss前压试点: 房2 start 链式重叠（对齐霜晶/锈轨）；wave2a start→wave2b delay2；开门在 wave2b
 # 2026-09-28 Boss前压: wave2b.end→boss_prep(卫尸×2 @ ±3,76,2)→boss；房2链式零动
+# 2026-09-28 环廊防坠: wave2b (0,70,-6)→(0,70,-4)；(0,70,2)→(-1,69,1)（设计(0,70,1)中轴空洞，±微调可站）
 groups:
   wave1:
   - monster:
@@ -47,8 +48,8 @@ groups:
 
   wave2b:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=0,70,-6;amount=1;scattered=0.5;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=0,70,2;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=0,70,-4;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailySpireZombie;location=-1,69,1;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
     - "$kill{mobname=断塔卫尸;amount=2} @system"
     start:
