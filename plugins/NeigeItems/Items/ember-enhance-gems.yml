@@ -29,7 +29,6 @@ gem_ember_sharp:
   material: QUARTZ
   name: '&c锋利石'
   lore:
-    - '&7gem_ember_sharp'
     - '&8镶嵌石 · 微量攻击'
     - '&8刃 / 护符孔可用'
   enchantments:
