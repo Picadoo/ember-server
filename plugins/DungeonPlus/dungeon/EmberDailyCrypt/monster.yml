@@ -2,6 +2,7 @@
 # 分房 $kill（禁 $kill-any）；门1 z=18@y72；门2 z=40@y66 · x=-1..1 → AIR
 # Display：$kill 对齐 MM 去色名 窖卫尸 / 誓印骷 / 残誓守墓
 # 2026-09-28 波次差异: 中层先誓印骷×3（栏后/高台）→ 再窖卫尸×3（禁先尸后骷）
+# 2026-09-28 房2链式: wave2a.start→wave2b delay=2（原 end delay=5）；开门+boss 仍在 wave2b.end
 groups:
   wave1:
   - monster:
@@ -28,7 +29,7 @@ groups:
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 中层：先远程誓印骷×3 → 再近战窖卫尸×3
+  # 中层：先高台誓印骷×3 → start 链式地面窖卫尸×3（重叠压；开门仅 wave2b）
   wave2a:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberDailyCryptSkeleton;location=-5,66,36;amount=2;scattered=0.8;level=1} @dungeon"
@@ -36,11 +37,11 @@ groups:
     condition:
     - "$kill{mobname=誓印骷;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【中层·高台】誓印骷对射 —— 下阶先挨箭} @dungeon"
+    - "$message{type=text;text=§e【中层·高台】誓印骷对射 —— 窖卫将交错从地面压上} @dungeon"
+    - "$monstergroup{group=wave2b;repeat=false;delay=2} @dungeon"
     end:
-    - "$message{type=text;text=§7高台已清 · 窖卫尸压上} @dungeon"
+    - "$message{type=text;text=§7高台箭侧已清} @dungeon"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
-    - "$monstergroup{group=wave2b;repeat=false;delay=5} @dungeon"
     auto-start: false
 
   wave2b:
@@ -50,7 +51,7 @@ groups:
     condition:
     - "$kill{mobname=窖卫尸;amount=3} @system"
     start:
-    - "$message{type=text;text=§e【中层·地面】窖卫尸×3 —— 清完开底层门} @dungeon"
+    - "$message{type=text;text=§e【中层·地面】窖卫尸重叠压上 —— 清完开底层门} @dungeon"
     end:
     - "$message{type=text;text=§a中层已清 · 底层门开了} @dungeon"
     - "$operation-block{loc=-1,66,40;mode=set;type=AIR} @dungeon"
