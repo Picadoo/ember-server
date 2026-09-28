@@ -62,7 +62,6 @@ gem_ember_gale:
   material: FEATHER
   name: '&a疾风石'
   lore:
-    - '&7gem_ember_gale'
     - '&8镶嵌石 · 微量移速'
     - '&8刃 / 护符孔可用'
   enchantments:
