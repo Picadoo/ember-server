@@ -32,7 +32,6 @@ mat_ember_soul_dust:
   material: SUGAR
   name: '&b余烬魂尘'
   lore:
-    - '&7mat_ember_soul_dust'
     - '&8挂机 / 副本副产 · 可堆叠'
     - '&a喂使魔：/corerpg pet feed'
     - '&7不消耗核心'
