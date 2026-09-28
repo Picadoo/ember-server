@@ -1,6 +1,6 @@
 # 设计稿 · 天赋菜单类型英词 `passive`/`skill` 人话化（B2.16）
 
-> **未批准前不施工。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` lore 类型行中英文 `passive`/`skill` → 短中文（被动 / 去冗余 skill）；**禁**改 `talent.yml` 节点键 / cost / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。
+> **已批准 A · 待插件施工。** 本稿只定 **玩家可见** TrMenu `ember_talent.yml` lore 类型行中英文 `passive`/`skill` → 短中文（被动 / 去冗余 skill）；**禁**改 `talent.yml` 节点键 / cost / requires / stats、解锁 `command:` 实参、誓约逻辑、点数公式、洗点价、其它 TrMenu。
 > 债源：B2.15 方案 B 残留 · close `a43010d` 旁扫点名；裸属性键已清，同文件仍 **13** 处类型英词。  
 > 对齐：`design-ember-talent-attr-copy.md`（B2.15）· `design-ember-talent-nodeid-copy.md`（B2.14）· UX「文案短清楚 · 少打指令 · TrMenu」。  
 > 排除本轮：刚结 B2.6–B2.15；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔升 B；B0.1 除非新证据；精英预览壳；isomorphic 空壳 tell→真页；新进度/货币/副本类型；Citizens；Paper。**勿宣称 B0.1 已清。**
@@ -14,14 +14,15 @@
 | 稿件 | 天赋 TrMenu · **类型英词 `passive`/`skill` 人话化**（UX · B2.15 方案 B 残留 · B2.16） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 00:35 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_talent.yml` · B2.15 close `a43010d` |
-| 状态 | **未批 · 待总控批 A/B** |
-| 关联 STATUS / 稿 | backlog · 批后 STATUS-approve / 测报 |
+| 状态 | **已批 A · 待插件施工** |
+| 批准记录（总控） | 2026-09-29 00:37 Asia/Shanghai：余烬-总控批准 **A**；批准设计 tip `34e61dd` 已推至 `origin/main`。仅允许插件另开施工改 `ember_talent.yml` 13 个类型 lore 行；本批准 commit 不改 YAML。 |
+| 关联 STATUS / 稿 | `docs/STATUS-ember-talent-type-copy-approve.md` · backlog · 测报 |
 
 ### 硬约束（本稿）
 
-| 可动（**仅若批 A/B 且另开施工**） | 不可动（硬禁 · 含本稿 commit） |
+| 可动（**仅批 A 后另开施工**） | 不可动（硬禁 · 含本稿 commit） |
 |--------------------------------|--------------------------------|
-| `ember_talent.yml` 玩家可见 lore 类型行中 `passive`/`skill`（方案 B 另可动同句 `cost`→消耗） | `talent.yml` 节点 id 与 requires/cost/**stats 键名与数值** |
+| `ember_talent.yml` 玩家可见 lore 类型行中 `passive`/`skill`（方案 B 的 `cost`→消耗不在本轮） | `talent.yml` 节点 id 与 requires/cost/**stats 键名与数值** |
 | 热更 / TrMenu reload（服约定） | `command: corerpg talent unlock <nodeId>` 实参；洗点价；誓约树结构 |
 | | 改点数硬顶 30、Lv 门槛、日免洗；其它菜单；git push；奖励页 `NI id:` / 套装 `gear_ember_*`（另窗） |
 
@@ -112,7 +113,7 @@
 - 禁止借机改天赋点数、cost **数值**、requires、stats、洗点价。  
 - 禁止把属性 / 节点 **逻辑键** 在 `talent.yml` 改名（只改 TrMenu 展示句）。  
 - 禁止玩家路径新增斜杠教学。  
-- 禁止未批准改 `ember_talent.yml`（除非批 A/B 后另开施工）。  
+- 禁止未批准改 `ember_talent.yml`（本轮仅限批 A 后另开施工）。
 - 禁止把奖励预览 `NI id:` / 套装 `gear_ember_*` / B0.1 塞进本窗宣称勾销。
 
 ---
@@ -138,6 +139,17 @@
 
 ## 9. 回总控一句话
 
-**硬债空；荐 A——仅改 `ember_talent.yml`：13×类型行 `passive`→被动、`skill` 去冗余；零动 talent 键与 unlock/stats；引 B2.15 close `a43010d`。当前：未批 · 待总控批 A/B。**
+**硬债空；已批 A——仅改 `ember_talent.yml`：13×类型行 `passive`→被动、`skill` 去冗余；`cost` 原样；零动 talent 键与 unlock/stats；引 B2.15 close `a43010d`。当前：已批 A · 待插件施工。**
 
 **专岗：** **策划**（本稿）→ **插件**（批后改 1× TrMenu YAML 文案）→ **测试**（静态 rg `passive|skill`=0 + 开菜单目视根/二层/烬斩类型行）
+
+## 总控批准记录
+
+**已批方案 A**（2026-09-29 00:37 Asia/Shanghai · 余烬-总控）
+
+- 批准依据：设计 tip `34e61dd`（已推至 `origin/main`）；只处理 `plugins/TrMenu/menus/ember_talent.yml` 的玩家可见类型英词残留。
+- 批准范围：根节点 `passive`→`被动` 3 处；主动技去掉 `skill` 1 处；二层 `passive`→`被动` 9 处；`cost` 与 2/3/4 数值原样。
+- 硬边界：不做方案 B；不改 `cost`→`消耗`，不改 `talent.yml`、节点键、requires/cost/stats、unlock command 实参、其它菜单或 runtime/player/world。
+- 本批准 commit 只改文档；插件 tip 落地后再施工、reload 并由测试按 §4 静态验收。不得宣称 B0.1 已清。
+
+**专岗：** **策划**（本稿）→ **插件**（已批后改 1× TrMenu YAML 文案）→ **测试**（静态 rg `passive|skill`=0 + 开菜单目视根/二层/烬斩类型行）
