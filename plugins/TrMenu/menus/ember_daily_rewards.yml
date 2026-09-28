@@ -43,7 +43,6 @@ Icons:
       lore:
         - ''
         - '§8通关箱 · 各线相同'
-        - '§8NI id: mat_ember_core_fragment'
 
   C:
     display:
@@ -52,7 +51,6 @@ Icons:
       lore:
         - ''
         - '§8通关箱 · 各线相同'
-        - '§8NI id: crystal_ember_enchant'
 
   I:
     display:
@@ -62,7 +60,6 @@ Icons:
         - ''
         - '§8通关箱 · 各线相同'
         - '§7另附原版经验 §a+3 级'
-        - '§8NI id: mat_ember_shard'
 
   D:
     display:
@@ -71,7 +68,6 @@ Icons:
       lore:
         - ''
         - '§8七线 Boss 相同'
-        - '§8NI id: mat_ember_core_fragment'
 
   E:
     display:
@@ -82,7 +78,6 @@ Icons:
         - '§7焦骨 / 潮蚀 / 霜晶 → §c余烬碎片'
         - '§7地窖 / 断塔 / 锈轨 → §f余烬骨尘'
         - '§8庭院无此行'
-        - '§8NI: mat_ember_shard / mat_ember_bone_dust'
 
   F:
     display:
@@ -102,7 +97,6 @@ Icons:
         - ''
         - '§e约 12%'
         - '§8各线 Boss 相同'
-        - '§8NI id: gear_ember_blade'
 
   Y:
     display:
@@ -112,7 +106,6 @@ Icons:
         - ''
         - '§e约 8%'
         - '§8各线 Boss 相同'
-        - '§8NI id: gear_ember_charm'
 
   Z:
     display:
@@ -122,7 +115,6 @@ Icons:
         - ''
         - '§e约 3%'
         - '§8各线 Boss 相同'
-        - '§8NI id: gear_ember_t1_blade'
 
   B:
     display:

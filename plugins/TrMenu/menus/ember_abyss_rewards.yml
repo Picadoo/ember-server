@@ -46,7 +46,6 @@ Icons:
         - '§7余烬碎片 §f×8'
         - '§7余烬骨尘 §f×2'
         - '§8核心 ×0 · 锋利石 ×0'
-        - '§8NI id: mat_ember_shard / mat_ember_bone_dust'
 
   C:
     display:
@@ -57,7 +56,6 @@ Icons:
         - '§7余烬碎片 §f×12'
         - '§7余烬骨尘 §f×4 · 余烬核心 §f×1'
         - '§7锋利石 §e约 10% §8（非必给）'
-        - '§8NI id: mat_ember_shard / mat_ember_bone_dust / mat_ember_core_fragment / gem_ember_sharp'
 
   D:
     display:
@@ -68,7 +66,6 @@ Icons:
         - '§7余烬碎片 §f×16'
         - '§7余烬骨尘 §f×6 · 余烬核心 §f×2'
         - '§7锋利石 §e约 10% §8（非必给）'
-        - '§8NI id: mat_ember_shard / mat_ember_bone_dust / mat_ember_core_fragment / gem_ember_sharp'
 
   X:
     display:
@@ -88,7 +85,6 @@ Icons:
         - ''
         - '§7本周首次达到第 12 层：稳定符 §f×1'
         - '§8同周再达静默，不重复发放'
-        - '§8NI id: mat_ember_stable_charm'
 
   Z:
     display:

@@ -44,7 +44,6 @@ Icons:
       lore:
         - ''
         - '§8通关箱'
-        - '§8NI id: mat_ember_core_fragment'
 
   C:
     display:
@@ -53,7 +52,6 @@ Icons:
       lore:
         - ''
         - '§8通关箱'
-        - '§8NI id: crystal_ember_enchant'
 
   I:
     display:
@@ -62,7 +60,6 @@ Icons:
       lore:
         - ''
         - '§8通关箱'
-        - '§8NI id: mat_ember_shard'
 
   D:
     display:
@@ -71,7 +68,6 @@ Icons:
       lore:
         - ''
         - '§8通关箱'
-        - '§8NI id: mat_ember_bone_dust'
 
   E:
     display:
@@ -90,7 +86,6 @@ Icons:
         - ''
         - '§e每周首次通关保底'
         - '§8同周再通不重复发放此项'
-        - '§8NI id: gear_ember_t1_talisman'
 
   X:
     display:
@@ -122,7 +117,6 @@ Icons:
         - ''
         - '§e核心 ×1 §7必掉'
         - '§8终厅 EmberWeeklyBruteB'
-        - '§8NI id: mat_ember_core_fragment'
 
   M:
     display:
