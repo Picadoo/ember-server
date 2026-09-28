@@ -1,6 +1,6 @@
 # 设计稿 · NI 灾厄余烬 lore 裸 id 人话对齐（B2.30）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-abyss-calamity.yml` 内 `mat_calamity_ember` **1** 行 lore 裸 NI id；**未获批前不改 NI Items YAML**。不改 NI 数值、配方、给物、掉落、体力、TrMenu 或 CoreRpg。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-mat-calamity-ember-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-abyss-calamity.yml` 内 `mat_calamity_ember` **1** 行 lore 裸 NI id；**未获批前不改 NI Items YAML**。不改 NI 数值、配方、给物、掉落、体力、TrMenu 或 CoreRpg。
 >
 > B2.29 已 **PASS · 勾销**（设计 `bc58aaf` · 批准 `c87423c` · 施工 `9875d1b` · 测 `0420ef4` · close `91adf76`）。本窗承接其余 live `&7mat_*` 的下一件最薄债；只推灾厄余烬 1 件，**勿宣称 B0.1 已清**。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 灾厄余烬 · **玩家可见 lore 裸 id `mat_calamity_ember` 对齐**（UX · B2.30） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 02:53 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 | live `plugins/NeigeItems/Items/ember-abyss-calamity.yml` · B2.29 勾销后下一件 `&7mat_*` |
 | 专岗 | **物品**；验收 **`rg` + 悬停** |
 
@@ -50,7 +50,7 @@ mat_calamity_ember:
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **待批；批 A 后由物品岗施工** |
+| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **已批 A；交物品岗施工** |
 | A′ | 改为灰字「灾厄余烬」 | 不荐：与显示名重复 |
 | B | 顺手处理其它 mat 裸 id | **只作 soft，勿双上** |
 
