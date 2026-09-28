@@ -16,7 +16,6 @@ cosmetic_calamity_shard:
   material: NETHER_STAR
   name: '&d灾厄外观碎片'
   lore:
-    - '&7cosmetic_calamity_shard'
     - '&8灾厄掉落 · 外观碎片'
     - '&8集齐可兑称号 / 特效'
   enchantments:
