@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 18:17 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 18:20 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,10 +17,11 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 使徒校准收口后下一项：策划薄设计挑窗
+- Raid/GuildBoss kill-any live 测法（方案 A）：测岗三 bot + 植盟
 
 ### 刚结
-- **团本使徒 TTK 校准**：校准 ΔTTK **PASS**（L1 63.7s / L2 56.8s · Δ=+10.83% · 门已还原 min=3 · 测报本 commit）
+- **Raid/GuildBoss kill-any live 测法设计**：已批 **A**（`design-ember-raid-guildboss-live-harness.md` · 零玩法改）
+- **团本使徒 TTK 校准**：校准 ΔTTK **PASS**（L1 63.7s / L2 56.8s · Δ=+10.83% · 门已还原 min=3 · `aff517c`）
 - **团本使徒 TTK 可测性设计**：已批 **A**（`design-ember-raid-apostle-ttk-calib.md` · 临时 min=1 校准）
 - **日常第三拍双线收口**：霜晶霜暴 + 锈轨砸地 **均 PASS**（霜 `3e8c969`/`0de8c50` · 锈 `d1e57ef`/`affd058`）
 - **锈轨第三拍同构设计**：已批 **A**（`design-ember-daily-rail-third-beat.md` · 矿监砸地读条）

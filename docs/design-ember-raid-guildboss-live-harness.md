@@ -1,6 +1,6 @@
 # 设计稿 · Raid / GuildBoss kill-any live 测法·工具链
 
-> **未批准前不施工。** 玩法 YAML 零改；勿 git push。  
+> **已批准方案 A（总控 · 2026-09-28）。** 仅测岗工具链 / 测报；玩法 YAML / MM / 人数门 **零改**。  
 > 债源：`docs/design-ember-content-backlog.md`「仍挂 · Raid/GuildBoss kill-any live 复测」· `STATUS-ember-killany-debt-cleanup-test.md`（静态 PASS · live SKIP）。  
 > 对照：消 kill-any 剩债已批 A 落地（`design-ember-killany-debt-cleanup.md` / 施工 `3194355`）；团本使徒 TTK 校准已 PASS、人数门已还原 min=3（`aff517c`/`8b3190f`）。  
 > 排除本轮：**不**重开使徒 TTK / HP；**不**开霜晶·锈轨 Boss 前压；**不**升断塔环廊方案 B；**不**动周本 prep B / 精英厅二 B；**不**开空许愿旁支；**不**借机砍 wave amount / 改 condition。
@@ -14,7 +14,7 @@
 | 稿件 | Raid / GuildBoss · kill-any live 测法·工具链薄窗 |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | **仅**测岗进本工具链 + 测报口径；**不**改 `monster.yml` / option 人数门 / Boss 数值 |
-| 状态 | **待批 · 未批准前不施工** |
+| 状态 | **已批准 A · 待测岗 live 收口** |
 | 关联 STATUS | `STATUS-ember-killany-debt-cleanup(-test).md` · backlog 仍挂 · 旁证 `smoke-raid-combat-20260926.md` |
 
 ### 硬约束（本稿）
@@ -157,4 +157,9 @@ STATUS 明文「本轮选 B · live 继续 SKIP · 静态仍算 kill-any YAML �
 
 ## 总控批注
 
-（待填）
+**批准方案 A**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 仅测岗：Raid 三 bot（`corerpg enter` + dungeon-team）验 wave2 双 `$kill`；GuildBoss 植盟开本验 wave1。
+- **禁**降人数门 / 砍怪 / 改 YAML / 重开使徒校准；测后 min 仍 3；ops=`[]`。
+- 交付 `STATUS-ember-killany-live-retest.md`；玩法树 diff 须空。
+
