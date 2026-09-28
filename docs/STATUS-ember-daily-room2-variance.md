@@ -2,7 +2,7 @@
 
 **日期：** 2026-09-28（Asia/Shanghai）  
 **岗：** 余烬-插件  
-**依据：** `docs/design-ember-daily-room2-variance.md` §5.1–5.3（**已批准 · 施工落地**）
+**依据：** `docs/design-ember-daily-room2-variance.md` §5.1–5.3（**已批准 · 施工落地 · §8 验收 PASS**）
 
 ## Verdict
 
@@ -77,7 +77,7 @@
 | 日志 | `[DungeonPlus] 插件重载完毕`；`EmberDaily` / `EmberDailyTide` / `EmberDailySpire` 地牢内容初始化完毕 |
 | RCON | 未用（`enable-rcon=false` 惯例） |
 
-## 验收要点（§8 · 待短抽）
+## 验收要点（§8 · ✅ PASS · `docs/STATUS-ember-daily-room2-variance-test.md`）
 
 1. **骨架**：三线仍 ≥2 真门 → Boss；铁栅语义在  
 2. **庭院前压**：door2 后先门槛尸×2，清完才蛮兵  
@@ -95,8 +95,8 @@
 - [x] FIFO `dp reload` PASS（08:08:52 CST）
 - [x] 霜晶/锈轨/焦骨/地窖 git diff 空
 - [x] `ops.json=[]`
-- [ ] §8 短抽验收（进本实打 · 交测本/总控）
+- [x] §8 短抽验收 **PASS**（`STATUS-ember-daily-room2-variance-test.md` · 2026-09-28 08:28 CST）
 
 ## Blocker
 
-无施工 blocker。待办仅为 **§8 短抽**（非本施工阻断）。
+无。§8 已 PASS；非试点扩展另开设计稿，不在本 STATUS 施工范围。
