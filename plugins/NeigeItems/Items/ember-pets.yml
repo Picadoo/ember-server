@@ -19,7 +19,7 @@ pet_ember_cinder:
   lore:
     - '&8使魔蛋 · 外观 / 余火'
     - '&8出战 1 只 · 不卖满级战力'
-    - '&7用于 /corerpg pet summon'
+    - '&7用于枢纽 · 使魔'
   enchantments:
     DURABILITY: 1
   hideflags:
