@@ -1,6 +1,6 @@
 # 设计稿 · shop 文件头在售摘要去斜杠（B2.52）
 
-> **STATUS：待批 A（总控 · 2026-09-29 05:20 Asia/Shanghai）。**
+> **STATUS：已批 A（总控 · 2026-09-29 05:21 Asia/Shanghai）。**
 > 本稿只定 TrMenu `ember_shop.yml` **YAML 文件头 L3 注释** 1 行：去掉「/corerpg coin」教斜杠，保留在售摘要。
 > **本窗只处理维护者可见注释（非玩家 UI / 非 Open tell）；新句不写斜杠、不写 STATUS 路径。**
 > **本窗 commit 只写 docs；玩法 / TrMenu / NI YAML 零改**（批 A 后由专岗只改 shop L3）。
@@ -16,7 +16,7 @@
 | 稿件 | shop · **文件头注释去命令教学，保留在售摘要**（UX · B2.52） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 05:20 Asia/Shanghai |
 | 关联 | live `plugins/TrMenu/menus/ember_shop.yml` · B2.51 PASS 旁证 |
-| 状态 | **待批 A** · 批后交插件 TrMenu |
+| 状态 | **已批 A** · 交插件 TrMenu |
 | tip 路径 | `docs/design-ember-shop-header-copy.md` |
 | 上游 | B2.51 close `900eeed` · enhance/socket 已清；升本窗收 shop L3 |
 
@@ -145,7 +145,7 @@ git diff -- plugins/TrMenu/menus/ember_shop.yml
 
 ## 7. 总控批示
 
-- [ ] **批 A** · 仅 `ember_shop.yml` L3 按上表荐案去斜杠教学、保留在售摘要；Icons / Open / SKU / 玩法零改
+- [x] **批 A** · 仅 `ember_shop.yml` L3 按上表荐案去斜杠教学、保留在售摘要；Icons / Open / SKU / 玩法零改
 - [ ] **驳回** · 说明
 
-**批示摘要（待填）：** —
+**批示摘要：** 批 A。仅 `ember_shop.yml` L3 去掉「软通货用 /corerpg coin」；Icons/Open/SKU 零改；hub/NI 旁记不捆；禁长测/挑刺；勿宣称 B0.1。
