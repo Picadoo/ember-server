@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 日常软债 **奖励预览真分页**：**方案 1 已批**，插件施工中（`ember_daily_rewards`）
+- （额度内日常 UX 软债已清；下一项待排）
 
 ### 刚结
 - 锈轨真侧袭 + enter 冷却 chat **PASS**（CoreRpg 1.15.21）
@@ -33,7 +33,7 @@
 - B0.4 挂机日顶二档：**已文档标定**（经济窗另批 B1）
 - 团本使徒 TTK（人数门 3～5 SKIP）
 - B0.2 周本/深渊天赋二层 ΔTTK 已 PASS；使徒仍 SKIP
-- 日常软债：奖励预览真分页（菜单 lore 已有摘要）
+- 日常软债：奖励预览真分页 **已还**（`ember_daily_rewards` PASS）
 
 ### 多世界现状（确认）
 - `plugins/Multiverse-Core.jar` + Portals；常驻 `ember_hub` / `ember_afk` / `ember_event` 等
