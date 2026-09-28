@@ -6,7 +6,6 @@ mat_ember_reforge_stone:
   material: FIREBALL
   name: '&6余烬重铸石'
   lore:
-    - '&7mat_ember_reforge_stone'
     - '&8重铸石 · 刷新次要词缀'
     - '&8主词缀不随重铸乱飙'
     - '&7用于 /corerpg reforge'
