@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.19 套装菜单 `gear_ember_*`/团戒人话**：**待批 A**（设计 tip `docs/design-ember-set-gear-id-copy.md`；升自 B2.18 旁附 4 句；零改套装数值/掉落/体力；精英壳勿硬开；与 B-flex/B-anvil 不捆；**勿宣称 B0.1 已清**）
+- **B2.19 套装菜单 `gear_ember_*`/团戒人话**：**已批 A · 待插件**（设计 `0687fe5` · 批准 `157543b`；不附拆解 B）。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -102,7 +102,7 @@
 - ~~**B-flex-2 可装配轻技 1 槽试点**~~ → **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 补记 `3841f4f` · 测 `1c36873` · close 本提交；报告 `docs/STATUS-ember-flex-skill-slot-pilot-test.md`；CoreRpg **1.15.25**；烬砧材料→部件仍 soft；**勿宣称 B0.1 已清**）
 - ~~**B2.17 天赋同句 `cost`→消耗**~~ → **PASS · 勾销**（设计 `3a3a226` · 批准 `0eb15c2` · 施工 `9631343` · 测 `dabf579` · close 本提交；报告 `docs/STATUS-ember-talent-cost-copy-test.md`；与 B-flex 不捆；文案薄窗暂缓）
 - ~~**B2.18** 奖励页 NI 灰字~~ → **PASS · 勾销**（设计 `5c2f7f2` · 批准 `cef1017` · 施工 `dc8ebb8` · 测 `6783618` · close `91061b3`；套装旁附已升 **B2.19**）
-- **B2.19 套装菜单 `gear_ember_*`/团戒人话**：**待批 A**（`docs/design-ember-set-gear-id-copy.md`；刃 lore×2 + 戒 lore + tell；拆解 `mat_ember_reforge_stone` 旁附 soft 勿双上；精英壳勿硬开）
+- **B2.19 套装菜单 `gear_ember_*`/团戒人话**：**已批 A · 待插件**（设计 `0687fe5` · 批准 `157543b`；拆解 B soft 勿双上）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -153,7 +153,7 @@
 - **B2.16：** **PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close `22c2d40`；报告 `docs/STATUS-ember-talent-type-copy-test.md`；方案 B `cost`→`消耗`已由 **B2.17** 勾销）。
 - **B2.17：** **PASS · 勾销**（设计 `3a3a226` · 批准 `0eb15c2` · 施工 `9631343` · 测 `dabf579` · close 本提交；报告 `docs/STATUS-ember-talent-cost-copy-test.md`）。
 - ~~**B2.18**~~ → **PASS · 勾销**（`dc8ebb8` / `6783618` · close `91061b3`）。
-- **B2.19：** **待批 A**（`docs/design-ember-set-gear-id-copy.md` · 套装 4 句人话）。
+- **B2.19：** **已批 A · 待插件**（设计 `0687fe5` · 批准 `157543b`）。
 
 ---
 
@@ -274,7 +274,7 @@
 | B2.16 | 天赋菜单类型英词 `passive`/`skill` 人话化 | `ember_talent.yml` 13 行类型 lore 无字面 `passive`/`skill`（→被动 / 去冗余）；不改 talent.yml / unlock / cost 数值；同句 `cost`→消耗不做（方案 B） | **PASS · 勾销**（设计 `34e61dd` · 批准 `7c1c408` · 施工 `39ca8f6` · 测试 tips `e342990` / `7db1160` · close `22c2d40`；报告 `docs/STATUS-ember-talent-type-copy-test.md`） |
 | B2.17 | 天赋菜单同句英词 `cost`→消耗 | `ember_talent.yml` 13 行类型 lore 无字面 `cost`（→消耗）；数值 2/3/4 原样；不改 talent.yml / unlock / cost 数值；不附 NI/套装/精英壳 | **PASS · 勾销**（设计 `3a3a226` · 批准 `0eb15c2` · 施工 `9631343` · 测 `dabf579` · close 本提交；报告 `docs/STATUS-ember-talent-cost-copy-test.md`） |
 | B2.18 | 奖励预览页 `§8NI id:`/`§8NI:` 人话对齐 | 五份 `ember_*_rewards.yml` 玩家 lore 无字面 `§8NI`；中文主名/概率句保留；零改 loot/DP/MM/体力；套装 `gear_ember_*` 不做（B 旁附）；不开精英预览壳 | **PASS · 勾销**（设计 `5c2f7f2` · 批准 `cef1017` · 施工 `dc8ebb8` · 测 `6783618` · close `91061b3`） |
-| B2.19 | 套装菜单 `gear_ember_*` / 团戒 NI 人话对齐 | `ember_set.yml` 4 句玩家可见无字面 `gear_ember_*`/`acc_ember_raid_ring`（→中文）；零改套装数值/掉落/体力；拆解重铸石灰字不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **待批 A**（设计 tip `docs/design-ember-set-gear-id-copy.md`） |
+| B2.19 | 套装菜单 `gear_ember_*` / 团戒 NI 人话对齐 | `ember_set.yml` 4 句玩家可见无字面 `gear_ember_*`/`acc_ember_raid_ring`（→中文）；零改套装数值/掉落/体力；拆解重铸石灰字不做（B soft）；不开精英预览壳；与 B-flex/B-anvil 不捆 | **已批 A · 待插件**（设计 `0687fe5` · 批准 `157543b`；不附拆解 B） |
 
 ---
 
@@ -311,15 +311,15 @@
 
 
 ```
-可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.18 已结**；**B2.19 待批 A**（套装 4 句人话）
+可维护性：  **B0.1 仍挂** / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8～B2.18 已结**；**B2.19 已批 A · 待插件**（套装 4 句人话）
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
 内容灵活窗：**B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 测 `1c36873` · close `ba47f3e`；CoreRpg **1.15.25**）
 烬砧窗：    **B-anvil-1** 灰箍 **PASS · 勾销**（设计 `ab33c21` · 批准 `f10779b` · NI `57a6540` · 插件 `72281d9` · 测 `0ab09ef` · close 本提交；CoreRpg **1.15.26**）
-文案窗：**B2.18** 奖励页 NI 灰字 **PASS · 勾销**（`dc8ebb8` / `6783618` · close `91061b3`）；**B2.19** 套装 `gear_ember_*` **待批 A**（`design-ember-set-gear-id-copy.md`）。
+文案窗：**B2.18** 奖励页 NI 灰字 **PASS · 勾销**（`dc8ebb8` / `6783618` · close `91061b3`）；**B2.19** 套装 `gear_ember_*` **已批 A · 待插件**（设计 `0687fe5` · 批准 `157543b`）。
 软挂升窗：  ~~烬砧材料→部件~~ → B-anvil-1 已结；~~套装旁附~~ → 已升 B2.19
-软观察：    ~~奖励页 NI id~~ → B2.18 PASS；~~套装 `gear_ember_*`~~ → B2.19 待批；拆解 `mat_ember_reforge_stone`（B soft）/ 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
+软观察：    ~~奖励页 NI id~~ → B2.18 PASS；~~套装 `gear_ember_*`~~ → B2.19 已批 A · 待插件；拆解 `mat_ember_reforge_stone`（B soft）/ 精英预览壳（证据不足勿硬开） / 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 策划挑选排除：刚结 B2.6–B2.18 / B-flex-1 / B-flex-2 / B-anvil-1；五入口奖励预览真分页+NI 灰字（已结）；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence；精英预览壳若证据不足则勿硬开厚壳；四件甲/誓约主动大改/锻炉重做；位移+保命双上；灰箍+骨饰双上；本窗未批前勿改 `ember_set.yml`。
 ```
 
@@ -331,9 +331,9 @@
 
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1 **仍挂**；B0.3～B0.4 / B2.5 数值+挂机菜单 UX 已结；进本冷却 chat **勾销**（1.15.21）；B0.1 无新证据不重开
-- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.18 等已结；**B2.18 PASS · 勾销**（`dc8ebb8` / `6783618` · close `91061b3`）；**B2.19 待批 A**
+- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6～B2.18 等已结；**B2.18 PASS · 勾销**（`dc8ebb8` / `6783618` · close `91061b3`）；**B2.19 已批 A · 待插件**（`157543b`）
 - **内容灵活窗：** **B-flex-1** 副手 **PASS · 勾销**（close `d333b01`）；**B-flex-2** 轻技踏步 **PASS · 勾销**（close `ba47f3e`；CoreRpg **1.15.25**）
 - **烬砧窗：** **B-anvil-1** 灰箍 **PASS · 勾销**（close `e39172f`；CoreRpg **1.15.26**）；灵活三窗已结
-- **文案窗：** **B2.18** **PASS · 勾销**；**B2.19** 套装 4 句人话 **待批 A**（`docs/design-ember-set-gear-id-copy.md`）
+- **文案窗：** **B2.18** **PASS · 勾销**；**B2.19** 套装 4 句人话 **已批 A · 待插件**（`157543b`）
 - 软观察：拆解 `mat_ember_reforge_stone`（B soft）/ 精英预览壳（勿硬开）/ 断塔观察 / 霜锈前压 / AFK 通胀未封死 / B0.1；**勿宣称 B0.1 已清**
 
