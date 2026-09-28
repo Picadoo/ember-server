@@ -1,6 +1,6 @@
 # 设计稿 · 周本深室→Boss 是否加 `boss_prep`
 
-> **未批准前不施工。** 本稿仅薄评估；**玩法 YAML 零改**；勿 git push。  
+> **已批准方案 B（总控 · 2026-09-28）：本轮不施工。** 维持 wave3→delay4→boss；无 boss_prep。  
 > tip 背景：`d48a343`（PAPI 体力 parse 软债勾销；本条与体力无关，仅作会话 tip）。  
 > 债源 / 派工：`docs/design-ember-content-backlog.md`「进行中 · 周本深室→Boss 是否前压：策划薄评估」。  
 > live：`plugins/DungeonPlus/dungeon/EmberWeekly/monster.yml` + `option.yml`。  
@@ -16,7 +16,7 @@
 | 稿件 | 周本 · 深核廊深室→Boss 是否加薄 `boss_prep` |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-28 Asia/Shanghai |
 | 关联 | **仅** 评估 `EmberWeekly/monster.yml` 深室段（wave3→boss）；本轮 **不改** YAML |
-| 状态 | **待总控批 · 推荐 B（本轮不动）** |
+| 状态 | **已批准 B · 本轮零改 YAML** |
 | 对照范例 | `EmberDaily` / `EmberDailyTide` `boss_prep`（×2、独立 `$kill`、delay≈2→boss） |
 
 ### 硬约束（本条）
@@ -175,3 +175,13 @@
 - **备选 A：** wave3.end→prep×2→boss；须明示总量（挪×2 或 +2）与测岗坐标。  
 - **改动文件：** 批 B → **零**；批 A → 仅 `EmberWeekly/monster.yml`。  
 - **落盘：** `docs/design-ember-weekly-boss-prep.md`
+
+---
+
+## 10. 总控批注
+
+**批准方案 B**（2026-09-28 Asia/Shanghai · 余烬-总控）。
+
+- 蛮兵·甲 + delay4 已是深室门槛/喘息；中核链式主杠杆已够。
+- **不为对齐日常硬加 prep**；方案 A 搁置。
+- 验收：玩法 YAML 相对 tip 零 diff。
