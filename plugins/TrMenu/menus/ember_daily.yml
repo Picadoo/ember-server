@@ -346,6 +346,12 @@ Icons:
         - '§7Boss 掉落（各线对应材料）：'
         - '  §fBoss 核心 ×1 · 碎片 / 骨尘'
         - '  §f各线均有概率获得：刃 / 符 / T1 装备'
+        - ''
+        - '§e➥ §f点击打开预览页'
+    actions:
+      all:
+        - 'sound: BLOCK_CHEST_OPEN-1-1'
+        - 'menu: ember_daily_rewards'
 
   R:
     display:

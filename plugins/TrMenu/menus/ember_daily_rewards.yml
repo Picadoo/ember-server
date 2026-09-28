@@ -1,0 +1,134 @@
+# 日常奖励预览真分页 — 通关箱 / Boss 材料 / 装备机会（方案 1 · 仅展示 · 零进本）
+# 入口：ember_daily 图标 P · 返回：底栏 B → ember_daily
+
+Title: '§6日常 · 奖励预览'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#   H   #'
+  - '# A C I #'
+  - '# D E F #'
+  - '# X Y Z #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-1'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  H:
+    display:
+      material: chest
+      name: '§6日常奖励预览'
+      lore:
+        - ''
+        - '§7通关箱各线相同 · Boss 装掉各线同概率 · 风味小料分线'
+        - '§8纯展示 · 不进本'
+
+  A:
+    display:
+      material: nether star
+      name: '§e余烬核心碎片 §f×1'
+      lore:
+        - ''
+        - '§8通关箱 · 各线相同'
+        - '§8NI id: mat_ember_core_fragment'
+
+  C:
+    display:
+      material: glowstone dust
+      name: '§d余烬附魔晶 §f×1'
+      lore:
+        - ''
+        - '§8通关箱 · 各线相同'
+        - '§8NI id: crystal_ember_enchant'
+
+  I:
+    display:
+      material: redstone
+      name: '§c余烬碎片 §f×5'
+      lore:
+        - ''
+        - '§8通关箱 · 各线相同'
+        - '§7另附原版经验 §a+3 级'
+        - '§8NI id: mat_ember_shard'
+
+  D:
+    display:
+      material: nether star
+      name: '§eBoss 核心碎片 §f×1（必掉）'
+      lore:
+        - ''
+        - '§8七线 Boss 相同'
+        - '§8NI id: mat_ember_core_fragment'
+
+  E:
+    display:
+      material: bone
+      name: '§7风味小料 §f50%'
+      lore:
+        - ''
+        - '§7焦骨 / 潮蚀 / 霜晶 → §c余烬碎片'
+        - '§7地窖 / 断塔 / 锈轨 → §f余烬骨尘'
+        - '§8庭院无此行'
+        - '§8NI: mat_ember_shard / mat_ember_bone_dust'
+
+  F:
+    display:
+      material: experience bottle
+      name: '§b精英击杀经验'
+      lore:
+        - ''
+        - '§7Boss 击杀触发精英经验'
+        - '§8通关进度另计 daily_clear'
+        - '§8（非背包物品 · 仅说明）'
+
+  X:
+    display:
+      material: iron sword
+      name: '§c余烬之刃'
+      lore:
+        - ''
+        - '§e约 12%'
+        - '§8各线 Boss 相同'
+        - '§8NI id: gear_ember_blade'
+
+  Y:
+    display:
+      material: gold nugget
+      name: '§e余烬护符'
+      lore:
+        - ''
+        - '§e约 8%'
+        - '§8各线 Boss 相同'
+        - '§8NI id: gear_ember_charm'
+
+  Z:
+    display:
+      material: diamond sword
+      name: '§b余烬精炼之刃'
+      lore:
+        - ''
+        - '§e约 3%'
+        - '§8各线 Boss 相同'
+        - '§8NI id: gear_ember_t1_blade'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回日常选线'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_daily'
