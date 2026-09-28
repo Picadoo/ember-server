@@ -122,7 +122,7 @@ chapters:
       - type: level
         level: 20
         desc: 达到余烬等级 Lv.20（解锁周本）
-        hint: 签到 / 日常 / 悬赏 / 挂机（灰坡）都能补经验
+        hint: 打开枢纽菜单 → 签到 · 日常本 · 悬赏 · 挂机庭①灰坡，都能补经验
         levels: 3
         items: { consumable_ember_stamina_30: 1, mat_ember_shard: 10, food_ember_bread: 8 }
         done:
@@ -163,7 +163,7 @@ chapters:
       - type: level
         level: 25
         desc: 达到余烬等级 Lv.25（解锁深渊）
-        hint: 日常 / 悬赏 / 签到 / 挂机 ② 荒原
+        hint: 打开枢纽菜单 → 日常本 · 悬赏 · 签到 · 挂机庭②荒原
         levels: 5
         items: { mat_ember_shard: 15, crystal_ember_enchant: 2, consumable_ember_stamina_30: 2 }
         done: ['§6灰烛：§f回响来自深渊。护符在周烬箱里（每周首通必出），别在下面待太久。']
@@ -204,7 +204,7 @@ chapters:
       - type: level
         level: 30
         desc: 达到余烬等级 Lv.30（解锁灾厄窗口）
-        hint: 深渊 / 日常 / 悬赏 / 挂机 ② 荒原
+        hint: 打开枢纽菜单 → 深渊 · 日常本 · 悬赏 · 挂机庭②荒原
         levels: 5
         items: { gem_ember_sharp: 1, mat_ember_core_fragment: 5, mat_ember_protect_scroll: 1 }
         done:
@@ -246,7 +246,7 @@ chapters:
       - type: level
         level: 35
         desc: 达到余烬等级 Lv.35（解锁团本）
-        hint: 深渊 / 日常 / 悬赏 / 灾厄 / 挂机 ③ 焦土
+        hint: 打开枢纽菜单 → 深渊 · 日常本 · 悬赏 · 灾厄 · 挂机庭③焦土
         levels: 5
         items: { mat_ember_stable_charm: 1, consumable_ember_stamina_30: 1 }
         done: ['§6灰烛：§f团本需要三到五人。找齐你的同袍。']
@@ -315,7 +315,7 @@ chapters:
       - type: level
         level: 40
         desc: 达到余烬等级 Lv.40
-        hint: 打开枢纽菜单 → 日常本 / 深渊 / 挂机庭 / 悬赏
+        hint: 打开枢纽菜单 → 日常本 · 深渊 · 挂机庭 · 悬赏
         xp: 400
         levels: 3
         items: { mat_ember_stable_charm: 1, mat_ember_shard: 20 }
@@ -358,7 +358,7 @@ chapters:
       - type: level
         level: 45
         desc: 达到余烬等级 Lv.45
-        hint: 打开枢纽菜单 → 深渊 / 日常本 / 灾厄 / 挂机庭
+        hint: 打开枢纽菜单 → 深渊 · 日常本 · 灾厄 · 挂机庭
         xp: 220
         levels: 3
         items: { gem_ember_steady: 1, mat_ember_core_fragment: 5 }
@@ -392,7 +392,7 @@ chapters:
       - type: level
         level: 50
         desc: 达到余烬等级 Lv.50
-        hint: 打开枢纽菜单 → 精英试炼 / 深渊 / 日常本
+        hint: 打开枢纽菜单 → 精英试炼 · 深渊 · 日常本
         xp: 420
         levels: 3
         items: { core_ember_compact: 1, mat_ember_talent_reset: 1 }
@@ -433,7 +433,7 @@ chapters:
       - type: level
         level: 60
         desc: 达到余烬等级 Lv.60（第二卷终）
-        hint: 打开枢纽菜单 → 日常本 / 深渊 / 精英试炼 / 团本 / 灾厄
+        hint: 打开枢纽菜单 → 日常本 · 深渊 · 精英试炼 · 团本 · 灾厄
         xp: 300
         levels: 5
         items: { core_ember_compact: 1, mat_ember_stable_charm: 1, cosmetic_calamity_shard: 1 }
