@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-09-28 22:01 Asia/Shanghai (总控)
+## Progress snapshot — 2026-09-28 22:23 Asia/Shanghai (总控)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **非日常进本体力不足灰显**（设计待批 · `design-ember-enter-stamina-gray.md` 荐 A · 未批不施工）
+- （空 · 待策划挑下一薄窗）
 
 ### 刚结
+- **非日常进本体力灰显**：**PASS · 勾销**（施工 `23a816e` · 测 `6bda99e` · CoreRpg **1.15.23** · 深渊/周本三态/团本/精英 · cost 30/45/50/40 · over_chance* 未动）
 - **挂机二档菜单 UX 对齐**：**PASS · 勾销**（施工 `0deda12` · 测 `f0ce1fd` · 枢纽/规则双软顶 · over_chance* 未动）
 - **B0.4 / B2.5 挂机二档施工+短样**：**PASS · 勾销**（施工 `5301556` · 测 `99898cc` · CoreRpg **1.15.22** · 一档 0.25 / 二档 0.08 @≥2×cap · 短样 0.263/0.080 · 外推 ~3.3×→~2.4× · **不宣称封死通胀** · 禁墙钟 2h）
 - **B0.4 / B2.5 挂机二档定稿设计**：已批 **A**（`design-ember-afk-b04-tier2.md` · `over_chance_2=0.08` @≥2×cap · 短样外推验收）
@@ -76,7 +77,7 @@
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - ~~**挂机二档菜单 UX**（非改数）~~ → **PASS · 勾销**（`0deda12` / `f0ce1fd`）
 - ~~进本 `start-interval` 冷却 chat 转发~~ → **PASS · 勾销**（CoreRpg 1.15.21 启发式 tell+退还 · 测 `STATUS-ember-daily-rail-flank-cooldown-chat-test.md` · 非捕 DP 回执）
-- **非日常进本体力灰显**：已批 **A**（`design-ember-enter-stamina-gray.md`）· 待插件 TrMenu±PAPI
+- ~~**非日常进本体力灰显**~~ → **PASS · 勾销**（`23a816e` / `6bda99e` · CoreRpg 1.15.23）
 - ~~**B0.4 / B2.5 挂机二档数值**~~ → **施工+短样 PASS · 勾销**（`5301556` / `99898cc` · 0.25/0.08 · 外推 ~2.4× · 不封死通胀）
 - ~~**B1.3 精英 Boss TTK**~~ → **关账采数 PASS · 勾销**（`STATUS-ember-b13-elite-ttk-close.md` · tip `996f035` · 65.5s / 535.3s · 5200/12 不动 · 剩血 62% 观察不砍血）
 - ~~团本使徒 TTK（人数门 SKIP）~~ → **校准 PASS**（正式门仍 3～5）
@@ -218,7 +219,7 @@
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-下一薄窗：  非日常进本体力灰显（design-ember-enter-stamina-gray · 荐 A · 待批）
+下一薄窗：  （待策划挑 · 非日常体力灰显已勾销）
 软观察：    断塔近阶掉底厅（无证据不升 B）；霜晶/锈轨无 prep（刻意）
 ```
 
@@ -231,5 +232,5 @@
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1～B0.4 / B2.5 数值+挂机菜单 UX 均已结；进本冷却 chat **勾销**（1.15.21）  
 - **B1/B2：** 工坊/地图/精英TTK/文案/测试钮等已结  
-- **下一薄窗：** 非日常进本体力灰显（`design-ember-enter-stamina-gray.md` 荐 A · 未批不施工）；软观察不断塔 B / 霜锈前压  
+- **下一薄窗：** 待策划挑（非日常体力灰显已勾销 `23a816e`/`6bda99e`）；软观察不断塔 B / 霜锈前压  
 
