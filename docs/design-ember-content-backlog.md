@@ -17,9 +17,10 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.13 天赋菜单 `*_cap` 文案人话化**：**已批 A · 待插件**（设计本稿 · `docs/design-ember-talent-cap-copy.md` · 批准 tip `c86ebd6` · 引 B2.12 close `483215f` · **插件未施工**）
+- **当前无已锁定薄窗**：B2.13 已结；下一薄窗 → **待策划挑**。
 
 ### 刚结
+- **B2.13 天赋菜单 `*_cap` 文案人话化**：**PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close 本提交；报告 `docs/STATUS-ember-talent-cap-copy-test.md`；§8 nodeId/前置、奖励页 NI id、套装 `gear_ember_*` 未宣称已清）
 - **B2.12 灾厄 OP 调试拒门去斜杠**：**PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`；不改 `text=`/人数/loot；灾厄 OP #6 已闭环）
 - **B2.11 主线 quest「深渊票」两句薄扫**：**PASS · 勾销**（设计 `4a2a671` · 批准 `ca68b64` · 施工 `8605d10` · 测 `a538d26` · close `5378b23` · 双路径 live+src；灾厄 OP #6 已由 B2.12 闭环）
 - **B2.10 DP 局内/超时「票」→体力文案**：**PASS · 勾销**（设计 `f2eb738` · 批准 `bf174fc` · 施工 `9311a72` · 测 `95c9fbc` · 九句 DP 玩家 message 已对齐；Q1/Q2 保留为残余，灾厄 OP #6 已由 B2.12 闭环）
@@ -92,7 +93,7 @@
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
 - B0.1 无新证据不重开
-- **B2.13 天赋 `*_cap` 文案**：**已批 A · 待插件**（设计本稿 · `design-ember-talent-cap-copy.md` · 批准 tip `c86ebd6` · 引 close `483215f`）
+- ~~**B2.13 天赋 `*_cap` 文案**~~ → **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close 本提交；报告 `docs/STATUS-ember-talent-cap-copy-test.md`）
 - ~~**B2.12 灾厄 OP #6**~~ → **PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`）
 - ~~**B2.11** quest「深渊票」两句~~ → **PASS · 勾销**（设计 `4a2a671` · 批准 `ca68b64` · 施工 `8605d10` · 测 `a538d26` · 双路径 live+src；灾厄 OP #6 已由 B2.12 闭环）
 - ~~**B2.7 主线 `quest.yml`「日票/周票」台词**~~ → **PASS · 勾销**（设计 `b7ccbb8` · 批准 `a6c48bc` · 施工 `4eb9af8` · 测 `f2edc25` · close `e950efe`）
@@ -127,7 +128,7 @@
 - **B2.10：** **PASS · 勾销**（设计 `f2eb738` · 批准 `bf174fc` · 施工 `9311a72` · 测 `95c9fbc` · close `ddaeb46`）。
 - **B2.11：** **PASS · 勾销**（设计 `4a2a671` · 批准 `ca68b64` · 施工 `8605d10` · 测 `a538d26` · close `5378b23` · 双路径 live+src；灾厄 OP #6 已由 B2.12 闭环）。
 - **B2.12：** **PASS · 勾销**（设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f`；EmberCalamity OP 拒门去 `/ember`）。
-- **B2.13：** **已批 A · 待插件**（设计本稿 · `design-ember-talent-cap-copy.md` · 批准 tip `c86ebd6` · 天赋菜单 `*_cap` 人话化 · 引 `483215f`）。
+- **B2.13：** **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close 本提交；天赋菜单 `*_cap` 人话化）。
 
 ---
 
@@ -242,20 +243,20 @@
 | B2.10 | DP 局内/超时「票」→体力文案 | 日/周/深/团/精 玩家 `$message`/timeout 无日票·周票·团本票·深渊票·票不退·票已扣；对齐开场「已消耗体力」；零改 cost/门控 | **PASS · 勾销** 设计 `f2eb738` · 批准 `bf174fc` · 施工 `9311a72` · 测 `95c9fbc` |
 | B2.11 | 主线 quest「深渊票」两句薄扫 | live+src `quest.yml` 无「深渊票」「票还是一天一张」；对齐耗体力/体力日回；不改步骤/items/cost；灾厄 OP #6 已由 B2.12 闭环 | **PASS · 勾销** 设计 `4a2a671` · 批准 `ca68b64` · 施工 `8605d10` · 测 `a538d26` · close `5378b23` |
 | B2.12 | 灾厄 OP 调试拒门去斜杠 | `EmberCalamity` OP gate message 无 `/ember`；改为枢纽菜单 → 灾厄；不改 `text=`/人数/loot | **PASS · 勾销** 设计 `1e109b3` · 批准 `708c62a` · 施工 `9be6ae4` · 测 `095be05` · close `483215f` |
-| B2.13 | 天赋菜单 `*_cap` 文案人话化 | `ember_talent.yml` 玩家 lore/tell 无字面 `*_cap`；改为一层顶「燎原/烟幕/永护」；不改 talent 键/unlock command/cost | **已批 A · 待插件**（设计本稿 · `design-ember-talent-cap-copy.md` · 批准 tip `c86ebd6` · 引 `483215f`） |
+| B2.13 | 天赋菜单 `*_cap` 文案人话化 | `ember_talent.yml` 玩家 lore/tell 无字面 `*_cap`；改为一层顶「燎原/烟幕/永护」；不改 talent 键/unlock command/cost | **PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close 本提交） |
 
 ---
 
 ## 4. 建议排期（额度内）
 
 ```
-可维护性：  B0.1 / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8/B2.9/B2.10/B2.11/B2.12 已结**；**B2.13 已批 A · 待插件**（设计本稿）
+可维护性：  B0.1 / B0.3 TrMenu / B1.4 / B2.3 / B2.4 已结；挂机菜单 UX 勾销；**B2.8/B2.9/B2.10/B2.11/B2.12/B2.13 已结**（B2.13 PASS · 勾销）
 测窗：      B0.2 ΔTTK · B1.3 精英关账 · kill-any live · 使徒校准 · 冷却 chat 均 PASS
 地图窗：    P4 七线 + 节奏杠杆收口；P5 已有专稿
 经济窗：    B0.4/B2.5 二档数值+菜单 UX 均 PASS 勾销
-下一薄窗：  **B2.13** 天赋 `*_cap` 文案人话化（已批 A · 待插件 · `design-ember-talent-cap-copy.md` · 批准 tip `c86ebd6` · 引 close `483215f`）
-软观察：    断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳；§8 nodeId/NI id（未纳入 A）
-策划挑选排除：刚结 B2.6–B2.12；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence。B2.13=天赋 `*_cap`。
+下一薄窗：  **待策划挑**
+软观察：    断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳；旁扫 §8 nodeId/前置 / 奖励页 NI id / 套装 `gear_ember_*` 仍可挂软观察（未宣称已清）
+策划挑选排除：刚结 B2.6–B2.13；五入口奖励预览；非日常体力灰显；挂机 over_chance*/二档 UX；B1.3；墙钟 2h；霜锈前压；断塔无证据升 B；B0.1 unless new evidence。
 ```
 
 **不建议本额度新开：** 新养成线、新货币、新副本类型、Citizens、改 Paper/NMS。
@@ -266,6 +267,6 @@
 
 - 文档：`docs/design-ember-content-backlog.md`  
 - **B0 硬债：** B0.1～B0.4 / B2.5 数值+挂机菜单 UX 均已结；进本冷却 chat **勾销**（1.15.21）；**无高杠杆硬债**（B0.1 无新证据不重开）  
-- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6/B2.7/B2.8/B2.9/B2.10/B2.11/B2.12 等已结；**B2.12 PASS · 勾销**（close `483215f`）；**B2.13 已批 A · 待插件**（设计本稿 · `design-ember-talent-cap-copy.md` · 批准 tip `c86ebd6`）
-- **当前薄窗：** **B2.13 已批 A · 待插件**（`design-ember-talent-cap-copy.md` · 批准 tip `c86ebd6` · 引 `483215f`）；软观察：断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳；§8 nodeId/NI id（未纳入 A）
+- **B1/B2：** 工坊/地图/精英TTK/文案/测试钮/B2.6/B2.7/B2.8/B2.9/B2.10/B2.11/B2.12/B2.13 等已结；**B2.13 PASS · 勾销**（设计 `c86ebd6` · 批准 `aa4a7bb` · 施工 `89b7432` · 测 `f600687` · close 本提交）
+- **当前薄窗：** **待策划挑**；软观察：断塔观察 / 霜锈前压 / AFK not sealed / B0.1 / 精英预览壳；旁扫 §8 nodeId/前置 / 奖励页 NI id / 套装 `gear_ember_*` 仍可挂软观察（未宣称已清）
 
