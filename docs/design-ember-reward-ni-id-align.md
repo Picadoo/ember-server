@@ -166,7 +166,7 @@
 ## 11. 回总控摘要
 
 - **荐 A：** 五入口奖励预览删除 34 行玩家可见 `§8NI id:`/`§8NI:` 灰字（中文主名已在；零改掉落）。  
-- **路径：** `docs/design-ember-reward-ni-id-align.md` · **B2.18** · STATUS **待批 · 未批准前不施工**。  
+- **路径：** `docs/design-ember-reward-ni-id-align.md` · **B2.18** · STATUS **已批 A · 待插件** · 批准 `cef1017`。  
 - **证据：** 5 文件 34 行 / 20 id；例日常刃格 `name: 余烬之刃` + `§8NI id: gear_ember_blade`。  
 - **B 旁附：** 套装菜单 4 句 `gear_ember_*`/`acc_ember_raid_ring` → 中文；**勿双上**。  
 - **未动：** 精英厚壳 / NI 物品 lore / loot·体力·掉率 / B0.1 / 四件甲·锻炉·誓约。  
