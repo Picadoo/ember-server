@@ -17,7 +17,6 @@ mat_ember_stable_charm:
   material: NETHER_STAR
   name: '&b余烬稳固符'
   lore:
-    - '&7mat_ember_stable_charm'
     - '&8+10 强化失败时不掉级'
     - '&7仅失败，不掉档'
   enchantments:
