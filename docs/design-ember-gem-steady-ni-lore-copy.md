@@ -1,6 +1,6 @@
 # 设计稿 · NI 余烬稳固石 lore 裸 id 人话对齐（B2.34）
 
-> **STATUS：待批 A**。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_steady` **1** 行 lore 灰字裸 id；**未获批前不改 NI Items YAML**。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
+> **STATUS：已批 A**（总控 2026-09-29 · tip 见 STATUS-ember-gem-steady-ni-lore-copy-approve.md）。本稿只定 **玩家可见** NeigeItems `plugins/NeigeItems/Items/ember-enhance-gems.yml` 内 `gem_ember_steady` **1** 行 lore 灰字裸 id；批后由物品岗改 NI Items YAML。不改 NI 数值、配方、给物、镶嵌逻辑或其它物品。
 >
 > B2.33 已 **PASS · 勾销**（设计 `48b5218` · 批准 `6a43ab1` · 施工 `fbef72e` · 测 `90797d7` · close `973e941`）。当前 `&7gem_*` 仍有 3 件；本窗只处理稳固石，**勿宣称 B0.1 已清**。
 
@@ -10,7 +10,7 @@
 |---|---|
 | 稿件 | NI 余烬稳固石 · **玩家可见 lore 裸 id `gem_ember_steady` 对齐**（UX · B2.34） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-29 03:14 Asia/Shanghai |
-| 状态 | **待批 A** |
+| 状态 | **已批 A** |
 | 关联 | live `plugins/NeigeItems/Items/ember-enhance-gems.yml` · B2.33 锋利石 PASS 后 gem 轨单件薄窗 |
 | 专岗 | **物品**；验收 **`rg` + 悬停** |
 
@@ -50,7 +50,7 @@ gem_ember_steady:
 
 | 方案 | 做法 | 本窗 |
 |---|---|---|
-| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **待批 A；批后交物品岗施工** |
+| **A · 荐** | 删除目标 lore 灰字裸 id 1 行 | **已批 A；交物品岗施工** |
 | A′ | 改为灰字「稳固石」 | 不荐：与显示名重复 |
 | B | 顺手处理 `gem_ember_drain` / `gem_ember_gale`、斜杠、cosmetic/pet 或精英壳 | **仅作 soft，勿双上** |
 
