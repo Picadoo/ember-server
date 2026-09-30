@@ -19,7 +19,7 @@ dungeon-start:
     # 维护备忘：体力/首免已在 corerpg enter 扣除（未进本自动退还）；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§9团本大厅已集结。§7左道卫兵 · 右道射手 · 汇合后终厅使徒。} @dungeon"
-    - "$message{type=text;text=§8已消耗体力 ×1} @dungeon"
+    - "$message{type=text;text=§8通关箱 · 全队每人结算 · 周首通保底团戒} @dungeon"
     - "$teleport{location=0,65,0;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
