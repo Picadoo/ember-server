@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 02:21 Asia/Shanghai (总控 · B2.95 PASS · 勾销 · B2.96 DP EmberRaid option.yml 注释 已批 A · 交插件岗)
+## Progress snapshot — 2026-10-01 02:27 Asia/Shanghai (总控 · B2.96 PASS · 勾销 · 下一窗 B2.97 交策划)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.96 已批 A**（设计 `5552822` · 批准本提交 · 交插件岗）（tip `docs/design-ember-dp-raid-option-ticket-comment-copy.md`；核对现行：团本扣发起者体力，每周首免 1 次后 50，非 NI 票；同周再通扣体力；团戒每人每周 1 枚按 raidRingWeek 去重；改 L3/L4/L17/L19/L30 五行注释）：DP `plugins/DungeonPlus/dungeon/EmberRaid/option.yml` L3/L4/L17/L19 历史「扣票 / B0.1」注释 + L30 通关箱「团票每周 1 张」注释 → 体力口径维护备忘（一文件一窗；之后 B2.97 EmberEliteWeekly；三份注释做完后单开窗修开本提示 `text=`「已消耗体力 ×1」；另记：CoreRpgPlugin 兜底文案「日限 1 次 · 进本扣余烬深渊票」、深渊状态页显示背包票数，待排；勿宣称 B0.1 已清）。~~B2.95~~ → DP EmberAbyss option.yml 注释 PASS · 勾销（设计 `37a01ca` · 批准 `e384dab` · 插件 `50a946c` · 测 `3c82e34` · close 本提交）。~~B2.94~~ → PASS · 勾销；精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
+- **B2.97 待策划出稿**：DP `plugins/DungeonPlus/dungeon/EmberEliteWeekly/option.yml` L3/L4/L16/L18 历史「扣票 / B0.1 / 有票」注释 → 体力口径维护备忘（一文件一窗；须先核 `%corerpg_gate_elite%` 现行判定；**精英壳勿硬开**、勿暗示已开放；DP option 注释四份收尾后，再排：三份 `text=`「已消耗体力 ×1」、`set.yml:27` 与 `cash.yml:86` 团票旧注、`CoreRpgPlugin.java:1356` 兜底文案、深渊状态页票数、mineflayer 旧正则；勿宣称 B0.1 已清）。~~B2.96~~ → DP EmberRaid option.yml 注释 PASS · 勾销（设计 `5552822` · 批准 `273a4f6` · 插件 `179a7a9` · 测 `d62e20c` · close 本提交）。~~B2.95~~ → PASS · 勾销；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -211,7 +211,8 @@
 - ~~**B2.93 CoreRpg `cash.yml` L94 `elite.free_tickets` 无旁注**~~ → **PASS · 勾销**（设计 `b53fa71` · 批准 `df742c8` · 插件 `6203a87` · 测 `869fd38` · close 本提交；报告 `docs/TEST-B2.93-cash-elite-free-tickets-comment.md`；cash 四个 free_tickets 行内旁注本轨清零）
 - ~~**B2.94 DP `EmberWeekly/option.yml` 历史扣票/B0.1 注释**~~ → **PASS · 勾销**（设计 `9d20149` · 批准 `4c7e7eb` · 插件 `ef7e350` · 测 `b6501af` · close 本提交；报告 `docs/TEST-B2.94-dp-weekly-option-comment.md`）
 - ~~**B2.95 DP `EmberAbyss/option.yml` 历史扣票/B0.1 注释**~~ → **PASS · 勾销**（设计 `37a01ca` · 批准 `e384dab` · 插件 `50a946c` · 测 `3c82e34` · close 本提交；报告 `docs/TEST-B2.95-dp-abyss-option-comment.md`）
-- **B2.96** DP `EmberRaid/option.yml` 历史扣票/B0.1 注释 + L30 团票注释（**已批 A** · 设计 `5552822` · 批准本提交 · tip `docs/design-ember-dp-raid-option-ticket-comment-copy.md`；仅注释；**勿宣称 B0.1 已清**/票已废；一文件一窗）
+- ~~**B2.96 DP `EmberRaid/option.yml` 历史扣票/B0.1 注释 + L30 团票注释**~~ → **PASS · 勾销**（设计 `5552822` · 批准 `273a4f6` · 插件 `179a7a9` · 测 `d62e20c` · close 本提交；报告 `docs/TEST-B2.96-dp-raid-option-comment.md`；测岗更正：团戒配置在 `set.yml:29-32`，与代码缺省一致）
+- **B2.97** DP `EmberEliteWeekly/option.yml` 历史扣票/B0.1/有票注释（**待策划出稿**；一文件一窗；精英壳勿硬开）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -341,7 +342,8 @@
 - ~~**B2.93**~~ → cash.yml L94 `elite.free_tickets` **PASS · 勾销**（测 `869fd38` · close 本提交）。
 - ~~**B2.94**~~ → DP EmberWeekly option.yml 注释 **PASS · 勾销**（测 `b6501af` · close 本提交）。
 - ~~**B2.95**~~ → DP EmberAbyss option.yml 注释 **PASS · 勾销**（测 `3c82e34` · close 本提交）。
-- **B2.96** → DP EmberRaid option.yml 历史注释（**已批 A** · 设计 `5552822`；交插件岗）。
+- ~~**B2.96**~~ → DP EmberRaid option.yml 注释 **PASS · 勾销**（测 `d62e20c` · close 本提交）。
+- **B2.97** → DP EmberEliteWeekly option.yml 历史注释（待策划出稿）。
 
 ---
 
@@ -540,7 +542,7 @@
 | ~~**B2.93**~~ | cash elite free_tickets | 无旁注→遗留票物/体力备忘 | **PASS · 勾销**（测 `869fd38`） |
 | ~~**B2.94**~~ | DP EmberWeekly option.yml | 扣票/B0.1 注释→体力口径维护备忘 | **PASS · 勾销**（测 `b6501af`） |
 | ~~**B2.95**~~ | DP EmberAbyss option.yml | 扣票/B0.1 注释→体力口径维护备忘 | **PASS · 勾销**（测 `3c82e34`） |
-| **B2.96** | DP EmberRaid option.yml | 扣票/B0.1 + L30 团票注释→体力口径维护备忘 | **已批 A**（设计 `5552822` · 批准本提交） |
+| ~~**B2.96**~~ | DP EmberRaid option.yml | 扣票/B0.1 + L30 团票注释→体力口径维护备忘 | **PASS · 勾销**（测 `d62e20c`） |
 
 ---
 
@@ -609,7 +611,7 @@
 - CoreRpg `cash.yml` L89 `abyss.free_tickets` 无旁注 → 已升 **B2.91 PASS · 勾销**（测 `96baff6`）（tip `docs/design-ember-cash-abyss-free-tickets-comment-copy.md`）
 - CoreRpg `config.yml` L76 `mysql.password` 真实样式密码 → ~~B2.92~~ **PASS · 勾销**（同值 5 文件一并复位；git 历史未清，归用户轮换）
 - CoreRpg `cash.yml` L94 `elite.free_tickets` 无旁注 → ~~B2.93~~ **PASS · 勾销**
-- DP `dungeon/*/option.yml` 历史「扣票 / B0.1」注释 → ~~B2.94 Weekly~~ ~~B2.95 Abyss~~ **PASS · 勾销**；余 Raid/EliteWeekly 依次 B2.96–B2.97
+- DP `dungeon/*/option.yml` 历史「扣票 / B0.1」注释 → ~~B2.94 Weekly~~ ~~B2.95 Abyss~~ ~~B2.96 Raid~~ **PASS · 勾销**；余 EliteWeekly → B2.97
 
 **明确未做/未清：** 四件甲 · 誓约主动大改 · 锻炉重做 · 位移+保命双上 · **勿宣称 B0.1 已清**
 

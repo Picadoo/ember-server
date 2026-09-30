@@ -1,6 +1,6 @@
 # B2.96 · DP `EmberRaid/option.yml` 历史「扣票 / B0.1」注释 + L30 团票注释 → 体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-10-01 02:21 Asia/Shanghai）· 交插件岗** · 设计 tip `5552822`；按荐案逐字施工（仅 L3/L4/L17/L19/L30 注释）；L31、`text=` L22/L45 零改。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 02:27 Asia/Shanghai）** · 设计 `5552822` · 批准 `273a4f6` · 插件 `179a7a9` · 测 `d62e20c` · close 本提交。测岗更正：团戒配置读 `set.yml:29-32`（非「live 无 raid_ring」），值等于代码缺省，结论不变。
 - **tip 路径：**`docs/design-ember-dp-raid-option-ticket-comment-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberRaid/option.yml` 的 5 行注释：L3、L4、L17、L19、L30。键值、脚本、`text=` 全部零改。
 - **前序对齐：**B2.94 Weekly（close `7a5aff2`）、B2.95 Abyss（close `61785ad`）同构注释已 PASS · 勾销，本窗句式一致。
