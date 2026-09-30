@@ -26,12 +26,12 @@
 | `ember_set.yml` | 主菜单「套装」 | 余烬同袍（团戒+刃）2 件套 |
 | `ember_storage.yml` | 主菜单「仓库」 | 末影箱 / 扩展页 / 勋阶链 |
 
-## 占位待改（插件岗）
+## 占位 / 待接线备忘
 
-1. **挂机传送**：现为 `tp %player_name% -40 65 270`（RpgBot 测试点）。可改 `warp afk` 或真实大厅坐标。
-2. **进本命令**：`dp start EmberDaily` / `dp start EmberWeekly`（官方命令）。
-3. **次数占位符**：菜单文案暂写死 3/1；PAPI `%ember_daily_left%` / `%ember_weekly_left%` 待接入后改 lore。
-4. **音效**：用了 1.12 风格 `BLOCK_NOTE_PLING`；若 TrMenu 映射失败再换成插件支持名。
-5. **材质**：`stained glass pane` / `watch` / `ender chest` 等若在 1.12 + TrMenu 3.12 解析异常，改成 `glass` / `clock` / `chest`。
+1. **挂机传送**：当前为 `tp %player_name% -40 65 270`（RpgBot 测试点）；后续可评估改为 `warp afk` 或真实大厅坐标。
+2. **进本命令**：当前记录为 `dp start EmberDaily` / `dp start EmberWeekly`（官方命令）；入口接线时再核对实际用法。
+3. **次数占位符**：菜单文案目前写死 3/1；PAPI `%ember_daily_left%` / `%ember_weekly_left%` 尚未接入，接线后再改 lore。
+4. **音效**：当前使用 1.12 风格 `BLOCK_NOTE_PLING`；若 TrMenu 映射失败，再换成插件支持名。
+5. **材质**：`stained glass pane` / `watch` / `ender chest` 等若在 1.12 + TrMenu 3.12 解析异常，再改成 `glass` / `clock` / `chest`。
 
 DungeonPlus 配置等 jar 到位后再落，不在本目录。
