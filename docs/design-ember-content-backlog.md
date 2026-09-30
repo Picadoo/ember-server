@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 02:02 Asia/Shanghai (总控 · B2.93 PASS · 勾销 · 下一窗 B2.94 交策划)
+## Progress snapshot — 2026-10-01 02:10 Asia/Shanghai (策划 · B2.93 PASS · 勾销 · B2.94 DP EmberWeekly option 票注释 待批 A)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.94 待策划出稿**：DP `plugins/DungeonPlus/dungeon/EmberWeekly/option.yml` 历史「扣票 / B0.1」注释 → 体力口径维护备忘（HANDOFF-ember-grokbot §6 候选 3；**一文件一窗**；勿宣称 B0.1 已清）。~~B2.93~~ → cash `elite.free_tickets` 行内旁注 PASS · 勾销（设计 `b53fa71` · 批准 `df742c8` · 插件 `6203a87` · 测 `869fd38` · close 本提交）。~~B2.92~~ → PASS · 勾销；文案薄窗可续；精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
+- **B2.94 待批 A**（tip `docs/design-ember-dp-weekly-option-ticket-comment-copy.md`；核对现行：周本进本扣体力，首免+45，非 NI 票；改 L4/L5/L16/L18 四行注释）：DP `plugins/DungeonPlus/dungeon/EmberWeekly/option.yml` 历史「扣票 / B0.1」注释 → 体力口径维护备忘（HANDOFF-ember-grokbot §6 候选 3；**一文件一窗**；勿宣称 B0.1 已清）。~~B2.93~~ → cash `elite.free_tickets` 行内旁注 PASS · 勾销（设计 `b53fa71` · 批准 `df742c8` · 插件 `6203a87` · 测 `869fd38` · close 本提交）。~~B2.92~~ → PASS · 勾销；文案薄窗可续；精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -209,6 +209,7 @@
 - ~~**B2.91 CoreRpg `cash.yml` L89 `abyss.free_tickets` 无旁注**~~ → **PASS · 勾销**（设计 `759c7d7` · 批准 `fde150f` · 插件 `93724a4` · 测 `96baff6` · close 本提交；报告 `docs/STATUS-ember-cash-abyss-free-tickets-comment-copy-test.md`；下一窗升 **B2.92** config.yml 密码复位；**勿宣称 B0.1 已清**）
 - ~~**B2.92 CoreRpg `config.yml` L76 `mysql.password` 真实样式密码**~~ → **PASS · 勾销**（备选 B：5 文件 · 设计 `ebc41ce` · 批准 `d20dd57` · 插件 `1cd6d0f` · 测 `011594b` · close 本提交；报告 `docs/TEST-B2.92-mysql-password-reset.md`；后续代码窗候选：`MysqlStorage` 读到 `CHANGE_ME` 时改读环境变量 `MYSQL_PASSWORD`）
 - ~~**B2.93 CoreRpg `cash.yml` L94 `elite.free_tickets` 无旁注**~~ → **PASS · 勾销**（设计 `b53fa71` · 批准 `df742c8` · 插件 `6203a87` · 测 `869fd38` · close 本提交；报告 `docs/TEST-B2.93-cash-elite-free-tickets-comment.md`；cash 四个 free_tickets 行内旁注本轨清零）
+- **B2.94** DP `EmberWeekly/option.yml` L4/L5/L16/L18「扣票 / B0.1」注释→体力口径维护备忘（**待批 A** · tip `docs/design-ember-dp-weekly-option-ticket-comment-copy.md`；仅注释；**勿宣称 B0.1 已清**/票已废）
 - **B2.94** DP `EmberWeekly/option.yml` 历史扣票/B0.1 注释（**待策划出稿**；一文件一窗）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
@@ -337,6 +338,7 @@
 - ~~**B2.91**~~ → cash.yml L89 `abyss.free_tickets` **PASS · 勾销**（测 `96baff6` · close 本提交）。
 - ~~**B2.92**~~ → mysql.password 同值 5 文件复位 **PASS · 勾销**（测 `011594b` · close 本提交）。
 - ~~**B2.93**~~ → cash.yml L94 `elite.free_tickets` **PASS · 勾销**（测 `869fd38` · close 本提交）。
+- **B2.94** → DP `EmberWeekly/option.yml` L4/L5/L16/L18 票注释（**待批 A**）。
 - **B2.94** → DP EmberWeekly/option.yml 历史注释（待策划出稿）。
 
 ---
@@ -534,6 +536,7 @@
 | **B2.91** | cash abyss free_tickets | 无旁注→遗留票物/体力备忘 | **PASS · 勾销**（测 `96baff6` · close 本提交） |
 | ~~**B2.92**~~ | CoreRpg config mysql.password | 真实样式密码→`"CHANGE_ME"` | **PASS · 勾销**（5 文件 · 测 `011594b`） |
 | ~~**B2.93**~~ | cash elite free_tickets | 无旁注→遗留票物/体力备忘 | **PASS · 勾销**（测 `869fd38`） |
+| **B2.94** | DP EmberWeekly option.yml | 扣票/B0.1 注释→体力口径维护备忘 | **待批 A** |
 
 ---
 
@@ -602,6 +605,7 @@
 - CoreRpg `cash.yml` L89 `abyss.free_tickets` 无旁注 → 已升 **B2.91 PASS · 勾销**（测 `96baff6`）（tip `docs/design-ember-cash-abyss-free-tickets-comment-copy.md`）
 - CoreRpg `config.yml` L76 `mysql.password` 真实样式密码 → ~~B2.92~~ **PASS · 勾销**（同值 5 文件一并复位；git 历史未清，归用户轮换）
 - CoreRpg `cash.yml` L94 `elite.free_tickets` 无旁注 → ~~B2.93~~ **PASS · 勾销**
+- DP `EmberWeekly/option.yml` 历史「扣票 / B0.1」注释 → 已升 **B2.94 待批 A**（tip `docs/design-ember-dp-weekly-option-ticket-comment-copy.md`；后续 B2.95 Abyss → B2.96 Raid → B2.97 EliteWeekly；开本「已消耗体力 ×1」文案另议）
 
 **明确未做/未清：** 四件甲 · 誓约主动大改 · 锻炉重做 · 位移+保命双上 · **勿宣称 B0.1 已清**
 
