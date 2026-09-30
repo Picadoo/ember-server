@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：**B2.62 待交稿**（CoreRpg `cash.yml` L98/L104 勋阶 stub 注释维护备忘；tip 建议 `docs/design-ember-corerpg-vip-stub-copy.md`；**仅**两行注释；禁长测/挑刺；**勿宣称 B0.1/LuckPerms 已清**）。~~B2.61~~ → PASS · 勾销；schema「插件岗写入」本轨归零；精英壳勿硬开。
+- 文案薄窗：**B2.62 待批 A**（CoreRpg `cash.yml` L98/L104 勋阶 stub 注释维护备忘；tip 建议 `docs/design-ember-corerpg-vip-stub-copy.md`；**仅**两行注释；禁长测/挑刺；**勿宣称 B0.1/LuckPerms 已清**）。~~B2.61~~ → PASS · 勾销；schema「插件岗写入」本轨归零；精英壳勿硬开。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -177,7 +177,7 @@
 - ~~**B2.59 TrMenu README 占位段管理口吻**~~ → **PASS · 勾销**（设计 `57558b3` · 批准 `ffde8fc` · 插件 `5fea72e` · 测 `2ae758f` · close 本提交；报告 `docs/STATUS-ember-trmenu-readme-placeholder-copy-test.md`；下一窗升 **B2.60**；**勿宣称 B0.1 已清**）
 - ~~**B2.60 CoreRpg cash/covenant/talent 文件头维护备忘**~~ → **PASS · 勾销**（设计 `262bfa8` · 批准 `45f2dcf` · 插件 `96b931a` · 测 `5abd67d` · close 本提交；报告 `docs/STATUS-ember-corerpg-stub-header-copy-test.md`；下一窗升 **B2.61**；**勿宣称 B0.1 已清**）
 - ~~**B2.61 CoreRpg `_schema-example.yml` 分区注释「插件岗写入」**~~ → **PASS · 勾销**（设计 `72ad8a7` · 批准 `6c5fd45` · 插件 `8421383` · 测 `0098df7` · close 本提交；报告 `docs/STATUS-ember-corerpg-schema-header-copy-test.md`；下一窗升 **B2.62**；**勿宣称 B0.1 已清**）
-- **B2.62** CoreRpg `cash.yml` 勋阶 stub 注释（**待交稿** · tip 建议 `docs/design-ember-corerpg-vip-stub-copy.md`；仅 L98/L104；禁长测/挑刺；**勿宣称 B0.1/LuckPerms 已清**）
+- **B2.62** CoreRpg `cash.yml` 勋阶 stub 注释（**待批 A** · tip `docs/design-ember-corerpg-vip-stub-copy.md`；仅 L98/L104；禁长测/挑刺；**勿宣称 B0.1/LuckPerms 已清**）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
