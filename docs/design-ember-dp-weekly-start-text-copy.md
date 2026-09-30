@@ -1,6 +1,6 @@
 # B2.98 · DP `EmberWeekly/option.yml` L20 开本提示「已消耗体力 ×1」→ 去掉扣费字样
 
-- **STATUS：已批 A（总控 · 2026-10-01 02:39 Asia/Shanghai）· 交插件岗** · 设计 tip `58103e9`；L20 按荐案逐字施工，余项顺序按 §6。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 02:45 Asia/Shanghai）** · 设计 `58103e9` · 批准 `baccdf4` · 插件 `94d8759` · 测 `b4cec8c` · close 本提交；报告 `docs/TEST-B2.98-dp-weekly-start-text.md`；reload 实测待恢复服后补。
 - **tip 路径：**`docs/design-ember-dp-weekly-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberWeekly/option.yml` L20 一行 `text=` 值（玩家可见）。其它键、脚本、注释全部零改。
 - **来由：**B2.94 §5 顺带发现；backlog L20「票时代旧文案余项」首位。本 tip 同时给出余项的排序（§6）。
