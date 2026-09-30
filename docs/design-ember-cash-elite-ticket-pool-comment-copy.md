@@ -1,6 +1,6 @@
 # B2.79 · cash 精英周票注释 → 遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 21:23 Asia/Shanghai）** · 设计 tip `f6c7eb7` · 交**插件岗（CoreRpg cash 注释）**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 21:28 Asia/Shanghai）** · 设计 `f6c7eb7` · 批准 `358a306` · 插件 `8919053` · 测 `a20689f/483f627`
 - **tip 路径：**`docs/design-ember-cash-elite-ticket-pool-comment-copy.md`
 - **范围：**仅 `plugins/CoreRpg/cash.yml` 约 L92 的 Stage 4.4 注释；`elite.free_tickets`、`ticket_ni_id`、`hard_cap` 及其它键值零改。
 - **前序对齐：**B2.78 已批 `811984d`；本窗承接 cash 精英周票注释，backlog 对齐 B2.79。
