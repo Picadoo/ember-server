@@ -64,7 +64,7 @@ shop:
     id: weekly_ticket
     price: 180
     sku_limit: 1          # 晶钻购买次数/周；仍受 hard_cap 约束
-    hard_cap: 2          # 免费1+氪≤2
+    hard_cap: 2          # 维护备忘：遗留票物/体力口径；免费1+氪≤2
     grant_ni: true
     ticket_ni_id: ticket_ember_weekly
 
