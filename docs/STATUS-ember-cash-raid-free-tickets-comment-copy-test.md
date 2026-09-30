@@ -9,7 +9,7 @@
 - **tip：**`docs/design-ember-cash-raid-free-tickets-comment-copy.md`
 - **是否已 push：否**（本岗仅本地 commit，禁止 push）
 - **报告路径：**`docs/STATUS-ember-cash-raid-free-tickets-comment-copy-test.md`
-- **ahead：**测报提交后相对 `origin/main` ahead 1（未 push）
+- **ahead：**测报两提交后相对 `origin/main` ahead 2（未 push）
 
 ## 各点
 
@@ -49,11 +49,11 @@ rg -n "票已废|B0\.1 已清" plugins/CoreRpg/cash.yml
 - 总评：PASS
 - 各点：1 PASS / 2 PASS / 3 PASS
 - 施工 tip SHA：`f568433`
-- 测报 tip short SHA：`0707373`（`07073732f77ef4b09f47200c81bd81801333163a`）
+- 测报 tip short SHA：`66ed681`（`66ed681dd8a2cca4dfafbacdf62a8b2a324e14ee`）
 - 是否已 push：否
 - 报告路径：`docs/STATUS-ember-cash-raid-free-tickets-comment-copy-test.md`
 - 阻塞点：无
-- ahead：相对 origin/main ahead 1（未 push）
+- ahead：相对 origin/main ahead 2（未 push；含测报+SHA回填）
 - 目标行原文：见上 L86
 - 违禁词 rg：无命中
 - 旁证：见上
