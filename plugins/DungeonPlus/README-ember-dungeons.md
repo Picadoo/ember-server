@@ -8,7 +8,7 @@
 
 | 路径 | 说明 |
 |------|------|
-| `plugins/DungeonPlus/dungeon/EmberDaily/option.yml` | 地图/出生/入场券条件/通关 ni give |
+| `plugins/DungeonPlus/dungeon/EmberDaily/option.yml` | 地图/出生/遗留票物入场条件/通关 ni give |
 | `plugins/DungeonPlus/dungeon/EmberDaily/monster.yml` | 三波 MM 怪 |
 | `plugins/DungeonPlus/dungeon/EmberDaily/obstacle.yml` | 空障碍（必填） |
 | `plugins/DungeonPlus/dungeon/EmberDaily/task/timeout.yml` | 720s 超时失败 |
