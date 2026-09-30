@@ -73,7 +73,7 @@ mysql:
   port: 3306
   database: ember
   username: ember
-  password: Sa9PBTNDms3DouMAbJ9q0voW
+  password: "CHANGE_ME"
   pool-size: 10
   jdbc-params: useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&serverTimezone=UTC
 debug:

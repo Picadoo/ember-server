@@ -15,7 +15,7 @@ DataSource:
     # Username to connect to the MySQL database
     mySQLUsername: 'ember'
     # Password to connect to the MySQL database
-    mySQLPassword: 'Sa9PBTNDms3DouMAbJ9q0voW'
+    mySQLPassword: "CHANGE_ME"
     # Database Name, use with converters or as SQLITE database name
     mySQLDatabase: 'authme'
     # Table of the database
