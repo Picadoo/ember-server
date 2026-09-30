@@ -31,7 +31,7 @@ monthlyExpireDate: ""      # yyyy-MM-dd Asia/Shanghai（含当日）
 monthlyLastGrantDate: ""
 dailyCashResetDate: ""
 dailyFreeGranted: false
-dailyTicketsGranted: 0     # 今日已发票（免费+氪+月卡），硬顶 6
+dailyTicketsGranted: 0     # 遗留票物/体力口径维护备忘：免费+氪+月卡，硬顶 6
 dailyTicketsBought: 0      # 今日晶钻购买次数，SKU 3
 dailyEntriesUsed: 0
 
