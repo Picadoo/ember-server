@@ -1,6 +1,6 @@
 # B2.101 · DP `EmberEliteWeekly/option.yml` L20 开本提示「本周只有一次」→ 每人每周限通关一次
 
-- **STATUS：已批 A（总控 · 2026-10-01 03:11 Asia/Shanghai）· 交插件岗** · 设计 tip `86d83c1`；L20 按荐案逐字施工，列表长度 3 不变。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 03:19 Asia/Shanghai）** · 设计 `86d83c1` · 批准 `910d284` · 插件 `e55540a` · 测 `713b407` · close 本提交；报告 `docs/TEST-B2.101-dp-elite-start-text.md`；reload 实测待恢复服后补。
 - **tip 路径：**`docs/design-ember-dp-elite-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberEliteWeekly/option.yml` L20 一行 `text=` 值（玩家可见）。列表长度（3 项）、其它键、脚本、注释全部零改。
 - **来由：**B2.98 tip §6 排序；「本周只有一次」暗示每周只能进一次，与现行规则不符。B2.102（`ember_hub.yml` L249）沿用本窗句式。
