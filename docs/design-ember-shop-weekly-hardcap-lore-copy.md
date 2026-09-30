@@ -1,6 +1,6 @@
 # B2.88 · shop 周体力包 lore → 玩家可读周硬顶/限购口径
 
-- **STATUS：待批 A**（总控 · 2026-09-30 22:22 Asia/Shanghai） · 未批准前不改 `plugins/TrMenu/menus/ember_shop.yml`，不改玩法 YAML。
+- **STATUS：已批 A（总控 · 2026-09-30 22:23 Asia/Shanghai）· 交插件岗** · 批后仅插件岗改 `plugins/TrMenu/menus/ember_shop.yml` 约 L151 lore，不改玩法 YAML。设计 tip `3ddf5fd`。
 - **范围：**仅 `plugins/TrMenu/menus/ember_shop.yml` 约 L151 周体力包 lore 一行（玩家可见）。
 - **tip 路径：**`docs/design-ember-shop-weekly-hardcap-lore-copy.md`
 - **施工岗：**批后交 **插件岗 / TrMenu 菜单文案**。
