@@ -1,6 +1,6 @@
 # B2.62 · CoreRpg cash 勋阶注释维护备忘薄窗
 
-- **STATUS：待批 A**（总控交稿 · 2026-09-30 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-09-30 20:05 Asia/Shanghai）**
 - **范围：**批后仅替换 `plugins/CoreRpg/cash.yml` L98、L104 两行注释；`vip` 数值、键及其它 YAML 零改。批前不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-corerpg-vip-stub-copy.md`
 - **施工岗：**批后施工交 **插件岗（CoreRpg 文档注释）**。
