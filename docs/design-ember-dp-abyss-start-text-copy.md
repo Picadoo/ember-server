@@ -1,6 +1,6 @@
 # B2.100 · DP `EmberAbyss/option.yml` L22 开本提示去掉「已消耗体力 ×1」
 
-- **STATUS：已批 A（总控 · 2026-10-01 03:00 Asia/Shanghai）· 交插件岗** · 设计 tip `0ef491e`；L22 只删「已消耗体力 ×1 —— 」，其余逐字保留，列表长度 5 不变；B2.110 排位照准。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 03:08 Asia/Shanghai）** · 设计 `0ef491e` · 批准 `2033207` · 插件 `252fe8e` · 测 `c3d662c` · close 本提交；报告 `docs/TEST-B2.100-dp-abyss-start-text.md`；reload 实测待恢复服后补。
 - **tip 路径：**`docs/design-ember-dp-abyss-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberAbyss/option.yml` L22 一行 `text=` 值（玩家可见）。列表长度（5 项）、其它键、脚本、注释全部零改。
 - **来由：**B2.98 tip §6 排序第 1 项（B2.99 §6 顺延）；沿用 B2.98/B2.99 口径：开本广播不写扣费，扣费只由 CoreRpg 私聊 costHint 告知。
