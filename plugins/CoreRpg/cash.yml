@@ -80,7 +80,7 @@ monthly:
     daily_ticket: 1       # S0: 每点折算体力+30（非 NI 票）
 
 weekly:
-  free_tickets: 0
+  free_tickets: 0          # 维护备忘：遗留票物/体力口径；周本 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_weekly
 raid:
   free_tickets: 0          # 2026-09-27: 维护备忘：遗留票物/体力口径；周登录团本票发放口径留档（菜单承诺每周团本票×1）
