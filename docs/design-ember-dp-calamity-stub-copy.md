@@ -1,6 +1,6 @@
 # B2.63 · DungeonPlus 灾厄 Boss 注释维护备忘薄窗
 
-- **STATUS：待批 A · 总控交稿（2026-09-30 20:08 Asia/Shanghai）**
+- **STATUS：已批 A（总控 · 2026-09-30 20:09 Asia/Shanghai）**
 - **范围：**仅拟改 `plugins/DungeonPlus/dungeon/EmberCalamity/monster.yml` L3 注释；批前不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-dp-calamity-stub-copy.md`
 - **施工岗：**批后施工交 **插件岗（DungeonPlus 文档注释）**。
