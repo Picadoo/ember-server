@@ -1,6 +1,6 @@
 # B2.97 · DP `EmberEliteWeekly/option.yml` 历史「扣票 / B0.1 / 有票」注释 → 体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-10-01 02:30 Asia/Shanghai）· 交插件岗** · 设计 tip `aeb2bc1`；按荐案逐字施工（仅 L3/L4/L16/L18 注释）；`text=`（含 L20）零改；精英壳勿硬开。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 02:36 Asia/Shanghai）** · 设计 `aeb2bc1` · 批准 `810f0cd` · 插件 `79257fd` · 测 `8e12ca3` · close 本提交。测岗更正（不影响结论）：菜单入口为 `corerpg elite start`，与 `corerpg enter elite` 同入 tryEnter；level_gates 段存在但缺 elite 键时门槛为 0（live 已配 40）。
 - **tip 路径：**`docs/design-ember-dp-elite-option-ticket-comment-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberEliteWeekly/option.yml` 的 4 行注释：L3、L4、L16、L18。键值、脚本、`text=`（含 L20「本周只有一次」）全部零改。DP option 注释系列最后一份。
 - **前序对齐：**B2.94 Weekly、B2.95 Abyss、B2.96 Raid（close `2dc9b39`）同构注释已 PASS · 勾销，本窗句式一致。
