@@ -1,6 +1,6 @@
 # B2.102 · TrMenu `ember_hub.yml` L249-L250 精英试炼 lore：限通关口径 + 体力数字改占位符
 
-- **STATUS：待批 A**（策划 · 2026-10-01 03:21 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-10-01 03:22 Asia/Shanghai）· 交插件岗** · 设计 tip `4045245`；L249+L250 按荐案逐字施工（L250 用占位符 `%corerpg_stamina_cost_elite%`）。
 - **tip 路径：**`docs/design-ember-hub-elite-lore-copy.md`
 - **目标范围：**仅 `plugins/TrMenu/menus/ember_hub.yml` L249、L250 两行（精英试炼图标 `Icons.2.display.lore[1]`、`[2]`，玩家可见）。其它行、条件图标、actions 全部零改；numstat `2 2`。
 - **来由：**B2.101 §3 预案（L249 沿用「每人每周限通关」句式）；总控 03:20 定：L250 写死的 40 并入本窗。
@@ -92,3 +92,9 @@ L249、L250 精确替换为（行首 8 个空格，单引号保持）：
 建议另开一窗（同一文件，3 行换占位符），排在 B2.111 之后、B2.103 之前。编号由总控定。
 
 排序（按总控更新）：B2.112 EliteWeekly `task/timeout.yml:6` → B2.110 → B2.111 →（上述 hub 三行新窗）→ B2.103 → B2.104 → B2.105 → B2.106 → B2.108 → B2.109（B2.107 挂起）。
+
+
+## 总控批注（2026-10-01 03:22 Asia/Shanghai）
+- 批荐案：占位符方案优于去数字（`CoreRpgExpansion.java:103` 现成，L235/L240 已在用）。OP 冲突只记不改。
+- 同文件 L215（周本 45）/ L266（深渊 30）/ L280（团本 50）硬编码 → 另开 **B2.113**（仅改 ember_hub.yml 这三行为 `stamina_cost_weekly/abyss/raid` 占位符），排 B2.111 后、B2.103 前。
+- 验收全部静态；reload 实测记「待恢复服后实测」，不挡 PASS。
