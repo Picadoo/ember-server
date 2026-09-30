@@ -1,7 +1,7 @@
 # 余烬团本 — docs/ember-raid-channel-spec.md · 通道→终厅
 # 启动：/dp start EmberRaid
-# 次数：扣 NI id ticket_ember_raid ×1（显示名「余烬团本票」；周发 1）= 周首通实践保底
-# B0.1: 扣票改由 CoreRpg TicketEntryService（NI id）；本文件不再 <item:显示名> 扣次
+# 次数：维护备忘：遗留票物/体力口径；现行进本扣发起者体力（本周首次免费，之后按 cash.yml stamina.costs.raid，现行 50）
+# 维护备忘：扣次由 CoreRpg TicketEntryService/StaminaService 在 corerpg enter 时处理，本文件不扣次；遗留 NI 票物 ticket_ember_raid 按 stamina.ticket_convert 折体力
 # 怪：EmberRaidFootman/Archer/Elite/Boss（勿改 EmberAbyss DP）
 # 通关箱：材料保底 + 周首通团戒；T3 不保底（终厅 MM 概率）
 
@@ -14,9 +14,9 @@ dungeon-init-script:
 dungeon-start:
   condition:
     - "$team-condition{team=true;min=3;max=5;message=§c团本人数 3～5，当前 (<size>)} @system"
-    # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.raid=35；DP 逐队员判定；放在扣票条件前 → 被拒不扣票；OP 豁免）
+    # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.raid=35；DP 逐队员判定；被拒未进本时 CoreRpg 退还本次体力/首免；OP 豁免）
     - "$js-condition{text='%corerpg_gate_raid%'=='yes'||'%player_is_op%'=='yes';message=§c团本需要余烬等级 §eLv.35§c · 队伍中有人等级不足 · 打开枢纽 → 角色查看等级} @system"
-    # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
+    # 维护备忘：体力/首免已在 corerpg enter 扣除（未进本自动退还）；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§9团本大厅已集结。§7左道卫兵 · 右道射手 · 汇合后终厅使徒。} @dungeon"
     - "$message{type=text;text=§8已消耗体力 ×1} @dungeon"
@@ -27,7 +27,7 @@ dungeon-area: []
 
 # 通关箱（每次 COMPLETE · 全队）
 # 材料保底；孔石锋利×1（二选一取锐）；不发灾厄余烬（灾厄主产）
-# 团戒：周首通保底。团票每周 1 张 ⇒ 同周再通需额外票；
+# 团戒：周首通保底（每人每周 1 枚）。进本首免按发起者每周 1 次，用完后同周再通扣发起者体力；团戒不重复发；
 #   周首通去重：corerpg raid grant-ring（raidRingWeek=DailyService.weekId）
 # T2/T3：不保底；终厅 Boss MM 概率（15/12 · 8/6）
 # 2026-09-26 修：DP $command 不认 <player.name>（控制台实测 "NeigeItems > 玩家 <player.name> 不在线"，
