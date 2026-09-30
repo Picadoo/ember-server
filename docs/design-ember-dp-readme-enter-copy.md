@@ -1,6 +1,6 @@
 # B2.65 · DungeonPlus README L4 进本入口维护备忘
 
-- **STATUS：待批 A**（总控 · 2026-09-30 20:16 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-09-30 20:17 Asia/Shanghai）**
 - **范围：**仅 `plugins/DungeonPlus/README-ember-dungeons.md` L4；批前不改目标 README，不改地牢 YAML。
 - **tip 路径：**`docs/design-ember-dp-readme-enter-copy.md`
 - **施工岗：**批后施工交 **插件岗（DungeonPlus 文档）**。
