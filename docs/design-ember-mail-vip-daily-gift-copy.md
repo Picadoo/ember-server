@@ -1,6 +1,6 @@
 # B2.74 · CoreRpg mail `vip_daily_gift` 日礼文案维护备忘薄窗
 
-- **STATUS：待批 A。**
+- **STATUS：已批 A（总控 · 2026-09-30 21:00 Asia/Shanghai）** · 设计 `d0c7f27`
 - **范围：**仅 `plugins/CoreRpg/mail.yml` 模板 `vip_daily_gift` 的 **body**；未批前不改目标 mail.yml，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-mail-vip-daily-gift-copy.md`
 - **施工岗：**批后交 **插件岗（CoreRpg mail）**。
