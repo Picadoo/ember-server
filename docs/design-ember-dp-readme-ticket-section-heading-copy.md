@@ -1,6 +1,6 @@
 # B2.71 · DP README 次数段标题维护备忘薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 20:45 Asia/Shanghai）** · 设计 `aadfe77`
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:48 Asia/Shanghai）** · 测 `62abf4b` · 施工 `a888348` · 批准 `1227e0c` · 设计 `aadfe77`
 - **范围：**仅 `plugins/DungeonPlus/README-ember-dungeons.md` 约 L29 的段标题一行；未批准前不改目标 README，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-dp-readme-ticket-section-heading-copy.md`
 - **施工岗：**批后施工交 **插件岗（DungeonPlus 文档）**。
