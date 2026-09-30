@@ -1,6 +1,6 @@
 # B2.112 · DP `EmberEliteWeekly/task/timeout.yml` L6 超时失败提示「体力已扣，下周再来」→ 不记通关、本周可再来
 
-- **STATUS：已批 A（总控 · 2026-10-01 03:34 Asia/Shanghai）· 交插件岗** · 设计 tip `e47a7ed`；L6 按荐案逐字施工。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 03:41 Asia/Shanghai）** · 设计 `e47a7ed` · 批准 `ed3e16e` · 插件 `684ede2` · 测 `4adadc4` · close 本提交；报告 `docs/TEST-B2.112-dp-elite-timeout-text.md`；reload 实测待恢复服后补。
 - **tip 路径：**`docs/design-ember-dp-elite-timeout-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberEliteWeekly/task/timeout.yml` L6 一行 `text=` 值（玩家可见）。L7 `$end`、`auto-start`、时长 720 全部零改；numstat `1 1`。
 - **来由：**测岗报：L6 与 B2.101 新 L20「没过可以再来」和代码都矛盾。总控 03:31 排为 B2.112。
