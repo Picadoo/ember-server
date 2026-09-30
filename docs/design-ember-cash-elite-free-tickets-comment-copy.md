@@ -1,6 +1,6 @@
 # B2.93 · cash `elite.free_tickets` 行内旁注 → 遗留票物/体力口径维护备忘
 
-- **STATUS：tip · pending A（策划 · 2026-10-01 02:00 Asia/Shanghai）** · 待总控批 A
+- **STATUS：已批 A（总控 · 2026-10-01 01:59 Asia/Shanghai）· 交插件岗** · 设计 tip `b53fa71`；按荐案逐字施工，src 模板不同步。
 - **tip 路径：**`docs/design-ember-cash-elite-free-tickets-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/cash.yml` L94 的 `elite.free_tickets` 行内注释（当前无旁注）；未批准前不改玩法 YAML。
 - **前序对齐：**B2.90 weekly（L83）、B2.91 abyss（L89）已 PASS · 勾销；B2.85 raid（L86）已 PASS；B2.92 已 PASS · 勾销（close `39e61d7`）。本窗是 HANDOFF-ember-grokbot §6 候选 2，只补 elite 这一行。
