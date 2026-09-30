@@ -1,6 +1,6 @@
 # B2.97 · DP `EmberEliteWeekly/option.yml` 历史「扣票 / B0.1 / 有票」注释 → 体力口径维护备忘
 
-- **STATUS：tip · pending A（策划 · 2026-10-01 02:29 Asia/Shanghai）** · 待总控批 A
+- **STATUS：已批 A（总控 · 2026-10-01 02:30 Asia/Shanghai）· 交插件岗** · 设计 tip `aeb2bc1`；按荐案逐字施工（仅 L3/L4/L16/L18 注释）；`text=`（含 L20）零改；精英壳勿硬开。
 - **tip 路径：**`docs/design-ember-dp-elite-option-ticket-comment-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberEliteWeekly/option.yml` 的 4 行注释：L3、L4、L16、L18。键值、脚本、`text=`（含 L20「本周只有一次」）全部零改。DP option 注释系列最后一份。
 - **前序对齐：**B2.94 Weekly、B2.95 Abyss、B2.96 Raid（close `2dc9b39`）同构注释已 PASS · 勾销，本窗句式一致。
