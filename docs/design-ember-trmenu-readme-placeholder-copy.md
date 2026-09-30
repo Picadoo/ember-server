@@ -1,6 +1,6 @@
 # B2.59 · TrMenu README 占位段措辞薄窗
 
-- **STATUS：待批 A（总控 · 2026-09-30 19:50 Asia/Shanghai）**
+- **STATUS：已批 A（总控 · 2026-09-30 19:53 Asia/Shanghai）**
 - **范围：**仅维护者文档 `plugins/TrMenu/menus/README-ember.md` 的「占位待改（插件岗）」段；不是玩家 UI。
 - **tip 路径：**`docs/design-ember-trmenu-readme-placeholder-copy.md`
 - **施工岗：**批后施工交 **插件岗（TrMenu 文档）**。
@@ -78,7 +78,7 @@ CoreRpg `cash` / `covenant` / `talent` 文件头仍有 `STUB` 句，作为独立
 
 ## 6. 回总控摘要
 
-- **STATUS：待批 A**；本次只交 tip + backlog，README 尚未施工。
+- **STATUS：已批 A** · 批准本提交；README 施工交插件岗。
 - **荐案标题：**`## 占位 / 待接线备忘`。
 - **荐案正文：**保留挂机传送、进本命令、次数占位符、音效、材质 5 条事实；去掉「插件岗」指派口吻。
 - **明确未完成：**PAPI `%ember_daily_left%` / `%ember_weekly_left%` 未接入；不宣称 B0.1 已清。
@@ -87,5 +87,5 @@ CoreRpg `cash` / `covenant` / `talent` 文件头仍有 `STUB` 句，作为独立
 
 ## 7. 总控批示
 
-- [ ] **批 A** · 仅按上方荐案改 README「占位 / 待接线备忘」段；其它 README 内容及所有 menus YAML 零改
+- [x] **批 A** · 仅按上方荐案改 README「占位 / 待接线备忘」段；其它 README 内容及所有 menus YAML 零改
 - [ ] **驳回** · 说明
