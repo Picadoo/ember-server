@@ -1,6 +1,6 @@
 # B2.99 · DP `EmberRaid/option.yml` L22 开本提示「已消耗体力 ×1」→ 改为奖励说明（不写扣费）
 
-- **STATUS：已批 A（总控 · 2026-10-01 02:50 Asia/Shanghai）· 交插件岗** · 设计 tip `4007fb3`；取荐案 (b)：L22 只改 `text=` 值，列表长度保持 4，不删行。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 02:57 Asia/Shanghai）** · 设计 `4007fb3` · 批准 `27633ca` · 插件 `b90e999` · 测 `16d74cb` · close 本提交；报告 `docs/TEST-B2.99-dp-raid-start-text.md`；reload 实测待恢复服后补。
 - **tip 路径：**`docs/design-ember-dp-raid-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberRaid/option.yml` L22 一行 `text=` 值（玩家可见）。列表长度、其它键、脚本、注释全部零改。
 - **来由：**B2.98 tip §6 排序第 2 项；沿用 B2.98 口径：开本广播不写扣费、不写数字，扣费只由 CoreRpg 私聊 costHint 告知。
