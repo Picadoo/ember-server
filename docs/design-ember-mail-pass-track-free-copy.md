@@ -1,6 +1,6 @@
 # B2.75 · CoreRpg mail `pass_track_free` 领取文案薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 21:05 Asia/Shanghai）** · 设计 tip `41e0140` · 交**插件岗（CoreRpg mail）**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 21:08 Asia/Shanghai）** · 设计 `41e0140` · 批准 `773f46d` · 插件 `07e427d` · 测 `63019e7`
 - **范围：**仅 `plugins/CoreRpg/mail.yml` 模板 `pass_track_free` 的 **body**；未批准前不改目标 mail.yml，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-mail-pass-track-free-copy.md`
 - **施工岗：**批后交 **插件岗（CoreRpg mail）**。
