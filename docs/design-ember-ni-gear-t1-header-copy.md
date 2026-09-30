@@ -1,6 +1,6 @@
 # B2.57 · NI gear-t1 文件头功能摘要
 
-- **STATUS：待批 A（总控 · 2026-09-30 19:42 Asia/Shanghai）**
+- **STATUS：已批 A（总控 · 2026-09-30 19:44 Asia/Shanghai）**
 - **范围：**仅 `plugins/NeigeItems/Items/ember-gear-t1.yml` 文件头 L1–L2 注释；本稿只交 tip，不施工玩法 YAML。
 - **施工岗：**批后交 **物品岗（NI）**，**非插件 TrMenu**。
 - **本窗纪律：**文档可 commit；**勿改玩法 YAML；勿 git push**。
@@ -14,7 +14,7 @@
 | 稿件 | NI gear-t1 文件头 L1–L2 去管理口吻，改功能摘要（UX · B2.57） |
 | 负责人 / 日期 | 余烬-策划执行 / 2026-09-30 19:42 Asia/Shanghai |
 | 关联 | live `plugins/NeigeItems/Items/ember-gear-t1.yml` · B2.56 close `edef7b8` |
-| 状态 | **待批 A** · 批后交**物品岗（NI）**，非插件 TrMenu |
+| 状态 | **已批 A** · 交**物品岗（NI）**，非插件 TrMenu |
 | tip 路径 | `docs/design-ember-ni-gear-t1-header-copy.md` |
 | 上游 | B2.56 bestiary 阶段奖 tell **PASS · 勾销**（close `edef7b8`） |
 
@@ -87,7 +87,7 @@ git diff -- plugins/NeigeItems/Items/ember-gear-t1.yml
 
 ## 7. 回总控摘要
 
-- **STATUS：待批 A** · tip `docs/design-ember-ni-gear-t1-header-copy.md`
+- **STATUS：已批 A** · tip `docs/design-ember-ni-gear-t1-header-copy.md` · 批准本提交
 - **荐案：**
   - L1 → `# T1 精炼装备与团本饰品：精炼刃、护符等功能摘要`
   - L2 → `# 来源：日本高难、周本、团本`
@@ -97,5 +97,5 @@ git diff -- plugins/NeigeItems/Items/ember-gear-t1.yml
 
 ## 8. 总控批示
 
-- [ ] **批 A** · 仅 `ember-gear-t1.yml` L1–L2 按上表荐案改功能摘要；正文、lore、数值及其它 NI 零改
+- [x] **批 A** · 仅 `ember-gear-t1.yml` L1–L2 按上表荐案改功能摘要；正文、lore、数值及其它 NI 零改
 - [ ] **驳回** · 说明
