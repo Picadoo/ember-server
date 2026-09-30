@@ -17,7 +17,7 @@ templates:
 
   vip_daily_gift:
     title: "勋阶·日礼"
-    body: "轻量 QoL 日礼（勋阶正式累进前）。"
+    body: "轻量 QoL 日礼仍在维护；勋阶累进口径未定稿。"
     attachments:
       coin: 120
       mat_ember_shard: 1
