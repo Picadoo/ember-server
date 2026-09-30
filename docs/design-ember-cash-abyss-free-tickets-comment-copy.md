@@ -1,6 +1,6 @@
 # B2.91 · cash `abyss.free_tickets` 行内旁注 → 遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-10-01 01:47 Asia/Shanghai）· 交插件岗** · 批后仅插件岗改 `plugins/CoreRpg/cash.yml` L89 行内注释，不改玩法 YAML。设计 tip `759c7d7`。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 01:50 Asia/Shanghai）** · 设计 `759c7d7` · 批准 `fde150f` · 插件 `93724a4` · 测 `96baff6`
 - **tip 路径：**`docs/design-ember-cash-abyss-free-tickets-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/cash.yml` L89 的 `abyss.free_tickets` 行内注释（当前无旁注）；未批准前不改玩法 YAML。
 - **前序对齐：**B2.90 已 PASS · 勾销（设计 `838cb7d` · 批准 `74509b6` · 插件 `57cd7de` · 测 `fb06ed1` · close `12db71d`）；B2.85 raid `free_tickets` 已 PASS；本窗只补 abyss 旁注。
