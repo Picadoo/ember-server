@@ -1,6 +1,6 @@
 # B2.87 · progress 等级门槛旁注 → 遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 22:14 Asia/Shanghai）· 交插件岗** · 批后仅插件岗改 `plugins/CoreRpg/progress.yml` 约 L137 注释，不改玩法 YAML。
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 22:19 Asia/Shanghai）** · 设计 `e4900d6` · 批准 `5881af9` · 插件 `5b41046` · 测 `89bbd57`/`b9c8f9e`
 - **范围：**仅 `plugins/CoreRpg/progress.yml` 约 L137 的等级门槛旁注单行。
 - **tip 路径：**`docs/design-ember-progress-gate-ticket-comment-copy.md`
 - **施工岗：**批后交 **插件岗（CoreRpg progress 注释）**。
