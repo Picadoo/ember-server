@@ -1,6 +1,6 @@
 # B2.92 · CoreRpg `config.yml` `mysql.password` 复位为 `"CHANGE_ME"`
 
-- **STATUS：已批 A · 采备选 B（总控 · 2026-10-01 01:58 Asia/Shanghai）· 交插件岗** · 设计 tip `ebc41ce`。见文末「总控批注」。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 01:58 Asia/Shanghai）** · 采备选 B（5 文件）· 设计 `ebc41ce` · 批准 `d20dd57` · 插件 `1cd6d0f` · 测 `011594b` · close 本提交。批准实际时间 01:51:55（批注误写 01:58，以 commit 时间为准）。
 - **tip 路径：**`docs/design-ember-corerpg-config-mysql-password-reset.md`
 - **目标范围：**仅 `plugins/CoreRpg/config.yml` L76 `mysql.password` 的值；其它键零改。
 - **起因：**自 `2e5649f`（Ember sync 2026-09-27）起，该行在仓库里是真实样式密码，违反 `HANDOFF.md` §8 硬规则（仓库内保持 `password: "CHANGE_ME"`）。本稿及 backlog **不写旧值原文**。
