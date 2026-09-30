@@ -1,6 +1,6 @@
 # B2.99 · DP `EmberRaid/option.yml` L22 开本提示「已消耗体力 ×1」→ 改为奖励说明（不写扣费）
 
-- **STATUS：tip · pending A（策划 · 2026-10-01 02:47 Asia/Shanghai）** · 待总控批 A
+- **STATUS：已批 A（总控 · 2026-10-01 02:50 Asia/Shanghai）· 交插件岗** · 设计 tip `4007fb3`；取荐案 (b)：L22 只改 `text=` 值，列表长度保持 4，不删行。
 - **tip 路径：**`docs/design-ember-dp-raid-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberRaid/option.yml` L22 一行 `text=` 值（玩家可见）。列表长度、其它键、脚本、注释全部零改。
 - **来由：**B2.98 tip §6 排序第 2 项；沿用 B2.98 口径：开本广播不写扣费、不写数字，扣费只由 CoreRpg 私聊 costHint 告知。
@@ -60,3 +60,8 @@ L22 精确替换为（行首 4 个空格，引号与 `@dungeon` 保持原样）�
 ## 6. 后续（按 B2.98 §6，已批）
 
 B2.100 Abyss L22 → B2.101 Elite L20 → B2.102 hub L249 → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.108 CoreRpgExpansion → B2.109 mineflayer（B2.107 src 模板挂起）。
+
+
+## 总控批注（2026-10-01 02:50 Asia/Shanghai）
+- 批 (b)。新文案两段均有现行出处（`ember_raid_rewards.yml:46`「通关箱 · 全队每人结算」；`EmberRaid/option.yml:30/44`「周首通保底」团戒），不引入新口径。
+- 验收全部静态；reload 实测记「待恢复服后实测」，不挡 PASS。
