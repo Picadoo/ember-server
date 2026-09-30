@@ -1,6 +1,6 @@
 # B2.94 · DP `EmberWeekly/option.yml` 历史「扣票 / B0.1」注释 → 体力口径维护备忘
 
-- **STATUS：tip · pending A（策划 · 2026-10-01 02:10 Asia/Shanghai）** · 待总控批 A
+- **STATUS：已批 A（总控 · 2026-10-01 02:06 Asia/Shanghai）· 交插件岗** · 设计 tip `9d20149`；按 §2 荐案逐字施工（仅 L4/L5/L16/L18 注释）。开本提示 `text=`「已消耗体力 ×1」三处不符记为后续窗（三份 option 注释做完后单开）。
 - **tip 路径：**`docs/design-ember-dp-weekly-option-ticket-comment-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberWeekly/option.yml` 的 4 行注释：L4、L5、L16、L18。键值、脚本、`text=` 全部零改。
 - **前序对齐：**B2.90/B2.91/B2.93 cash `free_tickets` 旁注已 PASS · 勾销（口径「维护备忘：遗留票物/体力口径…」）。本窗是 HANDOFF-ember-grokbot §6 候选 3 的第一个文件。
