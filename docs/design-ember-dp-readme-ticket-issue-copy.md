@@ -1,6 +1,6 @@
 # B2.66 · DungeonPlus README 次数段发放维护备忘
 
-- **STATUS：待批 A · 2026-09-30 20:20 Asia/Shanghai** · 总控交稿
+- **STATUS：已批 A（总控 · 2026-09-30 20:22 Asia/Shanghai）** · 设计 `9499ef8`
 - **范围：**仅 `plugins/DungeonPlus/README-ember-dungeons.md` 次数段末「发放」句；批前不改目标 README，不改地牢 YAML。
 - **tip 路径：**`docs/design-ember-dp-readme-ticket-issue-copy.md`
 - **施工岗：**批后施工交 **插件岗（DungeonPlus 文档）**。
