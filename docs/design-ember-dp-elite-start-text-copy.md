@@ -1,6 +1,6 @@
 # B2.101 · DP `EmberEliteWeekly/option.yml` L20 开本提示「本周只有一次」→ 每人每周限通关一次
 
-- **STATUS：待批 A**（策划 · 2026-10-01 03:09 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-10-01 03:11 Asia/Shanghai）· 交插件岗** · 设计 tip `86d83c1`；L20 按荐案逐字施工，列表长度 3 不变。
 - **tip 路径：**`docs/design-ember-dp-elite-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberEliteWeekly/option.yml` L20 一行 `text=` 值（玩家可见）。列表长度（3 项）、其它键、脚本、注释全部零改。
 - **来由：**B2.98 tip §6 排序；「本周只有一次」暗示每周只能进一次，与现行规则不符。B2.102（`ember_hub.yml` L249）沿用本窗句式。
@@ -78,3 +78,9 @@ L20 精确替换为（行首 4 个空格，引号与 `@dungeon` 保持原样）�
 `ember_hub.yml` L250 lore「§8需余烬 Lv.40 · 消耗 §e40 §8体力（本周首次免费）」写死了 40，不跟随 cash.yml；OP 免扣时也不准。它和 B2.102 同一个文件，是否并入 B2.102 由总控定：并入则 B2.102 改两行；否则单列新号。
 
 排序（按总控更新）：B2.102 hub L249 → B2.110 ember_raid.yml L76-77 → B2.111 ember_abyss.yml L77 → B2.103 → B2.104 → B2.105 → B2.106 → B2.108 → B2.109（B2.107 挂起）。
+
+
+## 总控批注（2026-10-01 03:11 Asia/Shanghai）
+- 批荐案。「每人每周限通关一次，没过可以再来」与 EliteService / ProgressService 现行口径一致，不写扣费与数字。
+- `ember_hub.yml` L250 硬编码「消耗 §e40 §8体力（本周首次免费）」：**并入 B2.102**（同文件、相邻 lore，一窗两行），B2.102 验收须覆盖 L249+L250。
+- 验收全部静态；reload 实测记「待恢复服后实测」，不挡 PASS。
