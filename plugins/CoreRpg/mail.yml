@@ -23,7 +23,7 @@ templates:
       mat_ember_shard: 1
   pass_track_free:
     title: "战令·免费轨补给"
-    body: "赛季免费轨轻量补给（菜单一键领取）。重复点击会再发一封，请及时 claim。"
+    body: "赛季免费轨轻量补给（菜单一键领取）。重复点击会再发一封，请及时领取。"
     attachments:
       coin: 80
       mat_ember_shard: 2
