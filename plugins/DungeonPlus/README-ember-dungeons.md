@@ -1,7 +1,7 @@
 # 余烬日/周本 — 路径清单
 
 设计：`/workspace/minecraft/DESIGN-dungeon-daily-weekly.md`  
-玩家进本（B0.1）：`/corerpg enter daily|weekly|abyss|raid|elite`（TrMenu 按钮）· NI id 扣票  
+维护备忘：玩家入口=TrMenu 点击进本（日/周/深渊/团本/精英）· 体力扣次；进本门控仍挂
 管理/测本：`dp start-console <玩家> <DungeonId>` · 灾厄测本 `/dp start EmberCalamity`（须标仅测试）· 盟 Boss：`/corerpg guild boss`
 
 ## 地牢配置
