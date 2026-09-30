@@ -1,6 +1,6 @@
 # B2.61 · CoreRpg schema 分区注释维护备忘薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 20:01 Asia/Shanghai）**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:04 Asia/Shanghai）** · 测 `0098df7` · 施工 `8421383` · 批准 `6c5fd45` · 设计 `72ad8a7`
 - **范围：**仅 `plugins/CoreRpg/players/_schema-example.yml` L16、L27 两行分区注释；字段、键、数值及其它文件零改。
 - **tip 路径：**`docs/design-ember-corerpg-schema-header-copy.md`
 - **施工岗：**批后施工交 **插件岗（CoreRpg 文档注释）**。
