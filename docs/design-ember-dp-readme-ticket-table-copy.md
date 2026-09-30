@@ -1,6 +1,6 @@
 # B2.67 · DungeonPlus README 票表规则列维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 20:26 Asia/Shanghai）** · 设计 `f4d646e`
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:29 Asia/Shanghai）** · 测 `1f2770f` · 施工 `32ce94f` · 批准 `7195926` · 设计 `f4d646e`
 - **范围：**仅 `plugins/DungeonPlus/README-ember-dungeons.md` 次数表三行「规则」列（当前约 L35–L37）；批前不改目标 README，不改地牢 YAML。
 - **目标：**去掉「日发 3 / 周发 1 / 日发 1」的体力时代旧债口吻，改成维护备忘：遗留票物仍是 DP 入场条件，现行玩家次数以体力为准。
 - **本窗纪律：**不捆 DEBT 段全文，不改 L4、次数段发放句、mail、地牢 YAML；不写「票已废」或「B0.1 已清」；禁长测/挑刺；精英壳勿硬开；勿 git push。
