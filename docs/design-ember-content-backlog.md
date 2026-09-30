@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 02:59 Asia/Shanghai (策划 · B2.100 DP EmberAbyss L22 开本提示 tip 待批 A · 测岗新候选 ember_raid.yml:76-77 排为 B2.110)
+## Progress snapshot — 2026-10-01 03:00 Asia/Shanghai (总控 · B2.100 DP EmberAbyss L22 开本提示 已批 A · 交插件岗 · B2.110 排位照准)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.100 待批 A**（tip `docs/design-ember-dp-abyss-start-text-copy.md`；DP `EmberAbyss/option.yml` L22 只删「已消耗体力 ×1 —— 」→「§5深渊已开启。§7能走多深，就走多深。本期可下潜至第 §f12 §7层。」，列表 5 项不变；「12」与 floor12 顶层 COMPLETE 一致；验收 rg 用收窄口径 `已消耗体力|体力 ×|体力 -|扣票|深渊票`；余项顺序：B2.101 Elite L20 → B2.102 hub L249 → **B2.110 TrMenu ember_raid.yml L76-77 click tell** → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排) → B2.108 CoreRpgExpansion → B2.109 mineflayer；level_gates 缺键只记不排）。~~B2.99~~ → DP EmberRaid L22 开本提示改奖励说明 PASS · 勾销（设计 `4007fb3` · 批准 `27633ca` · 插件 `b90e999` · 测 `16d74cb` · close 本提交；取 (b) 只改文案、列表长度 4）。新候选已排为 **B2.110**（测岗，玩家可见，插在 B2.102 后、B2.103 前）：`TrMenu/menus/ember_raid.yml:76-77` 点菜单恒报「消耗 §e50 §8体力」，与首免/等级不符时的私聊冲突。B2.109 追加：`raid-combat-smoke.js:153-155,170`（认「团本已点燃」/「已扣除余烬团本票」）、`abyss-followup.js:58`、`abyss-calamity-supplement.js:111`、`dungeon-balance.js:21` ticket 字段、`killany-live-retest.js:122` 死分支、`gates-smoke.js:26-30`、`stamina-s0-smoke.js:120`；七个日本「已消耗体力」只记不排。NI 票物保留（ticket_convert 需要）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
+- **B2.100 已批 A**（设计 `0ef491e` · 批准本提交 · 交插件岗；tip `docs/design-ember-dp-abyss-start-text-copy.md`；DP `EmberAbyss/option.yml` L22 只删「已消耗体力 ×1 —— 」→「§5深渊已开启。§7能走多深，就走多深。本期可下潜至第 §f12 §7层。」，列表 5 项不变；「12」与 floor12 顶层 COMPLETE 一致；验收 rg 用收窄口径 `已消耗体力|体力 ×|体力 -|扣票|深渊票`；余项顺序：B2.101 Elite L20 → B2.102 hub L249 → **B2.110 TrMenu ember_raid.yml L76-77 click tell** → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排) → B2.108 CoreRpgExpansion → B2.109 mineflayer；level_gates 缺键只记不排）。~~B2.99~~ → DP EmberRaid L22 开本提示改奖励说明 PASS · 勾销（设计 `4007fb3` · 批准 `27633ca` · 插件 `b90e999` · 测 `16d74cb` · close 本提交；取 (b) 只改文案、列表长度 4）。新候选已排为 **B2.110**（测岗，玩家可见，插在 B2.102 后、B2.103 前）：`TrMenu/menus/ember_raid.yml:76-77` 点菜单恒报「消耗 §e50 §8体力」，与首免/等级不符时的私聊冲突。B2.109 追加：`raid-combat-smoke.js:153-155,170`（认「团本已点燃」/「已扣除余烬团本票」）、`abyss-followup.js:58`、`abyss-calamity-supplement.js:111`、`dungeon-balance.js:21` ticket 字段、`killany-live-retest.js:122` 死分支、`gates-smoke.js:26-30`、`stamina-s0-smoke.js:120`；七个日本「已消耗体力」只记不排。NI 票物保留（ticket_convert 需要）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -347,7 +347,7 @@
 - ~~**B2.97**~~ → DP EmberEliteWeekly option.yml 注释 **PASS · 勾销**（测 `8e12ca3` · close 本提交）；DP option 注释四份清零。
 - ~~**B2.98**~~ → DP EmberWeekly L20 开本提示（**PASS · 勾销** · 插件 `94d8759` · 测 `b4cec8c`）。
 - ~~**B2.99**~~ → DP EmberRaid L22 开本提示（**PASS · 勾销** · 插件 `b90e999` · 测 `16d74cb`）。
-- **B2.100** → DP EmberAbyss L22 开本提示（tip 待批 A）。
+- **B2.100** → DP EmberAbyss L22 开本提示（**已批 A** · 设计 `0ef491e`；交插件岗）。
 - **B2.110** → TrMenu ember_raid.yml L76-77 进本 click tell 去扣费/去「已点燃」（排在 B2.102 后、B2.103 前；待出稿）。
 
 ---
@@ -551,7 +551,7 @@
 | ~~**B2.97**~~ | DP EmberEliteWeekly option.yml | 扣票/B0.1/有票注释→体力口径维护备忘 | **PASS · 勾销**（测 `8e12ca3`） |
 | **B2.98** | DP EmberWeekly option.yml L20 | 开本「已消耗体力 ×1」→ 去扣费字样 | **PASS · 勾销**（设计 `58103e9` · 批准 `baccdf4` · 插件 `94d8759` · 测 `b4cec8c`） |
 | **B2.99** | DP EmberRaid option.yml L22 | 仅扣费提示一行 → 去扣费字样（删行须证不依赖行序） | **PASS · 勾销**（设计 `4007fb3` · 批准 `27633ca` · 插件 `b90e999` · 测 `16d74cb` · 取 (b)） |
-| **B2.100** | DP EmberAbyss option.yml L22 | 开本「已消耗体力 ×1」→ 去扣费字样，保留下潜提示 | 待批 A（tip `docs/design-ember-dp-abyss-start-text-copy.md`；只改文案、列表 5 项；12=floor12 顶层） |
+| **B2.100** | DP EmberAbyss option.yml L22 | 开本「已消耗体力 ×1」→ 去扣费字样，保留下潜提示 | **已批 A**（设计 `0ef491e` · 批准本提交） |
 | **B2.110** | TrMenu ember_raid.yml L76-77 | 进本按钮 click tell 恒报「消耗 50 体力」「团本已点燃」，与首免/OP/等级被拒私聊冲突 → 改「尝试进入」、不写扣费 | 待出稿（排 B2.102 后、B2.103 前） |
 
 ---

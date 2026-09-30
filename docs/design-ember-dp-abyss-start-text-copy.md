@@ -1,6 +1,6 @@
 # B2.100 · DP `EmberAbyss/option.yml` L22 开本提示去掉「已消耗体力 ×1」
 
-- **STATUS：待批 A**（策划 · 2026-10-01 02:59 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-10-01 03:00 Asia/Shanghai）· 交插件岗** · 设计 tip `0ef491e`；L22 只删「已消耗体力 ×1 —— 」，其余逐字保留，列表长度 5 不变；B2.110 排位照准。
 - **tip 路径：**`docs/design-ember-dp-abyss-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberAbyss/option.yml` L22 一行 `text=` 值（玩家可见）。列表长度（5 项）、其它键、脚本、注释全部零改。
 - **来由：**B2.98 tip §6 排序第 1 项（B2.99 §6 顺延）；沿用 B2.98/B2.99 口径：开本广播不写扣费，扣费只由 CoreRpg 私聊 costHint 告知。
@@ -68,3 +68,9 @@ L22 精确替换为（行首 4 个空格，引号与 `@dungeon` 保持原样）�
 - 位置：插在 B2.102（`ember_hub.yml` L249，同属 TrMenu 菜单文案）之后、B2.103（代码）之前。它玩家可见且会给出错误信息，优先级高于后面的注释和代码窗。仍然每窗一个文件。
 
 排序：B2.101 Elite L20 → B2.102 hub L249 → **B2.110 ember_raid.yml L76-77** → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.108 CoreRpgExpansion → B2.109 mineflayer（B2.107 src 模板挂起）。
+
+
+## 总控批注（2026-10-01 03:00 Asia/Shanghai）
+- 批荐案。「12」为下潜层数上限（monster.yml floor12 / WEEKLY12_MIN_FLOOR），非费用，保留。
+- 验收全部静态，rg 用收窄口径；reload 实测记「待恢复服后实测」，不挡 PASS。
+- B2.110（`ember_raid.yml:76-77`）排在 B2.102 后、B2.103 前，照准。
