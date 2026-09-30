@@ -17,7 +17,7 @@ dungeon-start:
     - "$js-condition{text='%corerpg_gate_elite%'=='yes'||'%player_is_op%'=='yes';message=§c精英试炼需要余烬 Lv.40，且本周尚未通关} @system"
     # 维护备忘：体力/首免已在 corerpg enter 扣除（未进本自动退还）；此处仅保留人数/等级门
   action-script:
-    - "$message{type=text;text=§e精英试炼开启。§7本周只有一次——词缀会咬人。} @dungeon"
+    - "$message{type=text;text=§e精英试炼开启。§7每人每周限通关一次，没过可以再来——词缀会咬人。} @dungeon"
     - "$teleport{location=-35,70,270;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
