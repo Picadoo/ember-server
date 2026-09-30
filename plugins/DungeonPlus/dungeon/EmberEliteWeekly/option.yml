@@ -1,7 +1,7 @@
 # 余烬·精英试炼 — docs/design-stage4-elite-weekly.md §1～§5
 # 启动：菜单 corerpg elite start → dp start EmberEliteWeekly（玩家不可见 /dp start）
-# 次数：扣 NI id ticket_ember_elite ×1（显示名「余烬精英票」；周一发 1 · 持有上限 1）
-# B0.1: 扣票改由 CoreRpg TicketEntryService（NI id）；本文件不再 <item:显示名> 扣次
+# 次数：维护备忘：遗留票物/体力口径；现行进本扣发起者体力（本周首次免费，之后按 cash.yml stamina.costs.elite，现行 40）；每人每周通关 1 次
+# 维护备忘：扣次由 CoreRpg TicketEntryService/StaminaService 在 corerpg enter 时处理，本文件不扣次；遗留 NI 票物 ticket_ember_elite 按 stamina.ticket_convert 折体力
 # P3 2026-09-27: 独立 map ember_elite 试炼短廊（石英/金砖中轴）
 
 dungeon-init-script:
@@ -13,9 +13,9 @@ dungeon-init-script:
 dungeon-start:
   condition:
     - "$team-condition{team=true;min=1;max=2;message=§c精英试炼人数 1～2，当前 (<size>)} @system"
-    # 等级 + 本周未通关 + 有票（%corerpg_gate_elite%）；OP 豁免；放在扣票前 → 被拒不扣票
+    # 等级 + 本周未通关（%corerpg_gate_elite%，不查票/首免）；OP 豁免；发起者在 CoreRpg 先判同两项，不符不扣；队员被拒未进本时 CoreRpg 退还本次体力/首免
     - "$js-condition{text='%corerpg_gate_elite%'=='yes'||'%player_is_op%'=='yes';message=§c精英试炼需要余烬 Lv.40，且本周尚未通关} @system"
-    # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
+    # 维护备忘：体力/首免已在 corerpg enter 扣除（未进本自动退还）；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§e精英试炼开启。§7本周只有一次——词缀会咬人。} @dungeon"
     - "$teleport{location=-35,70,270;defspawn=true} @player"
