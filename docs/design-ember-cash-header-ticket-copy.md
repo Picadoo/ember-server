@@ -1,6 +1,6 @@
 # B2.76 · CoreRpg cash 文件头「日票」→体力口径维护备忘
 
-- **STATUS：待批 A**（总控待批 · 2026-09-30 21:09 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-09-30 21:10 Asia/Shanghai）** · 设计 tip `b39a214` · 交**插件岗（CoreRpg cash 注释）** · 仅改 L1/L3；L2 保持 live 原文
 - **范围：**仅 `plugins/CoreRpg/cash.yml` 文件头约 L1、L3 的注释；未批准前不改目标 cash.yml，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-cash-header-ticket-copy.md`
 - **施工岗：**批后交 **插件岗（CoreRpg cash 注释）**。
