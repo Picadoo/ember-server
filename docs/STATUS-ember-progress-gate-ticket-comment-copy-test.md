@@ -6,7 +6,7 @@
 - **工作区：**`/workspace/minecraft`（`git pull` 已执行，Already up to date）
 - **验收基线：**批准 `5881af9` → 施工 tip `5b41046`
 - **施工 tip SHA：**`5b41046`（全：`5b4104635ee7b5b30c752dbf3b17c6c0de540a8c`）
-- **测报正文 SHA：**本文件首提交后回填；本次按二次回填策略记录最终 tip/HEAD。
+- **测报正文 SHA：**`89bbd57`（全：`89bbd57871af6795276759506093d12383008b1b`）。
 - **设计 tip：**`docs/design-ember-progress-gate-ticket-comment-copy.md`
 - **是否已 push：**否（仅本地 commit，未执行 `git push`）
 - **报告路径：**`docs/STATUS-ember-progress-gate-ticket-comment-copy-test.md`
@@ -53,3 +53,4 @@ rg -n -F -e '票已废' -e 'B0.1 已清' plugins/CoreRpg/progress.yml
 - 不执行 `git push`；仅本地提交测报。
 - 仅 stage 本 STATUS 文件；工作区其它脏文件不纳入。
 
+- **测报 tip/HEAD（回填提交）：**`89bbd57` 后回填为本次最终本地 tip；最终 SHA 见回报。
