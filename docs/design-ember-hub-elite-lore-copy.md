@@ -1,6 +1,6 @@
 # B2.102 · TrMenu `ember_hub.yml` L249-L250 精英试炼 lore：限通关口径 + 体力数字改占位符
 
-- **STATUS：已批 A（总控 · 2026-10-01 03:22 Asia/Shanghai）· 交插件岗** · 设计 tip `4045245`；L249+L250 按荐案逐字施工（L250 用占位符 `%corerpg_stamina_cost_elite%`）。
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 03:31 Asia/Shanghai）** · 设计 `4045245` · 批准 `6c2913a` · 插件 `862d21c` · 测 `0884f55` · close 本提交；报告 `docs/TEST-B2.102-hub-elite-lore.md`；reload 实测待恢复服后补。
 - **tip 路径：**`docs/design-ember-hub-elite-lore-copy.md`
 - **目标范围：**仅 `plugins/TrMenu/menus/ember_hub.yml` L249、L250 两行（精英试炼图标 `Icons.2.display.lore[1]`、`[2]`，玩家可见）。其它行、条件图标、actions 全部零改；numstat `2 2`。
 - **来由：**B2.101 §3 预案（L249 沿用「每人每周限通关」句式）；总控 03:20 定：L250 写死的 40 并入本窗。
