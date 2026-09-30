@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `813af94` · 批准 `31f4653` · tip `docs/design-ember-ni-gear-t1-section-stub-copy.md`  
 **口径：** 纯静态 · 禁开服测 · 禁长测/挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS** · STATUS 待本 commit push
+**Verdict：** ✅ **PASS** · STATUS 已 push (`162cae0`)
 
 ---
 
@@ -110,8 +110,8 @@ git show 813af94 --numstat
 | 总评 | **PASS** |
 | 各点 | 1 PASS · 2 PASS · 3 PASS · 4 PASS |
 | 施工 tip SHA | `813af94` |
-| 测报 tip short SHA | （本 commit，见 push 后） |
-| 是否已 push | （本 commit 后更新） |
+| 测报 tip short SHA | `162cae0` |
+| 是否已 push | 是 (`162cae0`) |
 | 报告路径 | `docs/STATUS-ember-ni-gear-t1-section-stub-copy-test.md` |
 | ops | `[]` |
 | 阻塞点 | 无 |
