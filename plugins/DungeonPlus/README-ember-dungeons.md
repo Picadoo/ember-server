@@ -26,7 +26,7 @@
 | `plugins/DungeonPlus/map/ember_raid/` | EmberRaid 独立图（石英大平台） |
 | `plugins/DungeonPlus/config.yml` | `dungeon-pre-folder` 已注册各 map |
 
-## 次数（入场券）
+## 次数（遗留票物 / 体力）
 
 维护备忘：DP 1.4 无原生「每日 N 次」字段，物品仅用于 DP 入场条件；现行玩家次数以体力为准。
 
