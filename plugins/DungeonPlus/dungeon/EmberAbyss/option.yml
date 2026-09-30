@@ -1,7 +1,7 @@
 # 余烬深渊 — docs/ember-abyss-evacuate-spec.md · DESIGN-ember-abyss-evacuate.md
 # 启动：/dp start EmberAbyss（玩家走菜单按钮，勿在 tell 里强调指令）
-# 次数：扣 NI id ticket_ember_abyss ×1（显示名「余烬深渊票」；日 1 张）
-# B0.1: 扣票改由 CoreRpg TicketEntryService（NI id）；本文件不再 <item:显示名> 扣次
+# 次数：维护备忘：遗留票物/体力口径；现行进本扣体力（深渊无首免，按 cash.yml stamina.costs.abyss，现行 30）
+# 维护备忘：扣次由 CoreRpg TicketEntryService/StaminaService 在 corerpg enter 时处理，本文件不扣次；遗留 NI 票物 ticket_ember_abyss 按 stamina.ticket_convert 折体力
 # 材料/孔石：corerpg abyss settle 按最高层查表；COMPLETE 额外 T2 周首；战斗掉落仍走 MM
 # 2026-09-27 P2 shaft：井顶 spawn (-40,90,274)；层平台见 monster.yml / STATUS-ember-abyss-maps-p2
 # 2026-09-27 stage4.1：COMPLETE 顶层 = floor12（非 floor8）；周首通稳定符在 settle(floor≥12) 内发
@@ -15,9 +15,9 @@ dungeon-init-script:
 dungeon-start:
   condition:
     - "$team-condition{team=true;min=1;max=2;message=§c深渊人数 1～2，当前 (<size>)} @system"
-    # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.abyss=25；DP 逐队员判定；放在扣票条件前 → 被拒不扣票；OP 豁免）
+    # 2026-09-26 等级门槛（CoreRpg progress.yml level_gates.abyss=25；DP 逐队员判定；被拒未进本时 CoreRpg 退还本次体力；OP 豁免）
     - "$js-condition{text='%corerpg_gate_abyss%'=='yes'||'%player_is_op%'=='yes';message=§c深渊需要余烬等级 §eLv.25§c · 队伍中有人等级不足 · 打开枢纽 → 角色查看等级} @system"
-    # B0.1: 票已在 /corerpg enter 按 NI id 扣除；此处仅保留人数/等级门
+    # 维护备忘：体力已在 corerpg enter 扣除；未进本自动退还，进本后撤离按最高层结算、体力不退；此处仅保留人数/等级门
   action-script:
     - "$message{type=text;text=§5深渊已开启。§7已消耗体力 ×1 —— 能走多深，就走多深。本期可下潜至第 §f12 §7层。} @dungeon"
     - "$message{type=text;text=§8需要撤离：打开菜单 → 深渊 → 撤离 · 按最高层结算 · 体力不退} @dungeon"
