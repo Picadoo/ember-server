@@ -1,6 +1,6 @@
-# CoreRpg cash — 晶钻 / 日票限购 / 月卡（DESIGN-ember-cash-monthly.md）
+# CoreRpg cash — 晶钻 / 体力 / 遗留票物 / 月卡（DESIGN-ember-cash-monthly.md）
 # 维护备忘：配置可先落盘；落地后纳入 CoreRpg reload
-# 红线：不直售碎片/晶/核心；日票硬顶是总进本 6（免费+氪+月卡）
+# 红线：不直售碎片/晶/核心；总进本次数硬顶仍为 6（免费+氪+月卡），按体力口径维护
 enabled: true
 
 timezone: Asia/Shanghai
