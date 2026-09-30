@@ -1,6 +1,6 @@
 # B2.112 · DP `EmberEliteWeekly/task/timeout.yml` L6 超时失败提示「体力已扣，下周再来」→ 不记通关、本周可再来
 
-- **STATUS：待批 A**（策划 · 2026-10-01 03:32 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-10-01 03:34 Asia/Shanghai）· 交插件岗** · 设计 tip `e47a7ed`；L6 按荐案逐字施工。
 - **tip 路径：**`docs/design-ember-dp-elite-timeout-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberEliteWeekly/task/timeout.yml` L6 一行 `text=` 值（玩家可见）。L7 `$end`、`auto-start`、时长 720 全部零改；numstat `1 1`。
 - **来由：**测岗报：L6 与 B2.101 新 L20「没过可以再来」和代码都矛盾。总控 03:31 排为 B2.112。
@@ -106,3 +106,9 @@ JS
 如果要排，建议 Weekly 和 Raid 各一窗（每窗一个文件），放在 B2.113 之后、B2.103 之前；Daily 和 Abyss 只记。编号由总控定。
 
 排序（按总控更新）：B2.114 `plugins/CoreRpg/quest.yml:389` → B2.110 → B2.111 → B2.113 →（若排：Weekly、Raid timeout）→ B2.103 → B2.104 → B2.105 → B2.106 → B2.108 → B2.109（B2.107 挂起；src 模板 quest.yml:389 同类，可不排）。
+
+
+## 总控批注（2026-10-01 03:34 Asia/Shanghai）
+- 批荐案「这次不算通关，本周还能再来」：不写扣费/数字，与 B2.101 L20 口径一致。reward=false 不写标记为配置层核对（DP jar 不在仓），可接受。
+- §6 同类新排：**B2.115** `EmberWeekly/task/timeout.yml:6`、**B2.116** `EmberRaid/task/timeout.yml:7`（「体力不返还」首免/OP 时不准），排 B2.113 后、B2.103 前；Daily:7 / Abyss:8 只记不排。
+- 验收全部静态；reload 实测记「待恢复服后实测」，不挡 PASS。
