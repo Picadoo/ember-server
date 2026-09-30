@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 02:19 Asia/Shanghai (总控 · B2.95 PASS · 勾销 · 下一窗 B2.96 交策划)
+## Progress snapshot — 2026-10-01 02:28 Asia/Shanghai (策划 · B2.95 PASS · 勾销 · B2.96 DP EmberRaid option 票注释 待批 A)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.96 待策划出稿**：DP `plugins/DungeonPlus/dungeon/EmberRaid/option.yml` L3/L4/L17/L19 历史「扣票 / B0.1」注释 + L30 通关箱「团票每周 1 张」注释 → 体力口径维护备忘（一文件一窗；之后 B2.97 EmberEliteWeekly；三份注释做完后单开窗修开本提示 `text=`「已消耗体力 ×1」；另记：CoreRpgPlugin 兜底文案「日限 1 次 · 进本扣余烬深渊票」、深渊状态页显示背包票数，待排；勿宣称 B0.1 已清）。~~B2.95~~ → DP EmberAbyss option.yml 注释 PASS · 勾销（设计 `37a01ca` · 批准 `e384dab` · 插件 `50a946c` · 测 `3c82e34` · close 本提交）。~~B2.94~~ → PASS · 勾销；精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
+- **B2.96 待批 A**（tip `docs/design-ember-dp-raid-option-ticket-comment-copy.md`；核对现行：团本扣发起者体力，每周首免 1 次后 50，非 NI 票；同周再通扣体力；团戒每人每周 1 枚按 raidRingWeek 去重；改 L3/L4/L17/L19/L30 五行注释）：DP `plugins/DungeonPlus/dungeon/EmberRaid/option.yml` L3/L4/L17/L19 历史「扣票 / B0.1」注释 + L30 通关箱「团票每周 1 张」注释 → 体力口径维护备忘（一文件一窗；之后 B2.97 EmberEliteWeekly；三份注释做完后单开窗修开本提示 `text=`「已消耗体力 ×1」；另记：CoreRpgPlugin 兜底文案「日限 1 次 · 进本扣余烬深渊票」、深渊状态页显示背包票数，待排；勿宣称 B0.1 已清）。~~B2.95~~ → DP EmberAbyss option.yml 注释 PASS · 勾销（设计 `37a01ca` · 批准 `e384dab` · 插件 `50a946c` · 测 `3c82e34` · close 本提交）。~~B2.94~~ → PASS · 勾销；精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -211,7 +211,7 @@
 - ~~**B2.93 CoreRpg `cash.yml` L94 `elite.free_tickets` 无旁注**~~ → **PASS · 勾销**（设计 `b53fa71` · 批准 `df742c8` · 插件 `6203a87` · 测 `869fd38` · close 本提交；报告 `docs/TEST-B2.93-cash-elite-free-tickets-comment.md`；cash 四个 free_tickets 行内旁注本轨清零）
 - ~~**B2.94 DP `EmberWeekly/option.yml` 历史扣票/B0.1 注释**~~ → **PASS · 勾销**（设计 `9d20149` · 批准 `4c7e7eb` · 插件 `ef7e350` · 测 `b6501af` · close 本提交；报告 `docs/TEST-B2.94-dp-weekly-option-comment.md`）
 - ~~**B2.95 DP `EmberAbyss/option.yml` 历史扣票/B0.1 注释**~~ → **PASS · 勾销**（设计 `37a01ca` · 批准 `e384dab` · 插件 `50a946c` · 测 `3c82e34` · close 本提交；报告 `docs/TEST-B2.95-dp-abyss-option-comment.md`）
-- **B2.96** DP `EmberRaid/option.yml` 历史扣票/B0.1 注释 + L30 团票注释（**待策划出稿**；一文件一窗）
+- **B2.96** DP `EmberRaid/option.yml` 历史扣票/B0.1 注释 + L30 团票注释（**待批 A** · tip `docs/design-ember-dp-raid-option-ticket-comment-copy.md`；仅注释；**勿宣称 B0.1 已清**/票已废；一文件一窗）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -341,7 +341,7 @@
 - ~~**B2.93**~~ → cash.yml L94 `elite.free_tickets` **PASS · 勾销**（测 `869fd38` · close 本提交）。
 - ~~**B2.94**~~ → DP EmberWeekly option.yml 注释 **PASS · 勾销**（测 `b6501af` · close 本提交）。
 - ~~**B2.95**~~ → DP EmberAbyss option.yml 注释 **PASS · 勾销**（测 `3c82e34` · close 本提交）。
-- **B2.96** → DP EmberRaid option.yml 历史注释（待策划出稿）。
+- **B2.96** → DP EmberRaid option.yml 历史注释（**待批 A**）。
 
 ---
 
@@ -540,6 +540,7 @@
 | ~~**B2.93**~~ | cash elite free_tickets | 无旁注→遗留票物/体力备忘 | **PASS · 勾销**（测 `869fd38`） |
 | ~~**B2.94**~~ | DP EmberWeekly option.yml | 扣票/B0.1 注释→体力口径维护备忘 | **PASS · 勾销**（测 `b6501af`） |
 | ~~**B2.95**~~ | DP EmberAbyss option.yml | 扣票/B0.1 注释→体力口径维护备忘 | **PASS · 勾销**（测 `3c82e34`） |
+| **B2.96** | DP EmberRaid option.yml | 扣票/B0.1 + L30 团票注释→体力口径维护备忘 | **待批 A** |
 
 ---
 
