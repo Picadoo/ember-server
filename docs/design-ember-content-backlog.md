@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 01:50 Asia/Shanghai (总控 · B2.91 PASS · 勾销 · 下一窗 B2.92 config.yml mysql.password 复位 CHANGE_ME)
+## Progress snapshot — 2026-10-01 01:55 Asia/Shanghai (策划 · B2.91 PASS · 勾销 · B2.92 CoreRpg config mysql.password 复位 待批 A)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- 文案薄窗：~~B2.91~~ → **PASS · 勾销**（设计 `759c7d7` · 批准 `fde150f` · 插件 `93724a4` · 测 `96baff6` · close 本提交；报告 `docs/STATUS-ember-cash-abyss-free-tickets-comment-copy-test.md`）；下一窗 **B2.92**：`plugins/CoreRpg/config.yml` `mysql.password` 复位 `CHANGE_ME`（插件岗 2026-10-01 发现自 `2e5649f` 起入库真实样式密码；安全优先）。~~B2.90~~ → PASS · 勾销（测 `fb06ed1` · close `12db71d`）；交接见 `docs/HANDOFF-ember-grokbot-2026-09-30.md`；精英壳勿硬开。
+- **B2.92 待批 A**（`plugins/CoreRpg/config.yml` L76 `mysql.password` 真实样式密码→复位 `"CHANGE_ME"`，违反 HANDOFF §8；tip `docs/design-ember-corerpg-config-mysql-password-reset.md`；仅该行；同值另见 4 个受跟踪文件，见 tip §1/§6；线上轮换与 git 历史清理不在本窗）。~~B2.91~~ → PASS · 勾销（close `47f2c77`）；文案薄窗可续；精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -207,6 +207,7 @@
 - ~~**B2.89 TrMenu `ember_shop.yml` 约 L2–3 文件头「原日票/周票」**~~ → **PASS · 勾销**（设计 `21121c0` · 批准 `b6ff3d6` · 插件 `245fe40` · 测 `b04af5b` · close 本提交；报告 `docs/STATUS-ember-shop-header-ticket-alias-copy-test.md`；下一窗升 **B2.90**；**勿宣称 B0.1 已清**）
 - ~~**B2.90 CoreRpg `cash.yml` 约 L83 `weekly.free_tickets` 无旁注**~~ → **PASS · 勾销**（设计 `838cb7d` · 批准 `74509b6` · 插件 `57cd7de` · 测 `fb06ed1` · close 本提交；报告 `docs/STATUS-ember-cash-weekly-free-tickets-comment-copy-test.md`；**不升 B2.91**；交接 `docs/HANDOFF-ember-grokbot-2026-09-30.md`；**勿宣称 B0.1 已清**）
 - ~~**B2.91 CoreRpg `cash.yml` L89 `abyss.free_tickets` 无旁注**~~ → **PASS · 勾销**（设计 `759c7d7` · 批准 `fde150f` · 插件 `93724a4` · 测 `96baff6` · close 本提交；报告 `docs/STATUS-ember-cash-abyss-free-tickets-comment-copy-test.md`；下一窗升 **B2.92** config.yml 密码复位；**勿宣称 B0.1 已清**）
+- **B2.92** CoreRpg `config.yml` L76 `mysql.password` 真实样式密码→`"CHANGE_ME"`（**待批 A** · tip `docs/design-ember-corerpg-config-mysql-password-reset.md`；仅该行；线上轮换/历史清理不在本窗）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -332,6 +333,7 @@
 - ~~**B2.89**~~ → ember_shop.yml 约 L2–3 文件头 **PASS · 勾销**（测 `b04af5b` · close 本提交）。
 - ~~**B2.90**~~ → cash.yml 约 L83 `weekly.free_tickets` **PASS · 勾销**（测 `fb06ed1` · close 本提交；**不升 B2.91**；交接停工）。
 - ~~**B2.91**~~ → cash.yml L89 `abyss.free_tickets` **PASS · 勾销**（测 `96baff6` · close 本提交）。
+- **B2.92** → config.yml L76 `mysql.password` 复位 `"CHANGE_ME"`（**待批 A**）。
 - **B2.92** → config.yml `mysql.password` 复位 `CHANGE_ME`（待策划出稿）。
 
 ---
@@ -527,6 +529,7 @@
 | **B2.89** | ember_shop 文件头 | 原日票/周票→展示名+SKU 别名 | **PASS · 勾销**（测 `b04af5b` · close 本提交） |
 | **B2.90** | cash weekly free_tickets | 无旁注→遗留票物/体力备忘 | **PASS · 勾销**（测 `fb06ed1` · close 本提交；不升 B2.91） |
 | **B2.91** | cash abyss free_tickets | 无旁注→遗留票物/体力备忘 | **PASS · 勾销**（测 `96baff6` · close 本提交） |
+| **B2.92** | CoreRpg config mysql.password | 真实样式密码→`"CHANGE_ME"` | **待批 A** |
 
 ---
 
@@ -593,6 +596,7 @@
 - ~~TrMenu `ember_shop.yml` 约 L2–3 文件头「原日票/周票」~~ → **B2.89 PASS · 勾销**（测 `b04af5b`）；shop 文件头本轨归零
 - ~~CoreRpg `cash.yml` 约 L83 `weekly.free_tickets` 无旁注~~ → **B2.90 PASS · 勾销**（测 `fb06ed1`）；**本号交接停工 · 不升 B2.91**（见 `docs/HANDOFF-ember-grokbot-2026-09-30.md`）
 - CoreRpg `cash.yml` L89 `abyss.free_tickets` 无旁注 → 已升 **B2.91 PASS · 勾销**（测 `96baff6`）（tip `docs/design-ember-cash-abyss-free-tickets-comment-copy.md`）
+- CoreRpg `config.yml` L76 `mysql.password` 真实样式密码 → 已升 **B2.92 待批 A**（tip `docs/design-ember-corerpg-config-mysql-password-reset.md`；同值另 4 文件见 tip §6）
 
 **明确未做/未清：** 四件甲 · 誓约主动大改 · 锻炉重做 · 位移+保命双上 · **勿宣称 B0.1 已清**
 
