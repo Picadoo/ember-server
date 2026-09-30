@@ -60,7 +60,7 @@ rg -n "遗留票物/体力口径维护备忘" plugins/CoreRpg/players/_schema-ex
 - 总评：PASS
 - 各点：1 PASS / 2 PASS / 3 PASS / 4 PASS
 - 施工 tip SHA：`5a8e340`
-- 测报 tip short SHA：*(commit 后回填)*
+- 测报 tip short SHA：`b289812`（`b289812faf3775cacac5d7e5e634fa15d6b706cb`）
 - 是否已 push：否
 - 报告路径：`docs/STATUS-ember-schema-ticket-cap-comment-copy-test.md`
 - 阻塞点：无
