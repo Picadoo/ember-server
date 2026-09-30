@@ -24,7 +24,7 @@ talentFreeResetsUsed: 0
 crystalCash: 0            # 晶钻（硬通货 E）；洗约/洗点优先扣 NI 券否则扣此
 emberLevel: 10            # 占位等级；earned==0 时按 talent.yml 公式播种
 
-# —— 晶钻 / 日票硬顶 / 月卡（DESIGN-ember-cash-monthly.md §4）——
+# —— 晶钻 / 遗留票物/体力口径维护备忘 / 月卡（DESIGN-ember-cash-monthly.md §4）——
 ember_crystal_cash: 0      # 硬通货 E；读兼容 crystalCash
 monthlyCard: false
 monthlyExpireDate: ""      # yyyy-MM-dd Asia/Shanghai（含当日）
