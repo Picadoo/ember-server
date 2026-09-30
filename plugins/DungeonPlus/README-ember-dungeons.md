@@ -54,7 +54,7 @@
 
 权限：玩家需 `dungeon.user` / `dungeon.start`（见 DP 文档）。
 
-## 已知占位
+## 维护备忘（地图与脚本）
 
 - 地图已按本拆分（仍为测试区切片，出生 `-40,65,270`）；近出生点有主题方块标记；正式艺术面由 WorldEdit 再调。详见 `STATUS-ember-maps.md`。
 - `$kill` 依赖 MM Display「余烬地窟僵尸/骷髅/蛮兵」；若对不上，看 DP debug 或改 monster.yml。
