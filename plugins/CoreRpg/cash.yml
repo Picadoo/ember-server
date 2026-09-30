@@ -42,7 +42,7 @@ currency:
   # 现有 PlayerDataStore 已写 crystalCash；读时兼容，写契约键
   legacy_yml_key: crystalCash
 
-# 日本：免费张数 + 总硬顶（进本/发票共用）
+# 遗留票物/体力口径维护备忘：免费张数 + 总硬顶（进本/发放共用）
 daily:
   free_tickets: 0  # S0 维护备忘：遗留票物停发；现行按体力日回满
   hard_cap: 6
