@@ -1,7 +1,7 @@
 # 2026-09-27 stage4.2: layer2 + max_spendable 30 — docs/design-stage4-talent-layer2.md
 # 2026-09-27: costs raised so each tree totals 20 (was 8/7/7, maxed at Lv10) — docs/critic-fixes-20260927.md
 # CoreRpg talent — 余烬天赋树（DESIGN-ember-covenant-talent.md §6.2）
-# STUB：插件岗扩树与实现 unlock/reset；本文件为契约形状
+# 维护备忘：扩树与 unlock/reset 尚待实现；本文件为契约形状
 enabled: true
 
 # Seed for new players / earned==0 (plugin computes on load) — Formula A stage4.2:

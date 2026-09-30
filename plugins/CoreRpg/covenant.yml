@@ -1,5 +1,5 @@
 # CoreRpg covenant — 余烬誓约（DESIGN-ember-covenant-talent.md §6.1）
-# STUB：插件岗实现命令前可先落盘；热重载进 /corerpg reload（落地后）
+# 维护备忘：配置可先落盘；热重载纳入 CoreRpg reload（落地后）
 enabled: true
 
 first_pick_free: true

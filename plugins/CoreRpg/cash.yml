@@ -1,5 +1,5 @@
 # CoreRpg cash — 晶钻 / 日票限购 / 月卡（DESIGN-ember-cash-monthly.md）
-# STUB：插件岗实现命令前可先落盘；挂到 /corerpg reload（落地后）
+# 维护备忘：配置可先落盘；落地后纳入 CoreRpg reload
 # 红线：不直售碎片/晶/核心；日票硬顶是总进本 6（免费+氪+月卡）
 enabled: true
 
