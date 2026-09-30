@@ -1,6 +1,6 @@
 # B2.84 · cash 体力段旁注「停发票」→「遗留票物停发」
 
-- **STATUS：待批 A**
+- **STATUS：已批 A（总控 · 2026-09-30 21:49 Asia/Shanghai）· 交插件岗**
 - **tip 路径：**`docs/design-ember-cash-stamina-header-stop-issue-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/cash.yml` 约 L8 的体力段旁注；未批准前不改玩法 YAML。
 - **前序对齐：**B2.83 已批 `81ce2be`；本窗承接 `cash.yml` 体力段旁注，与 `free_tickets` L47 的「遗留票物停发」口径对齐。
