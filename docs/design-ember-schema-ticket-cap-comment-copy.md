@@ -1,6 +1,6 @@
 # B2.80 · schema 分区注释「日票硬顶」→ 遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 21:30 Asia/Shanghai）** · 设计 tip `6a9070e` · 交**插件岗（CoreRpg schema 注释）**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 21:32 Asia/Shanghai）** · 设计 `6a9070e` · 批准 `a046b99` · 插件 `5a8e340` · 测 `b289812/d46303c`
 - **tip 路径：**`docs/design-ember-schema-ticket-cap-comment-copy.md`
 - **范围：**仅 `plugins/CoreRpg/players/_schema-example.yml` 约 L27 的分区注释行；schema 键值零改。
 - **前序对齐：**B2.79 已批 `358a306`；本窗承接 schema 分区注释，backlog 对齐 B2.80。
