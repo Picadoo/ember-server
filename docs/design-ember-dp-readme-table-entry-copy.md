@@ -1,6 +1,6 @@
 # B2.72 · DP README 表说明列「入场券条件」维护备忘薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 20:49 Asia/Shanghai）** · 设计 `a5d1ce1`
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:53 Asia/Shanghai）** · 设计 `a5d1ce1` · 批准 `9a7bd68` · 插件 `db12737` · 测 `f092865`
 - **范围：**仅 `plugins/DungeonPlus/README-ember-dungeons.md` 约 L11 的表说明列措辞；未批准前不改目标 README，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-dp-readme-table-entry-copy.md`
 - **施工岗：**批后施工交 **插件岗（DungeonPlus 文档）**。
