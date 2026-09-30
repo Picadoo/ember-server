@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 02:38 Asia/Shanghai (策划 · B2.97 PASS · 勾销 · 票时代旧文案余项已排序 · B2.98 DP EmberWeekly 开本提示 待批 A)
+## Progress snapshot — 2026-10-01 02:39 Asia/Shanghai (总控 · B2.97 PASS · 勾销 · B2.98 DP EmberWeekly L20 开本提示 已批 A · 交插件岗)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.98 待批 A**（tip `docs/design-ember-dp-weekly-start-text-copy.md`；EmberWeekly L20 开本提示「已消耗体力 ×1」→「§c深核·周 开始！」，不写扣费、不写数字；余项排序见 tip §6：B2.99 Raid L22 → B2.100 Abyss L22 → B2.101 Elite L20 → B2.102 hub L249 → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排) → B2.108 CoreRpgExpansion → B2.109 mineflayer；level_gates 缺键只记不排）。原候选：票时代旧文案余项（候选：三份 option.yml `text=`「已消耗体力 ×1」+ EliteWeekly L20 / `ember_hub.yml:249`「本周只有一次/每周 1 次」歧义；`set.yml:27` 与 `cash.yml:86` 团票旧注 + `cash.yml` L92 段头「持有硬顶 1」/`elite.hard_cap` 无消费方（含 src 模板 cash.yml:92）；`CoreRpgPlugin.java:1356` 兜底文案；深渊/精英状态页显示背包票数；`EliteService.java:37-38,61`、`CoreRpgExpansion.java:51` 代码注释；mineflayer 旧正则；option 注释「corerpg enter」与菜单入口 `corerpg elite start` 命名差异；`ProgressService` level_gates 缺 elite 键时门槛为 0 的潜在坑）。NI `ticket_ember_elite` 等票物保留（ticket_convert 需要）。~~B2.97~~ → DP EmberEliteWeekly option.yml 注释 PASS · 勾销（设计 `aeb2bc1` · 批准 `810f0cd` · 插件 `79257fd` · 测 `8e12ca3` · close 本提交）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
+- **B2.98 已批 A**（设计 `58103e9` · 批准本提交 · 交插件岗 · 余项顺序按 tip §6）（tip `docs/design-ember-dp-weekly-start-text-copy.md`；EmberWeekly L20 开本提示「已消耗体力 ×1」→「§c深核·周 开始！」，不写扣费、不写数字；余项排序见 tip §6：B2.99 Raid L22 → B2.100 Abyss L22 → B2.101 Elite L20 → B2.102 hub L249 → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排) → B2.108 CoreRpgExpansion → B2.109 mineflayer；level_gates 缺键只记不排）。原候选：票时代旧文案余项（候选：三份 option.yml `text=`「已消耗体力 ×1」+ EliteWeekly L20 / `ember_hub.yml:249`「本周只有一次/每周 1 次」歧义；`set.yml:27` 与 `cash.yml:86` 团票旧注 + `cash.yml` L92 段头「持有硬顶 1」/`elite.hard_cap` 无消费方（含 src 模板 cash.yml:92）；`CoreRpgPlugin.java:1356` 兜底文案；深渊/精英状态页显示背包票数；`EliteService.java:37-38,61`、`CoreRpgExpansion.java:51` 代码注释；mineflayer 旧正则；option 注释「corerpg enter」与菜单入口 `corerpg elite start` 命名差异；`ProgressService` level_gates 缺 elite 键时门槛为 0 的潜在坑）。NI `ticket_ember_elite` 等票物保留（ticket_convert 需要）。~~B2.97~~ → DP EmberEliteWeekly option.yml 注释 PASS · 勾销（设计 `aeb2bc1` · 批准 `810f0cd` · 插件 `79257fd` · 测 `8e12ca3` · close 本提交）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -213,7 +213,7 @@
 - ~~**B2.95 DP `EmberAbyss/option.yml` 历史扣票/B0.1 注释**~~ → **PASS · 勾销**（设计 `37a01ca` · 批准 `e384dab` · 插件 `50a946c` · 测 `3c82e34` · close 本提交；报告 `docs/TEST-B2.95-dp-abyss-option-comment.md`）
 - ~~**B2.96 DP `EmberRaid/option.yml` 历史扣票/B0.1 注释 + L30 团票注释**~~ → **PASS · 勾销**（设计 `5552822` · 批准 `273a4f6` · 插件 `179a7a9` · 测 `d62e20c` · close 本提交；报告 `docs/TEST-B2.96-dp-raid-option-comment.md`；测岗更正：团戒配置在 `set.yml:29-32`，与代码缺省一致）
 - ~~**B2.97 DP `EmberEliteWeekly/option.yml` 历史扣票/B0.1/有票注释**~~ → **PASS · 勾销**（设计 `aeb2bc1` · 批准 `810f0cd` · 插件 `79257fd` · 测 `8e12ca3` · close 本提交；报告 `docs/TEST-B2.97-dp-elite-option-comment.md`）
-- **B2.98** DP `EmberWeekly/option.yml` L20 开本提示「已消耗体力 ×1」（**待批 A** · tip `docs/design-ember-dp-weekly-start-text-copy.md`；玩家可见 `text=`；不写数字；NI 票物保留）
+- **B2.98** DP `EmberWeekly/option.yml` L20 开本提示「已消耗体力 ×1」（**已批 A** · 设计 `58103e9` · 批准本提交 · tip `docs/design-ember-dp-weekly-start-text-copy.md`；玩家可见 `text=`；不写数字；NI 票物保留）
 - 断塔近阶偶发掉底厅（软观察 · 日刷频繁再升方案 B）
 - 霜晶/锈轨无 Boss前压（设计刻意 · 口碑点名再动）
 - AFK 二档未封死通胀（软残余）
@@ -345,7 +345,7 @@
 - ~~**B2.95**~~ → DP EmberAbyss option.yml 注释 **PASS · 勾销**（测 `3c82e34` · close 本提交）。
 - ~~**B2.96**~~ → DP EmberRaid option.yml 注释 **PASS · 勾销**（测 `d62e20c` · close 本提交）。
 - ~~**B2.97**~~ → DP EmberEliteWeekly option.yml 注释 **PASS · 勾销**（测 `8e12ca3` · close 本提交）；DP option 注释四份清零。
-- **B2.98** → DP EmberWeekly L20 开本提示（**待批 A**）。
+- **B2.98** → DP EmberWeekly L20 开本提示（**已批 A** · 设计 `58103e9`；交插件岗）。
 
 ---
 
@@ -546,7 +546,7 @@
 | ~~**B2.95**~~ | DP EmberAbyss option.yml | 扣票/B0.1 注释→体力口径维护备忘 | **PASS · 勾销**（测 `3c82e34`） |
 | ~~**B2.96**~~ | DP EmberRaid option.yml | 扣票/B0.1 + L30 团票注释→体力口径维护备忘 | **PASS · 勾销**（测 `d62e20c`） |
 | ~~**B2.97**~~ | DP EmberEliteWeekly option.yml | 扣票/B0.1/有票注释→体力口径维护备忘 | **PASS · 勾销**（测 `8e12ca3`） |
-| **B2.98** | DP EmberWeekly option.yml L20 | 开本「已消耗体力 ×1」→ 去扣费字样 | **待批 A** |
+| **B2.98** | DP EmberWeekly option.yml L20 | 开本「已消耗体力 ×1」→ 去扣费字样 | **已批 A**（设计 `58103e9` · 批准本提交） |
 
 ---
 

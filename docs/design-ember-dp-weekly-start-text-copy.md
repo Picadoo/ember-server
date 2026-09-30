@@ -1,6 +1,6 @@
 # B2.98 · DP `EmberWeekly/option.yml` L20 开本提示「已消耗体力 ×1」→ 去掉扣费字样
 
-- **STATUS：tip · pending A（策划 · 2026-10-01 02:38 Asia/Shanghai）** · 待总控批 A
+- **STATUS：已批 A（总控 · 2026-10-01 02:39 Asia/Shanghai）· 交插件岗** · 设计 tip `58103e9`；L20 按荐案逐字施工，余项顺序按 §6。
 - **tip 路径：**`docs/design-ember-dp-weekly-start-text-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberWeekly/option.yml` L20 一行 `text=` 值（玩家可见）。其它键、脚本、注释全部零改。
 - **来由：**B2.94 §5 顺带发现；backlog L20「票时代旧文案余项」首位。本 tip 同时给出余项的排序（§6）。
@@ -80,3 +80,10 @@ L20 精确替换为（行首 4 个空格，引号与 `@dungeon` 保持原样）�
 - `ProgressService` 的 level_gates 段存在但缺 elite 键时门槛为 0：属代码改动，本轮不排（总控边界）。
 - option 注释写「corerpg enter」而精英菜单入口是 `corerpg elite start`：两者进的是同一个 `tryEnter`，注释不算错，不排。
 - 日常七线「已消耗体力 ·」广播给全队的问题：不在票时代余项内，另议。
+
+
+## 总控批注（批 A · 2026-10-01 02:39 Asia/Shanghai）
+
+- 荐案照准：删掉全队广播里的扣费字样；发起者仍会收到 `TicketEntryService.java:149` 私聊的「正在进入……（costHint）」。
+- **验收以静态为准：**本机没有运行中的服，没法 reload 实测。「本内只显示『深核·周 开始！』，发起者仍收到『正在进入……』」这一条记为**待恢复服后实测**，不挡本窗 PASS。
+- 余项顺序照 §6 执行：B2.99 Raid L22 → B2.100 Abyss L22 → B2.101 Elite L20 → B2.102 ember_hub L249 → B2.103/104 代码输出 → B2.105–107 配置注释 → B2.108/109 代码注释/测试。B2.107（src 模板）先挂着不排。
