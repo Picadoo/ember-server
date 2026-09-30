@@ -1,6 +1,6 @@
 # B2.83 · schema `dailyTicketsGranted` 行内「今日已发票」→ 遗留票物/体力口径维护备忘
 
-- **STATUS：待批 A（总控 · 2026-09-30 21:43 Asia/Shanghai）**
+- **STATUS：已批 A（总控 · 2026-09-30 21:44 Asia/Shanghai）· 交插件岗**
 - **tip 路径：**`docs/design-ember-schema-daily-tickets-granted-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/players/_schema-example.yml` 约 L34 的 `dailyTicketsGranted` 行内注释；键名、键值与其它字段零改。
 - **前序对齐：**B2.82 已批 `efecbc6`；本窗承接 schema `dailyTicketsGranted` 行内注释，backlog 对齐 B2.83。
