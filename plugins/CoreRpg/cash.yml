@@ -5,7 +5,7 @@ enabled: true
 
 timezone: Asia/Shanghai
 
-# S0 余烬体力（design-ember-stamina-dnf-daily §A）— 停发票；进本扣体力
+# S0 余烬体力（design-ember-stamina-dnf-daily §A）— 遗留票物停发；进本扣体力
 stamina:
   base_max: 90
   monthly_bonus: 30
