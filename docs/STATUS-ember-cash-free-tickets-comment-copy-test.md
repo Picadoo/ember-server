@@ -49,7 +49,7 @@ rg -n "票已废|B0\.1 已清" plugins/CoreRpg/cash.yml
 - 总评：PASS
 - 各点：1 PASS / 2 PASS / 3 PASS
 - 施工 tip SHA：`b531320`
-- 测报 tip short SHA：`b24f584`（`b24f5841c07a534631a1a9eb8679227fccfec759`）
+- 测报 tip short SHA：`e9a3cf0`（`e9a3cf0b437e57cff30b3c7165d97eebdb4e02e2`；本修正提交跟进）
 - 是否已 push：否
 - 报告路径：`docs/STATUS-ember-cash-free-tickets-comment-copy-test.md`
 - 阻塞点：无
