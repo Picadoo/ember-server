@@ -32,7 +32,7 @@ gear_ember_t1_talisman:
   hideflags:
     - HIDE_ENCHANTS
 
-# --- 团本饰品 stub ---
+# --- 团本饰品 ---
 acc_ember_raid_ring:
   material: GOLD_INGOT
   name: '&6余烬团本之戒'
