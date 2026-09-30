@@ -9,7 +9,7 @@
 - **tip：**`docs/design-ember-cash-weekly-shop-hardcap-comment-copy.md`
 - **是否已 push：否**（本岗仅本地 commit，禁止 push）
 - **报告路径：**`docs/STATUS-ember-cash-weekly-shop-hardcap-comment-copy-test.md`
-- **ahead：**测报提交后相对 `origin/main` ahead 1（未 push）
+- **ahead：**测报两提交后相对 `origin/main` ahead 2（未 push）
 
 ## 各点
 
@@ -50,11 +50,11 @@ rg -n "票已废|B0\.1 已清" plugins/CoreRpg/cash.yml
 - 总评：PASS
 - 各点：1 PASS / 2 PASS / 3 PASS
 - 施工 tip SHA：`7cd818b`
-- 测报 tip short SHA：待本地 commit 后回填
+- 测报 tip short SHA：`fc6d159`（`fc6d159c51bc2b645721c068530dd4b667d5150c`）
 - 是否已 push：否
 - 报告路径：`docs/STATUS-ember-cash-weekly-shop-hardcap-comment-copy-test.md`
 - 阻塞点：无
-- ahead：测报提交后相对 `origin/main` ahead 1（未 push）
+- ahead：测报两提交后相对 `origin/main` ahead 2（未 push）
 - 目标行原文：见上 L67
 - 违禁词 rg：无命中
 - 旁证：见上
