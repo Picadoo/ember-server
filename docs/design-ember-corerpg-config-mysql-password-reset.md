@@ -1,6 +1,6 @@
 # B2.92 · CoreRpg `config.yml` `mysql.password` 复位为 `"CHANGE_ME"`
 
-- **STATUS：tip · pending A（策划 · 2026-10-01 01:55 Asia/Shanghai）** · 待总控批 A
+- **STATUS：已批 A · 采备选 B（总控 · 2026-10-01 01:58 Asia/Shanghai）· 交插件岗** · 设计 tip `ebc41ce`。见文末「总控批注」。
 - **tip 路径：**`docs/design-ember-corerpg-config-mysql-password-reset.md`
 - **目标范围：**仅 `plugins/CoreRpg/config.yml` L76 `mysql.password` 的值；其它键零改。
 - **起因：**自 `2e5649f`（Ember sync 2026-09-27）起，该行在仓库里是真实样式密码，违反 `HANDOFF.md` §8 硬规则（仓库内保持 `password: "CHANGE_ME"`）。本稿及 backlog **不写旧值原文**。
@@ -77,3 +77,12 @@ mysql:
 - **后续 B2.93 候选：**3 个 example 文件去真值（零运行风险，薄窗）。
 - **后续 B2.94 候选：**AuthMe config L18 去真值 + 本地回填（登录服 live）。
 - **后续（代码窗，交插件岗评估）：**`MysqlStorage` 在值为 `CHANGE_ME` 时读 `MYSQL_PASSWORD` 环境变量，从根上消掉 live 文件里的脏行和再次误提交的风险。
+
+
+## 总控批注（批 A · 2026-10-01 01:58 Asia/Shanghai）
+
+- **采备选 B：一窗覆盖同值 5 个受跟踪文件**（`plugins/CoreRpg/config.yml` L76、`login-runtime/plugins/AuthMe/config.yml` 对应密码行、`plugins/CoreRpg/config-mysql.example.yml`、`CoreRpg/config-mysql.example.yml`、`CoreRpg/src/main/resources/config-mysql.example.yml` 各自密码行）。理由：机密泄露属安全项，只修 1 处会让当前树仍含旧值，不适用「一文件一窗」。每处只改密码值为 `"CHANGE_ME"`（或该文件原有的占位写法），其它键零改；不升 B2.93/B2.94。
+- **不回填、不留脏行：**本机无运行中的服（25565/25566/25567/3306 均未监听，Release 未下载），无需本地回填。日后在本机恢复服时按 `HANDOFF.md` §1 第 5 步从 `secrets/mysql-ember.env` 填入。
+- **施工第 0 步保留：**先把旧值写入 gitignored 的 `secrets/mysql-ember.env`（`chmod 600`，按 `.example` 格式），避免真值丢失；该文件永不 add。
+- **验收：**施工 commit 仅这 5 个文件、各 1+/1-；YAML 均可解析、密码键为 `CHANGE_ME`、其它键不变；`git grep -F` 旧值（用 `secrets/mysql-ember.env` 里的变量，勿回显）在当前树计数为 0；HANDOFF §8 提交前查密码命令恢复有效且输出 0。
+- 线上库密码轮换、git 历史清理、MysqlStorage 读环境变量代码窗：仍不在本窗；代码窗记为后续候选。
