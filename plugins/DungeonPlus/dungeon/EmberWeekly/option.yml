@@ -17,7 +17,7 @@ dungeon-start:
     - "$js-condition{text='%corerpg_gate_weekly%'=='yes'||'%player_is_op%'=='yes';message=§c周常本需要余烬等级 §eLv.20§c · 队伍中有人等级不足 · 打开枢纽 → 角色查看等级} @system"
     # 维护备忘：体力/首免已在 corerpg enter 扣除（未进本自动退还）；此处仅保留人数/等级门
   action-script:
-    - "$message{type=text;text=§c深核·周 开始！已消耗体力 ×1} @dungeon"
+    - "$message{type=text;text=§c深核·周 开始！} @dungeon"
     - "$teleport{location=-40,65,270;defspawn=true} @player"
     - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
