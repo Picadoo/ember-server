@@ -9,8 +9,8 @@ templates:
       coin: 500
       mat_ember_shard: 8
   season_pass_stub:
-    title: "战令结算（占位）"
-    body: "赛季占位奖励。"
+    title: "战令结算（维护备忘）"
+    body: "赛季奖励尚未开放；本邮件仅作维护备忘。"
     attachments:
       ember_crystal_cash: 30
       coin: 200
