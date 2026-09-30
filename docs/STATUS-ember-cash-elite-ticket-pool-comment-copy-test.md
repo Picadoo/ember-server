@@ -60,7 +60,7 @@ rg -n "不进商城遗留票物/体力相关池；维护备忘" plugins/CoreRpg/
 - 总评：PASS
 - 各点：1 PASS / 2 PASS / 3 PASS / 4 PASS
 - 施工 tip SHA：`8919053`
-- 测报 tip short SHA：*(commit 后回填)*
+- 测报 tip short SHA：`a20689f`（`a20689fd4a2f6f046d2e2734e6401212aab7e5c8`）
 - 是否已 push：否
 - 报告路径：`docs/STATUS-ember-cash-elite-ticket-pool-comment-copy-test.md`
 - 阻塞点：无
