@@ -1,6 +1,6 @@
 # B2.73 · CoreRpg mail `season_pass_stub` 占位文案维护备忘薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 20:55 Asia/Shanghai）** · 设计 `53b92d1`
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:58 Asia/Shanghai）** · 设计 `53b92d1` · 批准 `87e40af` · 插件 `7290f4d` · 测 `e166783`
 - **范围：**仅 `plugins/CoreRpg/mail.yml` 模板 `season_pass_stub` 的 `title` / `body`；未批准前不改目标 mail.yml，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-mail-season-pass-stub-copy.md`
 - **施工岗：**批后交 **插件岗（CoreRpg mail）**。
