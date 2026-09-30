@@ -1,6 +1,6 @@
 # B2.77 · progress 战令「日票×5」注释 → 遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 21:14 Asia/Shanghai）** · 设计 tip `65a16bc` · 交**插件岗（CoreRpg progress 注释）**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 21:17 Asia/Shanghai）** · 设计 `65a16bc` · 批准 `d579edf` · 插件 `6cb958e` · 测 `fc171a2`
 - **范围：**仅 `plugins/CoreRpg/progress.yml` 约 L60 的战令注释单行；未批准前不改 `progress.yml`，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-progress-pass-ticket-comment-copy.md`
 - **施工岗：**批后交 **插件岗（CoreRpg progress 注释）**。
