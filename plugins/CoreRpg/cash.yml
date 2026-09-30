@@ -44,7 +44,7 @@ currency:
 
 # 日本：免费张数 + 总硬顶（进本/发票共用）
 daily:
-  free_tickets: 0  # S0: 停发日票，改体力日回满
+  free_tickets: 0  # S0 维护备忘：遗留票物停发；现行按体力日回满
   hard_cap: 6
   ticket_ni_id: ticket_ember_daily
 
