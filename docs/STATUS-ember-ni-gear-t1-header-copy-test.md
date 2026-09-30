@@ -4,7 +4,7 @@
 **岗：** 余烬-测试岗执行器  
 **依据：** 施工 tip `8c5bb51` · 批准 `325b2e0` · tip `docs/design-ember-ni-gear-t1-header-copy.md`  
 **口径：** 纯静态 · 禁开服测 · 禁长测/挑刺 · 本岗不改配置（仅测报）· **勿宣称 B0.1**  
-**Verdict：** ✅ **PASS** · STATUS 待 push
+**Verdict：** ✅ **PASS** · STATUS 已 push (`01a41b2`)
 
 ---
 
@@ -115,8 +115,8 @@ git show 8c5bb51 --numstat
 | 总评 | **PASS** |
 | 各点 | 1 PASS · 2 PASS · 3 PASS · 4 PASS · 5 PASS |
 | 施工 tip SHA | `8c5bb51` |
-| 测报 tip short SHA | （push 后回填） |
-| 是否已 push | 否（待 push） |
+| 测报 tip short SHA | `01a41b2` |
+| 是否已 push | 是 (`01a41b2`) |
 | 报告路径 | `docs/STATUS-ember-ni-gear-t1-header-copy-test.md` |
 | ops | `[]` |
 | 阻塞点 | 无 |
