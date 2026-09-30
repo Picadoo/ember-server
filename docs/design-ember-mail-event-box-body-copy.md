@@ -1,6 +1,6 @@
 # B2.81 · CoreRpg mail `event_box` 活动箱正文维护备忘薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 21:33 Asia/Shanghai）** · 设计 tip `85291bf` · 交**插件岗（CoreRpg mail）**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 21:36 Asia/Shanghai）** · 设计 `85291bf` · 批准 `30b739b` · 插件 `699a7cb` · 测 `50ca64f`
 - **范围：**仅 `plugins/CoreRpg/mail.yml` 模板 `event_box` 的 **body**；`title`、`attachments` 及其它邮件模板零改。
 - **tip 路径：**`docs/design-ember-mail-event-box-body-copy.md`
 - **施工岗：**批 A 后交 **插件岗（CoreRpg mail）**。
