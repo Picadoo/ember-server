@@ -95,13 +95,13 @@ elite:
   ticket_ni_id: ticket_ember_elite
   hard_cap: 1
 
-# 勋阶轻量 stub（无 LuckPerms）
+# 维护备忘：勋阶轻量档（当前无 LuckPerms）
 vip:
   enabled: true
   daily_claim_coin: 120        # 勋阶 ≥1
   # 2026-09-26：勋阶 0（未开通）只给象征性日礼；设计未给层级数值，保守取 20
   tier0_daily_claim_coin: 20
-  # tiers stub — PlayerData.vipTier default 0
+  # 维护备忘：tiers — PlayerData.vipTier 默认 0
   tiers:
     0: { name: "无" }
     1: { name: "勋阶I" }
