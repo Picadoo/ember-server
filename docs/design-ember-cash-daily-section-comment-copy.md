@@ -1,6 +1,6 @@
 # B2.82 · cash `daily` 段注释「日本/发票」→遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 21:38 Asia/Shanghai）· 交插件岗**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 21:41 Asia/Shanghai）** · 设计 `af9d95d` · 批准 `efecbc6` · 插件 `a7cadbd` · 测 `195033a`
 - **tip 路径：**`docs/design-ember-cash-daily-section-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/cash.yml` 约 L45 的 `daily` 段注释；未批前不改 `cash.yml`，不改玩法 YAML。
 - **施工岗：**批 A 后交 **插件岗（CoreRpg cash 注释）**。
