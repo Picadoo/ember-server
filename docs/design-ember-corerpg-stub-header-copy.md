@@ -1,6 +1,6 @@
 # B2.60 · CoreRpg 文件头维护备忘薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 19:57 Asia/Shanghai）**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:00 Asia/Shanghai）** · 测 `5abd67d` · 施工 `96b931a` · 批准 `45f2dcf` · 设计 `262bfa8`
 - **范围：**仅 `plugins/CoreRpg/cash.yml`、`covenant.yml`、`talent.yml` 指定文件头注释行；玩法数值、键及其它 YAML 不在本窗施工。
 - **tip 路径：**`docs/design-ember-corerpg-stub-header-copy.md`
 - **施工岗：**批后施工交 **插件岗（CoreRpg 文档注释）**。
