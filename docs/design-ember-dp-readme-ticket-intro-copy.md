@@ -1,6 +1,6 @@
 # B2.69 · DungeonPlus README 次数段导语维护备忘薄窗
 
-- **STATUS：已批 A（总控 · 2026-09-30 20:36 Asia/Shanghai）** · 设计 `e805e35`
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:39 Asia/Shanghai）** · 测 `a8dfda7` · 施工 `c9e72b5` · 批准 `9c833a7` · 设计 `e805e35`
 - **范围：**仅 `plugins/DungeonPlus/README-ember-dungeons.md` 约 L31 的次数段导语；未批准前不改目标 README，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-dp-readme-ticket-intro-copy.md`
 - **施工岗：**批后施工交 **插件岗（DungeonPlus 文档）**。
