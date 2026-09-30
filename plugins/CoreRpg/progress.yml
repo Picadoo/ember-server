@@ -57,7 +57,7 @@ ember_xp:
 # ---------------------------------------------------------------------------
 # 1.6.0 战令等级奖励（/corerpg pass claim → 系统邮件；付费轨需本季已解锁）
 #   只用现有 NI 物品 + coin；免费轨无装备；Lv30 外观碎片（cosmetic_calamity_shard）。
-#   付费轨累计日票 ×5（Lv6/12/18/24/30，规格「日票×5 分散等级发」）。
+#   付费轨累计遗留票物 ×5（体力口径维护备忘；Lv6/12/18/24/30，规格「×5 分散等级发」。）
 #   赛季：plugins/CoreRpg/season.yml current_season_id；管理员 /corerpg pass season reset <新ID>
 pass_rewards:
   free:
