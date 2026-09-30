@@ -1,6 +1,6 @@
 # B2.95 · DP `EmberAbyss/option.yml` 历史「扣票 / B0.1」注释 → 体力口径维护备忘
 
-- **STATUS：tip · pending A（策划 · 2026-10-01 02:20 Asia/Shanghai）** · 待总控批 A
+- **STATUS：已批 A（总控 · 2026-10-01 02:14 Asia/Shanghai）· 交插件岗** · 设计 tip `37a01ca`；按荐案逐字施工（仅 L3/L4/L18/L20 注释）；`text=` L22/L23 零改。
 - **tip 路径：**`docs/design-ember-dp-abyss-option-ticket-comment-copy.md`
 - **目标范围：**仅 `plugins/DungeonPlus/dungeon/EmberAbyss/option.yml` 的 4 行注释：L3、L4、L18、L20。键值、脚本、`text=` 全部零改。
 - **前序对齐：**B2.94 `EmberWeekly/option.yml` 同构注释已 PASS · 勾销（close `7a5aff2`），本窗写法与之一致；cash.yml 深渊 `free_tickets` 旁注（B2.91）口径「维护备忘：遗留票物/体力口径…（现行 0）」。
