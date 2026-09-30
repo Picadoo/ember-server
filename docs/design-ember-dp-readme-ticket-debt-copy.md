@@ -1,6 +1,6 @@
 # B2.68 · DungeonPlus README DEBT 段维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 20:31 Asia/Shanghai）** · 设计 `e371b80`
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 20:35 Asia/Shanghai）** · 测 `e56ee7d` · 施工 `4963bfd` · 批准 `f73627e` · 设计 `e371b80`
 - **范围：**仅 `plugins/DungeonPlus/README-ember-dungeons.md` 约 L40 的 DEBT 行；未批准前不改目标 README，不改玩法 YAML。
 - **tip 路径：**`docs/design-ember-dp-readme-ticket-debt-copy.md`
 - **施工岗：**批后施工交 **插件岗（DungeonPlus 文档）**。
