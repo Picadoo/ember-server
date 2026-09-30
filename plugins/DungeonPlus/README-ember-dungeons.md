@@ -16,8 +16,8 @@
 | `plugins/DungeonPlus/dungeon/EmberWeekly/monster.yml` | 四波加压 |
 | `plugins/DungeonPlus/dungeon/EmberWeekly/obstacle.yml` | 空障碍 |
 | `plugins/DungeonPlus/dungeon/EmberWeekly/task/timeout.yml` | 1500s 超时 |
-| `plugins/DungeonPlus/dungeon/EmberAbyss/` | 深渊 5 层 stub + 通关箱 5～9 档 |
-| `plugins/DungeonPlus/dungeon/EmberCalamity/` | 灾厄 Boss stub + 日箱表 |
+| `plugins/DungeonPlus/dungeon/EmberAbyss/` | 维护备忘：深渊 5 层 + 通关箱 5～9 档 |
+| `plugins/DungeonPlus/dungeon/EmberCalamity/` | 维护备忘：灾厄 Boss + 日箱表 |
 | `plugins/DungeonPlus/map/ember_arena/` | 共享回退 / `ember_arena` 本（保留） |
 | `plugins/DungeonPlus/map/ember_daily/` | EmberDaily 独立图（绿羊毛+绿宝石柱标记） |
 | `plugins/DungeonPlus/map/ember_weekly/` | EmberWeekly 独立图（蓝羊毛+青金石柱） |
