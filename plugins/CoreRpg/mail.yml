@@ -35,7 +35,7 @@ templates:
       consumable_ember_stamina_30: 1
   event_box:
     title: "活动箱"
-    body: "活动奖励。"
+    body: "活动箱邮件仍在维护；奖励按活动发放。"
     attachments:
       consumable_ember_stamina_30: 1
       gem_ember_sharp: 1
