@@ -1,6 +1,6 @@
 # B2.89 · shop 文件头 → 体力药/周体力包 SKU 备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 22:32 Asia/Shanghai）· 交插件岗** · 批后仅插件岗改 `plugins/TrMenu/menus/ember_shop.yml` 约 L2–L3 文件头，不改玩法 YAML。设计 tip `21121c0`。
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 22:36 Asia/Shanghai）** · 设计 `21121c0` · 批准 `b6ff3d6` · 插件 `245fe40` · 测 `b04af5b`
 - **范围：**仅 `plugins/TrMenu/menus/ember_shop.yml` 约 L2–L3 文件头注释两行（维护者可见，非玩家 UI）。**L1 零改。**
 - **tip 路径：**`docs/design-ember-shop-header-ticket-alias-copy.md`
 - **施工岗：**批后交 **插件岗 / TrMenu 菜单文案**。
