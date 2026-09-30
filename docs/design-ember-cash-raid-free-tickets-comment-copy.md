@@ -1,6 +1,6 @@
 # B2.85 · cash `raid.free_tickets` 行内周登录/团本票注释 → 遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 21:56 Asia/Shanghai）· 交插件岗**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 22:02 Asia/Shanghai）** · 设计 `dae3743` · 批准 `a0cf518` · 插件 `f568433` · 测 `66ed681`/`1bbcdd0`
 - **tip 路径：**`docs/design-ember-cash-raid-free-tickets-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/cash.yml` 约 L86 的 `raid.free_tickets` 行内注释；未批准前不改玩法 YAML。
 - **前序对齐：**B2.84 已批 `9051ebe`；本窗承接 `cash.yml` 团本 `free_tickets` 行内周登录/团本票口径。
