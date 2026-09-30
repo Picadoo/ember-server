@@ -1,6 +1,6 @@
 # B2.86 · cash `shop.weekly_ticket.hard_cap` 行内注释 → 遗留票物/体力口径维护备忘
 
-- **STATUS：已批 A（总控 · 2026-09-30 22:05 Asia/Shanghai）· 交插件岗**
+- **STATUS：PASS · 勾销（总控 · 2026-09-30 22:10 Asia/Shanghai）** · 设计 `bb16ce5` · 批准 `2e81466` · 插件 `7cd818b` · 测 `fc6d159`/`a116ef1`
 - **tip 路径：**`docs/design-ember-cash-weekly-shop-hardcap-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/cash.yml` 约 L67 的 `shop.weekly_ticket.hard_cap` 行内注释；未批准前不改玩法 YAML。
 - **前序对齐：**B2.85 已 PASS · 勾销（close `c2fa2bf` · 测 `66ed681`/`1bbcdd0` · 施工 `f568433`）；本窗承接 `shop.weekly_ticket.hard_cap` 的遗留票物/体力口径维护备注。
