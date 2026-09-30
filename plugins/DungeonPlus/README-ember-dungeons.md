@@ -32,9 +32,9 @@ DP 1.4 无原生「每日 N 次」字段，按官方「入场卷」做法：
 
 | NI ID | 显示名 | 规则 |
 |-------|--------|------|
-| `ticket_ember_daily` | 余烬日票 | 进本扣 1；日发 3 = 每日 3 次 |
-| `ticket_ember_weekly` | 余烬周票 | 进本扣 1；周发 1 = 每周 1 次 |
-| `ticket_ember_abyss` | 余烬深渊票 | 进本扣 1；日发 1 |
+| `ticket_ember_daily` | 余烬日票 | 进本扣 1；遗留票物 / DP 入场条件；现行次数=体力 |
+| `ticket_ember_weekly` | 余烬周票 | 进本扣 1；遗留票物 / DP 入场条件；现行次数=体力 |
+| `ticket_ember_abyss` | 余烬深渊票 | 进本扣 1；遗留票物 / DP 入场条件；现行次数=体力 |
 
 物品草案：`plugins/NeigeItems/Items/ember-dungeon-tickets.yml`  
 > **DEBT（票务 NI 对齐）：** 进本扣次仍用 DP `<item:显示名>`（官方只认物品名）；给票/计数已走 NI ID。详见 `/workspace/minecraft/STATUS-ember-ticket-ni-audit.md`。  
