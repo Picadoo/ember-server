@@ -1,6 +1,6 @@
 # B2.90 · cash `weekly.free_tickets` 行内旁注 → 遗留票物/体力口径维护备忘
 
-- **STATUS：待批 A**（总控 · 2026-09-30 22:39 Asia/Shanghai） · 未批准前不改 `plugins/CoreRpg/cash.yml`，不改玩法 YAML。
+- **STATUS：已批 A（总控 · 2026-09-30 22:40 Asia/Shanghai）· 交插件岗** · 批后仅插件岗改 `plugins/CoreRpg/cash.yml` 约 L83 行内注释，不改玩法 YAML。设计 tip `838cb7d`。**本号最后一窗：结案后写交接停工，不升 B2.91。**
 - **tip 路径：**`docs/design-ember-cash-weekly-free-tickets-comment-copy.md`
 - **目标范围：**仅 `plugins/CoreRpg/cash.yml` 约 L83 的 `weekly.free_tickets` 行内注释（当前无旁注）；未批准前不改玩法 YAML。
 - **前序对齐：**B2.89 已 PASS · 勾销（设计 `21121c0` · 批准 `b6ff3d6` · 插件 `245fe40` · 测 `b04af5b` · close `f1977ce`）；B2.85 raid `free_tickets` 已 PASS；本窗只补 weekly 旁注。
