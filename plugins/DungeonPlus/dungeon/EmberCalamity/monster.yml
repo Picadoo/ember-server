@@ -1,6 +1,6 @@
 # 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
 #   see docs/critic-fixes-20260927.md §10). Map ember_calamity room: x -42..-38, z 268..272
-# 灾厄 Boss 战 stub — EmberCalamityBoss（Display：余烬灾厄使）
+# 维护备忘：灾厄 Boss 战 — EmberCalamityBoss（Display：余烬灾厄使）
 # 完整阶段添头见 docs §2.2；本期单 Boss 清完即结算
 groups:
   boss:
