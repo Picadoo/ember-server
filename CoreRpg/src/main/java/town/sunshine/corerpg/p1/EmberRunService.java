@@ -1179,6 +1179,13 @@ public final class EmberRunService implements Listener {
         }
         if ("pending".equals(key)) return String.valueOf(store.ledger(p.getUniqueId()).open().size());
         if ("active".equals(key)) return EmberMode.active() ? "yes" : "no";
+        if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
+        if ("awaken".equals(key) || "awaken_next".equals(key)) {
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            EmberLoadout l = ls == null ? null : ls.get(p);
+            if (l == null) return "";
+            return "awaken".equals(key) ? l.setLabel() : l.nextAwakeningHint();
+        }
         int us = key.indexOf('_');
         if (us > 0) {
             EmberRunMaps.MapDef m = maps.byKey(key.substring(0, us));

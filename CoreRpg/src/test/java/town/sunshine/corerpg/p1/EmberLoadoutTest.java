@@ -110,4 +110,21 @@ public class EmberLoadoutTest {
         EmberLoadout low = EmberLoadout.compute(t, blade("burst", 3, 0, 0, 5), charm("burst", 2, 0, 0, 9), 10);
         assertEquals(1, low.awakening);
     }
+
+    @Test public void nextAwakeningHintNamesWhatIsMissing() {
+        assertEquals("下一档 觉醒II 缺：刃 T1→T2、+4→+6；护符 T1→T2",
+                EmberLoadout.compute(t, blade("scorch", 1, 0, 0, 4), charm("scorch", 1, 0, 0, 7), 20).nextAwakeningHint());
+        EmberLoadout l = EmberLoadout.compute(t, blade("scorch", 2, 0, 0, 6), charm("scorch", 2, 0, 0, 5), 20);
+        assertEquals(1, l.awakening);
+        assertEquals("下一档 觉醒II 缺：护符 +5→+6", l.nextAwakeningHint());
+        l = EmberLoadout.compute(t, blade("scorch", 2, 0, 0, 6), charm("scorch", 2, 0, 0, 6), 20);
+        assertEquals(2, l.awakening);
+        assertTrue(l.setLabel().endsWith(" 觉醒II"));
+        assertEquals("下一档 觉醒III 缺：刃 T2→T3、+6→+9；护符 T2→T3、+6→+9", l.nextAwakeningHint());
+        assertTrue(EmberLoadout.compute(t, blade("scorch", 1, 0, 0, 0), charm("burst", 1, 0, 0, 0), 20)
+                .nextAwakeningHint().startsWith("觉醒I 缺：刃与护符同族"));
+        assertEquals("觉醒I 缺：主手 P1 刃", EmberLoadout.compute(t, null, charm("burst", 1, 0, 0, 0), 20).nextAwakeningHint());
+        assertEquals("已达 觉醒III（最高）",
+                EmberLoadout.compute(t, blade("burst", 3, 0, 0, 9), charm("burst", 3, 0, 0, 9), 20).nextAwakeningHint());
+    }
 }

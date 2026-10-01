@@ -57,6 +57,35 @@ public final class EmberLoadout {
         return tier >= 1 ? 1 : 0;
     }
 
+    /**
+     * §19.1 "下一次突破缺哪项": what the equipped pair still lacks for the next awakening (§4.3: I = same family both
+     * ≥ T1; II = both ≥ T2 and both ≥ +6; III = both ≥ T3 and both ≥ +9). Pure text, no rule of its own.
+     */
+    public String nextAwakeningHint() {
+        if (blade == null) return "觉醒I 缺：主手 P1 刃";
+        if (charm == null) return "觉醒I 缺：选定护符（/corerpg p1 charm）";
+        if (!blade.family.equals(charm.family) || "none".equals(blade.family))
+            return "觉醒I 缺：刃与护符同族（现为 " + EmberItemData.familyName(blade.family) + " / " + EmberItemData.familyName(charm.family) + "）";
+        if (awakening >= 3) return "已达 觉醒III（最高）";
+        int next = awakening + 1;
+        if (next == 1) return "觉醒I 缺：两件均 ≥ T1";
+        int needTier = next, needEnh = next == 2 ? 6 : 9;
+        StringBuilder sb = new StringBuilder("下一档 觉醒").append(next == 2 ? "II" : "III").append(" 缺：");
+        int n = 0;
+        n += lack(sb, n, "刃", blade, needTier, needEnh);
+        n += lack(sb, n, "护符", charm, needTier, needEnh);
+        return sb.toString();
+    }
+
+    private static int lack(StringBuilder sb, int before, String name, EmberItemData it, int needTier, int needEnh) {
+        StringBuilder part = new StringBuilder();
+        if (it.tier < needTier) part.append("T").append(it.tier).append("→T").append(needTier);
+        if (it.enhance < needEnh) part.append(part.length() > 0 ? "、" : "").append("+").append(it.enhance).append("→+").append(needEnh);
+        if (part.length() == 0) return 0;
+        sb.append(before > 0 ? "；" : "").append(name).append(' ').append(part);
+        return 1;
+    }
+
     public double ehp() { return EmberFormula.ehp(h, m); }
 
     public String setLabel() {

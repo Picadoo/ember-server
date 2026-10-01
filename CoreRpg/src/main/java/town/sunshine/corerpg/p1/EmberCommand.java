@@ -113,6 +113,7 @@ public final class EmberCommand {
                 EmberLoadout l = loadouts.refresh(p);
                 s.sendMessage(P + String.format(Locale.ROOT, "B=%.2f H=%.2f (H0 %.2f) D=%.0f M=%.4f EHP=%.1f  Lv%d  套装: %s",
                         l.b, l.h, l.h0, l.d, l.m, l.ehp(), l.level, l.setLabel()));
+                s.sendMessage(P + l.nextAwakeningHint());
                 s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "无有效 P1 刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
