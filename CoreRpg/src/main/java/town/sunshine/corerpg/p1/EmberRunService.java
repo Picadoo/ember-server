@@ -3,6 +3,7 @@ package town.sunshine.corerpg.p1;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -670,6 +671,7 @@ public final class EmberRunService implements Listener {
             if (s != null && s.mapKey.equals(m.key) && (s.world == null || s.world.equals(to.getName()))) {
                 attach(s, to);
                 if (!EmberRunSession.PREPARE.equals(s.state)) commit(s, p.getUniqueId());
+                spreadLater(s, m, p);
             } else {
                 p.sendMessage(P + ChatColor.RED + "没有找到你的主线本入场记录：本实例不会生成怪物，也不会结算。请 /dp leave 后从 冒险 菜单进入。");
             }
@@ -690,6 +692,24 @@ public final class EmberRunService implements Listener {
                 starterKit(p);
             }, 20L);
         }
+    }
+
+    /**
+     * B2.146: DP drops the whole party on one spawn block; members 2..n are moved to the map's spread points so
+     * nobody starts inside another player (and the boss-circle lock does not hit the whole party at once).
+     * Only a player who is still standing on the spawn is moved.
+     */
+    private void spreadLater(final EmberRunSession s, final EmberRunMaps.MapDef m, final Player p) {
+        final int idx = s.participants.indexOf(p.getUniqueId());
+        final EmberRunMaps.Pt to = m.spreadPoint(idx);
+        if (to == null || m.spawn == null) return;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline() || p.isDead() || !p.getWorld().getName().equals(s.world == null ? p.getWorld().getName() : s.world)) return;
+            Location l = p.getLocation();
+            double dx = l.getX() - (m.spawn.x + 0.5), dz = l.getZ() - (m.spawn.z + 0.5);
+            if (dx * dx + dz * dz > 2.5 * 2.5 || Math.abs(l.getY() - m.spawn.y) > 1.5) return;
+            p.teleport(new Location(p.getWorld(), to.x + 0.5, to.y, to.z + 0.5, l.getYaw(), l.getPitch()));
+        }, 30L);
     }
 
     /** B2.139: logged back into a Q instance whose run no longer includes this player (released / ended / restart). */

@@ -167,6 +167,8 @@ public final class EmberRunMaps {
         public final List<Link> links;
         /** guard rails: iron bars placed in AIR only, when the instance is attached (template untouched) */
         public final List<Box> rails;
+        /** single blocks set to AIR in the instance at attach (e.g. the tide template's stray sign for Q04) */
+        public final List<Pt> clear;
 
         MapDef(String key, Map<?, ?> m) {
             this.key = key;
@@ -213,6 +215,25 @@ public final class EmberRunMaps {
             List<Box> rl = new ArrayList<Box>();
             if (m.get("rails") instanceof List) for (Object o : (List<?>) m.get("rails")) { Box b = box(o); if (b != null) rl.add(b); }
             rails = Collections.unmodifiableList(rl);
+            clear = pts(m.get("clear"));
+        }
+
+        /** member 0 keeps the spawn; member i ≥ 1 gets spread[(i-1) % n]; null = stay. */
+        public Pt spreadPoint(int idx) {
+            if (idx < 1 || spread.isEmpty()) return null;
+            return spread.get((idx - 1) % spread.size());
+        }
+
+        /** every point a player or mob is placed on (rails must never cover one) */
+        public List<Pt> standPoints() {
+            List<Pt> out = new ArrayList<Pt>();
+            if (spawn != null) out.add(spawn);
+            out.addAll(spread);
+            for (Room r : rooms) out.addAll(r.points);
+            for (Link l : links) if (l.to != null) out.add(l.to);
+            if (boss != null && boss.at != null) out.add(boss.at);
+            if (eventAnchor != null) out.add(eventAnchor);
+            return out;
         }
 
         public Room room(String id) {
@@ -265,7 +286,10 @@ public final class EmberRunMaps {
             for (Link l : links) {
                 if (room(l.after) == null) return key + ": link.after " + l.after + " is not a room";
                 if (l.from == null || l.to == null) return key + ": link from/to missing";
+                if (l.from.contains(l.to.x + 0.5, l.to.y, l.to.z + 0.5)) return key + ": link target inside its own entry box";
             }
+            for (Box b : rails) for (Pt p : standPoints())
+                if (b.contains(p.x + 0.5, p.y, p.z + 0.5)) return key + ": rail covers point " + p;
             return null;
         }
     }

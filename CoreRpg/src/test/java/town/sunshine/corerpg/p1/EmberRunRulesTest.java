@@ -354,4 +354,46 @@ public class EmberRunRulesTest {
         assertNull(g.get("fc_q05_coin"));
         assertEquals("q06", g.get("fc_q05_unlock").id);
     }
+
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> rawQ01() {
+        InputStream in = EmberRunRulesTest.class.getResourceAsStream("/ember-v1-runs.yml");
+        Map<String, Object> root = (Map<String, Object>) new Yaml().load(new InputStreamReader(in, StandardCharsets.UTF_8));
+        return (Map<String, Object>) ((Map<String, Object>) root.get("maps")).get("q01");
+    }
+
+    private static List<Object> xyz(int... v) {
+        List<Object> l = new java.util.ArrayList<Object>();
+        for (int i : v) l.add(i);
+        return l;
+    }
+
+    @Test public void spreadLinksRailsClearParseAndValidate() {
+        Map<String, Object> q = rawQ01();
+        q.put("spread", java.util.Arrays.asList(xyz(-2, 65, 0), xyz(2, 65, 0)));
+        Map<String, Object> link = new java.util.HashMap<String, Object>();
+        link.put("after", "r1"); link.put("label", "上楼"); link.put("from", xyz(-1, 65, 14, 1, 67, 14));
+        link.put("to", xyz(0, 65, 20)); link.put("yaw", 180);
+        q.put("links", java.util.Collections.singletonList(link));
+        q.put("rails", java.util.Collections.singletonList(xyz(-9, 65, 2, -9, 66, 2)));
+        q.put("clear", java.util.Collections.singletonList(xyz(6, 64, 11)));
+        EmberRunMaps.MapDef d = new EmberRunMaps.MapDef("q01", q);
+        assertNull(d.validate());
+        assertNull(d.spreadPoint(0));                      // leader keeps the DP spawn
+        assertEquals(-2, (int) d.spreadPoint(1).x);
+        assertEquals(2, (int) d.spreadPoint(2).x);
+        assertEquals(-2, (int) d.spreadPoint(3).x);        // wraps
+        assertEquals(180f, d.links.get(0).yaw, 0);
+        assertEquals("上楼", d.links.get(0).label);
+        assertEquals(1, d.rails.size());
+        assertEquals(11, (int) d.clear.get(0).z);
+        // a rail over a mob point, a link into its own box, a link after a non-room are refused
+        q.put("rails", java.util.Collections.singletonList(xyz(-5, 65, 8, -5, 66, 8)));
+        assertTrue(new EmberRunMaps.MapDef("q01", q).validate().contains("rail covers point"));
+        q.remove("rails");
+        link.put("to", xyz(0, 65, 14));
+        assertTrue(new EmberRunMaps.MapDef("q01", q).validate().contains("inside its own entry box"));
+        link.put("to", xyz(0, 65, 20)); link.put("after", "r9");
+        assertTrue(new EmberRunMaps.MapDef("q01", q).validate().contains("not a room"));
+    }
 }

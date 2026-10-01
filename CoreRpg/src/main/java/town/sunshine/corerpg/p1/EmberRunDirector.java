@@ -96,6 +96,11 @@ final class EmberRunDirector {
             EmberRunMaps.Room r = def.rooms.get(i);
             if (r.door != null && i >= next) setBox(r.door, Material.IRON_FENCE, Material.AIR);
         }
+        for (EmberRunMaps.Box b : def.rails) setBox(b, Material.IRON_FENCE, Material.AIR);
+        for (EmberRunMaps.Pt c : def.clear) {
+            Block bl = w.getBlockAt((int) Math.floor(c.x), (int) Math.floor(c.y), (int) Math.floor(c.z));
+            if (bl.getType() != Material.AIR) bl.setType(Material.AIR);
+        }
     }
 
     boolean finished() { return finished; }
@@ -110,6 +115,17 @@ final class EmberRunDirector {
             for (Player p : participantsHere()) {
                 Location l = p.getLocation();
                 if (r.trigger.contains(l.getX(), l.getY(), l.getZ())) { spawnRoom(r); break; }
+            }
+        }
+        // passages (spire): once the room is cleared, stepping into the passage box moves the player up
+        for (EmberRunMaps.Link k : def.links) {
+            if (!s.cleared.contains(k.after)) continue;
+            for (Player p : participantsHere()) {
+                Location l = p.getLocation();
+                if (!k.from.contains(l.getX(), l.getY(), l.getZ())) continue;
+                p.teleport(new Location(w, k.to.x + 0.5, k.to.y, k.to.z + 0.5, k.yaw, 0f));
+                w.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.8f, 1.2f);
+                if (!k.label.isEmpty()) p.sendMessage("§7" + k.label);
             }
         }
         // mob upkeep: leash, stuck, void
@@ -196,6 +212,7 @@ final class EmberRunDirector {
             setBox(r.door, Material.AIR, Material.IRON_FENCE);
             w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
         }
+        for (EmberRunMaps.Link k : def.links) if (k.after.equals(r.id)) svc.tellRun(s, "§7通道已开启：" + k.label);
         if (r.id.equals(def.eventAfter)) spawnExtra();
         boolean last = next >= def.rooms.size();
         svc.onRoomCleared(s, r, last);
