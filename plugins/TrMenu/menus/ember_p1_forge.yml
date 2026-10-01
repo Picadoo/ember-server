@@ -109,10 +109,11 @@ Icons:
       name: '§7分解 · 预览'
       lore:
         - '§7只限普通掉落件 → 胚料 1/2/3'
-        - '§7确认请输入 /corerpg p1 dismantle confirm'
+        - '§7预览后在聊天栏点击 §c[确认分解]§7（30 秒内有效）'
     actions:
       all:
         - 'command: corerpg p1 dismantle'
+        - close
   B:
     display:
       material: barrier

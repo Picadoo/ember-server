@@ -78,12 +78,13 @@ public final class EmberForgeService implements Listener {
         if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
         Player p = (Player) s;
         boolean go = false;
-        String rid = null, target = null, sub = null;
+        String rid = null, target = null, sub = null, tok = null;
         for (int i = 2; i < args.length; i++) {
             String a = args[i];
             String l = a.toLowerCase(Locale.ROOT);
             if (l.equals("confirm") || l.equals("go") || l.equals("确认")) go = true;
             else if (l.startsWith("rid:")) rid = a.substring(4);
+            else if (l.startsWith("tok:")) tok = a.substring(4);
             else if (l.equals("craft") || l.equals("精工")) sub = "craft";
             else if (l.equals("quality") || l.equals("成色")) sub = "quality";
             else if (HEX.matcher(l).matches()) target = l;
@@ -100,7 +101,7 @@ public final class EmberForgeService implements Listener {
         if ("upgrade".equals(op)) return simple(p, it, "upgrade", EmberUpgradeRules.upgrade(it.data, firstClear(p, EmberUpgradeRules.upgradeFlag(it.data.tier))), go, rid);
         if ("refine".equals(op)) return simple(p, it, "refine", EmberUpgradeRules.refine(it.data), go, rid);
         if ("quality".equals(op)) return simple(p, it, "quality", EmberUpgradeRules.quality(it.data), go, rid);
-        if ("dismantle".equals(op)) return dismantle(p, it, go, rid);
+        if ("dismantle".equals(op)) return dismantle(p, it, go, rid, tok);
         return help(p);
     }
 
@@ -258,13 +259,23 @@ public final class EmberForgeService implements Listener {
         return true;
     }
 
-    private boolean dismantle(Player p, Slot it, boolean go, String rid) {
+    private boolean dismantle(Player p, Slot it, boolean go, String rid, String tok) {
         String why = EmberUpgradeRules.dismantleCheck(it.data);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         int blanks = EmberUpgradeRules.dismantleYield(it.data);
+        // B2.137: destroying needs the one-shot token from a preview (clickable [确认分解]), bound to uid+rev+slot
+        String fp = it.data.uid + "|" + it.data.rev + "|" + it.index;
+        if (go) {
+            String bad = town.sunshine.corerpg.ConfirmTokens.consume(p, "p1dismantle", tok, fp);
+            if (bad != null) { p.sendMessage(P + ChatColor.RED + bad); go = false; }
+        }
         if (!go) {
             p.sendMessage(P + "分解 " + it.data.shortLabel() + " → 胚料 ×" + blanks + "（不退强化材料与金币，物品永久销毁）");
-            p.sendMessage(P + "执行: /corerpg p1 dismantle confirm");
+            if (it.data.isBlade() && onlyBlade(p, it.index))
+                p.sendMessage(P + ChatColor.RED + "⚠ 这是你背包里唯一的 P1 刃，分解后新模式副本内将没有可用武器");
+            String t = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1dismantle", fp);
+            town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "物品将被永久销毁：", "[确认分解]",
+                    "/corerpg p1 dismantle confirm tok:" + t, "分解 " + it.data.shortLabel() + "\n物品永久销毁，不可撤销");
             return true;
         }
         if (ni().createNiItem(EmberUpgradeRules.MAT_BLANK) == null) { p.sendMessage(P + ChatColor.RED + "胚料模板 " + EmberUpgradeRules.MAT_BLANK + " 未加载（需 ni reload/重启）"); return true; }
@@ -276,6 +287,17 @@ public final class EmberForgeService implements Listener {
         pendingDismantle.put(it.data.uid, new Object[]{original, blanks}); // before commit: YAML mode finishes inline
         commit(p, "dismantle", r, Cost.NONE, Arrays.asList(new TxnItem(it.data, null, "dismantled")),
                 "分解 " + it.data.shortLabel() + " → 胚料×" + blanks);
+        return true;
+    }
+
+    /** B2.137: true when no other inventory slot holds a valid P1 blade. */
+    private boolean onlyBlade(Player p, int except) {
+        ItemStack[] all = p.getInventory().getContents();
+        for (int i = 0; i < all.length; i++) {
+            if (i == except || all[i] == null || !items().hasData(all[i])) continue;
+            EmberItems.Read r = items().read(all[i]);
+            if (r != null && r.data != null && r.data.isBlade()) return false;
+        }
         return true;
     }
 

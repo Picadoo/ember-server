@@ -1652,8 +1652,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             return true;
         }
         Player p = (Player) sender;
-        boolean info = args.length >= 2 && "info".equalsIgnoreCase(args[1]);
-        if (scrapService != null) scrapService.cmdScrap(p, info);
+        String mode = args.length >= 2 && "info".equalsIgnoreCase(args[1]) ? "info"
+                : args.length >= 2 && ("confirm".equalsIgnoreCase(args[1]) || "确认".equals(args[1])) ? "confirm" : "preview";
+        if (scrapService != null) scrapService.cmdScrap(p, mode, args.length >= 3 ? args[2] : null); // B2.137 click-confirm
         return true;
     }
 

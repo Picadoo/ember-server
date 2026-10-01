@@ -239,8 +239,19 @@ public final class ScrapService {
         p.updateInventory();
     }
 
-    /** Preview or execute scrap. */
-    public void cmdScrap(Player p, boolean infoOnly) {
+    /** Preview only (no confirm button) — kept for callers of the old signature. */
+    public void cmdScrap(Player p, boolean infoOnly) { cmdScrap(p, infoOnly ? "info" : "preview", null); }
+
+    private static String fingerprint(Player p, ItemStack stack, String gearId, int enhance) {
+        return p.getInventory().getHeldItemSlot() + "|" + gearId + "|" + enhance + "|" + stack.getAmount() + "|" + stack.hashCode();
+    }
+
+    /**
+     * mode = info (rules preview), preview (rules + clickable [确认分解]) or confirm (needs the token from the
+     * preview; B2.137: /corerpg scrap no longer destroys the held item on the first call).
+     */
+    public void cmdScrap(Player p, String mode, String token) {
+        boolean infoOnly = !"confirm".equals(mode);
         if (!enabled) {
             p.sendMessage(ChatColor.RED + "[分解] 系统未启用");
             return;
@@ -261,6 +272,15 @@ public final class ScrapService {
             return;
         }
         int enhance = GearLore.readEnhance(stack);
+        String fp = fingerprint(p, stack, gearId, enhance);
+        if (!infoOnly) {
+            String why = ConfirmTokens.consume(p, "scrap", token, fp);
+            if (why != null) {
+                p.sendMessage(ChatColor.RED + "[分解] " + why);
+                infoOnly = true;
+                mode = "preview";
+            }
+        }
         Map<String, Integer> grants = computeGrants(gs, enhance, !infoOnly);
 
         if (infoOnly) {
@@ -273,7 +293,14 @@ public final class ScrapService {
                 p.sendMessage(ChatColor.YELLOW + "  强化加成: 每 " + enhanceBonusPerLevels
                         + " 级 +1 主材料 → 当前 +" + bonus);
             }
-            p.sendMessage(ChatColor.DARK_GRAY + "  执行: /corerpg scrap");
+            if ("preview".equals(mode)) {
+                if (ConfirmTokens.onlyWeapon(p)) p.sendMessage(ChatColor.RED + "  ⚠ 这是你身上唯一的武器，分解后将没有武器可用");
+                String t = ConfirmTokens.issue(p, "scrap", fp);
+                ConfirmTokens.sendClick(p, ChatColor.GOLD + "[分解] " + ChatColor.GRAY + "物品将被永久销毁：", "[确认分解]",
+                        "/corerpg scrap confirm " + t, "分解手持的 " + gearId + "（+" + enhance + "）\n物品永久销毁，不可撤销");
+            } else {
+                p.sendMessage(ChatColor.DARK_GRAY + "  分解: /corerpg scrap（预览后点击 [确认分解]）");
+            }
             return;
         }
 
