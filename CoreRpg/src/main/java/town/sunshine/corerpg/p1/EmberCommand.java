@@ -16,6 +16,9 @@ public final class EmberCommand {
 
     private final EmberMode mode;
     private final EmberDamageTrace trace;
+    private EmberLoadoutService loadouts;
+
+    public void setLoadouts(EmberLoadoutService l) { this.loadouts = l; }
 
     public EmberCommand(EmberMode mode, EmberDamageTrace trace) {
         this.mode = mode;
@@ -27,12 +30,15 @@ public final class EmberCommand {
     public boolean cmd(CommandSender s, String[] args) {
         String sub = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "status";
         if ("status".equals(sub)) return status(s);
+        if ("charm".equals(sub)) return charm(s, args);
+        if ("inspect".equals(sub)) return inspect(s);
         if (!s.hasPermission("corerpg.admin")) {
             s.sendMessage(ChatColor.RED + "需要 corerpg.admin");
             return true;
         }
         if ("enable".equals(sub) || "on".equals(sub)) {
             mode.setRuntimeEnabled(Boolean.TRUE);
+            if (loadouts != null && mode.isActive()) { loadouts.store().ensureSchema(); loadouts.ensureLoadedAll(); }
             s.sendMessage(P + "运行期开启 " + EmberMode.MODE_ID + "（仅 scope 内世界生效，重启后恢复配置值）"
                     + (mode.isBlocked() ? ChatColor.RED + " 但已被阻止: " + mode.getBlockedReason() : ""));
             return true;
@@ -50,6 +56,7 @@ public final class EmberCommand {
         if ("world".equals(sub)) return world(s, args);
         if ("debug".equals(sub)) return debug(s, args);
         if ("calc".equals(sub)) return calc(s, args);
+        if ("give".equals(sub)) return give(s, args);
         return help(s);
     }
 
@@ -57,6 +64,8 @@ public final class EmberCommand {
         s.sendMessage(P + "/corerpg p1 status | enable | disable | follow");
         s.sendMessage(P + "/corerpg p1 world add|remove [世界] | world list");
         s.sendMessage(P + "/corerpg p1 debug [all|console|off]  — 每击伤害来源日志");
+        s.sendMessage(P + "/corerpg p1 give <scorch|burst|sustain|t0> <blade|charm> <阶0-3> [成色0-3] [精工0-3] [强化0-10] [玩家]");
+        s.sendMessage(P + "/corerpg p1 charm select|clear  ·  /corerpg p1 inspect  — 手持物品身份/校验");
         s.sendMessage(P + "/corerpg p1 calc <武阶> <武成色> <武精工> <武强化> <符阶> <符成色> <符精工> <符强化> <等级> [sustain]");
         return true;
     }
@@ -70,6 +79,14 @@ public final class EmberCommand {
             Player p = (Player) s;
             s.sendMessage(P + "当前世界 " + p.getWorld().getName() + " → " + (EmberMode.isP1(p) ? ChatColor.GOLD + "P1 新模式" : "旧模式"));
             if (trace != null) s.sendMessage(P + "debug " + trace.describe(p.getUniqueId()));
+            if (loadouts != null) {
+                EmberLoadout l = loadouts.refresh(p);
+                s.sendMessage(P + String.format(Locale.ROOT, "B=%.2f H=%.2f (H0 %.2f) D=%.0f M=%.4f EHP=%.1f  Lv%d  套装: %s",
+                        l.b, l.h, l.h0, l.d, l.m, l.ehp(), l.level, l.setLabel()));
+                s.sendMessage(P + "主手: " + (l.blade == null ? "无有效 P1 刃" : l.blade.shortLabel())
+                        + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
+                for (String n : loadouts.notes(p)) s.sendMessage(P + ChatColor.YELLOW + n);
+            }
         }
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "tables " + EmberMode.tables());
         return true;
@@ -116,6 +133,73 @@ public final class EmberCommand {
         }
         boolean on = trace.toggleSelf(p.getUniqueId());
         s.sendMessage(P + "与你相关的每击伤害日志: " + (on ? "开" : "关") + "（raw → 各修正 → final）");
+        return true;
+    }
+
+    private boolean charm(CommandSender s, String[] args) {
+        if (!(s instanceof Player) || loadouts == null) { s.sendMessage(P + "仅玩家可用"); return true; }
+        Player p = (Player) s;
+        String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "select";
+        if ("clear".equals(op)) {
+            loadouts.clearCharm(p);
+            s.sendMessage(P + "已取消选定护符");
+            return true;
+        }
+        String err = loadouts.selectCharm(p, p.getInventory().getItemInMainHand());
+        if (err != null) { s.sendMessage(P + ChatColor.RED + err); return true; }
+        EmberLoadout l = loadouts.get(p);
+        s.sendMessage(P + "已选定护符 " + (l.charm == null ? "(暂未生效: " + String.join("; ", loadouts.notes(p)) + ")" : l.charm.shortLabel())
+                + " · 套装: " + l.setLabel());
+        return true;
+    }
+
+    private boolean inspect(CommandSender s) {
+        if (!(s instanceof Player) || loadouts == null) { s.sendMessage(P + "仅玩家可用"); return true; }
+        Player p = (Player) s;
+        org.bukkit.inventory.ItemStack it = p.getInventory().getItemInMainHand();
+        if (!NmsNbt.isReady()) { s.sendMessage(P + ChatColor.RED + "NBT 桥不可用: " + NmsNbt.error()); return true; }
+        EmberItems.Read r = loadouts.items().read(it);
+        if (r == null) { s.sendMessage(P + "手持物品没有 ember_v1 数据（旧物品在 P1 中不提供任何属性）"); return true; }
+        EmberItemData d = r.data;
+        s.sendMessage(P + "uid=" + d.uid + " ni=" + d.ni + " ver=" + d.version + " rev=" + d.rev);
+        s.sendMessage(P + "fam=" + d.family + " slot=" + d.slot + " T" + d.tier + " q=" + d.quality + " craft=" + d.craft
+                + " +" + d.enhance + " pity=" + d.pity + " bound=" + d.bound + " src=" + d.source);
+        s.sendMessage(P + "NBT 校验: " + (r.ok() ? ChatColor.GREEN + "OK" : ChatColor.RED + r.problem));
+        EmberItemStore.Row row = loadouts.cachedRow(d.uid);
+        s.sendMessage(P + "DB: " + (!loadouts.store().usable() ? "未用 MySQL（只校验签名 NBT）"
+                : row == null ? "未缓存（加入/选定时会查询）" : "owner=" + row.owner + " rev=" + row.rev + " state=" + row.state));
+        return true;
+    }
+
+    private boolean give(CommandSender s, String[] args) {
+        if (loadouts == null) return true;
+        if (args.length < 5) return help(s);
+        String fam = args[2].toLowerCase(Locale.ROOT);
+        String slot = args[3].toLowerCase(Locale.ROOT);
+        int tier, q = 0, craft = 0, enh = 0;
+        try {
+            tier = Integer.parseInt(args[4]);
+            if (args.length >= 6) q = Integer.parseInt(args[5]);
+            if (args.length >= 7) craft = Integer.parseInt(args[6]);
+            if (args.length >= 8) enh = Integer.parseInt(args[7]);
+        } catch (NumberFormatException ex) { s.sendMessage(P + "阶/成色/精工/强化需为整数"); return true; }
+        if ("t0".equals(fam)) { fam = "none"; tier = 0; }
+        Player target = args.length >= 9 ? Bukkit.getPlayerExact(args[8]) : (s instanceof Player ? (Player) s : null);
+        if (target == null) { s.sendMessage(P + "找不到目标玩家"); return true; }
+        if (!NmsNbt.isReady()) { s.sendMessage(P + ChatColor.RED + "NBT 桥不可用: " + NmsNbt.error()); return true; }
+        EmberItemData d = EmberItemData.create(fam, slot, tier, q, craft, enh, true, "admin");
+        String bad = d.validate();
+        if (bad != null) { s.sendMessage(P + ChatColor.RED + "参数无效: " + bad); return true; }
+        org.bukkit.inventory.ItemStack item = loadouts.items().create(d);
+        if (item == null) {
+            s.sendMessage(P + ChatColor.RED + "生成失败：NI 模板 " + d.ni + " 未加载（plugins/NeigeItems/Items/ember-v1-gear.yml 需重启/ni reload 后生效）或签名密钥不可用");
+            return true;
+        }
+        loadouts.remember(d, target.getUniqueId());
+        java.util.Map<Integer, org.bukkit.inventory.ItemStack> left = target.getInventory().addItem(item);
+        for (org.bukkit.inventory.ItemStack drop : left.values()) target.getWorld().dropItemNaturally(target.getLocation(), drop);
+        s.sendMessage(P + "已发放 " + d.shortLabel() + " uid=" + d.uid + " → " + target.getName()
+                + (loadouts.store().usable() ? "（已写入 cr_p1_item）" : "（未用 MySQL：仅签名 NBT）"));
         return true;
     }
 

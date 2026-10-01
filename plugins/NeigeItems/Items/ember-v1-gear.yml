@@ -1,0 +1,204 @@
+# ember-v1.0-P1 装备模板（余烬策划书 v1.0 §5.4：3 族×3 阶×2 部位 + 2 个 T0 模板）
+# 成色/精工/强化/uid 是物品 NBT ember_v1 数据，不为每个组合造模板；由 /corerpg p1 give 生成并签名。
+# 不写 物理伤害/生命力/物理防御（旧 StatService 解析键），不带附魔（A02/A03），不进 CoreEnchant 白名单。
+# 需重启或 /ni reload 后加载。
+
+ember_v1_t0_blade:
+  material: IRON_SWORD
+  name: '&f余烬v1 · 起始之刃'
+  lore:
+    - '&8余烬 v1 · 无族 · 刃 · T0'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_t0_charm:
+  material: QUARTZ
+  name: '&f余烬v1 · 起始护符'
+  lore:
+    - '&8余烬 v1 · 无族 · 护符 · T0'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_scorch_blade_t1:
+  material: DIAMOND_SWORD
+  name: '&c[T1] 焚烬刃'
+  lore:
+    - '&8余烬 v1 · 焚烬 · 刃 · T1'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_scorch_charm_t1:
+  material: DIAMOND
+  name: '&c[T1] 焚烬护符'
+  lore:
+    - '&8余烬 v1 · 焚烬 · 护符 · T1'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_scorch_blade_t2:
+  material: DIAMOND_SWORD
+  name: '&c[T2] 焚烬刃'
+  lore:
+    - '&8余烬 v1 · 焚烬 · 刃 · T2'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_scorch_charm_t2:
+  material: DIAMOND
+  name: '&c[T2] 焚烬护符'
+  lore:
+    - '&8余烬 v1 · 焚烬 · 护符 · T2'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_scorch_blade_t3:
+  material: DIAMOND_SWORD
+  name: '&c[T3] 焚烬刃'
+  lore:
+    - '&8余烬 v1 · 焚烬 · 刃 · T3'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_scorch_charm_t3:
+  material: DIAMOND
+  name: '&c[T3] 焚烬护符'
+  lore:
+    - '&8余烬 v1 · 焚烬 · 护符 · T3'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_burst_blade_t1:
+  material: DIAMOND_SWORD
+  name: '&6[T1] 烬爆刃'
+  lore:
+    - '&8余烬 v1 · 烬爆 · 刃 · T1'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_burst_charm_t1:
+  material: DIAMOND
+  name: '&6[T1] 烬爆护符'
+  lore:
+    - '&8余烬 v1 · 烬爆 · 护符 · T1'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_burst_blade_t2:
+  material: DIAMOND_SWORD
+  name: '&6[T2] 烬爆刃'
+  lore:
+    - '&8余烬 v1 · 烬爆 · 刃 · T2'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_burst_charm_t2:
+  material: DIAMOND
+  name: '&6[T2] 烬爆护符'
+  lore:
+    - '&8余烬 v1 · 烬爆 · 护符 · T2'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_burst_blade_t3:
+  material: DIAMOND_SWORD
+  name: '&6[T3] 烬爆刃'
+  lore:
+    - '&8余烬 v1 · 烬爆 · 刃 · T3'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_burst_charm_t3:
+  material: DIAMOND
+  name: '&6[T3] 烬爆护符'
+  lore:
+    - '&8余烬 v1 · 烬爆 · 护符 · T3'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_sustain_blade_t1:
+  material: DIAMOND_SWORD
+  name: '&a[T1] 炽愈刃'
+  lore:
+    - '&8余烬 v1 · 炽愈 · 刃 · T1'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_sustain_charm_t1:
+  material: DIAMOND
+  name: '&a[T1] 炽愈护符'
+  lore:
+    - '&8余烬 v1 · 炽愈 · 护符 · T1'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_sustain_blade_t2:
+  material: DIAMOND_SWORD
+  name: '&a[T2] 炽愈刃'
+  lore:
+    - '&8余烬 v1 · 炽愈 · 刃 · T2'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_sustain_charm_t2:
+  material: DIAMOND
+  name: '&a[T2] 炽愈护符'
+  lore:
+    - '&8余烬 v1 · 炽愈 · 护符 · T2'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_sustain_blade_t3:
+  material: DIAMOND_SWORD
+  name: '&a[T3] 炽愈刃'
+  lore:
+    - '&8余烬 v1 · 炽愈 · 刃 · T3'
+    - '&7主手生效；伤害由统一公式 B 结算'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS
+
+ember_v1_sustain_charm_t3:
+  material: DIAMOND
+  name: '&a[T3] 炽愈护符'
+  lore:
+    - '&8余烬 v1 · 炽愈 · 护符 · T3'
+    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_ENCHANTS

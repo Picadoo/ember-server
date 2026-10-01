@@ -114,6 +114,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private town.sunshine.corerpg.p1.EmberMode emberMode;
     private town.sunshine.corerpg.p1.EmberDamageTrace emberTrace;
     private town.sunshine.corerpg.p1.EmberCommand emberCommand;
+    private town.sunshine.corerpg.p1.EmberItemStore emberStore;
+    private town.sunshine.corerpg.p1.EmberLoadoutService emberLoadouts;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -138,6 +140,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         emberTrace = new town.sunshine.corerpg.p1.EmberDamageTrace(this);
         Bukkit.getPluginManager().registerEvents(emberTrace, this);
         emberCommand = new town.sunshine.corerpg.p1.EmberCommand(emberMode, emberTrace);
+        emberStore = new town.sunshine.corerpg.p1.EmberItemStore(this);
+        emberLoadouts = new town.sunshine.corerpg.p1.EmberLoadoutService(this,
+                new town.sunshine.corerpg.p1.EmberItems(this, niBridge), emberStore);
+        Bukkit.getPluginManager().registerEvents(emberLoadouts, this);
+        emberCommand.setLoadouts(emberLoadouts);
         enhanceService = new EnhanceService(this, niBridge);
         calamityService = new CalamityService(this);
         covenantService = new CovenantService(this, niBridge, dataStore);
@@ -267,6 +274,14 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (guildService != null) guildService.saveAll();
         if (auctionService != null) auctionService.saveAll();
         if (dataStore != null) dataStore.saveAll();
+        if (emberLoadouts != null && town.sunshine.corerpg.p1.EmberMode.active()) {
+            for (Player p : Bukkit.getOnlinePlayers()) {
+                town.sunshine.corerpg.p1.EmberPlayerState st = emberLoadouts.state(p.getUniqueId());
+                if (town.sunshine.corerpg.p1.EmberMode.isP1(p)) { st.lastHp = p.getHealth(); st.lastWorld = p.getWorld().getName(); }
+                emberLoadouts.saveState(p);
+            }
+        }
+        if (emberStore != null) emberStore.shutdown(); // flush P1 writes before the pool closes
         if (mysqlStorage != null) {
             mysqlStorage.close();
             mysqlStorage = null;
@@ -310,6 +325,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public MysqlStorage getMysqlStorage() { return mysqlStorage; }
     public String getStorageMode() { return storageMode; }
     public town.sunshine.corerpg.p1.EmberMode getEmberMode() { return emberMode; }
+    public town.sunshine.corerpg.p1.EmberLoadoutService getEmberLoadouts() { return emberLoadouts; }
     public boolean isMysqlActive() { return mysqlStorage != null && mysqlStorage.isActive(); }
 
 
@@ -475,6 +491,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (emberMode != null) {
             emberMode.reload();
             if (emberTrace != null) emberTrace.setConsole(emberMode.b("debug.console", false));
+            if (emberMode.isActive() && emberStore != null) {
+                emberStore.ensureSchema();
+                if (emberLoadouts != null) emberLoadouts.ensureLoadedAll();
+            }
         }
         if (progressService != null) progressService.reload();
         if (questService != null) {

@@ -1,0 +1,230 @@
+package town.sunshine.corerpg.p1;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import town.sunshine.corerpg.CoreRpgPlugin;
+import town.sunshine.corerpg.PlayerData;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+/**
+ * Resolves the EquippedLoadout of a player: the P1 blade in the main hand plus the explicitly selected charm
+ * uid (anywhere in the player inventory, counted once; the off hand is not a second charm). An item only counts
+ * when its NBT is valid and signed, the NI id matches, the uid appears exactly once in the inventory, and — with
+ * MySQL — the {@code cr_p1_item} row exists, belongs to this player, is active and has the same rev (G07).
+ */
+public final class EmberLoadoutService implements Listener {
+
+    private final CoreRpgPlugin plugin;
+    private final EmberItems items;
+    private final EmberItemStore store;
+
+    private final Map<UUID, EmberLoadout> cache = new ConcurrentHashMap<UUID, EmberLoadout>();
+    private final Map<UUID, List<String>> notes = new ConcurrentHashMap<UUID, List<String>>();
+    private final Map<UUID, EmberPlayerState> states = new ConcurrentHashMap<UUID, EmberPlayerState>();
+    /** DB trust cache: uid → row (main thread only) */
+    private final Map<String, EmberItemStore.Row> rows = new HashMap<String, EmberItemStore.Row>();
+    private final Map<String, Long> lookupAt = new HashMap<String, Long>();
+
+    public EmberLoadoutService(CoreRpgPlugin plugin, EmberItems items, EmberItemStore store) {
+        this.plugin = plugin;
+        this.items = items;
+        this.store = store;
+    }
+
+    public EmberItems items() { return items; }
+    public EmberItemStore store() { return store; }
+
+    public EmberPlayerState state(UUID id) {
+        EmberPlayerState s = states.get(id);
+        if (s == null) {
+            s = new EmberPlayerState();
+            EmberPlayerState prev = states.putIfAbsent(id, s);
+            if (prev != null) s = prev;
+        }
+        return s;
+    }
+
+    public void saveState(Player p) {
+        if (store.usable()) store.saveState(p.getUniqueId(), state(p.getUniqueId()));
+    }
+
+    /** Cached loadout (re-resolved by {@link #refresh} every second from StatService for P1 players). */
+    public EmberLoadout get(Player p) {
+        EmberLoadout l = cache.get(p.getUniqueId());
+        return l != null ? l : refresh(p);
+    }
+
+    public List<String> notes(Player p) {
+        List<String> n = notes.get(p.getUniqueId());
+        return n == null ? Collections.<String>emptyList() : n;
+    }
+
+    public void invalidate(UUID id) { cache.remove(id); }
+
+    public EmberLoadout refresh(Player p) {
+        List<String> why = new ArrayList<String>();
+        EmberPlayerState st = state(p.getUniqueId());
+        PlayerInventory inv = p.getInventory();
+        ItemStack[] all = inv.getContents();
+        Map<String, Integer> count = new HashMap<String, Integer>();
+        Map<String, EmberItems.Read> charmCandidates = new HashMap<String, EmberItems.Read>();
+        for (ItemStack it : all) {
+            if (it == null || !items.hasData(it)) continue;
+            EmberItems.Read r = items.read(it);
+            if (r == null || r.data == null || r.data.uid == null) continue;
+            Integer c = count.get(r.data.uid);
+            count.put(r.data.uid, (c == null ? 0 : c) + Math.max(1, it.getAmount()));
+            if (st.charmUid != null && st.charmUid.equals(r.data.uid)) charmCandidates.put(r.data.uid, r);
+        }
+        EmberItemData blade = null;
+        ItemStack main = inv.getItemInMainHand();
+        if (main != null && items.hasData(main)) {
+            EmberItems.Read r = items.read(main);
+            if (r == null) why.add("主手: 无 ember_v1 数据");
+            else if (!r.ok()) why.add("主手: " + r.problem);
+            else if (!r.data.isBlade()) why.add("主手: 不是刃 (" + r.data.slot + ")");
+            else if (count.get(r.data.uid) != null && count.get(r.data.uid) > 1) why.add("主手: uid 重复出现 " + count.get(r.data.uid) + " 次");
+            else {
+                String db = dbCheck(p, r.data);
+                if (db != null) why.add("主手: " + db);
+                else blade = r.data;
+            }
+        }
+        EmberItemData charm = null;
+        if (st.charmUid != null) {
+            EmberItems.Read r = charmCandidates.get(st.charmUid);
+            if (r == null) why.add("护符: 已选 " + st.charmUid.substring(0, 8) + " 不在背包");
+            else if (!r.ok()) why.add("护符: " + r.problem);
+            else if (!r.data.isCharm()) why.add("护符: 选中的不是护符");
+            else if (count.get(r.data.uid) > 1) why.add("护符: uid 重复出现 " + count.get(r.data.uid) + " 次");
+            else {
+                String db = dbCheck(p, r.data);
+                if (db != null) why.add("护符: " + db);
+                else charm = r.data;
+            }
+        }
+        int level = 10;
+        try {
+            PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+            if (pd != null) level = pd.getEmberLevel();
+        } catch (Throwable ignored) {}
+        EmberLoadout l = EmberLoadout.compute(EmberMode.tables(), blade, charm, level);
+        cache.put(p.getUniqueId(), l);
+        notes.put(p.getUniqueId(), why);
+        String mainUid = blade == null ? null : blade.uid;
+        boolean changed = !eq(st.mainhandUid, mainUid) || !eq(st.activeSet, l.activeSet) || st.awakening != l.awakening;
+        st.mainhandUid = mainUid;
+        st.activeSet = l.activeSet;
+        st.awakening = l.awakening;
+        if (changed && EmberMode.isP1(p)) saveState(p);
+        return l;
+    }
+
+    private static boolean eq(String a, String b) { return a == null ? b == null : a.equals(b); }
+
+    /** @return null when the DB agrees (or there is no DB), else the reason. */
+    private String dbCheck(Player p, EmberItemData d) {
+        if (!store.usable()) return null; // YAML storage: signed NBT only
+        EmberItemStore.Row row = rows.get(d.uid);
+        if (row == null) {
+            Long at = lookupAt.get(d.uid);
+            long now = System.currentTimeMillis();
+            if (at == null || now - at > 30000L) {
+                lookupAt.put(d.uid, now);
+                final String uid = d.uid;
+                store.lookupItem(uid, r -> {
+                    if (r != null) { rows.put(uid, r); }
+                });
+            }
+            return "DB 记录未找到/查询中";
+        }
+        if (!"active".equals(row.state)) return "DB 状态 " + row.state;
+        if (row.owner == null || !row.owner.equals(p.getUniqueId().toString())) return "DB 所有者不是你";
+        if (row.rev != d.rev) return "DB rev " + row.rev + " != NBT rev " + d.rev;
+        return null;
+    }
+
+    /** Called after an admin give / future item mutations so the trust cache matches immediately. */
+    public void remember(EmberItemData d, UUID owner) {
+        rows.put(d.uid, new EmberItemStore.Row(owner == null ? null : owner.toString(), d.rev, "active"));
+        store.upsertItem(d, owner, "active");
+    }
+
+    public EmberItemStore.Row cachedRow(String uid) { return rows.get(uid); }
+
+    /** Explicit charm selection (book §4.1: only the selected charm counts). */
+    public String selectCharm(Player p, ItemStack held) {
+        EmberItems.Read r = items.read(held);
+        if (r == null) return "手持物品不是 P1 物品";
+        if (!r.ok()) return "物品不可信: " + r.problem;
+        if (!r.data.isCharm()) return "手持的是 " + EmberItemData.slotName(r.data.slot) + "，不是护符";
+        EmberPlayerState st = state(p.getUniqueId());
+        st.charmUid = r.data.uid;
+        saveState(p);
+        refresh(p);
+        return null;
+    }
+
+    public void clearCharm(Player p) {
+        state(p.getUniqueId()).charmUid = null;
+        saveState(p);
+        refresh(p);
+    }
+
+    // ------------------------------------------------------------------ lifecycle
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onJoin(PlayerJoinEvent e) {
+        cache.remove(e.getPlayer().getUniqueId());
+        if (!EmberMode.active()) return;
+        ensureLoaded(e.getPlayer());
+    }
+
+    /** Loads persisted state + owned item rows once per server session (join, or when P1 is switched on). */
+    public void ensureLoaded(Player p) {
+        final UUID id = p.getUniqueId();
+        EmberPlayerState st = state(id);
+        if (!store.usable()) { st.loaded = true; return; }
+        if (st.loaded) return;
+        store.ensureSchema();
+        store.loadState(id, st, () -> { Player q = Bukkit.getPlayer(id); if (q != null) refresh(q); });
+        store.loadOwnerItems(id, m -> rows.putAll(m));
+    }
+
+    public void ensureLoadedAll() {
+        for (Player p : Bukkit.getOnlinePlayers()) ensureLoaded(p);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onQuit(PlayerQuitEvent e) {
+        Player p = e.getPlayer();
+        UUID id = p.getUniqueId();
+        cache.remove(id);
+        notes.remove(id);
+        if (!EmberMode.active()) return;
+        EmberPlayerState st = state(id);
+        if (EmberMode.isP1(p)) {
+            st.lastHp = p.getHealth();
+            st.lastWorld = p.getWorld().getName();
+        } else {
+            st.lastHp = Double.NaN;
+            st.lastWorld = null;
+        }
+        saveState(p);
+        // state (cooldowns) intentionally stays in memory: reconnect must not reset them (D03 / A12)
+    }
+}
