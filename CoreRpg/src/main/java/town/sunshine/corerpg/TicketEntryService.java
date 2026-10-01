@@ -165,10 +165,12 @@ public final class TicketEntryService {
             ok = false;
         }
         if (!ok) {
+            boolean refunded = false;
             if (!op && stamina != null && consumed != null) {
                 stamina.refundEnter(player, kind, consumed);
+                refunded = true;
             }
-            tellEnterFailed(player, recent);
+            tellEnterFailed(player, recent, refunded ? consumed : null);
             plugin.getLogger().warning("[TicketEntry] start-console failed: " + cmd);
             return true;
         }
@@ -191,10 +193,12 @@ public final class TicketEntryService {
                     lastOkEnterMs.put(pid, Long.valueOf(System.currentTimeMillis()));
                     return;
                 }
+                boolean refunded = false;
                 if (!opF && staminaF != null && consumedF != null) {
                     staminaF.refundEnter(p, kindF, consumedF);
+                    refunded = true;
                 }
-                tellEnterFailed(p, recentF);
+                tellEnterFailed(p, recentF, refunded ? consumedF : null);
                 plugin.getLogger().info("[TicketEntry] start no-effect (likely interval): "
                         + p.getName() + " " + kindF.dungeonId);
             }
@@ -202,12 +206,22 @@ public final class TicketEntryService {
         return true;
     }
 
-    private void tellEnterFailed(Player player, boolean recentCooldown) {
+    /**
+     * B2.119: DP 无稳定回传。短时重试 → 缓存冷却提示；否则（多为 DP 条件拒进：人数 / 等级等，DP 已在上方说明）
+     * 不再误报「缓存冷却」。退还时按实际扣法说明：本周免费抵扣 vs 体力；OP / 未扣则不提退还。
+     */
+    private void tellEnterFailed(Player player, boolean recentCooldown, StaminaService.ConsumeResult refunded) {
         if (player == null) return;
-        // DP 无稳定回传；失败/短时拒进用人话对齐菜单 lore
-        player.sendMessage(COOLDOWN_TELL);
-        if (!recentCooldown) {
-            player.sendMessage(ChatColor.GRAY + "若仍进不去，请稍后再试（体力已退还，若已扣）");
+        if (recentCooldown) {
+            player.sendMessage(COOLDOWN_TELL);
+            player.sendMessage(ChatColor.GRAY + "若上方另有原因（如人数、等级），以上方为准");
+        } else {
+            player.sendMessage(ChatColor.YELLOW + "没能进本：原因见上方提示（如人数、等级）；出本后立刻再进需等约 5 秒");
+        }
+        if (refunded != null && refunded.usedCredit) {
+            player.sendMessage(ChatColor.GRAY + "本周首次免费次数已退还");
+        } else if (refunded != null && refunded.cost > 0) {
+            player.sendMessage(ChatColor.GRAY + "体力 " + refunded.cost + " 已退还");
         }
     }
 
