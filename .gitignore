@@ -42,6 +42,17 @@ server-runtime/ember_afk/
 server-runtime/ember_event/
 server-runtime/ember_daily_ash/
 server-runtime/ember_daily_crypt/
+server-runtime/ember_daily_frost/
+server-runtime/ember_daily_rail/
+server-runtime/ember_daily_spire/
+server-runtime/ember_daily_tide/
+server-runtime/ember_daily_frost_build/
+server-runtime/ember_daily_rail_build/
+server-runtime/ember_daily_spire_build/
+server-runtime/ember_daily_tide_build/
+server-runtime/ember_daily_build/
+server-runtime/ember_daily_ash_build/
+server-runtime/ember_daily_crypt_build/
 login-runtime/world/
 login-runtime/world_the_end/
 plugins/DungeonPlus/map/

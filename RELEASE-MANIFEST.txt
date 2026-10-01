@@ -1,11 +1,20 @@
-余烬服 ember-binaries-20260926 —— 解压到仓库根目录（与 git clone 的目录合并）
-  tar -xJf ember-binaries-20260926.tar.xz -C <仓库根目录>
-内容：
-  server-runtime/{world,world_nether,world_the_end,ember_hub,ember_afk,ember_event}  游玩服世界
+余烬服 ember-binaries-20261001 —— 解压到仓库根目录（与 git clone 的目录合并）
+  tar -xJf ember-binaries-20261001.tar.xz -C <仓库根目录>
+内容（相对 v2026.09.27 补全漏传地图）：
+  server-runtime/{world,world_nether,world_the_end,ember_hub,ember_afk,ember_event}  游玩服基础世界
+  server-runtime/{ember_daily_ash,ember_daily_crypt,ember_daily_frost,ember_daily_rail,ember_daily_spire,ember_daily_tide}
+                                                                                    P0–P5 日图世界（新增）
+  server-runtime/{ember_daily_ash,ember_daily_crypt,ember_daily_frost,ember_daily_rail,ember_daily_spire,ember_daily_tide}_build
+                                                                                    日图建造世界（新增；ash/crypt 若无独立 _build 则仅有上列线）
+  server-runtime/{ember_daily_build,ember_abyss_build}                              日图/深渊建造世界（新增）
   login-runtime/{world,world_the_end}                                                登录服世界
-  plugins/DungeonPlus/map/                                                            DungeonPlus 副本地图
-  server-runtime/libs, server-runtime/libraries                                       运行库缓存（可选，离线启动用）
+  plugins/DungeonPlus/map/                                                          全部 DP 副本地图：
+    ember_abyss, ember_arena, ember_calamity, ember_daily, ember_raid, ember_weekly,
+    ember_daily_ash, ember_daily_crypt, ember_daily_frost, ember_daily_rail,
+    ember_daily_spire, ember_daily_tide, ember_elite（后七项相对 0927 新增/补全）
+  server-runtime/libs, server-runtime/libraries, server-runtime/cache               运行库缓存（可选）
   **/*.jar                                                                            paper-custom.jar、原版 paper-1.12.2-1620.jar、全部插件 jar、客户端 mod
   plugins/**/*.db, login-runtime/plugins/AuthMe/authme.db                             插件本地数据（sqlite）
-  sql/ember.sql, sql/authme.sql                                                       MariaDB 转储（来自 2026-09-13 归档；导出时数据库未运行）
-不含：secrets/（请从 secrets/mysql-ember.env.example 复制填写）、日志、缓存、JDK。
+  sql/ember.sql, sql/authme.sql                                                       MariaDB 转储
+不含：secrets/（请从 secrets/mysql-ember.env.example 复制填写）、日志、JDK、tools/。
+Release：https://github.com/Picadoo/ember-server/releases/tag/v2026.10.01

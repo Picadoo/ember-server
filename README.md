@@ -10,7 +10,7 @@
 | 数据库 | MariaDB | 3306 | 库 `ember`（CoreRpg）+ 库 `authme`（AuthMe），用户 `ember` |
 
 > 本仓库只含**源码 + 配置 + 文档**。世界存档、所有 jar、SQL 转储在 GitHub Release
-> **`v2026.09.26`** 的资产 `ember-binaries-20260926.tar.xz` 里；数据库密码等机密**不在**仓库中。
+> **`v2026.10.01`** 的资产 `ember-binaries-20261001.tar.xz` 里；数据库密码等机密**不在**仓库中。
 
 ## 仓库结构
 
@@ -40,10 +40,10 @@ secrets/mysql-ember.env.example   数据库凭据模板（真实 secrets/mysql-e
    > 脚本（env.sh、start.sh）里写死了 `/workspace/minecraft/...` 路径，建议就克隆到这个位置，否则需改 `env.sh`。
 2. **下载 Release 资产并解压到仓库根目录**（世界 + jar + SQL）：
    ```bash
-   gh release download v2026.09.26 --repo Picadoo/ember-server
-   tar -xJf ember-binaries-20260926.tar.xz -C .
+   gh release download v2026.10.01 --repo Picadoo/ember-server
+   tar -xJf ember-binaries-20261001.tar.xz -C .
    ```
-   会放好：`server-runtime/{world*,ember_hub,ember_afk,ember_event}`、`login-runtime/world*`、
+   会放好：`server-runtime/{world*,ember_hub,ember_afk,ember_event,ember_daily_*,ember_*_build}`、`login-runtime/world*`、
    `plugins/DungeonPlus/map/`、所有插件 jar、`server-runtime/paper-custom.jar`、`login-runtime/paper-custom.jar`、
    `paper/paper-1.12.2-1620.jar`（原版备用核心）、`sql/ember.sql`、`sql/authme.sql`。
 3. **游玩服插件目录软链**：`ln -sfn ../plugins server-runtime/plugins`（start.sh 缺失时也会自动建）。

@@ -112,3 +112,7 @@ Workspace: `/workspace/minecraft`
 ## 10. 停工声明
 
 本号（交接触发账号）在 B2.90 close + 本文件 push 后 **全面停止**：不再批 A、不再交策划/插件/测试新窗、不再升 B2.91。
+
+## 11. 二进制快照（2026-10-01）
+
+世界/ jar / DP map 快照已迁至 GitHub Release **`v2026.10.01`**（`ember-binaries-20261001.tar.xz`），相对 v2026.09.27 补全日图六线、`ember_elite` 与建造世界。接手恢复请按 README / `RELEASE-MANIFEST.txt`。
