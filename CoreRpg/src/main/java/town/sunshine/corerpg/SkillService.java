@@ -390,7 +390,9 @@ public final class SkillService implements Listener {
             int n = 0;
             for (LivingEntity le : targets) {
                 if (n++ >= maxTargets) break;
-                dealInternal(player, le, dmg);
+                town.sunshine.corerpg.p1.EmberCombatListener.dealP1(player, le, dmg,
+                        town.sunshine.corerpg.p1.EmberSetEngine.Kind.SKILL,
+                        town.sunshine.corerpg.p1.EmberCombatListener.internalTag);
                 if (look2 != null) spawnParticles(le.getLocation().add(0, 1, 0), look2.particles, 12);
             }
         } finally {

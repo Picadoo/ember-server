@@ -18,7 +18,10 @@ public final class EmberCommand {
     private final EmberDamageTrace trace;
     private EmberLoadoutService loadouts;
 
+    private EmberSetService sets;
+
     public void setLoadouts(EmberLoadoutService l) { this.loadouts = l; }
+    public void setSets(EmberSetService v) { this.sets = v; }
 
     public EmberCommand(EmberMode mode, EmberDamageTrace trace) {
         this.mode = mode;
@@ -87,6 +90,7 @@ public final class EmberCommand {
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
                 for (String n : loadouts.notes(p)) s.sendMessage(P + ChatColor.YELLOW + n);
             }
+            if (sets != null) s.sendMessage(P + sets.describe(p));
         }
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "tables " + EmberMode.tables());
         return true;

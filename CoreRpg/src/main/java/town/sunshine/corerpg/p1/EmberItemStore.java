@@ -59,6 +59,8 @@ public final class EmberItemStore {
                     + "skill_cd_until BIGINT NOT NULL DEFAULT 0,"
                     + "last_hp DOUBLE NULL,"
                     + "last_world VARCHAR(64) NULL,"
+                    + "burst_cd_ms INT NOT NULL DEFAULT 0,"
+                    + "sustain_cd_ms INT NOT NULL DEFAULT 0,"
                     + "updated_at BIGINT NOT NULL"
                     + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
@@ -103,6 +105,8 @@ public final class EmberItemStore {
             try (Connection c = plugin.getMysqlStorage().getConnection(); Statement st = c.createStatement()) {
                 st.executeUpdate(SCHEMA_ITEM);
                 st.executeUpdate(SCHEMA_LOADOUT);
+                addColumnIfMissing(c, "cr_p1_loadout", "burst_cd_ms", "INT NOT NULL DEFAULT 0");
+                addColumnIfMissing(c, "cr_p1_loadout", "sustain_cd_ms", "INT NOT NULL DEFAULT 0");
                 schemaOk = true;
                 plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout ready");
             } catch (Throwable t) {
@@ -110,6 +114,21 @@ public final class EmberItemStore {
                 plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] schema init failed: " + t.getMessage());
             }
         });
+    }
+
+    /** Our own P1 tables only: adds a column introduced after the table may already exist (G02 cooldowns). */
+    static void addColumnIfMissing(Connection c, String table, String column, String ddl) throws SQLException {
+        try (PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM information_schema.COLUMNS"
+                + " WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=? AND COLUMN_NAME=?")) {
+            ps.setString(1, table);
+            ps.setString(2, column);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) return;
+            }
+        }
+        try (Statement st = c.createStatement()) {
+            st.executeUpdate("ALTER TABLE " + table + " ADD COLUMN " + column + " " + ddl);
+        }
     }
 
     private void run(String what, SqlTask task) {
@@ -196,12 +215,15 @@ public final class EmberItemStore {
         final int awk = s.awakening;
         final long heal = s.healCdUntil, skill = s.skillCdUntil;
         final double hp = s.lastHp;
+        final int burstMs = (int) Math.max(0, Math.min(Integer.MAX_VALUE, s.burstCdRemainMs));
+        final int sustainMs = (int) Math.max(0, Math.min(Integer.MAX_VALUE, s.sustainCdRemainMs));
         run("save loadout " + player, c -> {
             try (PreparedStatement ps = c.prepareStatement(
-                    "INSERT INTO cr_p1_loadout (player_uuid,mainhand_uid,charm_uid,active_set,awakening,heal_cd_until,skill_cd_until,last_hp,last_world,updated_at)"
-                            + " VALUES (?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE mainhand_uid=VALUES(mainhand_uid),charm_uid=VALUES(charm_uid),"
+                    "INSERT INTO cr_p1_loadout (player_uuid,mainhand_uid,charm_uid,active_set,awakening,heal_cd_until,skill_cd_until,last_hp,last_world,burst_cd_ms,sustain_cd_ms,updated_at)"
+                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE mainhand_uid=VALUES(mainhand_uid),charm_uid=VALUES(charm_uid),"
                             + "active_set=VALUES(active_set),awakening=VALUES(awakening),heal_cd_until=VALUES(heal_cd_until),"
-                            + "skill_cd_until=VALUES(skill_cd_until),last_hp=VALUES(last_hp),last_world=VALUES(last_world),updated_at=VALUES(updated_at)")) {
+                            + "skill_cd_until=VALUES(skill_cd_until),last_hp=VALUES(last_hp),last_world=VALUES(last_world),"
+                            + "burst_cd_ms=VALUES(burst_cd_ms),sustain_cd_ms=VALUES(sustain_cd_ms),updated_at=VALUES(updated_at)")) {
                 ps.setString(1, player.toString());
                 if (main == null) ps.setNull(2, Types.CHAR); else ps.setString(2, main);
                 if (charm == null) ps.setNull(3, Types.CHAR); else ps.setString(3, charm);
@@ -211,7 +233,9 @@ public final class EmberItemStore {
                 ps.setLong(7, skill);
                 if (Double.isNaN(hp)) ps.setNull(8, Types.DOUBLE); else ps.setDouble(8, hp);
                 if (world == null) ps.setNull(9, Types.VARCHAR); else ps.setString(9, world);
-                ps.setLong(10, System.currentTimeMillis());
+                ps.setInt(10, burstMs);
+                ps.setInt(11, sustainMs);
+                ps.setLong(12, System.currentTimeMillis());
                 ps.executeUpdate();
             }
         });
@@ -221,10 +245,10 @@ public final class EmberItemStore {
     public void loadState(final UUID player, final EmberPlayerState into, final Runnable done) {
         run("load loadout " + player, c -> {
             String charm = null, main = null, set = "none", world = null;
-            int awk = 0; long heal = 0, skill = 0; double hp = Double.NaN;
+            int awk = 0; long heal = 0, skill = 0; double hp = Double.NaN; long bcd = 0, scd = 0;
             boolean found = false;
             try (PreparedStatement ps = c.prepareStatement(
-                    "SELECT mainhand_uid,charm_uid,active_set,awakening,heal_cd_until,skill_cd_until,last_hp,last_world FROM cr_p1_loadout WHERE player_uuid=?")) {
+                    "SELECT mainhand_uid,charm_uid,active_set,awakening,heal_cd_until,skill_cd_until,last_hp,last_world,burst_cd_ms,sustain_cd_ms FROM cr_p1_loadout WHERE player_uuid=?")) {
                 ps.setString(1, player.toString());
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
@@ -234,12 +258,13 @@ public final class EmberItemStore {
                         double v = rs.getDouble(7);
                         hp = rs.wasNull() ? Double.NaN : v;
                         world = rs.getString(8);
+                        bcd = rs.getLong(9); scd = rs.getLong(10);
                     }
                 }
             }
             final boolean f = found;
             final String fc = charm, fm = main, fs = set, fw = world;
-            final int fa = awk; final long fh = heal, fk = skill; final double fhp = hp;
+            final int fa = awk; final long fh = heal, fk = skill; final double fhp = hp; final long fb = bcd, fsu = scd;
             sync(() -> {
                 if (f) {
                     // keep anything changed in memory meanwhile (later of the two cooldowns wins)
@@ -251,6 +276,8 @@ public final class EmberItemStore {
                     into.skillCdUntil = Math.max(into.skillCdUntil, fk);
                     if (Double.isNaN(into.lastHp)) into.lastHp = fhp;
                     if (into.lastWorld == null) into.lastWorld = fw;
+                    into.burstCdRemainMs = Math.max(into.burstCdRemainMs, fb);
+                    into.sustainCdRemainMs = Math.max(into.sustainCdRemainMs, fsu);
                 }
                 into.loaded = true;
                 if (done != null) done.run();

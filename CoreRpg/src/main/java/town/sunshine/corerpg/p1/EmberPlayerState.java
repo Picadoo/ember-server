@@ -15,5 +15,8 @@ public final class EmberPlayerState {
     /** D11: HP when the player left while inside a P1 world (NaN = none) */
     public volatile double lastHp = Double.NaN;
     public volatile String lastWorld;
+    /** G02 烬爆 / 炽愈 internal cooldowns as monotonic REMAINING ms, written at quit/disable, restored on the next session */
+    public volatile long burstCdRemainMs;
+    public volatile long sustainCdRemainMs;
     public volatile boolean loaded;
 }

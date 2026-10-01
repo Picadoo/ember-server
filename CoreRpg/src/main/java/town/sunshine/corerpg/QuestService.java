@@ -616,6 +616,9 @@ public final class QuestService implements Listener {
 
     // ---------------- MythicMobs (reflection) ----------------
 
+    /** MythicMobs mob (reflection; false when MM is missing). */
+    public boolean isMythic(Entity e) { return e != null && mythicId(e) != null; }
+
     private String mythicId(Entity e) {
         try {
             if (!mmTried) {

@@ -113,6 +113,14 @@ public final class EmberDamageTrace implements Listener {
         t.emit(msg, p, null, EmberMode.isP1(p));
     }
 
+    /** G02 set runtime line (ignite / explosion targets / eviction / clears), shown to viewers of this player. */
+    public static void set(Player p, String line) {
+        EmberDamageTrace t = instance;
+        if (t == null || !t.anyone()) return;
+        String msg = ChatColor.GOLD + "[P1套装] " + ChatColor.GRAY + p.getName() + " " + line;
+        t.emit(msg, p, null, EmberMode.isP1(p));
+    }
+
     // ------------------------------------------------------------------ probes
 
     @EventHandler(priority = EventPriority.LOWEST)

@@ -29,6 +29,7 @@ import town.sunshine.corerpg.SkillService;
 
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -78,6 +79,38 @@ public final class EmberCombatListener implements Listener {
 
     /** Label for P1-internal damage currently being dealt (e.g. "烬斩"), shown in the trace. */
     public static String internalTag;
+    /** Source kind of the P1-internal damage being dealt (SKILL / BURN / EXPLOSION); null = legacy internal */
+    public static EmberSetEngine.Kind internalKind;
+    /** Intended BASE of a set-event hit; forced at HIGHEST so no other listener multiplies it (§4.4) */
+    public static double internalAmount = Double.NaN;
+
+    /** onMelee → set runtime MONITOR hand-off for the same event object (removed at MONITOR). */
+    private final Map<EntityDamageByEntityEvent, Swing> pendingSwing = new IdentityHashMap<EntityDamageByEntityEvent, Swing>();
+
+    /** The swing accepted by {@link #onMelee} for exactly this event, or null (always removes it). */
+    public Swing takeSwing(EntityDamageByEntityEvent e) {
+        return pendingSwing.isEmpty() ? null : pendingSwing.remove(e);
+    }
+
+    /**
+     * Deals P1-owned damage as a player attack (no i-frame block, not a melee swing). {@code kind} tells the set
+     * runtime what it is; BURN / EXPLOSION are set-event damage whose BASE is pinned to {@code amount}.
+     */
+    public static void dealP1(Player p, LivingEntity le, double amount, EmberSetEngine.Kind kind, String tag) {
+        String prevTag = internalTag;
+        EmberSetEngine.Kind prevKind = internalKind;
+        double prevAmount = internalAmount;
+        internalTag = tag;
+        internalKind = kind;
+        internalAmount = (kind == EmberSetEngine.Kind.BURN || kind == EmberSetEngine.Kind.EXPLOSION) ? amount : Double.NaN;
+        try {
+            SkillService.dealInternal(p, le, amount);
+        } finally {
+            internalTag = prevTag;
+            internalKind = prevKind;
+            internalAmount = prevAmount;
+        }
+    }
 
     public EmberCombatListener(CoreRpgPlugin plugin, EmberLoadoutService loadouts) {
         this.plugin = plugin;
@@ -157,7 +190,10 @@ public final class EmberCombatListener implements Listener {
         }
         e.setDamage(dmg);
         boolean valid = !est.unreliable && c >= t.critMinCharge;
-        lastSwing.put(p.getUniqueId(), new Swing(++rootSeq, c, crit, valid, now));
+        Swing sw = new Swing(++rootSeq, c, crit, valid, now);
+        lastSwing.put(p.getUniqueId(), sw);
+        if (pendingSwing.size() > 256) pendingSwing.clear(); // safety: MONITOR always removes its entry
+        pendingSwing.put(e, sw);
         EmberDamageTrace.note(e, raw, String.format(Locale.ROOT,
                 "A01 P1 普攻替换: 原版 %.2f (attr %.2f, 锋利 %d) → %s · B=%.2f × 蓄力系数 %.3f%s%s = %.2f",
                 rawFull, attr, sharp, est, l.b, EmberFormula.chargeFactor(c),
@@ -189,6 +225,15 @@ public final class EmberCombatListener implements Listener {
             playerVictim((Player) victim, src, e);
         } else if (src instanceof Player && victim instanceof LivingEntity) {
             double before = e.getDamage();
+            if (SkillService.internalDamage && !Double.isNaN(internalAmount)) {
+                // set-event damage (焚烬 / 烬爆): exactly coefficient × snapshot B, never multiplied by other listeners
+                if (Math.abs(before - internalAmount) > 1e-9) {
+                    e.setDamage(internalAmount);
+                    EmberDamageTrace.note(e, before, String.format(Locale.ROOT,
+                            "套装事件伤害被其它监听改为 %.2f → 复位为 %.2f", before, internalAmount));
+                }
+                before = e.getDamage();
+            }
             String z = zeroVanilla(e);
             if (!z.isEmpty()) EmberDamageTrace.note(e, before, "怪物侧原版修正清零: " + z);
         }
@@ -281,5 +326,6 @@ public final class EmberCombatListener implements Listener {
     public void onQuit(UUID id) {
         lastSwing.remove(id);
         graceUntil.remove(id);
+        pendingSwing.clear();
     }
 }

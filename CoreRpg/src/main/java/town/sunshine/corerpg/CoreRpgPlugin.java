@@ -117,6 +117,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private town.sunshine.corerpg.p1.EmberItemStore emberStore;
     private town.sunshine.corerpg.p1.EmberLoadoutService emberLoadouts;
     private town.sunshine.corerpg.p1.EmberCombatListener emberCombat;
+    private town.sunshine.corerpg.p1.EmberSetService emberSets;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -207,6 +208,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(statService, this);
         emberCombat = new town.sunshine.corerpg.p1.EmberCombatListener(this, emberLoadouts);
         Bukkit.getPluginManager().registerEvents(emberCombat, this);
+        emberSets = new town.sunshine.corerpg.p1.EmberSetService(this, emberLoadouts, emberCombat);
+        Bukkit.getPluginManager().registerEvents(emberSets, this);
+        emberSets.start();
+        emberCommand.setSets(emberSets);
         Bukkit.getPluginManager().registerEvents(flexSkillService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -277,6 +282,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (guildService != null) guildService.saveAll();
         if (auctionService != null) auctionService.saveAll();
         if (dataStore != null) dataStore.saveAll();
+        if (emberSets != null) emberSets.flushAll(); // G02 remaining cooldowns → states, saved just below
         if (emberLoadouts != null && town.sunshine.corerpg.p1.EmberMode.active()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
                 town.sunshine.corerpg.p1.EmberPlayerState st = emberLoadouts.state(p.getUniqueId());
@@ -330,6 +336,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public town.sunshine.corerpg.p1.EmberMode getEmberMode() { return emberMode; }
     public town.sunshine.corerpg.p1.EmberLoadoutService getEmberLoadouts() { return emberLoadouts; }
     public town.sunshine.corerpg.p1.EmberCombatListener getEmberCombat() { return emberCombat; }
+    public town.sunshine.corerpg.p1.EmberSetService getEmberSets() { return emberSets; }
     public boolean isMysqlActive() { return mysqlStorage != null && mysqlStorage.isActive(); }
 
 

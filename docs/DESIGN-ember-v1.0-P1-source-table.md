@@ -349,7 +349,7 @@ CREATE TABLE IF NOT EXISTS cr_item_txn (           -- 幂等键＋审计（强�
 | A06–A11 B02 C03 D05 E03 G01 | ✅ 禁用 | `StatService.stats()` 对 P1 玩家返回空表；`onDamage` 在 P1 下 return |
 | A12 A13 | ✅ | `SkillService.castEmberSlashP1`：1.5B、8s、100°、3.5 格、最多 5 个目标、不暴击/吸血/天赋；CD 存 `EmberPlayerState` |
 | A14 A17 A18 D08 | ✅ 禁用 | 灰印、同袍、灾厄人数缩放、`SetService.isSetActive` |
-| A15 A16 D07 | ✅ 禁用旧被动 | `GearPassiveService.onHit`；新的三套效果 ⏳ G02 SetRuntime（消费 `EmberCombatListener.lastSwing` 中的 root id、c 和 valid≥0.9） |
+| A15 A16 D07 | ✅ 替换 | 旧被动在 `GearPassiveService.onHit` 禁用；新的焚烬/烬爆/炽愈见 §8 G02 |
 | A19 D09 D10 | ⏳ 配置 lint | 代码侧：回复事件全部取消，MM 的 BASE 改动会在 trace 里显示为"未登记来源"；Q 系列 MM/DP 配置 lint 还没写 |
 | A21 C01 C02 F01 F02 | ✅ | `EmberFormula` 等级加成；`StatService.refreshP1`：最大生命设为 H，移除攻速修饰，移速固定 0.2 |
 | A23 | ✅ | AttributePlus 启用时 `EmberMode` 阻止开启 |
@@ -364,3 +364,21 @@ CREATE TABLE IF NOT EXISTS cr_item_txn (           -- 幂等键＋审计（强�
 | G07 | ✅ | P1 只认签名的 `ember_v1` NBT＋NI ID＋uid 唯一＋DB 行（owner/rev/state） |
 
 其他还没做的：G03 强化保底/互换/升阶事务；RunSession（A18 开局锁定血量，以及 D11 的按局记录）；`/corerpg stats` 在 P1 下显示 B/H；NI 模板 `ember-v1-gear.yml` 需要重启或 `ni reload` 才会加载。
+
+## 8. G02 SetRuntime 实现状态（未部署）
+
+- 纯逻辑：`EmberSetRules`（系数表）、`EmberBurnBook`（燃烧）、`EmberSetEngine`（计数、内置冷却、根事件去重、爆炸选目标、HUD 文本）。单测：`EmberSetEngineTest`、`EmberBurnBookTest`、`EmberSetEnvelopeTest`、`EmberLoadoutTest`（C02/C03）。
+- Bukkit：`EmberSetService`。MONITOR `EntityDamageByEntityEvent`（不忽略已取消事件）里按 `EmberCombatListener.takeSwing(e)` 取同一事件的 root id/c；`SkillService.internalDamage` 时按 `EmberCombatListener.internalKind` 分为 SKILL/BURN/EXPLOSION，都不计数。
+- 有效命中：直接主目标近战、c≥0.9（估算不可靠时视为无效）、最终伤害 >0、未取消、root id 只计一次、存活敌对（Monster/Slime/Ghast/Shulker/末影龙或 MythicMobs 怪；驯服生物、盔甲架、玩家除外）、非无敌。
+- 焚烬：每 3 次有效命中点燃主目标，4 跳 × 1s，每跳 = 觉醒系数 × 点燃时的 B；同一目标续燃只延长结束时间（下一跳时间和快照都不变，不补跳）；最多 5 个目标，第 6 个挤掉最近一次（续）燃最早的。
+- 烬爆：每 5 次有效命中，以主目标为圆心、半径 3/3/3.5，按距离再按实体 ID 取最多 5 个（含主目标）；ICD 3s，冷却中计数停在 5/5，冷却结束后要等下一次有效命中才触发。
+- 炽愈：每 5 次有效命中回 2.5/3.25/4% 最大生命（`EmberHeal`），ICD 6s，计数封顶 5。
+- 套装事件伤害：`EmberCombatListener.dealP1(..., BURN|EXPLOSION, tag)`；`onFinal`（HIGHEST）把 BASE 复位为预定值（被其它监听改过时在 trace 里记一行），并清零原版修正。怪物没有 M；P1 世界内 PvP 已取消，所以"受击方 M"不会出现。
+- 清空：脱战 8s（造成或受到敌方伤害都算战斗）、套装变化、死亡、换世界、退出时清计数和燃烧；内置冷却不清。冷却按单调时钟（nanoTime）计时，退出/关服时把剩余毫秒写入 `cr_p1_loadout.burst_cd_ms/sustain_cd_ms`，下次会话恢复（上限为一次 ICD）。
+- HUD：每秒和每次计数变化时发 ActionBar，例如「烬爆 4/5 · 冷却 1.8s」「焚烬 2/3 · 燃烧 3 目标」；空闲时清掉，不发聊天消息。`/corerpg p1 status` 多一行运行时状态；`/corerpg p1 debug` 中以 `[P1套装]` 显示点燃、挤出、爆炸目标和脱战清空。
+
+与书的差异／取舍：
+- 点燃和爆炸在命中后的下一 tick 执行（不在原伤害事件内嵌套造成伤害）；炽愈立即执行。
+- 满血时炽愈照样触发并开始 6s 冷却（回复量为 0，trace 记一行）。
+- §8.4 五目标焚烬 731.888/s 是上界：按 §4.2 规则（每 3 击点燃一次、每次 4 跳）每秒最多 2.133 跳，实际可达约 569.9/s（测试里同时断言两者）。
+
