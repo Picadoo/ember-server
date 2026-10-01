@@ -441,4 +441,66 @@ public class EmberRunRulesTest {
         assertEquals("T2 印记不足（7/8）", EmberRunRules.exchangeCheck(7, 2, 2, "scorch", "charm", false)); // count first
         assertEquals("T3 定向锻造需本人首通 Q07", EmberRunRules.exchangeCheck(8, 3, 3, "burst", "charm", false));
     }
+
+    // ------------------------------------------------------------------ §18.1 challenge
+
+    @Test public void challengeSectionParsesWithBookValues() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.Challenge c = m.challenge;
+        assertNotNull(c);
+        assertNull(c.validate());
+        assertEquals("q07", c.requires);
+        assertEquals(3, c.tier);
+        assertEquals(90, c.bRef, 0);
+        assertArrayEquals(EmberRunRules.CHALLENGE_QUALITY_WEIGHTS, c.quality);
+        assertArrayEquals(new int[]{60, 28, 10, 2}, c.quality);
+        assertEquals(270, c.mobs.get("melee")[0], 0);
+        assertEquals(198, c.mobs.get("ranged")[0], 0);
+        assertEquals(378, c.mobs.get("heavy")[0], 0);
+        assertEquals(234, c.mobs.get("caster")[0], 0);
+        assertEquals(24, c.mobs.get("melee")[1], 0);
+        assertEquals(8000, c.bossHp, 0);
+        assertEquals(44, c.bossAtk, 0);
+        // overrides, not multipliers; timings and MM id are the map's own
+        EmberRunMaps.MapDef q1 = m.byKey("q01");
+        EmberRunMaps.Role r = q1.role("melee", c);
+        assertEquals(270, r.hp, 0);
+        assertEquals(24, r.atk, 0);
+        assertEquals(q1.roles.get("melee").mm, r.mm);
+        assertEquals(q1.roles.get("melee").interval, r.interval, 0);
+        assertEquals(36, q1.role("melee", null).hp, 0);
+        // heavy 72 / light 44 per map
+        assertEquals(72, c.skillDmg(q1.boss.skills.get(0)), 0);                    // Q01 重斩
+        assertEquals(44, c.skillDmg(m.byKey("q02").boss.skills.get(0).follow), 0);  // Q02 横扫 (second, lighter)
+        assertEquals(72, c.skillDmg(m.byKey("q04").boss.skills.get(0)), 0);
+        assertEquals(44, c.skillDmg(m.byKey("q04").boss.skills.get(1)), 0);
+        assertEquals(72, c.skillDmg(m.byKey("q05").boss.skills.get(0)), 0);
+        assertEquals(44, c.skillDmg(m.byKey("q05").boss.skills.get(1)), 0);
+    }
+
+    @Test public void challengeSettlementIsT3WithChallengeQualityAndNoFirstClear() {
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.runId = "q01c-x"; in.player = "p"; in.bossKilled = true; in.tier = EmberRunRules.CHALLENGE_TIER;
+        in.qualityWeights = EmberRunRules.CHALLENGE_QUALITY_WEIGHTS; in.extra = EmberRunRules.Extra.CHEST; in.extraDone = true;
+        int[] q = new int[4];
+        int n = 20000;
+        for (long seed = 0; seed < n; seed++) {
+            in.seed = seed;
+            Map<String, EmberRunRules.Grant> g = new HashMap<String, EmberRunRules.Grant>();
+            for (EmberRunRules.Grant x : EmberRunRules.settle(in)) g.put(x.key, x);
+            assertEquals("3", g.get("base_mark").id);
+            assertEquals(3, g.get("base_item").item.tier);
+            assertEquals(3, g.get("extra_chest_item").item.tier);
+            assertEquals(300, g.get("base_coin").amount); // fixed settlement unchanged (§18.1 table)
+            q[g.get("base_item").item.quality]++;
+        }
+        assertEquals(0.60, q[0] / (double) n, 0.015);
+        assertEquals(0.28, q[1] / (double) n, 0.015);
+        assertEquals(0.10, q[2] / (double) n, 0.01);
+        assertEquals(0.02, q[3] / (double) n, 0.005);
+        // normal table untouched when no weights are given
+        assertEquals(0, EmberRunRules.pickQuality(null, 0.69));
+        assertEquals(1, EmberRunRules.pickQuality(EmberRunRules.CHALLENGE_QUALITY_WEIGHTS, 0.61));
+        assertEquals(0, EmberRunRules.pickQuality(0.61));
+    }
 }

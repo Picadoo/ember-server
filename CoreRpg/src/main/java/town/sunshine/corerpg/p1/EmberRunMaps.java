@@ -38,6 +38,12 @@ public final class EmberRunMaps {
     public static final class Role {
         public final String id, mm;
         public final double hp, atk, interval, range, lineLength, lineWidth, warn;
+        private Role(Role o, double hp, double atk) {
+            id = o.id; mm = o.mm; this.hp = hp; this.atk = atk; interval = o.interval; range = o.range;
+            lineLength = o.lineLength; lineWidth = o.lineWidth; warn = o.warn;
+        }
+        /** same role (MM id, timings, caster line) with challenge HP / raw damage */
+        public Role with(double hp, double atk) { return new Role(this, hp, atk); }
         Role(String id, Map<?, ?> m) {
             this.id = id;
             this.mm = str(m.get("mm"), "");
@@ -254,6 +260,14 @@ public final class EmberRunMaps {
             clear = pts(m.get("clear"));
         }
 
+        /** role of this map, with the §18.1 challenge override when {@code ch} is set (else the table value) */
+        public Role role(String id, Challenge ch) {
+            Role r = roles.get(id);
+            if (r == null || ch == null) return r;
+            double[] o = ch.mobs.get(id);
+            return o == null ? r : r.with(o[0], o[1]);
+        }
+
         /** member 0 keeps the spawn; member i ≥ 1 gets spread[(i-1) % n]; null = stay. */
         public Pt spreadPoint(int idx) {
             if (idx < 1 || spread.isEmpty()) return null;
@@ -370,8 +384,54 @@ public final class EmberRunMaps {
         return out;
     }
 
+    /**
+     * §18.1 challenge difficulty, one shared T3 reference for all seven maps (not normal HP × something): mob HP /
+     * raw damage, boss HP / normal hit, heavy (重斩/刀气/重砸/冲撞) and light (second, lighter) skill damage, T3 drops
+     * and marks with the 60/28/10/2 quality table, opened by the player's own Q07 first clear.
+     */
+    public static final class Challenge {
+        public final String requires;
+        public final int tier;
+        public final double bRef, bossHp, bossAtk, heavy, light;
+        public final int[] quality;
+        public final Map<String, double[]> mobs; // role → {hp, atk}
+        Challenge(Map<?, ?> m) {
+            requires = str(m.get("requires"), "q07");
+            tier = (int) num(m.get("tier"), 3);
+            bRef = num(m.get("b_ref"), 90);
+            Map<?, ?> b = m.get("boss") instanceof Map ? (Map<?, ?>) m.get("boss") : Collections.emptyMap();
+            bossHp = num(b.get("hp"), 8000);
+            bossAtk = num(b.get("atk"), 44);
+            heavy = num(b.get("heavy"), 72);
+            light = num(b.get("light"), 44);
+            int[] q = EmberRunRules.CHALLENGE_QUALITY_WEIGHTS.clone();
+            if (m.get("quality") instanceof List && ((List<?>) m.get("quality")).size() == 4)
+                for (int i = 0; i < 4; i++) q[i] = (int) num(((List<?>) m.get("quality")).get(i), q[i]);
+            quality = q;
+            Map<String, double[]> mm = new LinkedHashMap<String, double[]>();
+            if (m.get("mobs") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("mobs")).entrySet()) {
+                if (!(e.getValue() instanceof Map)) continue;
+                Map<?, ?> x = (Map<?, ?>) e.getValue();
+                mm.put(String.valueOf(e.getKey()), new double[]{num(x.get("hp"), 1), num(x.get("atk"), 0)});
+            }
+            mobs = Collections.unmodifiableMap(mm);
+        }
+        public double skillDmg(Skill sk) { return sk.light ? light : heavy; }
+        public String validate() {
+            for (String r : new String[]{"melee", "ranged", "heavy", "caster", "treasure", "elite"})
+                if (!mobs.containsKey(r)) return "challenge: mobs." + r + " missing";
+            int t = 0;
+            for (int x : quality) { if (x < 0) return "challenge: negative quality weight"; t += x; }
+            if (t != 100) return "challenge: quality weights sum " + t + " ≠ 100";
+            if (tier < 1 || tier > EmberTables.MAX_TIER) return "challenge: tier " + tier;
+            return null;
+        }
+    }
+
     public final int version;
     public final String ruleVersion;
+    /** null when the file has no challenge section (challenge entry refused) */
+    public final Challenge challenge;
     public final int cost, partyMin, partyMax, passSeconds;
     public final String worldPrefix;
     public final Map<String, MapDef> maps;
@@ -384,6 +444,7 @@ public final class EmberRunMaps {
         partyMax = (int) num(root.get("party_max"), 3);
         passSeconds = (int) num(root.get("pass_seconds"), 30);
         worldPrefix = str(root.get("world_prefix"), "dungeon_EmberQ0");
+        challenge = root.get("challenge") instanceof Map ? new Challenge((Map<?, ?>) root.get("challenge")) : null;
         Map<String, MapDef> m = new LinkedHashMap<String, MapDef>();
         if (root.get("maps") instanceof Map) {
             for (Map.Entry<?, ?> e : ((Map<?, ?>) root.get("maps")).entrySet()) {
@@ -418,6 +479,7 @@ public final class EmberRunMaps {
     public List<String> validate() {
         List<String> out = new ArrayList<String>();
         if (maps.isEmpty()) out.add("no maps");
+        if (challenge != null) { String e = challenge.validate(); if (e != null) out.add(e); }
         for (MapDef d : maps.values()) {
             String e = d.validate();
             if (e != null) out.add(e);

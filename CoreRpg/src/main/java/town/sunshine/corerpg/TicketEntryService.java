@@ -34,7 +34,10 @@ public final class TicketEntryService {
         Q03("q03", "EmberQ03", "", "余烬主线·残誓地窖", "q03", "残誓地窖"),
         // batch 2 (§23.2): same templates as daily_tide / daily_spire, separate dungeon defs
         Q04("q04", "EmberQ04", "", "余烬主线·潮蚀水道", "q04", "潮蚀水道"),
-        Q05("q05", "EmberQ05", "", "余烬主线·断塔回廊", "q05", "断塔回廊");
+        Q05("q05", "EmberQ05", "", "余烬主线·断塔回廊", "q05", "断塔回廊"),
+        // batch 3 (§23.2 后段): same templates as daily_frost / daily_rail, separate dungeon defs
+        Q06("q06", "EmberQ06", "", "余烬主线·霜封哨所", "q06", "霜封哨所"),
+        Q07("q07", "EmberQ07", "", "余烬主线·锈轨矿道", "q07", "锈轨矿道");
 
         /** P1 main map (Q01..): entry is reserve → create → commit through EmberRunService. */
         public boolean p1() { return key.startsWith("q0"); }
@@ -267,14 +270,24 @@ public final class TicketEntryService {
     /** /corerpg enter &lt;daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite&gt; */
     public boolean cmdEnter(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("玩家专用：/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01..q05>");
+            sender.sendMessage("玩家专用：/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01..q07 [challenge]>");
             return true;
         }
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01..q05>");
+            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01..q07 [challenge]>");
             return true;
         }
         Kind kind = Kind.parse(args[1]);
+        boolean challenge = args.length >= 3 && town.sunshine.corerpg.p1.EmberRunService.isChallengeWord(args[2]);
+        if (kind == null && args[1].length() == 4 && (args[1].endsWith("c") || args[1].endsWith("C"))) { // q03c
+            Kind k = Kind.parse(args[1].substring(0, 3));
+            if (k != null && k.p1()) { kind = k; challenge = true; }
+        }
+        if (kind != null && kind.p1() && challenge) {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            if (runs == null) { sender.sendMessage(ChatColor.RED + "主线本服务未加载"); return true; }
+            return runs.tryEnter((Player) sender, kind.key, true);
+        }
         if (kind == null) {
             sender.sendMessage(ChatColor.RED + "未知副本：" + args[1]
                     + ChatColor.GRAY + " · daily/daily_ash/daily_crypt/daily_tide/daily_spire/daily_frost/daily_rail/weekly/abyss/raid/elite");

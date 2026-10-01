@@ -17,6 +17,25 @@ world_prefix: dungeon_EmberQ0
 # seconds a P1 entry pass stays valid for the DP js-condition (paid entries only)
 pass_seconds: 30
 
+# §18.1 challenge difficulty for all seven maps, opened by the player's OWN Q07 first clear. One shared T3 reference
+# (B_ref 90), overriding — not multiplying — the normal values; party HP 1+0.65(n−1) still applies; damage does not
+# scale with party size. Same 30 stamina and the same fixed settlement; items and marks are T3 with the challenge
+# quality table; no first-clear package. Boss skills: heavy (重斩/刀气/重砸/冲撞) = boss.heavy, the lighter second
+# skill (marked `light: true` on the map) = boss.light. Warnings, shapes and recoveries are the normal ones.
+challenge:
+  requires: q07
+  tier: 3
+  b_ref: 90
+  quality: [60, 28, 10, 2]
+  mobs:
+    melee:    {hp: 270, atk: 24}
+    ranged:   {hp: 198, atk: 24}
+    heavy:    {hp: 378, atk: 24}
+    caster:   {hp: 234, atk: 24}
+    treasure: {hp: 360, atk: 0}
+    elite:    {hp: 900, atk: 24}
+  boss: {hp: 8000, atk: 44, heavy: 72, light: 44}
+
 maps:
   q01:
     name: 灰烬庭院
@@ -125,7 +144,7 @@ maps:
       area: [-4, 64, 38, 4, 70, 48]
       skills:
         - {type: circle, name: 砸地, every: 9, warn: 1.2, radius: 3, ahead: 2, dmg: 18,
-           follow: {type: cone, name: 横扫, below: 0.5, delay: 2.0, warn: 0.9, angle: 80, range: 3, dmg: 10}}
+           follow: {type: cone, name: 横扫, below: 0.5, delay: 2.0, warn: 0.9, angle: 80, range: 3, dmg: 10, light: true}}
     event:
       after: r1
       anchor: [5, 65, 10]
@@ -251,7 +270,7 @@ maps:
       # two skills, cooldowns run from the boss spawn; same tick → first listed, the other right after its recovery
       skills:
         - {type: circle, target: player, name: 冲击圈, every: 10, warn: 1.2, radius: 2.5, dmg: 30}
-        - {type: cone, name: 闸杆推击, every: 14, warn: 1.0, angle: 90, range: 4, dmg: 18, kb: 1}
+        - {type: cone, name: 闸杆推击, every: 14, warn: 1.0, angle: 90, range: 4, dmg: 18, kb: 1, light: true}
       recover: 0.5
     event:
       after: r1
@@ -351,7 +370,7 @@ maps:
       area: [-5, 75, -5, 5, 80, 5]
       skills:
         - {type: cone, name: 斧刃横扫, every: 9, warn: 1.2, angle: 120, range: 5, dmg: 44, kb: 0.5}
-        - {type: circle, name: 径向冲击, every: 15, warn: 1.0, radius: 3, ahead: 0, dmg: 26, kb: 1}
+        - {type: circle, name: 径向冲击, every: 15, warn: 1.0, radius: 3, ahead: 0, dmg: 26, kb: 1, light: true}
       recover: 0.5
     event:
       after: r2

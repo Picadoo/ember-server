@@ -30,6 +30,8 @@ public final class EmberRunSession {
     public String ruleVersion;
     public String contentVersion;
     public int tier = 1;
+    /** §18.1 challenge difficulty (T3 drops / marks, challenge HP / damage overrides, no first clear) */
+    public boolean challenge;
     public long seed;
     public long created;
     public long updated;
@@ -93,6 +95,7 @@ public final class EmberRunSession {
         m.put("target", t);
         m.put("party_size", partySize);
         m.put("hp_factor", hpFactor);
+        m.put("challenge", challenge);
         m.put("extra", extra.id);
         m.put("extra_done", extraDone);
         m.put("acted", ids(acted));
@@ -131,6 +134,7 @@ public final class EmberRunSession {
         }
         s.partySize = (int) EmberRunMaps.num(m.get("party_size"), 1);
         s.hpFactor = EmberRunMaps.num(m.get("hp_factor"), 1.0);
+        s.challenge = Boolean.TRUE.equals(m.get("challenge"));
         s.extra = EmberRunRules.Extra.parse(str(m.get("extra")));
         s.extraDone = Boolean.TRUE.equals(m.get("extra_done"));
         readIds(m.get("acted"), s.acted);

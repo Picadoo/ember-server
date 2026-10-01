@@ -37,6 +37,10 @@ public final class EmberRunRules {
     public static final double TARGET_WEIGHT = 0.60;
     /** §5.1 标准/精良/卓越/极品 */
     public static final int[] QUALITY_WEIGHTS = {70, 23, 6, 1};
+    /** §18.1 challenge 成色 标准/精良/卓越/极品 (精工 unchanged) */
+    public static final int[] CHALLENGE_QUALITY_WEIGHTS = {60, 28, 10, 2};
+    /** §18.1 challenge items and marks are all T3 */
+    public static final int CHALLENGE_TIER = 3;
     /** §5.2 精工 0/2/4/6 % */
     public static final int[] CRAFT_WEIGHTS = {70, 20, 9, 1};
     /** §9.3 none / treasure mob / reward elite / extra chest */
@@ -99,6 +103,8 @@ public final class EmberRunRules {
 
     public static int pickQuality(double u) { return pick(QUALITY_WEIGHTS, u); }
 
+    public static int pickQuality(int[] weights, double u) { return pick(weights == null ? QUALITY_WEIGHTS : weights, u); }
+
     public static int pickCraft(double u) { return pick(CRAFT_WEIGHTS, u); }
 
     public static double hpFactor(int partySize) {
@@ -141,10 +147,13 @@ public final class EmberRunRules {
     }
 
     /** §9.1 random item: tier = the map tier, target family 60/20/20, blade/charm 50/50, quality and craft independent. */
-    public static ItemRoll rollItem(int tier, String target, Random r) {
+    public static ItemRoll rollItem(int tier, String target, Random r) { return rollItem(tier, target, r, null); }
+
+    /** same draw order as the normal roll; {@code qualityWeights} null = §5.1 normal table (challenge: 60/28/10/2) */
+    public static ItemRoll rollItem(int tier, String target, Random r, int[] qualityWeights) {
         String fam = pickFamily(target, r.nextDouble());
         String slot = pickSlot(r.nextDouble());
-        int q = pickQuality(r.nextDouble());
+        int q = pickQuality(qualityWeights, r.nextDouble());
         int c = pickCraft(r.nextDouble());
         return new ItemRoll(fam, slot, tier, q, c);
     }
@@ -230,6 +239,7 @@ public final class EmberRunRules {
         public Extra extra = Extra.NONE;
         public boolean extraDone;       // event completed during the run (pending until the boss dies)
         public FirstClear firstClear;   // null when this character already has the first clear of this content version
+        public int[] qualityWeights;    // null = normal §5.1; challenge §18.1 60/28/10/2
     }
 
     /**
@@ -278,7 +288,7 @@ public final class EmberRunRules {
 
     private static Grant item(SettleInput in, String key) {
         Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
-        return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, rollItem(in.tier, in.target, r));
+        return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, rollItem(in.tier, in.target, r, in.qualityWeights));
     }
 
     /** First-clear free choice → the bound standard quest item (q0, craft 0, +0). */

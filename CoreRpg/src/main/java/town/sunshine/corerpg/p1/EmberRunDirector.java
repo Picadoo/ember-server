@@ -58,6 +58,8 @@ final class EmberRunDirector {
     final EmberRunSession s;
     final EmberRunMaps.MapDef def;
     final World w;
+    /** §18.1 challenge overrides of this run (null = normal) */
+    final EmberRunMaps.Challenge ch;
     final Map<UUID, Tracked> mobs = new HashMap<UUID, Tracked>();
 
     private int next;                 // index of the next room to trigger
@@ -87,6 +89,7 @@ final class EmberRunDirector {
         this.s = s;
         this.def = def;
         this.w = w;
+        this.ch = s.challenge && svc.maps() != null ? svc.maps().challenge : null;
         for (String c : s.cleared) if (def.roomIndex(c) >= next) next = def.roomIndex(c) + 1;
     }
 
@@ -214,7 +217,7 @@ final class EmberRunDirector {
         List<String[]> lay = EmberRunMaps.layout(r, b, s.roomSeed(r.id));
         int ok = 0;
         for (String[] e : lay) {
-            EmberRunMaps.Role role = def.roles.get(e[0]);
+            EmberRunMaps.Role role = def.role(e[0], ch);
             EmberRunMaps.Pt pt = r.points.get(Integer.parseInt(e[1]));
             if (spawn(role, e[0], r.id, pt, r.trigger) != null) ok++;
         }
@@ -280,9 +283,9 @@ final class EmberRunDirector {
             return;
         }
         LivingEntity le = (LivingEntity) e;
-        scaleHealth(le, b.hp);
+        scaleHealth(le, ch != null ? ch.bossHp : b.hp);
         le.setRemoveWhenFarAway(false);
-        boss = new Tracked(le, "boss", "boss", b.at, b.area, b.atk, b.interval, 3.0, pseudo);
+        boss = new Tracked(le, "boss", "boss", b.at, b.area, ch != null ? ch.bossAtk : b.atk, b.interval, 3.0, pseudo);
         mobs.put(le.getUniqueId(), boss);
         svc.index(le.getUniqueId(), this);
         nextAt = new long[b.skills.size()];
@@ -298,7 +301,7 @@ final class EmberRunDirector {
             case TREASURE:
             case ELITE: {
                 String role = s.extra == EmberRunRules.Extra.TREASURE ? "treasure" : "elite";
-                Tracked t = spawn(def.roles.get(role), role, "event", a, def.eventArea);
+                Tracked t = spawn(def.role(role, ch), role, "event", a, def.eventArea);
                 if (t != null) extraMob = t.le.getUniqueId();
                 break;
             }
@@ -376,7 +379,7 @@ final class EmberRunDirector {
         if (addsAt > 0) {
             if (now >= addsAt) {
                 addsAt = 0;
-                for (EmberRunMaps.Pt p : b.adds.points) spawn(def.roles.get(b.adds.role), "add", "boss", safe(p, b.at), b.area);
+                for (EmberRunMaps.Pt p : b.adds.points) spawn(def.role(b.adds.role, ch), "add", "boss", safe(p, b.at), b.area);
             } else {
                 for (EmberRunMaps.Pt p : b.adds.points) warnCircle(new Location(w, p.x + 0.5, p.y + 0.1, p.z + 0.5), 1.0, Particle.SPELL_WITCH);
             }
@@ -449,7 +452,7 @@ final class EmberRunDirector {
 
     /** challenge overrides hook (§18.1); normal runs use the table value. */
     EmberRunMaps.Skill skillFor(EmberRunMaps.Skill sk) {
-        return sk;
+        return ch == null ? sk : sk.withDmg(ch.skillDmg(sk));
     }
 
     private void startWarn(EmberRunMaps.Skill sk, long now, LivingEntity le) {
@@ -709,6 +712,7 @@ final class EmberRunDirector {
 
     String describe() {
         StringBuilder sb = new StringBuilder();
+        if (ch != null) sb.append("challenge ");
         sb.append("next=").append(next < def.rooms.size() ? def.rooms.get(next).id : "boss");
         sb.append(" active=").append(activeRoom == null ? "-" : activeRoom);
         sb.append(" alive=").append(mobs.size());

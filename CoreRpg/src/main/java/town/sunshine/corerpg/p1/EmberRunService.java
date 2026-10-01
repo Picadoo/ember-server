@@ -187,13 +187,25 @@ public final class EmberRunService implements Listener {
      * (unlock, stamina, not already in a run), reserves 30 stamina each, creates the session, then lets DP create the
      * instance; members not inside 2 s later get their reservation released.
      */
-    public boolean tryEnter(final Player leader, String mapKey) {
+    public boolean tryEnter(final Player leader, String mapKey) { return tryEnter(leader, mapKey, false); }
+
+    /** §18.1 challenge: open for every map once the player has their own Q07 first clear. */
+    public boolean challengeOpen(PlayerData d) {
+        return maps.challenge != null && progressFlag(d, maps.challenge.requires);
+    }
+
+    /**
+     * @param challenge §18.1 challenge difficulty: every participant needs their own Q07 first clear; T3 drops / marks,
+     *                  challenge HP and damage, no first-clear package, same 30 stamina
+     */
+    public boolean tryEnter(final Player leader, String mapKey, final boolean challenge) {
         if (!EmberMode.active()) {
             leader.sendMessage(P + "新模式（ember-v1.0-P1）尚未开启，主线 Q 本暂不可进入。");
             return true;
         }
         final EmberRunMaps.MapDef m = maps.byKey(mapKey);
         if (m == null) { leader.sendMessage(P + "未知主线本 " + mapKey); return true; }
+        if (challenge && maps.challenge == null) { leader.sendMessage(P + "挑战版未配置。"); return true; }
         if (!EmberRunBridges.teamLeader(leader)) { leader.sendMessage(P + "组队时由队长开本。"); return true; }
         List<UUID> ids = EmberRunBridges.teamMembers(leader);
         List<Player> party = new ArrayList<Player>();
@@ -209,7 +221,9 @@ public final class EmberRunService implements Listener {
         if (st == null) problems.add("体力服务未就绪");
         for (Player p : party) {
             PlayerData d = data(p.getUniqueId());
-            if (!unlocked(d, m)) {
+            if (challenge && !challengeOpen(d)) {
+                problems.add(p.getName() + " 未开放挑战版（需本人首通 " + maps.challenge.requires.toUpperCase(Locale.ROOT) + "）");
+            } else if (!challenge && !unlocked(d, m)) {
                 EmberRunMaps.MapDef req = maps.byKey(m.requires);
                 problems.add(p.getName() + " 未解锁（需先首通 " + (req == null ? m.requires : req.key.toUpperCase(Locale.ROOT) + " " + req.name) + "）");
             }
@@ -224,13 +238,14 @@ public final class EmberRunService implements Listener {
         }
         // create the session first (seed, snapshot, extra event fixed now — never re-rolled on reconnect)
         final EmberRunSession s = new EmberRunSession();
-        s.runId = m.key + "-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(36 * 36 * 36), 36);
+        s.runId = m.key + (challenge ? "c" : "") + "-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(36 * 36 * 36), 36);
         s.mapKey = m.key;
         s.dungeon = m.dungeon;
         s.mapVersion = m.mapVersion;
         s.ruleVersion = maps.ruleVersion;
         s.contentVersion = m.contentVersion;
-        s.tier = m.tier;
+        s.challenge = challenge;
+        s.tier = challenge ? maps.challenge.tier : m.tier;
         s.seed = rnd.nextLong();
         s.created = System.currentTimeMillis();
         s.leader = leader.getUniqueId();
@@ -263,7 +278,7 @@ public final class EmberRunService implements Listener {
         long until = System.currentTimeMillis() + maps.passSeconds * 1000L;
         for (Player p : party) {
             passes.put(p.getUniqueId(), new Object[]{m.key, until});
-            p.sendMessage(P + "§e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name + " §7正在创建实例……（已预留体力 " + maps.cost + "）");
+            p.sendMessage(P + "§e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + maps.cost + "）");
         }
         boolean ok = plugin.getTicketEntryService() != null
                 && plugin.getTicketEntryService().dispatchStart(leader, m.dungeon);
@@ -300,7 +315,7 @@ public final class EmberRunService implements Listener {
         s.partySize = s.committed.size();
         s.hpFactor = EmberRunRules.hpFactor(s.partySize);
         store.save(s);
-        tellRun(s, "§7主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
+        tellRun(s, (s.challenge ? "§c挑战版 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                 + "）· 走进前方房间开战 · 击败首领后统一结算");
     }
 
@@ -375,7 +390,7 @@ public final class EmberRunService implements Listener {
     }
 
     void onBossSpawned(EmberRunSession s, EmberRunMaps.Boss b) {
-        tellRun(s, "§c首领 " + b.name + " §7现身 · 招式都有预警，看清地面火线再躲");
+        tellRun(s, "§c首领 " + b.name + (s.challenge ? "（挑战）" : "") + " §7现身 · 招式都有预警，看清地面火线再躲");
     }
 
     void onExtraSpawned(EmberRunSession s) {
@@ -486,7 +501,9 @@ public final class EmberRunService implements Listener {
         in.bossKilled = true;
         in.extra = s.extra;
         in.extraDone = s.extraDone;
-        in.firstClear = firstCleared(pd, m) ? null : m.firstClear;
+        // §18.1: challenge runs never carry the first-clear package (first clears are per map + content version, normal)
+        in.firstClear = s.challenge || firstCleared(pd, m) ? null : m.firstClear;
+        if (s.challenge && maps.challenge != null) in.qualityWeights = maps.challenge.quality;
         List<EmberRunRules.Grant> grants = EmberRunRules.settle(in);
         EmberRunRules.Ledger l = store.ledger(u);
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
@@ -500,7 +517,8 @@ public final class EmberRunService implements Listener {
         if (in.firstClear != null) pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
         store.saveLedger(u, changed);
         plugin.getDataStore().flushMutation(u);
-        log().info("[P1 run] " + s.runId + " settle " + u + " rows+" + changed.size() + (in.firstClear != null ? " (first clear)" : ""));
+        log().info("[P1 run] " + s.runId + " settle " + u + " rows+" + changed.size() + (in.firstClear != null ? " (first clear)" : "")
+                + (s.challenge ? " (challenge T" + s.tier + ")" : ""));
         Player p = Bukkit.getPlayer(u);
         if (p != null && p.isOnline()) deliver(p);
     }
@@ -972,15 +990,23 @@ public final class EmberRunService implements Listener {
                     s.sendMessage(P + "没有可领取的暂存奖励。");
                 return true;
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q05>"); return true; }
-                return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT));
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07> [challenge]"); return true; }
+                return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             default:
                 return cmdRuns(s, args);
         }
     }
 
+    /** "challenge" / "c" / "挑战" (after the map key) */
+    public static boolean isChallengeWord(String w) {
+        if (w == null) return false;
+        String x = w.toLowerCase(Locale.ROOT);
+        return "challenge".equals(x) || "c".equals(x) || "ch".equals(x) || "挑战".equals(w) || "挑战版".equals(w);
+    }
+
     public static void helpLines(CommandSender s) {
-        s.sendMessage(P + "/corerpg enter q01..q05 — 主线本（30 体力，1～3 人）· /corerpg p1 run — 解锁/待领/当前局");
+        s.sendMessage(P + "/corerpg enter q01..q07 — 主线本（30 体力，1～3 人）· /corerpg p1 run — 解锁/待领/当前局");
+        s.sendMessage(P + "/corerpg enter q01..q07 challenge — 挑战版（本人首通 Q07 后开放；T3 掉落与印记，敌人更强）");
         s.sendMessage(P + "/corerpg p1 target <scorch|burst|sustain|none> — 掉落目标族（入场时快照）");
         s.sendMessage(P + "/corerpg p1 marks [exchange <族> <blade|charm> [阶]] — 8 枚同阶印记换标准件");
         s.sendMessage(P + "/corerpg p1 firstclear <族> — 领取首通自选 · /corerpg p1 claim — 补领暂存奖励");
@@ -1157,7 +1183,10 @@ public final class EmberRunService implements Listener {
                     + " 体力 · 掉落 " + m.dropLabel + " · 首通：" + m.firstClearLabel());
         }
         String t = target(d);
+        p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· /corerpg enter <q01..q07> challenge · 掉落 T3"
+                : "§7需本人首通 " + (maps.challenge == null ? "Q07" : maps.challenge.requires.toUpperCase(Locale.ROOT))));
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
+                + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
                 + " · 暂存 " + store.ledger(p.getUniqueId()).open().size() + " 项");
         EmberRunSession cur = openSessionOf(p.getUniqueId());
         if (cur != null) {
@@ -1188,6 +1217,8 @@ public final class EmberRunService implements Listener {
         if ("pending".equals(key)) return String.valueOf(store.ledger(p.getUniqueId()).open().size());
         if ("active".equals(key)) return EmberMode.active() ? "yes" : "no";
         if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
+        if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
+        if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("awaken".equals(key) || "awaken_next".equals(key)) {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberLoadout l = ls == null ? null : ls.get(p);
