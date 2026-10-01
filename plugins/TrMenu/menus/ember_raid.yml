@@ -1,5 +1,5 @@
 # 团本子菜单 — EmberRaid · DESIGN-ember-rpg-systems.md §4
-# 进本：corerpg enter raid · S0 体力 50 / 本周首次免费 · 3～5 人
+# 进本：corerpg enter raid · S0 体力 %corerpg_stamina_cost_raid%（cash.yml，现 50）/ 本周首次免费 · 3～5 人
 
 Title: '§9团本 · 大厅通道'
 
@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §9【团本】 §7需 3～5 人 · 消耗 50 体力（本周首次免费）'
+    - 'tell: §9【团本】 §7需 3～5 人 · 消耗 %corerpg_stamina_cost_raid% 体力（本周首次免费）'
 
 Icons:
   '#':
@@ -106,7 +106,7 @@ Icons:
       name: '§e次数说明'
       lore:
         - ''
-        - '§7本周首次免费 · 其后 50 体力'
+        - '§7本周首次免费 · 其后 %corerpg_stamina_cost_raid% 体力'
         - '§7重置：§f周一 00:00 Asia/Shanghai'
         - '§7进本即扣 · 失败不返还'
         - '§7人数硬限 §f3～5'
@@ -115,4 +115,4 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §9团本本周首次免费，其后 50 体力；需 3～5 人。'
+        - 'tell: §9团本本周首次免费，其后 %corerpg_stamina_cost_raid% 体力；需 3～5 人。'

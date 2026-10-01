@@ -4,6 +4,8 @@
 //   node menu-lore-dump.js                 # hub only
 //   node menu-lore-dump.js 团本            # hub → 团本 submenu
 //   GREP='体力' node menu-lore-dump.js 深渊  # only lines matching GREP
+//   CLICK='次数说明' node menu-lore-dump.js 团本   # also click that submenu item, print the chat it sends
+// Chat (raw JSON packets) received while opening the submenu / after CLICK is printed as [chat].
 const { joinPlay } = require('./lib/proxy-login')
 const nbt = require('prismarine-nbt')
 const wait = (ms) => new Promise((r) => setTimeout(r, ms))
@@ -38,9 +40,18 @@ function dump (label, w) {
     let slot = -1
     for (let i = 0; i < hub.slots.length; i++) if (hub.slots[i] && strip(disp(hub.slots[i]).name) === sub) { slot = i; break }
     if (slot < 0) throw new Error('no hub item named ' + sub)
+    const pk = []; bot._client.on('chat', (m) => pk.push(m.message))
     p = waitWindow(bot); bot.clickWindow(slot, 0, 0).catch(() => {}); const w = await p
     if (!w) throw new Error('submenu did not open')
     dump(sub, w)
+    for (const m of pk.splice(0)) console.log(`[chat] open ${sub}: ${m}`)
+    if (process.env.CLICK) {
+      const re = new RegExp(process.env.CLICK); let cs = -1
+      for (let i = 0; i < w.slots.length; i++) if (w.slots[i] && re.test(strip(disp(w.slots[i]).name))) { cs = i; break }
+      if (cs < 0) throw new Error('no submenu item matching ' + process.env.CLICK)
+      bot.clickWindow(cs, 0, 0).catch(() => {}); await wait(2500)
+      for (const m of pk.splice(0)) console.log(`[chat] click ${strip(disp(w.slots[cs]).name)}: ${m}`)
+    }
   }
   bot.quit(); setTimeout(() => process.exit(0), 300)
 })().catch((e) => { console.error('[menu] FATAL', e.message || e); process.exit(1) })
