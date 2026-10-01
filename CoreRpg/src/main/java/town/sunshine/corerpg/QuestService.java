@@ -1085,6 +1085,41 @@ public final class QuestService implements Listener {
         if (id != null) { mmSeen.put(e.getEntity().getUniqueId(), id); e.setCancelled(true); }
     }
 
+    /**
+     * 1.15.30 (B2.123): DP $kill counts any death of the wave's mob, so a MythicMobs mob that suffocates in a DP instance
+     * (spawn point inside solid blocks, e.g. a stale map template) cleared the wave with nobody fighting — idle bots got
+     * weekly/raid clears + loot. Instance MM mobs no longer take suffocation damage; they are lifted to the first open
+     * 2-high cell above (else just left in place) and the bad spot is logged once per mob.
+     */
+    private final java.util.Set<UUID> suffocateLogged = java.util.Collections.newSetFromMap(new java.util.LinkedHashMap<UUID, Boolean>(64, 0.75f, false) {
+        @Override protected boolean removeEldestEntry(Map.Entry<UUID, Boolean> e) { return size() > 512; }
+    });
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onInstanceMobSuffocate(EntityDamageEvent e) {
+        if (e.getCause() != EntityDamageEvent.DamageCause.SUFFOCATION) return;
+        Entity en = e.getEntity();
+        if (en instanceof Player || !(en instanceof org.bukkit.entity.LivingEntity)) return;
+        if (en.getWorld() == null || !en.getWorld().getName().startsWith("dungeon_")) return;
+        String id = mmSeen.get(en.getUniqueId());
+        if (id == null) id = mythicId(en);
+        if (id == null) return;
+        e.setCancelled(true);
+        Location l = en.getLocation();
+        org.bukkit.block.Block b = l.getBlock();
+        for (int i = 1; i <= 12; i++) {
+            org.bukkit.block.Block feet = b.getRelative(0, i, 0), head = b.getRelative(0, i + 1, 0);
+            if (!feet.getType().isSolid() && !head.getType().isSolid()) {
+                en.teleport(new Location(l.getWorld(), l.getX(), feet.getY(), l.getZ(), l.getYaw(), l.getPitch()));
+                break;
+            }
+        }
+        if (suffocateLogged.add(en.getUniqueId())) {
+            plugin.getLogger().warning("MM mob '" + id + "' was suffocating in " + l.getWorld().getName() + " at "
+                    + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ() + " (damage cancelled; check the DP map template / spawn point)");
+        }
+    }
+
     /** The DP map templates carry a baked-in 余烬地窟骷髅 1.7 blocks from the entry point → remove it on chunk load. */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onChunkLoad(org.bukkit.event.world.ChunkLoadEvent e) {
