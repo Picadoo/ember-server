@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1'
-    - 'tell: §b[战令] §7每日补给 + 等级奖励（Lv1～30）· 付费轨需解锁 · §c不出核心'
+    - 'tell: §b【战令】 §7每日补给 + 等级奖励（Lv1～30）· 付费轨需解锁 · §c不出核心'
 
 Icons:
   '#':
@@ -62,7 +62,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6[战令·付费轨] §7尝试解锁 · 价 §f48 §7晶钻'
+        - 'tell: §6【战令·付费轨】 §7尝试解锁 · 价 §f48 §7晶钻'
         - 'command: corerpg shop buy pass_unlock'
         - 'command: corerpg cash'
         - 'command: corerpg mail claim all'
@@ -83,7 +83,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[战令] §7约30天季 · 双轨 · 付费轨外观+券+体力药，无核心'
+        - 'tell: §e【战令】 §7约30天季 · 双轨 · 付费轨外观+券+体力药，无核心'
         - 'command: corerpg pass'
 
   L:

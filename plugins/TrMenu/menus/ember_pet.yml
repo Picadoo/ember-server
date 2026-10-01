@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §a[使魔] §7收集出战 · 偏外观与微量助战（≤战力 5%）。'
+    - 'tell: §a【使魔】 §7收集出战 · 偏外观与微量助战（≤战力 5%）。'
 
 Icons:
   '#':
@@ -69,7 +69,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[使魔] §7出战（未实装则：§8功能筹备中）'
+        - 'tell: §a【使魔】 §7出战（未实装则：§8功能筹备中）'
         - 'tell: §8氪皮 / 经验瓶 · 不卖满级战力宠'
         - 'command: corerpg pet list'
 
@@ -88,5 +88,5 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[使魔] §7投喂魂尘升级'
+        - 'tell: §6【使魔】 §7投喂魂尘升级'
         - 'command: corerpg pet feed'

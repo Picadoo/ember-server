@@ -52,7 +52,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[镶嵌] §7请确认手持余烬装备…'
+        - 'tell: §e【镶嵌】 §7请确认手持余烬装备…'
         - 'command: corerpg socket list'
 
   A:
@@ -68,7 +68,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §a[镶嵌] §7尝试卸下孔 1…'
+        - 'tell: §a【镶嵌】 §7尝试卸下孔 1…'
         - 'command: corerpg socket remove 1'
 
   B:
@@ -84,7 +84,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §b[镶嵌] §7尝试卸下孔 2…'
+        - 'tell: §b【镶嵌】 §7尝试卸下孔 2…'
         - 'command: corerpg socket remove 2'
 
   '1':
@@ -100,7 +100,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §c[镶嵌] §7尝试镶入锋利石…'
+        - 'tell: §c【镶嵌】 §7尝试镶入锋利石…'
         - 'command: corerpg socket insert gem_ember_sharp'
         - close
 
@@ -117,7 +117,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §9[镶嵌] §7尝试镶入稳固石…'
+        - 'tell: §9【镶嵌】 §7尝试镶入稳固石…'
         - 'command: corerpg socket insert gem_ember_steady'
         - close
 
@@ -134,7 +134,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §5[镶嵌] §7尝试镶入汲取石…'
+        - 'tell: §5【镶嵌】 §7尝试镶入汲取石…'
         - 'command: corerpg socket insert gem_ember_drain'
         - close
 
@@ -151,6 +151,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[镶嵌] §7尝试镶入疾风石…'
+        - 'tell: §a【镶嵌】 §7尝试镶入疾风石…'
         - 'command: corerpg socket insert gem_ember_gale'
         - close

@@ -21,7 +21,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §6[商城] §7便利·特权货架 · §c不卖毕业伤害'
+    - 'tell: §6【商城】 §7便利·特权货架 · §c不卖毕业伤害'
     - 'tell: §8体力药可直接买 · 月卡点图标购买 · 余烬币走生活菜单'
 
 Icons:
@@ -42,7 +42,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[商城] §7正在查询余烬币…'
+        - 'tell: §e【商城】 §7正在查询余烬币…'
         - 'command: corerpg coin'
 
   P:
@@ -94,7 +94,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[热销·月卡] §7尝试开通/续期 · 价 §f68 晶钻'
+        - 'tell: §e【热销·月卡】 §7尝试开通/续期 · 价 §f68 晶钻'
         - 'command: corerpg monthly buy'
         - 'command: corerpg monthly'
 
@@ -116,7 +116,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §b[热销·战令] §7尝试解锁付费轨 · 价 §f48 晶钻'
+        - 'tell: §b【热销·战令】 §7尝试解锁付费轨 · 价 §f48 晶钻'
         - 'command: corerpg shop buy pass_unlock'
         - 'menu: ember_pass'
 
@@ -137,7 +137,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[便利·体力药] §7尝试购买 · 价 §f60 晶钻 §7· 日限 3 / 药剂回体≤90'
+        - 'tell: §e【便利·体力药】 §7尝试购买 · 价 §f60 晶钻 §7· 日限 3 / 药剂回体≤90'
         - 'command: corerpg shop buy daily_ticket'
 
   E:
@@ -156,7 +156,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[便利·周体力] §7尝试购买 · 价 §f180 晶钻 §7· 限购 1/周'
+        - 'tell: §6【便利·周体力】 §7尝试购买 · 价 §f180 晶钻 §7· 限购 1/周'
         - 'command: corerpg shop buy weekly_ticket'
 
   R:

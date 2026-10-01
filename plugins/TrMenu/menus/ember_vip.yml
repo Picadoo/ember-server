@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1'
-    - 'tell: §6[勋阶] §7QoL 为主 · 累计充值晶钻晋升 · 日礼每日 1 次'
+    - 'tell: §6【勋阶】 §7QoL 为主 · 累计充值晶钻晋升 · 日礼每日 1 次'
 
 Icons:
   '#':
@@ -58,7 +58,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[勋阶·日礼] §7尝试领取…'
+        - 'tell: §a【勋阶·日礼】 §7尝试领取…'
         - 'command: corerpg vip claim'
         - 'command: corerpg vip'
 

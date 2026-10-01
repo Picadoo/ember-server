@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §7[设置] §7音效、提示与隐私。个人选项，点下方切换。'
+    - 'tell: §7【设置】 §7音效、提示与隐私。个人选项，点下方切换。'
 
 Icons:
   '#':
@@ -51,7 +51,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[设置·音效] §7已切换（或：点击即可切换）'
+        - 'tell: §e【设置·音效】 §7已切换（或：点击即可切换）'
         - 'command: corerpg settings sound'
 
   T:
@@ -69,7 +69,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §b[设置·提示] §7已切换'
+        - 'tell: §b【设置·提示】 §7已切换'
         - 'command: corerpg settings tip'
 
   P:
@@ -88,6 +88,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[设置·隐私] §7已切换'
+        - 'tell: §d【设置·隐私】 §7已切换'
         - 'tell: §8拒陌生人申请 · 不影响盟约/天梯'
         - 'command: corerpg settings privacy'

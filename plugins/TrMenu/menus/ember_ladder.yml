@@ -20,7 +20,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §e[天梯] §7战力 · 深渊层数 · 周本竞速。周结算只发外观。'
+    - 'tell: §e【天梯】 §7战力 · 深渊层数 · 周本竞速。周结算只发外观。'
     - 'tell: §8全息板在挂机庭附近 · 战力 / 深渊 / 竞速三块'
 
 Icons:
@@ -68,7 +68,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §7[天梯·全息] §f挂机庭西侧三块全息（战力·深渊·竞速）§7 · 每分钟刷新'
+        - 'tell: §7【天梯·全息】 §f挂机庭西侧三块全息（战力·深渊·竞速）§7 · 每分钟刷新'
 
   P:
     display:

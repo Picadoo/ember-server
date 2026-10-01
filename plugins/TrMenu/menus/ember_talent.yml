@@ -67,7 +67,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[天赋] §7点击节点解锁；二层需先点满一层顶 §f燎原 / 烟幕 / 永护§7。'
+        - 'tell: §d【天赋】 §7点击节点解锁；二层需先点满一层顶 §f燎原 / 烟幕 / 永护§7。'
         - 'tell: §8硬顶 30 点 · Lv.60 满二层'
 
   Z:
@@ -85,7 +85,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c[天赋] §7洗点（日免费 1 次；额外 25 晶钻或重置券）'
+        - 'tell: §c【天赋】 §7洗点（日免费 1 次；额外 25 晶钻或重置券）'
         - 'command: corerpg talent reset'
 
   '1':
@@ -166,7 +166,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d[天赋] §7先誓约 → 再点击节点解锁；二层需一层顶（燎原 / 烟幕 / 永护）；日免洗 1 次。'
+        - 'tell: §d【天赋】 §7先誓约 → 再点击节点解锁；二层需一层顶（燎原 / 烟幕 / 永护）；日免洗 1 次。'
 
   # —— 二层 · 烬刃 ——
   a:

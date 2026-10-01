@@ -74,7 +74,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §5[深渊] §7尝试下潜……（需余烬 Lv.25）'
+        - 'tell: §5【深渊】 §7尝试下潜……（需余烬 Lv.25）'
         - 'tell: §8需要撤离：打开本菜单 → 上浮撤离'
         - 'command: corerpg enter abyss'
         - close
@@ -95,7 +95,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §5[深渊] §7撤离按最高层结算 · §c体力不退'
+        - 'tell: §5【深渊】 §7撤离按最高层结算 · §c体力不退'
         - 'command: corerpg abyss evacuate'
         - close
 

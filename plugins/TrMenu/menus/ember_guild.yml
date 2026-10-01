@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §2[盟约] §7创建公会 · 日捐盟课 · 周盟 Boss，点下方即可。'
+    - 'tell: §2【盟约】 §7创建公会 · 日捐盟课 · 周盟 Boss，点下方即可。'
 
 Icons:
   '#':
@@ -66,7 +66,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[盟约] §7点击创建；按提示填写名称'
+        - 'tell: §a【盟约】 §7点击创建；按提示填写名称'
         - 'tell: §8费用：币 5000 或 晶钻 40'
 
   D:
@@ -85,7 +85,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6[盟约] §7点击捐献今日盟课'
+        - 'tell: §6【盟约】 §7点击捐献今日盟课'
         - 'tell: §8碎片×10 / 骨尘×5 → 贡献 1 · 日 cap 50'
 
   B:
@@ -104,6 +104,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §c[盟约] §7点击前往盟 Boss'
+        - 'tell: §c【盟约】 §7点击前往盟 Boss'
         - 'tell: §8周 1 次 · 消耗贡献 20 · 需先组队（队长执行）'
         - 'command: corerpg guild boss'

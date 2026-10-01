@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §6[寄售] §7玩家间上架流通物。税率 §e10%§7 · 绑定物不可流通。'
+    - 'tell: §6【寄售】 §7玩家间上架流通物。税率 §e10%§7 · 绑定物不可流通。'
 
 Icons:
   '#':
@@ -67,7 +67,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[寄售] §7正在刷新列表…'
+        - 'tell: §a【寄售】 §7正在刷新列表…'
         - 'tell: §8白名单流通物 · 绑定物不可买'
         - 'command: corerpg auction list'
 
@@ -86,7 +86,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6[寄售] §7手持物品后点上架，按提示定价'
+        - 'tell: §6【寄售】 §7手持物品后点上架，按提示定价'
         - 'tell: §8手持白名单物品 · 成交卖方实收 = 标价 × 90%（税 10%）'
         - 'tell: §c禁止：§8核心、毕业刃、满孔装、战力扭蛋直售'
         - 'command: corerpg auction sell'
@@ -106,6 +106,6 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[寄售·税] §7成交税率 §e10%§7 · 卖方实收标价的 90%'
+        - 'tell: §e【寄售·税】 §7成交税率 §e10%§7 · 卖方实收标价的 90%'
         - 'tell: §8绑定物、票券 / 体力药、邮件附件不可上架'
         - 'tell: §8不开放毕业伤害 / 核心直售'

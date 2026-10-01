@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §9[团本] §7需 3～5 人 · 消耗 50 体力（本周首次免费）'
+    - 'tell: §9【团本】 §7需 3～5 人 · 消耗 50 体力（本周首次免费）'
 
 Icons:
   '#':
@@ -73,7 +73,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §9[团本] §7尝试进入……'
+        - 'tell: §9【团本】 §7尝试进入……'
         - 'tell: §8人数 3～5'
         - 'tell: §8需要余烬等级 §eLv.35§8（见菜单等级要求）'
         - 'command: corerpg enter raid'

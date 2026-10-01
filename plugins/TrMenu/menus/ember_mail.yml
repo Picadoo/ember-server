@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §f[邮寄] §7领取系统邮件、战令与维护补偿。奖励统一进邮箱。'
+    - 'tell: §f【邮寄】 §7领取系统邮件、战令与维护补偿。奖励统一进邮箱。'
 
 Icons:
   '#':
@@ -67,7 +67,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[邮寄] §7正在领取全部…'
+        - 'tell: §a【邮寄】 §7正在领取全部…'
         - 'tell: §8战令 / 维护补偿 / 活动箱走邮箱'
         - 'command: corerpg mail claim all'
 
@@ -87,7 +87,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[邮寄·系统] §7战令与维护补偿由系统投递'
+        - 'tell: §6【邮寄·系统】 §7战令与维护补偿由系统投递'
 
   D:
     display:
@@ -103,5 +103,5 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-0'
-        - 'tell: §7[邮寄] §7点击邮件清理；无需手打编号'
+        - 'tell: §7【邮寄】 §7点击邮件清理；无需手打编号'
         - 'tell: §8未领附件不可删'

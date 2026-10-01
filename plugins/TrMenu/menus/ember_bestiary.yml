@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §3[图录] §7怪物 · 装备 · 使魔图鉴。集齐有奖（称号/币/天赋点）。'
+    - 'tell: §3【图录】 §7怪物 · 装备 · 使魔图鉴。集齐有奖（称号/币/天赋点）。'
 
 Icons:
   '#':
@@ -51,7 +51,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c[图录·怪物] §7暂未开放，敬请期待'
+        - 'tell: §c【图录·怪物】 §7暂未开放，敬请期待'
 
   G:
     display:
@@ -68,7 +68,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[图录·装备] §7暂未开放，敬请期待'
+        - 'tell: §6【图录·装备】 §7暂未开放，敬请期待'
 
   P:
     display:
@@ -98,4 +98,4 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e[图录·阶段奖] §7暂未开放，敬请期待'
+        - 'tell: §e【图录·阶段奖】 §7暂未开放，敬请期待'

@@ -72,7 +72,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §c[周] 正在尝试进入 §fEmberWeekly§c …'
+        - 'tell: §c【周】 正在尝试进入 §fEmberWeekly§c …'
         - 'tell: §8需要余烬等级 §eLv.20§8（打开角色面板可查看）'
         - 'command: corerpg enter weekly'
         - close

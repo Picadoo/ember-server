@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0.8'
-    - 'tell: §3[仓库] §7材料仓：一格一种 · 数量近无限 · 可解锁新格'
+    - 'tell: §3【仓库】 §7材料仓：一格一种 · 数量近无限 · 可解锁新格'
 
 Icons:
   '#':
@@ -41,7 +41,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg warehouse'
-        - 'tell: §8[仓库] §7点击格位取出；或用本页取出按钮'
+        - 'tell: §8【仓库】 §7点击格位取出；或用本页取出按钮'
 
   D:
     display:

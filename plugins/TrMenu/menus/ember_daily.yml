@@ -84,7 +84,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §6余烬窟·庭院§e …'
+        - 'tell: §e【日】 正在进入 §6余烬窟·庭院§e …'
         - 'command: corerpg enter daily'
         - close
 
@@ -125,7 +125,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §c余烬窟·焦骨甬道§e …'
+        - 'tell: §e【日】 正在进入 §c余烬窟·焦骨甬道§e …'
         - 'command: corerpg enter daily_ash'
         - close
 
@@ -166,7 +166,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §8余烬窟·残誓地窖§e …'
+        - 'tell: §e【日】 正在进入 §8余烬窟·残誓地窖§e …'
         - 'command: corerpg enter daily_crypt'
         - close
 
@@ -207,7 +207,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §3余烬窟·潮蚀水道§e …'
+        - 'tell: §e【日】 正在进入 §3余烬窟·潮蚀水道§e …'
         - 'command: corerpg enter daily_tide'
         - close
 
@@ -248,7 +248,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §7余烬窟·断塔回廊§e …'
+        - 'tell: §e【日】 正在进入 §7余烬窟·断塔回廊§e …'
         - 'command: corerpg enter daily_spire'
         - close
 
@@ -289,7 +289,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §b余烬窟·霜晶裂隙§e …'
+        - 'tell: §e【日】 正在进入 §b余烬窟·霜晶裂隙§e …'
         - 'command: corerpg enter daily_frost'
         - close
 
@@ -330,7 +330,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §e[日] 正在进入 §6余烬窟·锈轨矿道§e …'
+        - 'tell: §e【日】 正在进入 §6余烬窟·锈轨矿道§e …'
         - 'command: corerpg enter daily_rail'
         - close
 

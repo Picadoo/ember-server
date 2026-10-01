@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §a[好友] §7好友与组队。点下方申请 / 邀请。'
+    - 'tell: §a【好友】 §7好友与组队。点下方申请 / 邀请。'
 
 Icons:
   '#':
@@ -66,7 +66,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[好友] §7点击申请；按提示填写名称'
+        - 'tell: §a【好友】 §7点击申请；按提示填写名称'
         - 'tell: §8删除：在列表点对应好友'
 
   P:
@@ -84,7 +84,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §b[好友] §7点击邀请组队'
+        - 'tell: §b【好友】 §7点击邀请组队'
         - 'tell: §8团本 3～5 人 · 邀请只发提示，不强制进队'
 
   M:
@@ -102,5 +102,5 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6[好友] §7点击发起师徒'
+        - 'tell: §6【好友】 §7点击发起师徒'
         - 'tell: §8新人绑老手 · 双方活跃奖（币/外观）· 可选'

@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §c[竞技] §71v1 / 2v2 积分赛。点下方排队或离开。'
+    - 'tell: §c【竞技】 §71v1 / 2v2 积分赛。点下方排队或离开。'
 
 Icons:
   '#':
@@ -68,7 +68,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[竞技] §7正在排队 1v1…'
+        - 'tell: §a【竞技】 §7正在排队 1v1…'
         - 'tell: §7匹配后进独立竞技世界 · 结算只发币与外观'
         - 'command: corerpg arena queue 1v1'
 
@@ -87,7 +87,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a[竞技] §7正在排队 2v2…'
+        - 'tell: §a【竞技】 §7正在排队 2v2…'
         - 'tell: §7建议先与好友组队 · 结算只发币与外观'
         - 'command: corerpg arena queue 2v2'
 
@@ -104,5 +104,5 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_BASS-1-0'
-        - 'tell: §7[竞技] §7已离开队列'
+        - 'tell: §7【竞技】 §7已离开队列'
         - 'command: corerpg arena leave'
