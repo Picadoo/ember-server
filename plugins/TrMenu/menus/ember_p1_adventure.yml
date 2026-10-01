@@ -1,0 +1,206 @@
+# 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q03 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领。
+# 只转发到 CoreRpg 命令；解锁、体力、队伍校验全在服务端（锁定的本点了只会提示原因）。
+# 不写通关时长承诺。P1 未启用（ember-v1.yml enabled=false）时进本命令会直接拒绝。
+# 入口：主菜单 ember_hub 的「冒险 · 主线本」图标，或 /ember_p1_adventure。
+
+Title: '§6余烬 v1 · 冒险'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_adventure'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '# T   K #'
+  - '#  1 2 3#'
+  - '# s b u n'
+  - '# M F C #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  T:
+    update: 20
+    display:
+      material: glowstone dust
+      name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+      lore:
+        - ''
+        - '§7主线本每次 §e30 §7体力（与日常同池）'
+        - '§7开本失败退还 · 开打后离开不退'
+        - '§7只有 Boss 倒下才结算（中途离开无奖励）'
+        - '§81～3 人 · 敌人血量按开局人数锁定'
+
+  K:
+    update: 20
+    display:
+      material: book
+      name: '§b新模式进度'
+      lore:
+        - ''
+        - '§7掉落目标族：§f%corerpg_p1_target%'
+        - '§7T1 锻造印记：§f%corerpg_p1_marks_t1% §7/ 8'
+        - '§7暂存待领：§f%corerpg_p1_pending% §7项'
+        - ''
+        - '§e➥ §f聊天栏查看详细（解锁 / 当前局）'
+    actions:
+      all:
+        - 'command: corerpg p1 run'
+        - close
+
+  '1':
+    update: 20
+    display:
+      material: iron sword
+      name: '§aQ01 §f%corerpg_p1_q01_name%'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_q01_state%'
+        - '§7消耗：§e%corerpg_p1_q01_cost%'
+        - '§7掉落：§f%corerpg_p1_q01_tier%'
+        - '§7用途：§f%corerpg_p1_q01_purpose%'
+        - '§7首通：§f%corerpg_p1_q01_fc%'
+        - ''
+        - '§e➥ §f点击进本（队长点；队员需各自满足条件）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q01'
+        - close
+  '2':
+    update: 20
+    display:
+      material: iron sword
+      name: '§aQ02 §f%corerpg_p1_q02_name%'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_q02_state%'
+        - '§7消耗：§e%corerpg_p1_q02_cost%'
+        - '§7掉落：§f%corerpg_p1_q02_tier%'
+        - '§7用途：§f%corerpg_p1_q02_purpose%'
+        - '§7首通：§f%corerpg_p1_q02_fc%'
+        - ''
+        - '§e➥ §f点击进本（需 Q01 首通）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q02'
+        - close
+  '3':
+    update: 20
+    display:
+      material: diamond sword
+      name: '§aQ03 §f%corerpg_p1_q03_name%'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_q03_state%'
+        - '§7消耗：§e%corerpg_p1_q03_cost%'
+        - '§7掉落：§f%corerpg_p1_q03_tier%'
+        - '§7用途：§f%corerpg_p1_q03_purpose%'
+        - '§7首通：§f%corerpg_p1_q03_fc%'
+        - ''
+        - '§e➥ §f点击进本（需 Q02 首通）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q03'
+        - close
+
+  s:
+    display:
+      material: blaze powder
+      name: '§6目标族 · 灼烬'
+      lore:
+        - '§7之后入场的局：灼烬 60%，另两族各 20%'
+        - '§8入场时快照，局内改不影响本局'
+    actions:
+      all:
+        - 'command: corerpg p1 target scorch'
+  b:
+    display:
+      material: fireball
+      name: '§c目标族 · 烬爆'
+      lore:
+        - '§7之后入场的局：烬爆 60%，另两族各 20%'
+        - '§8入场时快照，局内改不影响本局'
+    actions:
+      all:
+        - 'command: corerpg p1 target burst'
+  u:
+    display:
+      material: magma cream
+      name: '§a目标族 · 余息'
+      lore:
+        - '§7之后入场的局：余息 60%，另两族各 20%'
+        - '§8入场时快照，局内改不影响本局'
+    actions:
+      all:
+        - 'command: corerpg p1 target sustain'
+  n:
+    display:
+      material: paper
+      name: '§7目标族 · 不指定'
+      lore:
+        - '§7三族各 1/3'
+    actions:
+      all:
+        - 'command: corerpg p1 target none'
+
+  M:
+    display:
+      material: nether star
+      name: '§d锻造印记'
+      lore:
+        - '§7Boss 结算每局 1 枚同阶印记（账户绑定）'
+        - '§78 枚同阶 → 指定族 + 部位的标准件'
+        - '§8点击在聊天栏查看数量与兑换命令'
+    actions:
+      all:
+        - 'command: corerpg p1 marks'
+        - close
+  F:
+    display:
+      material: book and quill
+      name: '§e首通自选'
+      lore:
+        - '§7Q01 首通：自选族 T1 刃 · Q02 首通：自选族 T1 护符'
+        - '§8绑定 · 不可分解'
+        - '§8点击在聊天栏查看待选项与命令'
+    actions:
+      all:
+        - 'command: corerpg p1 firstclear'
+        - close
+  C:
+    display:
+      material: ender chest
+      name: '§b补领暂存奖励'
+      lore:
+        - '§7背包满时 P1 装备暂存在此（不会重抽）'
+        - '§7材料溢出走邮件'
+        - '§8出本后点击领取'
+    actions:
+      all:
+        - 'command: corerpg p1 claim'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'

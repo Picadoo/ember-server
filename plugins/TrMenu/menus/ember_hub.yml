@@ -20,7 +20,7 @@ Options:
 Layout:
   - ' ABCDEFm1'
   - ' GHI2JKLk'
-  - ' MNOPQR l'
+  - ' MNOPQRnl'
   - ' STUVWX  '
   - ' YZabcd  '
   - ' efghij  '
@@ -649,6 +649,23 @@ Icons:
       all:
         - 'sound: BLOCK_ANVIL_USE-1-1'
         - 'menu: ember_forge'
+
+  # —— 余烬 v1 (P1) 冒险页（G04；旧日常/周常入口不变）——
+  n:
+    display:
+      material: blaze rod
+      name: '§6冒险 · 主线本'
+      lore:
+        - ''
+        - '§7新模式主线本 Q01–Q03：解锁状态、消耗、掉落阶与用途'
+        - '§7掉落目标族 · 锻造印记 · 首通自选 · 补领'
+        - '§8每次 30 体力 · 1～3 人'
+        - ''
+        - '§e➥ §f打开冒险页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_adventure'
 
   # —— 第 6 行 · 商城与收尾 ——
   e:
