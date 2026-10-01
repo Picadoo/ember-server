@@ -147,10 +147,14 @@ dungeon-pre-folder:
     "ember_arena": 1
   ember_daily:
     "EmberDaily": 2
+    # ember-v1.0-P1 G04 main map Q01 (same template, separate dungeon def)
+    "EmberQ01": 1
   ember_daily_ash:
     "EmberDailyAsh": 1
+    "EmberQ02": 1
   ember_daily_crypt:
     "EmberDailyCrypt": 1
+    "EmberQ03": 1
   ember_daily_tide:
     "EmberDailyTide": 1
   ember_daily_spire:

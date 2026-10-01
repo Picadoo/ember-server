@@ -1,0 +1,16 @@
+# ember-v1.0-P1 G04 — CoreRpg 触发：dp script trigger <组> <队内玩家>
+# 只负责结束实例；奖励已由 CoreRpg 单次结算（reward=false，绝不走旧通关奖励）。
+
+ember_p1_complete:
+  async: false
+  action-script:
+    - condition: []
+      true:
+        - "$end{type=text;text=§6余烬结算完成，即将返回;reward=false;delay=8;end-type=COMPLETE} @dungeon"
+
+ember_p1_fail:
+  async: false
+  action-script:
+    - condition: []
+      true:
+        - "$end{type=text;text=§c本局失败（已开战不退体力）;reward=false;delay=3;end-type=FAILURE} @dungeon"

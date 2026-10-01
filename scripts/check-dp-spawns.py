@@ -6,6 +6,9 @@ world (gitignored, never refreshed) while monster.yml used the rebuilt P2-P5 roo
 mobs suffocated and DP's $kill counted it → idle players got weekly/raid clears + loot. Run this after copying maps.
 
 usage: scripts/check-dp-spawns.py [dungeonDir ...]     (default: every plugins/DungeonPlus/dungeon/Ember*/)
+P1 G04: for EmberQ0x dungeons the CoreRpg run director spawns the mobs, so the points in
+plugins/CoreRpg/ember-v1-runs.yml (rooms.*.points, boss.at, boss.adds.points, event.anchor, spawn) of the map whose
+`dungeon:` matches are checked too, and every door block listed there must be a closed door (iron bars) in the template.
        DP_MAP_ROOT=/path/with/<mapname>/ dirs to check other map copies (e.g. a release or a backup)
 exit 1 = some point has its head inside a full opaque block (mob suffocates → DP counts the death) or no chunk;
 WARN (exit 0) = feet in the floor, head in a non-full block (bars/glass/fence/slab/stairs: stuck, no suffocation), floating.
@@ -14,6 +17,33 @@ No dependencies (own minimal NBT + anvil reader, MC 1.12 format).
 import glob, io, os, re, struct, sys, zlib
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'plugins', 'DungeonPlus')
+RUNS = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'plugins', 'CoreRpg', 'ember-v1-runs.yml')
+
+
+def p1_points(dungeon):
+    """(label, x, y, z) points and door boxes of the ember-v1-runs.yml map whose dungeon id is `dungeon`."""
+    if not os.path.exists(RUNS): return [], []
+    text = open(RUNS, encoding='utf-8').read()
+    blocks = re.split(r'(?m)^  (q\d\d):\s*$', text)
+    for i in range(1, len(blocks) - 1, 2):
+        body = blocks[i + 1]
+        if not re.search(r'(?m)^\s+dungeon:\s*%s\s*$' % re.escape(dungeon), body): continue
+        pts, doors, room = [], [], ''
+        for line in body.splitlines():
+            r = re.match(r'^      (r\d|boss|event|adds):', line) or re.match(r'^        (adds):', line)
+            if r: room = r.group(1)
+            key = re.match(r'^\s*(\w+):', line)
+            if not key: continue
+            k = key.group(1)
+            if k == 'door':
+                d = re.search(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line)
+                if d: doors.append((blocks[i] + ':' + room + ':door', [int(v) for v in d.groups()]))
+                continue
+            if k not in ('points', 'at', 'anchor', 'spawn'): continue
+            for m in re.finditer(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line):
+                pts.append(('p1:%s:%s:%s' % (blocks[i], room or '-', k), int(m.group(1)), int(m.group(2)), int(m.group(3))))
+        return pts, doors
+    return [], []
 # non-solid ids a mob can stand in: air, sapling, water, lava, tall grass, dead bush, flowers, torch, fire, rails, signs,
 # ladder, lever, plates, redstone torch, buttons, snow layer, sugar cane, vines, carpet, double plants, banners
 PASSABLE = {0, 6, 8, 9, 10, 11, 27, 28, 30, 31, 32, 37, 38, 39, 40, 50, 51, 55, 59, 63, 65, 66, 68, 69, 70, 72, 75, 76,
@@ -91,6 +121,14 @@ def check(ddir):
         x, y, z = (int(float(v) // 1) for v in loc.groups())
         pts.add((mm.group(1) + (':' + name.group(1) if name and mm.group(1) == 'mob' else ''), x, y, z))
     bad, warn = [], []
+    p1pts, p1doors = p1_points(os.path.basename(ddir.rstrip('/')))
+    pts.update(p1pts)
+    for what, (x0, y0, z0, x1, y1, z1) in p1doors:
+        for x in range(min(x0, x1), max(x0, x1) + 1):
+            for y in range(min(y0, y1), max(y0, y1) + 1):
+                for z in range(min(z0, z1), max(z0, z1) + 1):
+                    b = mp.block(x, y, z)
+                    if b != 101: bad.append('  %s @ %d,%d,%d: block id %s, expected closed iron bars (101)' % (what, x, y, z, b))
     for what, x, y, z in sorted(pts, key=lambda p: (p[3], p[1], p[2])):
         below, feet, head = mp.block(x, y - 1, z), mp.block(x, y, z), mp.block(x, y + 1, z)
         at = '  %s @ %d,%d,%d: ' % (what, x, y, z)

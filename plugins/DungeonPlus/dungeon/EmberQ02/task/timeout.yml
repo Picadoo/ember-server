@@ -1,0 +1,8 @@
+# §7.5 普通主线本不设硬时限失败；只保留 30 分钟维护超时（防实例挂死）。已开战不退体力（§20.5）。
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 1800:
+      - "$message{type=text;text=§c焦骨甬道 维护超时（30 分钟），本局结束} @dungeon"
+      - "$end{type=text;text=§c焦骨甬道 维护超时;reward=false;delay=1;end-type=FAILURE} @dungeon"

@@ -1,0 +1,362 @@
+# ember-v1.0-P1 G04 — first-batch main maps Q01 灰烬庭院 / Q02 焦骨甬道 / Q03 残誓地窖 (book ch. 11–13, normal version).
+# Spawned ONLY by the CoreRpg run director (plugins/CoreRpg/ember-v1-runs.yml); never by DP groups, spawners or other mobs.
+# - Health = book single-player value; CoreRpg multiplies it by the locked party factor 1 + 0.65 (n − 1) at spawn (A18).
+# - Damage = book raw value; CoreRpg pins every hit to it and enforces the minimum interval (melee 2.5 s, ranged / heavy
+#   3 s, bosses 3.2 / 3 / 3 s), then the P1 pipeline applies the player's mitigation M once. Arrow damage is replaced too.
+# - Boss moves (Q01 重斩, Q02 砸地 + 横扫 below 50 %, Q03 誓斩 + adds at 50 %) and the Q03 caster line are telegraphed by
+#   CoreRpg (flame outline + chat warning; the hit area never exceeds the outline). No MM skills, no drops, no xp,
+#   no corerpg mmgive / mmxp lines (E02: the only payout is the boss settlement).
+# - PreventSunburn on every undead body (instances can be daytime); CoreRpg also cancels combustion of run mobs.
+
+# ---------------- Q01 灰烬庭院 (B_ref 12) ----------------
+EmberQ01Melee:
+  Type: ZOMBIE
+  Display: '&7灰烬卒'
+  Health: 36
+  Damage: 3
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - STONE_SWORD HAND
+
+EmberQ01Ranged:
+  Type: SKELETON
+  Display: '&7灰烬弩手'
+  Health: 26
+  Damage: 3
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+
+EmberQ01Heavy:
+  Type: ZOMBIE
+  Display: '&8灰烬重卒'
+  Health: 50
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.5
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+
+EmberQ01Treasure:
+  Type: RABBIT
+  Display: '&6余烬宝藏怪 &7(可跳过)'
+  Health: 48
+  Damage: 0
+  Options:
+    MovementSpeed: 0.35
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+
+EmberQ01Elite:
+  Type: ZOMBIE
+  Display: '&6灰烬奖励精英'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.4
+  Equipment:
+  - GOLD_HELMET HEAD
+  - GOLD_CHESTPLATE CHEST
+  - IRON_SWORD HAND
+
+EmberQ01Boss:
+  Type: VINDICATOR
+  Display: '&c残门蛮兵'
+  Health: 240
+  Damage: 6
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.8
+  Equipment:
+  - IRON_AXE HAND
+
+# ---------------- Q02 焦骨甬道 (B_ref 24) ----------------
+EmberQ02Melee:
+  Type: ZOMBIE
+  Display: '&7焦骨卒'
+  Health: 72
+  Damage: 6
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - STONE_SWORD HAND
+
+EmberQ02Ranged:
+  Type: SKELETON
+  Display: '&7焦骨弓手'
+  Health: 53
+  Damage: 6
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+
+EmberQ02Heavy:
+  Type: ZOMBIE
+  Display: '&8焦骨重甲'
+  Health: 101
+  Damage: 6
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.5
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+
+EmberQ02Treasure:
+  Type: RABBIT
+  Display: '&6余烬宝藏怪 &7(可跳过)'
+  Health: 96
+  Damage: 0
+  Options:
+    MovementSpeed: 0.35
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+
+EmberQ02Elite:
+  Type: ZOMBIE
+  Display: '&6焦骨奖励精英'
+  Health: 240
+  Damage: 6
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.4
+  Equipment:
+  - GOLD_HELMET HEAD
+  - GOLD_CHESTPLATE CHEST
+  - IRON_SWORD HAND
+
+EmberQ02Boss:
+  Type: ZOMBIE
+  Display: '&c守炉蛮兵'
+  Health: 900
+  Damage: 10
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.9
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+  - IRON_AXE HAND
+
+# ---------------- Q03 残誓地窖 (B_ref 27) ----------------
+EmberQ03Melee:
+  Type: ZOMBIE
+  Display: '&7残誓卒'
+  Health: 81
+  Damage: 8
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - IRON_SWORD HAND
+
+EmberQ03Ranged:
+  Type: SKELETON
+  Display: '&7誓印弓手'
+  Health: 59
+  Damage: 8
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - CHAINMAIL_HELMET HEAD
+  - BOW HAND
+
+EmberQ03Heavy:
+  Type: ZOMBIE
+  Display: '&8残誓重甲'
+  Health: 113
+  Damage: 8
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.5
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+
+# caster: no weapon and its melee is cancelled by CoreRpg; only the telegraphed 6×1.5 line (1 s warning, 6 s cooldown)
+EmberQ03Caster:
+  Type: SKELETON
+  Display: '&5残誓术者'
+  Health: 70
+  Damage: 8
+  Options:
+    MovementSpeed: 0.18
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - GOLD_HELMET HEAD
+
+EmberQ03Treasure:
+  Type: RABBIT
+  Display: '&6余烬宝藏怪 &7(可跳过)'
+  Health: 108
+  Damage: 0
+  Options:
+    MovementSpeed: 0.35
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+
+EmberQ03Elite:
+  Type: ZOMBIE
+  Display: '&6残誓奖励精英'
+  Health: 270
+  Damage: 8
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.4
+  Equipment:
+  - GOLD_HELMET HEAD
+  - GOLD_CHESTPLATE CHEST
+  - IRON_SWORD HAND
+
+EmberQ03Boss:
+  Type: ZOMBIE
+  Display: '&c残誓守卫'
+  Health: 1300
+  Damage: 14
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.9
+  Equipment:
+  - DIAMOND_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+  - IRON_SWORD HAND

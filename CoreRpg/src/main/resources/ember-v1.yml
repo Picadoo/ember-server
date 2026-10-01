@@ -7,7 +7,8 @@ scope:
   # 精确世界名（不区分大小写）
   worlds: []
   # 世界名前缀，例如新模式 DP 实例世界的前缀；留空 = 不匹配任何实例
-  world_prefixes: []
+  # G04: Q01–Q03 主线本实例 dungeon_EmberQ01_<HEX> …（与 ember-v1-runs.yml world_prefix 一致）
+  world_prefixes: [dungeon_EmberQ0]
 
 # §7.1 / §5.1 / §5.2 / §6.1 数值表。留空 = 用策划书默认值；填写时长度必须一致且不递减。
 tables:
