@@ -90,4 +90,24 @@ public class EmberLoadoutTest {
         assertNull(l.charm);
         assertEquals("none", l.activeSet);
     }
+
+    @Test public void ninePairsOnlySameFamilyActivates_C02() {
+        String[] fams = {"scorch", "burst", "sustain"};
+        int active = 0;
+        for (String bf : fams) for (String cf : fams) {
+            EmberLoadout l = EmberLoadout.compute(t, blade(bf, 2, 0, 0, 0), charm(cf, 2, 0, 0, 0), 30);
+            if (bf.equals(cf)) { assertEquals(bf, l.activeSet); active++; }
+            else assertEquals("none", l.activeSet);
+        }
+        assertEquals(3, active);
+    }
+
+    @Test public void awakeningDropsWithGearNoResidue_C03() {
+        EmberLoadout high = EmberLoadout.compute(t, blade("burst", 3, 0, 0, 9), charm("burst", 3, 0, 0, 9), 10);
+        assertEquals(3, high.awakening);
+        EmberLoadout dropped = EmberLoadout.compute(t, blade("burst", 3, 0, 0, 9), charm("burst", 2, 0, 0, 9), 10);
+        assertEquals(2, dropped.awakening);
+        EmberLoadout low = EmberLoadout.compute(t, blade("burst", 3, 0, 0, 5), charm("burst", 2, 0, 0, 9), 10);
+        assertEquals(1, low.awakening);
+    }
 }
