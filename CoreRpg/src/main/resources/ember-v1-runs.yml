@@ -78,6 +78,10 @@ maps:
         points: [[-6, 65, 27], [5, 65, 27], [-8, 65, 33], [7, 65, 33], [-6, 65, 36], [5, 65, 36]]
         a: {melee: 5, ranged: 1}
         b: {melee: 4, heavy: 1}
+    # instance-only guard rails (iron bars into AIR)
+    rails:
+      # B2.160: the template drop behind the spawn corridor (z−5, no way back)
+      - [-1, 65, -5, 1, 66, -5]
     boss:
       mm: EmberQ01Boss
       name: 残门蛮兵
@@ -134,6 +138,10 @@ maps:
         points: [[-3, 65, 40], [3, 65, 40], [-3, 65, 44], [3, 65, 44], [-3, 65, 48], [3, 65, 48]]
         a: {melee: 5, ranged: 1}
         b: {melee: 4, heavy: 1}
+    # instance-only guard rails (iron bars into AIR)
+    rails:
+      # B2.160: the template drop behind the spawn corridor (z−5, no way back)
+      - [-1, 65, -5, 1, 66, -5]
     boss:
       mm: EmberQ02Boss
       name: 守炉蛮兵
@@ -288,7 +296,7 @@ maps:
     requires: q04
     unlocks: q06
     first_clear: {bone: 20, blank: 6}
-    purpose: "T2 本：常规掉 T2 装备与 T2 印记；首通（骨尘 20·胚料 6）记录 Q06 开放（后续批次）"
+    purpose: "T2 本：常规掉 T2 装备与 T2 印记；首通（骨尘 20·胚料 6）开放 Q06"
     b_ref: 59
     spawn: [0, 64, 2]
     spread: [[-2, 64, 2], [2, 64, 2]]
@@ -330,6 +338,8 @@ maps:
       - {after: r2, from: [-1, 70, 5, 1, 72, 7], to: [0, 76, 3], yaw: 180, label: 沿塔内阶梯上到塔冠}
     # instance-only guard rails (iron bars into AIR): open ring edge (~14-block drop) and the central hole
     rails:
+      # B2.160: the 2-wide floor hole in the west doorway of the ground hall (r1 side)
+      - [-7, 64, 0, -7, 65, 0]
       - [-9, 70, -9, 9, 71, -9]
       - [-9, 70, 9, -3, 71, 9]
       - [3, 70, 9, 9, 71, 9]
@@ -376,3 +386,183 @@ maps:
       after: r2
       anchor: [6, 70, 7]
       area: [3, 69, 5, 8, 73, 8]
+
+  q06:
+    name: 霜封哨所
+    dungeon: EmberQ06
+    template: ember_daily_frost
+    tier: 2
+    drop_label: T2
+    content_version: v1
+    map_version: ember_daily_frost@s3-2026-10-02
+    requires: q05
+    unlocks: q07
+    first_clear: {core: 10, coin: 1200}
+    purpose: "T2 本：常规掉 T2 装备与 T2 印记；冲 T3 前的积累；首通（核心 10·币 1200）开放 Q07"
+    b_ref: 59
+    spawn: [0, 70, 0]
+    spread: [[-2, 70, -2], [2, 70, -2]]
+    # template signs (spawn pair, in front of both doors, boss hall) are removed in the instance (book ch. 16 §9: no signs)
+    clear: [[-2, 70, 0], [2, 70, 0], [2, 70, 15], [2, 70, 33], [3, 70, 48]]
+    mobs:
+      melee:    {mm: EmberQ06Melee,    hp: 177, atk: 15, interval: 2.5}
+      ranged:   {mm: EmberQ06Ranged,   hp: 130, atk: 15, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ06Heavy,    hp: 248, atk: 15, interval: 3.0}
+      caster:   {mm: EmberQ06Caster,   hp: 153, atk: 15, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+      treasure: {mm: EmberQ06Treasure, hp: 236, atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ06Elite,    hp: 590, atk: 15, interval: 2.5}
+    rooms:
+      r1:
+        label: 霜旗外院
+        trigger: [-6, 69, 5, 6, 73, 15]
+        points: [[-3, 70, 7], [3, 70, 7], [-2, 70, 10], [2, 70, 10], [-3, 70, 13], [1, 70, 13], [0, 70, 8], [-1, 70, 12]]
+        door: [-1, 70, 16, 1, 72, 16]
+        a: {melee: 6, ranged: 1}
+        b: {melee: 5, heavy: 1}
+      r2:
+        label: 军械仓
+        trigger: [-6, 69, 17, 6, 73, 33]
+        points: [[-2, 70, 22], [3, 70, 22], [-3, 70, 27], [3, 70, 27], [0, 70, 24], [0, 70, 29], [-2, 70, 19], [2, 70, 19]]
+        door: [-1, 70, 34, 1, 72, 34]
+        a: {melee: 5, ranged: 2}
+        b: {melee: 5, caster: 1}
+      r3:
+        label: 盾墙内院
+        trigger: [-6, 69, 35, 6, 73, 41]
+        points: [[-4, 70, 37], [4, 70, 37], [-4, 70, 40], [4, 70, 40], [-2, 70, 38], [2, 70, 38], [-1, 70, 40], [1, 70, 40]]
+        # runtime: the template leaves the 3-wide opening into the boss hall open; closed at attach, opened on clear
+        door: [-1, 70, 42, 1, 72, 42]
+        a: {melee: 6, heavy: 1}
+        b: {melee: 5, ranged: 2}
+    # instance-only guard rails (iron bars into AIR, 2 high): the rift channels along both walls (x ±4..6) and the two
+    # 1×1 pits beside the hall opening drop 4 blocks with no way back; flood fill: no standable cell next to a drop
+    rails:
+      # B2.160: the template drop behind the spawn corridor (z−5, no way back)
+      - [-1, 70, -5, 1, 71, -5]
+      - [-6, 70, 7, -6, 71, 7]
+      - [-6, 70, 9, -6, 71, 9]
+      - [-6, 70, 11, -6, 71, 11]
+      - [-6, 70, 13, -6, 71, 13]
+      - [-6, 70, 22, -6, 71, 28]
+      - [-6, 70, 35, -6, 71, 35]
+      - [-6, 70, 42, -6, 71, 42]
+      - [-5, 70, 6, -5, 71, 7]
+      - [-5, 70, 9, -5, 71, 11]
+      - [-5, 70, 13, -5, 71, 15]
+      - [-5, 70, 21, -5, 71, 22]
+      - [-5, 70, 28, -5, 71, 31]
+      - [-5, 70, 35, -5, 71, 35]
+      - [-4, 70, 5, -4, 71, 6]
+      - [-4, 70, 10, -4, 71, 11]
+      - [-4, 70, 21, -4, 71, 21]
+      - [-4, 70, 29, -4, 71, 29]
+      - [-4, 70, 31, -4, 71, 31]
+      - [-4, 70, 35, -4, 71, 35]
+      - [4, 70, 4, 4, 71, 4]
+      - [4, 70, 10, 4, 71, 11]
+      - [4, 70, 13, 4, 71, 15]
+      - [4, 70, 20, 4, 71, 20]
+      - [4, 70, 31, 4, 71, 31]
+      - [4, 70, 35, 4, 71, 35]
+      - [5, 70, 4, 5, 71, 7]
+      - [5, 70, 9, 5, 71, 11]
+      - [5, 70, 13, 5, 71, 13]
+      - [5, 70, 20, 5, 71, 20]
+      - [5, 70, 24, 5, 71, 26]
+      - [5, 70, 30, 5, 71, 31]
+      - [5, 70, 35, 5, 71, 35]
+      - [6, 70, 7, 6, 71, 7]
+      - [6, 70, 9, 6, 71, 9]
+      - [6, 70, 11, 6, 71, 11]
+      - [6, 70, 13, 6, 71, 13]
+      - [6, 70, 20, 6, 71, 24]
+      - [6, 70, 26, 6, 71, 30]
+      - [6, 70, 35, 6, 71, 35]
+      - [6, 70, 42, 6, 71, 42]
+    boss:
+      mm: EmberQ06Boss
+      name: 霜封统领
+      hp: 4600
+      atk: 28
+      interval: 3.0
+      at: [0, 70, 48]
+      area: [-5, 69, 43, 5, 76, 53]
+      # book ch. 16 §7: every 10 s two blade bands, each 1..7 ahead × 3 wide, 1.2 s warn, 48; the second one 1 s after the
+      # first hit, locked to the first direction and slid 4 blocks to the boss's right (the left side stays safe)
+      skills:
+        - {type: line, name: 刀气, every: 10, warn: 1.2, start: 1, length: 6, width: 3, dmg: 48,
+           follow: {type: line, name: 刀气·二段, start: 1, length: 6, width: 3, shift: 4, delay: 1.0, warn: 1.2, dmg: 48}}
+      recover: 0.5
+    event:
+      after: r2
+      anchor: [-5, 70, 25]
+      area: [-5, 69, 22, -2, 73, 28]
+
+  q07:
+    name: 锈轨矿道
+    dungeon: EmberQ07
+    template: ember_daily_rail
+    tier: 3
+    drop_label: T3
+    content_version: v1
+    map_version: ember_daily_rail@s3-2026-10-02
+    requires: q06
+    unlocks: ""
+    first_clear: {blank: 12, core: 12, coin: 1800}
+    purpose: "T3 本：常规掉 T3 装备与 T3 印记；首通（胚料 12·核心 12·币 1800）开放 T3 定向锻造、T2→T3 升阶与七图挑战版"
+    b_ref: 68
+    spawn: [0, 64, 0]
+    spread: [[-2, 64, -2], [2, 64, -2]]
+    clear: [[-2, 64, 0], [2, 64, 0], [2, 64, 14], [2, 64, 32], [3, 64, 46]]
+    mobs:
+      melee:    {mm: EmberQ07Melee,    hp: 204, atk: 19, interval: 2.5}
+      ranged:   {mm: EmberQ07Ranged,   hp: 150, atk: 19, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ07Heavy,    hp: 286, atk: 19, interval: 3.0}
+      caster:   {mm: EmberQ07Caster,   hp: 177, atk: 19, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+      treasure: {mm: EmberQ07Treasure, hp: 272, atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ07Elite,    hp: 680, atk: 19, interval: 2.5}
+    rooms:
+      r1:
+        label: 装卸场
+        trigger: [-5, 63, 5, 5, 67, 14]
+        points: [[-4, 64, 7], [4, 64, 7], [-3, 64, 10], [3, 64, 10], [-4, 64, 12], [4, 64, 12], [-1, 64, 13], [1, 64, 13]]
+        door: [-1, 64, 15, 1, 66, 15]
+        a: {melee: 6, ranged: 1}
+        b: {melee: 5, heavy: 1}
+      r2:
+        label: 侧置货仓
+        trigger: [-6, 63, 16, 6, 67, 32]
+        points: [[-5, 64, 20], [1, 64, 20], [-3, 64, 24], [3, 64, 24], [-4, 64, 28], [4, 64, 28], [-1, 64, 27], [1, 64, 30]]
+        door: [-1, 64, 33, 1, 66, 33]
+        a: {melee: 5, ranged: 2}
+        b: {melee: 5, caster: 1}
+      r3:
+        label: 废压机房
+        trigger: [-6, 63, 34, 6, 67, 39]
+        points: [[-5, 64, 36], [5, 64, 36], [-3, 64, 38], [3, 64, 38], [-5, 64, 39], [5, 64, 39], [-1, 64, 37], [1, 64, 37]]
+        # runtime: template opening into the boss hall, closed at attach, opened on clear
+        door: [-1, 64, 40, 1, 66, 40]
+        a: {melee: 6, heavy: 1}
+        b: {melee: 6, ranged: 1}
+    # instance-only guard rails (iron bars into AIR)
+    rails:
+      # B2.160: the template drop behind the spawn corridor (z−5, no way back)
+      - [-1, 64, -5, 1, 65, -5]
+    boss:
+      mm: EmberQ07Boss
+      name: 炉锁巨卫
+      hp: 5800
+      atk: 34
+      interval: 3.0
+      at: [0, 64, 46]
+      area: [-5, 63, 41, 5, 70, 51]
+      # book ch. 17 §7: 重砸 every 9 s (r 3.5 on a locked point, 1.3 s warn, 56, fixed 1.5 s recovery) and 冲撞 every 14 s
+      # (≤ 8-block strip × 4 wide, 1.3 s warn, 56; the boss ends at the strip end); mutually exclusive (one at a time)
+      skills:
+        - {type: circle, target: player, name: 重砸, every: 9, warn: 1.3, radius: 3.5, dmg: 56, recover: 1.5}
+        - {type: charge, name: 冲撞, every: 14, warn: 1.3, length: 8, width: 4, dmg: 56}
+      recover: 0.5
+    event:
+      after: r2
+      anchor: [9, 64, 20]
+      area: [5, 63, 19, 11, 67, 21]

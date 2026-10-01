@@ -1,0 +1,8 @@
+# G04: 怪物由 CoreRpg 运行导演按 ember-v1-runs.yml 生成（种子 A/B、组队血量锁定、清房开门），这里不放 DP 怪物组。
+groups:
+  idle:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

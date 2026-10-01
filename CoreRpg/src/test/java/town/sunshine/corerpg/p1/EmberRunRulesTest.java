@@ -286,7 +286,7 @@ public class EmberRunRulesTest {
         assertEquals(30, m.cost);
         assertEquals(3, m.partyMax);
         assertEquals("[]", m.validate().toString());
-        assertEquals(5, m.maps.size());
+        assertEquals(7, m.maps.size());
         EmberRunMaps.MapDef q1 = m.byKey("q01"), q2 = m.byKey("q02"), q3 = m.byKey("q03");
         assertEquals("ember_daily", q1.template);
         assertEquals("ember_daily_ash", q2.template);
@@ -340,10 +340,61 @@ public class EmberRunRulesTest {
         assertEquals(2, q4.spread.size());
         assertEquals(1, q4.clear.size());
         assertEquals(2, q5.links.size());
-        assertEquals(28, q5.rails.size());
+        assertEquals(29, q5.rails.size()); // + B2.160 doorway hole
         assertEquals("r1", q4.eventAfter);
         assertEquals("r2", q5.eventAfter);
         assertSame(q5, m.byWorld("dungeon_EmberQ05_0A1B2C3D"));
+        // batch 3 (§23.2 后段): Q05 → Q06 → Q07, Q07 drops T3 and unlocks nothing (challenge + T3 forge hang on its flag)
+        EmberRunMaps.MapDef q6 = m.byKey("q06"), q7 = m.byKey("q07");
+        assertEquals("q06", q5.unlocks);
+        assertEquals("q05", q6.requires);
+        assertEquals("q07", q6.unlocks);
+        assertEquals("q06", q7.requires);
+        assertEquals("", q7.unlocks);
+        assertEquals(2, q6.tier);
+        assertEquals(3, q7.tier);
+        assertEquals("ember_daily_frost", q6.template);
+        assertEquals("ember_daily_rail", q7.template);
+        assertEquals("核心 10 币 1200", q6.firstClearLabel());
+        assertEquals("核心 12 胚料 12 币 1800", q7.firstClearLabel());
+        assertEquals(177, q6.roles.get("melee").hp, 0);
+        assertEquals(15, q6.roles.get("melee").atk, 0);
+        assertEquals(204, q7.roles.get("melee").hp, 0);
+        assertEquals(286, q7.roles.get("heavy").hp, 0);
+        assertEquals(19, q7.roles.get("caster").atk, 0);
+        assertEquals(680, q7.roles.get("elite").hp, 0);
+        assertEquals(4600, q6.boss.hp, 0);
+        assertEquals(28, q6.boss.atk, 0);
+        assertEquals(5800, q7.boss.hp, 0);
+        assertEquals(34, q7.boss.atk, 0);
+        EmberRunMaps.Skill blade = q6.boss.skills.get(0);
+        assertEquals("line", blade.type);
+        assertEquals(1, blade.stripFrom(), 0);
+        assertEquals(7, blade.stripTo(), 0);
+        assertEquals(10, blade.every, 0);
+        assertEquals(48, blade.dmg, 0);
+        assertEquals(4, blade.follow.shift, 0);
+        assertEquals(1.0, blade.follow.delay, 0);
+        assertEquals(1.01, blade.follow.below, 0); // always fires
+        assertFalse(blade.light);
+        EmberRunMaps.Skill slam = q7.boss.skills.get(0), charge = q7.boss.skills.get(1);
+        assertEquals("player", slam.target);
+        assertEquals(3.5, slam.radius, 0);
+        assertEquals(1.5, slam.recover, 0);
+        assertEquals("charge", charge.type);
+        assertEquals(8, charge.length, 0);
+        assertEquals(4, charge.width, 0);
+        assertEquals(14, charge.every, 0);
+        assertFalse(slam.light || charge.light); // 重砸 / 冲撞 both use the heavy challenge value 72
+        assertNotNull(q6.room("r3").door); // runtime door into the boss hall
+        assertNotNull(q7.room("r3").door);
+        assertEquals(41, q6.rails.size());
+        assertEquals(1, q7.rails.size());
+        assertEquals(5, q6.clear.size());
+        assertEquals(5, q7.clear.size());
+        assertEquals("r2", q6.eventAfter);
+        assertEquals("r2", q7.eventAfter);
+        assertSame(q7, m.byWorld("dungeon_EmberQ07_0A1B2C3D"));
     }
 
     @Test public void compositionCapsAndLayout() {

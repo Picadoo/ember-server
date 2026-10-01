@@ -8,7 +8,8 @@ mobs suffocated and DP's $kill counted it → idle players got weekly/raid clear
 usage: scripts/check-dp-spawns.py [dungeonDir ...]     (default: every plugins/DungeonPlus/dungeon/Ember*/)
 P1 G04: for EmberQ0x dungeons the CoreRpg run director spawns the mobs, so the points in
 plugins/CoreRpg/ember-v1-runs.yml (rooms.*.points, boss.at, boss.adds.points, event.anchor, spawn, spread, links.to) of the map whose
-`dungeon:` matches are checked too, every door block listed there must be a closed door (iron bars) in the template,
+`dungeon:` matches are checked too, every door block listed there must be a closed door (iron bars) in the template
+(a door preceded by a `# runtime:` comment line must be open there instead: the director closes it at attach),
 and no runtime rail box (rails:) may cover a point's feet or head.
        DP_MAP_ROOT=/path/with/<mapname>/ dirs to check other map copies (e.g. a release or a backup)
 exit 1 = some point has its head inside a full opaque block (mob suffocates → DP counts the death) or no chunk;
@@ -29,7 +30,7 @@ def p1_points(dungeon):
     for i in range(1, len(blocks) - 1, 2):
         body = blocks[i + 1]
         if not re.search(r'(?m)^\s+dungeon:\s*%s\s*$' % re.escape(dungeon), body): continue
-        pts, doors, room, rails, lst = [], [], '', [], ''
+        pts, doors, room, rails, lst, runtime = [], [], '', [], '', False
         for line in body.splitlines():
             r = re.match(r'^      (r\d|boss|event|adds):', line) or re.match(r'^        (adds):', line)
             if r: room = r.group(1)
@@ -43,13 +44,16 @@ def p1_points(dungeon):
                 d = re.search(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line)
                 if d: rails.append([int(v) for v in d.groups()])
                 continue
+            if re.match(r'^\s*#\s*runtime:', line): runtime = True  # next door: template opening closed at attach
             key = re.match(r'^\s*(\w+):', line)
             if not key: continue
             k = key.group(1)
             if k == 'door':
                 d = re.search(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line)
-                if d: doors.append((blocks[i] + ':' + room + ':door', [int(v) for v in d.groups()]))
+                if d: doors.append((blocks[i] + ':' + room + ':door' + (':runtime' if runtime else ''), [int(v) for v in d.groups()]))
+                runtime = False
                 continue
+            runtime = False
             if k not in ('points', 'at', 'anchor', 'spawn', 'spread'): continue
             for m in re.finditer(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line):
                 pts.append(('p1:%s:%s:%s' % (blocks[i], room or '-', k), int(m.group(1)), int(m.group(2)), int(m.group(3))))
@@ -143,7 +147,9 @@ def check(ddir):
             for y in range(min(y0, y1), max(y0, y1) + 1):
                 for z in range(min(z0, z1), max(z0, z1) + 1):
                     b = mp.block(x, y, z)
-                    if b != 101: bad.append('  %s @ %d,%d,%d: block id %s, expected closed iron bars (101)' % (what, x, y, z, b))
+                    if what.endswith(':runtime'):  # the director closes it at attach: the template must be open there
+                        if b not in (0, 101): bad.append('  %s @ %d,%d,%d: block id %s, expected air (runtime door)' % (what, x, y, z, b))
+                    elif b != 101: bad.append('  %s @ %d,%d,%d: block id %s, expected closed iron bars (101)' % (what, x, y, z, b))
     for rb in P1_RAILS.get(os.path.basename(ddir.rstrip('/')), []):
         x0, y0, z0, x1, y1, z1 = rb
         for what, x, y, z in pts:

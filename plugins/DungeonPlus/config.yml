@@ -168,8 +168,12 @@ dungeon-pre-folder:
     "EmberQ05": 1
   ember_daily_frost:
     "EmberDailyFrost": 1
+    # ember-v1.0-P1 batch 3 main map Q06
+    "EmberQ06": 1
   ember_daily_rail:
     "EmberDailyRail": 1
+    # ember-v1.0-P1 batch 3 main map Q07
+    "EmberQ07": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:
