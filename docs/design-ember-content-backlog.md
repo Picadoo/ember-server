@@ -363,6 +363,7 @@
 - **B2.115** → DP EmberWeekly/task/timeout.yml L6「周常超时失败（体力不返还）」首免/OP 不准（排 B2.113 后；待出稿）。
 - **B2.116** → DP EmberRaid/task/timeout.yml L7「团本超时失败（体力不返还）」首免/OP 不准（排 B2.115 后、B2.103 前；待出稿）。
 - ~~**B2.117**~~ → `plugins/CoreRpg/quest.yml:377` done「试炼每周一次」→ 每人每周限通关口径（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:43 CST 机器人实测（quest set 9 0 → /corerpg quest talk → 复原 1 0）：包 {"color":"gold","text":"灰烛："},{"color":"white","text":"试炼每人每周限通关一次。稳定符在周首通里。"}）
+- ~~**B2.105**~~ → plugins/CoreRpg/set.yml L27 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释）（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常）。
 
 ---
 
@@ -581,6 +582,7 @@
 | **B2.115** | DP EmberWeekly/task/timeout.yml L6 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.113 后） |
 | **B2.116** | DP EmberRaid/task/timeout.yml L7 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.115 后） |
 | ~~**B2.117**~~ | plugins/CoreRpg/quest.yml L377 | 主线 done「试炼每周一次」→「试炼每人每周限通关一次。稳定符在周首通里。」 | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:43 CST 机器人实测（quest set 9 0 → /corerpg quest talk → 复原 1 0）：包 {"color":"gold","text":"灰烛："},{"color":"white","text":"试炼每人每周限通关一次。稳定符在周首通里。"}） |
+| ~~**B2.105**~~ | plugins/CoreRpg/set.yml L27 | 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释） | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常） |
 
 ---
 

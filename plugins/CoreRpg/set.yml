@@ -24,7 +24,7 @@ sets:
     lore_mark: "§6套装：余烬同袍 ✓"
 
 # 团戒周首通（option.yml 通关箱 ni give）
-# 团票每周 1 张 ⇒ 实践上每角色每周至多 1 次 COMPLETE。
+# 团本现按体力进本（本周首次免费，其后扣体力），同周可多次通关；团戒只靠下行周首通去重发放。
 # 真去重：PlayerData.raidRingWeek = DailyService.weekId()；/corerpg raid grant-ring
 raid_ring:
   ni_id: acc_ember_raid_ring
