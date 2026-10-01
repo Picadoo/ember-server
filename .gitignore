@@ -71,3 +71,6 @@ server-runtime/ember_abyss_build/
 
 # ---- 控制台 FIFO（scripts/console-fifo.sh）----
 **/console.fifo
+
+# ember-v1.0-P1 item signing key (generated at runtime; never commit)
+plugins/CoreRpg/ember-v1-item.key

@@ -1,0 +1,52 @@
+# ember-v1.0-P1 (余烬策划书 v1.0 · 来源开关表 docs/DESIGN-ember-v1.0-P1-source-table.md)
+# 默认关闭。关闭时旧模式行为不变；开启后也只在 scope 内的世界（新模式副本实例 / 测试世界）生效。
+# 运行期可用 /corerpg p1 enable|disable|world add <世界> 临时切换（不写回本文件，重启后恢复）。
+enabled: false
+
+scope:
+  # 精确世界名（不区分大小写）
+  worlds: []
+  # 世界名前缀，例如新模式 DP 实例世界的前缀；留空 = 不匹配任何实例
+  world_prefixes: []
+
+# §7.1 / §5.1 / §5.2 / §6.1 数值表。留空 = 用策划书默认值；填写时长度必须一致且不递减。
+tables:
+  weapon_a: [12, 24, 42, 70]          # T0..T3 武器基准 A
+  charm_h: [20, 50, 95, 165]          # T0..T3 护符额外生命 h
+  charm_d: [2, 6, 10, 14]             # T0..T3 护符防御 D
+  quality: [0.0, 0.04, 0.08, 0.12]    # 标准/精良/卓越/极品
+  craft: [0.0, 0.02, 0.04, 0.06]      # 锋刃/护心 0/2/4/6%
+  enhance: [0.0, 0.04, 0.08, 0.13, 0.18, 0.24, 0.30, 0.37, 0.44, 0.52, 0.60]
+
+crit:
+  rate: 0.10
+  mult: 1.5
+defense:
+  k: 40
+  floor: 0.5
+sustain_hp_mult: 1.12
+
+# 烬斩 (A12，P1 唯一主动入口)
+skill:
+  cooldown_seconds: 8
+  radius: 3.5
+  arc_degrees: 100
+  max_targets: 5
+
+# 统一回复药 (D03)：P1 中 potion_ember_heal 改为回复 H 的 percent，与其他回复药共享冷却
+heal_potion:
+  items: [potion_ember_heal]
+  percent: 0.20
+  cooldown_seconds: 15
+
+# P1 中允许照常生效的 life.yml 消耗品 id（其余战斗类效果明确提示不可用，食物只补饱食度）
+consumables:
+  allowed: [potion_ember_night]
+
+# 伤害来源日志默认输出到控制台的开关（玩家侧用 /corerpg p1 debug）
+debug:
+  console: false
+
+# 物品身份签名：plugins/CoreRpg/ember-v1-item.key 首次需要时自动生成（勿提交）
+security:
+  sign_items: true

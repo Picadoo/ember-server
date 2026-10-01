@@ -110,6 +110,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private RaidHallService raidHallService;
     private CalamityBasinService calamityBasinService;
     private LootService lootService;
+    /** ember-v1.0-P1 (default OFF; per-world scope) */
+    private town.sunshine.corerpg.p1.EmberMode emberMode;
+    private town.sunshine.corerpg.p1.EmberDamageTrace emberTrace;
+    private town.sunshine.corerpg.p1.EmberCommand emberCommand;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -129,6 +133,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         initStorage();
         dataStore = new PlayerDataStore(this);
         niBridge = new NiBridge(this);
+        // ember-v1.0-P1: mode flag + read-only damage probes first, so the LOWEST probe sees the raw value
+        emberMode = new town.sunshine.corerpg.p1.EmberMode(this); // config read in reloadLocal()
+        emberTrace = new town.sunshine.corerpg.p1.EmberDamageTrace(this);
+        Bukkit.getPluginManager().registerEvents(emberTrace, this);
+        emberCommand = new town.sunshine.corerpg.p1.EmberCommand(emberMode, emberTrace);
         enhanceService = new EnhanceService(this, niBridge);
         calamityService = new CalamityService(this);
         covenantService = new CovenantService(this, niBridge, dataStore);
@@ -246,6 +255,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             }, period, period);
         }
         registerPapi();
+        Bukkit.getScheduler().runTask(this, new Runnable() {
+            @Override public void run() { if (emberMode != null) emberMode.checkConflicts(); } // after all plugins enabled
+        });
         getLogger().info("CoreRpg " + getDescription().getVersion() + " enabled (storage=" + storageMode + "; coin/sign/activity/bounty/enhance/socket/scrap/reforge/calamity/abyss-settle/covenant/talent/skill/cash/shop/monthly/stamina/tickets/mail/friend/settings/ladder/pet/guild/arena/auction/warehouse/raid/set/part).");
     }
 
@@ -297,6 +309,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public EnhanceService getEnhanceService() { return enhanceService; }
     public MysqlStorage getMysqlStorage() { return mysqlStorage; }
     public String getStorageMode() { return storageMode; }
+    public town.sunshine.corerpg.p1.EmberMode getEmberMode() { return emberMode; }
     public boolean isMysqlActive() { return mysqlStorage != null && mysqlStorage.isActive(); }
 
 
@@ -459,6 +472,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private void reloadLocal() {
         reloadConfig();
+        if (emberMode != null) {
+            emberMode.reload();
+            if (emberTrace != null) emberTrace.setConsole(emberMode.b("debug.console", false));
+        }
         if (progressService != null) progressService.reload();
         if (questService != null) {
             questService.reload();
@@ -791,6 +808,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("progress".equals(sub)) return progressService.cmdProgress(sender, args);
         if ("loot".equals(sub)) return lootService.cmd(sender, args);
         if ("stats".equals(sub) || "属性".equals(sub)) return statService.cmd(sender, args);
+        if ("p1".equals(sub) || "ember".equals(sub)) return emberCommand.cmd(sender, args);
         if ("forge".equals(sub) || "锻造".equals(sub)) return forgeService.cmd(sender, args);
         if ("part".equals(sub) || "部件".equals(sub)) return partService.cmd(sender, args);
         if ("mmgiveall".equals(sub)) return cmdMmGiveAll(sender, args);
@@ -924,7 +942,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GRAY + "  guild|alliance [create|info|invite|accept|leave|kick|donate|boss]");
         sender.sendMessage(ChatColor.GRAY + "  arena|pvp [queue 1v1|2v2|leave|stats|claim|forfeit] · auction [list|sell|buy|cancel]");
         sender.sendMessage(ChatColor.GRAY + "  warehouse [deposit|withdraw <slot|id> [n]|unlock [coin|cash]|info <slot>]");
-        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: xpreward · passxp · progress · pass season reset · enhance set · calamity forceopen/forceend · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
+        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: xpreward · passxp · progress · pass season reset · enhance set · calamity forceopen/forceend · p1 status/debug/world · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
         sender.sendMessage(ChatColor.DARK_GRAY + "  storage — 显示 yaml|mysql 与 ping");
     }
 
