@@ -34,8 +34,8 @@ public final class EliteService {
 
     /**
      * Placeholder / DP gate: Lv≥40 + 本周未通关。
-     * B0.1: 票改由 TicketEntryService 在 start 前 consumeExact；此处不再要求持票
-     *（否则扣票后再跑 %corerpg_gate_elite% 会假失败）。
+     * S0: 体力 / 本周免费抵扣由 TicketEntryService 在 start 前扣；此处只判等级 + 本周未通关
+     *（否则扣过后再跑 %corerpg_gate_elite% 会假失败）。
      */
     public boolean passesGate(Player player, PlayerData data) {
         if (player == null || data == null) return false;
@@ -58,7 +58,7 @@ public final class EliteService {
     }
 
     /**
-     * /corerpg elite start — B0.1：NI id 扣票后 console start-console（见 TicketEntryService）.
+     * /corerpg elite start — S0：TicketEntryService 扣体力 / 本周免费抵扣后 console start-console.
      */
     public boolean cmdStart(Player player) {
         TicketEntryService entry = plugin.getTicketEntryService();
@@ -133,11 +133,14 @@ public final class EliteService {
             PlayerData d = dataStore.get(p.getUniqueId());
             ProgressService ps = plugin.getProgressService();
             int need = ps != null ? ps.gateLevel("elite") : GATE_LEVEL;
-            int tickets = ni == null ? 0 : ni.countInInventory(p, TICKET_NI);
+            StaminaService st = plugin.getStaminaService();
             p.sendMessage(ChatColor.GOLD + "[精英试炼] " + ChatColor.GRAY + "本周 " + DailyService.weekId()
                     + " · 门槛 Lv." + need + " · 当前 Lv." + d.getEmberLevel());
-            p.sendMessage(ChatColor.AQUA + "  精英票 §f" + tickets
-                    + ChatColor.GRAY + " · 本周已通关："
+            String cost = st == null ? "体力服务未就绪"
+                    : "进本 §f" + st.costOf("elite") + "§7 体力 · 体力 §f" + st.getStamina(d) + "§7/§f" + st.getMax(d)
+                    + "§7 · 本周免费 §f×" + d.getWeeklyGrantCreditElite();
+            p.sendMessage(ChatColor.GRAY + "  " + cost);
+            p.sendMessage(ChatColor.GRAY + "  本周已通关："
                     + (isClearedThisWeek(d) ? ChatColor.RED + "是" : ChatColor.GREEN + "否")
                     + ChatColor.GRAY + " · 门控："
                     + (passesGate(p, d) ? ChatColor.GREEN + "yes" : ChatColor.YELLOW + "no"));
