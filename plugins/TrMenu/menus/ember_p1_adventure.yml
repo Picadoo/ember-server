@@ -1,4 +1,4 @@
-# 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q03 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领。
+# 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q05 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领。
 # 只转发到 CoreRpg 命令；解锁、体力、队伍校验全在服务端（锁定的本点了只会提示原因）。
 # 不写通关时长承诺。P1 未启用（ember-v1.yml enabled=false）时进本命令会直接拒绝。
 # 入口：主菜单 ember_hub 的「冒险 · 主线本」图标，或 /ember_p1_adventure。
@@ -18,7 +18,7 @@ Options:
 Layout:
   - '#########'
   - '# T   K #'
-  - '#  1 2 3#'
+  - '# 12345 #'
   - '# s b u n'
   - '# M F C #'
   - '####B####'
@@ -54,6 +54,9 @@ Icons:
         - ''
         - '§7掉落目标族：§f%corerpg_p1_target%'
         - '§7T1 锻造印记：§f%corerpg_p1_marks_t1% §7/ 8'
+        - '§7T2 锻造印记：§f%corerpg_p1_marks_t2% §7/ 8 §8（T2 定向锻造：%corerpg_p1_forge_t2%）'
+        - '§7套装：§f%corerpg_p1_awaken%'
+        - '§7%corerpg_p1_awaken_next%'
         - '§7暂存待领：§f%corerpg_p1_pending% §7项'
         - ''
         - '§e➥ §f聊天栏查看详细（解锁 / 当前局）'
@@ -119,6 +122,44 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg enter q03'
         - close
+  '4':
+    update: 20
+    display:
+      material: prismarine shard
+      name: '§bQ04 §f%corerpg_p1_q04_name%'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_q04_state%'
+        - '§7消耗：§e%corerpg_p1_q04_cost%'
+        - '§7掉落：§f%corerpg_p1_q04_tier%'
+        - '§7用途：§f%corerpg_p1_q04_purpose%'
+        - '§7首通：§f%corerpg_p1_q04_fc%'
+        - ''
+        - '§e➥ §f点击进本（需 Q03 首通）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q04'
+        - close
+  '5':
+    update: 20
+    display:
+      material: iron axe
+      name: '§bQ05 §f%corerpg_p1_q05_name%'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_q05_state%'
+        - '§7消耗：§e%corerpg_p1_q05_cost%'
+        - '§7掉落：§f%corerpg_p1_q05_tier%'
+        - '§7用途：§f%corerpg_p1_q05_purpose%'
+        - '§7首通：§f%corerpg_p1_q05_fc%'
+        - ''
+        - '§e➥ §f点击进本（需 Q04 首通）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q05'
+        - close
 
   s:
     display:
@@ -167,6 +208,7 @@ Icons:
       lore:
         - '§7Boss 结算每局 1 枚同阶印记（账户绑定）'
         - '§78 枚同阶 → 指定族 + 部位的标准件'
+        - '§7T2 定向锻造需本人首通 Q04（T3 需 Q07）'
         - '§8点击在聊天栏查看数量与兑换命令'
     actions:
       all:
@@ -178,6 +220,7 @@ Icons:
       name: '§e首通自选'
       lore:
         - '§7Q01 首通：自选族 T1 刃 · Q02 首通：自选族 T1 护符'
+        - '§7Q03～Q05 首通为材料，直接发放（见各本「首通」）'
         - '§8绑定 · 不可分解'
         - '§8点击在聊天栏查看待选项与命令'
     actions:
