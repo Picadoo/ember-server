@@ -177,21 +177,21 @@ chapters:
         count: 20
         complete_on: abyss_clear
         desc: 击败深渊中的余烬之物
-        hint: 打开枢纽菜单 → 深渊（耗体力）· 本次结算也算完成
+        hint: 打开枢纽菜单 → 深渊（耗体力）· 本次打穿第 12 层也算完成
         xp: 150
         done: ['§7它们曾是守城的人。']
       - type: event
         event: abyss_clear
         count: 1
         desc: 在深渊结算一次
-        hint: 深渊结算
+        hint: 打穿深渊第 12 层（自动结算）· 中途上浮撤离只按层发箱，不计本步
         xp: 300
         done: ['§7你在深渊壁上看见了烧焦的城徽。']
       - type: event
         event: abyss_clear
         count: 1
         desc: 再次深入深渊并结算
-        hint: 深渊每日有次数限制
+        hint: 深渊不限次数 · 每次进入耗 30 体力 · 同样需打穿第 12 层
         xp: 250
         done: ['§6灰烛：§f三十年前那场火，是从深渊烧上来的。']
       - type: event
