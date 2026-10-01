@@ -72,8 +72,8 @@ groups:
   # Boss 前门压：终厅门槛内侧两侧尸贴脸（door2 z=25 与 Boss z=31 之间）
   boss_prep:
   - monster:
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-3,65,27;amount=1;scattered=0.5;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=3,65,27;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=-3,66,27;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberDailyZombie;location=3,66,27;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
     - "$kill{mobname=灰烬庭院僵尸;amount=2} @system"
     start:

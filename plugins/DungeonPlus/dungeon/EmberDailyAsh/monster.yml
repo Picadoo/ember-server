@@ -9,7 +9,7 @@ groups:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=-3,65,8;amount=2;scattered=0.8;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=3,65,8;amount=2;scattered=0.8;level=1} @dungeon"
-    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=8,65,10;amount=1;scattered=0.5;level=1} @dungeon"
+    - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=7,65,10;amount=1;scattered=0.5;level=1} @dungeon"
     - "$mob{plugin=MythicMobs;name=EmberAshZombie;location=7,65,11;amount=1;scattered=0.5;level=1} @dungeon"
     condition:
     - "$kill{mobname=焦骨尸;amount=6} @system"
