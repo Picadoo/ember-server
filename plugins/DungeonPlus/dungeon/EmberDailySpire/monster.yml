@@ -4,6 +4,7 @@
 # 2026-09-28 波次差异: 环廊双侧裂隙箭骷 2+2 → 再卫尸×2（顺序单 $kill）
 # 2026-09-28 第二房/Boss前压试点: 房2 start 链式重叠（对齐霜晶/锈轨）；wave2a start→wave2b delay2；开门在 wave2b
 # 2026-09-28 Boss前压: wave2b.end→boss_prep(卫尸×2 @ ±3,76,2)→boss；房2链式零动
+# 2026-10-02 B2.152: 模板楼梯不可走 → wave1 结束传送 (0,70,-6)，wave2b 结束传送 (0,76,3)
 # 2026-09-28 环廊防坠: wave2b (0,70,-6)→(0,70,-4)；(0,70,2)→(-1,69,1)（设计(0,70,1)中轴空洞，±微调可站）
 groups:
   wave1:
@@ -27,6 +28,9 @@ groups:
     - "$operation-block{loc=1,64,4;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,65,4;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,66,4;mode=set;type=AIR} @dungeon"
+    # B2.152: the template stairs cannot be walked (stuck at z≈7.7 y67) → carry the party up to the ring
+    - "$message{type=text;text=§7塔内阶梯坍塌 —— 护送你上到中层环廊} @dungeon"
+    - "$teleport{location=0,70,-6} @player"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=wave2a;repeat=false;delay=3} @dungeon"
     auto-start: false
@@ -65,6 +69,9 @@ groups:
     - "$operation-block{loc=1,70,4;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,71,4;mode=set;type=AIR} @dungeon"
     - "$operation-block{loc=1,72,4;mode=set;type=AIR} @dungeon"
+    # B2.152: tube 2 starts 3 blocks up behind a bar row → carry the party to the crown
+    - "$message{type=text;text=§7上层阶梯断裂 —— 护送你上到顶台} @dungeon"
+    - "$teleport{location=0,76,3} @player"
     - "$command{text=effect %player_name% instant_health 1 2 true;console=true} @player"
     - "$monstergroup{group=boss_prep;repeat=false;delay=2} @dungeon"
     auto-start: false
