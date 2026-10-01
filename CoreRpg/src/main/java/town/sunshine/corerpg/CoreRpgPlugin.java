@@ -118,6 +118,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private town.sunshine.corerpg.p1.EmberLoadoutService emberLoadouts;
     private town.sunshine.corerpg.p1.EmberCombatListener emberCombat;
     private town.sunshine.corerpg.p1.EmberSetService emberSets;
+    private town.sunshine.corerpg.p1.EmberForgeService emberForge;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -212,6 +213,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(emberSets, this);
         emberSets.start();
         emberCommand.setSets(emberSets);
+        emberForge = new town.sunshine.corerpg.p1.EmberForgeService(this, emberLoadouts);
+        Bukkit.getPluginManager().registerEvents(emberForge, this);
+        emberCommand.setForge(emberForge);
         Bukkit.getPluginManager().registerEvents(flexSkillService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {

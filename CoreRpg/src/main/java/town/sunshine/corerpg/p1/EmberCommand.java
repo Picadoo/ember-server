@@ -23,6 +23,11 @@ public final class EmberCommand {
     public void setLoadouts(EmberLoadoutService l) { this.loadouts = l; }
     public void setSets(EmberSetService v) { this.sets = v; }
 
+    private EmberForgeService forge;
+    public void setForge(EmberForgeService v) { this.forge = v; }
+    private static final java.util.Set<String> FORGE_OPS = new java.util.HashSet<String>(java.util.Arrays.asList(
+            "enhance", "swap", "upgrade", "refine", "quality", "dismantle", "sync", "flag"));
+
     public EmberCommand(EmberMode mode, EmberDamageTrace trace) {
         this.mode = mode;
         this.trace = trace;
@@ -35,6 +40,10 @@ public final class EmberCommand {
         if ("status".equals(sub)) return status(s);
         if ("charm".equals(sub)) return charm(s, args);
         if ("inspect".equals(sub)) return inspect(s);
+        if (FORGE_OPS.contains(sub)) {
+            if (forge == null) { s.sendMessage(P + "锻造服务未加载"); return true; }
+            return forge.cmd(s, sub, args); // flag checks corerpg.admin itself
+        }
         if (!s.hasPermission("corerpg.admin")) {
             s.sendMessage(ChatColor.RED + "需要 corerpg.admin");
             return true;
@@ -69,6 +78,8 @@ public final class EmberCommand {
         s.sendMessage(P + "/corerpg p1 debug [all|console|off]  — 每击伤害来源日志");
         s.sendMessage(P + "/corerpg p1 give <scorch|burst|sustain|t0> <blade|charm> <阶0-3> [成色0-3] [精工0-3] [强化0-10] [玩家]");
         s.sendMessage(P + "/corerpg p1 charm select|clear  ·  /corerpg p1 inspect  — 手持物品身份/校验");
+        EmberForgeService.helpLines(s);
+        s.sendMessage(P + "/corerpg p1 flag <玩家> <q04|q07> [clear]  — 首通标记桩（升阶条件）");
         s.sendMessage(P + "/corerpg p1 calc <武阶> <武成色> <武精工> <武强化> <符阶> <符成色> <符精工> <符强化> <等级> [sustain]");
         return true;
     }

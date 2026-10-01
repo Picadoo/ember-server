@@ -166,6 +166,14 @@ public final class EmberLoadoutService implements Listener {
 
     public EmberItemStore.Row cachedRow(String uid) { return rows.get(uid); }
 
+    /** G03 trust check for a mutation: same rules as combat (DB owner/rev/state; YAML = signed NBT only). */
+    public String trust(Player p, EmberItemData d) { return dbCheck(p, d); }
+
+    /** After a committed G03 transaction: update the trust cache without another upsert. */
+    public void rememberRow(String uid, UUID owner, int rev, String state) {
+        rows.put(uid, new EmberItemStore.Row(owner == null ? null : owner.toString(), rev, state));
+    }
+
     /** Explicit charm selection (book §4.1: only the selected charm counts). */
     public String selectCharm(Player p, ItemStack held) {
         EmberItems.Read r = items.read(held);

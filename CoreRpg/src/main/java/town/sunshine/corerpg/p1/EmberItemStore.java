@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -64,6 +65,24 @@ public final class EmberItemStore {
                     + "updated_at BIGINT NOT NULL"
                     + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
+    /** G03 idempotency key + audit of every P1 item mutation (enhance/swap/upgrade/refine/quality/dismantle). */
+    public static final String SCHEMA_TXN =
+            "CREATE TABLE IF NOT EXISTS cr_p1_txn ("
+                    + "request_id VARCHAR(64) NOT NULL PRIMARY KEY,"
+                    + "kind VARCHAR(16) NOT NULL,"
+                    + "owner_uuid CHAR(36) NOT NULL,"
+                    + "uid_a CHAR(32) NOT NULL,"
+                    + "uid_b CHAR(32) NULL,"
+                    + "before_json TEXT NOT NULL,"
+                    + "after_json TEXT NOT NULL,"
+                    + "cost_json VARCHAR(255) NULL,"
+                    + "result VARCHAR(16) NOT NULL,"
+                    + "note VARCHAR(255) NULL,"
+                    + "created_at BIGINT NOT NULL,"
+                    + "KEY idx_p1_txn_uid_a (uid_a),"
+                    + "KEY idx_p1_txn_owner (owner_uuid)"
+                    + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
     /** DB view of one item, enough for the trust check. */
     public static final class Row {
         public final String owner;
@@ -105,10 +124,11 @@ public final class EmberItemStore {
             try (Connection c = plugin.getMysqlStorage().getConnection(); Statement st = c.createStatement()) {
                 st.executeUpdate(SCHEMA_ITEM);
                 st.executeUpdate(SCHEMA_LOADOUT);
+                st.executeUpdate(SCHEMA_TXN);
                 addColumnIfMissing(c, "cr_p1_loadout", "burst_cd_ms", "INT NOT NULL DEFAULT 0");
                 addColumnIfMissing(c, "cr_p1_loadout", "sustain_cd_ms", "INT NOT NULL DEFAULT 0");
                 schemaOk = true;
-                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout ready");
+                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn ready");
             } catch (Throwable t) {
                 schemaQueued = false;
                 plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] schema init failed: " + t.getMessage());
@@ -282,6 +302,166 @@ public final class EmberItemStore {
                 into.loaded = true;
                 if (done != null) done.run();
             });
+        });
+    }
+
+    // ------------------------------------------------------------------ G03 transactions
+
+    public enum TxnStatus { OK, REPLAY, CONFLICT, ERROR }
+
+    public static final class TxnResult {
+        public final TxnStatus status;
+        /** CONFLICT/ERROR: reason; REPLAY: the stored note of the original request */
+        public final String detail;
+        public TxnResult(TxnStatus status, String detail) { this.status = status; this.detail = detail; }
+    }
+
+    /** One locked item row: {@code before} must match the DB (owner, rev, active); {@code after} null = retire it. */
+    public static final class TxnItem {
+        public final EmberItemData before, after;
+        public final String retireState;
+        public TxnItem(EmberItemData before, EmberItemData after, String retireState) {
+            this.before = before; this.after = after; this.retireState = retireState;
+        }
+    }
+
+    static String json(EmberItemData... ds) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < ds.length; i++) {
+            if (i > 0) sb.append(',');
+            sb.append(ds[i] == null ? "null" : "\"" + ds[i].canonical().replace("\\", "\\\\").replace("\"", "\\\"") + "\"");
+        }
+        return sb.append(']').toString();
+    }
+
+    /**
+     * Single DB transaction: replay check by request id → SELECT … FOR UPDATE every row (uid order) → owner/rev/state
+     * check → UPDATE … WHERE rev=? → INSERT the ledger row → COMMIT. Callback on the main thread.
+     */
+    public void commitTxn(final String rid, final String kind, final UUID owner, final List<TxnItem> items,
+                          final String costJson, final String note, final Consumer<TxnResult> cb) {
+        if (!usable()) { cb.accept(new TxnResult(TxnStatus.ERROR, "MySQL 不可用")); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            TxnResult res;
+            Connection c = null;
+            try {
+                c = plugin.getMysqlStorage().getConnection();
+                c.setAutoCommit(false);
+                res = doTxn(c, rid, kind, owner, items, costJson, note);
+                if (res.status == TxnStatus.OK) c.commit(); else c.rollback();
+            } catch (Throwable t) {
+                try { if (c != null) c.rollback(); } catch (Throwable ignored) {}
+                String m = t.getMessage() == null ? t.getClass().getSimpleName() : t.getMessage();
+                // a concurrent insert of the same request id loses on the PRIMARY KEY → treat as replay
+                res = m.contains("Duplicate") ? new TxnResult(TxnStatus.REPLAY, "并发重复请求") : new TxnResult(TxnStatus.ERROR, m);
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] txn " + kind + " " + rid + " failed: " + m);
+            } finally {
+                if (c != null) {
+                    try { c.setAutoCommit(true); } catch (Throwable ignored) {}
+                    try { c.close(); } catch (Throwable ignored) {}
+                }
+            }
+            final TxnResult r = res;
+            if (plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> cb.accept(r));
+        });
+    }
+
+    private TxnResult doTxn(Connection c, String rid, String kind, UUID owner, List<TxnItem> items,
+                            String costJson, String note) throws SQLException {
+        try (PreparedStatement ps = c.prepareStatement("SELECT note FROM cr_p1_txn WHERE request_id=?")) {
+            ps.setString(1, rid);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return new TxnResult(TxnStatus.REPLAY, rs.getString(1));
+            }
+        }
+        List<TxnItem> ordered = new java.util.ArrayList<TxnItem>(items);
+        java.util.Collections.sort(ordered, (x, y) -> x.before.uid.compareTo(y.before.uid)); // fixed lock order
+        for (TxnItem it : ordered) {
+            try (PreparedStatement ps = c.prepareStatement("SELECT owner_uuid,rev,state FROM cr_p1_item WHERE item_uid=? FOR UPDATE")) {
+                ps.setString(1, it.before.uid);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) return new TxnResult(TxnStatus.CONFLICT, "DB 无记录 " + it.before.uid.substring(0, 8));
+                    if (!owner.toString().equals(rs.getString(1))) return new TxnResult(TxnStatus.CONFLICT, "DB 所有者不符");
+                    if (rs.getInt(2) != it.before.rev) return new TxnResult(TxnStatus.CONFLICT, "DB rev " + rs.getInt(2) + " != " + it.before.rev);
+                    if (!"active".equals(rs.getString(3))) return new TxnResult(TxnStatus.CONFLICT, "DB 状态 " + rs.getString(3));
+                }
+            }
+        }
+        long now = System.currentTimeMillis();
+        for (TxnItem it : ordered) {
+            int n;
+            if (it.after == null) {
+                try (PreparedStatement ps = c.prepareStatement(
+                        "UPDATE cr_p1_item SET state=?,rev=rev+1,updated_at=? WHERE item_uid=? AND rev=?")) {
+                    ps.setString(1, it.retireState == null ? "retired" : it.retireState);
+                    ps.setLong(2, now);
+                    ps.setString(3, it.before.uid);
+                    ps.setInt(4, it.before.rev);
+                    n = ps.executeUpdate();
+                }
+            } else {
+                EmberItemData d = it.after;
+                try (PreparedStatement ps = c.prepareStatement(
+                        "UPDATE cr_p1_item SET ni_id=?,family=?,slot=?,tier=?,quality=?,craft=?,enhance=?,pity=?,bound=?,rev=?,updated_at=?"
+                                + " WHERE item_uid=? AND rev=?")) {
+                    int i = 1;
+                    ps.setString(i++, d.ni); ps.setString(i++, d.family); ps.setString(i++, d.slot);
+                    ps.setInt(i++, d.tier); ps.setInt(i++, d.quality); ps.setInt(i++, d.craft);
+                    ps.setInt(i++, d.enhance); ps.setInt(i++, d.pity); ps.setInt(i++, d.bound ? 1 : 0);
+                    ps.setInt(i++, d.rev); ps.setLong(i++, now);
+                    ps.setString(i++, it.before.uid); ps.setInt(i, it.before.rev);
+                    n = ps.executeUpdate();
+                }
+            }
+            if (n != 1) return new TxnResult(TxnStatus.CONFLICT, "并发修改 " + it.before.uid.substring(0, 8));
+        }
+        EmberItemData[] before = new EmberItemData[items.size()], after = new EmberItemData[items.size()];
+        for (int i = 0; i < items.size(); i++) { before[i] = items.get(i).before; after[i] = items.get(i).after; }
+        try (PreparedStatement ps = c.prepareStatement(
+                "INSERT INTO cr_p1_txn (request_id,kind,owner_uuid,uid_a,uid_b,before_json,after_json,cost_json,result,note,created_at)"
+                        + " VALUES (?,?,?,?,?,?,?,?,?,?,?)")) {
+            ps.setString(1, rid);
+            ps.setString(2, kind);
+            ps.setString(3, owner.toString());
+            ps.setString(4, items.get(0).before.uid);
+            if (items.size() > 1) ps.setString(5, items.get(1).before.uid); else ps.setNull(5, Types.CHAR);
+            ps.setString(6, json(before));
+            ps.setString(7, json(after));
+            if (costJson == null) ps.setNull(8, Types.VARCHAR); else ps.setString(8, costJson);
+            ps.setString(9, "ok");
+            String nt = note == null ? null : (note.length() > 250 ? note.substring(0, 250) : note);
+            if (nt == null) ps.setNull(10, Types.VARCHAR); else ps.setString(10, nt);
+            ps.setLong(11, now);
+            ps.executeUpdate();
+        }
+        return new TxnResult(TxnStatus.OK, null);
+    }
+
+    /** Full DB row as item data (+ owner/state), for re-syncing a stale NBT copy. */
+    public static final class FullRow {
+        public final EmberItemData data;
+        public final String owner, state;
+        FullRow(EmberItemData data, String owner, String state) { this.data = data; this.owner = owner; this.state = state; }
+    }
+
+    public void lookupFull(final String uid, final Consumer<FullRow> cb) {
+        run("lookup full " + uid, c -> {
+            FullRow row = null;
+            try (PreparedStatement ps = c.prepareStatement("SELECT ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,"
+                    + "data_version,rev,owner_uuid,state FROM cr_p1_item WHERE item_uid=?")) {
+                ps.setString(1, uid);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        EmberItemData d = new EmberItemData(uid, rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4),
+                                rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9) != 0, rs.getString(10),
+                                rs.getInt(11), rs.getInt(12));
+                        row = new FullRow(d, rs.getString(13), rs.getString(14));
+                    }
+                }
+            }
+            final FullRow r = row;
+            sync(() -> cb.accept(r));
         });
     }
 
