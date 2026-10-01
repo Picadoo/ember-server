@@ -116,6 +116,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private town.sunshine.corerpg.p1.EmberCommand emberCommand;
     private town.sunshine.corerpg.p1.EmberItemStore emberStore;
     private town.sunshine.corerpg.p1.EmberLoadoutService emberLoadouts;
+    private town.sunshine.corerpg.p1.EmberCombatListener emberCombat;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -204,6 +205,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(lifeService, this);
         Bukkit.getPluginManager().registerEvents(staminaService, this);
         Bukkit.getPluginManager().registerEvents(statService, this);
+        emberCombat = new town.sunshine.corerpg.p1.EmberCombatListener(this, emberLoadouts);
+        Bukkit.getPluginManager().registerEvents(emberCombat, this);
         Bukkit.getPluginManager().registerEvents(flexSkillService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -326,6 +329,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public String getStorageMode() { return storageMode; }
     public town.sunshine.corerpg.p1.EmberMode getEmberMode() { return emberMode; }
     public town.sunshine.corerpg.p1.EmberLoadoutService getEmberLoadouts() { return emberLoadouts; }
+    public town.sunshine.corerpg.p1.EmberCombatListener getEmberCombat() { return emberCombat; }
     public boolean isMysqlActive() { return mysqlStorage != null && mysqlStorage.isActive(); }
 
 
@@ -694,6 +698,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (skillService != null) skillService.onQuit(id);
         if (flexSkillService != null) flexSkillService.onQuit(id);
         if (gearPassiveService != null) gearPassiveService.onQuit(id);
+        if (emberCombat != null) emberCombat.onQuit(id);
         boards.remove(id);
         dataStore.unload(id);
     }

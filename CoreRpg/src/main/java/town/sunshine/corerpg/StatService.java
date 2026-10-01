@@ -27,6 +27,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import town.sunshine.corerpg.p1.EmberLoadout;
+import town.sunshine.corerpg.p1.EmberLoadoutService;
+import town.sunshine.corerpg.p1.EmberMode;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -271,6 +275,7 @@ public final class StatService implements Listener {
      */
     public double skillHeal(Player p, double dealt) {
         if (!enabled || p == null || dealt <= 0) return 0;
+        if (EmberMode.isP1(p)) return 0; // ember-v1.0-P1 D06: 烬斩 does not heal
         double pct = Math.min(skillLifeStealCap, get(stats(p), "skill_life_steal_pct"));
         if (pct <= 0) return 0;
         double max = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
@@ -287,6 +292,10 @@ public final class StatService implements Listener {
      * No crit. Skills / passives scale off this (docs/ember-skills-passives.md).
      */
     public double fullHitDamage(Player p) {
+        if (EmberMode.isP1(p)) { // ember-v1.0-P1 A01: the full-charge hit is B, nothing added on top
+            EmberLoadoutService l = plugin.getEmberLoadouts();
+            if (l != null) return l.get(p).b;
+        }
         double base = 1.0;
         AttributeInstance ai = p.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE);
         if (ai != null) base = ai.getValue();
@@ -303,7 +312,10 @@ public final class StatService implements Listener {
     public double lastCharge(UUID u) { double[] v = lastSwing.get(u); return v == null ? 0 : v[0]; }
     public boolean lastCrit(UUID u) { double[] v = lastSwing.get(u); return v != null && v[1] > 0; }
 
+    private static final Map<String, Double> EMPTY = java.util.Collections.emptyMap();
+
     private Map<String, Double> stats(Player p) {
+        if (EmberMode.isP1(p)) return EMPTY; // ember-v1.0-P1 A06–A11/B02/C03/D05/E03/G01: no legacy stats in P1 worlds
         Map<String, Double> m = cache.get(p.getUniqueId());
         if (m == null) { m = compute(p); cache.put(p.getUniqueId(), m); }
         return m;
@@ -311,6 +323,7 @@ public final class StatService implements Listener {
 
     public void refresh(Player p) {
         if (p == null || !p.isOnline()) return;
+        if (EmberMode.isP1(p)) { refreshP1(p); return; }
         Map<String, Double> m = compute(p);
         cache.put(p.getUniqueId(), m);
         AttributeInstance ai = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
@@ -332,6 +345,38 @@ public final class StatService implements Listener {
                 if (old != null) as.removeModifier(old);
                 if (asp > 0) as.addModifier(new org.bukkit.attribute.AttributeModifier(AS_MOD, "ember_attack_speed", asp,
                         org.bukkit.attribute.AttributeModifier.Operation.MULTIPLY_SCALAR_1));
+            }
+        }
+        double scale = Math.min(heartsDisplayCap, Math.max(20.0, want));
+        if (!p.isHealthScaled() || Math.abs(p.getHealthScale() - scale) > 0.01) {
+            p.setHealthScale(scale);
+            p.setHealthScaled(true);
+        }
+    }
+
+    /**
+     * ember-v1.0-P1 C02/F02/G01/B06: the single max-HP entry is H from the EquippedLoadout; the legacy
+     * per-second reset, attack-speed modifier and walk-speed bonus are not applied inside P1 worlds.
+     */
+    private void refreshP1(Player p) {
+        EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls == null) return;
+        EmberLoadout l = ls.refresh(p);
+        cache.remove(p.getUniqueId());
+        if (p.hasPotionEffect(org.bukkit.potion.PotionEffectType.ABSORPTION)) p.removePotionEffect(org.bukkit.potion.PotionEffectType.ABSORPTION);
+        if (p.hasPotionEffect(org.bukkit.potion.PotionEffectType.HEALTH_BOOST)) p.removePotionEffect(org.bukkit.potion.PotionEffectType.HEALTH_BOOST);
+        AttributeInstance ai = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (ai == null) return;
+        double want = Math.max(1.0, l.h);
+        if (Math.abs(ai.getBaseValue() - want) > 0.001) {
+            ai.setBaseValue(want);
+            if (p.getHealth() > want) p.setHealth(want);
+        }
+        if (Math.abs(p.getWalkSpeed() - 0.2f) > 0.0005) p.setWalkSpeed(0.2f);
+        AttributeInstance as = p.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
+        if (as != null) {
+            for (org.bukkit.attribute.AttributeModifier am : new ArrayList<org.bukkit.attribute.AttributeModifier>(as.getModifiers())) {
+                if (AS_MOD.equals(am.getUniqueId())) as.removeModifier(am);
             }
         }
         double scale = Math.min(heartsDisplayCap, Math.max(20.0, want));
@@ -391,6 +436,7 @@ public final class StatService implements Listener {
                 && e.getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
             if (SkillService.internalDamage) return; // skill / passive damage already scales off fullHitDamage
             Player p = (Player) damager;
+            if (EmberMode.isP1(p)) return; // ember-v1.0-P1 A01/E01/D05/F03: EmberCombatListener replaces the hit
             Map<String, Double> m = stats(p);
             double flat = get(m, "phys_damage") * damageScale;
             if (flat <= 0 && get(m, "crit_chance_pct") <= 0) { lastSwing.put(p.getUniqueId(), new double[] { 1.0, 0 }); return; }
@@ -432,10 +478,12 @@ public final class StatService implements Listener {
                 src = (Entity) ((Projectile) damager).getShooter();
             }
             if (src instanceof Player) return; // PvP untouched (arena balance)
-            Map<String, Double> m = stats((Player) victim);
-            double def = get(m, "phys_defense");
-            double mult = (1.0 - def / (def + defenseK)) * (1.0 + get(m, "damage_taken_pct"));
-            if (mult < 0.999) e.setDamage(e.getDamage() * Math.max(0.2, mult));
+            if (!EmberMode.isP1(victim)) { // ember-v1.0-P1 B01/B02: M is applied once at HIGHEST by EmberCombatListener
+                Map<String, Double> m = stats((Player) victim);
+                double def = get(m, "phys_defense");
+                double mult = (1.0 - def / (def + defenseK)) * (1.0 + get(m, "damage_taken_pct"));
+                if (mult < 0.999) e.setDamage(e.getDamage() * Math.max(0.2, mult));
+            }
             if (stripWitherOnHit && src instanceof org.bukkit.entity.WitherSkeleton) {
                 // vanilla wither-skeleton melee adds 10 s Wither I that ticks through defense; for Ember bosses
                 // (abyss watcher, calamity, raid) it dominated solo fights → strip it next tick (config stats.strip_wither_on_hit)
