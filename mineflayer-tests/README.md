@@ -75,3 +75,8 @@ echo "list" > /tmp/ember-play-console.fifo   # 手动下控制台命令
 ```
 
 `lib/console.js` 以 O_NONBLOCK 打开 FIFO：服务端没在读时直接报错，不会卡住。可用 `EMBER_CONSOLE_FIFO`、`EMBER_PLAY_LOG` 覆盖路径。
+
+### 其他脚本现状（2026-10-01）
+
+- `trmenu-ember-smoke.js`：已改为 `joinPlay` + 断言（B2.122 回归：团本/深渊点击提示的原始聊天包须含 `【团本】`/`【深渊】` 且保留颜色）。
+- 顶层其余 62 个 `*.js` 是历史一次性脚本：仍直连 25565（未走 AuthMe）且靠机器人聊天发 op 命令（本服 `ops.json` 为 `[]`），在当前拓扑下不能直接用，尚未迁移。新测试请用 `lib/proxy-login.js` 的 `joinPlay()` + `lib/console.js`。另外 37 个已用 `joinPlay` 的脚本里，凡发 op 命令的步骤同样需改成控制台。
