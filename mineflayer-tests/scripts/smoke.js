@@ -1,56 +1,23 @@
 /**
- * Offline-mode friendly smoke test for Paper 1.12.2 on localhost:25565.
- * Connects as "Tester", waits for spawn, chats hello, then quits.
+ * Smoke test for the current topology: proxy :25565 → login server (AuthMe /register|/login)
+ * → play server, via lib/proxy-login joinPlay(). Waits to land on play, chats hello, quits.
  */
-const mineflayer = require('mineflayer')
+const { joinPlay } = require('../lib/proxy-login')
 
 const HOST = process.env.MC_HOST || '127.0.0.1'
 const PORT = Number(process.env.MC_PORT || 25565)
-const USERNAME = process.env.MC_USER || 'Tester'
+const USERNAME = process.env.MC_USER || 'EmberTestOp'
+const timeoutMs = Number(process.env.MC_TIMEOUT_MS || 45000)
 
-const bot = mineflayer.createBot({
-  host: HOST,
-  port: PORT,
-  username: USERNAME,
-  auth: 'offline',
-  version: '1.12.2',
-  hideErrors: false
-})
-
-const timeoutMs = Number(process.env.MC_TIMEOUT_MS || 30000)
-const timer = setTimeout(() => {
-  console.error(`[smoke] timed out after ${timeoutMs}ms connecting to ${HOST}:${PORT}`)
-  try { bot.quit('timeout') } catch (_) {}
-  process.exit(1)
-}, timeoutMs)
-
-bot.once('login', () => {
-  console.log(`[smoke] logged in as ${bot.username}`)
-})
-
-bot.once('spawn', () => {
-  console.log(`[smoke] spawned at ${bot.entity.position}`)
+;(async () => {
+  const bot = await joinPlay(USERNAME, { host: HOST, port: PORT, timeout: timeoutMs, log: false })
+  console.log(`[smoke] on play server as ${bot.username} at ${bot.entity.position} (${bot.game.dimension})`)
   bot.chat('hello from mineflayer smoke test')
-  setTimeout(() => {
-    clearTimeout(timer)
-    console.log('[smoke] quitting — OK')
-    bot.quit('smoke ok')
-    process.exit(0)
-  }, 500)
-})
-
-bot.on('kicked', (reason) => {
-  clearTimeout(timer)
-  console.error('[smoke] kicked:', reason)
+  await new Promise((r) => setTimeout(r, 500))
+  console.log('[smoke] quitting — OK')
+  bot.quit('smoke ok')
+  process.exit(0)
+})().catch((e) => {
+  console.error(`[smoke] FAIL connecting via ${HOST}:${PORT}:`, e.message || e)
   process.exit(1)
-})
-
-bot.on('error', (err) => {
-  clearTimeout(timer)
-  console.error('[smoke] error:', err.message || err)
-  process.exit(1)
-})
-
-bot.on('end', (reason) => {
-  console.log('[smoke] connection ended:', reason || '(none)')
 })

@@ -6,7 +6,8 @@
   "scripts": {
     "smoke": "node scripts/smoke.js",
     "test": "npm run smoke",
-    "gameplay": "node scripts/gameplay-suite.js"
+    "gameplay": "node scripts/gameplay-suite.js",
+    "check": "node scripts/check-furnace.js && node scripts/check-enchant.js && node scripts/check-craft-fish-combat.js"
   },
   "dependencies": {
     "mineflayer": "^4.33.0"

@@ -31,10 +31,12 @@ node scripts/smoke.js
 |------|--------|------|
 | `MC_HOST` | `127.0.0.1` | 服务器地址 |
 | `MC_PORT` | `25565` | 端口 |
-| `MC_USER` | `Tester` | 机器人用户名 |
-| `MC_TIMEOUT_MS` | `30000` | 连接超时（毫秒） |
+| `MC_USER` | `EmberTestOp` | 机器人用户名（AuthMe 密码自动存入 `secrets/bot-passwords.json`） |
+| `MC_TIMEOUT_MS` | `45000` | 登录 + 转服超时（毫秒） |
 
-脚本会：连接 → 等待 spawn → 聊天 `hello from mineflayer smoke test` → 退出。
+脚本会：经代理连接 → AuthMe /register 或 /login → 等待转到游玩服 → 聊天 `hello from mineflayer smoke test` → 退出。
+
+`npm run check`（`check-furnace.js`、`check-enchant.js`、`check-craft-fish-combat.js`）：在游玩服控制台执行 `coresmelt/coreenchant/corecraft/corefish/corecombat check`，按当前配置断言输出（如 `NI_registered=5`、`tableEntryCount=7`、`registeredTables=8`），再把样例 NI 物品给机器人并核对中文名。需要下文「控制台 FIFO」。
 
 ## 分工说明
 
