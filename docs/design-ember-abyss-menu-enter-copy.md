@@ -1,6 +1,6 @@
 # B2.111 · TrMenu `plugins/TrMenu/menus/ember_abyss.yml` L77 进本按钮 click tell → 去掉写死的「体力 30」和「等级不足不扣」
 
-- **STATUS：待批 A（策划 · 2026-10-01 13:26 Asia/Shanghai）**
+- **STATUS：已批 A（总控 · 2026-10-01 13:28 Asia/Shanghai）· 交插件岗**（方案 A：L77 `'tell: §5[深渊] §7尝试下潜……（需余烬 Lv.25）'`，numstat `1 1`）
 - **tip 路径：**`docs/design-ember-abyss-menu-enter-copy.md`
 - **目标范围：**只改 `plugins/TrMenu/menus/ember_abyss.yml` L77 这一行，numstat `1	1`。L78 撤离句、L79 command、L80 close 不动。
 - **来由：**总控 13:26 派单（B2.110 结案后）。口径与 B2.110（团本 L76-L77）一致。
@@ -124,3 +124,10 @@ JS
 - 若总控要处理 L49/L54/L130/L139 换占位符，建议与 B2.113（hub 换占位符）、B2.118（raid 换占位符）同类，可排在 B2.118 后（如开 B2.120）；L41 和 L132 另议。
 
 排序（按总控更新）：B2.111 → B2.113 → B2.118 → B2.115 → B2.116 → B2.117 → B2.103 → B2.104 → B2.105 → B2.106 → B2.108 → B2.119（退还提示例外，需 build）→ B2.109（B2.107 挂起）。L41 不区分 OP 与已记的「blocked_raid 不区分 OP」同类。
+
+## 总控批注（2026-10-01 13:28 Asia/Shanghai）
+- **批 A（方案 A，去数字）**：只改 `plugins/TrMenu/menus/ember_abyss.yml` L77 一行，行首 8 空格、单引号，逐字按荐案；YAML 路径 `/Icons/S/actions/all/1`。L78 撤离句、L79 `command: corerpg enter abyss` 不动。方案 B（占位符）不采用：OP 仍会先见「体力 30」再见「管理免扣」。
+- 代码核对认可：深渊无周首免（consumeForEnter 仅 WEEKLY/ELITE/RAID 抵扣）；「等级不足不扣」对队员等级门为先扣后退、OP 跳过等级门，删去合理，退还由插件私聊说明。
+- **旁记排期**：同文件 L49/L54/L130/L139 写死 30 → 占位符，另开 **B2.120**，排 B2.118 后；L132「硬顶建议 ≤2/日（免费+购）」旧票制口径，另开 **B2.121**，排 B2.120 后。L41 灰显 `%corerpg_stamina% < 30` 不区分 OP，需新占位符（build），与「blocked_raid 不区分 OP」同列只记。
+- 验收：稿中 heredoc `/tmp/chk-b2111.js`（`<build>^` 对 `<build>`，旧 exit 3 / 新 exit 4 / 多处差异 exit 1 / all/3 非 enter abyss exit 5）、rg 全文件预跑、HANDOFF.md §8 计数 0、`ops.json` 为 `[]`；reload 记「待恢复服后实测」。
+- 施工岗：插件岗，本地 commit，不 push、不 reload。
