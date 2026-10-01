@@ -360,7 +360,7 @@
 - ~~**B2.120**~~ → TrMenu ember_abyss.yml L49/L54/L130/L139 写死 30 → `%corerpg_stamina_cost_abyss%`（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:38 CST 机器人实测：体力 10 时灰显 lore「需要 §e30 §7体力 · 当前 10/90」+ 点击 tell「体力不足，需 30 点体力」；体力满时次数说明 lore「消耗 §e30 §7体力（与日常同池）」+ 点击 tell「深渊消耗 30 体力」均由 %corerpg_stamina_cost_abyss% 解析；L41 condition 字面量 30 按注释保留）
 - **B2.121** → TrMenu ember_abyss.yml L132 旧票制「硬顶建议 ≤2/日（免费+购）」（排在 B2.120 后；待出稿）。
 - **B2.119** → CoreRpg TicketEntryService 进本失败退还提示几处例外（:189/:209/首免/人数不足）（需 build；排在 B2.108 后；待出稿）。
-- **B2.115** → DP EmberWeekly/task/timeout.yml L6「周常超时失败（体力不返还）」首免/OP 不准（排 B2.113 后；待出稿）。
+- ~~**B2.115**~~ → DP EmberWeekly/task/timeout.yml L6「周常超时失败（体力不返还）」首免/OP 不准（**实测 PASS · 勾销** · 本提交 · L6 → 「§c周常超时失败。§7这次不算通关。」（去掉首免/OP 时不准的「体力不返还」，与 B2.112 精英口径一致、不写扣费）；2026-10-01 19:35 CST dp reload「[EmberWeekly] 地牢内容导入完毕」；超时实测未触发：bot 挂机周常 17 分钟时副本被判通关（weekly_clear），未到 1500s；同机制 Elite 720s 超时 20:00:51 实测包 {"color":"red","text":"试炼失败。"},{"color":"gray","text":"这次不算通关，本周还能再来。"} 渲染正常）
 - **B2.116** → DP EmberRaid/task/timeout.yml L7「团本超时失败（体力不返还）」首免/OP 不准（排 B2.115 后、B2.103 前；待出稿）。
 - ~~**B2.117**~~ → `plugins/CoreRpg/quest.yml:377` done「试炼每周一次」→ 每人每周限通关口径（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:43 CST 机器人实测（quest set 9 0 → /corerpg quest talk → 复原 1 0）：包 {"color":"gold","text":"灰烛："},{"color":"white","text":"试炼每人每周限通关一次。稳定符在周首通里。"}）
 - ~~**B2.105**~~ → plugins/CoreRpg/set.yml L27 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释）（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常）。
@@ -580,7 +580,7 @@
 | ~~**B2.120**~~ | TrMenu ember_abyss.yml L49/L54/L130/L139 | 深渊菜单写死「30」体力 → `%corerpg_stamina_cost_abyss%` | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:38 CST 机器人实测：体力 10 时灰显 lore「需要 §e30 §7体力 · 当前 10/90」+ 点击 tell「体力不足，需 30 点体力」；体力满时次数说明 lore「消耗 §e30 §7体力（与日常同池）」+ 点击 tell「深渊消耗 30 体力」均由 %corerpg_stamina_cost_abyss% 解析；L41 condition 字面量 30 按注释保留） |
 | **B2.121** | TrMenu ember_abyss.yml L132 | 「硬顶建议 ≤2/日（免费+购）」旧票制口径，深渊无免费次数 | 待出稿（排 B2.120 后） |
 | **B2.119** | CoreRpg TicketEntryService 退还提示 | 发起者 40 tick 内下线不退不提示（:189）；5.5s 内重试退了不提示（:209）；周首免退还仍写「体力已退还」；DP 人数不足拒绝报「缓存冷却」误导 | 待出稿（需 build；排 B2.108 后） |
-| **B2.115** | DP EmberWeekly/task/timeout.yml L6 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.113 后） |
+| ~~**B2.115**~~ | DP EmberWeekly/task/timeout.yml L6 | 「体力不返还」首免/OP 进本时不准 | **实测 PASS · 勾销**（本提交 · L6 → 「§c周常超时失败。§7这次不算通关。」（去掉首免/OP 时不准的「体力不返还」，与 B2.112 精英口径一致、不写扣费）；2026-10-01 19:35 CST dp reload「[EmberWeekly] 地牢内容导入完毕」；超时实测未触发：bot 挂机周常 17 分钟时副本被判通关（weekly_clear），未到 1500s；同机制 Elite 720s 超时 20:00:51 实测包 {"color":"red","text":"试炼失败。"},{"color":"gray","text":"这次不算通关，本周还能再来。"} 渲染正常） |
 | **B2.116** | DP EmberRaid/task/timeout.yml L7 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.115 后） |
 | ~~**B2.117**~~ | plugins/CoreRpg/quest.yml L377 | 主线 done「试炼每周一次」→「试炼每人每周限通关一次。稳定符在周首通里。」 | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:43 CST 机器人实测（quest set 9 0 → /corerpg quest talk → 复原 1 0）：包 {"color":"gold","text":"灰烛："},{"color":"white","text":"试炼每人每周限通关一次。稳定符在周首通里。"}） |
 | ~~**B2.105**~~ | plugins/CoreRpg/set.yml L27 | 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释） | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常） |
