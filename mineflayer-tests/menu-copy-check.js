@@ -1,7 +1,7 @@
 // B2.109 — TrMenu copy assertions (non-op bot via proxy → AuthMe → play; console via lib/console.js):
 //  · hub lore: weekly/abyss/raid stamina numbers == live costs (B2.113)
 //  · raid menu: open tell / 次数说明 lore+tell use the live raid cost (B2.118); 开始协作 tell keeps 【团本】 and
-//    states no cost (B2.110/B2.122)
+//    states no cost (B2.110/B2.122); 次数说明 states who pays and when it is refunded (B2.124)
 //  · abyss menu: 次数说明 lore+tell, low-stamina grey lore+tell use the live abyss cost (B2.120);
 //    开始下潜 tell keeps 【深渊】, no 「体力 30」 (B2.111/B2.122)
 // Costs come from `/corerpg stamina` ("消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50").
@@ -38,6 +38,7 @@ function waitWindow (bot, ms = 5000) { return new Promise((res) => { const t = s
   const openTell = pk.join('\n')
   check('raid open tell', openTell.includes('"color":"blue","text":"【团本】 "') && openTell.includes(`消耗 ${C.raid} 体力（本周首次免费）`), openTell)
   check('raid 次数说明 lore', loreOf(w, /次数说明/).some((l) => l.includes(`其后 ${C.raid} 体力`)), loreOf(w, /次数说明/).join(' / '))
+  { const L = loreOf(w, /次数说明/).join(' / '); check('raid 次数说明 refund rule (B2.124)', L.includes('只扣发起者 · 没进成本自动退还') && L.includes('进本后失败 / 超时不返还（含首免）') && !L.includes('进本即扣'), L) }
   let t = await click(w, /次数说明/)
   check('raid 次数说明 tell', t.includes(`其后 ${C.raid} 体力；需 3～5 人`), t)
   w = await openSub('团本')
