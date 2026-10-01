@@ -1,0 +1,173 @@
+# 余烬 v1 (P1) 挑战版选图 — 书 §18.1：Q07 普通首通后七张图开放独立挑战难度（1～3 人、30 体力、统一 T3 参照、
+# 掉落与印记全部 T3、成色 60/28/10/2、无首通奖励）。只转发 /corerpg enter <qXX> challenge；资格全在服务端校验。
+# 入口：冒险页 ember_p1_adventure 的「挑战版 · 七图」图标，或 /ember_p1_challenge。
+
+Title: '§c余烬 v1 · 挑战版'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_challenge'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '#   I   #'
+  - '#1234567#'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: blaze rod
+      name: '§c挑战版：§f%corerpg_p1_challenge%'
+      lore:
+        - ''
+        - '§7体力：§f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8（每局 30）'
+        - '§7敌人：近战 270 · 远程 198 · 重甲 378 · 术者 234 · 普攻 24'
+        - '§7首领：生命 8000 · 普攻 44 · 重技 72 / 轻技 44（预警不缩短）'
+        - '§7人数生命倍率同普通版：1 + 0.65 ×（人数 − 1）'
+        - '§7掉落 T3 装备 + T3 印记 · 成色 60/28/10/2 · 无首通奖励'
+        - '§7T3 锻造印记：§f%corerpg_p1_marks_t3% §7/ 8'
+  '1':
+    update: 20
+    display:
+      material: iron sword
+      name: '§cQ01 挑战 §f%corerpg_p1_q01_name%'
+      lore:
+        - ''
+        - '§7开放：§f%corerpg_p1_challenge%'
+        - '§7消耗：§e%corerpg_p1_q01_cost% §7· 掉落：§fT3'
+        - '§7普通版：§f%corerpg_p1_q01_state%'
+        - ''
+        - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q01 challenge'
+        - close
+  '2':
+    update: 20
+    display:
+      material: iron sword
+      name: '§cQ02 挑战 §f%corerpg_p1_q02_name%'
+      lore:
+        - ''
+        - '§7开放：§f%corerpg_p1_challenge%'
+        - '§7消耗：§e%corerpg_p1_q02_cost% §7· 掉落：§fT3'
+        - '§7普通版：§f%corerpg_p1_q02_state%'
+        - ''
+        - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q02 challenge'
+        - close
+  '3':
+    update: 20
+    display:
+      material: diamond sword
+      name: '§cQ03 挑战 §f%corerpg_p1_q03_name%'
+      lore:
+        - ''
+        - '§7开放：§f%corerpg_p1_challenge%'
+        - '§7消耗：§e%corerpg_p1_q03_cost% §7· 掉落：§fT3'
+        - '§7普通版：§f%corerpg_p1_q03_state%'
+        - ''
+        - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q03 challenge'
+        - close
+  '4':
+    update: 20
+    display:
+      material: prismarine shard
+      name: '§cQ04 挑战 §f%corerpg_p1_q04_name%'
+      lore:
+        - ''
+        - '§7开放：§f%corerpg_p1_challenge%'
+        - '§7消耗：§e%corerpg_p1_q04_cost% §7· 掉落：§fT3'
+        - '§7普通版：§f%corerpg_p1_q04_state%'
+        - ''
+        - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q04 challenge'
+        - close
+  '5':
+    update: 20
+    display:
+      material: iron axe
+      name: '§cQ05 挑战 §f%corerpg_p1_q05_name%'
+      lore:
+        - ''
+        - '§7开放：§f%corerpg_p1_challenge%'
+        - '§7消耗：§e%corerpg_p1_q05_cost% §7· 掉落：§fT3'
+        - '§7普通版：§f%corerpg_p1_q05_state%'
+        - ''
+        - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q05 challenge'
+        - close
+  '6':
+    update: 20
+    display:
+      material: packed ice
+      name: '§cQ06 挑战 §f%corerpg_p1_q06_name%'
+      lore:
+        - ''
+        - '§7开放：§f%corerpg_p1_challenge%'
+        - '§7消耗：§e%corerpg_p1_q06_cost% §7· 掉落：§fT3'
+        - '§7普通版：§f%corerpg_p1_q06_state%'
+        - ''
+        - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q06 challenge'
+        - close
+  '7':
+    update: 20
+    display:
+      material: rail
+      name: '§cQ07 挑战 §f%corerpg_p1_q07_name%'
+      lore:
+        - ''
+        - '§7开放：§f%corerpg_p1_challenge%'
+        - '§7消耗：§e%corerpg_p1_q07_cost% §7· 掉落：§fT3'
+        - '§7普通版：§f%corerpg_p1_q07_state%'
+        - ''
+        - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg enter q07 challenge'
+        - close
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回冒险页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_p1_adventure'
