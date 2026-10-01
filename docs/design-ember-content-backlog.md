@@ -387,16 +387,18 @@
 - ~~**B2.142**~~ → 修 B2.140 时发现：计数器读档套了宠物等级的 max(1,v)，任何归零的计数重连/重启后变成 1——P1 锻造印记兑换后凭空多 1 枚（实测复现）、unlock/首通桩清除失效、目标族「无」变成焚烬、深渊补结算每次重连发 1 层（实测 PASS · 勾销 · 7c638e8 · 计数器按原值读档，归零即删除；JUnit 往返测试）
 - ~~**B2.143**~~ → P1 代码审查：升阶门槛查 p1_first_clear_q04@all（管理员桩），主线本写的是 p1_first_clear_<图>@<内容版本>，Q04 上线后真实首通也开不了 T1→T2 升阶（潜在 · 已修 · fc02d21 · 先问主线本服务，再看桩；Q04 未上线无法实测，桩路径实测 PASS）
 - ~~**B2.144**~~ → P1 实测：MythicMobs heal{}（EmberWeeklyBruteB 对半径 20 内玩家每 15 秒 heal{6}）直接改血，不触发回复事件，P1 玩家照样回血，违反 D09/D10（实测 PASS · 勾销 · 710e97c · 每 tick 守卫：未经回复账本的涨血一律回退并记日志；炽愈、入场补满、重连恢复不受影响）
-- **B2.145** → P1 第二批：Boss 多技能——Q04/Q05 首领各两招，原调度只支持一招；圈形技能要能锁定玩家位置；推击要有安全击退；前摇期间首领普攻照样打人（74edb65 · 冷却从首领出现起算，同时到点先放列表靠前的，另一招在 0.5 秒收招后立即补放、不跳号；锁定圈以开始前摇时选中的玩家为圆心；击退 ≤1 格，逐 0.25 格检查，遇墙/悬空/出 Boss 区即停；前摇中普攻取消）
-- **B2.146** → P1 第二批：组队全员落在同一个出生方块；断塔模板楼梯走不上去（实测卡在 z≈7.7 y67）、中层环廊无护栏有约 14 格落差（36275b1 · 第 2、3 名成员 1.5 秒后移到 spread 点（仍站在出生点附近才移）；清房后单向通道 links 把站进通道盒的人送上一层；rails 只往实例里的空气放铁栏，模板不改；clear 只在实例里清方块；校验：护栏不能压住任何站点）
-- **B2.147** → P1 第二批：书 §23.2「开放 T2 定向锻造」——8 枚 T2 印记兑换原来不设门槛（6e1c7ff · T2 定向锻造需本人首通 Q04，T3 需 Q07，与升阶门槛一致；先查数量再查门槛）
-- **B2.148** → P1 第二批：书 §19.1 要求显示「下一次突破缺哪项」，二阶觉醒只有判定没有提示（17e18c3 · /corerpg p1 status 与 %corerpg_p1_awaken_next% 显示「下一档 觉醒II 缺：刃 T1→T2、+4→+6；护符 …」；%corerpg_p1_forge_t2%）
-- **B2.149** → P1 第二批：Q04 潮蚀水道（ember_daily_tide 模板，T2，首通胚料 6·核心 6·币 900，开放 Q05/T2 升阶/T2 定向锻造）（aae5109 · 3 房 + 潮闸重卫（冲击圈 + 闸杆推击）；事件在 R1 侧室；侧室旧告示牌只在 Q04 实例开局清除）
-- **B2.150** → P1 第二批：Q05 断塔回廊（ember_daily_spire 模板，T2，首通骨尘 20·胚料 6，记录 Q06 开放）（aae5109 · 塔底厅 → 通道 → 中层环廊（运行时护栏）→ 通道 → 塔冠 + 断塔斧卫（斧刃横扫 + 径向冲击）；r2 门前低栏一排在实例中清除）
+- ~~**B2.145**~~ → P1 第二批：Boss 多技能——Q04/Q05 首领各两招，原调度只支持一招；圈形技能要能锁定玩家位置；推击要有安全击退；前摇期间首领普攻照样打人（74edb65 · 冷却从首领出现起算，同时到点先放列表靠前的，另一招在 0.5 秒收招后立即补放、不跳号；锁定圈以开始前摇时选中的玩家为圆心；击退 ≤1 格，逐 0.25 格检查，遇墙/悬空/出 Boss 区即停；前摇中普攻取消）
+- ~~**B2.146**~~ → P1 第二批：组队全员落在同一个出生方块；断塔模板楼梯走不上去（实测卡在 z≈7.7 y67）、中层环廊无护栏有约 14 格落差（36275b1 · 第 2、3 名成员 1.5 秒后移到 spread 点（仍站在出生点附近才移）；清房后单向通道 links 把站进通道盒的人送上一层；rails 只往实例里的空气放铁栏，模板不改；clear 只在实例里清方块；校验：护栏不能压住任何站点）
+- ~~**B2.147**~~ → P1 第二批：书 §23.2「开放 T2 定向锻造」——8 枚 T2 印记兑换原来不设门槛（6e1c7ff · T2 定向锻造需本人首通 Q04，T3 需 Q07，与升阶门槛一致；先查数量再查门槛）
+- ~~**B2.148**~~ → P1 第二批：书 §19.1 要求显示「下一次突破缺哪项」，二阶觉醒只有判定没有提示（17e18c3 · /corerpg p1 status 与 %corerpg_p1_awaken_next% 显示「下一档 觉醒II 缺：刃 T1→T2、+4→+6；护符 …」；%corerpg_p1_forge_t2%）
+- ~~**B2.149**~~ → P1 第二批：Q04 潮蚀水道（ember_daily_tide 模板，T2，首通胚料 6·核心 6·币 900，开放 Q05/T2 升阶/T2 定向锻造）（aae5109 · 3 房 + 潮闸重卫（冲击圈 + 闸杆推击）；事件在 R1 侧室；侧室旧告示牌只在 Q04 实例开局清除）
+- ~~**B2.150**~~ → P1 第二批：Q05 断塔回廊（ember_daily_spire 模板，T2，首通骨尘 20·胚料 6，记录 Q06 开放）（aae5109 · 塔底厅 → 通道 → 中层环廊（运行时护栏）→ 通道 → 塔冠 + 断塔斧卫（斧刃横扫 + 径向冲击）；r2 门前低栏一排在实例中清除）
 - **B2.151** → P1 第二批：断塔改用通道是对书 §15 / M02「楼梯可步行」的偏离——需要新做一张可走的 ember_daily_spire_v1（楼梯 1 格一阶、环廊外沿与中空有护栏、r2 门前无低栏），做好后 Q05 改 template 并删掉 links/rails/clear（**待做**（地图工作，不在本批））
-- **B2.152** → 旧日常 断塔回廊（EmberDailySpire）：同一模板楼梯走不上去，清完塔底后玩家上不了中层，环廊清完也上不了顶台（旧有 bug）（5816c63 · DP monster.yml wave1/wave2b 结束时 $teleport 到 (0,70,-6) / (0,76,3)，模板不改）
+- ~~**B2.152**~~ → 旧日常 断塔回廊（EmberDailySpire）：同一模板楼梯走不上去，清完塔底后玩家上不了中层，环廊清完也上不了顶台（旧有 bug）（5816c63 · DP monster.yml wave1/wave2b 结束时 $teleport 到 (0,70,-6) / (0,76,3)，模板不改）
 - **B2.153** → ember_daily_tide 模板侧室 (6,64,11) 有一块旧告示牌（Q04 实例开局清除（clear:），模板与旧日常 EmberDailyTide 不变；地图重做时一并删除）
 - **B2.154** → 运维：2026-10-02 01:53 CST 机器重启后 MariaDB 软件包与数据目录都没了（重装 MariaDB 11.8；ember 从 2026-10-01 17:37 的备份导回（356 名角色），authme 从 2026-09-27 的 sql 导回（290 个账号）；之后的进度丢失。建议：定时 mysqldump 到持久盘）
+- ~~**B2.155**~~ → P1 实测：首领掉出 Boss 区（Q05 塔冠缺口）会被当作异常移除，本局永远没有击杀、不结算（实测 PASS · 勾销 · 06e021b · 首领掉落改为拉回原点并记录异常，小怪仍移除）
+- ~~**B2.156**~~ → P1 实测：Q05 塔冠铁栏圈是孤立的细栏柱，斜角缝能钻过，机器人、远程怪和首领都掉到环廊；塔冠南侧楼梯井 z=7 也是空的（实测 PASS · 勾销 · 3ddab38 · 15 段实例护栏，泛洪检查塔冠与环廊均无可站格紧邻落差；修后单人与三人局无掉落）
 - ~~**B2.105**~~ → plugins/CoreRpg/set.yml L27 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释）（**实测 PASS · 勾销** · `fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常）。
 - ~~**B2.106**~~ → plugins/CoreRpg/cash.yml L86、L92 段首 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改）（**实测 PASS · 勾销** · `b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变）。
 - ~~**B2.109**~~ → mineflayer-tests 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb（**实测 PASS · 勾销** · `42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s）。
@@ -643,16 +645,18 @@
 | ~~**B2.142**~~ | CoreRpg PlayerDataStore / PlayerData | 归零计数读档变 1 | **实测 PASS · 勾销**（7c638e8 · 印记归零后重连仍为 0；深渊不再每次重连补发 · 2026-10-02 01:31 CST） |
 | ~~**B2.143**~~ | CoreRpg EmberForgeService.firstClear | 升阶门槛与首通键名不一致（潜在） | **已修**（fc02d21 · Q04 上线前只能实测桩路径） |
 | ~~**B2.144**~~ | CoreRpg EmberHeal / EmberCombatListener | MM heal{} 绕过 P1 回复账本 | **实测 PASS · 勾销**（710e97c · 竞技场 EmberWeeklyBruteB 三次 heal 全部回退，炽愈 +5.95 正常 · 2026-10-02 01:06 CST） |
-| **B2.145** | CoreRpg EmberRunDirector / EmberRunMaps / EmberRunService.onMobHit | Boss 多技能调度、锁定圈、安全击退、前摇不普攻 | **已修 · 待实测** |
-| **B2.146** | CoreRpg EmberRunDirector.attach/tick、EmberRunService.spreadLater、EmberRunMaps | 组队分散出生、单向通道、实例护栏、实例清方块 | **已修 · 待实测** |
-| **B2.147** | CoreRpg EmberRunRules.exchangeCheck / EmberRunService.cmdMarks | T2 定向锻造门槛（本人首通 Q04） | **已修 · 待实测** |
-| **B2.148** | CoreRpg EmberLoadout.nextAwakeningHint / EmberCommand.status / PAPI | 下一档觉醒缺项提示 | **已修 · 待实测** |
-| **B2.149** | ember-v1-runs.yml q04；MM EmberQ04*；DP EmberQ04；TicketEntryService.Kind.Q04；TrMenu ember_p1_adventure | Q04 潮蚀水道 | **已修 · 待实测** |
-| **B2.150** | ember-v1-runs.yml q05；MM EmberQ05*；DP EmberQ05；TicketEntryService.Kind.Q05；TrMenu ember_p1_adventure | Q05 断塔回廊 | **已修 · 待实测** |
+| ~~**B2.145**~~ | CoreRpg EmberRunDirector / EmberRunMaps / EmberRunService.onMobHit | Boss 多技能调度、锁定圈、安全击退、前摇不普攻 | **实测 PASS · 勾销**（74edb65 · Q04 冲击圈锁定 P1Alpha、闸杆推击交替出招；Q05 横扫 44 / 径向冲击 26 命中；前摇中首领普攻被取消（03:35:12、03:58:02 CANCELLED）· 击退未单独测量 · 2026-10-02 03:58 CST） |
+| ~~**B2.146**~~ | CoreRpg EmberRunDirector.attach/tick、EmberRunService.spreadLater、EmberRunMaps | 组队分散出生、单向通道、实例护栏、实例清方块 | **实测 PASS · 勾销**（36275b1 · 三人局队员落在 (−2,64,0)/(2,64,0)、Q05 (−2,64,2)/(2,64,2)；两段通道步行触发；护栏与清块只在实例生效 · 2026-10-02 03:49 CST） |
+| ~~**B2.147**~~ | CoreRpg EmberRunRules.exchangeCheck / EmberRunService.cmdMarks | T2 定向锻造门槛（本人首通 Q04） | **实测 PASS · 勾销**（6e1c7ff · P1Gamma 首通前兑换被拒「T2 定向锻造需本人首通 Q04」，首通后兑换成功；P1Alpha 首通后兑换成功 · 2026-10-02 03:48 CST） |
+| ~~**B2.148**~~ | CoreRpg EmberLoadout.nextAwakeningHint / EmberCommand.status / PAPI | 下一档觉醒缺项提示 | **实测 PASS · 勾销**（17e18c3 · 兑换得到的 T2 +0 护符显示「下一档 觉醒II 缺：护符 +0→+6」；T2+6 套显示觉醒II，烬爆 0.80×B 半径 3 · 2026-10-02 03:40 CST） |
+| ~~**B2.149**~~ | ember-v1-runs.yml q04；MM EmberQ04*；DP EmberQ04；TicketEntryService.Kind.Q04；TrMenu ember_p1_adventure | Q04 潮蚀水道 | **实测 PASS · 勾销**（aae5109 · 单人与三人局结算、首通、Q05 开放均正确；实例侧室告示牌已清 · 2026-10-02 03:47 CST） |
+| ~~**B2.150**~~ | ember-v1-runs.yml q05；MM EmberQ05*；DP EmberQ05；TicketEntryService.Kind.Q05；TrMenu ember_p1_adventure | Q05 断塔回廊 | **实测 PASS · 勾销**（aae5109 + 3ddab38 · 单人与三人局（含挂机队员）结算、首通正确 · 2026-10-02 03:58 CST） |
 | **B2.151** | DP map ember_daily_spire_v1（新） | 可步行断塔地图 | **待做** |
-| **B2.152** | DP EmberDailySpire monster.yml | 旧日常断塔楼梯不可走 | **已修 · 待实测** |
+| ~~**B2.152**~~ | DP EmberDailySpire monster.yml | 旧日常断塔楼梯不可走 | **实测 PASS · 勾销**（5816c63 · ScrapT1 旧日常断塔：清底层后传到环廊、清环廊后传到顶台，通关发奖 · 2026-10-02 04:02 CST） |
 | **B2.153** | DP map ember_daily_tide | 侧室旧告示牌 | **Q04 实例已绕开，模板待改** |
 | **B2.154** | 服务器 MariaDB | 重启丢库，已从备份恢复 | **已恢复（数据回退到备份时间点）** |
+| ~~**B2.155**~~ | CoreRpg EmberRunDirector.tick | 首领掉出大厅被移除 → 本局卡死 | **实测 PASS · 勾销**（06e021b · 修后两局无异常 · 2026-10-02 03:58 CST） |
+| ~~**B2.156**~~ | ember-v1-runs.yml q05 rails | 塔冠斜角缝 / 楼梯井掉落 | **实测 PASS · 勾销**（3ddab38 · 2026-10-02 03:58 CST） |
 | ~~**B2.105**~~ | plugins/CoreRpg/set.yml L27 | 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释） | **实测 PASS · 勾销**（`fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常） |
 | ~~**B2.106**~~ | plugins/CoreRpg/cash.yml L86、L92 段首 | 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改） | **实测 PASS · 勾销**（`b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变） |
 | ~~**B2.109**~~ | mineflayer-tests | 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb | **实测 PASS · 勾销**（`42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s） |
