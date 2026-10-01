@@ -1,6 +1,6 @@
 # B2.114 · live `plugins/CoreRpg/quest.yml` L389 主线 hint「精英试炼（每周 1 次）」→ 每人每周限通关 1 次
 
-- **STATUS：已批 A（总控 · 2026-10-01 13:02 Asia/Shanghai）· 交插件岗**（荐案 L389 `hint: 打开枢纽菜单 → 精英试炼（每人每周限通关 1 次）`，numstat `1 1`）
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 13:11 Asia/Shanghai）**（设计 `d7cdcc7` · 批准 `f6531db` · 插件 `6817eb9` · 测 `13771d1` · close 本提交；报告 `docs/TEST-B2.114-quest-elite-hint.md`）
 - **tip 路径：**`docs/design-ember-quest-elite-hint-copy.md`
 - **目标范围：**只改 live `plugins/CoreRpg/quest.yml` L389 这一行的 `hint` 值（玩家可见），numstat `1 1`。src 模板 `CoreRpg/src/main/resources/quest.yml:389` 是同一句，本窗不动，与 B2.107 归为同一类。
 - **来由：**测岗报告；总控 03:31 排为 B2.114。口径与 B2.101（DP 开本句）、B2.102（hub L249）一致。

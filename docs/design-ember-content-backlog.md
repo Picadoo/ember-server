@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 13:02 Asia/Shanghai (总控 · B2.114 CoreRpg quest.yml L389 hint 已批 A · 交插件岗)
+## Progress snapshot — 2026-10-01 13:11 Asia/Shanghai (总控 · B2.114 PASS · 勾销 · B2.110 TrMenu ember_raid.yml L76-77 交策划出稿)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.114 已批 A · 交插件岗**（总控 13:02 批；L377 不并入，另开 B2.117 排 B2.116 后；tip `docs/design-ember-quest-elite-hint-copy.md`；荐案 L389 `hint: 打开枢纽菜单 → 精英试炼（每人每周限通关 1 次）`；QuestService L168 读入不截断，L293/471/569 整串发聊天，actionBar/PAPI 走 objective() 不含 hint；quest.yml 同类只记：L377 done「试炼每周一次」建议排（并入或单开由总控定），L134 周本氛围句、L73/L243「约 3 次」依赖 base_max/cost 只记；原派单：`plugins/CoreRpg/quest.yml` L389 `hint: 打开枢纽菜单 → 精英试炼（每周 1 次）` → 每人每周限通关 1 次口径（与 B2.101/B2.102 一致）；玩家经 `QuestService.java:293,471,569` 可见；src 模板 `CoreRpg/src/main/resources/quest.yml:389` 同句，与 B2.107 同列可不排；余项顺序：B2.110 TrMenu ember_raid.yml L76-77 → B2.111 TrMenu ember_abyss.yml L77 → B2.113 ember_hub.yml L215/L266/L280 → B2.115 Weekly timeout:6 → B2.116 Raid timeout:7 → B2.117 quest.yml L377 → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排) → B2.108 CoreRpgExpansion → B2.109 mineflayer；Daily:7/Abyss:8 timeout、level_gates 缺键只记不排）。~~B2.112~~ → DP EmberEliteWeekly/task/timeout.yml L6「这次不算通关，本周还能再来」PASS · 勾销（设计 `e47a7ed` · 批准 `ed3e16e` · 插件 `684ede2` · 测 `4adadc4` · close 本提交）。B2.109 追加：精英本超时用例（断言 L6 新文案、elite status 本周未通关、同周可再进）；B2.99–B2.102 清单续有效。NI 票物保留（ticket_convert 需要）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
+- **B2.110 交策划出稿**（TrMenu `plugins/TrMenu/menus/ember_raid.yml` L76-77 进本按钮 click tell 恒报「消耗 50 体力」「团本已点燃」，与首免/OP/等级被拒私聊冲突 → 改「尝试进入」类中性句、不写扣费，扣费交给插件私聊；相邻两行可并一窗；余项顺序：B2.111 TrMenu ember_abyss.yml L77 → B2.113 ember_hub.yml L215/L266/L280 → B2.115 Weekly timeout:6 → B2.116 Raid timeout:7 → B2.117 quest.yml L377 → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排；解挂时同步 src quest.yml:389) → B2.108 CoreRpgExpansion → B2.109 mineflayer；Daily:7/Abyss:8 timeout、level_gates 缺键、quest.yml L134/L73/L243 只记不排）。~~B2.114~~ → CoreRpg quest.yml L389 hint「精英试炼（每人每周限通关 1 次）」PASS · 勾销（设计 `d7cdcc7` · 批准 `f6531db` · 插件 `6817eb9` · 测 `13771d1` · close 本提交）。B2.109 清单续有效（含精英本超时用例）。NI 票物保留（ticket_convert 需要）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -351,8 +351,8 @@
 - ~~**B2.101**~~ → DP EmberEliteWeekly L20 开本提示（**PASS · 勾销** · 插件 `e55540a` · 测 `713b407`）。
 - ~~**B2.102**~~ → TrMenu ember_hub.yml L249+L250 精英 lore（**PASS · 勾销** · 插件 `862d21c` · 测 `0884f55`）。
 - ~~**B2.112**~~ → DP EmberEliteWeekly/task/timeout.yml L6（**PASS · 勾销** · 插件 `684ede2` · 测 `4adadc4`）。
-- **B2.114** → `plugins/CoreRpg/quest.yml:389` hint「精英试炼（每周 1 次）」（排在 B2.112 后、B2.110 前；src 模板同句可不排；已批 A · 交插件岗）。
-- **B2.110** → TrMenu ember_raid.yml L76-77 进本 click tell 去扣费/去「已点燃」（排在 B2.102 后、B2.103 前；待出稿）。
+- ~~**B2.114**~~ → CoreRpg quest.yml L389 hint（**PASS · 勾销** · 插件 `6817eb9` · 测 `13771d1`）。
+- **B2.110** → TrMenu ember_raid.yml L76-77 进本 click tell 去扣费/去「已点燃」（排在 B2.102 后、B2.103 前；交策划出稿）。
 - **B2.111** → TrMenu ember_abyss.yml L77 click tell 硬编码「体力 30」（排在 B2.110 后、B2.103 前；待出稿）。
 - **B2.113** → TrMenu ember_hub.yml L215/L266/L280 硬编码体力 45/30/50 → `%corerpg_stamina_cost_weekly/abyss/raid%`（排在 B2.111 后、B2.103 前；待出稿）。
 - **B2.115** → DP EmberWeekly/task/timeout.yml L6「周常超时失败（体力不返还）」首免/OP 不准（排 B2.113 后；待出稿）。
@@ -564,8 +564,8 @@
 | **B2.101** | DP EmberEliteWeekly option.yml L20 | 开本「本周只有一次」→ 每人每周通关 1 次口径 | **PASS · 勾销**（设计 `86d83c1` · 批准 `910d284` · 插件 `e55540a` · 测 `713b407`） |
 | **B2.102** | TrMenu ember_hub.yml L249+L250 | 「每周 1 次」→ 每人每周限通关 1 次；L250 硬编码「消耗 40 体力」 | **PASS · 勾销**（设计 `4045245` · 批准 `6c2913a` · 插件 `862d21c` · 测 `0884f55`） |
 | **B2.112** | DP EmberEliteWeekly/task/timeout.yml L6 | 失败提示「体力已扣，下周再来」与现行（失败同周可再进、首免/OP 不扣）矛盾 | **PASS · 勾销**（设计 `e47a7ed` · 批准 `ed3e16e` · 插件 `684ede2` · 测 `4adadc4`） |
-| **B2.114** | plugins/CoreRpg/quest.yml L389 | 任务 hint「精英试炼（每周 1 次）」→ 限通关口径（src 模板同句可不排） | 已批 A · 交插件岗（tip `docs/design-ember-quest-elite-hint-copy.md`；「每人每周限通关 1 次」；numstat 1 1） |
-| **B2.110** | TrMenu ember_raid.yml L76-77 | 进本按钮 click tell 恒报「消耗 50 体力」「团本已点燃」，与首免/OP/等级被拒私聊冲突 → 改「尝试进入」、不写扣费 | 待出稿（排 B2.102 后、B2.103 前） |
+| **B2.114** | plugins/CoreRpg/quest.yml L389 | 任务 hint「精英试炼（每周 1 次）」→ 限通关口径（src 模板同句可不排） | **PASS · 勾销**（设计 `d7cdcc7` · 批准 `f6531db` · 插件 `6817eb9` · 测 `13771d1`） |
+| **B2.110** | TrMenu ember_raid.yml L76-77 | 进本按钮 click tell 恒报「消耗 50 体力」「团本已点燃」，与首免/OP/等级被拒私聊冲突 → 改「尝试进入」、不写扣费 | 交策划出稿 |
 | **B2.111** | TrMenu ember_abyss.yml L77 | 进本 click tell 硬编码「体力 30」，OP 免扣冲突、不跟 cash.yml | 待出稿（排 B2.110 后） |
 | **B2.113** | TrMenu ember_hub.yml L215/L266/L280 | 周本/深渊/团本 lore 硬编码体力 45/30/50 → 占位符 | 待出稿（排 B2.111 后） |
 | **B2.115** | DP EmberWeekly/task/timeout.yml L6 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.113 后） |
