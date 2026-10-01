@@ -170,7 +170,9 @@ final class EmberRunDirector {
                 it.remove();
                 continue;
             }
-            boolean out = t.leash != null && !t.leash.containsGrown(l.getX(), l.getY(), l.getZ(), 2.0);
+            // B2.165: also "out" when standing well above its own floor (on a roof / wall top it glitched onto)
+            boolean out = t.leash != null && !t.leash.containsGrown(l.getX(), l.getY(), l.getZ(), 2.0)
+                    || l.getY() > t.home.y + 4.5;
             Block head = l.clone().add(0, Math.min(1.5, t.le.getEyeHeight()), 0).getBlock();
             boolean inWall = head.getType().isOccluding();
             if (out || inWall) {
@@ -181,7 +183,7 @@ final class EmberRunDirector {
                     it.remove();
                     continue;
                 }
-                if (out || t.stuck >= 3) t.le.teleport(new Location(w, t.home.x + 0.5, t.home.y, t.home.z + 0.5, l.getYaw(), l.getPitch()));
+                if (out || t.stuck >= (t.boss() ? 1 : 3)) t.le.teleport(new Location(w, t.home.x + 0.5, t.home.y, t.home.z + 0.5, l.getYaw(), l.getPitch()));
             } else if (t.stuck > 0) {
                 t.stuck--;
             }
@@ -463,10 +465,26 @@ final class EmberRunDirector {
         if (dir.lengthSquared() < 1e-6) dir = new Vector(0, 0, 1);
         dir.normalize();
         // Q04 冲击圈: the circle is locked on the chosen player's ground position now and lands after the warning
+        double run = 0;
+        if ("charge".equals(sk.type)) { // §17: strip = the real path; blocked → charge back toward the hall centre
+            run = clearRun(o, dir, sk.length);
+            if (run < CHARGE_MIN) {
+                Vector home = new Vector(def.boss.at.x + 0.5 - o.getX(), 0, def.boss.at.z + 0.5 - o.getZ());
+                if (home.lengthSquared() > 1.0) {
+                    home.normalize();
+                    double r2 = clearRun(o, home, sk.length);
+                    if (r2 > run) { run = r2; dir = home; }
+                }
+            }
+            if (run < CHARGE_MIN) { // B2.165: no 0-block "charge" telegraphs; the cooldown is spent, the slam stays on schedule
+                svc.log().fine("[P1 run] " + s.runId + " " + sk.name + " skipped (no room: " + fmt(run) + ")");
+                return;
+            }
+        }
         lockOrigin = "player".equals(sk.target) && target != null ? target.getLocation().clone() : o.clone();
         lockDir = dir;
         pending = skillFor(sk);
-        if ("charge".equals(sk.type)) pending = pending.withLength(clearRun(o, dir, sk.length)); // §17: strip = the real path
+        if ("charge".equals(sk.type)) pending = pending.withLength(run);
         pendingAt = now + (long) (sk.warn * 1000);
         casts++;
         Location face = o.clone();
@@ -667,16 +685,37 @@ final class EmberRunDirector {
      * §17 冲撞 path: how far (≤ max, 0.25 steps) the boss can move along {@code dir} from {@code o} with a floor under
      * it, two free blocks and still inside the boss area — the drawn strip and the hit box use this length.
      */
-    private double clearRun(Location o, Vector dir, double max) {
-        double best = 0;
+    private double clearRun(final Location o, Vector dir, double max) {
+        return clearRunGrid((x, z) -> {
+            Location c = new Location(w, x, o.getY(), z);
+            return standable(c) && (def.boss.area == null || def.boss.area.contains(x, o.getY(), z));
+        }, o.getX(), o.getZ(), dir.getX(), dir.getZ(), max, BOSS_HALF_WIDTH);
+    }
+
+    /** half of the boss's footprint (zombie 0.6) plus a margin: the charge end must not put its box into a wall */
+    static final double BOSS_HALF_WIDTH = 0.4;
+
+    interface GroundTest { boolean ok(double x, double z); }
+
+    /**
+     * B2.165: how far the boss can charge along (dx, dz): every 0.25 step the centre AND the box edges (± half
+     * sideways, + half ahead) must be standable ground inside the boss area. The centre-only check let the Q07 boss
+     * end a charge with half its box in the hall wall (z=40); a mob inside a block climbs it when it jumps and walked
+     * on the roof (y70) for the rest of the fight.
+     */
+    static double clearRunGrid(GroundTest g, double ox, double oz, double dx, double dz, double max, double half) {
+        double best = 0, px = -dz, pz = dx;
         for (double k = 0.25; k <= max + 1e-9; k += 0.25) {
-            Location c = o.clone().add(dir.clone().multiply(k));
-            if (!standable(c)) break;
-            if (def.boss.area != null && !def.boss.area.contains(c.getX(), c.getY(), c.getZ())) break;
+            double cx = ox + dx * k, cz = oz + dz * k;
+            if (!g.ok(cx, cz) || !g.ok(cx + px * half, cz + pz * half) || !g.ok(cx - px * half, cz - pz * half)
+                    || !g.ok(cx + dx * half, cz + dz * half)) break;
             best = k;
         }
         return best;
     }
+
+    /** a charge shorter than this is not worth a telegraph (book: 冲撞 = up to 8 blocks) */
+    static final double CHARGE_MIN = 2.0;
 
     static boolean standableIds(boolean belowSolid, boolean feetSolid, boolean headSolid) {
         return belowSolid && !feetSolid && !headSolid;

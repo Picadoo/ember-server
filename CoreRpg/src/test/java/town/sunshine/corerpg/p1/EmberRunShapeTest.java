@@ -156,4 +156,15 @@ public class EmberRunShapeTest {
         assertEquals(72, heavy.withDmg(72).dmg, 0);
         assertEquals(44, heavy.dmg, 0);
     }
+
+    @Test public void chargeRunKeepsTheBossBoxOutOfWalls_B2165() {
+        // Q07 hall: floor z >= 41 (wall z = 40), x <= 5 (wall x = 6); boss at the hall point (0.5, 46.5)
+        EmberRunDirector.GroundTest hall = (x, z) -> z >= 41 && x < 6 && x >= -5;
+        assertEquals(5.0, EmberRunDirector.clearRunGrid(hall, 0.5, 46.5, 0, -1, 8, EmberRunDirector.BOSS_HALF_WIDTH), 1e-9);
+        assertEquals(5.5, EmberRunDirector.clearRunGrid(hall, 0.5, 46.5, 0, -1, 8, 0), 1e-9); // old centre-only check
+        assertEquals(5.0, EmberRunDirector.clearRunGrid(hall, 0.5, 46.5, 1, 0, 8, EmberRunDirector.BOSS_HALF_WIDTH), 1e-9);
+        // hugging the side wall: the sideways edge is already in the wall → no run at all
+        assertEquals(0, EmberRunDirector.clearRunGrid(hall, 5.75, 46.5, 0, 1, 8, EmberRunDirector.BOSS_HALF_WIDTH), 1e-9);
+        assertTrue(EmberRunDirector.CHARGE_MIN >= 2.0);
+    }
 }

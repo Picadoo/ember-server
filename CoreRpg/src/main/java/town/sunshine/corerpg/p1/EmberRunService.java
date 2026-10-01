@@ -528,7 +528,7 @@ public final class EmberRunService implements Listener {
 
     /** Batch 3: the Q07 first clear ends the P1 main line (§2 table, §18.1): say what it opened, once. */
     private void endOfP1(Player p) {
-        p.sendMessage(P + "§6§l余烬主线 P1 完结§r §7— 七张主线图全部首通。");
+        p.sendMessage(P + "§6§l余烬主线 P1 完结§r §7— 已首通最后一张主线图 Q07。");
         p.sendMessage(P + "§a已开放：§fT3 定向锻造§7（工坊）· §fT2→T3 升阶§7 · §f七图挑战版§7（/corerpg enter <q01..q07> challenge，掉落 T3 与 T3 印记）");
         p.sendMessage(P + "§7长线目标：同族 T3 两件套 +9 = 觉醒III（/corerpg p1 status 查看成套进度）");
         p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
