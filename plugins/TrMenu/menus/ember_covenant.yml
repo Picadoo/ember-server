@@ -81,7 +81,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6【誓约】 §7已选定 · 烬刃'
+        - 'tell: §6【誓约】 §7正在选定 · 烬刃…'
         - 'tell: §8打开枢纽菜单 → 技能 查看'
         - 'command: corerpg covenant set blaze'
         - close
@@ -101,7 +101,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §7【誓约】 §7已选定 · 灰行'
+        - 'tell: §7【誓约】 §7正在选定 · 灰行…'
         - 'tell: §8打开枢纽菜单 → 技能 查看'
         - 'command: corerpg covenant set ash'
         - close
@@ -121,7 +121,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §9【誓约】 §7已选定 · 守墓'
+        - 'tell: §9【誓约】 §7正在选定 · 守墓…'
         - 'tell: §8打开枢纽菜单 → 技能 查看'
         - 'command: corerpg covenant set warden'
         - close
