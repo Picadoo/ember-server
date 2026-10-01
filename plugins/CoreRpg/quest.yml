@@ -374,7 +374,7 @@ chapters:
         desc: 向 灰烛 打听天赋二层与精英试炼
         hint: 枢纽工坊旁找灰烛（右键交谈）
         xp: 80
-        done: ['§6灰烛：§f试炼每周一次。稳定符在周首通里。']
+        done: ['§6灰烛：§f试炼每人每周限通关一次。稳定符在周首通里。']
       - type: event
         event: talent
         count: 1

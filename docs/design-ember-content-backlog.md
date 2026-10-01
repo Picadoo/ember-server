@@ -362,7 +362,7 @@
 - **B2.119** → CoreRpg TicketEntryService 进本失败退还提示几处例外（:189/:209/首免/人数不足）（需 build；排在 B2.108 后；待出稿）。
 - **B2.115** → DP EmberWeekly/task/timeout.yml L6「周常超时失败（体力不返还）」首免/OP 不准（排 B2.113 后；待出稿）。
 - **B2.116** → DP EmberRaid/task/timeout.yml L7「团本超时失败（体力不返还）」首免/OP 不准（排 B2.115 后、B2.103 前；待出稿）。
-- **B2.117** → `plugins/CoreRpg/quest.yml:377` done「试炼每周一次」→ 每人每周限通关口径（排在 B2.116 后、B2.103 前；待出稿）。
+- ~~**B2.117**~~ → `plugins/CoreRpg/quest.yml:377` done「试炼每周一次」→ 每人每周限通关口径（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:43 CST 机器人实测（quest set 9 0 → /corerpg quest talk → 复原 1 0）：包 {"color":"gold","text":"灰烛："},{"color":"white","text":"试炼每人每周限通关一次。稳定符在周首通里。"}）
 
 ---
 
@@ -580,7 +580,7 @@
 | **B2.119** | CoreRpg TicketEntryService 退还提示 | 发起者 40 tick 内下线不退不提示（:189）；5.5s 内重试退了不提示（:209）；周首免退还仍写「体力已退还」；DP 人数不足拒绝报「缓存冷却」误导 | 待出稿（需 build；排 B2.108 后） |
 | **B2.115** | DP EmberWeekly/task/timeout.yml L6 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.113 后） |
 | **B2.116** | DP EmberRaid/task/timeout.yml L7 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.115 后） |
-| **B2.117** | plugins/CoreRpg/quest.yml L377 | 主线 done「试炼每周一次」→「试炼每人每周限通关一次。稳定符在周首通里。」 | 待出稿（排 B2.116 后、B2.103 前） |
+| ~~**B2.117**~~ | plugins/CoreRpg/quest.yml L377 | 主线 done「试炼每周一次」→「试炼每人每周限通关一次。稳定符在周首通里。」 | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:43 CST 机器人实测（quest set 9 0 → /corerpg quest talk → 复原 1 0）：包 {"color":"gold","text":"灰烛："},{"color":"white","text":"试炼每人每周限通关一次。稳定符在周首通里。"}） |
 
 ---
 
