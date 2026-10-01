@@ -1,85 +1,26 @@
 # STATUS — Mineflayer gameplay suite
 
-**Updated:** 2026-09-09 13:51:35 CST (UTC 2026-09-09T05:51:35.778Z)
-**Bot:** Tester @ 127.0.0.1:25565 version 1.12.2 offline
-**Server:** Paper custom stack (NeigeItems + Core* + MythicMobs)
+**Updated:** 2026-10-01 19:10:24 CST
+**Bot:** EmberTestOp via proxy 127.0.0.1:25565 → AuthMe → play · 1.12.2 offline · **not op, no permissions**
+**Privileged setup:** play-server console via `mineflayer-tests/lib/console.js` (FIFO stdin); scratch pad (3000,200,3000) cleared after run; no gamerule / ops.json changes
 
-## Summary: PASS=7 FAIL=0 SKIP=1
+## Summary: PASS=9 FAIL=0 SKIP=0
 
 | Mechanic | Status | Notes |
 |----------|--------|-------|
-| Join/smoke | **PASS** | spawned at (-38.5, 78.0, 256.5) as Tester |
-| Furnace | **PASS** | opened window type=minecraft:furnace; slots in=iron_ore#15x1("Iron Ore") fuel=coal#263x1("Coal"); output=iron_ingot#265x2("Iron Ingot") progressSeen=true invIngot=iron_ingot#265x2("Iron Ingot") |
-| Enchant | **PASS** | window=minecraft:enchanting_table; sword: moved 29->0 now=iron_sword#267x1("Iron Sword"); catalyst: moved 30->1 now=dye#351x16("Lapis Lazuli"); targetSlot=iron_sword#267x1("Iron Sword") lapisSlot=dye#351x16("Lapis Lazuli"); ready=true offers=[#0 lvl=1 expEnchant=1, #1 lvl=3 expEnchant=32, #2 lvl=5 expEnchant=21] xp=90; enchanted slot=0 result=iron_sword#267x1("Iron Sword") xpBefore=90 xpAfter=89 |
-| Fishing | **SKIP** | cast attempted but no bite within timeout (bobber/particle detect fragile on 1.12). rod equipped; look→water -39,78,259; fishOk=false err=fish timeout 20s loot=(none) |
-| Totem | **PASS** | death+alive (resurrection); offhand=totem_of_undying#449x1("Totem of Undying"); healthBefore=20; healthAfter=20 died=true resurrected=true totemStillOff=false totemInInv=false offAfter=(none); combatCheck=true |
-| Shield | **PASS** | shield in off-hand + activateItem + ShieldNmsHooks.active; offhand=shield#442x1("Shield") activateItem(offHand=true) issued; combatCheck=true |
-| Craft | **PASS** | window=minecraft:crafting_table; resultSlot=iron_ingot#265x1("Iron Ingot") grid=iron_ingot#265x1("Iron Ingot"),iron_ingot#265x1("Iron Ingot"),iron_ingot#265x1("Iron Ingot"),iron_ingot#265x1("Iron Ingot"); invPlate=iron_ingot#265x1("Iron Ingot") |
-| World rules / MM | **PASS** | cwr=[CoreWorldRules] spawnBans: natural=true spawners=true allowCustom=true allowEggs=true allowBuild=true cancelledSpawns=0 allowedCustomSpawns=2; mobs before=1 afterSpawn=2 later=2; mmChat=[MythicMobs] Spawned 1x EmberZombie!; flood=false |
-
-## Honesty notes
-
-- PASS only when the suite observed concrete client/server evidence (spawn, window slots, item give, chat proof, entity spawn, etc.).
-- SKIP means best-effort attempted but evidence incomplete.
-- **Fishing SKIP:** `bot.fish()` relies on 1.12 bobber particle packets; cast + CoreFish hooks verified, but bite/collect not observed within 20s.
-- Enchant PASS: window offers cost 1/3/5 with `crystal_ember_enchant` (dye:4) catalyst; cheap slot taken (xp 90→89).
-- Totem PASS: `/effect <player> 7 …` Instant Damage; `died=true` then alive; CoreCombat `resurrectOk` incremented.
-- Furnace PASS: ore_ember_iron + coal → output iron_ingot×2 (ingot_ember_iron) with progress bar.
-- Craft PASS: 2×2 ingot_ember_iron on crafting_table produced result (plate_ember_iron material=IRON_INGOT).
-- FAIL means the mechanic did not produce expected evidence.
+| Join/smoke | **PASS** | proxy→AuthMe→play as EmberTestOp; spawn (-18.5, 58.0, 110.5) in overworld; auth=" 镶嵌 · 签到 · 生活补给。工坊 NPC 也可右键进入。 \| 进本门槛：周本 Lv.20 · 深渊 Lv.25 · 灾厄 Lv.30 · 团本 Lv.35——打开枢纽菜单进入。 \| EmberTestOp joined the game" |
+| Hub menu (/ember, non-op) | **PASS** | title="{"text":"余烬 · 冒险枢纽"}" items=41 missing=[] unreplacedPAPI=0 |
+| Furnace (CoreSmelt ore_ember_iron→ingot_ember_iron) | **PASS** | in=(none); out=iron_ingot#265x2("Iron Ingot") name="余烬铁锭" |
+| Enchant (CoreEnchant gear_ember_blade + 附魔晶) | **PASS** | offers=[1,2,3] xp=127; target=iron_sword#267x1("Iron Sword") ench=[16:1,34:1] xpAfter=126 |
+| Fishing (CoreFish loot table) | **PASS** | err=none loot=fish#349x1("Raw Fish") "余烬鳕鱼" items 1→2 |
+| Totem (CoreCombat totem_ember_life) | **PASS** | lethal damage survived, totem consumed; hp 4→4; died=false; offhandAfter=(none); check="[CoreCombat] resurrectOk=14 resurrectBlockedApprox=1" |
+| Shield (CoreCombat shield_ember_guard) | **PASS** | offhand=shield#442x1("Shield") hooks="[CoreCombat] ShieldNmsHooks.active=true hasOverride=true durMult=1.5 allowedCount=1" |
+| Craft (CoreCraft 2×2 余烬铁锭→余烬铁板) | **PASS** | result=iron_ingot#265x1("Iron Ingot") name="余烬铁板" |
+| World rules / MM (CoreWorldRules + EmberZombie) | **PASS** | cwr="[CoreWorldRules] spawnBans: natural=true spawners=true allowCustom=true allowEggs=true allowBuild=true cancelledSpawns=36 allowedCustomSpawns=28" pad=true mm="[MythicMobs] Spawned 1x EmberZombie!" mobs 0→1→1→0 (after mm kill: "Mobs Killed: EmberZombie, ") |
 
 ## How run
 
 ```bash
-export JAVA_HOME=/workspace/minecraft/tools/jdk8u504-b01
-cd /workspace/minecraft/server-runtime && ./start.sh custom
+# play server must be started with the console FIFO (see mineflayer-tests/README.md)
 cd /workspace/minecraft/mineflayer-tests && npm run gameplay
-cd /workspace/minecraft/server-runtime && ./stop.sh
-```
-
-## Raw results JSON
-
-```json
-[
-  {
-    "name": "Join/smoke",
-    "status": "PASS",
-    "notes": "spawned at (-38.5, 78.0, 256.5) as Tester"
-  },
-  {
-    "name": "Furnace",
-    "status": "PASS",
-    "notes": "opened window type=minecraft:furnace; slots in=iron_ore#15x1(\"Iron Ore\") fuel=coal#263x1(\"Coal\"); output=iron_ingot#265x2(\"Iron Ingot\") progressSeen=true invIngot=iron_ingot#265x2(\"Iron Ingot\")"
-  },
-  {
-    "name": "Enchant",
-    "status": "PASS",
-    "notes": "window=minecraft:enchanting_table; sword: moved 29->0 now=iron_sword#267x1(\"Iron Sword\"); catalyst: moved 30->1 now=dye#351x16(\"Lapis Lazuli\"); targetSlot=iron_sword#267x1(\"Iron Sword\") lapisSlot=dye#351x16(\"Lapis Lazuli\"); ready=true offers=[#0 lvl=1 expEnchant=1, #1 lvl=3 expEnchant=32, #2 lvl=5 expEnchant=21] xp=90; enchanted slot=0 result=iron_sword#267x1(\"Iron Sword\") xpBefore=90 xpAfter=89"
-  },
-  {
-    "name": "Fishing",
-    "status": "SKIP",
-    "notes": "cast attempted but no bite within timeout (bobber/particle detect fragile on 1.12). rod equipped; look→water -39,78,259; fishOk=false err=fish timeout 20s loot=(none)"
-  },
-  {
-    "name": "Totem",
-    "status": "PASS",
-    "notes": "death+alive (resurrection); offhand=totem_of_undying#449x1(\"Totem of Undying\"); healthBefore=20; healthAfter=20 died=true resurrected=true totemStillOff=false totemInInv=false offAfter=(none); combatCheck=true"
-  },
-  {
-    "name": "Shield",
-    "status": "PASS",
-    "notes": "shield in off-hand + activateItem + ShieldNmsHooks.active; offhand=shield#442x1(\"Shield\") activateItem(offHand=true) issued; combatCheck=true"
-  },
-  {
-    "name": "Craft",
-    "status": "PASS",
-    "notes": "window=minecraft:crafting_table; resultSlot=iron_ingot#265x1(\"Iron Ingot\") grid=iron_ingot#265x1(\"Iron Ingot\"),iron_ingot#265x1(\"Iron Ingot\"),iron_ingot#265x1(\"Iron Ingot\"),iron_ingot#265x1(\"Iron Ingot\"); invPlate=iron_ingot#265x1(\"Iron Ingot\")"
-  },
-  {
-    "name": "World rules / MM",
-    "status": "PASS",
-    "notes": "cwr=[CoreWorldRules] spawnBans: natural=true spawners=true allowCustom=true allowEggs=true allowBuild=true cancelledSpawns=0 allowedCustomSpawns=2; mobs before=1 afterSpawn=2 later=2; mmChat=[MythicMobs] Spawned 1x EmberZombie!; flood=false"
-  }
-]
 ```

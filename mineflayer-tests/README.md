@@ -46,3 +46,30 @@ node scripts/smoke.js
 
 - 使用 `auth: 'offline'`，需服务端 `online-mode=false`
 - 协议版本固定为 `1.12.2`
+
+## 玩法套件 `npm run gameplay`
+
+`scripts/gameplay-suite.js`：机器人 `EmberTestOp` 经代理 25565 → AuthMe（`joinPlay()`，密码自动生成并存入已忽略的 `secrets/bot-passwords.json`）→ 游玩服，依次测：
+
+Join → 枢纽菜单 `/ember`（非 op，查标题/关键图标/无未替换 `%占位符%`）→ 熔炉（CoreSmelt）→ 附魔（CoreEnchant，NI `gear_ember_blade` + `crystal_ember_enchant`）→ 钓鱼（CoreFish NI 战利品）→ 图腾（`totem_ember_life`）→ 盾（`shield_ember_guard`）→ 合成（2×2 余烬铁锭→余烬铁板）→ 世界规则 / MythicMobs（`EmberZombie`）。
+
+- 机器人 **不是 op**、本服 **无 LuckPerms**：所有特权步骤（`ni give`、`gamemode`、`mvtp`、`fill`、`mm mobs spawn/kill`）都由 `lib/console.js` 写入游玩服控制台执行，`ops.json` 始终保持 `[]`。
+- 测试场地：`world` (3000,200,3000) 高空临时平台，结束时在 `finally` 中清空背包、拆平台、`gamemode 0`、送回 `ember_hub`。不改 gamerule。
+- 钓鱼池故意 1 格深且紧贴脚下：2 格深时上钩会把浮漂拖到水下，战利品在水中被岸边方块挡住，捡不到（几何问题，不是 CoreFish bug）。
+- 结果写到 `STATUS_PATH`（默认 `/workspace/minecraft/STATUS-gameplay-suite.md`）；调试变量 `FISH_DEBUG=1`、`REEL_MS`（上钩后多久收杆，默认 400）。
+
+### 控制台 FIFO
+
+没有 RCON；`start.sh` 用 `nohup … &` 启动时 stdin 为 `/dev/null`，无法下控制台命令。要跑玩法套件，游玩服需以 FIFO 作为 stdin 启动（先 `./stop.sh` 正常停服）：
+
+```bash
+mkfifo -m 600 /tmp/ember-play-console.fifo
+(setsid nohup tail -f /dev/null > /tmp/ember-play-console.fifo &)   # 常驻写端，防止 EOF
+cd /workspace/minecraft/server-runtime
+setsid bash -c 'source ./env.sh; exec "$JAVA_HOME/bin/java" -Xms512M -Xmx1536M \
+  -jar "$RUNTIME_DIR/paper-custom.jar" nogui < /tmp/ember-play-console.fifo > logs/stdout.log 2>&1' &
+echo $! > server.pid      # 让 stop.sh 继续可用
+echo "list" > /tmp/ember-play-console.fifo   # 手动下控制台命令
+```
+
+`lib/console.js` 以 O_NONBLOCK 打开 FIFO：服务端没在读时直接报错，不会卡住。可用 `EMBER_CONSOLE_FIFO`、`EMBER_PLAY_LOG` 覆盖路径。
