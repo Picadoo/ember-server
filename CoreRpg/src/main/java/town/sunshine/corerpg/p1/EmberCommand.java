@@ -76,6 +76,13 @@ public final class EmberCommand {
         if ("debug".equals(sub)) return debug(s, args);
         if ("calc".equals(sub)) return calc(s, args);
         if ("give".equals(sub)) return give(s, args);
+        if ("heal".equals(sub)) { // admin: fill HP through the ledger (other heals are reverted in P1 worlds)
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            double got = EmberHeal.full(t, "管理员 /corerpg p1 heal");
+            s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
+            return true;
+        }
         return help(s);
     }
 
@@ -84,6 +91,7 @@ public final class EmberCommand {
         s.sendMessage(P + "/corerpg p1 world add|remove [世界] | world list");
         s.sendMessage(P + "/corerpg p1 debug [all|console|off]  — 每击伤害来源日志");
         s.sendMessage(P + "/corerpg p1 give <scorch|burst|sustain|t0> <blade|charm> <阶0-3> [成色0-3] [精工0-3] [强化0-10] [玩家]");
+        s.sendMessage(P + "/corerpg p1 heal [玩家]  — 经账本回满（P1 世界内其它直接改血会被回退）");
         s.sendMessage(P + "/corerpg p1 charm select|clear  ·  /corerpg p1 inspect  — 手持物品身份/校验");
         EmberForgeService.helpLines(s);
         EmberRunService.helpLines(s);
@@ -105,6 +113,7 @@ public final class EmberCommand {
                 EmberLoadout l = loadouts.refresh(p);
                 s.sendMessage(P + String.format(Locale.ROOT, "B=%.2f H=%.2f (H0 %.2f) D=%.0f M=%.4f EHP=%.1f  Lv%d  套装: %s",
                         l.b, l.h, l.h0, l.d, l.m, l.ehp(), l.level, l.setLabel()));
+                s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "无有效 P1 刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
                 for (String n : loadouts.notes(p)) s.sendMessage(P + ChatColor.YELLOW + n);

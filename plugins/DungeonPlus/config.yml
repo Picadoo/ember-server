@@ -34,6 +34,9 @@ dungeon:
       - "corerpg 属性"
       - "corerpg 技能"
       - "corerpg 主线"
+      # 2026-10-02 (P1 live test B2.138): read-only P1 status / current run panel inside Q instances
+      - "corerpg p1 status"
+      - "corerpg p1 run"
       - "rpg quest"
       - "rpg stats"
       - "rpg skill"

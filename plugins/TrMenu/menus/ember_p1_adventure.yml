@@ -123,9 +123,9 @@ Icons:
   s:
     display:
       material: blaze powder
-      name: '§6目标族 · 灼烬'
+      name: '§6目标族 · 焚烬'
       lore:
-        - '§7之后入场的局：灼烬 60%，另两族各 20%'
+        - '§7之后入场的局：焚烬 60%，另两族各 20%'
         - '§8入场时快照，局内改不影响本局'
     actions:
       all:
@@ -143,9 +143,9 @@ Icons:
   u:
     display:
       material: magma cream
-      name: '§a目标族 · 余息'
+      name: '§a目标族 · 炽愈'
       lore:
-        - '§7之后入场的局：余息 60%，另两族各 20%'
+        - '§7之后入场的局：炽愈 60%，另两族各 20%'
         - '§8入场时快照，局内改不影响本局'
     actions:
       all:

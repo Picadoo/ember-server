@@ -222,6 +222,11 @@ public final class EmberRunService implements Listener {
         s.created = System.currentTimeMillis();
         s.leader = leader.getUniqueId();
         s.extra = EmberRunRules.rollExtra(new java.util.Random(EmberRunRules.subSeed(s.seed, "extra")).nextDouble());
+        if (forcedExtra != null) { // admin test hook, one shot
+            log().info("[P1 run] " + s.runId + " extra forced " + s.extra.id + " → " + forcedExtra.id + " (admin test)");
+            s.extra = forcedExtra;
+            forcedExtra = null;
+        }
         for (Player p : party) {
             s.participants.add(p.getUniqueId());
             String t = target(data(p.getUniqueId()));
@@ -585,7 +590,7 @@ public final class EmberRunService implements Listener {
         }
         if (!got.isEmpty()) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (waiting > 0) p.sendMessage(P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）：空出格子后 /corerpg p1 claim");
-        if (choices > 0) p.sendMessage(P + ChatColor.YELLOW + "首通自选待领取：/corerpg p1 firstclear <scorch|burst|sustain>（灼烬/烬爆/余息）或 冒险 菜单");
+        if (choices > 0) p.sendMessage(P + ChatColor.YELLOW + "首通自选待领取：/corerpg p1 firstclear <scorch|burst|sustain>（焚烬/烬爆/炽愈）或 冒险 菜单");
         return changed.size();
     }
 
@@ -750,7 +755,9 @@ public final class EmberRunService implements Listener {
         if (projectile && p.getLocation().distance(src.getLocation()) > t.range + 1.0) { e.setCancelled(true); return; }
         if (now - t.lastHit < (long) (t.interval * 1000) - 50L) { e.setCancelled(true); return; }
         t.lastHit = now;
+        double before = e.getDamage();
         e.setDamage(t.atk);
+        EmberDamageTrace.note(e, before, "G04 主线本怪物伤害固定 atk=" + EmberDamageTrace.fmt(t.atk));
         markActed(d.s, p);
     }
 
@@ -833,7 +840,14 @@ public final class EmberRunService implements Listener {
     private void checkWipe(EmberRunSession s) {
         if (!s.open() || EmberRunSession.SETTLING.equals(s.state)) return;
         for (UUID u : s.committed) if (!s.died.contains(u) && !s.left.contains(u)) return;
-        if (s.fightStarted()) fail(s, s.committed.size() == 1 ? "倒下" : "全员倒下或离开");
+        if (s.fightStarted()) { // B2.138: say what actually happened
+            int dead = 0;
+            for (UUID u : s.committed) if (s.died.contains(u)) dead++;
+            boolean solo = s.committed.size() == 1;
+            String why = dead == s.committed.size() ? (solo ? "倒下" : "全员倒下")
+                    : dead == 0 ? (solo ? "离开副本" : "全员离开副本") : "全员倒下或离开";
+            fail(s, why);
+        }
         else abort(s, "开战前全员离开", true);
     }
 
@@ -899,7 +913,8 @@ public final class EmberRunService implements Listener {
             case "claim":
                 if (!(s instanceof Player)) return true;
                 if (blocksLegacy(((Player) s).getWorld())) { s.sendMessage(P + "出本后再领取。"); return true; }
-                if (deliver((Player) s) == 0) s.sendMessage(P + "没有可领取的暂存奖励。");
+                if (deliver((Player) s) == 0 && store.ledger(((Player) s).getUniqueId()).open().isEmpty()) // B2.138
+                    s.sendMessage(P + "没有可领取的暂存奖励。");
                 return true;
             case "enter":
                 if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01|q02|q03>"); return true; }
@@ -929,7 +944,7 @@ public final class EmberRunService implements Listener {
         String f = args[2].toLowerCase(Locale.ROOT);
         int idx = 0;
         for (int i = 0; i < 3; i++) if (EmberRunRules.FAMILIES[i].equals(f)) idx = i + 1;
-        if (idx == 0 && !"none".equals(f)) { p.sendMessage(P + ChatColor.RED + "族：scorch（灼烬）/ burst（烬爆）/ sustain（余息）/ none"); return true; }
+        if (idx == 0 && !"none".equals(f)) { p.sendMessage(P + ChatColor.RED + "族：scorch（焚烬）/ burst（烬爆）/ sustain（炽愈）/ none"); return true; }
         d.addPeriodCount(C_TARGET, "all", idx - d.periodCount(C_TARGET, "all"));
         plugin.getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(P + "§a掉落目标族已设为 " + (idx == 0 ? "无（三族均分）" : EmberItemData.familyName(f)) + " §7· 下次入场生效");
@@ -1002,9 +1017,30 @@ public final class EmberRunService implements Listener {
         return true;
     }
 
+    /** admin test hook: the next started run uses this extra event instead of the seeded roll (one shot). */
+    private volatile EmberRunRules.Extra forcedExtra;
+
     private boolean cmdRuns(CommandSender s, String[] args) {
         boolean admin = s.hasPermission("corerpg.admin");
         String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if (admin && "extra".equals(op) && args.length >= 4) {
+            forcedExtra = "clear".equalsIgnoreCase(args[3]) ? null : EmberRunRules.Extra.parse(args[3]);
+            s.sendMessage(P + "下一局额外事件（仅一次，测试用）= " + (forcedExtra == null ? "按种子" : forcedExtra.id));
+            return true;
+        }
+        if (admin && "marks".equals(op) && args.length >= 6) { // test grant: runs marks <玩家> <阶> <±n>
+            Player t = Bukkit.getPlayerExact(args[3]);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            int tier, n;
+            try { tier = Integer.parseInt(args[4]); n = Integer.parseInt(args[5]); }
+            catch (NumberFormatException ex) { s.sendMessage(P + "阶与数量需为整数"); return true; }
+            PlayerData d = data(t.getUniqueId());
+            d.addPeriodCount(C_MARK + tier, "all", Math.max(n, -marks(d, tier)));
+            plugin.getDataStore().flushMutation(t.getUniqueId());
+            s.sendMessage(P + t.getName() + " T" + tier + " 锻造印记 = " + marks(d, tier));
+            log().info("[P1 run] admin " + s.getName() + " marks " + t.getName() + " T" + tier + " " + n + " → " + marks(d, tier));
+            return true;
+        }
         if (admin && "list".equals(op)) {
             for (EmberRunSession x : sessions.values()) {
                 EmberRunDirector d = x.world == null ? null : byWorld.get(x.world);
@@ -1053,7 +1089,7 @@ public final class EmberRunService implements Listener {
             return true;
         }
         if (!(s instanceof Player)) {
-            s.sendMessage(P + "/corerpg p1 runs list | unlock <玩家> <q02|q03> [clear] | firstclear <玩家> <q01..> [clear] | starter <玩家> [reset]");
+            s.sendMessage(P + "/corerpg p1 runs list | unlock <玩家> <q02|q03> [clear] | firstclear <玩家> <q01..> [clear] | starter <玩家> [reset] | marks <玩家> <阶> <±n> | extra <none|treasure|elite|chest|clear>");
             return true;
         }
         Player p = (Player) s;
