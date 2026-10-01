@@ -7,8 +7,9 @@ mobs suffocated and DP's $kill counted it → idle players got weekly/raid clear
 
 usage: scripts/check-dp-spawns.py [dungeonDir ...]     (default: every plugins/DungeonPlus/dungeon/Ember*/)
 P1 G04: for EmberQ0x dungeons the CoreRpg run director spawns the mobs, so the points in
-plugins/CoreRpg/ember-v1-runs.yml (rooms.*.points, boss.at, boss.adds.points, event.anchor, spawn) of the map whose
-`dungeon:` matches are checked too, and every door block listed there must be a closed door (iron bars) in the template.
+plugins/CoreRpg/ember-v1-runs.yml (rooms.*.points, boss.at, boss.adds.points, event.anchor, spawn, spread, links.to) of the map whose
+`dungeon:` matches are checked too, every door block listed there must be a closed door (iron bars) in the template,
+and no runtime rail box (rails:) may cover a point's feet or head.
        DP_MAP_ROOT=/path/with/<mapname>/ dirs to check other map copies (e.g. a release or a backup)
 exit 1 = some point has its head inside a full opaque block (mob suffocates → DP counts the death) or no chunk;
 WARN (exit 0) = feet in the floor, head in a non-full block (bars/glass/fence/slab/stairs: stuck, no suffocation), floating.
@@ -28,10 +29,20 @@ def p1_points(dungeon):
     for i in range(1, len(blocks) - 1, 2):
         body = blocks[i + 1]
         if not re.search(r'(?m)^\s+dungeon:\s*%s\s*$' % re.escape(dungeon), body): continue
-        pts, doors, room = [], [], ''
+        pts, doors, room, rails, lst = [], [], '', [], ''
         for line in body.splitlines():
             r = re.match(r'^      (r\d|boss|event|adds):', line) or re.match(r'^        (adds):', line)
             if r: room = r.group(1)
+            top = re.match(r'^    (\w+):', line)
+            if top: lst = top.group(1); room = '' if lst in ('links', 'rails', 'spread', 'clear') else room
+            if lst == 'links':  # - {after: r1, from: [..], to: [x, y, z], ...}: the arrival point must be standable
+                t = re.search(r'\bto:\s*\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line)
+                if t: pts.append(('p1:%s:link:to' % blocks[i], int(t.group(1)), int(t.group(2)), int(t.group(3))))
+                continue
+            if lst == 'rails':
+                d = re.search(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line)
+                if d: rails.append([int(v) for v in d.groups()])
+                continue
             key = re.match(r'^\s*(\w+):', line)
             if not key: continue
             k = key.group(1)
@@ -39,11 +50,15 @@ def p1_points(dungeon):
                 d = re.search(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line)
                 if d: doors.append((blocks[i] + ':' + room + ':door', [int(v) for v in d.groups()]))
                 continue
-            if k not in ('points', 'at', 'anchor', 'spawn'): continue
+            if k not in ('points', 'at', 'anchor', 'spawn', 'spread'): continue
             for m in re.finditer(r'\[\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\]', line):
                 pts.append(('p1:%s:%s:%s' % (blocks[i], room or '-', k), int(m.group(1)), int(m.group(2)), int(m.group(3))))
+        P1_RAILS[dungeon] = rails
         return pts, doors
     return [], []
+
+
+P1_RAILS = {}  # dungeon -> rail boxes (iron bars placed into AIR at attach): must not cover any point
 # non-solid ids a mob can stand in: air, sapling, water, lava, tall grass, dead bush, flowers, torch, fire, rails, signs,
 # ladder, lever, plates, redstone torch, buttons, snow layer, sugar cane, vines, carpet, double plants, banners
 PASSABLE = {0, 6, 8, 9, 10, 11, 27, 28, 30, 31, 32, 37, 38, 39, 40, 50, 51, 55, 59, 63, 65, 66, 68, 69, 70, 72, 75, 76,
@@ -129,6 +144,11 @@ def check(ddir):
                 for z in range(min(z0, z1), max(z0, z1) + 1):
                     b = mp.block(x, y, z)
                     if b != 101: bad.append('  %s @ %d,%d,%d: block id %s, expected closed iron bars (101)' % (what, x, y, z, b))
+    for rb in P1_RAILS.get(os.path.basename(ddir.rstrip('/')), []):
+        x0, y0, z0, x1, y1, z1 = rb
+        for what, x, y, z in pts:
+            if min(x0, x1) <= x <= max(x0, x1) and min(z0, z1) <= z <= max(z0, z1) and min(y0, y1) <= y + 1 and y <= max(y0, y1):
+                bad.append('  rail %s covers %s @ %d,%d,%d' % (rb, what, x, y, z))
     for what, x, y, z in sorted(pts, key=lambda p: (p[3], p[1], p[2])):
         below, feet, head = mp.block(x, y - 1, z), mp.block(x, y, z), mp.block(x, y + 1, z)
         at = '  %s @ %d,%d,%d: ' % (what, x, y, z)
