@@ -324,11 +324,16 @@ Icons:
         - '§7接取短目标，换币、经验与碎片'
         - '§8每日自动分配短目标'
         - ''
-        - '§e➥ §f查看今日悬赏'
+        - '§e➥ §f左键 查看今日悬赏'
+        - '§e➥ §f右键 领取奖励（完成后）'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg bounty'
+        - close
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg bounty claim'
         - close
 
   N:
