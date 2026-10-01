@@ -140,6 +140,14 @@ final class EmberRunDirector {
             }
             Location l = t.le.getLocation();
             if (t.leash != null && l.getY() < t.leash.y0 - 4) {
+                if (t.boss()) { // B2.155: removing the boss would leave the run without a kill → no settlement ever
+                    String line = String.format(Locale.ROOT, "%s %s@%s: fell below the room → back to its point", t.roomId, t.role, t.home);
+                    anomalies.add(line);
+                    svc.log().warning("[P1 run] " + s.runId + " anomaly " + line);
+                    t.le.setFallDistance(0f);
+                    t.le.teleport(new Location(w, t.home.x + 0.5, t.home.y, t.home.z + 0.5, l.getYaw(), l.getPitch()));
+                    continue;
+                }
                 anomaly(t, "fell below the room");
                 t.le.remove();
                 it.remove();
