@@ -4,5 +4,5 @@ auto-start:
 
 timeout:
   - 2400:
-      - "$message{type=text;text=§c团本超时失败（体力不返还）} @dungeon"
+      - "$message{type=text;text=§c团本超时失败。§7这次不算通关。} @dungeon"
       - "$end{type=text;text=§c余烬团本 超时失败;reward=false;delay=1;end-type=FAILURE} @dungeon"
