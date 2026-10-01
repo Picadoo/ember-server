@@ -157,6 +157,7 @@ public final class LifeService implements Listener {
         Consumable c = consumables.get(id);
         if (c == null) return;
         final Player p = e.getPlayer();
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(p) && consumeP1(e, p, id)) return; // ember-v1.0-P1 A05/D02/D03/D04
         if (c.cooldownSec > 0) {
             String key = p.getUniqueId() + ":" + id;
             Long until = cooldowns.get(key);
@@ -175,16 +176,60 @@ public final class LifeService implements Listener {
                 if (!p.isOnline()) return;
                 for (PotionEffect pe : eff) p.addPotionEffect(pe, true);
                 // plain POTION items leave an empty bottle behind — take it back
-                if (!bottle) return;
-                org.bukkit.inventory.ItemStack[] inv = p.getInventory().getContents();
-                for (int i = 0; i < inv.length; i++) {
-                    org.bukkit.inventory.ItemStack it = inv[i];
-                    if (it == null || it.getType() != org.bukkit.Material.GLASS_BOTTLE || ni.getNiId(it) != null) continue;
-                    if (it.getAmount() > 1) it.setAmount(it.getAmount() - 1); else p.getInventory().setItem(i, null);
-                    break;
-                }
+                if (bottle) takeBottle(p);
             }
         });
+    }
+
+    private void takeBottle(Player p) {
+        org.bukkit.inventory.ItemStack[] inv = p.getInventory().getContents();
+        for (int i = 0; i < inv.length; i++) {
+            org.bukkit.inventory.ItemStack it = inv[i];
+            if (it == null || it.getType() != org.bukkit.Material.GLASS_BOTTLE || ni.getNiId(it) != null) continue;
+            if (it.getAmount() > 1) it.setAmount(it.getAmount() - 1); else p.getInventory().setItem(i, null);
+            break;
+        }
+    }
+
+    /**
+     * ember-v1.0-P1 consumables inside P1 worlds (策划书 §19.4): the heal potion becomes the unified heal
+     * (percent of max HP, one shared cooldown that survives reconnect); ids in consumables.allowed keep their
+     * legacy effect; other potions are refused with a message (no silent swallow); food only restores hunger.
+     * @return true when handled here (legacy effects must not run)
+     */
+    private boolean consumeP1(PlayerItemConsumeEvent e, final Player p, String id) {
+        town.sunshine.corerpg.p1.EmberMode mode = town.sunshine.corerpg.p1.EmberMode.get();
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (mode == null || ls == null) return false;
+        if (mode.list("consumables.allowed").contains(id)) return false;
+        final boolean bottle = e.getItem().getType() == org.bukkit.Material.POTION;
+        if (mode.list("heal_potion.items").contains(id)) {
+            town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(p.getUniqueId());
+            long now = System.currentTimeMillis();
+            if (st.healCdUntil > now) {
+                e.setCancelled(true);
+                p.sendMessage(ChatColor.RED + "[余烬] 回复药冷却中，还需 " + ((st.healCdUntil - now) / 1000 + 1) + " 秒（所有回复药共用）。");
+                return true;
+            }
+            st.healCdUntil = now + Math.max(0, mode.i("heal_potion.cooldown_seconds", 15)) * 1000L;
+            ls.saveState(p);
+            final double pct = mode.d("heal_potion.percent", 0.20);
+            plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
+                @Override public void run() {
+                    if (!p.isOnline()) return;
+                    town.sunshine.corerpg.p1.EmberHeal.heal(p, pct * town.sunshine.corerpg.p1.EmberHeal.maxHp(p), "D03 回复药 " + Math.round(pct * 100) + "%");
+                    if (bottle) takeBottle(p);
+                }
+            });
+            return true;
+        }
+        if (bottle) {
+            e.setCancelled(true);
+            p.sendMessage(ChatColor.RED + "[余烬] 新模式副本内此药剂不可用（首版不开放增伤/加速类药）。");
+            return true;
+        }
+        p.sendMessage(ChatColor.GRAY + "[余烬] 新模式副本内食物只补饱食度，附带效果不生效。");
+        return true;
     }
 
     /** Anvil repair coin fee (coin sink); charged when the result is actually taken. */

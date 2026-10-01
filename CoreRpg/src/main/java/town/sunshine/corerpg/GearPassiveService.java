@@ -142,6 +142,7 @@ public final class GearPassiveService implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSetBonus(EntityDamageByEntityEvent e) {
         if (!enabled || !setEnabled || !(e.getDamager() instanceof Player)) return;
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(e.getEntity())) return; // ember-v1.0-P1 A17: no 同袍 +5%
         if (!(e.getEntity() instanceof LivingEntity) || e.getEntity() instanceof Player || e.getEntity() instanceof ArmorStand) return;
         Player p = (Player) e.getDamager();
         if (nearbyWearers(p) >= setMinWearers) {
@@ -154,6 +155,7 @@ public final class GearPassiveService implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onHit(EntityDamageByEntityEvent e) {
         if (!enabled || SkillService.internalDamage) return;
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(e.getEntity())) return; // ember-v1.0-P1 A15/A16/D07: old blade passives off (G02 SetRuntime replaces)
         if (!(e.getDamager() instanceof Player) || e.getCause() != EntityDamageEvent.DamageCause.ENTITY_ATTACK) return;
         if (!(e.getEntity() instanceof LivingEntity) || e.getEntity() instanceof Player || e.getEntity() instanceof ArmorStand) return;
         final Player p = (Player) e.getDamager();

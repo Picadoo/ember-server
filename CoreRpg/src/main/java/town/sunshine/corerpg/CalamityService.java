@@ -501,6 +501,7 @@ public final class CalamityService implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBossDamageScale(EntityDamageByEntityEvent event) {
         if (!scaleEnabled || !(event.getEntity() instanceof LivingEntity)) return;
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(event.getEntity())) return; // ember-v1.0-P1 A18: no live party scaling in P1 worlds
         LivingEntity boss = (LivingEntity) event.getEntity();
         if (!boss.getWorld().getName().equals(worldName) || !isCalamityEntity(boss)) return;
         Entity src = event.getDamager();

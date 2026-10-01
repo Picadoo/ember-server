@@ -25,7 +25,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -262,6 +264,10 @@ public final class SkillService implements Listener {
     }
 
     public void cast(Player player) {
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) { // ember-v1.0-P1 A12/A13: shared 烬斩 only, no covenant actives
+            castEmberSlashP1(player);
+            return;
+        }
         if (!enabled) {
             player.sendMessage(PREFIX + ChatColor.RED + "功能未启用");
             return;
@@ -329,6 +335,74 @@ public final class SkillService implements Listener {
         playSound(player.getLocation(), def.sound);
         spawnParticles(eye.clone().add(look.clone().multiply(1.5)), def.particles, 20);
         return true;
+    }
+
+    /**
+     * ember-v1.0-P1 A12 烬斩 (策划书 §4.2): 1.5B, 8 s CD, 100° front arc, 3.5 blocks, max 5 targets sorted by
+     * distance then entity id; no crit, no life steal, no talent bonus, no set count. The CD lives in
+     * EmberPlayerState (survives reconnect, and restart with MySQL).
+     */
+    private void castEmberSlashP1(Player player) {
+        town.sunshine.corerpg.p1.EmberMode mode = town.sunshine.corerpg.p1.EmberMode.get();
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (mode == null || ls == null) return;
+        town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(player.getUniqueId());
+        long now = System.currentTimeMillis();
+        if (st.skillCdUntil > now) {
+            player.sendMessage(PREFIX + ChatColor.RED + "烬斩冷却中，剩余 " + (int) Math.ceil((st.skillCdUntil - now) / 1000.0) + "s");
+            return;
+        }
+        double range = mode.d("skill.radius", 3.5);
+        double arc = mode.d("skill.arc_degrees", 100.0);
+        int maxTargets = Math.max(1, mode.i("skill.max_targets", 5));
+        int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
+        Location eye = player.getEyeLocation();
+        Vector look = eye.getDirection().normalize();
+        double cosHalf = Math.cos(Math.toRadians(Math.max(1.0, arc) / 2.0));
+        List<LivingEntity> targets = new ArrayList<LivingEntity>();
+        final Map<LivingEntity, Double> distOf = new HashMap<LivingEntity, Double>();
+        for (Entity e : player.getNearbyEntities(range, range, range)) {
+            if (!isMonsterTarget(player, e)) continue;
+            LivingEntity le = (LivingEntity) e;
+            Vector to = le.getEyeLocation().toVector().subtract(eye.toVector());
+            double dist = to.length();
+            if (dist > range || dist < 0.05) continue;
+            if (look.dot(to.normalize()) < cosHalf) continue;
+            targets.add(le);
+            distOf.put(le, dist);
+        }
+        if (targets.isEmpty()) {
+            player.sendMessage(PREFIX + ChatColor.YELLOW + "附近没有目标");
+            return;
+        }
+        java.util.Collections.sort(targets, new java.util.Comparator<LivingEntity>() {
+            @Override public int compare(LivingEntity a, LivingEntity b) {
+                int c = Double.compare(distOf.get(a), distOf.get(b));
+                return c != 0 ? c : Integer.compare(a.getEntityId(), b.getEntityId());
+            }
+        });
+        double b = ls.get(player).b;
+        double dmg = town.sunshine.corerpg.p1.EmberFormula.skill(town.sunshine.corerpg.p1.EmberMode.tables(), b);
+        SkillDef look2 = getSkill("ember_blaze_slash");
+        String prevTag = town.sunshine.corerpg.p1.EmberCombatListener.internalTag;
+        town.sunshine.corerpg.p1.EmberCombatListener.internalTag = String.format(java.util.Locale.ROOT, "A12 烬斩 1.5×B(%.2f)=%.2f", b, dmg);
+        try {
+            int n = 0;
+            for (LivingEntity le : targets) {
+                if (n++ >= maxTargets) break;
+                dealInternal(player, le, dmg);
+                if (look2 != null) spawnParticles(le.getLocation().add(0, 1, 0), look2.particles, 12);
+            }
+        } finally {
+            town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;
+        }
+        if (look2 != null) {
+            playSound(player.getLocation(), look2.sound);
+            spawnParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, 20);
+        }
+        st.skillCdUntil = now + cd * 1000L;
+        ls.saveState(player);
+        player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩");
     }
 
     private boolean castAshMark(Player player, SkillDef def) {
@@ -528,6 +602,7 @@ public final class SkillService implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (ashMarks.isEmpty()) return;
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(event.getEntity())) return; // ember-v1.0-P1 A14: no 灰印 multiplier
         if (!(event.getEntity() instanceof LivingEntity) || event.getEntity() instanceof Player) return;
         Entity d = event.getDamager();
         if (d instanceof org.bukkit.entity.Projectile && ((org.bukkit.entity.Projectile) d).getShooter() instanceof Player) {

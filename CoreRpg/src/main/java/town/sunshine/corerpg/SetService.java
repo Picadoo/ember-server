@@ -110,6 +110,7 @@ public final class SetService {
 
     public boolean isSetActive(Player player) {
         if (!enabled || player == null) return false;
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) return false; // ember-v1.0-P1 A17/D08: 同袍 not a P1 set
         return hasAnyNi(player, blades) && hasAnyNi(player, rings);
     }
 

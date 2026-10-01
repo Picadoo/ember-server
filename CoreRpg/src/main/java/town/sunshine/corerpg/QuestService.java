@@ -1142,7 +1142,27 @@ public final class QuestService implements Listener {
         final Player p = e.getPlayer();
         if (!isInstanceWorld(p.getWorld())) return;
         for (Entity en : p.getWorld().getEntities()) removeIfRogue(en);
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(p)) { p1Entry(p); return; } // ember-v1.0-P1 D11/B05
         instanceGrace(p, 100);
+    }
+
+    /**
+     * ember-v1.0-P1 entry into a P1 world: fill HP once (after StatService applied H next tick), food 20, no
+     * Resistance V; a short registered grace window instead (B05, logged in the damage trace).
+     */
+    private void p1Entry(final Player p) {
+        final World w = p.getWorld();
+        town.sunshine.corerpg.p1.EmberCombatListener cl = plugin.getEmberCombat();
+        if (cl != null) cl.grantGrace(p, 5000L);
+        Runnable fill = new Runnable() {
+            @Override public void run() {
+                if (!p.isOnline() || !p.getWorld().equals(w)) return;
+                town.sunshine.corerpg.p1.EmberHeal.full(p, "D11 入场补满");
+                p.setFoodLevel(20);
+                p.setFireTicks(0);
+            }
+        };
+        Bukkit.getScheduler().runTaskLater(plugin, fill, 3L);
     }
 
     /** 1.11.0: heal now and again after StatService re-applies max HP (the world change clamps HP to the vanilla 20-ish). */
@@ -1171,10 +1191,26 @@ public final class QuestService implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override public void run() {
                 if (!p.isOnline() || !isInstanceWorld(p.getWorld())) return;
+                if (town.sunshine.corerpg.p1.EmberMode.isP1(p)) { p1Reconnect(p); return; } // ember-v1.0-P1 D11/B05
                 instanceGrace(p, 140);
                 p.sendMessage(ChatColor.GOLD + "[余烬] 你回到了副本中：已回满生命并获得 7 秒保护。" + ChatColor.GRAY + "想离开请 /dp leave");
             }
         }, 10L);
+    }
+
+    /** ember-v1.0-P1 D11: reconnecting into a P1 world keeps the HP from the disconnect; no heal, no Resistance. */
+    private void p1Reconnect(Player p) {
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls != null) {
+            town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(p.getUniqueId());
+            if (!Double.isNaN(st.lastHp) && p.getWorld().getName().equals(st.lastWorld)) {
+                double hp = Math.max(0.5, Math.min(st.lastHp, town.sunshine.corerpg.p1.EmberHeal.maxHp(p)));
+                if (Math.abs(p.getHealth() - hp) > 0.01) p.setHealth(hp);
+            }
+            st.lastHp = Double.NaN;
+            st.lastWorld = null;
+        }
+        p.sendMessage(ChatColor.GOLD + "[余烬] 你回到了新模式副本：生命保持断线前状态。" + ChatColor.GRAY + "想离开请 /dp leave");
     }
 
     private static final java.util.Set<String> HUB_CMDS = new java.util.HashSet<String>(java.util.Arrays.asList(
