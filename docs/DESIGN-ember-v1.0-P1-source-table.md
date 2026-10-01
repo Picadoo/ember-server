@@ -408,3 +408,45 @@ CREATE TABLE IF NOT EXISTS cr_item_txn (           -- 幂等键＋审计（强�
 - 强化本身不绑定物品（书没有要求）；互换会绑定两件。
 - `src=migrate` 也不可分解（书只点名任务／补发／测试件，这里按保守处理）。T0 不可升阶、不可分解。
 
+
+## 10. G04 首批：统一结算 + Q01–Q03（CoreRpg 1.18.0，2026-10-01，未部署）
+
+只作用于 P1 主线本（`ember-v1.yml` `enabled=false` 时进本直接拒绝）。旧日常 `EmberDaily/Ash/Crypt` 定义与菜单不变。
+
+### 10.1 代码
+
+- 纯规则 `p1/EmberRunRules`：Boss 结算包（300 币、24 碎片、6 骨尘、2 核心碎片、120 余烬经验、1 枚本阶印记、1 件随机 P1 装备）；装备 = 地图阶 · 目标族 60/20/20（未选 1/3）· 刃/护符 50/50 · 成色 70/23/6/1 · 精工 70/20/9/1；附加事件 70/15/10/5；`settle()` 没有 Boss 击杀时返回空（E11）；奖励 uid 由 (run seed, 玩家, run_id, reward_key) 决定，重试不重抽。
+- `EmberRunRules.Ledger`：每行 (玩家, run_id, reward_key)，`record` 永不覆盖已有行（E03/E04）；状态 pending → delivered / mailed，首通自选为 await_choice；体力 reserved → committed / released。
+- `EmberRunMaps`：读 `ember-v1-runs.yml`（地图、房间触发盒、门、刷怪点、A/B 组成、Boss 技能、加怪），校验每房 ≤8 只、≤2 远程、≤1 施法、刷怪点足够。
+- `EmberRunSession` + `EmberRunStore`：`plugins/CoreRpg/p1-runs/runs/<run>.yml`、`p1-runs/ledger/<uuid>.yml` 为准，MySQL 镜像表 `cr_p1_run`、`cr_p1_reward`（主键 player, run_id, reward_key）。session 记 run_id、地图/规则版本、参与者、seed、入场时目标族快照、开本时抽定的附加事件、锁定人数与血量系数。
+- `EmberRunDirector`：一局一个；房间由已提交的参与者进入触发盒开始，按 seed 选 A/B 组成；清房开门（铁栏平面变空气，DP 复用缓存世界，所以挂载时重新关门）；拴绳把跑远的怪拉回；附加事件在指定房间后出现（宝藏怪 / 奖励精英 / 末影箱）；最后一房清完 1.5 秒后刷 Boss；Boss 技能有火焰轮廓 + 聊天 + 缓慢预警，50% 以下追加招，Q03 50% 加怪。
+- `EmberRunService`：进本 = 全员校验（解锁、30 体力、不在别的局）→ 预留体力 → 建 session → 30 秒通行证 → `TicketEntryService.dispatchStart` 建 DP 实例 → 40 tick 后核对：在实例里的成员提交体力，其余释放；没人进去则全部释放并作废。旧的每周首免、等级门槛、OP 免费都不走。人数 1–3，敌人血量 ×(1+0.65(n−1)) 在核对时锁定（A18）。
+- 首通（每角色 × content_version）：Q01 自选族 T1 刃、Q02 自选族 T1 护符（绑定、`src=quest` 不可分解），Q03 30 碎片 / 4 核心 / 600 币；首通写下一张图的解锁（Q03 写 `p1_unlock_q04`，Q04 本批未做）。
+- 印记：`p1_mark_t<n>@all` 账户计数，绑定；8 枚同阶换指定族 + 部位的同阶标准件。
+- 新手包：没有任何 P1 装备的角色一次性得到 T0 刃 + T0 护符（`p1_starter@all`）。
+- 命令：`/corerpg enter q01|q02|q03`、`/corerpg p1 target|marks|firstclear|claim|run`；管理员 `/corerpg p1 runs list|unlock|firstclear|starter`。PAPI `%corerpg_p1_…%`。
+
+### 10.2 防重复发放（E01/E02/E11）
+
+P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪物掉落与经验球清空；DP 奖励脚本为空、超时 `reward=false`；`CoreRpgPlugin.onDeath` 的旧 MM 结算、`mmcredit` / `mmgiveall`、`ProgressService` 进度与管理发放全部跳过；非 CUSTOM 刷怪被拦截。唯一出口是 Boss 结算 → 账本 → `deliver()`。
+
+### 10.3 地图改编（实际地图没有书里的 R0–RB/E 布局）
+
+| 本 | 模板 | R1 | R2 | R3 | Boss | 附加事件锚点 | 门 |
+|---|---|---|---|---|---|---|---|
+| Q01 灰烬庭院 | `ember_daily` | 前厅 z3–12（门廊 z−3..2 当 R0） | 回廊 z15–24 | Boss 厅外圈 z27–37（与 Boss 同厅） | 0,66,31 | −6,65,23，R2 后 | z=13、z=25 |
+| Q02 焦骨甬道 | `ember_daily_ash` | 骨廊 z7–15 | 3–5 格宽窄道 z18–35 | 鼓形厅外沿 z39–48 | 0,65,44 | 假岔路 5,65,10，R1 旁 | z=16、z=36 |
+| Q03 残誓地窖 | `ember_daily_crypt` | 上层厅 y72 | 中层厅 y66 | Boss 圆厅 y60 | 0,60,48 | −5,66,38，R2 后 | z=18 @y72、z=40 @y66 |
+
+- 书的 A/B 组成全部保留，每房 6 个刷怪点；Q03 加怪点用 (±6,60,44)，书的 ±8 在墙里。
+- 所有点（spawn、房间点、Boss、加怪、事件锚点）和门方块（必须是铁栏）由 `scripts/check-dp-spawns.py` 检查：Q01 23 点、Q02 23、Q03 25，全部通过。
+- 怪物 `plugins/MythicMobs/Mobs/EmberP1Main.yml`：Health / Damage = 规则表数值（`EmberRunMobsTest` 校验），防晒、不掉落、不捡物品、不随机装备、不消失；技能和攻击间隔由 CoreRpg 控制。
+
+### 10.4 与书的差异 / 未验证
+
+- 宝藏怪血量书没给，取 4×B_ref；奖励精英 10×B_ref。
+- 近战 / 远程 / Boss 攻击间隔在伤害层强制（原版箭照样会射出，只是伤害按间隔）。
+- P1 装备不能走邮件（签名物品），背包满时留在账本里，`/corerpg p1 claim` 补领（E10）；材料溢出走邮件。
+- 开打后离开 / 团灭不退体力；开本失败、刷怪坏掉、重启（未开打）退还。重启时 settling 的局补完结算，其余作废并写一条 `refund` 账本行。
+- DP 结束：CoreRpg 调 `dp script trigger ember_p1_complete|ember_p1_fail <玩家>`，失败时退回 `/dp leave` —— 未实测。
+- DP `js-condition` 是否对每个队员单独求值未实测；CoreRpg 进本前自己也逐个校验。
