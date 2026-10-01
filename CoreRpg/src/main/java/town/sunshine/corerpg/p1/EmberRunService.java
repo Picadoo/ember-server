@@ -763,6 +763,14 @@ public final class EmberRunService implements Listener {
         sessions.remove(s.runId);
     }
 
+    /** B2.157: template item entities (dropped torches saved into the ember_daily* maps) never reach a P1 player. */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onChunkLoad(org.bukkit.event.world.ChunkLoadEvent e) {
+        if (!blocksLegacy(e.getWorld())) return;
+        int n = EmberRunDirector.purgeItems(e.getChunk());
+        if (n > 0) log().fine("[P1 run] removed " + n + " template item entities in " + e.getWorld().getName() + " " + e.getChunk().getX() + "," + e.getChunk().getZ());
+    }
+
     /** Natural / spawner mobs never join a P1 run; MythicMobs spawns are CUSTOM. */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSpawn(CreatureSpawnEvent e) {

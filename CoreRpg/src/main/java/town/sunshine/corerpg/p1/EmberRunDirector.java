@@ -101,6 +101,20 @@ final class EmberRunDirector {
             Block bl = w.getBlockAt((int) Math.floor(c.x), (int) Math.floor(c.y), (int) Math.floor(c.z));
             if (bl.getType() != Material.AIR) bl.setType(Material.AIR);
         }
+        int items = 0;
+        for (org.bukkit.Chunk c : w.getLoadedChunks()) items += purgeItems(c);
+        if (items > 0) svc.log().info("[P1 run] " + s.runId + " removed " + items + " template item entities at attach");
+    }
+
+    /**
+     * B2.157: the ember_daily* templates were saved with dropped-torch item entities lying in and around the rooms
+     * (builder scrub leftovers, e.g. 11 torches in ember_daily_frost) — players picked them up as "old drops".
+     * Instance only: every item entity in a P1 run chunk is removed when the chunk loads / the run attaches.
+     */
+    static int purgeItems(org.bukkit.Chunk c) {
+        int n = 0;
+        for (Entity e : c.getEntities()) if (e instanceof org.bukkit.entity.Item) { e.remove(); n++; }
+        return n;
     }
 
     boolean finished() { return finished; }
