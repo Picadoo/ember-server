@@ -330,3 +330,37 @@ CREATE TABLE IF NOT EXISTS cr_item_txn (           -- 幂等键＋审计（强�
 8. 之后进入 G02 `SetRuntime`（C02、C03、C06–C11、C15），再做 G03 强化保底和互换、G04 统一结算——都不在本准备阶段内。
 
 每次推送前先 `git pull --rebase`，只 add 自己的文件；★步骤需要先和运行实服的 worker 约好重启窗口。
+
+## 7. G01 实现状态（CoreRpg 1.16.0，2026-10-01，未部署）
+
+开关默认关闭（`plugins/CoreRpg/ember-v1.yml enabled: false`，`scope.worlds/world_prefixes` 为空）。所有闸门都是 `EmberMode.isP1(实体)`：总开关关闭、或实体不在 P1 世界时直接返回，旧模式路径不变。代码在 `CoreRpg/src/main/java/town/sunshine/corerpg/p1/`。
+
+与 §6 计划的差异：
+- 表名用 `cr_p1_item`、`cr_p1_loadout`（都是新表，`CREATE TABLE IF NOT EXISTS`，P1 开启或管理员发放时才建）；`cr_item_txn` 留给 G03（强化/互换事务）。
+- 校验不一致时，物品只是"不计入战斗"并在 `/corerpg p1 status` 中写原因，还不会把 DB 行改成 `quarantine`（G03 再做）。
+- YAML 存储下不拒绝开启，退化为"只校验 HMAC 签名的 NBT"（线上是 MySQL）。
+- 提交顺序合并成 6 步，见提交记录。
+
+| ID | 状态 | 位置 |
+|---|---|---|
+| A01 A02 E01 E02 F03 | ✅ 替换 | `EmberCombatListener.onMelee`（LOWEST，`setDamage` 覆盖，按伤害比反推蓄力，跳劈剥离，i-frame 只计超出部分） |
+| A03 A04 A20 | ✅ 禁用 | `onCombust` / `onMelee` 取消 |
+| A05 D02 D03 D04 | ✅ | `LifeService.consumeP1`：回复药改为 20% H，所有回复药共用 15s CD（重连不清；MySQL 下重启也不清）；夜视在白名单中；其余药剂提示后拒绝；食物只补饱食度 |
+| A06–A11 B02 C03 D05 E03 G01 | ✅ 禁用 | `StatService.stats()` 对 P1 玩家返回空表；`onDamage` 在 P1 下 return |
+| A12 A13 | ✅ | `SkillService.castEmberSlashP1`：1.5B、8s、100°、3.5 格、最多 5 个目标、不暴击/吸血/天赋；CD 存 `EmberPlayerState` |
+| A14 A17 A18 D08 | ✅ 禁用 | 灰印、同袍、灾厄人数缩放、`SetService.isSetActive` |
+| A15 A16 D07 | ✅ 禁用旧被动 | `GearPassiveService.onHit`；新的三套效果 ⏳ G02 SetRuntime（消费 `EmberCombatListener.lastSwing` 中的 root id、c 和 valid≥0.9） |
+| A19 D09 D10 | ⏳ 配置 lint | 代码侧：回复事件全部取消，MM 的 BASE 改动会在 trace 里显示为"未登记来源"；Q 系列 MM/DP 配置 lint 还没写 |
+| A21 C01 C02 F01 F02 | ✅ | `EmberFormula` 等级加成；`StatService.refreshP1`：最大生命设为 H，移除攻速修饰，移速固定 0.2 |
+| A23 | ✅ | AttributePlus 启用时 `EmberMode` 阻止开启 |
+| B01 B03 B04 B05 B06 B07 B10 B11 B12 | ✅ | `onFinal`（HIGHEST）：敌方伤害和凋零/中毒/魔法/CUSTOM 乘一次 M，环境伤害按原值；护甲/抗性/保护/吸收/格挡/头盔修正全部清零；入场改为 5s 登记保护窗口；金苹果拒绝；吸收和生命提升效果清除 |
+| B08 | ✅ | `onResurrect` 取消 |
+| B09 | 保留 | 需实测 MM `damage{}` 是否受 EASY 缩放 |
+| B13 | ✅ | P1 世界内 PvP 取消 |
+| D01 | ✅ | `onRegain`：P1 玩家的所有回复事件都取消；P1 只通过 `EmberHeal`（setHealth＋trace）回血 |
+| D06 | ✅ | `skillHeal()` 返回 0 |
+| D11 | ✅ | `QuestService.p1Entry/p1Reconnect`：首次进入补满一次；重连恢复断线前的生命，不给抗性 |
+| G05 | ⏳ | 踏步 CD 仍会在退出时清空（FlexSkillService），尚未持久化 |
+| G07 | ✅ | P1 只认签名的 `ember_v1` NBT＋NI ID＋uid 唯一＋DB 行（owner/rev/state） |
+
+其他还没做的：G03 强化保底/互换/升阶事务；RunSession（A18 开局锁定血量，以及 D11 的按局记录）；`/corerpg stats` 在 P1 下显示 B/H；NI 模板 `ember-v1-gear.yml` 需要重启或 `ni reload` 才会加载。
