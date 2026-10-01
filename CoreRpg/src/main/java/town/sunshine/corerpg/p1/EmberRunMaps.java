@@ -77,6 +77,20 @@ public final class EmberRunMaps {
         /** "player": a circle locked on one participant's current ground (Q04 冲击圈); "" = relative to the boss */
         public final String target;
         public final Skill follow;
+        /**
+         * line / charge strip start (blocks ahead of the boss); NaN = the old caster/boss line from −0.5 to length.
+         * Q06 刀气: start 1, length 6 → the band covers 1..7 blocks ahead (book ch. 16 §7).
+         */
+        public final double start;
+        /**
+         * follow only: NaN = re-aim at the nearest player when the follow starts; a number = keep the first part's
+         * locked origin + direction and slide the shape this many blocks to the boss's RIGHT (Q06 second band, +4).
+         */
+        public final double shift;
+        /** recovery after THIS skill (Q07 重砸 1.5 s); NaN = the boss default */
+        public final double recover;
+        /** §18.1 challenge: the lighter second skill uses the light override (44), every other skill the heavy one (72) */
+        public final boolean light;
         Skill(Map<?, ?> m) {
             type = str(m.get("type"), "cone");
             target = str(m.get("target"), "");
@@ -91,10 +105,32 @@ public final class EmberRunMaps {
             ahead = num(m.get("ahead"), 0);
             length = num(m.get("length"), 5);
             width = num(m.get("width"), 3);
-            below = num(m.get("below"), 1.0);
+            // follow-up gate: fires while boss HP ratio < below; default = always (full HP is ratio 1.0)
+            below = num(m.get("below"), 1.01);
             delay = num(m.get("delay"), 0);
+            start = num(m.get("start"), Double.NaN);
+            shift = num(m.get("shift"), Double.NaN);
+            recover = num(m.get("recover"), Double.NaN);
+            light = Boolean.TRUE.equals(m.get("light")) || "true".equals(String.valueOf(m.get("light")));
             follow = m.get("follow") instanceof Map ? new Skill((Map<?, ?>) m.get("follow")) : null;
         }
+
+        private Skill(Skill o, double length, double dmg) {
+            type = o.type; name = o.name; every = o.every; warn = o.warn; this.dmg = dmg; angle = o.angle; range = o.range;
+            radius = o.radius; ahead = o.ahead; this.length = length; width = o.width; below = o.below; delay = o.delay;
+            kb = o.kb; target = o.target; follow = o.follow; start = o.start; shift = o.shift; recover = o.recover; light = o.light;
+        }
+
+        /** same skill with another strip length (charge clipped at a wall / the boss area edge) */
+        public Skill withLength(double len) { return new Skill(this, len, dmg); }
+
+        /** same skill with another raw damage (challenge overrides) */
+        public Skill withDmg(double d) { return new Skill(this, length, d); }
+
+        /** strip along-range [from, to] for line / charge */
+        public double stripFrom() { return Double.isNaN(start) ? -0.5 : start; }
+        public double stripTo() { return Double.isNaN(start) ? length : start + length; }
+        public boolean strip() { return "line".equals(type) || "charge".equals(type); }
     }
 
     public static final class Adds {
@@ -282,6 +318,12 @@ public final class EmberRunMaps {
                 if (sk.every <= sk.warn) return key + ": skill " + sk.name + " every ≤ warn";
                 if (!sk.target.isEmpty() && !("player".equals(sk.target) && "circle".equals(sk.type)))
                     return key + ": skill " + sk.name + " target " + sk.target + " (only circle/player)";
+                if (!java.util.Arrays.asList("cone", "circle", "line", "charge").contains(sk.type))
+                    return key + ": skill " + sk.name + " unknown type " + sk.type;
+                if ("charge".equals(sk.type) && (sk.length <= 0 || sk.length > 8))
+                    return key + ": skill " + sk.name + " charge length must be 0..8 (book ch. 17 §7)";
+                if (sk.follow != null && !Double.isNaN(sk.follow.shift) && !sk.follow.strip())
+                    return key + ": follow of " + sk.name + " uses shift but is not a line";
             }
             for (Link l : links) {
                 if (room(l.after) == null) return key + ": link.after " + l.after + " is not a room";

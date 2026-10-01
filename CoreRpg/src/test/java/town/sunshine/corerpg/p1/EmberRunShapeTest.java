@@ -105,4 +105,55 @@ public class EmberRunShapeTest {
         // a long stall skips missed slots instead of firing a burst of casts
         assertEquals(100000, EmberRunDirector.nextDue(70000, 10000, 95000));
     }
+
+    /** Q06 两段刀气 (book ch. 16 §7): band 6 long × 3 wide, 1..7 ahead; second band 4 to the right, left stays safe. */
+    @Test public void q06BladeBandsStartOneAheadAndShiftRight() {
+        EmberRunMaps.Skill s = skill("type", "line", "start", 1, "length", 6, "width", 3);
+        assertTrue(hit(s, 0, 1.1));
+        assertTrue(hit(s, 1.4, 6.9));
+        assertFalse(hit(s, 0, 0.5));   // the first block in front of the boss is outside the band
+        assertFalse(hit(s, 0, 7.2));
+        assertFalse(hit(s, 1.6, 4));
+        // facing +z (south): right-hand side is −x (west)
+        Vector r = EmberRunDirector.rightOf(NORTH);
+        assertEquals(-1, r.getX(), 1e-9);
+        assertEquals(0, r.getZ(), 1e-9);
+        Location o2 = O.clone().add(r.clone().multiply(4));
+        assertTrue(EmberRunDirector.inShape(s, o2, NORTH, new Location(null, -4, 65, 4)));
+        assertFalse(EmberRunDirector.inShape(s, o2, NORTH, new Location(null, 0, 65, 4))); // first band's centre
+        assertFalse(EmberRunDirector.inShape(s, O, NORTH, new Location(null, 2, 65, 4)));   // left of band 1
+        assertFalse(EmberRunDirector.inShape(s, o2, NORTH, new Location(null, 2, 65, 4)));  // … and of band 2
+        // the YAML follow keeps the direction and only slides
+        Map<String, Object> f = new HashMap<String, Object>();
+        f.put("type", "line"); f.put("start", 1); f.put("length", 6); f.put("width", 3); f.put("shift", 4); f.put("delay", 1.0);
+        EmberRunMaps.Skill both = skill("type", "line", "start", 1, "length", 6, "width", 3, "follow", f);
+        assertEquals(4, both.follow.shift, 0);
+        assertTrue("follow without below fires at full HP", 1.0 < both.follow.below);
+        assertTrue(Double.isNaN(s.shift));
+    }
+
+    /** Q07 冲撞: ≤ 8-block strip 4 wide from the boss; clipped length = strip length; 重砸 own 1.5 s recovery. */
+    @Test public void q07ChargeStripAndSlamRecovery() {
+        EmberRunMaps.Skill c = skill("type", "charge", "length", 8, "width", 4);
+        assertTrue(hit(c, 1.9, 7.9));
+        assertFalse(hit(c, 2.1, 4));
+        assertFalse(hit(c, 0, 8.3));
+        EmberRunMaps.Skill clipped = c.withLength(3.5);
+        assertTrue(EmberRunDirector.inShape(clipped, O, NORTH, new Location(null, 0, 65, 3.4)));
+        assertFalse(EmberRunDirector.inShape(clipped, O, NORTH, new Location(null, 0, 65, 3.6)));
+        EmberRunMaps.Skill slam = skill("type", "circle", "target", "player", "radius", 3.5, "recover", 1.5);
+        assertEquals(1.5, slam.recover, 0);
+        assertTrue(Double.isNaN(c.recover));
+        assertTrue(hit(slam, 0, 3.4));
+        assertFalse(hit(slam, 2.6, 2.6));
+    }
+
+    @Test public void challengeLightFlagAndDamageCopy() {
+        EmberRunMaps.Skill heavy = skill("type", "cone", "dmg", 44);
+        EmberRunMaps.Skill light = skill("type", "circle", "dmg", 26, "light", true);
+        assertFalse(heavy.light);
+        assertTrue(light.light);
+        assertEquals(72, heavy.withDmg(72).dmg, 0);
+        assertEquals(44, heavy.dmg, 0);
+    }
 }

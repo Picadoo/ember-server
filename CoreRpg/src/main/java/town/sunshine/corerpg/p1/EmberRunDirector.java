@@ -387,7 +387,7 @@ final class EmberRunDirector {
                 execute(pending, lockOrigin, lockDir, le);
                 EmberRunMaps.Skill done = pending;
                 pending = null;
-                recoverUntil = now + (long) (b.recover * 1000);
+                recoverUntil = now + (long) ((Double.isNaN(done.recover) ? b.recover : done.recover) * 1000);
                 if (done.follow != null && ratio < done.follow.below) {
                     follow = done.follow;
                     followStart = now + (long) (done.follow.delay * 1000);
@@ -396,7 +396,8 @@ final class EmberRunDirector {
             return;
         }
         if (follow != null && now >= followStart) {
-            startWarn(follow, now, le);
+            if (!Double.isNaN(follow.shift) && lockOrigin != null && lockDir != null) startShifted(follow, now, le);
+            else startWarn(follow, now, le);
             follow = null;
             return;
         }
@@ -426,8 +427,30 @@ final class EmberRunDirector {
         return n;
     }
 
-    /** True while a telegraphed skill is winding up: the boss's normal hit is suppressed (施法时停止普攻). */
-    boolean bossCasting() { return pending != null; }
+    /**
+     * True while a telegraphed skill is winding up or a combo is between its parts: the boss's normal hit is
+     * suppressed (施法时停止普攻; Q06 两段刀气「组合期间停止普攻」).
+     */
+    boolean bossCasting() { return pending != null || follow != null; }
+
+    /** Right-hand side of a horizontal facing (Minecraft: +x east, +z south; facing south → right is west). */
+    static Vector rightOf(Vector dir) { return new Vector(-dir.getZ(), 0, dir.getX()); }
+
+    /** Q06 second band: same locked direction, origin slid {@code shift} blocks to the boss's right; no re-aim. */
+    private void startShifted(EmberRunMaps.Skill sk, long now, LivingEntity le) {
+        lockOrigin = lockOrigin.clone().add(rightOf(lockDir).multiply(sk.shift));
+        pending = skillFor(sk);
+        pendingAt = now + (long) (sk.warn * 1000);
+        casts++;
+        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
+        w.playSound(le.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.7f);
+        svc.tellRun(s, "§c" + def.boss.name + " §e第二段「" + sk.name + "」§7— 右移 " + fmt(sk.shift) + " 格 · 左侧安全（" + sk.warn + " 秒）");
+    }
+
+    /** challenge overrides hook (§18.1); normal runs use the table value. */
+    EmberRunMaps.Skill skillFor(EmberRunMaps.Skill sk) {
+        return sk;
+    }
 
     private void startWarn(EmberRunMaps.Skill sk, long now, LivingEntity le) {
         Location o = le.getLocation();
@@ -439,7 +462,8 @@ final class EmberRunDirector {
         // Q04 冲击圈: the circle is locked on the chosen player's ground position now and lands after the warning
         lockOrigin = "player".equals(sk.target) && target != null ? target.getLocation().clone() : o.clone();
         lockDir = dir;
-        pending = sk;
+        pending = skillFor(sk);
+        if ("charge".equals(sk.type)) pending = pending.withLength(clearRun(o, dir, sk.length)); // §17: strip = the real path
         pendingAt = now + (long) (sk.warn * 1000);
         casts++;
         Location face = o.clone();
@@ -447,7 +471,7 @@ final class EmberRunDirector {
         le.teleport(face);
         le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
         w.playSound(o, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.6f);
-        String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下" : shapeHint(sk);
+        String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下" : shapeHint(pending);
         svc.tellRun(s, "§c" + def.boss.name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
     }
 
@@ -507,9 +531,17 @@ final class EmberRunDirector {
                 hit++;
             }
         }
-        Location fx = o.clone().add(dir.clone().multiply(sk.type.equals("circle") ? sk.ahead : Math.min(2.0, sk.range)));
+        Location fx = o.clone().add(dir.clone().multiply(sk.type.equals("circle") ? sk.ahead
+                : sk.strip() ? (sk.stripFrom() + sk.stripTo()) / 2.0 : Math.min(2.0, sk.range)));
         w.spawnParticle(Particle.EXPLOSION_NORMAL, fx.add(0, 0.3, 0), 8, 1.0, 0.2, 1.0, 0.01);
         w.playSound(o, Sound.ENTITY_GENERIC_EXPLODE, 0.6f, 1.4f);
+        if ("charge".equals(sk.type) && src != null && boss != null && src == boss.le && sk.length > 0.25) {
+            // §17 冲撞: the boss ends at the end of the drawn strip (never past a wall / the area edge: clearRun)
+            Location end = o.clone().add(dir.clone().multiply(sk.length));
+            end.setYaw(o.getYaw());
+            end.setDirection(dir);
+            src.teleport(end);
+        }
         if (hit == 0 && src == (boss == null ? null : boss.le)) svc.log().fine("[P1 run] " + sk.name + " missed");
     }
 
@@ -523,10 +555,11 @@ final class EmberRunDirector {
                 double ex = dx - cx, ez = dz - cz;
                 return ex * ex + ez * ez <= sk.radius * sk.radius;
             }
-            case "line": {
+            case "line":
+            case "charge": {
                 double along = dx * dir.getX() + dz * dir.getZ();
                 double perp = Math.abs(-dx * dir.getZ() + dz * dir.getX());
-                return along >= -0.5 && along <= sk.length && perp <= sk.width / 2.0;
+                return along >= sk.stripFrom() && along <= sk.stripTo() && perp <= sk.width / 2.0;
             }
             default: { // cone
                 double dist = Math.sqrt(dx * dx + dz * dz);
@@ -542,7 +575,9 @@ final class EmberRunDirector {
         switch (sk.type) {
             case "circle": return (sk.ahead <= 0 ? "以首领为中心半径 " : "前方 " + (int) sk.ahead + " 格处半径 ") + fmt(sk.radius) + " 圆形"
                     + (sk.kb > 0 ? " · 击退 ≤" + fmt(sk.kb) + " 格" : "");
-            case "line": return "正前直线 长 " + fmt(sk.length) + " 宽 " + fmt(sk.width);
+            case "line": return Double.isNaN(sk.start) ? "正前直线 长 " + fmt(sk.length) + " 宽 " + fmt(sk.width)
+                    : "正前 " + fmt(sk.stripFrom()) + "～" + fmt(sk.stripTo()) + " 格条带 宽 " + fmt(sk.width);
+            case "charge": return "直线冲撞 " + fmt(sk.length) + " 格 · 条带宽 " + fmt(sk.width);
             default: return "正前 " + (int) sk.angle + "° 扇形 " + fmt(sk.range) + " 格" + (sk.kb > 0 ? " · 击退 ≤" + fmt(sk.kb) + " 格" : "");
         }
     }
@@ -557,9 +592,10 @@ final class EmberRunDirector {
                 warnCircle(new Location(w, cx, y, cz), sk.radius, Particle.FLAME);
                 break;
             }
-            case "line": {
+            case "line":
+            case "charge": {
                 Vector side = new Vector(-dir.getZ(), 0, dir.getX());
-                for (double a = 0; a <= sk.length; a += 0.5) {
+                for (double a = Math.max(0, sk.stripFrom()); a <= sk.stripTo() + 1e-9; a += 0.5) {
                     for (double sgn : new double[]{-1, 1}) {
                         Location l = o.clone().add(dir.clone().multiply(a)).add(side.clone().multiply(sgn * sk.width / 2.0));
                         l.setY(y);
@@ -622,6 +658,21 @@ final class EmberRunDirector {
             best = c;
         }
         if (best != null) p.teleport(best);
+    }
+
+    /**
+     * §17 冲撞 path: how far (≤ max, 0.25 steps) the boss can move along {@code dir} from {@code o} with a floor under
+     * it, two free blocks and still inside the boss area — the drawn strip and the hit box use this length.
+     */
+    private double clearRun(Location o, Vector dir, double max) {
+        double best = 0;
+        for (double k = 0.25; k <= max + 1e-9; k += 0.25) {
+            Location c = o.clone().add(dir.clone().multiply(k));
+            if (!standable(c)) break;
+            if (def.boss.area != null && !def.boss.area.contains(c.getX(), c.getY(), c.getZ())) break;
+            best = k;
+        }
+        return best;
     }
 
     static boolean standableIds(boolean belowSolid, boolean feetSolid, boolean headSolid) {
