@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -194,6 +195,17 @@ public final class EmberLoadoutService implements Listener {
     }
 
     // ------------------------------------------------------------------ lifecycle
+
+    /**
+     * B2.168: P1 gear is a permanent, DB-tracked asset (book §9 / §18.3「不掉永久装备」): vanilla durability must not
+     * wear it out. The T0 starter blade is an IRON_SWORD (250 uses) and broke after ~9 Q01 runs; an admin-given T2+6
+     * DIAMOND_SWORD broke the same way during long test sessions, leaving its cr_p1_item row active with no item.
+     * Runs in every world and regardless of the P1 switch (the item exists either way).
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onItemDamage(PlayerItemDamageEvent e) {
+        if (e.getItem() != null && items().hasData(e.getItem())) e.setCancelled(true);
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent e) {
