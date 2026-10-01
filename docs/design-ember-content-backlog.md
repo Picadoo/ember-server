@@ -368,6 +368,7 @@
 - ~~**B2.109**~~ → mineflayer-tests 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s）。
 - ~~**B2.103**~~ → CoreRpgPlugin.cmdAbyss（/corerpg abyss 兜底）「日限 1 次 · 进本扣余烬深渊票」「背包深渊票 / 软计数 /1（以票为准）」「/dp start EmberAbyss」「无票时 /ni give…」票制旧文 → 「无尽波次下潜 · 进本消耗 {costOf(abyss)} 体力（与日常同池）」+ 当前体力/历史最深层 + 「进本：打开枢纽菜单 → 深渊」；CoreRpg 1.15.28→1.15.29（**PASS · 勾销（构建/部署实测；兜底路径 live 不可达）** · 本提交 · 2026-10-01 20:20 CST 构建并部署 1.15.29，启用日志「CoreRpg 1.15.29 enabled」；该兜底只在 AbyssSettleService 缺失时可达，live 常驻 settle 服务，无法用 bot 触发（静态核对））。
 - ~~**B2.104**~~ → EliteService status / L37-38 / L61 注释 /corerpg elite status「精英票 N」→「进本 40 体力 · 体力 x/y · 本周免费 ×n」；注释 B0.1「扣票 / consumeExact / NI id 扣票」→ S0 体力 / 本周免费抵扣（1.15.29）（**实测 PASS · 勾销** · 本提交 · 2026-10-01 20:21 CST 机器人 EmberTestE /corerpg elite status：「[精英试炼] 本周 2026-W40 · 门槛 Lv.40 · 当前 Lv.42」「进本 40 体力 · 体力 90/90 · 本周免费 ×0」「本周已通关：否 · 门控：yes」）。
+- ~~**B2.108**~~ → CoreRpgExpansion L51 注释 elite gate 注释「票在 TicketEntryService 扣」→「体力 / 本周免费在 TicketEntryService 扣」（仅注释，1.15.29）（**实测 PASS · 勾销** · 本提交 · 2026-10-01 20:23 CST papi parse %corerpg_gate_elite%：EmberTestE（Lv.42、本周未通关）= yes，EmberTestOp（Lv.11）= no，行为不变）。
 
 ---
 
@@ -591,6 +592,7 @@
 | ~~**B2.109**~~ | mineflayer-tests | 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s） |
 | ~~**B2.103**~~ | CoreRpgPlugin.cmdAbyss（/corerpg abyss 兜底） | 「日限 1 次 · 进本扣余烬深渊票」「背包深渊票 / 软计数 /1（以票为准）」「/dp start EmberAbyss」「无票时 /ni give…」票制旧文 → 「无尽波次下潜 · 进本消耗 {costOf(abyss)} 体力（与日常同池）」+ 当前体力/历史最深层 + 「进本：打开枢纽菜单 → 深渊」；CoreRpg 1.15.28→1.15.29 | **PASS · 勾销（构建/部署实测；兜底路径 live 不可达）**（本提交 · 2026-10-01 20:20 CST 构建并部署 1.15.29，启用日志「CoreRpg 1.15.29 enabled」；该兜底只在 AbyssSettleService 缺失时可达，live 常驻 settle 服务，无法用 bot 触发（静态核对）） |
 | ~~**B2.104**~~ | EliteService status / L37-38 / L61 注释 | /corerpg elite status「精英票 N」→「进本 40 体力 · 体力 x/y · 本周免费 ×n」；注释 B0.1「扣票 / consumeExact / NI id 扣票」→ S0 体力 / 本周免费抵扣（1.15.29） | **实测 PASS · 勾销**（本提交 · 2026-10-01 20:21 CST 机器人 EmberTestE /corerpg elite status：「[精英试炼] 本周 2026-W40 · 门槛 Lv.40 · 当前 Lv.42」「进本 40 体力 · 体力 90/90 · 本周免费 ×0」「本周已通关：否 · 门控：yes」） |
+| ~~**B2.108**~~ | CoreRpgExpansion L51 注释 | elite gate 注释「票在 TicketEntryService 扣」→「体力 / 本周免费在 TicketEntryService 扣」（仅注释，1.15.29） | **实测 PASS · 勾销**（本提交 · 2026-10-01 20:23 CST papi parse %corerpg_gate_elite%：EmberTestE（Lv.42、本周未通关）= yes，EmberTestOp（Lv.11）= no，行为不变） |
 
 ---
 

@@ -48,7 +48,7 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
         if ("ember_level".equals(key) || "level".equals(key)) return String.valueOf(data.getEmberLevel());
         if (key.startsWith("gate_")) {
             String gateId = key.substring(5);
-            // Stage 4.4 / B0.1: elite gate = Lv + 本周未通关（票在 TicketEntryService 扣；OP 由 DP || %player_is_op%）
+            // Stage 4.4 / S0: elite gate = Lv + 本周未通关（体力 / 本周免费在 TicketEntryService 扣；OP 由 DP || %player_is_op%）
             if ("elite".equals(gateId)) {
                 EliteService es = plugin.getEliteService();
                 return es != null && es.passesGate(player, data) ? "yes" : "no";
