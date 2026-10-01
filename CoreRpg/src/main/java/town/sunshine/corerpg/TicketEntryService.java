@@ -27,7 +27,14 @@ public final class TicketEntryService {
         WEEKLY("weekly", "EmberWeekly", "ticket_ember_weekly", "余烬周本", "weekly", "周本"),
         ABYSS("abyss", "EmberAbyss", "ticket_ember_abyss", "余烬深渊", "abyss", "深渊"),
         RAID("raid", "EmberRaid", "ticket_ember_raid", "余烬团本", "raid", "团本"),
-        ELITE("elite", "EmberEliteWeekly", "ticket_ember_elite", "余烬精英", "elite", "精英");
+        ELITE("elite", "EmberEliteWeekly", "ticket_ember_elite", "余烬精英", "elite", "精英"),
+        // ember-v1.0-P1 G04 main maps: routed to EmberRunService (no level gate, flat 30, never weekly credits)
+        Q01("q01", "EmberQ01", "", "余烬主线·灰烬庭院", "q01", "灰烬庭院"),
+        Q02("q02", "EmberQ02", "", "余烬主线·焦骨甬道", "q02", "焦骨甬道"),
+        Q03("q03", "EmberQ03", "", "余烬主线·残誓地窖", "q03", "残誓地窖");
+
+        /** P1 main map (Q01..): entry is reserve → create → commit through EmberRunService. */
+        public boolean p1() { return key.startsWith("q0"); }
 
         final String key;
         final String dungeonId;
@@ -50,7 +57,7 @@ public final class TicketEntryService {
             String s = raw.toLowerCase().trim();
             for (Kind k : values()) {
                 if (k.key.equals(s) || k.dungeonId.equalsIgnoreCase(raw)
-                        || k.ticketNiId.equalsIgnoreCase(raw)
+                        || (!k.ticketNiId.isEmpty() && k.ticketNiId.equalsIgnoreCase(raw))
                         || k.shortLabel.equals(raw)) {
                     return k;
                 }
@@ -99,6 +106,11 @@ public final class TicketEntryService {
      */
     public boolean tryEnter(Player player, Kind kind) {
         if (player == null || kind == null) return true;
+        if (kind.p1()) { // G04: unified entry, P1 rules (no level gate, no OP bypass, no weekly first-free)
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            if (runs == null) { player.sendMessage(ChatColor.RED + "主线本服务未加载"); return true; }
+            return runs.tryEnter(player, kind.key);
+        }
         PlayerData data = dataStore.get(player.getUniqueId());
         boolean op = player.isOp() || player.hasPermission("corerpg.admin");
         StaminaService stamina = plugin.getStaminaService();
@@ -206,6 +218,19 @@ public final class TicketEntryService {
         return true;
     }
 
+    /** G04: the same console start the legacy path uses; P1 handles reserve / commit / release itself. */
+    public boolean dispatchStart(Player leader, String dungeonId) {
+        String cmd = "dp start-console " + leader.getName() + " " + dungeonId;
+        try {
+            boolean ok = Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+            if (ok) lastTryEnterMs.put(leader.getUniqueId(), Long.valueOf(System.currentTimeMillis()));
+            return ok;
+        } catch (Throwable t) {
+            plugin.getLogger().warning("[TicketEntry] start-console threw: " + cmd + " · " + t.getMessage());
+            return false;
+        }
+    }
+
     /**
      * B2.119: DP 无稳定回传。短时重试 → 缓存冷却提示；否则（多为 DP 条件拒进：人数 / 等级等，DP 已在上方说明）
      * 不再误报「缓存冷却」。退还时按实际扣法说明：本周免费抵扣 vs 体力；OP / 未扣则不提退还。
@@ -239,11 +264,11 @@ public final class TicketEntryService {
     /** /corerpg enter &lt;daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite&gt; */
     public boolean cmdEnter(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("玩家专用：/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite>");
+            sender.sendMessage("玩家专用：/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01|q02|q03>");
             return true;
         }
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite>");
+            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01|q02|q03>");
             return true;
         }
         Kind kind = Kind.parse(args[1]);

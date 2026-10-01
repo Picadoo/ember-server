@@ -46,6 +46,10 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
         }
         if ("ember_xp".equals(key)) return String.valueOf(data.getEmberXp());
         if ("ember_level".equals(key) || "level".equals(key)) return String.valueOf(data.getEmberLevel());
+        if (key.startsWith("p1_")) { // G04 冒险 page / DP entry pass
+            town.sunshine.corerpg.p1.EmberRunService r = plugin.getEmberRuns();
+            return r == null ? "" : r.placeholder(player, key.substring(3));
+        }
         if (key.startsWith("gate_")) {
             String gateId = key.substring(5);
             // Stage 4.4 / S0: elite gate = Lv + 本周未通关（体力 / 本周免费在 TicketEntryService 扣；OP 由 DP || %player_is_op%）

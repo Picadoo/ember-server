@@ -74,3 +74,6 @@ server-runtime/ember_abyss_build/
 
 # ember-v1.0-P1 item signing key (generated at runtime; never commit)
 plugins/CoreRpg/ember-v1-item.key
+
+# ember-v1.0-P1 G04 run sessions / reward ledgers (runtime data; MySQL mirror cr_p1_run / cr_p1_reward)
+plugins/CoreRpg/p1-runs/

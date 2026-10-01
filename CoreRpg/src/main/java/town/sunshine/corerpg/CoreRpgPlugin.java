@@ -119,6 +119,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private town.sunshine.corerpg.p1.EmberCombatListener emberCombat;
     private town.sunshine.corerpg.p1.EmberSetService emberSets;
     private town.sunshine.corerpg.p1.EmberForgeService emberForge;
+    private town.sunshine.corerpg.p1.EmberRunService emberRuns;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -216,6 +217,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         emberForge = new town.sunshine.corerpg.p1.EmberForgeService(this, emberLoadouts);
         Bukkit.getPluginManager().registerEvents(emberForge, this);
         emberCommand.setForge(emberForge);
+        emberRuns = new town.sunshine.corerpg.p1.EmberRunService(this, emberLoadouts, emberStore); // G04 Q01–Q03 runs + settlement
+        Bukkit.getPluginManager().registerEvents(emberRuns, this);
+        emberRuns.start();
+        emberCommand.setRuns(emberRuns);
         Bukkit.getPluginManager().registerEvents(flexSkillService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -286,6 +291,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (guildService != null) guildService.saveAll();
         if (auctionService != null) auctionService.saveAll();
         if (dataStore != null) dataStore.saveAll();
+        if (emberRuns != null) emberRuns.shutdown(); // G04: run mobs removed; open runs are aborted + refunded on the next start
         if (emberSets != null) emberSets.flushAll(); // G02 remaining cooldowns → states, saved just below
         if (emberLoadouts != null && town.sunshine.corerpg.p1.EmberMode.active()) {
             for (Player p : Bukkit.getOnlinePlayers()) {
@@ -341,6 +347,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public town.sunshine.corerpg.p1.EmberLoadoutService getEmberLoadouts() { return emberLoadouts; }
     public town.sunshine.corerpg.p1.EmberCombatListener getEmberCombat() { return emberCombat; }
     public town.sunshine.corerpg.p1.EmberSetService getEmberSets() { return emberSets; }
+    public town.sunshine.corerpg.p1.EmberRunService getEmberRuns() { return emberRuns; }
     public boolean isMysqlActive() { return mysqlStorage != null && mysqlStorage.isActive(); }
 
 
@@ -722,6 +729,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (calamityService != null && calamityService.isPublicCalamityBoss(entity)) { // 2026-09-27: guild-boss variant no longer settles as calamity
             calamityService.onCalamityKilled(killer);
         }
+        if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(entity)) return; // G04 E02/E11: P1 run kills pay only through the run settlement
         if (killer != null && setService != null && !(entity instanceof Player)) {
             setService.onKill(killer);
         }
@@ -1274,6 +1282,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                     + " (" + via + ", en=" + (en == null ? "gone" : en.getType().name()) + ", last=" + cause + ")");
         }
         if (p == null || !p.isOnline()) return true;
+        if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(en) || town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(p)) return true; // G04 E02
         if (xp) {
             progressService.grantKillLevels(p, args[2]);
             progressService.grantEmberXp(p, args[2]);
@@ -1296,6 +1305,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         try { id = UUID.fromString(args[1]); } catch (IllegalArgumentException e) { return true; }
         org.bukkit.entity.Entity en = Bukkit.getEntity(id);
         if (en == null) return cmdMmCredit(sender, args, false);
+        if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(en)) return true; // G04 E02
         int n = 1;
         if (args.length >= 4) try { n = Math.max(1, Integer.parseInt(args[3])); } catch (NumberFormatException ignored) { }
         int given = 0;

@@ -464,6 +464,10 @@ public final class ProgressService {
         if (args.length < 3) { sender.sendMessage("/corerpg progress <player> <source>"); return true; }
         Player target = Bukkit.getPlayerExact(args[1]);
         if (target == null) { sender.sendMessage(ChatColor.RED + "玩家不在线：" + args[1]); return true; }
+        if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(target)) { // G04 E02/E11: the run settlement already pays 120 xp
+            sender.sendMessage("[CoreRpg] progress " + target.getName() + " " + args[2] + " → skipped (P1 main-map run)");
+            return true;
+        }
         String src = args[2] == null ? "" : args[2].toLowerCase();
         // Stage 4.4: elite_weekly once per ISO week (Asia/Shanghai) — mark + skip double XP
         // Stage 4.5: also fire quest elite_weekly_clear (dual-trigger with DP COMPLETE script)
@@ -514,6 +518,7 @@ public final class ProgressService {
             sender.sendMessage(ChatColor.RED + "玩家不在线：" + args[1]);
             return true;
         }
+        if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(target)) return true; // G04 E02
         int got = pass ? grantPassXp(target, args[2]) : grantKillLevels(target, args[2]);
         if (!pass) grantEmberXp(target, args[2]);
         if (!(sender instanceof Player) || sender != target) {
