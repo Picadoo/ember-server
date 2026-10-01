@@ -204,7 +204,11 @@ public final class EmberForgeService implements Listener {
     private boolean firstClear(Player p, String flag) {
         if (flag == null) return false;
         PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
-        return pd != null && pd.periodCount(FLAG_PREFIX + flag, "all") > 0; // stub: wired to Q04/Q07 later
+        if (pd == null) return false;
+        // B2.143: the run service writes p1_first_clear_<map>@<content version>; the admin stub writes @all
+        EmberRunService runs = plugin.getEmberRuns();
+        if (runs != null && runs.firstClearedKey(pd, flag)) return true;
+        return pd.periodCount(FLAG_PREFIX + flag, "all") > 0; // admin stub (/corerpg p1 flag) until Q04/Q07 exist
     }
 
     // ================================================================== operations

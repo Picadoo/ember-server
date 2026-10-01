@@ -151,6 +151,12 @@ public final class EmberRunService implements Listener {
         return m.requires == null || m.requires.isEmpty() || d.periodCount(C_UNLOCK + m.key, "all") > 0;
     }
 
+    /** B2.143: first clear of a map key at its configured content version (false when the map is not defined yet). */
+    public boolean firstClearedKey(PlayerData d, String key) {
+        EmberRunMaps.MapDef m = key == null ? null : maps.byKey(key);
+        return m != null && firstCleared(d, m);
+    }
+
     public boolean firstCleared(PlayerData d, EmberRunMaps.MapDef m) {
         return d.periodCount(C_FIRST + m.key, m.contentVersion) > 0;
     }
