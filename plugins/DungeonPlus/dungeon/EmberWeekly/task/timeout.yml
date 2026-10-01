@@ -3,5 +3,5 @@ auto-start:
 
 timeout:
   - 1500:
-      - "$message{type=text;text=§c周常超时失败。§7这次不算通关。} @dungeon"
+      - "$message{type=text;text=§c周常超时失败。§7这次不算通关；进本消耗（含本周首免）不返还。} @dungeon"
       - "$end{type=text;text=§c深核·周 超时失败;reward=false;delay=1;end-type=FAILURE} @dungeon"
