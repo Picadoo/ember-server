@@ -158,6 +158,12 @@ public final class EmberRunService implements Listener {
         return m != null && firstCleared(d, m);
     }
 
+    /** first clear of {@code key} by a real run, or the admin stub flag (@all) used before the map existed. */
+    public boolean progressFlag(PlayerData d, String key) {
+        if (key == null) return true;
+        return firstClearedKey(d, key) || d.periodCount(C_FIRST + key, "all") > 0;
+    }
+
     public boolean firstCleared(PlayerData d, EmberRunMaps.MapDef m) {
         return d.periodCount(C_FIRST + m.key, m.contentVersion) > 0;
     }
@@ -999,6 +1005,8 @@ public final class EmberRunService implements Listener {
         if (args.length < 3 || !"exchange".equalsIgnoreCase(args[2])) {
             p.sendMessage(P + "锻造印记（账户绑定）：T1 " + marks(d, 1) + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3));
             p.sendMessage(P + "8 枚同阶印记 → 指定族+部位的同阶标准件（成色标准、精工 0、+0）：/corerpg p1 marks exchange <族> <blade|charm> [阶]");
+            p.sendMessage(P + "T2 定向锻造：" + (progressFlag(d, "q04") ? "§a已开放" : "§7需本人首通 Q04")
+                    + " §7· T3：" + (progressFlag(d, "q07") ? "§a已开放" : "§7需本人首通 Q07"));
             return true;
         }
         if (blocksLegacy(p.getWorld())) { p.sendMessage(P + "出本后再兑换。"); return true; }
@@ -1006,7 +1014,8 @@ public final class EmberRunService implements Listener {
         String fam = args[3].toLowerCase(Locale.ROOT), slot = args[4].toLowerCase(Locale.ROOT);
         int tier = 1;
         if (args.length >= 6) try { tier = Integer.parseInt(args[5].replace("t", "").replace("T", "")); } catch (NumberFormatException ignored) { }
-        String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot);
+        String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot,
+                progressFlag(d, EmberRunRules.directedForgeFlag(tier)));
         if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
         if (freeSlots(p) <= 0) { p.sendMessage(P + ChatColor.RED + "背包已满，空出一格再兑换。"); return true; }
         d.addPeriodCount(C_MARK + tier, "all", -EmberRunRules.MARKS_PER_EXCHANGE);

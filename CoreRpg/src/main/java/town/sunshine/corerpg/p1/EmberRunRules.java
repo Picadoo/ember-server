@@ -301,6 +301,24 @@ public final class EmberRunRules {
 
     // ------------------------------------------------------------------ forge marks (§9.1, E03/E04)
 
+    /**
+     * B2.147 (§23.2 "开放 T2 定向锻造", §6.4): directed forging (8 marks → chosen family + slot) of T2 needs the
+     * player's own Q04 first clear, T3 their own Q07 first clear — the same gates as the T1→T2 / T2→T3 upgrade.
+     * @return the first-clear key gating {@code tier}, or null when the tier is always open (T1).
+     */
+    public static String directedForgeFlag(int tier) {
+        return tier == 2 ? "q04" : tier == 3 ? "q07" : null;
+    }
+
+    /** {@link #exchangeCheck(int, int, int, String, String)} plus the directed-forge gate of the mark tier. */
+    public static String exchangeCheck(int haveOfTier, int markTier, int wantTier, String family, String slot, boolean gateOpen) {
+        String err = exchangeCheck(haveOfTier, markTier, wantTier, family, slot);
+        if (err != null) return err;
+        String flag = directedForgeFlag(markTier);
+        if (flag != null && !gateOpen) return "T" + markTier + " 定向锻造需本人首通 " + flag.toUpperCase(Locale.ROOT);
+        return null;
+    }
+
     /** @return null when the exchange is allowed, else the reason. */
     public static String exchangeCheck(int haveOfTier, int markTier, int wantTier, String family, String slot) {
         if (!validFamily(family)) return "族无效";

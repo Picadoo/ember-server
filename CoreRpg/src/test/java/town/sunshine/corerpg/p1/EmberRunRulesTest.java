@@ -396,4 +396,15 @@ public class EmberRunRulesTest {
         link.put("to", xyz(0, 65, 20)); link.put("after", "r9");
         assertTrue(new EmberRunMaps.MapDef("q01", q).validate().contains("not a room"));
     }
+
+    @Test public void directedForgeT2NeedsOwnQ04FirstClear() {
+        assertNull(EmberRunRules.directedForgeFlag(1));
+        assertEquals("q04", EmberRunRules.directedForgeFlag(2));
+        assertEquals("q07", EmberRunRules.directedForgeFlag(3));
+        assertNull(EmberRunRules.exchangeCheck(8, 1, 1, "scorch", "blade", false));      // T1 always open
+        assertEquals("T2 定向锻造需本人首通 Q04", EmberRunRules.exchangeCheck(8, 2, 2, "scorch", "blade", false));
+        assertNull(EmberRunRules.exchangeCheck(8, 2, 2, "scorch", "charm", true));
+        assertEquals("T2 印记不足（7/8）", EmberRunRules.exchangeCheck(7, 2, 2, "scorch", "charm", false)); // count first
+        assertEquals("T3 定向锻造需本人首通 Q07", EmberRunRules.exchangeCheck(8, 3, 3, "burst", "charm", false));
+    }
 }
