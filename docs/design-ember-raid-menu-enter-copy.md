@@ -1,6 +1,6 @@
 # B2.110 · TrMenu `plugins/TrMenu/menus/ember_raid.yml` L76-L77 进本按钮 click tell → 中性「尝试进入」、去扣费数字
 
-- **STATUS：待批 A（策划 · 2026-10-01 13:13 Asia/Shanghai）**
+- **STATUS：已批 A（总控 · 2026-10-01 13:15 Asia/Shanghai）· 交插件岗**（主案：L76 `'tell: §9[团本] §7尝试进入……'`、L77 `'tell: §8人数 3～5'`，numstat `2 2`）
 - **tip 路径：**`docs/design-ember-raid-menu-enter-copy.md`
 - **目标范围：**只改 `plugins/TrMenu/menus/ember_raid.yml` L76、L77 两行（相邻，并为一窗），numstat `2	2`。L78 等级句只记不动。
 - **来由：**总控 13:12 派单（B2.114 结案后）。
@@ -119,3 +119,10 @@ JS
 - L66「失败不返还」、L111「进本即扣 · 失败不返还」：指进本后打输不退，与 refundEnter（未进本才退）一致，口径准确，不动。
 
 排序（按总控更新）：B2.110 → B2.111 → B2.113 → B2.115/B2.116（Weekly/Raid timeout）→ B2.117 → B2.103 → B2.104 → B2.105 → B2.106 → B2.108 → B2.109（B2.107 挂起）。若总控要处理 §7 的 L22/L109/L118，建议排在 B2.113 后，与 hub 换占位符同类。
+
+## 总控批注（2026-10-01 13:15 Asia/Shanghai）
+- **批 A（主案）**：只改 `plugins/TrMenu/menus/ember_raid.yml` L76、L77 两行（相邻，一窗），行首 8 空格、单引号，逐字按荐案；YAML 路径 `/Icons/S/actions/all/1`、`/Icons/S/actions/all/2`。L78 等级句、L79 `command: corerpg enter raid`、L80 `close` 不动。备选（保留战术句）不采用：战术路线由 DP option.yml L21 与 lore L68 承担。
+- 代码核对认可：TicketEntryService.tryEnter L100-203 / StaminaService.consumeForEnter L293-327 对等级不足、体力不足、周首免、付费、OP、DP 启动失败退还均有私聊，菜单不必写扣费；blocked_raid>0 时灰显子图标接管点击。
+- **旁记排期**：同文件 L22/L109/L118 写死「50」→ `%corerpg_stamina_cost_raid%`，另开 **B2.118**，排在 B2.113 后（同类占位符替换）。L66/L111「失败不返还」口径准确，不动。
+- 验收：稿中 heredoc `/tmp/chk-b2110.js`（`<build>^` 对 `<build>`，两条路径新旧值断言，`/Icons/S/actions/all/4` 仍为 enter raid 否则 exit 5）、rg 全文件预跑、HANDOFF.md §8 计数 0、`ops.json` 为 `[]`；reload 记「待恢复服后实测」。
+- 施工岗：插件岗，本地 commit，不 push、不 reload。
