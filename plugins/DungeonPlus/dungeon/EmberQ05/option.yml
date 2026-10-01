@@ -1,0 +1,25 @@
+# ember-v1.0-P1 G04 — Q05 断塔回廊（主线普通版）。复用 ember_daily_spire 地图模板；旧日常地牢定义保持不变。
+# 进入：只经 CoreRpg（冒险菜单 / /corerpg enter q05）：先校验全队资格与体力、为每人预留 30 体力，再发 P1 通行证并 dp start-console。
+# 断塔模板自带楼梯无法步行：清房后由 CoreRpg 的单向通道（links）送到上一层，环廊护栏只在实例内放置（模板不改）。
+# 本文件不刷怪、不发奖：房间/门/A·B 变体/首领/额外事件与唯一一次结算都由 CoreRpg（plugins/CoreRpg/ember-v1-runs.yml）负责，
+# 结束由 CoreRpg 触发脚本组 ember_p1_complete / ember_p1_fail（actionscript/ember-p1.yml）。reward=false，无旧奖励脚本（E02）。
+
+dungeon-init-script:
+  - "$setmap{name=ember_daily_spire} @init"
+  - "$setspawn{location=0,64,2} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  # §20.5 首版无倒地/复活系统：单人死亡即失败，多人由存活队友完成（CoreRpg 判定）
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=3;message=§c主线本人数 1～3，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_q05%'=='yes';message=§c请从 冒险 菜单或 /corerpg enter q05 进入（体力与解锁由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e断塔回廊 §7· 走进前方房间开始；清房开门，击败首领后统一结算} @dungeon"
+    - "$teleport{location=0,64,2;defspawn=true} @player"
+
+dungeon-area: []
+
+# G04: 不发任何旧奖励（币/材料/经验/daily_clear 全部由 CoreRpg 单次结算）
+dungeon-reward-script: []

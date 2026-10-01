@@ -160,8 +160,12 @@ dungeon-pre-folder:
     "EmberQ03": 1
   ember_daily_tide:
     "EmberDailyTide": 1
+    # ember-v1.0-P1 batch 2 main map Q04
+    "EmberQ04": 1
   ember_daily_spire:
     "EmberDailySpire": 1
+    # ember-v1.0-P1 batch 2 main map Q05
+    "EmberQ05": 1
   ember_daily_frost:
     "EmberDailyFrost": 1
   ember_daily_rail:

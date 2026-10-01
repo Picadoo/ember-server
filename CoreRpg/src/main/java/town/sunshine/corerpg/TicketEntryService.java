@@ -31,7 +31,10 @@ public final class TicketEntryService {
         // ember-v1.0-P1 G04 main maps: routed to EmberRunService (no level gate, flat 30, never weekly credits)
         Q01("q01", "EmberQ01", "", "余烬主线·灰烬庭院", "q01", "灰烬庭院"),
         Q02("q02", "EmberQ02", "", "余烬主线·焦骨甬道", "q02", "焦骨甬道"),
-        Q03("q03", "EmberQ03", "", "余烬主线·残誓地窖", "q03", "残誓地窖");
+        Q03("q03", "EmberQ03", "", "余烬主线·残誓地窖", "q03", "残誓地窖"),
+        // batch 2 (§23.2): same templates as daily_tide / daily_spire, separate dungeon defs
+        Q04("q04", "EmberQ04", "", "余烬主线·潮蚀水道", "q04", "潮蚀水道"),
+        Q05("q05", "EmberQ05", "", "余烬主线·断塔回廊", "q05", "断塔回廊");
 
         /** P1 main map (Q01..): entry is reserve → create → commit through EmberRunService. */
         public boolean p1() { return key.startsWith("q0"); }
@@ -264,11 +267,11 @@ public final class TicketEntryService {
     /** /corerpg enter &lt;daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite&gt; */
     public boolean cmdEnter(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage("玩家专用：/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01|q02|q03>");
+            sender.sendMessage("玩家专用：/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01..q05>");
             return true;
         }
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01|q02|q03>");
+            sender.sendMessage(ChatColor.YELLOW + "/corerpg enter <daily|daily_ash|daily_crypt|daily_tide|daily_spire|daily_frost|daily_rail|weekly|abyss|raid|elite|q01..q05>");
             return true;
         }
         Kind kind = Kind.parse(args[1]);

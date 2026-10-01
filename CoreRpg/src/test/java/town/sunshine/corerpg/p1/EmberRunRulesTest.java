@@ -286,7 +286,7 @@ public class EmberRunRulesTest {
         assertEquals(30, m.cost);
         assertEquals(3, m.partyMax);
         assertEquals("[]", m.validate().toString());
-        assertEquals(3, m.maps.size());
+        assertEquals(5, m.maps.size());
         EmberRunMaps.MapDef q1 = m.byKey("q01"), q2 = m.byKey("q02"), q3 = m.byKey("q03");
         assertEquals("ember_daily", q1.template);
         assertEquals("ember_daily_ash", q2.template);
@@ -310,6 +310,40 @@ public class EmberRunRulesTest {
         assertNotNull(q3.boss.adds);
         assertNotNull(q2.boss.skills.get(0).follow);
         assertEquals(0.5, q2.boss.skills.get(0).follow.below, 0);
+        // batch 2 (§23.2): Q03 → Q04 → Q05 chain, T2 drops, two-skill bosses
+        EmberRunMaps.MapDef q4 = m.byKey("q04"), q5 = m.byKey("q05");
+        assertEquals("q04", q3.unlocks);
+        assertEquals("q03", q4.requires);
+        assertEquals("q05", q4.unlocks);
+        assertEquals("q04", q5.requires);
+        assertEquals(2, q4.tier);
+        assertEquals(2, q5.tier);
+        assertEquals("ember_daily_tide", q4.template);
+        assertEquals("ember_daily_spire", q5.template);
+        assertEquals(6, q4.firstClear.blank);
+        assertEquals(6, q4.firstClear.core);
+        assertEquals(900, q4.firstClear.coin);
+        assertEquals(20, q5.firstClear.bone);
+        assertEquals(6, q5.firstClear.blank);
+        assertEquals("核心 6 胚料 6 币 900", q4.firstClearLabel());
+        assertEquals("胚料 6 骨尘 20", q5.firstClearLabel());
+        assertEquals(105, q4.roles.get("melee").hp, 0);
+        assertEquals(10, q4.roles.get("melee").atk, 0);
+        assertEquals(177, q5.roles.get("melee").hp, 0);
+        assertEquals(2200, q4.boss.hp, 0);
+        assertEquals(4000, q5.boss.hp, 0);
+        assertEquals(2, q4.boss.skills.size());
+        assertEquals("player", q4.boss.skills.get(0).target);
+        assertEquals(1.0, q4.boss.skills.get(1).kb, 0);
+        assertEquals(0.5, q5.boss.skills.get(0).kb, 0);
+        assertEquals(0.5, q4.boss.recover, 0);
+        assertEquals(2, q4.spread.size());
+        assertEquals(1, q4.clear.size());
+        assertEquals(2, q5.links.size());
+        assertEquals(13, q5.rails.size());
+        assertEquals("r1", q4.eventAfter);
+        assertEquals("r2", q5.eventAfter);
+        assertSame(q5, m.byWorld("dungeon_EmberQ05_0A1B2C3D"));
     }
 
     @Test public void compositionCapsAndLayout() {

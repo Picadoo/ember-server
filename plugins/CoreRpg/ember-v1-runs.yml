@@ -1,4 +1,4 @@
-# ember-v1.0-P1 G04 — first-batch main maps Q01–Q03 (book ch. 11–13, §9, §20.5).
+# ember-v1.0-P1 G04 — main maps Q01–Q03 (batch 1) and Q04–Q05 (batch 2) (book ch. 11–13, §9, §20.5, §23.2).
 # CoreRpg runs the encounters (rooms, doors, A/B variants, boss skills, extra event) and the single settlement;
 # DungeonPlus only creates the instance (EmberQ01..03 reuse the ember_daily* map templates), teleports, and ends it.
 # Coordinates are the REAL template coordinates of ember_daily / ember_daily_ash / ember_daily_crypt (not the book's
@@ -193,3 +193,150 @@ maps:
       after: r2
       anchor: [-5, 66, 38]
       area: [-7, 64, 26, 6, 70, 39]
+
+  # ---- batch 2 (book §23.2 "Q04～05＋升阶＋二阶觉醒"; decisions: source table §11) ----
+  q04:
+    name: 潮蚀水道
+    dungeon: EmberQ04
+    template: ember_daily_tide
+    tier: 2
+    drop_label: T2
+    content_version: v1
+    map_version: ember_daily_tide@s3-2026-10-02
+    requires: q03
+    unlocks: q05
+    first_clear: {blank: 6, core: 6, coin: 900}
+    purpose: "首个 T2 本：常规掉 T2 装备与 T2 印记；首通（胚料 6·核心 6·币 900）开放 Q05、T1→T2 升阶与 T2 定向锻造"
+    b_ref: 35
+    spawn: [0, 64, 0]
+    spread: [[-2, 64, 0], [2, 64, 0]]
+    # the template's stray sign in the side pocket (event area) is removed in the instance only
+    clear: [[6, 64, 11]]
+    mobs:
+      melee:    {mm: EmberQ04Melee,    hp: 105, atk: 10, interval: 2.5}
+      ranged:   {mm: EmberQ04Ranged,   hp: 77,  atk: 10, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ04Heavy,    hp: 147, atk: 10, interval: 3.0}
+      caster:   {mm: EmberQ04Caster,   hp: 91,  atk: 10, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+      treasure: {mm: EmberQ04Treasure, hp: 140, atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ04Elite,    hp: 350, atk: 10, interval: 2.5}
+    rooms:
+      r1:
+        label: 沿岸
+        trigger: [-6, 63, 5, 8, 68, 17]
+        points: [[-2, 64, 7], [2, 64, 7], [-2, 64, 11], [2, 64, 11], [-1, 64, 15], [1, 64, 15], [0, 64, 7], [0, 64, 11]]
+        door: [-1, 64, 18, 1, 66, 18]
+        a: {melee: 5, ranged: 1}
+        b: {melee: 4, heavy: 1}
+      r2:
+        label: 折桥
+        trigger: [-4, 63, 19, 4, 68, 37]
+        points: [[-2, 64, 21], [2, 64, 21], [-2, 64, 26], [2, 64, 26], [-1, 64, 31], [1, 64, 34], [0, 64, 21], [0, 64, 26]]
+        door: [-1, 64, 38, 1, 66, 38]
+        a: {melee: 4, ranged: 2}
+        b: {melee: 5, caster: 1}
+      r3:
+        label: 闸厅外圈
+        trigger: [-5, 63, 39, 5, 69, 51]
+        points: [[-4, 64, 42], [4, 64, 42], [-4, 64, 48], [4, 64, 48], [-2, 64, 51], [2, 64, 51], [-2, 64, 42], [-2, 64, 48]]
+        a: {melee: 6, heavy: 1}
+        b: {melee: 5, ranged: 2}
+    boss:
+      mm: EmberQ04Boss
+      name: 潮闸重卫
+      hp: 2200
+      atk: 18
+      interval: 3.0
+      at: [0, 64, 46]
+      area: [-5, 63, 41, 5, 70, 51]
+      # two skills, cooldowns run from the boss spawn; same tick → first listed, the other right after its recovery
+      skills:
+        - {type: circle, target: player, name: 冲击圈, every: 10, warn: 1.2, radius: 2.5, dmg: 30}
+        - {type: cone, name: 闸杆推击, every: 14, warn: 1.0, angle: 90, range: 4, dmg: 18, kb: 1}
+      recover: 0.5
+    event:
+      after: r1
+      anchor: [6, 64, 12]
+      area: [3, 62, 10, 7, 66, 13]
+
+  q05:
+    name: 断塔回廊
+    dungeon: EmberQ05
+    template: ember_daily_spire
+    tier: 2
+    drop_label: T2
+    content_version: v1
+    map_version: ember_daily_spire@s3-2026-10-02
+    requires: q04
+    unlocks: q06
+    first_clear: {bone: 20, blank: 6}
+    purpose: "T2 本：常规掉 T2 装备与 T2 印记；首通（骨尘 20·胚料 6）记录 Q06 开放（后续批次）"
+    b_ref: 59
+    spawn: [0, 64, 2]
+    spread: [[-2, 64, 2], [2, 64, 2]]
+    # the template's low bar row in front of the r2 door (z3) would stay shut when the door opens: removed in the
+    # instance; the hole edge behind it gets a rail (rails:)
+    clear: [[-1, 70, 3], [0, 70, 3], [1, 70, 3]]
+    mobs:
+      melee:    {mm: EmberQ05Melee,    hp: 177, atk: 14, interval: 2.5}
+      ranged:   {mm: EmberQ05Ranged,   hp: 130, atk: 14, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ05Heavy,    hp: 248, atk: 14, interval: 3.0}
+      caster:   {mm: EmberQ05Caster,   hp: 153, atk: 14, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+      treasure: {mm: EmberQ05Treasure, hp: 236, atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ05Elite,    hp: 590, atk: 14, interval: 2.5}
+    rooms:
+      r1:
+        label: 塔底厅
+        trigger: [-7, 63, -7, 7, 68, -2]
+        points: [[-6, 64, -3], [6, 64, -3], [-4, 64, -7], [4, 64, -7], [-2, 64, -5], [2, 64, -5], [-4, 64, -3], [-2, 64, -7]]
+        door: [-1, 64, 4, 1, 66, 4]
+        a: {melee: 5, ranged: 1}
+        b: {melee: 4, heavy: 1}
+      r2:
+        label: 中层环廊
+        trigger: [-8, 69, -8, 8, 73, 8]
+        points: [[-3, 70, -6], [3, 70, -6], [-7, 70, -1], [7, 70, -1], [-6, 70, 7], [-7, 70, 4], [-1, 70, -6], [-5, 70, -1]]
+        door: [-1, 70, 4, 1, 72, 4]
+        a: {melee: 5, ranged: 2}
+        b: {melee: 5, caster: 1}
+      r3:
+        label: 塔冠外圈
+        trigger: [-6, 75, -5, 6, 79, 6]
+        points: [[-4, 76, -3], [4, 76, -3], [-5, 76, 0], [5, 76, 0], [-4, 76, 3], [4, 76, 3], [-2, 76, -3], [-3, 76, 0]]
+        a: {melee: 6, heavy: 1}
+        b: {melee: 5, ranged: 2}
+    # the template's stairs cannot be walked (bot: stuck at z≈7.7 y67; tube 2 starts 3 blocks up): one-way passages
+    # open after the room is cleared (book §15 walkable-stairs rule deviated, backlog: ember_daily_spire_v1)
+    links:
+      - {after: r1, from: [-1, 64, 3, 1, 69, 9], to: [0, 70, -6], yaw: 0, label: 沿塔内阶梯上到中层环廊}
+      - {after: r2, from: [-1, 70, 5, 1, 72, 7], to: [0, 76, 3], yaw: 180, label: 沿塔内阶梯上到塔冠}
+    # instance-only guard rails (iron bars into AIR): open ring edge (~14-block drop) and the central hole
+    rails:
+      - [-9, 70, -9, 9, 71, -9]
+      - [-9, 70, 9, -3, 71, 9]
+      - [3, 70, 9, 9, 71, 9]
+      - [-9, 70, -8, -9, 71, 8]
+      - [9, 70, -8, 9, 71, 8]
+      - [-2, 70, -3, -2, 71, -3]
+      - [-3, 70, -2, -3, 71, -2]
+      - [2, 70, -3, 2, 71, -3]
+      - [3, 70, -2, 3, 71, -2]
+      - [-3, 70, 2, -3, 71, 2]
+      - [-2, 70, 3, -2, 71, 3]
+      - [3, 70, 2, 3, 71, 2]
+      - [-1, 70, 2, 1, 71, 2]
+    boss:
+      mm: EmberQ05Boss
+      name: 断塔斧卫
+      hp: 4000
+      atk: 26
+      interval: 3.0
+      at: [0, 76, 0]
+      area: [-5, 75, -5, 5, 80, 5]
+      skills:
+        - {type: cone, name: 斧刃横扫, every: 9, warn: 1.2, angle: 120, range: 5, dmg: 44, kb: 0.5}
+        - {type: circle, name: 径向冲击, every: 15, warn: 1.0, radius: 3, ahead: 0, dmg: 26, kb: 1}
+      recover: 0.5
+    event:
+      after: r2
+      anchor: [6, 70, 7]
+      area: [3, 69, 5, 8, 73, 8]

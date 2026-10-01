@@ -183,7 +183,7 @@ public final class EmberRunService implements Listener {
     }
 
     /**
-     * Entry for /corerpg enter q01..q03 (TicketEntryService routes the P1 kinds here). Validates every participant
+     * Entry for /corerpg enter q01..q05 (TicketEntryService routes the P1 kinds here). Validates every participant
      * (unlock, stamina, not already in a run), reserves 30 stamina each, creates the session, then lets DP create the
      * instance; members not inside 2 s later get their reservation released.
      */
@@ -964,7 +964,7 @@ public final class EmberRunService implements Listener {
                     s.sendMessage(P + "没有可领取的暂存奖励。");
                 return true;
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01|q02|q03>"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q05>"); return true; }
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT));
             default:
                 return cmdRuns(s, args);
@@ -972,7 +972,7 @@ public final class EmberRunService implements Listener {
     }
 
     public static void helpLines(CommandSender s) {
-        s.sendMessage(P + "/corerpg enter q01|q02|q03 — 主线本（30 体力，1～3 人）· /corerpg p1 run — 解锁/待领/当前局");
+        s.sendMessage(P + "/corerpg enter q01..q05 — 主线本（30 体力，1～3 人）· /corerpg p1 run — 解锁/待领/当前局");
         s.sendMessage(P + "/corerpg p1 target <scorch|burst|sustain|none> — 掉落目标族（入场时快照）");
         s.sendMessage(P + "/corerpg p1 marks [exchange <族> <blade|charm> [阶]] — 8 枚同阶印记换标准件");
         s.sendMessage(P + "/corerpg p1 firstclear <族> — 领取首通自选 · /corerpg p1 claim — 补领暂存奖励");
@@ -1139,7 +1139,7 @@ public final class EmberRunService implements Listener {
             return true;
         }
         if (!(s instanceof Player)) {
-            s.sendMessage(P + "/corerpg p1 runs list | unlock <玩家> <q02|q03> [clear] | firstclear <玩家> <q01..> [clear] | starter <玩家> [reset] | marks <玩家> <阶> <±n> | extra <none|treasure|elite|chest|clear>");
+            s.sendMessage(P + "/corerpg p1 runs list | unlock <玩家> <q02..q05> [clear] | firstclear <玩家> <q01..> [clear] | starter <玩家> [reset] | marks <玩家> <阶> <±n> | extra <none|treasure|elite|chest|clear>");
             return true;
         }
         Player p = (Player) s;
