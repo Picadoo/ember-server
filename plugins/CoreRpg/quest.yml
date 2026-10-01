@@ -386,7 +386,7 @@ chapters:
         event: elite_weekly_clear
         count: 1
         desc: 通关 余烬·精英试炼 一次
-        hint: 打开枢纽菜单 → 精英试炼（每周 1 次）
+        hint: 打开枢纽菜单 → 精英试炼（每人每周限通关 1 次）
         xp: 500
         done: ['§6灰烛：§f词缀怪比普通周本难缠。你过了。']
       - type: level
