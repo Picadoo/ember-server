@@ -111,6 +111,17 @@ public class EmberLoadoutTest {
         assertEquals(1, low.awakening);
     }
 
+    @Test public void setProgressCountsTheSameFamilyPair() {
+        EmberLoadout l = EmberLoadout.compute(t, blade("scorch", 3, 0, 0, 9), charm("scorch", 2, 0, 0, 9), 20);
+        assertEquals("成套进度（焚烬）：同族 2/2 · T3 1/2 · T3+9 1/2", l.setProgress());
+        l = EmberLoadout.compute(t, blade("scorch", 3, 0, 0, 9), charm("burst", 3, 0, 0, 9), 20);
+        assertEquals("成套进度（焚烬）：同族 1/2 · T3 1/2 · T3+9 1/2", l.setProgress());
+        l = EmberLoadout.compute(t, blade("sustain", 3, 0, 0, 9), charm("sustain", 3, 0, 0, 10), 20);
+        assertTrue(l.setProgress().endsWith("T3+9 2/2 §a· P1 套装完成"));
+        assertEquals(3, l.awakening);
+        assertEquals("成套进度：无有效 P1 刃", EmberLoadout.compute(t, null, charm("scorch", 3, 0, 0, 9), 20).setProgress());
+    }
+
     @Test public void nextAwakeningHintNamesWhatIsMissing() {
         assertEquals("下一档 觉醒II 缺：刃 T1→T2、+4→+6；护符 T1→T2",
                 EmberLoadout.compute(t, blade("scorch", 1, 0, 0, 4), charm("scorch", 1, 0, 0, 7), 20).nextAwakeningHint());

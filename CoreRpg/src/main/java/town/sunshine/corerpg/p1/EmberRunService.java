@@ -520,7 +520,18 @@ public final class EmberRunService implements Listener {
         log().info("[P1 run] " + s.runId + " settle " + u + " rows+" + changed.size() + (in.firstClear != null ? " (first clear)" : "")
                 + (s.challenge ? " (challenge T" + s.tier + ")" : ""));
         Player p = Bukkit.getPlayer(u);
-        if (p != null && p.isOnline()) deliver(p);
+        if (p != null && p.isOnline()) {
+            deliver(p);
+            if (in.firstClear != null && maps.challenge != null && m.key.equals(maps.challenge.requires)) endOfP1(p);
+        }
+    }
+
+    /** Batch 3: the Q07 first clear ends the P1 main line (§2 table, §18.1): say what it opened, once. */
+    private void endOfP1(Player p) {
+        p.sendMessage(P + "§6§l余烬主线 P1 完结§r §7— 七张主线图全部首通。");
+        p.sendMessage(P + "§a已开放：§fT3 定向锻造§7（工坊）· §fT2→T3 升阶§7 · §f七图挑战版§7（/corerpg enter <q01..q07> challenge，掉落 T3 与 T3 印记）");
+        p.sendMessage(P + "§7长线目标：同族 T3 两件套 +9 = 觉醒III（/corerpg p1 status 查看成套进度）");
+        p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
     }
 
     // ------------------------------------------------------------------ delivery (E10: retry the original result)
@@ -1219,11 +1230,11 @@ public final class EmberRunService implements Listener {
         if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
-        if ("awaken".equals(key) || "awaken_next".equals(key)) {
+        if ("awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key)) {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberLoadout l = ls == null ? null : ls.get(p);
             if (l == null) return "";
-            return "awaken".equals(key) ? l.setLabel() : l.nextAwakeningHint();
+            return "awaken".equals(key) ? l.setLabel() : "set_progress".equals(key) ? l.setProgress() : l.nextAwakeningHint();
         }
         int us = key.indexOf('_');
         if (us > 0) {

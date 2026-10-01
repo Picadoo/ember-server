@@ -86,6 +86,24 @@ public final class EmberLoadout {
         return 1;
     }
 
+    /**
+     * Batch 3 "set completion" (D13): how far the equipped pair is from the P1 end state, the same-family T3 two-piece
+     * at +9 (觉醒III). Counts only the two set slots (main-hand blade + selected charm) of the blade's family; pieces
+     * of another family count 0 (they do not form the set, §4.1). Pure text.
+     */
+    public String setProgress() {
+        String fam = blade == null ? null : blade.family;
+        if (fam == null || "none".equals(fam)) return "成套进度：无有效 P1 刃";
+        int same = 1, t3 = blade.tier >= 3 ? 1 : 0, e9 = blade.tier >= 3 && blade.enhance >= 9 ? 1 : 0;
+        if (charm != null && fam.equals(charm.family)) {
+            same++;
+            if (charm.tier >= 3) t3++;
+            if (charm.tier >= 3 && charm.enhance >= 9) e9++;
+        }
+        return "成套进度（" + EmberItemData.familyName(fam) + "）：同族 " + same + "/2 · T3 " + t3 + "/2 · T3+9 " + e9 + "/2"
+                + (e9 == 2 ? " §a· P1 套装完成" : "");
+    }
+
     public double ehp() { return EmberFormula.ehp(h, m); }
 
     public String setLabel() {
