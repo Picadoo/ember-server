@@ -46,12 +46,12 @@ Icons:
           name: '§8开始下潜 · 体力不足'
           lore:
             - ''
-            - '§7需要 §e30 §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§7需要 §e%corerpg_stamina_cost_abyss% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
         actions:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-0.6'
-            - 'tell: §c体力不足，需 30 点体力；每日 0:00 回满。'
+            - 'tell: §c体力不足，需 %corerpg_stamina_cost_abyss% 点体力；每日 0:00 回满。'
 
     update: 20
     refresh: 20
@@ -127,7 +127,7 @@ Icons:
       name: '§e次数说明'
       lore:
         - ''
-        - '§7消耗 §e30 §7体力（与日常同池）'
+        - '§7消耗 §e%corerpg_stamina_cost_abyss% §7体力（与日常同池）'
         - '§7重置：§f00:00 Asia/Shanghai'
         - '§7硬顶建议 ≤2/日（免费+购）'
         - ''
@@ -136,4 +136,4 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §5深渊消耗 30 体力；0:00（上海）回满；撤离不退。'
+        - 'tell: §5深渊消耗 %corerpg_stamina_cost_abyss% 体力；0:00（上海）回满；撤离不退。'

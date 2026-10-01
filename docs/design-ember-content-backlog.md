@@ -357,7 +357,7 @@
 - ~~**B2.122**~~ → TrMenu 全部 click `tell:` 行 `[..]`→`【..】`（TabooLib 组件语法吞方括号+颜色；25 菜单 91 行；**实测 PASS · 勾销** · `00cba0d` · 报告 `docs/TEST-B2.122-trmenu-brackets-live.md`）。
 - ~~**B2.113**~~ → TrMenu ember_hub.yml L215/L266/L280 硬编码体力 45/30/50 → `%corerpg_stamina_cost_weekly/abyss/raid%`（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:32 CST 机器人 /ember 实测：周常「进本消耗 §e45 §8体力」、深渊「消耗 §e30」、团本「消耗 §e50」均由 %corerpg_stamina_cost_weekly/abyss/raid% 解析（papi parse 45/30/50），unreplacedPAPI=0）
 - ~~**B2.118**~~ → TrMenu ember_raid.yml L22/L109/L118 写死 50 → `%corerpg_stamina_cost_raid%`（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:35 CST 机器人实测：打开团本 tell「【团本】 需 3～5 人 · 消耗 50 体力（本周首次免费）」、次数说明 lore「其后 50 体力」、点击 tell「其后 50 体力；需 3～5 人。」均由 %corerpg_stamina_cost_raid% 解析，unreplacedPAPI=0）
-- **B2.120** → TrMenu ember_abyss.yml L49/L54/L130/L139 写死 30 → `%corerpg_stamina_cost_abyss%`（排在 B2.118 后；待出稿）。
+- ~~**B2.120**~~ → TrMenu ember_abyss.yml L49/L54/L130/L139 写死 30 → `%corerpg_stamina_cost_abyss%`（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:38 CST 机器人实测：体力 10 时灰显 lore「需要 §e30 §7体力 · 当前 10/90」+ 点击 tell「体力不足，需 30 点体力」；体力满时次数说明 lore「消耗 §e30 §7体力（与日常同池）」+ 点击 tell「深渊消耗 30 体力」均由 %corerpg_stamina_cost_abyss% 解析；L41 condition 字面量 30 按注释保留）
 - **B2.121** → TrMenu ember_abyss.yml L132 旧票制「硬顶建议 ≤2/日（免费+购）」（排在 B2.120 后；待出稿）。
 - **B2.119** → CoreRpg TicketEntryService 进本失败退还提示几处例外（:189/:209/首免/人数不足）（需 build；排在 B2.108 后；待出稿）。
 - **B2.115** → DP EmberWeekly/task/timeout.yml L6「周常超时失败（体力不返还）」首免/OP 不准（排 B2.113 后；待出稿）。
@@ -575,7 +575,7 @@
 | ~~**B2.122**~~ | TrMenu menus/*.yml 全部 click `tell:`（25 菜单 91 行） | TabooLib `[文本](参数)` 组件语法吞掉 `[团本]`/`[深渊]` 等方括号与颜色（B2.110/B2.111 静态 PASS 未发现）→ `【..】` | **实测 PASS · 勾销**（`00cba0d` · 报告 `docs/TEST-B2.122-trmenu-brackets-live.md` · 2026-10-01 18:35 CST） |
 | ~~**B2.113**~~ | TrMenu ember_hub.yml L215/L266/L280 | 周本/深渊/团本 lore 硬编码体力 45/30/50 → 占位符 | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:32 CST 机器人 /ember 实测：周常「进本消耗 §e45 §8体力」、深渊「消耗 §e30」、团本「消耗 §e50」均由 %corerpg_stamina_cost_weekly/abyss/raid% 解析（papi parse 45/30/50），unreplacedPAPI=0） |
 | ~~**B2.118**~~ | TrMenu ember_raid.yml L22/L109/L118 | 团本菜单写死「50」体力（口径准确）→ `%corerpg_stamina_cost_raid%` | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:35 CST 机器人实测：打开团本 tell「【团本】 需 3～5 人 · 消耗 50 体力（本周首次免费）」、次数说明 lore「其后 50 体力」、点击 tell「其后 50 体力；需 3～5 人。」均由 %corerpg_stamina_cost_raid% 解析，unreplacedPAPI=0） |
-| **B2.120** | TrMenu ember_abyss.yml L49/L54/L130/L139 | 深渊菜单写死「30」体力 → `%corerpg_stamina_cost_abyss%` | 待出稿（排 B2.118 后） |
+| ~~**B2.120**~~ | TrMenu ember_abyss.yml L49/L54/L130/L139 | 深渊菜单写死「30」体力 → `%corerpg_stamina_cost_abyss%` | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:38 CST 机器人实测：体力 10 时灰显 lore「需要 §e30 §7体力 · 当前 10/90」+ 点击 tell「体力不足，需 30 点体力」；体力满时次数说明 lore「消耗 §e30 §7体力（与日常同池）」+ 点击 tell「深渊消耗 30 体力」均由 %corerpg_stamina_cost_abyss% 解析；L41 condition 字面量 30 按注释保留） |
 | **B2.121** | TrMenu ember_abyss.yml L132 | 「硬顶建议 ≤2/日（免费+购）」旧票制口径，深渊无免费次数 | 待出稿（排 B2.120 后） |
 | **B2.119** | CoreRpg TicketEntryService 退还提示 | 发起者 40 tick 内下线不退不提示（:189）；5.5s 内重试退了不提示（:209）；周首免退还仍写「体力已退还」；DP 人数不足拒绝报「缓存冷却」误导 | 待出稿（需 build；排 B2.108 后） |
 | **B2.115** | DP EmberWeekly/task/timeout.yml L6 | 「体力不返还」首免/OP 进本时不准 | 待出稿（排 B2.113 后） |
