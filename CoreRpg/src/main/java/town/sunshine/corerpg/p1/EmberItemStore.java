@@ -83,6 +83,41 @@ public final class EmberItemStore {
                     + "KEY idx_p1_txn_owner (owner_uuid)"
                     + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
+    /** G04 §20.3 RunSession mirror (authoritative copy: plugins/CoreRpg/p1-runs/runs/<run>.yml). */
+    public static final String SCHEMA_RUN =
+            "CREATE TABLE IF NOT EXISTS cr_p1_run ("
+                    + "run_id VARCHAR(48) NOT NULL PRIMARY KEY,"
+                    + "map_key VARCHAR(16) NOT NULL,"
+                    + "map_version VARCHAR(64) NOT NULL,"
+                    + "rule_version VARCHAR(32) NOT NULL,"
+                    + "world VARCHAR(64) NULL,"
+                    + "seed BIGINT NOT NULL,"
+                    + "participants VARCHAR(255) NOT NULL,"
+                    + "targets VARCHAR(255) NOT NULL,"
+                    + "extra VARCHAR(16) NOT NULL,"
+                    + "extra_done TINYINT NOT NULL,"
+                    + "party_size TINYINT NOT NULL,"
+                    + "hp_factor DOUBLE NOT NULL,"
+                    + "state VARCHAR(16) NOT NULL,"
+                    + "reason VARCHAR(255) NULL,"
+                    + "created_at BIGINT NOT NULL,"
+                    + "updated_at BIGINT NOT NULL"
+                    + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+    /** G04 §20.3 RewardLedger mirror: one row per (player, run_id, reward_key); the result is never updated. */
+    public static final String SCHEMA_REWARD =
+            "CREATE TABLE IF NOT EXISTS cr_p1_reward ("
+                    + "player_uuid CHAR(36) NOT NULL,"
+                    + "run_id VARCHAR(48) NOT NULL,"
+                    + "reward_key VARCHAR(48) NOT NULL,"
+                    + "result VARCHAR(160) NOT NULL,"
+                    + "status VARCHAR(16) NOT NULL,"
+                    + "created_at BIGINT NOT NULL,"
+                    + "updated_at BIGINT NOT NULL,"
+                    + "PRIMARY KEY (player_uuid, run_id, reward_key),"
+                    + "KEY idx_p1_reward_run (run_id)"
+                    + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
     /** DB view of one item, enough for the trust check. */
     public static final class Row {
         public final String owner;
@@ -125,10 +160,12 @@ public final class EmberItemStore {
                 st.executeUpdate(SCHEMA_ITEM);
                 st.executeUpdate(SCHEMA_LOADOUT);
                 st.executeUpdate(SCHEMA_TXN);
+                st.executeUpdate(SCHEMA_RUN);
+                st.executeUpdate(SCHEMA_REWARD);
                 addColumnIfMissing(c, "cr_p1_loadout", "burst_cd_ms", "INT NOT NULL DEFAULT 0");
                 addColumnIfMissing(c, "cr_p1_loadout", "sustain_cd_ms", "INT NOT NULL DEFAULT 0");
                 schemaOk = true;
-                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn ready");
+                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn / cr_p1_run / cr_p1_reward ready");
             } catch (Throwable t) {
                 schemaQueued = false;
                 plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] schema init failed: " + t.getMessage());
@@ -227,6 +264,73 @@ public final class EmberItemStore {
             }
             final Row r = row;
             sync(() -> cb.accept(r));
+        });
+    }
+
+    /** G04: mirror one run session (upsert; state / world / reason / extra_done move forward). */
+    public void mirrorRun(final EmberRunSession s) {
+        final String id = s.runId, map = s.mapKey, mv = s.mapVersion == null ? "" : s.mapVersion,
+                rv = s.ruleVersion == null ? "" : s.ruleVersion, world = s.world, extra = s.extra.id, state = s.state,
+                reason = s.reason == null ? "" : s.reason;
+        final long seed = s.seed, created = s.created;
+        final boolean done = s.extraDone;
+        final int party = s.partySize;
+        final double hpf = s.hpFactor;
+        StringBuilder ps = new StringBuilder(), ts = new StringBuilder();
+        for (UUID u : s.participants) {
+            if (ps.length() > 0) { ps.append(','); ts.append(','); }
+            ps.append(u);
+            String t = s.target.get(u);
+            ts.append(t == null || t.isEmpty() ? "-" : t);
+        }
+        final String parts = ps.length() > 255 ? ps.substring(0, 255) : ps.toString();
+        final String targets = ts.length() > 255 ? ts.substring(0, 255) : ts.toString();
+        run("mirror run " + id, c -> {
+            long now = System.currentTimeMillis();
+            try (PreparedStatement p = c.prepareStatement(
+                    "INSERT INTO cr_p1_run (run_id,map_key,map_version,rule_version,world,seed,participants,targets,extra,extra_done,party_size,hp_factor,state,reason,created_at,updated_at)"
+                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE world=VALUES(world),participants=VALUES(participants),"
+                            + "extra_done=VALUES(extra_done),party_size=VALUES(party_size),hp_factor=VALUES(hp_factor),state=VALUES(state),reason=VALUES(reason),updated_at=VALUES(updated_at)")) {
+                int i = 1;
+                p.setString(i++, id);
+                p.setString(i++, map);
+                p.setString(i++, mv);
+                p.setString(i++, rv);
+                if (world == null) p.setNull(i++, Types.VARCHAR); else p.setString(i++, world);
+                p.setLong(i++, seed);
+                p.setString(i++, parts);
+                p.setString(i++, targets);
+                p.setString(i++, extra);
+                p.setInt(i++, done ? 1 : 0);
+                p.setInt(i++, party);
+                p.setDouble(i++, hpf);
+                p.setString(i++, state);
+                p.setString(i++, reason.length() > 255 ? reason.substring(0, 255) : reason);
+                p.setLong(i++, created);
+                p.setLong(i, now);
+                p.executeUpdate();
+            }
+        });
+    }
+
+    /** G04: mirror one ledger row; INSERT keeps the first result, a later call only moves the status. */
+    public void mirrorReward(final UUID player, final EmberRunRules.Row r) {
+        final String run = r.runId, key = r.key, result = r.result.length() > 160 ? r.result.substring(0, 160) : r.result,
+                status = r.status;
+        final long created = r.created, updated = r.updated;
+        run("mirror reward " + run + "/" + key, c -> {
+            try (PreparedStatement p = c.prepareStatement(
+                    "INSERT INTO cr_p1_reward (player_uuid,run_id,reward_key,result,status,created_at,updated_at) VALUES (?,?,?,?,?,?,?)"
+                            + " ON DUPLICATE KEY UPDATE status=VALUES(status),updated_at=VALUES(updated_at)")) {
+                p.setString(1, player.toString());
+                p.setString(2, run);
+                p.setString(3, key);
+                p.setString(4, result);
+                p.setString(5, status);
+                p.setLong(6, created);
+                p.setLong(7, updated);
+                p.executeUpdate();
+            }
         });
     }
 

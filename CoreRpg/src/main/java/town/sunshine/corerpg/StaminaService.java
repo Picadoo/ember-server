@@ -326,6 +326,40 @@ public final class StaminaService implements Listener {
         return new ConsumeResult(true, false, cost, null);
     }
 
+    /**
+     * ember-v1.0-P1 G04 (§9.5 / §20.5): flat reservation for the new main maps — the 30 stamina is taken now and either
+     * committed when the player is in the instance or released on failure. Weekly / elite / raid first-free credits are
+     * never touched here.
+     */
+    public ConsumeResult reserveFlat(Player player, int cost) {
+        if (player == null) return new ConsumeResult(false, false, 0, "无效");
+        PlayerData data = dataStore.get(player.getUniqueId());
+        ensure(data);
+        if (cost <= 0) return new ConsumeResult(true, false, 0, null);
+        if (data.getStamina() < cost) {
+            return new ConsumeResult(false, false, cost, ChatColor.RED + player.getName() + " 体力不足（需 " + cost + "，当前 "
+                    + data.getStamina() + "/" + resolveMax(data) + "）");
+        }
+        data.setStamina(data.getStamina() - cost);
+        dataStore.flushMutation(player.getUniqueId());
+        return new ConsumeResult(true, false, cost, null);
+    }
+
+    /** G04: give back a flat reservation (entry failed / restart abort). Works for any loaded player data. */
+    public void releaseFlat(java.util.UUID id, int cost) {
+        if (id == null || cost <= 0) return;
+        PlayerData data = dataStore.get(id);
+        ensure(data);
+        data.setStamina(data.getStamina() + cost);
+        dataStore.flushMutation(id);
+    }
+
+    public int staminaOf(Player player) {
+        PlayerData data = dataStore.get(player.getUniqueId());
+        ensure(data);
+        return data.getStamina();
+    }
+
     public void refundEnter(Player player, TicketEntryService.Kind kind, ConsumeResult prior) {
         if (player == null || kind == null || prior == null || !prior.ok) return;
         PlayerData data = dataStore.get(player.getUniqueId());

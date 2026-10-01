@@ -151,7 +151,7 @@ public final class EmberRunRules {
 
     // ------------------------------------------------------------------ grants
 
-    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK }
+    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA }
 
     /** One reward row. {@link #encode()} is what the ledger stores; {@link #decode(String, String)} reads it back. */
     public static final class Grant {
@@ -173,6 +173,7 @@ public final class EmberRunRules {
                 case MARK: return "mark:" + id + ":" + amount;
                 case CHOICE: return "choice:" + id + ":" + amount;
                 case UNLOCK: return "unlock:" + id;
+                case STAMINA: return "stamina:" + amount;
                 default: return "item:" + id + ":" + item;
             }
         }
@@ -188,6 +189,7 @@ public final class EmberRunRules {
                     case "mark": return new Grant(key, Kind.MARK, p[1], Integer.parseInt(p[2]), null);
                     case "choice": return new Grant(key, Kind.CHOICE, p[1], Integer.parseInt(p[2]), null);
                     case "unlock": return new Grant(key, Kind.UNLOCK, p[1], 0, null);
+                    case "stamina": return new Grant(key, Kind.STAMINA, null, Integer.parseInt(p[1]), null);
                     case "item": return new Grant(key, Kind.ITEM, p[1], 1, new ItemRoll(p[2], p[3],
                             Integer.parseInt(p[4]), Integer.parseInt(p[5]), Integer.parseInt(p[6])));
                     default: return null;
@@ -309,6 +311,10 @@ public final class EmberRunRules {
     public static final String ST_DELIVERED = "delivered";
     public static final String ST_MAILED = "mailed";
     public static final String ST_AWAIT = "await_choice";
+    /** cost rows (§20.5 reserve → commit / release) */
+    public static final String ST_RESERVED = "reserved";
+    public static final String ST_COMMITTED = "committed";
+    public static final String ST_RELEASED = "released";
 
     public static final class Row {
         public final String runId, key, result;
@@ -370,7 +376,7 @@ public final class EmberRunRules {
             java.util.Iterator<Row> it = rows.values().iterator();
             while (it.hasNext()) {
                 Row r = it.next();
-                if (!r.open() && now - r.updated > keepMs && !r.key.equals("cost") && !r.key.equals("refund")) { it.remove(); n++; }
+                if (!r.open() && !ST_RESERVED.equals(r.status) && now - r.updated > keepMs) { it.remove(); n++; }
             }
             return n;
         }
