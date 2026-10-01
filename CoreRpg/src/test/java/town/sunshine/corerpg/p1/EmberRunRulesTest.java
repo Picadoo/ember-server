@@ -329,4 +329,29 @@ public class EmberRunRulesTest {
         for (String[] s : lay) assertTrue("points reused", used.add(s[1]));
         assertEquals(EmberRunMaps.layout(r, false, 12345L).get(0)[1], lay.get(0)[1]);
     }
+
+    @Test public void q04q05FirstClearPackages() {
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.runId = "q04-x"; in.player = "p"; in.seed = 7; in.tier = 2; in.bossKilled = true;
+        in.firstClear = new EmberRunRules.FirstClear("q04", null, 2, 0, 6, 900, 0, 6, "q05");
+        java.util.Map<String, EmberRunRules.Grant> g = new java.util.HashMap<String, EmberRunRules.Grant>();
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) g.put(x.key, x);
+        assertEquals(6, g.get("fc_q04_blank").amount);
+        assertEquals(EmberUpgradeRules.MAT_BLANK, g.get("fc_q04_blank").id);
+        assertEquals(6, g.get("fc_q04_core").amount);
+        assertEquals(900, g.get("fc_q04_coin").amount);
+        assertNull(g.get("fc_q04_shard"));
+        assertNull(g.get("fc_q04_bone"));
+        assertEquals("q05", g.get("fc_q04_unlock").id);
+        assertEquals("2", g.get("base_mark").id); // T2 mark
+        assertEquals(2, g.get("base_item").item.tier);
+        in.firstClear = new EmberRunRules.FirstClear("q05", null, 2, 0, 0, 0, 20, 6, "q06");
+        g.clear();
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) g.put(x.key, x);
+        assertEquals(20, g.get("fc_q05_bone").amount);
+        assertEquals(EmberUpgradeRules.MAT_BONE, g.get("fc_q05_bone").id);
+        assertEquals(6, g.get("fc_q05_blank").amount);
+        assertNull(g.get("fc_q05_coin"));
+        assertEquals("q06", g.get("fc_q05_unlock").id);
+    }
 }

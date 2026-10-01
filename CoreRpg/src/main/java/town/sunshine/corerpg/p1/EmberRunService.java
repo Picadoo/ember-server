@@ -772,6 +772,7 @@ public final class EmberRunService implements Listener {
         if (skillDepth > 0) { markActed(d.s, p); return; } // boss / caster skill: raw value set by skillHit
         long now = System.currentTimeMillis();
         if (t.caster() || t.atk <= 0) { e.setCancelled(true); return; }
+        if (t.boss() && d.bossCasting()) { e.setCancelled(true); return; } // §14/§15: no normal hit while a skill winds up
         if (projectile && p.getLocation().distance(src.getLocation()) > t.range + 1.0) { e.setCancelled(true); return; }
         if (now - t.lastHit < (long) (t.interval * 1000) - 50L) { e.setCancelled(true); return; }
         t.lastHit = now;

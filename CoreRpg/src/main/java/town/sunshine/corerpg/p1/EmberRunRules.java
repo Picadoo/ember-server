@@ -207,11 +207,15 @@ public final class EmberRunRules {
         public final String mapKey;
         public final String choiceSlot; // blade / charm / null
         public final int choiceTier;
-        public final int shard, core, coin;
+        public final int shard, core, coin, bone, blank;
         public final String unlocks;    // next map key or null
         public FirstClear(String mapKey, String choiceSlot, int choiceTier, int shard, int core, int coin, String unlocks) {
+            this(mapKey, choiceSlot, choiceTier, shard, core, coin, 0, 0, unlocks);
+        }
+        /** §9.4: Q04 胚料 6·核心 6·币 900; Q05 骨尘 20·胚料 6 */
+        public FirstClear(String mapKey, String choiceSlot, int choiceTier, int shard, int core, int coin, int bone, int blank, String unlocks) {
             this.mapKey = mapKey; this.choiceSlot = choiceSlot; this.choiceTier = choiceTier;
-            this.shard = shard; this.core = core; this.coin = coin; this.unlocks = unlocks;
+            this.shard = shard; this.core = core; this.coin = coin; this.bone = bone; this.blank = blank; this.unlocks = unlocks;
         }
     }
 
@@ -265,6 +269,8 @@ public final class EmberRunRules {
             if (fc.shard > 0) out.add(new Grant(p + "shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, fc.shard, null));
             if (fc.core > 0) out.add(new Grant(p + "core", Kind.MAT, EmberUpgradeRules.MAT_CORE, fc.core, null));
             if (fc.coin > 0) out.add(new Grant(p + "coin", Kind.COIN, null, fc.coin, null));
+            if (fc.bone > 0) out.add(new Grant(p + "bone", Kind.MAT, EmberUpgradeRules.MAT_BONE, fc.bone, null));
+            if (fc.blank > 0) out.add(new Grant(p + "blank", Kind.MAT, EmberUpgradeRules.MAT_BLANK, fc.blank, null));
             if (fc.unlocks != null && !fc.unlocks.isEmpty()) out.add(new Grant(p + "unlock", Kind.UNLOCK, fc.unlocks, 0, null));
         }
         return out;

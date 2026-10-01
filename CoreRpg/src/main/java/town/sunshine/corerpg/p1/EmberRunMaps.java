@@ -73,10 +73,14 @@ public final class EmberRunMaps {
 
     public static final class Skill {
         public final String type, name;
-        public final double every, warn, dmg, angle, range, radius, ahead, length, width, below, delay;
+        public final double every, warn, dmg, angle, range, radius, ahead, length, width, below, delay, kb;
+        /** "player": a circle locked on one participant's current ground (Q04 冲击圈); "" = relative to the boss */
+        public final String target;
         public final Skill follow;
         Skill(Map<?, ?> m) {
             type = str(m.get("type"), "cone");
+            target = str(m.get("target"), "");
+            kb = Math.max(0, Math.min(1.0, num(m.get("kb"), 0))); // §10.I: horizontal push ≤ 1 block, never through walls / off ledges
             name = str(m.get("name"), type);
             every = num(m.get("every"), 8);
             warn = num(m.get("warn"), 1.0);
@@ -107,7 +111,7 @@ public final class EmberRunMaps {
 
     public static final class Boss {
         public final String mm, name;
-        public final double hp, atk, interval;
+        public final double hp, atk, interval, recover;
         public final Pt at;
         public final Box area;
         public final List<Skill> skills;
@@ -118,12 +122,31 @@ public final class EmberRunMaps {
             hp = num(m.get("hp"), 100);
             atk = num(m.get("atk"), 1);
             interval = num(m.get("interval"), 3);
+            recover = num(m.get("recover"), 0.5); // §10.I 收招: pause after one skill before the next may start
             at = pt(m.get("at"));
             area = box(m.get("area"));
             List<Skill> s = new ArrayList<Skill>();
             if (m.get("skills") instanceof List) for (Object o : (List<?>) m.get("skills")) if (o instanceof Map) s.add(new Skill((Map<?, ?>) o));
             skills = Collections.unmodifiableList(s);
             adds = m.get("adds") instanceof Map ? new Adds((Map<?, ?>) m.get("adds")) : null;
+        }
+    }
+
+    /**
+     * A one-way passage opened once room {@code after} is cleared: a participant inside {@code from} is moved to
+     * {@code to}. Used where the template's own stairs cannot be walked (spire), see source table §11.
+     */
+    public static final class Link {
+        public final String after, label;
+        public final Box from;
+        public final Pt to;
+        public final float yaw;
+        Link(Map<?, ?> m) {
+            after = str(m.get("after"), "");
+            label = str(m.get("label"), "");
+            from = box(m.get("from"));
+            to = pt(m.get("to"));
+            yaw = (float) num(m.get("yaw"), 0);
         }
     }
 
@@ -139,6 +162,11 @@ public final class EmberRunMaps {
         public final String eventAfter;
         public final Pt eventAnchor;
         public final Box eventArea;
+        /** extra standing points for party members 2..n (member 1 keeps the DP spawn) */
+        public final List<Pt> spread;
+        public final List<Link> links;
+        /** guard rails: iron bars placed in AIR only, when the instance is attached (template untouched) */
+        public final List<Box> rails;
 
         MapDef(String key, Map<?, ?> m) {
             this.key = key;
@@ -157,7 +185,8 @@ public final class EmberRunMaps {
             Map<?, ?> fc = m.get("first_clear") instanceof Map ? (Map<?, ?>) m.get("first_clear") : Collections.emptyMap();
             firstClear = new EmberRunRules.FirstClear(key, fc.get("choice") == null ? null : String.valueOf(fc.get("choice")),
                     (int) num(fc.get("tier"), tier), (int) num(fc.get("shard"), 0), (int) num(fc.get("core"), 0),
-                    (int) num(fc.get("coin"), 0), unlocks.isEmpty() ? null : unlocks);
+                    (int) num(fc.get("coin"), 0), (int) num(fc.get("bone"), 0), (int) num(fc.get("blank"), 0),
+                    unlocks.isEmpty() ? null : unlocks);
             Map<String, Role> r = new LinkedHashMap<String, Role>();
             if (m.get("mobs") instanceof Map) {
                 for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("mobs")).entrySet()) {
@@ -177,6 +206,13 @@ public final class EmberRunMaps {
             eventAfter = str(ev.get("after"), rs.isEmpty() ? "" : rs.get(Math.min(1, rs.size() - 1)).id);
             eventAnchor = ev.get("anchor") == null ? null : pt(ev.get("anchor"));
             eventArea = ev.get("area") == null ? null : box(ev.get("area"));
+            spread = pts(m.get("spread"));
+            List<Link> ls = new ArrayList<Link>();
+            if (m.get("links") instanceof List) for (Object o : (List<?>) m.get("links")) if (o instanceof Map) ls.add(new Link((Map<?, ?>) o));
+            links = Collections.unmodifiableList(ls);
+            List<Box> rl = new ArrayList<Box>();
+            if (m.get("rails") instanceof List) for (Object o : (List<?>) m.get("rails")) { Box b = box(o); if (b != null) rl.add(b); }
+            rails = Collections.unmodifiableList(rl);
         }
 
         public Room room(String id) {
@@ -195,6 +231,8 @@ public final class EmberRunMaps {
             StringBuilder sb = new StringBuilder();
             if (f.shard > 0) sb.append("碎片 ").append(f.shard).append(' ');
             if (f.core > 0) sb.append("核心 ").append(f.core).append(' ');
+            if (f.blank > 0) sb.append("胚料 ").append(f.blank).append(' ');
+            if (f.bone > 0) sb.append("骨尘 ").append(f.bone).append(' ');
             if (f.coin > 0) sb.append("币 ").append(f.coin);
             return sb.toString().trim();
         }
@@ -219,6 +257,15 @@ public final class EmberRunMaps {
             if (eventAnchor == null) return key + ": event anchor missing";
             if (room(eventAfter) == null) return key + ": event.after " + eventAfter + " is not a room";
             if (boss.adds != null && !roles.containsKey(boss.adds.role)) return key + ": adds role " + boss.adds.role + " missing";
+            for (Skill sk : boss.skills) {
+                if (sk.every <= sk.warn) return key + ": skill " + sk.name + " every ≤ warn";
+                if (!sk.target.isEmpty() && !("player".equals(sk.target) && "circle".equals(sk.type)))
+                    return key + ": skill " + sk.name + " target " + sk.target + " (only circle/player)";
+            }
+            for (Link l : links) {
+                if (room(l.after) == null) return key + ": link.after " + l.after + " is not a room";
+                if (l.from == null || l.to == null) return key + ": link from/to missing";
+            }
             return null;
         }
     }

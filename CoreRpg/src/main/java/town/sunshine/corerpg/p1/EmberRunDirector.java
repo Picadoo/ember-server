@@ -69,7 +69,9 @@ final class EmberRunDirector {
     private long pendingAt;
     private Location lockOrigin;
     private Vector lockDir;
-    private long nextSkill;
+    private long[] nextAt = new long[0]; // per skill, anchored at the boss spawn (§10.I: cooldowns from fight start)
+    private long recoverUntil;           // §10.I 收招: no new skill before this
+    private int casts;
     private EmberRunMaps.Skill follow;
     private long followStart;
     private boolean addsDone;
@@ -244,7 +246,8 @@ final class EmberRunDirector {
         boss = new Tracked(le, "boss", "boss", b.at, b.area, b.atk, b.interval, 3.0, pseudo);
         mobs.put(le.getUniqueId(), boss);
         svc.index(le.getUniqueId(), this);
-        nextSkill = now + (b.skills.isEmpty() ? Long.MAX_VALUE / 4 : (long) (b.skills.get(0).every * 1000));
+        nextAt = new long[b.skills.size()];
+        for (int i = 0; i < nextAt.length; i++) nextAt[i] = now + (long) (b.skills.get(i).every * 1000);
         svc.onBossSpawned(s, b);
     }
 
@@ -345,6 +348,7 @@ final class EmberRunDirector {
                 execute(pending, lockOrigin, lockDir, le);
                 EmberRunMaps.Skill done = pending;
                 pending = null;
+                recoverUntil = now + (long) (b.recover * 1000);
                 if (done.follow != null && ratio < done.follow.below) {
                     follow = done.follow;
                     followStart = now + (long) (done.follow.delay * 1000);
@@ -357,30 +361,68 @@ final class EmberRunDirector {
             follow = null;
             return;
         }
-        if (now >= nextSkill && !b.skills.isEmpty() && follow == null) {
-            EmberRunMaps.Skill sk = b.skills.get(0);
+        if (follow != null || now < recoverUntil) return;
+        int due = dueSkill(nextAt, now);
+        if (due >= 0) {
+            EmberRunMaps.Skill sk = b.skills.get(due);
             startWarn(sk, now, le);
-            nextSkill = now + (long) (sk.every * 1000);
+            nextAt[due] = nextDue(nextAt[due], (long) (sk.every * 1000), now);
         }
     }
 
+    /**
+     * §10.I: the first-listed skill wins when several are due in the same tick; the other waits until the current
+     * action and its recovery are over (it stays due, it is not skipped). @return index or −1
+     */
+    static int dueSkill(long[] nextAt, long now) {
+        for (int i = 0; i < nextAt.length; i++) if (now >= nextAt[i]) return i;
+        return -1;
+    }
+
+    /** Keeps the schedule anchored at the fight start: next slot strictly after {@code now}. */
+    static long nextDue(long at, long every, long now) {
+        if (every <= 0) return Long.MAX_VALUE / 4;
+        long n = at;
+        while (n <= now) n += every;
+        return n;
+    }
+
+    /** True while a telegraphed skill is winding up: the boss's normal hit is suppressed (施法时停止普攻). */
+    boolean bossCasting() { return pending != null; }
+
     private void startWarn(EmberRunMaps.Skill sk, long now, LivingEntity le) {
-        Player target = nearest(le.getLocation(), 24);
         Location o = le.getLocation();
+        Player target = "player".equals(sk.target) ? pickTarget(o, 24) : nearest(o, 24);
         Vector dir = target != null ? target.getLocation().toVector().subtract(o.toVector()) : o.getDirection();
         dir.setY(0);
         if (dir.lengthSquared() < 1e-6) dir = new Vector(0, 0, 1);
         dir.normalize();
-        lockOrigin = o.clone();
+        // Q04 冲击圈: the circle is locked on the chosen player's ground position now and lands after the warning
+        lockOrigin = "player".equals(sk.target) && target != null ? target.getLocation().clone() : o.clone();
         lockDir = dir;
         pending = sk;
         pendingAt = now + (long) (sk.warn * 1000);
+        casts++;
         Location face = o.clone();
         face.setDirection(dir);
         le.teleport(face);
         le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
         w.playSound(o, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.6f);
-        svc.tellRun(s, "§c" + def.boss.name + " §e蓄力「" + sk.name + "」§7— " + shapeHint(sk) + "（" + sk.warn + " 秒）");
+        String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下" : shapeHint(sk);
+        svc.tellRun(s, "§c" + def.boss.name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
+    }
+
+    /** One committed participant in range, chosen from the run seed + cast number (reproducible, not always the tank). */
+    private Player pickTarget(Location l, double max) {
+        List<Player> c = new ArrayList<Player>();
+        for (Player p : participantsHere()) {
+            if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+            if (p.getLocation().distanceSquared(l) <= max * max) c.add(p);
+        }
+        if (c.isEmpty()) return null;
+        c.sort((a, b) -> a.getUniqueId().compareTo(b.getUniqueId()));
+        long h = EmberRunRules.subSeed(s.seed, "skill", String.valueOf(casts));
+        return c.get((int) Math.floorMod(h, (long) c.size()));
     }
 
     private void casterTick(Tracked t, long now) {
@@ -422,6 +464,7 @@ final class EmberRunDirector {
             if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
             if (inShape(sk, o, dir, p.getLocation())) {
                 svc.skillHit(s, p, src, sk.dmg);
+                if (sk.kb > 0 && !p.isDead()) push(p, src == null ? o : src.getLocation(), sk.kb);
                 hit++;
             }
         }
@@ -458,9 +501,10 @@ final class EmberRunDirector {
 
     private static String shapeHint(EmberRunMaps.Skill sk) {
         switch (sk.type) {
-            case "circle": return "前方 " + (int) sk.ahead + " 格处半径 " + fmt(sk.radius) + " 圆形";
+            case "circle": return (sk.ahead <= 0 ? "以首领为中心半径 " : "前方 " + (int) sk.ahead + " 格处半径 ") + fmt(sk.radius) + " 圆形"
+                    + (sk.kb > 0 ? " · 击退 ≤" + fmt(sk.kb) + " 格" : "");
             case "line": return "正前直线 长 " + fmt(sk.length) + " 宽 " + fmt(sk.width);
-            default: return "正前 " + (int) sk.angle + "° 扇形 " + fmt(sk.range) + " 格";
+            default: return "正前 " + (int) sk.angle + "° 扇形 " + fmt(sk.range) + " 格" + (sk.kb > 0 ? " · 击退 ≤" + fmt(sk.kb) + " 格" : "");
         }
     }
 
@@ -520,6 +564,35 @@ final class EmberRunDirector {
             if (d <= bd) { bd = d; best = p; }
         }
         return best;
+    }
+
+    /**
+     * §10.I knockback: at most {@code max} blocks horizontally away from {@code from}, walked in 0.25 steps; stops
+     * before a wall, a missing floor (no pushing off a ledge / into the stair shaft) or the boss area edge.
+     */
+    private void push(Player p, Location from, double max) {
+        Location at = p.getLocation();
+        Vector d = at.toVector().subtract(from.toVector()).setY(0);
+        if (d.lengthSquared() < 1e-6) d = lockDir == null ? new Vector(0, 0, 1) : lockDir.clone();
+        d.normalize();
+        Location best = null;
+        for (double k = 0.25; k <= max + 1e-9; k += 0.25) {
+            Location c = at.clone().add(d.clone().multiply(k));
+            if (!standable(c)) break;
+            if (def.boss.area != null && !def.boss.area.contains(c.getX(), c.getY(), c.getZ())) break;
+            best = c;
+        }
+        if (best != null) p.teleport(best);
+    }
+
+    static boolean standableIds(boolean belowSolid, boolean feetSolid, boolean headSolid) {
+        return belowSolid && !feetSolid && !headSolid;
+    }
+
+    private boolean standable(Location c) {
+        Block feet = c.getBlock();
+        return standableIds(feet.getRelative(0, -1, 0).getType().isSolid(), feet.getType().isSolid(),
+                feet.getRelative(0, 1, 0).getType().isSolid());
     }
 
     /** Clearance check for runtime points (adds): feet + head passable, else fall back to the boss point. */

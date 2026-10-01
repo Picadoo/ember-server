@@ -53,4 +53,56 @@ public class EmberRunShapeTest {
         assertTrue(hit(caster, 0.7, 5.9));
         assertFalse(hit(caster, 0.8, 3));
     }
+
+    @Test public void q04ImpactCircleIsCentredOnTheLockedPoint() {
+        EmberRunMaps.Skill s = skill("type", "circle", "target", "player", "radius", 2.5, "every", 10, "warn", 1.2);
+        assertEquals("player", s.target);
+        assertEquals(0, s.ahead, 0);
+        assertTrue(hit(s, 0, 2.4));
+        assertTrue(hit(s, -1.7, -1.7));
+        assertFalse(hit(s, 0, 2.6));
+    }
+
+    @Test public void q05RadialBurstAndSweep() {
+        EmberRunMaps.Skill burst = skill("type", "circle", "radius", 3, "kb", 1);
+        assertTrue(hit(burst, 0, -2.9));
+        assertFalse(hit(burst, 2.2, 2.2));
+        EmberRunMaps.Skill sweep = skill("type", "cone", "angle", 120, "range", 5, "kb", 0.5);
+        assertTrue(hit(sweep, Math.sin(Math.toRadians(59)) * 4.9, Math.cos(Math.toRadians(59)) * 4.9));
+        assertFalse(hit(sweep, Math.sin(Math.toRadians(62)) * 4, Math.cos(Math.toRadians(62)) * 4));
+        assertFalse(hit(sweep, 0, 5.1));
+    }
+
+    @Test public void knockbackIsCappedAtOneBlock() {
+        assertEquals(1.0, skill("kb", 3).kb, 0);
+        assertEquals(0.0, skill("kb", -1).kb, 0);
+        assertEquals(0.5, skill("kb", 0.5).kb, 0);
+        assertEquals(0.0, skill().kb, 0);
+        // push target must have a floor and two free blocks
+        assertTrue(EmberRunDirector.standableIds(true, false, false));
+        assertFalse(EmberRunDirector.standableIds(false, false, false)); // ledge / stair shaft
+        assertFalse(EmberRunDirector.standableIds(true, true, false));   // wall
+        assertFalse(EmberRunDirector.standableIds(true, false, true));
+    }
+
+    /** §10.I: cooldowns from the fight start; same-tick → first listed wins, the other stays due (not skipped). */
+    @Test public void skillSchedulerPriorityAndAnchoring() {
+        long t0 = 0;
+        long[] next = {t0 + 10000, t0 + 14000}; // Q04: circle every 10 s, push every 14 s
+        assertEquals(-1, EmberRunDirector.dueSkill(next, 9999));
+        assertEquals(0, EmberRunDirector.dueSkill(next, 10000));
+        next[0] = EmberRunDirector.nextDue(next[0], 10000, 10000);
+        assertEquals(20000, next[0]);
+        assertEquals(1, EmberRunDirector.dueSkill(next, 14000));
+        next[1] = EmberRunDirector.nextDue(next[1], 14000, 14000);
+        assertEquals(28000, next[1]);
+        // t = 70 s: both due → circle first; push still due right after, keeps its 14 s grid (84 s next)
+        next[0] = 70000; next[1] = 70000;
+        assertEquals(0, EmberRunDirector.dueSkill(next, 70000));
+        next[0] = EmberRunDirector.nextDue(next[0], 10000, 70000);
+        assertEquals(1, EmberRunDirector.dueSkill(next, 71700));
+        assertEquals(84000, EmberRunDirector.nextDue(next[1], 14000, 71700));
+        // a long stall skips missed slots instead of firing a burst of casts
+        assertEquals(100000, EmberRunDirector.nextDue(70000, 10000, 95000));
+    }
 }
