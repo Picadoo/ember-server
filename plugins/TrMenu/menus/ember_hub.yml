@@ -124,11 +124,18 @@ Icons:
         - '§e➥ §f立即释放'
         - '§7潜行点击查看技能说明'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg skill'
         - close
-      shift_all:
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg skill'
+        - close
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg skill info'
+      shift_right:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg skill info'
 
@@ -147,10 +154,17 @@ Icons:
         - '§e➥ §f打开轻技页'
         - '§7潜行点击直接释放轻技'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_flex_skill'
-      shift_all:
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_flex_skill'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg flex cast'
+        - close
+      shift_right:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg flex cast'
         - close
