@@ -1,6 +1,6 @@
 # B2.110 · TrMenu `plugins/TrMenu/menus/ember_raid.yml` L76-L77 进本按钮 click tell → 中性「尝试进入」、去扣费数字
 
-- **STATUS：已批 A（总控 · 2026-10-01 13:15 Asia/Shanghai）· 交插件岗**（主案：L76 `'tell: §9[团本] §7尝试进入……'`、L77 `'tell: §8人数 3～5'`，numstat `2 2`）
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 13:25 Asia/Shanghai）**（设计 `4aff2ee` · 批准 `a63f4ac` · 插件 `22b1084` · 测 `e405013` · close 本提交；报告 `docs/TEST-B2.110-raid-menu-enter-tell.md`）
 - **tip 路径：**`docs/design-ember-raid-menu-enter-copy.md`
 - **目标范围：**只改 `plugins/TrMenu/menus/ember_raid.yml` L76、L77 两行（相邻，并为一窗），numstat `2	2`。L78 等级句只记不动。
 - **来由：**总控 13:12 派单（B2.114 结案后）。
