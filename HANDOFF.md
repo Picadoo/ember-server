@@ -43,6 +43,7 @@
    ```
 7. **启动 / 停止**：`scripts/ember-up.sh`（登录服 → 游玩服 → 代理）/ `scripts/ember-down.sh`。
    单独重启游玩服：`./server-runtime/stop.sh` → 等 `:25567` 不再监听 → `sleep 3` → `(setsid nohup ./server-runtime/start.sh > /tmp/play-start.log 2>&1 < /dev/null &)` → 等 `server-runtime/logs/latest.log` 出现 `Done (`。
+   控制台命令（无 RCON / 无需 op）：`scripts/console.sh <play|login|proxy> "cmd"`，经各 runtime 的 `console.fifo`（start.sh 自动建立，`stop.sh` 经它正常 `stop`/`end`）。
 8. **构建 CoreRpg**：
    ```bash
    export JAVA_HOME=/workspace/minecraft/tools/jdk8u504-b01 PATH=$JAVA_HOME/bin:/workspace/minecraft/tools/apache-maven-3.9.16/bin:$PATH

@@ -77,6 +77,9 @@ secrets/mysql-ember.env.example   数据库凭据模板（真实 secrets/mysql-e
    2. 一键：`scripts/ember-up.sh`（登录服 127.0.0.1:25566 → 游玩服 127.0.0.1:25567 → 代理 0.0.0.0:25565）
       代理需要 Java 11+（原环境为 `tools/jdk-21.0.12.1+1`，可用 `PROXY_JAVA=/path/to/java` 覆盖）；Waterfall jar 放在 `proxy-runtime/waterfall.jar`。
    停止：`scripts/ember-down.sh`（先代理，再游玩服，再登录服）。后端只绑 127.0.0.1，内网穿透只能指向 25565。
+   **控制台**：三个 `start.sh` 都把服务端 stdin 接到 `<runtime>/console.fifo`（由常驻 `sleep infinity` 持有写端，pid 在 `console-holder.pid`；FIFO 已 gitignore），所以可以随时下控制台命令：
+   `scripts/console.sh play "list"`、`scripts/console.sh login "authme reload"`、`scripts/console.sh proxy "bungee"`（打印该命令产生的日志行）。
+   `stop.sh` 先经 FIFO 发 `stop`（代理为 `end`）正常停服，超时才 SIGTERM/SIGKILL。代理不再因 stdin=/dev/null 空转 100% CPU。
 8. （可选）重新构建：`Core*/` 用 Maven（`mvn package`），Paper 核心见 `Paper/` 与 `PERF-CHANGELOG-paper-nms.md`、`HOOKS.md`；
    mineflayer 测试 `cd mineflayer-tests && npm install`。
 

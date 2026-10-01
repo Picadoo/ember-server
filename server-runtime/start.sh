@@ -2,6 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 source ./env.sh
+source /workspace/minecraft/scripts/console-fifo.sh
 
 MODE="${1:-auto}"
 case "$MODE" in
@@ -49,8 +50,9 @@ fi
 
 echo "Starting Paper ($MODE): $JAR"
 echo "  127.0.0.1:25567 (behind proxy :25565, bungeecord=true) plugins=/workspace/minecraft/plugins"
+ember_fifo_prepare   # stdin = console.fifo (kept open by a holder) → scripts/console.sh play "cmd"
 nohup "$JAVA_HOME/bin/java" -Xms512M -Xmx1536M -jar "$JAR" nogui \
-  > logs/stdout.log 2>&1 &
+  < console.fifo > logs/stdout.log 2>&1 &
 echo $! > "$PIDFILE"
 echo "PID $(cat "$PIDFILE") — logs: $RUNTIME_DIR/logs/stdout.log"
-echo "Stop with: $RUNTIME_DIR/stop.sh"
+echo "Console: /workspace/minecraft/scripts/console.sh play \"cmd\"  ·  Stop with: $RUNTIME_DIR/stop.sh"

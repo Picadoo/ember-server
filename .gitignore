@@ -68,3 +68,6 @@ ember-binaries-*.tar.xz
 ember-binaries-*.tar.xz.sha256
 server-runtime/config-backups/
 server-runtime/ember_abyss_build/
+
+# ---- 控制台 FIFO（scripts/console-fifo.sh）----
+**/console.fifo

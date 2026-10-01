@@ -1,12 +1,9 @@
-// Play-server console bridge for tests (no op, no RCON): writes commands into the FIFO that the
-// play server's stdin is attached to, and reads results from server-runtime/logs/latest.log.
-// Start the play server with a console FIFO (see mineflayer-tests/README.md「控制台 FIFO」):
-//   mkfifo -m 600 /tmp/ember-play-console.fifo
-//   (setsid nohup tail -f /dev/null > /tmp/ember-play-console.fifo &)      # keeps a writer open
-//   cd server-runtime && setsid bash -c 'source ./env.sh; exec "$JAVA_HOME/bin/java" -Xms512M -Xmx1536M \
-//     -jar "$RUNTIME_DIR/paper-custom.jar" nogui < /tmp/ember-play-console.fifo > logs/stdout.log 2>&1' &
+// Play-server console bridge for tests (no op, no RCON): writes commands into
+// server-runtime/console.fifo, the play server's stdin (set up by server-runtime/start.sh via
+// scripts/console-fifo.sh), and reads results from server-runtime/logs/latest.log.
+// Shell equivalent: scripts/console.sh play "cmd"
 const fs = require('fs')
-const FIFO = process.env.EMBER_CONSOLE_FIFO || '/tmp/ember-play-console.fifo'
+const FIFO = process.env.EMBER_CONSOLE_FIFO || '/workspace/minecraft/server-runtime/console.fifo'
 const LOG = process.env.EMBER_PLAY_LOG || '/workspace/minecraft/server-runtime/logs/latest.log'
 const wait = ms => new Promise(r => setTimeout(r, ms))
 

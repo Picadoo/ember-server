@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
+# Graceful stop: `stop` via console.fifo, SIGTERM/SIGKILL only as fallback.
 set -euo pipefail
 cd "$(dirname "$0")"
+source /workspace/minecraft/scripts/console-fifo.sh
 PIDFILE=server.pid
-if [ ! -f "$PIDFILE" ]; then echo "not running"; exit 0; fi
+if [ ! -f "$PIDFILE" ]; then echo "not running"; ember_fifo_release; exit 0; fi
 PID=$(cat "$PIDFILE")
 if kill -0 "$PID" 2>/dev/null; then
-  if [ -w "/proc/$PID/fd/0" ]; then printf 'stop\n' > "/proc/$PID/fd/0"; fi
-  for i in $(seq 1 30); do kill -0 "$PID" 2>/dev/null || break; sleep 1; done
-  kill -9 "$PID" 2>/dev/null || true
+  ember_graceful_stop "$PID" stop 60
 fi
 rm -f "$PIDFILE"
+ember_fifo_release
 echo "Login stopped."

@@ -62,16 +62,10 @@ Join → 枢纽菜单 `/ember`（非 op，查标题/关键图标/无未替换 `%
 
 ### 控制台 FIFO
 
-没有 RCON；`start.sh` 用 `nohup … &` 启动时 stdin 为 `/dev/null`，无法下控制台命令。要跑玩法套件，游玩服需以 FIFO 作为 stdin 启动（先 `./stop.sh` 正常停服）：
+没有 RCON。自 2026-10-01 起 `server-runtime/start.sh`（以及登录服、代理的 start.sh）自动把服务端 stdin 接到 `server-runtime/console.fifo`，由常驻 `sleep infinity` 持有写端（见 `scripts/console-fifo.sh`），正常 `scripts/ember-up.sh` 或 `server-runtime/start.sh` 启动即可跑本套件。手动下命令：
 
 ```bash
-mkfifo -m 600 /tmp/ember-play-console.fifo
-(setsid nohup tail -f /dev/null > /tmp/ember-play-console.fifo &)   # 常驻写端，防止 EOF
-cd /workspace/minecraft/server-runtime
-setsid bash -c 'source ./env.sh; exec "$JAVA_HOME/bin/java" -Xms512M -Xmx1536M \
-  -jar "$RUNTIME_DIR/paper-custom.jar" nogui < /tmp/ember-play-console.fifo > logs/stdout.log 2>&1' &
-echo $! > server.pid      # 让 stop.sh 继续可用
-echo "list" > /tmp/ember-play-console.fifo   # 手动下控制台命令
+/workspace/minecraft/scripts/console.sh play "list"
 ```
 
 `lib/console.js` 以 O_NONBLOCK 打开 FIFO：服务端没在读时直接报错，不会卡住。可用 `EMBER_CONSOLE_FIFO`、`EMBER_PLAY_LOG` 覆盖路径。
