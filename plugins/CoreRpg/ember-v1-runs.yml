@@ -1,0 +1,195 @@
+# ember-v1.0-P1 G04 — first-batch main maps Q01–Q03 (book ch. 11–13, §9, §20.5).
+# CoreRpg runs the encounters (rooms, doors, A/B variants, boss skills, extra event) and the single settlement;
+# DungeonPlus only creates the instance (EmberQ01..03 reuse the ember_daily* map templates), teleports, and ends it.
+# Coordinates are the REAL template coordinates of ember_daily / ember_daily_ash / ember_daily_crypt (not the book's
+# R0..RB layout, which those maps do not have) — see docs/DESIGN-ember-v1.0-P1-source-table.md §10 for the mapping.
+# Check every point after editing:  DP_MAP_ROOT=<maps> python3 scripts/check-dp-spawns.py plugins/DungeonPlus/dungeon/EmberQ0*
+# Runtime-only file edits need a restart (no reload path for runs on purpose: a live run keeps its snapshot).
+
+version: 1
+rule_version: g04-1
+# §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
+cost: 30
+party_min: 1
+party_max: 3
+# instance worlds are dungeon_<DungeonId>_<HEX>; must also be listed in ember-v1.yml scope.world_prefixes
+world_prefix: dungeon_EmberQ0
+# seconds a P1 entry pass stays valid for the DP js-condition (paid entries only)
+pass_seconds: 30
+
+maps:
+  q01:
+    name: 灰烬庭院
+    dungeon: EmberQ01
+    template: ember_daily
+    tier: 1
+    drop_label: T1
+    content_version: v1
+    map_version: ember_daily@s1-2026-09-28
+    requires: ""
+    unlocks: q02
+    first_clear: {choice: blade, tier: 1}
+    purpose: "起步本：首通自选 T1 武器并开放 Q02；常规掉 T1 装备与锻造印记"
+    b_ref: 12
+    spawn: [0, 65, 0]
+    mobs:
+      melee:    {mm: EmberQ01Melee,    hp: 36,  atk: 3, interval: 2.5}
+      ranged:   {mm: EmberQ01Ranged,   hp: 26,  atk: 3, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ01Heavy,    hp: 50,  atk: 3, interval: 3.0}
+      treasure: {mm: EmberQ01Treasure, hp: 48,  atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ01Elite,    hp: 120, atk: 3, interval: 2.5}
+    rooms:
+      r1:
+        label: 前厅
+        trigger: [-9, 64, 3, 8, 68, 12]
+        points: [[-5, 65, 8], [5, 65, 8], [0, 65, 10], [-6, 65, 11], [5, 65, 11], [0, 65, 12]]
+        door: [-1, 65, 13, 1, 67, 13]
+        a: {melee: 4}
+        b: {melee: 3, ranged: 1}
+      r2:
+        label: 回廊
+        trigger: [-9, 64, 15, 8, 68, 24]
+        points: [[-6, 65, 17], [6, 65, 17], [-6, 65, 21], [6, 65, 21], [0, 65, 19], [0, 65, 23]]
+        door: [-1, 65, 25, 1, 67, 25]
+        a: {melee: 4, ranged: 1}
+        b: {melee: 3, heavy: 1}
+      r3:
+        label: 终厅外圈
+        trigger: [-9, 64, 27, 8, 69, 37]
+        points: [[-6, 65, 27], [5, 65, 27], [-8, 65, 33], [7, 65, 33], [-6, 65, 36], [5, 65, 36]]
+        a: {melee: 5, ranged: 1}
+        b: {melee: 4, heavy: 1}
+    boss:
+      mm: EmberQ01Boss
+      name: 残门蛮兵
+      hp: 240
+      atk: 6
+      interval: 3.2
+      at: [0, 66, 31]
+      area: [-9, 64, 26, 8, 70, 37]
+      skills:
+        - {type: cone, name: 重斩, every: 8, warn: 1.0, angle: 100, range: 4, dmg: 12}
+    event:
+      after: r2
+      anchor: [-6, 65, 23]
+      area: [-9, 64, 14, 8, 68, 24]
+
+  q02:
+    name: 焦骨甬道
+    dungeon: EmberQ02
+    template: ember_daily_ash
+    tier: 1
+    drop_label: T1
+    content_version: v1
+    map_version: ember_daily_ash@s2-2026-09-28
+    requires: q01
+    unlocks: q03
+    first_clear: {choice: charm, tier: 1}
+    purpose: "首通自选 T1 护符（可与武器不同族）并开放 Q03；常规掉 T1 装备与锻造印记"
+    b_ref: 24
+    spawn: [0, 65, 0]
+    mobs:
+      melee:    {mm: EmberQ02Melee,    hp: 72,  atk: 6, interval: 2.5}
+      ranged:   {mm: EmberQ02Ranged,   hp: 53,  atk: 6, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ02Heavy,    hp: 101, atk: 6, interval: 3.0}
+      treasure: {mm: EmberQ02Treasure, hp: 96,  atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ02Elite,    hp: 240, atk: 6, interval: 2.5}
+    rooms:
+      r1:
+        label: 骨廊
+        trigger: [-4, 64, 7, 7, 68, 15]
+        points: [[-3, 65, 8], [3, 65, 8], [0, 65, 10], [-2, 65, 12], [1, 65, 13], [0, 65, 15]]
+        door: [-1, 65, 16, 1, 67, 16]
+        a: {melee: 5}
+        b: {melee: 4, ranged: 1}
+      r2:
+        label: 焦骨甬道
+        trigger: [-4, 64, 18, 2, 68, 35]
+        points: [[0, 65, 19], [0, 65, 22], [-2, 65, 24], [1, 65, 28], [-1, 65, 32], [0, 65, 35]]
+        door: [-1, 65, 36, 1, 67, 36]
+        a: {melee: 4, heavy: 1}
+        b: {melee: 3, ranged: 2}
+      r3:
+        label: 炉鼓外缘
+        trigger: [-4, 64, 39, 4, 68, 48]
+        points: [[-3, 65, 40], [3, 65, 40], [-3, 65, 44], [3, 65, 44], [-3, 65, 48], [3, 65, 48]]
+        a: {melee: 5, ranged: 1}
+        b: {melee: 4, heavy: 1}
+    boss:
+      mm: EmberQ02Boss
+      name: 守炉蛮兵
+      hp: 900
+      atk: 10
+      interval: 3.0
+      at: [0, 65, 44]
+      area: [-4, 64, 38, 4, 70, 48]
+      skills:
+        - {type: circle, name: 砸地, every: 9, warn: 1.2, radius: 3, ahead: 2, dmg: 18,
+           follow: {type: cone, name: 横扫, below: 0.5, delay: 2.0, warn: 0.9, angle: 80, range: 3, dmg: 10}}
+    event:
+      after: r1
+      anchor: [5, 65, 10]
+      area: [3, 64, 10, 7, 68, 11]
+
+  q03:
+    name: 残誓地窖
+    dungeon: EmberQ03
+    template: ember_daily_crypt
+    tier: 1
+    drop_label: T1
+    content_version: v1
+    map_version: ember_daily_crypt@s2-2026-09-28
+    requires: q02
+    unlocks: q04
+    first_clear: {shard: 30, core: 4, coin: 600}
+    purpose: "首通材料（碎片 30·核心 4·币 600），记录 Q04 开放；常规掉 T1 装备与锻造印记"
+    b_ref: 27
+    spawn: [0, 72, 0]
+    mobs:
+      melee:    {mm: EmberQ03Melee,    hp: 81,  atk: 8, interval: 2.5}
+      ranged:   {mm: EmberQ03Ranged,   hp: 59,  atk: 8, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ03Heavy,    hp: 113, atk: 8, interval: 3.0}
+      caster:   {mm: EmberQ03Caster,   hp: 70,  atk: 8, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+      treasure: {mm: EmberQ03Treasure, hp: 108, atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ03Elite,    hp: 270, atk: 8, interval: 2.5}
+    rooms:
+      r1:
+        label: 上层誓厅
+        trigger: [-8, 70, 3, 7, 76, 17]
+        points: [[-6, 72, 6], [5, 72, 6], [-6, 72, 14], [5, 72, 14], [0, 72, 11], [-2, 72, 16]]
+        door: [-1, 72, 18, 1, 74, 18]
+        a: {melee: 4, ranged: 1}
+        b: {melee: 3, heavy: 1}
+      r2:
+        label: 中层窖厅
+        trigger: [-7, 64, 27, 6, 70, 39]
+        points: [[-5, 66, 30], [4, 66, 30], [-5, 66, 36], [4, 66, 36], [0, 66, 33], [-1, 66, 38]]
+        door: [-1, 66, 40, 1, 68, 40]
+        a: {melee: 4, caster: 1}
+        b: {melee: 4, ranged: 1}
+      r3:
+        label: 守墓圆厅外圈
+        trigger: [-7, 58, 43, 7, 64, 55]
+        points: [[-3, 60, 43], [3, 60, 43], [-5, 60, 47], [5, 60, 47], [-5, 60, 51], [5, 60, 51]]
+        a: {melee: 5, caster: 1}
+        b: {melee: 4, heavy: 1}
+    boss:
+      mm: EmberQ03Boss
+      name: 残誓守卫
+      hp: 1300
+      atk: 14
+      interval: 3.0
+      at: [0, 60, 48]
+      area: [-7, 58, 41, 7, 66, 55]
+      skills:
+        - {type: line, name: 誓斩, every: 10, warn: 1.1, length: 5, width: 3, dmg: 24}
+      adds:
+        at_hp: 0.5
+        warn: 1.0
+        role: melee
+        # book: boss x±8, z−4 → (±8, 60, 44) is inside the round wall here; ±6 is the nearest clear floor
+        points: [[-6, 60, 44], [6, 60, 44]]
+    event:
+      after: r2
+      anchor: [-5, 66, 38]
+      area: [-7, 64, 26, 6, 70, 39]
