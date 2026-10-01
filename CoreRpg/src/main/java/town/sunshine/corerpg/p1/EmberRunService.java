@@ -444,18 +444,31 @@ public final class EmberRunService implements Listener {
         if (world == null) return;
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             World w = Bukkit.getWorld(world);
-            if (w == null || w.getPlayers().isEmpty()) return;
+            if (w == null || w.getPlayers().isEmpty() || !stillOurs(world, s)) return;
             String group = complete ? "ember_p1_complete" : "ember_p1_fail";
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dp script trigger " + group + " " + w.getPlayers().get(0).getName());
         }, complete ? 60L : 20L);
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             World w = Bukkit.getWorld(world);
-            if (w == null) return;
+            if (w == null || !stillOurs(world, s)) return;
             for (Player p : new ArrayList<Player>(w.getPlayers())) {
+                EmberRunSession other = openSessionOf(p.getUniqueId());
+                if (other != null && other != s) continue; // already in their next run
                 p.sendMessage(P + "实例未自动关闭，正在离开……");
                 p.performCommand("dp leave");
             }
         }, complete ? 600L : 400L);
+    }
+
+    /**
+     * B2.166: DP's pre-folder cache hands the SAME world name to the next run of that map; the delayed end-of-run
+     * fallbacks of a finished run must not act on (kick out of) a newer run bound to the reused world.
+     */
+    private boolean stillOurs(String world, EmberRunSession s) {
+        EmberRunDirector cur = byWorld.get(world);
+        if (cur != null && cur.s != s) return false;
+        for (EmberRunSession o : sessions.values()) if (o != s && o.open() && world.equals(o.world)) return false;
+        return true;
     }
 
     // ------------------------------------------------------------------ boss kill → settlement (§9, §20.5)
