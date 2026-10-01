@@ -210,6 +210,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(statService, this);
         emberCombat = new town.sunshine.corerpg.p1.EmberCombatListener(this, emberLoadouts);
         Bukkit.getPluginManager().registerEvents(emberCombat, this);
+        emberCombat.startHealGuard();
         emberSets = new town.sunshine.corerpg.p1.EmberSetService(this, emberLoadouts, emberCombat);
         Bukkit.getPluginManager().registerEvents(emberSets, this);
         emberSets.start();

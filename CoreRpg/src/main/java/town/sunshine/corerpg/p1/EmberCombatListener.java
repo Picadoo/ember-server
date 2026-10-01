@@ -21,6 +21,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityResurrectEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -116,6 +117,19 @@ public final class EmberCombatListener implements Listener {
         this.plugin = plugin;
         this.loadouts = loadouts;
     }
+
+    /** B2.144: 1-tick guard against heals that bypass EntityRegainHealthEvent (MM heal{}, direct setHealth). */
+    public void startHealGuard() {
+        plugin.getServer().getScheduler().runTaskTimer(plugin, new Runnable() {
+            @Override public void run() {
+                boolean on = EmberMode.active();
+                for (Player p : plugin.getServer().getOnlinePlayers()) EmberHeal.guardTick(p, on && EmberMode.isP1(p));
+            }
+        }, 20L, 1L);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRespawnGuard(PlayerRespawnEvent e) { EmberHeal.forget(e.getPlayer().getUniqueId()); }
 
     public Swing lastSwing(UUID id) { return lastSwing.get(id); }
 
@@ -315,6 +329,7 @@ public final class EmberCombatListener implements Listener {
     public void onWorld(PlayerChangedWorldEvent e) {
         final Player p = e.getPlayer();
         loadouts.invalidate(p.getUniqueId());
+        EmberHeal.forget(p.getUniqueId());
         if (!EmberMode.active()) return;
         if (EmberMode.isP1(p)) loadouts.ensureLoaded(p);
         // next tick: StatService switches the max-HP/attack-speed layer between legacy and P1
@@ -324,6 +339,7 @@ public final class EmberCombatListener implements Listener {
     }
 
     public void onQuit(UUID id) {
+        EmberHeal.forget(id);
         lastSwing.remove(id);
         graceUntil.remove(id);
         pendingSwing.clear();

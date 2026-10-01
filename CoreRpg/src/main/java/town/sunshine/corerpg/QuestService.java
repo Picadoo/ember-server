@@ -1209,6 +1209,7 @@ public final class QuestService implements Listener {
             if (!Double.isNaN(st.lastHp) && p.getWorld().getName().equals(st.lastWorld)) {
                 double hp = Math.max(0.5, Math.min(st.lastHp, town.sunshine.corerpg.p1.EmberHeal.maxHp(p)));
                 if (Math.abs(p.getHealth() - hp) > 0.01) p.setHealth(hp);
+                town.sunshine.corerpg.p1.EmberHeal.rebase(p); // B2.144 guard: sanctioned restore
             }
             st.lastHp = Double.NaN;
             st.lastWorld = null;
