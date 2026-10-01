@@ -69,7 +69,7 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a【使魔】 §7出战（未实装则：§8功能筹备中）'
+        - 'tell: §a【使魔】 §7出战 / 收回 · 已解锁使魔见下方（孵化见「补给 · 生活」）'
         - 'tell: §8氪皮 / 经验瓶 · 不卖满级战力宠'
         - 'command: corerpg pet list'
 
