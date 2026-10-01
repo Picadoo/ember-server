@@ -1,7 +1,7 @@
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 
-## Progress snapshot — 2026-10-01 13:25 Asia/Shanghai (总控 · B2.110 PASS · 勾销 · B2.111 TrMenu ember_abyss.yml L77 交策划出稿)
+## Progress snapshot — 2026-10-01 13:28 Asia/Shanghai (策划 · B2.111 TrMenu ember_abyss.yml L77 tip 待批 A)
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -17,7 +17,7 @@
 - 枢纽工坊 NPC（烬砧/余晶/灰粮）**已落地**（1.15.6 起）
 
 ### 进行中
-- **B2.111 交策划出稿**（TrMenu `plugins/TrMenu/menus/ember_abyss.yml` L77 进本 click tell `尝试下潜……（需余烬 Lv.25 · 体力 30；等级不足不扣）` 硬编码「体力 30」，与周首免/OP 免扣冲突、不跟 cash.yml → 去扣费数字或改占位符，扣费交插件私聊；余项顺序：B2.113 ember_hub.yml L215/L266/L280 → B2.118 ember_raid.yml L22/L109/L118 → B2.115 Weekly timeout:6 → B2.116 Raid timeout:7 → B2.117 quest.yml L377 → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排；解挂时同步 src quest.yml:389) → B2.108 CoreRpgExpansion → B2.119 TicketEntryService 退还提示 → B2.109 mineflayer；Daily:7/Abyss:8 timeout、level_gates 缺键、quest.yml L134/L73/L243、blocked_raid 不区分 OP 只记不排）。~~B2.110~~ → TrMenu ember_raid.yml L76-77「[团本] 尝试进入……」「人数 3～5」PASS · 勾销（设计 `4aff2ee` · 批准 `a63f4ac` · 插件 `22b1084` · 测 `e405013` · close 本提交）。B2.109 追加：abyss-followup.js:58 等旧「团本已点燃」（L53 /dp start、L47 发票）；团本菜单点击用例（断言新两行 tell、无「已点燃/消耗 50」，覆盖等级不足/周首免/付费/OP 私聊）；raid-combat-smoke.js:153-155,170、killany-live-retest.js:122 续有效。NI 票物保留（ticket_convert 需要）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
+- **B2.111 待批 A**（tip `docs/design-ember-abyss-menu-enter-copy.md`：TrMenu `plugins/TrMenu/menus/ember_abyss.yml` L77 →「§5[深渊] §7尝试下潜……（需余烬 Lv.25）」，numstat 1 1，方案 A 去数字（占位符方案 OP 仍矛盾）；深渊无周首免，「体力 30」只在 OP/改价时错；「等级不足不扣」对队员等级门不准（先扣后退）；同文件 L49/L54/L130/L139 写死 30、L41 灰显不区分 OP、L132「免费+购」只记；余项顺序：B2.113 ember_hub.yml L215/L266/L280 → B2.118 ember_raid.yml L22/L109/L118 → B2.115 Weekly timeout:6 → B2.116 Raid timeout:7 → B2.117 quest.yml L377 → B2.103 CoreRpgPlugin cmdAbyss → B2.104 EliteService status → B2.105 set.yml → B2.106 cash.yml → B2.107 src 模板(可不排；解挂时同步 src quest.yml:389) → B2.108 CoreRpgExpansion → B2.119 TicketEntryService 退还提示 → B2.109 mineflayer；Daily:7/Abyss:8 timeout、level_gates 缺键、quest.yml L134/L73/L243、blocked_raid 不区分 OP 只记不排）。~~B2.110~~ → TrMenu ember_raid.yml L76-77「[团本] 尝试进入……」「人数 3～5」PASS · 勾销（设计 `4aff2ee` · 批准 `a63f4ac` · 插件 `22b1084` · 测 `e405013` · close 本提交）。B2.109 追加：abyss-followup.js:58 等旧「团本已点燃」（L53 /dp start、L47 发票）；团本菜单点击用例（断言新两行 tell、无「已点燃/消耗 50」，覆盖等级不足/周首免/付费/OP 私聊）；raid-combat-smoke.js:153-155,170、killany-live-retest.js:122 续有效。NI 票物保留（ticket_convert 需要）。精英壳勿硬开；**勿宣称 B0.1 已清**/票已废。
 - 灵活三窗挑刺 **无挡级**（`43bf843` / `STATUS-ember-flex-trilogy-picky.md`）；**勿**无证据重开 B0.1；**勿**四件甲/锻炉重做。
 
 ### 刚结
@@ -353,7 +353,7 @@
 - ~~**B2.112**~~ → DP EmberEliteWeekly/task/timeout.yml L6（**PASS · 勾销** · 插件 `684ede2` · 测 `4adadc4`）。
 - ~~**B2.114**~~ → CoreRpg quest.yml L389 hint（**PASS · 勾销** · 插件 `6817eb9` · 测 `13771d1`）。
 - ~~**B2.110**~~ → TrMenu ember_raid.yml L76-77 进本 tell（**PASS · 勾销** · 插件 `22b1084` · 测 `e405013`）。
-- **B2.111** → TrMenu ember_abyss.yml L77 click tell 硬编码「体力 30」（排在 B2.110 后、B2.103 前；交策划出稿）。
+- **B2.111** → TrMenu ember_abyss.yml L77 click tell 硬编码「体力 30」（排在 B2.110 后、B2.103 前；tip 待批 A：`docs/design-ember-abyss-menu-enter-copy.md`）。
 - **B2.113** → TrMenu ember_hub.yml L215/L266/L280 硬编码体力 45/30/50 → `%corerpg_stamina_cost_weekly/abyss/raid%`（排在 B2.111 后、B2.103 前；待出稿）。
 - **B2.118** → TrMenu ember_raid.yml L22/L109/L118 写死 50 → `%corerpg_stamina_cost_raid%`（排在 B2.113 后；待出稿）。
 - **B2.119** → CoreRpg TicketEntryService 进本失败退还提示几处例外（:189/:209/首免/人数不足）（需 build；排在 B2.108 后；待出稿）。
@@ -568,7 +568,7 @@
 | **B2.112** | DP EmberEliteWeekly/task/timeout.yml L6 | 失败提示「体力已扣，下周再来」与现行（失败同周可再进、首免/OP 不扣）矛盾 | **PASS · 勾销**（设计 `e47a7ed` · 批准 `ed3e16e` · 插件 `684ede2` · 测 `4adadc4`） |
 | **B2.114** | plugins/CoreRpg/quest.yml L389 | 任务 hint「精英试炼（每周 1 次）」→ 限通关口径（src 模板同句可不排） | **PASS · 勾销**（设计 `d7cdcc7` · 批准 `f6531db` · 插件 `6817eb9` · 测 `13771d1`） |
 | **B2.110** | TrMenu ember_raid.yml L76-77 | 进本按钮 click tell 恒报「消耗 50 体力」「团本已点燃」，与首免/OP/等级被拒私聊冲突 → 改「尝试进入」、不写扣费 | **PASS · 勾销**（设计 `4aff2ee` · 批准 `a63f4ac` · 插件 `22b1084` · 测 `e405013`） |
-| **B2.111** | TrMenu ember_abyss.yml L77 | 进本 click tell 硬编码「体力 30」，OP 免扣冲突、不跟 cash.yml | 交策划出稿 |
+| **B2.111** | TrMenu ember_abyss.yml L77 | 进本 click tell 硬编码「体力 30」，OP 免扣冲突、不跟 cash.yml | tip 待批 A（`docs/design-ember-abyss-menu-enter-copy.md`；L77「尝试下潜……（需余烬 Lv.25）」） |
 | **B2.113** | TrMenu ember_hub.yml L215/L266/L280 | 周本/深渊/团本 lore 硬编码体力 45/30/50 → 占位符 | 待出稿（排 B2.111 后） |
 | **B2.118** | TrMenu ember_raid.yml L22/L109/L118 | 团本菜单写死「50」体力（口径准确）→ `%corerpg_stamina_cost_raid%` | 待出稿（排 B2.113 后） |
 | **B2.119** | CoreRpg TicketEntryService 退还提示 | 发起者 40 tick 内下线不退不提示（:189）；5.5s 内重试退了不提示（:209）；周首免退还仍写「体力已退还」；DP 人数不足拒绝报「缓存冷却」误导 | 待出稿（需 build；排 B2.108 后） |
