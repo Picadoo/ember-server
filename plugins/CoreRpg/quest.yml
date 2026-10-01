@@ -93,7 +93,7 @@ chapters:
       - type: event
         event: covenant
         count: 1
-        desc: 选择一个誓约（烬刃 / 灰印 / 守墓）
+        desc: 选择一个誓约（烬刃 / 灰行 / 守墓）
         hint: 打开枢纽菜单 → 誓约 · 首次免费 · 决定你的技能
         xp: 100
         done: ['§6灰烛：§f誓言立下，火就认得你的刃了。打开枢纽菜单 → 技能 看看。']
