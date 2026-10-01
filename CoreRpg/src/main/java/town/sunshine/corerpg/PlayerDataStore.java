@@ -264,7 +264,7 @@ public final class PlayerDataStore {
         data.setPetsUnlocked(stringList(yaml, "petsUnlocked"));
         data.setActivePet(yaml.getString("activePet", ""));
         data.setPetLevels(intMap(yaml, "petLevels"));
-        data.setCounters(intMap(yaml, "counters"));
+        data.setCounters(counterMap(yaml, "counters")); // B2.142: no max(1, v) clamp (0 used to reload as 1)
 
         data.setGuildId(yaml.getString("guildId", ""));
         data.setGuildDonateDate(yaml.getString("guildDonateDate", ""));
@@ -486,6 +486,19 @@ public final class PlayerDataStore {
         for (String k : sec.getKeys(false)) {
             if (k == null || k.isEmpty()) continue;
             out.put(k, Integer.valueOf(Math.max(1, sec.getInt(k, 1))));
+        }
+        return out;
+    }
+
+    /** Period counters: raw values; 0 / negative entries are dropped (absent == 0). */
+    static Map<String, Integer> counterMap(FileConfiguration yaml, String key) {
+        Map<String, Integer> out = new LinkedHashMap<String, Integer>();
+        ConfigurationSection sec = yaml.getConfigurationSection(key);
+        if (sec == null) return out;
+        for (String k : sec.getKeys(false)) {
+            if (k == null || k.isEmpty()) continue;
+            int v = sec.getInt(k, 0);
+            if (v > 0) out.put(k, Integer.valueOf(v));
         }
         return out;
     }

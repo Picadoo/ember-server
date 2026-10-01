@@ -525,7 +525,8 @@ public final class PlayerData {
         java.util.Iterator<String> it = counters.keySet().iterator();
         while (it.hasNext()) { String k = it.next(); if (k.startsWith(name + "@") && !k.equals(key)) it.remove(); }
         int v = periodCount(name, period) + n;
-        counters.put(key, Integer.valueOf(v));
+        if (v <= 0) { counters.remove(key); v = 0; } // B2.142: absent == 0 (never persisted as 0 → reload clamp)
+        else counters.put(key, Integer.valueOf(v));
         dirty = true;
         return v;
     }
