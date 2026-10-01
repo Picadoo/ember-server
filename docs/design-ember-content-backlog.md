@@ -366,6 +366,7 @@
 - ~~**B2.105**~~ → plugins/CoreRpg/set.yml L27 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释）（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常）。
 - ~~**B2.106**~~ → plugins/CoreRpg/cash.yml L86、L92 段首 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改）（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变）。
 - ~~**B2.109**~~ → mineflayer-tests 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s）。
+- ~~**B2.103**~~ → CoreRpgPlugin.cmdAbyss（/corerpg abyss 兜底）「日限 1 次 · 进本扣余烬深渊票」「背包深渊票 / 软计数 /1（以票为准）」「/dp start EmberAbyss」「无票时 /ni give…」票制旧文 → 「无尽波次下潜 · 进本消耗 {costOf(abyss)} 体力（与日常同池）」+ 当前体力/历史最深层 + 「进本：打开枢纽菜单 → 深渊」；CoreRpg 1.15.28→1.15.29（**PASS · 勾销（构建/部署实测；兜底路径 live 不可达）** · 本提交 · 2026-10-01 20:20 CST 构建并部署 1.15.29，启用日志「CoreRpg 1.15.29 enabled」；该兜底只在 AbyssSettleService 缺失时可达，live 常驻 settle 服务，无法用 bot 触发（静态核对））。
 
 ---
 
@@ -587,6 +588,7 @@
 | ~~**B2.105**~~ | plugins/CoreRpg/set.yml L27 | 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释） | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常） |
 | ~~**B2.106**~~ | plugins/CoreRpg/cash.yml L86、L92 段首 | 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改） | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变） |
 | ~~**B2.109**~~ | mineflayer-tests | 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s） |
+| ~~**B2.103**~~ | CoreRpgPlugin.cmdAbyss（/corerpg abyss 兜底） | 「日限 1 次 · 进本扣余烬深渊票」「背包深渊票 / 软计数 /1（以票为准）」「/dp start EmberAbyss」「无票时 /ni give…」票制旧文 → 「无尽波次下潜 · 进本消耗 {costOf(abyss)} 体力（与日常同池）」+ 当前体力/历史最深层 + 「进本：打开枢纽菜单 → 深渊」；CoreRpg 1.15.28→1.15.29 | **PASS · 勾销（构建/部署实测；兜底路径 live 不可达）**（本提交 · 2026-10-01 20:20 CST 构建并部署 1.15.29，启用日志「CoreRpg 1.15.29 enabled」；该兜底只在 AbyssSettleService 缺失时可达，live 常驻 settle 服务，无法用 bot 触发（静态核对）） |
 
 ---
 

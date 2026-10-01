@@ -1347,18 +1347,19 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         return true;
     }
 
+    /** Fallback when AbyssSettleService is unavailable — S0: abyss entry costs stamina (no tickets). */
     private boolean cmdAbyss(CommandSender sender) {
         if (!requirePlayer(sender)) return true;
         Player p = (Player) sender;
         PlayerData data = dataStore.get(p.getUniqueId());
-        int tickets = 0;
-        if (niBridge != null) tickets = niBridge.countInInventory(p, "ticket_ember_abyss");
-        p.sendMessage(ChatColor.DARK_PURPLE + "[余烬深渊] " + ChatColor.LIGHT_PURPLE + "日限 1 次 · 进本扣余烬深渊票");
-        p.sendMessage(ChatColor.GRAY + "  背包深渊票 §f" + tickets
-                + ChatColor.GRAY + " · 软计数 " + data.getAbyssUsedToday() + "/1（以票为准）");
-        p.sendMessage(ChatColor.GRAY + "  进本：§f/dp start EmberAbyss"
-                + ChatColor.DARK_GRAY + "  · 通关箱：碎片8 骨尘4 核心2 + 锋利/稳固石");
-        p.sendMessage(ChatColor.DARK_GRAY + "  无票时：/ni give " + p.getName() + " ticket_ember_abyss 1（管理）");
+        int cost = staminaService != null ? staminaService.costOf("abyss") : 0;
+        p.sendMessage(ChatColor.DARK_PURPLE + "[余烬深渊] " + ChatColor.LIGHT_PURPLE + "无尽波次下潜 · 进本消耗 "
+                + cost + " 体力（与日常同池）");
+        if (staminaService != null) {
+            p.sendMessage(ChatColor.GRAY + "  当前体力 §f" + staminaService.getStamina(data) + "§7/§f"
+                    + staminaService.getMax(data) + ChatColor.GRAY + " · 历史最深 §f" + data.getAbyssBest() + ChatColor.GRAY + " 层");
+        }
+        p.sendMessage(ChatColor.GRAY + "  进本：打开枢纽菜单 → 深渊（/corerpg enter abyss）");
         return true;
     }
 
