@@ -82,6 +82,7 @@ public final class EmberRunService implements Listener {
     private final Map<UUID, Object[]> passes = new HashMap<UUID, Object[]>(); // uuid → {mapKey, until ms}
     private final Map<UUID, Long> starterChecked = new HashMap<UUID, Long>();
     private int skillDepth;
+    private final KnockbackGuard kbGuard = new KnockbackGuard();
     private int spawnBlocks;
     private int taskId = -1;
 
@@ -852,10 +853,19 @@ public final class EmberRunService implements Listener {
         if (projectile && p.getLocation().distance(src.getLocation()) > t.range + 1.0) { e.setCancelled(true); return; }
         if (now - t.lastHit < (long) (t.interval * 1000) - 50L) { e.setCancelled(true); return; }
         t.lastHit = now;
+        if (t.boss()) kbGuard.mark(p.getUniqueId(), now); // B2.167: no vanilla knockback from the boss melee either
         double before = e.getDamage();
         e.setDamage(t.atk);
         EmberDamageTrace.note(e, before, "G04 主线本怪物伤害固定 atk=" + EmberDamageTrace.fmt(t.atk));
         markActed(d.s, p);
+    }
+
+    /** B2.167: drop the vanilla knockback velocity of a boss skill / boss melee hit (the P1 push is a teleport). */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onVelocity(org.bukkit.event.player.PlayerVelocityEvent e) {
+        long now = System.currentTimeMillis();
+        if (kbGuard.consume(e.getPlayer().getUniqueId(), now)) e.setCancelled(true);
+        if (kbGuard.size() > 64) kbGuard.prune(now);
     }
 
     /** Player → run mob: participation record (§20.5 合法参战). */
@@ -876,6 +886,7 @@ public final class EmberRunService implements Listener {
         skillDepth++;
         try {
             p.setNoDamageTicks(0);
+            kbGuard.mark(p.getUniqueId(), System.currentTimeMillis()); // B2.167: only the P1 push (≤ kb) moves the player
             p.damage(dmg, src);
         } finally {
             skillDepth--;
