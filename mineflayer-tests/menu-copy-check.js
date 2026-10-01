@@ -3,7 +3,7 @@
 //  · raid menu: open tell / 次数说明 lore+tell use the live raid cost (B2.118); 开始协作 tell keeps 【团本】 and
 //    states no cost (B2.110/B2.122); 次数说明 states who pays and when it is refunded (B2.124)
 //  · abyss menu: 次数说明 lore+tell, low-stamina grey lore+tell use the live abyss cost (B2.120);
-//    开始下潜 tell keeps 【深渊】, no 「体力 30」 (B2.111/B2.122)
+//    开始下潜 tell keeps 【深渊】, no 「体力 30」 (B2.111/B2.122); 次数说明 states no daily cap (B2.121)
 // Costs come from `/corerpg stamina` ("消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50").
 const { joinPlay } = require('./lib/proxy-login')
 const con = require('./lib/console')
@@ -47,6 +47,7 @@ function waitWindow (bot, ms = 5000) { return new Promise((res) => { const t = s
   // abyss (full stamina)
   w = await openSub('深渊')
   check('abyss 次数说明 lore', loreOf(w, /次数说明/).some((l) => l.includes(`消耗 ${C.abyss} 体力（与日常同池）`)), loreOf(w, /次数说明/).join(' / '))
+  { const L = loreOf(w, /次数说明/).join(' / '); check('abyss 次数说明 daily rule (B2.121)', L.includes('每日不限次数 · 体力够就能进') && !/硬顶|≤2/.test(L), L) }
   t = await click(w, /次数说明/)
   check('abyss 次数说明 tell', t.includes(`深渊消耗 ${C.abyss} 体力`), t)
   w = await openSub('深渊')
