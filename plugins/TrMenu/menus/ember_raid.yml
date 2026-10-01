@@ -73,8 +73,8 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §9团本已点燃。§7分路推进——左卫兵、右射手，汇合后再闯终厅。'
-        - 'tell: §8消耗 §e50 §8体力 · 人数 3～5'
+        - 'tell: §9[团本] §7尝试进入……'
+        - 'tell: §8人数 3～5'
         - 'tell: §8需要余烬等级 §eLv.35§8（见菜单等级要求）'
         - 'command: corerpg enter raid'
         - close
