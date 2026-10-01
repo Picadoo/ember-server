@@ -340,7 +340,7 @@ public class EmberRunRulesTest {
         assertEquals(2, q4.spread.size());
         assertEquals(1, q4.clear.size());
         assertEquals(2, q5.links.size());
-        assertEquals(13, q5.rails.size());
+        assertEquals(28, q5.rails.size());
         assertEquals("r1", q4.eventAfter);
         assertEquals("r2", q5.eventAfter);
         assertSame(q5, m.byWorld("dungeon_EmberQ05_0A1B2C3D"));
