@@ -202,3 +202,13 @@ ember_v1_sustain_charm_t3:
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
+
+# G03 材料：胚料（策划书 §5.3 分解所得；精工/成色/升阶消耗）。仓库中原本没有胚料模板，这是最小模板。
+# 碎片/骨尘/核心碎片沿用 ember-dungeon.yml 的 mat_ember_shard / mat_ember_bone_dust / mat_ember_core_fragment。
+mat_ember_v1_blank:
+  material: CLAY_BALL
+  name: '&e余烬胚料'
+  lore:
+    - '&8余烬 v1 · 材料'
+    - '&7分解普通掉落的 P1 装备获得（T1/T2/T3 = 1/2/3 份）'
+    - '&7用于精工、成色提升与同族升阶'

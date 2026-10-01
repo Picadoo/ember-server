@@ -365,7 +365,7 @@ CREATE TABLE IF NOT EXISTS cr_item_txn (           -- 幂等键＋审计（强�
 
 其他还没做的：G03 强化保底/互换/升阶事务；RunSession（A18 开局锁定血量，以及 D11 的按局记录）；`/corerpg stats` 在 P1 下显示 B/H；NI 模板 `ember-v1-gear.yml` 需要重启或 `ni reload` 才会加载。
 
-## 8. G02 SetRuntime 实现状态（未部署）
+## 8. G02 SetRuntime 实现状态（CoreRpg 1.17.0，未部署）
 
 - 纯逻辑：`EmberSetRules`（系数表）、`EmberBurnBook`（燃烧）、`EmberSetEngine`（计数、内置冷却、根事件去重、爆炸选目标、HUD 文本）。单测：`EmberSetEngineTest`、`EmberBurnBookTest`、`EmberSetEnvelopeTest`、`EmberLoadoutTest`（C02/C03）。
 - Bukkit：`EmberSetService`。MONITOR `EntityDamageByEntityEvent`（不忽略已取消事件）里按 `EmberCombatListener.takeSwing(e)` 取同一事件的 root id/c；`SkillService.internalDamage` 时按 `EmberCombatListener.internalKind` 分为 SKILL/BURN/EXPLOSION，都不计数。
@@ -381,4 +381,30 @@ CREATE TABLE IF NOT EXISTS cr_item_txn (           -- 幂等键＋审计（强�
 - 点燃和爆炸在命中后的下一 tick 执行（不在原伤害事件内嵌套造成伤害）；炽愈立即执行。
 - 满血时炽愈照样触发并开始 6s 冷却（回复量为 0，trace 记一行）。
 - §8.4 五目标焚烬 731.888/s 是上界：按 §4.2 规则（每 3 击点燃一次、每次 4 跳）每秒最多 2.133 跳，实际可达约 569.9/s（测试里同时断言两者）。
+
+## 9. G03 P1 强化／互换／升阶／精工／成色／分解（CoreRpg 1.17.0，未部署）
+
+旧 `EnhanceService`/`ForgeService`/`ScrapService` 和旧菜单不变（它们只认白名单 NI id，本来就拒绝 `ember_v1` 物品）。
+
+- 纯规则 `EmberUpgradeRules`：§6.1 表；保底计数 `pity` 存在物品数据里，下一次尝试序号 = pity+1，序号达到"本档最多尝试"即必成；成功 enh+1、pity 归零；失败 pity+1，不降级、不爆装。§6.3 互换只交换 enh+pity，两件都绑定。§6.4 原位升阶（uid 不变，NI id 换成下一阶模板，强化轨道/成色/精工/绑定保留）。§5.3 精工、成色（卓越→极品拒绝）、分解（只限 `src=drop` 的 T1–T3）。每个操作返回 cost 和 rev+1 的新数据，预览就是结果。
+- 单测 `EmberUpgradeRulesTest`：E05–E09；§6.2 精确分布（均值 22.784、中位 22、P90 31、P95 33、最坏 51；期望 927.87 碎片／68.37 核心／12,984.12 币；全失败路线正好 2,132／157／29,720）＋20 万次种子蒙特卡洛（走真实规则代码）。
+- Bukkit `EmberForgeService`（`/corerpg p1 enhance|upgrade|refine [craft|quality]|dismantle|swap [uid前缀]`，不带 `confirm` 只预览；`rid:<id>` 可选；`/corerpg p1 sync`；管理员 `/corerpg p1 flag <玩家> q04|q07 [clear]`）：
+  1. P1 总开关开启，且不在 P1 战斗世界或副本世界（"城内"）。
+  2. 物品可信：签名 NBT＋DB 行（owner、rev、state=active）；每个 uid 同时只允许一个操作。
+  3. 先检查全部材料和金币，再一起扣除（任何一步失败都退回）；材料不足时不抽随机、不推进保底。
+  4. 强化在扣费后掷随机数；新物品堆叠预先生成（模板缺失时直接退回，不写库）。
+  5. 一个 DB 事务（单独线程）：按 request id 查重放 → 按 uid 顺序 `SELECT … FOR UPDATE` → 校验 owner/rev/state → `UPDATE … WHERE rev=?` → 写 `cr_p1_txn` 账本 → COMMIT。成功后按 uid 找到背包里的堆叠并替换；失败或重放时退回全部材料和金币。
+  6. 默认 request id = 操作类型＋uid＋rev（互换为两件的 uid/rev 哈希），所以同一状态的重复请求只执行一次；完成后物品 rev 已变，再点一次是新的操作。
+  7. 分解：先把物品从背包拿走再提交，成功给胚料、DB 状态改成 `dismantled`；失败把原物品还回去。
+  8. DB 为准：登录 3 秒后和 `/corerpg p1 sync` 会把 rev 落后于 DB 的堆叠按 DB 重写。
+  9. YAML 存储没有 DB，只有签名 NBT；重放表在内存里。
+- 首通条件是桩：`PlayerData` 计数 `p1_first_clear_q04@all` / `p1_first_clear_q07@all` > 0，等 Q04/Q07 接线时由通关事件写入。
+- 新增 NI 材料 `mat_ember_v1_blank`（余烬胚料，`ember-v1-gear.yml`）；碎片／骨尘／核心碎片沿用 `mat_ember_shard`／`mat_ember_bone_dust`／`mat_ember_core_fragment`。
+- TrMenu 桩 `ember_p1_forge.yml`（`/ember_p1_forge`，未挂主菜单）：只转发到上面的命令；互换和分解的确认仍需手打命令。
+- 新表 `cr_p1_txn`（request_id 主键、kind、owner、uid_a/uid_b、before/after 规范串、cost、note）；`cr_p1_loadout` 增加 `burst_cd_ms`、`sustain_cd_ms`（表已存在时用 information_schema 检查后 `ALTER TABLE … ADD COLUMN`，只动 P1 自己的表）。
+
+与书的差异／取舍：
+- 书 §6 写的是同步事务；这里是"主线程先扣费，DB 事务在后台线程，失败退款"，避免主线程等数据库。代价是掉线时的退款只存在内存里（会写 WARN 日志），重启前登录会补发。
+- 强化本身不绑定物品（书没有要求）；互换会绑定两件。
+- `src=migrate` 也不可分解（书只点名任务／补发／测试件，这里按保守处理）。T0 不可升阶、不可分解。
 
