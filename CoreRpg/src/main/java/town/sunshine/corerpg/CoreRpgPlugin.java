@@ -706,6 +706,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             }
         }, 10L);
         if (questService != null) questService.onJoin(player);
+        if (abyssSettleService != null) abyssSettleService.onPlayerJoin(player); // B2.140 relog grace / payout
     }
 
     @EventHandler

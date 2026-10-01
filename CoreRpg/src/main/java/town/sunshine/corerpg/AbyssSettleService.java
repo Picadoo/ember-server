@@ -22,7 +22,8 @@ import java.util.UUID;
 /**
  * Memory-session abyss progress + settle rewards (1.4.6).
  * Stage 4.1: settle(floor≥12) grants weekly first mat_ember_stable_charm via lootWeekMarks abyss_weekly12.
- * Session is NOT MySQL — Map&lt;UUID, AbyssSession&gt;, cleared on quit.
+ * Session is in memory (Map&lt;UUID, AbyssSession&gt;); B2.140 keeps it across a relog and mirrors an unsettled floor
+ * into PlayerData so it is paid out after the grace window or a restart.
  */
 public final class AbyssSettleService {
 
@@ -150,8 +151,71 @@ public final class AbyssSettleService {
         sessions.remove(uuid);
     }
 
+    /** B2.140: an unsettled run survives a relog within this window (DP keeps the instance); later it is paid out. */
+    static final long RELOG_GRACE_MS = 10L * 60L * 1000L;
+    static final String PENDING_KEY = "abyss_run_floor";
+
+    private void mirror(UUID id, int floor) {
+        PlayerData d = dataStore.get(id);
+        if (d == null) return;
+        int cur = d.periodCount(PENDING_KEY, "all");
+        if (cur != floor) d.addPeriodCount(PENDING_KEY, "all", floor - cur);
+    }
+
     public void onPlayerQuit(Player player) {
-        if (player != null) sessions.remove(player.getUniqueId());
+        if (player == null) return;
+        UUID id = player.getUniqueId();
+        AbyssSession s = sessions.get(id);
+        if (s == null || s.isSettled() || s.getFloor() < 1) { // nothing to keep
+            sessions.remove(id);
+            mirror(id, 0);
+            return;
+        }
+        s.quitAt = System.currentTimeMillis();
+        mirror(id, s.getFloor()); // saved by dataStore.unload right after
+        plugin.getLogger().info("[深渊] " + player.getName() + " 断线，保留本局进度 层 " + s.getFloor() + "（" + (RELOG_GRACE_MS / 60000) + " 分钟内重连可继续）");
+    }
+
+    private static boolean inAbyssWorld(Player p) {
+        String w = p.getWorld().getName().toLowerCase(java.util.Locale.ROOT);
+        return w.startsWith("dungeon_") && w.contains("abyss");
+    }
+
+    /** B2.140: called ~2 s after join. Resume inside the instance within the grace window, otherwise pay out. */
+    public void onPlayerJoin(final Player player) {
+        if (player == null || !enabled) return;
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override public void run() {
+                if (!player.isOnline()) return;
+                UUID id = player.getUniqueId();
+                AbyssSession s = sessions.get(id);
+                PlayerData d = dataStore.get(id);
+                int pending = d == null ? 0 : d.periodCount(PENDING_KEY, "all");
+                if (s == null && pending < 1) return;
+                if (s == null) { // restart or memory lost: rebuild from the mirror
+                    s = getOrCreate(id);
+                    s.raiseFloor(pending);
+                    s.quitAt = 1L; // treat as expired
+                }
+                if (s.isSettled() || s.getFloor() < 1) { mirror(id, 0); return; }
+                boolean fresh = s.quitAt > 1L && System.currentTimeMillis() - s.quitAt <= RELOG_GRACE_MS;
+                if (fresh && inAbyssWorld(player)) {
+                    s.quitAt = 0;
+                    player.sendMessage(PREFIX + ChatColor.LIGHT_PURPLE + "已恢复本局深渊进度：最高层 " + ChatColor.AQUA + s.getFloor()
+                            + ChatColor.GRAY + "（可继续下潜，或菜单 → 深渊 → 撤离结算）");
+                    plugin.getLogger().info("[深渊] " + player.getName() + " 重连，恢复本局进度 层 " + s.getFloor());
+                    return;
+                }
+                player.sendMessage(PREFIX + ChatColor.YELLOW + "你在深渊中断线后未能回到本局，按断线前最高层 " + s.getFloor() + " 结算：");
+                SettleResult r = settle(player);
+                player.sendMessage(formatSettleMessage(player, r));
+                plugin.getLogger().info("[深渊] " + player.getName() + " 重连补结算 层 " + r.floor + " → " + r.outcome);
+                if (inAbyssWorld(player)) {
+                    player.sendMessage(PREFIX + ChatColor.GRAY + "本局已结束，正在离开深渊……");
+                    player.performCommand("dp leave");
+                }
+            }
+        }, 40L);
     }
 
     /** Command root: /corerpg abyss [progress|settle|evacuate|…] */
@@ -222,6 +286,12 @@ public final class AbyssSettleService {
         if (floor < 0) floor = 0;
         AbyssSession session = getOrCreate(target.getUniqueId());
         int before = session.getFloor();
+        if (floor == 0) { // B2.141: DP start script → new run (was a no-op: a 2nd run in one login settled as ALREADY)
+            if (before > 0 && !session.isSettled())
+                plugin.getLogger().warning("[深渊] " + target.getName() + " 新开一局时上一局（层 " + before + "）尚未结算");
+            session.reset();
+            mirror(target.getUniqueId(), 0);
+        }
         session.raiseFloor(floor);
         sender.sendMessage(PREFIX + ChatColor.GREEN + target.getName()
                 + " 本局层 " + before + " → " + session.getFloor());
@@ -309,6 +379,7 @@ public final class AbyssSettleService {
         if (session.isSettled()) {
             return new SettleResult(SettleOutcome.ALREADY, session.getFloor(), null, false);
         }
+        mirror(player.getUniqueId(), 0); // B2.140: settled now (flushMutation below / on quit)
         int floor = session.getFloor();
         if (floor < 1) {
             session.setSettled(true);
