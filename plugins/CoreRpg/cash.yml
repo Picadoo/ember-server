@@ -83,13 +83,13 @@ weekly:
   free_tickets: 0          # 维护备忘：遗留票物/体力口径；周本 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_weekly
 raid:
-  free_tickets: 0          # 2026-09-27: 维护备忘：遗留票物/体力口径；周登录团本票发放口径留档（菜单承诺每周团本票×1）
+  free_tickets: 0          # 2026-09-27: 维护备忘：遗留票物/体力口径；周登录团本票发放口径留档（现行 0；团本按体力进，本周首次免费）
   ticket_ni_id: ticket_ember_raid
 abyss:
   free_tickets: 0          # 维护备忘：遗留票物/体力口径；深渊 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_abyss
 
-# Stage 4.4 精英试炼周票 — 周一 0:00 Asia/Shanghai 与周本同节奏；不进商城遗留票物/体力相关池；维护备忘；持有硬顶 1
+# Stage 4.4 精英试炼周票 — 周一 0:00 Asia/Shanghai 与周本同节奏；不进商城遗留票物/体力相关池；维护备忘；hard_cap 现无代码消费（TicketGrantService 只读不用），键保留
 elite:
   free_tickets: 0          # 维护备忘：遗留票物/体力口径；精英 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_elite
