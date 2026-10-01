@@ -355,7 +355,7 @@
 - ~~**B2.110**~~ → TrMenu ember_raid.yml L76-77 进本 tell（**PASS · 勾销** · 插件 `22b1084` · 测 `e405013`；静态 PASS，实测发现方括号丢失，B2.122 已修）。
 - ~~**B2.111**~~ → TrMenu ember_abyss.yml L77 进本 tell（**PASS · 勾销** · 插件 `4cd3be3` · 测 `7ef8d00`；静态 PASS，实测发现方括号丢失，B2.122 已修）。
 - ~~**B2.122**~~ → TrMenu 全部 click `tell:` 行 `[..]`→`【..】`（TabooLib 组件语法吞方括号+颜色；25 菜单 91 行；**实测 PASS · 勾销** · `00cba0d` · 报告 `docs/TEST-B2.122-trmenu-brackets-live.md`）。
-- **B2.113** → TrMenu ember_hub.yml L215/L266/L280 硬编码体力 45/30/50 → `%corerpg_stamina_cost_weekly/abyss/raid%`（排在 B2.111 后、B2.103 前；待出稿）。
+- ~~**B2.113**~~ → TrMenu ember_hub.yml L215/L266/L280 硬编码体力 45/30/50 → `%corerpg_stamina_cost_weekly/abyss/raid%`（**实测 PASS · 勾销** · 本提交 · 2026-10-01 19:32 CST 机器人 /ember 实测：周常「进本消耗 §e45 §8体力」、深渊「消耗 §e30」、团本「消耗 §e50」均由 %corerpg_stamina_cost_weekly/abyss/raid% 解析（papi parse 45/30/50），unreplacedPAPI=0）
 - **B2.118** → TrMenu ember_raid.yml L22/L109/L118 写死 50 → `%corerpg_stamina_cost_raid%`（排在 B2.113 后；待出稿）。
 - **B2.120** → TrMenu ember_abyss.yml L49/L54/L130/L139 写死 30 → `%corerpg_stamina_cost_abyss%`（排在 B2.118 后；待出稿）。
 - **B2.121** → TrMenu ember_abyss.yml L132 旧票制「硬顶建议 ≤2/日（免费+购）」（排在 B2.120 后；待出稿）。
@@ -573,7 +573,7 @@
 | **B2.110** | TrMenu ember_raid.yml L76-77 | 进本按钮 click tell 恒报「消耗 50 体力」「团本已点燃」，与首免/OP/等级被拒私聊冲突 → 改「尝试进入」、不写扣费 | **PASS · 勾销**（设计 `4aff2ee` · 批准 `a63f4ac` · 插件 `22b1084` · 测 `e405013`；静态 PASS，实测发现方括号丢失，B2.122 已修） |
 | **B2.111** | TrMenu ember_abyss.yml L77 | 进本 click tell 硬编码「体力 30」，OP 免扣冲突、不跟 cash.yml | **PASS · 勾销**（设计 `227bec9` · 批准 `4e0c11a` · 插件 `4cd3be3` · 测 `7ef8d00`；静态 PASS，实测发现方括号丢失，B2.122 已修） |
 | ~~**B2.122**~~ | TrMenu menus/*.yml 全部 click `tell:`（25 菜单 91 行） | TabooLib `[文本](参数)` 组件语法吞掉 `[团本]`/`[深渊]` 等方括号与颜色（B2.110/B2.111 静态 PASS 未发现）→ `【..】` | **实测 PASS · 勾销**（`00cba0d` · 报告 `docs/TEST-B2.122-trmenu-brackets-live.md` · 2026-10-01 18:35 CST） |
-| **B2.113** | TrMenu ember_hub.yml L215/L266/L280 | 周本/深渊/团本 lore 硬编码体力 45/30/50 → 占位符 | 待出稿（排 B2.111 后） |
+| ~~**B2.113**~~ | TrMenu ember_hub.yml L215/L266/L280 | 周本/深渊/团本 lore 硬编码体力 45/30/50 → 占位符 | **实测 PASS · 勾销**（本提交 · 2026-10-01 19:32 CST 机器人 /ember 实测：周常「进本消耗 §e45 §8体力」、深渊「消耗 §e30」、团本「消耗 §e50」均由 %corerpg_stamina_cost_weekly/abyss/raid% 解析（papi parse 45/30/50），unreplacedPAPI=0） |
 | **B2.118** | TrMenu ember_raid.yml L22/L109/L118 | 团本菜单写死「50」体力（口径准确）→ `%corerpg_stamina_cost_raid%` | 待出稿（排 B2.113 后） |
 | **B2.120** | TrMenu ember_abyss.yml L49/L54/L130/L139 | 深渊菜单写死「30」体力 → `%corerpg_stamina_cost_abyss%` | 待出稿（排 B2.118 后） |
 | **B2.121** | TrMenu ember_abyss.yml L132 | 「硬顶建议 ≤2/日（免费+购）」旧票制口径，深渊无免费次数 | 待出稿（排 B2.120 后） |
