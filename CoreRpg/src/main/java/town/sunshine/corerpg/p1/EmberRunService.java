@@ -686,9 +686,23 @@ public final class EmberRunService implements Listener {
         }
     }
 
+    /** B2.139: logged back into a Q instance whose run no longer includes this player (released / ended / restart). */
+    public boolean orphanedIn(Player p) {
+        if (p == null || maps.byWorld(p.getWorld().getName()) == null) return false;
+        EmberRunSession s = openSessionOf(p.getUniqueId());
+        return s == null || (s.world != null && !s.world.equals(p.getWorld().getName()));
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
+        if (maps.byWorld(p.getWorld().getName()) != null) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!p.isOnline() || !orphanedIn(p)) return;
+                p.sendMessage(P + ChatColor.YELLOW + "你所在的主线本已结束或已取消（未开战的体力会退还）：正在送你离开实例……");
+                p.performCommand("dp leave");
+            }, 20L);
+        }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!p.isOnline() || blocksLegacy(p.getWorld())) return;
             deliver(p);

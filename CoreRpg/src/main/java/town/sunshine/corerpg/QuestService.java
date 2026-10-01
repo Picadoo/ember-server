@@ -1194,7 +1194,11 @@ public final class QuestService implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override public void run() {
                 if (!p.isOnline() || !isInstanceWorld(p.getWorld())) return;
-                if (town.sunshine.corerpg.p1.EmberMode.isP1(p)) { p1Reconnect(p); return; } // ember-v1.0-P1 D11/B05
+                if (town.sunshine.corerpg.p1.EmberMode.isP1(p)) {
+                    if (plugin.getEmberRuns() != null && plugin.getEmberRuns().orphanedIn(p)) return; // B2.139: run gone → EmberRunService sends them out
+                    p1Reconnect(p);
+                    return;
+                } // ember-v1.0-P1 D11/B05
                 instanceGrace(p, 140);
                 p.sendMessage(ChatColor.GOLD + "[余烬] 你回到了副本中：已回满生命并获得 7 秒保护。" + ChatColor.GRAY + "想离开请 /dp leave");
             }
