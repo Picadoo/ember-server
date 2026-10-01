@@ -410,7 +410,8 @@
 - ~~**B2.165**~~ → P1 实测：Q07 首领冲撞终点半身进厅墙，爬上墙顶 y70 走了整场（实测 PASS · 勾销 · 5965455 · 冲撞查碰撞箱边缘、被挡改向或不放、高出地面 4.5 格或卡墙即回原点；修后最高 y64.96，冲撞 3.5 / 8 / 8 格）
 - ~~**B2.166**~~ → P1 实测：DP 复用同名世界时，上一局的结束兜底（30 秒 dp leave）把刚进新局的玩家踢出（实测 PASS · 勾销 · f06c4ce · stillOurs() 检查；同世界再进 30 秒未被踢）
 - ~~**B2.167**~~ → P1 实测：首领技能命中带原版击退（横扫 0.5 + 约 1.85 格并跳起），超过书「最多 1 格」（实测 PASS · 勾销 · df4928c · 首领技能与首领普攻取消原版击退速度；1.20.3 实测横扫 0.50、径向冲击 1.00 格，无跳起）
-- **B2.168** → P1 实测：P1Alpha 管理员补发的 T2+6 烬爆刃在 05:24 Q04 实例死亡后从背包消失，cr_p1_item 行仍 active；kill 复现不出（待查 · 需要背包 vs cr_p1_item 对账命令（列出 DB active 但不在任何背包 / 邮件 / 暂存里的物品））
+- ~~**B2.168**~~ → P1 实测：P1 装备会按原版耐久磨坏（T0 起始之刃是铁剑 250 次，约 9 局 Q01 后碎掉；P1Alpha 管理员补发的 T2+6 钻石剑在长时间测试中同样碎掉），cr_p1_item 行仍 active（实测 PASS · 勾销 · 3190379 · 带 P1 数据的物品取消 PlayerItemDamageEvent，所有世界、不看 P1 开关；1.20.4 实测 25 次命中后耐久仍 0；已碎的两件不自动补回，Delta 的起始之刃按「bug 补发」重新发放并标来源）
+- **B2.169** → P1 试玩：书 §3.1「首次进入提供 T0 武器、T0 护符和基础补给」与 §19.4「回复药商店 10 币」都没有落地——起始包只有刃 + 护符，回复药只能钓鱼熬制（life.yml，河豚 + 鳕鱼 + 10 币）。新角色在 Q01 里没有任何回复手段（待定：补给数量书中没写，属于数值，需要策划给数）
 - ~~**B2.105**~~ → plugins/CoreRpg/set.yml L27 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释）（**实测 PASS · 勾销** · `fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常）。
 - ~~**B2.106**~~ → plugins/CoreRpg/cash.yml L86、L92 段首 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改）（**实测 PASS · 勾销** · `b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变）。
 - ~~**B2.109**~~ → mineflayer-tests 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb（**实测 PASS · 勾销** · `42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s）。
@@ -680,7 +681,8 @@
 | ~~**B2.165**~~ | CoreRpg EmberRunDirector | 首领冲进墙 / 上房顶 | **实测 PASS · 勾销**（5965455 · 1.20.1 · 2026-10-02 05:00 CST） |
 | ~~**B2.166**~~ | CoreRpg EmberRunService | 复用世界误踢 | **实测 PASS · 勾销**（f06c4ce · 1.20.2 · 2026-10-02 05:30 CST） |
 | ~~**B2.167**~~ | CoreRpg EmberRunService / KnockbackGuard | 首领击退距离 | **实测 PASS · 勾销**（df4928c · 1.20.3 · 2026-10-02 06:06 CST） |
-| **B2.168** | CoreRpg EmberItemStore（对账工具） | P1 物品丢失对账 | **待查** |
+| ~~**B2.168**~~ | CoreRpg EmberLoadoutService.onItemDamage | P1 装备原版耐久磨损 | **实测 PASS · 勾销**（3190379 · 1.20.4 · 2026-10-02 06:33 CST） |
+| **B2.169** | CoreRpg 起始包 / 补给商店 | 新角色没有基础补给与回复药购买途径 | **待策划给数** |
 | ~~**B2.105**~~ | plugins/CoreRpg/set.yml L27 | 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释） | **实测 PASS · 勾销**（`fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常） |
 | ~~**B2.106**~~ | plugins/CoreRpg/cash.yml L86、L92 段首 | 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改） | **实测 PASS · 勾销**（`b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变） |
 | ~~**B2.109**~~ | mineflayer-tests | 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb | **实测 PASS · 勾销**（`42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s） |
