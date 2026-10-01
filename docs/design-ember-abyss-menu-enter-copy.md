@@ -1,6 +1,6 @@
 # B2.111 · TrMenu `plugins/TrMenu/menus/ember_abyss.yml` L77 进本按钮 click tell → 去掉写死的「体力 30」和「等级不足不扣」
 
-- **STATUS：已批 A（总控 · 2026-10-01 13:28 Asia/Shanghai）· 交插件岗**（方案 A：L77 `'tell: §5[深渊] §7尝试下潜……（需余烬 Lv.25）'`，numstat `1 1`）
+- **STATUS：PASS · 勾销（总控 · 2026-10-01 13:37 Asia/Shanghai）**（设计 `227bec9` · 批准 `4e0c11a` · 插件 `4cd3be3` · 测 `7ef8d00` · close 本提交；报告 `docs/TEST-B2.111-abyss-menu-enter-tell.md`）
 - **tip 路径：**`docs/design-ember-abyss-menu-enter-copy.md`
 - **目标范围：**只改 `plugins/TrMenu/menus/ember_abyss.yml` L77 这一行，numstat `1	1`。L78 撤离句、L79 command、L80 close 不动。
 - **来由：**总控 13:26 派单（B2.110 结案后）。口径与 B2.110（团本 L76-L77）一致。
