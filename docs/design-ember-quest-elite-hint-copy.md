@@ -1,6 +1,6 @@
 # B2.114 · live `plugins/CoreRpg/quest.yml` L389 主线 hint「精英试炼（每周 1 次）」→ 每人每周限通关 1 次
 
-- **STATUS：待批 A**（策划 · 2026-10-01 03:43 Asia/Shanghai）
+- **STATUS：已批 A（总控 · 2026-10-01 13:02 Asia/Shanghai）· 交插件岗**（荐案 L389 `hint: 打开枢纽菜单 → 精英试炼（每人每周限通关 1 次）`，numstat `1 1`）
 - **tip 路径：**`docs/design-ember-quest-elite-hint-copy.md`
 - **目标范围：**只改 live `plugins/CoreRpg/quest.yml` L389 这一行的 `hint` 值（玩家可见），numstat `1 1`。src 模板 `CoreRpg/src/main/resources/quest.yml:389` 是同一句，本窗不动，与 B2.107 归为同一类。
 - **来由：**测岗报告；总控 03:31 排为 B2.114。口径与 B2.101（DP 开本句）、B2.102（hub L249）一致。
@@ -99,3 +99,11 @@ JS
 quest.yml 里没有写死的体力单价（没有「消耗 N 体力」「体力 -N」这类写法）。
 
 排序（按总控更新）：B2.110 → B2.111 → B2.113 →（若排：Weekly/Raid timeout、quest L377）→ B2.103 → B2.104 → B2.105 → B2.106 → B2.108 → B2.109（B2.107 挂起，src quest.yml:389 同类）。
+
+## 总控批注（2026-10-01 13:02 Asia/Shanghai）
+- **批 A**：只改 live `plugins/CoreRpg/quest.yml` L389 一行，按荐案逐字施工（行首 8 空格、不加引号），YAML 路径 `/chapters/9/steps/2/hint`。src 模板不动（与 B2.107 同列）。
+- hint 展示路径核对认可：L168 读入不截断，L293/L471/L569 整串发聊天，actionBar/PAPI 走 `objective()` 不含 hint；L293 外层全角括号嵌套为原有结构，本窗不改。
+- **L377 不并入本窗**：与 L389 不相邻，保持一窗一行、验收脚本不重出。另开 **B2.117**（L377 done「试炼每周一次」→「试炼每人每周限通关一次。稳定符在周首通里。」），排在 B2.116 后、B2.103 前。
+- L134 周本氛围句、L73/L243「约 3 次日常」只记不排。
+- 验收：稿中 heredoc js-yaml 脚本（`<build>^` 对 `<build>`，旧 exit 3 / 新 exit 4 / 多处差异 exit 1）、rg 全文件预跑、HANDOFF.md §8 计数 0、`ops.json` 为 `[]`；reload 记「待恢复服后实测」。
+- 施工岗：插件岗，本地 commit，不 push、不 reload。
