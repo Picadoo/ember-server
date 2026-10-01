@@ -11,9 +11,9 @@ Options:
 
 Layout:
   - '#########'
-  - '#       #'
+  - '#1234567#'
   - '# W D U #'
-  - '# E     #'
+  - '# E 8   #'
   - '####X####'
 
 Events:
@@ -22,6 +22,134 @@ Events:
     - 'tell: §3【仓库】 §7材料仓：一格一种 · 数量近无限 · 可解锁新格'
 
 Icons:
+
+  '1':
+    display:
+      material: hopper
+      name: '§a取出 · 第 1 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 1 64'
+        - 'command: corerpg warehouse'
+
+  '2':
+    display:
+      material: hopper
+      name: '§a取出 · 第 2 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 2 64'
+        - 'command: corerpg warehouse'
+
+  '3':
+    display:
+      material: hopper
+      name: '§a取出 · 第 3 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 3 64'
+        - 'command: corerpg warehouse'
+
+  '4':
+    display:
+      material: hopper
+      name: '§a取出 · 第 4 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 4 64'
+        - 'command: corerpg warehouse'
+
+  '5':
+    display:
+      material: hopper
+      name: '§a取出 · 第 5 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 5 64'
+        - 'command: corerpg warehouse'
+
+  '6':
+    display:
+      material: hopper
+      name: '§a取出 · 第 6 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 6 64'
+        - 'command: corerpg warehouse'
+
+  '7':
+    display:
+      material: hopper
+      name: '§a取出 · 第 7 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 7 64'
+        - 'command: corerpg warehouse'
+
+  '8':
+    display:
+      material: hopper
+      name: '§a取出 · 第 8 格'
+      lore:
+        - ''
+        - '§7一次取出 §f64 §7个（不足则全部取出）'
+        - '§8格内是什么：点「材料仓总览」查看'
+        - ''
+        - '§e➥ §f点击取出'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'command: corerpg warehouse withdraw 8 64'
+        - 'command: corerpg warehouse'
   '#':
     display:
       material: stained glass pane
@@ -41,7 +169,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg warehouse'
-        - 'tell: §8【仓库】 §7点击格位取出；或用本页取出按钮'
+        - 'tell: §8【仓库】 §7用本页「取出 · 第 N 格」按钮取出（每次 64 个）'
 
   D:
     display:
@@ -52,7 +180,7 @@ Icons:
         - '§7把手上的白名单 NI 材料全部存入'
         - '§8同 id 合并 · 满格且无同 id 则失败'
         - ''
-        - '§e➥ §fdeposit'
+        - '§e➥ §f点击存入'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -66,9 +194,9 @@ Icons:
         - ''
         - '§7默认扣余烬币（阶梯涨价）'
         - '§8也可在本页解锁格位（晶钻）'
-        - '§8晶钻价 28（可配）'
+        - '§8晶钻价 28'
         - ''
-        - '§e➥ §funlock'
+        - '§e➥ §f点击解锁'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
