@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(5, m.balanceVersion);                 // D75
-        assertEquals("g04-1/b5", m.ruleVersion);
+        assertEquals(6, m.balanceVersion);                 // D77–D78
+        assertEquals("g04-1/b6", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
@@ -655,5 +655,28 @@ public class EmberRunRulesTest {
         assertEquals(3, r.boss.skills.size());                     // existing moves only
         assertNotNull(r.boss.adds);
         for (int s = 1; s < 300; s++) assertFalse(m.abyssMap(s).raid);
+    }
+
+    @Test public void secondRaidSharesTheWeeklyCapAndGatesItsSecondPhase_P2_6() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.MapDef r1 = m.raids.get("r01"), r2 = m.raids.get("r02");
+        assertNotNull(r2);
+        assertTrue(r2.raid);
+        assertSame(r2, m.byWorld("dungeon_EmberQ0R2_1A2B3C4D"));
+        assertSame(m.byKey("q06"), m.byWorld("dungeon_EmberQ06_1A2B3C4D"));
+        assertEquals("q07", r2.requires);
+        assertEquals(3, r2.tier);
+        assertEquals("raid", r1.capGroup);
+        assertEquals(EmberRunService.capKey(r1), EmberRunService.capKey(r2));
+        assertEquals("q01", EmberRunService.capKey(m.byKey("q01")));
+        assertNull(r2.boss.adds);                                    // pressure from the phase, not adds
+        int gated = 0;
+        for (EmberRunMaps.Skill sk : r2.boss.skills) if (sk.below <= 1.0) gated++;
+        assertEquals(1, gated);
+        long[] next = {0, 0, 0};
+        double[] below = {1.01, 1.01, 0.5};
+        next[0] = 99999; next[1] = 99999;
+        assertEquals(-1, EmberRunDirector.dueSkill(next, 1000, below, 0.8)); // gated above 50 %
+        assertEquals(2, EmberRunDirector.dueSkill(next, 1000, below, 0.49));
     }
 }

@@ -195,7 +195,7 @@ class Fight:
                     if s['next'] == t:
                         sk = s['s']
                         s['next'] = t + sk['every']
-                        if boss['hp'] > 0:
+                        if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
                             self.hurt(sk['dmg'], True)
                             f = sk.get('follow')
                             if f and (f.get('below') is None or boss['hp'] <= f['below'] * boss['max']):

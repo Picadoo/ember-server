@@ -20,7 +20,7 @@ Layout:
   - '#T X A K#'
   - '#1234567#'
   - '# s b u n'
-  - '#GM F C D'
+  - '#GMRF C D'
   - '####B####'
 
 Events:
@@ -28,6 +28,27 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
 
 Icons:
+  R:
+    update: 20
+    display:
+      material: diamond chestplate
+      name: '§b团本 · 霜封哨所·团（3～5 人）'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_raid_r02%'
+        - '§7Q06 的地图 · 首领双段刀气 + 追身冲击圈；半血进入第二阶段（砸地接横扫）'
+        - '§7同一伤害管道与三套装 · 无团本专属掉落或饰品'
+        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
+        - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'
+        - '§7结算同锈轨矿道·团：挑战版固定结算 + 多 1 件 T3 + 1 枚 T3 印记'
+        - '§7与锈轨矿道·团合计每周 3 次'
+        - ''
+        - '§e➥ §f队长点击开本（全队需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter r02'
+        - close
   '#':
     display:
       material: gray stained glass pane
@@ -248,6 +269,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_raid_r01%'
         - '§7Q07 的地图与首领招式组合（重砸 / 冲撞 / 斧刃横扫 + 半血增援）'
+        - '§7与霜封哨所·团合计每周 3 次'
         - '§7同一伤害管道与三套装 · 无团本专属掉落或饰品'
         - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
         - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'

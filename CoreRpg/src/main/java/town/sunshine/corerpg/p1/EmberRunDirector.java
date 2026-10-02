@@ -460,7 +460,11 @@ final class EmberRunDirector {
             return;
         }
         if (follow != null || now < recoverUntil) return;
-        int due = dueSkill(nextAt, now);
+        int due = dueSkill(nextAt, now, belowOf(b.skills), ratio); // P2-6: top-level skills may be phase-gated
+        if (!phaseTold && due >= 0 && b.skills.get(due).below <= 1.0) {
+            phaseTold = true;
+            svc.tellRun(s, "§c" + b.name + " §7进入第二阶段：新招式「" + b.skills.get(due).name + "」！");
+        }
         if (due >= 0) {
             EmberRunMaps.Skill sk = b.skills.get(due);
             startWarn(sk, now, le);
@@ -475,6 +479,24 @@ final class EmberRunDirector {
     static int dueSkill(long[] nextAt, long now) {
         for (int i = 0; i < nextAt.length; i++) if (now >= nextAt[i]) return i;
         return -1;
+    }
+
+    /** P2-6: like dueSkill, but a skill with below[i] fires only while the boss HP ratio is under it (a gated skill whose
+     *  slot passes waits, so it opens the second phase as soon as the threshold is crossed). */
+    static int dueSkill(long[] nextAt, long now, double[] below, double ratio) {
+        for (int i = 0; i < nextAt.length; i++) if (now >= nextAt[i] && (below == null || ratio < below[i])) return i;
+        return -1;
+    }
+
+    private double[] belowCache;
+    private boolean phaseTold;
+
+    private double[] belowOf(List<EmberRunMaps.Skill> skills) {
+        if (belowCache == null || belowCache.length != skills.size()) {
+            belowCache = new double[skills.size()];
+            for (int i = 0; i < belowCache.length; i++) belowCache[i] = skills.get(i).below;
+        }
+        return belowCache;
     }
 
     /** Keeps the schedule anchored at the fight start: next slot strictly after {@code now}. */

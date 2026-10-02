@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75)
-balance_version: 5
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78)
+balance_version: 6
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -554,13 +554,14 @@ raids:
     map_version: ember_daily_rail_v1@d15-2026-10-02
     requires: q07
     unlocks: ""
-    purpose: "团本（3～5 人）：同一伤害管道与三套装；掉落同挑战版（T3、挑战成色）、每次多 1 件 T3 与 1 枚 T3 印记；每周 3 次"
+    purpose: "团本（3～5 人）：同一伤害管道与三套装；掉落同挑战版（T3、挑战成色）、每次多 1 件 T3 与 1 枚 T3 印记；与 r02 合计每周 3 次"
     b_ref: 90
     # P2-5: 3–5 players, its own stamina and weekly cap (book §18.4); no first-clear package, no exclusive drops
     party_min: 3
     party_max: 5
     cost: 50
     weekly_cap: 3
+    cap_group: raid   # P2-6 (D78): r01 + r02 share one weekly counter
     # role-less parties split incoming damage, so the A18 slope alone makes 5 far easier than 3 (p1party, D76):
     hp_per_member: 0.85
     dmg_per_member: 0.20
@@ -619,6 +620,85 @@ raids:
         warn: 1.0
         role: melee
         points: [[-12, 64, 136], [12, 64, 136], [-12, 64, 152], [12, 64, 152]]
+      recover: 0.5
+    event:
+      after: r2
+      anchor: [66, 64, 64]
+      area: [60, 63, 58, 72, 70, 70]
+
+  r02:
+    name: 霜封哨所·团
+    dungeon: EmberQ0R2
+    template: ember_daily_frost_v1
+    tier: 3
+    drop_label: T3
+    content_version: v1
+    map_version: ember_daily_frost_v1@d15-2026-10-02
+    requires: q07
+    unlocks: ""
+    purpose: "团本（3～5 人）：霜封哨所的地图，首领双段刀气 + 追身冲击圈，半血后砸地带横扫；掉落与 r01 相同；与 r01 合计每周 3 次"
+    b_ref: 90
+    # P2-6: same raid rules as r01; the weekly cap is shared through cap_group (both raids together: 3 per week)
+    party_min: 3
+    party_max: 5
+    cost: 50
+    weekly_cap: 3
+    cap_group: raid
+    hp_per_member: 0.85
+    dmg_per_member: 0.20
+    # D15: book ch. 16 walkable white box (ember_daily_frost_v1, /corerpg p1 mapbuild q06)
+    spawn: [0, 64, 6]
+    spread: [[-2, 64, 6], [2, 64, 6], [-4, 64, 6], [4, 64, 6]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 16)
+    safe: {r0: [0, 64, 3], r1: [0, 64, 23], r2: [40, 64, 55], r3: [40, 64, 89], rb: [0, 64, 125]}
+    holo: {entry: [0, 67, 6], event: [60, 67, 64], exit: [0, 67, 125]}
+    mobs:
+      melee:    {mm: EmberQ06Melee, hp: 270, atk: 26, interval: 2.5}
+      ranged:   {mm: EmberQ06Ranged, hp: 198, atk: 26, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ06Heavy, hp: 378, atk: 26, interval: 3.0}
+      caster:   {mm: EmberQ06Caster, hp: 234, atk: 26, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+      treasure: {mm: EmberQ06Treasure, hp: 360, atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ06Elite, hp: 900, atk: 26, interval: 2.5}
+    rooms:
+      r1:
+        label: 霜旗外院
+        trigger: [-18, 63, 20, 18, 68, 44]
+        points: [[-6, 64, 33], [0, 64, 33], [6, 64, 33], [-6, 64, 38], [0, 64, 38], [6, 64, 38], [-15, 64, 32], [15, 64, 32]]
+        door: [37, 64, 48, 43, 69, 48]
+        a: {melee: 6, ranged: 1}
+        b: {melee: 5, heavy: 1}
+      r2:
+        label: 军械仓
+        trigger: [28, 63, 52, 52, 68, 76]
+        points: [[34, 64, 65], [40, 64, 65], [46, 64, 65], [34, 64, 70], [40, 64, 70], [46, 64, 70], [31, 64, 64], [49, 64, 64]]
+        door: [37, 64, 81, 43, 69, 81]
+        a: {melee: 5, ranged: 2}
+        b: {melee: 5, caster: 1}
+      r3:
+        label: 盾墙内院
+        trigger: [28, 63, 86, 52, 68, 110]
+        points: [[34, 64, 99], [40, 64, 99], [46, 64, 99], [34, 64, 104], [40, 64, 104], [46, 64, 104], [31, 64, 98], [49, 64, 98]]
+        door: [20, 64, 133, 20, 69, 139]
+        a: {melee: 6, heavy: 1}
+        b: {melee: 5, ranged: 2}
+    boss:
+      mm: EmberQ06Boss
+      name: 霜封统领·团
+      hp: 13000
+      atk: 48
+      interval: 3.0
+      at: [0, 64, 138]
+      area: [-16, 63, 122, 16, 74, 154]
+      wait_in_area: true
+      # P2-6 move combination (book §18.4: existing moves only, no adds; pressure from phases): Q06 刀气 + 二段 (heavy),
+      # Q04 冲击圈 on a random player (light), and below 50 % Q02 砸地 with its 横扫 follow-up (heavy / light);
+      # challenge heavy / light × 1.10 like r01
+      skills:
+        - {type: line, name: 刀气, every: 10, warn: 1.2, start: 1, length: 6, width: 3, dmg: 79,
+           follow: {type: line, name: 刀气·二段, start: 1, length: 6, width: 3, shift: 4, delay: 1.0, warn: 1.2, dmg: 79}}
+        - {type: circle, target: player, name: 冲击圈, every: 8, warn: 1.2, radius: 3, dmg: 48, light: true}
+        - {type: circle, name: 砸地, every: 12, warn: 1.2, radius: 3, ahead: 2, dmg: 79, below: 0.5,
+           follow: {type: cone, name: 横扫, below: 0.5, delay: 2.0, warn: 0.9, angle: 80, range: 3, dmg: 48, light: true}}
       recover: 0.5
     event:
       after: r2

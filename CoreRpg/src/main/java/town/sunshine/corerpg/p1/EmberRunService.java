@@ -212,12 +212,15 @@ public final class EmberRunService implements Listener {
 
     /** P2-5: settled clears of this raid in the current Monday-based week */
     public int raidWeek(PlayerData d, EmberRunMaps.MapDef m) {
-        return d.periodCount(C_RAID + m.key, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
+        return d.periodCount(C_RAID + capKey(m), EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
     }
+
+    /** P2-6 (D78): the weekly counter of a raid = its cap_group, else its own key */
+    static String capKey(EmberRunMaps.MapDef m) { return m.capGroup == null || m.capGroup.isEmpty() ? m.key : m.capGroup; }
 
     public String raidLabel(PlayerData d, EmberRunMaps.MapDef m) {
         if (!progressFlag(d, m.requires)) return "需本人首通 " + m.requires.toUpperCase(Locale.ROOT);
-        return "本周 " + raidWeek(d, m) + "/" + m.weeklyCap + " · " + maps.partyMin(m) + "～" + maps.partyMax(m) + " 人 · " + maps.cost(m) + " 体力";
+        return "本周 " + raidWeek(d, m) + "/" + m.weeklyCap + (capKey(m).equals(m.key) ? "" : "（团本合计）") + " · " + maps.partyMin(m) + "～" + maps.partyMax(m) + " 人 · " + maps.cost(m) + " 体力";
     }
 
     public boolean abyssOpen(PlayerData d) {
@@ -654,7 +657,7 @@ public final class EmberRunService implements Listener {
             EmberRunRules.Row r = l.record(s.runId, g.key, g.encode(), st, now, created);
             if (created[0]) changed.add(r);
             if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(C_ROTATION, week, 1); // counted once per run (ledger key)
-            if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + m.key, week, 1); // P2-5 weekly cap
+            if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + capKey(m), week, 1); // P2-5 weekly cap (P2-6: per cap_group)
         }
         if (in.firstClear != null) pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
         boolean newBest = s.abyss > 0 && s.abyss > abyssBest(pd);

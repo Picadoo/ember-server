@@ -111,7 +111,8 @@ public final class EmberRunMaps {
             ahead = num(m.get("ahead"), 0);
             length = num(m.get("length"), 5);
             width = num(m.get("width"), 3);
-            // follow-up gate: fires while boss HP ratio < below; default = always (full HP is ratio 1.0)
+            // phase gate: a follow-up (or, since P2-6, a top-level skill) fires only while boss HP ratio < below;
+            // default = always (full HP is ratio 1.0)
             below = num(m.get("below"), 1.01);
             delay = num(m.get("delay"), 0);
             start = num(m.get("start"), Double.NaN);
@@ -221,6 +222,8 @@ public final class EmberRunMaps {
         /** P2-5 raid overrides (−1 / 0 = the file-wide value / off): party size, stamina, weekly cap, party scaling */
         public final int partyMin, partyMax, cost, weeklyCap;
         public final double hpPerMember, dmgPerMember;
+        /** P2-6 (D78): raids with the same cap_group share one weekly counter ("" = own counter) */
+        public final String capGroup;
         /** true for entries of the runs-yml `raids:` section (never in the main-line order, featured or abyss) */
         public boolean raid;
 
@@ -239,6 +242,7 @@ public final class EmberRunMaps {
             partyMax = (int) num(m.get("party_max"), -1);
             cost = (int) num(m.get("cost"), -1);
             weeklyCap = (int) num(m.get("weekly_cap"), 0);
+            capGroup = str(m.get("cap_group"), "");
             hpPerMember = num(m.get("hp_per_member"), -1);
             dmgPerMember = num(m.get("dmg_per_member"), 0);
             purpose = str(m.get("purpose"), "");

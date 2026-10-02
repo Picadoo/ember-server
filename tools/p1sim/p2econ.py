@@ -153,7 +153,24 @@ def buy_listing(p, ccfg, rng):
     return True
 
 
-def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=False):
+RUNS = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'))
+RAIDS = RUNS.get('raids', {})
+# P2-5/P2-6: party clear rate by week after Q07 (tools/p1party.py, 4-player median of r01 / r02 at boss HP 13000:
+# week 2 ≈ 0.40, week 4 ≈ 0.76); weeks in between interpolated, capped at week 4's value.
+RAID_RATE = {1: 0.30, 2: 0.40, 3: 0.58, 4: 0.76}
+RAID_TRIES = 5  # a party gives up for the week after 5 attempts
+
+
+def raid_cap():
+    """Weekly settled raid clears per character: raids sharing a cap_group share one counter (P2-6)."""
+    groups = {}
+    for k, r in RAIDS.items():
+        g = r.get('cap_group') or k
+        groups[g] = max(groups.get(g, 0), int(r.get('weekly_cap', 0)))
+    return sum(groups.values())
+
+
+def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=False, raid=False):
     """Each week: if the player clears some challenge map >= 50 % of the time it farms challenge (featured first when
     rotating), otherwise it farms Q07 normal (T3). As on the server, the bonus only pays on challenge clears."""
     order = ccfg['order']
@@ -166,7 +183,20 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         bonus_left = ROT['weekly_cap']
         if trade:
             buy_listing(p, ccfg, rng)
-        for _ in range(7 * per_day):
+        runs_left = 7 * per_day
+        if raid and can_ch:  # raids only once the player can farm challenge (same gear bar as the p1party pool)
+            stamina, clears, cost = 7 * per_day * cfg['run_cost'], 0, int(next(iter(RAIDS.values()))['cost'])
+            for _ in range(RAID_TRIES):
+                if clears >= raid_cap() or stamina < cost:
+                    break
+                stamina -= cost
+                if rng.random() < RAID_RATE[min(w + 1, 4)]:
+                    clears += 1
+                    settle_with(p, ccfg, order[-1], 'chest')  # challenge settlement + raid_item (one more T3 roll)
+                    p.marks[3] += 1; marks_earned += 2       # raid_mark + the base mark
+                    p.invest()
+            runs_left = stamina // cfg['run_cost']
+        for _ in range(runs_left):
             if can_ch:
                 use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else best)
             else:
@@ -209,11 +239,12 @@ def main():
     ap.add_argument('--no-swap', action='store_true', help='phase 2 without the §6.3 enhance-track swap (old behaviour)')
     ap.add_argument('--trade', action='store_true', help='add the P2-3 market model (weekly best-of-10 purchase)')
     ap.add_argument('--abyss', action='store_true', help='add the P2-2 abyss policy as a third column')
+    ap.add_argument('--raid', action='store_true', help='add the P2-5/6 raids (rotation + weekly raid clears, shared cap)')
     a = ap.parse_args()
     cfg = p1config.load()
     ccfg = challenge_cfg(cfg)
     per_day = cfg['stamina_day'] // cfg['run_cost']
-    modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ())
+    modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ())
     res = {m: [] for m in modes}
     for i in range(a.players):
         for mode in modes:
@@ -225,8 +256,8 @@ def main():
             if mode == 'abyss':
                 res[mode].append(phase2_abyss(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, per_day))
             else:
-                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode == 'rot', per_day, runs,
-                                        trade=mode == 'trade'))
+                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode in ('rot', 'raid'), per_day, runs,
+                                        trade=mode == 'trade', raid=mode == 'raid'))
     print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
     print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
     print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
@@ -239,7 +270,7 @@ def main():
                 continue
             n = len(rows)
             print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d%% | %d | %d | %.1f | %d%% | %s | %s |' % (
-                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易'}[mode], round(100 * sum(r['set'] for r in rows) / n),
+                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易', 'raid': '轮换 + 团本'}[mode], round(100 * sum(r['set'] for r in rows) / n),
                 statistics.median(r['enh'] for r in rows), round(100 * sum(r['q'] >= 2 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 2 for r in rows) / n), round(100 * sum(r['q'] >= 3 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 3 for r in rows) / n),
