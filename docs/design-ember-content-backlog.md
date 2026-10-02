@@ -416,6 +416,10 @@
 - **B2.171** → 第二次试玩后的数值调整（D31，用户批准 2026-10-02 14:31）：Q03 首领 1000；Q04 近战 96、R3 5+1、首领 1900、首通币 2100；Q05–Q07 首领 3500/3800/4800（1.21.0 落地，2026-10-02 实测通过）
 - **B2.172** → 每日首次倒下退还该局回复药（D32，`death_refund.max_potions`=5，账本一天一行）（1.21.0 落地，2026-10-02 实测通过）
 - **B2.173** → `/corerpg p1 charm select` 的「套装: 未成套」误导：改为按选定护符 + 刃计算（D33，1.21.0 落地，2026-10-02 实测通过）
+- ~~**B2.174**~~ → 书 §19.1 装备页没有落地：主手 / 已选护符 / 实际 B·生命·防御 / 套装与觉醒 / 下一次突破 / 成套进度只在 `/corerpg p1 status` 聊天里（实测 PASS · 勾销 · 1.22.0 · TrMenu `ember_p1_gear` + PAPI `p1_stats/ehp/blade/charm`；主菜单「装备 · 主线本」，非 OP 机器人打开无未替换占位符）
+- ~~**B2.175**~~ → 书 §3.1「菜单能看操作」/ 主菜单「帮助」只有旧挂机闭环说明且不能点（实测 PASS · 勾销 · 1.22.0 · TrMenu `ember_help`：怎么玩 / 操作 / 三套装 / 变强 / 收益与体力 / 补给与倒下 / 七张图 / 背景（可不读）/ 旧系统；P1 主线本里手持 P1 刃按 F = 烬斩（D34），实测「释放 烬斩」、副手不变）
+- ~~**B2.176**~~ → P1 工坊（`ember_p1_forge`）没挂主菜单、强化轨道互换要手打 `swap confirm`（实测 PASS · 勾销 · 1.22.0 · 主菜单「工坊 · 主线本」、装备页「工坊」、工坊「互换 · 确认」按钮 + 返回装备页）
+- ~~**B2.177**~~ → 主菜单「礼包」「外观」是假入口：点开是没有礼包 / 外观的商城（书 §19.1「未完成系统不以可点击假入口充数」）（实测 PASS · 勾销 · 1.22.0 · 改成灰色「暂未上架」、不可点击，D35）
 - ~~**B2.105**~~ → plugins/CoreRpg/set.yml L27 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释）（**实测 PASS · 勾销** · `fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常）。
 - ~~**B2.106**~~ → plugins/CoreRpg/cash.yml L86、L92 段首 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改）（**实测 PASS · 勾销** · `b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变）。
 - ~~**B2.109**~~ → mineflayer-tests 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb（**实测 PASS · 勾销** · `42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s）。
@@ -691,6 +695,10 @@
 | **B2.171** | CoreRpg 配置 / MM | 试玩后数值调整（D31） | 1.21.0 落地，实测通过（2026-10-02） |
 | **B2.172** | CoreRpg EmberRunService | 每日首次倒下退药（D32） | 1.21.0 落地，实测通过（2026-10-02） |
 | **B2.173** | CoreRpg EmberCommand | charm select 套装提示（D33） | 1.21.0 落地，实测通过（2026-10-02） |
+| ~~**B2.174**~~ | TrMenu ember_p1_gear；CoreRpg EmberRunService.placeholder | P1 装备页（§19.1） | **实测 PASS · 勾销**（1.22.0 · 2026-10-02 16:58 CST） |
+| ~~**B2.175**~~ | TrMenu ember_help / ember_hub；CoreRpg SkillService.onSwapHotkeyP1 | 帮助页 + F 键烬斩（D34） | **实测 PASS · 勾销**（1.22.0 · 2026-10-02 16:59 CST） |
+| ~~**B2.176**~~ | TrMenu ember_p1_forge / ember_hub | 工坊入口 + 互换确认按钮 | **PASS · 勾销**（1.22.0 · TrMenu 43 个菜单加载无错误） |
+| ~~**B2.177**~~ | TrMenu ember_hub | 礼包 / 外观假入口（D35） | **实测 PASS · 勾销**（1.22.0 · gameplay Hub 44 项 missing=[]） |
 | ~~**B2.105**~~ | plugins/CoreRpg/set.yml L27 | 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释） | **实测 PASS · 勾销**（`fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常） |
 | ~~**B2.106**~~ | plugins/CoreRpg/cash.yml L86、L92 段首 | 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改） | **实测 PASS · 勾销**（`b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变） |
 | ~~**B2.109**~~ | mineflayer-tests | 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb | **实测 PASS · 勾销**（`42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s） |
