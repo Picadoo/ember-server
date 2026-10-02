@@ -119,7 +119,7 @@ public class EmberLoadoutTest {
         l = EmberLoadout.compute(t, blade("sustain", 3, 0, 0, 9), charm("sustain", 3, 0, 0, 10), 20);
         assertTrue(l.setProgress().endsWith("T3+9 2/2 §a· P1 套装完成"));
         assertEquals(3, l.awakening);
-        assertEquals("成套进度：无有效 P1 刃", EmberLoadout.compute(t, null, charm("scorch", 3, 0, 0, 9), 20).setProgress());
+        assertEquals("成套进度：主手没有有效的 P1 刃", EmberLoadout.compute(t, null, charm("scorch", 3, 0, 0, 9), 20).setProgress());
     }
 
     @Test public void nextAwakeningHintNamesWhatIsMissing() {
