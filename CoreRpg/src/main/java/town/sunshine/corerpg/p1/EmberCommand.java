@@ -50,6 +50,10 @@ public final class EmberCommand {
             if (supplies == null) { s.sendMessage(P + "补给服务未加载"); return true; }
             return supplies.cmd(s, args);
         }
+        if ("audit".equals(sub)) {
+            if (loadouts == null) { s.sendMessage(P + "装备服务未加载"); return true; }
+            return new EmberAudit(loadouts).cmd(s, args); // B2.170, checks corerpg.admin itself
+        }
         if (EmberRunService.OPS.contains(sub)) {
             if (runs == null) { s.sendMessage(P + "主线本服务未加载"); return true; }
             return runs.cmd(s, sub, args); // admin sub-ops check corerpg.admin themselves
