@@ -1,19 +1,19 @@
-# 余烬服 · 交接（2026-10-02 23:35 CST 更新）
+# 余烬服 · 交接（2026-10-02 23:50 CST 更新）
 
-这份文档写给接手的人，读完就能接着做。设计正文在 `docs/design-ember-v1.0-P1.md`（下文称「书」）。P2 草案在 `docs/design-ember-v1.1-P2-draft.md`。所有裁决记在源表 `docs/DESIGN-ember-v1.0-P1-source-table.md`（§13.x，D01–D87）。
+这份文档写给接手的人，读完就能接着做。设计正文在 `docs/design-ember-v1.0-P1.md`（下文称「书」）。P2 草案在 `docs/design-ember-v1.1-P2-draft.md`。所有裁决记在源表 `docs/DESIGN-ember-v1.0-P1-source-table.md`（§13.x，D01–D92）。
 
 ## 1 当前状态
 
 | 项 | 值 |
 |---|---|
 | 仓库 | `Picadoo/ember-server`，main 分支。工作树 `/workspace/ember-p1`（分支 p1-g01，推到 main）。服务器在 `/workspace/minecraft` 跑，这是 main 的检出 |
-| CoreRpg | **1.39.1**（`CoreRpg/pom.xml` 第 8 行和 `plugin.yml` `version:` 一起改） |
+| CoreRpg | **1.40.1**（`CoreRpg/pom.xml` 第 8 行和 `plugin.yml` `version:` 一起改） |
 | balance_version | 10（`ember-v1-runs.yml`，规则 g04-1/b10） |
 | 模式 | P1 是默认模式（D61–D65），旧玩法藏在 `ember_hub_legacy`。**不要关 P1** |
 | 菜单 | TrMenu 共 47 个，`trmenu reload` 就能重载 |
-| 套件 | `mineflayer-tests` gameplay 9/9（1.39.1；钓鱼偶尔随机失败，重跑即过） |
-| 玩家 | 没有老玩家，**不做数据迁移**。测试号 P1Fox、RaidA–E、NewbieQ、FreshA1–C1（全新号） |
-| 内容 | 七张主线图 Q01–Q07 + 挑战版。P2-1 每周挑战轮换。P2-2 深渊·余烬层（10 层）。P2-5/6 团本 R01 锈轨矿道·团 + R02 霜封哨所·团（3～5 人，两本合计每周 3 次）。P2-7 每日委托。P2-8 精选图周规则（限药 / 术者换防 / 逆行）。P2-9 每图掉落偏向、团本额外装备按目标族定向（保底精良）、称号和团本足迹（只做展示）。P2-10 排行榜（`/corerpg p1 top`）。新手提示：回复药放快捷栏、生命低提醒、「下一步」（1.34.1–1.36.1）。新手第一周（1.39.x，D85–D87）：护符自动生效、T1 自动顶替起步件、Q01 普通版减压、首通自选 / 目标族改成可点按钮 |
+| 套件 | `mineflayer-tests` gameplay 9/9（1.40.1；钓鱼偶尔随机失败，重跑即过） |
+| 玩家 | 没有老玩家，**不做数据迁移**。测试号 P1Fox、RaidA–E、NewbieQ、FreshA1–F1（全新号） |
+| 内容 | 七张主线图 Q01–Q07 + 挑战版。P2-1 每周挑战轮换。P2-2 深渊·余烬层（10 层）。P2-5/6 团本 R01 锈轨矿道·团 + R02 霜封哨所·团（3～5 人，两本合计每周 3 次）。P2-7 每日委托。P2-8 精选图周规则（限药 / 术者换防 / 逆行）。P2-9 每图掉落偏向、团本额外装备按目标族定向（保底精良）、称号和团本足迹（只做展示）。P2-10 排行榜（`/corerpg p1 top`）。新手提示：回复药放快捷栏、生命低提醒、「下一步」（1.34.1–1.36.1）。新手第一周（1.39.x，D85–D87）：护符自动生效、T1 自动顶替起步件、Q01 普通版减压、首通自选 / 目标族改成可点按钮；1.40.x（D88–D92）：印记兑换按钮、房间敌人提示、结算物品不占快捷栏、踏步默认装配、好友页组队打开队伍面板 |
 
 ## 2 启停
 
@@ -66,8 +66,8 @@
 
 ## 5 备份和发布
 
-- jar 备份在 `/workspace/backup/CoreRpg-<ver>.jar`，最新是 1.39.1。
-- 数据库备份是 `/workspace/backup/db-ember-authme-*-after-<ver>.sql`，最新是 after-1.39.1。
+- jar 备份在 `/workspace/backup/CoreRpg-<ver>.jar`，最新是 1.40.1。
+- 数据库备份是 `/workspace/backup/db-ember-authme-*-after-<ver>.sql`，最新是 after-1.40.1。
 - 发布就是推到 main，然后在 live 里 `git pull --rebase --autostash`。没有单独的 release 产物。
 
 ## 6 规则（必须遵守）

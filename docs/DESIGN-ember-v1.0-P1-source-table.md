@@ -993,3 +993,12 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 测试 | EmberRunRulesTest：Q01 首领 hp 200、balance 10；EmberLoadoutTest：T0 刃提示；实测见 P2 草案 §5h |
 | 工具 | `tools/p1map/norm-smoke.sh`、`newbie-run.sh`，`fight.sh` 加 `DRINK=1` |
 
+### 13.24 新手第一周 · 第二批（CoreRpg 1.40.0 → 1.40.1，2026-10-02 23:34 / 23:40 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 参数源 | 没有改；balance_version 10 |
+| 代码 | EmberRunService `cmdMarks` 的按钮和确认、`exchangeButtons`、`tidyHotbar`、`onRoomStarted(…, comp)`；EmberRunRules `compositionLabel`；FlexSkillService `autoEquipStarter`（giveStarter 调用） |
+| 菜单 | 冒险页「锻造印记」lore；主菜单轻技、邮寄 lore；好友页「组队 · 队伍面板」点击执行 `dp team`；帮助页的踏步、组队、旧系统（仍是 47 个菜单） |
+| 测试 | `roomLineNamesTheEnemiesAndTheFirstThreat_D89`；实测见 P2 草案 §5i |
+
