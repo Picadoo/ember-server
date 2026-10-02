@@ -26,6 +26,9 @@ public final class EmberCommand {
     private EmberRunService runs;
     public void setRuns(EmberRunService v) { this.runs = v; }
 
+    private EmberSupplyService supplies;
+    public void setSupplies(EmberSupplyService v) { this.supplies = v; }
+
     private EmberForgeService forge;
     public void setForge(EmberForgeService v) { this.forge = v; }
     private static final java.util.Set<String> FORGE_OPS = new java.util.HashSet<String>(java.util.Arrays.asList(
@@ -43,6 +46,10 @@ public final class EmberCommand {
         if ("status".equals(sub)) return status(s);
         if ("charm".equals(sub)) return charm(s, args);
         if ("inspect".equals(sub)) return inspect(s);
+        if ("shop".equals(sub) || "补给".equals(sub)) {
+            if (supplies == null) { s.sendMessage(P + "补给服务未加载"); return true; }
+            return supplies.cmd(s, args);
+        }
         if (EmberRunService.OPS.contains(sub)) {
             if (runs == null) { s.sendMessage(P + "主线本服务未加载"); return true; }
             return runs.cmd(s, sub, args); // admin sub-ops check corerpg.admin themselves

@@ -1006,6 +1006,8 @@ public final class EmberRunService implements Listener {
         plugin.getDataStore().flushMutation(u);
         p.sendMessage(P + "§e新模式起步：发放 T0 刃 + T0 护符各一件（绑定）。手持护符 /corerpg p1 charm select 选定。");
         deliver(p);
+        EmberSupplyService sup = plugin.getEmberSupplies();
+        if (sup != null) sup.giveStarter(p); // B2.169 / D28: §3.1 基础补给, once (guarded by C_STARTER above)
     }
 
     // ------------------------------------------------------------------ commands

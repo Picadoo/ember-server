@@ -440,6 +440,10 @@ public final class AuctionService {
             p.sendMessage(PREFIX + ChatColor.RED + "请手持要上架的物品。");
             return;
         }
+        if (town.sunshine.corerpg.p1.EmberSupplyService.isBound(hand)) {
+            p.sendMessage(PREFIX + ChatColor.RED + "绑定物品不能寄售。");
+            return;
+        }
         String niId = niBridge.getNiId(hand);
         if (niId == null || niId.isEmpty()) {
             p.sendMessage(PREFIX + ChatColor.RED + "仅可上架白名单 NI 物品（材料/宝石/票/使魔蛋等）。");

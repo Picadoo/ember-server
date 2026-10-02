@@ -40,6 +40,15 @@ heal_potion:
   percent: 0.20
   cooldown_seconds: 15
 
+# B2.169 §19.4 补给商：回复药初测售价（余烬币 / 瓶），绑定、不回售；只在城内（非 P1 副本世界）购买
+shop:
+  heal_potion:
+    price: 10
+
+# B2.169 §3.1「首次进入提供 T0 武器、T0 护符和基础补给」：起步补给的回复药瓶数（D28，书未给数，保守取 5）
+starter:
+  heal_potions: 5
+
 # P1 中允许照常生效的 life.yml 消耗品 id（其余战斗类效果明确提示不可用，食物只补饱食度）
 consumables:
   allowed: [potion_ember_night]

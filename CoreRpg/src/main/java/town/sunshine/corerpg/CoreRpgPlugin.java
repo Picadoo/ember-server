@@ -120,6 +120,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private town.sunshine.corerpg.p1.EmberSetService emberSets;
     private town.sunshine.corerpg.p1.EmberForgeService emberForge;
     private town.sunshine.corerpg.p1.EmberRunService emberRuns;
+    private town.sunshine.corerpg.p1.EmberSupplyService emberSupplies;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
 
@@ -222,6 +223,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         Bukkit.getPluginManager().registerEvents(emberRuns, this);
         emberRuns.start();
         emberCommand.setRuns(emberRuns);
+        emberSupplies = new town.sunshine.corerpg.p1.EmberSupplyService(this); // B2.169 §19.4 shop + §3.1 starter supplies
+        Bukkit.getPluginManager().registerEvents(emberSupplies, this);
+        emberCommand.setSupplies(emberSupplies);
         Bukkit.getPluginManager().registerEvents(flexSkillService, this);
         statService.start();
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
@@ -349,6 +353,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public town.sunshine.corerpg.p1.EmberCombatListener getEmberCombat() { return emberCombat; }
     public town.sunshine.corerpg.p1.EmberSetService getEmberSets() { return emberSets; }
     public town.sunshine.corerpg.p1.EmberRunService getEmberRuns() { return emberRuns; }
+    public town.sunshine.corerpg.p1.EmberSupplyService getEmberSupplies() { return emberSupplies; }
     public boolean isMysqlActive() { return mysqlStorage != null && mysqlStorage.isActive(); }
 
 
