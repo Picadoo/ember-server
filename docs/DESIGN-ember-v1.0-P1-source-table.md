@@ -710,3 +710,18 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 
 实测（1.23.1，P1 关，机器人 P1Fox）：选定 T1 烬爆护符后手持 T1 烬爆刃 →「主手生效中 · B 38 · 生命 105.5 · 烬爆 觉醒I · 下一档 觉醒II 缺：刃 T1→T2；护符 T1→T2」；手持 T0 起始护符 →「最大生命 105.5 → 59.6 · 防御 6 → 2 · 有效生命 121.3 → 62.6 · 套装 烬爆 觉醒I → 未成套（会取消烬爆）」；之后 charm clear 恢复。gameplay 套件 PASS 9/9；mvn test 全过（含 EmberCompareTest 4 项）；DB `db-ember-authme-20261002-171744-after-1.23.1.sql`；P1 active=false。平衡没改。
 
+### 13.7 内容批 C4：图录 · 装备 + 阶段奖励（CoreRpg 1.24.0，2026-10-02 17:28 CST 部署）
+
+| 项 | 落点 | 书 |
+|---|---|---|
+| 装备图鉴（B2.180） | `EmberCodex`：20 种 = T0 刃 / T0 护符 + 焚烬 / 烬爆 / 炽愈 × 刃 / 护符 × T1–T3。`EmberLoadoutService.refresh` 扫背包时，校验通过（签名 NBT）的 P1 物品第一次出现就登记（PlayerData 计数 `p1_codex_<族>_<部位>_t<阶>@all`），聊天提示「[图录] 登记 … (n/20)」；每次开服后第一次加入时从 `cr_p1_item` 补登本人拥有过的种类（`source<>'admin'`）。升阶后的新阶级算新的一种 | §19.5 |
+| 阶段奖励 | 集齐 5 / 10 / 15 / 20 种各领一次余烬币 200 / 400 / 600 / 1000；`/corerpg p1 codex claim`（菜单「领取」）先写计数器 `p1_codex_stage_<n>` 再写主线结算账本行（run `codex`），由同一套 `deliver` 发放 | §19.5「一次性资源」、§22.3 E10 |
+| 菜单 | `ember_p1_codex_gear`：20 格状态（PAPI `p1_codex_<key>`）、计数（`p1_codex_count`）、4 档奖励（`p1_codex_stage_<n>`）+ 首领图录 / 返回；图录页「装备图鉴」「阶段奖励」从灰色占位改为打开此页 | §19.1 |
+
+| # | 问题 | 裁决 | 理由 |
+|---|---|---|---|
+| D42 | 图鉴阶段奖励给什么、给多少（书只说「展示和一次性资源」） | 只给余烬币，总计 2,200（约 7 局普通本收入），按 5 / 10 / 15 / 20 种分四档；不给碎片 / 核心 / 装备 / 属性 / 称号加成 | 一次性、可预期、不进入强化循环之外的新资源线；20 种里有 12 种是 T2 / T3，后两档自然落在 Q04 之后，不改变前期节奏；不在 §2c 模拟里（量级 < 1 天收入） |
+| D43 | 什么算「获得」 | 背包里出现过校验通过的本人 P1 物品，或 DB 里本人拥有过的行；管理员 `give`（source=admin）不算；同一种重复获得不重复登记 | §22.5「测试员补发的装备必须标来源，不能混入真实获取节奏」 |
+
+实测（1.24.0，P1 关，P1Fox）：`/corerpg p1 codex` → 8/20（DB 补登：T0 两件 + 若干 T1）；`codex claim` →「结算到账：余烬币 200」，日志 `[P1 codex] P1Fox stage 5 -> coin 200`，再开页显示「已领取」；图录 → 装备图鉴打开，unreplacedPAPI=0；TrMenu 45 个菜单；gameplay PASS 9/9；mvn test 全过（含 EmberCodexTest 3 项）；DB `db-ember-authme-20261002-173136-after-1.24.0.sql`；P1 active=false。
+
