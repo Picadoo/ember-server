@@ -677,7 +677,8 @@
 | ~~**B2.150**~~ | ember-v1-runs.yml q05；MM EmberQ05*；DP EmberQ05；TicketEntryService.Kind.Q05；TrMenu ember_p1_adventure | Q05 断塔回廊 | **实测 PASS · 勾销**（aae5109 + 3ddab38 · 单人与三人局（含挂机队员）结算、首通正确 · 2026-10-02 03:58 CST） |
 | ~~**B2.151**~~ | DP map ember_daily_spire_v1（新） | 可步行断塔地图 | **完成 · 实测 PASS**（4ae08a7 · 1.25.0 · 2026-10-02 17:46 CST） |
 | ~~**B2.152**~~ | DP EmberDailySpire monster.yml | 旧日常断塔楼梯不可走 | **实测 PASS · 勾销**（5816c63 · ScrapT1 旧日常断塔：清底层后传到环廊、清环廊后传到顶台，通关发奖 · 2026-10-02 04:02 CST） |
-| **B2.153** | DP map ember_daily_tide | 侧室旧告示牌 | **Q04 实例已绕开，模板待改** |
+| **B2.153** | DP map ember_daily_tide | 侧室旧告示牌 | **Q04 已换书白盒 ember_daily_tide_v1（852d65a · 1.26.0），旧日常 EmberDailyTide 模板仍有，未改** |
+| **B2.181** | P1MapLayout / P1MapBuilder | 书 §5 各图特色外形（Q01 掩体 / 石柱 / 兵营屋壳，Q02 焦梁，Q04 泵房，Q06 盾墙，Q07 吊架等）未做，只有路径、墙、顶、灯、RB 背景门楼（源表 D50） | **待做** |
 | **B2.154** | 服务器 MariaDB | 重启丢库，已从备份恢复 | **已恢复（数据回退到备份时间点）** |
 | ~~**B2.155**~~ | CoreRpg EmberRunDirector.tick | 首领掉出大厅被移除 → 本局卡死 | **实测 PASS · 勾销**（06e021b · 修后两局无异常 · 2026-10-02 03:58 CST） |
 | ~~**B2.156**~~ | ember-v1-runs.yml q05 rails | 塔冠斜角缝 / 楼梯井掉落 | **实测 PASS · 勾销**（3ddab38 · 2026-10-02 03:58 CST） |

@@ -12,6 +12,9 @@
     ember_abyss, ember_arena, ember_calamity, ember_daily, ember_raid, ember_weekly,
     ember_daily_ash, ember_daily_crypt, ember_daily_frost, ember_daily_rail,
     ember_daily_spire, ember_daily_tide, ember_elite（后七项相对 0927 新增/补全）
+    ember_daily_v1, ember_daily_ash_v1, ember_daily_crypt_v1, ember_daily_tide_v1, ember_daily_spire_v1,
+    ember_daily_frost_v1, ember_daily_rail_v1（P1 主线 Q01–Q07 书白盒，2026-10-02 新增；未进下一个 binaries 包前
+    可在服内重建：/corerpg p1 mapbuild q01..q07，Q05 也可 /corerpg spirebuild v1）
   server-runtime/libs, server-runtime/libraries, server-runtime/cache               运行库缓存（可选）
   **/*.jar                                                                            paper-custom.jar、原版 paper-1.12.2-1620.jar、全部插件 jar、客户端 mod
   plugins/**/*.db, login-runtime/plugins/AuthMe/authme.db                             插件本地数据（sqlite）
