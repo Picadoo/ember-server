@@ -371,7 +371,10 @@ class Player:
             self.cleared.add(key)
             fc = m.get('first_clear') or {}
             if 'choice' in fc:
-                drops.append(item(self.kn.target, fc['choice'], fc.get('tier', 1), src='task'))
+                slot = fc['choice']
+                if slot == 'piece':  # E-review #6: a free targeted exchange — the player picks family and slot
+                    slot = self.weaker_slot(fc.get('tier', 1))
+                drops.append(item(self.kn.target, slot, fc.get('tier', 1), src='task'))
             self.shard += fc.get('shard', 0); self.core += fc.get('core', 0); self.coin += fc.get('coin', 0)
             self.bone += fc.get('bone', 0); self.blank += fc.get('blank', 0)
         for d in drops:

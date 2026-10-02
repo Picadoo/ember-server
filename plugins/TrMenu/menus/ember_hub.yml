@@ -44,12 +44,19 @@ Icons:
         - '§7倒下后观战队友；下一个房间开打或首领转阶段时自动复活（50% 生命）；全员倒下才算失败'
         - '§7结算同锈轨矿道·团：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
         - '§7与锈轨矿道·团合计每周 3 次'
+        - '§a人越多越稳：首通 Q07 后第 2 周 3 人约 45%、5 人约 68% 能过'
+        - '§7招募中：§f%corerpg_p1_recruits%'
         - ''
-        - '§e➥ §f队长点击开本（全队需各自首通 Q07）'
+        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
+        - '§e➥ §f右键：全服招募队员（挂 10 分钟）'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 enter r02'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 recruit r02'
         - close
   n:
     update: 20
@@ -153,12 +160,19 @@ Icons:
         - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
         - '§7倒下后观战队友；下一个房间开打或首领转阶段时自动复活（50% 生命）；全员倒下才算失败'
         - '§7结算：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
+        - '§a人越多越稳：首通 Q07 后第 2 周 3 人约 45%、5 人约 68% 能过'
+        - '§7招募中：§f%corerpg_p1_recruits%'
         - ''
-        - '§e➥ §f队长点击开本（全队需各自首通 Q07）'
+        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
+        - '§e➥ §f右键：全服招募队员（挂 10 分钟）'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 enter r01'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 recruit r01'
         - close
   F:
     display:

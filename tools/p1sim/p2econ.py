@@ -91,7 +91,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
     (best cleared + 1) whose estimated clear rate is >= 50 % and whose fee leaves `reserve` coins; tier 1 otherwise.
     The fee is paid per started segment (a failed segment keeps it, like stamina)."""
     order = ccfg['order']
-    out, marks_earned, ch_runs, best, fees, tiers_played = [], 0, 0, 0, 0, []
+    out, marks_earned, ch_runs, best, fees, tiers_played, blocked = [], 0, 0, 0, 0, [], 0
     acfgs = {t: abyss_cfg(ccfg, t) for t in range(1, len(ABYSS) + 1)}
     for w in range(weeks):
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
@@ -103,7 +103,12 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
                 # once its estimated clear rate is >= 50 % (before D104 tier 1 equalled the challenge).
                 tier = 0
                 for t in range(min(best + 1, len(ABYSS)), 0, -1):
-                    if ABYSS[t - 1]['fee'] + reserve <= p.coin and abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
+                    if ABYSS[t - 1]['fee'] + reserve > p.coin:
+                        # coin-blocked: the player would have stepped into this tier but the fee + reserve is short
+                        if t == min(best + 1, len(ABYSS)) and abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
+                            blocked += 1
+                        continue
+                    if abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
                         tier = t
                         break
             for _ in range(per_day):
@@ -132,8 +137,30 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
         done = p.blade['tier'] == 3 and p.charm['tier'] == 3 and p.blade['fam'] == tgt and p.charm['fam'] == tgt
         out.append({'week': w + 1, 'set': done, 'enh': (p.blade['enh'] + p.charm['enh']) / 2, 'coin': p.coin,
                     'q': max(p.blade['q'], p.charm['q']), 'qmin': min(p.blade['q'], p.charm['q']), 'marks': marks_earned,
-                    'B': p.st()['B'], 'ch': ch_runs, 'best': best, 'fees': fees, 'tier': tiers_played[-1]})
+                    'B': p.st()['B'], 'ch': ch_runs, 'best': best, 'fees': fees, 'tier': tiers_played[-1],
+                    'blocked': blocked, 'days': (w + 1) * 7})
     return out
+
+
+def set_abyss(tiers=None, fees=None, quality=None):
+    """E-review tuning: override the abyss tier factors ('hp,dmg;hp,dmg;…') and/or fees ('0,60,…') in memory."""
+    global ABYSS
+    ABYSS = copy.deepcopy(ABYSS)
+    if tiers:
+        rows = [tuple(float(x) for x in r.split(',')) for r in tiers.split(';')]
+        assert len(rows) == len(ABYSS)
+        for row, (h, d) in zip(ABYSS, rows):
+            row['hp'], row['dmg'] = h, d
+    if fees:
+        fs = [int(x) for x in fees.split(',')]
+        assert len(fs) == len(ABYSS)
+        for row, f in zip(ABYSS, fs):
+            row['fee'] = f
+    if quality:
+        qs = [[int(x) for x in r.split(',')] for r in quality.split(';')]
+        assert len(qs) == len(ABYSS) and all(sum(q) == 100 for q in qs)
+        for row, q in zip(ABYSS, qs):
+            row['quality'] = q
 
 
 def to_q07(cfg, kn, seed):
@@ -359,7 +386,12 @@ def main():
     ap.add_argument('--every-week', action='store_true', help='print every week (default: 1, 2, 4, 6, 8, 10, 12)')
     ap.add_argument('--ch-hp', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss HP (abyss follows)')
     ap.add_argument('--ch-atk', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss damage (abyss follows)')
+    ap.add_argument('--abyss-tiers', help="E-review tuning: tier factors 'hp,dmg;…' (10 rows) instead of the config")
+    ap.add_argument('--abyss-quality', help="E-review tuning: tier quality tables '60,28,10,2;…' (10 rows)")
+    ap.add_argument('--abyss-fees', help="E-review tuning: tier fees '0,60,…' (10 values) instead of the config")
     a = ap.parse_args()
+    if a.abyss_tiers or a.abyss_fees or a.abyss_quality:
+        set_abyss(a.abyss_tiers, a.abyss_fees, a.abyss_quality)
     cfg = p1config.load()
     if a.no_bounty:
         cfg['bounty'] = []
@@ -417,6 +449,15 @@ def main():
                 statistics.median(r['B'] for r in rows), round(100 * statistics.mean(r['ch'] for r in rows) / (w * 7 * per_day)),
                 ('%d' % statistics.median(r['best'] for r in rows)) if mode == 'abyss' else '—',
                 ('%d' % statistics.median(r['fees'] for r in rows)) if mode == 'abyss' else '—'))
+
+    if a.abyss and res['abyss']:
+        rows = [r[-1] for r in res['abyss']]
+        n = len(rows)
+        print()
+        print('深渊第 %d 周最高层分布：≥1 层 %d%% · ≥3 层 %d%% · ≥5 层 %d%% · ≥10 层 %d%% · 因币不够没进下一层的天数（均值）%.1f / %d 天' % (
+            a.weeks, round(100 * sum(r['best'] >= 1 for r in rows) / n), round(100 * sum(r['best'] >= 3 for r in rows) / n),
+            round(100 * sum(r['best'] >= 5 for r in rows) / n), round(100 * sum(r['best'] >= 10 for r in rows) / n),
+            statistics.mean(r['blocked'] for r in rows), rows[0]['days']))
 
     if a.mods:
         print()

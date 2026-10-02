@@ -27,7 +27,7 @@ import town.sunshine.corerpg.PlayerData;
  */
 public final class EmberCosmetics implements Listener {
 
-    public enum Kind { TITLE, TRAIL, COLOR, FLAIR }
+    public enum Kind { TITLE, TRAIL, COLOR, FLAIR, GLOW, ANIM }
 
     public static final class Cosmetic {
         public final String id, label, how;
@@ -37,10 +37,14 @@ public final class EmberCosmetics implements Listener {
         public final String particle; // trails only
         public final String firstClear; // non-null: earned by the first clear of this main map (D103 milestones)
         public final int price;         // D107 > 0: bought with 余烬币 in the cosmetic shop (display only)
-        public final String style;      // D107 COLOR: colour code for owned titles · FLAIR: nameplate prefix
+        public final String style;      // D107 COLOR: colour code for owned titles · FLAIR: nameplate prefix · ANIM: colour cycle
+        public final int markPts;       // E-review #2: > 0 = mark-only item, priced in mark points (T1 1 · T2 2 · T3 4)
         Cosmetic(String id, Kind kind, String label, String how, int price, String style, String particle, boolean shop) {
+            this(id, kind, label, how, price, 0, style, particle);
+        }
+        Cosmetic(String id, Kind kind, String label, String how, int price, int markPts, String style, String particle) {
             this.id = id; this.kind = kind; this.label = label; this.how = how; this.abyssTier = 0; this.raid = null;
-            this.particle = particle; this.firstClear = null; this.price = price; this.style = style;
+            this.particle = particle; this.firstClear = null; this.price = price; this.style = style; this.markPts = markPts;
         }
         Cosmetic(String id, Kind kind, String label, String how, int abyssTier, String raid, String particle) {
             this(id, kind, label, how, abyssTier, raid, particle, null);
@@ -48,19 +52,31 @@ public final class EmberCosmetics implements Listener {
         Cosmetic(String id, Kind kind, String label, String how, int abyssTier, String raid, String particle, String firstClear) {
             this.id = id; this.kind = kind; this.label = label; this.how = how; this.abyssTier = abyssTier; this.raid = raid; this.particle = particle;
             this.firstClear = firstClear;
-            this.price = 0; this.style = null;
+            this.price = 0; this.style = null; this.markPts = 0;
         }
+        /** shop item (coin or mark-only) */
+        public boolean shop() { return price > 0 || markPts > 0; }
+        /** price in mark points: mark-only items carry their own, coin items convert at POINT_COIN 余烬币 per point */
+        public int points() { return markPts > 0 ? markPts : (price + POINT_COIN - 1) / POINT_COIN; }
     }
 
     public static final List<Cosmetic> ALL = Collections.unmodifiableList(Arrays.asList(
             // D103 (midgame #10/#6): milestones on the way, display only — Q01→Q07 took 8–26 days with nothing to show
+            // E-review #9: every main map has a small first-clear title now (the 0.3 players took 26 days with one title)
+            new Cosmetic("q01", Kind.TITLE, "§7庭院余火", "首通 Q01 灰烬庭院", 0, null, null, "q01"),
+            new Cosmetic("q02", Kind.TITLE, "§8焦骨行者", "首通 Q02 焦骨甬道", 0, null, null, "q02"),
+            new Cosmetic("q03", Kind.TITLE, "§2残誓守灯", "首通 Q03 残誓地窖", 0, null, null, "q03"),
             new Cosmetic("q04", Kind.TITLE, "§3潮蚀渡者", "首通 Q04 潮蚀水道", 0, null, null, "q04"),
+            new Cosmetic("q05", Kind.TITLE, "§e断塔攀者", "首通 Q05 断塔回廊", 0, null, null, "q05"),
+            new Cosmetic("q06", Kind.TITLE, "§b霜哨旧客", "首通 Q06 霜封哨所", 0, null, null, "q06"),
             new Cosmetic("q07", Kind.TITLE, "§6锈轨归来", "首通 Q07 锈轨矿道", 0, null, null, "q07"),
-            new Cosmetic("abyss3", Kind.TITLE, "§9深渊初探", "深渊最高通关第 3 层", 3, null, null),
+            // E-review #9: 深渊初探 at tier 1 (tier 1 = the challenge strength since the re-curve)
+            new Cosmetic("abyss1", Kind.TITLE, "§9深渊初探", "深渊最高通关第 1 层", 1, null, null),
             new Cosmetic("abyss5", Kind.TITLE, "§5深渊行者", "深渊最高通关第 5 层", 5, null, null),
             new Cosmetic("abyss10", Kind.TITLE, "§d§l余烬深渊之主", "深渊最高通关第 10 层", 10, null, null),
             new Cosmetic("r01", Kind.TITLE, "§6锈轨破袭者", "通关团本 R01 锈轨矿道·团", 0, "r01", null),
             new Cosmetic("r02", Kind.TITLE, "§b霜封守望者", "通关团本 R02 霜封哨所·团", 0, "r02", null),
+            new Cosmetic("raids10", Kind.TITLE, "§c十战老兵", "团本累计通关 10 次（R01 + R02）", 0, null, null),
             new Cosmetic("trail_r01", Kind.TRAIL, "§6余烬火星", "通关团本 R01（团本专属足迹）", 0, "r01", "FLAME"),
             new Cosmetic("trail_r02", Kind.TRAIL, "§b霜花", "通关团本 R02（团本专属足迹）", 0, "r02", "SNOW_SHOVEL")));
 
@@ -80,11 +96,28 @@ public final class EmberCosmetics implements Listener {
             new Cosmetic("trail_leaf", Kind.TRAIL, "§a萤绿", "脚下一点绿光（朴素足迹）", 12000, null, "VILLAGER_HAPPY", true),
             new Cosmetic("flair_star", Kind.FLAIR, "§6✦", "名牌前的金星（主城和野外显示）", 6000, "§6✦ §r", null, true),
             new Cosmetic("flair_snow", Kind.FLAIR, "§b❄", "名牌前的雪花（主城和野外显示）", 10000, "§b❄ §r", null, true),
-            new Cosmetic("flair_crown", Kind.FLAIR, "§e♛", "名牌前的王冠（主城和野外显示）", 20000, "§e♛ §r", null, true)));
+            new Cosmetic("flair_crown", Kind.FLAIR, "§e♛", "名牌前的王冠（主城和野外显示）", 20000, "§e♛ §r", null, true),
+            // E-review #2: mark-only items (late-game mark sink, display only). Weapon glows show in the hub only, around
+            // a P1 blade in the main hand; title effects make the worn title flow (chat colours shift per message, the
+            // hub / field nameplate suffix cycles every board refresh).
+            new Cosmetic("glow_ember", Kind.GLOW, "§6余烬辉光", "主城里手持的刃冒火星（只在主城）", 0, 160, null, "FLAME"),
+            new Cosmetic("glow_star", Kind.GLOW, "§f星辉", "主城里手持的刃绕着白光（只在主城）", 0, 240, null, "END_ROD"),
+            new Cosmetic("glow_witch", Kind.GLOW, "§5紫焰辉光", "主城里手持的刃冒紫焰（只在主城）", 0, 320, null, "SPELL_WITCH"),
+            new Cosmetic("anim_ember", Kind.ANIM, "§6流§c火", "称号动效：火色流光（要先装上称号）", 0, 240, "6ce", null),
+            new Cosmetic("anim_frost", Kind.ANIM, "§b霜§f光", "称号动效：霜色流光（要先装上称号）", 0, 240, "b3f", null)));
+
+    /** E-review #2: mark points per forge mark of tier 1/2/3, and 余烬币 per point when a coin item is paid in marks */
+    public static final int[] MARK_POINTS = {0, 1, 2, 4};
+    public static final int POINT_COIN = 50;
+    /** marks of each tier always kept back for an exchange (only the surplus pays for cosmetics) */
+    public static final int MARK_RESERVE = 8;
+    static final String RAIDS10 = "raids10";
 
     static final String C_BOUGHT = "p2_cosbuy_";     // + id, period "all", value 1
     static final String C_SEL_COLOR = "p2_colorsel";
     static final String C_SEL_FLAIR = "p2_flairsel";
+    static final String C_SEL_GLOW = "p2_glowsel";
+    static final String C_SEL_ANIM = "p2_animsel";
 
     static final String C_EARNED = "p2_title_";   // + raid key, value = clears
     static final String C_SEL_TITLE = "p2_titlesel";
@@ -109,10 +142,33 @@ public final class EmberCosmetics implements Listener {
         return null;
     }
 
-    public static boolean bought(PlayerData d, Cosmetic c) { return d != null && c != null && c.price > 0 && d.periodCount(C_BOUGHT + c.id, "all") > 0; }
+    public static boolean bought(PlayerData d, Cosmetic c) { return d != null && c != null && c.shop() && d.periodCount(C_BOUGHT + c.id, "all") > 0; }
 
     private static String selName(Kind k) {
-        return k == Kind.TITLE ? C_SEL_TITLE : k == Kind.TRAIL ? C_SEL_TRAIL : k == Kind.COLOR ? C_SEL_COLOR : C_SEL_FLAIR;
+        switch (k) {
+            case TITLE: return C_SEL_TITLE;
+            case TRAIL: return C_SEL_TRAIL;
+            case COLOR: return C_SEL_COLOR;
+            case GLOW: return C_SEL_GLOW;
+            case ANIM: return C_SEL_ANIM;
+            default: return C_SEL_FLAIR;
+        }
+    }
+
+    // ------------------------------------------------------------------ E-review #8: 10-second try-on
+
+    private static final class Trial { final Cosmetic c; final long until; Trial(Cosmetic c, long until) { this.c = c; this.until = until; } }
+    private static final Map<UUID, Trial> TRIALS = new java.util.concurrent.ConcurrentHashMap<UUID, Trial>();
+
+    /** the cosmetic of kind k this player shows right now: an active try-on wins, else the owned selection */
+    static Cosmetic shown(UUID u, PlayerData d, Kind k, int abyssBest) {
+        Trial t = u == null ? null : TRIALS.get(u);
+        if (t != null) {
+            if (t.until < System.currentTimeMillis()) TRIALS.remove(u);
+            else if (t.c.kind == k) return t.c;
+        }
+        Cosmetic c = byId(String.valueOf(selected(d, k)));
+        return c != null && c.kind == k && earned(d, abyssBest, c) ? c : null;
     }
 
     /** D107: the title in its bought colour (bold kept for titles that are bold by default) */
@@ -130,7 +186,8 @@ public final class EmberCosmetics implements Listener {
 
     public static boolean earned(PlayerData d, int abyssBest, Cosmetic c) {
         if (d == null || c == null) return false;
-        if (c.price > 0) return bought(d, c); // D107 shop items
+        if (c.shop()) return bought(d, c); // D107 shop items
+        if (RAIDS10.equals(c.id)) return raidClears(d, "r01") + raidClears(d, "r02") >= 10; // E-review #9
         if (c.firstClear != null) return firstClearOf.test(d, c.firstClear);
         if (c.abyssTier > 0) return abyssBest >= c.abyssTier;
         return c.raid != null && raidClears(d, c.raid) > 0;
@@ -151,6 +208,8 @@ public final class EmberCosmetics implements Listener {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
                 p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
         }
+        if (raidClears(d, "r01") + raidClears(d, "r02") == 10 && p != null && p.isOnline())
+            p.sendMessage(P + "§d获得称号「" + byId(RAIDS10).label + "§d」§7（团本累计 10 次，只做展示）");
     }
 
     void onAbyssBest(Player p, int oldBest, int newBest) {
@@ -159,17 +218,37 @@ public final class EmberCosmetics implements Listener {
             p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
     }
 
-    public String titleText(PlayerData d) {
-        Cosmetic c = byId(String.valueOf(selected(d, Kind.TITLE)));
-        if (c == null || !earned(d, runs.abyssBest(d), c)) return "";
-        Cosmetic col = byId(String.valueOf(selected(d, Kind.COLOR))); // D107
-        return col != null && col.kind == Kind.COLOR && bought(d, col) ? colored(c.label, col.style) : c.label;
+    public String titleText(PlayerData d) { return titleText(null, d, -1); }
+
+    /**
+     * The worn title as shown: bought colour (D107), try-on colour, or a title effect (E-review #2: each character
+     * takes the next colour of the cycle; {@code step} shifts the cycle — chat passes the message clock, the nameplate
+     * the board refresh — so the title flows). step < 0 = no effect (menus, plain text).
+     */
+    String titleText(UUID u, PlayerData d, long step) {
+        int best = runs.abyssBest(d);
+        Cosmetic c = shown(u, d, Kind.TITLE, best);
+        if (c == null) return "";
+        Cosmetic anim = step < 0 ? null : shown(u, d, Kind.ANIM, best);
+        if (anim != null) return animated(c.label, anim.style, step);
+        Cosmetic col = shown(u, d, Kind.COLOR, best); // D107
+        return col != null ? colored(c.label, col.style) : c.label;
+    }
+
+    static String animated(String label, String cycle, long step) {
+        String plain = ChatColor.stripColor(label);
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < plain.length(); i++)
+            b.append('§').append(cycle.charAt((int) ((i + step) % cycle.length()))).append(plain.charAt(i));
+        return b.toString();
     }
 
     /** D107: nameplate prefix ("" = none) */
-    public String flairOf(PlayerData d) {
-        Cosmetic c = byId(String.valueOf(selected(d, Kind.FLAIR)));
-        return c != null && c.kind == Kind.FLAIR && bought(d, c) ? c.style : "";
+    public String flairOf(PlayerData d) { return flairOf(null, d); }
+
+    String flairOf(UUID u, PlayerData d) {
+        Cosmetic c = shown(u, d, Kind.FLAIR, runs.abyssBest(d));
+        return c == null ? "" : c.style;
     }
 
     /** D103: menu text — never an empty 「当前称号：」 */
@@ -234,7 +313,25 @@ public final class EmberCosmetics implements Listener {
     // ------------------------------------------------------------------ D107 cosmetic shop
 
     private static String kindName(Kind k) {
-        return k == Kind.COLOR ? "称号颜色" : k == Kind.TRAIL ? "足迹" : k == Kind.FLAIR ? "名牌标记" : "称号";
+        switch (k) {
+            case COLOR: return "称号颜色";
+            case TRAIL: return "足迹";
+            case FLAIR: return "名牌标记";
+            case GLOW: return "武器辉光";
+            case ANIM: return "称号动效";
+            default: return "称号";
+        }
+    }
+
+    private static String kindNote(Kind k) {
+        switch (k) {
+            case COLOR: return "§7（用在你已有的称号上）";
+            case TRAIL: return "§7（比团本足迹朴素）";
+            case FLAIR: return "§7（主城和野外显示，副本里不显示）";
+            case GLOW: return "§7（只用印记换 · 只在主城显示，手持余烬刃时）";
+            case ANIM: return "§7（只用印记换 · 让装上的称号流动变色）";
+            default: return "";
+        }
     }
 
     private int ownedTitles(PlayerData d) {
@@ -243,15 +340,33 @@ public final class EmberCosmetics implements Listener {
         return n;
     }
 
-    /** /corerpg p1 cosmetic [buy <id> [confirm] | color <id|off> | flair <id|off>] */
+    /** marks of tier t that may pay for cosmetics (everything above the exchange reserve) */
+    int surplus(PlayerData d, int t) { return Math.max(0, runs.marks(d, t) - MARK_RESERVE); }
+
+    /** marks of tier t needed for this item */
+    static int markCost(Cosmetic c, int t) { return (c.points() + MARK_POINTS[t] - 1) / MARK_POINTS[t]; }
+
+    private static String priceText(Cosmetic c) {
+        String marks = "T3 ×" + markCost(c, 3) + " / T2 ×" + markCost(c, 2) + " / T1 ×" + markCost(c, 1) + " 印记";
+        return c.price > 0 ? c.price + " 币 或 " + marks : "仅印记：" + marks;
+    }
+
+    private static boolean needsTitle(Kind k) { return k == Kind.COLOR || k == Kind.ANIM; }
+
+    /**
+     * /corerpg p1 cosmetic [buy <id> [coin|t1|t2|t3] | try <id> | color|flair|glow|anim <id|off>]
+     * E-review #2/#3/#8: coin or surplus forge marks (T1 1 · T2 2 · T3 4 points, 1 point = 50 币, 8 marks per tier kept
+     * back), mark-only glows / title effects, a 10 s try-on, and a buy button only when the player can pay.
+     */
     public boolean shop(Player p, PlayerData d, String[] args) {
         String op = args.length >= 3 ? args[2].toLowerCase(java.util.Locale.ROOT) : "";
-        if (("color".equals(op) || "flair".equals(op)) && args.length >= 4) {
-            Kind k = "color".equals(op) ? Kind.COLOR : Kind.FLAIR;
+        Kind selKind = "color".equals(op) ? Kind.COLOR : "flair".equals(op) ? Kind.FLAIR : "glow".equals(op) ? Kind.GLOW : "anim".equals(op) ? Kind.ANIM : null;
+        if (selKind != null && args.length >= 4) {
+            Kind k = selKind;
             if ("off".equalsIgnoreCase(args[3])) {
                 String cur = selected(d, k);
                 if (cur != null) d.addPeriodCount(selName(k), cur, -d.periodCount(selName(k), cur));
-                p.sendMessage(P + (k == Kind.COLOR ? "称号恢复原色" : "已取下名牌标记"));
+                p.sendMessage(P + (k == Kind.COLOR ? "称号恢复原色" : "已取下" + kindName(k)));
                 runs.flushData(p.getUniqueId());
                 return true;
             }
@@ -260,77 +375,137 @@ public final class EmberCosmetics implements Listener {
             if (!bought(d, c)) { p.sendMessage(P + "§c还没买「" + c.label + "§c」"); return true; }
             select(d, k, c.id);
             runs.flushData(p.getUniqueId());
-            p.sendMessage(P + "已换上" + kindName(k) + "「" + c.label + "§7」" + (k == Kind.COLOR && titleText(d).isEmpty() ? "（先装上一个称号才看得到）" : ""));
+            p.sendMessage(P + "已换上" + kindName(k) + "「" + c.label + "§7」" + (needsTitle(k) && titleText(d).isEmpty() ? "（先装上一个称号才看得到）" : ""));
+            return true;
+        }
+        if ("try".equals(op) && args.length >= 4) {
+            Cosmetic c = byId(args[3]);
+            if (c == null || !c.shop()) { p.sendMessage(P + "§c商店里没有这件：" + args[3]); return true; }
+            if (needsTitle(c.kind) && titleText(d).isEmpty()) { p.sendMessage(P + "§c先在「荣誉与排行」装上一个称号，才看得到" + kindName(c.kind) + "。"); return true; }
+            TRIALS.put(p.getUniqueId(), new Trial(c, System.currentTimeMillis() + 10_000L));
+            p.sendMessage(P + "§a试穿「" + c.label + "§a」10 秒§7" + (c.kind == Kind.GLOW ? "（只在主城、手持余烬刃时显示）" : c.kind == Kind.TRAIL ? "（走动时看脚下）"
+                    : c.kind == Kind.FLAIR ? "（名牌约 2 秒后刷新）" : "（发一句话看效果）"));
             return true;
         }
         if ("buy".equals(op) && args.length >= 4) {
             Cosmetic c = byId(args[3]);
-            if (c == null || c.price <= 0) { p.sendMessage(P + "§c商店里没有这件：" + args[3]); return true; }
+            if (c == null || !c.shop()) { p.sendMessage(P + "§c商店里没有这件：" + args[3]); return true; }
             if (bought(d, c)) { p.sendMessage(P + "你已经有「" + c.label + "§7」了。"); return true; }
-            if (c.kind == Kind.COLOR && ownedTitles(d) == 0) { p.sendMessage(P + "§c称号颜色只能用在已有的称号上：先拿到一个称号（首通 Q04 就有）。"); return true; }
-            boolean go = args.length >= 5 && "confirm".equalsIgnoreCase(args[4]);
-            if (!go) {
-                p.sendMessage(P + "购买" + kindName(c.kind) + "「" + c.label + "§7」：" + c.how + " · §e" + c.price + " 余烬币§7（现有 " + d.getCoin() + "）· 只做展示，不加属性，买了不退");
-                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[确认购买]", "/corerpg p1 cosmetic buy " + c.id + " confirm", "扣 " + c.price + " 余烬币", "GREEN"});
+            if (needsTitle(c.kind) && ownedTitles(d) == 0) { p.sendMessage(P + "§c" + kindName(c.kind) + "只能用在已有的称号上：先拿到一个称号（首通 Q01 就有）。"); return true; }
+            String pay = args.length >= 5 ? args[4].toLowerCase(java.util.Locale.ROOT) : "";
+            int tier = "t1".equals(pay) ? 1 : "t2".equals(pay) ? 2 : "t3".equals(pay) ? 3 : 0;
+            boolean coin = "coin".equals(pay) || "confirm".equals(pay);
+            if (!coin && tier == 0) { // preview: one button per way the player can pay right now
+                p.sendMessage(P + "购买" + kindName(c.kind) + "「" + c.label + "§7」：" + c.how + " · §e" + priceText(c) + "§7 · 只做展示，不加属性，买了不退");
+                List<String[]> btn = new java.util.ArrayList<String[]>();
+                if (c.price > 0) {
+                    if (d.getCoin() >= c.price) btn.add(new String[]{"[用 " + c.price + " 币]", "/corerpg p1 cosmetic buy " + c.id + " coin", "扣 " + c.price + " 余烬币（现有 " + d.getCoin() + "）", "GREEN"});
+                    else p.sendMessage(P + "§8余烬币还差 " + (c.price - d.getCoin()) + "（现有 " + d.getCoin() + "）");
+                }
+                for (int t = 3; t >= 1; t--) {
+                    int need = markCost(c, t), have = surplus(d, t);
+                    if (have >= need) btn.add(new String[]{"[用 " + need + " 枚 T" + t + " 印记]", "/corerpg p1 cosmetic buy " + c.id + " t" + t,
+                            "扣 " + need + " 枚 T" + t + " 印记（现有 " + runs.marks(d, t) + "，留 " + MARK_RESERVE + " 枚备用兑换）", t == 3 ? "AQUA" : "DARK_AQUA"});
+                }
+                if (btn.isEmpty()) p.sendMessage(P + "§8现在付不起：印记只用超过 " + MARK_RESERVE + " 枚的部分（T3 可用 " + surplus(d, 3) + " · T2 " + surplus(d, 2) + " · T1 " + surplus(d, 1) + "）");
+                btn.add(new String[]{"[试穿 10 秒]", "/corerpg p1 cosmetic try " + c.id, "先看效果", "YELLOW"});
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
                 return true;
             }
-            if (d.getCoin() < c.price) { p.sendMessage(P + "§c余烬币不足（需要 " + c.price + "，现有 " + d.getCoin() + "）"); return true; }
-            if (!d.takeCoin(c.price)) { p.sendMessage(P + "§c扣除余烬币失败"); return true; }
+            String paid;
+            if (coin) {
+                if (c.price <= 0) { p.sendMessage(P + "§c这件只能用印记换。"); return true; }
+                if (d.getCoin() < c.price) { p.sendMessage(P + "§c余烬币不足（需要 " + c.price + "，现有 " + d.getCoin() + "）"); return true; }
+                if (!d.takeCoin(c.price)) { p.sendMessage(P + "§c扣除余烬币失败"); return true; }
+                paid = c.price + " 余烬币（剩余 " + d.getCoin() + "）";
+            } else {
+                int need = markCost(c, tier);
+                if (surplus(d, tier) < need) { p.sendMessage(P + "§cT" + tier + " 印记不够：需要 " + need + " 枚，可用 " + surplus(d, tier) + "（留 " + MARK_RESERVE + " 枚备用兑换）"); return true; }
+                d.addPeriodCount(EmberRunService.C_MARK + tier, "all", -need);
+                paid = need + " 枚 T" + tier + " 印记（剩余 " + runs.marks(d, tier) + "）";
+            }
             d.addPeriodCount(C_BOUGHT + c.id, "all", 1);
             if (c.kind != Kind.TITLE) select(d, c.kind, c.id); // put it on right away
+            TRIALS.remove(p.getUniqueId());
             runs.flushData(p.getUniqueId());
-            Bukkit.getLogger().info("[P1 cosmetic] " + p.getName() + " bought " + c.id + " for " + c.price + " coin");
-            p.sendMessage(P + "§a已购买并换上" + kindName(c.kind) + "「" + c.label + "§a」§7（剩余 " + d.getCoin() + " 余烬币）");
+            Bukkit.getLogger().info("[P1 cosmetic] " + p.getName() + " bought " + c.id + " for " + ChatColor.stripColor(paid));
+            p.sendMessage(P + "§a已购买并换上" + kindName(c.kind) + "「" + c.label + "§a」§7 · 花费 " + paid);
             return true;
         }
-        p.sendMessage(P + "§6外观商店§7（只做展示，不加属性；买一次永久有，不回收）· 余烬币 §f" + d.getCoin());
-        String selC = selected(d, Kind.COLOR), selT = selected(d, Kind.TRAIL), selF = selected(d, Kind.FLAIR);
+        p.sendMessage(P + "§6外观商店§7（只做展示，不加属性；买一次永久有，不回收）· 余烬币 §f" + d.getCoin()
+                + " §7· 可用印记 T3 §f" + surplus(d, 3) + " §7T2 §f" + surplus(d, 2) + " §7T1 §f" + surplus(d, 1));
+        p.sendMessage(P + "§7币或多出来的印记都能付：T1 1 点 · T2 2 点 · T3 4 点，1 点 = " + POINT_COIN + " 币；每阶留 " + MARK_RESERVE + " 枚备用兑换不动");
+        if (ownedTitles(d) == 0) p.sendMessage(P + "§8称号颜色 / 动效要先有称号：首通 Q01 就送一个，在「荣誉与排行」装上");
+        Map<Kind, String> sel = new HashMap<Kind, String>();
+        for (Kind k : Kind.values()) sel.put(k, selected(d, k));
         Kind last = null;
         for (Cosmetic c : SHOP) {
-            if (c.kind != last) {
-                last = c.kind;
-                p.sendMessage(P + "§e" + kindName(c.kind) + (c.kind == Kind.COLOR ? "§7（用在你已有的称号上）" : c.kind == Kind.TRAIL ? "§7（比团本足迹朴素）" : "§7（主城和野外显示，副本里不显示）"));
-            }
+            if (c.kind != last) { last = c.kind; p.sendMessage(P + "§e" + kindName(c.kind) + kindNote(c.kind)); }
             boolean got = bought(d, c);
-            String sel = c.kind == Kind.COLOR ? selC : c.kind == Kind.TRAIL ? selT : selF;
-            boolean on = c.id.equals(sel);
+            boolean on = c.id.equals(sel.get(c.kind));
             String cmd, label;
             if (!got) { cmd = "/corerpg p1 cosmetic buy " + c.id; label = "§a[购买]"; }
             else if (c.kind == Kind.TRAIL) { cmd = "/corerpg p1 trail " + (on ? "off" : c.id); label = on ? "§7[取下]" : "§a[换上]"; }
-            else { cmd = "/corerpg p1 cosmetic " + (c.kind == Kind.COLOR ? "color " : "flair ") + (on ? "off" : c.id); label = on ? "§7[取下]" : "§a[换上]"; }
+            else { cmd = "/corerpg p1 cosmetic " + c.kind.name().toLowerCase(java.util.Locale.ROOT) + " " + (on ? "off" : c.id); label = on ? "§7[取下]" : "§a[换上]"; }
             net.md_5.bungee.api.chat.TextComponent line = new net.md_5.bungee.api.chat.TextComponent(P + "  " + c.label + " §7" + c.how
-                    + (got ? (on ? " §e· 使用中 " : " §a· 已拥有 ") : " §6" + c.price + " 币 "));
+                    + (got ? (on ? " §e· 使用中 " : " §a· 已拥有 ") : " §6" + priceText(c) + " "));
             net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(label);
             b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, cmd));
             line.addExtra(b);
+            if (!got) {
+                net.md_5.bungee.api.chat.TextComponent t = new net.md_5.bungee.api.chat.TextComponent(" §e[试穿]");
+                t.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, "/corerpg p1 cosmetic try " + c.id));
+                line.addExtra(t);
+            }
             p.spigot().sendMessage(line);
         }
         return true;
     }
 
-    /** D107: nameplate flairs on one viewer's scoreboard (CoreRpg gives every player an own sidebar board) */
+    private long boardStep;
+
+    /**
+     * D107 / E-review #2: nameplate decorations on one viewer's scoreboard (CoreRpg gives every player an own sidebar
+     * board, refreshed every 2 s): one team per decorated player, prefix = flair, suffix = the worn title when it has
+     * a title effect (cycling colours). Instances stay clean.
+     */
     public void syncFlair(org.bukkit.scoreboard.Scoreboard board) {
-        Map<String, String> want = new HashMap<String, String>(); // player name → team
+        long step = System.currentTimeMillis() / 2000L;
+        Map<String, String[]> want = new HashMap<String, String[]>(); // team → {entry, prefix, suffix}
         for (Player o : Bukkit.getOnlinePlayers()) {
-            if (o.getWorld().getName().startsWith("dungeon_")) continue; // instances stay clean
-            String f = flairOf(runs.dataOf(o.getUniqueId()));
-            if (f.isEmpty()) continue;
-            String id = selected(runs.dataOf(o.getUniqueId()), Kind.FLAIR);
-            want.put(o.getName(), ("efl_" + id).length() > 16 ? ("efl_" + id).substring(0, 16) : "efl_" + id);
+            if (o.getWorld().getName().startsWith("dungeon_")) continue;
+            PlayerData d = runs.dataOf(o.getUniqueId());
+            String f = flairOf(o.getUniqueId(), d);
+            String suffix = "";
+            if (shown(o.getUniqueId(), d, Kind.ANIM, runs.abyssBest(d)) != null) {
+                String t = titleText(o.getUniqueId(), d, step);
+                if (!t.isEmpty()) suffix = cut(" " + t, 16);
+            }
+            if (f.isEmpty() && suffix.isEmpty()) continue;
+            String team = "efl_" + (o.getName().length() > 12 ? o.getName().substring(0, 12) : o.getName());
+            want.put(team, new String[]{o.getName(), cut(f, 16), suffix});
         }
         for (org.bukkit.scoreboard.Team t : new java.util.ArrayList<org.bukkit.scoreboard.Team>(board.getTeams())) {
             if (!t.getName().startsWith("efl_")) continue;
-            for (String e : new java.util.ArrayList<String>(t.getEntries())) if (!t.getName().equals(want.get(e))) t.removeEntry(e);
+            String[] w = want.get(t.getName());
+            if (w == null) { t.unregister(); continue; }
+            for (String e : new java.util.ArrayList<String>(t.getEntries())) if (!e.equals(w[0])) t.removeEntry(e);
         }
-        for (Map.Entry<String, String> e : want.entrySet()) {
-            org.bukkit.scoreboard.Team t = board.getTeam(e.getValue());
-            if (t == null) {
-                t = board.registerNewTeam(e.getValue());
-                Cosmetic c = byId(e.getValue().substring(4));
-                if (c != null) t.setPrefix(c.style);
-            }
-            if (!t.hasEntry(e.getKey())) t.addEntry(e.getKey());
+        for (Map.Entry<String, String[]> e : want.entrySet()) {
+            org.bukkit.scoreboard.Team t = board.getTeam(e.getKey());
+            if (t == null) t = board.registerNewTeam(e.getKey());
+            String[] w = e.getValue();
+            if (!w[1].equals(t.getPrefix())) t.setPrefix(w[1]);
+            if (!w[2].equals(t.getSuffix())) t.setSuffix(w[2]);
+            if (!t.hasEntry(w[0])) t.addEntry(w[0]);
         }
+    }
+
+    /** cut to n chars without leaving a dangling § */
+    static String cut(String s, int n) {
+        if (s.length() <= n) return s;
+        String c = s.substring(0, n);
+        return c.endsWith("§") ? c.substring(0, n - 1) : c;
     }
 
     // ------------------------------------------------------------------ display
@@ -338,13 +513,13 @@ public final class EmberCosmetics implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent e) {
         try { // async thread: a racing counter write must never break chat
-            String t = titleText(runs.dataOf(e.getPlayer().getUniqueId()));
+            String t = titleText(e.getPlayer().getUniqueId(), runs.dataOf(e.getPlayer().getUniqueId()), System.currentTimeMillis() / 700L);
             if (!t.isEmpty()) e.setFormat("§8[" + t + "§8]§r " + e.getFormat());
         } catch (RuntimeException ignored) { /* plain chat this once */ }
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e) { last.remove(e.getPlayer().getUniqueId()); }
+    public void onQuit(PlayerQuitEvent e) { last.remove(e.getPlayer().getUniqueId()); TRIALS.remove(e.getPlayer().getUniqueId()); }
 
     private int tickN;
 
@@ -354,10 +529,10 @@ public final class EmberCosmetics implements Listener {
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.hasPotionEffect(org.bukkit.potion.PotionEffectType.INVISIBILITY)) continue;
             PlayerData d = runs.dataOf(p.getUniqueId());
-            String sel = selected(d, Kind.TRAIL);
-            if (sel == null) continue;
-            Cosmetic c = byId(sel);
-            if (c == null || c.particle == null || !earned(d, runs.abyssBest(d), c)) continue;
+            int best = runs.abyssBest(d);
+            if ((tickN & 1) == 0 && HUB.equals(p.getWorld().getName())) glow(p, shown(p.getUniqueId(), d, Kind.GLOW, best)); // E-review #2
+            Cosmetic c = shown(p.getUniqueId(), d, Kind.TRAIL, best);
+            if (c == null || c.particle == null) continue;
             Location now = p.getLocation(), was = last.put(p.getUniqueId(), now);
             if (was == null || was.getWorld() != now.getWorld() || was.distanceSquared(now) < 0.04) continue;
             boolean plain = c.price > 0; // D107 coin trails: 1 particle every 8 ticks (raid trails: 3 every 4)
@@ -366,5 +541,22 @@ public final class EmberCosmetics implements Listener {
                 p.getWorld().spawnParticle(Particle.valueOf(c.particle), now.clone().add(0, 0.1, 0), plain ? 1 : 3, plain ? 0.05 : 0.15, 0.02, plain ? 0.05 : 0.15, plain ? 0.0 : 0.01);
             } catch (IllegalArgumentException ignored) { /* particle missing on this server version */ }
         }
+    }
+
+    static final String HUB = "ember_hub";
+
+    /** E-review #2: weapon glow — a couple of particles at the right hand while a P1 blade is in the main hand (hub only) */
+    private void glow(Player p, Cosmetic c) {
+        if (c == null || c.particle == null) return;
+        EmberLoadoutService ls = runs.loadouts();
+        EmberLoadout l = ls == null ? null : ls.get(p);
+        if (l == null || l.blade == null) return;
+        Location eye = p.getEyeLocation();
+        double yaw = Math.toRadians(eye.getYaw());
+        // right hand ≈ 0.35 to the right, 0.6 below the eyes, 0.3 forward
+        Location hand = eye.clone().add(-Math.cos(yaw) * 0.35 - Math.sin(yaw) * 0.3, -0.6, -Math.sin(yaw) * 0.35 + Math.cos(yaw) * 0.3);
+        try {
+            p.getWorld().spawnParticle(Particle.valueOf(c.particle), hand, 2, 0.08, 0.15, 0.08, 0.0);
+        } catch (IllegalArgumentException ignored) { /* particle missing on this server version */ }
     }
 }

@@ -719,6 +719,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                 && town.sunshine.corerpg.p1.EmberMode.get().config() != null
                 && !town.sunshine.corerpg.p1.EmberMode.get().config().getStringList("join_message").isEmpty()) {
             lines = town.sunshine.corerpg.p1.EmberMode.get().config().getStringList("join_message");
+            if (emberRuns != null) { // E-review #10: returning players get a progress greeting instead of "start at Q01"
+                List<String> own = emberRuns.joinLines(joinData);
+                if (own != null) lines = own;
+            }
         }
         if (lines != null) {
             for (Object o : lines) if (o != null) player.sendMessage(color(String.valueOf(o)));

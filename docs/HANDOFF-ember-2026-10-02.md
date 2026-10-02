@@ -7,12 +7,12 @@
 | 项 | 值 |
 |---|---|
 | 仓库 | `Picadoo/ember-server`，main 分支。工作树 `/workspace/ember-p1`（分支 p1-g01，推到 main）。服务器在 `/workspace/minecraft` 跑，这是 main 的检出 |
-| CoreRpg | **1.49.0**（`CoreRpg/pom.xml` 第 8 行和 `plugin.yml` `version:` 一起改） |
-| balance_version | 14（`ember-v1-runs.yml`，规则 g04-1/b14；D108 精选图首通后重打普通版 +1 枚该图阶印记，与挑战版精选加成共用 3 次/周；13 = D104 挑战版减压 + 深渊层表换算 + T3 升阶减半 + Q05 首通加币） |
+| CoreRpg | **1.50.0**（`CoreRpg/pom.xml` 第 8 行和 `plugin.yml` `version:` 一起改） |
+| balance_version | 15（`ember-v1-runs.yml`，规则 g04-1/b15；D109 深渊第 1 层 = 挑战版、线性到第 10 层（不变）、成色跟强度、第 8～10 层费 400/440/480；D110 Q02 首通 = 一次免费定向兑换（自选族 + 部位 T1）；14 = D108 精选图首通后重打普通版 +1 枚该图阶印记，与挑战版精选加成共用 3 次/周；13 = D104 挑战版减压 + 深渊层表换算 + T3 升阶减半 + Q05 首通加币） |
 | 模式 | P1 是默认模式（D61–D65），旧玩法藏在 `ember_hub_legacy`。**不要关 P1** |
 | 菜单 | TrMenu 共 47 个，`trmenu reload` 就能重载 |
-| 套件 | `mineflayer-tests` gameplay 9/9（1.49.0；钓鱼偶尔随机失败，重跑即过） |
-| 玩家 | 没有老玩家，**不做数据迁移**。测试号 P1Fox、RaidA–E、NewbieQ、FreshA1–N1、FreshO1–O9、FreshP1–P6（全新号）、RevMidA/B（点评用）。RevNewA 的游戏数据已删（D100），AuthMe 账号还在。**测试号不上榜**：`ember-v1.yml` 的 `leaderboard_exclude`（名字 / 前缀 / 正则，D102）挡住排行榜、主城悬浮字和荣誉陈列，加新机器人名字时记得补进去 |
+| 套件 | `mineflayer-tests` gameplay 9/9（1.50.0；钓鱼偶尔随机失败，重跑即过） |
+| 玩家 | 没有老玩家，**不做数据迁移**。测试号 P1Fox、RaidA–E、NewbieQ、FreshA1–N1、FreshO1–O9、FreshP1–P6、FreshQ1–Q3（全新号；下次从 FreshQ4 起）、RevMidA/B（点评用）。RevNewA 的游戏数据已删（D100），AuthMe 账号还在。**测试号不上榜**：`ember-v1.yml` 的 `leaderboard_exclude`（名字 / 前缀 / 正则，D102）挡住排行榜、主城悬浮字和荣誉陈列，加新机器人名字时记得补进去 |
 | 内容 | 七张主线图 Q01–Q07 + 挑战版。P2-1 每周挑战轮换。P2-2 深渊·余烬层（10 层）。P2-5/6 团本 R01 锈轨矿道·团 + R02 霜封哨所·团（3～5 人，两本合计每周 3 次）。P2-7 每日委托。P2-8 精选图周规则（限药 / 术者换防 / 逆行；D94 起限药、逆行也用于重打已首通的普通版）。P2-9 每图掉落偏向、团本额外装备按目标族定向（保底精良）、称号和团本足迹（只做展示）。P2-10 排行榜（`/corerpg p1 top`）。新手提示：回复药放快捷栏、生命低提醒、「下一步」（1.34.1–1.36.1）。新手第一周（1.39.x，D85–D87）：护符自动生效、T1 自动顶替起步件、Q01 普通版减压、首通自选 / 目标族改成可点按钮；1.40.x（D88–D92）：印记兑换按钮、房间敌人提示、结算物品不占快捷栏、踏步默认装配、好友页组队打开队伍面板；1.41.x（D94–D95）：普通版周规则、锻造 / 补领 / 荣誉改成按钮；1.42.0（D96）：第一周复查，Q02 缺 T1 件时提醒、锻造缺料给来源；1.43.0（D97）：枢纽氛围（闲话、指路牌、粒子、排行榜、荣誉陈列，只做展示）；1.44.0–1.46.0（D98–D100，第一周点评整改）：Q01 首通自选护符、Q02 首通自选刃（balance_version 12），Q02 提醒带 [回 Q01]；旧系统移出主菜单、Q07 前内容合成一个图标、术语和公式清理、进服消息去重；好友 / 组队全按钮、DP 队伍上限 5；锻造确认与预览同列、T0 黄字；1.47.0–1.48.1（D101–D105，中后期点评整改）：主手 / 攻击缓存改成事件驱动刷新（D101）、测试号不上榜 + 主菜单「荣誉与排行」+ 盟约移出（D102）、里程碑称号（D103）、挑战版减压与深渊换算 + T3 升阶减半 + 两条换阶路互相标注（D104）、团本算 2 局委托 + 团本招募按钮（D105）；1.49.0（D106–D108）：团本倒下观战队友、下一个房间开打 / 首领现身 / 首领转阶段自动复活 50% 生命（D106）、外观商店（称号颜色 / 朴素足迹 / 名牌标记，2000～20000 币，只做展示，D107）、精选图重打普通版 +1 枚 T1/T2 印记（D108） |
 
 ## 2 启停
@@ -41,7 +41,7 @@
 | 副本 | `EmberRunService`（入口、结算、账本）、`EmberRunSession` / `EmberRunStore`、`EmberRunDirector`（房间和首领；顶层招式可按 `below` 分阶段）、`EmberRunMaps`（读图、挑战、深渊、团本）、`EmberRunRules`（纯规则）、`EmberRunBridges`（反射调 DungeonPlus） | 体力预留和退还、断线重连、重启后中止并退还 |
 | 补给 | `EmberSupplyService` | 回复药商店、起步药（放进快捷栏右侧）、喝药提示 |
 | 地图建造 | `p1/map/P1MapBuilder`、`P1MapLayout`；`resources/p1-book-maps.yml` | 按书里的章节生成白盒地图 |
-| 命令 | `EmberCommand`（`/corerpg p1 …`） | 玩家：enter / run / abyss / shop / charm / title / trail / cosmetic（外观商店，D107）/ watch（团本倒下后换观战队友，D106）。管理：runs firstclear / weaken [比例] / modifier <id>（下一局挑战强制周规则）/ heal |
+| 命令 | `EmberCommand`（`/corerpg p1 …`） | 玩家：enter / run / abyss / shop / charm / title / trail / cosmetic（外观商店，D107；`buy <id> [coin\|t1\|t2\|t3]`、`try <id>`、`color\|flair\|glow\|anim <id\|off>`，D112）/ firstclear [族] [图] [blade\|charm]（D110）/ recruit [r01\|r02\|list]（D113）/ watch（团本倒下后换观战队友，D106）。管理：runs firstclear / weaken [比例] / modifier <id>（下一局挑战强制周规则）/ heal |
 | 参数源 | `plugins/CoreRpg/ember-v1.yml`、`plugins/CoreRpg/ember-v1-runs.yml`。`CoreRpg/src/main/resources/` 下各有一份，**两份要一起改** | 图（含 `loot:`）、`loot_bias:`、`raid_item:`、挑战、`rotation:`（含 `modifiers:`）、`abyss:`、`raids:`（`cap_group`）；`ember-v1.yml` 里有 `bounty:` |
 | 怪物 | `plugins/MythicMobs/Mobs/EmberP1Main.yml` | 生成时的生命以 MM 为准 |
 | 副本实例 | `plugins/DungeonPlus/dungeon/EmberQ01..Q07`、`EmberQ0R1` / `EmberQ0R2`（团本；D106 起 `revive=true;number=0`，复活只由 CoreRpg 用 `dp revive <玩家> true true` 触发）；`config.yml` 里的 precache | DP 队伍：`/dp team` GUI，接受用 `/dungeon-team request accept <名>` |
@@ -53,7 +53,7 @@
 | 工具 | 用途 |
 |---|---|
 | `tools/p1sim/p1sim.py`、`selfcheck.py` | 单人从 Q01 推到 Q07 的节奏模型，读真实配置；`--normal-mods` 开普通版周规则（D94）；`--no-feat-normal` 关掉精选普通版印记、`--feat-farm` 专门刷精选图（D108）。selfcheck 应该 0 failed |
-| `tools/p1sim/p2econ.py` | 60 人 8 周经济模型，开关 `--abyss` / `--trade` / `--raid` / `--mods` / `--no-loot` / `--old-raid-item` / `--no-swap` / `--no-bounty` / `--normal-mods` / `--every-week` / `--ch-hp` / `--ch-atk`（D104）/ `--no-feat-normal` / `--feat-farm` / `--feat-separate`（D108）/ `--raid-rate b12|b13|revive`（团本通关率表，默认 revive，D106）。**凡是发奖励的改动都要先跑这个** |
+| `tools/p1sim/p2econ.py` | 60 人 8 周经济模型，开关 `--abyss` / `--trade` / `--raid` / `--mods` / `--no-loot` / `--old-raid-item` / `--no-swap` / `--no-bounty` / `--normal-mods` / `--every-week` / `--ch-hp` / `--ch-atk`（D104）/ `--abyss-tiers` / `--abyss-quality` / `--abyss-fees`（E-review 试调深渊层表；输出带第 12 周层数分布和卡币天数）/ `--no-feat-normal` / `--feat-farm` / `--feat-separate`（D108）/ `--raid-rate b12|b13|revive`（团本通关率表，默认 revive，D106）。**凡是发奖励的改动都要先跑这个** |
 | `tools/p1sim/chrate.py` | 首通 Q07 那一刻的挑战版通关率（刚首通 / 免费互换后 / 刃 T3 / 两件 T3），`--scale-hp` / `--scale-atk` 试调（D104） |
 | `tools/p1sim/p1party.py` | 3～5 人团本模型，`--raid r01|r02`。参数 `--pool --weeks --dodge --trials --boss-hp --atk --k --j`；`--no-revive` 关掉 D106 复活 |
 | `tools/p1map/book.py`、`gen.py` | 解析书里的地图章节，生成地图 |
@@ -67,8 +67,8 @@
 
 ## 5 备份和发布
 
-- jar 备份在 `/workspace/backup/CoreRpg-<ver>.jar`，最新是 1.49.0（还有 1.48.1、1.48.0、1.47.0）。
-- 数据库备份是 `/workspace/backup/db-ember-authme-*-after-<ver>.sql`，最新是 after-1.49.0（还有 after-1.48.1、after-1.48.0、after-1.47.0、after-1.46.0、after-1.45.0、after-1.44.0、after-1.43.0、after-1.42.0，删 RevNewA 前的 pre-revnewa-delete；1.41.1 只在线 2 分钟，没有单独备份）。
+- jar 备份在 `/workspace/backup/CoreRpg-<ver>.jar`，最新是 1.50.0（还有 1.49.0、 1.48.1、1.48.0、1.47.0）。
+- 数据库备份是 `/workspace/backup/db-ember-authme-*-after-<ver>.sql`，最新是 after-1.50.0（还有 after-1.49.0、 after-1.48.1、after-1.48.0、after-1.47.0、after-1.46.0、after-1.45.0、after-1.44.0、after-1.43.0、after-1.42.0，删 RevNewA 前的 pre-revnewa-delete；1.41.1 只在线 2 分钟，没有单独备份）。
 - 发布就是推到 main，然后在 live 里 `git pull --rebase --autostash`。没有单独的 release 产物。
 
 ## 6 规则（必须遵守）
@@ -87,7 +87,8 @@
   - R02 第二阶段实机出现（首领削到 60%，日志 `boss phase 2 at 50% (砸地)`）。
   - 单个机器人对首领的 DPS 185，模型 190（−3%）。
   - 完整 3 人击杀用时还没测成：机器人不躲技能，1 秒一次治疗也扛不住，R01 削到 40% 时团灭了。要真人或会躲的机器人。
-- **后期币堆积**：深渊层费是目前唯一的大额出口（D72）。要发币的新内容必须先过 p2econ。D107 外观商店是只做展示的花币出口（全套 7.8 万）。
+- **后期币堆积**：深渊层费是目前唯一的大额出口（D72）。要发币的新内容必须先过 p2econ。D107 外观商店是只做展示的花币出口（全套 7.8 万），入口在**装备页第 43 格**（不是 44）；D112 起也能用多余印记付（T1/T2/T3 = 1/2/4 点，1 点 = 50 币，每阶留 8 枚），另有印记专属的主城刃辉光和称号动效。
+- **后期复查（`docs/review-endgame-2026-10-03.md`）**：D109–D115 已做（P2 草案 §5q）。没做：首领最后阶段的额外复活（改玩法，留给策划）、TrMenu 商店页（用聊天列表 + 试穿代替）、深渊榜按周 / 赛季重置和周常目标、旧物品名重写（没有老玩家）。
 - **留给策划（中后期点评）**：团本体力 60 的备选（D105 用了「算 2 局」）。团本倒下复活（D106）、花币出口（D107）、精选给中期奖励（D108）已做。
 - **D106 已知限制**：团本倒下后 `/dp leave` 10 秒内输两次仍然能走（算放弃，不复活不结算）；断线走 DP 的离线保护。复活点只有「下一个房间开打 / 首领现身 / 首领转阶段」，首领最后阶段倒下就等到结束。
 - **交易**：D73 否决开市，只有规则。
@@ -97,4 +98,4 @@
   - 精选周规则可以再加几条，比如计时或黑暗（没做的原因见 P2 草案 §5e）。
   - 主城氛围：书 §1 只要求「一句背景」。
   - 机器人点 TrMenu 时用 `bot.clickWindow(…).catch(()=>{})`，不要 await（TrMenu 不回确认包，await 会超时）。
-- 团本 DP 队伍：冒险页团本图标右键 = `/corerpg p1 recruit r01|r02`（D105），给在线的已首通 Q07 玩家发可点的 [申请入队]，队长收到 DP 自带的 [同意] [拒绝]。也可以用 GUI（`/dp team`）。
+- 团本 DP 队伍：冒险页团本图标右键 = `/corerpg p1 recruit r01|r02`（D105），给在线的已首通 Q07 玩家发可点的 [申请入队]，队长收到 DP 自带的 [同意] [拒绝]（只这一条，D113），拒绝后有「已拒绝 X」。招募挂 10 分钟：图标 lore `%corerpg_p1_recruits%`、`/corerpg p1 recruit list`，已首通 Q07 的人上线时也会看到。也可以用 GUI（`/dp team`）。

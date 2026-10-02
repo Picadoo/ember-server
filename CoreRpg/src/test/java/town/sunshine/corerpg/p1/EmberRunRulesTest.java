@@ -295,7 +295,7 @@ public class EmberRunRulesTest {
         assertEquals("q01", q2.requires);
         assertEquals("q02", q3.requires);
         assertEquals("charm", q1.firstClear.choiceSlot);
-        assertEquals("blade", q2.firstClear.choiceSlot);
+        assertEquals("piece", q2.firstClear.choiceSlot);
         assertEquals(600, q3.firstClear.coin);
         assertSame(q2, m.byWorld("dungeon_EmberQ02_252696C4"));
         assertNull(m.byWorld("dungeon_EmberDaily_252696C4"));
@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(14, m.balanceVersion);                // D108
-        assertEquals("g04-1/b14", m.ruleVersion);
+        assertEquals(15, m.balanceVersion);                // D108
+        assertEquals("g04-1/b15", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         assertEquals(1, m.rotationNormalBonusMarks);       // D108
@@ -617,13 +617,17 @@ public class EmberRunRulesTest {
         assertNull(m.abyssTier(0));
         assertNull(m.abyssTier(11));
         EmberRunMaps.AbyssTier t1 = m.abyssTier(1), t10 = m.abyssTier(10);
-        assertEquals(1.43, t1.hp, 1e-9); // D104: tier 1 = the old (pre-b13) challenge strength
+        assertEquals(1.00, t1.hp, 1e-9); // E-review D109: tier 1 = the challenge itself
+        assertEquals(1.00, t1.dmg, 1e-9);
+        assertEquals(2.07, t10.hp, 1e-9); // tier 10 keeps its old absolute strength
+        assertEquals(1.42, t10.dmg, 1e-9);
         assertEquals(0, t1.fee);
         assertArrayEquals(m.challenge.quality, t1.quality);       // tier 1 = the challenge run
         assertTrue(t10.hp <= EmberRunMaps.ABYSS_MAX_HP && t10.dmg <= EmberRunMaps.ABYSS_MAX_DMG);
         for (int t = 2; t <= 10; t++) {
             assertTrue(m.abyssTier(t).hp >= m.abyssTier(t - 1).hp);
             assertTrue(m.abyssTier(t).fee >= m.abyssTier(t - 1).fee);
+            assertTrue(m.abyssTier(t).quality[3] >= m.abyssTier(t - 1).quality[3]); // 极品 odds never drop deeper down
         }
         EmberRunMaps.Challenge c10 = m.abyssChallenge(10);
         assertEquals(m.challenge.bossHp * t10.hp, c10.bossHp, 1e-6);
@@ -751,7 +755,14 @@ public class EmberRunRulesTest {
         assertEquals(EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString(),
                 EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString());
         // cosmetics: no stats anywhere, abyss titles by best tier
-        assertEquals(9, EmberCosmetics.ALL.size()); // D103: + q04 / q07 / abyss3 milestones
+        assertEquals(15, EmberCosmetics.ALL.size()); // D103 + E-review #9: every main map, 深渊初探 at tier 1, 十战老兵
+        assertEquals(1, EmberCosmetics.byId("abyss1").abyssTier);
+        assertEquals(240, EmberCosmetics.byId("anim_ember").points());
+        assertEquals(40, EmberCosmetics.byId("color_white").points());        // 2000 币 = 40 points
+        assertEquals(10, EmberCosmetics.markCost(EmberCosmetics.byId("color_white"), 3));
+        assertEquals(40, EmberCosmetics.markCost(EmberCosmetics.byId("color_white"), 1));
+        assertEquals("§6流§c火§e火", EmberCosmetics.animated("§6流火火", "6ce", 0));
+        assertEquals("§c流§e火§6火", EmberCosmetics.animated("§6流火火", "6ce", 1));
         assertEquals("q04", EmberCosmetics.byId("q04").firstClear);
         assertEquals(5, EmberCosmetics.byId("abyss5").abyssTier);
         assertNull(EmberCosmetics.byId("nope"));

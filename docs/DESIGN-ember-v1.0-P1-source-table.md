@@ -1119,7 +1119,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 项 | 内容 |
 |---|---|
 | 裁决 | 只做展示的花币出口：称号颜色（只用在已有称号上）2000～5000，朴素足迹 4000～12000（比团本足迹朴素），名牌标记 6000～20000（只在主城和野外显示）。买一次永久有，不回收，不加属性 |
-| 代码 / 配置 | EmberCosmetics（`SHOP`、COLOR / FLAIR 类型、`shop`、`select`、`titleText` 套颜色、`flairOf`、`syncFlair` 队伍前缀 `efl_<id>`、普通足迹 8 tick 一次）；EmberCommand `cosmetic` / `外观`；CoreRpgPlugin `refreshBoard` 调 `syncFlair`；EmberRunService `flushData`；ember_p1_gear 第 44 格「外观商店」。计数：`p2_cosbuy_<id>@all`、`p2_colorsel`、`p2_flairsel` |
+| 代码 / 配置 | EmberCosmetics（`SHOP`、COLOR / FLAIR 类型、`shop`、`select`、`titleText` 套颜色、`flairOf`、`syncFlair` 队伍前缀 `efl_<id>`、普通足迹 8 tick 一次）；EmberCommand `cosmetic` / `外观`；CoreRpgPlugin `refreshBoard` 调 `syncFlair`；EmberRunService `flushData`；ember_p1_gear 第 43 格「外观商店」（原写 44，E-review 更正）。计数：`p2_cosbuy_<id>@all`、`p2_colorsel`、`p2_flairsel` |
 | 参数源 | 价钱写在 EmberCosmetics（只做展示，不进 balance） |
 | 测试 | 实测 FreshO1（列表、没称号不能买颜色、买金辉后聊天称号变金色、✦ 名牌前缀、灰烬足迹、装备页图标） |
 
@@ -1132,4 +1132,41 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 模型 | p1sim Q07 首通中位 26 / 8 / 3 天；只顺路拿 26 / 8 / 3，专门刷 25 / 8 / 4。p2econ 线上「轮换 + 团本」两件极品 ≥30%：0.3 档第 10 → 9 周，0.5 档第 10 → 9 周，0.7 档第 7 → 8 周。selfcheck 0 failed。输出 `tools/p1sim/out-p1sim-d108-*.md`、`out-p2econ-d108-*.md` |
 | 代码 | EmberRunMaps `rotationNormalBonusMarks`；EmberRunService `settleFor`（精选普通版重打）、`featuredLabel`、`ruleLine`、状态行；ember_p1_challenge、hub_ambience 文字；p1sim / p2econ `feat_*` |
 | 测试 | 单元测试（`normal_bonus_marks`、balance_version 14）；实测 FreshO1（精选 Q01 冒险页那一行；重打 Q01 拿到「额外 T1 锻造印记 +1（本周 1/3）」）；备份 `after-1.49.0` |
+
+### 13.39 深渊重排 + 层费（CoreRpg 1.50.0，2026-10-03 04:13 CST 部署，D109 / D111，balance_version 15）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 第 1 层 = 挑战版（×1.00），线性到第 10 层（生命 ×2.07、伤害 ×1.42 不变）；成色跟强度（2/3/3/4/5/6/7/8/10/12% 极品）；第 8～10 层费 400 / 440 / 480 |
+| 参数源 | `ember-v1-runs.yml`（两份）`abyss.tiers`；balance_version 15（g04-1/b15） |
+| 模型 | p2econ 200 人 12 周 `--abyss`：0.3 档 ≥1 层 30% → 100%；两件极品 ≥30% 周数 9/8/4 → 9/7/5；0.7 档卡币天数 59 → 55。输出 `tools/p1sim/out-p2econ-e3-{base,new,new-raid,fees-low}-*.md`。selfcheck 0 failed |
+| 代码 | EmberRunService `abyssLine` / `cmdAbyss` 文案；ember_p1_abyss、ember_p1_adventure、ember_p1_codex_gear 叫法；EmberCosmetics `abyss1`；单元测试第 1 / 10 层和极品单调 |
+| 测试 | `/corerpg p1 abyss` 层表（FreshQ3）；备份 `after-1.50.0` |
+
+### 13.40 Q02 首通定向兑换（CoreRpg 1.50.0，D110，balance_version 15）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | Q02 首通 = 一次免费定向兑换：自选族和部位（刃 / 护符）的 T1 标准件，绑定、不可分解 |
+| 参数源 | `q02.first_clear: {choice: piece, tier: 1}`（两份） |
+| 代码 | EmberRunMaps `firstClearLabel`；EmberRunService `choiceButtons` / `pieceButtons`、`cmdFirstClear <族> q02 <blade|charm>`（只点族名归 Q01 护符）、Q02 推荐文案；菜单 help / adventure / codex_gear；p1sim `piece` 领较弱的那一格 |
+| 模型 | p1sim 300 人：Q02 首通中位 2 / 2 / 1 天，Q07 26 / 8 / 3 天（不变）。输出 `out-p1sim-e3-q02.md` |
+| 测试 | FreshQ1：6 个按钮，领到 T1 烬爆刃；单元测试 `choiceSlot = piece` |
+
+### 13.41 印记出口、外观商店改版、新称号（CoreRpg 1.50.0，D112）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 商店可用多余印记付（T1/T2/T3 = 1/2/4 点，1 点 = 50 币，每阶留 8 枚）；印记专属：余烬辉光 160、星辉 240、紫焰辉光 320（主城、手持余烬刃）、流火 / 霜光称号动效各 240；试穿 10 秒；新称号 q01/q02/q03/q05/q06、raids10，abyss3 → abyss1 |
+| 代码 | EmberCosmetics（GLOW / ANIM、`markPts`、`points`、`markCost`、`surplus`、`TRIALS`、`titleText(uuid, d, step)`、`syncFlair` 每人一个 `efl_<名字>` 队伍：前缀标记 + 后缀动效称号、`tick` 主城辉光）；EmberRunService `loadouts()`；ember_p1_gear 第 43 格 lore |
+| 参数源 | 价钱在 EmberCosmetics（只做展示，不进 balance） |
+| 测试 | FreshQ1：印记买金辉 / 流火 / 余烬辉光；聊天称号逐句换色；名牌后缀；试穿紫焰辉光粒子 |
+
+### 13.42 团本文案 / 招募板、精选后期、其余文案（CoreRpg 1.50.0，D113–D115）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 团本「人越多越稳」+ p1party 数字；招募挂 10 分钟；只留 DP 一条 [同意]；拒绝反馈；已首通 Q07 的人重打精选普通版不给印记、不占名额；挑战页预期；进服消息按进度 |
+| 代码 | EmberRunService（`recruits` / `liveRecruits` / `recruitsLabel` → `%corerpg_p1_recruits%`、`showRecruits`、`recruit list`、拒绝监听、`settleFor` 的 `featNormal` 加 `!progressFlag(q07)`、`featuredLabel` / `ruleLine`、`joinLines`）；CoreRpgPlugin `onJoin`；ember_hub、ember_p1_adventure、ember_p1_challenge、ember-v1.yml 注释 |
+| 测试 | FreshQ2 / Q3 招募、申请、拒绝；FreshQ3 重打精选 Q01 无加成、进服消息；FreshQ1 进服消息 |
 

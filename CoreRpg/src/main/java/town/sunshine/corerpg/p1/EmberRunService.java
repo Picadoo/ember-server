@@ -152,6 +152,7 @@ public final class EmberRunService implements Listener {
     private PlayerData data(UUID id) { return plugin.getDataStore().get(id); }
     PlayerData dataOf(UUID id) { return data(id); }
     void flushData(UUID id) { plugin.getDataStore().flushMutation(id); } // D107
+    EmberLoadoutService loadouts() { return loadouts; }
 
     /** P2-9 (D83) titles / trails (set by the plugin at enable) */
     private EmberCosmetics cosmetics;
@@ -235,7 +236,7 @@ public final class EmberRunService implements Listener {
     /** D87: pending first-clear choice → pick it; no target family after Q01 → set one; else the next first clear. */
     public String nextStep(PlayerData d, UUID u) {
         if (u != null) for (EmberRunRules.Row r : store.ledger(u).open())
-            if (EmberRunRules.ST_AWAIT.equals(r.status)) return "领取首通自选：点聊天里的族名，或冒险页「首通自选」";
+            if (EmberRunRules.ST_AWAIT.equals(r.status)) return "领取首通自选：点聊天里的按钮，或冒险页「首通自选」";
         EmberRunMaps.MapDef first = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
         if (first != null && firstCleared(d, first) && target(d) == null) return "选掉落目标族（冒险页第 4 行）：之后约六成掉你选的族";
         EmberRunMaps.MapDef second = maps.maps.size() < 2 ? null : new ArrayList<EmberRunMaps.MapDef>(maps.maps.values()).get(1);
@@ -252,6 +253,34 @@ public final class EmberRunService implements Listener {
             if (!firstCleared(d, m)) return "首通 " + m.key.toUpperCase(Locale.ROOT) + " " + m.name + "（首通开放下一张图）";
         }
         return "主线已完结 · 挑战版 / 深渊 · 余烬层 / 团本 · 每日委托";
+    }
+
+    /** E-review #6: a pending piece voucher (Q02) asks for family + slot, a fixed-slot choice (Q01 charm) for the family */
+    private void choiceButtons(Player p, List<EmberRunRules.Row> rows) {
+        for (EmberRunRules.Row r : rows) {
+            if (!EmberRunRules.ST_AWAIT.equals(r.status)) continue;
+            EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
+            String map = r.key.length() >= 6 ? r.key.substring(3, 6) : "";
+            if (g != null && "piece".equals(g.id)) pieceButtons(p, map, g.amount);
+            else familyButtons(p, P + ChatColor.YELLOW + map.toUpperCase(Locale.ROOT) + " 首通自选待领取（悬停看三族区别），点一个族：", "/corerpg p1 firstclear");
+        }
+    }
+
+    /** E-review #6: six family × slot buttons for the Q02 free targeted exchange */
+    private void pieceButtons(Player p, String map, int tier) {
+        java.util.List<net.md_5.bungee.api.chat.BaseComponent> parts = new java.util.ArrayList<net.md_5.bungee.api.chat.BaseComponent>();
+        parts.add(new net.md_5.bungee.api.chat.TextComponent(P + ChatColor.YELLOW + map.toUpperCase(Locale.ROOT) + " 首通：一次免费定向兑换 T" + tier + "，选族和部位："));
+        String[][] fam = {{"scorch", "§6焚烬"}, {"burst", "§c烬爆"}, {"sustain", "§a炽愈"}};
+        for (String[] f : fam) for (String slot : new String[]{"blade", "charm"}) {
+            net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(" §7[" + f[1] + EmberItemData.slotName(slot) + "§7]");
+            b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND,
+                    "/corerpg p1 firstclear " + f[0] + " " + map + " " + slot));
+            b.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+                    new net.md_5.bungee.api.chat.ComponentBuilder(EmberItemData.familyBlurb(f[0]) + "\n§7点击领取 T" + tier + " 标准" + EmberItemData.slotName(slot)
+                            + "\n§7缺哪件补哪件：两件同族才成套").create()));
+            parts.add(b);
+        }
+        p.spigot().sendMessage(parts.toArray(new net.md_5.bungee.api.chat.BaseComponent[0]));
     }
 
     /** D87: one chat line of clickable family buttons running {@code command + " " + family} */
@@ -414,7 +443,7 @@ public final class EmberRunService implements Listener {
                 // D101 (midgame recheck #1): say the whole rule — both T1 pieces come from Q01; the Q02 first-clear blade
                 // is a second, chosen-family blade (to match the charm), not the way in
                 leader.sendMessage(P + "§e" + m.key.toUpperCase(Locale.ROOT) + " 首通推荐：T1 刃 + T1 护符，两件都来自 Q01"
-                        + "（护符 = Q01 首通自选，刃 = Q01 掉落）。" + (m.key.equals("q02") ? "Q02 首通再送一把自选族 T1 刃，用来和护符凑同族。" : ""));
+                        + "（护符 = Q01 首通自选，刃 = Q01 掉落）。" + (m.key.equals("q02") ? "Q02 首通送一次免费定向兑换（自选族和部位的 T1 件），用来补齐同族的那一件。" : ""));
                 for (String w : warn) leader.sendMessage(P + ChatColor.YELLOW + "⚠ " + w);
                 leader.sendMessage(P + "§7这样首通 " + m.key.toUpperCase(Locale.ROOT) + " 几乎打不过，倒下不退体力。");
                 List<String[]> btn = new ArrayList<String[]>();
@@ -993,6 +1022,7 @@ public final class EmberRunService implements Listener {
         // weekly counter with the challenge bonus (C_ROTATION), so the week's featured bonus stays 3 clears in total
         boolean featNormal = !s.challenge && s.abyss == 0 && !m.raid && in.firstClear == null && s.tier < 3
                 && m.key.equals(featured(today)) && maps.rotationNormalBonusMarks > 0
+                && !progressFlag(pd, "q07") // E-review #7: after the own Q07 first clear a normal repeat neither pays nor uses a challenge slot
                 && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
         if (featNormal) rotation = true;
         final int rotMarks = s.challenge ? maps.rotationBonusMarks : maps.rotationNormalBonusMarks;
@@ -1218,7 +1248,7 @@ public final class EmberRunService implements Listener {
         if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后点：",
                 "[补领]", "/corerpg p1 claim", "领取暂存的奖励（装备页也有「补领」）"); // D95
-        if (choices > 0) familyButtons(p, P + ChatColor.YELLOW + "首通自选待领取（悬停看三族区别），点一个族：", "/corerpg p1 firstclear");
+        if (choices > 0) choiceButtons(p, open);
         return changed.size();
     }
 
@@ -1785,7 +1815,7 @@ public final class EmberRunService implements Listener {
         }
         p.sendMessage(P + "§5深渊 · 余烬层 §7— 每层 = 随机一张主线图打一局（3 房 + 首领），打赢第 N 层开放第 N+1 层；共 "
                 + maps.abyss.size() + " 层封顶");
-        p.sendMessage(P + "§7每层单独确认：" + maps.cost + " 体力 + 层费（余烬币）；进本失败 / 开战前中止 / 重启 全退；打完首领才结算，失败只丢这一层的花费，不掉装备不降强化");
+        p.sendMessage(P + "§7每层单独确认：" + maps.cost + " 体力 + 层费（余烬币）；没开打就退出（含服务器重启）全额退还；打完首领才结算，失败只丢这一层的花费，不掉装备不降强化");
         if (!abyssOpen(d)) { p.sendMessage(P + "§c需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)); return true; }
         p.sendMessage(P + "最高通关 第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层 · 余烬币 " + d.getCoin());
         for (EmberRunMaps.AbyssTier t : maps.abyss) p.sendMessage(P + abyssLine(d, t));
@@ -1804,7 +1834,7 @@ public final class EmberRunService implements Listener {
         String st = t.index <= abyssBest(d) ? "§a已通关" : t.index <= abyssMaxStart(d) ? "§e可开" : "§8未开放";
         return "§d第 " + t.index + " 层 " + st + " §7· 生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
                 + String.format(Locale.ROOT, "%.2f", t.dmg) + " · 掉落成色 " + qualityLabel(t.quality) + " · 费 " + t.fee + " 币"
-                + (t.index == 1 ? " §8（比挑战版强一档，挑战版稳过再来）" : "");
+                + (t.index == 1 ? " §8（= 挑战版强度：挑战版能过就能下）" : t.index == maps.abyss.size() ? " §8（两件 T3 +10、卓越以上再来）" : "");
     }
 
     static String qualityLabel(int[] q) {
@@ -1912,11 +1942,15 @@ public final class EmberRunService implements Listener {
         for (EmberRunRules.Row r : l.open()) if (EmberRunRules.ST_AWAIT.equals(r.status)) waiting.add(r);
         if (waiting.isEmpty()) { p.sendMessage(P + "没有待领取的首通自选。"); return true; }
         if (args.length < 3) {
+            boolean fixed = false;
             for (EmberRunRules.Row r : waiting) {
                 EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
+                if (g != null && "piece".equals(g.id)) { pieceButtons(p, r.key.substring(3, 6), g.amount); continue; }
+                fixed = true;
                 p.sendMessage(P + "待选：" + r.key.substring(3, 6).toUpperCase(Locale.ROOT) + " T" + (g == null ? 1 : g.amount) + " 标准"
                         + EmberItemData.slotName(g == null ? "blade" : g.id));
             }
+            if (!fixed) return true;
             String t = target(data(p.getUniqueId()));
             familyButtons(p, P + "点一个族领取" + (t == null ? "（会同时设为掉落目标族）" : "（目标族 " + EmberItemData.familyName(t) + "，选同族才能成套）") + "：", "/corerpg p1 firstclear");
             p.sendMessage(P + "§7刃和护符同族才成套；选和另一件不同的族会断套装。");
@@ -1926,11 +1960,20 @@ public final class EmberRunService implements Listener {
         String fam = args[2].toLowerCase(Locale.ROOT);
         if (!EmberRunRules.validFamily(fam)) { p.sendMessage(P + ChatColor.RED + "族：scorch / burst / sustain"); return true; }
         EmberRunRules.Row pick = waiting.get(0);
+        if (args.length == 3) for (EmberRunRules.Row r : waiting) { // a bare family click belongs to a fixed-slot choice (Q01 charm)
+            EmberRunRules.Grant rg = EmberRunRules.Grant.decode(r.key, r.result);
+            if (rg != null && !"piece".equals(rg.id)) { pick = r; break; }
+        }
         if (args.length >= 4) for (EmberRunRules.Row r : waiting) if (r.key.startsWith("fc_" + args[3].toLowerCase(Locale.ROOT) + "_")) pick = r;
         EmberRunRules.Grant g = EmberRunRules.Grant.decode(pick.key, pick.result);
         if (g == null) return true;
+        String slot = g.id;
+        if ("piece".equals(g.id)) { // E-review #6: the voucher needs a slot too
+            slot = args.length >= 5 ? args[4].toLowerCase(Locale.ROOT) : "";
+            if (!"blade".equals(slot) && !"charm".equals(slot)) { pieceButtons(p, pick.key.substring(3, 6), g.amount); return true; }
+        }
         long seed = EmberRunRules.subSeed(p.getUniqueId().getLeastSignificantBits(), pick.runId);
-        EmberRunRules.Grant item = EmberRunRules.choiceItem(seed, p.getUniqueId().toString(), pick.runId, pick.key, fam, g.id, g.amount);
+        EmberRunRules.Grant item = EmberRunRules.choiceItem(seed, p.getUniqueId().toString(), pick.runId, pick.key, fam, slot, g.amount);
         boolean[] c = new boolean[1];
         long now = System.currentTimeMillis();
         EmberRunRules.Row ir = l.record(pick.runId, item.key, item.encode(), EmberRunRules.ST_PENDING, now, c);
@@ -1954,7 +1997,7 @@ public final class EmberRunService implements Listener {
         // free enhance-track swap so the player does not keep investing in an off-set blade (p2econ: set alignment −6 pt otherwise)
         EmberLoadoutService ls = plugin.getEmberLoadouts();
         EmberLoadout lo = ls == null ? null : ls.refresh(p);
-        if ("blade".equals(g.id) && lo != null && lo.blade != null && lo.blade.tier >= 1 && lo.blade.enhance > 0 && !fam.equals(lo.blade.family))
+        if ("blade".equals(slot) && lo != null && lo.blade != null && lo.blade.tier >= 1 && lo.blade.enhance > 0 && !fam.equals(lo.blade.family))
             p.sendMessage(P + "§e提示：§7你手里的刃是 " + EmberItemData.familyName(lo.blade.family) + " +" + lo.blade.enhance
                     + "。想换成新的 " + EmberItemData.familyName(fam) + "刃凑套装，工坊「互换」能把强化等级免费挪过去（主手一把、副手一把）。");
         return true;
@@ -1978,11 +2021,11 @@ public final class EmberRunService implements Listener {
             Player l = Bukkit.getPlayerExact(args[3]);
             if (l == null || l.equals(p)) { p.sendMessage(P + ChatColor.RED + "队长不在线。"); return true; }
             if (EmberRunBridges.hasTeam(p)) { p.sendMessage(P + ChatColor.RED + "你已经在一支队伍里了，先退出再申请。"); return true; }
+            // E-review #5: DP's own line already carries [同意] [拒绝] — no second [同意] from us
             p.performCommand("dungeon-team request join " + l.getName());
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(l, P + "§e" + p.getName() + " §f想加入你的团本队伍 ",
-                    new String[]{"[同意]", "/dungeon-team request accept " + p.getName(), "让 " + p.getName() + " 入队", "GREEN"});
             return true;
         }
+        if (args.length >= 3 && "list".equalsIgnoreCase(args[2])) { showRecruits(p, true); return true; }
         String key = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "r01";
         EmberRunMaps.MapDef m = maps.byKey(key);
         if (m == null || !m.raid) { p.sendMessage(P + "/corerpg p1 recruit <r01|r02> — 全服招募团本队员"); return true; }
@@ -1996,7 +2039,8 @@ public final class EmberRunService implements Listener {
         List<UUID> team = EmberRunBridges.teamMembers(p);
         int need = Math.max(0, maps.partyMin(m) - team.size());
         String line = P + "§6" + p.getName() + " §f招 §e" + m.name + " §f队员（现在 " + team.size() + " 人"
-                + (need > 0 ? "，还差 " + need + " 人开本" : "，人越多越稳") + "） ";
+                + (need > 0 ? "，还差 " + need + " 人开本" : "") + "；人越多越稳，最多 5 人） ";
+        recruits.put(p.getUniqueId(), new Recruit(p.getUniqueId(), p.getName(), m.key, m.name, now)); // E-review #5: the board
         int sent = 0;
         for (Player o : Bukkit.getOnlinePlayers()) {
             if (o.equals(p) || team.contains(o.getUniqueId())) continue;
@@ -2005,9 +2049,82 @@ public final class EmberRunService implements Listener {
                     new String[]{"[申请入队]", "/corerpg p1 recruit join " + p.getName(), "向队长申请；队长同意后入队", "GREEN"});
             sent++;
         }
-        p.sendMessage(P + (sent > 0 ? "§a已向 " + sent + " 位已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的在线玩家发出招募；有人申请时这里会出现 [同意]。"
-                : "§7现在没有其他已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的玩家在线，稍后再试。"));
+        p.sendMessage(P + (sent > 0 ? "§a已向 " + sent + " 位已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的在线玩家发出招募；有人申请时会出现 [同意] [拒绝]。"
+                : "§7现在没有其他已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的玩家在线。") + "§7招募挂在冒险页团本图标上 10 分钟，之后上线的人也看得到。");
         return true;
+    }
+
+    // ------------------------------------------------------------------ E-review #5: recruit board (10 minutes)
+
+    static final long RECRUIT_TTL = 10 * 60_000L;
+
+    private static final class Recruit {
+        final UUID leader; final String name, raid, raidName; final long at;
+        Recruit(UUID leader, String name, String raid, String raidName, long at) { this.leader = leader; this.name = name; this.raid = raid; this.raidName = raidName; this.at = at; }
+    }
+    private final Map<UUID, Recruit> recruits = new java.util.concurrent.ConcurrentHashMap<UUID, Recruit>();
+
+    /** live board entries: younger than 10 min, leader online, still leading a team that is not full and not in a run */
+    private List<Recruit> liveRecruits() {
+        long now = System.currentTimeMillis();
+        List<Recruit> out = new ArrayList<Recruit>();
+        for (Recruit r : new ArrayList<Recruit>(recruits.values())) {
+            Player l = Bukkit.getPlayer(r.leader);
+            boolean ok = now - r.at < RECRUIT_TTL && l != null && l.isOnline() && !blocksLegacy(l.getWorld())
+                    && EmberRunBridges.hasTeam(l) && EmberRunBridges.teamLeader(l) && EmberRunBridges.teamMembers(l).size() < 5;
+            if (ok) out.add(r); else recruits.remove(r.leader);
+        }
+        out.sort((a, b) -> Long.compare(b.at, a.at));
+        return out;
+    }
+
+    private String recruitText(Recruit r) {
+        Player l = Bukkit.getPlayer(r.leader);
+        int n = l == null ? 1 : EmberRunBridges.teamMembers(l).size();
+        EmberRunMaps.MapDef m = maps.byKey(r.raid);
+        int min = m == null ? 3 : maps.partyMin(m);
+        long mins = (System.currentTimeMillis() - r.at) / 60_000L;
+        return r.raid.toUpperCase(Locale.ROOT) + " · " + r.name + " · " + n + "/" + min + (n >= min ? "（可开本）" : "") + " · " + (mins == 0 ? "刚刚" : mins + " 分钟前");
+    }
+
+    /** %corerpg_p1_recruits%: up to two board entries for the adventure icons */
+    public String recruitsLabel() {
+        List<Recruit> live = liveRecruits();
+        if (live.isEmpty()) return "暂无（右键发一个）";
+        StringBuilder b = new StringBuilder();
+        for (int i = 0; i < Math.min(2, live.size()); i++) b.append(i == 0 ? "" : " ｜ ").append(recruitText(live.get(i)));
+        return b + (live.size() > 2 ? " 等 " + live.size() + " 个" : "");
+    }
+
+    /** chat list with [申请入队] (players with their own Q07 first clear, not already in a team) */
+    void showRecruits(Player p, boolean tellEmpty) {
+        List<Recruit> live = liveRecruits();
+        if (live.isEmpty()) { if (tellEmpty) p.sendMessage(P + "现在没有团本在招人。冒险页团本图标右键可以自己发一个。"); return; }
+        p.sendMessage(P + "§6团本招募板§7（挂 10 分钟）：");
+        for (Recruit r : live) {
+            if (r.leader.equals(p.getUniqueId())) { p.sendMessage(P + "  §7" + recruitText(r) + "（你的招募）"); continue; }
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "  §f" + recruitText(r) + " ",
+                    new String[]{"[申请入队]", "/corerpg p1 recruit join " + r.name, "向队长申请；队长同意后入队", "GREEN"});
+        }
+    }
+
+    /** E-review #5: players with a Q07 first clear see open recruits when they log in */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onJoinRecruits(org.bukkit.event.player.PlayerJoinEvent e) {
+        final Player p = e.getPlayer();
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline() || !progressFlag(data(p.getUniqueId()), "q07") || liveRecruits().isEmpty()) return;
+            showRecruits(p, false);
+        }, 100L);
+    }
+
+    /** E-review #5: DP says nothing to a leader who refused an application ([拒绝] runs request unaccept <name>) */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onRequestRefused(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
+        String[] a = e.getMessage().replaceFirst("^/", "").trim().split("\\s+");
+        if (a.length < 4 || !a[0].toLowerCase(Locale.ROOT).endsWith("dungeon-team") || !"request".equalsIgnoreCase(a[1])
+                || !"unaccept".equalsIgnoreCase(a[2])) return;
+        e.getPlayer().sendMessage(P + "已拒绝 " + a[3] + " 的入队申请。");
     }
 
     private final java.util.Set<UUID> warnedT3 = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>()); // D104
@@ -2153,9 +2270,11 @@ public final class EmberRunService implements Listener {
         if (f == null || maps.rotationBonusMarks <= 0) return "无";
         int left = Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
         EmberRunMaps.Modifier mod = maps.modifierFor(today);
-        boolean normalToo = f.tier < 3 && maps.rotationNormalBonusMarks > 0; // D108
+        boolean late = progressFlag(d, "q07"); // E-review #7
+        boolean normalToo = f.tier < 3 && maps.rotationNormalBonusMarks > 0 && !late; // D108
         return f.key.toUpperCase(Locale.ROOT) + " " + f.name + (mod == null ? "" : " · 规则「" + mod.name + "」")
-                + " · 本周还能多拿 " + left + " 次印记（" + (normalToo ? "首通后重打给 T" + f.tier + "，挑战版给 T3，共用 " + maps.rotationWeeklyCap + " 次" : "挑战版，T3") + "）· 周一 0 点轮换";
+                + " · 本周还能多拿 " + left + " 次印记（" + (normalToo ? "首通后重打给 T" + f.tier + "，挑战版给 T3，共用 " + maps.rotationWeeklyCap + " 次"
+                : late && f.tier < 3 ? "挑战版，T3；重打普通版不占名额" : "挑战版，T3") + "）· 周一 0 点轮换";
     }
 
     /** D98: the real family odds on this map for this player (EmberRunRules.familyProbability), one short tail */
@@ -2174,6 +2293,21 @@ public final class EmberRunService implements Listener {
     public java.util.List<EmberLeaderboard.Row> topRows(boolean abyssBoard, int n) {
         if (top == null) return new ArrayList<EmberLeaderboard.Row>();
         return top.top(abyssBoard, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())), n);
+    }
+
+    /** E-review #10: the join greeting follows progress — null = the config lines (new players, before the Q01 first clear) */
+    public List<String> joinLines(PlayerData d) {
+        if (d == null || !progressFlag(d, "q01")) return null;
+        List<String> out = new ArrayList<String>();
+        if (progressFlag(d, "q07")) {
+            out.add("§6§l[余烬服] §e欢迎回来 · 本周精选 §f" + featuredLabel(d));
+            out.add("§7深渊最高第 §f" + abyssBest(d) + "§7 层（可开 1～" + abyssMaxStart(d) + " 层）"
+                    + "§7 · 多余的印记可以在外观商店（装备页）换只做展示的外观");
+        } else {
+            out.add("§6§l[余烬服] §e欢迎回来 · 下一步：§f" + ChatColor.stripColor(nextStep(d)));
+            out.add("§7本周精选 §f" + featuredShort() + "§7 · 右键门吏 · 灰钥或点下面的 [冒险页] 进本");
+        }
+        return out;
     }
 
     /** D97 hub text, e.g. 「Q03 残誓地窖 · 规则「逆行」」 */
@@ -2220,6 +2354,8 @@ public final class EmberRunService implements Listener {
         if (m == null) return "";
         EmberRunMaps.Modifier mod = normalRule() ? maps.modifierFor(today) : null;
         boolean on = firstCleared(d, m);
+        if (m.tier < 3 && maps.rotationNormalBonusMarks > 0 && progressFlag(d, "q07")) // E-review #7: late players
+            return "§b· 本周精选图" + (mod == null ? "" : " · 规则「" + mod.name + "」") + "§8（你已首通 Q07：重打普通版不多给印记，也不占挑战版的 " + maps.rotationWeeklyCap + " 次名额）";
         if (m.tier < 3 && maps.rotationNormalBonusMarks > 0) { // D108: the featured T1/T2 map pays a mark on repeat clears
             int left = Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
             return "§b· 本周精选：重打通关 +" + maps.rotationNormalBonusMarks + " 枚 T" + m.tier + " 印记（本周剩 " + left + "/" + maps.rotationWeeklyCap + "）"
@@ -2314,6 +2450,7 @@ public final class EmberRunService implements Listener {
                 return t == null ? "" : abyssLine(d, t);
             } catch (NumberFormatException e) { return ""; }
         }
+        if ("recruits".equals(key)) return recruitsLabel(); // E-review #5
         if ("featured_key".equals(key)) return String.valueOf(featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
         if ("awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "stats".equals(key)
                 || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)) {

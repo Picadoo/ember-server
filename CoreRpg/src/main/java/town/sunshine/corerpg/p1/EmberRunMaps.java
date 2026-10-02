@@ -328,6 +328,7 @@ public final class EmberRunMaps {
 
         public String firstClearLabel() {
             EmberRunRules.FirstClear f = firstClear;
+            if ("piece".equals(f.choiceSlot)) return "一次免费定向兑换：T" + f.choiceTier + " 标准件，族和部位（刃 / 护符）都自己选（绑定、不可分解）"; // E-review #6
             if (f.choiceSlot != null) return "自选族 T" + f.choiceTier + " 标准" + EmberItemData.slotName(f.choiceSlot) + "（绑定、不可分解）";
             StringBuilder sb = new StringBuilder();
             if (f.shard > 0) sb.append("碎片 ").append(f.shard).append(' ');

@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108)
-balance_version: 14
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110)
+balance_version: 15
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -71,8 +71,8 @@ challenge:
   quality: [60, 28, 10, 2]
   # D104 (balance_version 13): eased to HP ×0.70 / damage ×0.85 so a fresh Q07 clearer (dodge 0.5, enhance moved onto
   # the new T3 piece with the free swap) clears the best map ~17 % and ~50 % after one T3 upgrade, ~85 % with two
-  # (tools/p1sim/chrate.py; was 0 % / 6 % / 14 %). The abyss tier factors below were raised by the same ratio, so the
-  # abyss keeps its old absolute strength (tier 1 = the old challenge values).
+  # (tools/p1sim/chrate.py; was 0 % / 6 % / 14 %). E-review D109: abyss tier 1 now equals these values (×1.00); only
+  # tier 10 keeps the old absolute strength.
   mobs:
     melee:    {hp: 189, atk: 20}
     ranged:   {hp: 139, atk: 20}
@@ -93,17 +93,22 @@ abyss:
   requires: q07
   # hp / dmg multiply the challenge values; quality = 标准/精良/卓越/极品 weights; fee = 余烬币 per tier
   # D104: hp ÷0.70 and dmg ×1.20 against the eased challenge = the same absolute strength as before (tier 1 = old challenge)
+  # E-review (D109, balance_version 15): tier 1 = the challenge itself (×1.00), a linear ramp to tier 10 at its old
+  # absolute strength (hp 2.07 / dmg 1.42). Quality follows the strength: tier 1 = the challenge table, tiers 2–3
+  # get 3 % 极品, tiers 4–8 the old tier 3–7 tables, tiers 9/10 keep theirs. Model: p2econ.py --abyss (0.3 dodge:
+  # ≥1 tier 30 % → 100 % by week 12; two 极品 ≥30 % at week 9 / 7 / 5 vs 9 / 8 / 4 before). D111: fees of tiers 8–10
+  # trimmed 420/480/540 → 400/440/480 (0.7 dodge coin-blocked days 59 → 55 of 84, chase speed unchanged).
   tiers:
-    - {hp: 1.43, dmg: 1.20, quality: [60, 28, 10, 2], fee: 0}
-    - {hp: 1.50, dmg: 1.22, quality: [57, 29, 11, 3], fee: 60}
-    - {hp: 1.57, dmg: 1.25, quality: [54, 30, 12, 4], fee: 120}
-    - {hp: 1.64, dmg: 1.27, quality: [51, 31, 13, 5], fee: 180}
-    - {hp: 1.71, dmg: 1.30, quality: [48, 32, 14, 6], fee: 240}
-    - {hp: 1.79, dmg: 1.32, quality: [45, 33, 15, 7], fee: 300}
-    - {hp: 1.86, dmg: 1.34, quality: [42, 34, 16, 8], fee: 360}
-    - {hp: 1.93, dmg: 1.37, quality: [39, 35, 17, 9], fee: 420}
-    - {hp: 2.00, dmg: 1.39, quality: [36, 36, 18, 10], fee: 480}
-    - {hp: 2.07, dmg: 1.42, quality: [33, 37, 18, 12], fee: 540}
+    - {hp: 1.00, dmg: 1.00, quality: [60, 28, 10, 2], fee: 0}
+    - {hp: 1.12, dmg: 1.05, quality: [58, 29, 10, 3], fee: 60}
+    - {hp: 1.24, dmg: 1.09, quality: [57, 29, 11, 3], fee: 120}
+    - {hp: 1.36, dmg: 1.14, quality: [54, 30, 12, 4], fee: 180}
+    - {hp: 1.48, dmg: 1.19, quality: [51, 31, 13, 5], fee: 240}
+    - {hp: 1.60, dmg: 1.23, quality: [48, 32, 14, 6], fee: 300}
+    - {hp: 1.71, dmg: 1.28, quality: [45, 33, 15, 7], fee: 360}
+    - {hp: 1.83, dmg: 1.33, quality: [42, 34, 16, 8], fee: 400}
+    - {hp: 1.95, dmg: 1.37, quality: [36, 36, 18, 10], fee: 440}
+    - {hp: 2.07, dmg: 1.42, quality: [33, 37, 18, 12], fee: 480}
 
 maps:
   q01:
@@ -181,8 +186,11 @@ maps:
     map_version: ember_daily_ash_v1@d15-2026-10-02
     requires: q01
     unlocks: q03
-    first_clear: {choice: blade, tier: 1}
-    purpose: "推荐带 T1 刃 + T1 护符再来；首通再送一件自选族 T1 刃（选同族才成套）并开放 Q03"
+    # E-review #6 (balance_version 15): the Q02 first clear is one free targeted exchange — a T1 standard piece of the
+    # family AND slot the player picks (was a fixed T1 blade, the same thing the Q02 gate asks for). Model: p1sim
+    # (`choice: piece` takes the weaker slot, as the mark exchange does).
+    first_clear: {choice: piece, tier: 1}
+    purpose: "推荐带 T1 刃 + Q01 首通的 T1 护符再来；首通送一次免费定向兑换（自选族和部位的 T1 件）并开放 Q03"
     b_ref: 24
     # D15: book ch. 12 walkable white box (ember_daily_ash_v1, /corerpg p1 mapbuild q02)
     spawn: [0, 64, 6]
