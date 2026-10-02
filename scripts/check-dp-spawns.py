@@ -8,8 +8,9 @@ mobs suffocated and DP's $kill counted it → idle players got weekly/raid clear
 usage: scripts/check-dp-spawns.py [dungeonDir ...]     (default: every plugins/DungeonPlus/dungeon/Ember*/)
 P1 G04: for EmberQ0x dungeons the CoreRpg run director spawns the mobs, so the points in
 plugins/CoreRpg/ember-v1-runs.yml (rooms.*.points, boss.at, boss.adds.points, event.anchor, spawn, spread, links.to) of the map whose
-`dungeon:` matches are checked too, every door block listed there must be a closed door (iron bars) in the template
-(a door preceded by a `# runtime:` comment line must be open there instead: the director closes it at attach),
+`dungeon:` matches are checked too, every door block listed there must be air or iron bars in the template (D129: the
+templates are saved with the doors OPEN; EmberRunDirector.attach() turns air/bars into bars for every room not yet cleared
+and opens them by swapping bars back to air, so any other block would leave the doorway blocked for good),
 and no runtime rail box (rails:) may cover a point's feet or head.
        DP_MAP_ROOT=/path/with/<mapname>/ dirs to check other map copies (e.g. a release or a backup)
 exit 1 = some point has its head inside a full opaque block (mob suffocates → DP counts the death) or no chunk;
@@ -26,7 +27,7 @@ def p1_points(dungeon):
     """(label, x, y, z) points and door boxes of the ember-v1-runs.yml map whose dungeon id is `dungeon`."""
     if not os.path.exists(RUNS): return [], []
     text = open(RUNS, encoding='utf-8').read()
-    blocks = re.split(r'(?m)^  (q\d\d):\s*$', text)
+    blocks = re.split(r'(?m)^  (q\d\d|r\d\d):\s*$', text)  # D129: raids are their own blocks (r01, r02)
     for i in range(1, len(blocks) - 1, 2):
         body = blocks[i + 1]
         if not re.search(r'(?m)^\s+dungeon:\s*%s\s*$' % re.escape(dungeon), body): continue
@@ -147,9 +148,8 @@ def check(ddir):
             for y in range(min(y0, y1), max(y0, y1) + 1):
                 for z in range(min(z0, z1), max(z0, z1) + 1):
                     b = mp.block(x, y, z)
-                    if what.endswith(':runtime'):  # the director closes it at attach: the template must be open there
-                        if b not in (0, 101): bad.append('  %s @ %d,%d,%d: block id %s, expected air (runtime door)' % (what, x, y, z, b))
-                    elif b != 101: bad.append('  %s @ %d,%d,%d: block id %s, expected closed iron bars (101)' % (what, x, y, z, b))
+                    # D129: saved open (air) or closed (bars) are both fine — the director closes them at attach
+                    if b not in (0, 101): bad.append('  %s @ %d,%d,%d: block id %s in a doorway (the director only swaps air <-> iron bars: this stays blocked)' % (what, x, y, z, b))
     for rb in P1_RAILS.get(os.path.basename(ddir.rstrip('/')), []):
         x0, y0, z0, x1, y1, z1 = rb
         for what, x, y, z in pts:

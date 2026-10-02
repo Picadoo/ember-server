@@ -20,6 +20,7 @@
 - **全栈**：`scripts/ember-up.sh` 和 `scripts/ember-down.sh`（登录服、游戏服、代理）。
 - **只重启游戏服**：`server-runtime/stop.sh; sleep 2; server-runtime/start.sh`，等大约 40 秒。日志 `server-runtime/logs/stdout.log` 里要看到「Enabling CoreRpg vX」「50 个菜单已加载」「Done」。
 - **控制台**：`scripts/console.sh play "<cmd>" [等待秒数]`。
+- **聊天不带世界名（D126）**：Multiverse 的设置要在服务器开着时改：`scripts/console.sh play "mv config prefixchat false"`（看到 `SUCCESS! Values were updated successfully!`，文件 `plugins/Multiverse-Core/config.yml` 里变成 `prefixchat: 'false'`）。**不要直接改文件**：Multiverse 关服时会把内存里的值写回去，改了也白改。检查：机器人说一句话，聊天里应是「[称号] <名字> …」，没有 `[ember_hub]`。原版成就广播由 CoreRpg 每次启动和世界加载时关掉（`gamerule announceAdvancements` 应为 false），不用手动管。
 - **构建**：
   ```
   cd CoreRpg && JAVA_HOME=/workspace/minecraft/tools/jdk8u504-b01 /workspace/minecraft/tools/apache-maven-3.9.16/bin/mvn -q -o package
@@ -60,7 +61,7 @@
 | `tools/p1map/book.py`、`gen.py` | 解析书里的地图章节，生成地图 |
 | `tools/p1map/chal-smoke.sh`、`abyss-smoke.sh`、`raid-smoke.sh LEADER "成员…" [q07|q06]`、`boss-test.sh LEADER "成员…" QMAP [比例]`（首领不 weaken 或只削到比例，看阶段和击杀用时） | 机器人冒烟：按书里的路线走，每个房间先 admin weaken，再由机器人击杀，结算是真的 |
 | `tools/p1map/norm-smoke.sh NAME qNN`（普通版，每个房间削弱）、`newbie-run.sh NAME qNN`（不削弱、生存模式、喝药，死了就停）；`fight.sh` 加环境变量 `DRINK=1`，生命低于 11 时喝快捷栏的药 | 新手视角冒烟 |
-| `scripts/check-dp-spawns.py`、`dp_fix_spawns.py`、`dp_map_reach.py` | 检查 DP 刷怪点（卡墙、走不到） |
+| `scripts/check-dp-spawns.py`、`dp_fix_spawns.py`、`dp_map_reach.py` | 检查 DP 刷怪点（卡墙、走不到）。用法 `DP_MAP_ROOT=/workspace/minecraft/plugins/DungeonPlus/map python3 scripts/check-dp-spawns.py /workspace/minecraft/plugins/DungeonPlus/dungeon/EmberQ0*`，应该 9 个都是 ok。D129 起门格只要是空气或铁栏就算对（模板存档时门开着，director attach 时把空气 / 铁栏变成铁栏），别的方块才报错；团本 r01 / r02 按自己的块检查，不再混进 q07 |
 | `scripts/db-dump.sh` | MySQL 备份到 `/workspace/backup/` |
 | `mineflayer-tests/tmp-p1/b.sh` | 机器人：join / quit / eval / chat。另有 `walk.sh`、`fight.sh` |
 
@@ -91,9 +92,7 @@
 - **后期币堆积**：深渊层费是目前唯一的大额出口（D72）。要发币的新内容必须先过 p2econ。D107 外观商店是只做展示的花币出口（全套 7.8 万），入口在**装备页第 43 格**（不是 44），D121 起第 43 格、进服消息、赛季页都打开同一个商店页 `ember_p1_shop`（付款在 `ember_p1_shop_buy`），价格和说法只在 EmberCosmetics；D112 起也能用多余印记付（T1/T2/T3 = 1/2/4 点，1 点 = 50 币，每阶留 8 枚），另有印记专属的主城刃辉光和称号动效。
 - **全流程验收（`docs/review-fullpath-2026-10-03.md`）**：D120–D127 已做（P2 草案 §5s）。没改的：
   - 后期 #6「挑战版失败什么都不给」：现在只多一条「下一次突破」提示，失败奖励 / 体力退还属于发奖励，要用户拍板再过 p2econ。chrate 的「刚首通」档默认 T3 件已经戴上，D120 自动换上让玩家更快到这个状态。
-  - `check-dp-spawns.py` 对 Q01–Q07 都报「门应是关着的铁栏」：模板存档时门开着，director attach 时才关，检查脚本该改成不查门。
   - D125 团本倒下提示这轮没有实机团本复测（代码 + 配置改动）。
-  - Multiverse 的 `prefixchat` 要用 `mv config prefixchat false` 在线改；直接改文件会在关服时被内存值写回。
   - 旧的仅管理员可见菜单（`ember_hub_legacy` 一系）没动。
 - **后期复查（`docs/review-endgame-2026-10-03.md`）**：D109–D115 已做（P2 草案 §5q）；原来留着的最后阶段复活、商店页、赛季榜和周目标在 1.51.0 做了（D116–D119，§5r）。旧物品名重写在 D127 做了（进服重写显示）。
 - **赛季（D116）**：第 1 赛季 2026-09-28～10-25，10-26 0 点后第一分钟自动结算（日志 `[P1 season] S1 settled`、全服广播、`season-archive/S1.yml`）。目前榜上只有测试号会打本，全都被 `leaderboard_exclude` 挡掉，所以 S1 很可能是空结算；真实玩家第一次上榜时看一眼 `/corerpg p1 season`。`runs season preview` 可以随时预览。
