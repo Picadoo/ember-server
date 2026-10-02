@@ -32,11 +32,10 @@ public final class EmberRunRules {
     public static final int ELITE_CORE = 1;
     /**
      * P2-1 weekly challenge rotation (docs/design-ember-v1.1-P2-draft.md §3): one of the seven challenge maps is featured
-     * each Monday-based week (Asia/Shanghai); its first {@link #ROTATION_WEEKLY_CAP} challenge clears per character and
-     * week add {@link #ROTATION_BONUS_MARKS} forge mark of the run tier. No coin, no item, no multiplier (§23.3).
+     * each Monday-based week (Asia/Shanghai); its first rotation.weekly_cap challenge clears per character and week add
+     * rotation.bonus_marks forge marks of the run tier (parameter source: ember-v1-runs.yml, D66). No coin, no item,
+     * no multiplier (§23.3).
      */
-    public static final int ROTATION_BONUS_MARKS = 1;
-    public static final int ROTATION_WEEKLY_CAP = 3;
 
     /** Monday-based week number since the epoch (1970-01-05 is week 1's Monday; 1970-01-01 was a Thursday). */
     public static long weekIndex(java.time.LocalDate day) {

@@ -451,6 +451,8 @@ public final class EmberRunMaps {
     /** null when the file has no challenge section (challenge entry refused) */
     public final Challenge challenge;
     public final int cost, partyMin, partyMax, passSeconds;
+    /** P2-1 (D66) weekly featured challenge: extra marks of the run tier, and how many clears per week get them */
+    public final int rotationBonusMarks, rotationWeeklyCap;
     public final String worldPrefix;
     public final Map<String, MapDef> maps;
 
@@ -463,6 +465,9 @@ public final class EmberRunMaps {
         partyMax = (int) num(root.get("party_max"), 3);
         passSeconds = (int) num(root.get("pass_seconds"), 30);
         worldPrefix = str(root.get("world_prefix"), "dungeon_EmberQ0");
+        Map<?, ?> rot = root.get("rotation") instanceof Map ? (Map<?, ?>) root.get("rotation") : java.util.Collections.emptyMap();
+        rotationBonusMarks = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
+        rotationWeeklyCap = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
         challenge = root.get("challenge") instanceof Map ? new Challenge((Map<?, ?>) root.get("challenge")) : null;
         Map<String, MapDef> m = new LinkedHashMap<String, MapDef>();
         if (root.get("maps") instanceof Map) {

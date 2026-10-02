@@ -304,8 +304,10 @@ public class EmberRunRulesTest {
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(2, m.balanceVersion);
-        assertEquals("g04-1/b2", m.ruleVersion);
+        assertEquals(3, m.balanceVersion);                 // D66
+        assertEquals("g04-1/b3", m.ruleVersion);
+        assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
+        assertEquals(3, m.rotationWeeklyCap);
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
         assertEquals(2, (int) q2.room("r2").b.get("ranged"));
         assertEquals(1, (int) q3.room("r3").a.get("caster"));
@@ -581,7 +583,5 @@ public class EmberRunRulesTest {
         assertEquals(7, seen.size());                                                     // every map once per 7 weeks
         assertEquals("w" + EmberRunRules.weekIndex(mon), EmberRunRules.rotationWeekKey(mon.plusDays(3)));
         assertNull(EmberRunRules.featuredChallenge(java.util.Collections.<String>emptyList(), mon));
-        assertEquals(1, EmberRunRules.ROTATION_BONUS_MARKS);
-        assertEquals(3, EmberRunRules.ROTATION_WEEKLY_CAP);
     }
 }

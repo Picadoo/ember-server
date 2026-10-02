@@ -524,8 +524,9 @@ public final class EmberRunService implements Listener {
         // P2-1 weekly challenge rotation: featured map, first 3 challenge clears of the week → +1 mark of the run tier
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
         String week = EmberRunRules.rotationWeekKey(today);
-        boolean rotation = s.challenge && m.key.equals(featured(today)) && pd.periodCount(C_ROTATION, week) < EmberRunRules.ROTATION_WEEKLY_CAP;
-        if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), EmberRunRules.ROTATION_BONUS_MARKS, null));
+        boolean rotation = s.challenge && m.key.equals(featured(today)) && maps.rotationBonusMarks > 0
+                && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
+        if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), maps.rotationBonusMarks, null));
         EmberRunRules.Ledger l = store.ledger(u);
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
         long now = System.currentTimeMillis();
@@ -543,8 +544,8 @@ public final class EmberRunService implements Listener {
                 + (s.challenge ? " (challenge T" + s.tier + ")" : ""));
         Player p = Bukkit.getPlayer(u);
         if (p != null && p.isOnline() && rotation) {
-            p.sendMessage(P + "§b本周精选挑战 §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + EmberRunRules.ROTATION_BONUS_MARKS
-                    + "§7（本周 " + pd.periodCount(C_ROTATION, week) + "/" + EmberRunRules.ROTATION_WEEKLY_CAP + "）");
+            p.sendMessage(P + "§b本周精选挑战 §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + maps.rotationBonusMarks
+                    + "§7（本周 " + pd.periodCount(C_ROTATION, week) + "/" + maps.rotationWeeklyCap + "）");
         }
         if (p != null && p.isOnline()) {
             deliver(p);
@@ -1356,7 +1357,7 @@ public final class EmberRunService implements Listener {
         String t = target(d);
         p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· /corerpg enter <q01..q07> challenge · 掉落 T3"
                 : "§7需本人首通 " + (maps.challenge == null ? "Q07" : maps.challenge.requires.toUpperCase(Locale.ROOT))));
-        p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 3 次挑战通关各多 1 枚 T3 印记）");
+        p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次挑战通关各多 " + maps.rotationBonusMarks + " 枚 T3 印记）");
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
                 + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
                 + " · 暂存 " + store.ledger(p.getUniqueId()).open().size() + " 项");
@@ -1378,9 +1379,9 @@ public final class EmberRunService implements Listener {
     public String featuredLabel(PlayerData d) {
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
         EmberRunMaps.MapDef f = maps.byKey(featured(today));
-        if (f == null) return "无";
-        int left = Math.max(0, EmberRunRules.ROTATION_WEEKLY_CAP - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
-        return f.key.toUpperCase(Locale.ROOT) + " " + f.name + " · 加成剩 " + left + "/" + EmberRunRules.ROTATION_WEEKLY_CAP + " · 周一 0 点轮换";
+        if (f == null || maps.rotationBonusMarks <= 0) return "无";
+        int left = Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
+        return f.key.toUpperCase(Locale.ROOT) + " " + f.name + " · 加成剩 " + left + "/" + maps.rotationWeeklyCap + " · 周一 0 点轮换";
     }
 
     public String stateLabel(PlayerData d, EmberRunMaps.MapDef m) {
