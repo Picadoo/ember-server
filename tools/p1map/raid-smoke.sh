@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# raid-smoke.sh LEADER "M1 M2 .." : P2-5 r01 (Q07 map); leader walks the book route, members tp along; per room weaken -> all bots fight
+# raid-smoke.sh LEADER "M1 M2 .." [QMAP=q07] : P2-5/6 raids (r01 = q07 map, r02 = q06 map); leader walks the book route, members tp along; per room weaken -> all bots fight
 N=$1; MEM=$2; C=/workspace/minecraft/scripts/console.sh; T=/workspace/minecraft/mineflayer-tests/tmp-p1
-ROUTE=$(python3 - q07 <<'PY'
+ROUTE=$(python3 - ${3:-q07} <<'PY'
 import sys, json
 sys.path.insert(0, '/workspace/ember-p1/tools/p1map')
 from book import parse

@@ -913,6 +913,14 @@ public final class EmberRunService implements Listener {
                 attach(s, to);
                 if (!EmberRunSession.PREPARE.equals(s.state)) commit(s, p.getUniqueId());
                 spreadLater(s, m, p);
+                if (s.died.contains(p.getUniqueId())) { // §20.5: a fallen member who gets back in (respawn elsewhere, tp) keeps watching
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        if (p.isOnline() && p.getWorld() == to) {
+                            p.setGameMode(GameMode.SPECTATOR);
+                            p.sendMessage(P + "你本局已倒下：观战等待队友（仍保留本次结算资格）。");
+                        }
+                    }, 3L);
+                }
             } else {
                 p.sendMessage(P + ChatColor.RED + "没有找到你的主线本入场记录：本实例不会生成怪物，也不会结算。请 /dp leave 后从 冒险 菜单进入。");
             }
