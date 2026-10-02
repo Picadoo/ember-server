@@ -880,3 +880,28 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D69 | P1 交易 | 只定规则（P2-3），没有模型证明就不开 | 书 §19.5 |
 
 实测（1.32.0，20:04 CST）：P1Fox 打 Q01 挑战版（本周精选），admin weaken 后玩家逐房击杀，结算到账「本周精选挑战 灰烬庭院：额外 T3 锻造印记 +1（本周 1/3）」。1.32.1 重启后 `/corerpg p1 run` 显示「加成剩 2/3」，挑战菜单 lore 有本周精选。
+
+### 13.17 P2-2 深渊 · 余烬层（CoreRpg 1.33.0 → 1.33.1，2026-10-02 20:25 / 20:37 CST 部署）
+
+设计：`docs/design-ember-v1.1-P2-draft.md` §4。模型：`tools/p1sim/p2econ.py --abyss`（输出 `out-p2econ-abyss-d050.md` / `-d065.md`）。
+
+| 项 | 落点 |
+|---|---|
+| 参数源 | 两份 `ember-v1-runs.yml` 的 `abyss.requires: q07` 和 `abyss.tiers`（10 行：hp / dmg / quality / fee），`balance_version: 4`；validate 检查上限（≤10 层、hp ≤1.6、dmg ≤1.3）和单调 |
+| 段与数值 | `EmberRunMaps.abyssMap(seed)` 从七图里抽；`Challenge.scaled(tier)` 给导演用（`EmberRunDirector` 的 `ch`）；`EmberRunSession.abyss` / `fee` 落盘 |
+| 入场 | `EmberRunService.tryEnterAbyss` → 公共的 `enter(...)`；资格：首通 Q07、层 ≤ 最高 + 1、币够 |
+| 费用 | 账本行 `cost_coin`（reserved → committed / released）；`releaseFee` 和体力一起退；重启时写 `refund_coin` 待领行 |
+| 结算 | `settleFor`：本层成色表；不给精选加成；`p2_abyss_best` 记新纪录并开放下一层 |
+| 菜单 | `ember_p1_abyss.yml`（新）、`ember_hub.yml`「深渊 · 余烬层」、`ember_p1_adventure.yml` A、`ember_p1_codex.yml` Y（表格）；PAPI `p1_abyss_state` / `p1_abyss_best` / `p1_abyss_t1..10` |
+| 测试 | `EmberRunRulesTest.abyssTableIsCappedMonotonicAndScalesTheChallenge_P2_2`、`abyssTableRejectsAnUncappedRow_P2_2`；套件 Hub 检查要求「深渊 · 余烬层」出现，旧的「深渊」仍然不能出现（9/9） |
+| 冒烟 | `tools/p1map/abyss-smoke.sh`（admin weaken + 玩家击杀） |
+
+| # | 问题 | 裁决 | 理由 |
+|---|---|---|---|
+| D70 | P2-2 深渊做法 | 段 = 种子抽的已验收主线图，挑战值 × 10 层封顶表，每段单独付费和结算 | 书 §18.3 全部条款；不新造导演、房间或肉鸽能力 |
+| D71 | p2econ 后期不互换强化 | 改为 Q07 后默认互换（书 §6.3） | 不互换时高成色掉落永远换不上，结论失真 |
+| D72 | 深渊层费 | 0～540 币 / 段，退还规则同体力 | p2econ：第 8 周币中位 2.6 万 → 约 1.5 千，两件极品 20% → 32%（dodge 0.65：27% → 60%），B 不变 |
+| D73 | P2-3 开市 | 否决 | p2econ `--trade`：两件极品 20% → 52%，成套提前超过 1 周 |
+| D74 | 团本 | 只写规格（P2 草案 §5b） | 书 §18.4 要五人模型 |
+
+实测（1.33.0，20:27–20:31 CST）：P1Fox 第 1 层（抽到 Q01），玩家逐房击杀，结算「新纪录，开放第 2 层」，没有精选加成；第 2 层（抽到 Q03）开局后重启服务器 → 自动中止 → 进服到账「体力 30、余烬币 60」。1.33.1 只换了表的数值（v2），`/corerpg p1 abyss` 显示第 10 层「生命 ×1.45 伤害 ×1.18 · 极品 12% · 费 540」。

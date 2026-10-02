@@ -136,7 +136,24 @@ def to_q07(cfg, kn, seed):
     return None, runs, rng
 
 
-def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run):
+TRADE = {'price': 800, 'fee': 0.10, 'listings': 10}  # P2-3 model knobs (not live parameters; the market is closed)
+
+
+def buy_listing(p, ccfg, rng):
+    """P2-3: once a week buy the best of `listings` unused T3 target-family drops for the weaker slot (sellers list what
+    they do not wear; quality per the challenge table, craft per the normal table)."""
+    cost = int(TRADE['price'] * (1 + TRADE['fee']))
+    if p.coin < cost + 1000:
+        return False
+    slot = p.weaker_slot(3)
+    best = max((p1sim.item(p.kn.target, slot, 3, p1sim.pick(ccfg['quality_w'], rng.random()), p1sim.pick(ccfg['craft_w'], rng.random()))
+                for _ in range(TRADE['listings'])), key=lambda it: (it['q'], it['f']))
+    p.coin -= cost
+    p.consider(best)
+    return True
+
+
+def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=False):
     """Each week: if the player clears some challenge map >= 50 % of the time it farms challenge (featured first when
     rotating), otherwise it farms Q07 normal (T3). As on the server, the bonus only pays on challenge clears."""
     order = ccfg['order']
@@ -147,6 +164,8 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run):
         best = max(rates, key=rates.get)
         can_ch = rates[best] >= 0.5
         bonus_left = ROT['weekly_cap']
+        if trade:
+            buy_listing(p, ccfg, rng)
         for _ in range(7 * per_day):
             if can_ch:
                 use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else best)
@@ -188,12 +207,13 @@ def main():
     ap.add_argument('--weeks', type=int, default=8)
     ap.add_argument('--dodge', type=float, default=0.5)
     ap.add_argument('--no-swap', action='store_true', help='phase 2 without the §6.3 enhance-track swap (old behaviour)')
+    ap.add_argument('--trade', action='store_true', help='add the P2-3 market model (weekly best-of-10 purchase)')
     ap.add_argument('--abyss', action='store_true', help='add the P2-2 abyss policy as a third column')
     a = ap.parse_args()
     cfg = p1config.load()
     ccfg = challenge_cfg(cfg)
     per_day = cfg['stamina_day'] // cfg['run_cost']
-    modes = ('base', 'rot', 'abyss') if a.abyss else ('base', 'rot')
+    modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ())
     res = {m: [] for m in modes}
     for i in range(a.players):
         for mode in modes:
@@ -205,7 +225,8 @@ def main():
             if mode == 'abyss':
                 res[mode].append(phase2_abyss(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, per_day))
             else:
-                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode == 'rot', per_day, runs))
+                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode == 'rot', per_day, runs,
+                                        trade=mode == 'trade'))
     print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
     print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
     print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
@@ -218,7 +239,7 @@ def main():
                 continue
             n = len(rows)
             print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d%% | %d | %d | %.1f | %d%% | %s | %s |' % (
-                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊'}[mode], round(100 * sum(r['set'] for r in rows) / n),
+                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易'}[mode], round(100 * sum(r['set'] for r in rows) / n),
                 statistics.median(r['enh'] for r in rows), round(100 * sum(r['q'] >= 2 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 2 for r in rows) / n), round(100 * sum(r['q'] >= 3 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 3 for r in rows) / n),
