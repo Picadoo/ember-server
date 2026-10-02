@@ -391,9 +391,13 @@ public final class EmberRunService implements Listener {
             if (t != null) tellRun(s, "§5深渊第 " + s.abyss + " 层 §7· 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
                     + String.format(Locale.ROOT, "%.2f", t.dmg) + "（在挑战版之上）· 成色 " + qualityLabel(t.quality) + " · 本段打完首领才结算，失败只丢本段");
         }
-        if (vm != null && vm.raid) tellRun(s, "§6团本 §7· " + s.partySize + " 人 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 无倒地复活：倒下的人等队友打完 · 首领死后统一结算");
-        tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : vm != null && vm.raid ? "§6团本 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
+        potionCheck(s);
+        if (vm != null && vm.raid) {
+            tellRun(s, "§6团本开始 §7· " + s.partySize + " 人 · 掉落 T3 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
+                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 无倒地复活：倒下的人等队友打完 · 走进前方房间开战 · 首领死后统一结算");
+            return;
+        }
+        tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                 + "）· 走进前方房间开战 · 击败首领后统一结算");
     }
 
@@ -504,6 +508,20 @@ public final class EmberRunService implements Listener {
     void onBroken(EmberRunSession s, String why) {
         tellRun(s, ChatColor.RED + "本局异常终止：" + why + " · 体力退还");
         abort(s, why, true);
+    }
+
+    /** New-player polish: at run start, tell each participant where their heal potions are (or that they have none). */
+    private void potionCheck(EmberRunSession s) {
+        EmberSupplyService sup = plugin.getEmberSupplies();
+        if (sup == null) return;
+        for (UUID u : s.participants) {
+            Player p = Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline()) continue;
+            int slot = sup.potionSlot(p);
+            if (slot < 0) p.sendMessage(P + "§e你没带回复药：本局只能靠躲技能。出本后 /corerpg p1 shop 购买（每瓶 " + EmberSupplyService.price() + " 余烬币）");
+            else if (slot == 9) p.sendMessage(P + "§e回复药在背包里：按 E 拖到快捷栏，危险时按数字键切过去、按住右键喝");
+            else p.sendMessage(P + "§7回复药在快捷栏第 " + (slot + 1) + " 格：按 " + (slot + 1) + " 切过去，按住右键喝（回复 20%，15 秒冷却）");
+        }
     }
 
     void tellRun(EmberRunSession s, String msg) {

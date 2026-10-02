@@ -280,9 +280,11 @@ public final class EmberSetService implements Listener {
     }
 
     private void showHud(Player p, Session s, long now) {
-        String hud = s.engine.hud(now);
+        EmberSupplyService sup = plugin.getEmberSupplies();
+        String hint = sup == null ? null : sup.lowHpHint(p); // new-player polish: low HP → how to drink (wins over the set line)
+        String hud = hint != null ? hint : s.engine.hud(now);
         if (hud != null) {
-            p.sendActionBar(ChatColor.GOLD + hud);
+            p.sendActionBar(hint != null ? hud : ChatColor.GOLD + hud);
             s.hudShown = true;
         } else if (s.hudShown) {
             p.sendActionBar("");

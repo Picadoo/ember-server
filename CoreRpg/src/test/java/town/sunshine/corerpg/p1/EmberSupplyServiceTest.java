@@ -1,5 +1,8 @@
 package town.sunshine.corerpg.p1;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,5 +24,15 @@ public class EmberSupplyServiceTest {
             assertEquals(10, EmberSupplyService.price());
             assertEquals(5, EmberSupplyService.starterPotions());
         }
+    }
+
+    @Test
+    public void lowHpHintTellsHowToDrink() {
+        assertNull(EmberSupplyService.lowHpHint(50, 100, 7, 0));            // not low
+        assertNull(EmberSupplyService.lowHpHint(30, 100, 7, 4000));         // cooldown running
+        assertTrue(EmberSupplyService.lowHpHint(30, 100, 7, 0).contains("数字键 8"));
+        assertTrue(EmberSupplyService.lowHpHint(30, 100, 9, 0).contains("按 E"));
+        assertTrue(EmberSupplyService.lowHpHint(30, 100, -1, 0).contains("没带回复药"));
+        assertNull(EmberSupplyService.lowHpHint(0, 100, 7, 0));             // dead
     }
 }

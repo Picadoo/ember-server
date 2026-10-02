@@ -81,17 +81,67 @@ public final class EmberSupplyService implements Listener {
         return n;
     }
 
-    /** Puts up to n bound potions into free slots; returns how many went in. */
+    /** Puts up to n bound potions into free slots, empty hotbar slots first (9 → 2, slot 1 stays for the blade); returns how many went in. */
     public int give(Player p, int n, String src) {
         int given = 0;
         for (int i = 0; i < n; i++) {
             if (freeSlots(p) <= 0) break;
             ItemStack s = boundPotion(src);
             if (s == null) break;
-            if (!p.getInventory().addItem(s).isEmpty()) break;
+            int hb = emptyHotbar(p);
+            if (hb >= 0) p.getInventory().setItem(hb, s);
+            else if (!p.getInventory().addItem(s).isEmpty()) break;
             given++;
         }
         return given;
+    }
+
+    /** First empty hotbar index from the right (8 → 1); -1 when none. */
+    static int emptyHotbar(Player p) {
+        for (int i = 8; i >= 1; i--) {
+            ItemStack s = p.getInventory().getItem(i);
+            if (s == null || s.getType() == org.bukkit.Material.AIR) return i;
+        }
+        return -1;
+    }
+
+    boolean isHealPotion(ItemStack s) {
+        if (s == null || s.getType() == org.bukkit.Material.AIR) return false;
+        if (isBound(s)) return true;
+        NiBridge ni = plugin.getNiBridge();
+        String id = ni == null ? null : ni.getNiId(s);
+        if (id == null) return false;
+        List<String> l = mode() == null ? null : mode().list("heal_potion.items");
+        return l == null || l.isEmpty() ? "potion_ember_heal".equals(id) : l.contains(id);
+    }
+
+    /** Hotbar index (0–8) holding a heal potion, 9 when only the backpack has one, -1 when there is none. */
+    public int potionSlot(Player p) {
+        boolean bag = false;
+        ItemStack[] c = p.getInventory().getStorageContents();
+        for (int i = 0; i < c.length; i++) {
+            if (!isHealPotion(c[i])) continue;
+            if (i < 9) return i;
+            bag = true;
+        }
+        return bag ? 9 : -1;
+    }
+
+    /** Pure: the low-HP potion hint (null = nothing to say). slot as potionSlot(); cdLeftMs > 0 = shared cooldown running. */
+    static String lowHpHint(double hp, double max, int slot, long cdLeftMs) {
+        if (max <= 0 || hp <= 0 || hp / max >= LOW_HP || cdLeftMs > 0) return null;
+        if (slot >= 0 && slot < 9) return "§c生命低！§f按数字键 " + (slot + 1) + " 切到回复药，§e按住右键喝§f（回复 20%，冷却 15 秒）";
+        if (slot == 9) return "§c生命低！§f回复药在背包里：按 E 把它拖到快捷栏，再按住右键喝";
+        return "§c生命低且没带回复药！§f后撤拉开距离 · 出本后 /corerpg p1 shop 补货";
+    }
+    static final double LOW_HP = 0.40;
+
+    /** The hint for a P1 player right now (the set HUD shows it instead of its own line). */
+    public String lowHpHint(Player p) {
+        if (p == null || p.isDead() || !EmberMode.isP1World(p.getWorld())) return null;
+        EmberLoadoutService ls = plugin.getEmberLoadouts();
+        long cd = ls == null ? 0 : ls.state(p.getUniqueId()).healCdUntil - System.currentTimeMillis();
+        return lowHpHint(p.getHealth(), EmberHeal.maxHp(p), potionSlot(p), cd);
     }
 
     /** Starter supplies (called once by the starter kit). */
@@ -100,7 +150,10 @@ public final class EmberSupplyService implements Listener {
         if (want <= 0) return;
         int got = give(p, want, "starter");
         plugin.getLogger().info("[P1 supply] starter " + p.getName() + " heal potions " + got + "/" + want);
-        if (got > 0) p.sendMessage(P + "起步补给：余烬回复药 ×" + got + "（绑定）。补给商：/corerpg p1 shop · 每瓶 " + price() + " 余烬币");
+        if (got > 0) {
+            p.sendMessage(P + "起步补给：余烬回复药 ×" + got + "（绑定）。补给商：/corerpg p1 shop · 每瓶 " + price() + " 余烬币");
+            p.sendMessage(P + ChatColor.YELLOW + "回复药放在快捷栏右侧：副本里按对应数字键切过去，按住右键喝（回复 20% 生命，15 秒冷却）。生命低时屏幕下方会提醒。");
+        }
     }
 
     public boolean cmd(CommandSender s, String[] args) {
