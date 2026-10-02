@@ -212,7 +212,8 @@ public final class EmberCommand {
         if (r == null) { s.sendMessage(P + "手持物品没有 ember_v1 数据（旧物品在 P1 中不提供任何属性）"); return true; }
         EmberItemData d = r.data;
         // B2.179 §19.2: item card in book order, then the whole-loadout comparison (no single power score)
-        EmberLoadout cur = loadouts.get(p);
+        EmberLoadout cur = loadouts.refresh(p); // fresh: the held slot may have just changed / a DB lookup may have landed
+        boolean pending = String.join(";", loadouts.notes(p)).contains("查询中");
         for (String line : EmberCompare.card(EmberMode.tables(), d, cur.level)) s.sendMessage(P + line);
         if (!r.ok()) {
             s.sendMessage(P + ChatColor.RED + "这件物品校验失败，P1 中不生效：" + r.problem);
@@ -223,13 +224,15 @@ public final class EmberCommand {
                 s.sendMessage(P + "§a这是你已选定的护符（生效中）");
             } else {
                 EmberLoadout after = EmberLoadout.compute(EmberMode.tables(), before.blade, d, before.level);
+                if (pending) s.sendMessage(P + "§e（正在向数据库校验，2 秒后再点一次数字更准）");
                 s.sendMessage(P + "§e选定这件护符后" + (before.blade == null ? "（没有可配的刃）" : "（配 " + before.blade.shortLabel() + "）") + "：");
                 for (String line : EmberCompare.diff(before, after)) s.sendMessage(P + "  " + line);
                 s.sendMessage(P + "§8确定要换：手持它点装备页「已选护符」，或 /corerpg p1 charm select");
             }
         } else if (d.isBlade()) {
             boolean live = cur.blade != null && cur.blade.uid.equals(d.uid);
-            s.sendMessage(P + (live ? "§a主手生效中" : "§c主手没有生效：" + String.join("; ", loadouts.notes(p))));
+            s.sendMessage(P + (live ? "§a主手生效中" : pending ? "§e正在向数据库校验这件装备，2 秒后再点一次"
+                    : "§c主手没有生效：" + String.join("; ", loadouts.notes(p))));
             s.sendMessage(P + "§7当前：B " + EmberCompare.n(cur.b) + " · 生命 " + EmberCompare.n(cur.h) + " · " + cur.setLabel()
                     + " §8· " + cur.nextAwakeningHint());
             s.sendMessage(P + "§8比较两把刃：切换快捷栏后再看一次（只有主手那把生效）");
