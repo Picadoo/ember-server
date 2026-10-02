@@ -106,8 +106,7 @@ public final class EmberForgeService implements Listener {
     }
 
     public static void helpLines(CommandSender s) {
-        s.sendMessage(P + "手持 P1 装备：/corerpg p1 enhance | upgrade | refine [craft|quality] | dismantle  — 先预览，加 confirm 执行");
-        s.sendMessage(P + "/corerpg p1 swap [对方uid前缀] [confirm] — 主手与副手（或背包里该 uid）同部位互换强化轨道，二者绑定");
+        s.sendMessage(P + "锻造请用工坊菜单（主菜单「工坊」或找锻炉师 · 烬砧）：手持余烬刃或护符，先点预览，再点聊天里的确认按钮。");
         s.sendMessage(P + "可选 rid:<请求ID> 用于重放保护；/corerpg p1 sync 按 DB 同步背包内 P1 装备");
     }
 
@@ -244,6 +243,7 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + Math.round(EmberUpgradeRules.rate(target) * 100)
                     + "%  本档第 " + EmberUpgradeRules.attemptNo(d) + "/" + max + " 次" + (EmberUpgradeRules.guaranteed(d) ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY : ""));
             p.sendMessage(P + "每次消耗: " + c.cost.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
+            warnT0(p, d);
             List<String> lack = lacking(p, c.cost);
             if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", "[确认强化]", "/corerpg p1 enhance confirm",
@@ -259,6 +259,11 @@ public final class EmberForgeService implements Listener {
         return true;
     }
 
+    /** D100 (review #10): starter pieces are replaced by the first T1 drop (D85) — don't sink week-1 money into them */
+    private static void warnT0(Player p, EmberItemData d) {
+        if (d.tier == 0) p.sendMessage(P + ChatColor.YELLOW + "起步件，拿到 T1 会被替换，不建议投入。");
+    }
+
     private boolean simple(Player p, Slot it, String kind, Plan plan, boolean go, String rid) {
         if (!plan.ok()) { p.sendMessage(P + ChatColor.RED + plan.error); return true; }
         if (!go) {
@@ -266,6 +271,7 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "当前: " + preview(it.data));
             p.sendMessage(P + "之后: " + preview(plan.after) + "（确定成功，预览即结果）");
             p.sendMessage(P + "消耗: " + plan.cost.label());
+            warnT0(p, it.data);
             List<String> lack = lacking(p, plan.cost);
             if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";
@@ -355,7 +361,7 @@ public final class EmberForgeService implements Listener {
         }
         if (b.error != null) { // D96: say how the swap works instead of "对方: 请手持…"
             if (target == null && (inv.getItemInOffHand() == null || !items().hasData(inv.getItemInOffHand())))
-                p.sendMessage(P + ChatColor.RED + "互换要两件同部位装备：主手拿一件，副手（F 键换手）拿另一件，再点预览。");
+                p.sendMessage(P + ChatColor.RED + "互换要两件同部位装备：主手拿一件，副手（按 F 换手，在主城里按）拿另一件，再点预览。");
             else p.sendMessage(P + ChatColor.RED + "另一件：" + b.error);
             return true;
         }

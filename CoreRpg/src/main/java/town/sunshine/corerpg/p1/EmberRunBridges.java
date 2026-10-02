@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 /** Soft reflection bridges to MythicMobs (spawn) and DungeonPlus (team members) — no compile dependency. */
-final class EmberRunBridges {
+public final class EmberRunBridges {
 
     private EmberRunBridges() { }
 
@@ -75,6 +75,9 @@ final class EmberRunBridges {
         if (!out.contains(p.getUniqueId())) out.add(0, p.getUniqueId());
         return out;
     }
+
+    /** D100: does this player belong to a DungeonPlus team? */
+    public static boolean hasTeam(Player p) { return dpTeam(p) != null; }
 
     static boolean teamLeader(Player p) {
         Object team = dpTeam(p);

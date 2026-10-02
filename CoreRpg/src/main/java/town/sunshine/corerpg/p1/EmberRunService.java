@@ -1567,7 +1567,7 @@ public final class EmberRunService implements Listener {
         PlayerData d = data(p.getUniqueId());
         if (args.length < 3) {
             String t = target(d);
-            p.sendMessage(P + "当前掉落目标族：" + (t == null ? "未选择（三族各 1/3）" : EmberItemData.familyName(t) + "（60%，另两族各 20%）"));
+            p.sendMessage(P + "当前掉落目标族：" + (t == null ? "未选择（每本按偏向族 50%，另两族各 25%）" : EmberItemData.familyName(t) + "（每本约 60% 掉这族，冒险页每本写了实际概率）") /* D100: real odds (D98 lootOdds) */);
             familyButtons(p, P + "点一个族设为目标（之后入场的局生效）：", "/corerpg p1 target");
             return true;
         }
@@ -1577,7 +1577,7 @@ public final class EmberRunService implements Listener {
         if (idx == 0 && !"none".equals(f)) { p.sendMessage(P + ChatColor.RED + "族：scorch（焚烬）/ burst（烬爆）/ sustain（炽愈）/ none"); return true; }
         d.addPeriodCount(C_TARGET, "all", idx - d.periodCount(C_TARGET, "all"));
         plugin.getDataStore().flushMutation(p.getUniqueId());
-        p.sendMessage(P + "§a掉落目标族已设为 " + (idx == 0 ? "无（三族均分）" : EmberItemData.familyName(f)) + " §7· 下次入场生效");
+        p.sendMessage(P + "§a掉落目标族已设为 " + (idx == 0 ? "无（按本的偏向族掉落）" : EmberItemData.familyName(f)) + " §7· 下次入场生效");
         return true;
     }
 

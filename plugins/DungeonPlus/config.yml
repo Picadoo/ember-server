@@ -92,7 +92,7 @@ dungeon:
     #地牢队伍伤害消息提醒 (开启后如果地牢无法造成队伍伤害时提示语言文件 'dungeon-game-pvp' 消息)
     dungeon-team-damage-message: true
     #地牢队伍玩家数量限制
-    dungeon-team-player-limit: 20
+    dungeon-team-player-limit: 5
     #地牢副本默认离线次数上限值，避免玩家挑战副本时使用离线遁躲避机制
     #如果地牢没有使用 $setting 脚本调整 quit-number-limit 参数值,则默认为该值 (设 -1 关闭)
     dungeon-default-quit-number: -1

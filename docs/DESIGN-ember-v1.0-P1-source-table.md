@@ -1046,3 +1046,31 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 参数源 | 没有改；balance_version 11 |
 | 测试 | 实测见 P2 草案 §5m；套件 9/9 |
 
+
+### 13.30 首通自选互换（CoreRpg 1.44.0，2026-10-03 00:59 CST 部署，D98）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | Q01 首通自选 T1 护符、Q02 首通自选 T1 刃（原来相反）；Q01 掉落偏向刃不变。p1sim 600 人：Q02 首通都是第 2 天，Q07 首通持平（闪避 0.5 第 8 天），Q02 首次尝试通关率 45% → 52%（0.5）/ 70% → 88%（0.7），所以采用，不另选变体 |
+| 参数源 | 两份 `ember-v1-runs.yml`：Q01 `choice: charm`、Q02 `choice: blade`，用途文字改写；balance_version 11 → 12（规则 g04-1/b12） |
+| 代码 | Q02 提醒和 [回 Q01]/[仍然进入]（`ConfirmTokens.sendButtons`）；「下一步」顺序；D87 目标族文字；`EmberItemData.familyBlurb()`、`EmberRunService.lootOdds()`；领 Q02 刃时提示免费互换 |
+| 测试 | selfcheck 0 failed；EmberRunRulesTest 断言改 12；p2econ 两件极品持平，「T3 两件目标族」85% → 79%（模型不会用免费互换，已加提示）；实测 FreshH1 |
+
+### 13.31 文字、术语和菜单（CoreRpg 1.45.0，2026-10-03 01:16 CST 部署，D99）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 按点评 #2/#3/#5–#9 改文字和菜单，不改属性、掉落、价格；§23.3 不适用 |
+| 代码 / 配置 | ember_hub（Q07 前合成一个图标，PAPI `p1_q07done`）、ember_life（只留面包 / 钓竿 / 代烤 / 熬药）、ember_bestiary、ember_flex_skill、各菜单标题；EmberItems lore（攻击 / 生命、来源名，无 uid）；NeigeItems `ember-v1-gear.yml`、`ember-life.yml`；回复药 lore 重写；进服消息和按钮；精选招牌「重打」；EmberCommand 前缀「[余烬]」 |
+| 参数源 | 没有改；balance_version 12 |
+| 测试 | 实测 FreshI1；套件见 P2 草案 §5n |
+
+### 13.32 好友组队、锻造页、小问题（CoreRpg 1.46.0，2026-10-03 01:24 CST 部署，D100）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 好友和组队全部改成点按钮；DP 入队申请本来就带可点的 [同意] [拒绝]，不另写监听。DP 队伍上限 20 → 5（团本最多 5 人；不是数值平衡项）。锻造确认放在预览正下方，T0 预览加黄字 |
+| 代码 / 配置 | FriendService（列表按钮、`addlist`、申请按钮、`invite` 先建 DP 队再发 DP 邀请）、`EmberRunBridges.hasTeam`；ember_friends（上限 40、师徒移出布局）；DP `config.yml`、`team.yml`；ember_p1_forge 布局；EmberForgeService `warnT0`、F 键文字；ember_help、ember_p1_gear 限药说明；玩家版 `/corerpg p1` 帮助改按钮 |
+| 参数源 | 没有改；balance_version 12 |
+| 数据 | 删除测试号 RevNewA 的游戏数据（cr_players / cr_p1_item / cr_p1_reward / cr_p1_loadout / cr_warehouse、playerdata、stats、advancements、ledger）；先备份 `db-ember-authme-20261003-012424-pre-revnewa-delete.sql` 和 `/workspace/backup/revnewa-files/`；AuthMe 账号保留 |
+| 测试 | 实测 FreshJ1/FreshJ2；套件见 P2 草案 §5n |

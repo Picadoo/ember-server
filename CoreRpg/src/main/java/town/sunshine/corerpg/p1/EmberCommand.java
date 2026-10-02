@@ -121,6 +121,14 @@ public final class EmberCommand {
     }
 
     public boolean help(CommandSender s) {
+        if (s instanceof Player && !s.hasPermission("corerpg.admin")) { // D100: players get buttons, not a command list
+            town.sunshine.corerpg.ConfirmTokens.sendButtons((Player) s, P + "常用入口：",
+                    new String[]{"[主菜单]", "/ember", "打开主菜单", "GREEN"},
+                    new String[]{"[冒险页]", "/ember_p1_adventure", "选本、选目标族、领首通", "AQUA"},
+                    new String[]{"[装备页]", "/ember_p1_gear", "装备、属性、补给", "YELLOW"},
+                    new String[]{"[帮助]", "/ember_help", "玩法说明", "GRAY"});
+            return true;
+        }
         s.sendMessage(P + "/corerpg p1 status | enable | disable | follow");
         s.sendMessage(P + "/corerpg p1 world add|remove [世界] | world list");
         s.sendMessage(P + "/corerpg p1 debug [all|console|off]  — 每击伤害来源日志");

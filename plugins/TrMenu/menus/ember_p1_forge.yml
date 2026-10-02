@@ -1,4 +1,4 @@
-# 余烬 v1 (P1) 锻造菜单桩 — 只转发到 /corerpg p1 命令；预览在聊天栏，执行需二次点击"确认"按钮。
+# 余烬 锻造菜单桩 — 只转发到 /corerpg p1 命令；预览在聊天栏，执行需二次点击"确认"按钮。
 # 旧 ember_enhance / ember_forge / ember_disassemble 菜单不变（旧物品仍走旧强化）。
 # 打开：/ember_p1_forge、主菜单「工坊」或装备页（B2.174）。互换确认按钮 B2.176（§19.1 不需要手打命令）
 
@@ -17,9 +17,11 @@ Options:
 Layout:
   - '#########'
   - '# E U R #'
+  - '# e u r #'
   - '# Q S D #'
-  - '#e u r q#'
-  - '# s  b B#'
+  - '# q s d #'
+  - '#   b  B#'
+# D100 (review #10): every confirm sits directly under its preview (same column); 分解 confirms in chat (one-shot token)
 
 Icons:
   '#':
@@ -40,6 +42,8 @@ Icons:
     display:
       material: redstone
       name: '§c强化 · 确认一次'
+      lore:
+        - '§7先点上面的预览，消耗以聊天为准'
     actions:
       all:
         - 'command: corerpg p1 enhance confirm'
@@ -57,6 +61,8 @@ Icons:
     display:
       material: nether star
       name: '§d升阶 · 确认'
+      lore:
+        - '§7先点上面的预览，消耗以聊天为准'
     actions:
       all:
         - 'command: corerpg p1 upgrade confirm'
@@ -66,7 +72,8 @@ Icons:
       material: blaze powder
       name: '§6精工 · 预览'
       lore:
-        - '§70→2%→4%→6%，确定成功'
+        - '§7让这件的成长 +2%/档（0→2%→4%→6%）'
+        - '§7确定成功'
     actions:
       all:
         - 'command: corerpg p1 refine craft'
@@ -74,6 +81,8 @@ Icons:
     display:
       material: blaze powder
       name: '§6精工 · 确认'
+      lore:
+        - '§7先点上面的预览，消耗以聊天为准'
     actions:
       all:
         - 'command: corerpg p1 refine craft confirm'
@@ -90,6 +99,8 @@ Icons:
     display:
       material: gold nugget
       name: '§e成色 · 确认'
+      lore:
+        - '§7先点上面的预览，消耗以聊天为准'
     actions:
       all:
         - 'command: corerpg p1 refine quality confirm'
@@ -99,7 +110,8 @@ Icons:
       name: '§b强化轨道互换 · 预览'
       lore:
         - '§7主手与副手同部位装备互换 强化等级+失败计数'
-        - '§7两件都会绑定；先预览，再点下方「互换 · 确认」'
+        - '§7两件都会绑定；副手（按 F 换手，在主城里按）'
+        - '§7先预览，再点下方「互换 · 确认」'
     actions:
       all:
         - 'command: corerpg p1 swap'
@@ -121,10 +133,17 @@ Icons:
       lore:
         - '§7主手与副手的同部位装备交换「强化等级 + 失败计数」'
         - '§7成色 / 精工 / 家族 / 阶级不变；两件都会绑定'
-        - '§c先点上方「预览」看清两件再确认'
+        - '§7先点上面的预览，消耗以聊天为准'
     actions:
       all:
         - 'command: corerpg p1 swap confirm'
+  d:
+    display:
+      material: gray dye
+      name: '§7分解 · 确认在聊天栏'
+      lore:
+        - '§7点上面的预览后，聊天栏出现 §c[确认分解]'
+        - '§7只限普通掉落件；首通和起步件拆不了'
   b:
     display:
       material: arrow

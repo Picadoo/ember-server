@@ -42,7 +42,7 @@ infos:
   title: "§f我的队伍"
   layouts:
     - "#########"
-    - "#@@@@@@@#"
+    - "##@@@@@##"
     - "##P###N##"
     - "D#######Q"
   player-info:
@@ -51,7 +51,6 @@ infos:
     lore:
       - " "
       - " §f状态: §f{state}"
-      - " §f等级: §f{level}"
       - " "
       - "§7(队长可操作)"
       - "§6右键 §f踢出队伍"
@@ -61,7 +60,8 @@ infos:
       material: BARRIER
       name: "§f空闲位置"
       lore:
-        - "§f快去邀请朋友加入吧"
+        - "§7主线本 1～3 人 · 团本 3～5 人"
+        - "§7邀请：主菜单 → 好友 → 好友列表里点 [组队]"
     "D":
       material: BARRIER
       name: "§c解散队伍"

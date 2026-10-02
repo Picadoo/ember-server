@@ -103,6 +103,10 @@ public final class FriendService {
             cmdMentor(p, args);
             return;
         }
+        if ("addlist".equals(sub) || "online".equals(sub)) { // D100: pick a name by clicking instead of typing it
+            cmdAddList(p);
+            return;
+        }
         cmdList(p);
     }
 
@@ -120,7 +124,8 @@ public final class FriendService {
         });
         p.sendMessage(PREFIX + ChatColor.YELLOW + "好友 §f" + friends.size() + "/" + maxFriends);
         if (friends.isEmpty()) {
-            p.sendMessage(ChatColor.GRAY + "  （空）· /corerpg friend add <名>");
+            ConfirmTokens.sendButtons(p, ChatColor.GRAY + "  （空）· ",
+                    new String[]{"[看在线玩家，点名字加好友]", "/corerpg friend addlist", "列出在线玩家", "GREEN"});
         } else {
             int shown = 0;
             for (String name : friends) {
@@ -131,14 +136,21 @@ public final class FriendService {
                 Player online = Bukkit.getPlayerExact(name);
                 String flag = online != null && online.isOnline()
                         ? ChatColor.GREEN + "[在线]" : ChatColor.DARK_GRAY + "[离线]";
-                p.sendMessage(ChatColor.GRAY + "  " + flag + ChatColor.WHITE + " " + name);
+                // D100: one-click team invite (online) and remove, no typed names
+                if (online != null && online.isOnline())
+                    ConfirmTokens.sendButtons(p, ChatColor.GRAY + "  " + flag + ChatColor.WHITE + " " + name + " ",
+                            new String[]{"[组队]", "/corerpg friend invite " + name, "邀请他进你的队伍（你没有队伍会先建一个）", "AQUA"},
+                            new String[]{"[删除]", "/corerpg friend remove " + name, "解除好友（对方会收到提示）", "DARK_GRAY"});
+                else
+                    ConfirmTokens.sendButtons(p, ChatColor.GRAY + "  " + flag + ChatColor.WHITE + " " + name + " ",
+                            new String[]{"[删除]", "/corerpg friend remove " + name, "解除好友（对方会收到提示）", "DARK_GRAY"});
                 shown++;
             }
         }
-        if (!data.getPendingIn().isEmpty()) {
-            p.sendMessage(ChatColor.AQUA + "  待处理申请: " + ChatColor.WHITE + join(data.getPendingIn()));
-            p.sendMessage(ChatColor.DARK_GRAY + "  /corerpg friend accept|deny <名>");
-        }
+        for (String in : data.getPendingIn())
+            ConfirmTokens.sendButtons(p, ChatColor.AQUA + "  好友申请：" + ChatColor.WHITE + in + " ",
+                    new String[]{"[同意]", "/corerpg friend accept " + in, "成为好友", "GREEN"},
+                    new String[]{"[拒绝]", "/corerpg friend deny " + in, "拒绝这条申请", "RED"});
         if (!data.getPendingOut().isEmpty()) {
             p.sendMessage(ChatColor.GRAY + "  已发出: " + join(data.getPendingOut()));
         }
@@ -148,7 +160,29 @@ public final class FriendService {
         } else if (data.getMentorPending() != null && !data.getMentorPending().isEmpty()) {
             p.sendMessage(ChatColor.YELLOW + "  师徒待确认: §f" + data.getMentorPending());
         }
-        p.sendMessage(ChatColor.DARK_GRAY + "  add|accept|deny|remove|invite|mentor …");
+        ConfirmTokens.sendButtons(p, ChatColor.DARK_GRAY + "  ",
+                new String[]{"[加好友]", "/corerpg friend addlist", "列出在线玩家，点名字发申请", "GREEN"});
+    }
+
+    /** D100: online players you could add, each a click-to-request button (no typed names) */
+    private void cmdAddList(Player p) {
+        PlayerData data = dataStore.get(p.getUniqueId());
+        List<String> names = new ArrayList<String>();
+        for (Player o : Bukkit.getOnlinePlayers()) {
+            if (o.equals(p) || findIgnoreCase(data.getFriends(), o.getName()) != null) continue;
+            names.add(o.getName());
+        }
+        Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
+        if (names.isEmpty()) { p.sendMessage(PREFIX + ChatColor.GRAY + "现在没有其他在线玩家可加。"); return; }
+        p.sendMessage(PREFIX + ChatColor.YELLOW + "在线玩家（点名字发好友申请，对方同意后成为好友）：");
+        List<String[]> row = new ArrayList<String[]>();
+        int shown = 0;
+        for (String n : names) {
+            if (shown++ >= 30) break;
+            row.add(new String[]{"[" + n + "]", "/corerpg friend add " + n, "向 " + n + " 发好友申请", "GREEN"});
+            if (row.size() == 4) { ConfirmTokens.sendButtons(p, "  ", row.toArray(new String[0][])); row.clear(); }
+        }
+        if (!row.isEmpty()) ConfirmTokens.sendButtons(p, "  ", row.toArray(new String[0][]));
     }
 
     private void cmdAdd(Player p, String targetName) {
@@ -203,8 +237,9 @@ public final class FriendService {
         p.sendMessage(PREFIX + ChatColor.GREEN + "已向 §f" + canon + ChatColor.GREEN + " 发出好友申请。");
         Player online = Bukkit.getPlayer(targetOff.getUniqueId());
         if (online != null && online.isOnline()) {
-            online.sendMessage(PREFIX + ChatColor.YELLOW + p.getName()
-                    + ChatColor.GRAY + " 申请加好友 · /corerpg friend accept " + p.getName());
+            ConfirmTokens.sendButtons(online, PREFIX + ChatColor.YELLOW + p.getName() + ChatColor.GRAY + " 申请加好友 ",
+                    new String[]{"[同意]", "/corerpg friend accept " + p.getName(), "成为好友", "GREEN"},
+                    new String[]{"[拒绝]", "/corerpg friend deny " + p.getName(), "拒绝这条申请", "RED"}); // D100
         }
     }
 
@@ -313,7 +348,7 @@ public final class FriendService {
         PlayerData self = dataStore.get(p.getUniqueId());
         String match = findIgnoreCase(self.getFriends(), targetName);
         if (match == null) {
-            p.sendMessage(PREFIX + ChatColor.RED + "只能邀请好友组队。先 /corerpg friend add");
+            p.sendMessage(PREFIX + ChatColor.RED + "只能邀请好友组队（好友页「添加」）。");
             return;
         }
         Player online = Bukkit.getPlayerExact(match);
@@ -321,9 +356,9 @@ public final class FriendService {
             p.sendMessage(PREFIX + ChatColor.RED + match + " 不在线。");
             return;
         }
-        p.sendMessage(PREFIX + ChatColor.AQUA + "已向 §f" + match + ChatColor.AQUA + " 发出组队邀请（不强制进队）。");
-        online.sendMessage(PREFIX + ChatColor.AQUA + p.getName()
-                + ChatColor.GRAY + " 邀请你组队（团本/周本）· 自行决定是否跟随。");
+        // D100: a real DungeonPlus invite (DP sends the invitee a clickable join line); create the team first if needed
+        if (!town.sunshine.corerpg.p1.EmberRunBridges.hasTeam(p)) p.performCommand("dungeon-team create");
+        p.performCommand("dungeon-team invite " + match);
     }
 
     private void cmdMentor(Player p, String[] args) {
