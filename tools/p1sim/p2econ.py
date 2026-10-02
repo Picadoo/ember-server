@@ -12,6 +12,9 @@ sys.path.insert(0, os.path.dirname(__file__))
 import p1config, p1sim, miniyaml
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
+# P2-1 parameter source (D66): ember-v1-runs.yml `rotation:`
+ROT = {k: int(v) for k, v in miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get(
+    'rotation', {'bonus_marks': 0, 'weekly_cap': 0}).items()}
 
 
 def challenge_cfg(cfg):
@@ -65,7 +68,7 @@ def to_q07(cfg, kn, seed):
 
 def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run):
     """Each week: if the player clears some challenge map >= 50 % of the time it farms challenge (featured first when
-    rotating), otherwise it farms Q07 normal (T3); the featured bonus also counts on Q07 normal in Q07's week."""
+    rotating), otherwise it farms Q07 normal (T3). As on the server, the bonus only pays on challenge clears."""
     order = ccfg['order']
     out, marks_earned, ch_runs = [], 0, 0
     for w in range(weeks):
@@ -73,7 +76,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run):
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
         best = max(rates, key=rates.get)
         can_ch = rates[best] >= 0.5
-        bonus_left = 3
+        bonus_left = ROT['weekly_cap']
         for _ in range(7 * per_day):
             if can_ch:
                 use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else best)
@@ -84,10 +87,10 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run):
             p.potions -= used
             ch_runs += use is ccfg
             if ok:
-                if rotation and key == featured and bonus_left > 0:
+                if rotation and use is ccfg and key == featured and bonus_left > 0:
                     bonus_left -= 1
-                    p.marks[3] += 1
-                    marks_earned += 1
+                    p.marks[3] += ROT['bonus_marks']
+                    marks_earned += ROT['bonus_marks']
                 p.settle(key, extra) if use is cfg else settle_with(p, ccfg, key, extra)
                 marks_earned += 1
                 p.invest()

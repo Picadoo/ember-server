@@ -858,3 +858,25 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D65 | 新角色第一次倒下复活后只有 1/7 血条（原版 20 → 刷新把上限抬到 140，饱食 17 不回血） | 复活与枢纽进服在刷新最大生命后补满 | §19.4「城内可正常补满，不收费制造往返负担」 |
 
 实测（1.31.0 / 1.31.1，19:47–19:58 CST；套件 9/9，Hub menu 13 格、旧入口 0）：全新角色 P1Rookie 注册进服 → 收到 P1 进服提示、T0 刃 + T0 护符 + 5 瓶回复药；`/ember` 13 格新主菜单，点「冒险 · 主线本」→ 冒险页 → 点 Q01 → 建实例开局；生存模式 T0 装备清掉 R1（4 只）、R2（4 只），R3 未喝药倒下（机器人不会喝药），当日首倒退药规则正常；枢纽 NPC 4 个都在；重进服 HP 20/20。
+
+### 13.16 P2-1 每周挑战轮换（CoreRpg 1.32.0 → 1.32.1，2026-10-02 20:03 / 20:09 CST 部署）
+
+设计：`docs/design-ember-v1.1-P2-draft.md` §3。模型：`tools/p1sim/p2econ.py`。
+
+| 项 | 落点 |
+|---|---|
+| 参数源 | 两份 `ember-v1-runs.yml` 的 `rotation.bonus_marks: 1`、`weekly_cap: 3`，`balance_version: 3`（rule_version `g04-1/b3`） |
+| 规则 | `EmberRunRules.weekIndex / featuredChallenge / rotationWeekKey`（周一 00:00 Asia/Shanghai，七图按 runs 顺序轮换） |
+| 结算 | `EmberRunService.settleFor`：挑战局 + 精选图 + 本周计数 < cap → 账本行 `rot_mark`（MARK，本局阶）；计数器 `p2_rotation` 只在账本行新建时 +1 |
+| 显示 | PAPI `p1_featured`、`p1_featured_key`；`ember_p1_challenge.yml`、`ember_p1_adventure.yml` lore；`/corerpg p1 run` |
+| 测试钩子 | `/corerpg p1 runs weaken <玩家>`（管理员；活怪 → 1 HP，玩家击杀、结算照常）；`tools/p1map/chal-smoke.sh` |
+| 测试 | `EmberRunRulesTest.weeklyRotationIsMondayBasedAndCyclesAllSeven_P2_1`，runs 解析断言 balance_version 3 / rotation 1·3；套件 9/9 |
+
+| # | 问题 | 裁决 | 理由 |
+|---|---|---|---|
+| D66 | P2 第一个工作包 | 每周挑战轮换：精选图每周前 3 次挑战通关各 +1 枚本局阶印记，不发币、不发物品 | p2econ：8 周 T3 印记 +6%（157 对 148），币不增，成套 / 强化时间不变；书 §18.2 让玩家刷不同的图。§23.3 四步：参数源、模型、设计、版本 |
+| D67 | Q01–Q07 困难模式 / 第 4 套 / 新成色档 | 不做 | 挑战版就是困难版；递进交给 P2-2 有限层表（书 §18.3、§23.3） |
+| D68 | P1 团本 | 推迟 | 书 §18.4：需五人模型和单独工作包 |
+| D69 | P1 交易 | 只定规则（P2-3），没有模型证明就不开 | 书 §19.5 |
+
+实测（1.32.0，20:04 CST）：P1Fox 打 Q01 挑战版（本周精选），admin weaken 后玩家逐房击杀，结算到账「本周精选挑战 灰烬庭院：额外 T3 锻造印记 +1（本周 1/3）」。1.32.1 重启后 `/corerpg p1 run` 显示「加成剩 2/3」，挑战菜单 lore 有本周精选。
