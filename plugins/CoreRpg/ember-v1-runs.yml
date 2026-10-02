@@ -203,7 +203,7 @@ maps:
     boss:
       mm: EmberQ03Boss
       name: 残誓守卫
-      hp: 1300
+      hp: 1000
       atk: 14
       interval: 3.0
       at: [0, 60, 48]
@@ -232,7 +232,7 @@ maps:
     map_version: ember_daily_tide@s3-2026-10-02
     requires: q03
     unlocks: q05
-    first_clear: {blank: 6, core: 6, coin: 900}
+    first_clear: {blank: 6, core: 6, coin: 2100}
     purpose: "首个 T2 本：常规掉 T2 装备与 T2 印记；首通（胚料 6·核心 6·币 900）开放 Q05、T1→T2 升阶与 T2 定向锻造"
     b_ref: 35
     spawn: [0, 64, 0]
@@ -240,7 +240,7 @@ maps:
     # the template's stray sign in the side pocket (event area) is removed in the instance only
     clear: [[6, 64, 11]]
     mobs:
-      melee:    {mm: EmberQ04Melee,    hp: 105, atk: 10, interval: 2.5}
+      melee:    {mm: EmberQ04Melee,    hp: 96,  atk: 10, interval: 2.5}
       ranged:   {mm: EmberQ04Ranged,   hp: 77,  atk: 10, interval: 3.0, range: 12}
       heavy:    {mm: EmberQ04Heavy,    hp: 147, atk: 10, interval: 3.0}
       caster:   {mm: EmberQ04Caster,   hp: 91,  atk: 10, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
@@ -265,12 +265,12 @@ maps:
         label: 闸厅外圈
         trigger: [-5, 63, 39, 5, 69, 51]
         points: [[-4, 64, 42], [4, 64, 42], [-4, 64, 48], [4, 64, 48], [-2, 64, 51], [2, 64, 51], [-2, 64, 42], [-2, 64, 48]]
-        a: {melee: 6, heavy: 1}
+        a: {melee: 5, heavy: 1}
         b: {melee: 5, ranged: 2}
     boss:
       mm: EmberQ04Boss
       name: 潮闸重卫
-      hp: 2200
+      hp: 1900
       atk: 18
       interval: 3.0
       at: [0, 64, 46]
@@ -373,7 +373,7 @@ maps:
     boss:
       mm: EmberQ05Boss
       name: 断塔斧卫
-      hp: 4000
+      hp: 3500
       atk: 26
       interval: 3.0
       at: [0, 76, 0]
@@ -482,7 +482,7 @@ maps:
     boss:
       mm: EmberQ06Boss
       name: 霜封统领
-      hp: 4600
+      hp: 3800
       atk: 28
       interval: 3.0
       at: [0, 70, 48]
@@ -551,7 +551,7 @@ maps:
     boss:
       mm: EmberQ07Boss
       name: 炉锁巨卫
-      hp: 5800
+      hp: 4800
       atk: 34
       interval: 3.0
       at: [0, 64, 46]

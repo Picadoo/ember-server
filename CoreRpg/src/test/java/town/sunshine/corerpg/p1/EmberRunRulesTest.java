@@ -303,7 +303,7 @@ public class EmberRunRulesTest {
         assertEquals(36, q1.roles.get("melee").hp, 0);
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
-        assertEquals(1300, q3.boss.hp, 0);
+        assertEquals(1000, q3.boss.hp, 0);
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
         assertEquals(2, (int) q2.room("r2").b.get("ranged"));
         assertEquals(1, (int) q3.room("r3").a.get("caster"));
@@ -322,16 +322,18 @@ public class EmberRunRulesTest {
         assertEquals("ember_daily_spire", q5.template);
         assertEquals(6, q4.firstClear.blank);
         assertEquals(6, q4.firstClear.core);
-        assertEquals(900, q4.firstClear.coin);
+        assertEquals(2100, q4.firstClear.coin);
         assertEquals(20, q5.firstClear.bone);
         assertEquals(6, q5.firstClear.blank);
-        assertEquals("核心 6 胚料 6 币 900", q4.firstClearLabel());
+        assertEquals("核心 6 胚料 6 币 2100", q4.firstClearLabel());
         assertEquals("胚料 6 骨尘 20", q5.firstClearLabel());
-        assertEquals(105, q4.roles.get("melee").hp, 0);
+        assertEquals(96, q4.roles.get("melee").hp, 0);
+        assertEquals(5, (int) q4.room("r3").a.get("melee")); // D31: Q04 R3 A = 5 melee + 1 heavy
+        assertEquals(1, (int) q4.room("r3").a.get("heavy"));
         assertEquals(10, q4.roles.get("melee").atk, 0);
         assertEquals(177, q5.roles.get("melee").hp, 0);
-        assertEquals(2200, q4.boss.hp, 0);
-        assertEquals(4000, q5.boss.hp, 0);
+        assertEquals(1900, q4.boss.hp, 0);
+        assertEquals(3500, q5.boss.hp, 0);
         assertEquals(2, q4.boss.skills.size());
         assertEquals("player", q4.boss.skills.get(0).target);
         assertEquals(1.0, q4.boss.skills.get(1).kb, 0);
@@ -363,9 +365,9 @@ public class EmberRunRulesTest {
         assertEquals(286, q7.roles.get("heavy").hp, 0);
         assertEquals(19, q7.roles.get("caster").atk, 0);
         assertEquals(680, q7.roles.get("elite").hp, 0);
-        assertEquals(4600, q6.boss.hp, 0);
+        assertEquals(3800, q6.boss.hp, 0);
         assertEquals(28, q6.boss.atk, 0);
-        assertEquals(5800, q7.boss.hp, 0);
+        assertEquals(4800, q7.boss.hp, 0);
         assertEquals(34, q7.boss.atk, 0);
         EmberRunMaps.Skill blade = q6.boss.skills.get(0);
         assertEquals("line", blade.type);

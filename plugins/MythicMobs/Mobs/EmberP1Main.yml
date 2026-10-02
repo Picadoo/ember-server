@@ -343,7 +343,7 @@ EmberQ03Elite:
 EmberQ03Boss:
   Type: ZOMBIE
   Display: '&c残誓守卫'
-  Health: 1300
+  Health: 1000
   Damage: 14
   Options:
     MovementSpeed: 0.24
@@ -365,7 +365,7 @@ EmberQ03Boss:
 EmberQ04Melee:
   Type: ZOMBIE
   Display: '&7潮蚀卒'
-  Health: 105
+  Health: 96
   Damage: 10
   Options:
     MovementSpeed: 0.23
@@ -474,7 +474,7 @@ EmberQ04Elite:
 EmberQ04Boss:
   Type: ZOMBIE
   Display: '&c潮闸重卫'
-  Health: 2200
+  Health: 1900
   Damage: 18
   Options:
     MovementSpeed: 0.24
@@ -605,7 +605,7 @@ EmberQ05Elite:
 EmberQ05Boss:
   Type: ZOMBIE
   Display: '&c断塔斧卫'
-  Health: 4000
+  Health: 3500
   Damage: 26
   Options:
     MovementSpeed: 0.24
@@ -736,7 +736,7 @@ EmberQ06Elite:
 EmberQ06Boss:
   Type: ZOMBIE
   Display: '&c霜封统领'
-  Health: 4600
+  Health: 3800
   Damage: 28
   Options:
     MovementSpeed: 0.24
@@ -867,7 +867,7 @@ EmberQ07Elite:
 EmberQ07Boss:
   Type: ZOMBIE
   Display: '&c炉锁巨卫'
-  Health: 5800
+  Health: 4800
   Damage: 34
   Options:
     MovementSpeed: 0.24
