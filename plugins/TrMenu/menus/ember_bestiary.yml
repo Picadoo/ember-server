@@ -1,5 +1,6 @@
-# 图录子菜单壳 — DESIGN-ember-pet-bestiary.md
-# 怪物 / 装备 / 使魔图鉴；阶段奖未接线
+# 图录 — DESIGN-ember-pet-bestiary.md；P1 书 §19.1 / §19.5（B2.178，D38）
+# 主线首领 → ember_p1_codex；使魔 → ember_pet。装备图鉴 / 阶段奖励没有实现：灰色「暂未上架」、不可点击（不做可点击假入口；
+# 图录奖励只给展示和一次性资源，不承诺天赋点等永久战斗属性）。
 
 Title: '§3余烬 · 图录'
 
@@ -19,7 +20,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §3【图录】 §7怪物 · 装备 · 使魔图鉴。集齐有奖（称号/币/天赋点）。'
+    - 'tell: §3【图录】 §7主线首领 · 使魔。图录只做展示，不加属性。'
 
 Icons:
   '#':
@@ -39,36 +40,24 @@ Icons:
   M:
     display:
       material: skull item
-      name: '§c怪物图鉴'
+      name: '§c主线首领'
       lore:
         - ''
-        - '§7记录击杀过的余烬怪'
-        - '§8地窟 / 深渊 / 灾厄 / 团本'
+        - '§7Q01–Q07 七个首领：生命、招式、预警、躲法'
+        - '§7以及你自己的首通状态'
         - ''
-        - '§8暂未开放'
-        - ''
-        - '§c➥ §f查看说明'
+        - '§c➥ §f打开'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §c【图录·怪物】 §7暂未开放，敬请期待'
+        - 'menu: ember_p1_codex'
 
   G:
     display:
       material: diamond sword
-      name: '§6装备图鉴'
+      name: '§8装备图鉴 · 暂未上架'
       lore:
-        - ''
-        - '§7刃 / 护符 / 饰品收集进度'
-        - '§8首次获得即登记'
-        - ''
-        - '§8暂未开放'
-        - ''
-        - '§6➥ §f查看说明'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6【图录·装备】 §7暂未开放，敬请期待'
+        - '§8还没有内容，上架后再开放'
 
   P:
     display:
@@ -88,14 +77,7 @@ Icons:
   R:
     display:
       material: gold ingot
-      name: '§e阶段奖励'
+      name: '§8阶段奖励 · 暂未上架'
       lore:
-        - ''
-        - '§7集齐阶段：称号 · 币 · 天赋点'
-        - '§8对标收集强迫症日活'
-        - ''
-        - '§8暂未开放'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e【图录·阶段奖】 §7暂未开放，敬请期待'
+        - '§8还没有内容，上架后再开放'
+        - '§8（图录只给展示，不加战斗属性）'

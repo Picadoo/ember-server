@@ -20,7 +20,7 @@ Layout:
   - '# T X K #'
   - '#1234567#'
   - '# s b u n'
-  - '# M F C #'
+  - '# M F C D'
   - '####B####'
 
 Events:
@@ -297,6 +297,19 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 claim'
+
+  D:
+    display:
+      material: book and quill
+      name: '§6图录 · 主线首领'
+      lore:
+        - '§7七个首领的生命、招式、预警与躲法'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_codex'
 
   B:
     display:

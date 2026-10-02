@@ -81,5 +81,31 @@ v2 = p1config.load('v2')
 check('v2 profile restores pre-D31 numbers', v2['maps']['q03']['boss']['hp'] == 1300 and v2['death_refund'] == 0
       and v2['maps']['q04']['first_clear']['coin'] == 900)
 
+
+# B2.178 图录 · 主线首领 (TrMenu ember_p1_codex): the numbers written in the menu must match the configs
+import os
+import re
+codex = open(os.path.join(p1config.ROOT, 'plugins/TrMenu/menus/ember_p1_codex.yml'), encoding='utf-8').read()
+bad = []
+for i, key in enumerate(cfg['order'], 1):
+    mblk = re.search(r"\n  '%d':\n(.*?)(?=\n  \S)" % i, codex, re.S)
+    if not mblk:
+        bad.append('%s: no icon' % key)
+        continue
+    txt = mblk.group(1)
+    b = cfg['maps'][key]['boss']
+    want = ['生命 §f%s' % b['hp'], '普攻 §f%s' % b['atk'], '≥%g 秒' % b['interval']]
+    for sk in b.get('skills', []):
+        for s2 in (sk, sk.get('follow')):
+            if not s2:
+                continue
+            if '·' not in s2['name']:
+                want.append('§c%s§7' % s2['name'])
+            if s2.get('every'):
+                want.append('每 %g 秒' % s2['every'])
+            want += ['预警 %.1f 秒' % s2['warn'], '伤害 %s' % s2['dmg']]
+    bad += ['%s: missing %r' % (key, w) for w in want if w not in txt]
+check('codex menu numbers match MM + runs yml', not bad, '; '.join(bad))
+
 print('\n%d failed' % len(fails))
 sys.exit(1 if fails else 0)

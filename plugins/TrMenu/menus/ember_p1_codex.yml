@@ -1,0 +1,185 @@
+# 余烬 v1 (P1) 图录 · 主线首领 — 书 §7（各图首领）、§19.3（预警用动作 + 范围形状）、§19.5（图录只给展示，不叠战斗属性）。
+# 只读页：每格写首领名、单人普通版生命 / 普攻、技能形状与预警、怎么躲，以及本人首通状态（PAPI corerpg_p1_qXX_state）。
+# 生命 / 普攻数字必须与 MythicMobs/Mobs/EmberP1Main.yml 的 EmberQxxBoss Health / Damage 一致（tools/p1sim/selfcheck.py 会核对）。
+# 入口：图录 ember_bestiary「主线首领」、冒险页 ember_p1_adventure「图录」、帮助页「七张图」，或 /ember_p1_codex。
+
+Title: '§6余烬 v1 · 图录 · 主线首领'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_codex'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 300
+
+Layout:
+  - '#########'
+  - '#   I   #'
+  - '#1234567#'
+  - '#       #'
+  - '##A#H#B##'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    display:
+      material: book
+      name: '§e怎么看'
+      lore:
+        - '§7数字是§f单人普通版§7；组队时首领生命随人数增加，伤害不变'
+        - '§7挑战版招式相同，生命和伤害更高'
+        - '§7首领出招前地上有§c火焰轮廓§7 + 聊天「蓄力」'
+        - '§7伤害不会超出轮廓；首领全程可以直接打'
+        - ''
+        - '§8图录只做展示，不加任何属性'
+
+  '1':
+    display:
+      material: stone axe
+      name: '§aQ01 §c残门蛮兵'
+      lore:
+        - '§7状态：§f%corerpg_p1_q01_state%'
+        - '§7生命 §f240 §8· §7普攻 §f6§8（≥3.2 秒一次）'
+        - ''
+        - '§c重斩§7：每 8 秒，正前方 100° · 4 格'
+        - '§8  抬斧预警 1.0 秒 · 伤害 12'
+        - ''
+        - '§a躲法§7：看到抬斧就绕到它侧后'
+        - '§8不锁血、不招小怪'
+
+  '2':
+    display:
+      material: iron axe
+      name: '§aQ02 §c守炉蛮兵'
+      lore:
+        - '§7状态：§f%corerpg_p1_q02_state%'
+        - '§7生命 §f900 §8· §7普攻 §f10§8（≥3 秒一次）'
+        - ''
+        - '§c砸地§7：每 9 秒，它前方 2 格处 半径 3 格圆'
+        - '§8  预警 1.2 秒 · 伤害 18'
+        - '§c横扫§7（半血后）：砸地后 2 秒，前方 80° · 3 格'
+        - '§8  预警 0.9 秒 · 伤害 10'
+        - ''
+        - '§a躲法§7：砸地走出圆圈，紧接着别站它正面'
+        - '§8炉管只是装饰，不用打'
+
+  '3':
+    display:
+      material: iron sword
+      name: '§aQ03 §c残誓守卫'
+      lore:
+        - '§7状态：§f%corerpg_p1_q03_state%'
+        - '§7生命 §f1000 §8· §7普攻 §f14§8（≥3 秒一次）'
+        - ''
+        - '§c誓斩§7：每 10 秒，前方 5 格长 · 3 格宽'
+        - '§8  预警 1.1 秒 · 伤害 24'
+        - '§c召唤§7：半血时一次，左右各来 1 只近战小怪'
+        - '§8  先预警 1 秒；小怪不给首领无敌'
+        - ''
+        - '§a躲法§7：往侧面跨出条带；小怪可以不管，直接打首领'
+
+  '4':
+    display:
+      material: prismarine shard
+      name: '§bQ04 §c潮闸重卫'
+      lore:
+        - '§7状态：§f%corerpg_p1_q04_state%'
+        - '§7生命 §f1900 §8· §7普攻 §f18§8（≥3 秒一次）'
+        - ''
+        - '§c冲击圈§7：每 10 秒，在你脚下画半径 2.5 格圈'
+        - '§8  圈锁定，预警 1.2 秒 · 伤害 30'
+        - '§c闸杆推击§7：每 14 秒，正前方 90° · 4 格'
+        - '§8  预警 1.0 秒 · 伤害 18 · 最多推开 1 格'
+        - ''
+        - '§a躲法§7：圈一出现就离开原地；它出招时停普攻，可以贴回去打'
+        - '§8不涉水、不限时'
+
+  '5':
+    display:
+      material: diamond axe
+      name: '§bQ05 §c断塔斧卫'
+      lore:
+        - '§7状态：§f%corerpg_p1_q05_state%'
+        - '§7生命 §f3500 §8· §7普攻 §f26§8（≥3 秒一次）'
+        - ''
+        - '§c斧刃横扫§7：每 9 秒，正面 120° · 5 格'
+        - '§8  预警 1.2 秒 · 伤害 44'
+        - '§c径向冲击§7：每 15 秒，以它为中心半径 3 格'
+        - '§8  预警 1.0 秒 · 伤害 26 · 最多推开 1 格'
+        - ''
+        - '§a躲法§7：斧刃横扫绕背，径向冲击拉开 3 格以外'
+        - '§8不会把人打下平台'
+
+  '6':
+    display:
+      material: packed ice
+      name: '§bQ06 §c霜封统领'
+      lore:
+        - '§7状态：§f%corerpg_p1_q06_state%'
+        - '§7生命 §f3800 §8· §7普攻 §f28§8（≥3 秒一次）'
+        - ''
+        - '§c刀气§7：每 10 秒，两段'
+        - '§8  第一段：面向方向 长 6 · 宽 3，预警 1.2 秒'
+        - '§8  第二段：1 秒后在第一段§f右侧 4 格§8，预警 1.2 秒'
+        - '§8  每段伤害 48；前方 1～7 格'
+        - ''
+        - '§a躲法§7：往它的§f左侧§7走，两段都打不到'
+        - '§8冰只是外观，不冻、不减速'
+
+  '7':
+    display:
+      material: anvil
+      name: '§6Q07 §c炉锁巨卫'
+      lore:
+        - '§7状态：§f%corerpg_p1_q07_state%'
+        - '§7生命 §f4800 §8· §7普攻 §f34§8（≥3 秒一次）'
+        - ''
+        - '§c重砸§7：每 9 秒，锁定你所在位置 半径 3.5 格'
+        - '§8  预警 1.3 秒 · 伤害 56 · 砸完固定 1.5 秒收招'
+        - '§c冲撞§7：每 14 秒，最多 8 格直线 · 宽 4 格'
+        - '§8  预警 1.3 秒 · 伤害 56'
+        - ''
+        - '§a躲法§7：重砸走出圈后趁收招输出；冲撞往条带侧面闪'
+        - '§8没有炉锁机关，任何阶段都能直接打'
+
+  A:
+    display:
+      material: map
+      name: '§a冒险'
+      lore:
+        - '§7打开主线本列表'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_adventure'
+
+  H:
+    display:
+      material: compass
+      name: '§e帮助'
+      lore:
+        - '§7怎么玩 / 操作 / 三套装'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_help'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
