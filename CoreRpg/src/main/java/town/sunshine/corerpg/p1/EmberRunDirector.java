@@ -84,6 +84,9 @@ final class EmberRunDirector {
     private boolean finished;
     final List<String> anomalies = new ArrayList<String>();
 
+    /** P2-8 weekly rotation modifier of this run (null = none) */
+    private final EmberRunMaps.Modifier mod;
+
     EmberRunDirector(EmberRunService svc, EmberRunSession s, EmberRunMaps.MapDef def, World w) {
         this.svc = svc;
         this.s = s;
@@ -92,6 +95,7 @@ final class EmberRunDirector {
         this.ch = !s.challenge || svc.maps() == null ? null
                 : s.abyss > 0 && svc.maps().abyssChallenge(s.abyss) != null ? svc.maps().abyssChallenge(s.abyss) // P2-2
                 : svc.maps().challenge;
+        this.mod = svc.maps() == null ? null : svc.maps().modifier(s.modifier);
         for (String c : s.cleared) if (def.roomIndex(c) >= next) next = def.roomIndex(c) + 1;
     }
 
@@ -263,7 +267,12 @@ final class EmberRunDirector {
     private void spawnRoom(EmberRunMaps.Room r) {
         activeRoom = r.id;
         boolean b = s.variantB(r.id);
-        List<String[]> lay = EmberRunMaps.layout(r, b, s.roomSeed(r.id));
+        List<String[]> lay;
+        EmberRunMaps.Room swap = mod == null || !mod.swapRooms ? null
+                : "r1".equals(r.id) ? def.room("r3") : "r3".equals(r.id) ? def.room("r1") : null;
+        lay = swap == null ? EmberRunMaps.layout(r, b, s.roomSeed(r.id))
+                : EmberRunMaps.layout(swap.variant(b), r.points.size(), s.roomSeed(r.id)); // P2-8 逆行
+        if (mod != null) for (String[] e : lay) e[0] = mod.role(e[0], def);         // P2-8 换防
         int ok = 0;
         for (String[] e : lay) {
             EmberRunMaps.Role role = def.role(e[0], ch);

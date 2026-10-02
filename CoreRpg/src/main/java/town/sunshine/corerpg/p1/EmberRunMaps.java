@@ -400,18 +400,7 @@ public final class EmberRunMaps {
 
     /** Spawn order for one encounter: roles expanded (stable order), point offset by the room seed. */
     public static List<String[]> layout(Room r, boolean useB, long roomSeed) {
-        List<String[]> out = new ArrayList<String[]>();
-        Map<String, Integer> c = r.variant(useB);
-        int n = r.points.size();
-        int off = n == 0 ? 0 : (int) Math.floorMod(roomSeed, (long) n);
-        int i = 0;
-        for (Map.Entry<String, Integer> e : c.entrySet()) {
-            for (int k = 0; k < e.getValue(); k++) {
-                out.add(new String[]{e.getKey(), String.valueOf((off + i) % Math.max(1, n))});
-                i++;
-            }
-        }
-        return out;
+        return layout(r.variant(useB), r.points.size(), roomSeed);
     }
 
     /**
@@ -518,6 +507,61 @@ public final class EmberRunMaps {
     public final Map<String, MapDef> maps;
     /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
     public final Map<String, MapDef> raids;
+    /** P2-8 weekly rotation modifiers (on the featured challenge map only; no multipliers, rewards unchanged) */
+    public final List<Modifier> modifiers;
+
+    /**
+     * P2-8 (D80): one weekly rule on the featured challenge map that changes how the fight plays, never how much it pays
+     * and never a multiplier: a heal-potion cap per run, an enemy-role substitution (only to roles the map defines),
+     * or the first and third rooms trading their enemy groups.
+     */
+    public static final class Modifier {
+        public final String id, name, text;
+        public final int potionCap;                 // 0 = no cap
+        public final Map<String, String> remap;     // role → role
+        public final boolean swapRooms;             // r1 ↔ r3 compositions
+        Modifier(Map<?, ?> m) {
+            id = str(m.get("id"), "");
+            name = str(m.get("name"), id);
+            text = str(m.get("text"), "");
+            potionCap = Math.max(0, (int) num(m.get("potion_cap"), 0));
+            Map<String, String> r = new LinkedHashMap<String, String>();
+            if (m.get("remap") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("remap")).entrySet()) r.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
+            remap = Collections.unmodifiableMap(r);
+            swapRooms = Boolean.TRUE.equals(m.get("swap_rooms")) || "true".equals(String.valueOf(m.get("swap_rooms")));
+        }
+        /** the role actually spawned on map d (a target role the map does not define keeps the original) */
+        public String role(String role, MapDef d) {
+            String to = remap.get(role);
+            return to != null && d != null && d.roles.containsKey(to) ? to : role;
+        }
+    }
+
+    /** The modifier of the rotation week containing {@code day} (null when none are configured). */
+    public Modifier modifierFor(java.time.LocalDate day) {
+        if (modifiers.isEmpty()) return null;
+        return modifiers.get((int) Math.floorMod(EmberRunRules.weekIndex(day), (long) modifiers.size()));
+    }
+
+    public Modifier modifier(String id) {
+        if (id == null || id.isEmpty()) return null;
+        for (Modifier m : modifiers) if (m.id.equals(id)) return m;
+        return null;
+    }
+
+    /** P2-8: layout from an explicit composition (the swap-rooms modifier spawns r3's group on r1's points and back). */
+    public static List<String[]> layout(Map<String, Integer> c, int points, long roomSeed) {
+        List<String[]> out = new ArrayList<String[]>();
+        int off = points == 0 ? 0 : (int) Math.floorMod(roomSeed, (long) points);
+        int i = 0;
+        for (Map.Entry<String, Integer> e : c.entrySet()) {
+            for (int k = 0; k < e.getValue(); k++) {
+                out.add(new String[]{e.getKey(), String.valueOf((off + i) % Math.max(1, points))});
+                i++;
+            }
+        }
+        return out;
+    }
 
     private EmberRunMaps(Map<?, ?> root) {
         version = (int) num(root.get("version"), 1);
@@ -531,6 +575,9 @@ public final class EmberRunMaps {
         Map<?, ?> rot = root.get("rotation") instanceof Map ? (Map<?, ?>) root.get("rotation") : java.util.Collections.emptyMap();
         rotationBonusMarks = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
         rotationWeeklyCap = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
+        List<Modifier> mods = new ArrayList<Modifier>();
+        if (rot.get("modifiers") instanceof List) for (Object o : (List<?>) rot.get("modifiers")) if (o instanceof Map) mods.add(new Modifier((Map<?, ?>) o));
+        modifiers = Collections.unmodifiableList(mods);
         challenge = root.get("challenge") instanceof Map ? new Challenge((Map<?, ?>) root.get("challenge")) : null;
         Map<?, ?> ab = root.get("abyss") instanceof Map ? (Map<?, ?>) root.get("abyss") : Collections.emptyMap();
         abyssRequires = str(ab.get("requires"), "q07");

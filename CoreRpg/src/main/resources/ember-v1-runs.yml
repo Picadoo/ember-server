@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79)
-balance_version: 7
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80)
+balance_version: 8
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -25,6 +25,16 @@ pass_seconds: 30
 rotation:
   bonus_marks: 1
   weekly_cap: 3
+  # P2-8 (D80) one weekly rule on the featured map's CHALLENGE runs only (index = ISO week mod count; with 7 maps and
+  # 3 rules all 21 pairs come round). Rules change how the fight plays, never the rewards, never a multiplier:
+  #   potion_cap N   heal potions per character per run (the 15 s shared cooldown still applies)
+  #   remap a: b     role a spawns as role b (only when the map defines b; Q01/Q02 have no caster and keep ranged)
+  #   swap_rooms     room 1 and room 3 trade enemy groups (each keeps its own spawn points and doors)
+  # Model: tools/p1sim/p2econ.py --mods (featured clear rate per rule; rewards only move down).
+  modifiers:
+    - {id: lean, name: 限药, potion_cap: 3, text: 本局每人最多喝 3 瓶回复药}
+    - {id: casters, name: 术者换防, remap: {ranged: caster}, text: 弓手换成术者（直线预警，躲开就不疼）}
+    - {id: reverse, name: 逆行, swap_rooms: true, text: 第一间和第三间的敌群互换（开局就是最重的一间）}
 
 # §18.1 challenge difficulty for all seven maps, opened by the player's OWN Q07 first clear. One shared T3 reference
 # (B_ref 90), overriding — not multiplying — the normal values; party HP 1+0.65(n−1) still applies; damage does not

@@ -34,6 +34,8 @@ public final class EmberRunSession {
     public boolean challenge;
     /** P2-2 abyss tier 1..10 (0 = not an abyss segment); an abyss segment is also {@link #challenge} */
     public int abyss;
+    /** P2-8 rotation modifier id fixed at entry (featured challenge map only; "" = none) */
+    public String modifier = "";
     /** P2-2 余烬币 fee reserved per participant at entry (refunded exactly like the stamina cost) */
     public final Map<UUID, Integer> fee = new LinkedHashMap<UUID, Integer>();
     public long seed;
@@ -106,6 +108,7 @@ public final class EmberRunSession {
         m.put("dmg_factor", dmgFactor);
         m.put("challenge", challenge);
         m.put("abyss", abyss);
+        if (modifier != null && !modifier.isEmpty()) m.put("modifier", modifier);
         Map<String, Object> f = new LinkedHashMap<String, Object>();
         for (Map.Entry<UUID, Integer> e : fee.entrySet()) f.put(e.getKey().toString(), e.getValue());
         m.put("fee", f);
@@ -153,6 +156,7 @@ public final class EmberRunSession {
         s.dmgFactor = EmberRunMaps.num(m.get("dmg_factor"), 1.0);
         s.challenge = Boolean.TRUE.equals(m.get("challenge"));
         s.abyss = (int) EmberRunMaps.num(m.get("abyss"), 0);
+        s.modifier = m.get("modifier") == null ? "" : String.valueOf(m.get("modifier"));
         if (m.get("fee") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("fee")).entrySet()) {
             UUID u = uuid(e.getKey());
             if (u != null) s.fee.put(u, (int) EmberRunMaps.num(e.getValue(), 0));

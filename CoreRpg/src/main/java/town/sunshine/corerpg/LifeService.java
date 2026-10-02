@@ -206,6 +206,12 @@ public final class LifeService implements Listener {
         if (mode.list("heal_potion.items").contains(id)) {
             town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(p.getUniqueId());
             long now = System.currentTimeMillis();
+            town.sunshine.corerpg.p1.EmberRunService rc = plugin.getEmberRuns();
+            if (rc != null && rc.potionCapped(p.getUniqueId())) { // P2-8 weekly rule 限药
+                e.setCancelled(true);
+                p.sendMessage(ChatColor.RED + "[余烬] 本周规则：本局最多喝 " + rc.potionCap(p.getUniqueId()) + " 瓶回复药，已用完。");
+                return true;
+            }
             if (st.healCdUntil > now) {
                 e.setCancelled(true);
                 p.sendMessage(ChatColor.RED + "[余烬] 回复药冷却中，还需 " + ((st.healCdUntil - now) / 1000 + 1) + " 秒（所有回复药共用）。");

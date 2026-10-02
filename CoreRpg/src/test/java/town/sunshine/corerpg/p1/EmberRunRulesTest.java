@@ -304,10 +304,29 @@ public class EmberRunRulesTest {
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(7, m.balanceVersion);                 // D79
-        assertEquals("g04-1/b7", m.ruleVersion);
+        assertEquals(8, m.balanceVersion);                 // D80
+        assertEquals("g04-1/b8", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
+        // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all
+        assertEquals(3, m.modifiers.size());
+        assertEquals(3, m.modifier("lean").potionCap);
+        assertEquals("caster", m.modifier("casters").role("ranged", q3));
+        assertEquals("ranged", m.modifier("casters").role("ranged", q1)); // Q01 has no caster → unchanged
+        assertEquals("melee", m.modifier("casters").role("melee", q3));
+        assertTrue(m.modifier("reverse").swapRooms);
+        assertNull(m.modifier(""));
+        java.util.Set<String> pairs = new java.util.HashSet<String>();
+        java.time.LocalDate d0 = java.time.LocalDate.of(2026, 10, 5);
+        for (int wk = 0; wk < 21; wk++) {
+            java.time.LocalDate d = d0.plusWeeks(wk);
+            pairs.add(EmberRunRules.featuredChallenge(new java.util.ArrayList<String>(m.maps.keySet()), d) + "/" + m.modifierFor(d).id);
+            assertSame(m.modifierFor(d), m.modifierFor(d.plusDays(6)));
+        }
+        assertEquals(21, pairs.size());
+        // swap layout: r3's group on r1's points
+        assertEquals(EmberRunMaps.layout(q3.room("r3").a, q3.room("r1").points.size(), 5L).size(),
+                q3.room("r3").a.values().stream().mapToInt(Integer::intValue).sum());
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
         assertEquals(2, (int) q2.room("r2").b.get("ranged"));
         assertEquals(1, (int) q3.room("r3").a.get("caster"));

@@ -46,6 +46,8 @@ Icons:
         - ''
         - '§b本周精选：§f%corerpg_p1_featured%'
         - '§8精选图前 3 次挑战通关各多 1 枚 T3 印记（P2-1，不加币、不加掉落）'
+        - '§b本周规则：§f%corerpg_p1_modifier%'
+        - '§8规则只在精选图的挑战局生效，改玩法不改奖励（P2-8）'
   '1':
     update: 20
     display:

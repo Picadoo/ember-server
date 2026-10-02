@@ -324,6 +324,11 @@ public final class EmberRunService implements Listener {
         s.challenge = challenge;
         s.abyss = abyss;
         s.tier = challenge ? maps.challenge.tier : m.tier;
+        if (challenge && abyss == 0) { // P2-8 weekly rule, fixed at entry
+            java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
+            EmberRunMaps.Modifier mod = m.key.equals(featured(today)) ? maps.modifierFor(today) : null;
+            s.modifier = mod == null ? "" : mod.id;
+        }
         s.seed = presetSeed != 0L ? presetSeed : rnd.nextLong();
         s.created = System.currentTimeMillis();
         s.leader = leader.getUniqueId();
@@ -419,6 +424,8 @@ public final class EmberRunService implements Listener {
                     + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 无倒地复活：倒下的人等队友打完 · 走进前方房间开战 · 首领死后统一结算");
             return;
         }
+        EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
+        if (mod != null) tellRun(s, "§b本周规则「" + mod.name + "」§7" + mod.text + "（奖励不变）");
         tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                 + "）· 走进前方房间开战 · 击败首领后统一结算");
     }
@@ -1580,6 +1587,7 @@ public final class EmberRunService implements Listener {
             p.sendMessage(P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " · /corerpg p1 enter " + rm.key);
         p.sendMessage(P + "§e每日委托 §7" + bountyLabel(d)); // P2-7
         p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次挑战通关各多 " + maps.rotationBonusMarks + " 枚 T3 印记）");
+        if (!maps.modifiers.isEmpty()) p.sendMessage(P + "本周规则（只在精选图挑战版生效，奖励不变）：§b" + modifierLabel());
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
                 + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
                 + " · 暂存 " + store.ledger(p.getUniqueId()).open().size() + " 项");
@@ -1603,7 +1611,35 @@ public final class EmberRunService implements Listener {
         EmberRunMaps.MapDef f = maps.byKey(featured(today));
         if (f == null || maps.rotationBonusMarks <= 0) return "无";
         int left = Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
-        return f.key.toUpperCase(Locale.ROOT) + " " + f.name + " · 加成剩 " + left + "/" + maps.rotationWeeklyCap + " · 周一 0 点轮换";
+        EmberRunMaps.Modifier mod = maps.modifierFor(today);
+        return f.key.toUpperCase(Locale.ROOT) + " " + f.name + (mod == null ? "" : " · 规则「" + mod.name + "」")
+                + " · 加成剩 " + left + "/" + maps.rotationWeeklyCap + " · 周一 0 点轮换";
+    }
+
+    /** P2-8 %corerpg_p1_modifier%: this week's featured-map rule, e.g. 「限药：本局最多喝 3 瓶回复药」 */
+    public String modifierLabel() {
+        EmberRunMaps.Modifier mod = maps.modifierFor(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+        return mod == null ? "无" : mod.name + "：" + mod.text;
+    }
+
+    /**
+     * P2-8 potion cap: true when {@code u} is in a run whose weekly rule caps heal potions and has used them all
+     * (the caller cancels the drink). Counts come from the run's own potion tally.
+     */
+    public boolean potionCapped(UUID u) {
+        if (maps == null) return false;
+        EmberRunSession s = openSessionOf(u);
+        if (s == null) return false;
+        EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
+        if (mod == null || mod.potionCap <= 0) return false;
+        Integer used = s.potions.get(u);
+        return used != null && used >= mod.potionCap;
+    }
+
+    public int potionCap(UUID u) {
+        EmberRunSession s = maps == null ? null : openSessionOf(u);
+        EmberRunMaps.Modifier mod = s == null ? null : maps.modifier(s.modifier);
+        return mod == null ? 0 : mod.potionCap;
     }
 
     public String stateLabel(PlayerData d, EmberRunMaps.MapDef m) {
@@ -1629,6 +1665,7 @@ public final class EmberRunService implements Listener {
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
+        if ("modifier".equals(key)) return modifierLabel(); // P2-8
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
         if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
         if ("next".equals(key)) return nextStep(d); // new-player polish %corerpg_p1_next%

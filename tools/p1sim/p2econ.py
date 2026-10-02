@@ -13,8 +13,32 @@ import p1config, p1sim, miniyaml
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 # P2-1 parameter source (D66): ember-v1-runs.yml `rotation:`
-ROT = {k: int(v) for k, v in miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get(
-    'rotation', {'bonus_marks': 0, 'weekly_cap': 0}).items()}
+_ROT = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('rotation', {'bonus_marks': 0, 'weekly_cap': 0})
+ROT = {k: int(v) for k, v in _ROT.items() if k in ('bonus_marks', 'weekly_cap')}
+# P2-8 (D80) weekly rules on the featured map's challenge runs (potion cap / role remap / room 1↔3 swap)
+MODS = list(_ROT.get('modifiers') or [])
+
+
+def mod_cfg(ccfg, key, mod):
+    """P2-8: challenge config with the week's rule applied to map `key`; returns (cfg, potion cap or None)."""
+    if not mod:
+        return ccfg, None
+    c = copy.deepcopy(ccfg)
+    m = c['maps'][key]
+    remap = {k: v for k, v in (mod.get('remap') or {}).items() if v in m['mobs']}  # server: only roles the map defines
+    if remap:
+        for room in m['rooms'].values():
+            for var in ('a', 'b'):
+                comp = {}
+                for role, n in room[var].items():
+                    r = remap.get(role, role)
+                    comp[r] = comp.get(r, 0) + n
+                room[var] = comp
+    if mod.get('swap_rooms'):
+        r1, r3 = m['rooms']['r1'], m['rooms']['r3']
+        r1['a'], r1['b'], r3['a'], r3['b'] = r3['a'], r3['b'], r1['a'], r1['b']
+    cap = int(mod['potion_cap']) if mod.get('potion_cap') else None
+    return c, cap
 
 
 def challenge_cfg(cfg):
@@ -172,7 +196,7 @@ def raid_cap():
     return sum(groups.values())
 
 
-def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=False, raid=False):
+def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=False, raid=False, mods=False, stats=None):
     """Each week: if the player clears some challenge map >= 50 % of the time it farms challenge (featured first when
     rotating), otherwise it farms Q07 normal (T3). As on the server, the bonus only pays on challenge clears."""
     order = ccfg['order']
@@ -183,6 +207,19 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         best = max(rates, key=rates.get)
         can_ch = rates[best] >= 0.5
         bonus_left = ROT['weekly_cap']
+        mod = MODS[w % len(MODS)] if mods and MODS else None
+        fcfg, fcap = mod_cfg(ccfg, featured, mod)
+        if mod:  # featured rate under this week's rule (own seed: the main rng stream stays paired with 'rot')
+            kn2 = copy.copy(kn)
+            if fcap is not None:
+                kn2.potion_keep = min(kn.potion_keep, fcap)
+            sd = 7919 * (w + 1) + int(100 * p.st()['B'])
+            rates[featured] = p1sim.clear_rate(fcfg, featured, p.st(), kn2, 10, seed=sd)
+            if stats is not None and can_ch:  # paired check: same seed, 40 entries, with vs without the rule
+                st_ = stats.setdefault(mod['id'], [0, 0.0, 0.0])
+                st_[0] += 1
+                st_[1] += p1sim.clear_rate(ccfg, featured, p.st(), kn, 40, seed=sd + 1)
+                st_[2] += p1sim.clear_rate(fcfg, featured, p.st(), kn2, 40, seed=sd + 1)
         if trade:
             buy_listing(p, ccfg, rng)
         runs_left = 7 * per_day
@@ -206,7 +243,10 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
             else:
                 use, key = cfg, order[-1]
             p.buy_potions()
-            ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions)
+            if mod and use is ccfg and key == featured:
+                ok, used, extra, *_ = p1sim.run_map(fcfg, key, p.st(), kn, rng, min(p.potions, fcap) if fcap is not None else p.potions)
+            else:
+                ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions)
             p.potions -= used
             ch_runs += use is ccfg
             if ok:
@@ -244,6 +284,7 @@ def main():
     ap.add_argument('--trade', action='store_true', help='add the P2-3 market model (weekly best-of-10 purchase)')
     ap.add_argument('--abyss', action='store_true', help='add the P2-2 abyss policy as a third column')
     ap.add_argument('--raid', action='store_true', help='add the P2-5/6 raids (rotation + weekly raid clears, shared cap)')
+    ap.add_argument('--mods', action='store_true', help='add the P2-8 weekly rules on the featured map (rotation + rule)')
     ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
     a = ap.parse_args()
     cfg = p1config.load()
@@ -251,8 +292,9 @@ def main():
         cfg['bounty'] = []
     ccfg = challenge_cfg(cfg)
     per_day = cfg['stamina_day'] // cfg['run_cost']
-    modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ())
+    modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ()) + (('mods',) if a.mods else ())
     res = {m: [] for m in modes}
+    stats = {}
     for i in range(a.players):
         for mode in modes:
             kn = p1sim.Knobs(a.dodge)
@@ -263,8 +305,9 @@ def main():
             if mode == 'abyss':
                 res[mode].append(phase2_abyss(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, per_day))
             else:
-                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode in ('rot', 'raid'), per_day, runs,
-                                        trade=mode == 'trade', raid=mode == 'raid'))
+                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode in ('rot', 'raid', 'mods'), per_day, runs,
+                                        trade=mode == 'trade', raid=mode == 'raid', mods=mode == 'mods',
+                                        stats=stats if mode == 'mods' else None))
     print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
     print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
     print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
@@ -277,7 +320,7 @@ def main():
                 continue
             n = len(rows)
             print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d%% | %d | %d | %.1f | %d%% | %s | %s |' % (
-                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易', 'raid': '轮换 + 团本'}[mode], round(100 * sum(r['set'] for r in rows) / n),
+                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易', 'raid': '轮换 + 团本', 'mods': '轮换 + 周规则'}[mode], round(100 * sum(r['set'] for r in rows) / n),
                 statistics.median(r['enh'] for r in rows), round(100 * sum(r['q'] >= 2 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 2 for r in rows) / n), round(100 * sum(r['q'] >= 3 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 3 for r in rows) / n),
@@ -286,6 +329,15 @@ def main():
                 ('%d' % statistics.median(r['best'] for r in rows)) if mode == 'abyss' else '—',
                 ('%d' % statistics.median(r['fees'] for r in rows)) if mode == 'abyss' else '—'))
 
+    if a.mods:
+        print()
+        print('P2-8 精选图挑战通关率（能刷挑战的玩家-周；同一种子 40 局配对：无规则 vs 本周规则）：')
+        print('| 规则 | 玩家-周 | 无规则 | 有规则 | 差 |')
+        print('|---|---:|---:|---:|---:|')
+        for m in MODS:
+            n, b, v = stats.get(m['id'], [0, 0.0, 0.0])
+            print('| %s %s | %d | %d%% | %d%% | %+d 点 |' % (m['id'], m.get('name', ''), n, round(100 * b / max(1, n)),
+                                                       round(100 * v / max(1, n)), round(100 * (v - b) / max(1, n))))
 
 if __name__ == '__main__':
     main()
