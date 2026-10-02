@@ -58,8 +58,17 @@ public final class ConfirmTokens {
 
     public static void forget(UUID id) { PENDING.remove(id); }
 
-    /** Sends "prefix [label]" where [label] runs {@code command} on click. */
+    /** Sends "prefix [label]" where [label] runs {@code command} on click (token buttons: shows the TTL). */
     public static void sendClick(Player p, String prefix, String label, String command, String hover) {
+        sendClick(p, prefix, label, command, hover, true);
+    }
+
+    /** D95: plain (token-free) buttons do not expire, so they carry no "30 秒内有效" tail. */
+    public static void sendButton(Player p, String prefix, String label, String command, String hover) {
+        sendClick(p, prefix, label, command, hover, false);
+    }
+
+    private static void sendClick(Player p, String prefix, String label, String command, String hover, boolean ttl) {
         TextComponent head = new TextComponent(prefix);
         TextComponent btn = new TextComponent(label);
         btn.setColor(net.md_5.bungee.api.ChatColor.RED);
@@ -67,7 +76,8 @@ public final class ConfirmTokens {
         btn.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
         btn.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
         TextComponent tail = new TextComponent(ChatColor.DARK_GRAY + "  (" + (TTL_MS / 1000) + " 秒内有效)");
-        p.spigot().sendMessage(head, btn, tail);
+        if (ttl) p.spigot().sendMessage(head, btn, tail);
+        else p.spigot().sendMessage(head, btn);
     }
 
     static boolean isWeapon(ItemStack s) {

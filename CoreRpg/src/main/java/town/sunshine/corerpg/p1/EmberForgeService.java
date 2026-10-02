@@ -231,7 +231,7 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "每次消耗: " + c.cost.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
             List<String> lack = lacking(p, c.cost);
             if (!lack.isEmpty()) p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
-            town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "手里拿着这件再点：", "[确认强化]", "/corerpg p1 enhance confirm",
+            town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", "[确认强化]", "/corerpg p1 enhance confirm",
                     "强化手持装备一次（扣上面的材料）"); // D95: no typed command
             return true;
         }
@@ -254,7 +254,7 @@ public final class EmberForgeService implements Listener {
             List<String> lack = lacking(p, plan.cost);
             if (!lack.isEmpty()) p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";
-            town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "手里拿着这件再点：", label,
+            town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", label,
                     "/corerpg p1 " + ("quality".equals(kind) ? "refine quality" : kind) + " confirm", "按上面的预览执行（扣上面的材料）"); // D95
             return true;
         }
@@ -339,7 +339,7 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "  " + a.data.shortLabel() + "  →  +" + plan.a.enhance + "（失败计数 " + plan.a.pity + "）");
             p.sendMessage(P + "  " + b.data.shortLabel() + "  →  +" + plan.b.enhance + "（失败计数 " + plan.b.pity + "）");
             p.sendMessage(P + ChatColor.YELLOW + "两件都会绑定；成色/精工/家族/阶级不变。");
-            town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "确认无误再点：", "[确认互换]",
+            town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "确认无误再点：", "[确认互换]",
                     "/corerpg p1 swap " + (target == null ? "" : target + " ") + "confirm", "交换两件的强化等级和失败计数，两件都会绑定"); // D95
             return true;
         }
