@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(12, m.balanceVersion);                // D98
-        assertEquals("g04-1/b12", m.ruleVersion);
+        assertEquals(13, m.balanceVersion);                // D104
+        assertEquals("g04-1/b13", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all
@@ -351,8 +351,9 @@ public class EmberRunRulesTest {
         assertEquals(2100, q4.firstClear.coin);
         assertEquals(20, q5.firstClear.bone);
         assertEquals(6, q5.firstClear.blank);
+        assertEquals(900, q5.firstClear.coin);              // D104
         assertEquals("核心 6 胚料 6 币 2100", q4.firstClearLabel());
-        assertEquals("胚料 6 骨尘 20", q5.firstClearLabel());
+        assertEquals("胚料 6 骨尘 20 币 900", q5.firstClearLabel());
         assertEquals(72, q4.roles.get("melee").hp, 0); // D60 §2c plan B
         assertEquals(5, (int) q4.room("r3").a.get("melee")); // D31: Q04 R3 A = 5 melee + 1 heavy
         assertEquals(1, (int) q4.room("r3").a.get("heavy"));
@@ -542,28 +543,29 @@ public class EmberRunRulesTest {
         assertEquals(90, c.bRef, 0);
         assertArrayEquals(EmberRunRules.CHALLENGE_QUALITY_WEIGHTS, c.quality);
         assertArrayEquals(new int[]{60, 28, 10, 2}, c.quality);
-        assertEquals(270, c.mobs.get("melee")[0], 0);
-        assertEquals(198, c.mobs.get("ranged")[0], 0);
-        assertEquals(378, c.mobs.get("heavy")[0], 0);
-        assertEquals(234, c.mobs.get("caster")[0], 0);
-        assertEquals(24, c.mobs.get("melee")[1], 0);
-        assertEquals(8000, c.bossHp, 0);
-        assertEquals(44, c.bossAtk, 0);
+        // D104 (b13): HP ×0.70, damage ×0.85 of the §18.1 references
+        assertEquals(189, c.mobs.get("melee")[0], 0);
+        assertEquals(139, c.mobs.get("ranged")[0], 0);
+        assertEquals(265, c.mobs.get("heavy")[0], 0);
+        assertEquals(164, c.mobs.get("caster")[0], 0);
+        assertEquals(20, c.mobs.get("melee")[1], 0);
+        assertEquals(5600, c.bossHp, 0);
+        assertEquals(37, c.bossAtk, 0);
         // overrides, not multipliers; timings and MM id are the map's own
         EmberRunMaps.MapDef q1 = m.byKey("q01");
         EmberRunMaps.Role r = q1.role("melee", c);
-        assertEquals(270, r.hp, 0);
-        assertEquals(24, r.atk, 0);
+        assertEquals(189, r.hp, 0);
+        assertEquals(20, r.atk, 0);
         assertEquals(q1.roles.get("melee").mm, r.mm);
         assertEquals(q1.roles.get("melee").interval, r.interval, 0);
         assertEquals(36, q1.role("melee", null).hp, 0);
-        // heavy 72 / light 44 per map
-        assertEquals(72, c.skillDmg(q1.boss.skills.get(0)), 0);                    // Q01 重斩
-        assertEquals(44, c.skillDmg(m.byKey("q02").boss.skills.get(0).follow), 0);  // Q02 横扫 (second, lighter)
-        assertEquals(72, c.skillDmg(m.byKey("q04").boss.skills.get(0)), 0);
-        assertEquals(44, c.skillDmg(m.byKey("q04").boss.skills.get(1)), 0);
-        assertEquals(72, c.skillDmg(m.byKey("q05").boss.skills.get(0)), 0);
-        assertEquals(44, c.skillDmg(m.byKey("q05").boss.skills.get(1)), 0);
+        // heavy 61 / light 37 per map (D104)
+        assertEquals(61, c.skillDmg(q1.boss.skills.get(0)), 0);                    // Q01 重斩
+        assertEquals(37, c.skillDmg(m.byKey("q02").boss.skills.get(0).follow), 0);  // Q02 横扫 (second, lighter)
+        assertEquals(61, c.skillDmg(m.byKey("q04").boss.skills.get(0)), 0);
+        assertEquals(37, c.skillDmg(m.byKey("q04").boss.skills.get(1)), 0);
+        assertEquals(61, c.skillDmg(m.byKey("q05").boss.skills.get(0)), 0);
+        assertEquals(37, c.skillDmg(m.byKey("q05").boss.skills.get(1)), 0);
     }
 
     @Test public void challengeSettlementIsT3WithChallengeQualityAndNoFirstClear() {
@@ -614,7 +616,7 @@ public class EmberRunRulesTest {
         assertNull(m.abyssTier(0));
         assertNull(m.abyssTier(11));
         EmberRunMaps.AbyssTier t1 = m.abyssTier(1), t10 = m.abyssTier(10);
-        assertEquals(1.0, t1.hp, 1e-9);
+        assertEquals(1.43, t1.hp, 1e-9); // D104: tier 1 = the old (pre-b13) challenge strength
         assertEquals(0, t1.fee);
         assertArrayEquals(m.challenge.quality, t1.quality);       // tier 1 = the challenge run
         assertTrue(t10.hp <= EmberRunMaps.ABYSS_MAX_HP && t10.dmg <= EmberRunMaps.ABYSS_MAX_DMG);
@@ -776,6 +778,10 @@ public class EmberRunRulesTest {
         assertEquals("[bounty_coin_1=coin:30]", keys(EmberRunRules.bountyGrants(t, 1)));
         assertEquals("[]", keys(EmberRunRules.bountyGrants(t, 2)));
         assertEquals("[bounty_coin_3=coin:60, bounty_shard_3=mat:mat_ember_shard:6]", keys(EmberRunRules.bountyGrants(t, 3)));
+        // D105: a raid clear counts 2 -> crossing 2..3 pays the 3rd tier once; 0..2 pays the 1st
+        assertEquals("[bounty_coin_3=coin:60, bounty_shard_3=mat:mat_ember_shard:6]", keys(EmberRunRules.bountyGrants(t, 1, 3)));
+        assertEquals("[bounty_coin_1=coin:30]", keys(EmberRunRules.bountyGrants(t, 0, 2)));
+        assertEquals("[]", keys(EmberRunRules.bountyGrants(t, 3, 5)));
         assertEquals("[]", keys(EmberRunRules.bountyGrants(t, 4)));
         assertTrue(EmberRunRules.bountyLine(t, 0).contains("再通关 1 局 → 30 余烬币"));
         assertTrue(EmberRunRules.bountyLine(t, 1).contains("再通关 2 局 → 60 余烬币 + 余烬碎片 ×6"));

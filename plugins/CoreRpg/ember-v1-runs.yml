@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98)
-balance_version: 12
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104)
+balance_version: 13
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -64,14 +64,18 @@ challenge:
   tier: 3
   b_ref: 90
   quality: [60, 28, 10, 2]
+  # D104 (balance_version 13): eased to HP ×0.70 / damage ×0.85 so a fresh Q07 clearer (dodge 0.5, enhance moved onto
+  # the new T3 piece with the free swap) clears the best map ~17 % and ~50 % after one T3 upgrade, ~85 % with two
+  # (tools/p1sim/chrate.py; was 0 % / 6 % / 14 %). The abyss tier factors below were raised by the same ratio, so the
+  # abyss keeps its old absolute strength (tier 1 = the old challenge values).
   mobs:
-    melee:    {hp: 270, atk: 24}
-    ranged:   {hp: 198, atk: 24}
-    heavy:    {hp: 378, atk: 24}
-    caster:   {hp: 234, atk: 24}
-    treasure: {hp: 360, atk: 0}
-    elite:    {hp: 900, atk: 24}
-  boss: {hp: 8000, atk: 44, heavy: 72, light: 44}
+    melee:    {hp: 189, atk: 20}
+    ranged:   {hp: 139, atk: 20}
+    heavy:    {hp: 265, atk: 20}
+    caster:   {hp: 164, atk: 20}
+    treasure: {hp: 252, atk: 0}
+    elite:    {hp: 630, atk: 20}
+  boss: {hp: 5600, atk: 37, heavy: 61, light: 37}
 
 # P2-2 (D70) P1 深渊 · 余烬层 (book §18.3): one segment = one accepted Q map (R1–R3 + its boss), picked by the segment
 # seed, at the challenge values above × the tier factors below. Opened by the player's own Q07 first clear; tier t+1
@@ -82,18 +86,19 @@ challenge:
 # Model: tools/p1sim/p2econ.py --abyss.
 abyss:
   requires: q07
-  # hp / dmg multiply the challenge values; quality = 标准/精良/卓越/极品 weights; fee = 余烬币 per segment
+  # hp / dmg multiply the challenge values; quality = 标准/精良/卓越/极品 weights; fee = 余烬币 per tier
+  # D104: hp ÷0.70 and dmg ×1.20 against the eased challenge = the same absolute strength as before (tier 1 = old challenge)
   tiers:
-    - {hp: 1.00, dmg: 1.00, quality: [60, 28, 10, 2], fee: 0}
-    - {hp: 1.05, dmg: 1.02, quality: [57, 29, 11, 3], fee: 60}
-    - {hp: 1.10, dmg: 1.04, quality: [54, 30, 12, 4], fee: 120}
-    - {hp: 1.15, dmg: 1.06, quality: [51, 31, 13, 5], fee: 180}
-    - {hp: 1.20, dmg: 1.08, quality: [48, 32, 14, 6], fee: 240}
-    - {hp: 1.25, dmg: 1.10, quality: [45, 33, 15, 7], fee: 300}
-    - {hp: 1.30, dmg: 1.12, quality: [42, 34, 16, 8], fee: 360}
-    - {hp: 1.35, dmg: 1.14, quality: [39, 35, 17, 9], fee: 420}
-    - {hp: 1.40, dmg: 1.16, quality: [36, 36, 18, 10], fee: 480}
-    - {hp: 1.45, dmg: 1.18, quality: [33, 37, 18, 12], fee: 540}
+    - {hp: 1.43, dmg: 1.20, quality: [60, 28, 10, 2], fee: 0}
+    - {hp: 1.50, dmg: 1.22, quality: [57, 29, 11, 3], fee: 60}
+    - {hp: 1.57, dmg: 1.25, quality: [54, 30, 12, 4], fee: 120}
+    - {hp: 1.64, dmg: 1.27, quality: [51, 31, 13, 5], fee: 180}
+    - {hp: 1.71, dmg: 1.30, quality: [48, 32, 14, 6], fee: 240}
+    - {hp: 1.79, dmg: 1.32, quality: [45, 33, 15, 7], fee: 300}
+    - {hp: 1.86, dmg: 1.34, quality: [42, 34, 16, 8], fee: 360}
+    - {hp: 1.93, dmg: 1.37, quality: [39, 35, 17, 9], fee: 420}
+    - {hp: 2.00, dmg: 1.39, quality: [36, 36, 18, 10], fee: 480}
+    - {hp: 2.07, dmg: 1.42, quality: [33, 37, 18, 12], fee: 540}
 
 maps:
   q01:
@@ -376,8 +381,9 @@ maps:
     map_version: ember_daily_spire_v1@b2151-2026-10-02
     requires: q04
     unlocks: q06
-    first_clear: {bone: 20, blank: 6}
-    purpose: "T2 本：常规掉 T2 装备与 T2 印记；首通（骨尘 20·胚料 6）开放 Q06"
+    # D104 (midgame minor): +900 coin so Q05 is not the only first clear without coin
+    first_clear: {bone: 20, blank: 6, coin: 900}
+    purpose: "T2 本：常规掉 T2 装备与 T2 印记；首通（胚料 6·骨尘 20·币 900）开放 Q06"
     b_ref: 59
     # B2.151: book ch. 15 walkable map (/corerpg spirebuild v1): R0 → C01 → R1 → C12 stairs (64→72) → R2 →
     # C23 stairs (72→80) → R3 → C3B → RB 33×33 boss hall; E side room off R2. No links / rails / clears any more.

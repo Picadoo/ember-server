@@ -321,7 +321,7 @@ public final class EmberRunRules {
         public FirstClear(String mapKey, String choiceSlot, int choiceTier, int shard, int core, int coin, String unlocks) {
             this(mapKey, choiceSlot, choiceTier, shard, core, coin, 0, 0, unlocks);
         }
-        /** §9.4: Q04 胚料 6·核心 6·币 2100 (D31); Q05 骨尘 20·胚料 6 */
+        /** §9.4: Q04 胚料 6·核心 6·币 2100 (D31); Q05 骨尘 20·胚料 6·币 900 (D104) */
         public FirstClear(String mapKey, String choiceSlot, int choiceTier, int shard, int core, int coin, int bone, int blank, String unlocks) {
             this.mapKey = mapKey; this.choiceSlot = choiceSlot; this.choiceTier = choiceTier;
             this.shard = shard; this.core = core; this.coin = coin; this.bone = bone; this.blank = blank; this.unlocks = unlocks;
@@ -450,6 +450,13 @@ public final class EmberRunRules {
             if (t.bone > 0) out.add(new Grant("bounty_bone_" + n, Kind.MAT, EmberUpgradeRules.MAT_BONE, t.bone, null));
             if (t.core > 0) out.add(new Grant("bounty_core_" + n, Kind.MAT, EmberUpgradeRules.MAT_CORE, t.core, null));
         }
+        return out;
+    }
+
+    /** D105: grants for every tier crossed when today's count goes from {@code prev} to {@code now} (a raid clear counts 2). */
+    public static List<Grant> bountyGrants(List<BountyTier> tiers, int prev, int now) {
+        List<Grant> out = new ArrayList<Grant>();
+        for (int n = prev + 1; n <= now; n++) out.addAll(bountyGrants(tiers, n));
         return out;
     }
 

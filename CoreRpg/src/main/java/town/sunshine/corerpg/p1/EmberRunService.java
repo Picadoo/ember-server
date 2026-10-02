@@ -269,6 +269,26 @@ public final class EmberRunService implements Listener {
     }
 
     /** D88: one chat line of six family×slot buttons for a mark tier (each asks for a confirm click) */
+    /** D104 (midgame #3): the exchange preview compares the new +0 piece with the one in use and names the free swap. */
+    private void exchangeCompare(Player p, String fam, String slot, int tier) {
+        EmberTables t = EmberMode.tables();
+        EmberLoadout lo = loadouts.get(p);
+        EmberItemData cur = lo == null ? null : ("blade".equals(slot) ? lo.blade : lo.charm);
+        boolean blade = "blade".equals(slot);
+        double base = blade ? t.weaponA(tier) : t.charmH(tier);
+        String stat = blade ? "攻击" : "生命 +";
+        if (cur == null) {
+            p.sendMessage(P + "§7兑换得到：" + stat + String.format(Locale.ROOT, "%.1f", base) + "（标准 +0）");
+            return;
+        }
+        double g = EmberFormula.growth(t, cur.quality, cur.craft, cur.enhance);
+        double now = (blade ? t.weaponA(cur.tier) : t.charmH(cur.tier)) * g;
+        double moved = base * EmberFormula.growth(t, 0, 0, cur.enhance);
+        p.sendMessage(P + String.format(Locale.ROOT, "§7现在用的：%s · %s%.1f §8｜ §7兑换得到：%s%.1f（+0）· 把 +%d 互换过来后 %s%.1f",
+                cur.shortLabel(), stat, now, stat, base, cur.enhance, stat, moved));
+        p.sendMessage(P + "§7强化可在工坊「互换」免费挪到新件；成色 / 精工不跟着走。想保留成色 / 精工就用升阶。");
+    }
+
     private void exchangeButtons(Player p, int tier) {
         java.util.List<net.md_5.bungee.api.chat.BaseComponent> parts = new java.util.ArrayList<net.md_5.bungee.api.chat.BaseComponent>();
         parts.add(new net.md_5.bungee.api.chat.TextComponent(P + "§fT" + tier + " 兑换："));
@@ -401,6 +421,23 @@ public final class EmberRunService implements Listener {
                 btn.add(new String[]{"[回 Q01]", "/corerpg p1 enter " + q1.key, "开一局 Q01（30 体力），刷 T1 刃", "GREEN"});
                 btn.add(new String[]{"[仍然进入]", "/corerpg p1 enter " + m.key + " force", "本次不再提醒，直接开本", "RED"});
                 town.sunshine.corerpg.ConfirmTokens.sendButtons(leader, P, btn.toArray(new String[0][]));
+                return true;
+            }
+        }
+        // D104 (midgame #2): the challenge is tuned for T3 — warn once per server session when someone still has a T2 blade
+        if (challenge && abyss == 0 && !forcedReady.remove(leader.getUniqueId()) && warnedT3.add(leader.getUniqueId())) {
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            List<String> low = new ArrayList<String>();
+            if (ls != null) for (Player p : party) {
+                EmberLoadout l = ls.refresh(p);
+                if (l.blade == null || l.blade.tier < 3) low.add(p.getName());
+            }
+            if (!low.isEmpty()) {
+                leader.sendMessage(P + "§e挑战版按 T3 装备来调；" + String.join("、", low) + " 主手还不是 T3 刃。");
+                leader.sendMessage(P + "§7先用 8 枚 T3 印记兑换（或升阶）一把 T3 刃，再到工坊「互换」免费把强化挪过去，通关率会高很多。");
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(leader, P,
+                        new String[]{"[印记兑换]", "/corerpg p1 marks", "看看能兑换什么", "GREEN"},
+                        new String[]{"[仍然进入]", "/corerpg p1 enter " + m.key + " challenge force", "本次不再提醒，直接开本", "RED"});
                 return true;
             }
         }
@@ -790,8 +827,10 @@ public final class EmberRunService implements Listener {
         final boolean fresh = l.get(s.runId, "base_coin") == null;
         final String bDay = town.sunshine.corerpg.DailyService.today();
         final List<EmberRunRules.BountyTier> tiers = bountyTiers();
-        final int bountyN = fresh ? pd.periodCount(C_BOUNTY, bDay) + 1 : 0;
-        List<EmberRunRules.Grant> bountyPaid = fresh ? EmberRunRules.bountyGrants(tiers, bountyN) : Collections.<EmberRunRules.Grant>emptyList();
+        final int bountyW = m.raid ? 2 : 1; // D105: a raid clear (50 stamina) counts as 2 runs toward the daily bounty
+        final int bountyPrev = fresh ? pd.periodCount(C_BOUNTY, bDay) : 0;
+        final int bountyN = fresh ? bountyPrev + bountyW : 0;
+        List<EmberRunRules.Grant> bountyPaid = fresh ? EmberRunRules.bountyGrants(tiers, bountyPrev, bountyN) : Collections.<EmberRunRules.Grant>emptyList();
         grants.addAll(bountyPaid);
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
         long now = System.currentTimeMillis();
@@ -803,7 +842,7 @@ public final class EmberRunService implements Listener {
             if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(C_ROTATION, week, 1); // counted once per run (ledger key)
             if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + capKey(m), week, 1); // P2-5 weekly cap (P2-6: per cap_group)
         }
-        if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, 1);
+        if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, bountyW);
         if (fresh && m.raid && cosmetics != null) cosmetics.onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
         if (in.firstClear != null) {
             pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
@@ -832,7 +871,7 @@ public final class EmberRunService implements Listener {
                     + "§7（本周 " + pd.periodCount(C_ROTATION, week) + "/" + maps.rotationWeeklyCap + "）");
         }
         if (p != null && p.isOnline() && fresh && !tiers.isEmpty()) {
-            p.sendMessage(P + "§e每日委托 §7" + (bountyPaid.isEmpty() ? "" : "§a完成第 " + bountyN + " 局档 §7· ")
+            p.sendMessage(P + "§e每日委托 §7" + (bountyW > 1 ? "§7团本算 " + bountyW + " 局 · " : "") + (bountyPaid.isEmpty() ? "" : "§a完成第 " + bountyN + " 局档 §7· ")
                     + EmberRunRules.bountyLine(tiers, bountyN));
         }
         if (p != null && p.isOnline()) {
@@ -846,6 +885,10 @@ public final class EmberRunService implements Listener {
         p.sendMessage(P + "§6§l余烬主线完结§r §7— 已首通最后一张主线图 Q07。");
         p.sendMessage(P + "§a已开放：§fT3 定向锻造§7（工坊）· §fT2→T3 升阶§7 · §f七图挑战版、深渊、团本§7（冒险页，掉落 T3 与 T3 印记）");
         p.sendMessage(P + "§7长线目标：同族 T3 两件套 +9 = 觉醒III（装备页看成套进度）");
+        // D104 (midgame #2): the challenge is tuned for T3 — say how to get there before the first attempt
+        p.sendMessage(P + "§e挑战版按 T3 装备来调。§7刚首通：先用 T3 印记兑换（或升阶）把刃换到 T3，再到工坊「互换」免费把强化挪过去；"
+                + "七张挑战图强度相同，只是掉落偏向的族 / 部位不同。");
+        town.sunshine.corerpg.ConfirmTokens.sendButton(p, P, "[打开冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本都在这里");
         p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
     }
 
@@ -1503,7 +1546,7 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ commands
 
     public static final java.util.Set<String> OPS = new java.util.HashSet<String>(java.util.Arrays.asList(
-            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss"));
+            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit"));
 
     public boolean cmd(CommandSender s, String sub, String[] args) {
         switch (sub) {
@@ -1521,6 +1564,7 @@ public final class EmberRunService implements Listener {
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) forcedReady.add(((Player) s).getUniqueId()); // D96
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
+            case "recruit": return cmdRecruit(s, args); // D104 (midgame #5)
             default:
                 return cmdRuns(s, args);
         }
@@ -1558,7 +1602,7 @@ public final class EmberRunService implements Listener {
         String st = t.index <= abyssBest(d) ? "§a已通关" : t.index <= abyssMaxStart(d) ? "§e可开" : "§8未开放";
         return "§d第 " + t.index + " 层 " + st + " §7· 生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
                 + String.format(Locale.ROOT, "%.2f", t.dmg) + " · 掉落成色 " + qualityLabel(t.quality) + " · 费 " + t.fee + " 币"
-                + (t.index == 1 ? " §8（= 挑战版强度，热身用）" : "");
+                + (t.index == 1 ? " §8（比挑战版强一档，挑战版稳过再来）" : "");
     }
 
     static String qualityLabel(int[] q) {
@@ -1643,6 +1687,7 @@ public final class EmberRunService implements Listener {
                     new net.md_5.bungee.api.chat.ComponentBuilder("§7扣 " + EmberRunRules.MARKS_PER_EXCHANGE + " 枚，不退").create()));
             msg.addExtra(ok);
             p.spigot().sendMessage(msg);
+            exchangeCompare(p, fam, slot, tier); // D104 (midgame #3)
             return true;
         }
         if (freeSlots(p) <= 0) { p.sendMessage(P + ChatColor.RED + "背包已满，空出一格再兑换。"); return true; }
@@ -1717,6 +1762,53 @@ public final class EmberRunService implements Listener {
     private boolean quietDeliver;
 
     /** D96: leaders who clicked [仍然进入] skip the readiness warning once */
+    private final Map<UUID, Long> recruitAt = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+
+    /**
+     * D104 (midgame #5): /corerpg p1 recruit <r01|r02> — the leader (a DP team is created if needed) sends every online
+     * player with their own Q07 first clear a clickable call; /corerpg p1 recruit join <leader> sends the DP join request
+     * and gives the leader a clickable [同意]. 60 s cooldown per leader.
+     */
+    private boolean cmdRecruit(CommandSender s, String[] args) {
+        if (!(s instanceof Player)) return true;
+        Player p = (Player) s;
+        if (args.length >= 4 && "join".equalsIgnoreCase(args[2])) {
+            Player l = Bukkit.getPlayerExact(args[3]);
+            if (l == null || l.equals(p)) { p.sendMessage(P + ChatColor.RED + "队长不在线。"); return true; }
+            if (EmberRunBridges.hasTeam(p)) { p.sendMessage(P + ChatColor.RED + "你已经在一支队伍里了，先退出再申请。"); return true; }
+            p.performCommand("dungeon-team request join " + l.getName());
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(l, P + "§e" + p.getName() + " §f想加入你的团本队伍 ",
+                    new String[]{"[同意]", "/dungeon-team request accept " + p.getName(), "让 " + p.getName() + " 入队", "GREEN"});
+            return true;
+        }
+        String key = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "r01";
+        EmberRunMaps.MapDef m = maps.byKey(key);
+        if (m == null || !m.raid) { p.sendMessage(P + "/corerpg p1 recruit <r01|r02> — 全服招募团本队员"); return true; }
+        if (!progressFlag(data(p.getUniqueId()), m.requires)) { p.sendMessage(P + ChatColor.RED + "先首通 " + m.requires.toUpperCase(Locale.ROOT) + " 才能开团本。"); return true; }
+        if (!EmberRunBridges.teamLeader(p)) { p.sendMessage(P + ChatColor.RED + "只有队长能招募。"); return true; }
+        long now = System.currentTimeMillis();
+        Long last = recruitAt.get(p.getUniqueId());
+        if (last != null && now - last < 60_000L) { p.sendMessage(P + ChatColor.RED + "招募 60 秒内只能发一次（还剩 " + (60 - (now - last) / 1000) + " 秒）。"); return true; }
+        if (!EmberRunBridges.hasTeam(p)) p.performCommand("dungeon-team create");
+        recruitAt.put(p.getUniqueId(), now);
+        List<UUID> team = EmberRunBridges.teamMembers(p);
+        int need = Math.max(0, maps.partyMin(m) - team.size());
+        String line = P + "§6" + p.getName() + " §f招 §e" + m.name + " §f队员（现在 " + team.size() + " 人"
+                + (need > 0 ? "，还差 " + need + " 人开本" : "，人越多越稳") + "） ";
+        int sent = 0;
+        for (Player o : Bukkit.getOnlinePlayers()) {
+            if (o.equals(p) || team.contains(o.getUniqueId())) continue;
+            if (!progressFlag(data(o.getUniqueId()), m.requires)) continue;
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(o, line,
+                    new String[]{"[申请入队]", "/corerpg p1 recruit join " + p.getName(), "向队长申请；队长同意后入队", "GREEN"});
+            sent++;
+        }
+        p.sendMessage(P + (sent > 0 ? "§a已向 " + sent + " 位已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的在线玩家发出招募；有人申请时这里会出现 [同意]。"
+                : "§7现在没有其他已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的玩家在线，稍后再试。"));
+        return true;
+    }
+
+    private final java.util.Set<UUID> warnedT3 = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>()); // D104
     private final java.util.Set<UUID> forcedReady = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
 
     /** admin test hook: the next started run uses this extra event instead of the seeded roll (one shot). */

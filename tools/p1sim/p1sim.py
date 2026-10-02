@@ -340,9 +340,10 @@ class Player:
             return
         if self._bday != self.day:
             self._bday, self._bn = self.day, 0
-        self._bn += 1
+        prev = self._bn
+        self._bn += getattr(self, 'bounty_weight', 1)  # D105: a raid clear counts as 2 (50 stamina ≈ two runs)
         for b in self.cfg.get('bounty', []):
-            if int(b.get('clears', 0)) == self._bn:
+            if prev < int(b.get('clears', 0)) <= self._bn:
                 self.coin += int(b.get('coin', 0)); self.shard += int(b.get('shard', 0))
                 self.bone += int(b.get('bone', 0)); self.core += int(b.get('core', 0))
 

@@ -99,14 +99,18 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
         tier = 1
         for d in range(7):
             if can_ch:  # re-pick the tier every day (players push up as soon as they clear)
-                tier = 1
-                for t in range(min(best + 1, len(ABYSS)), 1, -1):
+                # D104: tier 0 = the plain challenge (still open next to the abyss); a player only steps into tier 1
+                # once its estimated clear rate is >= 50 % (before D104 tier 1 equalled the challenge).
+                tier = 0
+                for t in range(min(best + 1, len(ABYSS)), 0, -1):
                     if ABYSS[t - 1]['fee'] + reserve <= p.coin and abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
                         tier = t
                         break
             for _ in range(per_day):
                 p.day = 1000 + w * 7 + d
-                if can_ch:
+                if can_ch and tier == 0:
+                    use, key = ccfg, farm_map(p, kn, ccfg, rates, max(order, key=lambda k: rates[k]))
+                elif can_ch:
                     if ABYSS[tier - 1]['fee'] + reserve > p.coin and tier > 1:
                         tier -= 1
                     use, key = acfgs[tier], order[rng.randrange(len(order))]
@@ -120,7 +124,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
                 if ok:
                     p.settle(key, extra) if use is cfg else settle_with(p, use, key, extra)
                     marks_earned += 1
-                    if use is not cfg:
+                    if use is not cfg and use is not ccfg:
                         best = max(best, tier)
                     p.invest()
         tiers_played.append(tier if can_ch else 0)
@@ -236,12 +240,14 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         p.day = 1000 + w * 7  # raids happen on the week's first day
         if raid and can_ch:  # raids only once the player can farm challenge (same gear bar as the p1party pool)
             stamina, clears, cost = 7 * per_day * cfg['run_cost'], 0, int(next(iter(RAIDS.values()))['cost'])
-            for _ in range(RAID_TRIES):
+            for ti in range(RAID_TRIES):
                 if clears >= raid_cap() or stamina < cost:
                     break
                 stamina -= cost
+                p.day = 1000 + w * 7 + ti  # D105: one raid per day (the bounty counts the raid as 2 clears)
                 if rng.random() < RAID_RATE[min(w + 1, 4)]:
                     clears += 1
+                    p.bounty_weight = 2
                     if OLD_RAID_ITEM:
                         settle_with(p, ccfg, order[-1], 'chest')  # pre-P2-9: challenge settlement + one more plain T3 roll
                     else:  # P2-9 (D82): raid_item = the player's target family, quality floor 精良
@@ -249,6 +255,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                         p.consider(p1sim.item(kn.target, 'blade' if rng.random() < 0.5 else 'charm', 3,
                                               max(RAID_FLOOR, p1sim.pick(ccfg['quality_w'], rng.random())),
                                               p1sim.pick(ccfg['craft_w'], rng.random())))
+                    p.bounty_weight = 1
                     p.marks[3] += 1; marks_earned += 2       # raid_mark + the base mark
                     p.invest()
             runs_left = stamina // cfg['run_cost']
@@ -328,6 +335,9 @@ def main():
     ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
     ap.add_argument('--normal-mods', nargs='?', const='normal', choices=['normal', 'all'], default=None,
                     help='D94: weekly rule on repeat normal runs of the featured map, in every mode (all = include casters)')
+    ap.add_argument('--every-week', action='store_true', help='print every week (default: 1, 2, 4, 6, 8, 10, 12)')
+    ap.add_argument('--ch-hp', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss HP (abyss follows)')
+    ap.add_argument('--ch-atk', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss damage (abyss follows)')
     a = ap.parse_args()
     cfg = p1config.load()
     if a.no_bounty:
@@ -342,6 +352,9 @@ def main():
     OLD_RAID_ITEM = a.old_raid_item
     RAID_FLOOR = int((RUNS.get('raid_item') or {}).get('quality_floor', 1))
     ccfg = challenge_cfg(cfg)
+    if a.ch_hp != 1.0 or a.ch_atk != 1.0:
+        import chrate
+        ccfg = chrate.scaled(ccfg, a.ch_hp, a.ch_atk)
     per_day = cfg['stamina_day'] // cfg['run_cost']
     modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ()) + (('mods',) if a.mods else ())
     res = {m: [] for m in modes}
@@ -362,7 +375,7 @@ def main():
     print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
     print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
     print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
-    for w in (1, 2, 4, 6, 8, 10, 12):
+    for w in (range(1, a.weeks + 1) if a.every_week else (1, 2, 4, 6, 8, 10, 12)):
         if w > a.weeks:
             continue
         for mode in modes:

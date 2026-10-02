@@ -146,7 +146,7 @@ public class EmberUpgradeRulesTest {
         assertEquals(2, u.quality); assertEquals(3, u.craft); assertTrue(u.bound);
         assertNull(u.validate());
         Plan p2 = EmberUpgradeRules.upgrade(u, true);
-        assertEquals(new Cost(120, 30, 12, 0, 3600), p2.cost);
+        assertEquals(new Cost(60, 15, 6, 0, 1800), p2.cost); // D104
         assertEquals("ember_v1_scorch_charm_t3", p2.after.ni);
         assertFalse(EmberUpgradeRules.upgrade(p2.after, true).ok());
         assertFalse(EmberUpgradeRules.upgrade(item("none", "blade", 0, 0, 0, 0, "quest"), true).ok());

@@ -272,6 +272,13 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "之后: " + preview(plan.after) + "（确定成功，预览即结果）");
             p.sendMessage(P + "消耗: " + plan.cost.label());
             warnT0(p, it.data);
+            if ("upgrade".equals(kind) && it.data.tier >= 1) { // D104 (midgame #3): show the other route next to the price
+                int nt = it.data.tier + 1;
+                boolean plain = it.data.quality == 0 && it.data.craft == 0;
+                p.sendMessage(P + ChatColor.AQUA + "另一条路：" + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + nt + " 印记兑换同族同部位的 T" + nt
+                        + " 标准 +0 件，再到工坊「互换」免费把强化挪过去。升阶的好处是保留成色和精工"
+                        + (plain ? "；这件是标准成色、没有精工，有印记时兑换更省。" : "（这件的成色 / 精工兑换后带不走）。"));
+            }
             if (it.data.tier == 1 && !"upgrade".equals(kind)) // D101 (midgame #4)
                 p.sendMessage(P + ChatColor.YELLOW + "T1 到 Q04 之后多半会被 T2 替换；想留着就用升阶（升阶会保留成色和精工）。");
             List<String> lack = lacking(p, plan.cost);

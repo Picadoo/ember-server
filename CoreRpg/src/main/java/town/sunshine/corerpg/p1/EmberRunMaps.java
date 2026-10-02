@@ -493,7 +493,9 @@ public final class EmberRunMaps {
 
     /** book §18.3 「必须有表列上限」: never more than ten tiers, never above these factors */
     public static final int ABYSS_MAX_TIERS = 10;
-    public static final double ABYSS_MAX_HP = 1.6, ABYSS_MAX_DMG = 1.3;
+    // D104: the challenge values were eased (HP ×0.70, damage ×0.85) and the tier factors raised by the same ratio, so
+    // the caps keep the same ABSOLUTE ceiling as before (1.6 ÷ 0.70 ≈ 2.3, 1.3 × 1.20 ≈ 1.56)
+    public static final double ABYSS_MAX_HP = 2.3, ABYSS_MAX_DMG = 1.56;
 
     public final int version;
     /** rule_version + "/b" + balance_version — what cr_p1_run.rule_version records for every run (book §23.2 / D60) */

@@ -168,7 +168,7 @@ public final class EmberUpgradeRules {
 
     public static Cost upgradeCost(int tier) {
         if (tier == 1) return new Cost(60, 12, 6, 0, 1500);
-        if (tier == 2) return new Cost(120, 30, 12, 0, 3600);
+        if (tier == 2) return new Cost(60, 15, 6, 0, 1800); // D104 (b13): halved — was 120/30/12/3600, about twice an 8-mark exchange + free swap
         return null;
     }
 
