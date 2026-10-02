@@ -40,7 +40,9 @@ public final class P1MapLayout {
     public final List<Room> rooms = new ArrayList<Room>();
     public final List<String> problems = new ArrayList<String>();
     /** Decor outside the walkable area, never enterable: {kind, a, b, c, d, y0, y1}; kind 0 = solid box x a..b z c..d with
-     *  crenellated top, kind 1 = hollow round tube centre (a, c) radius b, kind 2 = window bars in existing wall x a..b z c..d (even z). */
+     *  crenellated top, kind 1 = hollow round tube centre (a, c) radius b, kind 2 = window bars in existing wall x a..b z c..d (even z);
+     *  {3|6|7, x0, x1, z0, z1, y0, y1, id, data}: 3 = block box anywhere (also inside the cavity: covers, beams), 6 = cap on
+     *  wall tops at y0 (non-cavity cells with a block below), 7 = gable roof along z, ridge y1 at the x centre, eaves y0. */
     public final List<int[]> decor = new ArrayList<int[]>();
     /** Builder fill box (chunk aligned) and base terrain level. */
     public int boxX0, boxX1, boxZ0, boxZ1, ground = 62;
@@ -165,6 +167,8 @@ public final class P1MapLayout {
         boolean roofed = Boolean.TRUE.equals(m.get("roofed"));
         java.util.Set<String> guards = new java.util.HashSet<String>();
         if (m.get("low_guard") instanceof List) for (Object o : (List<Object>) m.get("low_guard")) guards.add(String.valueOf(o));
+        java.util.Set<String> roofs = new java.util.HashSet<String>();
+        if (m.get("roofed_rooms") instanceof List) for (Object o : (List<Object>) m.get("roofed_rooms")) roofs.add(String.valueOf(o));
         int x0 = Integer.MAX_VALUE, x1 = Integer.MIN_VALUE, z0 = Integer.MAX_VALUE, z1 = Integer.MIN_VALUE;
         for (Map<String, Object> r : rs) {
             x0 = Math.min(x0, n(r.get("x0"))); x1 = Math.max(x1, n(r.get("x1"))); z0 = Math.min(z0, n(r.get("z0"))); z1 = Math.max(z1, n(r.get("z1")));
@@ -174,7 +178,7 @@ public final class P1MapLayout {
         for (Map<String, Object> r : rs) {
             String id = String.valueOf(r.get("id"));
             if ("RB".equals(id)) rb = r;
-            boolean roof = roofed && !"R0".equals(id) || "E".equals(id);
+            boolean roof = roofed && !"R0".equals(id) || "E".equals(id) || roofs.contains(id);
             l.room(new Room(id, n(r.get("x0")), n(r.get("x1")), n(r.get("z0")), n(r.get("z1")), n(r.get("f")), n(r.get("h")), roof, guards.contains(id)));
         }
         for (Map<String, Object> c : cs) {
@@ -186,6 +190,12 @@ public final class P1MapLayout {
         if (rb != null) { // north backdrop (残门楼 / 冠冕 / 门楼): 23 wide, 16 above F, 5 deep, outside the wall, not climbable
             int cx = (n(rb.get("x0")) + n(rb.get("x1"))) / 2, zb = n(rb.get("z1")) + 3, f = n(rb.get("f"));
             l.decor.add(new int[] {0, cx - 11, cx + 11, zb, zb + 4, Math.min(l.ground, f - 1), f + 16});
+        }
+        if (m.get("decor") instanceof List) for (Object o : (List<Object>) m.get("decor")) { // B2.181 book §5 shapes
+            List<Object> d = (List<Object>) o;
+            int[] a = new int[Math.max(9, d.size())];
+            for (int i = 0; i < d.size(); i++) a[i] = n(d.get(i));
+            l.decor.add(a);
         }
         List<Object> sp = (List<Object>) m.get("spawn");
         l.spawnX = n(sp.get(0)); l.spawnF = n(sp.get(1)); l.spawnZ = n(sp.get(2));

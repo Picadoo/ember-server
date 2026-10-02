@@ -163,6 +163,8 @@ public final class P1MapBuilder {
             }
             for (int[] d : l.decor) decor(d, x, z, id, data);
         }
+        boolean cav = c != null && c.f != P1MapLayout.NONE;
+        for (int[] d : l.decor) shape(d, x, z, cav, id, data);
         int n = 0;
         for (int y = Y0; y <= Y1; y++) {
             Block b = w.getBlockAt(x, y, z);
@@ -173,6 +175,21 @@ public final class P1MapBuilder {
             n++;
         }
         return n;
+    }
+
+    /** B2.181 kinds 3 / 6 / 7 (applied after walls; 3 and 7 may sit inside the cavity, always above / beside the walk path). */
+    private static void shape(int[] d, int x, int z, boolean cavity, int[] id, byte[] data) {
+        if (d.length < 9 || x < d[1] || x > d[2] || z < d[3] || z > d[4]) return;
+        int y0 = Math.max(Y0, d[5]), y1 = Math.min(Y1, d[6]);
+        if (d[0] == 3) {
+            for (int y = y0; y <= y1; y++) { id[y - Y0] = d[7]; data[y - Y0] = (byte) d[8]; }
+        } else if (d[0] == 6) {
+            if (!cavity && y0 > Y0 && id[y0 - 1 - Y0] != AIR && id[y0 - Y0] == AIR) { id[y0 - Y0] = d[7]; data[y0 - Y0] = (byte) d[8]; }
+        } else if (d[0] == 7) {
+            double cx = (d[1] + d[2]) / 2.0, half = Math.max(1.0, (d[2] - d[1]) / 2.0);
+            int top = (int) Math.round(y0 + (y1 - y0) * (1.0 - Math.abs(x - cx) / half));
+            for (int y = Math.max(y0, top - 1); y <= Math.min(Y1, top); y++) { id[y - Y0] = d[7]; data[y - Y0] = (byte) d[8]; }
+        }
     }
 
     private static void decor(int[] d, int x, int z, int[] id, byte[] data) {
