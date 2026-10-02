@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110)
-balance_version: 15
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118)
+balance_version: 16
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -58,6 +58,34 @@ rotation:
     - {id: lean, name: 限药, potion_cap: 3, normal: true, text: 本局每人最多喝 3 瓶回复药}
     - {id: casters, name: 术者换防, remap: {ranged: caster}, text: 弓手换成术者（直线预警，躲开就不疼）}
     - {id: reverse, name: 逆行, swap_rooms: true, normal: true, text: 第一间和第三间的敌群互换（开局就是最重的一间）}
+
+# D116 (balance_version 16) seasons, display only: a season is `weeks` weeks from the Monday `anchor` (00:00 Asia/Shanghai).
+# Weekly boards (best abyss tier cleared, featured challenge clears, raid clears) reset every Monday 00:00; season boards
+# add the fastest R01 / R02 clear. At season end the top `top` of each board and everyone who cleared abyss tier
+# `deep_tier` inside the season get cosmetic-only season titles (#1 on any board also the ❖ nameplate frame); results
+# are archived in p1-runs/season-archive/. Accounts in ember-v1.yml leaderboard_exclude never rank or get awards.
+season:
+  anchor: "2026-09-28"
+  weeks: 4
+  deep_tier: 8
+  top: 3
+
+# D117 weekly goals (players with their own Q07 first clear; reset with the week): featured = featured-map challenge
+# clears (the week's rule applies there), abyss = abyss tiers cleared (any tier), raid = raid clears, bounty = days the
+# daily bounty's last step was reached. Each finished goal pays `reward` 余烬徽, all of them `bonus` more. 余烬徽 only
+# buys cosmetic-shop items (1 徽 = 1 shop point = 50 币 of list price): no coin, no marks, no items (book §23.3).
+# Model: tools/p1sim/p2econ.py --goals (what the goals make players do; the reward itself cannot move the chase).
+weekly_goals:
+  targets: {featured: 1, abyss: 3, raid: 1, bounty: 3}
+  reward: 15
+  bonus: 20
+
+# D118 one extra raid revive in the boss's last phase: after the phase change, once the boss is at or under
+# last_phase_hp of its health with someone down, every fallen member stands up `delay` seconds later (once per raid,
+# only while someone is still standing). 0 = off. Model: tools/p1sim/p1party.py --last-revive-hp 0.2 --last-revive-delay 20: R01 / R02 3-player week-2 54 % / 51 % (47 / 46 without).
+raid_revive:
+  last_phase_hp: 0.2
+  delay: 20
 
 # §18.1 challenge difficulty for all seven maps, opened by the player's OWN Q07 first clear. One shared T3 reference
 # (B_ref 90), overriding — not multiplying — the normal values; party HP 1+0.65(n−1) still applies; damage does not

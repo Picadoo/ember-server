@@ -40,6 +40,7 @@ public final class EmberRunSession {
     public final Map<UUID, Integer> fee = new LinkedHashMap<UUID, Integer>();
     public long seed;
     public long created;
+    public transient long fightStart; // D116: first room started (raid clear time; not persisted)
     public long updated;
     public String state = PREPARE;
     public String world;          // bound DP instance world

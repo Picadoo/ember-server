@@ -260,8 +260,24 @@ final class EmberRunDirector {
         for (EmberRunMaps.Skill sk : b.skills) if (sk.below <= 1.0) gated = true;
         if (gated && !phaseTold) return "首领进入第二阶段时";
         if (b.adds != null && !addsDone) return "首领半血转阶段时";
+        double hp = svc.maps().raidLastReviveHp; // D118: one extra revive in the last phase
+        if (hp > 0 && !lastRevDone) {
+            if (lastRevAt > 0) return "约 " + Math.max(1, (lastRevAt - System.currentTimeMillis() + 999) / 1000) + " 秒后（最后阶段额外一次）";
+            return "首领降到 " + Math.round(hp * 100) + "% 生命后约 " + Math.round(svc.maps().raidReviveDelay) + " 秒（最后阶段额外一次）";
+        }
         return null;
     }
+
+    /** D118: every phase change of this boss has happened */
+    private boolean lastPhase() {
+        EmberRunMaps.Boss b = def.boss;
+        boolean gated = false;
+        for (EmberRunMaps.Skill sk : b.skills) if (sk.below <= 1.0) gated = true;
+        return (!gated || phaseTold) && (b.adds == null || addsDone);
+    }
+
+    private long lastRevAt;
+    private boolean lastRevDone;
 
     private List<Player> participantsHere() {
         List<Player> out = new ArrayList<Player>();
@@ -511,6 +527,17 @@ final class EmberRunDirector {
             svc.tellRun(s, "§c" + b.name + " §7进入第二阶段：新招式「" + b.skills.get(due).name + "」！");
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
             svc.onBossPhase(s, "首领进入第二阶段"); // D106 raid revive point
+        }
+        double lrh = svc.maps().raidLastReviveHp; // D118: armed at <= lrh with someone down, once per raid
+        if (lrh > 0 && !lastRevDone && svc.isRaid(s) && lastPhase() && ratio <= lrh) {
+            if (lastRevAt == 0L && !s.died.isEmpty()) {
+                lastRevAt = now + (long) (svc.maps().raidReviveDelay * 1000);
+                svc.tellRun(s, "§e首领只剩 " + Math.round(lrh * 100) + "% 生命§7：倒下的队友约 " + Math.round(svc.maps().raidReviveDelay) + " 秒后再复活一次（本局仅此一次）");
+            }
+            if (lastRevAt > 0 && now >= lastRevAt) {
+                lastRevDone = true;
+                svc.onBossPhase(s, "最后阶段额外复活");
+            }
         }
         if (due >= 0) {
             EmberRunMaps.Skill sk = b.skills.get(due);

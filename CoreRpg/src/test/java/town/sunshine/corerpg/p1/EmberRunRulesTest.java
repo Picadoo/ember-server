@@ -304,11 +304,21 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(15, m.balanceVersion);                // D108
-        assertEquals("g04-1/b15", m.ruleVersion);
+        assertEquals(16, m.balanceVersion);                // D116–D118
+        assertEquals("g04-1/b16", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         assertEquals(1, m.rotationNormalBonusMarks);       // D108
+        assertEquals("2026-09-28", m.seasonAnchor);       // D116 seasons (display only)
+        assertEquals(4, m.seasonWeeks);
+        assertEquals(8, m.seasonDeepTier);
+        assertEquals(3, m.seasonTop);
+        assertEquals(Integer.valueOf(3), m.goalTargets.get("abyss")); // D117 weekly goals (余烬徽 only)
+        assertEquals(4, m.goalTargets.size());
+        assertEquals(15, m.goalReward);
+        assertEquals(20, m.goalBonus);
+        assertEquals(0.2, m.raidLastReviveHp, 1e-9);      // D118
+        assertEquals(20.0, m.raidReviveDelay, 1e-9);
         // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all
         assertEquals(3, m.modifiers.size());
         assertEquals(3, m.modifier("lean").potionCap);
@@ -755,7 +765,7 @@ public class EmberRunRulesTest {
         assertEquals(EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString(),
                 EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString());
         // cosmetics: no stats anywhere, abyss titles by best tier
-        assertEquals(15, EmberCosmetics.ALL.size()); // D103 + E-review #9: every main map, 深渊初探 at tier 1, 十战老兵
+        assertEquals(21, EmberCosmetics.ALL.size()); // D103 + E-review #9 + D116 six season honors
         assertEquals(1, EmberCosmetics.byId("abyss1").abyssTier);
         assertEquals(240, EmberCosmetics.byId("anim_ember").points());
         assertEquals(40, EmberCosmetics.byId("color_white").points());        // 2000 币 = 40 points
@@ -766,6 +776,20 @@ public class EmberRunRulesTest {
         assertEquals("q04", EmberCosmetics.byId("q04").firstClear);
         assertEquals(5, EmberCosmetics.byId("abyss5").abyssTier);
         assertNull(EmberCosmetics.byId("nope"));
+    }
+
+    @Test public void seasonCalendar_D116() {
+        long aw = EmberRunRules.weekIndex(java.time.LocalDate.of(2026, 9, 28));
+        assertEquals(1, EmberSeason.seasonOf(aw, 4, java.time.LocalDate.of(2026, 9, 28)));
+        assertEquals(1, EmberSeason.seasonOf(aw, 4, java.time.LocalDate.of(2026, 10, 25)));  // Sunday of week 4
+        assertEquals(2, EmberSeason.seasonOf(aw, 4, java.time.LocalDate.of(2026, 10, 26)));  // Monday → season 2
+        assertEquals(4, EmberSeason.weekInSeason(aw, 4, java.time.LocalDate.of(2026, 10, 25)));
+        assertEquals(1, EmberSeason.weekInSeason(aw, 4, java.time.LocalDate.of(2026, 10, 26)));
+        assertEquals(java.time.LocalDate.of(2026, 10, 26), EmberSeason.seasonStart(aw, 4, 2));
+        assertEquals(java.time.DayOfWeek.MONDAY, EmberSeason.seasonStart(aw, 4, 7).getDayOfWeek());
+        assertEquals(0, EmberSeason.seasonOf(aw, 4, java.time.LocalDate.of(2026, 9, 27)));
+        assertEquals("§d❖ §r", EmberCosmetics.byId("season_crown").style);
+        assertFalse(EmberCosmetics.byId("season_crown").shop());
     }
 
     @Test public void roomLineNamesTheEnemiesAndTheFirstThreat_D89() {

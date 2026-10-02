@@ -1,0 +1,342 @@
+# 余烬 v1.1 · D116 赛季与排行 + D117 周目标（源表 §13.43–13.44）— 只做展示 / 外观货币，不加属性。
+# 4 周一个赛季（周一 0 点 CST 换周），本周榜 + 赛季榜：深渊最高层、精选挑战通关、团本通关、R01/R02 最快通关；
+# 季末每榜前 3 名得赛季称号、各榜第 1 名再得 ❖ 名牌框、赛季内到深渊第 8 层得「赛季深潜者」，结果归档。
+# 周目标：精选挑战 1 · 深渊 3 层 · 团本 1 · 委托做满 3 天，每个 15 余烬徽、全完成再 +20（只能在外观商店用）。
+# 全部文字来自 PAPI（参数源 ember-v1-runs.yml season: / weekly_goals:）。入口：主菜单「荣誉与排行」左键、/ember_p1_season。
+
+Title: '§d余烬 · 赛季与周目标'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_season'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '#S  G  L#'
+  - '#1 2 3 4#'
+  - '# abcde #'
+  - '#H##B##P#'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  S:
+    update: 40
+    display:
+      material: nether star
+      name: '§d%corerpg_p1_season%'
+      lore:
+        - ''
+        - '§74 周一个赛季 · 每周一 0 点（北京时间）换周'
+        - '§7季末：每榜前 3 名得赛季称号，各榜第 1 名再得 §d❖ §7名牌框'
+        - '§7赛季内通关深渊第 8 层：称号「§5赛季深潜者§7」'
+        - '§8只做展示，不加属性 · 测试号不上榜'
+        - ''
+        - '§e➥ §f左键：本周榜（聊天栏，含你的名次）'
+        - '§e➥ §f右键：赛季榜'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
+
+  G:
+    update: 20
+    display:
+      material: book and quill
+      name: '§6本周目标：§f%corerpg_p1_goals%'
+      lore:
+        - ''
+        - '§7余烬徽：§f%corerpg_p1_badges% §8（外观商店用，1 徽 = 1 点）'
+        - '§7每完成一个 +15，全部完成再 +20'
+        - '§8周目标只给外观货币，不给币、印记或装备'
+        - ''
+        - '§e➥ §f点击：在聊天栏列出（带 [打开] 按钮）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 goals'
+
+  L:
+    update: 40
+    display:
+      material: banner
+      name: '§d上赛季结果'
+      lore:
+        - ''
+        - '§7%corerpg_p1_season_last%'
+        - ''
+        - '§e➥ §f点击：完整结果'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season last'
+
+  '1':
+    update: 20
+    display:
+      material: compass
+      name: '§6周目标 · 精选挑战'
+      lore:
+        - ''
+        - '%corerpg_p1_goal_featured%'
+        - ''
+        - '§e➥ §f点击：打开对应页面'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_challenge'
+
+  '2':
+    update: 20
+    display:
+      material: ender eye
+      name: '§6周目标 · 深渊'
+      lore:
+        - ''
+        - '%corerpg_p1_goal_abyss%'
+        - ''
+        - '§e➥ §f点击：打开对应页面'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_abyss'
+
+  '3':
+    update: 20
+    display:
+      material: iron axe
+      name: '§6周目标 · 团本'
+      lore:
+        - ''
+        - '%corerpg_p1_goal_raid%'
+        - ''
+        - '§e➥ §f点击：打开对应页面'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_adventure'
+
+  '4':
+    update: 20
+    display:
+      material: paper
+      name: '§6周目标 · 每日委托'
+      lore:
+        - ''
+        - '%corerpg_p1_goal_bounty%'
+        - ''
+        - '§e➥ §f点击：打开对应页面'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_adventure'
+
+  a:
+    update: 40
+    display:
+      material: ender eye
+      name: '§e深渊最高层'
+      lore:
+        - ''
+        - '§7本周：'
+        - '§f 1. %corerpg_p1_sboard_w_abyss_1%'
+        - '§f 2. %corerpg_p1_sboard_w_abyss_2%'
+        - '§f 3. %corerpg_p1_sboard_w_abyss_3%'
+        - '§7你：§f%corerpg_p1_srank_w_abyss%'
+        - ''
+        - '§7本赛季：'
+        - '§f 1. %corerpg_p1_sboard_s_abyss_1%'
+        - '§f 2. %corerpg_p1_sboard_s_abyss_2%'
+        - '§f 3. %corerpg_p1_sboard_s_abyss_3%'
+        - '§7你：§f%corerpg_p1_srank_s_abyss%'
+        - ''
+        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
+
+  b:
+    update: 40
+    display:
+      material: compass
+      name: '§e精选挑战通关'
+      lore:
+        - ''
+        - '§7本周：'
+        - '§f 1. %corerpg_p1_sboard_w_featured_1%'
+        - '§f 2. %corerpg_p1_sboard_w_featured_2%'
+        - '§f 3. %corerpg_p1_sboard_w_featured_3%'
+        - '§7你：§f%corerpg_p1_srank_w_featured%'
+        - ''
+        - '§7本赛季：'
+        - '§f 1. %corerpg_p1_sboard_s_featured_1%'
+        - '§f 2. %corerpg_p1_sboard_s_featured_2%'
+        - '§f 3. %corerpg_p1_sboard_s_featured_3%'
+        - '§7你：§f%corerpg_p1_srank_s_featured%'
+        - ''
+        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
+
+  c:
+    update: 40
+    display:
+      material: iron axe
+      name: '§e团本通关'
+      lore:
+        - ''
+        - '§7本周：'
+        - '§f 1. %corerpg_p1_sboard_w_raids_1%'
+        - '§f 2. %corerpg_p1_sboard_w_raids_2%'
+        - '§f 3. %corerpg_p1_sboard_w_raids_3%'
+        - '§7你：§f%corerpg_p1_srank_w_raids%'
+        - ''
+        - '§7本赛季：'
+        - '§f 1. %corerpg_p1_sboard_s_raids_1%'
+        - '§f 2. %corerpg_p1_sboard_s_raids_2%'
+        - '§f 3. %corerpg_p1_sboard_s_raids_3%'
+        - '§7你：§f%corerpg_p1_srank_s_raids%'
+        - ''
+        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
+
+  d:
+    update: 40
+    display:
+      material: rail
+      name: '§eR01 最快通关'
+      lore:
+        - ''
+        - '§7本周：'
+        - '§f 1. %corerpg_p1_sboard_w_time_r01_1%'
+        - '§f 2. %corerpg_p1_sboard_w_time_r01_2%'
+        - '§f 3. %corerpg_p1_sboard_w_time_r01_3%'
+        - '§7你：§f%corerpg_p1_srank_w_time_r01%'
+        - ''
+        - '§7本赛季：'
+        - '§f 1. %corerpg_p1_sboard_s_time_r01_1%'
+        - '§f 2. %corerpg_p1_sboard_s_time_r01_2%'
+        - '§f 3. %corerpg_p1_sboard_s_time_r01_3%'
+        - '§7你：§f%corerpg_p1_srank_s_time_r01%'
+        - ''
+        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
+
+  e:
+    update: 40
+    display:
+      material: packed ice
+      name: '§eR02 最快通关'
+      lore:
+        - ''
+        - '§7本周：'
+        - '§f 1. %corerpg_p1_sboard_w_time_r02_1%'
+        - '§f 2. %corerpg_p1_sboard_w_time_r02_2%'
+        - '§f 3. %corerpg_p1_sboard_w_time_r02_3%'
+        - '§7你：§f%corerpg_p1_srank_w_time_r02%'
+        - ''
+        - '§7本赛季：'
+        - '§f 1. %corerpg_p1_sboard_s_time_r02_1%'
+        - '§f 2. %corerpg_p1_sboard_s_time_r02_2%'
+        - '§f 3. %corerpg_p1_sboard_s_time_r02_3%'
+        - '§7你：§f%corerpg_p1_srank_s_time_r02%'
+        - ''
+        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
+
+  H:
+    display:
+      material: name tag
+      name: '§d称号与足迹'
+      lore:
+        - ''
+        - '§7当前称号：§f%corerpg_p1_title%'
+        - '§7赛季称号、❖ 名牌框也在这里装上'
+        - ''
+        - '§e➥ §f点击：查看与装上'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 title'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  P:
+    display:
+      material: emerald
+      name: '§b外观商店'
+      lore:
+        - ''
+        - '§7用余烬币、余烬徽或多出来的印记换外观'
+        - '§8只做展示，不加属性'
+        - ''
+        - '§e➥ §f点击：打开商店页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_shop'

@@ -514,6 +514,14 @@ public final class EmberRunMaps {
     public final int rotationBonusMarks, rotationWeeklyCap;
     /** D108: marks of the map tier on a repeat NORMAL clear of the featured T1/T2 map (shares rotationWeeklyCap) */
     public final int rotationNormalBonusMarks;
+    /** D116 seasons (runs yml `season:`): first Monday, weeks per season, threshold tier, places that get the top title */
+    public final String seasonAnchor;
+    public final int seasonWeeks, seasonDeepTier, seasonTop;
+    /** D117 weekly goals (runs yml `weekly_goals:`): target per goal id, 余烬徽 per goal, bonus for all of them */
+    public final Map<String, Integer> goalTargets;
+    public final int goalReward, goalBonus;
+    /** D118 raid revive (runs yml `raid_revive:`): extra last-phase revive at this boss HP ratio (0 = off), delay s */
+    public final double raidLastReviveHp, raidReviveDelay;
     public final String worldPrefix;
     public final Map<String, MapDef> maps;
     /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
@@ -606,6 +614,21 @@ public final class EmberRunMaps {
         rotationBonusMarks = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
         rotationWeeklyCap = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
         rotationNormalBonusMarks = Math.max(0, (int) num(rot.get("normal_bonus_marks"), 0));
+        Map<?, ?> sea = root.get("season") instanceof Map ? (Map<?, ?>) root.get("season") : Collections.emptyMap();
+        seasonAnchor = str(sea.get("anchor"), "2026-09-28");
+        seasonWeeks = Math.max(1, (int) num(sea.get("weeks"), 4));
+        seasonDeepTier = Math.max(1, (int) num(sea.get("deep_tier"), 8));
+        seasonTop = Math.max(1, (int) num(sea.get("top"), 3));
+        Map<?, ?> wg = root.get("weekly_goals") instanceof Map ? (Map<?, ?>) root.get("weekly_goals") : Collections.emptyMap();
+        Map<String, Integer> gt = new LinkedHashMap<String, Integer>();
+        if (wg.get("targets") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) wg.get("targets")).entrySet())
+            gt.put(String.valueOf(e.getKey()), Math.max(1, (int) num(e.getValue(), 1)));
+        goalTargets = Collections.unmodifiableMap(gt);
+        goalReward = Math.max(0, (int) num(wg.get("reward"), 0));
+        goalBonus = Math.max(0, (int) num(wg.get("bonus"), 0));
+        Map<?, ?> rv = root.get("raid_revive") instanceof Map ? (Map<?, ?>) root.get("raid_revive") : Collections.emptyMap();
+        raidLastReviveHp = clamp01(num(rv.get("last_phase_hp"), 0.0));
+        raidReviveDelay = Math.max(0.0, num(rv.get("delay"), 10.0));
         Map<?, ?> lb = root.get("loot_bias") instanceof Map ? (Map<?, ?>) root.get("loot_bias") : Collections.emptyMap();
         lootOwnFamily = clamp01(num(lb.get("own_family"), EmberRunRules.TARGET_WEIGHT));
         lootMapShare = clamp01(num(lb.get("map_share"), 0.5));

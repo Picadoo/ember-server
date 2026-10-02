@@ -1170,3 +1170,39 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 代码 | EmberRunService（`recruits` / `liveRecruits` / `recruitsLabel` → `%corerpg_p1_recruits%`、`showRecruits`、`recruit list`、拒绝监听、`settleFor` 的 `featNormal` 加 `!progressFlag(q07)`、`featuredLabel` / `ruleLine`、`joinLines`）；CoreRpgPlugin `onJoin`；ember_hub、ember_p1_adventure、ember_p1_challenge、ember-v1.yml 注释 |
 | 测试 | FreshQ2 / Q3 招募、申请、拒绝；FreshQ3 重打精选 Q01 无加成、进服消息；FreshQ1 进服消息 |
 
+### 13.43 赛季与排行（CoreRpg 1.51.0，D116，balance_version 16）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 4 周一季，锚点 2026-09-28，周一 0 点 CST 换周；本周 / 赛季榜：深渊最高层（MAX）、精选挑战通关（ADD）、团本通关（ADD）、R01 / R02 最快通关（MIN 秒）；季末每榜前 3 赛季称号、各榜第 1 ❖ 名牌框、赛季内深渊 ≥8 层「赛季深潜者」；归档；leaderboard_exclude 不上榜 |
+| 代码 | EmberSeason（`onAbyss` / `onFeatured` / `onRaid`、`top` / `rankOf`、`tick` → `finalizeSeason`、`pending` + `apply`、`seasonCommand`、`papi` 的 `season` / `season_last` / `sboard_<w|s>_<榜>_<i>` / `srank_<w|s>_<榜>`、`adminPreview` / `adminAward`）；EmberRunService `settleFor` 钩子、`season` / `goals` 子命令、`runs season preview|award|badges|goal`、`topCommand` 加赛季行；EmberRunSession `fightStart`；EmberCosmetics 6 个 season_ 荣誉（5 称号 + ❖ FLAIR）；CoreRpgPlugin 每 60 秒 `tick`、进服 `apply`；ember_p1_season、ember_hub「荣誉与排行」左键 |
+| 参数源 | ember-v1-runs.yml `season: {anchor, weeks, deep_tier, top}`；运行数据 plugins/CoreRpg/p1-runs/season.yml、season-archive/（运行文件，不入库） |
+| 测试 | EmberRunRulesTest `seasonCalendar_D116` + 解析；FreshQ4 发奖 / 装上 / 预览；FreshQ4–Q7 结算日志 not ranked |
+
+### 13.44 周目标（CoreRpg 1.51.0，D117，balance_version 16）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 首通 Q07 后每周 4 个：featured 1（精选挑战版）、abyss 3（深渊层）、raid 1、bounty 3（委托最后一档的天数）；每个 15 余烬徽、全完成 +20；徽只在外观商店用（1 徽 = 1 点） |
+| 代码 | EmberSeason（`addGoal`、`goalLine`、`goalsCommand`、PAPI `goals` / `goal_<g>` / `badges`，计数 `p3_goal_<g>@w<周>`、`p3_goalpay_*`、`p3_badge@all`）；EmberRunService `settleFor`；EmberCosmetics `buy <id> badge` |
+| 参数源 | ember-v1-runs.yml `weekly_goals: {targets, reward, bonus}`；模型 p2econ `--goals`（out-p2econ-d116-goals-*.md） |
+| 测试 | FreshQ4：精选 Q01 挑战通关计入；管理员补齐 → 80 徽；40 徽买素白 |
+
+### 13.45 团本最后阶段复活（CoreRpg 1.51.0，D118，balance_version 16）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 首领所有转阶段都过、生命 ≤20%、有人倒下 → 20 秒后复活一次（每局一次） |
+| 代码 | EmberRunDirector（`lastPhase`、`lastRevAt` / `lastRevDone`、`bossTick` 只对团本、`nextRevive` 文案）；EmberRunService `isRaid`、进本提示；ember_hub / ember_p1_adventure / ember_p1_codex 团本 lore |
+| 参数源 | ember-v1-runs.yml `raid_revive: {last_phase_hp: 0.2, delay: 20}`；p1party `--last-revive-hp` / `--last-revive-delay`（out-p1party-d118-last-revive.md） |
+| 测试 | FreshQ5–Q7 R01：转阶段复活后再倒下 → 20 秒后「最后阶段额外复活」，之后「没有复活点」 |
+
+### 13.46 外观商店页（CoreRpg 1.51.0，D119）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | TrMenu 页 ember_p1_shop：16 件图标，左键买 / 换上 / 取下，右键试穿；余烬徽可付 |
+| 代码 | EmberCosmetics `pick`、`shopLabel` → `%corerpg_p1_shop_<id>%`；ember_p1_shop.yml |
+| 参数源 | 价钱仍在 EmberCosmetics（只做展示） |
+| 测试 | FreshQ4 菜单 dump + 三种点击 |
+

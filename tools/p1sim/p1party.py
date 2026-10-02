@@ -103,7 +103,20 @@ class Party:
                 self._phase_rev = True  # D106: boss phase change revives
                 self.revive(t)
                 liv = self.living()
+            # D118: one extra revive in the last phase — armed once the boss is at <= LAST_REVIVE_HP with someone down,
+            # the fallen stand up LAST_REVIVE_DELAY s later (once per raid, only while someone is still standing)
+            if (boss is not None and LAST_REVIVE_HP > 0 and getattr(self, '_phase_rev', False) and not getattr(self, '_last_rev', False)
+                    and boss['hp'] <= LAST_REVIVE_HP * boss['max']):
+                if getattr(self, '_last_at', None) is None and len(liv) < len(self.ms):
+                    self._last_at = t + LAST_REVIVE_DELAY
+                if getattr(self, '_last_at', None) is not None and t >= self._last_at:
+                    self._last_rev = True
+                    self.revive(t)
+                    self.last_revives = getattr(self, 'last_revives', 0) + 1
+                    liv = self.living()
             cand = [m.next_swing for m in liv] + [x['next'] for x in alive if x['atk'] > 0]
+            if getattr(self, '_last_at', None) is not None and not getattr(self, '_last_rev', False) and self._last_at > t:
+                cand.append(self._last_at)
             cand += [s['next'] for s in skills] + [p[0] for p in pending]
             tn = min(cand)
             for m in liv:  # 焚烬 burn ticks (owner's B)
@@ -175,6 +188,7 @@ class Party:
 
 
 REVIVE = True  # D106 (--no-revive for the old rule)
+LAST_REVIVE_HP, LAST_REVIVE_DELAY = 0.25, 10.0  # D118 (ember-v1-runs.yml raid_revive; --last-revive-hp 0 = off)
 
 
 def run_party(cfg, m, sts, kns, rng, potions=5):
@@ -265,9 +279,16 @@ def main():
     ap.add_argument('--j', type=float, nargs='*', help='sweep dmg_per_member (enemy damage slope per extra member)')
     ap.add_argument('--atk', type=float, nargs='*', help='sweep a damage multiplier on every raid mob / boss / skill')
     ap.add_argument('--no-revive', action='store_true', help='D106 comparison: the old rule (no revive)')
+    ap.add_argument('--last-revive-hp', type=float, default=None, help='D118: extra last-phase revive at this boss HP ratio (0 = off)')
+    ap.add_argument('--last-revive-delay', type=float, default=None, help='D118: seconds from arming to the extra revive')
     a = ap.parse_args()
-    global REVIVE
+    global REVIVE, LAST_REVIVE_HP, LAST_REVIVE_DELAY
     REVIVE = not a.no_revive
+    rr = (miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('raid_revive') or {})
+    LAST_REVIVE_HP = float(rr.get('last_phase_hp', 0)) if a.last_revive_hp is None else a.last_revive_hp
+    LAST_REVIVE_DELAY = float(rr.get('delay', 10)) if a.last_revive_delay is None else a.last_revive_delay
+    if a.no_revive:
+        LAST_REVIVE_HP = 0
     cfg = p1config.load()
     pool = player_pool(cfg, a.pool, a.weeks, a.dodge)
     m = raid_map(cfg, a.raid)

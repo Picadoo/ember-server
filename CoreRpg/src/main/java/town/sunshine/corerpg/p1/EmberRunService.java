@@ -158,6 +158,11 @@ public final class EmberRunService implements Listener {
     private EmberCosmetics cosmetics;
     public void setCosmetics(EmberCosmetics c) { cosmetics = c; }
     public EmberCosmetics cosmetics() { return cosmetics; }
+
+    /** D116 seasons + D117 weekly goals (set by the plugin at enable) */
+    private EmberSeason season;
+    public void setSeason(EmberSeason v) { season = v; }
+    public EmberSeason season() { return season; }
     /** P2-10 (D84) display-only leaderboards */
     private EmberLeaderboard top;
     public void setLeaderboard(EmberLeaderboard t) { top = t; }
@@ -595,7 +600,7 @@ public final class EmberRunService implements Listener {
         potionCheck(s);
         if (vm != null && vm.raid) {
             tellRun(s, "§6团本开始 §7· " + s.partySize + " 人 · 掉落 T3 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 倒下后观战队友，下一个房间开打或首领转阶段时自动复活（50% 生命）· 走进前方房间开战 · 首领死后统一结算");
+                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 倒下后观战队友，下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次 · 走进前方房间开战 · 首领死后统一结算");
             return;
         }
         EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
@@ -683,6 +688,7 @@ public final class EmberRunService implements Listener {
 
     void onRoomStarted(EmberRunSession s, EmberRunMaps.Room r, boolean b, int spawned, int planned, String comp) {
         if (EmberRunSession.ENTERED.equals(s.state)) s.state = EmberRunSession.FIGHTING;
+        if (s.fightStart == 0L) s.fightStart = System.currentTimeMillis(); // D116 raid clear time
         store.save(s);
         // D89: say what is in the room (the A/B variant letter meant nothing to players; it stays in the log)
         tellRun(s, "§e" + r.label + " §7· 敌人 " + spawned + (spawned < planned ? "/" + planned : "") + "：" + comp);
@@ -703,6 +709,8 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ D106 raid falls: watch a teammate, revive later
 
     void onBossPhase(EmberRunSession s, String why) { reviveFallen(s, why); }
+
+    boolean isRaid(EmberRunSession s) { return raidRun(s); }
 
     private boolean raidRun(EmberRunSession s) {
         EmberRunMaps.MapDef m = maps.byKey(s.mapKey);
@@ -1065,6 +1073,18 @@ public final class EmberRunService implements Listener {
             String nm = Bukkit.getOfflinePlayer(u).getName();
             if (s.abyss > 0) top.abyssBest(u, nm, abyssBest(pd));
             if (fresh && s.challenge && s.abyss == 0 && m.key.equals(featured(today))) top.featuredClear(u, nm, week);
+        }
+        if (season != null && fresh) { // D116 season boards + D117 weekly goals (display / cosmetic currency only)
+            String nm = Bukkit.getOfflinePlayer(u).getName();
+            if (s.abyss > 0) { season.onAbyss(u, nm, s.abyss); season.addGoal(u, pd, "abyss", 1); }
+            if (s.challenge && s.abyss == 0 && m.key.equals(featured(today))) { season.onFeatured(u, nm); season.addGoal(u, pd, "featured", 1); }
+            if (m.raid) {
+                long t0 = s.fightStart > 0 ? s.fightStart : s.created;
+                season.onRaid(u, nm, m.key, t0 > 0 ? (int) Math.max(1, (System.currentTimeMillis() - t0) / 1000L) : 0);
+                season.addGoal(u, pd, "raid", 1);
+            }
+            int topClears = tiers.isEmpty() ? 0 : tiers.get(tiers.size() - 1).clears;
+            if (topClears > 0 && bountyPrev < topClears && bountyN >= topClears) season.addGoal(u, pd, "bounty", 1);
         }
         store.saveLedger(u, changed);
         plugin.getDataStore().flushMutation(u);
@@ -1777,7 +1797,7 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ commands
 
     public static final java.util.Set<String> OPS = new java.util.HashSet<String>(java.util.Arrays.asList(
-            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit", "watch"));
+            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit", "watch", "season", "goals"));
 
     public boolean cmd(CommandSender s, String sub, String[] args) {
         switch (sub) {
@@ -1797,6 +1817,12 @@ public final class EmberRunService implements Listener {
             case "abyss": return cmdAbyss(s, args);
             case "recruit": return cmdRecruit(s, args); // D104 (midgame #5)
             case "watch": return cmdWatch(s); // D106
+            case "season": // D116
+                if (!(s instanceof Player) || season == null) return true;
+                return season.seasonCommand((Player) s, args);
+            case "goals": // D117
+                if (!(s instanceof Player) || season == null) return true;
+                return season.goalsCommand((Player) s);
             default:
                 return cmdRuns(s, args);
         }
@@ -2112,6 +2138,7 @@ public final class EmberRunService implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoinRecruits(org.bukkit.event.player.PlayerJoinEvent e) {
         final Player p = e.getPlayer();
+        if (season != null) Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) season.apply(p); }, 60L); // D116
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!p.isOnline() || !progressFlag(data(p.getUniqueId()), "q07") || liveRecruits().isEmpty()) return;
             showRecruits(p, false);
@@ -2159,6 +2186,28 @@ public final class EmberRunService implements Listener {
             plugin.getDataStore().flushMutation(t.getUniqueId());
             s.sendMessage(P + t.getName() + " T" + tier + " 锻造印记 = " + marks(d, tier));
             log().info("[P1 run] admin " + s.getName() + " marks " + t.getName() + " T" + tier + " " + n + " → " + marks(d, tier));
+            return true;
+        }
+        if (admin && "season".equals(op) && season != null) { // D116/D117 test hooks
+            // runs season preview · runs season award <玩家> <id> · runs season badges <玩家> <n> · runs season goal <玩家> <goal> <n>
+            String w = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "preview";
+            if ("preview".equals(w)) { season.adminPreview(s); return true; }
+            Player t = args.length >= 5 ? Bukkit.getPlayerExact(args[4]) : null;
+            if (t == null) { s.sendMessage(P + "/corerpg p1 runs season preview|award|badges|goal <在线玩家> ..."); return true; }
+            PlayerData td = data(t.getUniqueId());
+            if ("award".equals(w) && args.length >= 6) {
+                EmberCosmetics.Cosmetic c = EmberCosmetics.byId(args[5]);
+                if (c == null || !c.id.startsWith("season_")) { s.sendMessage(P + "没有这个赛季奖励：" + args[5]); return true; }
+                season.adminAward(t, c.id);
+            } else if ("badges".equals(w) && args.length >= 6) {
+                td.addPeriodCount(EmberSeason.C_BADGE, "all", Integer.parseInt(args[5]));
+                flushData(t.getUniqueId());
+            } else if ("goal".equals(w) && args.length >= 7) {
+                season.addGoal(t.getUniqueId(), td, args[5], Integer.parseInt(args[6]));
+                flushData(t.getUniqueId());
+            } else { s.sendMessage(P + "参数不对"); return true; }
+            s.sendMessage(P + "ok · " + t.getName() + " 余烬徽 " + EmberSeason.badges(td) + " · 周目标 " + season.goalsDone(td) + "/" + season.goalCount());
+            log().info("[P1 season] admin " + s.getName() + " " + String.join(" ", args));
             return true;
         }
         if (admin && "weaken".equals(op) && args.length >= 4) { // test hook: runs weaken <玩家> — every live mob of that run → 1 HP
@@ -2336,6 +2385,11 @@ public final class EmberRunService implements Listener {
             p.sendMessage(P + "§e你：§f深渊 " + (ra == null ? "未上榜（最高第 " + abyssBest(data(me.getUniqueId())) + " 层）" : "第 " + ra[1] + " 层 · 第 " + ra[0] + " 名")
                     + " §7｜ §f精选 " + (rf == null ? "本周还没有挑战通关" : rf[1] + " 次 · 第 " + rf[0] + " 名"));
             p.sendMessage(P + "§8同分时先达到的人排前面 · 测试号不上榜");
+            if (season != null) { // D116
+                p.sendMessage(P + "§d" + season.seasonLabel() + " §7· 赛季榜加了团本通关和最快通关");
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(me, P, new String[]{"[赛季榜]", "/corerpg p1 season season", "4 周一季，季末前 3 名得称号", "LIGHT_PURPLE"},
+                        new String[]{"[本周榜]", "/corerpg p1 season week", "", "YELLOW"}, new String[]{"[周目标]", "/corerpg p1 goals", "", "GREEN"});
+            }
         }
         return true;
     }
@@ -2432,6 +2486,11 @@ public final class EmberRunService implements Listener {
             EmberLeaderboard.Row r = rows.get(i - 1);
             return r.name + " · " + (ab ? "第 " + r.value + " 层" : r.value + " 次");
         }
+        if (season != null && (key.startsWith("goal") || key.startsWith("season") || key.startsWith("sboard_") || key.startsWith("srank_") || "badges".equals(key))) {
+            String v = season.papi(p == null ? null : p.getUniqueId(), d, key); // D116 / D117
+            if (v != null) return v;
+        }
+        if (key.startsWith("shop_") && cosmetics != null) return cosmetics.shopLabel(p == null ? null : p.getUniqueId(), d, key.substring(5)); // D119
         if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleMenuText(d); // P2-9 %corerpg_p1_title% (D103: never empty)
         if ("honors".equals(key)) return cosmetics == null ? "0/0" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size();
         if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm) + lootOdds(d, lm); }

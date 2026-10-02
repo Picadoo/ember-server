@@ -86,7 +86,31 @@ def abyss_rate(acfg, st, kn, rng, n=3):
     return statistics.mean(p1sim.clear_rate(acfg, k, st, kn, n, seed=rng.randrange(1 << 30)) for k in order)
 
 
-def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
+def raid_once(cfg, ccfg, kn, p, rng, w, want=1):
+    """D116 weekly goal: raid entries until `want` clears this week (one per day, 50 stamina each); returns stamina used."""
+    cost, clears, used = int(next(iter(RAIDS.values()))['cost']), 0, 0
+    for ti in range(RAID_TRIES):
+        if clears >= want:
+            break
+        used += cost
+        p.day = 1000 + w * 7 + ti
+        if rng.random() < RAID_RATE[min(w + 1, 4)]:
+            clears += 1
+            p.bounty_weight = 2
+            settle_with(p, ccfg, ccfg['order'][-1], 'none')
+            p.consider(p1sim.item(kn.target, 'blade' if rng.random() < 0.5 else 'charm', 3,
+                                  max(RAID_FLOOR, p1sim.pick(ccfg['quality_w'], rng.random())),
+                                  p1sim.pick(ccfg['craft_w'], rng.random())))
+            p.bounty_weight = 1
+            p.marks[3] += 1
+            p.invest()
+    return used
+
+
+GOALS = {'featured': 1, 'abyss': 3, 'raid': 1}  # D116 weekly goals that change what a player does (rewards: cosmetic only)
+
+
+def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=False):
     """P2-2 policy: like phase2 until challenge is viable; then every run is an abyss segment at the highest open tier
     (best cleared + 1) whose estimated clear rate is >= 50 % and whose fee leaves `reserve` coins; tier 1 otherwise.
     The fee is paid per started segment (a failed segment keeps it, like stamina)."""
@@ -97,6 +121,22 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
         can_ch = max(rates.values()) >= 0.5
         tier = 1
+        skip = 0
+        if goals and can_ch:  # D116: the week's raid and one featured challenge clear come out of the same stamina
+            featured = order[(w + 3) % len(order)]
+            skip = (raid_once(cfg, ccfg, kn, p, rng, w, GOALS['raid']) + cfg['run_cost'] - 1) // cfg['run_cost']
+            for _ in range(3):  # up to three tries at the featured challenge
+                skip += 1
+                p.buy_potions()
+                ok, used, extra, *_ = p1sim.run_map(ccfg, featured, p.st(), kn, rng, p.potions)
+                p.potions -= used
+                ch_runs += 1
+                if ok:
+                    p.marks[3] += ROT['bonus_marks']
+                    settle_with(p, ccfg, featured, extra)
+                    marks_earned += 1
+                    p.invest()
+                    break
         for d in range(7):
             if can_ch:  # re-pick the tier every day (players push up as soon as they clear)
                 # D104: tier 0 = the plain challenge (still open next to the abyss); a player only steps into tier 1
@@ -112,6 +152,9 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
                         tier = t
                         break
             for _ in range(per_day):
+                if skip > 0:
+                    skip -= 1
+                    continue
                 p.day = 1000 + w * 7 + d
                 if can_ch and tier == 0:
                     use, key = ccfg, farm_map(p, kn, ccfg, rates, max(order, key=lambda k: rates[k]))
@@ -251,7 +294,7 @@ def raid_cap():
     return sum(groups.values())
 
 
-def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=False, raid=False, mods=False, stats=None):
+def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=False, raid=False, mods=False, stats=None, goals=False):
     """Each week: if the player clears some challenge map >= 50 % of the time it farms challenge (featured first when
     rotating), otherwise it farms Q07 normal (T3). As on the server, the bonus only pays on challenge clears."""
     order = ccfg['order']
@@ -303,6 +346,29 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                     p.marks[3] += 1; marks_earned += 2       # raid_mark + the base mark
                     p.invest()
             runs_left = stamina // cfg['run_cost']
+        if goals and can_ch:  # D116: three abyss tiers a week (highest open tier the player clears >= 50 %, else tier 1)
+            abest = getattr(p, 'abyss_best', 0)
+            acfgs = getattr(p, '_acfgs', None) or {t: abyss_cfg(ccfg, t) for t in range(1, len(ABYSS) + 1)}
+            p._acfgs = acfgs
+            for _ in range(GOALS['abyss']):
+                tier = 1
+                for t in range(min(abest + 1, len(ABYSS)), 0, -1):
+                    if ABYSS[t - 1]['fee'] + 1000 <= p.coin and abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
+                        tier = t
+                        break
+                runs_left -= 1
+                p.coin -= ABYSS[tier - 1]['fee']
+                p.buy_potions()
+                akey = order[rng.randrange(len(order))]
+                ok, used, extra, *_ = p1sim.run_map(acfgs[tier], akey, p.st(), kn, rng, p.potions)
+                p.potions -= used
+                ch_runs += 1
+                if ok:
+                    settle_with(p, acfgs[tier], akey, extra)
+                    abest = max(abest, tier)
+                    marks_earned += 1
+                    p.invest()
+            p.abyss_best = abest
         for i in range(runs_left):
             p.day = 1000 + w * 7 + i * 7 // max(1, runs_left)
             if can_ch:
@@ -383,6 +449,7 @@ def main():
     ap.add_argument('--feat-farm', action='store_true', help='D108: phase-1 players detour to the featured map for the bonus')
     ap.add_argument('--feat-separate', action='store_true', help='D108 variant: the normal bonus has its own weekly cap')
     ap.add_argument('--raid-rate', default='revive', choices=sorted(RAID_RATES), help='D106: raid clear rate table')
+    ap.add_argument('--goals', action='store_true', help='D116: add weekly-goal columns (raid + goals, abyss + goals)')
     ap.add_argument('--every-week', action='store_true', help='print every week (default: 1, 2, 4, 6, 8, 10, 12)')
     ap.add_argument('--ch-hp', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss HP (abyss follows)')
     ap.add_argument('--ch-atk', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss damage (abyss follows)')
@@ -410,7 +477,7 @@ def main():
         import chrate
         ccfg = chrate.scaled(ccfg, a.ch_hp, a.ch_atk)
     per_day = cfg['stamina_day'] // cfg['run_cost']
-    modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ()) + (('mods',) if a.mods else ())
+    modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ()) + (('mods',) if a.mods else ()) + (('goals',) if a.goals and a.raid else ()) + (('abyssg',) if a.goals and a.abyss else ())
     res = {m: [] for m in modes}
     stats = {}
     for i in range(a.players):
@@ -423,11 +490,11 @@ def main():
             if p is None:
                 continue
             kn.swap = not a.no_swap  # §6.3 free enhance-track swap: late-game players re-equip better-quality drops
-            if mode == 'abyss':
-                res[mode].append(phase2_abyss(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, per_day))
+            if mode in ('abyss', 'abyssg'):
+                res[mode].append(phase2_abyss(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, per_day, goals=mode == 'abyssg'))
             else:
-                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode in ('rot', 'raid', 'mods'), per_day, runs,
-                                        trade=mode == 'trade', raid=mode == 'raid', mods=mode == 'mods',
+                res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode in ('rot', 'raid', 'mods', 'goals'), per_day, runs,
+                                        trade=mode == 'trade', raid=mode in ('raid', 'goals'), mods=mode == 'mods', goals=mode == 'goals',
                                         stats=stats if mode == 'mods' else None))
     print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
     print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
@@ -441,14 +508,14 @@ def main():
                 continue
             n = len(rows)
             print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d%% | %d | %d | %.1f | %d%% | %s | %s |' % (
-                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易', 'raid': '轮换 + 团本', 'mods': '轮换 + 周规则'}[mode], round(100 * sum(r['set'] for r in rows) / n),
+                w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易', 'raid': '轮换 + 团本', 'mods': '轮换 + 周规则', 'goals': '团本 + 周目标', 'abyssg': '深渊 + 周目标'}[mode], round(100 * sum(r['set'] for r in rows) / n),
                 statistics.median(r['enh'] for r in rows), round(100 * sum(r['q'] >= 2 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 2 for r in rows) / n), round(100 * sum(r['q'] >= 3 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 3 for r in rows) / n),
                 statistics.median(r['coin'] for r in rows), statistics.median(r['marks'] for r in rows),
                 statistics.median(r['B'] for r in rows), round(100 * statistics.mean(r['ch'] for r in rows) / (w * 7 * per_day)),
-                ('%d' % statistics.median(r['best'] for r in rows)) if mode == 'abyss' else '—',
-                ('%d' % statistics.median(r['fees'] for r in rows)) if mode == 'abyss' else '—'))
+                ('%d' % statistics.median(r['best'] for r in rows)) if mode in ('abyss', 'abyssg') else '—',
+                ('%d' % statistics.median(r['fees'] for r in rows)) if mode in ('abyss', 'abyssg') else '—'))
 
     if a.abyss and res['abyss']:
         rows = [r[-1] for r in res['abyss']]

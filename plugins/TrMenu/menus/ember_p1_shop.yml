@@ -1,0 +1,421 @@
+# 余烬 v1.1 · D119 外观商店页（D107 外观商店 + E-review #2 印记外观 + D117 余烬徽）— 只做展示，不加属性。
+# 每件一个图标：状态 / 价格来自 PAPI %corerpg_p1_shop_<id>%；左键 = 没有就打开购买（聊天栏按付款方式出按钮），
+# 有了就换上 / 取下；右键 = 试穿 10 秒。付款与校验全在服务端（/corerpg p1 cosmetic pick|try <id>）。
+# 入口：赛季页「外观商店」、/ember_p1_shop；聊天版仍是 /corerpg p1 cosmetic。
+
+Title: '§b余烬 · 外观商店'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_shop'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#abcde###'
+  - '#fgh#ijk#'
+  - '#lmn#op##'
+  - '##H#B#T##'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: chest
+      name: '§b外观商店 §8（只做展示，不加属性）'
+      lore:
+        - ''
+        - '§7余烬币：§f%corerpg_coin%'
+        - '§7余烬徽：§f%corerpg_p1_badges% §8（周目标奖励，1 徽 = 1 点）'
+        - '§7多出来的印记也能付：T1 1 点 · T2 2 点 · T3 4 点（每阶留 8 枚备用兑换）'
+        - '§71 点 = 50 币标价 · 买一次永久有，不回收'
+        - ''
+        - '§e➥ §f左键：没有就购买 / 有了就换上或取下'
+        - '§e➥ §f右键：试穿 10 秒'
+
+  a:
+    update: 20
+    display:
+      material: paper
+      name: '§f素白'
+      lore:
+        - '§7称号颜色：已有称号换成白色'
+        - ''
+        - '%corerpg_p1_shop_color_white%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick color_white'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try color_white'
+
+  b:
+    update: 20
+    display:
+      material: gold nugget
+      name: '§6金辉'
+      lore:
+        - '§7称号颜色：已有称号换成金色'
+        - ''
+        - '%corerpg_p1_shop_color_gold%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick color_gold'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try color_gold'
+
+  c:
+    update: 20
+    display:
+      material: prismarine shard
+      name: '§b霜青'
+      lore:
+        - '§7称号颜色：已有称号换成青色'
+        - ''
+        - '%corerpg_p1_shop_color_aqua%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick color_aqua'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try color_aqua'
+
+  d:
+    update: 20
+    display:
+      material: redstone
+      name: '§c绯焰'
+      lore:
+        - '§7称号颜色：已有称号换成红色'
+        - ''
+        - '%corerpg_p1_shop_color_red%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick color_red'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try color_red'
+
+  e:
+    update: 20
+    display:
+      material: ender pearl
+      name: '§d紫晶'
+      lore:
+        - '§7称号颜色：已有称号换成紫色'
+        - ''
+        - '%corerpg_p1_shop_color_purple%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick color_purple'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try color_purple'
+
+  f:
+    update: 20
+    display:
+      material: flint
+      name: '§7灰烬'
+      lore:
+        - '§7足迹：脚下一缕灰烟（朴素足迹）'
+        - ''
+        - '%corerpg_p1_shop_trail_ash%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick trail_ash'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try trail_ash'
+
+  g:
+    update: 20
+    display:
+      material: glowstone dust
+      name: '§e星屑'
+      lore:
+        - '§7足迹：脚下一点星光'
+        - ''
+        - '%corerpg_p1_shop_trail_spark%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick trail_spark'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try trail_spark'
+
+  h:
+    update: 20
+    display:
+      material: emerald
+      name: '§a萤绿'
+      lore:
+        - '§7足迹：脚下一点绿光'
+        - ''
+        - '%corerpg_p1_shop_trail_leaf%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick trail_leaf'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try trail_leaf'
+
+  i:
+    update: 20
+    display:
+      material: gold ingot
+      name: '§6✦'
+      lore:
+        - '§7名牌标记：名牌前的金星（主城和野外显示）'
+        - ''
+        - '%corerpg_p1_shop_flair_star%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick flair_star'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try flair_star'
+
+  j:
+    update: 20
+    display:
+      material: packed ice
+      name: '§b❄'
+      lore:
+        - '§7名牌标记：名牌前的雪花'
+        - ''
+        - '%corerpg_p1_shop_flair_snow%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick flair_snow'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try flair_snow'
+
+  k:
+    update: 20
+    display:
+      material: gold helmet
+      name: '§e♛'
+      lore:
+        - '§7名牌标记：名牌前的王冠'
+        - ''
+        - '%corerpg_p1_shop_flair_crown%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick flair_crown'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try flair_crown'
+
+  l:
+    update: 20
+    display:
+      material: blaze powder
+      name: '§6余烬辉光'
+      lore:
+        - '§7武器辉光：主城里手持的刃冒火星（只用印记 / 徽）'
+        - ''
+        - '%corerpg_p1_shop_glow_ember%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick glow_ember'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try glow_ember'
+
+  m:
+    update: 20
+    display:
+      material: nether star
+      name: '§f星辉'
+      lore:
+        - '§7武器辉光：主城里手持的刃绕着白光（只用印记 / 徽）'
+        - ''
+        - '%corerpg_p1_shop_glow_star%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick glow_star'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try glow_star'
+
+  n:
+    update: 20
+    display:
+      material: magma cream
+      name: '§5紫焰辉光'
+      lore:
+        - '§7武器辉光：主城里手持的刃冒紫焰（只用印记 / 徽）'
+        - ''
+        - '%corerpg_p1_shop_glow_witch%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick glow_witch'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try glow_witch'
+
+  o:
+    update: 20
+    display:
+      material: blaze rod
+      name: '§6流§c火'
+      lore:
+        - '§7称号动效：火色流光（要先装上称号）'
+        - ''
+        - '%corerpg_p1_shop_anim_ember%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick anim_ember'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try anim_ember'
+
+  p:
+    update: 20
+    display:
+      material: quartz
+      name: '§b霜§f光'
+      lore:
+        - '§7称号动效：霜色流光（要先装上称号）'
+        - ''
+        - '%corerpg_p1_shop_anim_frost%'
+        - ''
+        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic pick anim_frost'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic try anim_frost'
+
+  H:
+    display:
+      material: name tag
+      name: '§d称号与足迹'
+      lore:
+        - ''
+        - '§7当前称号：§f%corerpg_p1_title%'
+        - ''
+        - '§e➥ §f点击：查看与装上'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 title'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回赛季与周目标'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_p1_season'
+
+  T:
+    display:
+      material: book
+      name: '§7聊天栏版商店'
+      lore:
+        - ''
+        - '§7完整列表 + 付款按钮'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic'

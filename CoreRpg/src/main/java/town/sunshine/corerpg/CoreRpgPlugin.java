@@ -227,6 +227,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             emberRuns.setLeaderboard(new town.sunshine.corerpg.p1.EmberLeaderboard(getDataFolder(), getLogger())); // P2-10 (D84)
             Bukkit.getPluginManager().registerEvents(cos, this);
             Bukkit.getScheduler().runTaskTimer(this, cos::tick, 40L, 4L);
+            final town.sunshine.corerpg.p1.EmberSeason season = new town.sunshine.corerpg.p1.EmberSeason(emberRuns, getDataFolder(), getLogger()); // D116/D117
+            emberRuns.setSeason(season);
+            Bukkit.getScheduler().runTaskTimer(this, season::tick, 200L, 1200L);
         }
         emberRuns.start();
         emberCommand.setRuns(emberRuns);
