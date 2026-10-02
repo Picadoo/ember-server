@@ -130,7 +130,7 @@ public final class HubAmbienceService implements Listener {
             List<EmberLeaderboard.Row> f = runs.topRows(false, n);
             if (f.isEmpty()) lines.add("§8暂无，第一名等你");
             for (int i = 0; i < f.size(); i++) lines.add(medal(i) + f.get(i).name + " §7" + f.get(i).value + " 次");
-            lines.add("§8完整榜单：/corerpg p1 top");
+            lines.add("§8完整榜单：图录 → 装备图鉴 → 荣誉（右键）");
             replace(board, loc(w, b.getList("at")), lines);
         }
         ConfigurationSection hs = cfg.getConfigurationSection("honors");
@@ -143,7 +143,7 @@ public final class HubAmbienceService implements Listener {
                 lines.add(c.label + " §8· §7" + c.how);
                 lines.add(who.isEmpty() ? "§8  尚无人获得" : "§7  首位 §f" + who.get(0) + " §7· 共 " + who.size() + " 人");
             }
-            lines.add("§8装上：图录 → 荣誉 或 /corerpg p1 title");
+            lines.add("§8装上：图录 → 装备图鉴 → 荣誉");
             replace(honors, loc(w, hs.getList("at")), lines);
         }
     }

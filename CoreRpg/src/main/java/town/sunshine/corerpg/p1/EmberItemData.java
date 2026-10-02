@@ -165,6 +165,14 @@ public final class EmberItemData {
 
     // ------------------------------------------------------------------ display helpers
 
+    /** D98: the one shared one-line description of each set family (chat buttons, help page and gear page say the same) */
+    public static String familyBlurb(String fam) {
+        if ("scorch".equals(fam)) return "焚烬：每 3 次普攻点燃敌人（持续伤害），适合打首领";
+        if ("burst".equals(fam)) return "烬爆：每 5 次普攻炸开一圈（3 格范围伤害），适合清一群";
+        if ("sustain".equals(fam)) return "炽愈：生命 ×1.12，每 5 次普攻回一点血，最稳";
+        return "";
+    }
+
     public static String familyName(String fam) {
         if ("scorch".equals(fam)) return "焚烬";
         if ("burst".equals(fam)) return "烬爆";

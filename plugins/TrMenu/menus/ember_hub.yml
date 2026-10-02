@@ -16,7 +16,7 @@ Layout:
   - ' n o p F '
   - ' m X k i '
   - ' R c Y d '
-  - '  A j G h'
+  - '  A G h j'
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -25,6 +25,12 @@ Events:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
   h:
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: stained glass pane
+          name: '§8 '
     update: 20
     display:
       material: diamond chestplate
@@ -33,7 +39,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_raid_r02%'
         - '§7Q06 的地图 · 首领双段刀气 + 追身冲击圈；半血进入第二阶段（砸地接横扫）'
-        - '§7同一伤害管道与三套装 · 不加属性；通关得专属称号与足迹（只做展示）'
+        - '§7战斗规则和三套装不变；通关得专属称号与足迹（只做展示）'
         - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
         - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'
         - '§7结算同锈轨矿道·团：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
@@ -53,7 +59,7 @@ Icons:
       lore:
         - ''
         - '§a下一步：§f%corerpg_p1_next%'
-        - '§7新模式主线本 Q01–Q07 + 挑战版：解锁状态、消耗、掉落阶与用途'
+        - '§7主线本 Q01–Q07：解锁状态、消耗、掉落与用途'
         - '§7掉落目标族 · 锻造印记 · 首通自选 · 补领'
         - '§8每次 30 体力 · 1～3 人'
         - ''
@@ -85,7 +91,7 @@ Icons:
       name: '§6工坊 · 主线本装备'
       lore:
         - ''
-        - '§7手持 P1 装备：强化 / 升阶 / 精工 / 成色 / 互换 / 分解'
+        - '§7手持刃或护符：强化 / 升阶 / 精工 / 成色 / 互换 / 分解'
         - '§8先预览，再点确认'
         - ''
         - '§e➥ §f打开工坊'
@@ -95,6 +101,24 @@ Icons:
         - 'menu: ember_p1_forge'
 
   A:
+    icons:
+      # D99: before the player's own Q07 first clear the post-Q07 content is one locked icon (the others are blank)
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7Q07 之后：挑战 / 深渊 / 团本'
+          lore:
+            - ''
+            - '§7首通 Q07 锈轨矿道后开放：'
+            - '§7· 七图挑战版（更强的敌人，掉 T3）'
+            - '§7· 深渊 · 余烬层（十层，越深越难）'
+            - '§7· 团本两张（3～5 人，每周 3 次）'
+            - ''
+            - '§a现在：§f%corerpg_p1_next%'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
     update: 20
     display:
       material: ender eye
@@ -110,6 +134,12 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_abyss'
   G:
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: stained glass pane
+          name: '§8 '
     update: 20
     display:
       material: iron chestplate
@@ -119,7 +149,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_raid_r01%'
         - '§7Q07 的地图与首领招式组合（重砸 / 冲撞 / 斧刃横扫 + 半血增援）'
         - '§7与霜封哨所·团合计每周 3 次'
-        - '§7同一伤害管道与三套装 · 不加属性；通关得专属称号与足迹（只做展示）'
+        - '§7战斗规则和三套装不变；通关得专属称号与足迹（只做展示）'
         - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
         - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'
         - '§7结算：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
@@ -136,7 +166,7 @@ Icons:
       name: '§3图录'
       lore:
         - ''
-        - '§7主线七个首领的招式与躲法 · 使魔图鉴'
+        - '§7主线七个首领的招式与躲法 · 装备图鉴 · 荣誉'
         - '§8只做展示，不加属性'
         - ''
         - '§e➥ §f打开图录菜单'
@@ -155,14 +185,14 @@ Icons:
         - '§7随时按 §e潜行 + Q §7释放（进服已默认装配）'
         - '§8当前 §f%corerpg_flex_skill_name%'
         - ''
-        - '§e➥ §f左键：轻技页 · 右键：帮助'
+        - '§e➥ §f左键：轻技页 · 右键：帮助 · Shift+点击：立即踏步'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_flex_skill'
       right:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_flex_skill'
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_help'
       shift_left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg flex cast'
@@ -177,7 +207,7 @@ Icons:
       name: '§3仓库'
       lore:
         - ''
-        - '§7扩展存储；勋阶可提升格数'
+        - '§7扩展存储'
         - '§8材料仓 · 点此打开'
         - '§8绑定与流通分仓'
         - ''
@@ -193,11 +223,9 @@ Icons:
       name: '§a补给 · 生活'
       lore:
         - ''
-        - '§7面包 / 钓竿（余烬币）· 代烤鱼 · 熬回复药'
-        - '§7遗物换重铸石 · 宝珠制稳固符（每周限次）'
+        - '§7面包 / 钓竿 · 代烤鱼 · 用鱼熬回复药'
+        - '§7回复药也能直接买：装备页或右键补给官 · 灰粮（10 币一瓶）'
         - '§8钓鱼 / 烹饪 / 熬药 提升生活等级'
-        - '§8点击打开补给与生活面板'
-        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
         - ''
         - '§e➥ §f打开补给菜单'
     actions:
@@ -226,7 +254,6 @@ Icons:
         - ''
         - '§7领取系统邮件、维护补偿和背包满时转来的结算材料'
         - '§8奖励统一进邮箱'
-        - '§7打开邮寄'
         - ''
         - '§e➥ §f打开邮寄菜单'
     actions:
@@ -241,8 +268,6 @@ Icons:
       lore:
         - ''
         - '§7好友列表与组队邀请入口'
-        - '§8可接师徒（可选）'
-        - '§7好友'
         - ''
         - '§e➥ §f打开好友菜单'
     actions:
@@ -257,7 +282,6 @@ Icons:
         - ''
         - '§7加入或创建公会，做盟课、打盟 Boss'
         - '§8创建 · 捐献 · 盟 Boss'
-        - '§7盟约与捐献'
         - ''
         - '§e➥ §f打开盟约菜单'
     actions:
@@ -272,7 +296,6 @@ Icons:
         - ''
         - '§7音效、提示与隐私等个人选项'
         - '§8低优先级个人选项'
-        - '§7设置'
         - ''
         - '§e➥ §f打开设置菜单'
     actions:

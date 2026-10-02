@@ -68,6 +68,25 @@ public final class ConfirmTokens {
         sendClick(p, prefix, label, command, hover, false);
     }
 
+    /**
+     * One chat line with several clickable buttons. Each button is {label, command, hover, color} where color is a
+     * bungee color name (GREEN, RED, YELLOW…); command may be null for plain text.
+     */
+    public static void sendButtons(Player p, String prefix, String[]... buttons) {
+        java.util.List<net.md_5.bungee.api.chat.BaseComponent> parts = new java.util.ArrayList<net.md_5.bungee.api.chat.BaseComponent>();
+        parts.add(new TextComponent(prefix));
+        for (String[] b : buttons) {
+            TextComponent btn = new TextComponent(b[0]);
+            try { btn.setColor(net.md_5.bungee.api.ChatColor.valueOf(b.length > 3 && b[3] != null ? b[3] : "RED")); } catch (IllegalArgumentException ignored) { }
+            btn.setBold(true);
+            if (b[1] != null) btn.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, b[1]));
+            if (b.length > 2 && b[2] != null) btn.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(b[2]).create()));
+            parts.add(btn);
+            parts.add(new TextComponent(" "));
+        }
+        p.spigot().sendMessage(parts.toArray(new net.md_5.bungee.api.chat.BaseComponent[0]));
+    }
+
     private static void sendClick(Player p, String prefix, String label, String command, String hover, boolean ttl) {
         TextComponent head = new TextComponent(prefix);
         TextComponent btn = new TextComponent(label);

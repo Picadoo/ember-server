@@ -723,6 +723,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (lines != null) {
             for (Object o : lines) if (o != null) player.sendMessage(color(String.valueOf(o)));
         }
+        if (town.sunshine.corerpg.p1.EmberMode.active()) // D99: open the menus by clicking, never by typing /ember
+            ConfirmTokens.sendButtons(player, "§7",
+                    new String[]{"[主菜单]", "/ember", "冒险 · 装备 · 工坊 · 帮助都在这里", "GOLD"},
+                    new String[]{"[冒险页]", "/ember_p1_adventure", "选图进副本（和右键门吏 · 灰钥一样）", "GREEN"},
+                    new String[]{"[帮助]", "/ember_help", "怎么玩 · 操作 · 三套装 · 变强", "AQUA"});
         Bukkit.getScheduler().runTaskLater(this, new Runnable() {
             @Override public void run() {
                 if (player.isOnline()) refreshBoard(player);

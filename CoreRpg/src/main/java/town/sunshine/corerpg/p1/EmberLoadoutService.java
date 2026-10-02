@@ -284,7 +284,7 @@ public final class EmberLoadoutService implements Listener {
     private void codex(Player p, EmberItemData d) {
         PlayerData pd;
         try { pd = plugin.getDataStore().get(p.getUniqueId()); } catch (Throwable t) { return; }
-        if (pd != null && EmberCodex.register(pd, d))
+        if (pd != null && EmberCodex.register(pd, d) && d.tier > 0) // D99: the two starter pieces register silently
             p.sendMessage("§6[图录] §f登记 T" + d.tier + " " + EmberItemData.familyName(d.tier == 0 ? "none" : d.family)
                     + EmberItemData.slotName(d.slot) + " §7（" + EmberCodex.count(pd) + "/" + EmberCodex.ENTRIES.size() + "，主菜单 图录 → 装备图鉴）");
     }

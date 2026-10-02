@@ -84,14 +84,14 @@ public final class EmberCosmetics implements Listener {
         int n = d.addPeriodCount(C_EARNED + raid, "all", 1);
         if (n == 1 && p != null && p.isOnline()) {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
-                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，图录装备页「荣誉」或 /corerpg p1 title 装上）");
+                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，图录 → 装备图鉴 → 荣誉 装上）");
         }
     }
 
     void onAbyssBest(Player p, int oldBest, int newBest) {
         if (p == null || !p.isOnline()) return;
         for (Cosmetic c : ALL) if (c.abyssTier > oldBest && c.abyssTier <= newBest)
-            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，图录装备页「荣誉」或 /corerpg p1 title 装上）");
+            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，图录 → 装备图鉴 → 荣誉 装上）");
     }
 
     public String titleText(PlayerData d) {

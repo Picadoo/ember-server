@@ -10,9 +10,11 @@ Options:
 Layout:
   - '#########'
   - '# A B C #'
-  - '# D E F #'
-  - '#G K H J#'
-  - '#OV#I#WZ#'
+  - '#   D   #'
+  - '#########'
+  - '####I##Z#'
+# D99: 重铸石 / 稳固符 / 魂尘 / 使魔 / 副手饰品 / 旧票 belong to the stowed legacy systems (主线本里不生效);
+# their icons stay defined below but are no longer in the layout (admin: ember_hub_legacy).
 
 Icons:
   '#':
@@ -47,7 +49,7 @@ Icons:
     display:
       material: potion
       name: '§c熬制 余烬回复药'
-      lore: ['', '§7河豚×1 + 鳕鱼×2 + 10 币', '§8立即回复 II · 冷却 20 秒', '§8需生活 Lv.2', '', '§e➥ §f熬制 1 瓶']
+      lore: ['', '§7河豚×1 + 鳕鱼×2 + 10 币', '§8回复最大生命 20% · 所有回复药共用 15 秒冷却', '§8不想钓鱼：装备页直接买，10 币一瓶', '§8需生活 Lv.2', '', '§e➥ §f熬制 1 瓶']
     actions:
       all:
         - 'command: corerpg life buy heal_potion'

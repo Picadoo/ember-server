@@ -62,7 +62,7 @@ public final class EmberLoadout {
      * ≥ T1; II = both ≥ T2 and both ≥ +6; III = both ≥ T3 and both ≥ +9). Pure text, no rule of its own.
      */
     public String nextAwakeningHint() {
-        if (blade == null) return "觉醒I 缺：主手 P1 刃";
+        if (blade == null) return "觉醒I 缺：主手拿一把余烬刃";
         if (charm == null) return "觉醒I 缺：选定护符（/corerpg p1 charm）";
         if (!blade.family.equals(charm.family) || "none".equals(blade.family))
             return "觉醒I 缺：刃与护符同族（现为 " + EmberItemData.familyName(blade.family) + " / " + EmberItemData.familyName(charm.family) + "）";
@@ -93,8 +93,8 @@ public final class EmberLoadout {
      */
     public String setProgress() {
         String fam = blade == null ? null : blade.family;
-        if (blade == null) return "成套进度：主手没有有效的 P1 刃";
-        if ("none".equals(fam)) return "成套进度：T0 起步刃无族；首通 Q01 自选一族 T1 刃后开始算";
+        if (blade == null) return "成套进度：主手没有有效的余烬刃";
+        if ("none".equals(fam)) return "成套进度：T0 起步刃无族；拿到 T1 刃和同族 T1 护符后开始算";
         int same = 1, t3 = blade.tier >= 3 ? 1 : 0, e9 = blade.tier >= 3 && blade.enhance >= 9 ? 1 : 0;
         if (charm != null && fam.equals(charm.family)) {
             same++;

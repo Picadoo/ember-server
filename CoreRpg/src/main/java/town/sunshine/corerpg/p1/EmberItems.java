@@ -120,14 +120,13 @@ public final class EmberItems {
         lore.add(ChatColor.GOLD + d.shortLabel());
         double g = EmberFormula.growth(t, d.quality, d.craft, d.enhance);
         if (d.isBlade()) {
-            lore.add(ChatColor.GRAY + String.format(Locale.ROOT, "基准攻击组成 %.0f×(1+%.2f+%.2f+%.2f) = %.1f，角色等级部分另计",
-                    t.weaponA(d.tier), t.enhance(d.enhance), t.quality(d.quality), t.craft(d.craft), t.weaponA(d.tier) * g));
+            lore.add(ChatColor.GRAY + String.format(Locale.ROOT, "攻击 %.1f（成长 ×%.2f），另加余烬等级部分", t.weaponA(d.tier) * g, g));
+            lore.add(ChatColor.DARK_GRAY + "拿在主手生效；副本里按 F 放烬斩");
         } else {
-            lore.add(ChatColor.GRAY + String.format(Locale.ROOT, "额外生命组成 %.0f×(1+%.2f+%.2f+%.2f) = %.1f · 防御 %.0f",
-                    t.charmH(d.tier), t.enhance(d.enhance), t.quality(d.quality), t.craft(d.craft), t.charmH(d.tier) * g, t.charmD(d.tier)));
+            lore.add(ChatColor.GRAY + String.format(Locale.ROOT, "生命 +%.1f · 防御 %.0f（成长 ×%.2f）", t.charmH(d.tier) * g, t.charmD(d.tier), g));
             lore.add(ChatColor.DARK_GRAY + "放在背包里生效（只算选定的一件；第一件自动选定，换件：手持它点装备页「已选护符」）");
         }
-        lore.add(ChatColor.DARK_GRAY + (d.bound ? "绑定" : "未绑定") + " · 来源 " + d.source + " · uid " + d.uid.substring(0, 8));
+        lore.add(ChatColor.DARK_GRAY + (d.bound ? "绑定" : "未绑定") + " · " + EmberCompare.sourceName(d.source)); // D99: uid only via admin inspect
         meta.setLore(lore);
         item.setItemMeta(meta);
     }

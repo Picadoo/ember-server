@@ -133,11 +133,11 @@ public final class EmberForgeService implements Listener {
     }
 
     private Slot check(Player p, int index, ItemStack st) {
-        if (st == null || !items().hasData(st)) return new Slot(index, st, null, "请手持余烬 P1 装备（刃或护符）");
+        if (st == null || !items().hasData(st)) return new Slot(index, st, null, "请手持余烬刃或护符");
         EmberItems.Read r = items().read(st);
-        if (r == null || !r.ok()) return new Slot(index, st, null, "物品不可信: " + (r == null ? "无数据" : r.problem) + "（可试 /corerpg p1 sync）");
+        if (r == null || !r.ok()) return new Slot(index, st, null, "物品不可信: " + (r == null ? "无数据" : r.problem) + "（重新登录会自动核对）");
         String t = loadouts.trust(p, r.data);
-        if (t != null) return new Slot(index, st, null, "物品校验未通过: " + t + "（稍后重试或 /corerpg p1 sync）");
+        if (t != null) return new Slot(index, st, null, "物品校验未通过: " + t + "（稍后重试，或重新登录自动核对）");
         if (busy.contains(r.data.uid)) return new Slot(index, st, null, "该物品有操作正在处理中");
         return new Slot(index, st, r.data, null);
     }
@@ -229,8 +229,9 @@ public final class EmberForgeService implements Listener {
 
     private String preview(EmberItemData d) {
         EmberTables t = EmberMode.tables();
-        return String.format(Locale.ROOT, "%s · e=%.0f%% · 成长 ×%.2f", d.shortLabel(), t.enhance(d.enhance) * 100,
-                EmberFormula.growth(t, d.quality, d.craft, d.enhance));
+        double g = EmberFormula.growth(t, d.quality, d.craft, d.enhance); // D99: no "e=" jargon; show the stat it changes
+        return d.isBlade() ? String.format(Locale.ROOT, "%s · 攻击 %.1f（成长 ×%.2f）", d.shortLabel(), t.weaponA(d.tier) * g, g)
+                : String.format(Locale.ROOT, "%s · 生命 +%.1f（成长 ×%.2f）", d.shortLabel(), t.charmH(d.tier) * g, g);
     }
 
     private boolean enhance(Player p, Slot it, boolean go, String rid) {
@@ -293,7 +294,7 @@ public final class EmberForgeService implements Listener {
         if (!go) {
             p.sendMessage(P + "分解 " + it.data.shortLabel() + " → 胚料 ×" + blanks + "（不退强化材料与金币，物品永久销毁）");
             if (it.data.isBlade() && onlyBlade(p, it.index))
-                p.sendMessage(P + ChatColor.RED + "⚠ 这是你背包里唯一的 P1 刃，分解后新模式副本内将没有可用武器");
+                p.sendMessage(P + ChatColor.RED + "⚠ 这是你背包里唯一的余烬刃，分解后副本里将没有可用武器");
             if (it.data.enhance > 0 || it.data.quality >= 1 || it.data.craft > 0) { // D96: invested / good items get a louder warning
                 List<String> inv = new ArrayList<String>();
                 if (it.data.enhance > 0) inv.add("强化 +" + it.data.enhance);
@@ -415,7 +416,7 @@ public final class EmberForgeService implements Listener {
                 for (TxnItem t : list) {
                     loadouts.rememberRow(t.before.uid, id, t.before.rev + 1, t.after == null ? t.retireState : "active");
                     if (t.after != null && q != null && !replace(q, t.before.uid, built.get(t.after.uid))) {
-                        q.sendMessage(P + ChatColor.YELLOW + "物品已不在背包，DB 已更新；放回背包后执行 /corerpg p1 sync");
+                        q.sendMessage(P + ChatColor.YELLOW + "物品已不在背包，记录已更新；放回背包后重新登录即可同步");
                     }
                 }
                 if ("dismantle".equals(kind)) {

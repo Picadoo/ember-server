@@ -294,8 +294,8 @@ public class EmberRunRulesTest {
         assertEquals("", q1.requires);
         assertEquals("q01", q2.requires);
         assertEquals("q02", q3.requires);
-        assertEquals("blade", q1.firstClear.choiceSlot);
-        assertEquals("charm", q2.firstClear.choiceSlot);
+        assertEquals("charm", q1.firstClear.choiceSlot);
+        assertEquals("blade", q2.firstClear.choiceSlot);
         assertEquals(600, q3.firstClear.coin);
         assertSame(q2, m.byWorld("dungeon_EmberQ02_252696C4"));
         assertNull(m.byWorld("dungeon_EmberDaily_252696C4"));
@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(11, m.balanceVersion);                // D94
-        assertEquals("g04-1/b11", m.ruleVersion);
+        assertEquals(12, m.balanceVersion);                // D98
+        assertEquals("g04-1/b12", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all

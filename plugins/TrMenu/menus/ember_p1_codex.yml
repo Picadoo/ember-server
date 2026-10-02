@@ -3,7 +3,7 @@
 # 生命 / 普攻数字必须与 MythicMobs/Mobs/EmberP1Main.yml 的 EmberQxxBoss Health / Damage 一致（tools/p1sim/selfcheck.py 会核对）。
 # 入口：图录 ember_bestiary「主线首领」、冒险页 ember_p1_adventure「图录」、帮助页「七张图」，或 /ember_p1_codex。
 
-Title: '§6余烬 v1 · 图录 · 主线首领'
+Title: '§6余烬 · 图录 · 主线首领'
 
 Bindings:
   Commands:
@@ -65,7 +65,7 @@ Icons:
     update: 40
     display:
       material: ender eye
-      name: '§5深渊 · 余烬层（P2-2）'
+      name: '§5深渊 · 余烬层'
       lore:
         - '§7%corerpg_p1_abyss_state%'
         - '§7每层 = 挑战版数值 × 下表系数（表列上限，十层封顶）'

@@ -227,7 +227,7 @@ public final class EmberUpgradeRules {
     public static String dismantleCheck(EmberItemData d) {
         String b = basic(d);
         if (b != null) return b;
-        if (!"drop".equals(d.source)) return "来源为「" + d.source + "」的装备不可分解（只有普通随机掉落可分解）";
+        if (!"drop".equals(d.source)) return "这件是" + EmberCompare.sourceName(d.source) + "：只有副本里随机掉落的装备能分解";
         if (d.tier < 1) return "T0 装备不可分解";
         return null;
     }

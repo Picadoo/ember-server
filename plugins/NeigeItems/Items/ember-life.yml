@@ -19,9 +19,8 @@ potion_ember_heal:
   material: POTION
   name: '&c余烬回复药'
   lore:
-    - '&7potion_ember_heal'
-    - '&8立即回复 II · 冷却 20 秒'
-    - '&8河豚 + 鱼 → 补给商熬制'
+    - '&8potion_ember_heal'
+    - '&7回复最大生命 20% · 所有回复药共用 15 秒冷却'
 
 tool_ember_rod:
   material: FISHING_ROD

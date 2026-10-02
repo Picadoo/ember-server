@@ -40,7 +40,7 @@ public final class EmberCommand {
         this.trace = trace;
     }
 
-    private static final String P = ChatColor.GOLD + "[P1] " + ChatColor.GRAY;
+    private static final String P = ChatColor.GOLD + "[余烬] " + ChatColor.GRAY;
 
     public boolean cmd(CommandSender s, String[] args) {
         String sub = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "status";
@@ -155,7 +155,7 @@ public final class EmberCommand {
                 s.sendMessage(P + l.nextAwakeningHint());
                 s.sendMessage(P + l.setProgress());
                 if (admin) s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
-                s.sendMessage(P + "主手: " + (l.blade == null ? "无有效 P1 刃" : l.blade.shortLabel())
+                s.sendMessage(P + "主手: " + (l.blade == null ? "没有有效的余烬刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
                 EmberItemData best = null; // P2 draft §2 low-priority item: show the player's best 成色 (display only)
                 for (org.bukkit.inventory.ItemStack it : p.getInventory().getContents()) {
@@ -167,6 +167,10 @@ public final class EmberCommand {
                 if (best != null) s.sendMessage(P + "§7背包里最好成色：§f" + EmberItemData.qualityName(best.quality) + "§7（T" + best.tier + " "
                         + EmberItemData.familyName(best.family) + EmberItemData.slotName(best.slot) + "）§8· 极品只从掉落获得，挑战版和深渊高层更容易");
                 for (String n : loadouts.notes(p)) s.sendMessage(P + ChatColor.YELLOW + n);
+                // D99: the formulas moved here from the gear page lore (only shown when the player asks for details)
+                s.sendMessage(P + "§8攻击 = 刃基础攻击 ×（1 + 强化 + 成色 + 精工）+ 0.2 ×（余烬等级 − 10）");
+                s.sendMessage(P + "§8生命 = 20 + 护符生命 ×（1 + 强化 + 成色 + 精工）+（余烬等级 − 10）");
+                s.sendMessage(P + "§8承伤倍率 = max(0.5, 40 ÷ (40 + 防御)) · 普攻 10% 暴击 ×1.5 · 烬斩 1.5 倍攻击、不暴击");
             }
             if (sets != null && admin) s.sendMessage(P + sets.describe(p));
         }

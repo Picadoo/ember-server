@@ -66,7 +66,13 @@ public final class EmberSupplyService implements Listener {
         ItemMeta m = s.getItemMeta();
         if (m != null) {
             List<String> lore = m.hasLore() ? new ArrayList<String>(m.getLore()) : new ArrayList<String>();
-            lore.add(ChatColor.DARK_GRAY + "P1 回复药：最大生命 20% · 所有回复药共用 15 秒冷却");
+            // D99: the template's legacy lines (id, 立即回复 II, 河豚 recipe) contradicted the P1 rules; bound potions are
+            // recognised by their NBT (isBound / NI id), never by lore, so the lore is rewritten in full here
+            lore.clear();
+            lore.add(ChatColor.GRAY + "回复最大生命 20%");
+            lore.add(ChatColor.GRAY + "所有回复药共用 15 秒冷却");
+            lore.add(ChatColor.GRAY + "副本里切到它，按住右键喝");
+            lore.add(ChatColor.DARK_GRAY + "补药：补给官 · 灰粮 / 装备页，" + price() + " 余烬币一瓶");
             lore.add(ChatColor.DARK_GRAY + "绑定 · 不可交易 · 不回售" + ("starter".equals(src) ? " · 起步补给" : ""));
             m.setLore(lore);
             s.setItemMeta(m);
@@ -132,7 +138,7 @@ public final class EmberSupplyService implements Listener {
         if (max <= 0 || hp <= 0 || hp / max >= LOW_HP || cdLeftMs > 0) return null;
         if (slot >= 0 && slot < 9) return "§c生命低！§f按数字键 " + (slot + 1) + " 切到回复药，§e按住右键喝§f（回复 20%，冷却 15 秒）";
         if (slot == 9) return "§c生命低！§f回复药在背包里：按 E 把它拖到快捷栏，再按住右键喝";
-        return "§c生命低且没带回复药！§f后撤拉开距离 · 出本后 /corerpg p1 shop 补货";
+        return "§c生命低且没带回复药！§f后撤拉开距离 · 出本后找补给官 · 灰粮补货";
     }
     static final double LOW_HP = 0.40;
 
@@ -151,8 +157,8 @@ public final class EmberSupplyService implements Listener {
         int got = give(p, want, "starter");
         plugin.getLogger().info("[P1 supply] starter " + p.getName() + " heal potions " + got + "/" + want);
         if (got > 0) {
-            p.sendMessage(P + "起步补给：余烬回复药 ×" + got + "（绑定）。补给商：/corerpg p1 shop · 每瓶 " + price() + " 余烬币");
-            p.sendMessage(P + ChatColor.YELLOW + "回复药放在快捷栏右侧：副本里按对应数字键切过去，按住右键喝（回复 20% 生命，15 秒冷却）。生命低时屏幕下方会提醒。");
+            p.sendMessage(P + ChatColor.YELLOW + "回复药 ×" + got + "（绑定）放在快捷栏右侧：副本里按数字键切过去，按住右键喝（回复 20% 生命，15 秒冷却）。"
+                    + "补药：右键补给官 · 灰粮或装备页「回复药」，每瓶 " + price() + " 余烬币。");
         }
     }
 
@@ -165,7 +171,9 @@ public final class EmberSupplyService implements Listener {
         boolean buy = args.length >= 3 && ("buy".equalsIgnoreCase(args[2]) || "买".equals(args[2]));
         if (!buy) {
             p.sendMessage(P + "余烬回复药：" + price + " 余烬币 / 瓶 · 回复最大生命 20% · 所有回复药共用 15 秒冷却 · 绑定、不回售");
-            p.sendMessage(P + "余烬币 " + coins + " · 购买：/corerpg p1 shop buy [数量 1–" + MAX_PER_BUY + "]");
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "余烬币 " + coins + " · ",
+                    new String[]{"[买 1 瓶]", "/corerpg p1 shop buy 1", price + " 余烬币", "GREEN"},
+                    new String[]{"[买 5 瓶]", "/corerpg p1 shop buy 5", (5 * price) + " 余烬币", "GREEN"}); // D99
             return true;
         }
         if (!EmberMode.active()) { p.sendMessage(P + ChatColor.RED + "新模式未开启"); return true; }

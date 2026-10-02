@@ -2,7 +2,7 @@
 # 旧 ember_enhance / ember_forge / ember_disassemble 菜单不变（旧物品仍走旧强化）。
 # 打开：/ember_p1_forge、主菜单「工坊」或装备页（B2.174）。互换确认按钮 B2.176（§19.1 不需要手打命令）
 
-Title: '§6余烬 v1 · 锻造'
+Title: '§6余烬 · 锻造'
 
 Bindings:
   Commands:
@@ -31,7 +31,7 @@ Icons:
       material: anvil
       name: '§c强化 · 预览'
       lore:
-        - '§7手持 P1 装备；+1~+3 必成，之后按次数保底'
+        - '§7手持刃或护符；+1~+3 必成，之后按次数保底'
         - '§7失败不降级、不爆装'
     actions:
       all:

@@ -236,13 +236,16 @@ public final class EmberRunService implements Listener {
         if (u != null) for (EmberRunRules.Row r : store.ledger(u).open())
             if (EmberRunRules.ST_AWAIT.equals(r.status)) return "领取首通自选：点聊天里的族名，或冒险页「首通自选」";
         EmberRunMaps.MapDef first = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
-        if (first != null && firstCleared(d, first) && target(d) == null) return "选掉落目标族（冒险页第 4 行）：之后 60% 掉你选的套装";
-        if (u != null && first != null && firstCleared(d, first)) { // D96: Q02 needs a T1 charm (p1sim: 0 % with the T0 one)
+        if (first != null && firstCleared(d, first) && target(d) == null) return "选掉落目标族（冒险页第 4 行）：之后约六成掉你选的族";
+        EmberRunMaps.MapDef second = maps.maps.size() < 2 ? null : new ArrayList<EmberRunMaps.MapDef>(maps.maps.values()).get(1);
+        if (u != null && first != null && firstCleared(d, first) && second != null && !firstCleared(d, second)) { // D96/D98: Q02 needs a T1 blade and a T1 charm (p1sim: 0 % with either at T0)
             Player op = Bukkit.getPlayer(u);
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberLoadout l = op == null || ls == null ? null : ls.get(op);
+            if (l != null && (l.blade == null || l.blade.tier < 1)) // D98: the Q01 choice is the charm, the blade drops in Q01
+                return "在 Q01 多打几局刷一件 T1 刃（Q01 偏向掉刃，拿到自动换上），再去首通 Q02";
             if (l != null && (l.charm == null || l.charm.tier < 1))
-                return "在 Q01 刷到一件 T1 护符（生命约翻倍，拿到自动生效），再去首通 Q02";
+                return "领 Q01 首通自选的 T1 护符（生命约翻倍），再去首通 Q02";
         }
         for (EmberRunMaps.MapDef m : maps.maps.values()) {
             if (!firstCleared(d, m)) return "首通 " + m.key.toUpperCase(Locale.ROOT) + " " + m.name + "（首通开放下一张图）";
@@ -254,7 +257,7 @@ public final class EmberRunService implements Listener {
     private void familyButtons(Player p, String prefix, String command) {
         java.util.List<net.md_5.bungee.api.chat.BaseComponent> parts = new java.util.ArrayList<net.md_5.bungee.api.chat.BaseComponent>();
         parts.add(new net.md_5.bungee.api.chat.TextComponent(prefix));
-        String[][] fam = {{"scorch", "§6[焚烬]", "灼烧：命中叠灼烧，持续伤害"}, {"burst", "§c[烬爆]", "爆发：每几下打出一次大伤害"}, {"sustain", "§a[炽愈]", "续航：命中回血，最稳"}};
+        String[][] fam = {{"scorch", "§6[焚烬]", EmberItemData.familyBlurb("scorch")}, {"burst", "§c[烬爆]", EmberItemData.familyBlurb("burst")}, {"sustain", "§a[炽愈]", EmberItemData.familyBlurb("sustain")}};
         for (String[] f : fam) {
             net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(" " + f[1] + " ");
             b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, command + " " + f[0]));
@@ -378,13 +381,16 @@ public final class EmberRunService implements Listener {
             if (ls != null && q1 != null && !m.key.equals(q1.key)) for (Player p : party) {
                 if (firstCleared(data(p.getUniqueId()), m)) continue;
                 EmberLoadout l = ls.refresh(p);
-                if (l.blade == null || l.blade.tier < 1) warn.add(p.getName() + " 主手不是 T1 以上的刃（Q01 首通自选或掉落）");
-                if (l.charm == null || l.charm.tier < 1) warn.add(p.getName() + " 还没有生效的 T1 护符（生命只有一半）：先在 Q01 刷一件，拿到会自动生效");
+                // D98: Q01 first clear now gives the T1 charm; the T1 blade comes from Q01 drops (Q01 leans to blades)
+                if (l.blade == null || l.blade.tier < 1) warn.add(p.getName() + " 主手还没有 T1 刃：回 Q01 多打几局（Q01 偏向掉刃），拿到会自动放到快捷栏第 1 格");
+                if (l.charm == null || l.charm.tier < 1) warn.add(p.getName() + " 还没有生效的 T1 护符（生命只有一半）：先领 Q01 首通自选的护符（冒险页「首通自选」）");
             }
             if (!warn.isEmpty()) {
                 for (String w : warn) leader.sendMessage(P + ChatColor.YELLOW + "⚠ " + w);
-                town.sunshine.corerpg.ConfirmTokens.sendButton(leader, P + "§7这样首通 " + m.key.toUpperCase(Locale.ROOT) + " 几乎打不过，倒下不退体力。确定还要进？",
-                        "[仍然进入]", "/corerpg p1 enter " + m.key + " force", "本次不再提醒，直接开本");
+                leader.sendMessage(P + "§7这样首通 " + m.key.toUpperCase(Locale.ROOT) + " 几乎打不过，倒下不退体力。");
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(leader, P,
+                        new String[]{"[回 Q01]", "/corerpg p1 enter " + q1.key, "开一局 Q01（30 体力），刷 T1 刃", "GREEN"},
+                        new String[]{"[仍然进入]", "/corerpg p1 enter " + m.key + " force", "本次不再提醒，直接开本", "RED"});
                 return true;
             }
         }
@@ -516,7 +522,7 @@ public final class EmberRunService implements Listener {
             return;
         }
         EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
-        if (mod != null) tellRun(s, "§b本周规则「" + mod.name + "」§7" + mod.text + "（奖励不变" + (s.challenge ? "" : "；本周精选图的复刻局") + "）");
+        if (mod != null) tellRun(s, "§b本周规则「" + mod.name + "」§7" + mod.text + "（奖励不变" + (s.challenge ? "" : "；本周精选图首通后的重打") + "）");
         tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                 + "）· 走进前方房间开战 · 击败首领后统一结算");
     }
@@ -640,7 +646,7 @@ public final class EmberRunService implements Listener {
             Player p = Bukkit.getPlayer(u);
             if (p == null || !p.isOnline()) continue;
             int slot = sup.potionSlot(p);
-            if (slot < 0) p.sendMessage(P + "§e你没带回复药：本局只能靠躲技能。出本后 /corerpg p1 shop 购买（每瓶 " + EmberSupplyService.price() + " 余烬币）");
+            if (slot < 0) p.sendMessage(P + "§e你没带回复药：本局只能靠躲技能。出本后右键补给官 · 灰粮或在装备页购买（每瓶 " + EmberSupplyService.price() + " 余烬币）");
             else if (slot == 9) p.sendMessage(P + "§e回复药在背包里：按 E 拖到快捷栏，危险时按数字键切过去、按住右键喝");
             else p.sendMessage(P + "§7回复药在快捷栏第 " + (slot + 1) + " 格：按 " + (slot + 1) + " 切过去，按住右键喝（回复 20%，15 秒冷却）");
         }
@@ -806,7 +812,7 @@ public final class EmberRunService implements Listener {
         Player p = Bukkit.getPlayer(u);
         if (p != null && p.isOnline() && s.abyss > 0) {
             p.sendMessage(P + "§5深渊第 " + s.abyss + " 层 已完整通关" + (newBest ? " §a· 新纪录，开放第 " + abyssMaxStart(pd) + " 层" : "")
-                    + " §7（下一段需重新确认与付费：/corerpg p1 abyss）");
+                    + " §7（下一段需重新确认与付费：冒险页 → 深渊）");
         }
         if (p != null && p.isOnline() && rotation) {
             p.sendMessage(P + "§b本周精选挑战 §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + maps.rotationBonusMarks
@@ -824,9 +830,9 @@ public final class EmberRunService implements Listener {
 
     /** Batch 3: the Q07 first clear ends the P1 main line (§2 table, §18.1): say what it opened, once. */
     private void endOfP1(Player p) {
-        p.sendMessage(P + "§6§l余烬主线 P1 完结§r §7— 已首通最后一张主线图 Q07。");
-        p.sendMessage(P + "§a已开放：§fT3 定向锻造§7（工坊）· §fT2→T3 升阶§7 · §f七图挑战版§7（/corerpg enter <q01..q07> challenge，掉落 T3 与 T3 印记）");
-        p.sendMessage(P + "§7长线目标：同族 T3 两件套 +9 = 觉醒III（/corerpg p1 status 查看成套进度）");
+        p.sendMessage(P + "§6§l余烬主线完结§r §7— 已首通最后一张主线图 Q07。");
+        p.sendMessage(P + "§a已开放：§fT3 定向锻造§7（工坊）· §fT2→T3 升阶§7 · §f七图挑战版、深渊、团本§7（冒险页，掉落 T3 与 T3 印记）");
+        p.sendMessage(P + "§7长线目标：同族 T3 两件套 +9 = 觉醒III（装备页看成套进度）");
         p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
     }
 
@@ -849,7 +855,7 @@ public final class EmberRunService implements Listener {
             StringBuilder lo = new StringBuilder(); // P2-9 (D81) where to farm what
             for (EmberRunMaps.MapDef m : maps.maps.values()) lo.append(lo.length() == 0 ? "" : " · ").append(m.key.toUpperCase(Locale.ROOT)).append(' ').append(EmberRunMaps.lootLabel(m));
             p.sendMessage(P + "§6掉落偏向 §7" + lo + "（目标族仍至少 60%；挑战 / 深渊同图同偏向）");
-            p.sendMessage(P + "§6团本额外装备 §7按你的目标族，成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（/corerpg p1 title）");
+            p.sendMessage(P + "§6团本额外装备 §7按你的目标族，成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（图录 → 装备图鉴 → 荣誉）");
             return true;
         }
         java.util.List<Integer> can = EmberCodex.claimable(d);
@@ -974,10 +980,10 @@ public final class EmberRunService implements Listener {
             plugin.getDataStore().flushMutation(u);
         }
         tidyHotbar(p, hbEmpty);
-        if (!got.isEmpty()) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
+        if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后点：",
                 "[补领]", "/corerpg p1 claim", "领取暂存的奖励（装备页也有「补领」）"); // D95
-        if (choices > 0) familyButtons(p, P + ChatColor.YELLOW + "首通自选待领取，点一个族：", "/corerpg p1 firstclear");
+        if (choices > 0) familyButtons(p, P + ChatColor.YELLOW + "首通自选待领取（悬停看三族区别），点一个族：", "/corerpg p1 firstclear");
         return changed.size();
     }
 
@@ -1471,8 +1477,9 @@ public final class EmberRunService implements Listener {
         }
         d.addPeriodCount(C_STARTER, "all", 1);
         plugin.getDataStore().flushMutation(u);
-        p.sendMessage(P + "§e新模式起步：发放 T0 刃 + T0 护符各一件（绑定）。护符放在背包里就生效（已自动选定），刃要拿在手上。");
-        deliver(p);
+        p.sendMessage(P + "§e起步装备：T0 刃 + T0 护符（绑定）。刃拿在手上（副本里按 F 放烬斩），护符放在背包里就生效。");
+        quietDeliver = true; // D99: the starter kit is not a "settlement"
+        try { deliver(p); } finally { quietDeliver = false; }
         EmberSupplyService sup = plugin.getEmberSupplies();
         if (sup != null) sup.giveStarter(p); // B2.169 / D28: §3.1 基础补给, once (guarded by C_STARTER above)
         town.sunshine.corerpg.FlexSkillService fx = plugin.getFlexSkillService();
@@ -1523,7 +1530,7 @@ public final class EmberRunService implements Listener {
         if (!abyssOpen(d)) { p.sendMessage(P + "§c需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)); return true; }
         p.sendMessage(P + "最高通关 第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层 · 余烬币 " + d.getCoin());
         for (EmberRunMaps.AbyssTier t : maps.abyss) p.sendMessage(P + abyssLine(d, t));
-        p.sendMessage(P + "§7开始：/corerpg p1 abyss <层>（或冒险页 → 深渊）");
+        p.sendMessage(P + "§7开始：冒险页 → 深渊，点要下潜的层");
         return true;
     }
 
@@ -1644,7 +1651,7 @@ public final class EmberRunService implements Listener {
             }
             String t = target(data(p.getUniqueId()));
             familyButtons(p, P + "点一个族领取" + (t == null ? "（会同时设为掉落目标族）" : "（目标族 " + EmberItemData.familyName(t) + "，选同族才能成套）") + "：", "/corerpg p1 firstclear");
-            p.sendMessage(P + "§7Q02 可选与武器不同的族（那样不能成套），系统不替你强选。");
+            p.sendMessage(P + "§7刃和护符同族才成套；选和另一件不同的族会断套装。");
             return true;
         }
         if (blocksLegacy(p.getWorld())) { p.sendMessage(P + "出本后再领取。"); return true; }
@@ -1671,11 +1678,22 @@ public final class EmberRunService implements Listener {
             for (int i = 0; i < 3; i++) if (EmberRunRules.FAMILIES[i].equals(fam)) idx = i + 1;
             pd.addPeriodCount(C_TARGET, "all", idx);
             plugin.getDataStore().flushMutation(p.getUniqueId());
-            p.sendMessage(P + "§a掉落目标族同时设为 " + EmberItemData.familyName(fam) + " §7（之后 60% 掉这一族；冒险页可改）");
+            // D98: the Q01 choice is now the charm, so this target also steers the T1 blade the player farms in Q01 next
+            p.sendMessage(P + "§a掉落目标族同时设为 " + EmberItemData.familyName(fam) + " §7（之后掉落约六成是这一族，接下来在 Q01 刷到的 T1 刃也大多同族，正好成套；冒险页可改）");
         }
         deliver(p);
+        // D98: the Q02 choice is now a blade; when the blade in hand is another family and already enhanced, point at the
+        // free enhance-track swap so the player does not keep investing in an off-set blade (p2econ: set alignment −6 pt otherwise)
+        EmberLoadoutService ls = plugin.getEmberLoadouts();
+        EmberLoadout lo = ls == null ? null : ls.refresh(p);
+        if ("blade".equals(g.id) && lo != null && lo.blade != null && lo.blade.tier >= 1 && lo.blade.enhance > 0 && !fam.equals(lo.blade.family))
+            p.sendMessage(P + "§e提示：§7你手里的刃是 " + EmberItemData.familyName(lo.blade.family) + " +" + lo.blade.enhance
+                    + "。想换成新的 " + EmberItemData.familyName(fam) + "刃凑套装，工坊「互换」能把强化等级免费挪过去（主手一把、副手一把）。");
         return true;
     }
+
+    /** D99: the starter kit delivery prints no "结算到账" line (main thread only) */
+    private boolean quietDeliver;
 
     /** D96: leaders who clicked [仍然进入] skip the readiness warning once */
     private final java.util.Set<UUID> forcedReady = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
@@ -1788,13 +1806,14 @@ public final class EmberRunService implements Listener {
                     + " 体力 · 掉落 " + m.dropLabel + "（偏向 " + EmberRunMaps.lootLabel(m) + "）· 首通：" + m.firstClearLabel());
         }
         String t = target(d);
-        p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· /corerpg enter <q01..q07> challenge · 掉落 T3"
+        p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· 冒险页「挑战版」选图 · 掉落 T3"
                 : "§7需本人首通 " + (maps.challenge == null ? "Q07" : maps.challenge.requires.toUpperCase(Locale.ROOT))));
         for (EmberRunMaps.MapDef rm : maps.raids.values())
-            p.sendMessage(P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " · /corerpg p1 enter " + rm.key);
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " ",
+                    new String[]{"[开本]", "/corerpg p1 enter " + rm.key, "队长点：全队需各自首通 Q07，3～5 人", "GOLD"});
         p.sendMessage(P + "§e每日委托 §7" + bountyLabel(d)); // P2-7
         p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次挑战通关各多 " + maps.rotationBonusMarks + " 枚 T3 印记）");
-        if (!maps.modifiers.isEmpty()) p.sendMessage(P + "本周规则（精选图挑战版；" + (normalRule() ? "已首通的普通版也生效" : "普通版不变") + "；奖励不变）：§b" + modifierLabel());
+        if (!maps.modifiers.isEmpty()) p.sendMessage(P + "本周规则（精选图的挑战版" + (normalRule() ? "和首通后的普通版重打；首通不受影响" : "；普通版不变") + "；奖励不变）：§b" + modifierLabel());
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
                 + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
                 + " · 暂存 " + store.ledger(p.getUniqueId()).open().size() + " 项");
@@ -1820,7 +1839,19 @@ public final class EmberRunService implements Listener {
         int left = Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
         EmberRunMaps.Modifier mod = maps.modifierFor(today);
         return f.key.toUpperCase(Locale.ROOT) + " " + f.name + (mod == null ? "" : " · 规则「" + mod.name + "」")
-                + " · 加成剩 " + left + "/" + maps.rotationWeeklyCap + " · 周一 0 点轮换";
+                + " · 挑战版本周还能多拿 " + left + " 枚 T3 印记 · 周一 0 点轮换";
+    }
+
+    /** D98: the real family odds on this map for this player (EmberRunRules.familyProbability), one short tail */
+    String lootOdds(PlayerData d, EmberRunMaps.MapDef m) {
+        if (m == null || m.raid || m.lootFamily == null) return "";
+        EmberRunRules.LootBias lb = maps.lootBias(m);
+        String t = target(d);
+        if (t == null) return " §8（没选目标族：偏向族 50%，另两族各 25%）";
+        int pt = (int) Math.round(100 * EmberRunRules.familyProbability(t, lb, t));
+        if (t.equals(m.lootFamily)) return " §8（目标族 " + EmberItemData.familyName(t) + " 约 " + pt + "%）";
+        int pm = (int) Math.round(100 * EmberRunRules.familyProbability(t, lb, m.lootFamily));
+        return " §8（目标族 " + EmberItemData.familyName(t) + " 约 " + pt + "%，偏向族约 " + pm + "%）";
     }
 
     /** D97 hub board: top {@code n} rows of the abyss board or this week's featured board (display only) */
@@ -1865,7 +1896,7 @@ public final class EmberRunService implements Listener {
         EmberRunMaps.Modifier mod = maps.modifierFor(today);
         EmberRunMaps.MapDef m = maps.byKey(key);
         boolean on = m != null && firstCleared(d, m);
-        return "§b· 本周规则「" + mod.name + "」" + (on ? "" : "§8（首通后的复刻局才生效）");
+        return "§b· 本周规则「" + mod.name + "」" + (on ? "" : "§8（只影响首通后的重打）");
     }
 
     /** P2-8 %corerpg_p1_modifier%: this week's featured-map rule, e.g. 「限药：本局最多喝 3 瓶回复药」 */
@@ -1920,6 +1951,7 @@ public final class EmberRunService implements Listener {
         if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
+        if ("q07done".equals(key)) return progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("modifier".equals(key)) return modifierLabel(); // P2-8
         if (key.startsWith("rule_")) return ruleLine(d, key.substring(5)); // D94
@@ -1935,7 +1967,7 @@ public final class EmberRunService implements Listener {
         }
         if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleText(d); // P2-9 %corerpg_p1_title%
         if ("honors".equals(key)) return cosmetics == null ? "0/0" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size();
-        if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm); }
+        if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm) + lootOdds(d, lm); }
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
         if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
         if ("next".equals(key)) return nextStep(d, p.getUniqueId()); // new-player polish %corerpg_p1_next%
@@ -1962,7 +1994,7 @@ public final class EmberRunService implements Listener {
                 case "awaken": return l.setLabel();
                 case "set_progress": return l.setProgress();
                 // B2.174 §19.1 装备页: actual B / H / D (formula output, §19.2), main hand + selected charm
-                case "stats": return String.format(Locale.ROOT, "B %.1f · 生命 %.0f · 防御 %.0f（承伤 ×%.2f）· Lv%d",
+                case "stats": return String.format(Locale.ROOT, "攻击 %.1f · 生命 %.0f · 防御 %.0f（承伤 ×%.2f）· Lv%d",
                         l.b, l.h, l.d, l.m, l.level);
                 case "ehp": return String.format(Locale.ROOT, "%.0f", l.ehp());
                 case "blade": return l.blade == null ? "主手不是有效 P1 刃" : l.blade.shortLabel();

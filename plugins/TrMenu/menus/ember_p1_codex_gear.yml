@@ -4,7 +4,7 @@
 # 状态全部来自 PAPI corerpg_p1_codex_*；本页由脚本生成（见 docs/DESIGN-ember-v1.0-P1-source-table.md §13.7）。
 # 入口：图录 ember_bestiary「装备图鉴」「阶段奖励」，或 /ember_p1_codex_gear。
 
-Title: '§6余烬 v1 · 图录 · 装备'
+Title: '§6余烬 · 图录 · 装备'
 
 Bindings:
   Commands:
@@ -40,7 +40,7 @@ Icons:
       material: book and quill
       name: '§6图录 · 装备 §f%corerpg_p1_codex_count%'
       lore:
-        - '§7第一次拿到某种 P1 装备就登记（放进背包即可）'
+        - '§7第一次拿到某种刃或护符就登记（放进背包即可）'
         - '§7升阶后的新阶级也算一种'
         - '§7测试发放的装备不算'
         - ''
@@ -91,7 +91,7 @@ Icons:
       lore:
         - '§7状态：%corerpg_p1_codex_scorch_blade_t1%'
         - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
-        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+        - '§8  Q01 首通自选护符 / Q02 首通自选刃'
 
   D:
     update: 40
@@ -101,7 +101,7 @@ Icons:
       lore:
         - '§7状态：%corerpg_p1_codex_scorch_charm_t1%'
         - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
-        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+        - '§8  Q01 首通自选护符 / Q02 首通自选刃'
 
   B:
     update: 40
@@ -151,7 +151,7 @@ Icons:
       lore:
         - '§7状态：%corerpg_p1_codex_burst_blade_t1%'
         - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
-        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+        - '§8  Q01 首通自选护符 / Q02 首通自选刃'
 
   K:
     update: 40
@@ -161,7 +161,7 @@ Icons:
       lore:
         - '§7状态：%corerpg_p1_codex_burst_charm_t1%'
         - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
-        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+        - '§8  Q01 首通自选护符 / Q02 首通自选刃'
 
   H:
     update: 40
@@ -211,7 +211,7 @@ Icons:
       lore:
         - '§7状态：%corerpg_p1_codex_sustain_blade_t1%'
         - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
-        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+        - '§8  Q01 首通自选护符 / Q02 首通自选刃'
 
   Q:
     update: 40
@@ -221,7 +221,7 @@ Icons:
       lore:
         - '§7状态：%corerpg_p1_codex_sustain_charm_t1%'
         - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
-        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+        - '§8  Q01 首通自选护符 / Q02 首通自选刃'
 
   O:
     update: 40
@@ -269,9 +269,9 @@ Icons:
       material: compass
       name: '§6哪里刷什么 · 掉落偏向'
       lore:
-        - '§7每张图的随机装备偏向一族一部位（P2-9）'
-        - '§7你的目标族在任何图都至少 60%；'
-        - '§7在偏向你目标族的图上更高，部位也偏向'
+        - '§7每张图的随机装备偏向一族一部位'
+        - '§7选了目标族：它约 60%（偏向它的图约 63%）'
+        - '§7没选：本图偏向族 50%，另两族各 25%'
         - ''
         - '§fQ01 §7%corerpg_p1_loot_q01%'
         - '§fQ02 §7%corerpg_p1_loot_q02%'
@@ -289,22 +289,25 @@ Icons:
       material: nether star
       name: '§d荣誉 · 称号与足迹'
       lore:
-        - '§7只做展示，不加属性（P2-9）'
+        - '§7只做展示，不加属性'
         - '§7已获得：§f%corerpg_p1_honors%'
         - '§7当前称号：§f%corerpg_p1_title%'
         - ''
         - '§5深渊行者 §7深渊第 5 层 · §d余烬深渊之主 §7第 10 层'
         - '§6锈轨破袭者 §7/ §b霜封守望者 §7通关团本 R01 / R02'
         - '§7团本专属足迹：§6余烬火星 §7/ §b霜花'
-        - '§7排行榜：§f/corerpg p1 top §8（深渊最高层 · 本周精选通关）'
         - '§7深渊榜首：§f%corerpg_p1_top_abyss_1%'
         - ''
-        - '§e➥ §f点击查看与装上'
+        - '§e➥ §f左键：查看与装上 · 右键：排行榜'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - close
         - 'command: corerpg p1 title'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - close
+        - 'command: corerpg p1 top'
 
   '1':
     update: 40

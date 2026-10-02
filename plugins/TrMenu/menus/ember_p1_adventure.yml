@@ -3,7 +3,7 @@
 # 不写通关时长承诺。P1 未启用（ember-v1.yml enabled=false）时进本命令会直接拒绝。
 # 入口：主菜单 ember_hub 的「冒险 · 主线本」图标，或 /ember_p1_adventure。
 
-Title: '§6余烬 v1 · 冒险'
+Title: '§6余烬 · 冒险'
 
 Bindings:
   Commands:
@@ -45,6 +45,12 @@ Icons:
         - 'sound: UI_BUTTON_CLICK-1-1'
 
   R:
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: stained glass pane
+          name: '§8 '
     update: 20
     display:
       material: diamond chestplate
@@ -53,7 +59,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_raid_r02%'
         - '§7Q06 的地图 · 首领双段刀气 + 追身冲击圈；半血进入第二阶段（砸地接横扫）'
-        - '§7同一伤害管道与三套装 · 不加属性；通关得专属称号与足迹（只做展示）'
+        - '§7战斗规则和三套装不变；通关得专属称号与足迹（只做展示）'
         - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
         - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'
         - '§7结算同锈轨矿道·团：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
@@ -78,7 +84,7 @@ Icons:
       lore:
         - '§a下一步：§f%corerpg_p1_next%'
         - ''
-        - '§7主线本每次 §e30 §7体力（与日常同池）'
+        - '§7主线本每次 §e30 §7体力 · 每天 0 点回满'
         - '§7开本失败退还 · 开打后离开不退'
         - '§7只有 Boss 倒下才结算（中途离开无奖励）'
         - '§81～3 人 · 敌人血量按开局人数锁定'
@@ -87,7 +93,7 @@ Icons:
     update: 20
     display:
       material: book
-      name: '§b新模式进度'
+      name: '§b我的进度'
       lore:
         - ''
         - '§7掉落目标族：§f%corerpg_p1_target%'
@@ -116,7 +122,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_q01_state% %corerpg_p1_rule_q01%'
         - '§7消耗：§e%corerpg_p1_q01_cost%'
         - '§7掉落：§f%corerpg_p1_q01_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q01% §8（目标族仍 ≥60%）'
+        - '§7偏向：§f%corerpg_p1_loot_q01%'
         - '§7用途：§f%corerpg_p1_q01_purpose%'
         - '§7首通：§f%corerpg_p1_q01_fc%'
         - ''
@@ -136,7 +142,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_q02_state% %corerpg_p1_rule_q02%'
         - '§7消耗：§e%corerpg_p1_q02_cost%'
         - '§7掉落：§f%corerpg_p1_q02_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q02% §8（目标族仍 ≥60%）'
+        - '§7偏向：§f%corerpg_p1_loot_q02%'
         - '§7用途：§f%corerpg_p1_q02_purpose%'
         - '§7首通：§f%corerpg_p1_q02_fc%'
         - ''
@@ -156,7 +162,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_q03_state% %corerpg_p1_rule_q03%'
         - '§7消耗：§e%corerpg_p1_q03_cost%'
         - '§7掉落：§f%corerpg_p1_q03_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q03% §8（目标族仍 ≥60%）'
+        - '§7偏向：§f%corerpg_p1_loot_q03%'
         - '§7用途：§f%corerpg_p1_q03_purpose%'
         - '§7首通：§f%corerpg_p1_q03_fc%'
         - ''
@@ -176,7 +182,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_q04_state% %corerpg_p1_rule_q04%'
         - '§7消耗：§e%corerpg_p1_q04_cost%'
         - '§7掉落：§f%corerpg_p1_q04_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q04% §8（目标族仍 ≥60%）'
+        - '§7偏向：§f%corerpg_p1_loot_q04%'
         - '§7用途：§f%corerpg_p1_q04_purpose%'
         - '§7首通：§f%corerpg_p1_q04_fc%'
         - ''
@@ -196,7 +202,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_q05_state% %corerpg_p1_rule_q05%'
         - '§7消耗：§e%corerpg_p1_q05_cost%'
         - '§7掉落：§f%corerpg_p1_q05_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q05% §8（目标族仍 ≥60%）'
+        - '§7偏向：§f%corerpg_p1_loot_q05%'
         - '§7用途：§f%corerpg_p1_q05_purpose%'
         - '§7首通：§f%corerpg_p1_q05_fc%'
         - ''
@@ -217,7 +223,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_q06_state% %corerpg_p1_rule_q06%'
         - '§7消耗：§e%corerpg_p1_q06_cost%'
         - '§7掉落：§f%corerpg_p1_q06_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q06% §8（目标族仍 ≥60%）'
+        - '§7偏向：§f%corerpg_p1_loot_q06%'
         - '§7用途：§f%corerpg_p1_q06_purpose%'
         - '§7首通：§f%corerpg_p1_q06_fc%'
         - ''
@@ -237,7 +243,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_q07_state% %corerpg_p1_rule_q07%'
         - '§7消耗：§e%corerpg_p1_q07_cost%'
         - '§7掉落：§f%corerpg_p1_q07_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q07% §8（目标族仍 ≥60%）'
+        - '§7偏向：§f%corerpg_p1_loot_q07%'
         - '§7用途：§f%corerpg_p1_q07_purpose%'
         - '§7首通：§f%corerpg_p1_q07_fc%'
         - ''
@@ -248,6 +254,24 @@ Icons:
         - 'command: corerpg enter q07'
         - close
   X:
+    icons:
+      # D99: before the player's own Q07 first clear the post-Q07 content is one locked icon (the others are blank)
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7Q07 之后：挑战 / 深渊 / 团本'
+          lore:
+            - ''
+            - '§7首通 Q07 锈轨矿道后开放：'
+            - '§7· 七图挑战版（更强的敌人，掉 T3）'
+            - '§7· 深渊 · 余烬层（十层，越深越难）'
+            - '§7· 团本两张（3～5 人，每周 3 次）'
+            - ''
+            - '§a现在：§f%corerpg_p1_next%'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-0.6'
     update: 20
     display:
       material: blaze rod
@@ -256,7 +280,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_challenge%'
         - '§7同一张图的空间与动作，敌人用统一 T3 参照（更强）'
-        - '§7掉落与印记全部 T3 · 极品机会更高（60/28/10/2）'
+        - '§7掉落与印记全部 T3 · 更容易出好成色'
         - '§7消耗同样 30 体力 · 1～3 人 · 无首通奖励'
         - '§b本周精选：§f%corerpg_p1_featured%'
         - ''
@@ -267,6 +291,12 @@ Icons:
         - 'menu: ember_p1_challenge'
 
   A:
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: stained glass pane
+          name: '§8 '
     update: 20
     display:
       material: ender eye
@@ -274,7 +304,7 @@ Icons:
       lore:
         - ''
         - '§7状态：§f%corerpg_p1_abyss_state%'
-        - '§7三房一段 · 挑战版数值 × 层系数 · 十层封顶'
+        - '§7三房一段 · 越深越难 · 十层封顶'
         - '§7每段单独付费（30 体力 + 层费余烬币）· 打完首领才结算'
         - '§7高层成色更好（卓越 / 极品权重有表列上限）'
         - ''
@@ -285,6 +315,12 @@ Icons:
         - 'menu: ember_p1_abyss'
 
   G:
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: stained glass pane
+          name: '§8 '
     update: 20
     display:
       material: iron chestplate
@@ -294,7 +330,7 @@ Icons:
         - '§7状态：§f%corerpg_p1_raid_r01%'
         - '§7Q07 的地图与首领招式组合（重砸 / 冲撞 / 斧刃横扫 + 半血增援）'
         - '§7与霜封哨所·团合计每周 3 次'
-        - '§7同一伤害管道与三套装 · 不加属性；通关得专属称号与足迹（只做展示）'
+        - '§7战斗规则和三套装不变；通关得专属称号与足迹（只做展示）'
         - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
         - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'
         - '§7结算：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
@@ -311,7 +347,8 @@ Icons:
       material: blaze powder
       name: '§6目标族 · 焚烬'
       lore:
-        - '§7之后入场的局：焚烬 60%，另两族各 20%'
+        - '§7之后入场的局：焚烬约 60%'
+        - '§7剩下的大多是这张图的偏向族（每张图「偏向」一行）'
         - '§8入场时快照，局内改不影响本局'
     actions:
       all:
@@ -321,7 +358,8 @@ Icons:
       material: fireball
       name: '§c目标族 · 烬爆'
       lore:
-        - '§7之后入场的局：烬爆 60%，另两族各 20%'
+        - '§7之后入场的局：烬爆约 60%'
+        - '§7剩下的大多是这张图的偏向族（每张图「偏向」一行）'
         - '§8入场时快照，局内改不影响本局'
     actions:
       all:
@@ -331,7 +369,8 @@ Icons:
       material: magma cream
       name: '§a目标族 · 炽愈'
       lore:
-        - '§7之后入场的局：炽愈 60%，另两族各 20%'
+        - '§7之后入场的局：炽愈约 60%'
+        - '§7剩下的大多是这张图的偏向族（每张图「偏向」一行）'
         - '§8入场时快照，局内改不影响本局'
     actions:
       all:
@@ -341,7 +380,7 @@ Icons:
       material: paper
       name: '§7目标族 · 不指定'
       lore:
-        - '§7三族各 1/3'
+        - '§7本图偏向族 50%，另两族各 25%'
     actions:
       all:
         - 'command: corerpg p1 target none'
@@ -364,7 +403,7 @@ Icons:
       material: book and quill
       name: '§e首通自选'
       lore:
-        - '§7Q01 首通：自选族 T1 刃 · Q02 首通：自选族 T1 护符'
+        - '§7Q01 首通：自选族 T1 护符 · Q02 首通：自选族 T1 刃'
         - '§7Q03～Q07 首通为材料，直接发放（见各本「首通」）'
         - '§8绑定 · 不可分解'
         - '§8点击后在聊天栏点族名领取（第一次选的族也会设为目标族）'
@@ -377,7 +416,7 @@ Icons:
       material: ender chest
       name: '§b补领暂存奖励'
       lore:
-        - '§7背包满时 P1 装备暂存在此（不会重抽）'
+        - '§7背包满时装备暂存在此（不会重抽）'
         - '§7材料溢出走邮件'
         - '§8出本后点击领取'
     actions:

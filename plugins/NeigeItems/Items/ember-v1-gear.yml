@@ -5,20 +5,18 @@
 
 ember_v1_t0_blade:
   material: IRON_SWORD
-  name: '&f余烬v1 · 起始之刃'
+  name: '&f余烬 · 起始之刃'
   lore:
-    - '&8余烬 v1 · 无族 · 刃 · T0'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8无族 · 刃 · T0'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
 
 ember_v1_t0_charm:
   material: QUARTZ
-  name: '&f余烬v1 · 起始护符'
+  name: '&f余烬 · 起始护符'
   lore:
-    - '&8余烬 v1 · 无族 · 护符 · T0'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8无族 · 护符 · T0'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -27,8 +25,7 @@ ember_v1_scorch_blade_t1:
   material: DIAMOND_SWORD
   name: '&c[T1] 焚烬刃'
   lore:
-    - '&8余烬 v1 · 焚烬 · 刃 · T1'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8焚烬 · 刃 · T1'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -37,8 +34,7 @@ ember_v1_scorch_charm_t1:
   material: DIAMOND
   name: '&c[T1] 焚烬护符'
   lore:
-    - '&8余烬 v1 · 焚烬 · 护符 · T1'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8焚烬 · 护符 · T1'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -47,8 +43,7 @@ ember_v1_scorch_blade_t2:
   material: DIAMOND_SWORD
   name: '&c[T2] 焚烬刃'
   lore:
-    - '&8余烬 v1 · 焚烬 · 刃 · T2'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8焚烬 · 刃 · T2'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -57,8 +52,7 @@ ember_v1_scorch_charm_t2:
   material: DIAMOND
   name: '&c[T2] 焚烬护符'
   lore:
-    - '&8余烬 v1 · 焚烬 · 护符 · T2'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8焚烬 · 护符 · T2'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -67,8 +61,7 @@ ember_v1_scorch_blade_t3:
   material: DIAMOND_SWORD
   name: '&c[T3] 焚烬刃'
   lore:
-    - '&8余烬 v1 · 焚烬 · 刃 · T3'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8焚烬 · 刃 · T3'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -77,8 +70,7 @@ ember_v1_scorch_charm_t3:
   material: DIAMOND
   name: '&c[T3] 焚烬护符'
   lore:
-    - '&8余烬 v1 · 焚烬 · 护符 · T3'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8焚烬 · 护符 · T3'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -87,8 +79,7 @@ ember_v1_burst_blade_t1:
   material: DIAMOND_SWORD
   name: '&6[T1] 烬爆刃'
   lore:
-    - '&8余烬 v1 · 烬爆 · 刃 · T1'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8烬爆 · 刃 · T1'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -97,8 +88,7 @@ ember_v1_burst_charm_t1:
   material: DIAMOND
   name: '&6[T1] 烬爆护符'
   lore:
-    - '&8余烬 v1 · 烬爆 · 护符 · T1'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8烬爆 · 护符 · T1'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -107,8 +97,7 @@ ember_v1_burst_blade_t2:
   material: DIAMOND_SWORD
   name: '&6[T2] 烬爆刃'
   lore:
-    - '&8余烬 v1 · 烬爆 · 刃 · T2'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8烬爆 · 刃 · T2'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -117,8 +106,7 @@ ember_v1_burst_charm_t2:
   material: DIAMOND
   name: '&6[T2] 烬爆护符'
   lore:
-    - '&8余烬 v1 · 烬爆 · 护符 · T2'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8烬爆 · 护符 · T2'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -127,8 +115,7 @@ ember_v1_burst_blade_t3:
   material: DIAMOND_SWORD
   name: '&6[T3] 烬爆刃'
   lore:
-    - '&8余烬 v1 · 烬爆 · 刃 · T3'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8烬爆 · 刃 · T3'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -137,8 +124,7 @@ ember_v1_burst_charm_t3:
   material: DIAMOND
   name: '&6[T3] 烬爆护符'
   lore:
-    - '&8余烬 v1 · 烬爆 · 护符 · T3'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8烬爆 · 护符 · T3'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -147,8 +133,7 @@ ember_v1_sustain_blade_t1:
   material: DIAMOND_SWORD
   name: '&a[T1] 炽愈刃'
   lore:
-    - '&8余烬 v1 · 炽愈 · 刃 · T1'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8炽愈 · 刃 · T1'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -157,8 +142,7 @@ ember_v1_sustain_charm_t1:
   material: DIAMOND
   name: '&a[T1] 炽愈护符'
   lore:
-    - '&8余烬 v1 · 炽愈 · 护符 · T1'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8炽愈 · 护符 · T1'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -167,8 +151,7 @@ ember_v1_sustain_blade_t2:
   material: DIAMOND_SWORD
   name: '&a[T2] 炽愈刃'
   lore:
-    - '&8余烬 v1 · 炽愈 · 刃 · T2'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8炽愈 · 刃 · T2'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -177,8 +160,7 @@ ember_v1_sustain_charm_t2:
   material: DIAMOND
   name: '&a[T2] 炽愈护符'
   lore:
-    - '&8余烬 v1 · 炽愈 · 护符 · T2'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8炽愈 · 护符 · T2'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -187,8 +169,7 @@ ember_v1_sustain_blade_t3:
   material: DIAMOND_SWORD
   name: '&a[T3] 炽愈刃'
   lore:
-    - '&8余烬 v1 · 炽愈 · 刃 · T3'
-    - '&7主手生效；伤害由统一公式 B 结算'
+    - '&8炽愈 · 刃 · T3'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -197,8 +178,7 @@ ember_v1_sustain_charm_t3:
   material: DIAMOND
   name: '&a[T3] 炽愈护符'
   lore:
-    - '&8余烬 v1 · 炽愈 · 护符 · T3'
-    - '&7选定后提供生命 H 与防御 D；副手不是第二份护符'
+    - '&8炽愈 · 护符 · T3'
   hideflags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
@@ -209,6 +189,6 @@ mat_ember_v1_blank:
   material: CLAY_BALL
   name: '&e余烬胚料'
   lore:
-    - '&8余烬 v1 · 材料'
+    - '&8材料'
     - '&7分解普通掉落的 P1 装备获得（T1/T2/T3 = 1/2/3 份）'
     - '&7用于精工、成色提升与同族升阶'
