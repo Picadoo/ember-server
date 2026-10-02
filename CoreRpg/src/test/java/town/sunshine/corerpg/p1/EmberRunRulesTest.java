@@ -398,6 +398,8 @@ public class EmberRunRulesTest {
             assertEquals(d.key, 0, d.clear.size());
             assertEquals(d.key, 0, d.links.size());
             assertTrue(d.key, d.boss.waitInArea);
+            assertEquals(d.key, "[r0, r1, r2, r3, rb]", d.safe.keySet().toString()); // §9 (validate() checks they sit in their room)
+            assertEquals(d.key, "[entry, event, exit]", d.holo.keySet().toString());
             assertTrue(d.key, d.boss.area.contains(d.boss.at.x, d.boss.at.y, d.boss.at.z));
         }
         assertEquals(32, q6.boss.area.x1 - q6.boss.area.x0); // 33 wide (RB −16..16)

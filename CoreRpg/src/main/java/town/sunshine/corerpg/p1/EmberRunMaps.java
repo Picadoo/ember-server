@@ -207,6 +207,10 @@ public final class EmberRunMaps {
         public final String eventAfter;
         public final Pt eventAnchor;
         public final Box eventArea;
+        /** §9 / §20.5 safe points r0..r3, rb (reconnect within 120 s → last cleared room; boss alive → rb) */
+        public final Map<String, Pt> safe;
+        /** §9 hologram anchors: entry (name + goal), event (only with an extra event), exit (after the clear) */
+        public final Map<String, Pt> holo;
         /** extra standing points for party members 2..n (member 1 keeps the DP spawn) */
         public final List<Pt> spread;
         public final List<Link> links;
@@ -253,6 +257,8 @@ public final class EmberRunMaps {
             eventAfter = str(ev.get("after"), rs.isEmpty() ? "" : rs.get(Math.min(1, rs.size() - 1)).id);
             eventAnchor = ev.get("anchor") == null ? null : pt(ev.get("anchor"));
             eventArea = ev.get("area") == null ? null : box(ev.get("area"));
+            safe = ptMap(m.get("safe"));
+            holo = ptMap(m.get("holo"));
             spread = pts(m.get("spread"));
             List<Link> ls = new ArrayList<Link>();
             if (m.get("links") instanceof List) for (Object o : (List<?>) m.get("links")) if (o instanceof Map) ls.add(new Link((Map<?, ?>) o));
@@ -346,6 +352,12 @@ public final class EmberRunMaps {
                 if (room(l.after) == null) return key + ": link.after " + l.after + " is not a room";
                 if (l.from == null || l.to == null) return key + ": link from/to missing";
                 if (l.from.contains(l.to.x + 0.5, l.to.y, l.to.z + 0.5)) return key + ": link target inside its own entry box";
+            }
+            for (Map.Entry<String, Pt> e : safe.entrySet()) {
+                Pt p = e.getValue();
+                Room r = room(e.getKey());
+                if (r != null && !r.trigger.contains(p.x + 0.5, p.y, p.z + 0.5)) return key + ": safe." + e.getKey() + " outside the room";
+                if ("rb".equals(e.getKey()) && boss.area != null && !boss.area.contains(p.x + 0.5, p.y, p.z + 0.5)) return key + ": safe.rb outside the boss area";
             }
             for (Box b : rails) for (Pt p : standPoints())
                 if (b.contains(p.x + 0.5, p.y, p.z + 0.5)) return key + ": rail covers point " + p;
@@ -506,6 +518,12 @@ public final class EmberRunMaps {
         if (!(o instanceof List) || ((List<?>) o).size() < 3) return null;
         List<?> l = (List<?>) o;
         return new Pt(num(l.get(0), 0), num(l.get(1), 0), num(l.get(2), 0));
+    }
+
+    static Map<String, Pt> ptMap(Object o) {
+        Map<String, Pt> out = new java.util.LinkedHashMap<String, Pt>();
+        if (o instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) o).entrySet()) { Pt p = pt(e.getValue()); if (p != null) out.put(String.valueOf(e.getKey()), p); }
+        return Collections.unmodifiableMap(out);
     }
 
     static List<Pt> pts(Object o) {

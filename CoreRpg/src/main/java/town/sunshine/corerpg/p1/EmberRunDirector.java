@@ -104,6 +104,7 @@ final class EmberRunDirector {
             Block bl = w.getBlockAt((int) Math.floor(c.x), (int) Math.floor(c.y), (int) Math.floor(c.z));
             if (bl.getType() != Material.AIR) bl.setType(Material.AIR);
         }
+        holo("entry", "§6" + def.name, "§7清空三处房间开门 · 击败首领后统一结算");
         int items = 0;
         for (org.bukkit.Chunk c : w.getLoadedChunks()) items += purgeItems(c);
         if (items > 0) svc.log().info("[P1 run] " + s.runId + " removed " + items + " template item entities at attach");
@@ -121,6 +122,45 @@ final class EmberRunDirector {
     }
 
     boolean finished() { return finished; }
+
+    // ------------------------------------------------------------------ §9 holograms / safe points
+
+    private final Map<String, List<Entity>> holos = new HashMap<String, List<Entity>>();
+
+    /** §9: at most two lines at a book anchor (marker armor stands, instance only; the template has none). */
+    private void holo(String key, String... lines) {
+        unholo(key);
+        EmberRunMaps.Pt a = def.holo.get(key);
+        if (a == null) return;
+        List<Entity> out = new ArrayList<Entity>();
+        for (int i = 0; i < lines.length; i++) {
+            Location l = new Location(w, a.x + 0.5, a.y - 0.3 * i, a.z + 0.5);
+            org.bukkit.entity.ArmorStand st = w.spawn(l, org.bukkit.entity.ArmorStand.class);
+            st.setVisible(false);
+            st.setGravity(false);
+            st.setMarker(true);
+            st.setSmall(true);
+            st.setInvulnerable(true);
+            st.setCustomName(lines[i]);
+            st.setCustomNameVisible(true);
+            out.add(st);
+        }
+        holos.put(key, out);
+    }
+
+    private void unholo(String key) {
+        List<Entity> l = holos.remove(key);
+        if (l != null) for (Entity e : l) e.remove();
+    }
+
+    /** §20.5: reconnect target — the last cleared room's safe point; once the boss is up (or dead) the RB entry side. */
+    Location safePoint() {
+        EmberRunMaps.Pt p;
+        if (boss != null || bossDead) p = def.safe.get("rb");
+        else p = def.safe.get(next == 0 ? "r0" : def.rooms.get(Math.min(next, def.rooms.size()) - 1).id);
+        if (p == null) return null;
+        return new Location(w, p.x + 0.5, p.y, p.z + 0.5, 0f, 0f);
+    }
 
     // ------------------------------------------------------------------ tick (every 5 ticks)
 
@@ -324,6 +364,7 @@ final class EmberRunDirector {
             default:
                 return;
         }
+        holo("event", "§e额外事件：" + (s.extra == EmberRunRules.Extra.TREASURE ? "宝藏怪" : s.extra == EmberRunRules.Extra.ELITE ? "奖励精英" : "额外宝箱"));
         svc.onExtraSpawned(s);
     }
 
@@ -335,9 +376,11 @@ final class EmberRunDirector {
         if (t.boss()) {
             bossDead = true;
             cleanupMobs(); // §13: adds die with the boss; an unfinished extra mob is gone too
+            unholo("event");
+            holo("exit", "§a" + def.name + " 已通关", "§7结算已发放 · /dp leave 离开");
             return true;
         }
-        if ("event".equals(t.roomId) && t.le.getUniqueId().equals(extraMob)) svc.onExtraDone(s);
+        if ("event".equals(t.roomId) && t.le.getUniqueId().equals(extraMob)) { unholo("event"); svc.onExtraDone(s); }
         return false;
     }
 
@@ -345,6 +388,7 @@ final class EmberRunDirector {
         if (chest == null || !b.getLocation().equals(chest)) return false;
         b.setType(Material.AIR);
         chest = null;
+        unholo("event");
         svc.onExtraDone(s);
         return true;
     }
@@ -352,6 +396,7 @@ final class EmberRunDirector {
     void finish() {
         finished = true;
         cleanupMobs();
+        for (String k : new ArrayList<String>(holos.keySet())) if (!"exit".equals(k)) unholo(k); // exit stays until the instance closes
         if (chest != null && chest.getBlock().getType() == Material.ENDER_CHEST) chest.getBlock().setType(Material.AIR);
         chest = null;
     }

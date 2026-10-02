@@ -53,6 +53,9 @@ maps:
     # D15: book ch. 11 walkable white box (ember_daily_v1, /corerpg p1 mapbuild q01)
     spawn: [0, 64, 5]
     spread: [[-2, 64, 5], [2, 64, 5]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 11)
+    safe: {r0: [0, 64, 3], r1: [0, 64, 21], r2: [30, 64, 31], r3: [32, 64, 59], rb: [0, 64, 91]}
+    holo: {entry: [0, 67, 5], event: [48, 67, 38], exit: [0, 67, 91]}
     mobs:
       melee:    {mm: EmberQ01Melee,    hp: 36,  atk: 3, interval: 2.5}
       ranged:   {mm: EmberQ01Ranged,   hp: 26,  atk: 3, interval: 3.0, range: 12}
@@ -113,6 +116,9 @@ maps:
     # D15: book ch. 12 walkable white box (ember_daily_ash_v1, /corerpg p1 mapbuild q02)
     spawn: [0, 64, 6]
     spread: [[-2, 64, 6], [2, 64, 6]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 12)
+    safe: {r0: [0, 64, 3], r1: [0, 64, 23], r2: [28, 64, 51], r3: [2, 64, 77], rb: [0, 64, 111]}
+    holo: {entry: [0, 67, 6], event: [48, 67, 57], exit: [0, 67, 111]}
     mobs:
       melee:    {mm: EmberQ02Melee,    hp: 72,  atk: 6, interval: 2.5}
       ranged:   {mm: EmberQ02Ranged,   hp: 53,  atk: 6, interval: 3.0, range: 12}
@@ -174,6 +180,9 @@ maps:
     # D15: book ch. 13 walkable white box (ember_daily_crypt_v1, /corerpg p1 mapbuild q03)
     spawn: [0, 64, 6]
     spread: [[-2, 64, 6], [2, 64, 6]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 13)
+    safe: {r0: [0, 64, 3], r1: [0, 60, 25], r2: [-29, 56, 51], r3: [2, 56, 79], rb: [0, 56, 111]}
+    holo: {entry: [0, 67, 6], event: [-48, 59, 60], exit: [0, 59, 111]}
     mobs:
       melee:    {mm: EmberQ03Melee,    hp: 81,  atk: 8, interval: 2.5}
       ranged:   {mm: EmberQ03Ranged,   hp: 59,  atk: 8, interval: 3.0, range: 12}
@@ -242,6 +251,9 @@ maps:
     # D15: book ch. 14 walkable white box (ember_daily_tide_v1, /corerpg p1 mapbuild q04)
     spawn: [0, 64, 6]
     spread: [[-2, 64, 6], [2, 64, 6]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 14)
+    safe: {r0: [0, 64, 3], r1: [0, 64, 25], r2: [-36, 64, 57], r3: [14, 64, 91], rb: [0, 64, 129]}
+    holo: {entry: [0, 67, 6], event: [-56, 67, 66], exit: [0, 67, 129]}
     mobs:
       melee:    {mm: EmberQ04Melee,    hp: 96,  atk: 10, interval: 2.5}
       ranged:   {mm: EmberQ04Ranged,   hp: 77,  atk: 10, interval: 3.0, range: 12}
@@ -307,6 +319,9 @@ maps:
     # C23 stairs (72→80) → R3 → C3B → RB 33×33 boss hall; E side room off R2. No links / rails / clears any more.
     spawn: [0, 64, 5]
     spread: [[-2, 64, 5], [2, 64, 5]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 15)
+    safe: {r0: [0, 64, 3], r1: [0, 64, 21], r2: [40, 72, 53], r3: [-4, 80, 89], rb: [0, 80, 133]}
+    holo: {entry: [0, 67, 5], event: [60, 75, 63], exit: [0, 83, 133]}
     mobs:
       melee:    {mm: EmberQ05Melee,    hp: 177, atk: 14, interval: 2.5}
       ranged:   {mm: EmberQ05Ranged,   hp: 130, atk: 14, interval: 3.0, range: 12}
@@ -371,6 +386,9 @@ maps:
     # D15: book ch. 16 walkable white box (ember_daily_frost_v1, /corerpg p1 mapbuild q06)
     spawn: [0, 64, 6]
     spread: [[-2, 64, 6], [2, 64, 6]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 16)
+    safe: {r0: [0, 64, 3], r1: [0, 64, 23], r2: [40, 64, 55], r3: [40, 64, 89], rb: [0, 64, 125]}
+    holo: {entry: [0, 67, 6], event: [60, 67, 64], exit: [0, 67, 125]}
     mobs:
       melee:    {mm: EmberQ06Melee,    hp: 177, atk: 15, interval: 2.5}
       ranged:   {mm: EmberQ06Ranged,   hp: 130, atk: 15, interval: 3.0, range: 12}
@@ -436,6 +454,9 @@ maps:
     # D15: book ch. 17 walkable white box (ember_daily_rail_v1, /corerpg p1 mapbuild q07)
     spawn: [0, 64, 6]
     spread: [[-2, 64, 6], [2, 64, 6]]
+    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 17)
+    safe: {r0: [0, 64, 3], r1: [0, 64, 23], r2: [40, 64, 55], r3: [-2, 64, 87], rb: [0, 64, 127]}
+    holo: {entry: [0, 67, 6], event: [60, 67, 64], exit: [0, 67, 127]}
     mobs:
       melee:    {mm: EmberQ07Melee,    hp: 204, atk: 19, interval: 2.5}
       ranged:   {mm: EmberQ07Ranged,   hp: 150, atk: 19, interval: 3.0, range: 12}

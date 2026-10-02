@@ -40,6 +40,10 @@ def parse():
         for p in re.finditer(r'^\|(R[1-3])\|((?:' + PT + r'；?)+)\|', body, re.M):
             pts[p.group(1)] = [[int(a), int(b), int(c)] for a, b, c in re.findall(PT, p.group(2))]
         m['points'] = pts
+        sf = re.search(r'安全回退点：(.*)', body).group(1)
+        m['safe'] = {k.lower(): [int(a), int(b), int(c)] for k, a, b, c in re.findall(r'(R[0-3B]) ' + PT, sf)}
+        hl = re.search(r'全息预留：(.*)', body).group(1)
+        m['holo'] = {k.lower(): [int(a), int(b), int(c)] for k, a, b, c in re.findall(r'H_(ENTRY|EVENT|EXIT)=' + PT, hl)}
         e = re.search(r'E 中心 ' + PT, body)
         m['event'] = [int(v) for v in e.groups()]
         out[key] = m

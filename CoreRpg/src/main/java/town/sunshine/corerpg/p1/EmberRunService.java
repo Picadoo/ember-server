@@ -809,15 +809,24 @@ public final class EmberRunService implements Listener {
         return s == null || (s.world != null && !s.world.equals(p.getWorld().getName()));
     }
 
+    /** §20.5: when a committed participant dropped out of an open run (reconnect window 120 s) */
+    private final Map<UUID, Long> quitAt = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+    static final long RECONNECT_MS = 120_000L;
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
         final Player p = e.getPlayer();
+        final Long q = quitAt.remove(p.getUniqueId());
         if (maps.byWorld(p.getWorld().getName()) != null) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                if (!p.isOnline() || !orphanedIn(p)) return;
-                p.sendMessage(P + ChatColor.YELLOW + "你所在的主线本已结束或已取消（未开战的体力会退还）：正在送你离开实例……");
-                p.performCommand("dp leave");
-            }, 20L);
+                if (!p.isOnline()) return;
+                if (orphanedIn(p)) {
+                    p.sendMessage(P + ChatColor.YELLOW + "你所在的主线本已结束或已取消（未开战的体力会退还）：正在送你离开实例……");
+                    p.performCommand("dp leave");
+                    return;
+                }
+                reconnect(p, q == null ? -1 : System.currentTimeMillis() - q);
+            }, 25L);
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!p.isOnline() || blocksLegacy(p.getWorld())) return;
@@ -826,9 +835,27 @@ public final class EmberRunService implements Listener {
         }, 60L);
     }
 
+    /** §20.5: within 120 s back to the last cleared room's safe point (boss up → RB entry side); later → out of the run. */
+    void reconnect(Player p, long gapMs) {
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.finished()) return;
+        if (gapMs > RECONNECT_MS) {
+            p.sendMessage(P + ChatColor.YELLOW + "断线超过 120 秒，不能回到本局：正在送你离开实例（按离开副本处理）……");
+            p.performCommand("dp leave");
+            return;
+        }
+        org.bukkit.Location to = d.safePoint();
+        if (to == null) return;
+        p.teleport(to);
+        p.setFallDistance(0f);
+        p.sendMessage(P + "断线重连：已回到最近已清房的安全点" + (gapMs >= 0 ? "（离线 " + gapMs / 1000 + " 秒）" : "") + "，房间进度与生命保持不变。");
+        log().info("[P1 run] reconnect " + p.getName() + " gap=" + gapMs + "ms → " + to.getBlockX() + "," + to.getBlockY() + "," + to.getBlockZ());
+    }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
         UUID u = e.getPlayer().getUniqueId();
+        if (openSessionOf(u) != null && maps.byWorld(e.getPlayer().getWorld().getName()) != null) quitAt.put(u, System.currentTimeMillis());
         passes.remove(u);
         starterChecked.remove(u);
         if (openSessionOf(u) == null) store.unload(u);

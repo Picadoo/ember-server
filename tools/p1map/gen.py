@@ -118,6 +118,20 @@ def patch_runs(text, k, m):
     return text[:q] + blk + text[e:]
 
 
+def patch_safe_holo(text, k, m):
+    """§9 / §20.5: book safe points + hologram anchors, inserted after spread: (replaced when present)."""
+    q = text.index(f'\n  {k}:\n') + 1
+    nxt = re.search(r'\n  q0\d:\n', text[q + 5:])
+    e = q + 5 + nxt.start() + 1 if nxt else len(text)
+    blk = re.sub(r'    # §9 safe points[^\n]*\n    safe: [^\n]*\n    holo: [^\n]*\n', '', text[q:e])
+    sf = ', '.join(f'{r}: {yml_list(m["safe"][r])}' for r in ('r0', 'r1', 'r2', 'r3', 'rb'))
+    hl = ', '.join(f'{h}: {yml_list(m["holo"][h])}' for h in ('entry', 'event', 'exit'))
+    ins = (f'    # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. {10 + int(k[1:])})\n'
+           f'    safe: {{{sf}}}\n    holo: {{{hl}}}\n')
+    blk = re.sub(r'(\n    spread: [^\n]*\n)', lambda mm: mm.group(1) + ins, blk, count=1)
+    return text[:q] + blk + text[e:]
+
+
 def patch_dp(k, m):
     d = 'EmberQ' + k[1:]
     p = os.path.join(ROOT, 'plugins/DungeonPlus/dungeon', d, 'option.yml')
@@ -142,7 +156,11 @@ if __name__ == '__main__':
     open(os.path.join(ROOT, 'CoreRpg/src/main/resources/p1-book-maps.yml'), 'w', encoding='utf-8').write(resource(maps))
     runs = [os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'), os.path.join(ROOT, 'plugins/CoreRpg/ember-v1-runs.yml')]
     t = open(runs[0], encoding='utf-8').read()
-    for k in sys.argv[1:]:
+    args = sys.argv[1:]
+    if args and args[0] == 'safe':
+        for k in maps: t = patch_safe_holo(t, k, maps[k])
+        args = []
+    for k in args:
         t = patch_runs(t, k, maps[k])
         patch_dp(k, maps[k])
     for p in runs: open(p, 'w', encoding='utf-8').write(t)
