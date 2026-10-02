@@ -1,19 +1,19 @@
 # 余烬服 · 交接（2026-10-02 22:50 CST 更新）
 
-这份文档写给接手的人，读完就能接着做。设计正文在 `docs/design-ember-v1.0-P1.md`（下文称「书」）。P2 草案在 `docs/design-ember-v1.1-P2-draft.md`。所有裁决记在源表 `docs/DESIGN-ember-v1.0-P1-source-table.md`（§13.x，D01–D83）。
+这份文档写给接手的人，读完就能接着做。设计正文在 `docs/design-ember-v1.0-P1.md`（下文称「书」）。P2 草案在 `docs/design-ember-v1.1-P2-draft.md`。所有裁决记在源表 `docs/DESIGN-ember-v1.0-P1-source-table.md`（§13.x，D01–D84）。
 
 ## 1 当前状态
 
 | 项 | 值 |
 |---|---|
 | 仓库 | `Picadoo/ember-server`，main 分支。工作树 `/workspace/ember-p1`（分支 p1-g01，推到 main）。服务器在 `/workspace/minecraft` 跑，这是 main 的检出 |
-| CoreRpg | **1.38.0**（`CoreRpg/pom.xml` 第 8 行和 `plugin.yml` `version:` 一起改） |
+| CoreRpg | **1.38.1**（`CoreRpg/pom.xml` 第 8 行和 `plugin.yml` `version:` 一起改） |
 | balance_version | 9（`ember-v1-runs.yml`，规则 g04-1/b9） |
 | 模式 | P1 是默认模式（D61–D65），旧玩法藏在 `ember_hub_legacy`。**不要关 P1** |
 | 菜单 | TrMenu 共 47 个，`trmenu reload` 就能重载 |
-| 套件 | `mineflayer-tests` gameplay 9/9（最近一次跑在 1.36.1；1.37/1.38 只做了冒烟） |
+| 套件 | `mineflayer-tests` gameplay 9/9（1.38.0） |
 | 玩家 | 没有老玩家，**不做数据迁移**。测试号 P1Fox、RaidA–E、NewbieQ |
-| 内容 | 七张主线图 Q01–Q07 + 挑战版。P2-1 每周挑战轮换。P2-2 深渊·余烬层（10 层）。P2-5/6 团本 R01 锈轨矿道·团 + R02 霜封哨所·团（3～5 人，两本合计每周 3 次）。P2-7 每日委托。P2-8 精选图周规则（限药 / 术者换防 / 逆行）。P2-9 每图掉落偏向、团本额外装备按目标族定向（保底精良）、称号和团本足迹（只做展示）。新手提示：回复药放快捷栏、生命低提醒、「下一步」（1.34.1–1.36.1） |
+| 内容 | 七张主线图 Q01–Q07 + 挑战版。P2-1 每周挑战轮换。P2-2 深渊·余烬层（10 层）。P2-5/6 团本 R01 锈轨矿道·团 + R02 霜封哨所·团（3～5 人，两本合计每周 3 次）。P2-7 每日委托。P2-8 精选图周规则（限药 / 术者换防 / 逆行）。P2-9 每图掉落偏向、团本额外装备按目标族定向（保底精良）、称号和团本足迹（只做展示）。P2-10 排行榜（`/corerpg p1 top`）。新手提示：回复药放快捷栏、生命低提醒、「下一步」（1.34.1–1.36.1） |
 
 ## 2 启停
 
@@ -65,8 +65,8 @@
 
 ## 5 备份和发布
 
-- jar 备份在 `/workspace/backup/CoreRpg-<ver>.jar`，最新是 1.38.0。
-- 数据库备份是 `/workspace/backup/db-ember-authme-*-after-<ver>.sql`，最新是 after-1.36.1。
+- jar 备份在 `/workspace/backup/CoreRpg-<ver>.jar`，最新是 1.38.1。
+- 数据库备份是 `/workspace/backup/db-ember-authme-*-after-<ver>.sql`，最新是 after-1.38.0。
 - 发布就是推到 main，然后在 live 里 `git pull --rebase --autostash`。没有单独的 release 产物。
 
 ## 6 规则（必须遵守）
@@ -90,8 +90,6 @@
 - 旧玩法试玩遗留：`docs/PLAYTEST-2026-10-01-newplayer.md` 的「未解决问题」，P1 默认模式下大多已经不在主路上。
 - 日志噪音很小。MythicMobs `ExampleItems.yml` 里的 `GOLDEN_HELMET` 在 1.12 不存在，没修。
 - 剩下的候选：
-  - 排行榜：深渊最高层、每周精选通关数。
   - 精选周规则可以再加几条，比如计时或黑暗（没做的原因见 P2 草案 §5e）。
   - 主城氛围：书 §1 只要求「一句背景」。
 - 团本 DP 队伍要用 GUI 组建（`/dp team`）：队长点第 40 格建队，队员点第 10 格申请，队长 `/dungeon-team request accept <名>`。
-- 1.37.0 起还没跑过套件，也没做过数据库备份，下一位接手请先补上。
