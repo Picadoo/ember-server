@@ -5,6 +5,7 @@
 //   node menu-lore-dump.js 团本            # hub → 团本 submenu
 //   GREP='体力' node menu-lore-dump.js 深渊  # only lines matching GREP
 //   CLICK='次数说明' node menu-lore-dump.js 团本   # also click that submenu item, print the chat it sends
+//                                                 (and dump the next menu if the click opens one)
 // Chat (raw JSON packets) received while opening the submenu / after CLICK is printed as [chat].
 const { joinPlay } = require('./lib/proxy-login')
 const nbt = require('prismarine-nbt')
@@ -49,8 +50,10 @@ function dump (label, w) {
       const re = new RegExp(process.env.CLICK); let cs = -1
       for (let i = 0; i < w.slots.length; i++) if (w.slots[i] && re.test(strip(disp(w.slots[i]).name))) { cs = i; break }
       if (cs < 0) throw new Error('no submenu item matching ' + process.env.CLICK)
-      bot.clickWindow(cs, 0, 0).catch(() => {}); await wait(2500)
+      const pw = waitWindow(bot, 4000); bot.clickWindow(cs, 0, 0).catch(() => {})
+      const w2 = await pw; if (!w2) await wait(1000)
       for (const m of pk.splice(0)) console.log(`[chat] click ${strip(disp(w.slots[cs]).name)}: ${m}`)
+      if (w2) dump(strip(disp(w.slots[cs]).name), w2) // the click opened another menu: dump it too
     }
   }
   bot.quit(); setTimeout(() => process.exit(0), 300)
