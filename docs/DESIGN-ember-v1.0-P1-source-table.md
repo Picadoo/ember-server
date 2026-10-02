@@ -1074,3 +1074,33 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 参数源 | 没有改；balance_version 12 |
 | 数据 | 删除测试号 RevNewA 的游戏数据（cr_players / cr_p1_item / cr_p1_reward / cr_p1_loadout / cr_warehouse、playerdata、stats、advancements、ledger）；先备份 `db-ember-authme-20261003-012424-pre-revnewa-delete.sql` 和 `/workspace/backup/revnewa-files/`；AuthMe 账号保留 |
 | 测试 | 实测 FreshJ1/FreshJ2；套件见 P2 草案 §5n |
+
+### 13.33 装备缓存、测试号不上榜、里程碑称号（CoreRpg 1.47.0，2026-10-03 02:07 CST 部署，D101–D103）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 主手 / 攻击显示从源头修：装备缓存由事件标脏、主线程刷新，异步读取等主线程最多 750 ms。测试号不进排行榜、主城悬浮字、荣誉陈列（配置名单，不按权限）。主菜单「盟约」位改成「荣誉与排行」。三个里程碑称号只做展示 |
+| 代码 / 配置 | EmberLoadoutService（`markDirty`、事件监听、`get` / `refresh`）；EmberMode `boardExcluded`；EmberLeaderboard（`at` 时间、同分先达到在前、`purgeExcluded`、`rankOf`）；HubAmbience 过滤；EmberCosmetics（q04 / q07 / abyss3）；EmberCompare、EmberItemData 短名；ember-v1.yml `leaderboard_exclude`（两份）；ember_hub 第 23 格；Q02 提醒和 [领 Q01 首通护符]；DP `lang/zh_CN.yml` |
+| 参数源 | 没有数值改动；balance_version 12 |
+| 数据 | leaderboard.yml 载入时清掉 P1Fox（运行时文件，不提交） |
+| 测试 | 实测 FreshL1；备份 `after-1.47.0` |
+
+### 13.34 挑战版减压、深渊换算、T3 升阶（CoreRpg 1.48.0，2026-10-03 02:29 CST 部署，D104，balance_version 13）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 挑战敌人生命 ×0.70、伤害 ×0.85；深渊层系数按同比放大（生命 ÷0.70、伤害 ×1.20），每层绝对强度不变，第 1 层 = 改前挑战版；T2→T3 升阶费用减半；Q05 首通 +900 币；升阶 / 印记兑换预览互相标注；Q07 首通和挑战页写「按 T3 来调」，进挑战版时主手不是 T3 提醒一次 |
+| 参数源 | `ember-v1-runs.yml`（两份）：challenge mobs 189/139/265/164/252/630 · atk 20，boss 5600 / 37 / 61 / 37；abyss tiers 1.43/1.20 … 2.07/1.42；q05 `first_clear` 加 `coin: 900`；balance_version 13（g04-1/b13）。`EmberRunMaps.ABYSS_MAX_HP/DMG` 2.3 / 1.56；`EmberUpgradeRules` T2→T3 (60, 15, 6, 0, 1800) |
+| 模型 | chrate：0.5 档刚首通 0% → 11%，免费互换后 0% → 17%，刃 T3 8% → 52%，两件 T3 16% → 86%。p2econ 12 周：线上组合（轮换 / 轮换 + 团本 / 深渊）两件极品 ≥30% 的周数在 0.5 / 0.7 档变化 ≤1 周；0.3 档从「12 周内没到」变成第 9～11 周。p1sim Q07 首通 26 / 8 / 3 天不变。selfcheck 0 failed。输出见 `tools/p1sim/out-*-d104*.md`，表格见 P2 草案 §5o |
+| 代码 | EmberForgeService（升阶「另一条路」）、EmberRunService（`exchangeCompare`、`endOfP1` 引导、`warnedT3`、深渊第 1 层文字）；ember_p1_challenge、ember_p1_abyss、ember_help |
+| 测试 | 单元测试（挑战值、层表、升阶费用、Q05 首通、balance_version 13）；实测 FreshM1；备份 `after-1.48.0` |
+
+### 13.35 团本委托和招募（CoreRpg 1.48.0 / 1.48.1，2026-10-03 02:29 / 02:32 CST 部署，D105）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 团本结算在每日委托里算 2 局（发跨过的每一档，账本键不变）。团本图标右键全服招募，只发给在线的已首通 Q07 玩家；[申请入队] 走 DP 入队申请；每个队长 60 秒一次。体力 60 的备选没用 |
+| 代码 / 配置 | `EmberRunRules.bountyGrants(tiers, prev, now)`；EmberRunService 委托计数 `bountyW`、`cmdRecruit`、`OPS` 加 recruit；ember_p1_adventure 团本图标左 / 右键和建议人数；ember_help、ember-v1.yml 注释；p1sim `bounty()`、p2econ 团本模式 `bounty_weight = 2` |
+| 参数源 | 委托档位不变 |
+| 测试 | 单元测试（跨档发放）；实测 FreshM1 + FreshN1（招募 → 申请 → 入队 → 冷却）；1.48.1 去掉招募对测试号的过滤；套件 9/9；备份 `after-1.48.1` |
+
