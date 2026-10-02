@@ -394,8 +394,26 @@ public final class StatService implements Listener {
 
     // ---------------------------------------------------------------- events
 
-    @EventHandler public void onJoin(PlayerJoinEvent e) { refreshLater(e.getPlayer()); }
-    @EventHandler public void onRespawn(PlayerRespawnEvent e) { refreshLater(e.getPlayer()); }
+    @EventHandler public void onJoin(PlayerJoinEvent e) { refreshLater(e.getPlayer(), "ember_hub"); }
+    @EventHandler public void onRespawn(PlayerRespawnEvent e) { refreshLater(e.getPlayer(), "*"); }
+
+    /**
+     * D65: vanilla respawns / joins at 20 HP and the refresh 1 tick later raises the max (e.g. 140), leaving the player at
+     * 1/7 of the bar in town (seen on the first P1-default death: 2.86 of 20 hearts, food 17 → no regen). Outside P1
+     * worlds a respawn (any world) and a join in the hub ("城内可正常补满", book §19.4) top the player up after the refresh.
+     */
+    private void refreshLater(final Player p, final String fillWorld) {
+        Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override public void run() {
+                if (!p.isOnline() || p.isDead()) return;
+                refresh(p);
+                if (EmberMode.isP1(p)) return;
+                if (!"*".equals(fillWorld) && !p.getWorld().getName().equalsIgnoreCase(fillWorld)) return;
+                AttributeInstance ai = p.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+                if (ai != null && p.getHealth() < ai.getValue()) p.setHealth(ai.getValue());
+            }
+        }, 2L);
+    }
     @EventHandler public void onHeld(PlayerItemHeldEvent e) { refreshLater(e.getPlayer()); }
 
     /** F-key / swap hands — OffHand contents change (B-flex-1). */
