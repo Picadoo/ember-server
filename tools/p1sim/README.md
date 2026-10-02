@@ -1,0 +1,42 @@
+# p1sim — P1 离线节奏模拟器
+
+Python 3 标准库，不联网、不连服务器。用仓库里的**真实配置**模拟一个新角色从 Q01 推到 Q07，代替长时间的机器人试玩来估平衡和节奏。
+
+## 读哪些文件（没有手抄的平衡数）
+
+| 内容 | 来源 |
+|---|---|
+| 七图房间编排（A/B）、怪的生命 / 攻击 / 间隔、首领技能与追加段、增援、额外事件位置、首通奖励、阶级、体力费用 | `plugins/CoreRpg/ember-v1-runs.yml`（和 `CoreRpg/src/main/resources/` 那份比对，不同会警告） |
+| 怪物实际生成生命 | `plugins/MythicMobs/Mobs/EmberP1Main.yml`（和 runs 不一致会警告并以 MM 为准） |
+| A / h / D / q / f / e、暴击、防御、炽愈生命倍率、烬斩冷却、回复药 20% / 15 秒、商店价、起步药、死亡退药 | `plugins/CoreRpg/ember-v1.yml` |
+| 等级攻击 / 生命、等级上下限、烬斩倍率 | `EmberTables.java` DEFAULTS |
+| 强化成功率 / 保底 / 碎片 / 核心 / 币，升阶配方 | `EmberUpgradeRules.java` |
+| 三套觉醒系数、触发间隔、内置冷却 | `EmberSetRules.java` |
+| 基础结算、额外事件权重与奖励、成色 / 精工权重、目标族权重、印记兑换 | `EmberRunRules.java` |
+| 每天体力 | `plugins/CoreRpg/cash.yml` `stamina.base_max` |
+| 余烬经验曲线 | `plugins/CoreRpg/progress.yml` `ember_xp.curve` |
+
+## 模型（简化，故意少参数）
+
+- **每局**：r1 → r2 → r3（每房 A/B 各 50%）→ 首领；按 §9.3 抽额外事件（宝藏怪 / 奖励精英要打，箱子直接给）。房间之间不回血（§19.4）。
+- **战斗**（每房 Monte Carlo、事件驱动）：玩家每 `swing/uptime` 秒一次满蓄力普攻（B，10% ×1.5），烬斩 1.5B 每 8 秒打 `skill_hits` 个；烬爆 / 焚烬 / 炽愈按 `EmberSetRules`。怪各按自己的间隔出手，同时贴身的近战最多 `engage` 只；每下 `atk × M`，以概率 `dodge` 躲开（首领技能和术者直线是预警招，躲避 +0.25）。生命 < 67.5% 且冷却好了就喝药。首领追加段、`below` 条件、Q03 增援都照配置。
+- **养成策略**（=试玩机器人的规则）：每局前用自己的币把药补到 5 瓶；通关领结算，首通拿首通包；新件只在整套更强（DPS × EHP）时换上，其余分解成胚料；8 印记兑换目标族较弱部位；能升阶就先升阶（只差币就攒钱），再把强化较低的一件强化到留 100 币为止；每天 90 体力 = 3 局；每天第一次死亡退回本局用掉的药（D32）。
+- **路线**：`stepdown`（第三次试玩：前沿失败就往下一图刷，逐级下探；下面通关就回前沿）或 `alternate`（第二次试玩：失败 → 上一图刷一局 → 再试）。
+- **技能参数** `dodge`：0.3 / 0.5 / 0.7 代表笨拙 / 一般 / 熟练。校准结果：两次自然试玩的机器人都约等于 **dodge 0.40–0.45**。
+
+不模拟：走位路径、拉怪、地形卡怪、多人、强化互换（`--swap` 可开）、精工 / 成色养成。
+
+## 用法
+
+```bash
+cd tools/p1sim
+python3 selfcheck.py                         # 公式对书 §7.4 / §6.2 / §9.3 的算例、解析器、确定性、单调性
+python3 p1sim.py                             # 当前配置，dodge 0.3/0.5/0.7，每档 60 名玩家，上限 60 天
+python3 p1sim.py --dodge 0.45 --players 200  # 单一档
+python3 p1sim.py --ref                       # 每图在书 §3.2 参考投入下的通关率
+python3 p1sim.py --calibrate                 # 用 v2（改数前）和 v3（1.21.0）的实测首通局数拟合 dodge
+python3 p1sim.py --profile v2 --route alternate   # 重放 D31 之前的数
+```
+
+改了平衡数（runs yml / MM / ember-v1.yml / Java 常量）后重跑即可；`--profile` 里只放历史对照用的覆盖值。
+输出是中位数 / P90（没到的玩家记作无穷大），「首通时装备」是众数，B / H / Lv 是首通那一局的中位数。

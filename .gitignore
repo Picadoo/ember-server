@@ -13,7 +13,9 @@ out/
 .gradle/
 Paper/work/
 node_modules/
-tools/
+tools/*
+!tools/p1sim/
+tools/p1sim/__pycache__/
 
 # ---- 运行时数据 ----
 logs/
