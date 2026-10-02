@@ -1037,3 +1037,12 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 参数源 | 没有改；balance_version 11 |
 | 测试 | 实测见 P2 草案 §5l |
 
+### 13.29 枢纽氛围（CoreRpg 1.43.0，2026-10-03 00:32 CST 部署，D97）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 枢纽只加展示性内容（闲话、指路牌、粒子、排行榜、荣誉陈列），不碰属性、掉落和价格；§23.3 不适用（没有数值） |
+| 代码 | 新增 `HubAmbienceService` 和资源 `hub_ambience.yml`；EmberRunService 新增 `topRows`、`featuredShort`；CoreRpgPlugin 接线和 `/corerpg hubambience`。EmberForgeService 分解警告只列真正的投入 |
+| 参数源 | 没有改；balance_version 11 |
+| 测试 | 实测见 P2 草案 §5m；套件 9/9 |
+

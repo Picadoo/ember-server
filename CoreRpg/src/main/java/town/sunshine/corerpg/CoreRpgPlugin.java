@@ -230,6 +230,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         emberRuns.start();
         emberCommand.setRuns(emberRuns);
+        hubAmbience = new HubAmbienceService(this); // D97 hub atmosphere (display only)
+        Bukkit.getPluginManager().registerEvents(hubAmbience, this);
+        Bukkit.getScheduler().runTaskLater(this, hubAmbience::start, 100L);
         emberSupplies = new town.sunshine.corerpg.p1.EmberSupplyService(this); // B2.169 §19.4 shop + §3.1 starter supplies
         Bukkit.getPluginManager().registerEvents(emberSupplies, this);
         emberCommand.setSupplies(emberSupplies);
@@ -299,6 +302,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (hubAmbience != null) hubAmbience.stop(); // D97: floating lines never outlive the plugin
         if (petService != null) petService.shutdown();
         if (guildService != null) guildService.saveAll();
         if (auctionService != null) auctionService.saveAll();
@@ -332,6 +336,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public CashService getCashService() { return cashService; }
     public ProgressService getProgressService() { return progressService; }
     public QuestService getQuestService() { return questService; }
+    private HubAmbienceService hubAmbience;
     public HubNpcService getHubNpcService() { return hubNpcService; }
     public AfkTierService getAfkTierService() { return afkTierService; }
     public TalentService getTalentServicePublic() { return talentService; }
@@ -879,6 +884,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if ("mmgive".equals(sub) || "mmxp".equals(sub)) return cmdMmCredit(sender, args, "mmxp".equals(sub));
         if ("quest".equals(sub) || "mainline".equals(sub) || "主线".equals(sub)) return questService.cmd(sender, args);
         if ("hubbuild".equals(sub) || "hubplaza".equals(sub)) return hubPlazaService.cmd(sender, args);
+        if ("hubambience".equals(sub) && hubAmbience != null) return hubAmbience.cmd(sender, args);
         if ("hubnpc".equals(sub) || "workshopnpc".equals(sub)) return hubNpcService.cmd(sender, args);
         if ("abyssbuild".equals(sub) || "abyssshaft".equals(sub)) return abyssShaftService.cmd(sender, args);
         if ("weeklybuild".equals(sub) || "weeklycorridor".equals(sub)) return weeklyCorridorService.cmd(sender, args);

@@ -1823,6 +1823,21 @@ public final class EmberRunService implements Listener {
                 + " · 加成剩 " + left + "/" + maps.rotationWeeklyCap + " · 周一 0 点轮换";
     }
 
+    /** D97 hub board: top {@code n} rows of the abyss board or this week's featured board (display only) */
+    public java.util.List<EmberLeaderboard.Row> topRows(boolean abyssBoard, int n) {
+        if (top == null) return new ArrayList<EmberLeaderboard.Row>();
+        return top.top(abyssBoard, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())), n);
+    }
+
+    /** D97 hub text, e.g. 「Q03 残誓地窖 · 规则「逆行」」 */
+    public String featuredShort() {
+        java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
+        EmberRunMaps.MapDef f = maps.byKey(featured(today));
+        if (f == null) return "无";
+        EmberRunMaps.Modifier mod = maps.modifierFor(today);
+        return f.key.toUpperCase(Locale.ROOT) + " " + f.name + (mod == null ? "" : " · 规则「" + mod.name + "」");
+    }
+
     /** P2-10 (D84) /corerpg p1 top: both boards, top 10 */
     public boolean topCommand(org.bukkit.command.CommandSender p) {
         if (top == null) { p.sendMessage(P + "排行榜未加载"); return true; }
