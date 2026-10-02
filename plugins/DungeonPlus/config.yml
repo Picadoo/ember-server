@@ -90,7 +90,8 @@ dungeon:
     #开启DEBUG项后在地牢内使用物品会返回对应英文ID复制至下方列表即可
     dungeon-item-right-click-ban: []
     #地牢复活消息提醒 (即死亡后聊天栏显示的死亡消息,可以点击复活那个)
-    dungeon-revive-message: true
+    # F-review #7 (D125): off — CoreRpg says 你已倒下 + the next revive point itself; DP's [复活] button could never work
+    dungeon-revive-message: false
     #地牢队伍伤害消息提醒 (开启后如果地牢无法造成队伍伤害时提示语言文件 'dungeon-game-pvp' 消息)
     dungeon-team-damage-message: true
     #地牢队伍玩家数量限制

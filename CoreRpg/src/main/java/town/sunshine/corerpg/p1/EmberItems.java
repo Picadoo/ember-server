@@ -108,6 +108,38 @@ public final class EmberItems {
     }
 
     /**
+     * Endgame #10 / F-review (D127): rewrite the display lines of P1 items made before D101 (old 「标准｜锋刃0%」 names)
+     * to the current wording — template lore + {@link #applyLore}. Display only: the signed ember_v1 data is untouched,
+     * and only valid, verified stacks are touched. Returns how many stacks were rewritten.
+     */
+    public int relabel(org.bukkit.entity.Player p) {
+        org.bukkit.inventory.PlayerInventory inv = p.getInventory();
+        ItemStack[] all = inv.getContents();
+        int n = 0;
+        for (int i = 0; i < all.length; i++) {
+            ItemStack it = all[i];
+            if (it == null || !hasData(it)) continue;
+            Read r = read(it);
+            if (r == null || !r.ok()) continue;
+            ItemStack fresh = ni.createNiItem(r.data.ni);
+            if (fresh == null) continue;
+            applyLore(fresh, r.data);
+            ItemMeta want = fresh.getItemMeta(), have = it.getItemMeta();
+            if (want == null || have == null) continue;
+            List<String> wl = want.hasLore() ? want.getLore() : new ArrayList<String>();
+            List<String> hl = have.hasLore() ? have.getLore() : new ArrayList<String>();
+            String wn = want.hasDisplayName() ? want.getDisplayName() : null, hn = have.hasDisplayName() ? have.getDisplayName() : null;
+            if (wl.equals(hl) && (wn == null ? hn == null : wn.equals(hn))) continue;
+            have.setLore(wl);
+            if (wn != null) have.setDisplayName(wn);
+            it.setItemMeta(have);
+            inv.setItem(i, it);
+            n++;
+        }
+        return n;
+    }
+
+    /**
      * Appends the §19.3 info lines (成色/精工/强化 + base composition). Display only, never read back.
      * Never uses the legacy lore keys 物理伤害 / 生命力 / 物理防御 that StatService parses.
      */

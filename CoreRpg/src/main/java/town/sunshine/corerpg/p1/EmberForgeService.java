@@ -157,6 +157,9 @@ public final class EmberForgeService implements Listener {
         return out.isEmpty() ? null : "§8来源：" + String.join("；", out);
     }
 
+    /** D120: what is missing for a cost (the gear page's cheapest-route hint) */
+    public List<String> lackingFor(Player p, Cost c) { return lacking(p, c); }
+
     private List<String> lacking(Player p, Cost c) {
         List<String> out = new ArrayList<String>();
         for (Map.Entry<String, Integer> m : c.materials().entrySet()) {
@@ -374,6 +377,33 @@ public final class EmberForgeService implements Listener {
             else p.sendMessage(P + ChatColor.RED + "另一件：" + b.error);
             return true;
         }
+        return swapSlots(p, a, b, go, rid, "/corerpg p1 swap " + (target == null ? "" : target + " ") + "confirm");
+    }
+
+    /**
+     * D120: free enhance swap between two pieces named by uid (the [免费互换强化] button after a better piece arrives):
+     * no main hand / off hand juggling. Town only, same as the workshop swap.
+     */
+    public boolean swapUids(Player p, String uidA, String uidB, boolean go, String confirmCmd) {
+        String gate = gate(p);
+        if (gate != null) { p.sendMessage(P + ChatColor.RED + gate + "（按钮一直有效，回城后再点）"); return true; }
+        PlayerInventory inv = p.getInventory();
+        ItemStack[] all = inv.getContents();
+        Slot a = null, b = null;
+        for (int i = 0; i < all.length; i++) {
+            if (all[i] == null || !items().hasData(all[i])) continue;
+            EmberItems.Read r = items().read(all[i]);
+            if (r == null || r.data == null || r.data.uid == null) continue;
+            if (r.data.uid.equals(uidA)) a = check(p, i, all[i]);
+            else if (r.data.uid.equals(uidB)) b = check(p, i, all[i]);
+        }
+        if (a == null || b == null) { p.sendMessage(P + ChatColor.RED + "两件都要在背包里才能互换"); return true; }
+        if (a.error != null) { p.sendMessage(P + ChatColor.RED + a.error); return true; }
+        if (b.error != null) { p.sendMessage(P + ChatColor.RED + b.error); return true; }
+        return swapSlots(p, a, b, go, null, confirmCmd);
+    }
+
+    private boolean swapSlots(Player p, Slot a, Slot b, boolean go, String rid, String confirmCmd) {
         EmberUpgradeRules.SwapPlan plan = EmberUpgradeRules.swap(a.data, b.data);
         if (!plan.ok()) { p.sendMessage(P + ChatColor.RED + plan.error); return true; }
         if (!go) {
@@ -382,7 +412,7 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "  " + b.data.shortLabel() + "  →  +" + plan.b.enhance + "（失败计数 " + plan.b.pity + "）");
             p.sendMessage(P + ChatColor.YELLOW + "两件都会绑定；成色/精工/家族/阶级不变。");
             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "确认无误再点：", "[确认互换]",
-                    "/corerpg p1 swap " + (target == null ? "" : target + " ") + "confirm", "交换两件的强化等级和失败计数，两件都会绑定"); // D95
+                    confirmCmd, "交换两件的强化等级和失败计数，两件都会绑定"); // D95
             return true;
         }
         String first = a.data.uid.compareTo(b.data.uid) < 0 ? a.data.uid + ":" + a.data.rev + ":" + b.data.uid + ":" + b.data.rev

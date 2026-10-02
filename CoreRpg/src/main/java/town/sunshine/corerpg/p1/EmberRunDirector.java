@@ -194,6 +194,19 @@ final class EmberRunDirector {
                 if (!k.label.isEmpty()) p.sendMessage("§7" + k.label);
             }
         }
+        // F-review Q04 (D122): a player who drops below the map's floors (pool, ground outside) goes back to the room
+        if (!Double.isNaN(def.fallCatchY)) {
+            for (Player p : participantsHere()) {
+                if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead() || p.getLocation().getY() >= def.fallCatchY) continue;
+                EmberRunMaps.Pt sp = activeRoom != null ? def.safe.get(activeRoom) : null;
+                Location to = sp != null ? new Location(w, sp.x + 0.5, sp.y, sp.z + 0.5, p.getLocation().getYaw(), 0f) : safePoint();
+                if (to == null) continue;
+                p.setFallDistance(0f);
+                p.teleport(to);
+                p.sendMessage("§7掉出房间了，已送回房间（下面是水渠，不是路）");
+                svc.log().info("[P1 run] " + s.runId + " fall-catch " + p.getName() + " → " + (activeRoom != null ? activeRoom : "safe"));
+            }
+        }
         // mob upkeep: leash, stuck, void
         Iterator<Map.Entry<UUID, Tracked>> it = mobs.entrySet().iterator();
         while (it.hasNext()) {
@@ -221,7 +234,8 @@ final class EmberRunDirector {
             }
             // B2.165: also "out" when standing well above its own floor (on a roof / wall top it glitched onto)
             boolean out = t.leash != null && !t.leash.containsGrown(l.getX(), l.getY(), l.getZ(), 2.0)
-                    || l.getY() > t.home.y + 4.5;
+                    || l.getY() > t.home.y + 4.5
+                    || !Double.isNaN(def.fallCatchY) && l.getY() < def.fallCatchY; // D122: in the pool / outside → home
             Block head = l.clone().add(0, Math.min(1.5, t.le.getEyeHeight()), 0).getBlock();
             boolean inWall = head.getType().isOccluding();
             if (out || inWall) {

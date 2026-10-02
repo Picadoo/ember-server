@@ -1,7 +1,8 @@
-# 余烬 v1.1 · D119 外观商店页（D107 外观商店 + E-review #2 印记外观 + D117 余烬徽）— 只做展示，不加属性。
-# 每件一个图标：状态 / 价格来自 PAPI %corerpg_p1_shop_<id>%；左键 = 没有就打开购买（聊天栏按付款方式出按钮），
-# 有了就换上 / 取下；右键 = 试穿 10 秒。付款与校验全在服务端（/corerpg p1 cosmetic pick|try <id>）。
-# 入口：赛季页「外观商店」、/ember_p1_shop；聊天版仍是 /corerpg p1 cosmetic。
+# 余烬 v1.1 · 外观商店页（D107 外观商店 + E-review #2 印记外观 + D117 余烬徽；F-review #2 / D121 唯一的商店）— 只做展示，不加属性。
+# 名字 / 说明 / 价格 / 状态全来自 PAPI（%corerpg_p1_shopname_|shophow_|shopprice_|shop_<id>%），和聊天栏列表
+# （/corerpg p1 cosmetic list）同一份数据、同一句话。左键：没有就打开页内确认页 ember_p1_shop_buy（每种付款方式一格，
+# 写付得起或还差多少），有了就换上 / 取下；右键：试穿 10 秒。付款与校验全在服务端（/corerpg p1 cosmetic pick|buysel|try）。
+# 入口（都打开这一页）：赛季页 [43]、装备页 [43]、/ember_p1_shop、/corerpg p1 cosmetic、进服消息与称号列表的 [外观商店]。
 
 Title: '§b余烬 · 外观商店'
 
@@ -20,7 +21,7 @@ Layout:
   - '#abcde###'
   - '#fgh#ijk#'
   - '#lmn#op##'
-  - '##H#B#T##'
+  - '####B####'
 
 Events:
   Open:
@@ -40,20 +41,22 @@ Icons:
       lore:
         - ''
         - '§7余烬币：§f%corerpg_coin%'
-        - '§7余烬徽：§f%corerpg_p1_badges% §8（周目标奖励，1 徽 = 1 点）'
-        - '§7多出来的印记也能付：T1 1 点 · T2 2 点 · T3 4 点（每阶留 8 枚备用兑换）'
-        - '§71 点 = 50 币标价 · 买一次永久有，不回收'
+        - '§7余烬徽：§f%corerpg_p1_badges% §8（周目标奖励）'
+        - '§7可用印记：§f%corerpg_p1_shopmarks% §8（每阶留 8 枚备用兑换）'
+        - '§7折算：1 徽 = 1 点 · T1 1 点 · T2 2 点 · T3 4 点 · 1 点 = 50 币'
+        - '§7辉光 / 动效不收币，其余币、徽、印记都能付 · 买一次永久有，不回收'
         - ''
-        - '§e➥ §f左键：没有就购买 / 有了就换上或取下'
+        - '§e➥ §f左键：没有就看付款方式 / 有了就换上或取下'
         - '§e➥ §f右键：试穿 10 秒'
 
   a:
     update: 20
     display:
       material: paper
-      name: '§f素白'
+      name: '%corerpg_p1_shopname_color_white%'
       lore:
-        - '§7称号颜色：已有称号换成白色'
+        - '§7%corerpg_p1_shophow_color_white%'
+        - '§6%corerpg_p1_shopprice_color_white%'
         - ''
         - '%corerpg_p1_shop_color_white%'
         - ''
@@ -72,9 +75,10 @@ Icons:
     update: 20
     display:
       material: gold nugget
-      name: '§6金辉'
+      name: '%corerpg_p1_shopname_color_gold%'
       lore:
-        - '§7称号颜色：已有称号换成金色'
+        - '§7%corerpg_p1_shophow_color_gold%'
+        - '§6%corerpg_p1_shopprice_color_gold%'
         - ''
         - '%corerpg_p1_shop_color_gold%'
         - ''
@@ -93,9 +97,10 @@ Icons:
     update: 20
     display:
       material: prismarine shard
-      name: '§b霜青'
+      name: '%corerpg_p1_shopname_color_aqua%'
       lore:
-        - '§7称号颜色：已有称号换成青色'
+        - '§7%corerpg_p1_shophow_color_aqua%'
+        - '§6%corerpg_p1_shopprice_color_aqua%'
         - ''
         - '%corerpg_p1_shop_color_aqua%'
         - ''
@@ -114,9 +119,10 @@ Icons:
     update: 20
     display:
       material: redstone
-      name: '§c绯焰'
+      name: '%corerpg_p1_shopname_color_red%'
       lore:
-        - '§7称号颜色：已有称号换成红色'
+        - '§7%corerpg_p1_shophow_color_red%'
+        - '§6%corerpg_p1_shopprice_color_red%'
         - ''
         - '%corerpg_p1_shop_color_red%'
         - ''
@@ -135,9 +141,10 @@ Icons:
     update: 20
     display:
       material: ender pearl
-      name: '§d紫晶'
+      name: '%corerpg_p1_shopname_color_purple%'
       lore:
-        - '§7称号颜色：已有称号换成紫色'
+        - '§7%corerpg_p1_shophow_color_purple%'
+        - '§6%corerpg_p1_shopprice_color_purple%'
         - ''
         - '%corerpg_p1_shop_color_purple%'
         - ''
@@ -156,9 +163,10 @@ Icons:
     update: 20
     display:
       material: flint
-      name: '§7灰烬'
+      name: '%corerpg_p1_shopname_trail_ash%'
       lore:
-        - '§7足迹：脚下一缕灰烟（朴素足迹）'
+        - '§7%corerpg_p1_shophow_trail_ash%'
+        - '§6%corerpg_p1_shopprice_trail_ash%'
         - ''
         - '%corerpg_p1_shop_trail_ash%'
         - ''
@@ -177,9 +185,10 @@ Icons:
     update: 20
     display:
       material: glowstone dust
-      name: '§e星屑'
+      name: '%corerpg_p1_shopname_trail_spark%'
       lore:
-        - '§7足迹：脚下一点星光'
+        - '§7%corerpg_p1_shophow_trail_spark%'
+        - '§6%corerpg_p1_shopprice_trail_spark%'
         - ''
         - '%corerpg_p1_shop_trail_spark%'
         - ''
@@ -198,9 +207,10 @@ Icons:
     update: 20
     display:
       material: emerald
-      name: '§a萤绿'
+      name: '%corerpg_p1_shopname_trail_leaf%'
       lore:
-        - '§7足迹：脚下一点绿光'
+        - '§7%corerpg_p1_shophow_trail_leaf%'
+        - '§6%corerpg_p1_shopprice_trail_leaf%'
         - ''
         - '%corerpg_p1_shop_trail_leaf%'
         - ''
@@ -219,9 +229,10 @@ Icons:
     update: 20
     display:
       material: gold ingot
-      name: '§6✦'
+      name: '%corerpg_p1_shopname_flair_star%'
       lore:
-        - '§7名牌标记：名牌前的金星（主城和野外显示）'
+        - '§7%corerpg_p1_shophow_flair_star%'
+        - '§6%corerpg_p1_shopprice_flair_star%'
         - ''
         - '%corerpg_p1_shop_flair_star%'
         - ''
@@ -240,9 +251,10 @@ Icons:
     update: 20
     display:
       material: packed ice
-      name: '§b❄'
+      name: '%corerpg_p1_shopname_flair_snow%'
       lore:
-        - '§7名牌标记：名牌前的雪花'
+        - '§7%corerpg_p1_shophow_flair_snow%'
+        - '§6%corerpg_p1_shopprice_flair_snow%'
         - ''
         - '%corerpg_p1_shop_flair_snow%'
         - ''
@@ -261,9 +273,10 @@ Icons:
     update: 20
     display:
       material: gold helmet
-      name: '§e♛'
+      name: '%corerpg_p1_shopname_flair_crown%'
       lore:
-        - '§7名牌标记：名牌前的王冠'
+        - '§7%corerpg_p1_shophow_flair_crown%'
+        - '§6%corerpg_p1_shopprice_flair_crown%'
         - ''
         - '%corerpg_p1_shop_flair_crown%'
         - ''
@@ -282,9 +295,10 @@ Icons:
     update: 20
     display:
       material: blaze powder
-      name: '§6余烬辉光'
+      name: '%corerpg_p1_shopname_glow_ember%'
       lore:
-        - '§7武器辉光：主城里手持的刃冒火星（只用印记 / 徽）'
+        - '§7%corerpg_p1_shophow_glow_ember%'
+        - '§6%corerpg_p1_shopprice_glow_ember%'
         - ''
         - '%corerpg_p1_shop_glow_ember%'
         - ''
@@ -303,9 +317,10 @@ Icons:
     update: 20
     display:
       material: nether star
-      name: '§f星辉'
+      name: '%corerpg_p1_shopname_glow_star%'
       lore:
-        - '§7武器辉光：主城里手持的刃绕着白光（只用印记 / 徽）'
+        - '§7%corerpg_p1_shophow_glow_star%'
+        - '§6%corerpg_p1_shopprice_glow_star%'
         - ''
         - '%corerpg_p1_shop_glow_star%'
         - ''
@@ -324,9 +339,10 @@ Icons:
     update: 20
     display:
       material: magma cream
-      name: '§5紫焰辉光'
+      name: '%corerpg_p1_shopname_glow_witch%'
       lore:
-        - '§7武器辉光：主城里手持的刃冒紫焰（只用印记 / 徽）'
+        - '§7%corerpg_p1_shophow_glow_witch%'
+        - '§6%corerpg_p1_shopprice_glow_witch%'
         - ''
         - '%corerpg_p1_shop_glow_witch%'
         - ''
@@ -345,9 +361,10 @@ Icons:
     update: 20
     display:
       material: blaze rod
-      name: '§6流§c火'
+      name: '%corerpg_p1_shopname_anim_ember%'
       lore:
-        - '§7称号动效：火色流光（要先装上称号）'
+        - '§7%corerpg_p1_shophow_anim_ember%'
+        - '§6%corerpg_p1_shopprice_anim_ember%'
         - ''
         - '%corerpg_p1_shop_anim_ember%'
         - ''
@@ -366,9 +383,10 @@ Icons:
     update: 20
     display:
       material: quartz
-      name: '§b霜§f光'
+      name: '%corerpg_p1_shopname_anim_frost%'
       lore:
-        - '§7称号动效：霜色流光（要先装上称号）'
+        - '§7%corerpg_p1_shophow_anim_frost%'
+        - '§6%corerpg_p1_shopprice_anim_frost%'
         - ''
         - '%corerpg_p1_shop_anim_frost%'
         - ''
@@ -383,39 +401,10 @@ Icons:
         - close
         - 'command: corerpg p1 cosmetic try anim_frost'
 
-  H:
-    display:
-      material: name tag
-      name: '§d称号与足迹'
-      lore:
-        - ''
-        - '§7当前称号：§f%corerpg_p1_title%'
-        - ''
-        - '§e➥ §f点击：查看与装上'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - close
-        - 'command: corerpg p1 title'
-
   B:
     display:
       material: arrow
-      name: '§7返回赛季与周目标'
+      name: '§7返回赛季 · 排行 · 周目标'
     actions:
       all:
-        - 'sound: BLOCK_NOTE_PLING-1-0'
         - 'menu: ember_p1_season'
-
-  T:
-    display:
-      material: book
-      name: '§7聊天栏版商店'
-      lore:
-        - ''
-        - '§7完整列表 + 付款按钮'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - close
-        - 'command: corerpg p1 cosmetic'

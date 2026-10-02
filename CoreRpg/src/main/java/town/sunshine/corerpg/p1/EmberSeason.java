@@ -50,7 +50,10 @@ public final class EmberSeason {
         public final String name;
         public final int value;
         public final long at;
-        Row(String name, int value, long at) { this.name = name; this.value = value; this.at = at; }
+        /** F-review #4 (D123): abyss board only — fastest clear (seconds) at the best tier, 0 = unknown; ties go to the faster */
+        public final int secs;
+        Row(String name, int value, long at) { this(name, value, at, 0); }
+        Row(String name, int value, long at, int secs) { this.name = name; this.value = value; this.at = at; this.secs = secs; }
     }
 
     private final EmberRunService runs;
@@ -107,7 +110,10 @@ public final class EmberSeason {
 
     // ------------------------------------------------------------------ recording (called from settlement)
 
-    void onAbyss(UUID u, String name, int tier) { record(u, name, "abyss", tier, MAX); }
+    void onAbyss(UUID u, String name, int tier) { onAbyss(u, name, tier, 0); }
+
+    /** F-review #4 (D123): best tier, then the fastest clear at that tier (a later, faster clear moves you up) */
+    void onAbyss(UUID u, String name, int tier, int secs) { record(u, name, "abyss", tier, MAX, secs); }
 
     void onFeatured(UUID u, String name) { record(u, name, "featured", 1, ADD); }
 
@@ -118,7 +124,9 @@ public final class EmberSeason {
 
     private static final int MAX = 0, ADD = 1, MIN = 2;
 
-    private synchronized void record(UUID u, String name, String board, int v, int mode) {
+    private void record(UUID u, String name, String board, int v, int mode) { record(u, name, board, v, mode, 0); }
+
+    private synchronized void record(UUID u, String name, String board, int v, int mode, int secs) {
         if (u == null || name == null) return;
         if (EmberMode.boardExcluded(name)) { log.info("[P1 season] " + name + " " + board + "=" + v + " not ranked (leaderboard_exclude)"); return; }
         LocalDate d = today();
@@ -128,9 +136,31 @@ public final class EmberSeason {
             Row r = b.get(u.toString());
             int nv = r == null ? v : mode == ADD ? r.value + v : mode == MAX ? Math.max(r.value, v) : Math.min(r.value, v);
             long at = r != null && r.value == nv ? r.at : System.currentTimeMillis();
-            b.put(u.toString(), new Row(name, nv, at));
+            int ns = bestSecs(r, nv, v, secs);
+            if (r != null && r.value == nv && ns != r.secs && ns > 0) at = System.currentTimeMillis();
+            b.put(u.toString(), new Row(name, nv, at, ns));
         }
         save();
+    }
+
+    /** the time kept for the row: a new best tier takes its own time; the same tier keeps the faster one */
+    static int bestSecs(Row old, int newValue, int v, int secs) {
+        int os = old == null ? 0 : old.secs;
+        if (old == null || newValue > old.value) return v == newValue ? Math.max(0, secs) : 0;
+        if (v < newValue || secs <= 0) return os;
+        return os <= 0 ? secs : Math.min(os, secs);
+    }
+
+    /** board order: value, then (abyss) the faster clear with unknown times last, then who got there first */
+    static int compareRows(String board, Row a, Row b) {
+        boolean low = lowerBetter(board);
+        if (a.value != b.value) return low ? Integer.compare(a.value, b.value) : Integer.compare(b.value, a.value);
+        if ("abyss".equals(board) && a.secs != b.secs) {
+            if (a.secs <= 0) return 1;
+            if (b.secs <= 0) return -1;
+            return Integer.compare(a.secs, b.secs);
+        }
+        return a.at != b.at ? Long.compare(a.at, b.at) : a.name.compareTo(b.name);
     }
 
     public synchronized List<Row> top(String period, String board, int n) {
@@ -142,11 +172,14 @@ public final class EmberSeason {
         Map<String, Map<String, Row>> p = boards.get(period);
         List<Row> rows = new ArrayList<Row>(p == null || p.get(board) == null ? Collections.<Row>emptyList() : p.get(board).values());
         rows.removeIf(r -> EmberMode.boardExcluded(r.name));
-        final boolean low = lowerBetter(board);
-        rows.sort((a, b) -> a.value != b.value ? (low ? Integer.compare(a.value, b.value) : Integer.compare(b.value, a.value))
-                : a.at != b.at ? Long.compare(a.at, b.at) : a.name.compareTo(b.name));
+        rows.sort((a, b) -> compareRows(board, a, b));
         return rows;
     }
+
+    /** the current week's board (the one leaderboard set: hub board, PAPI top_* and /corerpg p1 top all read it) */
+    public List<Row> weekTop(String board, int n) { return top(weekKey(today()), board, n); }
+
+    public int[] weekRank(UUID u, String board) { return rankOf(u, weekKey(today()), board); }
 
     /** {rank, value} or null */
     public synchronized int[] rankOf(UUID u, String period, String board) {
@@ -166,6 +199,11 @@ public final class EmberSeason {
             case "time_r02": return "R02 最快通关";
             default: return b;
         }
+    }
+
+    /** F-review #4: abyss rows show the time that breaks the tie (「第 10 层 · 6 分 05 秒」) */
+    public static String rowText(String b, Row r) {
+        return valueText(b, r.value) + ("abyss".equals(b) && r.secs > 0 ? " · " + (r.secs / 60) + " 分 " + String.format(Locale.ROOT, "%02d", r.secs % 60) + " 秒" : "");
     }
 
     public static String valueText(String b, int v) {
@@ -217,7 +255,7 @@ public final class EmberSeason {
                 names.put(uid, r.name);
                 awards.computeIfAbsent(uid, k -> new LinkedHashSet<String>()).add(ba[1]);
                 if (i == 0) awards.get(uid).add("season_crown");
-                line.append(i == 0 ? "" : " ｜ ").append(i + 1).append(". ").append(r.name).append(" ").append(valueText(ba[0], r.value));
+                line.append(i == 0 ? "" : " ｜ ").append(i + 1).append(". ").append(r.name).append(" ").append(rowText(ba[0], r));
             }
             lines.add(line.toString());
         }
@@ -294,7 +332,7 @@ public final class EmberSeason {
             d.addPeriodCount(C_AWARD_LAST + id, "all", n - d.periodCount(C_AWARD_LAST + id, "all"));
             EmberCosmetics.Cosmetic c = EmberCosmetics.byId(id);
             p.sendMessage(P + "§d第 " + n + " 赛季奖励：" + (c == null ? id : (c.kind == EmberCosmetics.Kind.FLAIR ? "名牌框 " : "称号 ") + c.label)
-                    + "§7（只做展示，主菜单「荣誉与排行」右键装上）");
+                    + "§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
         }
         runs.flushData(p.getUniqueId());
     }
@@ -385,7 +423,8 @@ public final class EmberSeason {
         LocalDate t = today();
         int left = (int) (7 - (t.getDayOfWeek().getValue() - 1));
         p.sendMessage(P + "§6本周目标§7（周一 0 点刷新，还剩 " + left + " 天）· 完成 " + goalsDone(d) + "/" + goalCount() + " · 余烬徽 §f" + badges(d));
-        if (!runs.progressFlag(d, "q07")) { p.sendMessage(P + "§8首通 Q07 后开放（挑战版、深渊、团本都在 Q07 之后）。"); return true; }
+        if (!runs.progressFlag(d, "q07")) { p.sendMessage(P + "§8首通 Q07 后才计数（挑战版、深渊、团本都在 Q07 之后）。"); return true; }
+        p.sendMessage(P + "§8首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算");
         for (String g : GOALS) {
             if (target(g) <= 0) continue;
             boolean done = progress(d, g) >= target(g);
@@ -433,9 +472,9 @@ public final class EmberSeason {
             List<Row> rows = top(period, b, 5);
             StringBuilder s = new StringBuilder("§e" + boardName(b) + "§7：");
             if (rows.isEmpty()) s.append("暂无");
-            for (int i = 0; i < rows.size(); i++) s.append(i == 0 ? "" : " ｜ ").append("§f").append(i + 1).append(". ").append(rows.get(i).name).append(" §7").append(valueText(b, rows.get(i).value));
+            for (int i = 0; i < rows.size(); i++) s.append(i == 0 ? "" : " ｜ ").append("§f").append(i + 1).append(". ").append(rows.get(i).name).append(" §7").append(rowText(b, rows.get(i)));
             int[] me = rankOf(p.getUniqueId(), period, b);
-            s.append(me == null ? "" : " §8（你：第 " + me[0] + " 名）");
+            s.append(me != null ? " §8（你：第 " + me[0] + " 名）" : " §8（你：未上榜" + ("abyss".equals(b) ? "，" + abyssMine(runs.abyssBest(runs.dataOf(p.getUniqueId()))) : "") + "）");
             p.sendMessage(P + s);
         }
         p.sendMessage(P + "§8赛季末：每榜前 " + maps().seasonTop + " 名和赛季内通关深渊第 " + maps().seasonDeepTier + " 层的人得赛季称号，各榜第 1 名再得 ❖ 名牌框 · 测试号不上榜");
@@ -470,7 +509,8 @@ public final class EmberSeason {
             rest = rest.substring(2);
             if (rank) {
                 int[] me = u == null ? null : rankOf(u, period, rest);
-                return me == null ? "未上榜" : "第 " + me[0] + " 名 · " + valueText(rest, me[1]);
+                if (me == null) return "abyss".equals(rest) ? "未上榜（" + abyssMine(runs.abyssBest(d)) + "）" : "未上榜";
+                return "第 " + me[0] + " 名 · " + valueText(rest, me[1]);
             }
             int us = rest.lastIndexOf('_');
             if (us < 0) return "";
@@ -478,7 +518,7 @@ public final class EmberSeason {
             try { i = Integer.parseInt(rest.substring(us + 1)); } catch (NumberFormatException e) { return ""; }
             String b = rest.substring(0, us);
             List<Row> rows = top(period, b, i);
-            return rows.size() < i ? "—" : rows.get(i - 1).name + " · " + valueText(b, rows.get(i - 1).value);
+            return rows.size() < i ? "—" : rows.get(i - 1).name + " · " + rowText(b, rows.get(i - 1));
         }
         return null;
     }
@@ -511,7 +551,7 @@ public final class EmberSeason {
                 Map<String, Row> m = boards.computeIfAbsent(period, k -> new LinkedHashMap<String, Map<String, Row>>())
                         .computeIfAbsent(board, k -> new LinkedHashMap<String, Row>());
                 for (String u : bs.getKeys(false))
-                    m.put(u, new Row(bs.getString(u + ".name", "?"), bs.getInt(u + ".value"), bs.getLong(u + ".at")));
+                    m.put(u, new Row(bs.getString(u + ".name", "?"), bs.getInt(u + ".value"), bs.getLong(u + ".at"), bs.getInt(u + ".secs", 0)));
             }
         }
         ConfigurationSection pe = y.getConfigurationSection("pending");
@@ -532,6 +572,7 @@ public final class EmberSeason {
                     y.set(k + ".name", r.getValue().name);
                     y.set(k + ".value", r.getValue().value);
                     y.set(k + ".at", r.getValue().at);
+                    if (r.getValue().secs > 0) y.set(k + ".secs", r.getValue().secs);
                 }
         for (Map.Entry<String, List<String>> e : pending.entrySet()) y.set("pending." + e.getKey(), e.getValue());
         for (Map.Entry<Integer, List<String>> e : archive.entrySet()) y.set("archive." + e.getKey(), e.getValue());
@@ -545,4 +586,7 @@ public final class EmberSeason {
 
     /** admin: preview the current season's settlement (dry run, nothing changes) */
     void adminPreview(org.bukkit.command.CommandSender to) { finalizeSeason(seasonOf(today()), to); }
+    static String abyssMine(int best) {
+        return best <= 0 ? "还没打过深渊" : "深渊最高第 " + best + " 层";
+    }
 }

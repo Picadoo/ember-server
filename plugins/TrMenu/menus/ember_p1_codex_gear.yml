@@ -294,12 +294,12 @@ Icons:
         - '§7当前称号：§f%corerpg_p1_title%'
         - ''
         - '§3潮蚀渡者 §7首通 Q04 · §6锈轨归来 §7首通 Q07'
-        - '§9深渊初探 §7深渊第 3 层 · §5深渊行者 §7第 5 层 · §d余烬深渊之主 §7第 10 层'
+        - '§9深渊初探 §7深渊第 1 层 · §5深渊行者 §7第 5 层 · §d余烬深渊之主 §7第 10 层'
         - '§6锈轨破袭者 §7/ §b霜封守望者 §7通关团本 R01 / R02'
         - '§7团本专属足迹：§6余烬火星 §7/ §b霜花'
         - '§7深渊榜首：§f%corerpg_p1_top_abyss_1%'
         - ''
-        - '§e➥ §f左键：查看与装上 · 右键：排行榜（主菜单「荣誉与排行」也能打开）'
+        - '§e➥ §f左键：称号与足迹（查看与装上） · 右键：赛季 · 排行 · 周目标页'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -307,8 +307,7 @@ Icons:
         - 'command: corerpg p1 title'
       right:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - close
-        - 'command: corerpg p1 top'
+        - 'menu: ember_p1_season'
 
   '1':
     update: 40

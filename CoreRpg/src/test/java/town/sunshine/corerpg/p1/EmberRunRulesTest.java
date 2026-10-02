@@ -304,14 +304,18 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(16, m.balanceVersion);                // D116–D118
-        assertEquals("g04-1/b16", m.ruleVersion);
+        assertEquals(17, m.balanceVersion);                // D123–D124
+        assertEquals("g04-1/b17", m.ruleVersion);
+        assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
+        assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
+        assertEquals(1, m.byKey("q04").rails.size());      // D122 R3 drain sealed at attach
+        assertTrue(Double.isNaN(m.byKey("q01").fallCatchY));
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         assertEquals(1, m.rotationNormalBonusMarks);       // D108
         assertEquals("2026-09-28", m.seasonAnchor);       // D116 seasons (display only)
         assertEquals(4, m.seasonWeeks);
-        assertEquals(8, m.seasonDeepTier);
+        assertEquals(5, m.seasonDeepTier);                 // D123 (was 8)
         assertEquals(3, m.seasonTop);
         assertEquals(Integer.valueOf(3), m.goalTargets.get("abyss")); // D117 weekly goals (余烬徽 only)
         assertEquals(4, m.goalTargets.size());
@@ -432,7 +436,7 @@ public class EmberRunRulesTest {
         assertNotNull(q7.room("r3").door);
         // D15: book white boxes, no instance rails / clears; bosses wait in the book-size hall
         for (EmberRunMaps.MapDef d : m.maps.values()) {
-            assertEquals(d.key, 0, d.rails.size());
+            assertEquals(d.key, "q04".equals(d.key) ? 1 : 0, d.rails.size()); // D122: only Q04's R3 drain
             assertEquals(d.key, 0, d.clear.size());
             assertEquals(d.key, 0, d.links.size());
             assertTrue(d.key, d.boss.waitInArea);
@@ -829,5 +833,53 @@ public class EmberRunRulesTest {
         java.util.List<String> l = new java.util.ArrayList<String>();
         for (EmberRunRules.Grant g : gs) l.add(g.key + "=" + g.encode());
         return l.toString();
+    }
+
+    // ---------------------------------------------------------------- F-review (D120 / D123)
+
+    private static EmberItemData piece(String fam, String slot, int tier, int q, int enh) {
+        return EmberItemData.create(fam, slot, tier, q, 0, enh, false, "drop");
+    }
+
+    @Test public void upgradeVerdictAutoEquipsOnlyClearlyBetterUninvestedPieces_D120() {
+        EmberTables t = EmberTables.defaults();
+        EmberItemData t1 = piece("scorch", "charm", 1, 0, 0), t2 = piece("scorch", "charm", 2, 1, 0);
+        assertEquals(EmberRunRules.UP_AUTO, EmberRunRules.upgradeVerdict(t, t2, t1, "none", 1));       // higher tier, no investment
+        assertEquals(EmberRunRules.UP_NONE, EmberRunRules.upgradeVerdict(t, t1, t2, "none", 1));       // worse
+        assertEquals(EmberRunRules.UP_NONE, EmberRunRules.upgradeVerdict(t, t1, t1, "none", 1));       // same piece
+        assertEquals(EmberRunRules.UP_NONE, EmberRunRules.upgradeVerdict(t, piece("scorch", "blade", 2, 0, 0), t1, "none", 1)); // other slot
+        EmberItemData same = piece("scorch", "charm", 1, 0, 0);
+        assertEquals("same tier, equal value is not clearly better", EmberRunRules.UP_NONE, EmberRunRules.upgradeVerdict(t, same, t1, "none", 1));
+        assertEquals(EmberRunRules.UP_AUTO, EmberRunRules.upgradeVerdict(t, piece("scorch", "charm", 1, 3, 0), t1, "none", 1)); // 极品 vs 标准
+        EmberItemData t1e = piece("scorch", "charm", 1, 0, 6);
+        assertEquals("enhanced active → ask with a free swap", EmberRunRules.UP_ASK_SWAP, EmberRunRules.upgradeVerdict(t, t2, t1e, "none", 1));
+        assertEquals("breaking an active set → ask", EmberRunRules.UP_ASK, EmberRunRules.upgradeVerdict(t, piece("burst", "charm", 2, 1, 0), t1, "scorch", 1));
+        assertEquals(EmberRunRules.UP_AUTO, EmberRunRules.upgradeVerdict(t, t2, t1, "scorch", 1));
+    }
+
+    @Test public void abyssBoardBreaksTiesByTheFastestClear_D123() {
+        EmberSeason.Row a = new EmberSeason.Row("A", 10, 1000L, 400), b = new EmberSeason.Row("B", 10, 500L, 300),
+                c = new EmberSeason.Row("C", 10, 100L, 0), d = new EmberSeason.Row("D", 9, 50L, 100);
+        java.util.List<EmberSeason.Row> rows = new java.util.ArrayList<EmberSeason.Row>(java.util.Arrays.asList(a, c, d, b));
+        rows.sort((x, y) -> EmberSeason.compareRows("abyss", x, y));
+        assertEquals("B", rows.get(0).name);  // same tier: faster first
+        assertEquals("A", rows.get(1).name);
+        assertEquals("C", rows.get(2).name);  // unknown time after the timed ones
+        assertEquals("D", rows.get(3).name);  // lower tier last
+        rows.sort((x, y) -> EmberSeason.compareRows("featured", x, y));
+        assertEquals("C", rows.get(0).name);  // other boards keep "first to get there"
+        assertEquals(300, EmberSeason.bestSecs(a, 10, 10, 300));  // same tier, faster run → kept
+        assertEquals(400, EmberSeason.bestSecs(a, 10, 10, 500));  // slower run → old time
+        assertEquals(400, EmberSeason.bestSecs(a, 10, 9, 100));   // a lower tier run never changes the time
+        assertEquals(700, EmberSeason.bestSecs(d, 10, 10, 700));  // new best tier takes its own time
+        assertEquals(250, EmberSeason.bestSecs(null, 5, 5, 250));
+        assertEquals("第 10 层 · 6 分 40 秒", EmberSeason.rowText("abyss", a));
+        assertEquals("第 10 层", EmberSeason.rowText("abyss", c));
+    }
+
+    @Test public void shopPriceLineListsCoinBadgeAndEveryMarkTier_D121() {
+        EmberCosmetics.Cosmetic white = EmberCosmetics.byId("color_white"), glow = EmberCosmetics.byId("glow_ember");
+        assertEquals("2000 币 / 40 徽 / 印记 T3×10 · T2×20 · T1×40", EmberCosmetics.priceText(white));
+        assertEquals("不收币 · 160 徽 / 印记 T3×40 · T2×80 · T1×160", EmberCosmetics.priceText(glow));
     }
 }

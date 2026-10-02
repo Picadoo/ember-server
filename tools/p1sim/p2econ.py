@@ -62,6 +62,23 @@ def challenge_cfg(cfg):
 
 
 ABYSS = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('abyss', {}).get('tiers', [])
+# F-review #5 (D124): surplus T3 marks (above the 8 kept back) may pay the abyss fee at this many coins per mark (0 = off)
+FEE_MARK = int(miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('abyss', {}).get('fee_mark_coin', 0) or 0)
+MARK_RESERVE = 8
+
+
+def fee_ok(p, fee, reserve):
+    """the fee can be paid: coins above the reserve, else surplus T3 marks (D124)"""
+    if fee + reserve <= p.coin:
+        return True
+    return FEE_MARK > 0 and p.marks[3] - MARK_RESERVE >= -(-fee // FEE_MARK)
+
+
+def pay_fee(p, fee, reserve):
+    if fee + reserve <= p.coin or FEE_MARK <= 0:
+        p.coin -= fee
+    else:
+        p.marks[3] -= -(-fee // FEE_MARK)
 
 
 def abyss_cfg(ccfg, t):
@@ -143,7 +160,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                 # once its estimated clear rate is >= 50 % (before D104 tier 1 equalled the challenge).
                 tier = 0
                 for t in range(min(best + 1, len(ABYSS)), 0, -1):
-                    if ABYSS[t - 1]['fee'] + reserve > p.coin:
+                    if not fee_ok(p, ABYSS[t - 1]['fee'], reserve):
                         # coin-blocked: the player would have stepped into this tier but the fee + reserve is short
                         if t == min(best + 1, len(ABYSS)) and abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
                             blocked += 1
@@ -159,10 +176,10 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                 if can_ch and tier == 0:
                     use, key = ccfg, farm_map(p, kn, ccfg, rates, max(order, key=lambda k: rates[k]))
                 elif can_ch:
-                    if ABYSS[tier - 1]['fee'] + reserve > p.coin and tier > 1:
+                    if not fee_ok(p, ABYSS[tier - 1]['fee'], reserve) and tier > 1:
                         tier -= 1
                     use, key = acfgs[tier], order[rng.randrange(len(order))]
-                    p.coin -= ABYSS[tier - 1]['fee']; fees += ABYSS[tier - 1]['fee']
+                    pay_fee(p, ABYSS[tier - 1]['fee'], reserve); fees += ABYSS[tier - 1]['fee']
                 else:
                     use, key = cfg, order[-1]
                 p.buy_potions()
@@ -455,8 +472,12 @@ def main():
     ap.add_argument('--ch-atk', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss damage (abyss follows)')
     ap.add_argument('--abyss-tiers', help="E-review tuning: tier factors 'hp,dmg;…' (10 rows) instead of the config")
     ap.add_argument('--abyss-quality', help="E-review tuning: tier quality tables '60,28,10,2;…' (10 rows)")
+    ap.add_argument('--fee-mark', type=int, default=None, help='D124: coins per surplus T3 mark paying abyss fees (0 = off; default = yml abyss.fee_mark_coin)')
     ap.add_argument('--abyss-fees', help="E-review tuning: tier fees '0,60,…' (10 values) instead of the config")
     a = ap.parse_args()
+    if a.fee_mark is not None:
+        global FEE_MARK
+        FEE_MARK = a.fee_mark
     if a.abyss_tiers or a.abyss_fees or a.abyss_quality:
         set_abyss(a.abyss_tiers, a.abyss_fees, a.abyss_quality)
     cfg = p1config.load()

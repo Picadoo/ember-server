@@ -84,7 +84,7 @@ public final class EmberCosmetics implements Listener {
             new Cosmetic("season_featured", Kind.TITLE, "§b赛季精选三甲", "某赛季「精选挑战通关」榜前 3", 0, null, null),
             new Cosmetic("season_raids", Kind.TITLE, "§6赛季团本三甲", "某赛季「团本通关」榜前 3", 0, null, null),
             new Cosmetic("season_fast", Kind.TITLE, "§c赛季疾行者", "某赛季 R01 或 R02「最快通关」榜前 3", 0, null, null),
-            new Cosmetic("season_deep", Kind.TITLE, "§5赛季深潜者", "某赛季深渊最高达到第 8 层", 0, null, null),
+            new Cosmetic("season_deep", Kind.TITLE, "§5赛季深潜者", "某赛季深渊最高达到第 5 层（赛季内通关）", 0, null, null),
             new Cosmetic("season_crown", Kind.FLAIR, "§d❖", "某赛季任一榜第 1 名（名牌前标记，主城和野外显示）", 0, 0, "§d❖ §r", null)));
 
     /**
@@ -110,8 +110,8 @@ public final class EmberCosmetics implements Listener {
             new Cosmetic("glow_ember", Kind.GLOW, "§6余烬辉光", "主城里手持的刃冒火星（只在主城）", 0, 160, null, "FLAME"),
             new Cosmetic("glow_star", Kind.GLOW, "§f星辉", "主城里手持的刃绕着白光（只在主城）", 0, 240, null, "END_ROD"),
             new Cosmetic("glow_witch", Kind.GLOW, "§5紫焰辉光", "主城里手持的刃冒紫焰（只在主城）", 0, 320, null, "SPELL_WITCH"),
-            new Cosmetic("anim_ember", Kind.ANIM, "§6流§c火", "称号动效：火色流光（要先装上称号）", 0, 240, "6ce", null),
-            new Cosmetic("anim_frost", Kind.ANIM, "§b霜§f光", "称号动效：霜色流光（要先装上称号）", 0, 240, "b3f", null)));
+            new Cosmetic("anim_ember", Kind.ANIM, "§6流§c火", "火色流光（要先装上称号）", 0, 240, "6ce", null),
+            new Cosmetic("anim_frost", Kind.ANIM, "§b霜§f光", "霜色流光（要先装上称号）", 0, 240, "b3f", null)));
 
     /** E-review #2: mark points per forge mark of tier 1/2/3, and 余烬币 per point when a coin item is paid in marks */
     public static final int[] MARK_POINTS = {0, 1, 2, 4};
@@ -140,7 +140,7 @@ public final class EmberCosmetics implements Listener {
     void onFirstClear(Player p, String mapKey) {
         if (p == null || !p.isOnline()) return;
         for (Cosmetic c : ALL) if (mapKey.equals(c.firstClear))
-            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
+            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
     }
 
     public static Cosmetic byId(String id) {
@@ -214,7 +214,7 @@ public final class EmberCosmetics implements Listener {
         int n = d.addPeriodCount(C_EARNED + raid, "all", 1);
         if (n == 1 && p != null && p.isOnline()) {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
-                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
+                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
         }
         if (raidClears(d, "r01") + raidClears(d, "r02") == 10 && p != null && p.isOnline())
             p.sendMessage(P + "§d获得称号「" + byId(RAIDS10).label + "§d」§7（团本累计 10 次，只做展示）");
@@ -223,7 +223,7 @@ public final class EmberCosmetics implements Listener {
     void onAbyssBest(Player p, int oldBest, int newBest) {
         if (p == null || !p.isOnline()) return;
         for (Cosmetic c : ALL) if (c.abyssTier > oldBest && c.abyssTier <= newBest)
-            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
+            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
     }
 
     public String titleText(PlayerData d) { return titleText(null, d, -1); }
@@ -262,7 +262,7 @@ public final class EmberCosmetics implements Listener {
     /** D103: menu text — never an empty 「当前称号：」 */
     public String titleMenuText(PlayerData d) {
         String t = titleText(d);
-        return t.isEmpty() ? "§7无（右键「荣誉与排行」装上）" : t;
+        return t.isEmpty() ? "§7无（右键「赛季 · 排行 · 周目标」装上）" : t;
     }
 
     public int earnedCount(PlayerData d) {
@@ -309,7 +309,7 @@ public final class EmberCosmetics implements Listener {
             p.spigot().sendMessage(line);
         }
         p.sendMessage(P + "§7点 [装上] / [取下]；只做展示，不加属性。");
-        town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[外观商店]", "/corerpg p1 cosmetic", "称号颜色、朴素足迹、名牌标记（花余烬币，只做展示）", "GOLD"});
+        town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[外观商店]", "/corerpg p1 cosmetic", "打开外观商店页：称号颜色、足迹、名牌标记、辉光、动效（币 / 余烬徽 / 印记，只做展示）", "GOLD"});
         return true;
     }
 
@@ -321,7 +321,7 @@ public final class EmberCosmetics implements Listener {
 
     // ------------------------------------------------------------------ D107 cosmetic shop
 
-    private static String kindName(Kind k) {
+    static String kindName(Kind k) {
         switch (k) {
             case COLOR: return "称号颜色";
             case TRAIL: return "足迹";
@@ -337,8 +337,8 @@ public final class EmberCosmetics implements Listener {
             case COLOR: return "§7（用在你已有的称号上）";
             case TRAIL: return "§7（比团本足迹朴素）";
             case FLAIR: return "§7（主城和野外显示，副本里不显示）";
-            case GLOW: return "§7（只用印记换 · 只在主城显示，手持余烬刃时）";
-            case ANIM: return "§7（只用印记换 · 让装上的称号流动变色）";
+            case GLOW: return "§7（不收币：余烬徽或印记 · 只在主城显示，手持余烬刃时）";
+            case ANIM: return "§7（不收币：余烬徽或印记 · 让装上的称号流动变色）";
             default: return "";
         }
     }
@@ -355,9 +355,60 @@ public final class EmberCosmetics implements Listener {
     /** marks of tier t needed for this item */
     static int markCost(Cosmetic c, int t) { return (c.points() + MARK_POINTS[t] - 1) / MARK_POINTS[t]; }
 
-    private static String priceText(Cosmetic c) {
-        String marks = "T3 ×" + markCost(c, 3) + " / T2 ×" + markCost(c, 2) + " / T1 ×" + markCost(c, 1) + " 印记";
-        return c.price > 0 ? c.price + " 币 或 " + marks : "仅印记：" + marks;
+    /**
+     * F-review #2 (D121): the one price line, shared by the shop page (PAPI shopprice_<id>), the confirm page and the
+     * chat list — coin (or 不收币) / 余烬徽 / every mark tier.
+     */
+    static String priceText(Cosmetic c) {
+        return (c.price > 0 ? c.price + " 币" : "不收币 ·") + (c.price > 0 ? " / " : " ") + c.points() + " 徽 / 印记 T3×" + markCost(c, 3)
+                + " · T2×" + markCost(c, 2) + " · T1×" + markCost(c, 1);
+    }
+
+    /** F-review #2: the one description line (kind + what it does) */
+    static String howText(Cosmetic c) { return kindName(c.kind) + "：" + c.how; }
+
+    /** F-review #2: the canonical shop page (every link opens this; the chat list stays as /corerpg p1 cosmetic list) */
+    public static final String SHOP_MENU = "ember_p1_shop";
+    static final String BUY_MENU = "ember_p1_shop_buy";
+
+    /** open a TrMenu page for this player one tick later (menus close on click; console opens it for them) */
+    void openMenu(Player p, String menu) {
+        Bukkit.getScheduler().runTask(runs.plugin(), () -> {
+            if (p.isOnline()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open " + menu + " " + p.getName());
+        });
+    }
+
+    /** F-review #2: the item a player picked on the shop page, shown on the in-menu confirm page */
+    private static final Map<UUID, String> PICKED = new java.util.concurrent.ConcurrentHashMap<UUID, String>();
+
+    /** PAPI lines of the confirm page: one per way to pay, saying what it takes or what is short */
+    String payLine(PlayerData d, Cosmetic c, String pay) {
+        if (d == null || c == null) return "";
+        if ("coin".equals(pay)) {
+            if (c.price <= 0) return "§8这件不收币";
+            return d.getCoin() >= c.price ? "§a付得起 §7· 扣 " + c.price + " 余烬币（现有 " + d.getCoin() + "）"
+                    : "§8还差 " + (c.price - d.getCoin()) + " 币（现有 " + d.getCoin() + "）";
+        }
+        if ("badge".equals(pay)) {
+            int bh = EmberSeason.badges(d);
+            return bh >= c.points() ? "§a付得起 §7· 扣 " + c.points() + " 余烬徽（现有 " + bh + "）"
+                    : "§8还差 " + (c.points() - bh) + " 徽（现有 " + bh + "，周目标奖励）";
+        }
+        int t = "t3".equals(pay) ? 3 : "t2".equals(pay) ? 2 : 1;
+        int need = markCost(c, t), have = surplus(d, t);
+        return have >= need ? "§a付得起 §7· 扣 " + need + " 枚 T" + t + "（可用 " + have + "，另留 " + MARK_RESERVE + " 枚备用兑换）"
+                : "§8还差 " + (need - have) + " 枚 T" + t + "（可用 " + have + "，留 " + MARK_RESERVE + " 枚不动）";
+    }
+
+    /** F-review #2: a title must be worn to see a colour / effect — wear the first owned one and say so */
+    private void ensureTitle(Player p, PlayerData d, Cosmetic c) {
+        if (!needsTitle(c.kind) || !titleText(d).isEmpty()) return;
+        int best = runs.abyssBest(d);
+        for (Cosmetic t : ALL) if (t.kind == Kind.TITLE && earned(d, best, t)) {
+            select(d, Kind.TITLE, t.id);
+            p.sendMessage(P + "已先帮你装上称号「" + t.label + "§7」（" + kindName(c.kind) + "要装着称号才看得到；赛季页可换）");
+            return;
+        }
     }
 
     private static boolean needsTitle(Kind k) { return k == Kind.COLOR || k == Kind.ANIM; }
@@ -387,18 +438,39 @@ public final class EmberCosmetics implements Listener {
             p.sendMessage(P + "已换上" + kindName(k) + "「" + c.label + "§7」" + (needsTitle(k) && titleText(d).isEmpty() ? "（先装上一个称号才看得到）" : ""));
             return true;
         }
-        if ("pick".equals(op) && args.length >= 4) { // D119 shop page click: owned → put on / take off, else the buy preview
+        if ("pick".equals(op) && args.length >= 4) { // D119 shop page click: owned → put on / take off, else the buy page
             Cosmetic c = byId(args[3]);
             if (c == null || !c.shop()) { p.sendMessage(P + "§c商店里没有这件：" + args[3]); return true; }
-            if (!bought(d, c)) return shop(p, d, new String[]{args[0], args[1], "buy", c.id});
+            if (!bought(d, c)) { // F-review #2: confirm inside the menu (one page per item), no detour through chat
+                PICKED.put(p.getUniqueId(), c.id);
+                openMenu(p, BUY_MENU);
+                return true;
+            }
             boolean on = c.id.equals(selected(d, c.kind));
-            if (c.kind == Kind.TRAIL) return command(p, d, "trail", new String[]{args[0], "trail", on ? "off" : c.id});
-            return shop(p, d, new String[]{args[0], args[1], c.kind.name().toLowerCase(java.util.Locale.ROOT), on ? "off" : c.id});
+            if (c.kind == Kind.TRAIL) command(p, d, "trail", new String[]{args[0], "trail", on ? "off" : c.id});
+            else shop(p, d, new String[]{args[0], args[1], c.kind.name().toLowerCase(java.util.Locale.ROOT), on ? "off" : c.id});
+            if (!on) ensureTitle(p, d, c);
+            openMenu(p, SHOP_MENU);
+            return true;
+        }
+        if ("buysel".equals(op) && args.length >= 4) { // F-review #2: the confirm page's pay buttons
+            String id = PICKED.get(p.getUniqueId());
+            Cosmetic c = id == null ? null : byId(id);
+            if (c == null) { p.sendMessage(P + "§c先在外观商店页点一件商品。"); openMenu(p, SHOP_MENU); return true; }
+            String pay = args[3].toLowerCase(java.util.Locale.ROOT);
+            if ("try".equals(pay)) { shop(p, d, new String[]{args[0], args[1], "try", c.id}); return true; }
+            shop(p, d, new String[]{args[0], args[1], "buy", c.id, pay});
+            if (bought(d, c)) { PICKED.remove(p.getUniqueId()); openMenu(p, SHOP_MENU); }
+            else openMenu(p, BUY_MENU);
+            return true;
         }
         if ("try".equals(op) && args.length >= 4) {
             Cosmetic c = byId(args[3]);
             if (c == null || !c.shop()) { p.sendMessage(P + "§c商店里没有这件：" + args[3]); return true; }
-            if (needsTitle(c.kind) && titleText(d).isEmpty()) { p.sendMessage(P + "§c先在「荣誉与排行」装上一个称号，才看得到" + kindName(c.kind) + "。"); return true; }
+            if (needsTitle(c.kind) && titleText(d).isEmpty()) {
+                ensureTitle(p, d, c);
+                if (titleText(d).isEmpty()) { p.sendMessage(P + "§c" + kindName(c.kind) + "要装着称号才看得到：先拿到一个称号（首通 Q01 就有）。"); return true; }
+            }
             TRIALS.put(p.getUniqueId(), new Trial(c, System.currentTimeMillis() + 10_000L));
             p.sendMessage(P + "§a试穿「" + c.label + "§a」10 秒§7" + (c.kind == Kind.GLOW ? "（只在主城、手持余烬刃时显示）" : c.kind == Kind.TRAIL ? "（走动时看脚下）"
                     : c.kind == Kind.FLAIR ? "（名牌约 2 秒后刷新）" : "（发一句话看效果）"));
@@ -413,7 +485,12 @@ public final class EmberCosmetics implements Listener {
             int tier = "t1".equals(pay) ? 1 : "t2".equals(pay) ? 2 : "t3".equals(pay) ? 3 : 0;
             boolean coin = "coin".equals(pay) || "confirm".equals(pay);
             boolean badge = "badge".equals(pay); // D117: weekly-goal 余烬徽, 1 徽 = 1 point
-            if (!coin && !badge && tier == 0) { // preview: one button per way the player can pay right now
+            if (!coin && !badge && tier == 0 && !(p.isOnline() && "chat".equals(pay))) { // F-review #2: the buy page
+                PICKED.put(p.getUniqueId(), c.id);
+                openMenu(p, BUY_MENU);
+                return true;
+            }
+            if (!coin && !badge && tier == 0) { // chat preview (from the chat list): one button per way the player can pay right now
                 p.sendMessage(P + "购买" + kindName(c.kind) + "「" + c.label + "§7」：" + c.how + " · §e" + priceText(c) + "§7 · 只做展示，不加属性，买了不退");
                 List<String[]> btn = new java.util.ArrayList<String[]>();
                 if (c.price > 0) {
@@ -455,13 +532,15 @@ public final class EmberCosmetics implements Listener {
             runs.flushData(p.getUniqueId());
             Bukkit.getLogger().info("[P1 cosmetic] " + p.getName() + " bought " + c.id + " for " + ChatColor.stripColor(paid));
             p.sendMessage(P + "§a已购买并换上" + kindName(c.kind) + "「" + c.label + "§a」§7 · 花费 " + paid);
+            ensureTitle(p, d, c);
             return true;
         }
+        if (!"list".equals(op)) { openMenu(p, SHOP_MENU); return true; } // F-review #2: one canonical shop (the page)
         p.sendMessage(P + "§6外观商店§7（只做展示，不加属性；买一次永久有，不回收）· 余烬币 §f" + d.getCoin()
                 + " §7· 余烬徽 §f" + EmberSeason.badges(d)
                 + " §7· 可用印记 T3 §f" + surplus(d, 3) + " §7T2 §f" + surplus(d, 2) + " §7T1 §f" + surplus(d, 1));
         p.sendMessage(P + "§7币、余烬徽（周目标奖励）或多出来的印记都能付：1 徽 = 1 点 · T1 1 点 · T2 2 点 · T3 4 点，1 点 = " + POINT_COIN + " 币；每阶留 " + MARK_RESERVE + " 枚备用兑换不动");
-        if (ownedTitles(d) == 0) p.sendMessage(P + "§8称号颜色 / 动效要先有称号：首通 Q01 就送一个，在「荣誉与排行」装上");
+        if (ownedTitles(d) == 0) p.sendMessage(P + "§8称号颜色 / 动效要先有称号：首通 Q01 就送一个（买的时候会自动装上）");
         Map<Kind, String> sel = new HashMap<Kind, String>();
         for (Kind k : Kind.values()) sel.put(k, selected(d, k));
         Kind last = null;
@@ -470,11 +549,11 @@ public final class EmberCosmetics implements Listener {
             boolean got = bought(d, c);
             boolean on = c.id.equals(sel.get(c.kind));
             String cmd, label;
-            if (!got) { cmd = "/corerpg p1 cosmetic buy " + c.id; label = "§a[购买]"; }
+            if (!got) { cmd = "/corerpg p1 cosmetic buy " + c.id + " chat"; label = "§a[购买]"; }
             else if (c.kind == Kind.TRAIL) { cmd = "/corerpg p1 trail " + (on ? "off" : c.id); label = on ? "§7[取下]" : "§a[换上]"; }
             else { cmd = "/corerpg p1 cosmetic " + c.kind.name().toLowerCase(java.util.Locale.ROOT) + " " + (on ? "off" : c.id); label = on ? "§7[取下]" : "§a[换上]"; }
             net.md_5.bungee.api.chat.TextComponent line = new net.md_5.bungee.api.chat.TextComponent(P + "  " + c.label + " §7" + c.how
-                    + (got ? (on ? " §e· 使用中 " : " §a· 已拥有 ") : " §6" + priceText(c) + " "));
+                    + (got ? (on ? " §e· 使用中 " : " §a· 已拥有 ") : " §6" + priceText(c) + " ")); // same texts as the page
             net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(label);
             b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, cmd));
             line.addExtra(b);
@@ -496,7 +575,28 @@ public final class EmberCosmetics implements Listener {
         int bh = EmberSeason.badges(d);
         boolean can = (c.price > 0 && d != null && d.getCoin() >= c.price) || bh >= c.points();
         for (int t = 1; t <= 3 && !can; t++) can = d != null && surplus(d, t) >= markCost(c, t);
-        return (can ? "§a付得起" : "§8还付不起") + " §7· " + (c.price > 0 ? c.price + " 币 / " : "") + c.points() + " 徽 / T3×" + markCost(c, 3) + " 印记";
+        return can ? "§a付得起 §7· 左键看付款方式" : "§8还付不起 §7· 左键看差多少";
+    }
+
+    /** F-review #2 PAPI: shopprice_/shopname_/shophow_<id>, shopsel_name|how|price|state|coin|badge|t3|t2|t1 */
+    public String papi(UUID u, PlayerData d, String key) {
+        if (key.startsWith("shopprice_")) { Cosmetic c = byId(key.substring(10)); return c == null || !c.shop() ? "" : priceText(c); }
+        if (key.startsWith("shopname_")) { Cosmetic c = byId(key.substring(9)); return c == null ? "" : c.label; }
+        if (key.startsWith("shophow_")) { Cosmetic c = byId(key.substring(8)); return c == null ? "" : howText(c); }
+        if ("shopmarks".equals(key)) return d == null ? "" : "T3 " + surplus(d, 3) + " · T2 " + surplus(d, 2) + " · T1 " + surplus(d, 1);
+        if (key.startsWith("shopsel_")) {
+            String id = u == null ? null : PICKED.get(u);
+            Cosmetic c = id == null ? null : byId(id);
+            String f = key.substring(8);
+            if (c == null) return "name".equals(f) ? "§7（没有选中商品）" : "";
+            if ("name".equals(f)) return c.label;
+            if ("how".equals(f)) return howText(c);
+            if ("price".equals(f)) return priceText(c);
+            if ("state".equals(f)) return bought(d, c) ? "§a已拥有" : shopLabel(u, d, c.id);
+            if ("note".equals(f)) return needsTitle(c.kind) && titleText(d).isEmpty() ? (ownedTitles(d) == 0 ? "§c要先有一个称号（首通 Q01 就有）" : "§7买下时会先帮你装上一个称号") : "§7只做展示，不加属性，买了不退";
+            return payLine(d, c, f);
+        }
+        return null;
     }
 
     private long boardStep;

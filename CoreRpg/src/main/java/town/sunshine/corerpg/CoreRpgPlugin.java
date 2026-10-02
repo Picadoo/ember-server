@@ -134,6 +134,15 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
     }
 
+    /** F-review #9 (D126): no vanilla "has made the advancement" broadcasts (English, off-theme) on any world */
+    static void quietAdvancements(org.bukkit.World w) {
+        try { if (!"false".equals(w.getGameRuleValue("announceAdvancements"))) w.setGameRuleValue("announceAdvancements", "false"); }
+        catch (RuntimeException ignored) { /* rule missing on this server version */ }
+    }
+
+    @org.bukkit.event.EventHandler
+    public void onWorldLoadQuiet(org.bukkit.event.world.WorldLoadEvent e) { quietAdvancements(e.getWorld()); }
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
@@ -204,6 +213,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         dataStore.setTalentService(talentService);
         reloadLocal();
         Bukkit.getPluginManager().registerEvents(this, this);
+        for (org.bukkit.World w : Bukkit.getWorlds()) quietAdvancements(w); // F-review #9 (D126)
         Bukkit.getPluginManager().registerEvents(questService, this);
         Bukkit.getPluginManager().registerEvents(hubNpcService, this);
         Bukkit.getPluginManager().registerEvents(lifeService, this);
@@ -365,6 +375,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public String getStorageMode() { return storageMode; }
     public town.sunshine.corerpg.p1.EmberMode getEmberMode() { return emberMode; }
     public town.sunshine.corerpg.p1.EmberLoadoutService getEmberLoadouts() { return emberLoadouts; }
+    public town.sunshine.corerpg.p1.EmberForgeService getEmberForge() { return emberForge; }
     public town.sunshine.corerpg.p1.EmberCombatListener getEmberCombat() { return emberCombat; }
     public town.sunshine.corerpg.p1.EmberSetService getEmberSets() { return emberSets; }
     public town.sunshine.corerpg.p1.EmberRunService getEmberRuns() { return emberRuns; }
@@ -730,7 +741,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (lines != null) {
             for (Object o : lines) if (o != null) player.sendMessage(color(String.valueOf(o)));
         }
-        if (town.sunshine.corerpg.p1.EmberMode.active()) // D99: open the menus by clicking, never by typing /ember
+        String[][] own = town.sunshine.corerpg.p1.EmberMode.active() && emberRuns != null ? emberRuns.joinButtons(joinData) : null;
+        if (own != null) ConfirmTokens.sendButtons(player, "§7", own); // F-review #3: graduates get the season / goals page
+        else if (town.sunshine.corerpg.p1.EmberMode.active()) // D99: open the menus by clicking, never by typing /ember
             ConfirmTokens.sendButtons(player, "§7",
                     new String[]{"[主菜单]", "/ember", "冒险 · 装备 · 工坊 · 帮助都在这里", "GOLD"},
                     new String[]{"[冒险页]", "/ember_p1_adventure", "选图进副本（和右键门吏 · 灰钥一样）", "GREEN"},

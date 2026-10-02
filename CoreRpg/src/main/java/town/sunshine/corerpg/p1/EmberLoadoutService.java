@@ -299,6 +299,13 @@ public final class EmberLoadoutService implements Listener {
         return true;
     }
 
+    /** D120: select a charm by uid (auto-equip of a better charm, the [换上] button) */
+    public void selectCharmUid(Player p, String uid) {
+        state(p.getUniqueId()).charmUid = uid;
+        saveState(p);
+        refresh(p);
+    }
+
     public void clearCharm(Player p) {
         state(p.getUniqueId()).charmUid = null;
         saveState(p);
@@ -324,6 +331,14 @@ public final class EmberLoadoutService implements Listener {
         backfillCodex(e.getPlayer());
         if (!EmberMode.active()) return;
         ensureLoaded(e.getPlayer());
+        final Player jp = e.getPlayer(); // D127: old-format item names → the current wording (display only)
+        org.bukkit.Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!jp.isOnline()) return;
+            try {
+                int n = items.relabel(jp);
+                if (n > 0) { jp.updateInventory(); plugin.getLogger().info("[P1 items] " + jp.getName() + ": " + n + " old item label(s) rewritten"); }
+            } catch (RuntimeException ex) { plugin.getLogger().warning("[P1 items] relabel " + jp.getName() + ": " + ex); }
+        }, 40L);
     }
 
     /** Loads persisted state + owned item rows once per server session (join, or when P1 is switched on). */

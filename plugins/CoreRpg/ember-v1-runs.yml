@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118)
-balance_version: 16
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124)
+balance_version: 17
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -67,7 +67,10 @@ rotation:
 season:
   anchor: "2026-09-28"
   weeks: 4
-  deep_tier: 8
+  # F-review #4 (D123, balance_version 17): 8 → 5 — p2econ 0.5 dodge reaches tier 5 by week 2 (median), 0.3 by ~week 9;
+  # tier 8 was a 0.7-only title inside a 4-week season. The abyss board breaks ties at the same tier by the fastest clear
+  # (seconds from the first room to the boss kill), so tier-10 players are not ordered by who logged in first on Monday.
+  deep_tier: 5
   top: 3
 
 # D117 weekly goals (players with their own Q07 first clear; reset with the week): featured = featured-map challenge
@@ -119,6 +122,10 @@ challenge:
 # Model: tools/p1sim/p2econ.py --abyss.
 abyss:
   requires: q07
+  # F-review #5 (D124, balance_version 17): when the coins cannot pay a tier fee, surplus T3 marks (above the 8 kept for an
+  # exchange) pay it at this many 余烬币 per mark (= the cosmetic-shop rate); refunds return the marks. 0 = coins only.
+  # Model: p2econ.py --abyss --raid --goals (--fee-mark 200 vs 0): see docs §5s.
+  fee_mark_coin: 200
   # hp / dmg multiply the challenge values; quality = 标准/精良/卓越/极品 weights; fee = 余烬币 per tier
   # D104: hp ÷0.70 and dmg ×1.20 against the eased challenge = the same absolute strength as before (tier 1 = old challenge)
   # E-review (D109, balance_version 15): tier 1 = the challenge itself (×1.00), a linear ramp to tier 10 at its old
@@ -363,6 +370,12 @@ maps:
     # §9 safe points (reconnect ≤ 120 s → last cleared room; boss alive → rb) and hologram anchors (book ch. 14)
     safe: {r0: [0, 64, 3], r1: [0, 64, 25], r2: [-36, 64, 57], r3: [14, 64, 91], rb: [0, 64, 129]}
     holo: {entry: [0, 67, 6], event: [-56, 67, 66], exit: [0, 67, 129]}
+    # F-review Q04 (D122): R3's drain under the east wall (x 29–30, y 63–64, z 99–103) led from the pool to the open
+    # ground outside the map — players and ranged mobs walked out and shot from there. Iron bars close it at attach
+    # (template untouched), and below fall_catch_y (the pool or the ground outside; every floor here is y 64) a player is
+    # put back on the room's safe point and a mob on its own point.
+    rails: [[29, 63, 99, 30, 64, 103]]
+    fall_catch_y: 63.5
     mobs:
       melee:    {mm: EmberQ04Melee,    hp: 72,  atk: 8, interval: 2.5}
       ranged:   {mm: EmberQ04Ranged,   hp: 58,  atk: 8, interval: 3.0, range: 12}
@@ -388,7 +401,8 @@ maps:
       r3:
         label: 闸前检修场
         trigger: [0, 63, 88, 28, 68, 112]
-        points: [[8, 64, 101], [14, 64, 101], [20, 64, 101], [8, 64, 106], [14, 64, 106], [20, 64, 106], [3, 64, 100], [25, 64, 100]]
+        # F-review Q04 (D122): the last point [25, 64, 100] sat over the pool (mob dropped into the water) → solid floor
+        points: [[8, 64, 101], [14, 64, 101], [20, 64, 101], [8, 64, 106], [14, 64, 106], [20, 64, 106], [3, 64, 100], [25, 64, 93]]
         door: [-3, 64, 123, 3, 69, 123]
         a: {melee: 5, heavy: 1}
         b: {melee: 5, ranged: 2}

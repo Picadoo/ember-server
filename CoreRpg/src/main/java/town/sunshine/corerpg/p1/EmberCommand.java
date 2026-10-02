@@ -165,6 +165,7 @@ public final class EmberCommand {
                 else s.sendMessage(P + String.format(Locale.ROOT, "攻击 %.0f · 生命 %.0f · 防御 %.0f · 余烬等级 %d · 套装：%s",
                         l.b, l.h, l.d, l.level, l.setLabel()));
                 s.sendMessage(P + l.nextAwakeningHint());
+                if (runs != null) runs.routeCommand(p); // D120: cheapest real route + buttons
                 s.sendMessage(P + l.setProgress());
                 if (admin) s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "没有有效的余烬刃" : l.blade.shortLabel())

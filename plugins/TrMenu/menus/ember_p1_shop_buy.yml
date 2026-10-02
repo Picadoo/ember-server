@@ -1,0 +1,133 @@
+# 余烬 v1.1 · 外观商店确认页（F-review #2 / D121）：在外观商店页左键一件还没有的商品后打开（服务端记住选中的那件）。
+# 每种付款方式一格，写「付得起 · 扣多少」或「还差多少」；点了在服务端校验并扣款，买到后回商店页，没买成留在本页。
+# 文字全来自 PAPI %corerpg_p1_shopsel_*%（和商店页、聊天栏列表同一份价格）。
+
+Title: '§b外观商店 · 确认购买'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_shop_buy'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '##C#D#E##'
+  - '##F#G#R##'
+  - '####B####'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: chest
+      name: '%corerpg_p1_shopsel_name%'
+      lore:
+        - '§7%corerpg_p1_shopsel_how%'
+        - '§6%corerpg_p1_shopsel_price%'
+        - ''
+        - '%corerpg_p1_shopsel_note%'
+
+  C:
+    update: 20
+    display:
+      material: gold ingot
+      name: '§e用余烬币付'
+      lore:
+        - '%corerpg_p1_shopsel_coin%'
+        - ''
+        - '§e➥ §f点击付款（付不起不会扣）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic buysel coin'
+
+  D:
+    update: 20
+    display:
+      material: nether star
+      name: '§e用余烬徽付'
+      lore:
+        - '%corerpg_p1_shopsel_badge%'
+        - ''
+        - '§e➥ §f点击付款（付不起不会扣）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic buysel badge'
+
+  E:
+    update: 20
+    display:
+      material: diamond
+      name: '§e用 T3 印记付'
+      lore:
+        - '%corerpg_p1_shopsel_t3%'
+        - ''
+        - '§e➥ §f点击付款（付不起不会扣）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic buysel t3'
+
+  F:
+    update: 20
+    display:
+      material: emerald
+      name: '§e用 T2 印记付'
+      lore:
+        - '%corerpg_p1_shopsel_t2%'
+        - ''
+        - '§e➥ §f点击付款（付不起不会扣）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic buysel t2'
+
+  G:
+    update: 20
+    display:
+      material: iron ingot
+      name: '§e用 T1 印记付'
+      lore:
+        - '%corerpg_p1_shopsel_t1%'
+        - ''
+        - '§e➥ §f点击付款（付不起不会扣）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic buysel t1'
+
+  R:
+    display:
+      material: glass
+      name: '§e试穿 10 秒'
+      lore:
+        - '§7先看效果再决定'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 cosmetic buysel try'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回外观商店'
+    actions:
+      all:
+        - 'menu: ember_p1_shop'

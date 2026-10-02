@@ -99,6 +99,7 @@ public final class EmberRunService implements Listener {
     public static EmberRunService get() { return instance; }
 
     Logger log() { return plugin.getLogger(); }
+    CoreRpgPlugin plugin() { return plugin; }
 
     public EmberRunMaps maps() { return maps; }
 
@@ -274,15 +275,27 @@ public final class EmberRunService implements Listener {
     /** E-review #6: six family × slot buttons for the Q02 free targeted exchange */
     private void pieceButtons(Player p, String map, int tier) {
         java.util.List<net.md_5.bungee.api.chat.BaseComponent> parts = new java.util.ArrayList<net.md_5.bungee.api.chat.BaseComponent>();
+        // F-review #6: say when the player already owns a set, mark the pieces already owned, and that it keeps
+        java.util.Set<String> owned = new java.util.HashSet<String>();
+        for (ItemStack x : p.getInventory().getContents()) {
+            if (x == null || !loadouts.items().hasData(x)) continue;
+            EmberItems.Read r = loadouts.items().read(x);
+            if (r != null && r.ok() && r.data != null && r.data.tier >= tier) owned.add(r.data.family + ":" + r.data.slot);
+        }
+        EmberLoadout lo = loadouts.refresh(p);
+        if (!"none".equals(lo.activeSet))
+            p.sendMessage(P + "§7你已成套（" + EmberItemData.familyName(lo.activeSet) + "刃 + 护符）：可以换另一族备用、以后试别的套装；不急就先留着，"
+                    + "这次兑换一直有效（装备页「补领」或 /corerpg p1 firstclear 再领）。");
         parts.add(new net.md_5.bungee.api.chat.TextComponent(P + ChatColor.YELLOW + map.toUpperCase(Locale.ROOT) + " 首通：一次免费定向兑换 T" + tier + "，选族和部位："));
         String[][] fam = {{"scorch", "§6焚烬"}, {"burst", "§c烬爆"}, {"sustain", "§a炽愈"}};
         for (String[] f : fam) for (String slot : new String[]{"blade", "charm"}) {
-            net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(" §7[" + f[1] + EmberItemData.slotName(slot) + "§7]");
+            boolean have = owned.contains(f[0] + ":" + slot);
+            net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(" §7[" + f[1] + EmberItemData.slotName(slot) + (have ? "§8·已有" : "") + "§7]");
             b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND,
                     "/corerpg p1 firstclear " + f[0] + " " + map + " " + slot));
             b.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
                     new net.md_5.bungee.api.chat.ComponentBuilder(EmberItemData.familyBlurb(f[0]) + "\n§7点击领取 T" + tier + " 标准" + EmberItemData.slotName(slot)
-                            + "\n§7缺哪件补哪件：两件同族才成套").create()));
+                            + (have ? "\n§8你已经有这一族的 T" + tier + " " + EmberItemData.slotName(slot) + "（会多一件备用）" : "\n§7缺哪件补哪件：两件同族才成套")).create()));
             parts.add(b);
         }
         p.spigot().sendMessage(parts.toArray(new net.md_5.bungee.api.chat.BaseComponent[0]));
@@ -408,7 +421,9 @@ public final class EmberRunService implements Listener {
             if (at != null) {
                 if (!abyssOpen(d)) problems.add(p.getName() + " 未开放深渊（需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT) + "）");
                 else if (abyss > abyssMaxStart(d)) problems.add(p.getName() + " 深渊最高只能开第 " + abyssMaxStart(d) + " 层（先完整通关第 " + abyssBest(d) + " 层）");
-                if (d.getCoin() < at.fee) problems.add(p.getName() + " 余烬币不足（这一层 " + at.fee + "，当前 " + d.getCoin() + "）");
+                if (d.getCoin() < at.fee && feeMarks(d, at.fee) == 0)
+                    problems.add(p.getName() + " 余烬币不足（这一层 " + at.fee + "，当前 " + d.getCoin() + "）"
+                            + (maps.abyssFeeMarkCoin > 0 ? "，多出来的 T3 印记也不够抵（1 枚抵 " + maps.abyssFeeMarkCoin + " 币，留 " + EmberCosmetics.MARK_RESERVE + " 枚）" : ""));
             } else if (challenge && !challengeOpen(d)) {
                 problems.add(p.getName() + " 未开放挑战版（需本人首通 " + maps.challenge.requires.toUpperCase(Locale.ROOT) + "）");
             } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears
@@ -536,13 +551,22 @@ public final class EmberRunService implements Listener {
             reserved.add(p);
             if (at != null && at.fee > 0) { // P2-2: the segment fee rides with the stamina reservation
                 PlayerData pd = data(p.getUniqueId());
-                if (!pd.takeCoin(at.fee)) {
+                int fm = pd.getCoin() < at.fee ? feeMarks(pd, at.fee) : 0; // F-review #5: surplus T3 marks pay when coins cannot
+                if (fm > 0) {
+                    pd.addPeriodCount(C_MARK + 3, "all", -fm);
+                    s.fee.put(p.getUniqueId(), 0);
+                    ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "mark:3:" + fm, EmberRunRules.ST_RESERVED);
+                    p.sendMessage(P + "§7这一层的费用 " + at.fee + " 币用 §f" + fm + " 枚 T3 印记§7抵了（余烬币不够；1 枚抵 " + maps.abyssFeeMarkCoin
+                            + " 币，剩 " + marks(pd, 3) + " 枚）· 没打成会和体力一起退回");
+                    log().info("[P1 run] " + s.runId + " abyss fee " + p.getName() + ": " + fm + " T3 mark(s) for " + at.fee + " coin");
+                } else if (!pd.takeCoin(at.fee)) {
                     for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
                     for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（这一层 " + at.fee + "）");
                     return true;
+                } else {
+                    s.fee.put(p.getUniqueId(), at.fee);
+                    ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "coin:" + at.fee, EmberRunRules.ST_RESERVED);
                 }
-                s.fee.put(p.getUniqueId(), at.fee);
-                ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "coin:" + at.fee, EmberRunRules.ST_RESERVED);
                 plugin.getDataStore().flushMutation(p.getUniqueId());
             }
         }
@@ -634,12 +658,23 @@ public final class EmberRunService implements Listener {
         log().info("[P1 run] " + s.runId + " release " + u + " (" + why + ")");
     }
 
+    /** F-review #5 (D124): T3 marks that would pay this fee (0 = off / not enough surplus above the exchange reserve) */
+    int feeMarks(PlayerData d, int fee) {
+        if (fee <= 0 || maps.abyssFeeMarkCoin <= 0 || d == null) return 0;
+        int need = (fee + maps.abyssFeeMarkCoin - 1) / maps.abyssFeeMarkCoin;
+        return marks(d, 3) - EmberCosmetics.MARK_RESERVE >= need ? need : 0;
+    }
+
     /** P2-2: the abyss fee goes back together with the stamina, once (ledger "cost_coin" status). */
     private void releaseFee(EmberRunSession s, UUID u, EmberRunRules.Ledger l) {
         EmberRunRules.Row f = l.get(s.runId, "cost_coin");
         if (f == null || EmberRunRules.ST_RELEASED.equals(f.status)) return;
         Integer fee = s.fee.get(u);
-        if (fee != null && fee > 0) {
+        EmberRunRules.Grant paid = EmberRunRules.Grant.decode("cost_coin", f.result);
+        if (paid != null && paid.kind == EmberRunRules.Kind.MARK) { // F-review #5: marks go back as marks
+            data(u).addPeriodCount(C_MARK + paid.id, "all", paid.amount);
+            plugin.getDataStore().flushMutation(u);
+        } else if (fee != null && fee > 0) {
             data(u).addCoin(fee);
             plugin.getDataStore().flushMutation(u);
         }
@@ -803,6 +838,8 @@ public final class EmberRunService implements Listener {
         log().info("[P1 run] " + s.runId + " raid revive (" + why + "): " + names);
     }
 
+    private final Map<UUID, Long> leashTold = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+
     /** D106: once a second — a fallen raid member who drifts more than 24 blocks from every living teammate (or out of
      *  the instance world) is put back on a teammate's camera. */
     void leashFallen(EmberRunDirector d) {
@@ -817,7 +854,12 @@ public final class EmberRunService implements Listener {
             if (t == null) continue;
             if (t.getLocation().distanceSquared(p.getLocation()) > 24 * 24) {
                 watchTeammate(p, s, false);
-                p.sendMessage(P + "§7倒下时只能在队友身边 24 格内观战 · 下一次复活：§e" + nextReviveText(s));
+                Long last = leashTold.get(u); // F-review #7: once every 10 s, not every second
+                long now = System.currentTimeMillis();
+                if (last == null || now - last >= 10_000L) {
+                    leashTold.put(u, now);
+                    p.sendMessage(P + "§7倒下时只能在队友身边 24 格内观战 · 下一次复活：§e" + nextReviveText(s));
+                }
             }
         }
     }
@@ -846,6 +888,11 @@ public final class EmberRunService implements Listener {
         if (d == null || !d.def.raid || !d.s.open() || !d.s.died.contains(p.getUniqueId())) return;
         String[] a = e.getMessage().replaceFirst("^/", "").trim().toLowerCase(Locale.ROOT).split("\\s+");
         String root = a[0].contains(":") ? a[0].substring(a[0].indexOf(':') + 1) : a[0];
+        if ((root.equals("dp") || root.startsWith("dungeon")) && a.length >= 2 && "revive".equals(a[1])) { // F-review #7
+            e.setCancelled(true);
+            p.sendMessage(P + "§7团本里倒下后不能自己复活 · 下一次复活：§e" + nextReviveText(d.s));
+            return;
+        }
         if (!(root.equals("dp") || root.startsWith("dungeon")) || a.length < 2 || !"leave".equals(a[1])) return;
         Long t = leaveAsked.get(p.getUniqueId());
         long now = System.currentTimeMillis();
@@ -930,6 +977,16 @@ public final class EmberRunService implements Listener {
         s.reason = why;
         store.save(s);
         tellRun(s, ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
+        if (s.challenge && s.fightStarted()) { // endgame #6 (D120): a failed challenge says what makes the next try likelier
+            for (UUID u : s.committed) {
+                Player p = Bukkit.getPlayer(u);
+                if (p == null || !p.isOnline()) continue;
+                try {
+                    List<String> r = breakthroughRoutes(p, null);
+                    if (!r.isEmpty()) p.sendMessage(P + "§7挑战版按两件 T3 调（只换刃约一半能过，两件 T3 基本稳过）· 下一次突破：§f" + r.get(0) + " §8（装备页「下一次突破」有按钮）");
+                } catch (RuntimeException ignored) { /* hint only */ }
+            }
+        }
         endInstance(s, false);
     }
 
@@ -1076,7 +1133,11 @@ public final class EmberRunService implements Listener {
         }
         if (season != null && fresh) { // D116 season boards + D117 weekly goals (display / cosmetic currency only)
             String nm = Bukkit.getOfflinePlayer(u).getName();
-            if (s.abyss > 0) { season.onAbyss(u, nm, s.abyss); season.addGoal(u, pd, "abyss", 1); }
+            if (s.abyss > 0) { // F-review #4: the clear time breaks ties on the abyss board
+                long a0 = s.fightStart > 0 ? s.fightStart : s.created;
+                season.onAbyss(u, nm, s.abyss, a0 > 0 ? (int) Math.max(1, (System.currentTimeMillis() - a0) / 1000L) : 0);
+                season.addGoal(u, pd, "abyss", 1);
+            }
             if (s.challenge && s.abyss == 0 && m.key.equals(featured(today))) { season.onFeatured(u, nm); season.addGoal(u, pd, "featured", 1); }
             if (m.raid) {
                 long t0 = s.fightStart > 0 ? s.fightStart : s.created;
@@ -1117,7 +1178,18 @@ public final class EmberRunService implements Listener {
         // D104 (midgame #2): the challenge is tuned for T3 — say how to get there before the first attempt
         p.sendMessage(P + "§e挑战版按 T3 装备来调。§7刚首通：先用 T3 印记兑换（或升阶）把刃换到 T3，再到工坊「互换」免费把强化挪过去；"
                 + "七张挑战图强度相同，只是掉落偏向的族 / 部位不同。");
-        town.sunshine.corerpg.ConfirmTokens.sendButton(p, P, "[打开冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本都在这里");
+        PlayerData d = data(p.getUniqueId());
+        if (season != null && season.goalsOn()) {
+            // F-review #8: today's daily bounty counts for the week even when it was finished before the Q07 clear
+            List<EmberRunRules.BountyTier> tiers = bountyTiers();
+            int topClears = tiers.isEmpty() ? 0 : tiers.get(tiers.size() - 1).clears;
+            if (topClears > 0 && d.periodCount(C_BOUNTY, town.sunshine.corerpg.DailyService.today()) >= topClears && season.progress(d, "bounty") == 0)
+                season.addGoal(p.getUniqueId(), d, "bounty", 1);
+            // F-review #3: the weekly goals and the season are the reason to come back — say so at graduation
+            p.sendMessage(P + "§d周目标和赛季已开放：§7" + goalsShort(d) + "（每周 4 个，完成得余烬徽换外观；赛季榜 4 周一季）");
+        }
+        town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[打开冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本都在这里", "GREEN"},
+                new String[]{"[赛季 · 周目标]", "/ember_p1_season", "本周目标、排行榜、赛季奖励、外观商店", "LIGHT_PURPLE"});
         p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
     }
 
@@ -1140,7 +1212,7 @@ public final class EmberRunService implements Listener {
             StringBuilder lo = new StringBuilder(); // P2-9 (D81) where to farm what
             for (EmberRunMaps.MapDef m : maps.maps.values()) lo.append(lo.length() == 0 ? "" : " · ").append(m.key.toUpperCase(Locale.ROOT)).append(' ').append(EmberRunMaps.lootLabel(m));
             p.sendMessage(P + "§6掉落偏向 §7" + lo + "（目标族仍至少 60%；挑战 / 深渊同图同偏向）");
-            p.sendMessage(P + "§6团本额外装备 §7按你的目标族（没选就按团本偏向族），成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（主菜单「荣誉与排行」）");
+            p.sendMessage(P + "§6团本额外装备 §7按你的目标族（没选就按团本偏向族），成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（主菜单「赛季 · 排行 · 周目标」）");
             return true;
         }
         java.util.List<Integer> can = EmberCodex.claimable(d);
@@ -1266,6 +1338,7 @@ public final class EmberRunService implements Listener {
         }
         tidyHotbar(p, hbEmpty);
         if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
+        sendUpgradeAsks(p); // D120
         if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后点：",
                 "[补领]", "/corerpg p1 claim", "领取暂存的奖励（装备页也有「补领」）"); // D95
         if (choices > 0) choiceButtons(p, open);
@@ -1334,7 +1407,181 @@ public final class EmberRunService implements Listener {
                 }
             }
         }
-        return d.shortLabel();
+        String up = offerUpgrade(p, d); // D120 (F-review #1)
+        return up == null ? d.shortLabel() : d.shortLabel() + up;
+    }
+
+    /** D120: better pieces that need the player's click (sent after the 结算到账 line) */
+    private final Map<UUID, List<String[]>> upgradeAsks = new java.util.concurrent.ConcurrentHashMap<UUID, List<String[]>>();
+
+    /** the active piece of a slot: main-hand blade (or the last one, if still carried) / selected charm */
+    EmberItemData activePiece(Player p, String slot) {
+        EmberLoadout cur = loadouts.refresh(p);
+        if ("charm".equals(slot)) return cur.charm;
+        if (cur.blade != null) return cur.blade;
+        String last = loadouts.state(p.getUniqueId()).mainhandUid;
+        if (last == null) return null;
+        for (ItemStack x : p.getInventory().getContents()) {
+            if (x == null || !loadouts.items().hasData(x)) continue;
+            EmberItems.Read r = loadouts.items().read(x);
+            if (r != null && r.ok() && r.data != null && last.equals(r.data.uid)) return r.data;
+        }
+        return null;
+    }
+
+    private static int slotOfUid(EmberItems items, org.bukkit.inventory.PlayerInventory inv, String uid) {
+        for (int i = 0; i < 36; i++) {
+            ItemStack x = inv.getItem(i);
+            if (x == null || !items.hasData(x)) continue;
+            EmberItems.Read r = items.read(x);
+            if (r != null && r.data != null && uid.equals(r.data.uid)) return i;
+        }
+        return -1;
+    }
+
+    /** D120: make c the active piece of its slot; returns where it went, or null when it could not be placed */
+    String equipPiece(Player p, EmberItemData c, EmberItemData active) {
+        if (c.isCharm()) { loadouts.selectCharmUid(p, c.uid); return "已选定为生效护符"; }
+        org.bukkit.inventory.PlayerInventory inv = p.getInventory();
+        int ci = slotOfUid(loadouts.items(), inv, c.uid);
+        if (ci < 0) return null;
+        int ai = active == null ? -1 : slotOfUid(loadouts.items(), inv, active.uid);
+        int to = ai >= 0 && ai < 9 ? ai : -1;
+        if (to < 0) for (int i = 0; i < 9 && to < 0; i++) { ItemStack x = inv.getItem(i); if (x == null || x.getType() == org.bukkit.Material.AIR) to = i; }
+        if (to < 0) to = inv.getHeldItemSlot();
+        if (ci != to) {
+            ItemStack old = inv.getItem(to);
+            inv.setItem(to, inv.getItem(ci));
+            inv.setItem(ci, old);
+        }
+        loadouts.refresh(p);
+        return "已放到快捷栏第 " + (to + 1) + " 格" + (ci == to ? "" : "，原来那格的东西移到" + (ci < 9 ? "快捷栏第 " + (ci + 1) + " 格" : "背包"));
+    }
+
+    /**
+     * D120 (F-review #1): the cheapest real way to the next awakening, per piece that lacks something: a better piece
+     * already in the bag (free, [换上]), an 8-mark exchange, the in-place upgrade, or for enhance the free swap from an
+     * enhanced old piece. One line per piece; {@code buttons} (may be null) collects [label, command, hover, colour].
+     */
+    List<String> breakthroughRoutes(Player p, List<String[]> buttons) {
+        List<String> out = new ArrayList<String>();
+        EmberLoadout l = loadouts.refresh(p);
+        if (l.blade == null) { out.add("先把一把余烬刃拿在主手"); return out; }
+        PlayerData d = data(p.getUniqueId());
+        String fam = !"none".equals(l.blade.family) ? l.blade.family : l.charm != null ? l.charm.family : "none";
+        int next = l.awakening + 1;
+        if (next > 3) { out.add("已达觉醒 III：之后是追极品和深渊层数"); return out; }
+        int needT = Math.max(1, next == 1 ? 1 : next), needE = next == 2 ? 6 : next == 3 ? 9 : 0;
+        List<EmberItemData> bag = new ArrayList<EmberItemData>();
+        for (ItemStack x : p.getInventory().getContents()) {
+            if (x == null || !loadouts.items().hasData(x)) continue;
+            EmberItems.Read r = loadouts.items().read(x);
+            if (r != null && r.ok() && r.data != null) bag.add(r.data);
+        }
+        EmberForgeService forge = plugin.getEmberForge();
+        for (String slot : new String[]{"blade", "charm"}) {
+            EmberItemData x = "blade".equals(slot) ? l.blade : l.charm;
+            String nm = EmberItemData.slotName(slot);
+            boolean famOk = x != null && !"none".equals(fam) && fam.equals(x.family);
+            if (x != null && famOk && x.tier >= needT) {
+                if (x.enhance >= needE) continue;
+                EmberItemData donor = null;
+                for (EmberItemData b : bag) if (b.slot.equals(slot) && !b.uid.equals(x.uid) && b.enhance >= needE && (donor == null || b.enhance > donor.enhance)) donor = b;
+                if (donor != null) {
+                    out.add(nm + " +" + x.enhance + "→+" + needE + "：§a工坊免费互换§7，把 " + donor.shortLabel() + " §7的 +" + donor.enhance + " 挪过来");
+                    if (buttons != null) buttons.add(new String[]{"[互换" + nm + "强化]", "/corerpg p1 equip " + x.uid + " swap", "免费把 +" + donor.enhance + " 挪到正在用的" + nm, "AQUA"});
+                } else out.add(nm + " 强化 +" + x.enhance + "→+" + needE + "（工坊；+1~+3 必成，之后按次数保底）");
+                continue;
+            }
+            // needs another piece: free from the bag, else marks, else upgrade
+            EmberItemData best = null;
+            for (EmberItemData b : bag) {
+                if (!b.slot.equals(slot) || (x != null && b.uid.equals(x.uid)) || b.tier < needT || ("none".equals(fam) ? b.tier < 1 : !fam.equals(b.family))) continue;
+                if (best == null || EmberRunRules.pieceValue(EmberMode.tables(), b, b.enhance, l.level) > EmberRunRules.pieceValue(EmberMode.tables(), best, best.enhance, l.level)) best = b;
+            }
+            String famName = "none".equals(fam) ? "" : EmberItemData.familyName(fam);
+            String want = nm + " 要 " + famName + " T" + needT + "：";
+            if (best != null) {
+                out.add(want + "§a背包里就有 " + best.shortLabel() + "§7 → 换上（免费）" + (x != null && x.enhance > best.enhance ? "，+" + x.enhance + " 可免费互换过去" : ""));
+                if (buttons != null) {
+                    buttons.add(new String[]{"[换上" + nm + "]", "/corerpg p1 equip " + best.uid, best.shortLabel(), "GREEN"});
+                    if (x != null && x.enhance > best.enhance)
+                        buttons.add(new String[]{"[换上并互换强化]", "/corerpg p1 equip " + best.uid + " swap", "换上并把 +" + x.enhance + " 免费挪过去（回城后）", "AQUA"});
+                }
+                continue;
+            }
+            int t = needT;
+            boolean open = t == 1 || progressFlag(d, EmberRunRules.directedForgeFlag(t));
+            int have = marks(d, t);
+            if (open && have >= EmberRunRules.MARKS_PER_EXCHANGE && !"none".equals(fam)) {
+                out.add(want + "§a用 8 枚 T" + t + " 印记兑换§7（有 " + have + " 枚）" + (x != null && x.enhance > 0 ? "，再免费互换 +" + x.enhance : ""));
+                if (buttons != null) buttons.add(new String[]{"[兑换 T" + t + " " + famName + nm + "]", "/corerpg p1 marks exchange " + fam + " " + slot + " " + t, "先预览，再点确认", "AQUA"});
+                continue;
+            }
+            String up = null;
+            if (x != null && famOk && x.tier == t - 1 && EmberUpgradeRules.upgradeCost(x.tier) != null) {
+                String flag = EmberUpgradeRules.upgradeFlag(x.tier);
+                EmberUpgradeRules.Cost c = EmberUpgradeRules.upgradeCost(x.tier);
+                List<String> lack = forge == null ? java.util.Collections.<String>emptyList() : forge.lackingFor(p, c);
+                if (flag != null && !progressFlag(d, flag)) up = "升阶要先首通 " + flag.toUpperCase(Locale.ROOT);
+                else if (lack.isEmpty()) {
+                    out.add(want + "§a升阶 T" + x.tier + "→T" + t + "§7（" + c.label() + "，保留成色 / 精工 / 强化；手持后进工坊）");
+                    continue;
+                } else up = "升阶 " + c.label() + "，还缺 " + String.join("、", lack).replaceAll("§.", "");
+            }
+            out.add(want + (open ? "T" + t + " 印记 " + have + "/8" : "T" + t + " 兑换要先首通 " + EmberRunRules.directedForgeFlag(t).toUpperCase(Locale.ROOT))
+                    + (up == null ? "" : " · " + up) + "（每局首领结算给 1 枚同阶印记）");
+        }
+        if (out.isEmpty()) out.add("两件都够了：" + l.nextAwakeningHint());
+        return out;
+    }
+
+    /** D120: /corerpg p1 route — the breakthrough routes with buttons */
+    public boolean routeCommand(Player p) {
+        List<String[]> btn = new ArrayList<String[]>();
+        for (String line : breakthroughRoutes(p, btn)) p.sendMessage(P + "§b下一次突破 §7" + line);
+        if (!btn.isEmpty()) town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
+        return true;
+    }
+
+    /** D120 (extends D85): a strictly better piece becomes active by itself when nothing is invested in the old one */
+    private String offerUpgrade(Player p, EmberItemData c) {
+        if (c.tier < 1) return null;
+        EmberItemData a = activePiece(p, c.slot);
+        if (a == null) return null;
+        EmberLoadout cur = loadouts.get(p);
+        int lv = cur == null ? 10 : cur.level;
+        int v = EmberRunRules.upgradeVerdict(EmberMode.tables(), c, a, cur == null ? "none" : cur.activeSet, lv);
+        if (v == EmberRunRules.UP_NONE) return null;
+        if (v == EmberRunRules.UP_AUTO) {
+            String where = equipPiece(p, c, a);
+            if (where == null) return null;
+            log().info("[P1 equip] auto " + p.getName() + " " + c.uid.substring(0, 8) + " replaces " + a.uid.substring(0, 8));
+            return "（比 " + a.shortLabel() + " 强，已自动换上：" + where + "；原来那件还在背包）";
+        }
+        String why = v == EmberRunRules.UP_ASK_SWAP ? "原来那件强化到 +" + a.enhance + "，可以免费互换过来" : "会拆掉现在的 " + EmberItemData.familyName(cur.activeSet) + " 套装";
+        List<String[]> btn = new ArrayList<String[]>();
+        btn.add(new String[]{"[换上]", "/corerpg p1 equip " + c.uid, "只换上，不动强化", "GREEN"});
+        if (v == EmberRunRules.UP_ASK_SWAP)
+            btn.add(new String[]{"[免费互换强化]", "/corerpg p1 equip " + c.uid + " swap", "换上并把 +" + a.enhance + " 免费挪到新件（回城后操作）", "AQUA"});
+        btn.add(0, new String[]{"§e更好的" + EmberItemData.slotName(c.slot) + "：" + c.shortLabel() + " §7（" + why + "）", null, null, null});
+        upgradeAsks.computeIfAbsent(p.getUniqueId(), k -> new ArrayList<String[]>()).addAll(btn);
+        upgradeAsks.get(p.getUniqueId()).add(new String[]{null, null, null, null}); // group end
+        return "（比现在用的强，见下面的 [换上]）";
+    }
+
+    private void sendUpgradeAsks(Player p) {
+        List<String[]> l = upgradeAsks.remove(p.getUniqueId());
+        if (l == null) return;
+        String head = null;
+        List<String[]> btn = new ArrayList<String[]>();
+        for (String[] b : l) {
+            if (b[0] == null) { // group end
+                if (head != null && !btn.isEmpty()) town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + head + " ", btn.toArray(new String[0][]));
+                head = null; btn.clear();
+            } else if (b[1] == null) head = b[0];
+            else btn.add(b);
+        }
     }
 
     /** hotbar slot of a T0 starter blade (-1 = none): only that one gets swapped for the first real blade */
@@ -1377,7 +1624,8 @@ public final class EmberRunService implements Listener {
                         l.mark(s.runId, "cost_coin", EmberRunRules.ST_RELEASED, System.currentTimeMillis());
                         ch.add(f);
                         boolean[] c2 = new boolean[1];
-                        EmberRunRules.Row fr = l.record(s.runId, "refund_coin", "coin:" + (fee == null ? 0 : fee),
+                        boolean markPaid = f.result != null && f.result.startsWith("mark:"); // F-review #5
+                        EmberRunRules.Row fr = l.record(s.runId, "refund_coin", markPaid ? f.result : "coin:" + (fee == null ? 0 : fee),
                                 EmberRunRules.ST_PENDING, System.currentTimeMillis(), c2);
                         if (c2[0]) ch.add(fr);
                     }
@@ -1689,6 +1937,7 @@ public final class EmberRunService implements Listener {
         UUID u = p.getUniqueId();
         Integer used = s.potions.get(u);
         int n = EmberRunRules.deathRefundCount(used == null ? 0 : used, max);
+        if (n == 0 && raidRun(s)) return; // F-review #7: a raid fall with nothing to refund says nothing and keeps today's refund
         String day = town.sunshine.corerpg.DailyService.today();
         EmberRunRules.Ledger l = store.ledger(u);
         boolean[] c = new boolean[1];
@@ -1797,7 +2046,7 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ commands
 
     public static final java.util.Set<String> OPS = new java.util.HashSet<String>(java.util.Arrays.asList(
-            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit", "watch", "season", "goals"));
+            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit", "watch", "season", "goals", "equip", "route"));
 
     public boolean cmd(CommandSender s, String sub, String[] args) {
         switch (sub) {
@@ -1820,6 +2069,8 @@ public final class EmberRunService implements Listener {
             case "season": // D116
                 if (!(s instanceof Player) || season == null) return true;
                 return season.seasonCommand((Player) s, args);
+            case "equip": return cmdEquip(s, args); // D120
+            case "route": return s instanceof Player ? routeCommand((Player) s) : true; // D120
             case "goals": // D117
                 if (!(s instanceof Player) || season == null) return true;
                 return season.goalsCommand((Player) s);
@@ -1901,6 +2152,42 @@ public final class EmberRunService implements Listener {
         d.addPeriodCount(C_TARGET, "all", idx - d.periodCount(C_TARGET, "all"));
         plugin.getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(P + "§a掉落目标族已设为 " + (idx == 0 ? "无（按本的偏向族掉落）" : EmberItemData.familyName(f)) + " §7· 下次入场生效");
+        return true;
+    }
+
+    /** D120: /corerpg p1 equip <uid> [swap [confirm]] — the [换上] / [免费互换强化] buttons and the gear-page route */
+    private boolean cmdEquip(CommandSender s, String[] args) {
+        if (!(s instanceof Player) || args.length < 3) return true;
+        Player p = (Player) s;
+        String want = args[2];
+        boolean swap = args.length >= 4 && "swap".equalsIgnoreCase(args[3]);
+        boolean go = args.length >= 5 && "confirm".equalsIgnoreCase(args[4]);
+        EmberItemData c = null;
+        for (ItemStack x : p.getInventory().getContents()) {
+            if (x == null || !loadouts.items().hasData(x)) continue;
+            EmberItems.Read r = loadouts.items().read(x);
+            if (r != null && r.ok() && r.data != null && r.data.uid != null && r.data.uid.startsWith(want)) { c = r.data; break; }
+        }
+        if (c == null) { p.sendMessage(P + "§c背包里没有这件（可能已分解或放进了仓库）"); return true; }
+        String t = loadouts.trust(p, c);
+        if (t != null) { p.sendMessage(P + "§c物品校验未通过：" + t + "（稍后再点）"); return true; }
+        EmberItemData a = activePiece(p, c.slot);
+        if (swap && a != null && !a.uid.equals(c.uid) && a.enhance > c.enhance) {
+            EmberForgeService f = plugin.getEmberForge();
+            if (f == null) return true;
+            if (!go) {
+                String where = equipPiece(p, c, a);
+                if (where != null) p.sendMessage(P + "§a已换上 " + c.shortLabel() + "§7（" + where + "）");
+            }
+            return f.swapUids(p, a.uid, c.uid, go, "/corerpg p1 equip " + c.uid + " swap confirm");
+        }
+        if (a != null && a.uid.equals(c.uid)) {
+            if (!swap) { p.sendMessage(P + "这件已经在用了。"); return true; }
+        }
+        String where = equipPiece(p, c, a);
+        if (where == null) { p.sendMessage(P + "§c放不进快捷栏，手动拿到主手即可"); return true; }
+        p.sendMessage(P + "§a已换上 " + c.shortLabel() + "§7（" + where + "）" + (a != null && a.enhance > c.enhance
+                ? " · 原来那件 +" + a.enhance + "，工坊「互换」可免费挪过来" : ""));
         return true;
     }
 
@@ -2340,18 +2627,37 @@ public final class EmberRunService implements Listener {
 
     /** D97 hub board: top {@code n} rows of the abyss board or this week's featured board (display only) */
     public java.util.List<EmberLeaderboard.Row> topRows(boolean abyssBoard, int n) {
+        if (season != null) { // F-review #2 (D121): one leaderboard set — the season page's week boards
+            java.util.List<EmberLeaderboard.Row> out = new ArrayList<EmberLeaderboard.Row>();
+            for (EmberSeason.Row r : season.weekTop(abyssBoard ? "abyss" : "featured", n)) out.add(new EmberLeaderboard.Row(r.name, r.value, r.at));
+            return out;
+        }
         if (top == null) return new ArrayList<EmberLeaderboard.Row>();
         return top.top(abyssBoard, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())), n);
     }
 
     /** E-review #10: the join greeting follows progress — null = the config lines (new players, before the Q01 first clear) */
+    /** F-review #3: 「本周目标 1/4 · 余烬徽 15」 */
+    public String goalsShort(PlayerData d) {
+        return season == null ? "" : "本周目标 §f" + season.goalsDone(d) + "/" + season.goalCount() + "§7 · 余烬徽 §f" + EmberSeason.badges(d) + "§7";
+    }
+
+    /** F-review #3: extra join buttons after graduation (null = the default three) */
+    public String[][] joinButtons(PlayerData d) {
+        if (d == null || !progressFlag(d, "q07")) return null;
+        return new String[][]{{"[主菜单]", "/ember", "冒险 · 装备 · 工坊 · 帮助都在这里", "GOLD"},
+                {"[冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本", "GREEN"},
+                {"[赛季 · 周目标]", "/ember_p1_season", "本周目标、排行榜、赛季奖励、外观商店", "LIGHT_PURPLE"}};
+    }
+
     public List<String> joinLines(PlayerData d) {
-        if (d == null || !progressFlag(d, "q01")) return null;
+        if (d == null || (!progressFlag(d, "q01") && !progressFlag(d, "q07"))) return null;
         List<String> out = new ArrayList<String>();
         if (progressFlag(d, "q07")) {
             out.add("§6§l[余烬服] §e欢迎回来 · 本周精选 §f" + featuredLabel(d));
-            out.add("§7深渊最高第 §f" + abyssBest(d) + "§7 层（可开 1～" + abyssMaxStart(d) + " 层）"
-                    + "§7 · 多余的印记可以在外观商店（装备页）换只做展示的外观");
+            out.add("§7" + EmberSeason.abyssMine(abyssBest(d)) + "（可开第 1～" + abyssMaxStart(d) + " 层）"
+                    + (season != null && season.goalsOn() ? "§7 · " + goalsShort(d) : ""));
+            out.add("§7外观商店（主菜单「赛季 · 排行 · 周目标」→ 外观商店）：余烬徽、余烬币或多出来的印记都能付，只做展示");
         } else {
             out.add("§6§l[余烬服] §e欢迎回来 · 下一步：§f" + ChatColor.stripColor(nextStep(d)));
             out.add("§7本周精选 §f" + featuredShort() + "§7 · 右键门吏 · 灰钥或点下面的 [冒险页] 进本");
@@ -2370,6 +2676,10 @@ public final class EmberRunService implements Listener {
 
     /** P2-10 (D84) /corerpg p1 top: both boards, top 10 */
     public boolean topCommand(org.bukkit.command.CommandSender p) {
+        if (p instanceof Player && season != null) { // F-review #2 (D121): one leaderboard set — open the season page
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open ember_p1_season " + p.getName());
+            return true;
+        }
         if (top == null) { p.sendMessage(P + "排行榜未加载"); return true; }
         String wk = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
         java.util.List<EmberLeaderboard.Row> a = top.top(true, wk, 10), f = top.top(false, wk, 10);
@@ -2480,7 +2790,12 @@ public final class EmberRunService implements Listener {
             boolean ab = key.startsWith("top_abyss_");
             int i;
             try { i = Integer.parseInt(key.substring(ab ? 10 : 13)); } catch (NumberFormatException e) { return ""; }
-            if (top == null || i < 1 || i > 10) return "";
+            if (i < 1 || i > 10) return "";
+            if (season != null) { // F-review #2: the season week board (same rows as the season page)
+                java.util.List<EmberSeason.Row> sr = season.weekTop(ab ? "abyss" : "featured", i);
+                return sr.size() < i ? "—" : sr.get(i - 1).name + " · " + EmberSeason.rowText(ab ? "abyss" : "featured", sr.get(i - 1));
+            }
+            if (top == null) return "";
             java.util.List<EmberLeaderboard.Row> rows = top.top(ab, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())), i);
             if (rows.size() < i) return "—";
             EmberLeaderboard.Row r = rows.get(i - 1);
@@ -2488,6 +2803,10 @@ public final class EmberRunService implements Listener {
         }
         if (season != null && (key.startsWith("goal") || key.startsWith("season") || key.startsWith("sboard_") || key.startsWith("srank_") || "badges".equals(key))) {
             String v = season.papi(p == null ? null : p.getUniqueId(), d, key); // D116 / D117
+            if (v != null) return v;
+        }
+        if (key.startsWith("shop") && !key.startsWith("shop_") && cosmetics != null) { // F-review #2 (D121)
+            String v = cosmetics.papi(p == null ? null : p.getUniqueId(), d, key);
             if (v != null) return v;
         }
         if (key.startsWith("shop_") && cosmetics != null) return cosmetics.shopLabel(p == null ? null : p.getUniqueId(), d, key.substring(5)); // D119
@@ -2511,7 +2830,14 @@ public final class EmberRunService implements Listener {
         }
         if ("recruits".equals(key)) return recruitsLabel(); // E-review #5
         if ("featured_key".equals(key)) return String.valueOf(featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
-        if ("awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "stats".equals(key)
+        if ("awaken_route".equals(key)) { // D120: cheapest real route (first line)
+            List<String> r;
+            if (Bukkit.isPrimaryThread()) r = breakthroughRoutes(p, null);
+            else try { final Player fp = p; r = Bukkit.getScheduler().callSyncMethod(plugin, () -> breakthroughRoutes(fp, null)).get(750, java.util.concurrent.TimeUnit.MILLISECONDS); }
+            catch (Exception e) { return ""; }
+            return r.isEmpty() ? "" : "§7路线：" + r.get(0) + (r.size() > 1 ? " §8（还有 " + (r.size() - 1) + " 条，点开看）" : "");
+        }
+                if ("awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "stats".equals(key)
                 || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)) {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberLoadout l = ls == null ? null : ls.get(p);

@@ -217,6 +217,8 @@ public final class EmberRunMaps {
         public final List<Link> links;
         /** guard rails: iron bars placed in AIR only, when the instance is attached (template untouched) */
         public final List<Box> rails;
+        /** F-review Q04 (D122): feet below this Y = fell out of the rooms (pool / outside ground) → put back; NaN = off */
+        public final double fallCatchY;
         /** single blocks set to AIR in the instance at attach (e.g. the tide template's stray sign for Q04) */
         public final List<Pt> clear;
         /** P2-5 raid overrides (−1 / 0 = the file-wide value / off): party size, stamina, weekly cap, party scaling */
@@ -287,6 +289,7 @@ public final class EmberRunMaps {
             List<Box> rl = new ArrayList<Box>();
             if (m.get("rails") instanceof List) for (Object o : (List<?>) m.get("rails")) { Box b = box(o); if (b != null) rl.add(b); }
             rails = Collections.unmodifiableList(rl);
+            fallCatchY = m.get("fall_catch_y") == null ? Double.NaN : num(m.get("fall_catch_y"), Double.NaN);
             clear = pts(m.get("clear"));
         }
 
@@ -508,6 +511,8 @@ public final class EmberRunMaps {
     public final int cost, partyMin, partyMax, passSeconds;
     /** P2-2 abyss: opening flag (own first clear of this map) and the tier table; empty = abyss off */
     public final String abyssRequires;
+    /** F-review #5 (D124): 余烬币 per surplus T3 mark when the coins cannot pay an abyss fee (0 = coins only) */
+    public final int abyssFeeMarkCoin;
     public final List<AbyssTier> abyss;
     private final List<Challenge> abyssCh;
     /** P2-1 (D66) weekly featured challenge: extra marks of the run tier, and how many clears per week get them */
@@ -641,6 +646,7 @@ public final class EmberRunMaps {
         challenge = root.get("challenge") instanceof Map ? new Challenge((Map<?, ?>) root.get("challenge")) : null;
         Map<?, ?> ab = root.get("abyss") instanceof Map ? (Map<?, ?>) root.get("abyss") : Collections.emptyMap();
         abyssRequires = str(ab.get("requires"), "q07");
+        abyssFeeMarkCoin = Math.max(0, (int) num(ab.get("fee_mark_coin"), 0));
         List<AbyssTier> at = new ArrayList<AbyssTier>();
         List<Challenge> ac = new ArrayList<Challenge>();
         if (challenge != null && ab.get("tiers") instanceof List) for (Object o : (List<?>) ab.get("tiers")) {

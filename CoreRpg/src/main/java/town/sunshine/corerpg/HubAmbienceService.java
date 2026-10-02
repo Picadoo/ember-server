@@ -130,7 +130,7 @@ public final class HubAmbienceService implements Listener {
             List<EmberLeaderboard.Row> f = runs.topRows(false, n);
             if (f.isEmpty()) lines.add("§8暂无，第一名等你");
             for (int i = 0; i < f.size(); i++) lines.add(medal(i) + f.get(i).name + " §7" + f.get(i).value + " 次");
-            lines.add("§8完整榜单和你的名次：主菜单「荣誉与排行」");
+            lines.add("§8完整榜单和你的名次：主菜单「赛季 · 排行 · 周目标」");
             replace(board, loc(w, b.getList("at")), lines);
         }
         ConfigurationSection hs = cfg.getConfigurationSection("honors");
@@ -143,7 +143,7 @@ public final class HubAmbienceService implements Listener {
                 who.removeIf(town.sunshine.corerpg.p1.EmberMode::boardExcluded); // D102: no test / bot accounts
                 lines.add(c.label + " §8· §7" + c.how + (who.isEmpty() ? " §8· 尚无人获得" : " §7· 首位 §f" + who.get(0) + " §7· 共 " + who.size() + " 人")); // D103: 9 entries, one line each
             }
-            lines.add("§8装上：主菜单 → 荣誉与排行");
+            lines.add("§8装上：主菜单 → 赛季 · 排行 · 周目标");
             replace(honors, loc(w, hs.getList("at")), lines);
         }
     }

@@ -56,6 +56,33 @@ public final class EmberRunRules {
     /** §9.1 forge marks: 8 same-tier marks → one standard item of a chosen family + slot */
     public static final int MARKS_PER_EXCHANGE = 8;
 
+    /** F-review #1 (D120): auto-equip verdicts for a new piece against the active piece of the same slot */
+    public static final int UP_NONE = 0, UP_AUTO = 1, UP_ASK = 2, UP_ASK_SWAP = 3;
+    /** same tier: the new piece must be at least this much stronger to count as "clearly better" */
+    public static final double UP_SAME_TIER = 1.05;
+
+    /** the slot value of a piece (blade attack B / charm life H0), optionally with another enhance level */
+    public static double pieceValue(EmberTables t, EmberItemData d, int enhance, int level) {
+        return d.isBlade() ? EmberFormula.baseAttack(t, d.tier, d.quality, d.craft, enhance, level)
+                : EmberFormula.baseHp(t, d.tier, d.quality, d.craft, enhance, level);
+    }
+
+    /**
+     * D120: is {@code c} strictly better than the active {@code a} (higher tier, or same tier and ≥ 5 % more value)?
+     * The active piece's enhance counts as moveable (the free swap), so the comparison uses c at a's enhance level.
+     * Verdict: UP_AUTO when a has no investment (+0) and c does not break the active set; UP_ASK when it would break
+     * the set; UP_ASK_SWAP when a is enhanced (offer [换上] + [免费互换强化]); UP_NONE when c is not better.
+     */
+    public static int upgradeVerdict(EmberTables t, EmberItemData c, EmberItemData a, String activeSet, int level) {
+        if (c == null || a == null || !c.slot.equals(a.slot) || c.uid.equals(a.uid)) return UP_NONE;
+        double vc = pieceValue(t, c, Math.max(c.enhance, a.enhance), level), va = pieceValue(t, a, a.enhance, level);
+        boolean better = c.tier > a.tier ? vc >= va : c.tier == a.tier && vc >= va * UP_SAME_TIER;
+        if (!better) return UP_NONE;
+        if (a.enhance > c.enhance) return UP_ASK_SWAP;
+        boolean breaks = activeSet != null && !"none".equals(activeSet) && !activeSet.equals(c.family);
+        return breaks ? UP_ASK : UP_AUTO;
+    }
+
     public static final String[] FAMILIES = {"scorch", "burst", "sustain"};
     public static final double TARGET_WEIGHT = 0.60;
     /** §5.1 标准/精良/卓越/极品 */

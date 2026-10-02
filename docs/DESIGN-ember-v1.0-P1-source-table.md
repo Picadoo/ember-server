@@ -1206,3 +1206,72 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 参数源 | 价钱仍在 EmberCosmetics（只做展示） |
 | 测试 | FreshQ4 菜单 dump + 三种点击 |
 
+
+### 13.47 更好的件自动换上（CoreRpg 1.52.0，D120，balance_version 17）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 同部位严格更好（阶更高，或同阶有效值 ≥ ×1.05）：当前件无投入 → 自动换上并说明；有投入 → [换上] [免费互换强化]。「下一次突破」按成本给路线：免费换上 → 印记兑换 → 互换 → 升阶；挑战失败提示第一条 |
+| 代码 | EmberRunRules `upgradeVerdict` / `pieceValue` / `UP_*`；EmberRunService `offerUpgrade` / `equipPiece` / `cmdEquip` / `breakthroughRoutes`，`/corerpg p1 equip <uid> [swap [confirm]]`、`/corerpg p1 route`、PAPI `awaken_route`；EmberForgeService `swapUids` / `lackingFor`；EmberLoadoutService `selectCharmUid`；ember_p1_gear N 图标 |
+| 参数源 | `UP_SAME_TIER = 1.05`（只决定提示，不改数值） |
+| 测试 | 单测 `upgradeVerdict…D120`；FreshQ8 真打 Q04 首通 → T2 精良护符自动换上 |
+
+### 13.48 外观商店一个来源、一套页面（CoreRpg 1.52.0，D121）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 价格 / 付款 / 说法只在 EmberCosmetics；菜单和聊天版共用；新付款页；第 43 格、进服消息、赛季页开 ember_p1_shop；称号 / 排行 / 周目标只留 ember_p1_season；排行只留赛季榜 |
+| 代码 | EmberCosmetics `priceText` / `howText` / `openMenu` / `pick` / `buysel` / `ensureTitle` / `papi()`（`shopprice_` `shopname_` `shophow_` `shopmarks` `shopsel_*`）；`cosmetic list`；EmberSeason `weekTop` 供 `topRows` 和主城 PAPI；ember_p1_shop.yml、ember_p1_shop_buy.yml（新）、ember_p1_gear.yml X、ember_hub.yml Y、ember_p1_season.yml、ember_p1_codex_gear.yml [51] |
+| 参数源 | 价钱仍在 EmberCosmetics（只做展示） |
+| 测试 | 单测 `shopPriceLine…D121`；FreshQ8 页内用币买素白、自动装称号、回商店页；第 43 格 / `top` 开对应页面 |
+
+### 13.49 Q04 封口和掉落传回（CoreRpg 1.52.0，D122）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | R3 东墙排水口封口；低于 y 63.5 传回当前房间；R3 浮空刷怪点挪位 |
+| 代码 | EmberRunMaps `fallCatchY`；EmberRunDirector fall-catch（玩家传回、怪回家） |
+| 参数源 | ember-v1-runs.yml q04 `rails: [[29,63,99,30,64,103]]`、`fall_catch_y: 63.5`、R3 点 [25,64,93] |
+| 测试 | `check-dp-spawns.py` 浮空点消失（门铁栏报错是全图老问题）；FreshQ8 生存不 tp 通关 Q04 |
+
+### 13.50 赛季深渊榜并列、深潜者第 5 层（CoreRpg 1.52.0，D123，balance_version 17）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 同层按用时排，无用时最后；赛季深潜者 = 赛季内通关第 5 层；没上榜也显示自己 |
+| 代码 | EmberSeason `Row.secs`、`compareRows`、`rowText`、`bestSecs`、`abyssMine`；`onAbyss(…, secs)` |
+| 参数源 | ember-v1-runs.yml `season.deep_tier: 5` |
+| 测试 | 单测 `abyssBoardBreaksTies…D123`；FreshQ8 `season` 每榜「你：未上榜」 |
+
+### 13.51 深渊层费 T3 印记抵（CoreRpg 1.52.0，D124，balance_version 17）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 币不够时，多于 8 枚的 T3 印记 1 枚 = 200 币抵层费；退费退印记 |
+| 代码 | EmberRunService `feeMarks`、账本 `cost_coin = mark:3:n`、`releaseFee` / 重启退还；EmberRunMaps `abyssFeeMarkCoin` |
+| 参数源 | ember-v1-runs.yml `abyss.fee_mark_coin: 200`；p2econ `--fee-mark`（out-p2econ-feemark-*.md：0.7 档卡币天数 54.8 → 28.4，两件极品第 12 周 75 → 83%） |
+| 测试 | 单测 fee mark 200；p2econ 三档 |
+
+### 13.52 团本倒下提示（CoreRpg 1.52.0，D125）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 拦 `/dp revive` 改回下一次复活说明；关 DP 复活消息；24 格提示 10 秒冷却；团本无药可退不提示 |
+| 代码 | EmberRunService（命令拦截、`leashTold`、退药判断）；DP `config.yml` `dungeon-revive-message: false`、lang `dungeon-game-un-revive` |
+| 测试 | 代码 + 配置；本轮没有实机团本复测 |
+
+### 13.53 聊天世界名和原版成就（CoreRpg 1.52.0，D126）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 聊天不带世界名；不广播原版成就 |
+| 代码 | CoreRpgPlugin `quietAdvancements`（启用时 + WorldLoadEvent）；Multiverse `prefixchat: 'false'`（在线用 `mv config prefixchat false`） |
+| 测试 | FreshQ8 聊天「[庭院余火] <FreshQ8> …」；`gamerule announceAdvancements` = false |
+
+### 13.54 旧物品名重写（CoreRpg 1.52.0，D127）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 进服重写签名有效的 P1 物品名字和 lore，只改显示 |
+| 代码 | EmberItems `relabel`；EmberLoadoutService `onJoin` 40 tick 后 |
+| 测试 | P1Fox 进服「10 old item label(s) rewritten」 |
