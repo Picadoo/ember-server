@@ -156,6 +156,9 @@ public final class EmberRunService implements Listener {
     private EmberCosmetics cosmetics;
     public void setCosmetics(EmberCosmetics c) { cosmetics = c; }
     public EmberCosmetics cosmetics() { return cosmetics; }
+    /** P2-10 (D84) display-only leaderboards */
+    private EmberLeaderboard top;
+    public void setLeaderboard(EmberLeaderboard t) { top = t; }
 
     public boolean unlocked(PlayerData d, EmberRunMaps.MapDef m) {
         return m.requires == null || m.requires.isEmpty() || d.periodCount(C_UNLOCK + m.key, "all") > 0;
@@ -712,6 +715,11 @@ public final class EmberRunService implements Listener {
         int oldBest = abyssBest(pd);
         if (newBest) pd.addPeriodCount(C_ABYSS_BEST, "all", s.abyss - abyssBest(pd)); // P2-2: opens tier + 1
         if (newBest && cosmetics != null) cosmetics.onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
+        if (top != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records
+            String nm = Bukkit.getOfflinePlayer(u).getName();
+            if (s.abyss > 0) top.abyssBest(u, nm, abyssBest(pd));
+            if (fresh && s.challenge && s.abyss == 0 && m.key.equals(featured(today))) top.featuredClear(u, nm, week);
+        }
         store.saveLedger(u, changed);
         plugin.getDataStore().flushMutation(u);
         log().info("[P1 run] " + s.runId + " settle " + u + " rows+" + changed.size() + (in.firstClear != null ? " (first clear)" : "")
@@ -1642,6 +1650,20 @@ public final class EmberRunService implements Listener {
                 + " · 加成剩 " + left + "/" + maps.rotationWeeklyCap + " · 周一 0 点轮换";
     }
 
+    /** P2-10 (D84) /corerpg p1 top: both boards, top 10 */
+    public boolean topCommand(org.bukkit.command.CommandSender p) {
+        if (top == null) { p.sendMessage(P + "排行榜未加载"); return true; }
+        String wk = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+        java.util.List<EmberLeaderboard.Row> a = top.top(true, wk, 10), f = top.top(false, wk, 10);
+        p.sendMessage(P + "§6排行榜 §7（只做展示）");
+        p.sendMessage(P + "§5深渊最高层：" + (a.isEmpty() ? "§7暂无" : ""));
+        for (int i = 0; i < a.size(); i++) p.sendMessage(P + "§f" + (i + 1) + ". " + a.get(i).name + " §7第 " + a.get(i).value + " 层");
+        EmberRunMaps.MapDef fm = maps.byKey(featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
+        p.sendMessage(P + "§b本周精选挑战通关" + (fm == null ? "" : "（" + fm.key.toUpperCase(Locale.ROOT) + " " + fm.name + "）") + "：" + (f.isEmpty() ? "§7暂无" : ""));
+        for (int i = 0; i < f.size(); i++) p.sendMessage(P + "§f" + (i + 1) + ". " + f.get(i).name + " §7" + f.get(i).value + " 次");
+        return true;
+    }
+
     /** P2-8 %corerpg_p1_modifier%: this week's featured-map rule, e.g. 「限药：本局最多喝 3 瓶回复药」 */
     public String modifierLabel() {
         EmberRunMaps.Modifier mod = maps.modifierFor(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
@@ -1692,6 +1714,16 @@ public final class EmberRunService implements Listener {
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("modifier".equals(key)) return modifierLabel(); // P2-8
+        if (key.startsWith("top_abyss_") || key.startsWith("top_featured_")) { // P2-10 %corerpg_p1_top_abyss_1%
+            boolean ab = key.startsWith("top_abyss_");
+            int i;
+            try { i = Integer.parseInt(key.substring(ab ? 10 : 13)); } catch (NumberFormatException e) { return ""; }
+            if (top == null || i < 1 || i > 10) return "";
+            java.util.List<EmberLeaderboard.Row> rows = top.top(ab, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())), i);
+            if (rows.size() < i) return "—";
+            EmberLeaderboard.Row r = rows.get(i - 1);
+            return r.name + " · " + (ab ? "第 " + r.value + " 层" : r.value + " 次");
+        }
         if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleText(d); // P2-9 %corerpg_p1_title%
         if ("honors".equals(key)) return cosmetics == null ? "0/0" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size();
         if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm); }

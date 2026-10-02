@@ -224,6 +224,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         { // P2-9 (D83) titles + trails (cosmetic only)
             final town.sunshine.corerpg.p1.EmberCosmetics cos = new town.sunshine.corerpg.p1.EmberCosmetics(emberRuns);
             emberRuns.setCosmetics(cos);
+            emberRuns.setLeaderboard(new town.sunshine.corerpg.p1.EmberLeaderboard(getDataFolder(), getLogger())); // P2-10 (D84)
             Bukkit.getPluginManager().registerEvents(cos, this);
             Bukkit.getScheduler().runTaskTimer(this, cos::tick, 40L, 4L);
         }
