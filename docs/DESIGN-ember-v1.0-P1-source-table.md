@@ -802,6 +802,8 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 
 七张 `ember_daily*_v1` DP 模板（1.28.0 建，含 B2.181 形体）打包为 `ember-p1-maps-v1-2026-10-02.zip`（8,056,349 字节，36 个文件，内含 SHA256SUMS.txt；zip sha256 `a3ad0448870a8dfde34263a2aae4af4076f620145fd43c9d53384c1f11751e80`），上传到 GitHub Release **maps-v1-2026-10-02**（https://github.com/Picadoo/ember-server/releases/tag/maps-v1-2026-10-02 ，目标 main）。重新下载校验一致。恢复：解压到仓库根目录（路径以 `plugins/DungeonPlus/map/` 开头），或服内 `/corerpg p1 mapbuild q01..q07` 重建。之后若重建模板，需另发新的 maps release。
 
+1.29.0 重建 Q03 后（18:46 CST）：同一个 Release 加传附加资产 `ember_daily_crypt_v1-1.29.0.zip`（1,557,957 字节，sha256 `fcc70124a2089c2b47d91c24ae720536311383dd2fa49e0063f28b6f31e695bd`），恢复时用它覆盖总包里的旧 crypt。
+
 ### 13.13 内容批 C9：Q03 墙内形体 + 踏步冷却（CoreRpg 1.29.0，2026-10-02 18:41 CST 部署）
 
 | 项 | 做了（Q03 全部做成墙层 / 顶层里的方块盒 kind 3，D55 的「墙内浅龛」） | 书 |
