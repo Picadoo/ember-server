@@ -1310,11 +1310,23 @@ public final class EmberRunService implements Listener {
         if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
-        if ("awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key)) {
+        if ("awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "stats".equals(key)
+                || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)) {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberLoadout l = ls == null ? null : ls.get(p);
+            if (l == null && ls != null) l = ls.refresh(p);
             if (l == null) return "";
-            return "awaken".equals(key) ? l.setLabel() : "set_progress".equals(key) ? l.setProgress() : l.nextAwakeningHint();
+            switch (key) {
+                case "awaken": return l.setLabel();
+                case "set_progress": return l.setProgress();
+                // B2.174 §19.1 装备页: actual B / H / D (formula output, §19.2), main hand + selected charm
+                case "stats": return String.format(Locale.ROOT, "B %.1f · 生命 %.0f · 防御 %.0f（承伤 ×%.2f）· Lv%d",
+                        l.b, l.h, l.d, l.m, l.level);
+                case "ehp": return String.format(Locale.ROOT, "%.0f", l.ehp());
+                case "blade": return l.blade == null ? "主手不是有效 P1 刃" : l.blade.shortLabel();
+                case "charm": return l.charm == null ? "未选定护符" : l.charm.shortLabel();
+                default: return l.nextAwakeningHint();
+            }
         }
         int us = key.indexOf('_');
         if (us > 0) {

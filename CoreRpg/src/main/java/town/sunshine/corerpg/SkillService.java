@@ -338,6 +338,22 @@ public final class SkillService implements Listener {
     }
 
     /**
+     * B2.175 / D34 (策划书 §3.1「默认有可用主动」, §19.1「玩家不需要手打命令」): in a P1 world, the swap-hands key (F)
+     * while the main hand holds the player's valid P1 blade casts 烬斩 instead of swapping. The off hand never counts
+     * in P1 (§4.1), so nothing is lost; outside P1 worlds, or without a valid P1 blade, F swaps as before.
+     */
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onSwapHotkeyP1(org.bukkit.event.player.PlayerSwapHandItemsEvent event) {
+        Player player = event.getPlayer();
+        if (player == null || !town.sunshine.corerpg.p1.EmberMode.isP1(player)) return;
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        town.sunshine.corerpg.p1.EmberLoadout l = ls == null ? null : ls.get(player);
+        if (l == null || l.blade == null) return;
+        event.setCancelled(true);
+        castEmberSlashP1(player);
+    }
+
+    /**
      * ember-v1.0-P1 A12 烬斩 (策划书 §4.2): 1.5B, 8 s CD, 100° front arc, 3.5 blocks, max 5 targets sorted by
      * distance then entity id; no crit, no life steal, no talent bonus, no set count. The CD lives in
      * EmberPlayerState (survives reconnect, and restart with MySQL).

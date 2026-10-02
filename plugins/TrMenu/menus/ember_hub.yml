@@ -1,7 +1,7 @@
 # 余烬主界面 — DESIGN-ember-rpg-systems.md §1 + docs/ember-hub-copy.md
 # TrMenu 3.12.x · Paper 1.12.2 · /ember 或 /menu
-# 实装：挂机/日/周/附魔/帮助/关闭 + 签到/活跃/悬赏（CoreRpg）+ 强化/镶嵌/分解菜单壳
-# 商城/战令/勋阶：子菜单壳（晶钻支付未接线）· 月卡/礼包/外观/御兽入口进商城
+# 实装：挂机/日/周/附魔/帮助(ember_help)/关闭 · P1 冒险/装备/工坊（n/o/p） + 签到/活跃/悬赏（CoreRpg）+ 强化/镶嵌/分解菜单壳
+# 商城/战令/勋阶：子菜单壳（晶钻支付未接线）· 月卡入口进商城；礼包/外观暂未上架、不可点击（D35）
 # 角色/套装/仓库 + 盟约/天梯/团本/使魔/图录/邮寄/好友/设置/竞技/寄售：子菜单壳
 
 Title: '§6余烬 · 冒险枢纽'
@@ -21,7 +21,7 @@ Layout:
   - ' ABCDEFm1'
   - ' GHI2JKLk'
   - ' MNOPQRnl'
-  - ' STUVWX  '
+  - ' STUVWXop'
   - ' YZabcd  '
   - ' efghij  '
 
@@ -120,6 +120,7 @@ Icons:
         - '§7释放当前誓约主动技'
         - '§8烬斩 / 灰印 / 守墓壁垒'
         - '§8需先选定誓约 · CD 见提示'
+        - '§8主线本里：所有人共用烬斩，手持 P1 刃按 §eF§8 释放'
         - ''
         - '§e➥ §f立即释放'
         - '§7潜行点击查看技能说明'
@@ -657,7 +658,7 @@ Icons:
       name: '§6冒险 · 主线本'
       lore:
         - ''
-        - '§7新模式主线本 Q01–Q03：解锁状态、消耗、掉落阶与用途'
+        - '§7新模式主线本 Q01–Q07 + 挑战版：解锁状态、消耗、掉落阶与用途'
         - '§7掉落目标族 · 锻造印记 · 首通自选 · 补领'
         - '§8每次 30 体力 · 1～3 人'
         - ''
@@ -666,6 +667,38 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_adventure'
+
+  # —— 余烬 v1 (P1) 装备 / 工坊（B2.174，§19.1 一级入口：冒险、装备、工坊）——
+  o:
+    update: 20
+    display:
+      material: iron chestplate
+      name: '§6装备 · 主线本'
+      lore:
+        - ''
+        - '§7主手刃、已选护符、实际属性、套装与觉醒'
+        - '§7下一次突破缺什么 · 回复药补给 · 补领'
+        - '§8套装：§f%corerpg_p1_awaken%'
+        - ''
+        - '§e➥ §f打开装备页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_gear'
+  p:
+    display:
+      material: anvil
+      name: '§6工坊 · 主线本装备'
+      lore:
+        - ''
+        - '§7手持 P1 装备：强化 / 升阶 / 精工 / 成色 / 互换 / 分解'
+        - '§8先预览，再点确认'
+        - ''
+        - '§e➥ §f打开工坊'
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-1-1'
+        - 'menu: ember_p1_forge'
 
   # —— 第 6 行 · 商城与收尾 ——
   e:
@@ -687,18 +720,12 @@ Icons:
   f:
     display:
       material: redstone
-      name: '§c礼包'
+      name: '§8礼包 · 暂未上架'
       lore:
         - ''
-        - '§7限时组合包'
-        - '§8商城暂无礼包上架'
-        - '§8上架后在商城显示'
-        - ''
-        - '§e➥ §f打开商城'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_shop'
+        - '§8目前没有礼包在售'
+        - '§8上架后这里会变成可点击'
+    # B2.177 / D35: §19.1「未完成系统不以可点击假入口充数」— no action until something is on sale
 
   g:
     display:
@@ -719,18 +746,12 @@ Icons:
   h:
     display:
       material: fireworks
-      name: '§d外观'
+      name: '§8外观 · 暂未上架'
       lore:
         - ''
-        - '§7皮肤、称号、特效与坐骑外观'
-        - '§8商城暂未上架外观'
-        - '§8战令付费轨可得外观'
-        - ''
-        - '§e➥ §f打开商城'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_shop'
+        - '§8商城目前没有外观在售'
+        - '§7战令付费轨可得外观 → 主菜单「战令」'
+    # B2.177 / D35: no clickable placeholder (§19.1)
 
   i:
     display:
@@ -738,20 +759,14 @@ Icons:
       name: '§b帮助'
       lore:
         - ''
-        - '§7养成闭环说明：挂机 → 晶 → 附魔 → 日周本'
+        - '§7怎么玩 · 操作 · 三套装 · 变强 · 收益与体力'
+        - '§7补给与倒下 · 七张图 · 背景（可不读）'
         - ''
-        - '§71. §f挂机刷碎片 / 骨尘'
-        - '§72. §f工作台合成 §e余烬附魔晶'
-        - '§73. §f附魔台强化 §6余烬刃 / 护符'
-        - '§74. §f铁砧用碎片或核心修理（手续费 20 币）'
-        - '§74+. §f饿了吃面包/烤鱼，补给见「补给 · 生活」'
-        - '§75. §f日 / 周本冲击核心与稀有装备'
-        - '§76. §f签到 / 活跃 / 悬赏攒余烬币'
-        - ''
-        - '§8不改方块 · 材料花在养成闭环里'
+        - '§e➥ §f打开帮助页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_help'
 
   j:
     display:

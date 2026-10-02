@@ -1,0 +1,199 @@
+# 余烬 v1 (P1) 装备页 — 策划书 §19.1「装备页显示主手、已选护符、套装是否激活、觉醒档以及下一次突破缺哪项；
+#   背包中的非生效装备应明确标注」+ §19.2（实际基础属性 = 统一公式输出）。B2.174。
+# 数值全部来自 CoreRpg 占位符 %corerpg_p1_*%（与 /corerpg p1 status 同一份 EmberLoadout），菜单不自己算。
+# 打开：主菜单「装备」或 /ember_p1_gear
+
+Title: '§6余烬 v1 · 装备'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_gear'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '# W T C #'
+  - '# S N P #'
+  - '#h H q f#'
+  - '###bAB###'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  W:
+    update: 20
+    display:
+      material: iron sword
+      name: '§6主手 · 刃'
+      lore:
+        - '§f%corerpg_p1_blade%'
+        - ''
+        - '§7只认§f主手§7那一把；背包里的其他刃§c不生效'
+        - '§7比较时看整套：换异族刃会取消套装'
+        - ''
+        - '§e➥ §f点击：查看手持物品的身份与校验'
+    actions:
+      all:
+        - 'command: corerpg p1 inspect'
+        - close
+
+  C:
+    update: 20
+    display:
+      material: totem
+      name: '§6已选护符'
+      lore:
+        - '§f%corerpg_p1_charm%'
+        - ''
+        - '§7只认「已选」的一件；放副手不算第二份护符'
+        - '§7护符提供生命与防御；成色 / 精工 / 强化只加生命'
+        - ''
+        - '§e➥ §f手持要用的护符，点击选定'
+    actions:
+      all:
+        - 'command: corerpg p1 charm select'
+        - close
+
+  T:
+    update: 20
+    display:
+      material: paper
+      name: '§e实际属性'
+      lore:
+        - '§f%corerpg_p1_stats%'
+        - '§7有效生命 §f%corerpg_p1_ehp% §8（生命 ÷ 承伤倍率）'
+        - ''
+        - '§8B = A×(1+强化+成色+精工) + 0.2×(等级−10)'
+        - '§8生命 = 20 + h×(1+强化+成色+精工) + (等级−10)'
+        - '§8承伤倍率 = max(0.5, 40/(40+防御))'
+        - '§8普攻 10% 暴击 ×1.5 · 烬斩 1.5B 不暴击'
+        - ''
+        - '§e➥ §f点击：聊天栏完整明细'
+    actions:
+      all:
+        - 'command: corerpg p1 status'
+        - close
+
+  S:
+    update: 20
+    display:
+      material: nether star
+      name: '§d套装：§f%corerpg_p1_awaken%'
+      lore:
+        - '§7刃与护符同族、都 ≥ T1 → 成套（只有一套生效）'
+        - '§6焚烬§7 每 3 次满蓄力普攻点燃主目标（4 秒）'
+        - '§c烬爆§7 每 5 次普攻爆炸，最多 5 个目标（3 秒内置冷却）'
+        - '§a炽愈§7 总生命 ×1.12；每 5 次命中回复（6 秒内置冷却）'
+        - ''
+        - '§7觉醒 I：同族两件 ≥ T1'
+        - '§7觉醒 II：两件都 ≥ T2 且都 ≥ +6'
+        - '§7觉醒 III：两件都 T3 且都 ≥ +9'
+        - '§8觉醒按较低那件算；只提高系数，不增加次数'
+
+  N:
+    update: 20
+    display:
+      material: exp bottle
+      name: '§b下一次突破'
+      lore:
+        - '§f%corerpg_p1_awaken_next%'
+        - ''
+        - '§7升阶：T1→T2 需本人首通 Q04，T2→T3 需首通 Q07'
+        - '§7强化 +1~+3 必成，之后失败不降级、按次数保底'
+
+  P:
+    update: 20
+    display:
+      material: book
+      name: '§6成套进度'
+      lore:
+        - '§f%corerpg_p1_set_progress%'
+        - ''
+        - '§8P1 的终点 = 同族 T3 两件 +9（觉醒 III）'
+
+  h:
+    display:
+      material: potion
+      name: '§a回复药 · 买 1 瓶'
+      lore:
+        - '§7余烬回复药：回复最大生命 20%'
+        - '§7所有回复药共用 15 秒冷却 · 绑定、不回售'
+        - '§7每天第一次在主线本倒下，退还该局喝掉的药（最多 5 瓶）'
+        - '§8只能在城里买（副本内不能买）'
+        - ''
+        - '§e➥ §f点击购买 1 瓶（10 余烬币）'
+    actions:
+      all:
+        - 'command: corerpg p1 shop buy 1'
+
+  H:
+    display:
+      material: potion
+      amount: 5
+      name: '§a回复药 · 买 5 瓶'
+      lore:
+        - '§7一局普通本 60–120 秒，按冷却最多喝 4–8 瓶'
+        - ''
+        - '§e➥ §f点击购买 5 瓶（50 余烬币）'
+    actions:
+      all:
+        - 'command: corerpg p1 shop buy 5'
+
+  q:
+    update: 20
+    display:
+      material: chest
+      name: '§b补领暂存奖励'
+      lore:
+        - '§7背包满时结算会先暂存：§f%corerpg_p1_pending% §7项'
+        - ''
+        - '§e➥ §f点击补领'
+    actions:
+      all:
+        - 'command: corerpg p1 claim'
+
+  f:
+    display:
+      material: anvil
+      name: '§6工坊 · 强化 / 升阶 / 精工 / 成色 / 互换 / 分解'
+      lore:
+        - '§7手持要处理的 P1 装备再打开'
+        - ''
+        - '§e➥ §f打开工坊'
+    actions:
+      all:
+        - 'menu: ember_p1_forge'
+
+  A:
+    display:
+      material: blaze rod
+      name: '§6冒险 · 主线本'
+      lore:
+        - '§e➥ §f打开冒险页'
+    actions:
+      all:
+        - 'menu: ember_p1_adventure'
+
+  b:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'menu: ember_hub'
+
+  B:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all:
+        - close

@@ -1,6 +1,6 @@
 # 余烬 v1 (P1) 锻造菜单桩 — 只转发到 /corerpg p1 命令；预览在聊天栏，执行需二次点击"确认"按钮。
 # 旧 ember_enhance / ember_forge / ember_disassemble 菜单不变（旧物品仍走旧强化）。
-# 打开：/ember_p1_forge（未挂到主菜单，待 UI 设计后再接入）
+# 打开：/ember_p1_forge、主菜单「工坊」或装备页（B2.174）。互换确认按钮 B2.176（§19.1 不需要手打命令）
 
 Title: '§6余烬 v1 · 锻造'
 
@@ -19,7 +19,7 @@ Layout:
   - '# E U R #'
   - '# Q S D #'
   - '#e u r q#'
-  - '####B####'
+  - '# s  b B#'
 
 Icons:
   '#':
@@ -99,7 +99,7 @@ Icons:
       name: '§b强化轨道互换 · 预览'
       lore:
         - '§7主手与副手同部位装备互换 强化等级+失败计数'
-        - '§7两件都会绑定；确认请输入 /corerpg p1 swap confirm'
+        - '§7两件都会绑定；先预览，再点下方「互换 · 确认」'
     actions:
       all:
         - 'command: corerpg p1 swap'
@@ -114,6 +114,24 @@ Icons:
       all:
         - 'command: corerpg p1 dismantle'
         - close
+  s:
+    display:
+      material: ender pearl
+      name: '§b强化轨道互换 · 确认'
+      lore:
+        - '§7主手与副手的同部位装备交换「强化等级 + 失败计数」'
+        - '§7成色 / 精工 / 家族 / 阶级不变；两件都会绑定'
+        - '§c先点上方「预览」看清两件再确认'
+    actions:
+      all:
+        - 'command: corerpg p1 swap confirm'
+  b:
+    display:
+      material: arrow
+      name: '§7返回装备页'
+    actions:
+      all:
+        - 'menu: ember_p1_gear'
   B:
     display:
       material: barrier
