@@ -567,4 +567,21 @@ public class EmberRunRulesTest {
         assertEquals(1, EmberRunRules.pickQuality(EmberRunRules.CHALLENGE_QUALITY_WEIGHTS, 0.61));
         assertEquals(0, EmberRunRules.pickQuality(0.61));
     }
+
+    @Test public void weeklyRotationIsMondayBasedAndCyclesAllSeven_P2_1() {
+        List<String> order = java.util.Arrays.asList("q01", "q02", "q03", "q04", "q05", "q06", "q07");
+        java.time.LocalDate sun = java.time.LocalDate.of(2026, 10, 4), mon = sun.plusDays(1), nextSun = mon.plusDays(6);
+        assertEquals(java.time.DayOfWeek.MONDAY, mon.getDayOfWeek());
+        assertEquals(EmberRunRules.weekIndex(sun) + 1, EmberRunRules.weekIndex(mon));      // changes at Monday 00:00
+        assertEquals(EmberRunRules.weekIndex(mon), EmberRunRules.weekIndex(nextSun));      // same week through Sunday
+        assertEquals(EmberRunRules.featuredChallenge(order, mon), EmberRunRules.featuredChallenge(order, nextSun));
+        assertNotEquals(EmberRunRules.featuredChallenge(order, sun), EmberRunRules.featuredChallenge(order, mon));
+        Set<String> seen = new HashSet<String>();
+        for (int w = 0; w < 7; w++) seen.add(EmberRunRules.featuredChallenge(order, mon.plusWeeks(w)));
+        assertEquals(7, seen.size());                                                     // every map once per 7 weeks
+        assertEquals("w" + EmberRunRules.weekIndex(mon), EmberRunRules.rotationWeekKey(mon.plusDays(3)));
+        assertNull(EmberRunRules.featuredChallenge(java.util.Collections.<String>emptyList(), mon));
+        assertEquals(1, EmberRunRules.ROTATION_BONUS_MARKS);
+        assertEquals(3, EmberRunRules.ROTATION_WEEKLY_CAP);
+    }
 }

@@ -30,6 +30,30 @@ public final class EmberRunRules {
     public static final int TREASURE_COIN = 100;
     public static final int ELITE_SHARD = 10;
     public static final int ELITE_CORE = 1;
+    /**
+     * P2-1 weekly challenge rotation (docs/design-ember-v1.1-P2-draft.md §3): one of the seven challenge maps is featured
+     * each Monday-based week (Asia/Shanghai); its first {@link #ROTATION_WEEKLY_CAP} challenge clears per character and
+     * week add {@link #ROTATION_BONUS_MARKS} forge mark of the run tier. No coin, no item, no multiplier (§23.3).
+     */
+    public static final int ROTATION_BONUS_MARKS = 1;
+    public static final int ROTATION_WEEKLY_CAP = 3;
+
+    /** Monday-based week number since the epoch (1970-01-05 is week 1's Monday; 1970-01-01 was a Thursday). */
+    public static long weekIndex(java.time.LocalDate day) {
+        return Math.floorDiv(day.toEpochDay() + 3, 7);
+    }
+
+    /** The featured challenge map of the week containing {@code day}; null for an empty map list. */
+    public static String featuredChallenge(List<String> order, java.time.LocalDate day) {
+        if (order == null || order.isEmpty()) return null;
+        return order.get((int) Math.floorMod(weekIndex(day), (long) order.size()));
+    }
+
+    /** Ledger / counter key of the rotation week ("w" + index). */
+    public static String rotationWeekKey(java.time.LocalDate day) {
+        return "w" + weekIndex(day);
+    }
+
     /** §9.1 forge marks: 8 same-tier marks → one standard item of a chosen family + slot */
     public static final int MARKS_PER_EXCHANGE = 8;
 
