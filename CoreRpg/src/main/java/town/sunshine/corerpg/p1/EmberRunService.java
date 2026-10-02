@@ -150,6 +150,12 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ PlayerData counters
 
     private PlayerData data(UUID id) { return plugin.getDataStore().get(id); }
+    PlayerData dataOf(UUID id) { return data(id); }
+
+    /** P2-9 (D83) titles / trails (set by the plugin at enable) */
+    private EmberCosmetics cosmetics;
+    public void setCosmetics(EmberCosmetics c) { cosmetics = c; }
+    public EmberCosmetics cosmetics() { return cosmetics; }
 
     public boolean unlocked(PlayerData d, EmberRunMaps.MapDef m) {
         return m.requires == null || m.requires.isEmpty() || d.periodCount(C_UNLOCK + m.key, "all") > 0;
@@ -669,14 +675,15 @@ public final class EmberRunService implements Listener {
         if (s.challenge && maps.challenge != null) in.qualityWeights = maps.challenge.quality;
         EmberRunMaps.AbyssTier abT = s.abyss > 0 ? maps.abyssTier(s.abyss) : null;
         if (abT != null) in.qualityWeights = abT.quality; // P2-2 tier quality table
+        in.loot = m.raid ? null : maps.lootBias(m); // P2-9 (D81) map loot identity (abyss segments: the segment map)
         List<EmberRunRules.Grant> grants = new ArrayList<EmberRunRules.Grant>(EmberRunRules.settle(in));
         // P2-1 weekly challenge rotation: featured map, first 3 challenge clears of the week → +1 mark of the run tier
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
         String week = EmberRunRules.rotationWeekKey(today);
         boolean rotation = s.challenge && s.abyss == 0 && m.key.equals(featured(today)) && maps.rotationBonusMarks > 0
                 && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
-        if (m.raid) { // P2-5: one more standard T3 roll + 1 T3 mark (50 stamina vs 30), nothing raid-only
-            grants.add(EmberRunRules.extraItem(in, "raid_item"));
+        if (m.raid) { // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic
+            grants.add(EmberRunRules.raidItem(in, "raid_item", m.lootFamily, maps.raidItemQualityFloor)); // P2-9 (D82)
             grants.add(new EmberRunRules.Grant("raid_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), 1, null));
         }
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), maps.rotationBonusMarks, null));
@@ -699,9 +706,12 @@ public final class EmberRunService implements Listener {
             if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + capKey(m), week, 1); // P2-5 weekly cap (P2-6: per cap_group)
         }
         if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, 1);
+        if (fresh && m.raid && cosmetics != null) cosmetics.onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
         if (in.firstClear != null) pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
         boolean newBest = s.abyss > 0 && s.abyss > abyssBest(pd);
+        int oldBest = abyssBest(pd);
         if (newBest) pd.addPeriodCount(C_ABYSS_BEST, "all", s.abyss - abyssBest(pd)); // P2-2: opens tier + 1
+        if (newBest && cosmetics != null) cosmetics.onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
         store.saveLedger(u, changed);
         plugin.getDataStore().flushMutation(u);
         log().info("[P1 run] " + s.runId + " settle " + u + " rows+" + changed.size() + (in.firstClear != null ? " (first clear)" : "")
@@ -749,6 +759,10 @@ public final class EmberRunService implements Listener {
             p.sendMessage(P + sb.toString().trim());
             for (int i = 0; i < EmberCodex.STAGE_AT.length; i++)
                 p.sendMessage(P + "§7集齐 " + EmberCodex.STAGE_AT[i] + " 种：余烬币 " + EmberCodex.STAGE_COIN[i] + " · " + EmberCodex.stageLabel(d, i));
+            StringBuilder lo = new StringBuilder(); // P2-9 (D81) where to farm what
+            for (EmberRunMaps.MapDef m : maps.maps.values()) lo.append(lo.length() == 0 ? "" : " · ").append(m.key.toUpperCase(Locale.ROOT)).append(' ').append(EmberRunMaps.lootLabel(m));
+            p.sendMessage(P + "§6掉落偏向 §7" + lo + "（目标族仍至少 60%；挑战 / 深渊同图同偏向）");
+            p.sendMessage(P + "§6团本额外装备 §7按你的目标族，成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（/corerpg p1 title）");
             return true;
         }
         java.util.List<Integer> can = EmberCodex.claimable(d);
@@ -1590,7 +1604,7 @@ public final class EmberRunService implements Listener {
         PlayerData d = data(p.getUniqueId());
         for (EmberRunMaps.MapDef m : maps.maps.values()) {
             p.sendMessage(P + "§e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name + " §7" + stateLabel(d, m) + " · " + maps.cost
-                    + " 体力 · 掉落 " + m.dropLabel + " · 首通：" + m.firstClearLabel());
+                    + " 体力 · 掉落 " + m.dropLabel + "（偏向 " + EmberRunMaps.lootLabel(m) + "）· 首通：" + m.firstClearLabel());
         }
         String t = target(d);
         p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· /corerpg enter <q01..q07> challenge · 掉落 T3"
@@ -1678,6 +1692,9 @@ public final class EmberRunService implements Listener {
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("modifier".equals(key)) return modifierLabel(); // P2-8
+        if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleText(d); // P2-9 %corerpg_p1_title%
+        if ("honors".equals(key)) return cosmetics == null ? "0/0" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size();
+        if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm); }
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
         if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
         if ("next".equals(key)) return nextStep(d); // new-player polish %corerpg_p1_next%

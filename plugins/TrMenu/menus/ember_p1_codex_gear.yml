@@ -22,7 +22,7 @@ Layout:
   - '#ABC DEF#'
   - '#GHJ KLM#'
   - '#NOP QRS#'
-  - '#1 2 3 4#'
+  - '#1w2 3h4#'
 
 Events:
   Open:
@@ -262,6 +262,47 @@ Icons:
         - '§7状态：%corerpg_p1_codex_sustain_charm_t3%'
         - '§8来源：Q07 / 挑战版掉落 · T3 印记 · T3 定向锻造'
         - '§8  或把 T2 升阶（Q07 首通后）'
+
+  w:
+    update: 100
+    display:
+      material: compass
+      name: '§6哪里刷什么 · 掉落偏向'
+      lore:
+        - '§7每张图的随机装备偏向一族一部位（P2-9）'
+        - '§7你的目标族在任何图都至少 60%；'
+        - '§7在偏向你目标族的图上更高，部位也偏向'
+        - ''
+        - '§fQ01 §7%corerpg_p1_loot_q01%'
+        - '§fQ02 §7%corerpg_p1_loot_q02%'
+        - '§fQ03 §7%corerpg_p1_loot_q03%'
+        - '§fQ04 §7%corerpg_p1_loot_q04%'
+        - '§fQ05 §7%corerpg_p1_loot_q05%'
+        - '§fQ06 §7%corerpg_p1_loot_q06%'
+        - '§fQ07 §7%corerpg_p1_loot_q07%'
+        - '§8挑战版 / 深渊段同图同偏向'
+        - '§6团本额外装备：§f按你的目标族，成色至少精良'
+
+  h:
+    update: 40
+    display:
+      material: nether star
+      name: '§d荣誉 · 称号与足迹'
+      lore:
+        - '§7只做展示，不加属性（P2-9）'
+        - '§7已获得：§f%corerpg_p1_honors%'
+        - '§7当前称号：§f%corerpg_p1_title%'
+        - ''
+        - '§5深渊行者 §7深渊第 5 层 · §d余烬深渊之主 §7第 10 层'
+        - '§6锈轨破袭者 §7/ §b霜封守望者 §7通关团本 R01 / R02'
+        - '§7团本专属足迹：§6余烬火星 §7/ §b霜花'
+        - ''
+        - '§e➥ §f点击查看与装上'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - close
+        - 'command: corerpg p1 title'
 
   '1':
     update: 40

@@ -51,6 +51,10 @@ public final class EmberCommand {
             if (!(s instanceof Player) || runs == null) { s.sendMessage(P + "仅玩家可用"); return true; }
             return runs.codexCommand((Player) s, args);
         }
+        if ("title".equals(sub) || "trail".equals(sub) || "称号".equals(sub)) { // P2-9 (D83)
+            if (!(s instanceof Player) || runs == null || runs.cosmetics() == null) { s.sendMessage(P + "仅玩家可用"); return true; }
+            return runs.cosmetics().command((Player) s, runs.dataOf(((Player) s).getUniqueId()), "trail".equals(sub) ? "trail" : "title", args);
+        }
         if ("shop".equals(sub) || "补给".equals(sub)) {
             if (supplies == null) { s.sendMessage(P + "补给服务未加载"); return true; }
             return supplies.cmd(s, args);

@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80)
-balance_version: 8
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82)
+balance_version: 9
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -18,6 +18,21 @@ party_max: 3
 world_prefix: dungeon_EmberQ0
 # seconds a P1 entry pass stays valid for the DP js-condition (paid entries only)
 pass_seconds: 30
+
+# P2-9 (D81) per-map loot identity (book §9.1 target pool): each map's `loot: {family, slot}` biases its random items
+# (base item, extra chest, abyss segments on that map). Target family weight stays target_weight (60 %) everywhere,
+# own_family on a map whose family IS the player's target; on other maps the map family takes map_share of the
+# non-target rest. No target: map family 50 %, others 25 %. slot = weight of the map slot (no slot = 50/50).
+# Model: tools/p1sim/p2econ.py --loot (two-极品 speed must not move by more than about a week).
+loot_bias:
+  own_family: 0.625
+  map_share: 0.75
+  slot: 0.55
+
+# P2-9 (D82) raid_item: the extra raid roll is the player's entry target family (raid `loot.family` without a target),
+# slot 50/50, challenge quality table with this floor (1 = 精良; 极品 odds unchanged). Model: p2econ.py --raid.
+raid_item:
+  quality_floor: 1
 
 # P2-1 (D66) weekly featured challenge: the map order above cycles every Monday 00:00 (Asia/Shanghai); each character's
 # first weekly_cap challenge clears of the featured map add bonus_marks forge marks of the run tier (T3). No coin, no
@@ -80,6 +95,7 @@ abyss:
 maps:
   q01:
     name: 灰烬庭院
+    loot: {family: scorch, slot: blade}  # P2-9 loot identity (D81)
     dungeon: EmberQ01
     template: ember_daily_v1
     tier: 1
@@ -143,6 +159,7 @@ maps:
 
   q02:
     name: 焦骨甬道
+    loot: {family: burst, slot: charm}  # P2-9 loot identity (D81)
     dungeon: EmberQ02
     template: ember_daily_ash_v1
     tier: 1
@@ -207,6 +224,7 @@ maps:
 
   q03:
     name: 残誓地窖
+    loot: {family: sustain, slot: blade}  # P2-9 loot identity (D81)
     dungeon: EmberQ03
     template: ember_daily_crypt_v1
     tier: 1
@@ -278,6 +296,7 @@ maps:
   # ---- batch 2 (book §23.2 "Q04～05＋升阶＋二阶觉醒"; decisions: source table §11) ----
   q04:
     name: 潮蚀水道
+    loot: {family: scorch, slot: charm}  # P2-9 loot identity (D81)
     dungeon: EmberQ04
     template: ember_daily_tide_v1
     tier: 2
@@ -345,6 +364,7 @@ maps:
 
   q05:
     name: 断塔回廊
+    loot: {family: burst, slot: blade}  # P2-9 loot identity (D81)
     dungeon: EmberQ05
     template: ember_daily_spire_v1
     tier: 2
@@ -413,6 +433,7 @@ maps:
 
   q06:
     name: 霜封哨所
+    loot: {family: sustain, slot: charm}  # P2-9 loot identity (D81)
     dungeon: EmberQ06
     template: ember_daily_frost_v1
     tier: 2
@@ -481,6 +502,7 @@ maps:
 
   q07:
     name: 锈轨矿道
+    loot: {family: burst}  # P2-9 loot identity (D81)
     dungeon: EmberQ07
     template: ember_daily_rail_v1
     tier: 3
@@ -556,6 +578,7 @@ maps:
 raids:
   r01:
     name: 锈轨矿道·团
+    loot: {family: burst}  # P2-9 raid family: fallback for raid_item when the player has no target (D82)
     dungeon: EmberQ0R1
     template: ember_daily_rail_v1
     tier: 3
@@ -638,6 +661,7 @@ raids:
 
   r02:
     name: 霜封哨所·团
+    loot: {family: sustain}  # P2-9 raid family: fallback for raid_item when the player has no target (D82)
     dungeon: EmberQ0R2
     template: ember_daily_frost_v1
     tier: 3

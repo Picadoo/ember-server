@@ -55,6 +55,7 @@ Icons:
       name: '§cQ01 挑战 §f%corerpg_p1_q01_name%'
       lore:
         - ''
+        - '§7偏向：§f%corerpg_p1_loot_q01%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q01_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q01_state%'
@@ -72,6 +73,7 @@ Icons:
       name: '§cQ02 挑战 §f%corerpg_p1_q02_name%'
       lore:
         - ''
+        - '§7偏向：§f%corerpg_p1_loot_q02%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q02_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q02_state%'
@@ -89,6 +91,7 @@ Icons:
       name: '§cQ03 挑战 §f%corerpg_p1_q03_name%'
       lore:
         - ''
+        - '§7偏向：§f%corerpg_p1_loot_q03%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q03_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q03_state%'
@@ -106,6 +109,7 @@ Icons:
       name: '§cQ04 挑战 §f%corerpg_p1_q04_name%'
       lore:
         - ''
+        - '§7偏向：§f%corerpg_p1_loot_q04%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q04_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q04_state%'
@@ -123,6 +127,7 @@ Icons:
       name: '§cQ05 挑战 §f%corerpg_p1_q05_name%'
       lore:
         - ''
+        - '§7偏向：§f%corerpg_p1_loot_q05%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q05_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q05_state%'
@@ -140,6 +145,7 @@ Icons:
       name: '§cQ06 挑战 §f%corerpg_p1_q06_name%'
       lore:
         - ''
+        - '§7偏向：§f%corerpg_p1_loot_q06%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q06_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q06_state%'
@@ -157,6 +163,7 @@ Icons:
       name: '§cQ07 挑战 §f%corerpg_p1_q07_name%'
       lore:
         - ''
+        - '§7偏向：§f%corerpg_p1_loot_q07%'
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q07_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q07_state%'

@@ -272,13 +272,29 @@ class Player:
     def st(self):
         return stats(self.cfg, self.blade, self.charm, level_of(self.cfg, self.xp))
 
-    def roll_item(self, tier):
+    def roll_item(self, tier, key=None):
         r, cfg = self.rng, self.cfg
         u = r.random()
         tw = cfg['target_weight']
-        others = [x for x in FAMS if x != self.kn.target]
-        fam = self.kn.target if u < tw else (others[0] if u < tw + (1 - tw) / 2 else others[1])
-        slot = 'blade' if r.random() < 0.5 else 'charm'
+        tgt = self.kn.target
+        others = [x for x in FAMS if x != tgt]
+        lb = cfg.get('loot_bias') or {}
+        loot = (cfg['maps'].get(key) or {}).get('loot') if key and lb else None
+        mf, ms = (loot or {}).get('family'), (loot or {}).get('slot')
+        if mf and mf == tgt:      # P2-9: map family is the player's target
+            tw = float(lb.get('own_family', tw))
+            fam = tgt if u < tw else (others[0] if u < tw + (1 - tw) / 2 else others[1])
+        elif mf:                  # map family takes map_share of the non-target rest
+            third = next(x for x in others if x != mf)
+            sh = (1 - tw) * float(lb.get('map_share', 0.5))
+            fam = tgt if u < tw else (mf if u < tw + sh else third)
+        else:
+            fam = tgt if u < tw else (others[0] if u < tw + (1 - tw) / 2 else others[1])
+        if ms:
+            sw = float(lb.get('slot', 0.5))
+            slot = ms if r.random() < sw else ('charm' if ms == 'blade' else 'blade')
+        else:
+            slot = 'blade' if r.random() < 0.5 else 'charm'
         return item(fam, slot, tier, pick(cfg['quality_w'], r.random()), pick(cfg['craft_w'], r.random()))
 
     def consider(self, new):
@@ -329,13 +345,13 @@ class Player:
         self.xp += b['xp']
         tier = m['tier']
         self.marks[tier] += b['mark']
-        drops = [self.roll_item(tier)]
+        drops = [self.roll_item(tier, key)]
         if extra == 'treasure':
             self.coin += cfg['treasure_coin']
         elif extra == 'elite':
             self.shard += cfg['elite_shard']; self.core += cfg['elite_core']
         elif extra == 'chest':
-            drops.append(self.roll_item(tier))
+            drops.append(self.roll_item(tier, key))
         if key not in self.cleared:
             self.cleared.add(key)
             fc = m.get('first_clear') or {}
@@ -577,6 +593,7 @@ def main(argv=None):
     ap.add_argument('--route', default='stepdown', choices=['stepdown', 'alternate'])
     ap.add_argument('--swap', action='store_true', help='use the §6.3 free enhance swap (the bots did not)')
     ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
+    ap.add_argument('--no-loot', action='store_true', help='without the P2-9 per-map loot identity (D81) for comparison')
     ap.add_argument('--target', default='burst', choices=FAMS)
     ap.add_argument('--uptime', type=float, default=0.70)
     ap.add_argument('--ref', action='store_true', help='clear rate per map at the book §3.2 reference loadout')
@@ -591,6 +608,8 @@ def main(argv=None):
     cfg = p1config.load(args.profile)
     if args.no_bounty:
         cfg["bounty"] = []
+    if args.no_loot:
+        cfg["loot_bias"] = {}
     if args.ref:
         print(ref_table(cfg, args.dodge, args.players * 5))
         return

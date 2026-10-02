@@ -124,6 +124,7 @@ def load(profile='current'):
         'quality_w': _java_array(se, 'QUALITY_WEIGHTS'), 'craft_w': _java_array(se, 'CRAFT_WEIGHTS'),
         'extra_w': _java_array(se, 'EXTRA_WEIGHTS'),
         'maps': {},
+        'loot_bias': dict(runs.get('loot_bias') or {}),  # P2-9 (D81) per-map loot identity
     }
     order = []
     k = next(k for k, m in runs['maps'].items() if not m.get('requires'))

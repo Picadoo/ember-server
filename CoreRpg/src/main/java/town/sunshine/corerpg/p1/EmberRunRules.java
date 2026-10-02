@@ -181,6 +181,61 @@ public final class EmberRunRules {
         return new ItemRoll(fam, slot, tier, q, c);
     }
 
+    /**
+     * P2-9 (D81) per-map loot identity. Target family keeps {@link #TARGET_WEIGHT} unless the map family IS the target
+     * ({@code ownFamily}); on other maps the map family takes {@code mapShare} of the non-target rest. No target: map
+     * family 50 %, each other 25 %. The map slot gets {@code slotWeight}. Same four draws as the plain roll.
+     */
+    public static final class LootBias {
+        public final String family, slot;
+        public final double ownFamily, mapShare, slotWeight;
+        public LootBias(String family, String slot, double ownFamily, double mapShare, double slotWeight) {
+            this.family = family; this.slot = slot; this.ownFamily = ownFamily; this.mapShare = mapShare; this.slotWeight = slotWeight;
+        }
+    }
+
+    public static String pickFamily(String target, LootBias lb, double u) {
+        if (lb == null || lb.family == null) return pickFamily(target, u);
+        u = Math.max(0.0, Math.min(0.999999999, u));
+        List<String> others = new ArrayList<String>(2);
+        if (!validFamily(target)) {
+            if (u < 0.5) return lb.family;
+            for (String f : FAMILIES) if (!f.equals(lb.family)) others.add(f);
+            return u < 0.75 ? others.get(0) : others.get(1);
+        }
+        for (String f : FAMILIES) if (!f.equals(target)) others.add(f);
+        if (lb.family.equals(target)) {
+            double tw = lb.ownFamily;
+            if (u < tw) return target;
+            return u < tw + (1.0 - tw) / 2.0 ? others.get(0) : others.get(1);
+        }
+        if (u < TARGET_WEIGHT) return target;
+        String third = others.get(0).equals(lb.family) ? others.get(1) : others.get(0);
+        return u < TARGET_WEIGHT + (1.0 - TARGET_WEIGHT) * lb.mapShare ? lb.family : third;
+    }
+
+    public static double familyProbability(String target, LootBias lb, String fam) {
+        if (lb == null || lb.family == null) return familyProbability(target, fam);
+        if (!validFamily(fam)) return 0.0;
+        if (!validFamily(target)) return fam.equals(lb.family) ? 0.5 : 0.25;
+        if (lb.family.equals(target)) return fam.equals(target) ? lb.ownFamily : (1.0 - lb.ownFamily) / 2.0;
+        if (fam.equals(target)) return TARGET_WEIGHT;
+        return (1.0 - TARGET_WEIGHT) * (fam.equals(lb.family) ? lb.mapShare : 1.0 - lb.mapShare);
+    }
+
+    public static String pickSlot(LootBias lb, double u) {
+        if (lb == null || lb.slot == null) return pickSlot(u);
+        return u < lb.slotWeight ? lb.slot : ("blade".equals(lb.slot) ? "charm" : "blade");
+    }
+
+    public static ItemRoll rollItem(int tier, String target, Random r, int[] qualityWeights, LootBias lb) {
+        String fam = pickFamily(target, lb, r.nextDouble());
+        String slot = pickSlot(lb, r.nextDouble());
+        int q = pickQuality(qualityWeights, r.nextDouble());
+        int c = pickCraft(r.nextDouble());
+        return new ItemRoll(fam, slot, tier, q, c);
+    }
+
     // ------------------------------------------------------------------ grants
 
     public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA, POTION }
@@ -272,6 +327,7 @@ public final class EmberRunRules {
         public boolean extraDone;       // event completed during the run (pending until the boss dies)
         public FirstClear firstClear;   // null when this character already has the first clear of this content version
         public int[] qualityWeights;    // null = normal §5.1; challenge §18.1 60/28/10/2
+        public LootBias loot;           // P2-9 map loot identity (null = plain 60/20/20, 50/50)
     }
 
     /**
@@ -320,6 +376,20 @@ public final class EmberRunRules {
 
     /** P2-5 raids: one more roll with the same tier / target / quality table (stable key → idempotent). */
     public static Grant extraItem(SettleInput in, String key) { return item(in, key); }
+
+    /**
+     * P2-9 (D82) raid_item: the player's entry target family (fallback {@code raidFamily}, then a plain draw), slot
+     * 50/50, the run's quality table with {@code qualityFloor} (标准 → 精良 at floor 1; 极品 odds unchanged).
+     */
+    public static Grant raidItem(SettleInput in, String key, String raidFamily, int qualityFloor) {
+        Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
+        double uf = r.nextDouble();
+        String fam = validFamily(in.target) ? in.target : validFamily(raidFamily) ? raidFamily : pickFamily(null, uf);
+        String slot = pickSlot(r.nextDouble());
+        int q = Math.max(qualityFloor, pickQuality(in.qualityWeights, r.nextDouble()));
+        int c = pickCraft(r.nextDouble());
+        return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, new ItemRoll(fam, slot, in.tier, Math.min(3, q), c));
+    }
 
     // ------------------------------------------------------------------ P2-7 daily bounty (D79)
 
@@ -381,7 +451,7 @@ public final class EmberRunRules {
 
     private static Grant item(SettleInput in, String key) {
         Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
-        return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, rollItem(in.tier, in.target, r, in.qualityWeights));
+        return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, rollItem(in.tier, in.target, r, in.qualityWeights, in.loot));
     }
 
     /** First-clear free choice → the bound standard quest item (q0, craft 0, +0). */

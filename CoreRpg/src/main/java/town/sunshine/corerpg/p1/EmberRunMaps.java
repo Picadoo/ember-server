@@ -224,6 +224,8 @@ public final class EmberRunMaps {
         public final double hpPerMember, dmgPerMember;
         /** P2-6 (D78): raids with the same cap_group share one weekly counter ("" = own counter) */
         public final String capGroup;
+        /** P2-9 (D81) loot identity: family / slot this map's random items lean to (null = none) */
+        public final String lootFamily, lootSlot;
         /** true for entries of the runs-yml `raids:` section (never in the main-line order, featured or abyss) */
         public boolean raid;
 
@@ -234,6 +236,10 @@ public final class EmberRunMaps {
             template = str(m.get("template"), "");
             tier = (int) num(m.get("tier"), 1);
             dropLabel = str(m.get("drop_label"), "T" + tier);
+            Map<?, ?> lo = m.get("loot") instanceof Map ? (Map<?, ?>) m.get("loot") : Collections.emptyMap();
+            String lf = str(lo.get("family"), ""), lsl = str(lo.get("slot"), "");
+            lootFamily = EmberRunRules.validFamily(lf) ? lf : null;
+            lootSlot = "blade".equals(lsl) || "charm".equals(lsl) ? lsl : null;
             contentVersion = str(m.get("content_version"), "v1");
             mapVersion = str(m.get("map_version"), "");
             requires = str(m.get("requires"), "");
@@ -507,6 +513,9 @@ public final class EmberRunMaps {
     public final Map<String, MapDef> maps;
     /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
     public final Map<String, MapDef> raids;
+    /** P2-9 (D81) loot bias weights; P2-9 (D82) raid_item quality floor */
+    public final double lootOwnFamily, lootMapShare, lootSlotWeight;
+    public final int raidItemQualityFloor;
     /** P2-8 weekly rotation modifiers (on the featured challenge map only; no multipliers, rewards unchanged) */
     public final List<Modifier> modifiers;
 
@@ -543,6 +552,20 @@ public final class EmberRunMaps {
         return modifiers.get((int) Math.floorMod(EmberRunRules.weekIndex(day), (long) modifiers.size()));
     }
 
+    private static double clamp01(double v) { return Math.max(0.0, Math.min(1.0, v)); }
+
+    /** P2-9: the loot pool of map {@code d} for settlement (null when the map has no identity). */
+    public EmberRunRules.LootBias lootBias(MapDef d) {
+        if (d == null || (d.lootFamily == null && d.lootSlot == null)) return null;
+        return new EmberRunRules.LootBias(d.lootFamily, d.lootSlot, lootOwnFamily, lootMapShare, lootSlotWeight);
+    }
+
+    /** P2-9 label for menus / codex, e.g. 「焚烬 · 刃」 or 「烬爆」 */
+    public static String lootLabel(MapDef d) {
+        if (d == null || d.lootFamily == null) return "不偏向";
+        return EmberItemData.familyName(d.lootFamily) + (d.lootSlot == null ? "（部位不偏）" : " · " + ("blade".equals(d.lootSlot) ? "刃" : "护符"));
+    }
+
     public Modifier modifier(String id) {
         if (id == null || id.isEmpty()) return null;
         for (Modifier m : modifiers) if (m.id.equals(id)) return m;
@@ -575,6 +598,12 @@ public final class EmberRunMaps {
         Map<?, ?> rot = root.get("rotation") instanceof Map ? (Map<?, ?>) root.get("rotation") : java.util.Collections.emptyMap();
         rotationBonusMarks = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
         rotationWeeklyCap = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
+        Map<?, ?> lb = root.get("loot_bias") instanceof Map ? (Map<?, ?>) root.get("loot_bias") : Collections.emptyMap();
+        lootOwnFamily = clamp01(num(lb.get("own_family"), EmberRunRules.TARGET_WEIGHT));
+        lootMapShare = clamp01(num(lb.get("map_share"), 0.5));
+        lootSlotWeight = clamp01(num(lb.get("slot"), 0.5));
+        Map<?, ?> ri = root.get("raid_item") instanceof Map ? (Map<?, ?>) root.get("raid_item") : Collections.emptyMap();
+        raidItemQualityFloor = Math.max(0, Math.min(3, (int) num(ri.get("quality_floor"), 0)));
         List<Modifier> mods = new ArrayList<Modifier>();
         if (rot.get("modifiers") instanceof List) for (Object o : (List<?>) rot.get("modifiers")) if (o instanceof Map) mods.add(new Modifier((Map<?, ?>) o));
         modifiers = Collections.unmodifiableList(mods);

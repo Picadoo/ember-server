@@ -221,6 +221,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         emberCommand.setForge(emberForge);
         emberRuns = new town.sunshine.corerpg.p1.EmberRunService(this, emberLoadouts, emberStore); // G04 Q01–Q03 runs + settlement
         Bukkit.getPluginManager().registerEvents(emberRuns, this);
+        { // P2-9 (D83) titles + trails (cosmetic only)
+            final town.sunshine.corerpg.p1.EmberCosmetics cos = new town.sunshine.corerpg.p1.EmberCosmetics(emberRuns);
+            emberRuns.setCosmetics(cos);
+            Bukkit.getPluginManager().registerEvents(cos, this);
+            Bukkit.getScheduler().runTaskTimer(this, cos::tick, 40L, 4L);
+        }
         emberRuns.start();
         emberCommand.setRuns(emberRuns);
         emberSupplies = new town.sunshine.corerpg.p1.EmberSupplyService(this); // B2.169 §19.4 shop + §3.1 starter supplies

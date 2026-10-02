@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(8, m.balanceVersion);                 // D80
-        assertEquals("g04-1/b8", m.ruleVersion);
+        assertEquals(9, m.balanceVersion);                 // D81–D82
+        assertEquals("g04-1/b9", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all
@@ -697,6 +697,57 @@ public class EmberRunRulesTest {
         next[0] = 99999; next[1] = 99999;
         assertEquals(-1, EmberRunDirector.dueSkill(next, 1000, below, 0.8)); // gated above 50 %
         assertEquals(2, EmberRunDirector.dueSkill(next, 1000, below, 0.49));
+    }
+
+    @Test public void mapLootIdentityKeepsTheTargetFloorAndRaidItemIsTargeted_P2_9() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.MapDef q1 = m.byKey("q01"), q7 = m.byKey("q07");
+        assertEquals("scorch", q1.lootFamily);
+        assertEquals("blade", q1.lootSlot);
+        assertNull(q7.lootSlot);
+        assertEquals("sustain", m.raids.get("r02").lootFamily);
+        assertEquals(1, m.raidItemQualityFloor);
+        EmberRunRules.LootBias lb = m.lootBias(q1);
+        // the target family never drops below TARGET_WEIGHT on any map; probabilities sum to 1
+        for (String t : new String[]{"scorch", "burst", "sustain", null}) {
+            double sum = 0;
+            for (String f : EmberRunRules.FAMILIES) sum += EmberRunRules.familyProbability(t, lb, f);
+            assertEquals(1.0, sum, 1e-9);
+            if (t != null) assertTrue(EmberRunRules.familyProbability(t, lb, t) >= EmberRunRules.TARGET_WEIGHT - 1e-9);
+        }
+        assertEquals(m.lootOwnFamily, EmberRunRules.familyProbability("scorch", lb, "scorch"), 1e-9);
+        assertEquals(0.4 * m.lootMapShare, EmberRunRules.familyProbability("burst", lb, "scorch"), 1e-9);
+        assertEquals(0.5, EmberRunRules.familyProbability(null, lb, "scorch"), 1e-9);
+        // sampled roll agrees with the table (target burst on the scorch map)
+        java.util.Random r = new java.util.Random(3);
+        int n = 20000, sc = 0, bu = 0, blade = 0;
+        for (int i = 0; i < n; i++) {
+            EmberRunRules.ItemRoll it = EmberRunRules.rollItem(1, "burst", r, null, lb);
+            if ("scorch".equals(it.family)) sc++;
+            if ("burst".equals(it.family)) bu++;
+            if ("blade".equals(it.slot)) blade++;
+        }
+        assertEquals(0.60, bu / (double) n, 0.015);
+        assertEquals(0.4 * m.lootMapShare, sc / (double) n, 0.015);
+        assertEquals(m.lootSlotWeight, blade / (double) n, 0.015);
+        // raid_item: entry target family, floor 精良, stable per key
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.runId = "r01-x"; in.player = "p"; in.seed = 9; in.tier = 3; in.target = "scorch"; in.bossKilled = true;
+        in.qualityWeights = new int[]{60, 28, 10, 2};
+        for (int i = 0; i < 200; i++) {
+            in.runId = "r01-" + i;
+            EmberRunRules.ItemRoll it = EmberRunRules.raidItem(in, "raid_item", "burst", 1).item;
+            assertEquals("scorch", it.family);
+            assertTrue(it.quality >= 1);
+        }
+        in.target = null;
+        assertEquals("burst", EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.family);
+        assertEquals(EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString(),
+                EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString());
+        // cosmetics: no stats anywhere, abyss titles by best tier
+        assertEquals(6, EmberCosmetics.ALL.size());
+        assertEquals(5, EmberCosmetics.byId("abyss5").abyssTier);
+        assertNull(EmberCosmetics.byId("nope"));
     }
 
     @Test public void dailyBountyPaysEachTierOnceOnTheMatchingClear_P2_7() {

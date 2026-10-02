@@ -232,14 +232,20 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                 stamina -= cost
                 if rng.random() < RAID_RATE[min(w + 1, 4)]:
                     clears += 1
-                    settle_with(p, ccfg, order[-1], 'chest')  # challenge settlement + raid_item (one more T3 roll)
+                    if OLD_RAID_ITEM:
+                        settle_with(p, ccfg, order[-1], 'chest')  # pre-P2-9: challenge settlement + one more plain T3 roll
+                    else:  # P2-9 (D82): raid_item = the player's target family, quality floor 精良
+                        settle_with(p, ccfg, order[-1], 'none')
+                        p.consider(p1sim.item(kn.target, 'blade' if rng.random() < 0.5 else 'charm', 3,
+                                              max(RAID_FLOOR, p1sim.pick(ccfg['quality_w'], rng.random())),
+                                              p1sim.pick(ccfg['craft_w'], rng.random())))
                     p.marks[3] += 1; marks_earned += 2       # raid_mark + the base mark
                     p.invest()
             runs_left = stamina // cfg['run_cost']
         for i in range(runs_left):
             p.day = 1000 + w * 7 + i * 7 // max(1, runs_left)
             if can_ch:
-                use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else best)
+                use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else farm_map(p, kn, ccfg, rates, best))
             else:
                 use, key = cfg, order[-1]
             p.buy_potions()
@@ -265,6 +271,24 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
     return out
 
 
+OLD_RAID_ITEM = False
+RAID_FLOOR = 1  # P2-9 (D82) raid_item quality floor (1 = 精良), from ember-v1-runs.yml raid_item.quality_floor
+
+
+def farm_map(p, kn, ccfg, rates, best):
+    """P2-9: with per-map loot identity the player farms the map of its target family and weaker slot when that map
+    clears within 10 points of its best one (otherwise the best map, as before)."""
+    if not ccfg.get('loot_bias'):
+        return best
+    bl, ch = p.blade, p.charm
+    want = 'blade' if (bl['fam'] != kn.target, -bl['q'], bl['enh']) >= (ch['fam'] != kn.target, -ch['q'], ch['enh']) else 'charm'
+    def score(k):
+        lo = ccfg['maps'][k].get('loot') or {}
+        return (lo.get('family') == kn.target) * 2 + (lo.get('slot') == want), rates[k]
+    ok = [k for k in rates if rates[k] >= max(0.5, rates[best] - 0.10)]
+    return max(ok, key=score) if ok else best
+
+
 def settle_with(p, ccfg, key, extra):
     """Challenge settlement: same base, T3 items with the challenge quality table, no first clear (already cleared)."""
     saved = p.cfg
@@ -284,12 +308,25 @@ def main():
     ap.add_argument('--trade', action='store_true', help='add the P2-3 market model (weekly best-of-10 purchase)')
     ap.add_argument('--abyss', action='store_true', help='add the P2-2 abyss policy as a third column')
     ap.add_argument('--raid', action='store_true', help='add the P2-5/6 raids (rotation + weekly raid clears, shared cap)')
+    ap.add_argument('--loot-own', type=float, help='override loot_bias.own_family (tuning)')
+    ap.add_argument('--loot-slot', type=float, help='override loot_bias.slot (tuning)')
+    ap.add_argument('--no-loot', action='store_true', help='without the P2-9 per-map loot identity (D81)')
+    ap.add_argument('--old-raid-item', action='store_true', help='pre-P2-9 raid_item (plain roll, no family target, no floor)')
     ap.add_argument('--mods', action='store_true', help='add the P2-8 weekly rules on the featured map (rotation + rule)')
     ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
     a = ap.parse_args()
     cfg = p1config.load()
     if a.no_bounty:
         cfg['bounty'] = []
+    if a.no_loot:
+        cfg['loot_bias'] = {}
+    if a.loot_own is not None:
+        cfg['loot_bias']['own_family'] = a.loot_own
+    if a.loot_slot is not None:
+        cfg['loot_bias']['slot'] = a.loot_slot
+    global OLD_RAID_ITEM, RAID_FLOOR
+    OLD_RAID_ITEM = a.old_raid_item
+    RAID_FLOOR = int((RUNS.get('raid_item') or {}).get('quality_floor', 1))
     ccfg = challenge_cfg(cfg)
     per_day = cfg['stamina_day'] // cfg['run_cost']
     modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ()) + (('mods',) if a.mods else ())
@@ -311,7 +348,7 @@ def main():
     print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
     print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
     print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
-    for w in (1, 2, 4, 8, 12):
+    for w in (1, 2, 4, 6, 8, 10, 12):
         if w > a.weeks:
             continue
         for mode in modes:
