@@ -618,6 +618,7 @@ public final class EmberRunService implements Listener {
         }
         s.state = EmberRunSession.SETTLING;
         store.save(s);
+        if (d.bossSpawnedAt > 0) log().info(String.format(Locale.ROOT, "[P1 run] %s boss killed after %.1f s", s.runId, (System.currentTimeMillis() - d.bossSpawnedAt) / 1000.0));
         EmberRunMaps.MapDef m = d.def;
         World w = d.w;
         for (UUID u : s.participants) {
@@ -1501,10 +1502,18 @@ public final class EmberRunService implements Listener {
             EmberRunSession x = t == null ? null : openSessionOf(t.getUniqueId());
             EmberRunDirector d = x == null || x.world == null ? null : byWorld.get(x.world);
             if (d == null) { s.sendMessage(P + "该玩家没有进行中的主线本"); return true; }
+            // optional ratio (0 < r < 1): every live mob → r × max HP instead of 1 HP (phase / kill-time tests, e.g. 0.55)
+            double ratio = 0;
+            if (args.length >= 5) { try { ratio = Double.parseDouble(args[4]); } catch (NumberFormatException e) { ratio = 0; } }
+            if (ratio <= 0 || ratio >= 1) ratio = 0;
             int n = 0;
-            for (EmberRunDirector.Tracked m : d.mobs.values()) if (!m.le.isDead()) { m.le.setHealth(Math.min(1.0, m.le.getMaxHealth())); n++; }
-            s.sendMessage(P + x.runId + " 削弱 " + n + " 只（测试用；击杀仍须由玩家完成，结算照常）");
-            log().info("[P1 run] admin " + s.getName() + " weaken " + x.runId + " n=" + n);
+            for (EmberRunDirector.Tracked m : d.mobs.values()) if (!m.le.isDead()) {
+                double to = ratio > 0 ? Math.max(1.0, ratio * m.le.getMaxHealth()) : 1.0;
+                m.le.setHealth(Math.min(to, m.le.getMaxHealth()));
+                n++;
+            }
+            s.sendMessage(P + x.runId + " 削弱 " + n + " 只" + (ratio > 0 ? "（到 " + Math.round(ratio * 100) + "% 生命）" : "") + "（测试用；击杀仍须由玩家完成，结算照常）");
+            log().info("[P1 run] admin " + s.getName() + " weaken " + x.runId + " n=" + n + (ratio > 0 ? " ratio=" + ratio : ""));
             return true;
         }
         if (admin && "list".equals(op)) {

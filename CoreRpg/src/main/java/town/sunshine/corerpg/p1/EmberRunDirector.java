@@ -340,8 +340,13 @@ final class EmberRunDirector {
         svc.index(le.getUniqueId(), this);
         nextAt = new long[b.skills.size()];
         for (int i = 0; i < nextAt.length; i++) nextAt[i] = now + (long) (b.skills.get(i).every * 1000);
+        bossSpawnedAt = now;
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss spawned hp=%.0f party=%d", s.runId, le.getMaxHealth(), s.partySize));
         svc.onBossSpawned(s, b);
     }
+
+    /** epoch ms of the boss spawn (0 = not yet) — kill-time measurements in the log */
+    long bossSpawnedAt;
 
     private void spawnExtra() {
         if (extraSpawned || def.eventAnchor == null) return;
@@ -464,6 +469,7 @@ final class EmberRunDirector {
         if (!phaseTold && due >= 0 && b.skills.get(due).below <= 1.0) {
             phaseTold = true;
             svc.tellRun(s, "§c" + b.name + " §7进入第二阶段：新招式「" + b.skills.get(due).name + "」！");
+            svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
         }
         if (due >= 0) {
             EmberRunMaps.Skill sk = b.skills.get(due);
