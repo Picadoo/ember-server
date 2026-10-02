@@ -193,7 +193,7 @@ final class EmberRunDirector {
         if (activeRoom != null && aliveIn(activeRoom) == 0) roomCleared(def.room(activeRoom));
         // boss
         if (bossAt > 0 && boss == null && !bossDead) {
-            if (now >= bossAt) spawnBoss(now);
+            if (now >= bossAt && (!def.boss.waitInArea || def.boss.area == null || now >= bossAt + 20000L || anyoneIn(def.boss.area))) spawnBoss(now);
             else warnCircle(new Location(w, def.boss.at.x + 0.5, def.boss.at.y + 0.1, def.boss.at.z + 0.5), 1.5, Particle.FLAME);
         }
         if (boss != null && !bossDead) bossTick(now);
@@ -203,6 +203,11 @@ final class EmberRunDirector {
         List<Player> out = new ArrayList<Player>();
         for (Player p : w.getPlayers()) if (s.committed.contains(p.getUniqueId()) && !p.isDead()) out.add(p);
         return out;
+    }
+
+    private boolean anyoneIn(EmberRunMaps.Box b) {
+        for (Player p : participantsHere()) { Location l = p.getLocation(); if (b.contains(l.getX(), l.getY(), l.getZ())) return true; }
+        return false;
     }
 
     private int aliveIn(String room) {
@@ -245,7 +250,8 @@ final class EmberRunDirector {
         svc.onRoomCleared(s, r, last);
         if (last) {
             bossAt = System.currentTimeMillis() + 1500L;
-            svc.tellRun(s, "§c" + def.boss.name + " §7即将在大厅中央现身（1.5 秒）");
+            svc.tellRun(s, def.boss.waitInArea ? "§c" + def.boss.name + " §7在前方首领厅等候，走进大厅即现身"
+                    : "§c" + def.boss.name + " §7即将在大厅中央现身（1.5 秒）");
         }
     }
 

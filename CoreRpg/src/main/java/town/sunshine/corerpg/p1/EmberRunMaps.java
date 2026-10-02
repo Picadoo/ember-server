@@ -156,6 +156,8 @@ public final class EmberRunMaps {
         public final double hp, atk, interval, recover;
         public final Pt at;
         public final Box area;
+        /** spawn only once a participant stands in the area (or 20 s after the last room): far boss halls (B2.151) */
+        public final boolean waitInArea;
         public final List<Skill> skills;
         public final Adds adds;
         Boss(Map<?, ?> m) {
@@ -167,6 +169,7 @@ public final class EmberRunMaps {
             recover = num(m.get("recover"), 0.5); // §10.I 收招: pause after one skill before the next may start
             at = pt(m.get("at"));
             area = box(m.get("area"));
+            waitInArea = Boolean.TRUE.equals(m.get("wait_in_area"));
             List<Skill> s = new ArrayList<Skill>();
             if (m.get("skills") instanceof List) for (Object o : (List<?>) m.get("skills")) if (o instanceof Map) s.add(new Skill((Map<?, ?>) o));
             skills = Collections.unmodifiableList(s);

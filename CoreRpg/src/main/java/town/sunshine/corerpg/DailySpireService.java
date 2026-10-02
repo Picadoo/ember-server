@@ -93,11 +93,16 @@ public class DailySpireService {
         if ("build".equals(a) || "spirebuild".equals(a) || "spire".equals(a)) {
             return doBuild(sender);
         }
+        if ("v1".equals(a)) { // B2.151 walkable spire (book ch. 15)
+            new town.sunshine.corerpg.p1.map.P1MapBuilder(plugin).build(sender, "ember_daily_spire_v1", "ember_daily_spire",
+                    town.sunshine.corerpg.p1.map.P1MapLayout.spireV1());
+            return true;
+        }
         if ("table".equals(a) || "coords".equals(a)) {
             dumpTable(sender);
             return true;
         }
-        sender.sendMessage(ChatColor.YELLOW + "/corerpg spirebuild [build|table]");
+        sender.sendMessage(ChatColor.YELLOW + "/corerpg spirebuild [build|table|v1]");
         return true;
     }
 

@@ -288,21 +288,20 @@ maps:
   q05:
     name: 断塔回廊
     dungeon: EmberQ05
-    template: ember_daily_spire
+    template: ember_daily_spire_v1
     tier: 2
     drop_label: T2
     content_version: v1
-    map_version: ember_daily_spire@s3-2026-10-02
+    map_version: ember_daily_spire_v1@b2151-2026-10-02
     requires: q04
     unlocks: q06
     first_clear: {bone: 20, blank: 6}
     purpose: "T2 本：常规掉 T2 装备与 T2 印记；首通（骨尘 20·胚料 6）开放 Q06"
     b_ref: 59
-    spawn: [0, 64, 2]
-    spread: [[-2, 64, 2], [2, 64, 2]]
-    # the template's low bar row in front of the r2 door (z3) would stay shut when the door opens: removed in the
-    # instance; the hole edge behind it gets a rail (rails:)
-    clear: [[-1, 70, 3], [0, 70, 3], [1, 70, 3]]
+    # B2.151: book ch. 15 walkable map (/corerpg spirebuild v1): R0 → C01 → R1 → C12 stairs (64→72) → R2 →
+    # C23 stairs (72→80) → R3 → C3B → RB 33×33 boss hall; E side room off R2. No links / rails / clears any more.
+    spawn: [0, 64, 5]
+    spread: [[-2, 64, 5], [2, 64, 5]]
     mobs:
       melee:    {mm: EmberQ05Melee,    hp: 177, atk: 14, interval: 2.5}
       ranged:   {mm: EmberQ05Ranged,   hp: 130, atk: 14, interval: 3.0, range: 12}
@@ -312,80 +311,44 @@ maps:
       elite:    {mm: EmberQ05Elite,    hp: 590, atk: 14, interval: 2.5}
     rooms:
       r1:
-        label: 塔底厅
-        trigger: [-7, 63, -7, 7, 68, -2]
-        points: [[-6, 64, -3], [6, 64, -3], [-4, 64, -7], [4, 64, -7], [-2, 64, -5], [2, 64, -5], [-4, 64, -3], [-2, 64, -7]]
-        door: [-1, 64, 4, 1, 66, 4]
+        label: 第一层环院
+        trigger: [-16, 63, 18, 16, 68, 42]
+        points: [[-6, 64, 31], [0, 64, 31], [6, 64, 31], [-6, 64, 36], [0, 64, 36], [6, 64, 36], [-12, 64, 33], [12, 64, 33]]
+        door: [37, 72, 48, 43, 77, 48]
         a: {melee: 5, ranged: 1}
         b: {melee: 4, heavy: 1}
       r2:
-        label: 中层环廊
-        trigger: [-8, 69, -8, 8, 73, 8]
-        points: [[-3, 70, -6], [3, 70, -6], [-7, 70, -1], [7, 70, -1], [-6, 70, 7], [-7, 70, 4], [-1, 70, -6], [-5, 70, -1]]
-        door: [-1, 70, 4, 1, 72, 4]
+        label: 第二层外台
+        trigger: [28, 71, 50, 52, 76, 76]
+        points: [[34, 72, 64], [40, 72, 64], [46, 72, 64], [34, 72, 69], [40, 72, 69], [46, 72, 69], [32, 72, 58], [48, 72, 58]]
+        door: [14, 80, 95, 14, 85, 101]
         a: {melee: 5, ranged: 2}
         b: {melee: 5, caster: 1}
       r3:
-        label: 塔冠外圈
-        trigger: [-6, 75, -5, 6, 79, 6]
-        points: [[-4, 76, -3], [4, 76, -3], [-5, 76, 0], [5, 76, 0], [-4, 76, 3], [4, 76, 3], [-2, 76, -3], [-3, 76, 0]]
+        label: 第三层横廊
+        trigger: [-18, 79, 86, 10, 84, 112]
+        points: [[-10, 80, 100], [-4, 80, 100], [2, 80, 100], [-10, 80, 105], [-4, 80, 105], [2, 80, 105], [-14, 80, 94], [6, 80, 94]]
+        door: [-3, 80, 121, 3, 85, 121]
         a: {melee: 6, heavy: 1}
         b: {melee: 5, ranged: 2}
-    # the template's stairs cannot be walked (bot: stuck at z≈7.7 y67; tube 2 starts 3 blocks up): one-way passages
-    # open after the room is cleared (book §15 walkable-stairs rule deviated, backlog: ember_daily_spire_v1)
-    links:
-      - {after: r1, from: [-1, 64, 3, 1, 69, 9], to: [0, 70, -6], yaw: 0, label: 沿塔内阶梯上到中层环廊}
-      - {after: r2, from: [-1, 70, 5, 1, 72, 7], to: [0, 76, 3], yaw: 180, label: 沿塔内阶梯上到塔冠}
-    # instance-only guard rails (iron bars into AIR): open ring edge (~14-block drop) and the central hole
-    rails:
-      # B2.160: the 2-wide floor hole in the west doorway of the ground hall (r1 side)
-      - [-7, 64, 0, -7, 65, 0]
-      - [-9, 70, -9, 9, 71, -9]
-      - [-9, 70, 9, -3, 71, 9]
-      - [3, 70, 9, 9, 71, 9]
-      - [-9, 70, -8, -9, 71, 8]
-      - [9, 70, -8, 9, 71, 8]
-      - [-2, 70, -3, -2, 71, -3]
-      - [-3, 70, -2, -3, 71, -2]
-      - [2, 70, -3, 2, 71, -3]
-      - [3, 70, -2, 3, 71, -2]
-      - [-3, 70, 2, -3, 71, 2]
-      - [-2, 70, 3, -2, 71, 3]
-      - [3, 70, 2, 3, 71, 2]
-      - [-1, 70, 2, 1, 71, 2]
-      # crown (y76): the bar ring has diagonal gaps between lone bar posts (players and mobs slip through and drop to
-      # the ring) and the tube-2 shaft opens at z7; checked with a flood fill: no standable cell next to a drop
-      - [-1, 76, 7, 1, 77, 7]
-      - [-6, 76, -1, -6, 77, -1]
-      - [-6, 76, 1, -6, 77, 1]
-      - [6, 76, -1, 6, 77, -1]
-      - [6, 76, 1, 6, 77, 1]
-      - [-5, 76, -4, -5, 77, -4]
-      - [-4, 76, -5, -4, 77, -5]
-      - [5, 76, -4, 5, 77, -4]
-      - [4, 76, -5, 4, 77, -5]
-      - [-5, 76, 4, -5, 77, 4]
-      - [-4, 76, 5, -4, 77, 5]
-      - [5, 76, 4, 5, 77, 4]
-      - [4, 76, 5, 4, 77, 5]
-      - [-1, 76, -6, -1, 77, -6]
-      - [1, 76, -6, 1, 77, -6]
     boss:
       mm: EmberQ05Boss
       name: 断塔斧卫
       hp: 3500
       atk: 26
       interval: 3.0
-      at: [0, 76, 0]
-      area: [-5, 75, -5, 5, 80, 5]
+      at: [0, 80, 146]
+      area: [-16, 79, 130, 16, 94, 162]
+      # the hall is 25 blocks past R3: spawn when someone walks in (or 20 s after the last room)
+      wait_in_area: true
       skills:
         - {type: cone, name: 斧刃横扫, every: 9, warn: 1.2, angle: 120, range: 5, dmg: 44, kb: 0.5}
         - {type: circle, name: 径向冲击, every: 15, warn: 1.0, radius: 3, ahead: 0, dmg: 26, kb: 1, light: true}
       recover: 0.5
     event:
       after: r2
-      anchor: [6, 70, 7]
-      area: [3, 69, 5, 8, 73, 8]
+      anchor: [66, 72, 63]
+      area: [60, 71, 57, 72, 78, 69]
 
   q06:
     name: 霜封哨所

@@ -164,7 +164,8 @@ dungeon-pre-folder:
     "EmberQ04": 1
   ember_daily_spire:
     "EmberDailySpire": 1
-    # ember-v1.0-P1 batch 2 main map Q05
+  # ember-v1.0-P1 B2.151: Q05 on the walkable book map (CoreRpg /corerpg spirebuild v1)
+  ember_daily_spire_v1:
     "EmberQ05": 1
   ember_daily_frost:
     "EmberDailyFrost": 1

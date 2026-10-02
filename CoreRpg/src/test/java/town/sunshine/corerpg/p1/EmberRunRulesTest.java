@@ -319,7 +319,7 @@ public class EmberRunRulesTest {
         assertEquals(2, q4.tier);
         assertEquals(2, q5.tier);
         assertEquals("ember_daily_tide", q4.template);
-        assertEquals("ember_daily_spire", q5.template);
+        assertEquals("ember_daily_spire_v1", q5.template); // B2.151 walkable map
         assertEquals(6, q4.firstClear.blank);
         assertEquals(6, q4.firstClear.core);
         assertEquals(2100, q4.firstClear.coin);
@@ -341,8 +341,10 @@ public class EmberRunRulesTest {
         assertEquals(0.5, q4.boss.recover, 0);
         assertEquals(2, q4.spread.size());
         assertEquals(1, q4.clear.size());
-        assertEquals(2, q5.links.size());
-        assertEquals(29, q5.rails.size()); // + B2.160 doorway hole
+        assertEquals(0, q5.links.size()); // B2.151: real stairs, no passages
+        assertEquals(0, q5.rails.size());
+        assertEquals(true, q5.boss.waitInArea);
+        assertEquals(0, q5.clear.size());
         assertEquals("r1", q4.eventAfter);
         assertEquals("r2", q5.eventAfter);
         assertSame(q5, m.byWorld("dungeon_EmberQ05_0A1B2C3D"));
