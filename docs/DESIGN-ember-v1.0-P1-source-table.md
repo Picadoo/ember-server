@@ -797,3 +797,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D57 | Q04 R1 外缘改护栏 | 整房外缘 1 实心 + 1 铁栏（与 Q05 R2 / RB 同做法），通道口仍是全高墙 | 书「与可走地面之间必须有实心边梁和连续护栏」 |
 
 实测（1.28.0，18:26–18:30 CST，P1 运行期临时开启后恢复 follow）：五张图重建各 7–9 秒；Q07 按书路线禁跳走完三房到首领厅（首领等候 → 现身）；Q04 方块抽查：水渠 (−23,62,34) / (23,62,34) / (−21,62,26) 为水，R1 外缘 (−19,64,26) 石砖 + (−19,65,26) 铁栏、(19,65,26) 铁栏，外圈 (−20,64,26) 实心、其上空气；Q06 R1 墙顶 (−19,73,32) 雪块、R2 屋脊 (40,77,64) / 檐 (27,73,64) 云杉木板，室内 (40,70,64) 净空。gameplay PASS 9/9；mvn test 全过；DB `db-ember-authme-20261002-183359-after-1.28.0.sql`；P1 active=false。
+
+### 13.12 地图模板备份（2026-10-02 18:37 CST）
+
+七张 `ember_daily*_v1` DP 模板（1.28.0 建，含 B2.181 形体）打包为 `ember-p1-maps-v1-2026-10-02.zip`（8,056,349 字节，36 个文件，内含 SHA256SUMS.txt；zip sha256 `a3ad0448870a8dfde34263a2aae4af4076f620145fd43c9d53384c1f11751e80`），上传到 GitHub Release **maps-v1-2026-10-02**（https://github.com/Picadoo/ember-server/releases/tag/maps-v1-2026-10-02 ，目标 main）。重新下载校验一致。恢复：解压到仓库根目录（路径以 `plugins/DungeonPlus/map/` 开头），或服内 `/corerpg p1 mapbuild q01..q07` 重建。之后若重建模板，需另发新的 maps release。
