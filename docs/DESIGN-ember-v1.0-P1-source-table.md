@@ -1020,3 +1020,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 模型 | `p1sim.py --normal-mods [all]`、`p2econ.py --normal-mods [all]`；输出 `out-p1sim-nm*.md`、`out-p2econ-nm*.md` |
 | 测试 | EmberRunRulesTest：balance 11 / `g04-1/b11`，lean、reverse 是 normal，casters 不是；实测见 P2 草案 §5j |
 
+### 13.27 去掉打命令（CoreRpg 1.41.1 → 1.41.2，2026-10-03 00:08 / 00:10 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 代码 | EmberForgeService：enhance、simple（升阶 / 精工 / 成色）、swap 预览改为 `ConfirmTokens.sendButton`；EmberRunService.deliver 暂存提示 [补领]；EmberCosmetics 列表 [装上] / [取下]；ConfirmTokens 新增 `sendButton`（不带过期尾巴） |
+| 参数源 | 没有改；balance_version 11 |
+| 测试 | 实测见 P2 草案 §5k；套件 9/9 |
+
