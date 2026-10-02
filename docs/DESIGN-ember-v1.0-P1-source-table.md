@@ -1104,3 +1104,32 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 参数源 | 委托档位不变 |
 | 测试 | 单元测试（跨档发放）；实测 FreshM1 + FreshN1（招募 → 申请 → 入队 → 冷却）；1.48.1 去掉招募对测试号的过滤；套件 9/9；备份 `after-1.48.1` |
 
+### 13.36 团本倒下：观战队友 + 自动复活（CoreRpg 1.49.0，2026-10-03 03:13 CST 部署，D106）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 团本倒下后在实例里观战队友，不能离开（观战传送出实例被拦；离队友超过 24 格拉回；`/dp leave` 10 秒内输两次才算放弃，放弃后不复活也不结算）。下一个房间开打、首领现身、首领转阶段时在队友身边复活，50% 生命。全员倒下仍失败。倒下的人保留结算资格 |
+| 代码 / 配置 | EmberRunDirector（`participantsHere` 不算观战者、`nextRevive`、每秒 `leashFallen`、`onBossPhase`）；EmberRunService（`watchTeammate`、`watchLater`、`reviveFallen` 先 `dp revive <玩家> true true` 再传送 / 冒险模式 / 50% 生命 / `EmberHeal.rebase`、`onSpectateTeleport`、`onFallenLeave`、`cmdWatch`，`OPS` 加 watch）；QuestService `quietHint`；EmberSupplyService 观战时不显示低血提示；DP `EmberQ0R1/2/option.yml` `revive=true;number=0`、`config.yml` 白名单加 `corerpg p1 watch`、`lang/zh_CN.yml` 倒下 / 复活文字；ember_hub、ember_p1_adventure、ember_p1_codex 文字 |
+| 参数源 | 没有数值改动 |
+| 模型 | p1party 复活模型（`--no-revive` 对照），R01 / R02 通关率见 P2 草案 §5p；p2econ `RAID_RATES` 加 `revive` 档（默认），`--raid-rate` 选档。输出见 `tools/p1sim/out-p1party-d106-*.md` |
+| 测试 | 实测 FreshP4–P6（R01：第 2、3 间开打、首领现身、首领半血都复活，最后提示没有复活点，首领死后倒下的人照常结算）、FreshO7–O9（全员倒下判失败，[观战队友]，/dp leave 被拦） |
+
+### 13.37 外观商店（CoreRpg 1.49.0，2026-10-03 02:50 CST 部署，D107）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 只做展示的花币出口：称号颜色（只用在已有称号上）2000～5000，朴素足迹 4000～12000（比团本足迹朴素），名牌标记 6000～20000（只在主城和野外显示）。买一次永久有，不回收，不加属性 |
+| 代码 / 配置 | EmberCosmetics（`SHOP`、COLOR / FLAIR 类型、`shop`、`select`、`titleText` 套颜色、`flairOf`、`syncFlair` 队伍前缀 `efl_<id>`、普通足迹 8 tick 一次）；EmberCommand `cosmetic` / `外观`；CoreRpgPlugin `refreshBoard` 调 `syncFlair`；EmberRunService `flushData`；ember_p1_gear 第 44 格「外观商店」。计数：`p2_cosbuy_<id>@all`、`p2_colorsel`、`p2_flairsel` |
+| 参数源 | 价钱写在 EmberCosmetics（只做展示，不进 balance） |
+| 测试 | 实测 FreshO1（列表、没称号不能买颜色、买金辉后聊天称号变金色、✦ 名牌前缀、灰烬足迹、装备页图标） |
+
+### 13.38 精选图重打给中期印记（CoreRpg 1.49.0，2026-10-03 02:50 CST 部署，D108，balance_version 14）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 本周精选图首通后重打普通版，每局额外 +1 枚该图阶印记（Q01～Q03 T1，Q04～Q06 T2；Q07 不变），和挑战版的精选加成共用每周 3 次。共用和分开在 p2econ 里结果一样，共用不会多给，所以选共用 |
+| 参数源 | `ember-v1-runs.yml`（两份）`rotation.normal_bonus_marks: 1`；balance_version 14（g04-1/b14） |
+| 模型 | p1sim Q07 首通中位 26 / 8 / 3 天；只顺路拿 26 / 8 / 3，专门刷 25 / 8 / 4。p2econ 线上「轮换 + 团本」两件极品 ≥30%：0.3 档第 10 → 9 周，0.5 档第 10 → 9 周，0.7 档第 7 → 8 周。selfcheck 0 failed。输出 `tools/p1sim/out-p1sim-d108-*.md`、`out-p2econ-d108-*.md` |
+| 代码 | EmberRunMaps `rotationNormalBonusMarks`；EmberRunService `settleFor`（精选普通版重打）、`featuredLabel`、`ruleLine`、状态行；ember_p1_challenge、hub_ambience 文字；p1sim / p2econ `feat_*` |
+| 测试 | 单元测试（`normal_bonus_marks`、balance_version 14）；实测 FreshO1（精选 Q01 冒险页那一行；重打 Q01 拿到「额外 T1 锻造印记 +1（本周 1/3）」）；备份 `after-1.49.0` |
+
