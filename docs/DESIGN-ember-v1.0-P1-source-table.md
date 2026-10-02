@@ -981,3 +981,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 模型 | `p2econ.py --raid`（新增 `--no-loot`、`--old-raid-item`、`--loot-own`、`--loot-slot`）；`out-p2econ-loot-d050.md`、`out-p2econ-loot-base-d050.md`；p1sim `--no-loot`，`out-p1sim-loot.md` |
 | 测试 | `mapLootIdentityKeepsTheTargetFloorAndRaidItemIsTargeted_P2_9`：概率和为 1、目标族 ≥60%、抽样吻合、raid_item 目标族 + 保底、无目标族回退团本族；实测见 P2 草案 §5f |
 
+### 13.23 新手第一周（CoreRpg 1.39.0 → 1.39.1，2026-10-02 23:05 / 23:23 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 参数源 | `ember-v1-runs.yml`（两份）Q01 普通版：首领 hp 200、atk 4、重斩 dmg 9；melee/ranged atk 2.5；`EmberP1Main.yml` 中 Q01 远程 Damage 2.5；balance_version 10 |
+| 代码 | EmberLoadoutService `autoSelectCharm(p, uid, newTier)`、`starterBladeSlot`；giveItem 到账消息；EmberRunService `familyButtons`（bungee TextComponent）、`nextStep(d, uuid)`；首通自选在没有目标族时设目标族；status 的调试行和生命行只给管理员 |
+| 命令 / PAPI | `/corerpg p1 firstclear`、`/corerpg p1 target` 不带参数时出按钮；`p1_next` 新增「领取首通自选」「选掉落目标族」两步 |
+| 菜单 | 主菜单冒险图标加 `%corerpg_p1_next%` 行；图录首领页的 Q01 数值；团本 lore（仍是 47 个菜单） |
+| 模型 | `out-p1sim-q01ease.md`（dodge 0.3：Q01 前沿 4%→56%，Q07 中位第 31→25 天）；`out-p2econ-q01ease-d050.md`（后期在噪声内） |
+| 测试 | EmberRunRulesTest：Q01 首领 hp 200、balance 10；EmberLoadoutTest：T0 刃提示；实测见 P2 草案 §5h |
+| 工具 | `tools/p1map/norm-smoke.sh`、`newbie-run.sh`，`fight.sh` 加 `DRINK=1` |
+
