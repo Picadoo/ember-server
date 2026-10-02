@@ -224,13 +224,14 @@ public final class EmberLoadoutService implements Listener {
 
     /**
      * Onboarding fix (D85): a charm that arrives while no valid charm is selected is selected automatically. A new
-     * player otherwise fought with half the life (H 20 instead of 40) until he found the select command. Choosing
-     * between several charms stays manual (book §4.1: only the selected charm counts).
+     * player otherwise fought with half the life (H 20 instead of 40) until he found the select command. The T0
+     * starter is also replaced by the first T1+ charm. Choosing between real charms stays manual (book §4.1).
      */
-    public boolean autoSelectCharm(Player p, String uid) {
+    public boolean autoSelectCharm(Player p, String uid, int newTier) {
         EmberPlayerState st = state(p.getUniqueId());
         EmberLoadout cur = refresh(p);
-        if (cur.charm != null || uid == null) return false;
+        if (uid == null) return false;
+        if (cur.charm != null && !(cur.charm.tier == 0 && newTier >= 1)) return false; // T0 starter → first real charm
         st.charmUid = uid;
         saveState(p);
         refresh(p);

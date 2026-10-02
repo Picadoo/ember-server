@@ -154,7 +154,7 @@ public final class EmberCommand {
                         l.b, l.h, l.d, l.level, l.setLabel()));
                 s.sendMessage(P + l.nextAwakeningHint());
                 s.sendMessage(P + l.setProgress());
-                s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
+                if (admin) s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "无有效 P1 刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
                 for (String n : loadouts.notes(p)) s.sendMessage(P + ChatColor.YELLOW + n);

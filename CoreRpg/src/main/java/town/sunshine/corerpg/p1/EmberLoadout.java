@@ -93,7 +93,8 @@ public final class EmberLoadout {
      */
     public String setProgress() {
         String fam = blade == null ? null : blade.family;
-        if (fam == null || "none".equals(fam)) return "成套进度：无有效 P1 刃";
+        if (blade == null) return "成套进度：主手没有有效的 P1 刃";
+        if ("none".equals(fam)) return "成套进度：T0 起步刃无族；首通 Q01 自选一族 T1 刃后开始算";
         int same = 1, t3 = blade.tier >= 3 ? 1 : 0, e9 = blade.tier >= 3 && blade.enhance >= 9 ? 1 : 0;
         if (charm != null && fam.equals(charm.family)) {
             same++;

@@ -946,9 +946,38 @@ public final class EmberRunService implements Listener {
         if (stack == null) return null;
         loadouts.remember(d, p.getUniqueId());
         p.getInventory().addItem(stack);
-        if (d.isCharm() && loadouts.autoSelectCharm(p, d.uid)) // D85 onboarding: no more half-life new players
+        if (d.isCharm() && loadouts.autoSelectCharm(p, d.uid, d.tier)) // D85 onboarding: no more half-life new players
             return d.shortLabel() + "（已自动选定为生效护符）";
+        if (d.isBlade() && d.tier >= 1) { // D85: the first real blade replaces the T0 starter on the hotbar
+            int slot = starterBladeSlot(p);
+            if (slot >= 0) {
+                org.bukkit.inventory.PlayerInventory inv = p.getInventory();
+                int at = -1;
+                for (int i = 0; i < inv.getSize(); i++) {
+                    ItemStack x = inv.getItem(i);
+                    if (x != null && loadouts.items().hasData(x)) { EmberItems.Read r = loadouts.items().read(x); if (r != null && r.data != null && d.uid.equals(r.data.uid)) { at = i; break; } }
+                }
+                if (at >= 0 && at != slot) {
+                    ItemStack old = inv.getItem(slot);
+                    inv.setItem(slot, inv.getItem(at));
+                    inv.setItem(at, old);
+                    loadouts.refresh(p);
+                    return d.shortLabel() + "（已放到快捷栏第 " + (slot + 1) + " 格，起步刃移进背包）";
+                }
+            }
+        }
         return d.shortLabel();
+    }
+
+    /** hotbar slot of a T0 starter blade (-1 = none): only that one gets swapped for the first real blade */
+    private int starterBladeSlot(Player p) {
+        for (int i = 0; i < 9; i++) {
+            ItemStack x = p.getInventory().getItem(i);
+            if (x == null || !loadouts.items().hasData(x)) continue;
+            EmberItems.Read r = loadouts.items().read(x);
+            if (r != null && r.ok() && r.data != null && r.data.isBlade() && r.data.tier == 0) return i;
+        }
+        return -1;
     }
 
     // ------------------------------------------------------------------ restart recovery (§20.5)
