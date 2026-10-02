@@ -970,3 +970,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 |---|---|---|---|
 | D80 | 轮换图的新鲜感 | 每周一条玩法规则，三条轮换，奖励不变 | §23.3：不加倍率区、不加产出；模型显示精选通关率 −5～+4 点，印记中位不变 |
 
+### 13.22 P2-9 掉落个性 + 团本定向 + 荣誉（CoreRpg 1.38.0，2026-10-02 22:40 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 参数源 | `ember-v1-runs.yml`（两份）：各图 `loot: {family, slot}`；`loot_bias: {own_family: 0.625, map_share: 0.75, slot: 0.55}`；`raid_item: {quality_floor: 1}`；团本 `loot.family`（R01 burst，R02 sustain）；balance_version 9 |
+| 代码 | EmberRunRules `LootBias`、`pickFamily/pickSlot/familyProbability(…, LootBias)`、`rollItem(…, LootBias)`、`raidItem(in, key, raidFamily, floor)`；SettleInput.loot（团本为 null）；EmberRunMaps `lootFamily/lootSlot/lootBias()/lootLabel()`；EmberCosmetics（称号、足迹、聊天前缀、每 4 tick 足迹粒子） |
+| 命令 / PAPI | `/corerpg p1 title [id\|off]`、`/corerpg p1 trail [id\|off]`；`p1_loot_<图>`、`p1_title`、`p1_honors` |
+| 菜单 | 冒险页 Q01–Q07「偏向」行；挑战页每图「偏向」；图录装备页 w「哪里刷什么」、h「荣誉」（仍是 47 个菜单） |
+| 模型 | `p2econ.py --raid`（新增 `--no-loot`、`--old-raid-item`、`--loot-own`、`--loot-slot`）；`out-p2econ-loot-d050.md`、`out-p2econ-loot-base-d050.md`；p1sim `--no-loot`，`out-p1sim-loot.md` |
+| 测试 | `mapLootIdentityKeepsTheTargetFloorAndRaidItemIsTargeted_P2_9`：概率和为 1、目标族 ≥60%、抽样吻合、raid_item 目标族 + 保底、无目标族回退团本族；实测见 P2 草案 §5f |
+
