@@ -20,7 +20,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §7主路：冒险 · 主线本，从 Q01 灰烬庭院开始；首通开放下一张图。'
+    - 'tell: §7下一步：§f%corerpg_p1_next% §8（冒险 · 主线本）'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:

@@ -217,6 +217,14 @@ public final class EmberRunService implements Listener {
         return EmberRunRules.bountyTiers(mode == null ? null : mode.config().getMapList("bounty.daily"));
     }
 
+    /** New-player polish: the one next thing to do on the main line (first map not yet first-cleared), then the late game. */
+    public String nextStep(PlayerData d) {
+        for (EmberRunMaps.MapDef m : maps.maps.values()) {
+            if (!firstCleared(d, m)) return "首通 " + m.key.toUpperCase(Locale.ROOT) + " " + m.name + "（首通开放下一张图）";
+        }
+        return "主线已完结 · 挑战版 / 深渊 · 余烬层 / 团本 · 每日委托";
+    }
+
     public String bountyLabel(PlayerData d) {
         return EmberRunRules.bountyLine(bountyTiers(), d.periodCount(C_BOUNTY, town.sunshine.corerpg.DailyService.today()));
     }
@@ -1614,6 +1622,7 @@ public final class EmberRunService implements Listener {
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
         if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
+        if ("next".equals(key)) return nextStep(d); // new-player polish %corerpg_p1_next%
         if (key.startsWith("raid_")) { // P2-5 %corerpg_p1_raid_r01%
             EmberRunMaps.MapDef rm = maps.raids.get(key.substring(5));
             return rm == null ? "" : raidLabel(d, rm);

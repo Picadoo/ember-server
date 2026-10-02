@@ -76,6 +76,7 @@ Icons:
       material: glowstone dust
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
       lore:
+        - '§a下一步：§f%corerpg_p1_next%'
         - ''
         - '§7主线本每次 §e30 §7体力（与日常同池）'
         - '§7开本失败退还 · 开打后离开不退'

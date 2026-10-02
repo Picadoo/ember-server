@@ -42,9 +42,12 @@ npcs:
     y: 58.0
     z: 114.5
     yaw: 0.0
-    action: life
-    tell: '§a灰粮：§f面包、竿子、代烤，点菜单就行。'
-    menu: ember_life
+    # 1.36.1: P1 默认模式 → 补给官卖主线本回复药（装备页下方的购买按钮）；旧 ember_life 不再从这里打开
+    action: p1_supply
+    tell: |-
+      §a灰粮：§f回复药 10 余烬币一瓶，装备页下方就能买，进本前补到 5 瓶。
+      §7副本里按数字键切到回复药、按住右键喝；每天第一次倒下会退还那一局喝掉的药。
+    menu: ember_p1_gear
     open_menu: true
 
   ember_dungeon_clerk:
