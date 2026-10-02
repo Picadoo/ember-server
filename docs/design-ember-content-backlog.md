@@ -393,7 +393,7 @@
 - ~~**B2.148**~~ → P1 第二批：书 §19.1 要求显示「下一次突破缺哪项」，二阶觉醒只有判定没有提示（17e18c3 · /corerpg p1 status 与 %corerpg_p1_awaken_next% 显示「下一档 觉醒II 缺：刃 T1→T2、+4→+6；护符 …」；%corerpg_p1_forge_t2%）
 - ~~**B2.149**~~ → P1 第二批：Q04 潮蚀水道（ember_daily_tide 模板，T2，首通胚料 6·核心 6·币 900，开放 Q05/T2 升阶/T2 定向锻造）（aae5109 · 3 房 + 潮闸重卫（冲击圈 + 闸杆推击）；事件在 R1 侧室；侧室旧告示牌只在 Q04 实例开局清除）
 - ~~**B2.150**~~ → P1 第二批：Q05 断塔回廊（ember_daily_spire 模板，T2，首通骨尘 20·胚料 6，记录 Q06 开放）（aae5109 · 塔底厅 → 通道 → 中层环廊（运行时护栏）→ 通道 → 塔冠 + 断塔斧卫（斧刃横扫 + 径向冲击）；r2 门前低栏一排在实例中清除）
-- **B2.151** → P1 第二批：断塔改用通道是对书 §15 / M02「楼梯可步行」的偏离——需要新做一张可走的 ember_daily_spire_v1（楼梯 1 格一阶、环廊外沿与中空有护栏、r2 门前无低栏），做好后 Q05 改 template 并删掉 links/rails/clear（**待做**（地图工作，不在本批））
+- **B2.151** → P1 第二批：断塔改用通道是对书 §15 / M02「楼梯可步行」的偏离——需要新做一张可走的 ember_daily_spire_v1（楼梯 1 格一阶、环廊外沿与中空有护栏、r2 门前无低栏），做好后 Q05 改 template 并删掉 links/rails/clear（**完成** 4ae08a7 · 1.25.0：`P1MapLayout` 白盒 + `P1MapBuilder` `/corerpg spirebuild v1`，Q05 改用 v1，links/rails/clear 删除；机器人禁跳走完三段台阶，源表 §13.8）
 - ~~**B2.152**~~ → 旧日常 断塔回廊（EmberDailySpire）：同一模板楼梯走不上去，清完塔底后玩家上不了中层，环廊清完也上不了顶台（旧有 bug）（5816c63 · DP monster.yml wave1/wave2b 结束时 $teleport 到 (0,70,-6) / (0,76,3)，模板不改）
 - **B2.153** → ember_daily_tide 模板侧室 (6,64,11) 有一块旧告示牌（Q04 实例开局清除（clear:），模板与旧日常 EmberDailyTide 不变；地图重做时一并删除）
 - **B2.154** → 运维：2026-10-02 01:53 CST 机器重启后 MariaDB 软件包与数据目录都没了（重装 MariaDB 11.8；ember 从 2026-10-01 17:37 的备份导回（356 名角色），authme 从 2026-09-27 的 sql 导回（290 个账号）；之后的进度丢失。建议：定时 mysqldump 到持久盘）
@@ -675,7 +675,7 @@
 | ~~**B2.148**~~ | CoreRpg EmberLoadout.nextAwakeningHint / EmberCommand.status / PAPI | 下一档觉醒缺项提示 | **实测 PASS · 勾销**（17e18c3 · 兑换得到的 T2 +0 护符显示「下一档 觉醒II 缺：护符 +0→+6」；T2+6 套显示觉醒II，烬爆 0.80×B 半径 3 · 2026-10-02 03:40 CST） |
 | ~~**B2.149**~~ | ember-v1-runs.yml q04；MM EmberQ04*；DP EmberQ04；TicketEntryService.Kind.Q04；TrMenu ember_p1_adventure | Q04 潮蚀水道 | **实测 PASS · 勾销**（aae5109 · 单人与三人局结算、首通、Q05 开放均正确；实例侧室告示牌已清 · 2026-10-02 03:47 CST） |
 | ~~**B2.150**~~ | ember-v1-runs.yml q05；MM EmberQ05*；DP EmberQ05；TicketEntryService.Kind.Q05；TrMenu ember_p1_adventure | Q05 断塔回廊 | **实测 PASS · 勾销**（aae5109 + 3ddab38 · 单人与三人局（含挂机队员）结算、首通正确 · 2026-10-02 03:58 CST） |
-| **B2.151** | DP map ember_daily_spire_v1（新） | 可步行断塔地图 | **待做** |
+| ~~**B2.151**~~ | DP map ember_daily_spire_v1（新） | 可步行断塔地图 | **完成 · 实测 PASS**（4ae08a7 · 1.25.0 · 2026-10-02 17:46 CST） |
 | ~~**B2.152**~~ | DP EmberDailySpire monster.yml | 旧日常断塔楼梯不可走 | **实测 PASS · 勾销**（5816c63 · ScrapT1 旧日常断塔：清底层后传到环廊、清环廊后传到顶台，通关发奖 · 2026-10-02 04:02 CST） |
 | **B2.153** | DP map ember_daily_tide | 侧室旧告示牌 | **Q04 实例已绕开，模板待改** |
 | **B2.154** | 服务器 MariaDB | 重启丢库，已从备份恢复 | **已恢复（数据回退到备份时间点）** |
