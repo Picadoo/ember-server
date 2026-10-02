@@ -1047,6 +1047,8 @@ public final class EmberRunService implements Listener {
         s.sendMessage(P + "/corerpg p1 target <scorch|burst|sustain|none> — 掉落目标族（入场时快照）");
         s.sendMessage(P + "/corerpg p1 marks [exchange <族> <blade|charm> [阶]] — 8 枚同阶印记换标准件");
         s.sendMessage(P + "/corerpg p1 firstclear <族> — 领取首通自选 · /corerpg p1 claim — 补领暂存奖励");
+        s.sendMessage(P + "/corerpg p1 shop [buy [n]] — 补给商：回复药 " + EmberSupplyService.price() + " 余烬币/瓶（绑定，城内购买）");
+        if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "/corerpg p1 audit [玩家] · audit restore <玩家> <uid前缀> — 物品与 DB 对账 / 补发");
     }
 
     private boolean cmdTarget(CommandSender s, String[] args) {
