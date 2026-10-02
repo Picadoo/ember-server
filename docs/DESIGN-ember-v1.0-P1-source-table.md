@@ -1002,3 +1002,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 菜单 | 冒险页「锻造印记」lore；主菜单轻技、邮寄 lore；好友页「组队 · 队伍面板」点击执行 `dp team`；帮助页的踏步、组队、旧系统（仍是 47 个菜单） |
 | 测试 | `roomLineNamesTheEnemiesAndTheFirstThreat_D89`；实测见 P2 草案 §5i |
 
+### 13.25 修正批（CoreRpg 1.40.2，2026-10-02 23:48 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 代码 | EmberLoadoutService：`loadOwnerItems` 和 `lookupItem` 回调里 `cache.remove`（D93）；EmberRunService：`p1_pending` 不算 ST_AWAIT；EmberCommand status：背包最好成色 |
+| 参数源 | 只改 Q04 `purpose` 文字（币 2100，D31），两份 runs yml 和 `plugins/CoreRpg/ember-v1-runs.yml` 同步；balance_version 10 不变 |
+| 模型 | `tools/p1sim/modnorm.py`：周规则套到普通版的单局通关率参考（`out-modnorm-ref.md`），还没上线 |
+
