@@ -94,6 +94,6 @@ public class EmberItemDataTest {
     }
 
     @Test public void labels() {
-        assertEquals("T2 烬爆刃｜精良｜锋刃4%｜+6", sample().shortLabel());
+        assertEquals("T2 烬爆刃｜成色精良｜精工4%｜+6", sample().shortLabel());
     }
 }

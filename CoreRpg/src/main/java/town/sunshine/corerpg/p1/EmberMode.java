@@ -158,6 +158,7 @@ public final class EmberMode {
             tables = EmberTables.defaults();
             plugin.getLogger().log(Level.WARNING, "[" + MODE_ID + "] bad tables in " + FILE + ", using book defaults: " + ex.getMessage());
         }
+        loadBoardExclude(y);
         checkConflicts();
         plugin.getLogger().info("[" + MODE_ID + "] config enabled=" + configEnabled + " worlds=" + cfgWorlds
                 + " prefixes=" + cfgPrefixes + (blocked ? " BLOCKED: " + blockedReason : ""));
@@ -186,6 +187,39 @@ public final class EmberMode {
             }
         }
         return out;
+    }
+
+    // ---------------------------------------------------------------- D102 test / bot accounts off the boards
+
+    private volatile Set<String> exNames = Collections.emptySet();
+    private volatile List<String> exPrefixes = Collections.emptyList();
+    private volatile List<java.util.regex.Pattern> exPatterns = Collections.emptyList();
+
+    private void loadBoardExclude(YamlConfiguration y) {
+        Set<String> n = new LinkedHashSet<String>();
+        for (String s : y.getStringList("leaderboard_exclude.names")) if (s != null && !s.trim().isEmpty()) n.add(s.trim().toLowerCase(Locale.ROOT));
+        List<String> pf = new ArrayList<String>();
+        for (String s : y.getStringList("leaderboard_exclude.prefixes")) if (s != null && !s.trim().isEmpty()) pf.add(s.trim().toLowerCase(Locale.ROOT));
+        List<java.util.regex.Pattern> pt = new ArrayList<java.util.regex.Pattern>();
+        for (String s : y.getStringList("leaderboard_exclude.patterns")) {
+            if (s == null || s.trim().isEmpty()) continue;
+            try { pt.add(java.util.regex.Pattern.compile(s.trim(), java.util.regex.Pattern.CASE_INSENSITIVE)); }
+            catch (java.util.regex.PatternSyntaxException e) { plugin.getLogger().warning("[" + MODE_ID + "] bad leaderboard_exclude pattern " + s); }
+        }
+        exNames = Collections.unmodifiableSet(n);
+        exPrefixes = Collections.unmodifiableList(pf);
+        exPatterns = Collections.unmodifiableList(pt);
+    }
+
+    /** D102: test / bot accounts never appear on the leaderboards, the hub board or the honors showcase. */
+    public static boolean boardExcluded(String name) {
+        EmberMode m = instance;
+        if (m == null || name == null) return false;
+        String l = name.toLowerCase(Locale.ROOT);
+        if (m.exNames.contains(l)) return true;
+        for (String p : m.exPrefixes) if (l.startsWith(p)) return true;
+        for (java.util.regex.Pattern p : m.exPatterns) if (p.matcher(name).matches()) return true;
+        return false;
     }
 
     // typed config helpers

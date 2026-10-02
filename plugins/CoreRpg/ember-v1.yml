@@ -79,3 +79,18 @@ bounty:
   daily:
     - {clears: 1, coin: 30}
     - {clears: 3, coin: 60, shard: 6}
+
+# D102：测试号 / 机器人不上排行榜、主城排行榜悬浮字和荣誉陈列（名字不区分大小写）。
+# names 精确匹配；prefixes 前缀匹配；patterns 是整名匹配的正则。改完 /corerpg reload 或重启生效。
+leaderboard_exclude:
+  names: [P1Fox, Tester, RpgBot, EmberTestOp, NewbieQ, OpReload, NiReload, ReloadBot, PassBot, PassBot2, PickyBot,
+          SetBot, ThemeBot, TicketBot, WareBot, WeekBot, AbyssBot, AbyssBot2, AbyssBot3, CalAssist, CalBotA, CalBotB,
+          CalBotC, CalWatch, CalWatch2, ArenaA, ArenaB, RaidA, RaidB, RaidC, RaidD, RaidE, RaidProbeA, RaidProbeB,
+          ScrapT1, ProxyT1, QProbe2]
+  prefixes: [Fresh, Rev, CriticNew, SmokeT, QProbe]
+  patterns:
+    - '^P1[A-Z][a-z]+$'                     # P1Alpha / P1Fox / P1Rookie …（套件与模拟测试号）
+    - '^.+(926|0926)$'                      # 9/26 批量测试号（RaidA926、GbL0926 …）
+    - '^Bal[A-Z]{2}\d{4}[a-z]$'            # 平衡模拟号
+    - '^(Afk\dx|Newb|NewP|Main|MainB|Gate|Gap|Pf|Pz|Prog|KillT|KillXp|IpTest|Ashfall|Cinder)\d{4,5}$'
+    - '(?-i)^.*Bot\d*$'                  # …Bot、…Bot2（区分大小写，避免误伤 Abbot）

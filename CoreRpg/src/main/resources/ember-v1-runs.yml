@@ -237,7 +237,7 @@ maps:
     requires: q02
     unlocks: q04
     first_clear: {shard: 30, core: 4, coin: 600}
-    purpose: "首通材料（碎片 30·核心 4·币 600），记录 Q04 开放；常规掉 T1 装备与锻造印记"
+    purpose: "首通材料（碎片 30·核心 4·币 600），开放 Q04；常规掉 T1 装备与锻造印记"
     b_ref: 27
     # D15: book ch. 13 walkable white box (ember_daily_crypt_v1, /corerpg p1 mapbuild q03)
     spawn: [0, 64, 6]

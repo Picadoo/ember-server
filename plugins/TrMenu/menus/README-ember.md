@@ -15,7 +15,7 @@
 | `ember_enhance.yml` | 主菜单「强化」 | 强化命令壳 |
 | `ember_socket.yml` | 主菜单「镶嵌」 | 镶嵌命令壳 |
 | `ember_disassemble.yml` | 主菜单「分解」 | 分解/重铸命令壳 |
-| `ember_guild.yml` | 主菜单「盟约」 | 创建/捐献/周 Boss 壳 |
+| `ember_guild.yml` | 旧系统，D102 起不在主菜单（管理员 trmenu open） | 创建/捐献/周 Boss 壳 |
 | `ember_ladder.yml` | 主菜单「天梯」 | 战力/深渊/竞速壳 |
 | `ember_mail.yml` | 主菜单「邮寄」 | 收件箱/领取/系统发奖壳 |
 | `ember_friends.yml` | 主菜单「好友」 | 列表/申请/组队/师徒壳 |

@@ -92,6 +92,11 @@ public final class FriendService {
             return;
         }
         if ("remove".equals(sub) || "del".equals(sub)) {
+            if (args.length >= 3 && !(args.length >= 4 && "confirm".equalsIgnoreCase(args[3]))) { // D101: confirm first
+                ConfirmTokens.sendButtons(p, PREFIX + ChatColor.YELLOW + "确定和 " + args[2] + " 解除好友？ ",
+                        new String[]{"[确认删除]", "/corerpg friend remove " + args[2] + " confirm", "解除好友，对方会收到提示", "RED"});
+                return;
+            }
             cmdRemove(p, args.length >= 3 ? args[2] : null);
             return;
         }

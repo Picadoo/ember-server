@@ -18,16 +18,16 @@ public class EmberCompareTest {
     @Test public void bookExampleCard() {
         // §19.2: "T2 烬爆刃｜卓越｜锋刃4%｜+6；当前基准攻击组成 42×(1+0.30+0.08+0.04)，角色等级部分另列"
         List<String> c = EmberCompare.card(t, it("burst", "blade", 2, 2, 2, 6, "drop"), 10);
-        assertEquals("§6T2 烬爆刃｜卓越｜锋刃4%｜+6", c.get(0));
-        assertTrue(c.get(1), c.get(1).contains("42×(1+0.30+0.08+0.04) = 59.6"));
-        assertTrue(c.get(1), c.get(1).contains("角色等级另加 §f0"));
+        assertEquals("§6T2 烬爆刃｜成色卓越｜精工4%｜+6", c.get(0));
+        assertTrue(c.get(1), c.get(1).contains("攻击：§f59.6") && c.get(1).contains("×1.42"));
+        assertTrue(c.get(1), c.get(1).contains("余烬等级另加 §f0"));
         assertTrue(c.get(2), c.get(2).contains("烬爆") && c.get(2).contains("≥ T1"));
         assertTrue(c.get(3), c.get(3).contains("绑定") && c.get(3).contains("掉落"));
     }
 
     @Test public void charmCardShowsHpAndDefense() {
         List<String> c = EmberCompare.card(t, it("sustain", "charm", 1, 0, 0, 0, "quest"), 10);
-        assertTrue(c.get(1), c.get(1).contains("20 + 50×(1+0.00+0.00+0.00) = 70"));
+        assertTrue(c.get(1), c.get(1).contains("生命：§f70") && c.get(1).contains("×1.00"));
         assertTrue(c.get(2), c.get(2).contains("防御：§f6") && c.get(2).contains("×0.87"));
         assertTrue(c.get(4), c.get(4).contains("不可分解"));
     }

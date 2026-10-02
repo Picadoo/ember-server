@@ -130,7 +130,7 @@ public final class HubAmbienceService implements Listener {
             List<EmberLeaderboard.Row> f = runs.topRows(false, n);
             if (f.isEmpty()) lines.add("§8暂无，第一名等你");
             for (int i = 0; i < f.size(); i++) lines.add(medal(i) + f.get(i).name + " §7" + f.get(i).value + " 次");
-            lines.add("§8完整榜单：图录 → 装备图鉴 → 荣誉（右键）");
+            lines.add("§8完整榜单和你的名次：主菜单「荣誉与排行」");
             replace(board, loc(w, b.getList("at")), lines);
         }
         ConfigurationSection hs = cfg.getConfigurationSection("honors");
@@ -139,11 +139,11 @@ public final class HubAmbienceService implements Listener {
             lines.add("§d§l荣誉陈列");
             lines.add("§7称号与足迹只做展示，不加属性");
             for (EmberCosmetics.Cosmetic c : EmberCosmetics.ALL) {
-                List<String> who = wall.getStringList(c.id + ".names");
-                lines.add(c.label + " §8· §7" + c.how);
-                lines.add(who.isEmpty() ? "§8  尚无人获得" : "§7  首位 §f" + who.get(0) + " §7· 共 " + who.size() + " 人");
+                List<String> who = new ArrayList<String>(wall.getStringList(c.id + ".names"));
+                who.removeIf(town.sunshine.corerpg.p1.EmberMode::boardExcluded); // D102: no test / bot accounts
+                lines.add(c.label + " §8· §7" + c.how + (who.isEmpty() ? " §8· 尚无人获得" : " §7· 首位 §f" + who.get(0) + " §7· 共 " + who.size() + " 人")); // D103: 9 entries, one line each
             }
-            lines.add("§8装上：图录 → 装备图鉴 → 荣誉");
+            lines.add("§8装上：主菜单 → 荣誉与排行");
             replace(honors, loc(w, hs.getList("at")), lines);
         }
     }
@@ -155,6 +155,7 @@ public final class HubAmbienceService implements Listener {
         if (runs == null || plugin.getDataStore() == null) return;
         boolean dirty = false;
         for (Player p : Bukkit.getOnlinePlayers()) {
+            if (town.sunshine.corerpg.p1.EmberMode.boardExcluded(p.getName())) continue; // D102
             PlayerData d = plugin.getDataStore().get(p.getUniqueId());
             if (d == null) continue;
             int best = runs.abyssBest(d);

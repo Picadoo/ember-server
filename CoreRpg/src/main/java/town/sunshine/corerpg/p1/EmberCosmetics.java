@@ -35,12 +35,21 @@ public final class EmberCosmetics implements Listener {
         public final int abyssTier;   // > 0: earned by abyss best >= this tier
         public final String raid;     // non-null: earned by a clear of this raid key
         public final String particle; // trails only
+        public final String firstClear; // non-null: earned by the first clear of this main map (D103 milestones)
         Cosmetic(String id, Kind kind, String label, String how, int abyssTier, String raid, String particle) {
+            this(id, kind, label, how, abyssTier, raid, particle, null);
+        }
+        Cosmetic(String id, Kind kind, String label, String how, int abyssTier, String raid, String particle, String firstClear) {
             this.id = id; this.kind = kind; this.label = label; this.how = how; this.abyssTier = abyssTier; this.raid = raid; this.particle = particle;
+            this.firstClear = firstClear;
         }
     }
 
     public static final List<Cosmetic> ALL = Collections.unmodifiableList(Arrays.asList(
+            // D103 (midgame #10/#6): milestones on the way, display only — Q01→Q07 took 8–26 days with nothing to show
+            new Cosmetic("q04", Kind.TITLE, "§3潮蚀渡者", "首通 Q04 潮蚀水道", 0, null, null, "q04"),
+            new Cosmetic("q07", Kind.TITLE, "§6锈轨归来", "首通 Q07 锈轨矿道", 0, null, null, "q07"),
+            new Cosmetic("abyss3", Kind.TITLE, "§9深渊初探", "深渊最高通关第 3 层", 3, null, null),
             new Cosmetic("abyss5", Kind.TITLE, "§5深渊行者", "深渊最高通关第 5 层", 5, null, null),
             new Cosmetic("abyss10", Kind.TITLE, "§d§l余烬深渊之主", "深渊最高通关第 10 层", 10, null, null),
             new Cosmetic("r01", Kind.TITLE, "§6锈轨破袭者", "通关团本 R01 锈轨矿道·团", 0, "r01", null),
@@ -56,7 +65,14 @@ public final class EmberCosmetics implements Listener {
     private final EmberRunService runs;
     private final Map<UUID, Location> last = new HashMap<UUID, Location>();
 
-    public EmberCosmetics(EmberRunService runs) { this.runs = runs; }
+    public EmberCosmetics(EmberRunService runs) { this.runs = runs; firstClearOf = runs::firstClearedKey; }
+
+    /** D103: called after a first clear of a main map; says which milestone title it unlocked */
+    void onFirstClear(Player p, String mapKey) {
+        if (p == null || !p.isOnline()) return;
+        for (Cosmetic c : ALL) if (mapKey.equals(c.firstClear))
+            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
+    }
 
     public static Cosmetic byId(String id) {
         for (Cosmetic c : ALL) if (c.id.equalsIgnoreCase(id)) return c;
@@ -66,8 +82,12 @@ public final class EmberCosmetics implements Listener {
     /** raid clears that count for {@code raid} (the earned counter doubles as the clear tally) */
     public static int raidClears(PlayerData d, String raid) { return d == null ? 0 : d.periodCount(C_EARNED + raid, "all"); }
 
+    /** D103: first-clear lookup for milestone titles (set by the constructor; EmberRunService#firstClearedKey) */
+    private static volatile java.util.function.BiPredicate<PlayerData, String> firstClearOf = (d, k) -> false;
+
     public static boolean earned(PlayerData d, int abyssBest, Cosmetic c) {
         if (d == null || c == null) return false;
+        if (c.firstClear != null) return firstClearOf.test(d, c.firstClear);
         if (c.abyssTier > 0) return abyssBest >= c.abyssTier;
         return c.raid != null && raidClears(d, c.raid) > 0;
     }
@@ -84,19 +104,25 @@ public final class EmberCosmetics implements Listener {
         int n = d.addPeriodCount(C_EARNED + raid, "all", 1);
         if (n == 1 && p != null && p.isOnline()) {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
-                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，图录 → 装备图鉴 → 荣誉 装上）");
+                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
         }
     }
 
     void onAbyssBest(Player p, int oldBest, int newBest) {
         if (p == null || !p.isOnline()) return;
         for (Cosmetic c : ALL) if (c.abyssTier > oldBest && c.abyssTier <= newBest)
-            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，图录 → 装备图鉴 → 荣誉 装上）");
+            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「荣誉与排行」右键装上）");
     }
 
     public String titleText(PlayerData d) {
         Cosmetic c = byId(String.valueOf(selected(d, Kind.TITLE)));
         return c == null || !earned(d, runs.abyssBest(d), c) ? "" : c.label;
+    }
+
+    /** D103: menu text — never an empty 「当前称号：」 */
+    public String titleMenuText(PlayerData d) {
+        String t = titleText(d);
+        return t.isEmpty() ? "§7无（右键「荣誉与排行」装上）" : t;
     }
 
     public int earnedCount(PlayerData d) {

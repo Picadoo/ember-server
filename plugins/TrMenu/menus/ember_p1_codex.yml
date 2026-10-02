@@ -68,7 +68,7 @@ Icons:
       name: '§5深渊 · 余烬层'
       lore:
         - '§7%corerpg_p1_abyss_state%'
-        - '§7每层 = 挑战版数值 × 下表系数（表列上限，十层封顶）'
+        - '§7每层 = 挑战版的敌人 × 下表倍率（十层封顶）'
         - '%corerpg_p1_abyss_t1%'
         - '%corerpg_p1_abyss_t2%'
         - '%corerpg_p1_abyss_t3%'

@@ -63,20 +63,80 @@ public final class EmberLoadoutService implements Listener {
         if (store.usable()) store.saveState(p.getUniqueId(), state(p.getUniqueId()));
     }
 
-    /** Cached loadout (re-resolved by {@link #refresh} every second from StatService for P1 players). */
+    /**
+     * Cached loadout. D101: the cache is kept current at its source — every inventory change (held slot, F swap,
+     * clicks, drags, pickups, drops, world change, respawn) schedules one main-thread re-resolve on the next tick
+     * ({@link #markDirty}), in every world, not only for P1 players (StatService refreshes those every second as
+     * well). Before this the hub never refreshed and the gear / abyss pages showed the old main hand.
+     * Off the main thread (TrMenu evaluates placeholders asynchronously) this never resolves the inventory itself:
+     * it hops to the main thread and waits briefly, else returns the last cached value.
+     */
     public EmberLoadout get(Player p) {
         EmberLoadout l = cache.get(p.getUniqueId());
-        return l != null ? l : refresh(p);
+        if (l != null && !dirty.contains(p.getUniqueId())) return l;
+        if (Bukkit.isPrimaryThread()) return refresh(p);
+        final Player fp = p;
+        try {
+            return Bukkit.getScheduler().callSyncMethod(plugin, () -> refresh(fp)).get(750, java.util.concurrent.TimeUnit.MILLISECONDS);
+        } catch (Exception e) {
+            return l != null ? l : EmberLoadout.compute(EmberMode.tables(), null, null, 10);
+        }
     }
+
+    private final java.util.Set<UUID> dirty = ConcurrentHashMap.newKeySet();
+
+    /** D101: the player's inventory may have changed — re-resolve the loadout once on the next tick (debounced). */
+    public void markDirty(final Player p) {
+        if (p == null) return;
+        final UUID id = p.getUniqueId();
+        if (!dirty.add(id)) return;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Player q = Bukkit.getPlayer(id);
+            if (q != null && q.isOnline()) refresh(q); else dirty.remove(id);
+        }, 1L);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onHeld(org.bukkit.event.player.PlayerItemHeldEvent e) { markDirty(e.getPlayer()); }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onSwap(org.bukkit.event.player.PlayerSwapHandItemsEvent e) { markDirty(e.getPlayer()); }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onInvClick(org.bukkit.event.inventory.InventoryClickEvent e) {
+        if (e.getWhoClicked() instanceof Player) markDirty((Player) e.getWhoClicked());
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onInvDrag(org.bukkit.event.inventory.InventoryDragEvent e) {
+        if (e.getWhoClicked() instanceof Player) markDirty((Player) e.getWhoClicked());
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onInvClose(org.bukkit.event.inventory.InventoryCloseEvent e) {
+        if (e.getPlayer() instanceof Player) markDirty((Player) e.getPlayer());
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onDrop(org.bukkit.event.player.PlayerDropItemEvent e) { markDirty(e.getPlayer()); }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onPickup(org.bukkit.event.entity.EntityPickupItemEvent e) {
+        if (e.getEntity() instanceof Player) markDirty((Player) e.getEntity());
+    }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWorld(org.bukkit.event.player.PlayerChangedWorldEvent e) { markDirty(e.getPlayer()); }
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onRespawn(org.bukkit.event.player.PlayerRespawnEvent e) { markDirty(e.getPlayer()); }
 
     public List<String> notes(Player p) {
         List<String> n = notes.get(p.getUniqueId());
         return n == null ? Collections.<String>emptyList() : n;
     }
 
-    public void invalidate(UUID id) { cache.remove(id); }
+    public void invalidate(UUID id) {
+        cache.remove(id);
+        Player p = Bukkit.getPlayer(id);
+        if (p != null) markDirty(p); // D101: re-resolve on the main thread, never lazily from a placeholder thread
+    }
 
     public EmberLoadout refresh(Player p) {
+        if (!Bukkit.isPrimaryThread()) return get(p); // D101: inventory + trust cache are main-thread only
+        dirty.remove(p.getUniqueId());
         List<String> why = new ArrayList<String>();
         EmberPlayerState st = state(p.getUniqueId());
         PlayerInventory inv = p.getInventory();
@@ -150,7 +210,7 @@ public final class EmberLoadoutService implements Listener {
                 final String uid = d.uid;
                 final UUID owner = p.getUniqueId();
                 store.lookupItem(uid, r -> {
-                    if (r != null) { rows.put(uid, r); cache.remove(owner); } // D93
+                    if (r != null) { rows.put(uid, r); invalidate(owner); } // D93 / D101
                 });
             }
             return "DB 记录未找到/查询中";
@@ -273,9 +333,9 @@ public final class EmberLoadoutService implements Listener {
         if (!store.usable()) { st.loaded = true; return; }
         if (st.loaded) return;
         store.ensureSchema();
-        store.loadState(id, st, () -> { Player q = Bukkit.getPlayer(id); if (q != null) refresh(q); });
+        store.loadState(id, st, () -> invalidate(id));
         // D93: the cached loadout computed before the rows arrived said "主手不是有效 P1 刃" until something else refreshed it
-        store.loadOwnerItems(id, m -> { rows.putAll(m); cache.remove(id); });
+        store.loadOwnerItems(id, m -> { rows.putAll(m); invalidate(id); });
     }
 
     private final java.util.Set<UUID> codexLoaded = new java.util.HashSet<UUID>();
@@ -312,6 +372,7 @@ public final class EmberLoadoutService implements Listener {
         Player p = e.getPlayer();
         UUID id = p.getUniqueId();
         cache.remove(id);
+        dirty.remove(id);
         notes.remove(id);
         if (!EmberMode.active()) return;
         EmberPlayerState st = state(id);

@@ -34,17 +34,17 @@ public final class EmberCompare {
     public static List<String> card(EmberTables t, EmberItemData d, int level) {
         List<String> out = new ArrayList<String>();
         out.add("§6" + d.shortLabel());
-        String grow = "(1+" + pct(t.enhance(d.enhance)) + "+" + pct(t.quality(d.quality)) + "+" + pct(t.craft(d.craft)) + ")";
+        @SuppressWarnings("unused")         String grow = "(1+" + pct(t.enhance(d.enhance)) + "+" + pct(t.quality(d.quality)) + "+" + pct(t.craft(d.craft)) + ")";
         double g = EmberFormula.growth(t, d.quality, d.craft, d.enhance);
         if (d.isBlade()) {
             double a = t.weaponA(d.tier);
-            out.add("§7基础攻击：§f" + n(a) + "×" + grow + " = " + n(a * g)
-                    + " §7· 角色等级另加 §f" + n(EmberFormula.levelAttack(t, level)) + "§7（Lv" + level + "）");
+            out.add("§7攻击：§f" + n(a * g) + " §7（成长 ×" + String.format(java.util.Locale.ROOT, "%.2f", g) + "）· 余烬等级另加 §f"
+                    + n(EmberFormula.levelAttack(t, level)) + "§7（Lv" + level + "）"); // D101: no raw formula
         } else if (d.isCharm()) {
             double h = t.charmH(d.tier);
             double def = EmberFormula.defense(t, d.tier);
-            out.add("§7生命：§f20 + " + n(h) + "×" + grow + " = " + n(20 + h * g)
-                    + " §7· 角色等级另加 §f" + n(EmberFormula.levelHp(t, level)) + "§7（Lv" + level + "）");
+            out.add("§7生命：§f" + n(20 + h * g) + " §7（成长 ×" + String.format(java.util.Locale.ROOT, "%.2f", g) + "）· 余烬等级另加 §f"
+                    + n(EmberFormula.levelHp(t, level)) + "§7（Lv" + level + "）");
             out.add("§7防御：§f" + n(def) + "§7（承伤 ×" + pct(EmberFormula.mitigation(t, def)) + "，强化 / 成色 / 精工不改防御）");
         }
         if ("none".equals(d.family) || d.tier < 1) out.add("§7套装：§8T0 / 无族，不组成套装");

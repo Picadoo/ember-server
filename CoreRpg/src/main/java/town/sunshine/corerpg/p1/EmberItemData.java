@@ -169,7 +169,7 @@ public final class EmberItemData {
     public static String familyBlurb(String fam) {
         if ("scorch".equals(fam)) return "焚烬：每 3 次普攻点燃敌人（持续伤害），适合打首领";
         if ("burst".equals(fam)) return "烬爆：每 5 次普攻炸开一圈（3 格范围伤害），适合清一群";
-        if ("sustain".equals(fam)) return "炽愈：生命 ×1.12，每 5 次普攻回一点血，最稳";
+        if ("sustain".equals(fam)) return "炽愈：生命 ×1.12，每 5 次普攻回最大生命 2.5%（觉醒后最多 4%，6 秒一次），最稳";
         return "";
     }
 
@@ -192,8 +192,9 @@ public final class EmberItemData {
     }
 
     public String shortLabel() {
-        return "T" + tier + " " + familyName(family) + slotName(slot) + "｜" + qualityName(quality) + "｜"
-                + (isBlade() ? "锋刃" : "护心") + (craft * 2) + "%｜+" + enhance;
+        // D101 (midgame #4): one name per property — the forge calls them 成色 / 精工, so the item does too
+        return "T" + tier + " " + familyName(family) + slotName(slot) + "｜成色" + qualityName(quality) + "｜精工"
+                + (craft * 2) + "%｜+" + enhance;
     }
 
     @Override public String toString() { return canonical(); }

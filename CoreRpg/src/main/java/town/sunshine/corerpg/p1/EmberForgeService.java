@@ -107,7 +107,7 @@ public final class EmberForgeService implements Listener {
 
     public static void helpLines(CommandSender s) {
         s.sendMessage(P + "锻造请用工坊菜单（主菜单「工坊」或找锻炉师 · 烬砧）：手持余烬刃或护符，先点预览，再点聊天里的确认按钮。");
-        s.sendMessage(P + "可选 rid:<请求ID> 用于重放保护；/corerpg p1 sync 按 DB 同步背包内 P1 装备");
+        if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "可选 rid:<请求ID> 用于重放保护；/corerpg p1 sync 按 DB 同步背包内 P1 装备");
     }
 
     private boolean help(Player p) { helpLines(p); return true; }
@@ -272,6 +272,8 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "之后: " + preview(plan.after) + "（确定成功，预览即结果）");
             p.sendMessage(P + "消耗: " + plan.cost.label());
             warnT0(p, it.data);
+            if (it.data.tier == 1 && !"upgrade".equals(kind)) // D101 (midgame #4)
+                p.sendMessage(P + ChatColor.YELLOW + "T1 到 Q04 之后多半会被 T2 替换；想留着就用升阶（升阶会保留成色和精工）。");
             List<String> lack = lacking(p, plan.cost);
             if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";

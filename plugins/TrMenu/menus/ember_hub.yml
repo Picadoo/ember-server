@@ -1,5 +1,5 @@
 # 余烬主界面（P1 默认模式，D63）— 书 §19.1「一级菜单只需要冒险、装备、工坊、仓库与设置」
-# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；P2-2 深渊 · 余烬层（D70）；P2-5 团本（D75）；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 盟约 / 帮助
+# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；P2-2 深渊 · 余烬层（D70）；P2-5 团本（D75）；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 荣誉与排行 / 帮助（盟约 D102 起不在主菜单）
 # 旧模式入口（挂机 / 日常 / 周常 / 精英 / 深渊 / 团本 / 灾厄 / 誓约 / 天赋 / 使魔 / 旧强化镶嵌附魔 / 商城等）整页留在
 # ember_hub_legacy.yml（不绑定命令，管理员 trmenu open ember_hub_legacy），源表 §13.15 D63
 Title: '§6余烬 · 冒险枢纽'
@@ -126,7 +126,7 @@ Icons:
       lore:
         - ''
         - '§7Q07 首通后的长线挑战：§f%corerpg_p1_abyss_state%'
-        - '§7三房一段 · 十层封顶 · 每段单独付费与结算'
+        - '§7每层 = 随机一张主线图打一局 · 十层封顶 · 每层单独付费与结算'
         - ''
         - '§e➥ §f打开深渊选层'
     actions:
@@ -274,20 +274,31 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_friends'
+  # D102 (midgame recheck #2/#6): the legacy guild (盟约) left the main menu (ember_guild.yml stays for admins);
+  # its slot is now the visible leaderboard / honors entry that used to hide behind 图录 → 装备图鉴 → 荣誉 (right-click)
   Y:
+    update: 40
     display:
-      material: banner
-      name: '§2盟约'
+      material: nether star
+      name: '§d荣誉与排行'
       lore:
         - ''
-        - '§7加入或创建公会，做盟课、打盟 Boss'
-        - '§8创建 · 捐献 · 盟 Boss'
+        - '§7排行榜：深渊最高层 · 本周精选挑战通关'
+        - '§7深渊榜首：§f%corerpg_p1_top_abyss_1%'
+        - '§7称号与足迹：已获得 §f%corerpg_p1_honors% §7· 当前 §f%corerpg_p1_title%'
+        - '§8只做展示，不加属性'
         - ''
-        - '§e➥ §f打开盟约菜单'
+        - '§e➥ §f左键：排行榜（含你的名次）'
+        - '§e➥ §f右键：称号与足迹（查看与装上）'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_guild'
+        - close
+        - 'command: corerpg p1 top'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 title'
   d:
     display:
       material: comparator

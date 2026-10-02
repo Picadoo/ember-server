@@ -339,7 +339,7 @@ public final class EmberRunService implements Listener {
         List<String> problems = new ArrayList<String>();
         for (UUID u : ids) {
             Player p = Bukkit.getPlayer(u);
-            if (p == null || !p.isOnline()) { problems.add("队员不在线：" + u.toString().substring(0, 8)); continue; }
+            if (p == null || !p.isOnline()) { problems.add("队员不在线：" + nameOf(u)); continue; } // D101: a name, not a uuid
             party.add(p);
         }
         final int cost = maps.cost(m);
@@ -353,7 +353,7 @@ public final class EmberRunService implements Listener {
             if (at != null) {
                 if (!abyssOpen(d)) problems.add(p.getName() + " 未开放深渊（需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT) + "）");
                 else if (abyss > abyssMaxStart(d)) problems.add(p.getName() + " 深渊最高只能开第 " + abyssMaxStart(d) + " 层（先完整通关第 " + abyssBest(d) + " 层）");
-                if (d.getCoin() < at.fee) problems.add(p.getName() + " 余烬币不足（本段 " + at.fee + "，当前 " + d.getCoin() + "）");
+                if (d.getCoin() < at.fee) problems.add(p.getName() + " 余烬币不足（这一层 " + at.fee + "，当前 " + d.getCoin() + "）");
             } else if (challenge && !challengeOpen(d)) {
                 problems.add(p.getName() + " 未开放挑战版（需本人首通 " + maps.challenge.requires.toUpperCase(Locale.ROOT) + "）");
             } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears
@@ -378,19 +378,29 @@ public final class EmberRunService implements Listener {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberRunMaps.MapDef q1 = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
             List<String> warn = new ArrayList<String>();
+            boolean noCharm = false;
             if (ls != null && q1 != null && !m.key.equals(q1.key)) for (Player p : party) {
                 if (firstCleared(data(p.getUniqueId()), m)) continue;
                 EmberLoadout l = ls.refresh(p);
                 // D98: Q01 first clear now gives the T1 charm; the T1 blade comes from Q01 drops (Q01 leans to blades)
                 if (l.blade == null || l.blade.tier < 1) warn.add(p.getName() + " 主手还没有 T1 刃：回 Q01 多打几局（Q01 偏向掉刃），拿到会自动放到快捷栏第 1 格");
-                if (l.charm == null || l.charm.tier < 1) warn.add(p.getName() + " 还没有生效的 T1 护符（生命只有一半）：先领 Q01 首通自选的护符（冒险页「首通自选」）");
+                if (l.charm == null || l.charm.tier < 1) {
+                    warn.add(p.getName() + " 还没有生效的 T1 护符（生命只有一半）：先领 Q01 首通自选的护符");
+                    if (p.equals(leader)) noCharm = true;
+                }
             }
             if (!warn.isEmpty()) {
+                // D101 (midgame recheck #1): say the whole rule — both T1 pieces come from Q01; the Q02 first-clear blade
+                // is a second, chosen-family blade (to match the charm), not the way in
+                leader.sendMessage(P + "§e" + m.key.toUpperCase(Locale.ROOT) + " 首通推荐：T1 刃 + T1 护符，两件都来自 Q01"
+                        + "（护符 = Q01 首通自选，刃 = Q01 掉落）。" + (m.key.equals("q02") ? "Q02 首通再送一把自选族 T1 刃，用来和护符凑同族。" : ""));
                 for (String w : warn) leader.sendMessage(P + ChatColor.YELLOW + "⚠ " + w);
                 leader.sendMessage(P + "§7这样首通 " + m.key.toUpperCase(Locale.ROOT) + " 几乎打不过，倒下不退体力。");
-                town.sunshine.corerpg.ConfirmTokens.sendButtons(leader, P,
-                        new String[]{"[回 Q01]", "/corerpg p1 enter " + q1.key, "开一局 Q01（30 体力），刷 T1 刃", "GREEN"},
-                        new String[]{"[仍然进入]", "/corerpg p1 enter " + m.key + " force", "本次不再提醒，直接开本", "RED"});
+                List<String[]> btn = new ArrayList<String[]>();
+                if (noCharm) btn.add(new String[]{"[领 Q01 首通护符]", "/corerpg p1 firstclear", "领取 Q01 首通自选的 T1 护符（选族）", "GREEN"});
+                btn.add(new String[]{"[回 Q01]", "/corerpg p1 enter " + q1.key, "开一局 Q01（30 体力），刷 T1 刃", "GREEN"});
+                btn.add(new String[]{"[仍然进入]", "/corerpg p1 enter " + m.key + " force", "本次不再提醒，直接开本", "RED"});
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(leader, P, btn.toArray(new String[0][]));
                 return true;
             }
         }
@@ -456,7 +466,7 @@ public final class EmberRunService implements Listener {
                 PlayerData pd = data(p.getUniqueId());
                 if (!pd.takeCoin(at.fee)) {
                     for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
-                    for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（本段 " + at.fee + "）");
+                    for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（这一层 " + at.fee + "）");
                     return true;
                 }
                 s.fee.put(p.getUniqueId(), at.fee);
@@ -513,7 +523,7 @@ public final class EmberRunService implements Listener {
         if (s.abyss > 0) {
             EmberRunMaps.AbyssTier t = maps.abyssTier(s.abyss);
             if (t != null) tellRun(s, "§5深渊第 " + s.abyss + " 层 §7· 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
-                    + String.format(Locale.ROOT, "%.2f", t.dmg) + "（在挑战版之上）· 成色 " + qualityLabel(t.quality) + " · 本段打完首领才结算，失败只丢本段");
+                    + String.format(Locale.ROOT, "%.2f", t.dmg) + "（在挑战版之上）· 掉落成色 " + qualityLabel(t.quality) + " · 打完首领才结算，失败只丢这一层的花费");
         }
         potionCheck(s);
         if (vm != null && vm.raid) {
@@ -795,7 +805,10 @@ public final class EmberRunService implements Listener {
         }
         if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, 1);
         if (fresh && m.raid && cosmetics != null) cosmetics.onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
-        if (in.firstClear != null) pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
+        if (in.firstClear != null) {
+            pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
+            if (cosmetics != null) cosmetics.onFirstClear(Bukkit.getPlayer(u), m.key); // D103 milestone titles
+        }
         boolean newBest = s.abyss > 0 && s.abyss > abyssBest(pd);
         int oldBest = abyssBest(pd);
         if (newBest) pd.addPeriodCount(C_ABYSS_BEST, "all", s.abyss - abyssBest(pd)); // P2-2: opens tier + 1
@@ -812,7 +825,7 @@ public final class EmberRunService implements Listener {
         Player p = Bukkit.getPlayer(u);
         if (p != null && p.isOnline() && s.abyss > 0) {
             p.sendMessage(P + "§5深渊第 " + s.abyss + " 层 已完整通关" + (newBest ? " §a· 新纪录，开放第 " + abyssMaxStart(pd) + " 层" : "")
-                    + " §7（下一段需重新确认与付费：冒险页 → 深渊）");
+                    + " §7（下一层需重新确认与付费：冒险页 → 深渊）");
         }
         if (p != null && p.isOnline() && rotation) {
             p.sendMessage(P + "§b本周精选挑战 §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + maps.rotationBonusMarks
@@ -855,7 +868,7 @@ public final class EmberRunService implements Listener {
             StringBuilder lo = new StringBuilder(); // P2-9 (D81) where to farm what
             for (EmberRunMaps.MapDef m : maps.maps.values()) lo.append(lo.length() == 0 ? "" : " · ").append(m.key.toUpperCase(Locale.ROOT)).append(' ').append(EmberRunMaps.lootLabel(m));
             p.sendMessage(P + "§6掉落偏向 §7" + lo + "（目标族仍至少 60%；挑战 / 深渊同图同偏向）");
-            p.sendMessage(P + "§6团本额外装备 §7按你的目标族，成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（图录 → 装备图鉴 → 荣誉）");
+            p.sendMessage(P + "§6团本额外装备 §7按你的目标族（没选就按团本偏向族），成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（主菜单「荣誉与排行」）");
             return true;
         }
         java.util.List<Integer> can = EmberCodex.claimable(d);
@@ -1524,9 +1537,9 @@ public final class EmberRunService implements Listener {
             try { t = Integer.parseInt(args[2]); } catch (NumberFormatException e) { t = "next".equalsIgnoreCase(args[2]) ? abyssMaxStart(d) : -1; }
             return tryEnterAbyss(p, t);
         }
-        p.sendMessage(P + "§5深渊 · 余烬层 §7— 每段 = 一张已验收主线图（3 房 + 首领，按种子抽），挑战版数值 × 层系数；共 "
+        p.sendMessage(P + "§5深渊 · 余烬层 §7— 每层 = 随机一张主线图打一局（3 房 + 首领），打赢第 N 层开放第 N+1 层；共 "
                 + maps.abyss.size() + " 层封顶");
-        p.sendMessage(P + "§7每段单独确认：" + maps.cost + " 体力 + 层费（余烬币）；进本失败 / 开战前中止 / 重启 全退；打完首领才结算，失败只丢本段，不掉装备不降强化");
+        p.sendMessage(P + "§7每层单独确认：" + maps.cost + " 体力 + 层费（余烬币）；进本失败 / 开战前中止 / 重启 全退；打完首领才结算，失败只丢这一层的花费，不掉装备不降强化");
         if (!abyssOpen(d)) { p.sendMessage(P + "§c需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)); return true; }
         p.sendMessage(P + "最高通关 第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层 · 余烬币 " + d.getCoin());
         for (EmberRunMaps.AbyssTier t : maps.abyss) p.sendMessage(P + abyssLine(d, t));
@@ -1534,10 +1547,18 @@ public final class EmberRunService implements Listener {
         return true;
     }
 
+    /** D101: a player's name for messages (offline players too), never a raw uuid */
+    static String nameOf(UUID u) {
+        org.bukkit.OfflinePlayer op = Bukkit.getOfflinePlayer(u);
+        String n = op == null ? null : op.getName();
+        return n == null ? "（未知玩家）" : n;
+    }
+
     String abyssLine(PlayerData d, EmberRunMaps.AbyssTier t) {
         String st = t.index <= abyssBest(d) ? "§a已通关" : t.index <= abyssMaxStart(d) ? "§e可开" : "§8未开放";
         return "§d第 " + t.index + " 层 " + st + " §7· 生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
-                + String.format(Locale.ROOT, "%.2f", t.dmg) + " · 成色 " + qualityLabel(t.quality) + " · 费 " + t.fee + " 币";
+                + String.format(Locale.ROOT, "%.2f", t.dmg) + " · 掉落成色 " + qualityLabel(t.quality) + " · 费 " + t.fee + " 币"
+                + (t.index == 1 ? " §8（= 挑战版强度，热身用）" : "");
     }
 
     static String qualityLabel(int[] q) {
@@ -1880,6 +1901,13 @@ public final class EmberRunService implements Listener {
         EmberRunMaps.MapDef fm = maps.byKey(featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
         p.sendMessage(P + "§b本周精选挑战通关" + (fm == null ? "" : "（" + fm.key.toUpperCase(Locale.ROOT) + " " + fm.name + "）") + "：" + (f.isEmpty() ? "§7暂无" : ""));
         for (int i = 0; i < f.size(); i++) p.sendMessage(P + "§f" + (i + 1) + ". " + f.get(i).name + " §7" + f.get(i).value + " 次");
+        if (p instanceof Player) { // D102: where am I
+            Player me = (Player) p;
+            int[] ra = top.rankOf(me.getUniqueId(), true, wk), rf = top.rankOf(me.getUniqueId(), false, wk);
+            p.sendMessage(P + "§e你：§f深渊 " + (ra == null ? "未上榜（最高第 " + abyssBest(data(me.getUniqueId())) + " 层）" : "第 " + ra[1] + " 层 · 第 " + ra[0] + " 名")
+                    + " §7｜ §f精选 " + (rf == null ? "本周还没有挑战通关" : rf[1] + " 次 · 第 " + rf[0] + " 名"));
+            p.sendMessage(P + "§8同分时先达到的人排前面 · 测试号不上榜");
+        }
         return true;
     }
 
@@ -1896,7 +1924,8 @@ public final class EmberRunService implements Listener {
         EmberRunMaps.Modifier mod = maps.modifierFor(today);
         EmberRunMaps.MapDef m = maps.byKey(key);
         boolean on = m != null && firstCleared(d, m);
-        return "§b· 本周规则「" + mod.name + "」" + (on ? "" : "§8（只影响首通后的重打）");
+        // D101 (midgame #9): say plainly that the normal-run rule only adds difficulty
+        return "§b· 本周规则「" + mod.name + "」§8（" + (on ? "" : "只影响首通后的重打，") + "只加难度；额外印记在 Q07 后的挑战版）";
     }
 
     /** P2-8 %corerpg_p1_modifier%: this week's featured-map rule, e.g. 「限药：本局最多喝 3 瓶回复药」 */
@@ -1965,7 +1994,7 @@ public final class EmberRunService implements Listener {
             EmberLeaderboard.Row r = rows.get(i - 1);
             return r.name + " · " + (ab ? "第 " + r.value + " 层" : r.value + " 次");
         }
-        if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleText(d); // P2-9 %corerpg_p1_title%
+        if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleMenuText(d); // P2-9 %corerpg_p1_title% (D103: never empty)
         if ("honors".equals(key)) return cosmetics == null ? "0/0" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size();
         if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm) + lootOdds(d, lm); }
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
@@ -1997,7 +2026,7 @@ public final class EmberRunService implements Listener {
                 case "stats": return String.format(Locale.ROOT, "攻击 %.1f · 生命 %.0f · 防御 %.0f（承伤 ×%.2f）· Lv%d",
                         l.b, l.h, l.d, l.m, l.level);
                 case "ehp": return String.format(Locale.ROOT, "%.0f", l.ehp());
-                case "blade": return l.blade == null ? "主手不是有效 P1 刃" : l.blade.shortLabel();
+                case "blade": return l.blade == null ? "主手没拿余烬刃" : l.blade.shortLabel();
                 case "charm": return l.charm == null ? "未选定护符" : l.charm.shortLabel();
                 default: return l.nextAwakeningHint();
             }

@@ -276,18 +276,19 @@ public final class EmberCommand {
                 if (pending) s.sendMessage(P + "§e（正在向数据库校验，2 秒后再点一次数字更准）");
                 s.sendMessage(P + "§e选定这件护符后" + (before.blade == null ? "（没有可配的刃）" : "（配 " + before.blade.shortLabel() + "）") + "：");
                 for (String line : EmberCompare.diff(before, after)) s.sendMessage(P + "  " + line);
-                s.sendMessage(P + "§8确定要换：手持它点装备页「已选护符」，或 /corerpg p1 charm select");
+                s.sendMessage(P + "§8确定要换：手持它点装备页「已选护符」");
             }
         } else if (d.isBlade()) {
             boolean live = cur.blade != null && cur.blade.uid.equals(d.uid);
-            s.sendMessage(P + (live ? "§a主手生效中" : pending ? "§e正在向数据库校验这件装备，2 秒后再点一次"
-                    : "§c主手没有生效：" + String.join("; ", loadouts.notes(p))));
-            s.sendMessage(P + "§7当前：B " + EmberCompare.n(cur.b) + " · 生命 " + EmberCompare.n(cur.h) + " · " + cur.setLabel()
+            boolean admin = s.hasPermission("corerpg.admin");
+            s.sendMessage(P + (live ? "§a主手生效中" : pending ? "§e正在核对这件装备，2 秒后再点一次"
+                    : "§c这把没有生效" + (admin ? "：" + String.join("; ", loadouts.notes(p)) : "（要拿在主手；同一件只能有一份）")));
+            s.sendMessage(P + "§7当前：攻击 " + EmberCompare.n(cur.b) + " · 生命 " + EmberCompare.n(cur.h) + " · " + cur.setLabel()
                     + " §8· " + cur.nextAwakeningHint());
             s.sendMessage(P + "§8比较两把刃：切换快捷栏后再看一次（只有主手那把生效）");
         }
+        if (!s.hasPermission("corerpg.admin")) return true; // D101: ids are for admins only
         s.sendMessage(P + "§8uid=" + d.uid + " ni=" + d.ni + " ver=" + d.version + " rev=" + d.rev);
-        if (!s.hasPermission("corerpg.admin")) return true;
         s.sendMessage(P + "fam=" + d.family + " slot=" + d.slot + " T" + d.tier + " q=" + d.quality + " craft=" + d.craft
                 + " +" + d.enhance + " pity=" + d.pity + " bound=" + d.bound + " src=" + d.source);
         s.sendMessage(P + "NBT 校验: " + (r.ok() ? ChatColor.GREEN + "OK" : ChatColor.RED + r.problem));

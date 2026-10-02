@@ -748,7 +748,8 @@ public class EmberRunRulesTest {
         assertEquals(EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString(),
                 EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString());
         // cosmetics: no stats anywhere, abyss titles by best tier
-        assertEquals(6, EmberCosmetics.ALL.size());
+        assertEquals(9, EmberCosmetics.ALL.size()); // D103: + q04 / q07 / abyss3 milestones
+        assertEquals("q04", EmberCosmetics.byId("q04").firstClear);
         assertEquals(5, EmberCosmetics.byId("abyss5").abyssTier);
         assertNull(EmberCosmetics.byId("nope"));
     }
