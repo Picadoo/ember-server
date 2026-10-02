@@ -57,15 +57,15 @@ abyss:
   # hp / dmg multiply the challenge values; quality = 标准/精良/卓越/极品 weights; fee = 余烬币 per segment
   tiers:
     - {hp: 1.00, dmg: 1.00, quality: [60, 28, 10, 2], fee: 0}
-    - {hp: 1.06, dmg: 1.03, quality: [57, 30, 11, 2], fee: 60}
-    - {hp: 1.12, dmg: 1.06, quality: [54, 31, 12, 3], fee: 120}
-    - {hp: 1.18, dmg: 1.09, quality: [51, 32, 14, 3], fee: 180}
-    - {hp: 1.24, dmg: 1.12, quality: [48, 33, 16, 3], fee: 240}
-    - {hp: 1.30, dmg: 1.15, quality: [45, 34, 17, 4], fee: 300}
-    - {hp: 1.36, dmg: 1.18, quality: [42, 35, 19, 4], fee: 360}
-    - {hp: 1.42, dmg: 1.21, quality: [40, 35, 21, 4], fee: 420}
-    - {hp: 1.48, dmg: 1.24, quality: [38, 35, 22, 5], fee: 480}
-    - {hp: 1.55, dmg: 1.27, quality: [36, 35, 24, 5], fee: 540}
+    - {hp: 1.05, dmg: 1.02, quality: [57, 29, 11, 3], fee: 60}
+    - {hp: 1.10, dmg: 1.04, quality: [54, 30, 12, 4], fee: 120}
+    - {hp: 1.15, dmg: 1.06, quality: [51, 31, 13, 5], fee: 180}
+    - {hp: 1.20, dmg: 1.08, quality: [48, 32, 14, 6], fee: 240}
+    - {hp: 1.25, dmg: 1.10, quality: [45, 33, 15, 7], fee: 300}
+    - {hp: 1.30, dmg: 1.12, quality: [42, 34, 16, 8], fee: 360}
+    - {hp: 1.35, dmg: 1.14, quality: [39, 35, 17, 9], fee: 420}
+    - {hp: 1.40, dmg: 1.16, quality: [36, 36, 18, 10], fee: 480}
+    - {hp: 1.45, dmg: 1.18, quality: [33, 37, 18, 12], fee: 540}
 
 maps:
   q01:

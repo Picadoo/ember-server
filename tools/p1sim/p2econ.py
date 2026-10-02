@@ -207,8 +207,8 @@ def main():
             else:
                 res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode == 'rot', per_day, runs))
     print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
-    print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
-    print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
+    print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
+    print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
     for w in (1, 2, 4, 8, 12):
         if w > a.weeks:
             continue
@@ -217,10 +217,11 @@ def main():
             if not rows:
                 continue
             n = len(rows)
-            print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d | %d | %.1f | %d%% | %s | %s |' % (
+            print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d%% | %d | %d | %.1f | %d%% | %s | %s |' % (
                 w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊'}[mode], round(100 * sum(r['set'] for r in rows) / n),
                 statistics.median(r['enh'] for r in rows), round(100 * sum(r['q'] >= 2 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 2 for r in rows) / n), round(100 * sum(r['q'] >= 3 for r in rows) / n),
+                round(100 * sum(r['qmin'] >= 3 for r in rows) / n),
                 statistics.median(r['coin'] for r in rows), statistics.median(r['marks'] for r in rows),
                 statistics.median(r['B'] for r in rows), round(100 * statistics.mean(r['ch'] for r in rows) / (w * 7 * per_day)),
                 ('%d' % statistics.median(r['best'] for r in rows)) if mode == 'abyss' else '—',
