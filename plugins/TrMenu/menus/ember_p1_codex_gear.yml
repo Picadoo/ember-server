@@ -18,7 +18,7 @@ Options:
 
 Layout:
   - '####I####'
-  - '#xy  b  B'
+  - '#xy  b  Z'
   - '#ABC DEF#'
   - '#GHJ KLM#'
   - '#NOP QRS#'
@@ -57,7 +57,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'menu: ember_p1_codex'
 
-  B:
+  Z:
     display:
       material: arrow
       name: '§7返回图录'
