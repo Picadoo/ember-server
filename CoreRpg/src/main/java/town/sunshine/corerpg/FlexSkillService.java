@@ -190,6 +190,16 @@ public final class FlexSkillService implements Listener {
                 + ChatColor.GRAY + " · CD " + def.cooldownSeconds + "s · 零体力");
     }
 
+    /** D91 onboarding: the book's step (§4.2) is part of every kit, so new players start with it equipped. */
+    public boolean autoEquipStarter(Player player) {
+        if (!enabled || !isEquippable(PILOT_ID)) return false;
+        PlayerData data = dataStore.get(player.getUniqueId());
+        if (data == null || data.hasFlexSkill()) return false;
+        data.setFlexSkillId(PILOT_ID);
+        dataStore.flushMutation(player.getUniqueId());
+        return true;
+    }
+
     public void cmdUnequip(Player player) {
         PlayerData data = dataStore.get(player.getUniqueId());
         if (!data.hasFlexSkill()) {

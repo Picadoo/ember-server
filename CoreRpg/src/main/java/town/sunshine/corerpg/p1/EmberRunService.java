@@ -1437,6 +1437,9 @@ public final class EmberRunService implements Listener {
         deliver(p);
         EmberSupplyService sup = plugin.getEmberSupplies();
         if (sup != null) sup.giveStarter(p); // B2.169 / D28: §3.1 基础补给, once (guarded by C_STARTER above)
+        town.sunshine.corerpg.FlexSkillService fx = plugin.getFlexSkillService();
+        if (fx != null && fx.autoEquipStarter(p)) // D91
+            p.sendMessage(P + "§e踏步已装配：§f潜行 + Q §7向前短位移 5 格（冷却 14 秒），用来躲首领的地面预警。");
     }
 
     // ------------------------------------------------------------------ commands
