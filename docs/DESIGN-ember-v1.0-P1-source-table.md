@@ -1010,3 +1010,13 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 参数源 | 只改 Q04 `purpose` 文字（币 2100，D31），两份 runs yml 和 `plugins/CoreRpg/ember-v1-runs.yml` 同步；balance_version 10 不变 |
 | 模型 | `tools/p1sim/modnorm.py`：周规则套到普通版的单局通关率参考（`out-modnorm-ref.md`），还没上线 |
 
+### 13.26 普通版周规则（CoreRpg 1.41.0，2026-10-03 00:00 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 参数源 | `ember-v1-runs.yml`（两份）`rotation.modifiers` 里 lean、reverse 加 `normal: true`；balance_version 11 |
+| 代码 | EmberRunMaps.Modifier `normal`；EmberRunService.enter：普通版、非深渊、非团本、精选图、规则 normal、全队都已首通 → `s.modifier`；`normalRule()`、`ruleLine()`，PAPI `p1_rule_<图>` |
+| 菜单 | 冒险页 Q01–Q07 状态行加规则；挑战页规则说明 |
+| 模型 | `p1sim.py --normal-mods [all]`、`p2econ.py --normal-mods [all]`；输出 `out-p1sim-nm*.md`、`out-p2econ-nm*.md` |
+| 测试 | EmberRunRulesTest：balance 11 / `g04-1/b11`，lean、reverse 是 normal，casters 不是；实测见 P2 草案 §5j |
+
