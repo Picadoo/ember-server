@@ -926,3 +926,18 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 
 实测（21:00–21:09 CST）：5 个机器人通关（用了 weaken），5 人都结算，周计数 1/3；断线 14 秒后回到安全点；重启后退还 50 体力。TTK 对比没做（用了 weaken）。
 
+### 13.19 P2-6 团本 R02 霜封哨所·团 + 团本合计周上限（CoreRpg 1.35.0 → 1.35.1，2026-10-02 21:25 / 21:31 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 参数源 | `raids.r02`，r01 / r02 都加 `cap_group: raid`；balance_version 6 |
+| 模型 | `p1party.py --raid r02`（`out-p1party-r02-w2.md` / `-w4.md`）；`p2econ.py --raid`（`out-p2econ-raid-d050.md`） |
+| 代码 | EmberRunMaps `capGroup`；EmberRunService `capKey`（周计数和菜单标签）；EmberRunDirector 顶层招式按 `below` 分阶段，进入第二阶段时提示；1.35.1 倒下的人重新进入实例后放回观战 |
+| 副本 / 菜单 | DP `EmberQ0R2`（从 EmberQ06 复制，3～5 人）；冒险页 R、主菜单 h、图录 J；套件 Hub 检查要求「霜封哨所·团」 |
+| 测试 | `secondRaidSharesTheWeeklyCapAndGatesItsSecondPhase_P2_6` |
+
+| # | 问题 | 裁决 | 理由 |
+|---|---|---|---|
+| D77 | 第二个团本 | Q06 地图，首领只用已有招式，靠半血后的第二阶段施压，不加增援 | 书 §18.4；和 R01（冲撞 + 增援）打法不同；首领生命 13000 时第 4 周 3～5 人通关率 60～78%，和 R01 同档 |
+| D78 | 团本周上限 | 两本合计每周 3 次 | p2econ：团本不让奖励膨胀（第 8 周两件极品 22% → 17%，各 3 次是 25%），合计上限更保守，团本保持每周活动的定位 |
+
