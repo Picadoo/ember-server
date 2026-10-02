@@ -356,7 +356,7 @@ public final class FlexSkillService implements Listener {
             map = new HashMap<String, Long>();
             cooldowns.put(uuid, map);
         }
-        map.put(skillId, Long.valueOf(System.currentTimeMillis() + seconds * 1000L));
+        map.put(skillId, Long.valueOf(nowMs() + seconds * 1000L));
     }
 
     private long remainingCooldownMs(UUID uuid, String skillId) {
@@ -364,7 +364,7 @@ public final class FlexSkillService implements Listener {
         if (map == null) return 0L;
         Long exp = map.get(skillId);
         if (exp == null) return 0L;
-        long left = exp.longValue() - System.currentTimeMillis();
+        long left = exp.longValue() - nowMs();
         if (left <= 0) {
             map.remove(skillId);
             return 0L;
@@ -409,8 +409,17 @@ public final class FlexSkillService implements Listener {
         cast(player);
     }
 
+    /** Monotonic ms (book §20.6: a system clock change must not shorten or reset a cooldown). */
+    private static long nowMs() { return System.nanoTime() / 1000000L; }
+
+    /** Book §20.6 / G05: relogging must not reset the step cooldown, so only expired entries are dropped here. */
     public void onQuit(UUID uuid) {
         if (uuid == null) return;
-        cooldowns.remove(uuid);
+        Map<String, Long> map = cooldowns.get(uuid);
+        if (map == null) return;
+        long now = nowMs();
+        java.util.Iterator<Map.Entry<String, Long>> it = map.entrySet().iterator();
+        while (it.hasNext()) if (it.next().getValue().longValue() <= now) it.remove();
+        if (map.isEmpty()) cooldowns.remove(uuid);
     }
 }
