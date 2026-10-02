@@ -320,7 +320,13 @@ final class EmberRunDirector {
         AttributeInstance a = le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (a != null) a.setBaseValue(hp);
         le.setHealth(Math.min(hp, le.getMaxHealth()));
+        if (le.getMaxHealth() < hp - 0.5 && !hpCapWarned) { // spigot.yml settings.attribute.maxHealth.max clamps silently
+            hpCapWarned = true;
+            svc.log().warning(String.format(Locale.ROOT, "[P1 run] %s max HP clamped: wanted %.0f, got %.0f — raise spigot.yml attribute.maxHealth.max",
+                    s.runId, hp, le.getMaxHealth()));
+        }
     }
+    private boolean hpCapWarned;
 
     private void spawnBoss(long now) {
         EmberRunMaps.Boss b = def.boss;

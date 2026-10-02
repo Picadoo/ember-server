@@ -29,7 +29,7 @@ settings:
   netty-threads: 4
   attribute:
     maxHealth:
-      max: 20000.0
+      max: 1000000.0
     movementSpeed:
       max: 2048.0
     attackDamage:
