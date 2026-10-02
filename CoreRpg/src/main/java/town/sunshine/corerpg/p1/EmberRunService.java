@@ -237,6 +237,13 @@ public final class EmberRunService implements Listener {
             if (EmberRunRules.ST_AWAIT.equals(r.status)) return "领取首通自选：点聊天里的族名，或冒险页「首通自选」";
         EmberRunMaps.MapDef first = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
         if (first != null && firstCleared(d, first) && target(d) == null) return "选掉落目标族（冒险页第 4 行）：之后 60% 掉你选的套装";
+        if (u != null && first != null && firstCleared(d, first)) { // D96: Q02 needs a T1 charm (p1sim: 0 % with the T0 one)
+            Player op = Bukkit.getPlayer(u);
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            EmberLoadout l = op == null || ls == null ? null : ls.get(op);
+            if (l != null && (l.charm == null || l.charm.tier < 1))
+                return "在 Q01 刷到一件 T1 护符（生命约翻倍，拿到自动生效），再去首通 Q02";
+        }
         for (EmberRunMaps.MapDef m : maps.maps.values()) {
             if (!firstCleared(d, m)) return "首通 " + m.key.toUpperCase(Locale.ROOT) + " " + m.name + "（首通开放下一张图）";
         }
@@ -361,6 +368,25 @@ public final class EmberRunService implements Listener {
             for (Player p : party) for (String s : problems) p.sendMessage(P + ChatColor.RED + s);
             if (!party.contains(leader)) for (String s : problems) leader.sendMessage(P + ChatColor.RED + s);
             return true;
+        }
+        // D96: a first attempt at Q02+ without a T1 blade in hand or a selected T1 charm is a near-certain death (p1sim
+        // 0 % even at dodge 0.5) that costs a third of the day's stamina: warn once, entering stays the player's choice.
+        if (!challenge && abyss == 0 && !m.raid && !forcedReady.remove(leader.getUniqueId())) {
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            EmberRunMaps.MapDef q1 = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
+            List<String> warn = new ArrayList<String>();
+            if (ls != null && q1 != null && !m.key.equals(q1.key)) for (Player p : party) {
+                if (firstCleared(data(p.getUniqueId()), m)) continue;
+                EmberLoadout l = ls.refresh(p);
+                if (l.blade == null || l.blade.tier < 1) warn.add(p.getName() + " 主手不是 T1 以上的刃（Q01 首通自选或掉落）");
+                if (l.charm == null || l.charm.tier < 1) warn.add(p.getName() + " 还没有生效的 T1 护符（生命只有一半）：先在 Q01 刷一件，拿到会自动生效");
+            }
+            if (!warn.isEmpty()) {
+                for (String w : warn) leader.sendMessage(P + ChatColor.YELLOW + "⚠ " + w);
+                town.sunshine.corerpg.ConfirmTokens.sendButton(leader, P + "§7这样首通 " + m.key.toUpperCase(Locale.ROOT) + " 几乎打不过，倒下不退体力。确定还要进？",
+                        "[仍然进入]", "/corerpg p1 enter " + m.key + " force", "本次不再提醒，直接开本");
+                return true;
+            }
         }
         // create the session first (seed, snapshot, extra event fixed now — never re-rolled on reconnect)
         final EmberRunSession s = new EmberRunSession();
@@ -1472,6 +1498,7 @@ public final class EmberRunService implements Listener {
                 return true;
             case "enter":
                 if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07> [challenge]"); return true; }
+                if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) forcedReady.add(((Player) s).getUniqueId()); // D96
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
             default:
@@ -1650,6 +1677,9 @@ public final class EmberRunService implements Listener {
         return true;
     }
 
+    /** D96: leaders who clicked [仍然进入] skip the readiness warning once */
+    private final java.util.Set<UUID> forcedReady = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
+
     /** admin test hook: the next started run uses this extra event instead of the seeded roll (one shot). */
     private volatile EmberRunRules.Extra forcedExtra;
     /** P2-8 admin test hook: the next challenge run uses this weekly rule (one shot). */
@@ -1660,7 +1690,7 @@ public final class EmberRunService implements Listener {
         String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
         if (admin && "modifier".equals(op) && args.length >= 4) { // P2-8 test hook: next challenge run (any map) uses this rule
             forcedModifier = "clear".equalsIgnoreCase(args[3]) ? null : maps.modifier(args[3]);
-            s.sendMessage(P + "下一局挑战规则（仅一次，测试用）= " + (forcedModifier == null ? "按周" : forcedModifier.id));
+            s.sendMessage(P + "下一局规则（挑战或精选图普通版，仅一次，测试用）= " + (forcedModifier == null ? "按周" : forcedModifier.id));
             return true;
         }
         if (admin && "extra".equals(op) && args.length >= 4) {

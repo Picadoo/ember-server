@@ -133,7 +133,7 @@ public final class EmberForgeService implements Listener {
     }
 
     private Slot check(Player p, int index, ItemStack st) {
-        if (st == null || !items().hasData(st)) return new Slot(index, st, null, "请手持 P1 装备（ember_v1）");
+        if (st == null || !items().hasData(st)) return new Slot(index, st, null, "请手持余烬 P1 装备（刃或护符）");
         EmberItems.Read r = items().read(st);
         if (r == null || !r.ok()) return new Slot(index, st, null, "物品不可信: " + (r == null ? "无数据" : r.problem) + "（可试 /corerpg p1 sync）");
         String t = loadouts.trust(p, r.data);
@@ -143,6 +143,20 @@ public final class EmberForgeService implements Listener {
     }
 
     // ================================================================== payment
+
+    /** D96: where a missing forge input comes from (first-week players did not know where 胚料 / 核心 drop). */
+    private String sources(List<String> lack) {
+        java.util.LinkedHashSet<String> out = new java.util.LinkedHashSet<String>();
+        for (String l : lack) {
+            String n = l.replaceAll("§.", "");
+            if (n.contains("胚料")) out.add("胚料：分解多余的掉落件（T1/T2/T3 = 1/2/3 个）· Q04、Q05、Q07 首通");
+            else if (n.contains("核心")) out.add("核心碎片：每局通关 2 · Q03、Q04、Q06、Q07 首通");
+            else if (n.contains("骨尘")) out.add("骨尘：每局通关 6 · Q05 首通 20");
+            else if (n.contains("碎片")) out.add("碎片：每局通关 24 · 每日委托第 3 局 +6");
+            else if (n.contains("余烬币")) out.add("余烬币：每局通关 300 · 每日委托 · 首通");
+        }
+        return out.isEmpty() ? null : "§8来源：" + String.join("；", out);
+    }
 
     private List<String> lacking(Player p, Cost c) {
         List<String> out = new ArrayList<String>();
@@ -230,7 +244,7 @@ public final class EmberForgeService implements Listener {
                     + "%  本档第 " + EmberUpgradeRules.attemptNo(d) + "/" + max + " 次" + (EmberUpgradeRules.guaranteed(d) ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY : ""));
             p.sendMessage(P + "每次消耗: " + c.cost.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
             List<String> lack = lacking(p, c.cost);
-            if (!lack.isEmpty()) p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
+            if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", "[确认强化]", "/corerpg p1 enhance confirm",
                     "强化手持装备一次（扣上面的材料）"); // D95: no typed command
             return true;
@@ -252,7 +266,7 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "之后: " + preview(plan.after) + "（确定成功，预览即结果）");
             p.sendMessage(P + "消耗: " + plan.cost.label());
             List<String> lack = lacking(p, plan.cost);
-            if (!lack.isEmpty()) p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
+            if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";
             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", label,
                     "/corerpg p1 " + ("quality".equals(kind) ? "refine quality" : kind) + " confirm", "按上面的预览执行（扣上面的材料）"); // D95
@@ -280,6 +294,13 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "分解 " + it.data.shortLabel() + " → 胚料 ×" + blanks + "（不退强化材料与金币，物品永久销毁）");
             if (it.data.isBlade() && onlyBlade(p, it.index))
                 p.sendMessage(P + ChatColor.RED + "⚠ 这是你背包里唯一的 P1 刃，分解后新模式副本内将没有可用武器");
+            if (it.data.enhance > 0 || it.data.quality >= 1 || it.data.craft > 0) { // D96: invested / good items get a louder warning
+                List<String> inv = new ArrayList<String>();
+                if (it.data.enhance > 0) inv.add("强化 +" + it.data.enhance);
+                if (it.data.quality >= 1) inv.add("成色 " + EmberItemData.qualityName(it.data.quality));
+                if (it.data.craft > 0) inv.add("精炼过");
+                p.sendMessage(P + ChatColor.RED + "⚠ 这件已投入：" + String.join(" · ", inv) + "，分解只给胚料 ×" + blanks + "，这些投入全部丢失");
+            }
             String t = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1dismantle", fp);
             town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "物品将被永久销毁：", "[确认分解]",
                     "/corerpg p1 dismantle confirm tok:" + t, "分解 " + it.data.shortLabel() + "\n物品永久销毁，不可撤销");
@@ -331,7 +352,12 @@ public final class EmberForgeService implements Listener {
             int off = offhandIndex(inv);
             b = check(p, off, inv.getItemInOffHand());
         }
-        if (b.error != null) { p.sendMessage(P + ChatColor.RED + "对方: " + b.error); return true; }
+        if (b.error != null) { // D96: say how the swap works instead of "对方: 请手持…"
+            if (target == null && (inv.getItemInOffHand() == null || !items().hasData(inv.getItemInOffHand())))
+                p.sendMessage(P + ChatColor.RED + "互换要两件同部位装备：主手拿一件，副手（F 键换手）拿另一件，再点预览。");
+            else p.sendMessage(P + ChatColor.RED + "另一件：" + b.error);
+            return true;
+        }
         EmberUpgradeRules.SwapPlan plan = EmberUpgradeRules.swap(a.data, b.data);
         if (!plan.ok()) { p.sendMessage(P + ChatColor.RED + plan.error); return true; }
         if (!go) {
