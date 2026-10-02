@@ -382,6 +382,17 @@ public final class EmberRunService implements Listener {
                 forcedModifier = null;
             }
             s.modifier = mod == null ? "" : mod.id;
+        } else if (!challenge && abyss == 0 && !m.raid) { // D94: repeat normal runs of the featured map get the rule too
+            java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
+            EmberRunMaps.Modifier mod = m.key.equals(featured(today)) ? maps.modifierFor(today) : null;
+            if (mod != null && !mod.normal) mod = null;                 // 术者换防 stays challenge-only (model: +6～+17 points)
+            if (mod != null) for (Player p : party) if (!firstCleared(data(p.getUniqueId()), m)) { mod = null; break; } // first clears stay canonical
+            if (forcedModifier != null) {
+                log().info("[P1 run] " + s.runId + " modifier forced " + forcedModifier.id + " (admin test, normal run)");
+                mod = forcedModifier;
+                forcedModifier = null;
+            }
+            s.modifier = mod == null ? "" : mod.id;
         }
         s.seed = presetSeed != 0L ? presetSeed : rnd.nextLong();
         s.created = System.currentTimeMillis();
@@ -479,7 +490,7 @@ public final class EmberRunService implements Listener {
             return;
         }
         EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
-        if (mod != null) tellRun(s, "§b本周规则「" + mod.name + "」§7" + mod.text + "（奖励不变）");
+        if (mod != null) tellRun(s, "§b本周规则「" + mod.name + "」§7" + mod.text + "（奖励不变" + (s.challenge ? "" : "；本周精选图的复刻局") + "）");
         tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                 + "）· 走进前方房间开战 · 击败首领后统一结算");
     }
@@ -1752,7 +1763,7 @@ public final class EmberRunService implements Listener {
             p.sendMessage(P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " · /corerpg p1 enter " + rm.key);
         p.sendMessage(P + "§e每日委托 §7" + bountyLabel(d)); // P2-7
         p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次挑战通关各多 " + maps.rotationBonusMarks + " 枚 T3 印记）");
-        if (!maps.modifiers.isEmpty()) p.sendMessage(P + "本周规则（只在精选图挑战版生效，奖励不变）：§b" + modifierLabel());
+        if (!maps.modifiers.isEmpty()) p.sendMessage(P + "本周规则（精选图挑战版；" + (normalRule() ? "已首通的普通版也生效" : "普通版不变") + "；奖励不变）：§b" + modifierLabel());
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
                 + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
                 + " · 暂存 " + store.ledger(p.getUniqueId()).open().size() + " 项");
@@ -1793,6 +1804,22 @@ public final class EmberRunService implements Listener {
         p.sendMessage(P + "§b本周精选挑战通关" + (fm == null ? "" : "（" + fm.key.toUpperCase(Locale.ROOT) + " " + fm.name + "）") + "：" + (f.isEmpty() ? "§7暂无" : ""));
         for (int i = 0; i < f.size(); i++) p.sendMessage(P + "§f" + (i + 1) + ". " + f.get(i).name + " §7" + f.get(i).value + " 次");
         return true;
+    }
+
+    /** D94: does this week's rule also apply to repeat normal runs of the featured map? */
+    public boolean normalRule() {
+        EmberRunMaps.Modifier mod = maps.modifierFor(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+        return mod != null && mod.normal;
+    }
+
+    /** D94 %corerpg_p1_rule_<map>%: "" unless the map is featured this week and its rule reaches normal runs */
+    public String ruleLine(PlayerData d, String key) {
+        java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
+        if (!key.equals(featured(today)) || !normalRule()) return "";
+        EmberRunMaps.Modifier mod = maps.modifierFor(today);
+        EmberRunMaps.MapDef m = maps.byKey(key);
+        boolean on = m != null && firstCleared(d, m);
+        return "§b· 本周规则「" + mod.name + "」" + (on ? "" : "§8（首通后的复刻局才生效）");
     }
 
     /** P2-8 %corerpg_p1_modifier%: this week's featured-map rule, e.g. 「限药：本局最多喝 3 瓶回复药」 */
@@ -1849,6 +1876,7 @@ public final class EmberRunService implements Listener {
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("modifier".equals(key)) return modifierLabel(); // P2-8
+        if (key.startsWith("rule_")) return ruleLine(d, key.substring(5)); // D94
         if (key.startsWith("top_abyss_") || key.startsWith("top_featured_")) { // P2-10 %corerpg_p1_top_abyss_1%
             boolean ab = key.startsWith("top_abyss_");
             int i;

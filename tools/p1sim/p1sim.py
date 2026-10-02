@@ -6,7 +6,15 @@ import random
 import statistics
 import sys
 
+import copy
+import os
+
+import miniyaml
 import p1config
+
+# P2-8 / D94 weekly rules (rotation.modifiers); `normal: true` rules also hit repeat normal runs of the featured map
+_RUNS = miniyaml.load(os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'))
+MODS = list((_RUNS.get('rotation') or {}).get('modifiers') or [])
 
 FAMS = ('scorch', 'burst', 'sustain')
 MELEE_ROLES = ('melee', 'heavy', 'elite')
@@ -27,6 +35,7 @@ class Knobs:
         self.target = kw.get('target', 'burst')
         self.swap = kw.get('swap', False)   # §6.3 free enhance-track swap when equipping a better drop
         self.route = kw.get('route', 'stepdown')  # stepdown (v3 bot) | alternate (v2 bot)
+        self.normal_mods = kw.get('normal_mods', None)  # D94: None | 'normal' (rules marked normal) | 'all' (incl. casters)
 
 
 # ---------------------------------------------------------------- stats
@@ -417,6 +426,39 @@ class Player:
             self.potions += 1
 
 
+def _truthy(v):
+    return v is True or str(v).lower() == 'true'
+
+
+def mod_cfg(cfg, key, mod):
+    """D94: config with weekly rule `mod` applied to map `key` (role remap / room 1↔3 swap); returns (cfg, potion cap)."""
+    c = copy.deepcopy(cfg)
+    m = c['maps'][key]
+    remap = {k: v for k, v in (mod.get('remap') or {}).items() if v in m['mobs']}  # server: only roles the map defines
+    if remap:
+        for room in m['rooms'].values():
+            for var in ('a', 'b'):
+                comp = {}
+                for role, n in room[var].items():
+                    comp[remap.get(role, role)] = comp.get(remap.get(role, role), 0) + n
+                room[var] = comp
+    if _truthy(mod.get('swap_rooms')):
+        r1, r3 = m['rooms']['r1'], m['rooms']['r3']
+        r1['a'], r1['b'], r3['a'], r3['b'] = r3['a'], r3['b'], r1['a'], r1['b']
+    return c, (int(mod['potion_cap']) if mod.get('potion_cap') else None)
+
+
+def week_rule(kn, order, day, offset, key, cleared):
+    """D94: the weekly rule hitting this NORMAL run (featured map, already first-cleared), or None."""
+    if not kn.normal_mods or not MODS:
+        return None
+    week = (day - 1 + offset) // 7
+    if order[week % len(order)] != key or key not in cleared:
+        return None
+    mod = MODS[week % len(MODS)]
+    return mod if (kn.normal_mods == 'all' or _truthy(mod.get('normal'))) else None
+
+
 def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
     rng = random.Random(seed)
     p = Player(cfg, kn, rng)
@@ -428,6 +470,8 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
     refund_day = -1
     cur = 0
     runs = 0
+    offset = random.Random(seed * 7919 + 13).randrange(7 * len(order) * max(1, len(MODS)))  # calendar position
+    modded = {}
     while runs < max_runs:
         day = runs // per_day + 1
         front = next((i for i, k in enumerate(order) if k not in p.cleared), None)
@@ -438,7 +482,14 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
         p.buy_potions()
         p.day = day
         st = p.st()
-        ok, used, extra, secs, taken, where = run_map(cfg, key, st, kn, rng, p.potions)
+        mod = week_rule(kn, order, day, offset, key, p.cleared)
+        if mod is None:
+            ok, used, extra, secs, taken, where = run_map(cfg, key, st, kn, rng, p.potions)
+        else:
+            if (key, mod['id']) not in modded:
+                modded[(key, mod['id'])] = mod_cfg(cfg, key, mod)
+            mc, cap = modded[(key, mod['id'])]
+            ok, used, extra, secs, taken, where = run_map(mc, key, st, kn, rng, p.potions if cap is None else min(cap, p.potions))
         p.potions -= used
         runs += 1
         r = rec[key]
@@ -594,6 +645,8 @@ def main(argv=None):
     ap.add_argument('--swap', action='store_true', help='use the §6.3 free enhance swap (the bots did not)')
     ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
     ap.add_argument('--no-loot', action='store_true', help='without the P2-9 per-map loot identity (D81) for comparison')
+    ap.add_argument('--normal-mods', nargs='?', const='normal', choices=['normal', 'all'], default=None,
+                    help='D94: weekly rule on repeat normal runs of the featured map (all = include casters)')
     ap.add_argument('--target', default='burst', choices=FAMS)
     ap.add_argument('--uptime', type=float, default=0.70)
     ap.add_argument('--ref', action='store_true', help='clear rate per map at the book §3.2 reference loadout')
@@ -616,10 +669,10 @@ def main(argv=None):
     for w in cfg['warnings']:
         print('WARNING:', w, file=sys.stderr)
     per_day = cfg['stamina_day'] // cfg['run_cost']
-    print('# p1sim profile=%s route=%s swap=%s target=%s players=%d cap=%d days (%d runs/day)\n' % (
-        args.profile, args.route, args.swap, args.target, args.players, args.days, per_day))
+    print('# p1sim profile=%s route=%s swap=%s target=%s normal_mods=%s players=%d cap=%d days (%d runs/day)\n' % (
+        args.profile, args.route, args.swap, args.target, args.normal_mods, args.players, args.days, per_day))
     for d in args.dodge:
-        kn = Knobs(d, route=args.route, swap=args.swap, target=args.target, uptime=args.uptime)
+        kn = Knobs(d, route=args.route, swap=args.swap, target=args.target, uptime=args.uptime, normal_mods=args.normal_mods)
         rows, cap = summarize(cfg, kn, args.players, args.days * per_day)
         last = rows[-1]
         print('## dodge %.2f — Q07 first clear: %s\n' % (d, ('median day %s (P90 %s), %d%% of players within %d days'

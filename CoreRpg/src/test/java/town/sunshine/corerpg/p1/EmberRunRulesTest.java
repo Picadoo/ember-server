@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(10, m.balanceVersion);                // D86
-        assertEquals("g04-1/b10", m.ruleVersion);
+        assertEquals(11, m.balanceVersion);                // D94
+        assertEquals("g04-1/b11", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all
@@ -314,6 +314,9 @@ public class EmberRunRulesTest {
         assertEquals("caster", m.modifier("casters").role("ranged", q3));
         assertEquals("ranged", m.modifier("casters").role("ranged", q1)); // Q01 has no caster → unchanged
         assertEquals("melee", m.modifier("casters").role("melee", q3));
+        assertTrue(m.modifier("lean").normal);              // D94: repeat normal runs get lean / reverse only
+        assertTrue(m.modifier("reverse").normal);
+        assertFalse(m.modifier("casters").normal);
         assertTrue(m.modifier("reverse").swapRooms);
         assertNull(m.modifier(""));
         java.util.Set<String> pairs = new java.util.HashSet<String>();

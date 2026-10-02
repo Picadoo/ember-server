@@ -138,6 +138,8 @@ def to_q07(cfg, kn, seed):
     p = p1sim.Player(cfg, kn, rng)
     order, per_day = cfg['order'], cfg['stamina_day'] // cfg['run_cost']
     cur, runs, refund_day = 0, 0, -1
+    offset = random.Random(seed * 7919 + 13).randrange(7 * len(order) * max(1, len(p1sim.MODS)))  # D94 calendar position
+    modded = {}
     while runs < 60 * per_day:
         front = next((i for i, k in enumerate(order) if k not in p.cleared), None)
         if front is None:
@@ -146,7 +148,12 @@ def to_q07(cfg, kn, seed):
         key = order[cur]
         p.buy_potions()
         p.day = runs // per_day + 1
-        ok, used, extra, *_ = p1sim.run_map(cfg, key, p.st(), kn, rng, p.potions)
+        mod = p1sim.week_rule(kn, order, p.day, offset, key, p.cleared)  # D94 (None unless --normal-mods)
+        if mod is None:
+            ok, used, extra, *_ = p1sim.run_map(cfg, key, p.st(), kn, rng, p.potions)
+        else:
+            mc, cap = modded.setdefault((key, mod['id']), p1sim.mod_cfg(cfg, key, mod))
+            ok, used, extra, *_ = p1sim.run_map(mc, key, p.st(), kn, rng, p.potions if cap is None else min(cap, p.potions))
         p.potions -= used
         runs += 1
         if ok:
@@ -209,6 +216,9 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         bonus_left = ROT['weekly_cap']
         mod = MODS[w % len(MODS)] if mods and MODS else None
         fcfg, fcap = mod_cfg(ccfg, featured, mod)
+        wmod = MODS[w % len(MODS)] if MODS else None  # D94: the same week's rule on repeat NORMAL Q07 runs when featured
+        ncfg, ncap = (p1sim.mod_cfg(cfg, order[-1], wmod) if kn.normal_mods and wmod and featured == order[-1]
+                      and (kn.normal_mods == 'all' or p1sim._truthy(wmod.get('normal'))) else (None, None))
         if mod:  # featured rate under this week's rule (own seed: the main rng stream stays paired with 'rot')
             kn2 = copy.copy(kn)
             if fcap is not None:
@@ -251,6 +261,8 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
             p.buy_potions()
             if mod and use is ccfg and key == featured:
                 ok, used, extra, *_ = p1sim.run_map(fcfg, key, p.st(), kn, rng, min(p.potions, fcap) if fcap is not None else p.potions)
+            elif ncfg is not None and use is cfg:
+                ok, used, extra, *_ = p1sim.run_map(ncfg, key, p.st(), kn, rng, min(p.potions, ncap) if ncap is not None else p.potions)
             else:
                 ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions)
             p.potions -= used
@@ -314,6 +326,8 @@ def main():
     ap.add_argument('--old-raid-item', action='store_true', help='pre-P2-9 raid_item (plain roll, no family target, no floor)')
     ap.add_argument('--mods', action='store_true', help='add the P2-8 weekly rules on the featured map (rotation + rule)')
     ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
+    ap.add_argument('--normal-mods', nargs='?', const='normal', choices=['normal', 'all'], default=None,
+                    help='D94: weekly rule on repeat normal runs of the featured map, in every mode (all = include casters)')
     a = ap.parse_args()
     cfg = p1config.load()
     if a.no_bounty:
@@ -334,7 +348,7 @@ def main():
     stats = {}
     for i in range(a.players):
         for mode in modes:
-            kn = p1sim.Knobs(a.dodge)
+            kn = p1sim.Knobs(a.dodge, normal_mods=a.normal_mods)
             p, runs, rng = to_q07(cfg, kn, 5000 + i)   # same seed → same phase-1 player for both modes
             if p is None:
                 continue

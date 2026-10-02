@@ -529,6 +529,7 @@ public final class EmberRunMaps {
         public final int potionCap;                 // 0 = no cap
         public final Map<String, String> remap;     // role → role
         public final boolean swapRooms;             // r1 ↔ r3 compositions
+        public final boolean normal;                // D94: also on repeat NORMAL runs of the featured map
         Modifier(Map<?, ?> m) {
             id = str(m.get("id"), "");
             name = str(m.get("name"), id);
@@ -538,6 +539,7 @@ public final class EmberRunMaps {
             if (m.get("remap") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("remap")).entrySet()) r.put(String.valueOf(e.getKey()), String.valueOf(e.getValue()));
             remap = Collections.unmodifiableMap(r);
             swapRooms = Boolean.TRUE.equals(m.get("swap_rooms")) || "true".equals(String.valueOf(m.get("swap_rooms")));
+            normal = Boolean.TRUE.equals(m.get("normal")) || "true".equals(String.valueOf(m.get("normal")));
         }
         /** the role actually spawned on map d (a target role the map does not define keeps the original) */
         public String role(String role, MapDef d) {

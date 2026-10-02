@@ -113,7 +113,7 @@ Icons:
       name: '§aQ01 §f%corerpg_p1_q01_name%'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_q01_state%'
+        - '§7状态：§f%corerpg_p1_q01_state% %corerpg_p1_rule_q01%'
         - '§7消耗：§e%corerpg_p1_q01_cost%'
         - '§7掉落：§f%corerpg_p1_q01_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q01% §8（目标族仍 ≥60%）'
@@ -133,7 +133,7 @@ Icons:
       name: '§aQ02 §f%corerpg_p1_q02_name%'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_q02_state%'
+        - '§7状态：§f%corerpg_p1_q02_state% %corerpg_p1_rule_q02%'
         - '§7消耗：§e%corerpg_p1_q02_cost%'
         - '§7掉落：§f%corerpg_p1_q02_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q02% §8（目标族仍 ≥60%）'
@@ -153,7 +153,7 @@ Icons:
       name: '§aQ03 §f%corerpg_p1_q03_name%'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_q03_state%'
+        - '§7状态：§f%corerpg_p1_q03_state% %corerpg_p1_rule_q03%'
         - '§7消耗：§e%corerpg_p1_q03_cost%'
         - '§7掉落：§f%corerpg_p1_q03_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q03% §8（目标族仍 ≥60%）'
@@ -173,7 +173,7 @@ Icons:
       name: '§bQ04 §f%corerpg_p1_q04_name%'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_q04_state%'
+        - '§7状态：§f%corerpg_p1_q04_state% %corerpg_p1_rule_q04%'
         - '§7消耗：§e%corerpg_p1_q04_cost%'
         - '§7掉落：§f%corerpg_p1_q04_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q04% §8（目标族仍 ≥60%）'
@@ -193,7 +193,7 @@ Icons:
       name: '§bQ05 §f%corerpg_p1_q05_name%'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_q05_state%'
+        - '§7状态：§f%corerpg_p1_q05_state% %corerpg_p1_rule_q05%'
         - '§7消耗：§e%corerpg_p1_q05_cost%'
         - '§7掉落：§f%corerpg_p1_q05_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q05% §8（目标族仍 ≥60%）'
@@ -214,7 +214,7 @@ Icons:
       name: '§bQ06 §f%corerpg_p1_q06_name%'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_q06_state%'
+        - '§7状态：§f%corerpg_p1_q06_state% %corerpg_p1_rule_q06%'
         - '§7消耗：§e%corerpg_p1_q06_cost%'
         - '§7掉落：§f%corerpg_p1_q06_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q06% §8（目标族仍 ≥60%）'
@@ -234,7 +234,7 @@ Icons:
       name: '§6Q07 §f%corerpg_p1_q07_name%'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_q07_state%'
+        - '§7状态：§f%corerpg_p1_q07_state% %corerpg_p1_rule_q07%'
         - '§7消耗：§e%corerpg_p1_q07_cost%'
         - '§7掉落：§f%corerpg_p1_q07_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q07% §8（目标族仍 ≥60%）'
