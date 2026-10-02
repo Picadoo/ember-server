@@ -11,7 +11,7 @@
 | balance_version | 7（`ember-v1-runs.yml`，规则 g04-1/b7） |
 | 模式 | P1 是默认模式（D61–D65），旧玩法藏在 `ember_hub_legacy`。**不要关 P1** |
 | 菜单 | TrMenu 共 47 个，`trmenu reload` 就能重载 |
-| 套件 | `mineflayer-tests` gameplay 9/9（1.36.0） |
+| 套件 | `mineflayer-tests` gameplay 9/9（1.36.1） |
 | 玩家 | 没有老玩家，**不做数据迁移**。测试号 P1Fox、RaidA–E、NewbieQ |
 | 内容 | 七张主线图 Q01–Q07 + 挑战版。P2-1 每周挑战轮换。P2-2 深渊·余烬层（10 层）。P2-5/6 团本 R01 锈轨矿道·团 + R02 霜封哨所·团（3～5 人，两本合计每周 3 次）。P2-7 每日委托。新手提示：回复药放快捷栏、生命低提醒、「下一步」（1.34.1–1.36.1） |
 
