@@ -513,6 +513,8 @@ public final class EmberRunMaps {
     public final String abyssRequires;
     /** F-review #5 (D124): 余烬币 per surplus T3 mark when the coins cannot pay an abyss fee (0 = coins only) */
     public final int abyssFeeMarkCoin;
+    /** Endgame #6 (D128): share of the stamina cost refunded for the first failed challenge / abyss run of the day */
+    public final double failRefund;
     public final List<AbyssTier> abyss;
     private final List<Challenge> abyssCh;
     /** P2-1 (D66) weekly featured challenge: extra marks of the run tier, and how many clears per week get them */
@@ -611,6 +613,7 @@ public final class EmberRunMaps {
         balanceVersion = (int) num(root.get("balance_version"), 1);
         ruleVersion = str(root.get("rule_version"), "g04-1") + "/b" + balanceVersion;
         cost = (int) num(root.get("cost"), 30);
+        failRefund = Math.max(0.0, Math.min(1.0, num(root.get("fail_refund"), 0)));
         partyMin = (int) num(root.get("party_min"), 1);
         partyMax = (int) num(root.get("party_max"), 3);
         passSeconds = (int) num(root.get("pass_seconds"), 30);

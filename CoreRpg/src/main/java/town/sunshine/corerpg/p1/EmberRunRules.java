@@ -284,6 +284,16 @@ public final class EmberRunRules {
     public static String deathRefundRun(String day) { return "deathrefund@" + day; }
     public static final String DEATH_REFUND_KEY = "potions";
 
+    /** Endgame #6 (D128): ledger run id of the once-per-day failed-challenge stamina refund (stamina day). */
+    public static String failRefundRun(String day) { return "failrefund@" + day; }
+    public static final String FAIL_REFUND_KEY = "stamina";
+
+    /** D128: stamina given back for the day's first failed challenge / abyss run = floor(cost × share), share in [0, 1]. */
+    public static int failRefundAmount(int cost, double share) {
+        if (cost <= 0 || !(share > 0)) return 0;
+        return (int) Math.floor(cost * Math.min(1.0, share) + 1e-9);
+    }
+
     /** D32: potions refunded for the first death of the day = used in that run, capped by config (max <= 0 = off). */
     public static int deathRefundCount(int used, int max) { return max <= 0 ? 0 : Math.max(0, Math.min(used, max)); }
 

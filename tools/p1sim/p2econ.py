@@ -65,6 +65,24 @@ ABYSS = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-ru
 # F-review #5 (D124): surplus T3 marks (above the 8 kept back) may pay the abyss fee at this many coins per mark (0 = off)
 FEE_MARK = int(miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('abyss', {}).get('fee_mark_coin', 0) or 0)
 MARK_RESERVE = 8
+# Endgame #6 (D128): the first failed challenge / abyss run of the day gives back this share of its stamina (0 = off)
+FAIL_REFUND = float(miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('fail_refund', 0) or 0)
+
+
+def fail_refund(p, w, d):
+    """D128: call after a failed challenge / abyss run on day d (0..6) of week w. Banks FAIL_REFUND of one run's stamina
+    once per day; returns 1 when the bank holds a whole run (spent as an extra run right away), else 0."""
+    if FAIL_REFUND <= 0:
+        return 0
+    used = p.__dict__.setdefault('_fr_days', set())
+    if (w, d) in used:
+        return 0
+    used.add((w, d))
+    p._fr_bank = getattr(p, '_fr_bank', 0.0) + FAIL_REFUND
+    if p._fr_bank >= 1 - 1e-9:
+        p._fr_bank -= 1
+        return 1
+    return 0
 
 
 def fee_ok(p, fee, reserve):
@@ -142,12 +160,14 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
         if goals and can_ch:  # D116: the week's raid and one featured challenge clear come out of the same stamina
             featured = order[(w + 3) % len(order)]
             skip = (raid_once(cfg, ccfg, kn, p, rng, w, GOALS['raid']) + cfg['run_cost'] - 1) // cfg['run_cost']
-            for _ in range(3):  # up to three tries at the featured challenge
+            for ti in range(3):  # up to three tries at the featured challenge
                 skip += 1
                 p.buy_potions()
                 ok, used, extra, *_ = p1sim.run_map(ccfg, featured, p.st(), kn, rng, p.potions)
                 p.potions -= used
                 ch_runs += 1
+                if not ok:
+                    skip -= fail_refund(p, w, ti)  # D128: a refunded run frees a slot later in the week
                 if ok:
                     p.marks[3] += ROT['bonus_marks']
                     settle_with(p, ccfg, featured, extra)
@@ -168,7 +188,9 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                     if abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
                         tier = t
                         break
-            for _ in range(per_day):
+            n_today, ri = per_day, 0
+            while ri < n_today:
+                ri += 1
                 if skip > 0:
                     skip -= 1
                     continue
@@ -186,6 +208,8 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                 ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions)
                 p.potions -= used
                 ch_runs += use is not cfg
+                if not ok and use is not cfg:
+                    n_today += fail_refund(p, w, d)  # D128
                 if ok:
                     p.settle(key, extra) if use is cfg else settle_with(p, use, key, extra)
                     marks_earned += 1
@@ -367,7 +391,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
             abest = getattr(p, 'abyss_best', 0)
             acfgs = getattr(p, '_acfgs', None) or {t: abyss_cfg(ccfg, t) for t in range(1, len(ABYSS) + 1)}
             p._acfgs = acfgs
-            for _ in range(GOALS['abyss']):
+            for gi in range(GOALS['abyss']):
                 tier = 1
                 for t in range(min(abest + 1, len(ABYSS)), 0, -1):
                     if ABYSS[t - 1]['fee'] + 1000 <= p.coin and abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
@@ -380,14 +404,18 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                 ok, used, extra, *_ = p1sim.run_map(acfgs[tier], akey, p.st(), kn, rng, p.potions)
                 p.potions -= used
                 ch_runs += 1
+                if not ok:
+                    runs_left += fail_refund(p, w, gi)  # D128
                 if ok:
                     settle_with(p, acfgs[tier], akey, extra)
                     abest = max(abest, tier)
                     marks_earned += 1
                     p.invest()
             p.abyss_best = abest
-        for i in range(runs_left):
-            p.day = 1000 + w * 7 + i * 7 // max(1, runs_left)
+        planned, i = max(1, runs_left), -1
+        while i + 1 < runs_left:
+            i += 1
+            p.day = 1000 + w * 7 + min(6, i * 7 // planned)
             if can_ch:
                 use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else farm_map(p, kn, ccfg, rates, best))
             else:
@@ -401,6 +429,8 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                 ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions)
             p.potions -= used
             ch_runs += use is ccfg
+            if not ok and use is ccfg:
+                runs_left += fail_refund(p, w, p.day - 1000 - w * 7)  # D128
             if ok:
                 if rotation and use is ccfg and key == featured and bonus_left > 0:
                     bonus_left -= 1
@@ -473,11 +503,15 @@ def main():
     ap.add_argument('--abyss-tiers', help="E-review tuning: tier factors 'hp,dmg;…' (10 rows) instead of the config")
     ap.add_argument('--abyss-quality', help="E-review tuning: tier quality tables '60,28,10,2;…' (10 rows)")
     ap.add_argument('--fee-mark', type=int, default=None, help='D124: coins per surplus T3 mark paying abyss fees (0 = off; default = yml abyss.fee_mark_coin)')
+    ap.add_argument('--fail-refund', type=float, default=None, help='D128: share of the stamina given back for the first failed challenge / abyss run of the day (0 = off; default = yml fail_refund)')
     ap.add_argument('--abyss-fees', help="E-review tuning: tier fees '0,60,…' (10 values) instead of the config")
     a = ap.parse_args()
     if a.fee_mark is not None:
         global FEE_MARK
         FEE_MARK = a.fee_mark
+    if a.fail_refund is not None:
+        global FAIL_REFUND
+        FAIL_REFUND = a.fail_refund
     if a.abyss_tiers or a.abyss_fees or a.abyss_quality:
         set_abyss(a.abyss_tiers, a.abyss_fees, a.abyss_quality)
     cfg = p1config.load()

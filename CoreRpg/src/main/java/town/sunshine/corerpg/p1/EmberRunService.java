@@ -665,6 +665,42 @@ public final class EmberRunService implements Listener {
         return marks(d, 3) - EmberCosmetics.MARK_RESERVE >= need ? need : 0;
     }
 
+    /**
+     * Endgame #6 (D128): the first failed challenge / abyss run of the stamina day gives back runs.yml fail_refund of the
+     * stamina it cost (no loot, no coins, the abyss fee stays spent). One ledger row per (player, day) like the death
+     * refund: record() never overwrites, so a second fail, a relog or a restart pays nothing more.
+     * Returns the stamina given back, 0 = already used today, -1 = not eligible (off / no committed cost).
+     */
+    private int failRefund(UUID u, EmberRunSession s) {
+        Integer c = s.cost.get(u);
+        int back = EmberRunRules.failRefundAmount(c == null ? 0 : c, maps.failRefund);
+        StaminaService st = plugin.getStaminaService();
+        if (back <= 0 || st == null) return -1;
+        EmberRunRules.Ledger l = store.ledger(u);
+        EmberRunRules.Row cost = l.get(s.runId, "cost");
+        if (cost == null || EmberRunRules.ST_RELEASED.equals(cost.status)) return -1;
+        String day = town.sunshine.corerpg.DailyService.today();
+        boolean[] created = new boolean[1];
+        EmberRunRules.Row r = l.record(EmberRunRules.failRefundRun(day), EmberRunRules.FAIL_REFUND_KEY,
+                "stamina:" + back + ":" + s.runId, EmberRunRules.ST_DELIVERED, System.currentTimeMillis(), created);
+        if (!created[0]) {
+            log().info("[P1 run] fail refund " + u + " " + day + ": already used today (" + r.result + ")");
+            return 0;
+        }
+        store.saveLedger(u, Collections.singletonList(r));
+        st.releaseFlat(u, back);
+        log().info("[P1 run] fail refund " + u + " " + day + " run " + s.runId + ": " + back + " stamina (cost " + c + ")");
+        return back;
+    }
+
+    /** D128 PAPI p1_failrefund: whether today's failed-challenge refund is still there */
+    String failRefundLabel(UUID u) {
+        if (maps.failRefund <= 0) return "";
+        int pct = (int) Math.round(maps.failRefund * 100);
+        boolean used = store.ledger(u).get(EmberRunRules.failRefundRun(town.sunshine.corerpg.DailyService.today()), EmberRunRules.FAIL_REFUND_KEY) != null;
+        return used ? "§8今天的失败退还已用过（明天 0 点再有）" : "§a每天第一次失败退还 " + pct + "% 体力（" + EmberRunRules.failRefundAmount(maps.cost, maps.failRefund) + " 点；不给掉落和币）";
+    }
+
     /** P2-2: the abyss fee goes back together with the stamina, once (ledger "cost_coin" status). */
     private void releaseFee(EmberRunSession s, UUID u, EmberRunRules.Ledger l) {
         EmberRunRules.Row f = l.get(s.runId, "cost_coin");
@@ -891,6 +927,7 @@ public final class EmberRunService implements Listener {
         if ((root.equals("dp") || root.startsWith("dungeon")) && a.length >= 2 && "revive".equals(a[1])) { // F-review #7
             e.setCancelled(true);
             p.sendMessage(P + "§7团本里倒下后不能自己复活 · 下一次复活：§e" + nextReviveText(d.s));
+            if (plugin.getQuestService() != null) plugin.getQuestService().quietHint(p.getUniqueId()); // no second "不可用" line
             return;
         }
         if (!(root.equals("dp") || root.startsWith("dungeon")) || a.length < 2 || !"leave".equals(a[1])) return;
@@ -973,11 +1010,21 @@ public final class EmberRunService implements Listener {
 
     private void fail(EmberRunSession s, String why) {
         if (!s.open() || EmberRunSession.SETTLING.equals(s.state)) return;
+        boolean chFail = s.challenge && s.fightStarted(); // read before the state flips to FAILED
         s.state = EmberRunSession.FAILED;
         s.reason = why;
         store.save(s);
-        tellRun(s, ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
-        if (s.challenge && s.fightStarted()) { // endgame #6 (D120): a failed challenge says what makes the next try likelier
+        if (!chFail) tellRun(s, ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
+        else for (UUID u : s.participants) { // endgame #6 (D128): the day's first failed challenge / abyss run gives half the stamina back
+            int back = s.committed.contains(u) ? failRefund(u, s) : -1;
+            Player p = Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline()) continue;
+            p.sendMessage(P + ChatColor.RED + "本局失败：" + why + (back > 0
+                    ? "§a · 今天第一次挑战失败：退还 " + back + " 体力（花费的 " + Math.round(maps.failRefund * 100) + "%，每天一次；不给掉落和币" + (s.abyss > 0 ? "，层费不退" : "") + "）"
+                    : back == 0 ? "§c（今天的失败退还已经用过，明天再有；未结算的额外奖励作废）"
+                    : "§c（已开战不退体力；未结算的额外奖励作废）"));
+        }
+        if (chFail) { // endgame #6 (D120): a failed challenge says what makes the next try likelier
             for (UUID u : s.committed) {
                 Player p = Bukkit.getPlayer(u);
                 if (p == null || !p.isOnline()) continue;
@@ -1500,7 +1547,7 @@ public final class EmberRunService implements Listener {
                 if (best == null || EmberRunRules.pieceValue(EmberMode.tables(), b, b.enhance, l.level) > EmberRunRules.pieceValue(EmberMode.tables(), best, best.enhance, l.level)) best = b;
             }
             String famName = "none".equals(fam) ? "" : EmberItemData.familyName(fam);
-            String want = nm + " 要 " + famName + " T" + needT + "：";
+            String want = famName.isEmpty() ? nm + " 要 T" + needT + "（任一族，两件同族才成套）：" : nm + " 要 " + famName + " T" + needT + "：";
             if (best != null) {
                 out.add(want + "§a背包里就有 " + best.shortLabel() + "§7 → 换上（免费）" + (x != null && x.enhance > best.enhance ? "，+" + x.enhance + " 可免费互换过去" : ""));
                 if (buttons != null) {
@@ -2092,7 +2139,7 @@ public final class EmberRunService implements Listener {
         }
         p.sendMessage(P + "§5深渊 · 余烬层 §7— 每层 = 随机一张主线图打一局（3 房 + 首领），打赢第 N 层开放第 N+1 层；共 "
                 + maps.abyss.size() + " 层封顶");
-        p.sendMessage(P + "§7每层单独确认：" + maps.cost + " 体力 + 层费（余烬币）；没开打就退出（含服务器重启）全额退还；打完首领才结算，失败只丢这一层的花费，不掉装备不降强化");
+        p.sendMessage(P + "§7每层单独确认：" + maps.cost + " 体力 + 层费（余烬币）；没开打就退出（含服务器重启）全额退还；打完首领才结算，失败只丢这一层的花费（每天第一次失败退一半体力，层费不退），不掉装备不降强化");
         if (!abyssOpen(d)) { p.sendMessage(P + "§c需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)); return true; }
         p.sendMessage(P + "最高通关 第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层 · 余烬币 " + d.getCoin());
         for (EmberRunMaps.AbyssTier t : maps.abyss) p.sendMessage(P + abyssLine(d, t));
@@ -2829,6 +2876,7 @@ public final class EmberRunService implements Listener {
             } catch (NumberFormatException e) { return ""; }
         }
         if ("recruits".equals(key)) return recruitsLabel(); // E-review #5
+        if ("failrefund".equals(key)) return failRefundLabel(p.getUniqueId()); // D128
         if ("featured_key".equals(key)) return String.valueOf(featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
         if ("awaken_route".equals(key)) { // D120: cheapest real route (first line)
             List<String> r;

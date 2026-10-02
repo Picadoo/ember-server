@@ -304,8 +304,9 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(17, m.balanceVersion);                // D123–D124
-        assertEquals("g04-1/b17", m.ruleVersion);
+        assertEquals(18, m.balanceVersion);                // D128
+        assertEquals("g04-1/b18", m.ruleVersion);
+        assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
         assertEquals(1, m.byKey("q04").rails.size());      // D122 R3 drain sealed at attach
@@ -881,5 +882,23 @@ public class EmberRunRulesTest {
         EmberCosmetics.Cosmetic white = EmberCosmetics.byId("color_white"), glow = EmberCosmetics.byId("glow_ember");
         assertEquals("2000 币 / 40 徽 / 印记 T3×10 · T2×20 · T1×40", EmberCosmetics.priceText(white));
         assertEquals("不收币 · 160 徽 / 印记 T3×40 · T2×80 · T1×160", EmberCosmetics.priceText(glow));
+    }
+
+    @Test
+    public void failRefundIsHalfOncePerDayD128() {
+        assertEquals(15, EmberRunRules.failRefundAmount(30, 0.5));
+        assertEquals(0, EmberRunRules.failRefundAmount(30, 0));
+        assertEquals(0, EmberRunRules.failRefundAmount(0, 0.5));
+        assertEquals(30, EmberRunRules.failRefundAmount(30, 2.0));
+        EmberRunRules.Ledger l = new EmberRunRules.Ledger();
+        boolean[] c = new boolean[1];
+        String run = EmberRunRules.failRefundRun("2026-10-03");
+        l.record(run, EmberRunRules.FAIL_REFUND_KEY, "stamina:15:q01c-a", EmberRunRules.ST_DELIVERED, 1L, c);
+        assertTrue(c[0]);
+        l.record(run, EmberRunRules.FAIL_REFUND_KEY, "stamina:15:q02c-b", EmberRunRules.ST_DELIVERED, 2L, c);
+        assertFalse(c[0]);                                  // second fail the same day pays nothing
+        assertEquals("stamina:15:q01c-a", l.get(run, EmberRunRules.FAIL_REFUND_KEY).result);
+        l.record(EmberRunRules.failRefundRun("2026-10-04"), EmberRunRules.FAIL_REFUND_KEY, "stamina:15:q03c-c", EmberRunRules.ST_DELIVERED, 3L, c);
+        assertTrue(c[0]);                                   // next day again
     }
 }
