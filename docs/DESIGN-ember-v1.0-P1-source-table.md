@@ -820,3 +820,17 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D59 | R2「四排棺匣」 | 4 只、一层，离地 1 格，3 长（沿墙）× 2 深 × 2 高 | 房高 8，两层会顶到灯；书没给层数 |
 
 实测（1.29.0，18:43–18:45 CST，P1 运行期临时开启后恢复 follow）：Q03 重建 8 秒；P1Fox 按书路线禁跳走完 R1 → R2 → R3 → 首领厅（首领等候 → 现身），23 个抽查方块全部到位（碑龛空气 + 錾制石碑、拱顶 F+11 灯、棺匣木板、横肋、观察窗玻璃、低墓库萤石、石棺台、四角灯龛）。踏步冷却只做了代码修改，没做机器人实测。地图模板备份：Q03 重建后的 crypt 单独作为附加资产传到同一个 Release（见 13.12）。
+
+### 13.14 数值包 balance_version 2：§2c 方案 B（CoreRpg 1.30.0，2026-10-02 19:41 CST）
+
+| 项 | 落点 |
+|---|---|
+| 覆盖值 | `tools/p1sim/proposal_2c.json` 69 项原样写入两份 `ember-v1-runs.yml`（小怪 hp/atk、首领 hp/atk、首领技能与追加段 dmg）和 `EmberP1Main.yml` 对应 Health / Damage；脚本 `tools/p1sim/apply_2c.py`（只改数字，保留注释，可重复执行） |
+| 每图系数 | Q03 0.95、Q04 0.75、Q05 0.65、Q06 0.70、Q07 0.65（生命与伤害同乘，取整）；Q01 / Q02、宝藏怪、挑战版（自己的覆盖值）不变 |
+| 版本 | runs yml 新增 `balance_version: 2`；每局 `cr_p1_run.rule_version` 记为 `g04-1/b2`（旧局是 `g04-1`）。`content_version` 仍是 v1，已拿过的首通不重置（书 §23.2「仅重建地图不能重置奖励」同理） |
+| 图录 | `ember_p1_codex.yml` Q03–Q07 首领生命 / 普攻 / 技能伤害改成新值；`selfcheck.py` 0 failed |
+| 测试 | `EmberRunRulesTest` 断言改为新值，加 balance_version / rule_version 断言；`EmberRunMobsTest`（MM = runs）通过 |
+
+| # | 问题 | 裁决 | 理由 |
+|---|---|---|---|
+| D60 | §2c 方案 B 是否应用 | **应用**，数值包升到 balance_version 2（用户授权 2026-10-02 19:37：「全部自行决定，不再询问」） | 模拟器：dodge 0.5 时 Q07 首通第 8–9 天（P90 11–12），各图最难已开放阶段通关率 35–56%；旧数 Q04 通关率 5%、Q07 60 天内只有 20% 玩家到达。书 §7 的初测值保留为历史基线，现行数以 runs yml 为准 |

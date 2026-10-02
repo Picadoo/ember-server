@@ -444,7 +444,10 @@ public final class EmberRunMaps {
     }
 
     public final int version;
+    /** rule_version + "/b" + balance_version — what cr_p1_run.rule_version records for every run (book §23.2 / D60) */
     public final String ruleVersion;
+    /** §23.2: bumped on every parameter change (1 = book initial values incl. D31, 2 = §2c plan B / D60) */
+    public final int balanceVersion;
     /** null when the file has no challenge section (challenge entry refused) */
     public final Challenge challenge;
     public final int cost, partyMin, partyMax, passSeconds;
@@ -453,7 +456,8 @@ public final class EmberRunMaps {
 
     private EmberRunMaps(Map<?, ?> root) {
         version = (int) num(root.get("version"), 1);
-        ruleVersion = str(root.get("rule_version"), "g04-1");
+        balanceVersion = (int) num(root.get("balance_version"), 1);
+        ruleVersion = str(root.get("rule_version"), "g04-1") + "/b" + balanceVersion;
         cost = (int) num(root.get("cost"), 30);
         partyMin = (int) num(root.get("party_min"), 1);
         partyMax = (int) num(root.get("party_max"), 3);

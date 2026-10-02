@@ -234,7 +234,7 @@ EmberQ02Boss:
 EmberQ03Melee:
   Type: ZOMBIE
   Display: '&7残誓卒'
-  Health: 81
+  Health: 77
   Damage: 8
   Options:
     MovementSpeed: 0.23
@@ -252,7 +252,7 @@ EmberQ03Melee:
 EmberQ03Ranged:
   Type: SKELETON
   Display: '&7誓印弓手'
-  Health: 59
+  Health: 56
   Damage: 8
   Options:
     MovementSpeed: 0.25
@@ -270,7 +270,7 @@ EmberQ03Ranged:
 EmberQ03Heavy:
   Type: ZOMBIE
   Display: '&8残誓重甲'
-  Health: 113
+  Health: 107
   Damage: 8
   Options:
     MovementSpeed: 0.2
@@ -291,7 +291,7 @@ EmberQ03Heavy:
 EmberQ03Caster:
   Type: SKELETON
   Display: '&5残誓术者'
-  Health: 70
+  Health: 66
   Damage: 8
   Options:
     MovementSpeed: 0.18
@@ -323,7 +323,7 @@ EmberQ03Treasure:
 EmberQ03Elite:
   Type: ZOMBIE
   Display: '&6残誓奖励精英'
-  Health: 270
+  Health: 256
   Damage: 8
   Options:
     MovementSpeed: 0.23
@@ -343,8 +343,8 @@ EmberQ03Elite:
 EmberQ03Boss:
   Type: ZOMBIE
   Display: '&c残誓守卫'
-  Health: 1000
-  Damage: 14
+  Health: 950
+  Damage: 13
   Options:
     MovementSpeed: 0.24
     AlwaysShowName: true
@@ -365,8 +365,8 @@ EmberQ03Boss:
 EmberQ04Melee:
   Type: ZOMBIE
   Display: '&7潮蚀卒'
-  Health: 96
-  Damage: 10
+  Health: 72
+  Damage: 8
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -383,8 +383,8 @@ EmberQ04Melee:
 EmberQ04Ranged:
   Type: SKELETON
   Display: '&7潮痕弓手'
-  Health: 77
-  Damage: 10
+  Health: 58
+  Damage: 8
   Options:
     MovementSpeed: 0.25
     AlwaysShowName: true
@@ -401,8 +401,8 @@ EmberQ04Ranged:
 EmberQ04Heavy:
   Type: ZOMBIE
   Display: '&8潮蚀重甲'
-  Health: 147
-  Damage: 10
+  Health: 110
+  Damage: 8
   Options:
     MovementSpeed: 0.2
     AlwaysShowName: true
@@ -422,8 +422,8 @@ EmberQ04Heavy:
 EmberQ04Caster:
   Type: SKELETON
   Display: '&5潮蚀术者'
-  Health: 91
-  Damage: 10
+  Health: 68
+  Damage: 8
   Options:
     MovementSpeed: 0.18
     AlwaysShowName: true
@@ -454,8 +454,8 @@ EmberQ04Treasure:
 EmberQ04Elite:
   Type: ZOMBIE
   Display: '&6潮蚀奖励精英'
-  Health: 350
-  Damage: 10
+  Health: 262
+  Damage: 8
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -474,8 +474,8 @@ EmberQ04Elite:
 EmberQ04Boss:
   Type: ZOMBIE
   Display: '&c潮闸重卫'
-  Health: 1900
-  Damage: 18
+  Health: 1420
+  Damage: 14
   Options:
     MovementSpeed: 0.24
     AlwaysShowName: true
@@ -496,8 +496,8 @@ EmberQ04Boss:
 EmberQ05Melee:
   Type: ZOMBIE
   Display: '&7断塔卒'
-  Health: 177
-  Damage: 14
+  Health: 115
+  Damage: 9
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -514,8 +514,8 @@ EmberQ05Melee:
 EmberQ05Ranged:
   Type: SKELETON
   Display: '&7塔檐弓手'
-  Health: 130
-  Damage: 14
+  Health: 84
+  Damage: 9
   Options:
     MovementSpeed: 0.25
     AlwaysShowName: true
@@ -532,8 +532,8 @@ EmberQ05Ranged:
 EmberQ05Heavy:
   Type: ZOMBIE
   Display: '&8断塔重甲'
-  Health: 248
-  Damage: 14
+  Health: 161
+  Damage: 9
   Options:
     MovementSpeed: 0.2
     AlwaysShowName: true
@@ -553,8 +553,8 @@ EmberQ05Heavy:
 EmberQ05Caster:
   Type: SKELETON
   Display: '&5断塔术者'
-  Health: 153
-  Damage: 14
+  Health: 99
+  Damage: 9
   Options:
     MovementSpeed: 0.18
     AlwaysShowName: true
@@ -585,8 +585,8 @@ EmberQ05Treasure:
 EmberQ05Elite:
   Type: ZOMBIE
   Display: '&6断塔奖励精英'
-  Health: 590
-  Damage: 14
+  Health: 384
+  Damage: 9
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -605,8 +605,8 @@ EmberQ05Elite:
 EmberQ05Boss:
   Type: ZOMBIE
   Display: '&c断塔斧卫'
-  Health: 3500
-  Damage: 26
+  Health: 2280
+  Damage: 17
   Options:
     MovementSpeed: 0.24
     AlwaysShowName: true
@@ -627,8 +627,8 @@ EmberQ05Boss:
 EmberQ06Melee:
   Type: ZOMBIE
   Display: '&7霜哨卒'
-  Health: 177
-  Damage: 15
+  Health: 124
+  Damage: 10
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -645,8 +645,8 @@ EmberQ06Melee:
 EmberQ06Ranged:
   Type: SKELETON
   Display: '&7哨楼弩手'
-  Health: 130
-  Damage: 15
+  Health: 91
+  Damage: 10
   Options:
     MovementSpeed: 0.25
     AlwaysShowName: true
@@ -663,8 +663,8 @@ EmberQ06Ranged:
 EmberQ06Heavy:
   Type: ZOMBIE
   Display: '&8盾墙重甲'
-  Health: 248
-  Damage: 15
+  Health: 174
+  Damage: 10
   Options:
     MovementSpeed: 0.2
     AlwaysShowName: true
@@ -684,8 +684,8 @@ EmberQ06Heavy:
 EmberQ06Caster:
   Type: SKELETON
   Display: '&5霜印术者'
-  Health: 153
-  Damage: 15
+  Health: 107
+  Damage: 10
   Options:
     MovementSpeed: 0.18
     AlwaysShowName: true
@@ -716,8 +716,8 @@ EmberQ06Treasure:
 EmberQ06Elite:
   Type: ZOMBIE
   Display: '&6霜哨奖励精英'
-  Health: 590
-  Damage: 15
+  Health: 413
+  Damage: 10
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -736,8 +736,8 @@ EmberQ06Elite:
 EmberQ06Boss:
   Type: ZOMBIE
   Display: '&c霜封统领'
-  Health: 3800
-  Damage: 28
+  Health: 2660
+  Damage: 20
   Options:
     MovementSpeed: 0.24
     AlwaysShowName: true
@@ -758,8 +758,8 @@ EmberQ06Boss:
 EmberQ07Melee:
   Type: ZOMBIE
   Display: '&7锈轨矿工'
-  Health: 204
-  Damage: 19
+  Health: 133
+  Damage: 12
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -776,8 +776,8 @@ EmberQ07Melee:
 EmberQ07Ranged:
   Type: SKELETON
   Display: '&7矿道弓手'
-  Health: 150
-  Damage: 19
+  Health: 98
+  Damage: 12
   Options:
     MovementSpeed: 0.25
     AlwaysShowName: true
@@ -794,8 +794,8 @@ EmberQ07Ranged:
 EmberQ07Heavy:
   Type: ZOMBIE
   Display: '&8锈甲重卫'
-  Health: 286
-  Damage: 19
+  Health: 186
+  Damage: 12
   Options:
     MovementSpeed: 0.2
     AlwaysShowName: true
@@ -815,8 +815,8 @@ EmberQ07Heavy:
 EmberQ07Caster:
   Type: SKELETON
   Display: '&5炉印术者'
-  Health: 177
-  Damage: 19
+  Health: 115
+  Damage: 12
   Options:
     MovementSpeed: 0.18
     AlwaysShowName: true
@@ -847,8 +847,8 @@ EmberQ07Treasure:
 EmberQ07Elite:
   Type: ZOMBIE
   Display: '&6矿道奖励精英'
-  Health: 680
-  Damage: 19
+  Health: 442
+  Damage: 12
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -867,8 +867,8 @@ EmberQ07Elite:
 EmberQ07Boss:
   Type: ZOMBIE
   Display: '&c炉锁巨卫'
-  Health: 4800
-  Damage: 34
+  Health: 3120
+  Damage: 22
   Options:
     MovementSpeed: 0.24
     AlwaysShowName: true

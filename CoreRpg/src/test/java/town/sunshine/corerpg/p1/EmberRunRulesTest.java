@@ -303,7 +303,9 @@ public class EmberRunRulesTest {
         assertEquals(36, q1.roles.get("melee").hp, 0);
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
-        assertEquals(1000, q3.boss.hp, 0);
+        assertEquals(950, q3.boss.hp, 0); // D60
+        assertEquals(2, m.balanceVersion);
+        assertEquals("g04-1/b2", m.ruleVersion);
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
         assertEquals(2, (int) q2.room("r2").b.get("ranged"));
         assertEquals(1, (int) q3.room("r3").a.get("caster"));
@@ -327,13 +329,13 @@ public class EmberRunRulesTest {
         assertEquals(6, q5.firstClear.blank);
         assertEquals("核心 6 胚料 6 币 2100", q4.firstClearLabel());
         assertEquals("胚料 6 骨尘 20", q5.firstClearLabel());
-        assertEquals(96, q4.roles.get("melee").hp, 0);
+        assertEquals(72, q4.roles.get("melee").hp, 0); // D60 §2c plan B
         assertEquals(5, (int) q4.room("r3").a.get("melee")); // D31: Q04 R3 A = 5 melee + 1 heavy
         assertEquals(1, (int) q4.room("r3").a.get("heavy"));
-        assertEquals(10, q4.roles.get("melee").atk, 0);
-        assertEquals(177, q5.roles.get("melee").hp, 0);
-        assertEquals(1900, q4.boss.hp, 0);
-        assertEquals(3500, q5.boss.hp, 0);
+        assertEquals(8, q4.roles.get("melee").atk, 0);
+        assertEquals(115, q5.roles.get("melee").hp, 0);
+        assertEquals(1420, q4.boss.hp, 0);
+        assertEquals(2280, q5.boss.hp, 0);
         assertEquals(2, q4.boss.skills.size());
         assertEquals("player", q4.boss.skills.get(0).target);
         assertEquals(1.0, q4.boss.skills.get(1).kb, 0);
@@ -361,22 +363,22 @@ public class EmberRunRulesTest {
         assertEquals("ember_daily_rail_v1", q7.template);
         assertEquals("核心 10 币 1200", q6.firstClearLabel());
         assertEquals("核心 12 胚料 12 币 1800", q7.firstClearLabel());
-        assertEquals(177, q6.roles.get("melee").hp, 0);
-        assertEquals(15, q6.roles.get("melee").atk, 0);
-        assertEquals(204, q7.roles.get("melee").hp, 0);
-        assertEquals(286, q7.roles.get("heavy").hp, 0);
-        assertEquals(19, q7.roles.get("caster").atk, 0);
-        assertEquals(680, q7.roles.get("elite").hp, 0);
-        assertEquals(3800, q6.boss.hp, 0);
-        assertEquals(28, q6.boss.atk, 0);
-        assertEquals(4800, q7.boss.hp, 0);
-        assertEquals(34, q7.boss.atk, 0);
+        assertEquals(124, q6.roles.get("melee").hp, 0);
+        assertEquals(10, q6.roles.get("melee").atk, 0);
+        assertEquals(133, q7.roles.get("melee").hp, 0);
+        assertEquals(186, q7.roles.get("heavy").hp, 0);
+        assertEquals(12, q7.roles.get("caster").atk, 0);
+        assertEquals(442, q7.roles.get("elite").hp, 0);
+        assertEquals(2660, q6.boss.hp, 0);
+        assertEquals(20, q6.boss.atk, 0);
+        assertEquals(3120, q7.boss.hp, 0);
+        assertEquals(22, q7.boss.atk, 0);
         EmberRunMaps.Skill blade = q6.boss.skills.get(0);
         assertEquals("line", blade.type);
         assertEquals(1, blade.stripFrom(), 0);
         assertEquals(7, blade.stripTo(), 0);
         assertEquals(10, blade.every, 0);
-        assertEquals(48, blade.dmg, 0);
+        assertEquals(34, blade.dmg, 0);
         assertEquals(4, blade.follow.shift, 0);
         assertEquals(1.0, blade.follow.delay, 0);
         assertEquals(1.01, blade.follow.below, 0); // always fires
