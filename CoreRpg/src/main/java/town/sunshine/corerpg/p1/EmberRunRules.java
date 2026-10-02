@@ -321,7 +321,7 @@ public final class EmberRunRules {
         public FirstClear(String mapKey, String choiceSlot, int choiceTier, int shard, int core, int coin, String unlocks) {
             this(mapKey, choiceSlot, choiceTier, shard, core, coin, 0, 0, unlocks);
         }
-        /** §9.4: Q04 胚料 6·核心 6·币 900; Q05 骨尘 20·胚料 6 */
+        /** §9.4: Q04 胚料 6·核心 6·币 2100 (D31); Q05 骨尘 20·胚料 6 */
         public FirstClear(String mapKey, String choiceSlot, int choiceTier, int shard, int core, int coin, int bone, int blank, String unlocks) {
             this.mapKey = mapKey; this.choiceSlot = choiceSlot; this.choiceTier = choiceTier;
             this.shard = shard; this.core = core; this.coin = coin; this.bone = bone; this.blank = blank; this.unlocks = unlocks;

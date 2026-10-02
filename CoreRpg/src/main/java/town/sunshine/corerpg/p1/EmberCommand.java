@@ -157,6 +157,15 @@ public final class EmberCommand {
                 if (admin) s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "无有效 P1 刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
+                EmberItemData best = null; // P2 draft §2 low-priority item: show the player's best 成色 (display only)
+                for (org.bukkit.inventory.ItemStack it : p.getInventory().getContents()) {
+                    if (it == null || !loadouts.items().hasData(it)) continue;
+                    EmberItems.Read r = loadouts.items().read(it);
+                    if (r == null || !r.ok() || r.data == null || r.data.tier == 0) continue;
+                    if (best == null || r.data.quality > best.quality || (r.data.quality == best.quality && r.data.tier > best.tier)) best = r.data;
+                }
+                if (best != null) s.sendMessage(P + "§7背包里最好成色：§f" + EmberItemData.qualityName(best.quality) + "§7（T" + best.tier + " "
+                        + EmberItemData.familyName(best.family) + EmberItemData.slotName(best.slot) + "）§8· 极品只从掉落获得，挑战版和深渊高层更容易");
                 for (String n : loadouts.notes(p)) s.sendMessage(P + ChatColor.YELLOW + n);
             }
             if (sets != null && admin) s.sendMessage(P + sets.describe(p));

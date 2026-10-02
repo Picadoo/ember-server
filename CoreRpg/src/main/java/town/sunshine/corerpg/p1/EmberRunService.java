@@ -1838,7 +1838,11 @@ public final class EmberRunService implements Listener {
         if (key.startsWith("marks_t")) {
             try { return String.valueOf(marks(d, Integer.parseInt(key.substring(7)))); } catch (NumberFormatException e) { return "0"; }
         }
-        if ("pending".equals(key)) return String.valueOf(store.ledger(p.getUniqueId()).open().size());
+        if ("pending".equals(key)) { // D93: a first-clear choice waiting for a click is not "stuck in storage"
+            int n = 0;
+            for (EmberRunRules.Row r : store.ledger(p.getUniqueId()).open()) if (!EmberRunRules.ST_AWAIT.equals(r.status)) n++;
+            return String.valueOf(n);
+        }
         if ("active".equals(key)) return EmberMode.active() ? "yes" : "no";
         if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";

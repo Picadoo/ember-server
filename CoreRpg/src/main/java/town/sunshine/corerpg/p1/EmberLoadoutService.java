@@ -148,8 +148,9 @@ public final class EmberLoadoutService implements Listener {
             if (at == null || now - at > 30000L) {
                 lookupAt.put(d.uid, now);
                 final String uid = d.uid;
+                final UUID owner = p.getUniqueId();
                 store.lookupItem(uid, r -> {
-                    if (r != null) { rows.put(uid, r); }
+                    if (r != null) { rows.put(uid, r); cache.remove(owner); } // D93
                 });
             }
             return "DB 记录未找到/查询中";
@@ -273,7 +274,8 @@ public final class EmberLoadoutService implements Listener {
         if (st.loaded) return;
         store.ensureSchema();
         store.loadState(id, st, () -> { Player q = Bukkit.getPlayer(id); if (q != null) refresh(q); });
-        store.loadOwnerItems(id, m -> rows.putAll(m));
+        // D93: the cached loadout computed before the rows arrived said "主手不是有效 P1 刃" until something else refreshed it
+        store.loadOwnerItems(id, m -> { rows.putAll(m); cache.remove(id); });
     }
 
     private final java.util.Set<UUID> codexLoaded = new java.util.HashSet<UUID>();

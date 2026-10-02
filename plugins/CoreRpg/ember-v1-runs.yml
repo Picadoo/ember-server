@@ -306,7 +306,7 @@ maps:
     requires: q03
     unlocks: q05
     first_clear: {blank: 6, core: 6, coin: 2100}
-    purpose: "首个 T2 本：常规掉 T2 装备与 T2 印记；首通（胚料 6·核心 6·币 900）开放 Q05、T1→T2 升阶与 T2 定向锻造"
+    purpose: "首个 T2 本：常规掉 T2 装备与 T2 印记；首通（胚料 6·核心 6·币 2100）开放 Q05、T1→T2 升阶与 T2 定向锻造"
     b_ref: 35
     # D15: book ch. 14 walkable white box (ember_daily_tide_v1, /corerpg p1 mapbuild q04)
     spawn: [0, 64, 6]
