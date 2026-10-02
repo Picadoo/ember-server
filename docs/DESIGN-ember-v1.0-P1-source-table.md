@@ -941,3 +941,17 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D77 | 第二个团本 | Q06 地图，首领只用已有招式，靠半血后的第二阶段施压，不加增援 | 书 §18.4；和 R01（冲撞 + 增援）打法不同；首领生命 13000 时第 4 周 3～5 人通关率 60～78%，和 R01 同档 |
 | D78 | 团本周上限 | 两本合计每周 3 次 | p2econ：团本不让奖励膨胀（第 8 周两件极品 22% → 17%，各 3 次是 25%），合计上限更保守，团本保持每周活动的定位 |
 
+### 13.20 P2-7 每日委托（CoreRpg 1.36.0，2026-10-02 21:38 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 参数源 | `ember-v1.yml` `bounty.daily: [{clears: 1, coin: 30}, {clears: 3, coin: 60, shard: 6}]`（两份）；balance_version 7 |
+| 代码 | EmberRunRules `BountyTier` / `bountyTiers` / `bountyGrants` / `bountyLine`；EmberRunService.settleFor 只在本局还没有基础结算行时计数（计数器 `p2_bounty@<体力日>`），奖励记作账本行 `bounty_*_<n>` |
+| 显示 | 冒险页 W、`/corerpg p1 run`、结算后的提示；PAPI `p1_bounty` |
+| 模型 | p1sim / p2econ（`--no-bounty` 对比）；`out-p1sim-bounty.md`、`out-p1sim-nobounty.md`、`out-p2econ-bounty-d050.md` |
+| 测试 | `dailyBountyPaysEachTierOnceOnTheMatchingClear_P2_7`；实测 P1Fox 挑战 Q01 结算多出「余烬币 30」，提示还差 2 局 |
+
+| # | 问题 | 裁决 | 理由 |
+|---|---|---|---|
+| D79 | 每日上线理由 | 每日委托只发币和碎片，两档（第 1 次 / 第 3 次通关） | §23.3：不加物品、印记或体力；模型显示进度和成套不变，后期币由深渊层费吸收 |
+
