@@ -151,6 +151,7 @@ public final class EmberRunService implements Listener {
 
     private PlayerData data(UUID id) { return plugin.getDataStore().get(id); }
     PlayerData dataOf(UUID id) { return data(id); }
+    void flushData(UUID id) { plugin.getDataStore().flushMutation(id); } // D107
 
     /** P2-9 (D83) titles / trails (set by the plugin at enable) */
     private EmberCosmetics cosmetics;
@@ -565,7 +566,7 @@ public final class EmberRunService implements Listener {
         potionCheck(s);
         if (vm != null && vm.raid) {
             tellRun(s, "§6团本开始 §7· " + s.partySize + " 人 · 掉落 T3 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 无倒地复活：倒下的人等队友打完 · 走进前方房间开战 · 首领死后统一结算");
+                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 倒下后观战队友，下一个房间开打或首领转阶段时自动复活（50% 生命）· 走进前方房间开战 · 首领死后统一结算");
             return;
         }
         EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
@@ -657,6 +658,7 @@ public final class EmberRunService implements Listener {
         // D89: say what is in the room (the A/B variant letter meant nothing to players; it stays in the log)
         tellRun(s, "§e" + r.label + " §7· 敌人 " + spawned + (spawned < planned ? "/" + planned : "") + "：" + comp);
         log().info("[P1 run] " + s.runId + " " + r.id + " variant " + (b ? "B" : "A") + " " + comp.replaceAll("§.", ""));
+        reviveFallen(s, "新房间开打"); // D106
     }
 
     void onRoomCleared(EmberRunSession s, EmberRunMaps.Room r, boolean last) {
@@ -666,6 +668,176 @@ public final class EmberRunService implements Listener {
 
     void onBossSpawned(EmberRunSession s, EmberRunMaps.Boss b) {
         tellRun(s, "§c首领 " + b.name + (s.challenge ? "（挑战）" : "") + " §7现身 · 招式都有预警，看清地面火线再躲");
+        reviveFallen(s, "首领现身"); // D106
+    }
+
+    // ------------------------------------------------------------------ D106 raid falls: watch a teammate, revive later
+
+    void onBossPhase(EmberRunSession s, String why) { reviveFallen(s, why); }
+
+    private boolean raidRun(EmberRunSession s) {
+        EmberRunMaps.MapDef m = maps.byKey(s.mapKey);
+        return m != null && m.raid;
+    }
+
+    /** committed members standing in the instance (not fallen, not left, not spectating) */
+    private List<Player> livingIn(EmberRunSession s) {
+        List<Player> out = new ArrayList<Player>();
+        for (UUID u : s.committed) {
+            if (s.died.contains(u) || s.left.contains(u)) continue;
+            Player p = Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline() || p.isDead() || p.getGameMode() == GameMode.SPECTATOR) continue;
+            if (s.world != null && !s.world.equals(p.getWorld().getName())) continue;
+            out.add(p);
+        }
+        return out;
+    }
+
+    private Player nearestLiving(EmberRunSession s, Player from) {
+        Player best = null;
+        double bd = Double.MAX_VALUE;
+        for (Player o : livingIn(s)) {
+            double d = o.getWorld() == from.getWorld() ? o.getLocation().distanceSquared(from.getLocation()) : Double.MAX_VALUE / 2;
+            if (best == null || d < bd) { best = o; bd = d; }
+        }
+        return best;
+    }
+
+    private String nextReviveText(EmberRunSession s) {
+        EmberRunDirector d = s.world == null ? null : byWorld.get(s.world);
+        String n = d == null ? null : d.nextRevive();
+        return n == null ? "本局没有复活点了，等队友打完（首领死后照常结算）" : n + "自动复活（50% 生命）";
+    }
+
+    /** a fallen raid member: spectator mode, camera on a living teammate, plus the [观战队友] button and next revive */
+    private void watchTeammate(Player p, EmberRunSession s, boolean tell) {
+        p.setGameMode(GameMode.SPECTATOR);
+        Player t = nearestLiving(s, p);
+        if (t != null) {
+            if (p.getWorld() != t.getWorld() || p.getLocation().distanceSquared(t.getLocation()) > 4) p.teleport(t.getLocation());
+            try { p.setSpectatorTarget(t); } catch (Throwable ignored) { }
+        }
+        if (tell) {
+            p.sendMessage(P + "§c你已倒下§7：观战队友" + (t == null ? "" : " §f" + t.getName()) + "§7 · 下一次复活：§e" + nextReviveText(s));
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[观战队友]", "/corerpg p1 watch", "换下一个还站着的队友", "AQUA"});
+        }
+    }
+
+    /** D106: revive every fallen raid member still in the instance at 50 % HP next to a living teammate. */
+    void reviveFallen(EmberRunSession s, String why) {
+        if (!s.open() || s.died.isEmpty() || !raidRun(s)) return;
+        List<Player> alive = livingIn(s);
+        if (alive.isEmpty()) return;
+        List<String> names = new ArrayList<String>();
+        for (UUID u : new ArrayList<UUID>(s.died)) {
+            Player p = Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline() || s.left.contains(u) || p.isDead()) continue;
+            if (s.world == null || !s.world.equals(p.getWorld().getName())) continue;
+            Player a0 = nearestLiving(s, p);
+            final Player a = a0 == null ? alive.get(0) : a0;
+            try { p.setSpectatorTarget(null); } catch (Throwable ignored) { }
+            // DP keeps a fallen raider in its own "dead" state (revive=true, number=0): clear it first, or DP would
+            // count the revived player as dead and end the dungeon when the last DP-alive member falls.
+            try { Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dp revive " + p.getName() + " true true"); }
+            catch (RuntimeException ex) { log().warning("[P1 run] dp revive " + p.getName() + ": " + ex); }
+            s.died.remove(u);
+            names.add(p.getName());
+            final String world = s.world;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> { // after DP's own respawn teleport
+                if (!p.isOnline() || !world.equals(p.getWorld().getName())) return;
+                Location to = a.isOnline() && a.getWorld() == p.getWorld() ? a.getLocation() : p.getLocation();
+                p.teleport(to);
+                p.setGameMode(GameMode.ADVENTURE);
+                double max = EmberHeal.maxHp(p);
+                p.setHealth(Math.max(1.0, Math.min(max, max * 0.5)));
+                EmberHeal.rebase(p); // sanctioned HP change: the B2.144 guard must not revert it
+                p.setFireTicks(0);
+                p.setFallDistance(0f);
+                p.sendMessage(P + "§a" + why + "：你已复活（50% 生命），回到 §f" + a.getName() + " §a身边");
+            }, 3L);
+            Bukkit.getScheduler().runTaskLater(plugin, () -> { // DP may put the player back on the death point a bit later
+                if (!p.isOnline() || !a.isOnline() || a.getWorld() != p.getWorld() || !world.equals(p.getWorld().getName())) return;
+                if (p.getLocation().distanceSquared(a.getLocation()) > 64) p.teleport(a.getLocation());
+            }, 20L);
+        }
+        if (names.isEmpty()) return;
+        store.save(s);
+        tellRun(s, "§a" + why + " · 复活：§f" + String.join("、", names));
+        log().info("[P1 run] " + s.runId + " raid revive (" + why + "): " + names);
+    }
+
+    /** D106: once a second — a fallen raid member who drifts more than 24 blocks from every living teammate (or out of
+     *  the instance world) is put back on a teammate's camera. */
+    void leashFallen(EmberRunDirector d) {
+        EmberRunSession s = d.s;
+        if (!s.open() || s.died.isEmpty()) return;
+        for (UUID u : s.died) {
+            Player p = Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline() || p.getGameMode() != GameMode.SPECTATOR || s.left.contains(u)) continue;
+            if (p.getWorld() != d.w) continue; // left the instance: handled by onChangedWorld (counts as left)
+            if (p.getSpectatorTarget() != null) continue;
+            Player t = nearestLiving(s, p);
+            if (t == null) continue;
+            if (t.getLocation().distanceSquared(p.getLocation()) > 24 * 24) {
+                watchTeammate(p, s, false);
+                p.sendMessage(P + "§7倒下时只能在队友身边 24 格内观战 · 下一次复活：§e" + nextReviveText(s));
+            }
+        }
+    }
+
+    /** D106: spectator-menu teleports out of the raid instance are blocked for fallen members. */
+    @EventHandler(ignoreCancelled = true)
+    public void onSpectateTeleport(org.bukkit.event.player.PlayerTeleportEvent e) {
+        if (e.getCause() != org.bukkit.event.player.PlayerTeleportEvent.TeleportCause.SPECTATE || e.getTo() == null) return;
+        Player p = e.getPlayer();
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || !d.def.raid || !d.s.died.contains(p.getUniqueId())) return;
+        if (e.getTo().getWorld() != d.w) {
+            e.setCancelled(true);
+            p.sendMessage(P + "§7倒下时只能观战本局队友。");
+        }
+    }
+
+    private final Map<UUID, Long> leaveAsked = new HashMap<UUID, Long>();
+
+    /** D106: a fallen raid member cannot walk out of the instance — /dp leave is held once; a second /dp leave within
+     *  10 s is a deliberate give-up (counts as leaving: no revive, no settlement). Hub commands are blocked by QuestService. */
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onFallenLeave(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
+        Player p = e.getPlayer();
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || !d.def.raid || !d.s.open() || !d.s.died.contains(p.getUniqueId())) return;
+        String[] a = e.getMessage().replaceFirst("^/", "").trim().toLowerCase(Locale.ROOT).split("\\s+");
+        String root = a[0].contains(":") ? a[0].substring(a[0].indexOf(':') + 1) : a[0];
+        if (!(root.equals("dp") || root.startsWith("dungeon")) || a.length < 2 || !"leave".equals(a[1])) return;
+        Long t = leaveAsked.get(p.getUniqueId());
+        long now = System.currentTimeMillis();
+        if (t != null && now - t < 10000L) { leaveAsked.remove(p.getUniqueId()); return; } // confirmed give-up
+        leaveAsked.put(p.getUniqueId(), now);
+        e.setCancelled(true);
+        if (plugin.getQuestService() != null) plugin.getQuestService().quietHint(p.getUniqueId());
+        p.sendMessage(P + "§c倒下后不能离开团本§7：下一次复活 §e" + nextReviveText(d.s)
+                + "§7；本局结束会自动送回。§c确实要放弃本局结算§7：10 秒内再输一次 /dp leave");
+    }
+
+    /** /corerpg p1 watch — a fallen raid member cycles the camera through the living teammates. */
+    private boolean cmdWatch(CommandSender sender) {
+        if (!(sender instanceof Player)) return true;
+        Player p = (Player) sender;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || !d.s.died.contains(p.getUniqueId()) || !d.s.open()) { p.sendMessage(P + "只有团本里倒下的人可以观战队友。"); return true; }
+        List<Player> alive = livingIn(d.s);
+        if (alive.isEmpty()) { p.sendMessage(P + "没有还站着的队友。"); return true; }
+        Entity cur = p.getSpectatorTarget();
+        int i = 0;
+        for (int k = 0; k < alive.size(); k++) if (alive.get(k).equals(cur)) { i = (k + 1) % alive.size(); break; }
+        Player t = alive.get(i);
+        p.setGameMode(GameMode.SPECTATOR);
+        try { p.setSpectatorTarget(null); } catch (Throwable ignored) { }
+        p.teleport(t.getLocation());
+        try { p.setSpectatorTarget(t); } catch (Throwable ignored) { }
+        p.sendMessage(P + "§7正在观战 §f" + t.getName() + " §7· 下一次复活：§e" + nextReviveText(d.s));
+        return true;
     }
 
     void onExtraSpawned(EmberRunSession s) {
@@ -817,11 +989,18 @@ public final class EmberRunService implements Listener {
         String week = EmberRunRules.rotationWeekKey(today);
         boolean rotation = s.challenge && s.abyss == 0 && m.key.equals(featured(today)) && maps.rotationBonusMarks > 0
                 && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
+        // D108: a repeat NORMAL clear of the featured T1/T2 map (Q01–Q06) → +normal_bonus_marks of the map tier; one
+        // weekly counter with the challenge bonus (C_ROTATION), so the week's featured bonus stays 3 clears in total
+        boolean featNormal = !s.challenge && s.abyss == 0 && !m.raid && in.firstClear == null && s.tier < 3
+                && m.key.equals(featured(today)) && maps.rotationNormalBonusMarks > 0
+                && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
+        if (featNormal) rotation = true;
+        final int rotMarks = s.challenge ? maps.rotationBonusMarks : maps.rotationNormalBonusMarks;
         if (m.raid) { // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic
             grants.add(EmberRunRules.raidItem(in, "raid_item", m.lootFamily, maps.raidItemQualityFloor)); // P2-9 (D82)
             grants.add(new EmberRunRules.Grant("raid_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), 1, null));
         }
-        if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), maps.rotationBonusMarks, null));
+        if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
         EmberRunRules.Ledger l = store.ledger(u);
         // P2-7 daily bounty (D79): the n-th settled clear of the stamina day; counted once per run (fresh = no base row yet)
         final boolean fresh = l.get(s.runId, "base_coin") == null;
@@ -867,7 +1046,7 @@ public final class EmberRunService implements Listener {
                     + " §7（下一层需重新确认与付费：冒险页 → 深渊）");
         }
         if (p != null && p.isOnline() && rotation) {
-            p.sendMessage(P + "§b本周精选挑战 §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + maps.rotationBonusMarks
+            p.sendMessage(P + "§b本周精选" + (s.challenge ? "挑战" : "重打") + " §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + rotMarks
                     + "§7（本周 " + pd.periodCount(C_ROTATION, week) + "/" + maps.rotationWeeklyCap + "）");
         }
         if (p != null && p.isOnline() && fresh && !tiers.isEmpty()) {
@@ -1176,6 +1355,7 @@ public final class EmberRunService implements Listener {
                 if (s.died.contains(p.getUniqueId())) { // §20.5: a fallen member who gets back in (respawn elsewhere, tp) keeps watching
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                         if (p.isOnline() && p.getWorld() == to) {
+                            if (raidRun(s) && s.open()) { watchTeammate(p, s, true); return; } // D106
                             p.setGameMode(GameMode.SPECTATOR);
                             p.sendMessage(P + "你本局已倒下：观战等待队友（仍保留本次结算资格）。");
                         }
@@ -1189,6 +1369,7 @@ public final class EmberRunService implements Listener {
             EmberRunDirector d = byWorld.get(from.getName());
             if (d != null && d.s.participants.contains(p.getUniqueId()) && d.s.open()) {
                 if (!d.s.died.contains(p.getUniqueId())) d.s.left.add(p.getUniqueId());
+                else if (d.def.raid) { d.s.died.remove(p.getUniqueId()); d.s.left.add(p.getUniqueId()); } // D106: a fallen raider who gives up has left
                 store.save(d.s);
                 checkWipe(d.s);
             }
@@ -1414,10 +1595,24 @@ public final class EmberRunService implements Listener {
         Player p = e.getEntity();
         EmberRunDirector d = byWorld.get(p.getWorld().getName());
         if (d == null || !d.s.committed.contains(p.getUniqueId()) || !d.s.open()) return;
-        d.s.died.add(p.getUniqueId());
+        if (!d.s.died.add(p.getUniqueId()) && d.def.raid) return; // D106: a watcher killed again (/kill, void) — already counted
         store.save(d.s);
         deathRefund(p, d.s);
         checkWipe(d.s);
+        if (d.def.raid && d.s.open() && !livingIn(d.s).isEmpty()) { // D106
+            tellRun(d.s, "§c" + p.getName() + " 倒下 §7· 下一次复活：§e" + nextReviveText(d.s));
+            watchLater(p, d.s, 10L, 3); // DP keeps the fallen raider in the instance (dead state) — put the camera on a teammate
+        }
+    }
+
+    /** D106: once the fallen raider is back on their feet (DP auto-respawn), switch to watching a teammate. */
+    private void watchLater(final Player p, final EmberRunSession rs, long delay, final int tries) {
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline() || !rs.open() || !rs.died.contains(p.getUniqueId()) || rs.world == null
+                    || !rs.world.equals(p.getWorld().getName())) return;
+            if (p.isDead()) { if (tries > 0) watchLater(p, rs, 20L, tries - 1); return; }
+            watchTeammate(p, rs, true);
+        }, delay);
     }
 
     /** D32 / B2.172: a heal potion drunk inside a P1 main run (called by LifeService after the cooldown check). */
@@ -1466,8 +1661,14 @@ public final class EmberRunService implements Listener {
         final Player p = e.getPlayer();
         EmberRunDirector d = byWorld.get(p.getWorld().getName());
         if (d == null || !d.s.died.contains(p.getUniqueId()) || !d.s.open()) return;
+        final EmberRunSession rs = d.s;
+        if (d.def.raid) { // D106: respawn next to a living teammate, then watch them until the next revive point
+            Player a = nearestLiving(rs, p);
+            if (a != null) e.setRespawnLocation(a.getLocation());
+        }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (p.isOnline() && blocksLegacy(p.getWorld())) {
+                if (raidRun(rs) && rs.open() && rs.died.contains(p.getUniqueId())) { watchTeammate(p, rs, false); return; } // onDeath tells
                 p.setGameMode(GameMode.SPECTATOR);
                 p.sendMessage(P + "你已倒下：本局观战等待队友（仍保留本次结算资格）。");
             }
@@ -1546,7 +1747,7 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ commands
 
     public static final java.util.Set<String> OPS = new java.util.HashSet<String>(java.util.Arrays.asList(
-            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit"));
+            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit", "watch"));
 
     public boolean cmd(CommandSender s, String sub, String[] args) {
         switch (sub) {
@@ -1565,6 +1766,7 @@ public final class EmberRunService implements Listener {
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
             case "recruit": return cmdRecruit(s, args); // D104 (midgame #5)
+            case "watch": return cmdWatch(s); // D106
             default:
                 return cmdRuns(s, args);
         }
@@ -1925,7 +2127,7 @@ public final class EmberRunService implements Listener {
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " ",
                     new String[]{"[开本]", "/corerpg p1 enter " + rm.key, "队长点：全队需各自首通 Q07，3～5 人", "GOLD"});
         p.sendMessage(P + "§e每日委托 §7" + bountyLabel(d)); // P2-7
-        p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次挑战通关各多 " + maps.rotationBonusMarks + " 枚 T3 印记）");
+        p.sendMessage(P + "本周精选：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次精选通关各多 1 枚印记：挑战版给 T3，Q01–Q06 首通后的普通版重打给本图阶）");
         if (!maps.modifiers.isEmpty()) p.sendMessage(P + "本周规则（精选图的挑战版" + (normalRule() ? "和首通后的普通版重打；首通不受影响" : "；普通版不变") + "；奖励不变）：§b" + modifierLabel());
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
                 + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
@@ -1951,8 +2153,9 @@ public final class EmberRunService implements Listener {
         if (f == null || maps.rotationBonusMarks <= 0) return "无";
         int left = Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
         EmberRunMaps.Modifier mod = maps.modifierFor(today);
+        boolean normalToo = f.tier < 3 && maps.rotationNormalBonusMarks > 0; // D108
         return f.key.toUpperCase(Locale.ROOT) + " " + f.name + (mod == null ? "" : " · 规则「" + mod.name + "」")
-                + " · 挑战版本周还能多拿 " + left + " 枚 T3 印记 · 周一 0 点轮换";
+                + " · 本周还能多拿 " + left + " 次印记（" + (normalToo ? "首通后重打给 T" + f.tier + "，挑战版给 T3，共用 " + maps.rotationWeeklyCap + " 次" : "挑战版，T3") + "）· 周一 0 点轮换";
     }
 
     /** D98: the real family odds on this map for this player (EmberRunRules.familyProbability), one short tail */
@@ -2012,11 +2215,18 @@ public final class EmberRunService implements Listener {
     /** D94 %corerpg_p1_rule_<map>%: "" unless the map is featured this week and its rule reaches normal runs */
     public String ruleLine(PlayerData d, String key) {
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
-        if (!key.equals(featured(today)) || !normalRule()) return "";
-        EmberRunMaps.Modifier mod = maps.modifierFor(today);
+        if (!key.equals(featured(today))) return "";
         EmberRunMaps.MapDef m = maps.byKey(key);
-        boolean on = m != null && firstCleared(d, m);
-        // D101 (midgame #9): say plainly that the normal-run rule only adds difficulty
+        if (m == null) return "";
+        EmberRunMaps.Modifier mod = normalRule() ? maps.modifierFor(today) : null;
+        boolean on = firstCleared(d, m);
+        if (m.tier < 3 && maps.rotationNormalBonusMarks > 0) { // D108: the featured T1/T2 map pays a mark on repeat clears
+            int left = Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
+            return "§b· 本周精选：重打通关 +" + maps.rotationNormalBonusMarks + " 枚 T" + m.tier + " 印记（本周剩 " + left + "/" + maps.rotationWeeklyCap + "）"
+                    + (mod == null ? "" : " · 规则「" + mod.name + "」") + (on ? "" : "§8（首通后才有，首通不受规则影响）");
+        }
+        if (mod == null) return "";
+        // D101 (midgame #9): Q07 normal (T3) gets no extra mark — the extra marks are on the challenge version
         return "§b· 本周规则「" + mod.name + "」§8（" + (on ? "" : "只影响首通后的重打，") + "只加难度；额外印记在 Q07 后的挑战版）";
     }
 

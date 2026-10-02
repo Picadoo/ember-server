@@ -7,8 +7,9 @@ dungeon-init-script:
   - "$setmap{name=ember_daily_frost_v1} @init"
   - "$setspawn{location=0,64,6} @init"
   - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
-  # §20.5 首版无倒地/复活系统：单人死亡即失败，多人由存活队友完成（CoreRpg 判定）
-  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+  # D106 团本倒下：留在实例里观战队友（revive=true 但 number=0：DP 的点击复活用不了）；
+  # 复活只由 CoreRpg 在下一个房间开打 / 首领转阶段时用 dp revive <玩家> true true 触发（50% 生命）
+  - "$revive-setting{revive=true;number=0;death-location=true} @init"
 
 dungeon-start:
   condition:

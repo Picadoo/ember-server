@@ -304,10 +304,11 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(13, m.balanceVersion);                // D104
-        assertEquals("g04-1/b13", m.ruleVersion);
+        assertEquals(14, m.balanceVersion);                // D108
+        assertEquals("g04-1/b14", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
+        assertEquals(1, m.rotationNormalBonusMarks);       // D108
         // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all
         assertEquals(3, m.modifiers.size());
         assertEquals(3, m.modifier("lean").potionCap);

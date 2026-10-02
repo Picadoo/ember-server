@@ -511,6 +511,8 @@ public final class EmberRunMaps {
     private final List<Challenge> abyssCh;
     /** P2-1 (D66) weekly featured challenge: extra marks of the run tier, and how many clears per week get them */
     public final int rotationBonusMarks, rotationWeeklyCap;
+    /** D108: marks of the map tier on a repeat NORMAL clear of the featured T1/T2 map (shares rotationWeeklyCap) */
+    public final int rotationNormalBonusMarks;
     public final String worldPrefix;
     public final Map<String, MapDef> maps;
     /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
@@ -602,6 +604,7 @@ public final class EmberRunMaps {
         Map<?, ?> rot = root.get("rotation") instanceof Map ? (Map<?, ?>) root.get("rotation") : java.util.Collections.emptyMap();
         rotationBonusMarks = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
         rotationWeeklyCap = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
+        rotationNormalBonusMarks = Math.max(0, (int) num(rot.get("normal_bonus_marks"), 0));
         Map<?, ?> lb = root.get("loot_bias") instanceof Map ? (Map<?, ?>) root.get("loot_bias") : Collections.emptyMap();
         lootOwnFamily = clamp01(num(lb.get("own_family"), EmberRunRules.TARGET_WEIGHT));
         lootMapShare = clamp01(num(lb.get("map_share"), 0.5));

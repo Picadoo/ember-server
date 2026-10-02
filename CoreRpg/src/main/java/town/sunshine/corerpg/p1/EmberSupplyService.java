@@ -144,7 +144,7 @@ public final class EmberSupplyService implements Listener {
 
     /** The hint for a P1 player right now (the set HUD shows it instead of its own line). */
     public String lowHpHint(Player p) {
-        if (p == null || p.isDead() || !EmberMode.isP1World(p.getWorld())) return null;
+        if (p == null || p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR || !EmberMode.isP1World(p.getWorld())) return null; // D106: not while watching
         EmberLoadoutService ls = plugin.getEmberLoadouts();
         long cd = ls == null ? 0 : ls.state(p.getUniqueId()).healCdUntil - System.currentTimeMillis();
         return lowHpHint(p.getHealth(), EmberHeal.maxHp(p), potionSlot(p), cd);

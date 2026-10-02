@@ -15,6 +15,7 @@ import p1config
 # P2-8 / D94 weekly rules (rotation.modifiers); `normal: true` rules also hit repeat normal runs of the featured map
 _RUNS = miniyaml.load(os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'))
 MODS = list((_RUNS.get('rotation') or {}).get('modifiers') or [])
+ROT_CFG = _RUNS.get('rotation') or {}
 
 FAMS = ('scorch', 'burst', 'sustain')
 MELEE_ROLES = ('melee', 'heavy', 'elite')
@@ -36,6 +37,10 @@ class Knobs:
         self.swap = kw.get('swap', False)   # §6.3 free enhance-track swap when equipping a better drop
         self.route = kw.get('route', 'stepdown')  # stepdown (v3 bot) | alternate (v2 bot)
         self.normal_mods = kw.get('normal_mods', None)  # D94: None | 'normal' (rules marked normal) | 'all' (incl. casters)
+        # D108: +normal_bonus_marks on repeat NORMAL clears of the featured map (T1/T2 maps). 'config' = as the runs yml,
+        # 'off' = never; feat_farm = the player detours to the featured map while bonus clears are left this week
+        self.feat_normal = kw.get('feat_normal', 'config')
+        self.feat_farm = kw.get('feat_farm', False)
 
 
 # ---------------------------------------------------------------- stats
@@ -460,6 +465,35 @@ def week_rule(kn, order, day, offset, key, cleared):
     return mod if (kn.normal_mods == 'all' or _truthy(mod.get('normal'))) else None
 
 
+def feat_week(order, day, offset):
+    week = (day - 1 + offset) // 7
+    return week, order[week % len(order)]
+
+
+def feat_left(p, kn, cfg, order, day, offset, key):
+    """D108: bonus clears left this week if a repeat NORMAL clear of `key` would pay the featured mark (else 0)."""
+    n = int(ROT_CFG.get('normal_bonus_marks', 0) or 0)
+    if kn.feat_normal == 'off' or n <= 0 or key not in p.cleared or cfg['maps'][key]['tier'] >= 3:
+        return 0
+    week, feat = feat_week(order, day, offset)
+    if feat != key:
+        return 0
+    if getattr(p, 'feat_wk', None) != week:
+        p.feat_wk, p.feat_n = week, 0
+    return max(0, int(ROT_CFG.get('weekly_cap', 3)) - p.feat_n)
+
+
+def feat_pay(p, kn, cfg, order, day, offset, key):
+    """Call BEFORE settle (the mark converts in settle). Shares the weekly cap counter with the challenge bonus."""
+    if feat_left(p, kn, cfg, order, day, offset, key) <= 0:
+        return 0
+    n = int(ROT_CFG.get('normal_bonus_marks', 0))
+    p.feat_n += 1
+    p.marks[cfg['maps'][key]['tier']] += n
+    p.feat_marks = getattr(p, 'feat_marks', 0) + n
+    return n
+
+
 def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
     rng = random.Random(seed)
     p = Player(cfg, kn, rng)
@@ -480,6 +514,10 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
             break
         cur = min(cur, front)
         key = order[cur]
+        if kn.feat_farm:  # D108 detour: spend this week's bonus clears on the featured map when it pays
+            fk = feat_week(order, day, offset)[1]
+            if feat_left(p, kn, cfg, order, day, offset, fk) > 0:
+                key = fk
         p.buy_potions()
         p.day = day
         st = p.st()
@@ -495,7 +533,8 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
         runs += 1
         r = rec[key]
         r['entries'] += 1
-        if cur == front:
+        detour = key != order[cur]  # D108 featured detour (feat_farm)
+        if cur == front and not detour:
             r['front_entries'] += 1
         if ok:
             r['clears'] += 1
@@ -504,18 +543,22 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
                 r['fc_run'], r['fc_day'] = runs, day
                 r['gear'] = desc(p.blade) + ' ' + desc(p.charm)
                 r['B'], r['H'], r['lv'] = st['B'], st['H'], level_of(cfg, p.xp)
+            feat_pay(p, kn, cfg, order, day, offset, key)
             p.settle(key, extra)
             if first:
                 if key == stop_at:
                     break
             p.invest()
-            cur = front + 1 if cur == front else front
+            if not detour:
+                cur = front + 1 if cur == front else front
         else:
             r['deaths'] += 1
             if cfg['death_refund'] > 0 and refund_day != day:
                 refund_day = day
                 p.potions += min(used, cfg['death_refund'])
-            if kn.route == 'alternate':
+            if detour:
+                pass
+            elif kn.route == 'alternate':
                 cur = max(0, front - 1) if cur == front else front
             else:
                 cur = max(0, cur - 1)
@@ -648,6 +691,8 @@ def main(argv=None):
     ap.add_argument('--no-loot', action='store_true', help='without the P2-9 per-map loot identity (D81) for comparison')
     ap.add_argument('--normal-mods', nargs='?', const='normal', choices=['normal', 'all'], default=None,
                     help='D94: weekly rule on repeat normal runs of the featured map (all = include casters)')
+    ap.add_argument('--no-feat-normal', action='store_true', help='D108: without the featured mark on repeat normal runs')
+    ap.add_argument('--feat-farm', action='store_true', help='D108: players detour to the featured map for the bonus')
     ap.add_argument('--target', default='burst', choices=FAMS)
     ap.add_argument('--uptime', type=float, default=0.70)
     ap.add_argument('--ref', action='store_true', help='clear rate per map at the book §3.2 reference loadout')
@@ -673,7 +718,8 @@ def main(argv=None):
     print('# p1sim profile=%s route=%s swap=%s target=%s normal_mods=%s players=%d cap=%d days (%d runs/day)\n' % (
         args.profile, args.route, args.swap, args.target, args.normal_mods, args.players, args.days, per_day))
     for d in args.dodge:
-        kn = Knobs(d, route=args.route, swap=args.swap, target=args.target, uptime=args.uptime, normal_mods=args.normal_mods)
+        kn = Knobs(d, route=args.route, swap=args.swap, target=args.target, uptime=args.uptime, normal_mods=args.normal_mods,
+                   feat_normal='off' if args.no_feat_normal else 'config', feat_farm=args.feat_farm)
         rows, cap = summarize(cfg, kn, args.players, args.days * per_day)
         last = rows[-1]
         print('## dodge %.2f — Q07 first clear: %s\n' % (d, ('median day %s (P90 %s), %d%% of players within %d days'

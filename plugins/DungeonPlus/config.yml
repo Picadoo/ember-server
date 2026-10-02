@@ -37,6 +37,8 @@ dungeon:
       # 2026-10-02 (P1 live test B2.138): read-only P1 status / current run panel inside Q instances
       - "corerpg p1 status"
       - "corerpg p1 run"
+      # 2026-10-03 D106: a fallen raider cycles the camera through living teammates ([观战队友])
+      - "corerpg p1 watch"
       - "rpg quest"
       - "rpg stats"
       - "rpg skill"

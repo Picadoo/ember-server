@@ -846,6 +846,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         setLine(obj, ChatColor.GRAY + "骨尘 " + ChatColor.WHITE + countNamed(player, dustNeedle), 2);
         setLine(obj, ChatColor.AQUA + "附魔晶 " + ChatColor.WHITE + countNamed(player, crystalNeedle), 1);
         setLine(obj, ChatColor.DARK_GRAY + "/ember", 0);
+        if (emberRuns != null && emberRuns.cosmetics() != null) { // D107 nameplate flairs
+            try { emberRuns.cosmetics().syncFlair(board); } catch (RuntimeException ex) { getLogger().fine("flair sync: " + ex); }
+        }
         player.setScoreboard(board);
     }
 

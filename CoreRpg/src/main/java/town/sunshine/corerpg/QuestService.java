@@ -1268,6 +1268,9 @@ public final class QuestService implements Listener {
         blockedHint.put(e.getPlayer().getUniqueId(), System.currentTimeMillis());
     }
 
+    /** D106: another handler already explained why the command was held — skip the generic hint. */
+    public void quietHint(UUID u) { blockedHint.put(u, System.currentTimeMillis()); }
+
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDungeonCmdBlocked(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
         if (!e.isCancelled() || !isInstanceWorld(e.getPlayer().getWorld())) return;

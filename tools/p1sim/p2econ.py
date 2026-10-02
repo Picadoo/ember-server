@@ -147,11 +147,18 @@ def to_q07(cfg, kn, seed):
     while runs < 60 * per_day:
         front = next((i for i, k in enumerate(order) if k not in p.cleared), None)
         if front is None:
+            # D108 shared cap: featured bonuses already taken in the week of the Q07 first clear
+            p.feat_carry = p.feat_n if getattr(p, 'feat_wk', None) == p1sim.feat_week(order, p.day, offset)[0] else 0
             return p, runs, rng
         cur = min(cur, front)
         key = order[cur]
-        p.buy_potions()
         p.day = runs // per_day + 1
+        if kn.feat_farm:  # D108 featured detour (see p1sim.simulate_player)
+            fk = p1sim.feat_week(order, p.day, offset)[1]
+            if p1sim.feat_left(p, kn, cfg, order, p.day, offset, fk) > 0:
+                key = fk
+        detour = key != order[cur]
+        p.buy_potions()
         mod = p1sim.week_rule(kn, order, p.day, offset, key, p.cleared)  # D94 (None unless --normal-mods)
         if mod is None:
             ok, used, extra, *_ = p1sim.run_map(cfg, key, p.st(), kn, rng, p.potions)
@@ -161,15 +168,18 @@ def to_q07(cfg, kn, seed):
         p.potions -= used
         runs += 1
         if ok:
+            p1sim.feat_pay(p, kn, cfg, order, p.day, offset, key)  # D108
             p.settle(key, extra)
             p.invest()
-            cur = front + 1 if cur == front else front
+            if not detour:
+                cur = front + 1 if cur == front else front
         else:
             day = runs // per_day + 1
             if cfg['death_refund'] > 0 and refund_day != day:
                 refund_day = day
                 p.potions += min(used, cfg['death_refund'])
-            cur = max(0, cur - 1)
+            if not detour:
+                cur = max(0, cur - 1)
     return None, runs, rng
 
 
@@ -195,6 +205,13 @@ RAIDS = RUNS.get('raids', {})
 # P2-5/P2-6: party clear rate by week after Q07 (tools/p1party.py, 4-player median of r01 / r02 at boss HP 13000:
 # week 2 ≈ 0.40, week 4 ≈ 0.76); weeks in between interpolated, capped at week 4's value.
 RAID_RATE = {1: 0.30, 2: 0.40, 3: 0.58, 4: 0.76}
+# D106 (balance_version 14): p1party.py after D104, 4-player median of r01 / r02 (weeks 2 and 4 measured, 1 and 3
+# scaled / interpolated). 'b13' = no revive (the old rule), 'revive' = fallen members stand up at the next room / boss
+# appearance / boss 50 % (live from CoreRpg 1.49.0). out-p1party-d106-*.md
+RAID_RATES = {'b12': {1: 0.30, 2: 0.40, 3: 0.58, 4: 0.76},
+              'b13': {1: 0.34, 2: 0.45, 3: 0.63, 4: 0.81},
+              'revive': {1: 0.44, 2: 0.59, 3: 0.74, 4: 0.88}}
+RAID_RATE = RAID_RATES['revive']
 RAID_TRIES = 5  # a party gives up for the week after 5 attempts
 
 
@@ -217,7 +234,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
         best = max(rates, key=rates.get)
         can_ch = rates[best] >= 0.5
-        bonus_left = ROT['weekly_cap']
+        bonus_left = ROT['weekly_cap'] - (getattr(p, 'feat_carry', 0) if w == 0 else 0)  # D108 shared weekly cap
         mod = MODS[w % len(MODS)] if mods and MODS else None
         fcfg, fcap = mod_cfg(ccfg, featured, mod)
         wmod = MODS[w % len(MODS)] if MODS else None  # D94: the same week's rule on repeat NORMAL Q07 runs when featured
@@ -335,6 +352,10 @@ def main():
     ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
     ap.add_argument('--normal-mods', nargs='?', const='normal', choices=['normal', 'all'], default=None,
                     help='D94: weekly rule on repeat normal runs of the featured map, in every mode (all = include casters)')
+    ap.add_argument('--no-feat-normal', action='store_true', help='D108: without the featured mark on repeat normal runs')
+    ap.add_argument('--feat-farm', action='store_true', help='D108: phase-1 players detour to the featured map for the bonus')
+    ap.add_argument('--feat-separate', action='store_true', help='D108 variant: the normal bonus has its own weekly cap')
+    ap.add_argument('--raid-rate', default='revive', choices=sorted(RAID_RATES), help='D106: raid clear rate table')
     ap.add_argument('--every-week', action='store_true', help='print every week (default: 1, 2, 4, 6, 8, 10, 12)')
     ap.add_argument('--ch-hp', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss HP (abyss follows)')
     ap.add_argument('--ch-atk', type=float, default=1.0, help='D104 tuning: multiply challenge mob/boss damage (abyss follows)')
@@ -348,7 +369,8 @@ def main():
         cfg['loot_bias']['own_family'] = a.loot_own
     if a.loot_slot is not None:
         cfg['loot_bias']['slot'] = a.loot_slot
-    global OLD_RAID_ITEM, RAID_FLOOR
+    global OLD_RAID_ITEM, RAID_FLOOR, RAID_RATE
+    RAID_RATE = RAID_RATES[a.raid_rate]
     OLD_RAID_ITEM = a.old_raid_item
     RAID_FLOOR = int((RUNS.get('raid_item') or {}).get('quality_floor', 1))
     ccfg = challenge_cfg(cfg)
@@ -361,8 +383,11 @@ def main():
     stats = {}
     for i in range(a.players):
         for mode in modes:
-            kn = p1sim.Knobs(a.dodge, normal_mods=a.normal_mods)
+            kn = p1sim.Knobs(a.dodge, normal_mods=a.normal_mods, feat_normal='off' if a.no_feat_normal else 'config',
+                             feat_farm=a.feat_farm)
             p, runs, rng = to_q07(cfg, kn, 5000 + i)   # same seed → same phase-1 player for both modes
+            if p is not None and a.feat_separate:
+                p.feat_carry = 0
             if p is None:
                 continue
             kn.swap = not a.no_swap  # §6.3 free enhance-track swap: late-game players re-equip better-quality drops

@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104)
-balance_version: 13
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108)
+balance_version: 14
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -40,6 +40,11 @@ raid_item:
 rotation:
   bonus_marks: 1
   weekly_cap: 3
+  # D108 (balance_version 14): a repeat NORMAL clear of the featured map (already first-cleared by that character, map
+  # tier 1 or 2, i.e. Q01–Q06) adds normal_bonus_marks forge marks of the map tier. It shares weekly_cap with the
+  # challenge bonus above (one counter, 3 per week in total). Q07 normal (T3) gets nothing extra. 0 = off.
+  # Model: p1sim.py --normal-mods [--feat-farm] / p2econ.py (--no-feat-normal for the old rule, --feat-separate).
+  normal_bonus_marks: 1
   # P2-8 (D80) one weekly rule on the featured map's CHALLENGE runs only (index = ISO week mod count; with 7 maps and
   # 3 rules all 21 pairs come round). Rules change how the fight plays, never the rewards, never a multiplier:
   #   potion_cap N   heal potions per character per run (the 15 s shared cooldown still applies)

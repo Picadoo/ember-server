@@ -170,8 +170,11 @@ final class EmberRunDirector {
 
     // ------------------------------------------------------------------ tick (every 5 ticks)
 
+    private long leashAt;
+
     void tick(long now) {
         if (finished || EmberRunSession.PREPARE.equals(s.state)) return; // rooms wait until the entry is committed
+        if (def.raid && now >= leashAt) { leashAt = now + 1000L; svc.leashFallen(this); } // D106
         // room trigger: a committed participant walks into the next room box
         if (activeRoom == null && boss == null && bossAt == 0 && next < def.rooms.size()) {
             EmberRunMaps.Room r = def.rooms.get(next);
@@ -245,9 +248,26 @@ final class EmberRunDirector {
         if (boss != null && !bossDead) bossTick(now);
     }
 
+    /** D106: when the next raid revive happens (null = no revive point left in this run). */
+    String nextRevive() {
+        if (bossDead || finished) return null;
+        if (boss == null) {
+            if (activeRoom != null) return def.roomIndex(activeRoom) + 1 < def.rooms.size() ? "下一个房间开打时" : "首领现身时";
+            return next < def.rooms.size() ? "下一个房间开打时" : "首领现身时";
+        }
+        EmberRunMaps.Boss b = def.boss;
+        boolean gated = false;
+        for (EmberRunMaps.Skill sk : b.skills) if (sk.below <= 1.0) gated = true;
+        if (gated && !phaseTold) return "首领进入第二阶段时";
+        if (b.adds != null && !addsDone) return "首领半血转阶段时";
+        return null;
+    }
+
     private List<Player> participantsHere() {
         List<Player> out = new ArrayList<Player>();
-        for (Player p : w.getPlayers()) if (s.committed.contains(p.getUniqueId()) && !p.isDead()) out.add(p);
+        // D106: a fallen member watching in spectator mode never triggers rooms / passages / boss halls
+        for (Player p : w.getPlayers()) if (s.committed.contains(p.getUniqueId()) && !p.isDead()
+                && p.getGameMode() != org.bukkit.GameMode.SPECTATOR) out.add(p);
         return out;
     }
 
@@ -454,6 +474,7 @@ final class EmberRunDirector {
             addsDone = true;
             addsAt = now + (long) (b.adds.warn * 1000);
             svc.tellRun(s, "§c" + b.name + " §7高举誓印——两侧将出现援兵！");
+            svc.onBossPhase(s, "首领半血转阶段"); // D106 raid revive point
         }
         if (addsAt > 0) {
             if (now >= addsAt) {
@@ -489,6 +510,7 @@ final class EmberRunDirector {
             phaseTold = true;
             svc.tellRun(s, "§c" + b.name + " §7进入第二阶段：新招式「" + b.skills.get(due).name + "」！");
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
+            svc.onBossPhase(s, "首领进入第二阶段"); // D106 raid revive point
         }
         if (due >= 0) {
             EmberRunMaps.Skill sk = b.skills.get(due);

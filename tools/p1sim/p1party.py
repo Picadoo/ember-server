@@ -6,8 +6,9 @@ Rules modelled (all from the live code / book, nothing raid-specific invented):
 - boss skills are the existing telegraphed moves: the chosen target always rolls a dodge; every other living member is
   inside the shape with probability `splash` (cone/line/charge 0.45, circle 0.30) and then rolls its own dodge;
 - sets act on their owner only (炽愈 heals self; 烬爆 / 焚烬 hit enemies; book §18.4: no raid-only trinkets);
-- no revive (DP revive=false): a dead member stays down; the run fails when nobody is left; potions per member
-  (shared 15 s cooldown per character, same 20 %).
+- D106 revive: a dead member watches and comes back at 50 % H when the next room starts, when the boss appears and
+  when the boss crosses 50 % (phase change); the run still fails when nobody is left; potions per member
+  (shared 15 s cooldown per character, same 20 %). --no-revive = the old rule (a dead member stays down).
 Player states come from p2econ (Q07 first clear, then W weeks of challenge farming with the §6.3 swap).
 Standard library only.
 """
@@ -49,6 +50,18 @@ class Party:
     def living(self):
         return [m for m in self.ms if m.alive()]
 
+    revive_on = True
+
+    def revive(self, t):
+        """D106: every fallen member stands up at 50 % H (only while someone is still standing)."""
+        if not self.revive_on or not self.living():
+            return
+        for m in self.ms:
+            if not m.alive():
+                m.hp = 0.5 * m.st['H']
+                m.next_swing = max(m.next_swing, t + 1.0)
+                self.revives = getattr(self, 'revives', 0) + 1
+
     def hurt(self, m, raw, tele):
         cfg, kn = self.cfg, m.kn
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
@@ -86,6 +99,10 @@ class Party:
             if not liv:
                 self.t = t
                 return False
+            if boss is not None and not getattr(self, '_phase_rev', False) and boss['hp'] <= 0.5 * boss['max']:
+                self._phase_rev = True  # D106: boss phase change revives
+                self.revive(t)
+                liv = self.living()
             cand = [m.next_swing for m in liv] + [x['next'] for x in alive if x['atk'] > 0]
             cand += [s['next'] for s in skills] + [p[0] for p in pending]
             tn = min(cand)
@@ -157,11 +174,15 @@ class Party:
                         break
 
 
+REVIVE = True  # D106 (--no-revive for the old rule)
+
+
 def run_party(cfg, m, sts, kns, rng, potions=5):
     """One raid entry with len(sts) members. Returns (cleared, seconds, deaths, potions used)."""
     n = len(sts)
     ms = [Member(cfg, st, kn, potions) for st, kn in zip(sts, kns)]
     P = Party(cfg, ms, rng)
+    P.revive_on = REVIVE
     P.hpf = hpf = hp_factor(n, m.get('hp_per_member'))
     dmf = 1.0 + m.get('dmg_per_member', 0.0) * (n - 1)  # raid-only: enemy damage per extra member (role-less parties)
     if dmf != 1.0:
@@ -180,12 +201,14 @@ def run_party(cfg, m, sts, kns, rng, potions=5):
                 x = p1sim.mob(cfg, m, role, rng, kns[0], P.t)
                 x['hp'] *= hpf
                 mobs.append(x)
+        P.revive(P.t)  # D106: next room starts
         if not P.segment(mobs):
             return False, P.t, n - len(P.living()), sum(x.used for x in ms), 0.0
     b = m['boss']
     boss = {'hp': b['hp'] * hpf, 'max': b['hp'] * hpf, 'atk': b['atk'], 'iv': b.get('interval', 3.0), 'role': 'boss',
             'next': P.t + 2.0, 'tele': False, 'burn': 0.0}
     t0 = P.t
+    P.revive(P.t)  # D106: the boss appears
     ok = P.segment([boss], boss=boss, mapdef=m)
     return ok, P.t, n - len(P.living()), sum(x.used for x in ms), P.t - t0
 
@@ -241,7 +264,10 @@ def main():
     ap.add_argument('--k', type=float, nargs='*', help='sweep hp_per_member (party HP factor slope)')
     ap.add_argument('--j', type=float, nargs='*', help='sweep dmg_per_member (enemy damage slope per extra member)')
     ap.add_argument('--atk', type=float, nargs='*', help='sweep a damage multiplier on every raid mob / boss / skill')
+    ap.add_argument('--no-revive', action='store_true', help='D106 comparison: the old rule (no revive)')
     a = ap.parse_args()
+    global REVIVE
+    REVIVE = not a.no_revive
     cfg = p1config.load()
     pool = player_pool(cfg, a.pool, a.weeks, a.dodge)
     m = raid_map(cfg, a.raid)
