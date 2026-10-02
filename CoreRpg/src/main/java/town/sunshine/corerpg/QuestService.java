@@ -464,7 +464,7 @@ public final class QuestService implements Listener {
         talkCooldown.put(p.getUniqueId(), now);
         if (town.sunshine.corerpg.p1.EmberMode.active()) { // D62: the guide sends players down the P1 route
             p.sendMessage(npcName + ChatColor.WHITE + "：主线本是正路——从 Q01 灰烬庭院开始，首通开放下一张图。手持刃按 "
-                    + ChatColor.YELLOW + "F" + ChatColor.WHITE + " 放烬斩。");
+                    + ChatColor.YELLOW + "F" + ChatColor.WHITE + " 放烬斩；快捷栏右侧是回复药，危险时按数字键切过去、按住右键喝。");
             final String name = p.getName();
             Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open ember_p1_adventure " + name));
             return;
