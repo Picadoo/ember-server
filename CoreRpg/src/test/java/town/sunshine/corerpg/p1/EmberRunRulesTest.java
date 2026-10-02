@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(4, m.balanceVersion);                 // D70
-        assertEquals("g04-1/b4", m.ruleVersion);
+        assertEquals(5, m.balanceVersion);                 // D75
+        assertEquals("g04-1/b5", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
@@ -629,5 +629,31 @@ public class EmberRunRulesTest {
         ab.put("tiers", java.util.Collections.singletonList(row));
         root.put("abyss", ab);
         assertTrue(EmberRunMaps.parse(root).validate().toString().contains("above the table cap"));
+    }
+
+    @Test public void raidIsSeparateFromTheMainLineAndScalesWithTheParty_P2_5() {
+        EmberRunMaps m = bundled();
+        assertEquals("[]", m.validate().toString());
+        EmberRunMaps.MapDef r = m.raids.get("r01");
+        assertNotNull(r);
+        assertTrue(r.raid);
+        assertFalse(m.maps.containsKey("r01"));                    // never in the order / featured / abyss pool
+        assertSame(r, m.byKey("r01"));
+        assertSame(r, m.byWorld("dungeon_EmberQ0R1_1A2B3C4D"));
+        assertSame(m.byKey("q07"), m.byWorld("dungeon_EmberQ07_1A2B3C4D"));
+        assertEquals("q07", r.requires);
+        assertEquals(3, m.partyMin(r));
+        assertEquals(5, m.partyMax(r));
+        assertEquals(50, m.cost(r));
+        assertEquals(30, m.cost(m.byKey("q01")));
+        assertEquals(3, m.partyMax(m.byKey("q01")));
+        assertEquals(3, r.weeklyCap);
+        assertEquals(1.0 + 0.85 * 4, EmberRunMaps.hpFactor(r, 5), 1e-9);
+        assertEquals(1.0 + 0.20 * 2, EmberRunMaps.dmgFactor(r, 3), 1e-9);
+        assertEquals(EmberRunRules.hpFactor(3), EmberRunMaps.hpFactor(m.byKey("q03"), 3), 1e-9);
+        assertEquals(1.0, EmberRunMaps.dmgFactor(m.byKey("q03"), 3), 1e-9);  // §18.1: no damage scaling on main maps
+        assertEquals(3, r.boss.skills.size());                     // existing moves only
+        assertNotNull(r.boss.adds);
+        for (int s = 1; s < 300; s++) assertFalse(m.abyssMap(s).raid);
     }
 }

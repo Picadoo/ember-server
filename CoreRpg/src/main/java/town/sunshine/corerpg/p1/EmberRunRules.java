@@ -318,6 +318,9 @@ public final class EmberRunRules {
         return out;
     }
 
+    /** P2-5 raids: one more roll with the same tier / target / quality table (stable key → idempotent). */
+    public static Grant extraItem(SettleInput in, String key) { return item(in, key); }
+
     private static Grant item(SettleInput in, String key) {
         Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
         return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, rollItem(in.tier, in.target, r, in.qualityWeights));

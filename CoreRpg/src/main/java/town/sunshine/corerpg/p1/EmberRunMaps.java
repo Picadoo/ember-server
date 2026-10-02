@@ -218,6 +218,11 @@ public final class EmberRunMaps {
         public final List<Box> rails;
         /** single blocks set to AIR in the instance at attach (e.g. the tide template's stray sign for Q04) */
         public final List<Pt> clear;
+        /** P2-5 raid overrides (−1 / 0 = the file-wide value / off): party size, stamina, weekly cap, party scaling */
+        public final int partyMin, partyMax, cost, weeklyCap;
+        public final double hpPerMember, dmgPerMember;
+        /** true for entries of the runs-yml `raids:` section (never in the main-line order, featured or abyss) */
+        public boolean raid;
 
         MapDef(String key, Map<?, ?> m) {
             this.key = key;
@@ -230,6 +235,12 @@ public final class EmberRunMaps {
             mapVersion = str(m.get("map_version"), "");
             requires = str(m.get("requires"), "");
             unlocks = str(m.get("unlocks"), "");
+            partyMin = (int) num(m.get("party_min"), -1);
+            partyMax = (int) num(m.get("party_max"), -1);
+            cost = (int) num(m.get("cost"), -1);
+            weeklyCap = (int) num(m.get("weekly_cap"), 0);
+            hpPerMember = num(m.get("hp_per_member"), -1);
+            dmgPerMember = num(m.get("dmg_per_member"), 0);
             purpose = str(m.get("purpose"), "");
             bRef = num(m.get("b_ref"), 12);
             spawn = pt(m.get("spawn"));
@@ -501,6 +512,8 @@ public final class EmberRunMaps {
     public final int rotationBonusMarks, rotationWeeklyCap;
     public final String worldPrefix;
     public final Map<String, MapDef> maps;
+    /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
+    public final Map<String, MapDef> raids;
 
     private EmberRunMaps(Map<?, ?> root) {
         version = (int) num(root.get("version"), 1);
@@ -537,6 +550,34 @@ public final class EmberRunMaps {
             }
         }
         maps = Collections.unmodifiableMap(m);
+        Map<String, MapDef> rr = new LinkedHashMap<String, MapDef>();
+        if (root.get("raids") instanceof Map) {
+            for (Map.Entry<?, ?> e : ((Map<?, ?>) root.get("raids")).entrySet()) {
+                if (e.getValue() instanceof Map) {
+                    String k = String.valueOf(e.getKey()).toLowerCase(Locale.ROOT);
+                    MapDef d = new MapDef(k, (Map<?, ?>) e.getValue());
+                    d.raid = true;
+                    rr.put(k, d);
+                }
+            }
+        }
+        raids = Collections.unmodifiableMap(rr);
+    }
+
+    public int partyMin(MapDef m) { return m != null && m.partyMin > 0 ? m.partyMin : partyMin; }
+    public int partyMax(MapDef m) { return m != null && m.partyMax > 0 ? m.partyMax : partyMax; }
+    public int cost(MapDef m) { return m != null && m.cost > 0 ? m.cost : cost; }
+
+    /** enemy HP factor: A18 1 + 0.65 (n − 1) for main maps; raids use their own hp_per_member (P2-5, D76) */
+    public static double hpFactor(MapDef m, int n) {
+        if (m == null || m.hpPerMember < 0) return EmberRunRules.hpFactor(n);
+        return 1.0 + m.hpPerMember * (Math.max(1, Math.min(m.partyMax > 0 ? m.partyMax : n, n)) - 1);
+    }
+
+    /** enemy damage factor: 1 for main maps (§18.1 damage does not scale); raids 1 + dmg_per_member (n − 1) */
+    public static double dmgFactor(MapDef m, int n) {
+        if (m == null || m.dmgPerMember <= 0) return 1.0;
+        return 1.0 + m.dmgPerMember * (Math.max(1, Math.min(m.partyMax > 0 ? m.partyMax : n, n)) - 1);
     }
 
     public static EmberRunMaps parse(Map<?, ?> root) { return new EmberRunMaps(root == null ? Collections.emptyMap() : root); }
@@ -554,10 +595,16 @@ public final class EmberRunMaps {
         return l.get((int) Math.floorMod(EmberRunRules.subSeed(seed, "abyss_map"), (long) l.size()));
     }
 
-    public MapDef byKey(String key) { return key == null ? null : maps.get(key.toLowerCase(Locale.ROOT)); }
+    public MapDef byKey(String key) {
+        if (key == null) return null;
+        String k = key.toLowerCase(Locale.ROOT);
+        MapDef d = maps.get(k);
+        return d != null ? d : raids.get(k);
+    }
 
     public MapDef byDungeon(String dungeonId) {
         for (MapDef d : maps.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
+        for (MapDef d : raids.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         return null;
     }
 
@@ -565,6 +612,10 @@ public final class EmberRunMaps {
     public MapDef byWorld(String worldName) {
         if (worldName == null) return null;
         for (MapDef d : maps.values()) {
+            String p = "dungeon_" + d.dungeon + "_";
+            if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
+        }
+        for (MapDef d : raids.values()) {
             String p = "dungeon_" + d.dungeon + "_";
             if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
         }
@@ -581,6 +632,15 @@ public final class EmberRunMaps {
             if (e != null) out.add(e);
             if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
                 out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);
+        }
+        for (MapDef d : raids.values()) {
+            String e = d.validate();
+            if (e != null) out.add(e);
+            if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
+                out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);
+            if (maps.containsKey(d.key)) out.add(d.key + ": raid key collides with a main map");
+            if (d.partyMin < 1 || d.partyMax < d.partyMin || d.partyMax > 5) out.add(d.key + ": raid party " + d.partyMin + ".." + d.partyMax);
+            if (d.hpPerMember > 1.5 || d.dmgPerMember > 0.5) out.add(d.key + ": raid party scaling above the cap");
         }
         return out;
     }

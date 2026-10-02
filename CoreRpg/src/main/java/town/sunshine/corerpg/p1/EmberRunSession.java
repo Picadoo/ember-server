@@ -48,6 +48,8 @@ public final class EmberRunSession {
     public final Map<UUID, String> target = new LinkedHashMap<UUID, String>();
     public int partySize = 1;
     public double hpFactor = 1.0;
+    /** P2-5 raid enemy damage factor (1.0 for every other run), locked with hpFactor at entry */
+    public double dmgFactor = 1.0;
     public EmberRunRules.Extra extra = EmberRunRules.Extra.NONE;
     public boolean extraDone;
     public final Set<UUID> acted = new LinkedHashSet<UUID>();
@@ -101,6 +103,7 @@ public final class EmberRunSession {
         m.put("target", t);
         m.put("party_size", partySize);
         m.put("hp_factor", hpFactor);
+        m.put("dmg_factor", dmgFactor);
         m.put("challenge", challenge);
         m.put("abyss", abyss);
         Map<String, Object> f = new LinkedHashMap<String, Object>();
@@ -147,6 +150,7 @@ public final class EmberRunSession {
         }
         s.partySize = (int) EmberRunMaps.num(m.get("party_size"), 1);
         s.hpFactor = EmberRunMaps.num(m.get("hp_factor"), 1.0);
+        s.dmgFactor = EmberRunMaps.num(m.get("dmg_factor"), 1.0);
         s.challenge = Boolean.TRUE.equals(m.get("challenge"));
         s.abyss = (int) EmberRunMaps.num(m.get("abyss"), 0);
         if (m.get("fee") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("fee")).entrySet()) {

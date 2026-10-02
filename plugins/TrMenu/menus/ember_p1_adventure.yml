@@ -20,7 +20,7 @@ Layout:
   - '#T X A K#'
   - '#1234567#'
   - '# s b u n'
-  - '# M F C D'
+  - '#GM F C D'
   - '####B####'
 
 Events:
@@ -238,6 +238,27 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'menu: ember_p1_abyss'
+
+  G:
+    update: 20
+    display:
+      material: iron chestplate
+      name: '§6团本 · 锈轨矿道·团（3～5 人）'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_raid_r01%'
+        - '§7Q07 的地图与首领招式组合（重砸 / 冲撞 / 斧刃横扫 + 半血增援）'
+        - '§7同一伤害管道与三套装 · 无团本专属掉落或饰品'
+        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
+        - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'
+        - '§7结算：挑战版固定结算 + 多 1 件 T3 + 1 枚 T3 印记'
+        - ''
+        - '§e➥ §f队长点击开本（全队需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter r01'
+        - close
 
   s:
     display:

@@ -1,5 +1,5 @@
 # 余烬主界面（P1 默认模式，D63）— 书 §19.1「一级菜单只需要冒险、装备、工坊、仓库与设置」
-# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；P2-2 深渊 · 余烬层（D70）；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 盟约 / 帮助
+# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；P2-2 深渊 · 余烬层（D70）；P2-5 团本（D75）；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 盟约 / 帮助
 # 旧模式入口（挂机 / 日常 / 周常 / 精英 / 深渊 / 团本 / 灾厄 / 誓约 / 天赋 / 使魔 / 旧强化镶嵌附魔 / 商城等）整页留在
 # ember_hub_legacy.yml（不绑定命令，管理员 trmenu open ember_hub_legacy），源表 §13.15 D63
 Title: '§6余烬 · 冒险枢纽'
@@ -16,7 +16,7 @@ Layout:
   - ' n o p F '
   - ' m X k i '
   - ' R c Y d '
-  - '  A j    '
+  - '  A j G  '
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -86,6 +86,26 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_abyss'
+  G:
+    update: 20
+    display:
+      material: iron chestplate
+      name: '§6团本 · 锈轨矿道·团（3～5 人）'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_raid_r01%'
+        - '§7Q07 的地图与首领招式组合（重砸 / 冲撞 / 斧刃横扫 + 半血增援）'
+        - '§7同一伤害管道与三套装 · 无团本专属掉落或饰品'
+        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
+        - '§7无倒地复活：倒下的人等队友打完；首领死后统一结算'
+        - '§7结算：挑战版固定结算 + 多 1 件 T3 + 1 枚 T3 印记'
+        - ''
+        - '§e➥ §f队长点击开本（全队需各自首通 Q07）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter r01'
+        - close
   F:
     display:
       material: book and quill

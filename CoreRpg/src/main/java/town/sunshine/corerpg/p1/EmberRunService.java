@@ -118,7 +118,7 @@ public final class EmberRunService implements Listener {
         }
         maps = EmberRunMaps.parse(root);
         for (String e : maps.validate()) log().warning("[P1 run] " + FILE + ": " + e);
-        log().info("[P1 run] maps " + maps.maps.keySet() + " cost=" + maps.cost + " party=" + maps.partyMin + ".." + maps.partyMax);
+        log().info("[P1 run] maps " + maps.maps.keySet() + " raids " + maps.raids.keySet() + " cost=" + maps.cost + " party=" + maps.partyMin + ".." + maps.partyMax);
     }
 
     /** Called once after enable: restart recovery (§20.5) + the director ticker. */
@@ -208,6 +208,17 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ P2-2 abyss (book §18.3, D70)
 
     static final String C_ABYSS_BEST = "p2_abyss_best";
+    static final String C_RAID = "p2_raid_";
+
+    /** P2-5: settled clears of this raid in the current Monday-based week */
+    public int raidWeek(PlayerData d, EmberRunMaps.MapDef m) {
+        return d.periodCount(C_RAID + m.key, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
+    }
+
+    public String raidLabel(PlayerData d, EmberRunMaps.MapDef m) {
+        if (!progressFlag(d, m.requires)) return "需本人首通 " + m.requires.toUpperCase(Locale.ROOT);
+        return "本周 " + raidWeek(d, m) + "/" + m.weeklyCap + " · " + maps.partyMin(m) + "～" + maps.partyMax(m) + " 人 · " + maps.cost(m) + " 体力";
+    }
 
     public boolean abyssOpen(PlayerData d) {
         return maps.challenge != null && !maps.abyss.isEmpty() && progressFlag(d, maps.abyssRequires);
@@ -250,8 +261,10 @@ public final class EmberRunService implements Listener {
             if (p == null || !p.isOnline()) { problems.add("队员不在线：" + u.toString().substring(0, 8)); continue; }
             party.add(p);
         }
-        if (party.size() < maps.partyMin || party.size() > maps.partyMax)
-            problems.add("人数 " + maps.partyMin + "～" + maps.partyMax + "，当前 " + party.size());
+        final int cost = maps.cost(m);
+        if (party.size() < maps.partyMin(m) || party.size() > maps.partyMax(m))
+            problems.add("人数 " + maps.partyMin(m) + "～" + maps.partyMax(m) + "，当前 " + party.size());
+        if (m.raid && (challenge || abyss > 0)) problems.add("团本没有挑战 / 深渊版本");
         StaminaService st = plugin.getStaminaService();
         if (st == null) problems.add("体力服务未就绪");
         for (Player p : party) {
@@ -262,13 +275,16 @@ public final class EmberRunService implements Listener {
                 if (d.getCoin() < at.fee) problems.add(p.getName() + " 余烬币不足（本段 " + at.fee + "，当前 " + d.getCoin() + "）");
             } else if (challenge && !challengeOpen(d)) {
                 problems.add(p.getName() + " 未开放挑战版（需本人首通 " + maps.challenge.requires.toUpperCase(Locale.ROOT) + "）");
+            } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears
+                if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放团本（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
+                else if (m.weeklyCap > 0 && raidWeek(d, m) >= m.weeklyCap) problems.add(p.getName() + " 本周团本次数已满（" + raidWeek(d, m) + "/" + m.weeklyCap + "，周一 0 点重置）");
             } else if (!challenge && !unlocked(d, m)) {
                 EmberRunMaps.MapDef req = maps.byKey(m.requires);
                 problems.add(p.getName() + " 未解锁（需先首通 " + (req == null ? m.requires : req.key.toUpperCase(Locale.ROOT) + " " + req.name) + "）");
             }
             if (openSessionOf(p.getUniqueId()) != null) problems.add(p.getName() + " 已在另一局主线本中");
             if (p.getWorld().getName().startsWith("dungeon_")) problems.add(p.getName() + " 仍在副本内");
-            if (st != null && st.staminaOf(p) < maps.cost) problems.add(p.getName() + " 体力不足（需 " + maps.cost + "，当前 " + st.staminaOf(p) + "）");
+            if (st != null && st.staminaOf(p) < cost) problems.add(p.getName() + " 体力不足（需 " + cost + "，当前 " + st.staminaOf(p) + "）");
         }
         if (!problems.isEmpty()) {
             for (Player p : party) for (String s : problems) p.sendMessage(P + ChatColor.RED + s);
@@ -303,7 +319,7 @@ public final class EmberRunService implements Listener {
         // reserve
         List<Player> reserved = new ArrayList<Player>();
         for (Player p : party) {
-            StaminaService.ConsumeResult r = st.reserveFlat(p, maps.cost);
+            StaminaService.ConsumeResult r = st.reserveFlat(p, cost);
             if (!r.ok) {
                 for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
                 for (Player q : party) q.sendMessage(P + ChatColor.RED + (r.failMessage == null ? "体力不足" : r.failMessage));
@@ -330,8 +346,8 @@ public final class EmberRunService implements Listener {
         for (Player p : party) {
             passes.put(p.getUniqueId(), new Object[]{m.key, until});
             p.sendMessage(P + (at != null ? "§5深渊 · 余烬层 第 " + abyss + " 层 §7→ §e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name
-                    + " §7正在创建实例……（已预留体力 " + maps.cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）"
-                    : "§e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + maps.cost + "）"));
+                    + " §7正在创建实例……（已预留体力 " + cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）"
+                    : "§e" + (m.raid ? "团本 " : "") + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + cost + "）"));
         }
         boolean ok = plugin.getTicketEntryService() != null
                 && plugin.getTicketEntryService().dispatchStart(leader, m.dungeon);
@@ -366,14 +382,18 @@ public final class EmberRunService implements Listener {
         if (EmberRunSession.PREPARE.equals(s.state)) s.state = EmberRunSession.ENTERED;
         // A18: party HP multiplier locked now for the whole run
         s.partySize = s.committed.size();
-        s.hpFactor = EmberRunRules.hpFactor(s.partySize);
+        EmberRunMaps.MapDef vm = maps.byKey(s.mapKey);
+        s.hpFactor = EmberRunMaps.hpFactor(vm, s.partySize);
+        s.dmgFactor = EmberRunMaps.dmgFactor(vm, s.partySize); // P2-5 raids only (1.0 elsewhere)
         store.save(s);
         if (s.abyss > 0) {
             EmberRunMaps.AbyssTier t = maps.abyssTier(s.abyss);
             if (t != null) tellRun(s, "§5深渊第 " + s.abyss + " 层 §7· 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
                     + String.format(Locale.ROOT, "%.2f", t.dmg) + "（在挑战版之上）· 成色 " + qualityLabel(t.quality) + " · 本段打完首领才结算，失败只丢本段");
         }
-        tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
+        if (vm != null && vm.raid) tellRun(s, "§6团本 §7· " + s.partySize + " 人 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
+                + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 无倒地复活：倒下的人等队友打完 · 首领死后统一结算");
+        tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : vm != null && vm.raid ? "§6团本 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                 + "）· 走进前方房间开战 · 击败首领后统一结算");
     }
 
@@ -591,7 +611,8 @@ public final class EmberRunService implements Listener {
         in.extra = s.extra;
         in.extraDone = s.extraDone;
         // §18.1: challenge runs never carry the first-clear package (first clears are per map + content version, normal)
-        in.firstClear = s.challenge || firstCleared(pd, m) ? null : m.firstClear;
+        in.firstClear = s.challenge || m.raid || firstCleared(pd, m) ? null : m.firstClear;
+        if (m.raid && maps.challenge != null) in.qualityWeights = maps.challenge.quality; // P2-5: no exclusive drop table
         if (s.challenge && maps.challenge != null) in.qualityWeights = maps.challenge.quality;
         EmberRunMaps.AbyssTier abT = s.abyss > 0 ? maps.abyssTier(s.abyss) : null;
         if (abT != null) in.qualityWeights = abT.quality; // P2-2 tier quality table
@@ -601,6 +622,10 @@ public final class EmberRunService implements Listener {
         String week = EmberRunRules.rotationWeekKey(today);
         boolean rotation = s.challenge && s.abyss == 0 && m.key.equals(featured(today)) && maps.rotationBonusMarks > 0
                 && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
+        if (m.raid) { // P2-5: one more standard T3 roll + 1 T3 mark (50 stamina vs 30), nothing raid-only
+            grants.add(EmberRunRules.extraItem(in, "raid_item"));
+            grants.add(new EmberRunRules.Grant("raid_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), 1, null));
+        }
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), maps.rotationBonusMarks, null));
         EmberRunRules.Ledger l = store.ledger(u);
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
@@ -611,6 +636,7 @@ public final class EmberRunService implements Listener {
             EmberRunRules.Row r = l.record(s.runId, g.key, g.encode(), st, now, created);
             if (created[0]) changed.add(r);
             if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(C_ROTATION, week, 1); // counted once per run (ledger key)
+            if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + m.key, week, 1); // P2-5 weekly cap
         }
         if (in.firstClear != null) pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
         boolean newBest = s.abyss > 0 && s.abyss > abyssBest(pd);
@@ -1027,8 +1053,9 @@ public final class EmberRunService implements Listener {
         t.lastHit = now;
         if (t.boss()) kbGuard.mark(p.getUniqueId(), now); // B2.167: no vanilla knockback from the boss melee either
         double before = e.getDamage();
-        e.setDamage(t.atk);
-        EmberDamageTrace.note(e, before, "G04 主线本怪物伤害固定 atk=" + EmberDamageTrace.fmt(t.atk));
+        double atk = t.atk * d.s.dmgFactor; // P2-5 raid party scaling (1.0 for every other run)
+        e.setDamage(atk);
+        EmberDamageTrace.note(e, before, "G04 主线本怪物伤害固定 atk=" + EmberDamageTrace.fmt(atk));
         markActed(d.s, p);
     }
 
@@ -1059,7 +1086,7 @@ public final class EmberRunService implements Listener {
         try {
             p.setNoDamageTicks(0);
             kbGuard.mark(p.getUniqueId(), System.currentTimeMillis()); // B2.167: only the P1 push (≤ kb) moves the player
-            p.damage(dmg, src);
+            p.damage(dmg * s.dmgFactor, src); // P2-5 raid party scaling (1.0 for every other run)
         } finally {
             skillDepth--;
         }
@@ -1480,6 +1507,8 @@ public final class EmberRunService implements Listener {
         String t = target(d);
         p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· /corerpg enter <q01..q07> challenge · 掉落 T3"
                 : "§7需本人首通 " + (maps.challenge == null ? "Q07" : maps.challenge.requires.toUpperCase(Locale.ROOT))));
+        for (EmberRunMaps.MapDef rm : maps.raids.values())
+            p.sendMessage(P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " · /corerpg p1 enter " + rm.key);
         p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次挑战通关各多 " + maps.rotationBonusMarks + " 枚 T3 印记）");
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
                 + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
@@ -1531,6 +1560,10 @@ public final class EmberRunService implements Listener {
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
+        if (key.startsWith("raid_")) { // P2-5 %corerpg_p1_raid_r01%
+            EmberRunMaps.MapDef rm = maps.raids.get(key.substring(5));
+            return rm == null ? "" : raidLabel(d, rm);
+        }
         if ("abyss_state".equals(key)) return maps.abyss.isEmpty() ? "未配置" : !abyssOpen(d) ? "需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)
                 : "最高第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层";
         if (key.startsWith("abyss_t")) {
@@ -1581,7 +1614,7 @@ public final class EmberRunService implements Listener {
                     case "open": return unlocked(d, m) ? "yes" : "no";
                     case "cleared": return firstCleared(d, m) ? "yes" : "no";
                     case "name": return m.name;
-                    case "cost": return maps.cost + " 体力";
+                    case "cost": return maps.cost(m) + " 体力";
                     case "tier": return m.dropLabel;
                     case "purpose": return m.purpose;
                     case "fc": return firstCleared(d, m) ? "已领取" : m.firstClearLabel();
