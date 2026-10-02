@@ -17,7 +17,7 @@ Options:
 
 Layout:
   - '#########'
-  - '# T X K #'
+  - '#T X A K#'
   - '#1234567#'
   - '# s b u n'
   - '# M F C D'
@@ -220,6 +220,24 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'menu: ember_p1_challenge'
+
+  A:
+    update: 20
+    display:
+      material: ender eye
+      name: '§5深渊 · 余烬层'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_abyss_state%'
+        - '§7三房一段 · 挑战版数值 × 层系数 · 十层封顶'
+        - '§7每段单独付费（30 体力 + 层费余烬币）· 打完首领才结算'
+        - '§7高层成色更好（卓越 / 极品权重有表列上限）'
+        - ''
+        - '§e➥ §f打开深渊选层'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_abyss'
 
   s:
     display:

@@ -89,7 +89,9 @@ final class EmberRunDirector {
         this.s = s;
         this.def = def;
         this.w = w;
-        this.ch = s.challenge && svc.maps() != null ? svc.maps().challenge : null;
+        this.ch = !s.challenge || svc.maps() == null ? null
+                : s.abyss > 0 && svc.maps().abyssChallenge(s.abyss) != null ? svc.maps().abyssChallenge(s.abyss) // P2-2
+                : svc.maps().challenge;
         for (String c : s.cleared) if (def.roomIndex(c) >= next) next = def.roomIndex(c) + 1;
     }
 
@@ -802,7 +804,7 @@ final class EmberRunDirector {
 
     String describe() {
         StringBuilder sb = new StringBuilder();
-        if (ch != null) sb.append("challenge ");
+        if (ch != null) sb.append(s.abyss > 0 ? "abyss T" + s.abyss + " " : "challenge ");
         sb.append("next=").append(next < def.rooms.size() ? def.rooms.get(next).id : "boss");
         sb.append(" active=").append(activeRoom == null ? "-" : activeRoom);
         sb.append(" alive=").append(mobs.size());

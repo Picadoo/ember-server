@@ -32,6 +32,10 @@ public final class EmberRunSession {
     public int tier = 1;
     /** §18.1 challenge difficulty (T3 drops / marks, challenge HP / damage overrides, no first clear) */
     public boolean challenge;
+    /** P2-2 abyss tier 1..10 (0 = not an abyss segment); an abyss segment is also {@link #challenge} */
+    public int abyss;
+    /** P2-2 余烬币 fee reserved per participant at entry (refunded exactly like the stamina cost) */
+    public final Map<UUID, Integer> fee = new LinkedHashMap<UUID, Integer>();
     public long seed;
     public long created;
     public long updated;
@@ -98,6 +102,10 @@ public final class EmberRunSession {
         m.put("party_size", partySize);
         m.put("hp_factor", hpFactor);
         m.put("challenge", challenge);
+        m.put("abyss", abyss);
+        Map<String, Object> f = new LinkedHashMap<String, Object>();
+        for (Map.Entry<UUID, Integer> e : fee.entrySet()) f.put(e.getKey().toString(), e.getValue());
+        m.put("fee", f);
         m.put("extra", extra.id);
         m.put("extra_done", extraDone);
         m.put("acted", ids(acted));
@@ -140,6 +148,11 @@ public final class EmberRunSession {
         s.partySize = (int) EmberRunMaps.num(m.get("party_size"), 1);
         s.hpFactor = EmberRunMaps.num(m.get("hp_factor"), 1.0);
         s.challenge = Boolean.TRUE.equals(m.get("challenge"));
+        s.abyss = (int) EmberRunMaps.num(m.get("abyss"), 0);
+        if (m.get("fee") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("fee")).entrySet()) {
+            UUID u = uuid(e.getKey());
+            if (u != null) s.fee.put(u, (int) EmberRunMaps.num(e.getValue(), 0));
+        }
         s.extra = EmberRunRules.Extra.parse(str(m.get("extra")));
         s.extraDone = Boolean.TRUE.equals(m.get("extra_done"));
         readIds(m.get("acted"), s.acted);

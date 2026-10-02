@@ -431,6 +431,17 @@ public final class EmberRunMaps {
             }
             mobs = Collections.unmodifiableMap(mm);
         }
+        private Challenge(Challenge c, double hpMul, double dmgMul, int[] q) {
+            requires = c.requires; tier = c.tier; bRef = c.bRef;
+            bossHp = c.bossHp * hpMul; bossAtk = c.bossAtk * dmgMul; heavy = c.heavy * dmgMul; light = c.light * dmgMul;
+            quality = q.clone();
+            Map<String, double[]> mm = new LinkedHashMap<String, double[]>();
+            for (Map.Entry<String, double[]> e : c.mobs.entrySet())
+                mm.put(e.getKey(), new double[]{e.getValue()[0] * hpMul, e.getValue()[1] * dmgMul});
+            mobs = Collections.unmodifiableMap(mm);
+        }
+        /** P2-2: this challenge × an abyss tier (HP / damage factors, the tier quality table). */
+        public Challenge scaled(AbyssTier t) { return new Challenge(this, t.hp, t.dmg, t.quality); }
         public double skillDmg(Skill sk) { return sk.light ? light : heavy; }
         public String validate() {
             for (String r : new String[]{"melee", "ranged", "heavy", "caster", "treasure", "elite"})
@@ -443,6 +454,37 @@ public final class EmberRunMaps {
         }
     }
 
+    /** P2-2 (D70) one row of the capped abyss tier table (book §18.3): factors on the challenge values. */
+    public static final class AbyssTier {
+        public final int index;          // 1-based
+        public final double hp, dmg;
+        public final int[] quality;      // 标准/精良/卓越/极品
+        public final int fee;            // 余烬币 per segment (reserved at entry like stamina)
+        AbyssTier(int index, Map<?, ?> m) {
+            this.index = index;
+            hp = num(m.get("hp"), 1.0);
+            dmg = num(m.get("dmg"), 1.0);
+            fee = (int) num(m.get("fee"), 0);
+            int[] q = EmberRunRules.CHALLENGE_QUALITY_WEIGHTS.clone();
+            if (m.get("quality") instanceof List && ((List<?>) m.get("quality")).size() == 4)
+                for (int i = 0; i < 4; i++) q[i] = (int) num(((List<?>) m.get("quality")).get(i), q[i]);
+            quality = q;
+        }
+        String validate(AbyssTier prev) {
+            int t = 0;
+            for (int x : quality) { if (x < 0) return "abyss T" + index + ": negative quality weight"; t += x; }
+            if (t != 100) return "abyss T" + index + ": quality weights sum " + t + " ≠ 100";
+            if (hp < 1.0 || dmg < 1.0 || fee < 0) return "abyss T" + index + ": factors below the challenge values";
+            if (prev != null && (hp < prev.hp || dmg < prev.dmg || fee < prev.fee)) return "abyss T" + index + ": not monotonic";
+            if (hp > ABYSS_MAX_HP || dmg > ABYSS_MAX_DMG) return "abyss T" + index + ": above the table cap";
+            return null;
+        }
+    }
+
+    /** book §18.3 「必须有表列上限」: never more than ten tiers, never above these factors */
+    public static final int ABYSS_MAX_TIERS = 10;
+    public static final double ABYSS_MAX_HP = 1.6, ABYSS_MAX_DMG = 1.3;
+
     public final int version;
     /** rule_version + "/b" + balance_version — what cr_p1_run.rule_version records for every run (book §23.2 / D60) */
     public final String ruleVersion;
@@ -451,6 +493,10 @@ public final class EmberRunMaps {
     /** null when the file has no challenge section (challenge entry refused) */
     public final Challenge challenge;
     public final int cost, partyMin, partyMax, passSeconds;
+    /** P2-2 abyss: opening flag (own first clear of this map) and the tier table; empty = abyss off */
+    public final String abyssRequires;
+    public final List<AbyssTier> abyss;
+    private final List<Challenge> abyssCh;
     /** P2-1 (D66) weekly featured challenge: extra marks of the run tier, and how many clears per week get them */
     public final int rotationBonusMarks, rotationWeeklyCap;
     public final String worldPrefix;
@@ -469,6 +515,18 @@ public final class EmberRunMaps {
         rotationBonusMarks = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
         rotationWeeklyCap = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
         challenge = root.get("challenge") instanceof Map ? new Challenge((Map<?, ?>) root.get("challenge")) : null;
+        Map<?, ?> ab = root.get("abyss") instanceof Map ? (Map<?, ?>) root.get("abyss") : Collections.emptyMap();
+        abyssRequires = str(ab.get("requires"), "q07");
+        List<AbyssTier> at = new ArrayList<AbyssTier>();
+        List<Challenge> ac = new ArrayList<Challenge>();
+        if (challenge != null && ab.get("tiers") instanceof List) for (Object o : (List<?>) ab.get("tiers")) {
+            if (!(o instanceof Map) || at.size() >= ABYSS_MAX_TIERS) continue;
+            AbyssTier t = new AbyssTier(at.size() + 1, (Map<?, ?>) o);
+            at.add(t);
+            ac.add(challenge.scaled(t));
+        }
+        abyss = Collections.unmodifiableList(at);
+        abyssCh = ac;
         Map<String, MapDef> m = new LinkedHashMap<String, MapDef>();
         if (root.get("maps") instanceof Map) {
             for (Map.Entry<?, ?> e : ((Map<?, ?>) root.get("maps")).entrySet()) {
@@ -482,6 +540,19 @@ public final class EmberRunMaps {
     }
 
     public static EmberRunMaps parse(Map<?, ?> root) { return new EmberRunMaps(root == null ? Collections.emptyMap() : root); }
+
+    /** 1-based; null when the tier does not exist */
+    public AbyssTier abyssTier(int t) { return t >= 1 && t <= abyss.size() ? abyss.get(t - 1) : null; }
+
+    /** challenge values × tier t (what the director uses for an abyss segment); null when the tier does not exist */
+    public Challenge abyssChallenge(int t) { return t >= 1 && t <= abyssCh.size() ? abyssCh.get(t - 1) : null; }
+
+    /** the segment's map: seeded pick over the runs-yml map order (book §18.3 uses accepted rooms only) */
+    public MapDef abyssMap(long seed) {
+        if (maps.isEmpty()) return null;
+        List<MapDef> l = new ArrayList<MapDef>(maps.values());
+        return l.get((int) Math.floorMod(EmberRunRules.subSeed(seed, "abyss_map"), (long) l.size()));
+    }
 
     public MapDef byKey(String key) { return key == null ? null : maps.get(key.toLowerCase(Locale.ROOT)); }
 
@@ -504,6 +575,7 @@ public final class EmberRunMaps {
         List<String> out = new ArrayList<String>();
         if (maps.isEmpty()) out.add("no maps");
         if (challenge != null) { String e = challenge.validate(); if (e != null) out.add(e); }
+        for (int i = 0; i < abyss.size(); i++) { String e = abyss.get(i).validate(i == 0 ? null : abyss.get(i - 1)); if (e != null) out.add(e); }
         for (MapDef d : maps.values()) {
             String e = d.validate();
             if (e != null) out.add(e);

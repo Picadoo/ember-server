@@ -19,7 +19,7 @@ Layout:
   - '#########'
   - '#   I   #'
   - '#1234567#'
-  - '#       #'
+  - '#   Y   #'
   - '##A#H#B##'
 
 Events:
@@ -27,6 +27,29 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
 
 Icons:
+  Y:
+    update: 40
+    display:
+      material: ender eye
+      name: '§5深渊 · 余烬层（P2-2）'
+      lore:
+        - '§7%corerpg_p1_abyss_state%'
+        - '§7每层 = 挑战版数值 × 下表系数（表列上限，十层封顶）'
+        - '%corerpg_p1_abyss_t1%'
+        - '%corerpg_p1_abyss_t2%'
+        - '%corerpg_p1_abyss_t3%'
+        - '%corerpg_p1_abyss_t4%'
+        - '%corerpg_p1_abyss_t5%'
+        - '%corerpg_p1_abyss_t6%'
+        - '%corerpg_p1_abyss_t7%'
+        - '%corerpg_p1_abyss_t8%'
+        - '%corerpg_p1_abyss_t9%'
+        - '%corerpg_p1_abyss_t10%'
+        - '§8首领招式、预警与躲法同各图（见上方首领页）'
+    actions:
+      all:
+        - 'menu: ember_p1_abyss'
+
   '#':
     display:
       material: gray stained glass pane

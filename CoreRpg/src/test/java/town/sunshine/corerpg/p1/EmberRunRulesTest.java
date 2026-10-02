@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(3, m.balanceVersion);                 // D66
-        assertEquals("g04-1/b3", m.ruleVersion);
+        assertEquals(4, m.balanceVersion);                 // D70
+        assertEquals("g04-1/b4", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
@@ -583,5 +583,51 @@ public class EmberRunRulesTest {
         assertEquals(7, seen.size());                                                     // every map once per 7 weeks
         assertEquals("w" + EmberRunRules.weekIndex(mon), EmberRunRules.rotationWeekKey(mon.plusDays(3)));
         assertNull(EmberRunRules.featuredChallenge(java.util.Collections.<String>emptyList(), mon));
+    }
+
+    @Test public void abyssTableIsCappedMonotonicAndScalesTheChallenge_P2_2() {
+        EmberRunMaps m = bundled();
+        assertEquals(10, m.abyss.size());
+        assertEquals("q07", m.abyssRequires);
+        assertNull(m.abyssTier(0));
+        assertNull(m.abyssTier(11));
+        EmberRunMaps.AbyssTier t1 = m.abyssTier(1), t10 = m.abyssTier(10);
+        assertEquals(1.0, t1.hp, 1e-9);
+        assertEquals(0, t1.fee);
+        assertArrayEquals(m.challenge.quality, t1.quality);       // tier 1 = the challenge run
+        assertTrue(t10.hp <= EmberRunMaps.ABYSS_MAX_HP && t10.dmg <= EmberRunMaps.ABYSS_MAX_DMG);
+        for (int t = 2; t <= 10; t++) {
+            assertTrue(m.abyssTier(t).hp >= m.abyssTier(t - 1).hp);
+            assertTrue(m.abyssTier(t).fee >= m.abyssTier(t - 1).fee);
+        }
+        EmberRunMaps.Challenge c10 = m.abyssChallenge(10);
+        assertEquals(m.challenge.bossHp * t10.hp, c10.bossHp, 1e-6);
+        assertEquals(m.challenge.heavy * t10.dmg, c10.heavy, 1e-6);
+        assertEquals(m.challenge.mobs.get("melee")[0] * t10.hp, c10.mobs.get("melee")[0], 1e-6);
+        assertEquals(m.challenge.mobs.get("melee")[1] * t10.dmg, c10.mobs.get("melee")[1], 1e-6);
+        assertArrayEquals(t10.quality, c10.quality);
+        assertEquals(m.challenge.tier, c10.tier);                 // still T3 drops and marks
+        // the segment map is a seeded pick over the seven accepted maps, deterministic per seed
+        Set<String> seen = new HashSet<String>();
+        for (long seed = 1; seed < 400; seed++) seen.add(m.abyssMap(seed).key);
+        assertEquals(7, seen.size());
+        assertSame(m.abyssMap(42L), m.abyssMap(42L));
+    }
+
+    @Test public void abyssTableRejectsAnUncappedRow_P2_2() {
+        Map<String, Object> root = new HashMap<String, Object>();
+        Map<String, Object> ch = new HashMap<String, Object>();
+        Map<String, Object> mobs = new HashMap<String, Object>();
+        for (String r : new String[]{"melee", "ranged", "heavy", "caster", "treasure", "elite"}) {
+            Map<String, Object> x = new HashMap<String, Object>(); x.put("hp", 100); x.put("atk", 10); mobs.put(r, x);
+        }
+        ch.put("mobs", mobs);
+        root.put("challenge", ch);
+        Map<String, Object> row = new HashMap<String, Object>();
+        row.put("hp", 3.0); row.put("dmg", 1.0); row.put("fee", 0); row.put("quality", java.util.Arrays.asList(60, 28, 10, 2));
+        Map<String, Object> ab = new HashMap<String, Object>();
+        ab.put("tiers", java.util.Collections.singletonList(row));
+        root.put("abyss", ab);
+        assertTrue(EmberRunMaps.parse(root).validate().toString().contains("above the table cap"));
     }
 }

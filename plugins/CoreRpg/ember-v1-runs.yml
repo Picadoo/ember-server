@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66)
-balance_version: 3
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70)
+balance_version: 4
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -44,6 +44,28 @@ challenge:
     treasure: {hp: 360, atk: 0}
     elite:    {hp: 900, atk: 24}
   boss: {hp: 8000, atk: 44, heavy: 72, light: 44}
+
+# P2-2 (D70) P1 深渊 · 余烬层 (book §18.3): one segment = one accepted Q map (R1–R3 + its boss), picked by the segment
+# seed, at the challenge values above × the tier factors below. Opened by the player's own Q07 first clear; tier t+1
+# opens after a full clear of tier t. Each segment is its own entry: 30 stamina + the tier fee in 余烬币, both reserved
+# at entry and refunded exactly like stamina (no entry / abort before the fight / restart); a started segment that fails
+# keeps the cost. A full segment settles like a challenge run (300 coin, T3 item + mark) with the tier quality table;
+# no rotation bonus, no first-clear package, no extra coin. Ten tiers is the hard cap (no endless floors).
+# Model: tools/p1sim/p2econ.py --abyss.
+abyss:
+  requires: q07
+  # hp / dmg multiply the challenge values; quality = 标准/精良/卓越/极品 weights; fee = 余烬币 per segment
+  tiers:
+    - {hp: 1.00, dmg: 1.00, quality: [60, 28, 10, 2], fee: 0}
+    - {hp: 1.06, dmg: 1.03, quality: [57, 30, 11, 2], fee: 60}
+    - {hp: 1.12, dmg: 1.06, quality: [54, 31, 12, 3], fee: 120}
+    - {hp: 1.18, dmg: 1.09, quality: [51, 32, 14, 3], fee: 180}
+    - {hp: 1.24, dmg: 1.12, quality: [48, 33, 16, 3], fee: 240}
+    - {hp: 1.30, dmg: 1.15, quality: [45, 34, 17, 4], fee: 300}
+    - {hp: 1.36, dmg: 1.18, quality: [42, 35, 19, 4], fee: 360}
+    - {hp: 1.42, dmg: 1.21, quality: [40, 35, 21, 4], fee: 420}
+    - {hp: 1.48, dmg: 1.24, quality: [38, 35, 22, 5], fee: 480}
+    - {hp: 1.55, dmg: 1.27, quality: [36, 35, 24, 5], fee: 540}
 
 maps:
   q01:

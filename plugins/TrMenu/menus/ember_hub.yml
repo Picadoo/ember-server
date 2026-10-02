@@ -1,5 +1,5 @@
 # 余烬主界面（P1 默认模式，D63）— 书 §19.1「一级菜单只需要冒险、装备、工坊、仓库与设置」
-# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 盟约 / 帮助
+# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；P2-2 深渊 · 余烬层（D70）；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 盟约 / 帮助
 # 旧模式入口（挂机 / 日常 / 周常 / 精英 / 深渊 / 团本 / 灾厄 / 誓约 / 天赋 / 使魔 / 旧强化镶嵌附魔 / 商城等）整页留在
 # ember_hub_legacy.yml（不绑定命令，管理员 trmenu open ember_hub_legacy），源表 §13.15 D63
 Title: '§6余烬 · 冒险枢纽'
@@ -16,7 +16,7 @@ Layout:
   - ' n o p F '
   - ' m X k i '
   - ' R c Y d '
-  - '    j    '
+  - '  A j    '
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -71,6 +71,21 @@ Icons:
         - 'sound: BLOCK_ANVIL_USE-1-1'
         - 'menu: ember_p1_forge'
 
+  A:
+    update: 20
+    display:
+      material: ender eye
+      name: '§5深渊 · 余烬层'
+      lore:
+        - ''
+        - '§7Q07 首通后的长线挑战：§f%corerpg_p1_abyss_state%'
+        - '§7三房一段 · 十层封顶 · 每段单独付费与结算'
+        - ''
+        - '§e➥ §f打开深渊选层'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_abyss'
   F:
     display:
       material: book and quill
