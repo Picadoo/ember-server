@@ -48,6 +48,8 @@ public final class EmberRunSession {
     public boolean extraDone;
     public final Set<UUID> acted = new LinkedHashSet<UUID>();
     public final Set<UUID> died = new LinkedHashSet<UUID>();
+    /** D32: P1 heal potions each participant drank in this run (for the first-death-of-the-day refund) */
+    public final Map<UUID, Integer> potions = new LinkedHashMap<UUID, Integer>();
     public final Set<UUID> left = new LinkedHashSet<UUID>();
     public final List<String> cleared = new ArrayList<String>();
     public String reason = "";
@@ -100,6 +102,9 @@ public final class EmberRunSession {
         m.put("extra_done", extraDone);
         m.put("acted", ids(acted));
         m.put("died", ids(died));
+        Map<String, Object> pu = new LinkedHashMap<String, Object>();
+        for (Map.Entry<UUID, Integer> e : potions.entrySet()) pu.put(e.getKey().toString(), e.getValue());
+        m.put("potions", pu);
         m.put("left", ids(left));
         m.put("cleared", new ArrayList<String>(cleared));
         m.put("reason", reason == null ? "" : reason);
@@ -139,6 +144,10 @@ public final class EmberRunSession {
         s.extraDone = Boolean.TRUE.equals(m.get("extra_done"));
         readIds(m.get("acted"), s.acted);
         readIds(m.get("died"), s.died);
+        if (m.get("potions") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("potions")).entrySet()) {
+            UUID u = uuid(e.getKey());
+            if (u != null) s.potions.put(u, (int) EmberRunMaps.num(e.getValue(), 0));
+        }
         readIds(m.get("left"), s.left);
         if (m.get("cleared") instanceof List) for (Object o : (List<?>) m.get("cleared")) s.cleared.add(String.valueOf(o));
         s.reason = str(m.get("reason"));

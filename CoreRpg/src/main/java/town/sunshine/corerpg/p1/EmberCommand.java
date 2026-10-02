@@ -190,11 +190,16 @@ public final class EmberCommand {
             s.sendMessage(P + "已取消选定护符");
             return true;
         }
+        String lastBlade = loadouts.state(p.getUniqueId()).mainhandUid; // B2.173: blade equipped before the charm was taken in hand
         String err = loadouts.selectCharm(p, p.getInventory().getItemInMainHand());
         if (err != null) { s.sendMessage(P + ChatColor.RED + err); return true; }
         EmberLoadout l = loadouts.get(p);
+        Object[] pv = loadouts.previewWithBlade(p, lastBlade);
+        EmberLoadout v = (EmberLoadout) pv[0];
+        String set = v.blade == null ? "未成套（没有可配的刃）"
+                : Boolean.TRUE.equals(pv[1]) ? v.setLabel() + "（配 " + v.blade.shortLabel() + "，手持该刃时生效）" : v.setLabel();
         s.sendMessage(P + "已选定护符 " + (l.charm == null ? "(暂未生效: " + String.join("; ", loadouts.notes(p)) + ")" : l.charm.shortLabel())
-                + " · 套装: " + l.setLabel());
+                + " · 套装: " + set);
         return true;
     }
 

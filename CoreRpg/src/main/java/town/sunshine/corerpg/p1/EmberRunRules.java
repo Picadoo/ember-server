@@ -160,7 +160,14 @@ public final class EmberRunRules {
 
     // ------------------------------------------------------------------ grants
 
-    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA }
+    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA, POTION }
+
+    /** D32 / B2.172: ledger run id of the once-per-day death refund (day = stamina day, DailyService.today()). */
+    public static String deathRefundRun(String day) { return "deathrefund@" + day; }
+    public static final String DEATH_REFUND_KEY = "potions";
+
+    /** D32: potions refunded for the first death of the day = used in that run, capped by config (max <= 0 = off). */
+    public static int deathRefundCount(int used, int max) { return max <= 0 ? 0 : Math.max(0, Math.min(used, max)); }
 
     /** One reward row. {@link #encode()} is what the ledger stores; {@link #decode(String, String)} reads it back. */
     public static final class Grant {
@@ -183,6 +190,7 @@ public final class EmberRunRules {
                 case CHOICE: return "choice:" + id + ":" + amount;
                 case UNLOCK: return "unlock:" + id;
                 case STAMINA: return "stamina:" + amount;
+                case POTION: return "potion:" + amount + (id == null ? "" : ":" + id);
                 default: return "item:" + id + ":" + item;
             }
         }
@@ -199,6 +207,7 @@ public final class EmberRunRules {
                     case "choice": return new Grant(key, Kind.CHOICE, p[1], Integer.parseInt(p[2]), null);
                     case "unlock": return new Grant(key, Kind.UNLOCK, p[1], 0, null);
                     case "stamina": return new Grant(key, Kind.STAMINA, null, Integer.parseInt(p[1]), null);
+                    case "potion": return new Grant(key, Kind.POTION, p.length > 2 ? p[2] : null, Integer.parseInt(p[1]), null);
                     case "item": return new Grant(key, Kind.ITEM, p[1], 1, new ItemRoll(p[2], p[3],
                             Integer.parseInt(p[4]), Integer.parseInt(p[5]), Integer.parseInt(p[6])));
                     default: return null;

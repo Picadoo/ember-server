@@ -49,6 +49,11 @@ shop:
 starter:
   heal_potions: 5
 
+# D32 / B2.172（用户批准 2026-10-02 14:31）：每个体力日（Asia/Shanghai，与体力同一天）第一次在 P1 主线本里倒下，
+# 退还该局用掉的回复药（绑定，回城到账），最多 max_potions 瓶；同日第二次倒下不退。每人每天一行账本，不会重复发放。0 = 关闭
+death_refund:
+  max_potions: 5
+
 # P1 中允许照常生效的 life.yml 消耗品 id（其余战斗类效果明确提示不可用，食物只补饱食度）
 consumables:
   allowed: [potion_ember_night]

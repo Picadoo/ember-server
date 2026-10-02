@@ -589,6 +589,17 @@ public final class EmberRunService implements Listener {
                     done = true;
                     break;
                 }
+                case POTION: { // D32: bound heal potions, only in town and only when they all fit (else stays pending)
+                    if (blocksLegacy(p.getWorld())) break;
+                    EmberSupplyService sup = plugin.getEmberSupplies();
+                    if (sup == null || g.amount <= 0) { done = g.amount <= 0; break; }
+                    if (freeSlots(p) < g.amount) { waiting++; break; }
+                    int given = sup.give(p, g.amount, "death_refund");
+                    if (given < g.amount) log().warning("[P1 run] death refund " + p.getName() + " gave " + given + "/" + g.amount + " (" + r.runId + ")");
+                    got.add("今日首次倒下退还 回复药 ×" + given);
+                    done = true;
+                    break;
+                }
                 case STAMINA: {
                     StaminaService st = plugin.getStaminaService();
                     if (st != null) st.releaseFlat(u, g.amount);
@@ -928,7 +939,48 @@ public final class EmberRunService implements Listener {
         if (d == null || !d.s.committed.contains(p.getUniqueId()) || !d.s.open()) return;
         d.s.died.add(p.getUniqueId());
         store.save(d.s);
+        deathRefund(p, d.s);
         checkWipe(d.s);
+    }
+
+    /** D32 / B2.172: a heal potion drunk inside a P1 main run (called by LifeService after the cooldown check). */
+    public void notePotion(Player p) {
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || !d.s.open() || !d.s.committed.contains(p.getUniqueId())) return;
+        d.s.potions.merge(p.getUniqueId(), 1, Integer::sum);
+        store.save(d.s);
+    }
+
+    public static int deathRefundMax() {
+        EmberMode m = EmberMode.get();
+        return m == null ? 5 : m.i("death_refund.max_potions", 5);
+    }
+
+    /**
+     * D32 / B2.172: the first P1 main-run death of the stamina day refunds the heal potions used in that run (up to
+     * death_refund.max_potions). One ledger row per (player, day): record() never overwrites, so a second death the
+     * same day, a relog, a restart or a duplicate death event pays nothing more. The row is delivered in town.
+     */
+    private void deathRefund(Player p, EmberRunSession s) {
+        int max = deathRefundMax();
+        if (max <= 0) return;
+        UUID u = p.getUniqueId();
+        Integer used = s.potions.get(u);
+        int n = EmberRunRules.deathRefundCount(used == null ? 0 : used, max);
+        String day = town.sunshine.corerpg.DailyService.today();
+        EmberRunRules.Ledger l = store.ledger(u);
+        boolean[] c = new boolean[1];
+        EmberRunRules.Row r = l.record(EmberRunRules.deathRefundRun(day), EmberRunRules.DEATH_REFUND_KEY,
+                "potion:" + n + ":" + s.runId, n > 0 ? EmberRunRules.ST_PENDING : EmberRunRules.ST_DELIVERED,
+                System.currentTimeMillis(), c);
+        if (!c[0]) {
+            log().info("[P1 run] death refund " + p.getName() + " " + day + ": already used today (" + r.result + ", " + r.status + ")");
+            return;
+        }
+        store.saveLedger(u, Collections.singletonList(r));
+        log().info("[P1 run] death refund " + p.getName() + " " + day + " run " + s.runId + ": " + n + " potion(s) (used " + (used == null ? 0 : used) + ", max " + max + ")");
+        p.sendMessage(P + (n > 0 ? "§a今日首次倒下：退还本局用掉的回复药 ×" + n + "（回城到账，绑定）。今天再倒下不再退还。"
+                : "今日首次倒下：本局没有用回复药，无可退还（今天再倒下也不再退还）。"));
     }
 
     /** §20.5: no revive system — a dead member watches; the run fails when nobody is left standing. */

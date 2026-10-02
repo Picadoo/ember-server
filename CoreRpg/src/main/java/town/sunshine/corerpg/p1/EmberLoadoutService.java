@@ -176,6 +176,39 @@ public final class EmberLoadoutService implements Listener {
     }
 
     /** Explicit charm selection (book §4.1: only the selected charm counts). */
+    /**
+     * B2.173: the set the selected charm makes with the player's blade, for the {@code charm select} reply. While the
+     * charm is in the main hand the live loadout has no blade, so this takes the main-hand blade if there is one, else
+     * the blade equipped before ({@code lastBladeUid}, if still in the inventory), else the first P1 blade on the
+     * hotbar. Display only: the live loadout still uses the main hand. {@code [0]} = loadout, {@code [1]} = the blade
+     * was not in the main hand (Boolean).
+     */
+    public Object[] previewWithBlade(Player p, String lastBladeUid) {
+        EmberLoadout cur = get(p);
+        if (cur.blade != null) return new Object[] { cur, Boolean.FALSE };
+        PlayerInventory inv = p.getInventory();
+        EmberItemData blade = null;
+        for (int pass = 0; pass < 2 && blade == null; pass++) {
+            ItemStack[] it = pass == 0 ? inv.getStorageContents() : java.util.Arrays.copyOf(inv.getStorageContents(), 9);
+            for (ItemStack s : it) {
+                if (s == null || !items.hasData(s)) continue;
+                EmberItems.Read r = items.read(s);
+                if (r == null || !r.ok() || r.data == null || !r.data.isBlade()) continue;
+                if (pass == 0 && (lastBladeUid == null || !lastBladeUid.equals(r.data.uid))) continue;
+                if (dbCheck(p, r.data) != null) continue;
+                blade = r.data;
+                break;
+            }
+        }
+        if (blade == null) return new Object[] { cur, Boolean.FALSE };
+        int level = 10;
+        try {
+            PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+            if (pd != null) level = pd.getEmberLevel();
+        } catch (Throwable ignored) {}
+        return new Object[] { EmberLoadout.compute(EmberMode.tables(), blade, cur.charm, level), Boolean.TRUE };
+    }
+
     public String selectCharm(Player p, ItemStack held) {
         EmberItems.Read r = items.read(held);
         if (r == null) return "手持物品不是 P1 物品";

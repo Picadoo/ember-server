@@ -213,6 +213,8 @@ public final class LifeService implements Listener {
             }
             st.healCdUntil = now + Math.max(0, mode.i("heal_potion.cooldown_seconds", 15)) * 1000L;
             ls.saveState(p);
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns(); // D32: count for the death refund
+            if (runs != null) runs.notePotion(p);
             final double pct = mode.d("heal_potion.percent", 0.20);
             plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
                 @Override public void run() {
