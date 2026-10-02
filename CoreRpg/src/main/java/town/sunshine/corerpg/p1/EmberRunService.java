@@ -209,6 +209,17 @@ public final class EmberRunService implements Listener {
 
     static final String C_ABYSS_BEST = "p2_abyss_best";
     static final String C_RAID = "p2_raid_";
+    static final String C_BOUNTY = "p2_bounty";
+
+    /** P2-7 (D79): ember-v1.yml bounty.daily */
+    public List<EmberRunRules.BountyTier> bountyTiers() {
+        EmberMode mode = EmberMode.get();
+        return EmberRunRules.bountyTiers(mode == null ? null : mode.config().getMapList("bounty.daily"));
+    }
+
+    public String bountyLabel(PlayerData d) {
+        return EmberRunRules.bountyLine(bountyTiers(), d.periodCount(C_BOUNTY, town.sunshine.corerpg.DailyService.today()));
+    }
 
     /** P2-5: settled clears of this raid in the current Monday-based week */
     public int raidWeek(PlayerData d, EmberRunMaps.MapDef m) {
@@ -649,6 +660,13 @@ public final class EmberRunService implements Listener {
         }
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), maps.rotationBonusMarks, null));
         EmberRunRules.Ledger l = store.ledger(u);
+        // P2-7 daily bounty (D79): the n-th settled clear of the stamina day; counted once per run (fresh = no base row yet)
+        final boolean fresh = l.get(s.runId, "base_coin") == null;
+        final String bDay = town.sunshine.corerpg.DailyService.today();
+        final List<EmberRunRules.BountyTier> tiers = bountyTiers();
+        final int bountyN = fresh ? pd.periodCount(C_BOUNTY, bDay) + 1 : 0;
+        List<EmberRunRules.Grant> bountyPaid = fresh ? EmberRunRules.bountyGrants(tiers, bountyN) : Collections.<EmberRunRules.Grant>emptyList();
+        grants.addAll(bountyPaid);
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
         long now = System.currentTimeMillis();
         boolean[] created = new boolean[1];
@@ -659,6 +677,7 @@ public final class EmberRunService implements Listener {
             if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(C_ROTATION, week, 1); // counted once per run (ledger key)
             if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + capKey(m), week, 1); // P2-5 weekly cap (P2-6: per cap_group)
         }
+        if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, 1);
         if (in.firstClear != null) pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
         boolean newBest = s.abyss > 0 && s.abyss > abyssBest(pd);
         if (newBest) pd.addPeriodCount(C_ABYSS_BEST, "all", s.abyss - abyssBest(pd)); // P2-2: opens tier + 1
@@ -674,6 +693,10 @@ public final class EmberRunService implements Listener {
         if (p != null && p.isOnline() && rotation) {
             p.sendMessage(P + "§b本周精选挑战 §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + maps.rotationBonusMarks
                     + "§7（本周 " + pd.periodCount(C_ROTATION, week) + "/" + maps.rotationWeeklyCap + "）");
+        }
+        if (p != null && p.isOnline() && fresh && !tiers.isEmpty()) {
+            p.sendMessage(P + "§e每日委托 §7" + (bountyPaid.isEmpty() ? "" : "§a完成第 " + bountyN + " 局档 §7· ")
+                    + EmberRunRules.bountyLine(tiers, bountyN));
         }
         if (p != null && p.isOnline()) {
             deliver(p);
@@ -1538,6 +1561,7 @@ public final class EmberRunService implements Listener {
                 : "§7需本人首通 " + (maps.challenge == null ? "Q07" : maps.challenge.requires.toUpperCase(Locale.ROOT))));
         for (EmberRunMaps.MapDef rm : maps.raids.values())
             p.sendMessage(P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " · /corerpg p1 enter " + rm.key);
+        p.sendMessage(P + "§e每日委托 §7" + bountyLabel(d)); // P2-7
         p.sendMessage(P + "本周精选挑战：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次挑战通关各多 " + maps.rotationBonusMarks + " 枚 T3 印记）");
         p.sendMessage(P + "目标族 " + (t == null ? "未选" : EmberItemData.familyName(t)) + " · 印记 T1 " + marks(d, 1)
                 + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3)
@@ -1589,6 +1613,7 @@ public final class EmberRunService implements Listener {
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
+        if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
         if (key.startsWith("raid_")) { // P2-5 %corerpg_p1_raid_r01%
             EmberRunMaps.MapDef rm = maps.raids.get(key.substring(5));
             return rm == null ? "" : raidLabel(d, rm);

@@ -81,6 +81,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000):
                         tier = t
                         break
             for _ in range(per_day):
+                p.day = 1000 + w * 7 + d
                 if can_ch:
                     if ABYSS[tier - 1]['fee'] + reserve > p.coin and tier > 1:
                         tier -= 1
@@ -120,6 +121,7 @@ def to_q07(cfg, kn, seed):
         cur = min(cur, front)
         key = order[cur]
         p.buy_potions()
+        p.day = runs // per_day + 1
         ok, used, extra, *_ = p1sim.run_map(cfg, key, p.st(), kn, rng, p.potions)
         p.potions -= used
         runs += 1
@@ -184,6 +186,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         if trade:
             buy_listing(p, ccfg, rng)
         runs_left = 7 * per_day
+        p.day = 1000 + w * 7  # raids happen on the week's first day
         if raid and can_ch:  # raids only once the player can farm challenge (same gear bar as the p1party pool)
             stamina, clears, cost = 7 * per_day * cfg['run_cost'], 0, int(next(iter(RAIDS.values()))['cost'])
             for _ in range(RAID_TRIES):
@@ -196,7 +199,8 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                     p.marks[3] += 1; marks_earned += 2       # raid_mark + the base mark
                     p.invest()
             runs_left = stamina // cfg['run_cost']
-        for _ in range(runs_left):
+        for i in range(runs_left):
+            p.day = 1000 + w * 7 + i * 7 // max(1, runs_left)
             if can_ch:
                 use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else best)
             else:
@@ -240,8 +244,11 @@ def main():
     ap.add_argument('--trade', action='store_true', help='add the P2-3 market model (weekly best-of-10 purchase)')
     ap.add_argument('--abyss', action='store_true', help='add the P2-2 abyss policy as a third column')
     ap.add_argument('--raid', action='store_true', help='add the P2-5/6 raids (rotation + weekly raid clears, shared cap)')
+    ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
     a = ap.parse_args()
     cfg = p1config.load()
+    if a.no_bounty:
+        cfg['bounty'] = []
     ccfg = challenge_cfg(cfg)
     per_day = cfg['stamina_day'] // cfg['run_cost']
     modes = ('base', 'rot') + (('abyss',) if a.abyss else ()) + (('trade',) if a.trade else ()) + (('raid',) if a.raid else ())

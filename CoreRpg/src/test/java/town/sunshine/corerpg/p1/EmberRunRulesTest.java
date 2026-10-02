@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(240, q1.boss.hp, 0);
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(6, m.balanceVersion);                 // D77–D78
-        assertEquals("g04-1/b6", m.ruleVersion);
+        assertEquals(7, m.balanceVersion);                 // D79
+        assertEquals("g04-1/b7", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         assertEquals(4, (int) q1.room("r1").a.get("melee"));
@@ -678,5 +678,30 @@ public class EmberRunRulesTest {
         next[0] = 99999; next[1] = 99999;
         assertEquals(-1, EmberRunDirector.dueSkill(next, 1000, below, 0.8)); // gated above 50 %
         assertEquals(2, EmberRunDirector.dueSkill(next, 1000, below, 0.49));
+    }
+
+    @Test public void dailyBountyPaysEachTierOnceOnTheMatchingClear_P2_7() {
+        java.util.List<java.util.Map<String, Object>> raw = new java.util.ArrayList<java.util.Map<String, Object>>();
+        java.util.Map<String, Object> a = new java.util.HashMap<String, Object>(); a.put("clears", 3); a.put("coin", 60); a.put("shard", 6);
+        java.util.Map<String, Object> b = new java.util.HashMap<String, Object>(); b.put("clears", 1); b.put("coin", 30);
+        java.util.Map<String, Object> bad = new java.util.HashMap<String, Object>(); bad.put("clears", 2);           // no reward → dropped
+        raw.add(a); raw.add(b); raw.add(bad);
+        java.util.List<EmberRunRules.BountyTier> t = EmberRunRules.bountyTiers(raw);
+        assertEquals(2, t.size());
+        assertEquals(1, t.get(0).clears);                                       // sorted
+        assertEquals("[bounty_coin_1=coin:30]", keys(EmberRunRules.bountyGrants(t, 1)));
+        assertEquals("[]", keys(EmberRunRules.bountyGrants(t, 2)));
+        assertEquals("[bounty_coin_3=coin:60, bounty_shard_3=mat:mat_ember_shard:6]", keys(EmberRunRules.bountyGrants(t, 3)));
+        assertEquals("[]", keys(EmberRunRules.bountyGrants(t, 4)));
+        assertTrue(EmberRunRules.bountyLine(t, 0).contains("再通关 1 局 → 30 余烬币"));
+        assertTrue(EmberRunRules.bountyLine(t, 1).contains("再通关 2 局 → 60 余烬币 + 余烬碎片 ×6"));
+        assertTrue(EmberRunRules.bountyLine(t, 3).contains("全部完成"));
+        assertEquals("未开放", EmberRunRules.bountyLine(EmberRunRules.bountyTiers(null), 0));
+    }
+
+    private static String keys(java.util.List<EmberRunRules.Grant> gs) {
+        java.util.List<String> l = new java.util.ArrayList<String>();
+        for (EmberRunRules.Grant g : gs) l.add(g.key + "=" + g.encode());
+        return l.toString();
     }
 }

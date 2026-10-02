@@ -19,7 +19,7 @@ Layout:
   - '#########'
   - '#T X A K#'
   - '#1234567#'
-  - '# s b u n'
+  - '#Ws b u n'
   - '#GMRF C D'
   - '####B####'
 
@@ -28,6 +28,22 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
 
 Icons:
+  W:
+    update: 20
+    display:
+      material: paper
+      name: '§e每日委托'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_bounty%'
+        - '§7当天第 1 局结算通关：30 余烬币'
+        - '§7当天第 3 局结算通关：60 余烬币 + 余烬碎片 ×6'
+        - '§7主线 / 挑战 / 深渊段 / 团本都算，失败不算'
+        - '§7每天 0 点刷新（同体力日）· 自动到账，不用领取'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+
   R:
     update: 20
     display:

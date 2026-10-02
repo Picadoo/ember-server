@@ -321,6 +321,64 @@ public final class EmberRunRules {
     /** P2-5 raids: one more roll with the same tier / target / quality table (stable key → idempotent). */
     public static Grant extraItem(SettleInput in, String key) { return item(in, key); }
 
+    // ------------------------------------------------------------------ P2-7 daily bounty (D79)
+
+    /** One bounty tier: paid once on the {@code clears}-th settled clear of the stamina day (existing currencies only). */
+    public static final class BountyTier {
+        public final int clears, coin, shard, bone, core;
+        public BountyTier(int clears, int coin, int shard, int bone, int core) {
+            this.clears = clears; this.coin = coin; this.shard = shard; this.bone = bone; this.core = core;
+        }
+        public String rewardText() {
+            List<String> l = new ArrayList<String>();
+            if (coin > 0) l.add(coin + " 余烬币");
+            if (shard > 0) l.add("余烬碎片 ×" + shard);
+            if (bone > 0) l.add("余烬骨尘 ×" + bone);
+            if (core > 0) l.add("余烬核心碎片 ×" + core);
+            return l.isEmpty() ? "无" : String.join(" + ", l);
+        }
+    }
+
+    /** Parses {@code bounty.daily}; drops rows without a positive clears count or any reward; sorted by clears. */
+    public static List<BountyTier> bountyTiers(List<? extends Map<?, ?>> raw) {
+        List<BountyTier> out = new ArrayList<BountyTier>();
+        if (raw == null) return out;
+        for (Map<?, ?> m : raw) {
+            int c = intOf(m.get("clears")), coin = intOf(m.get("coin")), sh = intOf(m.get("shard")), bo = intOf(m.get("bone")), co = intOf(m.get("core"));
+            if (c <= 0 || coin < 0 || sh < 0 || bo < 0 || co < 0 || coin + sh + bo + co <= 0) continue;
+            out.add(new BountyTier(c, coin, sh, bo, co));
+        }
+        Collections.sort(out, (a, b) -> Integer.compare(a.clears, b.clears));
+        return out;
+    }
+
+    private static int intOf(Object o) {
+        if (o instanceof Number) return ((Number) o).intValue();
+        try { return o == null ? 0 : Integer.parseInt(String.valueOf(o).trim()); } catch (NumberFormatException e) { return -1; }
+    }
+
+    /** Grants for the n-th settled clear of the day (empty unless some tier has clears == n). */
+    public static List<Grant> bountyGrants(List<BountyTier> tiers, int n) {
+        List<Grant> out = new ArrayList<Grant>();
+        for (BountyTier t : tiers) {
+            if (t.clears != n) continue;
+            if (t.coin > 0) out.add(new Grant("bounty_coin_" + n, Kind.COIN, null, t.coin, null));
+            if (t.shard > 0) out.add(new Grant("bounty_shard_" + n, Kind.MAT, EmberUpgradeRules.MAT_SHARD, t.shard, null));
+            if (t.bone > 0) out.add(new Grant("bounty_bone_" + n, Kind.MAT, EmberUpgradeRules.MAT_BONE, t.bone, null));
+            if (t.core > 0) out.add(new Grant("bounty_core_" + n, Kind.MAT, EmberUpgradeRules.MAT_CORE, t.core, null));
+        }
+        return out;
+    }
+
+    /** Status line after {@code done} settled clears today. */
+    public static String bountyLine(List<BountyTier> tiers, int done) {
+        if (tiers.isEmpty()) return "未开放";
+        for (BountyTier t : tiers) {
+            if (t.clears > done) return "今日通关 " + done + " 局 · 再通关 " + (t.clears - done) + " 局 → " + t.rewardText();
+        }
+        return "今日委托已全部完成（通关 " + done + " 局）· 明天 0 点刷新";
+    }
+
     private static Grant item(SettleInput in, String key) {
         Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
         return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, rollItem(in.tier, in.target, r, in.qualityWeights));

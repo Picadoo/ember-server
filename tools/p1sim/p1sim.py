@@ -267,6 +267,7 @@ class Player:
         self.marks = {1: 0, 2: 0, 3: 0}
         self.cleared = set()
         self.save_for_upgrade = False
+        self.day, self._bday, self._bn = None, None, 0  # P2-7 daily bounty: loops set p.day before settle()
 
     def st(self):
         return stats(self.cfg, self.blade, self.charm, level_of(self.cfg, self.xp))
@@ -308,7 +309,20 @@ class Player:
         if it['src'] in ('drop', 'mark') and it['tier'] >= 1:
             self.blank += it['tier']
 
+    def bounty(self):
+        """P2-7 (D79): the n-th settled clear of the stamina day pays the bounty tiers with clears == n."""
+        if self.day is None:
+            return
+        if self._bday != self.day:
+            self._bday, self._bn = self.day, 0
+        self._bn += 1
+        for b in self.cfg.get('bounty', []):
+            if int(b.get('clears', 0)) == self._bn:
+                self.coin += int(b.get('coin', 0)); self.shard += int(b.get('shard', 0))
+                self.bone += int(b.get('bone', 0)); self.core += int(b.get('core', 0))
+
     def settle(self, key, extra):
+        self.bounty()
         cfg, m = self.cfg, self.cfg['maps'][key]
         b = cfg['base']
         self.coin += b['coin']; self.shard += b['shard']; self.bone += b['bone']; self.core += b['core']
@@ -406,6 +420,7 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
         cur = min(cur, front)
         key = order[cur]
         p.buy_potions()
+        p.day = day
         st = p.st()
         ok, used, extra, secs, taken, where = run_map(cfg, key, st, kn, rng, p.potions)
         p.potions -= used
@@ -561,6 +576,7 @@ def main(argv=None):
     ap.add_argument('--days', type=int, default=60, help='stamina-day cap per simulated player')
     ap.add_argument('--route', default='stepdown', choices=['stepdown', 'alternate'])
     ap.add_argument('--swap', action='store_true', help='use the §6.3 free enhance swap (the bots did not)')
+    ap.add_argument('--no-bounty', action='store_true', help='without the P2-7 daily bounty (D79) for comparison')
     ap.add_argument('--target', default='burst', choices=FAMS)
     ap.add_argument('--uptime', type=float, default=0.70)
     ap.add_argument('--ref', action='store_true', help='clear rate per map at the book §3.2 reference loadout')
@@ -573,6 +589,8 @@ def main(argv=None):
             print('| %s | %.2f | %.2f | %s |' % (name, d, e, '；'.join(cells)))
         return
     cfg = p1config.load(args.profile)
+    if args.no_bounty:
+        cfg["bounty"] = []
     if args.ref:
         print(ref_table(cfg, args.dodge, args.players * 5))
         return
