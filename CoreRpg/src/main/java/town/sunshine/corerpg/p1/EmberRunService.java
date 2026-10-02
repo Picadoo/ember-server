@@ -228,10 +228,34 @@ public final class EmberRunService implements Listener {
 
     /** New-player polish: the one next thing to do on the main line (first map not yet first-cleared), then the late game. */
     public String nextStep(PlayerData d) {
+        return nextStep(d, null);
+    }
+
+    /** D87: pending first-clear choice → pick it; no target family after Q01 → set one; else the next first clear. */
+    public String nextStep(PlayerData d, UUID u) {
+        if (u != null) for (EmberRunRules.Row r : store.ledger(u).open())
+            if (EmberRunRules.ST_AWAIT.equals(r.status)) return "领取首通自选：点聊天里的族名，或冒险页「首通自选」";
+        EmberRunMaps.MapDef first = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
+        if (first != null && firstCleared(d, first) && target(d) == null) return "选掉落目标族（冒险页第 4 行）：之后 60% 掉你选的套装";
         for (EmberRunMaps.MapDef m : maps.maps.values()) {
             if (!firstCleared(d, m)) return "首通 " + m.key.toUpperCase(Locale.ROOT) + " " + m.name + "（首通开放下一张图）";
         }
         return "主线已完结 · 挑战版 / 深渊 · 余烬层 / 团本 · 每日委托";
+    }
+
+    /** D87: one chat line of clickable family buttons running {@code command + " " + family} */
+    private void familyButtons(Player p, String prefix, String command) {
+        java.util.List<net.md_5.bungee.api.chat.BaseComponent> parts = new java.util.ArrayList<net.md_5.bungee.api.chat.BaseComponent>();
+        parts.add(new net.md_5.bungee.api.chat.TextComponent(prefix));
+        String[][] fam = {{"scorch", "§6[焚烬]", "灼烧：命中叠灼烧，持续伤害"}, {"burst", "§c[烬爆]", "爆发：每几下打出一次大伤害"}, {"sustain", "§a[炽愈]", "续航：命中回血，最稳"}};
+        for (String[] f : fam) {
+            net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(" " + f[1] + " ");
+            b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, command + " " + f[0]));
+            b.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+                    new net.md_5.bungee.api.chat.ComponentBuilder(f[2] + "\n§7点击选择").create()));
+            parts.add(b);
+        }
+        p.spigot().sendMessage(parts.toArray(new net.md_5.bungee.api.chat.BaseComponent[0]));
     }
 
     public String bountyLabel(PlayerData d) {
@@ -894,7 +918,7 @@ public final class EmberRunService implements Listener {
         }
         if (!got.isEmpty()) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (waiting > 0) p.sendMessage(P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）：空出格子后 /corerpg p1 claim");
-        if (choices > 0) p.sendMessage(P + ChatColor.YELLOW + "首通自选待领取：/corerpg p1 firstclear <scorch|burst|sustain>（焚烬/烬爆/炽愈）或 冒险 菜单");
+        if (choices > 0) familyButtons(p, P + ChatColor.YELLOW + "首通自选待领取，点一个族：", "/corerpg p1 firstclear");
         return changed.size();
     }
 
@@ -922,6 +946,8 @@ public final class EmberRunService implements Listener {
         if (stack == null) return null;
         loadouts.remember(d, p.getUniqueId());
         p.getInventory().addItem(stack);
+        if (d.isCharm() && loadouts.autoSelectCharm(p, d.uid)) // D85 onboarding: no more half-life new players
+            return d.shortLabel() + "（已自动选定为生效护符）";
         return d.shortLabel();
     }
 
@@ -1339,7 +1365,7 @@ public final class EmberRunService implements Listener {
         }
         d.addPeriodCount(C_STARTER, "all", 1);
         plugin.getDataStore().flushMutation(u);
-        p.sendMessage(P + "§e新模式起步：发放 T0 刃 + T0 护符各一件（绑定）。手持护符 /corerpg p1 charm select 选定。");
+        p.sendMessage(P + "§e新模式起步：发放 T0 刃 + T0 护符各一件（绑定）。护符放在背包里就生效（已自动选定），刃要拿在手上。");
         deliver(p);
         EmberSupplyService sup = plugin.getEmberSupplies();
         if (sup != null) sup.giveStarter(p); // B2.169 / D28: §3.1 基础补给, once (guarded by C_STARTER above)
@@ -1425,7 +1451,7 @@ public final class EmberRunService implements Listener {
         if (args.length < 3) {
             String t = target(d);
             p.sendMessage(P + "当前掉落目标族：" + (t == null ? "未选择（三族各 1/3）" : EmberItemData.familyName(t) + "（60%，另两族各 20%）"));
-            p.sendMessage(P + "/corerpg p1 target <scorch|burst|sustain|none> · 只影响之后入场的局（入场时快照）");
+            familyButtons(p, P + "点一个族设为目标（之后入场的局生效）：", "/corerpg p1 target");
             return true;
         }
         String f = args[2].toLowerCase(Locale.ROOT);
@@ -1480,8 +1506,10 @@ public final class EmberRunService implements Listener {
             for (EmberRunRules.Row r : waiting) {
                 EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
                 p.sendMessage(P + "待选：" + r.key.substring(3, 6).toUpperCase(Locale.ROOT) + " T" + (g == null ? 1 : g.amount) + " 标准"
-                        + EmberItemData.slotName(g == null ? "blade" : g.id) + " → /corerpg p1 firstclear <scorch|burst|sustain>");
+                        + EmberItemData.slotName(g == null ? "blade" : g.id));
             }
+            String t = target(data(p.getUniqueId()));
+            familyButtons(p, P + "点一个族领取" + (t == null ? "（会同时设为掉落目标族）" : "（目标族 " + EmberItemData.familyName(t) + "，选同族才能成套）") + "：", "/corerpg p1 firstclear");
             p.sendMessage(P + "§7Q02 可选与武器不同的族（那样不能成套），系统不替你强选。");
             return true;
         }
@@ -1503,6 +1531,14 @@ public final class EmberRunService implements Listener {
         ch.add(pick);
         if (c[0]) ch.add(ir);
         store.saveLedger(p.getUniqueId(), ch);
+        PlayerData pd = data(p.getUniqueId());
+        if (target(pd) == null) { // D87: the first family a new player picks becomes the drop target (changeable)
+            int idx = 0;
+            for (int i = 0; i < 3; i++) if (EmberRunRules.FAMILIES[i].equals(fam)) idx = i + 1;
+            pd.addPeriodCount(C_TARGET, "all", idx);
+            plugin.getDataStore().flushMutation(p.getUniqueId());
+            p.sendMessage(P + "§a掉落目标族同时设为 " + EmberItemData.familyName(fam) + " §7（之后 60% 掉这一族；冒险页可改）");
+        }
         deliver(p);
         return true;
     }
@@ -1729,7 +1765,7 @@ public final class EmberRunService implements Listener {
         if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm); }
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
         if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
-        if ("next".equals(key)) return nextStep(d); // new-player polish %corerpg_p1_next%
+        if ("next".equals(key)) return nextStep(d, p.getUniqueId()); // new-player polish %corerpg_p1_next%
         if (key.startsWith("raid_")) { // P2-5 %corerpg_p1_raid_r01%
             EmberRunMaps.MapDef rm = maps.raids.get(key.substring(5));
             return rm == null ? "" : raidLabel(d, rm);

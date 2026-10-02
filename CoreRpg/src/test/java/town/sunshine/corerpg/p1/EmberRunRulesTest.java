@@ -301,11 +301,11 @@ public class EmberRunRulesTest {
         assertNull(m.byWorld("dungeon_EmberDaily_252696C4"));
         // book numbers
         assertEquals(36, q1.roles.get("melee").hp, 0);
-        assertEquals(240, q1.boss.hp, 0);
+        assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(9, m.balanceVersion);                 // D81–D82
-        assertEquals("g04-1/b9", m.ruleVersion);
+        assertEquals(10, m.balanceVersion);                // D86
+        assertEquals("g04-1/b10", m.ruleVersion);
         assertEquals(1, m.rotationBonusMarks);             // P2-1 parameter source
         assertEquals(3, m.rotationWeeklyCap);
         // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all

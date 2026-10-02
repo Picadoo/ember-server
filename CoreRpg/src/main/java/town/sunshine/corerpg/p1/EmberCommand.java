@@ -135,18 +135,23 @@ public final class EmberCommand {
     }
 
     private boolean status(CommandSender s) {
-        s.sendMessage(P + EmberMode.MODE_ID + " active=" + mode.isActive() + " (config=" + mode.isConfigEnabled()
+        boolean admin = !(s instanceof Player) || s.hasPermission("corerpg.admin");
+        if (admin) s.sendMessage(P + EmberMode.MODE_ID + " active=" + mode.isActive() + " (config=" + mode.isConfigEnabled()
                 + ", runtime=" + (mode.getRuntimeOverride() == null ? "follow" : mode.getRuntimeOverride()) + ")"
                 + (mode.isBlocked() ? ChatColor.RED + " BLOCKED: " + mode.getBlockedReason() : ""));
-        for (String line : mode.describeScope()) s.sendMessage(P + line);
+        if (admin) for (String line : mode.describeScope()) s.sendMessage(P + line);
         if (s instanceof Player) {
             Player p = (Player) s;
-            s.sendMessage(P + "当前世界 " + p.getWorld().getName() + " → " + (EmberMode.isP1(p) ? ChatColor.GOLD + "P1 新模式" : "旧模式"));
-            if (trace != null) s.sendMessage(P + "debug " + trace.describe(p.getUniqueId()));
+            if (admin) {
+                s.sendMessage(P + "当前世界 " + p.getWorld().getName() + " → " + (EmberMode.isP1(p) ? ChatColor.GOLD + "P1 新模式" : "旧模式"));
+                if (trace != null) s.sendMessage(P + "debug " + trace.describe(p.getUniqueId()));
+            }
             if (loadouts != null) {
                 EmberLoadout l = loadouts.refresh(p);
-                s.sendMessage(P + String.format(Locale.ROOT, "B=%.2f H=%.2f (H0 %.2f) D=%.0f M=%.4f EHP=%.1f  Lv%d  套装: %s",
+                if (admin) s.sendMessage(P + String.format(Locale.ROOT, "B=%.2f H=%.2f (H0 %.2f) D=%.0f M=%.4f EHP=%.1f  Lv%d  套装: %s",
                         l.b, l.h, l.h0, l.d, l.m, l.ehp(), l.level, l.setLabel()));
+                else s.sendMessage(P + String.format(Locale.ROOT, "攻击 %.0f · 生命 %.0f · 防御 %.0f · 余烬等级 %d · 套装：%s",
+                        l.b, l.h, l.d, l.level, l.setLabel()));
                 s.sendMessage(P + l.nextAwakeningHint());
                 s.sendMessage(P + l.setProgress());
                 s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
@@ -154,7 +159,7 @@ public final class EmberCommand {
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
                 for (String n : loadouts.notes(p)) s.sendMessage(P + ChatColor.YELLOW + n);
             }
-            if (sets != null) s.sendMessage(P + sets.describe(p));
+            if (sets != null && admin) s.sendMessage(P + sets.describe(p));
         }
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "tables " + EmberMode.tables());
         return true;

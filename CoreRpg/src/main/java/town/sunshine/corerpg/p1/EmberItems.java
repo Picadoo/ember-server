@@ -125,7 +125,7 @@ public final class EmberItems {
         } else {
             lore.add(ChatColor.GRAY + String.format(Locale.ROOT, "额外生命组成 %.0f×(1+%.2f+%.2f+%.2f) = %.1f · 防御 %.0f",
                     t.charmH(d.tier), t.enhance(d.enhance), t.quality(d.quality), t.craft(d.craft), t.charmH(d.tier) * g, t.charmD(d.tier)));
-            lore.add(ChatColor.DARK_GRAY + "需 /corerpg p1 charm select 选定后生效");
+            lore.add(ChatColor.DARK_GRAY + "放在背包里生效（只算选定的一件；第一件自动选定，换件：手持它点装备页「已选护符」）");
         }
         lore.add(ChatColor.DARK_GRAY + (d.bound ? "绑定" : "未绑定") + " · 来源 " + d.source + " · uid " + d.uid.substring(0, 8));
         meta.setLore(lore);

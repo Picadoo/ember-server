@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82)
-balance_version: 9
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86)
+balance_version: 10
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 party_min: 1
@@ -114,8 +114,8 @@ maps:
     safe: {r0: [0, 64, 3], r1: [0, 64, 21], r2: [30, 64, 31], r3: [32, 64, 59], rb: [0, 64, 91]}
     holo: {entry: [0, 67, 5], event: [48, 67, 38], exit: [0, 67, 91]}
     mobs:
-      melee:    {mm: EmberQ01Melee,    hp: 36,  atk: 3, interval: 2.5}
-      ranged:   {mm: EmberQ01Ranged,   hp: 26,  atk: 3, interval: 3.0, range: 12}
+      melee:    {mm: EmberQ01Melee,    hp: 36,  atk: 2.5, interval: 2.5}  # D86 onboarding: atk was 3 (challenge overrides atk)
+      ranged:   {mm: EmberQ01Ranged,   hp: 26,  atk: 2.5, interval: 3.0, range: 12}  # D86: atk was 3
       heavy:    {mm: EmberQ01Heavy,    hp: 50,  atk: 3, interval: 3.0}
       treasure: {mm: EmberQ01Treasure, hp: 48,  atk: 0, interval: 9.0}
       elite:    {mm: EmberQ01Elite,    hp: 120, atk: 3, interval: 2.5}
@@ -144,14 +144,14 @@ maps:
     boss:
       mm: EmberQ01Boss
       name: 残门蛮兵
-      hp: 240
-      atk: 6
+      hp: 200  # D86: was 240
+      atk: 4   # D86: was 6
       interval: 3.2
       at: [0, 64, 102]
       area: [-14, 63, 88, 14, 74, 116]
       wait_in_area: true
       skills:
-        - {type: cone, name: 重斩, every: 8, warn: 1.0, angle: 100, range: 4, dmg: 12}
+        - {type: cone, name: 重斩, every: 8, warn: 1.0, angle: 100, range: 4, dmg: 9}  # D86: was 12
     event:
       after: r2
       anchor: [54, 64, 38]

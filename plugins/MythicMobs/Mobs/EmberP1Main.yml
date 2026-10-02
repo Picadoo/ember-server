@@ -13,7 +13,7 @@ EmberQ01Melee:
   Type: ZOMBIE
   Display: '&7灰烬卒'
   Health: 36
-  Damage: 3
+  Damage: 2.5
   Options:
     MovementSpeed: 0.23
     AlwaysShowName: true
@@ -31,7 +31,7 @@ EmberQ01Ranged:
   Type: SKELETON
   Display: '&7灰烬弩手'
   Health: 26
-  Damage: 3
+  Damage: 2.5
   Options:
     MovementSpeed: 0.25
     AlwaysShowName: true
@@ -102,8 +102,8 @@ EmberQ01Elite:
 EmberQ01Boss:
   Type: VINDICATOR
   Display: '&c残门蛮兵'
-  Health: 240
-  Damage: 6
+  Health: 200
+  Damage: 4
   Options:
     MovementSpeed: 0.26
     AlwaysShowName: true
