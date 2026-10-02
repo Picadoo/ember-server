@@ -95,10 +95,14 @@ async function testHubMenu () {
       .flatMap((i) => { try { return i.nbt.value.display.value.Lore.value.value } catch (_) { return [] } })
       .filter((l) => /%[A-Za-z0-9_]+%/.test(l))
     bot.closeWindow(w)
-    const need = ['团本', '深渊', '精英试炼', '日常 · 余烬窟']
+    // D63 (CoreRpg 1.31.0, P1 default mode): book §19.1 main menu = 冒险 / 装备 / 工坊 / 仓库 / 设置 (+ 帮助);
+    // the old-mode entries (团本 / 深渊 / 精英试炼 / 日常 · 余烬窟 …) moved to ember_hub_legacy and must NOT show here
+    const need = ['冒险 · 主线本', '装备 · 主线本', '工坊', '仓库', '设置', '帮助']
+    const gone = ['团本', '深渊', '精英试炼', '日常 · 余烬窟', '挂机庭', '天赋']
     const missing = need.filter((n) => !names.some((s) => s.includes(n)))
-    const notes = `title="${title}" items=${names.length} missing=[${missing}] unreplacedPAPI=${ph.length}`
-    rec.record(name, /余烬 · 冒险枢纽/.test(title) && !missing.length && !ph.length ? 'PASS' : 'FAIL', notes)
+    const leaked = gone.filter((n) => names.some((s) => s.includes(n)))
+    const notes = `title="${title}" items=${names.length} missing=[${missing}] legacyShown=[${leaked}] unreplacedPAPI=${ph.length}`
+    rec.record(name, /余烬 · 冒险枢纽/.test(title) && !missing.length && !leaked.length && !ph.length ? 'PASS' : 'FAIL', notes)
   } catch (e) { rec.record(name, 'FAIL', e.message || String(e)) }
 }
 

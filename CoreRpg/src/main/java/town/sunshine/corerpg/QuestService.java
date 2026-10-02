@@ -235,6 +235,7 @@ public final class QuestService implements Listener {
             }, 60L);
         }
         if (!enabled) return;
+        if (town.sunshine.corerpg.p1.EmberMode.active()) return; // D62: P1 default mode — the old chain is not the route
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
             @Override public void run() {
                 if (!p.isOnline()) return;
@@ -461,6 +462,13 @@ public final class QuestService implements Listener {
         Long last = talkCooldown.get(p.getUniqueId());
         if (last != null && now - last < 1000) return;
         talkCooldown.put(p.getUniqueId(), now);
+        if (town.sunshine.corerpg.p1.EmberMode.active()) { // D62: the guide sends players down the P1 route
+            p.sendMessage(npcName + ChatColor.WHITE + "：主线本是正路——从 Q01 灰烬庭院开始，首通开放下一张图。手持刃按 "
+                    + ChatColor.YELLOW + "F" + ChatColor.WHITE + " 放烬斩。");
+            final String name = p.getName();
+            Bukkit.getScheduler().runTask(plugin, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open ember_p1_adventure " + name));
+            return;
+        }
         PlayerData d = dataStore.get(p.getUniqueId());
         if (d.getQuestChapter() <= 0 && !d.isQuestDone() && !chapters.isEmpty()) { startChapter(p, chapters.firstKey()); return; }
         reissueStarter(p, d);

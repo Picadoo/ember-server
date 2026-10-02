@@ -12,9 +12,10 @@ npcs:
     y: 58.0
     z: 105.5
     yaw: 90.0
-    action: forge
-    tell: '§6烬砧：§f刃与护符，放到菜单里锻。材料不够就去挂机庭。'
-    menu: ember_forge
+    # D64: P1 默认模式 → 工坊（主线本装备）；旧 ember_forge 不再对玩家开放
+    action: p1_forge
+    tell: '§6烬砧：§f手持刃或护符，在工坊里强化、升阶、精工。材料从主线本来。'
+    menu: ember_p1_forge
     open_menu: true
   ember_enchanter:
     enabled: true
@@ -25,11 +26,12 @@ npcs:
     y: 58.0
     z: 104.5
     yaw: 270.0
-    action: enchant_guide
+    # D64: 主线本里附魔不生效（源表 A01/A02），余晶改为讲解员 → 帮助页
+    action: help
     tell: |-
-      §d余晶：§f手持附魔晶点附魔台——把晶放在热键栏，对着旁边的附魔台用。
-      §7刃与护符分表；晶不够去日常或补给看看。
-    menu: ember_enchant_guide
+      §d余晶：§f主线本只认刃、护符与套装——附魔、宝石、旧天赋在主线本里都不加属性。
+      §7不清楚的地方，看帮助页。
+    menu: ember_help
     open_menu: true
   ember_quartermaster:
     enabled: true
@@ -54,10 +56,10 @@ npcs:
     y: 58.0
     z: 110.5
     yaw: 90.0
-    action: daily
+    # D64: 门吏改送主线本（冒险页）；旧日常窟不再对玩家开放
+    action: adventure
     tell: |-
-      §e灰钥：§f日常窟靠体力进。顶栏能看见还剩多少，一条扣 30，0 点回满。
-      §7庭院、焦骨、地窖、潮蚀、断塔、霜晶、锈轨——点菜单选一条。
-      §e灰钥：§f点开选本。不够体力就改天或用药。
-    menu: ember_daily
+      §e灰钥：§f主线本靠体力进，一次 30，0 点回满。
+      §7Q01 灰烬庭院起步，首通开放下一张图——点菜单选图。
+    menu: ember_p1_adventure
     open_menu: true

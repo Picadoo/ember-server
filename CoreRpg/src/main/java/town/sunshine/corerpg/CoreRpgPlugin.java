@@ -702,6 +702,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (cashService != null) cashService.onJoin(player);
         if (ladderService != null) ladderService.recomputePower(player);
         List<?> lines = getConfig().getList("join_message");
+        // D62: P1 is the default mode → the P1 welcome (ember-v1.yml join_message) replaces the old-route tips
+        if (town.sunshine.corerpg.p1.EmberMode.active() && town.sunshine.corerpg.p1.EmberMode.get() != null
+                && town.sunshine.corerpg.p1.EmberMode.get().config() != null
+                && !town.sunshine.corerpg.p1.EmberMode.get().config().getStringList("join_message").isEmpty()) {
+            lines = town.sunshine.corerpg.p1.EmberMode.get().config().getStringList("join_message");
+        }
         if (lines != null) {
             for (Object o : lines) if (o != null) player.sendMessage(color(String.valueOf(o)));
         }

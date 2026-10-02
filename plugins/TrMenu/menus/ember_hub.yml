@@ -1,657 +1,29 @@
-# 余烬主界面 — DESIGN-ember-rpg-systems.md §1 + docs/ember-hub-copy.md
-# TrMenu 3.12.x · Paper 1.12.2 · /ember 或 /menu
-# 实装：挂机/日/周/附魔/帮助(ember_help)/关闭 · P1 冒险/装备/工坊（n/o/p） + 签到/活跃/悬赏（CoreRpg）+ 强化/镶嵌/分解菜单壳
-# 商城/战令/勋阶：子菜单壳（晶钻支付未接线）· 月卡入口进商城；礼包/外观暂未上架、不可点击（D35）
-# 角色/套装/仓库 + 盟约/天梯/团本/使魔/图录/邮寄/好友/设置/竞技/寄售：子菜单壳
-
+# 余烬主界面（P1 默认模式，D63）— 书 §19.1「一级菜单只需要冒险、装备、工坊、仓库与设置」
+# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 盟约 / 帮助
+# 旧模式入口（挂机 / 日常 / 周常 / 精英 / 深渊 / 团本 / 灾厄 / 誓约 / 天赋 / 使魔 / 旧强化镶嵌附魔 / 商城等）整页留在
+# ember_hub_legacy.yml（不绑定命令，管理员 trmenu open ember_hub_legacy），源表 §13.15 D63
 Title: '§6余烬 · 冒险枢纽'
-
 Bindings:
   Commands:
     - '(?i)ember'
     - '(?i)menu'
-
 Options:
   Arguments: false
   Default-Layout: 0
   Hide-Player-Inventory: false
   Min-Click-Delay: 200
-
 Layout:
-  - ' ABCDEFm1'
-  - ' GHI2JKLk'
-  - ' MNOPQRnl'
-  - ' STUVWXop'
-  - ' YZabcd  '
-  - ' efghij  '
-
+  - ' n o p F '
+  - ' m X k i '
+  - ' R c Y d '
+  - '    j    '
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §7欢迎回来。今日也从挂机或日常开始吧。'
+    - 'tell: §7主路：冒险 · 主线本，从 Q01 灰烬庭院开始；首通开放下一张图。'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
-
 Icons:
-  # —— 主线（CoreRpg 1.8.0 QuestService）——
-  '1':
-    display:
-      material: book
-      name: '§6§l主线 · 旧誓余烬 / 烬火未灭'
-      lore:
-        - '§7%corerpg_quest_chapter%'
-        - '§f▶ %corerpg_quest%'
-        - ''
-        - '§8引路人·灰烛 在出生点北边（工坊旁）'
-        - '§e点击查看主线进度'
-    actions:
-      all:
-        - 'close'
-        - 'command: corerpg quest'
-  # —— 第 1 行 · 角色养成 ——
-  A:
-    display:
-      material: skull item
-      name: '§b角色'
-      lore:
-        - ''
-        - '§7查看等级、战力评分与今日必做摘要'
-        - '§8状态 · 誓约 · 晶钻 / 月卡'
-        - ''
-        - '§e➥ §f打开角色菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_character'
-
-  B:
-    display:
-      material: diamond sword
-      name: '§6誓约'
-      lore:
-        - ''
-        - '§7选定烬刃 / 灰行 / 守墓，决定技能与装备倾向'
-        - '§8三选一 · 首次免费 · 可洗（收费）'
-        - '§8ID: blaze / ash / warden'
-        - ''
-        - '§e➥ §f打开誓约菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_covenant'
-
-  C:
-    display:
-      material: enchantment table
-      name: '§d天赋'
-      lore:
-        - ''
-        - '§7点亮誓约天赋树，解锁被动与主动技'
-        - '§8Lv.10 有 5 点 · Lv.16 起每级 +1 · Lv.30 满 20 点 · 日免洗 1 次'
-        - '§8需先选定誓约'
-        - ''
-        - '§e➥ §f打开天赋菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_talent'
-
-  D:
-    display:
-      material: egg
-      name: '§a使魔'
-      lore:
-        - ''
-        - '§7收集出战使魔，偏外观与微量助战'
-        - '§8图鉴收集 · 出战 1 只 · 偏外观'
-        - ''
-        - '§e➥ §f打开使魔菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_pet'
-
-  E:
-    display:
-      material: blaze powder
-      name: '§c技能'
-      lore:
-        - ''
-        - '§7释放当前誓约主动技'
-        - '§8烬斩 / 灰印 / 守墓壁垒'
-        - '§8需先选定誓约 · CD 见提示'
-        - '§8主线本里：所有人共用烬斩，手持 P1 刃按 §eF§8 释放'
-        - ''
-        - '§e➥ §f立即释放'
-        - '§7潜行点击查看技能说明'
-    actions:
-      left:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg skill'
-        - close
-      right:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg skill'
-        - close
-      shift_left:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'command: corerpg skill info'
-      shift_right:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'command: corerpg skill info'
-
-
-  m:
-    display:
-      material: feather
-      name: '§a轻技'
-      lore:
-        - ''
-        - '§7可装配轻技槽 · 试点余烬踏步'
-        - '§7短位移 · CD 14s · 零体力'
-        - '§7战斗中 §e潜行+Q §7可释放'
-        - '§8与誓约主动并行 · 当前 §f%corerpg_flex_skill_name%'
-        - ''
-        - '§e➥ §f打开轻技页'
-        - '§7潜行点击直接释放轻技'
-    actions:
-      left:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_flex_skill'
-      right:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_flex_skill'
-      shift_left:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg flex cast'
-        - close
-      shift_right:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg flex cast'
-        - close
-
-  F:
-    display:
-      material: book and quill
-      name: '§3图录'
-      lore:
-        - ''
-        - '§7主线七个首领的招式与躲法 · 使魔图鉴'
-        - '§8只做展示，不加属性'
-        - ''
-        - '§e➥ §f打开图录菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_bestiary'
-
-  # —— 第 2 行 · 内容矩阵 ——
-  G:
-    display:
-      material: grass
-      name: '§a挂机庭'
-      lore:
-        - ''
-        - '§7分层挂机：灰坡 Lv10 · 荒原 Lv20 · 焦土 Lv30 · 烬原深处 Lv40'
-        - '§7刷碎片 / 骨尘（高层有核心碎片），四层共用每日上限 · 达顶后双软顶'
-        - '§8死亡不掉落 · 复活在本层入口 · 打开枢纽菜单可返回'
-        - ''
-        - '§e➥ §f点击选层'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        # 1.14.0：选择挂机档位并进入挂机菜单（等级门槛 + 传送）
-        - 'menu: ember_afk'
-
-  H:
-    display:
-      material: iron sword
-      name: '§e日常 · 余烬窟'
-      lore:
-        - ''
-        - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力闯余烬窟 · 多线可选'
-        - '§8庭院 · 焦骨 · 地窖 · 潮蚀 · 断塔 · 霜晶 · 锈轨'
-        - '§8也可找广场：门吏·灰钥（右键）'
-        - '§8当前体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-        - ''
-        - '§e➥ §f打开日常副本菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_daily'
-
-  I:
-    display:
-      material: diamond sword
-      name: '§c周常 · 深核'
-      lore:
-        - ''
-        - '§7高难爆发核心与稀有装备 · 本周首次免费'
-        - '§8进本消耗 §e%corerpg_stamina_cost_weekly% §8体力 · 通关回枢纽'
-        - ''
-        - '§e➥ §f打开周常副本菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_weekly'
-
-  # —— 4.4 精英试炼（周常旁 · 一点进本，无套娃）——
-  '2':
-    icons:
-      # 无周免费且体力不足：灰显；blocked_elite 已合 credit+cost，右侧字面量（禁双侧 PAPI）
-      - condition: 'check papi %corerpg_stamina_blocked_elite% > 0'
-        priority: 2
-        inherit: true
-        display:
-          material: gray stained glass pane
-          name: '§8精英试炼 · 体力不足'
-          lore:
-            - ''
-            - '§7需要 §e%corerpg_stamina_cost_elite% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
-            - '§c本周免费已用完 · 体力不足 · 每日 0:00 回满'
-        actions:
-          all:
-            - 'sound: BLOCK_NOTE_PLING-1-0.6'
-            - 'tell: §c体力不足，需 %corerpg_stamina_cost_elite% 点体力（本周免费已用完）；每日 0:00 回满。'
-
-    update: 20
-    refresh: 20
-    display:
-      material: golden sword
-      name: '§e精英试炼'
-      lore:
-        - ''
-        - '§7每人每周限通关 1 次 · 词缀精英 · 周首通稳定符'
-        - '§8需余烬 Lv.40 · 消耗 §e%corerpg_stamina_cost_elite% §8体力（本周首次免费）'
-        - ''
-        - '§e➥ 点击进入'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg elite start'
-        - close
-
-  J:
-    display:
-      material: obsidian
-      name: '§5深渊'
-      lore:
-        - ''
-        - '§7无尽波次下潜，冲层数榜与孔石'
-        - '§8消耗 §e%corerpg_stamina_cost_abyss% §8体力 · 进本扣体力'
-        - '§e➥ §f打开深渊菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_abyss'
-
-  K:
-    display:
-      material: beacon
-      name: '§9团本'
-      lore:
-        - ''
-        - '§7通道分路 → 终厅 · 周首通团戒'
-        - '§8消耗 §e%corerpg_stamina_cost_raid% §8体力（本周首次免费）· 3～5 人'
-        - ''
-        - '§e➥ §f打开团本菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_raid'
-
-  L:
-    display:
-      material: magma cream
-      name: '§4灾厄'
-      lore:
-        - ''
-        - '§7限时公共世界事件 · 余烬灾厄使'
-        - '§8世界 §fember_event §8· 日 2～3 窗'
-        - '§8每日宝箱限 1 · 产余烬/外观/低概率T3'
-        - '§e➥ §f打开灾厄菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_calamity'
-
-  # —— 第 3 行 · 日活（签到/活跃/悬赏已接 CoreRpg）——
-  M:
-    display:
-      material: paper
-      name: '§e悬赏'
-      lore:
-        - ''
-        - '§7接取短目标，换币、经验与碎片'
-        - '§8每日自动分配短目标'
-        - ''
-        - '§e➥ §f左键 查看今日悬赏'
-        - '§e➥ §f右键 领取奖励（完成后）'
-    actions:
-      left:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg bounty'
-        - close
-      right:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg bounty claim'
-        - close
-
-  N:
-    display:
-      material: chest
-      name: '§6活跃'
-      lore:
-        - ''
-        - '§7完成每日清单攒活跃度，开阶段宝箱'
-        - '§8箱档 25 / 50 / 75 / 100'
-        - ''
-        - '§e➥ §f查看并领取活跃宝箱'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg activity'
-        - close
-
-  O:
-    display:
-      material: gold ingot
-      name: '§a签到'
-      lore:
-        - ''
-        - '§7每日一签，领取余烬币奖励'
-        - '§8按上海日历日，每日一次'
-        - ''
-        - '§e➥ §f立即签到'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg sign'
-        - close
-
-  P:
-    display:
-      material: name tag
-      name: '§b战令'
-      lore:
-        - ''
-        - '§7赛季通行证，免费轨与付费轨并行'
-        - '§7战令进度进行中'
-        - '§8不卖毕业伤害'
-        - ''
-        - '§e➥ §f打开战令'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_pass'
-
-  Q:
-    display:
-      material: gold helmet
-      name: '§6勋阶'
-      lore:
-        - ''
-        - '§7VIP 小特权：仓库、经验、外观位'
-        - '§7勋阶特权进行中'
-        - '§8分层便利，不碾压战力'
-        - ''
-        - '§e➥ §f打开勋阶'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_vip'
-
-  R:
-    display:
-      material: book and quill
-      name: '§f邮寄'
-      lore:
-        - ''
-        - '§7领取系统邮件、战令与维护补偿'
-        - '§8奖励统一进邮箱'
-        - '§7打开邮寄'
-        - ''
-        - '§e➥ §f打开邮寄菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_mail'
-
-  # —— 第 4 行 · 装备成长 ——
-  S:
-    display:
-      material: anvil
-      name: '§c强化'
-      lore:
-        - ''
-        - '§7装备 +0～+10，固定数值成长，可保护'
-        - '§8手持余烬刃 / 护符后操作'
-        - '§8材料 + 保护券 / 稳固符'
-        - ''
-        - '§e➥ §f打开强化菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_enhance'
-
-  T:
-    display:
-      material: emerald
-      name: '§5镶嵌'
-      lore:
-        - ''
-        - '§7孔石嵌入刃与护符，微调流派'
-        - '§8刃 2 孔 / 护符 1 孔（随强化解锁）'
-        - '§8锋利 / 稳固 / 汲取 / 疾风'
-        - ''
-        - '§e➥ §f打开镶嵌菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_socket'
-
-  U:
-    display:
-      material: enchanted book
-      name: '§d附魔'
-      lore:
-        - ''
-        - '§7余烬晶催化，白名单装备专属词缀'
-        - '§8工坊：出生点北边 6 格（附魔台 -22,58,104）'
-        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
-        - ''
-        - '§e➥ §f回枢纽并提示位置'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §d附魔：§7带上余烬附魔晶与原版经验等级，到工坊附魔台（出生点北边 6 格，-22,58,104）。旁边是工作台 -24 与铁砧 -20。'
-        - 'command: hub'
-        - close
-
-  V:
-    display:
-      material: leather chestplate
-      name: '§9套装'
-      lore:
-        - ''
-        - '§7余烬同袍：团戒 + 任意余烬之刃'
-        - '§8背包同持即激活 · 击杀微量回能'
-        - '§8周首通保底团戒 · 不改方块甲'
-        - '§7副手饰品 · 放副手槽生效'
-        - '§8工坊灰粮可购'
-        - ''
-        - '§e➥ §f打开套装菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_set'
-
-  W:
-    display:
-      material: flint and steel
-      name: '§7分解'
-      lore:
-        - ''
-        - '§7分解多余装备，换强化材料与低概率孔石'
-        - '§8手持余烬刃 / 护符后操作'
-        - '§8分解换材料 · 重铸刷次要词缀'
-        - ''
-        - '§e➥ §f打开分解 / 重铸'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_disassemble'
-
-  X:
-    display:
-      material: ender chest
-      name: '§3仓库'
-      lore:
-        - ''
-        - '§7扩展存储；勋阶可提升格数'
-        - '§8材料仓 · 点此打开'
-        - '§8绑定与流通分仓'
-        - ''
-        - '§e➥ §f打开仓库菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_storage'
-
-  # —— 第 5 行 · 社交竞争 ——
-  Y:
-    display:
-      material: banner
-      name: '§2盟约'
-      lore:
-        - ''
-        - '§7加入或创建公会，做盟课、打盟 Boss'
-        - '§8创建 · 捐献 · 盟 Boss'
-        - '§7盟约与捐献'
-        - ''
-        - '§e➥ §f打开盟约菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_guild'
-
-  Z:
-    display:
-      material: ladder
-      name: '§e天梯'
-      lore:
-        - ''
-        - '§7战力、深渊层数与周本竞速榜'
-        - '§8三榜 · 周结算只发外观'
-        - '§8枢纽有排行全息'
-        - ''
-        - '§e➥ §f打开天梯菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_ladder'
-
-  a:
-    display:
-      material: iron axe
-      name: '§c竞技'
-      lore:
-        - ''
-        - '§71v1 / 2v2 积分赛，奖币与外观'
-        - '§8点此打开 1v1 / 2v2 匹配'
-        - '§8赛季制 · 奖励绑外观与币'
-        - ''
-        - '§e➥ §f打开竞技菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_arena'
-
-  b:
-    display:
-      material: emerald block
-      name: '§6寄售'
-      lore:
-        - ''
-        - '§7玩家间上架流通物，含税与绑定区分'
-        - '§8浏览 / 上架 · 税率 10%'
-        - '§8不开放毕业伤害直售'
-        - ''
-        - '§e➥ §f打开寄售菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_auction'
-
-  c:
-    display:
-      material: cake
-      name: '§a好友'
-      lore:
-        - ''
-        - '§7好友列表与组队邀请入口'
-        - '§8可接师徒（可选）'
-        - '§7好友'
-        - ''
-        - '§e➥ §f打开好友菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_friends'
-
-  d:
-    display:
-      material: comparator
-      name: '§7设置'
-      lore:
-        - ''
-        - '§7音效、提示与隐私等个人选项'
-        - '§8低优先级个人选项'
-        - '§7设置'
-        - ''
-        - '§e➥ §f打开设置菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_settings'
-
-  # —— 1.11.0 生活 · 补给（CoreRpg LifeService）——
-  k:
-    display:
-      material: bread
-      name: '§a补给 · 生活'
-      lore:
-        - ''
-        - '§7面包 / 钓竿（余烬币）· 代烤鱼 · 熬回复药'
-        - '§7遗物换重铸石 · 宝珠制稳固符（每周限次）'
-        - '§8钓鱼 / 烹饪 / 熬药 提升生活等级'
-        - '§8点击打开补给与生活面板'
-        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
-        - ''
-        - '§e➥ §f打开补给菜单'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_life'
-  l:
-    display:
-      material: anvil
-      name: '§6余烬锻炉 · 锻造'
-      lore:
-        - ''
-        - '§7T1 → T2 · T2 → T3 保底锻造'
-        - '§7消耗核心碎片 / 凝核 / 灾厄余烬 / 余烬币'
-        - '§8保留 50% 强化、附魔、词条、宝石'
-        - '§8点击打开锻炉（手持装备）'
-        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
-        - ''
-        - '§e➥ §f打开锻炉'
-    actions:
-      all:
-        - 'sound: BLOCK_ANVIL_USE-1-1'
-        - 'menu: ember_forge'
-
-  # —— 余烬 v1 (P1) 冒险页（G04；旧日常/周常入口不变）——
   n:
     display:
       material: blaze rod
@@ -668,7 +40,6 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_adventure'
 
-  # —— 余烬 v1 (P1) 装备 / 工坊（B2.174，§19.1 一级入口：冒险、装备、工坊）——
   o:
     update: 20
     display:
@@ -700,59 +71,82 @@ Icons:
         - 'sound: BLOCK_ANVIL_USE-1-1'
         - 'menu: ember_p1_forge'
 
-  # —— 第 6 行 · 商城与收尾 ——
-  e:
+  F:
     display:
-      material: gold block
-      name: '§6商城'
+      material: book and quill
+      name: '§3图录'
       lore:
         - ''
-        - '§7便利、外观与特权货架，不卖毕业伤害'
-        - '§8热销 / 便利 / 外观 / 礼包'
-        - '§7商城 · 体力药等'
+        - '§7主线七个首领的招式与躲法 · 使魔图鉴'
+        - '§8只做展示，不加属性'
         - ''
-        - '§e➥ §f打开商城'
+        - '§e➥ §f打开图录菜单'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_shop'
+        - 'menu: ember_bestiary'
 
-  f:
+  m:
     display:
-      material: redstone
-      name: '§8礼包 · 暂未上架'
+      material: feather
+      name: '§a轻技'
       lore:
         - ''
-        - '§8目前没有礼包在售'
-        - '§8上架后这里会变成可点击'
-    # B2.177 / D35: §19.1「未完成系统不以可点击假入口充数」— no action until something is on sale
-
-  g:
+        - '§7可装配轻技槽 · 试点余烬踏步'
+        - '§7短位移 · CD 14s · 零体力'
+        - '§7战斗中 §e潜行+Q §7可释放'
+        - '§8与誓约主动并行 · 当前 §f%corerpg_flex_skill_name%'
+        - ''
+        - '§e➥ §f打开轻技页'
+        - '§7潜行点击直接释放轻技'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_flex_skill'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_flex_skill'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg flex cast'
+        - close
+      shift_right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg flex cast'
+        - close
+  X:
     display:
-      material: watch
-      name: '§e月卡'
+      material: ender chest
+      name: '§3仓库'
       lore:
         - ''
-        - '§7每日定额领取币与体力，偏便利订阅'
-        - '§8货架见商城 · 热销'
-        - '§8不提供碾压属性'
+        - '§7扩展存储；勋阶可提升格数'
+        - '§8材料仓 · 点此打开'
+        - '§8绑定与流通分仓'
         - ''
-        - '§e➥ §f打开商城'
+        - '§e➥ §f打开仓库菜单'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_shop'
+        - 'menu: ember_storage'
 
-  h:
+  k:
     display:
-      material: fireworks
-      name: '§8外观 · 暂未上架'
+      material: bread
+      name: '§a补给 · 生活'
       lore:
         - ''
-        - '§8商城目前没有外观在售'
-        - '§7战令付费轨可得外观 → 主菜单「战令」'
-    # B2.177 / D35: no clickable placeholder (§19.1)
-
+        - '§7面包 / 钓竿（余烬币）· 代烤鱼 · 熬回复药'
+        - '§7遗物换重铸石 · 宝珠制稳固符（每周限次）'
+        - '§8钓鱼 / 烹饪 / 熬药 提升生活等级'
+        - '§8点击打开补给与生活面板'
+        - '§8也可找工坊：烬砧 / 余晶 / 灰粮（右键）'
+        - ''
+        - '§e➥ §f打开补给菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_life'
   i:
     display:
       material: book
@@ -767,6 +161,67 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'menu: ember_help'
+  R:
+    display:
+      material: book and quill
+      name: '§f邮寄'
+      lore:
+        - ''
+        - '§7领取系统邮件、战令与维护补偿'
+        - '§8奖励统一进邮箱'
+        - '§7打开邮寄'
+        - ''
+        - '§e➥ §f打开邮寄菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_mail'
+
+  c:
+    display:
+      material: cake
+      name: '§a好友'
+      lore:
+        - ''
+        - '§7好友列表与组队邀请入口'
+        - '§8可接师徒（可选）'
+        - '§7好友'
+        - ''
+        - '§e➥ §f打开好友菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_friends'
+  Y:
+    display:
+      material: banner
+      name: '§2盟约'
+      lore:
+        - ''
+        - '§7加入或创建公会，做盟课、打盟 Boss'
+        - '§8创建 · 捐献 · 盟 Boss'
+        - '§7盟约与捐献'
+        - ''
+        - '§e➥ §f打开盟约菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_guild'
+  d:
+    display:
+      material: comparator
+      name: '§7设置'
+      lore:
+        - ''
+        - '§7音效、提示与隐私等个人选项'
+        - '§8低优先级个人选项'
+        - '§7设置'
+        - ''
+        - '§e➥ §f打开设置菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_settings'
 
   j:
     display:
