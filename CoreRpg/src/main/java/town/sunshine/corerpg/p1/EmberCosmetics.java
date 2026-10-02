@@ -84,14 +84,14 @@ public final class EmberCosmetics implements Listener {
         int n = d.addPeriodCount(C_EARNED + raid, "all", 1);
         if (n == 1 && p != null && p.isOnline()) {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
-                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，/corerpg p1 title）");
+                p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，图录装备页「荣誉」或 /corerpg p1 title 装上）");
         }
     }
 
     void onAbyssBest(Player p, int oldBest, int newBest) {
         if (p == null || !p.isOnline()) return;
         for (Cosmetic c : ALL) if (c.abyssTier > oldBest && c.abyssTier <= newBest)
-            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，/corerpg p1 title）");
+            p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，图录装备页「荣誉」或 /corerpg p1 title 装上）");
     }
 
     public String titleText(PlayerData d) {
@@ -128,12 +128,20 @@ public final class EmberCosmetics implements Listener {
         p.sendMessage(P + "§6荣誉（只做展示，不加属性）§7 已获得 " + earnedCount(d) + "/" + ALL.size()
                 + " · 团本通关 R01 " + raidClears(d, "r01") + " 次 · R02 " + raidClears(d, "r02") + " 次 · 深渊最高 " + best + " 层");
         String selT = selected(d, Kind.TITLE), selR = selected(d, Kind.TRAIL);
-        for (Cosmetic c : ALL) {
+        for (Cosmetic c : ALL) { // D95: earned honors are a click away (装上 / 取下)
             boolean on = c.id.equals(c.kind == Kind.TITLE ? selT : selR);
-            p.sendMessage(P + (earned(d, best, c) ? "§a✔ " : "§8✘ ") + (c.kind == Kind.TITLE ? "称号 " : "足迹 ") + c.label
-                    + " §7" + c.how + " §8（" + c.id + "）" + (on ? " §e· 使用中" : ""));
+            boolean got = earned(d, best, c);
+            net.md_5.bungee.api.chat.TextComponent line = new net.md_5.bungee.api.chat.TextComponent(P + (got ? "§a✔ " : "§8✘ ")
+                    + (c.kind == Kind.TITLE ? "称号 " : "足迹 ") + c.label + " §7" + c.how + (on ? " §e· 使用中" : "") + " ");
+            if (got) {
+                String cmd = "/corerpg p1 " + (c.kind == Kind.TITLE ? "title " : "trail ") + (on ? "off" : c.id);
+                net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(on ? "§7[取下]" : "§a[装上]");
+                b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, cmd));
+                line.addExtra(b);
+            }
+            p.spigot().sendMessage(line);
         }
-        p.sendMessage(P + "§7装上：/corerpg p1 title <id> · /corerpg p1 trail <id> · 取下：title off / trail off");
+        p.sendMessage(P + "§7点 [装上] / [取下]；只做展示，不加属性。");
         return true;
     }
 

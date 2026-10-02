@@ -949,7 +949,8 @@ public final class EmberRunService implements Listener {
         }
         tidyHotbar(p, hbEmpty);
         if (!got.isEmpty()) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
-        if (waiting > 0) p.sendMessage(P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）：空出格子后 /corerpg p1 claim");
+        if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后点：",
+                "[补领]", "/corerpg p1 claim", "领取暂存的奖励（装备页也有「补领」）"); // D95
         if (choices > 0) familyButtons(p, P + ChatColor.YELLOW + "首通自选待领取，点一个族：", "/corerpg p1 firstclear");
         return changed.size();
     }
