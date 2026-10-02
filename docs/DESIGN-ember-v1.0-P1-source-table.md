@@ -955,3 +955,18 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 |---|---|---|---|
 | D79 | 每日上线理由 | 每日委托只发币和碎片，两档（第 1 次 / 第 3 次通关） | §23.3：不加物品、印记或体力；模型显示进度和成套不变，后期币由深渊层费吸收 |
 
+### 13.21 P2-8 精选图周规则（CoreRpg 1.37.0 → 1.37.1，2026-10-02 22:20 / 22:25 CST 部署）
+
+| 项 | 内容 |
+|---|---|
+| 参数源 | `ember-v1-runs.yml` `rotation.modifiers`：`lean` 限药 `potion_cap: 3`；`casters` 术者换防 `remap: {ranged: caster}`；`reverse` 逆行 `swap_rooms: true`（两份）；balance_version 8 |
+| 选择 | `EmberRunMaps.modifierFor(day)` = modifiers[ISO 周 mod 3]；只在 `challenge && abyss == 0 && key == featured(today)` 时写进 `EmberRunSession.modifier` |
+| 代码 | `EmberRunMaps.Modifier`（`role(role, map)` 只换到本图定义过的角色）、`layout(comp, points, seed)`；EmberRunDirector.spawnRoom 换组 / 换角色并记日志；LifeService.consumeP1 在冷却判断前调用 `EmberRunService.potionCapped`；PAPI `p1_modifier` |
+| 显示 | `/corerpg p1 run` 两行、挑战页精选格、开局 tellRun |
+| 模型 | `p2econ.py --mods` → `out-p2econ-mods-d050.md` |
+| 测试 | EmberRunRulesTest：3 条规则、Q01 不换术者、21 周 21 种组合、同周同规则、换组 layout。实测（22:20–22:28 CST）：本周精选 Q01「限药」，P1Fox 第 4 瓶被拦下并提示「已用完」；强制 `reverse` 打 Q03 挑战，日志 `r1 rule reverse (group of r3): melee×4,heavy`，r3 换成 r1 的组，首领击败后正常结算 8 行 |
+
+| # | 问题 | 裁决 | 理由 |
+|---|---|---|---|
+| D80 | 轮换图的新鲜感 | 每周一条玩法规则，三条轮换，奖励不变 | §23.3：不加倍率区、不加产出；模型显示精选通关率 −5～+4 点，印记中位不变 |
+
