@@ -252,6 +252,21 @@ public final class EmberItemStore {
         });
     }
 
+    /** B2.180 codex backfill: distinct (family, slot, tier) of every row this player ever owned, test items excluded. */
+    public void loadOwnerKinds(final UUID owner, final Consumer<List<String[]>> cb) {
+        run("load kinds " + owner, c -> {
+            final List<String[]> out = new java.util.ArrayList<String[]>();
+            try (PreparedStatement ps = c.prepareStatement(
+                    "SELECT DISTINCT family,slot,tier FROM cr_p1_item WHERE owner_uuid=? AND source<>'admin'")) {
+                ps.setString(1, owner.toString());
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) out.add(new String[] {rs.getString(1), rs.getString(2), String.valueOf(rs.getInt(3))});
+                }
+            }
+            sync(() -> cb.accept(out));
+        });
+    }
+
     /** Single-row lookup; callback gets null when the uid is unknown. */
     public void lookupItem(final String uid, final Consumer<Row> cb) {
         run("lookup item " + uid, c -> {

@@ -548,6 +548,36 @@ public final class EmberRunService implements Listener {
         p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
     }
 
+    // ------------------------------------------------------------------ B2.180 图录 · 装备
+
+    /** /corerpg p1 codex [claim]: list the 20 entries, or claim every reached stage once (D42, ledger-delivered coin). */
+    public boolean codexCommand(Player p, String[] args) {
+        PlayerData d = data(p.getUniqueId());
+        EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls != null) { ls.backfillCodex(p); ls.refresh(p); }
+        boolean claim = args.length >= 3 && "claim".equalsIgnoreCase(args[2]);
+        if (!claim) {
+            p.sendMessage(P + "§6图录 · 装备 §f" + EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size() + " §7（只做展示，不加属性）");
+            StringBuilder sb = new StringBuilder();
+            for (EmberCodex.Entry e : EmberCodex.ENTRIES)
+                sb.append(EmberCodex.has(d, e.key()) ? "§a" : "§8").append(e.label()).append(' ');
+            p.sendMessage(P + sb.toString().trim());
+            for (int i = 0; i < EmberCodex.STAGE_AT.length; i++)
+                p.sendMessage(P + "§7集齐 " + EmberCodex.STAGE_AT[i] + " 种：余烬币 " + EmberCodex.STAGE_COIN[i] + " · " + EmberCodex.stageLabel(d, i));
+            return true;
+        }
+        java.util.List<Integer> can = EmberCodex.claimable(d);
+        if (can.isEmpty()) { p.sendMessage(P + "§7没有可领取的图录阶段奖励（" + EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size() + "）"); return true; }
+        UUID u = p.getUniqueId();
+        for (int i : can) {
+            d.addPeriodCount(EmberCodex.C_CLAIM + i, "all", 1); // the counter is the once-only guard (ledger rows get pruned)
+            ledgerRow(u, EmberCodex.LEDGER_RUN, "stage" + i, "coin:" + EmberCodex.STAGE_COIN[i], EmberRunRules.ST_PENDING);
+            log().info("[P1 codex] " + p.getName() + " stage " + EmberCodex.STAGE_AT[i] + " -> coin " + EmberCodex.STAGE_COIN[i]);
+        }
+        deliver(p);
+        return true;
+    }
+
     // ------------------------------------------------------------------ delivery (E10: retry the original result)
 
     private void ledgerRow(UUID u, String run, String key, String result, String status) {
@@ -1327,6 +1357,19 @@ public final class EmberRunService implements Listener {
                 case "charm": return l.charm == null ? "未选定护符" : l.charm.shortLabel();
                 default: return l.nextAwakeningHint();
             }
+        }
+        if (key.startsWith("codex")) { // B2.180 图录 · 装备 (display only, §19.5)
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            if (ls != null) ls.backfillCodex(p);
+            if ("codex_count".equals(key)) return EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size();
+            if (key.startsWith("codex_stage_")) {
+                try {
+                    int i = Integer.parseInt(key.substring(12));
+                    return i >= 0 && i < EmberCodex.STAGE_AT.length ? EmberCodex.stageLabel(d, i) : "";
+                } catch (NumberFormatException e) { return ""; }
+            }
+            if (key.startsWith("codex_")) return EmberCodex.has(d, key.substring(6)) ? "§a已登记" : "§8未获得";
+            return "";
         }
         int us = key.indexOf('_');
         if (us > 0) {

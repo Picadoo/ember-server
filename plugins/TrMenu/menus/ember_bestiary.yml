@@ -1,6 +1,6 @@
 # 图录 — DESIGN-ember-pet-bestiary.md；P1 书 §19.1 / §19.5（B2.178，D38）
-# 主线首领 → ember_p1_codex；使魔 → ember_pet。装备图鉴 / 阶段奖励没有实现：灰色「暂未上架」、不可点击（不做可点击假入口；
-# 图录奖励只给展示和一次性资源，不承诺天赋点等永久战斗属性）。
+# 主线首领 → ember_p1_codex；使魔 → ember_pet；装备图鉴 / 阶段奖励 → ember_p1_codex_gear（B2.180，1.24.0）。
+# 图录奖励只给展示和一次性资源（一次性余烬币，D42），不承诺天赋点等永久战斗属性。
 
 Title: '§3余烬 · 图录'
 
@@ -20,7 +20,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §3【图录】 §7主线首领 · 使魔。图录只做展示，不加属性。'
+    - 'tell: §3【图录】 §7主线首领 · 装备 · 使魔。图录只做展示，不加属性。'
 
 Icons:
   '#':
@@ -53,11 +53,20 @@ Icons:
         - 'menu: ember_p1_codex'
 
   G:
+    update: 40
     display:
       material: diamond sword
-      name: '§8装备图鉴 · 暂未上架'
+      name: '§6装备图鉴 §f%corerpg_p1_codex_count%'
       lore:
-        - '§8还没有内容，上架后再开放'
+        - ''
+        - '§7P1 刃 / 护符：三族 × T0–T3，共 20 种'
+        - '§7第一次拿到就登记；只做展示，不加属性'
+        - ''
+        - '§6➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_codex_gear'
 
   P:
     display:
@@ -77,7 +86,15 @@ Icons:
   R:
     display:
       material: gold ingot
-      name: '§8阶段奖励 · 暂未上架'
+      name: '§e阶段奖励'
       lore:
-        - '§8还没有内容，上架后再开放'
-        - '§8（图录只给展示，不加战斗属性）'
+        - ''
+        - '§7装备图鉴集齐 5 / 10 / 15 / 20 种'
+        - '§7各领一次余烬币（200 / 400 / 600 / 1000）'
+        - '§8一次性资源，不加战斗属性'
+        - ''
+        - '§e➥ §f打开装备图鉴领取'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_codex_gear'

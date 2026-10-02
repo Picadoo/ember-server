@@ -89,6 +89,7 @@ public final class EmberLoadoutService implements Listener {
             if (r == null || r.data == null || r.data.uid == null) continue;
             Integer c = count.get(r.data.uid);
             count.put(r.data.uid, (c == null ? 0 : c) + Math.max(1, it.getAmount()));
+            if (r.ok()) codex(p, r.data);
             if (st.charmUid != null && st.charmUid.equals(r.data.uid)) charmCandidates.put(r.data.uid, r);
         }
         EmberItemData blade = null;
@@ -243,6 +244,7 @@ public final class EmberLoadoutService implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent e) {
         cache.remove(e.getPlayer().getUniqueId());
+        backfillCodex(e.getPlayer());
         if (!EmberMode.active()) return;
         ensureLoaded(e.getPlayer());
     }
@@ -256,6 +258,31 @@ public final class EmberLoadoutService implements Listener {
         store.ensureSchema();
         store.loadState(id, st, () -> { Player q = Bukkit.getPlayer(id); if (q != null) refresh(q); });
         store.loadOwnerItems(id, m -> rows.putAll(m));
+    }
+
+    private final java.util.Set<UUID> codexLoaded = new java.util.HashSet<UUID>();
+
+    /** B2.180: register a verified item in the player's 图录 (first time only) and tell them. */
+    private void codex(Player p, EmberItemData d) {
+        PlayerData pd;
+        try { pd = plugin.getDataStore().get(p.getUniqueId()); } catch (Throwable t) { return; }
+        if (pd != null && EmberCodex.register(pd, d))
+            p.sendMessage("§6[图录] §f登记 T" + d.tier + " " + EmberItemData.familyName(d.tier == 0 ? "none" : d.family)
+                    + EmberItemData.slotName(d.slot) + " §7（" + EmberCodex.count(pd) + "/" + EmberCodex.ENTRIES.size() + "，主菜单 图录 → 装备图鉴）");
+    }
+
+    /** B2.180: once per server session, register every kind the player ever owned (DB rows), quietly. */
+    public void backfillCodex(Player p) {
+        final UUID id = p.getUniqueId();
+        if (!store.usable() || !codexLoaded.add(id)) return;
+        store.ensureSchema();
+        store.loadOwnerKinds(id, kinds -> {
+            PlayerData pd = plugin.getDataStore().get(id);
+            if (pd == null) return;
+            for (String[] k : kinds) {
+                try { EmberCodex.register(pd, k[0], k[1], Integer.parseInt(k[2]), "drop"); } catch (NumberFormatException ignored) {}
+            }
+        });
     }
 
     public void ensureLoadedAll() {

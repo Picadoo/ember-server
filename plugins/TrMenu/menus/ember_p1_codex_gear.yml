@@ -1,0 +1,324 @@
+# 余烬 v1 (P1) 图录 · 装备 — B2.180；书 §19.5（图鉴先给展示和一次性资源，不叠战斗属性）、§19.1（不做假入口）。
+# 20 种：T0 刃 / 护符 + 三族 × 刃 / 护符 × T1–T3。第一次拿到（背包里校验通过的 P1 物品；DB 里自己拥有过的也补登）即登记；
+# 管理员测试件不算。阶段奖励一次性余烬币（D42），点「领取」走主线结算账本（/corerpg p1 codex claim）。
+# 状态全部来自 PAPI corerpg_p1_codex_*；本页由脚本生成（见 docs/DESIGN-ember-v1.0-P1-source-table.md §13.7）。
+# 入口：图录 ember_bestiary「装备图鉴」「阶段奖励」，或 /ember_p1_codex_gear。
+
+Title: '§6余烬 v1 · 图录 · 装备'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_codex_gear'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#xy  b  B'
+  - '#ABC DEF#'
+  - '#GHJ KLM#'
+  - '#NOP QRS#'
+  - '#1 2 3 4#'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 40
+    display:
+      material: book and quill
+      name: '§6图录 · 装备 §f%corerpg_p1_codex_count%'
+      lore:
+        - '§7第一次拿到某种 P1 装备就登记（放进背包即可）'
+        - '§7升阶后的新阶级也算一种'
+        - '§7测试发放的装备不算'
+        - ''
+        - '§8只做展示：登记多少都不加任何属性'
+
+  b:
+    display:
+      material: map
+      name: '§e主线首领图录'
+      lore:
+        - '§7七个首领的招式与躲法'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_codex'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回图录'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_bestiary'
+  x:
+    update: 40
+    display:
+      material: iron sword
+      name: '§fT0 起始之刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_none_blade_t0%'
+        - '§8来源：开局赠送'
+
+  y:
+    update: 40
+    display:
+      material: quartz
+      name: '§fT0 起始护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_none_charm_t0%'
+        - '§8来源：开局赠送'
+
+  A:
+    update: 40
+    display:
+      material: stone sword
+      name: '§cT1 焚烬刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_scorch_blade_t1%'
+        - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
+        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+
+  D:
+    update: 40
+    display:
+      material: gold nugget
+      name: '§cT1 焚烬护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_scorch_charm_t1%'
+        - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
+        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+
+  B:
+    update: 40
+    display:
+      material: iron sword
+      name: '§cT2 焚烬刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_scorch_blade_t2%'
+        - '§8来源：Q04–Q06 掉落 · T2 印记 · T2 定向锻造'
+        - '§8  或把 T1 升阶（Q04 首通后）'
+
+  E:
+    update: 40
+    display:
+      material: diamond
+      name: '§cT2 焚烬护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_scorch_charm_t2%'
+        - '§8来源：Q04–Q06 掉落 · T2 印记 · T2 定向锻造'
+        - '§8  或把 T1 升阶（Q04 首通后）'
+
+  C:
+    update: 40
+    display:
+      material: diamond sword
+      name: '§cT3 焚烬刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_scorch_blade_t3%'
+        - '§8来源：Q07 / 挑战版掉落 · T3 印记 · T3 定向锻造'
+        - '§8  或把 T2 升阶（Q07 首通后）'
+
+  F:
+    update: 40
+    display:
+      material: emerald
+      name: '§cT3 焚烬护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_scorch_charm_t3%'
+        - '§8来源：Q07 / 挑战版掉落 · T3 印记 · T3 定向锻造'
+        - '§8  或把 T2 升阶（Q07 首通后）'
+
+  G:
+    update: 40
+    display:
+      material: stone sword
+      name: '§6T1 烬爆刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_burst_blade_t1%'
+        - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
+        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+
+  K:
+    update: 40
+    display:
+      material: gold nugget
+      name: '§6T1 烬爆护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_burst_charm_t1%'
+        - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
+        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+
+  H:
+    update: 40
+    display:
+      material: iron sword
+      name: '§6T2 烬爆刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_burst_blade_t2%'
+        - '§8来源：Q04–Q06 掉落 · T2 印记 · T2 定向锻造'
+        - '§8  或把 T1 升阶（Q04 首通后）'
+
+  L:
+    update: 40
+    display:
+      material: diamond
+      name: '§6T2 烬爆护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_burst_charm_t2%'
+        - '§8来源：Q04–Q06 掉落 · T2 印记 · T2 定向锻造'
+        - '§8  或把 T1 升阶（Q04 首通后）'
+
+  J:
+    update: 40
+    display:
+      material: diamond sword
+      name: '§6T3 烬爆刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_burst_blade_t3%'
+        - '§8来源：Q07 / 挑战版掉落 · T3 印记 · T3 定向锻造'
+        - '§8  或把 T2 升阶（Q07 首通后）'
+
+  M:
+    update: 40
+    display:
+      material: emerald
+      name: '§6T3 烬爆护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_burst_charm_t3%'
+        - '§8来源：Q07 / 挑战版掉落 · T3 印记 · T3 定向锻造'
+        - '§8  或把 T2 升阶（Q07 首通后）'
+
+  N:
+    update: 40
+    display:
+      material: stone sword
+      name: '§aT1 炽愈刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_sustain_blade_t1%'
+        - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
+        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+
+  Q:
+    update: 40
+    display:
+      material: gold nugget
+      name: '§aT1 炽愈护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_sustain_charm_t1%'
+        - '§8来源：Q01–Q03 掉落 · T1 印记兑换'
+        - '§8  Q01 首通自选刃 / Q02 首通自选护符'
+
+  O:
+    update: 40
+    display:
+      material: iron sword
+      name: '§aT2 炽愈刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_sustain_blade_t2%'
+        - '§8来源：Q04–Q06 掉落 · T2 印记 · T2 定向锻造'
+        - '§8  或把 T1 升阶（Q04 首通后）'
+
+  R:
+    update: 40
+    display:
+      material: diamond
+      name: '§aT2 炽愈护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_sustain_charm_t2%'
+        - '§8来源：Q04–Q06 掉落 · T2 印记 · T2 定向锻造'
+        - '§8  或把 T1 升阶（Q04 首通后）'
+
+  P:
+    update: 40
+    display:
+      material: diamond sword
+      name: '§aT3 炽愈刃'
+      lore:
+        - '§7状态：%corerpg_p1_codex_sustain_blade_t3%'
+        - '§8来源：Q07 / 挑战版掉落 · T3 印记 · T3 定向锻造'
+        - '§8  或把 T2 升阶（Q07 首通后）'
+
+  S:
+    update: 40
+    display:
+      material: emerald
+      name: '§aT3 炽愈护符'
+      lore:
+        - '§7状态：%corerpg_p1_codex_sustain_charm_t3%'
+        - '§8来源：Q07 / 挑战版掉落 · T3 印记 · T3 定向锻造'
+        - '§8  或把 T2 升阶（Q07 首通后）'
+
+  '1':
+    update: 40
+    display:
+      material: gold ingot
+      name: '§e阶段奖励 · 集齐 5 种'
+      lore:
+        - '§7奖励：§f余烬币 200 §8（一次性）'
+        - '§7状态：%corerpg_p1_codex_stage_0%'
+        - ''
+        - '§e➥ §f点击领取所有已达成的阶段'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 codex claim'
+
+  '2':
+    update: 40
+    display:
+      material: gold ingot
+      name: '§e阶段奖励 · 集齐 10 种'
+      lore:
+        - '§7奖励：§f余烬币 400 §8（一次性）'
+        - '§7状态：%corerpg_p1_codex_stage_1%'
+        - ''
+        - '§e➥ §f点击领取所有已达成的阶段'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 codex claim'
+
+  '3':
+    update: 40
+    display:
+      material: gold ingot
+      name: '§e阶段奖励 · 集齐 15 种'
+      lore:
+        - '§7奖励：§f余烬币 600 §8（一次性）'
+        - '§7状态：%corerpg_p1_codex_stage_2%'
+        - ''
+        - '§e➥ §f点击领取所有已达成的阶段'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 codex claim'
+
+  '4':
+    update: 40
+    display:
+      material: gold ingot
+      name: '§e阶段奖励 · 集齐 20 种'
+      lore:
+        - '§7奖励：§f余烬币 1000 §8（一次性）'
+        - '§7状态：%corerpg_p1_codex_stage_3%'
+        - ''
+        - '§e➥ §f点击领取所有已达成的阶段'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 codex claim'

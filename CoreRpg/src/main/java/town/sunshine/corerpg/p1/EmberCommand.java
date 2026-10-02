@@ -46,6 +46,10 @@ public final class EmberCommand {
         if ("status".equals(sub)) return status(s);
         if ("charm".equals(sub)) return charm(s, args);
         if ("inspect".equals(sub)) return inspect(s);
+        if ("codex".equals(sub) || "图录".equals(sub)) {
+            if (!(s instanceof Player) || runs == null) { s.sendMessage(P + "仅玩家可用"); return true; }
+            return runs.codexCommand((Player) s, args);
+        }
         if ("shop".equals(sub) || "补给".equals(sub)) {
             if (supplies == null) { s.sendMessage(P + "补给服务未加载"); return true; }
             return supplies.cmd(s, args);
