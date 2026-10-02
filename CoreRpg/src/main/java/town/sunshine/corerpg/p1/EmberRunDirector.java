@@ -272,7 +272,11 @@ final class EmberRunDirector {
                 : "r1".equals(r.id) ? def.room("r3") : "r3".equals(r.id) ? def.room("r1") : null;
         lay = swap == null ? EmberRunMaps.layout(r, b, s.roomSeed(r.id))
                 : EmberRunMaps.layout(swap.variant(b), r.points.size(), s.roomSeed(r.id)); // P2-8 逆行
-        if (mod != null) for (String[] e : lay) e[0] = mod.role(e[0], def);         // P2-8 换防
+        if (mod != null) {
+            StringBuilder roles = new StringBuilder();
+            for (String[] e : lay) { e[0] = mod.role(e[0], def); roles.append(roles.length() == 0 ? "" : ",").append(e[0]); } // P2-8 换防
+            svc.log().info("[P1 run] " + s.runId + " " + r.id + " rule " + mod.id + (swap != null ? " (group of " + swap.id + ")" : "") + ": " + roles);
+        }
         int ok = 0;
         for (String[] e : lay) {
             EmberRunMaps.Role role = def.role(e[0], ch);

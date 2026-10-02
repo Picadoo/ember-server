@@ -327,6 +327,11 @@ public final class EmberRunService implements Listener {
         if (challenge && abyss == 0) { // P2-8 weekly rule, fixed at entry
             java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
             EmberRunMaps.Modifier mod = m.key.equals(featured(today)) ? maps.modifierFor(today) : null;
+            if (forcedModifier != null) {
+                log().info("[P1 run] " + s.runId + " modifier forced " + forcedModifier.id + " (admin test)");
+                mod = forcedModifier;
+                forcedModifier = null;
+            }
             s.modifier = mod == null ? "" : mod.id;
         }
         s.seed = presetSeed != 0L ? presetSeed : rnd.nextLong();
@@ -1482,10 +1487,17 @@ public final class EmberRunService implements Listener {
 
     /** admin test hook: the next started run uses this extra event instead of the seeded roll (one shot). */
     private volatile EmberRunRules.Extra forcedExtra;
+    /** P2-8 admin test hook: the next challenge run uses this weekly rule (one shot). */
+    private volatile EmberRunMaps.Modifier forcedModifier;
 
     private boolean cmdRuns(CommandSender s, String[] args) {
         boolean admin = s.hasPermission("corerpg.admin");
         String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if (admin && "modifier".equals(op) && args.length >= 4) { // P2-8 test hook: next challenge run (any map) uses this rule
+            forcedModifier = "clear".equalsIgnoreCase(args[3]) ? null : maps.modifier(args[3]);
+            s.sendMessage(P + "下一局挑战规则（仅一次，测试用）= " + (forcedModifier == null ? "按周" : forcedModifier.id));
+            return true;
+        }
         if (admin && "extra".equals(op) && args.length >= 4) {
             forcedExtra = "clear".equalsIgnoreCase(args[3]) ? null : EmberRunRules.Extra.parse(args[3]);
             s.sendMessage(P + "下一局额外事件（仅一次，测试用）= " + (forcedExtra == null ? "按种子" : forcedExtra.id));
