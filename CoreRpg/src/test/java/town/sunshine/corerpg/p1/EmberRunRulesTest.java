@@ -750,6 +750,16 @@ public class EmberRunRulesTest {
         assertNull(EmberCosmetics.byId("nope"));
     }
 
+    @Test public void roomLineNamesTheEnemiesAndTheFirstThreat_D89() {
+        java.util.List<String[]> lay = new java.util.ArrayList<String[]>();
+        lay.add(new String[]{"melee", "0"}); lay.add(new String[]{"ranged", "1"}); lay.add(new String[]{"melee", "2"}); lay.add(new String[]{"heavy", "3"});
+        String l = EmberRunRules.compositionLabel(lay).replaceAll("\u00a7.", "");
+        assertEquals("近战 ×2 · 远程 ×1 · 重甲 ×1 （远程站远放箭，先清掉）", l);
+        java.util.List<String[]> only = new java.util.ArrayList<String[]>();
+        only.add(new String[]{"melee", "0"});
+        assertEquals("近战 ×1", EmberRunRules.compositionLabel(only).replaceAll("\u00a7.", ""));
+    }
+
     @Test public void dailyBountyPaysEachTierOnceOnTheMatchingClear_P2_7() {
         java.util.List<java.util.Map<String, Object>> raw = new java.util.ArrayList<java.util.Map<String, Object>>();
         java.util.Map<String, Object> a = new java.util.HashMap<String, Object>(); a.put("clears", 3); a.put("coin", 60); a.put("shard", 6);

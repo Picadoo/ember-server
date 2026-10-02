@@ -98,6 +98,19 @@ public final class EmberRunRules {
         return weights.length - 1;
     }
 
+    /** D89: player-facing room line, e.g. "近战 ×3 · 远程 ×1 §8（远程会站远放箭，先清）" from layout rows {role, point}. */
+    public static String compositionLabel(List<String[]> layout) {
+        String[] order = {"melee", "ranged", "caster", "heavy", "elite"};
+        String[] names = {"近战", "远程", "术者", "重甲", "精英"};
+        int[] n = new int[order.length];
+        for (String[] e : layout) for (int i = 0; i < order.length; i++) if (order[i].equals(e[0])) n[i]++;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < order.length; i++) if (n[i] > 0) sb.append(sb.length() == 0 ? "§f" : " §7· §f").append(names[i]).append(" ×").append(n[i]);
+        String tip = n[2] > 0 ? "术者地面亮火线后会打一条直线，横移躲开" : n[1] > 0 ? "远程站远放箭，先清掉" : n[3] > 0 ? "重甲伤高，绕着打、别硬吃" : "";
+        if (!tip.isEmpty()) sb.append(" §8（").append(tip).append("）");
+        return sb.toString();
+    }
+
     public static Extra rollExtra(double u) { return Extra.values()[pick(EXTRA_WEIGHTS, u)]; }
 
     public static boolean validFamily(String f) {

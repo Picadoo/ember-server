@@ -258,6 +258,22 @@ public final class EmberRunService implements Listener {
         p.spigot().sendMessage(parts.toArray(new net.md_5.bungee.api.chat.BaseComponent[0]));
     }
 
+    /** D88: one chat line of six family×slot buttons for a mark tier (each asks for a confirm click) */
+    private void exchangeButtons(Player p, int tier) {
+        java.util.List<net.md_5.bungee.api.chat.BaseComponent> parts = new java.util.ArrayList<net.md_5.bungee.api.chat.BaseComponent>();
+        parts.add(new net.md_5.bungee.api.chat.TextComponent(P + "§fT" + tier + " 兑换："));
+        String[][] fam = {{"scorch", "§6焚烬"}, {"burst", "§c烬爆"}, {"sustain", "§a炽愈"}};
+        for (String[] f : fam) for (String slot : new String[]{"blade", "charm"}) {
+            net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent(" §7[" + f[1] + EmberItemData.slotName(slot) + "§7] ");
+            b.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND,
+                    "/corerpg p1 marks exchange " + f[0] + " " + slot + " " + tier));
+            b.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+                    new net.md_5.bungee.api.chat.ComponentBuilder("§7点击预览，再点 [确认兑换]").create()));
+            parts.add(b);
+        }
+        p.spigot().sendMessage(parts.toArray(new net.md_5.bungee.api.chat.BaseComponent[0]));
+    }
+
     public String bountyLabel(PlayerData d) {
         return EmberRunRules.bountyLine(bountyTiers(), d.periodCount(C_BOUNTY, town.sunshine.corerpg.DailyService.today()));
     }
@@ -545,10 +561,12 @@ public final class EmberRunService implements Listener {
 
     void unindex(UUID e) { byEntity.remove(e); }
 
-    void onRoomStarted(EmberRunSession s, EmberRunMaps.Room r, boolean b, int spawned, int planned) {
+    void onRoomStarted(EmberRunSession s, EmberRunMaps.Room r, boolean b, int spawned, int planned, String comp) {
         if (EmberRunSession.ENTERED.equals(s.state)) s.state = EmberRunSession.FIGHTING;
         store.save(s);
-        tellRun(s, "§e" + r.label + " §7· 敌人 " + spawned + (spawned < planned ? "/" + planned : "") + "（变体 " + (b ? "B" : "A") + "）");
+        // D89: say what is in the room (the A/B variant letter meant nothing to players; it stays in the log)
+        tellRun(s, "§e" + r.label + " §7· 敌人 " + spawned + (spawned < planned ? "/" + planned : "") + "：" + comp);
+        log().info("[P1 run] " + s.runId + " " + r.id + " variant " + (b ? "B" : "A") + " " + comp.replaceAll("§.", ""));
     }
 
     void onRoomCleared(EmberRunSession s, EmberRunMaps.Room r, boolean last) {
@@ -832,6 +850,8 @@ public final class EmberRunService implements Listener {
         Map<String, Integer> mail = new LinkedHashMap<String, Integer>();
         List<EmberRunRules.Row> mailRows = new ArrayList<EmberRunRules.Row>();
         long now = System.currentTimeMillis();
+        boolean[] hbEmpty = new boolean[9];
+        for (int i = 0; i < 9; i++) { ItemStack x = p.getInventory().getItem(i); hbEmpty[i] = x == null || x.getType() == org.bukkit.Material.AIR; }
         for (EmberRunRules.Row r : open) {
             if (EmberRunRules.ST_AWAIT.equals(r.status)) { choices++; continue; }
             EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
@@ -916,10 +936,29 @@ public final class EmberRunService implements Listener {
             store.saveLedger(u, changed);
             plugin.getDataStore().flushMutation(u);
         }
+        tidyHotbar(p, hbEmpty);
         if (!got.isEmpty()) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (waiting > 0) p.sendMessage(P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）：空出格子后 /corerpg p1 claim");
         if (choices > 0) familyButtons(p, P + ChatColor.YELLOW + "首通自选待领取，点一个族：", "/corerpg p1 firstclear");
         return changed.size();
+    }
+
+    /** D90: settlement loot that fell into a previously empty hotbar slot moves to the backpack (blade + potions keep the hotbar). */
+    private void tidyHotbar(Player p, boolean[] wasEmpty) {
+        org.bukkit.inventory.PlayerInventory inv = p.getInventory();
+        EmberSupplyService sup = plugin.getEmberSupplies();
+        for (int i = 0; i < 9; i++) {
+            if (!wasEmpty[i]) continue;
+            ItemStack x = inv.getItem(i);
+            if (x == null || x.getType() == org.bukkit.Material.AIR) continue;
+            if (sup != null && sup.isHealPotion(x)) continue;
+            if (loadouts.items().hasData(x)) { EmberItems.Read r = loadouts.items().read(x); if (r != null && r.data != null && r.data.isBlade()) continue; }
+            int to = -1;
+            for (int j = 9; j < 36; j++) { ItemStack y = inv.getItem(j); if (y == null || y.getType() == org.bukkit.Material.AIR) { to = j; break; } }
+            if (to < 0) return;
+            inv.setItem(to, x);
+            inv.setItem(i, null);
+        }
     }
 
     private static int freeSlots(Player p) {
@@ -1499,9 +1538,21 @@ public final class EmberRunService implements Listener {
         PlayerData d = data(p.getUniqueId());
         if (args.length < 3 || !"exchange".equalsIgnoreCase(args[2])) {
             p.sendMessage(P + "锻造印记（账户绑定）：T1 " + marks(d, 1) + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3));
-            p.sendMessage(P + "8 枚同阶印记 → 指定族+部位的同阶标准件（成色标准、精工 0、+0）：/corerpg p1 marks exchange <族> <blade|charm> [阶]");
+            p.sendMessage(P + "8 枚同阶印记 → 指定族+部位的同阶标准件（成色标准、精工 0、+0）");
             p.sendMessage(P + "T2 定向锻造：" + (progressFlag(d, "q04") ? "§a已开放" : "§7需本人首通 Q04")
                     + " §7· T3：" + (progressFlag(d, "q07") ? "§a已开放" : "§7需本人首通 Q07"));
+            boolean any = false;
+            for (int t = 3; t >= 1; t--) { // D88: clickable exchange rows instead of a typed command
+                int have = marks(d, t);
+                if (t > 1 && !progressFlag(d, EmberRunRules.directedForgeFlag(t))) continue;
+                if (have < EmberRunRules.MARKS_PER_EXCHANGE) {
+                    if (have > 0) p.sendMessage(P + "§7T" + t + "：还差 " + (EmberRunRules.MARKS_PER_EXCHANGE - have) + " 枚可兑换一件");
+                    continue;
+                }
+                any = true;
+                exchangeButtons(p, t);
+            }
+            if (!any) p.sendMessage(P + "§7每局首领结算给 1 枚同阶印记，攒够 8 枚这里会出现兑换按钮。");
             return true;
         }
         if (blocksLegacy(p.getWorld())) { p.sendMessage(P + "出本后再兑换。"); return true; }
@@ -1512,6 +1563,18 @@ public final class EmberRunService implements Listener {
         String err = EmberRunRules.exchangeCheck(marks(d, tier), tier, tier, fam, slot,
                 progressFlag(d, EmberRunRules.directedForgeFlag(tier)));
         if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
+        if (args.length < 7 || !"confirm".equalsIgnoreCase(args[6])) { // D88: preview + confirm button (8 marks are not refunded)
+            net.md_5.bungee.api.chat.TextComponent msg = new net.md_5.bungee.api.chat.TextComponent(P + "用 " + EmberRunRules.MARKS_PER_EXCHANGE
+                    + " 枚 T" + tier + " 印记兑换 T" + tier + " " + EmberItemData.familyName(fam) + EmberItemData.slotName(slot) + "（标准、+0、绑定）？ ");
+            net.md_5.bungee.api.chat.TextComponent ok = new net.md_5.bungee.api.chat.TextComponent("§a§l[确认兑换]");
+            ok.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND,
+                    "/corerpg p1 marks exchange " + fam + " " + slot + " " + tier + " confirm"));
+            ok.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+                    new net.md_5.bungee.api.chat.ComponentBuilder("§7扣 " + EmberRunRules.MARKS_PER_EXCHANGE + " 枚，不退").create()));
+            msg.addExtra(ok);
+            p.spigot().sendMessage(msg);
+            return true;
+        }
         if (freeSlots(p) <= 0) { p.sendMessage(P + ChatColor.RED + "背包已满，空出一格再兑换。"); return true; }
         d.addPeriodCount(C_MARK + tier, "all", -EmberRunRules.MARKS_PER_EXCHANGE);
         String run = "mark-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(1296), 36);

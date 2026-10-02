@@ -283,7 +283,7 @@ final class EmberRunDirector {
             EmberRunMaps.Pt pt = r.points.get(Integer.parseInt(e[1]));
             if (spawn(role, e[0], r.id, pt, r.trigger) != null) ok++;
         }
-        svc.onRoomStarted(s, r, b, ok, lay.size());
+        svc.onRoomStarted(s, r, b, ok, lay.size(), EmberRunRules.compositionLabel(lay));
         if (ok == 0) {
             anomalies.add(r.id + ": no mob could be spawned (MythicMobs ids " + def.roles.keySet() + ")");
             svc.onBroken(s, "房间 " + r.label + " 无法生成怪物");
