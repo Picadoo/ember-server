@@ -413,9 +413,9 @@
 - ~~**B2.168**~~ → P1 实测：P1 装备会按原版耐久磨坏（T0 起始之刃是铁剑 250 次，约 9 局 Q01 后碎掉；P1Alpha 管理员补发的 T2+6 钻石剑在长时间测试中同样碎掉），cr_p1_item 行仍 active（实测 PASS · 勾销 · 3190379 · 带 P1 数据的物品取消 PlayerItemDamageEvent，所有世界、不看 P1 开关；1.20.4 实测 25 次命中后耐久仍 0；已碎的两件不自动补回，Delta 的起始之刃按「bug 补发」重新发放并标来源）
 - ~~**B2.169**~~ → P1 试玩：书 §3.1「首次进入提供 T0 武器、T0 护符和基础补给」与 §19.4「回复药商店 10 币」都没有落地——起始包只有刃 + 护符，回复药只能钓鱼熬制（life.yml，河豚 + 鳕鱼 + 10 币）。新角色在 Q01 里没有任何回复手段（待定：补给数量书中没写，属于数值，需要策划给数）（实测 PASS · 勾销 · 1.20.5 · `/corerpg p1 shop` 10 币绑定回复药 + 起步 5 瓶，D28 / D29）
 - ~~**B2.170**~~ → B2.168 后续：没有「背包 vs cr_p1_item」对账手段，磨碎的物品无从补发（实测 PASS · 勾销 · 1.20.5 · `/corerpg p1 audit [玩家]` + `audit restore`，D30；P1Alpha T2+6 刃已按原 uid 补发）
-- **B2.171** → 第二次试玩后的数值调整（D31，用户批准 2026-10-02 14:31）：Q03 首领 1000；Q04 近战 96、R3 5+1、首领 1900、首通币 2100；Q05–Q07 首领 3500/3800/4800（1.21.0 落地，待实测）
-- **B2.172** → 每日首次倒下退还该局回复药（D32，`death_refund.max_potions`=5，账本一天一行）（1.21.0 落地，待实测）
-- **B2.173** → `/corerpg p1 charm select` 的「套装: 未成套」误导：改为按选定护符 + 刃计算（D33，1.21.0 落地，待实测）
+- **B2.171** → 第二次试玩后的数值调整（D31，用户批准 2026-10-02 14:31）：Q03 首领 1000；Q04 近战 96、R3 5+1、首领 1900、首通币 2100；Q05–Q07 首领 3500/3800/4800（1.21.0 落地，2026-10-02 实测通过）
+- **B2.172** → 每日首次倒下退还该局回复药（D32，`death_refund.max_potions`=5，账本一天一行）（1.21.0 落地，2026-10-02 实测通过）
+- **B2.173** → `/corerpg p1 charm select` 的「套装: 未成套」误导：改为按选定护符 + 刃计算（D33，1.21.0 落地，2026-10-02 实测通过）
 - ~~**B2.105**~~ → plugins/CoreRpg/set.yml L27 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释）（**实测 PASS · 勾销** · `fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常）。
 - ~~**B2.106**~~ → plugins/CoreRpg/cash.yml L86、L92 段首 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改）（**实测 PASS · 勾销** · `b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变）。
 - ~~**B2.109**~~ → mineflayer-tests 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb（**实测 PASS · 勾销** · `42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s）。
@@ -688,9 +688,9 @@
 | ~~**B2.168**~~ | CoreRpg EmberLoadoutService.onItemDamage | P1 装备原版耐久磨损 | **实测 PASS · 勾销**（3190379 · 1.20.4 · 2026-10-02 06:33 CST） |
 | ~~**B2.169**~~ | CoreRpg EmberSupplyService | 新角色没有基础补给与回复药购买途径 | **实测 PASS · 勾销**（1.20.5 · 2026-10-02 09:40 CST · D28 起步 5 瓶可配） |
 | ~~**B2.170**~~ | CoreRpg EmberAudit | P1 物品与 DB 对账 / 补发 | **实测 PASS · 勾销**（1.20.5 · 2026-10-02 09:40 CST） |
-| **B2.171** | CoreRpg 配置 / MM | 试玩后数值调整（D31） | 1.21.0 落地，待实测 |
-| **B2.172** | CoreRpg EmberRunService | 每日首次倒下退药（D32） | 1.21.0 落地，待实测 |
-| **B2.173** | CoreRpg EmberCommand | charm select 套装提示（D33） | 1.21.0 落地，待实测 |
+| **B2.171** | CoreRpg 配置 / MM | 试玩后数值调整（D31） | 1.21.0 落地，实测通过（2026-10-02） |
+| **B2.172** | CoreRpg EmberRunService | 每日首次倒下退药（D32） | 1.21.0 落地，实测通过（2026-10-02） |
+| **B2.173** | CoreRpg EmberCommand | charm select 套装提示（D33） | 1.21.0 落地，实测通过（2026-10-02） |
 | ~~**B2.105**~~ | plugins/CoreRpg/set.yml L27 | 注释「团票每周 1 张 ⇒ 每角色每周至多 1 次 COMPLETE」旧票制口径 → 体力进本、同周可多次通关、团戒靠周首通去重（仅注释） | **实测 PASS · 勾销**（`fbf46f9` · 2026-10-01 19:45 CST corerpg reload「SetService loaded: 余烬同袍 blades=4」+ 机器人 /corerpg set 输出正常） |
 | ~~**B2.106**~~ | plugins/CoreRpg/cash.yml L86、L92 段首 | 注释：raid「菜单承诺每周团本票×1」→ 现行 0、体力进本首免；elite 段首「持有硬顶 1」→ hard_cap 现无代码消费（TicketGrantService 只读不用），键保留（仅注释，键值零改） | **实测 PASS · 勾销**（`b71c5a6` · 2026-10-01 19:47 CST corerpg reload 后机器人 /corerpg stamina「消耗 日常30 · 周45 · 精英40 · 深渊30 · 团50 · 本周免费抵扣 周本×1 · 精英×1 · 团×1」不变） |
 | ~~**B2.109**~~ | mineflayer-tests | 补用例：menu-copy-check.js（hub 周常/深渊/团本体力 lore = 实时单价；团本打开/次数说明/开始协作 tell；深渊次数说明、开始下潜、低体力灰显 lore+tell，共 12 断言）+ timeout-live.js（周常/团本/精英超时实测，LINE=weekly|raid|elite）；旧脚本迁移见前序 6a1e1f9/a8dbdcb | **实测 PASS · 勾销**（`42cbaf9` · 2026-10-01 19:52 CST menu-copy-check PASS=12 FAIL=0；精英超时 20:00:51 实测包「试炼失败。这次不算通关，本周还能再来。」+「精英试炼超时失败」，718s） |
