@@ -134,6 +134,7 @@ public final class P1MapBuilder {
         P1MapLayout.Cell c = l.cell(x, z);
         if (c != null && c.f != P1MapLayout.NONE) {
             for (int y = l.ground; y <= c.f - 2; y++) { id[y - Y0] = STONE; data[y - Y0] = 0; }
+            for (int y = Math.max(Y0, c.f); y <= Y1; y++) { id[y - Y0] = AIR; data[y - Y0] = 0; } // sunken rooms (Q03 F 56)
             int fy = c.f - 1;
             boolean room = c.owner.startsWith("R") || c.owner.startsWith("E");
             if (c.stair != 0) { id[fy - Y0] = STAIRS; data[fy - Y0] = (byte) (c.stair == 1 ? 0 : c.stair == 2 ? 1 : c.stair == 3 ? 2 : 3); }
@@ -152,7 +153,7 @@ public final class P1MapBuilder {
             int[] wl = plan.wall(x, z);
             if (wl != null) {
                 int top = Math.min(wl[0], Y1);
-                for (int y = l.ground; y <= top; y++) {
+                for (int y = Y0 + 10; y <= top; y++) {
                     int r = Math.floorMod(h + y * 31, 13);
                     id[y - Y0] = r == 0 ? COBBLE : r == 1 ? MOSSY : BRICK;
                     data[y - Y0] = (byte) (id[y - Y0] == BRICK && r == 2 ? 2 : 0);

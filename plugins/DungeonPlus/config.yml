@@ -150,31 +150,33 @@ dungeon-pre-folder:
     "ember_arena": 1
   ember_daily:
     "EmberDaily": 2
-    # ember-v1.0-P1 G04 main map Q01 (same template, separate dungeon def)
-    "EmberQ01": 1
   ember_daily_ash:
     "EmberDailyAsh": 1
-    "EmberQ02": 1
   ember_daily_crypt:
     "EmberDailyCrypt": 1
-    "EmberQ03": 1
   ember_daily_tide:
     "EmberDailyTide": 1
-    # ember-v1.0-P1 batch 2 main map Q04
-    "EmberQ04": 1
   ember_daily_spire:
     "EmberDailySpire": 1
+  ember_daily_v1:
+    "EmberQ01": 1
+  ember_daily_ash_v1:
+    "EmberQ02": 1
+  ember_daily_crypt_v1:
+    "EmberQ03": 1
+  ember_daily_tide_v1:
+    "EmberQ04": 1
+  ember_daily_frost_v1:
+    "EmberQ06": 1
+  ember_daily_rail_v1:
+    "EmberQ07": 1
   # ember-v1.0-P1 B2.151: Q05 on the walkable book map (CoreRpg /corerpg spirebuild v1)
   ember_daily_spire_v1:
     "EmberQ05": 1
   ember_daily_frost:
     "EmberDailyFrost": 1
-    # ember-v1.0-P1 batch 3 main map Q06
-    "EmberQ06": 1
   ember_daily_rail:
     "EmberDailyRail": 1
-    # ember-v1.0-P1 batch 3 main map Q07
-    "EmberQ07": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

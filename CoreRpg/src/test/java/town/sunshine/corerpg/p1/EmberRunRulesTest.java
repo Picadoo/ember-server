@@ -288,9 +288,9 @@ public class EmberRunRulesTest {
         assertEquals("[]", m.validate().toString());
         assertEquals(7, m.maps.size());
         EmberRunMaps.MapDef q1 = m.byKey("q01"), q2 = m.byKey("q02"), q3 = m.byKey("q03");
-        assertEquals("ember_daily", q1.template);
-        assertEquals("ember_daily_ash", q2.template);
-        assertEquals("ember_daily_crypt", q3.template);
+        assertEquals("ember_daily_v1", q1.template); // D15 book white boxes
+        assertEquals("ember_daily_ash_v1", q2.template);
+        assertEquals("ember_daily_crypt_v1", q3.template);
         assertEquals("", q1.requires);
         assertEquals("q01", q2.requires);
         assertEquals("q02", q3.requires);
@@ -318,7 +318,7 @@ public class EmberRunRulesTest {
         assertEquals("q04", q5.requires);
         assertEquals(2, q4.tier);
         assertEquals(2, q5.tier);
-        assertEquals("ember_daily_tide", q4.template);
+        assertEquals("ember_daily_tide_v1", q4.template);
         assertEquals("ember_daily_spire_v1", q5.template); // B2.151 walkable map
         assertEquals(6, q4.firstClear.blank);
         assertEquals(6, q4.firstClear.core);
@@ -340,12 +340,12 @@ public class EmberRunRulesTest {
         assertEquals(0.5, q5.boss.skills.get(0).kb, 0);
         assertEquals(0.5, q4.boss.recover, 0);
         assertEquals(2, q4.spread.size());
-        assertEquals(1, q4.clear.size());
+        assertEquals(0, q4.clear.size()); // D15: the tide sign is gone with the old template (B2.153)
         assertEquals(0, q5.links.size()); // B2.151: real stairs, no passages
         assertEquals(0, q5.rails.size());
         assertEquals(true, q5.boss.waitInArea);
         assertEquals(0, q5.clear.size());
-        assertEquals("r1", q4.eventAfter);
+        assertEquals("r2", q4.eventAfter); // D15: E is entered from R2 on every book map
         assertEquals("r2", q5.eventAfter);
         assertSame(q5, m.byWorld("dungeon_EmberQ05_0A1B2C3D"));
         // batch 3 (§23.2 后段): Q05 → Q06 → Q07, Q07 drops T3 and unlocks nothing (challenge + T3 forge hang on its flag)
@@ -357,8 +357,8 @@ public class EmberRunRulesTest {
         assertEquals("", q7.unlocks);
         assertEquals(2, q6.tier);
         assertEquals(3, q7.tier);
-        assertEquals("ember_daily_frost", q6.template);
-        assertEquals("ember_daily_rail", q7.template);
+        assertEquals("ember_daily_frost_v1", q6.template);
+        assertEquals("ember_daily_rail_v1", q7.template);
         assertEquals("核心 10 币 1200", q6.firstClearLabel());
         assertEquals("核心 12 胚料 12 币 1800", q7.firstClearLabel());
         assertEquals(177, q6.roles.get("melee").hp, 0);
@@ -392,10 +392,15 @@ public class EmberRunRulesTest {
         assertFalse(slam.light || charge.light); // 重砸 / 冲撞 both use the heavy challenge value 72
         assertNotNull(q6.room("r3").door); // runtime door into the boss hall
         assertNotNull(q7.room("r3").door);
-        assertEquals(41, q6.rails.size());
-        assertEquals(1, q7.rails.size());
-        assertEquals(5, q6.clear.size());
-        assertEquals(5, q7.clear.size());
+        // D15: book white boxes, no instance rails / clears; bosses wait in the book-size hall
+        for (EmberRunMaps.MapDef d : m.maps.values()) {
+            assertEquals(d.key, 0, d.rails.size());
+            assertEquals(d.key, 0, d.clear.size());
+            assertEquals(d.key, 0, d.links.size());
+            assertTrue(d.key, d.boss.waitInArea);
+            assertTrue(d.key, d.boss.area.contains(d.boss.at.x, d.boss.at.y, d.boss.at.z));
+        }
+        assertEquals(32, q6.boss.area.x1 - q6.boss.area.x0); // 33 wide (RB −16..16)
         assertEquals("r2", q6.eventAfter);
         assertEquals("r2", q7.eventAfter);
         assertSame(q7, m.byWorld("dungeon_EmberQ07_0A1B2C3D"));
@@ -477,7 +482,7 @@ public class EmberRunRulesTest {
         assertEquals(1, d.rails.size());
         assertEquals(11, (int) d.clear.get(0).z);
         // a rail over a mob point, a link into its own box, a link after a non-room are refused
-        q.put("rails", java.util.Collections.singletonList(xyz(-5, 65, 8, -5, 66, 8)));
+        q.put("rails", java.util.Collections.singletonList(xyz(-6, 64, 29, -6, 65, 29))); // D15 q01 r1 P1
         assertTrue(new EmberRunMaps.MapDef("q01", q).validate().contains("rail covers point"));
         q.remove("rails");
         link.put("to", xyz(0, 65, 14));

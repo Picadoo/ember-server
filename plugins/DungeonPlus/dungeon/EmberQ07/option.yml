@@ -1,12 +1,11 @@
-# ember-v1.0-P1 批次 3 — Q07 锈轨矿道（主线普通版）。复用 ember_daily_rail 地图模板；旧日常地牢定义保持不变。
+# ember-v1.0-P1 批次 3 — Q07 锈轨矿道（主线普通版）。地图 ember_daily_rail_v1（D15：书第 17 章白盒，可步行，首领厅按书尺寸）；旧日常地牢定义保持不变。
 # 进入：只经 CoreRpg（冒险菜单 / /corerpg enter q07）：先校验全队资格与体力、为每人预留 30 体力，再发 P1 通行证并 dp start-console。
-# 锈轨模板为平地，无落差；告示牌只在实例内移除（模板不改）。
 # 本文件不刷怪、不发奖：房间/门/A·B 变体/首领/额外事件与唯一一次结算都由 CoreRpg（plugins/CoreRpg/ember-v1-runs.yml）负责，
 # 结束由 CoreRpg 触发脚本组 ember_p1_complete / ember_p1_fail（actionscript/ember-p1.yml）。reward=false，无旧奖励脚本（E02）。
 
 dungeon-init-script:
-  - "$setmap{name=ember_daily_rail} @init"
-  - "$setspawn{location=0,64,0} @init"
+  - "$setmap{name=ember_daily_rail_v1} @init"
+  - "$setspawn{location=0,64,6} @init"
   - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
   # §20.5 首版无倒地/复活系统：单人死亡即失败，多人由存活队友完成（CoreRpg 判定）
   - "$revive-setting{revive=false;number=0;death-location=true} @init"
@@ -17,7 +16,7 @@ dungeon-start:
     - "$js-condition{text='%corerpg_p1_pass_q07%'=='yes';message=§c请从 冒险 菜单或 /corerpg enter q07 进入（体力与解锁由 CoreRpg 校验）} @system"
   action-script:
     - "$message{type=text;text=§6[余烬] §e锈轨矿道 §7· 走进前方房间开始；清房开门，击败首领后统一结算} @dungeon"
-    - "$teleport{location=0,64,0;defspawn=true} @player"
+    - "$teleport{location=0,64,6;defspawn=true} @player"
 
 dungeon-area: []
 

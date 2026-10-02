@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * {@code /corerpg p1 ...} — ember-v1.0-P1 admin/test commands.
@@ -68,6 +69,16 @@ public final class EmberCommand {
         }
         if (!s.hasPermission("corerpg.admin")) {
             s.sendMessage(ChatColor.RED + "需要 corerpg.admin");
+            return true;
+        }
+        if ("mapbuild".equals(sub)) { // D15 / B2.151: build a book white-box template (q05 = hand-checked spire v1)
+            String k = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+            org.bukkit.plugin.Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+            Map<String, Object> m = town.sunshine.corerpg.p1.map.P1MapLayout.bookMap(k);
+            if (m == null) { s.sendMessage(P + "/corerpg p1 mapbuild <q01..q07>"); return true; }
+            town.sunshine.corerpg.p1.map.P1MapLayout l = "q05".equals(k) ? town.sunshine.corerpg.p1.map.P1MapLayout.spireV1()
+                    : town.sunshine.corerpg.p1.map.P1MapLayout.fromBook(m);
+            new town.sunshine.corerpg.p1.map.P1MapBuilder(pl).build(s, String.valueOf(m.get("template")), String.valueOf(m.get("base")), l);
             return true;
         }
         if ("enable".equals(sub) || "on".equals(sub)) {

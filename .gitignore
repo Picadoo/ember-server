@@ -80,3 +80,9 @@ plugins/CoreRpg/ember-v1-item.key
 
 # ember-v1.0-P1 G04 run sessions / reward ledgers (runtime data; MySQL mirror cr_p1_run / cr_p1_reward)
 plugins/CoreRpg/p1-runs/
+server-runtime/ember_daily_v1_build/
+server-runtime/ember_daily_ash_v1_build/
+server-runtime/ember_daily_crypt_v1_build/
+server-runtime/ember_daily_tide_v1_build/
+server-runtime/ember_daily_frost_v1_build/
+server-runtime/ember_daily_rail_v1_build/

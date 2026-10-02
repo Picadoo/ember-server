@@ -87,14 +87,19 @@ public final class P1MapLayout {
             int[] a = nodes[i], b = nodes[i + 1];
             boolean alongZ = a[0] == b[0];
             if (!alongZ && a[2] != b[2]) { problems.add(id + " segment " + i + " is diagonal"); continue; }
+            // landings only at the ends and at turns; a collinear continuation shares the node cell
+            boolean turnIn = i == 0 || (nodes[i - 1][0] == a[0]) != alongZ;
+            boolean turnOut = i + 2 >= nodes.length || (b[0] == nodes[i + 2][0]) != alongZ;
             int s0 = alongZ ? a[2] : a[0], s1 = alongZ ? b[2] : b[0];
             int dir = Integer.signum(s1 - s0);
             if (dir == 0) dir = 1;
             int len = Math.abs(s1 - s0), rise = b[1] - a[1], n = Math.abs(rise);
             int f0 = n == 0 ? 0 : (len - n) / 2; // flat cells before the first rise
-            if (n > 0 && (f0 < 3 || len - n - f0 < 3)) problems.add(id + " segment " + i + ": " + n + " rise over " + len + " cells leaves < 3 flat at an end");
+            // a pure ramp segment (len == n) takes its ≥ 3 flat cells from the collinear neighbours (book Q03 C01 / C12)
+            if (n > 0 && len > n && (f0 < 3 || len - n - f0 < 3)) problems.add(id + " segment " + i + ": " + n + " rise over " + len + " cells leaves < 3 flat at an end");
+            if (n > len) problems.add(id + " segment " + i + ": rise " + n + " over " + len + " cells");
             int stairDir = n == 0 ? 0 : (alongZ ? (dir * Integer.signum(rise) > 0 ? 3 : 4) : (dir * Integer.signum(rise) > 0 ? 1 : 2));
-            for (int t = -half; t <= len + half; t++) {
+            for (int t = turnIn ? -half : 0; t <= len + (turnOut ? half : 0); t++) {
                 int s = s0 + dir * t;
                 int f, st = 0;
                 if (n == 0 || t <= f0) f = a[1];
@@ -148,6 +153,63 @@ public final class P1MapLayout {
         }
         return m;
     }
+
+    /**
+     * Generic book map (ch. 11–17 tables, generated into p1-book-maps.yml by tools/p1map/gen.py): rooms open-topped
+     * unless {@code roofed}, corridors roofed 7×6, RB backdrop 23 wide behind the north wall, box = bounds + margin.
+     */
+    @SuppressWarnings("unchecked")
+    public static P1MapLayout fromBook(Map<String, Object> m) {
+        List<Map<String, Object>> rs = (List<Map<String, Object>>) m.get("rooms");
+        List<Map<String, Object>> cs = (List<Map<String, Object>>) m.get("corridors");
+        boolean roofed = Boolean.TRUE.equals(m.get("roofed"));
+        java.util.Set<String> guards = new java.util.HashSet<String>();
+        if (m.get("low_guard") instanceof List) for (Object o : (List<Object>) m.get("low_guard")) guards.add(String.valueOf(o));
+        int x0 = Integer.MAX_VALUE, x1 = Integer.MIN_VALUE, z0 = Integer.MAX_VALUE, z1 = Integer.MIN_VALUE;
+        for (Map<String, Object> r : rs) {
+            x0 = Math.min(x0, n(r.get("x0"))); x1 = Math.max(x1, n(r.get("x1"))); z0 = Math.min(z0, n(r.get("z0"))); z1 = Math.max(z1, n(r.get("z1")));
+        }
+        P1MapLayout l = new P1MapLayout(x0 - 4, x1 + 4, z0 - 12, z1 + 4);
+        Map<String, Object> rb = null;
+        for (Map<String, Object> r : rs) {
+            String id = String.valueOf(r.get("id"));
+            if ("RB".equals(id)) rb = r;
+            boolean roof = roofed && !"R0".equals(id) || "E".equals(id);
+            l.room(new Room(id, n(r.get("x0")), n(r.get("x1")), n(r.get("z0")), n(r.get("z1")), n(r.get("f")), n(r.get("h")), roof, guards.contains(id)));
+        }
+        for (Map<String, Object> c : cs) {
+            List<List<Object>> ns = (List<List<Object>>) c.get("nodes");
+            int[][] nodes = new int[ns.size()][];
+            for (int i = 0; i < ns.size(); i++) nodes[i] = new int[] {n(ns.get(i).get(0)), n(ns.get(i).get(1)), n(ns.get(i).get(2))};
+            l.corridor(String.valueOf(c.get("id")), 6, true, nodes);
+        }
+        if (rb != null) { // north backdrop (残门楼 / 冠冕 / 门楼): 23 wide, 16 above F, 5 deep, outside the wall, not climbable
+            int cx = (n(rb.get("x0")) + n(rb.get("x1"))) / 2, zb = n(rb.get("z1")) + 3, f = n(rb.get("f"));
+            l.decor.add(new int[] {0, cx - 11, cx + 11, zb, zb + 4, Math.min(l.ground, f - 1), f + 16});
+        }
+        List<Object> sp = (List<Object>) m.get("spawn");
+        l.spawnX = n(sp.get(0)); l.spawnF = n(sp.get(1)); l.spawnZ = n(sp.get(2));
+        l.boxX0 = Math.floorDiv(x0 - 20, 16) * 16; l.boxX1 = Math.floorDiv(x1 + 20, 16) * 16 + 15;
+        l.boxZ0 = Math.floorDiv(z0 - 20, 16) * 16; l.boxZ1 = Math.floorDiv(z1 + 28, 16) * 16 + 15;
+        return l;
+    }
+
+    /** One map from the bundled p1-book-maps.yml (generated from the book), or null. */
+    @SuppressWarnings("unchecked")
+    public static Map<String, Object> bookMap(String key) {
+        java.io.InputStream in = P1MapLayout.class.getClassLoader().getResourceAsStream("p1-book-maps.yml");
+        if (in == null) return null;
+        try {
+            Object y = new org.yaml.snakeyaml.Yaml().load(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+            Object maps = y instanceof Map ? ((Map<String, Object>) y).get("maps") : null;
+            Object m = maps instanceof Map ? ((Map<String, Object>) maps).get(key) : null;
+            return m instanceof Map ? (Map<String, Object>) m : null;
+        } finally {
+            try { in.close(); } catch (java.io.IOException ignored) { }
+        }
+    }
+
+    private static int n(Object o) { return o instanceof Number ? ((Number) o).intValue() : Integer.parseInt(String.valueOf(o).trim()); }
 
     /** Q05 断塔回廊 v1 (book ch. 15 §3–§4). */
     public static P1MapLayout spireV1() {
