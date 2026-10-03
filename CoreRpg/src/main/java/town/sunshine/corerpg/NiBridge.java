@@ -27,6 +27,32 @@ public final class NiBridge {
         this.plugin = plugin;
     }
 
+    /**
+     * 1.62: a second place a player keeps NI materials (the P1 material warehouse). When set, {@link #countInInventory}
+     * adds what it holds and {@link #consume} takes the rest from it after the inventory, so every cost check / payment
+     * (forge, reroll, festival exchange …) sees backpack + warehouse as one pool. Only ids the source accepts count.
+     */
+    public interface ExtraSource {
+        long count(Player player, String niId);
+        /** removes up to {@code amount}; returns removed */
+        long take(Player player, String niId, long amount);
+    }
+
+    private volatile ExtraSource extra;
+
+    public void setExtraSource(ExtraSource source) { this.extra = source; }
+
+    /** inventory only (the warehouse deposit-all / pickup paths must not count the warehouse itself) */
+    public int countInInventoryOnly(Player player, String niId) {
+        if (player == null || niId == null || niId.isEmpty()) return 0;
+        int total = 0;
+        for (ItemStack stack : player.getInventory().getContents()) {
+            if (stack == null || stack.getType() == Material.AIR) continue;
+            if (matchesNiId(stack, niId)) total += stack.getAmount();
+        }
+        return total;
+    }
+
     public boolean isReady() {
         if (niReady != null) return niReady.booleanValue();
         niReady = Boolean.valueOf(Bukkit.getPluginManager().getPlugin("NeigeItems") != null);
@@ -99,6 +125,11 @@ public final class NiBridge {
             if (stack == null || stack.getType() == Material.AIR) continue;
             if (matchesNiId(stack, niId)) total += stack.getAmount();
         }
+        ExtraSource e = extra;
+        if (e != null) {
+            long more = e.count(player, niId);
+            if (more > 0) total = (int) Math.min(Integer.MAX_VALUE, (long) total + more);
+        }
         return total;
     }
 
@@ -123,6 +154,8 @@ public final class NiBridge {
             need -= take;
         }
         player.updateInventory();
+        ExtraSource e = extra;
+        if (need > 0 && e != null) need -= (int) Math.max(0, Math.min(need, e.take(player, niId, need)));
         return amount - need;
     }
 

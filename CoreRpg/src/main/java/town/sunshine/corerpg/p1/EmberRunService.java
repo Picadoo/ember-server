@@ -1594,6 +1594,12 @@ public final class EmberRunService implements Listener {
                     break;
                 }
                 case MAT: {
+                    EmberVault vlt = EmberVault.get(); // 1.62: whitelisted materials go straight into the warehouse (自动入库)
+                    if (ni != null && vlt != null && vlt.autoDeposit(p, g.id, g.amount)) {
+                        got.add(matSource(r.key) + ni.displayName(g.id) + " ×" + g.amount + "（进仓库）");
+                        done = true;
+                        break;
+                    }
                     if (ni != null && freeSlots(p) >= (g.amount + 63) / 64 + 1) {
                         if (ni.giveNiItem(p, g.id, g.amount)) {
                             got.add(matSource(r.key) + ni.displayName(g.id) + " ×" + g.amount);
@@ -1672,6 +1678,13 @@ public final class EmberRunService implements Listener {
             if (s == null || !loadouts.items().hasData(s)) continue;
             EmberItems.Read r = loadouts.items().read(s);
             if (r != null && r.data != null && g.id.equals(r.data.uid)) return d.shortLabel() + "（已在背包）";
+        }
+        EmberGearLib lib = EmberGearLib.get(); // 1.62 装备库: new drops go to the library while the backpack is nearly full
+        if (lib != null && lib.usable()) {
+            EmberItemData act = activePiece(p, d.slot);
+            boolean up = act != null && d.tier >= 1 && EmberRunRules.upgradeVerdict(EmberMode.tables(), d, act,
+                    loadouts.get(p) == null ? "none" : loadouts.get(p).activeSet, loadouts.get(p) == null ? 10 : loadouts.get(p).level) != EmberRunRules.UP_NONE;
+            if (lib.autoStash(p, d, freeSlots(p), up, act != null)) return d.shortLabel() + "（已存入装备库）";
         }
         if (freeSlots(p) <= 0) return null;
         ItemStack stack = loadouts.items().create(d);

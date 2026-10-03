@@ -118,6 +118,17 @@ public final class EmberItemStore {
                     + "KEY idx_p1_reward_run (run_id)"
                     + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
+    /** 1.62 装备库: per-item lock / favourite flags of the owner's stored gear (the item row itself is cr_p1_item, state 'stored'). */
+    public static final String SCHEMA_GEARLIB =
+            "CREATE TABLE IF NOT EXISTS cr_p1_gearlib ("
+                    + "item_uid CHAR(32) NOT NULL PRIMARY KEY,"
+                    + "owner_uuid CHAR(36) NOT NULL,"
+                    + "locked TINYINT NOT NULL DEFAULT 0,"
+                    + "fav TINYINT NOT NULL DEFAULT 0,"
+                    + "stored_at BIGINT NOT NULL DEFAULT 0,"
+                    + "KEY idx_p1_gearlib_owner (owner_uuid)"
+                    + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
     /** DB view of one item, enough for the trust check. */
     public static final class Row {
         public final String owner;
@@ -162,10 +173,11 @@ public final class EmberItemStore {
                 st.executeUpdate(SCHEMA_TXN);
                 st.executeUpdate(SCHEMA_RUN);
                 st.executeUpdate(SCHEMA_REWARD);
+                st.executeUpdate(SCHEMA_GEARLIB);
                 addColumnIfMissing(c, "cr_p1_loadout", "burst_cd_ms", "INT NOT NULL DEFAULT 0");
                 addColumnIfMissing(c, "cr_p1_loadout", "sustain_cd_ms", "INT NOT NULL DEFAULT 0");
                 schemaOk = true;
-                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn / cr_p1_run / cr_p1_reward ready");
+                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn / cr_p1_run / cr_p1_reward / cr_p1_gearlib ready");
             } catch (Throwable t) {
                 schemaQueued = false;
                 plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] schema init failed: " + t.getMessage());
@@ -439,8 +451,14 @@ public final class EmberItemStore {
     public static final class TxnItem {
         public final EmberItemData before, after;
         public final String retireState;
+        /** DB state the row must be in (default active; the gear library moves stored ↔ active, undo dismantled → stored) */
+        public final String expectState;
         public TxnItem(EmberItemData before, EmberItemData after, String retireState) {
+            this(before, after, retireState, "active");
+        }
+        public TxnItem(EmberItemData before, EmberItemData after, String retireState, String expectState) {
             this.before = before; this.after = after; this.retireState = retireState;
+            this.expectState = expectState == null ? "active" : expectState;
         }
     }
 
@@ -503,7 +521,7 @@ public final class EmberItemStore {
                     if (!rs.next()) return new TxnResult(TxnStatus.CONFLICT, "DB 无记录 " + it.before.uid.substring(0, 8));
                     if (!owner.toString().equals(rs.getString(1))) return new TxnResult(TxnStatus.CONFLICT, "DB 所有者不符");
                     if (rs.getInt(2) != it.before.rev) return new TxnResult(TxnStatus.CONFLICT, "DB rev " + rs.getInt(2) + " != " + it.before.rev);
-                    if (!"active".equals(rs.getString(3))) return new TxnResult(TxnStatus.CONFLICT, "DB 状态 " + rs.getString(3));
+                    if (!it.expectState.equals(rs.getString(3))) return new TxnResult(TxnStatus.CONFLICT, "DB 状态 " + rs.getString(3));
                 }
             }
         }
@@ -581,6 +599,134 @@ public final class EmberItemStore {
             }
             final FullRow r = row;
             sync(() -> cb.accept(r));
+        });
+    }
+
+    // ------------------------------------------------------------------ 1.62 ledger: create rows, history, gear library
+
+    /**
+     * Ledger row for a newly created item (drop / quest / admin / auto-stash). Request id {@code create:<uid>}, INSERT
+     * IGNORE so a re-delivery of the same reward uid never writes twice. {@code state} is the state the row starts in.
+     */
+    public void logCreate(final EmberItemData d, final UUID owner, final String state, final String note) {
+        if (d == null || owner == null) return;
+        final String after = json(d), nt = note == null ? null : (note.length() > 250 ? note.substring(0, 250) : note);
+        run("ledger create " + d.uid, c -> {
+            try (PreparedStatement ps = c.prepareStatement(
+                    "INSERT IGNORE INTO cr_p1_txn (request_id,kind,owner_uuid,uid_a,uid_b,before_json,after_json,cost_json,result,note,created_at)"
+                            + " VALUES (?,?,?,?,NULL,'[null]',?,NULL,?,?,?)")) {
+                ps.setString(1, "create:" + d.uid);
+                ps.setString(2, "create");
+                ps.setString(3, owner.toString());
+                ps.setString(4, d.uid);
+                ps.setString(5, after);
+                ps.setString(6, "ok");
+                if (nt == null) ps.setString(7, d.source + (state == null || "active".equals(state) ? "" : " → " + state));
+                else ps.setString(7, nt);
+                ps.setLong(8, System.currentTimeMillis());
+                ps.executeUpdate();
+            }
+        });
+    }
+
+    /** One cr_p1_txn row for the admin item history. */
+    public static final class TxnRow {
+        public final String rid, kind, owner, uidA, uidB, cost, note; public final long at;
+        TxnRow(String rid, String kind, String owner, String uidA, String uidB, String cost, String note, long at) {
+            this.rid = rid; this.kind = kind; this.owner = owner; this.uidA = uidA; this.uidB = uidB; this.cost = cost; this.note = note; this.at = at;
+        }
+    }
+
+    /** Newest first: by owner ({@code uidPrefix} null) or by item uid prefix (≥ 6 hex chars, any owner). */
+    public void history(final UUID owner, final String uidPrefix, final int limit, final Consumer<List<TxnRow>> cb) {
+        run("history", c -> {
+            final List<TxnRow> out = new java.util.ArrayList<TxnRow>();
+            String sql = uidPrefix != null
+                    ? "SELECT request_id,kind,owner_uuid,uid_a,uid_b,cost_json,note,created_at FROM cr_p1_txn WHERE uid_a LIKE ? OR uid_b LIKE ? ORDER BY created_at DESC LIMIT ?"
+                    : "SELECT request_id,kind,owner_uuid,uid_a,uid_b,cost_json,note,created_at FROM cr_p1_txn WHERE owner_uuid=? ORDER BY created_at DESC LIMIT ?";
+            try (PreparedStatement ps = c.prepareStatement(sql)) {
+                int i = 1;
+                if (uidPrefix != null) { ps.setString(i++, uidPrefix + "%"); ps.setString(i++, uidPrefix + "%"); }
+                else ps.setString(i++, owner.toString());
+                ps.setInt(i, Math.max(1, Math.min(200, limit)));
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) out.add(new TxnRow(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4),
+                            rs.getString(5), rs.getString(6), rs.getString(7), rs.getLong(8)));
+                }
+            }
+            sync(() -> cb.accept(out));
+        });
+    }
+
+    /** A stored (gear library) or recently dismantled item of one owner, with the library flags. */
+    public static final class LibRow {
+        public final EmberItemData data; public final String state; public final boolean locked, fav; public final long storedAt, updatedAt;
+        LibRow(EmberItemData data, String state, boolean locked, boolean fav, long storedAt, long updatedAt) {
+            this.data = data; this.state = state; this.locked = locked; this.fav = fav; this.storedAt = storedAt; this.updatedAt = updatedAt;
+        }
+    }
+
+    /** Every row of {@code owner} in {@code state} (stored = gear library; dismantled = undo candidates, newer than {@code since}). */
+    public void loadByState(final UUID owner, final String state, final long since, final Consumer<List<LibRow>> cb) {
+        run("load " + state + " " + owner, c -> {
+            final List<LibRow> out = new java.util.ArrayList<LibRow>();
+            try (PreparedStatement ps = c.prepareStatement("SELECT i.item_uid,i.ni_id,i.family,i.slot,i.tier,i.quality,i.craft,i.enhance,i.pity,"
+                    + "i.bound,i.source,i.data_version,i.rev,i.state,COALESCE(g.locked,0),COALESCE(g.fav,0),COALESCE(g.stored_at,i.updated_at),i.updated_at"
+                    + " FROM cr_p1_item i LEFT JOIN cr_p1_gearlib g ON g.item_uid=i.item_uid WHERE i.owner_uuid=? AND i.state=? AND i.updated_at>=?")) {
+                ps.setString(1, owner.toString());
+                ps.setString(2, state);
+                ps.setLong(3, since);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        EmberItemData d = new EmberItemData(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5),
+                                rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10) != 0, rs.getString(11), rs.getInt(12), rs.getInt(13));
+                        out.add(new LibRow(d, rs.getString(14), rs.getInt(15) != 0, rs.getInt(16) != 0, rs.getLong(17), rs.getLong(18)));
+                    }
+                }
+            }
+            sync(() -> cb.accept(out));
+        });
+    }
+
+    /** Gear library flags (upsert); {@code storedAt} 0 keeps the current value. */
+    public void saveLibFlags(final String uid, final UUID owner, final boolean locked, final boolean fav, final long storedAt) {
+        run("gearlib flags " + uid, c -> {
+            try (PreparedStatement ps = c.prepareStatement("INSERT INTO cr_p1_gearlib (item_uid,owner_uuid,locked,fav,stored_at) VALUES (?,?,?,?,?)"
+                    + " ON DUPLICATE KEY UPDATE owner_uuid=VALUES(owner_uuid),locked=VALUES(locked),fav=VALUES(fav),"
+                    + "stored_at=IF(VALUES(stored_at)>0,VALUES(stored_at),stored_at)")) {
+                ps.setString(1, uid);
+                ps.setString(2, owner.toString());
+                ps.setInt(3, locked ? 1 : 0);
+                ps.setInt(4, fav ? 1 : 0);
+                ps.setLong(5, storedAt);
+                ps.executeUpdate();
+            }
+        });
+    }
+
+    /**
+     * Soft-undo candidates: items of {@code owner} whose dismantle (kind dismantle / glibdis, not reroll) committed at or
+     * after {@code since} and that are still dismantled. Newest first.
+     */
+    public void recentDismantles(final UUID owner, final long since, final Consumer<List<LibRow>> cb) {
+        run("recent dismantles " + owner, c -> {
+            final List<LibRow> out = new java.util.ArrayList<LibRow>();
+            try (PreparedStatement ps = c.prepareStatement("SELECT i.item_uid,i.ni_id,i.family,i.slot,i.tier,i.quality,i.craft,i.enhance,i.pity,"
+                    + "i.bound,i.source,i.data_version,i.rev,i.state,t.created_at FROM cr_p1_txn t JOIN cr_p1_item i ON i.item_uid=t.uid_a"
+                    + " WHERE t.owner_uuid=? AND t.kind IN ('dismantle','glibdis') AND t.created_at>=? AND i.state='dismantled'"
+                    + " AND i.owner_uuid=? ORDER BY t.created_at DESC LIMIT 20")) {
+                ps.setString(1, owner.toString());
+                ps.setLong(2, since);
+                ps.setString(3, owner.toString());
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        EmberItemData d = new EmberItemData(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5),
+                                rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10) != 0, rs.getString(11), rs.getInt(12), rs.getInt(13));
+                        out.add(new LibRow(d, rs.getString(14), false, false, rs.getLong(15), rs.getLong(15)));
+                    }
+                }
+            }
+            sync(() -> cb.accept(out));
         });
     }
 

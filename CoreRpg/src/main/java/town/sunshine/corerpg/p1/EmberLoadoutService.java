@@ -228,6 +228,7 @@ public final class EmberLoadoutService implements Listener {
     public void remember(EmberItemData d, UUID owner) {
         rows.put(d.uid, new EmberItemStore.Row(owner == null ? null : owner.toString(), d.rev, "active"));
         store.upsertItem(d, owner, "active");
+        store.logCreate(d, owner, "active", null); // 1.62: every created item has a ledger row (cr_p1_txn kind create)
     }
 
     public EmberItemStore.Row cachedRow(String uid) { return rows.get(uid); }

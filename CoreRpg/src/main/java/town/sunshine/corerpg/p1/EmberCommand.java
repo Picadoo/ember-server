@@ -84,6 +84,11 @@ public final class EmberCommand {
             if (supplies == null) { s.sendMessage(P + "补给服务未加载"); return true; }
             return supplies.cmd(s, args);
         }
+        if ("vault".equals(sub) || "仓库".equals(sub) || "gearlib".equals(sub) || "装备库".equals(sub) || "stash".equals(sub)
+                || "undo".equals(sub) || "itemlog".equals(sub)) { // 1.62 storage + data protection
+            if (EmberGearLib.get() == null) { s.sendMessage(P + "仓库服务未加载"); return true; }
+            return EmberGearLib.get().cmd(s, sub, args);
+        }
         if ("audit".equals(sub)) {
             if (loadouts == null) { s.sendMessage(P + "装备服务未加载"); return true; }
             return new EmberAudit(loadouts).cmd(s, args); // B2.170, checks corerpg.admin itself

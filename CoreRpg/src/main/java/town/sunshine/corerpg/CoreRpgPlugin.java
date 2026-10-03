@@ -212,6 +212,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         statService = new StatService(this, niBridge, dataStore);
         dataStore.setTalentService(talentService);
         reloadLocal();
+        dbGuard = new DbGuard(this); // 1.62: MySQL configured but down at enable → refuse joins instead of silent YAML
+        Bukkit.getPluginManager().registerEvents(dbGuard, this);
+        if (DbGuard.shouldEngage("mysql".equalsIgnoreCase(getConfig().getString("storage", "yaml")), isMysqlActive(),
+                getConfig().getBoolean("storage_guard.enabled", true), town.sunshine.corerpg.p1.EmberMode.active())) {
+            dbGuard.engage("connect to MySQL failed at enable (see the [storage] error above)");
+        }
         Bukkit.getPluginManager().registerEvents(this, this);
         for (org.bukkit.World w : Bukkit.getWorlds()) quietAdvancements(w); // F-review #9 (D126)
         Bukkit.getPluginManager().registerEvents(questService, this);
@@ -229,6 +235,14 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         emberForge = new town.sunshine.corerpg.p1.EmberForgeService(this, emberLoadouts);
         Bukkit.getPluginManager().registerEvents(emberForge, this);
         emberCommand.setForge(emberForge);
+        { // 1.62 P1 material warehouse + gear library (storage) and vanilla inventory snapshots
+            town.sunshine.corerpg.p1.EmberVault vault = new town.sunshine.corerpg.p1.EmberVault(this);
+            Bukkit.getPluginManager().registerEvents(vault, this);
+            Bukkit.getPluginManager().registerEvents(new town.sunshine.corerpg.p1.EmberGearLib(this, emberLoadouts), this);
+            invSnap = new InvSnapService(this);
+            Bukkit.getPluginManager().registerEvents(invSnap, this);
+            invSnap.start();
+        }
         emberRuns = new town.sunshine.corerpg.p1.EmberRunService(this, emberLoadouts, emberStore); // G04 Q01–Q03 runs + settlement
         Bukkit.getPluginManager().registerEvents(emberRuns, this);
         { // P2-9 (D83) titles + trails (cosmetic only)
@@ -320,6 +334,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (invSnap != null) invSnap.shutdown(); // 1.62: last inventory snapshot of everyone online (quit events come after disable)
         if (hubAmbience != null) hubAmbience.stop(); // D97: floating lines never outlive the plugin
         if (petService != null) petService.shutdown();
         if (guildService != null) guildService.saveAll();
@@ -343,6 +358,23 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private StatService statService;
     public StatService getStatService() { return statService; }
+
+    private InvSnapService invSnap;
+    private DbGuard dbGuard;
+    public InvSnapService getInvSnap() { return invSnap; }
+    public DbGuard getDbGuard() { return dbGuard; }
+
+    /** test hook: env CORERPG_TEST_MYSQL_PORT overrides mysql.port (used by the DB-down guard smoke) */
+    public static Integer testMysqlPort() {
+        String v = System.getenv("CORERPG_TEST_MYSQL_PORT");
+        if (v == null || v.trim().isEmpty()) return null;
+        try { return Integer.valueOf(v.trim()); } catch (NumberFormatException e) { return null; }
+    }
+
+    public int effectiveMysqlPort() {
+        Integer t = testMysqlPort();
+        return t != null ? t : getConfig().getInt("mysql.port", 3306);
+    }
     public PlayerDataStore getDataStore() { return dataStore; }
     public CalamityService getCalamityService() { return calamityService; }
     public SetService getSetService() { return setService; }
@@ -399,10 +431,19 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         if ("mysql".equals(want)) {
             mysqlStorage = new MysqlStorage(this);
-            if (mysqlStorage.tryInit(getConfig().getConfigurationSection("mysql"))) {
+            org.bukkit.configuration.ConfigurationSection sec = getConfig().getConfigurationSection("mysql");
+            Integer tp = testMysqlPort();
+            if (tp != null && sec != null) {
+                org.bukkit.configuration.file.YamlConfiguration c = new org.bukkit.configuration.file.YamlConfiguration();
+                for (String k : sec.getKeys(true)) if (!sec.isConfigurationSection(k)) c.set(k, sec.get(k));
+                c.set("port", tp);
+                sec = c;
+                getLogger().warning("[storage] TEST OVERRIDE: CORERPG_TEST_MYSQL_PORT=" + tp + " (mysql.port from config ignored)");
+            }
+            if (mysqlStorage.tryInit(sec)) {
                 storageMode = "mysql";
             } else {
-                getLogger().severe("[storage] configured mysql but connect failed — FAIL-OPEN to yaml");
+                getLogger().severe("[storage] configured mysql but connect failed — YAML fallback for non-player caches; DbGuard will refuse joins if P1+storage_guard");
                 mysqlStorage = null;
                 storageMode = "yaml";
             }
@@ -896,7 +937,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             return true;
         }
         if ("storage".equals(sub)) {
+            if (args.length >= 2 && "guard".equalsIgnoreCase(args[1]) && dbGuard != null) return dbGuard.cmd(sender, args);
             return cmdStorage(sender);
+        }
+        if ("invsnap".equals(sub)) {
+            if (invSnap == null) { sender.sendMessage(ChatColor.RED + "invsnap 未加载"); return true; }
+            return invSnap.cmd(sender, args);
         }
         if ("admin".equals(sub)) {
             return cmdAdmin(sender, args);
@@ -1046,7 +1092,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GRAY + "  arena|pvp [queue 1v1|2v2|leave|stats|claim|forfeit] · auction [list|sell|buy|cancel]");
         sender.sendMessage(ChatColor.GRAY + "  warehouse [deposit|withdraw <slot|id> [n]|unlock [coin|cash]|info <slot>]");
         sender.sendMessage(ChatColor.DARK_GRAY + "  admin: xpreward · passxp · progress · pass season reset · enhance set · calamity forceopen/forceend · p1 status/debug/world · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
-        sender.sendMessage(ChatColor.DARK_GRAY + "  storage — 显示 yaml|mysql 与 ping");
+        sender.sendMessage(ChatColor.DARK_GRAY + "  storage — 显示 yaml|mysql 与 ping · storage guard [release] — 数据库断线保护");
+        sender.sendMessage(ChatColor.DARK_GRAY + "  invsnap list|view|restore|diff|take <玩家> [id] — 背包/末影箱快照（管理员）");
     }
 
     private boolean requirePlayer(CommandSender sender) {

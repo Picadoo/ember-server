@@ -110,6 +110,11 @@ public final class PlayerData {
 
     public void markDirty() { dirty = true; }
 
+    /** 1.62 data guard: MySQL failed while loading this player — never save it (it would overwrite the real row). */
+    private transient boolean loadFailed;
+    public boolean isLoadFailed() { return loadFailed; }
+    public void setLoadFailed(boolean v) { loadFailed = v; }
+
     public String getCovenant() { return covenant == null || covenant.isEmpty() ? "none" : covenant; }
     public void setCovenant(String v) {
         if (v == null || v.isEmpty()) covenant = "none";

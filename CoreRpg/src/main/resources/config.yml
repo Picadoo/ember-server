@@ -91,6 +91,14 @@ mysql:
   password: "changeme"
   pool-size: 10
   jdbc-params: "useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=utf8&serverTimezone=UTC"
+# 1.62 data protection (docs/design/DESIGN-ember-data-protection.md). Defaults live in code; keys are optional.
+storage_guard:
+  enabled: true        # storage: mysql + P1 on + connect failed at enable → refuse joins (no silent YAML fallback)
+invsnap:
+  enabled: true        # vanilla inventory + armor + offhand + ender chest snapshots (cr_inv_snapshot / snapshots/*.yml.gz)
+  interval_minutes: 10
+  keep_last: 50
+  keep_days: 30        # + newest snapshot per CST day
 
 
 debug:

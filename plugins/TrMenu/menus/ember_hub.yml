@@ -237,15 +237,17 @@ Icons:
       name: '§3仓库'
       lore:
         - ''
-        - '§7扩展存储'
-        - '§8材料仓 · 点此打开'
-        - '§8绑定与流通分仓'
+        - '§7材料仓库 · 无格子上限，打副本自动入库'
+        - '§7装备库 · 背包满时新装备自动存入'
+        - '§8强化/升阶直接扣仓库里的材料'
+        - '§8一键存入 · 筛选 · 批量分解（可撤销）'
         - ''
-        - '§e➥ §f打开仓库菜单'
+        - '§e➥ §f打开仓库'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_storage'
+        - close
+        - 'command: corerpg p1 vault from hub'
 
   k:
     display:

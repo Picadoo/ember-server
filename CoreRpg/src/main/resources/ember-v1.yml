@@ -100,3 +100,17 @@ leaderboard_exclude:
     - '^Bal[A-Z]{2}\d{4}[a-z]$'            # 平衡模拟号
     - '^(Afk\dx|Newb|NewP|Main|MainB|Gate|Gap|Pf|Pz|Prog|KillT|KillXp|IpTest|Ashfall|Cinder)\d{4,5}$'
     - '(?-i)^.*Bot\d*$'                  # …Bot、…Bot2（区分大小写，避免误伤 Abbot）
+
+# 1.62 P1 storage (DESIGN-ember-material-warehouse.md §P1 · DESIGN-ember-data-protection.md)
+storage:
+  vault:                       # 材料仓库: whitelisted NI materials, no slot limit, 2e9 per id, counted by every P1 cost
+    enabled: true
+    auto_pickup: true          # server switch; players toggle their own 自动入库 in the GUI
+    whitelist: [mat_ember_shard, mat_ember_core_fragment, mat_ember_bone_dust, mat_ember_v1_blank, ember_fest_coin_gq26]
+  gearlib:                     # 装备库: P1 gear rows in cr_p1_item state=stored (MySQL only)
+    enabled: true
+    auto_stash_below_free: 4   # drops go to the library when the backpack has fewer free slots (non-upgrades only)
+    undo_minutes: 10           # 分解撤销窗口
+  invsnap:                     # also mirrored in config.yml invsnap.* (InvSnapService reads both)
+    enabled: true
+    interval_minutes: 10

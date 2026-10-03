@@ -107,6 +107,13 @@ public final class PlayerDataStore {
     public PlayerData peek(UUID uuid) { return cache.get(uuid); }
 
     public PlayerData load(UUID uuid) {
+        boolean[] failed = new boolean[1];
+        PlayerData data = loadInner(uuid, failed);
+        if (failed[0]) data.setLoadFailed(true);
+        return data;
+    }
+
+    private PlayerData loadInner(UUID uuid, boolean[] failed) {
         PlayerData data = new PlayerData();
         FileConfiguration yaml = null;
         MysqlStorage mysql = mysqlOrNull();
@@ -119,7 +126,8 @@ public final class PlayerDataStore {
                     yaml = y;
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "MySQL load player " + uuid, e);
+                plugin.getLogger().log(Level.SEVERE, "MySQL load player " + uuid + " FAILED — this session's data is read-only (never saved), player is kicked", e);
+                failed[0] = true;
             } catch (InvalidConfigurationException e) {
                 plugin.getLogger().log(Level.WARNING, "Invalid player yaml in MySQL " + uuid, e);
             }
@@ -319,7 +327,8 @@ public final class PlayerDataStore {
                     data.setWarehouseJson(row.slotsJson == null ? "[]" : row.slotsJson);
                 }
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "MySQL load warehouse " + uuid, e);
+                plugin.getLogger().log(Level.SEVERE, "MySQL load warehouse " + uuid + " FAILED — session read-only", e);
+                failed[0] = true;
             }
         }
 
@@ -330,6 +339,10 @@ public final class PlayerDataStore {
 
     public void save(UUID uuid, PlayerData data) {
         if (data == null) return;
+        if (data.isLoadFailed()) { // 1.62 guard: a half-loaded player must never overwrite the stored row
+            plugin.getLogger().warning("[storage] NOT saving " + uuid + ": its load from MySQL failed this session");
+            return;
+        }
         FileConfiguration yaml = new YamlConfiguration();
         yaml.set("coin", data.getCoin());
         yaml.set("lastSignDate", data.getLastSignDate());
@@ -466,6 +479,9 @@ public final class PlayerDataStore {
             if (e.getValue().isDirty()) save(e.getKey(), e.getValue());
         }
     }
+
+    /** 1.62 guard: forget a cached entry without saving it */
+    public void forget(UUID uuid) { cache.remove(uuid); }
 
     public void unload(UUID uuid) {
         PlayerData data = cache.remove(uuid);

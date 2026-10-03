@@ -24,7 +24,7 @@
 | `ember_auction.yml` | 主菜单「寄售」 | list/sell · 税 10% 壳 |
 | `ember_character.yml` | 主菜单「角色」 | status / covenant / cash / monthly 壳 |
 | `ember_set.yml` | 主菜单「套装」 | 余烬同袍（团戒+刃）2 件套 |
-| `ember_storage.yml` | 主菜单「仓库」 | 末影箱 / 扩展页 / 勋阶链 |
+| `ember_storage.yml` | 旧「仓库」二级页（1.62 起主菜单仓库直接打开 `/corerpg p1 vault` 材料仓库/装备库 GUI） | 末影箱 / 扩展页 / 勋阶链 |
 
 ## 占位 / 待接线备忘
 

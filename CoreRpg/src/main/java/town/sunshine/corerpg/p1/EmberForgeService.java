@@ -498,7 +498,7 @@ public final class EmberForgeService implements Listener {
                 if ("dismantle".equals(kind)) {
                     Object[] pd = pendingDismantle.remove(list.get(0).before.uid);
                     int blanks = pd == null ? 0 : (Integer) pd[1];
-                    if (q != null) ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks);
+                    if (q != null) { if (EmberVault.get() != null) EmberVault.get().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); }
                     else plugin.getLogger().warning("[" + EmberMode.MODE_ID + "] dismantle blanks for offline " + id + " not given: " + blanks);
                 }
                 plugin.getLogger().info("[" + EmberMode.MODE_ID + "] forge " + kind + " " + rid + " " + id + " ok: " + note + " cost " + cost.json());
