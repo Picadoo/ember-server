@@ -1355,3 +1355,13 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 代码 | EmberRunMaps `Skill.share`；EmberRunDirector `execute`（分摊）/ `shareDamage` / 绿圈；EmberSeason `time_r03`；EmberCosmetics `r03` / `trail_r03`；DP `EmberQ0R3` + config；菜单 hub / adventure / codex / codex_gear / season |
 | 参数源 | ember-v1-runs.yml（两份）`raids.r03`（烬核 `dmg: 100, warn: 3.0, every: 16, share: true`），balance_version 20；p1party `--share-dmg`（out-p1party-d137-*.md） |
 | 测试 | 单测 `thirdRaidStacksForItsShareMoveAndCoversTheLastFamily_D137`；check-dp-spawns 10 个 ok；FreshQ28–Q30 R03 通关 + 烬核 n=1 / n=2 日志 |
+
+### 13.64 重复刷图花样（CoreRpg 1.57.0，D138，balance_version 21）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 用户 10-03 13:51：新内容批第 2 项（重复局的变化：随机精英词缀 + 可选房间事件，只用现有奖励种类） |
+| 规则 | 已首通的普通版（全队都首通），开本按种子定：1 只词缀精英（炽热火圈 1 秒预警 / 分裂 2 个 50% 近战 / 护盾生命 ×1.6）击败 +3 余烬碎片；约 50% 的局 30 秒限时清房 +1 余烬核心；首通 / 挑战 / 深渊 / 团本没有 |
+| 配置 | runs yml `variety:`；balance_version 21 |
+| 模型 | p1sim Q07 首通中位 26→25 / 8→8 / 3→3 天；p2econ 两件极品最快 7.75→7.80 / 5.50→5.50 / 4.33→4.44 周（+6 碎片时 0.3 档 −2 天，超限，改 +3） |
+| 测试 | 单测 `repeatRunVarietyIsSeededAndPaysOnlyExistingTypesOffFirstClears_D138`（39 个全过）；selfcheck 0 failed；实测待部署 |
