@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(25, m.balanceVersion);                // D144–D149
-        assertEquals("g04-1/b25", m.ruleVersion);
+        assertEquals(26, m.balanceVersion);                // D152 卸甲
+        assertEquals("g04-1/b26", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -325,25 +325,28 @@ public class EmberRunRulesTest {
         assertEquals(20, m.goalBonus);
         assertEquals(0.2, m.raidLastReviveHp, 1e-9);      // D118
         assertEquals(20.0, m.raidReviveDelay, 1e-9);
-        // P2-8 weekly rules: 3 rules × 7 maps, all 21 pairs over 21 weeks; no multiplier keys at all
-        assertEquals(3, m.modifiers.size());
+        // P2-8 weekly rules: 4 rules × 7 maps, all 28 pairs over 28 weeks; no multiplier keys at all
+        assertEquals(4, m.modifiers.size());
         assertEquals(3, m.modifier("lean").potionCap);
         assertEquals("caster", m.modifier("casters").role("ranged", q3));
         assertEquals("ranged", m.modifier("casters").role("ranged", q1)); // Q01 has no caster → unchanged
         assertEquals("melee", m.modifier("casters").role("melee", q3));
+        assertEquals("melee", m.modifier("disarm").role("heavy", q1)); // D152: heavy→melee when map has melee
+        assertEquals("melee", m.modifier("disarm").role("melee", q1));
         assertTrue(m.modifier("lean").normal);              // D94: repeat normal runs get lean / reverse only
         assertTrue(m.modifier("reverse").normal);
         assertFalse(m.modifier("casters").normal);
+        assertFalse(m.modifier("disarm").normal);           // D152: challenge-only like casters
         assertTrue(m.modifier("reverse").swapRooms);
         assertNull(m.modifier(""));
         java.util.Set<String> pairs = new java.util.HashSet<String>();
         java.time.LocalDate d0 = java.time.LocalDate.of(2026, 10, 5);
-        for (int wk = 0; wk < 21; wk++) {
+        for (int wk = 0; wk < 28; wk++) {
             java.time.LocalDate d = d0.plusWeeks(wk);
             pairs.add(EmberRunRules.featuredChallenge(new java.util.ArrayList<String>(m.maps.keySet()), d) + "/" + m.modifierFor(d).id);
             assertSame(m.modifierFor(d), m.modifierFor(d.plusDays(6)));
         }
-        assertEquals(21, pairs.size());
+        assertEquals(28, pairs.size());
         // swap layout: r3's group on r1's points
         assertEquals(EmberRunMaps.layout(q3.room("r3").a, q3.room("r1").points.size(), 5L).size(),
                 q3.room("r3").a.values().stream().mapToInt(Integer::intValue).sum());

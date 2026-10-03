@@ -1444,3 +1444,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 问题 | `fail()` 先把状态改成 FAILED 再拼连战失败那一行，`fightStarted()` 读成 false → 已计入本周的局也说「还没开打，本周次数没有扣」（次数其实扣了，日志 `rush entry counted`） |
 | 修改 | 改状态前读 `started`（和挑战失败 `chFail` 同样处理）；`check-dp-spawns.py` 按任何两格缩进的图键切块，`rush:` 段不再混进 q07（之前 EmberQ0B1 误报门格 FAIL）；套件主菜单检查认合并图标 |
 | 上线 | 源码 main 9af8556；线上仍是 1.61.0，下次部署升 1.61.1 |
+
+### 13.73 P2-8 第 4 条周规则「卸甲」（CoreRpg 1.63.0，D152，balance_version 26）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | handoff 候选：精选周规则可再加几条；计时/黑暗在 P2 草案 §5e 明确否决；卸甲复用已有 `Modifier.remap` |
+| 规则 | `disarm` / 卸甲：`remap: {heavy: melee}`；挑战专用（不设 `normal: true`，与 `casters` 相同）；不改奖励、不加倍率（§23.3） |
+| 参数源 | `ember-v1-runs.yml` `rotation.modifiers` 第四条（两份）；balance_version 26；轮换 4×7=28 周组合 |
+| 模型 | `p2econ.py --mods` → `tools/p1sim/out-p2econ-mods-d152.md`：disarm 通关率差 +0 点（躲避 0.5 已顶 100%）；第 8 周印记/币相对轮换噪声内 |
+| 测试 | 单测 `EmberRunRulesTest`：4 modifiers、disarm heavy→melee on q01、`!normal`、28 pairs；线上冒烟 FreshQ44：`modifier forced disarm` + 聊天「卸甲」+ `r1 rule disarm: melee×4` |
+| 上线 | 10-04 07:48 CST，日志 `Enabling CoreRpg v1.63.0` + `[storage] MySQL connected`；STATUS `docs/status/STATUS-ember-modifier-disarm-d152.md` |
+
