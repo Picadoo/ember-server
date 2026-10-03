@@ -265,13 +265,23 @@ public final class EmberGrowth {
     }
 
     /** "结算余烬币 +4% · 每次结算余烬碎片 +1 · 深渊层费 -5%" */
+    /**
+     * A multiplier as a signed percent with up to 2 decimals: 1.0025 → "+0.25%", 0.855 → "-14.5%", 1.04 → "+4%".
+     * (10-04 fix: "%+.1f" showed the 余烬 affix 1 / 3 档 as +0.2% / +0.8% instead of +0.25% / +0.75%.)
+     */
+    public static String signedPct(double v) {
+        java.math.BigDecimal b = new java.math.BigDecimal((v - 1.0) * 100).setScale(2, java.math.RoundingMode.HALF_UP).stripTrailingZeros();
+        if (b.signum() == 0) return "+0%";
+        return (b.signum() > 0 ? "+" : "") + b.toPlainString() + "%";
+    }
+
     public static String describeCn(Map<String, Double> m) {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Double> e : m.entrySet()) {
             String k = e.getKey(), name = CN.containsKey(k) ? CN.get(k) : k;
             double v = e.getValue();
             String val = ADD.contains(k) ? String.format(Locale.ROOT, "%+.0f", v)
-                    : String.format(Locale.ROOT, "%+.1f%%", (v - 1.0) * 100).replace(".0%", "%");
+                    : signedPct(v);
             sb.append(sb.length() == 0 ? "" : " · ").append(name).append(' ').append(val);
         }
         return sb.toString();

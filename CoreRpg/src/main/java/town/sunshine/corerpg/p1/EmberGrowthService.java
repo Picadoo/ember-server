@@ -828,7 +828,7 @@ public final class EmberGrowthService implements Listener {
 
     private static List<String> pctList(EmberAffix.Def df) {
         List<String> l = new ArrayList<String>();
-        for (double v : df.values) l.add(String.format(Locale.ROOT, "%+.1f%%", (v - 1) * 100).replace(".0%", "%"));
+        for (double v : df.values) l.add(EmberGrowth.signedPct(v));
         return l;
     }
 

@@ -28,7 +28,7 @@ public final class EmberAffix {
         /** "对词缀精英伤害 +8%" */
         public String text(int tier) {
             double v = value(tier);
-            return desc + " " + String.format(Locale.ROOT, "%+.1f%%", (v - 1.0) * 100).replace(".0%", "%");
+            return desc + " " + EmberGrowth.signedPct(v);
         }
     }
 

@@ -150,6 +150,15 @@ public class EmberGrowthTest {
         assertEquals(1.0, m.get("shard_bonus"), 1e-9);
     }
 
+    @Test public void percentTextKeepsQuarterPoints() { // 10-04: 余烬 1 / 3 档 used to read +0.2% / +0.8%
+        assertEquals("+0.25%", EmberGrowth.signedPct(1.0025));
+        assertEquals("+0.75%", EmberGrowth.signedPct(1.0075));
+        assertEquals("+1%", EmberGrowth.signedPct(1.01));
+        assertEquals("-14.5%", EmberGrowth.signedPct(0.855));
+        assertEquals("+4%", EmberGrowth.signedPct(1.04));
+        assertEquals("-0.5%", EmberGrowth.signedPct(0.995));
+    }
+
     @Test public void affixRulesQualityCapAndPity() {
         EmberAffix.Rules r = EmberAffix.parse(root());
         assertNotNull(r);
