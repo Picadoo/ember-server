@@ -44,7 +44,9 @@ public final class EmberSeason {
     public static final String C_AWARD = "p3_season_";    // + award id, period "all": times earned
     public static final String C_AWARD_LAST = "p3_seasonlast_"; // + award id, period "all": last season number
     public static final List<String> GOALS = Collections.unmodifiableList(Arrays.asList("featured", "abyss", "raid", "bounty"));
-    public static final List<String> BOARDS = Collections.unmodifiableList(Arrays.asList("abyss", "featured", "raids", "time_r01", "time_r02", "time_r03"));
+    /** D144: optional weekly goals — pay the goal reward, never count toward「全部完成」 */
+    public static final List<String> OPTIONAL = Collections.unmodifiableList(Arrays.asList("core"));
+    public static final List<String> BOARDS = Collections.unmodifiableList(Arrays.asList("abyss", "featured", "raids", "time_r01", "time_r02", "time_r03", "time_rush"));
     private static final String P = "§6[余烬] §7";
 
     public static final class Row {
@@ -123,6 +125,9 @@ public final class EmberSeason {
         if (seconds > 0 && ("r01".equals(raid) || "r02".equals(raid) || "r03".equals(raid))) record(u, name, "time_" + raid, seconds, MIN);
     }
 
+    /** D144 余烬连战: fastest settled clear (seconds) of the week / season */
+    void onRush(UUID u, String name, int seconds) { if (seconds > 0) record(u, name, "time_rush", seconds, MIN); }
+
     private static final int MAX = 0, ADD = 1, MIN = 2;
 
     private void record(UUID u, String name, String board, int v, int mode) { record(u, name, board, v, mode, 0); }
@@ -199,6 +204,7 @@ public final class EmberSeason {
             case "time_r01": return "R01 最快通关";
             case "time_r02": return "R02 最快通关";
             case "time_r03": return "R03 最快通关"; // D137
+            case "time_rush": return "余烬连战最快"; // D144
             default: return b;
         }
     }
@@ -234,7 +240,8 @@ public final class EmberSeason {
     }
 
     static final String[][] AWARD_OF = {{"abyss", "season_abyss"}, {"featured", "season_featured"}, {"raids", "season_raids"},
-            {"time_r01", "season_fast"}, {"time_r02", "season_fast"}, {"time_r03", "season_fast"}};
+            {"time_r01", "season_fast"}, {"time_r02", "season_fast"}, {"time_r03", "season_fast"},
+            {"time_rush", "season_fast"}}; // D144
 
     synchronized void finalizeSeason(int n) { finalizeSeason(n, null); }
 
@@ -395,6 +402,7 @@ public final class EmberSeason {
             case "abyss": return "通关深渊层（任意层）";
             case "raid": return "通关团本（R01、R02 或 R03）";
             case "bounty": return "做满每日委托（当天第 3 局）";
+            case "core": return "烬核同心：团本 R03 里全员站进同一个烬核圈并通关（可选）"; // D144
             default: return g;
         }
     }
@@ -450,7 +458,9 @@ public final class EmberSeason {
         p.sendMessage(P + "§6本周目标§7（周一 0 点刷新，还剩 " + left + " 天）· 完成 " + goalsDone(d) + "/" + goalCount() + " · 余烬徽 §f" + badges(d));
         if (!runs.progressFlag(d, "q07")) { p.sendMessage(P + "§8首通 Q07 后才计数（挑战版、深渊、团本都在 Q07 之后）。"); return true; }
         p.sendMessage(P + "§8首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算；毕业那周的委托目标按剩下的天数算（周六毕业要 2 天，周日 1 天）");
-        for (String g : GOALS) {
+        List<String> shown = new ArrayList<String>(GOALS);
+        shown.addAll(OPTIONAL);
+        for (String g : shown) {
             if (target(g) <= 0) continue;
             boolean done = progress(d, g) >= target(d, g);
             net.md_5.bungee.api.chat.TextComponent line = new net.md_5.bungee.api.chat.TextComponent(P + goalLine(d, g) + " ");
@@ -463,6 +473,7 @@ public final class EmberSeason {
             }
             p.spigot().sendMessage(line);
         }
+        if (target("core") > 0) p.sendMessage(P + "§8「烬核同心」是可选目标：完成也给 " + maps().goalReward + " 余烬徽，但不算进「全部完成」");
         p.sendMessage(P + "§7全部完成再 +" + maps().goalBonus + " 余烬徽 · 余烬徽只能在外观商店换外观（1 徽 = 1 点 = 50 币标价），不加属性");
         town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[赛季与周目标页]", "/ember_p1_season", "排行榜、周目标、赛季奖励", "GOLD"},
                 new String[]{"[外观商店]", "/corerpg p1 cosmetic", "用余烬徽 / 币 / 印记换外观", "AQUA"});

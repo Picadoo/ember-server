@@ -518,6 +518,36 @@ public final class EmberRunRules {
         return out;
     }
 
+    /** D144 花样委托: one daily goal over repeat-run variety outcomes (kind affix / timed), paid once when count is reached. */
+    public static final class VarietyBounty {
+        public final String kind;
+        public final int count, coin, shard;
+        public VarietyBounty(String kind, int count, int coin, int shard) { this.kind = kind; this.count = count; this.coin = coin; this.shard = shard; }
+        public String label() { return "affix".equals(kind) ? "击败词缀精英" : "限时清房达标"; }
+        public String rewardText() { return (coin > 0 ? coin + " 余烬币" : "") + (coin > 0 && shard > 0 ? " + " : "") + (shard > 0 ? "余烬碎片 ×" + shard : ""); }
+    }
+
+    public static List<VarietyBounty> varietyBounties(List<? extends Map<?, ?>> raw) {
+        List<VarietyBounty> out = new ArrayList<VarietyBounty>();
+        if (raw == null) return out;
+        for (Map<?, ?> m : raw) {
+            String k = String.valueOf(m.get("kind"));
+            int c = intOf(m.get("count")), coin = intOf(m.get("coin")), sh = intOf(m.get("shard"));
+            if (!("affix".equals(k) || "timed".equals(k)) || c <= 0 || coin < 0 || sh < 0 || coin + sh <= 0) continue;
+            out.add(new VarietyBounty(k, c, coin, sh));
+        }
+        return out;
+    }
+
+    /** D144: the grants of one goal when this run moves it from prev to prev + 1 (empty unless it crosses count) */
+    public static List<Grant> varietyBountyGrants(VarietyBounty b, int prev, boolean hit) {
+        if (b == null || !hit || prev >= b.count || prev + 1 < b.count) return Collections.emptyList();
+        List<Grant> g = new ArrayList<Grant>();
+        if (b.coin > 0) g.add(new Grant("vb_" + b.kind, Kind.COIN, null, b.coin, null));
+        if (b.shard > 0) g.add(new Grant("vb_" + b.kind + "_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, b.shard, null));
+        return g;
+    }
+
     private static int intOf(Object o) {
         if (o instanceof Number) return ((Number) o).intValue();
         try { return o == null ? 0 : Integer.parseInt(String.valueOf(o).trim()); } catch (NumberFormatException e) { return -1; }

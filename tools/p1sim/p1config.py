@@ -100,6 +100,7 @@ def load(profile='current'):
         'starter_potions': p1['starter']['heal_potions'],
         'death_refund': p1['death_refund']['max_potions'],
         'bounty': [dict(b) for b in (p1.get('bounty') or {}).get('daily', [])],  # P2-7 (D79)
+        'vbounty': [dict(b) for b in (p1.get('bounty') or {}).get('variety', []) or []],  # D144 花样委托
         'stamina_day': cash['stamina']['base_max'],
         'run_cost': runs['cost'],
         # level / skill: tail of EmberTables.DEFAULTS (crit, def, sustain, lvl atk, lvl hp, lvl base, lvl cap, skill mult)

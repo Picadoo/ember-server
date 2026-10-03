@@ -77,6 +77,7 @@ public final class EmberCosmetics implements Listener {
             new Cosmetic("r01", Kind.TITLE, "§6锈轨破袭者", "通关团本 R01 锈轨矿道·团", 0, "r01", null),
             new Cosmetic("r02", Kind.TITLE, "§b霜封守望者", "通关团本 R02 霜封哨所·团", 0, "r02", null),
             new Cosmetic("r03", Kind.TITLE, "§6断塔同心", "通关团本 R03 断塔回廊·团", 0, "r03", null), // D137
+            new Cosmetic("rush", Kind.TITLE, "§c连战不息", "通关「余烬连战」（每周首领连战，Q05→Q06→Q07 连打）", 0, "rush", null), // D144
             new Cosmetic("raids10", Kind.TITLE, "§c十战老兵", "团本累计通关 10 次（R01 + R02 + R03）", 0, null, null),
             new Cosmetic("trail_r01", Kind.TRAIL, "§6余烬火星", "通关团本 R01（团本专属足迹）", 0, "r01", "FLAME"),
             new Cosmetic("trail_r02", Kind.TRAIL, "§b霜花", "通关团本 R02（团本专属足迹）", 0, "r02", "SNOW_SHOVEL"),
@@ -89,7 +90,7 @@ public final class EmberCosmetics implements Listener {
             new Cosmetic("season_abyss", Kind.TITLE, "§d赛季深渊三甲", "某赛季「最高深渊层」榜前 3", 0, null, null),
             new Cosmetic("season_featured", Kind.TITLE, "§b赛季精选三甲", "某赛季「精选挑战通关」榜前 3", 0, null, null),
             new Cosmetic("season_raids", Kind.TITLE, "§6赛季团本三甲", "某赛季「团本通关」榜前 3", 0, null, null),
-            new Cosmetic("season_fast", Kind.TITLE, "§c赛季疾行者", "某赛季 R01、R02 或 R03「最快通关」榜前 3", 0, null, null),
+            new Cosmetic("season_fast", Kind.TITLE, "§c赛季疾行者", "某赛季 R01、R02、R03 或余烬连战「最快通关」榜前 3", 0, null, null),
             new Cosmetic("season_deep", Kind.TITLE, "§5赛季深潜者", "某赛季深渊最高达到第 5 层（赛季内通关）", 0, null, null),
             new Cosmetic("season_crown", Kind.FLAIR, "§d❖", "某赛季任一榜第 1 名（名牌前标记，主城和野外显示）", 0, 0, "§d❖ §r", null)));
 

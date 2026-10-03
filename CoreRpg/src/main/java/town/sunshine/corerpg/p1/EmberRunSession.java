@@ -40,6 +40,8 @@ public final class EmberRunSession {
     public final Map<UUID, Integer> fee = new LinkedHashMap<UUID, Integer>();
     public long seed;
     public long created;
+    /** D144 烬核同心: members who were in a clean 烬核 stack this run (2+, everyone standing inside; not persisted) */
+    public final transient Set<UUID> coreClean = new LinkedHashSet<UUID>();
     public transient long fightStart; // D116: first room started (raid clear time; not persisted)
     public long updated;
     public String state = PREPARE;

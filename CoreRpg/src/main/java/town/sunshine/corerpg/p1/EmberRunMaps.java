@@ -235,6 +235,15 @@ public final class EmberRunMaps {
         public boolean raid;
         /** D139: the limited-time event dungeon (ember-v1-festival.yml `dungeon:`; never main-line / raid / abyss) */
         public boolean event;
+        /** D144 余烬连战 (runs yml `rush:`): bosses fought back-to-back in one hall; {@link #boss} = chain.get(0) */
+        public boolean rush;
+        public List<Boss> chain = Collections.emptyList();
+        public List<String> chainKeys = Collections.emptyList();
+        /** D144: boss HP / damage multipliers on the chain bosses, rest between bosses, heal share at each break */
+        public double rushHp = 1.0, rushDmg = 1.0, rushBreak = 10, rushHeal = 0.3;
+        /** D144 reward per settled clear (T3 marks, 余烬徽) and the cosmetic id of the first clear ever */
+        public int rushMarks, rushBadges;
+        public String rushTitle = "";
 
         MapDef(String key, Map<?, ?> m) {
             this.key = key;
@@ -542,6 +551,8 @@ public final class EmberRunMaps {
     public final Map<String, MapDef> raids;
     /** D139 limited-time event dungeons (festival yml `dungeon:`, injected by EmberRunService.load as root `events:`) */
     public final Map<String, MapDef> events;
+    /** D144 余烬连战 (runs yml `rush:`), keyed like maps (rush) */
+    public final Map<String, MapDef> rush;
     /** P2-9 (D81) loot bias weights; P2-9 (D82) raid_item quality floor */
     public final double lootOwnFamily, lootMapShare, lootSlotWeight;
     public final int raidItemQualityFloor;
@@ -763,12 +774,65 @@ public final class EmberRunMaps {
             }
         }
         events = Collections.unmodifiableMap(ev);
+        Map<String, MapDef> ru = new LinkedHashMap<String, MapDef>();
+        if (root.get("rush") instanceof Map) {
+            for (Map.Entry<?, ?> e : ((Map<?, ?>) root.get("rush")).entrySet()) {
+                if (e.getValue() instanceof Map) {
+                    String k = String.valueOf(e.getKey()).toLowerCase(Locale.ROOT);
+                    MapDef d = rushDef(k, (Map<?, ?>) e.getValue(), root.get("maps") instanceof Map ? (Map<?, ?>) root.get("maps") : Collections.emptyMap());
+                    if (d != null) ru.put(k, d);
+                }
+            }
+        }
+        rush = Collections.unmodifiableMap(ru);
+    }
+
+    /**
+     * D144: one rush entry. Each chain key names a main map whose boss block (mm / name / HP / attack / moves) is
+     * reused as-is, moved to the rush hall (boss.at / boss.area of the rush entry, never waiting in the area).
+     * Returns null when a chain map or its boss is missing (validate() then reports the empty rush).
+     */
+    static MapDef rushDef(String key, Map<?, ?> m, Map<?, ?> mapsRaw) {
+        Map<?, ?> hall = m.get("boss") instanceof Map ? (Map<?, ?>) m.get("boss") : Collections.emptyMap();
+        List<Boss> chain = new ArrayList<Boss>();
+        List<String> keys = new ArrayList<String>();
+        if (m.get("chain") instanceof List) for (Object o : (List<?>) m.get("chain")) {
+            String ck = String.valueOf(o).toLowerCase(Locale.ROOT);
+            Object src = mapsRaw.get(ck);
+            if (!(src instanceof Map) || !(((Map<?, ?>) src).get("boss") instanceof Map)) return null;
+            Map<Object, Object> b = new LinkedHashMap<Object, Object>((Map<?, ?>) ((Map<?, ?>) src).get("boss"));
+            if (hall.get("at") != null) b.put("at", hall.get("at"));
+            if (hall.get("area") != null) b.put("area", hall.get("area"));
+            b.put("wait_in_area", false);
+            chain.add(new Boss(b));
+            keys.add(ck);
+        }
+        if (chain.isEmpty()) return null;
+        Map<Object, Object> mm = new LinkedHashMap<Object, Object>(m);
+        Map<Object, Object> first = new LinkedHashMap<Object, Object>((Map<?, ?>) ((Map<?, ?>) mapsRaw.get(keys.get(0))).get("boss"));
+        if (hall.get("at") != null) first.put("at", hall.get("at"));
+        if (hall.get("area") != null) first.put("area", hall.get("area"));
+        first.put("wait_in_area", false);
+        mm.put("boss", first);
+        MapDef d = new MapDef(key, mm);
+        d.rush = true;
+        d.chain = Collections.unmodifiableList(chain);
+        d.chainKeys = Collections.unmodifiableList(keys);
+        d.rushHp = num(m.get("boss_hp"), 1.0);
+        d.rushDmg = num(m.get("boss_dmg"), 1.0);
+        d.rushBreak = num(m.get("break_secs"), 10);
+        d.rushHeal = num(m.get("heal"), 0.3);
+        Map<?, ?> rw = m.get("reward") instanceof Map ? (Map<?, ?>) m.get("reward") : Collections.emptyMap();
+        d.rushMarks = (int) num(rw.get("marks"), 0);
+        d.rushBadges = (int) num(rw.get("badges"), 0);
+        d.rushTitle = str(rw.get("title"), "");
+        return d;
     }
 
     public int partyMin(MapDef m) { return m != null && m.partyMin > 0 ? m.partyMin : partyMin; }
     public int partyMax(MapDef m) { return m != null && m.partyMax > 0 ? m.partyMax : partyMax; }
     public int cost(MapDef m) {
-        if (m != null && m.event) return Math.max(0, m.cost); // D139: event dungeon 0 = free (not the file default)
+        if (m != null && (m.event || m.rush)) return Math.max(0, m.cost); // D139 / D144: 0 = free (not the file default)
         return m != null && m.cost > 0 ? m.cost : cost;
     }
 
@@ -804,6 +868,7 @@ public final class EmberRunMaps {
         String k = key.toLowerCase(Locale.ROOT);
         MapDef d = maps.get(k);
         if (d == null) d = raids.get(k);
+        if (d == null) d = rush.get(k);
         return d != null ? d : events.get(k);
     }
 
@@ -811,6 +876,7 @@ public final class EmberRunMaps {
         for (MapDef d : maps.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         for (MapDef d : raids.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         for (MapDef d : events.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
+        for (MapDef d : rush.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         return null;
     }
 
@@ -826,6 +892,10 @@ public final class EmberRunMaps {
             if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
         }
         for (MapDef d : events.values()) {
+            String p = "dungeon_" + d.dungeon + "_";
+            if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
+        }
+        for (MapDef d : rush.values()) {
             String p = "dungeon_" + d.dungeon + "_";
             if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
         }
@@ -858,6 +928,16 @@ public final class EmberRunMaps {
             if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
                 out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);
             if (maps.containsKey(d.key) || raids.containsKey(d.key)) out.add(d.key + ": event key collides with a map / raid");
+        }
+        for (MapDef d : rush.values()) { // D144: no rooms by design; the chain bosses come from the main maps
+            if (d.dungeon.isEmpty()) out.add(d.key + ": dungeon missing");
+            if (d.chain.size() < 2) out.add(d.key + ": rush chain needs 2+ bosses");
+            if (d.boss == null || d.boss.at == null || d.boss.area == null) out.add(d.key + ": rush hall boss.at / area missing");
+            if (maps.containsKey(d.key) || raids.containsKey(d.key)) out.add(d.key + ": rush key collides with a map / raid");
+            if (d.rushHp < 1.0 || d.rushHp > 3.0 || d.rushDmg < 1.0 || d.rushDmg > 2.0) out.add(d.key + ": rush boss_hp 1..3 / boss_dmg 1..2");
+            if (d.rushHeal < 0 || d.rushHeal > 1 || d.rushBreak < 3) out.add(d.key + ": rush heal 0..1 / break_secs ≥ 3");
+            if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
+                out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);
         }
         return out;
     }

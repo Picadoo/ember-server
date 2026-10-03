@@ -1,0 +1,4 @@
+obstacles:
+  default:
+    - obstacle-block: []
+      action-script: []

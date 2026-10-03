@@ -152,6 +152,22 @@ def raid_once(cfg, ccfg, kn, p, rng, w, want=1):
     return used
 
 
+RUSH = None  # D144 余烬连战 (rushsim.rush_conf()); None = off
+
+
+def rush_week(cfg, kn, p, rng):
+    """D144: the week's one free rush entry (solo, the player's own gear); a clear pays the rush T3 marks."""
+    if not RUSH:
+        return 0
+    import rushsim
+    ok, _, used, _ = rushsim.run_rush(cfg, RUSH, p.st(), kn, rng, p.potions)
+    p.potions = max(0, p.potions - used)
+    if ok:
+        p.marks[3] += RUSH['marks']
+        p.invest()
+    return int(ok)
+
+
 GOALS = {'featured': 1, 'abyss': 3, 'raid': 1}  # D116 weekly goals that change what a player does (rewards: cosmetic only)
 
 
@@ -163,6 +179,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
     out, marks_earned, ch_runs, best, fees, tiers_played, blocked, top_short = [], 0, 0, 0, 0, [], 0, 0
     acfgs = {t: abyss_cfg(ccfg, t) for t in range(1, len(ABYSS) + 1)}
     for w in range(weeks):
+        rush_week(cfg, kn, p, random.Random(w * 7919 + 17))  # D144: own stream, so --rush keeps the run stream
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
         can_ch = max(rates.values()) >= 0.5
         tier = 1
@@ -359,6 +376,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
     order = ccfg['order']
     out, marks_earned, ch_runs = [], 0, 0
     for w in range(weeks):
+        rush_week(cfg, kn, p, random.Random(w * 7919 + 17))  # D144: own stream, so --rush keeps the run stream
         featured = order[(w + 3) % len(order)]  # server: ISO week mod 7 (offset arbitrary here)
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
         best = max(rates, key=rates.get)
@@ -524,9 +542,17 @@ def main():
     ap.add_argument('--fail-refund', type=float, default=None, help='D128: share of the stamina given back for the first failed challenge / abyss run of the day (0 = off; default = yml fail_refund)')
     ap.add_argument('--abyss-fees', help="E-review tuning: tier fees '0,60,…' (10 values) instead of the config")
     ap.add_argument('--no-variety', action='store_true', help='D138: without the repeat-run variety (affixed elite + room event)')
+    ap.add_argument('--no-vbounty', action='store_true', help='D144: without the 花样委托 daily variety bounty')
+    ap.add_argument('--rush', action='store_true', help='D144: the weekly 余烬连战 (one free entry, T3 marks on a clear)')
     a = ap.parse_args()
     if a.no_variety:
         p1sim.VARIETY = False
+    if a.no_vbounty:
+        p1sim.VBOUNTY = False
+    global RUSH
+    if a.rush:
+        import rushsim
+        RUSH = rushsim.rush_conf() or None
     if a.fee_mark is not None:
         global FEE_MARK
         FEE_MARK = a.fee_mark

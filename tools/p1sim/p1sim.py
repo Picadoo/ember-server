@@ -330,6 +330,7 @@ class Fight:
 
 
 VARIETY = True   # D138 repeat-run variety (--no-variety to compare)
+VBOUNTY = True   # D144 花样委托 (--no-vbounty to compare)
 LAST_VAR = {'affix': False, 'event': False}  # outcome of the last run_map(repeat=True)
 
 
@@ -519,6 +520,17 @@ class Player:
                 self.shard += int(v.get('affix_shard', 0))
             if var.get('event'):
                 self.core += int(v.get('event_core', 0))
+            if VBOUNTY and self.day is not None:  # D144 花样委托: daily count per kind, paid once when reached
+                if getattr(self, '_vbday', None) != self.day:
+                    self._vbday, self._vbn = self.day, {}
+                for vb in cfg.get('vbounty', []):
+                    k = vb.get('kind')
+                    if not var.get('affix' if k == 'affix' else 'event'):
+                        continue
+                    prev = self._vbn.get(k, 0)
+                    self._vbn[k] = prev + 1
+                    if prev + 1 == int(vb.get('count', 1)):
+                        self.coin += int(vb.get('coin', 0)); self.shard += int(vb.get('shard', 0))
         self.coin += b['coin']; self.shard += b['shard']; self.bone += b['bone']; self.core += b['core']
         self.xp += b['xp']
         tier = m['tier']
@@ -860,6 +872,7 @@ def main(argv=None):
                     help='D94: weekly rule on repeat normal runs of the featured map (all = include casters)')
     ap.add_argument('--no-feat-normal', action='store_true', help='D108: without the featured mark on repeat normal runs')
     ap.add_argument('--no-variety', action='store_true', help='D138: without the repeat-run variety (affixed elite + room event)')
+    ap.add_argument('--no-vbounty', action='store_true', help='D144: without the 花样委托 daily variety bounty')
     ap.add_argument('--feat-farm', action='store_true', help='D108: players detour to the featured map for the bonus')
     ap.add_argument('--target', default='burst', choices=FAMS)
     ap.add_argument('--uptime', type=float, default=0.70)
@@ -880,6 +893,9 @@ def main(argv=None):
     if args.no_variety:
         global VARIETY
         VARIETY = False
+    if args.no_vbounty:
+        global VBOUNTY
+        VBOUNTY = False
     if args.ref:
         print(ref_table(cfg, args.dodge, args.players * 5))
         return

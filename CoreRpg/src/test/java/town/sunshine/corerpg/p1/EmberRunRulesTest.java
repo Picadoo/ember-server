@@ -319,7 +319,8 @@ public class EmberRunRulesTest {
         assertEquals(5, m.seasonDeepTier);                 // D123 (was 8)
         assertEquals(3, m.seasonTop);
         assertEquals(Integer.valueOf(3), m.goalTargets.get("abyss")); // D117 weekly goals (余烬徽 only)
-        assertEquals(4, m.goalTargets.size());
+        assertEquals(5, m.goalTargets.size());             // D144 + optional core (烬核同心)
+        assertEquals(Integer.valueOf(2), m.goalTargets.get("core"));
         assertEquals(15, m.goalReward);
         assertEquals(20, m.goalBonus);
         assertEquals(0.2, m.raidLastReviveHp, 1e-9);      // D118
@@ -796,7 +797,7 @@ public class EmberRunRulesTest {
         assertEquals(EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString(),
                 EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString());
         // cosmetics: no stats anywhere, abyss titles by best tier
-        assertEquals(25, EmberCosmetics.ALL.size()); // D103 + E-review #9 + D116 six season honors + D137 R03 title / trail + D139 国庆 title / trail
+        assertEquals(26, EmberCosmetics.ALL.size()); // D103 + E-review #9 + D116 six season honors + D137 R03 title / trail + D139 国庆 title / trail + D144 连战 title
         assertEquals(1, EmberCosmetics.byId("abyss1").abyssTier);
         assertEquals(240, EmberCosmetics.byId("anim_ember").points());
         assertEquals(40, EmberCosmetics.byId("color_white").points());        // 2000 币 = 40 points
@@ -854,6 +855,53 @@ public class EmberRunRulesTest {
         assertTrue(EmberRunRules.bountyLine(t, 1).contains("再通关 2 局 → 60 余烬币 + 余烬碎片 ×6"));
         assertTrue(EmberRunRules.bountyLine(t, 3).contains("全部完成"));
         assertEquals("未开放", EmberRunRules.bountyLine(EmberRunRules.bountyTiers(null), 0));
+    }
+
+    @Test public void varietyBountyPaysOnceWhenTheDailyCountIsReached_D144() {
+        java.util.List<java.util.Map<String, Object>> raw = new java.util.ArrayList<java.util.Map<String, Object>>();
+        java.util.Map<String, Object> a = new java.util.HashMap<String, Object>(); a.put("kind", "affix"); a.put("count", 2); a.put("coin", 20);
+        java.util.Map<String, Object> b = new java.util.HashMap<String, Object>(); b.put("kind", "timed"); b.put("count", 1); b.put("coin", 20); b.put("shard", 2);
+        java.util.Map<String, Object> bad = new java.util.HashMap<String, Object>(); bad.put("kind", "boss"); bad.put("count", 1); bad.put("coin", 20);
+        raw.add(a); raw.add(b); raw.add(bad);
+        java.util.List<EmberRunRules.VarietyBounty> v = EmberRunRules.varietyBounties(raw);
+        assertEquals(2, v.size());
+        assertEquals("[]", keys(EmberRunRules.varietyBountyGrants(v.get(0), 0, true)));            // 1st affixed elite: 1/2
+        assertEquals("[vb_affix=coin:20]", keys(EmberRunRules.varietyBountyGrants(v.get(0), 1, true)));
+        assertEquals("[]", keys(EmberRunRules.varietyBountyGrants(v.get(0), 2, true)));            // done today: nothing more
+        assertEquals("[]", keys(EmberRunRules.varietyBountyGrants(v.get(0), 1, false)));           // no affix kill this run
+        assertEquals("[vb_timed=coin:20, vb_timed_shard=mat:mat_ember_shard:2]", keys(EmberRunRules.varietyBountyGrants(v.get(1), 0, true)));
+        // the shipped ember-v1.yml values (p1sim reads the same list)
+        org.bukkit.configuration.file.YamlConfiguration y = org.bukkit.configuration.file.YamlConfiguration.loadConfiguration(
+                new InputStreamReader(EmberRunRulesTest.class.getResourceAsStream("/ember-v1.yml"), StandardCharsets.UTF_8));
+        java.util.List<EmberRunRules.VarietyBounty> shipped = EmberRunRules.varietyBounties(y.getMapList("bounty.variety"));
+        assertEquals(2, shipped.size());
+        for (EmberRunRules.VarietyBounty x : shipped) assertTrue(x.kind, x.coin <= 30 && x.shard == 0); // existing reward types, small
+    }
+
+    @Test public void rushChainsTheQ05ToQ07BossesInOneHall_D144() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.MapDef r = m.byKey("rush");
+        assertNotNull(r);
+        assertTrue(r.rush);
+        assertFalse(r.raid || r.event);
+        assertEquals("[q05, q06, q07]", r.chainKeys.toString());
+        assertEquals(3, r.chain.size());
+        assertEquals(m.byKey("q05").boss.name, r.chain.get(0).name);
+        assertEquals(m.byKey("q07").boss.skills.size(), r.chain.get(2).skills.size());     // D140 moves kept
+        assertEquals(m.byKey("q06").boss.hp, r.chain.get(1).hp, 0);                         // × boss_hp at entry, not here
+        for (EmberRunMaps.Boss b : r.chain) {
+            assertEquals(0, b.at.x, 0); assertEquals(80, b.at.y, 0); assertEquals(146, b.at.z, 0); // all in the Q05 hall
+            assertFalse(b.waitInArea);
+            assertTrue(b.area.contains(b.at.x, b.at.y, b.at.z));
+        }
+        assertSame(r, m.byDungeon("EmberQ0B1"));
+        assertSame(r, m.byWorld("dungeon_EmberQ0B1_1A2B"));
+        assertEquals(0, m.cost(r));                                                          // free; one entry a week
+        assertTrue(r.rooms.isEmpty());
+        assertEquals("[]", m.validate().toString());
+        assertTrue(r.rushMarks >= 1 && r.rushMarks <= 2);                                    // marks / 余烬徽 / title only
+        assertTrue(r.rushHp >= 1.0 && r.rushDmg >= 1.0);
+        assertNotNull(EmberCosmetics.byId(r.rushTitle));
     }
 
     private static String keys(java.util.List<EmberRunRules.Grant> gs) {

@@ -71,6 +71,11 @@ final class EmberRunDirector {
     private long bossAt;              // boss spawn time (after the warning)
     Tracked boss;
     private boolean bossDead;
+    /** D144 余烬连战: index of the current chain boss (0 for every other run) */
+    int chainIdx;
+    private boolean rushArmed;
+    /** D144: the boss of this stage (rush: the chain boss; else the map's boss) */
+    EmberRunMaps.Boss bossDef() { return def.chain.isEmpty() ? def.boss : def.chain.get(Math.min(chainIdx, def.chain.size() - 1)); }
     private EmberRunMaps.Skill pending;
     private long pendingAt;
     private Location lockOrigin;
@@ -114,7 +119,7 @@ final class EmberRunDirector {
             Block bl = w.getBlockAt((int) Math.floor(c.x), (int) Math.floor(c.y), (int) Math.floor(c.z));
             if (bl.getType() != Material.AIR) bl.setType(Material.AIR);
         }
-        holo("entry", "§6" + def.name, "§7清空三处房间开门 · 击败首领后统一结算");
+        holo("entry", "§6" + def.name, def.rush ? "§7" + def.chain.size() + " 个首领依次现身 · 全部击败后统一结算" : "§7清空三处房间开门 · 击败首领后统一结算");
         int items = 0;
         for (org.bukkit.Chunk c : w.getLoadedChunks()) items += purgeItems(c);
         if (items > 0) svc.log().info("[P1 run] " + s.runId + " removed " + items + " template item entities at attach");
@@ -166,7 +171,7 @@ final class EmberRunDirector {
     /** §20.5: reconnect target — the last cleared room's safe point; once the boss is up (or dead) the RB entry side. */
     Location safePoint() {
         EmberRunMaps.Pt p;
-        if (boss != null || bossDead) p = def.safe.get("rb");
+        if (boss != null || bossDead || def.rush) p = def.safe.get("rb"); // D144: the rush is the boss hall only
         else p = def.safe.get(next == 0 ? "r0" : def.rooms.get(Math.min(next, def.rooms.size()) - 1).id);
         if (p == null) return null;
         return new Location(w, p.x + 0.5, p.y, p.z + 0.5, 0f, 0f);
@@ -264,10 +269,16 @@ final class EmberRunDirector {
         }
         // room cleared → door, event, next
         if (activeRoom != null && aliveIn(activeRoom) == 0) roomCleared(def.room(activeRoom));
+        // D144 余烬连战: no rooms — the first boss shows up a few seconds after the entry is committed
+        if (def.rush && !rushArmed && boss == null && bossAt == 0 && !bossDead) {
+            rushArmed = true;
+            bossAt = now + 5000L;
+            svc.onRushStart(s, def, bossDef());
+        }
         // boss
         if (bossAt > 0 && boss == null && !bossDead) {
-            if (now >= bossAt && (!def.boss.waitInArea || def.boss.area == null || now >= bossAt + 20000L || anyoneIn(def.boss.area))) spawnBoss(now);
-            else warnCircle(new Location(w, def.boss.at.x + 0.5, def.boss.at.y + 0.1, def.boss.at.z + 0.5), 1.5, Particle.FLAME);
+            if (now >= bossAt && (!bossDef().waitInArea || bossDef().area == null || now >= bossAt + 20000L || anyoneIn(bossDef().area))) spawnBoss(now);
+            else warnCircle(new Location(w, bossDef().at.x + 0.5, bossDef().at.y + 0.1, bossDef().at.z + 0.5), 1.5, Particle.FLAME);
         }
         if (boss != null && !bossDead) bossTick(now);
     }
@@ -279,7 +290,7 @@ final class EmberRunDirector {
             if (activeRoom != null) return def.roomIndex(activeRoom) + 1 < def.rooms.size() ? "下一个房间开打时" : "首领现身时";
             return next < def.rooms.size() ? "下一个房间开打时" : "首领现身时";
         }
-        EmberRunMaps.Boss b = def.boss;
+        EmberRunMaps.Boss b = bossDef();
         boolean gated = false;
         for (EmberRunMaps.Skill sk : b.skills) if (sk.below <= 1.0) gated = true;
         if (gated && !phaseTold) return "首领进入第二阶段时";
@@ -294,7 +305,7 @@ final class EmberRunDirector {
 
     /** D118: every phase change of this boss has happened */
     private boolean lastPhase() {
-        EmberRunMaps.Boss b = def.boss;
+        EmberRunMaps.Boss b = bossDef();
         boolean gated = false;
         for (EmberRunMaps.Skill sk : b.skills) if (sk.below <= 1.0) gated = true;
         return (!gated || phaseTold) && (b.adds == null || addsDone);
@@ -378,8 +389,8 @@ final class EmberRunDirector {
         svc.onRoomCleared(s, r, last);
         if (last) {
             bossAt = System.currentTimeMillis() + 1500L;
-            svc.tellRun(s, def.boss.waitInArea ? "§c" + def.boss.name + " §7在前方首领厅等候，走进大厅即现身"
-                    : "§c" + def.boss.name + " §7即将在大厅中央现身（1.5 秒）");
+            svc.tellRun(s, bossDef().waitInArea ? "§c" + bossDef().name + " §7在前方首领厅等候，走进大厅即现身"
+                    : "§c" + bossDef().name + " §7即将在大厅中央现身（1.5 秒）");
         }
     }
 
@@ -500,7 +511,7 @@ final class EmberRunDirector {
     private boolean hpCapWarned;
 
     private void spawnBoss(long now) {
-        EmberRunMaps.Boss b = def.boss;
+        EmberRunMaps.Boss b = bossDef();
         EmberRunMaps.Role pseudo = null;
         Location loc = new Location(w, b.at.x + 0.5, b.at.y, b.at.z + 0.5);
         Entity e = EmberRunBridges.spawnMythic(b.mm, loc, svc.log());
@@ -557,6 +568,26 @@ final class EmberRunDirector {
     /** @return true when this was the boss */
     boolean onDeath(Tracked t) {
         mobs.remove(t.le.getUniqueId());
+        if (t.boss() && def.rush && chainIdx < def.chain.size() - 1) { // D144: next boss after a short break
+            int done = chainIdx;
+            EmberRunMaps.Boss was = bossDef();
+            chainIdx++;
+            boss = null;
+            pending = null;
+            follow = null;
+            recoverUntil = 0;
+            addsDone = false;
+            addsAt = 0;
+            phaseTold = false;
+            belowCache = null;
+            lastRevAt = 0;
+            lastRevDone = false;
+            cleanupMobs();
+            long secs = bossSpawnedAt > 0 ? (System.currentTimeMillis() - bossSpawnedAt) / 1000L : 0;
+            bossAt = System.currentTimeMillis() + (long) (def.rushBreak * 1000);
+            svc.onRushStage(this, done, was, bossDef(), secs);
+            return false;
+        }
         if (t.boss()) {
             bossDead = true;
             cleanupMobs(); // §13: adds die with the boss; an unfinished extra mob is gone too
@@ -610,7 +641,7 @@ final class EmberRunDirector {
         LivingEntity le = boss.le;
         if (le.isDead()) return;
         double ratio = le.getHealth() / Math.max(1.0, le.getMaxHealth());
-        EmberRunMaps.Boss b = def.boss;
+        EmberRunMaps.Boss b = bossDef();
         // §13 adds: once at 50 % after a 1 s warning
         if (b.adds != null && !addsDone && ratio <= b.adds.atHp) {
             addsDone = true;
@@ -724,7 +755,7 @@ final class EmberRunDirector {
         casts++;
         le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
         w.playSound(le.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.7f);
-        svc.tellRun(s, "§c" + def.boss.name + " §e第二段「" + sk.name + "」§7— 右移 " + fmt(sk.shift) + " 格 · 左侧安全（" + sk.warn + " 秒）");
+        svc.tellRun(s, "§c" + bossDef().name + " §e第二段「" + sk.name + "」§7— 右移 " + fmt(sk.shift) + " 格 · 左侧安全（" + sk.warn + " 秒）");
     }
 
     /** challenge overrides hook (§18.1); normal runs use the table value. */
@@ -744,7 +775,7 @@ final class EmberRunDirector {
         if ("charge".equals(sk.type)) { // §17: strip = the real path; blocked → charge back toward the hall centre
             run = clearRun(o, dir, sk.length);
             if (run < CHARGE_MIN) {
-                Vector home = new Vector(def.boss.at.x + 0.5 - o.getX(), 0, def.boss.at.z + 0.5 - o.getZ());
+                Vector home = new Vector(bossDef().at.x + 0.5 - o.getX(), 0, bossDef().at.z + 0.5 - o.getZ());
                 if (home.lengthSquared() > 1.0) {
                     home.normalize();
                     double r2 = clearRun(o, home, sk.length);
@@ -769,7 +800,7 @@ final class EmberRunDirector {
         w.playSound(o, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.6f);
         String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下" : shapeHint(pending);
         if (sk.share) who += " §6· 全队靠拢进圈分摊（人越多每人越少，一个人扛会很痛）";
-        svc.tellRun(s, "§c" + def.boss.name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
+        svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
     }
 
     /** One committed participant in range, chosen from the run seed + cast number (reproducible, not always the tank). */
@@ -838,6 +869,8 @@ final class EmberRunDirector {
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s share %s n=%d each=%.1f", s.runId, sk.name, inside.size(), each));
             if (!inside.isEmpty()) svc.tellRun(s, "§6「" + sk.name + "」§7落下：" + inside.size() + " 人分摊，每人 " + Math.round(each * s.dmgFactor)
                     + (inside.size() == 1 ? " §c（只有一个人扛！）" : ""));
+            // D144 烬核同心: everyone still standing was inside (2+) — counts once per run toward the optional weekly goal
+            if (inside.size() >= 2 && inside.containsAll(participantsHere())) svc.onCleanShare(s, inside);
         }
         boolean bossSkill = src != null && boss != null && src == boss.le;
         String kind = sk.share ? "share" : bossSkill ? "tele" : "mob";
@@ -997,7 +1030,7 @@ final class EmberRunDirector {
         for (double k = 0.25; k <= max + 1e-9; k += 0.25) {
             Location c = at.clone().add(d.clone().multiply(k));
             if (!standable(c)) break;
-            if (def.boss.area != null && !def.boss.area.contains(c.getX(), c.getY(), c.getZ())) break;
+            if (bossDef().area != null && !bossDef().area.contains(c.getX(), c.getY(), c.getZ())) break;
             best = c;
         }
         if (best != null) p.teleport(best);
@@ -1010,7 +1043,7 @@ final class EmberRunDirector {
     private double clearRun(final Location o, Vector dir, double max) {
         return clearRunGrid((x, z) -> {
             Location c = new Location(w, x, o.getY(), z);
-            return standable(c) && (def.boss.area == null || def.boss.area.contains(x, o.getY(), z));
+            return standable(c) && (bossDef().area == null || bossDef().area.contains(x, o.getY(), z));
         }, o.getX(), o.getZ(), dir.getX(), dir.getZ(), max, BOSS_HALF_WIDTH);
     }
 

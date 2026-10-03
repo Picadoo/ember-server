@@ -85,7 +85,7 @@ season:
 # Recheck #8 (D134, balance_version 19): in the week of the own Q07 first clear the bounty target is prorated to the days
 # left (graduation day included: Saturday 2, Sunday 1); later weeks use the full target. Cosmetic-only reward (余烬徽).
 weekly_goals:
-  targets: {featured: 1, abyss: 3, raid: 1, bounty: 3}
+  targets: {featured: 1, abyss: 3, raid: 1, bounty: 3, core: 2}
   reward: 15
   bonus: 20
 
@@ -664,6 +664,49 @@ maps:
       after: r2
       anchor: [66, 64, 64]
       area: [60, 63, 58, 72, 70, 70]
+
+# D144 余烬连战 (weekly boss rush, content batch 10-04): the Q05 → Q06 → Q07 bosses back-to-back with their D140 moves
+# in the Q05 boss hall (template ember_daily_spire_v1, own DP dungeon EmberQ0B1). No rooms, no mobs, no extra event,
+# no variety. Opened by the own Q07 first clear; 1–3 players; free (cost 0) but one ENTRY per character and week (counted
+# when the first boss shows up; an instance that never got that far gives the entry back). Each boss is the normal
+# map's boss (`chain`: same moves / warnings) × boss_hp HP and × boss_dmg damage (party HP 1 + 0.65 (n − 1) as usual);
+# between bosses break_secs of rest and everyone standing heals `heal` of max HP (no revive: like a normal map, a fallen
+# member watches and the run fails when nobody is standing).
+# Reward per settled clear (no coin, items, shards or bounty): reward.marks T3 marks + reward.badges 余烬徽; the first
+# clear ever also the cosmetic title reward.title. Weekly fastest board time_rush (season award = 最快通关 title).
+# Model: tools/p1sim/rushsim.py (clear rate), tools/p1sim/p2econ.py --rush (the weekly marks on the two-极品 route).
+rush:
+  rush:
+    name: 余烬连战
+    dungeon: EmberQ0B1
+    template: ember_daily_spire_v1
+    tier: 3
+    drop_label: T3
+    content_version: v1
+    map_version: ember_daily_spire_v1@b2151-2026-10-02
+    requires: q07
+    unlocks: ""
+    purpose: "每周一次的首领连战：Q05 断塔斧卫 → Q06 霜封统领 → Q07 炉锁巨卫，同一大厅连打；只给 T3 印记、余烬徽和外观称号"
+    b_ref: 90
+    party_min: 1
+    party_max: 3
+    cost: 0
+    chain: [q05, q06, q07]
+    boss_hp: 1.7
+    boss_dmg: 1.45
+    break_secs: 10
+    heal: 0.3
+    reward: {marks: 1, badges: 20, title: rush}
+    spawn: [0, 80, 133]
+    spread: [[-2, 80, 133], [2, 80, 133]]
+    safe: {rb: [0, 80, 133]}
+    holo: {entry: [0, 83, 133], exit: [0, 83, 136]}
+    # keep the party in the hall: bars across the R3 → hall corridor door (placed in AIR only)
+    rails: [[-3, 80, 121, 3, 85, 121]]
+    boss:
+      at: [0, 80, 146]
+      area: [-16, 79, 130, 16, 94, 162]
+      wait_in_area: false
 
 # P2-5 (D75) P1 团本 (book §18.4): reuses the Q07 map (ember_daily_rail_v1, own DP dungeon EmberQ0R1 so DP allows 5) and
 # the existing boss moves; same damage pipeline, the three sets, no raid-only trinkets or drop table. Values: the §18.1
