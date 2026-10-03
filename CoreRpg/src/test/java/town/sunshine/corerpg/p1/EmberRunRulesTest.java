@@ -901,4 +901,37 @@ public class EmberRunRulesTest {
         l.record(EmberRunRules.failRefundRun("2026-10-04"), EmberRunRules.FAIL_REFUND_KEY, "stamina:15:q03c-c", EmberRunRules.ST_DELIVERED, 3L, c);
         assertTrue(c[0]);                                   // next day again
     }
+
+    @Test public void starterBladeGoesToTheBackpackNotTheHotbar_D131() {
+        boolean[] used = new boolean[36];
+        used[0] = true; used[1] = true; used[3] = true; // starter in 0, T1 blade in 1, new blade landed in hotbar slot 4
+        used[4] = true;
+        assertEquals("first free backpack slot, not the free hotbar slot 5", 9, EmberRunRules.starterTarget(used, 4));
+        used[9] = true; used[10] = true;
+        assertEquals(11, EmberRunRules.starterTarget(used, 4));
+        for (int i = 9; i < 36; i++) used[i] = true;
+        assertEquals("full backpack: swap into the new blade's slot", 4, EmberRunRules.starterTarget(used, 4));
+    }
+
+    @Test public void starterSwapStillLetsTheBetterBladeAutoEquip_D130() {
+        // FreshQ17: T1 blade in hand, T0 starter still on the hotbar, Q04 drops a T2 blade. After the starter swap the
+        // upgrade check must still say AUTO (the giveItem flow no longer returns before it).
+        EmberTables t = EmberTables.defaults();
+        EmberItemData hand = piece("scorch", "blade", 1, 1, 0), drop = piece("scorch", "blade", 2, 0, 0);
+        assertEquals(EmberRunRules.UP_AUTO, EmberRunRules.upgradeVerdict(t, drop, hand, "scorch", 14));
+        assertSame(drop, EmberRunRules.bestCandidate(t, drop, java.util.Arrays.asList(hand, drop), hand, "scorch", 14));
+    }
+
+    @Test public void betterSameTierPieceInTheBagIsPreferred_D132() {
+        EmberTables t = EmberTables.defaults();
+        EmberItemData active = piece("scorch", "blade", 1, 0, 0);
+        EmberItemData fresh = piece("scorch", "blade", 3, 0, 0), bagGood = piece("scorch", "blade", 3, 2, 0), bagOther = piece("burst", "blade", 3, 3, 0);
+        java.util.List<EmberItemData> bag = java.util.Arrays.asList(active, fresh, bagGood, bagOther);
+        assertSame("T3 卓越 in the bag beats the new T3 标准", bagGood, EmberRunRules.bestCandidate(t, fresh, bag, active, "scorch", 30));
+        assertSame("no set on: the other family's 极品 counts", bagOther, EmberRunRules.bestCandidate(t, fresh, java.util.Arrays.asList(active, fresh, bagOther), active, null, 30));
+        assertSame("with a scorch set only scorch bag pieces count", fresh, EmberRunRules.bestCandidate(t, fresh, java.util.Arrays.asList(active, fresh, bagOther), active, "scorch", 30));
+        assertSame("ties keep the new piece", fresh, EmberRunRules.bestCandidate(t, fresh, java.util.Arrays.asList(piece("scorch", "blade", 3, 0, 0)), active, null, 30));
+        assertTrue(EmberRunRules.betterThan(t, bagGood, fresh, 30));
+        assertFalse(EmberRunRules.betterThan(t, fresh, bagGood, 30));
+    }
 }

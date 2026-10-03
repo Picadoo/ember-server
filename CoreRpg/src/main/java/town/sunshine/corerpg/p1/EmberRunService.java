@@ -1436,25 +1436,32 @@ public final class EmberRunService implements Listener {
         p.getInventory().addItem(stack);
         if (d.isCharm() && loadouts.autoSelectCharm(p, d.uid, d.tier)) // D85 onboarding: no more half-life new players
             return d.shortLabel() + "（已自动选定为生效护符）";
-        if (d.isBlade() && d.tier >= 1) { // D85: the first real blade replaces the T0 starter on the hotbar
+        String placed = null;
+        if (d.isBlade() && d.tier >= 1) { // D85: the first real blade takes the T0 starter's hotbar slot
             int slot = starterBladeSlot(p);
             if (slot >= 0) {
                 org.bukkit.inventory.PlayerInventory inv = p.getInventory();
-                int at = -1;
-                for (int i = 0; i < inv.getSize(); i++) {
-                    ItemStack x = inv.getItem(i);
-                    if (x != null && loadouts.items().hasData(x)) { EmberItems.Read r = loadouts.items().read(x); if (r != null && r.data != null && d.uid.equals(r.data.uid)) { at = i; break; } }
-                }
+                int at = slotOfUid(loadouts.items(), inv, d.uid);
                 if (at >= 0 && at != slot) {
-                    ItemStack old = inv.getItem(slot);
-                    inv.setItem(slot, inv.getItem(at));
-                    inv.setItem(at, old);
+                    // recheck #4 (D131): the starter really goes to the backpack (rows 9..35), never to a free hotbar slot
+                    // such as 5, which the new-player tips call the potion slot
+                    boolean[] used = new boolean[36];
+                    for (int i = 0; i < 36; i++) { ItemStack x = inv.getItem(i); used[i] = x != null && x.getType() != org.bukkit.Material.AIR; }
+                    int to = at >= 9 ? at : EmberRunRules.starterTarget(used, at); // landed in the backpack already: plain swap
+                    ItemStack starter = inv.getItem(slot), fresh = inv.getItem(at);
+                    inv.setItem(slot, fresh);
+                    if (to == at) inv.setItem(at, starter);
+                    else { inv.setItem(at, null); inv.setItem(to, starter); }
                     loadouts.refresh(p);
-                    return d.shortLabel() + "（已放到快捷栏第 " + (slot + 1) + " 格，起步刃移进背包）";
+                    placed = "已放到快捷栏第 " + (slot + 1) + " 格，起步刃" + (to >= 9 ? "移进背包" : "换到快捷栏第 " + (to + 1) + " 格");
                 }
             }
         }
+        // recheck #1 (D130): no early return — the D120 upgrade check also runs after the starter swap, so a new T2 blade
+        // replaces the T1 in hand even while the T0 starter was still on the hotbar
         String up = offerUpgrade(p, d); // D120 (F-review #1)
+        if (placed != null && up != null && up.startsWith("（比 ")) return d.shortLabel() + up; // auto-equipped: the hand slot is what matters
+        if (placed != null) return d.shortLabel() + "（" + placed + "）" + (up == null ? "" : up);
         return up == null ? d.shortLabel() : d.shortLabel() + up;
     }
 
@@ -1531,6 +1538,14 @@ public final class EmberRunService implements Listener {
             String nm = EmberItemData.slotName(slot);
             boolean famOk = x != null && !"none".equals(fam) && fam.equals(x.family);
             if (x != null && famOk && x.tier >= needT) {
+                // recheck #2 (D132): a better piece of the same family already in the bag → one-click [换上]
+                EmberItemData better = EmberRunRules.bestCandidate(EmberMode.tables(), x, bag, null, fam, l.level);
+                if (better != x) {
+                    out.add(nm + "：§a背包里有更好的 " + better.shortLabel() + "§7 → 换上（免费）" + (x.enhance > better.enhance ? "，+" + x.enhance + " 可免费互换过去" : ""));
+                    if (buttons != null) buttons.add(new String[]{"[换上" + nm + "]", "/corerpg p1 equip " + better.uid, "换上 " + ChatColor.stripColor(better.shortLabel()), "GREEN"});
+                    if (x.enhance >= needE || better.enhance >= needE) continue;
+                    x = better; // the enhance route below is about the better piece
+                }
                 if (x.enhance >= needE) continue;
                 EmberItemData donor = null;
                 for (EmberItemData b : bag) if (b.slot.equals(slot) && !b.uid.equals(x.uid) && b.enhance >= needE && (donor == null || b.enhance > donor.enhance)) donor = b;
@@ -1598,23 +1613,39 @@ public final class EmberRunService implements Listener {
         if (a == null) return null;
         EmberLoadout cur = loadouts.get(p);
         int lv = cur == null ? 10 : cur.level;
-        int v = EmberRunRules.upgradeVerdict(EmberMode.tables(), c, a, cur == null ? "none" : cur.activeSet, lv);
+        String set = cur == null ? "none" : cur.activeSet;
+        // recheck #2 (D132): a better piece of that slot already in the bag beats the new one (same family while a set is on)
+        EmberItemData fresh = c;
+        c = EmberRunRules.bestCandidate(EmberMode.tables(), fresh, bagPieces(p), a, "none".equals(set) ? null : set, lv);
+        String from = c == fresh ? "" : "背包里的 " + c.shortLabel() + " 比新拿到的更好，";
+        int v = EmberRunRules.upgradeVerdict(EmberMode.tables(), c, a, set, lv);
         if (v == EmberRunRules.UP_NONE) return null;
         if (v == EmberRunRules.UP_AUTO) {
             String where = equipPiece(p, c, a);
             if (where == null) return null;
-            log().info("[P1 equip] auto " + p.getName() + " " + c.uid.substring(0, 8) + " replaces " + a.uid.substring(0, 8));
-            return "（比 " + a.shortLabel() + " 强，已自动换上：" + where + "；原来那件还在背包）";
+            log().info("[P1 equip] auto " + p.getName() + " " + c.uid.substring(0, 8) + " replaces " + a.uid.substring(0, 8) + (c == fresh ? "" : " (bag piece)"));
+            return "（" + from + "比 " + a.shortLabel() + " 强，已自动换上" + (c == fresh ? "" : "那件") + "：" + where + "；原来那件还在背包）";
         }
         String why = v == EmberRunRules.UP_ASK_SWAP ? "原来那件强化到 +" + a.enhance + "，可以免费互换过来" : "会拆掉现在的 " + EmberItemData.familyName(cur.activeSet) + " 套装";
         List<String[]> btn = new ArrayList<String[]>();
         btn.add(new String[]{"[换上]", "/corerpg p1 equip " + c.uid, "只换上，不动强化", "GREEN"});
         if (v == EmberRunRules.UP_ASK_SWAP)
             btn.add(new String[]{"[免费互换强化]", "/corerpg p1 equip " + c.uid + " swap", "换上并把 +" + a.enhance + " 免费挪到新件（回城后操作）", "AQUA"});
-        btn.add(0, new String[]{"§e更好的" + EmberItemData.slotName(c.slot) + "：" + c.shortLabel() + " §7（" + why + "）", null, null, null});
+        btn.add(0, new String[]{"§e更好的" + EmberItemData.slotName(c.slot) + "：" + c.shortLabel() + (c == fresh ? "" : "（背包里那件）") + " §7（" + why + "）", null, null, null});
         upgradeAsks.computeIfAbsent(p.getUniqueId(), k -> new ArrayList<String[]>()).addAll(btn);
         upgradeAsks.get(p.getUniqueId()).add(new String[]{null, null, null, null}); // group end
         return "（比现在用的强，见下面的 [换上]）";
+    }
+
+    /** every valid P1 piece in the inventory */
+    private List<EmberItemData> bagPieces(Player p) {
+        List<EmberItemData> bag = new ArrayList<EmberItemData>();
+        for (ItemStack x : p.getInventory().getContents()) {
+            if (x == null || !loadouts.items().hasData(x)) continue;
+            EmberItems.Read r = loadouts.items().read(x);
+            if (r != null && r.ok() && r.data != null) bag.add(r.data);
+        }
+        return bag;
     }
 
     private void sendUpgradeAsks(Player p) {

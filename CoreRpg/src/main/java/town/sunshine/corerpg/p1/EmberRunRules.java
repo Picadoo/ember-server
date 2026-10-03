@@ -83,6 +83,30 @@ public final class EmberRunRules {
         return breaks ? UP_ASK : UP_AUTO;
     }
 
+    /** D120 "strictly better": higher tier with at least the value, or same tier with ≥ UP_SAME_TIER × the value (each at its own enhance) */
+    public static boolean betterThan(EmberTables t, EmberItemData x, EmberItemData y, int level) {
+        if (x == null) return false;
+        if (y == null) return true;
+        double vx = pieceValue(t, x, x.enhance, level), vy = pieceValue(t, y, y.enhance, level);
+        return x.tier > y.tier ? vx >= vy : x.tier == y.tier && vx >= vy * UP_SAME_TIER;
+    }
+
+    /**
+     * Recheck #2 (D132): the piece to offer when {@code fresh} arrives — the best real (T1+) piece of that slot among the
+     * fresh one and the bag, skipping the active one; the fresh piece wins ties. {@code family} non-null = only that family
+     * counts for bag pieces (keeps a set together); the fresh piece always counts.
+     */
+    public static EmberItemData bestCandidate(EmberTables t, EmberItemData fresh, List<EmberItemData> bag, EmberItemData active,
+                                              String family, int level) {
+        EmberItemData best = fresh;
+        for (EmberItemData b : bag) {
+            if (b == null || !b.slot.equals(fresh.slot) || b.tier < 1 || b.uid.equals(fresh.uid) || (active != null && b.uid.equals(active.uid))) continue;
+            if (family != null && !family.equals(b.family)) continue;
+            if (betterThan(t, b, best, level)) best = b;
+        }
+        return best;
+    }
+
     public static final String[] FAMILIES = {"scorch", "burst", "sustain"};
     public static final double TARGET_WEIGHT = 0.60;
     /** §5.1 标准/精良/卓越/极品 */
@@ -283,6 +307,16 @@ public final class EmberRunRules {
     /** D32 / B2.172: ledger run id of the once-per-day death refund (day = stamina day, DailyService.today()). */
     public static String deathRefundRun(String day) { return "deathrefund@" + day; }
     public static final String DEATH_REFUND_KEY = "potions";
+
+    /**
+     * Recheck #4 (D131): where the T0 starter blade goes when the first real blade takes its hotbar slot — the first free
+     * backpack slot (9..35); only with a full backpack does it take the slot the new blade landed in. {@code used} = the
+     * 36 storage slots (true = occupied), {@code newAt} = where the new blade landed.
+     */
+    public static int starterTarget(boolean[] used, int newAt) {
+        for (int i = 9; i < Math.min(36, used.length); i++) if (!used[i]) return i;
+        return newAt;
+    }
 
     /** Endgame #6 (D128): ledger run id of the once-per-day failed-challenge stamina refund (stamina day). */
     public static String failRefundRun(String day) { return "failrefund@" + day; }
