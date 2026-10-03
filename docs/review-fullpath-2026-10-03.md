@@ -223,7 +223,7 @@ p1party（`--trials 60`，0.5 档，3 / 4 / 5 人通关率）：
   - 团本：RevFullA 右键招募 → RevMidA / RevMidB 上线看到招募板 → RevMidA 申请 → 拒绝 → 再申请 → 同意 → RevMidB 申请 → 同意。R01 两次：第 1 次首领厅全灭；第 2 次 RevFullA、RevMidA 用创造模式（不会倒），RevMidB 生存模式，自然倒下以测复活。首领依次削到 52% 和 19%，触发半血转阶段和最后阶段复活，最后削到 1 血击杀结算。倒下时点了 DP 的 `[复活]`。
   - Q04 两次卡点（远程怪在房外、机器人掉进低处），用 `tp` 把机器人移到怪旁边。
   - 中断恢复：05:58 那条命令被中断。从 `server-runtime/logs/latest.log` 确认 weaken 19%（05:57:58）和最后阶段复活（05:58:20）都已执行，然后从 RevMidB 的聊天记录取原文，接着打完。
-  - 结束时三个号都改回生存模式，RevFullA 发了 `/dungeon-team leave`（没核对回包），三个机器人都已 quit，`/list` = `[]`。
+  - 结束时三个号都改回生存模式，RevFullA 发了 `/dungeon-team leave`（没核对回包）（**更正**：DP 没有 `leave`，这条其实没离队；离队用 `/dungeon-team quit`，队长解散用 `/dungeon-team disband`，见 review-recheck §4），三个机器人都已 quit，`/list` = `[]`。
 - **控制台 admin（只对测试号）**：
   - `corerpg stamina set <号> 90`：RevFullA 4 次，RevMidA / RevMidB 各 2 次。
   - `corerpg p1 runs firstclear RevFullA q05|q06`、`runs unlock RevFullA q06|q07`。
