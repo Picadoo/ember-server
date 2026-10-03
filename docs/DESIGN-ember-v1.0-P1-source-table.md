@@ -1346,3 +1346,12 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 代码 | EmberCosmetics `shop`（`from` / `back`）、`FROM` / `FROM_MENUS` / `backLabel`、PAPI `p1_shopback`；EmberSeason 称号列表按钮；ember_p1_gear / ember_p1_season [43]、ember_p1_shop 返回键 |
 | 参数源 | 无 |
 | 测试 | 单测 `shopBackGoesToTheOpeningPage_D136`；FreshQ27 三个入口都回对了 |
+
+### 13.63 团本 R03 断塔回廊·团（CoreRpg 1.56.0，D137，balance_version 20）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | Q05 地图的 3～5 人团本，和 r01 / r02 合计每周 3 次；招牌机制烬核（分摊）；偏向族焚烬；结算同 r01 |
+| 代码 | EmberRunMaps `Skill.share`；EmberRunDirector `execute`（分摊）/ `shareDamage` / 绿圈；EmberSeason `time_r03`；EmberCosmetics `r03` / `trail_r03`；DP `EmberQ0R3` + config；菜单 hub / adventure / codex / codex_gear / season |
+| 参数源 | ember-v1-runs.yml（两份）`raids.r03`（烬核 `dmg: 100, warn: 3.0, every: 16, share: true`），balance_version 20；p1party `--share-dmg`（out-p1party-d137-*.md） |
+| 测试 | 单测 `thirdRaidStacksForItsShareMoveAndCoversTheLastFamily_D137`；check-dp-spawns 10 个 ok；FreshQ28–Q30 R03 通关 + 烬核 n=1 / n=2 日志 |
