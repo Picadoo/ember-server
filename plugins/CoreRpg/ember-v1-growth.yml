@@ -42,11 +42,12 @@ talents:
     - {id: abyss5, kind: abyss_floor, arg: "5", name: "深渊·余烬层到第 5 层"}
   # 每排只能点一个；点数 = 占用的专精点（重置时退回），币 = 第一次学会这个天赋时付一次（重置不退，以后再点不收）
   rows:
-    - {row: 1, name: "应变", points: 1, coin: 800, theme: "首领预警招（D140）"}
-    - {row: 2, name: "猎手", points: 2, coin: 2000, theme: "词缀精英与房间（D138）"}
+    # theme = shown to players (no internal D-numbers; D147 review 10-04 #3 / #8 / #10)
+    - {row: 1, name: "应变", points: 1, coin: 800, theme: "首领预警招 · 3% ≈ Q07 重砸每次 1 点"}
+    - {row: 2, name: "猎手", points: 2, coin: 2000, theme: "只作用于主线重打的词缀精英（每局 1 只）"}
     - {row: 3, name: "套装专精", points: 3, coin: 4000, theme: "只在对应套装成套时生效"}
   nodes:
-    # 第 1 排「应变」：首领预警招（D140）。得失都只在首领战里。
+    # 第 1 排「应变」：首领预警招（D140）。fit = 菜单里「适合 / 不适合」一行（D147，评审 10-04 #3）。得失都只在首领战里。
     - id: t1a
       row: 1
       name: "回身斩"
@@ -54,6 +55,7 @@ talents:
       mods: {dodge_dmg: 1.02, dodge_secs: 3, taken_tele: 1.02}
       good: "躲开首领预警招后 3 秒内伤害 +2%"
       bad: "被首领预警招打中多受 2%"
+      fit: "适合：预警招大多能躲开的人 · 不适合：常被预警招打中（那样是净亏）"
     - id: t1b
       row: 1
       name: "稳桩"
@@ -61,6 +63,7 @@ talents:
       mods: {taken_tele: 0.97, dmg_boss: 0.99}
       good: "受到首领预警招伤害 -3%"
       bad: "对首领伤害 -1%"
+      fit: "适合：常被预警招打中、求稳的人 · 不适合：想打得快的人"
     - id: t1c
       row: 1
       name: "踏步回气"
@@ -68,6 +71,7 @@ talents:
       mods: {dodge_heal: 0.008, dodge_icd: 15, taken_tele: 1.03}
       good: "躲开首领预警招回 0.8% 最大生命（15 秒一次）"
       bad: "被首领预警招打中多受 3%"
+      fit: "适合：躲招稳、常用踏步的人 · 不适合：常被预警招打中（那样是净亏）"
     # 第 2 排「猎手」：重复刷图的词缀精英（D138）。得失都只落在词缀精英（含分身）身上，首通局和首领战不受影响。
     - id: t2a
       row: 2
@@ -76,6 +80,7 @@ talents:
       mods: {dmg_affix: 1.30, taken_affix: 1.20}
       good: "对词缀精英（含分身）伤害 +30%"
       bad: "受到词缀精英（含分身、炽热火圈）伤害 +20%"
+      fit: "适合：想快点清掉词缀精英 · 不适合：容易被精英火圈 / 分身围住"
     - id: t2b
       row: 2
       name: "守缀"
@@ -83,6 +88,7 @@ talents:
       mods: {taken_affix: 0.75, dmg_affix: 0.85}
       good: "受到词缀精英（含分身、炽热火圈）伤害 -25%"
       bad: "对词缀精英（含分身）伤害 -15%"
+      fit: "适合：怕词缀精英的人 · 不适合：想快清精英的人"
     - id: t2c
       row: 2
       name: "拆分"
@@ -90,6 +96,7 @@ talents:
       mods: {dmg_split: 1.50, dmg_affix: 0.80}
       good: "对分裂精英裂出来的分身伤害 +50%（门更快开）"
       bad: "对词缀精英本体伤害 -20%"
+      fit: "适合：遇到分裂精英想快开门 · 不适合：其他两种词缀（本体伤害变低）"
     # 第 3 排「套装专精」：只在穿对应套装成套时生效（换套自动失效，不用重置）。
     - id: t3a
       row: 3
@@ -99,14 +106,16 @@ talents:
       mods: {burn_spread: 1, spread_icd: 15, burn_mult: 0.94}
       good: "燃烧中的敌人倒下时，把最多 1 秒燃烧传给 4 格内最近的敌人（15 秒一次）"
       bad: "焚烬燃烧每跳伤害 ×0.94"
+      fit: "适合：焚烬套、怪多扎堆的图 · 不适合：单体首领战"
     - id: t3b
       row: 3
       name: "反震"
       family: burst
       set: burst
       mods: {hit_burst: 1, taken_tele: 1.02}
-      good: "被首领预警招打中时烬爆计数 +1（硬吃一招换一次更早的烬爆，和「稳桩」搭）"
+      good: "被首领预警招打中时烬爆计数 +1（硬吃一招换一次更早的烬爆，和天赋「稳桩」搭）"
       bad: "被首领预警招打中多受 2%"
+      fit: "适合：烬爆套、敢硬吃一招的人 · 不适合：常被预警招打中"
     - id: t3c
       row: 3
       name: "扛核"
@@ -115,6 +124,7 @@ talents:
       mods: {share_w: 1.5, sustain_mult: 0.99}
       good: "烬核分摊时你算 1.5 份（队友少扛）"
       bad: "你自己扛的烬核变多（1.5 份）；炽愈回复量 ×0.99"
+      fit: "适合：炽愈套、团本里替队友扛烬核 · 不适合：单人（没人分摊）"
 
 # ---------------------------------------------------------------- D142 余烬勋记
 # 账号永久、自动解锁；条件全是已有的一次性成就。效果以经济 / 便利为主，战斗类只有「深渊里受伤」（只在深渊）。
@@ -135,7 +145,11 @@ honors:
 # 档位按 tier_weights 抽，截在成色上限 tier_cap[成色]（标准 1 / 精良 2 / 卓越 3 / 极品 4）再归一；
 # 连续 pity 次没出到上限档，下一次必出上限档。洗完二选一：保留新 / 保留旧（不选 = 旧的）。
 # 数值 = 1 / 2 / 3 / 4 档。参考装都是标准件，只能到 1 档。词条几乎都只落在词缀精英 / 分身 / 烬核上（D138 / D137），
-# 通用的两条（余烬、稳桩）每档只有 0.5%；回复药类词条试过（+1% = Q06 约 +1 点）删掉了，code 5 空着不要复用。
+# 通用的两条（余烬纹、定身纹）每档只有 0.5%；回复药类词条试过（+1% = Q06 约 +1 点）删掉了，code 5 空着不要复用。
+# D148（评审 10-04 #4）：保底只保档位，词条仍在本部位 3 个里随机；锁定 = 保留当前词条只重抽档位，另加 lock_shard 碎片
+# （同一保底计数）。tools/p1sim/rerollsim.py：极品件指定词条满档 不锁 15.9 次（1910 碎片 + 15.9k 币）→ 锁定 6.2 次
+# （1136 碎片 + 6.2k 币）。上限不变（D143 的两件 4 档已在 10-03 成长检查里），只省钱。
+# D147（评审 10-04 #5）：词条名一律带「纹」，不和天赋重名（code 不变，存档不受影响）。
 reroll:
   pity: 5
   tier_weights: [50, 30, 15, 5]
@@ -143,13 +157,14 @@ reroll:
   # 按物品阶 T0..T3
   coin: [0, 300, 600, 1000]
   shard: [0, 40, 80, 120]
+  lock_shard: [0, 40, 80, 120]
   # code = 存档里的编号（玩家数据 p4_af_<物品 uid> = code × 10 + 档），上线后不要改
   affixes:
     blade:
-      - {id: b_affix, code: 1, name: "破缀", key: dmg_affix, desc: "对词缀精英伤害", values: [1.04, 1.08, 1.12, 1.16]}
-      - {id: b_set, code: 2, name: "余烬", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.0025, 1.005, 1.0075, 1.01]}
-      - {id: b_split, code: 3, name: "拆分", key: dmg_split, desc: "对分身伤害", values: [1.05, 1.10, 1.15, 1.20]}
+      - {id: b_affix, code: 1, name: "猎缀纹", key: dmg_affix, desc: "对词缀精英伤害", values: [1.04, 1.08, 1.12, 1.16]}
+      - {id: b_set, code: 2, name: "余烬纹", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.0025, 1.005, 1.0075, 1.01]}
+      - {id: b_split, code: 3, name: "裂身纹", key: dmg_split, desc: "对分身伤害", values: [1.05, 1.10, 1.15, 1.20]}
     charm:
-      - {id: c_tele, code: 4, name: "稳桩", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
-      - {id: c_share, code: 6, name: "分核", key: share_taken, desc: "烬核自己那份", values: [0.99, 0.98, 0.97, 0.96]}
-      - {id: c_affix, code: 7, name: "抗缀", key: taken_affix, desc: "受到词缀精英伤害", values: [0.96, 0.92, 0.88, 0.84]}
+      - {id: c_tele, code: 4, name: "定身纹", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
+      - {id: c_share, code: 6, name: "分核纹", key: share_taken, desc: "烬核自己那份", values: [0.99, 0.98, 0.97, 0.96]}
+      - {id: c_affix, code: 7, name: "抗缀纹", key: taken_affix, desc: "受到词缀精英伤害", values: [0.96, 0.92, 0.88, 0.84]}

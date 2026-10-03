@@ -76,10 +76,16 @@ public final class EmberGrowth {
 
     public static final class Node {
         public final String id, name, family, set, good, bad;
+        /** D147 (review 10-04 #3): "适合 … / 不适合 …" one-liner for the menu; may be empty */
+        public final String fit;
         public final int row;
         public final Map<String, Double> mods;
         Node(String id, int row, String name, String family, String set, Map<String, Double> mods, String good, String bad) {
+            this(id, row, name, family, set, mods, good, bad, "");
+        }
+        Node(String id, int row, String name, String family, String set, Map<String, Double> mods, String good, String bad, String fit) {
             this.id = id; this.row = row; this.name = name; this.family = family; this.set = set; this.mods = mods; this.good = good; this.bad = bad;
+            this.fit = fit == null ? "" : fit;
         }
         /** set-gated nodes only work while that set is active */
         public boolean activeWith(String activeSet) { return set == null || set.isEmpty() || set.equals(activeSet); }
@@ -216,7 +222,7 @@ public final class EmberGrowth {
         for (Map<?, ?> x : maps(m.get("rows"))) rows.add(new Row(i(x, "row"), s(x, "name"), i(x, "points"), i(x, "coin"), s(x, "theme")));
         List<Node> nodes = new ArrayList<Node>();
         for (Map<?, ?> x : maps(m.get("nodes"))) nodes.add(new Node(s(x, "id"), i(x, "row"), s(x, "name"), s(x, "family"), s(x, "set"),
-                mods(x.get("mods")), s(x, "good"), s(x, "bad")));
+                mods(x.get("mods")), s(x, "good"), s(x, "bad"), s(x, "fit")));
         return new Talents(i(m, "respec_coin"), Collections.unmodifiableList(pts), Collections.unmodifiableList(rows), Collections.unmodifiableList(nodes));
     }
 

@@ -561,6 +561,7 @@ public final class EmberGrowthService implements Listener {
         if (key.startsWith("st_")) return status(p, d, key.substring(3));
         if (key.startsWith("good_")) { EmberGrowth.Node n = talents.node(key.substring(5)); return n == null ? "" : "§a得 · " + n.good; }
         if (key.startsWith("bad_")) { EmberGrowth.Node n = talents.node(key.substring(4)); return n == null ? "" : "§c失 · " + n.bad; }
+        if (key.startsWith("fit_")) { EmberGrowth.Node n = talents.node(key.substring(4)); return n == null || n.fit.isEmpty() ? "" : "§e" + n.fit; } // D147
         if (key.startsWith("name_")) {
             EmberGrowth.Node n = talents.node(key.substring(5));
             if (n == null) return "";
@@ -651,7 +652,7 @@ public final class EmberGrowthService implements Listener {
         return (int) Math.round(reroll.coinFor(t.tier) * mods(p).get("reroll_coin"));
     }
 
-    /** /corerpg p1 reroll [from gear|hub] | back | blade|charm dup|shard [confirm] | keep new|old */
+    /** /corerpg p1 reroll [from gear|hub] | back | blade|charm dup|shard [lock] [confirm] | keep new|old */
     public boolean rerollCommand(Player p, String[] args) {
         if (reroll == null) { p.sendMessage(P + "词条洗练未配置（" + EmberGrowth.FILE + "）"); return true; }
         PlayerData d = data(p.getUniqueId());
@@ -674,13 +675,15 @@ public final class EmberGrowthService implements Listener {
         if (("blade".equals(op) || "charm".equals(op)) && args.length >= 4) {
             String how = args[3].toLowerCase(Locale.ROOT);
             if (!"dup".equals(how) && !"shard".equals(how)) { p.sendMessage(P + "用法：/corerpg p1 reroll（打开洗练页）"); return true; }
-            return reroll(p, d, op, "dup".equals(how), confirm);
+            boolean lock = false;
+            for (int i = 4; i < args.length; i++) if ("lock".equalsIgnoreCase(args[i])) lock = true;
+            return reroll(p, d, op, "dup".equals(how), lock, confirm);
         }
         p.sendMessage(P + "用法：/corerpg p1 reroll（打开洗练页）");
         return true;
     }
 
-    private boolean reroll(Player p, PlayerData d, String slot, boolean dup, boolean confirm) {
+    private boolean reroll(Player p, PlayerData d, String slot, boolean dup, boolean lock, boolean confirm) {
         EmberItemData t = target(p, slot);
         String name = "charm".equals(slot) ? "护符" : "刃";
         if (t == null) { p.sendMessage(P + "§c" + ("charm".equals(slot) ? "还没有选定的护符" : "主手没有余烬刃") + "（洗练的是正在用的那件）"); return true; }
@@ -689,50 +692,74 @@ public final class EmberGrowthService implements Listener {
         int coin = rerollCoin(p, t), shard = reroll.shardFor(t.tier);
         int di = dup ? findDup(p, d, t) : -1;
         int cap = reroll.cap(t.quality), pity = d.periodCount(C_AFP + t.uid, "all");
+        // D148 lock: keep the current affix, roll only the tier, for lock_shard extra shards
+        EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t.uid));
+        int lockShard = reroll.lockShardFor(t.tier);
+        if (lock) {
+            if (lockShard <= 0) { p.sendMessage(P + "§c锁定词条没有开放"); return true; }
+            if (cur == null) { p.sendMessage(P + "§c词条槽还是空的，没有可锁定的词条（先普通洗一次）"); return true; }
+            if (Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) >= cap) { p.sendMessage(P + "§c" + cur.name + " 已经是这件成色的上限档（" + cap + " 档），锁定再洗没有意义"); return true; }
+        }
+        int needShard = (dup ? 0 : shard) + (lock ? lockShard : 0);
+        String mode = (dup ? "dup" : "shard") + (lock ? " lock" : "");
         if (!confirm) {
             p.sendMessage(P + "§6词条洗练 · " + t.shortLabel());
             p.sendMessage(P + "现在：" + affixText(affixOf(d, t.uid), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality) + "最高 §f" + cap + " §7档 · 保底 §f" + pity + "/" + reroll.pity
                     + (pity >= reroll.pity ? " §a（这次必出 " + cap + " 档）" : ""));
             p.sendMessage(P + "档位概率：" + oddsText(cap));
+            p.sendMessage(P + (lock ? "§a锁定词条：§f" + cur.name + " §7不变，只重抽档位" : "词条：本部位 " + reroll.pool(slot).size() + " 个里随机（保底只保档位，不保词条）"));
             String pay = (dup ? "一件同部位同阶的重复件" + (di < 0 ? " §c（背包里没有：要掉落来的、没强化 / 成色 / 精工 / 词条、没在用的 T" + t.tier + name + "）§7" : "")
-                    : shard + " 余烬碎片") + " + " + coin + " 余烬币";
+                    : shard + " 余烬碎片") + (lock ? " + 锁定 " + lockShard + " 碎片" : "") + " + " + coin + " 余烬币";
             p.sendMessage(P + "花费：" + pay);
-            if (dup && di < 0) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + shard + " 碎片 + " + coin + " 币"); return true; }
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
-                    new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + (dup ? "dup" : "shard") + " confirm", "扣上面的花费，抽一次" + name + "的词条", "GREEN"},
-                    new String[]{"[回洗练页]", "/corerpg p1 reroll from " + rfromKey(p), "不洗，回去看看", "GRAY"});
+            if (dup && di < 0) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
+            List<String[]> btn = new ArrayList<String[]>();
+            btn.add(new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + mode + " confirm", "扣上面的花费，" + (lock ? "锁定「" + cur.name + "」重抽档位" : "抽一次" + name + "的词条"), "GREEN"});
+            if (!lock && cur != null && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) < cap)
+                btn.add(new String[]{"[锁定" + cur.name + "再洗]", "/corerpg p1 reroll " + slot + " " + (dup ? "dup" : "shard") + " lock", "保留「" + cur.name + "」只重抽档位，另加 " + lockShard + " 碎片", "AQUA"});
+            btn.add(new String[]{"[回洗练页]", "/corerpg p1 reroll from " + rfromKey(p), "不洗，回去看看", "GRAY"});
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
             return true;
         }
+        final String lockId = lock ? cur.id : null;
         if (gate(p)) return true;
         if (!rerollBusy.add(p.getUniqueId())) { p.sendMessage(P + "§c上一次洗练还在处理"); return true; }
         if (d.getCoin() < coin) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c余烬币不够：要 " + coin + "，现有 " + d.getCoin()); return true; }
         town.sunshine.corerpg.NiBridge ni = plugin.getNiBridge();
-        if (!dup && ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD) < shard) {
+        if (needShard > 0 && ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD) < needShard) {
             rerollBusy.remove(p.getUniqueId());
-            p.sendMessage(P + "§c碎片不够：要 " + shard + "，背包里 " + ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD));
+            p.sendMessage(P + "§c碎片不够：要 " + needShard + "，背包里 " + ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD));
             return true;
         }
         if (dup && di < 0) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c背包里没有可用的重复件"); return true; }
         if (!d.takeCoin(coin)) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c扣币失败"); return true; }
-        if (!dup) {
-            int got = ni.consume(p, EmberUpgradeRules.MAT_SHARD, shard);
-            if (got < shard) {
+        if (needShard > 0) {
+            int got = ni.consume(p, EmberUpgradeRules.MAT_SHARD, needShard);
+            if (got < needShard) {
                 if (got > 0) ni.giveNiItem(p, EmberUpgradeRules.MAT_SHARD, got);
                 d.addCoin(coin);
                 rerollBusy.remove(p.getUniqueId());
                 p.sendMessage(P + "§c扣碎片失败，已退回");
                 return true;
             }
-            roll(p, d, t, slot, coin + " 币 + " + shard + " 碎片");
+        }
+        String lockPaid = lock ? " + 锁定 " + lockShard + " 碎片" : "";
+        if (!dup) {
+            roll(p, d, t, slot, coin + " 币 + " + shard + " 碎片" + lockPaid, lockId);
             rerollBusy.remove(p.getUniqueId());
             return true;
         }
         EmberItems.Read dr = runs.loadouts().items().read(p.getInventory().getItem(di));
         final EmberItemData dupData = dr.data;
+        final int refundShard = needShard;
         plugin.getEmberForge().consumeForReroll(p, di, dupData, "洗练 " + t.shortLabel() + " 用掉重复件 " + dupData.shortLabel(), ok -> {
             rerollBusy.remove(p.getUniqueId());
-            if (!ok) { d.addCoin(coin); if (p.isOnline()) p.sendMessage(P + "§c重复件没扣成，" + coin + " 币已退回"); return; }
-            if (p.isOnline()) roll(p, d, t, slot, coin + " 币 + 重复件");
+            if (!ok) {
+                d.addCoin(coin);
+                if (refundShard > 0 && p.isOnline()) ni.giveNiItem(p, EmberUpgradeRules.MAT_SHARD, refundShard);
+                if (p.isOnline()) p.sendMessage(P + "§c重复件没扣成，" + coin + " 币" + (refundShard > 0 ? "和 " + refundShard + " 碎片" : "") + "已退回");
+                return;
+            }
+            if (p.isOnline()) roll(p, d, t, slot, coin + " 币 + 重复件" + lockPaid, lockId);
         });
         return true;
     }
@@ -744,13 +771,13 @@ public final class EmberGrowthService implements Listener {
         return sb.append(" §8（成色上限截断后归一）").toString();
     }
 
-    private void roll(Player p, PlayerData d, EmberItemData t, String slot, String paid) {
+    private void roll(Player p, PlayerData d, EmberItemData t, String slot, String paid, String lockId) {
         int pity = d.periodCount(C_AFP + t.uid, "all");
-        EmberAffix.Roll r = EmberAffix.roll(reroll, slot, t.quality, pity, java.util.concurrent.ThreadLocalRandom.current());
+        EmberAffix.Roll r = EmberAffix.roll(reroll, slot, t.quality, pity, java.util.concurrent.ThreadLocalRandom.current(), lockId);
         if (r == null) { p.sendMessage(P + "§c这个部位没有词条池"); return; }
         d.addPeriodCount(C_AFP + t.uid, "all", r.pityAfter - pity);
         int enc = EmberAffix.encode(reroll.def(r.id), r.tier), old = affixOf(d, t.uid);
-        plugin.getLogger().info("[P1 growth] " + p.getName() + " reroll " + t.uid + " " + paid + " → " + r.id + " t" + r.tier + (r.forced ? " (pity)" : "") + " pity " + pity + "→" + r.pityAfter);
+        plugin.getLogger().info("[P1 growth] " + p.getName() + " reroll " + t.uid + " " + paid + " → " + r.id + " t" + r.tier + (lockId != null ? " (lock)" : "") + (r.forced ? " (pity)" : "") + " pity " + pity + "→" + r.pityAfter);
         p.sendMessage(P + "§6洗练结果：" + affixText(enc, t.quality) + (r.forced ? " §a（保底）" : "") + " §7· 保底 " + r.pityAfter + "/" + reroll.pity);
         if (old == 0) {
             d.addPeriodCount(C_AF + t.uid, "all", enc);
@@ -823,6 +850,14 @@ public final class EmberGrowthService implements Listener {
         }
         if ("dup".equals(k)) return findDup(p, d, t) >= 0 ? "§a背包里有重复件 §7+ " + rerollCoin(p, t) + " 币" : "§8背包里没有重复件（同部位 T" + t.tier + "、掉落来的、没投入）";
         if ("shard".equals(k)) return "§7" + reroll.shardFor(t.tier) + " 碎片 + " + rerollCoin(p, t) + " 币";
+        if ("lock".equals(k)) { // D148
+            EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t.uid));
+            int ls = reroll.lockShardFor(t.tier);
+            if (ls <= 0) return "";
+            if (cur == null) return "§8锁定词条：词条槽还是空的";
+            if (Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), reroll.cap(t.quality)) >= reroll.cap(t.quality)) return "§a" + cur.name + " 已是上限档";
+            return "§bShift+点击：锁定「" + cur.name + "」只重抽档位（另加 " + ls + " 碎片）";
+        }
         return "";
     }
 

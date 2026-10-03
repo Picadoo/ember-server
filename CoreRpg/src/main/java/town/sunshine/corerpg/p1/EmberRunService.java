@@ -374,6 +374,15 @@ public final class EmberRunService implements Listener {
         return EmberRunRules.varietyBounties(mode == null ? null : mode.config().getMapList("bounty.variety"));
     }
 
+    /** D147 (review 10-04 #8): settlement label prefix for extra material rows, so they read as what paid them */
+    static String matSource(String key) {
+        if (key == null) return "";
+        if ("var_affix_shard".equals(key)) return "词缀精英 ";
+        if ("var_event_core".equals(key)) return "限时清房 ";
+        if ("honor_shard".equals(key)) return "勋记 ";
+        if (key.startsWith("vb_")) return "花样委托 ";
+        return "";
+    }
     static final String C_VBOUNTY = "p4_vb_"; // + kind, period = stamina day: variety outcomes settled today
 
     /** D144: one line「花样委托 词缀精英 1/2 ✔ · 限时清房 0/1」for menus / settlement */
@@ -1079,7 +1088,7 @@ public final class EmberRunService implements Listener {
         if (ok) {
             s.eventDone = true;
             store.save(s);
-            tellRun(s, "§b限时清房完成 §7（" + t + " 秒）· 余烬核心 +" + maps.variety.eventCore + " 记为待结算");
+            tellRun(s, "§b限时清房完成 §7（" + t + " 秒）· 余烬核心碎片 +" + maps.variety.eventCore + " 记为待结算");
         } else {
             tellRun(s, "§7限时清房超时（" + t + " 秒 / 限 " + maps.variety.eventSecs + " 秒），这次没有额外核心");
         }
@@ -1586,7 +1595,7 @@ public final class EmberRunService implements Listener {
                 case MAT: {
                     if (ni != null && freeSlots(p) >= (g.amount + 63) / 64 + 1) {
                         if (ni.giveNiItem(p, g.id, g.amount)) {
-                            got.add(ni.displayName(g.id) + " ×" + g.amount);
+                            got.add(matSource(r.key) + ni.displayName(g.id) + " ×" + g.amount);
                             done = true;
                         }
                     }

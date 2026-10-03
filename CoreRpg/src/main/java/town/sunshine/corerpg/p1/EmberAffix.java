@@ -34,11 +34,13 @@ public final class EmberAffix {
 
     public static final class Rules {
         public final int pity;
-        public final int[] tierWeights, tierCap, coin, shard;
+        public final int[] tierWeights, tierCap, coin, shard, lockShard;
         public final List<Def> defs;
-        Rules(int pity, int[] tierWeights, int[] tierCap, int[] coin, int[] shard, List<Def> defs) {
-            this.pity = pity; this.tierWeights = tierWeights; this.tierCap = tierCap; this.coin = coin; this.shard = shard; this.defs = defs;
+        Rules(int pity, int[] tierWeights, int[] tierCap, int[] coin, int[] shard, int[] lockShard, List<Def> defs) {
+            this.pity = pity; this.tierWeights = tierWeights; this.tierCap = tierCap; this.coin = coin; this.shard = shard; this.lockShard = lockShard; this.defs = defs;
         }
+        /** D148 extra shards for a locked try (keep the affix, roll only the tier); 0 = lock not offered */
+        public int lockShardFor(int itemTier) { return lockShard.length == 0 ? 0 : lockShard[Math.max(0, Math.min(lockShard.length - 1, itemTier))]; }
         public Def def(String id) { if (id != null) for (Def d : defs) if (d.id.equals(id)) return d; return null; }
         /** stable code stored in the player save (yml {@code code:}) */
         public Def byCode(int code) { for (Def d : defs) if (d.code == code) return d; return null; }
@@ -75,10 +77,18 @@ public final class EmberAffix {
      * One try for an item of {@code slot} / {@code quality} whose pity counter is {@code pity}. The affix is uniform over
      * the slot pool; the tier never exceeds the quality cap; {@code pity} misses in a row → the cap tier.
      */
-    public static Roll roll(Rules r, String slot, int quality, int pity, Random rng) {
+    public static Roll roll(Rules r, String slot, int quality, int pity, Random rng) { return roll(r, slot, quality, pity, rng, null); }
+
+    /**
+     * D148 lock: {@code lockId} != null keeps that affix (must be in the slot pool) and rolls only the tier — same
+     * weights, cap and pity counter as a normal try.
+     */
+    public static Roll roll(Rules r, String slot, int quality, int pity, Random rng, String lockId) {
         List<Def> pool = r.pool(slot);
         if (pool.isEmpty()) return null;
-        Def d = pool.get(rng.nextInt(pool.size()));
+        Def locked = lockId == null ? null : r.def(lockId);
+        if (locked != null && !locked.slot.equals(slot)) locked = null;
+        Def d = locked != null ? locked : pool.get(rng.nextInt(pool.size()));
         int cap = r.cap(quality);
         boolean forced = pity >= r.pity;
         int tier;
@@ -136,7 +146,7 @@ public final class EmberAffix {
             }
         }
         return new Rules(EmberGrowth.i(m, "pity"), ints(m.get("tier_weights")), ints(m.get("tier_cap")), ints(m.get("coin")), ints(m.get("shard")),
-                Collections.unmodifiableList(defs));
+                m.get("lock_shard") instanceof List ? ints(m.get("lock_shard")) : new int[0], Collections.unmodifiableList(defs));
     }
 
     static int[] ints(Object o) {

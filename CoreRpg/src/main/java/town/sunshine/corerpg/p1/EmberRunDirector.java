@@ -361,7 +361,7 @@ final class EmberRunDirector {
         if (r.id.equals(s.eventRoom) && !s.eventDone) {
             eventStart = System.currentTimeMillis();
             eventWarned = false;
-            svc.tellRun(s, "§b限时清房 §7· " + svc.maps().variety.eventSecs + " 秒内清完这个房间 → 结算时 §f余烬核心 +" + svc.maps().variety.eventCore + " §7（可选）");
+            svc.tellRun(s, "§b限时清房 §7· " + svc.maps().variety.eventSecs + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + svc.maps().variety.eventCore + " §7（可选）");
         }
         if (ok == 0) {
             anomalies.add(r.id + ": no mob could be spawned (MythicMobs ids " + def.roles.keySet() + ")");
@@ -798,7 +798,9 @@ final class EmberRunDirector {
         le.teleport(face);
         le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
         w.playSound(o, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.6f);
-        String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下" : shapeHint(pending);
+        // D147 (review 10-04 #6): the locked circle also says its radius, like the other shapes
+        String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下"
+                + ("circle".equals(sk.type) && sk.radius > 0 ? " · 半径 " + fmt(sk.radius) + " 格" : "") : shapeHint(pending);
         if (sk.share) who += " §6· 全队靠拢进圈分摊（人越多每人越少，一个人扛会很痛）";
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
     }

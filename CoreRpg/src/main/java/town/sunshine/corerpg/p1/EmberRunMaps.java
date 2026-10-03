@@ -606,7 +606,7 @@ public final class EmberRunMaps {
 
         /** Chinese tag shown on the elite's name and in chat */
         public static String label(String id) {
-            return "blazing".equals(id) ? "炽热" : "split".equals(id) ? "分裂" : "shield".equals(id) ? "护盾" : id;
+            return "blazing".equals(id) ? "炽热" : "split".equals(id) ? "分裂" : "shield".equals(id) ? "厚甲" : id; // D147: was 护盾 (it only has more HP, no shield bar)
         }
 
         /** {affix room, affix id, event room} for this seed; entries are "" when not rolled. Deterministic. */

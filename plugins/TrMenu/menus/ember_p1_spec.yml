@@ -48,8 +48,11 @@ Icons:
         - '%corerpg_p1_spec_src_5%'
         - '%corerpg_p1_spec_src_6%'
         - ''
-        - '§7每个天赋都是§f有得有失的取舍§7，不是纯加属性；'
-        - '§7装备仍是主线，天赋只改变打法侧重。'
+        - '§e打法取舍，不是变强：§7每个天赋都有得有失，'
+        - '§7效果很小：模拟里单个天赋让通关率变化约 1 点上下，'
+        - '§7例：3% ≈ Q07 重砸每次少挨 / 多挨 1 点。'
+        - '§7选合你打法的那个；躲不好预警招时别点「回身斩」「踏步回气」。'
+        - '§7装备的阶、成色、强化仍是主线。'
         - '§8每排只能点一个 · 从上往下点 · 只能在城里改'
 
   '1':
@@ -79,6 +82,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t1a%'
         - '%corerpg_p1_spec_bad_t1a%'
+        - '%corerpg_p1_spec_fit_t1a%'
         - ''
         - '%corerpg_p1_spec_st_t1a%'
     actions:
@@ -96,6 +100,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t1b%'
         - '%corerpg_p1_spec_bad_t1b%'
+        - '%corerpg_p1_spec_fit_t1b%'
         - ''
         - '%corerpg_p1_spec_st_t1b%'
     actions:
@@ -113,6 +118,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t1c%'
         - '%corerpg_p1_spec_bad_t1c%'
+        - '%corerpg_p1_spec_fit_t1c%'
         - ''
         - '%corerpg_p1_spec_st_t1c%'
     actions:
@@ -130,6 +136,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t2a%'
         - '%corerpg_p1_spec_bad_t2a%'
+        - '%corerpg_p1_spec_fit_t2a%'
         - ''
         - '%corerpg_p1_spec_st_t2a%'
     actions:
@@ -147,6 +154,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t2b%'
         - '%corerpg_p1_spec_bad_t2b%'
+        - '%corerpg_p1_spec_fit_t2b%'
         - ''
         - '%corerpg_p1_spec_st_t2b%'
     actions:
@@ -164,6 +172,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t2c%'
         - '%corerpg_p1_spec_bad_t2c%'
+        - '%corerpg_p1_spec_fit_t2c%'
         - ''
         - '%corerpg_p1_spec_st_t2c%'
     actions:
@@ -181,6 +190,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t3a%'
         - '%corerpg_p1_spec_bad_t3a%'
+        - '%corerpg_p1_spec_fit_t3a%'
         - ''
         - '%corerpg_p1_spec_st_t3a%'
     actions:
@@ -198,6 +208,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t3b%'
         - '%corerpg_p1_spec_bad_t3b%'
+        - '%corerpg_p1_spec_fit_t3b%'
         - ''
         - '%corerpg_p1_spec_st_t3b%'
     actions:
@@ -215,6 +226,7 @@ Icons:
         - ''
         - '%corerpg_p1_spec_good_t3c%'
         - '%corerpg_p1_spec_bad_t3c%'
+        - '%corerpg_p1_spec_fit_t3c%'
         - ''
         - '%corerpg_p1_spec_st_t3c%'
     actions:

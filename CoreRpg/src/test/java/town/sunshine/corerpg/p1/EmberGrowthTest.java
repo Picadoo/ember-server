@@ -193,6 +193,31 @@ public class EmberGrowthTest {
         assertTrue(EmberAffix.parts(r, new int[][]{{0, 3}}).isEmpty());
     }
 
+    @Test public void lockKeepsTheAffixAndAffixNamesNeverCollideWithTalents_D147_D148() {
+        EmberAffix.Rules r = EmberAffix.parse(root());
+        assertEquals(120, r.lockShardFor(3)); assertEquals(40, r.lockShardFor(1));
+        java.util.Random rng = new java.util.Random(11);
+        EmberAffix.Def want = r.pool("charm").get(1);
+        int pity = 0, worst = 0, run = 0;
+        for (int i = 0; i < 3000; i++) {
+            EmberAffix.Roll x = EmberAffix.roll(r, "charm", 3, pity, rng, want.id);
+            assertEquals("lock keeps the affix", want.id, x.id);
+            if (x.tier < 4) run++; else run = 0;
+            worst = Math.max(worst, run); pity = x.pityAfter;
+        }
+        assertTrue("same pity under lock", worst <= r.pity);
+        // a lock id from the other slot is ignored (normal roll from the slot pool)
+        EmberAffix.Roll other = EmberAffix.roll(r, "blade", 3, 0, rng, want.id);
+        assertEquals("blade", r.def(other.id).slot);
+        java.util.Set<String> talentNames = new java.util.HashSet<String>();
+        for (EmberGrowth.Node n : talents().nodes) { talentNames.add(n.name); assertFalse("fit line " + n.id, n.fit.isEmpty()); }
+        for (EmberAffix.Def d : r.defs) {
+            assertFalse("affix name " + d.name + " is also a talent", talentNames.contains(d.name));
+            assertTrue("affix names end with 纹: " + d.name, d.name.endsWith("纹"));
+        }
+        for (EmberGrowth.Row row : talents().rows) assertFalse("no internal D-number in " + row.theme, row.theme.matches(".*D\\d+.*"));
+    }
+
     @Test public void affixDuplicateRules() {
         EmberItemData t = EmberItemData.create("burst", "blade", 2, 0, 0, 0, false, "drop");
         EmberItemData ok = EmberItemData.create("scorch", "blade", 2, 0, 0, 0, false, "drop");

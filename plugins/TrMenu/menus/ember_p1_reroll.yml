@@ -1,6 +1,7 @@
 # D143 词条洗练（P2 草案 §5za 第 3 部分，源表 §13.69）— 洗的是正在用的那两件：主手的刃、选定的护符。
 # 文字 / 状态都来自 PAPI %corerpg_p1_reroll_*%（参数 plugins/CoreRpg/ember-v1-growth.yml reroll:）。
 # 点图标 → 聊天栏预览（花费、概率、保底）→ 点 [确认洗练]；有旧词条时再选 [保留新] / [保留旧]（不选 = 旧的）。
+# D148：Shift+点击 = 锁定当前词条只重抽档位（另加一份碎片，lock_shard）。
 # 入口：装备页、主界面；返回键回到打开它的那一页。
 
 Title: '§6词条洗练'
@@ -42,7 +43,11 @@ Icons:
         - '§7        或碎片（T1 40 / T2 80 / T3 120）+ 币（300 / 600 / 1000）'
         - '§7档位最高 = 成色：标准 1 · 精良 2 · 卓越 3 · 极品 4'
         - '%corerpg_p1_reroll_odds%'
-        - '§7保底：连续 5 次没出到上限档，第 6 次必出'
+        - '§7保底：连续 5 次没出到上限档，第 6 次必出上限档'
+        - '§7        （词条仍随机，3 选 1；锁定时就是锁定的那个）'
+        - '§b锁定词条：§7Shift+点击，保留当前词条只重抽档位，'
+        - '§7        另加一份碎片（T1 40 / T2 80 / T3 120）'
+        - '§8极品件洗到指定词条满档：不锁约 16 次，锁定约 6 次'
         - ''
         - '§6刃的词条：'
         - '%corerpg_p1_reroll_pool_blade_1%'
@@ -53,7 +58,8 @@ Icons:
         - '%corerpg_p1_reroll_pool_charm_2%'
         - '%corerpg_p1_reroll_pool_charm_3%'
         - '%corerpg_p1_reroll_pool_charm_4%'
-        - '§8全是小加成；装备的阶、成色、强化仍是主线'
+        - '§e小加成，不是变强：§74 档定身纹 ≈ Q07 重砸每次少挨 0.7；'
+        - '§7模拟里词条对通关率的影响不到 1 点。装备的阶、成色、强化仍是主线'
 
   a:
     update: 20
@@ -65,10 +71,15 @@ Icons:
         - '%corerpg_p1_reroll_blade_cur%'
         - '%corerpg_p1_reroll_blade_cap%'
         - '%corerpg_p1_reroll_blade_dup%'
+        - '%corerpg_p1_reroll_blade_lock%'
         - ''
-        - '§e➥ §f点击：聊天栏预览，再确认'
+        - '§e➥ §f点击：聊天栏预览，再确认 · Shift+点击：锁定词条再洗'
     actions:
-      all:
+      shift_left:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll blade dup lock'
+      left:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - close
         - 'command: corerpg p1 reroll blade dup'
@@ -83,10 +94,15 @@ Icons:
         - '%corerpg_p1_reroll_blade_cur%'
         - '%corerpg_p1_reroll_blade_cap%'
         - '%corerpg_p1_reroll_blade_shard%'
+        - '%corerpg_p1_reroll_blade_lock%'
         - ''
-        - '§e➥ §f点击：聊天栏预览，再确认'
+        - '§e➥ §f点击：聊天栏预览，再确认 · Shift+点击：锁定词条再洗'
     actions:
-      all:
+      shift_left:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll blade shard lock'
+      left:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - close
         - 'command: corerpg p1 reroll blade shard'
@@ -101,10 +117,15 @@ Icons:
         - '%corerpg_p1_reroll_charm_cur%'
         - '%corerpg_p1_reroll_charm_cap%'
         - '%corerpg_p1_reroll_charm_dup%'
+        - '%corerpg_p1_reroll_charm_lock%'
         - ''
-        - '§e➥ §f点击：聊天栏预览，再确认'
+        - '§e➥ §f点击：聊天栏预览，再确认 · Shift+点击：锁定词条再洗'
     actions:
-      all:
+      shift_left:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll charm dup lock'
+      left:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - close
         - 'command: corerpg p1 reroll charm dup'
@@ -119,10 +140,15 @@ Icons:
         - '%corerpg_p1_reroll_charm_cur%'
         - '%corerpg_p1_reroll_charm_cap%'
         - '%corerpg_p1_reroll_charm_shard%'
+        - '%corerpg_p1_reroll_charm_lock%'
         - ''
-        - '§e➥ §f点击：聊天栏预览，再确认'
+        - '§e➥ §f点击：聊天栏预览，再确认 · Shift+点击：锁定词条再洗'
     actions:
-      all:
+      shift_left:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll charm shard lock'
+      left:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - close
         - 'command: corerpg p1 reroll charm shard'
