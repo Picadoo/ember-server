@@ -1,5 +1,5 @@
 /**
- * CoreRpg guild / alliance (盟约) smoke — DESIGN-ember-guild-ladder.md §1
+ * CoreRpg guild / alliance (盟约) smoke — docs/design/DESIGN-ember-guild-ladder.md §1
  * Expect: /corerpg guild|alliance · create · info · donate · invite · leave · disband
  * Do NOT run until plugins/CoreRpg.jar contains GuildService (or equiv) + guild wiring.
  * No jar overwrite from this script.

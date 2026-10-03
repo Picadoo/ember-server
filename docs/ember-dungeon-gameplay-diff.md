@@ -1,7 +1,7 @@
 # 五套副本玩法差异（一页纸）
 
 **日期：** 2026-09-13（Asia/Shanghai）  
-**依据：** `DESIGN-ember-growth-curve.md` §2～4 · `DESIGN-ember-map-plan.md`  
+**依据：** `docs/design/DESIGN-ember-growth-curve.md` §2～4 · `docs/design/DESIGN-ember-map-plan.md`  
 **目的：** 讲清「为什么不是同一套波次换皮」——机制差异，不只数字。
 
 ---
@@ -117,4 +117,4 @@
 
 - 文案播报见 `docs/ember-abyss-calamity.md`；团本播报可另补 `docs/ember-raid-copy.md`（下期）。  
 - 掉落阶梯见 `docs/ember-gear-drop-t0-t3.md`。  
-- 地图主题见 `DESIGN-ember-map-plan.md`；不改 Paper/NMS。
+- 地图主题见 `docs/design/DESIGN-ember-map-plan.md`；不改 Paper/NMS。

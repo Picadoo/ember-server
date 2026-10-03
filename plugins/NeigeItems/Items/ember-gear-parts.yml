@@ -1,4 +1,4 @@
-# B-anvil-1 批 A · 烬砧材料→部件短链 — docs/design-ember-anvil-mat-to-part-pilot.md
+# B-anvil-1 批 A · 烬砧材料→部件短链 — docs/design/design-ember-anvil-mat-to-part-pilot.md
 # 产物进 stats.offhand（插件另接）；配方 shard×12 + ingot×2 由插件/菜单扣给
 # 勿改 mat_ember_shard / ingot_ember_iron / 刃护符 / 守腕生坠；勿宣称 B0.1 已清
 

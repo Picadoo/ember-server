@@ -25,7 +25,7 @@ dungeon-area: []
 # 每日首通窗宝箱（表 2.3-B）— 参战 MM 掉落另见 EmberCalamity.yml
 # 2026-09-26 已修：<player.name> → %player_name%（旧写法不被解析，奖励从未发放）。
 #   先加了 OP 门（上方 dungeon-start js-condition，%player_is_op%），非 OP 的 /dp start 被拒，
-#   因此每次通关必发 T3 护符不再构成无限刷。见 docs/smoke-gating-drops-20260926.md。
+#   因此每次通关必发 T3 护符不再构成无限刷。见 docs/tests/smoke-gating-drops-20260926.md。
 #   注：Boss 的 MM onDeath 掉落 + CoreRpg kill_rewards 在此实例里本来就会发（不经本段）。
 dungeon-reward-script:
   - "$message{type=text;text=§a灾厄暂息。§7全服共享了这一剑。§8（日箱限领后期接线）} @dungeon"

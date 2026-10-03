@@ -1,5 +1,5 @@
 # CoreRpg — 余烬服 RPG：进度 HUD / 刷怪 / 余烬币 / 签到 / 活跃 / 悬赏
-# 余烬币 = 软通货 D（DESIGN-ember-economy-monetization.md）
+# 余烬币 = 软通货 D（docs/design/DESIGN-ember-economy-monetization.md）
 
 join_message:
   - "§6§l[余烬服] §e目标：击杀地窟亡灵，收集碎片与骨尘，合成附魔晶，强化余烬装备。"

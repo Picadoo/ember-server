@@ -1,5 +1,5 @@
 /**
- * CoreRpg free ticket grant smoke — DESIGN-ember-economy-monetization.md / cash + abyss
+ * CoreRpg free ticket grant smoke — docs/design/DESIGN-ember-economy-monetization.md / cash + abyss
  * Expect free grants (CoreRpg 1.3.10+):
  *   余烬日票   ticket_ember_daily  ×3 / day
  *   余烬周票   ticket_ember_weekly ×1 / week

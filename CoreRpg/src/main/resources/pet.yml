@@ -1,5 +1,5 @@
 # CoreRpg pet / 使魔 — cosmetic familiar only (no power pets for sale)
-# DESIGN-ember-pet-bestiary.md · NI ember-pets.yml
+# docs/design/DESIGN-ember-pet-bestiary.md · NI ember-pets.yml
 enabled: true
 max_active: 1
 # follow teleport interval (ticks) and distance

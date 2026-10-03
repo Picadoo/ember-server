@@ -18,6 +18,6 @@ for d in ['EmberAbyss','EmberCalamity','EmberGuildBoss','EmberRaid','EmberWeekly
         return f'name={name};location={best[0]},{best[1]},{best[2]}{rest}'
     s2=re.sub(r'name=(\w+);location=(-?\d+),(-?\d+),(-?\d+)((?:;[^}]*)?)',fix,s)
     if s2!=s:
-        s2="# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;\n#   see docs/critic-fixes-20260927.md §10). Map "+m+" room: x "+str(min(c[0] for c in R))+".."+str(max(c[0] for c in R))+", z "+str(min(c[2] for c in R))+".."+str(max(c[2] for c in R))+"\n"+s2
+        s2="# 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;\n#   see docs/reviews/critic-fixes-20260927.md §10). Map "+m+" room: x "+str(min(c[0] for c in R))+".."+str(max(c[0] for c in R))+", z "+str(min(c[2] for c in R))+".."+str(max(c[2] for c in R))+"\n"+s2
         open(p,'w').write(s2)
     print(d,m,changes)

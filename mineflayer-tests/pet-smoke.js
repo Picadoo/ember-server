@@ -1,5 +1,5 @@
 /**
- * CoreRpg pet / 使魔 smoke — DESIGN-ember-pet-bestiary.md
+ * CoreRpg pet / 使魔 smoke — docs/design/DESIGN-ember-pet-bestiary.md
  * NI eggs: pet_ember_ashling · pet_ember_cinder (ember-pets.yml)
  * Expect: /corerpg pet · list · summon ashling|cinder (or full id) · dismiss
  * Do NOT run until plugins/CoreRpg.jar contains PetService + pet.yml.

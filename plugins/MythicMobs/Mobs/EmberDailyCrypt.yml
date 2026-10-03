@@ -1,5 +1,5 @@
 # S2 日常线 C · 余烬窟·残誓地窖（EmberDailyCrypt）
-# 依据：docs/design-ember-daily-s2.md §5.3
+# 依据：docs/design/design-ember-daily-s2.md §5.3
 # ID 用 EmberDailyCrypt*（避免与地窟 EmberCrypt* 撞 ID）；Display 去色勿与庭院/地窟撞名
 
 EmberDailyCryptZombie:

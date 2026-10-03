@@ -11,7 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 1.12.2 lore persistence (DESIGN-ember-enhance-socket.md §3).
+ * 1.12.2 lore persistence (docs/design/DESIGN-ember-enhance-socket.md §3).
  * Display: §8强化 §f+N
  * Marker:  §8§o#ember_en:N
  * Socket:  §8孔{slot}: …  +  §8§o#ember_sk:1=id;2=

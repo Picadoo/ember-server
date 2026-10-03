@@ -1,4 +1,4 @@
-# 余烬深渊 — docs/ember-abyss-evacuate-spec.md · DESIGN-ember-abyss-evacuate.md
+# 余烬深渊 — docs/ember-abyss-evacuate-spec.md · docs/design/DESIGN-ember-abyss-evacuate.md
 # 启动：/dp start EmberAbyss（玩家走菜单按钮，勿在 tell 里强调指令）
 # 次数：维护备忘：遗留票物/体力口径；现行进本扣体力（深渊无首免，按 cash.yml stamina.costs.abyss，现行 30）
 # 维护备忘：扣次由 CoreRpg TicketEntryService/StaminaService 在 corerpg enter 时处理，本文件不扣次；遗留 NI 票物 ticket_ember_abyss 按 stamina.ticket_convert 折体力

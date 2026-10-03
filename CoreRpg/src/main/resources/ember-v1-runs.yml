@@ -2,7 +2,7 @@
 # CoreRpg runs the encounters (rooms, doors, A/B variants, boss skills, extra event) and the single settlement;
 # DungeonPlus only creates the instance (EmberQ01..03 reuse the ember_daily* map templates), teleports, and ends it.
 # Coordinates are the REAL template coordinates of ember_daily / ember_daily_ash / ember_daily_crypt (not the book's
-# R0..RB layout, which those maps do not have) — see docs/DESIGN-ember-v1.0-P1-source-table.md §10 for the mapping.
+# R0..RB layout, which those maps do not have) — see docs/design/DESIGN-ember-v1.0-P1-source-table.md §10 for the mapping.
 # Check every point after editing:  DP_MAP_ROOT=<maps> python3 scripts/check-dp-spawns.py plugins/DungeonPlus/dungeon/EmberQ0*
 # Runtime-only file edits need a restart (no reload path for runs on purpose: a live run keeps its snapshot).
 

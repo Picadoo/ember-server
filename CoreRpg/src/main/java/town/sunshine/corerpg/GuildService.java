@@ -28,7 +28,7 @@ import java.util.logging.Level;
 
 /**
  * Lightweight guild / 盟约 — create, invite, donate; weekly guild boss.
- * DESIGN-ember-guild-ladder.md §1
+ * docs/design/DESIGN-ember-guild-ladder.md §1
  */
 public final class GuildService {
 

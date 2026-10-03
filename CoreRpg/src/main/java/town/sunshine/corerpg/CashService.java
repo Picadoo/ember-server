@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-/** Crystal cash shop + monthly card (DESIGN-ember-cash-monthly.md). */
+/** Crystal cash shop + monthly card (docs/design/DESIGN-ember-cash-monthly.md). */
 public final class CashService {
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");

@@ -25,10 +25,24 @@ login-runtime/             登录服配置 + plugins/（AuthMe、ProtocolLib、V
 mineflayer-tests/          mineflayer 自动化冒烟测试（npm install 后运行）
 ember-stack-display/       客户端堆叠显示 mod 源码（Forge 1.12.2 / Gradle）
 dungeons/ scripts/         副本设计与搭建脚本文本
-docs/                      设计/规格文档；docs/如何创建-Grok-Bot专岗.md = 重建 bot 产线的指南
-DESIGN-*.md STATUS-*.md    设计稿与各功能进度记录（STATUS.md 为总览）
+docs/                      设计/规格文档（分类见下方「文档地图」与 docs/README.md）
 secrets/mysql-ember.env.example   数据库凭据模板（真实 secrets/mysql-ember.env 被 .gitignore 忽略）
 ```
+
+## 文档地图
+
+根目录只保留本 README 与少量工程文档（`HOOKS.md`、`ROADMAP-core-mod.md`、`PERF-CHANGELOG-paper-nms.md`）；其余文档都在 `docs/` 下：
+
+| 目录 | 内容 |
+|------|------|
+| `docs/handoff/` | 交接文档。**当前交接：`docs/handoff/HANDOFF-ember-2026-10-02.md`**；早期总接手说明 `docs/handoff/HANDOFF.md`；设计交接模板 `TEMPLATE-ember-design-handoff.md` |
+| `docs/design/` | 所有 `DESIGN-*.md` / `design-*.md` 设计稿。**设计书（P1）：`docs/design/design-ember-v1.0-P1.md`**；来源开关/决策表：`docs/design/DESIGN-ember-v1.0-P1-source-table.md`；**P2 草案：`docs/design/design-ember-v1.1-P2-draft.md`** |
+| `docs/status/` | 所有 `STATUS*.md` 进度/验收记录（总览 `docs/status/STATUS.md`；gameplay 套件报告 `docs/status/STATUS-gameplay-suite.md`） |
+| `docs/reviews/` | 试玩、评审、复盘：`PLAYTEST-*`、`review-*`（如 `review-recheck-2026-10-03.md`）、`RETRO-*`、`LESSONS-*`、`critic-*`、`audit-*` |
+| `docs/tests/` | 单项测试报告 `TEST-*` 与冒烟记录 `smoke-*` |
+| `docs/`（根） | 规格与参考：`ember-master-plan.md`、`ember-*-spec.md`、`如何创建-Grok-Bot专岗.md`（重建 bot 产线指南）等 |
+
+新写的 STATUS / 设计稿请直接放进对应子目录（`docs/status/STATUS-<主题>.md`、`docs/design/design-<主题>.md`）。
 
 ## 在新机器上恢复
 
@@ -94,4 +108,4 @@ secrets/mysql-ember.env.example   数据库凭据模板（真实 secrets/mysql-e
 ## 相关文档
 
 - `docs/如何创建-Grok-Bot专岗.md`：换账号后如何重建余烬服多 bot 产线（提示词模板）。
-- `STATUS.md`：当前进度总览；`DESIGN-ember-mysql-network.md`：登录服/游玩服/MySQL 拓扑。
+- `docs/status/STATUS.md`：当前进度总览；`docs/design/DESIGN-ember-mysql-network.md`：登录服/游玩服/MySQL 拓扑。

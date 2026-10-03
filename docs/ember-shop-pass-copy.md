@@ -1,7 +1,7 @@
 # 商城 / 战令 / 勋阶 · 短文案包
 
 **日期：** 2026-09-12（Asia/Shanghai）  
-**依据：** `DESIGN-ember-economy-monetization.md` §5、`DESIGN-ember-rpg-systems.md` §8、`DESIGN-ember-cash-monthly.md`  
+**依据：** `docs/design/DESIGN-ember-economy-monetization.md` §5、`docs/design/DESIGN-ember-rpg-systems.md` §8、`docs/design/DESIGN-ember-cash-monthly.md`  
 **菜单：** `ember_shop.yml` · `ember_pass.yml` · `ember_vip.yml`（TrMenu 热重载）
 
 ---

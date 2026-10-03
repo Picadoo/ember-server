@@ -35,4 +35,4 @@ CoreRpg `StatService` now applies them. Config: `plugins/CoreRpg/config.yml` →
 | Lv35 raid | T2 blade + T2 talisman (ch5) | blade +4, talisman +3, Sharp II | 7+38+1.5 ≈ 46.5 | 96 | −49 % |
 
 Enhance +2…+4 costs 8–26 shards (100/90/80/70 %), which the mainline and weekly boxes cover; Sharpness II is one enchant
-with the ch1 crystal. Dungeon mob numbers are in `docs/critic-fixes-20260927.md` round 3.
+with the ch1 crystal. Dungeon mob numbers are in `docs/reviews/critic-fixes-20260927.md` round 3.

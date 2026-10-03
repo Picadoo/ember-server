@@ -2,8 +2,8 @@
 
 **日期：** 2026-09-13（Asia/Shanghai）  
 **作者岗：** 余烬-策划  
-**背景：** 灾厄公共窗刷怪点已冒烟；日箱限 1 **可后补**。团本 DP 已有四波骨架（`STATUS-ember-raid-pets.md`），本刀把「换皮周本」做成**协作通道感 + 戒指有用**。  
-**承接：** `docs/ember-dungeon-gameplay-diff.md` §5 · `docs/ember-gear-drop-t0-t3.md` §3.6 · `DESIGN-ember-map-plan.md` §3.5  
+**背景：** 灾厄公共窗刷怪点已冒烟；日箱限 1 **可后补**。团本 DP 已有四波骨架（`docs/status/STATUS-ember-raid-pets.md`），本刀把「换皮周本」做成**协作通道感 + 戒指有用**。  
+**承接：** `docs/ember-dungeon-gameplay-diff.md` §5 · `docs/ember-gear-drop-t0-t3.md` §3.6 · `docs/design/DESIGN-ember-map-plan.md` §3.5  
 
 ---
 
@@ -138,4 +138,4 @@ Boss：§4【终厅】使徒！分摊砸击，别叠脸！
 ## 落地（2026-09-13）
 
 执行岗已按本文改 EmberRaid DP / 通关箱 / MM 终厅概率 / `ember_set` / `acc_ember_raid_ring` lore。  
-详见 `DESIGN-ember-raid.md` · `STATUS-ember-raid.md`。
+详见 `docs/design/DESIGN-ember-raid.md` · `docs/status/STATUS-ember-raid.md`。

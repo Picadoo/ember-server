@@ -2,7 +2,7 @@
 
 **日期：** 2026-09-12（Asia/Shanghai）  
 **作者岗：** 余烬-策划  
-**承接：** `DESIGN-ember-rpg-systems.md` §4；孔石见 `DESIGN-ember-enhance-socket.md`；日周本见 `DESIGN-dungeon-daily-weekly.md`  
+**承接：** `docs/design/DESIGN-ember-rpg-systems.md` §4；孔石见 `docs/design/DESIGN-ember-enhance-socket.md`；日周本见 `docs/design/DESIGN-dungeon-daily-weekly.md`  
 **硬约束：** 不改 Paper；奖励走 NI / MM / 副本结算；本文定文案与表，**DP YAML 落地由插件岗按表接线**。  
 **进本命令（已定）：**
 

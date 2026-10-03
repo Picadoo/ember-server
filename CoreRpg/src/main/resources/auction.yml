@@ -1,4 +1,4 @@
-# CoreRpg auction / 寄售 — coin listings, tax 10% (DESIGN-ember-arena-auction.md)
+# CoreRpg auction / 寄售 — coin listings, tax 10% (docs/design/DESIGN-ember-arena-auction.md)
 enabled: true
 tax_rate: 0.10
 page_size: 8

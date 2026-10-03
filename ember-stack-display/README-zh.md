@@ -55,4 +55,4 @@ cp build/libs/ember-stack-display-1.0.0.jar \
 |------|------|
 | 工程 | `/workspace/minecraft/ember-stack-display/` |
 | 客户端 jar | `/workspace/minecraft/client-mods/ember-stack-display-1.12.2.jar` |
-| 构建状态 | `/workspace/minecraft/STATUS-stack-display-mod.md` |
+| 构建状态 | `/workspace/minecraft/docs/status/STATUS-stack-display-mod.md` |

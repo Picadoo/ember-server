@@ -1,5 +1,5 @@
 /**
- * CoreRpg auction + arena smoke — DESIGN-ember-arena-auction.md
+ * CoreRpg auction + arena smoke — docs/design/DESIGN-ember-arena-auction.md
  * Cover likely command surface for 1.3.8:
  *   /corerpg auction|ah  list|sell|buy|cancel|collect
  *   /corerpg arena|pvp   queue 1v1|2v2 · leave · stats

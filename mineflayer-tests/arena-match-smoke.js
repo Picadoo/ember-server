@@ -1,5 +1,5 @@
 /**
- * CoreRpg arena 1v1 match smoke — DESIGN-ember-arena-auction.md §1
+ * CoreRpg arena 1v1 match smoke — docs/design/DESIGN-ember-arena-auction.md §1
  * Two bots ArenaA + ArenaB:
  *   both /corerpg arena queue 1v1 → wait teleport/match tells → assert positions change
  *   leave or wait settle → then /corerpg pvp queue 1v1 alias path

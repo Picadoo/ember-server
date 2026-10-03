@@ -1,5 +1,5 @@
 # 余烬盟约 — 轻量公会（CoreRpg 1.3.7）
-# DESIGN-ember-guild-ladder.md §1 · create + donate + guild weekly boss
+# docs/design/DESIGN-ember-guild-ladder.md §1 · create + donate + guild weekly boss
 enabled: true
 create:
   coin_cost: 5000

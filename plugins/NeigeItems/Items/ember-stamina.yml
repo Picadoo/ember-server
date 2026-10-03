@@ -1,4 +1,4 @@
-# 体力药 — docs/design-ember-stamina-dnf-daily.md §A.4～A.5
+# 体力药 — docs/design/design-ember-stamina-dnf-daily.md §A.4～A.5
 # 逻辑以 NI ID（consumable_ember_stamina_*）为准；消耗后由 CoreRpg 按 id 加体力（禁显示名匹配）
 # lore 不写指令；发放/日限/硬顶由 cash.yml / 插件负责
 

@@ -1,5 +1,5 @@
 /**
- * CoreRpg guild boss smoke — DESIGN-ember-guild-ladder.md §1.3
+ * CoreRpg guild boss smoke — docs/design/DESIGN-ember-guild-ladder.md §1.3
  * Ensure guild exists (create + cash/coin give if needed), donate contribution,
  * then /corerpg guild boss; also try /dp start EmberGuildBoss if that dungeon appears.
  * Do NOT run until boss.enabled + guild→DP wiring (or STATUS says ready).

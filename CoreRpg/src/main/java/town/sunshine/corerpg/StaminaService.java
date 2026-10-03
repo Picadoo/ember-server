@@ -26,7 +26,7 @@ import java.util.Map;
 
 /**
  * S0 余烬体力 — 日 0:00 Asia/Shanghai 回满；进本扣体力；旧票兑换/逾期折算。
- * 设计：docs/design-ember-stamina-dnf-daily.md §A
+ * 设计：docs/design/design-ember-stamina-dnf-daily.md §A
  */
 public final class StaminaService implements Listener {
 

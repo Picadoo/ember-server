@@ -1,4 +1,4 @@
-# CoreRpg covenant — 余烬誓约（DESIGN-ember-covenant-talent.md §6.1）
+# CoreRpg covenant — 余烬誓约（docs/design/DESIGN-ember-covenant-talent.md §6.1）
 # STUB：插件岗实现命令前可先落盘；热重载进 /corerpg reload（落地后）
 enabled: true
 

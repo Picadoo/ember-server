@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * 1.15.26 (2026-09-29): B-anvil-1 烬砧材料→部件短链 — part.yml recipes + /corerpg part craft &lt;key&gt;.
  * No coin, no stamina. Does not touch forge.yml upgrade recipes.
- * docs/design-ember-anvil-mat-to-part-pilot.md
+ * docs/design/design-ember-anvil-mat-to-part-pilot.md
  */
 public final class PartService {
 

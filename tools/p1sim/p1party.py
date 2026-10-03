@@ -1,4 +1,4 @@
-"""P2-5 party model (docs/design-ember-v1.1-P2-draft.md §5b, book §18.4): 3–5 role-less players in one run.
+"""P2-5 party model (docs/design/design-ember-v1.1-P2-draft.md §5b, book §18.4): 3–5 role-less players in one run.
 
 Rules modelled (all from the live code / book, nothing raid-specific invented):
 - enemy HP × party factor 1 + 0.65 (n − 1) (A18, EmberRunRules.hpFactor), locked at entry; damage does not scale;

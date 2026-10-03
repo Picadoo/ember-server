@@ -723,7 +723,7 @@ def table(rows, cap_days, dodge):
     return '\n'.join(lines)
 
 
-# measured natural playtests (docs/PLAYTEST-P1-progression.md): first-clear run index, or ('>', runs) = not cleared
+# measured natural playtests (docs/reviews/PLAYTEST-P1-progression.md): first-clear run index, or ('>', runs) = not cleared
 MEASURED = {
     'v2': {'profile': 'v2', 'route': 'alternate', 'runs': 92,
            'fc': {'q01': 2, 'q02': 7, 'q03': 14, 'q04': 56, 'q05': ('>', 92)}},

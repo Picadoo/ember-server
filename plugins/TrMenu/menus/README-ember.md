@@ -1,6 +1,6 @@
 # 余烬 TrMenu 草案
 
-对应设计：`/workspace/minecraft/DESIGN-dungeon-daily-weekly.md`
+对应设计：`/workspace/minecraft/docs/design/DESIGN-dungeon-daily-weekly.md`
 
 | 文件 | 命令 / 打开方式 | 说明 |
 |------|-----------------|------|

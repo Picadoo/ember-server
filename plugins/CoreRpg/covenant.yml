@@ -1,4 +1,4 @@
-# CoreRpg covenant — 余烬誓约（DESIGN-ember-covenant-talent.md §6.1）
+# CoreRpg covenant — 余烬誓约（docs/design/DESIGN-ember-covenant-talent.md §6.1）
 # 维护备忘：配置可先落盘；热重载纳入 CoreRpg reload（落地后）
 enabled: true
 

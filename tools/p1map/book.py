@@ -1,9 +1,9 @@
-"""Parse the P1 book map chapters (docs/design-ember-v1.0-P1.md ch. 11-17) into structured layouts.
+"""Parse the P1 book map chapters (docs/design/design-ember-v1.0-P1.md ch. 11-17) into structured layouts.
 python3 book.py            -> prints JSON for all maps
 """
 import json, re, sys, os
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
-BOOK = os.path.join(ROOT, 'docs', 'design-ember-v1.0-P1.md')
+BOOK = os.path.join(ROOT, 'docs', 'design', 'design-ember-v1.0-P1.md')
 TEMPLATES = {'q01': 'ember_daily', 'q02': 'ember_daily_ash', 'q03': 'ember_daily_crypt', 'q04': 'ember_daily_tide',
              'q05': 'ember_daily_spire', 'q06': 'ember_daily_frost', 'q07': 'ember_daily_rail'}
 NUM = r'(-?\d+)'

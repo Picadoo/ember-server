@@ -24,7 +24,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.logging.Level;
 
-/** Enhance + socket per DESIGN-ember-enhance-socket.md (reads enhance.yml). */
+/** Enhance + socket per docs/design/DESIGN-ember-enhance-socket.md (reads enhance.yml). */
 public final class EnhanceService {
 
     private final JavaPlugin plugin;

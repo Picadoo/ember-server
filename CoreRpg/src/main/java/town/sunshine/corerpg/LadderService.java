@@ -26,7 +26,7 @@ import java.util.logging.Level;
 
 /**
  * Ember ladder boards + power_score (display only).
- * DESIGN-ember-guild-ladder.md §2 · docs/ember-holograms.md
+ * docs/design/DESIGN-ember-guild-ladder.md §2 · docs/ember-holograms.md
  */
 public final class LadderService {
 

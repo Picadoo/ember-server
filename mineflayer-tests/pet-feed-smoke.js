@@ -1,5 +1,5 @@
 /**
- * CoreRpg pet feed / 魂尘 smoke — DESIGN-ember-pet-bestiary.md
+ * CoreRpg pet feed / 魂尘 smoke — docs/design/DESIGN-ember-pet-bestiary.md
  * Expect (CoreRpg 1.3.9+): feed.enabled + mat_ember_soul_dust consume → pet level up
  * Flow: NI give soul dust (if exists) → unlock/summon pet_ember_ashling → /corerpg pet feed
  * Do NOT run until plugins/CoreRpg.jar is 1.3.9 with real feed (not「暂未开放魂尘」stub).

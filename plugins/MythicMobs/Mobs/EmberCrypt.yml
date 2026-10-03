@@ -1,5 +1,5 @@
 # 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
-# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/tests/smoke-gating-drops-20260926.md
 # 余烬地窟 — MythicMobs 4.11 / Paper 1.12.2（锁定：Mobs/EmberCrypt.yml）
 # 掉落只走一条：~onDeath + @Trigger → ni give <trigger.name>（进背包）
 # 已去掉 NeigeItems.Drops，避免与 ni give 叠双份

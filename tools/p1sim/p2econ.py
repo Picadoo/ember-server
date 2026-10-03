@@ -1,4 +1,4 @@
-"""P2 economy check (docs/design-ember-v1.1-P2-draft.md §4): what the weekly challenge rotation (P2-1) adds after Q07.
+"""P2 economy check (docs/design/design-ember-v1.1-P2-draft.md §4): what the weekly challenge rotation (P2-1) adds after Q07.
 
 Phase 1 = p1sim as-is (balance_version 2, stepdown route) until the player's Q07 first clear.
 Phase 2 = W weeks of challenge runs only (3/day, the §18.1 T3 overrides from ember-v1-runs.yml `challenge:`), comparing

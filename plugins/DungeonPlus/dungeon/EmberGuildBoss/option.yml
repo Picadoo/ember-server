@@ -26,7 +26,7 @@ dungeon-area: []
 # 通关箱：币友好 — 碎片/外观/低档孔石/核心×1～2；不发 gear_ember_blade
 # 2026-09-26 已修：<player.name> → %player_name%（旧写法不被解析，奖励从未发放）。
 #   前提：上方 dungeon-start 门控（CoreRpg 1.4.9 一次性通行 / OP），直开被拒，奖励只经贡献路径发放。
-#   见 docs/smoke-gating-drops-20260926.md。
+#   见 docs/tests/smoke-gating-drops-20260926.md。
 dungeon-reward-script:
   - "$message{type=text;text=§6盟约周 Boss 通关奖励已发放} @dungeon"
   - "$command{text=ni give %player_name% mat_ember_shard 8;console=true} @player"

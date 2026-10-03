@@ -1,7 +1,7 @@
 # `/ember` 主界面文案包
 
 **日期：** 2026-09-12（Asia/Shanghai）  
-**依据：** `DESIGN-ember-rpg-systems.md` §1 信息架构  
+**依据：** `docs/design/DESIGN-ember-rpg-systems.md` §1 信息架构  
 **用途：** 总控改 TrMenu YAML 时直接贴 lore；本文不改数值、不改菜单结构。  
 **约定：** 每入口 **一行定位**；未实装系统在定位下加 **`§8即将点燃`**（可再跟一句短期待）。已实装不写「即将点燃」。
 
@@ -38,7 +38,7 @@
 - **补充：** `§8状态 · 誓约 · 晶钻 / 月卡`
 - **动作：** `menu: ember_character`
 - **命令：** `/corerpg status` · `covenant` · `cash` · `monthly`
-- **详稿：** `DESIGN-ember-character-storage.md`
+- **详稿：** `docs/design/DESIGN-ember-character-storage.md`
 
 ### 誓约
 - **显示名：** `§6誓约`
@@ -60,7 +60,7 @@
 - **状态行：** （已接菜单壳 · **不写**即将点燃）
 - **补充：** `§8图鉴收集 · 出战 1 只 · 偏外观`
 - **动作：** `menu: ember_pet`
-- **详稿：** `DESIGN-ember-pet-bestiary.md`
+- **详稿：** `docs/design/DESIGN-ember-pet-bestiary.md`
 
 ### 御兽
 - **显示名：** `§2御兽`
@@ -75,7 +75,7 @@
 - **状态行：** （已接菜单壳 · **不写**即将点燃）
 - **补充：** `§8收集强迫症友好`
 - **动作：** `menu: ember_bestiary`
-- **详稿：** `DESIGN-ember-pet-bestiary.md`
+- **详稿：** `docs/design/DESIGN-ember-pet-bestiary.md`
 
 ---
 
@@ -171,7 +171,7 @@
 - **补充：** `§8奖励统一进邮箱`
 - **动作：** `menu: ember_mail`
 - **命令占位：** `/corerpg mail` · `claim all` · 运营 `mail send`
-- **详稿：** `DESIGN-ember-mail-friends.md`
+- **详稿：** `docs/design/DESIGN-ember-mail-friends.md`
 
 ---
 
@@ -205,7 +205,7 @@
 - **补充：** `§8背包同持即激活 · 周首通保底团戒`
 - **动作：** `menu: ember_set`
 - **命令占位：** `/corerpg set`
-- **详稿：** `DESIGN-ember-character-storage.md`
+- **详稿：** `docs/design/DESIGN-ember-character-storage.md`
 
 ### 分解
 - **显示名：** `§7分解`
@@ -214,7 +214,7 @@
 - **补充：** `§8手持余烬刃 / 护符后操作` · `§8分解换材料 · 重铸刷次要词缀`
 - **动作：** `menu: ember_disassemble`
 - **命令占位：** `/corerpg scrap` · `/corerpg reforge`
-- **详稿：** `STATUS-ember-disassemble.md`
+- **详稿：** `docs/status/STATUS-ember-disassemble.md`
 
 ### 仓库
 - **显示名：** `§3仓库`
@@ -223,7 +223,7 @@
 - **补充：** `§8末影箱可用 · 扩展页待接线` · `§8绑定与流通分仓`
 - **动作：** `menu: ember_storage`
 - **命令占位：** `/enderchest` · `/corerpg storage`
-- **详稿：** `DESIGN-ember-character-storage.md`
+- **详稿：** `docs/design/DESIGN-ember-character-storage.md`
 
 ---
 
@@ -235,7 +235,7 @@
 - **状态行：** （已接菜单壳 · **不写**即将点燃）
 - **补充：** `§8创建 · 捐献 · 周 Boss（壳）`
 - **动作：** `menu: ember_guild`
-- **详稿：** `DESIGN-ember-guild-ladder.md`
+- **详稿：** `docs/design/DESIGN-ember-guild-ladder.md`
 
 ### 天梯
 - **显示名：** `§e天梯`
@@ -252,7 +252,7 @@
 - **补充：** `§8排队壳 · 1v1 / 2v2 tell` · `§8赛季制 · 奖励绑外观与币`
 - **动作：** `menu: ember_arena`
 - **命令占位：** `/corerpg arena` · `queue 1v1` · `queue 2v2` · `leave`
-- **详稿：** `DESIGN-ember-arena-auction.md`
+- **详稿：** `docs/design/DESIGN-ember-arena-auction.md`
 
 ### 寄售
 - **显示名：** `§6寄售`
@@ -261,7 +261,7 @@
 - **补充：** `§8浏览 / 上架壳 · 税率 10%` · `§8不开放毕业伤害直售`
 - **动作：** `menu: ember_auction`
 - **命令占位：** `/corerpg auction` · `list` · `sell <价>`
-- **详稿：** `DESIGN-ember-arena-auction.md`
+- **详稿：** `docs/design/DESIGN-ember-arena-auction.md`
 
 ### 好友
 - **显示名：** `§a好友`
@@ -270,7 +270,7 @@
 - **补充：** `§8可接师徒（可选）`
 - **动作：** `menu: ember_friends`
 - **命令占位：** `/corerpg friend` · `add` · `invite` · `mentor`
-- **详稿：** `DESIGN-ember-mail-friends.md`
+- **详稿：** `docs/design/DESIGN-ember-mail-friends.md`
 
 ### 设置
 - **显示名：** `§7设置`
@@ -279,7 +279,7 @@
 - **补充：** `§8低优先级个人选项`
 - **动作：** `menu: ember_settings`
 - **命令占位：** `/corerpg settings` · `sound` · `tip` · `privacy`
-- **详稿：** `DESIGN-ember-mail-friends.md`
+- **详稿：** `docs/design/DESIGN-ember-mail-friends.md`
 
 ---
 

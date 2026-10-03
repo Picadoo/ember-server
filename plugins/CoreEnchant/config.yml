@@ -1,4 +1,4 @@
-# CoreEnchant — 余烬成长闭环（DESIGN-ember-enchant-anvil.md）
+# CoreEnchant — 余烬成长闭环（docs/design/DESIGN-ember-enchant-anvil.md）
 # Paper 1.12.2 + EnchantNmsHooks；物品只认 NeigeItems
 
 override_vanilla: true

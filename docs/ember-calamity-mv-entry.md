@@ -1,7 +1,7 @@
 # 灾厄入口文案 · Multiverse `ember_event`
 
 **日期：** 2026-09-13（Asia/Shanghai）  
-**依据：** `DESIGN-ember-growth-curve.md` §4  
+**依据：** `docs/design/DESIGN-ember-growth-curve.md` §4  
 **分工：** 公共场 = MV；Boss 技能回归测 = 仍保留 `/dp start EmberCalamity`。
 
 ---

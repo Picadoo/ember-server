@@ -36,7 +36,7 @@ import java.util.UUID;
 
 /**
  * Cosmetic familiar (使魔) — ArmorStand follower. Not sold as power pets.
- * DESIGN-ember-pet-bestiary.md · NI ember-pets.yml
+ * docs/design/DESIGN-ember-pet-bestiary.md · NI ember-pets.yml
  */
 public final class PetService implements Listener {
 

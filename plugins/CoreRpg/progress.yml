@@ -1,5 +1,5 @@
 # CoreRpg progress — 2026-09-26（1.5.0）
-# 规格来源：DESIGN-ember-economy-monetization.md §5.3（战令经验来源 = 挂机击杀 / 日本 / 周本，有日上限）；
+# 规格来源：docs/design/DESIGN-ember-economy-monetization.md §5.3（战令经验来源 = 挂机击杀 / 日本 / 周本，有日上限）；
 #   数值规格未给出，以下为保守取值。
 
 # 第二经验等级来源：MM 精英/首领死亡 → console: corerpg xpreward <trigger.name> elite|boss

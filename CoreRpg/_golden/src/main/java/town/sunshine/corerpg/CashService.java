@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-/** Crystal cash shop + monthly card (DESIGN-ember-cash-monthly.md). */
+/** Crystal cash shop + monthly card (docs/design/DESIGN-ember-cash-monthly.md). */
 public final class CashService {
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");

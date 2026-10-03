@@ -1,7 +1,7 @@
 # 余烬 v1 (P1) 图录 · 装备 — B2.180；书 §19.5（图鉴先给展示和一次性资源，不叠战斗属性）、§19.1（不做假入口）。
 # 20 种：T0 刃 / 护符 + 三族 × 刃 / 护符 × T1–T3。第一次拿到（背包里校验通过的 P1 物品；DB 里自己拥有过的也补登）即登记；
 # 管理员测试件不算。阶段奖励一次性余烬币（D42），点「领取」走主线结算账本（/corerpg p1 codex claim）。
-# 状态全部来自 PAPI corerpg_p1_codex_*；本页由脚本生成（见 docs/DESIGN-ember-v1.0-P1-source-table.md §13.7）。
+# 状态全部来自 PAPI corerpg_p1_codex_*；本页由脚本生成（见 docs/design/DESIGN-ember-v1.0-P1-source-table.md §13.7）。
 # 入口：图录 ember_bestiary「装备图鉴」「阶段奖励」，或 /ember_p1_codex_gear。
 
 Title: '§6余烬 · 图录 · 装备'

@@ -1,5 +1,5 @@
 # 阶段 4.4 · EmberEliteWeekly 精英试炼怪物
-# 依据：docs/design-stage4-elite-weekly.md §4
+# 依据：docs/design/design-stage4-elite-weekly.md §4
 # Display 须与 DP $kill 明文一字不差（去色后）；稳定符不走 MM 掉落（仅周首通箱）
 # 勿进 afk 世界刷怪名单；勿改 EmberAbyss / EmberAfk
 # 4.4f：波血保持；波伤再≈-20%；Ignite×0.75；Boss/Pulse/Rush 禁止改（目标死亡≤2）

@@ -34,7 +34,7 @@ import java.util.UUID;
 
 /**
  * Arena — 1v1 teleport + settle; 2v2 team-wipe on pads (or stub if world missing).
- * DESIGN-ember-arena-auction.md · CoreRpg 1.3.11
+ * docs/design/DESIGN-ember-arena-auction.md · CoreRpg 1.3.11
  */
 public final class ArenaService implements Listener {
 

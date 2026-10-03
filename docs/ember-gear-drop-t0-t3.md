@@ -1,7 +1,7 @@
 # T0→T3 装备掉落表（对齐成长曲线 §3）
 
 **日期：** 2026-09-13（Asia/Shanghai）  
-**依据：** `DESIGN-ember-growth-curve.md` §3  
+**依据：** `docs/design/DESIGN-ember-growth-curve.md` §3  
 **约束：** 只定 ID / 来源 / 概率口径；NI 实体由物品岗做；MM/`ni give`/DP `dungeon-reward-script` 由怪物·插件接线。  
 **原则：** 低阶本不掉高阶成品洪水；高阶本可掉材料回流低阶强化。
 

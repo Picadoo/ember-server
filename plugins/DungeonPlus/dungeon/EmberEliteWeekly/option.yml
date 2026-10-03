@@ -1,4 +1,4 @@
-# 余烬·精英试炼 — docs/design-stage4-elite-weekly.md §1～§5
+# 余烬·精英试炼 — docs/design/design-stage4-elite-weekly.md §1～§5
 # 启动：菜单 corerpg elite start → dp start EmberEliteWeekly（玩家不可见 /dp start）
 # 次数：维护备忘：遗留票物/体力口径；现行进本扣发起者体力（本周首次免费，之后按 cash.yml stamina.costs.elite，现行 40）；每人每周通关 1 次
 # 维护备忘：扣次由 CoreRpg TicketEntryService/StaminaService 在 corerpg enter 时处理，本文件不扣次；遗留 NI 票物 ticket_ember_elite 按 stamina.ticket_convert 折体力

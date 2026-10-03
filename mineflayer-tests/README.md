@@ -58,7 +58,7 @@ Join → 枢纽菜单 `/ember`（非 op，查标题/关键图标/无未替换 `%
 - 机器人 **不是 op**、本服 **无 LuckPerms**：所有特权步骤（`ni give`、`gamemode`、`mvtp`、`fill`、`mm mobs spawn/kill`）都由 `lib/console.js` 写入游玩服控制台执行，`ops.json` 始终保持 `[]`。
 - 测试场地：`world` (3000,200,3000) 高空临时平台，结束时在 `finally` 中清空背包、拆平台、`gamemode 0`、送回 `ember_hub`。不改 gamerule。
 - 钓鱼池故意 1 格深且紧贴脚下：2 格深时上钩会把浮漂拖到水下，战利品在水中被岸边方块挡住，捡不到（几何问题，不是 CoreFish bug）。
-- 结果写到 `STATUS_PATH`（默认 `/workspace/minecraft/STATUS-gameplay-suite.md`）；调试变量 `FISH_DEBUG=1`、`REEL_MS`（上钩后多久收杆，默认 400）。
+- 结果写到 `STATUS_PATH`（默认 `/workspace/minecraft/docs/status/STATUS-gameplay-suite.md`）；调试变量 `FISH_DEBUG=1`、`REEL_MS`（上钩后多久收杆，默认 400）。
 
 ### 控制台 FIFO
 

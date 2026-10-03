@@ -37,7 +37,7 @@
 | `CoreCombat/` | 盾/图腾/冷却等（规划，可拆分） |
 | `server-runtime/` | 测试服 |
 | `mineflayer-tests/` | 冒烟与机制脚本 |
-| `DESIGN-*.md` / `STATUS-*.md` / 本文件 | 设计与验收 |
+| `docs/design/DESIGN-*.md` / `docs/status/STATUS-*.md` / 本文件 | 设计与验收 |
 
 ---
 
@@ -298,6 +298,6 @@ P2 熔炉时长/数量 ──┬── P3 炼药
 
 ## 10. 相关文档
 
-- `DESIGN-furnace.md` — 余烬熔炉链  
-- `STATUS-furnace.md` / `STATUS.md` / `STATUS-hybrid.md`（hybrid 完成后）  
+- `docs/design/DESIGN-furnace.md` — 余烬熔炉链  
+- `docs/status/STATUS-furnace.md` / `docs/status/STATUS.md` / `docs/status/STATUS-hybrid.md`（hybrid 完成后）  
 - `ROADMAP-core-mod.md` — 本文件（唯一总路线图）

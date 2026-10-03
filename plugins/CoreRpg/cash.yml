@@ -1,4 +1,4 @@
-# CoreRpg cash — 晶钻 / 体力 / 遗留票物 / 月卡（DESIGN-ember-cash-monthly.md）
+# CoreRpg cash — 晶钻 / 体力 / 遗留票物 / 月卡（docs/design/DESIGN-ember-cash-monthly.md）
 # 维护备忘：配置可先落盘；落地后纳入 CoreRpg reload
 # 红线：不直售碎片/晶/核心；总进本次数硬顶仍为 6（免费+氪+月卡），按体力口径维护
 enabled: true

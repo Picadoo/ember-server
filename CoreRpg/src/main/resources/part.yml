@@ -1,5 +1,5 @@
 # CoreRpg 1.15.26 B-anvil-1 烬砧材料→部件短链（/corerpg part craft，TrMenu ember_forge / ember_part）
-# 与 forge.yml 升阶正交；本文件零币零体力。docs/design-ember-anvil-mat-to-part-pilot.md
+# 与 forge.yml 升阶正交；本文件零币零体力。docs/design/design-ember-anvil-mat-to-part-pilot.md
 enabled: true
 recipes:
   ash_brace:

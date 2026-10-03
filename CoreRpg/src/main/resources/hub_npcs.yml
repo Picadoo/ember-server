@@ -1,5 +1,5 @@
-# 枢纽工坊 NPC（Adyeshach + Bukkit hitbox）— design-ember-hub-workshop-npcs.md
-# + 日常门吏 ember_dungeon_clerk — design-ember-hub-dungeon-clerk.md
+# 枢纽工坊 NPC（Adyeshach + Bukkit hitbox）— docs/design/design-ember-hub-workshop-npcs.md
+# + 日常门吏 ember_dungeon_clerk — docs/design/design-ember-hub-dungeon-clerk.md
 # ember_guide（灰烛）仍由 quest.yml / QuestService 管理，此处不列。
 enabled: true
 npcs:

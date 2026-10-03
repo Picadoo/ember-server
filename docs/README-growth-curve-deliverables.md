@@ -1,6 +1,6 @@
 # 成长曲线 · 策划交付路径（2026-09-13）
 
-依据：`DESIGN-ember-growth-curve.md`
+依据：`docs/design/DESIGN-ember-growth-curve.md`
 
 | # | 文件 | 内容 |
 |---|------|------|

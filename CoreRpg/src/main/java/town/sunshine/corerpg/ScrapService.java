@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-/** Scrap + reforge per STATUS-ember-disassemble.md / scrap.yml. */
+/** Scrap + reforge per docs/status/STATUS-ember-disassemble.md / scrap.yml. */
 public final class ScrapService {
 
     private final JavaPlugin plugin;

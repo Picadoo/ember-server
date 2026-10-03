@@ -18,7 +18,7 @@ const {
 } = require('./helpers/suite-util')
 
 const USERNAME = process.env.MC_USER || 'EmberTestOp'
-const STATUS_PATH = process.env.STATUS_PATH || '/workspace/minecraft/STATUS-gameplay-suite.md'
+const STATUS_PATH = process.env.STATUS_PATH || '/workspace/minecraft/docs/status/STATUS-gameplay-suite.md'
 const SX = Number(process.env.SX || 3000)
 const SY = Number(process.env.SY || 200) // pad floor at SY-1; air above everything
 const SZ = Number(process.env.SZ || 3000)

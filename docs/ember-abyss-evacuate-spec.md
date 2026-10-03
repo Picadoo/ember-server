@@ -2,7 +2,7 @@
 
 **日期：** 2026-09-13（Asia/Shanghai）  
 **作者岗：** 余烬-策划  
-**状态：** 总控已按此开干；现网 `STATUS-ember-abyss.md` 为 **5 层 stub**，本文定义 **做真** 验收。  
+**状态：** 总控已按此开干；现网 `docs/status/STATUS-ember-abyss.md` 为 **5 层 stub**，本文定义 **做真** 验收。  
 **承接：** `docs/ember-abyss-calamity.md` §1 · `docs/ember-gear-drop-t0-t3.md` §3.4 · `docs/ember-dungeon-gameplay-diff.md` §3  
 **约束：** 不改 Paper；票仍进本扣；奖励 NI/MM/结算命令。
 
@@ -139,4 +139,4 @@
 | **本文** `docs/ember-abyss-evacuate-spec.md` | 本刀验收主规格 |
 | `docs/ember-abyss-calamity.md` | 文案与原表 |
 | `docs/ember-gear-drop-t0-t3.md` §3.4 | T2 高层概率 |
-| `STATUS-ember-abyss.md` | 现状 stub；通关后请改 STATUS |
+| `docs/status/STATUS-ember-abyss.md` | 现状 stub；通关后请改 STATUS |

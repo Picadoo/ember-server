@@ -32,7 +32,7 @@ import java.util.logging.Level;
 
 /**
  * Coin auction / 寄售 — whitelist NI listings, 10% tax.
- * DESIGN-ember-arena-auction.md §2 · store plugins/CoreRpg/auction.yml
+ * docs/design/DESIGN-ember-arena-auction.md §2 · store plugins/CoreRpg/auction.yml
  */
 public final class AuctionService {
 

@@ -1,5 +1,5 @@
 # 日/周本/深渊/团本/精英 入场券 — 迁移期仍保留 NI ID（ticket_ember_*）供 ItemManager consumeExact 兑换体力
-# docs/design-ember-stamina-dnf-daily.md §A.4：停发由插件改 cash/progress；物品侧 id 稳定可引用
+# docs/design/design-ember-stamina-dnf-daily.md §A.4：停发由插件改 cash/progress；物品侧 id 稳定可引用
 # 进本已改体力制后不再作入场扣次；禁显示名匹配
 
 ticket_ember_daily:

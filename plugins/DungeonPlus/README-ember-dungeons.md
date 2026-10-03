@@ -1,6 +1,6 @@
 # 余烬日/周本 — 路径清单
 
-设计：`/workspace/minecraft/DESIGN-dungeon-daily-weekly.md`  
+设计：`/workspace/minecraft/docs/design/DESIGN-dungeon-daily-weekly.md`  
 维护备忘：玩家入口=TrMenu 点击进本（日/周/深渊/团本/精英）· 体力扣次；进本门控仍挂
 管理/测本：`dp start-console <玩家> <DungeonId>` · 灾厄测本 `/dp start EmberCalamity`（须标仅测试）· 盟 Boss：`/corerpg guild boss`
 
@@ -37,7 +37,7 @@
 | `ticket_ember_abyss` | 余烬深渊票 | 进本扣 1；遗留票物 / DP 入场条件；现行次数=体力 |
 
 物品草案：`plugins/NeigeItems/Items/ember-dungeon-tickets.yml`  
-> **维护备忘（票务 NI 对齐）：** 进本扣次仍用 DP `<item:显示名>`（官方只认物品名）；给票/计数已走 NI ID。详见 `/workspace/minecraft/STATUS-ember-ticket-ni-audit.md`。  
+> **维护备忘（票务 NI 对齐）：** 进本扣次仍用 DP `<item:显示名>`（官方只认物品名）；给票/计数已走 NI ID。详见 `/workspace/minecraft/docs/status/STATUS-ember-ticket-ni-audit.md`。  
 维护备忘：自动发放未落地前，仅管理/测试可用 `/ni give <玩家> ticket_ember_daily 3` 做物测；不作为玩家操作说明。
 
 ## 菜单
@@ -56,6 +56,6 @@
 
 ## 维护备忘（地图与脚本）
 
-- 地图已按本拆分（仍为测试区切片，出生 `-40,65,270`）；近出生点有主题方块标记；正式艺术面由 WorldEdit 再调。详见 `STATUS-ember-maps.md`。
+- 地图已按本拆分（仍为测试区切片，出生 `-40,65,270`）；近出生点有主题方块标记；正式艺术面由 WorldEdit 再调。详见 `docs/status/STATUS-ember-maps.md`。
 - `$kill` 依赖 MM Display「余烬地窟僵尸/骷髅/蛮兵」；若对不上，看 DP debug 或改 monster.yml。
 - 周本装备保底目前固定发刃。

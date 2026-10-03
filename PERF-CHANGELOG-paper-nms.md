@@ -187,7 +187,7 @@ Server stopped via `./stop.sh` after verify.
 ## 2026-09-10 later — XP orbs removed + chunk bandwidth (CST)
 
 **Also:** CoreWorldRules **1.2.0** plugin + runtime config edits (backups `server-runtime/config-backups/xp-chunk-20260910/`).  
-**Status doc:** `STATUS-xp-chunk.md`
+**Status doc:** `docs/status/STATUS-xp-chunk.md`
 
 ### 7. Reject experience orb entities entirely
 

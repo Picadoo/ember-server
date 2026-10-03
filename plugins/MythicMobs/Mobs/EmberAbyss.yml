@@ -1,7 +1,7 @@
 # 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
-# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/tests/smoke-gating-drops-20260926.md
 # 深渊 EmberAbyss — 层系数上涨（潮/骨/混/蛮/看守）
-# 2026-09-27 宝石几率下调（目标活跃玩家约 2~3 天 1 颗，见 docs/critic-fixes-20260927.md）
+# 2026-09-27 宝石几率下调（目标活跃玩家约 2~3 天 1 颗，见 docs/reviews/critic-fixes-20260927.md）
 # DP 可用 level= 再叠 LevelModifiers；单路径 ni give
 
 EmberAbyssZombie:
@@ -121,7 +121,7 @@ EmberAbyssWatcher:
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_blade 1"} @Self ~onDeath 0.03
   - command{c="corerpg mmgive <caster.uuid> gear_ember_t2_talisman 1"} @Self ~onDeath 0.02
 
-# 阶段 4.1 · 深渊 9～12：第二看守（设计稿 docs/design-stage4-abyss-9-12.md §2.2 / §3）
+# 阶段 4.1 · 深渊 9～12：第二看守（设计稿 docs/design/design-stage4-abyss-9-12.md §2.2 / §3）
 # Display 须与 DP $kill「余烬深渊·看守·深」一字不差（含中间点）；稳定符不走战斗掉落（周首通）
 EmberAbyssWatcherDeep:
   # 4.3c：7500/18 → 6000/18（4.3b TTK≈91–98s/剩血偏高→略削血；Damage 18 能逼复活勿抬）；LM health=0；Gaze/掉落/Display 不变

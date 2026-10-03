@@ -1,6 +1,6 @@
 # 2026-09-27: zombie 24hp/3dmg → 20/2 and no wood sword (+4), brute 48hp/6dmg → 40/4 and no iron sword (+6) (mobs now really spawn in the room instead of suffocating in rock)
 # 2026-09-27: death rewards → corerpg mmgive/mmxp <caster.uuid> (credited to the last player hitter; MM <trigger> was often 'Unknown')
-# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/smoke-gating-drops-20260926.md
+# 2026-09-26：~onDeath 几率行由 ">0 X"（血量>0 条件，死亡时恒不成立 → 从未触发）改为纯几率 "X"；按 docs/ember-gear-drop-t0-t3.md 审计下调过高项，见 docs/tests/smoke-gating-drops-20260926.md
 # 日常 EmberDaily — 清潮轻压（灰烬庭院）
 # 单路径 ni give；勿与地窟 Display 撞名（DP $kill 用去色 Display）
 

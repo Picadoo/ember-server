@@ -1,5 +1,5 @@
 # D63（P1 默认模式）：旧主界面原样保留，不绑定命令；只给管理员 trmenu open ember_hub_legacy 查旧系统
-# 余烬主界面 — DESIGN-ember-rpg-systems.md §1 + docs/ember-hub-copy.md
+# 余烬主界面 — docs/design/DESIGN-ember-rpg-systems.md §1 + docs/ember-hub-copy.md
 # TrMenu 3.12.x · Paper 1.12.2 · /ember 或 /menu
 # 实装：挂机/日/周/附魔/帮助(ember_help)/关闭 · P1 冒险/装备/工坊（n/o/p） + 签到/活跃/悬赏（CoreRpg）+ 强化/镶嵌/分解菜单壳
 # 商城/战令/勋阶：子菜单壳（晶钻支付未接线）· 月卡入口进商城；礼包/外观暂未上架、不可点击（D35）

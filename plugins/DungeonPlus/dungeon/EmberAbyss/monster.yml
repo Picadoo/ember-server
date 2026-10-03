@@ -1,9 +1,9 @@
 # 2026-09-27 F2-stuck: spawn CZ±6 (odd z=276 / even z=264); F2 scattered 0.5; hole rails via abyssbuild
 # 2026-09-27 P2 shaft: per-floor ring platforms (Y step~5; F10-12 wider). Teleport on wave start.
 # 2026-09-27: spawn points moved into the map's open room (old ones were inside solid blocks → mobs/bosses suffocated;
-#   see docs/critic-fixes-20260927.md §10). Map ember_abyss room: x -43..-37, z 267..273
+#   see docs/reviews/critic-fixes-20260927.md §10). Map ember_abyss room: x -43..-37, z 267..273
 # 深渊 · Display：余烬深渊·潮尸/骨潮/混潮/蛮层/看守
-# 冲层+撤离：docs/ember-abyss-evacuate-spec.md · DESIGN-ember-abyss-evacuate.md
+# 冲层+撤离：docs/ember-abyss-evacuate-spec.md · docs/design/DESIGN-ember-abyss-evacuate.md
 # 清层 end：progress N → 播报+撤离提示 → 下一层（顶层 floor12 COMPLETE）
 # 2026-09-27 stage4.1：可下潜至 12；撤离提示改为菜单文案
 # 2026-09-26 修：$command 不认 <player.name>（控制台 "玩家 <player.name> 不在线"，奖励/结算/回城从未执行）→ PAPI %player_name%
@@ -154,7 +154,7 @@ groups:
     - "$monstergroup{group=floor9;repeat=false;delay=3} @dungeon"
     auto-start: false
 
-  # 9～12：stage4.1 深渊续层（design-stage4-abyss-9-12.md）；顶层 COMPLETE=floor12
+  # 9～12：stage4.1 深渊续层（docs/design/design-stage4-abyss-9-12.md）；顶层 COMPLETE=floor12
   floor9:
   - monster:
     - "$mob{plugin=MythicMobs;name=EmberAbyssBrute;location=-38,45,276;amount=1;scattered=1.0;level=1} @dungeon"
