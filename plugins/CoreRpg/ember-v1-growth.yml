@@ -51,9 +51,9 @@ talents:
       row: 1
       name: "回身斩"
       family: burst
-      mods: {dodge_dmg: 1.05, dodge_secs: 3, taken_tele: 1.04}
+      mods: {dodge_dmg: 1.05, dodge_secs: 3, taken_tele: 1.05}
       good: "躲开首领预警招后 3 秒内伤害 +5%"
-      bad: "被首领预警招打中多受 4%"
+      bad: "被首领预警招打中多受 5%"
     - id: t1b
       row: 1
       name: "稳桩"
@@ -65,9 +65,9 @@ talents:
       row: 1
       name: "踏步回气"
       family: scorch
-      mods: {dodge_heal: 0.01, dodge_icd: 10, taken_tele: 1.04}
-      good: "躲开首领预警招回 1% 最大生命（10 秒一次）"
-      bad: "被首领预警招打中多受 4%"
+      mods: {dodge_heal: 0.01, dodge_icd: 12, taken_tele: 1.05}
+      good: "躲开首领预警招回 1% 最大生命（12 秒一次）"
+      bad: "被首领预警招打中多受 5%"
     # 第 2 排「猎手」：重复刷图的词缀精英（D138）。得失都只落在词缀精英（含分身）身上，首通局和首领战不受影响。
     - id: t2a
       row: 2
@@ -96,17 +96,17 @@ talents:
       name: "燎原"
       family: scorch
       set: scorch
-      mods: {burn_spread: 2, spread_icd: 10, burn_mult: 0.95}
+      mods: {burn_spread: 2, spread_icd: 10, burn_mult: 0.93}
       good: "燃烧中的敌人倒下时，把最多 2 秒燃烧传给 4 格内最近的敌人（10 秒一次）"
-      bad: "焚烬燃烧每跳伤害 ×0.95"
+      bad: "焚烬燃烧每跳伤害 ×0.93"
     - id: t3b
       row: 3
       name: "反震"
       family: burst
       set: burst
-      mods: {hit_burst: 2, taken_tele: 1.02}
+      mods: {hit_burst: 2, taken_tele: 1.03}
       good: "被首领预警招打中时烬爆计数 +2（硬吃一招换一次更早的烬爆，和「稳桩」搭）"
-      bad: "被首领预警招打中多受 2%"
+      bad: "被首领预警招打中多受 3%"
     - id: t3c
       row: 3
       name: "扛核"
@@ -134,7 +134,8 @@ honors:
 # 每件 T1+ 刃 / 护符一个词条槽（初始空）。一次洗练 = 同部位同阶的一件重复件（掉落来的、没投入、没穿着）或碎片，加币。
 # 档位按 tier_weights 抽，截在成色上限 tier_cap[成色]（标准 1 / 精良 2 / 卓越 3 / 极品 4）再归一；
 # 连续 pity 次没出到上限档，下一次必出上限档。洗完二选一：保留新 / 保留旧（不选 = 旧的）。
-# 数值 = 1 / 2 / 3 / 4 档。参考装都是标准件，只能到 1 档。
+# 数值 = 1 / 2 / 3 / 4 档。参考装都是标准件，只能到 1 档。词条几乎都只落在词缀精英 / 分身 / 烬核上（D138 / D137），
+# 通用的两条（余烬、稳桩）每档只有 0.5%；回复药类词条试过（+1% = Q06 约 +1 点）删掉了，code 5 空着不要复用。
 reroll:
   pity: 5
   tier_weights: [50, 30, 15, 5]
@@ -146,10 +147,9 @@ reroll:
   affixes:
     blade:
       - {id: b_affix, code: 1, name: "破缀", key: dmg_affix, desc: "对词缀精英伤害", values: [1.04, 1.08, 1.12, 1.16]}
-      - {id: b_set, code: 2, name: "余烬", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.01, 1.02, 1.03, 1.04]}
+      - {id: b_set, code: 2, name: "余烬", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.005, 1.01, 1.015, 1.02]}
       - {id: b_split, code: 3, name: "拆分", key: dmg_split, desc: "对分身伤害", values: [1.05, 1.10, 1.15, 1.20]}
     charm:
       - {id: c_tele, code: 4, name: "稳桩", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
-      - {id: c_potion, code: 5, name: "药引", key: potion, desc: "回复药回复", values: [1.01, 1.02, 1.03, 1.04]}
       - {id: c_share, code: 6, name: "分核", key: share_taken, desc: "烬核自己那份", values: [0.97, 0.94, 0.91, 0.88]}
       - {id: c_affix, code: 7, name: "抗缀", key: taken_affix, desc: "受到词缀精英伤害", values: [0.96, 0.92, 0.88, 0.84]}

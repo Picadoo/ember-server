@@ -105,4 +105,80 @@ public class EmberGrowthTest {
         assertEquals("at most 2 s move over", 3500, b.get("b").endAt());
         assertFalse("nothing left to move", b.transfer("a", "c", 1500, 2000));
     }
+
+    private static Map<?, ?> root() {
+        return (Map<?, ?>) new Yaml().load(new InputStreamReader(EmberGrowthTest.class.getResourceAsStream("/" + EmberGrowth.FILE), StandardCharsets.UTF_8));
+    }
+
+    @Test public void honorsCappedAndNoMainMapCombat() {
+        EmberGrowth.Honors h = EmberGrowth.parseHonors(root());
+        assertNotNull(h);
+        assertEquals(7, h.list.size());
+        List<String> all = new ArrayList<String>();
+        for (EmberGrowth.Honor x : h.list) {
+            all.add(x.id);
+            for (String k : x.mods.keySet())
+                assertTrue(x.id + ": honors only touch economy / abyss keys, got " + k,
+                        Arrays.asList("coin", "shard_bonus", "abyss_fee", "abyss_taken", "reroll_coin").contains(k));
+        }
+        Map<String, Double> m = EmberGrowth.honorParts(h, all);
+        assertTrue(m.get("coin") <= 1.04 + 1e-9);
+        assertTrue(m.get("shard_bonus") <= 1 + 1e-9);
+        assertTrue(m.get("abyss_fee") >= 0.95 - 1e-9);
+        assertTrue(m.get("abyss_taken") >= 0.98 - 1e-9);
+        assertTrue(m.get("reroll_coin") >= 0.85 - 1e-9);
+        // a cap actually bites when the list sums past it
+        Map<String, Double> caps = new HashMap<String, Double>(); caps.put("coin", 1.04);
+        List<EmberGrowth.Honor> l = new ArrayList<EmberGrowth.Honor>();
+        for (int i = 0; i < 5; i++) l.add(new EmberGrowth.Honor("h" + i, "h", "x", "", "", m("coin", 1.02)));
+        EmberGrowth.Honors big = new EmberGrowth.Honors(l, caps);
+        assertEquals(1.04, EmberGrowth.honorParts(big, Arrays.asList("h0", "h1", "h2", "h3", "h4")).get("coin"), 1e-9);
+        assertTrue(EmberGrowth.honorParts(h, new ArrayList<String>()).isEmpty());
+    }
+
+    @Test public void affixRulesQualityCapAndPity() {
+        EmberAffix.Rules r = EmberAffix.parse(root());
+        assertNotNull(r);
+        assertEquals(5, r.pity);
+        assertEquals(1, r.cap(0)); assertEquals(2, r.cap(1)); assertEquals(3, r.cap(2)); assertEquals(4, r.cap(3));
+        assertFalse(r.pool("blade").isEmpty()); assertFalse(r.pool("charm").isEmpty());
+        java.util.Set<Integer> codes = new java.util.HashSet<Integer>();
+        for (EmberAffix.Def d : r.defs) { assertTrue(d.id, d.code > 0); assertTrue("unique code " + d.id, codes.add(d.code)); assertEquals(4, d.values.length); }
+        assertArrayEquals(new double[]{1.0}, EmberAffix.tierOdds(r, 1), 1e-9);
+        double[] o2 = EmberAffix.tierOdds(r, 2);
+        assertEquals(50.0 / 80, o2[0], 1e-9); assertEquals(30.0 / 80, o2[1], 1e-9);
+        java.util.Random rng = new java.util.Random(5);
+        for (int q = 0; q <= 3; q++) {
+            int pity = 0, worst = 0, run = 0;
+            for (int i = 0; i < 4000; i++) {
+                EmberAffix.Roll x = EmberAffix.roll(r, i % 2 == 0 ? "blade" : "charm", q, pity, rng);
+                assertTrue("never above the quality cap", x.tier <= r.cap(q) && x.tier >= 1);
+                if (x.tier < r.cap(q)) run++; else run = 0;
+                worst = Math.max(worst, run);
+                pity = x.pityAfter;
+            }
+            assertTrue("pity: at most " + r.pity + " misses in a row, got " + worst, worst <= r.pity);
+        }
+        EmberAffix.Roll forced = EmberAffix.roll(r, "blade", 3, 5, rng);
+        assertTrue(forced.forced); assertEquals(4, forced.tier); assertEquals(0, forced.pityAfter);
+        EmberAffix.Def d = r.pool("blade").get(0);
+        int enc = EmberAffix.encode(d, 4);
+        assertSame(d, EmberAffix.decodeDef(r, enc)); assertEquals(4, EmberAffix.decodeTier(enc));
+        // a tier-4 affix on a piece that is now 标准 counts as tier 1 (cap re-applied)
+        Map<String, Double> parts = EmberAffix.parts(r, new int[][]{{enc, 0}, null});
+        assertEquals(d.values[0], parts.get(d.key), 1e-9);
+        assertTrue(EmberAffix.parts(r, new int[][]{{0, 3}}).isEmpty());
+    }
+
+    @Test public void affixDuplicateRules() {
+        EmberItemData t = EmberItemData.create("burst", "blade", 2, 0, 0, 0, false, "drop");
+        EmberItemData ok = EmberItemData.create("scorch", "blade", 2, 0, 0, 0, false, "drop");
+        assertNull(EmberAffix.duplicateOk(t, ok, false));
+        assertNotNull("own affix = investment", EmberAffix.duplicateOk(t, ok, true));
+        assertNotNull("same piece", EmberAffix.duplicateOk(t, t, false));
+        assertNotNull("other tier", EmberAffix.duplicateOk(t, EmberItemData.create("burst", "blade", 1, 0, 0, 0, false, "drop"), false));
+        assertNotNull("other slot", EmberAffix.duplicateOk(t, EmberItemData.create("burst", "charm", 2, 0, 0, 0, false, "drop"), false));
+        assertNotNull("enhanced", EmberAffix.duplicateOk(t, EmberItemData.create("burst", "blade", 2, 0, 0, 3, false, "drop"), false));
+        assertNotNull("T0 has no slot", EmberAffix.eligible(EmberItemData.create("burst", "blade", 0, 0, 0, 0, false, "starter")));
+    }
 }
