@@ -183,6 +183,18 @@ public final class EmberGrowth {
         return out;
     }
 
+    /** Admin test hook (Part A, 10-04): honor ids matched by an id, a condition kind ("raid_count"), "kind:arg" or "all". */
+    public static List<String> honorMatch(Honors h, String token) {
+        List<String> out = new ArrayList<String>();
+        if (h == null || token == null) return out;
+        String t = token.trim().toLowerCase(java.util.Locale.ROOT);
+        for (Honor x : h.list) {
+            String ka = x.kind + ":" + (x.arg == null ? "" : x.arg.trim());
+            if ("all".equals(t) || x.id.equalsIgnoreCase(t) || x.kind.equalsIgnoreCase(t) || ka.equalsIgnoreCase(t)) out.add(x.id);
+        }
+        return out;
+    }
+
     public static Honors parseHonors(Map<?, ?> root) {
         Object o = root == null ? null : root.get("honors");
         if (!(o instanceof Map)) return null;

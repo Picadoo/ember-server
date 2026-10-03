@@ -136,6 +136,20 @@ public class EmberGrowthTest {
         assertTrue(EmberGrowth.honorParts(h, new ArrayList<String>()).isEmpty());
     }
 
+    @Test public void honorTestHookMatches() { // Part A 10-04: /corerpg p1 honor test <id|kind|kind:arg|all>
+        EmberGrowth.Honors h = EmberGrowth.parseHonors(root());
+        assertEquals(java.util.Arrays.asList("h_raid1"), EmberGrowth.honorMatch(h, "h_raid1"));
+        assertEquals(java.util.Arrays.asList("h_raid1", "h_raid3"), EmberGrowth.honorMatch(h, "raid_count"));
+        assertEquals(java.util.Arrays.asList("h_abyss5"), EmberGrowth.honorMatch(h, "abyss_floor:5"));
+        assertEquals(h.list.size(), EmberGrowth.honorMatch(h, "all").size());
+        assertTrue(EmberGrowth.honorMatch(h, "nope").isEmpty());
+        // all seven together: coin 1.02 × 1.02 = 1.0404 → capped at 1.04; reroll 0.90 × 0.95 = 0.855 (cap 0.85 not reached)
+        java.util.Map<String, Double> m = EmberGrowth.honorParts(h, EmberGrowth.honorMatch(h, "all"));
+        assertEquals(1.04, m.get("coin"), 1e-9);
+        assertEquals(0.855, m.get("reroll_coin"), 1e-9);
+        assertEquals(1.0, m.get("shard_bonus"), 1e-9);
+    }
+
     @Test public void affixRulesQualityCapAndPity() {
         EmberAffix.Rules r = EmberAffix.parse(root());
         assertNotNull(r);

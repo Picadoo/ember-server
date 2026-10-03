@@ -51,6 +51,8 @@ public final class EmberGrowthService implements Listener {
     private final Map<UUID, Object[]> honorCache = new ConcurrentHashMap<UUID, Object[]>(); // uuid → {until ms, List<String>}
     static final String C_HONOR_SEEN = "p4_honor_";     // + id, period all: the one-time "勋记解锁" notice was sent
     static final String HONOR_MENU = "ember_p1_honor";
+    /** + honor id, period all: admin test grant (Part A 10-04); counts as the condition being met */
+    static final String C_HONOR_TEST = "p4_honortest_";
     private static final Map<UUID, String> HFROM = new ConcurrentHashMap<UUID, String>();
     private long epoch;
     private final Map<UUID, Object[]> cache = new ConcurrentHashMap<UUID, Object[]>(); // uuid → {key, Mods}
@@ -358,6 +360,7 @@ public final class EmberGrowthService implements Listener {
     /** one honor reached? (all conditions are existing one-time achievements) */
     public boolean honorDone(PlayerData d, EmberGrowth.Honor h) {
         if (d == null || h == null) return false;
+        if (d.periodCount(C_HONOR_TEST + h.id, "all") > 0) return true; // admin test grant
         int n;
         try { n = h.arg == null || h.arg.trim().isEmpty() ? 0 : Integer.parseInt(h.arg.trim()); } catch (NumberFormatException e) { n = 0; }
         if ("abyss_floor".equals(h.kind)) return runs.abyssBest(d) >= n;
@@ -441,6 +444,38 @@ public final class EmberGrowthService implements Listener {
         }
         refreshHonors(p);
         openMenu(p, HONOR_MENU);
+        return true;
+    }
+
+    /**
+     * Admin: /corerpg p1 honor test <id|kind|kind:arg|all> [玩家] — grant the condition (then the normal unlock notice fires);
+     * honor test clear [玩家] — drop every test grant and the "seen" marks so the notice can fire again; honor test show [玩家].
+     */
+    public boolean honorTest(org.bukkit.command.CommandSender s, String[] args) {
+        if (honors == null) { s.sendMessage(P + "余烬勋记未配置"); return true; }
+        String w = args.length >= 4 ? args[3] : "show";
+        Player t = args.length >= 5 ? Bukkit.getPlayerExact(args[4]) : (s instanceof Player ? (Player) s : null);
+        if (t == null) { s.sendMessage(P + "/corerpg p1 honor test <勋记id|条件|all|clear|show> [在线玩家]"); return true; }
+        PlayerData d = data(t.getUniqueId());
+        if (d == null) { s.sendMessage(P + "数据还没加载好"); return true; }
+        if ("clear".equalsIgnoreCase(w)) {
+            for (EmberGrowth.Honor h : honors.list) {
+                d.addPeriodCount(C_HONOR_TEST + h.id, "all", -d.periodCount(C_HONOR_TEST + h.id, "all"));
+                d.addPeriodCount(C_HONOR_SEEN + h.id, "all", -d.periodCount(C_HONOR_SEEN + h.id, "all"));
+            }
+        } else if (!"show".equalsIgnoreCase(w)) {
+            List<String> ids = EmberGrowth.honorMatch(honors, w);
+            if (ids.isEmpty()) { s.sendMessage(P + "没有这个勋记 / 条件：" + w + "（id 或 abyss_floor:5 / challenge_count:3 / raid_count:1 / codex_full / all）"); return true; }
+            for (String id : ids) d.addPeriodCount(C_HONOR_TEST + id, "all", 1 - d.periodCount(C_HONOR_TEST + id, "all"));
+        }
+        epoch++;
+        refreshHonors(t); // sends the one-time unlock notice for newly met honors
+        runs.flushData(t.getUniqueId());
+        List<String> e = honorsEarned(t.getUniqueId(), d);
+        Map<String, Double> tot = EmberGrowth.honorParts(honors, e);
+        s.sendMessage(P + t.getName() + " 勋记 " + e.size() + "/" + honors.list.size() + " " + e + " · 合计（封顶后）："
+                + (tot.isEmpty() ? "无" : EmberGrowth.describeCn(tot)) + " · raw " + tot);
+        plugin.getLogger().info("[P1 growth] admin " + s.getName() + " honor test " + w + " " + t.getName() + " → " + e + " " + tot);
         return true;
     }
 
