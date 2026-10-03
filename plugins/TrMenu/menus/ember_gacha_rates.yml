@@ -1,0 +1,120 @@
+# 由 CoreGacha/tools/genmenus.py 从 gacha.yml 生成 —— 不要手改，改生成器后重跑（设计 docs/design/DESIGN-ember-gacha.md §8）
+Title: '§d扭蛋 · 概率公示'
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+Layout:
+  - '####I####'
+  - '#L#E#R#C#'
+  - '#########'
+  - '##s#P#l##'
+  - '####B####'
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+  'I':
+    update: 20
+    display:
+      material: 'paper'
+      name: '%coregacha_view_name% §7· 概率公示'
+      lore:
+        - '%coregacha_view_rules%'
+  'L':
+    update: 20
+    display:
+      material: 'gold block'
+      name: '§6传说 §7%coregacha_view_tier_legend%'
+      lore:
+        - ''
+        - '%coregacha_view_items_legend%'
+        - ''
+        - '§8单件概率 = 品质综合概率 × 品质内份额（传说份额按「不连出同一件」算）'
+  'E':
+    update: 20
+    display:
+      material: 'purpur block'
+      name: '§d史诗 §7%coregacha_view_tier_epic%'
+      lore:
+        - ''
+        - '%coregacha_view_items_epic%'
+        - ''
+        - '§8单件概率 = 品质综合概率 × 品质内份额（传说份额按「不连出同一件」算）'
+  'R':
+    update: 20
+    display:
+      material: 'lapis block'
+      name: '§b稀有 §7%coregacha_view_tier_rare%'
+      lore:
+        - ''
+        - '%coregacha_view_items_rare%'
+        - ''
+        - '§8单件概率 = 品质综合概率 × 品质内份额（传说份额按「不连出同一件」算）'
+  'C':
+    update: 20
+    display:
+      material: 'stone'
+      name: '§7普通 §7%coregacha_view_tier_common%'
+      lore:
+        - ''
+        - '%coregacha_view_items_common%'
+        - ''
+        - '§8单件概率 = 品质综合概率 × 品质内份额（传说份额按「不连出同一件」算）'
+  's':
+    update: 20
+    display:
+      material: 'nether star'
+      name: '§b看常驻池'
+      lore:
+        - ''
+        - '§e➥ §f切换'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha rates standard'
+  'l':
+    update: 20
+    display:
+      material: 'firework'
+      name: '§c看国庆 · 烟火盛典'
+      lore:
+        - ''
+        - '§e➥ §f切换'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha rates gq26'
+  'P':
+    update: 20
+    display:
+      material: 'clock'
+      name: '§f保底说明'
+      lore:
+        - ''
+        - '§7第 1–60 抽传说 0.6%，之后每抽 +4%'
+        - '§7第 80 抽必出传说（永远不会到第 81 抽）'
+        - '§7每 10 抽至少一件史诗或以上'
+        - '§7同一个池不会连续出同一件传说'
+        - '§7火花：每抽 +1，满 200 任选一件'
+        - '§7限定池共用一组保底（换季延续），常驻池单独一组'
+        - '§7「综合概率」= 算上保底后长期的实际概率（精确计算，离线百万抽验证）'
+  'B':
+    update: 20
+    display:
+      material: 'arrow'
+      name: '§7返回扭蛋页'
+      lore:
+        - ''
+        - '§e➥ §f返回'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_gacha'

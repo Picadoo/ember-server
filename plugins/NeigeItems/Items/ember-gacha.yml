@@ -1,0 +1,14 @@
+# CoreGacha 外观扭蛋 —— 实物扭蛋券。CoreGacha 按 NI ID 认（禁显示名匹配），右键或 /gacha redeem 存进扭蛋钱包。
+# 给以后的副本掉落 / 邮件 / 活动发券用（ni give <玩家> ember_gacha_ticket <n>）。只能抽外观（零属性），没有任何充值入口。
+
+ember_gacha_ticket:
+  material: PAPER
+  name: '&d扭蛋券'
+  lore:
+    - '&7余烬 · 外观扭蛋的抽卡券（只出外观，零属性）'
+    - '&7右键存进扭蛋钱包，/gacha 打开扭蛋页'
+    - '&8游戏内获得 · 不能充值购买'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

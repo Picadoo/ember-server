@@ -1,0 +1,18 @@
+name: CoreGacha
+main: town.sunshine.coregacha.CoreGachaPlugin
+version: 1.0.0
+author: sunshine-town
+description: 余烬 · 外观扭蛋（只出外观，零属性；扭蛋券游戏内获得）
+depend: [CoreRpg]
+softdepend: [PlaceholderAPI, NeigeItems, TrMenu]
+commands:
+  gacha:
+    description: 外观扭蛋
+    usage: /gacha [pull <池> <1|10>|history|rates <池>|shop|craft|spark|exchange|wear|fx|redeem|admin]
+    permission: coregacha.use
+    aliases: [扭蛋, niudan]
+permissions:
+  coregacha.use:
+    default: true
+  coregacha.admin:
+    default: op

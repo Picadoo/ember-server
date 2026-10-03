@@ -1,0 +1,165 @@
+# CoreGacha · 外观扭蛋参数（设计 docs/design/DESIGN-ember-gacha.md）。两份：CoreGacha/src/main/resources/ 和
+# plugins/CoreGacha/ —— 一起改。改完 /gacha admin reload（公示概率会重算），再跑模拟器（docs/tests/TEST-gacha-sim-*.md）。
+# 只放外观：kind 只能是 badge / tag / aura / pet / show / corerpg（corerpg = CoreRpg 外观商店的件，ref = 商店 id）。
+# 没有属性、材料、币、门票这种奖励类型（经济文档 §5.1：抽奖箱出战力禁止）。
+
+rates:
+  # 每一抽的基础概率；普通 = 1 − 三项之和
+  base: {legend: 0.006, epic: 0.051, rare: 0.143}
+  # 原神式软保底：距上次传说第 k 抽，k ≤ start 固定 base.legend；k > start 每抽 +step
+  soft_pity: {start: 60, step: 0.04}
+  # 第 hard_pity 抽必出传说
+  hard_pity: 80
+  # 每 tier2_every 抽内至少一件史诗或以上
+  tier2_every: 10
+  # 明日方舟式：同一个池里不连续出同一件传说
+  no_repeat_legend: true
+
+# 火花：每个池每抽 +1，满这么多可在该池任选一件没有的外观
+spark: 200
+# 每人每天最多抽这么多次（经济文档 §9：不做无上限抽奖）
+daily_pull_cap: 50
+cost_per_pull: 1
+
+# 炉石式：重复 → 光屑；光屑可以直接换池里任意一件
+shards:
+  dup: {legend: 300, epic: 80, rare: 20, common: 5}
+  craft: {legend: 1800, epic: 480, rare: 120, common: 40}
+  # 限定池结束后，没用掉的火花每点折成这么多光屑
+  spark_leftover: 1
+
+items:
+  # ---------------- 传说（常驻）
+  pet_lamp:      {name: "余烬灯灵", tier: legend, kind: pet, head: JACK_O_LANTERN, icon: JACK_O_LANTERN, desc: "一盏会跟着你的小南瓜灯"}
+  pet_frost:     {name: "霜晶灵", tier: legend, kind: pet, head: SEA_LANTERN, icon: SEA_LANTERN, desc: "一块浮在身后的霜晶"}
+  aura_phoenix:  {name: "凤羽光环", tier: legend, kind: aura, particle: FLAME, style: spiral, extra: LAVA, icon: BLAZE_POWDER, desc: "身边盘旋的火羽"}
+  tag_emberlord: {name: "烬火领主", tier: legend, kind: tag, label: "§6§l烬火领主", icon: GOLDEN_APPLE, desc: "聊天名字后的金色称号"}
+  # ---------------- 史诗
+  glow_ember:    {name: "余烬辉光", tier: epic, kind: corerpg, ref: glow_ember, kind_label: "武器辉光（CoreRpg 外观商店）", icon: BLAZE_ROD}
+  glow_star:     {name: "星辉", tier: epic, kind: corerpg, ref: glow_star, kind_label: "武器辉光（CoreRpg 外观商店）", icon: END_ROD}
+  glow_witch:    {name: "紫焰辉光", tier: epic, kind: corerpg, ref: glow_witch, kind_label: "武器辉光（CoreRpg 外观商店）", icon: CHORUS_FRUIT_POPPED}
+  anim_ember:    {name: "流火", tier: epic, kind: corerpg, ref: anim_ember, kind_label: "称号动效（CoreRpg 外观商店）", icon: MAGMA_CREAM}
+  anim_frost:    {name: "霜光", tier: epic, kind: corerpg, ref: anim_frost, kind_label: "称号动效（CoreRpg 外观商店）", icon: PRISMARINE_CRYSTALS}
+  aura_frost:    {name: "霜花光环", tier: epic, kind: aura, particle: SNOW_SHOVEL, style: ring, icon: SNOW_BALL, desc: "身边飘落的霜花"}
+  tag_wanderer:  {name: "拾光旅人", tier: epic, kind: tag, label: "§d拾光旅人", icon: COMPASS, desc: "聊天名字后的紫色称号"}
+  show_star:     {name: "星落", tier: epic, kind: show, particle: END_ROD, sound: BLOCK_NOTE_CHIME, icon: NETHER_STAR, desc: "/gacha fx 放一场星雨（冷却 30 秒）"}
+  # ---------------- 稀有
+  color_white:   {name: "素白", tier: rare, kind: corerpg, ref: color_white, kind_label: "称号颜色（CoreRpg 外观商店）", icon: PAPER}
+  color_gold:    {name: "金辉", tier: rare, kind: corerpg, ref: color_gold, kind_label: "称号颜色（CoreRpg 外观商店）", icon: GOLD_NUGGET}
+  color_aqua:    {name: "霜青", tier: rare, kind: corerpg, ref: color_aqua, kind_label: "称号颜色（CoreRpg 外观商店）", icon: PRISMARINE_SHARD}
+  color_red:     {name: "绯焰", tier: rare, kind: corerpg, ref: color_red, kind_label: "称号颜色（CoreRpg 外观商店）", icon: REDSTONE}
+  color_purple:  {name: "紫晶", tier: rare, kind: corerpg, ref: color_purple, kind_label: "称号颜色（CoreRpg 外观商店）", icon: CHORUS_FRUIT}
+  trail_ash:     {name: "灰烬", tier: rare, kind: corerpg, ref: trail_ash, kind_label: "足迹（CoreRpg 外观商店）", icon: SULPHUR}
+  trail_spark:   {name: "星屑", tier: rare, kind: corerpg, ref: trail_spark, kind_label: "足迹（CoreRpg 外观商店）", icon: GLOWSTONE_DUST}
+  trail_leaf:    {name: "萤绿", tier: rare, kind: corerpg, ref: trail_leaf, kind_label: "足迹（CoreRpg 外观商店）", icon: SLIME_BALL}
+  flair_star:    {name: "✦ 金星", tier: rare, kind: corerpg, ref: flair_star, kind_label: "名牌标记（CoreRpg 外观商店）", icon: GOLD_INGOT}
+  flair_snow:    {name: "❄ 雪花", tier: rare, kind: corerpg, ref: flair_snow, kind_label: "名牌标记（CoreRpg 外观商店）", icon: SNOW_BALL}
+  aura_note:     {name: "音符环", tier: rare, kind: aura, particle: NOTE, style: ring, icon: NOTE_BLOCK, desc: "身边跳动的音符"}
+  tag_lamp:      {name: "守灯人", tier: rare, kind: tag, label: "§b守灯人", icon: TORCH, desc: "聊天名字后的蓝色称号"}
+  # ---------------- 普通（聊天徽记：名字前一个符号）
+  badge_flower:  {name: "✿ 花", tier: common, kind: badge, symbol: "§d✿", icon: RED_ROSE}
+  badge_clover:  {name: "☘ 三叶", tier: common, kind: badge, symbol: "§a☘", icon: LONG_GRASS}
+  badge_note:    {name: "♪ 音符", tier: common, kind: badge, symbol: "§b♪", icon: RECORD_3}
+  badge_sun:     {name: "☀ 太阳", tier: common, kind: badge, symbol: "§e☀", icon: DOUBLE_PLANT}
+  badge_star:    {name: "✧ 星芒", tier: common, kind: badge, symbol: "§f✧", icon: QUARTZ}
+  badge_moon:    {name: "☾ 弦月", tier: common, kind: badge, symbol: "§9☾", icon: INK_SACK}
+  badge_blossom: {name: "❀ 繁花", tier: common, kind: badge, symbol: "§c❀", icon: YELLOW_FLOWER}
+  badge_spade:   {name: "♠ 黑桃", tier: common, kind: badge, symbol: "§8♠", icon: COAL}
+  # ---------------- 国庆 2026 限定（gq26 池；10-08 0 点后转常驻）
+  gq_pet_koi:       {name: "锦鲤灵", tier: legend, kind: pet, head: "RAW_FISH:2", icon: RAW_FISH, desc: "国庆限定 · 游在身边的锦鲤"}
+  gq_aura_firework: {name: "盛世烟火", tier: legend, kind: aura, particle: FIREWORKS_SPARK, style: burst, extra: REDSTONE, icon: FIREWORK, desc: "国庆限定 · 身边不停绽开的小烟火"}
+  gq_show_firework: {name: "满天星火", tier: epic, kind: show, particle: FIREWORKS_SPARK, sound: ENTITY_FIREWORK_LARGE_BLAST, icon: FIREWORK_CHARGE, desc: "国庆限定 · /gacha fx 放一场烟火（冷却 30 秒）"}
+  gq_tag_lantern:   {name: "灯火阑珊", tier: epic, kind: tag, label: "§c灯火§6阑珊", icon: REDSTONE_LAMP_OFF, desc: "国庆限定 · 聊天名字后的红金称号"}
+  gq_aura_lantern:  {name: "灯会流光", tier: rare, kind: aura, particle: FLAME, style: ring, icon: TORCH, desc: "国庆限定 · 身边一圈小灯火"}
+  gq_badge_firework: {name: "✸ 烟花", tier: common, kind: badge, symbol: "§c✸", icon: FIREWORK_CHARGE}
+
+banners:
+  standard:
+    name: "常驻 · 余烬星愿"
+    type: standard
+    pity_group: std
+    icon: NETHER_STAR
+    desc: "常驻池，一直开放；往期限定结束后转入这里"
+    items:
+      pet_lamp: 1
+      pet_frost: 1
+      aura_phoenix: 1
+      tag_emberlord: 1
+      glow_ember: 1
+      glow_star: 1
+      glow_witch: 1
+      anim_ember: 1
+      anim_frost: 1
+      aura_frost: 1
+      tag_wanderer: 1
+      show_star: 1
+      color_white: 1
+      color_gold: 1
+      color_aqua: 1
+      color_red: 1
+      color_purple: 1
+      trail_ash: 1
+      trail_spark: 1
+      trail_leaf: 1
+      flair_star: 1
+      flair_snow: 1
+      aura_note: 1
+      tag_lamp: 1
+      badge_flower: 1
+      badge_clover: 1
+      badge_note: 1
+      badge_sun: 1
+      badge_star: 1
+      badge_moon: 1
+      badge_blossom: 1
+      badge_spade: 1
+  gq26:
+    name: "国庆 · 烟火盛典"
+    type: limited
+    pity_group: limited
+    # 和 plugins/CoreRpg/ember-v1-festival.yml 的「烟火庙会」同一窗口
+    start: "2026-10-03T00:00:00+08:00"
+    end: "2026-10-08T00:00:00+08:00"
+    retire_to: standard
+    retire_weight: 1
+    icon: FIREWORK
+    desc: "国庆限定：锦鲤灵、盛世烟火 概率提升"
+    items:
+      gq_pet_koi: 35
+      gq_aura_firework: 35
+      pet_lamp: 7.5
+      pet_frost: 7.5
+      aura_phoenix: 7.5
+      tag_emberlord: 7.5
+      gq_show_firework: 3
+      gq_tag_lantern: 3
+      glow_ember: 1
+      glow_star: 1
+      glow_witch: 1
+      anim_ember: 1
+      anim_frost: 1
+      aura_frost: 1
+      tag_wanderer: 1
+      show_star: 1
+      gq_aura_lantern: 3
+      color_white: 1
+      color_gold: 1
+      color_aqua: 1
+      color_red: 1
+      color_purple: 1
+      trail_ash: 1
+      trail_spark: 1
+      trail_leaf: 1
+      flair_star: 1
+      flair_snow: 1
+      aura_note: 1
+      tag_lamp: 1
+      gq_badge_firework: 2
+      badge_flower: 1
+      badge_clover: 1
+      badge_note: 1
+      badge_sun: 1
+      badge_star: 1
+      badge_moon: 1
+      badge_blossom: 1
+      badge_spade: 1

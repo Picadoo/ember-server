@@ -16,7 +16,7 @@
 
 ```
 Core*/                     自研插件源码（CoreAnvil CoreBrew CoreCombat CoreCraft CoreEnchant
-                           CoreFish CoreRpg CoreSmelt CoreWorldRules），Maven/pom，无构建产物
+                           CoreFish CoreGacha CoreRpg CoreSmelt CoreWorldRules），Maven/pom，无构建产物
 Paper/                     自定义 Paper 1.12.2 核心：Spigot-*-Patches 补丁、Paper-API / Paper-Server 源码
                            （不含 .git 与 work/）；ember-custom-Paper-Server.diff = 相对上游补丁的本地改动
 plugins/                   游玩服插件配置（YAML/JSON/脚本），游玩服 server-runtime/plugins 应为指向此处的符号链接
@@ -36,10 +36,10 @@ secrets/mysql-ember.env.example   数据库凭据模板（真实 secrets/mysql-e
 | 目录 | 内容 |
 |------|------|
 | `docs/handoff/` | 交接文档。**当前交接：`docs/handoff/HANDOFF-ember-2026-10-02.md`**；早期总接手说明 `docs/handoff/HANDOFF.md`；设计交接模板 `TEMPLATE-ember-design-handoff.md` |
-| `docs/design/` | 所有 `DESIGN-*.md` / `design-*.md` 设计稿。**设计书（P1）：`docs/design/design-ember-v1.0-P1.md`**；来源开关/决策表：`docs/design/DESIGN-ember-v1.0-P1-source-table.md`；**P2 草案：`docs/design/design-ember-v1.1-P2-draft.md`** |
+| `docs/design/` | 所有 `DESIGN-*.md` / `design-*.md` 设计稿。**设计书（P1）：`docs/design/design-ember-v1.0-P1.md`**；来源开关/决策表：`docs/design/DESIGN-ember-v1.0-P1-source-table.md`；**P2 草案：`docs/design/design-ember-v1.1-P2-draft.md`**；外观扭蛋（CoreGacha）：`docs/design/DESIGN-ember-gacha.md` |
 | `docs/status/` | 所有 `STATUS*.md` 进度/验收记录（总览 `docs/status/STATUS.md`；gameplay 套件报告 `docs/status/STATUS-gameplay-suite.md`） |
 | `docs/reviews/` | 试玩、评审、复盘：`PLAYTEST-*`、`review-*`（如 `review-recheck-2026-10-03.md`）、`RETRO-*`、`LESSONS-*`、`critic-*`、`audit-*` |
-| `docs/tests/` | 单项测试报告 `TEST-*` 与冒烟记录 `smoke-*` |
+| `docs/tests/` | 单项测试报告 `TEST-*` 与冒烟记录 `smoke-*`（如扭蛋离线模拟 `TEST-gacha-sim-2026-10-04.md`、线上冒烟 `smoke-gacha-2026-10-04.md`） |
 | `docs/`（根） | 规格与参考：`ember-master-plan.md`、`ember-*-spec.md`、`如何创建-Grok-Bot专岗.md`（重建 bot 产线指南）等 |
 
 新写的 STATUS / 设计稿请直接放进对应子目录（`docs/status/STATUS-<主题>.md`、`docs/design/design-<主题>.md`）。

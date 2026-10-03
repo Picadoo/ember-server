@@ -1,0 +1,880 @@
+# 由 CoreGacha/tools/genmenus.py 从 gacha.yml 生成 —— 不要手改，改生成器后重跑（设计 docs/design/DESIGN-ember-gacha.md §8）
+Title: '§d扭蛋 · 光屑兑换'
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+Layout:
+  - 'abcdefghi'
+  - 'jklmnopqr'
+  - 'stuvwxyzA'
+  - 'CDEFGHJKL'
+  - 'MN       '
+  - '###I#B###'
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+  'a':
+    update: 20
+    display:
+      material: 'JACK_O_LANTERN'
+      name: '%coregacha_shop_name_pet_lamp%'
+      lore:
+        - '%coregacha_shop_kind_pet_lamp%'
+        - '%coregacha_shop_desc_pet_lamp%'
+        - ''
+        - '%coregacha_shop_price_pet_lamp%'
+        - '%coregacha_shop_state_pet_lamp%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft pet_lamp'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft pet_lamp confirm'
+  'b':
+    update: 20
+    display:
+      material: 'SEA_LANTERN'
+      name: '%coregacha_shop_name_pet_frost%'
+      lore:
+        - '%coregacha_shop_kind_pet_frost%'
+        - '%coregacha_shop_desc_pet_frost%'
+        - ''
+        - '%coregacha_shop_price_pet_frost%'
+        - '%coregacha_shop_state_pet_frost%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft pet_frost'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft pet_frost confirm'
+  'c':
+    update: 20
+    display:
+      material: 'BLAZE_POWDER'
+      name: '%coregacha_shop_name_aura_phoenix%'
+      lore:
+        - '%coregacha_shop_kind_aura_phoenix%'
+        - '%coregacha_shop_desc_aura_phoenix%'
+        - ''
+        - '%coregacha_shop_price_aura_phoenix%'
+        - '%coregacha_shop_state_aura_phoenix%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft aura_phoenix'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft aura_phoenix confirm'
+  'd':
+    update: 20
+    display:
+      material: 'GOLDEN_APPLE'
+      name: '%coregacha_shop_name_tag_emberlord%'
+      lore:
+        - '%coregacha_shop_kind_tag_emberlord%'
+        - '%coregacha_shop_desc_tag_emberlord%'
+        - ''
+        - '%coregacha_shop_price_tag_emberlord%'
+        - '%coregacha_shop_state_tag_emberlord%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft tag_emberlord'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft tag_emberlord confirm'
+  'e':
+    update: 20
+    display:
+      material: 'RAW_FISH'
+      name: '%coregacha_shop_name_gq_pet_koi%'
+      lore:
+        - '%coregacha_shop_kind_gq_pet_koi%'
+        - '%coregacha_shop_desc_gq_pet_koi%'
+        - ''
+        - '%coregacha_shop_price_gq_pet_koi%'
+        - '%coregacha_shop_state_gq_pet_koi%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_pet_koi'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_pet_koi confirm'
+  'f':
+    update: 20
+    display:
+      material: 'FIREWORK'
+      name: '%coregacha_shop_name_gq_aura_firework%'
+      lore:
+        - '%coregacha_shop_kind_gq_aura_firework%'
+        - '%coregacha_shop_desc_gq_aura_firework%'
+        - ''
+        - '%coregacha_shop_price_gq_aura_firework%'
+        - '%coregacha_shop_state_gq_aura_firework%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_aura_firework'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_aura_firework confirm'
+  'g':
+    update: 20
+    display:
+      material: 'BLAZE_ROD'
+      name: '%coregacha_shop_name_glow_ember%'
+      lore:
+        - '%coregacha_shop_kind_glow_ember%'
+        - '%coregacha_shop_desc_glow_ember%'
+        - ''
+        - '%coregacha_shop_price_glow_ember%'
+        - '%coregacha_shop_state_glow_ember%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft glow_ember'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft glow_ember confirm'
+  'h':
+    update: 20
+    display:
+      material: 'END_ROD'
+      name: '%coregacha_shop_name_glow_star%'
+      lore:
+        - '%coregacha_shop_kind_glow_star%'
+        - '%coregacha_shop_desc_glow_star%'
+        - ''
+        - '%coregacha_shop_price_glow_star%'
+        - '%coregacha_shop_state_glow_star%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft glow_star'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft glow_star confirm'
+  'i':
+    update: 20
+    display:
+      material: 'CHORUS_FRUIT_POPPED'
+      name: '%coregacha_shop_name_glow_witch%'
+      lore:
+        - '%coregacha_shop_kind_glow_witch%'
+        - '%coregacha_shop_desc_glow_witch%'
+        - ''
+        - '%coregacha_shop_price_glow_witch%'
+        - '%coregacha_shop_state_glow_witch%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft glow_witch'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft glow_witch confirm'
+  'j':
+    update: 20
+    display:
+      material: 'MAGMA_CREAM'
+      name: '%coregacha_shop_name_anim_ember%'
+      lore:
+        - '%coregacha_shop_kind_anim_ember%'
+        - '%coregacha_shop_desc_anim_ember%'
+        - ''
+        - '%coregacha_shop_price_anim_ember%'
+        - '%coregacha_shop_state_anim_ember%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft anim_ember'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft anim_ember confirm'
+  'k':
+    update: 20
+    display:
+      material: 'PRISMARINE_CRYSTALS'
+      name: '%coregacha_shop_name_anim_frost%'
+      lore:
+        - '%coregacha_shop_kind_anim_frost%'
+        - '%coregacha_shop_desc_anim_frost%'
+        - ''
+        - '%coregacha_shop_price_anim_frost%'
+        - '%coregacha_shop_state_anim_frost%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft anim_frost'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft anim_frost confirm'
+  'l':
+    update: 20
+    display:
+      material: 'SNOW_BALL'
+      name: '%coregacha_shop_name_aura_frost%'
+      lore:
+        - '%coregacha_shop_kind_aura_frost%'
+        - '%coregacha_shop_desc_aura_frost%'
+        - ''
+        - '%coregacha_shop_price_aura_frost%'
+        - '%coregacha_shop_state_aura_frost%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft aura_frost'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft aura_frost confirm'
+  'm':
+    update: 20
+    display:
+      material: 'COMPASS'
+      name: '%coregacha_shop_name_tag_wanderer%'
+      lore:
+        - '%coregacha_shop_kind_tag_wanderer%'
+        - '%coregacha_shop_desc_tag_wanderer%'
+        - ''
+        - '%coregacha_shop_price_tag_wanderer%'
+        - '%coregacha_shop_state_tag_wanderer%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft tag_wanderer'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft tag_wanderer confirm'
+  'n':
+    update: 20
+    display:
+      material: 'NETHER_STAR'
+      name: '%coregacha_shop_name_show_star%'
+      lore:
+        - '%coregacha_shop_kind_show_star%'
+        - '%coregacha_shop_desc_show_star%'
+        - ''
+        - '%coregacha_shop_price_show_star%'
+        - '%coregacha_shop_state_show_star%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft show_star'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft show_star confirm'
+  'o':
+    update: 20
+    display:
+      material: 'FIREWORK_CHARGE'
+      name: '%coregacha_shop_name_gq_show_firework%'
+      lore:
+        - '%coregacha_shop_kind_gq_show_firework%'
+        - '%coregacha_shop_desc_gq_show_firework%'
+        - ''
+        - '%coregacha_shop_price_gq_show_firework%'
+        - '%coregacha_shop_state_gq_show_firework%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_show_firework'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_show_firework confirm'
+  'p':
+    update: 20
+    display:
+      material: 'REDSTONE_LAMP_OFF'
+      name: '%coregacha_shop_name_gq_tag_lantern%'
+      lore:
+        - '%coregacha_shop_kind_gq_tag_lantern%'
+        - '%coregacha_shop_desc_gq_tag_lantern%'
+        - ''
+        - '%coregacha_shop_price_gq_tag_lantern%'
+        - '%coregacha_shop_state_gq_tag_lantern%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_tag_lantern'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_tag_lantern confirm'
+  'q':
+    update: 20
+    display:
+      material: 'PAPER'
+      name: '%coregacha_shop_name_color_white%'
+      lore:
+        - '%coregacha_shop_kind_color_white%'
+        - '%coregacha_shop_desc_color_white%'
+        - ''
+        - '%coregacha_shop_price_color_white%'
+        - '%coregacha_shop_state_color_white%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_white'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_white confirm'
+  'r':
+    update: 20
+    display:
+      material: 'GOLD_NUGGET'
+      name: '%coregacha_shop_name_color_gold%'
+      lore:
+        - '%coregacha_shop_kind_color_gold%'
+        - '%coregacha_shop_desc_color_gold%'
+        - ''
+        - '%coregacha_shop_price_color_gold%'
+        - '%coregacha_shop_state_color_gold%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_gold'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_gold confirm'
+  's':
+    update: 20
+    display:
+      material: 'PRISMARINE_SHARD'
+      name: '%coregacha_shop_name_color_aqua%'
+      lore:
+        - '%coregacha_shop_kind_color_aqua%'
+        - '%coregacha_shop_desc_color_aqua%'
+        - ''
+        - '%coregacha_shop_price_color_aqua%'
+        - '%coregacha_shop_state_color_aqua%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_aqua'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_aqua confirm'
+  't':
+    update: 20
+    display:
+      material: 'REDSTONE'
+      name: '%coregacha_shop_name_color_red%'
+      lore:
+        - '%coregacha_shop_kind_color_red%'
+        - '%coregacha_shop_desc_color_red%'
+        - ''
+        - '%coregacha_shop_price_color_red%'
+        - '%coregacha_shop_state_color_red%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_red'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_red confirm'
+  'u':
+    update: 20
+    display:
+      material: 'CHORUS_FRUIT'
+      name: '%coregacha_shop_name_color_purple%'
+      lore:
+        - '%coregacha_shop_kind_color_purple%'
+        - '%coregacha_shop_desc_color_purple%'
+        - ''
+        - '%coregacha_shop_price_color_purple%'
+        - '%coregacha_shop_state_color_purple%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_purple'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft color_purple confirm'
+  'v':
+    update: 20
+    display:
+      material: 'SULPHUR'
+      name: '%coregacha_shop_name_trail_ash%'
+      lore:
+        - '%coregacha_shop_kind_trail_ash%'
+        - '%coregacha_shop_desc_trail_ash%'
+        - ''
+        - '%coregacha_shop_price_trail_ash%'
+        - '%coregacha_shop_state_trail_ash%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft trail_ash'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft trail_ash confirm'
+  'w':
+    update: 20
+    display:
+      material: 'GLOWSTONE_DUST'
+      name: '%coregacha_shop_name_trail_spark%'
+      lore:
+        - '%coregacha_shop_kind_trail_spark%'
+        - '%coregacha_shop_desc_trail_spark%'
+        - ''
+        - '%coregacha_shop_price_trail_spark%'
+        - '%coregacha_shop_state_trail_spark%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft trail_spark'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft trail_spark confirm'
+  'x':
+    update: 20
+    display:
+      material: 'SLIME_BALL'
+      name: '%coregacha_shop_name_trail_leaf%'
+      lore:
+        - '%coregacha_shop_kind_trail_leaf%'
+        - '%coregacha_shop_desc_trail_leaf%'
+        - ''
+        - '%coregacha_shop_price_trail_leaf%'
+        - '%coregacha_shop_state_trail_leaf%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft trail_leaf'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft trail_leaf confirm'
+  'y':
+    update: 20
+    display:
+      material: 'GOLD_INGOT'
+      name: '%coregacha_shop_name_flair_star%'
+      lore:
+        - '%coregacha_shop_kind_flair_star%'
+        - '%coregacha_shop_desc_flair_star%'
+        - ''
+        - '%coregacha_shop_price_flair_star%'
+        - '%coregacha_shop_state_flair_star%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft flair_star'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft flair_star confirm'
+  'z':
+    update: 20
+    display:
+      material: 'SNOW_BALL'
+      name: '%coregacha_shop_name_flair_snow%'
+      lore:
+        - '%coregacha_shop_kind_flair_snow%'
+        - '%coregacha_shop_desc_flair_snow%'
+        - ''
+        - '%coregacha_shop_price_flair_snow%'
+        - '%coregacha_shop_state_flair_snow%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft flair_snow'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft flair_snow confirm'
+  'A':
+    update: 20
+    display:
+      material: 'NOTE_BLOCK'
+      name: '%coregacha_shop_name_aura_note%'
+      lore:
+        - '%coregacha_shop_kind_aura_note%'
+        - '%coregacha_shop_desc_aura_note%'
+        - ''
+        - '%coregacha_shop_price_aura_note%'
+        - '%coregacha_shop_state_aura_note%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft aura_note'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft aura_note confirm'
+  'C':
+    update: 20
+    display:
+      material: 'TORCH'
+      name: '%coregacha_shop_name_tag_lamp%'
+      lore:
+        - '%coregacha_shop_kind_tag_lamp%'
+        - '%coregacha_shop_desc_tag_lamp%'
+        - ''
+        - '%coregacha_shop_price_tag_lamp%'
+        - '%coregacha_shop_state_tag_lamp%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft tag_lamp'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft tag_lamp confirm'
+  'D':
+    update: 20
+    display:
+      material: 'TORCH'
+      name: '%coregacha_shop_name_gq_aura_lantern%'
+      lore:
+        - '%coregacha_shop_kind_gq_aura_lantern%'
+        - '%coregacha_shop_desc_gq_aura_lantern%'
+        - ''
+        - '%coregacha_shop_price_gq_aura_lantern%'
+        - '%coregacha_shop_state_gq_aura_lantern%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_aura_lantern'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_aura_lantern confirm'
+  'E':
+    update: 20
+    display:
+      material: 'RED_ROSE'
+      name: '%coregacha_shop_name_badge_flower%'
+      lore:
+        - '%coregacha_shop_kind_badge_flower%'
+        - '%coregacha_shop_desc_badge_flower%'
+        - ''
+        - '%coregacha_shop_price_badge_flower%'
+        - '%coregacha_shop_state_badge_flower%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_flower'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_flower confirm'
+  'F':
+    update: 20
+    display:
+      material: 'LONG_GRASS'
+      name: '%coregacha_shop_name_badge_clover%'
+      lore:
+        - '%coregacha_shop_kind_badge_clover%'
+        - '%coregacha_shop_desc_badge_clover%'
+        - ''
+        - '%coregacha_shop_price_badge_clover%'
+        - '%coregacha_shop_state_badge_clover%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_clover'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_clover confirm'
+  'G':
+    update: 20
+    display:
+      material: 'RECORD_3'
+      name: '%coregacha_shop_name_badge_note%'
+      lore:
+        - '%coregacha_shop_kind_badge_note%'
+        - '%coregacha_shop_desc_badge_note%'
+        - ''
+        - '%coregacha_shop_price_badge_note%'
+        - '%coregacha_shop_state_badge_note%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_note'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_note confirm'
+  'H':
+    update: 20
+    display:
+      material: 'DOUBLE_PLANT'
+      name: '%coregacha_shop_name_badge_sun%'
+      lore:
+        - '%coregacha_shop_kind_badge_sun%'
+        - '%coregacha_shop_desc_badge_sun%'
+        - ''
+        - '%coregacha_shop_price_badge_sun%'
+        - '%coregacha_shop_state_badge_sun%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_sun'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_sun confirm'
+  'J':
+    update: 20
+    display:
+      material: 'QUARTZ'
+      name: '%coregacha_shop_name_badge_star%'
+      lore:
+        - '%coregacha_shop_kind_badge_star%'
+        - '%coregacha_shop_desc_badge_star%'
+        - ''
+        - '%coregacha_shop_price_badge_star%'
+        - '%coregacha_shop_state_badge_star%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_star'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_star confirm'
+  'K':
+    update: 20
+    display:
+      material: 'INK_SACK'
+      name: '%coregacha_shop_name_badge_moon%'
+      lore:
+        - '%coregacha_shop_kind_badge_moon%'
+        - '%coregacha_shop_desc_badge_moon%'
+        - ''
+        - '%coregacha_shop_price_badge_moon%'
+        - '%coregacha_shop_state_badge_moon%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_moon'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_moon confirm'
+  'L':
+    update: 20
+    display:
+      material: 'YELLOW_FLOWER'
+      name: '%coregacha_shop_name_badge_blossom%'
+      lore:
+        - '%coregacha_shop_kind_badge_blossom%'
+        - '%coregacha_shop_desc_badge_blossom%'
+        - ''
+        - '%coregacha_shop_price_badge_blossom%'
+        - '%coregacha_shop_state_badge_blossom%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_blossom'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_blossom confirm'
+  'M':
+    update: 20
+    display:
+      material: 'COAL'
+      name: '%coregacha_shop_name_badge_spade%'
+      lore:
+        - '%coregacha_shop_kind_badge_spade%'
+        - '%coregacha_shop_desc_badge_spade%'
+        - ''
+        - '%coregacha_shop_price_badge_spade%'
+        - '%coregacha_shop_state_badge_spade%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_spade'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft badge_spade confirm'
+  'N':
+    update: 20
+    display:
+      material: 'FIREWORK_CHARGE'
+      name: '%coregacha_shop_name_gq_badge_firework%'
+      lore:
+        - '%coregacha_shop_kind_gq_badge_firework%'
+        - '%coregacha_shop_desc_gq_badge_firework%'
+        - ''
+        - '%coregacha_shop_price_gq_badge_firework%'
+        - '%coregacha_shop_state_gq_badge_firework%'
+        - ''
+        - '§e➥ §f左键：兑换（聊天确认）· Shift+左键：直接兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_badge_firework'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha craft gq_badge_firework confirm'
+  'I':
+    update: 20
+    display:
+      material: 'prismarine crystals'
+      name: '§b光屑 %coregacha_shards%'
+      lore:
+        - ''
+        - '§7重复返还：传说 300 · 史诗 80 · 稀有 20 · 普通 5'
+        - '§7兑换价：传说 1800 · 史诗 480 · 稀有 120 · 普通 40'
+        - '§8不在开放池里的件（还没开的限定）不能换'
+  'B':
+    update: 20
+    display:
+      material: 'arrow'
+      name: '§7返回扭蛋页'
+      lore:
+        - ''
+        - '§e➥ §f返回'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_gacha'

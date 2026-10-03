@@ -1,0 +1,348 @@
+# 由 CoreGacha/tools/genmenus.py 从 gacha.yml 生成 —— 不要手改，改生成器后重跑（设计 docs/design/DESIGN-ember-gacha.md §8）
+Title: '§d余烬 · 外观扭蛋'
+Bindings:
+  Commands:
+    - '(?i)ember_gacha'
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+Layout:
+  - '####I####'
+  - '#S1T#L2M#'
+  - '#R#K#r#k#'
+  - '#########'
+  - '#H#C#E#W#'
+  - '####B####'
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+  'I':
+    update: 20
+    display:
+      material: 'nether star'
+      name: '§d外观扭蛋 §8（只出外观，零属性）'
+      lore:
+        - ''
+        - '§7扭蛋券：§f%coregacha_tickets% §8张  §7光屑：§b%coregacha_shards%'
+        - '§7今日已抽：§f%coregacha_today% §8（每日上限）'
+        - '§7收藏：§f%coregacha_owned_count%'
+        - ''
+        - '§7券从哪来：每天活跃在线 30 / 90 分钟、主线结算 1 / 3 局各 1 张，'
+        - '§7或用余烬币 / 余烬徽换（每天最多 5 张）。§c没有任何充值入口。'
+        - '§7重复的外观变光屑，光屑能直接换池里任意一件。'
+  'S':
+    update: 20
+    display:
+      material: 'NETHER_STAR'
+      name: '§b常驻 · 余烬星愿'
+      lore:
+        - ''
+        - '%coregacha_b_desc_standard%'
+        - '%coregacha_b_left_standard%'
+        - ''
+        - '§6传说：§f%coregacha_b_legend_standard%'
+        - '%coregacha_b_pity_standard%'
+        - '§7火花：§f%coregacha_b_spark_standard% §8（满 200 任选一件）'
+        - '§7本池累计：§f%coregacha_b_pulls_standard% §7抽'
+        - ''
+        - '§e➥ §f左键：概率公示 · 右键：火花兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha rates standard'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha spark standard'
+  '1':
+    update: 20
+    display:
+      material: 'ender pearl'
+      name: '§f单抽 §8· 常驻 · 余烬星愿'
+      lore:
+        - ''
+        - '§7消耗 §f1§7 张扭蛋券 · 现有 §f%coregacha_tickets%'
+        - '§7今日 §f%coregacha_today%'
+        - ''
+        - '§e➥ §f点击抽取'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha pull standard 1'
+  'T':
+    update: 20
+    display:
+      material: 'eye of ender'
+      name: '§6十连 §8· 常驻 · 余烬星愿'
+      lore:
+        - ''
+        - '§7消耗 §f10§7 张扭蛋券 · 现有 §f%coregacha_tickets%'
+        - '§7今日 §f%coregacha_today%'
+        - '§7十连内至少一件史诗或以上'
+        - ''
+        - '§e➥ §f点击抽取'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha pull standard 10'
+  'R':
+    update: 20
+    display:
+      material: 'paper'
+      name: '§f概率公示 §8· 常驻 · 余烬星愿'
+      lore:
+        - ''
+        - '§7四档基础 / 综合概率、保底规则、逐件概率'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha rates standard'
+  'K':
+    update: 20
+    display:
+      material: 'blaze powder'
+      name: '§f火花兑换 §8· %coregacha_b_spark_standard%'
+      lore:
+        - ''
+        - '§7每抽 +1，满 200 在本池任选一件没有的'
+        - ''
+        - '§e➥ §f查看'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha spark standard'
+  'L':
+    update: 20
+    icons:
+      - condition: 'check papi %coregacha_b_open_gq26% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§8国庆 · 烟火盛典（已结束）'
+          lore:
+            - ''
+            - '§7限定外观已转入常驻池，可在常驻池抽到或用光屑兑换'
+    display:
+      material: 'FIREWORK'
+      name: '§c国庆 · 烟火盛典 §6（限定）'
+      lore:
+        - ''
+        - '%coregacha_b_desc_gq26%'
+        - '%coregacha_b_left_gq26%'
+        - ''
+        - '§6传说：§f%coregacha_b_legend_gq26%'
+        - '%coregacha_b_pity_gq26%'
+        - '§7火花：§f%coregacha_b_spark_gq26% §8（满 200 任选一件）'
+        - '§7本池累计：§f%coregacha_b_pulls_gq26% §7抽'
+        - ''
+        - '§e➥ §f左键：概率公示 · 右键：火花兑换'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha rates gq26'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha spark gq26'
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %coregacha_b_open_gq26% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§8国庆 · 烟火盛典（已结束）'
+          lore:
+            - ''
+            - '§7限定外观已转入常驻池，可在常驻池抽到或用光屑兑换'
+    display:
+      material: 'firework charge'
+      name: '§f单抽 §8· 国庆 · 烟火盛典'
+      lore:
+        - ''
+        - '§7消耗 §f1§7 张扭蛋券 · 现有 §f%coregacha_tickets%'
+        - '§7今日 §f%coregacha_today%'
+        - ''
+        - '§e➥ §f点击抽取'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha pull gq26 1'
+  'M':
+    update: 20
+    icons:
+      - condition: 'check papi %coregacha_b_open_gq26% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§8国庆 · 烟火盛典（已结束）'
+          lore:
+            - ''
+            - '§7限定外观已转入常驻池，可在常驻池抽到或用光屑兑换'
+    display:
+      material: 'firework'
+      name: '§6十连 §8· 国庆 · 烟火盛典'
+      lore:
+        - ''
+        - '§7消耗 §f10§7 张扭蛋券 · 现有 §f%coregacha_tickets%'
+        - '§7今日 §f%coregacha_today%'
+        - '§7十连内至少一件史诗或以上'
+        - ''
+        - '§e➥ §f点击抽取'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha pull gq26 10'
+  'r':
+    update: 20
+    icons:
+      - condition: 'check papi %coregacha_b_open_gq26% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§8国庆 · 烟火盛典（已结束）'
+          lore:
+            - ''
+            - '§7限定外观已转入常驻池，可在常驻池抽到或用光屑兑换'
+    display:
+      material: 'paper'
+      name: '§f概率公示 §8· 国庆 · 烟火盛典'
+      lore:
+        - ''
+        - '§7四档基础 / 综合概率、保底规则、逐件概率'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha rates gq26'
+  'k':
+    update: 20
+    icons:
+      - condition: 'check papi %coregacha_b_open_gq26% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§8国庆 · 烟火盛典（已结束）'
+          lore:
+            - ''
+            - '§7限定外观已转入常驻池，可在常驻池抽到或用光屑兑换'
+    display:
+      material: 'blaze powder'
+      name: '§f火花兑换 §8· %coregacha_b_spark_gq26%'
+      lore:
+        - ''
+        - '§7每抽 +1，满 200 在本池任选一件没有的'
+        - '§8限定池结束后剩下的火花 1:1 折成光屑'
+        - ''
+        - '§e➥ §f查看'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha spark gq26'
+  'H':
+    update: 20
+    display:
+      material: 'book'
+      name: '§f最近 100 抽'
+      lore:
+        - ''
+        - '§7时间、池、品质、外观、新 / 重复、保底'
+        - ''
+        - '§e➥ §f打开记录页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha history'
+  'C':
+    update: 20
+    display:
+      material: 'prismarine crystals'
+      name: '§b光屑兑换 §8· 现有 %coregacha_shards%'
+      lore:
+        - ''
+        - '§7重复的外观会变成光屑：传说 300 · 史诗 80 · 稀有 20 · 普通 5'
+        - '§7兑换价：传说 1800 · 史诗 480 · 稀有 120 · 普通 40'
+        - '§7能换所有开放池 + 常驻池里的任意一件'
+        - ''
+        - '§e➥ §f打开兑换页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha shop'
+  'E':
+    update: 20
+    display:
+      material: 'gold ingot'
+      name: '§e换扭蛋券 §8· 今天还能换 %coregacha_exch_left% 张'
+      lore:
+        - ''
+        - '§7余烬币：§f%coregacha_coin% §8（1200 币 = 1 张）'
+        - '§7余烬徽：§f%coregacha_badges% §8（20 徽 = 1 张）'
+        - '§8两种合计每天最多 5 张 · 只用游戏里挣的'
+        - ''
+        - '§e➥ §f左键：用 1200 余烬币换 1 张 · 右键：用 20 余烬徽换 1 张'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha exchange coin 1'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha exchange badge 1'
+  'W':
+    update: 20
+    display:
+      material: 'armor stand'
+      name: '§d我的外观'
+      lore:
+        - ''
+        - '§7徽记 %coregacha_wear_badge% §7· 称号 %coregacha_wear_tag%'
+        - '§7光环 %coregacha_wear_aura% §7· 宠物 %coregacha_wear_pet%'
+        - '§7烟火 %coregacha_wear_show% §8（/gacha fx 放）'
+        - '§8CoreRpg 的件在外观商店换上'
+        - ''
+        - '§e➥ §f左键：装上 / 取下（聊天栏）· 右键：外观商店'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha wear'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: corerpg p1 cosmetic'
+  'B':
+    update: 20
+    display:
+      material: 'arrow'
+      name: '§7返回主菜单'
+      lore:
+        - ''
+        - '§e➥ §f返回'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'

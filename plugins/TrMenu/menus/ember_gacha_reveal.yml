@@ -1,0 +1,567 @@
+# 由 CoreGacha/tools/genmenus.py 从 gacha.yml 生成 —— 不要手改，改生成器后重跑（设计 docs/design/DESIGN-ember-gacha.md §8）
+Title: '§d扭蛋 · 开箱'
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+Layout:
+  - '####I####'
+  - '#########'
+  - '##01234##'
+  - '##56789##'
+  - '#########'
+  - '#A#W#B#Z#'
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+  '0':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_1_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_1_name%'
+          lore:
+            - '%coregacha_rv_1_kind%'
+            - '%coregacha_rv_1_desc%'
+            - ''
+            - '%coregacha_rv_1_note%'
+      - condition: 'check papi %coregacha_rv_1_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_1_name%'
+          lore:
+            - '%coregacha_rv_1_kind%'
+            - '%coregacha_rv_1_desc%'
+            - ''
+            - '%coregacha_rv_1_note%'
+      - condition: 'check papi %coregacha_rv_1_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_1_name%'
+          lore:
+            - '%coregacha_rv_1_kind%'
+            - '%coregacha_rv_1_desc%'
+            - ''
+            - '%coregacha_rv_1_note%'
+      - condition: 'check papi %coregacha_rv_1_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_1_name%'
+          lore:
+            - '%coregacha_rv_1_kind%'
+            - '%coregacha_rv_1_desc%'
+            - ''
+            - '%coregacha_rv_1_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '1':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_2_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_2_name%'
+          lore:
+            - '%coregacha_rv_2_kind%'
+            - '%coregacha_rv_2_desc%'
+            - ''
+            - '%coregacha_rv_2_note%'
+      - condition: 'check papi %coregacha_rv_2_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_2_name%'
+          lore:
+            - '%coregacha_rv_2_kind%'
+            - '%coregacha_rv_2_desc%'
+            - ''
+            - '%coregacha_rv_2_note%'
+      - condition: 'check papi %coregacha_rv_2_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_2_name%'
+          lore:
+            - '%coregacha_rv_2_kind%'
+            - '%coregacha_rv_2_desc%'
+            - ''
+            - '%coregacha_rv_2_note%'
+      - condition: 'check papi %coregacha_rv_2_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_2_name%'
+          lore:
+            - '%coregacha_rv_2_kind%'
+            - '%coregacha_rv_2_desc%'
+            - ''
+            - '%coregacha_rv_2_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '2':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_3_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_3_name%'
+          lore:
+            - '%coregacha_rv_3_kind%'
+            - '%coregacha_rv_3_desc%'
+            - ''
+            - '%coregacha_rv_3_note%'
+      - condition: 'check papi %coregacha_rv_3_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_3_name%'
+          lore:
+            - '%coregacha_rv_3_kind%'
+            - '%coregacha_rv_3_desc%'
+            - ''
+            - '%coregacha_rv_3_note%'
+      - condition: 'check papi %coregacha_rv_3_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_3_name%'
+          lore:
+            - '%coregacha_rv_3_kind%'
+            - '%coregacha_rv_3_desc%'
+            - ''
+            - '%coregacha_rv_3_note%'
+      - condition: 'check papi %coregacha_rv_3_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_3_name%'
+          lore:
+            - '%coregacha_rv_3_kind%'
+            - '%coregacha_rv_3_desc%'
+            - ''
+            - '%coregacha_rv_3_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '3':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_4_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_4_name%'
+          lore:
+            - '%coregacha_rv_4_kind%'
+            - '%coregacha_rv_4_desc%'
+            - ''
+            - '%coregacha_rv_4_note%'
+      - condition: 'check papi %coregacha_rv_4_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_4_name%'
+          lore:
+            - '%coregacha_rv_4_kind%'
+            - '%coregacha_rv_4_desc%'
+            - ''
+            - '%coregacha_rv_4_note%'
+      - condition: 'check papi %coregacha_rv_4_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_4_name%'
+          lore:
+            - '%coregacha_rv_4_kind%'
+            - '%coregacha_rv_4_desc%'
+            - ''
+            - '%coregacha_rv_4_note%'
+      - condition: 'check papi %coregacha_rv_4_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_4_name%'
+          lore:
+            - '%coregacha_rv_4_kind%'
+            - '%coregacha_rv_4_desc%'
+            - ''
+            - '%coregacha_rv_4_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '4':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_5_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_5_name%'
+          lore:
+            - '%coregacha_rv_5_kind%'
+            - '%coregacha_rv_5_desc%'
+            - ''
+            - '%coregacha_rv_5_note%'
+      - condition: 'check papi %coregacha_rv_5_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_5_name%'
+          lore:
+            - '%coregacha_rv_5_kind%'
+            - '%coregacha_rv_5_desc%'
+            - ''
+            - '%coregacha_rv_5_note%'
+      - condition: 'check papi %coregacha_rv_5_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_5_name%'
+          lore:
+            - '%coregacha_rv_5_kind%'
+            - '%coregacha_rv_5_desc%'
+            - ''
+            - '%coregacha_rv_5_note%'
+      - condition: 'check papi %coregacha_rv_5_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_5_name%'
+          lore:
+            - '%coregacha_rv_5_kind%'
+            - '%coregacha_rv_5_desc%'
+            - ''
+            - '%coregacha_rv_5_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '5':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_6_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_6_name%'
+          lore:
+            - '%coregacha_rv_6_kind%'
+            - '%coregacha_rv_6_desc%'
+            - ''
+            - '%coregacha_rv_6_note%'
+      - condition: 'check papi %coregacha_rv_6_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_6_name%'
+          lore:
+            - '%coregacha_rv_6_kind%'
+            - '%coregacha_rv_6_desc%'
+            - ''
+            - '%coregacha_rv_6_note%'
+      - condition: 'check papi %coregacha_rv_6_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_6_name%'
+          lore:
+            - '%coregacha_rv_6_kind%'
+            - '%coregacha_rv_6_desc%'
+            - ''
+            - '%coregacha_rv_6_note%'
+      - condition: 'check papi %coregacha_rv_6_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_6_name%'
+          lore:
+            - '%coregacha_rv_6_kind%'
+            - '%coregacha_rv_6_desc%'
+            - ''
+            - '%coregacha_rv_6_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '6':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_7_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_7_name%'
+          lore:
+            - '%coregacha_rv_7_kind%'
+            - '%coregacha_rv_7_desc%'
+            - ''
+            - '%coregacha_rv_7_note%'
+      - condition: 'check papi %coregacha_rv_7_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_7_name%'
+          lore:
+            - '%coregacha_rv_7_kind%'
+            - '%coregacha_rv_7_desc%'
+            - ''
+            - '%coregacha_rv_7_note%'
+      - condition: 'check papi %coregacha_rv_7_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_7_name%'
+          lore:
+            - '%coregacha_rv_7_kind%'
+            - '%coregacha_rv_7_desc%'
+            - ''
+            - '%coregacha_rv_7_note%'
+      - condition: 'check papi %coregacha_rv_7_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_7_name%'
+          lore:
+            - '%coregacha_rv_7_kind%'
+            - '%coregacha_rv_7_desc%'
+            - ''
+            - '%coregacha_rv_7_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '7':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_8_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_8_name%'
+          lore:
+            - '%coregacha_rv_8_kind%'
+            - '%coregacha_rv_8_desc%'
+            - ''
+            - '%coregacha_rv_8_note%'
+      - condition: 'check papi %coregacha_rv_8_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_8_name%'
+          lore:
+            - '%coregacha_rv_8_kind%'
+            - '%coregacha_rv_8_desc%'
+            - ''
+            - '%coregacha_rv_8_note%'
+      - condition: 'check papi %coregacha_rv_8_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_8_name%'
+          lore:
+            - '%coregacha_rv_8_kind%'
+            - '%coregacha_rv_8_desc%'
+            - ''
+            - '%coregacha_rv_8_note%'
+      - condition: 'check papi %coregacha_rv_8_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_8_name%'
+          lore:
+            - '%coregacha_rv_8_kind%'
+            - '%coregacha_rv_8_desc%'
+            - ''
+            - '%coregacha_rv_8_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '8':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_9_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_9_name%'
+          lore:
+            - '%coregacha_rv_9_kind%'
+            - '%coregacha_rv_9_desc%'
+            - ''
+            - '%coregacha_rv_9_note%'
+      - condition: 'check papi %coregacha_rv_9_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_9_name%'
+          lore:
+            - '%coregacha_rv_9_kind%'
+            - '%coregacha_rv_9_desc%'
+            - ''
+            - '%coregacha_rv_9_note%'
+      - condition: 'check papi %coregacha_rv_9_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_9_name%'
+          lore:
+            - '%coregacha_rv_9_kind%'
+            - '%coregacha_rv_9_desc%'
+            - ''
+            - '%coregacha_rv_9_note%'
+      - condition: 'check papi %coregacha_rv_9_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_9_name%'
+          lore:
+            - '%coregacha_rv_9_kind%'
+            - '%coregacha_rv_9_desc%'
+            - ''
+            - '%coregacha_rv_9_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  '9':
+    update: 10
+    icons:
+      - condition: 'check papi %coregacha_rv_10_is4% > 0'
+        priority: 4
+        display:
+          material: 'orange stained glass'
+          shiny: true
+          name: '%coregacha_rv_10_name%'
+          lore:
+            - '%coregacha_rv_10_kind%'
+            - '%coregacha_rv_10_desc%'
+            - ''
+            - '%coregacha_rv_10_note%'
+      - condition: 'check papi %coregacha_rv_10_is3% > 0'
+        priority: 3
+        display:
+          material: 'magenta stained glass'
+          shiny: true
+          name: '%coregacha_rv_10_name%'
+          lore:
+            - '%coregacha_rv_10_kind%'
+            - '%coregacha_rv_10_desc%'
+            - ''
+            - '%coregacha_rv_10_note%'
+      - condition: 'check papi %coregacha_rv_10_is2% > 0'
+        priority: 2
+        display:
+          material: 'light blue stained glass'
+          name: '%coregacha_rv_10_name%'
+          lore:
+            - '%coregacha_rv_10_kind%'
+            - '%coregacha_rv_10_desc%'
+            - ''
+            - '%coregacha_rv_10_note%'
+      - condition: 'check papi %coregacha_rv_10_is1% > 0'
+        priority: 1
+        display:
+          material: 'light gray stained glass'
+          name: '%coregacha_rv_10_name%'
+          lore:
+            - '%coregacha_rv_10_kind%'
+            - '%coregacha_rv_10_desc%'
+            - ''
+            - '%coregacha_rv_10_note%'
+    display:
+      material: black stained glass pane
+      name: '§8'
+  'I':
+    update: 20
+    display:
+      material: 'nether star'
+      name: '§d%coregacha_rv_banner% §7· 结果'
+      lore:
+        - ''
+        - '§6金 = 传说 §d紫 = 史诗 §b蓝 = 稀有 §7灰 = 普通'
+        - '§7券 §f%coregacha_tickets% §7· 光屑 §b%coregacha_shards%'
+        - '%coregacha_rv_pity%'
+  'A':
+    update: 20
+    display:
+      material: 'ender pearl'
+      name: '§a再抽一次'
+      lore:
+        - ''
+        - '§7同一个池，1 张券'
+        - ''
+        - '§e➥ §f点击'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha pull %coregacha_rv_bid% 1'
+  'Z':
+    update: 20
+    display:
+      material: 'eye of ender'
+      name: '§6十连'
+      lore:
+        - ''
+        - '§7同一个池，10 张券'
+        - ''
+        - '§e➥ §f点击'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha pull %coregacha_rv_bid% 10'
+  'W':
+    update: 20
+    display:
+      material: 'armor stand'
+      name: '§d我的外观'
+      lore:
+        - ''
+        - '§e➥ §f装上 / 取下'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha wear'
+  'B':
+    update: 20
+    display:
+      material: 'arrow'
+      name: '§7返回扭蛋页'
+      lore:
+        - ''
+        - '§e➥ §f返回'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_gacha'

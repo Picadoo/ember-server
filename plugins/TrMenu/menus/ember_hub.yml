@@ -16,7 +16,7 @@ Layout:
   - 'Ln o p F '
   - 'Tm X k i '
   - ' R c Y d '
-  - '  A G   j'
+  - '  A G U j'
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -346,6 +346,25 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_settings'
 
+  # CoreGacha（10-04）：外观扭蛋 —— 只出外观、零属性，券只从游戏里得（设计 docs/design/DESIGN-ember-gacha.md）
+  U:
+    update: 20
+    display:
+      material: nether star
+      name: '§d外观扭蛋 §8（只出外观）'
+      lore:
+        - ''
+        - '§7扭蛋券 §f%coregacha_tickets% §7· 光屑 §b%coregacha_shards% §7· 今日 %coregacha_today%'
+        - '§7称号、聊天徽记、光环、宠物、烟火 + 外观商店的件；零属性'
+        - '§7限定：%coregacha_b_name_gq26% %coregacha_b_left_gq26%'
+        - '§8券：在线 / 主线结算 / 余烬币或余烬徽兑换 · 没有充值'
+        - ''
+        - '§e➥ §f打开扭蛋页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: gacha'
   j:
     display:
       material: barrier

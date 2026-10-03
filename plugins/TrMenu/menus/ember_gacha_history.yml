@@ -1,0 +1,73 @@
+# 由 CoreGacha/tools/genmenus.py 从 gacha.yml 生成 —— 不要手改，改生成器后重跑（设计 docs/design/DESIGN-ember-gacha.md §8）
+Title: '§d扭蛋 · 最近 100 抽'
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+Layout:
+  - '####I####'
+  - '#1#2#3#4#'
+  - '####B####'
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+  '1':
+    update: 20
+    display:
+      material: 'book'
+      name: '§f记录 1–25 §8（新的在前）'
+      lore:
+        - '%coregacha_hist_page_1%'
+  '2':
+    update: 20
+    display:
+      material: 'book'
+      name: '§f记录 26–50 §8（新的在前）'
+      lore:
+        - '%coregacha_hist_page_2%'
+  '3':
+    update: 20
+    display:
+      material: 'book'
+      name: '§f记录 51–75 §8（新的在前）'
+      lore:
+        - '%coregacha_hist_page_3%'
+  '4':
+    update: 20
+    display:
+      material: 'book'
+      name: '§f记录 76–100 §8（新的在前）'
+      lore:
+        - '%coregacha_hist_page_4%'
+  'I':
+    update: 20
+    display:
+      material: 'writable book'
+      name: '§f最近 100 抽 §8· 共 %coregacha_hist_count% 条'
+      lore:
+        - ''
+        - '§7每一抽都记在数据库（审计）：时间、池、品质、外观、保底前后'
+        - '§7聊天版：/gacha history chat'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'close'
+        - 'command: gacha history chat'
+  'B':
+    update: 20
+    display:
+      material: 'arrow'
+      name: '§7返回扭蛋页'
+      lore:
+        - ''
+        - '§e➥ §f返回'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_gacha'

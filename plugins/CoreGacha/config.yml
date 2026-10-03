@@ -1,0 +1,28 @@
+# CoreGacha 运行配置（奖池 / 概率在 gacha.yml）。两份：CoreGacha/src/main/resources/ 和 plugins/CoreGacha/。
+# 数据库：默认运行时读 CoreRpg 的 plugins/CoreRpg/config.yml 的 mysql: 节（同一个库 ember），这里不存密码。
+mysql:
+  from: corerpg
+  corerpg_config: plugins/CoreRpg/config.yml
+  pool-size: 4
+
+# 扭蛋券来源（设计 §2.1），都是游戏里得的；没有任何真钱入口
+tickets:
+  welcome: 5
+  # 当日活跃在线分钟数 → 各发 1 张（这一分钟走动过才算；afk_worlds 里不算）
+  online_minutes: [30, 90]
+  afk_worlds: [ember_afk]
+  # 当日 CoreRpg 每日委托计数（p2_bounty，主线结算局数）达到 → 各发 1 张
+  bounty_clears: [1, 3]
+  exchange:
+    coin: 1200
+    badge: 20
+    daily_cap: 5
+  # 实物扭蛋券（NeigeItems ID），右键 / /gacha redeem 存进钱包
+  ni_item: ember_gacha_ticket
+
+display:
+  # 宠物只在这些世界显示；光环 / 烟火特效在 dungeon_ 开头的世界不显示
+  pet_worlds: [ember_hub]
+  no_fx_world_prefix: dungeon_
+  show_cooldown_seconds: 30
+  aura_period_ticks: 10
