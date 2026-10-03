@@ -1380,3 +1380,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 菜单 | `ember_p1_fest`（信息 / 进本 / 护符 / 足迹 / 称号 / 返回主界面），主界面左上角图标（活动期间才亮，`%corerpg_p1_fest_open%`）；PAPI `%corerpg_p1_fest_*%` |
 | 测试 | 单测 `EmberFestivalTest`（事件本解析与校验、时间窗、T3 封顶）；实测 FestQ01（1.57.0 测试包：进本门槛、掉币、买护符、迸发命中日志 `[P1 fest] burst … hit 1`、通关得称号、买足迹装上）、FestQ02（1.58.0：进本 → 通关 → 称号 + 15 国庆币）；活动结束后的常驻价没有实测（要改日期） |
 
+### 13.66 七个主线首领各加一招（CoreRpg 1.59.0，D140，balance_version 23）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 用户 10-03 13:51 / 14:37：新内容批第 3 项，每个 Q01–Q07 首领一招有预警的新招，通关率 ±3 以内；Q01 要改形状或错开时机 |
+| 规则 | 踏地（Q01，接重斩后 2 秒、半血后）/ 骨刺 / 誓印圈 / 潮涌 / 落石 / 霜环 / 矿锤横扫，预警 ≥ 1.2 秒，挑战版轻值；主招放慢（10.5 / 12.5 / 13.5 / 13.5 / 12 / 12.5 / 12 秒） |
+| 模型 | `tools/p1sim/bossmoves.py`（5 种子 × 4000 局）：6 格通关率最大变化 1.7 点 |
+| 测试 | 单测 `everyMainBossHasOneNewTelegraphedLightMove_D140`（183 个全过）；selfcheck 0 failed；FreshQ32 Q01 踏地、Q07 矿锤横扫实测出招；check-dp-spawns 11 ok |
