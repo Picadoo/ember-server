@@ -150,7 +150,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
     (best cleared + 1) whose estimated clear rate is >= 50 % and whose fee leaves `reserve` coins; tier 1 otherwise.
     The fee is paid per started segment (a failed segment keeps it, like stamina)."""
     order = ccfg['order']
-    out, marks_earned, ch_runs, best, fees, tiers_played, blocked = [], 0, 0, 0, 0, [], 0
+    out, marks_earned, ch_runs, best, fees, tiers_played, blocked, top_short = [], 0, 0, 0, 0, [], 0, 0
     acfgs = {t: abyss_cfg(ccfg, t) for t in range(1, len(ABYSS) + 1)}
     for w in range(weeks):
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
@@ -183,7 +183,10 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                     if not fee_ok(p, ABYSS[t - 1]['fee'], reserve):
                         # coin-blocked: the player would have stepped into this tier but the fee + reserve is short
                         if t == min(best + 1, len(ABYSS)) and abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
-                            blocked += 1
+                            if best < len(ABYSS):
+                                blocked += 1
+                            else:  # recheck #5: already at the top tier, only that day's fee is short (not a missed climb)
+                                top_short += 1
                         continue
                     if abyss_rate(acfgs[t], p.st(), kn, rng) >= 0.5:
                         tier = t
@@ -195,11 +198,14 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                     skip -= 1
                     continue
                 p.day = 1000 + w * 7 + d
+                if can_ch:
+                    # recheck #5: later runs of the day step down until the fee fits (before this the step-down was one
+                    # tier and the fee was paid anyway, overdrawing coins or T3 marks); nothing fits -> plain challenge
+                    while tier > 0 and not fee_ok(p, ABYSS[tier - 1]['fee'], reserve):
+                        tier -= 1
                 if can_ch and tier == 0:
                     use, key = ccfg, farm_map(p, kn, ccfg, rates, max(order, key=lambda k: rates[k]))
                 elif can_ch:
-                    if not fee_ok(p, ABYSS[tier - 1]['fee'], reserve) and tier > 1:
-                        tier -= 1
                     use, key = acfgs[tier], order[rng.randrange(len(order))]
                     pay_fee(p, ABYSS[tier - 1]['fee'], reserve); fees += ABYSS[tier - 1]['fee']
                 else:
@@ -222,7 +228,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
         out.append({'week': w + 1, 'set': done, 'enh': (p.blade['enh'] + p.charm['enh']) / 2, 'coin': p.coin,
                     'q': max(p.blade['q'], p.charm['q']), 'qmin': min(p.blade['q'], p.charm['q']), 'marks': marks_earned,
                     'B': p.st()['B'], 'ch': ch_runs, 'best': best, 'fees': fees, 'tier': tiers_played[-1],
-                    'blocked': blocked, 'days': (w + 1) * 7})
+                    'blocked': blocked, 'top_short': top_short, 'days': (w + 1) * 7})
     return out
 
 
@@ -576,10 +582,10 @@ def main():
         rows = [r[-1] for r in res['abyss']]
         n = len(rows)
         print()
-        print('深渊第 %d 周最高层分布：≥1 层 %d%% · ≥3 层 %d%% · ≥5 层 %d%% · ≥10 层 %d%% · 因币不够没进下一层的天数（均值）%.1f / %d 天' % (
+        print('深渊第 %d 周最高层分布：≥1 层 %d%% · ≥3 层 %d%% · ≥5 层 %d%% · ≥10 层 %d%% · 因币不够没进下一层的天数（均值）%.1f / %d 天 · 已到第 10 层但当天层费不够（均值）%.1f 天' % (
             a.weeks, round(100 * sum(r['best'] >= 1 for r in rows) / n), round(100 * sum(r['best'] >= 3 for r in rows) / n),
             round(100 * sum(r['best'] >= 5 for r in rows) / n), round(100 * sum(r['best'] >= 10 for r in rows) / n),
-            statistics.mean(r['blocked'] for r in rows), rows[0]['days']))
+            statistics.mean(r['blocked'] for r in rows), rows[0]['days'], statistics.mean(r['top_short'] for r in rows)))
 
     if a.mods:
         print()
