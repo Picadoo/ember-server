@@ -107,7 +107,7 @@ raid_revive:
 variety:
   affix_rate: 1.0
   affixes: [blazing, split, shield]
-  affix_shard: 3
+  affix_shard: 2
   blazing: {every: 3.0, radius: 1.5, warn: 1.0, dmg: 1.0}
   split: {count: 2, hp: 0.5}
   shield: {hp: 1.6}
