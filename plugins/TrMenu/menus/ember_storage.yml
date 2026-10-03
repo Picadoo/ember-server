@@ -1,5 +1,5 @@
-# 余烬仓库 — 材料仓（单种近无限 + 解锁格）+ 末影箱
-# docs/design/DESIGN-ember-material-warehouse.md
+# 余烬仓库（1.62）— P1 免费无限材料仓 + 装备库入口；旧「解锁格 / 付费扩容」文案已去掉
+# 主菜单「仓库」直接 /corerpg p1 vault；本页作备用二级壳（末影箱 / 跳转）
 
 Title: '§3余烬 · 仓库'
 
@@ -11,197 +11,73 @@ Options:
 
 Layout:
   - '#########'
-  - '#1234567#'
-  - '# W D U #'
-  - '# E 8   #'
+  - '#  V G  #'
+  - '#  D E  #'
+  - '#       #'
   - '####X####'
 
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0.8'
-    - 'tell: §3【仓库】 §7材料仓：一格一种 · 数量近无限 · 可解锁新格'
+    - 'tell: §3【仓库】 §7材料无限仓 · 装备库 · 全部免费，无需解锁'
 
 Icons:
 
-  '1':
-    display:
-      material: hopper
-      name: '§a取出 · 第 1 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 1 64'
-        - 'command: corerpg warehouse'
-
-  '2':
-    display:
-      material: hopper
-      name: '§a取出 · 第 2 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 2 64'
-        - 'command: corerpg warehouse'
-
-  '3':
-    display:
-      material: hopper
-      name: '§a取出 · 第 3 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 3 64'
-        - 'command: corerpg warehouse'
-
-  '4':
-    display:
-      material: hopper
-      name: '§a取出 · 第 4 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 4 64'
-        - 'command: corerpg warehouse'
-
-  '5':
-    display:
-      material: hopper
-      name: '§a取出 · 第 5 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 5 64'
-        - 'command: corerpg warehouse'
-
-  '6':
-    display:
-      material: hopper
-      name: '§a取出 · 第 6 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 6 64'
-        - 'command: corerpg warehouse'
-
-  '7':
-    display:
-      material: hopper
-      name: '§a取出 · 第 7 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 7 64'
-        - 'command: corerpg warehouse'
-
-  '8':
-    display:
-      material: hopper
-      name: '§a取出 · 第 8 格'
-      lore:
-        - ''
-        - '§7一次取出 §f64 §7个（不足则全部取出）'
-        - '§8格内是什么：点「材料仓总览」查看'
-        - ''
-        - '§e➥ §f点击取出'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1.2'
-        - 'command: corerpg warehouse withdraw 8 64'
-        - 'command: corerpg warehouse'
   '#':
     display:
       material: stained glass pane
       name: '§8 '
 
-  W:
+  V:
     display:
       material: chest
-      name: '§6材料仓总览'
+      name: '§6材料仓库'
       lore:
         - ''
-        - '§7每格绑定一种材料，数量可叠到近二十亿'
-        - '§8默认 8 格 · 上限 48'
+        - '§7白名单材料无格子上限'
+        - '§7每种最多近二十亿 · 打副本自动入库'
+        - '§8强化 / 升阶直接扣仓库里的材料'
         - ''
-        - '§e➥ §f点击打开仓库'
+        - '§e➥ §f打开材料仓库'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'command: corerpg warehouse'
-        - 'tell: §8【仓库】 §7用本页「取出 · 第 N 格」按钮取出（每次 64 个）'
+        - close
+        - 'command: corerpg p1 vault'
+
+  G:
+    display:
+      material: diamond sword
+      name: '§b装备库'
+      lore:
+        - ''
+        - '§7背包快满时新装备自动存入'
+        - '§7筛选 · 收藏 · 批量分解（可撤销）'
+        - '§8免费无限 · 不占背包格'
+        - ''
+        - '§e➥ §f打开装备库'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - close
+        - 'command: corerpg p1 gearlib'
 
   D:
     display:
       material: hopper
-      name: '§a存入主手'
+      name: '§a一键存入'
       lore:
         - ''
-        - '§7把手上的白名单 NI 材料全部存入'
-        - '§8同 id 合并 · 满格且无同 id 则失败'
+        - '§7背包里的白名单材料 → 材料仓'
+        - '§7背包里的 P1 装备 → 装备库'
         - ''
         - '§e➥ §f点击存入'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg warehouse deposit'
-
-  U:
-    display:
-      material: emerald
-      name: '§e解锁一格'
-      lore:
-        - ''
-        - '§7默认扣余烬币（阶梯涨价）'
-        - '§8也可在本页解锁格位（晶钻）'
-        - '§8晶钻价 28'
-        - ''
-        - '§e➥ §f点击解锁'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'command: corerpg warehouse unlock'
-        - 'command: corerpg warehouse'
+        - 'command: corerpg p1 stash'
+        - close
+        - 'command: corerpg p1 vault'
 
   E:
     display:
@@ -209,13 +85,12 @@ Icons:
       name: '§5末影箱'
       lore:
         - ''
-        - '§7普通物品 / 装备仍走末影箱'
+        - '§7普通物品仍走末影箱'
         - ''
         - '§e➥ §f打开'
     actions:
       all:
         - 'sound: BLOCK_CHEST_OPEN-1-1'
-        # 2026-09-26 audit: /enderchest did not exist → CoreRpg 1.4.10
         - 'command: corerpg enderchest'
         - close
 
