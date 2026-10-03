@@ -51,23 +51,23 @@ talents:
       row: 1
       name: "回身斩"
       family: burst
-      mods: {dodge_dmg: 1.05, dodge_secs: 3, taken_tele: 1.05}
-      good: "躲开首领预警招后 3 秒内伤害 +5%"
-      bad: "被首领预警招打中多受 5%"
+      mods: {dodge_dmg: 1.03, dodge_secs: 3, taken_tele: 1.025}
+      good: "躲开首领预警招后 3 秒内伤害 +3%"
+      bad: "被首领预警招打中多受 2.5%"
     - id: t1b
       row: 1
       name: "稳桩"
       family: sustain
-      mods: {taken_tele: 0.95, dmg_boss: 0.98}
-      good: "受到首领预警招伤害 -5%"
-      bad: "对首领伤害 -2%"
+      mods: {taken_tele: 0.97, dmg_boss: 0.99}
+      good: "受到首领预警招伤害 -3%"
+      bad: "对首领伤害 -1%"
     - id: t1c
       row: 1
       name: "踏步回气"
       family: scorch
-      mods: {dodge_heal: 0.01, dodge_icd: 12, taken_tele: 1.05}
-      good: "躲开首领预警招回 1% 最大生命（12 秒一次）"
-      bad: "被首领预警招打中多受 5%"
+      mods: {dodge_heal: 0.008, dodge_icd: 15, taken_tele: 1.03}
+      good: "躲开首领预警招回 0.8% 最大生命（15 秒一次）"
+      bad: "被首领预警招打中多受 3%"
     # 第 2 排「猎手」：重复刷图的词缀精英（D138）。得失都只落在词缀精英（含分身）身上，首通局和首领战不受影响。
     - id: t2a
       row: 2
@@ -96,25 +96,25 @@ talents:
       name: "燎原"
       family: scorch
       set: scorch
-      mods: {burn_spread: 2, spread_icd: 10, burn_mult: 0.93}
-      good: "燃烧中的敌人倒下时，把最多 2 秒燃烧传给 4 格内最近的敌人（10 秒一次）"
-      bad: "焚烬燃烧每跳伤害 ×0.93"
+      mods: {burn_spread: 1, spread_icd: 15, burn_mult: 0.95}
+      good: "燃烧中的敌人倒下时，把最多 1 秒燃烧传给 4 格内最近的敌人（15 秒一次）"
+      bad: "焚烬燃烧每跳伤害 ×0.95"
     - id: t3b
       row: 3
       name: "反震"
       family: burst
       set: burst
-      mods: {hit_burst: 2, taken_tele: 1.03}
-      good: "被首领预警招打中时烬爆计数 +2（硬吃一招换一次更早的烬爆，和「稳桩」搭）"
-      bad: "被首领预警招打中多受 3%"
+      mods: {hit_burst: 1, taken_tele: 1.02}
+      good: "被首领预警招打中时烬爆计数 +1（硬吃一招换一次更早的烬爆，和「稳桩」搭）"
+      bad: "被首领预警招打中多受 2%"
     - id: t3c
       row: 3
       name: "扛核"
       family: sustain
       set: sustain
-      mods: {share_w: 2, share_taken: 0.80, sustain_mult: 0.98}
-      good: "烬核分摊时你算 2 份（队友少扛），你那份再 -20%"
-      bad: "你自己扛的烬核变多（2 份 ×0.8 = 1.6 份）；炽愈回复量 ×0.98"
+      mods: {share_w: 2, share_taken: 0.90, sustain_mult: 0.99}
+      good: "烬核分摊时你算 2 份（队友少扛），你那份再 -10%"
+      bad: "你自己扛的烬核变多（2 份 ×0.9 = 1.8 份）；炽愈回复量 ×0.99"
 
 # ---------------------------------------------------------------- D142 余烬勋记
 # 账号永久、自动解锁；条件全是已有的一次性成就。效果以经济 / 便利为主，战斗类只有「深渊里受伤」（只在深渊）。
@@ -151,5 +151,5 @@ reroll:
       - {id: b_split, code: 3, name: "拆分", key: dmg_split, desc: "对分身伤害", values: [1.05, 1.10, 1.15, 1.20]}
     charm:
       - {id: c_tele, code: 4, name: "稳桩", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
-      - {id: c_share, code: 6, name: "分核", key: share_taken, desc: "烬核自己那份", values: [0.97, 0.94, 0.91, 0.88]}
+      - {id: c_share, code: 6, name: "分核", key: share_taken, desc: "烬核自己那份", values: [0.98, 0.96, 0.94, 0.92]}
       - {id: c_affix, code: 7, name: "抗缀", key: taken_affix, desc: "受到词缀精英伤害", values: [0.96, 0.92, 0.88, 0.84]}
