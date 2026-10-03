@@ -48,6 +48,9 @@ if [ -f "$PIDFILE" ] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null; then
   exit 1
 fi
 
+# hourly verified backup of MySQL + player files (idempotent; see scripts/ember-backup-loop.sh)
+/workspace/minecraft/scripts/ember-backup-loop.sh start >/dev/null 2>&1 || echo "WARN: backup loop did not start" >&2
+
 echo "Starting Paper ($MODE): $JAR"
 echo "  127.0.0.1:25567 (behind proxy :25565, bungeecord=true) plugins=/workspace/minecraft/plugins"
 ember_fifo_prepare   # stdin = console.fifo (kept open by a holder) → scripts/console.sh play "cmd"

@@ -89,3 +89,7 @@ server-runtime/ember_daily_rail_v1_build/
 # DungeonPlus auto-creates an example dungeon def per map folder (unused; P1 maps are driven by EmberQ0x)
 plugins/DungeonPlus/dungeon/ember_daily*_v1/
 plugins/DungeonPlus/dungeon/ember_fest*_v1/
+
+# player inventory snapshots written by CoreRpg when MySQL is down (player data; never commit)
+plugins/CoreRpg/snapshots/
+plugins/CoreRpg/invsnap-pending.yml
