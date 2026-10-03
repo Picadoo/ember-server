@@ -147,7 +147,7 @@ reroll:
   affixes:
     blade:
       - {id: b_affix, code: 1, name: "破缀", key: dmg_affix, desc: "对词缀精英伤害", values: [1.04, 1.08, 1.12, 1.16]}
-      - {id: b_set, code: 2, name: "余烬", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.005, 1.01, 1.015, 1.02]}
+      - {id: b_set, code: 2, name: "余烬", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.0025, 1.005, 1.0075, 1.01]}
       - {id: b_split, code: 3, name: "拆分", key: dmg_split, desc: "对分身伤害", values: [1.05, 1.10, 1.15, 1.20]}
     charm:
       - {id: c_tele, code: 4, name: "稳桩", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
