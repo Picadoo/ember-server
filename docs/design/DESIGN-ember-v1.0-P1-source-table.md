@@ -1364,4 +1364,19 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 规则 | 已首通的普通版（全队都首通），开本按种子定：1 只词缀精英（炽热火圈 1 秒预警 / 分裂 2 个 50% 近战 / 护盾生命 ×1.6）击败 +3 余烬碎片；约 50% 的局 30 秒限时清房 +1 余烬核心；首通 / 挑战 / 深渊 / 团本没有 |
 | 配置 | runs yml `variety:`；balance_version 21 |
 | 模型 | p1sim Q07 首通中位 26→25 / 8→8 / 3→3 天；p2econ 两件极品最快 7.75→7.80 / 5.50→5.50 / 4.33→4.44 周（+6 碎片时 0.3 档 −2 天，超限，改 +3） |
-| 测试 | 单测 `repeatRunVarietyIsSeededAndPaysOnlyExistingTypesOffFirstClears_D138`（39 个全过）；selfcheck 0 failed；实测待部署 |
+| 测试 | 单测 `repeatRunVarietyIsSeededAndPaysOnlyExistingTypesOffFirstClears_D138`（39 个全过）；selfcheck 0 failed；随 1.58.0 上线（10-03 14:38 CST 部署），实测词缀局还没打 |
+
+### 13.65 国庆 2026 限时活动「烟火庙会」（CoreRpg 1.58.0，D139，balance_version 22）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 用户 10-03 新内容批：国庆限时活动，10-07 前能玩、10-08 0 点（CST）结束，日期全部来自配置 |
+| 时间窗 | `ember-v1-festival.yml` `start: 2026-10-03T00:00:00+08:00` / `end: 2026-10-08T00:00:00+08:00`（start ≤ 现在 < end 开放；`enabled: false` 整个关掉）；改日期改这两行再 `/corerpg p1 fest reload` |
+| 活动本 | gq26「烟火庙会」：DP `EmberQ0F1`，地图 `ember_fest_gq26_v1` = Q04 潮蚀水道模板的红金换色副本（`/corerpg p1 fest mapbuild` 只换方块，几何 / 门 / 刷怪点同 Q04；原模板不动）。三房（灯会平台 / 爆竹坊 / 舞狮场）+ 首领年兽 · 焰狮（1800 生命，礼花圈 / 狮首扑击 / 半血后爆竹连环 + 余响）；强度在 Q04 和 Q05 之间。1～3 人，不耗体力，每天 3 次（进实例才算），需本人首通 Q04；单人倒下即失败。代码 `EmberRunMaps.events`（`MapDef.event`，不进主线顺序 / 深渊 / 团本），`EmberRunService` enter / verifyEntry / onBossKilled / onMobDeath 的事件分支 |
+| 奖励 | 只发国庆币（NI `ember_fest_coin_gq26`，CoreRpg 在活动本里发：小怪 25% 1 枚、精英 2、福袋兔 / 宝箱 3、通关每人 10，约 20 / 通关）和首次通关的限时称号「盛世烟火」；**不发余烬币、装备、印记、碎片、委托 / 周目标进度**，不走主线结算 → p2econ 不变（没有新币来源；活动后常驻价是币 / 徽的出口） |
+| 活动护符 | 盛世烟火符：独立的活动护符位（不占主手和已选护符、不算套装），H / D 走统一公式（`EmberLoadout.compute(..., festHp, festDef)` 加进 H0 / D，夹到标准 T3 护符 h 165 / D 14）。上线值 **hp 0 / def 0**；效果烟火迸发：你击杀的敌人炸开，3 格内最多 3 个其他敌人吃 0.2×B（不暴击、不算套装触发、迸发击杀不再迸发），每人 6 秒一次，只在 P1 副本里。活动期间 60 国庆币；活动后常驻 15000 余烬币或 300 余烬徽；都要本人首通 Q04 |
+| 模型 | `tools/p1sim/festsim.py` → `out-festsim-d139.md`：书参考区间平均（表 1b）Q01–Q07 戴 / 不戴差 ≤ 2.4 点（Q02 躲避 0.7）；团本 1000 局 R01 +2.9 / R02 +0.5 / R03 +0.1。调参过程：hp 10 让 Q01 / Q03 +30 点，hp 3 或 def 1 仍 +5～11（主线图对 H 很敏感），所以不加属性；coef 0.4 → +6.4，0.25 → +3.6，0.2 达标（`out-festsim-d139-coef025.md`）。活动本：刚首通 Q04 的推进玩家躲避 0.3 / 0.5 / 0.7 = 54% / 66% / 98% |
+| 限时外观 | 称号 gq26「盛世烟火」（活动期间通关，计数 `p2_title_gq26`）、足迹 trail_gq26「红金烟火」（活动商店 30 国庆币，计数 `p3_fest_trail_trail_gq26`）；活动后都拿不到，已有的保留 |
+| 菜单 | `ember_p1_fest`（信息 / 进本 / 护符 / 足迹 / 称号 / 返回主界面），主界面左上角图标（活动期间才亮，`%corerpg_p1_fest_open%`）；PAPI `%corerpg_p1_fest_*%` |
+| 测试 | 单测 `EmberFestivalTest`（事件本解析与校验、时间窗、T3 封顶）；实测 FestQ01（1.57.0 测试包：进本门槛、掉币、买护符、迸发命中日志 `[P1 fest] burst … hit 1`、通关得称号、买足迹装上）、FestQ02（1.58.0：进本 → 通关 → 称号 + 15 国庆币）；活动结束后的常驻价没有实测（要改日期） |
+
