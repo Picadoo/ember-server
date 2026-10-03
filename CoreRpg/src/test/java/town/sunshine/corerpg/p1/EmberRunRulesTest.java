@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(21, m.balanceVersion);                // D138
-        assertEquals("g04-1/b21", m.ruleVersion);
+        assertEquals(22, m.balanceVersion);                // D139
+        assertEquals("g04-1/b22", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -796,7 +796,7 @@ public class EmberRunRulesTest {
         assertEquals(EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString(),
                 EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString());
         // cosmetics: no stats anywhere, abyss titles by best tier
-        assertEquals(23, EmberCosmetics.ALL.size()); // D103 + E-review #9 + D116 six season honors + D137 R03 title / trail
+        assertEquals(25, EmberCosmetics.ALL.size()); // D103 + E-review #9 + D116 six season honors + D137 R03 title / trail + D139 国庆 title / trail
         assertEquals(1, EmberCosmetics.byId("abyss1").abyssTier);
         assertEquals(240, EmberCosmetics.byId("anim_ember").points());
         assertEquals(40, EmberCosmetics.byId("color_white").points());        // 2000 币 = 40 points

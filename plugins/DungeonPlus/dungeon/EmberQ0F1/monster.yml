@@ -1,0 +1,8 @@
+# 国庆活动本：同 Q04，不放 DP 怪物组（CoreRpg 导演负责）。
+groups:
+  idle:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

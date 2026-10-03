@@ -1,0 +1,136 @@
+# ember-v1.0-P1 D139 — 国庆限时活动本「烟火庙会」(plugins/CoreRpg/ember-v1-festival.yml). Same rules as EmberP1Main.yml:
+# spawned ONLY by the CoreRpg run director; health = book single-player value (CoreRpg applies the party factor, A18);
+# damage pinned by CoreRpg; boss moves telegraphed by CoreRpg. No MM skills, no drops, no xp, no corerpg mmgive lines:
+# 国庆币 is handed out by CoreRpg's run-mob death hook (E02). Red / gold names, gold armour on the heavier bodies.
+# Delete this file together with the event when it is retired.
+
+# ---------------- Q04 潮蚀水道 (B_ref 35) ----------------
+EmberFestMelee:
+  Type: ZOMBIE
+  Display: '&c爆竹小鬼'
+  Health: 92
+  Damage: 8
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - IRON_SWORD HAND
+
+EmberFestRanged:
+  Type: SKELETON
+  Display: '&6灯笼弓手'
+  Health: 70
+  Damage: 8
+  Options:
+    MovementSpeed: 0.25
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+
+EmberFestHeavy:
+  Type: ZOMBIE
+  Display: '&4石狮护院'
+  Health: 135
+  Damage: 8
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.5
+  Equipment:
+  - GOLD_HELMET HEAD
+  - GOLD_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+
+# caster: no weapon and its melee is cancelled by CoreRpg; only the telegraphed 6×1.5 line (1 s warning, 6 s cooldown)
+EmberFestCaster:
+  Type: SKELETON
+  Display: '&d焰火术士'
+  Health: 82
+  Damage: 8
+  Options:
+    MovementSpeed: 0.18
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+  Equipment:
+  - GOLD_HELMET HEAD
+
+EmberFestTreasure:
+  Type: RABBIT
+  Display: '&6福袋兔 &7(可跳过 · 掉国庆币)'
+  Health: 180
+  Damage: 0
+  Options:
+    MovementSpeed: 0.35
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+
+EmberFestElite:
+  Type: ZOMBIE
+  Display: '&6金甲舞狮'
+  Health: 320
+  Damage: 8
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.4
+  Equipment:
+  - GOLD_HELMET HEAD
+  - GOLD_CHESTPLATE CHEST
+  - IRON_SWORD HAND
+
+EmberFestBoss:
+  Type: ZOMBIE
+  Display: '&c&l年兽 · 焰狮'
+  Health: 1800
+  Damage: 15
+  Options:
+    MovementSpeed: 0.24
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventSunburn: true
+    PreventRandomEquipment: true
+    PreventItemPickup: true
+    Despawn: false
+    FollowRange: 24
+    KnockbackResistance: 0.9
+  Equipment:
+  - GOLD_HELMET HEAD
+  - GOLD_CHESTPLATE CHEST
+  - IRON_LEGGINGS LEGS
+  - IRON_SWORD HAND

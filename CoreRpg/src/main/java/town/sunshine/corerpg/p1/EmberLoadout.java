@@ -17,14 +17,31 @@ public final class EmberLoadout {
     /** 0 = no set, 1..3 = 觉醒 I..III */
     public final int awakening;
     public final double b, h0, h, d, m;
+    /** D139 festival charm slot (own slot, never part of a set): flat H0 / D added, capped at a standard T3 charm */
+    public final double festHp, festDef;
 
     private EmberLoadout(EmberItemData blade, EmberItemData charm, int level, String activeSet, int awakening,
-                         double b, double h0, double h, double d, double m) {
+                         double b, double h0, double h, double d, double m, double festHp, double festDef) {
         this.blade = blade; this.charm = charm; this.level = level; this.activeSet = activeSet;
         this.awakening = awakening; this.b = b; this.h0 = h0; this.h = h; this.d = d; this.m = m;
+        this.festHp = festHp; this.festDef = festDef;
     }
 
     public static EmberLoadout compute(EmberTables t, EmberItemData blade, EmberItemData charm, int level) {
+        return compute(t, blade, charm, level, 0, 0);
+    }
+
+    /** D139: the festival charm's H / D cap — never above a standard T3 charm (h 165 / D 14 in the book tables) */
+    public static double festCapHp(EmberTables t) { return t.charmH(3); }
+    public static double festCapDef(EmberTables t) { return t.charmD(3); }
+
+    /**
+     * D139: festHp / festDef come from the worn festival charm (0 when none); clamped to [0, T3 charm] and added to
+     * H0 / D before the §7.2 max-HP and mitigation formulas, so they go through the same pipeline as any charm stat.
+     */
+    public static EmberLoadout compute(EmberTables t, EmberItemData blade, EmberItemData charm, int level, double festHp, double festDef) {
+        festHp = Math.max(0, Math.min(festCapHp(t), festHp));
+        festDef = Math.max(0, Math.min(festCapDef(t), festDef));
         if (blade != null && !blade.isBlade()) blade = null;
         if (charm != null && !charm.isCharm()) charm = null;
         if (blade != null && charm != null && blade.uid.equals(charm.uid)) charm = null; // §8.2 same uid cannot fill two slots
@@ -34,10 +51,11 @@ public final class EmberLoadout {
                 : EmberFormula.baseAttack(t, blade.tier, blade.quality, blade.craft, blade.enhance, level);
         double h0 = charm == null ? EmberFormula.baseHp(t, -1, 0, 0, 0, level)
                 : EmberFormula.baseHp(t, charm.tier, charm.quality, charm.craft, charm.enhance, level);
+        h0 += festHp;
         double h = EmberFormula.maxHp(t, h0, "sustain".equals(set));
-        double d = EmberFormula.defense(t, charm == null ? -1 : charm.tier);
+        double d = EmberFormula.defense(t, charm == null ? -1 : charm.tier) + festDef;
         double m = EmberFormula.mitigation(t, d);
-        return new EmberLoadout(blade, charm, level, set, awk, b, h0, h, d, m);
+        return new EmberLoadout(blade, charm, level, set, awk, b, h0, h, d, m, festHp, festDef);
     }
 
     /** §4.1: both pieces present, same family (not none), both at least T1. */

@@ -169,6 +169,9 @@ dungeon-pre-folder:
     "EmberQ03": 1
   ember_daily_tide_v1:
     "EmberQ04": 1
+  # D139 国庆限时活动本（Q04 模板的红金换色副本，CoreRpg /corerpg p1 fest mapbuild）
+  ember_fest_gq26_v1:
+    "EmberQ0F1": 1
   ember_daily_frost_v1:
     "EmberQ06": 1
     "EmberQ0R2": 1

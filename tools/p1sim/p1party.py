@@ -134,6 +134,8 @@ class Party:
                         if x.get('burn_by') is m and x['burn'] > t:
                             x['hp'] -= cfg['burn'][m.st['awk']] * m.st['B'] * (min(tn, x['burn']) - t)
             t = self.t = tn
+            if p1sim.FEST:  # D139 burn kills (credited to the first living member: one burst per kill step)
+                p1sim.fest_proc(liv[0], alive, t, liv[0].st['B'], liv[0].kn.skill_hits)
             sw = next((m for m in liv if m.next_swing == t), None)
             if sw is not None:
                 m, st = sw, sw.st
@@ -162,6 +164,8 @@ class Party:
                         a = p1sim.mob(cfg, mapdef, mapdef['boss']['adds']['role'], rng, liv[0].kn, t + 1.0)
                         a['hp'] *= self.hpf
                         mobs.append(a)
+                if p1sim.FEST:  # D139 festival charm: every member wears one (own cooldown each)
+                    p1sim.fest_proc(m, alive, t, st['B'], m.kn.skill_hits)
                 continue
             hit = False
             melee = [x for x in alive if x['role'] in p1sim.MELEE_ROLES or x['role'] == 'boss']

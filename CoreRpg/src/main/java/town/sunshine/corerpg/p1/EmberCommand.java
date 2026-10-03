@@ -170,6 +170,10 @@ public final class EmberCommand {
                 if (admin) s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "没有有效的余烬刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
+                EmberFestival fest = EmberFestival.get(); // D139 festival charm slot
+                if (fest != null && runs != null && fest.worn(runs.dataOf(p.getUniqueId())))
+                    s.sendMessage(P + "活动护符: §c" + fest.charmName + "§7（佩戴中" + (l.festHp > 0 || l.festDef > 0
+                            ? String.format(Locale.ROOT, " · 生命 +%.0f 防御 +%.0f", l.festHp, l.festDef) : "") + "）· 烟火迸发");
                 EmberItemData best = null; // P2 draft §2 low-priority item: show the player's best 成色 (display only)
                 for (org.bukkit.inventory.ItemStack it : p.getInventory().getContents()) {
                     if (it == null || !loadouts.items().hasData(it)) continue;
@@ -277,7 +281,7 @@ public final class EmberCommand {
             if (before.charm != null && before.charm.uid.equals(d.uid)) {
                 s.sendMessage(P + "§a这是你已选定的护符（生效中）");
             } else {
-                EmberLoadout after = EmberLoadout.compute(EmberMode.tables(), before.blade, d, before.level);
+                EmberLoadout after = EmberLoadout.compute(EmberMode.tables(), before.blade, d, before.level, before.festHp, before.festDef);
                 if (pending) s.sendMessage(P + "§e（正在向数据库校验，2 秒后再点一次数字更准）");
                 s.sendMessage(P + "§e选定这件护符后" + (before.blade == null ? "（没有可配的刃）" : "（配 " + before.blade.shortLabel() + "）") + "：");
                 for (String line : EmberCompare.diff(before, after)) s.sendMessage(P + "  " + line);

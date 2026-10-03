@@ -117,10 +117,22 @@ public final class EmberRunService implements Listener {
         } catch (Throwable t) {
             log().log(Level.WARNING, "[P1 run] cannot read " + FILE + ": " + t.getMessage());
         }
+        festival = EmberFestival.load(plugin); // D139: the event dungeon rides in as root `events:`
+        festival.setRuns(this);
+        if (!festival.eventsSection().isEmpty()) {
+            Map<Object, Object> r2 = new java.util.LinkedHashMap<Object, Object>(root);
+            r2.put("events", festival.eventsSection());
+            root = r2;
+        }
         maps = EmberRunMaps.parse(root);
         for (String e : maps.validate()) log().warning("[P1 run] " + FILE + ": " + e);
-        log().info("[P1 run] maps " + maps.maps.keySet() + " raids " + maps.raids.keySet() + " cost=" + maps.cost + " party=" + maps.partyMin + ".." + maps.partyMax);
+        log().info("[P1 run] maps " + maps.maps.keySet() + " raids " + maps.raids.keySet() + " events " + maps.events.keySet() + " cost=" + maps.cost + " party=" + maps.partyMin + ".." + maps.partyMax);
     }
+
+    /** D139 国庆 event (ember-v1-festival.yml) */
+    private EmberFestival festival;
+    public EmberFestival festival() { return festival; }
+    boolean isRunMob(UUID e) { return byEntity.containsKey(e); }
 
     /** Called once after enable: restart recovery (§20.5) + the director ticker. */
     public void start() {
@@ -414,6 +426,7 @@ public final class EmberRunService implements Listener {
         if (party.size() < maps.partyMin(m) || party.size() > maps.partyMax(m))
             problems.add("人数 " + maps.partyMin(m) + "～" + maps.partyMax(m) + "，当前 " + party.size());
         if (m.raid && (challenge || abyss > 0)) problems.add("团本没有挑战 / 深渊版本");
+        if (m.event && (challenge || abyss > 0)) problems.add("活动本没有挑战 / 深渊版本");
         StaminaService st = plugin.getStaminaService();
         if (st == null) problems.add("体力服务未就绪");
         for (Player p : party) {
@@ -426,6 +439,9 @@ public final class EmberRunService implements Listener {
                             + (maps.abyssFeeMarkCoin > 0 ? "，多出来的 T3 印记也不够抵（1 枚抵 " + maps.abyssFeeMarkCoin + " 币，留 " + EmberCosmetics.MARK_RESERVE + " 枚）" : ""));
             } else if (challenge && !challengeOpen(d)) {
                 problems.add(p.getName() + " 未开放挑战版（需本人首通 " + maps.challenge.requires.toUpperCase(Locale.ROOT) + "）");
+            } else if (m.event) { // D139: festival window, own first clear of `requires`, daily entries
+                String why = festival == null ? "活动未加载" : festival.entryProblem(p, d);
+                if (why != null) problems.add(why);
             } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears
                 if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放团本（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
                 else if (m.weeklyCap > 0 && raidWeek(d, m) >= m.weeklyCap) problems.add(p.getName() + " 本周团本次数已满（" + raidWeek(d, m) + "/" + m.weeklyCap + "，周一 0 点重置）");
@@ -444,7 +460,7 @@ public final class EmberRunService implements Listener {
         }
         // D96: a first attempt at Q02+ without a T1 blade in hand or a selected T1 charm is a near-certain death (p1sim
         // 0 % even at dodge 0.5) that costs a third of the day's stamina: warn once, entering stays the player's choice.
-        if (!challenge && abyss == 0 && !m.raid && !forcedReady.remove(leader.getUniqueId())) {
+        if (!challenge && abyss == 0 && !m.raid && !m.event && !forcedReady.remove(leader.getUniqueId())) {
             EmberLoadoutService ls = plugin.getEmberLoadouts();
             EmberRunMaps.MapDef q1 = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
             List<String> warn = new ArrayList<String>();
@@ -511,7 +527,7 @@ public final class EmberRunService implements Listener {
                 forcedModifier = null;
             }
             s.modifier = mod == null ? "" : mod.id;
-        } else if (!challenge && abyss == 0 && !m.raid) { // D94: repeat normal runs of the featured map get the rule too
+        } else if (!challenge && abyss == 0 && !m.raid && !m.event) { // D94: repeat normal runs of the featured map get the rule too
             java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
             EmberRunMaps.Modifier mod = m.key.equals(featured(today)) ? maps.modifierFor(today) : null;
             if (mod != null && !mod.normal) mod = null;                 // 术者换防 stays challenge-only (model: +6～+17 points)
@@ -594,6 +610,7 @@ public final class EmberRunService implements Listener {
             passes.put(p.getUniqueId(), new Object[]{m.key, until});
             p.sendMessage(P + (at != null ? "§5深渊 · 余烬层 第 " + abyss + " 层 §7→ §e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name
                     + " §7正在创建实例……（已预留体力 " + cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）"
+                    : m.event ? "§c国庆活动本 §6" + m.name + " §7正在创建实例……（不耗体力 · 今日第 " + (festival.entriesToday(data(p.getUniqueId())) + 1) + "/" + festival.dailyEntries + " 次）"
                     : "§e" + (m.raid ? "团本 " : "") + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + cost + "）"));
         }
         boolean ok = plugin.getTicketEntryService() != null
@@ -639,6 +656,12 @@ public final class EmberRunService implements Listener {
                     + String.format(Locale.ROOT, "%.2f", t.dmg) + "（在挑战版之上）· 掉落成色 " + qualityLabel(t.quality) + " · 打完首领才结算，失败只丢这一层的花费");
         }
         potionCheck(s);
+        if (vm != null && vm.event && festival != null) { // D139: the day's entry counts once the player is inside
+            for (UUID u : s.committed) { PlayerData pd = data(u); if (pd != null) { festival.countEntry(pd); flushData(u); } }
+            tellRun(s, "§c国庆 · " + vm.name + " §7· " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
+                    + "）· 小怪和首领掉" + festival.coinName + " · 不发余烬币和装备 · 首次通关得限时称号 · 倒下即失败");
+            return;
+        }
         if (vm != null && vm.raid) {
             tellRun(s, "§6团本开始 §7· " + s.partySize + " 人 · 掉落 T3 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                     + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 倒下后观战队友，下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次 · 走进前方房间开战 · 首领死后统一结算");
@@ -986,6 +1009,8 @@ public final class EmberRunService implements Listener {
         if (s.extraDone || !s.open()) return;
         s.extraDone = true;
         store.save(s);
+        EmberRunMaps.MapDef em = maps.byKey(s.mapKey);
+        if (em != null && em.event && festival != null) { festival.onExtraDone(s); return; } // D139: no settlement here
         tellRun(s, "§6「" + s.extra.label + "」完成 §7· 额外奖励已记为待结算，击败首领后统一发放");
     }
 
@@ -1147,7 +1172,8 @@ public final class EmberRunService implements Listener {
                         + " acted=" + s.acted.contains(u) + " present=" + present + " died=" + s.died.contains(u));
                 continue;
             }
-            settleFor(s, m, u);
+            if (m.event) { if (festival != null) festival.onClear(s, u, cosmetics); } // D139: no main-line settlement
+            else settleFor(s, m, u);
         }
         s.state = EmberRunSession.COMPLETE;
         store.save(s);
@@ -1999,6 +2025,10 @@ public final class EmberRunService implements Listener {
         e.setDroppedExp(0);
         EmberRunDirector.Tracked t = d.mobs.get(e.getEntity().getUniqueId());
         if (t == null) return;
+        if (festival != null) {
+            try { festival.onRunMobDeath(d, t.role, e.getEntity()); } // D139 烟火迸发 + event drops
+            catch (RuntimeException ex) { log().log(Level.WARNING, "[P1 fest] mob death hook", ex); }
+        }
         boolean byPlayer = e.getEntity().getKiller() != null && d.s.committed.contains(e.getEntity().getKiller().getUniqueId());
         if (!byPlayer && t.boss()) byPlayer = !d.s.acted.isEmpty(); // DoT / set-event final blow after real participation
         if (d.onDeath(t)) onBossKilled(d, e.getEntity(), byPlayer);
@@ -2177,10 +2207,14 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ commands
 
     public static final java.util.Set<String> OPS = new java.util.HashSet<String>(java.util.Arrays.asList(
-            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit", "watch", "season", "goals", "equip", "route"));
+            "target", "marks", "firstclear", "claim", "run", "runs", "enter", "abyss", "recruit", "watch", "season", "goals", "equip", "route", "fest", "国庆"));
 
     public boolean cmd(CommandSender s, String sub, String[] args) {
         switch (sub) {
+            case "fest":
+            case "国庆":
+                if (festival == null) { s.sendMessage(P + "活动未加载"); return true; }
+                return festival.command(s, args); // D139
             case "target": return cmdTarget(s, args);
             case "marks": return cmdMarks(s, args);
             case "firstclear": return cmdFirstClear(s, args);
@@ -2949,6 +2983,7 @@ public final class EmberRunService implements Listener {
             if (v != null) return v;
         }
         if (key.startsWith("shop_") && cosmetics != null) return cosmetics.shopLabel(p == null ? null : p.getUniqueId(), d, key.substring(5)); // D119
+        if (key.startsWith("fest_") && festival != null) { String v = festival.papi(p, d, key.substring(5)); return v == null ? "" : v; } // D139
         if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleMenuText(d); // P2-9 %corerpg_p1_title% (D103: never empty)
         if ("honors".equals(key)) return cosmetics == null ? "0/0" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size();
         if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm) + lootOdds(d, lm); }

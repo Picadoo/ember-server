@@ -1,0 +1,23 @@
+# ember-v1.0-P1 D139 — 国庆限时活动本「烟火庙会」。地图 ember_fest_gq26_v1 = Q04 潮蚀水道模板的红金换色副本（几何不变，
+# /corerpg p1 fest mapbuild 生成；原模板不动）。进入只经 CoreRpg（主界面「国庆 · 烟火庙会」/ /corerpg p1 fest enter）：
+# 校验活动时间窗（plugins/CoreRpg/ember-v1-festival.yml start/end）、本人首通 Q04、每日次数，再发通行证并 dp start-console。
+# 本文件不刷怪、不发奖：房间/门/首领/国庆币掉落/称号全部由 CoreRpg 负责，结束由 CoreRpg 触发 ember_p1_complete / ember_p1_fail。
+# reward=false（E02）。活动结束后 CoreRpg 不再放行，本文件可留可删。
+
+dungeon-init-script:
+  - "$setmap{name=ember_fest_gq26_v1} @init"
+  - "$setspawn{location=0,64,6} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=3;message=§c活动本人数 1～3，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_gq26%'=='yes';message=§c请从主界面「国庆 · 烟火庙会」或 /corerpg p1 fest enter 进入（时间与次数由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§c[国庆] §6烟火庙会 §7· 走进前方房间开始；清房开门，击败年兽 · 焰狮后通关} @dungeon"
+    - "$teleport{location=0,64,6;defspawn=true} @player"
+
+dungeon-area: []
+
+dungeon-reward-script: []

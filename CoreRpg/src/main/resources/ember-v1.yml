@@ -87,7 +87,7 @@ leaderboard_exclude:
           SetBot, ThemeBot, TicketBot, WareBot, WeekBot, AbyssBot, AbyssBot2, AbyssBot3, CalAssist, CalBotA, CalBotB,
           CalBotC, CalWatch, CalWatch2, ArenaA, ArenaB, RaidA, RaidB, RaidC, RaidD, RaidE, RaidProbeA, RaidProbeB,
           ScrapT1, ProxyT1, QProbe2]
-  prefixes: [Fresh, Rev, CriticNew, SmokeT, QProbe]
+  prefixes: [Fresh, Rev, CriticNew, SmokeT, QProbe, FestQ]
   patterns:
     - '^P1[A-Z][a-z]+$'                     # P1Alpha / P1Fox / P1Rookie …（套件与模拟测试号）
     - '^.+(926|0926)$'                      # 9/26 批量测试号（RaidA926、GbL0926 …）

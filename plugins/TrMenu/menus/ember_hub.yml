@@ -13,7 +13,7 @@ Options:
   Hide-Player-Inventory: false
   Min-Click-Delay: 200
 Layout:
-  - ' n o p F '
+  - 'Ln o p F '
   - ' m X k i '
   - ' R c Y d '
   - ' ZA G h j'
@@ -24,6 +24,29 @@ Events:
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
+  # D139 国庆限时活动（活动期间才亮；时间来自 ember-v1-festival.yml，PAPI %corerpg_p1_fest_open%）
+  L:
+    icons:
+      - condition: 'check papi %corerpg_p1_fest_open% < 1'
+        priority: 1
+        display:
+          material: stained glass pane
+          name: '§8 '
+    update: 20
+    display:
+      material: firework
+      name: '§c国庆 · 烟火庙会 §6（限时）'
+      lore:
+        - ''
+        - '§7%corerpg_p1_fest_window% · %corerpg_p1_fest_state%'
+        - '§7活动本（首通 Q04 后 · 不耗体力 · 今日 %corerpg_p1_fest_entries%）掉国庆币'
+        - '§7换「盛世烟火符」（打怪时炸开烟火）和限时足迹；通关得限时称号'
+        - ''
+        - '§e➥ §f打开活动页'
+    actions:
+      all:
+        - 'sound: ENTITY_FIREWORK_LAUNCH-1-1'
+        - 'menu: ember_p1_fest'
   h:
     icons:
       - condition: 'check papi %corerpg_p1_q07done% < 1'

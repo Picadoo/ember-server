@@ -1,0 +1,16 @@
+# D139 国庆限时活动「烟火庙会」— 活动货币。只由 CoreRpg 在活动本里发放（小怪 / 精英 / 福袋兔 / 通关，见
+# plugins/CoreRpg/ember-v1-festival.yml drops），只在活动商店（/corerpg p1 fest）换盛世烟火符和限时足迹。
+# lore 不写指令；逻辑以 NI ID 为准（禁显示名匹配）。活动结束后没有用处（可留作纪念）。
+
+ember_fest_coin_gq26:
+  material: GOLD_NUGGET
+  name: '&c国庆币'
+  lore:
+    - '&6国庆 2026 · 烟火庙会 活动货币'
+    - '&7活动商店：盛世烟火符 · 红金烟火足迹'
+    - '&8活动时间见主界面「国庆 · 烟火庙会」'
+    - '&8不是余烬币 · 活动结束后无用处'
+  enchantments:
+    DURABILITY: 1
+  hideflags:
+    - HIDE_ENCHANTS

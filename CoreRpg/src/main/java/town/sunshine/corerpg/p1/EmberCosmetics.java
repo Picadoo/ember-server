@@ -81,6 +81,10 @@ public final class EmberCosmetics implements Listener {
             new Cosmetic("trail_r01", Kind.TRAIL, "§6余烬火星", "通关团本 R01（团本专属足迹）", 0, "r01", "FLAME"),
             new Cosmetic("trail_r02", Kind.TRAIL, "§b霜花", "通关团本 R02（团本专属足迹）", 0, "r02", "SNOW_SHOVEL"),
             new Cosmetic("trail_r03", Kind.TRAIL, "§6烬核余辉", "通关团本 R03（团本专属足迹）", 0, "r03", "CRIT_MAGIC"), // D137
+            // D139 国庆 2026 (limited): the title = an event clear inside the window (ember-v1-festival.yml), the trail =
+            // bought in the event shop with 国庆币; neither can be obtained after the event ends, owners keep them
+            new Cosmetic("gq26", Kind.TITLE, "§c盛世§6烟火", "国庆 2026 活动期间通关「烟火庙会」（限时）", 0, "gq26", null),
+            new Cosmetic("trail_gq26", Kind.TRAIL, "§c红§6金烟火", "国庆 2026 活动商店（限时，国庆币）", 0, null, "FIREWORKS_SPARK"),
             // D116 season honors (4-week seasons; display only, kept forever once earned)
             new Cosmetic("season_abyss", Kind.TITLE, "§d赛季深渊三甲", "某赛季「最高深渊层」榜前 3", 0, null, null),
             new Cosmetic("season_featured", Kind.TITLE, "§b赛季精选三甲", "某赛季「精选挑战通关」榜前 3", 0, null, null),
@@ -199,6 +203,8 @@ public final class EmberCosmetics implements Listener {
         if (c.id.startsWith("season_")) return d.periodCount(EmberSeason.C_AWARD + c.id, "all") > 0; // D116
         if (RAIDS10.equals(c.id)) return raidClears(d, "r01") + raidClears(d, "r02") + raidClears(d, "r03") >= 10; // E-review #9
         if (c.firstClear != null) return firstClearOf.test(d, c.firstClear);
+        EmberFestival fest = EmberFestival.get(); // D139 event trail: bought with the event currency
+        if (fest != null && fest.isFestTrail(c.id)) return fest.trailOwned(d, c.id);
         if (c.abyssTier > 0) return abyssBest >= c.abyssTier;
         return c.raid != null && raidClears(d, c.raid) > 0;
     }

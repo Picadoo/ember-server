@@ -1,0 +1,172 @@
+# D139 国庆限时活动「烟火庙会」— 活动页。所有日期 / 价格 / 次数 / 状态都来自 PAPI %corerpg_p1_fest_*%
+# （数据源 plugins/CoreRpg/ember-v1-festival.yml）；付款、校验、时间窗全在服务端（/corerpg p1 fest enter|buy|equip|unequip）。
+# 入口：主界面左上角（活动期间才亮）、/ember_p1_fest、/corerpg p1 fest。返回键回主界面。
+# 活动结束后：活动本和限时足迹下架、称号不再发；盛世烟火符改为常驻价（余烬币 或 余烬徽），这一页仍可打开。
+
+Title: '§c国庆 · 烟火庙会'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_fest'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#a#b#c#d#'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: ENTITY_FIREWORK_TWINKLE-1-1'
+
+Icons:
+  '#':
+    display:
+      material: red stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: firework
+      name: '§c%corerpg_p1_fest_name%'
+      lore:
+        - ''
+        - '§7时间：§f%corerpg_p1_fest_window%'
+        - '§7状态：%corerpg_p1_fest_state%'
+        - '§7今日活动本：§f%corerpg_p1_fest_entries% §8（0 点重置）'
+        - '§7活动通关：§f%corerpg_p1_fest_clears% 次'
+        - '§7背包里的%corerpg_p1_fest_coinname%：§f%corerpg_p1_fest_coins%'
+        - '§7进入条件：%corerpg_p1_fest_req%'
+        - ''
+        - '§8活动本不耗体力，不发余烬币和装备；掉%corerpg_p1_fest_coinname%换限时奖励'
+
+  a:
+    icons:
+      - condition: 'check papi %corerpg_p1_fest_open% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7活动本「烟火庙会」§8（未开放）'
+          lore:
+            - ''
+            - '§7状态：%corerpg_p1_fest_state%'
+            - '§7时间：§f%corerpg_p1_fest_window%'
+    update: 20
+    display:
+      material: blaze powder
+      name: '§6活动本「烟火庙会」§7（1～3 人）'
+      lore:
+        - ''
+        - '§7Q04 潮蚀水道的红金换装版：灯会平台 · 爆竹坊 · 舞狮场 → 年兽 · 焰狮'
+        - '§7首领三招：§f礼花圈§7（追身红圈）· §f狮首扑击§7（直线冲撞）· §f爆竹连环§7（半血后扇形 + 余响圈）'
+        - '§7强度在 Q04 和 Q05 之间（刚首通 Q04 的玩家躲得好约 6 成）· 倒下即失败'
+        - '§7小怪约 1/4 掉 1 枚%corerpg_p1_fest_coinname%，精英 / 福袋兔更多，通关每人再给一份'
+        - '§7首次通关得限时称号 §c盛世§6烟火'
+        - '§7今日次数：§f%corerpg_p1_fest_entries% · 不耗体力'
+        - ''
+        - '§e➥ §f左键：队长开本（全队需各自首通 Q04）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 fest enter'
+
+  b:
+    icons:
+      - condition: 'check papi %corerpg_p1_fest_charm_own% >= 1'
+        priority: 1
+        display:
+          material: nether star
+          name: '§c%corerpg_p1_fest_charm_name% §7（%corerpg_p1_fest_charm%§7）'
+          lore:
+            - ''
+            - '§7独立的活动护符位：不占主手和已选护符，不算套装'
+            - '§f%corerpg_p1_fest_charm_effect%'
+            - ''
+            - '§e➥ §f左键：佩戴 · 右键：取下'
+        actions:
+          left:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - close
+            - 'command: corerpg p1 fest equip'
+          right:
+            - 'sound: UI_BUTTON_CLICK-1-1'
+            - close
+            - 'command: corerpg p1 fest unequip'
+    update: 20
+    display:
+      material: nether star
+      name: '§c%corerpg_p1_fest_charm_name% §8（%corerpg_p1_fest_charm%§8）'
+      lore:
+        - ''
+        - '§7独立的活动护符位：不占主手和已选护符，不算套装'
+        - '§f%corerpg_p1_fest_charm_effect%'
+        - ''
+        - '§6价格：%corerpg_p1_fest_charm_price%'
+        - '§7活动结束后仍可买（价格更高，余烬币或余烬徽）· 需本人首通 Q04'
+        - ''
+        - '§e➥ §f左键：购买（活动期间用%corerpg_p1_fest_coinname%；结束后用余烬币）'
+        - '§e➥ §f右键：活动结束后用余烬徽购买'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 fest buy charm coin'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 fest buy charm badge'
+
+  c:
+    update: 20
+    display:
+      material: blaze powder
+      name: '§6足迹 %corerpg_p1_fest_trail_name% §8（限时）'
+      lore:
+        - ''
+        - '§7脚下的红金烟火火星（只做展示，不加属性）'
+        - '§7状态 / 价格：%corerpg_p1_fest_trail%'
+        - '§8只在活动期间出售，结束后买不到（已有的一直保留）'
+        - ''
+        - '§e➥ §f左键：购买 · 右键：装上'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 fest buy trail'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 trail trail_gq26'
+
+  d:
+    update: 20
+    display:
+      material: name tag
+      name: '§6称号 §c盛世§6烟火 §8（限时）'
+      lore:
+        - ''
+        - '§7%corerpg_p1_fest_title%'
+        - '§8只做展示，不加属性；活动结束后不再发放（已有的一直保留）'
+        - ''
+        - '§e➥ §f左键：装上称号'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 title gq26'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回主界面'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_hub'

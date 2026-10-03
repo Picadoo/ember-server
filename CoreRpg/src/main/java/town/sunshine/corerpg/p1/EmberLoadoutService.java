@@ -184,7 +184,10 @@ public final class EmberLoadoutService implements Listener {
             PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
             if (pd != null) level = pd.getEmberLevel();
         } catch (Throwable ignored) {}
-        EmberLoadout l = EmberLoadout.compute(EmberMode.tables(), blade, charm, level);
+        EmberFestival fest = EmberFestival.get();
+        double[] fs = fest == null ? null : fest.wornStats(p); // D139 festival charm slot (null = not worn)
+        EmberLoadout l = fs == null ? EmberLoadout.compute(EmberMode.tables(), blade, charm, level)
+                : EmberLoadout.compute(EmberMode.tables(), blade, charm, level, fs[0], fs[1]);
         cache.put(p.getUniqueId(), l);
         notes.put(p.getUniqueId(), why);
         String mainUid = blade == null ? null : blade.uid;
@@ -268,7 +271,7 @@ public final class EmberLoadoutService implements Listener {
             PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
             if (pd != null) level = pd.getEmberLevel();
         } catch (Throwable ignored) {}
-        return new Object[] { EmberLoadout.compute(EmberMode.tables(), blade, cur.charm, level), Boolean.TRUE };
+        return new Object[] { EmberLoadout.compute(EmberMode.tables(), blade, cur.charm, level, cur.festHp, cur.festDef), Boolean.TRUE };
     }
 
     public String selectCharm(Player p, ItemStack held) {

@@ -1,0 +1,135 @@
+# ember-v1.0-P1 D139 — 国庆限时活动「烟火庙会」(2026 National Day). Everything of the event lives in this one file
+# (plus MythicMobs/Mobs/EmberFestival.yml, NeigeItems/Items/ember-festival.yml, TrMenu ember_p1_fest*.yml) so the event
+# can be switched off, re-dated or deleted without touching the main-line config. Two copies: plugins/CoreRpg/ and
+# CoreRpg/src/main/resources/ — change both. Runtime edits need a restart (a live run keeps its snapshot).
+#
+# Time window (ISO-8601 with offset; CST = +08:00). start <= now < end: the dungeon opens, drops 国庆币, the charm and the
+# event trail are sold for 国庆币 and the event title can be earned. After `end` the dungeon closes, the title / trail
+# can no longer be obtained (owners keep them), and the charm moves to the permanent cosmetic-style shop at
+# after.price_coin 余烬币 or after.price_badge 余烬徽 (higher than the event price). enabled: false = the whole event off
+# (owned charms keep working, the after-event shop stays).
+enabled: true
+id: gq26
+name: 国庆 · 烟火庙会
+start: "2026-10-03T00:00:00+08:00"
+end: "2026-10-08T00:00:00+08:00"
+
+# event currency: a NeigeItems item (tradeable like any NI item), handed out by CoreRpg itself inside the event
+# instance (the run-mob death hook; MythicMobs drops stay off in P1 worlds, E02):
+#   every normal mob mob_chance → 1 · elite → `elite` · treasure → `treasure` · each eligible player on the clear → `clear`
+# ≈ 36 mobs per run → ~9 + 2 + 10 ≈ 20 per clear, ~6 per failed run; charm 60 + trail 30 ≈ 4–5 clears ≈ 2 days of 3 entries.
+currency:
+  ni: ember_fest_coin_gq26
+  name: 国庆币
+drops: {mob_chance: 0.25, elite: 2, treasure: 3, clear: 10}
+
+# entries per player per stamina day (Asia/Shanghai, 00:00 reset), counted when the player is inside the instance.
+# The event dungeon costs no stamina and pays no main-line settlement (no 余烬币 / items / marks / bounty / goals),
+# so it cannot move the main-line economy (p2econ unchanged; see docs §13.64).
+daily_entries: 3
+# own first clear needed to enter (mid players: Q04 cleared ≈ T1+6 → T2)
+requires: q04
+
+# Festival charm slot (own slot: never the main hand, never the selected charm, never part of a set).
+# Stats go through the unified formula (EmberFormula, book §7.2): H0 += hp, D += def — capped at a standard T3 charm
+# (h 165 / D 14, EmberTables); the fun is the effect. 烟火迸发: when an enemy you damaged dies (any P1 source), a burst at
+# its body hits up to `targets` other enemies within `radius` for coef × B (no crit, never counts for set triggers,
+# a burst kill never starts another burst), at most once per `icd` seconds. Only in P1 worlds while the charm is worn.
+# Model: tools/p1sim/festsim.py → out-festsim-d139.md (Q01–Q07 band-average / raid clear rates with and without the
+# charm within 3 points). hp 10 moved Q01 / Q03 by +30 points and even hp 3 / def 1 by +5～11 (the main maps are
+# knife-edge on H), so the charm carries no stats: hp 0 / def 0 (cap stays T3). coef 0.4 → Q02 +5.5 / Q03 +6.4,
+# 0.25 → +3.6, 0.2 → max +2.4 (Q02 dodge 0.7). Buying needs an own Q04 first clear (same as entering), so the charm
+# can never help a Q01–Q04 first clear in practice.
+charm:
+  id: fest_charm_gq26
+  name: 盛世烟火符
+  hp: 0
+  def: 0
+  effect: {coef: 0.2, targets: 3, radius: 3.0, icd: 6.0}
+  # event shop (国庆币), only start <= now < end
+  price_event: 60
+  # after the event: permanent shop, higher price; either currency
+  after: {price_coin: 15000, price_badge: 300}
+
+# event-only cosmetics (no stats): the title comes with the first event clear, the trail is bought with 国庆币;
+# neither can be obtained after `end`
+title: {id: gq26, label: "§c盛世§6烟火", how: "国庆活动期间通关「烟火庙会」（限时）"}
+trail: {id: trail_gq26, label: "§c红§6金烟火", particle: FIREWORKS_SPARK, price_event: 30, how: "国庆活动商店（限时，国庆币）"}
+
+# the event dungeon: a copy of the Q04 tide template (ember_daily_tide_v1 → ember_fest_gq26_v1, red / gold palette
+# via /corerpg p1 fest mapbuild [base]; the original is untouched), so rooms / doors / points are the Q04 ones.
+# map_theme: block-id palette swap inside box (1.12 ids, "id" = any data, "id:data" = that one) — geometry unchanged.
+map_theme:
+  box: [-80, 50, -12, 44, 90, 172]
+  palette: {"98": "215", "109": "114", "4": "159:14", "48": "159:1", "168": "159:14", "17": "159:4", "5": "159:4", "44": "44:6"}
+# Strength between Q04 (b_ref 35) and Q05 (59). Same director, same telegraphs, same single-player death rule as the
+# main maps; party 1–3 with the A18 HP factor.
+dungeon:
+  key: gq26
+  name: 烟火庙会
+  dungeon: EmberQ0F1
+  template: ember_fest_gq26_v1
+  tier: 2
+  drop_label: 国庆币
+  content_version: gq26
+  map_version: ember_fest_gq26_v1@d139-2026-10-03
+  requires: q04
+  cost: 0
+  purpose: "国庆限时本：掉国庆币（换盛世烟火符 / 红金烟火足迹），首次通关得限时称号；不发余烬币和装备"
+  b_ref: 45
+  spawn: [0, 64, 6]
+  spread: [[-2, 64, 6], [2, 64, 6]]
+  safe: {r0: [0, 64, 3], r1: [0, 64, 25], r2: [-36, 64, 57], r3: [14, 64, 91], rb: [0, 64, 129]}
+  holo: {entry: [0, 67, 6], event: [-56, 67, 66], exit: [0, 67, 129]}
+  rails: [[29, 63, 99, 30, 64, 103]]
+  fall_catch_y: 63.5
+  mobs:
+    melee:    {mm: EmberFestMelee,    hp: 92,  atk: 8, interval: 2.5}
+    ranged:   {mm: EmberFestRanged,   hp: 70,  atk: 8, interval: 3.0, range: 12}
+    heavy:    {mm: EmberFestHeavy,    hp: 135, atk: 8, interval: 3.0}
+    caster:   {mm: EmberFestCaster,   hp: 82,  atk: 8, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+    treasure: {mm: EmberFestTreasure, hp: 180, atk: 0, interval: 9.0}
+    elite:    {mm: EmberFestElite,    hp: 320, atk: 8, interval: 2.5}
+  rooms:
+    r1:
+      label: 灯会平台
+      trigger: [-18, 63, 22, 18, 68, 46]
+      points: [[-6, 64, 35], [0, 64, 35], [6, 64, 35], [-6, 64, 40], [0, 64, 40], [6, 64, 40], [-15, 64, 34], [15, 64, 34]]
+      door: [-39, 64, 50, -33, 69, 50]
+      a: {melee: 5, ranged: 1}
+      b: {melee: 4, heavy: 1}
+    r2:
+      label: 爆竹坊
+      trigger: [-48, 63, 54, -24, 68, 78]
+      points: [[-42, 64, 67], [-36, 64, 67], [-30, 64, 67], [-42, 64, 72], [-36, 64, 72], [-30, 64, 72], [-45, 64, 66], [-27, 64, 66]]
+      door: [11, 64, 84, 17, 69, 84]
+      a: {melee: 4, ranged: 2}
+      b: {melee: 5, caster: 1}
+    r3:
+      label: 舞狮场
+      trigger: [0, 63, 88, 28, 68, 112]
+      points: [[8, 64, 101], [14, 64, 101], [20, 64, 101], [8, 64, 106], [14, 64, 106], [20, 64, 106], [3, 64, 100], [25, 64, 93]]
+      door: [-3, 64, 123, 3, 69, 123]
+      a: {melee: 5, heavy: 1}
+      b: {melee: 5, ranged: 2}
+  boss:
+    mm: EmberFestBoss
+    name: 年兽 · 焰狮
+    hp: 1800
+    atk: 15
+    interval: 3.0
+    at: [0, 64, 142]
+    area: [-16, 63, 126, 16, 74, 158]
+    wait_in_area: true
+    # the existing telegraph shapes (flame outline + chat warning; the hit never leaves the outline)
+    skills:
+      - {type: circle, target: player, name: 礼花圈, every: 10, warn: 1.2, radius: 2.5, dmg: 22}
+      - {type: charge, name: 狮首扑击, every: 13, warn: 1.3, length: 7, width: 3, dmg: 20, light: true}
+      - {type: cone, name: 爆竹连环, every: 11, warn: 1.0, angle: 100, range: 4.5, dmg: 16, kb: 0.5, below: 0.5,
+         follow: {type: circle, name: 余响, delay: 1.5, warn: 1.0, radius: 2.5, ahead: 2, dmg: 12}}
+    recover: 0.5
+  # the Q04 side room: 福袋兔 / 金甲舞狮 / 宝箱 (the run's extra event) — pays 国庆币 here (drops above; the chest = `treasure`)
+  event:
+    after: r2
+    anchor: [-62, 64, 66]
+    area: [-68, 63, 60, -56, 70, 72]

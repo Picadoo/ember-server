@@ -18,6 +18,27 @@ MODS = list((_RUNS.get('rotation') or {}).get('modifiers') or [])
 ROT_CFG = _RUNS.get('rotation') or {}
 
 FAMS = ('scorch', 'burst', 'sustain')
+
+# D139 festival charm (None = not worn): {'hp', 'def', 'coef', 'targets', 'radius', 'icd'}; set by festsim.py
+FEST = None
+
+
+def fest_proc(owner, alive, t, B, caught):
+    """D139 烟火迸发: an enemy that died this step bursts on up to min(targets, caught) other living enemies for
+    coef × B, at most once per icd (a burst kill never starts another burst: the cooldown is set first)."""
+    dead = [m for m in alive if m['hp'] <= 0 and not m.get('_dead')]
+    if not dead:
+        return
+    for m in dead:
+        m['_dead'] = True
+    if FEST is None or t < getattr(owner, 'fest_cd', -1.0):
+        return
+    owner.fest_cd = t + FEST['icd']
+    rest = [m for m in alive if m['hp'] > 0][:min(int(FEST['targets']), caught)]
+    for m in rest:
+        m['hp'] -= FEST['coef'] * B
+    owner.fest_bursts = getattr(owner, 'fest_bursts', 0) + 1
+    fest_proc(owner, alive, t, B, caught)  # mark burst kills dead (cooldown already running → no new burst)
 MELEE_ROLES = ('melee', 'heavy', 'elite')
 
 
@@ -73,11 +94,13 @@ def stats(cfg, blade, charm, level):
     g = lambda it: 1 + cfg['e'][it['enh']] + cfg['q'][it['q']] + cfg['f'][it['f']]
     B = cfg['A'][blade['tier']] * g(blade) + cfg['lvl_atk'] * steps
     H = 20 + cfg['h'][charm['tier']] * g(charm) + cfg['lvl_hp'] * steps
+    if FEST:  # D139 festival charm slot (festsim.py): H0 += hp, D += def, same formula
+        H += FEST['hp']
     awk = awakening(blade, charm)
     fam = blade['fam'] if awk else None
     if fam == 'sustain':
         H *= cfg['sustain_hp']
-    M = max(cfg['def_floor'], cfg['def_k'] / (cfg['def_k'] + cfg['D'][charm['tier']]))
+    M = max(cfg['def_floor'], cfg['def_k'] / (cfg['def_k'] + cfg['D'][charm['tier']] + (FEST['def'] if FEST else 0)))
     return {'B': B, 'H': H, 'M': M, 'set': fam, 'awk': awk}
 
 
@@ -177,6 +200,8 @@ class Fight:
                         m['hp'] -= cfg['burn'][st['awk']] * st['B'] * (min(tn, m['burn']) - t)
             t = tn
             self.t = t
+            if FEST:
+                fest_proc(self, alive, t, st['B'], kn.skill_hits)
             if t == next_swing:
                 next_swing = t + period
                 tgt = alive[0]
@@ -205,6 +230,8 @@ class Fight:
                     adds_done = True
                     for _ in mapdef['boss']['adds']['points']:
                         mobs.append(mob(cfg, mapdef, mapdef['boss']['adds']['role'], rng, kn, t + 1.0))
+                if FEST:
+                    fest_proc(self, alive, t, st['B'], kn.skill_hits)
                 continue
             blazed = False
             for m in alive:  # D138 炽热: a warned fire circle at the elite's feet

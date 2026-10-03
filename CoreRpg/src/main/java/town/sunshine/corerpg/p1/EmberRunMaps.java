@@ -233,6 +233,8 @@ public final class EmberRunMaps {
         public final String lootFamily, lootSlot;
         /** true for entries of the runs-yml `raids:` section (never in the main-line order, featured or abyss) */
         public boolean raid;
+        /** D139: the limited-time event dungeon (ember-v1-festival.yml `dungeon:`; never main-line / raid / abyss) */
+        public boolean event;
 
         MapDef(String key, Map<?, ?> m) {
             this.key = key;
@@ -538,6 +540,8 @@ public final class EmberRunMaps {
     public final Map<String, MapDef> maps;
     /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
     public final Map<String, MapDef> raids;
+    /** D139 limited-time event dungeons (festival yml `dungeon:`, injected by EmberRunService.load as root `events:`) */
+    public final Map<String, MapDef> events;
     /** P2-9 (D81) loot bias weights; P2-9 (D82) raid_item quality floor */
     public final double lootOwnFamily, lootMapShare, lootSlotWeight;
     public final int raidItemQualityFloor;
@@ -747,11 +751,26 @@ public final class EmberRunMaps {
             }
         }
         raids = Collections.unmodifiableMap(rr);
+        Map<String, MapDef> ev = new LinkedHashMap<String, MapDef>();
+        if (root.get("events") instanceof Map) {
+            for (Map.Entry<?, ?> e : ((Map<?, ?>) root.get("events")).entrySet()) {
+                if (e.getValue() instanceof Map) {
+                    String k = String.valueOf(e.getKey()).toLowerCase(Locale.ROOT);
+                    MapDef d = new MapDef(k, (Map<?, ?>) e.getValue());
+                    d.event = true;
+                    ev.put(k, d);
+                }
+            }
+        }
+        events = Collections.unmodifiableMap(ev);
     }
 
     public int partyMin(MapDef m) { return m != null && m.partyMin > 0 ? m.partyMin : partyMin; }
     public int partyMax(MapDef m) { return m != null && m.partyMax > 0 ? m.partyMax : partyMax; }
-    public int cost(MapDef m) { return m != null && m.cost > 0 ? m.cost : cost; }
+    public int cost(MapDef m) {
+        if (m != null && m.event) return Math.max(0, m.cost); // D139: event dungeon 0 = free (not the file default)
+        return m != null && m.cost > 0 ? m.cost : cost;
+    }
 
     /** enemy HP factor: A18 1 + 0.65 (n − 1) for main maps; raids use their own hp_per_member (P2-5, D76) */
     public static double hpFactor(MapDef m, int n) {
@@ -784,12 +803,14 @@ public final class EmberRunMaps {
         if (key == null) return null;
         String k = key.toLowerCase(Locale.ROOT);
         MapDef d = maps.get(k);
-        return d != null ? d : raids.get(k);
+        if (d == null) d = raids.get(k);
+        return d != null ? d : events.get(k);
     }
 
     public MapDef byDungeon(String dungeonId) {
         for (MapDef d : maps.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         for (MapDef d : raids.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
+        for (MapDef d : events.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         return null;
     }
 
@@ -801,6 +822,10 @@ public final class EmberRunMaps {
             if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
         }
         for (MapDef d : raids.values()) {
+            String p = "dungeon_" + d.dungeon + "_";
+            if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
+        }
+        for (MapDef d : events.values()) {
             String p = "dungeon_" + d.dungeon + "_";
             if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
         }
@@ -826,6 +851,13 @@ public final class EmberRunMaps {
             if (maps.containsKey(d.key)) out.add(d.key + ": raid key collides with a main map");
             if (d.partyMin < 1 || d.partyMax < d.partyMin || d.partyMax > 5) out.add(d.key + ": raid party " + d.partyMin + ".." + d.partyMax);
             if (d.hpPerMember > 1.5 || d.dmgPerMember > 0.5) out.add(d.key + ": raid party scaling above the cap");
+        }
+        for (MapDef d : events.values()) {
+            String e = d.validate();
+            if (e != null) out.add(e);
+            if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
+                out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);
+            if (maps.containsKey(d.key) || raids.containsKey(d.key)) out.add(d.key + ": event key collides with a map / raid");
         }
         return out;
     }
