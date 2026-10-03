@@ -1292,3 +1292,39 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 门格空气（存档时开着）或铁栏都算对，别的方块报错；团本 r01 / r02 单独成块 |
 | 代码 | scripts/check-dp-spawns.py |
 | 测试 | live 图 9 个副本全 ok |
+
+### 13.57 起步刃不挡自动换上、起步刃进背包（CoreRpg 1.54.0，D130 / D131）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | D85 顶替起步刃之后总是再走 D120 自动换上；起步刃挪到背包第一个空格（9–35），背包满才和新刃对调 |
+| 代码 | EmberRunService `giveItem`（不再提前 return）；EmberRunRules `starterTarget` |
+| 参数源 | 无（不改数） |
+| 测试 | 单测 `starterBladeGoesToTheBackpackNotTheHotbar_D131`、`starterSwapStillLetsTheBetterBladeAutoEquip_D130`；`tools/p1map/starter-equip-check.sh` FreshQ18 / FreshQ19 全 PASS |
+
+### 13.58 背包里更好的同阶件（CoreRpg 1.54.0，D132）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 自动换上 / 询问在新件 + 背包同部位件里挑最好的（D120 的 5% 规则，开套装时要同族）；「下一次突破」有更好的同族背包件时先给「换上（免费）」+ [换上刃] / [换上护符] |
+| 代码 | EmberRunRules `betterThan` / `bestCandidate`；EmberRunService `offerUpgrade` / `bagPieces` / `breakthroughRoutes` |
+| 参数源 | 无 |
+| 测试 | 单测 `betterSameTierPieceInTheBagIsPreferred_D132`；FreshQ19 手拿 T1 打 `/corerpg p1 route` 出现 [换上刃] |
+
+### 13.59 团本失败说明周次数（CoreRpg 1.54.0，D133）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 团本周次数只在通关结算时加；失败消息多一句「本周团本次数没有扣：还是 n/3…」 |
+| 代码 | EmberRunService `fail`（团本分支）、`raidWeek` |
+| 参数源 | 无 |
+| 测试 | FreshQ24–Q26 R01 开战后全倒，三人都看到「还是 0/3（团本合计）」 |
+
+### 13.60 毕业那周委托目标按剩下的天数（CoreRpg 1.54.0，D134，balance_version 19）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | Q07 真首通记日期；毕业那周「委托 3 天」目标 = max(1, min(3, 8 − 星期几))，下周起恢复 3；进服 [外观商店] 按钮补齐 D121 |
+| 代码 | EmberSeason `target` / `proratedTarget` / `markGraduated`（`p3_grad`）；EmberRunService `endOfP1`、`joinButtons`；ember_p1_season 一行 |
+| 参数源 | ember-v1-runs.yml（两份）balance_version 19、`weekly_goals:` 注释 |
+| 测试 | 单测 `bountyGoalIsProratedInTheGraduationWeek_D134`；FreshQ20 进服按钮有 [外观商店] |
