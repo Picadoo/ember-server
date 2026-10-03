@@ -1,0 +1,127 @@
+# D142 余烬勋记（P2 草案 §5za 第 2 部分，源表 §13.68）— 账号永久、自动解锁的小加成，条件全是已有的一次性成就。
+# 文字 / 状态都来自 PAPI %corerpg_p1_honor_*%（数据源 plugins/CoreRpg/ember-v1-growth.yml honors:）。
+# 入口：装备页、主界面、天赋页；返回键回到打开它的那一页。主线图和团本里没有任何战斗加成（总上限见 yml caps）。
+
+Title: '§6余烬勋记'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_honor'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####N####'
+  - '#a#b#c#d#'
+  - '##e#f#g##'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  N:
+    update: 20
+    display:
+      material: gold ingot
+      name: '§6余烬勋记 %corerpg_p1_honor_n%'
+      lore:
+        - ''
+        - '§7现在的效果合计：'
+        - '%corerpg_p1_honor_total%'
+        - ''
+        - '§7账号永久 · 达成条件自动获得 · 不用领取'
+        - '§7全是小加成，有总上限：结算币最多 +4%、碎片 +1 / 次、'
+        - '§7深渊层费最多 -5%、深渊里受伤最多 -2%、洗练币最多 -15%'
+        - '§8主线图和团本里没有任何战斗加成；装备仍是主线'
+
+  a:
+    update: 20
+    display:
+      material: ender pearl
+      name: '%corerpg_p1_honor_name_1%'
+      lore:
+        - ''
+        - '%corerpg_p1_honor_desc_1%'
+        - '%corerpg_p1_honor_st_1%'
+
+  b:
+    update: 20
+    display:
+      material: ender eye
+      name: '%corerpg_p1_honor_name_2%'
+      lore:
+        - ''
+        - '%corerpg_p1_honor_desc_2%'
+        - '%corerpg_p1_honor_st_2%'
+
+  c:
+    update: 20
+    display:
+      material: iron sword
+      name: '%corerpg_p1_honor_name_3%'
+      lore:
+        - ''
+        - '%corerpg_p1_honor_desc_3%'
+        - '%corerpg_p1_honor_st_3%'
+
+  d:
+    update: 20
+    display:
+      material: diamond sword
+      name: '%corerpg_p1_honor_name_4%'
+      lore:
+        - ''
+        - '%corerpg_p1_honor_desc_4%'
+        - '%corerpg_p1_honor_st_4%'
+
+  e:
+    update: 20
+    display:
+      material: beacon
+      name: '%corerpg_p1_honor_name_5%'
+      lore:
+        - ''
+        - '%corerpg_p1_honor_desc_5%'
+        - '%corerpg_p1_honor_st_5%'
+
+  f:
+    update: 20
+    display:
+      material: nether star
+      name: '%corerpg_p1_honor_name_6%'
+      lore:
+        - ''
+        - '%corerpg_p1_honor_desc_6%'
+        - '%corerpg_p1_honor_st_6%'
+
+  g:
+    update: 20
+    display:
+      material: book
+      name: '%corerpg_p1_honor_name_7%'
+      lore:
+        - ''
+        - '%corerpg_p1_honor_desc_7%'
+        - '%corerpg_p1_honor_st_7%'
+
+  B:
+    update: 20
+    display:
+      material: arrow
+      name: '%corerpg_p1_honor_back%'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 honor back'

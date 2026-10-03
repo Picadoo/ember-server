@@ -20,7 +20,7 @@ Layout:
   - '# W T C #'
   - '# S N P #'
   - '#h H q f#'
-  - '###bABZX#'
+  - '#OEbABZX#'
 
 Icons:
   '#':
@@ -201,6 +201,41 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 cosmetic from gear'
+
+  # D142 余烬勋记（返回键回到装备页）
+  O:
+    update: 20
+    display:
+      material: gold ingot
+      name: '§6余烬勋记'
+      lore:
+        - '%corerpg_p1_honor_n%'
+        - '§7一次性成就换来的账号永久小加成（有总上限）'
+        - ''
+        - '§e➥ §f打开勋记页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 honor from gear'
+
+  # D143 词条洗练（返回键回到装备页）
+  E:
+    update: 20
+    display:
+      material: anvil
+      name: '§6词条洗练'
+      lore:
+        - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
+        - '§7护符：%corerpg_p1_reroll_charm_cur%'
+        - '§7重复件（或碎片）+ 币洗一次，档位不超过成色上限'
+        - ''
+        - '§e➥ §f打开洗练页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 reroll from gear'
 
   Z:
     update: 20

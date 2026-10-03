@@ -20,7 +20,7 @@ Layout:
   - '1##a#b#c#'
   - '2##d#e#f#'
   - '3##g#h#i#'
-  - '###R#B###'
+  - '###R#B#H#'
 
 Events:
   Open:
@@ -250,3 +250,19 @@ Icons:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - close
         - 'command: corerpg p1 spec back'
+
+  # D142 余烬勋记（返回键回到天赋页）
+  H:
+    update: 20
+    display:
+      material: gold ingot
+      name: '§6余烬勋记'
+      lore:
+        - '%corerpg_p1_honor_n%'
+        - ''
+        - '§e➥ §f打开勋记页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 honor from spec'

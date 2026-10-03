@@ -337,6 +337,32 @@ public final class EmberForgeService implements Listener {
         return true;
     }
 
+    /**
+     * D143 词条洗练: retire {@code dup} (a duplicate piece in inventory slot {@code index}) through the same item
+     * transaction as 分解, without giving blanks. {@code cb} gets true once the row is retired, false when it failed
+     * (the stack is put back).
+     */
+    public void consumeForReroll(Player p, int index, EmberItemData dup, String note, java.util.function.Consumer<Boolean> cb) {
+        String g = gate(p);
+        if (g != null) { p.sendMessage(P + ChatColor.RED + g); cb.accept(false); return; }
+        ItemStack st = p.getInventory().getItem(index);
+        Slot it = check(p, index, st);
+        if (it.error != null || it.data == null || !it.data.uid.equals(dup.uid)) {
+            p.sendMessage(P + ChatColor.RED + "重复件已不在原位：" + (it.error == null ? "请重试" : it.error));
+            cb.accept(false);
+            return;
+        }
+        String r = "reroll:" + dup.uid + ":" + dup.rev;
+        if (replayed(p, r)) { cb.accept(false); return; }
+        final ItemStack original = st.clone();
+        p.getInventory().setItem(index, null);
+        pendingDismantle.put(dup.uid, new Object[]{original, 0});
+        rerollCb.put(dup.uid, cb);
+        commit(p, "reroll", r, Cost.NONE, Arrays.asList(new TxnItem(dup, null, "dismantled")), note);
+    }
+
+    private final Map<String, java.util.function.Consumer<Boolean>> rerollCb = new HashMap<String, java.util.function.Consumer<Boolean>>();
+
     /** B2.137: true when no other inventory slot holds a valid P1 blade. */
     private boolean onlyBlade(Player p, int except) {
         ItemStack[] all = p.getInventory().getContents();
@@ -464,6 +490,11 @@ public final class EmberForgeService implements Listener {
                         q.sendMessage(P + ChatColor.YELLOW + "物品已不在背包，记录已更新；放回背包后重新登录即可同步");
                     }
                 }
+                if ("reroll".equals(kind)) { // D143: duplicate eaten, no blanks
+                    pendingDismantle.remove(list.get(0).before.uid);
+                    java.util.function.Consumer<Boolean> cb = rerollCb.remove(list.get(0).before.uid);
+                    if (cb != null) cb.accept(true);
+                }
                 if ("dismantle".equals(kind)) {
                     Object[] pd = pendingDismantle.remove(list.get(0).before.uid);
                     int blanks = pd == null ? 0 : (Integer) pd[1];
@@ -480,6 +511,8 @@ public final class EmberForgeService implements Listener {
             } else {
                 refund(id, cost);
                 if (q != null) restoreDismantle(q, list); else pendingDismantle.remove(list.get(0).before.uid);
+                java.util.function.Consumer<Boolean> rcb = rerollCb.remove(list.get(0).before.uid);
+                if (rcb != null) rcb.accept(false);
                 if (res.status == TxnStatus.REPLAY) {
                     done.put(rid, res.detail == null ? "(原结果)" : res.detail);
                     if (q != null) q.sendMessage(P + ChatColor.YELLOW + "请求 " + rid + " 已处理过（重放），未再次执行，材料已退回: " + res.detail);

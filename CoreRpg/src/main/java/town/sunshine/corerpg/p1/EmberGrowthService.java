@@ -47,6 +47,7 @@ public final class EmberGrowthService implements Listener {
     private final EmberRunService runs;
     private EmberGrowth.Talents talents;
     private EmberGrowth.Honors honors;
+    private EmberAffix.Rules reroll;
     private final Map<UUID, Object[]> honorCache = new ConcurrentHashMap<UUID, Object[]>(); // uuid → {until ms, List<String>}
     static final String C_HONOR_SEEN = "p4_honor_";     // + id, period all: the one-time "勋记解锁" notice was sent
     static final String HONOR_MENU = "ember_p1_honor";
@@ -78,11 +79,12 @@ public final class EmberGrowthService implements Listener {
             Map<?, ?> root = o instanceof Map ? (Map<?, ?>) o : null;
             talents = EmberGrowth.parseTalents(root);
             honors = EmberGrowth.parseHonors(root);
+            reroll = EmberAffix.parse(root);
             honorCache.clear();
             epoch++;
             cache.clear();
             plugin.getLogger().info("[P1 growth] " + EmberGrowth.FILE + ": talents " + (talents == null ? "off" : talents.nodes.size() + " nodes / " + talents.points.size() + " points")
-                    + ", honors " + (honors == null ? "off" : honors.list.size()));
+                    + ", honors " + (honors == null ? "off" : honors.list.size()) + ", reroll " + (reroll == null ? "off" : reroll.defs.size() + " affixes"));
         } catch (Exception e) {
             talents = null;
             plugin.getLogger().warning("[P1 growth] cannot read " + EmberGrowth.FILE + ": " + e);
@@ -97,6 +99,7 @@ public final class EmberGrowthService implements Listener {
 
     public Map<Integer, String> picks(PlayerData d) {
         Map<Integer, String> m = new LinkedHashMap<Integer, String>();
+        if (talents == null) return m;
         if (talents == null || d == null) return m;
         for (EmberGrowth.Row r : talents.rows) {
             int i = d.periodCount(C_ROW + r.row, "all");
@@ -135,16 +138,19 @@ public final class EmberGrowthService implements Listener {
 
     /** Combined growth modifiers of this player for the loadout's active set (cached per epoch + set). */
     public EmberGrowth.Mods mods(Player p) {
-        if (p == null || talents == null || !EmberMode.active()) return EmberGrowth.Mods.NONE;
+        if (p == null || !EmberMode.active() || (talents == null && honors == null && reroll == null)) return EmberGrowth.Mods.NONE;
         PlayerData d = data(p.getUniqueId());
         if (d == null) return EmberGrowth.Mods.NONE;
-        String set = runs.loadouts().get(p).activeSet;
+        EmberLoadout lo = runs.loadouts().get(p);
+        String set = lo.activeSet;
         List<String> hon = honorsEarned(p.getUniqueId(), d);
-        String key = epoch + "|" + set + "|" + hon;
+        int[][] af = affixItems(d, lo);
+        String key = epoch + "|" + set + "|" + hon + "|" + afKey(af);
         Object[] c = cache.get(p.getUniqueId());
         if (c != null && key.equals(c[0])) return (EmberGrowth.Mods) c[1];
         List<Map<String, Double>> parts = new ArrayList<Map<String, Double>>(EmberGrowth.talentParts(talents, picks(d), set));
         if (honors != null && !hon.isEmpty()) parts.add(EmberGrowth.honorParts(honors, hon));
+        if (reroll != null) { Map<String, Double> ap = EmberAffix.parts(reroll, af); if (!ap.isEmpty()) parts.add(ap); } // D143
         EmberGrowth.Mods m = EmberGrowth.Mods.combine(parts);
         cache.put(p.getUniqueId(), new Object[]{key, m});
         return m;
@@ -231,7 +237,7 @@ public final class EmberGrowthService implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         UUID u = e.getPlayer().getUniqueId();
-        cache.remove(u); dodgeUntil.remove(u); dodgeHealCd.remove(u);
+        cache.remove(u); dodgeUntil.remove(u); dodgeHealCd.remove(u); pendingRoll.remove(u); rerollBusy.remove(u);
     }
 
     // ------------------------------------------------------------------ commands
@@ -544,6 +550,251 @@ public final class EmberGrowthService implements Listener {
             return "§8" + why;
         }
         return learned(d, n.id) ? "§e➥ 点击点上 §7（" + r.points + " 点，已学会不收币）" : "§e➥ 点击学会并点上 §7（" + r.points + " 点 + " + r.coin + " 币）";
+    }
+
+    // ------------------------------------------------------------------ affix reroll (D143)
+
+    static final String C_AF = "p4_af_";    // + item uid, period all: affix code * 10 + tier (0 = empty)
+    static final String C_AFP = "p4_afp_";  // + item uid, period all: tries in a row below the quality cap (pity)
+    public static final String REROLL_MENU = "ember_p1_reroll";
+    private static final Map<UUID, String> RFROM = new ConcurrentHashMap<UUID, String>();
+    /** uuid → {item uid, slot, encoded candidate, old encoded} — the roll waiting for 保留新 / 保留旧 (not chosen = old) */
+    private final Map<UUID, Object[]> pendingRoll = new ConcurrentHashMap<UUID, Object[]>();
+    private final java.util.Set<UUID> rerollBusy = java.util.Collections.newSetFromMap(new ConcurrentHashMap<UUID, Boolean>());
+    static final Map<String, String> REROLL_FROM = new LinkedHashMap<String, String>();
+    static {
+        REROLL_FROM.put("gear", "ember_p1_gear");
+        REROLL_FROM.put("hub", "ember_hub");
+    }
+
+    public EmberAffix.Rules reroll() { return reroll; }
+
+    public int affixOf(PlayerData d, String uid) { return d == null || uid == null ? 0 : d.periodCount(C_AF + uid, "all"); }
+
+    private int[][] affixItems(PlayerData d, EmberLoadout lo) {
+        if (reroll == null || lo == null) return new int[0][];
+        return new int[][]{lo.blade == null ? null : new int[]{affixOf(d, lo.blade.uid), lo.blade.quality},
+                lo.charm == null ? null : new int[]{affixOf(d, lo.charm.uid), lo.charm.quality}};
+    }
+
+    private static String afKey(int[][] af) {
+        StringBuilder sb = new StringBuilder();
+        for (int[] x : af) sb.append(x == null ? "-" : x[0] + ":" + x[1]).append(',');
+        return sb.toString();
+    }
+
+    /** "余烬 2 档：套装事件（燃烧 / 烬爆）伤害 +2%" (tier clamped to the quality cap) */
+    String affixText(int enc, int quality) {
+        EmberAffix.Def def = EmberAffix.decodeDef(reroll, enc);
+        if (def == null) return "§8空";
+        int t = Math.min(EmberAffix.decodeTier(enc), reroll.cap(quality));
+        return "§b" + def.name + " " + t + " 档§7：" + def.text(t);
+    }
+
+    private EmberItemData target(Player p, String slot) {
+        EmberLoadout lo = runs.loadouts().get(p);
+        return "charm".equals(slot) ? lo.charm : lo.blade;
+    }
+
+    /** inventory index of a usable duplicate for {@code t}, or -1 (the equipped pieces are never taken) */
+    private int findDup(Player p, PlayerData d, EmberItemData t) {
+        EmberLoadout lo = runs.loadouts().get(p);
+        org.bukkit.inventory.ItemStack[] all = p.getInventory().getContents();
+        int held = p.getInventory().getHeldItemSlot();
+        for (int i = 0; i < Math.min(36, all.length); i++) {
+            if (i == held || all[i] == null || !runs.loadouts().items().hasData(all[i])) continue;
+            EmberItems.Read r = runs.loadouts().items().read(all[i]);
+            if (r == null || !r.ok() || r.data == null) continue;
+            EmberItemData x = r.data;
+            if (lo.blade != null && x.uid.equals(lo.blade.uid) || lo.charm != null && x.uid.equals(lo.charm.uid)) continue;
+            if (EmberAffix.duplicateOk(t, x, affixOf(d, x.uid) > 0) == null) return i;
+        }
+        return -1;
+    }
+
+    int rerollCoin(Player p, EmberItemData t) {
+        return (int) Math.round(reroll.coinFor(t.tier) * mods(p).get("reroll_coin"));
+    }
+
+    /** /corerpg p1 reroll [from gear|hub] | back | blade|charm dup|shard [confirm] | keep new|old */
+    public boolean rerollCommand(Player p, String[] args) {
+        if (reroll == null) { p.sendMessage(P + "词条洗练未配置（" + EmberGrowth.FILE + "）"); return true; }
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
+        String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        boolean confirm = "confirm".equalsIgnoreCase(args[args.length - 1]);
+        if (op.isEmpty()) { RFROM.remove(p.getUniqueId()); openMenu(p, REROLL_MENU); return true; }
+        if ("from".equals(op)) {
+            String from = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+            if (REROLL_FROM.containsKey(from)) RFROM.put(p.getUniqueId(), from); else RFROM.remove(p.getUniqueId());
+            openMenu(p, REROLL_MENU);
+            return true;
+        }
+        if ("back".equals(op)) {
+            String menu = REROLL_FROM.get(RFROM.get(p.getUniqueId()));
+            if (menu != null) openMenu(p, menu);
+            return true;
+        }
+        if ("keep".equals(op)) return keep(p, d, args.length >= 4 && "new".equalsIgnoreCase(args[3]));
+        if (("blade".equals(op) || "charm".equals(op)) && args.length >= 4) {
+            String how = args[3].toLowerCase(Locale.ROOT);
+            if (!"dup".equals(how) && !"shard".equals(how)) { p.sendMessage(P + "用法：/corerpg p1 reroll（打开洗练页）"); return true; }
+            return reroll(p, d, op, "dup".equals(how), confirm);
+        }
+        p.sendMessage(P + "用法：/corerpg p1 reroll（打开洗练页）");
+        return true;
+    }
+
+    private boolean reroll(Player p, PlayerData d, String slot, boolean dup, boolean confirm) {
+        EmberItemData t = target(p, slot);
+        String name = "charm".equals(slot) ? "护符" : "刃";
+        if (t == null) { p.sendMessage(P + "§c" + ("charm".equals(slot) ? "还没有选定的护符" : "主手没有余烬刃") + "（洗练的是正在用的那件）"); return true; }
+        String why = EmberAffix.eligible(t);
+        if (why != null) { p.sendMessage(P + "§c" + why); return true; }
+        int coin = rerollCoin(p, t), shard = reroll.shardFor(t.tier);
+        int di = dup ? findDup(p, d, t) : -1;
+        int cap = reroll.cap(t.quality), pity = d.periodCount(C_AFP + t.uid, "all");
+        if (!confirm) {
+            p.sendMessage(P + "§6词条洗练 · " + t.shortLabel());
+            p.sendMessage(P + "现在：" + affixText(affixOf(d, t.uid), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality) + "最高 §f" + cap + " §7档 · 保底 §f" + pity + "/" + reroll.pity
+                    + (pity >= reroll.pity ? " §a（这次必出 " + cap + " 档）" : ""));
+            p.sendMessage(P + "档位概率：" + oddsText(cap));
+            String pay = (dup ? "一件同部位同阶的重复件" + (di < 0 ? " §c（背包里没有：要掉落来的、没强化 / 成色 / 精工 / 词条、没在用的 T" + t.tier + name + "）§7" : "")
+                    : shard + " 余烬碎片") + " + " + coin + " 余烬币";
+            p.sendMessage(P + "花费：" + pay);
+            if (dup && di < 0) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + shard + " 碎片 + " + coin + " 币"); return true; }
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
+                    new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + (dup ? "dup" : "shard") + " confirm", "扣上面的花费，抽一次" + name + "的词条", "GREEN"},
+                    new String[]{"[回洗练页]", "/corerpg p1 reroll from " + rfromKey(p), "不洗，回去看看", "GRAY"});
+            return true;
+        }
+        if (gate(p)) return true;
+        if (!rerollBusy.add(p.getUniqueId())) { p.sendMessage(P + "§c上一次洗练还在处理"); return true; }
+        if (d.getCoin() < coin) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c余烬币不够：要 " + coin + "，现有 " + d.getCoin()); return true; }
+        town.sunshine.corerpg.NiBridge ni = plugin.getNiBridge();
+        if (!dup && ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD) < shard) {
+            rerollBusy.remove(p.getUniqueId());
+            p.sendMessage(P + "§c碎片不够：要 " + shard + "，背包里 " + ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD));
+            return true;
+        }
+        if (dup && di < 0) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c背包里没有可用的重复件"); return true; }
+        if (!d.takeCoin(coin)) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c扣币失败"); return true; }
+        if (!dup) {
+            int got = ni.consume(p, EmberUpgradeRules.MAT_SHARD, shard);
+            if (got < shard) {
+                if (got > 0) ni.giveNiItem(p, EmberUpgradeRules.MAT_SHARD, got);
+                d.addCoin(coin);
+                rerollBusy.remove(p.getUniqueId());
+                p.sendMessage(P + "§c扣碎片失败，已退回");
+                return true;
+            }
+            roll(p, d, t, slot, coin + " 币 + " + shard + " 碎片");
+            rerollBusy.remove(p.getUniqueId());
+            return true;
+        }
+        EmberItems.Read dr = runs.loadouts().items().read(p.getInventory().getItem(di));
+        final EmberItemData dupData = dr.data;
+        plugin.getEmberForge().consumeForReroll(p, di, dupData, "洗练 " + t.shortLabel() + " 用掉重复件 " + dupData.shortLabel(), ok -> {
+            rerollBusy.remove(p.getUniqueId());
+            if (!ok) { d.addCoin(coin); if (p.isOnline()) p.sendMessage(P + "§c重复件没扣成，" + coin + " 币已退回"); return; }
+            if (p.isOnline()) roll(p, d, t, slot, coin + " 币 + 重复件");
+        });
+        return true;
+    }
+
+    private String oddsText(int cap) {
+        double[] o = EmberAffix.tierOdds(reroll, cap);
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < o.length; i++) sb.append(i == 0 ? "" : " · ").append(i + 1).append(" 档 ").append(String.format(Locale.ROOT, "%.0f%%", o[i] * 100));
+        return sb.append(" §8（成色上限截断后归一）").toString();
+    }
+
+    private void roll(Player p, PlayerData d, EmberItemData t, String slot, String paid) {
+        int pity = d.periodCount(C_AFP + t.uid, "all");
+        EmberAffix.Roll r = EmberAffix.roll(reroll, slot, t.quality, pity, java.util.concurrent.ThreadLocalRandom.current());
+        if (r == null) { p.sendMessage(P + "§c这个部位没有词条池"); return; }
+        d.addPeriodCount(C_AFP + t.uid, "all", r.pityAfter - pity);
+        int enc = EmberAffix.encode(reroll.def(r.id), r.tier), old = affixOf(d, t.uid);
+        plugin.getLogger().info("[P1 growth] " + p.getName() + " reroll " + t.uid + " " + paid + " → " + r.id + " t" + r.tier + (r.forced ? " (pity)" : "") + " pity " + pity + "→" + r.pityAfter);
+        p.sendMessage(P + "§6洗练结果：" + affixText(enc, t.quality) + (r.forced ? " §a（保底）" : "") + " §7· 保底 " + r.pityAfter + "/" + reroll.pity);
+        if (old == 0) {
+            d.addPeriodCount(C_AF + t.uid, "all", enc);
+            pendingRoll.remove(p.getUniqueId());
+            epoch++;
+            p.sendMessage(P + "§a词条槽原来是空的，直接装上了");
+        } else {
+            pendingRoll.put(p.getUniqueId(), new Object[]{t.uid, slot, enc, old, t.quality});
+            p.sendMessage(P + "原来：" + affixText(old, t.quality));
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
+                    new String[]{"[保留新]", "/corerpg p1 reroll keep new", "换成：" + affixText(enc, t.quality).replaceAll("§.", ""), "GREEN"},
+                    new String[]{"[保留旧]", "/corerpg p1 reroll keep old", "不换（不选也等于保留旧，花费不退）", "GRAY"});
+        }
+        runs.flushData(p.getUniqueId());
+        openMenu(p, REROLL_MENU);
+    }
+
+    private boolean keep(Player p, PlayerData d, boolean takeNew) {
+        Object[] pr = pendingRoll.remove(p.getUniqueId());
+        if (pr == null) { p.sendMessage(P + "没有待选的洗练结果"); return true; }
+        String uid = (String) pr[0];
+        int enc = (Integer) pr[2], old = (Integer) pr[3], q = (Integer) pr[4];
+        if (takeNew) {
+            if (affixOf(d, uid) != old) { p.sendMessage(P + "§c这件的词条已经变了，结果作废"); return true; }
+            d.addPeriodCount(C_AF + uid, "all", enc - old);
+            epoch++;
+            runs.flushData(p.getUniqueId());
+            plugin.getLogger().info("[P1 growth] " + p.getName() + " reroll keep new " + uid + " " + old + "→" + enc);
+            p.sendMessage(P + "§a已换成：" + affixText(enc, q));
+        } else p.sendMessage(P + "§7保留原来的：" + affixText(old, q));
+        openMenu(p, REROLL_MENU);
+        return true;
+    }
+
+    private String rfromKey(Player p) { String f = RFROM.get(p.getUniqueId()); return f == null ? "none" : f; }
+
+    /** key after "reroll_" */
+    public String rerollPapi(Player p, PlayerData d, String key) {
+        if (reroll == null || d == null) return "";
+        if ("back".equals(key)) {
+            String f = RFROM.get(p.getUniqueId());
+            return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "§7关闭";
+        }
+        if ("pending".equals(key)) {
+            Object[] pr = pendingRoll.get(p.getUniqueId());
+            return pr == null ? "§8没有待选的结果" : "§e新：" + affixText((Integer) pr[2], (Integer) pr[4]) + " §7· 旧：" + affixText((Integer) pr[3], (Integer) pr[4]);
+        }
+        if ("odds".equals(key)) return "§7" + oddsText(4);
+        if (key.startsWith("pool_")) { // pool_blade_1
+            String[] a = key.split("_");
+            if (a.length < 3) return "";
+            List<EmberAffix.Def> pool = reroll.pool(a[1]);
+            int i;
+            try { i = Integer.parseInt(a[2]); } catch (NumberFormatException e) { return ""; }
+            if (i < 1 || i > pool.size()) return "";
+            EmberAffix.Def df = pool.get(i - 1);
+            return "§7· §b" + df.name + "§7：" + df.desc + " " + String.join(" / ", pctList(df));
+        }
+        String slot = key.startsWith("charm_") ? "charm" : key.startsWith("blade_") ? "blade" : null;
+        if (slot == null) return "";
+        String k = key.substring(slot.length() + 1);
+        EmberItemData t = target(p, slot);
+        if (t == null) return "item".equals(k) ? ("charm".equals(slot) ? "§8还没有选定的护符" : "§8主手没有余烬刃（拿在主手再打开）") : "";
+        if ("item".equals(k)) return "§f" + t.shortLabel();
+        if (EmberAffix.eligible(t) != null) return "cur".equals(k) ? "§8" + EmberAffix.eligible(t) : "";
+        if ("cur".equals(k)) return "§7词条：" + affixText(affixOf(d, t.uid), t.quality);
+        if ("cap".equals(k)) {
+            int pity = d.periodCount(C_AFP + t.uid, "all");
+            return "§7成色" + EmberItemData.qualityName(t.quality) + " · 最高 §f" + reroll.cap(t.quality) + " §7档 · 保底 §f" + pity + "/" + reroll.pity;
+        }
+        if ("dup".equals(k)) return findDup(p, d, t) >= 0 ? "§a背包里有重复件 §7+ " + rerollCoin(p, t) + " 币" : "§8背包里没有重复件（同部位 T" + t.tier + "、掉落来的、没投入）";
+        if ("shard".equals(k)) return "§7" + reroll.shardFor(t.tier) + " 碎片 + " + rerollCoin(p, t) + " 币";
+        return "";
+    }
+
+    private static List<String> pctList(EmberAffix.Def df) {
+        List<String> l = new ArrayList<String>();
+        for (double v : df.values) l.add(String.format(Locale.ROOT, "%+.1f%%", (v - 1) * 100).replace(".0%", "%"));
+        return l;
     }
 
     // ------------------------------------------------------------------ admin

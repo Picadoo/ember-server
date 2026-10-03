@@ -59,6 +59,10 @@ public final class EmberCommand {
             if (!(s instanceof Player) || runs == null || runs.cosmetics() == null) { s.sendMessage(P + "仅玩家可用"); return true; }
             return runs.cosmetics().command((Player) s, runs.dataOf(((Player) s).getUniqueId()), "trail".equals(sub) ? "trail" : "title", args);
         }
+        if ("reroll".equals(sub) || "洗练".equals(sub)) { // D143 词条洗练
+            if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "洗练服务未加载"); return true; }
+            return EmberGrowthService.get().rerollCommand((Player) s, args);
+        }
         if ("honor".equals(sub) || "勋记".equals(sub)) { // D142 余烬勋记
             if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "勋记服务未加载"); return true; }
             return EmberGrowthService.get().honorCommand((Player) s, args);

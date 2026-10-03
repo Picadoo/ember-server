@@ -14,8 +14,8 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - 'Ln o p F '
-  - 'Tm X k i '
-  - ' R c Y d '
+  - 'Tm X k iV'
+  - ' R c Y dW'
   - ' ZA G h j'
 Events:
   Open:
@@ -24,6 +24,37 @@ Events:
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
+  # D142 余烬勋记 / D143 词条洗练（返回键回到主菜单）
+  V:
+    update: 20
+    display:
+      material: gold ingot
+      name: '§6余烬勋记'
+      lore:
+        - '%corerpg_p1_honor_n%'
+        - '§7一次性成就换来的账号永久小加成（有总上限）'
+        - ''
+        - '§e➥ §f打开勋记页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 honor from hub'
+  W:
+    update: 20
+    display:
+      material: anvil
+      name: '§6词条洗练'
+      lore:
+        - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
+        - '§7护符：%corerpg_p1_reroll_charm_cur%'
+        - ''
+        - '§e➥ §f打开洗练页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 reroll from hub'
   # D141 天赋专精（装备页也有入口；返回键回到这里）
   T:
     update: 20

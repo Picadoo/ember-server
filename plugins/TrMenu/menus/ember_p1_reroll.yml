@@ -1,0 +1,166 @@
+# D143 词条洗练（P2 草案 §5za 第 3 部分，源表 §13.69）— 洗的是正在用的那两件：主手的刃、选定的护符。
+# 文字 / 状态都来自 PAPI %corerpg_p1_reroll_*%（参数 plugins/CoreRpg/ember-v1-growth.yml reroll:）。
+# 点图标 → 聊天栏预览（花费、概率、保底）→ 点 [确认洗练]；有旧词条时再选 [保留新] / [保留旧]（不选 = 旧的）。
+# 入口：装备页、主界面；返回键回到打开它的那一页。
+
+Title: '§6词条洗练'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_reroll'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####N####'
+  - '#a#b#c#d#'
+  - '###K#O###'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ANVIL_LAND-0.4-1.4'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  N:
+    update: 20
+    display:
+      material: book
+      name: '§6词条洗练 · 说明'
+      lore:
+        - '§7每件 T1 以上的刃 / 护符有一个词条槽（初始空）'
+        - '§7洗一次 = 一件同部位同阶的重复件（掉落来的、没投入）'
+        - '§7        或碎片（T1 40 / T2 80 / T3 120）+ 币（300 / 600 / 1000）'
+        - '§7档位最高 = 成色：标准 1 · 精良 2 · 卓越 3 · 极品 4'
+        - '%corerpg_p1_reroll_odds%'
+        - '§7保底：连续 5 次没出到上限档，第 6 次必出'
+        - ''
+        - '§6刃的词条：'
+        - '%corerpg_p1_reroll_pool_blade_1%'
+        - '%corerpg_p1_reroll_pool_blade_2%'
+        - '%corerpg_p1_reroll_pool_blade_3%'
+        - '§6护符的词条：'
+        - '%corerpg_p1_reroll_pool_charm_1%'
+        - '%corerpg_p1_reroll_pool_charm_2%'
+        - '%corerpg_p1_reroll_pool_charm_3%'
+        - '%corerpg_p1_reroll_pool_charm_4%'
+        - '§8全是小加成；装备的阶、成色、强化仍是主线'
+
+  a:
+    update: 20
+    display:
+      material: blaze rod
+      name: '§6刃 · 用重复件洗练'
+      lore:
+        - '%corerpg_p1_reroll_blade_item%'
+        - '%corerpg_p1_reroll_blade_cur%'
+        - '%corerpg_p1_reroll_blade_cap%'
+        - '%corerpg_p1_reroll_blade_dup%'
+        - ''
+        - '§e➥ §f点击：聊天栏预览，再确认'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll blade dup'
+
+  b:
+    update: 20
+    display:
+      material: prismarine shard
+      name: '§6刃 · 用碎片洗练'
+      lore:
+        - '%corerpg_p1_reroll_blade_item%'
+        - '%corerpg_p1_reroll_blade_cur%'
+        - '%corerpg_p1_reroll_blade_cap%'
+        - '%corerpg_p1_reroll_blade_shard%'
+        - ''
+        - '§e➥ §f点击：聊天栏预览，再确认'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll blade shard'
+
+  c:
+    update: 20
+    display:
+      material: ender eye
+      name: '§6护符 · 用重复件洗练'
+      lore:
+        - '%corerpg_p1_reroll_charm_item%'
+        - '%corerpg_p1_reroll_charm_cur%'
+        - '%corerpg_p1_reroll_charm_cap%'
+        - '%corerpg_p1_reroll_charm_dup%'
+        - ''
+        - '§e➥ §f点击：聊天栏预览，再确认'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll charm dup'
+
+  d:
+    update: 20
+    display:
+      material: prismarine crystals
+      name: '§6护符 · 用碎片洗练'
+      lore:
+        - '%corerpg_p1_reroll_charm_item%'
+        - '%corerpg_p1_reroll_charm_cur%'
+        - '%corerpg_p1_reroll_charm_cap%'
+        - '%corerpg_p1_reroll_charm_shard%'
+        - ''
+        - '§e➥ §f点击：聊天栏预览，再确认'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll charm shard'
+
+  K:
+    update: 20
+    display:
+      material: emerald
+      name: '§a保留新'
+      lore:
+        - '%corerpg_p1_reroll_pending%'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll keep new'
+
+  O:
+    update: 20
+    display:
+      material: redstone
+      name: '§7保留旧'
+      lore:
+        - '%corerpg_p1_reroll_pending%'
+        - '§8不选也等于保留旧（花费不退）'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll keep old'
+
+  B:
+    update: 20
+    display:
+      material: arrow
+      name: '%corerpg_p1_reroll_back%'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 reroll back'
