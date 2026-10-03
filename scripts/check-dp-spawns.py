@@ -27,7 +27,9 @@ def p1_points(dungeon):
     """(label, x, y, z) points and door boxes of the ember-v1-runs.yml map whose dungeon id is `dungeon`."""
     if not os.path.exists(RUNS): return [], []
     text = open(RUNS, encoding='utf-8').read()
-    blocks = re.split(r'(?m)^  (q\d\d|r\d\d):\s*$', text)  # D129: raids are their own blocks (r01, r02)
+    # D129: raids are their own blocks (r01, r02); D150: any 2-space map key ends the block (the D144 `rush:` section
+    # used to run on inside q07, so q07 was checked against EmberQ0B1 and got the rush hall points)
+    blocks = re.split(r'(?m)^  ([a-z]\w*):\s*$', text)
     for i in range(1, len(blocks) - 1, 2):
         body = blocks[i + 1]
         if not re.search(r'(?m)^\s+dungeon:\s*%s\s*$' % re.escape(dungeon), body): continue

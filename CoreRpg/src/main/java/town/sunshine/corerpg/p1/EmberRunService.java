@@ -1134,6 +1134,7 @@ public final class EmberRunService implements Listener {
     private void fail(EmberRunSession s, String why) {
         if (!s.open() || EmberRunSession.SETTLING.equals(s.state)) return;
         boolean chFail = s.challenge && s.fightStarted(); // read before the state flips to FAILED
+        boolean started = s.fightStarted(); // D150: same for the rush line (it read FAILED → "还没开打" after a counted entry)
         s.state = EmberRunSession.FAILED;
         s.reason = why;
         store.save(s);
@@ -1148,7 +1149,7 @@ public final class EmberRunService implements Listener {
                         + (used < fm.weeklyCap ? "，体力够就可以再来（只有通关才算一次）" : ""));
             }
         } else if (!chFail && fm != null && fm.rush) { // D144: free entry, so nothing to refund — say what the week looks like
-            tellRun(s, ChatColor.RED + "余烬连战失败：" + why + (s.fightStarted() ? "§7（本周的连战次数已用，下周一 0 点再来）" : "§7（还没开打，本周次数没有扣）"));
+            tellRun(s, ChatColor.RED + "余烬连战失败：" + why + (started ? "§7（本周的连战次数已用，下周一 0 点再来）" : "§7（还没开打，本周次数没有扣）"));
         } else if (!chFail) tellRun(s, ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
         else for (UUID u : s.participants) { // endgame #6 (D128): the day's first failed challenge / abyss run gives half the stamina back
             int back = s.committed.contains(u) ? failRefund(u, s) : -1;
