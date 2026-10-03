@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(22, m.balanceVersion);                // D139
-        assertEquals("g04-1/b22", m.ruleVersion);
+        assertEquals(23, m.balanceVersion);                // D140
+        assertEquals("g04-1/b23", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -377,7 +377,7 @@ public class EmberRunRulesTest {
         assertEquals(115, q5.roles.get("melee").hp, 0);
         assertEquals(1420, q4.boss.hp, 0);
         assertEquals(2280, q5.boss.hp, 0);
-        assertEquals(2, q4.boss.skills.size());
+        assertEquals(3, q4.boss.skills.size());           // D140: + 潮涌
         assertEquals("player", q4.boss.skills.get(0).target);
         assertEquals(1.0, q4.boss.skills.get(1).kb, 0);
         assertEquals(0.5, q5.boss.skills.get(0).kb, 0);
@@ -418,7 +418,7 @@ public class EmberRunRulesTest {
         assertEquals("line", blade.type);
         assertEquals(1, blade.stripFrom(), 0);
         assertEquals(7, blade.stripTo(), 0);
-        assertEquals(10, blade.every, 0);
+        assertEquals(12.5, blade.every, 0);             // D140: 10 → 12.5 (+ 霜环)
         assertEquals(34, blade.dmg, 0);
         assertEquals(4, blade.follow.shift, 0);
         assertEquals(1.0, blade.follow.delay, 0);
@@ -1020,5 +1020,20 @@ public class EmberRunRulesTest {
         EmberRunSession t = EmberRunSession.fromMap(s.toMap());
         assertEquals("split", t.affix); assertEquals("r2", t.affixRoom); assertTrue(t.affixDone);
         assertEquals("r3", t.eventRoom); assertFalse(t.eventDone);
+    }
+
+    @Test public void everyMainBossHasOneNewTelegraphedLightMove_D140() {
+        EmberRunMaps m = bundled();
+        String[][] want = {{"q01", "踏地"}, {"q02", "骨刺"}, {"q03", "誓印圈"}, {"q04", "潮涌"}, {"q05", "落石"}, {"q06", "霜环"}, {"q07", "矿锤横扫"}};
+        for (String[] w : want) {
+            EmberRunMaps.Skill found = null;
+            for (EmberRunMaps.Skill sk : m.byKey(w[0]).boss.skills) {
+                if (w[1].equals(sk.name)) found = sk;
+                if (sk.follow != null && w[1].equals(sk.follow.name)) found = sk.follow;
+            }
+            assertNotNull(w[0] + " " + w[1], found);
+            assertTrue(w[1] + " dodge window", found.warn >= 1.2);
+            assertTrue(w[1] + " light in the challenge", found.light);
+        }
     }
 }

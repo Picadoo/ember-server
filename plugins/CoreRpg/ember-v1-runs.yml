@@ -2,14 +2,14 @@
 # CoreRpg runs the encounters (rooms, doors, A/B variants, boss skills, extra event) and the single settlement;
 # DungeonPlus only creates the instance (EmberQ01..03 reuse the ember_daily* map templates), teleports, and ends it.
 # Coordinates are the REAL template coordinates of ember_daily / ember_daily_ash / ember_daily_crypt (not the book's
-# R0..RB layout, which those maps do not have) — see docs/DESIGN-ember-v1.0-P1-source-table.md §10 for the mapping.
+# R0..RB layout, which those maps do not have) — see docs/design/DESIGN-ember-v1.0-P1-source-table.md §10 for the mapping.
 # Check every point after editing:  DP_MAP_ROOT=<maps> python3 scripts/check-dp-spawns.py plugins/DungeonPlus/dungeon/EmberQ0*
 # Runtime-only file edits need a restart (no reload path for runs on purpose: a live run keeps its snapshot).
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137; 21 = repeat-run variety (affixed elite + optional room event), D138; 22 = 国庆 2026 limited event dungeon gq26 + festival charm slot (ember-v1-festival.yml), D139)
-balance_version: 22
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137; 21 = repeat-run variety (affixed elite + optional room event), D138; 22 = 国庆 2026 limited event dungeon gq26 + festival charm slot (ember-v1-festival.yml), D139; 23 = one new telegraphed move per Q01–Q07 boss + main-move timing re-tuned (clear rates ±2), D140)
+balance_version: 23
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 # Endgame #6 (D128, balance_version 18, user 2026-10-03 07:07): the first failed challenge / abyss run of the stamina day
@@ -229,7 +229,8 @@ maps:
       area: [-14, 63, 88, 14, 74, 116]
       wait_in_area: true
       skills:
-        - {type: cone, name: 重斩, every: 8, warn: 1.0, angle: 100, range: 4, dmg: 9}  # D86: was 12
+        - {type: cone, name: 重斩, every: 10.5, warn: 1.0, angle: 100, range: 4, dmg: 9,  # D86: was 12; D140 new move every 8 → 10.5
+           follow: {type: circle, name: 踏地, below: 0.5, delay: 2.0, warn: 1.2, radius: 2.5, ahead: 0, dmg: 3, light: true}}
     event:
       after: r2
       anchor: [54, 64, 38]
@@ -296,8 +297,9 @@ maps:
       area: [-16, 63, 108, 16, 74, 138]
       wait_in_area: true
       skills:
-        - {type: circle, name: 砸地, every: 9, warn: 1.2, radius: 3, ahead: 2, dmg: 18,
+        - {type: circle, name: 砸地, every: 12.5, warn: 1.2, radius: 3, ahead: 2, dmg: 18,  # D140 new move every 9 → 12.5
            follow: {type: cone, name: 横扫, below: 0.5, delay: 2.0, warn: 0.9, angle: 80, range: 3, dmg: 10, light: true}}
+        - {type: line, name: 骨刺, every: 14, warn: 1.2, length: 6, width: 2, dmg: 10, light: true}  # D140 new move
     event:
       after: r2
       anchor: [54, 64, 57]
@@ -362,7 +364,8 @@ maps:
       area: [-16, 55, 108, 16, 66, 138]
       wait_in_area: true
       skills:
-        - {type: line, name: 誓斩, every: 10, warn: 1.1, length: 5, width: 3, dmg: 23}
+        - {type: line, name: 誓斩, every: 13.5, warn: 1.1, length: 5, width: 3, dmg: 23}  # D140 new move every 10 → 13.5
+        - {type: circle, target: player, name: 誓印圈, every: 15, warn: 1.3, radius: 2, dmg: 14, light: true}  # D140 new move
       adds:
         at_hp: 0.5
         warn: 1.0
@@ -442,8 +445,9 @@ maps:
       wait_in_area: true
       # two skills, cooldowns run from the boss spawn; same tick → first listed, the other right after its recovery
       skills:
-        - {type: circle, target: player, name: 冲击圈, every: 10, warn: 1.2, radius: 2.5, dmg: 22}
+        - {type: circle, target: player, name: 冲击圈, every: 13.5, warn: 1.2, radius: 2.5, dmg: 22}  # D140 new move every 10 → 13.5
         - {type: cone, name: 闸杆推击, every: 14, warn: 1.0, angle: 90, range: 4, dmg: 14, kb: 1, light: true}
+        - {type: line, name: 潮涌, every: 15, warn: 1.2, length: 7, width: 2, dmg: 7, light: true}  # D140 new move
       recover: 0.5
     event:
       after: r2
@@ -512,8 +516,9 @@ maps:
       # the hall is 25 blocks past R3: spawn when someone walks in (or 20 s after the last room)
       wait_in_area: true
       skills:
-        - {type: cone, name: 斧刃横扫, every: 9, warn: 1.2, angle: 120, range: 5, dmg: 29, kb: 0.5}
+        - {type: cone, name: 斧刃横扫, every: 12, warn: 1.2, angle: 120, range: 5, dmg: 29, kb: 0.5}  # D140 new move every 9 → 12
         - {type: circle, name: 径向冲击, every: 15, warn: 1.0, radius: 3, ahead: 0, dmg: 17, kb: 1, light: true}
+        - {type: circle, target: player, name: 落石, every: 14, warn: 1.3, radius: 2.5, dmg: 16, light: true}  # D140 new move
       recover: 0.5
     event:
       after: r2
@@ -581,8 +586,9 @@ maps:
       # book ch. 16 §7: every 10 s two blade bands, each 1..7 ahead × 3 wide, 1.2 s warn, 48; the second one 1 s after the
       # first hit, locked to the first direction and slid 4 blocks to the boss's right (the left side stays safe)
       skills:
-        - {type: line, name: 刀气, every: 10, warn: 1.2, start: 1, length: 6, width: 3, dmg: 34,
+        - {type: line, name: 刀气, every: 12.5, warn: 1.2, start: 1, length: 6, width: 3, dmg: 34,  # D140 new move every 10 → 12.5
            follow: {type: line, name: 刀气·二段, start: 1, length: 6, width: 3, shift: 4, delay: 1.0, warn: 1.2, dmg: 34}}
+        - {type: circle, name: 霜环, every: 14, warn: 1.2, radius: 3, ahead: 0, dmg: 18, light: true}  # D140 new move
       recover: 0.5
     event:
       after: r2
@@ -650,8 +656,9 @@ maps:
       # book ch. 17 §7: 重砸 every 9 s (r 3.5 on a locked point, 1.3 s warn, 56, fixed 1.5 s recovery) and 冲撞 every 14 s
       # (≤ 8-block strip × 4 wide, 1.3 s warn, 56; the boss ends at the strip end); mutually exclusive (one at a time)
       skills:
-        - {type: circle, target: player, name: 重砸, every: 9, warn: 1.3, radius: 3.5, dmg: 36, recover: 1.5}
+        - {type: circle, target: player, name: 重砸, every: 12, warn: 1.3, radius: 3.5, dmg: 36, recover: 1.5}  # D140 new move every 9 → 12
         - {type: charge, name: 冲撞, every: 14, warn: 1.3, length: 8, width: 4, dmg: 36}
+        - {type: cone, name: 矿锤横扫, every: 15, warn: 1.2, angle: 140, range: 4, dmg: 20, light: true}  # D140 new move
       recover: 0.5
     event:
       after: r2
