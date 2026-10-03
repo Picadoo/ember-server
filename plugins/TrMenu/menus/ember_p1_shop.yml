@@ -404,6 +404,7 @@ Icons:
         - 'command: corerpg p1 cosmetic try anim_frost'
 
   B:
+    update: 20
     display:
       material: arrow
       name: '%corerpg_p1_shopback%'
