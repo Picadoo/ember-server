@@ -1,0 +1,117 @@
+# ember-v1.0-P1 D141–D143 横向成长（P2 草案 §5za）：天赋专精 / 余烬勋记 / 词条洗练。三样的全部参数都在这个文件。
+# 两份要一致：plugins/CoreRpg/ 和 CoreRpg/src/main/resources/。改完重启（或 /corerpg p1 growth reload）。
+#
+# 硬约束（用户 10-03 15:42）：三样全开到顶，Q01–Q07（普通 = 书参考装、挑战 = T3+6）和团本的通关率变化不超过约 3 个点，
+# Q07 首通中位和两件极品最快路线变化不超过约 0.5 周。模型 tools/p1sim/growth.py（p1sim / p1party / p2econ 共用这份 yml）。
+# 主线图对数值极敏感（+2% 攻击 = Q04 普通 0.5 档 +9 点，回复药 20%→22% = Q06 +8 点），所以：
+#   天赋 = 有得有失的取舍（得在一种情况，失在另一种），按模型调到参考装上几乎抵消；
+#   勋记 = 以经济 / 便利为主，战斗类很小；
+#   词条 = 小的纯加成，上限跟成色走（标准件只能到 1 档），参考装都是标准件。
+#
+# 修饰键（Java EmberGrowth.Mods 和 growth.py 用同一套）：乘数默认 1，加数默认 0。
+#   dmg_boss / dmg_mob / dmg_affix   对首领 / 普通怪 / 词缀精英（含分身）造成的伤害 ×
+#   dmg_split                        对词缀精英裂出来的分身再 ×
+#   dodge_dmg + dodge_secs           躲开首领预警招后 dodge_secs 秒内造成的伤害 ×
+#   dodge_heal + dodge_icd           躲开首领预警招回最大生命的比例（冷却 dodge_icd 秒）
+#   taken_tele / taken_boss / taken_mob / taken_affix / taken_all   受到首领预警招 / 首领普攻 / 怪物（非首领）/ 词缀精英 / 全部 伤害 ×
+#   potion                           回复药回复比例 ×（20% × potion）
+#   burn_ticks / burn_mult           焚烬点燃多几跳 / 每跳系数 ×（只在焚烬成套时）
+#   burn_spread / spread_icd         燃烧中的敌人倒下时把最多几秒的燃烧传给 4 格内最近的敌人 / 每几秒最多传一次
+#   dodge_burst                      躲开首领预警招后，下一次普攻直接触发烬爆（内置冷却照旧）
+#   burst_every / burst_mult         烬爆每几次普攻（加减）/ 系数 ×（只在烬爆成套时）
+#   sustain_every / sustain_mult / sustain_hp   炽愈回复间隔（加减）/ 回复 × / 生命加成（1.12 的 0.12 部分）×
+#   share_w / share_taken            烬核分摊时自己算几份 / 自己那份 ×
+#   set_dmg                          焚烬 / 烬爆 套装事件伤害 ×
+#   max_hp                           最大生命 ×
+#   abyss_taken / abyss_fee          深渊里受到伤害 × / 深渊层费 ×
+#   coin / shard_bonus               结算余烬币 × / 每次通关结算多给碎片
+#   reroll_coin                      洗练的币 ×
+version: 1
+
+# ---------------------------------------------------------------- D141 天赋专精
+talents:
+  # 第一次重置免费，之后每次（币）
+  respec_coin: 2000
+  # 专精点：一次性，按进度给（合计 6）
+  points:
+    - {id: q03, kind: first_clear, arg: q03, name: "首通 Q03"}
+    - {id: q05, kind: first_clear, arg: q05, name: "首通 Q05"}
+    - {id: q07, kind: first_clear, arg: q07, name: "首通 Q07"}
+    - {id: chal, kind: challenge_any, arg: "", name: "首通任一挑战版"}
+    - {id: raid, kind: raid_any, arg: "", name: "首通任一团本"}
+    - {id: abyss5, kind: abyss_floor, arg: "5", name: "深渊·余烬层到第 5 层"}
+  # 每排只能点一个；点数 = 占用的专精点（重置时退回），币 = 第一次学会这个天赋时付一次（重置不退，以后再点不收）
+  rows:
+    - {row: 1, name: "应变", points: 1, coin: 800, theme: "首领预警招（D140）"}
+    - {row: 2, name: "猎手", points: 2, coin: 2000, theme: "词缀精英与房间（D138）"}
+    - {row: 3, name: "套装专精", points: 3, coin: 4000, theme: "只在对应套装成套时生效"}
+  nodes:
+    # 第 1 排「应变」：首领预警招（D140）。得失都只在首领战里。
+    - id: t1a
+      row: 1
+      name: "回身斩"
+      family: burst
+      mods: {dodge_dmg: 1.08, dodge_secs: 3, taken_tele: 1.12}
+      good: "躲开首领预警招后 3 秒内伤害 +8%"
+      bad: "被首领预警招打中多受 12%"
+    - id: t1b
+      row: 1
+      name: "稳桩"
+      family: sustain
+      mods: {taken_tele: 0.94, dmg_boss: 0.97}
+      good: "受到首领预警招伤害 -6%"
+      bad: "对首领伤害 -3%"
+    - id: t1c
+      row: 1
+      name: "踏步回气"
+      family: scorch
+      mods: {dodge_heal: 0.01, dodge_icd: 10, taken_tele: 1.12}
+      good: "躲开首领预警招回 1% 最大生命（10 秒一次）"
+      bad: "被首领预警招打中多受 12%"
+    # 第 2 排「猎手」：重复刷图的词缀精英（D138）。得失都只落在词缀精英（含分身）身上，首通局和首领战不受影响。
+    - id: t2a
+      row: 2
+      name: "破缀"
+      family: burst
+      mods: {dmg_affix: 1.30, taken_affix: 1.20}
+      good: "对词缀精英（含分身）伤害 +30%"
+      bad: "受到词缀精英（含分身、炽热火圈）伤害 +20%"
+    - id: t2b
+      row: 2
+      name: "守缀"
+      family: sustain
+      mods: {taken_affix: 0.75, dmg_affix: 0.85}
+      good: "受到词缀精英（含分身、炽热火圈）伤害 -25%"
+      bad: "对词缀精英（含分身）伤害 -15%"
+    - id: t2c
+      row: 2
+      name: "拆分"
+      family: scorch
+      mods: {dmg_split: 1.50, dmg_affix: 0.80}
+      good: "对分裂精英裂出来的分身伤害 +50%（门更快开）"
+      bad: "对词缀精英本体伤害 -20%"
+    # 第 3 排「套装专精」：只在穿对应套装成套时生效（换套自动失效，不用重置）。
+    - id: t3a
+      row: 3
+      name: "燎原"
+      family: scorch
+      set: scorch
+      mods: {burn_spread: 2, spread_icd: 10, burn_mult: 0.92}
+      good: "燃烧中的敌人倒下时，把最多 2 秒燃烧传给 4 格内最近的敌人（10 秒一次）"
+      bad: "焚烬燃烧每跳伤害 ×0.92"
+    - id: t3b
+      row: 3
+      name: "借势"
+      family: burst
+      set: burst
+      mods: {dodge_burst: 1, taken_tele: 1.08}
+      good: "躲开首领预警招后，下一次普攻直接触发烬爆（内置冷却照旧）"
+      bad: "被首领预警招打中多受 8%"
+    - id: t3c
+      row: 3
+      name: "扛核"
+      family: sustain
+      set: sustain
+      mods: {share_w: 2, share_taken: 0.80, sustain_mult: 0.95}
+      good: "烬核分摊时你算 2 份（队友少扛），你自己那份再 -20%"
+      bad: "炽愈回复量 ×0.95"

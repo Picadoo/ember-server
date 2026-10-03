@@ -1,0 +1,252 @@
+# D141 天赋专精（P2 草案 §5za，源表 §13.67）— 每人一棵 3 排 × 3 个的小天赋树，每排只能点一个，从上往下点。
+# 所有文字 / 状态都来自 PAPI %corerpg_p1_spec_*%（数据源 plugins/CoreRpg/ember-v1-growth.yml）；扣币、点数、重置全在服务端
+# （/corerpg p1 spec pick|reset，带确认按钮）。入口：装备页、主界面；返回键回到打开它的那一页（D136 同款）。
+# 专精点按进度一次性给（首通 Q03 / Q05 / Q07、任一挑战版、任一团本、深渊第 5 层），学会一个天赋付一次币；第一次重置免费。
+
+Title: '§6天赋专精'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_spec'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####P####'
+  - '1##a#b#c#'
+  - '2##d#e#f#'
+  - '3##g#h#i#'
+  - '###R#B###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-1-1'
+
+Icons:
+  '#':
+    display:
+      material: black stained glass pane
+      name: '§8'
+
+  P:
+    update: 20
+    display:
+      material: nether star
+      name: '§6天赋专精'
+      lore:
+        - '%corerpg_p1_spec_pts%'
+        - ''
+        - '§7专精点来源（一次性，各 +1）：'
+        - '%corerpg_p1_spec_src_1%'
+        - '%corerpg_p1_spec_src_2%'
+        - '%corerpg_p1_spec_src_3%'
+        - '%corerpg_p1_spec_src_4%'
+        - '%corerpg_p1_spec_src_5%'
+        - '%corerpg_p1_spec_src_6%'
+        - ''
+        - '§7每个天赋都是§f有得有失的取舍§7，不是纯加属性；'
+        - '§7装备仍是主线，天赋只改变打法侧重。'
+        - '§8每排只能点一个 · 从上往下点 · 只能在城里改'
+
+  '1':
+    update: 20
+    display:
+      material: clock
+      name: '%corerpg_p1_spec_row_1%'
+
+  '2':
+    update: 20
+    display:
+      material: bow
+      name: '%corerpg_p1_spec_row_2%'
+
+  '3':
+    update: 20
+    display:
+      material: enchanted book
+      name: '%corerpg_p1_spec_row_3%'
+
+  a:
+    update: 20
+    display:
+      material: iron sword
+      name: '%corerpg_p1_spec_name_t1a%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t1a%'
+        - '%corerpg_p1_spec_bad_t1a%'
+        - ''
+        - '%corerpg_p1_spec_st_t1a%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t1a'
+
+  b:
+    update: 20
+    display:
+      material: shield
+      name: '%corerpg_p1_spec_name_t1b%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t1b%'
+        - '%corerpg_p1_spec_bad_t1b%'
+        - ''
+        - '%corerpg_p1_spec_st_t1b%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t1b'
+
+  c:
+    update: 20
+    display:
+      material: feather
+      name: '%corerpg_p1_spec_name_t1c%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t1c%'
+        - '%corerpg_p1_spec_bad_t1c%'
+        - ''
+        - '%corerpg_p1_spec_st_t1c%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t1c'
+
+  d:
+    update: 20
+    display:
+      material: golden sword
+      name: '%corerpg_p1_spec_name_t2a%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t2a%'
+        - '%corerpg_p1_spec_bad_t2a%'
+        - ''
+        - '%corerpg_p1_spec_st_t2a%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t2a'
+
+  e:
+    update: 20
+    display:
+      material: iron chestplate
+      name: '%corerpg_p1_spec_name_t2b%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t2b%'
+        - '%corerpg_p1_spec_bad_t2b%'
+        - ''
+        - '%corerpg_p1_spec_st_t2b%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t2b'
+
+  f:
+    update: 20
+    display:
+      material: prismarine shard
+      name: '%corerpg_p1_spec_name_t2c%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t2c%'
+        - '%corerpg_p1_spec_bad_t2c%'
+        - ''
+        - '%corerpg_p1_spec_st_t2c%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t2c'
+
+  g:
+    update: 20
+    display:
+      material: blaze powder
+      name: '%corerpg_p1_spec_name_t3a%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t3a%'
+        - '%corerpg_p1_spec_bad_t3a%'
+        - ''
+        - '%corerpg_p1_spec_st_t3a%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t3a'
+
+  h:
+    update: 20
+    display:
+      material: magma cream
+      name: '%corerpg_p1_spec_name_t3b%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t3b%'
+        - '%corerpg_p1_spec_bad_t3b%'
+        - ''
+        - '%corerpg_p1_spec_st_t3b%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t3b'
+
+  i:
+    update: 20
+    display:
+      material: golden apple
+      name: '%corerpg_p1_spec_name_t3c%'
+      lore:
+        - ''
+        - '%corerpg_p1_spec_good_t3c%'
+        - '%corerpg_p1_spec_bad_t3c%'
+        - ''
+        - '%corerpg_p1_spec_st_t3c%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec pick t3c'
+
+  R:
+    update: 20
+    display:
+      material: water bucket
+      name: '§c重置天赋'
+      lore:
+        - '§7三排全部清空，专精点全部退回'
+        - '§7学会过的天赋以后再点不收币'
+        - '%corerpg_p1_spec_reset%'
+        - ''
+        - '§e➥ §f点击：聊天栏确认后重置'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 spec reset'
+
+  B:
+    update: 20
+    display:
+      material: arrow
+      name: '%corerpg_p1_spec_back%'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 spec back'

@@ -60,6 +60,7 @@ public final class EmberSetService implements Listener {
     private static final class Session {
         final EmberSetEngine engine = new EmberSetEngine();
         final Map<String, LivingEntity> burnTargets = new HashMap<String, LivingEntity>();
+        long spreadCdUntil; // D141 燎原 icd
         boolean restored;
         boolean hudShown;
     }
@@ -95,6 +96,9 @@ public final class EmberSetService implements Listener {
             s.burnTargets.clear();
             EmberDamageTrace.set(p, "套装变化 → " + l.setLabel() + "：计数与燃烧清空，内置冷却保留");
         }
+        EmberGrowthService g = EmberGrowthService.get(); // D141 set-family talent (连爆 / 燎原 / 扛核)
+        EmberSetEngine.Tune t = g == null ? EmberSetEngine.Tune.NONE : g.setTune(p);
+        if (!t.equals(s.engine.tune())) s.engine.setTune(t);
         return s;
     }
 
@@ -293,6 +297,44 @@ public final class EmberSetService implements Listener {
     }
 
     // ------------------------------------------------------------------ clears / persistence
+
+    /** D141 借势: fill the burst counter after a dodged boss telegraph. */
+    public boolean primeBurst(Player p) {
+        Session s = sessions.get(p.getUniqueId());
+        if (s == null) s = session(p);
+        boolean ok = s != null && s.engine.primeBurst();
+        if (ok) EmberDamageTrace.set(p, "借势：躲开预警 → 下一次普攻触发烬爆");
+        return ok;
+    }
+
+    /** D141 燎原: when a burning enemy dies, its burn moves to the nearest enemy within 4 blocks that is not burning. */
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onMobDeath(org.bukkit.event.entity.EntityDeathEvent e) {
+        if (e.getEntity() instanceof Player || !EmberMode.active() || !EmberMode.isP1(e.getEntity())) return;
+        String id = e.getEntity().getUniqueId().toString();
+        for (Map.Entry<UUID, Session> en : sessions.entrySet()) {
+            Session s = en.getValue();
+            if (s.engine.tune().burnSpread <= 0 || s.engine.burns().get(id) == null) continue;
+            if (now() < s.spreadCdUntil) continue;
+            Player p = Bukkit.getPlayer(en.getKey());
+            if (p == null || p.getWorld() != e.getEntity().getWorld()) continue;
+            LivingEntity best = null;
+            double bd = 16.0;
+            for (Entity x : e.getEntity().getNearbyEntities(4, 3, 4)) {
+                if (!(x instanceof LivingEntity) || x.isDead() || !isEnemy((LivingEntity) x)) continue;
+                if (s.engine.burns().get(x.getUniqueId().toString()) != null) continue;
+                double d = x.getLocation().distanceSquared(e.getEntity().getLocation());
+                if (d < bd) { bd = d; best = (LivingEntity) x; }
+            }
+            if (best != null && s.engine.burns().transfer(id, best.getUniqueId().toString(), now(), (long) (s.engine.tune().burnSpread * 1000))) {
+                s.burnTargets.remove(id);
+                s.burnTargets.put(best.getUniqueId().toString(), best);
+                s.spreadCdUntil = now() + (long) (s.engine.tune().spreadIcd * 1000);
+                EmberDamageTrace.set(p, "燎原：燃烧转移到 " + best.getName());
+                best.getWorld().spawnParticle(Particle.FLAME, best.getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, 0.01);
+            }
+        }
+    }
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeath(PlayerDeathEvent e) {

@@ -241,6 +241,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             emberRuns.setSeason(season);
             Bukkit.getScheduler().runTaskTimer(this, season::tick, 200L, 1200L);
         }
+        try { // D141 talents / D142 honors / D143 affix reroll (ember-v1-growth.yml)
+            Bukkit.getPluginManager().registerEvents(new town.sunshine.corerpg.p1.EmberGrowthService(this, emberRuns), this);
+        } catch (RuntimeException ex) {
+            getLogger().warning("[P1] growth service failed to load: " + ex);
+        }
         emberRuns.start();
         emberCommand.setRuns(emberRuns);
         hubAmbience = new HubAmbienceService(this); // D97 hub atmosphere (display only)

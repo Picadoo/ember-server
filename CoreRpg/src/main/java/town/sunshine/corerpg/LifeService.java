@@ -221,7 +221,8 @@ public final class LifeService implements Listener {
             ls.saveState(p);
             town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns(); // D32: count for the death refund
             if (runs != null) runs.notePotion(p);
-            final double pct = mode.d("heal_potion.percent", 0.20);
+            town.sunshine.corerpg.p1.EmberGrowthService growth = town.sunshine.corerpg.p1.EmberGrowthService.get(); // D141 talents
+            final double pct = mode.d("heal_potion.percent", 0.20) * (growth == null ? 1.0 : growth.potionMult(p));
             plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
                 @Override public void run() {
                     if (!p.isOnline()) return;

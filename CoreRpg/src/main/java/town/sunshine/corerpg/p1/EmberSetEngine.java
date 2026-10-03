@@ -48,6 +48,50 @@ public final class EmberSetEngine {
         static Outcome no(String why, int counter) { return new Outcome(false, why, Trigger.NONE, 0, 0, counter); }
     }
 
+    /**
+     * D141 set tuning from the player's talents (only the active family's fields matter): trigger interval deltas,
+     * coefficient multipliers, extra burn ticks, burn spread. {@link #NONE} = the book's rules.
+     */
+    public static final class Tune {
+        public static final Tune NONE = new Tune(0, 0, 1.0, 1.0, 1.0, 0, 0, 0);
+        public final int burstEveryDelta, sustainEveryDelta, burnTicksExtra;
+        public final double burnMult, burstMult, sustainMult;
+        /** D141 燎原: seconds of burn passed on when a burning enemy dies (0 = off) */
+        public final double burnSpread;
+        /** D141 燎原: at most one spread per this many seconds */
+        public final double spreadIcd;
+        public Tune(int burstEveryDelta, int sustainEveryDelta, double burnMult, double burstMult, double sustainMult, int burnTicksExtra, double burnSpread, double spreadIcd) {
+            this.burstEveryDelta = burstEveryDelta; this.sustainEveryDelta = sustainEveryDelta; this.burnMult = burnMult;
+            this.burstMult = burstMult; this.sustainMult = sustainMult; this.burnTicksExtra = burnTicksExtra; this.burnSpread = burnSpread; this.spreadIcd = spreadIcd;
+        }
+        @Override public boolean equals(Object o) {
+            if (!(o instanceof Tune)) return false;
+            Tune t = (Tune) o;
+            return t.burstEveryDelta == burstEveryDelta && t.sustainEveryDelta == sustainEveryDelta && t.burnTicksExtra == burnTicksExtra
+                    && t.burnMult == burnMult && t.burstMult == burstMult && t.sustainMult == sustainMult && t.burnSpread == burnSpread && t.spreadIcd == spreadIcd;
+        }
+        @Override public int hashCode() { return burstEveryDelta * 31 + sustainEveryDelta * 7 + burnTicksExtra + (int) (burnSpread * 1000); }
+    }
+
+    private Tune tune = Tune.NONE;
+
+    /** D141: talents changed (or the set did); the counter is clamped to the new interval */
+    public void setTune(Tune t) {
+        tune = t == null ? Tune.NONE : t;
+        burns.setTicks(EmberSetRules.BURN_TICKS + Math.max(0, tune.burnTicksExtra));
+        int e = every();
+        if (e > 0 && counter > e) counter = e;
+    }
+
+    public Tune tune() { return tune; }
+
+    /** D141 借势: a dodged boss telegraph fills the 烬爆 counter (the next swing explodes once the icd allows). */
+    public boolean primeBurst() {
+        if (!"burst".equals(family)) return false;
+        counter = every();
+        return true;
+    }
+
     private String family = "none";
     private int awakening;
     private int counter;
@@ -105,8 +149,8 @@ public final class EmberSetEngine {
 
     public int every() {
         if ("scorch".equals(family)) return EmberSetRules.SCORCH_EVERY;
-        if ("burst".equals(family)) return EmberSetRules.BURST_EVERY;
-        if ("sustain".equals(family)) return EmberSetRules.SUSTAIN_EVERY;
+        if ("burst".equals(family)) return Math.max(2, EmberSetRules.BURST_EVERY + tune.burstEveryDelta);
+        if ("sustain".equals(family)) return Math.max(2, EmberSetRules.SUSTAIN_EVERY + tune.sustainEveryDelta);
         return 0;
     }
 
@@ -137,28 +181,29 @@ public final class EmberSetEngine {
             counter++;
             if (counter >= EmberSetRules.SCORCH_EVERY) {
                 counter = 0;
-                return new Outcome(true, "ignite", Trigger.IGNITE, EmberSetRules.burnCoef(awakening) * b, 0, counter);
+                return new Outcome(true, "ignite", Trigger.IGNITE, EmberSetRules.burnCoef(awakening) * tune.burnMult * b, 0, counter);
             }
             return new Outcome(true, "count", Trigger.NONE, 0, 0, counter);
         }
+        int ev = every();
         if ("burst".equals(family)) {
-            counter = Math.min(EmberSetRules.BURST_EVERY, counter + 1);
-            if (counter >= EmberSetRules.BURST_EVERY && now >= burstCdUntil) {
+            counter = Math.min(ev, counter + 1);
+            if (counter >= ev && now >= burstCdUntil) {
                 counter = 0;
                 burstCdUntil = now + EmberSetRules.BURST_ICD_MS;
-                return new Outcome(true, "explode", Trigger.EXPLODE, EmberSetRules.burstCoef(awakening) * b,
+                return new Outcome(true, "explode", Trigger.EXPLODE, EmberSetRules.burstCoef(awakening) * tune.burstMult * b,
                         EmberSetRules.burstRadius(awakening), counter);
             }
-            return new Outcome(true, counter >= EmberSetRules.BURST_EVERY ? "held (icd)" : "count", Trigger.NONE, 0, 0, counter);
+            return new Outcome(true, counter >= ev ? "held (icd)" : "count", Trigger.NONE, 0, 0, counter);
         }
         // sustain
-        counter = Math.min(EmberSetRules.SUSTAIN_EVERY, counter + 1);
-        if (counter >= EmberSetRules.SUSTAIN_EVERY && now >= sustainCdUntil) {
+        counter = Math.min(ev, counter + 1);
+        if (counter >= ev && now >= sustainCdUntil) {
             counter = 0;
             sustainCdUntil = now + EmberSetRules.SUSTAIN_ICD_MS;
-            return new Outcome(true, "heal", Trigger.HEAL, EmberSetRules.sustainPct(awakening) * maxHp, 0, counter);
+            return new Outcome(true, "heal", Trigger.HEAL, EmberSetRules.sustainPct(awakening) * tune.sustainMult * maxHp, 0, counter);
         }
-        return new Outcome(true, counter >= EmberSetRules.SUSTAIN_EVERY ? "held (icd)" : "count", Trigger.NONE, 0, 0, counter);
+        return new Outcome(true, counter >= ev ? "held (icd)" : "count", Trigger.NONE, 0, 0, counter);
     }
 
     /** Explosion candidate: stable entity id + distance from the main target. */

@@ -1243,6 +1243,8 @@ public final class EmberRunService implements Listener {
         }
         if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, bountyW);
         if (fresh && m.raid && cosmetics != null) cosmetics.onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
+        if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0)
+            pd.addPeriodCount(EmberGrowthService.C_CHAL + m.key, "all", 1); // D141: challenge first clear per map (talent point / honors)
         if (in.firstClear != null) {
             pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
             if (cosmetics != null) cosmetics.onFirstClear(Bukkit.getPlayer(u), m.key); // D103 milestone titles
@@ -2006,16 +2008,53 @@ public final class EmberRunService implements Listener {
         if (s.committed.contains(p.getUniqueId()) && s.acted.add(p.getUniqueId())) store.save(s);
     }
 
-    void skillHit(EmberRunSession s, Player p, LivingEntity src, double dmg) {
+    void skillHit(EmberRunSession s, Player p, LivingEntity src, double dmg) { skillHit(s, p, src, dmg, "mob"); }
+
+    /** D141: class of the skill hit being dealt right now (tele = boss telegraph, share = 烬核, mob = caster line / fire circle) */
+    private String skillKind;
+
+    void skillHit(EmberRunSession s, Player p, LivingEntity src, double dmg, String kind) {
         skillDepth++;
+        String prevKind = skillKind;
+        skillKind = kind;
         try {
             p.setNoDamageTicks(0);
             kbGuard.mark(p.getUniqueId(), System.currentTimeMillis()); // B2.167: only the P1 push (≤ kb) moves the player
             p.damage(dmg * s.dmgFactor, src); // P2-5 raid party scaling (1.0 for every other run)
         } finally {
             skillDepth--;
+            skillKind = prevKind;
         }
     }
+
+    /**
+     * D141 growth: class of a run mob — boss / affix (D138 affixed elite) / split (its split adds) / mob; null when the
+     * entity is not a mob of a live P1 run.
+     */
+    public String mobClass(Entity e) {
+        if (e == null) return null;
+        EmberRunDirector d = byEntity.get(e.getUniqueId());
+        if (d == null) return null;
+        EmberRunDirector.Tracked t = d.mobs.get(e.getUniqueId());
+        if (t == null) return d.boss != null && d.boss.le.getUniqueId().equals(e.getUniqueId()) ? "boss" : "mob";
+        if (t.boss()) return "boss";
+        if (t.splitAdd) return "split";
+        if (t.affix != null) return "affix";
+        return "mob";
+    }
+
+    /** D141 growth: class of the hit a player is taking from {@code src} right now (null = not a run hit). */
+    public String hitClass(Entity src) {
+        if (skillDepth > 0 && skillKind != null) {
+            if ("mob".equals(skillKind)) { String c = mobClass(src); return "affix".equals(c) || "split".equals(c) ? "affix" : "mob"; }
+            return skillKind;
+        }
+        String c = mobClass(src);
+        if (c == null) return null;
+        return "split".equals(c) ? "affix" : c;
+    }
+
+    public boolean isRunWorld(World w) { return w != null && byWorld.containsKey(w.getName()); }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onMobDeath(EntityDeathEvent e) {
@@ -2952,6 +2991,7 @@ public final class EmberRunService implements Listener {
             return String.valueOf(n);
         }
         if ("active".equals(key)) return EmberMode.active() ? "yes" : "no";
+        if (key.startsWith("spec_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.papi(p, d, key.substring(5)); } // D141
         if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";

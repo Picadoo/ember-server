@@ -46,6 +46,7 @@ final class EmberRunDirector {
         Vector castDir;
         Location castOrigin;
         String affix;               // D138 repeat-run variety: blazing / split / shield (null = plain)
+        boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 拆分)
         long affixNext, affixAt;
         Location affixOrigin;
         Tracked(LivingEntity le, String role, String roomId, EmberRunMaps.Pt home, EmberRunMaps.Box leash,
@@ -474,6 +475,7 @@ final class EmberRunDirector {
         for (int i = 0; i < v.splitCount; i++) {
             Tracked a = spawn(role, "melee", t.roomId, pt, t.leash);
             if (a == null) continue;
+            a.splitAdd = true;
             AttributeInstance at = a.le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             if (at != null) { at.setBaseValue(Math.max(1.0, at.getBaseValue() * v.splitHp)); a.le.setHealth(a.le.getMaxHealth()); }
             String old = a.le.getCustomName();
@@ -824,15 +826,33 @@ final class EmberRunDirector {
             if (inShape(sk, o, dir, p.getLocation())) inside.add(p);
         }
         double each = sk.share ? shareDamage(sk.dmg, inside.size()) : sk.dmg; // R03 (D137) 烬核分摊
+        EmberGrowthService g = EmberGrowthService.get();
+        double[] share = null;
+        if (sk.share && !inside.isEmpty()) { // D141 扛核: weights per player (1 each by default), × own share_taken
+            double[] w = new double[inside.size()];
+            for (int i = 0; i < w.length; i++) w[i] = g == null ? 1.0 : g.shareWeight(inside.get(i));
+            share = shareSplit(sk.dmg, w);
+            for (int i = 0; i < share.length; i++) if (g != null) share[i] *= g.shareTaken(inside.get(i));
+        }
         if (sk.share) {
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s share %s n=%d each=%.1f", s.runId, sk.name, inside.size(), each));
             if (!inside.isEmpty()) svc.tellRun(s, "§6「" + sk.name + "」§7落下：" + inside.size() + " 人分摊，每人 " + Math.round(each * s.dmgFactor)
                     + (inside.size() == 1 ? " §c（只有一个人扛！）" : ""));
         }
-        for (Player p : inside) {
-            svc.skillHit(s, p, src, each);
+        boolean bossSkill = src != null && boss != null && src == boss.le;
+        String kind = sk.share ? "share" : bossSkill ? "tele" : "mob";
+        for (int i = 0; i < inside.size(); i++) {
+            Player p = inside.get(i);
+            svc.skillHit(s, p, src, share != null ? share[i] : each, kind);
             if (sk.kb > 0 && !p.isDead()) push(p, src == null ? o : src.getLocation(), sk.kb);
             hit++;
+        }
+        if (bossSkill && !sk.share && g != null) { // D141: a boss telegraph that missed a player near it = a dodge
+            double reach = reach(sk) + 3.0;
+            for (Player p : participantsHere()) {
+                if (inside.contains(p) || p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                if (p.getLocation().distanceSquared(o) <= reach * reach) g.onDodge(p);
+            }
         }
         Location fx = o.clone().add(dir.clone().multiply(sk.type.equals("circle") ? sk.ahead
                 : sk.strip() ? (sk.stripFrom() + sk.stripTo()) / 2.0 : Math.min(2.0, sk.range)));
@@ -850,6 +870,22 @@ final class EmberRunDirector {
 
     /** R03 (D137): the whole hit split equally between everyone standing in the circle (alone = all of it). */
     static double shareDamage(double total, int inside) { return inside <= 0 ? 0 : total / inside; }
+
+    /** D141 扛核: the hit split by weight (a weight-2 player carries two portions; all weights 1 = {@link #shareDamage}). */
+    static double[] shareSplit(double total, double[] w) {
+        double sum = 0;
+        for (double x : w) sum += x;
+        double[] out = new double[w.length];
+        for (int i = 0; i < w.length; i++) out[i] = sum <= 0 ? 0 : total * w[i] / sum;
+        return out;
+    }
+
+    /** D141: how far a shape reaches from its origin (circle: offset + radius; line / charge: far end; cone: range) */
+    static double reach(EmberRunMaps.Skill sk) {
+        if ("circle".equals(sk.type)) return Math.abs(sk.ahead) + sk.radius;
+        if ("line".equals(sk.type) || "charge".equals(sk.type)) return Math.max(sk.stripTo(), sk.length);
+        return sk.range;
+    }
 
     /** Shapes never exceed the drawn warning (book: 实际范围不超过预警). */
     static boolean inShape(EmberRunMaps.Skill sk, Location o, Vector dir, Location p) {

@@ -20,7 +20,7 @@ Layout:
   - '# W T C #'
   - '# S N P #'
   - '#h H q f#'
-  - '###bAB#X#'
+  - '###bABZX#'
 
 Icons:
   '#':
@@ -201,6 +201,23 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 cosmetic from gear'
+
+  Z:
+    update: 20
+    display:
+      material: enchanted book
+      name: '§6天赋专精'
+      lore:
+        - '%corerpg_p1_spec_pts%'
+        - '§7三排小天赋树：首领预警 · 词缀精英 · 套装专精'
+        - '§7每个都是有得有失的取舍，不是纯加属性'
+        - ''
+        - '§e➥ §f打开天赋页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec from gear'
 
   A:
     display:

@@ -250,6 +250,16 @@ public final class EmberCombatListener implements Listener {
             }
             String z = zeroVanilla(e);
             if (!z.isEmpty()) EmberDamageTrace.note(e, before, "怪物侧原版修正清零: " + z);
+            EmberGrowthService g = EmberGrowthService.get(); // D141 talents (boss / affixed elite / mob, after-dodge window, set events)
+            if (g != null) {
+                EmberSetEngine.Kind k = SkillService.internalDamage ? internalKind : EmberSetEngine.Kind.MELEE_MAIN;
+                double gm = g.outMult((Player) src, victim, k);
+                if (gm != 1.0) {
+                    double b0 = e.getDamage();
+                    e.setDamage(b0 * gm);
+                    EmberDamageTrace.note(e, b0, String.format(Locale.ROOT, "D141 天赋 ×%.3f → %.2f", gm, b0 * gm));
+                }
+            }
         }
     }
 
@@ -275,6 +285,16 @@ public final class EmberCombatListener implements Listener {
         if (src != null || ENEMY_DOT.contains(e.getCause())) {
             base = before * l.m;
             pipe = String.format(Locale.ROOT, "B01/B10/B11 敌方伤害 × M %.4f (D=%.0f)", l.m, l.d);
+            EmberGrowthService gs = EmberGrowthService.get(); // D141 talents: telegraph / boss melee / mob / affixed elite
+            EmberRunService rs = EmberRunService.get();
+            if (gs != null && rs != null && src != null) {
+                String cls = rs.hitClass(src);
+                double gm = gs.takenMult(p, cls);
+                if (gm != 1.0) {
+                    base *= gm;
+                    pipe += String.format(Locale.ROOT, " · D141 天赋 %s ×%.3f", cls, gm);
+                }
+            }
         } else {
             pipe = "B12 环境管道（原值，不乘 M）";
         }

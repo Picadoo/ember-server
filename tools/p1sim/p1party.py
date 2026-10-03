@@ -62,16 +62,26 @@ class Party:
                 m.next_swing = max(m.next_swing, t + 1.0)
                 self.revives = getattr(self, 'revives', 0) + 1
 
-    def hurt(self, m, raw, tele, dodgeable=True):
-        cfg, kn = self.cfg, m.kn
+    def hurt(self, m, raw, tele, dodgeable=True, kind='mob'):
+        cfg, kn, st = self.cfg, m.kn, m.st
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
         if dodgeable and self.rng.random() < p:
+            if kind == 'tele' and st.get('mods'):  # D141: a dodged boss telegraph
+                m.dodge_until = self.t + p1sim.gm(st, 'dodge_secs', 0.0)
+                dh = p1sim.gm(st, 'dodge_heal', 0.0)
+                if dh > 0 and self.t >= getattr(m, 'dodge_heal_cd', -1.0):
+                    m.dodge_heal_cd = self.t + p1sim.gm(st, 'dodge_icd', 6.0)
+                    m.hp = min(st['H'], m.hp + dh * st['H'])
+                if p1sim.gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势
+                    m.hits = 99
             return
+        if st.get('mods'):
+            raw *= p1sim.gm(st, 'taken_' + kind) * p1sim.gm(st, 'taken_all')
         m.hp -= raw * m.st['M']
         if 0 < m.hp < kn.potion_at * m.st['H'] and m.potions > 0 and self.t >= m.pcd:
             m.potions -= 1; m.used += 1
             m.pcd = self.t + cfg['potion_cd']
-            m.hp = min(m.st['H'], m.hp + cfg['potion_pct'] * m.st['H'])
+            m.hp = min(m.st['H'], m.hp + cfg['potion_pct'] * p1sim.gm(st, 'potion') * m.st['H'])
 
     def skill_hit(self, sk, raw):
         liv = self.living()
@@ -83,14 +93,16 @@ class Party:
             # the same telegraph-response chance as a dodge (dodge + tele_bonus, ≤ 95 %); the hit is split equally and
             # cannot be dodged by those inside (standing in it is the point)
             inside = [tgt] + [m for m in liv if m is not tgt and self.rng.random() < min(0.95, m.kn.dodge + m.kn.tele_bonus)]
-            for m in inside:
-                self.hurt(m, raw / len(inside), True, dodgeable=False)
+            # D141 扛核: a member with share_w > 1 carries that many portions (the rest split what is left), × share_taken
+            w = [p1sim.gm(m.st, 'share_w') for m in inside]
+            for m, wi in zip(inside, w):
+                self.hurt(m, raw * wi / sum(w) * p1sim.gm(m.st, 'share_taken'), True, dodgeable=False, kind='share')
             self.shares = getattr(self, 'shares', []) + [len(inside)]
             return
         sp = SPLASH.get(sk.get('type'), 0.35)
         for m in liv:
             if m is tgt or self.rng.random() < sp:
-                self.hurt(m, raw, True)
+                self.hurt(m, raw, True, kind='tele')
 
     def segment(self, mobs, boss=None, mapdef=None):
         cfg, rng = self.cfg, self.rng
@@ -132,7 +144,7 @@ class Party:
                 if m.st['set'] == 'scorch':
                     for x in alive:
                         if x.get('burn_by') is m and x['burn'] > t:
-                            x['hp'] -= cfg['burn'][m.st['awk']] * m.st['B'] * (min(tn, x['burn']) - t)
+                            x['hp'] -= cfg['burn'][m.st['awk']] * p1sim.gm(m.st, 'burn_mult') * p1sim.gm(m.st, 'set_dmg') * p1sim.dmult(m.st, x, t, m) * m.st['B'] * (min(tn, x['burn']) - t)
             t = self.t = tn
             if p1sim.FEST:  # D139 burn kills (credited to the first living member: one burst per kill step)
                 p1sim.fest_proc(liv[0], alive, t, liv[0].st['B'], liv[0].kn.skill_hits)
@@ -141,23 +153,26 @@ class Party:
                 m, st = sw, sw.st
                 m.next_swing = t + m.kn.swing / m.kn.uptime
                 tgt = alive[0]  # focus fire
-                tgt['hp'] -= st['B'] * (cfg['crit_mult'] if rng.random() < cfg['crit_rate'] else 1.0)
+                dm = lambda x: p1sim.dmult(st, x, t, m)
+                tgt['hp'] -= st['B'] * (cfg['crit_mult'] if rng.random() < cfg['crit_rate'] else 1.0) * dm(tgt)
                 m.hits += 1
                 if t >= m.next_skill:
                     for x in alive[:m.kn.skill_hits]:
-                        x['hp'] -= cfg['skill_mult'] * st['B']
+                        x['hp'] -= cfg['skill_mult'] * st['B'] * dm(x)
                     m.next_skill = t + cfg['skill_cd']
-                if st['set'] == 'burst' and m.hits >= cfg['burst_every'] and t >= m.burst_cd:
+                bev = cfg['burst_every'] + int(p1sim.gm(st, 'burst_every', 0))
+                sev = cfg['sustain_every'] + int(p1sim.gm(st, 'sustain_every', 0))
+                if st['set'] == 'burst' and m.hits >= bev and t >= m.burst_cd:
                     for x in alive[:min(m.kn.skill_hits, 5)]:
-                        x['hp'] -= cfg['burst'][st['awk']] * st['B']
+                        x['hp'] -= cfg['burst'][st['awk']] * p1sim.gm(st, 'burst_mult') * p1sim.gm(st, 'set_dmg') * st['B'] * dm(x)
                     m.hits = 0; m.burst_cd = t + cfg['burst_icd']
                 elif st['set'] == 'scorch' and m.hits >= cfg['scorch_every']:
-                    tgt['burn'] = t + 4.0; tgt['burn_by'] = m; m.hits = 0
-                elif st['set'] == 'sustain' and m.hits >= cfg['sustain_every'] and t >= m.sus_cd:
-                    m.hp = min(st['H'], m.hp + cfg['sustain_pct'][st['awk']] * st['H'])
+                    tgt['burn'] = t + 4.0 + p1sim.gm(st, 'burn_ticks', 0); tgt['burn_by'] = m; m.hits = 0
+                elif st['set'] == 'sustain' and m.hits >= sev and t >= m.sus_cd:
+                    m.hp = min(st['H'], m.hp + cfg['sustain_pct'][st['awk']] * p1sim.gm(st, 'sustain_mult') * st['H'])
                     m.hits = 0; m.sus_cd = t + cfg['sustain_icd']
                 elif st['set'] in ('burst', 'sustain'):
-                    m.hits = min(m.hits, cfg['burst_every'])
+                    m.hits = min(m.hits, max(bev, sev))
                 if boss is not None and not adds_done and 'adds' in mapdef['boss'] and 0 < boss['hp'] <= mapdef['boss']['adds']['at_hp'] * boss['max']:
                     adds_done = True
                     for _ in mapdef['boss']['adds']['points']:
@@ -176,7 +191,7 @@ class Party:
                     if (x['role'] in p1sim.MELEE_ROLES or x['role'] == 'boss') and id(x) not in engaged:
                         hit = True
                         break
-                    self.hurt(rng.choice(liv), x['atk'], x['tele'])
+                    self.hurt(rng.choice(liv), x['atk'], x['tele'], kind='boss' if x['role'] == 'boss' else 'mob')
                     hit = True
                     break
             if hit:

@@ -21,6 +21,28 @@ FAMS = ('scorch', 'burst', 'sustain')
 
 # D139 festival charm (None = not worn): {'hp', 'def', 'coef', 'targets', 'radius', 'icd'}; set by festsim.py
 FEST = None
+# D141–D143 horizontal growth (talents / honors / affixes): None = off, else a callable (st, ctx) -> mods dict
+# (growth.py builds it from ember-v1-growth.yml; ctx = the player's cleared map keys, None = everything unlocked)
+GROWTH = None
+
+
+def gm(st, k, d=1.0):
+    """growth modifier k of these stats (default d when growth is off / the key is absent)"""
+    m = st.get('mods')
+    return d if not m else m.get(k, d)
+
+
+def dmult(st, tgt, t, owner):
+    """D141: outgoing multiplier on target tgt at time t (boss / affixed elite or its split adds / other mob, plus
+    the after-dodge window kept on the owner)"""
+    if not st.get('mods'):
+        return 1.0
+    r = gm(st, 'dmg_boss') if tgt['role'] == 'boss' else (gm(st, 'dmg_affix') if tgt.get('affix') else gm(st, 'dmg_mob'))
+    if tgt.get('split_add'):
+        r *= gm(st, 'dmg_split')
+    if t < getattr(owner, 'dodge_until', -1.0):
+        r *= gm(st, 'dodge_dmg')
+    return r
 
 
 def fest_proc(owner, alive, t, B, caught):
@@ -89,7 +111,7 @@ def awakening(blade, charm):
     return 1
 
 
-def stats(cfg, blade, charm, level):
+def stats(cfg, blade, charm, level, ctx=None):
     steps = max(0, min(level, cfg['lvl_cap']) - cfg['lvl_base'])
     g = lambda it: 1 + cfg['e'][it['enh']] + cfg['q'][it['q']] + cfg['f'][it['f']]
     B = cfg['A'][blade['tier']] * g(blade) + cfg['lvl_atk'] * steps
@@ -98,10 +120,16 @@ def stats(cfg, blade, charm, level):
         H += FEST['hp']
     awk = awakening(blade, charm)
     fam = blade['fam'] if awk else None
+    mods = GROWTH({'set': fam, 'blade': blade, 'charm': charm}, ctx) if GROWTH else None
     if fam == 'sustain':
-        H *= cfg['sustain_hp']
+        H *= 1 + (cfg['sustain_hp'] - 1) * (mods.get('sustain_hp', 1.0) if mods else 1.0)
+    if mods:
+        H *= mods.get('max_hp', 1.0)
     M = max(cfg['def_floor'], cfg['def_k'] / (cfg['def_k'] + cfg['D'][charm['tier']] + (FEST['def'] if FEST else 0)))
-    return {'B': B, 'H': H, 'M': M, 'set': fam, 'awk': awk}
+    out = {'B': B, 'H': H, 'M': M, 'set': fam, 'awk': awk}
+    if mods:
+        out['mods'] = mods
+    return out
 
 
 def power(cfg, st, kn):
@@ -140,11 +168,21 @@ class Fight:
         self.sus_cd = 0.0
         self.taken = 0.0
 
-    def hurt(self, raw, tele):
-        kn = self.kn
+    def hurt(self, raw, tele, kind='mob', affix=False):
+        kn, st = self.kn, self.st
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
         if self.rng.random() < p:
+            if kind == 'tele' and st.get('mods'):  # D141: a dodged boss telegraph
+                self.dodge_until = self.t + gm(st, 'dodge_secs', 0.0)
+                dh = gm(st, 'dodge_heal', 0.0)
+                if dh > 0 and self.t >= getattr(self, 'dodge_heal_cd', -1.0):
+                    self.dodge_heal_cd = self.t + gm(st, 'dodge_icd', 6.0)
+                    self.hp = min(st['H'], self.hp + dh * st['H'])
+                if gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势: the next swing sets off 烬爆 (icd unchanged)
+                    self.hits = 99
             return
+        if st.get('mods'):
+            raw *= gm(st, 'taken_' + kind) * (gm(st, 'taken_affix') if affix else 1.0) * gm(st, 'taken_all')
         dmg = raw * self.st['M']
         self.hp -= dmg
         self.taken += dmg
@@ -152,7 +190,7 @@ class Fight:
             self.potions -= 1
             self.used += 1
             self.pcd = self.t + self.cfg['potion_cd']
-            self.hp = min(self.st['H'], self.hp + self.cfg['potion_pct'] * self.st['H'])
+            self.hp = min(self.st['H'], self.hp + self.cfg['potion_pct'] * gm(self.st, 'potion') * self.st['H'])
 
     def segment(self, mobs, boss=None, mapdef=None):
         """Fight until every mob (and the boss) is dead or the player dies. Returns True on clear."""
@@ -174,7 +212,19 @@ class Fight:
                     for _ in range(n):
                         a = mob(cfg, md, 'melee', rng, kn, t + 1.0)
                         a['hp'] *= share
+                        a['affix'] = True  # D141: the split adds count as the affixed elite (破缀 / 抗缀)
+                        a['split_add'] = True
                         mobs.append(a)
+            if st.get('mods') and gm(st, 'burn_spread', 0) > 0:  # D141 燎原: a burning enemy that dies passes its burn on
+                for m in mobs:
+                    if m['hp'] <= 0 and m['burn'] > t and not m.get('_spread'):
+                        m['_spread'] = True
+                        if t < getattr(self, 'spread_cd', -1.0):  # spread_icd: at most once per this many seconds
+                            continue
+                        nxt = next((x for x in mobs if x['hp'] > 0 and x['burn'] <= t), None)
+                        if nxt is not None:  # burn_spread = at most this many seconds of the burn move over
+                            nxt['burn'] = min(m['burn'], t + gm(st, 'burn_spread', 0))
+                            self.spread_cd = t + gm(st, 'spread_icd', 0.0)
             alive = [m for m in mobs if m['hp'] > 0]
             if not alive:
                 self.t = t
@@ -197,7 +247,7 @@ class Fight:
             if st['set'] == 'scorch':
                 for m in alive:
                     if m['burn'] > t:
-                        m['hp'] -= cfg['burn'][st['awk']] * st['B'] * (min(tn, m['burn']) - t)
+                        m['hp'] -= cfg['burn'][st['awk']] * gm(st, 'burn_mult') * gm(st, 'set_dmg') * dmult(st, m, t, self) * st['B'] * (min(tn, m['burn']) - t)
             t = tn
             self.t = t
             if FEST:
@@ -206,26 +256,27 @@ class Fight:
                 next_swing = t + period
                 tgt = alive[0]
                 crit = rng.random() < cfg['crit_rate']
-                tgt['hp'] -= st['B'] * (cfg['crit_mult'] if crit else 1.0)
+                tgt['hp'] -= st['B'] * (cfg['crit_mult'] if crit else 1.0) * dmult(st, tgt, t, self)
                 self.hits += 1
                 if t >= next_skill:
                     for m in alive[:kn.skill_hits]:
-                        m['hp'] -= cfg['skill_mult'] * st['B']
+                        m['hp'] -= cfg['skill_mult'] * st['B'] * dmult(st, m, t, self)
                     next_skill = t + cfg['skill_cd']
-                if st['set'] == 'burst' and self.hits >= cfg['burst_every'] and t >= self.burst_cd:
+                bev = cfg['burst_every'] + int(gm(st, 'burst_every', 0))
+                if st['set'] == 'burst' and self.hits >= bev and t >= self.burst_cd:
                     for m in alive[:min(kn.skill_hits, 5)]:
-                        m['hp'] -= cfg['burst'][st['awk']] * st['B']
+                        m['hp'] -= cfg['burst'][st['awk']] * gm(st, 'burst_mult') * gm(st, 'set_dmg') * st['B'] * dmult(st, m, t, self)
                     self.hits = 0
                     self.burst_cd = t + cfg['burst_icd']
                 elif st['set'] == 'scorch' and self.hits >= cfg['scorch_every']:
-                    tgt['burn'] = t + 4.0
+                    tgt['burn'] = t + 4.0 + gm(st, 'burn_ticks', 0)
                     self.hits = 0
-                elif st['set'] == 'sustain' and self.hits >= cfg['sustain_every'] and t >= self.sus_cd:
-                    self.hp = min(st['H'], self.hp + cfg['sustain_pct'][st['awk']] * st['H'])
+                elif st['set'] == 'sustain' and self.hits >= cfg['sustain_every'] + int(gm(st, 'sustain_every', 0)) and t >= self.sus_cd:
+                    self.hp = min(st['H'], self.hp + cfg['sustain_pct'][st['awk']] * gm(st, 'sustain_mult') * st['H'])
                     self.hits = 0
                     self.sus_cd = t + cfg['sustain_icd']
                 elif st['set'] in ('burst', 'sustain'):
-                    self.hits = min(self.hits, cfg['burst_every'])
+                    self.hits = min(self.hits, max(bev, cfg['sustain_every'] + int(gm(st, 'sustain_every', 0))))
                 if boss is not None and not adds_done and 'adds' in mapdef['boss'] and 0 < boss['hp'] <= mapdef['boss']['adds']['at_hp'] * boss['max']:
                     adds_done = True
                     for _ in mapdef['boss']['adds']['points']:
@@ -238,7 +289,7 @@ class Fight:
                 if 'blaze' in m and m['blaze'][0] == t:
                     nt, ev, dmg = m['blaze']
                     m['blaze'] = (t + ev, ev, dmg)
-                    self.hurt(dmg, True)
+                    self.hurt(dmg, True, 'mob', True)
                     blazed = True
                     break
             if blazed:
@@ -250,7 +301,7 @@ class Fight:
                     m['next'] = t + m['iv']
                     if (m['role'] in MELEE_ROLES or m['role'] == 'boss') and id(m) not in engaged:
                         break
-                    self.hurt(m['atk'], m['tele'])
+                    self.hurt(m['atk'], m['tele'], 'boss' if m['role'] == 'boss' else 'mob', bool(m.get('affix')))
                     break
             else:
                 for s in skills:
@@ -258,7 +309,7 @@ class Fight:
                         sk = s['s']
                         s['next'] = t + sk['every']
                         if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
-                            self.hurt(sk['dmg'], True)
+                            self.hurt(sk['dmg'], True, 'tele')
                             f = sk.get('follow')
                             if f and (f.get('below') is None or boss['hp'] <= f['below'] * boss['max']):
                                 pending.append((t + f.get('delay', 1.0), f['dmg']))
@@ -268,7 +319,7 @@ class Fight:
                         if p[0] == t:
                             pending.remove(p)
                             if boss['hp'] > 0:
-                                self.hurt(p[1], True)
+                                self.hurt(p[1], True, 'tele')
                             break
             if self.hp <= 0:
                 return False
@@ -377,7 +428,7 @@ class Player:
         self.day, self._bday, self._bn = None, None, 0  # P2-7 daily bounty: loops set p.day before settle()
 
     def st(self):
-        return stats(self.cfg, self.blade, self.charm, level_of(self.cfg, self.xp))
+        return stats(self.cfg, self.blade, self.charm, level_of(self.cfg, self.xp), self.cleared)
 
     def roll_item(self, tier, key=None):
         r, cfg = self.rng, self.cfg

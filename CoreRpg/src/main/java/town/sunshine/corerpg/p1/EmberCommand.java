@@ -59,6 +59,10 @@ public final class EmberCommand {
             if (!(s instanceof Player) || runs == null || runs.cosmetics() == null) { s.sendMessage(P + "仅玩家可用"); return true; }
             return runs.cosmetics().command((Player) s, runs.dataOf(((Player) s).getUniqueId()), "trail".equals(sub) ? "trail" : "title", args);
         }
+        if ("spec".equals(sub) || "天赋".equals(sub)) { // D141 talent specialization
+            if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "天赋服务未加载"); return true; }
+            return EmberGrowthService.get().command((Player) s, args);
+        }
         if ("cosmetic".equals(sub) || "外观".equals(sub)) { // D107 cosmetic shop
             if (!(s instanceof Player) || runs == null || runs.cosmetics() == null) { s.sendMessage(P + "外观商店未加载"); return true; }
             return runs.cosmetics().shop((Player) s, runs.dataOf(((Player) s).getUniqueId()), args);

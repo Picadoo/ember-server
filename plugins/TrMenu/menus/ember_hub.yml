@@ -14,7 +14,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - 'Ln o p F '
-  - ' m X k i '
+  - 'Tm X k i '
   - ' R c Y d '
   - ' ZA G h j'
 Events:
@@ -24,6 +24,22 @@ Events:
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
+  # D141 天赋专精（装备页也有入口；返回键回到这里）
+  T:
+    update: 20
+    display:
+      material: enchanted book
+      name: '§6天赋专精'
+      lore:
+        - '%corerpg_p1_spec_pts%'
+        - '§7按进度得专精点，三排各选一个打法取舍'
+        - ''
+        - '§e➥ §f打开天赋页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec from hub'
   # D139 国庆限时活动（活动期间才亮；时间来自 ember-v1-festival.yml，PAPI %corerpg_p1_fest_open%）
   L:
     icons:
