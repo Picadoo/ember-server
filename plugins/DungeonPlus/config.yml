@@ -178,6 +178,7 @@ dungeon-pre-folder:
   # ember-v1.0-P1 B2.151: Q05 on the walkable book map (CoreRpg /corerpg spirebuild v1)
   ember_daily_spire_v1:
     "EmberQ05": 1
+    "EmberQ0R3": 1
   ember_daily_frost:
     "EmberDailyFrost": 1
   ember_daily_rail:

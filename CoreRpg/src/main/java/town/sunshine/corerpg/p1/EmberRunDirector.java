@@ -656,6 +656,7 @@ final class EmberRunDirector {
         le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
         w.playSound(o, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.6f);
         String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下" : shapeHint(pending);
+        if (sk.share) who += " §6· 全队靠拢进圈分摊（人越多每人越少，一个人扛会很痛）";
         svc.tellRun(s, "§c" + def.boss.name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
     }
 
@@ -707,13 +708,21 @@ final class EmberRunDirector {
 
     private void execute(EmberRunMaps.Skill sk, Location o, Vector dir, LivingEntity src) {
         int hit = 0;
+        List<Player> inside = new ArrayList<Player>();
         for (Player p : w.getPlayers()) {
             if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
-            if (inShape(sk, o, dir, p.getLocation())) {
-                svc.skillHit(s, p, src, sk.dmg);
-                if (sk.kb > 0 && !p.isDead()) push(p, src == null ? o : src.getLocation(), sk.kb);
-                hit++;
-            }
+            if (inShape(sk, o, dir, p.getLocation())) inside.add(p);
+        }
+        double each = sk.share ? shareDamage(sk.dmg, inside.size()) : sk.dmg; // R03 (D137) 烬核分摊
+        if (sk.share) {
+            svc.log().info(String.format(Locale.ROOT, "[P1 run] %s share %s n=%d each=%.1f", s.runId, sk.name, inside.size(), each));
+            if (!inside.isEmpty()) svc.tellRun(s, "§6「" + sk.name + "」§7落下：" + inside.size() + " 人分摊，每人 " + Math.round(each * s.dmgFactor)
+                    + (inside.size() == 1 ? " §c（只有一个人扛！）" : ""));
+        }
+        for (Player p : inside) {
+            svc.skillHit(s, p, src, each);
+            if (sk.kb > 0 && !p.isDead()) push(p, src == null ? o : src.getLocation(), sk.kb);
+            hit++;
         }
         Location fx = o.clone().add(dir.clone().multiply(sk.type.equals("circle") ? sk.ahead
                 : sk.strip() ? (sk.stripFrom() + sk.stripTo()) / 2.0 : Math.min(2.0, sk.range)));
@@ -728,6 +737,9 @@ final class EmberRunDirector {
         }
         if (hit == 0 && src == (boss == null ? null : boss.le)) svc.log().fine("[P1 run] " + sk.name + " missed");
     }
+
+    /** R03 (D137): the whole hit split equally between everyone standing in the circle (alone = all of it). */
+    static double shareDamage(double total, int inside) { return inside <= 0 ? 0 : total / inside; }
 
     /** Shapes never exceed the drawn warning (book: 实际范围不超过预警). */
     static boolean inShape(EmberRunMaps.Skill sk, Location o, Vector dir, Location p) {
@@ -773,7 +785,7 @@ final class EmberRunDirector {
         switch (sk.type) {
             case "circle": {
                 double cx = o.getX() + dir.getX() * sk.ahead, cz = o.getZ() + dir.getZ() * sk.ahead;
-                warnCircle(new Location(w, cx, y, cz), sk.radius, Particle.FLAME);
+                warnCircle(new Location(w, cx, y, cz), sk.radius, sk.share ? Particle.VILLAGER_HAPPY : Particle.FLAME); // D137: green = stand in it together
                 break;
             }
             case "line":

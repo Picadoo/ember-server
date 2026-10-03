@@ -25,7 +25,7 @@ import town.sunshine.corerpg.PlayerData;
  * D116 seasons + D117 weekly goals (display / cosmetic only, book §23.3).
  * <ul>
  * <li>Weekly boards (period "w&lt;week&gt;", reset Monday 00:00 Asia/Shanghai): best abyss tier cleared, featured
- * challenge clears, raid clears, fastest R01 / R02 clear. Season boards (period "s&lt;n&gt;"): the same over the
+ * challenge clears, raid clears, fastest R01 / R02 / R03 clear. Season boards (period "s&lt;n&gt;"): the same over the
  * season ({@code season.weeks} weeks from {@code season.anchor}).</li>
  * <li>Season end: the top {@code season.top} of the abyss / featured / raid boards, of either raid-time board, and every
  * player who cleared abyss tier {@code season.deep_tier} inside the season get season titles; #1 of any board also the
@@ -44,7 +44,7 @@ public final class EmberSeason {
     public static final String C_AWARD = "p3_season_";    // + award id, period "all": times earned
     public static final String C_AWARD_LAST = "p3_seasonlast_"; // + award id, period "all": last season number
     public static final List<String> GOALS = Collections.unmodifiableList(Arrays.asList("featured", "abyss", "raid", "bounty"));
-    public static final List<String> BOARDS = Collections.unmodifiableList(Arrays.asList("abyss", "featured", "raids", "time_r01", "time_r02"));
+    public static final List<String> BOARDS = Collections.unmodifiableList(Arrays.asList("abyss", "featured", "raids", "time_r01", "time_r02", "time_r03"));
     private static final String P = "§6[余烬] §7";
 
     public static final class Row {
@@ -120,7 +120,7 @@ public final class EmberSeason {
 
     void onRaid(UUID u, String name, String raid, int seconds) {
         record(u, name, "raids", 1, ADD);
-        if (seconds > 0 && ("r01".equals(raid) || "r02".equals(raid))) record(u, name, "time_" + raid, seconds, MIN);
+        if (seconds > 0 && ("r01".equals(raid) || "r02".equals(raid) || "r03".equals(raid))) record(u, name, "time_" + raid, seconds, MIN);
     }
 
     private static final int MAX = 0, ADD = 1, MIN = 2;
@@ -198,6 +198,7 @@ public final class EmberSeason {
             case "raids": return "团本通关";
             case "time_r01": return "R01 最快通关";
             case "time_r02": return "R02 最快通关";
+            case "time_r03": return "R03 最快通关"; // D137
             default: return b;
         }
     }
@@ -233,7 +234,7 @@ public final class EmberSeason {
     }
 
     static final String[][] AWARD_OF = {{"abyss", "season_abyss"}, {"featured", "season_featured"}, {"raids", "season_raids"},
-            {"time_r01", "season_fast"}, {"time_r02", "season_fast"}};
+            {"time_r01", "season_fast"}, {"time_r02", "season_fast"}, {"time_r03", "season_fast"}};
 
     synchronized void finalizeSeason(int n) { finalizeSeason(n, null); }
 
@@ -392,7 +393,7 @@ public final class EmberSeason {
         switch (g) {
             case "featured": return "通关本周精选图的挑战版（带本周规则）";
             case "abyss": return "通关深渊层（任意层）";
-            case "raid": return "通关团本（R01 或 R02）";
+            case "raid": return "通关团本（R01、R02 或 R03）";
             case "bounty": return "做满每日委托（当天第 3 局）";
             default: return g;
         }

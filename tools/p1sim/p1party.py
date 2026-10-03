@@ -62,10 +62,10 @@ class Party:
                 m.next_swing = max(m.next_swing, t + 1.0)
                 self.revives = getattr(self, 'revives', 0) + 1
 
-    def hurt(self, m, raw, tele):
+    def hurt(self, m, raw, tele, dodgeable=True):
         cfg, kn = self.cfg, m.kn
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
-        if self.rng.random() < p:
+        if dodgeable and self.rng.random() < p:
             return
         m.hp -= raw * m.st['M']
         if 0 < m.hp < kn.potion_at * m.st['H'] and m.potions > 0 and self.t >= m.pcd:
@@ -78,6 +78,15 @@ class Party:
         if not liv:
             return
         tgt = self.rng.choice(liv)
+        if str(sk.get('share', '')).lower() == 'true':
+            # R03 (D137) 烬核: the target is in the circle; every other living member gets there in the 3 s warning with
+            # the same telegraph-response chance as a dodge (dodge + tele_bonus, ≤ 95 %); the hit is split equally and
+            # cannot be dodged by those inside (standing in it is the point)
+            inside = [tgt] + [m for m in liv if m is not tgt and self.rng.random() < min(0.95, m.kn.dodge + m.kn.tele_bonus)]
+            for m in inside:
+                self.hurt(m, raw / len(inside), True, dodgeable=False)
+            self.shares = getattr(self, 'shares', []) + [len(inside)]
+            return
         sp = SPLASH.get(sk.get('type'), 0.35)
         for m in liv:
             if m is tgt or self.rng.random() < sp:
@@ -278,6 +287,7 @@ def main():
     ap.add_argument('--k', type=float, nargs='*', help='sweep hp_per_member (party HP factor slope)')
     ap.add_argument('--j', type=float, nargs='*', help='sweep dmg_per_member (enemy damage slope per extra member)')
     ap.add_argument('--atk', type=float, nargs='*', help='sweep a damage multiplier on every raid mob / boss / skill')
+    ap.add_argument('--share-dmg', type=float, nargs='*', help='D137: sweep the R03 烬核 (share) total damage')
     ap.add_argument('--no-revive', action='store_true', help='D106 comparison: the old rule (no revive)')
     ap.add_argument('--last-revive-hp', type=float, default=None, help='D118: extra last-phase revive at this boss HP ratio (0 = off)')
     ap.add_argument('--last-revive-delay', type=float, default=None, help='D118: seconds from arming to the extra revive')
@@ -296,10 +306,15 @@ def main():
     print('# pool B median %.1f, H median %.0f' % (statistics.median(p[0]['B'] for p in pool), statistics.median(p[0]['H'] for p in pool)))
     print('| 每人生命斜率 | 每人伤害斜率 | 伤害 × | 首领基础生命 | 人数 | 通关率 | 全程用时（中位 s） | 首领用时（中位 s） | 平均倒下人数 | 人均喝药 |')
     print('|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
-    combos = [(z, jj, x, y) for z in (a.k or [m.get('hp_per_member', K)]) for jj in (a.j or [m.get('dmg_per_member', 0.0)])
-              for x in (a.atk or [1.0]) for y in (a.boss_hp or [m['boss']['hp']])]
-    for k, j, am, bh in combos:
+    combos = [(z, jj, x, y, sd) for z in (a.k or [m.get('hp_per_member', K)]) for jj in (a.j or [m.get('dmg_per_member', 0.0)])
+              for x in (a.atk or [1.0]) for y in (a.boss_hp or [m['boss']['hp']]) for sd in (a.share_dmg or [None])]
+    for k, j, am, bh, sd in combos:
         mm = copy.deepcopy(m)
+        if sd is not None:
+            for sk in mm['boss']['skills']:
+                if str(sk.get('share', '')).lower() == 'true':
+                    sk['dmg'] = sd
+            print('# share dmg %.0f' % sd)
         mm['hp_per_member'] = k
         mm['dmg_per_member'] = j
         mm['boss']['hp'] = bh

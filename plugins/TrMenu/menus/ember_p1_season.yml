@@ -1,5 +1,5 @@
 # 余烬 v1.1 · D116 赛季与排行 + D117 周目标（源表 §13.43–13.44）— 只做展示 / 外观货币，不加属性。
-# 4 周一个赛季（周一 0 点 CST 换周），本周榜 + 赛季榜：深渊最高层、精选挑战通关、团本通关、R01/R02 最快通关；
+# 4 周一个赛季（周一 0 点 CST 换周），本周榜 + 赛季榜：深渊最高层、精选挑战通关、团本通关、R01/R02/R03 最快通关；
 # 季末每榜前 3 名得赛季称号、各榜第 1 名再得 ❖ 名牌框、赛季内通关深渊第 5 层得「赛季深潜者」（D123，原第 8 层），结果归档。
 # 周目标：精选挑战 1 · 深渊 3 层 · 团本 1 · 委托做满 3 天，每个 15 余烬徽、全完成再 +20（只能在外观商店用）。
 # 全部文字来自 PAPI（参数源 ember-v1-runs.yml season: / weekly_goals:）。入口：主菜单「赛季 · 排行 · 周目标」左键、/ember_p1_season。
@@ -20,7 +20,7 @@ Layout:
   - '#########'
   - '#S  G  L#'
   - '#1 2 3 4#'
-  - '# abcde #'
+  - '# abcdef#'
   - '#H##B##P#'
 
 Events:
@@ -293,6 +293,36 @@ Icons:
         - '§f 2. %corerpg_p1_sboard_s_time_r02_2%'
         - '§f 3. %corerpg_p1_sboard_s_time_r02_3%'
         - '§7你：§f%corerpg_p1_srank_s_time_r02%'
+        - ''
+        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
+
+  f:
+    update: 40
+    display:
+      material: blaze powder
+      name: '§eR03 最快通关'
+      lore:
+        - ''
+        - '§7本周：'
+        - '§f 1. %corerpg_p1_sboard_w_time_r03_1%'
+        - '§f 2. %corerpg_p1_sboard_w_time_r03_2%'
+        - '§f 3. %corerpg_p1_sboard_w_time_r03_3%'
+        - '§7你：§f%corerpg_p1_srank_w_time_r03%'
+        - ''
+        - '§7本赛季：'
+        - '§f 1. %corerpg_p1_sboard_s_time_r03_1%'
+        - '§f 2. %corerpg_p1_sboard_s_time_r03_2%'
+        - '§f 3. %corerpg_p1_sboard_s_time_r03_3%'
+        - '§7你：§f%corerpg_p1_srank_s_time_r03%'
         - ''
         - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
     actions:

@@ -2412,7 +2412,7 @@ public final class EmberRunService implements Listener {
     private final Map<UUID, Long> recruitAt = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
 
     /**
-     * D104 (midgame #5): /corerpg p1 recruit <r01|r02> — the leader (a DP team is created if needed) sends every online
+     * D104 (midgame #5): /corerpg p1 recruit <r01|r02|r03> — the leader (a DP team is created if needed) sends every online
      * player with their own Q07 first clear a clickable call; /corerpg p1 recruit join <leader> sends the DP join request
      * and gives the leader a clickable [同意]. 60 s cooldown per leader.
      */
@@ -2430,7 +2430,7 @@ public final class EmberRunService implements Listener {
         if (args.length >= 3 && "list".equalsIgnoreCase(args[2])) { showRecruits(p, true); return true; }
         String key = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "r01";
         EmberRunMaps.MapDef m = maps.byKey(key);
-        if (m == null || !m.raid) { p.sendMessage(P + "/corerpg p1 recruit <r01|r02> — 全服招募团本队员"); return true; }
+        if (m == null || !m.raid) { p.sendMessage(P + "/corerpg p1 recruit <r01|r02|r03> — 全服招募团本队员"); return true; }
         if (!progressFlag(data(p.getUniqueId()), m.requires)) { p.sendMessage(P + ChatColor.RED + "先首通 " + m.requires.toUpperCase(Locale.ROOT) + " 才能开团本。"); return true; }
         if (!EmberRunBridges.teamLeader(p)) { p.sendMessage(P + ChatColor.RED + "只有队长能招募。"); return true; }
         long now = System.currentTimeMillis();

@@ -76,14 +76,16 @@ public final class EmberCosmetics implements Listener {
             new Cosmetic("abyss10", Kind.TITLE, "§d§l余烬深渊之主", "深渊最高通关第 10 层", 10, null, null),
             new Cosmetic("r01", Kind.TITLE, "§6锈轨破袭者", "通关团本 R01 锈轨矿道·团", 0, "r01", null),
             new Cosmetic("r02", Kind.TITLE, "§b霜封守望者", "通关团本 R02 霜封哨所·团", 0, "r02", null),
-            new Cosmetic("raids10", Kind.TITLE, "§c十战老兵", "团本累计通关 10 次（R01 + R02）", 0, null, null),
+            new Cosmetic("r03", Kind.TITLE, "§6断塔同心", "通关团本 R03 断塔回廊·团", 0, "r03", null), // D137
+            new Cosmetic("raids10", Kind.TITLE, "§c十战老兵", "团本累计通关 10 次（R01 + R02 + R03）", 0, null, null),
             new Cosmetic("trail_r01", Kind.TRAIL, "§6余烬火星", "通关团本 R01（团本专属足迹）", 0, "r01", "FLAME"),
             new Cosmetic("trail_r02", Kind.TRAIL, "§b霜花", "通关团本 R02（团本专属足迹）", 0, "r02", "SNOW_SHOVEL"),
+            new Cosmetic("trail_r03", Kind.TRAIL, "§6烬核余辉", "通关团本 R03（团本专属足迹）", 0, "r03", "CRIT_MAGIC"), // D137
             // D116 season honors (4-week seasons; display only, kept forever once earned)
             new Cosmetic("season_abyss", Kind.TITLE, "§d赛季深渊三甲", "某赛季「最高深渊层」榜前 3", 0, null, null),
             new Cosmetic("season_featured", Kind.TITLE, "§b赛季精选三甲", "某赛季「精选挑战通关」榜前 3", 0, null, null),
             new Cosmetic("season_raids", Kind.TITLE, "§6赛季团本三甲", "某赛季「团本通关」榜前 3", 0, null, null),
-            new Cosmetic("season_fast", Kind.TITLE, "§c赛季疾行者", "某赛季 R01 或 R02「最快通关」榜前 3", 0, null, null),
+            new Cosmetic("season_fast", Kind.TITLE, "§c赛季疾行者", "某赛季 R01、R02 或 R03「最快通关」榜前 3", 0, null, null),
             new Cosmetic("season_deep", Kind.TITLE, "§5赛季深潜者", "某赛季深渊最高达到第 5 层（赛季内通关）", 0, null, null),
             new Cosmetic("season_crown", Kind.FLAIR, "§d❖", "某赛季任一榜第 1 名（名牌前标记，主城和野外显示）", 0, 0, "§d❖ §r", null)));
 
@@ -195,7 +197,7 @@ public final class EmberCosmetics implements Listener {
         if (d == null || c == null) return false;
         if (c.shop()) return bought(d, c); // D107 shop items
         if (c.id.startsWith("season_")) return d.periodCount(EmberSeason.C_AWARD + c.id, "all") > 0; // D116
-        if (RAIDS10.equals(c.id)) return raidClears(d, "r01") + raidClears(d, "r02") >= 10; // E-review #9
+        if (RAIDS10.equals(c.id)) return raidClears(d, "r01") + raidClears(d, "r02") + raidClears(d, "r03") >= 10; // E-review #9
         if (c.firstClear != null) return firstClearOf.test(d, c.firstClear);
         if (c.abyssTier > 0) return abyssBest >= c.abyssTier;
         return c.raid != null && raidClears(d, c.raid) > 0;
@@ -216,7 +218,7 @@ public final class EmberCosmetics implements Listener {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
                 p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
         }
-        if (raidClears(d, "r01") + raidClears(d, "r02") == 10 && p != null && p.isOnline())
+        if (raidClears(d, "r01") + raidClears(d, "r02") + raidClears(d, "r03") == 10 && p != null && p.isOnline())
             p.sendMessage(P + "§d获得称号「" + byId(RAIDS10).label + "§d」§7（团本累计 10 次，只做展示）");
     }
 
@@ -292,7 +294,7 @@ public final class EmberCosmetics implements Listener {
             return true;
         }
         p.sendMessage(P + "§6荣誉（只做展示，不加属性）§7 已获得 " + earnedCount(d) + "/" + ALL.size()
-                + " · 团本通关 R01 " + raidClears(d, "r01") + " 次 · R02 " + raidClears(d, "r02") + " 次 · 深渊最高 " + best + " 层");
+                + " · 团本通关 R01 " + raidClears(d, "r01") + " 次 · R02 " + raidClears(d, "r02") + " 次 · R03 " + raidClears(d, "r03") + " 次 · 深渊最高 " + best + " 层");
         String selT = selected(d, Kind.TITLE), selR = selected(d, Kind.TRAIL), selF = selected(d, Kind.FLAIR);
         for (Cosmetic c : ALL) { // D95: earned honors are a click away (装上 / 取下)
             boolean on = c.id.equals(c.kind == Kind.TITLE ? selT : c.kind == Kind.FLAIR ? selF : selR);

@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134)
-balance_version: 19
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137)
+balance_version: 20
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 # Endgame #6 (D128, balance_version 18, user 2026-10-03 07:07): the first failed challenge / abyss run of the stamina day
@@ -808,3 +808,80 @@ raids:
       after: r2
       anchor: [66, 64, 64]
       area: [60, 63, 58, 72, 70, 70]
+
+  r03:
+    name: 断塔回廊·团
+    loot: {family: scorch}  # D137: the one family no raid covered yet (r01 burst, r02 sustain) — raid_item fallback without a target
+    dungeon: EmberQ0R3
+    template: ember_daily_spire_v1
+    tier: 3
+    drop_label: T3
+    content_version: v1
+    map_version: ember_daily_spire_v1@b2151-2026-10-02
+    requires: q07
+    unlocks: ""
+    purpose: "团本（3～5 人）：断塔回廊的地图，首领斧刃横扫 + 径向冲击，招牌机制「烬核」要全队靠拢分摊；掉落与 r01 相同；与 r01 / r02 合计每周 3 次"
+    b_ref: 90
+    # D137: same raid rules as r01 / r02 (cap shared through cap_group: all raids together 3 per week)
+    party_min: 3
+    party_max: 5
+    cost: 50
+    weekly_cap: 3
+    cap_group: raid
+    hp_per_member: 0.85
+    dmg_per_member: 0.20
+    # B2.151 book ch. 15 walkable map (ember_daily_spire_v1): stairs 64 → 72 → 80, boss hall at y 80
+    spawn: [0, 64, 5]
+    spread: [[-2, 64, 5], [2, 64, 5], [-4, 64, 5], [4, 64, 5]]
+    safe: {r0: [0, 64, 3], r1: [0, 64, 21], r2: [40, 72, 53], r3: [-4, 80, 89], rb: [0, 80, 133]}
+    holo: {entry: [0, 67, 5], event: [60, 75, 63], exit: [0, 83, 133]}
+    mobs:
+      melee:    {mm: EmberQ05Melee, hp: 270, atk: 26, interval: 2.5}
+      ranged:   {mm: EmberQ05Ranged, hp: 198, atk: 26, interval: 3.0, range: 12}
+      heavy:    {mm: EmberQ05Heavy, hp: 378, atk: 26, interval: 3.0}
+      caster:   {mm: EmberQ05Caster, hp: 234, atk: 26, interval: 6.0, line_length: 6, line_width: 1.5, warn: 1.0}
+      treasure: {mm: EmberQ05Treasure, hp: 360, atk: 0, interval: 9.0}
+      elite:    {mm: EmberQ05Elite, hp: 900, atk: 26, interval: 2.5}
+    rooms:
+      r1:
+        label: 第一层环院
+        trigger: [-16, 63, 18, 16, 68, 42]
+        points: [[-6, 64, 31], [0, 64, 31], [6, 64, 31], [-6, 64, 36], [0, 64, 36], [6, 64, 36], [-12, 64, 33], [12, 64, 33]]
+        door: [37, 72, 48, 43, 77, 48]
+        a: {melee: 6, ranged: 1}
+        b: {melee: 5, heavy: 1}
+      r2:
+        label: 第二层外台
+        trigger: [28, 71, 50, 52, 76, 76]
+        points: [[34, 72, 64], [40, 72, 64], [46, 72, 64], [34, 72, 69], [40, 72, 69], [46, 72, 69], [32, 72, 58], [48, 72, 58]]
+        door: [14, 80, 95, 14, 85, 101]
+        a: {melee: 5, ranged: 2}
+        b: {melee: 5, caster: 1}
+      r3:
+        label: 第三层横廊
+        trigger: [-18, 79, 86, 10, 84, 112]
+        points: [[-10, 80, 100], [-4, 80, 100], [2, 80, 100], [-10, 80, 105], [-4, 80, 105], [2, 80, 105], [-14, 80, 94], [6, 80, 94]]
+        door: [-3, 80, 121, 3, 85, 121]
+        a: {melee: 6, heavy: 1}
+        b: {melee: 5, ranged: 2}
+    boss:
+      mm: EmberQ05Boss
+      name: 断塔斧卫·团
+      hp: 13000
+      atk: 48
+      interval: 3.0
+      at: [0, 80, 146]
+      area: [-16, 79, 130, 16, 94, 162]
+      wait_in_area: true
+      # D137 move combination: Q05 斧刃横扫 (heavy) / 径向冲击 (light) at the challenge values × 1.10 like r01 / r02, plus the
+      # raid's own mechanic 烬核 (share): a green circle locked on one member; after 3 s everyone standing in it splits
+      # the hit equally (alone = all of it). R01 = adds, R02 = phase-gated spread circles, R03 = stack together.
+      skills:
+        - {type: cone, name: 斧刃横扫, every: 9, warn: 1.2, angle: 120, range: 5, dmg: 79, kb: 0.5}
+        - {type: circle, name: 径向冲击, every: 15, warn: 1.0, radius: 3, ahead: 0, dmg: 48, kb: 1, light: true}
+        - {type: circle, target: player, name: 烬核, every: 16, warn: 3.0, radius: 3, dmg: 100, share: true, recover: 1.0}
+      recover: 0.5
+    event:
+      after: r2
+      anchor: [66, 72, 63]
+      area: [60, 71, 57, 72, 78, 69]

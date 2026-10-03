@@ -97,6 +97,8 @@ public final class EmberRunMaps {
         public final double recover;
         /** §18.1 challenge: the lighter second skill uses the light override (44), every other skill the heavy one (72) */
         public final boolean light;
+        /** R03 (D137) 烬核分摊: everyone inside the circle when it lands shares dmg equally (alone = all of it) */
+        public final boolean share;
         Skill(Map<?, ?> m) {
             type = str(m.get("type"), "cone");
             target = str(m.get("target"), "");
@@ -119,13 +121,14 @@ public final class EmberRunMaps {
             shift = num(m.get("shift"), Double.NaN);
             recover = num(m.get("recover"), Double.NaN);
             light = Boolean.TRUE.equals(m.get("light")) || "true".equals(String.valueOf(m.get("light")));
+            share = Boolean.TRUE.equals(m.get("share")) || "true".equals(String.valueOf(m.get("share")));
             follow = m.get("follow") instanceof Map ? new Skill((Map<?, ?>) m.get("follow")) : null;
         }
 
         private Skill(Skill o, double length, double dmg) {
             type = o.type; name = o.name; every = o.every; warn = o.warn; this.dmg = dmg; angle = o.angle; range = o.range;
             radius = o.radius; ahead = o.ahead; this.length = length; width = o.width; below = o.below; delay = o.delay;
-            kb = o.kb; target = o.target; follow = o.follow; start = o.start; shift = o.shift; recover = o.recover; light = o.light;
+            kb = o.kb; target = o.target; follow = o.follow; start = o.start; shift = o.shift; recover = o.recover; light = o.light; share = o.share;
         }
 
         /** same skill with another strip length (charge clipped at a wall / the boss area edge) */

@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(19, m.balanceVersion);                // D134
-        assertEquals("g04-1/b19", m.ruleVersion);
+        assertEquals(20, m.balanceVersion);                // D137
+        assertEquals("g04-1/b20", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -724,6 +724,32 @@ public class EmberRunRulesTest {
         assertEquals(2, EmberRunDirector.dueSkill(next, 1000, below, 0.49));
     }
 
+    @Test public void thirdRaidStacksForItsShareMoveAndCoversTheLastFamily_D137() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.MapDef r1 = m.raids.get("r01"), r2 = m.raids.get("r02"), r3 = m.raids.get("r03");
+        assertNotNull(r3);
+        assertTrue(r3.raid);
+        assertSame(r3, m.byWorld("dungeon_EmberQ0R3_1A2B3C4D"));
+        assertSame(m.byKey("q05"), m.byWorld("dungeon_EmberQ05_1A2B3C4D"));
+        assertEquals("q07", r3.requires);
+        assertEquals(EmberRunService.capKey(r1), EmberRunService.capKey(r3)); // one weekly counter for all three raids
+        assertEquals("scorch", r3.lootFamily);                                 // r01 burst, r02 sustain, r03 scorch
+        java.util.Set<String> fams = new java.util.HashSet<String>(java.util.Arrays.asList(r1.lootFamily, r2.lootFamily, r3.lootFamily));
+        assertEquals(3, fams.size());
+        assertNull(r3.boss.adds);
+        int shares = 0;
+        for (EmberRunMaps.Skill sk : r3.boss.skills) if (sk.share) { shares++; assertEquals("player", sk.target); assertTrue(sk.warn >= 2.5); }
+        assertEquals(1, shares);
+        for (EmberRunMaps.Skill sk : r1.boss.skills) assertFalse(sk.share);
+        for (EmberRunMaps.Skill sk : r2.boss.skills) assertFalse(sk.share);
+        assertEquals(100.0, EmberRunDirector.shareDamage(100, 1), 1e-9);  // alone: all of it
+        assertEquals(100.0 / 3, EmberRunDirector.shareDamage(100, 3), 1e-9);
+        assertEquals(0.0, EmberRunDirector.shareDamage(100, 0), 1e-9);
+        assertTrue(EmberSeason.BOARDS.contains("time_r03"));
+        assertNotNull(EmberCosmetics.byId("trail_r03"));
+        assertNotNull(EmberCosmetics.byId("r03"));
+    }
+
     @Test public void mapLootIdentityKeepsTheTargetFloorAndRaidItemIsTargeted_P2_9() {
         EmberRunMaps m = bundled();
         EmberRunMaps.MapDef q1 = m.byKey("q01"), q7 = m.byKey("q07");
@@ -770,7 +796,7 @@ public class EmberRunRulesTest {
         assertEquals(EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString(),
                 EmberRunRules.raidItem(in, "raid_item", "burst", 1).item.toString());
         // cosmetics: no stats anywhere, abyss titles by best tier
-        assertEquals(21, EmberCosmetics.ALL.size()); // D103 + E-review #9 + D116 six season honors
+        assertEquals(23, EmberCosmetics.ALL.size()); // D103 + E-review #9 + D116 six season honors + D137 R03 title / trail
         assertEquals(1, EmberCosmetics.byId("abyss1").abyssTier);
         assertEquals(240, EmberCosmetics.byId("anim_ember").points());
         assertEquals(40, EmberCosmetics.byId("color_white").points());        // 2000 币 = 40 points
