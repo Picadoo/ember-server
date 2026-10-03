@@ -1014,7 +1014,17 @@ public final class EmberRunService implements Listener {
         s.state = EmberRunSession.FAILED;
         s.reason = why;
         store.save(s);
-        if (!chFail) tellRun(s, ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
+        EmberRunMaps.MapDef fm = maps.byKey(s.mapKey);
+        if (!chFail && fm != null && fm.raid && fm.weeklyCap > 0) { // recheck #3 (D133): the weekly raid count only moves on a clear
+            for (UUID u : s.participants) {
+                Player p = Bukkit.getPlayer(u);
+                if (p == null || !p.isOnline()) continue;
+                int used = raidWeek(data(u), fm);
+                p.sendMessage(P + ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
+                p.sendMessage(P + "§a本周团本次数没有扣§7：还是 " + used + "/" + fm.weeklyCap + (capKey(fm).equals(fm.key) ? "" : "（团本合计）")
+                        + (used < fm.weeklyCap ? "，体力够就可以再来（只有通关才算一次）" : ""));
+            }
+        } else if (!chFail) tellRun(s, ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
         else for (UUID u : s.participants) { // endgame #6 (D128): the day's first failed challenge / abyss run gives half the stamina back
             int back = s.committed.contains(u) ? failRefund(u, s) : -1;
             Player p = Bukkit.getPlayer(u);
@@ -2725,7 +2735,8 @@ public final class EmberRunService implements Listener {
         if (d == null || !progressFlag(d, "q07")) return null;
         return new String[][]{{"[主菜单]", "/ember", "冒险 · 装备 · 工坊 · 帮助都在这里", "GOLD"},
                 {"[冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本", "GREEN"},
-                {"[赛季 · 周目标]", "/ember_p1_season", "本周目标、排行榜、赛季奖励、外观商店", "LIGHT_PURPLE"}};
+                {"[赛季 · 周目标]", "/ember_p1_season", "本周目标、排行榜、赛季奖励", "LIGHT_PURPLE"},
+                {"[外观商店]", "/corerpg p1 cosmetic", "打开外观商店页（余烬徽 / 币 / 印记都能付，只做展示）", "AQUA"}}; // recheck #5: D121 says the join message opens the shop page
     }
 
     public List<String> joinLines(PlayerData d) {
@@ -2735,7 +2746,7 @@ public final class EmberRunService implements Listener {
             out.add("§6§l[余烬服] §e欢迎回来 · 本周精选 §f" + featuredLabel(d));
             out.add("§7" + EmberSeason.abyssMine(abyssBest(d)) + "（可开第 1～" + abyssMaxStart(d) + " 层）"
                     + (season != null && season.goalsOn() ? "§7 · " + goalsShort(d) : ""));
-            out.add("§7外观商店（主菜单「赛季 · 排行 · 周目标」→ 外观商店）：余烬徽、余烬币或多出来的印记都能付，只做展示");
+            out.add("§7外观商店：点下面的 [外观商店]（或主菜单「赛季 · 排行 · 周目标」→ 外观商店）；余烬徽、余烬币或多出来的印记都能付，只做展示");
         } else {
             out.add("§6§l[余烬服] §e欢迎回来 · 下一步：§f" + ChatColor.stripColor(nextStep(d)));
             out.add("§7本周精选 §f" + featuredShort() + "§7 · 右键门吏 · 灰钥或点下面的 [冒险页] 进本");
