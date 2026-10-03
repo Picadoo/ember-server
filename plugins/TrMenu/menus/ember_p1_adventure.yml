@@ -20,7 +20,7 @@ Layout:
   - '#T X A K#'
   - '#1234567#'
   - '#Ws b u n'
-  - '#GMRFZC D'
+  - '#GMRFZCYD'
   - '####B####'
 
 Events:
@@ -40,6 +40,12 @@ Icons:
         - '§7当天第 3 局结算通关：60 余烬币 + 余烬碎片 ×6'
         - '§7主线 / 挑战 / 深渊每层都算 1 局，团本算 2 局，失败不算'
         - '§7每天 0 点刷新（同体力日）· 自动到账，不用领取'
+        - ''
+        # D144: numbers = ember-v1.yml bounty.variety
+        - '§e花样委托 §8（重打已首通的普通版时才有花样）'
+        - '§7%corerpg_p1_vbounty%'
+        - '§7当天击败 2 只词缀精英：20 余烬币 · 当天 1 次限时清房达标：20 余烬币'
+        - '§8和上面的局数委托分开计，各发一次'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
@@ -114,6 +120,40 @@ Icons:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'command: corerpg p1 recruit r03'
         - close
+  Y:
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: stained glass pane
+          name: '§8 '
+    update: 20
+    display:
+      material: blaze powder
+      name: '§c余烬连战 · 每周首领连战（1～3 人）'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush%'
+        - '§7断塔斧卫 → 霜封统领 → 炉锁巨卫，同一个大厅连打'
+        - '§7招式和各自主线图一样，生命 ×1.7、伤害 ×1.45（组队另按人数加生命）'
+        - '§7每打倒一个休息 10 秒、站着的人回复 30% 生命 · 倒下观战，没有复活'
+        - '§7不耗体力 · 每周 1 次（第一个首领现身时计入）'
+        - '§7奖励：T3 印记 +1 · 余烬徽 +20 · 第一次通关得称号「§c连战不息§7」'
+        - '§8不给余烬币、装备和碎片 · 本周最快榜，赛季末前 3 名得「赛季疾行者」'
+        - ''
+        - '§a参考：T3 两件 +6、躲得中等的单人约 9 成能过；T3 +3 约 6 成'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点，全队都要有本周次数）'
+        - '§e➥ §f右键：规则和本周最快榜（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush'
+        - close
   '#':
     display:
       material: gray stained glass pane
@@ -151,9 +191,9 @@ Icons:
         - ''
         # D138: numbers = ember-v1-runs.yml variety (affix_shard / event_secs / event_core)
         - '§6重复刷图花样 §8（已首通的普通版）'
-        - '§7每局 1 只发光的§6词缀精英§7：炽热（脚下火圈）/ 分裂 / 护盾'
+        - '§7每局 1 只发光的§6词缀精英§7：炽热（脚下火圈）/ 分裂 / 厚甲（只是血厚）'
         - '§7  击败 → §f余烬碎片 +2'
-        - '§7约一半的局有§b限时清房§7：30 秒内清完 → §f余烬核心 +1'
+        - '§7约一半的局有§b限时清房§7：30 秒内清完 → §f余烬核心碎片 +1'
         - ''
         - '§e➥ §f聊天栏查看详细（解锁 / 当前局）'
     actions:
@@ -315,7 +355,8 @@ Icons:
             - '§7首通 Q07 锈轨矿道后开放：'
             - '§7· 七图挑战版（更强的敌人，掉 T3）'
             - '§7· 深渊 · 余烬层（十层，越深越难）'
-            - '§7· 团本两张（3～5 人，每周 3 次）'
+            - '§7· 团本三张（3～5 人，每周 3 次）'
+            - '§7· 余烬连战（每周 1 次首领连战）'
             - ''
             - '§a现在：§f%corerpg_p1_next%'
         actions:

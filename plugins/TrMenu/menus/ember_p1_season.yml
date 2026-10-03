@@ -19,8 +19,8 @@ Options:
 Layout:
   - '#########'
   - '#S  G  L#'
-  - '#1 2 3 4#'
-  - '# abcdef#'
+  - '#1 2 345#'
+  - '#gabcdef#'
   - '#H##B##P#'
 
 Events:
@@ -153,6 +153,55 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_adventure'
+
+  '5':
+    update: 20
+    display:
+      material: slime ball
+      name: '§6周目标 · 烬核同心 §8（可选）'
+      lore:
+        - ''
+        - '%corerpg_p1_goal_core%'
+        - '§7团本断塔回廊·团（R03）里，烬核落下时§f全队站着的人都在圈里§7（至少 2 人）'
+        - '§7并且这局通关，算 1 次；同一局只算 1 次'
+        - '§8可选目标：完成也给 15 余烬徽，但不算进「全部完成」'
+        - ''
+        - '§e➥ §f点击：打开冒险页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_adventure'
+
+  g:
+    update: 40
+    display:
+      material: blaze powder
+      name: '§c余烬连战最快'
+      lore:
+        - ''
+        - '§7本周：'
+        - '§f 1. %corerpg_p1_sboard_w_time_rush_1%'
+        - '§f 2. %corerpg_p1_sboard_w_time_rush_2%'
+        - '§f 3. %corerpg_p1_sboard_w_time_rush_3%'
+        - '§7你：§f%corerpg_p1_srank_w_time_rush%'
+        - ''
+        - '§7本赛季：'
+        - '§f 1. %corerpg_p1_sboard_s_time_rush_1%'
+        - '§f 2. %corerpg_p1_sboard_s_time_rush_2%'
+        - '§f 3. %corerpg_p1_sboard_s_time_rush_3%'
+        - '§7你：§f%corerpg_p1_srank_s_time_rush%'
+        - '§8每周 1 次，从第一个首领现身算到第三个倒下'
+        - ''
+        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season week'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 season season'
 
   a:
     update: 40
