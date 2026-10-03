@@ -13,4 +13,4 @@ ember_p1_fail:
   action-script:
     - condition: []
       true:
-        - "$end{type=text;text=§c本局失败（已开战不退体力）;reward=false;delay=3;end-type=FAILURE} @dungeon"
+        - "$end{type=text;text=§c本局失败，即将返回;reward=false;delay=3;end-type=FAILURE} @dungeon"

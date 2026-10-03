@@ -39,7 +39,7 @@ dungeon-game-un-revive: "&6[队伍] &f倒下后不能自己复活：主线本等
 dungeon-game-settlement: "&6[队伍] &f地牢正在结算..."
 dungeon-quit-number-limit: "&7本局地牢队伍玩家§f离线次数§7已超过§f{0}§7次,队员§f{1}§7重新登陆将处于§f死亡状态"
 dungeon-game-death: "&6[队伍] &f你已倒下"
-dungeon-game-death-timeout-wait: "&6[队伍] &f&f队内所有玩家均已死亡,超过 §6{0} §f秒队内无人复活则挑战失败"
+dungeon-game-death-timeout-wait: "&6[队伍] &f全员倒下"
 dungeon-game-death-timeout: "&6[队伍] &f&f超过 §6{0} §f秒队内无人复活,系统自动判定为挑战失败"
 dungeon-game-team-operation: "&6[队伍] &f&f正在地牢内无法进行队伍操作"
 
