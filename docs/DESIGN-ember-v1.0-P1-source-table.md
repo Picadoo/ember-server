@@ -1328,3 +1328,21 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 代码 | EmberSeason `target` / `proratedTarget` / `markGraduated`（`p3_grad`）；EmberRunService `endOfP1`、`joinButtons`；ember_p1_season 一行 |
 | 参数源 | ember-v1-runs.yml（两份）balance_version 19、`weekly_goals:` 注释 |
 | 测试 | 单测 `bountyGoalIsProratedInTheGraduationWeek_D134`；FreshQ20 进服按钮有 [外观商店] |
+
+### 13.61 深渊层费不调（D135）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 第 8～10 层费 400 / 440 / 480、每阶保留 8 枚印记、`fee_mark_coin: 200` 都不动；第 10 层反复打是后期花币出口（用户 10-03 09:51） |
+| 代码 | 无 |
+| 参数源 | ember-v1-runs.yml 不变（balance_version 19） |
+| 测试 | p2econ `out-p2econ-recheck5-*.md`：0.7 档第 12 周 100% 到第 10 层 |
+
+### 13.62 外观商店返回键（CoreRpg 1.55.0，D136）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 返回键回到打开商店的那一页（装备页 / 赛季页），从聊天栏或命令打开就关闭商店 |
+| 代码 | EmberCosmetics `shop`（`from` / `back`）、`FROM` / `FROM_MENUS` / `backLabel`、PAPI `p1_shopback`；EmberSeason 称号列表按钮；ember_p1_gear / ember_p1_season [43]、ember_p1_shop 返回键 |
+| 参数源 | 无 |
+| 测试 | 单测 `shopBackGoesToTheOpeningPage_D136`；FreshQ27 三个入口都回对了 |
