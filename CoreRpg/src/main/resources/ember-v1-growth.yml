@@ -51,9 +51,9 @@ talents:
       row: 1
       name: "回身斩"
       family: burst
-      mods: {dodge_dmg: 1.03, dodge_secs: 3, taken_tele: 1.025}
-      good: "躲开首领预警招后 3 秒内伤害 +3%"
-      bad: "被首领预警招打中多受 2.5%"
+      mods: {dodge_dmg: 1.02, dodge_secs: 3, taken_tele: 1.02}
+      good: "躲开首领预警招后 3 秒内伤害 +2%"
+      bad: "被首领预警招打中多受 2%"
     - id: t1b
       row: 1
       name: "稳桩"
@@ -96,9 +96,9 @@ talents:
       name: "燎原"
       family: scorch
       set: scorch
-      mods: {burn_spread: 1, spread_icd: 15, burn_mult: 0.95}
+      mods: {burn_spread: 1, spread_icd: 15, burn_mult: 0.94}
       good: "燃烧中的敌人倒下时，把最多 1 秒燃烧传给 4 格内最近的敌人（15 秒一次）"
-      bad: "焚烬燃烧每跳伤害 ×0.95"
+      bad: "焚烬燃烧每跳伤害 ×0.94"
     - id: t3b
       row: 3
       name: "反震"
@@ -112,9 +112,9 @@ talents:
       name: "扛核"
       family: sustain
       set: sustain
-      mods: {share_w: 2, share_taken: 0.90, sustain_mult: 0.99}
-      good: "烬核分摊时你算 2 份（队友少扛），你那份再 -10%"
-      bad: "你自己扛的烬核变多（2 份 ×0.9 = 1.8 份）；炽愈回复量 ×0.99"
+      mods: {share_w: 1.5, sustain_mult: 0.99}
+      good: "烬核分摊时你算 1.5 份（队友少扛）"
+      bad: "你自己扛的烬核变多（1.5 份）；炽愈回复量 ×0.99"
 
 # ---------------------------------------------------------------- D142 余烬勋记
 # 账号永久、自动解锁；条件全是已有的一次性成就。效果以经济 / 便利为主，战斗类只有「深渊里受伤」（只在深渊）。
@@ -151,5 +151,5 @@ reroll:
       - {id: b_split, code: 3, name: "拆分", key: dmg_split, desc: "对分身伤害", values: [1.05, 1.10, 1.15, 1.20]}
     charm:
       - {id: c_tele, code: 4, name: "稳桩", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
-      - {id: c_share, code: 6, name: "分核", key: share_taken, desc: "烬核自己那份", values: [0.98, 0.96, 0.94, 0.92]}
+      - {id: c_share, code: 6, name: "分核", key: share_taken, desc: "烬核自己那份", values: [0.99, 0.98, 0.97, 0.96]}
       - {id: c_affix, code: 7, name: "抗缀", key: taken_affix, desc: "受到词缀精英伤害", values: [0.96, 0.92, 0.88, 0.84]}

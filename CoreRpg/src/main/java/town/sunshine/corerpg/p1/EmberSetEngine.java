@@ -85,7 +85,7 @@ public final class EmberSetEngine {
 
     public Tune tune() { return tune; }
 
-    /** D141 借势: a dodged boss telegraph moves the 烬爆 counter forward by {@code n} swings (capped at the interval). */
+    /** D141 反震 (and the unused dodge_burst key): a boss telegraph moves the 烬爆 counter forward by {@code n} swings (capped at the interval). */
     public boolean primeBurst(int n) {
         if (!"burst".equals(family) || n <= 0) return false;
         counter = Math.min(every(), counter + n);
