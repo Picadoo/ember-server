@@ -20,4 +20,4 @@
 ## 备注
 
 - FreshG01 在 04:16–04:18 已做过 craft（badge_moon / pet_lamp）和一次 exchange_badge；本窗用 FreshG03 把 craft + spark + coin/badge exchange + 日上限一并复核。
-- 下次扭蛋测试号：**FreshG04**。CoreRpg 侧仍 **FreshQ43**。
+- 下次扭蛋测试号：**FreshG04**。CoreRpg 侧下次 **FreshQ44**（FreshQ43 = 限时清房花样委托 PASS）。
