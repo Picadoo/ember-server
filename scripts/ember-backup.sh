@@ -4,7 +4,7 @@
 #      verify: gunzip -t, CREATE TABLE count == live base-table count, cr_p1_item rows in the dump ≈ live COUNT(*)
 #   2. vanilla player files → tar.gz           $ROOT/files-hourly/files-<ts>.tar.gz
 #      (every world's playerdata/stats/advancements on the play + login servers = inventory, armor, offhand, ender
-#       chest; CoreRpg players/ p1-runs/ snapshots/; AuthMe data (not its config); DungeonPlus / TrMenu sqlite)
+#       chest; CoreRpg players/ p1-runs/ snapshots/ invsnap-pending.yml; AuthMe data (not its config); DungeonPlus / TrMenu sqlite)
 #      verify: tar -tzf lists the archive and it holds ≥ 1 playerdata .dat
 #   3. first verified pair of each day → $ROOT/daily/ and $ROOT/files-daily/, plus a second copy outside the repo
 #      ($COPY, default /home/box/ember-db-backups/{daily,files-daily})
@@ -72,7 +72,7 @@ LIST="$(mktemp)"
       for sub in playerdata stats advancements; do [ -d "$w$sub" ] && echo "$w$sub"; done
     done
   done
-  for p in plugins/CoreRpg/players plugins/CoreRpg/p1-runs plugins/CoreRpg/snapshots \
+  for p in plugins/CoreRpg/players plugins/CoreRpg/p1-runs plugins/CoreRpg/snapshots plugins/CoreRpg/invsnap-pending.yml \
            plugins/DungeonPlus/data.db plugins/TrMenu/data.db plugins/TrMenu/data.db-wal plugins/TrMenu/global.db plugins/TrMenu/global.db-wal \
            login-runtime/plugins/AuthMe/authme.db login-runtime/plugins/AuthMe/playerdata; do
     [ -e "$p" ] && echo "$p"

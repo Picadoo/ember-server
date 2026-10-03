@@ -108,4 +108,4 @@ secrets/mysql-ember.env.example   数据库凭据模板（真实 secrets/mysql-e
 ## 相关文档
 
 - `docs/如何创建-Grok-Bot专岗.md`：换账号后如何重建余烬服多 bot 产线（提示词模板）。
-- `docs/status/STATUS.md`：当前进度总览；`docs/design/DESIGN-ember-mysql-network.md`：登录服/游玩服/MySQL 拓扑。
+- `docs/status/STATUS.md`：当前进度总览；`docs/design/DESIGN-ember-data-protection.md`：玩家数据保护（每小时备份、恢复脚本、数据库断线守卫、背包快照 `/corerpg invsnap`）；`docs/design/DESIGN-ember-mysql-network.md`：登录服/游玩服/MySQL 拓扑。
