@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128)
-balance_version: 18
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134)
+balance_version: 19
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 # Endgame #6 (D128, balance_version 18, user 2026-10-03 07:07): the first failed challenge / abyss run of the stamina day
@@ -82,6 +82,8 @@ season:
 # daily bounty's last step was reached. Each finished goal pays `reward` 余烬徽, all of them `bonus` more. 余烬徽 only
 # buys cosmetic-shop items (1 徽 = 1 shop point = 50 币 of list price): no coin, no marks, no items (book §23.3).
 # Model: tools/p1sim/p2econ.py --goals (what the goals make players do; the reward itself cannot move the chase).
+# Recheck #8 (D134, balance_version 19): in the week of the own Q07 first clear the bounty target is prorated to the days
+# left (graduation day included: Saturday 2, Sunday 1); later weeks use the full target. Cosmetic-only reward (余烬徽).
 weekly_goals:
   targets: {featured: 1, abyss: 3, raid: 1, bounty: 3}
   reward: 15

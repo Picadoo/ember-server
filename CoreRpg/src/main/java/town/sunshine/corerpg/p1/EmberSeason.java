@@ -40,6 +40,7 @@ public final class EmberSeason {
     public static final String C_GOAL = "p3_goal_";       // + goal id, period = week key: progress
     public static final String C_GOALPAY = "p3_goalpay_"; // + goal id | "all", period = week key: paid flag
     public static final String C_BADGE = "p3_badge";      // period "all": 余烬徽 balance
+    public static final String C_GRAD = "p3_grad";        // period "all": epoch day of the own Q07 first clear (D134)
     public static final String C_AWARD = "p3_season_";    // + award id, period "all": times earned
     public static final String C_AWARD_LAST = "p3_seasonlast_"; // + award id, period "all": last season number
     public static final List<String> GOALS = Collections.unmodifiableList(Arrays.asList("featured", "abyss", "raid", "bounty"));
@@ -348,13 +349,36 @@ public final class EmberSeason {
 
     public boolean goalsOn() { return !maps().goalTargets.isEmpty(); }
 
+    /**
+     * Recheck #8 (D134): the bounty goal ("做满每日委托 N 天") in the week of the Q07 first clear only asks for the days
+     * left that week, the graduation day included (Saturday → 2, Sunday → 1); later weeks ask for the full target.
+     */
+    public int target(PlayerData d, String goal) {
+        int t = target(goal);
+        if (t <= 0 || d == null || !"bounty".equals(goal)) return t;
+        int gd = d.periodCount(C_GRAD, "all");
+        if (gd <= 0) return t;
+        LocalDate g = LocalDate.ofEpochDay(gd);
+        return weekKey(g).equals(weekKey(today())) ? proratedTarget(t, g.getDayOfWeek().getValue()) : t;
+    }
+
+    /** D134: days from the graduation weekday (1 = Monday … 7 = Sunday) to Sunday, inclusive, capped by the target */
+    static int proratedTarget(int target, int gradDow) {
+        return Math.max(1, Math.min(target, 8 - gradDow));
+    }
+
+    /** D134: remember the graduation day once (called on the real Q07 first clear) */
+    void markGraduated(PlayerData d) {
+        if (d != null && d.periodCount(C_GRAD, "all") == 0) d.addPeriodCount(C_GRAD, "all", (int) today().toEpochDay());
+    }
+
     public int progress(PlayerData d, String goal) { return d == null ? 0 : d.periodCount(C_GOAL + goal, weekKey(today())); }
 
     public static int badges(PlayerData d) { return d == null ? 0 : d.periodCount(C_BADGE, "all"); }
 
     public int goalsDone(PlayerData d) {
         int n = 0;
-        for (String g : GOALS) if (target(g) > 0 && progress(d, g) >= target(g)) n++;
+        for (String g : GOALS) if (target(d, g) > 0 && progress(d, g) >= target(d, g)) n++;
         return n;
     }
 
@@ -384,7 +408,7 @@ public final class EmberSeason {
 
     /** settlement hook: n more toward goal g this week; pays when it completes */
     void addGoal(UUID u, PlayerData d, String g, int n) {
-        int t = target(g);
+        int t = target(d, g);
         if (d == null || t <= 0 || n <= 0 || !runs.progressFlag(d, "q07")) return;
         String wk = weekKey(today());
         int before = d.periodCount(C_GOAL + g, wk);
@@ -410,10 +434,10 @@ public final class EmberSeason {
     }
 
     public String goalLine(PlayerData d, String g) {
-        int t = target(g);
+        int t = target(d, g);
         if (t <= 0) return "";
         int v = Math.min(t, progress(d, g));
-        return (v >= t ? "§a✔ " : "§e") + goalName(g) + " §f" + v + "/" + t + (v >= t ? "" : " §7· 完成得 " + maps().goalReward + " 余烬徽");
+        return (v >= t ? "§a✔ " : "§e") + goalName(g) + " §f" + v + "/" + t + (t < target(g) ? " §8（毕业这周按剩下的天数）" : "") + (v >= t ? "" : " §7· 完成得 " + maps().goalReward + " 余烬徽");
     }
 
     /** /corerpg p1 goals: progress + one [打开] button per open goal */
@@ -424,10 +448,10 @@ public final class EmberSeason {
         int left = (int) (7 - (t.getDayOfWeek().getValue() - 1));
         p.sendMessage(P + "§6本周目标§7（周一 0 点刷新，还剩 " + left + " 天）· 完成 " + goalsDone(d) + "/" + goalCount() + " · 余烬徽 §f" + badges(d));
         if (!runs.progressFlag(d, "q07")) { p.sendMessage(P + "§8首通 Q07 后才计数（挑战版、深渊、团本都在 Q07 之后）。"); return true; }
-        p.sendMessage(P + "§8首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算");
+        p.sendMessage(P + "§8首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算；毕业那周的委托目标按剩下的天数算（周六毕业要 2 天，周日 1 天）");
         for (String g : GOALS) {
             if (target(g) <= 0) continue;
-            boolean done = progress(d, g) >= target(g);
+            boolean done = progress(d, g) >= target(d, g);
             net.md_5.bungee.api.chat.TextComponent line = new net.md_5.bungee.api.chat.TextComponent(P + goalLine(d, g) + " ");
             if (!done) {
                 net.md_5.bungee.api.chat.TextComponent b = new net.md_5.bungee.api.chat.TextComponent("§b[打开]");

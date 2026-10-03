@@ -1236,6 +1236,7 @@ public final class EmberRunService implements Listener {
         p.sendMessage(P + "§e挑战版按 T3 装备来调。§7刚首通：先用 T3 印记兑换（或升阶）把刃换到 T3，再到工坊「互换」免费把强化挪过去；"
                 + "七张挑战图强度相同，只是掉落偏向的族 / 部位不同。");
         PlayerData d = data(p.getUniqueId());
+        if (season != null) { season.markGraduated(d); flushData(p.getUniqueId()); } // D134: the bounty goal is prorated in the graduation week
         if (season != null && season.goalsOn()) {
             // F-review #8: today's daily bounty counts for the week even when it was finished before the Q07 clear
             List<EmberRunRules.BountyTier> tiers = bountyTiers();

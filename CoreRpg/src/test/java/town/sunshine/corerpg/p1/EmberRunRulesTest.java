@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(18, m.balanceVersion);                // D128
-        assertEquals("g04-1/b18", m.ruleVersion);
+        assertEquals(19, m.balanceVersion);                // D134
+        assertEquals("g04-1/b19", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -933,5 +933,12 @@ public class EmberRunRulesTest {
         assertSame("ties keep the new piece", fresh, EmberRunRules.bestCandidate(t, fresh, java.util.Arrays.asList(piece("scorch", "blade", 3, 0, 0)), active, null, 30));
         assertTrue(EmberRunRules.betterThan(t, bagGood, fresh, 30));
         assertFalse(EmberRunRules.betterThan(t, fresh, bagGood, 30));
+    }
+
+    @Test public void bountyGoalIsProratedInTheGraduationWeek_D134() {
+        assertEquals(3, EmberSeason.proratedTarget(3, 1)); // Monday
+        assertEquals(3, EmberSeason.proratedTarget(3, 5)); // Friday: Fri, Sat, Sun
+        assertEquals(2, EmberSeason.proratedTarget(3, 6)); // Saturday
+        assertEquals(1, EmberSeason.proratedTarget(3, 7)); // Sunday
     }
 }
