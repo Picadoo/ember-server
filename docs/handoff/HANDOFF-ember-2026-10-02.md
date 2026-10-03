@@ -1,4 +1,4 @@
-# 余烬服 · 交接（2026-10-04 03:55 CST 更新）
+# 余烬服 · 交接（2026-10-04 04:52 CST 更新）
 
 这份文档写给接手的人，读完就能接着做。设计正文在 `docs/design/design-ember-v1.0-P1.md`（下文称「书」）。P2 草案在 `docs/design/design-ember-v1.1-P2-draft.md`。所有裁决记在源表 `docs/design/DESIGN-ember-v1.0-P1-source-table.md`（§13.x，D01–D150）。
 
@@ -9,7 +9,7 @@
 | 仓库 | `Picadoo/ember-server`，main 分支。工作树 `/workspace/ember-p1`（分支 p1-g01，推到 main）。服务器在 `/workspace/minecraft` 跑，这是 main 的检出 |
 | CoreRpg | **1.62.0 线上**（10-04 04:03 CST 部署，日志 `MySQL connected`、`cr_p1_gearlib ready`、`cr_inv_snapshot ready`；包含 D150 连战失败行修复，04:05 实测在第一个首领现身后倒下时提示「本周的连战次数已用」；另外新增 P1 材料仓库 + 装备库、背包快照 `/corerpg invsnap`、数据库断线守卫 DbGuard，见 `docs/design/DESIGN-ember-data-protection.md`。**构建必须用 `JAVA_HOME=/workspace/minecraft/tools/jdk8u504-b01`**：用 JDK 21 编出来的包调用了 `Math.floorDiv(long,int)`，在服务器上会报 NoSuchMethodError；1.61.0 是 10-04 03:19 CST 部署，日志 `MySQL connected`：D144 花样委托 / 烬核同心 / 余烬连战 + 评审 10-04 Part D 整改 D145–D149，P2 草案 §5zb，p2econ 表 `tools/p1sim/out-p2econ-d144.md`；**main 上已有 D150 源码修复（连战失败行说错次数），还没部署，下次部署升 1.61.1**；1.60.1 = Part A 管理员钩子 `p1 honor test` / `p1 givedup`；1.60.0（10-03 18:23 CST）：D141 天赋专精 + D142 余烬勋记 + D143 词条洗练，P2 草案 §5za，参数 `ember-v1-growth.yml`，终验表 `tools/p1sim/out-growth-d141-d143.md`；1.59.0 = D140 七个主线首领各加一招 + D138 词缀精英改 +2 碎片；1.58.0 = D138 重复刷图花样 + D139 国庆活动；`CoreRpg/pom.xml` 第 8 行和 `plugin.yml` `version:` 一起改） |
 | balance_version | 25（`ember-v1-runs.yml`；25 = D144 余烬连战 `rush:` + 花样委托 `ember-v1.yml` `bounty.variety:` + 烬核同心 `weekly_goals.targets.core`，D146 国庆币剩余兑换（`ember-v1-festival.yml` `memo:` / `badge:`），D148 洗练锁定 `lock_shard`，D149 活动首领预警 1.2；24 = D141–D143 横向成长 `ember-v1-growth.yml`（天赋 / 勋记 / 词条，参考装上都是侧向取舍）；23 = D140 Q01–Q07 首领各加一招有预警的新招、主招放慢抵消（Q01 踏地接在重斩后、半血才有）；22 = D139 国庆限时活动 gq26 + 活动护符位（参数全在 `ember-v1-festival.yml`）；21 = D138 重复刷图花样 `variety:`（已首通的普通版：词缀精英 +3 碎片、30 秒限时清房 +1 核心）；20 = D137 团本 R03 `raids.r03`（烬核分摊）；19 = D134 毕业那周的周目标「委托 3 天」按剩下的天数算（周六 2、周日 1，`weekly_goals:` 上的注释，代码 `EmberSeason.target`）；18 = D128 每天第一次挑战 / 深渊失败退一半体力 `fail_refund: 0.5`；17 = D123 赛季深潜者改第 5 层 `season.deep_tier: 5`、D124 深渊层费可用多余 T3 印记抵 `abyss.fee_mark_coin: 200`、D122 Q04 `rails` + `fall_catch_y`；16 = D116 赛季 `season:`、D117 周目标 `weekly_goals:`、D118 团本最后阶段复活 `raid_revive:`（首领 ≤20% 且有人倒下，20 秒后复活一次）；15 = D109 深渊第 1 层 = 挑战版、线性到第 10 层（不变）、成色跟强度、第 8～10 层费 400/440/480；D110 Q02 首通 = 一次免费定向兑换（自选族 + 部位 T1）；14 = D108 精选图首通后重打普通版 +1 枚该图阶印记，与挑战版精选加成共用 3 次/周；13 = D104 挑战版减压 + 深渊层表换算 + T3 升阶减半 + Q05 首通加币） |
-| CoreGacha | **1.0.0 线上**（10-04 04:17 CST，日志 `[CoreGacha] [db] MySQL connected` + `[bridge] CoreRpg API ok`）：外观扭蛋，只出外观、零属性，券只从游戏里得（见面 5 张、每天在线 30 / 90 分钟、主线结算 1 / 3 局、余烬币 1200 / 余烬徽 20 换 1 张每天 5 张、NI 实物券 `ember_gacha_ticket`），每天最多 50 抽。设计 `docs/design/DESIGN-ember-gacha.md`，离线百万抽 `docs/tests/TEST-gacha-sim-2026-10-04.md`，冒烟 `docs/tests/smoke-gacha-2026-10-04.md`。表 `gacha_*` 在 ember 库（用 CoreRpg 的 MySQL 凭据），CoreRpg 外观商店的件通过反射调 CoreRpg 公开 API 发（`p2_cosbuy_<id>@all`），**CoreRpg 源码没动** |
+| CoreGacha | **1.0.0 线上**（10-04 04:17 CST，日志 `[CoreGacha] [db] MySQL connected` + `[bridge] CoreRpg API ok`）：外观扭蛋，只出外观、零属性，券只从游戏里得（见面 5 张、每天在线 30 / 90 分钟、主线结算 1 / 3 局、余烬币 1200 / 余烬徽 20 换 1 张每天 5 张、NI 实物券 `ember_gacha_ticket`），每天最多 50 抽。设计 `docs/design/DESIGN-ember-gacha.md`，离线百万抽 `docs/tests/TEST-gacha-sim-2026-10-04.md`，冒烟 `docs/tests/smoke-gacha-2026-10-04.md` + craft/spark/exchange `docs/status/STATUS-ember-gacha-craft-spark-smoke.md`（FreshG03 PASS）。表 `gacha_*` 在 ember 库（用 CoreRpg 的 MySQL 凭据），CoreRpg 外观商店的件通过反射调 CoreRpg 公开 API 发（`p2_cosbuy_<id>@all`），**CoreRpg 源码没动** |
 | 模式 | P1 是默认模式（D61–D65），旧玩法藏在 `ember_hub_legacy`。**不要关 P1** |
 | 菜单 | TrMenu 共 59 个（10-04 CoreGacha 加了 `ember_gacha` / `_rates` / `_history` / `_shop` / `_reveal`，由 `CoreGacha/tools/genmenus.py` 生成，主菜单 `ember_hub` 第 34 格是入口；D141–D143 加了 `ember_p1_spec` / `ember_p1_honor` / `ember_p1_reroll`；D139 加了 `ember_p1_fest`），`trmenu reload` 就能重载 |
 | 套件 | `mineflayer-tests` gameplay 9/9（1.61.0，10-04 03:41；主菜单检查认合并后的「团本 · R01–R03」「成长 · 天赋 / 勋记 / 洗练」；「天赋专精」不算旧版「天赋」；钓鱼偶尔随机失败，重跑即过） |
@@ -91,9 +91,10 @@
 
 - **外观扭蛋（CoreGacha 1.0.0，10-04）**：
   - 管理员：`/gacha admin give-tickets|give-shards <玩家> <n>`、`inspect <玩家>`、`simulate <池> <n>`、`failnext <玩家>`（测试：下一次 CoreRpg 发放失败 → 整批回滚退券）、`reload`。所有券 / 光屑变动都在 `gacha_ledger`，每一抽在 `gacha_pull`。
-  - 测试号 FreshG01（有 1880 光屑、余烬灯灵宠物、锦鲤灵等，今天抽了 41 次）、FreshG02（只进过服）；**下次从 FreshG03 起**（`Fresh` 前缀已不上榜）。
+  - 测试号 FreshG01（有 1880 光屑、余烬灯灵宠物、锦鲤灵等）、FreshG02（只进过服）、**FreshG03**（04:51 craft/spark/exchange 冒烟）；**下次从 FreshG04 起**（`Fresh` 前缀已不上榜）。
   - 已知限制：主扭蛋页把两个池写死（下个季节换限定池要改 `gacha.yml` 再跑 genmenus）；扭蛋称号只在聊天显示（不改头顶名牌，免得和 CoreRpg 的称号打架）；宠物只在主城 `ember_hub`；硬保底 80 实际几乎碰不到（每件传说 0.00079%，软保底从第 61 抽起很快就出）；CoreRpg 外观「已拥有」是快照，发放时再查一次。
-  - 没测：在线 / 主线结算发券（真时长）、火花兑换、10-08 限定结束后剩余火花折光屑（第一次到点后看 `gacha_ledger` 的 `spark_leftover`）。
+  - **已冒烟（10-04 04:51，FreshG03，未重启）**：光屑兑换 `/gacha craft`、火花兑换 `/gacha spark`（含已拥有拒绝不扣火花）、币/徽换券 `/gacha exchange coin|badge`、每日换券上限 5；见 `docs/status/STATUS-ember-gacha-craft-spark-smoke.md`。先前 FreshG01 也过了 craft + exchange_badge（`docs/tests/smoke-gacha-2026-10-04.md`）。
+  - 没测：在线 / 主线结算发券（真时长）；10-08 限定结束后剩余火花折光屑（第一次到点后看 `gacha_ledger` 的 `spark_leftover`，勿为测而改 gq26 全服日期）。
 
 - **新内容批 10-04 + Part D（D144–D150，1.61.0）**：设计 / 验收在 P2 草案 §5zb，源表 13.70–13.72。
   - p2econ 两件极品最快（600 人 12 周，关 / 开）+0.25 / −0.06 / −0.03 周，通过，没砍奖励。
@@ -135,7 +136,7 @@
 - **D106 已知限制**：团本倒下后 `/dp leave` 10 秒内输两次仍然能走（算放弃，不复活不结算）；断线走 DP 的离线保护。复活点是「下一个房间开打 / 首领现身 / 首领转阶段」，D118 起首领所有转阶段之后降到 20% 以下、有人倒下时，20 秒后再复活一次（每局一次）。
 - **交易**：D73 否决开市，只有规则。
 - 旧玩法试玩遗留：`docs/reviews/PLAYTEST-2026-10-01-newplayer.md` 的「未解决问题」，P1 默认模式下大多已经不在主路上。
-- 日志噪音很小。MythicMobs `ExampleItems.yml` 里的 `GOLDEN_HELMET` 在 1.12 不存在，没修。
+- 日志噪音很小。MythicMobs `ExampleItems.yml` 的 `GOLDEN_HELMET`→`GOLD_HELMET`（1.12）已在 **822468e** 修过。
 - 剩下的候选：
   - 精选周规则可以再加几条，比如计时或黑暗（没做的原因见 P2 草案 §5e）。
   - 主城氛围：书 §1 只要求「一句背景」。
