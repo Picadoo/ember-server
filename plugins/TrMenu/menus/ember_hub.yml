@@ -14,9 +14,9 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - 'Ln o p F '
-  - 'Tm X k iV'
-  - ' R c Y dW'
-  - ' ZA G h j'
+  - 'Tm X k i '
+  - ' R c Y d '
+  - '  A G   j'
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -24,61 +24,50 @@ Events:
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
-  # D142 余烬勋记 / D143 词条洗练（返回键回到主菜单）
-  V:
-    update: 20
-    display:
-      material: gold ingot
-      name: '§6余烬勋记'
-      lore:
-        - '%corerpg_p1_honor_n%'
-        - '§7一次性成就换来的账号永久小加成（有总上限）'
-        - ''
-        - '§e➥ §f打开勋记页'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - close
-        - 'command: corerpg p1 honor from hub'
-  W:
-    update: 20
-    display:
-      material: anvil
-      name: '§6词条洗练'
-      lore:
-        - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
-        - '§7护符：%corerpg_p1_reroll_charm_cur%'
-        - ''
-        - '§e➥ §f打开洗练页'
-    actions:
-      all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - close
-        - 'command: corerpg p1 reroll from hub'
-  # D141 天赋专精（装备页也有入口；返回键回到这里）
+  # D141–D143 成长（D147：天赋 / 勋记 / 洗练合成一格；装备页的三个入口保留，各页返回键回到这里）
   T:
     update: 20
     display:
       material: enchanted book
-      name: '§6天赋专精'
+      name: '§6成长 · 天赋 / 勋记 / 洗练'
       lore:
-        - '%corerpg_p1_spec_pts%'
-        - '§7按进度得专精点，三排各选一个打法取舍'
+        - '§7天赋：%corerpg_p1_spec_pts%'
+        - '§7勋记：%corerpg_p1_honor_n%'
+        - '§7洗练：刃 %corerpg_p1_reroll_blade_cur% §7· 护符 %corerpg_p1_reroll_charm_cur%'
         - ''
-        - '§e➥ §f打开天赋页'
+        - '§7三样都是打法取舍和小加成，不是变强；装备的阶、成色、强化才是主线'
+        - ''
+        - '§e➥ §f左键：天赋 · 右键：勋记 · Shift+左键：洗练'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 spec from hub'
-  # D139 国庆限时活动（活动期间才亮；时间来自 ember-v1-festival.yml，PAPI %corerpg_p1_fest_open%）
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 honor from hub'
+      shift_left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 reroll from hub'
+  # D139 国庆限时活动（时间来自 ember-v1-festival.yml，PAPI %corerpg_p1_fest_open%）。D145：活动结束后这一格变成
+  # 「国庆纪念」入口（烟火符常驻商店 + 剩余国庆币兑换），不再是一块无名灰玻璃
   L:
     icons:
       - condition: 'check papi %corerpg_p1_fest_open% < 1'
         priority: 1
         display:
-          material: stained glass pane
-          name: '§8 '
+          material: firework charge
+          name: '§6国庆纪念 · 烟火符常驻商店'
+          lore:
+            - ''
+            - '§7%corerpg_p1_fest_window% · %corerpg_p1_fest_state%'
+            - '§7「盛世烟火符」常驻出售：§f%corerpg_p1_fest_charm_price%'
+            - '§7剩下的国庆币（背包 §f%corerpg_p1_fest_coins%§7）：换纪念称号 / 余烬徽（有上限）/ 足迹'
+            - '§8装备页也有烟火符入口'
+            - ''
+            - '§e➥ §f打开活动页'
     update: 20
     display:
       material: firework
@@ -94,74 +83,6 @@ Icons:
       all:
         - 'sound: ENTITY_FIREWORK_LAUNCH-1-1'
         - 'menu: ember_p1_fest'
-  h:
-    icons:
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
-        priority: 1
-        display:
-          material: stained glass pane
-          name: '§8 '
-    update: 20
-    display:
-      material: diamond chestplate
-      name: '§b团本 · 霜封哨所·团（3～5 人）'
-      lore:
-        - ''
-        - '§7状态：§f%corerpg_p1_raid_r02%'
-        - '§7Q06 的地图 · 首领双段刀气 + 追身冲击圈；半血进入第二阶段（砸地接横扫）'
-        - '§7战斗规则和三套装不变；通关得专属称号与足迹（只做展示）'
-        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
-        - '§7倒下后观战队友；下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次；全员倒下才算失败'
-        - '§7结算同锈轨矿道·团：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
-        - '§7与锈轨矿道·团、断塔回廊·团合计每周 3 次'
-        - '§a人越多越稳：第 2 周 3 人约 5 成、5 人约 8 成；第 4 周 3 人约 7 成、4～5 人 9 成以上'
-        - '§7招募中：§f%corerpg_p1_recruits%'
-        - ''
-        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
-        - '§e➥ §f右键：全服招募队员（挂 10 分钟）'
-    actions:
-      left:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg p1 enter r02'
-        - close
-      right:
-        - 'sound: UI_BUTTON_CLICK-1-1'
-        - 'command: corerpg p1 recruit r02'
-        - close
-  Z:
-    icons:
-      - condition: 'check papi %corerpg_p1_q07done% < 1'
-        priority: 1
-        display:
-          material: stained glass pane
-          name: '§8 '
-    update: 20
-    display:
-      material: golden chestplate
-      name: '§6团本 · 断塔回廊·团（3～5 人）'
-      lore:
-        - ''
-        - '§7状态：§f%corerpg_p1_raid_r03%'
-        - '§7Q05 的地图 · 首领斧刃横扫 + 径向冲击；招牌机制「烬核」：绿圈锁定一人，3 秒后圈里的人平分伤害——全队靠拢！'
-        - '§7战斗规则和三套装不变；通关得专属称号与足迹（只做展示）'
-        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
-        - '§7倒下后观战队友；下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次；全员倒下才算失败'
-        - '§7结算同锈轨矿道·团（偏向族焚烬）：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
-        - '§7与锈轨矿道·团、霜封哨所·团合计每周 3 次'
-        - '§a人越多越稳：第 2 周 3 人约 5 成、5 人约 9 成；第 4 周 3 人约 7 成半、4～5 人 9 成以上'
-        - '§7招募中：§f%corerpg_p1_recruits%'
-        - ''
-        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
-        - '§e➥ §f右键：全服招募队员（挂 10 分钟）'
-    actions:
-      left:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg p1 enter r03'
-        - close
-      right:
-        - 'sound: UI_BUTTON_CLICK-1-1'
-        - 'command: corerpg p1 recruit r03'
-        - close
   n:
     update: 20
     display:
@@ -244,6 +165,7 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_abyss'
+  # D147（评审 10-04 #7）：三张团本合成一格，点进冒险页选图；每张的规则、通关率、招募按钮都在冒险页
   G:
     icons:
       - condition: 'check papi %corerpg_p1_q07done% < 1'
@@ -254,30 +176,20 @@ Icons:
     update: 20
     display:
       material: iron chestplate
-      name: '§6团本 · 锈轨矿道·团（3～5 人）'
+      name: '§6团本 · R01–R03（3～5 人）'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_raid_r01%'
-        - '§7Q07 的地图与首领招式组合（重砸 / 冲撞 / 斧刃横扫 + 半血增援）'
-        - '§7与霜封哨所·团、断塔回廊·团合计每周 3 次'
-        - '§7战斗规则和三套装不变；通关得专属称号与足迹（只做展示）'
-        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
-        - '§7倒下后观战队友；下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次；全员倒下才算失败'
-        - '§7结算：挑战版固定结算 + 1 件你目标族的 T3（至少精良）+ 1 枚 T3 印记'
-        - '§a人越多越稳：第 2 周 3 人约 5 成、5 人约 8 成；第 4 周 3 人约 7 成、4～5 人 9 成以上'
+        - '§7锈轨矿道·团：§f%corerpg_p1_raid_r01%'
+        - '§7霜封哨所·团：§f%corerpg_p1_raid_r02%'
+        - '§7断塔回廊·团：§f%corerpg_p1_raid_r03%'
+        - '§7三张合计每周 3 次 · 倒下可复活 · 人越多越稳'
         - '§7招募中：§f%corerpg_p1_recruits%'
         - ''
-        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
-        - '§e➥ §f右键：全服招募队员（挂 10 分钟）'
+        - '§e➥ §f打开冒险页选团本（规则 / 通关率 / 招募）'
     actions:
-      left:
+      all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg p1 enter r01'
-        - close
-      right:
-        - 'sound: UI_BUTTON_CLICK-1-1'
-        - 'command: corerpg p1 recruit r01'
-        - close
+        - 'menu: ember_p1_adventure'
   F:
     display:
       material: book and quill

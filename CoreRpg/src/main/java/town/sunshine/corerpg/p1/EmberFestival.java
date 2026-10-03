@@ -77,6 +77,10 @@ public final class EmberFestival implements Listener {
     int targets = 3, priceEvent = 60, afterCoin = 15000, afterBadge = 300;
     String titleId = "", titleLabel = "", trailId = "", trailLabel = "";
     int trailPrice = 30;
+    /** D146 leftover-coin exchange: title id / label / price, 余烬徽 rate + per-character cap, trail after the event */
+    String memoId = "", memoLabel = "";
+    int memoPrice = 0, badgeRate = 0, badgeCap = 0;
+    boolean trailAfter;
     double dropChance = 0.25;
     int dropElite = 2, dropTreasure = 3, clearBonus = 10;
     String dungeonKey = "";
@@ -145,6 +149,15 @@ public final class EmberFestival implements Listener {
         trailId = str(tr.get("id"), "");
         trailLabel = str(tr.get("label"), "");
         trailPrice = (int) num(tr.get("price_event"), 30);
+        Map<?, ?> ex = map(root.get("exchange"));
+        Map<?, ?> mo = map(ex.get("memo"));
+        memoId = str(mo.get("id"), "");
+        memoLabel = str(mo.get("label"), "");
+        memoPrice = (int) num(mo.get("price"), 0);
+        Map<?, ?> bx = map(ex.get("badge"));
+        badgeRate = (int) num(bx.get("rate"), 0);
+        badgeCap = (int) num(bx.get("cap"), 0);
+        trailAfter = Boolean.TRUE.equals(ex.get("trail_after"));
         Map<?, ?> dr = map(root.get("drops"));
         dropChance = num(dr.get("mob_chance"), 0.25);
         dropElite = (int) num(dr.get("elite"), 2);
@@ -206,7 +219,12 @@ public final class EmberFestival implements Listener {
     public boolean owns(PlayerData d) { return d != null && d.periodCount(C_OWN + charmId, "all") > 0; }
     public boolean worn(PlayerData d) { return owns(d) && d.periodCount(C_ON + charmId, "all") > 0; }
     boolean trailOwned(PlayerData d, String trail) { return d != null && d.periodCount(C_TRAIL + trail, "all") > 0; }
-    public boolean isFestTrail(String cosmeticId) { return cosmeticId != null && cosmeticId.equalsIgnoreCase(trailId) && !trailId.isEmpty(); }
+    /** the event trail and the D146 memo title: owned through the shop counter (C_TRAIL + id) */
+    public boolean isFestTrail(String cosmeticId) {
+        return cosmeticId != null && (!trailId.isEmpty() && cosmeticId.equalsIgnoreCase(trailId) || !memoId.isEmpty() && cosmeticId.equalsIgnoreCase(memoId));
+    }
+    static final String C_XBADGE = "p3_fest_xbadge_"; // + event id, period "all": 余烬徽 already converted (D146 cap)
+    int badgeConverted(PlayerData d) { return d == null ? 0 : d.periodCount(C_XBADGE + id, "all"); }
 
     /** {H, D} of the worn festival charm (P1 mode only, before the clamp in EmberLoadout), or null when not worn */
     double[] wornStats(Player p) {
@@ -361,6 +379,7 @@ public final class EmberFestival implements Listener {
     }
 
     private boolean buy(Player p, PlayerData d, String what, String pay) {
+        if ("memo".equals(what) || "badge".equals(what)) return exchange(p, d, what, pay); // D146
         boolean charm = !"trail".equals(what);
         if (runs != null && !runs.progressFlag(d, requires)) { p.sendMessage(P + ChatColor.RED + "需要本人首通 " + requires.toUpperCase(Locale.ROOT) + " 才能买"); return true; }
         if (charm && owns(d)) { p.sendMessage(P + "已经有「" + charmName + "」了"); return true; }
@@ -378,6 +397,15 @@ public final class EmberFestival implements Listener {
             grant(p, d, charm, coinName + " " + price);
             return true;
         }
+        if (!charm && trailAfter) { // D146: after the event, only with 国庆币 already earned
+            int have = countCoins(p);
+            if (have < trailPrice || ni == null || !ni.consumeExact(p, coinNi, trailPrice)) {
+                p.sendMessage(P + ChatColor.RED + coinName + "不够（要 " + trailPrice + "，背包里 " + have + "）· 活动已结束，不再掉落");
+                return true;
+            }
+            grant(p, d, false, coinName + " " + trailPrice);
+            return true;
+        }
         if (!charm) { p.sendMessage(P + ChatColor.RED + "限时足迹只在活动期间出售（" + windowText() + "）"); return true; }
         // after the event: permanent price, 余烬币 or 余烬徽
         boolean badge = "badge".equals(pay) || "徽".equals(pay);
@@ -389,6 +417,40 @@ public final class EmberFestival implements Listener {
             if (afterCoin <= 0 || !d.takeCoin(afterCoin)) { p.sendMessage(P + ChatColor.RED + "余烬币不够（要 " + afterCoin + "，有 " + d.getCoin() + "）"); return true; }
             grant(p, d, true, "余烬币 " + afterCoin);
         }
+        return true;
+    }
+
+    /** D146: leftover 国庆币 → the memo title, or → 余烬徽 (rate : 1, capped per character). Works from start on, forever. */
+    private boolean exchange(Player p, PlayerData d, String what, String amount) {
+        if (System.currentTimeMillis() < startMs) { p.sendMessage(P + ChatColor.RED + name + " 还没开始（" + windowText() + "）"); return true; }
+        NiBridge ni = ((town.sunshine.corerpg.CoreRpgPlugin) plugin).getNiBridge();
+        int have = countCoins(p);
+        if ("memo".equals(what)) {
+            if (memoId.isEmpty() || memoPrice <= 0) { p.sendMessage(P + "纪念称号未开放。"); return true; }
+            if (trailOwned(d, memoId)) { p.sendMessage(P + "已经有称号「" + memoLabel + "§7」了"); return true; }
+            if (have < memoPrice || ni == null || !ni.consumeExact(p, coinNi, memoPrice)) {
+                p.sendMessage(P + ChatColor.RED + coinName + "不够（要 " + memoPrice + "，背包里 " + have + "）");
+                return true;
+            }
+            d.addPeriodCount(C_TRAIL + memoId, "all", 1);
+            runs.flushData(p.getUniqueId());
+            runs.log().info("[P1 fest] exchange " + p.getName() + " memo " + memoId + " for " + memoPrice + " " + coinName);
+            p.sendMessage(P + "§a获得称号「" + memoLabel + "§a」§7（只做展示）· 付了 " + coinName + " " + memoPrice);
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[装上称号]", "/corerpg p1 title " + memoId, "装上纪念称号", "GREEN"});
+            return true;
+        }
+        if (badgeRate <= 0 || badgeCap <= 0) { p.sendMessage(P + "余烬徽兑换未开放。"); return true; }
+        int left = badgeCap - badgeConverted(d);
+        if (left <= 0) { p.sendMessage(P + "余烬徽兑换已到上限（每人 " + badgeCap + " 徽）。剩下的" + coinName + "可以换纪念称号或留作纪念。"); return true; }
+        int want = "all".equals(amount) || amount.isEmpty() ? left : (int) Math.max(0, num(amount, 0));
+        int n = Math.min(Math.min(want, left), have / badgeRate);
+        if (n <= 0) { p.sendMessage(P + ChatColor.RED + coinName + "不够（" + badgeRate + " 枚换 1 徽，背包里 " + have + "）"); return true; }
+        if (ni == null || !ni.consumeExact(p, coinNi, n * badgeRate)) { p.sendMessage(P + ChatColor.RED + "扣除" + coinName + "失败，什么都没换"); return true; }
+        d.addPeriodCount(C_XBADGE + id, "all", n);
+        d.addPeriodCount(EmberSeason.C_BADGE, "all", n);
+        runs.flushData(p.getUniqueId());
+        runs.log().info("[P1 fest] exchange " + p.getName() + " " + (n * badgeRate) + " " + coinName + " → " + n + " badges (" + badgeConverted(d) + "/" + badgeCap + ")");
+        p.sendMessage(P + "§a" + coinName + " " + (n * badgeRate) + " → 余烬徽 +" + n + " §7（共 " + EmberSeason.badges(d) + "；兑换额度 " + badgeConverted(d) + "/" + badgeCap + "）· 余烬徽只买外观");
         return true;
     }
 
@@ -450,7 +512,12 @@ public final class EmberFestival implements Listener {
             case "charm_effect": return effectText();
             case "charm_price": return active() ? priceEvent + " " + coinName
                     : ended() ? afterCoin + " 余烬币 或 " + afterBadge + " 余烬徽（活动结束后的常驻价）" : "活动开始后出售";
-            case "trail": return trailOwned(d, trailId) ? "§a已拥有" : active() ? "§7" + trailPrice + " " + coinName : "§8限时（已下架）";
+            case "trail": return trailOwned(d, trailId) ? "§a已拥有" : active() || ended() && trailAfter ? "§7" + trailPrice + " " + coinName + (active() ? "" : "（用剩下的）") : "§8限时（已下架）";
+            case "memo": return memoId.isEmpty() ? "§8未开放" : trailOwned(d, memoId) ? "§a已拥有" : "§7" + memoPrice + " " + coinName;
+            case "memo_name": return memoLabel;
+            case "xbadge": return badgeCap <= 0 ? "§8未开放" : badgeConverted(d) >= badgeCap ? "§a已换满 " + badgeCap + " 徽" : "§7已换 " + badgeConverted(d) + "/" + badgeCap + " 徽 · " + badgeRate + " 枚换 1 徽";
+            case "xrate": return String.valueOf(badgeRate);
+            case "xcap": return String.valueOf(badgeCap);
             case "trail_name": return trailLabel;
             case "title": return EmberCosmetics.raidClears(d, id) > 0 ? "§a已获得 " + titleLabel : active() ? "§7活动期间通关一次即得 " + titleLabel : "§8限时（已结束）";
             default: return null;

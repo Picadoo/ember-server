@@ -17,7 +17,7 @@ Options:
 
 Layout:
   - '#########'
-  - '# W T C #'
+  - '# W T CF#'
   - '# S N P #'
   - '#h H q f#'
   - '#OEbABZX#'
@@ -223,12 +223,13 @@ Icons:
   E:
     update: 20
     display:
-      material: anvil
+      material: prismarine crystals
       name: '§6词条洗练'
       lore:
         - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
         - '§7护符：%corerpg_p1_reroll_charm_cur%'
         - '§7重复件（或碎片）+ 币洗一次，档位不超过成色上限'
+        - '§8小加成，不是变强：4 档定身纹 ≈ Q07 重砸每次少挨 0.7'
         - ''
         - '§e➥ §f打开洗练页'
     actions:
@@ -236,6 +237,25 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 reroll from gear'
+
+  # D145（评审 10-04 #1）：盛世烟火符的常驻入口（活动期间 / 结束后都在；价格、拥有状态来自 PAPI，购买走活动页）
+  F:
+    update: 20
+    display:
+      material: firework charge
+      name: '§c%corerpg_p1_fest_charm_name% §8（活动护符位）'
+      lore:
+        - ''
+        - '§7%corerpg_p1_fest_charm%'
+        - '§f%corerpg_p1_fest_charm_effect%'
+        - '§7独立的活动护符位：不占主手和已选护符，不算套装'
+        - '§6价格：%corerpg_p1_fest_charm_price%'
+        - ''
+        - '§e➥ §f打开活动页（购买 / 佩戴 / 剩余国庆币兑换）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_fest'
 
   Z:
     update: 20
@@ -245,7 +265,7 @@ Icons:
       lore:
         - '%corerpg_p1_spec_pts%'
         - '§7三排小天赋树：首领预警 · 词缀精英 · 套装专精'
-        - '§7每个都是有得有失的取舍，不是纯加属性'
+        - '§7每个都是有得有失的取舍，不是纯加属性（打法取舍，不是变强）'
         - ''
         - '§e➥ §f打开天赋页'
     actions:

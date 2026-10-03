@@ -1,7 +1,8 @@
 # D139 国庆限时活动「烟火庙会」— 活动页。所有日期 / 价格 / 次数 / 状态都来自 PAPI %corerpg_p1_fest_*%
 # （数据源 plugins/CoreRpg/ember-v1-festival.yml）；付款、校验、时间窗全在服务端（/corerpg p1 fest enter|buy|equip|unequip）。
 # 入口：主界面左上角（活动期间才亮）、/ember_p1_fest、/corerpg p1 fest。返回键回主界面。
-# 活动结束后：活动本和限时足迹下架、称号不再发；盛世烟火符改为常驻价（余烬币 或 余烬徽），这一页仍可打开。
+# 活动结束后：活动本下架、限时称号不再发；盛世烟火符改为常驻价（余烬币 或 余烬徽），这一页仍可打开（主界面左上角
+# 变成「国庆纪念」图标，装备页也有常驻入口）。D146：剩下的国庆币可以换纪念称号、换余烬徽（每人上限），足迹也还能用国庆币买。
 
 Title: '§c国庆 · 烟火庙会'
 
@@ -18,7 +19,7 @@ Options:
 Layout:
   - '####I####'
   - '#a#b#c#d#'
-  - '####B####'
+  - '##m#B#x##'
 
 Events:
   Open:
@@ -45,6 +46,9 @@ Icons:
         - '§7进入条件：%corerpg_p1_fest_req%'
         - ''
         - '§8活动本不耗体力，不发余烬币和装备；掉%corerpg_p1_fest_coinname%换限时奖励'
+        - ''
+        - '§e剩下的%corerpg_p1_fest_coinname%别浪费：§7下面两格可以换纪念称号、换余烬徽'
+        - '§7（活动结束后也能换；只是活动结束后不再掉落）'
 
   a:
     icons:
@@ -132,7 +136,7 @@ Icons:
         - ''
         - '§7脚下的红金烟火火星（只做展示，不加属性）'
         - '§7状态 / 价格：%corerpg_p1_fest_trail%'
-        - '§8只在活动期间出售，结束后买不到（已有的一直保留）'
+        - '§8活动结束后也能用剩下的%corerpg_p1_fest_coinname%买（不再掉落）'
         - ''
         - '§e➥ §f左键：购买 · 右键：装上'
     actions:
@@ -161,6 +165,51 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 title gq26'
+
+  m:
+    update: 20
+    display:
+      material: name tag
+      name: '§6纪念称号 %corerpg_p1_fest_memo_name%'
+      lore:
+        - ''
+        - '§7用剩下的%corerpg_p1_fest_coinname%换：§f%corerpg_p1_fest_memo%'
+        - '§7只做展示，不加属性 · 活动结束后也能换'
+        - '§7背包里：§f%corerpg_p1_fest_coins%'
+        - ''
+        - '§e➥ §f左键：兑换 · 右键：装上'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 fest buy memo'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 title gq26_memo'
+
+  x:
+    update: 20
+    display:
+      material: gold nugget
+      name: '§6%corerpg_p1_fest_coinname% → 余烬徽'
+      lore:
+        - ''
+        - '§7%corerpg_p1_fest_xbadge%'
+        - '§7%corerpg_p1_fest_xrate% 枚%corerpg_p1_fest_coinname%换 1 余烬徽，每人最多换 %corerpg_p1_fest_xcap% 徽'
+        - '§7余烬徽只在外观商店用，不能换余烬币、印记或装备'
+        - '§7背包里：§f%corerpg_p1_fest_coins%'
+        - ''
+        - '§e➥ §f左键：能换多少换多少 · 右键：只换 5 徽'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 fest buy badge all'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 fest buy badge 5'
 
   B:
     display:

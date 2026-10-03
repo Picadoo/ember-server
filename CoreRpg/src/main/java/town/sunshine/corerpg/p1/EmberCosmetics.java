@@ -85,7 +85,8 @@ public final class EmberCosmetics implements Listener {
             // D139 国庆 2026 (limited): the title = an event clear inside the window (ember-v1-festival.yml), the trail =
             // bought in the event shop with 国庆币; neither can be obtained after the event ends, owners keep them
             new Cosmetic("gq26", Kind.TITLE, "§c盛世§6烟火", "国庆 2026 活动期间通关「烟火庙会」（限时）", 0, "gq26", null),
-            new Cosmetic("trail_gq26", Kind.TRAIL, "§c红§6金烟火", "国庆 2026 活动商店（限时，国庆币）", 0, null, "FIREWORKS_SPARK"),
+            new Cosmetic("trail_gq26", Kind.TRAIL, "§c红§6金烟火", "国庆 2026 活动商店（国庆币；活动结束后也能用剩下的国庆币换）", 0, null, "FIREWORKS_SPARK"),
+            new Cosmetic("gq26_memo", Kind.TITLE, "§6烟火§c纪念", "国庆 2026 剩下的国庆币兑换（120 国庆币）", 0, null, null), // D146
             // D116 season honors (4-week seasons; display only, kept forever once earned)
             new Cosmetic("season_abyss", Kind.TITLE, "§d赛季深渊三甲", "某赛季「最高深渊层」榜前 3", 0, null, null),
             new Cosmetic("season_featured", Kind.TITLE, "§b赛季精选三甲", "某赛季「精选挑战通关」榜前 3", 0, null, null),

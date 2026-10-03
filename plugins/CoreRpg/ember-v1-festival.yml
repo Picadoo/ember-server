@@ -56,6 +56,16 @@ charm:
 title: {id: gq26, label: "§c盛世§6烟火", how: "国庆活动期间通关「烟火庙会」（限时）"}
 trail: {id: trail_gq26, label: "§c红§6金烟火", particle: FIREWORKS_SPARK, price_event: 30, how: "国庆活动商店（限时，国庆币）"}
 
+# D146 (review 10-04 #2): a sink for leftover 国庆币 (a full 5 days ≈ 300 coins, charm + trail use 90). Open from `start`
+# on and forever after `end` — no 国庆币 can be earned after `end`, so selling for them later stays fair. Cosmetic only:
+#   memo   = the title「烟火纪念」for `price` 国庆币 (no stats)
+#   badge  = `rate` 国庆币 → 1 余烬徽 (cosmetic-shop currency), at most `cap` 余烬徽 per character in total
+#   trail_after = the event trail stays buyable with 国庆币 (price_event) after `end` (only with coins already earned)
+exchange:
+  memo: {id: gq26_memo, label: "§6烟火§c纪念", price: 120}
+  badge: {rate: 5, cap: 40}
+  trail_after: true
+
 # the event dungeon: a copy of the Q04 tide template (ember_daily_tide_v1 → ember_fest_gq26_v1, red / gold palette
 # via /corerpg p1 fest mapbuild [base]; the original is untouched), so rooms / doors / points are the Q04 ones.
 # map_theme: block-id palette swap inside box (1.12 ids, "id" = any data, "id:data" = that one) — geometry unchanged.
@@ -125,8 +135,8 @@ dungeon:
     skills:
       - {type: circle, target: player, name: 礼花圈, every: 10, warn: 1.2, radius: 2.5, dmg: 22}
       - {type: charge, name: 狮首扑击, every: 13, warn: 1.3, length: 7, width: 3, dmg: 20, light: true}
-      - {type: cone, name: 爆竹连环, every: 11, warn: 1.0, angle: 100, range: 4.5, dmg: 16, kb: 0.5, below: 0.5,
-         follow: {type: circle, name: 余响, delay: 1.5, warn: 1.0, radius: 2.5, ahead: 2, dmg: 12}}
+      - {type: cone, name: 爆竹连环, every: 11, warn: 1.2, angle: 100, range: 4.5, dmg: 16, kb: 0.5, below: 0.5,
+         follow: {type: circle, name: 余响, delay: 1.5, warn: 1.2, radius: 2.5, ahead: 2, dmg: 12}}
     recover: 0.5
   # the Q04 side room: 福袋兔 / 金甲舞狮 / 宝箱 (the run's extra event) — pays 国庆币 here (drops above; the chest = `treasure`)
   event:
