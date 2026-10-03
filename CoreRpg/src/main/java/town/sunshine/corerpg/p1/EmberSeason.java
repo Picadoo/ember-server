@@ -464,7 +464,7 @@ public final class EmberSeason {
         }
         p.sendMessage(P + "§7全部完成再 +" + maps().goalBonus + " 余烬徽 · 余烬徽只能在外观商店换外观（1 徽 = 1 点 = 50 币标价），不加属性");
         town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[赛季与周目标页]", "/ember_p1_season", "排行榜、周目标、赛季奖励", "GOLD"},
-                new String[]{"[外观商店]", "/ember_p1_shop", "用余烬徽 / 币 / 印记换外观", "AQUA"});
+                new String[]{"[外观商店]", "/corerpg p1 cosmetic", "用余烬徽 / 币 / 印记换外观", "AQUA"});
         return true;
     }
 

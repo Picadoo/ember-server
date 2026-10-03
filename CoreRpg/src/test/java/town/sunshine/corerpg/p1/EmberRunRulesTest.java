@@ -935,6 +935,14 @@ public class EmberRunRulesTest {
         assertFalse(EmberRunRules.betterThan(t, fresh, bagGood, 30));
     }
 
+    @Test public void shopBackGoesToTheOpeningPage_D136() {
+        assertEquals("ember_p1_gear", EmberCosmetics.FROM_MENUS.get("gear"));
+        assertEquals("ember_p1_season", EmberCosmetics.FROM_MENUS.get("season"));
+        assertTrue(EmberCosmetics.backLabel("gear").contains("装备页"));
+        assertTrue(EmberCosmetics.backLabel("season").contains("赛季"));
+        assertTrue(EmberCosmetics.backLabel(null).contains("关闭"));
+    }
+
     @Test public void bountyGoalIsProratedInTheGraduationWeek_D134() {
         assertEquals(3, EmberSeason.proratedTarget(3, 1)); // Monday
         assertEquals(3, EmberSeason.proratedTarget(3, 5)); // Friday: Fri, Sat, Sun

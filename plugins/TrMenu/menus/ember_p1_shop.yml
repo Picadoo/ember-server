@@ -3,6 +3,8 @@
 # （/corerpg p1 cosmetic list）同一份数据、同一句话。左键：没有就打开页内确认页 ember_p1_shop_buy（每种付款方式一格，
 # 写付得起或还差多少），有了就换上 / 取下；右键：试穿 10 秒。付款与校验全在服务端（/corerpg p1 cosmetic pick|buysel|try）。
 # 入口（都打开这一页）：赛季页 [43]、装备页 [43]、/ember_p1_shop、/corerpg p1 cosmetic、进服消息与称号列表的 [外观商店]。
+# D136：赛季页 / 装备页的按钮走 /corerpg p1 cosmetic from season|gear，返回键（%corerpg_p1_shopback%）回到打开它的那一页；
+# 从聊天栏或命令打开（/corerpg p1 cosmetic）返回键就是「关闭商店」。付款页的返回只回商店，不改来源。
 
 Title: '§b余烬 · 外观商店'
 
@@ -404,7 +406,10 @@ Icons:
   B:
     display:
       material: arrow
-      name: '§7返回赛季 · 排行 · 周目标'
+      name: '%corerpg_p1_shopback%'
+      lore:
+        - '§8回到打开商店的那一页（从聊天栏打开的就关掉）'
     actions:
       all:
-        - 'menu: ember_p1_season'
+        - close
+        - 'command: corerpg p1 cosmetic back'

@@ -199,7 +199,8 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'menu: ember_p1_shop'
+        - close
+        - 'command: corerpg p1 cosmetic from gear'
 
   A:
     display:

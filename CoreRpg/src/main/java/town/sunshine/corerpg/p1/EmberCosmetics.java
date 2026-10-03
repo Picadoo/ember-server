@@ -378,6 +378,19 @@ public final class EmberCosmetics implements Listener {
         });
     }
 
+    /** Back-button fix (D136): the page the shop was opened from (gear / season); none = opened from chat or a command → Back closes */
+    private static final Map<UUID, String> FROM = new java.util.concurrent.ConcurrentHashMap<UUID, String>();
+    static final Map<String, String> FROM_MENUS = new java.util.LinkedHashMap<String, String>();
+    static {
+        FROM_MENUS.put("gear", "ember_p1_gear");
+        FROM_MENUS.put("season", "ember_p1_season");
+    }
+
+    /** D136: label of the shop's Back button for this origin */
+    static String backLabel(String from) {
+        return "gear".equals(from) ? "§7返回装备页" : "season".equals(from) ? "§7返回赛季 · 排行 · 周目标" : "§7关闭商店";
+    }
+
     /** F-review #2: the item a player picked on the shop page, shown on the in-menu confirm page */
     private static final Map<UUID, String> PICKED = new java.util.concurrent.ConcurrentHashMap<UUID, String>();
 
@@ -436,6 +449,17 @@ public final class EmberCosmetics implements Listener {
             select(d, k, c.id);
             runs.flushData(p.getUniqueId());
             p.sendMessage(P + "已换上" + kindName(k) + "「" + c.label + "§7」" + (needsTitle(k) && titleText(d).isEmpty() ? "（先装上一个称号才看得到）" : ""));
+            return true;
+        }
+        if ("from".equals(op)) { // D136: a menu button opens the shop and remembers where Back goes
+            String from = args.length >= 4 ? args[3].toLowerCase(java.util.Locale.ROOT) : "";
+            if (FROM_MENUS.containsKey(from)) FROM.put(p.getUniqueId(), from); else FROM.remove(p.getUniqueId());
+            openMenu(p, SHOP_MENU);
+            return true;
+        }
+        if ("back".equals(op)) { // D136: the shop's Back button → the page it was opened from (chat / command → just close)
+            String menu = FROM_MENUS.get(FROM.get(p.getUniqueId()));
+            if (menu != null) openMenu(p, menu);
             return true;
         }
         if ("pick".equals(op) && args.length >= 4) { // D119 shop page click: owned → put on / take off, else the buy page
@@ -535,7 +559,11 @@ public final class EmberCosmetics implements Listener {
             ensureTitle(p, d, c);
             return true;
         }
-        if (!"list".equals(op)) { openMenu(p, SHOP_MENU); return true; } // F-review #2: one canonical shop (the page)
+        if (!"list".equals(op)) { // F-review #2: one canonical shop (the page)
+            if (op.isEmpty()) FROM.remove(p.getUniqueId()); // D136: opened from chat / a command, Back just closes
+            openMenu(p, SHOP_MENU);
+            return true;
+        }
         p.sendMessage(P + "§6外观商店§7（只做展示，不加属性；买一次永久有，不回收）· 余烬币 §f" + d.getCoin()
                 + " §7· 余烬徽 §f" + EmberSeason.badges(d)
                 + " §7· 可用印记 T3 §f" + surplus(d, 3) + " §7T2 §f" + surplus(d, 2) + " §7T1 §f" + surplus(d, 1));
@@ -583,6 +611,7 @@ public final class EmberCosmetics implements Listener {
         if (key.startsWith("shopprice_")) { Cosmetic c = byId(key.substring(10)); return c == null || !c.shop() ? "" : priceText(c); }
         if (key.startsWith("shopname_")) { Cosmetic c = byId(key.substring(9)); return c == null ? "" : c.label; }
         if (key.startsWith("shophow_")) { Cosmetic c = byId(key.substring(8)); return c == null ? "" : howText(c); }
+        if ("shopback".equals(key)) return backLabel(u == null ? null : FROM.get(u)); // D136
         if ("shopmarks".equals(key)) return d == null ? "" : "T3 " + surplus(d, 3) + " · T2 " + surplus(d, 2) + " · T1 " + surplus(d, 1);
         if (key.startsWith("shopsel_")) {
             String id = u == null ? null : PICKED.get(u);
@@ -656,7 +685,7 @@ public final class EmberCosmetics implements Listener {
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent e) { last.remove(e.getPlayer().getUniqueId()); TRIALS.remove(e.getPlayer().getUniqueId()); }
+    public void onQuit(PlayerQuitEvent e) { last.remove(e.getPlayer().getUniqueId()); TRIALS.remove(e.getPlayer().getUniqueId()); FROM.remove(e.getPlayer().getUniqueId()); }
 
     private int tickN;
 
