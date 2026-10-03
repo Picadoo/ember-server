@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(20, m.balanceVersion);                // D137
-        assertEquals("g04-1/b20", m.ruleVersion);
+        assertEquals(21, m.balanceVersion);                // D138
+        assertEquals("g04-1/b21", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -974,5 +974,51 @@ public class EmberRunRulesTest {
         assertEquals(3, EmberSeason.proratedTarget(3, 5)); // Friday: Fri, Sat, Sun
         assertEquals(2, EmberSeason.proratedTarget(3, 6)); // Saturday
         assertEquals(1, EmberSeason.proratedTarget(3, 7)); // Sunday
+    }
+
+    @Test public void repeatRunVarietyIsSeededAndPaysOnlyExistingTypesOffFirstClears_D138() {
+        EmberRunMaps.Variety v = bundled().variety;
+        assertTrue(v.on());
+        assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
+        assertTrue(v.affixShard > 0 && v.affixShard < EmberRunRules.ELITE_SHARD);   // smaller than the elite event
+        assertTrue(v.eventCore >= 1 && v.eventSecs >= 20);
+        assertTrue(v.blazeWarn >= 1.0);                                             // telegraphed
+        // same seed → same roll; every affix and every room shows up over many seeds
+        Set<String> seen = new HashSet<String>();
+        int events = 0;
+        for (long seed = 0; seed < 2000; seed++) {
+            String[] a = v.roll(EmberRunRules.subSeed(seed, "variety")), b = v.roll(EmberRunRules.subSeed(seed, "variety"));
+            assertArrayEquals(a, b);
+            if (!a[1].isEmpty()) { assertTrue(a[0].matches("r[123]")); seen.add(a[1]); seen.add(a[0]); }
+            if (!a[2].isEmpty()) events++;
+        }
+        assertTrue(seen.containsAll(java.util.Arrays.asList("blazing", "split", "shield", "r1", "r2", "r3")));
+        assertEquals(v.eventRate, events / 2000.0, 0.05);
+        // rewards: shards / cores only, never with the first-clear package
+        assertTrue(EmberRunRules.varietyGrants(true, true, 3, true, 1).isEmpty());
+        List<EmberRunRules.Grant> g = EmberRunRules.varietyGrants(false, true, 3, true, 1);
+        assertEquals(2, g.size());
+        assertEquals("var_affix_shard", g.get(0).key);
+        assertEquals(EmberRunRules.Kind.MAT, g.get(0).kind);
+        assertEquals("var_event_core", g.get(1).key);
+        assertEquals(1, EmberRunRules.varietyGrants(false, false, 3, true, 1).size());
+        assertTrue(EmberRunRules.varietyGrants(false, false, 3, false, 1).isEmpty());
+        // the elite: heavy, else melee, else the first; its fire circle is a warned circle at its feet
+        EmberRunDirector.Tracked r = new EmberRunDirector.Tracked(null, "ranged", "r1", null, null, 10, 3, 8, null);
+        EmberRunDirector.Tracked mm = new EmberRunDirector.Tracked(null, "melee", "r1", null, null, 12, 3, 2, null);
+        EmberRunDirector.Tracked h = new EmberRunDirector.Tracked(null, "heavy", "r1", null, null, 20, 3, 2, null);
+        assertSame(h, EmberRunDirector.affixPick(java.util.Arrays.asList(r, mm, h)));
+        assertSame(mm, EmberRunDirector.affixPick(java.util.Arrays.asList(r, mm)));
+        assertSame(r, EmberRunDirector.affixPick(java.util.Arrays.asList(r)));
+        EmberRunMaps.Skill fire = EmberRunDirector.blazeSkill(h, v);
+        assertEquals("circle", fire.type);
+        assertEquals(20 * v.blazeDmg, fire.dmg, 1e-9);
+        assertEquals(v.blazeRadius, fire.radius, 1e-9);
+        // session round trip keeps the roll and the done flags
+        EmberRunSession s = new EmberRunSession();
+        s.runId = "q03-x"; s.mapKey = "q03"; s.affix = "split"; s.affixRoom = "r2"; s.affixDone = true; s.eventRoom = "r3";
+        EmberRunSession t = EmberRunSession.fromMap(s.toMap());
+        assertEquals("split", t.affix); assertEquals("r2", t.affixRoom); assertTrue(t.affixDone);
+        assertEquals("r3", t.eventRoom); assertFalse(t.eventDone);
     }
 }

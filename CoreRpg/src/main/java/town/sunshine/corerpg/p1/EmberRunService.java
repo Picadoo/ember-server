@@ -532,6 +532,23 @@ public final class EmberRunService implements Listener {
             s.extra = forcedExtra;
             forcedExtra = null;
         }
+        if (!challenge && abyss == 0 && !m.raid && maps.variety.on()) { // D138: repeat-run variety, first clears stay canonical
+            boolean all = true;
+            for (Player p : party) if (!firstCleared(data(p.getUniqueId()), m)) { all = false; break; }
+            if (all || forcedVariety != null) {
+                String[] v = maps.variety.roll(EmberRunRules.subSeed(s.seed, "variety"));
+                if (forcedVariety != null) { // admin test hook, one shot: "affix:room" or "event:room"
+                    String[] fv = forcedVariety.split(":");
+                    if (EmberRunMaps.Variety.KNOWN.contains(fv[0])) { v[1] = fv[0]; v[0] = fv.length > 1 ? fv[1] : "r1"; }
+                    else if ("event".equals(fv[0])) v[2] = fv.length > 1 ? fv[1] : "r1";
+                    log().info("[P1 run] " + s.runId + " variety forced " + forcedVariety + " (admin test)");
+                    forcedVariety = null;
+                }
+                s.affixRoom = v[0];
+                s.affix = v[1];
+                s.eventRoom = v[2];
+            }
+        }
         for (Player p : party) {
             s.participants.add(p.getUniqueId());
             String t = target(data(p.getUniqueId()));
@@ -972,6 +989,29 @@ public final class EmberRunService implements Listener {
         tellRun(s, "§6「" + s.extra.label + "」完成 §7· 额外奖励已记为待结算，击败首领后统一发放");
     }
 
+    /** D138: the affixed elite of a repeat normal run died. */
+    void onAffixDone(EmberRunSession s, String affix) {
+        if (s.affixDone || !s.open()) return;
+        s.affixDone = true;
+        store.save(s);
+        tellRun(s, "§6词缀精英「" + EmberRunMaps.Variety.label(affix) + "」已击败 §7· 余烬碎片 +" + maps.variety.affixShard + " 记为待结算");
+        log().info("[P1 run] " + s.runId + " affix " + affix + " done");
+    }
+
+    /** D138: the timed room of a repeat normal run was cleared (in time or not). */
+    void onEventResult(EmberRunSession s, boolean ok, double secs) {
+        if (s.eventDone || !s.open()) return;
+        String t = String.format(Locale.ROOT, "%.1f", secs);
+        if (ok) {
+            s.eventDone = true;
+            store.save(s);
+            tellRun(s, "§b限时清房完成 §7（" + t + " 秒）· 余烬核心 +" + maps.variety.eventCore + " 记为待结算");
+        } else {
+            tellRun(s, "§7限时清房超时（" + t + " 秒 / 限 " + maps.variety.eventSecs + " 秒），这次没有额外核心");
+        }
+        log().info("[P1 run] " + s.runId + " event " + (ok ? "done" : "late") + " " + t + "s");
+    }
+
     /** Server-side breakage (mob / boss cannot spawn): abort and give the stamina back. */
     void onBroken(EmberRunSession s, String why) {
         tellRun(s, ChatColor.RED + "本局异常终止：" + why + " · 体力退还");
@@ -1153,6 +1193,8 @@ public final class EmberRunService implements Listener {
             grants.add(new EmberRunRules.Grant("raid_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), 1, null));
         }
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
+        if (!s.challenge && s.abyss == 0 && !m.raid) // D138 repeat-run variety (rolled only when every member had the first clear)
+            grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, maps.variety.affixShard, s.eventDone, maps.variety.eventCore));
         EmberRunRules.Ledger l = store.ledger(u);
         // P2-7 daily bounty (D79): the n-th settled clear of the stamina day; counted once per run (fresh = no base row yet)
         final boolean fresh = l.get(s.runId, "base_coin") == null;
@@ -2537,6 +2579,8 @@ public final class EmberRunService implements Listener {
     private volatile EmberRunRules.Extra forcedExtra;
     /** P2-8 admin test hook: the next challenge run uses this weekly rule (one shot). */
     private volatile EmberRunMaps.Modifier forcedModifier;
+    /** D138 admin test hook: the next normal run gets this affix / event ("blazing:r2", "event:r1"; one shot). */
+    private volatile String forcedVariety;
 
     private boolean cmdRuns(CommandSender s, String[] args) {
         boolean admin = s.hasPermission("corerpg.admin");
@@ -2544,6 +2588,11 @@ public final class EmberRunService implements Listener {
         if (admin && "modifier".equals(op) && args.length >= 4) { // P2-8 test hook: next challenge run (any map) uses this rule
             forcedModifier = "clear".equalsIgnoreCase(args[3]) ? null : maps.modifier(args[3]);
             s.sendMessage(P + "下一局规则（挑战或精选图普通版，仅一次，测试用）= " + (forcedModifier == null ? "按周" : forcedModifier.id));
+            return true;
+        }
+        if (admin && "variety".equals(op) && args.length >= 4) { // D138 test hook: runs variety blazing|split|shield|event[:r1..r3]|clear
+            forcedVariety = "clear".equalsIgnoreCase(args[3]) ? null : args[3].toLowerCase(Locale.ROOT);
+            s.sendMessage(P + "下一局普通版花样（仅一次，测试用）= " + (forcedVariety == null ? "按种子" : forcedVariety));
             return true;
         }
         if (admin && "extra".equals(op) && args.length >= 4) {

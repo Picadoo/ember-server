@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137)
-balance_version: 20
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137; 21 = repeat-run variety (affixed elite + optional room event), D138)
+balance_version: 21
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 # Endgame #6 (D128, balance_version 18, user 2026-10-03 07:07): the first failed challenge / abyss run of the stamina day
@@ -95,6 +95,25 @@ weekly_goals:
 raid_revive:
   last_phase_hp: 0.2
   delay: 20
+
+# D138 repeat-run variety (content batch part 2): only on a NORMAL Q01–Q07 run where every member already has the map's
+# first clear (never on a first clear, challenge, abyss or raid). Fixed at entry from the run seed. Rewards are existing
+# types only, paid at settlement next to the elite event: killing the affixed elite → affix_shard 余烬碎片; finishing
+# the marked room inside event_secs (timer starts when the room spawns) → event_core 余烬核心.
+#   blazing 炽热: drops a warned fire circle at its feet every `every` s (radius, warn s, dmg × its own attack)
+#   split   分裂: on death splits into `count` melee of the room with `hp` × the melee HP (the door waits for them)
+#   shield  护盾: HP × `hp`
+# Model: tools/p1sim (--no-variety to compare), D138 numbers in the P2 draft §5x.
+variety:
+  affix_rate: 1.0
+  affixes: [blazing, split, shield]
+  affix_shard: 3
+  blazing: {every: 3.0, radius: 1.5, warn: 1.0, dmg: 1.0}
+  split: {count: 2, hp: 0.5}
+  shield: {hp: 1.6}
+  event_rate: 0.5
+  event_secs: 30
+  event_core: 1
 
 # §18.1 challenge difficulty for all seven maps, opened by the player's OWN Q07 first clear. One shared T3 reference
 # (B_ref 90), overriding — not multiplying — the normal values; party HP 1+0.65(n−1) still applies; damage does not

@@ -202,6 +202,18 @@ public final class EmberRunRules {
     // ------------------------------------------------------------------ seeds
 
     /** Stable 64-bit mix of the run seed with a text key (FNV-1a + splitmix64 finaliser). */
+    /**
+     * D138 repeat-run variety rewards (existing types only): killing the affixed elite → shards, finishing the timed
+     * room → cores. Never on a first clear (the caller passes firstClear = the run carried the first-clear package).
+     */
+    public static List<Grant> varietyGrants(boolean firstClear, boolean affixDone, int affixShard, boolean eventDone, int eventCore) {
+        List<Grant> out = new ArrayList<Grant>();
+        if (firstClear) return out;
+        if (affixDone && affixShard > 0) out.add(new Grant("var_affix_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, affixShard, null));
+        if (eventDone && eventCore > 0) out.add(new Grant("var_event_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, eventCore, null));
+        return out;
+    }
+
     public static long subSeed(long seed, String... parts) {
         long h = 0xcbf29ce484222325L ^ seed;
         for (String p : parts) {

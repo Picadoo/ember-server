@@ -211,13 +211,14 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                 else:
                     use, key = cfg, order[-1]
                 p.buy_potions()
-                ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions)
+                rep = use is cfg and key in p.cleared  # D138 repeat-run variety on normal runs
+                ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions, repeat=rep)
                 p.potions -= used
                 ch_runs += use is not cfg
                 if not ok and use is not cfg:
                     n_today += fail_refund(p, w, d)  # D128
                 if ok:
-                    p.settle(key, extra) if use is cfg else settle_with(p, use, key, extra)
+                    p.settle(key, extra, dict(p1sim.LAST_VAR) if rep else None) if use is cfg else settle_with(p, use, key, extra)
                     marks_earned += 1
                     if use is not cfg and use is not ccfg:
                         best = max(best, tier)
@@ -277,16 +278,17 @@ def to_q07(cfg, kn, seed):
         detour = key != order[cur]
         p.buy_potions()
         mod = p1sim.week_rule(kn, order, p.day, offset, key, p.cleared)  # D94 (None unless --normal-mods)
+        rep = key in p.cleared  # D138
         if mod is None:
-            ok, used, extra, *_ = p1sim.run_map(cfg, key, p.st(), kn, rng, p.potions)
+            ok, used, extra, *_ = p1sim.run_map(cfg, key, p.st(), kn, rng, p.potions, repeat=rep)
         else:
             mc, cap = modded.setdefault((key, mod['id']), p1sim.mod_cfg(cfg, key, mod))
-            ok, used, extra, *_ = p1sim.run_map(mc, key, p.st(), kn, rng, p.potions if cap is None else min(cap, p.potions))
+            ok, used, extra, *_ = p1sim.run_map(mc, key, p.st(), kn, rng, p.potions if cap is None else min(cap, p.potions), repeat=rep)
         p.potions -= used
         runs += 1
         if ok:
             p1sim.feat_pay(p, kn, cfg, order, p.day, offset, key)  # D108
-            p.settle(key, extra)
+            p.settle(key, extra, dict(p1sim.LAST_VAR) if rep else None)
             p.invest()
             if not detour:
                 cur = front + 1 if cur == front else front
@@ -430,9 +432,9 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
             if mod and use is ccfg and key == featured:
                 ok, used, extra, *_ = p1sim.run_map(fcfg, key, p.st(), kn, rng, min(p.potions, fcap) if fcap is not None else p.potions)
             elif ncfg is not None and use is cfg:
-                ok, used, extra, *_ = p1sim.run_map(ncfg, key, p.st(), kn, rng, min(p.potions, ncap) if ncap is not None else p.potions)
+                ok, used, extra, *_ = p1sim.run_map(ncfg, key, p.st(), kn, rng, min(p.potions, ncap) if ncap is not None else p.potions, repeat=True)
             else:
-                ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions)
+                ok, used, extra, *_ = p1sim.run_map(use, key, p.st(), kn, rng, p.potions, repeat=use is cfg)
             p.potions -= used
             ch_runs += use is ccfg
             if not ok and use is ccfg:
@@ -442,7 +444,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                     bonus_left -= 1
                     p.marks[3] += ROT['bonus_marks']
                     marks_earned += ROT['bonus_marks']
-                p.settle(key, extra) if use is cfg else settle_with(p, ccfg, key, extra)
+                p.settle(key, extra, dict(p1sim.LAST_VAR)) if use is cfg else settle_with(p, ccfg, key, extra)
                 marks_earned += 1
                 p.invest()
         tgt = kn.target
@@ -511,7 +513,10 @@ def main():
     ap.add_argument('--fee-mark', type=int, default=None, help='D124: coins per surplus T3 mark paying abyss fees (0 = off; default = yml abyss.fee_mark_coin)')
     ap.add_argument('--fail-refund', type=float, default=None, help='D128: share of the stamina given back for the first failed challenge / abyss run of the day (0 = off; default = yml fail_refund)')
     ap.add_argument('--abyss-fees', help="E-review tuning: tier fees '0,60,…' (10 values) instead of the config")
+    ap.add_argument('--no-variety', action='store_true', help='D138: without the repeat-run variety (affixed elite + room event)')
     a = ap.parse_args()
+    if a.no_variety:
+        p1sim.VARIETY = False
     if a.fee_mark is not None:
         global FEE_MARK
         FEE_MARK = a.fee_mark

@@ -45,6 +45,9 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
+        String affix;               // D138 repeat-run variety: blazing / split / shield (null = plain)
+        long affixNext, affixAt;
+        Location affixOrigin;
         Tracked(LivingEntity le, String role, String roomId, EmberRunMaps.Pt home, EmberRunMaps.Box leash,
                 double atk, double interval, double range, EmberRunMaps.Role def) {
             this.le = le; this.role = role; this.roomId = roomId; this.home = home; this.leash = leash;
@@ -251,6 +254,12 @@ final class EmberRunDirector {
                 t.stuck--;
             }
             if (t.caster()) casterTick(t, now);
+            if (t.affix != null) affixTick(t, now);
+        }
+        if (eventStart > 0 && !eventWarned && activeRoom != null && activeRoom.equals(s.eventRoom)
+                && now >= eventStart + (svc.maps().variety.eventSecs - 10) * 1000L) {
+            eventWarned = true;
+            svc.tellRun(s, "§b限时清房 §7还剩 §e10 秒");
         }
         // room cleared → door, event, next
         if (activeRoom != null && aliveIn(activeRoom) == 0) roomCleared(def.room(activeRoom));
@@ -328,12 +337,20 @@ final class EmberRunDirector {
             svc.log().info("[P1 run] " + s.runId + " " + r.id + " rule " + mod.id + (swap != null ? " (group of " + swap.id + ")" : "") + ": " + roles);
         }
         int ok = 0;
+        List<Tracked> spawned = new ArrayList<Tracked>();
         for (String[] e : lay) {
             EmberRunMaps.Role role = def.role(e[0], ch);
             EmberRunMaps.Pt pt = r.points.get(Integer.parseInt(e[1]));
-            if (spawn(role, e[0], r.id, pt, r.trigger) != null) ok++;
+            Tracked t = spawn(role, e[0], r.id, pt, r.trigger);
+            if (t != null) { ok++; spawned.add(t); }
         }
         svc.onRoomStarted(s, r, b, ok, lay.size(), EmberRunRules.compositionLabel(lay));
+        if (r.id.equals(s.affixRoom) && !s.affix.isEmpty() && !s.affixDone && !spawned.isEmpty()) promote(spawned);
+        if (r.id.equals(s.eventRoom) && !s.eventDone) {
+            eventStart = System.currentTimeMillis();
+            eventWarned = false;
+            svc.tellRun(s, "§b限时清房 §7· " + svc.maps().variety.eventSecs + " 秒内清完这个房间 → 结算时 §f余烬核心 +" + svc.maps().variety.eventCore + " §7（可选）");
+        }
         if (ok == 0) {
             anomalies.add(r.id + ": no mob could be spawned (MythicMobs ids " + def.roles.keySet() + ")");
             svc.onBroken(s, "房间 " + r.label + " 无法生成怪物");
@@ -343,6 +360,11 @@ final class EmberRunDirector {
     private void roomCleared(EmberRunMaps.Room r) {
         activeRoom = null;
         if (r == null) return;
+        if (r.id.equals(s.eventRoom) && eventStart > 0) { // D138 timed room event
+            double secs = (System.currentTimeMillis() - eventStart) / 1000.0;
+            eventStart = 0;
+            svc.onEventResult(s, secs <= svc.maps().variety.eventSecs, secs);
+        }
         if (!s.cleared.contains(r.id)) s.cleared.add(r.id);
         next = Math.max(next, def.roomIndex(r.id) + 1);
         if (r.door != null) {
@@ -375,6 +397,90 @@ final class EmberRunDirector {
         mobs.put(le.getUniqueId(), t);
         svc.index(le.getUniqueId(), this);
         return t;
+    }
+
+    // ------------------------------------------------------------------ D138 repeat-run variety
+
+    private long eventStart;
+    private boolean eventWarned;
+
+    /** The room's toughest mob (heavy, else melee, else the first) becomes the affixed elite. */
+    static Tracked affixPick(List<Tracked> ts) {
+        for (Tracked t : ts) if ("heavy".equals(t.role)) return t;
+        for (Tracked t : ts) if ("melee".equals(t.role)) return t;
+        return ts.get(0);
+    }
+
+    private void promote(List<Tracked> spawned) {
+        EmberRunMaps.Variety v = svc.maps().variety;
+        Tracked t = affixPick(spawned);
+        t.affix = s.affix;
+        if ("shield".equals(t.affix)) {
+            AttributeInstance a = t.le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            if (a != null) {
+                a.setBaseValue(a.getBaseValue() * v.shieldHp);
+                t.le.setHealth(t.le.getMaxHealth());
+            }
+        }
+        t.affixNext = System.currentTimeMillis() + 1500L + (long) (v.blazeEvery * 1000);
+        String tag = EmberRunMaps.Variety.label(t.affix);
+        String old = t.le.getCustomName();
+        t.le.setCustomName("§6[" + tag + "] §r" + (old == null ? t.le.getName() : old));
+        t.le.setCustomNameVisible(true);
+        t.le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
+        String how = "blazing".equals(t.affix) ? "脚下每 " + fmt(v.blazeEvery) + " 秒落一圈火（半径 " + fmt(v.blazeRadius) + "，" + fmt(v.blazeWarn) + " 秒预警，看到火圈就退开）"
+                : "split".equals(t.affix) ? "死后分裂成 " + v.splitCount + " 个小怪（门要等它们也倒下）"
+                : "生命 ×" + fmt(v.shieldHp);
+        svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现在这个房间（发光的那只）：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));
+    }
+
+    private void affixTick(Tracked t, long now) {
+        Particle fx = "blazing".equals(t.affix) ? Particle.FLAME : "split".equals(t.affix) ? Particle.SPELL_WITCH : Particle.END_ROD;
+        w.spawnParticle(fx, t.le.getLocation().add(0, 1.0, 0), 3, 0.3, 0.5, 0.3, 0.01);
+        if (!"blazing".equals(t.affix)) return;
+        EmberRunMaps.Variety v = svc.maps().variety;
+        if (t.affixAt > 0) {
+            warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.blazeRadius, Particle.FLAME);
+            if (now >= t.affixAt) {
+                execute(blazeSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
+                t.affixAt = 0;
+                t.affixNext = now + (long) (v.blazeEvery * 1000);
+            }
+            return;
+        }
+        if (now < t.affixNext || nearest(t.le.getLocation(), 6) == null) return;
+        t.affixOrigin = t.le.getLocation().clone();
+        t.affixAt = now + (long) (v.blazeWarn * 1000);
+    }
+
+    static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("type", "circle");
+        m.put("name", "炽热火圈");
+        m.put("radius", v.blazeRadius);
+        m.put("warn", v.blazeWarn);
+        m.put("dmg", t.atk * v.blazeDmg);
+        return new EmberRunMaps.Skill(m);
+    }
+
+    private void splitAdds(Tracked t) {
+        EmberRunMaps.Variety v = svc.maps().variety;
+        EmberRunMaps.Role role = def.role("melee", ch);
+        if (role == null || v.splitCount <= 0) return;
+        Location l = t.le.getLocation();
+        EmberRunMaps.Pt pt = new EmberRunMaps.Pt(Math.floor(l.getX()), Math.floor(l.getY()), Math.floor(l.getZ()));
+        int n = 0;
+        for (int i = 0; i < v.splitCount; i++) {
+            Tracked a = spawn(role, "melee", t.roomId, pt, t.leash);
+            if (a == null) continue;
+            AttributeInstance at = a.le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+            if (at != null) { at.setBaseValue(Math.max(1.0, at.getBaseValue() * v.splitHp)); a.le.setHealth(a.le.getMaxHealth()); }
+            String old = a.le.getCustomName();
+            a.le.setCustomName("§7[分身] §r" + (old == null ? a.le.getName() : old));
+            n++;
+        }
+        svc.tellRun(s, "§6「分裂」§7精英裂成了 " + n + " 个分身！");
     }
 
     /** A18: base HP × (1 + 0.65 (n − 1)), locked when the run was committed. */
@@ -457,6 +563,10 @@ final class EmberRunDirector {
             return true;
         }
         if ("event".equals(t.roomId) && t.le.getUniqueId().equals(extraMob)) { unholo("event"); svc.onExtraDone(s); }
+        if (t.affix != null) { // D138
+            if ("split".equals(t.affix)) splitAdds(t);
+            svc.onAffixDone(s, t.affix);
+        }
         return false;
     }
 

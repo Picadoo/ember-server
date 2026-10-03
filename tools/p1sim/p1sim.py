@@ -145,6 +145,13 @@ class Fight:
                 skills.append({'s': s, 'next': t + s['every']})
         pending = []  # (time, raw dmg) of follow-up hits
         while True:
+            for m in mobs:  # D138 分裂: the affixed elite splits on death (the door waits for the adds)
+                if m['hp'] <= 0 and m.get('split'):
+                    n, share, md = m.pop('split')
+                    for _ in range(n):
+                        a = mob(cfg, md, 'melee', rng, kn, t + 1.0)
+                        a['hp'] *= share
+                        mobs.append(a)
             alive = [m for m in mobs if m['hp'] > 0]
             if not alive:
                 self.t = t
@@ -156,6 +163,8 @@ class Fight:
             for m in alive:
                 if m['atk'] > 0:
                     cand.append(m['next'])
+                if 'blaze' in m:
+                    cand.append(m['blaze'][0])
             for s in skills:
                 cand.append(s['next'])
             for p in pending:
@@ -197,6 +206,18 @@ class Fight:
                     for _ in mapdef['boss']['adds']['points']:
                         mobs.append(mob(cfg, mapdef, mapdef['boss']['adds']['role'], rng, kn, t + 1.0))
                 continue
+            blazed = False
+            for m in alive:  # D138 炽热: a warned fire circle at the elite's feet
+                if 'blaze' in m and m['blaze'][0] == t:
+                    nt, ev, dmg = m['blaze']
+                    m['blaze'] = (t + ev, ev, dmg)
+                    self.hurt(dmg, True)
+                    blazed = True
+                    break
+            if blazed:
+                if self.hp <= 0:
+                    return False
+                continue
             for m in alive:
                 if m['atk'] > 0 and m['next'] == t:
                     m['next'] = t + m['iv']
@@ -226,17 +247,62 @@ class Fight:
                 return False
 
 
-def run_map(cfg, key, st, kn, rng, potions):
+VARIETY = True   # D138 repeat-run variety (--no-variety to compare)
+LAST_VAR = {'affix': False, 'event': False}  # outcome of the last run_map(repeat=True)
+
+
+def variety_roll(cfg, seed):
+    """D138: (affix room, affix type, event room) for a repeat normal run; None where not rolled."""
+    v = cfg.get('variety') or {}
+    vr = random.Random(seed)
+    rooms = ('r1', 'r2', 'r3')
+    ar = at = er = None
+    if vr.random() < float(v.get('affix_rate', 0)) and v.get('affixes'):
+        ar = rooms[vr.randrange(3)]
+        at = v['affixes'][vr.randrange(len(v['affixes']))]
+    if vr.random() < float(v.get('event_rate', 0)):
+        er = rooms[vr.randrange(3)]
+    return ar, at, er
+
+
+def affix_mob(cfg, m, mobs, kind, t0):
+    """Promote the toughest mob of the room (heavy, else melee, else the first) — mirrors EmberRunDirector."""
+    v = cfg['variety']
+    pick_ = next((x for x in mobs if x['role'] == 'heavy'), None) or next((x for x in mobs if x['role'] == 'melee'), None) or mobs[0]
+    if kind == 'shield':
+        pick_['hp'] *= float(v['shield']['hp'])
+    elif kind == 'blazing':
+        b = v['blazing']
+        pick_['blaze'] = (t0 + 1.5 + float(b['every']), float(b['every']), pick_['atk'] * float(b['dmg']))
+    elif kind == 'split':
+        pick_['split'] = (int(v['split']['count']), float(v['split']['hp']), m)
+    pick_['affix'] = True
+    return pick_
+
+
+def run_map(cfg, key, st, kn, rng, potions, repeat=False):
     """One entry. Returns (cleared, potions_used, extra, seconds, damage taken, where it died)."""
     m = cfg['maps'][key]
     f = Fight(cfg, st, kn, rng, potions)
     extra = ('none', 'treasure', 'elite', 'chest')[pick(cfg['extra_w'], rng.random())]
+    ar = at = er = None
+    if repeat:
+        vseed = rng.getrandbits(32)  # drawn either way so --no-variety keeps the same stream shape
+        if VARIETY and cfg.get('variety'):
+            ar, at, er = variety_roll(cfg, vseed)
+    LAST_VAR['affix'] = LAST_VAR['event'] = False
     for rk in ('r1', 'r2', 'r3'):
         room = m['rooms'][rk]
         comp = room['a'] if rng.random() < 0.5 else room['b']
         mobs = [mob(cfg, m, role, rng, kn, f.t) for role, n in comp.items() for _ in range(n)]
+        am = affix_mob(cfg, m, mobs, at, f.t) if rk == ar else None
+        t0 = f.t
         if not f.segment(mobs):
             return False, f.used, extra, f.t, f.taken, rk
+        if am is not None:
+            LAST_VAR['affix'] = True
+        if rk == er and f.t - t0 <= float(cfg['variety']['event_secs']):
+            LAST_VAR['event'] = True
         if m.get('event', {}).get('after') == rk and extra in ('treasure', 'elite'):
             if not f.segment([mob(cfg, m, extra, rng, kn, f.t)]):
                 return False, f.used, extra, f.t, f.taken, 'event'
@@ -352,10 +418,16 @@ class Player:
                 self.coin += int(b.get('coin', 0)); self.shard += int(b.get('shard', 0))
                 self.bone += int(b.get('bone', 0)); self.core += int(b.get('core', 0))
 
-    def settle(self, key, extra):
+    def settle(self, key, extra, var=None):
         self.bounty()
         cfg, m = self.cfg, self.cfg['maps'][key]
         b = cfg['base']
+        if var is not None and key in self.cleared:  # D138 repeat-run variety (existing reward types only)
+            v = cfg.get('variety') or {}
+            if var.get('affix'):
+                self.shard += int(v.get('affix_shard', 0))
+            if var.get('event'):
+                self.core += int(v.get('event_core', 0))
         self.coin += b['coin']; self.shard += b['shard']; self.bone += b['bone']; self.core += b['core']
         self.xp += b['xp']
         tier = m['tier']
@@ -525,13 +597,14 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
         p.day = day
         st = p.st()
         mod = week_rule(kn, order, day, offset, key, p.cleared)
+        rep = key in p.cleared
         if mod is None:
-            ok, used, extra, secs, taken, where = run_map(cfg, key, st, kn, rng, p.potions)
+            ok, used, extra, secs, taken, where = run_map(cfg, key, st, kn, rng, p.potions, repeat=rep)
         else:
             if (key, mod['id']) not in modded:
                 modded[(key, mod['id'])] = mod_cfg(cfg, key, mod)
             mc, cap = modded[(key, mod['id'])]
-            ok, used, extra, secs, taken, where = run_map(mc, key, st, kn, rng, p.potions if cap is None else min(cap, p.potions))
+            ok, used, extra, secs, taken, where = run_map(mc, key, st, kn, rng, p.potions if cap is None else min(cap, p.potions), repeat=rep)
         p.potions -= used
         runs += 1
         r = rec[key]
@@ -547,7 +620,7 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
                 r['gear'] = desc(p.blade) + ' ' + desc(p.charm)
                 r['B'], r['H'], r['lv'] = st['B'], st['H'], level_of(cfg, p.xp)
             feat_pay(p, kn, cfg, order, day, offset, key)
-            p.settle(key, extra)
+            p.settle(key, extra, dict(LAST_VAR) if rep else None)
             if first:
                 if key == stop_at:
                     break
@@ -695,6 +768,7 @@ def main(argv=None):
     ap.add_argument('--normal-mods', nargs='?', const='normal', choices=['normal', 'all'], default=None,
                     help='D94: weekly rule on repeat normal runs of the featured map (all = include casters)')
     ap.add_argument('--no-feat-normal', action='store_true', help='D108: without the featured mark on repeat normal runs')
+    ap.add_argument('--no-variety', action='store_true', help='D138: without the repeat-run variety (affixed elite + room event)')
     ap.add_argument('--feat-farm', action='store_true', help='D108: players detour to the featured map for the bonus')
     ap.add_argument('--target', default='burst', choices=FAMS)
     ap.add_argument('--uptime', type=float, default=0.70)
@@ -712,6 +786,9 @@ def main(argv=None):
         cfg["bounty"] = []
     if args.no_loot:
         cfg["loot_bias"] = {}
+    if args.no_variety:
+        global VARIETY
+        VARIETY = False
     if args.ref:
         print(ref_table(cfg, args.dodge, args.players * 5))
         return

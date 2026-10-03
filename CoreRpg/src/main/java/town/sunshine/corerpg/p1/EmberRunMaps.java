@@ -532,6 +532,8 @@ public final class EmberRunMaps {
     public final int goalReward, goalBonus;
     /** D118 raid revive (runs yml `raid_revive:`): extra last-phase revive at this boss HP ratio (0 = off), delay s */
     public final double raidLastReviveHp, raidReviveDelay;
+    /** D138 repeat-run variety (runs yml `variety:`); never null (rates 0 when the block is missing) */
+    public final Variety variety;
     public final String worldPrefix;
     public final Map<String, MapDef> maps;
     /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
@@ -547,6 +549,65 @@ public final class EmberRunMaps {
      * and never a multiplier: a heal-potion cap per run, an enemy-role substitution (only to roles the map defines),
      * or the first and third rooms trading their enemy groups.
      */
+    /**
+     * D138 repeat-run variety: on a normal Q01–Q07 run where every member already has the map's first clear, one room
+     * gets an affixed elite (blazing / split / shield) and, sometimes, one room becomes a timed optional event. Pays
+     * existing reward types only (余烬碎片 / 余烬核心) at settlement.
+     */
+    public static final class Variety {
+        public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList("blazing", "split", "shield"));
+        public final double affixRate, eventRate;
+        public final List<String> affixes;
+        public final int affixShard, eventCore, eventSecs;
+        public final double blazeEvery, blazeRadius, blazeWarn, blazeDmg;
+        public final int splitCount;
+        public final double splitHp, shieldHp;
+
+        Variety(Map<?, ?> m) {
+            affixRate = clamp01(num(m.get("affix_rate"), 0.0));
+            eventRate = clamp01(num(m.get("event_rate"), 0.0));
+            List<String> a = new ArrayList<String>();
+            if (m.get("affixes") instanceof List) for (Object o : (List<?>) m.get("affixes")) {
+                String id = String.valueOf(o).trim();
+                if (KNOWN.contains(id) && !a.contains(id)) a.add(id);
+            }
+            affixes = Collections.unmodifiableList(a);
+            affixShard = Math.max(0, (int) num(m.get("affix_shard"), 0));
+            eventCore = Math.max(0, (int) num(m.get("event_core"), 0));
+            eventSecs = Math.max(5, (int) num(m.get("event_secs"), 30));
+            Map<?, ?> bz = m.get("blazing") instanceof Map ? (Map<?, ?>) m.get("blazing") : Collections.emptyMap();
+            blazeEvery = Math.max(1.0, num(bz.get("every"), 3.0));
+            blazeRadius = Math.max(0.5, num(bz.get("radius"), 1.5));
+            blazeWarn = Math.max(0.5, num(bz.get("warn"), 1.0));
+            blazeDmg = Math.max(0.0, num(bz.get("dmg"), 1.0));
+            Map<?, ?> sp = m.get("split") instanceof Map ? (Map<?, ?>) m.get("split") : Collections.emptyMap();
+            splitCount = Math.max(0, Math.min(4, (int) num(sp.get("count"), 2)));
+            splitHp = Math.max(0.05, Math.min(1.0, num(sp.get("hp"), 0.5)));
+            Map<?, ?> sh = m.get("shield") instanceof Map ? (Map<?, ?>) m.get("shield") : Collections.emptyMap();
+            shieldHp = Math.max(1.0, num(sh.get("hp"), 1.6));
+        }
+
+        public boolean on() { return (affixRate > 0 && !affixes.isEmpty()) || eventRate > 0; }
+
+        /** Chinese tag shown on the elite's name and in chat */
+        public static String label(String id) {
+            return "blazing".equals(id) ? "炽热" : "split".equals(id) ? "分裂" : "shield".equals(id) ? "护盾" : id;
+        }
+
+        /** {affix room, affix id, event room} for this seed; entries are "" when not rolled. Deterministic. */
+        public String[] roll(long seed) {
+            java.util.Random r = new java.util.Random(seed);
+            String[] rooms = {"r1", "r2", "r3"};
+            String ar = "", at = "", er = "";
+            if (r.nextDouble() < affixRate && !affixes.isEmpty()) {
+                ar = rooms[r.nextInt(3)];
+                at = affixes.get(r.nextInt(affixes.size()));
+            }
+            if (r.nextDouble() < eventRate) er = rooms[r.nextInt(3)];
+            return new String[]{ar, at, er};
+        }
+    }
+
     public static final class Modifier {
         public final String id, name, text;
         public final int potionCap;                 // 0 = no cap
@@ -640,6 +701,7 @@ public final class EmberRunMaps {
         Map<?, ?> rv = root.get("raid_revive") instanceof Map ? (Map<?, ?>) root.get("raid_revive") : Collections.emptyMap();
         raidLastReviveHp = clamp01(num(rv.get("last_phase_hp"), 0.0));
         raidReviveDelay = Math.max(0.0, num(rv.get("delay"), 10.0));
+        variety = new Variety(root.get("variety") instanceof Map ? (Map<?, ?>) root.get("variety") : Collections.emptyMap());
         Map<?, ?> lb = root.get("loot_bias") instanceof Map ? (Map<?, ?>) root.get("loot_bias") : Collections.emptyMap();
         lootOwnFamily = clamp01(num(lb.get("own_family"), EmberRunRules.TARGET_WEIGHT));
         lootMapShare = clamp01(num(lb.get("map_share"), 0.5));

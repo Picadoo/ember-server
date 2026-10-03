@@ -55,6 +55,9 @@ public final class EmberRunSession {
     public double dmgFactor = 1.0;
     public EmberRunRules.Extra extra = EmberRunRules.Extra.NONE;
     public boolean extraDone;
+    /** D138 repeat-run variety fixed at entry ("" = none): affixed elite room + type, timed event room; done flags */
+    public String affixRoom = "", affix = "", eventRoom = "";
+    public boolean affixDone, eventDone;
     public final Set<UUID> acted = new LinkedHashSet<UUID>();
     public final Set<UUID> died = new LinkedHashSet<UUID>();
     /** D32: P1 heal potions each participant drank in this run (for the first-death-of-the-day refund) */
@@ -115,6 +118,8 @@ public final class EmberRunSession {
         m.put("fee", f);
         m.put("extra", extra.id);
         m.put("extra_done", extraDone);
+        if (!affix.isEmpty()) { m.put("affix", affix); m.put("affix_room", affixRoom); m.put("affix_done", affixDone); }
+        if (!eventRoom.isEmpty()) { m.put("event_room", eventRoom); m.put("event_done", eventDone); }
         m.put("acted", ids(acted));
         m.put("died", ids(died));
         Map<String, Object> pu = new LinkedHashMap<String, Object>();
@@ -164,6 +169,11 @@ public final class EmberRunSession {
         }
         s.extra = EmberRunRules.Extra.parse(str(m.get("extra")));
         s.extraDone = Boolean.TRUE.equals(m.get("extra_done"));
+        s.affix = m.get("affix") == null ? "" : String.valueOf(m.get("affix"));
+        s.affixRoom = m.get("affix_room") == null ? "" : String.valueOf(m.get("affix_room"));
+        s.affixDone = Boolean.TRUE.equals(m.get("affix_done"));
+        s.eventRoom = m.get("event_room") == null ? "" : String.valueOf(m.get("event_room"));
+        s.eventDone = Boolean.TRUE.equals(m.get("event_done"));
         readIds(m.get("acted"), s.acted);
         readIds(m.get("died"), s.died);
         if (m.get("potions") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("potions")).entrySet()) {
