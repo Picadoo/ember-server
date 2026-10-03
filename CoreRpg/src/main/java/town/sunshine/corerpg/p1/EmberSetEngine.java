@@ -85,10 +85,10 @@ public final class EmberSetEngine {
 
     public Tune tune() { return tune; }
 
-    /** D141 借势: a dodged boss telegraph fills the 烬爆 counter (the next swing explodes once the icd allows). */
-    public boolean primeBurst() {
-        if (!"burst".equals(family)) return false;
-        counter = every();
+    /** D141 借势: a dodged boss telegraph moves the 烬爆 counter forward by {@code n} swings (capped at the interval). */
+    public boolean primeBurst(int n) {
+        if (!"burst".equals(family) || n <= 0) return false;
+        counter = Math.min(every(), counter + n);
         return true;
     }
 

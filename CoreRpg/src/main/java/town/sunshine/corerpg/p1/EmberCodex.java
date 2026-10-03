@@ -69,6 +69,8 @@ public final class EmberCodex {
         return counts(d) && register(pd, d.family, d.slot, d.tier, d.source);
     }
 
+    public static int size() { return ENTRIES.size(); }
+
     public static int count(PlayerData pd) {
         int n = 0;
         for (Entry e : ENTRIES) if (has(pd, e.key())) n++;

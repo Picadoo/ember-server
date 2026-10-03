@@ -299,11 +299,11 @@ public final class EmberSetService implements Listener {
     // ------------------------------------------------------------------ clears / persistence
 
     /** D141 借势: fill the burst counter after a dodged boss telegraph. */
-    public boolean primeBurst(Player p) {
+    public boolean primeBurst(Player p, int n) {
         Session s = sessions.get(p.getUniqueId());
         if (s == null) s = session(p);
-        boolean ok = s != null && s.engine.primeBurst();
-        if (ok) EmberDamageTrace.set(p, "借势：躲开预警 → 下一次普攻触发烬爆");
+        boolean ok = s != null && s.engine.primeBurst(n);
+        if (ok) EmberDamageTrace.set(p, "借势：躲开预警 → 烬爆计数 +" + n + "（" + s.engine.counter() + "/" + s.engine.every() + "）");
         return ok;
     }
 

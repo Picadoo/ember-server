@@ -85,14 +85,23 @@ def fail_refund(p, w, d):
     return 0
 
 
+def honor_fee(p, fee):
+    """D142 深渊行者: the player's abyss fee (growth off = the table fee)"""
+    if p1sim.GROWTH is None:
+        return fee
+    return int(round(fee * p1sim.gm(p.st(), 'abyss_fee')))
+
+
 def fee_ok(p, fee, reserve):
     """the fee can be paid: coins above the reserve, else surplus T3 marks (D124)"""
+    fee = honor_fee(p, fee)
     if fee + reserve <= p.coin:
         return True
     return FEE_MARK > 0 and p.marks[3] - MARK_RESERVE >= -(-fee // FEE_MARK)
 
 
 def pay_fee(p, fee, reserve):
+    fee = honor_fee(p, fee)
     if fee + reserve <= p.coin or FEE_MARK <= 0:
         p.coin -= fee
     else:
@@ -104,6 +113,7 @@ def abyss_cfg(ccfg, t):
     row = ABYSS[t - 1]
     c = copy.deepcopy(ccfg)
     c['quality_w'] = row['quality']
+    c['abyss'] = t  # D142 深渊老手: abyss_taken only applies in abyss fights
     for m in c['maps'].values():
         for mob in m['mobs'].values():
             mob['hp'] *= row['hp']; mob['atk'] *= row['dmg']

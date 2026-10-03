@@ -20,7 +20,7 @@ public final class EmberGrowth {
 
     /** additive keys (default 0); dodge_secs keeps the max, dodge_icd the min; share_w adds over a base of 1 */
     static final Set<String> ADD = new HashSet<String>(java.util.Arrays.asList(
-            "dodge_secs", "dodge_heal", "dodge_icd", "burn_ticks", "burst_every", "sustain_every", "shard_bonus", "burn_spread", "dodge_burst", "spread_icd"));
+            "dodge_secs", "dodge_heal", "dodge_icd", "burn_ticks", "burst_every", "sustain_every", "shard_bonus", "burn_spread", "dodge_burst", "spread_icd", "hit_burst"));
 
     // ------------------------------------------------------------------ modifiers
 
@@ -148,6 +148,50 @@ public final class EmberGrowth {
     /** First respec free, then {@code respecCoin} each time. */
     public static int respecCost(Talents t, int resetsUsed) { return resetsUsed <= 0 ? 0 : t.respecCoin; }
 
+    // ------------------------------------------------------------------ honors (D142)
+
+    public static final class Honor {
+        public final String id, name, kind, arg, desc;
+        public final Map<String, Double> mods;
+        Honor(String id, String name, String kind, String arg, String desc, Map<String, Double> mods) {
+            this.id = id; this.name = name; this.kind = kind; this.arg = arg; this.desc = desc; this.mods = mods;
+        }
+    }
+
+    public static final class Honors {
+        public final List<Honor> list;
+        /** hard caps on the combined honor modifiers: a cap above 1 is a ceiling, below 1 a floor; additive keys: ceiling */
+        public final Map<String, Double> caps;
+        Honors(List<Honor> list, Map<String, Double> caps) { this.list = list; this.caps = caps; }
+        public Honor byId(String id) { for (Honor h : list) if (h.id.equals(id)) return h; return null; }
+    }
+
+    /** Combined honor modifiers with the hard caps applied (keys without a cap stay as combined). */
+    public static Map<String, Double> honorParts(Honors h, List<String> earned) {
+        List<Map<String, Double>> parts = new ArrayList<Map<String, Double>>();
+        if (h == null) return new LinkedHashMap<String, Double>();
+        for (Honor x : h.list) if (earned.contains(x.id)) parts.add(x.mods);
+        Mods m = Mods.combine(parts);
+        Map<String, Double> out = new LinkedHashMap<String, Double>(m.view());
+        for (Map.Entry<String, Double> e : out.entrySet()) {
+            Double cap = h.caps.get(e.getKey());
+            if (cap == null) continue;
+            double v = e.getValue();
+            if (ADD.contains(e.getKey()) || cap >= 1.0) e.setValue(Math.min(v, cap));
+            else e.setValue(Math.max(v, cap));
+        }
+        return out;
+    }
+
+    public static Honors parseHonors(Map<?, ?> root) {
+        Object o = root == null ? null : root.get("honors");
+        if (!(o instanceof Map)) return null;
+        Map<?, ?> m = (Map<?, ?>) o;
+        List<Honor> l = new ArrayList<Honor>();
+        for (Map<?, ?> x : maps(m.get("list"))) l.add(new Honor(s(x, "id"), s(x, "name"), s(x, "kind"), s(x, "arg"), s(x, "desc"), mods(x.get("mods"))));
+        return new Honors(Collections.unmodifiableList(l), mods(m.get("caps")));
+    }
+
     // ------------------------------------------------------------------ parsing (snakeyaml map)
 
     public static Talents parseTalents(Map<?, ?> root) {
@@ -196,6 +240,28 @@ public final class EmberGrowth {
         StringBuilder sb = new StringBuilder();
         for (Map.Entry<String, Double> e : m.entrySet()) sb.append(sb.length() == 0 ? "" : " ").append(e.getKey()).append('=')
                 .append(String.format(Locale.ROOT, "%.3f", e.getValue()));
+        return sb.toString();
+    }
+
+    static final Map<String, String> CN = new LinkedHashMap<String, String>();
+    static {
+        CN.put("coin", "结算余烬币"); CN.put("shard_bonus", "每次结算余烬碎片"); CN.put("abyss_fee", "深渊层费");
+        CN.put("abyss_taken", "深渊里受到伤害"); CN.put("reroll_coin", "洗练的币");
+        CN.put("dmg_affix", "对词缀精英伤害"); CN.put("dmg_split", "对分身伤害"); CN.put("set_dmg", "套装事件伤害");
+        CN.put("taken_tele", "受到首领预警招伤害"); CN.put("potion", "回复药回复"); CN.put("share_taken", "烬核自己那份");
+        CN.put("taken_affix", "受到词缀精英伤害");
+    }
+
+    /** "结算余烬币 +4% · 每次结算余烬碎片 +1 · 深渊层费 -5%" */
+    public static String describeCn(Map<String, Double> m) {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<String, Double> e : m.entrySet()) {
+            String k = e.getKey(), name = CN.containsKey(k) ? CN.get(k) : k;
+            double v = e.getValue();
+            String val = ADD.contains(k) ? String.format(Locale.ROOT, "%+.0f", v)
+                    : String.format(Locale.ROOT, "%+.1f%%", (v - 1.0) * 100).replace(".0%", "%");
+            sb.append(sb.length() == 0 ? "" : " · ").append(name).append(' ').append(val);
+        }
         return sb.toString();
     }
 

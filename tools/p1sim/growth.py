@@ -15,7 +15,7 @@ import p1config
 import p1sim
 
 PATH = os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-growth.yml')
-ADD = {'dodge_secs', 'dodge_heal', 'dodge_icd', 'burn_ticks', 'burst_every', 'sustain_every', 'shard_bonus', 'burn_spread', 'dodge_burst', 'spread_icd'}
+ADD = {'dodge_secs', 'dodge_heal', 'dodge_icd', 'burn_ticks', 'burst_every', 'sustain_every', 'shard_bonus', 'burn_spread', 'dodge_burst', 'spread_icd', 'hit_burst'}
 ADD_MAX = {'dodge_secs'}
 ADD_MIN = {'dodge_icd', 'spread_icd'}
 SHARE_W = 'share_w'  # additive over the base 1 (share_w: 2 = one extra portion)
@@ -40,6 +40,16 @@ def combine(parts):
                 out[k] = out.get(k, 1.0) + (v - 1.0)
             else:
                 out[k] = out.get(k, 1.0) * v
+    return out
+
+
+def cap_honors(m, caps):
+    """D142 hard caps (same as Java EmberGrowth.honorParts): >= 1 or additive = ceiling, < 1 = floor"""
+    out = dict(m)
+    for k, c in caps.items():
+        if k in out:
+            c = float(c)
+            out[k] = min(out[k], c) if (k in ADD or c >= 1.0) else max(out[k], c)
     return out
 
 
@@ -77,9 +87,9 @@ def build(g, talents=(), honors=(), affixes=None, affix_tier=4):
                 continue
             parts.append(n['mods'])
         if honors and (ctx is None or 'q07' in ctx):
-            for h in (g.get('honors') or {}).get('list', []):
-                if honors == 'all' or h['id'] in honors:
-                    parts.append(h['mods'])
+            hs = [h['mods'] for h in (g.get('honors') or {}).get('list', []) if honors == 'all' or h['id'] in honors]
+            if hs:
+                parts.append(cap_honors(combine(hs), (g.get('honors') or {}).get('caps') or {}))
         if affixes:
             rr = g.get('reroll') or {}
             for slot, aid in affixes.items():

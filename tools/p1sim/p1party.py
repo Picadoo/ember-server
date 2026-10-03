@@ -72,11 +72,13 @@ class Party:
                 if dh > 0 and self.t >= getattr(m, 'dodge_heal_cd', -1.0):
                     m.dodge_heal_cd = self.t + p1sim.gm(st, 'dodge_icd', 6.0)
                     m.hp = min(st['H'], m.hp + dh * st['H'])
-                if p1sim.gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势
-                    m.hits = 99
+                if p1sim.gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势: counter + n
+                    m.hits += int(p1sim.gm(st, 'dodge_burst', 0.0))
             return
         if st.get('mods'):
             raw *= p1sim.gm(st, 'taken_' + kind) * p1sim.gm(st, 'taken_all')
+            if kind == 'tele' and p1sim.gm(st, 'hit_burst', 0.0) > 0:  # D141 反震
+                m.hits += int(p1sim.gm(st, 'hit_burst', 0.0))
         m.hp -= raw * m.st['M']
         if 0 < m.hp < kn.potion_at * m.st['H'] and m.potions > 0 and self.t >= m.pcd:
             m.potions -= 1; m.used += 1

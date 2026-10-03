@@ -434,8 +434,9 @@ public final class EmberRunService implements Listener {
             if (at != null) {
                 if (!abyssOpen(d)) problems.add(p.getName() + " 未开放深渊（需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT) + "）");
                 else if (abyss > abyssMaxStart(d)) problems.add(p.getName() + " 深渊最高只能开第 " + abyssMaxStart(d) + " 层（先完整通关第 " + abyssBest(d) + " 层）");
-                if (d.getCoin() < at.fee && feeMarks(d, at.fee) == 0)
-                    problems.add(p.getName() + " 余烬币不足（这一层 " + at.fee + "，当前 " + d.getCoin() + "）"
+                int fee0 = feeFor(p, at.fee); // D142 深渊行者
+                if (d.getCoin() < fee0 && feeMarks(d, fee0) == 0)
+                    problems.add(p.getName() + " 余烬币不足（这一层 " + fee0 + "，当前 " + d.getCoin() + "）"
                             + (maps.abyssFeeMarkCoin > 0 ? "，多出来的 T3 印记也不够抵（1 枚抵 " + maps.abyssFeeMarkCoin + " 币，留 " + EmberCosmetics.MARK_RESERVE + " 枚）" : ""));
             } else if (challenge && !challengeOpen(d)) {
                 problems.add(p.getName() + " 未开放挑战版（需本人首通 " + maps.challenge.requires.toUpperCase(Locale.ROOT) + "）");
@@ -582,23 +583,24 @@ public final class EmberRunService implements Listener {
             s.cost.put(p.getUniqueId(), r.cost);
             ledgerRow(p.getUniqueId(), s.runId, "cost", "stamina:" + r.cost, EmberRunRules.ST_RESERVED);
             reserved.add(p);
-            if (at != null && at.fee > 0) { // P2-2: the segment fee rides with the stamina reservation
+            final int pfee = at == null ? 0 : feeFor(p, at.fee); // D142 深渊行者: own fee per player
+            if (at != null && pfee > 0) { // P2-2: the segment fee rides with the stamina reservation
                 PlayerData pd = data(p.getUniqueId());
-                int fm = pd.getCoin() < at.fee ? feeMarks(pd, at.fee) : 0; // F-review #5: surplus T3 marks pay when coins cannot
+                int fm = pd.getCoin() < pfee ? feeMarks(pd, pfee) : 0; // F-review #5: surplus T3 marks pay when coins cannot
                 if (fm > 0) {
                     pd.addPeriodCount(C_MARK + 3, "all", -fm);
                     s.fee.put(p.getUniqueId(), 0);
                     ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "mark:3:" + fm, EmberRunRules.ST_RESERVED);
-                    p.sendMessage(P + "§7这一层的费用 " + at.fee + " 币用 §f" + fm + " 枚 T3 印记§7抵了（余烬币不够；1 枚抵 " + maps.abyssFeeMarkCoin
+                    p.sendMessage(P + "§7这一层的费用 " + pfee + " 币用 §f" + fm + " 枚 T3 印记§7抵了（余烬币不够；1 枚抵 " + maps.abyssFeeMarkCoin
                             + " 币，剩 " + marks(pd, 3) + " 枚）· 没打成会和体力一起退回");
-                    log().info("[P1 run] " + s.runId + " abyss fee " + p.getName() + ": " + fm + " T3 mark(s) for " + at.fee + " coin");
-                } else if (!pd.takeCoin(at.fee)) {
+                    log().info("[P1 run] " + s.runId + " abyss fee " + p.getName() + ": " + fm + " T3 mark(s) for " + pfee + " coin");
+                } else if (!pd.takeCoin(pfee)) {
                     for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
-                    for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（这一层 " + at.fee + "）");
+                    for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（这一层 " + pfee + "）");
                     return true;
                 } else {
-                    s.fee.put(p.getUniqueId(), at.fee);
-                    ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "coin:" + at.fee, EmberRunRules.ST_RESERVED);
+                    s.fee.put(p.getUniqueId(), pfee);
+                    ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "coin:" + pfee, EmberRunRules.ST_RESERVED);
                 }
                 plugin.getDataStore().flushMutation(p.getUniqueId());
             }
@@ -1231,6 +1233,15 @@ public final class EmberRunService implements Listener {
         final int bountyN = fresh ? bountyPrev + bountyW : 0;
         List<EmberRunRules.Grant> bountyPaid = fresh ? EmberRunRules.bountyGrants(tiers, bountyPrev, bountyN) : Collections.<EmberRunRules.Grant>emptyList();
         grants.addAll(bountyPaid);
+        EmberGrowthService growth = EmberGrowthService.get(); // D142 余烬勋记: settlement coin % / +shards (own ledger rows)
+        Player gp = Bukkit.getPlayer(u);
+        if (growth != null && gp != null) {
+            int coins = 0;
+            for (EmberRunRules.Grant g : grants) if (g.kind == EmberRunRules.Kind.COIN) coins += g.amount;
+            int hc = growth.honorCoin(gp, coins), hs = growth.honorShard(gp);
+            if (hc > 0) grants.add(new EmberRunRules.Grant("honor_coin", EmberRunRules.Kind.COIN, null, hc, null));
+            if (hs > 0) grants.add(new EmberRunRules.Grant("honor_shard", EmberRunRules.Kind.MAT, EmberUpgradeRules.MAT_SHARD, hs, null));
+        }
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
         long now = System.currentTimeMillis();
         boolean[] created = new boolean[1];
@@ -1253,6 +1264,7 @@ public final class EmberRunService implements Listener {
         int oldBest = abyssBest(pd);
         if (newBest) pd.addPeriodCount(C_ABYSS_BEST, "all", s.abyss - abyssBest(pd)); // P2-2: opens tier + 1
         if (newBest && cosmetics != null) cosmetics.onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
+        if (growth != null && gp != null) growth.refreshHonors(gp); // D142: one-time unlock notice
         if (top != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records
             String nm = Bukkit.getOfflinePlayer(u).getName();
             if (s.abyss > 0) top.abyssBest(u, nm, abyssBest(pd));
@@ -2052,6 +2064,18 @@ public final class EmberRunService implements Listener {
         String c = mobClass(src);
         if (c == null) return null;
         return "split".equals(c) ? "affix" : c;
+    }
+
+    /** D142 深渊行者: this player's segment fee */
+    int feeFor(Player p, int fee) {
+        EmberGrowthService g = EmberGrowthService.get();
+        return g == null ? fee : g.abyssFee(p, fee);
+    }
+
+    /** D142: the player stands in an abyss segment right now */
+    public boolean inAbyss(Player p) {
+        EmberRunDirector d = p == null ? null : byWorld.get(p.getWorld().getName());
+        return d != null && d.s.abyss > 0;
     }
 
     public boolean isRunWorld(World w) { return w != null && byWorld.containsKey(w.getName()); }
@@ -2991,6 +3015,7 @@ public final class EmberRunService implements Listener {
             return String.valueOf(n);
         }
         if ("active".equals(key)) return EmberMode.active() ? "yes" : "no";
+        if (key.startsWith("honor_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.honorPapi(p, d, key.substring(6)); } // D142
         if (key.startsWith("spec_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.papi(p, d, key.substring(5)); } // D141
         if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";

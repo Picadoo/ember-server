@@ -1,4 +1,6 @@
-"""D141 tuning helper: like growthcheck.py but each build carries raw mods (no yml): '{"mods": {...}, "set": "burst", "label": ".."}'"""
+"""D141 tuning helper: like growthcheck.py but each build carries raw mods (no yml): '{"mods": {...}, "set": "burst", "label": ".."}'
+"mods" may be a list of dicts (one per node): they are combined with growth.combine (a plain merged dict would let a
+later duplicate key override the earlier one instead of multiplying)."""
 import sys, json, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import p1config, p1sim, p2econ
@@ -26,6 +28,9 @@ for b in builds:
         p1sim.GROWTH = None
         base[fam] = rates(fam)
     mods = b['mods']; gate = b.get('gate')
+    if isinstance(mods, list):  # several nodes: combine like the game (same keys multiply, not override)
+        import growth
+        mods = growth.combine(mods)
     p1sim.GROWTH = lambda info, ctx: (mods if (not gate or info.get('set') == gate) else None)
     r = rates(fam)
     p1sim.GROWTH = None

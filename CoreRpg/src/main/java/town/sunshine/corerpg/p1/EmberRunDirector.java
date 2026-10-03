@@ -844,6 +844,7 @@ final class EmberRunDirector {
         for (int i = 0; i < inside.size(); i++) {
             Player p = inside.get(i);
             svc.skillHit(s, p, src, share != null ? share[i] : each, kind);
+            if (bossSkill && !sk.share && g != null && !p.isDead()) g.onTeleHit(p); // D141 反震
             if (sk.kb > 0 && !p.isDead()) push(p, src == null ? o : src.getLocation(), sk.kb);
             hit++;
         }

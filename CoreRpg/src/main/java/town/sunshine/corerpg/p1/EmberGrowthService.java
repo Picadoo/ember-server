@@ -46,6 +46,11 @@ public final class EmberGrowthService implements Listener {
     private final CoreRpgPlugin plugin;
     private final EmberRunService runs;
     private EmberGrowth.Talents talents;
+    private EmberGrowth.Honors honors;
+    private final Map<UUID, Object[]> honorCache = new ConcurrentHashMap<UUID, Object[]>(); // uuid → {until ms, List<String>}
+    static final String C_HONOR_SEEN = "p4_honor_";     // + id, period all: the one-time "勋记解锁" notice was sent
+    static final String HONOR_MENU = "ember_p1_honor";
+    private static final Map<UUID, String> HFROM = new ConcurrentHashMap<UUID, String>();
     private long epoch;
     private final Map<UUID, Object[]> cache = new ConcurrentHashMap<UUID, Object[]>(); // uuid → {key, Mods}
     private final Map<UUID, Long> dodgeUntil = new ConcurrentHashMap<UUID, Long>();
@@ -72,9 +77,12 @@ public final class EmberGrowthService implements Listener {
             Object o = new Yaml().load(r);
             Map<?, ?> root = o instanceof Map ? (Map<?, ?>) o : null;
             talents = EmberGrowth.parseTalents(root);
+            honors = EmberGrowth.parseHonors(root);
+            honorCache.clear();
             epoch++;
             cache.clear();
-            plugin.getLogger().info("[P1 growth] " + EmberGrowth.FILE + ": talents " + (talents == null ? "off" : talents.nodes.size() + " nodes / " + talents.points.size() + " points"));
+            plugin.getLogger().info("[P1 growth] " + EmberGrowth.FILE + ": talents " + (talents == null ? "off" : talents.nodes.size() + " nodes / " + talents.points.size() + " points")
+                    + ", honors " + (honors == null ? "off" : honors.list.size()));
         } catch (Exception e) {
             talents = null;
             plugin.getLogger().warning("[P1 growth] cannot read " + EmberGrowth.FILE + ": " + e);
@@ -131,10 +139,12 @@ public final class EmberGrowthService implements Listener {
         PlayerData d = data(p.getUniqueId());
         if (d == null) return EmberGrowth.Mods.NONE;
         String set = runs.loadouts().get(p).activeSet;
-        String key = epoch + "|" + set;
+        List<String> hon = honorsEarned(p.getUniqueId(), d);
+        String key = epoch + "|" + set + "|" + hon;
         Object[] c = cache.get(p.getUniqueId());
         if (c != null && key.equals(c[0])) return (EmberGrowth.Mods) c[1];
         List<Map<String, Double>> parts = new ArrayList<Map<String, Double>>(EmberGrowth.talentParts(talents, picks(d), set));
+        if (honors != null && !hon.isEmpty()) parts.add(EmberGrowth.honorParts(honors, hon));
         EmberGrowth.Mods m = EmberGrowth.Mods.combine(parts);
         cache.put(p.getUniqueId(), new Object[]{key, m});
         return m;
@@ -165,6 +175,7 @@ public final class EmberGrowthService implements Listener {
         EmberGrowth.Mods m = mods(p);
         if (m.isEmpty()) return 1.0;
         double r = m.get("taken_all");
+        if (m.has("abyss_taken") && runs.inAbyss(p)) r *= m.get("abyss_taken"); // D142 深渊老手 (abyss only)
         if ("tele".equals(cls)) r *= m.get("taken_tele");
         else if ("boss".equals(cls)) r *= m.get("taken_boss");
         else if ("affix".equals(cls)) r *= m.get("taken_mob") * m.get("taken_affix");
@@ -182,8 +193,9 @@ public final class EmberGrowthService implements Listener {
             dodgeUntil.put(p.getUniqueId(), now + (long) (secs * 1000));
             p.sendActionBar(ChatColor.GOLD + "躲开了！" + String.format(Locale.ROOT, "%.0f", secs) + " 秒内伤害 +" + pct(m.get("dodge_dmg") - 1));
         }
-        if (m.get("dodge_burst") > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p))
-            p.sendActionBar(ChatColor.GOLD + "借势！下一次普攻触发烬爆");
+        int db = (int) Math.round(m.get("dodge_burst"));
+        if (db > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, db))
+            p.sendActionBar(ChatColor.GOLD + "借势！烬爆计数 +" + db);
         double heal = m.get("dodge_heal");
         if (heal > 0) {
             Long cd = dodgeHealCd.get(p.getUniqueId());
@@ -192,6 +204,14 @@ public final class EmberGrowthService implements Listener {
                 EmberHeal.heal(p, heal * EmberHeal.maxHp(p), "D141 踏步回气 " + pct(heal));
             }
         }
+    }
+
+    /** A boss telegraph hit this player (反震: the 烬爆 counter moves forward). */
+    public void onTeleHit(Player p) {
+        EmberGrowth.Mods m = mods(p);
+        int hb = (int) Math.round(m.get("hit_burst"));
+        if (hb > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, hb))
+            p.sendActionBar(ChatColor.GOLD + "反震！烬爆计数 +" + hb);
     }
 
     public double potionMult(Player p) { return mods(p).get("potion"); }
@@ -323,6 +343,146 @@ public final class EmberGrowthService implements Listener {
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (p.isOnline()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open " + menu + " " + p.getName());
         });
+    }
+
+    // ------------------------------------------------------------------ honors (D142)
+
+    public EmberGrowth.Honors honors() { return honors; }
+
+    /** one honor reached? (all conditions are existing one-time achievements) */
+    public boolean honorDone(PlayerData d, EmberGrowth.Honor h) {
+        if (d == null || h == null) return false;
+        int n;
+        try { n = h.arg == null || h.arg.trim().isEmpty() ? 0 : Integer.parseInt(h.arg.trim()); } catch (NumberFormatException e) { n = 0; }
+        if ("abyss_floor".equals(h.kind)) return runs.abyssBest(d) >= n;
+        if ("challenge_count".equals(h.kind)) {
+            int c = 0;
+            for (String k : d.getCounters().keySet()) if (k.startsWith(C_CHAL) && k.endsWith("@all")) c++;
+            return c >= n;
+        }
+        if ("raid_count".equals(h.kind)) {
+            int c = 0;
+            for (String r : new String[]{"r01", "r02", "r03"}) if (EmberCosmetics.raidClears(d, r) > 0) c++;
+            return c >= n;
+        }
+        if ("codex_full".equals(h.kind)) return EmberCodex.count(d) >= EmberCodex.size();
+        return false;
+    }
+
+    /** earned honor ids (cached 5 s per player; the menu / settlement call {@link #refreshHonors}) */
+    public List<String> honorsEarned(UUID u, PlayerData d) {
+        if (honors == null || d == null) return java.util.Collections.emptyList();
+        Object[] c = honorCache.get(u);
+        long now = System.currentTimeMillis();
+        if (c != null && (Long) c[0] > now) {
+            @SuppressWarnings("unchecked") List<String> l = (List<String>) c[1];
+            return l;
+        }
+        List<String> l = new ArrayList<String>();
+        for (EmberGrowth.Honor h : honors.list) if (honorDone(d, h)) l.add(h.id);
+        honorCache.put(u, new Object[]{now + 5000L, l});
+        return l;
+    }
+
+    /** after a settlement / on join: recompute and send the one-time unlock notice for new honors */
+    public void refreshHonors(Player p) {
+        if (honors == null || p == null) return;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return;
+        honorCache.remove(p.getUniqueId());
+        for (String id : honorsEarned(p.getUniqueId(), d)) {
+            if (d.periodCount(C_HONOR_SEEN + id, "all") > 0) continue;
+            d.addPeriodCount(C_HONOR_SEEN + id, "all", 1);
+            EmberGrowth.Honor h = honors.byId(id);
+            p.sendMessage(P + "§6获得余烬勋记「" + h.name + "」§7— " + h.desc + " §8（账号永久，/corerpg p1 honor 查看）");
+            plugin.getLogger().info("[P1 growth] " + p.getName() + " honor " + id);
+        }
+    }
+
+    /** settlement coin bonus for these coins (0 when no honor) */
+    public int honorCoin(Player p, int coins) {
+        if (p == null || coins <= 0) return 0;
+        double m = mods(p).get("coin");
+        return m <= 1.0 ? 0 : (int) Math.round(coins * (m - 1.0));
+    }
+
+    public int honorShard(Player p) { return p == null ? 0 : (int) Math.round(mods(p).get("shard_bonus")); }
+
+    /** abyss segment fee after 深渊行者 */
+    public int abyssFee(Player p, int fee) {
+        if (p == null || fee <= 0) return fee;
+        return (int) Math.round(fee * mods(p).get("abyss_fee"));
+    }
+
+    public boolean honorCommand(Player p, String[] args) {
+        String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if ("from".equals(op)) {
+            String from = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+            if (HONOR_FROM.containsKey(from)) HFROM.put(p.getUniqueId(), from); else HFROM.remove(p.getUniqueId());
+        } else if ("back".equals(op)) {
+            String menu = HONOR_FROM.get(HFROM.get(p.getUniqueId()));
+            if (menu != null) openMenu(p, menu);
+            return true;
+        } else if ("list".equals(op)) {
+            PlayerData d = data(p.getUniqueId());
+            if (honors == null || d == null) { p.sendMessage(P + "余烬勋记未配置"); return true; }
+            List<String> e = honorsEarned(p.getUniqueId(), d);
+            p.sendMessage(P + "§6余烬勋记 §7" + e.size() + "/" + honors.list.size());
+            for (EmberGrowth.Honor h : honors.list) p.sendMessage(P + (e.contains(h.id) ? "§a✔ " : "§8✘ ") + h.name + " §7— " + h.desc);
+            return true;
+        } else {
+            HFROM.remove(p.getUniqueId());
+        }
+        refreshHonors(p);
+        openMenu(p, HONOR_MENU);
+        return true;
+    }
+
+    static final Map<String, String> HONOR_FROM = new LinkedHashMap<String, String>();
+    static {
+        HONOR_FROM.put("gear", "ember_p1_gear");
+        HONOR_FROM.put("hub", "ember_hub");
+        HONOR_FROM.put("spec", "ember_p1_spec");
+    }
+
+    /** key after "honor_" */
+    public String honorPapi(Player p, PlayerData d, String key) {
+        if (honors == null || d == null) return "";
+        List<String> e = honorsEarned(p.getUniqueId(), d);
+        if ("n".equals(key)) return "§7已得 §f" + e.size() + "§7/" + honors.list.size();
+        if ("back".equals(key)) {
+            String f = HFROM.get(p.getUniqueId());
+            return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "spec".equals(f) ? "§7返回天赋页" : "§7关闭";
+        }
+        if ("total".equals(key)) {
+            Map<String, Double> m = EmberGrowth.honorParts(honors, e);
+            return m.isEmpty() ? "§8还没有勋记效果" : "§a" + EmberGrowth.describeCn(m);
+        }
+        if (key.startsWith("name_") || key.startsWith("st_") || key.startsWith("desc_")) {
+            int i;
+            try { i = Integer.parseInt(key.substring(key.indexOf('_') + 1)); } catch (NumberFormatException ex) { return ""; }
+            if (i < 1 || i > honors.list.size()) return "";
+            EmberGrowth.Honor h = honors.list.get(i - 1);
+            boolean on = e.contains(h.id);
+            if (key.startsWith("name_")) return (on ? "§a✔ " : "§8✘ ") + h.name;
+            if (key.startsWith("desc_")) return (on ? "§f" : "§7") + h.desc;
+            return on ? "§a已获得（账号永久）" : "§7条件：" + condText(h);
+        }
+        return "";
+    }
+
+    static String condText(EmberGrowth.Honor h) {
+        if ("abyss_floor".equals(h.kind)) return "深渊·余烬层最高到第 " + h.arg + " 层";
+        if ("challenge_count".equals(h.kind)) return "首通任意 " + h.arg + " 张挑战版";
+        if ("raid_count".equals(h.kind)) return "3".equals(h.arg) ? "首通全部三个团本" : "首通任意 " + h.arg + " 个团本";
+        if ("codex_full".equals(h.kind)) return "图录全部点亮";
+        return h.kind;
+    }
+
+    @EventHandler
+    public void onJoin(org.bukkit.event.player.PlayerJoinEvent e) {
+        final Player p = e.getPlayer();
+        Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) refreshHonors(p); }, 100L);
     }
 
     // ------------------------------------------------------------------ placeholders (%corerpg_p1_spec_*%)

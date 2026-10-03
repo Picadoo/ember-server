@@ -178,11 +178,15 @@ class Fight:
                 if dh > 0 and self.t >= getattr(self, 'dodge_heal_cd', -1.0):
                     self.dodge_heal_cd = self.t + gm(st, 'dodge_icd', 6.0)
                     self.hp = min(st['H'], self.hp + dh * st['H'])
-                if gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势: the next swing sets off 烬爆 (icd unchanged)
-                    self.hits = 99
+                if gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势: the 烬爆 counter jumps by this many swings (icd unchanged)
+                    self.hits += int(gm(st, 'dodge_burst', 0.0))
             return
         if st.get('mods'):
             raw *= gm(st, 'taken_' + kind) * (gm(st, 'taken_affix') if affix else 1.0) * gm(st, 'taken_all')
+            if self.cfg.get('abyss'):
+                raw *= gm(st, 'abyss_taken')
+            if kind == 'tele' and gm(st, 'hit_burst', 0.0) > 0:  # D141 反震: hit by a boss telegraph → 烬爆 counter + n
+                self.hits += int(gm(st, 'hit_burst', 0.0))
         dmg = raw * self.st['M']
         self.hp -= dmg
         self.taken += dmg
@@ -497,6 +501,15 @@ class Player:
                 self.bone += int(b.get('bone', 0)); self.core += int(b.get('core', 0))
 
     def settle(self, key, extra, var=None):
+        c0 = self.coin
+        self._settle(key, extra, var)
+        if GROWTH is not None:  # D142 余烬勋记: settlement coin % and +shards
+            st = self.st()
+            if self.coin > c0 and gm(st, 'coin') > 1.0:
+                self.coin += int(round((self.coin - c0) * (gm(st, 'coin') - 1.0)))
+            self.shard += int(gm(st, 'shard_bonus', 0.0))
+
+    def _settle(self, key, extra, var=None):
         self.bounty()
         cfg, m = self.cfg, self.cfg['maps'][key]
         b = cfg['base']
