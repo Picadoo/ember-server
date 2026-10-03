@@ -18,7 +18,7 @@ SkeletonKingSword:
       Health: 10
       MovementSpeed: 0.1
 KingsCrown:
-  Id: GOLDEN_HELMET
+  Id: GOLD_HELMET
   Data: 0
   Amount: 1
   Display: '&dCrown of the King'
