@@ -1275,3 +1275,20 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 进服重写签名有效的 P1 物品名字和 lore，只改显示 |
 | 代码 | EmberItems `relabel`；EmberLoadoutService `onJoin` 40 tick 后 |
 | 测试 | P1Fox 进服「10 old item label(s) rewritten」 |
+
+### 13.55 挑战失败退一半体力（CoreRpg 1.53.0，D128，balance_version 18）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 每个体力日第一次失败的挑战版或深渊层退还 50% 体力；不给掉落和币，层费不退；挑战和深渊共用每天一次 |
+| 代码 | EmberRunService `fail`（先读 fightStarted）/ `failRefund` / `failRefundLabel`（PAPI `p1_failrefund`）；EmberRunRules `failRefundAmount` / `failRefundRun` / `FAIL_REFUND_KEY`；EmberRunMaps `failRefund`；ember_p1_challenge / ember_p1_abyss 各一行 |
+| 参数源 | ember-v1-runs.yml `fail_refund: 0.5`；p2econ `--fail-refund`（out-p2econ-d128-fail-refund-*.md） |
+| 测试 | 单测 `failRefundIsHalfOncePerDayD128`；FreshQ13 两次 Q01 挑战失败：第一次 +15，第二次不退 |
+
+### 13.56 刷怪点检查（D129）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 门格空气（存档时开着）或铁栏都算对，别的方块报错；团本 r01 / r02 单独成块 |
+| 代码 | scripts/check-dp-spawns.py |
+| 测试 | live 图 9 个副本全 ok |
