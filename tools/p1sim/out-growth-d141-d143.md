@@ -53,6 +53,6 @@ Worst: t1a (回身斩) at dodge 0.3: day 25 → 27 = **+0.29 week** (limit 0.5).
 
 | dodge | off (week) | on (week) | Δ |
 |---|---|---|---|
-| 0.3 | pending | pending | — |
-| 0.5 | pending | pending | — |
-| 0.7 | pending | pending | — |
+| 0.3 | 7.80 | 7.60 | -0.20 |
+| 0.5 | 5.44 | 5.50 | +0.06 |
+| 0.7 | 4.42 | 4.00 | -0.42 |

@@ -1396,7 +1396,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 来源 | 用户 10-03 15:42：服主说成长太单线 → 有上限的横向成长、装备仍是主线；三样全开到顶时 Q01–Q07 / 团本通关率 ±3 以内、Q07 首通中位和两件极品最快路线 ±0.5 周 |
 | 规则 | 3 排 × 3 个天赋，每排一个、从上往下点；专精点 6（首通 Q03 / Q05 / Q07、任一挑战、任一团本、深渊 5 层），排价 1 / 2 / 3 点；学会付一次币 800 / 2000 / 4000；重置第一次免费，之后 2000 币；只在城里改 |
 | 参数源 | `ember-v1-growth.yml` `talents:`（两份一致）；修饰键表见 P2 草案 §5za |
-| 模型 | `tools/p1sim/growth.py` + `growthtune.py` / `growthcheck.py` / `growthraid.py` / `growthrun.py`；终验 `tools/p1sim/out-growth-d141-d143.md`：Q01–Q07 / R01–R03 通关率 ±3（Q03/Q04 普通 0.5 档 +3.3～3.6 接受），Q07 首通中位 ≤ +0.29 周 |
+| 模型 | `tools/p1sim/growth.py` + `growthtune.py` / `growthcheck.py` / `growthraid.py` / `growthrun.py`；终验 `tools/p1sim/out-growth-d141-d143.md`：Q01–Q07 / R01–R03 通关率 ±3（Q03/Q04 普通 0.5 档 +3.3～3.6 接受），Q07 首通中位 ≤ +0.29 周，两件极品最快路线 −0.42～+0.06 周 |
 | 上线 | CoreRpg 1.60.0（10-03 18:23 CST），balance_version 24，三样一起上线 |
 
 ### 13.68 余烬勋记（D142，§5za 第 2 部分）
