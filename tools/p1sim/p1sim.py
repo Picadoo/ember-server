@@ -78,6 +78,7 @@ class Knobs:
         self.coin_reserve = kw.get('coin_reserve', 100)
         self.target = kw.get('target', 'burst')
         self.swap = kw.get('swap', False)   # §6.3 free enhance-track swap when equipping a better drop
+        self.quality_chase = kw.get('quality_chase', False)  # late-game: prefer higher q even if craft makes power dip
         self.route = kw.get('route', 'stepdown')  # stepdown (v3 bot) | alternate (v2 bot)
         self.normal_mods = kw.get('normal_mods', None)  # D94: None | 'normal' (rules marked normal) | 'all' (incl. casters)
         # D108: +normal_bonus_marks on repeat NORMAL clears of the featured map (T1/T2 maps). 'config' = as the runs yml,
@@ -468,12 +469,16 @@ class Player:
         cand = dict(new)
         if kn.swap and cur['enh'] > cand['enh']:
             cand['enh'], cand['pity'] = cur['enh'], cur['pity']
+        # quality_chase (forge-sink phase 2): take a strictly better-quality target-family piece even when
+        # the worn piece's forged craft makes raw power a hair higher — player re-forges craft next week.
+        chase = (getattr(kn, 'quality_chase', False) and new['q'] > cur['q']
+                 and new['tier'] >= cur['tier'] and new['fam'] == kn.target and cur['fam'] == kn.target)
         lv = level_of(cfg, self.xp)
         if slot == 'blade':
             a, b = stats(cfg, cand, self.charm, lv), stats(cfg, self.blade, self.charm, lv)
         else:
             a, b = stats(cfg, self.blade, cand, lv), stats(cfg, self.blade, self.charm, lv)
-        if power(cfg, a, kn) > power(cfg, b, kn) * 1.0001:
+        if chase or power(cfg, a, kn) > power(cfg, b, kn) * 1.0001:
             if kn.swap and cand['enh'] == cur['enh'] and cur['enh'] > new['enh']:
                 cur = dict(cur, enh=new['enh'], pity=new['pity'])
             if slot == 'blade':

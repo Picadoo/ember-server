@@ -68,6 +68,95 @@ MARK_RESERVE = 8
 # Endgame #6 (D128): the first failed challenge / abyss run of the day gives back this share of its stamina (0 = off)
 FAIL_REFUND = float(miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('fail_refund', 0) or 0)
 
+# §5.3 craft (精工) / quality (成色) coin sinks — EmberUpgradeRules.refineCost / qualityCost (coin only; mats assumed)
+# craft index 0/1/2/3 = 0/2/4/6%; quality 0→1 / 1→2 only (q≥2 = 极品, drop-only). Two worn T3 pieces full ≈ 9k.
+CRAFT_COIN = {0: 300, 1: 600, 2: 1200}
+QUALITY_COIN = {0: 800, 1: 1600}
+FORGE_SINK = True  # default ON; --no-forge-sink restores pre-sink coin piles
+FORGE_RESERVE = 1000  # leave room for enhance / abyss fees (same ballpark as phase2_abyss reserve)
+
+
+def forge_sink(p, reserve=None):
+    """Phase-2 weekly coin sink: greedily raise worn T3 craft toward 3 and quality toward 2.
+    Prefers higher growth-gain, then the weaker piece. Materials assumed available (coin-only model).
+    Returns coin spent this call; accumulates on p.forge_spent."""
+    if not FORGE_SINK:
+        return 0
+    if reserve is None:
+        reserve = FORGE_RESERVE
+    cfg = p.cfg
+    spent = 0
+    while True:
+        cands = []
+        for it in (p.blade, p.charm):
+            if it['tier'] < 3 or it['fam'] == 'none':
+                continue
+            base = cfg['q'][it['q']] + cfg['f'][it['f']]
+            if it['f'] < 3:
+                cost = CRAFT_COIN[it['f']]
+                gain = cfg['f'][it['f'] + 1] - cfg['f'][it['f']]
+                cands.append((gain, base, cost, 'f', it))
+            if it['q'] < 2:
+                cost = QUALITY_COIN[it['q']]
+                gain = cfg['q'][it['q'] + 1] - cfg['q'][it['q']]
+                cands.append((gain, base, cost, 'q', it))
+        if not cands:
+            break
+        # higher value gain first, then weaker piece (lower current q+f); skip steps that break the reserve
+        cands.sort(key=lambda x: (-x[0], x[1], x[2]))
+        pick = next((c for c in cands if p.coin - c[2] >= reserve), None)
+        if pick is None:
+            break
+        gain, base, cost, kind, it = pick
+        p.coin -= cost
+        spent += cost
+        if kind == 'f':
+            it['f'] += 1
+        else:
+            it['q'] += 1
+    p.forge_spent = getattr(p, 'forge_spent', 0) + spent
+    return spent
+
+
+def abyss_clear_table(cfg, dodges=(0.3, 0.5, 0.7), n_runs=40, seed=42):
+    """P2-2 clear-rate by abyss tier for representative late-game gear states (chrate / bossmoves spirit).
+    Returns list of markdown lines."""
+    ccfg = challenge_cfg(cfg)
+    # representative worn sets (burst family); craft field is 'f', quality is 'q'
+    def piece(slot, tier, enh, q, f):
+        return dict(p1sim.item('burst', slot, tier, q, f), enh=enh)
+    states = [
+        ('刚首通Q07', piece('blade', 3, 0, 0, 0), piece('charm', 2, 8, 0, 0), 28),
+        ('中期T3', piece('blade', 3, 8, 1, 1), piece('charm', 3, 8, 1, 1), 30),
+        ('两件极品', piece('blade', 3, 10, 3, 3), piece('charm', 3, 10, 3, 3), 30),
+    ]
+    lines = []
+    lines.append('# P2-2 abyss clear-rate by tier (ember-v1-runs.yml abyss.tiers)')
+    lines.append('')
+    lines.append('Each cell = mean clear rate over the 7 maps × %d runs (seed %d). Gear is fixed burst two-piece.'
+                 % (n_runs, seed))
+    lines.append('')
+    hdr = '| 装备 | 躲技能 | ' + ' | '.join('第%d层' % t for t in range(1, len(ABYSS) + 1)) + ' |'
+    sep = '|---|---:|' + '|'.join(['---:'] * len(ABYSS)) + '|'
+    lines.append(hdr)
+    lines.append(sep)
+    rng = random.Random(seed)
+    for name, bl, ch, lv in states:
+        st = p1sim.stats(cfg, bl, ch, lv)
+        for d in dodges:
+            kn = p1sim.Knobs(d)
+            cells = []
+            for t in range(1, len(ABYSS) + 1):
+                ac = abyss_cfg(ccfg, t)
+                rate = abyss_rate(ac, st, kn, rng, n=n_runs)
+                cells.append('%d%%' % round(100 * rate))
+            lines.append('| %s | %.1f | %s |' % (name, d, ' | '.join(cells)))
+    lines.append('')
+    lines.append('Tier factors (hp × dmg, fee): ' + ', '.join(
+        'L%d ×%.2f/%.2f fee %d' % (i + 1, row['hp'], row['dmg'], row['fee']) for i, row in enumerate(ABYSS)))
+    return lines
+
+
 
 def fail_refund(p, w, d):
     """D128: call after a failed challenge / abyss run on day d (0..6) of week w. Banks FAIL_REFUND of one run's stamina
@@ -251,12 +340,15 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                         best = max(best, tier)
                     p.invest()
         tiers_played.append(tier if can_ch else 0)
+        forge_sink(p, reserve)  # §5.3 craft/quality coin sink (once per week; --no-forge-sink to disable)
         tgt = kn.target
         done = p.blade['tier'] == 3 and p.charm['tier'] == 3 and p.blade['fam'] == tgt and p.charm['fam'] == tgt
         out.append({'week': w + 1, 'set': done, 'enh': (p.blade['enh'] + p.charm['enh']) / 2, 'coin': p.coin,
                     'q': max(p.blade['q'], p.charm['q']), 'qmin': min(p.blade['q'], p.charm['q']), 'marks': marks_earned,
                     'B': p.st()['B'], 'ch': ch_runs, 'best': best, 'fees': fees, 'tier': tiers_played[-1],
-                    'blocked': blocked, 'top_short': top_short, 'days': (w + 1) * 7})
+                    'blocked': blocked, 'top_short': top_short, 'days': (w + 1) * 7,
+                    'forge': getattr(p, 'forge_spent', 0),
+                    'craft': (p.blade['f'] + p.charm['f']) / 2})
     return out
 
 
@@ -475,11 +567,14 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
                 p.settle(key, extra, dict(p1sim.LAST_VAR)) if use is cfg else settle_with(p, ccfg, key, extra)
                 marks_earned += 1
                 p.invest()
+        forge_sink(p, FORGE_RESERVE)  # §5.3 craft/quality coin sink (once per week; --no-forge-sink to disable)
         tgt = kn.target
         done = p.blade['tier'] == 3 and p.charm['tier'] == 3 and p.blade['fam'] == tgt and p.charm['fam'] == tgt
         out.append({'week': w + 1, 'set': done, 'enh': (p.blade['enh'] + p.charm['enh']) / 2, 'coin': p.coin,
                     'q': max(p.blade['q'], p.charm['q']), 'qmin': min(p.blade['q'], p.charm['q']), 'marks': marks_earned,
-                    'B': p.st()['B'], 'ch': ch_runs, 'best': 0, 'fees': 0, 'tier': 0})
+                    'B': p.st()['B'], 'ch': ch_runs, 'best': 0, 'fees': 0, 'tier': 0,
+                    'forge': getattr(p, 'forge_spent', 0),
+                    'craft': (p.blade['f'] + p.charm['f']) / 2})
     return out
 
 
@@ -517,6 +612,7 @@ def main():
     ap.add_argument('--weeks', type=int, default=8)
     ap.add_argument('--dodge', type=float, default=0.5)
     ap.add_argument('--no-swap', action='store_true', help='phase 2 without the §6.3 enhance-track swap (old behaviour)')
+    ap.add_argument('--no-forge-sink', action='store_true', help='disable §5.3 craft/quality coin sinks in phase 2 (default ON)')
     ap.add_argument('--trade', action='store_true', help='add the P2-3 market model (weekly best-of-10 purchase)')
     ap.add_argument('--abyss', action='store_true', help='add the P2-2 abyss policy as a third column')
     ap.add_argument('--raid', action='store_true', help='add the P2-5/6 raids (rotation + weekly raid clears, shared cap)')
@@ -545,6 +641,9 @@ def main():
     ap.add_argument('--no-vbounty', action='store_true', help='D144: without the 花样委托 daily variety bounty')
     ap.add_argument('--rush', action='store_true', help='D144: the weekly 余烬连战 (one free entry, T3 marks on a clear)')
     a = ap.parse_args()
+    global FORGE_SINK
+    if a.no_forge_sink:
+        FORGE_SINK = False
     if a.no_variety:
         p1sim.VARIETY = False
     if a.no_vbounty:
@@ -592,15 +691,17 @@ def main():
             if p is None:
                 continue
             kn.swap = not a.no_swap  # §6.3 free enhance-track swap: late-game players re-equip better-quality drops
+            kn.quality_chase = FORGE_SINK  # with craft/quality sinks on, still take 极品 over forged 卓越
             if mode in ('abyss', 'abyssg'):
                 res[mode].append(phase2_abyss(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, per_day, goals=mode == 'abyssg'))
             else:
                 res[mode].append(phase2(cfg, ccfg, kn, p, random.Random(9000 + i), a.weeks, mode in ('rot', 'raid', 'mods', 'goals'), per_day, runs,
                                         trade=mode == 'trade', raid=mode in ('raid', 'goals'), mods=mode == 'mods', goals=mode == 'goals',
                                         stats=stats if mode == 'mods' else None))
-    print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day' % (len(res['base']), a.dodge, a.weeks))
-    print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
-    print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
+    print('# p2econ: %d players reached Q07 (dodge %.2f), %d challenge weeks after it, 3 runs/day%s' % (
+        len(res['base']), a.dodge, a.weeks, '' if FORGE_SINK else ' · forge sinks OFF'))
+    print('| 周 | 方案 | T3 目标族两件 | 强化均值（中位） | 最好成色≥卓越 | 两件都≥卓越 | 有极品 | 两件极品 | 余烬币（中位） | 累计精工/成色币（中位） | 精工均值（中位） | 累计 T3 印记（中位） | B（中位） | 挑战/深渊局占比 | 深渊最高层（中位） | 累计深渊费（中位） |')
+    print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
     for w in (range(1, a.weeks + 1) if a.every_week else (1, 2, 4, 6, 8, 10, 12)):
         if w > a.weeks:
             continue
@@ -609,12 +710,15 @@ def main():
             if not rows:
                 continue
             n = len(rows)
-            print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d%% | %d | %d | %.1f | %d%% | %s | %s |' % (
+            print('| %d | %s | %d%% | %.1f | %d%% | %d%% | %d%% | %d%% | %d | %d | %.1f | %d | %.1f | %d%% | %s | %s |' % (
                 w, {'base': '无轮换', 'rot': 'P2-1 轮换', 'abyss': 'P2-2 深渊', 'trade': 'P2-3 交易', 'raid': '轮换 + 团本', 'mods': '轮换 + 周规则', 'goals': '团本 + 周目标', 'abyssg': '深渊 + 周目标'}[mode], round(100 * sum(r['set'] for r in rows) / n),
                 statistics.median(r['enh'] for r in rows), round(100 * sum(r['q'] >= 2 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 2 for r in rows) / n), round(100 * sum(r['q'] >= 3 for r in rows) / n),
                 round(100 * sum(r['qmin'] >= 3 for r in rows) / n),
-                statistics.median(r['coin'] for r in rows), statistics.median(r['marks'] for r in rows),
+                statistics.median(r['coin'] for r in rows),
+                statistics.median(r.get('forge', 0) for r in rows),
+                statistics.median(r.get('craft', 0) for r in rows),
+                statistics.median(r['marks'] for r in rows),
                 statistics.median(r['B'] for r in rows), round(100 * statistics.mean(r['ch'] for r in rows) / (w * 7 * per_day)),
                 ('%d' % statistics.median(r['best'] for r in rows)) if mode in ('abyss', 'abyssg') else '—',
                 ('%d' % statistics.median(r['fees'] for r in rows)) if mode in ('abyss', 'abyssg') else '—'))
@@ -627,6 +731,9 @@ def main():
             a.weeks, round(100 * sum(r['best'] >= 1 for r in rows) / n), round(100 * sum(r['best'] >= 3 for r in rows) / n),
             round(100 * sum(r['best'] >= 5 for r in rows) / n), round(100 * sum(r['best'] >= 10 for r in rows) / n),
             statistics.mean(r['blocked'] for r in rows), rows[0]['days'], statistics.mean(r['top_short'] for r in rows)))
+        print()
+        for line in abyss_clear_table(cfg):
+            print(line)
 
     if a.mods:
         print()
