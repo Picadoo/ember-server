@@ -11,11 +11,20 @@
 #      before_commit (rolled back) / after_commit (callback held 10 s: disconnect or kill -9 inside that window) /
 #      after_deliver (applied + saved, ack skipped) on bulk dismantle, withdraw, undo, forge enhance; asserts conservation
 #      (end = start + confirmed gains − confirmed costs) and exactly-once delivery rows
-# usage: tools/p1map/persist-roundtrip.sh [A_BOT] [D_BOT] [E_BOT] [F_BOT] [G1_BOT] [G2_BOT]   (fresh bots every run)
-#        ONLY=g … runs phase g alone; NOG=1 skips it
+#   h) D172 asset fixes (restarts play with CORERPG_TEST_FAULTS=1, two kill -9 bundles, then once more without it):
+#      undo pays its blanks up front — undo batch raced against a forge refine on the same blanks (both orders),
+#      before_commit, after_pay + kill -9 · mark redemption — normal, before_commit, after_commit + kill -9, after_pay +
+#      kill -9 · affix reroll — normal, before_commit, after_commit + disconnect, instant disconnect, after_pay +
+#      disconnect, library-duplicate after_commit + disconnect, after_commit + kill -9, after_pay + kill -9. Asserts
+#      conservation (blanks / marks / coins / shards), exactly-once items and exactly one roll per committed reroll.
+# usage: tools/p1map/persist-roundtrip.sh [A_BOT] [D_BOT] [E_BOT] [F_BOT] [G1_BOT] [G2_BOT] [H1_BOT] [H2_BOT] [H3_BOT]
+#        (fresh bots every run) · ONLY=g or ONLY=g,h … runs only those phases ("1" = a–f); NOG=1 skips g
+#        COORDF=… file that gets the RESTART / KILL9 notes (default /workspace/COORD-rush-retry-persist.txt)
 # needs: botd on 127.0.0.1:8765 (mineflayer-tests/tmp-p1/botd.js), sudo mysql (read-only queries), no real players online.
 set -uo pipefail
 BA=${1:-FreshQ52}; BD=${2:-FreshQ53}; BE=${3:-FreshG07}; BF=${4:-FreshQ54}; BG1=${5:-FreshQ61}; BG2=${6:-FreshQ62}
+BH1=${7:-FreshQ109}; BH2=${8:-FreshQ110}; BH3=${9:-FreshQ111}; COORDF=${COORDF:-/workspace/COORD-rush-retry-persist.txt}
+want(){ [ -z "${ONLY:-}" ] || [[ ",$ONLY," == *",$1,"* ]]; }
 M=/workspace/minecraft; C=$M/scripts/console.sh; RT=$M/server-runtime; BOTD=http://127.0.0.1:8765
 PASS=0; FAIL=0; RES=()
 ok(){ echo "PASS $1"; PASS=$((PASS+1)); RES+=("PASS $1"); }
@@ -40,12 +49,12 @@ tomain(){ evalb "$1" 'let n=0; for(let i=37;i<=44;i++){const x=bot.inventory.slo
 waitdone(){ for i in $(seq 1 90); do [ "$(stat -c %i $RT/logs/latest.log 2>/dev/null)" != "$1" ] && grep -q 'Done (' $RT/logs/latest.log 2>/dev/null && return 0; sleep 2; done; return 1; }
 logcheck(){ grep -q '\[CoreRpg\] \[storage\] MySQL connected' $RT/logs/latest.log && grep -q '\[CoreGacha\] \[db\] MySQL connected' $RT/logs/latest.log && ok "$1: MySQL connected (CoreRpg + CoreGacha)" || bad "$1: MySQL line missing"
   local sv; sv=$(grep -c SEVERE $RT/logs/latest.log); [ "$sv" = 0 ] && ok "$1: no SEVERE" || { bad "$1: $sv SEVERE"; grep SEVERE $RT/logs/latest.log | head -3; }; }
-restart(){ echo "--- graceful restart ($1) $(date +%H:%M:%S)"; echo "RESTART $(date +%H:%M) persist-roundtrip: graceful ($1)" >> /workspace/COORD-rush-retry-persist.txt
+restart(){ echo "--- graceful restart ($1) $(date +%H:%M:%S)"; echo "RESTART $(date +%H:%M) persist-roundtrip: graceful ($1)" >> $COORDF
   local ino; ino=$(stat -c %i $RT/logs/latest.log); $RT/stop.sh >/dev/null; sleep 1; $RT/start.sh >/dev/null; sleep 3; waitdone "$ino" || bad "server did not finish starting"; sleep 5; logcheck "restart $1"; }
 killhard(){ local pid; pid=$(cat $RT/server.pid)
   # only the play server's Paper JVM: its pid from server-runtime/server.pid, a java process whose cwd is server-runtime
   [ "$(readlink /proc/$pid/cwd)" = "$RT" ] && tr '\0' ' ' < /proc/$pid/cmdline | grep -q 'paper.*\.jar' || { bad "kill -9: pid $pid is not the play Paper JVM"; return 1; }
-  echo "--- kill -9 $pid (play Paper) $(date +%H:%M:%S)"; echo "KILL9 $(date +%H:%M) persist-roundtrip: kill -9 play Paper pid $pid" >> /workspace/COORD-rush-retry-persist.txt
+  echo "--- kill -9 $pid (play Paper) $(date +%H:%M:%S)"; echo "KILL9 $(date +%H:%M) persist-roundtrip: kill -9 play Paper pid $pid" >> $COORDF
   local ino; ino=$(stat -c %i $RT/logs/latest.log); kill -9 "$pid"; for i in $(seq 1 20); do kill -0 "$pid" 2>/dev/null || break; sleep 0.5; done
   rm -f $RT/server.pid; sleep 2; $RT/start.sh >/dev/null; sleep 3; waitdone "$ino" || bad "server did not finish starting after kill -9"; sleep 5; logcheck "after kill -9"; }
 
@@ -58,7 +67,7 @@ mkdups(){ for q in 0 0 0; do $C play "corerpg p1 givedup blade $1 $q" 0.5 >/dev/
 curl -sf "$BOTD/list" >/dev/null || { echo "FAIL botd not running"; exit 1; }
 [ "$(curl -sf "$BOTD/list")" = "[]" ] || echo "note: other bots online: $(curl -sf "$BOTD/list")"
 
-if [ "${ONLY:-}" != g ]; then
+if want 1; then
 echo "=================== phase 1 (before restart #1)"
 for b in $BA $BD $BE; do join $b; online $b || { bad "$b online"; exit 1; }; done
 UA=$(uuid $BA); UD=$(uuid $BD); UE=$(uuid $BE); echo "uuids $BA=$UA $BD=$UD $BE=$UE"
@@ -199,8 +208,7 @@ chk "f: stashed blade still stored" "$(gstate $FG | cut -d: -f1)" "stored"
 quit $BF
 fi
 
-if [ "${NOG:-}" != 1 ]; then
-echo "=================== g) fault injection (D162)"
+# ---- helpers for g / h
 coin(){ sql "SELECT data FROM cr_players WHERE uuid='$1'" | grep -oE '(^|\\n)coin: [0-9]+' | grep -oE '[0-9]+$' | head -1; }
 # snap BOT UUID → "blank shard core coin" totals over warehouse + backpack (+ coin)
 snap(){ echo "$(( $(vault $2 mat_ember_v1_blank) + $(count $1 胚料) )) $(( $(vault $2 mat_ember_shard) + $(count $1 余烬碎片) )) $(( $(vault $2 mat_ember_core_fragment) + $(count $1 核心碎片) )) $(coin $2)"; }
@@ -218,6 +226,8 @@ stashone(){ # $1 bot $2 uuid → uid of a T1 blade put into the library
   $C play "corerpg p1 give scorch blade 1 0 0 0 $1" 1.0 >/dev/null; sleep 1; tomain $1
   local u; u=$(sql "SELECT item_uid FROM cr_p1_item WHERE owner_uuid='$2' AND state='active' ORDER BY created_at DESC LIMIT 1")
   chat $1 "/corerpg p1 stash" 2500 >/dev/null; echo "$u"; }
+if [ "${NOG:-}" != 1 ] && want g; then
+echo "=================== g) fault injection (D162)"
 export CORERPG_TEST_FAULTS=1; restart g-faults-on; unset CORERPG_TEST_FAULTS
 join $BG1; join $BG2; UG1=$(uuid $BG1); UG2=$(uuid $BG2); echo "uuids $BG1=$UG1 $BG2=$UG2"
 online $BG1 && online $BG2 || { bad "g: bots online"; }
@@ -253,16 +263,16 @@ abrupt $BG1; sleep 8; join $BG1; sleep 6; disarm $BG1
 chk "g3: stack delivered at join (1)" "$(hasuid $BG1 $P1)" "1"; chk "g3: delivery row delivered" "$(dstat $UG1 unstash:$P1)" "delivered"
 rejoin $BG1; chk "g3: still exactly 1 stack after another rejoin" "$(hasuid $BG1 $P1)" "1"
 
-echo "=== g4) undo · after_deliver (applied + saved, ack skipped) · abrupt disconnect → ack only, debit once"
+echo "=== g4) undo · after_commit (callback held 10 s) · abrupt disconnect → blanks taken UP FRONT exactly once (D172), hold void"
 if [ -n "$UNDO_UID" ]; then
   S4=$(snap $BG1 $UG1); Y=$(sql "SELECT amount FROM cr_p1_delivery WHERE owner_uuid='$UG1' AND request_id LIKE 'glibdis:$UNDO_UID:%'")
-  arm $BG1 after_deliver; chat $BG1 "/corerpg p1 undo $UNDO_UID" 3000 | grep -E '撤销|扣回' | head -2; sleep 2; disarm $BG1
+  arm $BG1 after_commit; chat $BG1 "/corerpg p1 undo $UNDO_UID" 3000 | grep -E '撤销|扣' | head -2
+  chk "g4: blanks taken before the commit callback (start − $Y)" "$(snap $BG1 $UG1 | cut -d' ' -f1)" "$(( $(echo $S4 | cut -d' ' -f1) - Y ))"
+  chk "g4: no debit delivery row any more (D172)" "$(sql "SELECT COUNT(*) FROM cr_p1_delivery WHERE request_id LIKE 'undo:$UNDO_UID:%'")" "0"
+  abrupt $BG1; sleep 8; join $BG1; sleep 6; disarm $BG1
   chk "g4: piece back in library" "$(gstate $UNDO_UID | cut -d: -f1)" "stored"
-  chk "g4: blanks debited once (start − $Y)" "$(snap $BG1 $UG1 | cut -d' ' -f1)" "$(( $(echo $S4 | cut -d' ' -f1) - Y ))"
-  chk "g4: ack skipped → row still pending" "$(dstat $UG1 undo:$UNDO_UID)" "pending"
-  abrupt $BG1; join $BG1; sleep 6
-  chk "g4: after rejoin blanks still start − $Y (not debited twice)" "$(snap $BG1 $UG1 | cut -d' ' -f1)" "$(( $(echo $S4 | cut -d' ' -f1) - Y ))"
-  chk "g4: row delivered by the marker (ack only)" "$(dstat $UG1 undo:$UNDO_UID)" "delivered"
+  chk "g4: after rejoin blanks still start − $Y (not taken twice, not refunded)" "$(snap $BG1 $UG1 | cut -d' ' -f1)" "$(( $(echo $S4 | cut -d' ' -f1) - Y ))"
+  chk "g4: refund hold voided by the commit" "$(dstat $UG1 refund:undo:$UNDO_UID)" "void"
 else bad "g4: no dismantled piece to undo"; fi
 
 echo "=== g5a) forge enhance · before_commit → hold released → refund once (materials + coins conserved)"
@@ -305,6 +315,179 @@ restart g-faults-off
 $C play "corerpg p1 fault $BG1 after_commit" 0.8 | grep -q "测试环境" && ok "g: fault hook refused without CORERPG_TEST_FAULTS" || bad "g: fault hook still active"
 fi
 
+if want h; then
+echo "=================== h) D172 asset fixes: undo pays up front (X5) · mark redemption (X1/X4) · reroll (X15)"
+# p1 counters live in cr_players.data as "key@all: N"
+ctr(){ local v; v=$(sql "SELECT data FROM cr_players WHERE uuid='$1'" | grep -oE "$2@all: -?[0-9]+" | grep -oE -- '-?[0-9]+$' | head -1); echo "${v:-0}"; }
+blanks(){ snap $1 $2 | cut -d' ' -f1; }
+bone(){ echo $(( $(vault $2 mat_ember_bone_dust) + $(count $1 骨尘) )); }
+craft(){ sql "SELECT craft FROM cr_p1_item WHERE item_uid='$1'"; }
+nstored(){ sql "SELECT COUNT(*) FROM cr_p1_item WHERE owner_uuid='$1' AND state='stored'"; }
+holds(){ sql "SELECT COUNT(*) FROM cr_p1_delivery WHERE owner_uuid='$1' AND status='hold'"; }
+# lines of all play logs written since the phase started (latest.log + the rotated .gz of this phase)
+hlogs(){ { for f in $(find $RT/logs -name '*.log.gz' -newer /tmp/persist-h.start 2>/dev/null); do zcat "$f"; done; cat $RT/logs/latest.log; } 2>/dev/null; }
+ndel(){ sql "SELECT COUNT(*) FROM cr_p1_delivery WHERE owner_uuid='$1' AND request_id LIKE '$2%' AND status='delivered'"; }
+nhold(){ sql "SELECT COUNT(*) FROM cr_p1_delivery WHERE owner_uuid='$1' AND request_id LIKE '$2%' AND status='hold'"; }
+# kill -9 that comes back up WITH the test fault hooks (killhard starts play from this shell's environment)
+killfaults(){ export CORERPG_TEST_FAULTS=1; killhard; unset CORERPG_TEST_FAULTS; }
+lastdis(){ sql "SELECT t.uid_a FROM cr_p1_txn t JOIN cr_p1_item i ON i.item_uid=t.uid_a WHERE t.owner_uuid='$1' AND t.kind='glibdis' AND i.state='dismantled' ORDER BY t.created_at DESC LIMIT 1"; }
+touch /tmp/persist-h.start
+export CORERPG_TEST_FAULTS=1; restart h-faults-on; unset CORERPG_TEST_FAULTS
+join $BH1; join $BH2; join $BH3; UH1=$(uuid $BH1); UH2=$(uuid $BH2); UH3=$(uuid $BH3); echo "uuids $BH1=$UH1 $BH2=$UH2 $BH3=$UH3"
+online $BH1 && online $BH2 && online $BH3 || bad "h: bots online"
+$C play "ni give $BH1 mat_ember_bone_dust 30" 0.5 >/dev/null; $C play "corerpg coin give $BH1 5000" 0.5 >/dev/null
+$C play "ni give $BH2 mat_ember_shard 400" 0.5 >/dev/null; $C play "corerpg coin give $BH2 8000" 0.5 >/dev/null
+$C play "corerpg p1 runs marks $BH3 1 40" 0.8 >/dev/null; sleep 1
+chat $BH1 "/corerpg p1 stash" 1500 >/dev/null; chat $BH2 "/corerpg p1 stash" 1500 >/dev/null; sleep 3
+
+# ---------------------------------------------------------------- h1: undo vs a forge refine on the same blanks
+RACE=()
+race(){ # $1 label $2 order: undo | refine (both fired in the same tick) | window (undo armed after_pay → refine fired in the
+  # 10 s between the undo's payment and its commit, the exact pre-1.65.5 hole) → asserts exactly one wins and blanks / bone / coins are conserved
+  local H N need tot b0 bo0 c0 st0 out
+  H=$(newblade $BH1 $UH1); [ "$(sql "SELECT COUNT(*) FROM cr_p1_item i JOIN cr_p1_txn t ON t.uid_a=i.item_uid WHERE t.owner_uuid='$UH1' AND t.kind='glibdis' AND i.state='dismantled' AND t.created_at>=$(( ($(date +%s) - 300) * 1000 ))")" -gt 0 ] || { mkdups $BH1; bulkrun $BH1 $1 >/dev/null; sleep 2; }
+  N=$(sql "SELECT COUNT(*) FROM cr_p1_item i JOIN cr_p1_txn t ON t.uid_a=i.item_uid WHERE t.owner_uuid='$UH1' AND t.kind='glibdis' AND i.state='dismantled' AND t.created_at>=$(( ($(date +%s) - 300) * 1000 ))")
+  need=$(( N > 3 ? N : 3 )); tot=$(blanks $BH1 $UH1); [ "$tot" -lt "$need" ] && { $C play "ni give $BH1 mat_ember_v1_blank $((need - tot))" 0.6 >/dev/null; sleep 1; chat $BH1 "/corerpg p1 stash" 1500 >/dev/null; sleep 2; }
+  b0=$(blanks $BH1 $UH1); bo0=$(bone $BH1 $UH1); c0=$(coin $UH1); st0=$(nstored $UH1)
+  echo "$1: blade $H craft $(craft $H) · $N dismantled pieces in the batch (undo needs $N) · refine needs 3 · blanks $b0 · bone $bo0 · coin $c0"
+  [ "$b0" -lt "$((N + 3))" ] && ok "$1: blanks ($b0) cover either op alone, not both" || bad "$1: race not tight (blanks $b0, need $N + 3)"
+  if [ "$2" = window ]; then arm $BH1 after_pay
+    out=$(evalb $BH1 'const f=bot.chatLog.length; bot.chat("/corerpg p1 undo batch"); await wait(2500); bot.chat("/corerpg p1 refine confirm"); await wait(12000); return bot.chatLog.slice(f).map(s=>s.replace(/\u00a7./g,"")).join("\n");'); disarm $BH1
+  elif [ "$2" = undo ]; then out=$(evalb $BH1 'const f=bot.chatLog.length; bot.chat("/corerpg p1 undo batch"); bot.chat("/corerpg p1 refine confirm"); await wait(6000); return bot.chatLog.slice(f).map(s=>s.replace(/\u00a7./g,"")).join("\n");')
+  else out=$(evalb $BH1 'const f=bot.chatLog.length; bot.chat("/corerpg p1 refine confirm"); bot.chat("/corerpg p1 undo batch"); await wait(6000); return bot.chatLog.slice(f).map(s=>s.replace(/\u00a7./g,"")).join("\n");'); fi
+  echo "$out" | grep -E '撤销|胚料|精工|不够|不足|扣' | head -4 | sed 's/^/    /'
+  sleep 3; wonU=$(( $(nstored $UH1) - st0 == N ? 1 : 0 )); wonR=$(( $(craft $H) > 0 ? 1 : 0 ))
+  RACE+=("$1 $2: undo=$wonU refine=$wonR"); echo "$1: undo won=$wonU (stored $st0→$(nstored $UH1)) · refine won=$wonR (craft $(craft $H))"
+  chk "$1: exactly one of undo / refine went through" "$((wonU + wonR))" "1"
+  chk "$1: blanks = start − cost of the winner" "$(blanks $BH1 $UH1)" "$(( b0 - wonU * N - wonR * 3 ))"
+  chk "$1: bone dust = start − refine cost if refine won" "$(bone $BH1 $UH1)" "$(( bo0 - wonR * 5 ))"
+  chk "$1: coins = start − refine cost if refine won" "$(coin $UH1)" "$(( c0 - wonR * 300 ))"
+  chk "$1: no hold / pending delivery left" "$(pend $UH1)" "0"; }
+echo "=== h1a) undo batch + forge refine fired in the same tick, undo first"
+race h1a undo
+echo "=== h1b) the same, refine first"
+race h1b refine
+echo "=== h1x) undo batch paid, commit held 10 s (after_pay) → refine spends the same blanks inside the window"
+race h1x window
+chk "h1x: the undo (paid first) is the one that went through" "$wonU" "1"
+chk "h1: no 'debit short' (the old post-hoc debit) anywhere in the log" "$(hlogs | grep -c 'debit short')" "0"
+chk "h1: no undo debit delivery rows (D172)" "$(sql "SELECT COUNT(*) FROM cr_p1_delivery WHERE owner_uuid='$UH1' AND request_id LIKE 'undo:%'")" "0"
+
+echo "=== h1c) undo · before_commit → rolled back: blanks refunded once, piece stays dismantled"
+[ -n "$(lastdis $UH1)" ] || { mkdups $BH1; bulkrun $BH1 h1c >/dev/null; sleep 2; }
+UU=$(lastdis $UH1); [ "$(blanks $BH1 $UH1)" -ge 1 ] || { $C play "ni give $BH1 mat_ember_v1_blank 2" 0.6 >/dev/null; sleep 1; }
+B1=$(blanks $BH1 $UH1); R1=$(gstate $UU); D1=$(ndel $UH1 refund:undo:$UU); echo "piece $UU $R1 · blanks $B1"
+arm $BH1 before_commit; chat $BH1 "/corerpg p1 undo $UU" 3000 | grep -E '撤销|退|扣' | head -2; sleep 4; disarm $BH1
+chk "h1c: piece unchanged (dismantled)" "$(gstate $UU)" "$R1"
+chk "h1c: blanks back to start (refund delivered once)" "$(blanks $BH1 $UH1)" "$B1"
+chk "h1c: refund delivered once, no hold left" "$(ndel $UH1 refund:undo:$UU):$(nhold $UH1 refund:undo:$UU)" "$((D1 + 1)):0"
+chk "h1c: no undo txn for this dismantle (rid undo:<uid>:<rev>)" "$(sql "SELECT COUNT(*) FROM cr_p1_txn WHERE request_id='undo:$UU:${R1##*:}'")" "0"
+
+# ---------------------------------------------------------------- h2: mark redemption
+redeemed(){ sql "SELECT COUNT(*) FROM cr_p1_txn WHERE owner_uuid='$UH3' AND kind='mark_redeem'"; }
+newest(){ sql "SELECT uid_a FROM cr_p1_txn WHERE owner_uuid='$UH3' AND kind='mark_redeem' ORDER BY created_at DESC LIMIT 1"; }
+X="/corerpg p1 marks exchange scorch blade 1 confirm"
+echo "=== h2a) redeem 8 T1 marks → one blade, ledger row + mark counter in one transaction"
+M0=$(ctr $UH3 p1_mark_t1); K0=$(redeemed); echo "marks $M0 · redemptions $K0"
+chat $BH3 "$X" 3000 | grep -E '兑换|印记' | head -2; sleep 2; G=$(newest)
+chk "h2a: marks −8" "$(ctr $UH3 p1_mark_t1)" "$((M0 - 8))"; chk "h2a: one mark_redeem txn" "$(redeemed)" "$((K0 + 1))"
+chk "h2a: the blade is in the backpack once" "$(hasuid $BH3 $G)" "1"; chk "h2a: gear delivery row delivered" "$(sql "SELECT GROUP_CONCAT(status) FROM cr_p1_delivery WHERE owner_uuid='$UH3' AND kind='gear' AND item='$G'")" "delivered"
+chk "h2a: item row active" "$(gstate $G | cut -d: -f1)" "active"; chk "h2a: no hold left" "$(holds $UH3)" "0"
+echo "=== h2b) redeem · before_commit → marks refunded once, no item, no txn"
+M0=$(ctr $UH3 p1_mark_t1); K0=$(redeemed); D3=$(ndel $UH3 refund:redeem:)
+arm $BH3 before_commit; chat $BH3 "$X" 3000 | grep -E '兑换|印记|退' | head -2; sleep 4; disarm $BH3
+chk "h2b: marks unchanged after the refund" "$(ctr $UH3 p1_mark_t1)" "$M0"; chk "h2b: no new txn" "$(redeemed)" "$K0"
+chk "h2b: one mark refund row delivered (kind mark)" "$(( $(ndel $UH3 refund:redeem:) - D3 )):$(sql "SELECT kind FROM cr_p1_delivery WHERE owner_uuid='$UH3' AND request_id LIKE 'refund:redeem:%' AND status='delivered' ORDER BY id DESC LIMIT 1")" "1:mark"
+chk "h2b: no pending / hold" "$(pend $UH3)" "0"
+
+# ---------------------------------------------------------------- h3: affix reroll on the durable payment path
+RB=$(newblade $BH2 $UH2); echo "reroll blade $RB (T1, empty affix slot)"
+read -r _ SH0 _ CO0 <<< "$(snap $BH2 $UH2)"; echo "start shards $SH0 coin $CO0"
+RR="/corerpg p1 reroll blade shard confirm"
+kshard(){ sql "SELECT COUNT(*) FROM cr_p1_txn WHERE owner_uuid='$UH2' AND request_id LIKE 'afx:$RB:%' AND uid_a='$RB'"; }
+lastrid(){ sql "SELECT request_id FROM cr_p1_txn WHERE owner_uuid='$UH2' AND request_id LIKE 'afx:$RB:%' ORDER BY created_at DESC LIMIT 1"; }
+kall(){ sql "SELECT COUNT(*) FROM cr_p1_txn WHERE owner_uuid='$UH2' AND request_id LIKE 'afx:$RB:%'"; }
+rolls(){ hlogs | grep -E "reroll $RB afx:$RB:[0-9]+ .* → " | grep -oE "afx:$RB:[0-9]+" | sort | uniq -c | awk '{print $1}' | sort -u | tr '\n' ' '; }
+nrolls(){ hlogs | grep -E "reroll $RB afx:$RB:[0-9]+ .* → " | wc -l; }
+rrcheck(){ # conservation over every reroll of the phase
+  local ks ka; ks=$(kshard); ka=$(kall); read -r _ sh _ co <<< "$(snap $BH2 $UH2)"
+  chk "$1: coins = start − 300 × committed rerolls ($ka)" "$co" "$(( CO0 - 300 * ka ))"
+  chk "$1: shards = start − 40 × committed shard rerolls ($ks)" "$sh" "$(( SH0 - 40 * ks ))"
+  chk "$1: exactly one roll per committed reroll" "$(nrolls)" "$ka"
+  [ "$ka" = 0 ] || chk "$1: no rid rolled twice" "$(rolls)" "1 "
+  # p4_rrn_ counts paid attempts (a refunded attempt keeps its number, request ids are never reused)
+  [ "$(ctr $UH2 p4_rrn_$RB)" -ge "$ka" ] && ok "$1: paid-attempt counter $(ctr $UH2 p4_rrn_$RB) ≥ committed $ka" || bad "$1: paid-attempt counter $(ctr $UH2 p4_rrn_$RB) < committed $ka"
+  chk "$1: no owed roll left" "$(ctr $UH2 p4_rro_$RB)" "0"; chk "$1: no hold / pending" "$(pend $UH2)" "0"; }
+echo "=== h3a) reroll (shard) normal → paid once, rolled once, affix installed in the empty slot"
+chat $BH2 "$RR" 3000 | grep -E '洗练|词条' | head -2; sleep 2
+[ "$(ctr $UH2 p4_af_$RB)" != 0 ] && ok "h3a: affix installed ($(ctr $UH2 p4_af_$RB))" || bad "h3a: no affix after a reroll"
+rrcheck h3a
+echo "=== h3b) reroll · before_commit → cost refunded once, nothing rolled"
+AF=$(ctr $UH2 p4_af_$RB); arm $BH2 before_commit; chat $BH2 "$RR" 3000 | grep -E '洗练|退' | head -2; sleep 5; disarm $BH2
+chk "h3b: affix unchanged" "$(ctr $UH2 p4_af_$RB)" "$AF"; rrcheck h3b
+echo "=== h3c) reroll · after_commit (callback held 10 s) · abrupt disconnect → rolled once at the next join"
+arm $BH2 after_commit; chat $BH2 "$RR" 1500 >/dev/null
+chk "h3c: owed roll persisted with the payment" "$( [ "$(ctr $UH2 p4_rro_$RB)" -gt 0 ] && echo yes || echo no)" "yes"
+abrupt $BH2; sleep 8; join $BH2; sleep 10; disarm $BH2
+chk "h3c: the roll was applied at join" "$(hlogs | grep -cE "reroll $RB $(lastrid) .*recovered at join")" "1"; rrcheck h3c
+echo "=== h3d) reroll + socket destroyed in the same tick → nothing or everything"
+evalb $BH2 "bot.chat('$RR'); setTimeout(()=>{ try { bot._client.socket.destroy() } catch (e) {} }, 0); return 'cut';" >/dev/null; sleep 12; join $BH2; sleep 10
+rrcheck h3d
+echo "=== h3e) reroll · after_pay (settling txn starts 10 s late) · abrupt disconnect → commit while offline, roll at join"
+arm $BH2 after_pay; K0=$(kall); chat $BH2 "$RR" 1500 >/dev/null; abrupt $BH2; sleep 12; join $BH2; sleep 10; disarm $BH2
+chk "h3e: committed while offline" "$(kall)" "$((K0 + 1))"; rrcheck h3e
+echo "=== h3f) reroll with a library duplicate · after_commit · abrupt disconnect"
+mkdups $BH2; sleep 1; K0=$(kall); KS0=$(kshard)
+arm $BH2 after_commit; chat $BH2 "/corerpg p1 reroll blade dup confirm" 2000 >/dev/null; abrupt $BH2; sleep 8; join $BH2; sleep 10; disarm $BH2
+DU=$(sql "SELECT uid_a FROM cr_p1_txn WHERE owner_uuid='$UH2' AND request_id LIKE 'afx:$RB:%' AND uid_a<>'$RB' ORDER BY created_at DESC LIMIT 1")
+chk "h3f: one dup reroll committed (no shards)" "$(kall):$(kshard)" "$((K0 + 1)):$KS0"
+chk "h3f: the duplicate was retired once" "$(gstate $DU | cut -d: -f1)" "dismantled"; rrcheck h3f
+
+# ---------------------------------------------------------------- kill -9 bundles
+echo "=== kill -9 bundle 1: h1d undo after_pay (BH1) · h2c redeem after_commit (BH3) · h3g reroll after_commit (BH2)"
+[ -n "$(lastdis $UH1)" ] || { mkdups $BH1; bulkrun $BH1 h1d >/dev/null; sleep 2; }
+UD1=$(lastdis $UH1); [ "$(blanks $BH1 $UH1)" -ge 1 ] || { $C play "ni give $BH1 mat_ember_v1_blank 2" 0.6 >/dev/null; sleep 1; }
+B1=$(blanks $BH1 $UH1); R1=$(gstate $UD1); D1=$(ndel $UH1 refund:undo:$UD1); M0=$(ctr $UH3 p1_mark_t1); K3=$(redeemed); K2=$(kall)
+arm $BH1 after_pay; arm $BH3 after_commit; arm $BH2 after_commit
+evalb $BH1 "bot.chat('/corerpg p1 undo $UD1'); return 'x';" >/dev/null; evalb $BH3 "bot.chat('$X'); return 'x';" >/dev/null; evalb $BH2 "bot.chat('$RR'); return 'x';" >/dev/null; sleep 3
+chk "h1d: blanks paid before the kill" "$(blanks $BH1 $UH1)" "$((B1 - 1))"
+chk "h2c: marks paid + txn committed before the kill" "$(ctr $UH3 p1_mark_t1):$(redeemed)" "$((M0 - 8)):$((K3 + 1))"; G=$(newest)
+chk "h2c: callback held → no stack yet" "$(hasuid $BH3 $G)" "0"
+chk "h3g: committed, roll owed before the kill" "$(kall):$( [ "$(ctr $UH2 p4_rro_$RB)" -gt 0 ] && echo owed)" "$((K2 + 1)):owed"
+killfaults
+quit $BH1; quit $BH2; quit $BH3; sleep 4; join $BH1; join $BH2; join $BH3; sleep 12
+chk "h1d: piece still dismantled (undo never committed)" "$(gstate $UD1)" "$R1"; chk "h1d: blanks refunded once" "$(blanks $BH1 $UH1)" "$B1"
+chk "h1d: refund hold reconciled → delivered once, no hold left" "$(ndel $UH1 refund:undo:$UD1):$(nhold $UH1 refund:undo:$UD1)" "$((D1 + 1)):0"
+chk "h2c: marks −8 exactly once" "$(ctr $UH3 p1_mark_t1)" "$((M0 - 8))"; chk "h2c: blade delivered once at join" "$(hasuid $BH3 $G)" "1"
+chk "h2c: hold void, gear row delivered" "$(dstat $UH3 "refund:$(sql "SELECT request_id FROM cr_p1_txn WHERE owner_uuid='$UH3' AND kind='mark_redeem' ORDER BY created_at DESC LIMIT 1")"):$(sql "SELECT status FROM cr_p1_delivery WHERE kind='gear' AND item='$G'")" "void:delivered"
+chk "h3g: the roll was applied at join after kill -9" "$(hlogs | grep -cE "reroll $RB $(lastrid) .*recovered at join")" "1"; rrcheck h3g
+
+echo "=== kill -9 bundle 2: h2d redeem after_pay (BH3) · h3h reroll after_pay (BH2)"
+M0=$(ctr $UH3 p1_mark_t1); K3=$(redeemed); K2=$(kall); read -r _ SHB _ COB <<< "$(snap $BH2 $UH2)"
+arm $BH3 after_pay; arm $BH2 after_pay
+evalb $BH3 "bot.chat('$X'); return 'x';" >/dev/null; evalb $BH2 "bot.chat('$RR'); return 'x';" >/dev/null; sleep 3
+chk "h2d: marks paid before the kill (no txn yet)" "$(ctr $UH3 p1_mark_t1):$(redeemed)" "$((M0 - 8)):$K3"
+chk "h3h: reroll paid before the kill (no txn yet)" "$(snap $BH2 $UH2 | cut -d' ' -f2,4):$(kall)" "$((SHB - 40)) $((COB - 300)):$K2"
+killfaults
+quit $BH2; quit $BH3; sleep 4; join $BH2; join $BH3; sleep 14
+chk "h2d: marks refunded once" "$(ctr $UH3 p1_mark_t1)" "$M0"; chk "h2d: no redemption" "$(redeemed)" "$K3"
+chk "h2d: no new gear row" "$(sql "SELECT COUNT(*) FROM cr_p1_delivery WHERE owner_uuid='$UH3' AND kind='gear'")" "$K3"
+chk "h3h: no reroll committed" "$(kall)" "$K2"; rrcheck h3h
+rejoin $BH1; rejoin $BH2; rejoin $BH3
+echo "=== h) stable after another rejoin"
+rrcheck h-final; chk "h-final: marks stable" "$(ctr $UH3 p1_mark_t1)" "$M0"
+for u in $UH1 $UH2 $UH3; do chk "h-final: no pending / hold rows ($u)" "$(pend $u)" "0"; done
+chk "h-final: every redemption stack exactly once" "$(for g in $(sql "SELECT uid_a FROM cr_p1_txn WHERE owner_uuid='$UH3' AND kind='mark_redeem'"); do hasuid $BH3 $g; done | sort -u | tr '\n' ' ')" "1 "
+chk "h-final: marks = 40 − 8 × redemptions" "$(ctr $UH3 p1_mark_t1)" "$(( 40 - 8 * $(redeemed) ))"
+chk "h-final: no 'debit short' in the log" "$(hlogs | grep -c 'debit short')" "0"
+quit $BH1; quit $BH2; quit $BH3
+echo "=================== back to normal (no fault hooks)"
+restart h-faults-off
+$C play "corerpg p1 fault $BH1 after_pay" 0.8 | grep -q "测试环境" && ok "h: fault hook refused without CORERPG_TEST_FAULTS" || bad "h: fault hook still active"
+tr '\0' '\n' < /proc/$(cat $RT/server.pid)/environ | grep -q '^CORERPG_TEST_FAULTS=' && bad "h: CORERPG_TEST_FAULTS in the play JVM environment" || ok "h: CORERPG_TEST_FAULTS not in the play JVM environment"
+printf '  race %s\n' "${RACE[@]}"
+fi
+
 echo; printf '%s\n' "${RES[@]}" | grep FAIL || true
-echo "persist-roundtrip $BA/$BD/$BE/$BF: PASS=$PASS FAIL=$FAIL"
+echo "persist-roundtrip ${ONLY:-all}: PASS=$PASS FAIL=$FAIL"
 [ "$FAIL" -eq 0 ]
