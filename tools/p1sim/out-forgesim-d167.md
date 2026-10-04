@@ -66,7 +66,7 @@
 
 ## w30 — two 极品 (blade + charm, target family, T3) after the Q07 first clear
 
-Weekly Monte Carlo of the core chase only (no combat): 3 runs / day, D81 map bias on challenge runs, raids 3 / week from week 2 (轮换 + 团本 route), abyss tiers by week (深渊 route), +3 rotation marks, rush 1 mark at 90 %. Inputs calibrated to the D144 p2econ raw table (on-0.5): challenge share by week and median abyss tier. W30 = first week ≥ 30 % own two 极品 (linear between weeks). n = 20000 players per cell, same seeds across variants.
+Weekly Monte Carlo of the core chase only (no combat): 3 runs / day, D81 map bias on challenge runs, raids 3 / week from week 2 (轮换 + 团本 route), abyss tiers by week (深渊 route), +3 rotation marks, rush 1 mark at 90 %. Inputs calibrated to the D144 p2econ raw table (on-0.5): challenge share by week, median abyss tier, and a clear rate (failed run = no item, no mark) fitted with `forgesim.py fit` so the base W30 lands on D144: 轮换+团本 0.79, 深渊 0.47. W30 = first week ≥ 30 % own two 极品 (linear between weeks). n = 20000 players per cell, same seeds across variants.
 
 ### 轮换 + 团本
 

@@ -310,7 +310,7 @@ CAL = {
 RAID_RATE = {1: 0.44, 2: 0.59, 3: 0.74, 4: 0.88}
 # Share of non-raid runs that clear (a failed run gives no item and no mark). Fitted (--fit) so that the base variant
 # lands on the D144 W30; abyss players step up a tier at >= 50 % clear (p2econ phase2_abyss), so a low value is expected.
-EFF = {'rot': 0.79, 'abyss': 0.47}  # forgesim fit --n 2000: 0.787 / 0.470
+EFF = {'rot': 0.79, 'abyss': 0.47}  # forgesim fit --n 2000: 0.787 / 0.470 (the fit is noisy: --n 1000 gave 0.858 / 0.453)
 D144_TWO = {'rot': [0, 2, 5, 12, 17, 22, 28, 34, 38, 41, 43, 46], 'abyss': [0, 4, 10, 17, 27, 35, 42, 48, 52, 56, 61, 63]}
 
 
@@ -435,9 +435,10 @@ def w30(n, weeks):
     header('w30 — two 极品 (blade + charm, target family, T3) after the Q07 first clear')
     print('Weekly Monte Carlo of the core chase only (no combat): 3 runs / day, D81 map bias on challenge runs, raids 3 / week '
           'from week 2 (轮换 + 团本 route), abyss tiers by week (深渊 route), +%d rotation marks, rush %d mark at 90 %%. '
-          'Inputs calibrated to the D144 p2econ raw table (on-0.5): challenge share by week and median abyss tier. '
+          'Inputs calibrated to the D144 p2econ raw table (on-0.5): challenge share by week, median abyss tier, and a clear rate '
+          '(failed run = no item, no mark) fitted with `forgesim.py fit` so the base W30 lands on D144: 轮换+团本 %.2f, 深渊 %.2f. '
           'W30 = first week ≥ 30 %% own two 极品 (linear between weeks). n = %d players per cell, same seeds across variants.\n'
-          % (ROT_MARKS, RUSH_MARKS, n))
+          % (ROT_MARKS, RUSH_MARKS, EFF['rot'], EFF['abyss'], n))
     variants = [
         ('base（现行：8 印记兑换标准件，无转化）', {}),
         ('随机锻造 8 印记 · 极品并入卓越（提案）', {'k': 8}),
@@ -464,7 +465,7 @@ def w30(n, weeks):
             f = lambda x: '%.2f' % x if x else '>%d' % weeks
             d = lambda x, b: ('%+.2f' % (x - b)) if x and b else '—'
             print('| %s | %.0f%% / %.0f%% / %.0f%% | %s | %s | %s | %s | %.1f | %.2f | %.0f | %.1f | %.2f |' % (
-                name, share[3], share[7], share[weeks - 1], f(wk), d(wk, base[0]), f(p50), d(p50, base[1]),
+                name, share[min(3, weeks - 1)], share[min(7, weeks - 1)], share[weeks - 1], f(wk), d(wk, base[0]), f(p50), d(p50, base[1]),
                 tot['marks'] / pw, tot['forge'] / pw, tot['coin'] / pw, tot['blank'] / pw, tot['conv'] / pw))
         print('\n对照 D144 p2econ（on-0.5）同一路线：第 4 / 8 / 12 周 %d%% / %d%% / %d%%，W30 %.2f。\n' % (
             D144_TWO[route][3], D144_TWO[route][7], D144_TWO[route][11], cal_w))
