@@ -65,8 +65,8 @@ ALTS = {
     'L06b': {'potion': 1.05, 'taken_tele': 1.10},
     'L08b': {'skill_var': 1, 'skill_ignite': 1, 'skill_ignite_n': 1, 'skill_burn': 1.0, 'dmg_boss': 0.98},
     'L10b': {'hit_burst': 1, 'dodge_burst': 1, 'taken_tele': 1.03},
-    # 'L11b' NOT shipped (D184: W30 P2-1 −0.55 wk with L11b+L02 worn day 1); kept for re-sweeps only
-    'L11b': {'skill_var': 1, 'skill_shield': 0.005, 'skill_shield_max': 0.01, 'skill_shield_secs': 5, 'skill_mult': 0.9, 'taken_tele': 1.14},  # ×1.12: + L02 +3.1 / + L10 +3.2 / sustain + L02 +3.2
+    # 'L11b' NOT shipped (D184: W30 P2-1 −0.55 wk with L11b+L02 worn day 1; D190 re-sweep ×1.15 paired at bv51: 无轮换 −0.69 / P2-1 −1.42 → still held); kept for re-sweeps only
+    'L11b': {'skill_var': 1, 'skill_shield': 0.005, 'skill_shield_max': 0.01, 'skill_shield_secs': 5, 'skill_mult': 0.9, 'taken_tele': 1.15},  # ×1.15 = D190 re-sweep value (×1.12: + L02 +3.1 / + L10 +3.2)
     'L12b': {'sustain_low': 0.4, 'sustain_low_every': -2, 'taken_boss': 1.02},
 }
 
