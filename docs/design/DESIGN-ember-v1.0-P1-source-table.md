@@ -1524,7 +1524,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D179 | 设计-only（deferred 实现） | Room Events Pack 3：房间事件池 +占点 hold / 护灯 beacon / 传火 relay（与 timed/crystal/escort 等权）；否决笼牢/抽血；奖励键不变；见 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`。实现另窗 |
 | D180 | CoreRpg 1.65.16；rev 2 CoreRpg 1.65.19 | P1 每日签到 + 在线时长（业主 19:06）：主菜单「签到 · 在线」→ `ember_p1_sign`；月历按本月第 n 次签到发奖（漏签不清零；1–27 次 20 币 + 5 经验，第 7 / 21 次 +首领徽记、第 14 / 28 次 +锻造印记，29–31 次 10 币 + 5 经验；补签每月 3 次、要今天有效在线 60 分钟）；有效在线 15 / 30 / 60 / 120 分钟四档（每天 70 币 + 20 经验，5 分钟无输入停表；**rev 2（业主 10-05 00:04）：挂机庭里的分钟也算在线，挂机庭自动战斗在跑算有操作、不受 5 分钟停表影响**，每天仍封顶 120 分钟档；rev 2 复跑 21 格 21/21（叠加挂机庭最大 1.9 pp）、W30 叠加上界 4.73（−0.13）；balance_version 42）；只发账号计数；**修订 D63**：印记 / 徽记每月各 ≤2 可来自签到；P1 下旧 `/corerpg sign|activity|bounty` 不再发旧币；设计 `docs/design/DESIGN-ember-signin-online-2026-10-04.md`；balance_version 39 |
 | D181 | 设计-only（deferred 实现） | Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）；闸门/奖励同 D138；否决反伤/拉人/造墙/瞬移/吸血；见 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`。实现另窗 |
-| D182 | 设计-only（deferred 实现） | 奖励精英变招 Pack 1：Extra.ELITE 每图 1 条固定轻招（门廊推/焦焰踏/誓印扫/闸冲/落尘/霜息/矿渣劈）；奖励 10+1 与权重不变；否决随机词缀包/小怪包/Jailer 类；见 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md` + `docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`。实现另窗 |
+| D182 | CoreRpg 1.65.20 | 奖励精英变招 Pack 1：Extra.ELITE 每图 1 条固定轻招（门廊推/焦焰踏/誓印扫/闸冲/落尘/霜息/矿渣劈）；`elite_twists` + Director twistTick；奖励 10+1 与权重不变；balance_version 43；p1sim §7 延后；设计 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md`；发布 `docs/status/RELEASE-ember-1.65.20.md` |
 | D183 | CoreRpg 1.65.17 | D174 烬爆族返工：守炉重锤 L04 代价只留对首领伤害 ×0.985（原被预警招打中 +3% + ×0.98；烬爆组合低躲避净亏 −3～−4pp → ≥ −2.6）；`balance_version` 40；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md` §12；发布 `docs/status/RELEASE-ember-1.65.17.md` |
 | D184 | CoreRpg 1.65.18 | D174 第 3 阶段：Q07 签名 L13 炉锁巨锤（烬斩蓄力）/ L14 炉芯护符（烬斩护盾 0.4%/0.8%/4 秒、药 ×0.95）/ L15 锈轨余火（燃烧 +1 跳、每跳 ×0.97）；Q07 首通「签名调律」（L01/L02/L06/L08/L10/L12 调律版，10 徽记解锁、城里切换；**L11 不给调律版**：W30 P2-1 −0.55 周）；L10 烬爆 ×0.9 → ×0.93；`balance_version` 41；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md` §11 / §13；发布 `docs/status/RELEASE-ember-1.65.18.md` |
 
@@ -1679,7 +1679,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 
 | 项 | 内容 |
 |---|---|
-| D182 | Extra.ELITE 每图 1 条固定轻招；研究 `docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`；设计 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md`；奖励/权重不动 |
+| D182 | Extra.ELITE 每图 1 条固定轻招（已上线 1.65.20 / bv43）；研究 `docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`；设计 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md` |
 | 不改 | 本登记不 bump 版本、不改 jar、不跑 sim；CoreRpg 仍由 mainline / afk / signin 占用 |
 
 ### 13.93 主线签名传奇 第 1.5 / 2a / 2b 阶段（CoreRpg 1.65.10–1.65.14，D174，2026-10-04）
@@ -1711,3 +1711,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 不改 | 装备结构、NI 材料来源、化妆品、config.yml、挂机庭（COORD-afk-p1）、旧模式行为 |
 | 测试 | 单测 `EmberSignServiceTest`；冒烟 `tools/p1map/d180-signin-smoke.sh`（FreshQ260–279）；p1sim `tools/p1sim/signin.py`（`tools/p1sim/out-signin-d180.md`）：21 格 21/21（最大 1.6 / 复测 2.0 pp，上界每天签 + 120 分钟）；W30 基线 4.86 → 签到 + 在线 4.58（−0.28）→ 再加挂机庭最终版 share 1.0 4.73（−0.13），都在 ±0.5 内 |
 | 文档 | 状态 `docs/status/STATUS-ember-signin-online-1.65.16.md`；发布凭证 `docs/status/RELEASE-ember-1.65.16.md` |
+
+### 13.96 奖励精英变招 Pack 1 上线（CoreRpg 1.65.20，D182，2026-10-05）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D182 设计；`COORD-routine-0047`；前置 1.65.19（D180 rev 2）|
+| 裁决 | Extra.ELITE 每图 1 条固定轻招；奖励/权重不动；Q04 kb=0；open_delay 3s |
+| 版本 | CoreRpg **1.65.20**；`balance_version` **43** |
+| 不改 | 装备结构、化妆品、ELITE_SHARD/CORE、Extra 权重、MythicMobs Skills |
+| 测试 | 单测 272/0；冒烟 FreshQ310+（部署后填）|
+| 文档 | 状态 `docs/status/STATUS-ember-reward-elite-1.65.20.md`；发布凭证 `docs/status/RELEASE-ember-1.65.20.md` |
+
