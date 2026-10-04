@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""D167 random / targeted forge — offline check for docs/design/DESIGN-ember-forge-random-2026-10-04.md.
+"""D167 烬砧 forge (redeem / random forge / 烙纹 pin / forge charges / weekly conversion) — offline check for docs/design/DESIGN-ember-forge-random-2026-10-04.md.
 
 Simple on purpose (steering 10-04 15:45: the 6-slot p1sim / p2econ rewrite belongs to another worker): this file only
 imports rules.py (M06 snapshot, read-only) and models the gear CHASE, not combat. Rule numbers (quality / craft tables,
@@ -8,7 +8,7 @@ rotation / rush marks, stamina, reroll table) come from rules.py; the forge numb
 not live; once ember-v1.yml carries `forge:` that section wins and the header says so).
 
 Modes
-  odds    exact cost-equivalence audit: chosen-slot rolls per run of marks (forge) vs per run (drops), by quality
+  odds    chosen-slot pieces per run: drops vs redemption / random forge; expected value of a random forge vs §5.3 refine
   affix   烙纹 pin vs D143 reroll: tries / shards / coins to a chosen affix at the quality cap; forge-charge use vs cap
   target  runs (T1/T2) and weeks (T3, after Q07) to a chosen piece: drops only / + 8-mark redemption / + random forge
   w30     two-极品 ownership after the Q07 first clear (W30 / P50 / P90), weekly Monte Carlo of the core blade + charm
@@ -52,6 +52,16 @@ EXTRA_W = _arr('EXTRA_WEIGHTS')              # none / treasure / elite / chest
 MARKS_PER = _const('MARKS_PER_EXCHANGE')     # 8
 TARGET_W = _const('TARGET_WEIGHT')           # 0.60
 CHEST = EXTRA_W[3] / float(sum(EXTRA_W))     # 5 % one more item
+UPG = rules.java('upgrade')
+
+
+def _costs(fn):
+    body = re.search(r'Cost ' + fn + r'\(int \w+\) \{(.*?)\n    \}', UPG, re.S).group(1)
+    return [tuple(int(x) for x in m.split(',')) for m in re.findall(r'new Cost\(([-0-9, ]+)\)', body)]
+
+
+Q_COST = _costs('qualityCost')    # §5.3 (shards, cores, blanks, bone, coins) per step 标准→精良, 精良→卓越
+C_COST = _costs('refineCost')     # §5.3 精工 0→1, 1→2, 2→3
 RUNS = rules.runs()
 LOOT = RUNS.get('loot_bias') or {}
 OWN, SLOT_W = float(LOOT.get('own_family', TARGET_W)), float(LOOT.get('slot', 0.5))
@@ -72,11 +82,12 @@ POOL = {s: [a['id'] for a in l if a.get('rollable', True) is not False] for s, l
 PROPOSAL = {
     # 8-mark redemption (the floor): unchanged for blade / charm; armor (6-slot stage 1) 4 marks — standard, craft 0, +0
     'redeem_marks': {'core': 8, 'armor': 4},
-    # EVALUATED, NOT ADOPTED (w30 shows it moves the two-极品 W30 too far): marks → chosen family + slot with a random
-    # quality / craft on QUALITY_W / CRAFT_W (the normal drop table), same tier
-    'roll_marks': {'core': 8, 'armor': 8},
-    'roll_blank': [0, 2, 4, 6],      # by tier T0..T3 (≥ 2 × the dismantle yield = tier)
-    'roll_coin': [0, 300, 600, 1000],
+    # random forge (烬砧 随机锻造): the redemption marks of that slot + roll_blank + roll_coin → chosen family + slot,
+    # same tier; craft on CRAFT_W, quality on the drop table with 极品 folded into 卓越 (§5.3: 极品 only from drops).
+    # The w30 section also runs the rejected variant that keeps 极品 at 1 % (roll_quality = QUALITY_W).
+    'roll_quality': None,            # None = QUALITY_W with the last weight added to 卓越 → [70, 23, 7, 0]
+    'roll_blank': [0, 4, 4, 4],      # flat by tier (refine prices are flat too); > the dismantle yield (= tier)
+    'roll_coin': [0, 500, 500, 500],
     # 烙纹 pin: 1 余烬烙纹 = 40 shards (crafted at the forge); writing a chosen type costs pin_brand[tier] 烙纹 + the
     # reroll coin of that tier, i.e. exactly the price of one LOCKED reroll (shard + lock_shard = 80 / 160 / 240)
     'brand_shard': 40, 'brand_core': 0,
@@ -90,6 +101,9 @@ PROPOSAL = {
 _live = (rules.data('p1') or {}).get('forge')
 if isinstance(_live, dict):
     PROPOSAL.update(_live)
+if not PROPOSAL.get('roll_quality'):
+    PROPOSAL['roll_quality'] = QUALITY_W[:2] + [QUALITY_W[2] + QUALITY_W[3], 0]
+FQ = PROPOSAL['roll_quality']
 SOURCE = 'ember-v1.yml forge:' if isinstance(_live, dict) else 'PROPOSAL (forge not live)'
 
 QN = ['标准', '精良', '卓越', '极品']
@@ -116,7 +130,7 @@ def header(title):
 # ------------------------------------------------------------------ odds
 
 def odds():
-    header('odds — cost-equivalence audit (forge roll vs drops, per run-equivalent)')
+    header('odds — chosen-slot pieces per run: drops vs marks (redemption / random forge), and the random-forge EV')
     core_drop = (1 + CHEST) * TARGET_W * 0.5          # chosen family + chosen slot per normal run, no map bias
     core_bias = (1 + CHEST) * OWN * SLOT_W            # on the map of the target family + slot (D81)
     armor_drop = 1.0 * TARGET_W * 0.25                # 6-slot stage 1: +1 armor per clear, 4 slots uniform (research §4.3)
@@ -128,16 +142,33 @@ def odds():
     for name, n, w in rows:
         print('| %s | %.4f | %.4f | %.4f | %.5f |' % (name, n, n * p_at_least(w, 1), n * p_at_least(w, 2), n * p_at_least(w, 3)))
     for kind, n in (('core', core_drop), ('armor', armor_drop)):
-        k = PROPOSAL['roll_marks'][kind]
+        k = PROPOSAL['redeem_marks'][kind]
         r = 1.0 / k
-        print('| **随机成色锻造 %s（%d 印记 = %d 局；评估，未采用）** | %.4f | %.4f | %.4f | %.5f |' % (
-            '核心件' if kind == 'core' else '护甲', k, k, r, r * p_at_least(QUALITY_W, 1), r * p_at_least(QUALITY_W, 2), r * p_at_least(QUALITY_W, 3)))
-        kmin = -(-1.0 // n) if n > 0 else 0
-        print('| ↳ 不比掉落好的最低印记数 ⌈1 / %.4f⌉ | %d | 按 %d：%s | | |' % (n, int(-(-1 // n)), k, '满足' if k >= 1.0 / n else '**不满足**'))
-    print('\n（随机成色锻造只作对照，w30 节否决。）每局本来就有掉落；随机锻造用的是另外攒下的印记，所以它是**加法**，但每局印记换来的“指定件抽奖”永远少于同一局的掉落'
-          '（核心件 1/%d = %.3f < %.3f；护甲 1/%d = %.3f < %.3f），成色表就是 §5.1 掉落表 %s，精工表 %s。' % (
-              PROPOSAL['roll_marks']['core'], 1.0 / PROPOSAL['roll_marks']['core'], core_drop,
-              PROPOSAL['roll_marks']['armor'], 1.0 / PROPOSAL['roll_marks']['armor'], armor_drop, QUALITY_W, CRAFT_W))
+        for label, w in (('提案：极品并入卓越 %s' % FQ, FQ), ('否决：照抄掉落表 %s' % QUALITY_W, QUALITY_W)):
+            print('| 随机锻造 %s %d 印记（%s） | %.4f | %.4f | %.4f | %.5f |' % (
+                '核心件' if kind == 'core' else '护甲', k, label, r, r * p_at_least(w, 1), r * p_at_least(w, 2), r * p_at_least(w, 3)))
+    print('\n提案的随机锻造**出不了极品**（P1 书 §5.3：极品只从正常随机掉落获得），所以它对“掉落 vs 印记”的极品产出没有任何影响；'
+          '它能给的精良 / 卓越和精工，本来就能用 §5.3 养成按固定价买到。下面把它当成“兑换 + 一次赌养成”来算期望：\n')
+    names = ('碎片', '核心', '胚料', '骨粉', '余烬币')
+    ev = [0.0] * 5
+    tq = float(sum(FQ))
+    for q in (1, 2):  # value of landing on 精良 / 卓越 = the §5.3 refine steps it skips
+        for step in range(q):
+            for i in range(5):
+                ev[i] += FQ[q] / tq * Q_COST[step][i]
+    tc = float(sum(CRAFT_W))
+    for c in (1, 2, 3):
+        for step in range(c):
+            for i in range(5):
+                ev[i] += CRAFT_W[c] / tc * C_COST[step][i]
+    print('| 项 | ' + ' | '.join(names) + ' |')
+    print('|---|' + '---:|' * 5)
+    print('| §5.3 成色养成 标准→精良 / 精良→卓越 | ' + ' | '.join('%d / %d' % (Q_COST[0][i], Q_COST[1][i]) for i in range(5)) + ' |')
+    print('| §5.3 精工养成 0→1 / 1→2 / 2→3 | ' + ' | '.join('%d / %d / %d' % tuple(C_COST[j][i] for j in range(3)) for i in range(5)) + ' |')
+    print('| 随机锻造一次“省下的养成”期望 | ' + ' | '.join('%.2f' % x for x in ev) + ' |')
+    print('| 随机锻造的额外价（T1–T3 同价） | 0 | 0 | %d | 0 | %d |' % (PROPOSAL['roll_blank'][3], PROPOSAL['roll_coin'][3]))
+    print('\n→ 期望大约持平（多付 %d 胚料 + %d 币，期望省 %.1f 胚料 + %.1f 骨粉 + %.0f 币）：随机锻造是“同价的赌”，不是更便宜的路；'
+          '想稳就兑换标准件再养成。' % (PROPOSAL['roll_blank'][3], PROPOSAL['roll_coin'][3], ev[2], ev[3], ev[4]))
 
 
 # ------------------------------------------------------------------ affix (D143 rules + pin + charges)
@@ -237,7 +268,7 @@ def runs_to(rng, per_run, w, q, marks_mode, k_roll, k_red, cap_runs=400):
                 return r
         if marks_mode == 'roll' and marks >= k_roll:
             marks -= k_roll
-            if pick(QUALITY_W, rng.random()) >= q:
+            if pick(FQ, rng.random()) >= q:
                 return r
     return cap_runs
 
@@ -247,9 +278,9 @@ def target(n):
     rng = random.Random(4167)
     core = (1 + CHEST) * TARGET_W * 0.5
     armor = TARGET_W * 0.25
-    kc, ka = PROPOSAL['roll_marks']['core'], PROPOSAL['roll_marks']['armor']
     rc, ra = PROPOSAL['redeem_marks']['core'], PROPOSAL['redeem_marks']['armor']
-    print('| 目标 | 只靠掉落（局，均值 / P90） | + 兑换（%d / %d 印记） | + 兑换 + 随机锻造（%d 印记，仅成色目标） | 随机锻造比只兑换快 |' % (rc, ra, kc))
+    kc, ka = rc, ra
+    print('| 目标（只看成色，不算养成） | 只靠掉落（局，均值 / P90） | + 兑换（%d / %d 印记） | 印记全用来随机锻造（%s） | 随机锻造比只兑换快 |' % (rc, ra, FQ))
     print('|---|---|---|---|---:|')
     for slot_name, per, kr, kk in (('刃或护符', core, rc, kc), ('某件护甲（阶段 1）', armor, ra, ka)):
         for q in (0, 1, 2, 3):
@@ -259,10 +290,11 @@ def target(n):
                 res.append((statistics.mean(l), l[int(0.9 * n)]))
             if q == 0:  # any quality: the redemption is the floor; a roll is never worse, so "roll" = "redeem"
                 res[2] = res[1]
-            gain = 100.0 * (1 - res[2][0] / res[1][0])
+            gain = 100.0 * (1 - res[2][0] / res[1][0]) if q in (1, 2) else None
             print('| %s ≥%s | %.1f / %d | %.1f / %d | %.1f / %d | %s |' % (slot_name, QN[q], res[0][0], res[0][1], res[1][0], res[1][1],
-                                                                          res[2][0], res[2][1], ('−%.0f%%' % gain) if q else '—'))
-    print('\n(“+ 兑换”只给标准件，所以对 ≥精良 的目标与只靠掉落相同；随机锻造的件最差也是标准件。'
+                                                                          res[2][0], res[2][1], ('−%.0f%%' % gain) if gain is not None else ('—（出不了极品，差别是噪声）' if q == 3 else '—')))
+    print('\n(“+ 兑换”只给标准件，所以对 ≥精良 的目标与只靠掉落相同；随机锻造的件最差也是标准件、出不了极品。'
+          '这张表不算 §5.3 养成——养成能用固定价把任何件买到卓越，所以随机锻造省的是养成材料，上表 odds 已算期望。'
           '极品行的 P90 截在 400 局。T3 之后的周数见下节 w30。)')
 
 
@@ -288,6 +320,7 @@ def one_player(rng, route, weeks, v):
     q = {'blade': 0, 'charm': 0}
     off = {'blade': 0, 'charm': 0}  # best off-family T3 piece kept in the gear library (conversion input)
     marks, out = 0, []
+    frng = random.Random(rng.getrandbits(64))  # forge draws on their own stream: variants keep the same drop sequence
     st = {'forge': 0, 'forge_q3': 0, 'conv': 0, 'conv_q': 0, 'coin': 0, 'blank': 0, 'marks': 0}
     cal = CAL[route]
 
@@ -350,13 +383,13 @@ def one_player(rng, route, weeks, v):
         budget = v.get('coin')
         spent = 0
         while k and marks >= k and min(q.values()) < 3:
-            cost = PROPOSAL['roll_coin'][3]
+            cost = PROPOSAL['roll_coin'][3]  # T3
             if budget is not None and spent + cost > budget:
                 break
             marks -= k; spent += cost
             st['forge'] += 1; st['coin'] += cost; st['blank'] += PROPOSAL['roll_blank'][3]
             s = 'blade' if (q['blade'] < 3 and (q['blade'] <= q['charm'] or q['charm'] == 3)) else 'charm'
-            qq = pick(QUALITY_W, rng.random())
+            qq = pick(v.get('table', FQ), frng.random())
             st['forge_q3'] += qq == 3
             q[s] = max(q[s], qq)
         if not k:
@@ -407,14 +440,14 @@ def w30(n, weeks):
           % (ROT_MARKS, RUSH_MARKS, n))
     variants = [
         ('base（现行：8 印记兑换标准件，无转化）', {}),
-        ('转化 1/周 成色截到卓越（提案）', {'conv': (1, PROPOSAL['conv_qcap'])}),
-        ('转化 1/周 保留极品（否决）', {'conv': (1, 3)}),
-        ('转化 2/周 截卓越', {'conv': (2, PROPOSAL['conv_qcap'])}),
-        ('随机成色锻造 核心件 8 印记（否决）', {'k': 8}),
-        ('随机成色锻造 8 印记 · 每周币 ≤2000', {'k': 8, 'coin': 2000}),
-        ('随机成色锻造 12 印记', {'k': 12}),
-        ('随机成色锻造 16 印记', {'k': 16}),
-        ('随机成色锻造 4 印记', {'k': 4}),
+        ('随机锻造 8 印记 · 极品并入卓越（提案）', {'k': 8}),
+        ('转化 1/周 · 成色截到卓越（提案）', {'conv': (1, PROPOSAL['conv_qcap'])}),
+        ('提案合计：随机锻造 + 转化', {'k': 8, 'conv': (1, PROPOSAL['conv_qcap'])}),
+        ('转化 1/周 · 保留极品（否决）', {'conv': (1, 3)}),
+        ('随机锻造 8 印记 · 照抄掉落表含 1% 极品（否决）', {'k': 8, 'table': QUALITY_W}),
+        ('↳ 同上 · 每周锻造币 ≤1000（深渊缺币）', {'k': 8, 'table': QUALITY_W, 'coin': 1000}),
+        ('↳ 同上 · 12 印记', {'k': 12, 'table': QUALITY_W}),
+        ('↳ 同上 · 16 印记', {'k': 16, 'table': QUALITY_W}),
     ]
     for route, label in (('rot', '轮换 + 团本'), ('abyss', 'P2-2 深渊')):
         print('### %s\n' % label)
