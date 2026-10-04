@@ -379,6 +379,8 @@ public final class EmberRunService implements Listener {
         if (key == null) return "";
         if ("var_affix_shard".equals(key)) return "词缀精英 ";
         if ("var_event_core".equals(key)) return "限时清房 ";
+        if ("var_event_crystal".equals(key)) return "砸余烬晶 ";
+        if ("var_event_escort".equals(key)) return "护宝兔 ";
         if ("honor_shard".equals(key)) return "勋记 ";
         if (key.startsWith("vb_")) return "花样委托 ";
         return "";
@@ -588,16 +590,19 @@ public final class EmberRunService implements Listener {
             for (Player p : party) if (!firstCleared(data(p.getUniqueId()), m)) { all = false; break; }
             if (all || forcedVariety != null) {
                 String[] v = maps.variety.roll(EmberRunRules.subSeed(s.seed, "variety"));
-                if (forcedVariety != null) { // admin test hook, one shot: "affix:room" or "event:room"
+                if (forcedVariety != null) { // admin test hook, one shot: "regen:r1" / "crystal:r2" / "event:r1" / "escort:r2"
                     String[] fv = forcedVariety.split(":");
-                    if (EmberRunMaps.Variety.KNOWN.contains(fv[0])) { v[1] = fv[0]; v[0] = fv.length > 1 ? fv[1] : "r1"; }
-                    else if ("event".equals(fv[0])) v[2] = fv.length > 1 ? fv[1] : "r1";
+                    String id = fv[0], room = fv.length > 1 ? fv[1] : "r1";
+                    if (EmberRunMaps.Variety.KNOWN.contains(id)) { v[1] = id; v[0] = room; }
+                    else if ("event".equals(id) || "timed".equals(id)) { v[2] = room; if (v.length > 3) v[3] = "timed"; }
+                    else if (EmberRunMaps.Variety.EVENTS.contains(id)) { v[2] = room; if (v.length > 3) v[3] = id; }
                     log().info("[P1 run] " + s.runId + " variety forced " + forcedVariety + " (admin test)");
                     forcedVariety = null;
                 }
                 s.affixRoom = v[0];
                 s.affix = v[1];
                 s.eventRoom = v[2];
+                s.eventKind = v.length > 3 && v[3] != null ? v[3] : (!v[2].isEmpty() ? "timed" : "");
             }
         }
         for (Player p : party) {
@@ -1083,18 +1088,23 @@ public final class EmberRunService implements Listener {
         log().info("[P1 run] " + s.runId + " affix " + affix + " done");
     }
 
-    /** D138: the timed room of a repeat normal run was cleared (in time or not). */
+    /** D138/D171: the marked room event of a repeat normal run was resolved (ok or not). */
     void onEventResult(EmberRunSession s, boolean ok, double secs) {
         if (s.eventDone || !s.open()) return;
         String t = String.format(Locale.ROOT, "%.1f", secs);
+        String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+        String name = EmberRunMaps.Variety.eventLabel(kind);
         if (ok) {
             s.eventDone = true;
             store.save(s);
-            tellRun(s, "§b限时清房完成 §7（" + t + " 秒）· 余烬核心碎片 +" + maps.variety.eventCore + " 记为待结算");
+            tellRun(s, "§b" + name + "完成 §7（" + t + " 秒）· 余烬核心碎片 +" + maps.variety.eventCore + " 记为待结算");
         } else {
-            tellRun(s, "§7限时清房超时（" + t + " 秒 / 限 " + maps.variety.eventSecs + " 秒），这次没有额外核心");
+            int lim = maps.variety.eventLimit(kind);
+            tellRun(s, lim > 0
+                    ? "§7" + name + "未达成（" + t + " 秒 / 限 " + lim + " 秒），这次没有额外核心"
+                    : "§7" + name + "未达成，这次没有额外核心");
         }
-        log().info("[P1 run] " + s.runId + " event " + (ok ? "done" : "late") + " " + t + "s");
+        log().info("[P1 run] " + s.runId + " event " + kind + " " + (ok ? "done" : "fail") + " " + t + "s");
     }
 
     /** Server-side breakage (mob / boss cannot spawn): abort and give the stamina back. */
@@ -1382,7 +1392,7 @@ public final class EmberRunService implements Listener {
         }
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
         if (!s.challenge && s.abyss == 0 && !m.raid) // D138 repeat-run variety (rolled only when every member had the first clear)
-            grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, maps.variety.affixShard, s.eventDone, maps.variety.eventCore));
+            grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, maps.variety.affixShard, s.eventDone, maps.variety.eventCore, s.eventKind));
         EmberRunRules.Ledger l = store.ledger(u);
         // P2-7 daily bounty (D79): the n-th settled clear of the stamina day; counted once per run (fresh = no base row yet)
         final boolean fresh = l.get(s.runId, "base_coin") == null;
@@ -2203,6 +2213,8 @@ public final class EmberRunService implements Listener {
         Entity src = e.getDamager();
         if (src instanceof Projectile && ((Projectile) src).getShooter() instanceof Entity) src = (Entity) ((Projectile) src).getShooter();
         if (src instanceof Player) markActed(d.s, (Player) src);
+        EmberRunDirector.Tracked t = d.mobs.get(e.getEntity().getUniqueId());
+        if (t != null && "regen".equals(t.affix)) d.noteRegenHurt(t, e.getFinalDamage());
     }
 
     private void markActed(EmberRunSession s, Player p) {
@@ -2298,10 +2310,20 @@ public final class EmberRunService implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onInteract(PlayerInteractEvent e) {
-        if (e.getAction() != Action.RIGHT_CLICK_BLOCK || e.getClickedBlock() == null) return;
+        if (e.getClickedBlock() == null) return;
         EmberRunDirector d = byWorld.get(e.getPlayer().getWorld().getName());
         if (d == null) return;
         Block b = e.getClickedBlock();
+        // D171: left-click smash crystals (BlockBreak is often cancelled in dungeon worlds for bots/creative)
+        if ((e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK)
+                && d.s.committed.contains(e.getPlayer().getUniqueId())
+                && d.breakCrystal(b, e.getPlayer())) {
+            b.setType(org.bukkit.Material.AIR);
+            e.setCancelled(true);
+            markActed(d.s, e.getPlayer());
+            return;
+        }
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (d.chest != null && b.getLocation().equals(d.chest)) {
             e.setCancelled(true);
             if (d.s.committed.contains(e.getPlayer().getUniqueId())) {
@@ -2310,6 +2332,23 @@ public final class EmberRunService implements Listener {
             }
         }
     }
+
+    /**
+     * D171: smash variety crystals. Dungeon protection often cancels BlockBreak after HIGH; run MONITOR
+     * ignoreCancelled=false, force AIR, and count once. Never leave a lantern behind.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    public void onCrystalBreak(org.bukkit.event.block.BlockBreakEvent e) {
+        EmberRunDirector d = byWorld.get(e.getPlayer().getWorld().getName());
+        if (d == null) return;
+        if (!d.s.committed.contains(e.getPlayer().getUniqueId())) return;
+        if (d.breakCrystal(e.getBlock(), e.getPlayer())) {
+            e.getBlock().setType(org.bukkit.Material.AIR);
+            markActed(d.s, e.getPlayer());
+        }
+    }
+
+
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeath(PlayerDeathEvent e) {
@@ -2967,7 +3006,7 @@ public final class EmberRunService implements Listener {
             s.sendMessage(P + "下一局规则（挑战或精选图普通版，仅一次，测试用）= " + (forcedModifier == null ? "按周" : forcedModifier.id));
             return true;
         }
-        if (admin && "variety".equals(op) && args.length >= 4) { // D138 test hook: runs variety blazing|split|shield|event[:r1..r3]|clear
+        if (admin && "variety".equals(op) && args.length >= 4) { // D138/D171: blazing|…|frost|timed|crystal|escort|event[:rN]|clear
             forcedVariety = "clear".equalsIgnoreCase(args[3]) ? null : args[3].toLowerCase(Locale.ROOT);
             s.sendMessage(P + "下一局普通版花样（仅一次，测试用）= " + (forcedVariety == null ? "按种子" : forcedVariety));
             return true;

@@ -57,8 +57,8 @@ public final class EmberRunSession {
     public double dmgFactor = 1.0;
     public EmberRunRules.Extra extra = EmberRunRules.Extra.NONE;
     public boolean extraDone;
-    /** D138 repeat-run variety fixed at entry ("" = none): affixed elite room + type, timed event room; done flags */
-    public String affixRoom = "", affix = "", eventRoom = "";
+    /** D138/D171 repeat-run variety fixed at entry ("" = none): affixed elite room + type, event room + kind; done flags */
+    public String affixRoom = "", affix = "", eventRoom = "", eventKind = "";
     public boolean affixDone, eventDone;
     public final Set<UUID> acted = new LinkedHashSet<UUID>();
     public final Set<UUID> died = new LinkedHashSet<UUID>();
@@ -121,7 +121,10 @@ public final class EmberRunSession {
         m.put("extra", extra.id);
         m.put("extra_done", extraDone);
         if (!affix.isEmpty()) { m.put("affix", affix); m.put("affix_room", affixRoom); m.put("affix_done", affixDone); }
-        if (!eventRoom.isEmpty()) { m.put("event_room", eventRoom); m.put("event_done", eventDone); }
+        if (!eventRoom.isEmpty()) {
+            m.put("event_room", eventRoom); m.put("event_done", eventDone);
+            if (eventKind != null && !eventKind.isEmpty()) m.put("event_kind", eventKind);
+        }
         m.put("acted", ids(acted));
         m.put("died", ids(died));
         Map<String, Object> pu = new LinkedHashMap<String, Object>();
@@ -175,6 +178,8 @@ public final class EmberRunSession {
         s.affixRoom = m.get("affix_room") == null ? "" : String.valueOf(m.get("affix_room"));
         s.affixDone = Boolean.TRUE.equals(m.get("affix_done"));
         s.eventRoom = m.get("event_room") == null ? "" : String.valueOf(m.get("event_room"));
+        s.eventKind = m.get("event_kind") == null ? "" : String.valueOf(m.get("event_kind"));
+        if (!s.eventRoom.isEmpty() && s.eventKind.isEmpty()) s.eventKind = "timed"; // D138 saves
         s.eventDone = Boolean.TRUE.equals(m.get("event_done"));
         readIds(m.get("acted"), s.acted);
         readIds(m.get("died"), s.died);

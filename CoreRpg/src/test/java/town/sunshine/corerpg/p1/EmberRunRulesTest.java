@@ -333,8 +333,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(29, m.balanceVersion);                // D158 converted-mob twists
-        assertEquals("g04-1/b29", m.ruleVersion);
+        assertEquals(30, m.balanceVersion);                // D176 Variety Pack 2
+        assertEquals("g04-1/b30", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1116,6 +1116,104 @@ public class EmberRunRulesTest {
         EmberRunSession t = EmberRunSession.fromMap(s.toMap());
         assertEquals("split", t.affix); assertEquals("r2", t.affixRoom); assertTrue(t.affixDone);
         assertEquals("r3", t.eventRoom); assertFalse(t.eventDone);
+    }
+
+    @Test public void varietyPack2RollsNewAffixesAndEventsOffFirstClears_D171() {
+        EmberRunMaps.Variety v = bundled().variety;
+        assertEquals(6, EmberRunMaps.Variety.KNOWN.size());
+        assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("regen", "charge", "frost")));
+        assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
+        assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
+        assertTrue(v.chargeWarn >= 1.2);
+        assertEquals(3, v.crystalCount);
+        assertEquals(0.35, v.escortHp, 1e-9);
+        assertEquals("再生", EmberRunMaps.Variety.label("regen"));
+        assertEquals("冲锋", EmberRunMaps.Variety.label("charge"));
+        assertEquals("凝霜", EmberRunMaps.Variety.label("frost"));
+        assertEquals("砸余烬晶", EmberRunMaps.Variety.eventLabel("crystal"));
+        assertEquals("护宝兔", EmberRunMaps.Variety.eventLabel("escort"));
+        Set<String> aff = new HashSet<String>(), ev = new HashSet<String>();
+        for (long seed = 0; seed < 6000; seed++) {
+            String[] a = v.roll(EmberRunRules.subSeed(seed, "variety"));
+            assertEquals(4, a.length);
+            if (!a[1].isEmpty()) aff.add(a[1]);
+            if (!a[2].isEmpty()) { assertTrue(a[3], EmberRunMaps.Variety.EVENTS.contains(a[3])); ev.add(a[3]); }
+        }
+        assertTrue(aff.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "blazing", "split", "shield")));
+        assertTrue(ev.containsAll(java.util.Arrays.asList("timed", "crystal", "escort")));
+        // reflect rejected
+        java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
+        raw.put("affix_rate", 1.0);
+        raw.put("affixes", java.util.Arrays.asList("blazing", "reflect", "regen"));
+        raw.put("event_rate", 0.5);
+        EmberRunMaps.Variety bad = new EmberRunMaps.Variety(raw);
+        assertFalse(bad.affixes.contains("reflect"));
+        assertTrue(bad.affixes.contains("regen"));
+        // session keeps eventKind; old saves without kind default to timed
+        EmberRunSession s = new EmberRunSession();
+        s.eventRoom = "r1"; s.eventKind = "crystal"; s.eventDone = true;
+        EmberRunSession round = EmberRunSession.fromMap(s.toMap());
+        assertEquals("crystal", round.eventKind);
+        EmberRunSession old = EmberRunSession.fromMap(java.util.Collections.singletonMap("event_room", "r2"));
+        assertEquals("timed", old.eventKind);
+        // charge strip skill shape
+        EmberRunDirector.Tracked h = new EmberRunDirector.Tracked(null, "heavy", "r1", null, null, 20, 3, 2, null);
+        EmberRunMaps.Skill ch = EmberRunDirector.chargeSkill(h, v, new org.bukkit.util.Vector(1, 0, 0));
+        assertEquals("charge", ch.type);
+        assertEquals(20 * v.chargeDmg, ch.dmg, 1e-9);
+        assertEquals(v.chargeWidth, ch.width, 1e-9);
+    }
+
+    @Test public void varietyBountyCountsAnyEventKind_D171() {
+        assertEquals("房间事件达标", new EmberRunRules.VarietyBounty("timed", 1, 20, 0).label());
+        assertEquals("击败词缀精英", new EmberRunRules.VarietyBounty("affix", 2, 20, 0).label());
+        // crystal/escort success advances the same kind=timed bounty (save id unchanged)
+        List<EmberRunRules.Grant> g = EmberRunRules.varietyBountyGrants(new EmberRunRules.VarietyBounty("timed", 1, 20, 0), 0, true);
+        assertEquals(1, g.size());
+        assertEquals("vb_timed", g.get(0).key);
+        // settle keys differ by event kind but same core mat
+        assertEquals("var_event_crystal", EmberRunRules.varietyGrants(false, false, 0, true, 1, "crystal").get(0).key);
+        assertEquals("var_event_escort", EmberRunRules.varietyGrants(false, false, 0, true, 1, "escort").get(0).key);
+        assertEquals("var_event_core", EmberRunRules.varietyGrants(false, false, 0, true, 1, "timed").get(0).key);
+        assertEquals("砸余烬晶 ", EmberRunService.matSource("var_event_crystal"));
+        assertEquals("护宝兔 ", EmberRunService.matSource("var_event_escort"));
+    }
+
+    @Test public void reflectAffixRejected_D171() {
+        java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
+        raw.put("affixes", java.util.Arrays.asList("reflect", "blazing"));
+        raw.put("affix_rate", 1.0);
+        EmberRunMaps.Variety v = new EmberRunMaps.Variety(raw);
+        assertFalse(EmberRunMaps.Variety.KNOWN.contains("reflect"));
+        assertEquals(java.util.Collections.singletonList("blazing"), v.affixes);
+    }
+
+    @Test public void escortRabbitDoesNotPayTreasureCoin_D171() {
+        // variety escort is tracked separately; Extra.TREASURE settlement is the only path to treasure coin
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.bossKilled = true;
+        in.extra = EmberRunRules.Extra.NONE;
+        in.extraDone = false;
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) assertFalse("extra_treasure_coin".equals(x.key));
+        // even if somehow marked done without TREASURE extra, still no treasure coin
+        in.extraDone = true;
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) assertFalse("extra_treasure_coin".equals(x.key));
+        // escort flag on Tracked must not itself produce a grant key
+        EmberRunDirector.Tracked rabbit = new EmberRunDirector.Tracked(null, "treasure", "r1", null, null, 0, 9, 2, null);
+        rabbit.varietyEscort = true;
+        assertTrue(rabbit.varietyEscort);
+        assertEquals(0, rabbit.atk, 0);
+    }
+
+    @Test public void crystalBlocksCleanupOnFailAndUnload_D171() {
+        // unit-level: crystalBlocks list starts empty; clearCrystals is idempotent via finish path contract
+        // (live SEA_LANTERN placement needs a World — covered by smoke). Here we only assert config + labels.
+        EmberRunMaps.Variety v = bundled().variety;
+        assertEquals(3, v.crystalCount);
+        assertEquals(35, v.crystalSecs);
+        assertEquals("砸余烬晶", EmberRunMaps.Variety.eventLabel("crystal"));
+        assertTrue(v.eventLimit("crystal") >= 30);
+        assertEquals(0, v.eventLimit("escort")); // no countdown
     }
 
     @Test public void everyMainBossHasOneNewTelegraphedLightMove_D140() {

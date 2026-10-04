@@ -210,10 +210,18 @@ public final class EmberRunRules {
      * room → cores. Never on a first clear (the caller passes firstClear = the run carried the first-clear package).
      */
     public static List<Grant> varietyGrants(boolean firstClear, boolean affixDone, int affixShard, boolean eventDone, int eventCore) {
+        return varietyGrants(firstClear, affixDone, affixShard, eventDone, eventCore, "timed");
+    }
+
+    /** D171: eventKind selects the settle source key (var_event_core / var_event_crystal / var_event_escort). */
+    public static List<Grant> varietyGrants(boolean firstClear, boolean affixDone, int affixShard, boolean eventDone, int eventCore, String eventKind) {
+        if (firstClear) return Collections.emptyList();
         List<Grant> out = new ArrayList<Grant>();
-        if (firstClear) return out;
         if (affixDone && affixShard > 0) out.add(new Grant("var_affix_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, affixShard, null));
-        if (eventDone && eventCore > 0) out.add(new Grant("var_event_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, eventCore, null));
+        if (eventDone && eventCore > 0) {
+            String k = "crystal".equals(eventKind) ? "var_event_crystal" : "escort".equals(eventKind) ? "var_event_escort" : "var_event_core";
+            out.add(new Grant(k, Kind.MAT, EmberUpgradeRules.MAT_CORE, eventCore, null));
+        }
         return out;
     }
 
@@ -542,7 +550,8 @@ public final class EmberRunRules {
         public final String kind;
         public final int count, coin, shard;
         public VarietyBounty(String kind, int count, int coin, int shard) { this.kind = kind; this.count = count; this.coin = coin; this.shard = shard; }
-        public String label() { return "affix".equals(kind) ? "击败词缀精英" : "限时清房达标"; }
+        /** timed = any room event success (timed / crystal / escort); id kept for save compat (D144/D171). */
+        public String label() { return "affix".equals(kind) ? "击败词缀精英" : "房间事件达标"; }
         public String rewardText() { return (coin > 0 ? coin + " 余烬币" : "") + (coin > 0 && shard > 0 ? " + " : "") + (shard > 0 ? "余烬碎片 ×" + shard : ""); }
     }
 

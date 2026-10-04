@@ -576,13 +576,25 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList("blazing", "split", "shield"));
+        /** D138 + D171 Pack 2. reflect is intentionally absent (rejected). */
+        public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
+                "blazing", "split", "shield", "regen", "charge", "frost"));
+        public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
+                "timed", "crystal", "escort"));
         public final double affixRate, eventRate;
-        public final List<String> affixes;
+        public final List<String> affixes, events;
         public final int affixShard, eventCore, eventSecs;
         public final double blazeEvery, blazeRadius, blazeWarn, blazeDmg;
         public final int splitCount;
         public final double splitHp, shieldHp;
+        // D171 regen / charge / frost
+        public final double regenEvery, regenHeal, regenInterruptWindow, regenInterruptHp;
+        public final double chargeEvery, chargeWarn, chargeLength, chargeWidth, chargeDmg;
+        public final double frostRadius, frostTick;
+        public final int frostAmplifier;
+        // D171 crystal / escort / timed
+        public final int crystalCount, crystalSecs, timedSecs;
+        public final double escortHp;
 
         Variety(Map<?, ?> m) {
             affixRate = clamp01(num(m.get("affix_rate"), 0.0));
@@ -593,6 +605,13 @@ public final class EmberRunMaps {
                 if (KNOWN.contains(id) && !a.contains(id)) a.add(id);
             }
             affixes = Collections.unmodifiableList(a);
+            List<String> ev = new ArrayList<String>();
+            if (m.get("events") instanceof List) for (Object o : (List<?>) m.get("events")) {
+                String id = String.valueOf(o).trim();
+                if (EVENTS.contains(id) && !ev.contains(id)) ev.add(id);
+            }
+            if (ev.isEmpty() && eventRate > 0) ev.add("timed"); // D138 compat: no events list → timed only
+            events = Collections.unmodifiableList(ev);
             affixShard = Math.max(0, (int) num(m.get("affix_shard"), 0));
             eventCore = Math.max(0, (int) num(m.get("event_core"), 0));
             eventSecs = Math.max(5, (int) num(m.get("event_secs"), 30));
@@ -606,26 +625,74 @@ public final class EmberRunMaps {
             splitHp = Math.max(0.05, Math.min(1.0, num(sp.get("hp"), 0.5)));
             Map<?, ?> sh = m.get("shield") instanceof Map ? (Map<?, ?>) m.get("shield") : Collections.emptyMap();
             shieldHp = Math.max(1.0, num(sh.get("hp"), 1.6));
+            Map<?, ?> rg = m.get("regen") instanceof Map ? (Map<?, ?>) m.get("regen") : Collections.emptyMap();
+            regenEvery = Math.max(1.0, num(rg.get("every"), 4.0));
+            regenHeal = Math.max(0.0, Math.min(1.0, num(rg.get("heal"), 0.10)));
+            regenInterruptWindow = Math.max(0.5, num(rg.get("interrupt_window"), 1.5));
+            regenInterruptHp = Math.max(0.0, Math.min(1.0, num(rg.get("interrupt_hp"), 0.05)));
+            Map<?, ?> ch = m.get("charge") instanceof Map ? (Map<?, ?>) m.get("charge") : Collections.emptyMap();
+            chargeEvery = Math.max(1.0, num(ch.get("every"), 5.5));
+            chargeWarn = Math.max(1.2, num(ch.get("warn"), 1.2));
+            chargeLength = Math.max(1.0, Math.min(8.0, num(ch.get("length"), 7)));
+            chargeWidth = Math.max(0.5, num(ch.get("width"), 2.5));
+            chargeDmg = Math.max(0.0, num(ch.get("dmg"), 1.0));
+            Map<?, ?> fr = m.get("frost") instanceof Map ? (Map<?, ?>) m.get("frost") : Collections.emptyMap();
+            frostRadius = Math.max(0.5, num(fr.get("radius"), 3.0));
+            frostAmplifier = Math.max(0, Math.min(4, (int) num(fr.get("amplifier"), 1)));
+            frostTick = Math.max(0.2, num(fr.get("tick"), 0.5));
+            Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
+            timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
+            Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
+            crystalCount = Math.max(1, Math.min(8, (int) num(cr.get("count"), 3)));
+            crystalSecs = Math.max(5, (int) num(cr.get("secs"), 35));
+            Map<?, ?> es = m.get("escort") instanceof Map ? (Map<?, ?>) m.get("escort") : Collections.emptyMap();
+            escortHp = Math.max(0.05, Math.min(1.0, num(es.get("hp"), 0.35)));
         }
 
         public boolean on() { return (affixRate > 0 && !affixes.isEmpty()) || eventRate > 0; }
 
         /** Chinese tag shown on the elite's name and in chat */
         public static String label(String id) {
-            return "blazing".equals(id) ? "炽热" : "split".equals(id) ? "分裂" : "shield".equals(id) ? "厚甲" : id; // D147: was 护盾 (it only has more HP, no shield bar)
+            if ("blazing".equals(id)) return "炽热";
+            if ("split".equals(id)) return "分裂";
+            if ("shield".equals(id)) return "厚甲"; // D147: was 护盾 (it only has more HP, no shield bar)
+            if ("regen".equals(id)) return "再生";
+            if ("charge".equals(id)) return "冲锋";
+            if ("frost".equals(id)) return "凝霜";
+            return id;
         }
 
-        /** {affix room, affix id, event room} for this seed; entries are "" when not rolled. Deterministic. */
+        /** Chinese name of a room event kind (timed / crystal / escort). */
+        public static String eventLabel(String kind) {
+            if ("crystal".equals(kind)) return "砸余烬晶";
+            if ("escort".equals(kind)) return "护宝兔";
+            return "限时清房";
+        }
+
+        /** Soft time limit (seconds) for the given event kind. */
+        public int eventLimit(String kind) {
+            if ("crystal".equals(kind)) return crystalSecs;
+            if ("escort".equals(kind)) return 0; // no countdown; lives until room clear or rabbit dies
+            return timedSecs;
+        }
+
+        /**
+         * {affix room, affix id, event room, event kind} for this seed; entries are "" when not rolled.
+         * Deterministic. Slot [3] defaults to "timed" when an event room is rolled (D138 callers that ignore it stay safe).
+         */
         public String[] roll(long seed) {
             java.util.Random r = new java.util.Random(seed);
             String[] rooms = {"r1", "r2", "r3"};
-            String ar = "", at = "", er = "";
+            String ar = "", at = "", er = "", ek = "";
             if (r.nextDouble() < affixRate && !affixes.isEmpty()) {
                 ar = rooms[r.nextInt(3)];
                 at = affixes.get(r.nextInt(affixes.size()));
             }
-            if (r.nextDouble() < eventRate) er = rooms[r.nextInt(3)];
-            return new String[]{ar, at, er};
+            if (r.nextDouble() < eventRate && !events.isEmpty()) {
+                er = rooms[r.nextInt(3)];
+                ek = events.get(r.nextInt(events.size()));
+            }
+            return new String[]{ar, at, er, ek};
         }
     }
 

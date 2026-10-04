@@ -1515,6 +1515,10 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D170 | CoreRpg 1.65.4 | Q02–Q07 第一房战术提示（短中文）；Q04 r3 可选落差提醒；balance_version 仍 29；不改战斗数值 |
 | D171 | 设计-only（无版本 bump） | Variety Pack 2：重复刷图花样扩包——词缀池 +再生/冲锋/凝霜（否决反伤）；房间事件池 +砸余烬晶/护宝兔（与限时清房等权）；闸门/奖励种类同 D138；花样委托泛型计数兼容；实现等 asset-fix-1655 后。`docs/design/DESIGN-ember-variety-pack2-2026-10-04.md` |
 | D172 | CoreRpg 1.65.5 | 资产安全修复（D167 §5 前置）：**撤销 / 批量撤销**先扣胚料（hold → pay → commit，扣不到什么都不做，不再写负数送货行，X5）；**印记兑换**扣印记 → 一个事务写物品 + txn + 待发货 + 作废 hold，退款走新 `mark` 欠款（X1/X4，exactly-once）；**洗练**走耐久付款，付款 + “欠一次结果”同存档、提交后才抽（种子 = 盐 + 玩家 + rid），断线 / kill -9 = 退一次或进服补同一次（X15）。数值、装备结构、balance_version（29）不变 |
+| D173 | 设计-only（deferred 实现） | Boss Moves Pack 2：半血转阶段轻压；见 `docs/design/DESIGN-ember-boss-moves-pack2-2026-10-04.md`。实现另窗 |
+| D174 | 设计进行中（COORD-mainline-unlocks） | 主线每图专属装 + 解锁新机制；研究/设计进行中（COORD-mainline-unlocks）。不占本窗 CoreRpg |
+| D175 | 设计-only（deferred 实现） | Weekly Modifier Pack 2：精选图周规则 +3（bolters/shell/press）；见 `docs/design/DESIGN-ember-weekly-mod-pack2-2026-10-04.md`。实现另窗 |
+| D176 | CoreRpg 1.65.6 | Variety Pack 2 上线（实现 D171）：词缀 +regen/charge/frost；房间事件 +crystal/escort（与 timed 等权）；闸门/奖励数不变；花样委托 timed 文案→「房间事件达标」；balance_version 29→30；Stage C p1sim 门禁 deferred |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1621,3 +1625,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 测试钩子 | 新故障点 `after_pay`（付款落盘后结算晚 10 s）；仍只在 `CORERPG_TEST_FAULTS=1` 下可用，线上关 |
 | 不改 | 价格、概率、保底、印记数、装备结构（`COORD-gear-structure-hold`）、YAML 存储走旧内存路径 |
 | 证据 | 单测 `EmberPayTest`；`tools/p1map/persist-roundtrip.sh` phase h（竞态 / before_commit / after_commit / after_pay / 断线 / kill -9）；状态 `docs/status/STATUS-ember-asset-fix-1.65.5.md`；发布凭证 `docs/status/RELEASE-ember-1.65.5.md` |
+
+### 13.88 Variety Pack 2 上线（CoreRpg 1.65.6，D176，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D171 设计；`COORD-variety-1714`；前置 asset-fix 1.65.5（D172）DONE |
+| 裁决 | 见 D176 行。词缀池 3→6（再生/冲锋/凝霜）；事件池限时→限时/砸晶/护宝兔等权；冲锋只播条带伤害不真冲出 leash；护宝兔不走宝藏币；晶块清房/失败/卸载一律 AIR |
+| 版本 | CoreRpg **1.65.6**；`balance_version` **30**；`plugin.yml` / `pom` 同步 |
+| 不改 | 装备结构、永久乘区、化妆品奖励、宝石、破甲专属键（新缀吃通用 `dmg_affix`）、`tools/p1sim/**`（Stage C deferred） |
+| 测试 | 单测 D171 一组 + D138 回归；冒烟 FreshQ121+ 强制 regen/charge/frost/crystal/escort |
+| 文档 | 状态 `docs/status/STATUS-ember-variety-pack2-1.65.6.md`；发布凭证 `docs/status/RELEASE-ember-1.65.6.md` |

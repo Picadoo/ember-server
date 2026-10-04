@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137; 21 = repeat-run variety (affixed elite + optional room event), D138; 22 = 国庆 2026 limited event dungeon gq26 + festival charm slot (ember-v1-festival.yml), D139; 23 = one new telegraphed move per Q01–Q07 boss + main-move timing re-tuned (clear rates ±2), D140; 24 = talent specialization in ember-v1-growth.yml (trade-off talents, sidegrades at the reference gear), D141; 25 = 余烬连战 boss rush + 花样委托 daily + optional 烬核同心 goal (D144), reroll lock-affix + 国庆币 leftover exchange + festival combo warn 1.2 (D145–D148); 26 = D152 卸甲 (disarm) 4th P2-8 weekly modifier heavy→melee challenge-only; 27 = D154 卫士潮 (guards) 5th P2-8 weekly modifier ranged→heavy challenge-only; 28 = D155 铁卫 (wall) 6th P2-8 weekly modifier melee→heavy challenge-only; 29 = D158 converted-mob twists for 卸甲 / 卫士潮 / 铁卫 (fast melee / charging heavy / heavy hitter))
-balance_version: 29
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137; 21 = repeat-run variety (affixed elite + optional room event), D138; 22 = 国庆 2026 limited event dungeon gq26 + festival charm slot (ember-v1-festival.yml), D139; 23 = one new telegraphed move per Q01–Q07 boss + main-move timing re-tuned (clear rates ±2), D140; 24 = talent specialization in ember-v1-growth.yml (trade-off talents, sidegrades at the reference gear), D141; 25 = 余烬连战 boss rush + 花样委托 daily + optional 烬核同心 goal (D144), reroll lock-affix + 国庆币 leftover exchange + festival combo warn 1.2 (D145–D148); 26 = D152 卸甲 (disarm) 4th P2-8 weekly modifier heavy→melee challenge-only; 27 = D154 卫士潮 (guards) 5th P2-8 weekly modifier ranged→heavy challenge-only; 28 = D155 铁卫 (wall) 6th P2-8 weekly modifier melee→heavy challenge-only; 29 = D158 converted-mob twists for 卸甲 / 卫士潮 / 铁卫 (fast melee / charging heavy / heavy hitter); 30 = D176 Variety Pack 2: affix +regen/charge/frost, event +crystal/escort)
+balance_version: 30
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 # Endgame #6 (D128, balance_version 18, user 2026-10-03 07:07): the first failed challenge / abyss run of the stamina day
@@ -101,24 +101,33 @@ raid_revive:
   last_phase_hp: 0.2
   delay: 20
 
-# D138 repeat-run variety (content batch part 2): only on a NORMAL Q01–Q07 run where every member already has the map's
-# first clear (never on a first clear, challenge, abyss or raid). Fixed at entry from the run seed. Rewards are existing
-# types only, paid at settlement next to the elite event: killing the affixed elite → affix_shard 余烬碎片; finishing
-# the marked room inside event_secs (timer starts when the room spawns) → event_core 余烬核心碎片 (mat_ember_core_fragment).
-#   blazing 炽热: drops a warned fire circle at its feet every `every` s (radius, warn s, dmg × its own attack)
-#   split   分裂: on death splits into `count` melee of the room with `hp` × the melee HP (the door waits for them)
-#   shield  厚甲: HP × `hp` (shown as 厚甲 since D147, was 护盾 — it has no shield bar; the id stays shield)
-# Model: tools/p1sim (--no-variety to compare), D138 numbers in the P2 draft §5x.
+# D138/D171 repeat-run variety (Pack 2): only on a NORMAL Q01–Q07 run where every member already has the map's
+# first clear (never on a first clear, challenge, abyss, raid or rush). Fixed at entry from the run seed. Rewards are
+# existing types only, paid at settlement: killing the affixed elite → affix_shard 余烬碎片; finishing the marked room
+# event → event_core 余烬核心碎片. Affix pool 6 / event pool 3 (equal weight).
+#   blazing 炽热 / split 分裂 / shield 厚甲 (D138)
+#   regen   再生: every s try heal×maxHP; interrupt_window; interrupt if hurt ≥ interrupt_hp×maxHP
+#   charge  冲锋: telegraph strip (≥1.2s), strip damage only (no body dash out of leash)
+#   frost   凝霜: Slow aura; leave radius → Slow clears
+#   timed / crystal 砸余烬晶 / escort 护宝兔
+# Model: p1sim Stage C deferred (gear-stage0 lock); D171 design → D176 ship.
 variety:
   affix_rate: 1.0
-  affixes: [blazing, split, shield]
+  affixes: [blazing, split, shield, regen, charge, frost]
   affix_shard: 2
   blazing: {every: 3.0, radius: 1.5, warn: 1.0, dmg: 1.0}
   split: {count: 2, hp: 0.5}
   shield: {hp: 1.6}
+  regen: {every: 4.0, heal: 0.10, interrupt_window: 1.5, interrupt_hp: 0.05}
+  charge: {every: 5.5, warn: 1.2, length: 7, width: 2.5, dmg: 1.0}
+  frost: {radius: 3.0, amplifier: 1, tick: 0.5}
   event_rate: 0.5
+  events: [timed, crystal, escort]
   event_secs: 30
   event_core: 1
+  timed: {secs: 30}
+  crystal: {count: 3, secs: 35}
+  escort: {hp: 0.35}
 
 # §18.1 challenge difficulty for all seven maps, opened by the player's OWN Q07 first clear. One shared T3 reference
 # (B_ref 90), overriding — not multiplying — the normal values; party HP 1+0.65(n−1) still applies; damage does not

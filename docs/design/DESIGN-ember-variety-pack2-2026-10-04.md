@@ -1,6 +1,6 @@
 # Ember Variety Pack 2：重复刷图花样扩包（D171，设计-only，2026-10-04）
 
-> 状态：**设计定稿，未实现**。本窗不改 CoreRpg 源码 / yml / jar / 菜单，不 bump `balance_version`，不跑长 p1sim。
+> 状态：**已实现并上线 CoreRpg 1.65.6（D176，2026-10-04）**。Stage C p1sim 门禁仍 deferred（gear-stage0 锁）。
 > 前置：D138（`variety:` 炽热 / 分裂 / 厚甲 + 限时清房）、D144（花样委托按「词缀精英击杀 / 房间事件达标」泛型计数）、D147（厚甲用词）、D164（破甲只认 shield/blazing/split）。
 > 实现对齐：等 `COORD-asset-fix-1655` DONE，再找空闲 CoreRpg 窗落地；落地前用离线 sim 过门禁（见 §8）。
 > 参考：PoE 稀有词缀（Regen / Temporal Chains 类减速圈）、Diablo 精英词缀（Teleporter/Molten 式预警圈 + 冲锋）、既有 `EmberRunDirector` 的 `charge` 技能与 D138 `promote/affixTick/splitAdds`。

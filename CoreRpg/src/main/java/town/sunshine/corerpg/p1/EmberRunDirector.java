@@ -45,10 +45,15 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
-        String affix;               // D138 repeat-run variety: blazing / split / shield (null = plain)
+        String affix;               // D138/D171: blazing / split / shield / regen / charge / frost (null = plain)
         boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
+        boolean varietyEscort;      // D171: escort rabbit — must not pay treasure coin; excluded from room-clear count
         long affixNext, affixAt;
         Location affixOrigin;
+        Vector affixDir;            // D171 charge telegraph direction
+        long regenWindowEnd;        // D171 regen interrupt window end (0 = idle)
+        double regenHurt;           // D171 damage taken during the current interrupt window
+        long frostNext;             // D171 next frost aura tick
         Tracked(LivingEntity le, String role, String roomId, EmberRunMaps.Pt home, EmberRunMaps.Box leash,
                 double atk, double interval, double range, EmberRunMaps.Role def) {
             this.le = le; this.role = role; this.roomId = roomId; this.home = home; this.leash = leash;
@@ -262,10 +267,14 @@ final class EmberRunDirector {
             if (t.caster()) casterTick(t, now);
             if (t.affix != null) affixTick(t, now);
         }
-        if (eventStart > 0 && !eventWarned && activeRoom != null && activeRoom.equals(s.eventRoom)
-                && now >= eventStart + (svc.maps().variety.eventSecs - 10) * 1000L) {
-            eventWarned = true;
-            svc.tellRun(s, "§b限时清房 §7还剩 §e10 秒");
+        if (!crystalBlocks.isEmpty()) pollCrystals();
+        if (eventStart > 0 && !eventWarned && activeRoom != null && activeRoom.equals(s.eventRoom)) {
+            String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+            int lim = svc.maps().variety.eventLimit(kind);
+            if (lim > 10 && now >= eventStart + (lim - 10) * 1000L) {
+                eventWarned = true;
+                svc.tellRun(s, "§b" + EmberRunMaps.Variety.eventLabel(kind) + " §7还剩 §e10 秒");
+            }
         }
         // room cleared → door, event, next
         if (activeRoom != null && aliveIn(activeRoom) == 0) roomCleared(def.room(activeRoom));
@@ -329,7 +338,7 @@ final class EmberRunDirector {
 
     private int aliveIn(String room) {
         int n = 0;
-        for (Tracked t : mobs.values()) if (room.equals(t.roomId) && !t.le.isDead()) n++;
+        for (Tracked t : mobs.values()) if (room.equals(t.roomId) && !t.le.isDead() && !t.varietyEscort) n++;
         return n;
     }
 
@@ -371,7 +380,18 @@ final class EmberRunDirector {
         if (r.id.equals(s.eventRoom) && !s.eventDone) {
             eventStart = System.currentTimeMillis();
             eventWarned = false;
-            svc.tellRun(s, "§b限时清房 §7· " + svc.maps().variety.eventSecs + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + svc.maps().variety.eventCore + " §7（可选）");
+            eventFailed = false;
+            String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+            EmberRunMaps.Variety v = svc.maps().variety;
+            if ("crystal".equals(kind)) {
+                placeCrystals(r, v.crystalCount);
+                svc.tellRun(s, "§b砸余烬晶 §7· 砸掉本房 " + v.crystalCount + " 块发光晶再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else if ("escort".equals(kind)) {
+                spawnEscort(r, v);
+                svc.tellRun(s, "§b护宝兔 §7· 清房前别让发光小兔倒下 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else {
+                svc.tellRun(s, "§b限时清房 §7· " + v.eventLimit(kind) + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            }
         }
         if (ok == 0) {
             anomalies.add(r.id + ": no mob could be spawned (MythicMobs ids " + def.roles.keySet() + ")");
@@ -382,10 +402,23 @@ final class EmberRunDirector {
     private void roomCleared(EmberRunMaps.Room r) {
         activeRoom = null;
         if (r == null) return;
-        if (r.id.equals(s.eventRoom) && eventStart > 0) { // D138 timed room event
+        if (r.id.equals(s.eventRoom) && eventStart > 0) { // D138/D171 room event
             double secs = (System.currentTimeMillis() - eventStart) / 1000.0;
             eventStart = 0;
-            svc.onEventResult(s, secs <= svc.maps().variety.eventSecs, secs);
+            String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+            EmberRunMaps.Variety v = svc.maps().variety;
+            boolean ok;
+            if ("crystal".equals(kind)) {
+                ok = !eventFailed && crystalsBroken >= v.crystalCount && secs <= v.crystalSecs;
+            } else if ("escort".equals(kind)) {
+                ok = !eventFailed && escortId != null && mobs.containsKey(escortId);
+            } else {
+                ok = secs <= v.eventLimit(kind);
+            }
+            clearCrystals();
+            removeEscort();
+            clearFrostSlow();
+            svc.onEventResult(s, ok, secs);
         }
         if (!s.cleared.contains(r.id)) s.cleared.add(r.id);
         next = Math.max(next, def.roomIndex(r.id) + 1);
@@ -436,6 +469,10 @@ final class EmberRunDirector {
 
     private long eventStart;
     private boolean eventWarned;
+    private boolean eventFailed; // D171: escort died / soft fail already told
+    private final List<Location> crystalBlocks = new ArrayList<Location>();
+    private int crystalsBroken;
+    private UUID escortId;
 
     /** The room's toughest mob (heavy, else melee, else the first) becomes the affixed elite. */
     static Tracked affixPick(List<Tracked> ts) {
@@ -455,36 +492,124 @@ final class EmberRunDirector {
                 t.le.setHealth(t.le.getMaxHealth());
             }
         }
-        t.affixNext = System.currentTimeMillis() + 1500L + (long) (v.blazeEvery * 1000);
+        double every = "blazing".equals(t.affix) ? v.blazeEvery
+                : "regen".equals(t.affix) ? v.regenEvery
+                : "charge".equals(t.affix) ? v.chargeEvery
+                : "frost".equals(t.affix) ? v.frostTick
+                : v.blazeEvery;
+        t.affixNext = System.currentTimeMillis() + 1500L + (long) (every * 1000);
         String tag = EmberRunMaps.Variety.label(t.affix);
         String old = t.le.getCustomName();
         t.le.setCustomName("§6[" + tag + "] §r" + (old == null ? t.le.getName() : old));
         t.le.setCustomNameVisible(true);
         t.le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
-        String how = "blazing".equals(t.affix) ? "脚下每 " + fmt(v.blazeEvery) + " 秒落一圈火（半径 " + fmt(v.blazeRadius) + "，" + fmt(v.blazeWarn) + " 秒预警，看到火圈就退开）"
-                : "split".equals(t.affix) ? "死后分裂成 " + v.splitCount + " 个小怪（门要等它们也倒下）"
-                : "生命 ×" + fmt(v.shieldHp);
-        svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现在这个房间（发光的那只）：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
+        String how;
+        if ("blazing".equals(t.affix)) how = "脚下每 " + fmt(v.blazeEvery) + " 秒落一圈火（半径 " + fmt(v.blazeRadius) + "，" + fmt(v.blazeWarn) + " 秒预警，看到火圈就退开）";
+        else if ("split".equals(t.affix)) how = "死后分裂成 " + v.splitCount + " 个小怪（门要等它们也倒下）";
+        else if ("shield".equals(t.affix)) how = "生命 ×" + fmt(v.shieldHp);
+        else if ("regen".equals(t.affix)) how = "发光读条时猛打可打断回血";
+        else if ("charge".equals(t.affix)) how = "看见脚下亮带就躲开";
+        else if ("frost".equals(t.affix)) how = "别站在它身边的霜圈里（出圈即解除）";
+        else how = t.affix;
+        svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));
     }
 
     private void affixTick(Tracked t, long now) {
-        Particle fx = "blazing".equals(t.affix) ? Particle.FLAME : "split".equals(t.affix) ? Particle.SPELL_WITCH : Particle.END_ROD;
+        Particle fx = "blazing".equals(t.affix) ? Particle.FLAME
+                : "split".equals(t.affix) ? Particle.SPELL_WITCH
+                : "regen".equals(t.affix) ? Particle.HEART
+                : "charge".equals(t.affix) ? Particle.CRIT
+                : "frost".equals(t.affix) ? Particle.SNOW_SHOVEL
+                : Particle.END_ROD;
         w.spawnParticle(fx, t.le.getLocation().add(0, 1.0, 0), 3, 0.3, 0.5, 0.3, 0.01);
-        if (!"blazing".equals(t.affix)) return;
         EmberRunMaps.Variety v = svc.maps().variety;
-        if (t.affixAt > 0) {
-            warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.blazeRadius, Particle.FLAME);
-            if (now >= t.affixAt) {
-                execute(blazeSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
-                t.affixAt = 0;
-                t.affixNext = now + (long) (v.blazeEvery * 1000);
+        if ("blazing".equals(t.affix)) {
+            if (t.affixAt > 0) {
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.blazeRadius, Particle.FLAME);
+                if (now >= t.affixAt) {
+                    execute(blazeSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
+                    t.affixAt = 0;
+                    t.affixNext = now + (long) (v.blazeEvery * 1000);
+                }
+                return;
             }
+            if (now < t.affixNext || nearest(t.le.getLocation(), 6) == null) return;
+            t.affixOrigin = t.le.getLocation().clone();
+            t.affixAt = now + (long) (v.blazeWarn * 1000);
             return;
         }
-        if (now < t.affixNext || nearest(t.le.getLocation(), 6) == null) return;
-        t.affixOrigin = t.le.getLocation().clone();
-        t.affixAt = now + (long) (v.blazeWarn * 1000);
+        if ("regen".equals(t.affix)) {
+            if (t.regenWindowEnd > 0) {
+                // flash name during interrupt window
+                if ((now / 200) % 2 == 0) t.le.setCustomNameVisible(true);
+                if (now >= t.regenWindowEnd) {
+                    if (t.regenHurt < t.le.getMaxHealth() * v.regenInterruptHp) {
+                        double heal = Math.min(t.le.getMaxHealth() - t.le.getHealth(), t.le.getMaxHealth() * v.regenHeal);
+                        if (heal > 0) t.le.setHealth(Math.min(t.le.getMaxHealth(), t.le.getHealth() + heal));
+                        svc.tellRun(s, "§6「再生」§7回血了（未打断）");
+                    } else {
+                        svc.tellRun(s, "§a「再生」§7被打断！");
+                    }
+                    t.regenWindowEnd = 0;
+                    t.regenHurt = 0;
+                    t.affixNext = now + (long) (v.regenEvery * 1000);
+                }
+                return;
+            }
+            if (now < t.affixNext || nearest(t.le.getLocation(), 8) == null) return;
+            t.regenWindowEnd = now + (long) (v.regenInterruptWindow * 1000);
+            t.regenHurt = 0;
+            svc.tellRun(s, "§6「再生」§7读条中 · 猛打可打断");
+            return;
+        }
+        if ("charge".equals(t.affix)) {
+            // D171: telegraph strip only — no body dash out of leash (execute skips teleport when src != boss)
+            if (t.affixAt > 0) {
+                EmberRunMaps.Skill sk = chargeSkill(t, v, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir);
+                drawShape(sk, t.affixOrigin, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir);
+                if (now >= t.affixAt) {
+                    execute(sk, t.affixOrigin, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir, t.le);
+                    t.affixAt = 0;
+                    t.affixNext = now + (long) (v.chargeEvery * 1000);
+                }
+                return;
+            }
+            Player tgt = nearest(t.le.getLocation(), 10);
+            if (now < t.affixNext || tgt == null) return;
+            Location o = t.le.getLocation().clone();
+            Vector dir = tgt.getLocation().toVector().subtract(o.toVector());
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(0, 0, 1);
+            dir.normalize();
+            double run = clearRun(o, dir, v.chargeLength);
+            if (run < CHARGE_MIN) return; // no room — skip this attempt, keep cooldown
+            t.affixOrigin = o;
+            t.affixDir = dir;
+            t.affixAt = now + (long) (v.chargeWarn * 1000);
+            return;
+        }
+        if ("frost".equals(t.affix)) {
+            if (now < t.frostNext) return;
+            t.frostNext = now + (long) (v.frostTick * 1000);
+            Location c = t.le.getLocation();
+            warnCircle(c.clone().add(0, 0.15, 0), v.frostRadius, Particle.SNOW_SHOVEL);
+            double r2 = v.frostRadius * v.frostRadius;
+            for (Player p : participantsHere()) {
+                if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                if (p.getLocation().distanceSquared(c) <= r2) {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (v.frostTick * 20) + 10, v.frostAmplifier, false, true), true);
+                } else {
+                    for (PotionEffect cur : p.getActivePotionEffects()) {
+                        if (cur.getType().equals(PotionEffectType.SLOW) && cur.getAmplifier() == v.frostAmplifier
+                                && cur.getDuration() <= (int) (v.frostTick * 20) + 15) {
+                            p.removePotionEffect(PotionEffectType.SLOW);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) {
@@ -495,6 +620,26 @@ final class EmberRunDirector {
         m.put("warn", v.blazeWarn);
         m.put("dmg", t.atk * v.blazeDmg);
         return new EmberRunMaps.Skill(m);
+    }
+
+    /** D171 charge affix: strip damage only (src != boss → execute will not teleport the body). */
+    static EmberRunMaps.Skill chargeSkill(Tracked t, EmberRunMaps.Variety v, Vector dir) {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("type", "charge");
+        m.put("name", "冲锋条带");
+        m.put("length", v.chargeLength);
+        m.put("width", v.chargeWidth);
+        m.put("warn", v.chargeWarn);
+        m.put("dmg", t.atk * v.chargeDmg);
+        EmberRunMaps.Skill sk = new EmberRunMaps.Skill(m);
+        // clip to clearRun length when origin known — caller already clipped via clearRun; length stays config max
+        return sk;
+    }
+
+    /** D171: damage taken by a regen elite during its interrupt window. */
+    void noteRegenHurt(Tracked t, double dmg) {
+        if (t == null || !"regen".equals(t.affix) || t.regenWindowEnd <= 0 || dmg <= 0) return;
+        t.regenHurt += dmg;
     }
 
     private void splitAdds(Tracked t) {
@@ -517,7 +662,121 @@ final class EmberRunDirector {
         svc.tellRun(s, "§6「分裂」§7精英裂成了 " + n + " 个分身！");
     }
 
-    /** A18: base HP × (1 + 0.65 (n − 1)), locked when the run was committed. */
+    // ------------------------------------------------------------------ D171 crystal / escort helpers
+
+    private void placeCrystals(EmberRunMaps.Room r, int count) {
+        clearCrystals();
+        crystalsBroken = 0;
+        if (r == null || r.points == null || r.points.isEmpty()) return;
+        int n = Math.min(count, r.points.size());
+        for (int i = 0; i < n; i++) {
+            EmberRunMaps.Pt pt = r.points.get(i % r.points.size());
+            // stand on the spawn point floor (y), prefer AIR above ground
+            Block bl = w.getBlockAt((int) Math.floor(pt.x), (int) Math.floor(pt.y), (int) Math.floor(pt.z));
+            if (bl.getType() != Material.AIR) bl = bl.getRelative(0, 1, 0);
+            if (bl.getType() != Material.AIR && bl.getRelative(0, 1, 0).getType() == Material.AIR) bl = bl.getRelative(0, 1, 0);
+            if (bl.getType() != Material.AIR) continue;
+            bl.setType(Material.SEA_LANTERN);
+            crystalBlocks.add(bl.getLocation());
+        }
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s crystals placed=%d", s.runId, r.id, crystalBlocks.size()));
+    }
+
+
+    /** Count crystals already dug (creative/instant dig may skip BlockBreakEvent); always leave AIR. */
+    private void pollCrystals() {
+        if (crystalBlocks.isEmpty()) return;
+        for (int i = crystalBlocks.size() - 1; i >= 0; i--) {
+            Location loc = crystalBlocks.get(i);
+            if (loc == null || loc.getWorld() == null) { crystalBlocks.remove(i); continue; }
+            Block bl = loc.getBlock();
+            if (bl.getType() == Material.SEA_LANTERN) continue;
+            crystalBlocks.remove(i);
+            crystalsBroken++;
+            if (bl.getType() != Material.AIR) bl.setType(Material.AIR);
+            svc.tellRun(s, "§b余烬晶碎裂 §7（" + crystalsBroken + "/" + svc.maps().variety.crystalCount + "）");
+            svc.log().info("[P1 run] " + s.runId + " crystal " + crystalsBroken + "/" + svc.maps().variety.crystalCount + " (poll)");
+        }
+    }
+
+    private void clearCrystals() {
+        for (Location loc : crystalBlocks) {
+            if (loc == null || loc.getWorld() == null) continue;
+            Block bl = loc.getBlock();
+            if (bl.getType() == Material.SEA_LANTERN) bl.setType(Material.AIR);
+        }
+        crystalBlocks.clear();
+        crystalsBroken = 0;
+    }
+
+    /** @return true when this break was a variety crystal (caller suppresses drops; do not cancel the event). */
+    boolean breakCrystal(Block b, Player p) {
+        if (b == null || crystalBlocks.isEmpty()) return false;
+        Location at = b.getLocation();
+        for (int i = 0; i < crystalBlocks.size(); i++) {
+            Location c = crystalBlocks.get(i);
+            if (c.getBlockX() != at.getBlockX() || c.getBlockY() != at.getBlockY() || c.getBlockZ() != at.getBlockZ()) continue;
+            crystalBlocks.remove(i);
+            crystalsBroken++;
+            svc.tellRun(s, "§b余烬晶碎裂 §7（" + crystalsBroken + "/" + svc.maps().variety.crystalCount + "）");
+            svc.log().info("[P1 run] " + s.runId + " crystal " + crystalsBroken + "/" + svc.maps().variety.crystalCount
+                    + (p == null ? "" : " by " + p.getName()));
+            return true;
+        }
+        return false;
+    }
+
+
+    private void spawnEscort(EmberRunMaps.Room r, EmberRunMaps.Variety v) {
+        EmberRunMaps.Role role = def.role("treasure", ch);
+        if (role == null) role = def.role("melee", ch);
+        if (role == null || r.points == null || r.points.isEmpty()) return;
+        EmberRunMaps.Pt pt = r.points.get(0);
+        Tracked t = spawn(role, "treasure", r.id, pt, r.trigger);
+        if (t == null) return;
+        t.varietyEscort = true;
+        AttributeInstance a = t.le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
+        if (a != null) {
+            a.setBaseValue(Math.max(1.0, a.getBaseValue() * v.escortHp));
+            t.le.setHealth(t.le.getMaxHealth());
+        }
+        // low threat: zero atk so it never hits (atk is final — zero interval via huge lastHit already set; rely on atk from role)
+        String old = t.le.getCustomName();
+        t.le.setCustomName("§e[护宝兔] §r" + (old == null ? "余烬小兔" : old));
+        t.le.setCustomNameVisible(true);
+        t.le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
+        escortId = t.le.getUniqueId();
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s escort spawned hp=%.0f", s.runId, r.id, t.le.getMaxHealth()));
+    }
+
+    private void removeEscort() {
+        if (escortId == null) return;
+        Tracked t = mobs.get(escortId);
+        if (t != null && t.varietyEscort) {
+            mobs.remove(escortId);
+            svc.unindex(escortId);
+            if (t.le != null && !t.le.isDead()) t.le.remove();
+        }
+        escortId = null;
+    }
+
+    private void clearFrostSlow() {
+        EmberRunMaps.Variety v = svc.maps().variety;
+        for (Player p : participantsHere()) {
+            for (PotionEffect cur : p.getActivePotionEffects()) {
+                if (cur.getType().equals(PotionEffectType.SLOW) && cur.getAmplifier() == v.frostAmplifier
+                        && cur.getDuration() <= (int) (v.frostTick * 20) + 40) {
+                    p.removePotionEffect(PotionEffectType.SLOW);
+                    break;
+                }
+            }
+        }
+    }
+
+    /** Static test helper: crystal list empty after clear. */
+    List<Location> crystalBlocksForTest() { return crystalBlocks; }
+
+        /** A18: base HP × (1 + 0.65 (n − 1)), locked when the run was committed. */
     private void scaleHealth(LivingEntity le, double base) {
         double hp = Math.max(1.0, base * s.hpFactor);
         AttributeInstance a = le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
@@ -617,7 +876,17 @@ final class EmberRunDirector {
             return true;
         }
         if ("event".equals(t.roomId) && t.le.getUniqueId().equals(extraMob)) { unholo("event"); svc.onExtraDone(s); }
-        if (t.affix != null) { // D138
+        if (t.varietyEscort) { // D171: rabbit died → event fail; door still opens with the room
+            escortId = null;
+            if (!eventFailed && !s.eventDone && eventStart > 0) {
+                eventFailed = true;
+                svc.tellRun(s, "§c护宝兔倒下了 §7· 这次没有额外核心（门照开）");
+                svc.log().info("[P1 run] " + s.runId + " escort died");
+            }
+            return false;
+        }
+        if (t.affix != null) { // D138/D171
+            if ("frost".equals(t.affix)) clearFrostSlow();
             if ("split".equals(t.affix)) splitAdds(t);
             svc.onAffixDone(s, t.affix);
         }
@@ -635,10 +904,13 @@ final class EmberRunDirector {
 
     void finish() {
         finished = true;
+        clearCrystals();
+        clearFrostSlow();
         cleanupMobs();
         for (String k : new ArrayList<String>(holos.keySet())) if (!"exit".equals(k)) unholo(k); // exit stays until the instance closes
         if (chest != null && chest.getBlock().getType() == Material.ENDER_CHEST) chest.getBlock().setType(Material.AIR);
         chest = null;
+        escortId = null;
     }
 
     private void cleanupMobs() {
