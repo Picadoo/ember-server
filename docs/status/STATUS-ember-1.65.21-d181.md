@@ -6,3 +6,5 @@
 - **TESTS**: 273 pass / 0 fail（JDK 8）
 - **STAGE C**: p1sim 42-cell deferred（注明于设计 + RELEASE）
 - **COORD**: `COORD-routine-0111`；DEPLOY LOCK 跨 afk/mainline/signin
+- **SMOKE**: FreshQ330 mortar PASS · FreshQ331 molten PASS (9/0); bots quit
+- **LIVE**: Paper PID 1162839; jar sha256 390fc003…; Enabling CoreRpg v1.65.21

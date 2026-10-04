@@ -11,6 +11,9 @@ D181 Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）�
 | CoreRpg JAR sha256 | `390fc0033a36311e74f7f9a3a89c192e98578d2f3268620f417036df1c6ca77e` |
 | balance_version | **44** |
 | 回滚包 | `/workspace/backup/CoreRpg-1.65.20-pre-1.65.21.jar` |
+| 服务器 PID | **1162839** |
+| MySQL | `[CoreRpg] [storage] MySQL connected` · `[CoreGacha] [db] MySQL connected` |
+| SEVERE | 0 |
 | Stage C p1sim | **deferred**（与 D176 同策略）|
 
 ## 内容
@@ -26,5 +29,6 @@ D181 Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）�
 | 项 | 结果 |
 |---|---|
 | 单测 `mvn -o test`（JDK 8）| 273 / 0 |
-| 冒烟 FreshQ330+ | （部署后填）|
+| 冒烟 FreshQ330 | PASS：force mortar + 聊天「投弹」+ affix mortar done |
+| 冒烟 FreshQ331 | PASS：force molten + 「亡爆」+ 「尸体要炸」chat；SEVERE 0；机器人已退出 |
 | 资产回归 | 无物品资产路径变化 → 未跑 persist-roundtrip |
