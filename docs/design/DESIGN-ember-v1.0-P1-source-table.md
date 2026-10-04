@@ -1514,6 +1514,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D169 | 文档定稿（无版本 bump） | 6 槽装备结构分阶段落地计划 SETTLED：`docs/design/DESIGN-ember-gear-staged-plan-2026-10-04.md`。目标刃+护符+4甲；每图掉全部位、甲另掉不稀释；2+4 件套；Stage 0–4 门禁。CoreRpg 结构代码仍 HOLD。不占 D167/D168 |
 | D170 | CoreRpg 1.65.4 | Q02–Q07 第一房战术提示（短中文）；Q04 r3 可选落差提醒；balance_version 仍 29；不改战斗数值 |
 | D171 | 设计-only（无版本 bump） | Variety Pack 2：重复刷图花样扩包——词缀池 +再生/冲锋/凝霜（否决反伤）；房间事件池 +砸余烬晶/护宝兔（与限时清房等权）；闸门/奖励种类同 D138；花样委托泛型计数兼容；实现等 asset-fix-1655 后。`docs/design/DESIGN-ember-variety-pack2-2026-10-04.md` |
+| D172 | CoreRpg 1.65.5 | 资产安全修复（D167 §5 前置）：**撤销 / 批量撤销**先扣胚料（hold → pay → commit，扣不到什么都不做，不再写负数送货行，X5）；**印记兑换**扣印记 → 一个事务写物品 + txn + 待发货 + 作废 hold，退款走新 `mark` 欠款（X1/X4，exactly-once）；**洗练**走耐久付款，付款 + “欠一次结果”同存档、提交后才抽（种子 = 盐 + 玩家 + rid），断线 / kill -9 = 退一次或进服补同一次（X15）。数值、装备结构、balance_version（29）不变 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1607,3 +1608,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 实现 | `EmberRunMaps.Variety` / `EmberRunDirector` / `EmberRunService` / `EmberRunRules.VarietyBounty`；单测 D171 一组；冒烟 FreshQ109+ 数分钟。前置：`COORD-asset-fix-1655` DONE |
 | 不改 | CoreRpg 本提交、`balance_version`、p1sim、化妆品奖励、破甲专属键（新缀暂吃通用 `dmg_affix`） |
 | 文档 | `docs/design/DESIGN-ember-variety-pack2-2026-10-04.md` |
+
+### 13.87 资产安全：撤销先扣 / 兑换一笔事务 / 洗练耐久（CoreRpg 1.65.5，D172，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D167 烬砧漏洞审查 §5（X5 / X1 / X4 / X15）列的前置；`/workspace/COORD-asset-fix-1655.txt` |
+| 裁决 | 见 D172 行。统一付款路径 `EmberPay`（同 D161 / D162 锻造 hold）：`refund:<rid>` hold 行 → 扣材料 / 币 / 印记 + `p1paid_` 标记 + 调用方钩子，同一次存档 → 结算事务（`commitTxn` / `commitCreate` / `commitPlain` / 重复件退役）作废 hold；没提交 → `releaseHolds` 退一次；崩服 → 进服 `reconcileHolds` |
+| 撤销 | `undo` / `undoBatch` 付款失败 = 不撤销；批量一次插全部 hold（一个 DB 事务），每件一个 commit，失败件单独退；旧的 `undo:` 负数行代码保留只为处理历史 pending |
+| 兑换 | `redeem:<uuid8>:<时间>:<随机>` rid；`commitCreate` 一个事务：`cr_p1_item` 行 + txn（`mark_redeem`）+ gear 待发货 + 作废 hold；`EmberDelivery` `mark` 类型（`p1_mark_t1..3`，与 `p1dlv_` 标记同存档） |
+| 洗练 | rid `afx:<uid>:<n>`（`p4_rrn_<uid>` = 已付款次数，退款不回收编号）；`p4_rro_<uid>` = 欠一次结果（n×2+锁定）；提交后 `applyOwed` 用 `seed(盐, 玩家, rid)` 抽，写结果那次存档清欠款；进服 `recoverRolls` 按 txn 状态补抽 / 等待 / 丢弃。盐：`plugins/CoreRpg/p1-runs/reroll-salt`（运行时） |
+| 测试钩子 | 新故障点 `after_pay`（付款落盘后结算晚 10 s）；仍只在 `CORERPG_TEST_FAULTS=1` 下可用，线上关 |
+| 不改 | 价格、概率、保底、印记数、装备结构（`COORD-gear-structure-hold`）、YAML 存储走旧内存路径 |
+| 证据 | 单测 `EmberPayTest`；`tools/p1map/persist-roundtrip.sh` phase h（竞态 / before_commit / after_commit / after_pay / 断线 / kill -9）；状态 `docs/status/STATUS-ember-asset-fix-1.65.5.md`；发布凭证 `docs/status/RELEASE-ember-1.65.5.md` |

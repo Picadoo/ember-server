@@ -5,6 +5,7 @@
 > 实现时机：**6 槽 Stage 1 之后**。本文各块按 D169 阶段拆开（§6.6），每块单独 `balance_version`、单独审批。
 > 证据：`tools/p1sim/forgesim.py`（独立小模型，只读 `rules.py`）→ `tools/p1sim/out-forgesim-d167.md`。
 > 协调：`/workspace/COORD-forge-random.txt`。
+> **前置状态（§6.6）：已完成 — CoreRpg 1.65.5（D172，2026-10-04）**：X5 撤销先扣胚料、X1/X4 印记兑换一笔事务 + `mark` 欠款、X15 洗练走耐久付款（RNG 在付款落盘后抽）。见 `docs/status/RELEASE-ember-1.65.5.md`、`docs/status/STATUS-ember-asset-fix-1.65.5.md`。烬砧本身仍是设计-only。
 
 ## 0. 一段话
 
@@ -178,11 +179,11 @@
 
 | # | 风险 | 现状 / 结论 | 设计里的处理 |
 |---|---|---|---|
-| X1 | 断线 / 崩服重复扣费或白拿（双花） | 兑换现在是“PlayerData 扣印记计数”和“写 ledger 待发货行”两次写入，中间崩服可能丢件或重复（不在 A01–A04 耐久模式内） | 兑换、随机锻造、定向、转化、烙纹合成全部走 `payDurable`：先插 hold（`cr_p1_delivery status=hold`，`refund:<rid>`）→ 扣材料 / 币 / **印记** + `p1paid_<hash>` 标记，同步存档 → 一个 COMMIT 里写物品 + txn + 作废 hold。失败 → `releaseHolds` 只退一次；崩服 → 进服 `reconcileHolds` |
+| X1 | 断线 / 崩服重复扣费或白拿（双花） | 兑换现在是“PlayerData 扣印记计数”和“写 ledger 待发货行”两次写入，中间崩服可能丢件或重复（不在 A01–A04 耐久模式内） | 兑换、随机锻造、定向、转化、烙纹合成全部走 `payDurable`：先插 hold（`cr_p1_delivery status=hold`，`refund:<rid>`）→ 扣材料 / 币 / **印记** + `p1paid_<hash>` 标记，同步存档 → 一个 COMMIT 里写物品 + txn + 作废 hold。失败 → `releaseHolds` 只退一次；崩服 → 进服 `reconcileHolds`。**兑换部分 1.65.5（D172）已做**：`EmberPay` 扣印记 → `commitCreate` 一个事务写物品行 + txn + 待发货行 + 作废 hold |
 | X2 | 不满意就断线 / 取消来“重抽” | 随机结果若在扣费前或提交前可见就能 SL | RNG **只在付款落盘后**抽，种子 = 服务器盐 + 玩家 + rid；结果在 COMMIT 后才显示；同一 rid 重放直接返回原结果（`cr_p1_txn` request_id 已有 replay 检查） |
 | X3 | 保底计数操纵 | 定向用同一个 `p4_afp_<uid>`；6 次保底只保档位不保类型 | 不新增计数；定向和洗练共用保底，不能“先定向刷保底再换类型”占便宜（换类型本身要花次数） |
-| X4 | 印记复制 | 印记是 PlayerData 计数 `p1_mark_t<阶>`，退款要能退回计数 | `EmberDelivery` 加 `mark` 欠款类型（写 PlayerData 计数，与 `p1dlv_<id>` 标记同一次保存）；印记扣减移进 `pay()` |
-| X5 | **分解 / 撤销竞态（现存漏洞，锻造会放大）** | `EmberGearLib.undo` / `undoBatch` 在主线程检查胚料够不够，异步提交，**之后**才用负数送货行扣胚料。中间把胚料花掉（例如锻造），扣款只记 warning（`EmberDelivery` “debit short”），玩家同时留下撤销回来的件和花掉的胚料 | ① 撤销改成先 hold → pay（预先扣胚料）→ commit；② 在修好之前，锻造的 `lacking()` 把“待处理的负数材料送货行”当作不可用；③ 修复列为烬砧实现的**前置**（§6.6） |
+| X4 | 印记复制 | 印记是 PlayerData 计数 `p1_mark_t<阶>`，退款要能退回计数 | `EmberDelivery` 加 `mark` 欠款类型（写 PlayerData 计数，与 `p1dlv_<id>` 标记同一次保存）；印记扣减移进 `pay()`。**1.65.5（D172）已做**（`EmberDelivery` `mark` 类型；兑换退款走它） |
+| X5 | **分解 / 撤销竞态（现存漏洞，锻造会放大）** | `EmberGearLib.undo` / `undoBatch` 在主线程检查胚料够不够，异步提交，**之后**才用负数送货行扣胚料。中间把胚料花掉（例如锻造），扣款只记 warning（`EmberDelivery` “debit short”），玩家同时留下撤销回来的件和花掉的胚料 | ① 撤销改成先 hold → pay（预先扣胚料）→ commit；② 在修好之前，锻造的 `lacking()` 把“待处理的负数材料送货行”当作不可用；③ 修复列为烬砧实现的**前置**（§6.6）。**1.65.5（D172）已修 ①**：撤销 / 批量撤销 = hold → 先扣胚料 → commit，扣不到就什么都不做；不再写负数送货行，② 不再需要 |
 | X6 | 装备库 / 自动存放 | 物品在装备库时 `doTxn` 的 owner / rev / state 检查能挡住双用 | 转化、定向要求手持（同现行洗练 / 强化），装备库里的件不能直接操作 |
 | X7 | 锻造件当洗练重复件 | 兑换件本来就能当重复件（`duplicateOk`：同部位同阶、src drop、无投入） | 随机锻造件同样；它比兑换件贵（多 4 胚料 + 500 币），当重复件只省 120 碎片，不构成套利 |
 | X8 | 锻造 → 分解刷胚料 | 分解给 `tier` 胚料 | 锻造多收 4 胚料 > T3 分解 3 → 净亏 |
@@ -192,7 +193,7 @@
 | X12 | 回滚安全 | 物品 `src = drop`，和兑换件一样，没有新的来源分支 | 出处只在 `cr_p1_txn.kind`（`forge_roll` / `forge_pin` / `forge_convert` / `forge_redeem` / `brand_craft`），回滚工具按 txn 识别 |
 | X13 | 管理员 invsnap 回档 | `EmberAssetGuard.hold()` 在回档 / 写失败时冻结 | 烬砧所有操作先查 `EmberAssetGuard`；InvSnap 账本要记录烙纹、印记的支出（vault log），否则回档会把花掉的材料还回来 |
 | X14 | 并发连点 | 洗练有 `rerollBusy`，锻造有 per-uid busy | 烬砧用**按玩家**的 busy 键 + `ConfirmTokens` 一次性确认 + 每玩家递增 rid（`p4_fseq`） |
-| X15 | 现行洗练本身不耐久 | `EmberGrowthService.reroll` 先 `takeCoin` + `ni.consume` 再 `ThreadLocalRandom` 抽、改 PlayerData，币 / 碎片 / 计数分开保存 | 加锻造次数时顺手把洗练和定向一起迁到 `payDurable`（同 X1），否则“扣了次数没扣碎片”之类的组合会变多 |
+| X15 | 现行洗练本身不耐久 | `EmberGrowthService.reroll` 先 `takeCoin` + `ni.consume` 再 `ThreadLocalRandom` 抽、改 PlayerData，币 / 碎片 / 计数分开保存 | 加锻造次数时顺手把洗练和定向一起迁到 `payDurable`（同 X1），否则“扣了次数没扣碎片”之类的组合会变多。**1.65.5（D172）已修：** hold → 扣币 / 碎片 + “欠一次结果”计数同一次存档 → ledger 行（或重复件退役）提交 → 才用 `seed(盐, 玩家, rid)` 抽，写结果的那次存档清欠款；断线 / 崩服 = 退一次，或下次进服补同一次结果 |
 
 ## 6. 实现计划（给 CoreRpg worker；6 槽 Stage 1 之后）
 
@@ -241,7 +242,7 @@ forge:                      # D167 烬砧
 | `p1/EmberRunService.cmdMarks` | 改成调用烬砧兑换（同一耐久路径）；旧命令保留为别名 |
 | `p1/EmberAffix` | `roll(..., lockId)` 已能“只抽档位”；加 `pin(rules, slot, id)` 校验 `rollable`；锻造次数常量 |
 | `p1/EmberGrowthService` | `C_AFC = "p4_afc_"`；`reroll` 在付款成功时扣次数、次数用完拒绝；洗练迁 `payDurable`（X15）；定向复用 `roll()` + `pendingRoll` 的保留新 / 旧 |
-| `p1/EmberGearLib` | 撤销 / 批量撤销先扣胚料（X5）；修之前锻造 `lacking()` 计入待扣负数送货行 |
+| `p1/EmberGearLib` | 撤销 / 批量撤销先扣胚料（X5）—— **1.65.5 已做（D172）** |
 | InvSnap / vault log | 烙纹、印记支出入账（X13） |
 | RNG | `new Random(hash(serverSalt, uuid, rid))`，在 pay 成功之后创建 |
 | 日志 | `[P1 forge] <玩家> <op> <rid> <花费> → <结果>` |
@@ -269,7 +270,7 @@ forge:                      # D167 烬砧
 
 | 阶段 | 上什么 | 前置 |
 |---|---|---|
-| 前置（可立即做、与 6 槽无关） | X5 撤销竞态修复；兑换迁 `payDurable` + `mark` 欠款 | 单独小版本 |
+| 前置（可立即做、与 6 槽无关） | X5 撤销竞态修复；兑换迁 `payDurable` + `mark` 欠款（另加 X15 洗练迁耐久） | **DONE：CoreRpg 1.65.5（D172，2026-10-04）**；`EmberPay` / `commitCreate` / `mark` 欠款已在线，烬砧可直接复用 |
 | Stage 1 之后 | 兑换扩 6 部位（护甲 4 枚）；随机锻造（`roll.enabled`） | Stage 1 上线、护甲养成折扣定下 |
 | Stage 2 | 每周转化 | 4 件效果上线 |
 | Stage 3 | 烙纹 + 定向 + 锻造次数（护甲词条池一起） | 护甲词条池定稿 |
