@@ -1717,6 +1717,14 @@ public final class EmberRunService implements Listener {
                     if (!done) { mail.merge(g.id, g.amount, Integer::sum); mailRows.add(r); }
                     break;
                 }
+                case BMAT: { // D177 rev 2 挂机庭 loot: warehouse entry marked account-bound (never a physical item, never mailed)
+                    EmberVault vlt = EmberVault.get();
+                    if (ni != null && vlt != null && vlt.creditBound(p, g.id, g.amount)) {
+                        got.add("挂机 " + ni.displayName(g.id) + " ×" + g.amount + "（进仓库 · 账号绑定）");
+                        done = true;
+                    } else waiting++; // stays pending (vault off / at cap) — retried on the next delivery
+                    break;
+                }
                 case SIGMARK: { // D174 首领徽记: an account counter like the forge marks
                     d.addPeriodCount(EmberSignature.C_MARK + g.id, "all", g.amount);
                     got.add(g.id.toUpperCase(Locale.ROOT) + " 首领徽记 " + g.amount + "（共 " + d.periodCount(EmberSignature.C_MARK + g.id, "all") + "）");

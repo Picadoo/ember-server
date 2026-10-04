@@ -143,6 +143,13 @@ public class AfkTierService implements Listener {
         return base();
     }
 
+    /** D177 rev 2: AFK tier number of the region at l (the lowest tier is the rest of the world); 0 = not the AFK world. */
+    public int tierNumberAt(Location l) {
+        if (!inAfk(l)) return 0;
+        Tier t = tierAt(l);
+        return t == null ? 0 : t.n;
+    }
+
     private Location pad(Tier t) {
         World w = world();
         return w == null ? null : new Location(w, t.x, t.y, t.z, t.yaw, 0f);
@@ -279,6 +286,12 @@ public class AfkTierService implements Listener {
         if ("build".equals(a)) return cmdBuild(sender, args);
         if (!(sender instanceof Player)) { sender.sendMessage("players only"); return true; }
         Player p = (Player) sender;
+        if ("fight".equals(a) || "auto".equals(a)) { // D177 rev 2 menu toggle: /corerpg afk fight [on|off]
+            town.sunshine.corerpg.p1.EmberAfkService ea = p1afk();
+            if (ea == null) { p.sendMessage(ChatColor.RED + "[挂机庭] 未开放。"); return true; }
+            ea.toggle(p, args.length >= 3 ? args[2] : "");
+            return true;
+        }
         if (!enabled) { p.sendMessage(ChatColor.RED + "[挂机] 分层挂机未开启。"); return true; }
         if (a.isEmpty() || "list".equals(a) || "status".equals(a)) { list(p); return true; }
         int n;
@@ -300,8 +313,8 @@ public class AfkTierService implements Listener {
         town.sunshine.corerpg.p1.EmberAfkService ea = p1afk();
         if (ea != null) { // D177
             p.sendMessage(ChatColor.GREEN + "[挂机庭] 已到达 " + ChatColor.YELLOW + t.name + ChatColor.GRAY
-                    + " · 在挂机庭任意位置每 " + ea.roundMinutes() + " 分钟结算一轮（按你已解锁的最高层计）· 怪物不掉东西，打不打都行");
-            p.sendMessage(ChatColor.GRAY + "  今日 " + ea.statusLine(p) + ChatColor.GRAY + " · 死亡不掉落，复活在本层入口 · 打开枢纽菜单可返回");
+                    + " · 站着不动就会自动战斗：自动打怪、自动放烬斩、战利品直接进账（击杀速度和能不能扛住看你的装备）");
+            p.sendMessage(ChatColor.GRAY + "  今日 " + ea.statusLine(p) + ChatColor.GRAY + " · 死亡不掉落，自动复活在本层入口 · 打开枢纽菜单可返回");
             return true;
         }
         p.sendMessage(ChatColor.GREEN + "[挂机] 已到达 " + ChatColor.YELLOW + t.name + ChatColor.GREEN + "（Lv." + t.level + "）"
@@ -313,7 +326,7 @@ public class AfkTierService implements Listener {
     private void list(Player p) {
         town.sunshine.corerpg.p1.EmberAfkService a = p1afk();
         if (a != null) { // D177
-            p.sendMessage(ChatColor.GOLD + "[挂机庭] 四层按主线首通开放 · 收益按已解锁的最高层 · 每日上限 " + a.dailyRounds() + " 轮");
+            p.sendMessage(ChatColor.GOLD + "[挂机庭] 四层按主线首通开放 · 自动战斗按击杀给奖励 · 每日上限 " + a.dailyKills() + " 只");
             for (Tier t : tiers) {
                 boolean ok = unlocked(p, t);
                 p.sendMessage((ok ? ChatColor.GREEN + " ✔ " : ChatColor.DARK_GRAY + " ✖ ") + t.n + ". " + t.name + " " + tierLabel(t)

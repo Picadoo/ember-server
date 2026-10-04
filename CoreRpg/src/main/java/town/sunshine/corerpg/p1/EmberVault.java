@@ -136,7 +136,7 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         return put;
     }
 
-    /** main thread: removes up to n; returns removed */
+    /** main thread: removes up to n; returns removed. The account-bound part never exceeds what is left. */
     public long takeFrom(Player p, String niId, long n) {
         PlayerData d = data(p.getUniqueId());
         if (d == null || n <= 0) return 0;
@@ -146,10 +146,44 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
             long t = Math.min(n, s.amount);
             s.amount -= t;
             d.setWarehouseSlots(sl); // drops empty entries
+            clampBound(d, niId, s.amount);
             flushSoon(p.getUniqueId());
             return t;
         }
+        clampBound(d, niId, 0);
         return 0;
+    }
+
+    // ------------------------------------------------------------------ D177 rev 2: account-bound part (挂机庭 loot)
+
+    static final String C_BOUND = "p1_vbound_"; // + NI id, period all: units of the warehouse entry that cannot leave the account
+
+    /** account-bound units of this entry (挂机庭 loot): usable for every P1 cost, never withdrawn to the backpack */
+    public long bound(UUID id, String niId) {
+        PlayerData d = data(id);
+        return d == null || niId == null ? 0 : Math.min(d.periodCount(C_BOUND + niId, "all"), amount(id, niId));
+    }
+
+    /** what may be taken out to the backpack (and from there dropped / traded): the entry minus its bound part */
+    public long withdrawable(UUID id, String niId) { return Math.max(0, amount(id, niId) - bound(id, niId)); }
+
+    static long boundAfterSpend(long bound, long spent, long left) { return Math.max(0, Math.min(bound - Math.min(bound, spent), left)); }
+
+    private void clampBound(PlayerData d, String niId, long left) {
+        int b = d.periodCount(C_BOUND + niId, "all");
+        if (b > left) d.addPeriodCount(C_BOUND + niId, "all", (int) (Math.max(0, left) - b));
+    }
+
+    /** D177 rev 2 delivery: all-or-nothing credit to the warehouse AND to its bound part (auto setting ignored). */
+    public boolean creditBound(Player p, String niId, long n) {
+        if (p == null || n <= 0 || n > Integer.MAX_VALUE || !enabled() || !accepts(niId)) return false;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return false;
+        long put = add(p, niId, n);
+        if (put < n) { if (put > 0) takeFrom(p, niId, put); return false; }
+        d.addPeriodCount(C_BOUND + niId, "all", (int) n);
+        audit(p, niId, put, EmberVaultLog.DELIVERY);
+        return true;
     }
 
     /**
@@ -181,7 +215,13 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
 
     @Override public long take(Player player, String niId, long amount) {
         if (player == null || !enabled() || !accepts(niId) || !Bukkit.isPrimaryThread()) return 0;
+        PlayerData pd = data(player.getUniqueId());
+        int b0 = pd == null ? 0 : pd.periodCount(C_BOUND + niId, "all");
         long t = takeFrom(player, niId, amount);
+        if (pd != null && t > 0) { // spending uses the bound part first (it can only ever be spent, never moved)
+            long nb = boundAfterSpend(b0, t, amount(player.getUniqueId(), niId));
+            pd.addPeriodCount(C_BOUND + niId, "all", (int) (nb - pd.periodCount(C_BOUND + niId, "all")));
+        }
         audit(player, niId, -t, EmberVaultLog.SPEND_VAULT);
         return t;
     }
@@ -297,7 +337,7 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
      * Returns the amount handed out, or −1 when the backpack has no room.
      */
     public long withdraw(Player p, String niId, long want) {
-        long have = amount(p.getUniqueId(), niId);
+        long have = withdrawable(p.getUniqueId(), niId); // D177 rev 2: the account-bound part stays in the warehouse
         if (have <= 0 || want <= 0) return 0;
         ItemStack proto = ni().createNiItem(niId);
         int max = proto == null ? 64 : Math.max(1, proto.getMaxStackSize());

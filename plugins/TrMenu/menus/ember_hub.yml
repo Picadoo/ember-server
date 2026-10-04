@@ -24,18 +24,19 @@ Events:
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
-  # D177 挂机庭（P1）：按主线首通开放四层，只给余烬币 + 经验，每日 12 轮
+  # D177 rev 2 挂机庭（P1）：按主线首通开放四层，自动战斗；币 + 经验 + 账号绑定材料，每日 2400 只
   Z:
     update: 20
     display:
       material: clock
-      name: '§a挂机庭 · 忙时也有进度'
+      name: '§a挂机庭 · 自动战斗'
       lore:
         - ''
-        - '§7今日：%corerpg_p1_afk_today%'
-        - '§7%corerpg_p1_afk_next%'
-        - '§7在挂机庭待着就自动结算余烬币 + 经验；下线时间按 1/4 折算'
-        - '§8首通 Q01 开放 · 每日上限 12 轮 · 打本永远更快'
+        - '§7状态：%corerpg_p1_afk_state%'
+        - '§7今日击杀：%corerpg_p1_afk_today%'
+        - '§7每小时：%corerpg_p1_afk_loot%'
+        - '§7站着就自动打怪、自动放烬斩，战利品直接到账；离线按实测速度折算'
+        - '§8首通 Q01 开放 · 装备越好打得越快 · 打本永远更快'
         - ''
         - '§e➥ §f打开挂机庭'
     actions:

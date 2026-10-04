@@ -7,7 +7,8 @@ enabled: true
 
 scope:
   # 精确世界名（不区分大小写）
-  worlds: []
+  # D177 rev 2：挂机庭自动战斗用真实 P1 属性（普攻公式 / ×M / P1 生命层 / 关自然回血）
+  worlds: [ember_afk]
   # 世界名前缀，例如新模式 DP 实例世界的前缀；留空 = 不匹配任何实例
   # G04: Q01–Q03 主线本实例 dungeon_EmberQ01_<HEX> …（与 ember-v1-runs.yml world_prefix 一致）
   world_prefixes: [dungeon_EmberQ0]
@@ -92,18 +93,35 @@ bounty:
 # 离线：下线分钟 ÷ offline_ratio 折成计时分钟（WoW 野外休息 1/4 速），每天最多 offline_rounds 轮，下次上线结算。
 # 在线 + 离线每天合计最多 daily_rounds 轮（0 点重置）。每层每日上限 = 每轮 × daily_rounds；模型 tools/p1sim/afk.py。
 afk:
+  # D177 rev 2（2026-10-04）：自动战斗挂机（业主否决「站着计时就发钱」）。站在已解锁的层里，角色自己打本层的个人怪：
+  # 自动普攻（真实 P1 满蓄力一击，暴击/套装照常）+ 冷却好自动烬斩 + 战利品直接进账（无地面掉落）。
+  # 击杀速度、能扛住哪层取决于装备；每杀按本层「每日量 ÷ daily_kills」累加（确定性，无随机），每日 daily_kills 只封顶（在线 + 离线）。
   enabled: true
   world: ember_afk
-  round_minutes: 10
-  daily_rounds: 12
-  offline_ratio: 4
-  offline_rounds: 6
   legacy_payouts: false
+  daily_kills: 2400         # 合适装备约 650–950 只/小时 → 在线 2.5–4 小时（或离线 + 在线 1–2 小时）挂满一天
+  settle_every: 100         # 每 100 只结算一次到账（上限 / 离开 / 下线时也结算）
+  combat:
+    pack: 3                 # 每波个人怪数量（只打你、只能被你打）
+    respawn_seconds: 4      # 一波清完到下一波
+    spawn_radius: 4
+    attack_range: 3.2
+    swing_ticks: 14         # 自动普攻间隔（0.7 秒，≥ 满蓄力上限 11 tick）
+    leash: 14               # 怪离你超过 14 格就收回
+    regen_pct: 0.08         # 没有自己的怪活着时每秒回 8% 最大生命（P1 关闭了自然回血）
+    death_stop: 3           # 10 分钟内死 3 次 → 自动战斗停下（换低层或去刷装备）
+    death_window_minutes: 10
+  offline:
+    ratio: 0.25             # 离线 = 在线实测击杀速度（只/分）× 离线分钟 × 25%
+    max_kills: 1200         # 每日离线最多折 1200 只（日上限的一半，算在 daily_kills 内）
+    max_hours: 12
+    min_fight_minutes: 5    # 在线自动战斗满 5 分钟才有实测速度
+  # 每层：怪（主线同款 MM 模型，挂机专用血量/攻击）+ 打满 daily_kills 只的每日量（币 / 经验 / 碎片 / 骨尘 / 核心碎片 / 胚料）
   tiers:
-    - {n: 1, name: 灰坡, requires: q01, coin: 8, xp: 3}
-    - {n: 2, name: 荒原, requires: q03, coin: 12, xp: 5}
-    - {n: 3, name: 焦土, requires: q05, coin: 16, xp: 6}
-    - {n: 4, name: 烬原深处, requires: q07, coin: 25, xp: 10}
+    - {n: 1, name: 灰坡, requires: q01, mm: EmberQ01Melee, hp: 160, atk: 1.5, interval: 2.5, coin: 60, xp: 10, shard: 2, bone: 2, core: 0, blank: 0}
+    - {n: 2, name: 荒原, requires: q03, mm: EmberQ03Melee, hp: 280, atk: 3.5, interval: 2.5, coin: 80, xp: 15, shard: 3, bone: 3, core: 1, blank: 0}
+    - {n: 3, name: 焦土, requires: q05, mm: EmberQ05Melee, hp: 480, atk: 5.5, interval: 2.5, coin: 100, xp: 20, shard: 3, bone: 4, core: 1, blank: 1}
+    - {n: 4, name: 烬原深处, requires: q07, mm: EmberQ07Melee, hp: 720, atk: 9, interval: 2.5, coin: 120, xp: 25, shard: 4, bone: 5, core: 2, blank: 1}
 # D177 漏洞审查：旧寄售（/corerpg ah，余烬币标价）能在账号之间转移余烬币和核心碎片；P1 不开放交易（D73），默认关。
 legacy_auction: false
 

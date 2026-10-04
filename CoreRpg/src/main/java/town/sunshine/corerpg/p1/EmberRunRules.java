@@ -344,7 +344,7 @@ public final class EmberRunRules {
 
     // ------------------------------------------------------------------ grants
 
-    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA, POTION, SIGMARK, SIG } // D174: 首领徽记 (id = map) / 签名 stamp (id = uid/Lxx)
+    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA, POTION, SIGMARK, SIG, BMAT } // D177 rev 2 BMAT: account-bound material (vault only, never an item) // D174: 首领徽记 (id = map) / 签名 stamp (id = uid/Lxx)
 
     /** D32 / B2.172: ledger run id of the once-per-day death refund (day = stamina day, DailyService.today()). */
     public static String deathRefundRun(String day) { return "deathrefund@" + day; }
@@ -406,6 +406,7 @@ public final class EmberRunRules {
                 case COIN: return "coin:" + amount;
                 case XP: return "xp:" + amount;
                 case MAT: return "mat:" + id + ":" + amount;
+                case BMAT: return "bmat:" + id + ":" + amount;
                 case MARK: return "mark:" + id + ":" + amount;
                 case CHOICE: return "choice:" + id + ":" + amount;
                 case UNLOCK: return "unlock:" + id;
@@ -425,6 +426,7 @@ public final class EmberRunRules {
                     case "coin": return new Grant(key, Kind.COIN, null, Integer.parseInt(p[1]), null);
                     case "xp": return new Grant(key, Kind.XP, null, Integer.parseInt(p[1]), null);
                     case "mat": return new Grant(key, Kind.MAT, p[1], Integer.parseInt(p[2]), null);
+                    case "bmat": return new Grant(key, Kind.BMAT, p[1], Integer.parseInt(p[2]), null);
                     case "mark": return new Grant(key, Kind.MARK, p[1], Integer.parseInt(p[2]), null);
                     case "choice": return new Grant(key, Kind.CHOICE, p[1], Integer.parseInt(p[2]), null);
                     case "unlock": return new Grant(key, Kind.UNLOCK, p[1], 0, null);

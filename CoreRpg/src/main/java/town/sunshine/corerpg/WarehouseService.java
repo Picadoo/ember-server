@@ -254,7 +254,13 @@ public final class WarehouseService {
             return;
         }
         PlayerData.WarehouseSlot slot = slots.get(idx);
-        long available = slot.amount;
+        // D177 rev 2: the account-bound part (挂机庭 loot, EmberVault C_BOUND) never leaves the warehouse — P1 or not
+        long bound = Math.max(0, Math.min(slot.amount, data.periodCount("p1_vbound_" + slot.niId, "all")));
+        long available = slot.amount - bound;
+        if (available <= 0) {
+            p.sendMessage(PREFIX + ChatColor.YELLOW + "这些是挂机庭的账号绑定战利品（" + bound + "）：不能取出，锻造 / 强化时直接从仓库扣。");
+            return;
+        }
         long want = 64L;
         if (args.length >= 4) {
             try {
@@ -280,7 +286,7 @@ public final class WarehouseService {
             p.sendMessage(PREFIX + ChatColor.RED + "发放物品失败（NI 未就绪或 id 缺失）: " + slot.niId);
             return;
         }
-        long left = available - giveAmt;
+        long left = slot.amount - giveAmt; // D177 rev 2: the bound part stays in the entry
         if (left <= 0L) {
             slots.remove(idx);
         } else {

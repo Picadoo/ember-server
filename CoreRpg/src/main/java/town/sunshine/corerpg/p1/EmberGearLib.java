@@ -702,6 +702,8 @@ public final class EmberGearLib implements Listener {
         if (hold != null) { p.sendMessage(PV + ChatColor.RED + hold); return; }
         long got = vault().withdraw(p, niId, n);
         if (got < 0) p.sendMessage(PV + ChatColor.RED + "背包满了");
+        else if (got == 0 && vault().bound(p.getUniqueId(), niId) > 0)
+            p.sendMessage(PV + ChatColor.YELLOW + "这些 " + plugin.getNiBridge().displayName(niId) + " 是挂机庭的账号绑定战利品：不能取出，锻造 / 强化 / 洗练时直接从仓库扣。");
         else if (got == 0) p.sendMessage(PV + "仓库里没有 " + plugin.getNiBridge().displayName(niId));
         else p.sendMessage(PV + ChatColor.GREEN + "取出 " + plugin.getNiBridge().displayName(niId) + " ×" + got + ChatColor.GRAY + "（库存 " + vault().amount(p.getUniqueId(), niId) + "）");
     }
@@ -744,8 +746,10 @@ public final class EmberGearLib implements Listener {
                 ItemStack proto = plugin.getNiBridge().createNiItem(e.getKey());
                 Material m = proto == null ? Material.PAPER : proto.getType();
                 int dv = proto == null ? 0 : proto.getDurability();
+                long bd = v.bound(p.getUniqueId(), e.getKey());
                 inv.setItem(slot, icon(m, dv, "§f" + plugin.getNiBridge().displayName(e.getKey()),
-                        "§7库存 §f" + e.getValue(), "", "§7锻造、洗练、兑换直接从仓库扣，不用取出",
+                        "§7库存 §f" + e.getValue() + (bd > 0 ? " §8（其中 §6" + bd + " §8挂机绑定：只能直接用，不能取出）" : ""),
+                        "", "§7锻造、洗练、兑换直接从仓库扣，不用取出（先扣挂机绑定的）",
                         "§e左键 §f取 64 §8· §eShift+左键 §f取一整背包 §8· §e右键 §f取 1"));
                 h.slotKey.put(slot, "mat:" + e.getKey());
                 slot++;
