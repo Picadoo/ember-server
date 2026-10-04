@@ -54,7 +54,7 @@ public final class EmberSignature {
         return out;
     }
 
-    /** stage 1 = Q01–Q03 (live Java keys only), stage 2a = Q04–Q06 (new hooks). Codes are stored in saves: never reuse or renumber. */
+    /** stage 1 = Q01–Q03 (live Java keys only), stage 2a = Q04–Q06 (new hooks), stage 3 = Q07 (D184). Codes are stored in saves: never reuse or renumber. */
     public static final List<Def> DEFS = Collections.unmodifiableList(java.util.Arrays.asList(
             new Def(1, "L01", "q01", "blade", "scorch", "burn", "t3a", "残门焚斧", "残门蛮兵",
                     "燃烧中的敌人倒下时，把最多 2 秒燃烧传给 4 格内最近的敌人（10 秒一次）", "焚烬燃烧每跳伤害 ×0.95",
@@ -85,14 +85,78 @@ public final class EmberSignature {
                     "烬斩改成环斩：身边一圈（不用对准，背后的也打）", "半径 3 格（原来 3.5）、最多打 3 个（原来 5 个）",
                     m("skill_var", 1, "skill_cap", 3, "skill_ring", 3.0)),
             new Def(10, "L10", "q05", "charm", "burst", "dodgeburst", "t3b", "回廊护符", "断塔斧卫",
-                    "躲开或被首领预警招打中，烬爆计数都 +1", "烬爆伤害 ×0.9",
-                    m("hit_burst", 1, "dodge_burst", 1, "burst_mult", 0.9)),
+                    "躲开或被首领预警招打中，烬爆计数都 +1", "烬爆伤害 ×0.93", // D184: ×0.9 → ×0.93 (p2econ 无轮换 W30 +0.75 → +0.20)
+                    m("hit_burst", 1, "dodge_burst", 1, "burst_mult", 0.93)),
             new Def(11, "L11", "q06", "blade", "any", "guard", "", "霜封长刀", "霜封统领",
                     "烬斩每命中 1 个敌人得 0.5% 最大生命的护盾（最多 1%，5 秒，不叠加）", "烬斩每下伤害 ×0.9，受到首领伤害 ×1.05",
                     m("skill_var", 1, "skill_shield", 0.005, "skill_shield_max", 0.01, "skill_shield_secs", 5, "skill_mult", 0.9, "taken_boss", 1.05)),
             new Def(12, "L12", "q06", "charm", "sustain", "heal", "", "统领护符", "霜封统领",
                     "生命低于 40% 时，炽愈每 3 下就触发（平时 5 下）", "炽愈每次回复量 ×0.99",
-                    m("sustain_low", 0.4, "sustain_low_every", -2, "sustain_mult", 0.99))));
+                    m("sustain_low", 0.4, "sustain_low_every", -2, "sustain_mult", 0.99)),
+            // ---- stage 3 · Q07 (T3): 烬斩 蓄力 (SkillService skill_charge, D184) / 护盾 (giveSkillShield) / 燃烧多 1 跳 (BurnBook burn_ticks)
+            new Def(13, "L13", "q07", "blade", "any", "shape", "", "炉锁巨锤", "炉锁巨卫",
+                    "烬斩改成蓄力环斩：按下 0.5 秒后落下，打身边一圈（不用对准，背后的也打）", "蓄力的 0.5 秒里普攻无效（冷却从按下时算）",
+                    m("skill_var", 1, "skill_charge", 0.5, "skill_plus", 1)),
+            new Def(14, "L14", "q07", "charm", "any", "guard", "", "炉芯护符", "炉锁巨卫",
+                    "烬斩每命中 1 个敌人得 0.4% 最大生命的护盾（最多 0.8%，4 秒，不叠加）", "回复药回复量 ×0.95",
+                    m("skill_var", 1, "skill_shield", 0.004, "skill_shield_max", 0.008, "skill_shield_secs", 4, "potion", 0.95)), // draft 2% / 6% was +37 pp
+            new Def(15, "L15", "q07", "charm", "scorch", "burn2", "", "锈轨余火", "炉锁巨卫",
+                    "焚烬燃烧多烧 1 跳（换目标、打小怪群时更划算）", "焚烬燃烧每跳伤害 ×0.97",
+                    m("burn_ticks", 1, "burn_mult", 0.97)))); // draft ×0.8: −2.8 pp mean (the extra tick never lands on a boss kept burning)
+
+    // ------------------------------------------------------------------ stage 3 · Q07 签名调律 (D184, design §11)
+
+    /** + Def.id, period all: 1 = the 调律 version is the one in effect (0 = original) */
+    public static final String C_ALT = "p1_sigalt_";
+    /** + Def.id, period all: 1 = the 调律 version is unlocked (permanent, paid once) */
+    public static final String C_ALTU = "p1_sigaltu_";
+    public static final String ALT_UNLOCK = "q07";
+    public static final int ALT_MARKS = 10;
+
+    /** the 调律 version of a signature: same benefit, another cost (full key set, mirrors tools/p1sim/mainline.py ALTS) */
+    public static final class Alt {
+        public final String bad;
+        public final Map<String, Double> mods;
+        Alt(String bad, Map<String, Double> mods) { this.bad = bad; this.mods = Collections.unmodifiableMap(mods); }
+    }
+
+    /** L03 no passing alternate (§11.3), L04 just reworked (D183), L05 / L07 / L09 have no cost, L13–L15 new this stage → none */
+    public static final Map<String, Alt> ALTS;
+    static {
+        Map<String, Alt> a = new LinkedHashMap<String, Alt>();
+        a.put("L01", new Alt("对首领伤害 ×0.98", m("burn_spread", 2, "spread_icd", 10, "dmg_boss", 0.98)));
+        a.put("L02", new Alt("回复药回复量 ×0.95", m("dodge_heal", 0.01, "dodge_icd", 15, "potion", 0.95)));
+        a.put("L06", new Alt("被首领预警招打中多受 10%", m("potion", 1.05, "taken_tele", 1.10)));
+        a.put("L08", new Alt("对首领伤害 ×0.98", m("skill_var", 1, "skill_ignite", 1, "skill_ignite_n", 1, "skill_burn", 1.0, "dmg_boss", 0.98)));
+        a.put("L10", new Alt("被首领预警招打中多受 3%", m("hit_burst", 1, "dodge_burst", 1, "taken_tele", 1.03)));
+        a.put("L11", new Alt("烬斩每下伤害 ×0.9，被首领预警招打中多受 14%", m("skill_var", 1, "skill_shield", 0.005, "skill_shield_max", 0.01, "skill_shield_secs", 5, "skill_mult", 0.9, "taken_tele", 1.14)));
+        a.put("L12", new Alt("受到首领伤害 ×1.02", m("sustain_low", 0.4, "sustain_low_every", -2, "taken_boss", 1.02)));
+        ALTS = Collections.unmodifiableMap(a);
+    }
+
+    public static Alt alt(Def d) { return d == null ? null : ALTS.get(d.id); }
+
+    /** the key set in effect: the 调律 one only if it exists and {@code useAlt} */
+    public static Map<String, Double> modsOf(Def d, boolean useAlt) {
+        Alt a = useAlt ? alt(d) : null;
+        return a != null ? a.mods : d.mods;
+    }
+
+    /** the cost text in effect */
+    public static String badOf(Def d, boolean useAlt) {
+        Alt a = useAlt ? alt(d) : null;
+        return a != null ? a.bad : d.bad;
+    }
+
+    /** 调律 precheck (unlock or switch); null = ok. Switching only in town is the caller's gate (same as 烙印). */
+    public static String attuneCheck(Def d, boolean q07, boolean mapCleared, boolean unlocked, int marks) {
+        if (d == null) return "没有这条签名";
+        if (alt(d) == null) return d.name + " 没有调律版";
+        if (!q07) return "首通 " + ALT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放签名调律";
+        if (!mapCleared) return "先首通 " + d.map.toUpperCase(Locale.ROOT) + " 才能调律它的签名";
+        if (!unlocked && marks < ALT_MARKS) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + ALT_MARKS + "）";
+        return null;
+    }
 
     public static Def byCode(int code) { for (Def d : DEFS) if (d.code == code) return d; return null; }
 

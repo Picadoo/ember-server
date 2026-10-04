@@ -1,0 +1,135 @@
+# D174 第 3 阶段 · 签名调律页（docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §11）
+# 首通 Q07 后：7 件有代价的签名（L01 / L02 / L06 / L08 / L10 / L11 / L12）各有一个「调律版」——好处不变，换一种代价。
+# Shift+点击 = 用那张图的 10 枚首领徽记解锁（一次、永久，解锁后立刻用调律版）；点击 = 在原版 / 调律版之间切换（只在城里）。
+# 文字 / 状态全部来自 PAPI %corerpg_p1_sig_*%（EmberGrowthService.sigPapi：n_ k_ g_ b_ o_ t_ 按 DEFS 序号）；按钮只调 /corerpg p1 sig attune。
+# L03（没有合格的调律版）、L04（D183 刚返工）、L05 / L07 / L09（没有代价）、L13–L15（本阶段新件）没有调律版。
+# 入口：签名页右上「签名调律」、/corerpg p1 sig attune。
+
+Title: '§d签名调律'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_sig_attune'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####H####'
+  - '#1 2 6 8#'
+  - '# A B C #'
+  - '###b#X###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.4'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  H:
+    update: 20
+    display:
+      material: enchanted book
+      name: '§d签名调律 · 说明'
+      lore:
+        - '%corerpg_p1_sig_alt_head%'
+        - '%corerpg_p1_sig_marks%'
+        - ''
+        - '§7好处不变，只换代价那一半；同一件签名同时只有一个版本生效'
+        - '§7解锁：那张图的 10 枚首领徽记，一次、永久（Shift+点击）'
+        - '§7切换：点击；只能在城里，下一局起生效'
+        - '§8没有调律版：L03 / L04 / L05 / L07 / L09 / Q07 三件'
+
+  '1':
+    update: 20
+    display:
+      material: iron axe
+      name: '%corerpg_p1_sig_n_1%'
+      lore: ['%corerpg_p1_sig_k_1%', '%corerpg_p1_sig_g_1%', '%corerpg_p1_sig_b_1%', '%corerpg_p1_sig_o_1%', '', '%corerpg_p1_sig_t_1%']
+    actions:
+      left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L01']
+      shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L01 unlock']
+
+  '2':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_2%'
+      lore: ['%corerpg_p1_sig_k_2%', '%corerpg_p1_sig_g_2%', '%corerpg_p1_sig_b_2%', '%corerpg_p1_sig_o_2%', '', '%corerpg_p1_sig_t_2%']
+    actions:
+      left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L02']
+      shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L02 unlock']
+
+  '6':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_6%'
+      lore: ['%corerpg_p1_sig_k_6%', '%corerpg_p1_sig_g_6%', '%corerpg_p1_sig_b_6%', '%corerpg_p1_sig_o_6%', '', '%corerpg_p1_sig_t_6%']
+    actions:
+      left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L06']
+      shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L06 unlock']
+
+  '8':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_8%'
+      lore: ['%corerpg_p1_sig_k_8%', '%corerpg_p1_sig_g_8%', '%corerpg_p1_sig_b_8%', '%corerpg_p1_sig_o_8%', '', '%corerpg_p1_sig_t_8%']
+    actions:
+      left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L08']
+      shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L08 unlock']
+
+  'A':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_10%'
+      lore: ['%corerpg_p1_sig_k_10%', '%corerpg_p1_sig_g_10%', '%corerpg_p1_sig_b_10%', '%corerpg_p1_sig_o_10%', '', '%corerpg_p1_sig_t_10%']
+    actions:
+      left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L10']
+      shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L10 unlock']
+
+  'B':
+    update: 20
+    display:
+      material: diamond sword
+      name: '%corerpg_p1_sig_n_11%'
+      lore: ['%corerpg_p1_sig_k_11%', '%corerpg_p1_sig_g_11%', '%corerpg_p1_sig_b_11%', '%corerpg_p1_sig_o_11%', '', '%corerpg_p1_sig_t_11%']
+    actions:
+      left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L11']
+      shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L11 unlock']
+
+  'C':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_12%'
+      lore: ['%corerpg_p1_sig_k_12%', '%corerpg_p1_sig_g_12%', '%corerpg_p1_sig_b_12%', '%corerpg_p1_sig_o_12%', '', '%corerpg_p1_sig_t_12%']
+    actions:
+      left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L12']
+      shift_left: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig attune L12 unlock']
+
+  b:
+    display:
+      material: arrow
+      name: '§7返回签名页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig menu'
+
+  X:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all:
+        - close

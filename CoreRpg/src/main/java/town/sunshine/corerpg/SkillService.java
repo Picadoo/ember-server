@@ -382,6 +382,52 @@ public final class SkillService implements Listener {
         if (variant && gmods.get("skill_cap") > 0) maxTargets = Math.max(1, Math.min(maxTargets, (int) Math.round(gmods.get("skill_cap"))));
         if (line > 0) range = Math.max(range, line);
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
+        final double fRange = range, fArc = arc, fLine = line;
+        final int fMax = maxTargets;
+        if (slashTargets(player, fRange, fArc, fLine).isEmpty()) {
+            player.sendMessage(PREFIX + ChatColor.YELLOW + "附近没有目标");
+            return;
+        }
+        // D174 stage 3 L13 炉锁巨锤 (p1sim skill_variant skill_charge): wind-up — the CD starts now, the hit lands after
+        // skill_charge seconds on whoever is in the shape then; no melee meanwhile (EmberCombatListener.onMelee cancels)
+        double charge = variant ? gmods.get("skill_charge") : 0.0;
+        st.skillCdUntil = now + cd * 1000L;
+        ls.saveState(player);
+        if (charge > 0) {
+            final java.util.UUID id = player.getUniqueId();
+            final town.sunshine.corerpg.p1.EmberGrowth.Mods fMods = gmods;
+            final long until = now + Math.round(charge * 1000.0);
+            CHARGING.put(id, until);
+            player.sendMessage(PREFIX + ChatColor.GOLD + String.format(java.util.Locale.ROOT, "烬斩蓄力 %.1fs（蓄力时普攻无效）", charge));
+            playSound(player.getLocation(), "BLOCK_BEACON_POWER_SELECT");
+            org.bukkit.Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                Long u = CHARGING.get(id);
+                if (u != null && u == until) CHARGING.remove(id);
+                if (!player.isOnline() || player.isDead() || !town.sunshine.corerpg.p1.EmberMode.isP1(player)) return;
+                List<LivingEntity> t2 = slashTargets(player, fRange, fArc, fLine);
+                if (t2.isEmpty()) { player.sendMessage(PREFIX + ChatColor.YELLOW + "烬斩蓄力落空（范围里没有目标了）"); return; }
+                landEmberSlash(player, ls, t2, fMax, fMods, true, gsv);
+                player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩（蓄力）");
+            }, Math.max(1L, Math.round(charge * 20.0)));
+            return;
+        }
+        landEmberSlash(player, ls, slashTargets(player, fRange, fArc, fLine), fMax, gmods, variant, gsv);
+        player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩");
+    }
+
+    /** D174 stage 3: uuid → wind-up end (ms) of a charged 烬斩 (L13); melee is cancelled until then */
+    private static final Map<java.util.UUID, Long> CHARGING = new java.util.concurrent.ConcurrentHashMap<java.util.UUID, Long>();
+
+    public static boolean isCharging(java.util.UUID id) {
+        Long u = id == null ? null : CHARGING.get(id);
+        if (u == null) return false;
+        if (u > System.currentTimeMillis()) return true;
+        CHARGING.remove(id, u);
+        return false;
+    }
+
+    /** 烬斩 targets in the shape, sorted by distance then entity id (the cap is applied when landing) */
+    private List<LivingEntity> slashTargets(Player player, double range, double arc, double line) {
         Location eye = player.getEyeLocation();
         Vector look = eye.getDirection().normalize();
         double cosHalf = Math.cos(Math.toRadians(Math.max(1.0, arc) / 2.0));
@@ -400,16 +446,19 @@ public final class SkillService implements Listener {
             targets.add(le);
             distOf.put(le, dist);
         }
-        if (targets.isEmpty()) {
-            player.sendMessage(PREFIX + ChatColor.YELLOW + "附近没有目标");
-            return;
-        }
         java.util.Collections.sort(targets, new java.util.Comparator<LivingEntity>() {
             @Override public int compare(LivingEntity a, LivingEntity b) {
                 int c = Double.compare(distOf.get(a), distOf.get(b));
                 return c != 0 ? c : Integer.compare(a.getEntityId(), b.getEntityId());
             }
         });
+        return targets;
+    }
+
+    private void landEmberSlash(Player player, town.sunshine.corerpg.p1.EmberLoadoutService ls, List<LivingEntity> targets, int maxTargets,
+                                town.sunshine.corerpg.p1.EmberGrowth.Mods gmods, boolean variant, town.sunshine.corerpg.p1.EmberGrowthService gsv) {
+        Location eye = player.getEyeLocation();
+        Vector look = eye.getDirection().normalize();
         double b = ls.get(player).b;
         double dmg = town.sunshine.corerpg.p1.EmberFormula.skill(town.sunshine.corerpg.p1.EmberMode.tables(), b);
         if (variant) dmg *= gmods.get("skill_mult");
@@ -429,7 +478,7 @@ public final class SkillService implements Listener {
                 if (look2 != null) spawnParticles(le.getLocation().add(0, 1, 0), look2.particles, 12);
             }
             if (variant && gsv != null) {
-                // L08 潮蚀护符: ignite the first skill_ignite_n targets still alive (焚烬 only); L11 霜封长刀: shield per target hit
+                // L08 潮蚀护符: ignite the first skill_ignite_n targets still alive (焚烬 only); L11 霜封长刀 / L14 炉芯护符: shield per target hit
                 town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
                 int lit = 0;
                 for (LivingEntity le : hit) {
@@ -446,9 +495,6 @@ public final class SkillService implements Listener {
             playSound(player.getLocation(), look2.sound);
             spawnParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, 20);
         }
-        st.skillCdUntil = now + cd * 1000L;
-        ls.saveState(player);
-        player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩");
     }
 
     private boolean castAshMark(Player player, SkillDef def) {

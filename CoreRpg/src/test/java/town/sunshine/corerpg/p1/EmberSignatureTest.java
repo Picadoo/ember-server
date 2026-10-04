@@ -38,10 +38,13 @@ public class EmberSignatureTest {
         assertEquals(1, EmberSignature.byId("L01").code); // stored in saves: never renumber
         assertEquals("L06", EmberSignature.byCode(6).id);
         assertEquals("L12", EmberSignature.byCode(12).id);
-        assertEquals(Arrays.asList("q01", "q02", "q03", "q04", "q05", "q06"), EmberSignature.maps());
+        assertEquals(Arrays.asList("q01", "q02", "q03", "q04", "q05", "q06", "q07"), EmberSignature.maps());
         assertEquals(2, EmberSignature.forMap("q02").size());
         assertEquals(2, EmberSignature.forMap("q06").size());
-        assertFalse(EmberSignature.hasMap("q07")); // stage 3
+        assertEquals(3, EmberSignature.forMap("q07").size()); // stage 3 (D184): L13 blade + L14 / L15 charms
+        assertEquals("L15", EmberSignature.byCode(15).id);
+        assertEquals(15, EmberSignature.DEFS.size());
+        assertFalse(EmberSignature.hasMap("q08"));
     }
 
     @Test
@@ -52,7 +55,11 @@ public class EmberSignatureTest {
         assertEquals("L02", EmberSignature.rollStamp("q01", "charm", "burst", 0.119).id);
         assertNull(EmberSignature.rollStamp("q01", "charm", "burst", EmberSignature.STAMP_RATE));
         assertNull(EmberSignature.rollStamp("q01", "charm", "burst", Double.NaN));
-        assertNull(EmberSignature.rollStamp("q07", "blade", "scorch", 0.0));
+        assertEquals("L13", EmberSignature.rollStamp("q07", "blade", "scorch", 0.0).id);   // stage 3: any-family blade
+        assertEquals("L14", EmberSignature.rollStamp("q07", "charm", "burst", 0.119).id);  // only the any-family charm fits burst
+        assertEquals("L14", EmberSignature.rollStamp("q07", "charm", "scorch", 0.0).id);   // scorch charm: L14 or L15, uniform
+        assertEquals("L15", EmberSignature.rollStamp("q07", "charm", "scorch", 0.119).id);
+        assertNull(EmberSignature.rollStamp("q08", "blade", "scorch", 0.0));
         assertEquals("L07", EmberSignature.rollStamp("q04", "blade", "burst", 0.0).id);   // any-family blade
         assertNull(EmberSignature.rollStamp("q04", "charm", "burst", 0.0));               // L08 is scorch-only
         int hit = 0, n = 100000;
@@ -87,8 +94,14 @@ public class EmberSignatureTest {
         // no stage-1 pair shares a tag; check the rule on a synthetic tag clash via offReason order (blade first)
         EmberSignature.Def b = EmberSignature.byId("L04"), c = EmberSignature.byId("L03");
         assertFalse(b.tag.equals(c.tag));
+        // one blade per boss; two charms only on Q07 (stage 3: L14 any + L15 scorch)
         for (EmberSignature.Def x : EmberSignature.DEFS) for (EmberSignature.Def y : EmberSignature.DEFS)
-            if (x != y && x.slot.equals(y.slot) && x.map.equals(y.map)) assertFalse(x.id + "/" + y.id, true);
+            if (x != y && x.slot.equals(y.slot) && x.map.equals(y.map)) assertTrue(x.id + "/" + y.id, "q07".equals(x.map) && "charm".equals(x.slot));
+        // L14 shares the guard tag with L11: with L11 on the blade only the blade's counts; L15 (burn2) stacks with L01 (burn)
+        List<String> none = Collections.emptyList();
+        assertEquals(1, EmberSignature.active(w("L11", "blade", "burst"), w("L14", "charm", "burst"), "burst", none, true).size());
+        assertEquals(2, EmberSignature.active(w("L01", "blade", "scorch"), w("L15", "charm", "scorch"), "scorch", none, true).size());
+        assertEquals(1, EmberSignature.active(w("L13", "blade", "burst"), w("L15", "charm", "burst"), "burst", none, true).size()); // L15 scorch-only
     }
 
     @Test
@@ -182,7 +195,8 @@ public class EmberSignatureTest {
         List<EmberRunRules.Grant> a = EmberRunRules.signatureGrants("q01", in, base), b = EmberRunRules.signatureGrants("q01", in, base);
         assertEquals(a.toString(), b.toString());
         assertEquals("sig_mark", a.get(0).key);
-        assertTrue(EmberRunRules.signatureGrants("q07", in, base).isEmpty());
+        assertTrue(EmberRunRules.signatureGrants("q08", in, base).isEmpty());
+        assertEquals("sig_mark", EmberRunRules.signatureGrants("q07", in, base).get(0).key); // stage 3: Q07 is a signature map
         int stamps = 0;
         for (int i = 0; i < 4000; i++) {
             in.runId = "r" + i;
@@ -203,5 +217,57 @@ public class EmberSignatureTest {
         assertEquals(0.985, m.get("dmg_boss"), 1e-9);
         assertEquals(1.0, m.get("dodge_burst"), 1e-9);
         assertEquals(1.03, EmberSignature.byId("L03").mods.get("taken_tele"), 1e-9);
+    }
+
+    @Test
+    public void stage3ChargeKey_D184() {
+        // L13 炉锁巨锤: skill_charge is additive with default 0 (absent = no wind-up) and two sources keep the larger
+        assertEquals(0.0, EmberGrowth.Mods.NONE.get("skill_charge"), 1e-9);
+        java.util.Map<String, Double> l13 = EmberSignature.byId("L13").mods;
+        EmberGrowth.Mods m = EmberGrowth.Mods.combine(Arrays.asList(l13, l13));
+        assertEquals(l13.get("skill_charge"), m.get("skill_charge"), 1e-9);
+        assertTrue(l13.get("skill_charge") > 0);
+        assertEquals(1.0, EmberSignature.byId("L15").mods.get("burn_ticks"), 1e-9);
+    }
+
+    @Test
+    public void attuneAlternates_D184() {
+        // 签名调律: exactly L01 / L02 / L06 / L08 / L10 / L11 / L12; none for L03 / L04 / L05 / L07 / L09 / L13–L15
+        assertEquals(Arrays.asList("L01", "L02", "L06", "L08", "L10", "L11", "L12"), new java.util.ArrayList<String>(EmberSignature.ALTS.keySet()));
+        for (String id : new String[]{"L03", "L04", "L05", "L07", "L09", "L13", "L14", "L15"}) assertNull(id, EmberSignature.alt(EmberSignature.byId(id)));
+        for (String id : EmberSignature.ALTS.keySet()) {
+            EmberSignature.Def d = EmberSignature.byId(id);
+            java.util.Map<String, Double> a = EmberSignature.alt(d).mods;
+            assertFalse(a.equals(d.mods));
+            assertTrue(EmberSignature.modsOf(d, true) == a && EmberSignature.modsOf(d, false) == d.mods);
+            assertEquals(d.bad, EmberSignature.badOf(d, false));
+            // same benefit: every additive (behaviour) key of the original is kept unchanged
+            for (java.util.Map.Entry<String, Double> e : d.mods.entrySet())
+                if (EmberGrowth.ADD.contains(e.getKey())) assertEquals(id + " " + e.getKey(), e.getValue(), a.get(e.getKey()));
+            assertFalse(EmberSignature.alt(d).bad.startsWith("@"));
+        }
+        // the 'all boss damage' cost → 'telegraph only' swaps are roughly doubled (§11.3: same % was +3～+5.6 pp)
+        assertEquals(1.04, EmberSignature.byId("L06").mods.get("taken_boss"), 1e-9);
+        assertTrue(EmberSignature.alt(EmberSignature.byId("L06")).mods.get("taken_tele") >= 1.08);
+        assertTrue(EmberSignature.alt(EmberSignature.byId("L11")).mods.get("taken_tele") >= 1.10);
+        assertFalse(EmberSignature.alt(EmberSignature.byId("L06")).mods.containsKey("taken_boss"));
+        // precheck
+        EmberSignature.Def l01 = EmberSignature.byId("L01");
+        assertNull(EmberSignature.attuneCheck(l01, true, true, false, 10));
+        assertNotNull(EmberSignature.attuneCheck(l01, true, true, false, 9));    // insignia short
+        assertNull(EmberSignature.attuneCheck(l01, true, true, true, 0));        // unlocked: switching is free
+        assertNotNull(EmberSignature.attuneCheck(l01, false, true, true, 99));   // Q07 not cleared
+        assertNotNull(EmberSignature.attuneCheck(l01, true, false, false, 99));  // its own map not cleared
+        assertNotNull(EmberSignature.attuneCheck(EmberSignature.byId("L05"), true, true, false, 99)); // no alternate
+        assertNotNull(EmberSignature.attuneCheck(null, true, true, false, 99));
+        assertEquals("q07", EmberSignature.ALT_UNLOCK);
+        assertEquals(10, EmberSignature.ALT_MARKS);
+    }
+
+    @Test
+    public void signatureTextsAreFilled() {
+        for (EmberSignature.Def d : EmberSignature.DEFS) {
+            assertFalse(d.id, d.good.startsWith("@") || d.bad.startsWith("@") || d.good.isEmpty() || d.bad.isEmpty());
+        }
     }
 }

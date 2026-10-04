@@ -161,6 +161,11 @@ public final class EmberCombatListener implements Listener {
             return;
         }
         Player p = (Player) damager;
+        if (SkillService.isCharging(p.getUniqueId())) { // D174 stage 3 L13 炉锁巨锤: no swing while 烬斩 winds up (p1sim skill_charge)
+            e.setCancelled(true);
+            EmberDamageTrace.note(e, e.getDamage(), "L13 烬斩蓄力中 → 普攻取消");
+            return;
+        }
         LivingEntity le = (LivingEntity) victim;
         EmberTables t = EmberMode.tables();
         double raw = e.getDamage();

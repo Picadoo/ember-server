@@ -23,11 +23,12 @@ public final class EmberGrowth {
             "dodge_secs", "dodge_heal", "dodge_icd", "burn_ticks", "burst_every", "sustain_every", "shard_bonus", "burn_spread", "dodge_burst", "spread_icd", "hit_burst",
             // D174 stage 2a signature hooks (烬斩形状 / 点燃 / 护盾 / 低血回涌); absent = 0 = off
             "skill_var", "skill_cap", "skill_plus", "skill_line", "skill_ring", "skill_ignite", "skill_ignite_n", "skill_shield", "skill_shield_max", "skill_shield_secs",
-            "sustain_low", "sustain_low_every"));
+            "sustain_low", "sustain_low_every",
+            "skill_charge")); // D174 stage 3 (L13 炉锁巨锤): 烬斩 wind-up seconds
 
     /** D174 stage 2a: sizes / caps / durations — two sources keep the larger, never add */
     static final Set<String> MAXK = new HashSet<String>(java.util.Arrays.asList(
-            "skill_cap", "skill_line", "skill_ring", "skill_ignite_n", "skill_shield_max", "skill_shield_secs", "sustain_low"));
+            "skill_cap", "skill_line", "skill_ring", "skill_ignite_n", "skill_shield_max", "skill_shield_secs", "sustain_low", "skill_charge"));
 
     // ------------------------------------------------------------------ modifiers
 

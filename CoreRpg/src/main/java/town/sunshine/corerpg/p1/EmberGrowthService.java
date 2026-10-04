@@ -149,13 +149,13 @@ public final class EmberGrowthService implements Listener {
         List<String> hon = honorsEarned(p.getUniqueId(), d);
         int[][] af = affixItems(d, lo);
         List<EmberSignature.Def> sg = signatures(d, lo); // D174
-        String key = epoch + "|" + set + "|" + hon + "|" + afKey(af) + "|" + sigKey(sg);
+        String key = epoch + "|" + set + "|" + hon + "|" + afKey(af) + "|" + sigKey(d, sg);
         Object[] c = cache.get(p.getUniqueId());
         if (c != null && key.equals(c[0])) return (EmberGrowth.Mods) c[1];
         List<Map<String, Double>> parts = new ArrayList<Map<String, Double>>(EmberGrowth.talentParts(talents, picks(d), set));
         if (honors != null && !hon.isEmpty()) parts.add(EmberGrowth.honorParts(honors, hon));
         if (reroll != null) { Map<String, Double> ap = EmberAffix.parts(reroll, af); if (!ap.isEmpty()) parts.add(ap); } // D143
-        for (EmberSignature.Def sd : sg) parts.add(sd.mods); // D174 签名传奇 (≤ 2, each its own part so the ADD keys add)
+        for (EmberSignature.Def sd : sg) parts.add(EmberSignature.modsOf(sd, sigAlt(d, sd))); // D174 签名传奇 (≤ 2, each its own part so the ADD keys add); stage 3 调律 version
         EmberGrowth.Mods m = EmberGrowth.Mods.combine(parts);
         cache.put(p.getUniqueId(), new Object[]{key, m});
         return m;
@@ -694,6 +694,16 @@ public final class EmberGrowthService implements Listener {
 
     public boolean sigOff(PlayerData d, String slot) { return d != null && d.periodCount(C_SIGOFF + slot, "all") > 0; }
 
+    /** D174 stage 3 签名调律: the 调律 version of {@code sd} is unlocked (paid once) */
+    public boolean altUnlocked(PlayerData d, EmberSignature.Def sd) {
+        return d != null && sd != null && EmberSignature.alt(sd) != null && d.periodCount(EmberSignature.C_ALTU + sd.id, "all") > 0;
+    }
+
+    /** D174 stage 3 签名调律: the 调律 version is the one in effect (unlocked + picked) */
+    public boolean sigAlt(PlayerData d, EmberSignature.Def sd) {
+        return altUnlocked(d, sd) && d.periodCount(EmberSignature.C_ALT + sd.id, "all") > 0;
+    }
+
     /** worn piece as the rules see it: a slot switched off counts as "no signature" (so it never blocks the other slot) */
     private EmberSignature.Worn wornOn(PlayerData d, EmberItemData it) {
         if (it == null) return null;
@@ -777,6 +787,10 @@ public final class EmberGrowthService implements Listener {
             return true;
         }
         if ("toggle".equals(op)) return sigToggle(p, d, lo, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "");
+        if ("attune".equals(op) || "调律".equals(op)) { // stage 3: bare = the 调律 page; <Lxx> = switch; <Lxx> unlock = pay 10 insignia
+            if (args.length < 4) { openMenu(p, SIG_ALT_MENU); return true; }
+            return sigAttune(p, d, args[3], args.length >= 5 && "unlock".equalsIgnoreCase(args[4]));
+        }
         if ("pick".equals(op)) return sigPick(p, d, args.length >= 4 ? args[3] : null);
         if ("target".equals(op)) {
             String[] pk = SPICK.get(p.getUniqueId());
@@ -797,7 +811,7 @@ public final class EmberGrowthService implements Listener {
             p.sendMessage(P + "§e" + mapLabel(mk) + " §7· 首领徽记 §f" + d.periodCount(EmberSignature.C_MARK + mk, "all")
                     + (cl ? "" : " §8（未首通：首通后重打才掉签名和徽记）"));
             for (EmberSignature.Def sd : EmberSignature.forMap(mk)) {
-                String line = P + "  §6" + sd.name + " §7" + sd.kindText() + "：§f" + sd.good + " §7/ 代价：" + sd.bad
+                String line = P + "  §6" + sd.name + " §7" + sd.kindText() + "：§f" + sd.good + " §7/ 代价：" + EmberSignature.badOf(sd, sigAlt(d, sd))
                         + (!sd.excl.isEmpty() && picks(d).values().contains(sd.excl) ? " §c（与已选天赋同类，不生效）" : "");
                 if (cl && imp) town.sunshine.corerpg.ConfirmTokens.sendClick(p, line + " ", "[烙印]", "/corerpg p1 sig imprint " + sd.id,
                         "把「" + sd.name + "」烙到正在用的" + EmberItemData.slotName(sd.slot) + "上\n" + EmberSignature.IMPRINT_MARKS + " 枚 "
@@ -868,7 +882,7 @@ public final class EmberGrowthService implements Listener {
 
     // ------------------------------------------------------------------ D174 stage 1.5: TrMenu pages (no commands for players)
 
-    public static final String SIG_MENU = "ember_p1_sig", SIG_IMP_MENU = "ember_p1_sig_imprint";
+    public static final String SIG_MENU = "ember_p1_sig", SIG_IMP_MENU = "ember_p1_sig_imprint", SIG_ALT_MENU = "ember_p1_sig_attune";
     static final Map<String, String> SIG_FROM = new LinkedHashMap<String, String>();
     static {
         SIG_FROM.put("gear", "ember_p1_gear");
@@ -887,6 +901,44 @@ public final class EmberGrowthService implements Listener {
         plugin.getLogger().info("[P1 sig] " + p.getName() + " toggle " + slot + " → " + (off ? "on" : "off"));
         p.sendMessage(P + EmberItemData.slotName(slot) + "上的签名" + (off ? "§a已打开" : "§e已关闭§7（随时可以再打开；不影响掉落和烙印）"));
         openMenu(p, SIG_MENU);
+        return true;
+    }
+
+    /**
+     * D174 stage 3 签名调律 (Q07): unlock (once, {@link EmberSignature#ALT_MARKS} insignia of the signature's map, one checked
+     * save) or switch the version in effect. Town only (same gate as 烙印 / 开关); the next run uses the new version.
+     */
+    private boolean sigAttune(Player p, PlayerData d, String id, boolean unlock) {
+        EmberSignature.Def sd = EmberSignature.byId(id);
+        if (sd == null || EmberSignature.alt(sd) == null) { openMenu(p, SIG_ALT_MENU); return true; }
+        if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后再调律（副本里不能改）"); return true; }
+        boolean un = altUnlocked(d, sd);
+        int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        String why = EmberSignature.attuneCheck(sd, runs.progressFlag(d, EmberSignature.ALT_UNLOCK), runs.progressFlag(d, sd.map), un, marks);
+        if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
+        if (!un) {
+            if (!unlock) {
+                p.sendMessage(P + "§d签名调律 §7· " + sd.name + "：调律版代价「" + EmberSignature.alt(sd).bad + "」（原版「" + sd.bad + "」，好处不变）");
+                p.sendMessage(P + "§e解锁要 " + EmberSignature.ALT_MARKS + " 枚 " + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）· 在调律页 Shift+点击解锁，之后永久、随时切换");
+                return true;
+            }
+            String hold = EmberAssetGuard.hold(p);
+            if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
+            d.addPeriodCount(EmberSignature.C_MARK + sd.map, "all", -EmberSignature.ALT_MARKS);
+            d.addPeriodCount(EmberSignature.C_ALTU + sd.id, "all", 1);
+            d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", 1 - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
+            boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
+            plugin.getLogger().info("[P1 sig] " + p.getName() + " attune unlock " + sd.id + " (-" + EmberSignature.ALT_MARKS + " " + sd.map + " marks, saved=" + saved + ")");
+            p.sendMessage(P + "§a调律版已解锁：§6" + sd.name + " §7现在用调律版（代价：" + EmberSignature.alt(sd).bad + "）· 剩 "
+                    + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记" + (saved ? "" : " §e（存档稍后重试）"));
+        } else {
+            boolean nowAlt = !sigAlt(d, sd);
+            d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", (nowAlt ? 1 : 0) - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
+            runs.flushData(p.getUniqueId());
+            plugin.getLogger().info("[P1 sig] " + p.getName() + " attune " + sd.id + " → " + (nowAlt ? "alt" : "original"));
+            p.sendMessage(P + "§6" + sd.name + " §7现在用" + (nowAlt ? "§d调律版" : "§a原版") + "§7（代价：" + EmberSignature.badOf(sd, nowAlt) + "）· 下一局起生效");
+        }
+        openMenu(p, SIG_ALT_MENU);
         return true;
     }
 
@@ -961,6 +1013,12 @@ public final class EmberGrowthService implements Listener {
             return "§7图鉴已解锁 §f" + un + "§7/" + EmberSignature.DEFS.size() + " §7· 同时生效最多 §f" + (dual ? 2 : 1) + " §7条"
                     + (dual ? "" : " §8（首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条）");
         }
+        if ("alt_head".equals(key)) { // stage 3 签名调律 page header
+            if (!runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return "§8签名调律：首通 " + mapLabel(EmberSignature.ALT_UNLOCK) + " 后开放";
+            int un = 0;
+            for (String id : EmberSignature.ALTS.keySet()) if (altUnlocked(d, EmberSignature.byId(id))) un++;
+            return "§7签名调律：§a已开放 §7· 已解锁调律版 §f" + un + "§7/" + EmberSignature.ALTS.size();
+        }
         if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
         if ("marks".equals(key)) {
             StringBuilder sb = new StringBuilder("§7首领徽记：");
@@ -993,7 +1051,7 @@ public final class EmberGrowthService implements Listener {
         }
         // per signature by index (1 = DEFS[0]): n_ name · k_ kind/map/boss · g_ good · b_ bad · s_ status · a_ action
         int u = key.indexOf('_');
-        if (u == 1 && "nkgbsa".indexOf(key.charAt(0)) >= 0) {
+        if (u == 1 && "nkgbsaot".indexOf(key.charAt(0)) >= 0) {
             int i = idx(key.substring(2));
             if (i < 1 || i > EmberSignature.DEFS.size()) return "";
             EmberSignature.Def sd = EmberSignature.DEFS.get(i - 1);
@@ -1002,7 +1060,9 @@ public final class EmberGrowthService implements Listener {
                 case 'n': return (cl ? "§6" : "§8") + sd.name + (cl ? "" : " §8（未解锁）");
                 case 'k': return "§7" + sd.kindText() + " · " + mapLabel(sd.map) + " · " + sd.boss + (sd.anyFamily() ? "" : " §8（只在" + EmberItemData.familyName(sd.family) + "成套时生效）");
                 case 'g': return "§a得：§f" + sd.good;
-                case 'b': return "§c代价：§7" + sd.bad;
+                case 'b': return "§c代价：§7" + EmberSignature.badOf(sd, sigAlt(d, sd)) + (sigAlt(d, sd) ? " §d（调律版）" : "");
+                case 'o': return altOther(d, sd);
+                case 't': return altAction(d, sd, cl);
                 case 's': return sigStatus(d, lo, sd, cl);
                 default:
                     if (!cl) return "§8首通 " + mapLabel(sd.map) + " 后解锁：重打掉签名件和徽记";
@@ -1013,6 +1073,26 @@ public final class EmberGrowthService implements Listener {
         }
         if (key.startsWith("p_")) return impPapi(p, d, lo, key.substring(2));
         return "";
+    }
+
+    /** stage 3: the other version's cost line */
+    private String altOther(PlayerData d, EmberSignature.Def sd) {
+        EmberSignature.Alt a = EmberSignature.alt(sd);
+        if (a == null) return "§8没有调律版";
+        return sigAlt(d, sd) ? "§7原版代价：" + sd.bad : "§d调律版代价：§7" + a.bad;
+    }
+
+    /** stage 3: the 调律 page's state / click line */
+    private String altAction(PlayerData d, EmberSignature.Def sd, boolean cleared) {
+        if (EmberSignature.alt(sd) == null) return "§8这件没有调律版";
+        if (!runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return "§8首通 " + mapLabel(EmberSignature.ALT_UNLOCK) + " 后开放签名调律";
+        if (!cleared) return "§8先首通 " + mapLabel(sd.map);
+        if (!altUnlocked(d, sd)) {
+            int mk = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+            return (mk >= EmberSignature.ALT_MARKS ? "§e➥ Shift+点击解锁调律版" : "§7解锁调律版") + " §7（" + EmberSignature.ALT_MARKS + " 枚 "
+                    + sd.map.toUpperCase(Locale.ROOT) + " 徽记，有 " + mk + "）";
+        }
+        return sigAlt(d, sd) ? "§d▶ 调律版生效中 §e➥ 点击换回原版" : "§a▶ 原版生效中 §e➥ 点击换成调律版";
     }
 
     private String sigStatus(PlayerData d, EmberLoadout lo, EmberSignature.Def sd, boolean cleared) {
@@ -1077,8 +1157,8 @@ public final class EmberGrowthService implements Listener {
     private boolean sigTest(org.bukkit.command.CommandSender s, String[] args) {
         if (!s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
         String w = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
-        String usage = P + "/corerpg p1 sig test marks <q01..> <n> [玩家] | stamp <blade|charm> <Lxx> [玩家] | show [玩家] | clear [玩家]";
-        int pi = "marks".equals(w) ? 6 : "stamp".equals(w) ? 6 : 4;
+        String usage = P + "/corerpg p1 sig test marks <q01..> <n> [玩家] | stamp <blade|charm> <Lxx> [玩家] | alt <Lxx> <0|1> [玩家] | show [玩家] | clear [玩家]";
+        int pi = "marks".equals(w) ? 6 : "stamp".equals(w) ? 6 : "alt".equals(w) ? 6 : 4;
         Player t = args.length > pi ? Bukkit.getPlayerExact(args[pi]) : (s instanceof Player ? (Player) s : null);
         if (t == null) { s.sendMessage(usage); return true; }
         PlayerData d = data(t.getUniqueId());
@@ -1093,6 +1173,12 @@ public final class EmberGrowthService implements Listener {
             EmberSignature.Def sd = EmberSignature.byId(args[5]);
             if (it == null || sd == null || !EmberSignature.fits(sd, it.slot, it.family)) { s.sendMessage(P + "没有这件 / 签名不合这件"); return true; }
             d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", sd.code - sigOf(d, it.uid));
+        } else if ("alt".equals(w) && args.length >= 6) { // stage 3: unlock + pick the 调律 version without insignia (smoke)
+            EmberSignature.Def sd = EmberSignature.byId(args[4]);
+            if (EmberSignature.alt(sd) == null) { s.sendMessage(P + "没有这条签名的调律版"); return true; }
+            boolean on = "1".equals(args[5]);
+            d.addPeriodCount(EmberSignature.C_ALTU + sd.id, "all", 1 - d.periodCount(EmberSignature.C_ALTU + sd.id, "all"));
+            d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", (on ? 1 : 0) - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
         } else if ("show".equals(w)) {
             // read only
         } else if ("clear".equals(w)) {
@@ -1102,6 +1188,10 @@ public final class EmberGrowthService implements Listener {
             for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) if (it != null) d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", -sigOf(d, it.uid));
             for (String sl : new String[]{"blade", "charm"}) d.addPeriodCount(C_SIGOFF + sl, "all", -d.periodCount(C_SIGOFF + sl, "all"));
             for (EmberSignature.Def sd : EmberSignature.DEFS) d.addPeriodCount(C_SIGSEEN + sd.id, "all", -d.periodCount(C_SIGSEEN + sd.id, "all"));
+            for (String id : EmberSignature.ALTS.keySet()) {
+                d.addPeriodCount(EmberSignature.C_ALT + id, "all", -d.periodCount(EmberSignature.C_ALT + id, "all"));
+                d.addPeriodCount(EmberSignature.C_ALTU + id, "all", -d.periodCount(EmberSignature.C_ALTU + id, "all"));
+            }
         } else { s.sendMessage(usage); return true; }
         runs.flushData(t.getUniqueId());
         s.sendMessage(P + t.getName() + " · " + wornLine(d, lo, "blade") + " §7| " + wornLine(d, lo, "charm"));
@@ -1110,14 +1200,22 @@ public final class EmberGrowthService implements Listener {
         StringBuilder seen = new StringBuilder();
         for (EmberSignature.Def sd : EmberSignature.DEFS) if (sigSeen(d, sd)) seen.append(sd.id).append(' ');
         s.sendMessage(P + "徽记 " + sb + "· off blade=" + sigOff(d, "blade") + " charm=" + sigOff(d, "charm") + " · seen " + seen + "· active "
-                + sigKey(signatures(d, lo)) + " · mods " + mods(t));
+                + sigKey(d, signatures(d, lo)) + " · 调律 " + altKey(d) + " · mods " + mods(t));
         return true;
     }
 
-    private static String sigKey(List<EmberSignature.Def> sg) {
+    private String sigKey(PlayerData d, List<EmberSignature.Def> sg) {
         StringBuilder sb = new StringBuilder();
-        for (EmberSignature.Def x : sg) sb.append(x.code).append(',');
+        for (EmberSignature.Def x : sg) sb.append(x.code).append(sigAlt(d, x) ? "b" : "").append(',');
         return sb.toString();
+    }
+
+    /** "L01:b L02:u" — unlocked 调律 versions (b = in effect, u = unlocked, original in effect) */
+    private String altKey(PlayerData d) {
+        StringBuilder sb = new StringBuilder();
+        for (String id : EmberSignature.ALTS.keySet())
+            if (d.periodCount(EmberSignature.C_ALTU + id, "all") > 0) sb.append(id).append(':').append(d.periodCount(EmberSignature.C_ALT + id, "all") > 0 ? 'b' : 'u').append(' ');
+        return sb.length() == 0 ? "- " : sb.toString();
     }
 
     private static String afKey(int[][] af) {

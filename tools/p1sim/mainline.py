@@ -48,14 +48,33 @@ SIGS = {
     'L07': ('q04', 'blade', 'any', 'shape', 2, '潮闸长杆', {'skill_var': 1, 'skill_cap': 3, 'skill_line': 5}),  # skill_line: Java-only reach (sim: cap only)
     'L08': ('q04', 'charm', 'scorch', 'burn', 2, '潮蚀护符', {'skill_var': 1, 'skill_ignite': 1, 'skill_ignite_n': 1, 'skill_burn': 1.0, 'burn_mult': 0.92}),  # stage 2a: n 3 → 1 (+20 at q03r)
     'L09': ('q05', 'blade', 'any', 'shape', 2, '断塔双斧', {'skill_var': 1, 'skill_cap': 3, 'skill_ring': 3.0}),  # stage 2a: ring ≤ 3 (skill_plus swept: +4 / −30 swings); skill_ring Java-only radius
-    'L10': ('q05', 'charm', 'burst', 'dodgeburst', 2, '回廊护符', {'hit_burst': 1, 'dodge_burst': 1, 'burst_mult': 0.9}),
+    'L10': ('q05', 'charm', 'burst', 'dodgeburst', 2, '回廊护符', {'hit_burst': 1, 'dodge_burst': 1, 'burst_mult': 0.93}),  # D184: 0.9 → 0.93 (无轮换 W30 +0.75 → +0.20 with L07+L10 worn day 1)
     'L11': ('q06', 'blade', 'any', 'guard', 2, '霜封长刀', {'skill_var': 1, 'skill_shield': 0.005, 'skill_shield_max': 0.01, 'skill_shield_secs': 5, 'skill_mult': 0.9, 'taken_boss': 1.05}),
     'L12': ('q06', 'charm', 'sustain', 'heal', 2, '统领护符', {'sustain_low': 0.4, 'sustain_low_every': -2, 'sustain_mult': 0.99}),
-    # ---- Stage 3 · Q07 (T3) — candidates, re-checked in stage 3
-    'L13': ('q07', 'blade', 'any', 'shape', 3, '炉锁巨锤', {'skill_var': 1, 'skill_charge': 0.5, 'skill_plus': 1}),
-    'L14': ('q07', 'charm', 'any', 'guard', 3, '炉芯护符', {'skill_var': 1, 'skill_shield': 0.02, 'skill_shield_max': 0.06, 'skill_shield_secs': 6, 'taken_mob': 1.03}),
-    'L15': ('q07', 'charm', 'scorch', 'burn', 3, '锈轨余火', {'burn_ticks': 1, 'burn_mult': 0.8}),
+    # ---- Stage 3 · Q07 (T3) — D184 (CoreRpg 1.65.18), swept on seeds 13/17 (out-d174-mainline.md §N)
+    'L13': ('q07', 'blade', 'any', 'shape', 3, '炉锁巨锤', {'skill_var': 1, 'skill_charge': 0.5, 'skill_plus': 1}),  # charge 0.25–0.45 (± ×1.1–1.3) → +2.3～+9.9 at q06c/q07c burst; 0.5 kept
+    'L14': ('q07', 'charm', 'any', 'guard', 3, '炉芯护符', {'skill_var': 1, 'skill_shield': 0.004, 'skill_shield_max': 0.008, 'skill_shield_secs': 4, 'potion': 0.95}),  # draft 2%/6% +37 pp; taken_mob cost unmodelled on boss cells
+    'L15': ('q07', 'charm', 'scorch', 'burn2', 3, '锈轨余火', {'burn_ticks': 1, 'burn_mult': 0.97}),  # +1 tick alone = 0.0 (bosses keep the burn refreshed); draft ×0.8 −2.8 mean
 }
+
+# Stage 3 · Q07 签名调律 (Java EmberSignature.ALTS): '<id>b' = same benefit, another cost (full key set). Players pick the
+# version per run (town only) → the gate is on the per-cell BEST of (original, alt) — tools: bestof via `try`, econ ids 'L01b'.
+ALTS = {
+    'L01b': {'burn_spread': 2, 'spread_icd': 10, 'dmg_boss': 0.98},
+    'L02b': {'dodge_heal': 0.01, 'dodge_icd': 15, 'potion': 0.95},
+    'L06b': {'potion': 1.05, 'taken_tele': 1.10},
+    'L08b': {'skill_var': 1, 'skill_ignite': 1, 'skill_ignite_n': 1, 'skill_burn': 1.0, 'dmg_boss': 0.98},
+    'L10b': {'hit_burst': 1, 'dodge_burst': 1, 'taken_tele': 1.03},
+    'L11b': {'skill_var': 1, 'skill_shield': 0.005, 'skill_shield_max': 0.01, 'skill_shield_secs': 5, 'skill_mult': 0.9, 'taken_tele': 1.14},  # ×1.12: + L02 +3.1 / + L10 +3.2 / sustain + L02 +3.2
+    'L12b': {'sustain_low': 0.4, 'sustain_low_every': -2, 'taken_boss': 1.02},
+}
+
+
+def modsof(i):
+    """mods of a signature id, of its 调律 version ('L01b'), or an inline mods dict (econ candidate checks)"""
+    if isinstance(i, dict):
+        return i
+    return ALTS[i] if i in ALTS else SIGS[i][6]
 
 
 def staged():
@@ -69,7 +88,7 @@ def fams_of(sid):
 
 def combine(ids):
     import growth
-    return growth.combine([SIGS[i][6] for i in ids])
+    return growth.combine([modsof(i) for i in ids])
 
 
 def legal_pairs(fam):
@@ -179,7 +198,7 @@ def main():
             for f in FAMS:
                 V[('tal', f)] = (f, None, TALENTS[f])
                 for pr in best.get(f, []):  # EXCL applied (ML_NOEXCL=1: diagnostic without it)
-                    ids = [i for i in pr.split('+') if os.environ.get('ML_NOEXCL') or EXCL.get(i) not in TALENTS[f]]
+                    ids = [i for i in pr.split('+') if os.environ.get('ML_NOEXCL') or EXCL.get(i[:3]) not in TALENTS[f]]
                     V[(pr + ('+tal!' if os.environ.get('ML_NOEXCL') else '+tal'), f)] = (f, combine(ids) if ids else None, TALENTS[f])
         for f in FAMS:  # names repeat across families → one batch per family
             run({nm: v for (nm, ff), v in V.items() if ff == f}, n, out)
@@ -223,9 +242,9 @@ def main():
         rest = sys.argv[3:]
         if ids:
             if isinstance(ids, dict):  # {"scorch": ["L01", "L02"], ...}: the pair each family wears
-                parts = {f: [SIGS[i][6] for i in ids.get(f, [])] for f in FAMS}
+                parts = {f: [modsof(i) for i in ids.get(f, [])] for f in FAMS}
             else:
-                parts = {f: [SIGS[i][6] for i in ids if f in fams_of(i)] for f in FAMS}
+                parts = {f: [modsof(i) for i in ids if f in fams_of(i[:3])] for f in FAMS}
             import growth
 
             def fn(info, ctx):

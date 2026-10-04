@@ -1731,6 +1731,7 @@ public final class EmberRunService implements Listener {
                     if ("fc_sigmark".equals(r.key)) { // D174: the first clear of a signature map also announces its new unlock
                         String un = EmberSignature.IMPRINT_UNLOCK.equals(g.id) ? "烬炉烙印（用徽记把签名烙到自己的件上）"
                                 : EmberSignature.DUAL_UNLOCK.equals(g.id) ? "双签名（刃 + 护符两条签名同时生效）"
+                                : EmberSignature.ALT_UNLOCK.equals(g.id) ? "签名调律（7 件签名多一个换代价的调律版，" + EmberSignature.ALT_MARKS + " 枚那张图的徽记解锁）+ Q07 签名"
                                 : "签名传奇（重打这张图掉它首领的签名件和徽记）";
                         town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新解锁：§e" + un + " ", "[打开签名页]", "/corerpg p1 sig menu", "签名图鉴、首领徽记、烙印、开关签名");
                         p.sendMessage(P + "§7不用打命令：主菜单 → 装备 → 签名传奇"); // stage 1.5 one-line hint
@@ -2669,7 +2670,7 @@ public final class EmberRunService implements Listener {
 
     /** D174 stage 2b: the mode a map's first clear opens (null = none yet live) */
     static String modeUnlock(String mapKey) {
-        if (PLEDGE_UNLOCK.equals(mapKey)) return "自选誓约（重打已首通的 Q01–Q06 普通版时自己挂规则，每条 +1 本图徽记）";
+        if (PLEDGE_UNLOCK.equals(mapKey)) return "自选誓约（重打已首通的 Q01–Q07 普通版时自己挂规则，每条 +1 本图徽记）";
         if ("q04".equals(mapKey)) return "首领残响（每周 3 次单独再打 Q01–Q04 的强化首领，每次 2 枚那张图的徽记）";
         if ("q05".equals(mapKey)) return "连战·前哨（Q01→Q02→Q03 三首领连战，每周领一次：每张图 2 枚徽记 + 1 枚 T2 印记）";
         return null;
@@ -2699,7 +2700,7 @@ public final class EmberRunService implements Listener {
 
     /**
      * the session modifier for the leader's pledge, or null: leader's own Q06 first clear, a repeat NORMAL run of a
-     * signature map (Q01–Q06 — the pledge pays that map's insignia), every member already first-cleared it.
+     * signature map (Q01–Q07 — the pledge pays that map's insignia), every member already first-cleared it.
      */
     String pledgeKey(Player leader, EmberRunMaps.MapDef m, List<Player> party) {
         PlayerData d = data(leader.getUniqueId());
@@ -2777,7 +2778,7 @@ public final class EmberRunService implements Listener {
         if (l.isEmpty()) return "§7现在没挂规则（重打按原样）";
         StringBuilder b = new StringBuilder();
         for (EmberRunMaps.Modifier m : l) b.append(b.length() == 0 ? "" : "+").append(m.name);
-        return "§d已挂：" + b + " §7· 你当队长重打已首通的 Q01–Q06 普通版时生效，每条 +1 本图徽记（本周精选图的周规则那天优先）";
+        return "§d已挂：" + b + " §7· 你当队长重打已首通的 Q01–Q07 普通版时生效，每条 +1 本图徽记（本周精选图的周规则那天优先）";
     }
 
     /** D144 /corerpg p1 rush [go] — the rule, this week's entry, the weekly fastest board; go = enter. */
