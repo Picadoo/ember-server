@@ -902,6 +902,186 @@ public final class EmberItemStore {
         });
     }
 
+    // ------------------------------------------------------------------ D172: durable payment for undo / mark redeem / reroll
+
+    /**
+     * D172: refund holds for several requests in ONE DB transaction (a batch undo pays once for all its pieces): all
+     * inserted, or none (any request with a hold still in flight → nothing). cb(ok) on the main thread.
+     */
+    public void insertHoldsAll(final UUID owner, final Map<String, List<Owed>> owed, final Consumer<Boolean> cb) {
+        if (!usable()) { cb.accept(false); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            boolean ok = false;
+            Connection c = null;
+            try {
+                c = plugin.getMysqlStorage().getConnection();
+                c.setAutoCommit(false);
+                boolean good = true;
+                for (Map.Entry<String, List<Owed>> e : owed.entrySet()) {
+                    if (e.getValue() == null || e.getValue().isEmpty()) continue;
+                    int base = 0;
+                    boolean inFlight = false;
+                    try (PreparedStatement ps = c.prepareStatement("SELECT status,idx FROM cr_p1_delivery WHERE owner_uuid=? AND request_id=? FOR UPDATE")) {
+                        ps.setString(1, owner.toString());
+                        ps.setString(2, holdId(e.getKey()));
+                        try (ResultSet rs = ps.executeQuery()) {
+                            while (rs.next()) { if ("hold".equals(rs.getString(1))) inFlight = true; base = Math.max(base, (rs.getInt(2) / 16 + 1) * 16); }
+                        }
+                    }
+                    if (inFlight || insertOwed(c, owner, holdId(e.getKey()), e.getValue(), "hold", base) != e.getValue().size()) { good = false; break; }
+                }
+                if (good) { c.commit(); ok = true; } else c.rollback();
+            } catch (Throwable t) {
+                try { if (c != null) c.rollback(); } catch (Throwable ignored) {}
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] refund holds " + owed.keySet() + ": " + t.getMessage());
+            } finally {
+                if (c != null) {
+                    try { c.setAutoCommit(true); } catch (Throwable ignored) {}
+                    try { c.close(); } catch (Throwable ignored) {}
+                }
+            }
+            health(ok ? TxnStatus.OK : TxnStatus.ERROR);
+            final boolean r = ok;
+            sync(() -> cb.accept(r));
+        });
+    }
+
+    private interface TxnBody { TxnResult run(Connection c, long now) throws SQLException; }
+
+    /** commitTxn's frame (faults, COMMIT / rollback, Duplicate → replay, main-thread callback) around another body */
+    private void runTxn(final String rid, final String kind, final UUID owner, final TxnBody body, final Consumer<TxnResult> cb) {
+        if (!usable()) { cb.accept(new TxnResult(TxnStatus.ERROR, "MySQL 不可用")); return; }
+        ensureSchema();
+        final boolean failBefore = EmberFaults.fire(owner, EmberFaults.BEFORE_COMMIT);
+        final boolean dropCb = !failBefore && EmberFaults.fire(owner, EmberFaults.AFTER_COMMIT);
+        exec().submit(() -> {
+            TxnResult res;
+            Connection c = null;
+            try {
+                c = plugin.getMysqlStorage().getConnection();
+                c.setAutoCommit(false);
+                try (PreparedStatement ps = c.prepareStatement("SELECT note FROM cr_p1_txn WHERE request_id=?")) {
+                    ps.setString(1, rid);
+                    try (ResultSet rs = ps.executeQuery()) { res = rs.next() ? new TxnResult(TxnStatus.REPLAY, rs.getString(1)) : null; }
+                }
+                if (res == null) res = body.run(c, System.currentTimeMillis());
+                if (res.status == TxnStatus.OK && failBefore) throw new SQLException("TEST FAULT before_commit");
+                if (res.status == TxnStatus.OK) c.commit(); else c.rollback();
+            } catch (Throwable t) {
+                try { if (c != null) c.rollback(); } catch (Throwable ignored) {}
+                String m = t.getMessage() == null ? t.getClass().getSimpleName() : t.getMessage();
+                res = m.contains("Duplicate") ? new TxnResult(TxnStatus.REPLAY, "并发重复请求") : new TxnResult(TxnStatus.ERROR, m);
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] txn " + kind + " " + rid + " failed: " + m);
+            } finally {
+                if (c != null) {
+                    try { c.setAutoCommit(true); } catch (Throwable ignored) {}
+                    try { c.close(); } catch (Throwable ignored) {}
+                }
+            }
+            final TxnResult r = res;
+            health(r.status);
+            if (dropCb && r.status == TxnStatus.OK) {
+                plugin.getLogger().warning("[" + EmberMode.MODE_ID + "] TEST FAULT after_commit: txn " + kind + " " + rid + " committed, callback held 10 s");
+                if (plugin.isEnabled()) Bukkit.getScheduler().runTaskLater(plugin, () -> cb.accept(r), 200L);
+                return;
+            }
+            if (plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> cb.accept(r));
+        });
+    }
+
+    private static void ledger(Connection c, String rid, String kind, UUID owner, String uidA, String before, String after,
+                               String costJson, String note, long now) throws SQLException {
+        try (PreparedStatement ps = c.prepareStatement(
+                "INSERT INTO cr_p1_txn (request_id,kind,owner_uuid,uid_a,uid_b,before_json,after_json,cost_json,result,note,created_at)"
+                        + " VALUES (?,?,?,?,NULL,?,?,?,'ok',?,?)")) {
+            ps.setString(1, rid); ps.setString(2, kind); ps.setString(3, owner.toString()); ps.setString(4, uidA);
+            ps.setString(5, before); ps.setString(6, after);
+            if (costJson == null) ps.setNull(7, Types.VARCHAR); else ps.setString(7, costJson);
+            String nt = note == null ? null : (note.length() > 250 ? note.substring(0, 250) : note);
+            if (nt == null) ps.setNull(8, Types.VARCHAR); else ps.setString(8, nt);
+            ps.setLong(9, now);
+            ps.executeUpdate();
+        }
+    }
+
+    private static void voidHold(Connection c, UUID owner, String rid, long now) throws SQLException {
+        try (PreparedStatement ps = c.prepareStatement("UPDATE cr_p1_delivery SET status='void',reason='committed',updated_at=?"
+                + " WHERE owner_uuid=? AND request_id=? AND status='hold'")) {
+            ps.setLong(1, now);
+            ps.setString(2, owner.toString());
+            ps.setString(3, holdId(rid));
+            ps.executeUpdate();
+        }
+    }
+
+    /**
+     * D172 (forge review X1 / X4): a NEW item paid up front (mark redemption) — item row (active, owner), ledger row,
+     * the owed lines (the piece itself as a gear delivery) and the void of the refund hold in ONE DB transaction.
+     */
+    public void commitCreate(final String rid, final String kind, final UUID owner, final EmberItemData d, final String costJson,
+                             final String note, final List<Owed> owed, final Consumer<TxnResult> cb) {
+        runTxn(rid, kind, owner, (c, now) -> {
+            try (PreparedStatement ps = c.prepareStatement("SELECT state FROM cr_p1_item WHERE item_uid=? FOR UPDATE")) {
+                ps.setString(1, d.uid);
+                try (ResultSet rs = ps.executeQuery()) { if (rs.next()) return new TxnResult(TxnStatus.CONFLICT, "物品编号已存在 " + d.uid.substring(0, 8)); }
+            }
+            try (PreparedStatement ps = c.prepareStatement(
+                    "INSERT INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at)"
+                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'active',?,?)")) {
+                int i = 1;
+                ps.setString(i++, d.uid); ps.setString(i++, owner.toString()); ps.setString(i++, d.ni); ps.setString(i++, d.family);
+                ps.setString(i++, d.slot); ps.setInt(i++, d.tier); ps.setInt(i++, d.quality); ps.setInt(i++, d.craft);
+                ps.setInt(i++, d.enhance); ps.setInt(i++, d.pity); ps.setInt(i++, d.bound ? 1 : 0); ps.setString(i++, d.source);
+                ps.setInt(i++, d.version); ps.setInt(i++, d.rev); ps.setLong(i++, now); ps.setLong(i, now);
+                ps.executeUpdate();
+            }
+            ledger(c, rid, kind, owner, d.uid, "[null]", json(d), costJson, note, now);
+            if (owed != null && !owed.isEmpty()) insertOwed(c, owner, rid, owed);
+            voidHold(c, owner, rid, now);
+            return new TxnResult(TxnStatus.OK, null);
+        }, cb);
+    }
+
+    /**
+     * D172 (X15): a payment that buys no item change by itself (affix reroll with shards: the result lives in PlayerData)
+     * — ledger row + void of the refund hold in one DB transaction. The row is what makes the paid roll "owed".
+     */
+    public void commitPlain(final String rid, final String kind, final UUID owner, final String uidA, final String costJson,
+                            final String note, final Consumer<TxnResult> cb) {
+        runTxn(rid, kind, owner, (c, now) -> {
+            ledger(c, rid, kind, owner, uidA, "[null]", "[null]", costJson, note, now);
+            voidHold(c, owner, rid, now);
+            return new TxnResult(TxnStatus.OK, null);
+        }, cb);
+    }
+
+    /** D172: "committed" (ledger row exists) / "hold" (its refund hold still open) / "none"; null when unreadable */
+    public void txnState(final UUID owner, final String rid, final Consumer<String> cb) {
+        if (!usable()) { cb.accept(null); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            String st = null;
+            try (Connection c = plugin.getMysqlStorage().getConnection()) {
+                try (PreparedStatement ps = c.prepareStatement("SELECT 1 FROM cr_p1_txn WHERE request_id=?")) {
+                    ps.setString(1, rid);
+                    try (ResultSet rs = ps.executeQuery()) { if (rs.next()) st = "committed"; }
+                }
+                if (st == null) try (PreparedStatement ps = c.prepareStatement(
+                        "SELECT COUNT(*) FROM cr_p1_delivery WHERE owner_uuid=? AND request_id=? AND status='hold'")) {
+                    ps.setString(1, owner.toString());
+                    ps.setString(2, holdId(rid));
+                    try (ResultSet rs = ps.executeQuery()) { st = rs.next() && rs.getInt(1) > 0 ? "hold" : "none"; }
+                }
+            } catch (Throwable t) {
+                st = null;
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] txn state " + rid + ": " + t.getMessage());
+            }
+            final String r = st;
+            sync(() -> cb.accept(r));
+        });
+    }
+
     /** Full DB row as item data (+ owner/state), for re-syncing a stale NBT copy. */
     public static final class FullRow {
         public final EmberItemData data;

@@ -61,7 +61,10 @@ public final class EmberForgeService implements Listener {
     /** refunds that could not be handed out because the player had left (in memory; logged) */
     private final Map<UUID, List<Cost>> pendingRefunds = new HashMap<UUID, List<Cost>>();
 
+    private final EmberPay pay;
+
     public EmberForgeService(CoreRpgPlugin plugin, EmberLoadoutService loadouts) {
+        this.pay = new EmberPay(plugin, loadouts);
         this.plugin = plugin;
         this.loadouts = loadouts;
     }
@@ -175,21 +178,6 @@ public final class EmberForgeService implements Listener {
         return out;
     }
 
-    /** Checks everything first, then takes all of it; on any partial failure gives back what was taken. */
-    private String pay(Player p, Cost c) {
-        List<String> lack = lacking(p, c);
-        if (!lack.isEmpty()) return "材料不足（未扣除、未抽取、保底不变）: " + String.join("，", lack);
-        Map<String, Integer> taken = new LinkedHashMap<String, Integer>();
-        for (Map.Entry<String, Integer> m : c.materials().entrySet()) {
-            int got = ni().consume(p, m.getKey(), m.getValue());
-            taken.put(m.getKey(), got);
-            if (got < m.getValue()) { giveBack(p, taken, 0); return "扣除材料失败，已退回"; }
-        }
-        PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
-        if (c.coins > 0 && (pd == null || !pd.takeCoin(c.coins))) { giveBack(p, taken, 0); return "扣除余烬币失败，已退回"; }
-        return null;
-    }
-
     /** D162: the cost as owed refund lines (materials + coins) */
     private static List<EmberItemStore.Owed> owedRefund(Cost c, String note) {
         List<EmberItemStore.Owed> l = new ArrayList<EmberItemStore.Owed>();
@@ -210,33 +198,8 @@ public final class EmberForgeService implements Listener {
         if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "材料不足（未扣除、未抽取、保底不变）: " + String.join("，", lack)); return; }
         String hold = EmberAssetGuard.hold(p);
         if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return; }
-        final List<EmberItemStore.Owed> owed = owedRefund(cost, "锻造没完成，退回");
-        if (!store().usable() || owed.isEmpty()) {
-            String err = pay(p, cost);
-            if (err != null) { p.sendMessage(P + ChatColor.RED + err); return; }
-            go.run();
-            return;
-        }
-        final UUID id = p.getUniqueId();
-        store().insertHolds(id, rid, owed, ok -> {
-            if (!p.isOnline()) { store().voidHolds(id, rid); return; }
-            if (!ok) { p.sendMessage(P + ChatColor.RED + "这次请求正在处理或数据库暂时写不进去，没有扣材料，稍后再试"); return; }
-            String err = pay(p, cost);
-            if (err != null) { store().voidHolds(id, rid); p.sendMessage(P + ChatColor.RED + err); return; }
-            PlayerData pd = plugin.getDataStore().get(id);
-            // saved with the deduction: "this cost was really taken" — one count per refund line, each refunded line takes one
-            if (pd != null) pd.addPeriodCount(EmberDelivery.paidMarker(rid), "1", owed.size() - pd.periodCount(EmberDelivery.paidMarker(rid), "1"));
-            boolean saved = pd != null && plugin.getDataStore().save(id, pd);
-            EmberVault.savePlayerFile(p);
-            if (!saved) { // deduction not durable: undo it in memory, drop the hold, do nothing
-                if (pd != null) pd.addPeriodCount(EmberDelivery.paidMarker(rid), "1", -pd.periodCount(EmberDelivery.paidMarker(rid), "1"));
-                giveBack(p, cost.materials(), cost.coins);
-                store().voidHolds(id, rid);
-                p.sendMessage(P + ChatColor.RED + "存档写入失败，已退回材料，没有锻造");
-                return;
-            }
-            go.run();
-        });
+        // D172: the same hold → pay + save → commit path now lives in EmberPay (shared with undo / mark redeem / reroll)
+        pay.pay(p, rid, EmberPay.Price.of(cost), "锻造没完成，退回", null, go, err -> { if (p.isOnline()) p.sendMessage(P + ChatColor.RED + err); });
     }
 
     private void giveBack(Player p, Map<String, Integer> mats, int coins) {
@@ -402,6 +365,11 @@ public final class EmberForgeService implements Listener {
      * (the stack is put back).
      */
     public void consumeForReroll(Player p, int index, EmberItemData dup, String note, java.util.function.Consumer<Boolean> cb) {
+        consumeForReroll(p, index, dup, note, null, cb);
+    }
+
+    /** D172: {@code rid} = the paid reroll's request id → this retire is the transaction that settles its payment */
+    public void consumeForReroll(Player p, int index, EmberItemData dup, String note, String rid, java.util.function.Consumer<Boolean> cb) {
         String g = gate(p);
         if (g != null) { p.sendMessage(P + ChatColor.RED + g); cb.accept(false); return; }
         ItemStack st = p.getInventory().getItem(index);
@@ -411,7 +379,7 @@ public final class EmberForgeService implements Listener {
             cb.accept(false);
             return;
         }
-        String r = "reroll:" + dup.uid + ":" + dup.rev;
+        String r = rid != null ? rid : "reroll:" + dup.uid + ":" + dup.rev;
         if (replayed(p, r)) { cb.accept(false); return; }
         final ItemStack original = st.clone();
         p.getInventory().setItem(index, null);

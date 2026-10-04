@@ -13,10 +13,13 @@ import java.util.concurrent.ConcurrentHashMap;
  *   <li>{@code after_commit} — the next transaction commits, its main-thread callback runs 10 s late: disconnect in that
  *   window = the player left between COMMIT and the callback; kill -9 in that window = crash after commit</li>
  *   <li>{@code after_deliver} — the next delivery is applied and saved, its DB ack is skipped (= crash before ack)</li>
+ *   <li>{@code after_pay} — D172: the next durable payment ({@link EmberPay}) is taken and saved, then the transaction
+ *   that settles it starts 10 s late: kill -9 in that window = crash between payment and commit (→ refund at join);
+ *   disconnect in that window = the player left with the payment taken (→ the op still commits or is refunded)</li>
  * </ul>
  */
 public final class EmberFaults {
-    public static final String BEFORE_COMMIT = "before_commit", AFTER_COMMIT = "after_commit", AFTER_DELIVER = "after_deliver";
+    public static final String BEFORE_COMMIT = "before_commit", AFTER_COMMIT = "after_commit", AFTER_DELIVER = "after_deliver", AFTER_PAY = "after_pay";
     private static final Map<UUID, String> armed = new ConcurrentHashMap<UUID, String>();
 
     private EmberFaults() {}
@@ -26,7 +29,7 @@ public final class EmberFaults {
     public static boolean arm(UUID id, String point) {
         if (!enabled() || id == null) return false;
         if (point == null || "clear".equals(point)) { armed.remove(id); return true; }
-        if (!BEFORE_COMMIT.equals(point) && !AFTER_COMMIT.equals(point) && !AFTER_DELIVER.equals(point)) return false;
+        if (!BEFORE_COMMIT.equals(point) && !AFTER_COMMIT.equals(point) && !AFTER_DELIVER.equals(point) && !AFTER_PAY.equals(point)) return false;
         armed.put(id, point);
         return true;
     }

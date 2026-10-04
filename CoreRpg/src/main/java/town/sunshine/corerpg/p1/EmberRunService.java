@@ -2698,6 +2698,9 @@ public final class EmberRunService implements Listener {
             return true;
         }
         if (freeSlots(p) <= 0) { p.sendMessage(P + ChatColor.RED + "背包已满，空出一格再兑换。"); return true; }
+        EmberPay pay = EmberPay.get();
+        if (pay != null && pay.durable()) return redeemDurable(p, pay, fam, slot, tier);
+        // YAML storage (no MySQL): the old in-memory path
         d.addPeriodCount(C_MARK + tier, "all", -EmberRunRules.MARKS_PER_EXCHANGE);
         String run = "mark-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(1296), 36);
         String uid = EmberRunRules.rewardUid(rnd.nextLong(), p.getUniqueId().toString(), run, "mark_item");
@@ -2706,6 +2709,49 @@ public final class EmberRunService implements Listener {
         p.sendMessage(P + "§a已用 " + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记兑换 " + EmberItemData.familyName(fam)
                 + EmberItemData.slotName(slot) + "（剩余 " + marks(d, tier) + "）");
         deliver(p);
+        return true;
+    }
+
+    private final java.util.Set<UUID> redeemBusy = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
+
+    /**
+     * D172 (forge review X1 / X4): mark redemption on the durable payment path. Refund hold (marks) → 8 marks taken +
+     * paid marker in one save → ONE DB transaction: item row (active) + ledger row (kind mark_redeem) + the piece as a
+     * gear delivery + void of the hold. The piece reaches the backpack through EmberDelivery (exactly once by uid).
+     * Crash before the commit → marks refunded at join; after it → the piece delivered at join.
+     */
+    private boolean redeemDurable(final Player p, final EmberPay pay, final String fam, final String slot, final int tier) {
+        final UUID id = p.getUniqueId();
+        if (!redeemBusy.add(id)) { p.sendMessage(P + "§c上一次兑换还在处理"); return true; }
+        final String rid = EmberPayRules.redeemRid(id, System.currentTimeMillis(), rnd.nextInt(46656));
+        final String uid = EmberRunRules.rewardUid(rnd.nextLong(), id.toString(), rid, "mark_item");
+        final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, 0, 0, 0, 0, true, "drop",
+                EmberItemData.DATA_VERSION, 0);
+        final EmberPay.Price price = EmberPay.Price.marks(tier, EmberRunRules.MARKS_PER_EXCHANGE);
+        final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
+        pay.pay(p, rid, price, "兑换没完成，退回印记", null, () ->
+                loadouts.store().commitCreate(rid, "mark_redeem", id, item, price.json(),
+                        "印记兑换 T" + tier + " " + label + "（" + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记）",
+                        java.util.Arrays.asList(EmberItemStore.Owed.gear(uid, "印记兑换 T" + tier + " " + label)), res -> {
+                            redeemBusy.remove(id);
+                            Player q = Bukkit.getPlayer(id);
+                            if (res.status == EmberItemStore.TxnStatus.OK) {
+                                pay.settled(id, rid);
+                                log().info("[P1 run] " + id + " mark redeem " + rid + " T" + tier + " " + fam + " " + slot + " → " + uid);
+                                if (q != null) {
+                                    PlayerData qd = data(id);
+                                    q.sendMessage(P + "§a已用 " + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记兑换 " + label
+                                            + "（剩余 " + (qd == null ? "?" : String.valueOf(marks(qd, tier))) + "）");
+                                    EmberGearLib gl = EmberGearLib.get();
+                                    if (gl != null) gl.delivery().kick(q);
+                                }
+                            } else {
+                                pay.release(id, rid); // not committed → the 8 marks come back once
+                                log().warning("[P1 run] " + id + " mark redeem " + rid + " not committed: " + res.status + " " + res.detail);
+                                if (q != null) q.sendMessage(P + ChatColor.RED + "兑换没完成（" + res.status + "），" + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记会退回");
+                            }
+                        }),
+                err -> { redeemBusy.remove(id); if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有兑换：" + err); });
         return true;
     }
 

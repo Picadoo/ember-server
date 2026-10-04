@@ -101,7 +101,7 @@ public final class EmberDelivery {
         final Delivery d = rows.get(i);
         final Runnable next = () -> step(p, rows, i + 1, left);
         if (EmberAssetGuard.frozen(p.getUniqueId()) || EmberAssetGuard.paused()) { left[0]++; next.run(); return; }
-        if ("mat".equals(d.kind) || "coin".equals(d.kind)) { mat(p, d, left, next); return; }
+        if ("mat".equals(d.kind) || "coin".equals(d.kind) || "mark".equals(d.kind)) { mat(p, d, left, next); return; }
         if ("gear".equals(d.kind)) { gear(p, d, left, next); return; }
         store().ackDelivery(d.id, "void", "unknown kind " + d.kind, ok -> next.run());
     }
@@ -121,8 +121,22 @@ public final class EmberDelivery {
             plugin.getLogger().warning("[P1 delivery] " + p.getName() + " refund " + d.request + " void: the cost was never saved");
             return;
         }
-        String name = "coin".equals(d.kind) ? "余烬币" : plugin.getNiBridge().displayName(d.item);
-        if (!applied && "coin".equals(d.kind)) {
+        if ("mark".equals(d.kind) && !EmberPayRules.markItem(d.item)) { // D172: only the forge mark counters t1..t3
+            store().ackDelivery(d.id, "void", "bad mark item " + d.item, ok -> next.run());
+            return;
+        }
+        String name = "coin".equals(d.kind) ? "余烬币" : "mark".equals(d.kind) ? d.item.toUpperCase(java.util.Locale.ROOT) + " 锻造印记" : plugin.getNiBridge().displayName(d.item);
+        if (!applied && "mark".equals(d.kind)) { // D172 (forge review X4): marks refunded in the same save as the row marker
+            String k = EmberPayRules.markCounter(d.item);
+            if (d.amount > 0) pd.addPeriodCount(k, "all", (int) d.amount);
+            else if (d.amount < 0) {
+                int have = pd.periodCount(k, "all"), take = (int) Math.min(have, -d.amount);
+                if (take < -d.amount) plugin.getLogger().warning("[P1 delivery] " + p.getName() + " mark debit " + d.request + " short: " + take + "/" + (-d.amount));
+                pd.addPeriodCount(k, "all", -take);
+            }
+            tell(p, (d.amount > 0 ? ChatColor.GREEN + "退回 " : "扣回 ") + name + " ×" + Math.abs(d.amount) + ChatColor.GRAY + "（" + why(d) + "）");
+            pd.addPeriodCount(mk, "1", 1);
+        } else if (!applied && "coin".equals(d.kind)) {
             if (d.amount > 0) pd.addCoin((int) d.amount);
             else if (d.amount < 0 && !pd.takeCoin((int) -d.amount)) plugin.getLogger().warning("[P1 delivery] " + p.getName() + " coin debit " + d.request + " short");
             tell(p, (d.amount > 0 ? ChatColor.GREEN + "退回 " : "扣回 ") + name + " ×" + Math.abs(d.amount) + ChatColor.GRAY + "（" + why(d) + "）");

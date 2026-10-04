@@ -192,6 +192,11 @@ public final class EmberGearLib implements Listener {
      * no blanks — same ledger exclusion as inventory consumeForReroll). Removes the row from the cache on OK.
      */
     public void consumeForReroll(final Player p, final String uid, final String note, final java.util.function.Consumer<Boolean> cb) {
+        consumeForReroll(p, uid, note, null, cb);
+    }
+
+    /** D172: {@code rid} = the paid reroll's request id → this retire is the transaction that settles its payment */
+    public void consumeForReroll(final Player p, final String uid, final String note, final String rid, final java.util.function.Consumer<Boolean> cb) {
         if (p == null || uid == null || cb == null) { if (cb != null) cb.accept(false); return; }
         String g = gate(p);
         if (g != null) { p.sendMessage(P + ChatColor.RED + g); cb.accept(false); return; }
@@ -203,7 +208,7 @@ public final class EmberGearLib implements Listener {
         if (busy.contains(uid)) { p.sendMessage(P + ChatColor.RED + "这件正在处理中"); cb.accept(false); return; }
         busy.add(uid);
         final String n = note == null ? ("洗练用掉装备库重复件 " + e.d.shortLabel()) : note;
-        store().commitTxn("reroll:" + e.d.uid + ":" + e.d.rev, "reroll", id,
+        store().commitTxn(rid != null ? rid : "reroll:" + e.d.uid + ":" + e.d.rev, "reroll", id,
                 Arrays.asList(new TxnItem(e.d, null, "dismantled", "stored")),
                 null, n, res -> {
                     busy.remove(uid);
@@ -516,24 +521,31 @@ public final class EmberGearLib implements Listener {
             final int y = EmberUpgradeRules.dismantleYield(d);
             int have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
             if (have < y) { p.sendMessage(P + ChatColor.RED + "撤销要退回胚料 ×" + y + "，背包 + 仓库只有 " + have); return; }
+            EmberPay pay = EmberPay.get();
+            if (pay == null) { p.sendMessage(P + ChatColor.RED + "撤销暂不可用（服务未就绪）"); return; }
             busy.add(d.uid);
-            // D162 (A01): nothing taken up front; the blanks to return are a debit delivery row of the same transaction
-            store().commitTxn("undo:" + d.uid + ":" + d.rev, "undo", id, Arrays.asList(new TxnItem(d, null, "stored", "dismantled")),
-                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（退回胚料×" + y + "，回到装备库）",
-                    y > 0 ? Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, -y, "撤销分解 " + d.shortLabel())) : null, res -> {
+            // D172 (forge review X5): the blanks are taken UP FRONT (refund hold → take + save → commit, which voids the hold).
+            // The old "debit row after the commit" let blanks spent in between go "debit short" (piece back + blanks kept).
+            final String rid = EmberPayRules.undoRid(d.uid, d.rev);
+            pay.pay(p, rid, EmberPay.Price.of(new EmberUpgradeRules.Cost(0, 0, y, 0, 0)), "撤销分解没成功，退回胚料", null, () ->
+                    store().commitTxn(rid, "undo", id, Arrays.asList(new TxnItem(d, null, "stored", "dismantled")),
+                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（退回胚料×" + y + "，回到装备库）", null, res -> {
                         busy.remove(d.uid);
                         Player q = Bukkit.getPlayer(id);
                         if (res.status == TxnStatus.OK) {
+                            pay.settled(id, rid);
                             long t = System.currentTimeMillis();
                             loadouts.rememberRow(d.uid, id, d.rev + 1, "stored");
                             store().saveLibFlags(d.uid, id, false, false, t);
                             replace(id, d.uid, new Entry(d.withRev(d.rev + 1), false, false, t));
-                            plugin.getLogger().info("[P1 gearlib] undo dismantle " + id + " " + d.uid.substring(0, 8) + " blanks back " + y);
-                            if (q != null) { delivery.kick(q); q.sendMessage(P + ChatColor.GREEN + "已撤销：" + d.shortLabel() + " 回到装备库（主菜单 仓库 → 装备库）"); }
+                            plugin.getLogger().info("[P1 gearlib] undo dismantle " + id + " " + d.uid.substring(0, 8) + " blanks paid " + y);
+                            if (q != null) q.sendMessage(P + ChatColor.GREEN + "已撤销：" + d.shortLabel() + " 回到装备库（主菜单 仓库 → 装备库）" + ChatColor.GRAY + "，胚料 ×" + y + " 已扣");
                         } else {
-                            if (q != null) q.sendMessage(P + ChatColor.RED + "没有撤销（" + res.status + ": " + res.detail + "），没有扣胚料");
+                            pay.release(id, rid); // not committed → the blanks taken up front come back once
+                            if (q != null) q.sendMessage(P + ChatColor.RED + "没有撤销（" + res.status + ": " + res.detail + "），胚料 ×" + y + " 会退回");
                         }
-                    });
+                    }),
+                    err -> { busy.remove(d.uid); if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有撤销：" + err); });
         });
         return true;
     }
@@ -551,32 +563,44 @@ public final class EmberGearLib implements Listener {
         for (LibRow r : pick) need += EmberUpgradeRules.dismantleYield(r.data);
         int have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
         if (have < need) { p.sendMessage(P + ChatColor.RED + "整批撤销要退回胚料 ×" + need + "，背包 + 仓库只有 " + have + "（可以一件一件撤销）"); return; }
+        final EmberPay pay = EmberPay.get();
+        if (pay == null) { p.sendMessage(P + ChatColor.RED + "撤销暂不可用（服务未就绪）"); return; }
         final UUID id = p.getUniqueId();
-        final int[] left = {pick.size()}, ok = {0}, refund = {0};
-        for (final LibRow r : pick) {
-            final EmberItemData d = r.data;
-            final int y = EmberUpgradeRules.dismantleYield(d);
-            busy.add(d.uid);
-            store().commitTxn("undo:" + d.uid + ":" + d.rev, "undo", id, Arrays.asList(new TxnItem(d, null, "stored", "dismantled")),
-                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（整批，退回胚料×" + y + "，回到装备库）",
-                    y > 0 ? Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, -y, "整批撤销分解 " + d.shortLabel())) : null, res -> {
-                        busy.remove(d.uid);
-                        if (res.status == TxnStatus.OK) {
-                            long t = System.currentTimeMillis();
-                            loadouts.rememberRow(d.uid, id, d.rev + 1, "stored");
-                            store().saveLibFlags(d.uid, id, false, false, t);
-                            replace(id, d.uid, new Entry(d.withRev(d.rev + 1), false, false, t));
-                            ok[0]++;
-                        } else refund[0] += y;
-                        if (--left[0] == 0) {
-                            Player q = Bukkit.getPlayer(id);
-                            // D162: blanks are debited by the delivery rows of the pieces that did go back; failed ones cost nothing
-                            plugin.getLogger().info("[P1 gearlib] batch undo " + id + " " + ok[0] + "/" + pick.size() + " pieces, not charged " + refund[0]);
-                            if (q != null) delivery.kick(q);
-                            if (q != null) q.sendMessage(P + ChatColor.GREEN + "已整批撤销 " + ok[0] + " 件，回到装备库" + (refund[0] > 0 ? ChatColor.RED + "（" + (pick.size() - ok[0]) + " 件没撤成，这几件的胚料 ×" + refund[0] + " 没有扣）" : ""));
-                        }
-                    });
-        }
+        // D172 (X5): one payment for the whole batch (a hold per piece, all in one DB transaction; the total taken in one
+        // save), then one undo transaction per piece; a piece that does not commit gets its own blanks back
+        final java.util.LinkedHashMap<String, EmberPay.Price> parts = new java.util.LinkedHashMap<String, EmberPay.Price>();
+        for (LibRow r : pick) parts.put(EmberPayRules.undoRid(r.data.uid, r.data.rev), EmberPay.Price.of(new EmberUpgradeRules.Cost(0, 0, EmberUpgradeRules.dismantleYield(r.data), 0, 0)));
+        for (LibRow r : pick) busy.add(r.data.uid);
+        final int needF = need;
+        pay.payAll(p, parts, "整批撤销分解没成功，退回胚料", null, () -> {
+            final int[] left = {pick.size()}, ok = {0}, refund = {0};
+            for (final LibRow r : pick) {
+                final EmberItemData d = r.data;
+                final int y = EmberUpgradeRules.dismantleYield(d);
+                final String rid = EmberPayRules.undoRid(d.uid, d.rev);
+                store().commitTxn(rid, "undo", id, Arrays.asList(new TxnItem(d, null, "stored", "dismantled")),
+                        "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（整批，退回胚料×" + y + "，回到装备库）", null, res -> {
+                            busy.remove(d.uid);
+                            if (res.status == TxnStatus.OK) {
+                                pay.settled(id, rid);
+                                long t = System.currentTimeMillis();
+                                loadouts.rememberRow(d.uid, id, d.rev + 1, "stored");
+                                store().saveLibFlags(d.uid, id, false, false, t);
+                                replace(id, d.uid, new Entry(d.withRev(d.rev + 1), false, false, t));
+                                ok[0]++;
+                            } else { refund[0] += y; pay.release(id, rid); }
+                            if (--left[0] == 0) {
+                                Player q = Bukkit.getPlayer(id);
+                                plugin.getLogger().info("[P1 gearlib] batch undo " + id + " " + ok[0] + "/" + pick.size() + " pieces, blanks paid " + needF + ", refunded " + refund[0]);
+                                if (q != null) q.sendMessage(P + ChatColor.GREEN + "已整批撤销 " + ok[0] + " 件，回到装备库" + ChatColor.GRAY + "，胚料 ×" + (needF - refund[0]) + " 已扣"
+                                        + (refund[0] > 0 ? ChatColor.RED + "（" + (pick.size() - ok[0]) + " 件没撤成，这几件的胚料 ×" + refund[0] + " 会退回）" : ""));
+                            }
+                        });
+            }
+        }, err -> {
+            for (LibRow r : pick) busy.remove(r.data.uid);
+            if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有撤销：" + err);
+        });
     }
 
     // ================================================================== admin item history
@@ -602,7 +626,7 @@ public final class EmberGearLib implements Listener {
         }
         final String who = byUid ? "uid " + prefix : args[2];
         store().history(owner, prefix, n, rows -> {
-            s.sendMessage(P + "物品记录 " + who + "：" + rows.size() + " 条（新的在前；create 创建 · enhance/upgrade/refine/quality/swap 锻造 · dismantle 分解 · reroll 洗练吃掉 · stash/unstash 装备库 · glibdis 库内分解 · undo 撤销分解）");
+            s.sendMessage(P + "物品记录 " + who + "：" + rows.size() + " 条（新的在前；create 创建 · enhance/upgrade/refine/quality/swap 锻造 · dismantle 分解 · reroll 洗练（吃掉的重复件 / 碎片洗练记账）· mark_redeem 印记兑换 · stash/unstash 装备库 · glibdis 库内分解 · undo 撤销分解）");
             SimpleDateFormat f = new SimpleDateFormat("MM-dd HH:mm:ss", Locale.ROOT);
             f.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
             for (EmberItemStore.TxnRow r : rows)
@@ -614,11 +638,11 @@ public final class EmberGearLib implements Listener {
         return true;
     }
 
-    /** D162 test hook: /corerpg p1 fault <player> before_commit|after_commit|after_deliver|clear (CORERPG_TEST_FAULTS=1 only) */
+    /** D162 test hook: /corerpg p1 fault <player> before_commit|after_commit|after_deliver|after_pay|clear (CORERPG_TEST_FAULTS=1 only) */
     private boolean fault(CommandSender s, String[] args) {
         if (!s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
         if (!EmberFaults.enabled()) { s.sendMessage(P + "故障注入只在测试环境可用（启动时 CORERPG_TEST_FAULTS=1）"); return true; }
-        if (args.length < 4) { s.sendMessage(P + "/corerpg p1 fault <玩家> before_commit|after_commit|after_deliver|clear"); return true; }
+        if (args.length < 4) { s.sendMessage(P + "/corerpg p1 fault <玩家> before_commit|after_commit|after_deliver|after_pay|clear"); return true; }
         Player t = Bukkit.getPlayerExact(args[2]);
         if (t == null) { s.sendMessage(P + "玩家需在线"); return true; }
         String pt = args[3].toLowerCase(Locale.ROOT);
