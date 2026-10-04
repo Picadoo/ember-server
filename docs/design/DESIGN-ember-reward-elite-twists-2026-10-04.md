@@ -1,6 +1,6 @@
 # Ember 奖励精英变招 Pack 1（D182，设计-only，2026-10-04）
 
-> 状态：**已实现 CoreRpg 1.65.20 / balance_version 43**（`COORD-routine-0047` / branch `d182-elite`；未 push / 未 deploy，等 signin DEPLOY LOCK RELEASE）。
+> 状态：**已实现并上线 CoreRpg 1.65.20 / balance_version 43**（`COORD-routine-0047`；live jar sha256 `9be6bbb0…`，Paper 曾 PID 1150435；见 `docs/status/RELEASE-ember-1.65.20.md`）。
 > 前置：Extra.ELITE 现网（10% 权重、金皮木桩、`ELITE_SHARD=10` + `ELITE_CORE=1`）；形状库同 D140/D173（`circle`/`cone`/`line`/`charge`，`light`，warn≥1.2s，kb≤1）。
 > 研究：`docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`（D3 Champion/Rare、PoE、WoW M+、本服词缀/首领边界）。
 > 边界：词缀精英扩包 = D138/D176/D181；房间事件扩包 = D179；首领半血 = D173。**本包只动 Extra.ELITE 奖励精英。**

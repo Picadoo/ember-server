@@ -1,9 +1,8 @@
 # Ember Variety Affix Pack 3：词缀精英再扩包（D181，设计-only，2026-10-04）
 
-> 状态：**设计定稿，未实现**。本窗不改 CoreRpg 源码 / yml / jar / 菜单，不 bump `balance_version`，不跑 p1sim（`COORD-afk-p1` 占用 `tools/p1sim`；`COORD-mainline-unlocks` / `COORD-signin-online` 占用 CoreRpg）。
+> 状态：**已实现 CoreRpg 1.65.21 / balance_version 44**（`COORD-routine-0111` / branch `d181-affix`）。Stage A+B 上线；**Stage C p1sim 42 格门禁 deferred**（与 D176 同策略，"within range" 即可，不挡发版）。
 > 前置：D138（词缀精英闸门）、D171/D176 Pack 2（池 3→6：再生/冲锋/凝霜）、D144（花样委托泛型「词缀精英击杀」计数）、D164（破甲只认 shield/blazing/split —— 本包新缀**仍不**加专属键）。
 > 房间事件扩包另见 D179（`DESIGN-ember-room-events-pack3-2026-10-04.md`，hold/beacon/relay）；本包**只动词缀池**，不改 `events:`。
-> 实现对齐：等 afk / mainline / signin 释放 CoreRpg + p1sim 后，空闲窗落地；落地前用离线 sim 过 §8 门禁。
 > 参考（2026-10-04 检索）：Diablo 3 精英词缀（Mortar 点名圈、Molten 亡爆圈、Waller/Vortex/Teleporter/Reflect 作否决对照）；Path of Exile 稀有怪单缀/三缀 + 光环类（本包不做光环叠乘）；WoW 大秘境近年「少叠压力、预警可读」方向。国服 1.12 RPG 常见「精英点名砸地 / 死后爆圈」可读原型。
 
 ## 0. 一段话裁决

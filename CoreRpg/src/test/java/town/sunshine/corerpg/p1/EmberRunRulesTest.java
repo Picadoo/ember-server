@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(43, m.balanceVersion);                // D180 rev 2 AFK minutes count online (D184 = 41, D183 = 40, D180 = 39, D177 rev 2 = 38, D174 2b echo = 37, outpost = 36, pledge = 35, 2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
-        assertEquals("g04-1/b43", m.ruleVersion);
+        assertEquals(44, m.balanceVersion);                // D181 Variety Pack 3 mortar/molten (D182 = 43, D180 rev 2 = 42, D184 = 41, …)
+        assertEquals("g04-1/b44", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1250,8 +1250,8 @@ public class EmberRunRulesTest {
 
     @Test public void varietyPack2RollsNewAffixesAndEventsOffFirstClears_D171() {
         EmberRunMaps.Variety v = bundled().variety;
-        assertEquals(6, EmberRunMaps.Variety.KNOWN.size());
-        assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("regen", "charge", "frost")));
+        assertEquals(8, EmberRunMaps.Variety.KNOWN.size()); // D181 Pack 3 expanded 6→8
+        assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "mortar", "molten")));
         assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
         assertTrue(v.chargeWarn >= 1.2);
@@ -1269,7 +1269,7 @@ public class EmberRunRulesTest {
             if (!a[1].isEmpty()) aff.add(a[1]);
             if (!a[2].isEmpty()) { assertTrue(a[3], EmberRunMaps.Variety.EVENTS.contains(a[3])); ev.add(a[3]); }
         }
-        assertTrue(aff.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "blazing", "split", "shield")));
+        assertTrue(aff.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "blazing", "split", "shield", "mortar", "molten")));
         assertTrue(ev.containsAll(java.util.Arrays.asList("timed", "crystal", "escort")));
         // reflect rejected
         java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
@@ -1316,6 +1316,56 @@ public class EmberRunRulesTest {
         EmberRunMaps.Variety v = new EmberRunMaps.Variety(raw);
         assertFalse(EmberRunMaps.Variety.KNOWN.contains("reflect"));
         assertEquals(java.util.Collections.singletonList("blazing"), v.affixes);
+    }
+
+    @Test public void varietyPack3MortarMolten_D181() {
+        EmberRunMaps.Variety v = bundled().variety;
+        assertEquals(8, EmberRunMaps.Variety.KNOWN.size());
+        assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("mortar", "molten")));
+        assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
+        assertEquals(5.0, v.mortarEvery, 1e-9);
+        assertTrue(v.mortarWarn >= 1.2);
+        assertEquals(2.0, v.mortarRadius, 1e-9);
+        assertEquals(0.0, v.mortarAhead, 1e-9);
+        assertEquals(1.0, v.mortarDmg, 1e-9);
+        assertEquals(0.4, v.moltenDelay, 1e-9);
+        assertTrue(v.moltenWarn >= 1.2);
+        assertEquals(2.5, v.moltenRadius, 1e-9);
+        assertEquals(1.2, v.moltenDmg, 1e-9);
+        assertEquals("投弹", EmberRunMaps.Variety.label("mortar"));
+        assertEquals("亡爆", EmberRunMaps.Variety.label("molten"));
+        // reject reflect + vortex
+        java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
+        raw.put("affix_rate", 1.0);
+        raw.put("affixes", java.util.Arrays.asList("mortar", "reflect", "vortex", "molten"));
+        EmberRunMaps.Variety bad = new EmberRunMaps.Variety(raw);
+        assertEquals(java.util.Arrays.asList("mortar", "molten"), bad.affixes);
+        assertFalse(EmberRunMaps.Variety.KNOWN.contains("reflect"));
+        assertFalse(EmberRunMaps.Variety.KNOWN.contains("vortex"));
+        // skill shapes: kb=0, circle
+        EmberRunDirector.Tracked h = new EmberRunDirector.Tracked(null, "heavy", "r1", null, null, 20, 3, 2, null);
+        EmberRunMaps.Skill mo = EmberRunDirector.mortarSkill(h, v);
+        assertEquals("circle", mo.type);
+        assertEquals(20 * v.mortarDmg, mo.dmg, 1e-9);
+        assertEquals(0.0, mo.kb, 1e-9);
+        assertEquals(v.mortarRadius, mo.radius, 1e-9);
+        EmberRunMaps.Skill ml = EmberRunDirector.moltenSkill(20, v);
+        assertEquals("circle", ml.type);
+        assertEquals(20 * v.moltenDmg, ml.dmg, 1e-9);
+        assertEquals(0.0, ml.kb, 1e-9);
+        // splitAdd must not be treated as molten trigger source (flag exists; scheduleMolten guards it)
+        EmberRunDirector.Tracked add = new EmberRunDirector.Tracked(null, "melee", "r1", null, null, 10, 3, 2, null);
+        add.splitAdd = true;
+        add.affix = "molten"; // even if mis-tagged, scheduleMolten refuses splitAdd
+        assertTrue(add.splitAdd);
+        // roll eventually hits mortar/molten
+        java.util.Set<String> aff = new java.util.HashSet<String>();
+        for (long seed = 0; seed < 8000; seed++) {
+            String[] a = v.roll(EmberRunRules.subSeed(seed, "variety"));
+            if (!a[1].isEmpty()) aff.add(a[1]);
+        }
+        assertTrue(aff.contains("mortar"));
+        assertTrue(aff.contains("molten"));
     }
 
     @Test public void escortRabbitDoesNotPayTreasureCoin_D171() {

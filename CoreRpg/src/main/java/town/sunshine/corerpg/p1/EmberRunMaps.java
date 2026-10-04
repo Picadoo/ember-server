@@ -587,9 +587,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2. reflect is intentionally absent (rejected). */
+        /** D138 + D171 Pack 2 + D181 Pack 3. reflect/vortex intentionally absent (rejected). */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort"));
         public final double affixRate, eventRate;
@@ -603,6 +603,9 @@ public final class EmberRunMaps {
         public final double chargeEvery, chargeWarn, chargeLength, chargeWidth, chargeDmg;
         public final double frostRadius, frostTick;
         public final int frostAmplifier;
+        // D181 mortar / molten
+        public final double mortarEvery, mortarWarn, mortarRadius, mortarAhead, mortarDmg;
+        public final double moltenDelay, moltenWarn, moltenRadius, moltenDmg;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -651,6 +654,17 @@ public final class EmberRunMaps {
             frostRadius = Math.max(0.5, num(fr.get("radius"), 3.0));
             frostAmplifier = Math.max(0, Math.min(4, (int) num(fr.get("amplifier"), 1)));
             frostTick = Math.max(0.2, num(fr.get("tick"), 0.5));
+            Map<?, ?> mo = m.get("mortar") instanceof Map ? (Map<?, ?>) m.get("mortar") : Collections.emptyMap();
+            mortarEvery = Math.max(1.0, num(mo.get("every"), 5.0));
+            mortarWarn = Math.max(1.2, num(mo.get("warn"), 1.2));
+            mortarRadius = Math.max(0.5, num(mo.get("radius"), 2.0));
+            mortarAhead = num(mo.get("ahead"), 0.0);
+            mortarDmg = Math.max(0.0, num(mo.get("dmg"), 1.0));
+            Map<?, ?> ml = m.get("molten") instanceof Map ? (Map<?, ?>) m.get("molten") : Collections.emptyMap();
+            moltenDelay = Math.max(0.0, num(ml.get("delay"), 0.4));
+            moltenWarn = Math.max(1.2, num(ml.get("warn"), 1.3));
+            moltenRadius = Math.max(0.5, num(ml.get("radius"), 2.5));
+            moltenDmg = Math.max(0.0, num(ml.get("dmg"), 1.2));
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -670,6 +684,8 @@ public final class EmberRunMaps {
             if ("regen".equals(id)) return "再生";
             if ("charge".equals(id)) return "冲锋";
             if ("frost".equals(id)) return "凝霜";
+            if ("mortar".equals(id)) return "投弹";
+            if ("molten".equals(id)) return "亡爆";
             return id;
         }
 

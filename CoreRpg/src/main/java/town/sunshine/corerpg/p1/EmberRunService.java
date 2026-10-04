@@ -3268,7 +3268,7 @@ public final class EmberRunService implements Listener {
             s.sendMessage(P + "下一局规则（挑战或精选图普通版，仅一次，测试用）= " + (forcedModifier == null ? "按周" : forcedModifier.id));
             return true;
         }
-        if (admin && "variety".equals(op) && args.length >= 4) { // D138/D171: blazing|…|frost|timed|crystal|escort|event[:rN]|clear
+        if (admin && "variety".equals(op) && args.length >= 4) { // D138/D171/D181: blazing|…|frost|mortar|molten|timed|crystal|escort|event[:rN]|clear
             forcedVariety = "clear".equalsIgnoreCase(args[3]) ? null : args[3].toLowerCase(Locale.ROOT);
             s.sendMessage(P + "下一局普通版花样（仅一次，测试用）= " + (forcedVariety == null ? "按种子" : forcedVariety));
             return true;

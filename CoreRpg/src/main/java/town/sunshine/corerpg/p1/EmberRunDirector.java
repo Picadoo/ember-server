@@ -45,7 +45,7 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
-        String affix;               // D138/D171: blazing / split / shield / regen / charge / frost (null = plain)
+        String affix;               // D138/D171/D181: blazing/split/shield/regen/charge/frost/mortar/molten (null = plain)
         boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
         boolean varietyEscort;      // D171: escort rabbit — must not pay treasure coin; excluded from room-clear count
         long affixNext, affixAt;
@@ -269,6 +269,7 @@ final class EmberRunDirector {
             if (t.affix != null) affixTick(t, now);
             if (t.twist != null) twistTick(t, now);
         }
+        moltenTick(now);
         if (!crystalBlocks.isEmpty()) pollCrystals();
         if (eventStart > 0 && !eventWarned && activeRoom != null && activeRoom.equals(s.eventRoom)) {
             String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
@@ -475,6 +476,11 @@ final class EmberRunDirector {
     private final List<Location> crystalBlocks = new ArrayList<Location>();
     private int crystalsBroken;
     private UUID escortId;
+    // D181 molten: corpse blast survives the Tracked (cleared on finish / unload like crystals)
+    private Location moltenOrigin;
+    private long moltenWarnAt;   // when telegraph starts (0 = idle)
+    private long moltenBoomAt;   // when damage lands
+    private double moltenDmg;    // absolute damage (atk × mult at death)
 
     /** The room's toughest mob (heavy, else melee, else the first) becomes the affixed elite. */
     static Tracked affixPick(List<Tracked> ts) {
@@ -498,7 +504,8 @@ final class EmberRunDirector {
                 : "regen".equals(t.affix) ? v.regenEvery
                 : "charge".equals(t.affix) ? v.chargeEvery
                 : "frost".equals(t.affix) ? v.frostTick
-                : v.blazeEvery;
+                : "mortar".equals(t.affix) ? v.mortarEvery
+                : v.blazeEvery; // molten has no live tick; split/shield idle glow only
         t.affixNext = System.currentTimeMillis() + 1500L + (long) (every * 1000);
         String tag = EmberRunMaps.Variety.label(t.affix);
         String old = t.le.getCustomName();
@@ -512,6 +519,8 @@ final class EmberRunDirector {
         else if ("regen".equals(t.affix)) how = "发光读条时猛打可打断回血";
         else if ("charge".equals(t.affix)) how = "看见脚下亮带就躲开";
         else if ("frost".equals(t.affix)) how = "别站在它身边的霜圈里（出圈即解除）";
+        else if ("mortar".equals(t.affix)) how = "脚下附近会亮圈，走开再打";
+        else if ("molten".equals(t.affix)) how = "杀掉后尸体要炸，立刻退开";
         else how = t.affix;
         svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));
@@ -523,6 +532,8 @@ final class EmberRunDirector {
                 : "regen".equals(t.affix) ? Particle.HEART
                 : "charge".equals(t.affix) ? Particle.CRIT
                 : "frost".equals(t.affix) ? Particle.SNOW_SHOVEL
+                : "mortar".equals(t.affix) ? Particle.FLAME
+                : "molten".equals(t.affix) ? Particle.LAVA
                 : Particle.END_ROD;
         w.spawnParticle(fx, t.le.getLocation().add(0, 1.0, 0), 3, 0.3, 0.5, 0.3, 0.01);
         EmberRunMaps.Variety v = svc.maps().variety;
@@ -611,6 +622,24 @@ final class EmberRunDirector {
                     }
                 }
             }
+            return;
+        }
+        if ("mortar".equals(t.affix)) {
+            // D181: periodic circle near nearest in-run player feet (onGround Y); kb=0
+            if (t.affixAt > 0) {
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.mortarRadius, Particle.FLAME);
+                if (now >= t.affixAt) {
+                    execute(mortarSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
+                    t.affixAt = 0;
+                    t.affixNext = now + (long) (v.mortarEvery * 1000);
+                }
+                return;
+            }
+            if (now < t.affixNext) return;
+            Location feet = mortarTargetFeet(t, v);
+            if (feet == null) return;
+            t.affixOrigin = feet;
+            t.affixAt = now + (long) (v.mortarWarn * 1000);
         }
     }
 
@@ -636,6 +665,97 @@ final class EmberRunDirector {
         EmberRunMaps.Skill sk = new EmberRunMaps.Skill(m);
         // clip to clearRun length when origin known — caller already clipped via clearRun; length stays config max
         return sk;
+    }
+
+    /** D181 mortar: circle at player feet; kb forced 0 (Q04 ledge discipline). */
+    static EmberRunMaps.Skill mortarSkill(Tracked t, EmberRunMaps.Variety v) {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("type", "circle");
+        m.put("name", "投弹圈");
+        m.put("radius", v.mortarRadius);
+        m.put("warn", v.mortarWarn);
+        m.put("ahead", v.mortarAhead);
+        m.put("dmg", t.atk * v.mortarDmg);
+        m.put("kb", 0);
+        return new EmberRunMaps.Skill(m);
+    }
+
+    /** D181 molten corpse blast (atk snapped at death). kb=0. */
+    static EmberRunMaps.Skill moltenSkill(double atk, EmberRunMaps.Variety v) {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("type", "circle");
+        m.put("name", "亡爆圈");
+        m.put("radius", v.moltenRadius);
+        m.put("warn", v.moltenWarn);
+        m.put("dmg", atk * v.moltenDmg);
+        m.put("kb", 0);
+        return new EmberRunMaps.Skill(m);
+    }
+
+    /** Nearest participant feet on ground Y; fallback elite feet. null only when nobody is in the instance. */
+    private Location mortarTargetFeet(Tracked t, EmberRunMaps.Variety v) {
+        Player tgt = nearest(t.le.getLocation(), 16);
+        Location base;
+        if (tgt != null) {
+            Location l = tgt.getLocation();
+            double y = tgt.isOnGround() ? l.getY() : Math.floor(l.getY());
+            base = new Location(w, l.getX(), y, l.getZ());
+        } else if (participantsHere().isEmpty()) {
+            return null;
+        } else {
+            base = t.le.getLocation().clone();
+            base.setY(Math.floor(base.getY()));
+        }
+        if (Math.abs(v.mortarAhead) > 1e-6) {
+            Vector dir = t.le.getLocation().toVector().subtract(base.toVector());
+            dir.setY(0);
+            if (dir.lengthSquared() > 1e-6) {
+                dir.normalize().multiply(v.mortarAhead);
+                base.add(dir.getX(), 0, dir.getZ());
+            }
+        }
+        return base;
+    }
+
+    private void scheduleMolten(Tracked t) {
+        if (t == null || t.splitAdd) return; // splitAdds must NOT trigger molten
+        EmberRunMaps.Variety v = svc.maps().variety;
+        Location at = t.le.getLocation().clone();
+        at.setY(Math.floor(at.getY()));
+        moltenOrigin = at;
+        moltenDmg = t.atk * v.moltenDmg; // store absolute for execute path via skill
+        long now = System.currentTimeMillis();
+        moltenWarnAt = now + (long) (v.moltenDelay * 1000);
+        moltenBoomAt = moltenWarnAt + (long) (v.moltenWarn * 1000);
+        svc.tellRun(s, "§c亡爆 §7· 尸体要炸，退后！");
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s molten scheduled at %.1f %.1f %.1f",
+                s.runId, at.getX(), at.getY(), at.getZ()));
+    }
+
+    private void moltenTick(long now) {
+        if (moltenWarnAt <= 0 || moltenOrigin == null) return;
+        EmberRunMaps.Variety v = svc.maps().variety;
+        if (now < moltenWarnAt) return;
+        warnCircle(moltenOrigin.clone().add(0, 0.15, 0), v.moltenRadius, Particle.LAVA);
+        if (now >= moltenBoomAt) {
+            // rebuild skill with stored absolute dmg (atk already folded)
+            Map<String, Object> m = new HashMap<String, Object>();
+            m.put("type", "circle");
+            m.put("name", "亡爆圈");
+            m.put("radius", v.moltenRadius);
+            m.put("warn", v.moltenWarn);
+            m.put("dmg", moltenDmg);
+            m.put("kb", 0);
+            execute(new EmberRunMaps.Skill(m), moltenOrigin, new Vector(1, 0, 0), null);
+            clearMolten();
+        }
+    }
+
+    private void clearMolten() {
+        moltenOrigin = null;
+        moltenWarnAt = 0;
+        moltenBoomAt = 0;
+        moltenDmg = 0;
     }
 
     /** D171: damage taken by a regen elite during its interrupt window. */
@@ -897,9 +1017,10 @@ final class EmberRunDirector {
             }
             return false;
         }
-        if (t.affix != null) { // D138/D171
+        if (t.affix != null) { // D138/D171/D181
             if ("frost".equals(t.affix)) clearFrostSlow();
             if ("split".equals(t.affix)) splitAdds(t);
+            if ("molten".equals(t.affix) && !t.splitAdd) scheduleMolten(t);
             svc.onAffixDone(s, t.affix);
         }
         return false;
@@ -918,6 +1039,7 @@ final class EmberRunDirector {
         finished = true;
         clearCrystals();
         clearFrostSlow();
+        clearMolten();
         cleanupMobs();
         for (String k : new ArrayList<String>(holos.keySet())) if (!"exit".equals(k)) unholo(k); // exit stays until the instance closes
         if (chest != null && chest.getBlock().getType() == Material.ENDER_CHEST) chest.getBlock().setType(Material.AIR);
