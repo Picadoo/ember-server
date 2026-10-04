@@ -72,6 +72,10 @@ public final class EmberCommand {
             if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "勋记服务未加载"); return true; }
             return EmberGrowthService.get().honorCommand((Player) s, args);
         }
+        if ("sign".equals(sub) || "签到".equals(sub) || "online".equals(sub) || "在线".equals(sub)) { // D180 每日签到 + 在线时长
+            if (EmberSignService.get() == null) { s.sendMessage(P + "签到服务未加载"); return true; }
+            return EmberSignService.get().cmd(s, args);
+        }
         if ("sig".equals(sub) || "签名".equals(sub)) { // D174 签名传奇
             if (EmberGrowthService.get() == null) { s.sendMessage(P + "签名服务未加载"); return true; }
             return EmberGrowthService.get().sigCommand(s, args);

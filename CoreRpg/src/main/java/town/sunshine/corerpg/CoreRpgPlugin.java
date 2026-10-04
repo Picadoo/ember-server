@@ -121,6 +121,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private town.sunshine.corerpg.p1.EmberSetService emberSets;
     private town.sunshine.corerpg.p1.EmberForgeService emberForge;
     private town.sunshine.corerpg.p1.EmberRunService emberRuns;
+    private town.sunshine.corerpg.p1.EmberSignService emberSign; // D180
     private town.sunshine.corerpg.p1.EmberSupplyService emberSupplies;
     private MysqlStorage mysqlStorage;
     private String storageMode = "yaml"; // yaml | mysql (effective)
@@ -247,6 +248,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         emberRuns = new town.sunshine.corerpg.p1.EmberRunService(this, emberLoadouts, emberStore); // G04 Q01–Q03 runs + settlement
         Bukkit.getPluginManager().registerEvents(emberRuns, this);
+        emberSign = new town.sunshine.corerpg.p1.EmberSignService(this); // D180 每日签到 + 在线时长 (ember-v1.yml signin / online)
+        emberSign.reload();
         { // P2-9 (D83) titles + trails (cosmetic only)
             final town.sunshine.corerpg.p1.EmberCosmetics cos = new town.sunshine.corerpg.p1.EmberCosmetics(emberRuns);
             emberRuns.setCosmetics(cos);
@@ -344,6 +347,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (auctionService != null) auctionService.saveAll();
         if (emberAfk != null) emberAfk.shutdown(); // D177: stamp offline start for everyone online (quit events come after disable)
         if (dataStore != null) dataStore.saveAll();
+        if (emberSign != null) emberSign.shutdown(); // D180
         if (emberRuns != null) emberRuns.shutdown(); // G04: run mobs removed; open runs are aborted + refunded on the next start
         if (emberSets != null) emberSets.flushAll(); // G02 remaining cooldowns → states, saved just below
         if (emberLoadouts != null && town.sunshine.corerpg.p1.EmberMode.active()) {
@@ -623,6 +627,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (forgeService != null) forgeService.reload();
         if (partService != null) partService.reload();
         if (lootService != null) lootService.reload();
+        if (emberSign != null) emberSign.reload(); // D180 (after emberMode.reload above)
         if (statService != null) statService.reload();
         if (afkTierService != null) afkTierService.reload();
         if (emberAfk != null) emberAfk.reload(); // D177 (after emberMode.reload above)
@@ -1199,6 +1204,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private boolean cmdSign(CommandSender sender) {
         if (!requirePlayer(sender)) return true;
+        if (town.sunshine.corerpg.p1.EmberMode.active()) { // D180: P1 sign-in only (the legacy 100-coin payout was outside the P1 sim economy, D63)
+            if (emberSign != null) return emberSign.legacySign(sender);
+            sender.sendMessage(ChatColor.YELLOW + "[余烬] 签到在 主菜单 → 签到 · 在线");
+            return true;
+        }
         Player p = (Player) sender;
         PlayerData data = dataStore.get(p.getUniqueId());
         String today = DailyService.today();
@@ -1224,6 +1234,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private boolean cmdActivity(CommandSender sender, String[] args) {
         if (!requirePlayer(sender)) return true;
+        if (town.sunshine.corerpg.p1.EmberMode.active()) { // D180: no legacy activity chests (coin) in P1 → daily online-time rewards
+            sender.sendMessage(ChatColor.YELLOW + "[余烬] P1 没有活跃宝箱：在线时长奖励在 主菜单 → 签到 · 在线");
+            if (emberSign != null) emberSign.openMenu((Player) sender);
+            return true;
+        }
         Player p = (Player) sender;
         PlayerData data = dataStore.get(p.getUniqueId());
         boolean forceClaim = args.length >= 2 && "claim".equalsIgnoreCase(args[1]);
@@ -1269,6 +1284,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     private boolean cmdBounty(CommandSender sender, String[] args) {
         if (!requirePlayer(sender)) return true;
+        if (town.sunshine.corerpg.p1.EmberMode.active()) { // D180: legacy bounty coin closed in P1; the P1 每日委托 is paid by main-story clears
+            sender.sendMessage(ChatColor.YELLOW + "[余烬] P1 的每日委托在主线本里结算（当天第 3 局），旧悬赏不开放");
+            return true;
+        }
         Player p = (Player) sender;
         ensureBounty(p);
         PlayerData data = dataStore.get(p.getUniqueId());

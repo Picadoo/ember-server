@@ -153,3 +153,29 @@ storage:
   invsnap:                     # also mirrored in config.yml invsnap.* (InvSnapService reads both)
     enabled: true
     interval_minutes: 10
+
+# D180 每日签到 + 在线时长奖励（DESIGN-ember-signin-online-2026-10-04.md）— CoreRpg EmberSignService，TrMenu ember_p1_sign
+# 只发账号绑定的东西：余烬币 / 余烬经验（账号数据）、锻造印记 / 首领徽记（账号计数）。碎片 / 核心 / 骨尘 / 胚料是能取出、能丢的
+# NI 物品，小号能转给大号 → 不发。日期一律用服务器时钟的体力日（Asia/Shanghai 0 点，DailyService.today()）。
+signin:
+  enabled: true
+  # 月历按「本月第 n 次签到」发（HoYoLAB / 黑色沙漠 / 失落的方舟同款累计制）：漏签不清零，下次签到接着第 n+1 格
+  daily: {coin: 20, xp: 5}             # 普通格
+  special:                             # 第 7 / 14 / 21 / 28 次签到的大格（替换普通格）
+    7: {coin: 40, sigmark: 1}          # 首领徽记 ×1（已首通的最高签名图；还没有 → 改发 60 币）
+    14: {coin: 40, mark: 1}            # 锻造印记 ×1（已首通的最高阶）
+    21: {coin: 40, sigmark: 1}
+    28: {coin: 80, mark: 1}            # 全勤格
+  extra: {coin: 10, xp: 5}             # 第 29–31 次（长月份的尾巴，HoYoLAB 同款小奖）
+  sigmark_fallback_coin: 60
+  makeup_per_month: 3                  # 补签：每月最多 3 次、每天最多 1 次、只补本月、自动补最早漏的那天（HoYoLAB 规则）
+  makeup_needs_online: 60              # 补签条件：今天先签到，且今天有效在线满 60 分钟（不花钱，不卖补签卡）
+online:
+  enabled: true
+  idle_minutes: 5                      # 5 分钟没有任何操作（移动 / 视角 / 攻击 / 点菜单 / 聊天）就停表（PlayTime+ 300 秒同款）
+  exclude_worlds: [ember_afk]          # 挂机庭的时间归挂机庭结算（D177），不计在线时长，避免一份时间拿两份奖
+  milestones:                          # 今日有效在线分钟；到了在签到页点领取（过 0 点没领的自动补发）
+    - {min: 15, coin: 10}
+    - {min: 30, coin: 15, xp: 5}
+    - {min: 60, coin: 20, xp: 5}
+    - {min: 120, coin: 25, xp: 10}

@@ -16,7 +16,7 @@ Layout:
   - 'Ln o p F '
   - 'Tm X k i '
   - 'ZR c Y d '
-  - '  A G U j'
+  - 'Q A G U j'
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
@@ -400,3 +400,39 @@ Icons:
       all:
         - close
         - 'sound: BLOCK_NOTE_PLING-1-0'
+  # D180 每日签到 + 在线时长（P1）：月历按本月第 n 次签到发奖，在线 15/30/60/120 分钟有效在线；只发账号绑定的币 / 经验 / 印记 / 徽记
+  Q:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_today% < 1'
+        priority: 1
+        display:
+          material: emerald
+          shiny: true
+          name: '§e签到 · 在线 §6(今天还没签)'
+          lore:
+            - ''
+            - '%corerpg_p1_sign_head%'
+            - '%corerpg_p1_sign_next%'
+            - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟 · 可领 §f%corerpg_p1_online_can% §7档'
+            - ''
+            - '§e➥ §f打开签到 · 在线'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'menu: ember_p1_sign'
+    display:
+      material: emerald
+      name: '§a签到 · 在线'
+      lore:
+        - ''
+        - '%corerpg_p1_sign_head%'
+        - '%corerpg_p1_sign_next%'
+        - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟 · 可领 §f%corerpg_p1_online_can% §7档'
+        - '§8月历累计签到 · 在线 15/30/60/120 分钟 · 打本永远更快'
+        - ''
+        - '§e➥ §f打开签到 · 在线'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_sign'

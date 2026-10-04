@@ -1,0 +1,1315 @@
+# P1 每日签到 + 在线时长（D180，docs/design/DESIGN-ember-signin-online-2026-10-04.md）— CoreRpg EmberSignService
+# 生成：python3 tools/menus/gen_ember_p1_sign.py（奖励文字全部来自 PAPI = ember-v1.yml signin / online，不手写数字）
+# 月历按「本月第 n 次签到」排（HoYoLAB / 黑色沙漠同款累计制）：漏签不清零；第 7 / 14 / 21 / 28 次是大格
+# 补签：每月 3 次、每天 1 次，先签今天 + 今天有效在线满 60 分钟；自动补本月最早漏的那天
+# 在线：15 / 30 / 60 / 120 分钟有效在线（5 分钟没操作停表；挂机庭的时间归挂机庭，不计）
+Title: '§6签到 · 在线 §8(%corerpg_p1_sign_month%)'
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 300
+Layout:
+  - '#H# I #O#'
+  - '#1234567#'
+  - '#890ACEF#'
+  - '#GJKLNPQ#'
+  - '#RSTUVWX#'
+  - ' M abcd B'
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8 '
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+  H:
+    update: 20
+    display:
+      material: book
+      name: '§6本月签到'
+      lore:
+        - ''
+        - '%corerpg_p1_sign_head%'
+        - '%corerpg_p1_sign_next%'
+        - '§7本月漏签 §f%corerpg_p1_sign_missed% §7天 · 补签剩余 §f%corerpg_p1_sign_mkleft% §7次'
+        - ''
+        - '§7第 29–31 次：§f%corerpg_p1_sign_r29% §8（长月份的尾巴）'
+        - '§8每月 1 日 0 点换新月历；奖励账号绑定，直接到账'
+  I:
+    display:
+      material: paper
+      name: '§f规则'
+      lore:
+        - ''
+        - '§7· 每天点一次「今天」那格签到（0 点换天，服务器时间）'
+        - '§7· 按本月第几次签到发奖：漏了不清零，下次接着下一格'
+        - '§7· 第 7 / 14 / 21 / 28 次是大格（首领徽记 / 锻造印记）'
+        - '§7· 补签：每月 3 次、每天 1 次，先签今天，今天有效在线满 60 分钟'
+        - '§7· 在线时长：有效在线（5 分钟没操作就停表），挂机庭的时间不计'
+        - '§7· 只发余烬币、经验、锻造印记、首领徽记（都绑定账号）'
+        - '§8变强的主路还是主线本：这里一天的币不到一次通关的三分之一'
+  O:
+    update: 20
+    display:
+      material: clock
+      name: '§a今日在线'
+      lore:
+        - ''
+        - '§7有效在线：§f%corerpg_p1_online_min% §7分钟'
+        - '§7%corerpg_p1_online_state%'
+        - '%corerpg_p1_online_next%'
+        - '§7可领：§f%corerpg_p1_online_can% §7档'
+        - ''
+        - '§e➥ §f点击一次领完所有已到的档'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 online claim'
+  M:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_mkcan% > 0'
+        priority: 1
+        display:
+          material: name tag
+          name: '§a补签'
+          shiny: true
+          lore:
+            - ''
+            - '%corerpg_p1_sign_mk%'
+            - '§7本月剩余 §f%corerpg_p1_sign_mkleft% §7次'
+            - ''
+            - '§e➥ §f点击补签'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign makeup'
+    display:
+      material: name tag
+      name: '§7补签'
+      lore:
+        - ''
+        - '%corerpg_p1_sign_mk%'
+        - '§7本月剩余 §f%corerpg_p1_sign_mkleft% §7次'
+        - '§8规则：先签今天 · 今天有效在线满 60 分钟 · 每天 1 次'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '1':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d1% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 1
+          name: '§a第 1 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r1%'
+      - condition: 'check papi %corerpg_p1_sign_k1% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 1
+          shiny: true
+          name: '§e第 1 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r1%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 1
+      name: '§7第 1 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r1%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '2':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d2% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 2
+          name: '§a第 2 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r2%'
+      - condition: 'check papi %corerpg_p1_sign_k2% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 2
+          shiny: true
+          name: '§e第 2 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r2%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 2
+      name: '§7第 2 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r2%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '3':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d3% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 3
+          name: '§a第 3 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r3%'
+      - condition: 'check papi %corerpg_p1_sign_k3% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 3
+          shiny: true
+          name: '§e第 3 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r3%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 3
+      name: '§7第 3 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r3%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '4':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d4% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 4
+          name: '§a第 4 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r4%'
+      - condition: 'check papi %corerpg_p1_sign_k4% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 4
+          shiny: true
+          name: '§e第 4 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r4%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 4
+      name: '§7第 4 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r4%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '5':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d5% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 5
+          name: '§a第 5 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r5%'
+      - condition: 'check papi %corerpg_p1_sign_k5% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 5
+          shiny: true
+          name: '§e第 5 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r5%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 5
+      name: '§7第 5 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r5%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '6':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d6% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 6
+          name: '§a第 6 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r6%'
+      - condition: 'check papi %corerpg_p1_sign_k6% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 6
+          shiny: true
+          name: '§e第 6 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r6%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 6
+      name: '§7第 6 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r6%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '7':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d7% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 7
+          name: '§a第 7 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r7%'
+      - condition: 'check papi %corerpg_p1_sign_k7% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 7
+          shiny: true
+          name: '§e§6大格 · 第 7 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r7%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: gold ingot
+      amount: 7
+      name: '§7§6大格 · 第 7 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r7%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '8':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d8% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 8
+          name: '§a第 8 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r8%'
+      - condition: 'check papi %corerpg_p1_sign_k8% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 8
+          shiny: true
+          name: '§e第 8 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r8%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 8
+      name: '§7第 8 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r8%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '9':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d9% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 9
+          name: '§a第 9 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r9%'
+      - condition: 'check papi %corerpg_p1_sign_k9% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 9
+          shiny: true
+          name: '§e第 9 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r9%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 9
+      name: '§7第 9 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r9%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  '0':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d10% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 10
+          name: '§a第 10 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r10%'
+      - condition: 'check papi %corerpg_p1_sign_k10% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 10
+          shiny: true
+          name: '§e第 10 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r10%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 10
+      name: '§7第 10 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r10%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'A':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d11% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 11
+          name: '§a第 11 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r11%'
+      - condition: 'check papi %corerpg_p1_sign_k11% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 11
+          shiny: true
+          name: '§e第 11 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r11%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 11
+      name: '§7第 11 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r11%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'C':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d12% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 12
+          name: '§a第 12 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r12%'
+      - condition: 'check papi %corerpg_p1_sign_k12% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 12
+          shiny: true
+          name: '§e第 12 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r12%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 12
+      name: '§7第 12 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r12%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'E':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d13% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 13
+          name: '§a第 13 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r13%'
+      - condition: 'check papi %corerpg_p1_sign_k13% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 13
+          shiny: true
+          name: '§e第 13 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r13%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 13
+      name: '§7第 13 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r13%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'F':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d14% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 14
+          name: '§a第 14 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r14%'
+      - condition: 'check papi %corerpg_p1_sign_k14% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 14
+          shiny: true
+          name: '§e§6大格 · 第 14 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r14%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: gold ingot
+      amount: 14
+      name: '§7§6大格 · 第 14 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r14%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'G':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d15% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 15
+          name: '§a第 15 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r15%'
+      - condition: 'check papi %corerpg_p1_sign_k15% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 15
+          shiny: true
+          name: '§e第 15 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r15%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 15
+      name: '§7第 15 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r15%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'J':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d16% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 16
+          name: '§a第 16 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r16%'
+      - condition: 'check papi %corerpg_p1_sign_k16% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 16
+          shiny: true
+          name: '§e第 16 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r16%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 16
+      name: '§7第 16 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r16%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'K':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d17% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 17
+          name: '§a第 17 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r17%'
+      - condition: 'check papi %corerpg_p1_sign_k17% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 17
+          shiny: true
+          name: '§e第 17 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r17%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 17
+      name: '§7第 17 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r17%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'L':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d18% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 18
+          name: '§a第 18 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r18%'
+      - condition: 'check papi %corerpg_p1_sign_k18% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 18
+          shiny: true
+          name: '§e第 18 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r18%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 18
+      name: '§7第 18 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r18%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'N':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d19% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 19
+          name: '§a第 19 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r19%'
+      - condition: 'check papi %corerpg_p1_sign_k19% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 19
+          shiny: true
+          name: '§e第 19 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r19%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 19
+      name: '§7第 19 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r19%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'P':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d20% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 20
+          name: '§a第 20 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r20%'
+      - condition: 'check papi %corerpg_p1_sign_k20% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 20
+          shiny: true
+          name: '§e第 20 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r20%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 20
+      name: '§7第 20 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r20%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'Q':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d21% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 21
+          name: '§a第 21 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r21%'
+      - condition: 'check papi %corerpg_p1_sign_k21% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 21
+          shiny: true
+          name: '§e§6大格 · 第 21 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r21%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: gold ingot
+      amount: 21
+      name: '§7§6大格 · 第 21 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r21%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'R':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d22% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 22
+          name: '§a第 22 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r22%'
+      - condition: 'check papi %corerpg_p1_sign_k22% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 22
+          shiny: true
+          name: '§e第 22 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r22%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 22
+      name: '§7第 22 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r22%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'S':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d23% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 23
+          name: '§a第 23 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r23%'
+      - condition: 'check papi %corerpg_p1_sign_k23% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 23
+          shiny: true
+          name: '§e第 23 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r23%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 23
+      name: '§7第 23 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r23%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'T':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d24% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 24
+          name: '§a第 24 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r24%'
+      - condition: 'check papi %corerpg_p1_sign_k24% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 24
+          shiny: true
+          name: '§e第 24 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r24%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 24
+      name: '§7第 24 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r24%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'U':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d25% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 25
+          name: '§a第 25 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r25%'
+      - condition: 'check papi %corerpg_p1_sign_k25% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 25
+          shiny: true
+          name: '§e第 25 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r25%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 25
+      name: '§7第 25 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r25%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'V':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d26% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 26
+          name: '§a第 26 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r26%'
+      - condition: 'check papi %corerpg_p1_sign_k26% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 26
+          shiny: true
+          name: '§e第 26 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r26%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 26
+      name: '§7第 26 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r26%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'W':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d27% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 27
+          name: '§a第 27 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r27%'
+      - condition: 'check papi %corerpg_p1_sign_k27% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 27
+          shiny: true
+          name: '§e第 27 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r27%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: paper
+      amount: 27
+      name: '§7第 27 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r27%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  'X':
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_sign_d28% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          amount: 28
+          name: '§a第 28 次 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_sign_r28%'
+      - condition: 'check papi %corerpg_p1_sign_k28% > 0'
+        priority: 1
+        display:
+          material: chest
+          amount: 28
+          shiny: true
+          name: '§e§6大格 · 第 28 次 · 今天可签'
+          lore:
+            - ''
+            - '§f%corerpg_p1_sign_r28%'
+            - ''
+            - '§e➥ §f点击签到'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 sign claim'
+    display:
+      material: gold ingot
+      amount: 28
+      name: '§7§6大格 · 第 28 次'
+      lore:
+        - ''
+        - '§7%corerpg_p1_sign_r28%'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  a:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_online_d1% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          name: '§a在线 %corerpg_p1_online_m1% 分钟 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_online_r1%'
+      - condition: 'check papi %corerpg_p1_online_k1% > 0'
+        priority: 1
+        display:
+          material: clock
+          shiny: true
+          name: '§e在线 %corerpg_p1_online_m1% 分钟 · 可领取'
+          lore:
+            - ''
+            - '§f%corerpg_p1_online_r1%'
+            - ''
+            - '§e➥ §f点击领取'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 online claim 1'
+    display:
+      material: coal
+      name: '§7在线 %corerpg_p1_online_m1% 分钟'
+      lore:
+        - ''
+        - '§7%corerpg_p1_online_r1%'
+        - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  b:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_online_d2% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          name: '§a在线 %corerpg_p1_online_m2% 分钟 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_online_r2%'
+      - condition: 'check papi %corerpg_p1_online_k2% > 0'
+        priority: 1
+        display:
+          material: clock
+          shiny: true
+          name: '§e在线 %corerpg_p1_online_m2% 分钟 · 可领取'
+          lore:
+            - ''
+            - '§f%corerpg_p1_online_r2%'
+            - ''
+            - '§e➥ §f点击领取'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 online claim 2'
+    display:
+      material: coal
+      name: '§7在线 %corerpg_p1_online_m2% 分钟'
+      lore:
+        - ''
+        - '§7%corerpg_p1_online_r2%'
+        - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  c:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_online_d3% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          name: '§a在线 %corerpg_p1_online_m3% 分钟 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_online_r3%'
+      - condition: 'check papi %corerpg_p1_online_k3% > 0'
+        priority: 1
+        display:
+          material: clock
+          shiny: true
+          name: '§e在线 %corerpg_p1_online_m3% 分钟 · 可领取'
+          lore:
+            - ''
+            - '§f%corerpg_p1_online_r3%'
+            - ''
+            - '§e➥ §f点击领取'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 online claim 3'
+    display:
+      material: coal
+      name: '§7在线 %corerpg_p1_online_m3% 分钟'
+      lore:
+        - ''
+        - '§7%corerpg_p1_online_r3%'
+        - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'
+  d:
+    update: 20
+    icons:
+      - condition: 'check papi %corerpg_p1_online_d4% > 0'
+        priority: 2
+        display:
+          material: lime stained glass pane
+          name: '§a在线 %corerpg_p1_online_m4% 分钟 · 已领'
+          lore:
+            - ''
+            - '§7%corerpg_p1_online_r4%'
+      - condition: 'check papi %corerpg_p1_online_k4% > 0'
+        priority: 1
+        display:
+          material: clock
+          shiny: true
+          name: '§e在线 %corerpg_p1_online_m4% 分钟 · 可领取'
+          lore:
+            - ''
+            - '§f%corerpg_p1_online_r4%'
+            - ''
+            - '§e➥ §f点击领取'
+        actions:
+          all:
+            - 'sound: ENTITY_PLAYER_LEVELUP-1-1'
+            - 'command: corerpg p1 online claim 4'
+    display:
+      material: coal
+      name: '§7在线 %corerpg_p1_online_m4% 分钟'
+      lore:
+        - ''
+        - '§7%corerpg_p1_online_r4%'
+        - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_BASS-1-0'

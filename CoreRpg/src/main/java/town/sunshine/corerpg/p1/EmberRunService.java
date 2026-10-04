@@ -3606,6 +3606,8 @@ public final class EmberRunService implements Listener {
             EmberRunMaps.MapDef pm = ps == null || System.currentTimeMillis() > (Long) ps[1] ? null : maps.byKey((String) ps[0]);
             return pm != null && pm.dungeon.equalsIgnoreCase(key.substring(6)) ? "yes" : "no";
         }
+        if (key.startsWith("sign_")) { EmberSignService g = EmberSignService.get(); return g == null ? "" : g.signPapi(p, d, key.substring(5)); } // D180
+        if (key.startsWith("online_")) { EmberSignService g = EmberSignService.get(); return g == null ? "" : g.onlinePapi(p, d, key.substring(7)); } // D180
         if (key.startsWith("afk_")) { EmberAfkService a = EmberAfkService.get(); return a == null ? "" : a.papi(p, d, key.substring(4)); } // D177
         if (key.startsWith("sig_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.sigPapi(p, d, key.substring(4)); } // D174 stage 1.5
         if (key.startsWith("reroll_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.rerollPapi(p, d, key.substring(7)); } // D143
