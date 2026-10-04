@@ -1341,6 +1341,15 @@ def prop_report(R, n_tol, n_felt, seed):
                 w('| %s | %s | %s | %.1f%% | %s | %s |' % (FAM_ZH[fam], CTX[ctx][0][:14], lab if len(lab) < 60 else lab[:57] + '…',
                   100 * r['clear'], ' | '.join(cells), ' / '.join(sv)))
         w('')
+    if os.path.exists('/tmp/bd/noise.pkl'):  # M05 noise floor (propose --noise)
+        import pickle
+        NF = pickle.load(open('/tmp/bd/noise.pkl', 'rb'))
+        L.append('\n## 噪声底线（M05）\n')
+        L.append('同一个配置在两组不相交的容差种子（7/11/13 vs 17/19/23，各 %d 局 × 3）上各跑一遍，42 格通关率的差：' % n_tol)
+        L.append('\n| 配置 | 最大升 | 最大降 | ±2 内 | 差的标准差 |\n|---|---:|---:|---:|---:|')
+        for lab, (mx, mn, k, n, sd) in NF.items():
+            L.append('| %s | %+.1f | %+.1f | %d/%d | %.2f pp |' % (lab, mx, mn, k, n, sd))
+        L.append('\n读法：纯随机的最大偏差约 ±1.7pp、标准差约 0.5pp；提案与现行用**同一组种子**（配对），差的噪声更小。所以表里 ≥ 3pp 的越界是真实效应，不是噪声；±2 标准偏紧但可达（P1b 3 秒 / ×0.9 42/42）。')
     return '\n'.join(L)
 
 
