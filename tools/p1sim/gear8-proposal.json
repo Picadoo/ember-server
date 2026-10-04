@@ -1,0 +1,45 @@
+{
+  "_doc": "D168 proposal (docs/design/DESIGN-ember-v1.2-gear8.md): 8-slot gear at the SAME power ceiling. Read by tools/p1sim/slots8.py only; not a live config. Shares are fractions of today's per-piece budget: a = blade attack A[t], h = charm life h[t], d = charm defence D[t]. Sum a = 1, sum h = 1, sum d = 1, so a fully matched loadout equals today's blade+charm exactly.",
+  "slots": {
+    "blade":   {"zh": "刃",   "vanilla": "main_hand", "set": true,  "a": 0.50, "h": 0.00, "d": 0.00, "craft": "锋刃", "class": "heavy", "side": "atk"},
+    "offhand": {"zh": "焰灯", "vanilla": "off_hand",  "set": true,  "a": 0.25, "h": 0.00, "d": 0.00, "craft": "锋刃", "class": "mid",   "side": "atk"},
+    "ring":    {"zh": "戒指", "vanilla": "accessory", "set": false, "a": 0.25, "h": 0.00, "d": 0.00, "craft": "锋刃", "class": "mid",   "side": "atk"},
+    "charm":   {"zh": "护符", "vanilla": "accessory", "set": false, "a": 0.00, "h": 0.25, "d": 0.10, "craft": "护心", "class": "mid",   "side": "life"},
+    "chest":   {"zh": "胸甲", "vanilla": "chest",     "set": true,  "a": 0.00, "h": 0.25, "d": 0.30, "craft": "护心", "class": "mid",   "side": "life"},
+    "legs":    {"zh": "护腿", "vanilla": "legs",      "set": true,  "a": 0.00, "h": 0.20, "d": 0.25, "craft": "护心", "class": "mid",   "side": "life"},
+    "helm":    {"zh": "头盔", "vanilla": "head",      "set": true,  "a": 0.00, "h": 0.15, "d": 0.20, "craft": "护心", "class": "light", "side": "life"},
+    "boots":   {"zh": "靴子", "vanilla": "feet",      "set": true,  "a": 0.00, "h": 0.15, "d": 0.15, "craft": "护心", "class": "light", "side": "life"}
+  },
+  "classes": {
+    "heavy": {"w": 0.70, "mark": 6, "dismantle_blank": [0, 1, 3, 4]},
+    "mid":   {"w": 0.35, "mark": 3, "dismantle_blank": [0, 1, 1, 2]},
+    "light": {"w": 0.25, "mark": 2, "dismantle_blank": [0, 1, 1, 2]}
+  },
+  "set": {
+    "proc_at": 4,
+    "full_at": 6,
+    "layer_step": 0.10,
+    "layer_max": 2,
+    "cap4": 2,
+    "awaken": {"I": [1, 0], "II": [2, 6], "III": [3, 9]},
+    "skill_form_at": null
+  },
+  "drops": {
+    "items_per_run": 2,
+    "featured_share": 0.70,
+    "featured": {
+      "q01": ["blade", "offhand", "ring", "boots"],
+      "q02": ["helm", "chest", "legs", "charm"],
+      "q03": ["blade", "chest", "charm", "ring"],
+      "q04": ["helm", "chest", "legs", "boots"],
+      "q05": ["blade", "offhand", "ring", "legs"],
+      "q06": ["charm", "offhand", "helm", "boots"],
+      "q07": []
+    },
+    "pity_after": 8
+  },
+  "first_clear": {
+    "q01": {"pack": ["charm", "helm", "chest", "legs", "boots"], "family": "none", "tier": 1},
+    "q02": {"pick": 4, "family": "target", "tier": 1}
+  }
+}
