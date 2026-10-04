@@ -15,7 +15,9 @@ for cid, room in (('C01', 'R1'), ('C12', 'R2'), ('C23', 'R3'), ('C3B', 'RB')):
 print('|'.join(legs))
 PY
 )
-$T/b.sh chat $N "/corerpg enter $K $MODE" 9000 | tr -d '\n' | sed 's/§.//g' | tail -c 300; echo
+ENT=$($T/b.sh chat $N "/corerpg enter $K $MODE" 9000 | tr -d '\n' | sed 's/§.//g'); echo "$ENT" | tail -c 300; echo
+# 2026-10-04: a refused entry (locked map, missing charm prompt …) used to walk / fight in the hub for 6 min
+echo "$ENT" | grep -q "本开始\|开始 ·" || { echo "ENTER FAILED: $(echo "$ENT" | tail -c 200)"; exit 3; }
 IFS='|' read -ra L <<< "$ROUTE"
 for i in 0 1 2 3; do
   $T/walk.sh $N "${L[$i]}" | tr -d '\n ' | tail -c 80; echo
