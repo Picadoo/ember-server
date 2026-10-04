@@ -18,7 +18,7 @@ Options:
 Layout:
   - '#########'
   - '# W T CF#'
-  - '# S N P #'
+  - '# S N PL#'
   - '#h H q f#'
   - '#OEbABZX#'
 
@@ -201,6 +201,25 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 cosmetic from gear'
+
+  # D174 第 1.5 阶段：签名传奇页（图鉴 / 烙印 / 开关；返回键回到装备页）
+  L:
+    update: 20
+    display:
+      material: nether star
+      name: '§6签名传奇'
+      lore:
+        - '%corerpg_p1_sig_head%'
+        - '%corerpg_p1_sig_blade%'
+        - '%corerpg_p1_sig_charm%'
+        - '§7每个首领自己的效果 · 首领徽记 · 烬炉烙印 · 开关'
+        - ''
+        - '§e➥ §f打开签名页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 sig from gear'
 
   # D142 余烬勋记（返回键回到装备页）
   O:

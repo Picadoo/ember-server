@@ -1677,7 +1677,8 @@ public final class EmberRunService implements Listener {
                         String un = EmberSignature.IMPRINT_UNLOCK.equals(g.id) ? "烬炉烙印（用徽记把签名烙到自己的件上）"
                                 : EmberSignature.DUAL_UNLOCK.equals(g.id) ? "双签名（刃 + 护符两条签名同时生效）"
                                 : "签名传奇（重打这张图掉它首领的签名件和徽记）";
-                        town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新解锁：§e" + un + " ", "[签名图鉴]", "/corerpg p1 sig", "查看签名传奇、首领徽记和烙印");
+                        town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新解锁：§e" + un + " ", "[打开签名页]", "/corerpg p1 sig menu", "签名图鉴、首领徽记、烙印、开关签名");
+                        p.sendMessage(P + "§7不用打命令：主菜单 → 装备 → 签名传奇"); // stage 1.5 one-line hint
                     }
                     done = true;
                     break;
@@ -1688,6 +1689,7 @@ public final class EmberRunService implements Listener {
                     if (sd == null) { log().warning("[P1 sig] bad stamp row " + r.runId + " " + g.id); done = true; break; }
                     String uid = g.id.substring(0, cut);
                     if (d.periodCount(EmberSignature.C_SIG + uid, "all") <= 0) d.addPeriodCount(EmberSignature.C_SIG + uid, "all", sd.code);
+                    EmberGrowthService.markSeen(d, sd); // stage 1.5 codex 「获得过」
                     got.add("§6签名传奇！§e" + sd.name + "§f（" + sd.kindText() + "，" + sd.boss + "）");
                     log().info("[P1 sig] " + p.getName() + " stamp " + uid + " " + sd.id + " (" + r.runId + ")");
                     done = true;
@@ -3391,6 +3393,7 @@ public final class EmberRunService implements Listener {
             return EmberRunRules.rushPaysReward(used, RUSH_WEEKLY) ? "§a本周奖励未领 · 失败可无限重试" : "§7本周奖励已领 · 可练习（无奖励）";
         }
         if (key.startsWith("afk_")) { EmberAfkService a = EmberAfkService.get(); return a == null ? "" : a.papi(p, d, key.substring(4)); } // D177
+        if (key.startsWith("sig_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.sigPapi(p, d, key.substring(4)); } // D174 stage 1.5
         if (key.startsWith("reroll_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.rerollPapi(p, d, key.substring(7)); } // D143
         if (key.startsWith("honor_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.honorPapi(p, d, key.substring(6)); } // D142
         if (key.startsWith("spec_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.papi(p, d, key.substring(5)); } // D141

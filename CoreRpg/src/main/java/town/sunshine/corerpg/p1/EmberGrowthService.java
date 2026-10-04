@@ -261,6 +261,7 @@ public final class EmberGrowthService implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         UUID u = e.getPlayer().getUniqueId();
         cache.remove(u); dodgeUntil.remove(u); dodgeHealCd.remove(u); pendingRoll.remove(u); rerollBusy.remove(u);
+        SPICK.remove(u); SFROM.remove(u); // D174 stage 1.5
     }
 
     // ------------------------------------------------------------------ commands
@@ -648,10 +649,40 @@ public final class EmberGrowthService implements Listener {
         return it == null ? null : new EmberSignature.Worn(EmberSignature.byCode(sigOf(d, it.uid)), it.slot, it.family);
     }
 
+    /** D174 stage 1.5: the player switched this slot's signature off in the menu (period all, 1 = off) */
+    static final String C_SIGOFF = "p1_sigoff_";
+    /** D174 stage 1.5: this signature was ever stamped / imprinted for this player (period all; codex 「获得过」) */
+    static final String C_SIGSEEN = "p1_sigseen_";
+
+    public boolean sigOff(PlayerData d, String slot) { return d != null && d.periodCount(C_SIGOFF + slot, "all") > 0; }
+
+    /** worn piece as the rules see it: a slot switched off counts as "no signature" (so it never blocks the other slot) */
+    private EmberSignature.Worn wornOn(PlayerData d, EmberItemData it) {
+        if (it == null) return null;
+        if (sigOff(d, it.slot)) return new EmberSignature.Worn(null, it.slot, it.family);
+        return worn(d, it);
+    }
+
+    /** codex: has this player ever had {@code sd} (seen counter, or any item uid carrying it on the save) */
+    public boolean sigSeen(PlayerData d, EmberSignature.Def sd) {
+        if (d == null || sd == null) return false;
+        if (d.periodCount(C_SIGSEEN + sd.id, "all") > 0) return true;
+        for (Map.Entry<String, Integer> e : d.getCounters().entrySet()) {
+            String k = e.getKey();
+            if (k.startsWith(EmberSignature.C_SIG) && k.endsWith("@all") && e.getValue() != null && e.getValue() == sd.code) return true;
+        }
+        return false;
+    }
+
+    /** mark seen (called by the settlement stamp and by imprint; the caller saves) */
+    public static void markSeen(PlayerData d, EmberSignature.Def sd) {
+        if (d != null && sd != null && d.periodCount(C_SIGSEEN + sd.id, "all") <= 0) d.addPeriodCount(C_SIGSEEN + sd.id, "all", 1);
+    }
+
     /** the active signatures of this loadout (≤ 2; see EmberSignature.active) */
     public List<EmberSignature.Def> signatures(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null) return Collections.<EmberSignature.Def>emptyList();
-        EmberSignature.Worn b = worn(d, lo.blade), c = worn(d, lo.charm);
+        EmberSignature.Worn b = wornOn(d, lo.blade), c = wornOn(d, lo.charm); // stage 1.5: menu toggle
         if ((b == null || b.def == null) && (c == null || c.def == null)) return Collections.<EmberSignature.Def>emptyList();
         return EmberSignature.active(b, c, lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
     }
@@ -666,9 +697,19 @@ public final class EmberGrowthService implements Listener {
         if (it == null) return "§7" + EmberItemData.slotName(slot) + "：§8没有";
         EmberSignature.Worn w = worn(d, it);
         if (w.def == null) return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §8（无签名）";
-        String why = "blade".equals(slot) ? EmberSignature.offReason(w, null, lo.activeSet, picks(d).values(), true)
-                : EmberSignature.offReason(w, worn(d, lo.blade), lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
+        String why = sigWhy(d, lo, slot);
         return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §6" + w.def.name + (why == null ? " §a生效" : " §c不生效：" + why);
+    }
+
+    /** why the worn {@code slot} signature is off (null = on; "无" = no signature) */
+    String sigWhy(PlayerData d, EmberLoadout lo, String slot) {
+        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        if (it == null) return "无";
+        EmberSignature.Worn w = worn(d, it);
+        if (w.def == null) return "无";
+        if (sigOff(d, slot)) return "你在签名页关掉了";
+        return "blade".equals(slot) ? EmberSignature.offReason(w, null, lo.activeSet, picks(d).values(), true)
+                : EmberSignature.offReason(w, wornOn(d, lo.blade), lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
     }
 
     /**
@@ -684,6 +725,30 @@ public final class EmberGrowthService implements Listener {
         if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
         EmberLoadout lo = runs.loadouts().get(p);
         if ("imprint".equals(op) || "烙印".equals(op)) return imprint(p, d, lo, args);
+        // ---- stage 1.5 menu ops (players never need to type these: every one is a menu button)
+        if (op.isEmpty() || "menu".equals(op) || "from".equals(op)) { // stage 1.5: bare /corerpg p1 sig opens the page; "list" = chat codex
+            String from = "from".equals(op) && args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+            if (SIG_FROM.containsKey(from)) SFROM.put(p.getUniqueId(), from);
+            else if (!"menu".equals(op)) SFROM.remove(p.getUniqueId()); // "menu" = back from the imprint page: keep the opener
+            openMenu(p, SIG_MENU);
+            return true;
+        }
+        if ("back".equals(op)) {
+            String menu = SIG_FROM.get(SFROM.get(p.getUniqueId()));
+            if (menu != null) openMenu(p, menu);
+            return true;
+        }
+        if ("toggle".equals(op)) return sigToggle(p, d, lo, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "");
+        if ("pick".equals(op)) return sigPick(p, d, args.length >= 4 ? args[3] : null);
+        if ("target".equals(op)) {
+            String[] pk = SPICK.get(p.getUniqueId());
+            if (pk == null) { openMenu(p, SIG_MENU); return true; }
+            SPICK.put(p.getUniqueId(), new String[]{pk[0], args.length >= 4 && "held".equalsIgnoreCase(args[3]) ? "held" : "worn"});
+            openMenu(p, SIG_IMP_MENU);
+            return true;
+        }
+        if ("ui".equals(op)) return sigUiConfirm(p, d, lo, args.length >= 5 && "overwrite".equalsIgnoreCase(args[4]));
+        if (!"list".equals(op)) { p.sendMessage(P + "用法：/corerpg p1 sig（打开签名页）· list（聊天栏图鉴）"); return true; }
         boolean dual = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK), imp = runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
         p.sendMessage(P + "§6签名传奇§7（每张主线图首领自己的效果；同时最多 " + (dual ? 2 : 1) + " 条"
                 + (dual ? "" : "，首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条") + "；同类不叠）");
@@ -712,7 +777,7 @@ public final class EmberGrowthService implements Listener {
         if (sd == null) { p.sendMessage(P + "用法：/corerpg p1 sig imprint L01（先 /corerpg p1 sig 看图鉴）"); return true; }
         String hold = EmberAssetGuard.hold(p);
         if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
-        if (EmberMode.isP1World(p.getWorld())) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
+        if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
         EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
         int cur = t == null ? 0 : sigOf(d, t.uid);
@@ -736,19 +801,239 @@ public final class EmberGrowthService implements Listener {
                     sd.name + "：" + sd.good + "\n代价：" + sd.bad);
             return true;
         }
-        // one PlayerData mutation (insignia + coins + the signature), then one checked save — never half applied
-        if (!d.takeCoin(coin)) { p.sendMessage(P + ChatColor.RED + "余烬币不够"); return true; }
+        doImprint(p, d, lo, sd, t, cur, coin, "chat");
+        return true;
+    }
+
+    private boolean inRun(Player p) { return EmberMode.isP1World(p.getWorld()) || runs.isRunWorld(p.getWorld()); }
+
+    /** one PlayerData mutation (insignia + coins + the signature + seen), then one checked save — never half applied */
+    private boolean doImprint(Player p, PlayerData d, EmberLoadout lo, EmberSignature.Def sd, EmberItemData t, int cur, int coin, String via) {
+        if (!d.takeCoin(coin)) { p.sendMessage(P + ChatColor.RED + "余烬币不够"); return false; }
+        EmberSignature.Def old = EmberSignature.byCode(cur);
         d.addPeriodCount(EmberSignature.C_MARK + sd.map, "all", -EmberSignature.IMPRINT_MARKS);
         d.addPeriodCount(EmberSignature.C_SIG + t.uid, "all", sd.code - cur);
+        markSeen(d, sd);
         boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
         plugin.getLogger().info("[P1 sig] " + p.getName() + " imprint " + t.uid + " " + (old == null ? "-" : old.id) + " → " + sd.id
-                + " (-" + EmberSignature.IMPRINT_MARKS + " " + sd.map + " marks, -" + coin + " coin, saved=" + saved + ")");
+                + " (-" + EmberSignature.IMPRINT_MARKS + " " + sd.map + " marks, -" + coin + " coin, via " + via + ", saved=" + saved + ")");
         p.sendMessage(P + "§a烙印完成：§f" + t.shortLabel() + " §7→ §6" + sd.name + "§7（剩 " + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记）"
                 + (saved ? "" : " §e（存档稍后重试）"));
-        String off = "blade".equals(sd.slot) ? EmberSignature.offReason(worn(d, t), null, lo.activeSet, picks(d).values(), true)
-                : EmberSignature.offReason(worn(d, t), worn(d, lo.blade), lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
-        if (off != null) p.sendMessage(P + "§e注意：现在不生效——" + off);
+        boolean worn = "blade".equals(sd.slot) ? lo.blade != null && lo.blade.uid.equals(t.uid) : lo.charm != null && lo.charm.uid.equals(t.uid);
+        if (!worn) p.sendMessage(P + "§e注意：这件现在没在用（选定 / 手持后才生效）");
+        else {
+            String off = sigWhy(d, lo, sd.slot);
+            if (off != null) p.sendMessage(P + "§e注意：现在不生效——" + off);
+        }
         return true;
+    }
+
+    // ------------------------------------------------------------------ D174 stage 1.5: TrMenu pages (no commands for players)
+
+    public static final String SIG_MENU = "ember_p1_sig", SIG_IMP_MENU = "ember_p1_sig_imprint";
+    static final Map<String, String> SIG_FROM = new LinkedHashMap<String, String>();
+    static {
+        SIG_FROM.put("gear", "ember_p1_gear");
+        SIG_FROM.put("hub", "ember_hub");
+    }
+    private static final Map<UUID, String> SFROM = new ConcurrentHashMap<UUID, String>();
+    /** uuid → {signature id, "worn" | "held"} — the imprint page's current choice */
+    private static final Map<UUID, String[]> SPICK = new ConcurrentHashMap<UUID, String[]>();
+
+    private boolean sigToggle(Player p, PlayerData d, EmberLoadout lo, String slot) {
+        if (!"blade".equals(slot) && !"charm".equals(slot)) { openMenu(p, SIG_MENU); return true; }
+        if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后再开关签名（副本里不能改）"); return true; }
+        boolean off = sigOff(d, slot);
+        d.addPeriodCount(C_SIGOFF + slot, "all", off ? -1 : 1);
+        runs.flushData(p.getUniqueId());
+        plugin.getLogger().info("[P1 sig] " + p.getName() + " toggle " + slot + " → " + (off ? "on" : "off"));
+        p.sendMessage(P + EmberItemData.slotName(slot) + "上的签名" + (off ? "§a已打开" : "§e已关闭§7（随时可以再打开；不影响掉落和烙印）"));
+        openMenu(p, SIG_MENU);
+        return true;
+    }
+
+    private boolean sigPick(Player p, PlayerData d, String id) {
+        EmberSignature.Def sd = EmberSignature.byId(id);
+        if (sd == null) { openMenu(p, SIG_MENU); return true; }
+        if (!runs.progressFlag(d, sd.map)) {
+            p.sendMessage(P + "§7" + sd.name + "：先首通 " + mapLabel(sd.map) + " 才解锁（重打掉落 / 烙印）");
+            return true;
+        }
+        if (!runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK)) {
+            p.sendMessage(P + "§7烬炉烙印在首通 " + mapLabel(EmberSignature.IMPRINT_UNLOCK) + " 后开放；现在只能靠重打 " + mapLabel(sd.map) + " 掉签名件");
+            return true;
+        }
+        SPICK.put(p.getUniqueId(), new String[]{sd.id, "worn"});
+        openMenu(p, SIG_IMP_MENU);
+        return true;
+    }
+
+    /** the main-hand P1 piece if it is a trusted item of this player (or null) */
+    private EmberItemData heldPiece(Player p) {
+        org.bukkit.inventory.ItemStack it = p.getInventory().getItemInMainHand();
+        if (it == null || !runs.loadouts().items().hasData(it)) return null;
+        EmberItems.Read r = runs.loadouts().items().read(it);
+        if (r == null || !r.ok()) return null;
+        return runs.loadouts().trust(p, r.data) == null ? r.data : null;
+    }
+
+    /** the imprint page target: the worn piece of the signature's slot, or the held piece */
+    private EmberItemData pickTarget(Player p, EmberLoadout lo, EmberSignature.Def sd, String which) {
+        if ("held".equals(which)) {
+            EmberItemData h = heldPiece(p);
+            return h != null && sd.slot.equals(h.slot) ? h : null;
+        }
+        return "blade".equals(sd.slot) ? lo.blade : lo.charm;
+    }
+
+    private boolean sigUiConfirm(Player p, PlayerData d, EmberLoadout lo, boolean overwrite) {
+        String[] pk = SPICK.get(p.getUniqueId());
+        EmberSignature.Def sd = pk == null ? null : EmberSignature.byId(pk[0]);
+        if (sd == null) { openMenu(p, SIG_MENU); return true; }
+        String hold = EmberAssetGuard.hold(p);
+        if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
+        if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
+        EmberItemData t = pickTarget(p, lo, sd, pk[1]);
+        int cur = t == null ? 0 : sigOf(d, t.uid);
+        String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map),
+                d.periodCount(EmberSignature.C_MARK + sd.map, "all"), d.getCoin(), cur);
+        if (why != null) { p.sendMessage(P + ChatColor.RED + why); openMenu(p, SIG_IMP_MENU); return true; }
+        if (cur > 0 && !overwrite) { // the page says Shift+点击 for an overwrite; a plain click never destroys a signature
+            p.sendMessage(P + ChatColor.RED + "这件已有签名「" + EmberSignature.byCode(cur).name + "」，覆盖请 Shift+点击确认");
+            openMenu(p, SIG_IMP_MENU);
+            return true;
+        }
+        if (doImprint(p, d, lo, sd, t, cur, EmberSignature.imprintCoin(t.tier), "menu")) SPICK.remove(p.getUniqueId());
+        openMenu(p, SIG_MENU);
+        return true;
+    }
+
+    private static int idx(String s) {
+        try { return Integer.parseInt(s); } catch (NumberFormatException e) { return -1; }
+    }
+
+    /** %corerpg_p1_sig_*% (key after "sig_") — the 签名传奇 page and the 烬炉烙印 page */
+    public String sigPapi(Player p, PlayerData d, String key) {
+        if (p == null || d == null) return "";
+        EmberLoadout lo = runs.loadouts().get(p);
+        boolean dual = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK), imp = runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+        if ("head".equals(key)) {
+            int un = 0;
+            for (EmberSignature.Def sd : EmberSignature.DEFS) if (runs.progressFlag(d, sd.map)) un++;
+            return "§7图鉴已解锁 §f" + un + "§7/" + EmberSignature.DEFS.size() + " §7· 同时生效最多 §f" + (dual ? 2 : 1) + " §7条"
+                    + (dual ? "" : " §8（首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条）");
+        }
+        if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
+        if ("marks".equals(key)) {
+            StringBuilder sb = new StringBuilder("§7首领徽记：");
+            for (String mk : EmberSignature.maps()) {
+                sb.append("§e").append(mk.toUpperCase(Locale.ROOT)).append(" §f")
+                        .append(runs.progressFlag(d, mk) ? String.valueOf(d.periodCount(EmberSignature.C_MARK + mk, "all")) : "§8—").append("  ");
+            }
+            return sb.toString().trim();
+        }
+        if ("back".equals(key)) {
+            String f = SFROM.get(p.getUniqueId());
+            return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "§7关闭";
+        }
+        if ("blade".equals(key) || "charm".equals(key)) return wornLine(d, lo, key);
+        if (key.startsWith("mn_") || key.startsWith("m_")) { // per map: mn_q01 = name line, m_q01 = first clear + insignia
+            String mk = key.substring(key.indexOf('_') + 1).toLowerCase(Locale.ROOT);
+            if (!EmberSignature.hasMap(mk)) return "";
+            List<EmberSignature.Def> l = EmberSignature.forMap(mk);
+            if (key.startsWith("mn_")) return "§6" + mapLabel(mk) + " §7· " + l.get(0).boss;
+            if (!runs.progressFlag(d, mk)) return "§8还没首通：首通后重打掉它的签名件 + 首领徽记（首通给 " + EmberSignature.FC_MARKS + " 枚）";
+            return "§7首领徽记 §f" + d.periodCount(EmberSignature.C_MARK + mk, "all") + " §7枚 · 普通重打每局 +" + EmberSignature.CLEAR_MARKS
+                    + "，基础掉落 " + Math.round(EmberSignature.STAMP_RATE * 100) + "% 是签名件";
+        }
+        if ("blade_t".equals(key) || "charm_t".equals(key)) {
+            String slot = key.substring(0, 5);
+            EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+            if (sigOff(d, slot)) return "§e➥ 点击重新打开这条签名";
+            if (it == null || sigOf(d, it.uid) <= 0) return "§8这件没有签名（在下面点一条签名可以烙印）";
+            return "§e➥ 点击关闭这条签名 §8（有代价时可以先关掉；随时再开）";
+        }
+        // per signature by index (1 = DEFS[0]): n_ name · k_ kind/map/boss · g_ good · b_ bad · s_ status · a_ action
+        int u = key.indexOf('_');
+        if (u == 1 && "nkgbsa".indexOf(key.charAt(0)) >= 0) {
+            int i = idx(key.substring(2));
+            if (i < 1 || i > EmberSignature.DEFS.size()) return "";
+            EmberSignature.Def sd = EmberSignature.DEFS.get(i - 1);
+            boolean cl = runs.progressFlag(d, sd.map);
+            switch (key.charAt(0)) {
+                case 'n': return (cl ? "§6" : "§8") + sd.name + (cl ? "" : " §8（未解锁）");
+                case 'k': return "§7" + sd.kindText() + " · " + mapLabel(sd.map) + " · " + sd.boss + (sd.anyFamily() ? "" : " §8（只在" + EmberItemData.familyName(sd.family) + "成套时生效）");
+                case 'g': return "§a得：§f" + sd.good;
+                case 'b': return "§c代价：§7" + sd.bad;
+                case 's': return sigStatus(d, lo, sd, cl);
+                default:
+                    if (!cl) return "§8首通 " + mapLabel(sd.map) + " 后解锁：重打掉签名件和徽记";
+                    if (!imp) return "§8重打 " + sd.map.toUpperCase(Locale.ROOT) + " 有机会掉 · 烙印在首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
+                    return "§e➥ 点击：烙印到自己的" + EmberItemData.slotName(sd.slot) + "上 §7（" + EmberSignature.IMPRINT_MARKS + " 枚徽记 + "
+                            + EmberSignature.IMPRINT_COIN_PER_TIER + "×阶级 币）";
+            }
+        }
+        if (key.startsWith("p_")) return impPapi(p, d, lo, key.substring(2));
+        return "";
+    }
+
+    private String sigStatus(PlayerData d, EmberLoadout lo, EmberSignature.Def sd, boolean cleared) {
+        String ex = !sd.excl.isEmpty() && picks(d).values().contains(sd.excl) ? " §c· 与已选天赋同类，不生效" : "";
+        for (String slot : new String[]{"blade", "charm"}) {
+            EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+            if (it != null && sigOf(d, it.uid) == sd.code) {
+                String why = sigWhy(d, lo, slot);
+                return why == null ? "§a▶ 穿着 · 生效中" : "§e▶ 穿着 · 不生效：" + why;
+            }
+        }
+        if (sigSeen(d, sd)) return "§b✔ 获得过" + ex;
+        return (cleared ? "§7✘ 还没获得" : "§8✘ 未解锁") + ex;
+    }
+
+    private String impPapi(Player p, PlayerData d, EmberLoadout lo, String k) {
+        String[] pk = SPICK.get(p.getUniqueId());
+        EmberSignature.Def sd = pk == null ? null : EmberSignature.byId(pk[0]);
+        if (sd == null) return "nok".equals(k) ? "1" : "§8先在签名页点一条签名";
+        String which = pk[1];
+        EmberItemData t = pickTarget(p, lo, sd, which);
+        int cur = t == null ? 0 : sigOf(d, t.uid), marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+        switch (k) {
+            case "name": return "§6" + sd.name + " §7（" + sd.kindText() + " · " + mapLabel(sd.map) + "）";
+            case "good": return "§a得：§f" + sd.good;
+            case "bad": return "§c代价：§7" + sd.bad;
+            case "worn": {
+                EmberItemData w = "blade".equals(sd.slot) ? lo.blade : lo.charm;
+                String lab = w == null ? "§8没有正在用的" + EmberItemData.slotName(sd.slot) : "§f" + w.shortLabel() + sigNow(d, w);
+                return ("worn".equals(which) ? "§a▶ 已选 · " : "§7") + lab;
+            }
+            case "held": {
+                EmberItemData h = heldPiece(p);
+                String lab = h == null ? "§8手里没有自己的 P1 件" : !sd.slot.equals(h.slot) ? "§8手里是" + EmberItemData.slotName(h.slot) + "，这条只能烙在" + EmberItemData.slotName(sd.slot) + "上"
+                        : "§f" + h.shortLabel() + sigNow(d, h);
+                return ("held".equals(which) ? "§a▶ 已选 · " : "§7") + lab;
+            }
+            case "cost": {
+                int coin = t == null ? EmberSignature.imprintCoin(1) : EmberSignature.imprintCoin(t.tier);
+                return "§7花费：§f" + EmberSignature.IMPRINT_MARKS + " §7枚 " + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + (marks >= EmberSignature.IMPRINT_MARKS ? "§a" : "§c") + marks
+                        + "§7）+ §f" + coin + " §7余烬币（有 " + (d.getCoin() >= coin ? "§a" : "§c") + d.getCoin() + "§7）" + (t == null ? " §8（按 T1 算）" : "");
+            }
+            case "warn": {
+                EmberSignature.Def old = EmberSignature.byCode(cur);
+                return old == null ? "§7这件现在没有签名" : "§c⚠ 会覆盖这件现在的签名「" + old.name + "」，不能取回";
+            }
+            case "check": return why == null ? "§a条件都满足" : "§c" + why;
+            case "go":
+                if (why != null) return "§8不能烙印：" + why;
+                return cur > 0 ? "§c➥ Shift+点击：确认覆盖并烙印" : "§e➥ 点击：确认烙印";
+            case "nok": return why == null ? "0" : "1";
+            default: return "";
+        }
+    }
+
+    private String sigNow(PlayerData d, EmberItemData it) {
+        EmberSignature.Def c = EmberSignature.byCode(sigOf(d, it.uid));
+        return c == null ? " §8（无签名）" : " §7· 现在：§6" + c.name;
     }
 
     private boolean sigTest(org.bukkit.command.CommandSender s, String[] args) {
@@ -777,12 +1062,17 @@ public final class EmberGrowthService implements Listener {
                 d.addPeriodCount(EmberSignature.C_MARK + mk, "all", -d.periodCount(EmberSignature.C_MARK + mk, "all"));
             }
             for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) if (it != null) d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", -sigOf(d, it.uid));
+            for (String sl : new String[]{"blade", "charm"}) d.addPeriodCount(C_SIGOFF + sl, "all", -d.periodCount(C_SIGOFF + sl, "all"));
+            for (EmberSignature.Def sd : EmberSignature.DEFS) d.addPeriodCount(C_SIGSEEN + sd.id, "all", -d.periodCount(C_SIGSEEN + sd.id, "all"));
         } else { s.sendMessage(usage); return true; }
         runs.flushData(t.getUniqueId());
         s.sendMessage(P + t.getName() + " · " + wornLine(d, lo, "blade") + " §7| " + wornLine(d, lo, "charm"));
         StringBuilder sb = new StringBuilder();
         for (String mk : EmberSignature.maps()) sb.append(mk).append('=').append(d.periodCount(EmberSignature.C_MARK + mk, "all")).append(' ');
-        s.sendMessage(P + "徽记 " + sb + "· mods " + mods(t));
+        StringBuilder seen = new StringBuilder();
+        for (EmberSignature.Def sd : EmberSignature.DEFS) if (sigSeen(d, sd)) seen.append(sd.id).append(' ');
+        s.sendMessage(P + "徽记 " + sb + "· off blade=" + sigOff(d, "blade") + " charm=" + sigOff(d, "charm") + " · seen " + seen + "· active "
+                + sigKey(signatures(d, lo)) + " · mods " + mods(t));
         return true;
     }
 

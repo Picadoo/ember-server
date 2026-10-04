@@ -1,0 +1,190 @@
+# D174 第 1.5 阶段 · 签名传奇页（docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §2.4）
+# 图鉴（每个首领两件：获得过 / 还没获得 / 未解锁 + 效果 + 代价）· 正在用的两件上的签名（点击开关）· 点一条签名 → 烬炉烙印页。
+# 文字 / 状态全部来自 PAPI %corerpg_p1_sig_*%（EmberGrowthService.sigPapi），菜单不自己算；按钮只调 /corerpg p1 sig 的子命令。
+# 签名按 EmberSignature.DEFS 的顺序编号：n_1 = L01 …；第 2a 阶段（Q04–Q06）在第 4、5 排加图标。
+# 入口：装备页「签名传奇」、首通解锁消息里的 [打开签名页]、/corerpg p1 sig。返回键回到打开它的那一页。
+
+Title: '§6签名传奇'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_sig'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '#M W C R#'
+  - '#u12 v34#'
+  - '#w56    #'
+  - '#########'
+  - '###b#X###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.2'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: nether star
+      name: '§6签名传奇 · 说明'
+      lore:
+        - '%corerpg_p1_sig_head%'
+        - ''
+        - '§7每张主线图的首领有自己的签名效果（改打法，不加伤害倍率；都有代价）'
+        - '§7生效：正在用的刃 1 条 + 已选护符 1 条；同类不叠；和已选天赋同类的不生效'
+        - '§7来源：首通后普通重打这张图 → 每局 1 枚首领徽记，基础掉落 12% 是签名件'
+        - '§7烬炉烙印：5 枚这张图的徽记 + 300×阶级 币，把签名烙到自己的件上'
+        - '§8签名记在你的存档上，跟着这件的编号走：升阶 / 强化 / 洗练都不丢；分解就没了'
+
+  M:
+    update: 20
+    display:
+      material: gold nugget
+      name: '§e首领徽记'
+      lore:
+        - '%corerpg_p1_sig_marks%'
+        - ''
+        - '§8只用来烙印这张图的签名，不换别的东西'
+
+  R:
+    update: 20
+    display:
+      material: anvil
+      name: '§6烬炉烙印'
+      lore:
+        - '%corerpg_p1_sig_rules%'
+        - ''
+        - '§7选签名 → 选件（正在用的 / 手里拿着的）→ 看花费 → 确认'
+        - '§7覆盖已有签名时要 Shift+点击确认，不能取回'
+
+  W:
+    update: 20
+    display:
+      material: iron sword
+      name: '§6正在用的刃'
+      lore:
+        - '%corerpg_p1_sig_blade%'
+        - ''
+        - '%corerpg_p1_sig_blade_t%'
+        - '§8只能在城里开关'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig toggle blade'
+
+  C:
+    update: 20
+    display:
+      material: totem
+      name: '§6已选护符'
+      lore:
+        - '%corerpg_p1_sig_charm%'
+        - ''
+        - '%corerpg_p1_sig_charm_t%'
+        - '§8只能在城里开关'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig toggle charm'
+
+  u:
+    update: 20
+    display:
+      material: book
+      name: '%corerpg_p1_sig_mn_q01%'
+      lore:
+        - '%corerpg_p1_sig_m_q01%'
+  v:
+    update: 20
+    display:
+      material: book
+      name: '%corerpg_p1_sig_mn_q02%'
+      lore:
+        - '%corerpg_p1_sig_m_q02%'
+  w:
+    update: 20
+    display:
+      material: book
+      name: '%corerpg_p1_sig_mn_q03%'
+      lore:
+        - '%corerpg_p1_sig_m_q03%'
+
+  '1':
+    update: 20
+    display:
+      material: iron axe
+      name: '%corerpg_p1_sig_n_1%'
+      lore: ['%corerpg_p1_sig_k_1%', '%corerpg_p1_sig_g_1%', '%corerpg_p1_sig_b_1%', '', '%corerpg_p1_sig_s_1%', '%corerpg_p1_sig_a_1%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L01']
+  '2':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_2%'
+      lore: ['%corerpg_p1_sig_k_2%', '%corerpg_p1_sig_g_2%', '%corerpg_p1_sig_b_2%', '', '%corerpg_p1_sig_s_2%', '%corerpg_p1_sig_a_2%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L02']
+  '3':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_3%'
+      lore: ['%corerpg_p1_sig_k_3%', '%corerpg_p1_sig_g_3%', '%corerpg_p1_sig_b_3%', '', '%corerpg_p1_sig_s_3%', '%corerpg_p1_sig_a_3%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L03']
+  '4':
+    update: 20
+    display:
+      material: iron axe
+      name: '%corerpg_p1_sig_n_4%'
+      lore: ['%corerpg_p1_sig_k_4%', '%corerpg_p1_sig_g_4%', '%corerpg_p1_sig_b_4%', '', '%corerpg_p1_sig_s_4%', '%corerpg_p1_sig_a_4%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L04']
+  '5':
+    update: 20
+    display:
+      material: iron sword
+      name: '%corerpg_p1_sig_n_5%'
+      lore: ['%corerpg_p1_sig_k_5%', '%corerpg_p1_sig_g_5%', '%corerpg_p1_sig_b_5%', '', '%corerpg_p1_sig_s_5%', '%corerpg_p1_sig_a_5%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L05']
+  '6':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_6%'
+      lore: ['%corerpg_p1_sig_k_6%', '%corerpg_p1_sig_g_6%', '%corerpg_p1_sig_b_6%', '', '%corerpg_p1_sig_s_6%', '%corerpg_p1_sig_a_6%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L06']
+
+  b:
+    update: 20
+    display:
+      material: arrow
+      name: '%corerpg_p1_sig_back%'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 sig back'
+
+  X:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all:
+        - close

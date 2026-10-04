@@ -1,0 +1,106 @@
+# D174 第 1.5 阶段 · 烬炉烙印页：签名（在签名页选）→ 选件 → 看花费 → 确认。
+# 状态全部来自 PAPI %corerpg_p1_sig_p_*%；确认时服务端重新核对一遍（件、徽记、币、是否覆盖），菜单显示只作参考。
+# 覆盖已有签名：普通点击不会执行，必须 Shift+点击（服务端也查）。返回键回到签名页。
+
+Title: '§6烬炉烙印'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_sig_imprint'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 600
+
+Layout:
+  - '####N####'
+  - '#  O H  #'
+  - '####G####'
+  - '###b#X###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  N:
+    update: 20
+    display:
+      material: nether star
+      name: '%corerpg_p1_sig_p_name%'
+      lore:
+        - '%corerpg_p1_sig_p_good%'
+        - '%corerpg_p1_sig_p_bad%'
+
+  O:
+    update: 20
+    display:
+      material: iron chestplate
+      name: '§6烙到正在用的那件'
+      lore:
+        - '%corerpg_p1_sig_p_worn%'
+        - ''
+        - '§e➥ 点击选这件'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig target worn'
+
+  H:
+    update: 20
+    display:
+      material: chest
+      name: '§6烙到手里拿着的那件'
+      lore:
+        - '%corerpg_p1_sig_p_held%'
+        - ''
+        - '§7先把要烙的件拿在主手，再打开这页'
+        - '§8（刃：主手那把就是正在用的刃；护符：可以烙没选定的那件）'
+        - '§e➥ 点击选这件'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig target held'
+
+  G:
+    update: 20
+    display:
+      material: blaze powder
+      name: '§6确认烙印'
+      lore:
+        - '%corerpg_p1_sig_p_cost%'
+        - '%corerpg_p1_sig_p_warn%'
+        - '%corerpg_p1_sig_p_check%'
+        - ''
+        - '%corerpg_p1_sig_p_go%'
+    actions:
+      left:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig ui confirm'
+      shift_left:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig ui confirm overwrite'
+
+  b:
+    display:
+      material: arrow
+      name: '§7返回签名页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 sig menu'
+
+  X:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all:
+        - close
