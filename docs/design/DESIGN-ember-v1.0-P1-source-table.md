@@ -1510,6 +1510,8 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D164 | CoreRpg 1.65.3 | 天赋第二排 `t2c` 拆分 → **破甲**：`dmg_affix_shield` 1.60、`dmg_affix_blazing` 0.80、`dmg_affix_split` 0.80（分身也算分裂）；只作用于主线重打的词缀精英 |
 | D165 | CoreRpg 1.65.3 | 刃词条 裂身纹 `b_split` 移出洗练池（`rollable: false`）：洗不出来、不能锁定；已有的照常生效；洗练页 / 词条池 / 图鉴列为「已移出洗练池」 |
 | D166 | CoreRpg 1.65.3 | 文案：天赋第二排与 猎缀纹 / 裂身纹 / 抗缀纹 加「仅主线重打生效」；Q01 第一房提示退到门口打；首领前「留 2 瓶药」；R01 招募 / 开本 / 冒险页「建议队伍里有炽愈」。不改数值 |
+| D169 | 文档定稿（无版本 bump） | 6 槽装备结构分阶段落地计划 SETTLED：`docs/design/DESIGN-ember-gear-staged-plan-2026-10-04.md`。目标刃+护符+4甲；每图掉全部位、甲另掉不稀释；2+4 件套；Stage 0–4 门禁。CoreRpg 结构代码仍 HOLD。不占 D167/D168 |
+| D170 | CoreRpg 1.65.4 | Q02–Q07 第一房战术提示（短中文）；Q04 r3 可选落差提醒；balance_version 仍 29；不改战斗数值 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1561,3 +1563,20 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D166 | 第二排主题与 t2a / t2b / t2c 正面文案、猎缀纹 / 裂身纹 / 抗缀纹（`note`）加「仅主线重打生效」；图鉴词缀精英条目说明。Q01 r1 `hint`「进门后退到门口打，别站进怪堆」；清完最后一房、等首领时 `PRE_BOSS_HINT`「首领前留 2 瓶药」（所有主线）；R01 `party_hint`「建议队伍里有炽愈」：招募广播、开本、冒险页 R01 图标 |
 | 不改 | 数值、奖励、`balance_version`（29） |
 | 测试 | `EmberGrowthTest.splitAffixRetiredFromPool_D165`、`EmberRunRulesTest.textHints_D166`；单测 229 / 0。实机：FreshQ100 Q01 kite 首通看到两条提示；FreshQ101 洗练页 / 天赋页文案正确；FreshQ102 收到 R01 招募带「建议队伍里有炽愈」 |
+
+### 13.83 装备结构分阶段计划定稿（D169，纯文档，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | RESEARCH `92f77fb`；服主否决按图锁部位；化妆品暂停；成长 sidegrades 待 6 槽复核 |
+| 裁决 | 目标 6 槽（刃+护符+4 原版甲）；护甲无攻击、分走护符 H/D（示意 40%/15%×4，Stage 0 定）；每图掉全部位、甲另掉不稀释刃/护符；2 件被动不变 + 4 件改行为；锻造后期选族选部位+可选钉词条类型，保留 8 印记；刃型 Stage 3 定 F 形状。Stage 0 离线模拟；Stage 1+ 各 balance_version + 冒烟 + loss/dup；失败停。yml-only sidegrades 包若 Stage 0+1 久拖可先发，本轮不发 |
+| 文档 | `docs/design/DESIGN-ember-gear-staged-plan-2026-10-04.md`；`COORD-gear-structure-hold.txt` → SETTLED PLAN / 结构代码仍 HOLD |
+| 不占 | D167（forge-random）、D168（gear8） |
+
+### 13.84 Q02–Q07 战术房提示（CoreRpg 1.65.4，D170，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 为 Q02–Q07 第一房补短中文 `hint`（语气同 D166）；Q04 r3 补落差提醒；Q01 r1 门口提示保留 |
+| 不改 | 战斗数值、variety、技能、`balance_version`（29）、非 hint 键 |
+| 版本 | CoreRpg 1.65.4；状态 `docs/status/STATUS-ember-room-hints-1.65.4.md`；发布凭证 `docs/status/RELEASE-ember-1.65.4.md` |

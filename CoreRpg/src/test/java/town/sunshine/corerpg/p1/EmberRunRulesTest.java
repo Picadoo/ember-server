@@ -292,6 +292,24 @@ public class EmberRunRulesTest {
         assertTrue(EmberRunRules.PRE_BOSS_HINT.contains("首领前留 2 瓶药"));
     }
 
+    @Test public void textHints_D170() {
+        EmberRunMaps m = bundled();
+        assertTrue(m.byKey("q01").rooms.get(0).hint.contains("进门后退到门口打，别站进怪堆"));
+        assertFalse(m.byKey("q02").rooms.get(0).hint.isEmpty());
+        assertTrue(m.byKey("q02").rooms.get(0).hint.contains("先清近战"));
+        assertFalse(m.byKey("q03").rooms.get(0).hint.isEmpty());
+        assertTrue(m.byKey("q03").rooms.get(0).hint.contains("别把怪拉进拐角"));
+        assertFalse(m.byKey("q04").rooms.get(0).hint.isEmpty());
+        assertTrue(m.byKey("q04").rooms.get(0).hint.contains("水边落差"));
+        assertFalse(m.byKey("q04").rooms.get(2).hint.isEmpty()); // r3 mid-room fall reminder
+        assertFalse(m.byKey("q05").rooms.get(0).hint.isEmpty());
+        assertTrue(m.byKey("q05").rooms.get(0).hint.contains("环廊"));
+        assertFalse(m.byKey("q06").rooms.get(0).hint.isEmpty());
+        assertTrue(m.byKey("q06").rooms.get(0).hint.contains("远程优先"));
+        assertFalse(m.byKey("q07").rooms.get(0).hint.isEmpty());
+        assertTrue(m.byKey("q07").rooms.get(0).hint.contains("货箱"));
+    }
+
     @Test public void bundledMapsValidateAgainstTheCaps() {
         EmberRunMaps m = bundled();
         assertEquals(30, m.cost);
