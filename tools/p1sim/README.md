@@ -40,3 +40,22 @@ python3 p1sim.py --profile v2 --route alternate   # 重放 D31 之前的数
 
 改了平衡数（runs yml / MM / ember-v1.yml / Java 常量）后重跑即可；`--profile` 里只放历史对照用的覆盖值。
 输出是中位数 / P90（没到的玩家记作无穷大），「首通时装备」是众数，B / H / Lv 是首通那一局的中位数。
+
+## 规则快照、可复现性与构筑分析（2026-10-04，审查 §04–§06）
+
+- **规则快照**（M06）：所有入口通过 `rules.py` 读同一份规范快照（runs / growth / festival 的 plugins/ 与 src/ 两份必须一致，否则报错；Java 常量表），第一行打印 `# rules sha256 …`。`python3 rules.py --export f.json` 导出；`P1SIM_RULES=f.json` 固定快照，`P1SIM_RULES_EXPECT=<hash>` 校验。快照存原文、加载时重新解析。
+- **随机流**（M01 / M02）：模拟代码不许用模块级 `random.*`（selfcheck 第 7 节）；每局从调用方 rng 取 4 次，派生 布局 / 命中 / 暴击 / 刷怪 四条流；团本阵容 `p1party.rosters(seed, n, trials, pool)` 预先固定（结果带 `lineup`）。
+- **焚烬**（M03）：`burnbook.py` 镜像 `EmberBurnBook.java`；`burncheck.py` + `javacheck/BurnCheck.java` 用仓库 JDK8 编译真实 Java 源逐跳对拍。
+- `simfix_check.py` / `simfix_report.py`：修正前后对照 → `out-simfix-m01-m06.md`（`SIMFIX_DIR` 默认 /tmp/bd）。
+
+```bash
+P1SIM_RULES=f.json python3 builddiv.py m04 --n 3000         # 243 结构穷举 → out-build-diversity-m04.md
+P1SIM_RULES=f.json python3 builddiv.py b01                  # 拆分补丁对照 → out-build-diversity-b01-split.md
+P1SIM_RULES=f.json NPROC=6 python3 builddiv.py propose [--ids P4b,P5b] [--noise]   # 提案校准（轮次合并到 /tmp/bd/prop.pkl）→ out-build-diversity-proposals.md
+P1SIM_RULES=f.json NPROC=6 python3 builddiv.py raid --n 1500 # 团本 1 号位换构筑 → out-build-diversity-raid.md
+P1SIM_RULES=f.json python3 raidcomp.py out.json --trials 1500; python3 raidcomp.py --report out.json > out-build-diversity-raidcomp.md   # 焚烬人数 × 7 池聚类区间
+python3 growthrun.py p2econ '<build json>' --players 300 --weeks 12 --abyss --raid --goals --every-week --dodge 0.5 [--seed-offset 100000]   # 上限效果检查
+python3 growthrun.py p2econ-real '{"talents":[…],"affixes":{…},"policy":"gear"}' …   # 真实成本成长（realcost.py）
+python3 growthrun.py weeks out1.md out2.md …                 # W30（候选策略中达到 30% 双极品拥有率的最早插值周）+ P50 / P90 / 第 12 周未拥有
+B03_DIR=… python3 b03report.py                               # → out-build-diversity-b03-b04.md
+```
