@@ -692,6 +692,8 @@ class Player:
         """STAGE 0: the extra armor drop of a completed run — family by the same target / map rule as roll_item, slot
         uniform (SIX['gap']: a slot whose worn piece is below this tier / not the target family is twice as likely),
         quality / craft from the same tables"""
+        if SIX.get('arm_cap') == 'all':  # rule option: an armor drop never exceeds the worn charm's tier
+            tier = min(tier, max(1, self.charm['tier']))
         it = self.roll_item(tier, key)
         r = self.rng
         ws = [2.0 if SIX.get('gap') and (a['tier'] < tier or a['fam'] != self.kn.target) else 1.0 for a in self.armor]
@@ -873,7 +875,9 @@ class Player:
             flag = {1: 'q04', 2: 'q07'}.get(it['tier'])
             if not flag or flag not in self.cleared or it['fam'] == 'none':
                 continue
-            k = self.cost_mult(it)
+            if SIX is not None and SIX.get('arm_cap') and it['slot'] in ARMOR_SLOTS and it['tier'] >= self.charm['tier']:
+                continue  # STAGE 0 rule option: an armor piece is upgraded only up to the charm's tier (drops are not capped)
+            k = self.cost_mult(it, up=True)
             c = {x: v * k for x, v in cfg['upgrade'][it['tier']].items()}
             if self.shard >= c['shard'] and self.core >= c['core'] and self.blank >= c['blank']:
                 if self.coin - c['coin'] >= reserve:
@@ -901,11 +905,15 @@ class Player:
             else:
                 it['pity'] += 1
 
-    def cost_mult(self, it):
-        """STAGE 0: enhance / upgrade cost multiplier of a piece (SIX['cost'] = {'charm': x, 'armor': y}; blade 1)"""
+    def cost_mult(self, it, up=False):
+        """STAGE 0: enhance / upgrade cost multiplier of a piece (SIX['cost'] = {'charm': x, 'armor': y}; blade 1;
+        SIX['cost_up'] = same shape, overrides SIX['cost'] for tier upgrades only)"""
         if SIX is None or it['slot'] == 'blade':
             return 1.0
-        return float((SIX.get('cost') or {}).get('armor' if it['slot'] in ARMOR_SLOTS else 'charm', 1.0))
+        kind = 'armor' if it['slot'] in ARMOR_SLOTS else 'charm'
+        if up and kind in (SIX.get('cost_up') or {}):
+            return float(SIX['cost_up'][kind])
+        return float((SIX.get('cost') or {}).get(kind, 1.0))
 
     def buy_potions(self):
         while self.potions < self.kn.potion_keep and self.coin >= self.cfg['potion_price']:

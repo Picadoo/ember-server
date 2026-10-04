@@ -11,7 +11,9 @@ Uses p1sim's opt-in 6-slot model (P1SIM_SIX / p1sim.SIX; None = today's 2-slot m
   python3 gear6.py affix                                                           # charm-pool affix x1 vs x5 (4 armor stacks)
 SIX keys: w = (charm, head, chest, legs, boots) shares of the charm's h / D; drop = armor drops per completed run (fraction =
 probability); start = true (Q01 head+chest, Q02 legs+boots) | "q01" (all four at Q01); up_all = upgrade every affordable
-armor piece in one invest pass; gap = gap-weighted armor slot; cost = {"charm": x, "armor": y} enhance / upgrade cost multipliers.
+armor piece in one invest pass; gap = gap-weighted armor slot; cost = {"charm": x, "armor": y} enhance / upgrade cost multipliers;
+cost_up = same shape, upgrade-only override; arm_cap = true (armor upgraded only up to the charm tier) | "all" (drops capped too);
+blank = white-blank yield of a dismantled armor piece (x tier; default 1.0).
 """
 import os
 import pickle
