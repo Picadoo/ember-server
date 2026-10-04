@@ -1,0 +1,93 @@
+# D174 第 2b 阶段 · 自选誓约页（Q06 首通开放；DESIGN-ember-mainline-unlocks-2026-10-04.md §4 Q06）
+# 可挂的规则 = ember-v1-runs.yml modifiers 里 normal: true 的那几条（D94 已允许上普通重打：限药 lean、逆行 reverse）。
+# 状态来自 %corerpg_p1_pledge_s_<id>% / n_ / t_；点击 = /corerpg p1 pledge toggle <id>（服务端校验 Q06 首通）。
+# 入口：进阶模式页「自选誓约」、/corerpg p1 pledge。
+
+Title: '§d自选誓约'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_pledge'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####I####'
+  - '##1###2##'
+  - '###b#X###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.2'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: writable book
+      name: '§d自选誓约'
+      lore:
+        - ''
+        - '%corerpg_p1_pledge_head%'
+        - ''
+        - '§7规则会一直挂着，直到你取消；开本时聊天栏会提示这局挂了什么'
+        - '§7每挂一条：通关结算每人 +1 枚本图首领徽记（徽记用来烙签名）'
+
+  '1':
+    update: 20
+    display:
+      material: potion
+      name: '§f%corerpg_p1_pledge_n_lean%'
+      lore:
+        - ''
+        - '§7%corerpg_p1_pledge_t_lean%'
+        - ''
+        - '%corerpg_p1_pledge_s_lean%'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 pledge toggle lean'
+
+  '2':
+    update: 20
+    display:
+      material: compass
+      name: '§f%corerpg_p1_pledge_n_reverse%'
+      lore:
+        - ''
+        - '§7%corerpg_p1_pledge_t_reverse%'
+        - ''
+        - '%corerpg_p1_pledge_s_reverse%'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 pledge toggle reverse'
+
+  X:
+    display:
+      material: barrier
+      name: '§c全部取消'
+      lore:
+        - '§7之后重打按原样（没有额外徽记）'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-0.8'
+        - 'command: corerpg p1 pledge off'
+
+  b:
+    display:
+      material: arrow
+      name: '§7返回进阶模式'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_p1_modes'

@@ -17,7 +17,7 @@ Options:
 
 Layout:
   - '#########'
-  - '#T X A K#'
+  - '#TVX A K#'
   - '#1234567#'
   - '#Ws b u n'
   - '#GMRFZCYD'
@@ -159,6 +159,23 @@ Icons:
     display:
       material: gray stained glass pane
       name: '§8'
+
+  # D174 stage 2b: 进阶模式 (首领残响 Q04 / 连战·前哨 Q05 / 自选誓约 Q06)
+  V:
+    display:
+      material: writable book
+      name: '§d进阶模式'
+      lore:
+        - ''
+        - '§7首领残响 §8（Q04 首通）§7· 连战·前哨 §8（Q05 首通）§7· 自选誓约 §8（Q06 首通）'
+        - '§7重打已通的图拿首领徽记（用来烙签名）'
+        - '§7自选誓约：%corerpg_p1_pledge_head%'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_modes'
 
   T:
     update: 20

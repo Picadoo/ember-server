@@ -963,7 +963,17 @@ def mod_cfg(cfg, key, mod):
 
 
 def week_rule(kn, order, day, offset, key, cleared):
-    """D94: the weekly rule hitting this NORMAL run (featured map, already first-cleared), or None."""
+    """D94: the weekly rule hitting this NORMAL run (featured map, already first-cleared), or None.
+    D174 stage 2b upper bound: P1_PLEDGE=lean+reverse puts the 自选誓约 rules on EVERY repeat normal run of Q01–Q06."""
+    pl = os.environ.get('P1_PLEDGE', '')
+    if pl and key in cleared and key != order[-1]:
+        ids = pl.split('+')
+        mod = {'id': 'pledge:' + pl}
+        if 'lean' in ids:
+            mod['potion_cap'] = 3
+        if 'reverse' in ids:
+            mod['swap_rooms'] = True
+        return mod
     if not kn.normal_mods or not MODS:
         return None
     week = (day - 1 + offset) // 7

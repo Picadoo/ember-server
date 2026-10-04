@@ -6,6 +6,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -310,6 +311,26 @@ public class EmberRunRulesTest {
         assertTrue(m.byKey("q07").rooms.get(0).hint.contains("货箱"));
     }
 
+    @Test public void pledgeCombinesTheNormalRules() { // D174 stage 2b 自选誓约
+        EmberRunMaps m = bundled();
+        List<String> pool = new ArrayList<String>();
+        for (EmberRunMaps.Modifier x : m.pledgePool()) pool.add(x.id);
+        assertEquals("[lean, reverse]", pool.toString()); // only the D94 normal-run rules
+        assertEquals("[lean, reverse]", EmberRunMaps.pledgeIds("pledge:lean+reverse+lean").toString());
+        assertTrue(EmberRunMaps.pledgeIds("lean").isEmpty());
+        EmberRunMaps.Modifier c = m.modifier("pledge:lean+reverse");
+        assertEquals(3, c.potionCap);
+        assertTrue(c.swapRooms);
+        assertTrue(c.remap.isEmpty());
+        assertFalse(c.tweaksConverted());
+        assertEquals("限药+逆行", c.name);
+        assertSame(c, m.modifier("pledge:lean+reverse"));
+        assertNull(m.modifier("pledge:casters")); // a challenge-only rule cannot be pledged
+        EmberRunMaps.Modifier r = m.modifier("pledge:reverse");
+        assertEquals(0, r.potionCap);
+        assertTrue(r.swapRooms);
+    }
+
     @Test public void bundledMapsValidateAgainstTheCaps() {
         EmberRunMaps m = bundled();
         assertEquals(30, m.cost);
@@ -333,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(34, m.balanceVersion);                // D174 stage 2a (D177 = 33, D178 = 32, D174 s1 = 31)
-        assertEquals("g04-1/b34", m.ruleVersion);
+        assertEquals(35, m.balanceVersion);                // D174 stage 2b pledge (2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
+        assertEquals("g04-1/b35", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch

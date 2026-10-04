@@ -754,8 +754,65 @@ public final class EmberRunMaps {
 
     public Modifier modifier(String id) {
         if (id == null || id.isEmpty()) return null;
+        if (id.startsWith(PLEDGE)) return pledgeModifier(id);
         for (Modifier m : modifiers) if (m.id.equals(id)) return m;
         return null;
+    }
+
+    // ---- D174 stage 2b 自选誓约 (Q06): the leader's own pick of the D94 normal-run rules, stored in the session as
+    // "pledge:lean+reverse" (one modifier slot; the combined rule = potion cap min, swap_rooms or, remaps merged)
+    public static final String PLEDGE = "pledge:";
+    private final Map<String, Modifier> pledgeCache = new java.util.concurrent.ConcurrentHashMap<String, Modifier>();
+
+    /** the rules a pledge may pick: the ones already allowed on repeat NORMAL runs (normal: true, D94 model: rewards only move down) */
+    public List<Modifier> pledgePool() {
+        List<Modifier> out = new ArrayList<Modifier>();
+        for (Modifier m : modifiers) if (m.normal) out.add(m);
+        return out;
+    }
+
+    /** ids of a pledge session modifier ("pledge:a+b" → [a, b]); empty for a weekly rule / none. Unknown ids are kept (counted by the caller against the pool). */
+    public static List<String> pledgeIds(String modifier) {
+        List<String> out = new ArrayList<String>();
+        if (modifier == null || !modifier.startsWith(PLEDGE)) return out;
+        for (String id : modifier.substring(PLEDGE.length()).split("\\+")) if (!id.isEmpty() && !out.contains(id)) out.add(id);
+        return out;
+    }
+
+    private Modifier pledgeModifier(String key) {
+        Modifier c = pledgeCache.get(key);
+        if (c != null) return c;
+        List<Modifier> parts = new ArrayList<Modifier>();
+        for (String id : pledgeIds(key)) for (Modifier m : pledgePool()) if (m.id.equals(id)) parts.add(m);
+        if (parts.isEmpty()) return null;
+        Map<Object, Object> raw = new LinkedHashMap<Object, Object>();
+        StringBuilder name = new StringBuilder(), text = new StringBuilder();
+        int cap = 0;
+        boolean swap = false;
+        Map<String, String> remap = new LinkedHashMap<String, String>();
+        double hp = 1, atk = 1, iv = 1, sp = 1;
+        for (Modifier m : parts) {
+            if (name.length() > 0) { name.append("+"); text.append("；"); }
+            name.append(m.name);
+            text.append(m.text);
+            if (m.potionCap > 0) cap = cap == 0 ? m.potionCap : Math.min(cap, m.potionCap);
+            swap |= m.swapRooms;
+            remap.putAll(m.remap);
+            hp *= m.convHp; atk *= m.convAtk; iv *= m.convInterval; sp *= m.convSpeed;
+        }
+        raw.put("id", key);
+        raw.put("name", name.toString());
+        raw.put("text", text.toString());
+        if (cap > 0) raw.put("potion_cap", cap);
+        if (swap) raw.put("swap_rooms", true);
+        raw.put("normal", true);
+        if (!remap.isEmpty()) raw.put("remap", remap);
+        Map<Object, Object> cv = new LinkedHashMap<Object, Object>();
+        cv.put("hp", hp); cv.put("atk", atk); cv.put("interval", iv); cv.put("speed", sp);
+        raw.put("converted", cv);
+        c = new Modifier(raw);
+        pledgeCache.put(key, c);
+        return c;
     }
 
     /** P2-8: layout from an explicit composition (the swap-rooms modifier spawns r3's group on r1's points and back). */
