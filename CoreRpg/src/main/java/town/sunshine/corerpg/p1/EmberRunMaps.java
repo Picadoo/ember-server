@@ -591,11 +591,11 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4. reflect/vortex intentionally absent (rejected). */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4. reflect/vortex intentionally absent (rejected). Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
                 "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
-                "timed", "crystal", "escort", "hold", "beacon", "relay"));
+                "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
         public final List<String> affixes, events;
         public final int affixShard, eventCore, eventSecs;
@@ -622,6 +622,11 @@ public final class EmberRunMaps {
         public final double beaconHp, beaconAggroR, beaconTick, beaconBite;
         public final int relayCount, relaySecs;
         public final double relayRadius;
+        // D191 breach (裂隙) / chain (连斩) / unscathed (无伤)
+        public final double breachRadius, breachMin, breachMax, breachShrink, breachGrow;
+        public final int chainNeed;
+        public final double chainGap;
+        public final int unscathedHits, unscathedPerMember;
 
         Variety(Map<?, ?> m) {
             affixRate = clamp01(num(m.get("affix_rate"), 0.0));
@@ -710,6 +715,18 @@ public final class EmberRunMaps {
             relayCount = Math.max(2, Math.min(3, (int) num(re.get("count"), 3)));
             relayRadius = Math.max(0.5, num(re.get("radius"), 1.6));
             relaySecs = Math.max(5, (int) num(re.get("secs"), 40));
+            Map<?, ?> br = m.get("breach") instanceof Map ? (Map<?, ?>) m.get("breach") : Collections.emptyMap();
+            breachMin = Math.max(0.5, Math.min(4.0, num(br.get("min"), 1.5)));
+            breachMax = Math.max(breachMin + 1.0, Math.min(10.0, num(br.get("max"), 7.0)));
+            breachRadius = Math.max(breachMin + 0.5, Math.min(breachMax, num(br.get("radius"), 5.0)));
+            breachShrink = Math.max(0.01, Math.min(1.0, num(br.get("shrink"), 0.15)));
+            breachGrow = Math.max(0.0, Math.min(3.0, num(br.get("grow"), 0.8)));
+            Map<?, ?> cn = m.get("chain") instanceof Map ? (Map<?, ?>) m.get("chain") : Collections.emptyMap();
+            chainNeed = Math.max(2, Math.min(8, (int) num(cn.get("need"), 4)));
+            chainGap = Math.max(1.0, Math.min(10.0, num(cn.get("gap"), 4.0)));
+            Map<?, ?> us = m.get("unscathed") instanceof Map ? (Map<?, ?>) m.get("unscathed") : Collections.emptyMap();
+            unscathedHits = Math.max(0, Math.min(20, (int) num(us.get("hits"), 4)));
+            unscathedPerMember = Math.max(0, Math.min(10, (int) num(us.get("per_member"), 2)));
         }
 
         public boolean on() { return (affixRate > 0 && !affixes.isEmpty()) || eventRate > 0; }
@@ -729,8 +746,11 @@ public final class EmberRunMaps {
             return id;
         }
 
-        /** Chinese name of a room event kind (timed / crystal / escort / hold / beacon / relay). */
+        /** Chinese name of a room event kind (timed / crystal / escort / hold / beacon / relay / breach / chain / unscathed). */
         public static String eventLabel(String kind) {
+            if ("breach".equals(kind)) return "裂隙";
+            if ("chain".equals(kind)) return "连斩";
+            if ("unscathed".equals(kind)) return "无伤";
             if ("crystal".equals(kind)) return "砸余烬晶";
             if ("escort".equals(kind)) return "护宝兔";
             if ("hold".equals(kind)) return "占点";
@@ -743,6 +763,7 @@ public final class EmberRunMaps {
         public int eventLimit(String kind) {
             if ("crystal".equals(kind)) return crystalSecs;
             if ("escort".equals(kind) || "beacon".equals(kind)) return 0; // no countdown; lives until room clear or fail
+            if ("breach".equals(kind) || "chain".equals(kind) || "unscathed".equals(kind)) return 0; // D191: no countdown
             if ("hold".equals(kind)) return holdSecs;
             if ("relay".equals(kind)) return relaySecs;
             return timedSecs;

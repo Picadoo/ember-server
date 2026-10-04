@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(51, m.balanceVersion);                // D189 Affix Pack 4 毒十字/禁锢 (D188 = 50, D187 = 49, …)
-        assertEquals("g04-1/b51", m.ruleVersion);
+        assertEquals(52, m.balanceVersion);                // D191 Room Events Pack 4 裂隙/连斩/无伤 (D189 = 51, D188 = 50, …)
+        assertEquals("g04-1/b52", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1352,7 +1352,7 @@ public class EmberRunRulesTest {
         }
         assertTrue(aff.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "blazing", "split", "shield", "mortar", "molten")));
         assertTrue(ev.containsAll(java.util.Arrays.asList("timed", "crystal", "escort", "hold", "beacon", "relay")));
-        assertEquals(6, EmberRunMaps.Variety.EVENTS.size());
+        assertEquals(9, EmberRunMaps.Variety.EVENTS.size()); // D191 Pack 4: 6 → 9
         // reflect rejected
         java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
         raw.put("affix_rate", 1.0);
@@ -1548,7 +1548,7 @@ public class EmberRunRulesTest {
 
     @Test public void varietyPack3RollsNewEventsOnly_D179() {
         EmberRunMaps.Variety v = bundled().variety;
-        assertEquals(6, EmberRunMaps.Variety.EVENTS.size());
+        assertEquals(9, EmberRunMaps.Variety.EVENTS.size()); // D191 Pack 4: 6 → 9
         assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("hold", "beacon", "relay")));
         assertEquals(10, EmberRunMaps.Variety.KNOWN.size()); // affix pool unchanged by D179 (D189 later 8→10)
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
@@ -1625,6 +1625,119 @@ public class EmberRunRulesTest {
         EmberRunMaps.Variety v = bundled().variety;
         assertEquals(3, v.relayCount);
         assertEquals("传火", EmberRunMaps.Variety.eventLabel("relay"));
+    }
+
+    @Test public void varietyPack4RollsBreachChainUnscathed_D191() {
+        EmberRunMaps.Variety v = bundled().variety;
+        assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("breach", "chain", "unscathed")));
+        assertEquals(10, EmberRunMaps.Variety.KNOWN.size()); // affix pool untouched by D191
+        assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
+        assertEquals(0.5, v.eventRate, 1e-9);               // rate unchanged
+        assertEquals(1, v.eventCore);                       // reward amount unchanged
+        assertEquals(5.0, v.breachRadius, 1e-9);
+        assertEquals(1.5, v.breachMin, 1e-9);
+        assertEquals(7.0, v.breachMax, 1e-9);
+        assertEquals(0.15, v.breachShrink, 1e-9);
+        assertEquals(0.8, v.breachGrow, 1e-9);
+        assertEquals(4, v.chainNeed);
+        assertEquals(4.0, v.chainGap, 1e-9);
+        assertEquals(4, v.unscathedHits);
+        assertEquals(2, v.unscathedPerMember);
+        assertEquals("裂隙", EmberRunMaps.Variety.eventLabel("breach"));
+        assertEquals("连斩", EmberRunMaps.Variety.eventLabel("chain"));
+        assertEquals("无伤", EmberRunMaps.Variety.eventLabel("unscathed"));
+        assertEquals(0, v.eventLimit("breach"));    // no countdown
+        assertEquals(0, v.eventLimit("chain"));
+        assertEquals(0, v.eventLimit("unscathed"));
+        java.util.Set<String> ev = new java.util.HashSet<String>();
+        for (long seed = 0; seed < 12000; seed++) {
+            String[] a = v.roll(EmberRunRules.subSeed(seed, "variety"));
+            if (!a[2].isEmpty()) ev.add(a[3]);
+            assertArrayEquals(a, v.roll(EmberRunRules.subSeed(seed, "variety"))); // same seed → same kind (reconnect / retry)
+        }
+        assertTrue(ev.containsAll(EmberRunMaps.Variety.EVENTS));
+        EmberRunSession s = new EmberRunSession();
+        s.eventRoom = "r3"; s.eventKind = "unscathed";
+        assertEquals("unscathed", EmberRunSession.fromMap(s.toMap()).eventKind);
+    }
+
+    @Test public void pack4PaysExistingCoreOnceOnly_D191() {
+        for (String k : new String[]{"breach", "chain", "unscathed"}) {
+            List<EmberRunRules.Grant> g = EmberRunRules.varietyGrants(false, false, 0, true, 1, k);
+            assertEquals(1, g.size());
+            assertEquals("var_event_" + k, g.get(0).key);
+            assertEquals(EmberUpgradeRules.MAT_CORE, g.get(0).id);
+            assertEquals(1, g.get(0).amount);
+            assertTrue(EmberRunRules.varietyGrants(true, false, 0, true, 1, k).isEmpty());   // first clear: nothing
+            assertTrue(EmberRunRules.varietyGrants(false, false, 0, false, 1, k).isEmpty()); // failed: nothing
+        }
+        assertEquals("裂隙 ", EmberRunService.matSource("var_event_breach"));
+        assertEquals("连斩 ", EmberRunService.matSource("var_event_chain"));
+        assertEquals("无伤 ", EmberRunService.matSource("var_event_unscathed"));
+        // 花样委托 kind timed still counts any room-event success (label unchanged)
+        assertEquals("房间事件达标", new EmberRunRules.VarietyBounty("timed", 1, 20, 0).label());
+    }
+
+    @Test public void breachShrinksGrowsAndCollapses_D191() {
+        assertEquals(4.25, EmberRunDirector.breachStep(5.0, 5.0, 0.15), 1e-9);
+        assertEquals(5.0, EmberRunDirector.breachStep(5.0, -1.0, 0.15), 1e-9);   // clock skew never grows it
+        assertEquals(0.0, EmberRunDirector.breachStep(0.5, 100.0, 0.15), 1e-9);
+        assertEquals(5.05, EmberRunDirector.breachGrow(4.25, 0.8, 7.0), 1e-9);
+        assertEquals(7.0, EmberRunDirector.breachGrow(6.8, 0.8, 7.0), 1e-9);     // capped
+        assertTrue(EmberRunDirector.breachCollapsed(1.5, 1.5));
+        assertFalse(EmberRunDirector.breachCollapsed(1.51, 1.5));
+        assertTrue(EmberRunDirector.breachInside(3.0, 4.0, 5.0));
+        assertFalse(EmberRunDirector.breachInside(3.0, 4.1, 5.0));
+        // no kills: 5.0 → 1.5 after (5.0 − 1.5) / 0.15 ≈ 23.3 s
+        double r = 5.0; int t = 0;
+        while (!EmberRunDirector.breachCollapsed(r, 1.5)) { r = EmberRunDirector.breachStep(r, 1.0, 0.15); t++; }
+        assertEquals(24, t);
+    }
+
+    @Test public void chainNeedsKillsWithinGap_D191() {
+        assertEquals(1, EmberRunDirector.chainNext(0, 0, 1000, 4.0));       // first kill
+        assertEquals(2, EmberRunDirector.chainNext(1, 1000, 4999, 4.0));    // within 4 s
+        assertEquals(3, EmberRunDirector.chainNext(2, 1000, 5000, 4.0));    // exactly 4 s still counts
+        assertEquals(1, EmberRunDirector.chainNext(3, 1000, 5001, 4.0));    // gap broken → restart
+        assertEquals(4, EmberRunDirector.chainNeedFor(4, 6));
+        assertEquals(3, EmberRunDirector.chainNeedFor(4, 3));               // small room: all of it
+        assertEquals(1, EmberRunDirector.chainNeedFor(4, 0));
+    }
+
+    @Test public void unscathedBudgetScalesPerMember_D191() {
+        assertEquals(4, EmberRunDirector.unscathedBudget(4, 2, 1));
+        assertEquals(6, EmberRunDirector.unscathedBudget(4, 2, 2));
+        assertEquals(10, EmberRunDirector.unscathedBudget(4, 2, 4));
+        assertEquals(4, EmberRunDirector.unscathedBudget(4, 2, 0));         // nobody counted → solo budget
+        assertTrue(EmberRunDirector.unscathedOk(4, 4));
+        assertFalse(EmberRunDirector.unscathedOk(5, 4));
+        assertFalse(EmberRunDirector.unscathedOk(0, -1));                    // never armed → never success
+    }
+
+    @Test public void pack4ConfigClampsAndUnknownKindsDropped_D191() {
+        java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
+        raw.put("event_rate", 1.0);
+        raw.put("events", java.util.Arrays.asList("breach", "ritual", "harbinger", "chain", "unscathed"));
+        java.util.Map<String, Object> br = new java.util.LinkedHashMap<String, Object>();
+        br.put("radius", 50.0); br.put("min", 0.0); br.put("max", 99.0); br.put("shrink", 0.0); br.put("grow", 9.0);
+        raw.put("breach", br);
+        java.util.Map<String, Object> cn = new java.util.LinkedHashMap<String, Object>();
+        cn.put("need", 1); cn.put("gap", 60.0);
+        raw.put("chain", cn);
+        java.util.Map<String, Object> us = new java.util.LinkedHashMap<String, Object>();
+        us.put("hits", 999); us.put("per_member", 99);
+        raw.put("unscathed", us);
+        EmberRunMaps.Variety v = new EmberRunMaps.Variety(raw);
+        assertEquals(java.util.Arrays.asList("breach", "chain", "unscathed"), v.events); // ritual / harbinger rejected
+        assertEquals(0.5, v.breachMin, 1e-9);
+        assertEquals(10.0, v.breachMax, 1e-9);
+        assertEquals(10.0, v.breachRadius, 1e-9);
+        assertEquals(0.01, v.breachShrink, 1e-9);   // never a rift that cannot close
+        assertEquals(3.0, v.breachGrow, 1e-9);
+        assertEquals(2, v.chainNeed);
+        assertEquals(10.0, v.chainGap, 1e-9);
+        assertEquals(20, v.unscathedHits);
+        assertEquals(10, v.unscathedPerMember);
     }
 
     @Test public void pack3RejectsCageDrainAsConfig_D179() {

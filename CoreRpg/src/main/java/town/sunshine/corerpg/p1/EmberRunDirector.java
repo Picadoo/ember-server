@@ -410,6 +410,16 @@ final class EmberRunDirector {
             } else if ("relay".equals(kind)) {
                 placeRelay(r, v);
                 svc.tellRun(s, "§b传火 §7· 按 1→2→3 点亮标记再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else if ("breach".equals(kind)) {
+                placeBreach(r, v);
+                svc.tellRun(s, "§b裂隙 §7· 紫圈会慢慢收拢，在圈里杀怪能把它撑开；清房时圈没合上 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else if ("chain".equals(kind)) {
+                chainReset(ok, v);
+                svc.tellRun(s, "§b连斩 §7· 连续击杀 " + chainNeedNow + " 只怪，每两次击杀间隔不超过 "
+                        + String.format(Locale.ROOT, "%.0f", v.chainGap) + " 秒 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else if ("unscathed".equals(kind)) {
+                unscathedReset(participantsHere().size(), v);
+                svc.tellRun(s, "§b无伤 §7· 清完这个房间时全队被怪打中不超过 " + unscathedBudgetNow + " 次 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
             } else {
                 svc.tellRun(s, "§b限时清房 §7· " + v.eventLimit(kind) + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
             }
@@ -439,6 +449,12 @@ final class EmberRunDirector {
                 ok = !eventFailed && beaconHp > 0 && beaconStand != null && !beaconStand.isDead();
             } else if ("relay".equals(kind)) {
                 ok = !eventFailed && relayNext >= v.relayCount && secs <= v.relaySecs;
+            } else if ("breach".equals(kind)) {
+                ok = !eventFailed && breachCenter != null && !breachCollapsed(breachR, v.breachMin);
+            } else if ("chain".equals(kind)) {
+                ok = !eventFailed && chainBest >= chainNeedNow && chainNeedNow > 0;
+            } else if ("unscathed".equals(kind)) {
+                ok = !eventFailed && unscathedOk(unscathedTaken, unscathedBudgetNow);
             } else {
                 ok = secs <= v.eventLimit(kind);
             }
@@ -447,6 +463,9 @@ final class EmberRunDirector {
             clearHold();
             clearBeacon();
             clearRelay();
+            clearBreach();
+            chainNeedNow = 0;
+            unscathedBudgetNow = -1;
             clearFrostSlow();
             svc.onEventResult(s, ok, secs);
         }
@@ -518,7 +537,18 @@ final class EmberRunDirector {
     private final List<Location> relayLocs = new ArrayList<Location>();
     private final List<Location> relayLanterns = new ArrayList<Location>();
     private int relayNext; // next index to light (0-based)
-    private long lastEventTickMs; // hold/beacon/relay dt anchor
+    private long lastEventTickMs; // hold/beacon/relay/breach dt anchor
+    // D191 breach (裂隙): shrinking circle, kills inside push it back out; markers never in mobs / Extra.TREASURE
+    private Location breachCenter;
+    private double breachR;
+    private org.bukkit.entity.ArmorStand breachMarker;
+    private Location breachLantern;
+    // D191 chain (连斩): kill streak inside the event room
+    private int chainNeedNow, chainStreak, chainBest;
+    private long chainLastMs;
+    // D191 unscathed (无伤): landed run-mob hits on the party while the event room is live (-1 = no budget armed)
+    private int unscathedTaken;
+    private int unscathedBudgetNow = -1;
     // D181 molten: corpse blast survives the Tracked (cleared on finish / unload like crystals)
     private Location moltenOrigin;
     private long moltenWarnAt;   // when telegraph starts (0 = idle)
@@ -1218,6 +1248,8 @@ final class EmberRunDirector {
             } else if (guarded) {
                 beaconNextBite = now + (long) (v.beaconTick * 1000);
             }
+        } else if ("breach".equals(kind)) {
+            tickBreach(now, dt, v); // D191
         } else if ("relay".equals(kind) && !relayLocs.isEmpty() && relayNext < relayLocs.size()) {
             for (Player p : participantsHere()) {
                 Location l = p.getLocation();
@@ -1249,6 +1281,132 @@ final class EmberRunDirector {
             }
         }
     }
+
+    // ------------------------------------------------------------------ D191 breach / chain / unscathed
+
+    /** D191 unit helper: radius after {@code dt} seconds of shrinking (never below 0). */
+    static double breachStep(double r, double dt, double shrink) { return Math.max(0.0, r - Math.max(0.0, dt) * shrink); }
+
+    /** D191 unit helper: a kill inside the rift pushes it back out, capped at {@code max}. */
+    static double breachGrow(double r, double grow, double max) { return Math.min(max, r + grow); }
+
+    /** D191 unit helper: the rift has closed (event failed). */
+    static boolean breachCollapsed(double r, double min) { return r <= min; }
+
+    /** D191 unit helper: horizontal distance check for a kill inside the rift. */
+    static boolean breachInside(double dx, double dz, double r) { return dx * dx + dz * dz <= r * r; }
+
+    /** D191 unit helper: streak after a kill at {@code nowMs} (first kill / gap exceeded → 1). */
+    static int chainNext(int streak, long lastMs, long nowMs, double gapSecs) {
+        if (streak <= 0 || lastMs <= 0 || nowMs - lastMs > (long) (gapSecs * 1000)) return 1;
+        return streak + 1;
+    }
+
+    /** D191 unit helper: kills needed = min(config need, mobs spawned in the room), at least 1. */
+    static int chainNeedFor(int need, int spawned) { return Math.max(1, Math.min(need, spawned)); }
+
+    /** D191 unit helper: hit budget of the party (base + per extra member). */
+    static int unscathedBudget(int hits, int perMember, int party) { return Math.max(0, hits) + Math.max(0, perMember) * Math.max(0, party - 1); }
+
+    /** D191 unit helper: still within budget. */
+    static boolean unscathedOk(int taken, int budget) { return budget >= 0 && taken <= budget; }
+
+    private boolean eventLive(String kind) {
+        return eventStart > 0 && !eventFailed && !s.eventDone && activeRoom != null && activeRoom.equals(s.eventRoom)
+                && kind.equals(s.eventKind);
+    }
+
+    private void placeBreach(EmberRunMaps.Room r, EmberRunMaps.Variety v) {
+        clearBreach();
+        EmberRunMaps.Pt pt = eventAnchorPt(r);
+        breachLantern = placeLanternAt(pt);
+        Location loc = new Location(w, pt.x + 0.5, (breachLantern != null ? breachLantern.getY() + 1.0 : pt.y + 1.0), pt.z + 0.5);
+        breachCenter = loc.clone();
+        breachR = v.breachRadius;
+        breachMarker = spawnEventMarker(loc, breachName(breachR), true);
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s breach placed r=%.1f min=%.1f shrink=%.2f grow=%.1f",
+                s.runId, r.id, breachR, v.breachMin, v.breachShrink, v.breachGrow));
+    }
+
+    private static String breachName(double r) {
+        return "§5[裂隙] §f半径 " + String.format(Locale.ROOT, "%.1f", r);
+    }
+
+    private void clearBreach() {
+        if (breachMarker != null) { breachMarker.remove(); breachMarker = null; }
+        clearLantern(breachLantern);
+        breachLantern = null;
+        breachCenter = null;
+        breachR = 0;
+    }
+
+    private void chainReset(int spawned, EmberRunMaps.Variety v) {
+        chainNeedNow = chainNeedFor(v.chainNeed, spawned);
+        chainStreak = 0;
+        chainBest = 0;
+        chainLastMs = 0;
+    }
+
+    private void unscathedReset(int party, EmberRunMaps.Variety v) {
+        unscathedTaken = 0;
+        unscathedBudgetNow = unscathedBudget(v.unscathedHits, v.unscathedPerMember, Math.max(1, party));
+    }
+
+    /** D191: a tracked room mob of the live event room died (escort / boss / extra never get here). */
+    private void noteEventKill(Tracked t) {
+        if (t == null || s.eventRoom == null || !s.eventRoom.equals(t.roomId)) return;
+        EmberRunMaps.Variety v = svc.maps().variety;
+        if (eventLive("breach") && breachCenter != null) {
+            Location l = t.le.getLocation();
+            if (breachInside(l.getX() - breachCenter.getX(), l.getZ() - breachCenter.getZ(), breachR)) {
+                breachR = breachGrow(breachR, v.breachGrow, v.breachMax);
+                if (breachMarker != null) breachMarker.setCustomName(breachName(breachR));
+            }
+        } else if (eventLive("chain") && chainNeedNow > 0 && chainBest < chainNeedNow) {
+            long now = System.currentTimeMillis();
+            chainStreak = chainNext(chainStreak, chainLastMs, now, v.chainGap);
+            chainLastMs = now;
+            chainBest = Math.max(chainBest, chainStreak);
+            if (chainBest >= chainNeedNow) {
+                svc.tellRun(s, "§b连斩 ×" + chainStreak + " §a达成 §7· 清完这个房间就算完成");
+                svc.log().info("[P1 run] " + s.runId + " chain " + chainStreak + "/" + chainNeedNow);
+            } else if (chainStreak >= 2) {
+                svc.tellRun(s, "§b连斩 §e×" + chainStreak + " §7/ " + chainNeedNow);
+            }
+        }
+    }
+
+    /** D191 无伤: one landed run-mob hit on a committed member while the event room is live. */
+    void noteHitTaken(Player p) {
+        if (!eventLive("unscathed") || unscathedBudgetNow < 0) return;
+        unscathedTaken++;
+        if (!unscathedOk(unscathedTaken, unscathedBudgetNow)) {
+            eventFailed = true;
+            svc.tellRun(s, "§c无伤失败 §7· 全队被打中 " + unscathedTaken + " 次（限 " + unscathedBudgetNow + "）· 这次没有额外核心（门照开）");
+            svc.log().info("[P1 run] " + s.runId + " unscathed failed " + unscathedTaken + "/" + unscathedBudgetNow);
+        } else if (unscathedTaken == unscathedBudgetNow || unscathedTaken * 2 == unscathedBudgetNow) {
+            svc.tellRun(s, "§e无伤 §7· 已被打中 " + unscathedTaken + "/" + unscathedBudgetNow + " 次");
+        }
+    }
+
+    /** D191 裂隙: shrink the rift; collapse = fail (door still opens with the room). */
+    private void tickBreach(long now, double dt, EmberRunMaps.Variety v) {
+        if (breachCenter == null) return;
+        breachR = breachStep(breachR, dt, v.breachShrink);
+        if (breachCollapsed(breachR, v.breachMin)) {
+            eventFailed = true;
+            clearBreach();
+            svc.tellRun(s, "§c裂隙合上了 §7· 这次没有额外核心（门照开）");
+            svc.log().info("[P1 run] " + s.runId + " breach collapsed");
+            return;
+        }
+        if (breachMarker != null) breachMarker.setCustomName(breachName(breachR));
+        warnCircle(breachCenter.clone().add(0, 0.1, 0), breachR, Particle.SPELL_WITCH);
+    }
+
+    int chainBestForTest() { return chainBest; }
+    int unscathedTakenForTest() { return unscathedTaken; }
+    double breachRForTest() { return breachR; }
 
         private void clearFrostSlow() {
         EmberRunMaps.Variety v = svc.maps().variety;
@@ -1391,6 +1549,7 @@ final class EmberRunDirector {
             }
             return false;
         }
+        noteEventKill(t); // D191 裂隙 / 连斩
         if (t.affix != null) { // D138/D171/D181
             if ("frost".equals(t.affix)) clearFrostSlow();
             if ("split".equals(t.affix)) splitAdds(t);
@@ -1415,6 +1574,7 @@ final class EmberRunDirector {
         clearHold();
         clearBeacon();
         clearRelay();
+        clearBreach();
         clearFrostSlow();
         clearMolten();
         cleanupMobs();

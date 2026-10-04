@@ -213,7 +213,7 @@ public final class EmberRunRules {
         return varietyGrants(firstClear, affixDone, affixShard, eventDone, eventCore, "timed");
     }
 
-    /** D171/D179: eventKind selects the settle source key (var_event_core / crystal / escort / hold / beacon / relay). */
+    /** D171/D179/D191: eventKind selects the settle source key (var_event_core / crystal / escort / hold / beacon / relay / breach / chain / unscathed). Amount is always eventCore. */
     public static List<Grant> varietyGrants(boolean firstClear, boolean affixDone, int affixShard, boolean eventDone, int eventCore, String eventKind) {
         if (firstClear) return Collections.emptyList();
         List<Grant> out = new ArrayList<Grant>();
@@ -225,6 +225,9 @@ public final class EmberRunRules {
             else if ("hold".equals(eventKind)) k = "var_event_hold";
             else if ("beacon".equals(eventKind)) k = "var_event_beacon";
             else if ("relay".equals(eventKind)) k = "var_event_relay";
+            else if ("breach".equals(eventKind)) k = "var_event_breach";
+            else if ("chain".equals(eventKind)) k = "var_event_chain";
+            else if ("unscathed".equals(eventKind)) k = "var_event_unscathed";
             else k = "var_event_core";
             out.add(new Grant(k, Kind.MAT, EmberUpgradeRules.MAT_CORE, eventCore, null));
         }
@@ -581,7 +584,7 @@ public final class EmberRunRules {
         public final String kind;
         public final int count, coin, shard;
         public VarietyBounty(String kind, int count, int coin, int shard) { this.kind = kind; this.count = count; this.coin = coin; this.shard = shard; }
-        /** timed = any room event success (timed / crystal / escort / hold / beacon / relay); id kept for save compat (D144/D171/D179). */
+        /** timed = any room event success (timed / crystal / escort / hold / beacon / relay / breach / chain / unscathed); id kept for save compat (D144/D171/D179/D191). */
         public String label() { return "affix".equals(kind) ? "击败词缀精英" : "房间事件达标"; }
         public String rewardText() { return (coin > 0 ? coin + " 余烬币" : "") + (coin > 0 && shard > 0 ? " + " : "") + (shard > 0 ? "余烬碎片 ×" + shard : ""); }
     }

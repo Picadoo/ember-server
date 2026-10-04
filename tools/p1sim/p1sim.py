@@ -335,6 +335,7 @@ class Fight:
         self.burst_cd = 0.0
         self.sus_cd = 0.0
         self.taken = 0.0
+        self.nhit = 0           # D191: hits that landed (after dodge), for the 无伤 unscathed event
         self.rec = __import__('collections').Counter() if RECORD else None
         self.min_hp = 1.0
 
@@ -401,6 +402,7 @@ class Fight:
                 self.shield = 0.0
         self.hp -= dmg
         self.taken += dmg
+        self.nhit += 1
         if rec is not None:
             rec['taken_' + ('affix' if affix else kind)] += dmg
             rec['n_hit_' + ('tele' if kind == 'tele' else ('blaze' if tele and affix else 'mob'))] += 1
@@ -444,6 +446,9 @@ class Fight:
                         mobs.append(a)
             if len(self.burns) and st.get('mods') and gm(st, 'burn_spread', 0) > 0:
                 spread_burn(self, mobs, t)  # D141 燎原 (EmberSetService.onMobDeath)
+            for m in mobs:  # D191: death time of every room mob (连斩 chain / 裂隙 breach models)
+                if m['hp'] <= 0 and '_dt' not in m:
+                    m['_dt'] = t
             alive = [m for m in mobs if m['hp'] > 0]
             if not alive:
                 self.t = t
@@ -588,6 +593,63 @@ def variety_roll(cfg, seed):
     return ar, at, er
 
 
+EVENT_FORCE = None  # D191 gate: force every rolled event to this kind (None = equal-weight pick from variety.events)
+EVENT_P_IN = {'melee': 0.9, 'heavy': 0.9, 'elite': 0.9}  # D191 裂隙: share of kills inside the rift by role (others 0.5)
+
+
+def event_kind(cfg, vseed):
+    """D191: event kind of a rolled event room — own stream (vseed-derived), so affix / room picks stay as before."""
+    if EVENT_FORCE is not None:
+        return EVENT_FORCE
+    ev = (cfg.get('variety') or {}).get('events') or ['timed']
+    return ev[random.Random(vseed ^ 0x5EED191).randrange(len(ev))]
+
+
+def chain_best(times, gap):
+    """D191 连斩: longest run of kills where each follows the previous within `gap` seconds (EmberRunDirector.chainNext)."""
+    best = cur = 0
+    prev = None
+    for d in sorted(times):
+        cur = cur + 1 if prev is not None and d - prev <= gap else 1
+        best = max(best, cur)
+        prev = d
+    return best
+
+
+def breach_open(cfg, deaths, t0, t_end, rng):
+    """D191 裂隙: radius r0 shrinks `shrink`/s; a kill inside adds `grow` (≤ rmax); collapsed at ≤ rmin → fail.
+    deaths = [(time, role)]; inside share by role (EVENT_P_IN, else 0.5)."""
+    b = (cfg.get('variety') or {}).get('breach') or {}
+    r0, rmin, rmax = float(b.get('radius', 5.0)), float(b.get('min', 1.5)), float(b.get('max', 7.0))
+    shrink, grow = float(b.get('shrink', 0.15)), float(b.get('grow', 0.8))
+    r, prev = r0, t0
+    for d, role in sorted(deaths):
+        r -= shrink * (d - prev)
+        if r <= rmin:
+            return False
+        if rng.random() < EVENT_P_IN.get(role, 0.5):
+            r = min(rmax, r + grow)
+        prev = d
+    return r - shrink * max(0.0, t_end - prev) > rmin
+
+
+def event_ok(cfg, kind, f, t0, h0, mobs, vseed):
+    """D138 generic (cleared within event_secs) for the D138–D179 kinds; D191 kinds modelled on what they ask."""
+    v = cfg['variety']
+    if kind == 'unscathed':
+        u = v.get('unscathed') or {}
+        return f.nhit - h0 <= int(u.get('hits', 4))
+    if kind == 'chain':
+        c = v.get('chain') or {}
+        times = [m['_dt'] for m in mobs if '_dt' in m]
+        need = min(int(c.get('need', 4)), max(1, len([m for m in mobs if not m.get('split_add')])))
+        return chain_best(times, float(c.get('gap', 4.0))) >= need
+    if kind == 'breach':
+        return breach_open(cfg, [(m['_dt'], m['role']) for m in mobs if '_dt' in m], t0, f.t,
+                           random.Random(vseed ^ 0xB4EAC4))
+    return f.t - t0 <= float(v['event_secs'])
+
+
 def affix_mob(cfg, m, mobs, kind, t0):
     """Promote the toughest mob of the room (heavy, else melee, else the first) — mirrors EmberRunDirector."""
     v = cfg['variety']
@@ -618,11 +680,14 @@ def run_map(cfg, key, st, kn, rng, potions, repeat=False):
     f = Fight(cfg, st, kn, hits, potions, crit_rng=crits, spawn_rng=spawns)
     LAST_FIGHT[0] = f
     extra = ('none', 'treasure', 'elite', 'chest')[pick(cfg['extra_w'], setup.random())]
-    ar = at = er = None
+    ar = at = er = ek = None
+    vseed = 0
     if repeat:
         vseed = setup.getrandbits(32)  # drawn either way so --no-variety keeps the same stream shape
         if VARIETY and cfg.get('variety'):
             ar, at, er = variety_roll(cfg, vseed)
+            if er is not None:
+                ek = event_kind(cfg, vseed)
     LAST_VAR['affix'] = LAST_VAR['event'] = False
     for rk in ('r1', 'r2', 'r3'):
         room = m['rooms'][rk]
@@ -632,6 +697,7 @@ def run_map(cfg, key, st, kn, rng, potions, repeat=False):
         t0 = f.t
         if f.rec is not None:
             u0, k0 = f.used, f.taken
+        h0 = f.nhit
         if not f.segment(mobs):
             if f.rec is not None:
                 f.rec['died_' + ('affix' if am is not None else 'trash')] += 1
@@ -645,7 +711,7 @@ def run_map(cfg, key, st, kn, rng, potions, repeat=False):
                 f.rec['own_affix_' + at] += getattr(f, 'affix_dead_at', f.t) - (getattr(f, 'affix_t0', None) or t0)
         if am is not None:
             LAST_VAR['affix'] = True
-        if rk == er and f.t - t0 <= float(cfg['variety']['event_secs']):
+        if rk == er and event_ok(cfg, ek, f, t0, h0, mobs, vseed):
             LAST_VAR['event'] = True
         if m.get('event', {}).get('after') == rk and extra in ('treasure', 'elite'):
             if not f.segment([mob(cfg, m, extra, setup, kn, f.t)]):

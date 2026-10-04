@@ -384,6 +384,9 @@ public final class EmberRunService implements Listener {
         if ("var_event_hold".equals(key)) return "占点 ";
         if ("var_event_beacon".equals(key)) return "护灯 ";
         if ("var_event_relay".equals(key)) return "传火 ";
+        if ("var_event_breach".equals(key)) return "裂隙 ";
+        if ("var_event_chain".equals(key)) return "连斩 ";
+        if ("var_event_unscathed".equals(key)) return "无伤 ";
         if ("honor_shard".equals(key)) return "勋记 ";
         if (key.startsWith("vb_")) return "花样委托 ";
         return "";
@@ -2324,6 +2327,24 @@ public final class EmberRunService implements Listener {
         e.setDamage(atk);
         EmberDamageTrace.note(e, before, "G04 主线本怪物伤害固定 atk=" + EmberDamageTrace.fmt(atk));
         markActed(d.s, p);
+    }
+
+    /**
+     * D191 无伤 (unscathed): a run-mob hit (melee, projectile or skill — every path ends in an EntityDamageByEntityEvent
+     * whose damager is the mob or its projectile) that really landed on a committed member. MONITOR + ignoreCancelled:
+     * cancelled / zero hits (interval guard, stunned boss, caster melee) never count.
+     */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onRunHitTaken(EntityDamageByEntityEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        if (e.getFinalDamage() <= 0) return;
+        Entity src = e.getDamager();
+        if (src instanceof Projectile && ((Projectile) src).getShooter() instanceof Entity) src = (Entity) ((Projectile) src).getShooter();
+        EmberRunDirector d = byEntity.get(src.getUniqueId());
+        if (d == null) return;
+        Player p = (Player) e.getEntity();
+        if (!d.s.committed.contains(p.getUniqueId())) return;
+        d.noteHitTaken(p);
     }
 
     /** B2.167: drop the vanilla knockback velocity of a boss skill / boss melee hit (the P1 push is a teleport). */
