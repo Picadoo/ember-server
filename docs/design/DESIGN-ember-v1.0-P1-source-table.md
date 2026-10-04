@@ -1456,3 +1456,12 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 测试 | 单测 `EmberRunRulesTest`：4 modifiers、disarm heavy→melee on q01、`!normal`、28 pairs；线上冒烟 FreshQ44：`modifier forced disarm` + 聊天「卸甲」+ `r1 rule disarm: melee×4` |
 | 上线 | 10-04 07:48 CST，日志 `Enabling CoreRpg v1.63.0` + `[storage] MySQL connected`；STATUS `docs/status/STATUS-ember-modifier-disarm-d152.md` |
 
+### 13.74 深渊层费复查：不卡穷、不调（D153，2026-10-04，balance_version 仍 26）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D151 后 p2econ 第 8 周（0.5 档）币中位：不打深渊约 3.3 万、打深渊约 1.4k；D135 定过第 8～10 层费不调 |
+| 检查 | `tools/p1sim/abysscoin.py` 200 人 8 周 × 0.3 / 0.5 / 0.7 × 层费优先 / 先精工（`p2econ.py --abyss-forge-first`）；60 人试降层费 ×0.75 / ×0.6 / ×0.5 / 只砍 5～10 层 |
+| 数 | 两件极品深渊 56～74% 对 38～40%；先精工：精工成色做满周 4 / 3 / 4 对 4 / 3 / 1，卡精工周数中位 3 / 3 / 4 对 3 / 3 / 1，B 134.6 相同；降层费后余币 1380→1387 / 1545 / 1900 / 1490 |
+| 裁决 | 不卡（自愿花余币），`abyss.tiers[].fee` / `fee_mark_coin` 不动，不加结算币；STATUS `docs/status/STATUS-ember-abyss-coin-2026-10-04.md`，P2 草案 §5zd |
+

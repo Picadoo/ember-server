@@ -118,6 +118,21 @@ def forge_sink(p, reserve=None):
     return spent
 
 
+def forge_next(p):
+    """cheapest craft/quality step still open on a worn T3 target-family piece (0 = nothing left / sinks off)"""
+    if not FORGE_SINK:
+        return 0
+    c = []
+    for it in (p.blade, p.charm):
+        if it['tier'] < 3 or it['fam'] == 'none':
+            continue
+        if it['f'] < 3:
+            c.append(CRAFT_COIN[it['f']])
+        if it['q'] < 2:
+            c.append(QUALITY_COIN[it['q']])
+    return min(c) if c else 0
+
+
 def abyss_clear_table(cfg, dodges=(0.3, 0.5, 0.7), n_runs=40, seed=42):
     """P2-2 clear-rate by abyss tier for representative late-game gear states (chrate / bossmoves spirit).
     Returns list of markdown lines."""
@@ -260,10 +275,16 @@ def rush_week(cfg, kn, p, rng):
 GOALS = {'featured': 1, 'abyss': 3, 'raid': 1}  # D116 weekly goals that change what a player does (rewards: cosmetic only)
 
 
+ABYSS_FORGE_FIRST = False  # 2026-10-04 abyss-coin check: forge (craft/quality) each morning before any tier fee
+
+
 def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=False):
     """P2-2 policy: like phase2 until challenge is viable; then every run is an abyss segment at the highest open tier
     (best cleared + 1) whose estimated clear rate is >= 50 % and whose fee leaves `reserve` coins; tier 1 otherwise.
-    The fee is paid per started segment (a failed segment keeps it, like stamina)."""
+    The fee is paid per started segment (a failed segment keeps it, like stamina).
+    ABYSS_FORGE_FIRST (--abyss-forge-first): the player buys open craft/quality steps every morning and keeps the
+    cheapest open step on top of `reserve` when paying tier fees (saves for the forge instead of the next fee)."""
+    base_reserve = reserve
     order = ccfg['order']
     out, marks_earned, ch_runs, best, fees, tiers_played, blocked, top_short = [], 0, 0, 0, 0, [], 0, 0
     acfgs = {t: abyss_cfg(ccfg, t) for t in range(1, len(ABYSS) + 1)}
@@ -291,6 +312,10 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                     p.invest()
                     break
         for d in range(7):
+            if ABYSS_FORGE_FIRST and can_ch:
+                p.day = 1000 + w * 7 + d
+                forge_sink(p, base_reserve)
+                reserve = base_reserve + forge_next(p)
             if can_ch:  # re-pick the tier every day (players push up as soon as they clear)
                 # D104: tier 0 = the plain challenge (still open next to the abyss); a player only steps into tier 1
                 # once its estimated clear rate is >= 50 % (before D104 tier 1 equalled the challenge).
@@ -340,6 +365,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
                         best = max(best, tier)
                     p.invest()
         tiers_played.append(tier if can_ch else 0)
+        reserve = base_reserve
         forge_sink(p, reserve)  # §5.3 craft/quality coin sink (once per week; --no-forge-sink to disable)
         tgt = kn.target
         done = p.blade['tier'] == 3 and p.charm['tier'] == 3 and p.blade['fam'] == tgt and p.charm['fam'] == tgt
@@ -640,7 +666,10 @@ def main():
     ap.add_argument('--no-variety', action='store_true', help='D138: without the repeat-run variety (affixed elite + room event)')
     ap.add_argument('--no-vbounty', action='store_true', help='D144: without the 花样委托 daily variety bounty')
     ap.add_argument('--rush', action='store_true', help='D144: the weekly 余烬连战 (one free entry, T3 marks on a clear)')
+    ap.add_argument('--abyss-forge-first', action='store_true', help='abyss players buy craft/quality steps each morning before tier fees')
     a = ap.parse_args()
+    global ABYSS_FORGE_FIRST
+    ABYSS_FORGE_FIRST = a.abyss_forge_first
     global FORGE_SINK
     if a.no_forge_sink:
         FORGE_SINK = False
