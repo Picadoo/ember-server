@@ -1515,7 +1515,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D170 | CoreRpg 1.65.4 | Q02–Q07 第一房战术提示（短中文）；Q04 r3 可选落差提醒；balance_version 仍 29；不改战斗数值 |
 | D171 | 设计-only（无版本 bump） | Variety Pack 2：重复刷图花样扩包——词缀池 +再生/冲锋/凝霜（否决反伤）；房间事件池 +砸余烬晶/护宝兔（与限时清房等权）；闸门/奖励种类同 D138；花样委托泛型计数兼容；实现等 asset-fix-1655 后。`docs/design/DESIGN-ember-variety-pack2-2026-10-04.md` |
 | D172 | CoreRpg 1.65.5 | 资产安全修复（D167 §5 前置）：**撤销 / 批量撤销**先扣胚料（hold → pay → commit，扣不到什么都不做，不再写负数送货行，X5）；**印记兑换**扣印记 → 一个事务写物品 + txn + 待发货 + 作废 hold，退款走新 `mark` 欠款（X1/X4，exactly-once）；**洗练**走耐久付款，付款 + “欠一次结果”同存档、提交后才抽（种子 = 盐 + 玩家 + rid），断线 / kill -9 = 退一次或进服补同一次（X15）。数值、装备结构、balance_version（29）不变 |
-| D173 | 设计-only（deferred 实现） | Boss Moves Pack 2：半血转阶段轻压；见 `docs/design/DESIGN-ember-boss-moves-pack2-2026-10-04.md`。实现另窗 |
+| D173 | CoreRpg 1.65.23 / bv46 | Boss Moves Pack 2：半血转阶段轻压；见 `docs/design/DESIGN-ember-boss-moves-pack2-2026-10-04.md`；发布 `docs/status/RELEASE-ember-1.65.23.md` |
 | D174 | CoreRpg 1.65.7 / 1.65.10 / 1.65.11–1.65.14（第 1、1.5、2a、2b 阶段已上线 + D183 返工 1.65.17；2c 暂缓；第 3 阶段 Q07 签名 + 签名调律 1.65.18 / D184）| 主线签名传奇：Q01–Q03 + 首领徽记 + 烬炉烙印 + 双签名（1.65.7）；签名页 TrMenu（1.65.10）；Q04–Q06 签名 L07–L12 + 烬斩形状 / 点燃 / 护盾 / 低血钩子（1.65.11）；自选誓约 Q06（1.65.12）、连战·前哨 Q05（1.65.13）、首领残响 Q04（1.65.14）；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md`；状态 `docs/status/STATUS-ember-mainline-unlocks-1.65.14.md` |
 | D175 | 设计定稿；已实现见 **D178** / 1.65.8 | Weekly Modifier Pack 2：精选图周规则 +3（bolters/shell/press）；见 `docs/design/DESIGN-ember-weekly-mod-pack2-2026-10-04.md`。实现：D178 |
 | D176 | CoreRpg 1.65.6 | Variety Pack 2 上线（实现 D171）：词缀 +regen/charge/frost；房间事件 +crystal/escort（与 timed 等权）；闸门/奖励数不变；花样委托 timed 文案→「房间事件达标」；balance_version 29→30；Stage C p1sim 门禁 deferred |
@@ -1741,3 +1741,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 事件池 3→6（+hold 占点 / beacon 护灯 / relay 传火）；词缀池不动；闸门/奖励不变；beacon 不进 mobs/TREASURE；Stage C p1sim deferred |
 | 版本 | CoreRpg **1.65.22**；`balance_version` **45** |
 | 发布 | `docs/status/RELEASE-ember-1.65.22.md` |
+
+### 13.99 Boss Moves Pack 2 半血转阶段（CoreRpg 1.65.23，D173，2026-10-05）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D173 设计；`COORD-routine-0214`；前置 1.65.22（D179）|
+| 裁决 | Q01–Q07 半血轻压：Q01/Q02 顶层 `below:0.5`；Q03–Q07 既有轻招 `follow`（Q04–Q07 禁止第 4 条独立 every）。团本/连战 yml 不动。无永久乘区。 |
+| 调参 | Q01 门廊突刺 every 40（挑战 light=37 门禁）；Q03 誓印扇改挂 誓印圈 follow（顶层超硬顶）。门禁 MAX_ABS_DPP **2.2**（prefer ≤2，硬顶 3）。 |
+| 版本 | CoreRpg **1.65.23**；`balance_version` **46** |
+| 测试 | 单测 `everyMainBossHasHalfHpTelegraphedLightPressure_D173`；`tools/p1sim/out-bossmoves-d173.md`；冒烟 FreshQ370+ |
+| 文档 | 状态 `docs/status/STATUS-ember-boss-moves-pack2-1.65.23.md`；发布 `docs/status/RELEASE-ember-1.65.23.md` |

@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(45, m.balanceVersion);                // D179 Room Events Pack 3 hold/beacon/relay (D181 = 44, D182 = 43, …)
-        assertEquals("g04-1/b45", m.ruleVersion);
+        assertEquals(46, m.balanceVersion);                // D173 Boss Moves Pack 2 half-HP (D179 = 45, D181 = 44, …)
+        assertEquals("g04-1/b46", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -508,7 +508,7 @@ public class EmberRunRulesTest {
         assertEquals("line", blade.type);
         assertEquals(1, blade.stripFrom(), 0);
         assertEquals(7, blade.stripTo(), 0);
-        assertEquals(12.5, blade.every, 0);             // D140: 10 → 12.5 (+ 霜环)
+        assertEquals(13.0, blade.every, 0);             // D140: 10 → 12.5; D173 12.5 → 13.0 (+ 霜锥)
         assertEquals(34, blade.dmg, 0);
         assertEquals(4, blade.follow.shift, 0);
         assertEquals(1.0, blade.follow.delay, 0);
@@ -1490,6 +1490,45 @@ public class EmberRunRulesTest {
         assertEquals(java.util.Arrays.asList("hold", "beacon", "relay"), v.events);
         assertFalse(EmberRunMaps.Variety.EVENTS.contains("cage"));
         assertFalse(EmberRunMaps.Variety.EVENTS.contains("drain"));
+    }
+
+
+    @Test public void everyMainBossHasHalfHpTelegraphedLightPressure_D173() {
+        EmberRunMaps m = bundled();
+        String[][] want = {
+            {"q01", "门廊突刺"}, {"q02", "焦冲"}, {"q03", "誓印扇"},
+            {"q04", "回浪"}, {"q05", "余震"}, {"q06", "霜锥"}, {"q07", "矿渣"}
+        };
+        for (String[] w : want) {
+            EmberRunMaps.Skill found = null;
+            for (EmberRunMaps.Skill sk : m.byKey(w[0]).boss.skills) {
+                if (w[1].equals(sk.name)) found = sk;
+                if (sk.follow != null && w[1].equals(sk.follow.name)) found = sk.follow;
+            }
+            assertNotNull(w[0] + " " + w[1], found);
+            assertTrue(w[1] + " half-HP gate", found.below <= 0.5);
+            assertTrue(w[1] + " dodge window", found.warn >= 1.2);
+            assertTrue(w[1] + " light", found.light);
+            assertTrue(w[0] + " has below pressure", EmberRunDirector.hasBelowPressure(m.byKey(w[0]).boss));
+        }
+        // Q01 top-level every 40 (challenge light gate); Q03 follow on 誓印圈 (not 4th every)
+        assertEquals(2, m.byKey("q01").boss.skills.size());
+        assertEquals(40.0, m.byKey("q01").boss.skills.get(1).every, 0);
+        assertEquals(3, m.byKey("q02").boss.skills.size());
+        assertEquals(13.0, m.byKey("q02").boss.skills.get(0).every, 0);
+        assertEquals(2, m.byKey("q03").boss.skills.size());
+        assertEquals(16.5, m.byKey("q03").boss.skills.get(0).every, 0);
+        assertEquals(18.0, m.byKey("q03").boss.skills.get(1).every, 0);
+        assertEquals("誓印扇", m.byKey("q03").boss.skills.get(1).follow.name);
+        assertEquals(3, m.byKey("q04").boss.skills.size());
+        assertEquals(18.0, m.byKey("q04").boss.skills.get(2).every, 0);
+        assertEquals(3, m.byKey("q05").boss.skills.size());
+        assertEquals(19.0, m.byKey("q05").boss.skills.get(2).every, 0);
+        assertEquals(2, m.byKey("q06").boss.skills.size());
+        assertEquals(13.0, m.byKey("q06").boss.skills.get(0).every, 0);
+        assertEquals(18.0, m.byKey("q06").boss.skills.get(1).every, 0);
+        assertEquals(3, m.byKey("q07").boss.skills.size());
+        assertEquals(17.5, m.byKey("q07").boss.skills.get(2).every, 0);
     }
 
     @Test public void everyMainBossHasOneNewTelegraphedLightMove_D140() {

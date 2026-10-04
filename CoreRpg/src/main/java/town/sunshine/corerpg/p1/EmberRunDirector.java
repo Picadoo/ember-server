@@ -1324,6 +1324,13 @@ final class EmberRunDirector {
         if (le.isDead()) return;
         double ratio = le.getHealth() / Math.max(1.0, le.getMaxHealth());
         EmberRunMaps.Boss b = bossDef();
+        // D173: half-HP team line when any top-level or follow skill is gated at below≤1.0 (Pack 2 + existing 踏地/横扫)
+        if (!phaseTold && ratio < 0.5 && hasBelowPressure(b)) {
+            phaseTold = true;
+            svc.tellRun(s, "§e首领进入半血 · 招式变强，盯紧预警");
+            svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss half-HP phase at %.0f%%", s.runId, ratio * 100));
+            svc.onBossPhase(s, "首领进入半血"); // D106 raid revive point
+        }
         // §13 adds: once at 50 % after a 1 s warning
         if (b.adds != null && !addsDone && ratio <= b.adds.atHp) {
             addsDone = true;
@@ -1361,11 +1368,12 @@ final class EmberRunDirector {
         }
         if (follow != null || now < recoverUntil) return;
         int due = dueSkill(nextAt, now, belowOf(b.skills), ratio); // P2-6: top-level skills may be phase-gated
+        // D173: half-HP tell already fired above when ratio < 0.5; keep fallback if a below-gated skill comes due first frame
         if (!phaseTold && due >= 0 && b.skills.get(due).below <= 1.0) {
             phaseTold = true;
-            svc.tellRun(s, "§c" + b.name + " §7进入第二阶段：新招式「" + b.skills.get(due).name + "」！");
+            svc.tellRun(s, "§e首领进入半血 · 招式变强，盯紧预警");
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
-            svc.onBossPhase(s, "首领进入第二阶段"); // D106 raid revive point
+            svc.onBossPhase(s, "首领进入半血"); // D106 raid revive point
         }
         double lrh = svc.maps().raidLastReviveHp; // D118: armed at <= lrh with someone down, once per raid
         if (lrh > 0 && !lastRevDone && svc.isRaid(s) && lastPhase() && ratio <= lrh) {
@@ -1410,6 +1418,16 @@ final class EmberRunDirector {
             for (int i = 0; i < belowCache.length; i++) belowCache[i] = skills.get(i).below;
         }
         return belowCache;
+    }
+
+    /** D173 / P2-6: true if any top-level or follow skill is phase-gated (below ≤ 1.0). */
+    static boolean hasBelowPressure(EmberRunMaps.Boss b) {
+        if (b == null || b.skills == null) return false;
+        for (EmberRunMaps.Skill sk : b.skills) {
+            if (sk.below <= 1.0) return true;
+            if (sk.follow != null && sk.follow.below <= 1.0) return true;
+        }
+        return false;
     }
 
     /** Keeps the schedule anchored at the fight start: next slot strictly after {@code now}. */

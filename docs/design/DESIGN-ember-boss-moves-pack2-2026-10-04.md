@@ -1,13 +1,13 @@
 # Ember Boss Moves Pack 2：半血转阶段（D173，设计-only，2026-10-04）
 
-> 状态：**设计定稿，未实现**。本窗不改 CoreRpg 源码 / yml / jar / 菜单，不 bump `balance_version`，不跑长 p1sim（`COORD-gear-stage0` / `COORD-asset-fix-1655` 占用中）。
+> 状态：**已上线 CoreRpg 1.65.23 / balance_version 46**（routine-0214）。实现见 `docs/status/RELEASE-ember-1.65.23.md`；门禁 `tools/p1sim/out-bossmoves-d173.md`（MAX_ABS_DPP 2.2）。
 > 前置：D140（七首领各 +1 预警轻招，主招放慢抵消，6 格最大 Δ1.7pp）；技能形状只允许现有 `circle` / `cone` / `line` / `charge` + `follow` / `below` / `light` / `target: player` / `kb≤1`。
 > 实现对齐：等 `COORD-asset-fix-1655` DONE **且** `COORD-gear-stage0` 释放 `tools/p1sim` 后，用 `tools/p1sim/bossmoves.py` 过 §7 门禁再动 runs yml。
 > 参考：Diablo 首领半血转阶段、WoW 可躲开的预警圈 / 扇 / 条带、本服 R02「半血砸地接横扫」与 R03「烬核分摊」已验证的 `below` / `follow` / `share` 模式。**本包不做单人主线分摊（share）**——R03 是团本专属。
 
 ## 0. 一段话裁决
 
-在 **Q01–Q07 主线首领**（普通 / 挑战 / 深渊复用挑战首领）上，加一套 **半血（HP < 50%）才出现的转阶段压力**：早期图（招式条目 ≤2）各加 1 条 `below: 0.5` 的轻招；后期图（已有 3 条计时招）**不新增第 4 条独立计时**，而是给既有轻招挂一条 `follow`（半血后才打出），避免预警叠在一起。全部 `light: true`、预警 ≥1.2s；主招或相关轻招再放慢一点抵消。**团本 / 连战首领配置本包不动**（仍用各自 yml）。不加永久乘区、不加新货币。本窗只出文档。
+在 **Q01–Q07 主线首领**（普通 / 挑战 / 深渊复用挑战首领）上，加一套 **半血（HP < 50%）才出现的转阶段压力**：早期图（招式条目 ≤2）各加 1 条 `below: 0.5` 的轻招；后期图（已有 3 条计时招）**不新增第 4 条独立计时**，而是给既有轻招挂一条 `follow`（半血后才打出），避免预警叠在一起。全部 `light: true`、预警 ≥1.2s；主招或相关轻招再放慢一点抵消。**团本 / 连战首领配置本包不动**（仍用各自 yml）。不加永久乘区、不加新货币。已实现并上线。
 
 ## 1. 白话版（给服主 / 玩家）
 
