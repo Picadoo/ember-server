@@ -64,10 +64,14 @@ Icons:
             - ''
             - '§7%corerpg_p1_fest_window% · %corerpg_p1_fest_state%'
             - '§7「盛世烟火符」常驻出售：§f%corerpg_p1_fest_charm_price%'
-            - '§7剩下的国庆币（背包 §f%corerpg_p1_fest_coins%§7）：换纪念称号 / 余烬徽（有上限）/ 足迹'
+            - '§7剩下的国庆币（含仓库 §f%corerpg_p1_fest_coins%§7）：换纪念称号 / 余烬徽（有上限）/ 足迹'
             - '§8装备页也有烟火符入口'
             - ''
             - '§e➥ §f打开活动页'
+        actions:
+          all:
+            - 'sound: ENTITY_FIREWORK_LAUNCH-1-1'
+            - 'menu: ember_p1_fest'
     update: 20
     display:
       material: firework

@@ -64,4 +64,27 @@ public final class InvSnapRules {
             default: return "槽" + i;
         }
     }
+
+    /** Default physical gacha ticket NI id (CoreGacha config tickets.ni_item). */
+    public static final String GACHA_TICKET_NI = "ember_gacha_ticket";
+
+    /**
+     * D157: stacks whose NI id is a P1 vault whitelist material (incl. festival coin) or a physical gacha ticket
+     * must not be recreated on inventory restore — those live in EmberVault / gacha_wallet ledgers.
+     */
+    public static boolean stripOnRestore(String niId, Set<String> vaultWhitelist, Set<String> extraSkip) {
+        if (niId == null || niId.isEmpty()) return false;
+        if (vaultWhitelist != null && vaultWhitelist.contains(niId)) return true;
+        if (extraSkip != null && extraSkip.contains(niId)) return true;
+        return GACHA_TICKET_NI.equals(niId);
+    }
+
+    /** how many of the given NI ids would be stripped (unit-test helper; order ignored) */
+    public static int countStrip(Iterable<String> niIds, Set<String> vaultWhitelist, Set<String> extraSkip) {
+        if (niIds == null) return 0;
+        int n = 0;
+        for (String id : niIds) if (stripOnRestore(id, vaultWhitelist, extraSkip)) n++;
+        return n;
+    }
+
 }

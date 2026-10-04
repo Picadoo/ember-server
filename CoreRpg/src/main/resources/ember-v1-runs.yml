@@ -62,9 +62,9 @@ rotation:
     - {id: lean, name: 限药, potion_cap: 3, normal: true, text: 本局每人最多喝 3 瓶回复药}
     - {id: casters, name: 术者换防, remap: {ranged: caster}, text: 弓手换成术者（直线预警，躲开就不疼）}
     - {id: reverse, name: 逆行, swap_rooms: true, normal: true, text: 第一间和第三间的敌群互换（开局就是最重的一间）}
-    - {id: disarm, name: 卸甲, remap: {heavy: melee}, text: 重甲换成近战（少挨重击；没有重甲的图不变）}
-    - {id: guards, name: 卫士潮, remap: {ranged: heavy}, text: 弓手换成重甲（少挨箭，多挨重击；没有弓手或重甲的图不变）}
-    - {id: wall, name: 铁卫, remap: {melee: heavy}, text: 近战全换成重甲（多挨重击、少杂兵；没有重甲的图不变）}
+    - {id: disarm, name: 卸甲, remap: {heavy: melee}, text: 重甲换成近战（少挨血厚慢手；没有重甲的图不变）}
+    - {id: guards, name: 卫士潮, remap: {ranged: heavy}, text: 弓手换成重甲（少挨箭，多挨血厚慢手、不怕击退；没有弓手或重甲的图不变）}
+    - {id: wall, name: 铁卫, remap: {melee: heavy}, text: 近战全换成重甲（多挨血厚慢手、不怕击退，少杂兵；没有重甲的图不变）}
 
 # D116 (balance_version 16) seasons, display only: a season is `weeks` weeks from the Monday `anchor` (00:00 Asia/Shanghai).
 # Weekly boards (best abyss tier cleared, featured challenge clears, raid clears) reset every Monday 00:00; season boards

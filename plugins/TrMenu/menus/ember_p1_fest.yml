@@ -42,7 +42,7 @@ Icons:
         - '§7状态：%corerpg_p1_fest_state%'
         - '§7今日活动本：§f%corerpg_p1_fest_entries% §8（0 点重置）'
         - '§7活动通关：§f%corerpg_p1_fest_clears% 次'
-        - '§7背包里的%corerpg_p1_fest_coinname%：§f%corerpg_p1_fest_coins%'
+        - '§7%corerpg_p1_fest_coinname%（含仓库）：§f%corerpg_p1_fest_coins%'
         - '§7进入条件：%corerpg_p1_fest_req%'
         - ''
         - '§8活动本不耗体力，不发余烬币和装备；掉%corerpg_p1_fest_coinname%换限时奖励'
@@ -175,7 +175,7 @@ Icons:
         - ''
         - '§7用剩下的%corerpg_p1_fest_coinname%换：§f%corerpg_p1_fest_memo%'
         - '§7只做展示，不加属性 · 活动结束后也能换'
-        - '§7背包里：§f%corerpg_p1_fest_coins%'
+        - '§7国庆币（含仓库）：§f%corerpg_p1_fest_coins%'
         - ''
         - '§e➥ §f左键：兑换 · 右键：装上'
     actions:
@@ -197,8 +197,8 @@ Icons:
         - ''
         - '§7%corerpg_p1_fest_xbadge%'
         - '§7%corerpg_p1_fest_xrate% 枚%corerpg_p1_fest_coinname%换 1 余烬徽，每人最多换 %corerpg_p1_fest_xcap% 徽'
-        - '§7余烬徽只在外观商店用，不能换余烬币、印记或装备'
-        - '§7背包里：§f%corerpg_p1_fest_coins%'
+        - '§7余烬徽：外观商店 / 20徽=1扭蛋券；活动后烟火符也可用徽付'
+        - '§7国庆币（含仓库）：§f%corerpg_p1_fest_coins%'
         - ''
         - '§e➥ §f左键：能换多少换多少 · 右键：只换 5 徽'
     actions:

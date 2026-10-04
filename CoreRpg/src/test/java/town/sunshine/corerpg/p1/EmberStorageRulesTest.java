@@ -119,4 +119,44 @@ public class EmberStorageRulesTest {
         assertEquals("0 分 01 秒", EmberStorageRules.left(at, at + 10 * 60_000L - 1000L, 10));
         assertEquals("0 分 00 秒", EmberStorageRules.left(at, at + 11 * 60_000L, 10));
     }
+
+    @Test public void bulkDismantleSkipsInvested() {
+        EmberItemData plain = drop("pl", 1, 0, "scorch", "blade"); // 标准 +0 精工0
+        EmberItemData enh = new EmberItemData(hex("en"), EmberItemData.templateId("scorch", "blade", 1), "scorch", "blade", 1, 0, 0, 3, 0, true, "drop", 1, 1);
+        EmberItemData craft = new EmberItemData(hex("cr"), EmberItemData.templateId("scorch", "blade", 1), "scorch", "blade", 1, 0, 2, 0, 0, true, "drop", 1, 1);
+        EmberItemData excel = drop("ex", 1, 2, "scorch", "blade"); // 卓越
+        EmberItemData top = drop("tp", 1, 3, "scorch", "blade"); // 极品
+        EmberItemData fine = drop("fn", 1, 1, "scorch", "blade"); // 精良 — still included
+        EmberItemData locked = drop("lk2", 1, 0, "scorch", "blade");
+        List<EmberStorageRules.Entry> view = Arrays.asList(
+                e(plain, false, false, 1),
+                e(enh, false, false, 2),
+                e(craft, false, false, 3),
+                e(excel, false, false, 4),
+                e(top, false, false, 5),
+                e(fine, false, false, 6),
+                e(locked, true, false, 7)
+        );
+        List<EmberStorageRules.Entry> take = EmberStorageRules.bulkDismantle(view, Collections.<String>emptySet());
+        java.util.Set<String> ids = new HashSet<String>();
+        for (EmberStorageRules.Entry x : take) ids.add(x.d.uid);
+        assertTrue(ids.contains(hex("pl")));
+        assertTrue(ids.contains(hex("fn"))); // 精良 ok
+        assertFalse(ids.contains(hex("en")));
+        assertFalse(ids.contains(hex("cr")));
+        assertFalse(ids.contains(hex("ex")));
+        assertFalse(ids.contains(hex("tp")));
+        assertFalse(ids.contains(hex("lk2")));
+        assertEquals(2, take.size());
+        assertTrue(EmberStorageRules.invested(enh));
+        assertTrue(EmberStorageRules.invested(craft));
+        assertTrue(EmberStorageRules.invested(excel));
+        assertFalse(EmberStorageRules.invested(plain));
+        assertFalse(EmberStorageRules.invested(fine));
+        // affix uid set also skips
+        EmberItemData aff = drop("af", 1, 0, "scorch", "blade");
+        List<EmberStorageRules.Entry> v2 = Collections.singletonList(e(aff, false, false, 1));
+        assertEquals(0, EmberStorageRules.bulkDismantle(v2, null, Collections.singleton(hex("af"))).size());
+        assertEquals(1, EmberStorageRules.bulkDismantle(v2, null, null).size());
+    }
 }

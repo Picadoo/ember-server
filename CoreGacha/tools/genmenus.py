@@ -110,6 +110,7 @@ rate_icons += [
     icon('P', 'clock', '§f保底说明', ['', f"§7第 1–{cfg['rates']['soft_pity']['start']} 抽传说 {cfg['rates']['base']['legend']*100:.1f}%，之后每抽 +{cfg['rates']['soft_pity']['step']*100:.0f}%",
          f"§7第 {cfg['rates']['hard_pity']} 抽必出传说（永远不会到第 {cfg['rates']['hard_pity']+1} 抽）",
          f"§7每 {cfg['rates']['tier2_every']} 抽至少一件史诗或以上", '§7同一个池不会连续出同一件传说',
+         '§8传说宠物只在主城显示 · 光环副本里不显示',
          f"§7火花：每抽 +1，满 {cfg.get('spark', 200)} 任选一件", '§7限定池共用一组保底（换季延续），常驻池单独一组',
          '§7「综合概率」= 算上保底后长期的实际概率（精确计算，离线百万抽验证）']),
     back(),

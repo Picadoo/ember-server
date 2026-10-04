@@ -303,6 +303,21 @@ public final class EmberGearLib implements Listener {
         store().saveLibFlags(uid, id, n.locked, n.fav, 0L);
     }
 
+
+    /** uids in {@code view} that currently carry a 词条 (D143); empty when growth service / player data missing */
+    private Set<String> affixUids(Player p, List<Entry> view) {
+        Set<String> out = new HashSet<String>();
+        EmberGrowthService gs = EmberGrowthService.get();
+        if (gs == null || p == null || view == null) return out;
+        PlayerData pd;
+        try { pd = plugin.getDataStore().get(p.getUniqueId()); } catch (RuntimeException e) { return out; }
+        if (pd == null) return out;
+        for (Entry e : view) {
+            try { if (gs.affixOf(pd, e.d.uid) > 0) out.add(e.d.uid); } catch (RuntimeException ignored) {}
+        }
+        return out;
+    }
+
     private Filter filter(UUID id) { Filter f = filters.get(id); if (f == null) { f = new Filter(); filters.put(id, f); } return f; }
 
     private boolean bulk(final Player p, boolean go, String tok) {
@@ -311,25 +326,26 @@ public final class EmberGearLib implements Listener {
         final UUID id = p.getUniqueId();
         Filter f = filter(id);
         List<Entry> view = EmberStorageRules.view(new ArrayList<Entry>(entries(id)), f);
-        final List<Entry> take = EmberStorageRules.bulkDismantle(view, equipped(p));
+        final List<Entry> take = EmberStorageRules.bulkDismantle(view, equipped(p), affixUids(p, view));
         int skipped = view.size() - take.size();
         StringBuilder fp = new StringBuilder();
         for (Entry e : take) fp.append(e.d.uid).append(':').append(e.d.rev).append(',');
         String fps = Integer.toHexString(fp.toString().hashCode());
-        if (take.isEmpty()) { p.sendMessage(P + "当前筛选（" + f.label() + "）里没有可分解的件（锁定、收藏、非掉落件、T0 都不分解）"); return true; }
+        if (take.isEmpty()) { p.sendMessage(P + "当前筛选（" + f.label() + "）里没有可分解的件（锁定、收藏、有投入、非掉落件、T0 都不分解）"); return true; }
         if (go) {
             String bad = ConfirmTokens.consume(p, "glibbulk", tok, fps);
             if (bad != null) { p.sendMessage(P + ChatColor.RED + bad + "（列表有变化时请重新点批量分解）"); go = false; }
         }
         if (!go) {
             p.sendMessage(P + "批量分解（筛选：" + f.label() + "）：" + ChatColor.WHITE + take.size() + ChatColor.GRAY + " 件 → 胚料 ×"
-                    + EmberStorageRules.blanksOf(take) + (skipped > 0 ? "；另有 " + skipped + " 件锁定 / 收藏 / 不可分解，不动" : ""));
+                    + EmberStorageRules.blanksOf(take) + (skipped > 0 ? "；另有 " + skipped + " 件锁定 / 收藏 / 有投入(强化·精工·成色卓越+/词条) / 不可分解，跳过" : ""));
             int shown = 0;
             for (Entry e : take) { if (shown++ >= 8) { p.sendMessage(P + "  … 共 " + take.size() + " 件"); break; } p.sendMessage(P + "  · " + e.d.shortLabel()); }
+            p.sendMessage(P + ChatColor.GRAY + "有强化 / 精工 / 成色卓越及以上 / 词条的件默认不批量分解（单件分解仍可）。");
             p.sendMessage(P + ChatColor.YELLOW + "分解后 " + undoMinutes() + " 分钟内可在装备库「撤销分解」找回（要退回胚料）。");
             String t = ConfirmTokens.issue(p, "glibbulk", fps);
             ConfirmTokens.sendClick(p, P + "确认无误再点：", "[确认批量分解]", "/corerpg p1 gearlib bulk confirm tok:" + t,
-                    "分解上面列出的 " + take.size() + " 件\n锁定 / 收藏 / 装备中的不会分解");
+                    "分解上面列出的 " + take.size() + " 件\n锁定 / 收藏 / 装备中 / 有投入的不会分解");
             return true;
         }
         final int[] left = {take.size()}, okN = {0}, blanks = {0};
@@ -593,7 +609,7 @@ public final class EmberGearLib implements Listener {
         for (int i = 0; i < shown.size(); i++) { inv.setItem(i, gearIcon(p, shown.get(i))); h.slotKey.put(i, "gear:" + shown.get(i).d.uid); }
         if (view.isEmpty()) inv.setItem(22, icon(Material.BARRIER, 0, "§7" + (entries(id).isEmpty() ? "装备库是空的" : "当前筛选没有装备"),
                 "§7仓库页「一键存入」把背包里的装备存进来", "§7筛选：" + f.label()));
-        List<Entry> bulk = EmberStorageRules.bulkDismantle(view, equipped(p));
+        List<Entry> bulk = EmberStorageRules.bulkDismantle(view, equipped(p), affixUids(p, view));
         inv.setItem(45, icon(Material.ARROW, 0, "§7返回仓库", "§8仓库页的返回键回到打开它的那一页"));
         inv.setItem(46, icon(Material.PAPER, 0, "§f上一页", "§7第 " + (pg + 1) + " / " + pages + " 页"));
         inv.setItem(47, icon(Material.DIAMOND, 0, "§f成色：§e" + (f.quality < 0 ? "全部" : EmberItemData.qualityName(f.quality)), "§e点击切换"));
@@ -602,7 +618,7 @@ public final class EmberGearLib implements Listener {
         inv.setItem(50, icon(Material.EXP_BOTTLE, 0, "§f阶：§e" + (f.tier < 0 ? "全部" : "T" + f.tier), "§e点击切换"));
         inv.setItem(51, icon(Material.HOPPER, 0, "§f排序：§e" + Filter.SORTS[f.sort], "§e点击切换", "§8" + view.size() + " 件符合筛选，共 " + entries(id).size() + " 件"));
         inv.setItem(52, icon(Material.ANVIL, 0, "§c批量分解（当前筛选）", "§7可分解 §f" + bulk.size() + " §7件 → 胚料 ×" + EmberStorageRules.blanksOf(bulk),
-                "§7锁定 / 收藏 / 装备中 / 非掉落件 / T0 不会分解", "§7点了先在聊天里列出清单，再点确认", "§e右键：撤销最近的分解（" + undoMinutes() + " 分钟内）"));
+                "§7锁定 / 收藏 / 装备中 / 有投入(强化·精工·成色卓越+/词条) / 非掉落 / T0 跳过", "§7点了先在聊天里列出清单，再点确认", "§e右键：撤销最近的分解（" + undoMinutes() + " 分钟内）"));
         inv.setItem(53, icon(Material.PAPER, 0, "§f下一页", "§7第 " + (pg + 1) + " / " + pages + " 页"));
         p.openInventory(inv);
     }

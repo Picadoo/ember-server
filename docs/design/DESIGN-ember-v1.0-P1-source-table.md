@@ -1490,3 +1490,5 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 ### D156（2026-10-04）国庆活动结束后路径冒烟
 
 临时改 `ember-v1-festival.yml` end→`fest reload`→FreshQ47：D145 主菜单「国庆纪念」+ 装备页常驻格、D146 常驻价 15000 币购符 / 结束后足迹 / 剩币换徽 / 徽价门闩均 PASS；立刻还原 10-08。不改数值。STATUS `docs/status/STATUS-ember-fest-after-end-smoke.md`。
+
+| D157 | CoreRpg 1.64.0 | InvSnap strip vault/ticket on restore；bulk dismantle skip invested；hub L after-end actions；文案批次（周规则/繁花烟火/宠物光环/余烬徽）；FreshQ49 PASS；推迟火花折算与批量撤销 |

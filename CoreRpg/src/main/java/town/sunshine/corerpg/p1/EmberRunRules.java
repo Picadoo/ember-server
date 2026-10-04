@@ -157,7 +157,7 @@ public final class EmberRunRules {
         for (String[] e : layout) for (int i = 0; i < order.length; i++) if (order[i].equals(e[0])) n[i]++;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < order.length; i++) if (n[i] > 0) sb.append(sb.length() == 0 ? "§f" : " §7· §f").append(names[i]).append(" ×").append(n[i]);
-        String tip = n[2] > 0 ? "术者地面亮火线后会打一条直线，横移躲开" : n[1] > 0 ? "远程站远放箭，先清掉" : n[3] > 0 ? "重甲伤高，绕着打、别硬吃" : "";
+        String tip = n[2] > 0 ? "术者地面亮火线后会打一条直线，横移躲开" : n[1] > 0 ? "远程站远放箭，先清掉" : n[3] > 0 ? "重甲血厚、出手慢、不怕击退，绕着打、别硬吃" : "";
         if (!tip.isEmpty()) sb.append(" §8（").append(tip).append("）");
         return sb.toString();
     }

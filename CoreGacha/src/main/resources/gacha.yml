@@ -30,9 +30,9 @@ shards:
 
 items:
   # ---------------- 传说（常驻）
-  pet_lamp:      {name: "余烬灯灵", tier: legend, kind: pet, head: JACK_O_LANTERN, icon: JACK_O_LANTERN, desc: "一盏会跟着你的小南瓜灯"}
-  pet_frost:     {name: "霜晶灵", tier: legend, kind: pet, head: SEA_LANTERN, icon: SEA_LANTERN, desc: "一块浮在身后的霜晶"}
-  aura_phoenix:  {name: "凤羽光环", tier: legend, kind: aura, particle: FLAME, style: spiral, extra: LAVA, icon: BLAZE_POWDER, desc: "身边盘旋的火羽"}
+  pet_lamp:      {name: "余烬灯灵", tier: legend, kind: pet, head: JACK_O_LANTERN, icon: JACK_O_LANTERN, desc: "一盏会跟着你的小南瓜灯（宠物只在主城显示）"}
+  pet_frost:     {name: "霜晶灵", tier: legend, kind: pet, head: SEA_LANTERN, icon: SEA_LANTERN, desc: "一块浮在身后的霜晶（宠物只在主城显示）"}
+  aura_phoenix:  {name: "凤羽光环", tier: legend, kind: aura, particle: FLAME, style: spiral, extra: LAVA, icon: BLAZE_POWDER, desc: "身边盘旋的火羽（光环副本里不显示）"}
   tag_emberlord: {name: "烬火领主", tier: legend, kind: tag, label: "§6§l烬火领主", icon: GOLDEN_APPLE, desc: "聊天名字后的金色称号"}
   # ---------------- 史诗
   glow_ember:    {name: "余烬辉光", tier: epic, kind: corerpg, ref: glow_ember, kind_label: "武器辉光（CoreRpg 外观商店）", icon: BLAZE_ROD}
@@ -66,8 +66,8 @@ items:
   badge_blossom: {name: "❀ 繁花", tier: common, kind: badge, symbol: "§c❀", icon: YELLOW_FLOWER}
   badge_spade:   {name: "♠ 黑桃", tier: common, kind: badge, symbol: "§8♠", icon: COAL}
   # ---------------- 国庆 2026 限定（gq26 池；10-08 0 点后转常驻）
-  gq_pet_koi:       {name: "锦鲤灵", tier: legend, kind: pet, head: "RAW_FISH:2", icon: RAW_FISH, desc: "国庆限定 · 游在身边的锦鲤"}
-  gq_aura_firework: {name: "盛世烟火", tier: legend, kind: aura, particle: FIREWORKS_SPARK, style: burst, extra: REDSTONE, icon: FIREWORK, desc: "国庆限定 · 身边不停绽开的小烟火"}
+  gq_pet_koi:       {name: "锦鲤灵", tier: legend, kind: pet, head: "RAW_FISH:2", icon: RAW_FISH, desc: "国庆限定 · 游在身边的锦鲤（宠物只在主城显示）"}
+  gq_aura_firework: {name: "繁花烟火", tier: legend, kind: aura, particle: FIREWORKS_SPARK, style: burst, extra: REDSTONE, icon: FIREWORK, desc: "国庆限定 · 身边不停绽开的小烟火（光环副本里不显示）"}
   gq_show_firework: {name: "满天星火", tier: epic, kind: show, particle: FIREWORKS_SPARK, sound: ENTITY_FIREWORK_LARGE_BLAST, icon: FIREWORK_CHARGE, desc: "国庆限定 · /gacha fx 放一场烟火（冷却 30 秒）"}
   gq_tag_lantern:   {name: "灯火阑珊", tier: epic, kind: tag, label: "§c灯火§6阑珊", icon: REDSTONE_LAMP_OFF, desc: "国庆限定 · 聊天名字后的红金称号"}
   gq_aura_lantern:  {name: "灯会流光", tier: rare, kind: aura, particle: FLAME, style: ring, icon: TORCH, desc: "国庆限定 · 身边一圈小灯火"}
@@ -123,7 +123,7 @@ banners:
     retire_to: standard
     retire_weight: 1
     icon: FIREWORK
-    desc: "国庆限定：锦鲤灵、盛世烟火 概率提升"
+    desc: "国庆限定：锦鲤灵、繁花烟火 概率提升"
     items:
       gq_pet_koi: 35
       gq_aura_firework: 35

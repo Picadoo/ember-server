@@ -122,13 +122,30 @@ public final class EmberStorageRules {
     }
 
     /**
+     * D157: true when the piece has meaningful investment — enhance &gt; 0, craft/精工 &gt; 0, or quality ≥ 卓越 (2).
+     * Bulk dismantle skips these by default; single-item dismantle is unchanged.
+     */
+    public static final int INVESTED_QUALITY = 2; // 卓越
+
+    public static boolean invested(EmberItemData d) {
+        return d != null && (d.enhance > 0 || d.craft > 0 || d.quality >= INVESTED_QUALITY);
+    }
+
+    /**
      * What a bulk dismantle of the current view may take: never locked, favourite or equipped pieces ({@code equipped}
-     * = the uids the loadout still points at), and never a piece the single dismantle would refuse.
+     * = the uids the loadout still points at), never invested pieces (强化/精工/成色卓越+/词条), and never a piece the
+     * single dismantle would refuse. {@code withAffix} = uids that carry a 词条 (optional; null = ignore affix).
      */
     public static List<Entry> bulkDismantle(List<Entry> view, Set<String> equipped) {
+        return bulkDismantle(view, equipped, null);
+    }
+
+    public static List<Entry> bulkDismantle(List<Entry> view, Set<String> equipped, Set<String> withAffix) {
         List<Entry> out = new ArrayList<Entry>();
         for (Entry e : view) {
             if (e.locked || e.fav || (equipped != null && equipped.contains(e.d.uid))) continue;
+            if (invested(e.d)) continue;
+            if (withAffix != null && withAffix.contains(e.d.uid)) continue;
             if (EmberUpgradeRules.dismantleCheck(e.d) != null) continue;
             out.add(e);
         }

@@ -974,3 +974,4 @@ Q03 普通 0.5 档对烬爆节奏的任何改动都 −7～−12 点），所以
 | D154 | P2-8 第 5 条周规则「卫士潮」 | `guards`：ranged→heavy，挑战专用（同 casters/disarm）；不改奖励；p2econ --mods 通关率差 +0（顶到 100%），经济噪声内；balance_version 27，CoreRpg 1.63.1；冒烟 FreshQ45 PASS |
 | D155 | P2-8 第 6 条周规则「铁卫」 | `wall`：melee→heavy，挑战专用（同 casters/disarm/guards）；不改奖励；p2econ --mods 通关率差 +0（顶到 100%），经济噪声内；balance_version 28，CoreRpg 1.63.2；冒烟 FreshQ46 PASS |
 | D156 | 国庆活动结束后路径实机冒烟（D145/D146） | 临时改 end→reload→还原；主菜单国庆纪念 / 装备页常驻格 / 15000 币购符 / 结束后足迹与换徽 / 徽价门闩；不改数值；见 §5ze |
+| D157 | 第二轮挑刺高/中高修复（review round2） | InvSnap 恢复跳过材料/扭蛋券/国庆币防复制；批量分解默认跳过强化/精工/成色卓越+/词条；hub L 活动后子图标补 actions；周规则「重击」文案、扭蛋光环改名繁花烟火、宠物/光环显示说明、余烬徽文案；CoreRpg 1.64.0，冒烟 FreshQ49 PASS；推迟 #3 火花/#7 批量撤销 |

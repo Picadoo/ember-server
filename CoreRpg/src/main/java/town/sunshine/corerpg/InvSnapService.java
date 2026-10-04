@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import town.sunshine.corerpg.p1.EmberItems;
 import town.sunshine.corerpg.p1.EmberMode;
+import town.sunshine.corerpg.p1.EmberVault;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -414,30 +415,39 @@ public final class InvSnapService implements Listener {
             if (pre == null) { msg(admin, ChatColor.RED + "恢复前快照写入失败，为安全起见未恢复"); return; }
             trustCheck(p, s, skipped -> {
                 if (!p.isOnline()) { msg(admin, ChatColor.RED + "玩家已下线，未恢复"); return; }
-                apply(p, s, skipped);
+                List<String> currency = new ArrayList<String>();
+                apply(p, s, skipped, currency);
                 String undo = "/corerpg invsnap restore " + p.getName() + " " + pre;
                 msg(admin, ChatColor.GREEN + "已把 " + p.getName() + " 的背包/末影箱恢复到快照 #" + s.id + "（" + fmt(s.at) + " " + s.reason + "）");
+                msg(admin, ChatColor.GRAY + "快照只管背包+末影箱；材料仓 / 扭蛋钱包 / 国庆币账本不会回滚。");
                 msg(admin, ChatColor.GRAY + "恢复前状态已存为 #" + pre + "，撤销：" + ChatColor.YELLOW + undo);
                 if (!skipped.isEmpty()) {
                     msg(admin, ChatColor.RED + "跳过 " + skipped.size() + " 件 P1 装备（防复制）：");
                     int k = 0;
                     for (String x : skipped) { if (k++ >= 10) { msg(admin, ChatColor.GRAY + "  …"); break; } msg(admin, ChatColor.GRAY + "  " + x); }
                 }
-                p.sendMessage(P + ChatColor.YELLOW + "管理员已恢复你的背包与末影箱（快照 " + fmt(s.at) + "）");
+                if (!currency.isEmpty()) {
+                    msg(admin, ChatColor.YELLOW + "跳过 " + currency.size() + " 格材料/扭蛋券/国庆币（防与仓库·钱包复制）：");
+                    int k = 0;
+                    for (String x : currency) { if (k++ >= 10) { msg(admin, ChatColor.GRAY + "  …"); break; } msg(admin, ChatColor.GRAY + "  " + x); }
+                }
+                p.sendMessage(P + ChatColor.YELLOW + "管理员已恢复你的背包与末影箱（快照 " + fmt(s.at) + "；材料仓与扭蛋钱包未回滚）");
                 plugin.getLogger().warning("[invsnap] " + admin.getName() + " restored " + p.getName() + " to snapshot " + s.id
-                        + " (pre-restore " + pre + ", skipped P1 " + skipped.size() + ")");
+                        + " (pre-restore " + pre + ", skipped P1 " + skipped.size() + ", stripped currency " + currency.size() + ")");
                 snapshot(p, "restored", null);
             });
         });
     }
 
-    private void apply(Player p, Snap s, List<String> skippedOut) {
+    private void apply(Player p, Snap s, List<String> skippedOut, List<String> currencyOut) {
         // skippedOut already contains labels; slots were nulled in trustCheck
         p.closeInventory();
         ItemStack[] inv = new ItemStack[INV];
         for (int i = 0; i < INV; i++) inv[i] = s.inv[i] == null ? null : s.inv[i].clone();
         ItemStack[] en = new ItemStack[ENDER];
         for (int i = 0; i < ENDER; i++) en[i] = s.ender[i] == null ? null : s.ender[i].clone();
+        // D157: strip vault materials / festival coin / physical gacha tickets so restore cannot dupe ledgers
+        stripCurrency(inv, en, currencyOut);
         p.getInventory().setContents(inv);
         p.getEnderChest().setContents(en);
         p.updateInventory();
@@ -447,6 +457,29 @@ public final class InvSnapService implements Listener {
             if (plugin.getEmberLoadouts() != null) plugin.getEmberLoadouts().refresh(p);
         } catch (RuntimeException e) {
             plugin.getLogger().log(Level.WARNING, "[invsnap] post-restore resync", e);
+        }
+    }
+
+    /**
+     * D157 anti-dupe for ledger currencies: null any stack whose NI id is on the P1 vault whitelist (materials +
+     * festival coin) or is a physical gacha ticket. Those amounts live in EmberVault / gacha_wallet and must not be
+     * recreated into the backpack on restore.
+     */
+    private void stripCurrency(ItemStack[] inv, ItemStack[] en, List<String> out) {
+        Set<String> wl = EmberVault.get() != null ? EmberVault.get().whitelist() : new HashSet<String>(EmberVault.DEFAULT_WHITELIST);
+        Set<String> extra = new HashSet<String>();
+        extra.add(InvSnapRules.GACHA_TICKET_NI);
+        NiBridge ni = plugin.getNiBridge();
+        for (int part = 0; part < 2; part++) {
+            ItemStack[] arr = part == 0 ? inv : en;
+            for (int i = 0; i < arr.length; i++) {
+                if (!real(arr[i]) || ni == null) continue;
+                String id = ni.getNiId(arr[i]);
+                if (!InvSnapRules.stripOnRestore(id, wl, extra)) continue;
+                String where = part == 0 ? InvSnapRules.slotName(i) : "末影箱" + (i + 1);
+                if (out != null) out.add(desc(arr[i]) + " @" + where + "（材料仓/扭蛋券，不恢复）");
+                arr[i] = null;
+            }
         }
     }
 
@@ -554,8 +587,9 @@ public final class InvSnapService implements Listener {
         if (args.length < 3 || "help".equals(op)) {
             s.sendMessage(P + "/corerpg invsnap list <玩家> [条数]  — 列出快照（id/时间/原因/世界/件数）");
             s.sendMessage(P + "/corerpg invsnap view <玩家> <id>  — 只读预览（第1页背包+护甲+副手，第2页末影箱）");
-            s.sendMessage(P + "/corerpg invsnap restore <玩家> <id>  — 恢复（先自动存一份 pre-restore 快照可撤销；离线则下次进服时恢复）");
-            s.sendMessage(P + "/corerpg invsnap diff <玩家> <id>  — 当前背包与快照逐格比对");
+            s.sendMessage(P + "/corerpg invsnap restore <玩家> <id>  — 恢复背包+末影箱（先存 pre-restore 可撤销；离线则下次进服时恢复）");
+            s.sendMessage(P + ChatColor.GRAY + "  快照不管材料仓 / 扭蛋钱包；快照里的材料、实物扭蛋券、国庆币恢复时会跳过（防复制）");
+            s.sendMessage(P + "/corerpg invsnap diff <玩家> <id>  — 当前背包与快照逐格比对（附材料仓摘要）");
             s.sendMessage(P + "/corerpg invsnap take <玩家>  — 立即拍一张 manual 快照");
             return true;
         }
@@ -639,6 +673,22 @@ public final class InvSnapService implements Listener {
         for (int i = 0; i < ENDER; i++) if (!same(en.length > i ? en[i] : null, snap.ender[i])) bad.add("末影箱" + (i + 1) + ": " + desc(en.length > i ? en[i] : null) + " ≠ " + desc(snap.ender[i]));
         s.sendMessage(P + p.getName() + " 对比快照 #" + snap.id + "（" + snap.count() + " 格）：" + (bad.isEmpty() ? ChatColor.GREEN + "完全一致 MATCH" : ChatColor.RED + "不一致 " + bad.size() + " 格"));
         for (int k = 0; k < bad.size() && k < 12; k++) s.sendMessage(ChatColor.GRAY + "  " + bad.get(k));
+        s.sendMessage(ChatColor.GRAY + "（快照只管背包+末影箱；材料仓 / 扭蛋钱包不在 diff 范围，恢复时也不会回滚）");
+        EmberVault v = EmberVault.get();
+        if (v != null && v.enabled()) {
+            Map<String, Long> all = v.all(p.getUniqueId());
+            if (all.isEmpty()) s.sendMessage(ChatColor.GRAY + "材料仓：空");
+            else {
+                StringBuilder sb = new StringBuilder();
+                int n = 0;
+                for (Map.Entry<String, Long> e : all.entrySet()) {
+                    if (n++ >= 6) { sb.append(" …"); break; }
+                    if (sb.length() > 0) sb.append(" · ");
+                    sb.append(e.getKey()).append("=").append(e.getValue());
+                }
+                s.sendMessage(ChatColor.GRAY + "材料仓现有：" + sb);
+            }
+        }
     }
 
     private static boolean same(ItemStack a, ItemStack b) {

@@ -74,4 +74,19 @@ public class InvSnapRulesTest {
         // 16:00 UTC = next CST day (00:00 next day)
         assertEquals(InvSnapRules.day(utcMidnight) + 1, InvSnapRules.day(utcMidnight + 16 * 3600000L));
     }
+
+    @Test public void stripOnRestoreVaultAndTickets() {
+        java.util.Set<String> wl = new java.util.HashSet<String>(java.util.Arrays.asList(
+                "mat_ember_shard", "mat_ember_v1_blank", "ember_fest_coin_gq26"));
+        java.util.Set<String> extra = java.util.Collections.singleton("ember_gacha_ticket");
+        assertTrue(InvSnapRules.stripOnRestore("mat_ember_shard", wl, extra));
+        assertTrue(InvSnapRules.stripOnRestore("ember_fest_coin_gq26", wl, extra));
+        assertTrue(InvSnapRules.stripOnRestore("ember_gacha_ticket", wl, extra));
+        assertTrue(InvSnapRules.stripOnRestore("ember_gacha_ticket", wl, null)); // default ticket id
+        assertFalse(InvSnapRules.stripOnRestore("some_sword", wl, extra));
+        assertFalse(InvSnapRules.stripOnRestore(null, wl, extra));
+        assertFalse(InvSnapRules.stripOnRestore("", wl, extra));
+        assertEquals(3, InvSnapRules.countStrip(java.util.Arrays.asList(
+                "mat_ember_shard", "dirt", "ember_gacha_ticket", "ember_fest_coin_gq26", "other"), wl, extra));
+    }
 }
