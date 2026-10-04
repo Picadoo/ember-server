@@ -53,6 +53,7 @@ wallet = icon('I', 'nether star', '§d外观扭蛋 §8（只出外观，零属�
     '§7收藏：§f%coregacha_owned_count%',
     '', '§7券从哪来：每天活跃在线 30 / 90 分钟、主线结算 1 / 3 局各 1 张，',
     '§7或用余烬币 / 余烬徽换（每天最多 5 张）。§c没有任何充值入口。',
+    '§a外观商店的件可以直接用余烬币买；已经买过的抽到返还光屑。',
     '§7重复的外观变光屑，光屑能直接换池里任意一件。'])
 def spark_of(bid):
     return int(cfg['banners'][bid].get('spark') or cfg.get('spark', 200))

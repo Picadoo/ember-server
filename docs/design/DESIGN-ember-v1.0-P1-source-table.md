@@ -1492,4 +1492,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 临时改 `ember-v1-festival.yml` end→`fest reload`→FreshQ47：D145 主菜单「国庆纪念」+ 装备页常驻格、D146 常驻价 15000 币购符 / 结束后足迹 / 剩币换徽 / 徽价门闩均 PASS；立刻还原 10-08。不改数值。STATUS `docs/status/STATUS-ember-fest-after-end-smoke.md`。
 
 | D157 | CoreRpg 1.64.0 | InvSnap strip vault/ticket on restore；bulk dismantle skip invested；hub L after-end actions；文案批次（周规则/繁花烟火/宠物光环/余烬徽）；FreshQ49 PASS；推迟火花折算与批量撤销 |
+| D159 | CoreRpg 1.64.2 | 洗练可用装备库重复件（优先背包，否则装备库；kind=reroll）；hub 扭蛋 ender pearl；扭蛋页#9文案；FreshQ51 PASS |
 | D158 | CoreRpg 1.64.1 + CoreGacha 1.0.1 | InvSnap 按账本扣回（cr_vault_log + gacha_ledger redeem，取代 1.64.0 全部扣回）+ `invsnap preview`；批量分解确认按成色计数 + 红字不分解清单 + [投入] 标记；整批撤销 `p1 undo batch`；gq26 火花 30 只换锦鲤灵/繁花烟火、剩余 1:1 转 standard；周规则转化怪各自加成 balance_version 29；FreshQ50 PASS 14/14、FreshG05/G06 PASS |
+
+### 13.77 洗练可用装备库重复件（CoreRpg 1.64.2，D159，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 问题 | 自动入库后洗练页只说「背包里没有重复件」，装备库里合格掉落重复件用不了 |
+| 裁决 | 洗练可消耗装备库重复件（未锁定/未收藏 + duplicateOk）；优先背包；ledger kind=reroll（不可撤销） |
+| 旁注 | hub 扭蛋图标改 ender pearl；扭蛋页补商店件币买/已购返光屑文案；不加周规则 |
+| 版本 | CoreRpg 1.64.2；冒烟 FreshQ51 PASS；STATUS `docs/status/STATUS-ember-reroll-gearlib-d159.md` |

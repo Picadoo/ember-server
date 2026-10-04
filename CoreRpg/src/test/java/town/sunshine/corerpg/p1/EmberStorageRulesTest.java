@@ -174,4 +174,20 @@ public class EmberStorageRulesTest {
         assertNull(EmberStorageRules.batchOf("分解 T1 焚烬刃"));
         assertNull(EmberStorageRules.batchOf(null));
     }
+
+    /** D159: gear-library 洗练 duplicate — unlocked/unfavoured + duplicateOk */
+    @Test public void libDupEligibleForReroll() {
+        EmberItemData target = drop("tg", 2, 1, "burst", "blade");
+        EmberItemData ok = drop("ok2", 2, 0, "scorch", "blade");
+        EmberItemData otherTier = drop("ot", 1, 0, "scorch", "blade");
+        EmberItemData enh = new EmberItemData(hex("eh"), EmberItemData.templateId("scorch", "blade", 2), "scorch", "blade", 2, 0, 0, 2, 0, true, "drop", 1, 1);
+        assertTrue(EmberStorageRules.libDupEligible(e(ok, false, false, 1), target, false));
+        assertFalse("locked", EmberStorageRules.libDupEligible(e(ok, true, false, 1), target, false));
+        assertFalse("fav", EmberStorageRules.libDupEligible(e(ok, false, true, 1), target, false));
+        assertFalse("has affix", EmberStorageRules.libDupEligible(e(ok, false, false, 1), target, true));
+        assertFalse("other tier", EmberStorageRules.libDupEligible(e(otherTier, false, false, 1), target, false));
+        assertFalse("enhanced", EmberStorageRules.libDupEligible(e(enh, false, false, 1), target, false));
+        assertFalse(EmberStorageRules.libDupEligible(null, target, false));
+    }
+
 }

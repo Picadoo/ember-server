@@ -168,6 +168,15 @@ public final class EmberStorageRules {
     }
 
     /**
+     * D159: a gear-library row may be eaten as the 洗练 duplicate — unlocked, not favourited, and
+     * {@link EmberAffix#duplicateOk} (drop-src, same slot/tier, no investment / affix on the duplicate).
+     */
+    public static boolean libDupEligible(Entry e, EmberItemData target, boolean dupHasAffix) {
+        if (e == null || e.d == null || target == null || e.locked || e.fav) return false;
+        return EmberAffix.duplicateOk(target, e.d, dupHasAffix) == null;
+    }
+
+    /**
      * What a bulk dismantle of the current view may take: never locked, favourite or equipped pieces ({@code equipped}
      * = the uids the loadout still points at), never invested pieces (强化/精工/成色卓越+/词条), and never a piece the
      * single dismantle would refuse. {@code withAffix} = uids that carry a 词条 (optional; null = ignore affix).

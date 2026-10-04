@@ -65,6 +65,7 @@ public final class EmberGearLib implements Listener {
     private final CoreRpgPlugin plugin;
     private final EmberLoadoutService loadouts;
     private final Map<UUID, List<Entry>> cache = new ConcurrentHashMap<UUID, List<Entry>>();
+    private final Set<UUID> loaded = ConcurrentHashMap.newKeySet();
     private final Map<UUID, Filter> filters = new HashMap<UUID, Filter>();
     private final Set<String> busy = new HashSet<String>();
     private final Map<String, Material> iconType = new HashMap<String, Material>();
@@ -147,12 +148,70 @@ public final class EmberGearLib implements Listener {
             List<Entry> l = Collections.synchronizedList(new ArrayList<Entry>());
             for (LibRow r : rows) l.add(new Entry(r.data, r.locked, r.fav, r.storedAt));
             cache.put(id, l);
+            loaded.add(id);
             for (LibRow r : rows) loadouts.rememberRow(r.data.uid, id, r.data.rev, "stored");
             if (then != null) then.run();
         });
     }
 
     public int count(UUID id) { List<Entry> l = cache.get(id); return l == null ? 0 : l.size(); }
+
+    /** D159: load stored rows once per session (join / first lookup) so 洗练 can see auto-stashed dups. */
+    public void ensureLoaded(Player p) {
+        if (p == null || !usable()) return;
+        UUID id = p.getUniqueId();
+        if (loaded.contains(id)) return;
+        reload(p, null);
+    }
+
+    /**
+     * D159: first unlocked, unfavourited stored piece that {@link EmberStorageRules#libDupEligible} accepts for
+     * {@code target}. {@code hasAffix} is true when that uid already carries a 词条 (investment). Null when none /
+     * library not ready yet (ensureLoaded kicked if needed).
+     */
+    public Entry findDupForReroll(Player p, EmberItemData target, java.util.function.Function<String, Boolean> hasAffix) {
+        if (p == null || target == null || !usable()) return null;
+        UUID id = p.getUniqueId();
+        if (!loaded.contains(id)) { ensureLoaded(p); return null; }
+        for (Entry e : new ArrayList<Entry>(entries(id))) {
+            boolean aff = hasAffix != null && Boolean.TRUE.equals(hasAffix.apply(e.d.uid));
+            if (EmberStorageRules.libDupEligible(e, target, aff)) return e;
+        }
+        return null;
+    }
+
+    /**
+     * D159: retire a stored gear-library piece as the 洗练 duplicate (stored → dismantled, kind {@code reroll},
+     * no blanks — same ledger exclusion as inventory consumeForReroll). Removes the row from the cache on OK.
+     */
+    public void consumeForReroll(final Player p, final String uid, final String note, final java.util.function.Consumer<Boolean> cb) {
+        if (p == null || uid == null || cb == null) { if (cb != null) cb.accept(false); return; }
+        String g = gate(p);
+        if (g != null) { p.sendMessage(P + ChatColor.RED + g); cb.accept(false); return; }
+        if (!usable()) { p.sendMessage(P + ChatColor.RED + "装备库需要 MySQL 存储"); cb.accept(false); return; }
+        final UUID id = p.getUniqueId();
+        final Entry e = find(id, uid);
+        if (e == null) { p.sendMessage(P + ChatColor.RED + "装备库里找不到这件重复件"); cb.accept(false); return; }
+        if (e.locked || e.fav) { p.sendMessage(P + ChatColor.RED + "锁定 / 收藏的件不会被洗练吃掉"); cb.accept(false); return; }
+        if (busy.contains(uid)) { p.sendMessage(P + ChatColor.RED + "这件正在处理中"); cb.accept(false); return; }
+        busy.add(uid);
+        final String n = note == null ? ("洗练用掉装备库重复件 " + e.d.shortLabel()) : note;
+        store().commitTxn("reroll:" + e.d.uid + ":" + e.d.rev, "reroll", id,
+                Arrays.asList(new TxnItem(e.d, null, "dismantled", "stored")),
+                null, n, res -> {
+                    busy.remove(uid);
+                    if (res.status == TxnStatus.OK) {
+                        loadouts.rememberRow(e.d.uid, id, e.d.rev + 1, "dismantled");
+                        replace(id, e.d.uid, null);
+                        plugin.getLogger().info("[P1 gearlib] reroll consume " + p.getName() + " " + e.d.uid.substring(0, 8) + " " + e.d.shortLabel());
+                        cb.accept(true);
+                    } else {
+                        plugin.getLogger().warning("[P1 gearlib] reroll consume failed " + uid + ": " + res.detail);
+                        cb.accept(false);
+                    }
+                });
+    }
+
 
     // ================================================================== auto-stash of new gear (EmberRunService.giveItem)
 
@@ -766,8 +825,15 @@ public final class EmberGearLib implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
+    public void onJoin(org.bukkit.event.player.PlayerJoinEvent e) {
+        if (EmberMode.active()) ensureLoaded(e.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        cache.remove(e.getPlayer().getUniqueId());
-        filters.remove(e.getPlayer().getUniqueId());
+        UUID id = e.getPlayer().getUniqueId();
+        cache.remove(id);
+        loaded.remove(id);
+        filters.remove(id);
     }
 }

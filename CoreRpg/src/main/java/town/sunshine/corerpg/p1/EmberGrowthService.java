@@ -648,6 +648,13 @@ public final class EmberGrowthService implements Listener {
         return -1;
     }
 
+    /** D159: first eligible gear-library duplicate (unlocked / unfavourited); null when none or lib not ready. */
+    private EmberStorageRules.Entry findLibDup(Player p, PlayerData d, EmberItemData t) {
+        EmberGearLib lib = EmberGearLib.get();
+        if (lib == null) return null;
+        return lib.findDupForReroll(p, t, uid -> affixOf(d, uid) > 0);
+    }
+
     int rerollCoin(Player p, EmberItemData t) {
         return (int) Math.round(reroll.coinFor(t.tier) * mods(p).get("reroll_coin"));
     }
@@ -691,6 +698,8 @@ public final class EmberGrowthService implements Listener {
         if (why != null) { p.sendMessage(P + "§c" + why); return true; }
         int coin = rerollCoin(p, t), shard = reroll.shardFor(t.tier);
         int di = dup ? findDup(p, d, t) : -1;
+        EmberStorageRules.Entry libDup = (dup && di < 0) ? findLibDup(p, d, t) : null;
+        boolean haveDup = di >= 0 || libDup != null;
         int cap = reroll.cap(t.quality), pity = d.periodCount(C_AFP + t.uid, "all");
         // D148 lock: keep the current affix, roll only the tier, for lock_shard extra shards
         EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t.uid));
@@ -708,10 +717,12 @@ public final class EmberGrowthService implements Listener {
                     + (pity >= reroll.pity ? " §a（这次必出 " + cap + " 档）" : ""));
             p.sendMessage(P + "档位概率：" + oddsText(cap));
             p.sendMessage(P + (lock ? "§a锁定词条：§f" + cur.name + " §7不变，只重抽档位" : "词条：本部位 " + reroll.pool(slot).size() + " 个里随机（保底只保档位，不保词条）"));
-            String pay = (dup ? "一件同部位同阶的重复件" + (di < 0 ? " §c（背包里没有：要掉落来的、没强化 / 成色 / 精工 / 词条、没在用的 T" + t.tier + name + "）§7" : "")
+            String dupWhere = !dup ? "" : di >= 0 ? " §a（背包）" : libDup != null ? " §a（装备库）"
+                    : " §c（背包或装备库里没有：要掉落来的、没强化 / 成色 / 精工 / 词条、未锁定/收藏的 T" + t.tier + name + "）§7";
+            String pay = (dup ? "一件同部位同阶的重复件" + dupWhere
                     : shard + " 余烬碎片") + (lock ? " + 锁定 " + lockShard + " 碎片" : "") + " + " + coin + " 余烬币";
             p.sendMessage(P + "花费：" + pay);
-            if (dup && di < 0) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
+            if (dup && !haveDup) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
             List<String[]> btn = new ArrayList<String[]>();
             btn.add(new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + mode + " confirm", "扣上面的花费，" + (lock ? "锁定「" + cur.name + "」重抽档位" : "抽一次" + name + "的词条"), "GREEN"});
             if (!lock && cur != null && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) < cap)
@@ -730,7 +741,7 @@ public final class EmberGrowthService implements Listener {
             p.sendMessage(P + "§c碎片不够：要 " + needShard + "，背包里 " + ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD));
             return true;
         }
-        if (dup && di < 0) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c背包里没有可用的重复件"); return true; }
+        if (dup && !haveDup) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c背包或装备库里没有可用的重复件"); return true; }
         if (!d.takeCoin(coin)) { rerollBusy.remove(p.getUniqueId()); p.sendMessage(P + "§c扣币失败"); return true; }
         if (needShard > 0) {
             int got = ni.consume(p, EmberUpgradeRules.MAT_SHARD, needShard);
@@ -748,10 +759,8 @@ public final class EmberGrowthService implements Listener {
             rerollBusy.remove(p.getUniqueId());
             return true;
         }
-        EmberItems.Read dr = runs.loadouts().items().read(p.getInventory().getItem(di));
-        final EmberItemData dupData = dr.data;
         final int refundShard = needShard;
-        plugin.getEmberForge().consumeForReroll(p, di, dupData, "洗练 " + t.shortLabel() + " 用掉重复件 " + dupData.shortLabel(), ok -> {
+        java.util.function.Consumer<Boolean> afterDup = ok -> {
             rerollBusy.remove(p.getUniqueId());
             if (!ok) {
                 d.addCoin(coin);
@@ -760,7 +769,15 @@ public final class EmberGrowthService implements Listener {
                 return;
             }
             if (p.isOnline()) roll(p, d, t, slot, coin + " 币 + 重复件" + lockPaid, lockId);
-        });
+        };
+        if (di >= 0) {
+            EmberItems.Read dr = runs.loadouts().items().read(p.getInventory().getItem(di));
+            final EmberItemData dupData = dr.data;
+            plugin.getEmberForge().consumeForReroll(p, di, dupData, "洗练 " + t.shortLabel() + " 用掉重复件 " + dupData.shortLabel(), afterDup);
+        } else {
+            final EmberItemData dupData = libDup.d;
+            EmberGearLib.get().consumeForReroll(p, dupData.uid, "洗练 " + t.shortLabel() + " 用掉装备库重复件 " + dupData.shortLabel(), afterDup);
+        }
         return true;
     }
 
@@ -848,7 +865,11 @@ public final class EmberGrowthService implements Listener {
             int pity = d.periodCount(C_AFP + t.uid, "all");
             return "§7成色" + EmberItemData.qualityName(t.quality) + " · 最高 §f" + reroll.cap(t.quality) + " §7档 · 保底 §f" + pity + "/" + reroll.pity;
         }
-        if ("dup".equals(k)) return findDup(p, d, t) >= 0 ? "§a背包里有重复件 §7+ " + rerollCoin(p, t) + " 币" : "§8背包里没有重复件（同部位 T" + t.tier + "、掉落来的、没投入）";
+        if ("dup".equals(k)) {
+            if (findDup(p, d, t) >= 0) return "§a背包里有重复件 §7+ " + rerollCoin(p, t) + " 币";
+            if (findLibDup(p, d, t) != null) return "§a装备库里有重复件 §7+ " + rerollCoin(p, t) + " 币";
+            return "§8背包或装备库里没有重复件（同部位 T" + t.tier + "、掉落来的、没投入、未锁定/收藏）";
+        }
         if ("shard".equals(k)) return "§7" + reroll.shardFor(t.tier) + " 碎片 + " + rerollCoin(p, t) + " 币";
         if ("lock".equals(k)) { // D148
             EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t.uid));
