@@ -903,6 +903,11 @@ Q03 普通 0.5 档对烬爆节奏的任何改动都 −7～−12 点），所以
 词缀池 6→8：+投弹 mortar（周期点名圈）/ 亡爆 molten（死后延迟圈）。对照 D3 Mortar/Molten；否决 Waller/Vortex/Teleporter/Reflect/Vampiric。闸门与 `affix_shard` 不变。完整设计见 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`。源表 D181。实现另窗。
 
 
+
+## 5zl 奖励精英变招 Pack 1（D182，设计-only，2026-10-04）
+
+Extra.ELITE（约 10%）刷出的 `EmberQ0xElite` 每图加 1 条固定轻招（改走位，不改 10 碎片 + 1 核心）。与词缀精英随机池（D138/D176/D181）分开。研究 `RESEARCH-ember-reward-elite-2026-10-04.md`；完整设计见 `DESIGN-ember-reward-elite-twists-2026-10-04.md`。源表 D182。实现另窗。
+
 ## 5zj Weekly Modifier Pack 2（D175，设计-only，2026-10-04）
 
 精选图周规则扩包（扩展 §5e / P2-8）：在现网 6 条上再加 **弓潮**（`bolters` caster→ranged）、**龟甲**（`shell` caster→heavy + 厚血慢手）、**压阵**（`press` ranged→melee + 冲锋近战），全部 challenge-only；池 6→9（63 周组合）。只用现有 `remap` / `converted` 字段；否决更严限药、黑暗、数量倍增、反伤、全局乘区、宝藏怪 remap。门禁：`p2econ.py --mods` 通关率差贴近 0。完整设计见 `docs/design/DESIGN-ember-weekly-mod-pack2-2026-10-04.md`。源表 D175 行等 `COORD-asset-fix-1655` 提交后再补。本草案节只作指针，不 bump `balance_version`。
@@ -1026,4 +1031,5 @@ Q03 普通 0.5 档对烬爆节奏的任何改动都 −7～−12 点），所以
 | D173 | Boss Moves Pack 2（设计-only） | 主线半血转阶段；见 `DESIGN-ember-boss-moves-pack2-2026-10-04.md`；源表行待 asset-fix 提交后补；实现后另记版本 |
 | D179 | Room Events Pack 3（设计-only） | +hold/beacon/relay；见 `DESIGN-ember-room-events-pack3-2026-10-04.md`；实现另窗 |
 | D181 | Variety Affix Pack 3（设计-only） | 词缀 +mortar/molten（6→8）；见 `DESIGN-ember-variety-affix-pack3-2026-10-04.md`；实现另窗 |
+| D182 | 奖励精英变招 Pack 1（设计-only） | Extra.ELITE 每图 1 固定轻招；见 `DESIGN-ember-reward-elite-twists-2026-10-04.md`；实现另窗 |
 | D175 | Weekly Modifier Pack 2（设计-only） | 周规则 +弓潮/龟甲/压阵（challenge-only remap+converted）；见 `DESIGN-ember-weekly-mod-pack2-2026-10-04.md`；源表行待 asset-fix 提交后补；实现后另记版本 |

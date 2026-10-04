@@ -1523,6 +1523,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D178 | CoreRpg 1.65.8 | Weekly Modifier Pack 2 上线（实现 D175）：+bolters 弓潮 / shell 龟甲 / press 压阵；池 6→9（63 图×规则对）；全部 challenge-only；`balance_version` 31→32；Stage C p1sim `--mods` deferred |
 | D179 | 设计-only（deferred 实现） | Room Events Pack 3：房间事件池 +占点 hold / 护灯 beacon / 传火 relay（与 timed/crystal/escort 等权）；否决笼牢/抽血；奖励键不变；见 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`。实现另窗 |
 | D181 | 设计-only（deferred 实现） | Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）；闸门/奖励同 D138；否决反伤/拉人/造墙/瞬移/吸血；见 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`。实现另窗 |
+| D182 | 设计-only（deferred 实现） | 奖励精英变招 Pack 1：Extra.ELITE 每图 1 条固定轻招（门廊推/焦焰踏/誓印扫/闸冲/落尘/霜息/矿渣劈）；奖励 10+1 与权重不变；否决随机词缀包/小怪包/Jailer 类；见 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md` + `docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`。实现另窗 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1670,3 +1671,10 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D179 | 房间事件 +hold/beacon/relay；文档 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`；实现等 CoreRpg+p1sim 空窗 |
 | D181 | 词缀 +mortar/molten（池 6→8）；文档 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`；研究对照 D3 Mortar/Molten，否决 Waller/Vortex/Teleporter/Reflect/Vampiric |
 | 不改 | 本登记不 bump 版本、不改 jar、不跑 sim；D180 签到/在线时长由 `COORD-signin-online` 占用 |
+
+### 13.92 设计登记：奖励精英变招 Pack 1（D182）（2026-10-04，设计-only）
+
+| 项 | 内容 |
+|---|---|
+| D182 | Extra.ELITE 每图 1 条固定轻招；研究 `docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`；设计 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md`；奖励/权重不动 |
+| 不改 | 本登记不 bump 版本、不改 jar、不跑 sim；CoreRpg 仍由 mainline / afk / signin 占用 |
