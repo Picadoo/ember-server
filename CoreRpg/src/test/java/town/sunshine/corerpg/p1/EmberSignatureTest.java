@@ -193,4 +193,15 @@ public class EmberSignatureTest {
         EmberRunRules.Grant t0 = new EmberRunRules.Grant("base_item", EmberRunRules.Kind.ITEM, "u2", 1, new EmberRunRules.ItemRoll("none", "charm", 0, 0, 0));
         for (int i = 0; i < 200; i++) { in.runId = "z" + i; assertEquals(1, EmberRunRules.signatureGrants("q01", in, t0).size()); }
     }
+
+    @Test
+    public void burstReworkKeepsTheHammerOffTheTelegraphCost_D183() {
+        // D183: 守炉重锤 pays only on boss damage now — its old 被预警招打中 +3% stacked with 炉心护符 / 门楼余烬 into a −3～−4 pp
+        // net loss at low dodge (DESIGN-ember-mainline-unlocks §12); the charm L03 keeps its telegraph cost (it pays when hit)
+        java.util.Map<String, Double> m = EmberSignature.byId("L04").mods;
+        assertFalse(m.containsKey("taken_tele"));
+        assertEquals(0.985, m.get("dmg_boss"), 1e-9);
+        assertEquals(1.0, m.get("dodge_burst"), 1e-9);
+        assertEquals(1.03, EmberSignature.byId("L03").mods.get("taken_tele"), 1e-9);
+    }
 }

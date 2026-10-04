@@ -41,7 +41,7 @@ SIGS = {
     'L01': ('q01', 'blade', 'scorch', 'burn', 1, '残门焚斧', {'burn_spread': 2, 'spread_icd': 10, 'burn_mult': 0.95}),
     'L02': ('q01', 'charm', 'any', 'dodgeheal', 1, '门楼余烬', {'dodge_heal': 0.01, 'dodge_icd': 15, 'taken_tele': 1.04}),
     'L03': ('q02', 'charm', 'burst', 'hitburst', 1, '炉心护符', {'hit_burst': 1, 'taken_tele': 1.03}),
-    'L04': ('q02', 'blade', 'burst', 'dodgeburst', 1, '守炉重锤', {'dodge_burst': 1, 'taken_tele': 1.03, 'dmg_boss': 0.98}),
+    'L04': ('q02', 'blade', 'burst', 'dodgeburst', 1, '守炉重锤', {'dodge_burst': 1, 'dmg_boss': 0.985}),  # burst rework (CoreRpg 1.65.17): was taken_tele 1.03 + dmg_boss 0.98 (pairs −3～−4 at low dodge)
     'L05': ('q03', 'blade', 'sustain', 'mend', 1, '残誓长戟', {'sustain_every': -1}),
     'L06': ('q03', 'charm', 'any', 'supply', 1, '守誓残灯', {'potion': 1.05, 'taken_boss': 1.04}),
     # ---- Stage 2 · act 2 (T2 maps) — need Java hooks (烬斩形状 / 烬斩点燃 / 烬斩护盾 / 低血回涌)

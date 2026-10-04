@@ -66,8 +66,8 @@ public final class EmberSignature {
                     "被首领预警招打中时烬爆计数 +1", "被首领预警招打中多受 3%",
                     m("hit_burst", 1, "taken_tele", 1.03)),
             new Def(4, "L04", "q02", "blade", "burst", "dodgeburst", "", "守炉重锤", "守炉蛮兵",
-                    "躲开首领预警招时烬爆计数 +1", "被首领预警招打中多受 3%，对首领伤害 ×0.98",
-                    m("dodge_burst", 1, "taken_tele", 1.03, "dmg_boss", 0.98)),
+                    "躲开首领预警招时烬爆计数 +1", "对首领伤害 ×0.985", // D183 burst rework: was 被打中 +3% + ×0.98 (pairs −3～−4 pp at low dodge)
+                    m("dodge_burst", 1, "dmg_boss", 0.985)),
             new Def(5, "L05", "q03", "blade", "sustain", "mend", "", "残誓长戟", "残誓守卫",
                     "炽愈回复少打 1 下就触发（更勤，每次回复量不变）", "无",
                     m("sustain_every", -1)),
