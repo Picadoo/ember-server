@@ -979,8 +979,19 @@ def week_rule(kn, order, day, offset, key, cleared):
     week = (day - 1 + offset) // 7
     if order[week % len(order)] != key or key not in cleared:
         return None
-    mod = MODS[week % len(MODS)]
+    mod = MODS[mod_index(week, len(MODS), len(order))]  # D187 skewed when pool and map count share a factor
     return mod if (kn.normal_mods == 'all' or _truthy(mod.get('normal'))) else None
+
+
+def mod_index(week, n, k):
+    """D187 mirror of EmberRunMaps.modifierIndex: rule index of rotation week `week` (featured map = week mod k).
+    Coprime pool sizes keep week mod n; otherwise (w mod k + w div k) mod n so every map meets every rule."""
+    import math
+    if n <= 0:
+        return 0
+    if k <= 1 or math.gcd(n, k) == 1:
+        return week % n
+    return ((week % k) + week // k) % n
 
 
 def feat_week(order, day, offset):

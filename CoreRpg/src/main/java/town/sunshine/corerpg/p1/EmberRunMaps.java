@@ -885,8 +885,22 @@ public final class EmberRunMaps {
     /** The modifier of the rotation week containing {@code day} (null when none are configured). */
     public Modifier modifierFor(java.time.LocalDate day) {
         if (modifiers.isEmpty()) return null;
-        return modifiers.get((int) Math.floorMod(EmberRunRules.weekIndex(day), (long) modifiers.size()));
+        return modifiers.get(modifierIndex(EmberRunRules.weekIndex(day), modifiers.size(), maps.size()));
     }
+
+    /**
+     * D187: rule index of rotation week {@code w} for {@code n} rules and {@code k} featured maps (map = w mod k).
+     * A pool size coprime with k keeps the plain w mod n (all n×k pairs in n×k weeks). When they share a factor
+     * (14 rules × 7 maps) plain w mod n would pin each map to n/k rules, so the index is skewed:
+     * (w mod k + w div k) mod n — consecutive weeks still differ and any n×k/gcd·k weeks meet every map×rule pair.
+     */
+    static int modifierIndex(long w, int n, int k) {
+        if (n <= 0) return 0;
+        if (k <= 1 || gcd(n, k) == 1) return (int) Math.floorMod(w, (long) n);
+        return (int) Math.floorMod(Math.floorMod(w, (long) k) + Math.floorDiv(w, (long) k), (long) n);
+    }
+
+    private static int gcd(int a, int b) { return b == 0 ? Math.abs(a) : gcd(b, a % b); }
 
     private static double clamp01(double v) { return Math.max(0.0, Math.min(1.0, v)); }
 

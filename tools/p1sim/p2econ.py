@@ -7,7 +7,7 @@ Phase 2 = W weeks of challenge runs only (3/day, the §18.1 T3 overrides from em
 Reports, per week checkpoint: share of players with a T3 two-piece of the target family, median enhance, coin balance,
 T3 marks earned and the mark share of total T3 items. Standard library only; reads the real config through p1config.
 """
-import argparse, copy, os, random, statistics, sys
+import argparse, copy, math, os, random, statistics, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import p1config, p1sim, miniyaml, rules
 
@@ -517,9 +517,11 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         best = max(rates, key=rates.get)
         can_ch = rates[best] >= 0.5
         bonus_left = ROT['weekly_cap'] - (getattr(p, 'feat_carry', 0) if w == 0 else 0)  # D108 shared weekly cap
-        mod = MODS[w % len(MODS)] if mods and MODS else None
+        mi = (w if math.gcd(len(MODS) or 1, len(order)) == 1 else w + 3)  # D187: skewed index shares the featured week number
+        mi = p1sim.mod_index(mi, len(MODS), len(order)) if MODS else 0
+        mod = MODS[mi] if mods and MODS else None
         fcfg, fcap = mod_cfg(ccfg, featured, mod)
-        wmod = MODS[w % len(MODS)] if MODS else None  # D94: the same week's rule on repeat NORMAL Q07 runs when featured
+        wmod = MODS[mi] if MODS else None  # D94: the same week's rule on repeat NORMAL Q07 runs when featured
         ncfg, ncap = (p1sim.mod_cfg(cfg, order[-1], wmod) if kn.normal_mods and wmod and featured == order[-1]
                       and (kn.normal_mods == 'all' or p1sim._truthy(wmod.get('normal'))) else (None, None))
         if mod:  # featured rate under this week's rule (own seed: the main rng stream stays paired with 'rot')

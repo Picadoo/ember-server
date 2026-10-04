@@ -1529,6 +1529,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D184 | CoreRpg 1.65.18 | D174 第 3 阶段：Q07 签名 L13 炉锁巨锤（烬斩蓄力）/ L14 炉芯护符（烬斩护盾 0.4%/0.8%/4 秒、药 ×0.95）/ L15 锈轨余火（燃烧 +1 跳、每跳 ×0.97）；Q07 首通「签名调律」（L01/L02/L06/L08/L10/L12 调律版，10 徽记解锁、城里切换；**L11 不给调律版**：W30 P2-1 −0.55 周）；L10 烬爆 ×0.9 → ×0.93；`balance_version` 41；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md` §11 / §13；发布 `docs/status/RELEASE-ember-1.65.18.md` |
 | D185 | CoreRpg 1.65.24 / bv47 | 奖励精英变招 Pack 2：Extra.ELITE 每图再加 1 条互补轻招（灰烬扇/焦线/誓踏/潮扇/碎带/霜环踏/炉扇）；`elite_twists.alt` + Director 交替；奖励 10+1 与权重不变；balance_version 47；p1sim §7 仍 deferred；设计 `docs/design/DESIGN-ember-reward-elite-twists-pack2-2026-10-05.md`；发布 `docs/status/RELEASE-ember-1.65.24.md` |
 | D186 | CoreRpg 1.65.25 / bv48 | Weekly Modifier Pack 3：精选图周规则 +3（skirmish 散兵 melee→ranged / hexers 咒潮 melee→caster / ballista 重弩 heavy→ranged）；池 9→12（84 图×规则对）；全部 challenge-only；`balance_version` 47→48；Stage C p1sim `--mods` deferred；冒烟 deferred batch；设计 `docs/design/DESIGN-ember-weekly-mod-pack3-2026-10-05.md`；发布 `docs/status/RELEASE-ember-1.65.25.md` |
+| D187 | CoreRpg 1.65.26 / bv49 | Weekly Modifier Pack 4（收尾）：精选图周规则 +2（hexplate 咒甲 heavy→caster + hp×1.25/interval×1.2 / blades 断咒 caster→melee + speed×1.2/atk×0.9）；池 12→14；14 与 7 图不互质 → `EmberRunMaps.modifierIndex` 斜移索引（(w mod 7 + w div 7) mod 14），任意 98 周覆盖 98 图×规则对、相邻两周规则不同；互质池保持 w mod n；p1sim/p2econ 同步 `mod_index`；全部 challenge-only；12 个 remap 方向全部用完；`balance_version` 48→49；Stage C p2econ `--mods` within range；冒烟 deferred batch；设计 `docs/design/DESIGN-ember-weekly-mod-pack4-2026-10-05.md`；发布 `docs/status/RELEASE-ember-1.65.26.md` |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1766,3 +1767,13 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 测试 | 单测池 12 / 84 对 + Pack 3 remap/converted/`normal==false`；Stage C p2econ `--mods` deferred；冒烟 deferred batch（POLICY 01:53）|
 | 文档 | 设计 `docs/design/DESIGN-ember-weekly-mod-pack3-2026-10-05.md`；状态 `docs/status/STATUS-ember-weekly-mod-pack3-1.65.25.md`；发布 `docs/status/RELEASE-ember-1.65.25.md` |
 
+### 13.101 Weekly Modifier Pack 4 上线（CoreRpg 1.65.26，D187，2026-10-05）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D186 留下的最后两个 remap 方向：heavy→caster、caster→melee；`COORD-routine-0418` |
+| 裁决 | 池 12→14：咒甲（heavy→caster + hp×1.25/interval×1.2）、断咒（caster→melee + speed×1.2/atk×0.9）；全部 challenge-only；缺角色图 noop（Q01/Q02 无术者 → 两条都 noop）；奖励表不动 |
+| 轮换修正 | 14 与 7 有公因数：旧式 w mod 14 会让每张图只见 2 条规则。新增 `EmberRunMaps.modifierIndex`：互质池仍 w mod n；否则 (w mod 7 + w div 7) mod 14 → 任意 98 周覆盖全部 98 对、相邻周不重复；sim `p1sim.mod_index` 同步 |
+| 版本 | CoreRpg **1.65.26**；`balance_version` **49** |
+| 测试 | 单测池 14 / 98 对 + 斜移窗口 / 相邻不重复 / remap 方向唯一 + Pack 4 remap/converted/`normal==false`；Stage C p2econ `--mods --weeks 24` within range；冒烟 deferred batch（POLICY 01:53）|
+| 文档 | 设计 `docs/design/DESIGN-ember-weekly-mod-pack4-2026-10-05.md`；状态 `docs/status/STATUS-ember-weekly-mod-pack4-1.65.26.md`；发布 `docs/status/RELEASE-ember-1.65.26.md` |

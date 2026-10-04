@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(48, m.balanceVersion);                // D186 Weekly Mod Pack 3 (D185 = 47, D173 = 46, …)
-        assertEquals("g04-1/b48", m.ruleVersion);
+        assertEquals(49, m.balanceVersion);                // D187 Weekly Mod Pack 4 (D186 = 48, D185 = 47, …)
+        assertEquals("g04-1/b49", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -375,8 +375,8 @@ public class EmberRunRulesTest {
         assertEquals(20, m.goalBonus);
         assertEquals(0.2, m.raidLastReviveHp, 1e-9);      // D118
         assertEquals(20.0, m.raidReviveDelay, 1e-9);
-        // P2-8 weekly rules: 12 rules × 7 maps, all 84 pairs over 84 weeks; no multiplier keys at all
-        assertEquals(12, m.modifiers.size());
+        // P2-8 weekly rules: 14 rules × 7 maps, all 98 pairs over any 98 weeks (D187 skewed index); no multiplier keys at all
+        assertEquals(14, m.modifiers.size());
         assertEquals(3, m.modifier("lean").potionCap);
         assertEquals("caster", m.modifier("casters").role("ranged", q3));
         assertEquals("ranged", m.modifier("casters").role("ranged", q1)); // Q01 has no caster → unchanged
@@ -444,15 +444,42 @@ public class EmberRunRulesTest {
         assertEquals(1.25, m.modifier("ballista").convAtk, 1e-9);
         assertEquals(1.35, m.modifier("ballista").convInterval, 1e-9);
         assertEquals(0.8, m.modifier("ballista").convSpeed, 1e-9);
+        // D187 Weekly Mod Pack 4: hexplate (heavy→caster) / blades (caster→melee), challenge-only
+        assertEquals("caster", m.modifier("hexplate").role("heavy", q3));  // heavy→caster when map has caster
+        assertEquals("heavy", m.modifier("hexplate").role("heavy", q1));   // Q01 has no caster → unchanged
+        assertEquals("melee", m.modifier("hexplate").role("melee", q3));   // non-source unchanged
+        assertEquals("melee", m.modifier("blades").role("caster", q3));    // caster→melee
+        assertEquals("ranged", m.modifier("blades").role("ranged", q3));   // non-source unchanged
+        assertFalse(m.modifier("hexplate").normal);
+        assertFalse(m.modifier("blades").normal);
+        assertTrue(m.modifier("hexplate").tweaksConverted());
+        assertTrue(m.modifier("blades").tweaksConverted());
+        assertEquals(1.25, m.modifier("hexplate").convHp, 1e-9);
+        assertEquals(1.2, m.modifier("hexplate").convInterval, 1e-9);
+        assertEquals(1.2, m.modifier("blades").convSpeed, 1e-9);
+        assertEquals(0.9, m.modifier("blades").convAtk, 1e-9);
+        for (EmberRunMaps.Modifier x : m.modifiers) { // every remap direction used at most once across Packs 1–4
+            if (x.remap.isEmpty()) continue;
+            for (EmberRunMaps.Modifier y : m.modifiers) if (x != y) assertNotEquals(x.id + " vs " + y.id, x.remap, y.remap);
+        }
+        // D187 skewed index: coprime pools keep w mod n; 14 rules × 7 maps meet every pair in any 98-week window, never the same rule twice in a row
+        assertEquals(5, EmberRunMaps.modifierIndex(5L, 12, 7));
+        assertEquals(Math.floorMod(-3L, 12L), EmberRunMaps.modifierIndex(-3L, 12, 7));
+        for (long w0 = 0; w0 < 200; w0 += 13) {
+            java.util.Set<String> win = new java.util.HashSet<String>();
+            for (long w = w0; w < w0 + 98; w++) win.add(Math.floorMod(w, 7L) + "/" + EmberRunMaps.modifierIndex(w, 14, 7));
+            assertEquals(98, win.size());
+        }
+        for (long w = 0; w < 400; w++) assertNotEquals(EmberRunMaps.modifierIndex(w, 14, 7), EmberRunMaps.modifierIndex(w + 1, 14, 7));
         assertNull(m.modifier(""));
         java.util.Set<String> pairs = new java.util.HashSet<String>();
         java.time.LocalDate d0 = java.time.LocalDate.of(2026, 10, 5);
-        for (int wk = 0; wk < 84; wk++) {
+        for (int wk = 0; wk < 98; wk++) {
             java.time.LocalDate d = d0.plusWeeks(wk);
             pairs.add(EmberRunRules.featuredChallenge(new java.util.ArrayList<String>(m.maps.keySet()), d) + "/" + m.modifierFor(d).id);
             assertSame(m.modifierFor(d), m.modifierFor(d.plusDays(6)));
         }
-        assertEquals(84, pairs.size());
+        assertEquals(98, pairs.size());
         // swap layout: r3's group on r1's points
         assertEquals(EmberRunMaps.layout(q3.room("r3").a, q3.room("r1").points.size(), 5L).size(),
                 q3.room("r3").a.values().stream().mapToInt(Integer::intValue).sum());
