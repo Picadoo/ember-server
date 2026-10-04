@@ -1513,6 +1513,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D167 | 设计-only（无版本 bump；实现跟 6 槽 Stage 1–3） | 烬砧（锻造台）：**兑换**地板不变（刃 / 护符 8 枚印记 → 指定族部位标准件，护甲 4 枚）；**随机锻造** = 同印记 + 4 胚料 + 500 币，成色 [70,23,7,0]（极品并入卓越，锻造出不了极品）、精工 [70,20,9,1]；**余烬烙纹**（40 碎片 → 1）定向写入指定可洗词条类型，T1–T3 2/4/6 烙纹 + 洗练币（= 一次锁定洗练价），档位按 D143 截成色上限、共用 `p4_afp` 保底（第 6 次必到）；**锻造次数**每件 13（洗练 / 定向各 −1，旧件满次）；**每周转化** 1 次，同阶同部位改族，成色 ≤卓越、强化归零。不加宝石 / 攻速 / 暴伤 / 冷却。forgesim：W30 两条路线 ±0.00；否决“锻造含 1% 极品”（轮换 −1.03 周，16 印记仍 −0.58）与“转化保留极品”（−2.10 / −1.53）。前置：撤销扣胚料竞态修复、兑换迁 payDurable。`docs/design/DESIGN-ember-forge-random-2026-10-04.md` |
 | D169 | 文档定稿（无版本 bump） | 6 槽装备结构分阶段落地计划 SETTLED：`docs/design/DESIGN-ember-gear-staged-plan-2026-10-04.md`。目标刃+护符+4甲；每图掉全部位、甲另掉不稀释；2+4 件套；Stage 0–4 门禁。CoreRpg 结构代码仍 HOLD。不占 D167/D168 |
 | D170 | CoreRpg 1.65.4 | Q02–Q07 第一房战术提示（短中文）；Q04 r3 可选落差提醒；balance_version 仍 29；不改战斗数值 |
+| D171 | 设计-only（无版本 bump） | Variety Pack 2：重复刷图花样扩包——词缀池 +再生/冲锋/凝霜（否决反伤）；房间事件池 +砸余烬晶/护宝兔（与限时清房等权）；闸门/奖励种类同 D138；花样委托泛型计数兼容；实现等 asset-fix-1655 后。`docs/design/DESIGN-ember-variety-pack2-2026-10-04.md` |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1592,3 +1593,17 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 漏洞 | 现存：`EmberGearLib.undo / undoBatch` 先查后异步扣胚料，期间花掉 → 扣款只记 warning（锻造会放大）；兑换的印记扣减与 ledger 行分开写；洗练不走 payDurable。设计要求全部走 hold → pay → commit，RNG 在付款落盘后抽 |
 | 实现 | `ember-v1.yml forge:`（`enabled: false`）；`EmberForgeRoll` + `EmberForgeRollTest`；`EmberItemStore.commitCreate`；`EmberDelivery` mark 欠款；`/corerpg p1 forge redeem|roll|pin|convert|brand`；TrMenu 烬砧页 + PAPI `brand / charges / convert_left` |
 | 阶段 | 前置（撤销修复、兑换迁耐久）→ Stage 1 后：6 部位兑换 + 随机锻造 → Stage 2：转化 → Stage 3：烙纹 + 次数 |
+
+### 13.86 Variety Pack 2：词缀 +3 / 房间事件 +2（D171，设计-only，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 余烬不停工 16:16 冻结安全窗；扩展 D138 重复刷图花样，侧向内容、无永久威力 |
+| 裁决 | 见 D171 行。词缀：`regen` 再生（打断窗回血）、`charge` 冲锋（≥1.2s 条带，复用 director charge）、`frost` 凝霜（可出圈 Slow）；否决 `reflect`。事件：`crystal` 砸余烬晶、`escort` 护宝兔，与 `timed` 等权；`eventDone` / 委托 kind `timed` 泛型兼容（文案改「房间事件达标」） |
+| 闸门 / 奖励 | 同 D138：仅 NORMAL 全员已首通；`affix_shard` / `event_core` 现有种类与数量；首通/挑战/深渊/团本/连战无花样 |
+| 配置草图 | runs yml `variety.affixes` 扩 6；新键 `events` / `regen` / `charge` / `frost` / `crystal` / `escort`；本窗不改 yml |
+| 漏洞 | 重连不重抽；晶块必须实例回收清理；护宝兔不走 §9.3 宝藏币；冲锋建议只播条带伤害；凝霜出圈消 Slow；不放宽模式闸门 |
+| 门禁（实现窗） | 42 格通关率 vs 无花样 ±3pp；p2econ 两件极品 ±0.5 周；超标只降难度不加薪 |
+| 实现 | `EmberRunMaps.Variety` / `EmberRunDirector` / `EmberRunService` / `EmberRunRules.VarietyBounty`；单测 D171 一组；冒烟 FreshQ109+ 数分钟。前置：`COORD-asset-fix-1655` DONE |
+| 不改 | CoreRpg 本提交、`balance_version`、p1sim、化妆品奖励、破甲专属键（新缀暂吃通用 `dmg_affix`） |
+| 文档 | `docs/design/DESIGN-ember-variety-pack2-2026-10-04.md` |
