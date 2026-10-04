@@ -822,7 +822,8 @@ class Player:
         self.marks[tier] += b['mark']
         drops = [self.roll_item(tier, key)]
         if SIX is not None:
-            drops += [self.roll_armor(tier, key) for _ in range(int(SIX.get('drop', 1)))]
+            dr = float(SIX.get('drop', 1))  # fractional = probability of one more armor drop
+            drops += [self.roll_armor(tier, key) for _ in range(int(dr) + (self.rng.random() < dr - int(dr) if dr != int(dr) else 0))]
             if SIX.get('start') and key not in self.cleared and key in ('q01', 'q02'):  # research §4.3 starter armor
                 four = SIX.get('start') == 'q01'  # all four at the Q01 first clear (no Q02 gap)
                 for a in (ARMOR_SLOTS if four and key == 'q01' else () if four else ('head', 'chest') if key == 'q01' else ('legs', 'boots')):
