@@ -813,3 +813,412 @@ def sys_report(R, n):
                   ' | '.join(pct(eff[k]) + mark(eff[k]) for k, _ in feltk), a[0.5]['n_fest'], pct(mx[0], '%.1f%%'), (' ' + mx[1]) if mx[0] >= JND else ''))
         w('')
     return '\n'.join(L)
+
+
+# ====================================================================================== M04 (review §04): every legal
+# structure at its REAL effective tier, normal progress and max investment separately, extremes per objective, paired
+# confidence intervals, hold-out seed. Structure = set × row-1 node × row-2 node × blade affix × charm affix (row 3 =
+# the worn set's node; the other two row-3 nodes are set-gated = dead for that set) = 3 × 3 × 3 × 3 × 3 = 243.
+ALL_MAPS = ('q01', 'q02', 'q03', 'q04', 'q05', 'q06', 'q07')
+M04_CTX = {
+    # key: (label, cfg, map, blade tier, enh, quality, charm tier, enh, quality, level, repeat run?, cleared maps, honors)
+    'N-q04n': ('正常推进 · Q04 普通重打（T1+6 标准成色；已通 Q01–Q03 = 2 天赋点，只开第一排；词条封顶 1 档；无勋记）',
+               'n', 'q04', 1, 6, 0, 1, 6, 0, 20, True, ('q01', 'q02', 'q03'), False),
+    'N-q07n': ('正常推进 · Q07 普通重打（T2+8 标准成色；6 点；词条封顶 1 档；勋记全开）', 'n', 'q07', 2, 8, 0, 2, 8, 0, 30, True, ALL_MAPS, True),
+    'N-q07c': ('正常推进 · Q07 挑战（T3+6 标准成色；6 点；词条封顶 1 档）', 'c', 'q07', 3, 6, 0, 3, 6, 0, 30, False, ALL_MAPS, True),
+    'M-q07n': ('最高投入 · Q07 普通重打（T3+10 极品；词条 4 档；有词缀精英）', 'n', 'q07', 3, 10, 3, 3, 10, 3, 30, True, ALL_MAPS, True),
+    'M-q07c': ('最高投入 · Q07 挑战（T3+10 极品；词条 4 档）', 'c', 'q07', 3, 10, 3, 3, 10, 3, 30, False, ALL_MAPS, True),
+}
+ROW1, ROW2 = ('t1a', 't1b', 't1c'), ('t2a', 't2b', 't2c')
+BLADE_AFX, CHARM_AFX = ('b_affix', 'b_set', 'b_split'), ('c_tele', 'c_share', 'c_affix')
+
+
+def m04_structures():
+    return [(f, a, b, x, y) for f in FAMS for a in ROW1 for b in ROW2 for x in BLADE_AFX for y in CHARM_AFX]
+
+
+def m04_effective(s, ctx):
+    """what is REALLY active for structure s in context ctx: talents within the progress' points, affix tiers capped by
+    the item quality (growth.py), honors only after Q07 — structures that collapse to the same effective build share one
+    simulation"""
+    fam, a, b, x, y = s
+    _, ck, k, bt, be, bq, ct, ce, cq, lv, rep, cleared, hon = M04_CTX[ctx]
+    g = cfgs()['g']
+    pts = growth.talent_points(set(cleared))
+    tal = tuple(n['id'] for n in growth.pick_talents(g, [a, b, ROW3[fam]], pts))
+    cap = g['reroll']['tier_cap']
+    return (fam, tal, (x, min(4, cap[bq])), (y, min(4, cap[cq])), hon)
+
+
+def m04_measure(job):
+    """job = (effective build, ctx, dodge, n, seed) → summary + per-run vectors (paired CIs need the runs)"""
+    eff, ctx, d, n, seed = job[:5]
+    nodes = job[5] if len(job) > 5 else None  # {node id: mods} what-if (B01 patch) — never the live config
+    fam, tal, (xa, xt), (ya, yt), hon = eff
+    c = cfgs()
+    _, ck, k, bt, be, bq, ct, ce, cq, lv, rep, cleared, _h = M04_CTX[ctx]
+    g = c['g']
+    if nodes:
+        g = copy.deepcopy(g)
+        for nd in g['talents']['nodes']:
+            if nd['id'] in nodes:
+                nd['mods'] = dict(nodes[nd['id']])
+    nobuild = not tal and xa is None
+    p1sim.RECORD = True
+    if nobuild:
+        p1sim.GROWTH = None
+    else:
+        fns = []
+        p1sim.GROWTH = growth.build(g, list(tal), 'all' if hon else (), {'blade': xa, 'charm': ya}, 4)  # growth caps by quality
+    bl = dict(p1sim.item(fam, 'blade', bt, q=bq), enh=be)
+    ch = dict(p1sim.item(fam, 'charm', ct, q=cq), enh=ce)
+    st = p1sim.stats(c[ck], bl, ch, lv, set(cleared))
+    kn = p1sim.Knobs(d)
+    rng = random.Random(seed)
+    agg = __import__('collections').Counter()
+    V = {x: [] for x in ('win', 'secs', 'boss', 'trash', 'elite', 'ekind', 'eroom', 'pot', 'minhp', 'heal', 'taken')}
+    for _ in range(n):
+        ok, used, extra, t, taken, where = p1sim.run_map(c[ck], k, st, kn, rng, kn.potion_keep, repeat=rep)
+        f = p1sim.LAST_FIGHT[0]
+        r = f.rec
+        agg.update(r)
+        V['win'].append(1 if ok else 0)
+        V['secs'].append(round(t, 2) if ok else None)
+        V['boss'].append(round(r['t_boss'], 2) if ok and r['c_boss'] else None)
+        V['trash'].append(round(r['t_trash'] / r['c_trash'], 2) if r['c_trash'] and ok else None)
+        el = [(r['own_affix_' + a], a, r['t_affix_' + a]) for a in AFFIX_ZH if r['c_affix_' + a]]
+        V['elite'].append(round(el[0][0], 2) if el and ok else None)
+        V['ekind'].append(el[0][1] if el else None)
+        V['eroom'].append(round(el[0][2], 2) if el and ok else None)
+        V['pot'].append(used)
+        V['minhp'].append(round(f.min_hp, 3))
+        V['heal'].append(round((r['heal_sustain'] + r['heal_dodge']) / st['H'], 3))
+        V['taken'].append(round(taken / st['H'], 3))
+    p1sim.GROWTH = None; p1sim.RECORD = False
+    dmg = {kk[2:]: v for kk, v in agg.items() if kk.startswith('d_') and kk != 'd_window_extra'}
+    tot = sum(dmg.values()) or 1.0
+    out = {'B': st['B'], 'H': st['H'], 'set': st['set'], 'mods': st.get('mods') or {}, 'V': V,
+           'share': {kk: v / tot for kk, v in dmg.items()},
+           'trig': {kk: agg[kk] / n for kk in ('n_burn', 'n_spread', 'n_burst', 'n_sustain', 'n_hit_burst', 'n_dodge_heal', 'n_dodge_tele', 'n_hit_tele')}}
+    return out
+
+
+M04_OBJ = [  # (key, 中文, better: -1 lower / +1 higher, kind)
+    ('boss', '单体：首领用时', -1, 'time'),
+    ('trash', '清群：每个杂兵房用时', -1, 'time'),
+    ('elite', '精英：词缀精英击杀用时', -1, 'time'),
+    ('heal', '续航：自我回复/局（×H）', +1, 'amount'),
+    ('pot', '续航：喝药/局', -1, 'amount'),
+    ('taken', '承伤：受到伤害/局（×H）', -1, 'amount'),
+    ('win', '经济/推进：通关率（体力制：失败=白花体力）', +1, 'rate'),
+]
+
+
+def m04_jobs(ctxs, n, seed, d=0.5):
+    eff_of, jobs = {}, []
+    for ctx in ctxs:
+        for fam in FAMS:  # per-set no-growth baseline
+            e = (fam, (), (None, 0), (None, 0), False)
+            eff_of[(('base', fam), ctx)] = e
+        for s in m04_structures():
+            eff_of[(s, ctx)] = m04_effective(s, ctx)
+    uniq = sorted(set((e, ctx) for (s, ctx), e in eff_of.items()), key=str)
+    jobs = [(e, ctx, d, n, seed) for e, ctx in uniq]
+    return eff_of, jobs
+
+
+def _mean(xs):
+    xs = [x for x in xs if x is not None]
+    return sum(xs) / len(xs) if xs else None
+
+
+def paired(a, b, key):
+    """paired difference a − b over runs where both have a value (same seed ⇒ same entry streams): (mean a, mean b,
+    diff, 95 % half-width, n). For 'win' every run counts."""
+    va, vb = a['V'][key], b['V'][key]
+    ds = [(x, y) for x, y in zip(va, vb) if x is not None and y is not None]
+    if len(ds) < 20:
+        return None
+    ma = sum(x for x, _ in ds) / len(ds); mb = sum(y for _, y in ds) / len(ds)
+    dd = [x - y for x, y in ds]; m = sum(dd) / len(dd)
+    sd = math.sqrt(sum((z - m) ** 2 for z in dd) / (len(dd) - 1)) if len(dd) > 1 else 0.0
+    return ma, mb, m, 1.96 * sd / math.sqrt(len(dd)), len(dd)
+
+
+def sname(s):
+    if s[0] == 'base':
+        return '%s 无成长' % FAM_ZH[s[1]]
+    nm = node_names()
+    fam, a, b, x, y = s
+    return '%s·%s+%s+%s·%s/%s' % (FAM_ZH[fam], nm.get(a, a), nm.get(b, b), nm.get(ROW3[fam], ''), AFFIX_NAME.get(x, x), AFFIX_NAME.get(y, y))
+
+
+def ename(e):
+    """the EFFECTIVE build (what the game really applies): set · talents · affix@tier"""
+    fam, tal, (xa, xt), (ya, yt), hon = e
+    nm = node_names()
+    t = '+'.join(nm.get(x, x) for x in tal) or '无天赋'
+    a = ('%s%d/%s%d' % (AFFIX_NAME.get(xa, xa), xt, AFFIX_NAME.get(ya, ya), yt)) if xa else '无词条'
+    return '%s·%s·%s' % (FAM_ZH[fam], t, a)
+
+
+AFFIX_NAME = {'b_affix': '猎缀纹', 'b_set': '余烬纹', 'b_split': '裂身纹', 'c_tele': '定身纹', 'c_share': '分核纹', 'c_affix': '抗缀纹'}
+
+
+def obj_val(r, key):
+    v = r['V'][key]
+    return sum(v) / len(v) if key == 'win' else _mean(v)
+
+
+def fmt_pd(m, h, mb, kind):
+    """paired difference text + (magnitude, lower CI magnitude, thresholds): relative for times / amounts with a
+    meaningful base, absolute (pp / per run) for rates and near-zero bases"""
+    if kind == 'rate':
+        return '%+.1f pp [%+.1f, %+.1f]' % (100 * m, 100 * (m - h), 100 * (m + h)), abs(m), abs(m) - h, (0.02, 0.05)
+    if abs(mb) < 0.05:
+        return '%+.2f/局 [%+.2f, %+.2f]' % (m, m - h, m + h), None, None, None
+    return '%+.1f%% [%+.1f, %+.1f]' % (100 * m / mb, 100 * (m - h) / mb, 100 * (m + h) / mb), abs(m / mb), (abs(m) - h) / abs(mb), (JND, CLEAR)
+
+
+def rel_or_abs(a, b, kind):
+    if a is None or b is None:
+        return None
+    return (a - b) if kind == 'rate' else (a - b) / b if b else None
+
+
+def m04_report(R, eff_of, n, seed, H=None, hseed=None):
+    L = []
+    w = L.append
+    w('# 构筑多样性 M04：全部 243 种合法结构 × 真实生效档位（builddiv.py m04），2026-10-04 CST\n')
+    w('%s。结构 = 套装 × 第一排 × 第二排 × 刃词条 × 符词条（第三排 = 所穿套装那一个；另外两个第三排节点被套装锁定 = 对该套无效），3⁵ = 243。'
+      '每个"实际生效构筑"（天赋点不足 / 成色封顶后相同的结构合并）跑 %d 局、种子 %d，同一种子下各结构共享每局的房间/受击/暴击/刷怪随机流（M02），所以差值按局配对。'
+      '躲避 0.5、基础站位。95%% 区间 = 配对差的 ±1.96·sd/√n（只计两边都有值的局）。%s\n'
+      % (rules.stamp(), n, seed, ('留出种子 %d 复跑了每个目标的最佳 / 最差结构（表中"留出"列）。' % hseed) if H else ''))
+    w('可感阈值（启发式，非实测）：时间/数量的相对变化 < 5% 视为感觉不到，5–10% 可能感觉到，≥ 10% 明显；通关率以 ±2 个百分点为"同一档"。"可感？"看最佳 vs 最差配对区间的下沿：下沿 ≥ 10%（率 ≥ 5pp）明显，≥ 5%（率 ≥ 2pp）可能，只有点估计过线为边缘。\n')
+    for ctx in M04_CTX:
+        w('## %s\n' % M04_CTX[ctx][0])
+        keys = [(s, e) for (s, c), e in eff_of.items() if c == ctx and s[0] != 'base']
+        ueff = sorted(set(e for _, e in keys), key=str)
+        w('合法结构 %d 种 → 实际生效的不同构筑 **%d** 种（天赋点 / 成色封顶后合并）。生效档位：刃 %d 档、符 %d 档；生效天赋示例：%s。\n' % (
+            len(keys), len(ueff), ueff[0][2][1], ueff[0][3][1], '+'.join(node_names().get(t, t) for t in ueff[0][1]) or '无'))
+        w('| 目标 | 范围 | 无成长基线 | 最佳结构 | 相对基线（95% 区间） | 最差结构 | 相对基线 | 最佳 vs 最差（配对 95% 区间） | 可感？ | 留出种子：最佳 vs 最差 |')
+        w('|---|---|---:|---|---|---|---|---|---|---|')
+        for key, zh, better, kind in M04_OBJ:
+            base = {f: R[(eff_of[(('base', f), ctx)], ctx)] for f in FAMS}
+            fmtv = (lambda x: '%.1f%%' % (100 * x)) if kind == 'rate' else (lambda x: '%.2f' % x)
+            for scope in FAMS + ('all',):
+                seen = set()
+                vals = []
+                for s_, e in keys:
+                    if (scope == 'all' or s_[0] == scope) and e not in seen:
+                        seen.add(e)
+                        vals.append((obj_val(R[(e, ctx)], key), s_, e))
+                vals = [v for v in vals if v[0] is not None]
+                if not vals:
+                    continue
+                vals.sort(key=lambda v: better * v[0], reverse=True)
+                best, worst = vals[0], vals[-1]
+
+                def vs_base(v):
+                    p = paired(R[(v[2], ctx)], base[v[1][0]], key)
+                    return fmt_pd(p[2], p[3], p[1], kind)[0] if p else '—'
+                p = paired(R[(best[2], ctx)], R[(worst[2], ctx)], key)
+                if p:
+                    bw, mag, lo, thr = fmt_pd(p[2], p[3], p[1], kind)
+                    felt = '（基线≈0，看绝对值）' if thr is None else ('明显' if lo >= thr[1] else ('可能' if lo >= thr[0] else ('边缘' if mag >= thr[0] else '否')))
+                else:
+                    bw, felt = '—', '—'
+                hold = '—'
+                if H and (best[2], ctx) in H and (worst[2], ctx) in H:
+                    ph = paired(H[(best[2], ctx)], H[(worst[2], ctx)], key)
+                    if ph:
+                        hold = fmt_pd(ph[2], ph[3], ph[1], kind)[0]
+                bv = obj_val(base[scope], key) if scope != 'all' else None
+                w('| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |' % (zh if scope == 'scorch' else '', '**跨套**' if scope == 'all' else FAM_ZH[scope],
+                  fmtv(bv) if bv is not None else '—', ename(best[2]), vs_base(best), ename(worst[2]), vs_base(worst), bw, felt, hold))
+        w('')
+        # per-dimension marginal effects (within each set): how much one choice moves each objective, all else equal
+        w('**单个选择的边际效应**（同套、其余选择相同时，换这一格的选项，目标变化的最大相对幅度，按 81 组同伴平均；★ = 平均变化 ≥ 5%，率 ≥ 2pp）：\n')
+        dims = [('第一排', 1, ROW1), ('第二排', 2, ROW2), ('刃词条', 3, BLADE_AFX), ('符词条', 4, CHARM_AFX)]
+        w('| 套装 | 选择 | ' + ' | '.join(zh.split('：')[1] if '：' in zh else zh for _, zh, _, _ in M04_OBJ) + ' |')
+        w('|---|---|' + '---:|' * len(M04_OBJ))
+        for fam in FAMS:
+            for dz, di, opts in dims:
+                cells = []
+                for key, zh, better, kind in M04_OBJ:
+                    spans = []
+                    for s, e in keys:
+                        if s[0] != fam or s[di] != opts[0]:
+                            continue
+                        vs = []
+                        for o in opts:
+                            s2 = s[:di] + (o,) + s[di + 1:]
+                            v = obj_val(R[(eff_of[(s2, ctx)], ctx)], key)
+                            if v is not None:
+                                vs.append(v)
+                        if len(vs) == len(opts):
+                            mid = sum(vs) / len(vs)
+                            spans.append((max(vs) - min(vs)) if (kind == 'rate' or abs(mid) < 0.05) else (max(vs) - min(vs)) / mid)
+                    if spans:
+                        sp = sum(spans) / len(spans)
+                        absb = kind != 'rate' and all(abs(obj_val(R[(eff_of[(('base', fam), ctx)], ctx)], key) or 0) < 0.05 for _ in [0])
+                        if kind == 'rate':
+                            cells.append('%.1fpp' % (100 * sp) + (' ★' if sp >= 0.02 else ''))
+                        elif absb:
+                            cells.append('%.2f/局' % sp)
+                        else:
+                            cells.append('%.1f%%' % (100 * sp) + (' ★' if sp >= JND else ''))
+                    else:
+                        cells.append('—')
+                w('| %s | %s | %s |' % (FAM_ZH[fam], dz, ' | '.join(cells)))
+        w('')
+        # perceptual classes + dominance within each set
+        w('**同套之内：感觉上有几种不同的构筑？谁被支配？**\n')
+        for fam in FAMS:
+            ks = [(s, e) for s, e in keys if s[0] == fam]
+            ues = sorted(set(e for _, e in ks), key=str)
+            vec = {}
+            for e in ues:
+                r = R[(e, ctx)]
+                vec[e] = {key: obj_val(r, key) for key, _, _, _ in M04_OBJ}
+            def close(a, b):
+                for key, _, _, kind in M04_OBJ:
+                    x, y = vec[a][key], vec[b][key]
+                    if x is None or y is None:
+                        continue
+                    if kind == 'rate':
+                        if abs(x - y) >= 0.02:
+                            return False
+                    elif abs(y) >= 0.05 and abs(x - y) / abs(y) >= JND:
+                        return False
+                    elif abs(y) < 0.05 and abs(x - y) >= 0.05:
+                        return False
+                return True
+            reps = []
+            for e in sorted(ues, key=lambda e: -(vec[e]['win'] or 0)):
+                if not any(close(e, r_) for r_ in reps):
+                    reps.append(e)
+            def dom(a, b, tol):
+                """a perceptibly dominates b: not worse beyond tol anywhere, better beyond tol somewhere"""
+                better_any = False
+                for key, _, sgn, kind in M04_OBJ:
+                    x, y = vec[a][key], vec[b][key]
+                    if x is None or y is None:
+                        continue
+                    dlt = (x - y) * sgn if (kind == 'rate' or abs(y) < 0.05) else (x - y) / abs(y) * sgn
+                    t = 0.02 if kind == 'rate' else tol
+                    if dlt < -t:
+                        return False
+                    if dlt > t:
+                        better_any = True
+                return better_any
+            pdom = [e for e in ues if any(dom(o, e, JND) for o in ues if o != e)]
+            ndom = [e for e in ues if any(dom(o, e, 0.0) for o in ues if o != e)]
+            w('- %s：%d 个实际构筑 → 按 5%% / 2pp 合并后 **%d** 个"感觉不同"的类；数值上被支配 %d 个（帕累托前沿 %d），可感地被支配（另一个构筑在某目标好 ≥5%% 且无一目标差 ≥5%%）**%d** 个。' % (
+                FAM_ZH[fam], len(ues), len(reps), len(ndom), len(ues) - len(ndom), len(pdom)))
+        w('')
+    return '\n'.join(L)
+
+
+def m04_main(n=3000, seed=20261004, hseed=777, nproc=6):
+    eff_of, jobs = m04_jobs(list(M04_CTX), n, seed)
+    res = run_jobs_fn(m04_measure, jobs, nproc)
+    R = {(j[0], j[1]): r for j, r in zip(jobs, res)}
+    # hold-out: re-run every objective's best / worst (and the baselines) on a seed not used for the selection
+    pick = set()
+    for ctx in M04_CTX:
+        keys = [(s, e) for (s, c), e in eff_of.items() if c == ctx and s[0] != 'base']
+        for key, zh, better, kind in M04_OBJ:
+            for scope in FAMS + ('all',):
+                vals = sorted([(obj_val(R[(e, ctx)], key), e) for s, e in keys if (scope == 'all' or s[0] == scope) and obj_val(R[(e, ctx)], key) is not None],
+                              key=lambda v: better * v[0], reverse=True)
+                if vals:
+                    pick.add((vals[0][1], ctx)); pick.add((vals[-1][1], ctx))
+        for f in FAMS:
+            pick.add((eff_of[(('base', f), ctx)], ctx))
+    hj = [(e, ctx, 0.5, n, hseed) for e, ctx in sorted(pick, key=str)]
+    hres = run_jobs_fn(m04_measure, hj, nproc)
+    H = {(j[0], j[1]): r for j, r in zip(hj, hres)}
+    return R, eff_of, H
+
+
+def run_jobs_fn(fn, jobs, nproc):
+    with Pool(nproc) as pool:
+        return pool.map(fn, jobs, chunksize=4)
+
+
+# ====================================================================================== B01 拆分: intent (planner 10-04)
+# = clones net +50 %, the affixed elite body −20 %. Live: t2c {dmg_split 1.5, dmg_affix 0.8} and Java outMult multiplies
+# dmg_affix × dmg_split on a clone → net 1.2. Proposed: new key dmg_affix_body (body only) → t2c {dmg_split 1.5,
+# dmg_affix_body 0.8}: clone 1.5, body 0.8 (p1sim.dmult already implements dmg_affix_body exactly like the Java patch).
+B01_VARIANTS = [
+    ('无成长', None, None),
+    ('破缀（第二排对手）', 't2a', None),
+    ('拆分·现行（分身净 ×1.2）', 't2c', None),
+    ('拆分·按意图（分身 ×1.5，本体 ×0.8）', 't2c', {'t2c': {'dmg_split': 1.5, 'dmg_affix_body': 0.8}}),
+    ('拆分·只改配置（dmg_split 1.875 × 0.8 = 1.5）', 't2c', {'t2c': {'dmg_split': 1.875, 'dmg_affix': 0.8}}),
+]
+
+
+def b01_jobs(n, seed):
+    jobs, keys = [], []
+    for ctx in ('N-q07n', 'M-q07n'):
+        _, ck, k, bt, be, bq, ct, ce, cq, lv, rep, cleared, hon = M04_CTX[ctx]
+        cap = cfgs()['g']['reroll']['tier_cap']
+        for fam in FAMS:
+            for lab, r2, nodes in B01_VARIANTS:
+                for afx in (None, 'b_split'):
+                    if r2 is None and afx:
+                        continue
+                    tal = () if r2 is None else ('t1b', r2, ROW3[fam])
+                    e = (fam, tal, (afx, min(4, cap[bq]) if afx else 0), ('c_tele' if afx else None, min(4, cap[cq]) if afx else 0), hon if r2 else False)
+                    jobs.append((e, ctx, 0.5, n, seed, nodes)); keys.append((ctx, fam, lab, afx))
+    return jobs, keys
+
+
+def b01_report(R, keys, n, seed):
+    L = []
+    w = L.append
+    w('# B01「拆分」：分身净 +50%% / 本体 −20%% 的补丁模拟（builddiv.py b01），2026-10-04 CST\n')
+    w('%s。重打普通版每局必有 1 只词缀精英（炽热 / 分裂 / 厚甲各 1/3），每格 %d 局、种子 %d（同种子 = 同房间 / 同精英类型，按局配对）。'
+      '"精英击杀用时" = 第一次打到精英到精英（分裂则含两个分身）全倒；"精英房用时" = 整个有精英的房间。第一排固定稳桩，第三排 = 本套。'
+      '刃词条列：— = 无词条；裂身纹 = 裂身纹（刃）+ 定身纹（符）在该成色的封顶档。\n' % (rules.stamp(), n, seed))
+    for ctx in ('N-q07n', 'M-q07n'):
+        w('## %s\n' % M04_CTX[ctx][0])
+        w('| 套装 | 变体 | 刃词条 | 分裂精英击杀 s | 相对现行拆分 | 分裂精英房 s | 厚甲精英击杀 s | 炽热精英击杀 s | 通关率 | 全程 s |')
+        w('|---|---|---|---:|---:|---:|---:|---:|---:|---:|')
+        for fam in FAMS:
+            ref = {}
+            for (c, f, lab, afx), r in zip(keys, R):
+                if c != ctx or f != fam:
+                    continue
+                V = r['V']
+                def km(kind, field='elite'):
+                    xs = [x for x, kk in zip(V[field], V['ekind']) if kk == kind and x is not None]
+                    return sum(xs) / len(xs) if xs else None
+                sp = km('split')
+                if lab.startswith('拆分·现行'):
+                    ref[afx] = sp
+                rr = ref.get(afx)
+                w('| %s | %s | %s | %.2f | %s | %.2f | %.2f | %.2f | %.1f%% | %.1f |' % (FAM_ZH[fam], lab, '裂身纹' if afx else '—', sp,
+                  ('%+.1f%%' % (100 * (sp / rr - 1))) if rr and not lab.startswith('拆分·现行') else '', km('split', 'eroom'), km('shield'), km('blazing'),
+                  100 * sum(V['win']) / len(V['win']), _mean(V['secs'])))
+        w('')
+    return '\n'.join(L)
+
+
+if __name__ == '__main__':
+    import pickle
+    mode = sys.argv[1] if len(sys.argv) > 1 else ''
+    if mode == 'b01':
+        n = int(sys.argv[sys.argv.index('--n') + 1]) if '--n' in sys.argv else 6000
+        jobs, keys = b01_jobs(n, 4242)
+        R = run_jobs_fn(m04_measure, jobs, 6)
+        open(os.path.join(HERE, 'out-build-diversity-b01-split.md'), 'w', encoding='utf-8').write(b01_report(R, keys, n, 4242))
+        print('wrote out-build-diversity-b01-split.md')
+    if mode == 'm04':
+        n = int(sys.argv[sys.argv.index('--n') + 1]) if '--n' in sys.argv else 3000
+        R, eff_of, H = m04_main(n)
+        pickle.dump((R, eff_of, H), open('/tmp/bd/m04.pkl', 'wb'))
+        open(os.path.join(HERE, 'out-build-diversity-m04.md'), 'w', encoding='utf-8').write(m04_report(R, eff_of, n, 20261004, H, 777))
+        print('wrote out-build-diversity-m04.md')
