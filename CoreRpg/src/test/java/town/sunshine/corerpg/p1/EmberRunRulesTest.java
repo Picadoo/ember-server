@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(49, m.balanceVersion);                // D187 Weekly Mod Pack 4 (D186 = 48, D185 = 47, …)
-        assertEquals("g04-1/b49", m.ruleVersion);
+        assertEquals(50, m.balanceVersion);                // D188 Boss Moves Pack 3 撞墙破绽 (D187 = 49, D186 = 48, …)
+        assertEquals("g04-1/b50", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1573,6 +1573,19 @@ public class EmberRunRulesTest {
         assertFalse(EmberRunMaps.Variety.EVENTS.contains("drain"));
     }
 
+
+    @Test public void chargeBossesCrashIntoWalls_D188() {
+        EmberRunMaps m = bundled();
+        String[][] want = {{"q02", "焦冲"}, {"q07", "冲撞"}};
+        for (String[] w : want) {
+            EmberRunMaps.Skill found = null;
+            for (EmberRunMaps.Skill sk : m.byKey(w[0]).boss.skills) if (w[1].equals(sk.name)) found = sk;
+            assertNotNull(w[0] + " " + w[1], found);
+            assertEquals("charge", found.type);
+            assertEquals(w[0] + " wall stun", 1.5, found.wallStun, 0);
+        }
+        for (EmberRunMaps.Skill sk : m.byKey("r01").boss.skills) assertEquals("raid untouched", 0.0, sk.wallStun, 0);
+    }
 
     @Test public void everyMainBossHasHalfHpTelegraphedLightPressure_D173() {
         EmberRunMaps m = bundled();

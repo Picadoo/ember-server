@@ -201,6 +201,11 @@ def power(cfg, st, kn):
 
 # ---------------------------------------------------------------- combat
 
+# D188 撞墙破绽: share of boss charges that end in a wall, as a mean (stun × share; no rng draw so paired runs stay paired).
+# None = tied to player skill: dodge × WALL_STUN_K (a player who dodges well also baits the boss into walls some of the time);
+# 1.0 = upper bound (every charge crashes). Java stuns only when a real wall cuts the strip short.
+WALL_STUN_P = None
+WALL_STUN_K = 0.5
 _UID = itertools.count(1)  # M03: burn-book key of a mob (unique per process; never touches an rng)
 
 
@@ -540,6 +545,14 @@ class Fight:
                         s['next'] = t + sk['every']
                         if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
                             self.hurt(sk['dmg'], True, 'tele')
+                            _wp = (kn.dodge * WALL_STUN_K) if WALL_STUN_P is None else WALL_STUN_P
+                            if sk.get('wall_stun') and _wp > 0 and boss['hp'] > 0:  # D188 撞墙破绽 (mean stun per charge)
+                                _st = float(sk['wall_stun']) * _wp
+                                boss['next'] = max(boss['next'], t) + _st
+                                for _s in skills:
+                                    if _s is not s:
+                                        _s['next'] += _st
+                                s['next'] += _st
                             f = sk.get('follow')
                             if f and (f.get('below') is None or boss['hp'] <= f['below'] * boss['max']):
                                 pending.append((t + f.get('delay', 1.0), f['dmg']))

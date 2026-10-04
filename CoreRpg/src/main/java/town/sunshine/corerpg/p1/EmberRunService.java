@@ -2412,6 +2412,13 @@ public final class EmberRunService implements Listener {
         return g == null ? fee : g.abyssFee(p, fee);
     }
 
+    /** D188 撞墙破绽: {@code src} is a run boss in its wall-crash stun (its plain melee does nothing) */
+    public boolean bossStunned(Entity src) {
+        if (src == null || skillDepth > 0) return false;
+        EmberRunDirector d = byWorld.get(src.getWorld().getName());
+        return d != null && d.bossStunned(src);
+    }
+
     /** D142: the player stands in an abyss segment right now */
     public boolean inAbyss(Player p) {
         EmberRunDirector d = p == null ? null : byWorld.get(p.getWorld().getName());

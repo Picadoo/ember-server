@@ -102,6 +102,9 @@ public final class EmberRunMaps {
         public final boolean light;
         /** R03 (D137) 烬核分摊: everyone inside the circle when it lands shares dmg equally (alone = all of it) */
         public final boolean share;
+        /** D188 撞墙破绽: charge only — when a real wall (not the invisible boss-area edge, not a ledge) cuts the strip
+         *  short, the boss is stunned this many seconds after it lands (no skills, no melee, rooted); 0 = off */
+        public final double wallStun;
         Skill(Map<?, ?> m) {
             type = str(m.get("type"), "cone");
             target = str(m.get("target"), "");
@@ -125,13 +128,14 @@ public final class EmberRunMaps {
             recover = num(m.get("recover"), Double.NaN);
             light = Boolean.TRUE.equals(m.get("light")) || "true".equals(String.valueOf(m.get("light")));
             share = Boolean.TRUE.equals(m.get("share")) || "true".equals(String.valueOf(m.get("share")));
+            wallStun = "charge".equals(type) ? Math.max(0, Math.min(3.0, num(m.get("wall_stun"), 0))) : 0; // D188: ≤ 3 s
             follow = m.get("follow") instanceof Map ? new Skill((Map<?, ?>) m.get("follow")) : null;
         }
 
         private Skill(Skill o, double length, double dmg) {
             type = o.type; name = o.name; every = o.every; warn = o.warn; this.dmg = dmg; angle = o.angle; range = o.range;
             radius = o.radius; ahead = o.ahead; this.length = length; width = o.width; below = o.below; delay = o.delay;
-            kb = o.kb; target = o.target; follow = o.follow; start = o.start; shift = o.shift; recover = o.recover; light = o.light; share = o.share;
+            kb = o.kb; target = o.target; follow = o.follow; start = o.start; shift = o.shift; recover = o.recover; light = o.light; share = o.share; wallStun = o.wallStun;
         }
 
         /** same skill with another strip length (charge clipped at a wall / the boss area edge) */

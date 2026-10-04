@@ -93,6 +93,8 @@ final class EmberRunDirector {
     private int casts;
     private EmberRunMaps.Skill follow;
     private long followStart;
+    private boolean pendingCrash;        // D188 撞墙破绽: the pending charge was cut short by a real wall
+    private long stunUntil;              // D188: boss stunned (no skills, no melee) until this
     private boolean addsDone;
     private long addsAt;
     private boolean extraSpawned;
@@ -1361,6 +1363,8 @@ final class EmberRunDirector {
                     follow = done.follow;
                     followStart = now + (long) (done.follow.delay * 1000);
                 }
+                if (pendingCrash && done.wallStun > 0 && !le.isDead()) wallStun(done, now, le);
+                pendingCrash = false;
             }
             return;
         }
@@ -1476,6 +1480,7 @@ final class EmberRunDirector {
         dir.normalize();
         // Q04 冲击圈: the circle is locked on the chosen player's ground position now and lands after the warning
         double run = 0;
+        pendingCrash = false;
         if ("charge".equals(sk.type)) { // §17: strip = the real path; blocked → charge back toward the hall centre
             run = clearRun(o, dir, sk.length);
             if (run < CHARGE_MIN) {
@@ -1490,6 +1495,7 @@ final class EmberRunDirector {
                 svc.log().fine("[P1 run] " + s.runId + " " + sk.name + " skipped (no room: " + fmt(run) + ")");
                 return;
             }
+            pendingCrash = sk.wallStun > 0 && crashesIntoWall(o, dir, run, sk.length);
         }
         lockOrigin = "player".equals(sk.target) && target != null ? target.getLocation().clone() : o.clone();
         lockDir = dir;
@@ -1506,7 +1512,47 @@ final class EmberRunDirector {
         String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下"
                 + ("circle".equals(sk.type) && sk.radius > 0 ? " · 半径 " + fmt(sk.radius) + " 格" : "") : shapeHint(pending);
         if (sk.share) who += " §6· 全队靠拢进圈分摊（人越多每人越少，一个人扛会很痛）";
+        if (sk.wallStun > 0) who += " §a· 让它撞上墙会晕 " + fmt(sk.wallStun) + " 秒";
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
+    }
+
+    /** D188 撞墙破绽: rooted, no skill and no melee for {@code done.wallStun} s; a queued follow-up waits until it ends. */
+    private void wallStun(EmberRunMaps.Skill done, long now, LivingEntity le) {
+        long ms = (long) (done.wallStun * 1000);
+        stunUntil = now + ms;
+        recoverUntil = Math.max(recoverUntil, stunUntil);
+        if (follow != null) followStart = Math.max(followStart, stunUntil);
+        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (done.wallStun * 20) + 4, 10, false, false), true);
+        Location at = le.getLocation();
+        w.spawnParticle(Particle.CRIT, at.clone().add(0, 2.2, 0), 16, 0.4, 0.2, 0.4, 0.05);
+        w.playSound(at, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.7f);
+        svc.tellRun(s, "§a撞墙！§c" + bossDef().name + " §e眩晕 " + fmt(done.wallStun) + " 秒 §7· 破绽，趁现在输出");
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s wall stun %s %.1fs", s.runId, done.name, done.wallStun));
+    }
+
+    /** D188: this director's boss is in its wall-crash stun right now (its melee is cancelled). */
+    boolean bossStunned(org.bukkit.entity.Entity e) {
+        return boss != null && e != null && e == boss.le && System.currentTimeMillis() < stunUntil;
+    }
+
+    /** D188: the charge strip stopped short of {@code max} because a solid block stands at feet / head height (a wall). */
+    private boolean crashesIntoWall(final Location o, Vector dir, double run, double max) {
+        return crashGrid((x, z) -> {
+            org.bukkit.block.Block feet = new Location(w, x, o.getY(), z).getBlock();
+            return feet.getType().isSolid() || feet.getRelative(0, 1, 0).getType().isSolid();
+        }, o.getX(), o.getZ(), dir.getX(), dir.getZ(), run, max, BOSS_HALF_WIDTH);
+    }
+
+    /**
+     * D188: the step right after the clipped strip end (same centre + box-edge probes as {@link #clearRunGrid}) hits a
+     * wall. A strip that ran its full length, or stopped at a ledge / the invisible boss-area edge, is no crash.
+     */
+    static boolean crashGrid(GroundTest wall, double ox, double oz, double dx, double dz, double run, double max, double half) {
+        if (run >= max - 1e-9) return false;
+        double k = run + 0.25, px = -dz, pz = dx;
+        double cx = ox + dx * k, cz = oz + dz * k;
+        return wall.ok(cx, cz) || wall.ok(cx + px * half, cz + pz * half) || wall.ok(cx - px * half, cz - pz * half)
+                || wall.ok(cx + dx * half, cz + dz * half);
     }
 
     /** One committed participant in range, chosen from the run seed + cast number (reproducible, not always the tank). */

@@ -167,4 +167,28 @@ public class EmberRunShapeTest {
         assertEquals(0, EmberRunDirector.clearRunGrid(hall, 5.75, 46.5, 0, 1, 8, EmberRunDirector.BOSS_HALF_WIDTH), 1e-9);
         assertTrue(EmberRunDirector.CHARGE_MIN >= 2.0);
     }
+
+    @Test public void wallCrashOnlyAtARealWall_D188() {
+        // same Q07 hall: solid wall blocks at z <= 40 and x >= 6; west side x < -5 is a ledge (no floor, not solid)
+        EmberRunDirector.GroundTest wall = (x, z) -> z < 41 || x >= 6;
+        double h = EmberRunDirector.BOSS_HALF_WIDTH;
+        // charge south into the z = 40 wall: run 5.0 of 8 → the next step's front probe is in the wall → crash
+        assertTrue(EmberRunDirector.crashGrid(wall, 0.5, 46.5, 0, -1, 5.0, 8, h));
+        // the full length ran out → no crash
+        assertFalse(EmberRunDirector.crashGrid(wall, 0.5, 46.5, 0, -1, 8.0, 8, h));
+        // stopped at the west ledge (floor ends, nothing solid) → no crash
+        assertFalse(EmberRunDirector.crashGrid(wall, 0.5, 46.5, -1, 0, 5.0, 8, h));
+        // stopped by the invisible boss-area edge in open floor → no crash
+        assertFalse(EmberRunDirector.crashGrid(wall, 0.5, 52.5, 0, 1, 3.0, 8, h));
+    }
+
+    @Test public void wallStunParsesOnChargeOnlyAndIsCapped_D188() {
+        assertEquals(2.0, skill("type", "charge", "wall_stun", 2.0).wallStun, 0);
+        assertEquals(0.0, skill("type", "charge").wallStun, 0);
+        assertEquals(0.0, skill("type", "cone", "wall_stun", 2.0).wallStun, 0); // not a dash → never a crash
+        assertEquals(3.0, skill("type", "charge", "wall_stun", 9).wallStun, 0);  // ≤ 3 s
+        EmberRunMaps.Skill c = skill("type", "charge", "wall_stun", 2.0, "length", 8);
+        assertEquals(2.0, c.withLength(5).wallStun, 0); // clipped copy keeps it
+        assertEquals(2.0, c.withDmg(79).wallStun, 0);   // challenge copy keeps it
+    }
 }

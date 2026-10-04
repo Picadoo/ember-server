@@ -284,6 +284,12 @@ public final class EmberCombatListener implements Listener {
             EmberDamageTrace.note(e, before, "B13 P1 世界内 PvP → 取消");
             return;
         }
+        EmberRunService rs0 = EmberRunService.get();
+        if (src != null && rs0 != null && rs0.bossStunned(src)) { // D188 撞墙破绽: a stunned boss's melee lands nothing
+            e.setCancelled(true);
+            EmberDamageTrace.note(e, before, "D188 首领撞墙眩晕 → 普攻取消");
+            return;
+        }
         EmberLoadout l = loadouts.get(p);
         String pipe;
         double base = before;
