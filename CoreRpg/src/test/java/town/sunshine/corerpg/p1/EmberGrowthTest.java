@@ -218,6 +218,47 @@ public class EmberGrowthTest {
         for (EmberGrowth.Row row : talents().rows) assertFalse("no internal D-number in " + row.theme, row.theme.matches(".*D\\d+.*"));
     }
 
+    @Test public void b01SplitMeansNetPlus50OnClones_D163() {
+        // Review B01: 「拆分」text = clones +50% / body −20%. Baseline damage 100.
+        EmberGrowth.Talents tal = talents();
+        EmberGrowth.Node split = null;
+        for (EmberGrowth.Node n : tal.nodes) if ("t2c".equals(n.id)) split = n;
+        assertNotNull(split);
+        assertEquals(1.50, split.mods.get("dmg_split"), 1e-9);
+        assertEquals(0.80, split.mods.get("dmg_affix_body"), 1e-9);
+        assertFalse("body penalty must not use dmg_affix (that also hits clones)", split.mods.containsKey("dmg_affix"));
+
+        EmberGrowth.Mods only = EmberGrowth.Mods.combine(java.util.Arrays.asList(split.mods));
+        assertEquals(100.0, 100 * EmberGrowthService.classMult(only, "mob"), 1e-9);
+        assertEquals(80.0, 100 * EmberGrowthService.classMult(only, "affix"), 1e-9);
+        assertEquals(150.0, 100 * EmberGrowthService.classMult(only, "split"), 1e-9);
+        assertEquals(100.0, 100 * EmberGrowthService.classMult(only, "boss"), 1e-9);
+
+        EmberAffix.Rules ar = EmberAffix.parse(root());
+        EmberAffix.Def splitAff = null, affixAff = null;
+        for (EmberAffix.Def d : ar.defs) {
+            if ("dmg_split".equals(d.key)) splitAff = d;
+            if ("dmg_affix".equals(d.key)) affixAff = d;
+        }
+        assertNotNull(splitAff); assertNotNull(affixAff);
+        // 裂身纹 4 档 on blade → clones 1.50 × 1.20 = 1.80
+        Map<String, Double> split4 = EmberAffix.parts(ar, new int[][]{{EmberAffix.encode(splitAff, 4), 3}, null});
+        EmberGrowth.Mods withSplitAff = EmberGrowth.Mods.combine(java.util.Arrays.asList(split.mods, split4));
+        assertEquals(180.0, 100 * EmberGrowthService.classMult(withSplitAff, "split"), 1e-9);
+        // 猎缀纹 4 档 → body 0.80 × 1.16 = 92.8; clones 1.50 × 1.16 = 174
+        Map<String, Double> aff4 = EmberAffix.parts(ar, new int[][]{{EmberAffix.encode(affixAff, 4), 3}, null});
+        EmberGrowth.Mods withAff = EmberGrowth.Mods.combine(java.util.Arrays.asList(split.mods, aff4));
+        assertEquals(92.8, 100 * EmberGrowthService.classMult(withAff, "affix"), 1e-9);
+        assertEquals(174.0, 100 * EmberGrowthService.classMult(withAff, "split"), 1e-9);
+        // 破缀 (t2a) → body and clones both × 1.30
+        EmberGrowth.Node crush = null;
+        for (EmberGrowth.Node n : tal.nodes) if ("t2a".equals(n.id)) crush = n;
+        assertNotNull(crush);
+        EmberGrowth.Mods crushOnly = EmberGrowth.Mods.combine(java.util.Arrays.asList(crush.mods));
+        assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "affix"), 1e-9);
+        assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "split"), 1e-9);
+    }
+
     @Test public void affixDuplicateRules() {
         EmberItemData t = EmberItemData.create("burst", "blade", 2, 0, 0, 0, false, "drop");
         EmberItemData ok = EmberItemData.create("scorch", "blade", 2, 0, 0, 0, false, "drop");

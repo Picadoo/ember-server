@@ -27,6 +27,7 @@ def own_rows(path, col='两件极品'):
     for line in open(path, encoding='utf-8'):
         if line.startswith('| 周 |'):
             head = [x.strip() for x in line.strip().strip('|').split('|')]
+            head = head if col in head else None  # other weekly tables (e.g. realcost's ledger) are not the ownership table
             continue
         if head and re.match(r'^\| \d+ \|', line):
             c = [x.strip() for x in line.strip().strip('|').split('|')]
@@ -98,6 +99,11 @@ if __name__ == '__main__':
         import realcost
         realcost.install(json.loads(sys.argv[2]))
         rest = sys.argv[3:]
+        if '--seed-offset' in rest:
+            i = rest.index('--seed-offset'); off = int(rest[i + 1]); del rest[i:i + 2]
+            import p2econ
+            _tq = p2econ.to_q07
+            p2econ.to_q07 = lambda cfg, kn, seed, _f=_tq, _o=off: _f(cfg, kn, seed + _o)
         if tool == 'p1sim-real':
             import p1sim
             p1sim.main(rest)
@@ -109,6 +115,11 @@ if __name__ == '__main__':
         sys.exit(0)
     build = sys.argv[2]
     rest = sys.argv[3:]
+    if '--seed-offset' in rest:  # M05 hold-out replicate: a different set of players (p2econ seeds them 5000 + i)
+        i = rest.index('--seed-offset'); off = int(rest[i + 1]); del rest[i:i + 2]
+        import p2econ
+        _tq = p2econ.to_q07
+        p2econ.to_q07 = lambda cfg, kn, seed, _f=_tq, _o=off: _f(cfg, kn, seed + _o)
     import p1sim, growth
     if build != 'off':
         b = json.loads(build)

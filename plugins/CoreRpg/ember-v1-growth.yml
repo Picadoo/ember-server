@@ -11,6 +11,7 @@
 # 修饰键（Java EmberGrowth.Mods 和 growth.py 用同一套）：乘数默认 1，加数默认 0。
 #   dmg_boss / dmg_mob / dmg_affix   对首领 / 普通怪 / 词缀精英（含分身）造成的伤害 ×
 #   dmg_split                        对词缀精英裂出来的分身再 ×
+#   dmg_affix_body                   只对词缀精英本体再 ×（不含分身；D163 / B01）
 #   dodge_dmg + dodge_secs           躲开首领预警招后 dodge_secs 秒内造成的伤害 ×
 #   dodge_heal + dodge_icd           躲开首领预警招回最大生命的比例（冷却 dodge_icd 秒）
 #   taken_tele / taken_boss / taken_mob / taken_affix / taken_all   受到首领预警招 / 首领普攻 / 怪物（非首领）/ 词缀精英 / 全部 伤害 ×
@@ -26,7 +27,8 @@
 #   abyss_taken / abyss_fee          深渊里受到伤害 × / 深渊层费 ×
 #   coin / shard_bonus               结算余烬币 × / 每次通关结算多给碎片
 #   reroll_coin                      洗练的币 ×
-version: 1
+# D163 / B01: t2c 拆分 uses dmg_affix_body (body −20%) so clones stay dmg_split +50% net
+version: 2
 
 # ---------------------------------------------------------------- D141 天赋专精
 talents:
@@ -93,7 +95,7 @@ talents:
       row: 2
       name: "拆分"
       family: scorch
-      mods: {dmg_split: 1.50, dmg_affix: 0.80}
+      mods: {dmg_split: 1.50, dmg_affix_body: 0.80}
       good: "对分裂精英裂出来的分身伤害 +50%（门更快开）"
       bad: "对词缀精英本体伤害 -20%"
       fit: "适合：遇到分裂精英想快开门 · 不适合：其他两种词缀（本体伤害变低）"

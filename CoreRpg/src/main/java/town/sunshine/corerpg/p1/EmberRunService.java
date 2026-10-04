@@ -1111,7 +1111,7 @@ public final class EmberRunService implements Listener {
             int slot = sup.potionSlot(p);
             if (slot < 0) p.sendMessage(P + "§e你没带回复药：本局只能靠躲技能。出本后右键补给官 · 灰粮或在装备页购买（每瓶 " + EmberSupplyService.price() + " 余烬币）");
             else if (slot == 9) p.sendMessage(P + "§e回复药在背包里：按 E 拖到快捷栏，危险时按数字键切过去、按住右键喝");
-            else p.sendMessage(P + "§7回复药在快捷栏第 " + (slot + 1) + " 格：按 " + (slot + 1) + " 切过去，按住右键喝（回复 20%，15 秒冷却）");
+            else p.sendMessage(P + "§7回复药在快捷栏第 5–9 格：按数字键切过去，按住右键喝（回复 20%，15 秒冷却）");
         }
     }
 

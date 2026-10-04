@@ -160,17 +160,25 @@ public final class EmberGrowthService implements Listener {
 
     // ------------------------------------------------------------------ combat hooks
 
+    /**
+     * Target-class piece of {@link #outMult}: boss / split add / affixed elite body / other mob.
+     * D163 / B01: {@code dmg_affix_body} applies only to the affixed elite body (not split adds), so talent
+     * 「拆分」{@code dmg_split: 1.50, dmg_affix_body: 0.80} is net +50% on clones and −20% on the body.
+     */
+    static double classMult(EmberGrowth.Mods m, String cls) {
+        if ("boss".equals(cls)) return m.get("dmg_boss");
+        if ("split".equals(cls)) return m.get("dmg_affix") * m.get("dmg_split"); // clones: 猎缀/破缀 × 拆分/裂身纹
+        if ("affix".equals(cls)) return m.get("dmg_affix") * m.get("dmg_affix_body"); // body: × body-only key
+        return m.get("dmg_mob");
+    }
+
     /** Outgoing multiplier on a run mob (boss / affixed elite / split add / other mob) + the after-dodge window + set events. */
     public double outMult(Player p, Entity target, EmberSetEngine.Kind kind) {
         EmberGrowth.Mods m = mods(p);
         if (m.isEmpty()) return 1.0;
         String cls = runs.mobClass(target);
         if (cls == null) return 1.0; // only inside P1 runs
-        double r;
-        if ("boss".equals(cls)) r = m.get("dmg_boss");
-        else if ("split".equals(cls)) r = m.get("dmg_affix") * m.get("dmg_split");
-        else if ("affix".equals(cls)) r = m.get("dmg_affix");
-        else r = m.get("dmg_mob");
+        double r = classMult(m, cls);
         Long until = dodgeUntil.get(p.getUniqueId());
         if (until != null && System.currentTimeMillis() < until) r *= m.get("dodge_dmg");
         if (kind == EmberSetEngine.Kind.BURN || kind == EmberSetEngine.Kind.EXPLOSION) r *= m.get("set_dmg");

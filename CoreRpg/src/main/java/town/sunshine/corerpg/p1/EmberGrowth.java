@@ -265,7 +265,7 @@ public final class EmberGrowth {
     static {
         CN.put("coin", "结算余烬币"); CN.put("shard_bonus", "每次结算余烬碎片"); CN.put("abyss_fee", "深渊层费");
         CN.put("abyss_taken", "深渊里受到伤害"); CN.put("reroll_coin", "洗练的币");
-        CN.put("dmg_affix", "对词缀精英伤害"); CN.put("dmg_split", "对分身伤害"); CN.put("set_dmg", "套装事件伤害");
+        CN.put("dmg_affix", "对词缀精英伤害"); CN.put("dmg_split", "对分身伤害"); CN.put("dmg_affix_body", "对词缀精英本体伤害"); CN.put("set_dmg", "套装事件伤害");
         CN.put("taken_tele", "受到首领预警招伤害"); CN.put("potion", "回复药回复"); CN.put("share_taken", "烬核自己那份");
         CN.put("taken_affix", "受到词缀精英伤害");
     }
