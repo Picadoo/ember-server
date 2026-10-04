@@ -4,7 +4,7 @@
 # make-up refused (<60 min) → admin +60 counted min → claim 15/30/60 by click → make-up by click → reconnect → no re-claim →
 # legacy /corerpg sign / activity / bounty claim pay no coin.
 set -uo pipefail
-B=${1:-FreshQ170}
+B=${1:-FreshQ260}
 C=/workspace/minecraft/scripts/console.sh
 BOTD=http://127.0.0.1:8765
 T=/workspace/minecraft/mineflayer-tests/tmp-p1

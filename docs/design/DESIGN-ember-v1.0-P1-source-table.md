@@ -1522,6 +1522,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D177 | CoreRpg 1.65.9 → **rev 2 1.65.15** | P1 挂机庭（业主 17:56「挂机」）。**rev 2（1.65.15，bv38）**：自动战斗——每人自己的 MM 怪（3 只一波，只打 / 只受主人），自动普攻 + 自动烬斩，按击杀累加（确定性）发币 / 经验 / 账号绑定材料（碎片 / 骨尘 / 核心 / 胚料，账本 `bmat:` → 仓库绑定计数，取不出），每日 2400 只（在线 + 离线），离线按实测速度 25%、最多 1200 只 / 12 小时；10 分钟死 3 次停；P1 材料与 P1 装备禁丢出 / 入箱 / 展示框 / 盔甲架；旧 `/corerpg warehouse withdraw` 扣绑定部分。p1sim：21 格 21/21（1600 复测 1.7pp、800 人 1.2pp），W30 +0.14 周（上界）。rev 1（1.65.9）：计时发币 + 经验（已停用）。**修订 D63**：材料来自通关 + 挂机庭（账号绑定、上限远低于主动）；见 `docs/design/DESIGN-ember-afk-p1-2026-10-04.md` |
 | D178 | CoreRpg 1.65.8 | Weekly Modifier Pack 2 上线（实现 D175）：+bolters 弓潮 / shell 龟甲 / press 压阵；池 6→9（63 图×规则对）；全部 challenge-only；`balance_version` 31→32；Stage C p1sim `--mods` deferred |
 | D179 | 设计-only（deferred 实现） | Room Events Pack 3：房间事件池 +占点 hold / 护灯 beacon / 传火 relay（与 timed/crystal/escort 等权）；否决笼牢/抽血；奖励键不变；见 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`。实现另窗 |
+| D180 | CoreRpg 1.65.16 | P1 每日签到 + 在线时长（业主 19:06）：主菜单「签到 · 在线」→ `ember_p1_sign`；月历按本月第 n 次签到发奖（漏签不清零；1–27 次 20 币 + 5 经验，第 7 / 21 次 +首领徽记、第 14 / 28 次 +锻造印记，29–31 次 10 币 + 5 经验；补签每月 3 次、要今天有效在线 60 分钟）；有效在线 15 / 30 / 60 / 120 分钟四档（每天 70 币 + 20 经验，5 分钟无输入停表，挂机庭分钟不算）；只发账号计数；**修订 D63**：印记 / 徽记每月各 ≤2 可来自签到；P1 下旧 `/corerpg sign|activity|bounty` 不再发旧币；设计 `docs/design/DESIGN-ember-signin-online-2026-10-04.md`；balance_version 39 |
 | D181 | 设计-only（deferred 实现） | Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）；闸门/奖励同 D138；否决反伤/拉人/造墙/瞬移/吸血；见 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`。实现另窗 |
 | D182 | 设计-only（deferred 实现） | 奖励精英变招 Pack 1：Extra.ELITE 每图 1 条固定轻招（门廊推/焦焰踏/誓印扫/闸冲/落尘/霜息/矿渣劈）；奖励 10+1 与权重不变；否决随机词缀包/小怪包/Jailer 类；见 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md` + `docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`。实现另窗 |
 
@@ -1697,3 +1698,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 见 D177 行。数值在 `ember-v1.yml afk:`（config.yml 未改），balance_version 37 → 38 |
 | 漏洞修复 | 签名线 19:19 发现 rev 2 初稿的材料可取出 → 丢给大号；改为账号绑定计数（`p1_vbound_<材料>`），P1 材料 / 装备禁转移；2 机器人冒烟验证 |
 | 发布凭证 | `docs/status/RELEASE-ember-1.65.15.md` · `docs/status/STATUS-ember-afk-p1-1.65.15.md` |
+
+### 13.95 P1 每日签到 + 在线时长（CoreRpg 1.65.16，D180，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 业主 2026-10-04 19:06「每日在线时长奖励做了吗？每日签到奖励等等？」；研究 `docs/design/RESEARCH-ember-signin-online-2026-10-04.md`（HoYoLAB 签到规则原文、黑色沙漠 10 月登录、失落的方舟出勤、国内 MC 服 LiteSignIn / PaiSign / QZOnlineReward / PlayTime+ 等）；`COORD-signin-online` |
+| 裁决 | 见 D180 行。数值在 `ember-v1.yml signin:` / `online:`（两份一致；config.yml 未改） |
+| 版本 | CoreRpg **1.65.16**；`balance_version` **39** |
+| 不改 | 装备结构、NI 材料来源、化妆品、config.yml、挂机庭（COORD-afk-p1）、旧模式行为 |
+| 测试 | 单测 `EmberSignServiceTest`；冒烟 `tools/p1map/d180-signin-smoke.sh`（FreshQ260–279）；p1sim `tools/p1sim/signin.py`（`tools/p1sim/out-signin-d180.md`）：21 格 21/21（最大 1.6 / 复测 2.0 pp，上界每天签 + 120 分钟）；W30 基线 4.86 → 签到 + 在线 4.58（−0.28）→ 再加挂机庭最终版 share 1.0 4.73（−0.13），都在 ±0.5 内 |
+| 文档 | 状态 `docs/status/STATUS-ember-signin-online-1.65.16.md`；发布凭证 `docs/status/RELEASE-ember-1.65.16.md` |
