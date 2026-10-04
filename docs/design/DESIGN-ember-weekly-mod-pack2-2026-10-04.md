@@ -1,6 +1,6 @@
 # Ember Weekly Modifier Pack 2：精选图周规则扩包（D175，设计-only，2026-10-04）
 
-> 状态：**设计定稿，未实现**。本窗不改 CoreRpg 源码 / yml / jar / 菜单，不 bump `balance_version`，不跑 p1sim / p2econ。
+> 状态：**已上线 CoreRpg 1.65.8 / D178**（2026-10-04）。实现：双写 `ember-v1-runs.yml` +3（bolters/shell/press），`balance_version` 31→32；单测 9 规则 / 63 对；冒烟 FreshQ139–141。Stage C `p2econ --mods` **DEFERRED**（p1sim 仍被 afk-p1 / mainline 占用）。
 > 前置：D80（限药 / 术者换防 / 逆行）、D94（`normal: true` 门槛）、D152 卸甲、D154 卫士潮、D155 铁卫、D158 `converted:` 转化怪扭矩。
 > 实现对齐：等 `COORD-asset-fix-1655` DONE，再用 `tools/p1sim/p2econ.py --mods` 过 §7 门禁后，在下一空闲 CoreRpg 窗落地。
 > 参考：Diablo 大秘境式周旋转突变（改遭遇不改掉落表）、PoE 地图词缀（侧向压力、非永久乘区）、WoW 大秘境词缀轮换（每周一条、可预测）。机制**只落在**现有 `rotation.modifiers` 字段：`remap` / `potion_cap` / `swap_rooms` / `converted:{hp,atk,interval,speed}` / `text` / `normal`。
