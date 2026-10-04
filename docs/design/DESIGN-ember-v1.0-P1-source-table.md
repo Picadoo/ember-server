@@ -1506,6 +1506,10 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D160 | CoreRpg 1.65.0 | 余烬连战不限次数重试、每周首次通关领奖（p4_rush_claim）、之后为练习；其它周内容逐项复查不改 |
 | D161 | CoreRpg 1.65.0 | 存仓 / 存库 / 取出 / 快照恢复后同 tick 保存 .dat；取出途中下线补偿（D162 起改为投递） |
 | D162 | CoreRpg 1.65.1 | review §03 A01–A04：cr_p1_delivery 同事务投递、自动入库同步单事务、工坊扣费 hold + 对账、玩家行 + 仓库一个事务、资产冻结 / 写失败暂停、离线恢复成功后才出队；测试专用故障注入 |
+| D163 | CoreRpg 1.65.2（未单独部署，随 1.65.3 上线） | review B01：拆分改为分身净 +50% / 本体 −20%（`dmg_affix_body` 0.80）；开局药格文案改「快捷栏第 5–9 格」。见 `docs/status/STATUS-ember-b01-split-d163.md`；拆分部分已被 D164 取代 |
+| D164 | CoreRpg 1.65.3 | 天赋第二排 `t2c` 拆分 → **破甲**：`dmg_affix_shield` 1.60、`dmg_affix_blazing` 0.80、`dmg_affix_split` 0.80（分身也算分裂）；只作用于主线重打的词缀精英 |
+| D165 | CoreRpg 1.65.3 | 刃词条 裂身纹 `b_split` 移出洗练池（`rollable: false`）：洗不出来、不能锁定；已有的照常生效；洗练页 / 词条池 / 图鉴列为「已移出洗练池」 |
+| D166 | CoreRpg 1.65.3 | 文案：天赋第二排与 猎缀纹 / 裂身纹 / 抗缀纹 加「仅主线重打生效」；Q01 第一房提示退到门口打；首领前「留 2 瓶药」；R01 招募 / 开本 / 冒险页「建议队伍里有炽愈」。不改数值 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1537,3 +1541,23 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 测试钩子 | `CORERPG_TEST_FAULTS=1` + `/corerpg p1 fault <玩家> before_commit|after_commit|after_deliver|clear`；线上不带该变量 |
 | 测试 | `docs/tests/TEST-ember-persist-roundtrip-2026-10-04.md`：a–f 48 / 0，g 52 / 0；单测 226 全过 |
 | 上线 | 10-04 11:31 CST（最终 jar），提交 64a0593；状态 `docs/status/STATUS-ember-rush-persist-d160-d162.md` |
+
+### 13.81 拆分 → 破甲（CoreRpg 1.65.3，D164；取代 D163 的拆分部分）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | review B01 / B02；`docs/design/DESIGN-ember-build-diversity-2026-10-04.md` §3.4、§7 提案 P7。D163（1.65.2）修好了文案与实现不一致，但模拟显示拆分仍是死选项（分裂精英击杀 0 ～ −2.3%，分身 = 半只近战怪；本体 −20% 让厚甲 / 炽热精英更慢） |
+| 裁决 | `t2c` 改名「破甲」：对厚甲精英 ×1.60（正好抵掉它的 1.6 倍生命），对炽热 / 分裂精英（含分身）×0.80。新键 `dmg_affix_shield` / `dmg_affix_blazing` / `dmg_affix_split`，`EmberGrowthService.classMult(m, cls, affix)` 按目标词缀类型相乘；`dmg_affix_body` 不再被任何节点使用（代码保留，读到时仍生效）；`dmg_split` 仍是裂身纹的键。growth.yml `version: 3` |
+| 范围 | 只有主线重打的词缀精英（每局 1 只）；首通、挑战、团本、深渊没有词缀精英 → 不受影响 |
+| 模拟 | `tools/p1sim/check_d164.py` → `out-d164-armorbreak-check.md`（rules sha256 f23d20ef0ce2779e，n=3000，d0.5，种子 4243 配对；容差 14 情境 × 3 躲避 × 3 种子 × 600 局）。破甲 vs 1.65.2 拆分：厚甲精英击杀用时 Q04 −34.8 / −34.0 / −36.2%（焚烬 / 烬爆 / 炽愈），Q07 −31.7 / −30.5 / −34.6%；分裂精英慢 +1.8 ～ +10.6%；炽热精英与拆分相同（比无成长慢 +14 ～ +20%）；重打通关率 +0.2 ～ +3.2pp，不超过无成长；Q07 挑战不变；42 个首通 / 挑战格三组逐局相同 |
+| 测试 | `EmberGrowthTest.t2cIsArmorBreak_D164`（替换 `b01SplitMeansNetPlus50OnClones_D163`）；实机 FreshQ101 强制厚甲精英：伤害日志 `[厚甲] … D141 天赋 ×1.600`，普通怪无倍率 |
+| 上线 | 10-04 13:41 CST，状态 `docs/status/STATUS-ember-armorbreak-1.65.3.md`，发布凭证 `docs/status/RELEASE-ember-1.65.3.md` |
+
+### 13.82 裂身纹移出洗练池 + 范围 / 新手提示文案（CoreRpg 1.65.3，D165 / D166）
+
+| 项 | 内容 |
+|---|---|
+| D165 | `b_split` 加 `rollable: false`。`EmberAffix.pool()` 只返回可洗词条，`roll()` 忽略对已退役词条的锁定，洗练页不给锁定按钮，PAPI 锁定行说明原因；词条池最后一行列「裂身纹：已移出洗练池（洗不出来；已有的照常生效）」。刃池 3 → 2：洗出指定极品期望次数（rerollsim，刃，极品）不锁 15.9 → 10.5、锁定 6.2 → 5.6。`tools/p1sim/realcost.py` 池同样过滤 `rollable: false` |
+| D166 | 第二排主题与 t2a / t2b / t2c 正面文案、猎缀纹 / 裂身纹 / 抗缀纹（`note`）加「仅主线重打生效」；图鉴词缀精英条目说明。Q01 r1 `hint`「进门后退到门口打，别站进怪堆」；清完最后一房、等首领时 `PRE_BOSS_HINT`「首领前留 2 瓶药」（所有主线）；R01 `party_hint`「建议队伍里有炽愈」：招募广播、开本、冒险页 R01 图标 |
+| 不改 | 数值、奖励、`balance_version`（29） |
+| 测试 | `EmberGrowthTest.splitAffixRetiredFromPool_D165`、`EmberRunRulesTest.textHints_D166`；单测 229 / 0。实机：FreshQ100 Q01 kite 首通看到两条提示；FreshQ101 洗练页 / 天赋页文案正确；FreshQ102 收到 R01 招募带「建议队伍里有炽愈」 |
