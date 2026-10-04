@@ -55,6 +55,8 @@ final class EmberRunDirector {
         double regenHurt;           // D171 damage taken during the current interrupt window
         long frostNext;             // D171 next frost aura tick
         EmberRunMaps.Skill twist;   // D182 Extra.ELITE light move (null = plain stump)
+        EmberRunMaps.Skill twistAlt; // D185 Pack 2 second light move (null = Pack 1 only)
+        boolean twistUseAlt;         // D185: true → fire twistAlt next
         Tracked(LivingEntity le, String role, String roomId, EmberRunMaps.Pt home, EmberRunMaps.Box leash,
                 double atk, double interval, double range, EmberRunMaps.Role def) {
             this.le = le; this.role = role; this.roomId = roomId; this.home = home; this.leash = leash;
@@ -1206,6 +1208,8 @@ final class EmberRunDirector {
                         EmberRunMaps.EliteTwists.Twist tw = svc.maps().eliteTwists.forMap(def.key);
                         if (tw != null) {
                             t.twist = tw.skill(t.atk);
+                            if (tw.alt != null) t.twistAlt = tw.alt.skill(t.atk);
+                            t.twistUseAlt = false;
                             t.nextCast = System.currentTimeMillis() + (long) (svc.maps().eliteTwists.openDelay * 1000);
                         }
                     }
@@ -1519,9 +1523,10 @@ final class EmberRunDirector {
     }
 
 
-    /** D182: Extra.ELITE fixed light move — same shapes as boss telegraphs; src != boss so charge does not dash. */
+    /** D182/D185: Extra.ELITE light move(s) — same shapes as boss telegraphs; src != boss so charge does not dash.
+     *  When Pack 2 alt is present, primary and alt alternate after each successful cast. */
     private void twistTick(Tracked t, long now) {
-        EmberRunMaps.Skill sk = t.twist;
+        EmberRunMaps.Skill sk = (t.twistUseAlt && t.twistAlt != null) ? t.twistAlt : t.twist;
         if (sk == null) return;
         if (t.castAt > 0) {
             EmberRunMaps.Skill drawn = twistDrawn(t, sk);
@@ -1530,6 +1535,7 @@ final class EmberRunDirector {
                 execute(drawn, t.castOrigin, t.castDir == null ? new Vector(1, 0, 0) : t.castDir, t.le);
                 t.castAt = 0;
                 t.nextCast = now + (long) (sk.every * 1000);
+                if (t.twistAlt != null) t.twistUseAlt = !t.twistUseAlt; // D185 alternate
             }
             return;
         }

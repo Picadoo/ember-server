@@ -764,7 +764,12 @@ public final class EmberRunMaps {
             public final String move, name, hint;
             /** template skill: {@code dmg} is the atk multiplier until {@link #skill(double)} */
             public final Skill template;
+            /** D185 Pack 2 second light move (null when absent) */
+            public final Twist alt;
             Twist(String move, Map<?, ?> raw) {
+                this(move, raw, true);
+            }
+            private Twist(String move, Map<?, ?> raw, boolean allowAlt) {
                 this.move = move;
                 String[] nh = names(move);
                 this.name = nh[0];
@@ -788,6 +793,12 @@ public final class EmberRunMaps {
                 if (raw.containsKey("target")) m.put("target", raw.get("target"));
                 if (raw.containsKey("start")) m.put("start", raw.get("start"));
                 this.template = new Skill(m);
+                if (allowAlt && raw.get("alt") instanceof Map) {
+                    Map<?, ?> altRaw = (Map<?, ?>) raw.get("alt");
+                    this.alt = new Twist(str(altRaw.get("move"), move + "_alt"), altRaw, false);
+                } else {
+                    this.alt = null;
+                }
             }
             /** absolute-damage skill for an elite whose atk is {@code atk} */
             public Skill skill(double atk) { return template.withDmg(atk * template.dmg); }
@@ -822,6 +833,14 @@ public final class EmberRunMaps {
             if ("dust".equals(move)) return new String[]{"落尘", "会在你脚附近亮圈，提前走开再打"};
             if ("breath".equals(move)) return new String[]{"霜息", "会放正前扇形，侧移再打"};
             if ("slag".equals(move)) return new String[]{"矿渣劈", "会放正前亮带，侧移再打"};
+            // D185 Pack 2
+            if ("ashfan".equals(move)) return new String[]{"灰烬扇", "还会放正前扇形，走到扇外再打"};
+            if ("sear".equals(move)) return new String[]{"焦线", "还会放正前亮带，侧移再打"};
+            if ("oathstomp".equals(move)) return new String[]{"誓踏", "还会放脚下亮圈，走开再打"};
+            if ("tidefan".equals(move)) return new String[]{"潮扇", "还会放正前扇形，走到扇外再打"};
+            if ("rubble".equals(move)) return new String[]{"碎带", "还会放正前亮带，侧移再打"};
+            if ("frostring".equals(move)) return new String[]{"霜环踏", "还会放脚下亮圈，走开再打"};
+            if ("forgefan".equals(move)) return new String[]{"炉扇", "还会放正前扇形，走到扇外再打"};
             return new String[]{move, "有预警招式，躲开再打"};
         }
     }

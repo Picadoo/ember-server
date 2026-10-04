@@ -1527,6 +1527,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D182 | CoreRpg 1.65.20 | 奖励精英变招 Pack 1：Extra.ELITE 每图 1 条固定轻招（门廊推/焦焰踏/誓印扫/闸冲/落尘/霜息/矿渣劈）；`elite_twists` + Director twistTick；奖励 10+1 与权重不变；balance_version 43；p1sim §7 延后；设计 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md`；发布 `docs/status/RELEASE-ember-1.65.20.md` |
 | D183 | CoreRpg 1.65.17 | D174 烬爆族返工：守炉重锤 L04 代价只留对首领伤害 ×0.985（原被预警招打中 +3% + ×0.98；烬爆组合低躲避净亏 −3～−4pp → ≥ −2.6）；`balance_version` 40；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md` §12；发布 `docs/status/RELEASE-ember-1.65.17.md` |
 | D184 | CoreRpg 1.65.18 | D174 第 3 阶段：Q07 签名 L13 炉锁巨锤（烬斩蓄力）/ L14 炉芯护符（烬斩护盾 0.4%/0.8%/4 秒、药 ×0.95）/ L15 锈轨余火（燃烧 +1 跳、每跳 ×0.97）；Q07 首通「签名调律」（L01/L02/L06/L08/L10/L12 调律版，10 徽记解锁、城里切换；**L11 不给调律版**：W30 P2-1 −0.55 周）；L10 烬爆 ×0.9 → ×0.93；`balance_version` 41；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md` §11 / §13；发布 `docs/status/RELEASE-ember-1.65.18.md` |
+| D185 | CoreRpg 1.65.24 / bv47 | 奖励精英变招 Pack 2：Extra.ELITE 每图再加 1 条互补轻招（灰烬扇/焦线/誓踏/潮扇/碎带/霜环踏/炉扇）；`elite_twists.alt` + Director 交替；奖励 10+1 与权重不变；balance_version 47；p1sim §7 仍 deferred；设计 `docs/design/DESIGN-ember-reward-elite-twists-pack2-2026-10-05.md`；发布 `docs/status/RELEASE-ember-1.65.24.md` |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 

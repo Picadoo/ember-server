@@ -1084,7 +1084,11 @@ public final class EmberRunService implements Listener {
         if (s.extra == EmberRunRules.Extra.ELITE && maps != null) {
             EmberRunMaps.EliteTwists.Twist tw = maps.eliteTwists.forMap(s.mapKey);
             if (tw != null) {
-                tellRun(s, "§e额外事件：奖励精英「" + tw.name + "」§7· " + tw.hint
+                String title = tw.alt != null
+                        ? ("「" + tw.name + "」§7/「" + tw.alt.name + "」")
+                        : ("「" + tw.name + "」");
+                String hint = tw.hint + (tw.alt != null ? " §7· " + tw.alt.hint : "");
+                tellRun(s, "§e额外事件：奖励精英" + title + "§7· " + hint
                         + " · 击败 → §f碎片 +" + EmberRunRules.ELITE_SHARD + " §7+ §f核心 +" + EmberRunRules.ELITE_CORE);
                 return;
             }

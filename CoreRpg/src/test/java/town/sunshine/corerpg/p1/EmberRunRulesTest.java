@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(46, m.balanceVersion);                // D173 Boss Moves Pack 2 half-HP (D179 = 45, D181 = 44, …)
-        assertEquals("g04-1/b46", m.ruleVersion);
+        assertEquals(47, m.balanceVersion);                // D185 Elite Twists Pack 2 alt (D173 = 46, D179 = 45, …)
+        assertEquals("g04-1/b47", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1246,6 +1246,40 @@ public class EmberRunRulesTest {
         assertFalse(disabled.enabled);
         assertNull(disabled.forMap("q01"));
         assertEquals(1, disabled.byMap.size()); // still parsed, just gated by enabled
+    }
+
+    @Test public void rewardEliteTwistsPack2AltPerMap_D185() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.EliteTwists et = m.eliteTwists;
+        assertTrue(et.enabled);
+        String[][] expect = {
+                {"q01", "ashfan", "cone", "灰烬扇"},
+                {"q02", "sear", "line", "焦线"},
+                {"q03", "oathstomp", "circle", "誓踏"},
+                {"q04", "tidefan", "cone", "潮扇"},
+                {"q05", "rubble", "line", "碎带"},
+                {"q06", "frostring", "circle", "霜环踏"},
+                {"q07", "forgefan", "cone", "炉扇"},
+        };
+        for (String[] row : expect) {
+            EmberRunMaps.EliteTwists.Twist tw = et.forMap(row[0]);
+            assertNotNull(row[0], tw);
+            assertNotNull(row[0] + " alt", tw.alt);
+            assertEquals(row[1], tw.alt.move);
+            assertEquals(row[2], tw.alt.template.type);
+            assertEquals(row[3], tw.alt.name);
+            assertTrue(tw.alt.template.light);
+            assertTrue(tw.alt.template.warn + " warn", tw.alt.template.warn >= 1.2 - 1e-9);
+            assertNull("alt has no nested alt", tw.alt.alt);
+            EmberRunMaps.Role elite = m.byKey(row[0]).roles.get("elite");
+            EmberRunMaps.Skill sk = tw.alt.skill(elite.atk);
+            assertEquals(elite.atk * tw.alt.template.dmg, sk.dmg, 1e-9);
+        }
+        // Q04 Pack2 tidefan kb=0 (same ledge rule as barge)
+        assertEquals(0.0, et.forMap("q04").alt.template.kb, 1e-9);
+        // Pack1 primary still present
+        assertEquals("shove", et.forMap("q01").move);
+        assertEquals("slag", et.forMap("q07").move);
     }
 
     @Test public void varietyPack2RollsNewAffixesAndEventsOffFirstClears_D171() {
