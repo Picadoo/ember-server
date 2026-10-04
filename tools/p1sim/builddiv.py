@@ -658,7 +658,7 @@ def raid_report(R, trials):
     w = L.append
     w('# 构筑多样性 · 团本（builddiv.py raid），2026-10-04 CST\n')
     w('p1party，4 人队：1 号位穿被测构筑，队友 3 人无成长（套装 烬爆 / 炽愈 / 焚烬 各一，T3+9 Lv30 = 三觉醒），每格 %d 次，同种子。'
-      '只看 1 号位自己：受到的烬核分摊 / 预警招 / 小怪伤害（×H/局）、倒下次数；全队：通关率、首领用时。\n' % trials)
+      '只看 1 号位自己：受到的烬核分摊 / 预警招 / 小怪伤害（×H/局）、倒下次数；全队：通关率、首领用时。%s。M02 起每格同种子 = 同一批局（配对）。\n' % (trials, rules.stamp()))
     for key in ('r01', 'r03'):
         w('## %s\n' % key.upper())
         w('| 1 号位套装 | 构筑 | 通关 0.3 / 0.5 / 0.7 | 首领 s (0.5) | 烬核分摊 ×H | 预警招 ×H | 首领普攻+小怪 ×H | 倒下/局 |')
@@ -728,13 +728,13 @@ PROPOSALS = [
      'variants': [{'sustain_low': 0.5, 'sustain_mult': a, 'sustain_low_mult': b / a, 'share_w': 1.5} for a, b in ((0.5, 1.4), (0.4, 1.6), (0.6, 1.2))]},
     {'id': 'P4', 'node': 't1a', 'set': None, 'name': '回身斩 → 破绽窗口',
      'text': '首领每次预警招落下（躲没躲开都算）后 {win_secs:.0f} 秒内对首领伤害 ×{win_dmg}；窗口外对首领 ×{win_out}',
-     'variants': [{'win_dmg': 1.25, 'win_secs': 2, 'win_out': x} for x in (0.91, 0.93)]},
+     'variants': [{'win_dmg': 1.25, 'win_secs': 2, 'win_out': x} for x in (0.91, 0.93, 0.95)]},
     {'id': 'P5', 'node': 't1b', 'set': None, 'name': '稳桩 → 铁壁',
      'text': '受到首领预警招伤害 ×{taken_tele}；代价：受到首领普攻 ×{taken_boss}',
-     'variants': [{'taken_tele': 0.7, 'taken_boss': x} for x in (1.10, 1.15, 1.20)]},
+     'variants': [{'taken_tele': t, 'taken_boss': x} for t, x in ((0.7, 1.10), (0.7, 1.05), (0.8, 1.05), (0.8, 1.08))]},
     {'id': 'P6', 'node': 't1c', 'set': None, 'name': '踏步回气 → 回气（以躲代药）',
      'text': '躲开首领预警招回 {dodge_heal:.0%} 最大生命（{dodge_icd:.0f} 秒一次）；代价：回复药 ×{potion}',
-     'variants': [{'dodge_heal': 0.04, 'dodge_icd': 10, 'potion': x} for x in (0.80, 0.85, 0.90)]},
+     'variants': [{'dodge_heal': h, 'dodge_icd': 10, 'potion': x} for h, x in ((0.04, 0.80), (0.04, 0.85), (0.04, 0.90), (0.03, 0.90))]},
     {'id': 'P7', 'node': 't2c', 'set': None, 'name': '拆分 → 破甲（厚甲专精）',
      'text': '对厚甲精英伤害 ×{dmg_affix_shield}（正好抵掉 1.6 倍生命）；对炽热 / 分裂精英（含分身）×{dmg_affix_blazing}',
      'variants': [{'dmg_affix_shield': 1.6, 'dmg_affix_blazing': x, 'dmg_affix_split': x} for x in (0.8, 0.9)]},
@@ -1179,7 +1179,7 @@ def b01_jobs(n, seed):
 def b01_report(R, keys, n, seed):
     L = []
     w = L.append
-    w('# B01「拆分」：分身净 +50%% / 本体 −20%% 的补丁模拟（builddiv.py b01），2026-10-04 CST\n')
+    w('# B01「拆分」：分身净 +50% / 本体 −20% 的补丁模拟（builddiv.py b01），2026-10-04 CST\n')
     w('%s。重打普通版每局必有 1 只词缀精英（炽热 / 分裂 / 厚甲各 1/3），每格 %d 局、种子 %d（同种子 = 同房间 / 同精英类型，按局配对）。'
       '"精英击杀用时" = 第一次打到精英到精英（分裂则含两个分身）全倒；"精英房用时" = 整个有精英的房间。第一排固定稳桩，第三排 = 本套。'
       '刃词条列：— = 无词条；裂身纹 = 裂身纹（刃）+ 定身纹（符）在该成色的封顶档。\n' % (rules.stamp(), n, seed))
@@ -1207,6 +1207,108 @@ def b01_report(R, keys, n, seed):
     return '\n'.join(L)
 
 
+# ====================================================================================== proposals re-calibrated on the
+# post-fix model (M01–M03): tolerance (clear rate vs the CURRENT node, 14 contexts × 3 dodges × 3 seeds) + felt metrics
+# and stance rewards in the three diversity contexts. Sim-only keys are marked PROPOSAL in p1sim — none is in Java.
+PROP_FELT_STANCES = ('base', 'careful', 'greedy', 'stack', 'single', 'facetank')
+PROP_FAMS = {'P4': ('burst', 'sustain'), 'P5': ('burst', 'sustain'), 'P6': ('burst', 'sustain'), 'P7': ('scorch', 'burst', 'sustain')}
+
+
+def prop_specs(P):
+    out = []
+    for fam in PROP_FAMS.get(P['id'], (P['set'],)):
+        out.append((fam, '无成长', {'set': fam}))
+        out.append((fam, '现行 ' + node_names()[P['node']], {'set': fam, 'extra': node_mods(P['node'])}))
+        for v in P['variants']:
+            out.append((fam, json.dumps(v, ensure_ascii=False), {'set': fam, 'extra': v}))
+    return out
+
+
+def prop_run(ids=None, n_tol=2000, n_felt=3000, nproc=7, seed=4243):
+    R = {}
+    for P in PROPOSALS:
+        if ids and P['id'] not in ids:
+            continue
+        specs = prop_specs(P)
+        jobs, keys = [], []
+        for fam, lab, sp in specs:
+            if P['id'] != 'P7':  # row 2 only acts on affixed elites (repeat normal runs) — first clears / challenge: no effect
+                tj, tk = tol_jobs(sp, n_tol)
+                jobs += tj; keys += [('tol', fam, lab) + k for k in tk]
+            for ctx in MAIN:
+                for stn in PROP_FELT_STANCES:
+                    jobs.append((sp, ctx, 0.5, stn, n_felt, seed)); keys.append(('felt', fam, lab, ctx, stn))
+        res = run_jobs(jobs, nproc)
+        R[P['id']] = (specs, list(zip(keys, res)))
+        print('prop', P['id'], 'done', flush=True)
+    return R
+
+
+PF = [('secs', '全程'), ('t_boss', '首领'), ('t_trash', '杂兵房'), ('ttk_affix_shield', '厚甲精英'), ('ttk_affix_split', '分裂精英'),
+      ('ttk_affix_blazing', '炽热精英'), ('potions', '喝药'), ('taken', '受伤×H')]
+
+
+def prop_report(R, n_tol, n_felt, seed):
+    L = []
+    w = L.append
+    w('# 构筑多样性 · 改动提案在修正后模型上的重新校准（builddiv.py propose），2026-10-04 CST\n')
+    w('%s。每个提案只替换一个天赋节点（其余成长关闭，隔离该节点）。**容差**：14 个情境（Q01–Q07 普通首通书参考装 r / 挑战 T3+6 c）× 躲避 0.3/0.5/0.7 × 种子 7/11/13 × %d 局，'
+      '和"现行节点"比通关率最大升 / 最大降（目标：±2 个百分点内 = 不加强也不削弱；同时列出相对"无成长"的值）。'
+      '**手感**：Q04 普通重打 / Q07 普通重打 / Q07 挑战，躲避 0.5，%d 局、种子 %d，相对现行节点的变化（· 5–10%%，● ≥10%%）；'
+      '**打法奖励**：换一种打法（谨慎 = 躲避 +0.1 输出 −0.1；贪刀 = 反之；聚怪 = 技能命中 5；单点 = 1；硬吃 = 不躲预警招）相对基础打法的通关率差，提案下减去现行下 —— 正数 = 提案更奖励这种打法。'
+      '提案键只存在于模拟器（p1sim 中标 PROPOSAL），Java 里都没有。\n' % (rules.stamp(), n_tol, n_felt, seed))
+    for P in PROPOSALS:
+        if P['id'] not in R:
+            continue
+        specs, rows = R[P['id']]
+        w('## %s %s\n' % (P['id'], P['name']))
+        w('文本：' + P['text'] + '\n')
+        tol, felt = {}, {}
+        for k, r in rows:
+            if k[0] == 'tol':
+                _, fam, lab, ck, d, sd = k
+                tol.setdefault((fam, lab), {}).setdefault((ck, d), []).append(r['clear'])
+            else:
+                _, fam, lab, ctx, stn = k
+                felt[(fam, lab, ctx, stn)] = r
+        tolm = {fl: {c: statistics.mean(v) for c, v in m.items()} for fl, m in tol.items()}
+        if tolm:
+            w('| 套装 | 变体 | 相对现行：最大升（情境） | 最大降（情境） | 相对无成长：最大升 | 最大降 | ±2 内？ |')
+            w('|---|---|---|---|---|---|---|')
+            for fam, lab, sp in specs:
+                if lab == '无成长':
+                    continue
+                cur = next(l for f_, l, _ in specs if f_ == fam and l.startswith('现行'))
+                u, d = tol_diff(tolm[(fam, lab)], tolm[(fam, cur)])
+                u0, d0 = tol_diff(tolm[(fam, lab)], tolm[(fam, '无成长')])
+                ok = '—' if lab == cur else ('是' if u[1] <= 2.0 and d[1] >= -2.0 else '**否**')
+                w('| %s | %s | %+.1f（%s d%.1f） | %+.1f（%s d%.1f） | %+.1f | %+.1f | %s |' % (FAM_ZH[fam], lab, u[1], u[0][0], u[0][1], d[1], d[0][0], d[0][1], u0[1], d0[1], ok))
+            w('')
+        w('| 套装 | 情境 | 变体 | 通关率 | ' + ' | '.join(l for _, l in PF) + ' | 打法奖励（提案 − 现行，pp）：谨慎 / 贪刀 / 聚怪 / 单点 / 硬吃 |')
+        w('|---|---|---|---:|' + '---:|' * len(PF) + '---|')
+        for fam, lab, sp in specs:
+            cur = next(l for f_, l, _ in specs if f_ == fam and l.startswith('现行'))
+            for ctx in MAIN:
+                r, rc = felt[(fam, lab, ctx, 'base')], felt[(fam, cur, ctx, 'base')]
+                cells = []
+                for k, _ in PF:
+                    if lab == cur:
+                        v = r.get(k)
+                        cells.append('—' if v is None else '%.2f' % v)
+                    else:
+                        x = rel(r.get(k), rc.get(k))
+                        cells.append('—' if x is None else '%s%s' % (pct(x), mark(x)))
+                sv = []
+                for stn in PROP_FELT_STANCES[1:]:
+                    a = 100 * (felt[(fam, lab, ctx, stn)]['clear'] - r['clear'])
+                    b = 100 * (felt[(fam, cur, ctx, stn)]['clear'] - rc['clear'])
+                    sv.append('%+.1f' % (a - b) if lab != cur else '%+.1f' % a)
+                w('| %s | %s | %s | %.1f%% | %s | %s |' % (FAM_ZH[fam], CTX[ctx][0][:14], lab if len(lab) < 60 else lab[:57] + '…',
+                  100 * r['clear'], ' | '.join(cells), ' / '.join(sv)))
+        w('')
+    return '\n'.join(L)
+
+
 if __name__ == '__main__':
     import pickle
     mode = sys.argv[1] if len(sys.argv) > 1 else ''
@@ -1216,6 +1318,21 @@ if __name__ == '__main__':
         R = run_jobs_fn(m04_measure, jobs, 6)
         open(os.path.join(HERE, 'out-build-diversity-b01-split.md'), 'w', encoding='utf-8').write(b01_report(R, keys, n, 4242))
         print('wrote out-build-diversity-b01-split.md')
+    if mode == 'raid':
+        tr = int(sys.argv[sys.argv.index('--n') + 1]) if '--n' in sys.argv else 1500
+        jobs, keys = raid_jobs(tr, 9100)
+        res = run_jobs_fn(raid_measure, jobs, int(os.environ.get('NPROC', '7')))
+        R = dict(zip(keys, res))
+        pickle.dump(R, open('/tmp/bd/raid_m04.pkl', 'wb'))
+        open(os.path.join(HERE, 'out-build-diversity-raid.md'), 'w', encoding='utf-8').write(raid_report(R, tr))
+        print('wrote out-build-diversity-raid.md')
+    if mode == 'propose':
+        ids = sys.argv[sys.argv.index('--ids') + 1].split(',') if '--ids' in sys.argv else None
+        nt = int(sys.argv[sys.argv.index('--n') + 1]) if '--n' in sys.argv else 2000
+        R = prop_run(ids, nt, int(1.5 * nt), nproc=int(os.environ.get('NPROC', '7')))
+        pickle.dump(R, open('/tmp/bd/prop.pkl', 'wb'))
+        open(os.path.join(HERE, 'out-build-diversity-proposals.md'), 'w', encoding='utf-8').write(prop_report(R, nt, int(1.5 * nt), 4243))
+        print('wrote out-build-diversity-proposals.md')
     if mode == 'm04':
         n = int(sys.argv[sys.argv.index('--n') + 1]) if '--n' in sys.argv else 3000
         R, eff_of, H = m04_main(n)
