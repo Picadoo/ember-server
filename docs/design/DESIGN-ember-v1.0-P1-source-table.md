@@ -1519,6 +1519,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D174 | CoreRpg 1.65.7（第 1 阶段已上线） | 主线签名传奇 Q01–Q03 + 首领徽记 + 烬炉烙印 + 双签名；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md`；发布 `docs/status/RELEASE-ember-1.65.7.md`；后续阶段仍 COORD-mainline-unlocks |
 | D175 | 设计定稿；已实现见 **D178** / 1.65.8 | Weekly Modifier Pack 2：精选图周规则 +3（bolters/shell/press）；见 `docs/design/DESIGN-ember-weekly-mod-pack2-2026-10-04.md`。实现：D178 |
 | D176 | CoreRpg 1.65.6 | Variety Pack 2 上线（实现 D171）：词缀 +regen/charge/frost；房间事件 +crystal/escort（与 timed 等权）；闸门/奖励数不变；花样委托 timed 文案→「房间事件达标」；balance_version 29→30；Stage C p1sim 门禁 deferred |
+| D177 | CoreRpg 1.65.9 | P1 挂机庭（业主 17:56「挂机」）：复用 `ember_afk`；四层按首通 Q01/Q03/Q05/Q07 开放；只发账号绑定的余烬币 + 余烬经验（10 分钟一轮，每日 12 轮在线 + 离线合计，离线 1/4 最多 6 轮；满一天 ≤ 一次通关基础）；P1 下旧挂机怪掉落 / 击杀币 / 击杀经验与旧寄售关闭；**修订 D63**：材料 / 装备 / 印记仍只来自通关；`balance_version` 32→33；p1sim `tools/p1sim/afk.py`：21 格 21/21，W30 share 0.5 −0.24 周、上界 share 1.0 −0.56 周（略超）→ Stage 1.1 降每轮币；见 `docs/design/DESIGN-ember-afk-p1-2026-10-04.md` |
 | D178 | CoreRpg 1.65.8 | Weekly Modifier Pack 2 上线（实现 D175）：+bolters 弓潮 / shell 龟甲 / press 压阵；池 6→9（63 图×规则对）；全部 challenge-only；`balance_version` 31→32；Stage C p1sim `--mods` deferred |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
@@ -1648,3 +1649,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 不改 | 装备结构、永久乘区、化妆品、`tools/p1sim/**`（Stage C deferred）、AFK、主线签名 Java |
 | 测试 | 单测 `EmberRunRulesTest` 9 规则 / 63 周对；冒烟 FreshQ139 bolters@q03、FreshQ140 shell@q03、FreshQ141 press@q01 |
 | 文档 | 状态 `docs/status/STATUS-ember-weekly-mod-pack2-1.65.8.md`；发布凭证 `docs/status/RELEASE-ember-1.65.8.md` |
+
+### 13.90 P1 挂机庭（CoreRpg 1.65.9，D177，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 业主 2026-10-04 17:56；研究 `docs/design/RESEARCH-ember-afk-2026-10-04.md`（WoW 休息、Lost Ark 休息加成、AFK Arena、冒险岛 M、RO 战斗时间、传奇泡点、MC 挂机池插件）；`COORD-afk-p1` |
+| 裁决 | 见 D177 行。数值在 `ember-v1.yml afk:`（config.yml 未改） |
+| 版本 | CoreRpg **1.65.9**；`balance_version` **33**；1.65.10（D174 stage 1.5）接替并包含 |
+| 不改 | 装备结构、材料来源、化妆品、config.yml、旧模式行为 |
+| 测试 | 单测 `EmberAfkServiceTest`（252 / 0）；冒烟 FreshQ145；p1sim 21 格 / 忙碌 / W30 见设计 §7 |
+| 文档 | 状态 `docs/status/STATUS-ember-afk-p1-1.65.9.md`；发布凭证 `docs/status/RELEASE-ember-1.65.9.md` |
