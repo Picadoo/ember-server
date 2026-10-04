@@ -95,6 +95,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private PartService partService;
     private GearPassiveService gearPassiveService;
     private AfkTierService afkTierService;
+    private town.sunshine.corerpg.p1.EmberAfkService emberAfk; // D177 P1 挂机庭
     private HubPlazaService hubPlazaService;
     private HubNpcService hubNpcService;
     private AbyssShaftService abyssShaftService;
@@ -191,6 +192,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         forgeService = new ForgeService(this, dataStore, niBridge);
         partService = new PartService(this, niBridge);
         afkTierService = new AfkTierService(this, dataStore);
+        emberAfk = new town.sunshine.corerpg.p1.EmberAfkService(this); // D177 (config: ember-v1.yml afk, read in reloadLocal)
         hubPlazaService = new HubPlazaService(this);
         hubNpcService = new HubNpcService(this);
         abyssShaftService = new AbyssShaftService(this);
@@ -340,6 +342,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (petService != null) petService.shutdown();
         if (guildService != null) guildService.saveAll();
         if (auctionService != null) auctionService.saveAll();
+        if (emberAfk != null) emberAfk.shutdown(); // D177: stamp offline start for everyone online (quit events come after disable)
         if (dataStore != null) dataStore.saveAll();
         if (emberRuns != null) emberRuns.shutdown(); // G04: run mobs removed; open runs are aborted + refunded on the next start
         if (emberSets != null) emberSets.flushAll(); // G02 remaining cooldowns → states, saved just below
@@ -390,6 +393,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     private HubAmbienceService hubAmbience;
     public HubNpcService getHubNpcService() { return hubNpcService; }
     public AfkTierService getAfkTierService() { return afkTierService; }
+    public town.sunshine.corerpg.p1.EmberAfkService getEmberAfk() { return emberAfk; }
     public TalentService getTalentServicePublic() { return talentService; }
     public WarehouseService getWarehouseServicePublic() { return warehouseService; }
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
@@ -621,6 +625,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (lootService != null) lootService.reload();
         if (statService != null) statService.reload();
         if (afkTierService != null) afkTierService.reload();
+        if (emberAfk != null) emberAfk.reload(); // D177 (after emberMode.reload above)
         shardNeedle = getConfig().getString("shard_name_contains", "余烬碎片");
         dustNeedle = getConfig().getString("dust_name_contains", "余烬骨尘");
         crystalNeedle = getConfig().getString("crystal_name_contains", "余烬附魔晶");
@@ -827,6 +832,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             calamityService.onCalamityKilled(killer);
         }
         if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(entity)) return; // G04 E02/E11: P1 run kills pay only through the run settlement
+        if (town.sunshine.corerpg.p1.EmberAfkService.blocksLegacyPayout(entity.getWorld())) return; // D177: no kill coin / kill XP / legacy drops in the P1 挂机庭
         if (killer != null && setService != null && !(entity instanceof Player)) {
             setService.onKill(killer);
         }
@@ -1046,6 +1052,13 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             return true;
         }
         if ("auction".equals(sub) || "寄售".equals(sub) || "ah".equals(sub)) {
+            // D177 exploit review: the legacy coin auction is a command-only path that moves 余烬币 / core fragments between
+            // accounts; P1 has no trading (D73, book §19.5) → closed for players while P1 is on (admins and legacy mode keep it)
+            if (town.sunshine.corerpg.p1.EmberMode.active() && !sender.hasPermission("corerpg.admin")
+                    && !(emberMode != null && emberMode.config() != null && emberMode.config().getBoolean("legacy_auction", false))) {
+                sender.sendMessage(ChatColor.GRAY + "[寄售] P1 首版不开放交易（D73），余烬币和材料只能自己用。");
+                return true;
+            }
             if (auctionService != null) auctionService.cmdRoot(sender, args);
             return true;
         }
@@ -1390,6 +1403,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         if (p == null || !p.isOnline()) return true;
         if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(en) || town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(p)) return true; // G04 E02
+        if (town.sunshine.corerpg.p1.EmberAfkService.blocksLegacyPayout(p.getWorld())) return true; // D177: P1 挂机庭 pays only by rounds
         if (xp) {
             progressService.grantKillLevels(p, args[2]);
             progressService.grantEmberXp(p, args[2]);
@@ -1413,6 +1427,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         org.bukkit.entity.Entity en = Bukkit.getEntity(id);
         if (en == null) return cmdMmCredit(sender, args, false);
         if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(en)) return true; // G04 E02
+        if (town.sunshine.corerpg.p1.EmberAfkService.blocksLegacyPayout(en.getWorld())) return true; // D177
         int n = 1;
         if (args.length >= 4) try { n = Math.max(1, Integer.parseInt(args[3])); } catch (NumberFormatException ignored) { }
         int given = 0;

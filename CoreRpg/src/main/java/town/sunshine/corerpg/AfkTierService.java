@@ -150,6 +150,28 @@ public class AfkTierService implements Listener {
 
     private int level(Player p) { return dataStore.get(p.getUniqueId()).getEmberLevel(); }
 
+    /** D177: under P1 the tiers open by main-story first clears (ember-v1.yml afk.tiers), else by ember level. */
+    private static town.sunshine.corerpg.p1.EmberAfkService p1afk() {
+        town.sunshine.corerpg.p1.EmberAfkService a = town.sunshine.corerpg.p1.EmberAfkService.get();
+        return a != null && a.p1() ? a : null;
+    }
+
+    private boolean unlocked(Player p, Tier t) {
+        town.sunshine.corerpg.p1.EmberAfkService a = p1afk();
+        return a != null ? a.tierUnlocked(p, t.n) : level(p) >= t.level;
+    }
+
+    private String reqText(Player p, Tier t) {
+        town.sunshine.corerpg.p1.EmberAfkService a = p1afk();
+        if (a != null) return "需要" + a.requiresLabel(t.n);
+        return "需要余烬等级 Lv." + t.level + "（当前 Lv." + level(p) + "）";
+    }
+
+    private String tierLabel(Tier t) {
+        town.sunshine.corerpg.p1.EmberAfkService a = p1afk();
+        return a != null ? a.requiresLabel(t.n) : "Lv." + t.level;
+    }
+
     private void protect(final Player p) {
         if (protectSeconds <= 0) return;
         Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
@@ -166,24 +188,24 @@ public class AfkTierService implements Listener {
         for (Player p : w.getPlayers()) {
             if (p.isOp() || p.isDead()) continue;
             Tier t = tierAt(p.getLocation());
-            if (t == null || level(p) >= t.level) continue;
+            if (t == null || unlocked(p, t)) continue;
             Tier b = highestUnlocked(p);
-            Location to = b == null ? null : pad(b);
+            if (b == null || !unlocked(p, b)) continue; // D177: nothing unlocked yet (P1 before Q01) — no teleport loop
+            Location to = pad(b);
             if (to == null) continue;
             p.teleport(to);
             protect(p);
             Long last = lastKick.get(p.getUniqueId());
             if (last == null || System.currentTimeMillis() - last > 10000) {
                 lastKick.put(p.getUniqueId(), System.currentTimeMillis());
-                p.sendMessage(ChatColor.RED + "[挂机] " + t.name + " 需要余烬等级 Lv." + t.level + "（当前 Lv." + level(p) + "），已送回 " + b.name + "。");
+                p.sendMessage(ChatColor.RED + "[挂机] " + t.name + " " + reqText(p, t) + "，已送回 " + b.name + "。");
             }
         }
     }
 
     private Tier highestUnlocked(Player p) {
         Tier best = base();
-        int lv = level(p);
-        for (Tier t : tiers) if (lv >= t.level) best = t;
+        for (Tier t : tiers) if (unlocked(p, t)) best = t;
         return best;
     }
 
@@ -206,7 +228,7 @@ public class AfkTierService implements Listener {
         Integer n = deathTier.remove(e.getPlayer().getUniqueId());
         if (n == null || !enabled) return;
         Tier t = tier(n);
-        if (t == null || level(e.getPlayer()) < t.level) t = highestUnlocked(e.getPlayer());
+        if (t == null || !unlocked(e.getPlayer(), t)) t = highestUnlocked(e.getPlayer());
         Location to = t == null ? null : pad(t);
         if (to == null) return;
         e.setRespawnLocation(to);
@@ -241,7 +263,7 @@ public class AfkTierService implements Listener {
 
     /** Called by ProgressService after a level-up. */
     public void onLevelUp(Player p, int from, int to) {
-        if (!enabled) return;
+        if (!enabled || p1afk() != null) return; // D177: P1 tiers open by first clears, not levels
         for (Tier t : tiers) {
             if (t.level > from && t.level <= to && t.level > 10) {
                 p.sendMessage(ChatColor.GREEN + "[挂机] 新挂机层解锁：" + ChatColor.YELLOW + t.name + ChatColor.GREEN + "（Lv." + t.level + "）"
@@ -263,17 +285,25 @@ public class AfkTierService implements Listener {
         try { n = Integer.parseInt(a); } catch (NumberFormatException e) { list(p); return true; }
         Tier t = tier(n);
         if (t == null) { p.sendMessage(ChatColor.RED + "[挂机] 没有第 " + n + " 层。打开 /ember → 挂机庭"); return true; }
-        if (!p.isOp() && level(p) < t.level) {
-            p.sendMessage(ChatColor.RED + "[挂机] " + t.name + " 需要余烬等级 " + ChatColor.YELLOW + "Lv." + t.level
-                    + ChatColor.RED + "（当前 Lv." + level(p) + "）" + ChatColor.GRAY + " · 打开 /ember 查看进度");
+        if (!p.isOp() && !unlocked(p, t)) {
+            p.sendMessage(ChatColor.RED + "[挂机] " + t.name + " " + ChatColor.YELLOW + reqText(p, t)
+                    + ChatColor.GRAY + " · 打开 /ember 查看进度");
             return true;
         }
         QuestService qs = plugin.getQuestService();
         if (qs != null && qs.isInstanceWorld(p.getWorld())) { p.sendMessage(ChatColor.RED + "[挂机] 副本中请先离开副本。"); return true; }
+        if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(p)) { p.sendMessage(ChatColor.RED + "[挂机] 主线本里请先离开副本。"); return true; }
         Location to = pad(t);
         if (to == null) { p.sendMessage(ChatColor.RED + "[挂机] 挂机世界未加载。"); return true; }
         p.teleport(to);
         protect(p);
+        town.sunshine.corerpg.p1.EmberAfkService ea = p1afk();
+        if (ea != null) { // D177
+            p.sendMessage(ChatColor.GREEN + "[挂机庭] 已到达 " + ChatColor.YELLOW + t.name + ChatColor.GRAY
+                    + " · 在挂机庭任意位置每 " + ea.roundMinutes() + " 分钟结算一轮（按你已解锁的最高层计）· 怪物不掉东西，打不打都行");
+            p.sendMessage(ChatColor.GRAY + "  今日 " + ea.statusLine(p) + ChatColor.GRAY + " · 死亡不掉落，复活在本层入口 · 打开枢纽菜单可返回");
+            return true;
+        }
         p.sendMessage(ChatColor.GREEN + "[挂机] 已到达 " + ChatColor.YELLOW + t.name + ChatColor.GREEN + "（Lv." + t.level + "）"
                 + ChatColor.GRAY + " · " + t.desc);
         p.sendMessage(ChatColor.GRAY + "  死亡不掉落，复活在本层入口 · 掉落与其它层共用每日上限（" + capLine(p) + "）· 打开枢纽菜单可返回");
@@ -281,6 +311,17 @@ public class AfkTierService implements Listener {
     }
 
     private void list(Player p) {
+        town.sunshine.corerpg.p1.EmberAfkService a = p1afk();
+        if (a != null) { // D177
+            p.sendMessage(ChatColor.GOLD + "[挂机庭] 四层按主线首通开放 · 收益按已解锁的最高层 · 每日上限 " + a.dailyRounds() + " 轮");
+            for (Tier t : tiers) {
+                boolean ok = unlocked(p, t);
+                p.sendMessage((ok ? ChatColor.GREEN + " ✔ " : ChatColor.DARK_GRAY + " ✖ ") + t.n + ". " + t.name + " " + tierLabel(t)
+                        + (ok ? ChatColor.YELLOW + "  可进入" : ""));
+            }
+            p.sendMessage(ChatColor.GRAY + " 今日：" + a.statusLine(p));
+            return;
+        }
         int lv = level(p);
         p.sendMessage(ChatColor.GOLD + "[挂机] 分层挂机（当前 Lv." + lv + "）· 四层共用每日掉落上限");
         for (Tier t : tiers) {

@@ -86,6 +86,27 @@ bounty:
     - {kind: affix, count: 2, coin: 20}
     - {kind: timed, count: 1, coin: 20}
 
+# D177 P1 挂机庭（docs/design/DESIGN-ember-afk-p1-2026-10-04.md）：复用 ember_afk 世界；四层按主线首通开放；
+# 只发账号绑定的余烬币 + 余烬经验（不发材料 / 核心 / 印记 / 装备，旧怪在 P1 下不掉东西）。
+# 在线：人在挂机庭（任意位置、活着）每 round_minutes 分钟结算一轮，按已解锁的最高层计。
+# 离线：下线分钟 ÷ offline_ratio 折成计时分钟（WoW 野外休息 1/4 速），每天最多 offline_rounds 轮，下次上线结算。
+# 在线 + 离线每天合计最多 daily_rounds 轮（0 点重置）。每层每日上限 = 每轮 × daily_rounds；模型 tools/p1sim/afk.py。
+afk:
+  enabled: true
+  world: ember_afk
+  round_minutes: 10
+  daily_rounds: 12
+  offline_ratio: 4
+  offline_rounds: 6
+  legacy_payouts: false
+  tiers:
+    - {n: 1, name: 灰坡, requires: q01, coin: 8, xp: 3}
+    - {n: 2, name: 荒原, requires: q03, coin: 12, xp: 5}
+    - {n: 3, name: 焦土, requires: q05, coin: 16, xp: 6}
+    - {n: 4, name: 烬原深处, requires: q07, coin: 25, xp: 10}
+# D177 漏洞审查：旧寄售（/corerpg ah，余烬币标价）能在账号之间转移余烬币和核心碎片；P1 不开放交易（D73），默认关。
+legacy_auction: false
+
 # D102：测试号 / 机器人不上排行榜、主城排行榜悬浮字和荣誉陈列（名字不区分大小写）。
 # names 精确匹配；prefixes 前缀匹配；patterns 是整名匹配的正则。改完 /corerpg reload 或重启生效。
 leaderboard_exclude:

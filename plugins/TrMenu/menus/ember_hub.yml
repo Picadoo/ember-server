@@ -15,7 +15,7 @@ Options:
 Layout:
   - 'Ln o p F '
   - 'Tm X k i '
-  - ' R c Y d '
+  - 'ZR c Y d '
   - '  A G U j'
 Events:
   Open:
@@ -24,6 +24,24 @@ Events:
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
+  # D177 挂机庭（P1）：按主线首通开放四层，只给余烬币 + 经验，每日 12 轮
+  Z:
+    update: 20
+    display:
+      material: clock
+      name: '§a挂机庭 · 忙时也有进度'
+      lore:
+        - ''
+        - '§7今日：%corerpg_p1_afk_today%'
+        - '§7%corerpg_p1_afk_next%'
+        - '§7在挂机庭待着就自动结算余烬币 + 经验；下线时间按 1/4 折算'
+        - '§8首通 Q01 开放 · 每日上限 12 轮 · 打本永远更快'
+        - ''
+        - '§e➥ §f打开挂机庭'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_afk'
   # D141–D143 成长（D147：天赋 / 勋记 / 洗练合成一格；装备页的三个入口保留，各页返回键回到这里）
   T:
     update: 20

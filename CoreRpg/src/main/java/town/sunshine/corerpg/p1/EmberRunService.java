@@ -1566,6 +1566,21 @@ public final class EmberRunService implements Listener {
 
     // ------------------------------------------------------------------ delivery (E10: retry the original result)
 
+    /** D177: a once-only PENDING ledger row outside a run (挂机庭 rounds); true when this call created it. Pay with deliver. */
+    public boolean grantRow(UUID u, String run, String key, String result) {
+        EmberRunRules.Ledger l = store.ledger(u);
+        boolean[] c = new boolean[1];
+        EmberRunRules.Row r = l.record(run, key, result, EmberRunRules.ST_PENDING, System.currentTimeMillis(), c);
+        if (c[0]) store.saveLedger(u, Collections.singletonList(r));
+        return c[0];
+    }
+
+    /** D177: deliver without the 「结算到账」 line (the caller prints its own). */
+    public int deliverQuiet(Player p) {
+        quietDeliver = true;
+        try { return deliver(p); } finally { quietDeliver = false; }
+    }
+
     private void ledgerRow(UUID u, String run, String key, String result, String status) {
         EmberRunRules.Ledger l = store.ledger(u);
         boolean[] c = new boolean[1];
@@ -3375,6 +3390,7 @@ public final class EmberRunService implements Listener {
             int used = rushWeek(d, p == null ? null : p.getUniqueId()); // D160
             return EmberRunRules.rushPaysReward(used, RUSH_WEEKLY) ? "§a本周奖励未领 · 失败可无限重试" : "§7本周奖励已领 · 可练习（无奖励）";
         }
+        if (key.startsWith("afk_")) { EmberAfkService a = EmberAfkService.get(); return a == null ? "" : a.papi(p, d, key.substring(4)); } // D177
         if (key.startsWith("reroll_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.rerollPapi(p, d, key.substring(7)); } // D143
         if (key.startsWith("honor_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.honorPapi(p, d, key.substring(6)); } // D142
         if (key.startsWith("spec_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.papi(p, d, key.substring(5)); } // D141

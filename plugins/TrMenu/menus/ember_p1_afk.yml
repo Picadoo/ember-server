@@ -1,0 +1,180 @@
+# P1 挂机庭（D177，DESIGN-ember-afk-p1-2026-10-04.md）— CoreRpg EmberAfkService + AfkTierService（复用 ember_afk 世界）
+# 四层按主线首通开放：灰坡 Q01 · 荒原 Q03 · 焦土 Q05 · 烬原深处 Q07；收益按已解锁的最高层计，人在挂机庭任意位置都算
+# 只给账号绑定的余烬币 + 余烬经验（不给碎片 / 核心 / 印记 / 装备）；每日 12 轮（在线 + 离线合计），离线按 1/4 折算、最多 6 轮
+# 旧挂机子菜单 ember_afk.yml 只留给旧枢纽 ember_hub_legacy.yml
+Title: '§a挂机庭 · 忙时也有进度'
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+Layout:
+  - '#########'
+  - '# 1 2 3 #'
+  - '#   4   #'
+  - '#  I  H #'
+  - '####B####'
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+  B:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+  I:
+    update: 20
+    display:
+      material: clock
+      name: '§f今日挂机'
+      lore:
+        - ''
+        - '§7当前收益层：%corerpg_p1_afk_tier%'
+        - '§7%corerpg_p1_afk_rate%'
+        - '§7今日：%corerpg_p1_afk_today%'
+        - '§7%corerpg_p1_afk_next%'
+        - ''
+        - '§7规则：在挂机庭待满 10 分钟结算一轮，自动到账'
+        - '§7下线时间按 1/4 折算，下次上线补发（每日最多 6 轮）'
+        - '§7每日上限 12 轮（在线 + 离线合计），0 点重置'
+        - '§7只给余烬币 + 经验；碎片、核心、印记、装备只从主线本来'
+        - '§8满一天挂机 ≈ 一次通关的基础币和经验 · 打本永远更快'
+  H:
+    display:
+      material: ender pearl
+      name: '§e回枢纽'
+      lore:
+        - ''
+        - '§7离开挂机庭回到枢纽（已攒的分钟今天之内都保留）'
+        - ''
+        - '§e➥ §f点击返回枢纽'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - close
+        - 'command: hub'
+  '1':
+    icons:
+      - condition: 'check papi %corerpg_p1_afk_t1% < 1'
+        priority: 1
+        display:
+          material: barrier
+          name: '§8① 灰坡 §7· 首通 Q01 后开放'
+          lore:
+            - ''
+            - '§7每轮 8 币 + 3 经验 · 每日最多 96 币 + 36 经验'
+            - '§8先去冒险 · 主线本 打通 Q01'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_BASS-1-0'
+            - 'menu: ember_p1_adventure'
+    update: 20
+    display:
+      material: grass
+      name: '§a① 灰坡 §7· 已开放'
+      lore:
+        - ''
+        - '§7每轮 8 币 + 3 经验 · 每日最多 96 币 + 36 经验'
+        - '§7入口离怪远，站着不动也能挂'
+        - ''
+        - '§e➥ §f点击传送'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg afk 1'
+  '2':
+    icons:
+      - condition: 'check papi %corerpg_p1_afk_t2% < 1'
+        priority: 1
+        display:
+          material: barrier
+          name: '§8② 荒原 §7· 首通 Q03 后开放'
+          lore:
+            - ''
+            - '§7每轮 12 币 + 5 经验 · 每日最多 144 币 + 60 经验'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_BASS-1-0'
+            - 'menu: ember_p1_adventure'
+    update: 20
+    display:
+      material: smooth brick
+      name: '§e② 荒原 §7· 已开放'
+      lore:
+        - ''
+        - '§7每轮 12 币 + 5 经验 · 每日最多 144 币 + 60 经验'
+        - '§8收益按已解锁的最高层，在哪一层挂都一样'
+        - ''
+        - '§e➥ §f点击传送'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg afk 2'
+  '3':
+    icons:
+      - condition: 'check papi %corerpg_p1_afk_t3% < 1'
+        priority: 1
+        display:
+          material: barrier
+          name: '§8③ 焦土 §7· 首通 Q05 后开放'
+          lore:
+            - ''
+            - '§7每轮 16 币 + 6 经验 · 每日最多 192 币 + 72 经验'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_BASS-1-0'
+            - 'menu: ember_p1_adventure'
+    update: 20
+    display:
+      material: nether brick
+      name: '§6③ 焦土 §7· 已开放'
+      lore:
+        - ''
+        - '§7每轮 16 币 + 6 经验 · 每日最多 192 币 + 72 经验'
+        - '§8收益按已解锁的最高层，在哪一层挂都一样'
+        - ''
+        - '§e➥ §f点击传送'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg afk 3'
+  '4':
+    icons:
+      - condition: 'check papi %corerpg_p1_afk_t4% < 1'
+        priority: 1
+        display:
+          material: barrier
+          name: '§8④ 烬原深处 §7· 首通 Q07 后开放'
+          lore:
+            - ''
+            - '§7每轮 25 币 + 10 经验 · 每日最多 300 币 + 120 经验'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_BASS-1-0'
+            - 'menu: ember_p1_adventure'
+    update: 20
+    display:
+      material: red nether brick
+      name: '§c④ 烬原深处 §7· 已开放'
+      lore:
+        - ''
+        - '§7每轮 25 币 + 10 经验 · 每日最多 300 币 + 120 经验'
+        - '§8收益按已解锁的最高层，在哪一层挂都一样'
+        - ''
+        - '§e➥ §f点击传送'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg afk 4'
