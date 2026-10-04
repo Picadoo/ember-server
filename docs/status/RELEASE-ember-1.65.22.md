@@ -8,10 +8,10 @@ D179 Room Events Pack 3：房间事件池 3→6（+hold 占点 / beacon 护灯 /
 |---|---|
 | CoreRpg 版本 | **1.65.22** |
 | class major | **52**（JDK 8，tools/jdk8u504-b01）|
-| CoreRpg JAR sha256 | `JARSHA` |
+| CoreRpg JAR sha256 | `cec92d46b62d0130883b1c2407ddd2f136c7016f0cebb39df5887cd758042b24` |
 | balance_version | **45** |
 | 回滚包 | `/workspace/backup/CoreRpg-1.65.21-pre-1.65.22.jar` |
-| 服务器 PID | **PAPERPID** |
+| 服务器 PID | **1179744** |
 | MySQL | `[CoreRpg] [storage] MySQL connected` · `[CoreGacha] [db] MySQL connected` |
 | SEVERE | 0 |
 | Stage C p1sim | **deferred**（与 D181/D176 同策略；时间紧，本窗未跑 42 格）|
@@ -30,5 +30,5 @@ D179 Room Events Pack 3：房间事件池 3→6（+hold 占点 / beacon 护灯 /
 | 项 | 结果 |
 |---|---|
 | 单测 `mvn -o test`（JDK 8）| 279 / 0 |
-| 冒烟 FreshQ350+ | SMOKE |
+| 冒烟 FreshQ350+ | PASS=12 FAIL=0（FreshQ350 hold / FreshQ351 beacon / FreshQ352 relay；SEVERE 0；机器人已退出） |
 | 资产回归 | 无物品资产路径变化 → 未跑 persist-roundtrip |
