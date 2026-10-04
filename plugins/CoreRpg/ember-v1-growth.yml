@@ -11,7 +11,8 @@
 # 修饰键（Java EmberGrowth.Mods 和 growth.py 用同一套）：乘数默认 1，加数默认 0。
 #   dmg_boss / dmg_mob / dmg_affix   对首领 / 普通怪 / 词缀精英（含分身）造成的伤害 ×
 #   dmg_split                        对词缀精英裂出来的分身再 ×
-#   dmg_affix_body                   只对词缀精英本体再 ×（不含分身；D163 / B01）
+#   dmg_affix_body                   只对词缀精英本体再 ×（不含分身；D163 / B01；D164 起没有节点在用）
+#   dmg_affix_shield / dmg_affix_blazing / dmg_affix_split   按词缀种类再 ×：厚甲 / 炽热 / 分裂精英（分裂含分身；D164 破甲）
 #   dodge_dmg + dodge_secs           躲开首领预警招后 dodge_secs 秒内造成的伤害 ×
 #   dodge_heal + dodge_icd           躲开首领预警招回最大生命的比例（冷却 dodge_icd 秒）
 #   taken_tele / taken_boss / taken_mob / taken_affix / taken_all   受到首领预警招 / 首领普攻 / 怪物（非首领）/ 词缀精英 / 全部 伤害 ×
@@ -27,8 +28,11 @@
 #   abyss_taken / abyss_fee          深渊里受到伤害 × / 深渊层费 ×
 #   coin / shard_bonus               结算余烬币 × / 每次通关结算多给碎片
 #   reroll_coin                      洗练的币 ×
-# D163 / B01: t2c 拆分 uses dmg_affix_body (body −20%) so clones stay dmg_split +50% net
-version: 2
+# D163 / B01: t2c 拆分 used dmg_affix_body (body −20%) so clones stay dmg_split +50% net.
+# D164 (build-diversity P7, 10-04): t2c 拆分 → 破甲 — 厚甲精英 ×1.6（正好抵掉生命 ×1.6），炽热 / 分裂精英（含分身）×0.8。
+#   p1sim builddiv propose P7: 厚甲精英击杀 −30～−36%，主线重打通关率相对拆分 ≤ ±2～3 点；首通 / 挑战 / 团本 / 深渊没有词缀精英 = 0。
+#   节点 id 不变（t2c），已点「拆分」的人自动变成「破甲」，不用重置。
+version: 3
 
 # ---------------------------------------------------------------- D141 天赋专精
 talents:
@@ -46,7 +50,7 @@ talents:
   rows:
     # theme = shown to players (no internal D-numbers; D147 review 10-04 #3 / #8 / #10)
     - {row: 1, name: "应变", points: 1, coin: 800, theme: "首领预警招 · 3% ≈ Q07 重砸每次 1 点"}
-    - {row: 2, name: "猎手", points: 2, coin: 2000, theme: "只作用于主线重打的词缀精英（每局 1 只）"}
+    - {row: 2, name: "猎手", points: 2, coin: 2000, theme: "仅主线重打生效 · 只作用于词缀精英（每局 1 只；首通、挑战、团本、深渊都没有）"}
     - {row: 3, name: "套装专精", points: 3, coin: 4000, theme: "只在对应套装成套时生效"}
   nodes:
     # 第 1 排「应变」：首领预警招（D140）。fit = 菜单里「适合 / 不适合」一行（D147，评审 10-04 #3）。得失都只在首领战里。
@@ -75,12 +79,13 @@ talents:
       bad: "被首领预警招打中多受 3%"
       fit: "适合：躲招稳、常用踏步的人 · 不适合：常被预警招打中（那样是净亏）"
     # 第 2 排「猎手」：重复刷图的词缀精英（D138）。得失都只落在词缀精英（含分身）身上，首通局和首领战不受影响。
+    # D164：三选一 = 破缀（全打快、多挨打）/ 守缀（少挨打、打得慢）/ 破甲（专打厚甲，另两种慢）。
     - id: t2a
       row: 2
       name: "破缀"
       family: burst
       mods: {dmg_affix: 1.30, taken_affix: 1.20}
-      good: "对词缀精英（含分身）伤害 +30%"
+      good: "对词缀精英（含分身）伤害 +30%（仅主线重打生效）"
       bad: "受到词缀精英（含分身、炽热火圈）伤害 +20%"
       fit: "适合：想快点清掉词缀精英 · 不适合：容易被精英火圈 / 分身围住"
     - id: t2b
@@ -88,17 +93,17 @@ talents:
       name: "守缀"
       family: sustain
       mods: {taken_affix: 0.75, dmg_affix: 0.85}
-      good: "受到词缀精英（含分身、炽热火圈）伤害 -25%"
+      good: "受到词缀精英（含分身、炽热火圈）伤害 -25%（仅主线重打生效）"
       bad: "对词缀精英（含分身）伤害 -15%"
       fit: "适合：怕词缀精英的人 · 不适合：想快清精英的人"
     - id: t2c
       row: 2
-      name: "拆分"
+      name: "破甲"
       family: scorch
-      mods: {dmg_split: 1.50, dmg_affix_body: 0.80}
-      good: "对分裂精英裂出来的分身伤害 +50%（门更快开）"
-      bad: "对词缀精英本体伤害 -20%"
-      fit: "适合：遇到分裂精英想快开门 · 不适合：其他两种词缀（本体伤害变低）"
+      mods: {dmg_affix_shield: 1.60, dmg_affix_blazing: 0.80, dmg_affix_split: 0.80}
+      good: "对厚甲精英伤害 +60%（正好抵掉它的 1.6 倍生命；仅主线重打生效）"
+      bad: "对炽热 / 分裂精英（含分身）伤害 -20%"
+      fit: "适合：专门对付厚甲精英 · 不适合：遇到炽热 / 分裂精英（会更慢）"
     # 第 3 排「套装专精」：只在穿对应套装成套时生效（换套自动失效，不用重置）。
     - id: t3a
       row: 3
@@ -163,10 +168,12 @@ reroll:
   # code = 存档里的编号（玩家数据 p4_af_<物品 uid> = code × 10 + 档），上线后不要改
   affixes:
     blade:
-      - {id: b_affix, code: 1, name: "猎缀纹", key: dmg_affix, desc: "对词缀精英伤害", values: [1.04, 1.08, 1.12, 1.16]}
+      - {id: b_affix, code: 1, name: "猎缀纹", key: dmg_affix, desc: "对词缀精英伤害", note: "仅主线重打生效", values: [1.04, 1.08, 1.12, 1.16]}
       - {id: b_set, code: 2, name: "余烬纹", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.0025, 1.005, 1.0075, 1.01]}
-      - {id: b_split, code: 3, name: "裂身纹", key: dmg_split, desc: "对分身伤害", values: [1.05, 1.10, 1.15, 1.20]}
+      # D164（build-diversity R5）：裂身纹移出洗练池（rollable: false）——洗不出来、也不能锁定再洗；已经有的照常生效、照常显示。
+      #   code 3 不要复用。刃池 3 → 2：极品件洗到指定 4 档（锁定路线）6.2 → 5.6 次。
+      - {id: b_split, code: 3, name: "裂身纹", key: dmg_split, desc: "对分身伤害", note: "仅主线重打生效", rollable: false, values: [1.05, 1.10, 1.15, 1.20]}
     charm:
       - {id: c_tele, code: 4, name: "定身纹", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
       - {id: c_share, code: 6, name: "分核纹", key: share_taken, desc: "烬核自己那份", values: [0.99, 0.98, 0.97, 0.96]}
-      - {id: c_affix, code: 7, name: "抗缀纹", key: taken_affix, desc: "受到词缀精英伤害", values: [0.96, 0.92, 0.88, 0.84]}
+      - {id: c_affix, code: 7, name: "抗缀纹", key: taken_affix, desc: "受到词缀精英伤害", note: "仅主线重打生效", values: [0.96, 0.92, 0.88, 0.84]}

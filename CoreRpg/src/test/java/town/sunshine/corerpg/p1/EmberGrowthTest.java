@@ -218,21 +218,27 @@ public class EmberGrowthTest {
         for (EmberGrowth.Row row : talents().rows) assertFalse("no internal D-number in " + row.theme, row.theme.matches(".*D\\d+.*"));
     }
 
-    @Test public void b01SplitMeansNetPlus50OnClones_D163() {
-        // Review B01: 「拆分」text = clones +50% / body −20%. Baseline damage 100.
+    @Test public void t2cIsArmorBreak_D164() {
+        // build-diversity P7: 拆分 → 破甲 — shield elites ×1.6, blazing / split elites (clones too) ×0.8. Baseline damage 100.
         EmberGrowth.Talents tal = talents();
-        EmberGrowth.Node split = null;
-        for (EmberGrowth.Node n : tal.nodes) if ("t2c".equals(n.id)) split = n;
-        assertNotNull(split);
-        assertEquals(1.50, split.mods.get("dmg_split"), 1e-9);
-        assertEquals(0.80, split.mods.get("dmg_affix_body"), 1e-9);
-        assertFalse("body penalty must not use dmg_affix (that also hits clones)", split.mods.containsKey("dmg_affix"));
+        EmberGrowth.Node ab = null;
+        for (EmberGrowth.Node n : tal.nodes) if ("t2c".equals(n.id)) ab = n;
+        assertNotNull(ab);
+        assertEquals("破甲", ab.name);
+        assertEquals(1.60, ab.mods.get("dmg_affix_shield"), 1e-9);
+        assertEquals(0.80, ab.mods.get("dmg_affix_blazing"), 1e-9);
+        assertEquals(0.80, ab.mods.get("dmg_affix_split"), 1e-9);
+        assertFalse("no flat dmg_affix on 破甲", ab.mods.containsKey("dmg_affix"));
+        assertTrue("row-2 text says 仅主线重打生效", ab.good.contains("仅主线重打生效"));
 
-        EmberGrowth.Mods only = EmberGrowth.Mods.combine(java.util.Arrays.asList(split.mods));
-        assertEquals(100.0, 100 * EmberGrowthService.classMult(only, "mob"), 1e-9);
-        assertEquals(80.0, 100 * EmberGrowthService.classMult(only, "affix"), 1e-9);
-        assertEquals(150.0, 100 * EmberGrowthService.classMult(only, "split"), 1e-9);
-        assertEquals(100.0, 100 * EmberGrowthService.classMult(only, "boss"), 1e-9);
+        EmberGrowth.Mods only = EmberGrowth.Mods.combine(java.util.Arrays.asList(ab.mods));
+        assertEquals(160.0, 100 * EmberGrowthService.classMult(only, "affix", "shield"), 1e-9);
+        assertEquals(80.0, 100 * EmberGrowthService.classMult(only, "affix", "blazing"), 1e-9);
+        assertEquals(80.0, 100 * EmberGrowthService.classMult(only, "affix", "split"), 1e-9);
+        assertEquals("clones of a split elite", 80.0, 100 * EmberGrowthService.classMult(only, "split", null), 1e-9);
+        assertEquals(100.0, 100 * EmberGrowthService.classMult(only, "mob", null), 1e-9);
+        assertEquals(100.0, 100 * EmberGrowthService.classMult(only, "boss", null), 1e-9);
+        assertEquals("unknown elite type = neutral", 100.0, 100 * EmberGrowthService.classMult(only, "affix", null), 1e-9);
 
         EmberAffix.Rules ar = EmberAffix.parse(root());
         EmberAffix.Def splitAff = null, affixAff = null;
@@ -241,22 +247,49 @@ public class EmberGrowthTest {
             if ("dmg_affix".equals(d.key)) affixAff = d;
         }
         assertNotNull(splitAff); assertNotNull(affixAff);
-        // 裂身纹 4 档 on blade → clones 1.50 × 1.20 = 1.80
-        Map<String, Double> split4 = EmberAffix.parts(ar, new int[][]{{EmberAffix.encode(splitAff, 4), 3}, null});
-        EmberGrowth.Mods withSplitAff = EmberGrowth.Mods.combine(java.util.Arrays.asList(split.mods, split4));
-        assertEquals(180.0, 100 * EmberGrowthService.classMult(withSplitAff, "split"), 1e-9);
-        // 猎缀纹 4 档 → body 0.80 × 1.16 = 92.8; clones 1.50 × 1.16 = 174
+        // 猎缀纹 4 档 + 破甲 → shield body 1.16 × 1.6 = 185.6; blazing 1.16 × 0.8 = 92.8
         Map<String, Double> aff4 = EmberAffix.parts(ar, new int[][]{{EmberAffix.encode(affixAff, 4), 3}, null});
-        EmberGrowth.Mods withAff = EmberGrowth.Mods.combine(java.util.Arrays.asList(split.mods, aff4));
-        assertEquals(92.8, 100 * EmberGrowthService.classMult(withAff, "affix"), 1e-9);
-        assertEquals(174.0, 100 * EmberGrowthService.classMult(withAff, "split"), 1e-9);
-        // 破缀 (t2a) → body and clones both × 1.30
+        EmberGrowth.Mods withAff = EmberGrowth.Mods.combine(java.util.Arrays.asList(ab.mods, aff4));
+        assertEquals(185.6, 100 * EmberGrowthService.classMult(withAff, "affix", "shield"), 1e-9);
+        assertEquals(92.8, 100 * EmberGrowthService.classMult(withAff, "affix", "blazing"), 1e-9);
+        // an old 裂身纹 4 档 still applies on clones (retired from the pool, not removed): 1.20 × 0.8 = 96
+        Map<String, Double> split4 = EmberAffix.parts(ar, new int[][]{{EmberAffix.encode(splitAff, 4), 3}, null});
+        EmberGrowth.Mods withSplitAff = EmberGrowth.Mods.combine(java.util.Arrays.asList(ab.mods, split4));
+        assertEquals(96.0, 100 * EmberGrowthService.classMult(withSplitAff, "split", null), 1e-9);
+        // B01 key still works for any node that uses it (none since D164): body only
+        Map<String, Double> body = new HashMap<String, Double>(); body.put("dmg_affix_body", 0.8); body.put("dmg_split", 1.5);
+        EmberGrowth.Mods b01 = EmberGrowth.Mods.combine(java.util.Arrays.asList(body));
+        assertEquals(80.0, 100 * EmberGrowthService.classMult(b01, "affix"), 1e-9);
+        assertEquals(150.0, 100 * EmberGrowthService.classMult(b01, "split"), 1e-9);
+        // 破缀 (t2a) → body and clones both × 1.30, any type
         EmberGrowth.Node crush = null;
         for (EmberGrowth.Node n : tal.nodes) if ("t2a".equals(n.id)) crush = n;
         assertNotNull(crush);
         EmberGrowth.Mods crushOnly = EmberGrowth.Mods.combine(java.util.Arrays.asList(crush.mods));
-        assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "affix"), 1e-9);
-        assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "split"), 1e-9);
+        assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "affix", "shield"), 1e-9);
+        assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "split", null), 1e-9);
+        for (EmberGrowth.Node n : tal.nodes) if (n.row == 2) assertTrue(n.id + " good text: 仅主线重打生效", n.good.contains("仅主线重打生效"));
+        assertTrue(tal.row(2).theme.contains("仅主线重打生效"));
+    }
+
+    @Test public void splitAffixRetiredFromPool_D165() {
+        EmberAffix.Rules r = EmberAffix.parse(root());
+        EmberAffix.Def gone = r.def("b_split");
+        assertNotNull("still decodable (existing items keep it)", gone);
+        assertFalse(gone.rollable);
+        assertEquals(gone, EmberAffix.decodeDef(r, EmberAffix.encode(gone, 2)));
+        assertEquals(2, r.pool("blade").size());
+        assertFalse(r.pool("blade").contains(gone));
+        assertEquals(java.util.Collections.singletonList(gone), r.retired("blade"));
+        assertEquals(3, r.pool("charm").size());
+        java.util.Random rng = new java.util.Random(7);
+        for (int i = 0; i < 3000; i++) assertNotEquals("never rolled", "b_split", EmberAffix.roll(r, "blade", 3, i % 6, rng).id);
+        for (int i = 0; i < 500; i++) assertNotEquals("lock on a retired affix = a normal roll", "b_split", EmberAffix.roll(r, "blade", 3, 0, rng, "b_split").id);
+        // D166 scope notes
+        assertTrue(r.def("b_affix").text(1).contains("仅主线重打生效"));
+        assertTrue(r.def("c_affix").text(1).contains("仅主线重打生效"));
+        assertTrue(gone.text(1).contains("仅主线重打生效"));
+        assertEquals("no note on the general ones", "", r.def("b_set").note);
     }
 
     @Test public void affixDuplicateRules() {

@@ -18,17 +18,25 @@ public final class EmberAffix {
 
     public static final class Def {
         public final String id, name, slot, key, desc;
+        /** D166: scope note shown after the value (e.g. 仅主线重打生效); "" = none */
+        public final String note;
+        /** D165: false = retired from the reroll pool (never rolled, not lockable) but still decoded and applied on items that have it */
+        public final boolean rollable;
         public final int code;
         public final double[] values;
         Def(String id, int code, String name, String slot, String key, String desc, double[] values) {
-            this.id = id; this.code = code; this.name = name; this.slot = slot; this.key = key; this.desc = desc; this.values = values;
+            this(id, code, name, slot, key, desc, "", true, values);
+        }
+        Def(String id, int code, String name, String slot, String key, String desc, String note, boolean rollable, double[] values) {
+            this.id = id; this.code = code; this.name = name; this.slot = slot; this.key = key; this.desc = desc;
+            this.note = note == null ? "" : note; this.rollable = rollable; this.values = values;
         }
         /** value of tier 1..4 */
         public double value(int tier) { return values[Math.max(1, Math.min(values.length, tier)) - 1]; }
         /** "对词缀精英伤害 +8%" */
         public String text(int tier) {
             double v = value(tier);
-            return desc + " " + EmberGrowth.signedPct(v);
+            return desc + " " + EmberGrowth.signedPct(v) + (note.isEmpty() ? "" : "（" + note + "）");
         }
     }
 
@@ -44,9 +52,16 @@ public final class EmberAffix {
         public Def def(String id) { if (id != null) for (Def d : defs) if (d.id.equals(id)) return d; return null; }
         /** stable code stored in the player save (yml {@code code:}) */
         public Def byCode(int code) { for (Def d : defs) if (d.code == code) return d; return null; }
+        /** the affixes a try can roll for this slot (D165: retired ones excluded) */
         public List<Def> pool(String slot) {
             List<Def> l = new ArrayList<Def>();
-            for (Def d : defs) if (d.slot.equals(slot)) l.add(d);
+            for (Def d : defs) if (d.slot.equals(slot) && d.rollable) l.add(d);
+            return l;
+        }
+        /** D165: affixes of this slot that are no longer rolled (items that have one keep it) */
+        public List<Def> retired(String slot) {
+            List<Def> l = new ArrayList<Def>();
+            for (Def d : defs) if (d.slot.equals(slot) && !d.rollable) l.add(d);
             return l;
         }
         /** highest value tier this quality can carry */
@@ -87,7 +102,7 @@ public final class EmberAffix {
         List<Def> pool = r.pool(slot);
         if (pool.isEmpty()) return null;
         Def locked = lockId == null ? null : r.def(lockId);
-        if (locked != null && !locked.slot.equals(slot)) locked = null;
+        if (locked != null && (!locked.slot.equals(slot) || !locked.rollable)) locked = null; // D165: a retired affix is not lockable
         Def d = locked != null ? locked : pool.get(rng.nextInt(pool.size()));
         int cap = r.cap(quality);
         boolean forced = pity >= r.pity;
@@ -141,7 +156,9 @@ public final class EmberAffix {
                     List<?> vs = x.get("values") instanceof List ? (List<?>) x.get("values") : Collections.emptyList();
                     double[] v = new double[vs.size()];
                     for (int i = 0; i < v.length; i++) v[i] = ((Number) vs.get(i)).doubleValue();
-                    defs.add(new Def(EmberGrowth.s(x, "id"), EmberGrowth.i(x, "code"), EmberGrowth.s(x, "name"), slot, EmberGrowth.s(x, "key"), EmberGrowth.s(x, "desc"), v));
+                    boolean rollable = !Boolean.FALSE.equals(x.get("rollable"));
+                    defs.add(new Def(EmberGrowth.s(x, "id"), EmberGrowth.i(x, "code"), EmberGrowth.s(x, "name"), slot, EmberGrowth.s(x, "key"), EmberGrowth.s(x, "desc"),
+                            EmberGrowth.s(x, "note"), rollable, v));
                 }
             }
         }

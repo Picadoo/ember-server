@@ -165,11 +165,21 @@ public final class EmberGrowthService implements Listener {
      * D163 / B01: {@code dmg_affix_body} applies only to the affixed elite body (not split adds), so talent
      * 「拆分」{@code dmg_split: 1.50, dmg_affix_body: 0.80} is net +50% on clones and −20% on the body.
      */
-    static double classMult(EmberGrowth.Mods m, String cls) {
+    static double classMult(EmberGrowth.Mods m, String cls) { return classMult(m, cls, null); }
+
+    /**
+     * D164 破甲: {@code affix} = the elite type of the target (blazing / split / shield; split adds count as "split"),
+     * so {@code dmg_affix_<type>} multiplies the body and — for split — its clones too (p1sim builddiv P7).
+     */
+    static double classMult(EmberGrowth.Mods m, String cls, String affix) {
         if ("boss".equals(cls)) return m.get("dmg_boss");
-        if ("split".equals(cls)) return m.get("dmg_affix") * m.get("dmg_split"); // clones: 猎缀/破缀 × 拆分/裂身纹
-        if ("affix".equals(cls)) return m.get("dmg_affix") * m.get("dmg_affix_body"); // body: × body-only key
-        return m.get("dmg_mob");
+        double r;
+        if ("split".equals(cls)) r = m.get("dmg_affix") * m.get("dmg_split"); // clones: 猎缀/破缀 × 裂身纹
+        else if ("affix".equals(cls)) r = m.get("dmg_affix") * m.get("dmg_affix_body"); // body: × body-only key
+        else return m.get("dmg_mob");
+        String kind = "split".equals(cls) ? "split" : affix;
+        if (kind != null) r *= m.get("dmg_affix_" + kind);
+        return r;
     }
 
     /** Outgoing multiplier on a run mob (boss / affixed elite / split add / other mob) + the after-dodge window + set events. */
@@ -178,7 +188,7 @@ public final class EmberGrowthService implements Listener {
         if (m.isEmpty()) return 1.0;
         String cls = runs.mobClass(target);
         if (cls == null) return 1.0; // only inside P1 runs
-        double r = classMult(m, cls);
+        double r = classMult(m, cls, "affix".equals(cls) ? runs.mobAffix(target) : null);
         Long until = dodgeUntil.get(p.getUniqueId());
         if (until != null && System.currentTimeMillis() < until) r *= m.get("dodge_dmg");
         if (kind == EmberSetEngine.Kind.BURN || kind == EmberSetEngine.Kind.EXPLOSION) r *= m.get("set_dmg");
@@ -715,6 +725,7 @@ public final class EmberGrowthService implements Listener {
         if (lock) {
             if (lockShard <= 0) { p.sendMessage(P + "§c锁定词条没有开放"); return true; }
             if (cur == null) { p.sendMessage(P + "§c词条槽还是空的，没有可锁定的词条（先普通洗一次）"); return true; }
+            if (!cur.rollable) { p.sendMessage(P + "§c" + cur.name + " 已移出洗练池，不能锁定再洗（已有的照常生效；普通洗会换成别的词条）"); return true; }
             if (Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) >= cap) { p.sendMessage(P + "§c" + cur.name + " 已经是这件成色的上限档（" + cap + " 档），锁定再洗没有意义"); return true; }
         }
         int needShard = (dup ? 0 : shard) + (lock ? lockShard : 0);
@@ -733,7 +744,7 @@ public final class EmberGrowthService implements Listener {
             if (dup && !haveDup) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
             List<String[]> btn = new ArrayList<String[]>();
             btn.add(new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + mode + " confirm", "扣上面的花费，" + (lock ? "锁定「" + cur.name + "」重抽档位" : "抽一次" + name + "的词条"), "GREEN"});
-            if (!lock && cur != null && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) < cap)
+            if (!lock && cur != null && cur.rollable && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) < cap)
                 btn.add(new String[]{"[锁定" + cur.name + "再洗]", "/corerpg p1 reroll " + slot + " " + (dup ? "dup" : "shard") + " lock", "保留「" + cur.name + "」只重抽档位，另加 " + lockShard + " 碎片", "AQUA"});
             btn.add(new String[]{"[回洗练页]", "/corerpg p1 reroll from " + rfromKey(p), "不洗，回去看看", "GRAY"});
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
@@ -857,9 +868,14 @@ public final class EmberGrowthService implements Listener {
             List<EmberAffix.Def> pool = reroll.pool(a[1]);
             int i;
             try { i = Integer.parseInt(a[2]); } catch (NumberFormatException e) { return ""; }
-            if (i < 1 || i > pool.size()) return "";
+            List<EmberAffix.Def> gone = reroll.retired(a[1]);
+            if (i < 1 || i > pool.size() + gone.size()) return "";
+            if (i > pool.size()) { // D165: retired affixes listed after the pool
+                EmberAffix.Def df = gone.get(i - pool.size() - 1);
+                return "§8· " + df.name + "：已移出洗练池（洗不出来；已有的照常生效）";
+            }
             EmberAffix.Def df = pool.get(i - 1);
-            return "§7· §b" + df.name + "§7：" + df.desc + " " + String.join(" / ", pctList(df));
+            return "§7· §b" + df.name + "§7：" + df.desc + " " + String.join(" / ", pctList(df)) + (df.note.isEmpty() ? "" : " §8（" + df.note + "）");
         }
         String slot = key.startsWith("charm_") ? "charm" : key.startsWith("blade_") ? "blade" : null;
         if (slot == null) return "";
@@ -884,6 +900,7 @@ public final class EmberGrowthService implements Listener {
             int ls = reroll.lockShardFor(t.tier);
             if (ls <= 0) return "";
             if (cur == null) return "§8锁定词条：词条槽还是空的";
+            if (!cur.rollable) return "§8" + cur.name + " 已移出洗练池，不能锁定（普通洗会换成别的词条）";
             if (Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), reroll.cap(t.quality)) >= reroll.cap(t.quality)) return "§a" + cur.name + " 已是上限档";
             return "§bShift+点击：锁定「" + cur.name + "」只重抽档位（另加 " + ls + " 碎片）";
         }
