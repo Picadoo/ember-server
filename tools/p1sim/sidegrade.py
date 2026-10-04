@@ -61,6 +61,22 @@ for i, (b_, m) in enumerate(((1.12, 0.88), (1.10, 0.90), (1.14, 0.86)), 1):   # 
     cand('R3b%d' % i, 'row3', '反震→破阵 对首领 ×%.2f / 对普通怪 ×%.2f（保留被预警招打中烬爆 +1）' % (b_, m), {'hit_burst': 1, 'dmg_boss': b_, 'dmg_mob': m}, 't3b', sets=('burst',))
 for i, (sm, sh) in enumerate(((1.35, 0.0), (1.25, 0.5), (1.5, 0.0)), 1):       # 炽愈 = heal more, smaller buffer [自我回复 / 最低血量]
     cand('R3c%d' % i, 'row3', '扛核→回涌 炽愈回复 ×%.2f / 生命加成 ×%.1f（保留烬核 1.5 份）' % (sm, sh), {'share_w': 1.5, 'sustain_mult': sm, 'sustain_hp': sh}, 't3c', sets=('sustain',))
+# row 3 round 2 (reachable cells only: row 3 needs all 6 points → challenge / raid / abyss, never a first clear)
+cand('R3a5', 'row3', '燎原→连锁燃烧 4 秒无冷却 / 每跳 ×0.92 / 对普通怪 ×1.10', {'burn_spread': 4, 'spread_icd': 0, 'burn_mult': 0.92, 'dmg_mob': 1.10}, 't3a', sets=('scorch',))
+cand('R3a6', 'row3', '燎原→连锁燃烧 4 秒无冷却 / 每跳 ×0.90 / 对普通怪 ×1.12', {'burn_spread': 4, 'spread_icd': 0, 'burn_mult': 0.90, 'dmg_mob': 1.12}, 't3a', sets=('scorch',))
+for i, (pk, so) in enumerate(((1.30, 0.50), (1.25, 0.60), (1.40, 0.40)), 4):   # 烬爆 = pull packs (NEW burst_pack / burst_solo)
+    cand('R3b%d' % i, 'row3', '反震→聚爆 烬爆命中 ≥3 个 ×%.2f / 只命中 1 个 ×%.2f（NEW）' % (pk, so), {'burst_pack': pk, 'burst_solo': so}, 't3b', sets=('burst',))
+cand('R3b7', 'row3', '反震→连爆 烬爆每 4 次普攻（原 5）/ 系数 ×0.80', {'burst_every': -1, 'burst_mult': 0.80}, 't3b', sets=('burst',))
+cand('R3b8', 'row3', '反震→连爆 烬爆每 3 次普攻 / 系数 ×0.62', {'burst_every': -2, 'burst_mult': 0.62}, 't3b', sets=('burst',))
+for i, (sm, sh) in enumerate(((1.20, 0.6), (1.15, 0.7), (1.20, 0.5)), 4):
+    cand('R3c%d' % i, 'row3', '扛核→回涌 炽愈回复 ×%.2f / 生命加成 ×%.1f（保留烬核 1.5 份）' % (sm, sh), {'share_w': 1.5, 'sustain_mult': sm, 'sustain_hp': sh}, 't3c', sets=('sustain',))
+# 炽愈 balance round 2
+cand('S6', 'set', '炽愈 生命加成 1.06 + 回复 ×0.85', cfg={'sustain_hp': 1.06, 'sustain_pct': [0, 0.02125, 0.0276, 0.034]}, sets=('sustain',))
+cand('S7', 'set', '炽愈 生命加成 1.00 + 回复 ×0.90', cfg={'sustain_hp': 1.00, 'sustain_pct': [0, 0.0225, 0.0293, 0.036]}, sets=('sustain',))
+cand('S8', 'set', '炽愈 回复 ×0.70', cfg={'sustain_pct': [0, 0.0175, 0.0228, 0.028]}, sets=('sustain',))
+cand('S9', 'set', '炽愈 生命加成 1.06 + 回复冷却 6→7 秒', cfg={'sustain_hp': 1.06, 'sustain_icd': 7.0}, sets=('sustain',))
+cand('S10', 'set', '炽愈 生命加成 1.00 + 回复 ×0.80', cfg={'sustain_hp': 1.00, 'sustain_pct': [0, 0.02, 0.026, 0.032]}, sets=('sustain',))
+
 # affixes at tier 4 (isolated, vs the current affix at tier 4)
 cand('b_set4', 'cur', '现行 余烬纹 4 档', {'set_dmg': 1.01})
 cand('c_tele4', 'cur', '现行 定身纹 4 档', {'taken_tele': 0.98})
