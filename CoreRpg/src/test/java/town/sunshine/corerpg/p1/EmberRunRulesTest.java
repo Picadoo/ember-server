@@ -1103,4 +1103,35 @@ public class EmberRunRulesTest {
             assertTrue(w[1] + " light in the challenge", found.light);
         }
     }
+
+    // ------------------------------------------------------------------ D160 余烬连战: weekly reward claim, unlimited retries
+
+    @Test public void rushRewardIsClaimedOncePerWeekRetriesAreFree() {
+        assertTrue(EmberRunRules.rushPaysReward(0, 1));
+        assertFalse(EmberRunRules.rushPaysReward(1, 1));
+        assertFalse(EmberRunRules.rushPaysReward(5, 1));
+        assertFalse("cap 0 = off", EmberRunRules.rushPaysReward(0, 0));
+        // the switch-over week: a pre-D160 clear (old rule counted the entry, the clear is on the board) is the claim
+        assertEquals(1, EmberRunRules.rushClaims(0, true));
+        assertEquals(0, EmberRunRules.rushClaims(0, false));
+        assertEquals(2, EmberRunRules.rushClaims(2, true));
+        assertTrue(EmberRunRules.rushWeekText(0, 1).contains("失败可无限重试"));
+        assertTrue(EmberRunRules.rushWeekText(1, 1).contains("练习"));
+    }
+
+    /** Econ invariant: whatever the attempt / fail pattern, a week pays at most the cap (and exactly the cap once anything clears). */
+    @Test public void rushWeeklyRewardOutputNeverExceedsTheCap() {
+        Random r = new Random(160);
+        for (int week = 0; week < 20000; week++) {
+            double clearRate = r.nextDouble();
+            int attempts = 1 + r.nextInt(40), claims = 0, paid = 0, clears = 0;
+            for (int a = 0; a < attempts; a++) {
+                if (r.nextDouble() >= clearRate) continue; // a failed attempt: nothing counted, nothing paid
+                clears++;
+                if (EmberRunRules.rushPaysReward(claims, 1)) { paid++; claims++; }
+            }
+            assertTrue("paid " + paid, paid <= 1);
+            assertEquals(clears > 0 ? 1 : 0, paid);
+        }
+    }
 }

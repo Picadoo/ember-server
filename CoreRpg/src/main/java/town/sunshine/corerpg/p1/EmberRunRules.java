@@ -340,6 +340,22 @@ public final class EmberRunRules {
         return (int) Math.floor(cost * Math.min(1.0, share) + 1e-9);
     }
 
+    /**
+     * D160 余烬连战 (boss rush): the WEEKLY REWARD is claimed once, attempts are unlimited and free. {@code claims} = reward
+     * claims settled this week (the {@code p4_rush_claim} counter), {@code legacyClear} = a pre-D160 clear this week (the
+     * old rule counted entries, not clears; its clear is on the weekly time board), so the switch-over week never pays twice.
+     */
+    public static int rushClaims(int claims, boolean legacyClear) { return Math.max(Math.max(0, claims), legacyClear ? 1 : 0); }
+
+    /** D160: does a settled rush clear pay the weekly reward (marks / 余烬徽)? false = practice clear (no reward). */
+    public static boolean rushPaysReward(int claimsThisWeek, int weeklyClaims) { return weeklyClaims > 0 && claimsThisWeek < weeklyClaims; }
+
+    /** D160: one-line weekly state for menus / chat, e.g. 「本周奖励未领 · 失败可无限重试」. */
+    public static String rushWeekText(int claimsThisWeek, int weeklyClaims) {
+        return rushPaysReward(claimsThisWeek, weeklyClaims) ? "本周奖励未领 · 失败可无限重试，不扣任何东西"
+                : "本周奖励已领 · 可以继续练习（无奖励），周一 0 点重置";
+    }
+
     /** D32: potions refunded for the first death of the day = used in that run, capped by config (max <= 0 = off). */
     public static int deathRefundCount(int used, int max) { return max <= 0 ? 0 : Math.max(0, Math.min(used, max)); }
 

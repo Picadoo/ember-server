@@ -190,7 +190,7 @@ Icons:
         - '§f 2. %corerpg_p1_sboard_s_time_rush_2%'
         - '§f 3. %corerpg_p1_sboard_s_time_rush_3%'
         - '§7你：§f%corerpg_p1_srank_s_time_rush%'
-        - '§8每周 1 次，从第一个首领现身算到第三个倒下'
+        - '§8从第一个首领现身算到第三个倒下 · 每周首通领奖，之后的练习局也算成绩'
         - ''
         - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
     actions:

@@ -672,12 +672,13 @@ maps:
 
 # D144 余烬连战 (weekly boss rush, content batch 10-04): the Q05 → Q06 → Q07 bosses back-to-back with their D140 moves
 # in the Q05 boss hall (template ember_daily_spire_v1, own DP dungeon EmberQ0B1). No rooms, no mobs, no extra event,
-# no variety. Opened by the own Q07 first clear; 1–3 players; free (cost 0) but one ENTRY per character and week (counted
-# when the first boss shows up; an instance that never got that far gives the entry back). Each boss is the normal
+# no variety. Opened by the own Q07 first clear; 1–3 players; free (cost 0). D160 (feedback 10-04): unlimited attempts —
+# a failed / fallen run costs nothing; the REWARD is claimed once per character and week (counter p4_rush_claim, the
+# first settled clear of the week); later clears that week are practice (no reward, still on the time board). Each boss is the normal
 # map's boss (`chain`: same moves / warnings) × boss_hp HP and × boss_dmg damage (party HP 1 + 0.65 (n − 1) as usual);
 # between bosses break_secs of rest and everyone standing heals `heal` of max HP (no revive: like a normal map, a fallen
 # member watches and the run fails when nobody is standing).
-# Reward per settled clear (no coin, items, shards or bounty): reward.marks T3 marks + reward.badges 余烬徽; the first
+# Reward = the week's first settled clear (no coin, items, shards or bounty): reward.marks T3 marks + reward.badges 余烬徽; the first
 # clear ever also the cosmetic title reward.title. Weekly fastest board time_rush (season award = 最快通关 title).
 # Model: tools/p1sim/rushsim.py (clear rate), tools/p1sim/p2econ.py --rush (the weekly marks on the two-极品 route).
 rush:
@@ -691,7 +692,7 @@ rush:
     map_version: ember_daily_spire_v1@b2151-2026-10-02
     requires: q07
     unlocks: ""
-    purpose: "每周一次的首领连战：Q05 断塔斧卫 → Q06 霜封统领 → Q07 炉锁巨卫，同一大厅连打；只给 T3 印记、余烬徽和外观称号"
+    purpose: "每周首通领奖、失败可无限重试的首领连战：Q05 断塔斧卫 → Q06 霜封统领 → Q07 炉锁巨卫，同一大厅连打；只给 T3 印记、余烬徽和外观称号"
     b_ref: 90
     party_min: 1
     party_max: 3
