@@ -71,6 +71,7 @@ def main():
     ap.add_argument('--abyss-fees')
     ap.add_argument('--forge-first', action='store_true', help='abyss players forge each morning before tier fees')
     a = ap.parse_args()
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     p2econ.ABYSS_FORGE_FIRST = a.forge_first
     if a.abyss_fees:
         p2econ.set_abyss(fees=a.abyss_fees)

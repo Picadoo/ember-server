@@ -7,13 +7,13 @@ Also imported by p2econ (rush_rate) for the weekly rush slot.
 """
 import argparse, copy, os, random, statistics, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import p1config, p1sim, miniyaml
+import p1config, p1sim, miniyaml, rules
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
 
 
 def rush_conf():
-    r = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('rush') or {}
+    r = rules.runs().get('rush') or {}
     out = {}
     for k, v in r.items():
         if isinstance(v, dict) and v.get('chain'):
@@ -25,7 +25,7 @@ def rush_conf():
 
 def run_rush(cfg, rc, st, kn, rng, potions):
     """One rush entry. Returns (cleared, seconds, potions used, bosses killed)."""
-    f = p1sim.Fight(cfg, st, kn, rng, potions)
+    f = p1sim.Fight(cfg, st, kn, p1sim.random.Random(rng.getrandbits(64)), potions)  # M02: fixed draws per entry
     for i, key in enumerate(rc['chain']):
         md = copy.deepcopy(cfg['maps'][key])
         b = md['boss']
@@ -63,6 +63,7 @@ def main(argv=None):
     ap.add_argument('--dmg', type=float)
     ap.add_argument('--n', type=int, default=2000)
     a = ap.parse_args(argv)
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     cfg = p1config.load('current')
     rc = rush_conf()
     if not rc:

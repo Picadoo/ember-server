@@ -41,6 +41,7 @@ def main():
     ap.add_argument('--scale-hp', type=float, default=1.0)
     ap.add_argument('--scale-atk', type=float, default=1.0)
     a = ap.parse_args()
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     cfg = p1config.load()
     ccfg = scaled(p2econ.challenge_cfg(cfg), a.scale_hp, a.scale_atk)
     print('# chrate: challenge clear rate at the Q07 first clear (%d players/dodge, %d runs per map, hp ×%.2f atk ×%.2f)'

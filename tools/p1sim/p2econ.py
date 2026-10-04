@@ -9,11 +9,11 @@ T3 marks earned and the mark share of total T3 items. Standard library only; rea
 """
 import argparse, copy, os, random, statistics, sys
 sys.path.insert(0, os.path.dirname(__file__))
-import p1config, p1sim, miniyaml
+import p1config, p1sim, miniyaml, rules
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 # P2-1 parameter source (D66): ember-v1-runs.yml `rotation:`
-_ROT = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('rotation', {'bonus_marks': 0, 'weekly_cap': 0})
+_ROT = rules.runs().get('rotation', {'bonus_marks': 0, 'weekly_cap': 0})
 ROT = {k: int(v) for k, v in _ROT.items() if k in ('bonus_marks', 'weekly_cap')}
 # P2-8 (D80) weekly rules on the featured map's challenge runs (potion cap / role remap / room 1↔3 swap)
 MODS = list(_ROT.get('modifiers') or [])
@@ -42,7 +42,7 @@ def mod_cfg(ccfg, key, mod):
 
 
 def challenge_cfg(cfg):
-    ch = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'))['challenge']
+    ch = rules.runs()['challenge']
     c = copy.deepcopy(cfg)
     c['quality_w'] = ch['quality']
     for key, m in c['maps'].items():
@@ -61,12 +61,12 @@ def challenge_cfg(cfg):
     return c
 
 
-ABYSS = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('abyss', {}).get('tiers', [])
+ABYSS = rules.runs().get('abyss', {}).get('tiers', [])
 # F-review #5 (D124): surplus T3 marks (above the 8 kept back) may pay the abyss fee at this many coins per mark (0 = off)
-FEE_MARK = int(miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('abyss', {}).get('fee_mark_coin', 0) or 0)
+FEE_MARK = int(rules.runs().get('abyss', {}).get('fee_mark_coin', 0) or 0)
 MARK_RESERVE = 8
 # Endgame #6 (D128): the first failed challenge / abyss run of the day gives back this share of its stamina (0 = off)
-FAIL_REFUND = float(miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('fail_refund', 0) or 0)
+FAIL_REFUND = float(rules.runs().get('fail_refund', 0) or 0)
 
 # §5.3 craft (精工) / quality (成色) coin sinks — EmberUpgradeRules.refineCost / qualityCost (coin only; mats assumed)
 # craft index 0/1/2/3 = 0/2/4/6%; quality 0→1 / 1→2 only (q≥2 = 极品, drop-only). Two worn T3 pieces full ≈ 9k.
@@ -259,17 +259,30 @@ def raid_once(cfg, ccfg, kn, p, rng, w, want=1):
 RUSH = None  # D144 余烬连战 (rushsim.rush_conf()); None = off
 
 
+RUSH_TRIES = 1  # D160: attempts per week (the reward is still claimed once); 1 = the D144 one-entry rule
+
+
 def rush_week(cfg, kn, p, rng):
-    """D144: the week's one free rush entry (solo, the player's own gear); a clear pays the rush T3 marks."""
+    """D144: the week's free rush (solo, the player's own gear); a clear pays the rush T3 marks.
+    D160 (--rush-tries N): up to N free attempts per week until the first clear; the reward is paid ONCE per week
+    (practice clears after it pay nothing, so they are not simulated)."""
     if not RUSH:
         return 0
     import rushsim
-    ok, _, used, _ = rushsim.run_rush(cfg, RUSH, p.st(), kn, rng, p.potions)
-    p.potions = max(0, p.potions - used)
-    if ok:
-        p.marks[3] += RUSH['marks']
-        p.invest()
-    return int(ok)
+    for _ in range(max(1, RUSH_TRIES)):
+        ok, _, used, _ = rushsim.run_rush(cfg, RUSH, p.st(), kn, rng, p.potions)
+        p.potions = max(0, p.potions - used)
+        RUSH_STATS['tries'] += 1
+        if ok:
+            p.marks[3] += RUSH['marks']
+            RUSH_STATS['paid'] += 1
+            p.invest()
+            return 1
+    RUSH_STATS['unpaid_weeks'] += 1
+    return 0
+
+
+RUSH_STATS = {'tries': 0, 'paid': 0, 'unpaid_weeks': 0}
 
 
 GOALS = {'featured': 1, 'abyss': 3, 'raid': 1}  # D116 weekly goals that change what a player does (rewards: cosmetic only)
@@ -464,7 +477,7 @@ def buy_listing(p, ccfg, rng):
     return True
 
 
-RUNS = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'))
+RUNS = rules.runs()
 RAIDS = RUNS.get('raids', {})
 # P2-5/P2-6: party clear rate by week after Q07 (tools/p1party.py, 4-player median of r01 / r02 at boss HP 13000:
 # week 2 ≈ 0.40, week 4 ≈ 0.76); weeks in between interpolated, capped at week 4's value.
@@ -666,8 +679,10 @@ def main():
     ap.add_argument('--no-variety', action='store_true', help='D138: without the repeat-run variety (affixed elite + room event)')
     ap.add_argument('--no-vbounty', action='store_true', help='D144: without the 花样委托 daily variety bounty')
     ap.add_argument('--rush', action='store_true', help='D144: the weekly 余烬连战 (one free entry, T3 marks on a clear)')
+    ap.add_argument('--rush-tries', type=int, default=1, help='D160: free 余烬连战 attempts per week until the first clear (reward still once a week)')
     ap.add_argument('--abyss-forge-first', action='store_true', help='abyss players buy craft/quality steps each morning before tier fees')
     a = ap.parse_args()
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     global ABYSS_FORGE_FIRST
     ABYSS_FORGE_FIRST = a.abyss_forge_first
     global FORGE_SINK
@@ -677,7 +692,8 @@ def main():
         p1sim.VARIETY = False
     if a.no_vbounty:
         p1sim.VBOUNTY = False
-    global RUSH
+    global RUSH, RUSH_TRIES
+    RUSH_TRIES = a.rush_tries
     if a.rush:
         import rushsim
         RUSH = rushsim.rush_conf() or None
@@ -773,6 +789,13 @@ def main():
             n, b, v = stats.get(m['id'], [0, 0.0, 0.0])
             print('| %s %s | %d | %d%% | %d%% | %+d 点 |' % (m['id'], m.get('name', ''), n, round(100 * b / max(1, n)),
                                                        round(100 * v / max(1, n)), round(100 * (v - b) / max(1, n))))
+    if RUSH:
+        rw = RUSH_STATS['paid'] + RUSH_STATS['unpaid_weeks']
+        print()
+        print('D160 余烬连战（每人每周最多 %d 次尝试，奖励每周最多 1 次）：玩家-周 %d · 尝试 %d · 领奖周 %d（%.1f%%）· T3 印记 %d（每周上限 %d）'
+              % (RUSH_TRIES, rw, RUSH_STATS['tries'], RUSH_STATS['paid'], 100.0 * RUSH_STATS['paid'] / max(1, rw),
+                 RUSH_STATS['paid'] * RUSH['marks'], RUSH['marks']))
+        assert RUSH_STATS['paid'] <= rw, 'more rush rewards than player-weeks'
 
 if __name__ == '__main__':
     main()

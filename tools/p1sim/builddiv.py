@@ -19,7 +19,7 @@ Writes tools/p1sim/out-build-diversity-<mode>.md. Sims measure numbers, not fun:
 import copy, itertools, json, math, os, random, statistics, sys
 from multiprocessing import Pool
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import p1config, p1sim, p2econ, growth, festsim, p1party, miniyaml
+import p1config, p1sim, p2econ, growth, festsim, p1party, miniyaml, rules
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FAMS = ('scorch', 'burst', 'sustain')
@@ -48,7 +48,7 @@ def cfgs():
         _CFG['c'] = p2econ.challenge_cfg(c)
         _CFG['g'] = growth.load()
         _CFG['fest'] = festsim.charm_of(festsim.fest_cfg())
-        _CFG['bv'] = miniyaml.load(os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('balance_version')
+        _CFG['bv'] = rules.runs().get('balance_version')
     return _CFG
 
 
@@ -583,7 +583,7 @@ def raid_measure(job):
     c = cfgs()
     cfg = c['n']
     m = p1party.raid_map(cfg, key)
-    rr = (miniyaml.load(os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('raid_revive') or {})
+    rr = (rules.runs().get('raid_revive') or {})
     p1party.LAST_REVIVE_HP = float(rr.get('last_phase_hp', 0)); p1party.LAST_REVIVE_DELAY = float(rr.get('delay', 10))
     mates = spec.get('mates', ['burst', 'sustain', 'scorch', 'burst'])
     sts, kns = [], []

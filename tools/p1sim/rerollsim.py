@@ -52,6 +52,7 @@ def main():
     ap.add_argument('--seed', type=int, default=1)
     ap.add_argument('--lock-shard', type=int, default=120, help='extra shards per locked roll at T3')
     a = ap.parse_args()
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     rng = random.Random(a.seed)
     names = ['标准', '精良', '卓越', '极品']
     print('# rerollsim — chosen affix at the quality cap (T3 item: 120 shards + 1000 coins per roll, lock +%d shards)\n' % a.lock_shard)

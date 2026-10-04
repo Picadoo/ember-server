@@ -14,7 +14,7 @@ Standard library only.
 """
 import argparse, copy, os, random, statistics, sys
 sys.path.insert(0, os.path.dirname(__file__))
-import p1config, p1sim, p2econ, miniyaml
+import p1config, p1sim, p2econ, miniyaml, burnbook, rules
 
 ROOT = os.path.join(os.path.dirname(__file__), '..', '..')
 SPLASH = {'cone': 0.45, 'line': 0.45, 'charge': 0.45, 'circle': 0.30}
@@ -28,15 +28,20 @@ def hp_factor(n, k=None):
 
 
 class Member:
-    def __init__(self, cfg, st, kn, potions):
-        self.st, self.kn = st, kn
+    def __init__(self, cfg, st, kn, potions, rng):
+        """rng: the entry's setup stream (M01: explicit, never the module-level random)"""
+        self.st, self.kn, self.cfg = st, kn, cfg
         self.hp = st['H']
         self.potions, self.used = potions, 0
         self.pcd = 0.0
         self.hits = 0
         self.burst_cd = self.sus_cd = 0.0
-        self.next_swing = 1.0 + random.random() * 0.5
+        self.next_swing = 1.0 + rng.random() * 0.5
         self.next_skill = 1.0
+        # M03: each player has an own EmberSetEngine / EmberBurnBook (EmberSetService.Session), so two 焚烬 players on
+        # one target both tick, each with its own snapshot and schedule
+        self.burns = burnbook.BurnBook(burnbook.TICKS + max(0, int(p1sim.gm(st, 'burn_ticks', 0))))
+        self.btgt, self.spread_keys, self.spread_cd = {}, set(), -1.0
 
     def alive(self):
         return self.hp > 0
@@ -82,6 +87,8 @@ class Party:
             if kind == 'tele' and p1sim.gm(st, 'hit_burst', 0.0) > 0:  # D141 反震
                 m.hits += int(p1sim.gm(st, 'hit_burst', 0.0))
         m.hp -= raw * m.st['M']
+        if m.hp <= 0:
+            m.burns.clear(); m.btgt.clear()  # a fallen player's burns end (EmberSetService.onDeath → clearCombat)
         if 0 < m.hp < kn.potion_at * m.st['H'] and m.potions > 0 and self.t >= m.pcd:
             m.potions -= 1; m.used += 1
             m.pcd = self.t + cfg['potion_cd']
@@ -116,6 +123,9 @@ class Party:
         for m in self.ms:
             m.next_swing = max(m.next_swing, t + 1.0)
         while True:
+            for m in self.ms:  # D141 燎原, per player (EmberSetService.onMobDeath loops every session)
+                if m.alive() and len(m.burns) and m.st.get('mods') and p1sim.gm(m.st, 'burn_spread', 0) > 0:
+                    p1sim.spread_burn(m, mobs, t)
             alive = [x for x in mobs if x['hp'] > 0]
             if not alive:
                 self.t = t
@@ -143,13 +153,12 @@ class Party:
             if getattr(self, '_last_at', None) is not None and not getattr(self, '_last_rev', False) and self._last_at > t:
                 cand.append(self._last_at)
             cand += [s['next'] for s in skills] + [p[0] for p in pending]
+            cand += [nd / 1000.0 for nd in (m.burns.next_due() for m in liv) if nd is not None]
             tn = min(cand)
-            for m in liv:  # 焚烬 burn ticks (owner's B)
-                if m.st['set'] == 'scorch':
-                    for x in alive:
-                        if x.get('burn_by') is m and x['burn'] > t:
-                            x['hp'] -= cfg['burn'][m.st['awk']] * p1sim.gm(m.st, 'burn_mult') * p1sim.gm(m.st, 'set_dmg') * p1sim.dmult(m.st, x, t, m) * m.st['B'] * (min(tn, x['burn']) - t)
             t = self.t = tn
+            for m in liv:  # M03: every player's own burn ticks due now (discrete, snapshot; EmberSetService.burnTick)
+                if len(m.burns):
+                    p1sim.burn_ticks(m, t)
             if p1sim.FEST:  # D139 burn kills (credited to the first living member: one burst per kill step)
                 p1sim.fest_proc(liv[0], alive, t, liv[0].st['B'], liv[0].kn.skill_hits)
             sw = next((m for m in liv if m.next_swing == t), None)
@@ -158,7 +167,7 @@ class Party:
                 m.next_swing = t + m.kn.swing / m.kn.uptime
                 tgt = alive[0]  # focus fire
                 dm = lambda x: p1sim.dmult(st, x, t, m)
-                tgt['hp'] -= st['B'] * (cfg['crit_mult'] if rng.random() < cfg['crit_rate'] else 1.0) * dm(tgt)
+                tgt['hp'] -= st['B'] * (cfg['crit_mult'] if self.crit_rng.random() < cfg['crit_rate'] else 1.0) * dm(tgt)
                 m.hits += 1
                 if t >= m.next_skill:
                     for x in alive[:m.kn.skill_hits]:
@@ -173,7 +182,7 @@ class Party:
                         x['hp'] -= cfg['burst'][st['awk']] * p1sim.gm(st, 'burst_mult') * bm * p1sim.gm(st, 'set_dmg') * st['B'] * dm(x)
                     m.hits = 0; m.burst_cd = t + cfg['burst_icd']
                 elif st['set'] == 'scorch' and m.hits >= cfg['scorch_every']:
-                    tgt['burn'] = t + 4.0 + p1sim.gm(st, 'burn_ticks', 0); tgt['burn_by'] = m; m.hits = 0
+                    p1sim.ignite(m, tgt, t); m.hits = 0
                 elif st['set'] == 'sustain' and m.hits >= p1sim.sustain_every(cfg, st, m.hp) and t >= m.sus_cd:
                     sm = p1sim.gm(st, 'sustain_mult') * (p1sim.gm(st, 'sustain_low_mult') if m.hp < p1sim.gm(st, 'sustain_low', 0.0) * st['H'] else 1.0)
                     m.hp = min(st['H'], m.hp + cfg['sustain_pct'][st['awk']] * sm * st['H'])
@@ -183,7 +192,7 @@ class Party:
                 if boss is not None and not adds_done and 'adds' in mapdef['boss'] and 0 < boss['hp'] <= mapdef['boss']['adds']['at_hp'] * boss['max']:
                     adds_done = True
                     for _ in mapdef['boss']['adds']['points']:
-                        a = p1sim.mob(cfg, mapdef, mapdef['boss']['adds']['role'], rng, liv[0].kn, t + 1.0)
+                        a = p1sim.mob(cfg, mapdef, mapdef['boss']['adds']['role'], self.spawn_rng, liv[0].kn, t + 1.0)
                         a['hp'] *= self.hpf
                         mobs.append(a)
                 if p1sim.FEST:  # D139 festival charm: every member wears one (own cooldown each)
@@ -227,10 +236,14 @@ LAST_REVIVE_HP, LAST_REVIVE_DELAY = 0.25, 10.0  # D118 (ember-v1-runs.yml raid_r
 
 
 def run_party(cfg, m, sts, kns, rng, potions=5):
-    """One raid entry with len(sts) members. Returns (cleared, seconds, deaths, potions used)."""
+    """One raid entry with len(sts) members. Returns (cleared, seconds, deaths, potions used, boss seconds).
+    M02: own streams for layout + first swings / incoming hits / crits / mid-fight spawns, drawn up front (the caller's
+    rng advances by exactly 4)."""
     n = len(sts)
-    ms = [Member(cfg, st, kn, potions) for st, kn in zip(sts, kns)]
-    P = Party(cfg, ms, rng)
+    setup, hits, crits, spawns = (random.Random(rng.getrandbits(64)) for _ in range(4))
+    ms = [Member(cfg, st, kn, potions, setup) for st, kn in zip(sts, kns)]
+    P = Party(cfg, ms, hits)
+    P.crit_rng, P.spawn_rng = crits, spawns
     P.revive_on = REVIVE
     P.hpf = hpf = hp_factor(n, m.get('hp_per_member'))
     dmf = 1.0 + m.get('dmg_per_member', 0.0) * (n - 1)  # raid-only: enemy damage per extra member (role-less parties)
@@ -243,11 +256,11 @@ def run_party(cfg, m, sts, kns, rng, potions=5):
             sk['dmg'] *= dmf
     for rk in ('r1', 'r2', 'r3'):
         room = m['rooms'][rk]
-        comp = room['a'] if rng.random() < 0.5 else room['b']
+        comp = room['a'] if setup.random() < 0.5 else room['b']
         mobs = []
         for role, k in comp.items():
             for _ in range(k):
-                x = p1sim.mob(cfg, m, role, rng, kns[0], P.t)
+                x = p1sim.mob(cfg, m, role, setup, kns[0], P.t)
                 x['hp'] *= hpf
                 mobs.append(x)
         P.revive(P.t)  # D106: next room starts
@@ -255,7 +268,7 @@ def run_party(cfg, m, sts, kns, rng, potions=5):
             return False, P.t, n - len(P.living()), sum(x.used for x in ms), 0.0
     b = m['boss']
     boss = {'hp': b['hp'] * hpf, 'max': b['hp'] * hpf, 'atk': b['atk'], 'iv': b.get('interval', 3.0), 'role': 'boss',
-            'next': P.t + 2.0, 'tele': False, 'burn': 0.0}
+            'next': P.t + 2.0, 'tele': False, 'uid': next(p1sim._UID)}
     t0 = P.t
     P.revive(P.t)  # D106: the boss appears
     ok = P.segment([boss], boss=boss, mapdef=m)
@@ -282,19 +295,33 @@ def player_pool(cfg, n, weeks, dodge, seed0=7000):
 
 
 def raid_map(cfg, key='r01'):
-    runs = miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'))
-    return copy.deepcopy(runs['raids'][key])
+    return copy.deepcopy(rules.runs()['raids'][key])  # M06: the canonical rule snapshot
+
+
+def rosters(seed, n, trials, pool_size):
+    """M02: the party line-ups (pool indices) for `trials` entries of size n — a function of (seed, n) only, so every
+    compared config fights with exactly the same members in the same entries"""
+    r = random.Random('%s:roster:%d:%d' % (seed, n, pool_size))
+    return [r.sample(range(pool_size), n) for _ in range(trials)]
+
+
+def entry_rng(seed, n, i):
+    """M02: entry i's own stream (layout / hits / crits / spawns are split from it in run_party)"""
+    return random.Random('%s:entry:%d:%d' % (seed, n, i))
 
 
 def evaluate(cfg, m, pool, sizes, trials, rng):
+    """rng: only one draw is taken (the base seed); line-ups and entry streams derive from it (M02). Each size's
+    result carries `wins` (per entry, in line-up order) for paired confidence intervals."""
+    seed = rng.getrandbits(64)
     out = {}
     for n in sizes:
         res = []
-        for _ in range(trials):
-            grp = rng.sample(pool, n)
-            res.append(run_party(cfg, m, [g[0] for g in grp], [g[1] for g in grp], rng))
+        lu = rosters(seed, n, trials, len(pool))
+        for i, grp in enumerate(lu):
+            res.append(run_party(cfg, m, [pool[j][0] for j in grp], [pool[j][1] for j in grp], entry_rng(seed, n, i)))
         ok = [r for r in res if r[0]]
-        out[n] = {'rate': len(ok) / len(res),
+        out[n] = {'rate': len(ok) / len(res), 'wins': [1 if r[0] else 0 for r in res], 'lineup': __import__('hashlib').sha1(str(lu).encode()).hexdigest()[:10],
                   'secs': statistics.median(r[1] for r in ok) if ok else None,
                   'boss_secs': statistics.median(r[4] for r in ok) if ok else None,
                   'deaths': statistics.mean(r[2] for r in res),
@@ -318,9 +345,10 @@ def main():
     ap.add_argument('--last-revive-hp', type=float, default=None, help='D118: extra last-phase revive at this boss HP ratio (0 = off)')
     ap.add_argument('--last-revive-delay', type=float, default=None, help='D118: seconds from arming to the extra revive')
     a = ap.parse_args()
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     global REVIVE, LAST_REVIVE_HP, LAST_REVIVE_DELAY
     REVIVE = not a.no_revive
-    rr = (miniyaml.load(os.path.join(ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('raid_revive') or {})
+    rr = (rules.runs().get('raid_revive') or {})
     LAST_REVIVE_HP = float(rr.get('last_phase_hp', 0)) if a.last_revive_hp is None else a.last_revive_hp
     LAST_REVIVE_DELAY = float(rr.get('delay', 10)) if a.last_revive_delay is None else a.last_revive_delay
     if a.no_revive:

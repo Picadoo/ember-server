@@ -4,6 +4,7 @@ import os
 import re
 
 import miniyaml
+import rules  # M06: every rule input comes from the one canonical snapshot
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 P1 = 'CoreRpg/src/main/java/town/sunshine/corerpg/p1/'
@@ -76,16 +77,14 @@ def _read(rel):
 
 
 def load(profile='current'):
-    runs = miniyaml.load(os.path.join(ROOT, FILES['runs']))
-    runs_src = miniyaml.load(os.path.join(ROOT, FILES['runs_src']))
-    p1 = miniyaml.load(os.path.join(ROOT, FILES['p1']))
-    mm = miniyaml.load(os.path.join(ROOT, FILES['mm']))
-    cash = miniyaml.load(os.path.join(ROOT, FILES['cash']))
-    prog = miniyaml.load(os.path.join(ROOT, FILES['progress']))
-    up, st, se, tb = (_read(FILES[k]) for k in ('upgrade', 'sets', 'settle', 'tables'))
+    # M06: one canonical snapshot (rules.py): a plugins/ vs src runs mismatch is a hard RuleError there, not a warning
+    runs = rules.runs()
+    p1 = rules.data('p1')
+    mm = rules.data('mm')
+    cash = rules.data('cash')
+    prog = rules.data('progress')
+    up, st, se, tb = (rules.java(k) for k in ('upgrade', 'sets', 'settle', 'tables'))
     warnings = []
-    if runs != runs_src:
-        warnings.append('ember-v1-runs.yml: plugins/ copy differs from CoreRpg/src/main/resources copy (using plugins/)')
 
     t = p1['tables']
     cfg = {

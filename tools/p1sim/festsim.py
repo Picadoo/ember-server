@@ -11,17 +11,13 @@ Standard library only. Usage: python3 festsim.py [--n 2000] [--players 120] [--t
 """
 import argparse, copy, os, random, statistics, sys
 sys.path.insert(0, os.path.dirname(__file__))
-import miniyaml, p1config, p1sim, p1party
+import miniyaml, p1config, p1sim, p1party, rules
 
 FEST_FILE = 'CoreRpg/src/main/resources/ember-v1-festival.yml'
 
 
 def fest_cfg():
-    f = miniyaml.load(os.path.join(p1config.ROOT, FEST_FILE))
-    live = miniyaml.load(os.path.join(p1config.ROOT, 'plugins/CoreRpg/ember-v1-festival.yml'))
-    if live != f:
-        print('WARNING: plugins/CoreRpg/ember-v1-festival.yml differs from the resources copy', file=sys.stderr)
-    return f
+    return rules.festival()  # M06: both copies checked equal (hard error) in rules.py
 
 
 def charm_of(f, **over):
@@ -35,8 +31,7 @@ def charm_of(f, **over):
 
 def event_map(cfg, f):
     m = copy.deepcopy(f['dungeon'])
-    mm = miniyaml.load(os.path.join(p1config.ROOT, 'plugins/MythicMobs/Mobs/EmberFestival.yml')) \
-        if os.path.exists(os.path.join(p1config.ROOT, 'plugins/MythicMobs/Mobs/EmberFestival.yml')) else {}
+    mm = rules.data('mm_fest')
     for role, mob in m['mobs'].items():
         row = mm.get(mob.get('mm'), {})
         if row and row.get('Health') != mob['hp']:
@@ -185,6 +180,7 @@ def main():
     ap.add_argument('--icd', type=float, default=None, help='sweep: override the burst cooldown')
     ap.add_argument('--skip', nargs='*', default=[], choices=['ref', 'band', 'front', 'raid', 'event'])
     a = ap.parse_args()
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     f = fest_cfg()
     over = {}
     if a.coef is not None:

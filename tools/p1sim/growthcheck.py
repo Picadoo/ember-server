@@ -18,6 +18,7 @@ k = args[0]
 builds = [json.loads(a) for a in args[1:]]
 cfg = p1config.load('current'); ccfg = p2econ.challenge_cfg(cfg)
 g = growth.load()
+print('# ' + __import__('rules').stamp(), flush=True)
 
 
 def rates(fam):

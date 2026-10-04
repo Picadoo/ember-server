@@ -18,7 +18,9 @@ key = args[0]
 builds = [json.loads(a) for a in args[1:]]
 cfg = p1config.load()
 g = growth.load()
-rr = (miniyaml.load(os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml')).get('raid_revive') or {})
+import rules
+rr = (rules.runs().get('raid_revive') or {})
+print('#', rules.stamp(), flush=True)
 p1party.LAST_REVIVE_HP = float(rr.get('last_phase_hp', 0)); p1party.LAST_REVIVE_DELAY = float(rr.get('delay', 10))
 ROW3 = {'scorch': 't3a', 'burst': 't3b', 'sustain': 't3c'}
 

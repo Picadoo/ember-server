@@ -11,9 +11,12 @@ import os
 
 import miniyaml
 import p1config
+import burnbook
+import itertools
 
 # P2-8 / D94 weekly rules (rotation.modifiers); `normal: true` rules also hit repeat normal runs of the featured map
-_RUNS = miniyaml.load(os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-runs.yml'))
+import rules
+_RUNS = rules.runs()  # M06 canonical snapshot
 MODS = list((_RUNS.get('rotation') or {}).get('modifiers') or [])
 ROT_CFG = _RUNS.get('rotation') or {}
 
@@ -177,6 +180,13 @@ def power(cfg, st, kn):
 
 # ---------------------------------------------------------------- combat
 
+_UID = itertools.count(1)  # M03: burn-book key of a mob (unique per process; never touches an rng)
+
+
+def uid(m):
+    return m['uid'] if 'uid' in m else m.setdefault('uid', next(_UID))
+
+
 CV = '@cv'  # D158: role key suffix of a mob converted by the week's rule (mod_cfg adds e.g. 'heavy@cv' with its multipliers)
 
 
@@ -186,15 +196,77 @@ def mob(cfg, m, role, rng, kn, t0=0.0):
     base = role[:-len(CV)] if role.endswith(CV) else role
     approach = (1.5 / float(d.get('speed', 1.0))) if base in MELEE_ROLES else 0.5
     out = {'hp': float(d['hp']), 'atk': d['atk'], 'iv': iv, 'role': base,
-           'next': t0 + approach + rng.uniform(0, iv), 'tele': base == 'caster', 'burn': 0.0}
+           'next': t0 + approach + rng.uniform(0, iv), 'tele': base == 'caster', 'uid': next(_UID)}
     if base != role:
         out['converted'] = True
     return out
 
 
+def ignite(owner, tgt, t):
+    """焚烬 trigger on the main target (EmberSetService.ignite): skipped when the swing already killed it; per-tick
+    amount = coef × burn_mult × B, fixed at ignition; a burning target only gets its end moved."""
+    if tgt['hp'] <= 0:
+        return
+    st = owner.st
+    k = uid(tgt)
+    ev = owner.burns.ignite(k, owner.cfg['burn'][st['awk']] * gm(st, 'burn_mult') * st['B'], burnbook.ms(t))
+    owner.btgt[k] = tgt
+    owner.spread_keys.discard(k)
+    if ev is not None:
+        owner.btgt.pop(ev, None)
+
+
+def burn_ticks(owner, t, sink=None):
+    """deal the burn ticks due at t: × set_dmg × the target-class / dodge-window multipliers at tick time
+    (EmberGrowthService.outMult); a dead target's burn is dropped without damage"""
+    st = owner.st
+    for k, amt in owner.burns.due(burnbook.ms(t)):
+        x = owner.btgt.get(k)
+        if x is None or x['hp'] <= 0:
+            owner.burns.remove(k)
+            owner.btgt.pop(k, None)
+            continue
+        dmg = amt * gm(st, 'set_dmg') * dmult(st, x, t, owner)
+        if hasattr(owner, 'hit'):
+            owner.hit(x, dmg, 'spread' if k in owner.spread_keys else 'burn')
+        else:
+            x['hp'] -= dmg
+
+
+def spread_burn(owner, mobs, t):
+    """D141 燎原 (EmberSetService.onMobDeath): a burning enemy that died passes what is left of its burn (at most
+    burn_spread s, same snapshot) to an enemy that is not burning yet (the server: nearest within 4 blocks; the model has
+    no positions: the first one in the room list), at most once per spread_icd s."""
+    st = owner.st
+    for m in mobs:
+        if m['hp'] <= 0 and not m.get('_spread_seen_%d' % id(owner)):
+            m['_spread_seen_%d' % id(owner)] = True
+            k = m.get('uid')
+            if k is None or owner.burns.get(k) is None or t < owner.spread_cd:
+                continue
+            nxt = next((x for x in mobs if x['hp'] > 0 and owner.burns.get(uid(x)) is None), None)
+            if nxt is not None and owner.burns.transfer(k, uid(nxt), burnbook.ms(t), burnbook.ms(gm(st, 'burn_spread', 0))):
+                owner.btgt.pop(k, None)
+                owner.btgt[uid(nxt)] = nxt
+                owner.spread_keys.add(uid(nxt))
+                owner.spread_cd = t + gm(st, 'spread_icd', 0.0)
+                rec = getattr(owner, 'rec', None)
+                if rec is not None:
+                    rec['n_spread'] += 1
+
+
 class Fight:
-    def __init__(self, cfg, st, kn, rng, potions):
+    def __init__(self, cfg, st, kn, rng, potions, crit_rng=None, spawn_rng=None):
+        # M02: rng = incoming hits (dodge rolls); crits and mid-fight spawns (split / boss adds) have own streams, so a
+        # config that changes the number of swings does not shift the dodge rolls (callers without them: derived here)
         self.cfg, self.st, self.kn, self.rng = cfg, st, kn, rng
+        self.crit_rng = crit_rng if crit_rng is not None else random.Random(rng.getrandbits(64))
+        self.spawn_rng = spawn_rng if spawn_rng is not None else random.Random(rng.getrandbits(64))
+        # M03: the player's 焚烬 burns = the Java EmberBurnBook (discrete 1 s ticks, snapshot, refresh = end only, ≤ 5)
+        self.burns = burnbook.BurnBook(burnbook.TICKS + max(0, int(gm(st, 'burn_ticks', 0))))
+        self.btgt = {}          # burn key → mob dict (EmberSetService.burnTargets)
+        self.spread_keys = set()  # RECORD label: burns that arrived by 燎原
+        self.spread_cd = -1.0
         self.hp = st['H']
         self.potions = potions
         self.used = 0
@@ -296,25 +368,14 @@ class Fight:
                 if m['hp'] <= 0 and m.get('split'):
                     n, share, md = m.pop('split')
                     for _ in range(n):
-                        a = mob(cfg, md, 'melee', rng, kn, t + 1.0)
+                        a = mob(cfg, md, 'melee', self.spawn_rng, kn, t + 1.0)
                         a['hp'] *= share
                         a['affix'] = True  # D141: the split adds count as the affixed elite (破缀 / 抗缀)
                         a['split_add'] = True
                         a['affix_kind'] = 'split'
                         mobs.append(a)
-            if st.get('mods') and gm(st, 'burn_spread', 0) > 0:  # D141 燎原: a burning enemy that dies passes its burn on
-                for m in mobs:
-                    if m['hp'] <= 0 and m['burn'] > t and not m.get('_spread'):
-                        m['_spread'] = True
-                        if t < getattr(self, 'spread_cd', -1.0):  # spread_icd: at most once per this many seconds
-                            continue
-                        nxt = next((x for x in mobs if x['hp'] > 0 and x['burn'] <= t), None)
-                        if nxt is not None:  # burn_spread = at most this many seconds of the burn move over
-                            nxt['burn'] = min(m['burn'], t + gm(st, 'burn_spread', 0))
-                            self.spread_cd = t + gm(st, 'spread_icd', 0.0)
-                            if self.rec is not None:
-                                self.rec['n_spread'] += 1
-                                nxt['_spread_burn'] = True
+            if len(self.burns) and st.get('mods') and gm(st, 'burn_spread', 0) > 0:
+                spread_burn(self, mobs, t)  # D141 燎原 (EmberSetService.onMobDeath)
             alive = [m for m in mobs if m['hp'] > 0]
             if not alive:
                 self.t = t
@@ -332,21 +393,20 @@ class Fight:
                 cand.append(s['next'])
             for p in pending:
                 cand.append(p[0])
+            nd = self.burns.next_due()
+            if nd is not None:
+                cand.append(nd / 1000.0)
             tn = min(cand)
-            # burn ticks between t and tn on burning targets
-            if st['set'] == 'scorch':
-                for m in alive:
-                    if m['burn'] > t:
-                        self.hit(m, cfg['burn'][st['awk']] * gm(st, 'burn_mult') * gm(st, 'set_dmg') * dmult(st, m, t, self) * st['B'] * (min(tn, m['burn']) - t),
-                                 'spread' if m.get('_spread_burn') else 'burn')
             t = tn
             self.t = t
+            if len(self.burns):  # M03: discrete burn ticks due now (EmberSetService.burnTick)
+                burn_ticks(self, t)
             if FEST:
                 fest_proc(self, alive, t, st['B'], kn.skill_hits)
             if t == next_swing:
                 next_swing = t + period
                 tgt = alive[0]
-                crit = rng.random() < cfg['crit_rate']
+                crit = self.crit_rng.random() < cfg['crit_rate']
                 self.hit(tgt, st['B'] * (cfg['crit_mult'] if crit else 1.0) * dmult(st, tgt, t, self), 'swing')
                 self.hits += 1
                 hold = getattr(kn, 'hold_skill', False) and boss is not None and t >= getattr(self, 'win_until', -1.0)
@@ -365,8 +425,7 @@ class Fight:
                     self.hits = 0
                     self.burst_cd = t + cfg['burst_icd']
                 elif st['set'] == 'scorch' and self.hits >= cfg['scorch_every']:
-                    tgt['burn'] = t + 4.0 + gm(st, 'burn_ticks', 0)
-                    tgt.pop('_spread_burn', None)
+                    ignite(self, tgt, t)
                     if self.rec is not None:
                         self.rec['n_burn'] += 1
                     self.hits = 0
@@ -385,7 +444,7 @@ class Fight:
                 if boss is not None and not adds_done and 'adds' in mapdef['boss'] and 0 < boss['hp'] <= mapdef['boss']['adds']['at_hp'] * boss['max']:
                     adds_done = True
                     for _ in mapdef['boss']['adds']['points']:
-                        mobs.append(mob(cfg, mapdef, mapdef['boss']['adds']['role'], rng, kn, t + 1.0))
+                        mobs.append(mob(cfg, mapdef, mapdef['boss']['adds']['role'], self.spawn_rng, kn, t + 1.0))
                 if FEST:
                     fest_proc(self, alive, t, st['B'], kn.skill_hits)
                 continue
@@ -469,19 +528,22 @@ def affix_mob(cfg, m, mobs, kind, t0):
 def run_map(cfg, key, st, kn, rng, potions, repeat=False):
     """One entry. Returns (cleared, potions_used, extra, seconds, damage taken, where it died)."""
     m = cfg['maps'][key]
-    f = Fight(cfg, st, kn, rng, potions)
+    # M02: own streams per entry (room layout / incoming hits / crits / mid-fight spawns), all drawn up front, so the
+    # caller's rng advances by exactly 4 per entry whatever happens in the fight (paired configs stay paired)
+    setup, hits, crits, spawns = (random.Random(rng.getrandbits(64)) for _ in range(4))
+    f = Fight(cfg, st, kn, hits, potions, crit_rng=crits, spawn_rng=spawns)
     LAST_FIGHT[0] = f
-    extra = ('none', 'treasure', 'elite', 'chest')[pick(cfg['extra_w'], rng.random())]
+    extra = ('none', 'treasure', 'elite', 'chest')[pick(cfg['extra_w'], setup.random())]
     ar = at = er = None
     if repeat:
-        vseed = rng.getrandbits(32)  # drawn either way so --no-variety keeps the same stream shape
+        vseed = setup.getrandbits(32)  # drawn either way so --no-variety keeps the same stream shape
         if VARIETY and cfg.get('variety'):
             ar, at, er = variety_roll(cfg, vseed)
     LAST_VAR['affix'] = LAST_VAR['event'] = False
     for rk in ('r1', 'r2', 'r3'):
         room = m['rooms'][rk]
-        comp = room['a'] if rng.random() < 0.5 else room['b']
-        mobs = [mob(cfg, m, role, rng, kn, f.t) for role, n in comp.items() for _ in range(n)]
+        comp = room['a'] if setup.random() < 0.5 else room['b']
+        mobs = [mob(cfg, m, role, setup, kn, f.t) for role, n in comp.items() for _ in range(n)]
         am = affix_mob(cfg, m, mobs, at, f.t) if rk == ar else None
         t0 = f.t
         if f.rec is not None:
@@ -502,11 +564,11 @@ def run_map(cfg, key, st, kn, rng, potions, repeat=False):
         if rk == er and f.t - t0 <= float(cfg['variety']['event_secs']):
             LAST_VAR['event'] = True
         if m.get('event', {}).get('after') == rk and extra in ('treasure', 'elite'):
-            if not f.segment([mob(cfg, m, extra, rng, kn, f.t)]):
+            if not f.segment([mob(cfg, m, extra, setup, kn, f.t)]):
                 return False, f.used, extra, f.t, f.taken, 'event'
     b = m['boss']
     boss = {'hp': float(b['hp']), 'max': float(b['hp']), 'atk': b['atk'], 'iv': b.get('interval', 3.0), 'role': 'boss',
-            'next': f.t + 2.0, 'tele': False, 'burn': 0.0}
+            'next': f.t + 2.0, 'tele': False, 'uid': next(_UID)}
     if f.rec is not None:
         t0, u0, k0 = f.t, f.used, f.taken
     if not f.segment([boss], boss=boss, mapdef=m):
@@ -544,7 +606,9 @@ def desc(it):
 
 class Player:
     def __init__(self, cfg, kn, rng):
-        self.cfg, self.kn, self.rng = cfg, kn, rng
+        # M02: drops / enhancement rolls get an own stream (one draw from the caller's), so a clear in one config and a
+        # failure in the other does not shift every later entry's layout and combat rolls
+        self.cfg, self.kn, self.rng = cfg, kn, random.Random(rng.getrandbits(64))
         self.blade = item('none', 'blade', 0, src='starter')
         self.charm = item('none', 'charm', 0, src='starter')
         self.coin = self.shard = self.core = self.bone = self.blank = self.xp = 0
@@ -1024,6 +1088,7 @@ def main(argv=None):
     ap.add_argument('--ref', action='store_true', help='clear rate per map at the book §3.2 reference loadout')
     ap.add_argument('--calibrate', action='store_true', help='fit the dodge level against the measured playtests')
     args = ap.parse_args(argv)
+    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
     if args.calibrate:
         grid = args.dodge if args.dodge != [0.3, 0.5, 0.7] else [0.3, 0.4, 0.5, 0.6, 0.7]
         print('| 试玩 | 躲避 | 平均对数误差 | 首通在第几局（中位） |\n|---|---:|---:|---|')

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Unit-ish self-check: config loading, formulas against the book's worked numbers, and simulator sanity."""
+import copy
 import random
 import sys
 
@@ -106,6 +107,110 @@ for i, key in enumerate(cfg['order'], 1):
             want += ['预警 %.1f 秒' % s2['warn'], '伤害 %s' % s2['dmg']]
     bad += ['%s: missing %r' % (key, w) for w in want if w not in txt]
 check('codex menu numbers match MM + runs yml', not bad, '; '.join(bad))
+
+
+# 7. review M01 / M02 / M03 / M06 (docs/reviews/review-gpt-comprehensive-2026-10-04.md §04)
+import ast
+import shutil
+import subprocess
+import tempfile
+import p1party
+import burnbook
+import rules
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+SIM = [x for x in sorted(os.listdir(HERE)) if x.endswith('.py') and x != 'selfcheck.py']
+banned = []
+for fn in SIM:
+    tree = ast.parse(open(os.path.join(HERE, fn), encoding='utf-8').read())
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module == 'random' and any(a.name != 'Random' for a in node.names):
+            banned.append('%s:%d from random import %s' % (fn, node.lineno, ','.join(a.name for a in node.names)))
+        if isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr != 'Random':
+            v = node.func.value
+            if (isinstance(v, ast.Name) and v.id == 'random') or (isinstance(v, ast.Attribute) and v.attr == 'random'):
+                banned.append('%s:%d random.%s()' % (fn, node.lineno, node.func.attr))
+check('M01 no module-level random.* in sim code (only random.Random(seed) instances)', not banned, '; '.join(banned))
+raw = []
+for fn in SIM:
+    if fn in ('rules.py', 'miniyaml.py', 'growth.py', 'apply_2c.py'):
+        continue  # rules.py = the one reader; growth.load(path) = explicit what-if file; apply_2c = a config WRITER
+    for i, line in enumerate(open(os.path.join(HERE, fn), encoding='utf-8'), 1):
+        if 'miniyaml.load(' in line and not line.lstrip().startswith('#'):
+            raw.append('%s:%d' % (fn, i))
+check('M06 no sim reads a rule file directly (all via rules.py)', not raw, ', '.join(raw))
+
+
+def perturb(k):
+    random.seed(k)
+    for _ in range(k):
+        random.random()
+
+
+perturb(3); a = p1sim.simulate_player(cfg, p1sim.Knobs(0.5), 42, 80)
+perturb(17); b = p1sim.simulate_player(cfg, p1sim.Knobs(0.5), 42, 80)
+check('M01 same seed ⇒ same player trajectory, whatever the global random does', a == b)
+pool = p1party.player_pool(cfg, 8, 1, 0.5)
+rm = p1party.raid_map(cfg, 'r01')
+perturb(5); e1 = p1party.evaluate(cfg, rm, pool, (3,), 60, random.Random(11))
+perturb(23); e2 = p1party.evaluate(cfg, rm, pool, (3,), 60, random.Random(11))
+check('M01 same seed ⇒ same raid entries (p1party.Member takes the entry rng)', e1[3]['wins'] == e2[3]['wins'] and e1[3]['secs'] == e2[3]['secs'])
+r1 = random.Random(5); p1sim.run_map(cfg, 'q03', st, p1sim.Knobs(0.2), r1, 3)
+r2 = random.Random(5); [r2.getrandbits(64) for _ in range(4)]
+r3 = random.Random(5); p1sim.run_map(cfg, 'q03', st, p1sim.Knobs(0.9), r3, 3)
+check('M02 one entry advances the caller rng by exactly 4 draws (whatever the fight did)', r1.getstate() == r2.getstate() == r3.getstate())
+check('M02 raid line-ups depend on (seed, size) only', p1party.rosters(99, 3, 40, 8) == p1party.rosters(99, 3, 40, 8) and p1party.rosters(99, 3, 40, 8) != p1party.rosters(98, 3, 40, 8))
+weak_rm = copy.deepcopy(rm); weak_rm['boss']['hp'] *= 0.3
+ew = p1party.evaluate(cfg, weak_rm, pool, (3,), 60, random.Random(11))  # a much easier boss: entries end early
+check('M02 compared configs fight with identical line-ups (easier boss: same members in every entry)',
+      ew[3]['lineup'] == e1[3]['lineup'] and ew[3]['rate'] >= e1[3]['rate'], '%.2f vs %.2f' % (e1[3]['rate'], ew[3]['rate']))
+
+bk1, bk2 = burnbook.BurnBook(), burnbook.BurnBook()
+bk1.ignite('T', 10, 0); bk2.ignite('T', 20, 0)
+t500 = sum(x[1] for x in bk1.due(500) + bk2.due(500)); t1000 = sum(x[1] for x in bk1.due(1000) + bk2.due(1000))
+check('M03 two 焚烬 players on one target: 0 at 500 ms, 10 + 20 at 1000 ms (review R03 / R04)', t500 == 0 and t1000 == 30, '%s / %s' % (t500, t1000))
+jc = subprocess.run([sys.executable, os.path.join(HERE, 'javacheck', 'burncheck.py'), '--scripts', '200'], capture_output=True, text=True)
+if jc.returncode == 2:
+    print('SKIP M03 Java EmberBurnBook == burnbook.py (no javac): ' + jc.stdout.strip())
+else:
+    check('M03 Java EmberBurnBook == burnbook.py on identical event scripts', jc.returncode == 0, jc.stdout.strip().splitlines()[0] if jc.stdout else jc.stderr[-300:])
+sc = dict(st, set='scorch'); two = [sc, dict(sc)]
+kn2 = [p1sim.Knobs(0.5), p1sim.Knobs(0.5)]
+P = p1party.Party(cfg, [p1party.Member(cfg, x, k, 0, random.Random(1)) for x, k in zip(two, kn2)], random.Random(2))
+tgt = p1sim.mob(cfg, cfg['maps']['q03'], 'heavy', random.Random(3), kn2[0])
+for mem in P.ms:
+    p1sim.ignite(mem, tgt, 0.0)
+check('M03 p1party keeps one burn per (player, target)', all(mem.burns.get(tgt['uid']) is not None for mem in P.ms))
+
+s0 = rules.snapshot()
+check('M06 canonical snapshot has a content hash and balance_version', len(s0['hash']) >= 64 and s0['balance_version'] is not None, rules.stamp())
+tmp = tempfile.mkdtemp(prefix='rules-')
+try:
+    rels = [r for pair in rules.PAIRS.values() for r in pair] + list(rules.SINGLE.values()) + list(rules.JAVA.values())
+    for r in rels:
+        if os.path.exists(os.path.join(rules.ROOT, r)):
+            os.makedirs(os.path.dirname(os.path.join(tmp, r)), exist_ok=True)
+            shutil.copy(os.path.join(rules.ROOT, r), os.path.join(tmp, r))
+    src = os.path.join(tmp, rules.PAIRS['runs'][1])
+    txt = open(src, encoding='utf-8').read()
+    open(src, 'w', encoding='utf-8').write(txt.replace('balance_version:', 'balance_version: 9999 #', 1))
+    old_root = rules.ROOT
+    rules.ROOT = tmp
+    try:
+        rules.build(); mism = False
+    except rules.RuleError:
+        mism = True
+    finally:
+        rules.ROOT = old_root
+    check('M06 a plugins/ vs src rule difference is a hard error', mism)
+    bad = copy.deepcopy(s0['data']); bad['growth']['talents']['nodes'][0]['mods'] = {'dmg_everything': 2.0}
+    try:
+        rules.validate(bad); unsup = False
+    except rules.RuleError:
+        unsup = True
+    check('M06 an unsupported growth mod key is a hard error', unsup)
+finally:
+    shutil.rmtree(tmp, ignore_errors=True)
 
 print('\n%d failed' % len(fails))
 sys.exit(1 if fails else 0)

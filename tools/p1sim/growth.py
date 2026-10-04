@@ -13,6 +13,7 @@ import os
 import miniyaml
 import p1config
 import p1sim
+import rules
 
 PATH = os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-growth.yml')
 ADD = {'dodge_secs', 'dodge_heal', 'dodge_icd', 'burn_ticks', 'burst_every', 'sustain_every', 'shard_bonus', 'burn_spread', 'dodge_burst', 'spread_icd', 'hit_burst'}
@@ -21,8 +22,9 @@ ADD_MIN = {'dodge_icd', 'spread_icd'}
 SHARE_W = 'share_w'  # additive over the base 1 (share_w: 2 = one extra portion)
 
 
-def load(path=PATH):
-    return miniyaml.load(path)
+def load(path=None):
+    """M06: the canonical snapshot's growth rules (path: an explicit file only for one-off what-if checks)"""
+    return rules.growth() if path is None else miniyaml.load(path)
 
 
 def combine(parts):
