@@ -50,6 +50,13 @@ for i, (z, sec, b_, w) in enumerate(((1.50, 3, 0.88, 1.0), (1.40, 3, 0.90, 1.10)
     cand('M%d' % i, 'row1', '踏步→闪击 躲开预警招后 %d 秒伤害 ×%.2f / 首领伤害 ×%.2f / 被预警招打中 ×%.2f' % (sec, z, b_, w),
          {'dodge_dmg': z, 'dodge_secs': sec, 'dmg_boss': b_, 'taken_tele': w})
 
+# row 1 round 3 (round 2: F1–F4 lose 5–10pp at q03c d0.5 → boss swings dominate there; smaller swing penalty. W: lower off-window)
+for i, (t, b_) in enumerate(((0.80, 1.05), (0.80, 1.06), (0.85, 1.04), (0.75, 1.08)), 5):
+    cand('F%d' % i, 'row1', '稳桩→铁壁 受首领预警招 ×%.2f / 受首领普攻 ×%.2f' % (t, b_), {'taken_tele': t, 'taken_boss': b_})
+for i, (w, sec, o) in enumerate(((1.30, 2, 0.90), (1.25, 1.5, 0.94)), 5):
+    cand('W%d' % i, 'row1', '回身斩→破绽 首领预警招落下后 %.1f 秒对首领 ×%.2f / 其余时间 ×%.2f（NEW win_*）' % (sec, w, o),
+         {'win_dmg': w, 'win_secs': sec, 'win_out': o})
+
 # row 3 (set-locked: only the matching set) · target metric in brackets
 cand('t3a', 'cur', '现行 燎原', {'burn_spread': 1, 'spread_icd': 15, 'burn_mult': 0.94}, 't3a', sets=('scorch',))
 cand('t3b', 'cur', '现行 反震', {'hit_burst': 1, 'taken_tele': 1.02}, 't3b', sets=('burst',))
@@ -76,6 +83,20 @@ cand('S7', 'set', '炽愈 生命加成 1.00 + 回复 ×0.90', cfg={'sustain_hp':
 cand('S8', 'set', '炽愈 回复 ×0.70', cfg={'sustain_pct': [0, 0.0175, 0.0228, 0.028]}, sets=('sustain',))
 cand('S9', 'set', '炽愈 生命加成 1.06 + 回复冷却 6→7 秒', cfg={'sustain_hp': 1.06, 'sustain_icd': 7.0}, sets=('sustain',))
 cand('S10', 'set', '炽愈 生命加成 1.00 + 回复 ×0.80', cfg={'sustain_hp': 1.00, 'sustain_pct': [0, 0.02, 0.026, 0.032]}, sets=('sustain',))
+
+# row 3 round 3 · 焚烬 slope check; 烬爆 聚爆 with a smaller single-target cost (round 2: solo ≤0.60 slows bosses → q02c −5)
+cand('R3a7', 'row3', '燎原→连锁燃烧 4 秒无冷却 / 每跳 ×0.92 / 对普通怪 ×1.16', {'burn_spread': 4, 'spread_icd': 0, 'burn_mult': 0.92, 'dmg_mob': 1.16}, 't3a', sets=('scorch',))
+for i, (pk, so) in enumerate(((1.35, 0.75), (1.30, 0.80), (1.40, 0.70)), 9):
+    cand('R3b%d' % i, 'row3', '反震→聚爆 烬爆命中 ≥3 个 ×%.2f / 只命中 1 个 ×%.2f（NEW）' % (pk, so), {'burst_pack': pk, 'burst_solo': so}, 't3b', sets=('burst',))
+# 炽愈 row 3 on top of the S2 set nerf (sustain_hp 1.00 → the row-3 "sustain_hp" lever is gone, need another cost)
+S2CFG = {'sustain_hp': 1.00}
+cand('t3cS2', 'cur', '现行 扛核（在 S2 之上）', {'share_w': 1.5, 'sustain_mult': 0.99}, 't3c', cfg=S2CFG, sets=('sustain',))
+cand('R3c7', 'row3', '扛核→回涌 炽愈回复 ×1.20 / 伤害 ×0.95（在 S2 之上）', {'share_w': 1.5, 'sustain_mult': 1.20, 'dmg_boss': 0.95, 'dmg_mob': 0.95}, 't3c', cfg=S2CFG, sets=('sustain',))
+cand('R3c8', 'row3', '扛核→回涌 炽愈回复 ×1.15 / 伤害 ×0.96（在 S2 之上）', {'share_w': 1.5, 'sustain_mult': 1.15, 'dmg_boss': 0.96, 'dmg_mob': 0.96}, 't3c', cfg=S2CFG, sets=('sustain',))
+for _k in ('R3c7', 'R3c8'):
+    C[_k]['base'] = 't3cS2'
+cand('R3c9', 'row3', '扛核→救急 生命 <50% 时炽愈回复 ×1.50 / ≥50% 时 ×0.60（在 S2 之上）', {'share_w': 1.5, 'sustain_low': 0.5, 'sustain_mult': 0.60, 'sustain_low_mult': 2.5}, 't3c', cfg=S2CFG, sets=('sustain',))
+C['R3c9']['base'] = 't3cS2'
 
 # affixes at tier 4 (isolated, vs the current affix at tier 4)
 cand('b_set4', 'cur', '现行 余烬纹 4 档', {'set_dmg': 1.01})
@@ -170,15 +191,6 @@ def arg(name, d, cast=str):
     return cast(sys.argv[sys.argv.index(name) + 1]) if name in sys.argv else d
 
 
-if __name__ == '__main__':
-    mode = sys.argv[1]
-    print('# ' + rules.stamp(), flush=True)
-    if mode == 'screen':
-        screen(arg('--ids', '', lambda s: s.split(',')), arg('--sets', SETS, lambda s: tuple(s.split(','))), arg('--n', 1000, int),
-               arg('--seeds', (7, 11, 13), lambda s: tuple(int(x) for x in s.split(','))), arg('--nfelt', 2000, int),
-               arg('--fseed', 4243, int), arg('--tag', 'screen'), int(os.environ.get('NPROC', '6')))
-
-
 # ---------------------------------------------------------------- analysis
 def cells(R, cid, fam, kind='tol'):
     out = {}
@@ -222,3 +234,106 @@ def felt_cmp(R, cid, base, fam, metric):
 
 def felt_abs(R, cid, fam, metric):
     return {k: v[0].get(metric) for k, v in cells(R, cid, fam, 'felt').items()}
+
+
+# ---------------------------------------------------------------- report
+# reachable tolerance cells (M04): row 1 needs the Q03 first-clear point → Q01–Q03 first clears (r) are unreachable;
+# row 3 needs all 6 points and affixes only roll on T3 gear → challenge cells (c) only; set constants → all 42.
+REACH = {'row1': lambda ck: ck.endswith('c') or ck[:3] in ('q04', 'q05', 'q06', 'q07'),
+         'row3': lambda ck: ck.endswith('c'), 'affix': lambda ck: ck.endswith('c'), 'set': lambda ck: True}
+SETNAME = {'burst': '烬爆', 'scorch': '焚烬', 'sustain': '炽愈'}
+
+
+def tol_reach(R, cid, base, fam, item, lim=3.0):
+    t = {k: v for k, v in tol_cmp(R, cid, base, fam).items() if REACH[item](k[0])}
+    if not t:
+        return None
+    up = max(t.items(), key=lambda x: x[1][0]); dn = min(t.items(), key=lambda x: x[1][0])
+    # seed-clustered spread of the worst cell: max |diff| over the seeds (each seed = an independent run set)
+    return {'up': up[1][0], 'up_at': '%s d%.1f' % up[0], 'dn': dn[1][0], 'dn_at': '%s d%.1f' % dn[0],
+            'in': sum(abs(v[0]) <= lim for v in t.values()), 'n': len(t), 'mean': statistics.mean(v[0] for v in t.values()),
+            'seed_sd': statistics.mean(statistics.pstdev(v[1]) for v in t.values()) if len(next(iter(t.values()))[1]) > 1 else 0.0}
+
+
+def _felt_row(R, cid, base, fam, metric):
+    d = felt_cmp(R, cid, base, fam, metric)
+    return ' '.join('%+.0f' % (100 * d[(c, x)]) if d.get((c, x)) is not None else '—' for c in FELT_CTX for x in DODGES)
+
+
+SECTIONS = (
+    ('行 1（回身斩 / 稳桩 / 踏步回气）', 'row1', {'A': 't1a', 'B': 't1b', 'D': 't1a', 'W': 't1a', 'F': 't1b', 'M': 't1c'},
+     ('t_boss', 'taken', 'k_boss', 'clear')),
+    ('行 3（燎原 / 反震 / 扛核）', 'row3', {'R3a': 't3a', 'R3b': 't3b', 'R3c': 't3c'}, ('t_trash', 't_boss', 'heal_sustain', 'clear')),
+    ('词缀（余烬纹 / 定身纹，4 档）', 'affix', {'E': 'b_set4', 'T': 'c_tele4'}, ('t_boss', 'k_boss', 'potions', 'clear')),
+)
+
+
+def base_of(cid, prefixes):
+    for p in sorted(prefixes, key=len, reverse=True):
+        if cid.startswith(p) and cid[len(p):].isdigit():
+            return prefixes[p]
+    return None
+
+
+def report(pkls, holdout, path):
+    R = {}
+    for p in pkls:
+        R.update(pickle.load(open(p, 'rb')))
+    H = {}
+    for p in holdout:
+        H.update(pickle.load(open(p, 'rb')))
+    L = ['# 成长 sidegrade 模拟（sidegrade.py report）', '', '`' + rules.stamp() + '`', '',
+         '源 pkl：' + ', '.join(os.path.basename(p) for p in pkls) + ('；留出（hold-out）：' + ', '.join(os.path.basename(p) for p in holdout) if holdout else ''), '',
+         '容差 = 各通关率格子（7 图 × 首通 r / 挑战 c × 闪避 0.3/0.5/0.7，种子 7/11/13 各 n=2000）与**被替换的现行节点**之差（pp，配对）。',
+         '“可达格” = M04 规则：行 1 去掉 Q01–Q03 首通（拿不到第 1 点）；行 3 / 词缀只看挑战格（要 6 点 / T3 装）；套装常数看全部 42 格。',
+         '体感 = 相对现行节点的变化（%），列顺序 Q04普通 d0.3/0.5/0.7 · Q07普通 · Q07挑战（n=3000，种子 4243）。', '']
+    for title, item, prefixes, metrics in SECTIONS:
+        L += ['## ' + title, '']
+        ids = [cid for cid in C if C[cid]['item'] == item and base_of(cid, prefixes)]
+        for fam in SETS:
+            rows = []
+            for cid in ids:
+                c = C[cid]; base = c.get('base') or base_of(cid, prefixes)
+                if fam not in c['sets'] or not cells(R, cid, fam) or not cells(R, base, fam):
+                    continue
+                tr = tol_reach(R, cid, base, fam, item); tf = tol_reach(R, cid, base, fam, 'set')
+                hr = tol_reach(H, cid, base, fam, item) if H and cells(H, cid, fam) and cells(H, base, fam) else None
+                rows.append('| %s | %s | %+.1f (%s) / %+.1f (%s) · %d/%d | %+.1f / %+.1f · %d/%d | %s | %s |' % (
+                    cid, c['label'], tr['up'], tr['up_at'], tr['dn'], tr['dn_at'], tr['in'], tr['n'], tf['up'], tf['dn'], tf['in'], tf['n'],
+                    ('%+.1f / %+.1f · %d/%d' % (hr['up'], hr['dn'], hr['in'], hr['n'])) if hr else '—',
+                    ' · '.join('%s %s' % (m, _felt_row(R, cid, base, fam, m)) for m in metrics)))
+            if rows:
+                L += ['### %s（%s 套）' % (SETNAME[fam], fam), '',
+                      '| id | 方案 | 可达格容差 最高/最低 · ±3 内 | 全 42 格 | 留出种子 可达格 | 体感（vs 现行）|', '|---|---|---|---|---|---|'] + rows + ['']
+    L += ['## 炽愈套装常数（全 42 格，平均通关率 %）', '',
+          '| id | 方案 | 首通 r 平均 | 挑战 c 平均 | 体感通关率 Q04n · Q07n · Q07c (d0.3/0.5/0.7) |', '|---|---|---|---|---|']
+    def means(RR, cid, fam):
+        tc = cells(RR, cid, fam)
+        m = lambda e: 100 * statistics.mean(statistics.mean(x['clear'] for x in v) for k, v in tc.items() if k[0].endswith(e))
+        fa = felt_abs(RR, cid, fam, 'clear')
+        return m('r'), m('c'), ' '.join('%.0f' % (100 * fa[(c, d)]) for c in FELT_CTX for d in DODGES if fa.get((c, d)) is not None)
+    for fam, cid in (('burst', 'none'), ('scorch', 'none')):
+        if cells(R, cid, fam):
+            r_, c_, f_ = means(R, cid, fam); L.append('| %s | %s（参照）| %.1f | %.1f | %s |' % (SETNAME[fam], '无成长', r_, c_, f_))
+    for cid in ['none'] + [k for k in C if C[k]['item'] == 'set']:
+        if cells(R, cid, 'sustain'):
+            r_, c_, f_ = means(R, cid, 'sustain')
+            L.append('| %s | %s | %.1f | %.1f | %s |' % (cid, '炽愈 现行' if cid == 'none' else C[cid]['label'], r_, c_, f_))
+    hs = [k for k in C if C[k]['item'] == 'set' and cells(H, k, 'sustain')]
+    if hs and cells(H, 'none', 'sustain'):
+        L += ['', '留出种子：']
+        for cid in ['none'] + hs:
+            r_, c_, f_ = means(H, cid, 'sustain'); L.append('- %s：r %.1f / c %.1f · 体感 %s' % (cid, r_, c_, f_))
+    open(path, 'w').write('\n'.join(L) + '\n')
+    print('wrote', path)
+
+if __name__ == '__main__':
+    mode = sys.argv[1]
+    print('# ' + rules.stamp(), flush=True)
+    if mode == 'screen':
+        screen(arg('--ids', '', lambda s: s.split(',')), arg('--sets', SETS, lambda s: tuple(s.split(','))), arg('--n', 1000, int),
+               arg('--seeds', (7, 11, 13), lambda s: tuple(int(x) for x in s.split(','))), arg('--nfelt', 2000, int),
+               arg('--fseed', 4243, int), arg('--tag', 'screen'), int(os.environ.get('NPROC', '6')))
+    elif mode == 'report':
+        report(arg('--pkl', [], lambda s: s.split(',')), arg('--holdout', [], lambda s: s.split(',')),
+               arg('--out', os.path.join(HERE, 'out-growth-sidegrades.md')))
