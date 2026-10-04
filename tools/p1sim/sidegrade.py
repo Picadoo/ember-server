@@ -158,7 +158,10 @@ def felt_jobs(spec, n, seed):
 
 
 KEEP = ('clear', 'secs', 't_trash', 't_boss', 'k_boss', 'p_boss', 'k_trash', 'potions', 'taken', 'heal_sustain', 'heal_dodge',
-        'n_dodge_tele', 'n_hit_tele', 'minhp_p10', 'share', 't_affix_blazing', 't_affix_split', 't_affix_shield', 'H')
+        'n_dodge_tele', 'n_hit_tele', 'minhp_p10', 'share', 't_affix_blazing', 't_affix_split', 't_affix_shield', 'H',
+        # target metrics added for the hold-out pass (not in the round-1–3 pkls)
+        'boss_win_share', 'window_extra', 'n_burst', 'n_spread', 'n_window', 'n_sustain', 'taken_share', 'heal_potion',
+        'shield_abs', 'shield_given', 'n_skill_ignite', 'n_burn', 'n_dodge_heal')
 
 
 def slim(r):
@@ -221,19 +224,27 @@ def tol_summary(R, cid, base, fam, lim=3.0):
             'mean': statistics.mean(v[0] for v in t.values())}
 
 
+def getm(r, metric):
+    """metric value; 'taken_<cls>' = damage taken from that hit class (× H per run), e.g. taken_tele = boss telegraphs"""
+    if metric.startswith('taken_') and metric != 'taken_share':
+        ts = r.get('taken_share')
+        return None if ts is None or r.get('taken') is None else r['taken'] * ts.get(metric[6:], 0.0)
+    return r.get(metric)
+
+
 def felt_cmp(R, cid, base, fam, metric):
     """{(ctx, dodge): relative change of metric vs base}"""
     a, b = cells(R, cid, fam, 'felt'), cells(R, base, fam, 'felt')
     out = {}
     for key in a:
         if key in b:
-            x, y = a[key][0].get(metric), b[key][0].get(metric)
+            x, y = getm(a[key][0], metric), getm(b[key][0], metric)
             out[key] = None if x is None or not y else x / y - 1
     return out
 
 
 def felt_abs(R, cid, fam, metric):
-    return {k: v[0].get(metric) for k, v in cells(R, cid, fam, 'felt').items()}
+    return {k: getm(v[0], metric) for k, v in cells(R, cid, fam, 'felt').items()}
 
 
 # ---------------------------------------------------------------- report

@@ -164,7 +164,8 @@ def measure(job):
     for k in ('n_window', 'n_sustain_low', 'potions', 'n_burst', 'n_burn', 'n_spread', 'n_sustain', 'n_dodge_heal', 'n_hit_burst', 'n_dodge_tele',
               'n_hit_tele', 'n_fest', 'n_dodge_blaze', 'n_hit_blaze', 'died_boss', 'died_affix', 'died_trash'):
         out[k] = agg[k] / n
-    for k in ('heal_potion', 'heal_sustain', 'heal_dodge'):
+    out['n_skill_ignite'] = agg['n_skill_ignite'] / n  # PROPOSAL set-specific 烬斩 (sidegrade.py)
+    for k in ('heal_potion', 'heal_sustain', 'heal_dodge', 'shield_abs', 'shield_given'):
         out[k] = agg[k] / n / st['H']
     tk = {k[6:]: v for k, v in agg.items() if k.startswith('taken_')}
     tt = sum(tk.values()) or 1.0

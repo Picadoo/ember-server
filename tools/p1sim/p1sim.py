@@ -202,18 +202,51 @@ def mob(cfg, m, role, rng, kn, t0=0.0):
     return out
 
 
-def ignite(owner, tgt, t):
+def ignite(owner, tgt, t, scale=1.0):
     """焚烬 trigger on the main target (EmberSetService.ignite): skipped when the swing already killed it; per-tick
     amount = coef × burn_mult × B, fixed at ignition; a burning target only gets its end moved."""
     if tgt['hp'] <= 0:
         return
     st = owner.st
     k = uid(tgt)
-    ev = owner.burns.ignite(k, owner.cfg['burn'][st['awk']] * gm(st, 'burn_mult') * st['B'], burnbook.ms(t))
+    ev = owner.burns.ignite(k, owner.cfg['burn'][st['awk']] * gm(st, 'burn_mult') * scale * st['B'], burnbook.ms(t))
     owner.btgt[k] = tgt
     owner.spread_keys.discard(k)
     if ev is not None:
         owner.btgt.pop(ev, None)
+
+
+def skill_variant(owner, alive, t, next_swing):
+    """PROPOSAL (growth sidegrades 10-04, not in Java): a set-specific 烬斩 that REPLACES the shared one (book §4.2:
+    replace, never a second active). Same 8 s CD, no crit, does not move the set counter (owner.hits untouched).
+      skill_mult      × the 1.5B coefficient
+      skill_cap       max targets the shape can catch (line = 3)        skill_plus  extra targets vs the 100° arc (circle)
+      skill_ignite    1 = the first skill_ignite_n targets hit are ignited with the 焚烬 burn × skill_burn (EmberBurnBook
+                      refresh rules: a weaker skill_burn poisons the snapshot of an already-burning boss → keep it 1.0)
+      skill_charge    seconds of wind-up: the hit lands after it, no swing meanwhile
+      skill_shield    shield = this × H per target hit (cap skill_shield_max × H), lasts skill_shield_secs, not stacking
+    Row-1 / row-3 growth multipliers apply to the HIT only (dmult), never to the shield size."""
+    st, cfg, kn = owner.st, owner.cfg, owner.kn
+    n = max(1, min(int(gm(st, 'skill_cap', 5)), kn.skill_hits + int(gm(st, 'skill_plus', 0)), 5))
+    caught = alive[:n]
+    ch = gm(st, 'skill_charge', 0.0)
+    for m in caught:
+        owner.hit(m, cfg['skill_mult'] * gm(st, 'skill_mult') * st['B'] * dmult(st, m, t + ch, owner), 'skill')
+    rec = owner.rec
+    if gm(st, 'skill_ignite', 0.0) > 0 and st['set'] == 'scorch':
+        for m in caught[:int(gm(st, 'skill_ignite_n', 5))]:
+            ignite(owner, m, t, gm(st, 'skill_burn'))
+            if rec is not None and m['hp'] > 0:
+                rec['n_skill_ignite'] += 1
+    sh = gm(st, 'skill_shield', 0.0)
+    if sh > 0:
+        got = sum(1 for m in caught) * sh * st['H']
+        owner.shield = max(getattr(owner, 'shield', 0.0) if t < getattr(owner, 'shield_until', -1.0) else 0.0,
+                           min(got, gm(st, 'skill_shield_max', 1.0) * st['H']))
+        owner.shield_until = t + gm(st, 'skill_shield_secs', 5.0)
+        if rec is not None:
+            rec['shield_given'] += owner.shield
+    return next_swing + ch
 
 
 def burn_ticks(owner, t, sink=None):
@@ -331,6 +364,15 @@ class Fight:
                 if rec is not None:
                     rec['n_hit_burst'] += 1
         dmg = raw * self.st['M']
+        if getattr(self, 'shield', 0.0) > 0:  # PROPOSAL 护心斩 (set-specific 烬斩, not in Java): absorbs before HP
+            if self.t < self.shield_until:
+                a = min(self.shield, dmg)
+                self.shield -= a
+                dmg -= a
+                if rec is not None:
+                    rec['shield_abs'] += a
+            else:
+                self.shield = 0.0
         self.hp -= dmg
         self.taken += dmg
         if rec is not None:
@@ -411,8 +453,11 @@ class Fight:
                 self.hits += 1
                 hold = getattr(kn, 'hold_skill', False) and boss is not None and t >= getattr(self, 'win_until', -1.0)
                 if t >= next_skill and not hold:  # hold_skill (behaviour knob): keep 烬斩 for the 破绽窗口
-                    for m in alive[:kn.skill_hits]:
-                        self.hit(m, cfg['skill_mult'] * st['B'] * dmult(st, m, t, self), 'skill')
+                    if st.get('mods') and 'skill_var' in st['mods']:
+                        next_swing = skill_variant(self, alive, t, next_swing)
+                    else:
+                        for m in alive[:kn.skill_hits]:
+                            self.hit(m, cfg['skill_mult'] * st['B'] * dmult(st, m, t, self), 'skill')
                     next_skill = t + cfg['skill_cd']
                 bev = cfg['burst_every'] + int(gm(st, 'burst_every', 0))
                 if st['set'] == 'burst' and self.hits >= bev and t >= self.burst_cd:
