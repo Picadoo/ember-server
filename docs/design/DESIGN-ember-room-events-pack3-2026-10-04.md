@@ -1,6 +1,6 @@
 # Ember Room Events Pack 3：房间事件扩包（D179，设计-only，2026-10-04）
 
-> 状态：**设计定稿，未实现**（本窗只出文档；不碰 CoreRpg Java / `ember-v1-runs.yml` / p1sim / 部署 / 机器人）。
+> 状态：**已实现 CoreRpg 1.65.22** / balance_version 45（`COORD-routine-0141`，2026-10-05）。Stage C p1sim deferred（同 D181/D176）。
 > 前置：D138（限时清房）、D144（花样委托按「房间事件达标」泛型计数）、D171（设计 Pack 2）、D176（Pack 2 上线：词缀 6 + 事件 timed/crystal/escort）。
 > 实现对齐：等 `COORD-mainline-unlocks`（ml-wt）与 `COORD-afk-p1`（p1sim）释放后，找空闲 CoreRpg 窗落地；落地前用离线 sim 过门禁（见 §8）。
 > 源表：`DESIGN-ember-v1.0-P1-source-table.md` 的 D179 行 + §13.xx **本窗不改**（afk-wt 正改该文件）；下一 routine 在 afk 释放后补写。

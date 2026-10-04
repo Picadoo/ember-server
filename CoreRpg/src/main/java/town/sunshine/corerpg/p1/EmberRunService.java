@@ -381,6 +381,9 @@ public final class EmberRunService implements Listener {
         if ("var_event_core".equals(key)) return "限时清房 ";
         if ("var_event_crystal".equals(key)) return "砸余烬晶 ";
         if ("var_event_escort".equals(key)) return "护宝兔 ";
+        if ("var_event_hold".equals(key)) return "占点 ";
+        if ("var_event_beacon".equals(key)) return "护灯 ";
+        if ("var_event_relay".equals(key)) return "传火 ";
         if ("honor_shard".equals(key)) return "勋记 ";
         if (key.startsWith("vb_")) return "花样委托 ";
         return "";

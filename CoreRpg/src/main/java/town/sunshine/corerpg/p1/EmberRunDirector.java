@@ -271,6 +271,9 @@ final class EmberRunDirector {
         }
         moltenTick(now);
         if (!crystalBlocks.isEmpty()) pollCrystals();
+        if (eventStart > 0 && activeRoom != null && activeRoom.equals(s.eventRoom) && !eventFailed && !s.eventDone) {
+            tickPack3Events(now);
+        }
         if (eventStart > 0 && !eventWarned && activeRoom != null && activeRoom.equals(s.eventRoom)) {
             String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
             int lim = svc.maps().variety.eventLimit(kind);
@@ -386,12 +389,22 @@ final class EmberRunDirector {
             eventFailed = false;
             String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
             EmberRunMaps.Variety v = svc.maps().variety;
+            lastEventTickMs = eventStart;
             if ("crystal".equals(kind)) {
                 placeCrystals(r, v.crystalCount);
                 svc.tellRun(s, "§b砸余烬晶 §7· 砸掉本房 " + v.crystalCount + " 块发光晶再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
             } else if ("escort".equals(kind)) {
                 spawnEscort(r, v);
                 svc.tellRun(s, "§b护宝兔 §7· 清房前别让发光小兔倒下 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else if ("hold".equals(kind)) {
+                placeHold(r, v);
+                svc.tellRun(s, "§b占点 §7· 站进发光圈攒满进度再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else if ("beacon".equals(kind)) {
+                placeBeacon(r, v);
+                svc.tellRun(s, "§b护灯 §7· 清房前别让发光灯柱被砸碎 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            } else if ("relay".equals(kind)) {
+                placeRelay(r, v);
+                svc.tellRun(s, "§b传火 §7· 按 1→2→3 点亮标记再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
             } else {
                 svc.tellRun(s, "§b限时清房 §7· " + v.eventLimit(kind) + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
             }
@@ -415,11 +428,20 @@ final class EmberRunDirector {
                 ok = !eventFailed && crystalsBroken >= v.crystalCount && secs <= v.crystalSecs;
             } else if ("escort".equals(kind)) {
                 ok = !eventFailed && escortId != null && mobs.containsKey(escortId);
+            } else if ("hold".equals(kind)) {
+                ok = !eventFailed && holdAccum >= v.holdNeed && secs <= v.holdSecs;
+            } else if ("beacon".equals(kind)) {
+                ok = !eventFailed && beaconHp > 0 && beaconStand != null && !beaconStand.isDead();
+            } else if ("relay".equals(kind)) {
+                ok = !eventFailed && relayNext >= v.relayCount && secs <= v.relaySecs;
             } else {
                 ok = secs <= v.eventLimit(kind);
             }
             clearCrystals();
             removeEscort();
+            clearHold();
+            clearBeacon();
+            clearRelay();
             clearFrostSlow();
             svc.onEventResult(s, ok, secs);
         }
@@ -472,10 +494,26 @@ final class EmberRunDirector {
 
     private long eventStart;
     private boolean eventWarned;
-    private boolean eventFailed; // D171: escort died / soft fail already told
+    private boolean eventFailed; // D171/D179: escort/beacon died / soft fail already told
     private final List<Location> crystalBlocks = new ArrayList<Location>();
     private int crystalsBroken;
     private UUID escortId;
+    // D179 hold / beacon / relay (markers are ArmorStands + optional SEA_LANTERN; never in mobs / Extra.TREASURE)
+    private Location holdCenter;
+    private double holdAccum;
+    private int holdToldPct; // last progress chat milestone (0/25/50/75)
+    private org.bukkit.entity.ArmorStand holdMarker;
+    private Location holdLantern;
+    private Location beaconLoc;
+    private org.bukkit.entity.ArmorStand beaconStand;
+    private Location beaconLantern;
+    private double beaconHp, beaconMaxHp;
+    private long beaconNextBite;
+    private final List<org.bukkit.entity.ArmorStand> relayMarkers = new ArrayList<org.bukkit.entity.ArmorStand>();
+    private final List<Location> relayLocs = new ArrayList<Location>();
+    private final List<Location> relayLanterns = new ArrayList<Location>();
+    private int relayNext; // next index to light (0-based)
+    private long lastEventTickMs; // hold/beacon/relay dt anchor
     // D181 molten: corpse blast survives the Tracked (cleared on finish / unload like crystals)
     private Location moltenOrigin;
     private long moltenWarnAt;   // when telegraph starts (0 = idle)
@@ -882,7 +920,217 @@ final class EmberRunDirector {
         escortId = null;
     }
 
-    private void clearFrostSlow() {
+    // ------------------------------------------------------------------ D179 hold / beacon / relay
+
+    /** D179 unit helper: hold only accumulates when a grounded player is inside the circle. */
+    static boolean holdCounts(boolean inRadius, boolean onGround) {
+        return inRadius && onGround;
+    }
+
+    /** D179 unit helper: relay advances only when the next ordered index is pressed. */
+    static int relayAdvance(int nextIndex, int pressedIndex, int count) {
+        if (pressedIndex != nextIndex || nextIndex < 0 || nextIndex >= count) return nextIndex;
+        return nextIndex + 1;
+    }
+
+    /** D179: beacon is never Extra.TREASURE and never blocks room-clear (tracked outside mobs). */
+    static boolean beaconIsTreasureExtra() { return false; }
+    static boolean beaconBlocksRoomClear() { return false; }
+
+    private EmberRunMaps.Pt eventAnchorPt(EmberRunMaps.Room r) {
+        if (r == null) return new EmberRunMaps.Pt(0, 64, 0);
+        if (r.points != null && !r.points.isEmpty()) return r.points.get(0);
+        if (r.trigger != null) {
+            EmberRunMaps.Box b = r.trigger;
+            return new EmberRunMaps.Pt((b.x0 + b.x1) / 2.0, b.y0, (b.z0 + b.z1) / 2.0);
+        }
+        return new EmberRunMaps.Pt(0, 64, 0);
+    }
+
+    private org.bukkit.entity.ArmorStand spawnEventMarker(Location loc, String name, boolean glowing) {
+        org.bukkit.entity.ArmorStand st = w.spawn(loc, org.bukkit.entity.ArmorStand.class);
+        st.setVisible(true);
+        st.setGravity(false);
+        st.setMarker(false);
+        st.setSmall(true);
+        st.setInvulnerable(true);
+        st.setBasePlate(false);
+        st.setArms(false);
+        st.setCustomName(name);
+        st.setCustomNameVisible(true);
+        if (glowing) st.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
+        return st;
+    }
+
+    private Location placeLanternAt(EmberRunMaps.Pt pt) {
+        Block bl = w.getBlockAt((int) Math.floor(pt.x), (int) Math.floor(pt.y), (int) Math.floor(pt.z));
+        if (bl.getType() != Material.AIR) bl = bl.getRelative(0, 1, 0);
+        if (bl.getType() != Material.AIR && bl.getRelative(0, 1, 0).getType() == Material.AIR) bl = bl.getRelative(0, 1, 0);
+        if (bl.getType() != Material.AIR) return null;
+        bl.setType(Material.SEA_LANTERN);
+        return bl.getLocation();
+    }
+
+    private void clearLantern(Location loc) {
+        if (loc == null || loc.getWorld() == null) return;
+        Block bl = loc.getBlock();
+        if (bl.getType() == Material.SEA_LANTERN) bl.setType(Material.AIR);
+    }
+
+    private void placeHold(EmberRunMaps.Room r, EmberRunMaps.Variety v) {
+        clearHold();
+        holdAccum = 0;
+        holdToldPct = 0;
+        EmberRunMaps.Pt pt = eventAnchorPt(r);
+        holdLantern = placeLanternAt(pt);
+        Location loc = new Location(w, pt.x + 0.5, (holdLantern != null ? holdLantern.getY() + 1.0 : pt.y + 1.0), pt.z + 0.5);
+        holdCenter = loc.clone();
+        holdMarker = spawnEventMarker(loc, "§b[占点] §f站进圈内", true);
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s hold placed r=%.1f need=%.1f", s.runId, r.id, v.holdRadius, v.holdNeed));
+    }
+
+    private void clearHold() {
+        if (holdMarker != null) { holdMarker.remove(); holdMarker = null; }
+        clearLantern(holdLantern);
+        holdLantern = null;
+        holdCenter = null;
+        holdAccum = 0;
+        holdToldPct = 0;
+    }
+
+    private void placeBeacon(EmberRunMaps.Room r, EmberRunMaps.Variety v) {
+        clearBeacon();
+        EmberRunMaps.Pt pt = eventAnchorPt(r);
+        EmberRunMaps.Role melee = def.role("melee", ch);
+        double base = melee == null ? 40.0 : melee.hp;
+        beaconMaxHp = Math.max(1.0, base * v.beaconHp);
+        beaconHp = beaconMaxHp;
+        beaconNextBite = System.currentTimeMillis() + (long) (v.beaconTick * 1000);
+        beaconLantern = placeLanternAt(pt);
+        Location loc = new Location(w, pt.x + 0.5, (beaconLantern != null ? beaconLantern.getY() + 1.0 : pt.y + 1.0), pt.z + 0.5);
+        beaconLoc = loc.clone();
+        beaconStand = spawnEventMarker(loc, "§e[余烬灯] §f护卫", true);
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s beacon placed hp=%.0f aggro=%.1f", s.runId, r.id, beaconMaxHp, v.beaconAggroR));
+    }
+
+    private void clearBeacon() {
+        if (beaconStand != null) { beaconStand.remove(); beaconStand = null; }
+        clearLantern(beaconLantern);
+        beaconLantern = null;
+        beaconLoc = null;
+        beaconHp = 0;
+        beaconMaxHp = 0;
+        beaconNextBite = 0;
+    }
+
+    private void placeRelay(EmberRunMaps.Room r, EmberRunMaps.Variety v) {
+        clearRelay();
+        relayNext = 0;
+        if (r == null || r.points == null || r.points.isEmpty()) return;
+        int n = Math.min(v.relayCount, r.points.size());
+        for (int i = 0; i < n; i++) {
+            EmberRunMaps.Pt pt = r.points.get(i % r.points.size());
+            Location lan = placeLanternAt(pt);
+            relayLanterns.add(lan);
+            Location loc = new Location(w, pt.x + 0.5, (lan != null ? lan.getY() + 1.0 : pt.y + 1.0), pt.z + 0.5);
+            relayLocs.add(loc.clone());
+            org.bukkit.entity.ArmorStand st = spawnEventMarker(loc, "§b[传火 " + (i + 1) + "/" + n + "] §7待点亮", i == 0);
+            relayMarkers.add(st);
+        }
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s relay placed count=%d", s.runId, r.id, relayMarkers.size()));
+    }
+
+    private void clearRelay() {
+        for (org.bukkit.entity.ArmorStand st : relayMarkers) if (st != null) st.remove();
+        relayMarkers.clear();
+        for (Location loc : relayLanterns) clearLantern(loc);
+        relayLanterns.clear();
+        relayLocs.clear();
+        relayNext = 0;
+    }
+
+    private void tickPack3Events(long now) {
+        String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+        EmberRunMaps.Variety v = svc.maps().variety;
+        double dt = lastEventTickMs > 0 ? Math.max(0.0, Math.min(1.0, (now - lastEventTickMs) / 1000.0)) : 0.25;
+        lastEventTickMs = now;
+        if ("hold".equals(kind) && holdCenter != null) {
+            boolean present = false;
+            for (Player p : participantsHere()) {
+                Location l = p.getLocation();
+                double dx = l.getX() - holdCenter.getX(), dz = l.getZ() - holdCenter.getZ();
+                boolean in = dx * dx + dz * dz <= v.holdRadius * v.holdRadius;
+                if (holdCounts(in, p.isOnGround())) { present = true; break; }
+            }
+            if (present) {
+                holdAccum += dt; // multiplayer does NOT speed fill
+                int pct = (int) Math.min(100, (holdAccum / v.holdNeed) * 100.0);
+                int mile = (pct / 25) * 25;
+                if (mile >= 25 && mile > holdToldPct) {
+                    holdToldPct = mile;
+                    svc.tellRun(s, "§b占点进度 §e" + mile + "% §7（"
+                            + String.format(Locale.ROOT, "%.1f", Math.min(holdAccum, v.holdNeed))
+                            + "/" + String.format(Locale.ROOT, "%.0f", v.holdNeed) + " 秒）");
+                }
+            }
+            if (holdCenter != null) warnCircle(holdCenter.clone().add(0, 0.1, 0), v.holdRadius, Particle.VILLAGER_HAPPY);
+        } else if ("beacon".equals(kind) && beaconLoc != null && beaconHp > 0) {
+            boolean guarded = false;
+            for (Player p : participantsHere()) {
+                Location l = p.getLocation();
+                double dx = l.getX() - beaconLoc.getX(), dy = l.getY() - beaconLoc.getY(), dz = l.getZ() - beaconLoc.getZ();
+                if (dx * dx + dy * dy + dz * dz <= v.beaconAggroR * v.beaconAggroR) { guarded = true; break; }
+            }
+            if (!guarded && now >= beaconNextBite) {
+                beaconNextBite = now + (long) (v.beaconTick * 1000);
+                beaconHp -= v.beaconBite * beaconMaxHp;
+                if (beaconStand != null) {
+                    int pctHp = (int) Math.max(0, Math.round(beaconHp / beaconMaxHp * 100));
+                    beaconStand.setCustomName("§e[余烬灯] §f" + pctHp + "%");
+                }
+                if (beaconHp <= 0) {
+                    beaconHp = 0;
+                    eventFailed = true;
+                    clearBeacon();
+                    svc.tellRun(s, "§c余烬灯碎了 §7· 这次没有额外核心（门照开）");
+                    svc.log().info("[P1 run] " + s.runId + " beacon died");
+                }
+            } else if (guarded) {
+                beaconNextBite = now + (long) (v.beaconTick * 1000);
+            }
+        } else if ("relay".equals(kind) && !relayLocs.isEmpty() && relayNext < relayLocs.size()) {
+            for (Player p : participantsHere()) {
+                Location l = p.getLocation();
+                for (int i = 0; i < relayLocs.size(); i++) {
+                    Location mloc = relayLocs.get(i);
+                    double dx = l.getX() - mloc.getX(), dz = l.getZ() - mloc.getZ();
+                    if (dx * dx + dz * dz > v.relayRadius * v.relayRadius) continue;
+                    if (i != relayNext) {
+                        if (i > relayNext) svc.tellRun(s, "§7先点亮上一处传火标记（现在是 §e" + (relayNext + 1) + "§7）");
+                        break;
+                    }
+                    int was = relayNext;
+                    relayNext = relayAdvance(relayNext, i, relayLocs.size());
+                    if (relayNext > was) {
+                        org.bukkit.entity.ArmorStand st = relayMarkers.get(i);
+                        if (st != null) {
+                            st.setCustomName("§a[传火 " + (i + 1) + "/" + relayLocs.size() + "] §f已点亮");
+                            st.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
+                        }
+                        if (relayNext < relayMarkers.size()) {
+                            org.bukkit.entity.ArmorStand nx = relayMarkers.get(relayNext);
+                            if (nx != null) nx.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
+                        }
+                        svc.tellRun(s, "§b传火点亮 §e" + relayNext + "/" + relayLocs.size());
+                        svc.log().info("[P1 run] " + s.runId + " relay " + relayNext + "/" + relayLocs.size());
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
+        private void clearFrostSlow() {
         EmberRunMaps.Variety v = svc.maps().variety;
         for (Player p : participantsHere()) {
             for (PotionEffect cur : p.getActivePotionEffects()) {
@@ -897,6 +1145,10 @@ final class EmberRunDirector {
 
     /** Static test helper: crystal list empty after clear. */
     List<Location> crystalBlocksForTest() { return crystalBlocks; }
+    double holdAccumForTest() { return holdAccum; }
+    int relayNextForTest() { return relayNext; }
+    double beaconHpForTest() { return beaconHp; }
+    List<Location> relayLocsForTest() { return relayLocs; }
 
         /** A18: base HP × (1 + 0.65 (n − 1)), locked when the run was committed. */
     private void scaleHealth(LivingEntity le, double base) {
@@ -1038,6 +1290,9 @@ final class EmberRunDirector {
     void finish() {
         finished = true;
         clearCrystals();
+        clearHold();
+        clearBeacon();
+        clearRelay();
         clearFrostSlow();
         clearMolten();
         cleanupMobs();

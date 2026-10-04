@@ -213,13 +213,19 @@ public final class EmberRunRules {
         return varietyGrants(firstClear, affixDone, affixShard, eventDone, eventCore, "timed");
     }
 
-    /** D171: eventKind selects the settle source key (var_event_core / var_event_crystal / var_event_escort). */
+    /** D171/D179: eventKind selects the settle source key (var_event_core / crystal / escort / hold / beacon / relay). */
     public static List<Grant> varietyGrants(boolean firstClear, boolean affixDone, int affixShard, boolean eventDone, int eventCore, String eventKind) {
         if (firstClear) return Collections.emptyList();
         List<Grant> out = new ArrayList<Grant>();
         if (affixDone && affixShard > 0) out.add(new Grant("var_affix_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, affixShard, null));
         if (eventDone && eventCore > 0) {
-            String k = "crystal".equals(eventKind) ? "var_event_crystal" : "escort".equals(eventKind) ? "var_event_escort" : "var_event_core";
+            String k;
+            if ("crystal".equals(eventKind)) k = "var_event_crystal";
+            else if ("escort".equals(eventKind)) k = "var_event_escort";
+            else if ("hold".equals(eventKind)) k = "var_event_hold";
+            else if ("beacon".equals(eventKind)) k = "var_event_beacon";
+            else if ("relay".equals(eventKind)) k = "var_event_relay";
+            else k = "var_event_core";
             out.add(new Grant(k, Kind.MAT, EmberUpgradeRules.MAT_CORE, eventCore, null));
         }
         return out;
@@ -575,7 +581,7 @@ public final class EmberRunRules {
         public final String kind;
         public final int count, coin, shard;
         public VarietyBounty(String kind, int count, int coin, int shard) { this.kind = kind; this.count = count; this.coin = coin; this.shard = shard; }
-        /** timed = any room event success (timed / crystal / escort); id kept for save compat (D144/D171). */
+        /** timed = any room event success (timed / crystal / escort / hold / beacon / relay); id kept for save compat (D144/D171/D179). */
         public String label() { return "affix".equals(kind) ? "击败词缀精英" : "房间事件达标"; }
         public String rewardText() { return (coin > 0 ? coin + " 余烬币" : "") + (coin > 0 && shard > 0 ? " + " : "") + (shard > 0 ? "余烬碎片 ×" + shard : ""); }
     }

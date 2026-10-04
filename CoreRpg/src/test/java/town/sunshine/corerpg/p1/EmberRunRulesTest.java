@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(44, m.balanceVersion);                // D181 Variety Pack 3 mortar/molten (D182 = 43, D180 rev 2 = 42, D184 = 41, …)
-        assertEquals("g04-1/b44", m.ruleVersion);
+        assertEquals(45, m.balanceVersion);                // D179 Room Events Pack 3 hold/beacon/relay (D181 = 44, D182 = 43, …)
+        assertEquals("g04-1/b45", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1270,7 +1270,8 @@ public class EmberRunRulesTest {
             if (!a[2].isEmpty()) { assertTrue(a[3], EmberRunMaps.Variety.EVENTS.contains(a[3])); ev.add(a[3]); }
         }
         assertTrue(aff.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "blazing", "split", "shield", "mortar", "molten")));
-        assertTrue(ev.containsAll(java.util.Arrays.asList("timed", "crystal", "escort")));
+        assertTrue(ev.containsAll(java.util.Arrays.asList("timed", "crystal", "escort", "hold", "beacon", "relay")));
+        assertEquals(6, EmberRunMaps.Variety.EVENTS.size());
         // reflect rejected
         java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
         raw.put("affix_rate", 1.0);
@@ -1307,6 +1308,9 @@ public class EmberRunRulesTest {
         assertEquals("var_event_core", EmberRunRules.varietyGrants(false, false, 0, true, 1, "timed").get(0).key);
         assertEquals("砸余烬晶 ", EmberRunService.matSource("var_event_crystal"));
         assertEquals("护宝兔 ", EmberRunService.matSource("var_event_escort"));
+        assertEquals("占点 ", EmberRunService.matSource("var_event_hold"));
+        assertEquals("护灯 ", EmberRunService.matSource("var_event_beacon"));
+        assertEquals("传火 ", EmberRunService.matSource("var_event_relay"));
     }
 
     @Test public void reflectAffixRejected_D171() {
@@ -1394,6 +1398,98 @@ public class EmberRunRulesTest {
         assertEquals("砸余烬晶", EmberRunMaps.Variety.eventLabel("crystal"));
         assertTrue(v.eventLimit("crystal") >= 30);
         assertEquals(0, v.eventLimit("escort")); // no countdown
+    }
+
+
+    @Test public void varietyPack3RollsNewEventsOnly_D179() {
+        EmberRunMaps.Variety v = bundled().variety;
+        assertEquals(6, EmberRunMaps.Variety.EVENTS.size());
+        assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("hold", "beacon", "relay")));
+        assertEquals(8, EmberRunMaps.Variety.KNOWN.size()); // affix pool unchanged this pack
+        assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
+        assertEquals(2.5, v.holdRadius, 1e-9);
+        assertEquals(12.0, v.holdNeed, 1e-9);
+        assertEquals(40, v.holdSecs);
+        assertEquals(0.45, v.beaconHp, 1e-9);
+        assertEquals(4.0, v.beaconAggroR, 1e-9);
+        assertEquals(1.0, v.beaconTick, 1e-9);
+        assertEquals(0.08, v.beaconBite, 1e-9);
+        assertEquals(3, v.relayCount);
+        assertEquals(1.6, v.relayRadius, 1e-9);
+        assertEquals(40, v.relaySecs);
+        assertEquals("占点", EmberRunMaps.Variety.eventLabel("hold"));
+        assertEquals("护灯", EmberRunMaps.Variety.eventLabel("beacon"));
+        assertEquals("传火", EmberRunMaps.Variety.eventLabel("relay"));
+        assertEquals(40, v.eventLimit("hold"));
+        assertEquals(0, v.eventLimit("beacon"));
+        assertEquals(40, v.eventLimit("relay"));
+        java.util.Set<String> ev = new java.util.HashSet<String>();
+        for (long seed = 0; seed < 8000; seed++) {
+            String[] a = v.roll(EmberRunRules.subSeed(seed, "variety"));
+            assertEquals(4, a.length);
+            if (!a[2].isEmpty()) {
+                assertTrue(a[3], EmberRunMaps.Variety.EVENTS.contains(a[3]));
+                ev.add(a[3]);
+            }
+        }
+        assertTrue(ev.containsAll(java.util.Arrays.asList("timed", "crystal", "escort", "hold", "beacon", "relay")));
+        // first-clear / challenge / abyss / raid: variety gated by caller — roll itself is seed-only; empty gates live in EmberRunService
+        EmberRunSession s = new EmberRunSession();
+        s.eventRoom = "r2"; s.eventKind = "hold"; s.eventDone = true;
+        assertEquals("hold", EmberRunSession.fromMap(s.toMap()).eventKind);
+    }
+
+    @Test public void varietyBountyCountsHoldBeaconRelay_D179() {
+        // same kind=timed bounty advances for any eventDone
+        List<EmberRunRules.Grant> g = EmberRunRules.varietyBountyGrants(new EmberRunRules.VarietyBounty("timed", 1, 20, 0), 0, true);
+        assertEquals("vb_timed", g.get(0).key);
+        assertEquals("var_event_hold", EmberRunRules.varietyGrants(false, false, 0, true, 1, "hold").get(0).key);
+        assertEquals("var_event_beacon", EmberRunRules.varietyGrants(false, false, 0, true, 1, "beacon").get(0).key);
+        assertEquals("var_event_relay", EmberRunRules.varietyGrants(false, false, 0, true, 1, "relay").get(0).key);
+        assertEquals("占点 ", EmberRunService.matSource("var_event_hold"));
+        assertEquals("护灯 ", EmberRunService.matSource("var_event_beacon"));
+        assertEquals("传火 ", EmberRunService.matSource("var_event_relay"));
+    }
+
+    @Test public void holdRequiresGroundPresence_D179() {
+        assertTrue(EmberRunDirector.holdCounts(true, true));
+        assertFalse(EmberRunDirector.holdCounts(true, false)); // airborne / creative fly
+        assertFalse(EmberRunDirector.holdCounts(false, true)); // outside circle
+        assertFalse(EmberRunDirector.holdCounts(false, false));
+    }
+
+    @Test public void beaconDoesNotPayTreasureOrBlockClear_D179() {
+        assertFalse(EmberRunDirector.beaconIsTreasureExtra());
+        assertFalse(EmberRunDirector.beaconBlocksRoomClear());
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.bossKilled = true;
+        in.extra = EmberRunRules.Extra.NONE;
+        in.extraDone = true;
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) assertFalse("extra_treasure_coin".equals(x.key));
+        // beacon success settles core via varietyGrants, not treasure
+        assertEquals(EmberUpgradeRules.MAT_CORE, EmberRunRules.varietyGrants(false, false, 0, true, 1, "beacon").get(0).id);
+    }
+
+    @Test public void relayEnforcesOrderAndCleanup_D179() {
+        assertEquals(0, EmberRunDirector.relayAdvance(0, 1, 3)); // skip invalid
+        assertEquals(0, EmberRunDirector.relayAdvance(0, 2, 3));
+        assertEquals(1, EmberRunDirector.relayAdvance(0, 0, 3));
+        assertEquals(2, EmberRunDirector.relayAdvance(1, 1, 3));
+        assertEquals(3, EmberRunDirector.relayAdvance(2, 2, 3));
+        assertEquals(3, EmberRunDirector.relayAdvance(3, 3, 3)); // already done
+        EmberRunMaps.Variety v = bundled().variety;
+        assertEquals(3, v.relayCount);
+        assertEquals("传火", EmberRunMaps.Variety.eventLabel("relay"));
+    }
+
+    @Test public void pack3RejectsCageDrainAsConfig_D179() {
+        java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
+        raw.put("event_rate", 1.0);
+        raw.put("events", java.util.Arrays.asList("hold", "cage", "drain", "beacon", "relay"));
+        EmberRunMaps.Variety v = new EmberRunMaps.Variety(raw);
+        assertEquals(java.util.Arrays.asList("hold", "beacon", "relay"), v.events);
+        assertFalse(EmberRunMaps.Variety.EVENTS.contains("cage"));
+        assertFalse(EmberRunMaps.Variety.EVENTS.contains("drain"));
     }
 
     @Test public void everyMainBossHasOneNewTelegraphedLightMove_D140() {

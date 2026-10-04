@@ -591,7 +591,7 @@ public final class EmberRunMaps {
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
                 "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
-                "timed", "crystal", "escort"));
+                "timed", "crystal", "escort", "hold", "beacon", "relay"));
         public final double affixRate, eventRate;
         public final List<String> affixes, events;
         public final int affixShard, eventCore, eventSecs;
@@ -609,6 +609,12 @@ public final class EmberRunMaps {
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
+        // D179 hold / beacon / relay
+        public final double holdRadius, holdNeed;
+        public final int holdSecs;
+        public final double beaconHp, beaconAggroR, beaconTick, beaconBite;
+        public final int relayCount, relaySecs;
+        public final double relayRadius;
 
         Variety(Map<?, ?> m) {
             affixRate = clamp01(num(m.get("affix_rate"), 0.0));
@@ -672,6 +678,19 @@ public final class EmberRunMaps {
             crystalSecs = Math.max(5, (int) num(cr.get("secs"), 35));
             Map<?, ?> es = m.get("escort") instanceof Map ? (Map<?, ?>) m.get("escort") : Collections.emptyMap();
             escortHp = Math.max(0.05, Math.min(1.0, num(es.get("hp"), 0.35)));
+            Map<?, ?> ho = m.get("hold") instanceof Map ? (Map<?, ?>) m.get("hold") : Collections.emptyMap();
+            holdRadius = Math.max(0.5, num(ho.get("radius"), 2.5));
+            holdNeed = Math.max(1.0, num(ho.get("need"), 12.0));
+            holdSecs = Math.max(5, (int) num(ho.get("secs"), 40));
+            Map<?, ?> be = m.get("beacon") instanceof Map ? (Map<?, ?>) m.get("beacon") : Collections.emptyMap();
+            beaconHp = Math.max(0.05, Math.min(1.0, num(be.get("hp"), 0.45)));
+            beaconAggroR = Math.max(0.5, num(be.get("aggro_r"), 4.0));
+            beaconTick = Math.max(0.2, num(be.get("tick"), 1.0));
+            beaconBite = Math.max(0.0, Math.min(1.0, num(be.get("bite"), 0.08)));
+            Map<?, ?> re = m.get("relay") instanceof Map ? (Map<?, ?>) m.get("relay") : Collections.emptyMap();
+            relayCount = Math.max(2, Math.min(3, (int) num(re.get("count"), 3)));
+            relayRadius = Math.max(0.5, num(re.get("radius"), 1.6));
+            relaySecs = Math.max(5, (int) num(re.get("secs"), 40));
         }
 
         public boolean on() { return (affixRate > 0 && !affixes.isEmpty()) || eventRate > 0; }
@@ -689,17 +708,22 @@ public final class EmberRunMaps {
             return id;
         }
 
-        /** Chinese name of a room event kind (timed / crystal / escort). */
+        /** Chinese name of a room event kind (timed / crystal / escort / hold / beacon / relay). */
         public static String eventLabel(String kind) {
             if ("crystal".equals(kind)) return "砸余烬晶";
             if ("escort".equals(kind)) return "护宝兔";
+            if ("hold".equals(kind)) return "占点";
+            if ("beacon".equals(kind)) return "护灯";
+            if ("relay".equals(kind)) return "传火";
             return "限时清房";
         }
 
         /** Soft time limit (seconds) for the given event kind. */
         public int eventLimit(String kind) {
             if ("crystal".equals(kind)) return crystalSecs;
-            if ("escort".equals(kind)) return 0; // no countdown; lives until room clear or rabbit dies
+            if ("escort".equals(kind) || "beacon".equals(kind)) return 0; // no countdown; lives until room clear or fail
+            if ("hold".equals(kind)) return holdSecs;
+            if ("relay".equals(kind)) return relaySecs;
             return timedSecs;
         }
 

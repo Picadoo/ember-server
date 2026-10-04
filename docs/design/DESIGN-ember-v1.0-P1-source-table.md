@@ -1521,7 +1521,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D176 | CoreRpg 1.65.6 | Variety Pack 2 上线（实现 D171）：词缀 +regen/charge/frost；房间事件 +crystal/escort（与 timed 等权）；闸门/奖励数不变；花样委托 timed 文案→「房间事件达标」；balance_version 29→30；Stage C p1sim 门禁 deferred |
 | D177 | CoreRpg 1.65.9 → **rev 2 1.65.15** | P1 挂机庭（业主 17:56「挂机」）。**rev 2（1.65.15，bv38）**：自动战斗——每人自己的 MM 怪（3 只一波，只打 / 只受主人），自动普攻 + 自动烬斩，按击杀累加（确定性）发币 / 经验 / 账号绑定材料（碎片 / 骨尘 / 核心 / 胚料，账本 `bmat:` → 仓库绑定计数，取不出），每日 2400 只（在线 + 离线），离线按实测速度 25%、最多 1200 只 / 12 小时；10 分钟死 3 次停；P1 材料与 P1 装备禁丢出 / 入箱 / 展示框 / 盔甲架；旧 `/corerpg warehouse withdraw` 扣绑定部分。p1sim：21 格 21/21（1600 复测 1.7pp、800 人 1.2pp），W30 +0.14 周（上界）。rev 1（1.65.9）：计时发币 + 经验（已停用）。**修订 D63**：材料来自通关 + 挂机庭（账号绑定、上限远低于主动）；见 `docs/design/DESIGN-ember-afk-p1-2026-10-04.md` |
 | D178 | CoreRpg 1.65.8 | Weekly Modifier Pack 2 上线（实现 D175）：+bolters 弓潮 / shell 龟甲 / press 压阵；池 6→9（63 图×规则对）；全部 challenge-only；`balance_version` 31→32；Stage C p1sim `--mods` deferred |
-| D179 | 设计-only（deferred 实现） | Room Events Pack 3：房间事件池 +占点 hold / 护灯 beacon / 传火 relay（与 timed/crystal/escort 等权）；否决笼牢/抽血；奖励键不变；见 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`。实现另窗 |
+| D179 | CoreRpg 1.65.22 | Room Events Pack 3：房间事件池 3→6（+占点 hold / 护灯 beacon / 传火 relay）；词缀池不动；奖励 `event_core` 不变；balance_version 45；Stage C p1sim deferred；设计 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`；发布 `docs/status/RELEASE-ember-1.65.22.md` |
 | D180 | CoreRpg 1.65.16；rev 2 CoreRpg 1.65.19 | P1 每日签到 + 在线时长（业主 19:06）：主菜单「签到 · 在线」→ `ember_p1_sign`；月历按本月第 n 次签到发奖（漏签不清零；1–27 次 20 币 + 5 经验，第 7 / 21 次 +首领徽记、第 14 / 28 次 +锻造印记，29–31 次 10 币 + 5 经验；补签每月 3 次、要今天有效在线 60 分钟）；有效在线 15 / 30 / 60 / 120 分钟四档（每天 70 币 + 20 经验，5 分钟无输入停表；**rev 2（业主 10-05 00:04）：挂机庭里的分钟也算在线，挂机庭自动战斗在跑算有操作、不受 5 分钟停表影响**，每天仍封顶 120 分钟档；rev 2 复跑 21 格 21/21（叠加挂机庭最大 1.9 pp）、W30 叠加上界 4.73（−0.13）；balance_version 42）；只发账号计数；**修订 D63**：印记 / 徽记每月各 ≤2 可来自签到；P1 下旧 `/corerpg sign|activity|bounty` 不再发旧币；设计 `docs/design/DESIGN-ember-signin-online-2026-10-04.md`；balance_version 39 |
 | D181 | CoreRpg 1.65.21 | Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）；闸门/奖励同 D138；否决反伤/拉人/造墙/瞬移/吸血；balance_version 44；Stage C p1sim deferred；设计 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`；发布 `docs/status/RELEASE-ember-1.65.21.md` |
 | D182 | CoreRpg 1.65.20 | 奖励精英变招 Pack 1：Extra.ELITE 每图 1 条固定轻招（门廊推/焦焰踏/誓印扫/闸冲/落尘/霜息/矿渣劈）；`elite_twists` + Director twistTick；奖励 10+1 与权重不变；balance_version 43；p1sim §7 延后；设计 `docs/design/DESIGN-ember-reward-elite-twists-2026-10-04.md`；发布 `docs/status/RELEASE-ember-1.65.20.md` |
@@ -1671,7 +1671,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 
 | 项 | 内容 |
 |---|---|
-| D179 | 房间事件 +hold/beacon/relay；文档 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`；实现等 CoreRpg+p1sim 空窗 |
+| D179 | 房间事件 +hold/beacon/relay；已上线 CoreRpg 1.65.22 / bv45；文档 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md` |
 | D181 | 词缀 +mortar/molten（池 6→8）；文档 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`；研究对照 D3 Mortar/Molten，否决 Waller/Vortex/Teleporter/Reflect/Vampiric |
 | 不改 | 本登记不 bump 版本、不改 jar、不跑 sim；D180 签到/在线时长由 `COORD-signin-online` 占用 |
 
@@ -1733,3 +1733,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 词缀池 6→8（+mortar 投弹 / molten 亡爆）；闸门/奖励不变；kb=0；分身不触发亡爆；Stage C p1sim deferred |
 | 发布 | `docs/status/RELEASE-ember-1.65.21.md` |
 
+### 13.98 Room Events Pack 3 上线（CoreRpg 1.65.22，D179，2026-10-05）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | D179 设计；`COORD-routine-0141`；前置 1.65.21（D181）|
+| 裁决 | 事件池 3→6（+hold 占点 / beacon 护灯 / relay 传火）；词缀池不动；闸门/奖励不变；beacon 不进 mobs/TREASURE；Stage C p1sim deferred |
+| 版本 | CoreRpg **1.65.22**；`balance_version` **45** |
+| 发布 | `docs/status/RELEASE-ember-1.65.22.md` |
