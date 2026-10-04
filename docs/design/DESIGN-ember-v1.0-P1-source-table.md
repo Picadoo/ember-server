@@ -1476,3 +1476,13 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 测试 | 单测 `EmberRunRulesTest`：5 modifiers、guards ranged→heavy on q01/q3、`!normal`、35 pairs；线上冒烟 FreshQ45：`modifier forced guards` + 聊天「卫士潮」+ `r1/r2/r3 rule guards` |
 | 上线 | 10-04 08:21 CST，日志 `Enabling CoreRpg v1.63.1` + `[storage] MySQL connected`；STATUS `docs/status/STATUS-ember-modifier-guards-d154.md` |
 
+### 13.76 P2-8 第 6 条周规则「铁卫」（CoreRpg 1.63.2，D155，balance_version 28）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | handoff 候选：精选周规则可再加几条；计时/黑暗在 P2 草案 §5e 明确否决；铁卫复用已有 `Modifier.remap`（与 disarm/guards 不同：melee→heavy） |
+| 规则 | `wall` / 铁卫：`remap: {melee: heavy}`；挑战专用（不设 `normal: true`，与 `casters` / `disarm` / `guards` 相同）；不改奖励、不加倍率（§23.3） |
+| 参数源 | `ember-v1-runs.yml` `rotation.modifiers` 第六条（两份）；balance_version 28；轮换 6×7=42 周组合 |
+| 模型 | `p2econ.py --mods` → `tools/p1sim/out-p2econ-mods-d155.md`：wall 通关率差 +0 点（躲避 0.5 已顶 100%）；第 8 周印记/币相对轮换噪声内；未触发 −12 点否决线 |
+| 测试 | 单测 `EmberRunRulesTest`：6 modifiers、wall melee→heavy on q01、ranged unchanged、`!normal`、42 pairs；线上冒烟 FreshQ46：`modifier forced wall` + 聊天「铁卫」+ `rN rule wall` |
+| 上线 | 10-04 08:52 CST，日志 `Enabling CoreRpg v1.63.2` + `[storage] MySQL connected`；STATUS `docs/status/STATUS-ember-modifier-wall-d155.md` |
