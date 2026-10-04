@@ -36,8 +36,14 @@ def _state():
 
 
 def points(p, s):
-    pts = sum(1 for k in ('q03', 'q05', 'q07') if k in p.cleared)
-    return pts + (1 if s['chal'] else 0) + (1 if s['raids'] else 0) + (1 if _abyss(p, s) >= 5 else 0)
+    """one point per entry of growth talents.points (first_clear / challenge_any / raid_any / abyss_floor; the gate
+    values come from the rules, so a what-if can move them)"""
+    pts = 0
+    for e in (G.get('talents') or {}).get('points', []):
+        k, a = e['kind'], e.get('arg')
+        pts += int((k == 'first_clear' and a in p.cleared) or (k == 'challenge_any' and bool(s['chal'])) or
+                   (k == 'raid_any' and s['raids'] > 0) or (k == 'abyss_floor' and _abyss(p, s) >= int(a)))
+    return pts
 
 
 def _abyss(p, s):

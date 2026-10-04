@@ -167,8 +167,39 @@ def snapshot():
         want = os.environ.get('P1SIM_RULES_EXPECT')
         if want and not s['hash'].startswith(want):
             raise RuleError('rule snapshot %s != expected %s (P1SIM_RULES_EXPECT)' % (s['hash'][:12], want))
+        wi = os.environ.get('P1SIM_WHATIF')
+        if wi:  # offline what-if (sidegrade.py): a JSON patch on top of the snapshot; the stamp says so
+            s = whatif(s, json.load(open(wi, encoding='utf-8')), wi)
         _SNAP = s
     return _SNAP
+
+
+def _merge(dst, src):
+    for k, v in src.items():
+        if isinstance(v, dict) and isinstance(dst.get(k), dict):
+            _merge(dst[k], v)
+        else:
+            dst[k] = copy.deepcopy(v)
+
+
+def whatif(s, patch, path):
+    """patch = {"growth": {...deep merge, lists replaced...}, "growth_nodes": {id: {field: value}},
+    "growth_affixes": {id: {field: value}}, "p1": {...}} — what-if only, never a real rule source"""
+    s = copy.deepcopy(s)
+    d = s['data']
+    for name in ('growth', 'runs', 'p1'):
+        if name in patch:
+            _merge(d[name], patch[name])
+    for n in d['growth']['talents']['nodes']:
+        if n['id'] in patch.get('growth_nodes', {}):
+            n.update(copy.deepcopy(patch['growth_nodes'][n['id']]))
+    for lst in d['growth']['reroll']['affixes'].values():
+        for a in lst:
+            if a['id'] in patch.get('growth_affixes', {}):
+                a.update(copy.deepcopy(patch['growth_affixes'][a['id']]))
+    h = hashlib.sha256(json.dumps(patch, sort_keys=True).encode()).hexdigest()[:8]
+    s['source'] = '%s + WHAT-IF %s (%s)' % (s['source'], os.path.basename(path), h)
+    return s
 
 
 def runs():
