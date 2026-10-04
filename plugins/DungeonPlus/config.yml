@@ -183,6 +183,7 @@ dungeon-pre-folder:
     "EmberQ05": 1
     "EmberQ0R3": 1
     "EmberQ0B1": 1  # D144 余烬连战（首领厅）
+    "EmberQ0B2": 1  # D174 stage 2b 连战·前哨 / 首领残响（同一个首领厅）
   ember_daily_frost:
     "EmberDailyFrost": 1
   ember_daily_rail:

@@ -1,0 +1,8 @@
+# D174 stage 2b 首领厅（连战·前哨 / 首领残响）：只保留 20 分钟维护超时（防实例挂死）；正常一局 2～4 分钟。
+auto-start:
+  - "timeout false timing"
+
+timeout:
+  - 1200:
+      - "$message{type=text;text=§c首领厅 维护超时（20 分钟），本局结束} @dungeon"
+      - "$end{type=text;text=§c首领厅 维护超时;reward=false;delay=1;end-type=FAILURE} @dungeon"

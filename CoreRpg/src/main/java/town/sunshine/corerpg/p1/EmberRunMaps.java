@@ -249,6 +249,15 @@ public final class EmberRunMaps {
         /** D144 reward per settled clear (T3 marks, 余烬徽) and the cosmetic id of the first clear ever */
         public int rushMarks, rushBadges;
         public String rushTitle = "";
+        /**
+         * D174 stage 2b: more entries on the same engine. mode rush (D144, default) / echo 首领残响 (one boss, Q04) /
+         * outpost 连战·前哨 (Q05). label = the player-facing name; claim = the weekly claim counter (entries sharing it
+         * share the weekly claims); weekly = claims per week; mark_tier = tier of reward.marks; sigmarks = 首领徽记 of
+         * EACH chain map per paid clear.
+         */
+        public String rushMode = "rush", rushLabel = "余烬连战", rushClaim = "p4_rush_claim";
+        public int rushWeekly = 1, rushMarkTier = 3, rushSig;
+        public boolean mainRush() { return "rush".equals(rushMode); }
 
         MapDef(String key, Map<?, ?> m) {
             this.key = key;
@@ -968,6 +977,12 @@ public final class EmberRunMaps {
         d.rushMarks = (int) num(rw.get("marks"), 0);
         d.rushBadges = (int) num(rw.get("badges"), 0);
         d.rushTitle = str(rw.get("title"), "");
+        d.rushMarkTier = (int) num(rw.get("mark_tier"), 3);
+        d.rushSig = (int) num(rw.get("sigmarks"), 0);
+        d.rushMode = str(m.get("mode"), "rush").toLowerCase(Locale.ROOT);
+        d.rushLabel = str(m.get("label"), "rush".equals(d.rushMode) ? "余烬连战" : d.name);
+        d.rushClaim = str(m.get("claim"), "p4_rush_claim");
+        d.rushWeekly = (int) num(m.get("weekly"), 1);
         return d;
     }
 
@@ -1073,10 +1088,17 @@ public final class EmberRunMaps {
         }
         for (MapDef d : rush.values()) { // D144: no rooms by design; the chain bosses come from the main maps
             if (d.dungeon.isEmpty()) out.add(d.key + ": dungeon missing");
-            if (d.chain.size() < 2) out.add(d.key + ": rush chain needs 2+ bosses");
+            if (d.chain.size() < ("echo".equals(d.rushMode) ? 1 : 2)) out.add(d.key + ": rush chain needs 2+ bosses (echo: 1)");
+            if (!java.util.Arrays.asList("rush", "echo", "outpost").contains(d.rushMode)) out.add(d.key + ": rush mode rush / echo / outpost");
+            if (d.rushWeekly < 1 || d.rushWeekly > 3 || d.rushSig < 0 || d.rushSig > 3 || d.rushMarks > 1 || d.rushMarkTier < 1 || d.rushMarkTier > 3)
+                out.add(d.key + ": rush weekly 1..3 / sigmarks 0..3 / marks ≤ 1 / mark_tier 1..3");
+            if (!d.mainRush() && (d.rushClaim.equals("p4_rush_claim") || !d.rushClaim.startsWith("p4_"))) out.add(d.key + ": a stage-2b entry needs its own p4_* claim counter");
+            for (MapDef o : rush.values()) if (o != d && o.rushClaim.equals(d.rushClaim) && o.rushWeekly != d.rushWeekly) out.add(d.key + ": entries sharing " + d.rushClaim + " need the same weekly");
             if (d.boss == null || d.boss.at == null || d.boss.area == null) out.add(d.key + ": rush hall boss.at / area missing");
             if (maps.containsKey(d.key) || raids.containsKey(d.key)) out.add(d.key + ": rush key collides with a map / raid");
-            if (d.rushHp < 1.0 || d.rushHp > 3.0 || d.rushDmg < 1.0 || d.rushDmg > 2.0) out.add(d.key + ": rush boss_hp 1..3 / boss_dmg 1..2");
+            if (d.mainRush() && (d.rushHp < 1.0 || d.rushHp > 3.0 || d.rushDmg < 1.0 || d.rushDmg > 2.0)) out.add(d.key + ": rush boss_hp 1..3 / boss_dmg 1..2");
+            // D174 stage 2b: echo / outpost lift T1–T2 bosses to the player's T2 level (rushsim-style tuning, DESIGN §4)
+            if (!d.mainRush() && (d.rushHp < 1.0 || d.rushHp > 15.0 || d.rushDmg < 1.0 || d.rushDmg > 3.0)) out.add(d.key + ": echo / outpost boss_hp 1..15 / boss_dmg 1..3");
             if (d.rushHeal < 0 || d.rushHeal > 1 || d.rushBreak < 3) out.add(d.key + ": rush heal 0..1 / break_secs ≥ 3");
             if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
                 out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);

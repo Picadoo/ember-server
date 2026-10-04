@@ -460,7 +460,7 @@ public final class EmberRunService implements Listener {
             problems.add("人数 " + maps.partyMin(m) + "～" + maps.partyMax(m) + "，当前 " + party.size());
         if (m.raid && (challenge || abyss > 0)) problems.add("团本没有挑战 / 深渊版本");
         if (m.event && (challenge || abyss > 0)) problems.add("活动本没有挑战 / 深渊版本");
-        if (m.rush && (challenge || abyss > 0)) problems.add("余烬连战没有挑战 / 深渊版本");
+        if (m.rush && (challenge || abyss > 0)) problems.add(m.rushLabel + "没有挑战 / 深渊版本");
         StaminaService st = plugin.getStaminaService();
         if (st == null) problems.add("体力服务未就绪");
         for (Player p : party) {
@@ -478,7 +478,8 @@ public final class EmberRunService implements Listener {
                 String why = festival == null ? "活动未加载" : festival.entryProblem(p, d);
                 if (why != null) problems.add(why);
             } else if (m.rush) { // D144: own Q07 first clear; D160: no weekly entry limit (the reward is claimed once a week)
-                if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放余烬连战（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
+                if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放" + m.rushLabel + "（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
+                else for (String ck : m.chainKeys) if (!progressFlag(d, ck)) { problems.add(p.getName() + " 还没首通 " + ck.toUpperCase(Locale.ROOT) + "（" + m.rushLabel + "只打已首通的图的首领）"); break; } // D174 stage 2b
             } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears
                 if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放团本（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
                 else if (m.weeklyCap > 0 && raidWeek(d, m) >= m.weeklyCap) problems.add(p.getName() + " 本周团本次数已满（" + raidWeek(d, m) + "/" + m.weeklyCap + "，周一 0 点重置）");
@@ -658,8 +659,8 @@ public final class EmberRunService implements Listener {
             passes.put(p.getUniqueId(), new Object[]{m.key, until});
             p.sendMessage(P + (at != null ? "§5深渊 · 余烬层 第 " + abyss + " 层 §7→ §e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name
                     + " §7正在创建实例……（已预留体力 " + cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）"
-                    : m.rush ? "§c余烬连战 §7正在创建实例……（不耗体力 · 每周首通领奖，失败可无限重试 · "
-                            + (EmberRunRules.rushPaysReward(rushWeek(data(p.getUniqueId()), p.getUniqueId()), RUSH_WEEKLY) ? "§a你本周奖励未领§7" : "§e你本周已领奖，这局是练习（无奖励）§7") + "）"
+                    : m.rush ? "§c" + m.rushLabel + " §7正在创建实例……（不耗体力 · " + rushRuleText(m) + " · "
+                            + (EmberRunRules.rushPaysReward(rushWeek(data(p.getUniqueId()), p.getUniqueId(), m), m.rushWeekly) ? "§a你本周奖励未领完§7" : "§e你本周已领完，这局是练习（无奖励）§7") + "）"
                     : m.event ? "§c国庆活动本 §6" + m.name + " §7正在创建实例……（不耗体力 · 今日第 " + (festival.entriesToday(data(p.getUniqueId())) + 1) + "/" + festival.dailyEntries + " 次）"
                     : "§e" + (m.raid ? "团本 " : "") + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + cost + "）"));
         }
@@ -716,9 +717,9 @@ public final class EmberRunService implements Listener {
             s.hpFactor = s.hpFactor * vm.rushHp;
             s.dmgFactor = vm.rushDmg;
             store.save(s);
-            tellRun(s, "§c余烬连战 §7· " + s.partySize + " 人 · " + rushChainText(vm) + " · 首领生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 每打倒一个休息 " + Math.round(vm.rushBreak) + " 秒、站着的人回复 "
-                    + Math.round(vm.rushHeal * 100) + "% 生命 · 倒下观战，没有复活 · 只发 T3 印记、余烬徽和称号");
+            tellRun(s, "§c" + vm.rushLabel + " §7· " + s.partySize + " 人 · " + rushChainText(vm) + " · 首领生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
+                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + (vm.chain.size() > 1 ? " · 每打倒一个休息 " + Math.round(vm.rushBreak) + " 秒、站着的人回复 "
+                    + Math.round(vm.rushHeal * 100) + "% 生命" : "") + " · 倒下观战，没有复活 · 只发" + rushRewardText(vm));
             return;
         }
         if (vm != null && vm.raid) {
@@ -880,7 +881,7 @@ public final class EmberRunService implements Listener {
             s.state = EmberRunSession.FIGHTING;
             if (s.fightStart == 0L) s.fightStart = System.currentTimeMillis();
             EmberRunMaps.MapDef rm = maps.byKey(s.mapKey);
-            if (rm != null && rm.rush) { // D160: attempts are only counted for stats (p4_rush), they never gate an entry
+            if (rm != null && rm.rush && rm.mainRush()) { // D160: attempts are only counted for stats (p4_rush), they never gate an entry
                 String wk = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
                 for (UUID u : s.committed) { PlayerData pd = data(u); if (pd != null) { pd.addPeriodCount(C_RUSH, wk, 1); flushData(u); } }
                 log().info("[P1 run] " + s.runId + " rush attempt counted for " + s.committed.size() + " (stats only, D160)");
@@ -1172,10 +1173,10 @@ public final class EmberRunService implements Listener {
             for (UUID u : s.participants) {
                 Player p = Bukkit.getPlayer(u);
                 if (p == null || !p.isOnline()) continue;
-                boolean open = EmberRunRules.rushPaysReward(rushWeek(data(u), u), RUSH_WEEKLY);
-                p.sendMessage(P + ChatColor.RED + "余烬连战失败：" + why + " §a· 不扣任何东西（不耗体力、不算次数），随时可以再来"
-                        + (open ? "§7（本周奖励还没领，通关就领）" : "§7（本周奖励已领，再来是练习）"));
-                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[再来一次]", "/corerpg p1 rush go", "出副本后点；组队时由队长开", "RED"});
+                boolean open = EmberRunRules.rushPaysReward(rushWeek(data(u), u, fm), fm.rushWeekly);
+                p.sendMessage(P + ChatColor.RED + fm.rushLabel + "失败：" + why + " §a· 不扣任何东西（不耗体力、不算次数），随时可以再来"
+                        + (open ? "§7（本周奖励还没领完，通关就领）" : "§7（本周奖励已领完，再来是练习）"));
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[再来一次]", "/corerpg p1 rush " + fm.key + " go", "出副本后点；组队时由队长开", "RED"});
             }
         } else if (!chFail) tellRun(s, ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
         else for (UUID u : s.participants) { // endgame #6 (D128): the day's first failed challenge / abyss run gives half the stamina back
@@ -1253,6 +1254,25 @@ public final class EmberRunService implements Listener {
         return EmberRunRules.rushClaims(d.periodCount(C_RUSH_CLAIM, rushWeekKey()), legacy);
     }
 
+    /** D174 stage 2b: claims this week on the entry's own counter (the D144 rush keeps its legacy rule) */
+    int rushWeek(PlayerData d, UUID u, EmberRunMaps.MapDef m) {
+        if (m == null || m.mainRush()) return rushWeek(d, u);
+        return d == null ? 0 : Math.max(0, d.periodCount(m.rushClaim, rushWeekKey()));
+    }
+
+    static String rushRuleText(EmberRunMaps.MapDef m) {
+        return m.rushWeekly <= 1 ? "每周首通领奖，失败可无限重试" : "每周前 " + m.rushWeekly + " 次通关领奖" + (m.mainRush() ? "" : "（同类共用）") + "，失败可无限重试";
+    }
+
+    static String rushRewardText(EmberRunMaps.MapDef m) {
+        StringBuilder b = new StringBuilder();
+        if (m.rushMarks > 0) b.append(" T").append(m.rushMarkTier).append(" 印记 +").append(m.rushMarks);
+        if (m.rushSig > 0) b.append(b.length() == 0 ? "" : " ·").append(" ").append(m.chainKeys.size() > 1 ? "每张图" : m.chainKeys.get(0).toUpperCase(Locale.ROOT)).append("首领徽记 +").append(m.rushSig);
+        if (m.rushBadges > 0) b.append(b.length() == 0 ? "" : " ·").append(" 余烬徽 +").append(m.rushBadges);
+        if (!m.rushTitle.isEmpty()) b.append(b.length() == 0 ? "" : " ·").append(" 首通称号");
+        return b.toString();
+    }
+
     static String rushChainText(EmberRunMaps.MapDef m) {
         StringBuilder b = new StringBuilder();
         for (EmberRunMaps.Boss x : m.chain) b.append(b.length() == 0 ? "" : " → ").append(x.name);
@@ -1260,7 +1280,7 @@ public final class EmberRunService implements Listener {
     }
 
     void onRushStart(EmberRunSession s, EmberRunMaps.MapDef m, EmberRunMaps.Boss first) {
-        tellRun(s, "§c余烬连战 §7· 5 秒后 §f" + first.name + " §7现身（1/" + m.chain.size() + "）· 每周首通领奖，失败可无限重试；已领奖后是练习（无奖励）");
+        tellRun(s, "§c" + m.rushLabel + " §7· 5 秒后 §f" + first.name + " §7现身（1/" + m.chain.size() + "）· " + rushRuleText(m) + "；领完后是练习（无奖励）");
     }
 
     /** D144: chain boss {@code done} (0-based) fell; heal everyone standing, say who is next. */
@@ -1292,9 +1312,10 @@ public final class EmberRunService implements Listener {
     private void rushSettle(EmberRunSession s, EmberRunMaps.MapDef m, UUID u) {
         PlayerData pd = data(u);
         EmberRunRules.Ledger l = store.ledger(u);
-        final boolean fresh = l.get(s.runId, "rush_mark") == null && l.get(s.runId, "rush_practice") == null;
+        final boolean fresh = l.get(s.runId, "rush_mark") == null && l.get(s.runId, "rush_practice") == null && l.get(s.runId, "rush_paid") == null;
         // D160: only the week's first settled clear pays; later clears this week are practice (time board only)
-        final boolean pays = fresh ? EmberRunRules.rushPaysReward(rushWeek(pd, u), RUSH_WEEKLY) : l.get(s.runId, "rush_mark") != null;
+        // D174 stage 2b: echo / outpost entries pay their first `weekly` clears on their own counter
+        final boolean pays = fresh ? EmberRunRules.rushPaysReward(rushWeek(pd, u, m), m.rushWeekly) : l.get(s.runId, "rush_mark") != null || l.get(s.runId, "rush_paid") != null;
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
         boolean[] created = new boolean[1];
         if (fresh && !pays) { // D160 practice: one marker row so a duplicate settle of this run stays a no-op
@@ -1303,27 +1324,41 @@ public final class EmberRunService implements Listener {
             if (created[0]) changed.add(r);
         }
         if (pays && m.rushMarks > 0) {
-            EmberRunRules.Row r = l.record(s.runId, "rush_mark", new EmberRunRules.Grant("rush_mark", EmberRunRules.Kind.MARK, "3", m.rushMarks, null).encode(),
+            EmberRunRules.Row r = l.record(s.runId, "rush_mark", new EmberRunRules.Grant("rush_mark", EmberRunRules.Kind.MARK, String.valueOf(m.rushMarkTier), m.rushMarks, null).encode(),
                     EmberRunRules.ST_PENDING, System.currentTimeMillis(), created);
             if (created[0]) changed.add(r);
+        }
+        if (pays && !m.mainRush()) { // D174 stage 2b: claim marker (idempotent re-settle) + insignia of each chain map (ledger, delivered by deliver())
+            EmberRunRules.Row r = l.record(s.runId, "rush_paid", new EmberRunRules.Grant("rush_paid", EmberRunRules.Kind.MARK, String.valueOf(m.rushMarkTier), 0, null).encode(),
+                    EmberRunRules.ST_DELIVERED, System.currentTimeMillis(), created);
+            if (created[0]) changed.add(r);
+            if (m.rushSig > 0) for (String ck : m.chainKeys) {
+                if (!EmberSignature.hasMap(ck)) continue;
+                EmberRunRules.Row g = l.record(s.runId, "rush_sig_" + ck, new EmberRunRules.Grant("rush_sig_" + ck, EmberRunRules.Kind.SIGMARK, ck, m.rushSig, null).encode(),
+                        EmberRunRules.ST_PENDING, System.currentTimeMillis(), created);
+                if (created[0]) changed.add(g);
+            }
         }
         Player p = Bukkit.getPlayer(u);
         long t0 = s.fightStart > 0 ? s.fightStart : s.created;
         int secs = t0 > 0 ? (int) Math.max(1, (System.currentTimeMillis() - t0) / 1000L) : 0;
         if (fresh && pays) {
-            pd.addPeriodCount(C_RUSH_CLAIM, rushWeekKey(), 1); // D160: the week's reward is claimed
+            pd.addPeriodCount(m.mainRush() ? C_RUSH_CLAIM : m.rushClaim, rushWeekKey(), 1); // D160: the week's reward is claimed
             if (m.rushBadges > 0) pd.addPeriodCount(EmberSeason.C_BADGE, "all", m.rushBadges);
-            if (cosmetics != null) cosmetics.onRaidClear(p, pd, m.key); // first clear → the 连战不息 title (counts clears)
+            if (cosmetics != null && m.mainRush()) cosmetics.onRaidClear(p, pd, m.key); // first clear → the 连战不息 title (counts clears)
         }
-        if (fresh && season != null && secs > 0) season.onRush(u, Bukkit.getOfflinePlayer(u).getName(), secs); // D160: practice clears count on the time board too
+        if (fresh && m.mainRush() && season != null && secs > 0) season.onRush(u, Bukkit.getOfflinePlayer(u).getName(), secs); // D160: practice clears count on the time board too
         store.saveLedger(u, changed);
         plugin.getDataStore().flushMutation(u);
         log().info("[P1 run] " + s.runId + " rush settle " + u + " rows+" + changed.size() + " secs=" + secs + (fresh ? (pays ? " claim" : " practice") : " (repeat event)"));
         if (p != null && p.isOnline()) {
             String t = (secs / 60) + " 分 " + String.format(Locale.ROOT, "%02d", secs % 60) + " 秒";
-            if (fresh && pays) p.sendMessage(P + "§c余烬连战通关 §7· 用时 §f" + t
+            if (fresh && pays && m.mainRush()) p.sendMessage(P + "§c余烬连战通关 §7· 用时 §f" + t
                     + " §7· 本周奖励：T3 印记 +" + m.rushMarks + " · 余烬徽 +" + m.rushBadges + "（共 " + EmberSeason.badges(pd) + "）· 之后本周再打是练习（无奖励）· 本周连战榜看 /corerpg p1 rush");
-            else if (fresh) p.sendMessage(P + "§c余烬连战通关（练习）§7· 用时 §f" + t + " §7· 本周奖励已经领过，这局不发奖励；成绩照样计入本周最快榜 · 周一 0 点重置");
+            else if (fresh && m.mainRush()) p.sendMessage(P + "§c余烬连战通关（练习）§7· 用时 §f" + t + " §7· 本周奖励已经领过，这局不发奖励；成绩照样计入本周最快榜 · 周一 0 点重置");
+            else if (fresh && pays) p.sendMessage(P + "§c" + m.rushLabel + "通关 §7· 用时 §f" + t + " §7· 奖励：" + rushRewardText(m)
+                    + " §7· 本周已领 " + rushWeek(pd, u, m) + "/" + m.rushWeekly + "（周一 0 点重置）");
+            else if (fresh) p.sendMessage(P + "§c" + m.rushLabel + "通关（练习）§7· 用时 §f" + t + " §7· 本周 " + m.rushWeekly + " 次奖励已领完，这局不发奖励 · 周一 0 点重置");
             deliver(p);
         }
     }
@@ -2084,10 +2119,11 @@ public final class EmberRunService implements Listener {
         EmberRunMaps.MapDef m = maps.byWorld(to.getName());
         if (m != null) {
             EmberRunSession s = openSessionOf(p.getUniqueId());
-            if (s != null && s.mapKey.equals(m.key) && (s.world == null || s.world.equals(to.getName()))) {
+            EmberRunMaps.MapDef sm = s == null ? null : maps.byKey(s.mapKey); // D174 stage 2b: entries may share one DP dungeon
+            if (s != null && sm != null && sm.dungeon.equalsIgnoreCase(m.dungeon) && (s.world == null || s.world.equals(to.getName()))) {
                 attach(s, to);
                 if (!EmberRunSession.PREPARE.equals(s.state)) commit(s, p.getUniqueId());
-                spreadLater(s, m, p);
+                spreadLater(s, sm, p);
                 if (s.died.contains(p.getUniqueId())) { // §20.5: a fallen member who gets back in (respawn elsewhere, tp) keeps watching
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                         if (p.isOnline() && p.getWorld() == to) {
@@ -2626,6 +2662,8 @@ public final class EmberRunService implements Listener {
     /** D174 stage 2b: the mode a map's first clear opens (null = none yet live) */
     static String modeUnlock(String mapKey) {
         if (PLEDGE_UNLOCK.equals(mapKey)) return "自选誓约（重打已首通的 Q01–Q06 普通版时自己挂规则，每条 +1 本图徽记）";
+        if ("q04".equals(mapKey)) return "首领残响（每周 3 次单独再打 Q01–Q04 的强化首领，每次 2 枚那张图的徽记）";
+        if ("q05".equals(mapKey)) return "连战·前哨（Q01→Q02→Q03 三首领连战，每周领一次：每张图 2 枚徽记 + 1 枚 T2 印记）";
         return null;
     }
 
@@ -2739,9 +2777,27 @@ public final class EmberRunService implements Listener {
         if (!(s instanceof Player)) return true;
         Player p = (Player) s;
         EmberRunMaps.MapDef m = maps.rush.isEmpty() ? null : maps.rush.values().iterator().next();
+        if (args.length >= 3 && maps.rush.containsKey(args[2].toLowerCase(Locale.ROOT))) { // D174 stage 2b: /corerpg p1 rush <entry> [go]
+            m = maps.rush.get(args[2].toLowerCase(Locale.ROOT));
+            String[] a = new String[args.length - 1];
+            a[0] = args[0]; a[1] = args[1];
+            System.arraycopy(args, 3, a, 2, args.length - 3);
+            args = a;
+        }
         if (m == null) { p.sendMessage(P + "余烬连战未配置。"); return true; }
         if (args.length >= 3 && ("go".equalsIgnoreCase(args[2]) || "enter".equalsIgnoreCase(args[2]))) return tryEnter(p, m.key);
         PlayerData d = data(p.getUniqueId());
+        if (!m.mainRush()) { // D174 stage 2b 首领残响 / 连战·前哨: the rule + this week's claims (no time board)
+            p.sendMessage(P + "§c" + m.rushLabel + " §7— " + rushChainText(m) + (m.chain.size() > 1 ? "，同一个大厅连打" : "，单独在大厅里打") + "（招式和各自主线图一样）");
+            p.sendMessage(P + "§7首领生命 ×" + fmt2(m.rushHp) + "、伤害 ×" + fmt2(m.rushDmg) + "（组队另按人数加生命）· 1～" + maps.partyMax(m) + " 人 · 不耗体力 · 倒下观战，没有复活");
+            p.sendMessage(P + "§e" + rushRuleText(m) + " §7· 奖励：" + rushRewardText(m) + " · 不给余烬币、装备、碎片，也不算每日委托");
+            if (!progressFlag(d, m.requires)) { p.sendMessage(P + "§c需本人首通 " + m.requires.toUpperCase(Locale.ROOT)); return true; }
+            int used = rushWeek(d, p.getUniqueId(), m);
+            p.sendMessage(P + (EmberRunRules.rushPaysReward(used, m.rushWeekly) ? "§a本周已领 " : "§8本周已领 ") + used + "/" + m.rushWeekly);
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{EmberRunRules.rushPaysReward(used, m.rushWeekly) ? "[开始]" : "[练习一局]",
+                    "/corerpg p1 rush " + m.key + " go", "组队时由队长开；失败不扣任何东西，可以无限重试", EmberRunRules.rushPaysReward(used, m.rushWeekly) ? "RED" : "GRAY"});
+            return true;
+        }
         p.sendMessage(P + "§c余烬连战 §7— " + rushChainText(m) + "，同一个大厅连打（招式和各自主线图一样）");
         p.sendMessage(P + "§7首领生命 ×" + fmt2(m.rushHp) + "、伤害 ×" + fmt2(m.rushDmg) + "（组队另按人数加生命）· 1～" + maps.partyMax(m) + " 人 · 不耗体力"
                 + " · 每打倒一个休息 " + Math.round(m.rushBreak) + " 秒、回复 " + Math.round(m.rushHeal * 100) + "% 生命 · 倒下观战，没有复活");
@@ -3530,6 +3586,18 @@ public final class EmberRunService implements Listener {
             return EmberRunRules.rushPaysReward(used, RUSH_WEEKLY) ? "§a本周奖励未领 · 失败可无限重试" : "§7本周奖励已领 · 可练习（无奖励）";
         }
         if (key.startsWith("pledge_")) return pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
+        if (key.startsWith("rush_") && maps.rush.containsKey(key.substring(5))) { // D174 stage 2b: %corerpg_p1_rush_<entry>% menu line
+            EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5));
+            if (!progressFlag(d, rm.requires)) return "§8需本人首通 " + rm.requires.toUpperCase(Locale.ROOT);
+            for (String ck : rm.chainKeys) if (!progressFlag(d, ck)) return "§8需本人首通 " + ck.toUpperCase(Locale.ROOT);
+            int used = rushWeek(d, p.getUniqueId(), rm);
+            return EmberRunRules.rushPaysReward(used, rm.rushWeekly) ? "§a本周已领 " + used + "/" + rm.rushWeekly + " · 失败可无限重试" : "§7本周 " + rm.rushWeekly + " 次已领完 · 可练习（无奖励）";
+        }
+        if (key.startsWith("passd_")) { // D174 stage 2b: entries sharing one DP hall dungeon check the pass by dungeon
+            Object[] ps = passes.get(p.getUniqueId());
+            EmberRunMaps.MapDef pm = ps == null || System.currentTimeMillis() > (Long) ps[1] ? null : maps.byKey((String) ps[0]);
+            return pm != null && pm.dungeon.equalsIgnoreCase(key.substring(6)) ? "yes" : "no";
+        }
         if (key.startsWith("afk_")) { EmberAfkService a = EmberAfkService.get(); return a == null ? "" : a.papi(p, d, key.substring(4)); } // D177
         if (key.startsWith("sig_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.sigPapi(p, d, key.substring(4)); } // D174 stage 1.5
         if (key.startsWith("reroll_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.rerollPapi(p, d, key.substring(7)); } // D143
@@ -3539,6 +3607,7 @@ public final class EmberRunService implements Listener {
         if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
         if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
         if ("q07done".equals(key)) return progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
+        if (key.length() == 7 && key.startsWith("q0") && key.endsWith("done")) return progressFlag(d, key.substring(0, 3)) ? "1" : "0"; // D174 stage 2b: q04done / q05done / q06done
         if ("featured".equals(key)) return featuredLabel(d); // P2-1
         if ("modifier".equals(key)) return modifierLabel(); // P2-8
         if (key.startsWith("rule_")) return ruleLine(d, key.substring(5)); // D94

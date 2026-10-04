@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(35, m.balanceVersion);                // D174 stage 2b pledge (2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
-        assertEquals("g04-1/b35", m.ruleVersion);
+        assertEquals(36, m.balanceVersion);                // D174 stage 2b outpost (pledge = 35, 2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
+        assertEquals("g04-1/b36", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -991,6 +991,30 @@ public class EmberRunRulesTest {
         assertTrue(r.rushMarks >= 1 && r.rushMarks <= 2);                                    // marks / 余烬徽 / title only
         assertTrue(r.rushHp >= 1.0 && r.rushDmg >= 1.0);
         assertNotNull(EmberCosmetics.byId(r.rushTitle));
+    }
+
+    @Test public void outpostRunsTheT1ChainOnItsOwnClaim_D174() { // stage 2b 连战·前哨
+        EmberRunMaps m = bundled();
+        EmberRunMaps.MapDef o = m.byKey("outpost"), r = m.byKey("rush");
+        assertNotNull(o);
+        assertTrue(o.rush && !o.mainRush() && r.mainRush());
+        assertEquals("outpost", o.rushMode);
+        assertEquals("[q01, q02, q03]", o.chainKeys.toString());
+        assertEquals("q05", o.requires);
+        assertEquals("p4_outpost_claim", o.rushClaim);
+        assertEquals("p4_rush_claim", r.rushClaim);
+        assertEquals(1, o.rushWeekly);
+        assertEquals(2, o.rushMarkTier);
+        assertEquals(1, o.rushMarks);
+        assertEquals(2, o.rushSig);
+        assertEquals(0, o.rushBadges);
+        assertEquals("", o.rushTitle);
+        assertEquals(0, m.cost(o));
+        assertEquals("EmberQ0B2", o.dungeon);
+        assertSame(r, m.byWorld("dungeon_EmberQ0B1_1A2B"));                                  // the D144 hall stays its own dungeon
+        assertEquals("EmberQ0B2", m.byWorld("dungeon_EmberQ0B2_1A2B").dungeon);
+        for (EmberRunMaps.Boss b : o.chain) { assertEquals(146, b.at.z, 0); assertFalse(b.waitInArea); }
+        assertEquals("[]", m.validate().toString());
     }
 
     private static String keys(java.util.List<EmberRunRules.Grant> gs) {

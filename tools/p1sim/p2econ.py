@@ -283,6 +283,7 @@ def rush_week(cfg, kn, p, rng):
 
 
 RUSH_STATS = {'tries': 0, 'paid': 0, 'unpaid_weeks': 0}
+OUTPOST = int(os.environ.get('P1_OUTPOST', '0'))  # D174 stage 2b: T2 marks per week from 连战·前哨 before the Q07 first clear (0 = off)
 
 
 GOALS = {'featured': 1, 'abyss': 3, 'raid': 1}  # D116 weekly goals that change what a player does (rewards: cosmetic only)
@@ -444,6 +445,9 @@ def to_q07(cfg, kn, seed):
             ok, used, extra, *_ = p1sim.run_map(mc, key, p.st(), kn, rng, p.potions if cap is None else min(cap, p.potions), repeat=rep)
         p.potions -= used
         runs += 1
+        if OUTPOST and 'q05' in p.cleared and runs % (7 * per_day) == 0:  # D174 stage 2b 连战·前哨 upper bound: cleared every week
+            p.marks[2] += OUTPOST
+            p.invest()
         if ok:
             p1sim.feat_pay(p, kn, cfg, order, p.day, offset, key)  # D108
             p.settle(key, extra, dict(p1sim.LAST_VAR) if rep else None)
