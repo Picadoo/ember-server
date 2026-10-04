@@ -741,6 +741,41 @@ PROPOSALS = [
 ]
 
 
+PROPOSALS += [  # second round (post-fix calibration 12:xx): narrower variants of the near-misses
+    {'id': 'P1b', 'node': 't3a', 'set': 'scorch', 'name': '燎原 → 连锁燃烧（第二轮）',
+     'text': '燃烧中的敌人倒下时，把剩余燃烧（最多 {burn_spread:.0f} 秒）整段传给最近的未燃烧敌人，无冷却；代价：燃烧每跳 ×{burn_mult}',
+     'variants': [{'burn_spread': s_, 'spread_icd': 0, 'burn_mult': x} for s_, x in ((4, 0.85), (3, 0.85), (3, 0.9))]},
+    {'id': 'P2b', 'node': 't3b', 'set': 'burst', 'name': '反震 → 聚爆（第二轮）',
+     'text': '烬爆一次命中 ≥3 个目标时系数 ×{burst_pack}；只命中 1 个时 ×{burst_solo}（2 个不变）',
+     'variants': [{'burst_pack': p, 'burst_solo': x} for p, x in ((1.2, 0.6), (1.15, 0.7), (1.25, 0.5))]},
+    {'id': 'P4b', 'node': 't1a', 'set': None, 'name': '回身斩 → 破绽窗口（第二轮）',
+     'text': '首领每次预警招落下（躲没躲开都算）后 {win_secs:.0f} 秒内对首领伤害 ×{win_dmg}；窗口外对首领 ×{win_out}',
+     'variants': [{'win_dmg': w_, 'win_secs': 2, 'win_out': x} for w_, x in ((1.2, 0.93), (1.25, 0.92), (1.2, 0.94))]},
+    {'id': 'P5b', 'node': 't1b', 'set': None, 'name': '稳桩 → 铁壁（第二轮）',
+     'text': '受到首领预警招伤害 ×{taken_tele}；代价：受到首领普攻 ×{taken_boss}',
+     'variants': [{'taken_tele': t, 'taken_boss': x} for t, x in ((0.85, 1.06), (0.8, 1.07), (0.85, 1.05))]},
+]
+PROP_FAMS_EXTRA = {'P4b': ('burst', 'sustain'), 'P5b': ('burst', 'sustain')}
+
+
+def noise_floor(n=2000, nproc=7):
+    """M05: the same spec on two disjoint tolerance seed sets — how big is max-over-42-cells by chance?"""
+    global TOL_SEEDS
+    out = {}
+    for lab, sp in (('无成长 烬爆', {'set': 'burst'}), ('现行稳桩 炽愈', {'set': 'sustain', 'extra': node_mods('t1b')})):
+        a = tol_rates(sp, n, nproc)
+        keep = TOL_SEEDS
+        TOL_SEEDS = (17, 19, 23)
+        try:
+            b_ = tol_rates(sp, n, nproc)
+        finally:
+            TOL_SEEDS = keep
+        ds = [100 * (a[k] - b_[k]) for k in a]
+        out[lab] = (max(ds), min(ds), sum(abs(x) <= 2 for x in ds), len(ds), statistics.pstdev(ds))
+        print('noise', lab, out[lab], flush=True)
+    return out
+
+
 PROP_STANCES = dict(STANCES, tank={'tele_bonus': 0.0, 'uptime': +0.1}, hold={'hold_skill': True})
 
 
@@ -1216,7 +1251,7 @@ PROP_FAMS = {'P4': ('burst', 'sustain'), 'P5': ('burst', 'sustain'), 'P6': ('bur
 
 def prop_specs(P):
     out = []
-    for fam in PROP_FAMS.get(P['id'], (P['set'],)):
+    for fam in {**PROP_FAMS, **PROP_FAMS_EXTRA}.get(P['id'], (P['set'],)):
         out.append((fam, '无成长', {'set': fam}))
         out.append((fam, '现行 ' + node_names()[P['node']], {'set': fam, 'extra': node_mods(P['node'])}))
         for v in P['variants']:
@@ -1329,8 +1364,12 @@ if __name__ == '__main__':
     if mode == 'propose':
         ids = sys.argv[sys.argv.index('--ids') + 1].split(',') if '--ids' in sys.argv else None
         nt = int(sys.argv[sys.argv.index('--n') + 1]) if '--n' in sys.argv else 2000
-        R = prop_run(ids, nt, int(1.5 * nt), nproc=int(os.environ.get('NPROC', '7')))
+        R0 = pickle.load(open('/tmp/bd/prop.pkl', 'rb')) if ids and os.path.exists('/tmp/bd/prop.pkl') else {}
+        R = dict(R0, **prop_run(ids, nt, int(1.5 * nt), nproc=int(os.environ.get('NPROC', '7'))))  # merge rounds
         pickle.dump(R, open('/tmp/bd/prop.pkl', 'wb'))
+        if '--noise' in sys.argv:
+            NF = noise_floor(nt, int(os.environ.get('NPROC', '7')))
+            pickle.dump(NF, open('/tmp/bd/noise.pkl', 'wb'))
         open(os.path.join(HERE, 'out-build-diversity-proposals.md'), 'w', encoding='utf-8').write(prop_report(R, nt, int(1.5 * nt), 4243))
         print('wrote out-build-diversity-proposals.md')
     if mode == 'm04':
