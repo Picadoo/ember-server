@@ -1,10 +1,10 @@
 # Ember 奖励精英变招 Pack 1（D182，设计-only，2026-10-04）
 
-> 状态：**设计定稿，未实现**。本窗不改 CoreRpg 源码 / yml / jar / 菜单，不 bump `balance_version`，不跑 p1sim（`COORD-afk-p1` / `COORD-signin-online` 占用 `tools/p1sim`；`COORD-mainline-unlocks` 占 CoreRpg DEPLOY LOCK）。
+> 状态：**已实现 CoreRpg 1.65.20 / balance_version 43**（`COORD-routine-0047` / branch `d182-elite`；未 push / 未 deploy，等 signin DEPLOY LOCK RELEASE）。
 > 前置：Extra.ELITE 现网（10% 权重、金皮木桩、`ELITE_SHARD=10` + `ELITE_CORE=1`）；形状库同 D140/D173（`circle`/`cone`/`line`/`charge`，`light`，warn≥1.2s，kb≤1）。
 > 研究：`docs/design/RESEARCH-ember-reward-elite-2026-10-04.md`（D3 Champion/Rare、PoE、WoW M+、本服词缀/首领边界）。
 > 边界：词缀精英扩包 = D138/D176/D181；房间事件扩包 = D179；首领半血 = D173。**本包只动 Extra.ELITE 奖励精英。**
-> 实现对齐：等 mainline / afk / signin 释放 CoreRpg + p1sim 后落地；落地前用离线 sim 过 §7 门禁。
+> p1sim：`tools/p1sim` Extra.ELITE 仍是无招木桩（`mob(..., 'elite')`，无 blaze/技能表）；本包**不扩** p1sim 大模型。§7 通关率门禁（有招 vs 无招 Δ≤2pp）留到 p1sim 有 elite-extra 招式模型后再扫；经济 Δ≈0（未改 shard/core）。
 
 ## 0. 一段话裁决
 
@@ -114,6 +114,6 @@ elite_twists:
 
 ## 9. 登记
 
-- 源表：**D182**（设计-only）  
+- 源表：**D182**（CoreRpg 1.65.20 / bv43，待 RELEASE）  
 - P2 草稿：§5zl  
-- COORD：本窗 `COORD-routine-1942`；实现另开 COORD（勿与 mainline/afk/signin 抢 DEPLOY LOCK）
+- COORD：设计窗 `COORD-routine-1942`；实现窗 `COORD-routine-0047`（worktree，不抢 DEPLOY LOCK）

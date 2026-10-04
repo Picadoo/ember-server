@@ -560,6 +560,8 @@ public final class EmberRunMaps {
     public final double raidLastReviveHp, raidReviveDelay;
     /** D138 repeat-run variety (runs yml `variety:`); never null (rates 0 when the block is missing) */
     public final Variety variety;
+    /** D182 Extra.ELITE light moves (runs yml `elite_twists:`); never null (enabled false when missing) */
+    public final EliteTwists eliteTwists;
     public final String worldPrefix;
     public final Map<String, MapDef> maps;
     /** P2-5 raids (runs yml `raids:`), keyed like maps (r01 …) */
@@ -704,6 +706,86 @@ public final class EmberRunMaps {
             return new String[]{ar, at, er, ek};
         }
     }
+
+    /**
+     * D182 奖励精英变招 Pack 1: Extra.ELITE (EmberQ0xElite) gets one fixed telegraphed light move per main map.
+     * {@code dmg} in yml is a multiplier of the elite's atk (absolute damage = atk × dmg); shapes reuse the boss
+     * telegraph system ({@code light: true}, warn ≥ 1.2). Rewards unchanged.
+     */
+    public static final class EliteTwists {
+        public static final List<String> MAPS = Collections.unmodifiableList(java.util.Arrays.asList(
+                "q01", "q02", "q03", "q04", "q05", "q06", "q07"));
+        public final boolean enabled;
+        /** seconds after spawn before the first cast may start (design §6: stagger vs affix elite) */
+        public final double openDelay;
+        public final Map<String, Twist> byMap;
+
+        public static final class Twist {
+            public final String move, name, hint;
+            /** template skill: {@code dmg} is the atk multiplier until {@link #skill(double)} */
+            public final Skill template;
+            Twist(String move, Map<?, ?> raw) {
+                this.move = move;
+                String[] nh = names(move);
+                this.name = nh[0];
+                this.hint = nh[1];
+                Map<Object, Object> m = new LinkedHashMap<Object, Object>();
+                // shape → type (boss skills use type=); force light
+                String shape = str(raw.get("shape"), str(raw.get("type"), "line"));
+                m.put("type", shape);
+                m.put("name", this.name);
+                m.put("every", num(raw.get("every"), 14));
+                m.put("warn", Math.max(1.2, num(raw.get("warn"), 1.2)));
+                m.put("dmg", Math.max(0.0, num(raw.get("dmg"), 1.0))); // multiplier
+                m.put("light", true);
+                if (raw.containsKey("length")) m.put("length", raw.get("length"));
+                if (raw.containsKey("width")) m.put("width", raw.get("width"));
+                if (raw.containsKey("radius")) m.put("radius", raw.get("radius"));
+                if (raw.containsKey("ahead")) m.put("ahead", raw.get("ahead"));
+                if (raw.containsKey("angle")) m.put("angle", raw.get("angle"));
+                if (raw.containsKey("range")) m.put("range", raw.get("range"));
+                if (raw.containsKey("kb")) m.put("kb", raw.get("kb"));
+                if (raw.containsKey("target")) m.put("target", raw.get("target"));
+                if (raw.containsKey("start")) m.put("start", raw.get("start"));
+                this.template = new Skill(m);
+            }
+            /** absolute-damage skill for an elite whose atk is {@code atk} */
+            public Skill skill(double atk) { return template.withDmg(atk * template.dmg); }
+        }
+
+        EliteTwists(Map<?, ?> m) {
+            enabled = Boolean.TRUE.equals(m.get("enabled")) || "true".equals(String.valueOf(m.get("enabled")));
+            openDelay = Math.max(0.0, num(m.get("open_delay"), 3.0));
+            Map<String, Twist> t = new LinkedHashMap<String, Twist>();
+            for (String k : MAPS) {
+                if (m.get(k) instanceof Map) {
+                    Map<?, ?> raw = (Map<?, ?>) m.get(k);
+                    String move = str(raw.get("move"), k);
+                    t.put(k, new Twist(move, raw));
+                }
+            }
+            byMap = Collections.unmodifiableMap(t);
+        }
+
+        /** null when disabled or the map has no twist row */
+        public Twist forMap(String mapKey) {
+            if (!enabled || mapKey == null) return null;
+            return byMap.get(mapKey.toLowerCase(Locale.ROOT));
+        }
+
+        /** Chinese display name + one-line dodge hint (design §4) */
+        static String[] names(String move) {
+            if ("shove".equals(move)) return new String[]{"门廊推", "会放正前亮带，侧移再打"};
+            if ("stomp".equals(move)) return new String[]{"焦焰踏", "会放脚下亮圈，走开再打"};
+            if ("sweep".equals(move)) return new String[]{"誓印扫", "会放正前扇形，走到扇外再打"};
+            if ("barge".equals(move)) return new String[]{"闸冲", "会放直线冲撞条带，离开再打"};
+            if ("dust".equals(move)) return new String[]{"落尘", "会在你脚附近亮圈，提前走开再打"};
+            if ("breath".equals(move)) return new String[]{"霜息", "会放正前扇形，侧移再打"};
+            if ("slag".equals(move)) return new String[]{"矿渣劈", "会放正前亮带，侧移再打"};
+            return new String[]{move, "有预警招式，躲开再打"};
+        }
+    }
+
 
     public static final class Modifier {
         public final String id, name, text;
@@ -868,6 +950,7 @@ public final class EmberRunMaps {
         raidLastReviveHp = clamp01(num(rv.get("last_phase_hp"), 0.0));
         raidReviveDelay = Math.max(0.0, num(rv.get("delay"), 10.0));
         variety = new Variety(root.get("variety") instanceof Map ? (Map<?, ?>) root.get("variety") : Collections.emptyMap());
+        eliteTwists = new EliteTwists(root.get("elite_twists") instanceof Map ? (Map<?, ?>) root.get("elite_twists") : Collections.emptyMap());
         Map<?, ?> lb = root.get("loot_bias") instanceof Map ? (Map<?, ?>) root.get("loot_bias") : Collections.emptyMap();
         lootOwnFamily = clamp01(num(lb.get("own_family"), EmberRunRules.TARGET_WEIGHT));
         lootMapShare = clamp01(num(lb.get("map_share"), 0.5));

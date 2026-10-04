@@ -1077,6 +1077,15 @@ public final class EmberRunService implements Listener {
     }
 
     void onExtraSpawned(EmberRunSession s) {
+        // D182: reward elite announces its fixed light move (dodge hint + same 10+1 rewards)
+        if (s.extra == EmberRunRules.Extra.ELITE && maps != null) {
+            EmberRunMaps.EliteTwists.Twist tw = maps.eliteTwists.forMap(s.mapKey);
+            if (tw != null) {
+                tellRun(s, "§e额外事件：奖励精英「" + tw.name + "」§7· " + tw.hint
+                        + " · 击败 → §f碎片 +" + EmberRunRules.ELITE_SHARD + " §7+ §f核心 +" + EmberRunRules.ELITE_CORE);
+                return;
+            }
+        }
         tellRun(s, "§6侧边出现了「" + s.extra.label + "」§7（可跳过；奖励记为待结算，击败首领才发放）");
     }
 

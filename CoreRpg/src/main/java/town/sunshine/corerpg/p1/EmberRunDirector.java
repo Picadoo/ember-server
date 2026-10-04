@@ -54,6 +54,7 @@ final class EmberRunDirector {
         long regenWindowEnd;        // D171 regen interrupt window end (0 = idle)
         double regenHurt;           // D171 damage taken during the current interrupt window
         long frostNext;             // D171 next frost aura tick
+        EmberRunMaps.Skill twist;   // D182 Extra.ELITE light move (null = plain stump)
         Tracked(LivingEntity le, String role, String roomId, EmberRunMaps.Pt home, EmberRunMaps.Box leash,
                 double atk, double interval, double range, EmberRunMaps.Role def) {
             this.le = le; this.role = role; this.roomId = roomId; this.home = home; this.leash = leash;
@@ -266,6 +267,7 @@ final class EmberRunDirector {
             }
             if (t.caster()) casterTick(t, now);
             if (t.affix != null) affixTick(t, now);
+            if (t.twist != null) twistTick(t, now);
         }
         if (!crystalBlocks.isEmpty()) pollCrystals();
         if (eventStart > 0 && !eventWarned && activeRoom != null && activeRoom.equals(s.eventRoom)) {
@@ -825,7 +827,17 @@ final class EmberRunDirector {
             case ELITE: {
                 String role = s.extra == EmberRunRules.Extra.TREASURE ? "treasure" : "elite";
                 Tracked t = spawn(def.role(role, ch), role, "event", a, def.eventArea);
-                if (t != null) extraMob = t.le.getUniqueId();
+                if (t != null) {
+                    extraMob = t.le.getUniqueId();
+                    // D182: attach the map's fixed light move (dmg = elite.atk × yml multiplier)
+                    if (s.extra == EmberRunRules.Extra.ELITE && svc.maps() != null) {
+                        EmberRunMaps.EliteTwists.Twist tw = svc.maps().eliteTwists.forMap(def.key);
+                        if (tw != null) {
+                            t.twist = tw.skill(t.atk);
+                            t.nextCast = System.currentTimeMillis() + (long) (svc.maps().eliteTwists.openDelay * 1000);
+                        }
+                    }
+                }
                 break;
             }
             case CHEST: {
@@ -1109,6 +1121,47 @@ final class EmberRunDirector {
         c.sort((a, b) -> a.getUniqueId().compareTo(b.getUniqueId()));
         long h = EmberRunRules.subSeed(s.seed, "skill", String.valueOf(casts));
         return c.get((int) Math.floorMod(h, (long) c.size()));
+    }
+
+
+    /** D182: Extra.ELITE fixed light move — same shapes as boss telegraphs; src != boss so charge does not dash. */
+    private void twistTick(Tracked t, long now) {
+        EmberRunMaps.Skill sk = t.twist;
+        if (sk == null) return;
+        if (t.castAt > 0) {
+            EmberRunMaps.Skill drawn = twistDrawn(t, sk);
+            drawShape(drawn, t.castOrigin, t.castDir == null ? new Vector(1, 0, 0) : t.castDir);
+            if (now >= t.castAt) {
+                execute(drawn, t.castOrigin, t.castDir == null ? new Vector(1, 0, 0) : t.castDir, t.le);
+                t.castAt = 0;
+                t.nextCast = now + (long) (sk.every * 1000);
+            }
+            return;
+        }
+        if (now < t.nextCast) return;
+        Location o = t.le.getLocation().clone();
+        Player target = "player".equals(sk.target) ? pickTarget(o, 16) : nearest(o, 16);
+        if (target == null) return;
+        Vector dir = target.getLocation().toVector().subtract(o.toVector());
+        dir.setY(0);
+        if (dir.lengthSquared() < 1e-6) dir = new Vector(0, 0, 1);
+        dir.normalize();
+        if ("charge".equals(sk.type) && clearRun(o, dir, sk.length) < CHARGE_MIN) return; // no room — skip, keep CD
+        // circle locked on the player's feet (Q05 落尘); others aim from the elite
+        t.castOrigin = "player".equals(sk.target) ? target.getLocation().clone() : o;
+        t.castDir = dir;
+        t.castAt = now + (long) (sk.warn * 1000);
+        Location face = o.clone();
+        face.setDirection(dir);
+        t.le.teleport(face);
+        t.le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
+    }
+
+    /** charge strip clipped to clearRun (B2.165); other shapes unchanged */
+    private EmberRunMaps.Skill twistDrawn(Tracked t, EmberRunMaps.Skill sk) {
+        if (!"charge".equals(sk.type) || t.castOrigin == null || t.castDir == null) return sk;
+        double run = clearRun(t.castOrigin, t.castDir, sk.length);
+        return run < CHARGE_MIN ? sk : sk.withLength(run);
     }
 
     private void casterTick(Tracked t, long now) {

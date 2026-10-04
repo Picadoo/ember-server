@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(42, m.balanceVersion);                // D180 rev 2 AFK minutes count online (D184 = 41, D183 = 40, D180 = 39, D177 rev 2 = 38, D174 2b echo = 37, outpost = 36, pledge = 35, 2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
-        assertEquals("g04-1/b42", m.ruleVersion);
+        assertEquals(43, m.balanceVersion);                // D180 rev 2 AFK minutes count online (D184 = 41, D183 = 40, D180 = 39, D177 rev 2 = 38, D174 2b echo = 37, outpost = 36, pledge = 35, 2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
+        assertEquals("g04-1/b43", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1200,6 +1200,52 @@ public class EmberRunRulesTest {
         EmberRunSession t = EmberRunSession.fromMap(s.toMap());
         assertEquals("split", t.affix); assertEquals("r2", t.affixRoom); assertTrue(t.affixDone);
         assertEquals("r3", t.eventRoom); assertFalse(t.eventDone);
+    }
+
+
+    @Test public void rewardEliteTwistsParseOneMovePerMap_D182() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.EliteTwists et = m.eliteTwists;
+        assertTrue(et.enabled);
+        assertEquals(3.0, et.openDelay, 1e-9);
+        assertEquals(7, et.byMap.size());
+        String[][] expect = {
+                {"q01", "shove", "line", "门廊推"},
+                {"q02", "stomp", "circle", "焦焰踏"},
+                {"q03", "sweep", "cone", "誓印扫"},
+                {"q04", "barge", "charge", "闸冲"},
+                {"q05", "dust", "circle", "落尘"},
+                {"q06", "breath", "cone", "霜息"},
+                {"q07", "slag", "line", "矿渣劈"},
+        };
+        for (String[] row : expect) {
+            EmberRunMaps.EliteTwists.Twist tw = et.forMap(row[0]);
+            assertNotNull(row[0], tw);
+            assertEquals(row[1], tw.move);
+            assertEquals(row[2], tw.template.type);
+            assertEquals(row[3], tw.name);
+            assertTrue(tw.template.light);
+            assertTrue(tw.template.warn + " warn", tw.template.warn >= 1.2 - 1e-9);
+            // absolute dmg = elite.atk × multiplier
+            EmberRunMaps.Role elite = m.byKey(row[0]).roles.get("elite");
+            EmberRunMaps.Skill sk = tw.skill(elite.atk);
+            assertEquals(elite.atk * tw.template.dmg, sk.dmg, 1e-9);
+            assertTrue(sk.light);
+        }
+        // Q04 barge: kb=0 (no knockback off the tide ledges)
+        assertEquals(0.0, et.forMap("q04").template.kb, 1e-9);
+        assertEquals("player", et.forMap("q05").template.target);
+        // disabled flag → forMap returns null (current Extra.ELITE stump behaviour)
+        java.util.Map<Object, Object> off = new java.util.LinkedHashMap<Object, Object>();
+        off.put("enabled", false);
+        java.util.Map<Object, Object> q01 = new java.util.LinkedHashMap<Object, Object>();
+        q01.put("move", "shove"); q01.put("shape", "line"); q01.put("every", 14); q01.put("warn", 1.2);
+        q01.put("length", 5); q01.put("width", 2); q01.put("dmg", 1.0);
+        off.put("q01", q01);
+        EmberRunMaps.EliteTwists disabled = new EmberRunMaps.EliteTwists(off);
+        assertFalse(disabled.enabled);
+        assertNull(disabled.forMap("q01"));
+        assertEquals(1, disabled.byMap.size()); // still parsed, just gated by enabled
     }
 
     @Test public void varietyPack2RollsNewAffixesAndEventsOffFirstClears_D171() {
