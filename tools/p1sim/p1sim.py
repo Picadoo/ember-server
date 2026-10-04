@@ -144,11 +144,29 @@ def awakening(blade, charm):
     return 1
 
 
-def stats(cfg, blade, charm, level, ctx=None):
+# STAGE 0 6-slot gear (gear6.py, 10-04 research doc §4.1; not in Java): None = the live 2-slot model. Otherwise
+# {'w': (charm, head, chest, legs, boots)} = each piece's share of the charm h / D budget (sums to 1). With every
+# armor piece equal to the charm (tier / enhance / quality / craft) H and M are exactly the 2-slot values.
+SIX = __import__('json').loads(os.environ['P1SIM_SIX']) if os.environ.get('P1SIM_SIX') else None  # e.g. {"w": [0.4, 0.15, 0.15, 0.15, 0.15], "drop": 1, "start": true, "cost": {"charm": 0.4, "armor": 0.15}}
+ARMOR_SLOTS = ('head', 'chest', 'legs', 'boots')
+
+
+def hp_def(cfg, charm, armor=None):
+    """(h·g, D) of the HP / DEF side: the charm alone (2-slot) or the share-weighted charm + 4 armor pieces"""
+    g = lambda it: 1 + cfg['e'][it['enh']] + cfg['q'][it['q']] + cfg['f'][it['f']]
+    if SIX is None or armor is None:
+        return cfg['h'][charm['tier']] * g(charm), cfg['D'][charm['tier']]
+    ps = (charm,) + tuple(armor)
+    return (sum(w * cfg['h'][it['tier']] * g(it) for w, it in zip(SIX['w'], ps)),
+            sum(w * cfg['D'][it['tier']] for w, it in zip(SIX['w'], ps)))
+
+
+def stats(cfg, blade, charm, level, ctx=None, armor=None):
     steps = max(0, min(level, cfg['lvl_cap']) - cfg['lvl_base'])
     g = lambda it: 1 + cfg['e'][it['enh']] + cfg['q'][it['q']] + cfg['f'][it['f']]
     B = cfg['A'][blade['tier']] * g(blade) + cfg['lvl_atk'] * steps
-    H = 20 + cfg['h'][charm['tier']] * g(charm) + cfg['lvl_hp'] * steps
+    hg, dd = hp_def(cfg, charm, armor)
+    H = 20 + hg + cfg['lvl_hp'] * steps
     if FEST:  # D139 festival charm slot (festsim.py): H0 += hp, D += def, same formula
         H += FEST['hp']
     awk = awakening(blade, charm)
@@ -158,8 +176,11 @@ def stats(cfg, blade, charm, level, ctx=None):
         H *= 1 + (cfg['sustain_hp'] - 1) * (mods.get('sustain_hp', 1.0) if mods else 1.0)
     if mods:
         H *= mods.get('max_hp', 1.0)
-    M = max(cfg['def_floor'], cfg['def_k'] / (cfg['def_k'] + cfg['D'][charm['tier']] + (FEST['def'] if FEST else 0)))
+    M = max(cfg['def_floor'], cfg['def_k'] / (cfg['def_k'] + dd + (FEST['def'] if FEST else 0)))
     out = {'B': B, 'H': H, 'M': M, 'set': fam, 'awk': awk}
+    if SIX is not None and armor is not None:  # 4-piece: core 2pc + >= 2 same-family armor, all four >= T2 (no effect modelled)
+        same = [a for a in armor if fam and a['fam'] == fam and a['tier'] >= 2]
+        out['pc4'] = bool(fam and len(same) >= 2 and blade['tier'] >= 2 and charm['tier'] >= 2)
     if mods:
         out['mods'] = mods
     return out
@@ -656,6 +677,7 @@ class Player:
         self.cfg, self.kn, self.rng = cfg, kn, random.Random(rng.getrandbits(64))
         self.blade = item('none', 'blade', 0, src='starter')
         self.charm = item('none', 'charm', 0, src='starter')
+        self.armor = [item('none', a, 0, src='starter') for a in ARMOR_SLOTS] if SIX is not None else None
         self.coin = self.shard = self.core = self.bone = self.blank = self.xp = 0
         self.potions = cfg['starter_potions']
         self.marks = {1: 0, 2: 0, 3: 0}
@@ -664,7 +686,32 @@ class Player:
         self.day, self._bday, self._bn = None, None, 0  # P2-7 daily bounty: loops set p.day before settle()
 
     def st(self):
-        return stats(self.cfg, self.blade, self.charm, level_of(self.cfg, self.xp), self.cleared)
+        return stats(self.cfg, self.blade, self.charm, level_of(self.cfg, self.xp), self.cleared, self.armor)
+
+    def roll_armor(self, tier, key=None):
+        """STAGE 0: the extra armor drop of a completed run — family by the same target / map rule as roll_item, slot
+        uniform (SIX['gap']: a slot whose worn piece is below this tier / not the target family is twice as likely),
+        quality / craft from the same tables"""
+        it = self.roll_item(tier, key)
+        r = self.rng
+        ws = [2.0 if SIX.get('gap') and (a['tier'] < tier or a['fam'] != self.kn.target) else 1.0 for a in self.armor]
+        it['slot'] = ARMOR_SLOTS[pick(ws, r.random())]
+        return it
+
+    def consider_armor(self, new):
+        cfg, kn = self.cfg, self.kn
+        i = ARMOR_SLOTS.index(new['slot'])
+        cur = self.armor[i]
+        lv = level_of(cfg, self.xp)
+        alt = list(self.armor); alt[i] = new
+        a, b = stats(cfg, self.blade, self.charm, lv, None, alt), stats(cfg, self.blade, self.charm, lv, None, self.armor)
+        # 4-piece bookkeeping only (no effect in stage 0): prefer the target family on ties
+        if power(cfg, a, kn) > power(cfg, b, kn) * 1.0001 or (power(cfg, a, kn) >= power(cfg, b, kn) * 0.9999
+                                                             and new['fam'] == kn.target and cur['fam'] != kn.target):
+            self.armor[i] = new
+            self.dismantle(cur)
+        else:
+            self.dismantle(new)
 
     def roll_item(self, tier, key=None):
         r, cfg = self.rng, self.cfg
@@ -695,6 +742,8 @@ class Player:
         """Equip `new` if the whole loadout gets stronger; dismantle what is not worn."""
         cfg, kn = self.cfg, self.kn
         slot = new['slot']
+        if slot in ARMOR_SLOTS:
+            return self.consider_armor(new)
         cur = self.blade if slot == 'blade' else self.charm
         cand = dict(new)
         if kn.swap and cur['enh'] > cand['enh']:
@@ -704,10 +753,11 @@ class Player:
         chase = (getattr(kn, 'quality_chase', False) and new['q'] > cur['q']
                  and new['tier'] >= cur['tier'] and new['fam'] == kn.target and cur['fam'] == kn.target)
         lv = level_of(cfg, self.xp)
+        ar = self.armor
         if slot == 'blade':
-            a, b = stats(cfg, cand, self.charm, lv), stats(cfg, self.blade, self.charm, lv)
+            a, b = stats(cfg, cand, self.charm, lv, None, ar), stats(cfg, self.blade, self.charm, lv, None, ar)
         else:
-            a, b = stats(cfg, self.blade, cand, lv), stats(cfg, self.blade, self.charm, lv)
+            a, b = stats(cfg, self.blade, cand, lv, None, ar), stats(cfg, self.blade, self.charm, lv, None, ar)
         if chase or power(cfg, a, kn) > power(cfg, b, kn) * 1.0001:
             if kn.swap and cand['enh'] == cur['enh'] and cur['enh'] > new['enh']:
                 cur = dict(cur, enh=new['enh'], pity=new['pity'])
@@ -721,7 +771,7 @@ class Player:
 
     def dismantle(self, it):
         if it['src'] in ('drop', 'mark') and it['tier'] >= 1:
-            self.blank += it['tier']
+            self.blank += it['tier'] * (SIX.get('blank', 1.0) if SIX is not None and it['slot'] in ARMOR_SLOTS else 1.0)
 
     def bounty(self):
         """P2-7 (D79): the n-th settled clear of the stamina day pays the bounty tiers with clears == n."""
@@ -771,6 +821,12 @@ class Player:
         tier = m['tier']
         self.marks[tier] += b['mark']
         drops = [self.roll_item(tier, key)]
+        if SIX is not None:
+            drops += [self.roll_armor(tier, key) for _ in range(int(SIX.get('drop', 1)))]
+            if SIX.get('start') and key not in self.cleared and key in ('q01', 'q02'):  # research §4.3 starter armor
+                four = SIX.get('start') == 'q01'  # all four at the Q01 first clear (no Q02 gap)
+                for a in (ARMOR_SLOTS if four and key == 'q01' else () if four else ('head', 'chest') if key == 'q01' else ('legs', 'boots')):
+                    drops.append(item(self.kn.target, a, 1, src='task'))
         if extra == 'treasure':
             self.coin += cfg['treasure_coin']
         elif extra == 'elite':
@@ -811,26 +867,31 @@ class Player:
         reserve = kn.coin_reserve
         # §6.4 upgrade first (T1→T2 after q04, T2→T3 after q07); lower piece first, blade on ties
         self.save_for_upgrade = False
-        for it in sorted((self.blade, self.charm), key=lambda x: (x['tier'], x['slot'] != 'blade')):
+        pieces = (self.blade, self.charm) + (tuple(self.armor) if self.armor is not None else ())
+        for it in sorted(pieces, key=lambda x: (x['tier'], ('blade', 'charm').index(x['slot']) if x['slot'] in ('blade', 'charm') else 2)):
             flag = {1: 'q04', 2: 'q07'}.get(it['tier'])
             if not flag or flag not in self.cleared or it['fam'] == 'none':
                 continue
-            c = cfg['upgrade'][it['tier']]
+            k = self.cost_mult(it)
+            c = {x: v * k for x, v in cfg['upgrade'][it['tier']].items()}
             if self.shard >= c['shard'] and self.core >= c['core'] and self.blank >= c['blank']:
                 if self.coin - c['coin'] >= reserve:
                     self.shard -= c['shard']; self.core -= c['core']; self.blank -= c['blank']; self.coin -= c['coin']
                     it['tier'] += 1
+                    if SIX is not None and SIX.get('up_all') and it['slot'] in ARMOR_SLOTS:
+                        continue  # STAGE 0 policy: upgrade every affordable armor piece in one go (2-slot unchanged)
                 else:
                     self.save_for_upgrade = True
                     reserve += c['coin']
                 break
         # §6.1 enhance the lower piece while affordable
         while True:
-            it = min((self.blade, self.charm), key=lambda x: (x['enh'], x['slot'] != 'blade'))
+            it = min(pieces, key=lambda x: (x['enh'], ('blade', 'charm').index(x['slot']) if x['slot'] in ('blade', 'charm') else 2))
             if it['enh'] >= 10 or it['tier'] == 0 and it['enh'] >= 10:
                 break
             t = it['enh'] + 1
-            sh, co, cn = cfg['enh_shard'][t], cfg['enh_core'][t], cfg['enh_coin'][t]
+            k = self.cost_mult(it)
+            sh, co, cn = cfg['enh_shard'][t] * k, cfg['enh_core'][t] * k, cfg['enh_coin'][t] * k
             if self.shard < sh or self.core < co or self.coin - cn < reserve:
                 break
             self.shard -= sh; self.core -= co; self.coin -= cn
@@ -838,6 +899,12 @@ class Player:
                 it['enh'] = t; it['pity'] = 0
             else:
                 it['pity'] += 1
+
+    def cost_mult(self, it):
+        """STAGE 0: enhance / upgrade cost multiplier of a piece (SIX['cost'] = {'charm': x, 'armor': y}; blade 1)"""
+        if SIX is None or it['slot'] == 'blade':
+            return 1.0
+        return float((SIX.get('cost') or {}).get('armor' if it['slot'] in ARMOR_SLOTS else 'charm', 1.0))
 
     def buy_potions(self):
         while self.potions < self.kn.potion_keep and self.coin >= self.cfg['potion_price']:
@@ -976,6 +1043,10 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
                 r['fc_run'], r['fc_day'] = runs, day
                 r['gear'] = desc(p.blade) + ' ' + desc(p.charm)
                 r['B'], r['H'], r['lv'] = st['B'], st['H'], level_of(cfg, p.xp)
+                r['M'] = st['M']
+                r['charm_te'] = (p.charm['tier'], p.charm['enh'], p.charm['q'])
+                if p.armor is not None:  # STAGE 0: armor worn at the first clear (tier, enhance, quality)
+                    r['armor'] = [(a['tier'], a['enh'], a['q']) for a in p.armor]
             feat_pay(p, kn, cfg, order, day, offset, key)
             p.settle(key, extra, dict(LAST_VAR) if rep else None)
             if first:

@@ -113,6 +113,29 @@ def gear(ctx, spec):
     return c[ck], k, bl, ch, lv, rep
 
 
+def armor_of(spec, ch):
+    """STAGE 0 (gear6.py): the 4 armor pieces worn next to the reference charm ch, by scenario spec['armor']:
+      eq = same tier / enhance / quality / craft as the charm (H, M identical to 2-slot) · enhN = N levels below the charm
+      enh0 = +0 · tierdown = one tier below, same enhance · start = T1 standard +0 (research §4.3 starter kit) ·
+      q<k> = quality k on every armor piece (extra drops → better rolls) · f<k> = craft k"""
+    if not spec.get('six'):
+        return None
+    sc = spec.get('armor', 'eq')
+    out = []
+    for a in p1sim.ARMOR_SLOTS:
+        it = dict(ch, slot=a)
+        if sc.startswith('enh'):
+            it['enh'] = 0 if sc == 'enh0' else max(0, ch['enh'] - int(sc[3:]))
+        elif sc == 'tierdown':
+            it['tier'] = max(0, ch['tier'] - 1)
+        elif sc == 'start':
+            it.update(tier=min(1, ch['tier']), enh=0, q=0, f=0)
+        elif sc[0] in 'qf' and sc[1:].isdigit():
+            it[sc[0]] = int(sc[1:])
+        out.append(it)
+    return out
+
+
 # tolerance contexts (same as growthcheck.py): first-clear NORMAL at the book §3.2 reference loadout, CHALLENGE at T3+6
 for _k, (_bt, _be, _ct, _ce, _lv) in p1sim.REF_GEAR.items():
     CTX[_k + 'r'] = ('%s 普通首通（书参考装）' % _k.upper(), 'n', _k, _bt, _be, _ct, _ce, _lv, False)
@@ -128,7 +151,11 @@ def measure(job):
     p1sim.GROWTH = growth_fn(spec) if (spec.get('talents') or spec.get('honors') or spec.get('affixes') or spec.get('extra')) else None
     p1sim.FEST = c['fest'] if spec.get('fest') else None
     cfg, key, bl, ch, lv, rep = gear(ctx, spec)
-    st = p1sim.stats(cfg, bl, ch, lv)
+    p1sim.SIX = spec.get('six')
+    try:
+        st = p1sim.stats(cfg, bl, ch, lv, None, armor_of(spec, ch))
+    finally:
+        p1sim.SIX = None
     kn = knobs(d, stance)
     rng = random.Random(seed)
     agg = __import__('collections').Counter()
