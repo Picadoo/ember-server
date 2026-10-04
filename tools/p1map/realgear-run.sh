@@ -30,13 +30,24 @@ ev "const want=(s,t)=>{ for(let i=9;i<=44;i++){const x=bot.inventory.slots[i]; i
 ev 'const n=bot.chatLog.length; bot.chat("/corerpg p1 equip"); await wait(1200); return bot.chatLog.slice(n).map(s=>s.replace(/\u00a7./g,"")).join(" | ").slice(0,400);'
 START=$(wc -l < $LOG); T0=$(date +%s)
 if [ "$K" = rush ]; then
+  # rush legs are boss-only arenas (no room DOOR/ROOM frames). MOVE=kite → fight-kite.sh strafe+telegraph dodge; stand keeps old fight.sh.
   ev 'const n=bot.chatLog.length; bot.chat("/corerpg p1 rush go"); await wait(9000); return bot.chatLog.slice(n).map(s=>s.replace(/\u00a7./g,"")).join(" | ").slice(0,500);'
   sleep 3
-  for leg in 1 2 3 4; do DRINK=1 $T/fight.sh $N 150000 0 34 22000 | tr -d "\n " | grep -o "\"ms\":[0-9]*\|\"hits\":[0-9]*\|\"drinks\":[0-9]*\|\"minHp\":[0-9.]*" | tr "\n" " "; echo
-    tail -n +$START $LOG | grep -aq "rush settle\|run .* failed\|state=FAILED\|余烬连战失败\|全员倒下" && break; done
+  for leg in 1 2 3 4; do
+    if [ "$MOVE" = kite ]; then
+      FJ=$(DRINK=1 MOVE=kite $P/fight-kite.sh $N 150000 0 34 22000 | tr -d "\n ")
+      echo "RUSH-LEG $leg $(echo "$FJ" | grep -o "\"ms\":[0-9]*\|\"hits\":[0-9]*\|\"drinks\":[0-9]*\|\"kites\":[0-9]*\|\"dodges\":[0-9]*\|\"casterDodges\":[0-9]*\|\"missed\":[0-9]*\|\"dead\":[a-z]*\|\"minHp\":[0-9.]*\|\"hp\":[0-9.]*\|\"err\".\{0,200\}" | tr "\n" " ")"
+      D1=$(echo "$FJ" | grep -o '"drinks":[0-9]*' | cut -d: -f2); RUSH_DRK=$(( ${RUSH_DRK:-0} + ${D1:-0} ))
+      echo "$FJ" | grep -q '"dead":true' && break
+    else
+      DRINK=1 $T/fight.sh $N 150000 0 34 22000 | tr -d "\n " | grep -o "\"ms\":[0-9]*\|\"hits\":[0-9]*\|\"drinks\":[0-9]*\|\"minHp\":[0-9.]*" | tr "\n" " "; echo
+    fi
+    tail -n +$START $LOG | grep -aq "rush settle\|run .* failed\|state=FAILED\|余烬连战失败\|全员倒下" && break
+  done
 else
   NR=$($P/newbie-run.sh $N $K 2>&1); echo "$NR"
 fi
+[ -n "${RUSH_DRK:-}" ] && NR="KITE-SUMMARY died_leg=- drinks=$RUSH_DRK"
 sleep 6
 DT=$(( $(date +%s) - T0 ))
 RL=$(tail -n +$START $LOG | grep -a "\[P1 run\]" | grep -a " $K-\| $N " | sed 's/^.*\[P1 run\] //' | cut -c1-150)

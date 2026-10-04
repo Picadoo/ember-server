@@ -142,3 +142,38 @@
 - `tools/p1map/newbie-run.sh`：`MOVE=kite` 时走到入口内 2 格、门口 = 走廊末点、房间框读线上 `plugins/CoreRpg/ember-v1-runs.yml` 的 trigger / 首领 area（只读）；`ENTRY=center` = 粗糙走位的进房方式；打印 `LEG n …` 与 `KITE-SUMMARY died_leg= drinks=`。
 - `tools/p1map/realgear-run.sh`：`MOVE` 透传；RESULT 行加 `move= room= potions= killer=`（站桩模式的 room 偏后一段，因为旧 fight 循环死后不停）。
 - 原始日志：`/workspace/scratch/kite/k-*.log`（走位）、`s-*.log`（粗糙走位）、`summ.py`（汇总），box 本地。
+
+## 6 冻结期走位连战 + Q04 文案冒烟（2026-10-04 14:41–14:57 CST，CoreRpg 1.65.3）
+
+**背景**：FEATURE FREEZE（不改 CoreRpg / 数值 / 不重启）。补 `realgear-run.sh`：`MOVE=kite` + `K=rush` 时每个首领段改走 `tools/p1map/fight-kite.sh`（`DRINK=1`，不传 `DOOR`/`ROOM`；横移 + 读聊天躲预警）。`MOVE=stand` 仍走旧 `tmp-p1/fight.sh`。qNN 路径不变（仍经 `newbie-run.sh`）。
+
+**设置**：不削弱、不加血、生存；T2+8/T2+8 Lv30 连战；T1+6/T1+6 Lv21 Q04。原始日志 `/workspace/scratch/routine-1439/`。
+
+### 6.1 结果
+
+| 局 | bot | 结果 | 关键验证 |
+|---|---|---|---|
+| 连战 #1 | FreshQ103 | **FAIL** wall=179 s · 药 5 · 死于第 3 首领 **炉锁巨卫**（1/3 断塔斧卫 ~54 s、2/3 霜封统领 ~52 s 已过） | 入口「不耗体力 · 每周首通领奖，失败可无限重试 · 你本周奖励未领」；日志 `rush attempt counted for 1 (stats only, D160)`；失败文案「本周奖励还没领」。RUSH-LEG 见 dodges=18/2 → **kite 路径生效** |
+| 连战 #2（同号立刻重试） | FreshQ103 | **FAIL** wall=201 s · 药 5 · 再死炉锁巨卫（1/3 ~53 s、2/3 ~59 s） | 入口仍「你本周奖励未领」；再计 `stats only, D160`；**失败不吞每周领奖机会**（无限重试 PASS） |
+| Q04 | FreshQ105 | **CLEAR** wall=183 s · 药 4 · minHp 17.6 · 首领 40.6 s | 与 §5 走位通关一致 |
+| Q04（补抓文案） | FreshQ106 | **CLEAR** wall=180 s · 药 2 · minHp 8.1 | 中途轮询聊天抓到 **「首领前留 2 瓶药 · 首领战更长、伤害更高；清房时生命够就别急着喝」**（1.65.3 / D166）。Q01 式「进门后退到门口打」只配在 Q01 r1，Q04 **没有**门口提示（符合配置） |
+
+RESULT 行：
+
+```
+RESULT FreshQ103 rush move=kite gear=burst T2+8/T2+8 Lv30 result=FAIL wall=179s deaths=1 room=- potions=5 killer=炉锁巨卫
+RESULT FreshQ103 rush move=kite gear=burst T2+8/T2+8 Lv30 result=FAIL wall=201s deaths=1 room=- potions=5 killer=炉锁巨卫
+RESULT FreshQ105 q04 move=kite gear=burst T1+6/T1+6 Lv21 result=CLEAR wall=183s deaths=0 room=- potions=4 killer=-
+RESULT FreshQ106 q04 move=kite gear=burst T1+6/T1+6 Lv21 result=CLEAR wall=180s deaths=0 room=- potions=2 killer=-
+```
+
+### 6.2 解读（不改数值）
+
+1. **工具补丁有效**：连战 kite 段打印 `RUSH-LEG` + dodges，站桩时代死在第 1 首领（§2），走位能打到第 3 首领；qNN 仍走 `newbie-run.sh`。
+2. **D160 行为仍对**：失败只记 stats、不领奖、可立刻再进且文案仍是「本周奖励未领」。
+3. **连战第 3 首领仍紧**：两局 kite 都在炉锁巨卫耗尽药后倒下——这是数据，不是 bug；冻结期不调数值。
+4. **1.65.3 文案**：Q04 首领前留药提示在线；门口拉怪提示仅 Q01（预期）。
+
+### 6.3 工具
+
+- `tools/p1map/realgear-run.sh`：rush + `MOVE=kite` → `fight-kite.sh`（无 DOOR/ROOM）；`MOVE=stand` 不变；累加 `RUSH_DRK` 填 RESULT `potions=`。
