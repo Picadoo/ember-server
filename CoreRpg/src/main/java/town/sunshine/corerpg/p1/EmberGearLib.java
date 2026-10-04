@@ -337,24 +337,44 @@ public final class EmberGearLib implements Listener {
             if (bad != null) { p.sendMessage(P + ChatColor.RED + bad + "（列表有变化时请重新点批量分解）"); go = false; }
         }
         if (!go) {
+            String byQ = EmberStorageRules.qualityCounts(take);
+            int enh = EmberStorageRules.enhancedCount(take);
             p.sendMessage(P + "批量分解（筛选：" + f.label() + "）：" + ChatColor.WHITE + take.size() + ChatColor.GRAY + " 件 → 胚料 ×"
-                    + EmberStorageRules.blanksOf(take) + (skipped > 0 ? "；另有 " + skipped + " 件锁定 / 收藏 / 有投入(强化·精工·成色卓越+/词条) / 不可分解，跳过" : ""));
+                    + EmberStorageRules.blanksOf(take) + " · 按成色：" + ChatColor.WHITE + byQ + ChatColor.GRAY + " · 其中强化过 " + (enh > 0 ? ChatColor.RED : ChatColor.WHITE) + enh + ChatColor.GRAY + " 件");
+            // 1.64.1: the pieces kept back for having investment come first, in red, with the reason
+            Set<String> aff = affixUids(p, view), eq = equipped(p);
+            List<String> kept = new ArrayList<String>();
+            int other = 0;
+            for (Entry e : view) {
+                if (take.contains(e)) continue;
+                String why = e.locked ? "锁定" : e.fav ? "收藏" : eq.contains(e.d.uid) ? "装备中"
+                        : EmberStorageRules.invested(e.d) ? "有投入：" + EmberStorageRules.investedWhy(e.d) : aff.contains(e.d.uid) ? "有词条" : null;
+                if (why == null) { other++; continue; }
+                kept.add(e.d.shortLabel() + "（" + why + "）");
+            }
+            if (!kept.isEmpty()) {
+                p.sendMessage(P + ChatColor.RED + "不会分解 " + kept.size() + " 件：");
+                for (int k = 0; k < kept.size(); k++) { if (k >= 6) { p.sendMessage(P + ChatColor.RED + "  … 另 " + (kept.size() - 6) + " 件"); break; } p.sendMessage(P + ChatColor.RED + "  ✖ " + kept.get(k)); }
+            }
+            if (other > 0) p.sendMessage(P + ChatColor.GRAY + "另有 " + other + " 件非掉落 / T0，不能分解");
+            p.sendMessage(P + ChatColor.WHITE + "会分解：");
             int shown = 0;
-            for (Entry e : take) { if (shown++ >= 8) { p.sendMessage(P + "  … 共 " + take.size() + " 件"); break; } p.sendMessage(P + "  · " + e.d.shortLabel()); }
-            p.sendMessage(P + ChatColor.GRAY + "有强化 / 精工 / 成色卓越及以上 / 词条的件默认不批量分解（单件分解仍可）。");
-            p.sendMessage(P + ChatColor.YELLOW + "分解后 " + undoMinutes() + " 分钟内可在装备库「撤销分解」找回（要退回胚料）。");
+            for (Entry e : take) { if (shown++ >= 8) { p.sendMessage(P + "  … 共 " + take.size() + " 件（" + byQ + "）"); break; } p.sendMessage(P + "  · " + e.d.shortLabel()); }
+            p.sendMessage(P + ChatColor.GRAY + "有强化 / 精工 / 成色卓越及以上（含极品）/ 词条的件默认不批量分解（单件分解仍可）。");
+            p.sendMessage(P + ChatColor.YELLOW + "分解后 " + undoMinutes() + " 分钟内可在装备库「撤销分解」找回，可整批撤销（要退回胚料）。");
             String t = ConfirmTokens.issue(p, "glibbulk", fps);
             ConfirmTokens.sendClick(p, P + "确认无误再点：", "[确认批量分解]", "/corerpg p1 gearlib bulk confirm tok:" + t,
-                    "分解上面列出的 " + take.size() + " 件\n锁定 / 收藏 / 装备中 / 有投入的不会分解");
+                    "分解上面列出的 " + take.size() + " 件（" + byQ + "，强化过 " + enh + "）\n锁定 / 收藏 / 装备中 / 有投入的不会分解");
             return true;
         }
+        final String batch = Long.toString(System.currentTimeMillis(), 36);
         final int[] left = {take.size()}, okN = {0}, blanks = {0};
         for (final Entry e : take) {
             if (busy.contains(e.d.uid)) { if (--left[0] == 0) bulkDone(id, okN[0], blanks[0]); continue; }
             busy.add(e.d.uid);
             final int y = EmberUpgradeRules.dismantleYield(e.d);
             store().commitTxn("glibdis:" + e.d.uid + ":" + e.d.rev, "glibdis", id, Arrays.asList(new TxnItem(e.d, null, "dismantled", "stored")),
-                    null, "装备库分解 " + e.d.shortLabel() + " → 胚料×" + y, res -> {
+                    null, "装备库分解 " + e.d.shortLabel() + " → 胚料×" + y + " [批 " + batch + "]", res -> {
                         busy.remove(e.d.uid);
                         if (res.status == TxnStatus.OK) {
                             okN[0]++; blanks[0] += y;
@@ -370,6 +390,7 @@ public final class EmberGearLib implements Listener {
     private void bulkDone(UUID id, int n, int blanks) {
         Player q = Bukkit.getPlayer(id);
         if (q == null) { plugin.getLogger().warning("[P1 gearlib] bulk dismantle " + id + " left: " + n + " pieces, blanks " + blanks + " not given"); return; }
+        if (n > 0) ConfirmTokens.sendButtons(q, P + "整批撤销：", new String[]{"[撤销这一批]", "/corerpg p1 undo batch", "一次撤销最近这批分解（" + undoMinutes() + " 分钟内，要退回胚料）", "GREEN"});
         if (blanks > 0) { if (vault() != null) vault().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else plugin.getNiBridge().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); }
         plugin.getLogger().info("[P1 gearlib] bulk dismantle " + q.getName() + " " + n + " pieces → blanks " + blanks);
         q.sendMessage(P + ChatColor.GREEN + "已分解 " + n + " 件 → 胚料 ×" + blanks + ChatColor.GRAY + "（" + undoMinutes() + " 分钟内可撤销）");
@@ -387,10 +408,18 @@ public final class EmberGearLib implements Listener {
         final long now = System.currentTimeMillis();
         store().recentDismantles(id, now - mins * 60000L, rows -> {
             if (!p.isOnline()) return;
+            if ("batch".equals(want)) { undoBatch(p, rows, args.length >= 4 ? args[3] : null); return; }
             if (want == null) {
                 if (rows.isEmpty()) { p.sendMessage(P + "最近 " + mins + " 分钟没有可撤销的分解（洗练吃掉的重复件不能撤销）"); return; }
-                p.sendMessage(P + "最近 " + mins + " 分钟分解的装备（撤销要退回当时给的胚料，物品回到装备库）：");
-                for (LibRow r : rows)
+                p.sendMessage(P + "最近 " + mins + " 分钟分解的装备共 " + rows.size() + " 件" + (rows.size() > 20 ? "，下面显示最近 20 件" : "")
+                        + "（撤销要退回当时给的胚料，物品回到装备库）：");
+                Map<String, Integer> batches = new java.util.LinkedHashMap<String, Integer>();
+                for (LibRow r : rows) { String b = EmberStorageRules.batchOf(r.note); if (b != null) batches.merge(b, 1, Integer::sum); }
+                for (Map.Entry<String, Integer> b : batches.entrySet()) if (b.getValue() > 1)
+                    ConfirmTokens.sendButtons(p, P + "批量分解的一批 §f" + b.getValue() + " §7件 ", new String[]{"[撤销这一批]", "/corerpg p1 undo batch " + b.getKey(),
+                            "一次撤销这 " + b.getValue() + " 件，退回胚料 ×" + EmberStorageRules.batchYield(rows, b.getKey()), "GREEN"});
+                int shownU = 0;
+                for (LibRow r : rows) if (shownU++ < 20)
                     ConfirmTokens.sendButtons(p, P + "· " + r.data.shortLabel() + " §8(剩 " + EmberStorageRules.left(r.updatedAt, now, mins) + ") ",
                             new String[]{"[撤销]", "/corerpg p1 undo " + r.data.uid, "退回胚料 ×" + EmberUpgradeRules.dismantleYield(r.data) + "，这件回到装备库", "GREEN"});
                 return;
@@ -425,6 +454,47 @@ public final class EmberGearLib implements Listener {
                     });
         });
         return true;
+    }
+
+    /** 1.64.1 (review round 2 #7): undo a whole bulk-dismantle batch at once ({@code tag} null = the newest batch) */
+    private void undoBatch(final Player p, List<LibRow> rows, String tag) {
+        String b = tag;
+        if (b == null) for (LibRow r : rows) { b = EmberStorageRules.batchOf(r.note); if (b != null) break; }
+        final List<LibRow> pick = new ArrayList<LibRow>();
+        if (b != null) for (LibRow r : rows) if (b.equals(EmberStorageRules.batchOf(r.note)) && !busy.contains(r.data.uid)) pick.add(r);
+        if (pick.isEmpty()) { p.sendMessage(P + ChatColor.RED + "没有可整批撤销的批量分解（超过 " + undoMinutes() + " 分钟、已撤销，或是单件分解）"); return; }
+        String g = gate(p);
+        if (g != null) { p.sendMessage(P + ChatColor.RED + g); return; }
+        int need = 0;
+        for (LibRow r : pick) need += EmberUpgradeRules.dismantleYield(r.data);
+        int have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
+        if (have < need) { p.sendMessage(P + ChatColor.RED + "整批撤销要退回胚料 ×" + need + "，背包 + 仓库只有 " + have + "（可以一件一件撤销）"); return; }
+        if (need > 0 && plugin.getNiBridge().consume(p, EmberUpgradeRules.MAT_BLANK, need) < need) { p.sendMessage(P + ChatColor.RED + "扣胚料失败"); return; }
+        final UUID id = p.getUniqueId();
+        final int[] left = {pick.size()}, ok = {0}, refund = {0};
+        for (final LibRow r : pick) {
+            final EmberItemData d = r.data;
+            final int y = EmberUpgradeRules.dismantleYield(d);
+            busy.add(d.uid);
+            store().commitTxn("undo:" + d.uid + ":" + d.rev, "undo", id, Arrays.asList(new TxnItem(d, null, "stored", "dismantled")),
+                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（整批，退回胚料×" + y + "，回到装备库）", res -> {
+                        busy.remove(d.uid);
+                        if (res.status == TxnStatus.OK) {
+                            long t = System.currentTimeMillis();
+                            loadouts.rememberRow(d.uid, id, d.rev + 1, "stored");
+                            store().saveLibFlags(d.uid, id, false, false, t);
+                            replace(id, d.uid, new Entry(d.withRev(d.rev + 1), false, false, t));
+                            ok[0]++;
+                        } else refund[0] += y;
+                        if (--left[0] == 0) {
+                            Player q = Bukkit.getPlayer(id);
+                            if (refund[0] > 0 && q != null) { if (vault() != null) vault().give(q, EmberUpgradeRules.MAT_BLANK, refund[0]); else plugin.getNiBridge().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, refund[0]); }
+                            else if (refund[0] > 0) plugin.getLogger().warning("[P1 gearlib] batch undo " + id + " offline, blanks refund " + refund[0] + " not given");
+                            plugin.getLogger().info("[P1 gearlib] batch undo " + id + " " + ok[0] + "/" + pick.size() + " pieces, refund " + refund[0]);
+                            if (q != null) q.sendMessage(P + ChatColor.GREEN + "已整批撤销 " + ok[0] + " 件，回到装备库" + (refund[0] > 0 ? ChatColor.RED + "（" + (pick.size() - ok[0]) + " 件没撤成，胚料 ×" + refund[0] + " 已退回）" : ""));
+                        }
+                    });
+        }
     }
 
     // ================================================================== admin item history
@@ -591,7 +661,8 @@ public final class EmberGearLib implements Listener {
         lore.add("");
         lore.add("§e左键 §f取出到背包" + (gate(p) != null ? " §c(回城后)" : ""));
         lore.add("§e右键 §f" + (e.locked ? "解锁" : "锁定") + " §8· §eShift+右键 §f" + (e.fav ? "取消收藏" : "收藏"));
-        String name = (e.fav ? "§e★ " : "") + (e.locked ? "§c[锁] " : "") + "§f" + e.d.shortLabel();
+        if (EmberStorageRules.invested(e.d)) lore.add(lore.size() - 3, "§c有投入（" + EmberStorageRules.investedWhy(e.d) + "）：批量分解会跳过");
+        String name = (e.fav ? "§e★ " : "") + (e.locked ? "§c[锁] " : "") + (EmberStorageRules.invested(e.d) ? "§6[投入] " : "") + "§f" + e.d.shortLabel();
         ItemStack it = icon(m, 0, name, lore.toArray(new String[0]));
         return it;
     }

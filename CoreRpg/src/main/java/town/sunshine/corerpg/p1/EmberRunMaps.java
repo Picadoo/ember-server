@@ -629,6 +629,8 @@ public final class EmberRunMaps {
         public final Map<String, String> remap;     // role → role
         public final boolean swapRooms;             // r1 ↔ r3 compositions
         public final boolean normal;                // D94: also on repeat NORMAL runs of the featured map
+        /** D158 (review round 2 #5): multipliers for the mobs this rule converted (remap), so each swap has its own feel */
+        public final double convHp, convAtk, convInterval, convSpeed;
         Modifier(Map<?, ?> m) {
             id = str(m.get("id"), "");
             name = str(m.get("name"), id);
@@ -639,7 +641,17 @@ public final class EmberRunMaps {
             remap = Collections.unmodifiableMap(r);
             swapRooms = Boolean.TRUE.equals(m.get("swap_rooms")) || "true".equals(String.valueOf(m.get("swap_rooms")));
             normal = Boolean.TRUE.equals(m.get("normal")) || "true".equals(String.valueOf(m.get("normal")));
+            Map<?, ?> cv = m.get("converted") instanceof Map ? (Map<?, ?>) m.get("converted") : Collections.emptyMap();
+            convHp = clampMult(num(cv.get("hp"), 1.0));
+            convAtk = clampMult(num(cv.get("atk"), 1.0));
+            convInterval = clampMult(num(cv.get("interval"), 1.0));
+            convSpeed = clampMult(num(cv.get("speed"), 1.0));
         }
+        private static double clampMult(double v) { return Math.max(0.25, Math.min(4.0, v)); }
+        /** true when converted mobs get any multiplier */
+        public boolean tweaksConverted() { return convHp != 1.0 || convAtk != 1.0 || convInterval != 1.0 || convSpeed != 1.0; }
+        /** damage per second factor of a converted mob vs. its plain role (atk / interval) */
+        public double convDpsFactor() { return convAtk / convInterval; }
         /** the role actually spawned on map d (a target role the map does not define keeps the original) */
         public String role(String role, MapDef d) {
             String to = remap.get(role);

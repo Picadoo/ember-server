@@ -36,6 +36,8 @@ public final class NiBridge {
         long count(Player player, String niId);
         /** removes up to {@code amount}; returns removed */
         long take(Player player, String niId, long amount);
+        /** 1.64.1: {@link #consume} took {@code amount} of {@code niId} straight out of the backpack (audit / invsnap net-out) */
+        default void consumedFromInventory(Player player, String niId, long amount) { }
     }
 
     private volatile ExtraSource extra;
@@ -155,6 +157,9 @@ public final class NiBridge {
         }
         player.updateInventory();
         ExtraSource e = extra;
+        if (e != null && amount - need > 0) {
+            try { e.consumedFromInventory(player, niId, amount - need); } catch (RuntimeException ignored) { }
+        }
         if (need > 0 && e != null) need -= (int) Math.max(0, Math.min(need, e.take(player, niId, need)));
         return amount - need;
     }

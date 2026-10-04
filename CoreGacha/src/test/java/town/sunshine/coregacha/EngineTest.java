@@ -130,4 +130,49 @@ public class EngineTest {
         assertEquals(0, s.sameLegendTwice);
         new SplittableRandom(1); // keep import used
     }
+
+    /** 1.0.1 (review round 2 #3): gq26 spark 30, only the two limited legends, leftover carried into standard spark */
+    @Test public void limitedSparkPerBannerAndRestricted() {
+        GachaConfig c = cfg();
+        Banner gq = c.banner("gq26"), std = c.banner("standard");
+        assertEquals(30, c.sparkFor(gq));
+        assertEquals(200, c.sparkFor(std));
+        assertTrue(c.sparkAllows(gq, "gq_pet_koi", OPEN));
+        assertTrue(c.sparkAllows(gq, "gq_aura_firework", OPEN));
+        assertTrue("standard legends are not on the limited spark", !c.sparkAllows(gq, "pet_lamp", OPEN));
+        assertTrue(!c.sparkAllows(gq, "gq_tag_lantern", OPEN));
+        assertTrue("standard spark: anything in the pool", c.sparkAllows(std, "pet_lamp", OPEN));
+        assertTrue("koi retires into standard and is spark-able there", c.sparkAllows(std, "gq_pet_koi", AFTER));
+        assertEquals("carry", gq.sparkLeftover);
+        assertEquals("standard", gq.retireTo);
+    }
+
+    /** a dedicated event player (free 21 + 9 exchanged = 30 pulls) always has the koi before 10-08 */
+    @Test public void thirtyPullsAlwaysReachKoi() {
+        GachaConfig c = cfg();
+        Engine e = new Engine(c);
+        Banner gq = c.banner("gq26");
+        Banner.Pool pool = c.pool(gq, OPEN);
+        SplittableRandom rng = new SplittableRandom(42);
+        for (int p = 0; p < 2000; p++) {
+            PityState st = new PityState();
+            Set<String> have = new HashSet<String>();
+            for (int i = 0; i < 30; i++) {
+                e.pull(pool, st, have, rng::nextDouble);
+                if (st.spark >= c.sparkFor(gq) && !have.contains("gq_pet_koi")) { have.add("gq_pet_koi"); st.spark -= c.sparkFor(gq); }
+            }
+            assertTrue(have.contains("gq_pet_koi"));
+        }
+    }
+
+    @Test public void sparkItemsMustBeOnTheBanner() {
+        @SuppressWarnings("unchecked") Map<String, Object> root = (Map<String, Object>) new Yaml().load(
+                "items: {a: {name: A, tier: legend, kind: tag}, b: {name: B, tier: legend, kind: tag}}\n"
+                        + "banners: {x: {type: limited, start: '2026-10-03T00:00:00+08:00', end: '2026-10-08T00:00:00+08:00', spark: 25,"
+                        + " spark_items: [a, zz], items: {a: 1, b: 1}}}");
+        GachaConfig c = GachaConfig.parse(root);
+        assertEquals(25, c.sparkFor(c.banner("x")));
+        assertEquals(java.util.Collections.singletonList("a"), c.banner("x").sparkItems);
+        assertTrue(c.warnings.toString(), c.warnings.toString().contains("zz"));
+    }
 }

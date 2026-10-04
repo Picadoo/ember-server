@@ -334,6 +334,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onDisable() {
+        if (town.sunshine.corerpg.p1.EmberVaultLog.get() != null) town.sunshine.corerpg.p1.EmberVaultLog.get().shutdown(); // 1.64.1 warehouse log
         if (invSnap != null) invSnap.shutdown(); // 1.62: last inventory snapshot of everyone online (quit events come after disable)
         if (hubAmbience != null) hubAmbience.stop(); // D97: floating lines never outlive the plugin
         if (petService != null) petService.shutdown();

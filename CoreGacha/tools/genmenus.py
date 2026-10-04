@@ -54,11 +54,15 @@ wallet = icon('I', 'nether star', '§d外观扭蛋 §8（只出外观，零属�
     '', '§7券从哪来：每天活跃在线 30 / 90 分钟、主线结算 1 / 3 局各 1 张，',
     '§7或用余烬币 / 余烬徽换（每天最多 5 张）。§c没有任何充值入口。',
     '§7重复的外观变光屑，光屑能直接换池里任意一件。'])
+def spark_of(bid):
+    return int(cfg['banners'][bid].get('spark') or cfg.get('spark', 200))
+def spark_pick(bid):
+    return '任选一件本池限定传说' if cfg['banners'][bid].get('spark_items') else '任选一件'
 def banner_icons(b, key_card, k1, k10, kr, ks):
     bid = b
     card_lore = ['', '%coregacha_b_desc_' + bid + '%', '%coregacha_b_left_' + bid + '%', '',
                  '§6传说：§f%coregacha_b_legend_' + bid + '%', '%coregacha_b_pity_' + bid + '%',
-                 '§7火花：§f%coregacha_b_spark_' + bid + '% §8（满 ' + str(cfg.get('spark', 200)) + ' 任选一件）',
+                 '§7火花：§f%coregacha_b_spark_' + bid + '% §8（满 ' + str(spark_of(bid)) + ' ' + spark_pick(bid) + '）',
                  '§7本池累计：§f%coregacha_b_pulls_' + bid + '% §7抽', '', '§e➥ §f左键：概率公示 · 右键：火花兑换']
     mat = cfg['banners'][bid].get('icon', 'CHEST')
     acts = {'left': cmd(f'gacha rates {bid}'), 'right': cmd(f'gacha spark {bid}')}
@@ -75,13 +79,14 @@ def banner_icons(b, key_card, k1, k10, kr, ks):
         out.append(lim_icon(k1, 'firework charge', '§f单抽 §8· ' + cfg['banners'][bid]['name'], pull_lore(1), {'all': cmd(f'gacha pull {bid} 1')}))
         out.append(lim_icon(k10, 'firework', '§6十连 §8· ' + cfg['banners'][bid]['name'], pull_lore(10) [:3] + ['§7十连内至少一件史诗或以上', '', '§e➥ §f点击抽取'], {'all': cmd(f'gacha pull {bid} 10')}))
         out.append(lim_icon(kr, 'paper', '§f概率公示 §8· ' + cfg['banners'][bid]['name'], ['', '§7四档基础 / 综合概率、保底规则、逐件概率', '', '§e➥ §f打开'], {'all': cmd(f'gacha rates {bid}')}))
-        out.append(lim_icon(ks, 'blaze powder', '§f火花兑换 §8· %coregacha_b_spark_' + bid + '%', ['', '§7每抽 +1，满 ' + str(cfg.get('spark', 200)) + ' 在本池任选一件没有的', '§8限定池结束后剩下的火花 1:1 折成光屑', '', '§e➥ §f查看'], {'all': cmd(f'gacha spark {bid}')}))
+        out.append(lim_icon(ks, 'blaze powder', '§f火花兑换 §8· %coregacha_b_spark_' + bid + '%', ['', '§7每抽 +1，满 ' + str(spark_of(bid)) + ' ' + spark_pick(bid) + '（没有的）', '§7活动期免费券 + 兑换约 9 张就能满' if spark_of(bid) <= 30 else '',
+     ('§8限定池结束后剩下的火花 1:1 转进常驻池火花' if cfg['banners'][bid].get('spark_leftover') == 'carry' else '§8限定池结束后剩下的火花 1:1 折成光屑'), '', '§e➥ §f查看'], {'all': cmd(f'gacha spark {bid}')}))
     else:
         out.append(icon(key_card, mat, '§b' + cfg['banners'][bid]['name'], card_lore, acts))
         out.append(icon(k1, 'ender pearl', '§f单抽 §8· ' + cfg['banners'][bid]['name'], pull_lore(1), {'all': cmd(f'gacha pull {bid} 1')}))
         out.append(icon(k10, 'eye of ender', '§6十连 §8· ' + cfg['banners'][bid]['name'], pull_lore(10)[:3] + ['§7十连内至少一件史诗或以上', '', '§e➥ §f点击抽取'], {'all': cmd(f'gacha pull {bid} 10')}))
         out.append(icon(kr, 'paper', '§f概率公示 §8· ' + cfg['banners'][bid]['name'], ['', '§7四档基础 / 综合概率、保底规则、逐件概率', '', '§e➥ §f打开'], {'all': cmd(f'gacha rates {bid}')}))
-        out.append(icon(ks, 'blaze powder', '§f火花兑换 §8· %coregacha_b_spark_' + bid + '%', ['', '§7每抽 +1，满 ' + str(cfg.get('spark', 200)) + ' 在本池任选一件没有的', '', '§e➥ §f查看'], {'all': cmd(f'gacha spark {bid}')}))
+        out.append(icon(ks, 'blaze powder', '§f火花兑换 §8· %coregacha_b_spark_' + bid + '%', ['', '§7每抽 +1，满 ' + str(spark_of(bid)) + ' 在本池任选一件没有的', '', '§e➥ §f查看'], {'all': cmd(f'gacha spark {bid}')}))
     return out
 
 main_icons = [wallet] + banner_icons(STANDARD, 'S', '1', 'T', 'R', 'K') + banner_icons(LIMITED, 'L', '2', 'M', 'r', 'k') + [
@@ -111,7 +116,7 @@ rate_icons += [
          f"§7第 {cfg['rates']['hard_pity']} 抽必出传说（永远不会到第 {cfg['rates']['hard_pity']+1} 抽）",
          f"§7每 {cfg['rates']['tier2_every']} 抽至少一件史诗或以上", '§7同一个池不会连续出同一件传说',
          '§8传说宠物只在主城显示 · 光环副本里不显示',
-         f"§7火花：每抽 +1，满 {cfg.get('spark', 200)} 任选一件", '§7限定池共用一组保底（换季延续），常驻池单独一组',
+         f"§7火花：每抽 +1；常驻池满 {spark_of(STANDARD)} 任选一件，限定池满 {spark_of(LIMITED)} 换一件限定传说", '§7限定池共用一组保底（换季延续），常驻池单独一组',
          '§7「综合概率」= 算上保底后长期的实际概率（精确计算，离线百万抽验证）']),
     back(),
 ]

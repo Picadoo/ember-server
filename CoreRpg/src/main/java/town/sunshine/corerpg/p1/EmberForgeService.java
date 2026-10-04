@@ -322,7 +322,7 @@ public final class EmberForgeService implements Listener {
             }
             String t = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1dismantle", fp);
             town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "物品将被永久销毁：", "[确认分解]",
-                    "/corerpg p1 dismantle confirm tok:" + t, "分解 " + it.data.shortLabel() + "\n物品永久销毁，不可撤销");
+                    "/corerpg p1 dismantle confirm tok:" + t, "分解 " + it.data.shortLabel() + "\n分解后 10 分钟内可在装备库「撤销分解」找回（要退回胚料）");
             return true;
         }
         if (ni().createNiItem(EmberUpgradeRules.MAT_BLANK) == null) { p.sendMessage(P + ChatColor.RED + "胚料模板 " + EmberUpgradeRules.MAT_BLANK + " 未加载（需 ni reload/重启）"); return true; }

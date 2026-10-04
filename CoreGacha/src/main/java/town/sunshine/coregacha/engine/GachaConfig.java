@@ -91,10 +91,33 @@ public final class GachaConfig {
                 if (wt > 0) w.put(it.getKey(), wt);
             }
             String type = s(m, "type", "standard");
-            c.banners.put(e.getKey(), new Banner(e.getKey(), s(m, "name", e.getKey()), type, s(m, "pity_group", "limited".equals(type) ? "limited" : "std"),
-                    time(m, "start"), time(m, "end"), s(m, "retire_to", null), i(m, "retire_weight", 1), w, s(m, "icon", "CHEST"), s(m, "desc", "")));
+            Banner bn = new Banner(e.getKey(), s(m, "name", e.getKey()), type, s(m, "pity_group", "limited".equals(type) ? "limited" : "std"),
+                    time(m, "start"), time(m, "end"), s(m, "retire_to", null), i(m, "retire_weight", 1), w, s(m, "icon", "CHEST"), s(m, "desc", ""));
+            bn.spark = Math.max(0, i(m, "spark", 0));
+            Object si = m.get("spark_items");
+            if (si instanceof List) {
+                List<String> l = new ArrayList<String>();
+                for (Object o : (List<?>) si) {
+                    String id = String.valueOf(o);
+                    if (w.containsKey(id)) l.add(id); else c.warnings.add("banner " + e.getKey() + ": spark_items " + id + " not in banner");
+                }
+                bn.sparkItems = java.util.Collections.unmodifiableList(l);
+            }
+            bn.sparkLeftover = s(m, "spark_leftover", "shards");
+            if ("carry".equals(bn.sparkLeftover) && (bn.retireTo == null || !sec(root, "banners").containsKey(bn.retireTo)))
+                c.warnings.add("banner " + e.getKey() + ": spark_leftover carry needs a valid retire_to");
+            c.banners.put(e.getKey(), bn);
         }
         return c;
+    }
+
+    /** spark points a banner needs (per-banner override, else global) */
+    public int sparkFor(Banner b) { return b != null && b.spark > 0 ? b.spark : spark; }
+
+    /** may the spark of {@code b} pick {@code itemId}? (in the pool at {@code now}, and in spark_items when set) */
+    public boolean sparkAllows(Banner b, String itemId, long now) {
+        if (b == null || itemId == null || !pool(b, now).contains(itemId)) return false;
+        return b.sparkItems.isEmpty() || b.sparkItems.contains(itemId);
     }
 
     public Banner banner(String id) { return id == null ? null : banners.get(id.toLowerCase(java.util.Locale.ROOT)); }

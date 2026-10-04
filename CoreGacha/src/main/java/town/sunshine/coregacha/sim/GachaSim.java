@@ -159,16 +159,66 @@ public final class GachaSim {
         o.append(f("- 判断：光屑换传说比直接抽「任意传说」贵（%.0f > %.1f），又不至于比抽「指定传说」贵太多（< 3 × %.0f）→ %s（光屑是补缺口的，不是捷径）\n",
                 craftLegendPulls, rm.expectedPullsPerLegend, pullsSpecific, sane ? "PASS" : "FAIL"));
         Banner gq = cfg.banner("gq26");
-        if (gq != null) {
-            Banner.Pool gp = cfg.pool(gq, gq.start + 1);
-            Map<Item, Double> sh = RateMath.shares(gp, cfg.noRepeatLegend);
-            Item koi = cfg.items.get("gq_pet_koi");
-            if (koi != null && sh.containsKey(koi))
-                o.append(f("- 火花 %d：限定池里「指定一件限定传说」（锦鲤灵）平均 %.0f 抽能抽到，火花 %d 抽保证拿到 → 火花是 %.1f 倍期望的兜底\n",
-                        cfg.spark, 1 / rm.itemRate(koi, sh), cfg.spark, cfg.spark * rm.itemRate(koi, sh)));
-        }
+        if (gq != null) eventPlayer(cfg, gq, n, seed, o, fails);
         o.append("\n## 结论\n\n").append(fails.isEmpty() ? "全部 PASS。\n" : "FAIL：" + fails + "\n");
         System.out.print(o);
         if (!fails.isEmpty()) System.exit(1);
+    }
+
+    /**
+     * 1.0.1 (review round 2 #3): what an event player gets on the limited banner before it ends. Fresh accounts, the
+     * real Engine, spark redeemed for the target as soon as it is full (only spark_items when set). Also the pure-pull
+     * mean (no spark) — the old report divided by the steady-state share (176); with "no repeat" before the first copy
+     * the target's share per legend is higher, so the true mean is lower (~133).
+     */
+    static void eventPlayer(GachaConfig cfg, Banner gq, long n, long seed, StringBuilder o, List<String> fails) {
+        Engine e = new Engine(cfg);
+        Banner.Pool gp = cfg.pool(gq, gq.start + 1);
+        int need = cfg.sparkFor(gq);
+        int[] budgets = {21, 30, 41};
+        o.append(f("\n## 活动期玩家（限定池 `%s`，火花 %d%s，结束后剩余火花 %s）\n\n", gq.id, need,
+                gq.sparkItems.isEmpty() ? " 任选" : " 只换 " + gq.sparkItems, "carry".equals(gq.sparkLeftover) ? "1:1 转进 " + gq.retireTo + " 火花" : "折光屑"));
+        o.append("| 活动期抽数 | 拿到锦鲤灵 | 拿到繁花烟火 | 两件都有 | 说明 |\n|---|---|---|---|---|\n");
+        String koi = "gq_pet_koi", fw = "gq_aura_firework";
+        double p41 = 0;
+        for (int budget : budgets) {
+            int players = (int) Math.max(1000, n / budget);
+            SplittableRandom rng = new SplittableRandom(seed ^ (budget * 7919L));
+            long hk = 0, hf = 0, both = 0;
+            for (int p = 0; p < players; p++) {
+                PityState st = new PityState();
+                Set<String> have = new HashSet<String>();
+                for (int i = 0; i < budget; i++) {
+                    e.pull(gp, st, have, rng::nextDouble);
+                    if (st.spark >= need) {
+                        String pick = !have.contains(koi) && cfg.sparkAllows(gq, koi, gq.start + 1) ? koi
+                                : !have.contains(fw) && cfg.sparkAllows(gq, fw, gq.start + 1) ? fw : null;
+                        if (pick != null) { have.add(pick); st.spark -= need; }
+                    }
+                }
+                boolean k = have.contains(koi), w = have.contains(fw);
+                if (k) hk++; if (w) hf++; if (k && w) both++;
+            }
+            double pk = hk / (double) players;
+            if (budget == 41) p41 = pk;
+            o.append(f("| %d | %.1f%% | %.1f%% | %.1f%% | %s |\n", budget, pk * 100, hf * 100.0 / players, both * 100.0 / players,
+                    budget == 21 ? "只靠免费券（见面礼 5 + 每天 4 × 4 天）" : budget == 41 ? "免费 + 每天兑换 5 张（活动期上限）" : "免费 + 兑换约 9 张"));
+        }
+        // pure pulls (no spark) until the first koi
+        int players = (int) Math.max(1000, n / 150);
+        SplittableRandom rng = new SplittableRandom(seed ^ 0xC01);
+        long sum = 0;
+        for (int p = 0; p < players; p++) {
+            PityState st = new PityState();
+            Set<String> have = new HashSet<String>();
+            int i = 0;
+            while (!have.contains(koi) && i < 5000) { e.pull(gp, st, have, rng::nextDouble); i++; }
+            sum += i;
+        }
+        double mean = sum / (double) players;
+        o.append(f("\n- 不靠火花、纯抽到第一只锦鲤灵：平均 %.0f 抽（模拟 %,d 人）；火花 %d → 兜底在期望的 %.2f 倍处\n", mean, players, need, need / mean));
+        boolean ok = p41 >= 0.99 || need > 41;
+        if (!ok) fails.add("event player 41 pulls koi " + p41);
+        o.append(f("- 判断：活动期打满（41 抽）的玩家拿到锦鲤灵 %.1f%% → %s\n", p41 * 100, p41 >= 0.99 ? "PASS（火花在活动期内够得着）" : need > 41 ? "（火花够不着，仅供参考）" : "FAIL"));
     }
 }

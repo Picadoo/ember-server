@@ -1492,3 +1492,4 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 临时改 `ember-v1-festival.yml` end→`fest reload`→FreshQ47：D145 主菜单「国庆纪念」+ 装备页常驻格、D146 常驻价 15000 币购符 / 结束后足迹 / 剩币换徽 / 徽价门闩均 PASS；立刻还原 10-08。不改数值。STATUS `docs/status/STATUS-ember-fest-after-end-smoke.md`。
 
 | D157 | CoreRpg 1.64.0 | InvSnap strip vault/ticket on restore；bulk dismantle skip invested；hub L after-end actions；文案批次（周规则/繁花烟火/宠物光环/余烬徽）；FreshQ49 PASS；推迟火花折算与批量撤销 |
+| D158 | CoreRpg 1.64.1 + CoreGacha 1.0.1 | InvSnap 按账本扣回（cr_vault_log + gacha_ledger redeem，取代 1.64.0 全部扣回）+ `invsnap preview`；批量分解确认按成色计数 + 红字不分解清单 + [投入] 标记；整批撤销 `p1 undo batch`；gq26 火花 30 只换锦鲤灵/繁花烟火、剩余 1:1 转 standard；周规则转化怪各自加成 balance_version 29；FreshQ50 PASS 14/14、FreshG05/G06 PASS |

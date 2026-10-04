@@ -62,7 +62,10 @@ public final class GachaExpansion extends PlaceholderExpansion {
         for (Tier t : Tier.values())
             l.add(t.colored() + " §7基础 §f" + RateMath.pct(base[t.ordinal()]) + " §7· 算上保底的综合 §f" + RateMath.pct(rm.effective.get(t)));
         l.add(String.format(Locale.ROOT, "§7传说：第 1–%d 抽 %s，之后每抽 +%s，第 %d 抽必出；平均 %.1f 抽一件", c.softStart, RateMath.pct(c.baseLegend), RateMath.pct(c.softStep), c.hardPity, rm.expectedPullsPerLegend));
-        l.add("§7每 " + c.tier2Every + " 抽至少一件史诗或以上 · 同一池不连出同一件传说 · 火花 " + c.spark + " 抽任选一件");
+        l.add("§7每 " + c.tier2Every + " 抽至少一件史诗或以上 · 同一池不连出同一件传说 · 火花 " + c.sparkFor(b) + " 抽"
+                + (b.sparkItems.isEmpty() ? "任选一件" : "任选一件本池限定传说"));
+        if (b.limited() && "carry".equals(b.sparkLeftover) && b.retireTo != null)
+            l.add("§7本池结束后剩下的火花 1:1 转进「" + Item.stripColor(c.banner(b.retireTo) == null ? b.retireTo : c.banner(b.retireTo).name) + "§7」的火花（限定件结束后也进那个池）");
         l.add("§7保底组：" + (b.limited() ? "限定池共用（换季延续）" : "常驻池单独"));
         return l;
     }
@@ -156,7 +159,7 @@ public final class GachaExpansion extends PlaceholderExpansion {
                 case "open": return b.open(System.currentTimeMillis()) ? "1" : "0";
                 case "left": return left(b);
                 case "desc": return "§7" + b.desc;
-                case "spark": { PCache.BState bs = pc == null ? null : pc.banners.get(b.id); return (bs == null ? 0 : bs.spark) + "/" + c.spark; }
+                case "spark": { PCache.BState bs = pc == null ? null : pc.banners.get(b.id); return (bs == null ? 0 : bs.spark) + "/" + c.sparkFor(b); }
                 case "pulls": { PCache.BState bs = pc == null ? null : pc.banners.get(b.id); return String.valueOf(bs == null ? 0 : bs.pulls); }
                 case "pity": {
                     int[] p = pc == null ? null : pc.pity.get(b.pityGroup);

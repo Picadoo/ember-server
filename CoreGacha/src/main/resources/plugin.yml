@@ -1,6 +1,6 @@
 name: CoreGacha
 main: town.sunshine.coregacha.CoreGachaPlugin
-version: 1.0.0
+version: 1.0.1
 author: sunshine-town
 description: 余烬 · 外观扭蛋（只出外观，零属性；扭蛋券游戏内获得）
 depend: [CoreRpg]

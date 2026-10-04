@@ -131,6 +131,42 @@ public final class EmberStorageRules {
         return d != null && (d.enhance > 0 || d.craft > 0 || d.quality >= INVESTED_QUALITY);
     }
 
+    /** 1.64.1: why {@link #invested} is true, e.g. 「强化+3 · 成色极品」 */
+    public static String investedWhy(EmberItemData d) {
+        if (d == null) return "";
+        List<String> w = new ArrayList<String>();
+        if (d.enhance > 0) w.add("强化+" + d.enhance);
+        if (d.craft > 0) w.add("精工" + (d.craft * 2) + "%");
+        if (d.quality >= INVESTED_QUALITY) w.add("成色" + EmberItemData.qualityName(d.quality));
+        return String.join(" · ", w);
+    }
+
+    /** 1.64.1 bulk confirmation: 「标准 20 · 精良 2」 (highest quality first, only non-zero) */
+    public static String qualityCounts(List<Entry> l) {
+        int[] n = new int[8];
+        for (Entry e : l) n[Math.max(0, Math.min(7, e.d.quality))]++;
+        StringBuilder b = new StringBuilder();
+        for (int q = 7; q >= 0; q--) if (n[q] > 0) b.append(b.length() == 0 ? "" : " · ").append(EmberItemData.qualityName(q)).append(' ').append(n[q]);
+        return b.length() == 0 ? "无" : b.toString();
+    }
+
+    public static int enhancedCount(List<Entry> l) { int n = 0; for (Entry e : l) if (e.d.enhance > 0) n++; return n; }
+
+    /** 1.64.1 batch undo: the bulk batch tag in a dismantle txn note 「… [批 abc]」, or null */
+    public static String batchOf(String note) {
+        if (note == null) return null;
+        int i = note.lastIndexOf("[批 ");
+        int j = i < 0 ? -1 : note.indexOf(']', i);
+        return i < 0 || j < 0 ? null : note.substring(i + 3, j).trim();
+    }
+
+    /** blanks a batch undo has to hand back */
+    public static int batchYield(List<EmberItemStore.LibRow> rows, String batch) {
+        int y = 0;
+        for (EmberItemStore.LibRow r : rows) if (batch != null && batch.equals(batchOf(r.note))) y += EmberUpgradeRules.dismantleYield(r.data);
+        return y;
+    }
+
     /**
      * What a bulk dismantle of the current view may take: never locked, favourite or equipped pieces ({@code equipped}
      * = the uids the loadout still points at), never invested pieces (强化/精工/成色卓越+/词条), and never a piece the

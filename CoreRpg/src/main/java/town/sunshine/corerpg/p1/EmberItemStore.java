@@ -661,6 +661,8 @@ public final class EmberItemStore {
     /** A stored (gear library) or recently dismantled item of one owner, with the library flags. */
     public static final class LibRow {
         public final EmberItemData data; public final String state; public final boolean locked, fav; public final long storedAt, updatedAt;
+        /** 1.64.1: txn note (recent dismantles only; carries the bulk batch tag) */
+        public String note;
         LibRow(EmberItemData data, String state, boolean locked, boolean fav, long storedAt, long updatedAt) {
             this.data = data; this.state = state; this.locked = locked; this.fav = fav; this.storedAt = storedAt; this.updatedAt = updatedAt;
         }
@@ -712,9 +714,9 @@ public final class EmberItemStore {
         run("recent dismantles " + owner, c -> {
             final List<LibRow> out = new java.util.ArrayList<LibRow>();
             try (PreparedStatement ps = c.prepareStatement("SELECT i.item_uid,i.ni_id,i.family,i.slot,i.tier,i.quality,i.craft,i.enhance,i.pity,"
-                    + "i.bound,i.source,i.data_version,i.rev,i.state,t.created_at FROM cr_p1_txn t JOIN cr_p1_item i ON i.item_uid=t.uid_a"
+                    + "i.bound,i.source,i.data_version,i.rev,i.state,t.created_at,t.note FROM cr_p1_txn t JOIN cr_p1_item i ON i.item_uid=t.uid_a"
                     + " WHERE t.owner_uuid=? AND t.kind IN ('dismantle','glibdis') AND t.created_at>=? AND i.state='dismantled'"
-                    + " AND i.owner_uuid=? ORDER BY t.created_at DESC LIMIT 20")) {
+                    + " AND i.owner_uuid=? ORDER BY t.created_at DESC LIMIT 500")) {
                 ps.setString(1, owner.toString());
                 ps.setLong(2, since);
                 ps.setString(3, owner.toString());
@@ -722,7 +724,9 @@ public final class EmberItemStore {
                     while (rs.next()) {
                         EmberItemData d = new EmberItemData(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5),
                                 rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10) != 0, rs.getString(11), rs.getInt(12), rs.getInt(13));
-                        out.add(new LibRow(d, rs.getString(14), false, false, rs.getLong(15), rs.getLong(15)));
+                        LibRow lr = new LibRow(d, rs.getString(14), false, false, rs.getLong(15), rs.getLong(15));
+                        lr.note = rs.getString(16);
+                        out.add(lr);
                     }
                 }
             }

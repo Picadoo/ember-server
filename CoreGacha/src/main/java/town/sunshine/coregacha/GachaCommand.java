@@ -86,10 +86,13 @@ final class GachaCommand implements CommandExecutor, TabCompleter {
                 if (a.length >= 3) { g.spark(p, b.id, a[2]); return true; }
                 PCache.BState bs = pc == null ? null : pc.banners.get(b.id);
                 int sp = bs == null ? 0 : bs.spark;
-                p.sendMessage(P + "§f" + Item.stripColor(b.name) + " §7火花 §f" + sp + "/" + g.cfg.spark + (sp >= g.cfg.spark ? " §a可以兑换：点一件没有的" : " §8（满了才能兑换）"));
-                if (sp >= g.cfg.spark) for (Item it : g.cfg.pool(b, System.currentTimeMillis()).all())
-                    if (!g.owns(p.getUniqueId(), it)) buttons(p, "  " + it.tier.colored() + " §f" + Item.stripColor(it.name) + " §8(" + it.kindLabel() + ") ",
-                            new String[]{"§a[选这件]", "/gacha spark " + b.id + " " + it.id, "扣 " + g.cfg.spark + " 火花"});
+                int need = g.cfg.sparkFor(b);
+                long now = System.currentTimeMillis();
+                p.sendMessage(P + "§f" + Item.stripColor(b.name) + " §7火花 §f" + sp + "/" + need + (sp >= need ? " §a可以兑换：点一件没有的" : " §8（满了才能兑换）")
+                        + (b.sparkItems.isEmpty() ? "" : " §7· 只能换本池限定传说"));
+                if (sp >= need) for (Item it : g.cfg.pool(b, now).all())
+                    if (g.cfg.sparkAllows(b, it.id, now) && !g.owns(p.getUniqueId(), it)) buttons(p, "  " + it.tier.colored() + " §f" + Item.stripColor(it.name) + " §8(" + it.kindLabel() + ") ",
+                            new String[]{"§a[选这件]", "/gacha spark " + b.id + " " + it.id, "扣 " + need + " 火花"});
                 return true;
             }
             case "exchange": case "换券":

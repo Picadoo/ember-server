@@ -13,6 +13,11 @@ public final class Banner {
     public final long start, end; // epoch ms; 0 = open / never ends
     public final int retireWeight;
     public final Map<String, Double> weights; // own items (insertion order kept)
+    /** 1.0.1: spark points needed on this banner (0 = the global {@code spark:}); items the spark may pick (empty = any in the pool) */
+    public int spark;
+    public List<String> sparkItems = Collections.emptyList();
+    /** 1.0.1: leftover spark when this limited banner ends — "carry" = 1:1 into the retire_to banner's spark, else 光屑 */
+    public String sparkLeftover = "shards";
 
     public Banner(String id, String name, String type, String pityGroup, long start, long end, String retireTo, int retireWeight,
                   Map<String, Double> weights, String icon, String desc) {

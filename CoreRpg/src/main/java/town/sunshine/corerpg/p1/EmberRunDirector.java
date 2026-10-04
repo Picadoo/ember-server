@@ -343,17 +343,27 @@ final class EmberRunDirector {
                 : "r1".equals(r.id) ? def.room("r3") : "r3".equals(r.id) ? def.room("r1") : null;
         lay = swap == null ? EmberRunMaps.layout(r, b, s.roomSeed(r.id))
                 : EmberRunMaps.layout(swap.variant(b), r.points.size(), s.roomSeed(r.id)); // P2-8 逆行
+        java.util.Set<Integer> converted = new java.util.HashSet<Integer>();
         if (mod != null) {
             StringBuilder roles = new StringBuilder();
-            for (String[] e : lay) { e[0] = mod.role(e[0], def); roles.append(roles.length() == 0 ? "" : ",").append(e[0]); } // P2-8 换防
-            svc.log().info("[P1 run] " + s.runId + " " + r.id + " rule " + mod.id + (swap != null ? " (group of " + swap.id + ")" : "") + ": " + roles);
+            for (int i = 0; i < lay.size(); i++) {
+                String[] e = lay.get(i);
+                String was = e[0];
+                e[0] = mod.role(e[0], def); // P2-8 换防
+                if (!was.equals(e[0])) converted.add(i);
+                roles.append(roles.length() == 0 ? "" : ",").append(e[0]);
+            }
+            svc.log().info("[P1 run] " + s.runId + " " + r.id + " rule " + mod.id + (swap != null ? " (group of " + swap.id + ")" : "") + ": " + roles
+                    + (mod.tweaksConverted() && !converted.isEmpty() ? " (converted x" + converted.size() + " hp*" + mod.convHp + " atk*" + mod.convAtk
+                    + " interval*" + mod.convInterval + " speed*" + mod.convSpeed + ")" : ""));
         }
         int ok = 0;
         List<Tracked> spawned = new ArrayList<Tracked>();
-        for (String[] e : lay) {
+        for (int i = 0; i < lay.size(); i++) {
+            String[] e = lay.get(i);
             EmberRunMaps.Role role = def.role(e[0], ch);
             EmberRunMaps.Pt pt = r.points.get(Integer.parseInt(e[1]));
-            Tracked t = spawn(role, e[0], r.id, pt, r.trigger);
+            Tracked t = spawn(role, e[0], r.id, pt, r.trigger, converted.contains(i) ? mod : null);
             if (t != null) { ok++; spawned.add(t); }
         }
         svc.onRoomStarted(s, r, b, ok, lay.size(), EmberRunRules.compositionLabel(lay));
@@ -397,14 +407,24 @@ final class EmberRunDirector {
     // ------------------------------------------------------------------ spawning
 
     private Tracked spawn(EmberRunMaps.Role role, String roleId, String roomId, EmberRunMaps.Pt pt, EmberRunMaps.Box leash) {
+        return spawn(role, roleId, roomId, pt, leash, null);
+    }
+
+    /** {@code conv} != null: this mob was converted by the week's rule — apply its D158 multipliers */
+    private Tracked spawn(EmberRunMaps.Role role, String roleId, String roomId, EmberRunMaps.Pt pt, EmberRunMaps.Box leash, EmberRunMaps.Modifier conv) {
         if (role == null) return null;
         Location loc = new Location(w, pt.x + 0.5, pt.y, pt.z + 0.5);
         Entity e = EmberRunBridges.spawnMythic(role.mm, loc, svc.log());
         if (!(e instanceof LivingEntity)) return null;
         LivingEntity le = (LivingEntity) e;
-        scaleHealth(le, role.hp);
+        boolean cv = conv != null && conv.tweaksConverted();
+        scaleHealth(le, role.hp * (cv ? conv.convHp : 1.0));
+        if (cv && conv.convSpeed != 1.0) {
+            AttributeInstance sp = le.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+            if (sp != null) sp.setBaseValue(sp.getBaseValue() * conv.convSpeed);
+        }
         le.setRemoveWhenFarAway(false);
-        Tracked t = new Tracked(le, roleId, roomId, pt, leash, role.atk, role.interval, role.range, role);
+        Tracked t = new Tracked(le, roleId, roomId, pt, leash, role.atk * (cv ? conv.convAtk : 1.0), role.interval * (cv ? conv.convInterval : 1.0), role.range, role);
         if (t.caster()) t.nextCast = System.currentTimeMillis() + 2500L;
         mobs.put(le.getUniqueId(), t);
         svc.index(le.getUniqueId(), this);

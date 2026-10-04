@@ -25,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import town.sunshine.corerpg.p1.EmberItems;
 import town.sunshine.corerpg.p1.EmberMode;
 import town.sunshine.corerpg.p1.EmberVault;
+import town.sunshine.corerpg.p1.EmberVaultLog;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -171,6 +172,12 @@ public final class InvSnapService implements Listener {
         YamlConfiguration meta = new YamlConfiguration();
         meta.set("meta.name", c.name); meta.set("meta.uuid", c.uuid.toString()); meta.set("meta.reason", reason);
         meta.set("meta.world", c.world); meta.set("meta.at", c.at); meta.set("meta.hash", c.hash);
+        // 1.64.1: warehouse baseline at the same instant, so a restore can net out what was stashed after it
+        EmberVault v = EmberVault.get();
+        if (v != null && v.enabled()) {
+            for (String id : v.whitelist()) meta.set("meta.vault." + id, v.amount(p.getUniqueId(), id));
+            meta.set("meta.vault_ok", true);
+        }
         c.gz = gzip(body + meta.saveToString());
         return c;
     }
@@ -338,6 +345,8 @@ public final class InvSnapService implements Listener {
         public final ItemStack[] ender = new ItemStack[ENDER];
         public String id, reason, world, name;
         public long at;
+        /** 1.64.1 warehouse baseline (null = older snapshot) */
+        public Map<String, Long> vault;
         public int count() { int n = 0; for (ItemStack s : inv) if (real(s)) n++; for (ItemStack s : ender) if (real(s)) n++; return n; }
     }
 
@@ -403,51 +412,71 @@ public final class InvSnapService implements Listener {
         for (int i = 0; i < ENDER; i++) s.ender[i] = y.getItemStack("ender." + i);
         s.reason = y.getString("meta.reason", "?"); s.world = y.getString("meta.world", "?");
         s.name = y.getString("meta.name", "?"); s.at = y.getLong("meta.at", 0L);
+        if (y.getBoolean("meta.vault_ok", false) && y.isConfigurationSection("meta.vault")) {
+            s.vault = new HashMap<String, Long>();
+            for (String k : y.getConfigurationSection("meta.vault").getKeys(false)) s.vault.put(k, y.getLong("meta.vault." + k, 0L));
+        }
         return s;
     }
 
     // ================================================================== restore
 
-    /** restores {@code s} onto online {@code p}: pre-restore snapshot first, P1 trust check, then apply */
+    /** restores {@code s} onto online {@code p}: pre-restore snapshot first, P1 trust check, ledger net-out, then apply */
     private void restore(final CommandSender admin, final Player p, final Snap s) {
         snapshot(p, "pre-restore", pre -> {
             if (!p.isOnline()) { msg(admin, ChatColor.RED + "玩家已下线，未恢复"); return; }
             if (pre == null) { msg(admin, ChatColor.RED + "恢复前快照写入失败，为安全起见未恢复"); return; }
-            trustCheck(p, s, skipped -> {
+            trustCheck(p, s, skipped -> netOut(p, s, net -> {
                 if (!p.isOnline()) { msg(admin, ChatColor.RED + "玩家已下线，未恢复"); return; }
-                List<String> currency = new ArrayList<String>();
-                apply(p, s, skipped, currency);
+                apply(p, s);
                 String undo = "/corerpg invsnap restore " + p.getName() + " " + pre;
                 msg(admin, ChatColor.GREEN + "已把 " + p.getName() + " 的背包/末影箱恢复到快照 #" + s.id + "（" + fmt(s.at) + " " + s.reason + "）");
-                msg(admin, ChatColor.GRAY + "快照只管背包+末影箱；材料仓 / 扭蛋钱包 / 国庆币账本不会回滚。");
+                report(admin, skipped, net);
                 msg(admin, ChatColor.GRAY + "恢复前状态已存为 #" + pre + "，撤销：" + ChatColor.YELLOW + undo);
-                if (!skipped.isEmpty()) {
-                    msg(admin, ChatColor.RED + "跳过 " + skipped.size() + " 件 P1 装备（防复制）：");
-                    int k = 0;
-                    for (String x : skipped) { if (k++ >= 10) { msg(admin, ChatColor.GRAY + "  …"); break; } msg(admin, ChatColor.GRAY + "  " + x); }
-                }
-                if (!currency.isEmpty()) {
-                    msg(admin, ChatColor.YELLOW + "跳过 " + currency.size() + " 格材料/扭蛋券/国庆币（防与仓库·钱包复制）：");
-                    int k = 0;
-                    for (String x : currency) { if (k++ >= 10) { msg(admin, ChatColor.GRAY + "  …"); break; } msg(admin, ChatColor.GRAY + "  " + x); }
-                }
                 p.sendMessage(P + ChatColor.YELLOW + "管理员已恢复你的背包与末影箱（快照 " + fmt(s.at) + "；材料仓与扭蛋钱包未回滚）");
                 plugin.getLogger().warning("[invsnap] " + admin.getName() + " restored " + p.getName() + " to snapshot " + s.id
-                        + " (pre-restore " + pre + ", skipped P1 " + skipped.size() + ", stripped currency " + currency.size() + ")");
+                        + " (pre-restore " + pre + ", skipped P1 " + skipped.size() + ", net-out " + net.summary() + ")");
                 snapshot(p, "restored", null);
-            });
+            }));
         });
     }
 
-    private void apply(Player p, Snap s, List<String> skippedOut, List<String> currencyOut) {
-        // skippedOut already contains labels; slots were nulled in trustCheck
+    /** /corerpg invsnap preview: same checks as restore, nothing applied */
+    private void preview(final CommandSender admin, final Player p, final Snap s) {
+        final int before = s.count();
+        trustCheck(p, s, skipped -> netOut(p, s, net -> {
+            msg(admin, ChatColor.AQUA + "预览：恢复 " + p.getName() + " 到快照 #" + s.id + "（" + fmt(s.at) + " " + s.reason + "）· 快照 " + before + " 格 → 实际恢复 " + s.count() + " 格");
+            report(admin, skipped, net);
+            int over = 0;
+            ItemStack[] cur = p.getInventory().getContents(), en = p.getEnderChest().getContents();
+            for (int i = 0; i < INV && i < cur.length; i++) if (real(cur[i]) && !same(cur[i], s.inv[i])) over++;
+            for (int i = 0; i < ENDER && i < en.length; i++) if (real(en[i]) && !same(en[i], s.ender[i])) over++;
+            msg(admin, ChatColor.GRAY + "当前背包/末影箱有 " + over + " 格和快照不同，恢复时会被覆盖（会先存 pre-restore 快照可撤销）");
+            msg(admin, ChatColor.YELLOW + "确认无误：/corerpg invsnap restore " + p.getName() + " " + s.id);
+        }));
+    }
+
+    private void report(CommandSender admin, List<String> skipped, Net net) {
+        msg(admin, ChatColor.GRAY + "快照只管背包+末影箱；材料仓 / 扭蛋钱包 / 装备库不会回滚。");
+        if (!skipped.isEmpty()) {
+            msg(admin, ChatColor.RED + "跳过 " + skipped.size() + " 件 P1 装备（防复制）：");
+            int k = 0;
+            for (String x : skipped) { if (k++ >= 10) { msg(admin, ChatColor.GRAY + "  …"); break; } msg(admin, ChatColor.GRAY + "  " + x); }
+        } else msg(admin, ChatColor.GRAY + "P1 装备：没有需要跳过的（已分解 / 在装备库 / 他人持有的都会跳过）");
+        if (net.lines.isEmpty()) msg(admin, ChatColor.GRAY + "材料 / 国庆币 / 实物扭蛋券：快照里没有");
+        else {
+            msg(admin, (net.held > 0 ? ChatColor.YELLOW : ChatColor.GRAY) + "材料 / 国庆币 / 实物扭蛋券（按仓库流水 + 扭蛋账本对账，防复制）：");
+            for (String x : net.lines) msg(admin, ChatColor.GRAY + "  " + x);
+        }
+    }
+
+    private void apply(Player p, Snap s) {
+        // P1 gear slots were nulled in trustCheck, material / ticket stacks reduced in netOut
         p.closeInventory();
         ItemStack[] inv = new ItemStack[INV];
         for (int i = 0; i < INV; i++) inv[i] = s.inv[i] == null ? null : s.inv[i].clone();
         ItemStack[] en = new ItemStack[ENDER];
         for (int i = 0; i < ENDER; i++) en[i] = s.ender[i] == null ? null : s.ender[i].clone();
-        // D157: strip vault materials / festival coin / physical gacha tickets so restore cannot dupe ledgers
-        stripCurrency(inv, en, currencyOut);
         p.getInventory().setContents(inv);
         p.getEnderChest().setContents(en);
         p.updateInventory();
@@ -460,27 +489,101 @@ public final class InvSnapService implements Listener {
         }
     }
 
+    // ------------------------------------------------------------------ 1.64.1 ledger net-out
+
+    /** what netOut held back: one admin line per NI id */
+    static final class Net {
+        final List<String> lines = new ArrayList<String>();
+        long held;
+        final StringBuilder sum = new StringBuilder();
+        String summary() { return sum.length() == 0 ? "none" : sum.toString(); }
+    }
+
+    private String ticketNi() {
+        File f = new File(plugin.getDataFolder().getParentFile(), "CoreGacha/config.yml");
+        if (!f.exists()) return InvSnapRules.GACHA_TICKET_NI;
+        return YamlConfiguration.loadConfiguration(f).getString("tickets.ni_item", InvSnapRules.GACHA_TICKET_NI);
+    }
+
     /**
-     * D157 anti-dupe for ledger currencies: null any stack whose NI id is on the P1 vault whitelist (materials +
-     * festival coin) or is a physical gacha ticket. Those amounts live in EmberVault / gacha_wallet and must not be
-     * recreated into the backpack on restore.
+     * Anti-dupe for ledger-backed stacks (review round 2 #1). For every warehouse-whitelisted material (incl. 国庆币) and
+     * physical gacha ticket in the snapshot, hold back what provably left the backpack after the snapshot: warehouse
+     * growth vs. the snapshot's baseline, 一键存入 and direct backpack spends from cr_vault_log, ticket redeems from
+     * gacha_ledger. Old snapshots (no baseline) and unreadable ledgers hold the whole amount back (= 1.64.0 strip).
+     * Mutates {@code s}; {@code cb} on the main thread.
      */
-    private void stripCurrency(ItemStack[] inv, ItemStack[] en, List<String> out) {
-        Set<String> wl = EmberVault.get() != null ? EmberVault.get().whitelist() : new HashSet<String>(EmberVault.DEFAULT_WHITELIST);
-        Set<String> extra = new HashSet<String>();
-        extra.add(InvSnapRules.GACHA_TICKET_NI);
-        NiBridge ni = plugin.getNiBridge();
+    private void netOut(final Player p, final Snap s, final Consumer<Net> cb) {
+        final NiBridge ni = plugin.getNiBridge();
+        final EmberVault v = EmberVault.get();
+        final Set<String> wl = v != null ? v.whitelist() : new HashSet<String>(EmberVault.DEFAULT_WHITELIST);
+        final String ticket = ticketNi();
+        // id -> list of {part, slot}
+        final Map<String, List<int[]>> at = new java.util.LinkedHashMap<String, List<int[]>>();
         for (int part = 0; part < 2; part++) {
-            ItemStack[] arr = part == 0 ? inv : en;
+            ItemStack[] arr = part == 0 ? s.inv : s.ender;
             for (int i = 0; i < arr.length; i++) {
                 if (!real(arr[i]) || ni == null) continue;
                 String id = ni.getNiId(arr[i]);
-                if (!InvSnapRules.stripOnRestore(id, wl, extra)) continue;
-                String where = part == 0 ? InvSnapRules.slotName(i) : "末影箱" + (i + 1);
-                if (out != null) out.add(desc(arr[i]) + " @" + where + "（材料仓/扭蛋券，不恢复）");
-                arr[i] = null;
+                if (id == null || !(wl.contains(id) || ticket.equals(id))) continue;
+                at.computeIfAbsent(id, k -> new ArrayList<int[]>()).add(new int[]{part, i});
             }
         }
+        final Net net = new Net();
+        if (at.isEmpty()) { cb.accept(net); return; }
+        final UUID u = p.getUniqueId();
+        final boolean wantTickets = at.containsKey(ticket);
+        final EmberVaultLog log = EmberVaultLog.get();
+        Consumer<EmberVaultLog.Sums> withLog = sums -> exec.submit(() -> {
+            long redeemed = 0;
+            boolean ledgerOk = false;
+            if (wantTickets && db()) {
+                try (Connection con = plugin.getMysqlStorage().getConnection();
+                     PreparedStatement ps = con.prepareStatement("SELECT COALESCE(SUM(d_tickets),0) FROM gacha_ledger WHERE uuid=? AND reason='redeem' AND UNIX_TIMESTAMP(created_at)*1000>=?")) {
+                    ps.setString(1, u.toString()); ps.setLong(2, s.at);
+                    try (ResultSet rs = ps.executeQuery()) { if (rs.next()) redeemed = rs.getLong(1); }
+                    ledgerOk = true;
+                } catch (SQLException e) {
+                    plugin.getLogger().log(Level.WARNING, "[invsnap] gacha_ledger read (tickets held back)", e);
+                }
+            }
+            final long red = redeemed;
+            final boolean lok = ledgerOk;
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                for (Map.Entry<String, List<int[]>> e : at.entrySet()) {
+                    String id = e.getKey();
+                    List<int[]> slots = e.getValue();
+                    int[] amts = new int[slots.size()];
+                    long snapAmt = 0;
+                    for (int k = 0; k < slots.size(); k++) { int[] x = slots.get(k); amts[k] = (x[0] == 0 ? s.inv : s.ender)[x[1]].getAmount(); snapAmt += amts[k]; }
+                    long deduct;
+                    String why;
+                    if (ticket.equals(id) && !wl.contains(id)) {
+                        deduct = InvSnapRules.ticketDeduct(snapAmt, red, lok);
+                        why = !lok ? "扭蛋账本读取失败" : "快照后存进扭蛋钱包 " + red + " 张（gacha_ledger redeem）";
+                    } else {
+                        long base = s.vault == null ? -1 : (s.vault.containsKey(id) ? s.vault.get(id) : 0L);
+                        long now = v == null ? 0 : v.amount(u, id);
+                        boolean ok = sums != null && sums.ok;
+                        long stash = ok ? sums.get(EmberVaultLog.STASH, id) : 0, spend = ok ? -sums.get(EmberVaultLog.SPEND_INV, id) : 0;
+                        deduct = InvSnapRules.vaultDeduct(snapAmt, base, now, stash, spend, ok);
+                        why = InvSnapRules.vaultWhy(base, now, stash, spend, ok);
+                    }
+                    InvSnapRules.takeFromStacks(amts, deduct);
+                    for (int k = 0; k < slots.size(); k++) {
+                        int[] x = slots.get(k);
+                        ItemStack[] arr = x[0] == 0 ? s.inv : s.ender;
+                        if (amts[k] <= 0) arr[x[1]] = null; else { ItemStack c = arr[x[1]].clone(); c.setAmount(amts[k]); arr[x[1]] = c; }
+                    }
+                    String name = ni == null ? id : ni.displayName(id);
+                    net.lines.add(InvSnapRules.netLine(name, snapAmt, deduct, why));
+                    net.held += deduct;
+                    net.sum.append(net.sum.length() == 0 ? "" : ",").append(id).append(' ').append(snapAmt - deduct).append('/').append(snapAmt);
+                }
+                cb.accept(net);
+            });
+        });
+        if (log != null) log.since(u, s.at, withLog);
+        else withLog.accept(null);
     }
 
     /**
@@ -588,7 +691,9 @@ public final class InvSnapService implements Listener {
             s.sendMessage(P + "/corerpg invsnap list <玩家> [条数]  — 列出快照（id/时间/原因/世界/件数）");
             s.sendMessage(P + "/corerpg invsnap view <玩家> <id>  — 只读预览（第1页背包+护甲+副手，第2页末影箱）");
             s.sendMessage(P + "/corerpg invsnap restore <玩家> <id>  — 恢复背包+末影箱（先存 pre-restore 可撤销；离线则下次进服时恢复）");
-            s.sendMessage(P + ChatColor.GRAY + "  快照不管材料仓 / 扭蛋钱包；快照里的材料、实物扭蛋券、国庆币恢复时会跳过（防复制）");
+            s.sendMessage(P + "/corerpg invsnap preview <玩家> <id>  — 先看会恢复什么、跳过什么、为什么（不改动）");
+            s.sendMessage(P + ChatColor.GRAY + "  快照不管材料仓 / 扭蛋钱包 / 装备库；快照里的材料、国庆币、实物扭蛋券按仓库流水 + 扭蛋账本对账：快照后存进仓库 / 钱包或直接花掉的部分不恢复（防复制）");
+            s.sendMessage(P + ChatColor.GRAY + "  交易 / 丢给别人的普通物品无法追踪，恢复前先 preview 并问清楚");
             s.sendMessage(P + "/corerpg invsnap diff <玩家> <id>  — 当前背包与快照逐格比对（附材料仓摘要）");
             s.sendMessage(P + "/corerpg invsnap take <玩家>  — 立即拍一张 manual 快照");
             return true;
@@ -614,7 +719,7 @@ public final class InvSnapService implements Listener {
                     snapshot(online, "manual", id -> s.sendMessage(P + (id == null ? ChatColor.RED + "快照失败" : "已保存快照 #" + id)));
                     return;
                 }
-                case "view": case "restore": case "diff": {
+                case "view": case "restore": case "diff": case "preview": {
                     if (args.length < 4) { s.sendMessage(P + "缺少快照 id（先 list）"); return; }
                     final String id = args[3].startsWith("#") ? args[3].substring(1) : args[3];
                     if ("restore".equals(op) && online == null) {
@@ -626,12 +731,13 @@ public final class InvSnapService implements Listener {
                         });
                         return;
                     }
-                    if ("diff".equals(op) && online == null) { s.sendMessage(P + "玩家需在线"); return; }
+                    if (("diff".equals(op) || "preview".equals(op)) && online == null) { s.sendMessage(P + "玩家需在线"); return; }
                     if ("view".equals(op) && !(s instanceof Player)) { s.sendMessage(P + "view 需在游戏内（控制台用 diff）"); return; }
                     load(uuid, id, snap -> {
                         if (snap == null) { s.sendMessage(P + ChatColor.RED + "快照 #" + id + " 不存在或已损坏"); return; }
                         if ("view".equals(op)) openView((Player) s, snap, 0);
                         else if ("diff".equals(op)) diff(s, online, snap);
+                        else if ("preview".equals(op)) preview(s, online, snap);
                         else restore(s, online, snap);
                     });
                     return;

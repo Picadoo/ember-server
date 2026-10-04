@@ -89,4 +89,59 @@ public class InvSnapRulesTest {
         assertEquals(3, InvSnapRules.countStrip(java.util.Arrays.asList(
                 "mat_ember_shard", "dirt", "ember_gacha_ticket", "ember_fest_coin_gq26", "other"), wl, extra));
     }
+
+    // ---------------- 1.64.1 net-out (review round 2 #1 repro numbers: 30 shards + 2 tickets)
+
+    @Test public void depositAfterSnapshotIsNettedOut() {
+        // snapshot: 30 shards in the backpack, warehouse 22; then 一键存入 30 → warehouse 52
+        assertEquals(30, InvSnapRules.vaultDeduct(30, 22, 52, 30, 0, true));
+        // nothing moved: restore everything (real loss case)
+        assertEquals(0, InvSnapRules.vaultDeduct(30, 22, 22, 0, 0, true));
+    }
+
+    @Test public void depositThenSpendFromWarehouseStillNetted() {
+        // stash 30 then a forge took 30 from the warehouse: balance back to 22, but the stash log still says 30 left
+        assertEquals(30, InvSnapRules.vaultDeduct(30, 22, 22, 30, 0, true));
+    }
+
+    @Test public void spentStraightFromBackpackNetted() {
+        assertEquals(18, InvSnapRules.vaultDeduct(30, 22, 22, 0, 18, true));
+        assertEquals(30, InvSnapRules.vaultDeduct(30, 22, 40, 10, 18, true)); // capped at the snapshot amount
+    }
+
+    @Test public void pickupsIntoWarehouseAreHeldBackConservatively() {
+        // warehouse grew by 5 from pickups (not from the backpack): held back anyway (never a dupe, admin sees why)
+        assertEquals(5, InvSnapRules.vaultDeduct(30, 22, 27, 0, 0, true));
+        // warehouse shrank (withdrawn): nothing extra held back
+        assertEquals(0, InvSnapRules.vaultDeduct(30, 22, 10, 0, 0, true));
+    }
+
+    @Test public void oldSnapshotOrUnreadableLogHoldsEverythingBack() {
+        assertEquals(30, InvSnapRules.vaultDeduct(30, -1, 52, 0, 0, true));
+        assertEquals(30, InvSnapRules.vaultDeduct(30, 22, 22, 0, 0, false));
+        assertEquals(0, InvSnapRules.vaultDeduct(0, -1, 52, 30, 0, true));
+    }
+
+    @Test public void ticketsRedeemedAfterSnapshotNetted() {
+        assertEquals(2, InvSnapRules.ticketDeduct(2, 2, true));
+        assertEquals(1, InvSnapRules.ticketDeduct(3, 1, true));
+        assertEquals(0, InvSnapRules.ticketDeduct(2, 0, true));
+        assertEquals(2, InvSnapRules.ticketDeduct(2, 5, true));
+        assertEquals(2, InvSnapRules.ticketDeduct(2, 0, false));
+    }
+
+    @Test public void takeFromStacksLastFirst() {
+        int[] a = {16, 10, 4};
+        assertEquals(12, InvSnapRules.takeFromStacks(a, 12));
+        assertArrayEquals(new int[]{16, 2, 0}, a);
+        int[] b = {5};
+        assertEquals(5, InvSnapRules.takeFromStacks(b, 9));
+        assertArrayEquals(new int[]{0}, b);
+    }
+
+    @Test public void netLineReadable() {
+        assertTrue(InvSnapRules.netLine("余烬碎片", 30, 30, "快照后一键存入仓库 30").contains("快照 30 → 恢复 0"));
+        assertTrue(InvSnapRules.vaultWhy(22, 52, 30, 0, true).contains("一键存入仓库 30"));
+        assertTrue(InvSnapRules.vaultWhy(-1, 52, 30, 0, true).contains("旧快照"));
+    }
 }

@@ -66,7 +66,8 @@ final class Anim {
         int p5 = pc == null || pc.pity.get(b.pityGroup) == null ? 0 : pc.pity.get(b.pityGroup)[0];
         PCache.BState bs = pc == null ? null : pc.banners.get(b.id);
         p.sendMessage(GachaService.P + "券 §f" + tickets + " §7· 光屑 §b" + shards + " §7· 距上次传说 §f" + p5 + "§7/" + pl.service().cfg.hardPity
-                + " 抽 · 火花 §f" + (bs == null ? 0 : bs.spark) + "§7/" + pl.service().cfg.spark);
+                + " 抽 · 火花 §f" + (bs == null ? 0 : bs.spark) + "§7/" + pl.service().cfg.sparkFor(b)
+                + (bs != null && bs.spark >= pl.service().cfg.sparkFor(b) ? " §a[可兑换：/gacha spark " + b.id + "]" : ""));
         TextComponent t = new TextComponent(GachaService.P);
         String[][] btn = {{"§a[再抽一次]", "/gacha pull " + b.id + " 1"}, {" §6[十连]", "/gacha pull " + b.id + " 10"}, {" §e[扭蛋页]", "/gacha"}, {" §d[我的外观]", "/gacha wear"}};
         for (String[] x : btn) { TextComponent c = new TextComponent(x[0]); c.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, x[1])); t.addExtra(c); }

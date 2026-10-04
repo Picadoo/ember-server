@@ -304,8 +304,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(28, m.balanceVersion);                // D155 铁卫
-        assertEquals("g04-1/b28", m.ruleVersion);
+        assertEquals(29, m.balanceVersion);                // D158 converted-mob twists
+        assertEquals("g04-1/b29", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -344,6 +344,15 @@ public class EmberRunRulesTest {
         assertEquals("heavy", m.modifier("wall").role("melee", q1));  // D155: melee→heavy when map has heavy
         assertEquals("ranged", m.modifier("wall").role("ranged", q1)); // ranged unchanged
         assertFalse(m.modifier("wall").normal);             // D155: challenge-only like casters/disarm/guards
+        // D158 (review round 2 #5): each swap gets its own twist on the converted mobs only
+        assertEquals(0.75, m.modifier("disarm").convInterval, 1e-9);   // fast melee
+        assertEquals(0.8, m.modifier("disarm").convHp, 1e-9);
+        assertEquals(1.35, m.modifier("guards").convSpeed, 1e-9);      // charging heavy
+        assertEquals(1.5, m.modifier("wall").convAtk, 1e-9);           // real heavy hits
+        assertEquals(1.2, m.modifier("wall").convDpsFactor(), 1e-9);
+        assertTrue(m.modifier("disarm").tweaksConverted() && m.modifier("guards").tweaksConverted() && m.modifier("wall").tweaksConverted());
+        assertFalse(m.modifier("casters").tweaksConverted());          // older rules untouched
+        assertFalse(m.modifier("lean").tweaksConverted());
         assertTrue(m.modifier("reverse").swapRooms);
         assertNull(m.modifier(""));
         java.util.Set<String> pairs = new java.util.HashSet<String>();

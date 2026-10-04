@@ -25,7 +25,7 @@ cost_per_pull: 1
 shards:
   dup: {legend: 300, epic: 80, rare: 20, common: 5}
   craft: {legend: 1800, epic: 480, rare: 120, common: 40}
-  # 限定池结束后，没用掉的火花每点折成这么多光屑
+  # 限定池结束后，没用掉的火花每点折成这么多光屑（池子写了 spark_leftover: carry 的转进 retire_to 池的火花，不折光屑）
   spark_leftover: 1
 
 items:
@@ -122,8 +122,13 @@ banners:
     end: "2026-10-08T00:00:00+08:00"
     retire_to: standard
     retire_weight: 1
+    # 1.0.1（评审第 2 轮 #3）：活动只有 4 天、最多约 41 抽，火花 200 够不着 → 本池火花 30，只换两件限定传说；
+    # 结束后剩下的火花 1:1 转进常驻池火花（限定件 10-08 起也进常驻池），不再折光屑
+    spark: 30
+    spark_items: [gq_pet_koi, gq_aura_firework]
+    spark_leftover: carry
     icon: FIREWORK
-    desc: "国庆限定：锦鲤灵、繁花烟火 概率提升"
+    desc: "国庆限定：锦鲤灵、繁花烟火 概率提升 · 火花满 30 必换一件 · 10-08 后转常驻池 / 光屑兑换"
     items:
       gq_pet_koi: 35
       gq_aura_firework: 35

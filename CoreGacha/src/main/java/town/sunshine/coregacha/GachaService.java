@@ -11,6 +11,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -200,20 +201,33 @@ public final class GachaService {
             ensureWallet(c, u, name);
             try (PreparedStatement ps = c.prepareStatement("UPDATE gacha_wallet SET name=? WHERE uuid=?")) { ps.setString(1, name); ps.setString(2, u.toString()); ps.executeUpdate(); }
             int[] w = lockWallet(c, u);
-            // limited banners that ended: leftover spark → 光屑 (design §2.2)
+            // limited banners that ended: leftover spark → 光屑 (design §2.2), or (1.0.1, spark_leftover: carry) 1:1 into
+            // the retire_to banner's spark — the limited items retire into that banner, so the points keep their value
             int gain = 0;
             List<String> settled = new ArrayList<String>();
+            Map<String, Integer> carry = new java.util.LinkedHashMap<String, Integer>();
             try (PreparedStatement ps = c.prepareStatement("SELECT banner, spark FROM gacha_banner_state WHERE uuid=? AND settled=0 FOR UPDATE")) {
                 ps.setString(1, u.toString());
                 try (ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
                         Banner b = c0.banner(rs.getString(1));
-                        if (b != null && b.limited() && b.ended(System.currentTimeMillis())) { settled.add(b.id); gain += rs.getInt(2) * c0.sparkLeftoverShard; }
+                        if (b == null || !b.limited() || !b.ended(System.currentTimeMillis())) continue;
+                        settled.add(b.id);
+                        Banner to = "carry".equals(b.sparkLeftover) ? c0.banner(b.retireTo) : null;
+                        if (to != null) { if (rs.getInt(2) > 0) carry.merge(to.id + "<" + b.id, rs.getInt(2), Integer::sum); }
+                        else gain += rs.getInt(2) * c0.sparkLeftoverShard;
                     }
                 }
             }
             for (String b : settled) try (PreparedStatement ps = c.prepareStatement("UPDATE gacha_banner_state SET spark=0, settled=1 WHERE uuid=? AND banner=?")) {
                 ps.setString(1, u.toString()); ps.setString(2, b); ps.executeUpdate();
+            }
+            for (Map.Entry<String, Integer> e : carry.entrySet()) {
+                String to = e.getKey().substring(0, e.getKey().indexOf('<'));
+                try (PreparedStatement ps = c.prepareStatement("INSERT INTO gacha_banner_state (uuid, banner, spark) VALUES (?,?,?) ON DUPLICATE KEY UPDATE spark=spark+VALUES(spark)")) {
+                    ps.setString(1, u.toString()); ps.setString(2, to); ps.setInt(3, e.getValue()); ps.executeUpdate();
+                }
+                ledger(c, u, name, 0, 0, w[0], w[1], "spark_carry", e.getKey() + " +" + e.getValue());
             }
             if (gain > 0) { setWallet(c, u, w[0], w[1] + gain); ledger(c, u, name, 0, gain, w[0], w[1] + gain, "spark_leftover", String.join(",", settled)); w[1] += gain; }
             c.commit();
@@ -406,6 +420,7 @@ public final class GachaService {
         if (b == null || !b.open(now)) { p.sendMessage(P + "§c这个池现在没开放：" + bannerId); return; }
         Item it = c0.items.get(itemId);
         if (it == null || !c0.pool(b, now).contains(it.id)) { p.sendMessage(P + "§c「" + b.name + "§c」里没有这件：" + itemId); return; }
+        if (!c0.sparkAllows(b, it.id, now)) { p.sendMessage(P + "§c「" + b.name + "§c」的火花只能换本池限定传说"); return; }
         acquire(p, it, "spark", b, 0);
     }
 
@@ -415,7 +430,7 @@ public final class GachaService {
         final String name = p.getName();
         if (owns(u, it)) { p.sendMessage(P + "你已经有「" + it.display() + "§7」了。"); return; }
         if (!busy.add(u)) { p.sendMessage(P + "§c上一个操作还没结束。"); return; }
-        final int need = cfg.spark;
+        final int need = cfg.sparkFor(b);
         tx(how + " " + name + " " + it.id, c -> {
             ensureWallet(c, u, name);
             int[] w = lockWallet(c, u);

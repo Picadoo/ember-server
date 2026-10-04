@@ -53,6 +53,14 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         this.plugin = plugin;
         instance = this;
         plugin.getNiBridge().setExtraSource(this);
+        this.log = new EmberVaultLog(plugin);
+    }
+
+    private final EmberVaultLog log;
+    public EmberVaultLog log() { return log; }
+
+    private void audit(Player p, String niId, long delta, String reason) {
+        if (p != null && log != null) log.record(p.getUniqueId(), niId, delta, reason);
     }
 
     private NiBridge ni() { return plugin.getNiBridge(); }
@@ -162,7 +170,14 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
 
     @Override public long take(Player player, String niId, long amount) {
         if (player == null || !enabled() || !accepts(niId) || !Bukkit.isPrimaryThread()) return 0;
-        return takeFrom(player, niId, amount);
+        long t = takeFrom(player, niId, amount);
+        audit(player, niId, -t, EmberVaultLog.SPEND_VAULT);
+        return t;
+    }
+
+    @Override public void consumedFromInventory(Player player, String niId, long amount) {
+        if (player == null || amount <= 0 || !enabled() || !accepts(niId)) return;
+        audit(player, niId, -amount, EmberVaultLog.SPEND_INV);
     }
 
     // ------------------------------------------------------------------ deposits
@@ -172,6 +187,7 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         if (p == null || n <= 0 || !enabled() || !accepts(niId) || !autoOn(p)) return false;
         long put = add(p, niId, n);
         if (put < n) { if (put > 0) takeFrom(p, niId, put); return false; } // at the cap: leave it to the caller
+        audit(p, niId, put, EmberVaultLog.AUTO);
         notice(p, niId, put);
         return true;
     }
@@ -192,6 +208,7 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         if (id == null || !accepts(id)) return;
         long put = add(p, id, st.getAmount());
         if (put <= 0) return; // warehouse full for this id: normal pickup
+        audit(p, id, put, EmberVaultLog.PICKUP);
         e.setCancelled(true);
         if (put >= st.getAmount()) ent.remove();
         else { st.setAmount((int) (st.getAmount() - put)); ent.setItemStack(st); }
@@ -237,6 +254,7 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
             if (put >= x.getAmount()) p.getInventory().setItem(i, null);
             else { x.setAmount((int) (x.getAmount() - put)); p.getInventory().setItem(i, x); }
             moved.merge(id, put, Long::sum);
+            audit(p, id, put, EmberVaultLog.STASH);
         }
         if (!moved.isEmpty()) p.updateInventory();
         return moved;
@@ -261,6 +279,7 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         long took = takeFrom(p, niId, n);
         if (took <= 0) return 0;
         if (!ni().giveNiItem(p, niId, (int) took)) { add(p, niId, took); return 0; }
+        audit(p, niId, -took, EmberVaultLog.WITHDRAW);
         return took;
     }
 }

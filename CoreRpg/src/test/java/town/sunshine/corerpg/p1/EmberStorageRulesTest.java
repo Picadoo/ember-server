@@ -159,4 +159,19 @@ public class EmberStorageRulesTest {
         assertEquals(0, EmberStorageRules.bulkDismantle(v2, null, Collections.singleton(hex("af"))).size());
         assertEquals(1, EmberStorageRules.bulkDismantle(v2, null, null).size());
     }
+
+    /** 1.64.1 (review round 2 #2 / #7): confirmation counts by quality, investment reason, batch tag for batch undo */
+    @Test public void bulkConfirmCountsAndBatchTag() {
+        EmberItemData std1 = drop("q1", 1, 0, "scorch", "blade"), std2 = drop("q2", 1, 0, "scorch", "blade"), good = drop("q3", 1, 1, "scorch", "blade");
+        EmberItemData top = new EmberItemData(hex("tp"), EmberItemData.templateId("scorch", "blade", 1), "scorch", "blade", 1, 3, 0, 3, 0, true, "drop", 1, 1);
+        java.util.List<EmberStorageRules.Entry> view = java.util.Arrays.asList(e(std1, false, false, 1), e(std2, false, false, 2), e(good, false, false, 3), e(top, false, false, 4));
+        java.util.List<EmberStorageRules.Entry> take = EmberStorageRules.bulkDismantle(view, new java.util.HashSet<String>(), null);
+        assertEquals(3, take.size());                                     // 极品 +3 kept back by default
+        assertEquals("精良 1 · 标准 2", EmberStorageRules.qualityCounts(take));
+        assertEquals(0, EmberStorageRules.enhancedCount(take));
+        assertEquals("强化+3 · 成色极品", EmberStorageRules.investedWhy(top));
+        assertEquals("abc12", EmberStorageRules.batchOf("装备库分解 T1 焚烬刃 → 胚料×1 [批 abc12]"));
+        assertNull(EmberStorageRules.batchOf("分解 T1 焚烬刃"));
+        assertNull(EmberStorageRules.batchOf(null));
+    }
 }
