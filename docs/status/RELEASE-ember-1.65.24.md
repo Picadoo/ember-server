@@ -33,6 +33,6 @@ D185 奖励精英变招 Pack 2：Extra.ELITE 每图再加 1 条互补轻招（`e
 | 项 | 结果 |
 |---|---|
 | 单测 `mvn -o test`（JDK 8）| 281 / 0 |
-| p1sim Stage C | deferred（同 D182）|
-| 冒烟 | deferred to batch (POLICY 01:53; packs since 1.65.20) |
+| p1sim Stage C | n/a（Extra.ELITE 无招式模型；奖励/权重不变 → 经济 Δ≈0；合批 p2econ `--mods` within range）|
+| 冒烟（合批 2026-10-05 04:50）| **PASS 4/0** FreshQ422 Q01 强制奖励精英：「奖励精英「门廊推」/「灰烬扇」… 碎片 +10 + 核心 +1」；SEVERE 0（`docs/tests/smoke-2026-10-05-batch-1.65.23-25.md`）|
 | 资产回归 | 无物品资产路径变化 → 未跑 persist-roundtrip |

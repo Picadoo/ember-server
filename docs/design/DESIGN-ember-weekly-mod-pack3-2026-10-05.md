@@ -1,6 +1,6 @@
 # Ember Weekly Modifier Pack 3：精选图周规则扩包（D186，2026-10-05）
 
-> 状态：**已上线 CoreRpg 1.65.25 / D186**（2026-10-05）。实现：双写 `ember-v1-runs.yml` +3（skirmish/hexers/ballista），`balance_version` 47→48；单测 12 规则 / 84 对；冒烟 **DEFERRED batch**（POLICY 01:53）。Stage C `p2econ --mods` **DEFERRED**。
+> 状态：**已上线 CoreRpg 1.65.25 / D186**（2026-10-05）。实现：双写 `ember-v1-runs.yml` +3（skirmish/hexers/ballista），`balance_version` 47→48；单测 12 规则 / 84 对；冒烟 **合批 PASS 12/0**（2026-10-05）。Stage C `p2econ --mods --weeks 24` **within range**。
 > 前置：D80 / D94 / D152 / D154 / D155 / D158 / D175→D178 Pack 2。
 > 参考：Diablo 大秘境式周旋转突变、PoE 地图词缀、WoW 大秘境词缀轮换（同 Pack 2）。机制**只落在**现有 `rotation.modifiers` 字段：`remap` / `converted:{hp,atk,interval,speed}` / `text` / `normal`。
 

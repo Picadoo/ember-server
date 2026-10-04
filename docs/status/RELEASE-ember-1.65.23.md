@@ -34,5 +34,5 @@ D173 Boss Moves Pack 2：主线 Q01–Q07 半血转阶段轻压。设计：`docs
 |---|---|
 | 单测 `mvn -o test`（JDK 8）| 280 / 0 |
 | bossmoves 5×4000 | MAX_ABS_DPP 2.2 |
-| 冒烟 FreshQ370+ | deferred to batch (POLICY 01:53; packs 1.65.20–1.65.23) |
+| 冒烟（合批 2026-10-05 04:39–04:48）| **PASS 20/0** FreshQ420 Q01 + FreshQ431 Q07：三房清空 → 首领 → `boss half-HP phase at 40%` + 「首领进入半血」；SEVERE 0（`docs/tests/smoke-2026-10-05-batch-1.65.23-25.md`）|
 | 资产回归 | 无物品资产路径变化 → 未跑 persist-roundtrip |

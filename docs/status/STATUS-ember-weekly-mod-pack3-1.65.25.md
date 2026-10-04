@@ -2,7 +2,7 @@
 
 ## 结论
 
-Pack 3 落地为 **CoreRpg 1.65.25** / 裁决 **D186** / `balance_version` **48**。Stage C `p2econ.py --mods` **DEFERRED**。冒烟 **DEFERRED batch**（POLICY 01:53）。
+Pack 3 落地为 **CoreRpg 1.65.25** / 裁决 **D186** / `balance_version` **48**。Stage C `p2econ.py --mods --weeks 24` **within range**（2026-10-05 合批）。冒烟 **PASS 12/0**（合批，`docs/tests/smoke-2026-10-05-batch-1.65.23-25.md`）。
 
 ## 改动摘要
 
@@ -19,7 +19,7 @@ Pack 3 落地为 **CoreRpg 1.65.25** / 裁决 **D186** / `balance_version` **48*
 ## 测试
 
 - `mvn test package`（JDK8）：见 RELEASE
-- 冒烟：DEFERRED batch（POLICY 01:53）
+- 冒烟：合批 PASS 12/0（2026-10-05 04:57–04:59）
 - 资产路径：未改 → 跳过 persist-roundtrip
 - MySQL：CoreRpg + CoreGacha connected；SEVERE 0
 

@@ -14,7 +14,7 @@ D186 Weekly Modifier Pack 3：精选图周规则 +3（散兵 / 咒潮 / 重弩�
 | 服务器 PID | **1248097** |
 | MySQL | `[CoreRpg] [storage] MySQL connected` · `[CoreGacha] [db] MySQL connected` |
 | SEVERE | 0 |
-| p1sim Stage C | deferred（`--mods`；POLICY within-range）|
+| p1sim Stage C | **within range**（`tools/p1sim/out-p2econ-mods-d186.md`，`--mods --weeks 24`）|
 
 ## 内容
 
@@ -30,6 +30,6 @@ D186 Weekly Modifier Pack 3：精选图周规则 +3（散兵 / 咒潮 / 重弩�
 | 项 | 结果 |
 |---|---|
 | 单测 `mvn test package`（JDK 8）| **281 / 0** |
-| p1sim Stage C | deferred |
-| 冒烟 | deferred to batch (POLICY 01:53; packs since 1.65.20) |
+| p1sim Stage C | `p2econ --mods --weeks 24`：12 规则通关率差 0～+1 点；skirmish/hexers/ballista 各 0 点 → **within range** |
+| 冒烟（合批 2026-10-05 04:57–04:59）| **PASS 12/0** 挑战版强制 skirmish（Q01 近战→弓手 ×4 + converted）/ hexers（Q03 近战→术者 ×3）/ ballista（Q01 该房无重甲 → noop）；SEVERE 0（`docs/tests/smoke-2026-10-05-batch-1.65.23-25.md`）|
 | 资产回归 | 无物品资产路径变化 → 未跑 persist-roundtrip |
