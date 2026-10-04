@@ -92,7 +92,7 @@
 
 | 检查 | 结果 |
 |---|---|
-| `tools/p1sim/p2econ.py --mods --weeks 24` | **within range**（`tools/p1sim/out-p2econ-mods-d187.md`；各规则通关率差 ±1 点内；经济列与无规则同量级）|
+| `tools/p1sim/p2econ.py --mods --weeks 98` | **within range**（`tools/p1sim/out-p2econ-mods-d187.md`；14 条规则各 360–420 玩家-周，通关率差全部 +0 点；经济列与无规则同量级。注：`--weeks 24` 在斜移索引下新 5 条规则 0 样本，故改跑 98 周 = 一个完整 7×14 周期）|
 | 经济列 | 规则不改奖励 → 不变 |
 | 超标处理 | 只调该条 `converted`；禁止加掉落 / 永久乘区 / 放宽 `normal` |
 
@@ -110,5 +110,5 @@
 ## 9. 登记
 
 - 源表：**D187**（CoreRpg 1.65.26 / bv49）
-- COORD：`COORD-routine-0418`
+- COORD：`COORD-routine-0418`（routine-0418 中断；routine-0517 收尾部署）
 - 设计：本文件
