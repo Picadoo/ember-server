@@ -894,6 +894,15 @@ Q03 普通 0.5 档对烬爆节奏的任何改动都 −7～−12 点），所以
 
 主线首领半血转阶段（扩展 D140）：Q01–Q03 各 +1 条 `below: 0.5` 轻招；Q04–Q07 不给第 4 条独立计时，只给既有轻招挂半血 `follow`。预警 ≥1.2s，主招/相关招再放慢抵消；门禁同 `bossmoves.py`（目标 Δ≤2pp，硬顶 3pp）。团本/连战不动。完整设计见 `docs/design/DESIGN-ember-boss-moves-pack2-2026-10-04.md`。源表 D173 行等 `COORD-asset-fix-1655` 提交后再补。本草案节只作指针，不 bump `balance_version`。
 
+## 5zj Room Events Pack 3（D179，设计-only，2026-10-04）
+
+房间事件池再扩 +占点 hold / 护灯 beacon / 传火 relay（与 timed/crystal/escort 等权）；否决笼牢/抽血；奖励键不变。完整设计见 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`。源表 D179。实现另窗。
+
+## 5zk Variety Affix Pack 3（D181，设计-only，2026-10-04）
+
+词缀池 6→8：+投弹 mortar（周期点名圈）/ 亡爆 molten（死后延迟圈）。对照 D3 Mortar/Molten；否决 Waller/Vortex/Teleporter/Reflect/Vampiric。闸门与 `affix_shard` 不变。完整设计见 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`。源表 D181。实现另窗。
+
+
 ## 5zj Weekly Modifier Pack 2（D175，设计-only，2026-10-04）
 
 精选图周规则扩包（扩展 §5e / P2-8）：在现网 6 条上再加 **弓潮**（`bolters` caster→ranged）、**龟甲**（`shell` caster→heavy + 厚血慢手）、**压阵**（`press` ranged→melee + 冲锋近战），全部 challenge-only；池 6→9（63 周组合）。只用现有 `remap` / `converted` 字段；否决更严限药、黑暗、数量倍增、反伤、全局乘区、宝藏怪 remap。门禁：`p2econ.py --mods` 通关率差贴近 0。完整设计见 `docs/design/DESIGN-ember-weekly-mod-pack2-2026-10-04.md`。源表 D175 行等 `COORD-asset-fix-1655` 提交后再补。本草案节只作指针，不 bump `balance_version`。
@@ -1015,4 +1024,6 @@ Q03 普通 0.5 档对烬爆节奏的任何改动都 −7～−12 点），所以
 | D171 | Variety Pack 2（设计） | 词缀 +再生/冲锋/凝霜；事件 +砸晶/护宝兔；见 `DESIGN-ember-variety-pack2-2026-10-04.md` |
 | D176 | Variety Pack 2 上线 CoreRpg 1.65.6 | 实现 D171；balance_version 30；Stage C p1sim deferred |
 | D173 | Boss Moves Pack 2（设计-only） | 主线半血转阶段；见 `DESIGN-ember-boss-moves-pack2-2026-10-04.md`；源表行待 asset-fix 提交后补；实现后另记版本 |
+| D179 | Room Events Pack 3（设计-only） | +hold/beacon/relay；见 `DESIGN-ember-room-events-pack3-2026-10-04.md`；实现另窗 |
+| D181 | Variety Affix Pack 3（设计-only） | 词缀 +mortar/molten（6→8）；见 `DESIGN-ember-variety-affix-pack3-2026-10-04.md`；实现另窗 |
 | D175 | Weekly Modifier Pack 2（设计-only） | 周规则 +弓潮/龟甲/压阵（challenge-only remap+converted）；见 `DESIGN-ember-weekly-mod-pack2-2026-10-04.md`；源表行待 asset-fix 提交后补；实现后另记版本 |

@@ -1521,6 +1521,8 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D176 | CoreRpg 1.65.6 | Variety Pack 2 上线（实现 D171）：词缀 +regen/charge/frost；房间事件 +crystal/escort（与 timed 等权）；闸门/奖励数不变；花样委托 timed 文案→「房间事件达标」；balance_version 29→30；Stage C p1sim 门禁 deferred |
 | D177 | CoreRpg 1.65.9 | P1 挂机庭（业主 17:56「挂机」）：复用 `ember_afk`；四层按首通 Q01/Q03/Q05/Q07 开放；只发账号绑定的余烬币 + 余烬经验（10 分钟一轮，每日 12 轮在线 + 离线合计，离线 1/4 最多 6 轮；满一天 ≤ 一次通关基础）；P1 下旧挂机怪掉落 / 击杀币 / 击杀经验与旧寄售关闭；**修订 D63**：材料 / 装备 / 印记仍只来自通关；`balance_version` 32→33；p1sim `tools/p1sim/afk.py`：21 格 21/21，W30 share 0.5 −0.24 周、上界 share 1.0 −0.56 周（略超）→ Stage 1.1 降每轮币；见 `docs/design/DESIGN-ember-afk-p1-2026-10-04.md` |
 | D178 | CoreRpg 1.65.8 | Weekly Modifier Pack 2 上线（实现 D175）：+bolters 弓潮 / shell 龟甲 / press 压阵；池 6→9（63 图×规则对）；全部 challenge-only；`balance_version` 31→32；Stage C p1sim `--mods` deferred |
+| D179 | 设计-only（deferred 实现） | Room Events Pack 3：房间事件池 +占点 hold / 护灯 beacon / 传火 relay（与 timed/crystal/escort 等权）；否决笼牢/抽血；奖励键不变；见 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`。实现另窗 |
+| D181 | 设计-only（deferred 实现） | Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）；闸门/奖励同 D138；否决反伤/拉人/造墙/瞬移/吸血；见 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`。实现另窗 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1660,3 +1662,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 不改 | 装备结构、材料来源、化妆品、config.yml、旧模式行为 |
 | 测试 | 单测 `EmberAfkServiceTest`（252 / 0）；冒烟 FreshQ145；p1sim 21 格 / 忙碌 / W30 见设计 §7 |
 | 文档 | 状态 `docs/status/STATUS-ember-afk-p1-1.65.9.md`；发布凭证 `docs/status/RELEASE-ember-1.65.9.md` |
+
+### 13.91 设计登记：Room Events Pack 3（D179）+ Variety Affix Pack 3（D181）（2026-10-04，设计-only）
+
+| 项 | 内容 |
+|---|---|
+| D179 | 房间事件 +hold/beacon/relay；文档 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`；实现等 CoreRpg+p1sim 空窗 |
+| D181 | 词缀 +mortar/molten（池 6→8）；文档 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`；研究对照 D3 Mortar/Molten，否决 Waller/Vortex/Teleporter/Reflect/Vampiric |
+| 不改 | 本登记不 bump 版本、不改 jar、不跑 sim；D180 签到/在线时长由 `COORD-signin-online` 占用 |
