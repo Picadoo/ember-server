@@ -173,7 +173,8 @@ signin:
 online:
   enabled: true
   idle_minutes: 5                      # 5 分钟没有任何操作（移动 / 视角 / 攻击 / 点菜单 / 聊天）就停表（PlayTime+ 300 秒同款）
-  exclude_worlds: [ember_afk]          # 挂机庭的时间归挂机庭结算（D177），不计在线时长，避免一份时间拿两份奖
+  exclude_worlds: []                   # D180 rev 2（业主 10-05 00:04）：挂机庭里也是在线，照样计时（每天仍封顶 120 分钟档）
+  afk_combat_counts: true              # 挂机庭自动战斗在跑 = 有操作，不受 5 分钟停表影响
   milestones:                          # 今日有效在线分钟；到了在签到页点领取（过 0 点没领的自动补发）
     - {min: 15, coin: 10}
     - {min: 30, coin: 15, xp: 5}

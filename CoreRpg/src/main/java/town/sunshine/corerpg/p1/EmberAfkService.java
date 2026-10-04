@@ -206,6 +206,8 @@ public final class EmberAfkService implements Listener {
 
     /** D177 rules apply: config on and P1 active. */
     public boolean p1() { return enabled && EmberMode.active(); }
+    /** D180 rev 2: is auto-combat running for this player right now (main thread)? */
+    public boolean fighting(UUID u) { return u != null && fights.containsKey(u); }
     public String world() { return world; }
     public List<Tier> tiers() { return tiers; }
     public int dailyKills() { return dailyKills; }

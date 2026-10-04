@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *   a month and one a day, only for the current month, fills the earliest missed day, and needs today's sign-in plus
  *   {@code makeup_needs_online} counted minutes today (no coin, no cards).</li>
  *   <li><b>在线时长</b> (PlayTime+ / QZOnlineReward style): counted active minutes per day — online, outside
- *   {@code online.exclude_worlds} (the AFK world is paid by D177), and some real input (look / click / interact /
+ *   {@code online.exclude_worlds} (empty since D180 rev 2: the AFK world counts like anywhere else), and some real input (look / click / interact /
  *   attack / chat / hotbar / sneak / command) within {@code idle_minutes}. Position-only movement (water streams,
  *   pistons, being pushed) never counts. Milestones are claimed in the menu; reached-but-unclaimed ones are paid
  *   automatically after the day rolls over.</li>
@@ -104,6 +104,7 @@ public final class EmberSignService implements Listener {
     private volatile Map<Integer, Reward> special = Collections.emptyMap();
     private volatile int fallbackCoin = 60, makeupPerMonth = 3, makeupNeeds = 60, idleMinutes = 5;
     private volatile Set<String> excluded = Collections.emptySet();
+    private volatile boolean afkCombatCounts = true; // D180 rev 2 (owner 10-05 00:04): AFK auto-combat = activity
     private volatile List<Milestone> milestones = Collections.emptyList();
     private final Map<UUID, Long> lastAct = new ConcurrentHashMap<UUID, Long>();
     private int taskId = -1;
@@ -142,6 +143,7 @@ public final class EmberSignService implements Listener {
             Set<String> ex = new HashSet<String>();
             for (String w : o.getStringList("exclude_worlds")) ex.add(w.toLowerCase(Locale.ROOT));
             excluded = Collections.unmodifiableSet(ex);
+            afkCombatCounts = o.getBoolean("afk_combat_counts", true);
             for (Map<?, ?> r : o.getMapList("milestones")) {
                 try { ms.add(new Milestone(Integer.parseInt(String.valueOf(r.get("min"))), Reward.of(r))); }
                 catch (RuntimeException e) { plugin.getLogger().warning("[P1 online] bad milestone " + r + ": " + e); }
@@ -155,7 +157,7 @@ public final class EmberSignService implements Listener {
         long now = System.currentTimeMillis();
         for (Player p : Bukkit.getOnlinePlayers()) lastAct.putIfAbsent(p.getUniqueId(), now);
         plugin.getLogger().info("[P1 sign] signin=" + (signOn ? "on" : "off") + " special=" + special.keySet() + " makeup=" + makeupPerMonth + "/month needs "
-                + makeupNeeds + "m · online=" + (onlineOn ? "on" : "off") + " idle=" + idleMinutes + "m exclude=" + excluded + " milestones=" + ms.size());
+                + makeupNeeds + "m · online=" + (onlineOn ? "on" : "off") + " idle=" + idleMinutes + "m exclude=" + excluded + " afk_combat=" + afkCombatCounts + " milestones=" + ms.size());
     }
 
     public boolean signP1() { return signOn && EmberMode.active(); }
@@ -191,7 +193,17 @@ public final class EmberSignService implements Listener {
     static String month(LocalDate d) { return String.format(Locale.ROOT, "%04d-%02d", d.getYear(), d.getMonthValue()); }
     /** does this minute count? (pure) */
     static boolean counts(boolean excludedWorld, Long lastActMs, long nowMs, int idleMin) {
-        return !excludedWorld && lastActMs != null && nowMs - lastActMs <= idleMin * 60000L;
+        return counts(excludedWorld, false, lastActMs, nowMs, idleMin);
+    }
+    /** D180 rev 2: running AFK auto-combat counts as activity (no idle stop while it runs); the daily cap is the 120-min tier */
+    static boolean counts(boolean excludedWorld, boolean autoCombat, Long lastActMs, long nowMs, int idleMin) {
+        if (excludedWorld) return false;
+        return autoCombat || (lastActMs != null && nowMs - lastActMs <= idleMin * 60000L);
+    }
+    private boolean autoCombat(Player p) {
+        if (!afkCombatCounts) return false;
+        EmberAfkService a = EmberAfkService.get();
+        return a != null && a.p1() && p.getWorld() != null && p.getWorld().getName().equalsIgnoreCase(a.world()) && a.fighting(p.getUniqueId());
     }
 
     public Reward rewardFor(int n) {
@@ -343,7 +355,7 @@ public final class EmberSignService implements Listener {
             if (d == null || d.isLoadFailed()) continue;
             if (!rollover(p, d, ti)) continue;
             boolean ex = p.getWorld() != null && excluded.contains(p.getWorld().getName().toLowerCase(Locale.ROOT));
-            if (!counts(ex, lastAct.get(p.getUniqueId()), now, idleMinutes)) continue;
+            if (!counts(ex, autoCombat(p), lastAct.get(p.getUniqueId()), now, idleMinutes)) continue;
             int m = d.addPeriodCount(C_OMIN, day, 1);
             for (int i = 0; i < milestones.size(); i++) {
                 Milestone ms = milestones.get(i);
@@ -531,7 +543,8 @@ public final class EmberSignService implements Listener {
             case "state": {
                 if (!onlineP1()) return "§7未开启";
                 if (p == null) return "";
-                if (p.getWorld() != null && excluded.contains(p.getWorld().getName().toLowerCase(Locale.ROOT))) return "§e在挂机庭：这段时间由挂机庭结算，不计在线时长";
+                if (p.getWorld() != null && excluded.contains(p.getWorld().getName().toLowerCase(Locale.ROOT))) return "§e这个世界不计在线时长";
+                if (autoCombat(p)) return "§a计时中（挂机庭自动战斗）";
                 return counts(false, lastAct.get(p.getUniqueId()), System.currentTimeMillis(), idleMinutes) ? "§a计时中" : "§e停表中：" + idleMinutes + " 分钟没有操作";
             }
             case "next": {

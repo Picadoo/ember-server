@@ -59,7 +59,12 @@ public class EmberSignServiceTest {
         assertTrue(EmberSignService.counts(false, now - 4 * 60000L, now, 5));
         assertTrue(EmberSignService.counts(false, now - 5 * 60000L, now, 5));
         assertFalse("idle > 5 min stops the clock", EmberSignService.counts(false, now - 5 * 60000L - 1, now, 5));
-        assertFalse("AFK world never counts", EmberSignService.counts(true, now, now, 5));
+        assertFalse("an excluded world never counts", EmberSignService.counts(true, now, now, 5));
+        // D180 rev 2: AFK auto-combat counts as activity even with no input for longer than idle_minutes
+        assertTrue("auto-combat keeps the clock running", EmberSignService.counts(false, true, now - 30 * 60000L, now, 5));
+        assertTrue("auto-combat right after join", EmberSignService.counts(false, true, null, now, 5));
+        assertFalse("auto-combat off + idle stops", EmberSignService.counts(false, false, now - 6 * 60000L, now, 5));
+        assertFalse("excluded world wins over auto-combat", EmberSignService.counts(true, true, now, now, 5));
         assertFalse("no input since join", EmberSignService.counts(false, null, now, 5));
     }
 
@@ -84,7 +89,8 @@ public class EmberSignServiceTest {
         assertEquals(3, s.getInt("makeup_per_month"));
         assertEquals(60, s.getInt("makeup_needs_online"));
         assertEquals(5, o.getInt("idle_minutes"));
-        assertTrue(o.getStringList("exclude_worlds").contains("ember_afk"));
+        assertTrue("D180 rev 2: the AFK world counts", o.getStringList("exclude_worlds").isEmpty());
+        assertTrue(o.getBoolean("afk_combat_counts"));
         ConfigurationSection sp = s.getConfigurationSection("special");
         int monthCoin = 0, marks = 0, sig = 0;
         for (int n = 1; n <= 30; n++) {

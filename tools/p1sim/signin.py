@@ -153,11 +153,18 @@ def dyn(a):
     print('|---|---|---:|---:|---:|---:|---:|---:|---:|---|')
     inside = cells = 0
     worst = 0.0
+    afk = install_afk(a.afk, a.afk_share)  # D180 rev 2: AFK + online stacking (base arm: --dyn-base none = nothing, afk = AFK only)
+    if afk is not None:
+        print('# afk lane %s share=%.2f in the new arm; base arm = %s\n' % (a.afk, a.afk_share, a.dyn_base))
     for d in a.dodge:
         kn = p1sim.Knobs(d)
         STATE['on'] = False
+        if afk is not None:
+            afk.STATE['share'] = a.afk_share if a.dyn_base == 'afk' else 0.0
         base, _ = p1sim.summarize(cfg, kn, a.players, a.days * per_day, seed0=a.seed0)
         install(a.online, a.sign_share)
+        if afk is not None:
+            afk.STATE['share'] = a.afk_share
         new, _ = p1sim.summarize(cfg, kn, a.players, a.days * per_day, seed0=a.seed0)
         STATE['on'] = False
         for b, n in zip(base, new):
@@ -205,5 +212,6 @@ if __name__ == '__main__':
     ap.add_argument('--seed0', type=int, default=1000)
     ap.add_argument('--afk', help='directory holding the AFK lane afk.py to install too (read-only import)')
     ap.add_argument('--afk-share', type=float, default=0.0)
+    ap.add_argument('--dyn-base', choices=['none', 'afk'], default='none', help='dyn with --afk: base arm without AFK (none) or with it (afk)')
     a = ap.parse_args(argv)
     {'table': lambda: table(a), 'dyn': lambda: dyn(a), 'p2econ': lambda: p2(a, rest)}[a.tool]()
