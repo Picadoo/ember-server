@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(36, m.balanceVersion);                // D174 stage 2b outpost (pledge = 35, 2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
-        assertEquals("g04-1/b36", m.ruleVersion);
+        assertEquals(37, m.balanceVersion);                // D174 stage 2b echo (outpost = 36, pledge = 35, 2a = 34, D177 = 33, D178 = 32, D174 s1 = 31)
+        assertEquals("g04-1/b37", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1014,6 +1014,25 @@ public class EmberRunRulesTest {
         assertSame(r, m.byWorld("dungeon_EmberQ0B1_1A2B"));                                  // the D144 hall stays its own dungeon
         assertEquals("EmberQ0B2", m.byWorld("dungeon_EmberQ0B2_1A2B").dungeon);
         for (EmberRunMaps.Boss b : o.chain) { assertEquals(146, b.at.z, 0); assertFalse(b.waitInArea); }
+        assertEquals("[]", m.validate().toString());
+    }
+
+    @Test public void echoFightsOneBossOnASharedWeeklyClaim_D174() { // stage 2b 首领残响
+        EmberRunMaps m = bundled();
+        for (String k : new String[]{"q01", "q02", "q03", "q04"}) {
+            EmberRunMaps.MapDef e = m.byKey("echo_" + k);
+            assertNotNull(k, e);
+            assertEquals("echo", e.rushMode);
+            assertEquals("[" + k + "]", e.chainKeys.toString());
+            assertEquals(m.byKey(k).boss.name, e.chain.get(0).name);
+            assertEquals("q04", e.requires);
+            assertEquals("p4_echo_claim", e.rushClaim);
+            assertEquals(3, e.rushWeekly);
+            assertEquals(0, e.rushMarks);
+            assertEquals(2, e.rushSig);
+            assertEquals(0, m.cost(e));
+            assertEquals("EmberQ0B2", e.dungeon);
+        }
         assertEquals("[]", m.validate().toString());
     }
 

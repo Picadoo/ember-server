@@ -18,6 +18,7 @@ Options:
 Layout:
   - '#########'
   - '#E  O  P#'
+  - '#1 2 3 4#'
   - '####B####'
 
 Events:
@@ -31,13 +32,28 @@ Icons:
       name: '§8'
 
   E:
+    icons:
+      - condition: 'check papi %corerpg_p1_q04done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7首领残响 §8（首通 Q04 潮蚀水道后开放）'
+          lore:
+            - ''
+            - '§7每周 3 次：单独再打一个 Q01–Q04 首领（按 T2 加强）'
+            - '§7每次必得这张图 2 枚首领徽记 · 不耗体力 · 不掉装备'
+    update: 20
     display:
-      material: gray dye
-      name: '§7首领残响 §8（Q04 首通开放 · 即将上线）'
+      material: amethyst shard
+      name: '§b首领残响 §7（下面一排选首领）'
       lore:
         - ''
-        - '§7每周 3 次：单独再打一个已首通的 Q01–Q04 首领（强化版）'
-        - '§7每次必得这张图 2 枚首领徽记 · 不耗体力 · 不掉装备'
+        - '§7状态：§f%corerpg_p1_rush_echo_q01%'
+        - '§7选一个 Q01–Q04 首领，单独在首领厅再打一次（招式不变，按 T2 加强）'
+        - '§e四个首领合计每周前 3 次通关领奖：每次 2 枚那张图的首领徽记'
+        - '§7不耗体力 · 失败不扣任何东西，可以无限重试；领完后是练习'
+        - '§8不给余烬币、装备、碎片和印记，不算每日委托'
+
 
   O:
     icons:
@@ -107,6 +123,123 @@ Icons:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'menu: ember_p1_pledge'
+
+  '1':
+    icons:
+      - condition: 'check papi %corerpg_p1_q04done% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§8 '
+    update: 20
+    display:
+      material: iron axe
+      name: '§b残响 · Q01 残门蛮兵'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush_echo_q01%'
+        - '§7生命 ×12、伤害 ×3（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
+        - '§e通关领奖：Q01 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§a参考：最容易：T2 基本都能过'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点）'
+        - '§e➥ §f右键：规则（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush echo_q01 go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush echo_q01'
+        - close
+  '2':
+    icons:
+      - condition: 'check papi %corerpg_p1_q04done% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§8 '
+    update: 20
+    display:
+      material: anvil
+      name: '§b残响 · Q02 守炉蛮兵'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush_echo_q02%'
+        - '§7生命 ×3.5、伤害 ×2.2（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
+        - '§e通关领奖：Q02 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§a参考：T2 +4 躲得中等约 9 成'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点）'
+        - '§e➥ §f右键：规则（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush echo_q02 go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush echo_q02'
+        - close
+  '3':
+    icons:
+      - condition: 'check papi %corerpg_p1_q04done% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§8 '
+    update: 20
+    display:
+      material: iron sword
+      name: '§b残响 · Q03 残誓守卫'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush_echo_q03%'
+        - '§7生命 ×3.2、伤害 ×2.0（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
+        - '§e通关领奖：Q03 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§a参考：最难：T2 +4 躲得中等约 6 成、+8 基本稳'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点）'
+        - '§e➥ §f右键：规则（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush echo_q03 go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush echo_q03'
+        - close
+  '4':
+    icons:
+      - condition: 'check papi %corerpg_p1_q04done% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§8 '
+    update: 20
+    display:
+      material: prismarine shard
+      name: '§b残响 · Q04 潮闸重卫'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush_echo_q04%'
+        - '§7生命 ×2.0、伤害 ×1.8（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
+        - '§e通关领奖：Q04 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§a参考：T2 +4 躲得中等约 9 成'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点）'
+        - '§e➥ §f右键：规则（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush echo_q04 go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush echo_q04'
+        - close
 
   B:
     display:

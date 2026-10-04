@@ -8,8 +8,8 @@
 
 version: 1
 rule_version: g04-1
-# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137; 21 = repeat-run variety (affixed elite + optional room event), D138; 22 = 国庆 2026 limited event dungeon gq26 + festival charm slot (ember-v1-festival.yml), D139; 23 = one new telegraphed move per Q01–Q07 boss + main-move timing re-tuned (clear rates ±2), D140; 24 = talent specialization in ember-v1-growth.yml (trade-off talents, sidegrades at the reference gear), D141; 25 = 余烬连战 boss rush + 花样委托 daily + optional 烬核同心 goal (D144), reroll lock-affix + 国庆币 leftover exchange + festival combo warn 1.2 (D145–D148); 26 = D152 卸甲 (disarm) 4th P2-8 weekly modifier heavy→melee challenge-only; 27 = D154 卫士潮 (guards) 5th P2-8 weekly modifier ranged→heavy challenge-only; 28 = D155 铁卫 (wall) 6th P2-8 weekly modifier melee→heavy challenge-only; 29 = D158 converted-mob twists for 卸甲 / 卫士潮 / 铁卫 (fast melee / charging heavy / heavy hitter); 30 = D176 Variety Pack 2: affix +regen/charge/frost, event +crystal/escort; 31 = D174 签名传奇 Q01–Q03 + 首领徽记 + 烬炉烙印 + 双签名 (EmberSignature constants); 32 = D178 Weekly Mod Pack 2: +bolters/shell/press; 33 = D177 P1 挂机庭 coin + xp rounds in ember-v1.yml afk (tools/p1sim/afk.py); 34 = D174 stage 2a Q04–Q06 signatures L07–L12 + 烬斩 line/ring/ignite/shield + low-HP 炽愈 hooks (EmberSignature constants, tools/p1sim/mainline.py); 35 = D174 stage 2b 自选誓约: the leader pledges the normal: true rules on repeat normal Q01–Q06 runs, +1 insignia per rule (EmberRunService C_PLEDGE); 36 = D174 stage 2b 连战·前哨 rush entry outpost (Q01→Q03 chain at T2, weekly 2 insignia per map + 1 T2 mark, own claim counter, DP EmberQ0B2))
-balance_version: 36
+# §23.2 parameter changes bump balance_version (1 = book initial values incl. D31; 2 = §2c plan B, D60; 3 = P2-1 rotation, D66; 4 = P2-2 abyss table, D70; 5 = P2-5 raid r01, D75; 6 = P2-6 raid r02 + shared raid cap, D77–D78; 7 = P2-7 daily bounty in ember-v1.yml, D79; 8 = P2-8 rotation modifiers, D80; 9 = P2-9 map loot identity + targeted raid_item, D81–D82; 10 = Q01 onboarding ease, D86; 11 = weekly rule on repeat normal runs, D94; 12 = Q01 first-clear choice is the T1 charm, Q02 the T1 blade, D98; 13 = challenge ease + abyss rescale + T3 upgrade cost, D104; 14 = featured mark on repeat normal runs, D108; 15 = abyss re-curve (tier 1 = challenge) + Q02 targeted exchange, E-review D109–D110; 16 = seasons + weekly goals + raid last-phase revive, D116–D118; 17 = abyss fee paid by surplus T3 marks + season deep tier 5 + abyss board tie by clear time, D123–D124; 18 = first failed challenge / abyss run of the day refunds half its stamina, D128; 19 = bounty weekly goal prorated in the graduation week, D134; 20 = raid r03 on the Q05 map with the 烬核 share mechanic, D137; 21 = repeat-run variety (affixed elite + optional room event), D138; 22 = 国庆 2026 limited event dungeon gq26 + festival charm slot (ember-v1-festival.yml), D139; 23 = one new telegraphed move per Q01–Q07 boss + main-move timing re-tuned (clear rates ±2), D140; 24 = talent specialization in ember-v1-growth.yml (trade-off talents, sidegrades at the reference gear), D141; 25 = 余烬连战 boss rush + 花样委托 daily + optional 烬核同心 goal (D144), reroll lock-affix + 国庆币 leftover exchange + festival combo warn 1.2 (D145–D148); 26 = D152 卸甲 (disarm) 4th P2-8 weekly modifier heavy→melee challenge-only; 27 = D154 卫士潮 (guards) 5th P2-8 weekly modifier ranged→heavy challenge-only; 28 = D155 铁卫 (wall) 6th P2-8 weekly modifier melee→heavy challenge-only; 29 = D158 converted-mob twists for 卸甲 / 卫士潮 / 铁卫 (fast melee / charging heavy / heavy hitter); 30 = D176 Variety Pack 2: affix +regen/charge/frost, event +crystal/escort; 31 = D174 签名传奇 Q01–Q03 + 首领徽记 + 烬炉烙印 + 双签名 (EmberSignature constants); 32 = D178 Weekly Mod Pack 2: +bolters/shell/press; 33 = D177 P1 挂机庭 coin + xp rounds in ember-v1.yml afk (tools/p1sim/afk.py); 34 = D174 stage 2a Q04–Q06 signatures L07–L12 + 烬斩 line/ring/ignite/shield + low-HP 炽愈 hooks (EmberSignature constants, tools/p1sim/mainline.py); 35 = D174 stage 2b 自选誓约: the leader pledges the normal: true rules on repeat normal Q01–Q06 runs, +1 insignia per rule (EmberRunService C_PLEDGE); 36 = D174 stage 2b 连战·前哨 rush entry outpost (Q01→Q03 chain at T2, weekly 2 insignia per map + 1 T2 mark, own claim counter, DP EmberQ0B2); 37 = D174 stage 2b 首领残响 rush entries echo_q01..q04 (one boss at T2, 3 shared weekly claims × 2 insignia, p4_echo_claim))
+balance_version: 37
 # §9.5 new main maps cost 30 stamina; weekly first-free credits never apply here
 cost: 30
 # Endgame #6 (D128, balance_version 18, user 2026-10-03 07:07): the first failed challenge / abyss run of the stamina day
@@ -764,6 +764,146 @@ rush:
     break_secs: 10
     heal: 0.3
     reward: {marks: 1, mark_tier: 2, sigmarks: 2}
+    spawn: [0, 80, 133]
+    spread: [[-2, 80, 133], [2, 80, 133]]
+    safe: {rb: [0, 80, 133]}
+    holo: {entry: [0, 83, 133], exit: [0, 83, 136]}
+    rails: [[-3, 80, 121, 3, 85, 121]]
+    boss:
+      at: [0, 80, 146]
+      area: [-16, 79, 130, 16, 94, 162]
+      wait_in_area: false
+  # D174 stage 2b 首领残响 (Q04 first clear; DESIGN-ember-mainline-unlocks §4): one Q01–Q04 boss alone in the hall, lifted to the
+  # T2 player (echotune: T2+4 dodge 0.5 → q01 100 % / q02 89 % / q03 64 % / q04 89 %; T2+8 ≥ 98 %). The four entries share
+  # p4_echo_claim: the first 3 settled clears of the week pay 2 insignia of that boss's map each; later clears are practice.
+  # Design deviation (documented): no gear (the hall run has no base drop), no extra affix — insignia only, so W30 is untouched.
+  echo_q01:
+    name: 首领残响·Q01
+    mode: echo
+    label: 首领残响·残门蛮兵
+    claim: p4_echo_claim
+    weekly: 3
+    dungeon: EmberQ0B2
+    template: ember_daily_spire_v1
+    tier: 2
+    drop_label: 徽记
+    content_version: v1
+    map_version: ember_daily_spire_v1@b2151-2026-10-02
+    requires: q04
+    unlocks: ""
+    purpose: "Q04 首通开放：残门蛮兵（Q01）单独在首领厅再打一次（按 T2 加强）；每周前 3 次通关（四个首领共用）各得 2 枚 Q01 首领徽记"
+    b_ref: 12
+    party_min: 1
+    party_max: 3
+    cost: 0
+    chain: [q01]
+    boss_hp: 12.0
+    boss_dmg: 3.0
+    break_secs: 10
+    heal: 0.3
+    reward: {sigmarks: 2}
+    spawn: [0, 80, 133]
+    spread: [[-2, 80, 133], [2, 80, 133]]
+    safe: {rb: [0, 80, 133]}
+    holo: {entry: [0, 83, 133], exit: [0, 83, 136]}
+    rails: [[-3, 80, 121, 3, 85, 121]]
+    boss:
+      at: [0, 80, 146]
+      area: [-16, 79, 130, 16, 94, 162]
+      wait_in_area: false
+  echo_q02:
+    name: 首领残响·Q02
+    mode: echo
+    label: 首领残响·守炉蛮兵
+    claim: p4_echo_claim
+    weekly: 3
+    dungeon: EmberQ0B2
+    template: ember_daily_spire_v1
+    tier: 2
+    drop_label: 徽记
+    content_version: v1
+    map_version: ember_daily_spire_v1@b2151-2026-10-02
+    requires: q04
+    unlocks: ""
+    purpose: "Q04 首通开放：守炉蛮兵（Q02）单独在首领厅再打一次（按 T2 加强）；每周前 3 次通关（四个首领共用）各得 2 枚 Q02 首领徽记"
+    b_ref: 24
+    party_min: 1
+    party_max: 3
+    cost: 0
+    chain: [q02]
+    boss_hp: 3.5
+    boss_dmg: 2.2
+    break_secs: 10
+    heal: 0.3
+    reward: {sigmarks: 2}
+    spawn: [0, 80, 133]
+    spread: [[-2, 80, 133], [2, 80, 133]]
+    safe: {rb: [0, 80, 133]}
+    holo: {entry: [0, 83, 133], exit: [0, 83, 136]}
+    rails: [[-3, 80, 121, 3, 85, 121]]
+    boss:
+      at: [0, 80, 146]
+      area: [-16, 79, 130, 16, 94, 162]
+      wait_in_area: false
+  echo_q03:
+    name: 首领残响·Q03
+    mode: echo
+    label: 首领残响·残誓守卫
+    claim: p4_echo_claim
+    weekly: 3
+    dungeon: EmberQ0B2
+    template: ember_daily_spire_v1
+    tier: 2
+    drop_label: 徽记
+    content_version: v1
+    map_version: ember_daily_spire_v1@b2151-2026-10-02
+    requires: q04
+    unlocks: ""
+    purpose: "Q04 首通开放：残誓守卫（Q03）单独在首领厅再打一次（按 T2 加强）；每周前 3 次通关（四个首领共用）各得 2 枚 Q03 首领徽记"
+    b_ref: 27
+    party_min: 1
+    party_max: 3
+    cost: 0
+    chain: [q03]
+    boss_hp: 3.2
+    boss_dmg: 2.0
+    break_secs: 10
+    heal: 0.3
+    reward: {sigmarks: 2}
+    spawn: [0, 80, 133]
+    spread: [[-2, 80, 133], [2, 80, 133]]
+    safe: {rb: [0, 80, 133]}
+    holo: {entry: [0, 83, 133], exit: [0, 83, 136]}
+    rails: [[-3, 80, 121, 3, 85, 121]]
+    boss:
+      at: [0, 80, 146]
+      area: [-16, 79, 130, 16, 94, 162]
+      wait_in_area: false
+  echo_q04:
+    name: 首领残响·Q04
+    mode: echo
+    label: 首领残响·潮闸重卫
+    claim: p4_echo_claim
+    weekly: 3
+    dungeon: EmberQ0B2
+    template: ember_daily_spire_v1
+    tier: 2
+    drop_label: 徽记
+    content_version: v1
+    map_version: ember_daily_spire_v1@b2151-2026-10-02
+    requires: q04
+    unlocks: ""
+    purpose: "Q04 首通开放：潮闸重卫（Q04）单独在首领厅再打一次（按 T2 加强）；每周前 3 次通关（四个首领共用）各得 2 枚 Q04 首领徽记"
+    b_ref: 35
+    party_min: 1
+    party_max: 3
+    cost: 0
+    chain: [q04]
+    boss_hp: 2.0
+    boss_dmg: 1.8
+    break_secs: 10
+    heal: 0.3
+    reward: {sigmarks: 2}
     spawn: [0, 80, 133]
     spread: [[-2, 80, 133], [2, 80, 133]]
     safe: {rb: [0, 80, 133]}
