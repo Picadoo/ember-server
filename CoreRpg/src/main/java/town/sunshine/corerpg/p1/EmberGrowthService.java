@@ -721,7 +721,7 @@ public final class EmberGrowthService implements Listener {
         int coin = EmberSignature.imprintCoin(t.tier);
         String fp = t.uid + "|" + sd.id + "|" + cur;
         boolean go = "confirm".equalsIgnoreCase(args.length >= 5 ? args[4] : "");
-        if (go) {
+        if (go && cur > 0) { // overwriting a signature destroys it → the one-shot token from the preview (like 分解)
             String tok = args.length >= 6 && args[5].startsWith("tok:") ? args[5].substring(4) : "";
             String bad = town.sunshine.corerpg.ConfirmTokens.consume(p, "p1sig", tok, fp);
             if (bad != null) { p.sendMessage(P + ChatColor.RED + bad); go = false; }
@@ -754,7 +754,7 @@ public final class EmberGrowthService implements Listener {
     private boolean sigTest(org.bukkit.command.CommandSender s, String[] args) {
         if (!s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
         String w = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
-        String usage = P + "/corerpg p1 sig test marks <q01..> <n> [玩家] | stamp <blade|charm> <Lxx> [玩家] | clear [玩家]";
+        String usage = P + "/corerpg p1 sig test marks <q01..> <n> [玩家] | stamp <blade|charm> <Lxx> [玩家] | show [玩家] | clear [玩家]";
         int pi = "marks".equals(w) ? 6 : "stamp".equals(w) ? 6 : 4;
         Player t = args.length > pi ? Bukkit.getPlayerExact(args[pi]) : (s instanceof Player ? (Player) s : null);
         if (t == null) { s.sendMessage(usage); return true; }
@@ -770,6 +770,8 @@ public final class EmberGrowthService implements Listener {
             EmberSignature.Def sd = EmberSignature.byId(args[5]);
             if (it == null || sd == null || !EmberSignature.fits(sd, it.slot, it.family)) { s.sendMessage(P + "没有这件 / 签名不合这件"); return true; }
             d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", sd.code - sigOf(d, it.uid));
+        } else if ("show".equals(w)) {
+            // read only
         } else if ("clear".equals(w)) {
             for (String mk : EmberSignature.maps()) {
                 d.addPeriodCount(EmberSignature.C_MARK + mk, "all", -d.periodCount(EmberSignature.C_MARK + mk, "all"));
