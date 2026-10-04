@@ -46,7 +46,8 @@ SIM_KEYS = {'abyss_taken', 'burn_mult', 'burn_spread', 'burn_ticks', 'burst_ever
             'dmg_boss', 'dmg_mob', 'dmg_split', 'dodge_burst', 'dodge_dmg', 'dodge_heal', 'dodge_icd', 'dodge_secs',
             'hit_burst', 'potion', 'set_dmg', 'shard_bonus', 'share_taken', 'share_w', 'spread_icd', 'sustain_every',
             'sustain_mult', 'taken_affix', 'taken_all', 'taken_boss', 'taken_mob', 'taken_tele', 'abyss_fee',
-            'dmg_affix_body'}  # dmg_affix_body: B01 patch key (body only, not the clones) — p1sim.dmult implements it
+            'dmg_affix_body',  # dmg_affix_body: B01 patch key (body only, not the clones) — p1sim.dmult implements it
+            'dmg_affix_shield', 'dmg_affix_blazing', 'dmg_affix_split'}  # D164 破甲: per elite type (split incl. clones) — p1sim.dmult
 # ... and economic keys it knowingly does not model (reported, not fatal)
 UNMODELLED = {'reroll_coin'}
 CONVERTED = {'hp', 'atk', 'interval', 'speed'}

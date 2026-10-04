@@ -122,8 +122,8 @@ def spend(p, want):
             p.coin -= cc; p.shard -= sh
             s['aff_coin'] += cc; s['aff_shard'] += sh; s['tries'] += 1
             rng = s['rng']
-            pool = rr['affixes'][slot]
-            d = next(x for x in pool if x['id'] == aid) if locked else pool[rng.randrange(len(pool))]
+            pool = [x for x in rr['affixes'][slot] if x.get('rollable', True) is not False]  # D165: retired affixes never roll
+            d = next(x for x in rr['affixes'][slot] if x['id'] == aid) if locked else pool[rng.randrange(len(pool))]
             pity = it.get('apity', 0)
             if pity >= int(rr['pity']):
                 tier = cap

@@ -49,7 +49,7 @@ def dmult(st, tgt, t, owner):
         r *= gm(st, 'dmg_split')
     elif tgt.get('affix') and 'dmg_affix_body' in st['mods']:  # PROPOSAL (builddiv 10-04, not in Java): body-only
         r *= gm(st, 'dmg_affix_body')
-    if tgt.get('affix_kind') and ('dmg_affix_' + tgt['affix_kind']) in st['mods']:  # PROPOSAL: per elite type
+    if tgt.get('affix_kind') and ('dmg_affix_' + tgt['affix_kind']) in st['mods']:  # D164 破甲 (Java EmberGrowthService.classMult): per elite type
         r *= st['mods']['dmg_affix_' + tgt['affix_kind']]
     if t < getattr(owner, 'dodge_until', -1.0):
         r *= gm(st, 'dodge_dmg')
