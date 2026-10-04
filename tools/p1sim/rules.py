@@ -55,8 +55,19 @@ class RuleError(RuntimeError):
     pass
 
 
+def _norm(x):
+    """type-preserving canonical form: non-str dict keys are tagged (JSON would silently turn 1 into '1')"""
+    if isinstance(x, dict):
+        return {(k if isinstance(k, str) else '\u0000%s:%r' % (type(k).__name__, k)): _norm(v) for k, v in x.items()}
+    if isinstance(x, (list, tuple)):
+        return [_norm(v) for v in x]
+    if isinstance(x, float) and x == int(x) and abs(x) < 1e15:
+        return {'\u0000float': repr(x)}
+    return x
+
+
 def _canon(x):
-    return json.dumps(x, sort_keys=True, ensure_ascii=False, separators=(',', ':'), default=str)
+    return json.dumps(_norm(x), sort_keys=True, ensure_ascii=False, separators=(',', ':'), default=repr)
 
 
 def _hash(data):
@@ -107,6 +118,7 @@ def build():
         if os.path.exists(p):
             files[rel] = hashlib.sha256(_read(rel).encode('utf-8')).hexdigest()[:12]
     data['java'] = {k: _read(v) for k, v in JAVA.items()}
+    texts = {rel: _read(rel) for rel in [p[0] for p in PAIRS.values()] + [r for r in SINGLE.values() if os.path.exists(os.path.join(ROOT, r))]}
     for v in JAVA.values():
         files[v] = hashlib.sha256(_read(v).encode('utf-8')).hexdigest()[:12]
     if mismatch and os.environ.get('P1SIM_ALLOW_MISMATCH') != '1':
@@ -115,12 +127,25 @@ def build():
     unmod = validate(data)
     h = _hash(data) + ('-MISMATCH' if mismatch else '')
     return {'hash': h, 'balance_version': data['runs'].get('balance_version'), 'files': files,
-            'unmodelled': unmod, 'mismatch': mismatch, 'source': 'repo', 'data': data}
+            'unmodelled': unmod, 'mismatch': mismatch, 'source': 'repo', 'data': data, 'texts': texts}
+
+
+def _parse_texts(texts, java):
+    """the exported snapshot carries the raw rule texts; re-parsing them gives exactly the repo build's objects
+    (a JSON dump of the parsed data would not: int keys become strings)"""
+    data = {}
+    for name, (dep, _src) in PAIRS.items():
+        data[name] = miniyaml.loads(texts[dep])
+    for name, rel in SINGLE.items():
+        data[name] = miniyaml.loads(texts[rel]) if rel in texts else {}
+    data['java'] = dict(java)
+    return data
 
 
 def load_file(path):
     with open(path, encoding='utf-8') as f:
         snap = json.load(f)
+    snap['data'] = _parse_texts(snap['texts'], snap['java'])
     h = _hash(snap['data'])
     if not snap['hash'].startswith(h):
         raise RuleError('%s: stored hash %s does not match its content %s' % (path, snap['hash'][:12], h[:12]))
@@ -174,6 +199,8 @@ if __name__ == '__main__':
     if '--export' in sys.argv:
         out = sys.argv[sys.argv.index('--export') + 1]
         s = dict(snapshot())
+        s['java'] = s['data']['java']
+        del s['data']  # rebuilt from the raw texts on load (type-exact)
         with open(out, 'w', encoding='utf-8') as f:
             json.dump(s, f, ensure_ascii=False, sort_keys=True)
         print('wrote', out, s['hash'])

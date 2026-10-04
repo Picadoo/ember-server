@@ -209,6 +209,11 @@ try:
     except rules.RuleError:
         unsup = True
     check('M06 an unsupported growth mod key is a hard error', unsup)
+    ex = os.path.join(tmp, 'snap.json')
+    subprocess.check_call([sys.executable, os.path.join(HERE, 'rules.py'), '--export', ex], stdout=subprocess.DEVNULL)
+    pinned = rules.load_file(ex)
+    check('M06 an exported snapshot re-loads type-exact (same hash, same parsed data)', pinned['hash'] == s0['hash']
+          and rules._canon(pinned['data']) == rules._canon(s0['data']) and pinned['data']['runs'] == s0['data']['runs'])
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 
