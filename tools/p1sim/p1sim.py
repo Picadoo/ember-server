@@ -24,6 +24,10 @@ FEST = None
 # D141–D143 horizontal growth (talents / honors / affixes): None = off, else a callable (st, ctx) -> mods dict
 # (growth.py builds it from ember-v1-growth.yml; ctx = the player's cleared map keys, None = everything unlocked)
 GROWTH = None
+# build-diversity instrumentation (builddiv.py): True = every Fight keeps a Counter `rec` of damage by source, heals,
+# mechanic triggers, damage taken by kind and segment times. Counting only — never touches the rng, so results are
+# bit-identical with RECORD on or off.
+RECORD = False
 
 
 def gm(st, k, d=1.0):
@@ -40,9 +44,31 @@ def dmult(st, tgt, t, owner):
     r = gm(st, 'dmg_boss') if tgt['role'] == 'boss' else (gm(st, 'dmg_affix') if tgt.get('affix') else gm(st, 'dmg_mob'))
     if tgt.get('split_add'):
         r *= gm(st, 'dmg_split')
+    elif tgt.get('affix') and 'dmg_affix_body' in st['mods']:  # PROPOSAL (builddiv 10-04, not in Java): body-only
+        r *= gm(st, 'dmg_affix_body')
+    if tgt.get('affix_kind') and ('dmg_affix_' + tgt['affix_kind']) in st['mods']:  # PROPOSAL: per elite type
+        r *= st['mods']['dmg_affix_' + tgt['affix_kind']]
     if t < getattr(owner, 'dodge_until', -1.0):
         r *= gm(st, 'dodge_dmg')
+    if tgt['role'] == 'boss' and 'win_dmg' in st['mods']:  # PROPOSAL (builddiv 10-04, not in Java): 破绽窗口
+        r *= gm(st, 'win_dmg') if t < getattr(owner, 'win_until', -1.0) else gm(st, 'win_out')
     return r
+
+
+def burst_n_mult(st, k):
+    """PROPOSAL (builddiv 10-04, not in Java) 聚爆: 烬爆 × burst_solo when it catches 1 target, × burst_pack at >= 3"""
+    m = st.get('mods')
+    if not m or ('burst_solo' not in m and 'burst_pack' not in m):
+        return 1.0
+    return m.get('burst_solo', 1.0) if k <= 1 else (m.get('burst_pack', 1.0) if k >= 3 else 1.0)
+
+
+def sustain_every(cfg, st, hp):
+    """炽愈 interval in swings; PROPOSAL 低血回涌: below sustain_low × H the interval moves by sustain_low_every instead"""
+    m = st.get('mods')
+    if m and 'sustain_low' in m and hp < m['sustain_low'] * st['H']:
+        return cfg['sustain_every'] + int(m.get('sustain_low_every', 0))
+    return cfg['sustain_every'] + int(gm(st, 'sustain_every', 0))
 
 
 def fest_proc(owner, alive, t, B, caught):
@@ -57,7 +83,10 @@ def fest_proc(owner, alive, t, B, caught):
         return
     owner.fest_cd = t + FEST['icd']
     rest = [m for m in alive if m['hp'] > 0][:min(int(FEST['targets']), caught)]
+    rec = getattr(owner, 'rec', None)
     for m in rest:
+        if rec is not None:
+            rec['d_fest'] += min(FEST['coef'] * B, m['hp']); rec['n_fest'] += 1
         m['hp'] -= FEST['coef'] * B
     owner.fest_bursts = getattr(owner, 'fest_bursts', 0) + 1
     fest_proc(owner, alive, t, B, caught)  # mark burst kills dead (cooldown already running → no new burst)
@@ -148,12 +177,19 @@ def power(cfg, st, kn):
 
 # ---------------------------------------------------------------- combat
 
+CV = '@cv'  # D158: role key suffix of a mob converted by the week's rule (mod_cfg adds e.g. 'heavy@cv' with its multipliers)
+
+
 def mob(cfg, m, role, rng, kn, t0=0.0):
     d = m['mobs'][role]
     iv = d.get('interval', 3.0)
-    approach = 1.5 if role in MELEE_ROLES else 0.5
-    return {'hp': float(d['hp']), 'atk': d['atk'], 'iv': iv, 'role': role,
-            'next': t0 + approach + rng.uniform(0, iv), 'tele': role == 'caster', 'burn': 0.0}
+    base = role[:-len(CV)] if role.endswith(CV) else role
+    approach = (1.5 / float(d.get('speed', 1.0))) if base in MELEE_ROLES else 0.5
+    out = {'hp': float(d['hp']), 'atk': d['atk'], 'iv': iv, 'role': base,
+           'next': t0 + approach + rng.uniform(0, iv), 'tele': base == 'caster', 'burn': 0.0}
+    if base != role:
+        out['converted'] = True
+    return out
 
 
 class Fight:
@@ -168,19 +204,51 @@ class Fight:
         self.burst_cd = 0.0
         self.sus_cd = 0.0
         self.taken = 0.0
+        self.rec = __import__('collections').Counter() if RECORD else None
+        self.min_hp = 1.0
+
+    def hit(self, tgt, amount, key):
+        """apply `amount` damage to tgt; with RECORD, count the effective part (no overkill) under d_<key>, by target
+        class (on_boss / on_affix / on_mob) and the after-dodge window's extra share"""
+        rec = self.rec
+        if rec is not None and tgt['hp'] > 0:
+            if tgt.get('affix') and getattr(self, 'affix_t0', None) is None:
+                self.affix_t0 = self.t  # first damage on the affixed elite (or its adds) this run
+            eff = min(amount, tgt['hp'])
+            rec['d_' + key] += eff
+            rec['on_boss' if tgt['role'] == 'boss' else ('on_affix' if tgt.get('affix') else 'on_mob')] += eff
+            dd = gm(self.st, 'dodge_dmg')
+            if dd != 1.0 and self.t < getattr(self, 'dodge_until', -1.0):
+                rec['d_window_extra'] += eff * (1 - 1 / dd)
+            if tgt['role'] == 'boss':
+                rec['d_boss_all'] += eff
+                if self.t < getattr(self, 'win_until', -1.0):
+                    rec['d_boss_win'] += eff
+        tgt['hp'] -= amount
 
     def hurt(self, raw, tele, kind='mob', affix=False):
         kn, st = self.kn, self.st
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
+        rec = self.rec
+        if kind == 'tele' and st.get('mods') and 'win_dmg' in st['mods']:  # PROPOSAL 破绽窗口: opens on every boss telegraph
+            self.win_until = self.t + gm(st, 'win_secs', 0.0)
+            if rec is not None:
+                rec['n_window'] += 1
         if self.rng.random() < p:
+            if rec is not None:
+                rec['n_dodge_' + ('tele' if kind == 'tele' else ('blaze' if tele and affix else 'mob'))] += 1
             if kind == 'tele' and st.get('mods'):  # D141: a dodged boss telegraph
                 self.dodge_until = self.t + gm(st, 'dodge_secs', 0.0)
                 dh = gm(st, 'dodge_heal', 0.0)
                 if dh > 0 and self.t >= getattr(self, 'dodge_heal_cd', -1.0):
                     self.dodge_heal_cd = self.t + gm(st, 'dodge_icd', 6.0)
+                    if rec is not None:
+                        rec['heal_dodge'] += min(st['H'], self.hp + dh * st['H']) - self.hp; rec['n_dodge_heal'] += 1
                     self.hp = min(st['H'], self.hp + dh * st['H'])
                 if gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势: the 烬爆 counter jumps by this many swings (icd unchanged)
                     self.hits += int(gm(st, 'dodge_burst', 0.0))
+                    if rec is not None:
+                        rec['n_dodge_burst'] += 1
             return
         if st.get('mods'):
             raw *= gm(st, 'taken_' + kind) * (gm(st, 'taken_affix') if affix else 1.0) * gm(st, 'taken_all')
@@ -188,13 +256,21 @@ class Fight:
                 raw *= gm(st, 'abyss_taken')
             if kind == 'tele' and gm(st, 'hit_burst', 0.0) > 0:  # D141 反震: hit by a boss telegraph → 烬爆 counter + n
                 self.hits += int(gm(st, 'hit_burst', 0.0))
+                if rec is not None:
+                    rec['n_hit_burst'] += 1
         dmg = raw * self.st['M']
         self.hp -= dmg
         self.taken += dmg
+        if rec is not None:
+            rec['taken_' + ('affix' if affix else kind)] += dmg
+            rec['n_hit_' + ('tele' if kind == 'tele' else ('blaze' if tele and affix else 'mob'))] += 1
+            self.min_hp = min(self.min_hp, max(0.0, self.hp) / self.st['H'])
         if self.hp > 0 and self.hp < kn.potion_at * self.st['H'] and self.potions > 0 and self.t >= self.pcd:
             self.potions -= 1
             self.used += 1
             self.pcd = self.t + self.cfg['potion_cd']
+            if rec is not None:
+                rec['heal_potion'] += min(self.st['H'], self.hp + self.cfg['potion_pct'] * gm(self.st, 'potion') * self.st['H']) - self.hp
             self.hp = min(self.st['H'], self.hp + self.cfg['potion_pct'] * gm(self.st, 'potion') * self.st['H'])
 
     def segment(self, mobs, boss=None, mapdef=None):
@@ -211,6 +287,11 @@ class Fight:
                 skills.append({'s': s, 'next': t + s['every']})
         pending = []  # (time, raw dmg) of follow-up hits
         while True:
+            if self.rec is not None:
+                for m in mobs:
+                    if m.get('affix') and m['hp'] <= 0 and not m.get('_kt'):
+                        m['_kt'] = True
+                        self.affix_dead_at = t
             for m in mobs:  # D138 分裂: the affixed elite splits on death (the door waits for the adds)
                 if m['hp'] <= 0 and m.get('split'):
                     n, share, md = m.pop('split')
@@ -219,6 +300,7 @@ class Fight:
                         a['hp'] *= share
                         a['affix'] = True  # D141: the split adds count as the affixed elite (破缀 / 抗缀)
                         a['split_add'] = True
+                        a['affix_kind'] = 'split'
                         mobs.append(a)
             if st.get('mods') and gm(st, 'burn_spread', 0) > 0:  # D141 燎原: a burning enemy that dies passes its burn on
                 for m in mobs:
@@ -230,6 +312,9 @@ class Fight:
                         if nxt is not None:  # burn_spread = at most this many seconds of the burn move over
                             nxt['burn'] = min(m['burn'], t + gm(st, 'burn_spread', 0))
                             self.spread_cd = t + gm(st, 'spread_icd', 0.0)
+                            if self.rec is not None:
+                                self.rec['n_spread'] += 1
+                                nxt['_spread_burn'] = True
             alive = [m for m in mobs if m['hp'] > 0]
             if not alive:
                 self.t = t
@@ -252,7 +337,8 @@ class Fight:
             if st['set'] == 'scorch':
                 for m in alive:
                     if m['burn'] > t:
-                        m['hp'] -= cfg['burn'][st['awk']] * gm(st, 'burn_mult') * gm(st, 'set_dmg') * dmult(st, m, t, self) * st['B'] * (min(tn, m['burn']) - t)
+                        self.hit(m, cfg['burn'][st['awk']] * gm(st, 'burn_mult') * gm(st, 'set_dmg') * dmult(st, m, t, self) * st['B'] * (min(tn, m['burn']) - t),
+                                 'spread' if m.get('_spread_burn') else 'burn')
             t = tn
             self.t = t
             if FEST:
@@ -261,23 +347,37 @@ class Fight:
                 next_swing = t + period
                 tgt = alive[0]
                 crit = rng.random() < cfg['crit_rate']
-                tgt['hp'] -= st['B'] * (cfg['crit_mult'] if crit else 1.0) * dmult(st, tgt, t, self)
+                self.hit(tgt, st['B'] * (cfg['crit_mult'] if crit else 1.0) * dmult(st, tgt, t, self), 'swing')
                 self.hits += 1
-                if t >= next_skill:
+                hold = getattr(kn, 'hold_skill', False) and boss is not None and t >= getattr(self, 'win_until', -1.0)
+                if t >= next_skill and not hold:  # hold_skill (behaviour knob): keep 烬斩 for the 破绽窗口
                     for m in alive[:kn.skill_hits]:
-                        m['hp'] -= cfg['skill_mult'] * st['B'] * dmult(st, m, t, self)
+                        self.hit(m, cfg['skill_mult'] * st['B'] * dmult(st, m, t, self), 'skill')
                     next_skill = t + cfg['skill_cd']
                 bev = cfg['burst_every'] + int(gm(st, 'burst_every', 0))
                 if st['set'] == 'burst' and self.hits >= bev and t >= self.burst_cd:
-                    for m in alive[:min(kn.skill_hits, 5)]:
-                        m['hp'] -= cfg['burst'][st['awk']] * gm(st, 'burst_mult') * gm(st, 'set_dmg') * st['B'] * dmult(st, m, t, self)
+                    caught = alive[:min(kn.skill_hits, 5)]
+                    bm = burst_n_mult(st, len(caught))
+                    for m in caught:
+                        self.hit(m, cfg['burst'][st['awk']] * gm(st, 'burst_mult') * bm * gm(st, 'set_dmg') * st['B'] * dmult(st, m, t, self), 'burst')
+                    if self.rec is not None:
+                        self.rec['n_burst'] += 1
                     self.hits = 0
                     self.burst_cd = t + cfg['burst_icd']
                 elif st['set'] == 'scorch' and self.hits >= cfg['scorch_every']:
                     tgt['burn'] = t + 4.0 + gm(st, 'burn_ticks', 0)
+                    tgt.pop('_spread_burn', None)
+                    if self.rec is not None:
+                        self.rec['n_burn'] += 1
                     self.hits = 0
-                elif st['set'] == 'sustain' and self.hits >= cfg['sustain_every'] + int(gm(st, 'sustain_every', 0)) and t >= self.sus_cd:
-                    self.hp = min(st['H'], self.hp + cfg['sustain_pct'][st['awk']] * gm(st, 'sustain_mult') * st['H'])
+                elif st['set'] == 'sustain' and self.hits >= sustain_every(cfg, st, self.hp) and t >= self.sus_cd:
+                    sm = gm(st, 'sustain_mult') * (gm(st, 'sustain_low_mult') if self.hp < gm(st, 'sustain_low', 0.0) * st['H'] else 1.0)
+                    if self.rec is not None:
+                        self.rec['heal_sustain'] += min(st['H'], self.hp + cfg['sustain_pct'][st['awk']] * sm * st['H']) - self.hp
+                        self.rec['n_sustain'] += 1
+                        if self.hp < 0.5 * st['H']:
+                            self.rec['n_sustain_low'] += 1
+                    self.hp = min(st['H'], self.hp + cfg['sustain_pct'][st['awk']] * sm * st['H'])
                     self.hits = 0
                     self.sus_cd = t + cfg['sustain_icd']
                 elif st['set'] in ('burst', 'sustain'):
@@ -333,6 +433,7 @@ class Fight:
 VARIETY = True   # D138 repeat-run variety (--no-variety to compare)
 VBOUNTY = True   # D144 花样委托 (--no-vbounty to compare)
 LAST_VAR = {'affix': False, 'event': False}  # outcome of the last run_map(repeat=True)
+LAST_FIGHT = [None]  # RECORD: the Fight of the last run_map (cleared or not)
 
 
 def variety_roll(cfg, seed):
@@ -361,6 +462,7 @@ def affix_mob(cfg, m, mobs, kind, t0):
     elif kind == 'split':
         pick_['split'] = (int(v['split']['count']), float(v['split']['hp']), m)
     pick_['affix'] = True
+    pick_['affix_kind'] = kind
     return pick_
 
 
@@ -368,6 +470,7 @@ def run_map(cfg, key, st, kn, rng, potions, repeat=False):
     """One entry. Returns (cleared, potions_used, extra, seconds, damage taken, where it died)."""
     m = cfg['maps'][key]
     f = Fight(cfg, st, kn, rng, potions)
+    LAST_FIGHT[0] = f
     extra = ('none', 'treasure', 'elite', 'chest')[pick(cfg['extra_w'], rng.random())]
     ar = at = er = None
     if repeat:
@@ -381,8 +484,19 @@ def run_map(cfg, key, st, kn, rng, potions, repeat=False):
         mobs = [mob(cfg, m, role, rng, kn, f.t) for role, n in comp.items() for _ in range(n)]
         am = affix_mob(cfg, m, mobs, at, f.t) if rk == ar else None
         t0 = f.t
+        if f.rec is not None:
+            u0, k0 = f.used, f.taken
         if not f.segment(mobs):
+            if f.rec is not None:
+                f.rec['died_' + ('affix' if am is not None else 'trash')] += 1
             return False, f.used, extra, f.t, f.taken, rk
+        if f.rec is not None:
+            seg = ('affix_' + at) if am is not None else 'trash'
+            f.rec['t_' + seg] += f.t - t0; f.rec['k_' + seg] += f.taken - k0; f.rec['p_' + seg] += f.used - u0
+            f.rec['c_' + seg] += 1
+            if am is not None:
+                f.rec['ttk_affix_' + at] += getattr(f, 'affix_dead_at', f.t) - t0
+                f.rec['own_affix_' + at] += getattr(f, 'affix_dead_at', f.t) - (getattr(f, 'affix_t0', None) or t0)
         if am is not None:
             LAST_VAR['affix'] = True
         if rk == er and f.t - t0 <= float(cfg['variety']['event_secs']):
@@ -393,8 +507,15 @@ def run_map(cfg, key, st, kn, rng, potions, repeat=False):
     b = m['boss']
     boss = {'hp': float(b['hp']), 'max': float(b['hp']), 'atk': b['atk'], 'iv': b.get('interval', 3.0), 'role': 'boss',
             'next': f.t + 2.0, 'tele': False, 'burn': 0.0}
+    if f.rec is not None:
+        t0, u0, k0 = f.t, f.used, f.taken
     if not f.segment([boss], boss=boss, mapdef=m):
+        if f.rec is not None:
+            f.rec['died_boss'] += 1
         return False, f.used, extra, f.t, f.taken, 'boss'
+    if f.rec is not None:
+        f.rec['t_boss'] += f.t - t0; f.rec['k_boss'] += f.taken - k0; f.rec['p_boss'] += f.used - u0; f.rec['c_boss'] += 1
+    LAST_FIGHT[0] = f
     return True, f.used, extra, f.t, f.taken, None
 
 
@@ -619,11 +740,30 @@ def _truthy(v):
     return v is True or str(v).lower() == 'true'
 
 
+def convert_roles(m, mod):
+    """D94 / D158: role remap of week rule `mod` on map def m (server: only roles the map defines). With a `converted:`
+    block (D158, balance_version 29) the swapped mobs spawn as '<to>@cv' — the target role's numbers × hp / atk /
+    interval, speed (approach time ÷ speed) — exactly like EmberRunDirector.spawn(conv). Returns the remap to use."""
+    remap = {k: v for k, v in (mod.get('remap') or {}).items() if v in m['mobs']}
+    cv = mod.get('converted') or {}
+    if remap and cv:
+        clamp = lambda x: max(0.25, min(4.0, float(x)))  # Modifier.clampMult
+        for frm, to in list(remap.items()):
+            d = dict(m['mobs'][to])
+            d['hp'] = float(d['hp']) * clamp(cv.get('hp', 1.0))
+            d['atk'] = float(d['atk']) * clamp(cv.get('atk', 1.0))
+            d['interval'] = float(d.get('interval', 3.0)) * clamp(cv.get('interval', 1.0))
+            d['speed'] = clamp(cv.get('speed', 1.0))
+            m['mobs'][to + CV] = d
+            remap[frm] = to + CV
+    return remap
+
+
 def mod_cfg(cfg, key, mod):
     """D94: config with weekly rule `mod` applied to map `key` (role remap / room 1↔3 swap); returns (cfg, potion cap)."""
     c = copy.deepcopy(cfg)
     m = c['maps'][key]
-    remap = {k: v for k, v in (mod.get('remap') or {}).items() if v in m['mobs']}  # server: only roles the map defines
+    remap = convert_roles(m, mod)
     if remap:
         for room in m['rooms'].values():
             for var in ('a', 'b'):

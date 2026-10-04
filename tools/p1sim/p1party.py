@@ -65,6 +65,8 @@ class Party:
     def hurt(self, m, raw, tele, dodgeable=True, kind='mob'):
         cfg, kn, st = self.cfg, m.kn, m.st
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
+        if kind in ('tele', 'share') and st.get('mods') and 'win_dmg' in st['mods']:  # PROPOSAL 破绽窗口 (p1sim.dmult)
+            m.win_until = self.t + p1sim.gm(st, 'win_secs', 0.0)
         if dodgeable and self.rng.random() < p:
             if kind == 'tele' and st.get('mods'):  # D141: a dodged boss telegraph
                 m.dodge_until = self.t + p1sim.gm(st, 'dodge_secs', 0.0)
@@ -165,13 +167,16 @@ class Party:
                 bev = cfg['burst_every'] + int(p1sim.gm(st, 'burst_every', 0))
                 sev = cfg['sustain_every'] + int(p1sim.gm(st, 'sustain_every', 0))
                 if st['set'] == 'burst' and m.hits >= bev and t >= m.burst_cd:
-                    for x in alive[:min(m.kn.skill_hits, 5)]:
-                        x['hp'] -= cfg['burst'][st['awk']] * p1sim.gm(st, 'burst_mult') * p1sim.gm(st, 'set_dmg') * st['B'] * dm(x)
+                    caught = alive[:min(m.kn.skill_hits, 5)]
+                    bm = p1sim.burst_n_mult(st, len(caught))  # PROPOSAL 聚爆 (1.0 unless the keys are set)
+                    for x in caught:
+                        x['hp'] -= cfg['burst'][st['awk']] * p1sim.gm(st, 'burst_mult') * bm * p1sim.gm(st, 'set_dmg') * st['B'] * dm(x)
                     m.hits = 0; m.burst_cd = t + cfg['burst_icd']
                 elif st['set'] == 'scorch' and m.hits >= cfg['scorch_every']:
                     tgt['burn'] = t + 4.0 + p1sim.gm(st, 'burn_ticks', 0); tgt['burn_by'] = m; m.hits = 0
-                elif st['set'] == 'sustain' and m.hits >= sev and t >= m.sus_cd:
-                    m.hp = min(st['H'], m.hp + cfg['sustain_pct'][st['awk']] * p1sim.gm(st, 'sustain_mult') * st['H'])
+                elif st['set'] == 'sustain' and m.hits >= p1sim.sustain_every(cfg, st, m.hp) and t >= m.sus_cd:
+                    sm = p1sim.gm(st, 'sustain_mult') * (p1sim.gm(st, 'sustain_low_mult') if m.hp < p1sim.gm(st, 'sustain_low', 0.0) * st['H'] else 1.0)
+                    m.hp = min(st['H'], m.hp + cfg['sustain_pct'][st['awk']] * sm * st['H'])
                     m.hits = 0; m.sus_cd = t + cfg['sustain_icd']
                 elif st['set'] in ('burst', 'sustain'):
                     m.hits = min(m.hits, max(bev, sev))

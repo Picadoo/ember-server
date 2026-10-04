@@ -25,7 +25,7 @@ def mod_cfg(ccfg, key, mod):
         return ccfg, None
     c = copy.deepcopy(ccfg)
     m = c['maps'][key]
-    remap = {k: v for k, v in (mod.get('remap') or {}).items() if v in m['mobs']}  # server: only roles the map defines
+    remap = p1sim.convert_roles(m, mod)  # server: only roles the map defines; D158 converted twists (bv29)
     if remap:
         for room in m['rooms'].values():
             for var in ('a', 'b'):
