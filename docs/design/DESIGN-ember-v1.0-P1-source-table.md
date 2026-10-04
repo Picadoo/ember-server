@@ -1503,3 +1503,37 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 洗练可消耗装备库重复件（未锁定/未收藏 + duplicateOk）；优先背包；ledger kind=reroll（不可撤销） |
 | 旁注 | hub 扭蛋图标改 ender pearl；扭蛋页补商店件币买/已购返光屑文案；不加周规则 |
 | 版本 | CoreRpg 1.64.2；冒烟 FreshQ51 PASS；STATUS `docs/status/STATUS-ember-reroll-gearlib-d159.md` |
+| D160 | CoreRpg 1.65.0 | 余烬连战不限次数重试、每周首次通关领奖（p4_rush_claim）、之后为练习；其它周内容逐项复查不改 |
+| D161 | CoreRpg 1.65.0 | 存仓 / 存库 / 取出 / 快照恢复后同 tick 保存 .dat；取出途中下线补偿（D162 起改为投递） |
+| D162 | CoreRpg 1.65.1 | review §03 A01–A04：cr_p1_delivery 同事务投递、自动入库同步单事务、工坊扣费 hold + 对账、玩家行 + 仓库一个事务、资产冻结 / 写失败暂停、离线恢复成功后才出队；测试专用故障注入 |
+
+### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 玩家反馈：连战一周只能进一次，打输了这周就没了，太伤 |
+| 裁决 | 去掉每周进入次数；`p4_rush` 改为只统计尝试次数，`p4_rush_claim` 记每周领奖；本周第一次结算通关发 T3 印记 + 余烬徽，之后本周再通关是练习（不发奖，仍上 `time_rush` 周榜）；本周已有旧版通关（旧计数 > 0 且在周榜上）算已领。称号仍是首次通关（只在领奖局）。免费，没有每次尝试成本。失败提示「不扣任何东西，随时可以再来」+ 本周奖励状态 + [再来一次] |
+| 其它周内容 | 团本：周上限只数通关（D133），每次进入扣体力不变，达到上限后挡进入 → 不改。精选周挑战（C_ROTATION）：按通关计 → 不改。深渊：每次层费 + 体力，D128 半价退还，不是「每周机会」→ 不改。国庆 gq26：每天 3 次按进入计 → 不改（怪物掉币，进入上限就是奖励上限；按天；10-08 结束）。旧精英 / 天灾：P1 大厅进不去 → 不改 |
+| 模型 | `p2econ.py --rush-tries N`（`RUSH_STATS`）150 人 12 周：领奖周 d0.3 9848 → 9852（91.2%），d0.5 9900 → 9906；每周印记 ≤ 1（上限成立）；最快两件极品周数 d0.3 6.17 → 5.91、d0.5 4.69 → 4.75（±0.5 内）。`tools/p1sim/out-p2econ-d160-*.md` |
+| 测试 | `EmberRunRulesTest` +2（只领一次、20k 周上限不变式）；实机见 `docs/tests/TEST-ember-realplay-2026-10-04.md` 的 rush 一行 |
+| 上线 | 1.65.0 10-04 10:54 CST；随 1.65.1 一起提交（7b1bd1c） |
+
+### 13.79 存档同步（CoreRpg 1.65.0，D161，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 问题 | persist-roundtrip run 1：取出与断线同 tick → 行 active、无实物；kill -9 后背包（.dat）比 MySQL 旧 → 存进仓库的材料又在背包里（复制） |
+| 裁决 | `EmberVault.flushSoon`、存库成功、取出成功、快照恢复后同 tick `p.saveData()`；取出途中下线先做补偿事务（D162 起改为投递行） |
+| 测试 | run 2 a–f 48 / 0 |
+
+### 13.80 资产交付闭环（CoreRpg 1.65.1，D162，review §03 A01–A04）
+
+| 项 | 内容 |
+|---|---|
+| A01 | `cr_p1_delivery`（唯一 owner + request + idx）：分解胚料、取出的装备、撤销要扣回的胚料与装备状态同事务写入；在线回调投递，离线下次进服；`p1dlv_<id>` 标记 / uid 保证恰好一次；不重新随机 |
+| A02 | 自动入库 = 物品行 + 创建流水 + 库标记一个同步事务，COMMIT 后才报已入库；失败走背包 / 奖励账本 pending |
+| A03 | 权威存储表见 review 附录；工坊扣费：hold → 扣费并同步保存（`p1paid_`）→ 装备事务（作废 hold）；失败释放 → 退款；崩溃 → 进服对账；`cr_players` + `cr_warehouse` 一个事务；P1 事务 / 存档连续 3 次失败暂停资产变更（`EmberAssetGuard`） |
+| A04 | 离线恢复只在应用后出队，失败记 attempts / last_error；恢复期间冻结仓库、装备库、工坊、投递、拾取进仓 |
+| 测试钩子 | `CORERPG_TEST_FAULTS=1` + `/corerpg p1 fault <玩家> before_commit|after_commit|after_deliver|clear`；线上不带该变量 |
+| 测试 | `docs/tests/TEST-ember-persist-roundtrip-2026-10-04.md`：a–f 48 / 0，g 52 / 0；单测 226 全过 |
+| 上线 | 10-04 11:31 CST（最终 jar），提交 64a0593；状态 `docs/status/STATUS-ember-rush-persist-d160-d162.md` |
