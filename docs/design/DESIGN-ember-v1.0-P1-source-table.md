@@ -1519,7 +1519,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D174 | CoreRpg 1.65.7 / 1.65.10 / 1.65.11–1.65.14（第 1、1.5、2a、2b 阶段已上线；2c 暂缓）| 主线签名传奇：Q01–Q03 + 首领徽记 + 烬炉烙印 + 双签名（1.65.7）；签名页 TrMenu（1.65.10）；Q04–Q06 签名 L07–L12 + 烬斩形状 / 点燃 / 护盾 / 低血钩子（1.65.11）；自选誓约 Q06（1.65.12）、连战·前哨 Q05（1.65.13）、首领残响 Q04（1.65.14）；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md`；状态 `docs/status/STATUS-ember-mainline-unlocks-1.65.14.md` |
 | D175 | 设计定稿；已实现见 **D178** / 1.65.8 | Weekly Modifier Pack 2：精选图周规则 +3（bolters/shell/press）；见 `docs/design/DESIGN-ember-weekly-mod-pack2-2026-10-04.md`。实现：D178 |
 | D176 | CoreRpg 1.65.6 | Variety Pack 2 上线（实现 D171）：词缀 +regen/charge/frost；房间事件 +crystal/escort（与 timed 等权）；闸门/奖励数不变；花样委托 timed 文案→「房间事件达标」；balance_version 29→30；Stage C p1sim 门禁 deferred |
-| D177 | CoreRpg 1.65.9 | P1 挂机庭（业主 17:56「挂机」）：复用 `ember_afk`；四层按首通 Q01/Q03/Q05/Q07 开放；只发账号绑定的余烬币 + 余烬经验（10 分钟一轮，每日 12 轮在线 + 离线合计，离线 1/4 最多 6 轮；满一天 ≤ 一次通关基础）；P1 下旧挂机怪掉落 / 击杀币 / 击杀经验与旧寄售关闭；**修订 D63**：材料 / 装备 / 印记仍只来自通关；`balance_version` 32→33；p1sim `tools/p1sim/afk.py`：21 格 21/21，W30 share 0.5 −0.24 周、上界 share 1.0 −0.56 周（略超）→ Stage 1.1 降每轮币；见 `docs/design/DESIGN-ember-afk-p1-2026-10-04.md` |
+| D177 | CoreRpg 1.65.9 → **rev 2 1.65.15** | P1 挂机庭（业主 17:56「挂机」）。**rev 2（1.65.15，bv38）**：自动战斗——每人自己的 MM 怪（3 只一波，只打 / 只受主人），自动普攻 + 自动烬斩，按击杀累加（确定性）发币 / 经验 / 账号绑定材料（碎片 / 骨尘 / 核心 / 胚料，账本 `bmat:` → 仓库绑定计数，取不出），每日 2400 只（在线 + 离线），离线按实测速度 25%、最多 1200 只 / 12 小时；10 分钟死 3 次停；P1 材料与 P1 装备禁丢出 / 入箱 / 展示框 / 盔甲架；旧 `/corerpg warehouse withdraw` 扣绑定部分。p1sim：21 格 21/21（1600 复测 1.7pp、800 人 1.2pp），W30 +0.14 周（上界）。rev 1（1.65.9）：计时发币 + 经验（已停用）。**修订 D63**：材料来自通关 + 挂机庭（账号绑定、上限远低于主动）；见 `docs/design/DESIGN-ember-afk-p1-2026-10-04.md` |
 | D178 | CoreRpg 1.65.8 | Weekly Modifier Pack 2 上线（实现 D175）：+bolters 弓潮 / shell 龟甲 / press 压阵；池 6→9（63 图×规则对）；全部 challenge-only；`balance_version` 31→32；Stage C p1sim `--mods` deferred |
 | D179 | 设计-only（deferred 实现） | Room Events Pack 3：房间事件池 +占点 hold / 护灯 beacon / 传火 relay（与 timed/crystal/escort 等权）；否决笼牢/抽血；奖励键不变；见 `docs/design/DESIGN-ember-room-events-pack3-2026-10-04.md`。实现另窗 |
 | D181 | 设计-only（deferred 实现） | Variety Affix Pack 3：词缀池 6→8（+mortar 投弹 / molten 亡爆）；闸门/奖励同 D138；否决反伤/拉人/造墙/瞬移/吸血；见 `docs/design/DESIGN-ember-variety-affix-pack3-2026-10-04.md`。实现另窗 |
@@ -1689,3 +1689,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 不改 | 装备结构（6 槽 2c 暂缓）、掉落成色 / 件数、化妆品、AFK、config.yml |
 | 测试 | 单测 252 → 257 / 0；冒烟 FreshQ150–151、FreshQ190–200（含前哨 / 残响完整结算与重进）；p1sim 设计 §8.4–8.5 |
 | 文档 | 状态 `docs/status/STATUS-ember-mainline-unlocks-1.65.14.md`；发布凭证 `docs/status/RELEASE-ember-1.65.10.md` … `RELEASE-ember-1.65.14.md` |
+
+### 13.94 P1 挂机庭 rev 2 自动战斗（CoreRpg 1.65.15，D177 rev 2，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 裁决 | 见 D177 行。数值在 `ember-v1.yml afk:`（config.yml 未改），balance_version 37 → 38 |
+| 漏洞修复 | 签名线 19:19 发现 rev 2 初稿的材料可取出 → 丢给大号；改为账号绑定计数（`p1_vbound_<材料>`），P1 材料 / 装备禁转移；2 机器人冒烟验证 |
+| 发布凭证 | `docs/status/RELEASE-ember-1.65.15.md` · `docs/status/STATUS-ember-afk-p1-1.65.15.md` |

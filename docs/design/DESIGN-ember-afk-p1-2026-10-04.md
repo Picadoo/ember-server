@@ -170,7 +170,7 @@ scope: {worlds: [ember_afk]}   # 节选
 | **挂机庭与副本规则冲突** | 挂机庭进了 P1 战斗范围，所以与副本一样不能锻造 / 换装 / 买药 / 点天赋（回城再做）；进出挂机庭会留背包快照（InvSnap，和进出副本一样）。 | 有意为之：挂机不该是换装台。 |
 
 ## 9. 验收（1.65.15 冒烟，FreshQ210+）
-见 `docs/status/STATUS-ember-afk-p1-1.65.15.md`。
+见 `docs/status/STATUS-ember-afk-p1-1.65.15.md` 与 `docs/status/RELEASE-ember-1.65.15.md`（冒烟 FreshQ210/211 含 2 机器人转移测试全部拒绝；persist-roundtrip a–f 48/0、g,h 203/0）。
 
 ## 10. 历史
 - **rev 1（1.65.9，18:23 上线 → 18:50 关闭）**：站在挂机庭每 10 分钟结算一轮币 + 经验（12 轮 / 天，离线 1/4）。业主 18:49 否决
