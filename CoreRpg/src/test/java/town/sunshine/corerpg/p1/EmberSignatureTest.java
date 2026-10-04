@@ -232,8 +232,8 @@ public class EmberSignatureTest {
 
     @Test
     public void attuneAlternates_D184() {
-        // 签名调律: exactly L01 / L02 / L06 / L08 / L10 / L11 / L12; none for L03 / L04 / L05 / L07 / L09 / L13–L15
-        assertEquals(Arrays.asList("L01", "L02", "L06", "L08", "L10", "L11", "L12"), new java.util.ArrayList<String>(EmberSignature.ALTS.keySet()));
+        // 签名调律: exactly L01 / L02 / L06 / L08 / L10 / L12; none for L03 / L04 / L05 / L07 / L09 / L11 (held back, D184 W30) / L13–L15
+        assertEquals(Arrays.asList("L01", "L02", "L06", "L08", "L10", "L12"), new java.util.ArrayList<String>(EmberSignature.ALTS.keySet()));
         for (String id : new String[]{"L03", "L04", "L05", "L07", "L09", "L13", "L14", "L15"}) assertNull(id, EmberSignature.alt(EmberSignature.byId(id)));
         for (String id : EmberSignature.ALTS.keySet()) {
             EmberSignature.Def d = EmberSignature.byId(id);
@@ -249,7 +249,7 @@ public class EmberSignatureTest {
         // the 'all boss damage' cost → 'telegraph only' swaps are roughly doubled (§11.3: same % was +3～+5.6 pp)
         assertEquals(1.04, EmberSignature.byId("L06").mods.get("taken_boss"), 1e-9);
         assertTrue(EmberSignature.alt(EmberSignature.byId("L06")).mods.get("taken_tele") >= 1.08);
-        assertTrue(EmberSignature.alt(EmberSignature.byId("L11")).mods.get("taken_tele") >= 1.10);
+        assertNull(EmberSignature.alt(EmberSignature.byId("L11")));
         assertFalse(EmberSignature.alt(EmberSignature.byId("L06")).mods.containsKey("taken_boss"));
         // precheck
         EmberSignature.Def l01 = EmberSignature.byId("L01");

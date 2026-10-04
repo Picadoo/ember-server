@@ -120,7 +120,7 @@ public final class EmberSignature {
         Alt(String bad, Map<String, Double> mods) { this.bad = bad; this.mods = Collections.unmodifiableMap(mods); }
     }
 
-    /** L03 no passing alternate (§11.3), L04 just reworked (D183), L05 / L07 / L09 have no cost, L13–L15 new this stage → none */
+    /** L03 no passing alternate (§11.3), L11 held back (D184: L11b W30 P2-1 −0.55 wk, outside ±0.5), L04 just reworked (D183), L05 / L07 / L09 have no cost, L13–L15 new this stage → none */
     public static final Map<String, Alt> ALTS;
     static {
         Map<String, Alt> a = new LinkedHashMap<String, Alt>();
@@ -129,7 +129,6 @@ public final class EmberSignature {
         a.put("L06", new Alt("被首领预警招打中多受 10%", m("potion", 1.05, "taken_tele", 1.10)));
         a.put("L08", new Alt("对首领伤害 ×0.98", m("skill_var", 1, "skill_ignite", 1, "skill_ignite_n", 1, "skill_burn", 1.0, "dmg_boss", 0.98)));
         a.put("L10", new Alt("被首领预警招打中多受 3%", m("hit_burst", 1, "dodge_burst", 1, "taken_tele", 1.03)));
-        a.put("L11", new Alt("烬斩每下伤害 ×0.9，被首领预警招打中多受 14%", m("skill_var", 1, "skill_shield", 0.005, "skill_shield_max", 0.01, "skill_shield_secs", 5, "skill_mult", 0.9, "taken_tele", 1.14)));
         a.put("L12", new Alt("受到首领伤害 ×1.02", m("sustain_low", 0.4, "sustain_low_every", -2, "taken_boss", 1.02)));
         ALTS = Collections.unmodifiableMap(a);
     }
