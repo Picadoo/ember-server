@@ -133,7 +133,7 @@ for fn in SIM:
 check('M01 no module-level random.* in sim code (only random.Random(seed) instances)', not banned, '; '.join(banned))
 raw = []
 for fn in SIM:
-    if fn in ('rules.py', 'miniyaml.py', 'growth.py', 'apply_2c.py'):
+    if fn in ('rules.py', 'miniyaml.py', 'growth.py', 'apply_2c.py', 'simfix_check.py'):  # simfix_check: pre/post harness, must also run on the pre-fix tree (no rules.py); it reads rules.py when present
         continue  # rules.py = the one reader; growth.load(path) = explicit what-if file; apply_2c = a config WRITER
     for i, line in enumerate(open(os.path.join(HERE, fn), encoding='utf-8'), 1):
         if 'miniyaml.load(' in line and not line.lstrip().startswith('#'):
