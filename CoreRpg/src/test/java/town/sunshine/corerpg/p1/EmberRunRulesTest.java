@@ -333,8 +333,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(31, m.balanceVersion);                // D174 签名传奇 (D176 = 30)
-        assertEquals("g04-1/b31", m.ruleVersion);
+        assertEquals(32, m.balanceVersion);                // D178 Weekly Mod Pack 2 (D174 = 31)
+        assertEquals("g04-1/b32", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(20, m.goalBonus);
         assertEquals(0.2, m.raidLastReviveHp, 1e-9);      // D118
         assertEquals(20.0, m.raidReviveDelay, 1e-9);
-        // P2-8 weekly rules: 6 rules × 7 maps, all 42 pairs over 42 weeks; no multiplier keys at all
-        assertEquals(6, m.modifiers.size());
+        // P2-8 weekly rules: 9 rules × 7 maps, all 63 pairs over 63 weeks; no multiplier keys at all
+        assertEquals(9, m.modifiers.size());
         assertEquals(3, m.modifier("lean").potionCap);
         assertEquals("caster", m.modifier("casters").role("ranged", q3));
         assertEquals("ranged", m.modifier("casters").role("ranged", q1)); // Q01 has no caster → unchanged
@@ -383,15 +383,35 @@ public class EmberRunRulesTest {
         assertFalse(m.modifier("casters").tweaksConverted());          // older rules untouched
         assertFalse(m.modifier("lean").tweaksConverted());
         assertTrue(m.modifier("reverse").swapRooms);
+        // D178 Weekly Mod Pack 2: bolters / shell / press (challenge-only remap+converted)
+        assertEquals("ranged", m.modifier("bolters").role("caster", q3)); // caster→ranged when map has ranged
+        assertEquals("ranged", m.modifier("bolters").role("caster", q1)); // target ranged exists; spawn still noop (Q01 has no caster pack)
+        assertEquals("ranged", m.modifier("bolters").role("ranged", q1)); // non-source roles unchanged
+        assertEquals("heavy", m.modifier("shell").role("caster", q3));    // caster→heavy
+        assertEquals("heavy", m.modifier("shell").role("caster", q1));    // target heavy exists; spawn noop without caster pack
+        assertEquals("melee", m.modifier("press").role("ranged", q1));    // ranged→melee (all maps have melee)
+        assertEquals("melee", m.modifier("press").role("ranged", q3));
+        assertFalse(m.modifier("bolters").normal);
+        assertFalse(m.modifier("shell").normal);
+        assertFalse(m.modifier("press").normal);
+        assertTrue(m.modifier("bolters").tweaksConverted());
+        assertTrue(m.modifier("shell").tweaksConverted());
+        assertTrue(m.modifier("press").tweaksConverted());
+        assertEquals(0.9, m.modifier("bolters").convInterval, 1e-9);
+        assertEquals(1.2, m.modifier("shell").convHp, 1e-9);
+        assertEquals(0.7, m.modifier("shell").convAtk, 1e-9);
+        assertEquals(1.35, m.modifier("shell").convInterval, 1e-9);
+        assertEquals(1.3, m.modifier("press").convSpeed, 1e-9);
+        assertEquals(0.85, m.modifier("press").convHp, 1e-9);
         assertNull(m.modifier(""));
         java.util.Set<String> pairs = new java.util.HashSet<String>();
         java.time.LocalDate d0 = java.time.LocalDate.of(2026, 10, 5);
-        for (int wk = 0; wk < 42; wk++) {
+        for (int wk = 0; wk < 63; wk++) {
             java.time.LocalDate d = d0.plusWeeks(wk);
             pairs.add(EmberRunRules.featuredChallenge(new java.util.ArrayList<String>(m.maps.keySet()), d) + "/" + m.modifierFor(d).id);
             assertSame(m.modifierFor(d), m.modifierFor(d.plusDays(6)));
         }
-        assertEquals(42, pairs.size());
+        assertEquals(63, pairs.size());
         // swap layout: r3's group on r1's points
         assertEquals(EmberRunMaps.layout(q3.room("r3").a, q3.room("r1").points.size(), 5L).size(),
                 q3.room("r3").a.values().stream().mapToInt(Integer::intValue).sum());
