@@ -1528,6 +1528,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D183 | CoreRpg 1.65.17 | D174 烬爆族返工：守炉重锤 L04 代价只留对首领伤害 ×0.985（原被预警招打中 +3% + ×0.98；烬爆组合低躲避净亏 −3～−4pp → ≥ −2.6）；`balance_version` 40；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md` §12；发布 `docs/status/RELEASE-ember-1.65.17.md` |
 | D184 | CoreRpg 1.65.18 | D174 第 3 阶段：Q07 签名 L13 炉锁巨锤（烬斩蓄力）/ L14 炉芯护符（烬斩护盾 0.4%/0.8%/4 秒、药 ×0.95）/ L15 锈轨余火（燃烧 +1 跳、每跳 ×0.97）；Q07 首通「签名调律」（L01/L02/L06/L08/L10/L12 调律版，10 徽记解锁、城里切换；**L11 不给调律版**：W30 P2-1 −0.55 周）；L10 烬爆 ×0.9 → ×0.93；`balance_version` 41；设计 `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md` §11 / §13；发布 `docs/status/RELEASE-ember-1.65.18.md` |
 | D185 | CoreRpg 1.65.24 / bv47 | 奖励精英变招 Pack 2：Extra.ELITE 每图再加 1 条互补轻招（灰烬扇/焦线/誓踏/潮扇/碎带/霜环踏/炉扇）；`elite_twists.alt` + Director 交替；奖励 10+1 与权重不变；balance_version 47；p1sim §7 仍 deferred；设计 `docs/design/DESIGN-ember-reward-elite-twists-pack2-2026-10-05.md`；发布 `docs/status/RELEASE-ember-1.65.24.md` |
+| D186 | CoreRpg 1.65.25 / bv48 | Weekly Modifier Pack 3：精选图周规则 +3（skirmish 散兵 melee→ranged / hexers 咒潮 melee→caster / ballista 重弩 heavy→ranged）；池 9→12（84 图×规则对）；全部 challenge-only；`balance_version` 47→48；Stage C p1sim `--mods` deferred；冒烟 deferred batch；设计 `docs/design/DESIGN-ember-weekly-mod-pack3-2026-10-05.md`；发布 `docs/status/RELEASE-ember-1.65.25.md` |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
@@ -1753,3 +1754,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 版本 | CoreRpg **1.65.23**；`balance_version` **46** |
 | 测试 | 单测 `everyMainBossHasHalfHpTelegraphedLightPressure_D173`；`tools/p1sim/out-bossmoves-d173.md`；冒烟 FreshQ370+ |
 | 文档 | 状态 `docs/status/STATUS-ember-boss-moves-pack2-1.65.23.md`；发布 `docs/status/RELEASE-ember-1.65.23.md` |
+
+### 13.100 Weekly Modifier Pack 3 上线（CoreRpg 1.65.25，D186，2026-10-05）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | Pack 2 后未占用 remap：melee→ranged / melee→caster / heavy→ranged / heavy→caster / caster→melee；本包取前三；`COORD-routine-0346` |
+| 裁决 | 精选图周规则池 9→12：散兵（melee→ranged + interval×0.85/hp×0.9）、咒潮（melee→caster + interval×1.1）、重弩（heavy→ranged + atk×1.25/interval×1.35/speed×0.8）；全部 challenge-only；缺角色图 noop；奖励表不动；无新 Java 字段 |
+| 留给 Pack 4 | heavy→caster、caster→melee |
+| 版本 | CoreRpg **1.65.25**；`balance_version` **48** |
+| 测试 | 单测池 12 / 84 对 + Pack 3 remap/converted/`normal==false`；Stage C p2econ `--mods` deferred；冒烟 deferred batch（POLICY 01:53）|
+| 文档 | 设计 `docs/design/DESIGN-ember-weekly-mod-pack3-2026-10-05.md`；状态 `docs/status/STATUS-ember-weekly-mod-pack3-1.65.25.md`；发布 `docs/status/RELEASE-ember-1.65.25.md` |
+

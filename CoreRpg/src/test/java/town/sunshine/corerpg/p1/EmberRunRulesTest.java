@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(47, m.balanceVersion);                // D185 Elite Twists Pack 2 alt (D173 = 46, D179 = 45, …)
-        assertEquals("g04-1/b47", m.ruleVersion);
+        assertEquals(48, m.balanceVersion);                // D186 Weekly Mod Pack 3 (D185 = 47, D173 = 46, …)
+        assertEquals("g04-1/b48", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -375,8 +375,8 @@ public class EmberRunRulesTest {
         assertEquals(20, m.goalBonus);
         assertEquals(0.2, m.raidLastReviveHp, 1e-9);      // D118
         assertEquals(20.0, m.raidReviveDelay, 1e-9);
-        // P2-8 weekly rules: 9 rules × 7 maps, all 63 pairs over 63 weeks; no multiplier keys at all
-        assertEquals(9, m.modifiers.size());
+        // P2-8 weekly rules: 12 rules × 7 maps, all 84 pairs over 84 weeks; no multiplier keys at all
+        assertEquals(12, m.modifiers.size());
         assertEquals(3, m.modifier("lean").potionCap);
         assertEquals("caster", m.modifier("casters").role("ranged", q3));
         assertEquals("ranged", m.modifier("casters").role("ranged", q1)); // Q01 has no caster → unchanged
@@ -424,15 +424,35 @@ public class EmberRunRulesTest {
         assertEquals(1.35, m.modifier("shell").convInterval, 1e-9);
         assertEquals(1.3, m.modifier("press").convSpeed, 1e-9);
         assertEquals(0.85, m.modifier("press").convHp, 1e-9);
+        // D186 Weekly Mod Pack 3: skirmish / hexers / ballista (challenge-only remap+converted)
+        assertEquals("ranged", m.modifier("skirmish").role("melee", q1)); // melee→ranged
+        assertEquals("ranged", m.modifier("skirmish").role("melee", q3));
+        assertEquals("ranged", m.modifier("skirmish").role("ranged", q1)); // non-source unchanged
+        assertEquals("caster", m.modifier("hexers").role("melee", q3));   // melee→caster when map has caster
+        assertEquals("melee", m.modifier("hexers").role("melee", q1));    // Q01 has no caster → unchanged
+        assertEquals("ranged", m.modifier("ballista").role("heavy", q1)); // heavy→ranged (all maps have ranged)
+        assertEquals("ranged", m.modifier("ballista").role("heavy", q3));
+        assertFalse(m.modifier("skirmish").normal);
+        assertFalse(m.modifier("hexers").normal);
+        assertFalse(m.modifier("ballista").normal);
+        assertTrue(m.modifier("skirmish").tweaksConverted());
+        assertTrue(m.modifier("hexers").tweaksConverted());
+        assertTrue(m.modifier("ballista").tweaksConverted());
+        assertEquals(0.85, m.modifier("skirmish").convInterval, 1e-9);
+        assertEquals(0.9, m.modifier("skirmish").convHp, 1e-9);
+        assertEquals(1.1, m.modifier("hexers").convInterval, 1e-9);
+        assertEquals(1.25, m.modifier("ballista").convAtk, 1e-9);
+        assertEquals(1.35, m.modifier("ballista").convInterval, 1e-9);
+        assertEquals(0.8, m.modifier("ballista").convSpeed, 1e-9);
         assertNull(m.modifier(""));
         java.util.Set<String> pairs = new java.util.HashSet<String>();
         java.time.LocalDate d0 = java.time.LocalDate.of(2026, 10, 5);
-        for (int wk = 0; wk < 63; wk++) {
+        for (int wk = 0; wk < 84; wk++) {
             java.time.LocalDate d = d0.plusWeeks(wk);
             pairs.add(EmberRunRules.featuredChallenge(new java.util.ArrayList<String>(m.maps.keySet()), d) + "/" + m.modifierFor(d).id);
             assertSame(m.modifierFor(d), m.modifierFor(d.plusDays(6)));
         }
-        assertEquals(63, pairs.size());
+        assertEquals(84, pairs.size());
         // swap layout: r3's group on r1's points
         assertEquals(EmberRunMaps.layout(q3.room("r3").a, q3.room("r1").points.size(), 5L).size(),
                 q3.room("r3").a.values().stream().mapToInt(Integer::intValue).sum());
