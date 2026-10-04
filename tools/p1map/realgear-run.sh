@@ -3,7 +3,10 @@
 # p1sim REF_GEAR): no weaken, no heal, no creative, survival only. Setup (admin, progression state only): first-clear
 # flags of the earlier maps, ember level LV, a FAM blade T BT +BE and charm T CT +CE (selected), stamina for one run.
 # The bot walks the book route and fights each room until idle with the blade, drinking a hotbar potion below 55 %
-# (DRINK=1, like a new player). Prints a one-line RESULT plus the run's chat.  Bots do not dodge telegraphs.
+# (DRINK=1, like a new player). Prints a one-line RESULT plus the run's chat.
+# env MOVE=stand (default; the bot stands and swings, never dodges) | kite (doorway pull, back-pedal / strafe, telegraph
+# dodges with a reaction delay — tools/p1map/fight-kite.js; no combat assist either way).
+MOVE=${MOVE:-stand}; export MOVE
 N=$1; K=$2; BT=$3; BE=$4; CT=$5; CE=$6; LV=$7; FAM=${8:-burst}
 M=/workspace/minecraft; C=$M/scripts/console.sh; T=$M/mineflayer-tests/tmp-p1; P=$M/tools/p1map; LOG=$M/server-runtime/logs/latest.log
 ev(){ curl -sf -m 120 -X POST "http://127.0.0.1:8765/eval?name=$N" --data "$1" | jq -r '.r // .err // ""'; }
@@ -32,7 +35,7 @@ if [ "$K" = rush ]; then
   for leg in 1 2 3 4; do DRINK=1 $T/fight.sh $N 150000 0 34 22000 | tr -d "\n " | grep -o "\"ms\":[0-9]*\|\"hits\":[0-9]*\|\"drinks\":[0-9]*\|\"minHp\":[0-9.]*" | tr "\n" " "; echo
     tail -n +$START $LOG | grep -aq "rush settle\|run .* failed\|state=FAILED\|余烬连战失败\|全员倒下" && break; done
 else
-  $P/newbie-run.sh $N $K
+  NR=$($P/newbie-run.sh $N $K 2>&1); echo "$NR"
 fi
 sleep 6
 DT=$(( $(date +%s) - T0 ))
@@ -40,7 +43,12 @@ RL=$(tail -n +$START $LOG | grep -a "\[P1 run\]" | grep -a " $K-\| $N " | sed 's
 CH=$(ev 'return bot.chatLog.slice(-40).map(s=>s.replace(/\u00a7./g,"")).join("\n");')
 DEATHS=$(echo "$CH" | grep -c "^\[队伍\] 你已倒下" || true)
 if echo "$RL" | grep -q "rush settle\|settle\b\|settled\|boss killed after"; then R=CLEAR; elif echo "$CH$RL" | grep -q "失败"; then R=FAIL; else R=UNKNOWN; fi
-echo "RESULT $N $K gear=${FAM} T$BT+$BE/T$CT+$CE Lv$L result=$R wall=${DT}s deaths=$DEATHS"
+KILLER=$(tail -n +$START $LOG | grep -a "$N was slain by" | head -1 | sed 's/.*was slain by //')
+DLEG=$(echo "$NR" | grep -o "died_leg=[0-9-]*\|FAILED/DEAD before leg [0-9]" | head -1 | grep -o "[0-9-]*$")
+case "$DLEG" in 0) ROOM=R1;; 1) ROOM=R2;; 2) ROOM=R3;; 3) ROOM=RB;; *) ROOM=-;; esac
+DRK=$(echo "$NR" | grep -o "KITE-SUMMARY.*drinks=[0-9]*" | grep -o "[0-9]*$")
+[ -z "$DRK" ] && DRK=$(echo "$NR" | grep -o '"drinks":[0-9]*' | cut -d: -f2 | paste -sd+ | bc 2>/dev/null)
+echo "RESULT $N $K move=$MOVE gear=${FAM} T$BT+$BE/T$CT+$CE Lv$L result=$R wall=${DT}s deaths=$DEATHS room=$ROOM potions=${DRK:-?} killer=${KILLER:--}"
 echo "--- [P1 run] log"; echo "$RL" | tail -25
 echo "--- chat (last 40)"; echo "$CH"
 curl -sf "http://127.0.0.1:8765/quit?name=$N" >/dev/null
