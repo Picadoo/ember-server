@@ -599,6 +599,11 @@ def affix_mob(cfg, m, mobs, kind, t0):
         pick_['blaze'] = (t0 + 1.5 + float(b['every']), float(b['every']), pick_['atk'] * float(b['dmg']))
     elif kind == 'split':
         pick_['split'] = (int(v['split']['count']), float(v['split']['hp']), m)
+    elif kind in ('venom', 'jailer') and isinstance(v.get(kind), dict):
+        # D189 毒十字 / 禁锢: periodic telegraphed hit on the elite's own timer (same dodge path as blazing);
+        # the 1 s jailer root is not modelled (no extra hit is forced during it)
+        b = v[kind]
+        pick_['blaze'] = (t0 + 1.5 + float(b['every']), float(b['every']), pick_['atk'] * float(b['dmg']))
     pick_['affix'] = True
     pick_['affix_kind'] = kind
     return pick_

@@ -591,9 +591,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3. reflect/vortex intentionally absent (rejected). */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4. reflect/vortex intentionally absent (rejected). */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay"));
         public final double affixRate, eventRate;
@@ -610,6 +610,9 @@ public final class EmberRunMaps {
         // D181 mortar / molten
         public final double mortarEvery, mortarWarn, mortarRadius, mortarAhead, mortarDmg;
         public final double moltenDelay, moltenWarn, moltenRadius, moltenDmg;
+        // D189 venom (毒十字) / jailer (禁锢)
+        public final double venomEvery, venomWarn, venomArm, venomWidth, venomDmg;
+        public final double jailerEvery, jailerWarn, jailerRadius, jailerRoot, jailerDmg;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -675,6 +678,18 @@ public final class EmberRunMaps {
             moltenWarn = Math.max(1.2, num(ml.get("warn"), 1.3));
             moltenRadius = Math.max(0.5, num(ml.get("radius"), 2.5));
             moltenDmg = Math.max(0.0, num(ml.get("dmg"), 1.2));
+            Map<?, ?> vn = m.get("venom") instanceof Map ? (Map<?, ?>) m.get("venom") : Collections.emptyMap();
+            venomEvery = Math.max(2.0, num(vn.get("every"), 6.0));
+            venomWarn = Math.max(1.2, num(vn.get("warn"), 1.3));
+            venomArm = Math.max(1.0, Math.min(6.0, num(vn.get("arm"), 4.0)));
+            venomWidth = Math.max(0.5, Math.min(3.0, num(vn.get("width"), 1.5)));
+            venomDmg = Math.max(0.0, num(vn.get("dmg"), 1.0));
+            Map<?, ?> jl = m.get("jailer") instanceof Map ? (Map<?, ?>) m.get("jailer") : Collections.emptyMap();
+            jailerEvery = Math.max(3.0, num(jl.get("every"), 7.0));
+            jailerWarn = Math.max(1.2, num(jl.get("warn"), 1.2));
+            jailerRadius = Math.max(0.5, Math.min(3.0, num(jl.get("radius"), 1.6)));
+            jailerRoot = Math.max(0.0, Math.min(1.5, num(jl.get("root"), 1.0))); // root never longer than 1.5 s
+            jailerDmg = Math.max(0.0, num(jl.get("dmg"), 0.5));
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -709,6 +724,8 @@ public final class EmberRunMaps {
             if ("frost".equals(id)) return "凝霜";
             if ("mortar".equals(id)) return "投弹";
             if ("molten".equals(id)) return "亡爆";
+            if ("venom".equals(id)) return "毒十字";
+            if ("jailer".equals(id)) return "禁锢";
             return id;
         }
 

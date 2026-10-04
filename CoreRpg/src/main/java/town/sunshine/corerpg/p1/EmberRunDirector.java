@@ -45,7 +45,7 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
-        String affix;               // D138/D171/D181: blazing/split/shield/regen/charge/frost/mortar/molten (null = plain)
+        String affix;               // D138/D171/D181/D189: blazing/split/shield/regen/charge/frost/mortar/molten/venom/jailer (null = plain)
         boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
         boolean varietyEscort;      // D171: escort rabbit — must not pay treasure coin; excluded from room-clear count
         long affixNext, affixAt;
@@ -54,6 +54,7 @@ final class EmberRunDirector {
         long regenWindowEnd;        // D171 regen interrupt window end (0 = idle)
         double regenHurt;           // D171 damage taken during the current interrupt window
         long frostNext;             // D171 next frost aura tick
+        boolean venomDiag;          // D189 毒十字: false = "+" (axis), true = "x" (diagonal); flips after every cast
         EmberRunMaps.Skill twist;   // D182 Extra.ELITE light move (null = plain stump)
         EmberRunMaps.Skill twistAlt; // D185 Pack 2 second light move (null = Pack 1 only)
         boolean twistUseAlt;         // D185: true → fire twistAlt next
@@ -547,6 +548,8 @@ final class EmberRunDirector {
                 : "charge".equals(t.affix) ? v.chargeEvery
                 : "frost".equals(t.affix) ? v.frostTick
                 : "mortar".equals(t.affix) ? v.mortarEvery
+                : "venom".equals(t.affix) ? v.venomEvery
+                : "jailer".equals(t.affix) ? v.jailerEvery
                 : v.blazeEvery; // molten has no live tick; split/shield idle glow only
         t.affixNext = System.currentTimeMillis() + 1500L + (long) (every * 1000);
         String tag = EmberRunMaps.Variety.label(t.affix);
@@ -563,6 +566,8 @@ final class EmberRunDirector {
         else if ("frost".equals(t.affix)) how = "别站在它身边的霜圈里（出圈即解除）";
         else if ("mortar".equals(t.affix)) how = "脚下附近会亮圈，走开再打";
         else if ("molten".equals(t.affix)) how = "杀掉后尸体要炸，立刻退开";
+        else if ("venom".equals(t.affix)) how = "身上会亮十字（+ 和 × 轮换），站到两条线之间的空隙里";
+        else if ("jailer".equals(t.affix)) how = "脚下亮小圈就走开，被罩住会定身 " + fmt(v.jailerRoot) + " 秒";
         else how = t.affix;
         svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));
@@ -576,6 +581,8 @@ final class EmberRunDirector {
                 : "frost".equals(t.affix) ? Particle.SNOW_SHOVEL
                 : "mortar".equals(t.affix) ? Particle.FLAME
                 : "molten".equals(t.affix) ? Particle.LAVA
+                : "venom".equals(t.affix) ? Particle.SPELL_MOB
+                : "jailer".equals(t.affix) ? Particle.CRIT_MAGIC
                 : Particle.END_ROD;
         w.spawnParticle(fx, t.le.getLocation().add(0, 1.0, 0), 3, 0.3, 0.5, 0.3, 0.01);
         EmberRunMaps.Variety v = svc.maps().variety;
@@ -682,8 +689,115 @@ final class EmberRunDirector {
             if (feet == null) return;
             t.affixOrigin = feet;
             t.affixAt = now + (long) (v.mortarWarn * 1000);
+            return;
+        }
+        if ("venom".equals(t.affix)) {
+            // D189 毒十字: two lines crossing at the elite's feet ("+" then "x"); a player is hit at most once per cast
+            EmberRunMaps.Skill arm = venomSkill(t, v);
+            if (t.affixAt > 0) {
+                for (Vector d : venomDirs(t.venomDiag)) drawShape(arm, t.affixOrigin, d);
+                if (now >= t.affixAt) {
+                    Vector[] dirs = venomDirs(t.venomDiag);
+                    int hit = 0;
+                    for (Player p : participantsHere()) {
+                        if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                        if (!venomHits(arm, t.affixOrigin, dirs, p.getLocation())) continue;
+                        svc.skillHit(s, p, t.le, arm.dmg, "mob");
+                        hit++;
+                    }
+                    w.spawnParticle(Particle.SPELL_MOB, t.affixOrigin.clone().add(0, 0.4, 0), 24, v.venomArm / 2.0, 0.2, v.venomArm / 2.0, 0.0);
+                    w.playSound(t.affixOrigin, Sound.ENTITY_GENERIC_EXPLODE, 0.5f, 1.6f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s venom %s hit=%d", s.runId, t.venomDiag ? "x" : "+", hit));
+                    t.venomDiag = !t.venomDiag;
+                    t.affixAt = 0;
+                    t.affixNext = now + (long) (v.venomEvery * 1000);
+                }
+                return;
+            }
+            if (now < t.affixNext || nearest(t.le.getLocation(), 8) == null) return;
+            Location o = t.le.getLocation().clone();
+            o.setY(Math.floor(o.getY()));
+            t.affixOrigin = o;
+            t.affixAt = now + (long) (v.venomWarn * 1000);
+            return;
+        }
+        if ("jailer".equals(t.affix)) {
+            // D189 禁锢: small circle at the nearest player's feet; inside when it lands = light hit + rooted (≤1.5 s)
+            if (t.affixAt > 0) {
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius, Particle.CRIT_MAGIC);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius * 0.5, Particle.CRIT_MAGIC);
+                if (now >= t.affixAt) {
+                    EmberRunMaps.Skill sk = jailerSkill(t, v);
+                    int ticks = jailerRootTicks(v);
+                    int rooted = 0;
+                    for (Player p : participantsHere()) {
+                        if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                        if (!inShape(sk, t.affixOrigin, new Vector(1, 0, 0), p.getLocation())) continue;
+                        if (sk.dmg > 0) svc.skillHit(s, p, t.le, sk.dmg, "mob");
+                        if (ticks > 0 && !p.isDead()) {
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, ticks, 6, false, true), true);
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, ticks, 128, false, false), true);
+                            p.sendMessage("§5「禁锢」§7你被定住 " + fmt(v.jailerRoot) + " 秒");
+                            rooted++;
+                        }
+                    }
+                    w.playSound(t.affixOrigin, Sound.BLOCK_ANVIL_LAND, 0.5f, 1.4f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s jailer rooted=%d", s.runId, rooted));
+                    t.affixAt = 0;
+                    t.affixNext = now + (long) (v.jailerEvery * 1000);
+                }
+                return;
+            }
+            if (now < t.affixNext) return;
+            Location feet = mortarTargetFeet(t, v, 0.0);
+            if (feet == null) return;
+            t.affixOrigin = feet;
+            t.affixAt = now + (long) (v.jailerWarn * 1000);
         }
     }
+
+    /** D189 毒十字 arm: one line through the centre, {@code -arm .. +arm}; kb 0. */
+    static EmberRunMaps.Skill venomSkill(Tracked t, EmberRunMaps.Variety v) {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("type", "line");
+        m.put("name", "毒十字");
+        m.put("start", -v.venomArm);
+        m.put("length", 2 * v.venomArm);
+        m.put("width", v.venomWidth);
+        m.put("warn", v.venomWarn);
+        m.put("dmg", t.atk * v.venomDmg);
+        m.put("kb", 0);
+        return new EmberRunMaps.Skill(m);
+    }
+
+    /** D189: the two arm directions — "+" (x / z axes) or "x" (the two diagonals). */
+    static Vector[] venomDirs(boolean diag) {
+        if (!diag) return new Vector[]{new Vector(1, 0, 0), new Vector(0, 0, 1)};
+        double c = Math.sqrt(0.5);
+        return new Vector[]{new Vector(c, 0, c), new Vector(c, 0, -c)};
+    }
+
+    /** D189: inside either arm (the crossing square counts once — caller hits each player at most once). */
+    static boolean venomHits(EmberRunMaps.Skill arm, Location o, Vector[] dirs, Location p) {
+        for (Vector d : dirs) if (inShape(arm, o, d, p)) return true;
+        return false;
+    }
+
+    /** D189 禁锢 circle at a player's feet; kb 0. */
+    static EmberRunMaps.Skill jailerSkill(Tracked t, EmberRunMaps.Variety v) {
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("type", "circle");
+        m.put("name", "禁锢圈");
+        m.put("radius", v.jailerRadius);
+        m.put("warn", v.jailerWarn);
+        m.put("ahead", 0.0);
+        m.put("dmg", t.atk * v.jailerDmg);
+        m.put("kb", 0);
+        return new EmberRunMaps.Skill(m);
+    }
+
+    /** D189: root length in ticks (config clamps to ≤ 1.5 s). */
+    static int jailerRootTicks(EmberRunMaps.Variety v) { return (int) Math.round(v.jailerRoot * 20); }
 
     static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) {
         Map<String, Object> m = new HashMap<String, Object>();
@@ -735,7 +849,9 @@ final class EmberRunDirector {
     }
 
     /** Nearest participant feet on ground Y; fallback elite feet. null only when nobody is in the instance. */
-    private Location mortarTargetFeet(Tracked t, EmberRunMaps.Variety v) {
+    private Location mortarTargetFeet(Tracked t, EmberRunMaps.Variety v) { return mortarTargetFeet(t, v, v.mortarAhead); }
+
+    private Location mortarTargetFeet(Tracked t, EmberRunMaps.Variety v, double ahead) {
         Player tgt = nearest(t.le.getLocation(), 16);
         Location base;
         if (tgt != null) {
@@ -748,11 +864,11 @@ final class EmberRunDirector {
             base = t.le.getLocation().clone();
             base.setY(Math.floor(base.getY()));
         }
-        if (Math.abs(v.mortarAhead) > 1e-6) {
+        if (Math.abs(ahead) > 1e-6) {
             Vector dir = t.le.getLocation().toVector().subtract(base.toVector());
             dir.setY(0);
             if (dir.lengthSquared() > 1e-6) {
-                dir.normalize().multiply(v.mortarAhead);
+                dir.normalize().multiply(ahead);
                 base.add(dir.getX(), 0, dir.getZ());
             }
         }
