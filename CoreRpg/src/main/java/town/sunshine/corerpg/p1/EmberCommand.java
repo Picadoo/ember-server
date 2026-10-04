@@ -72,6 +72,10 @@ public final class EmberCommand {
             if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "勋记服务未加载"); return true; }
             return EmberGrowthService.get().honorCommand((Player) s, args);
         }
+        if ("sig".equals(sub) || "签名".equals(sub)) { // D174 签名传奇
+            if (EmberGrowthService.get() == null) { s.sendMessage(P + "签名服务未加载"); return true; }
+            return EmberGrowthService.get().sigCommand(s, args);
+        }
         if ("spec".equals(sub) || "天赋".equals(sub)) { // D141 talent specialization
             if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "天赋服务未加载"); return true; }
             return EmberGrowthService.get().command((Player) s, args);

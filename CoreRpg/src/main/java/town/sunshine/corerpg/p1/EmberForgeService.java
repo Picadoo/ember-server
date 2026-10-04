@@ -342,6 +342,9 @@ public final class EmberForgeService implements Listener {
                 if (it.data.craft > 0) inv.add("精炼过");
                 p.sendMessage(P + ChatColor.RED + "⚠ 这件已投入：" + String.join(" · ", inv) + "，分解只给胚料 ×" + blanks + "，这些投入全部丢失");
             }
+            EmberGrowthService gsv = EmberGrowthService.get(); // D174: a signature is lost with the piece (no insignia back)
+            EmberSignature.Def sg = gsv == null ? null : EmberSignature.byCode(gsv.sigOf(plugin.getDataStore().get(p.getUniqueId()), it.data.uid));
+            if (sg != null) p.sendMessage(P + ChatColor.RED + "⚠ 这件是签名传奇「" + sg.name + "」，分解后签名一起消失（不退首领徽记）");
             String t = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1dismantle", fp);
             town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "物品将被永久销毁：", "[确认分解]",
                     "/corerpg p1 dismantle confirm tok:" + t, "分解 " + it.data.shortLabel() + "\n分解后 10 分钟内可在装备库「撤销分解」找回（要退回胚料）");

@@ -1391,6 +1391,16 @@ public final class EmberRunService implements Listener {
             grants.add(new EmberRunRules.Grant("raid_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), 1, null));
         }
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
+        // D174 签名传奇: repeat NORMAL clear of a signature map → 1 insignia + maybe a signature stamp on the base item;
+        // the map's first clear → the first-clear insignia, once per map (not per content version, C_FC)
+        boolean sigRun = !s.challenge && s.abyss == 0 && !m.raid && !m.event && !m.rush && EmberSignature.hasMap(m.key);
+        if (sigRun && in.firstClear == null && progressFlag(pd, m.key)) {
+            EmberRunRules.Grant base = null;
+            for (EmberRunRules.Grant g : grants) if ("base_item".equals(g.key)) base = g;
+            grants.addAll(EmberRunRules.signatureGrants(m.key, in, base));
+        }
+        final boolean sigFc = sigRun && in.firstClear != null && pd.periodCount(EmberSignature.C_FC + m.key, "all") <= 0;
+        if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.FC_MARKS, null));
         if (!s.challenge && s.abyss == 0 && !m.raid) // D138 repeat-run variety (rolled only when every member had the first clear)
             grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, maps.variety.affixShard, s.eventDone, maps.variety.eventCore, s.eventKind));
         EmberRunRules.Ledger l = store.ledger(u);
@@ -1434,6 +1444,7 @@ public final class EmberRunService implements Listener {
             if (created[0]) changed.add(r);
             if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(C_ROTATION, week, 1); // counted once per run (ledger key)
             if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + capKey(m), week, 1); // P2-5 weekly cap (P2-6: per cap_group)
+            if (created[0] && "fc_sigmark".equals(g.key)) pd.addPeriodCount(EmberSignature.C_FC + m.key, "all", 1); // D174: once per map
         }
         if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, bountyW);
         if (fresh && m.raid && cosmetics != null) cosmetics.onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
@@ -1642,6 +1653,29 @@ public final class EmberRunService implements Listener {
                         }
                     }
                     if (!done) { mail.merge(g.id, g.amount, Integer::sum); mailRows.add(r); }
+                    break;
+                }
+                case SIGMARK: { // D174 首领徽记: an account counter like the forge marks
+                    d.addPeriodCount(EmberSignature.C_MARK + g.id, "all", g.amount);
+                    got.add(g.id.toUpperCase(Locale.ROOT) + " 首领徽记 " + g.amount + "（共 " + d.periodCount(EmberSignature.C_MARK + g.id, "all") + "）");
+                    if ("fc_sigmark".equals(r.key)) { // D174: the first clear of a signature map also announces its new unlock
+                        String un = EmberSignature.IMPRINT_UNLOCK.equals(g.id) ? "烬炉烙印（用徽记把签名烙到自己的件上）"
+                                : EmberSignature.DUAL_UNLOCK.equals(g.id) ? "双签名（刃 + 护符两条签名同时生效）"
+                                : "签名传奇（重打这张图掉它首领的签名件和徽记）";
+                        town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新解锁：§e" + un + " ", "[签名图鉴]", "/corerpg p1 sig", "查看签名传奇、首领徽记和烙印");
+                    }
+                    done = true;
+                    break;
+                }
+                case SIG: { // D174: the base item of this run (same uid) carries a signature; never overwrites one
+                    int cut = g.id.indexOf('/');
+                    EmberSignature.Def sd = cut > 0 ? EmberSignature.byId(g.id.substring(cut + 1)) : null;
+                    if (sd == null) { log().warning("[P1 sig] bad stamp row " + r.runId + " " + g.id); done = true; break; }
+                    String uid = g.id.substring(0, cut);
+                    if (d.periodCount(EmberSignature.C_SIG + uid, "all") <= 0) d.addPeriodCount(EmberSignature.C_SIG + uid, "all", sd.code);
+                    got.add("§6签名传奇！§e" + sd.name + "§f（" + sd.kindText() + "，" + sd.boss + "）");
+                    log().info("[P1 sig] " + p.getName() + " stamp " + uid + " " + sd.id + " (" + r.runId + ")");
+                    done = true;
                     break;
                 }
                 case ITEM: {

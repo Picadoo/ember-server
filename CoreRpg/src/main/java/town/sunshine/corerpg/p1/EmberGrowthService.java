@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -147,12 +148,14 @@ public final class EmberGrowthService implements Listener {
         String set = lo.activeSet;
         List<String> hon = honorsEarned(p.getUniqueId(), d);
         int[][] af = affixItems(d, lo);
-        String key = epoch + "|" + set + "|" + hon + "|" + afKey(af);
+        List<EmberSignature.Def> sg = signatures(d, lo); // D174
+        String key = epoch + "|" + set + "|" + hon + "|" + afKey(af) + "|" + sigKey(sg);
         Object[] c = cache.get(p.getUniqueId());
         if (c != null && key.equals(c[0])) return (EmberGrowth.Mods) c[1];
         List<Map<String, Double>> parts = new ArrayList<Map<String, Double>>(EmberGrowth.talentParts(talents, picks(d), set));
         if (honors != null && !hon.isEmpty()) parts.add(EmberGrowth.honorParts(honors, hon));
         if (reroll != null) { Map<String, Double> ap = EmberAffix.parts(reroll, af); if (!ap.isEmpty()) parts.add(ap); } // D143
+        for (EmberSignature.Def sd : sg) parts.add(sd.mods); // D174 签名传奇 (≤ 2, each its own part so the ADD keys add)
         EmberGrowth.Mods m = EmberGrowth.Mods.combine(parts);
         cache.put(p.getUniqueId(), new Object[]{key, m});
         return m;
@@ -633,6 +636,160 @@ public final class EmberGrowthService implements Listener {
                 lo.charm == null ? null : new int[]{affixOf(d, lo.charm.uid), lo.charm.quality}};
     }
 
+    // ------------------------------------------------------------------ D174 签名传奇
+
+    /** signature code on this uid (0 = none) */
+    public int sigOf(PlayerData d, String uid) { return d == null || uid == null ? 0 : d.periodCount(EmberSignature.C_SIG + uid, "all"); }
+
+    /** D174: an affix or a signature = invested (never a reroll duplicate, skipped by bulk dismantle) */
+    public boolean invested(PlayerData d, String uid) { return affixOf(d, uid) > 0 || sigOf(d, uid) > 0; }
+
+    EmberSignature.Worn worn(PlayerData d, EmberItemData it) {
+        return it == null ? null : new EmberSignature.Worn(EmberSignature.byCode(sigOf(d, it.uid)), it.slot, it.family);
+    }
+
+    /** the active signatures of this loadout (≤ 2; see EmberSignature.active) */
+    public List<EmberSignature.Def> signatures(PlayerData d, EmberLoadout lo) {
+        if (d == null || lo == null) return Collections.<EmberSignature.Def>emptyList();
+        EmberSignature.Worn b = worn(d, lo.blade), c = worn(d, lo.charm);
+        if ((b == null || b.def == null) && (c == null || c.def == null)) return Collections.<EmberSignature.Def>emptyList();
+        return EmberSignature.active(b, c, lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
+    }
+
+    private String mapLabel(String key) {
+        EmberRunMaps.MapDef md = runs.maps() == null ? null : runs.maps().byKey(key);
+        return key.toUpperCase(Locale.ROOT) + (md == null ? "" : " " + md.name);
+    }
+
+    private String wornLine(PlayerData d, EmberLoadout lo, String slot) {
+        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        if (it == null) return "§7" + EmberItemData.slotName(slot) + "：§8没有";
+        EmberSignature.Worn w = worn(d, it);
+        if (w.def == null) return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §8（无签名）";
+        String why = "blade".equals(slot) ? EmberSignature.offReason(w, null, lo.activeSet, picks(d).values(), true)
+                : EmberSignature.offReason(w, worn(d, lo.blade), lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
+        return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §6" + w.def.name + (why == null ? " §a生效" : " §c不生效：" + why);
+    }
+
+    /**
+     * D174 /corerpg p1 sig — 签名图鉴 + 徽记 + 生效情况 | imprint &lt;Lxx&gt; [confirm tok:…] 烬炉烙印 |
+     * test &lt;marks map n | stamp blade|charm Lxx | clear&gt; [player] (corerpg.admin, smoke tests)
+     */
+    public boolean sigCommand(org.bukkit.command.CommandSender s, String[] args) {
+        String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if ("test".equals(op)) return sigTest(s, args);
+        if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+        Player p = (Player) s;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
+        EmberLoadout lo = runs.loadouts().get(p);
+        if ("imprint".equals(op) || "烙印".equals(op)) return imprint(p, d, lo, args);
+        boolean dual = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK), imp = runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+        p.sendMessage(P + "§6签名传奇§7（每张主线图首领自己的效果；同时最多 " + (dual ? 2 : 1) + " 条"
+                + (dual ? "" : "，首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条") + "；同类不叠）");
+        p.sendMessage(P + wornLine(d, lo, "blade"));
+        p.sendMessage(P + wornLine(d, lo, "charm"));
+        for (String mk : EmberSignature.maps()) {
+            boolean cl = runs.progressFlag(d, mk);
+            p.sendMessage(P + "§e" + mapLabel(mk) + " §7· 首领徽记 §f" + d.periodCount(EmberSignature.C_MARK + mk, "all")
+                    + (cl ? "" : " §8（未首通：首通后重打才掉签名和徽记）"));
+            for (EmberSignature.Def sd : EmberSignature.forMap(mk)) {
+                String line = P + "  §6" + sd.name + " §7" + sd.kindText() + "：§f" + sd.good + " §7/ 代价：" + sd.bad
+                        + (!sd.excl.isEmpty() && picks(d).values().contains(sd.excl) ? " §c（与已选天赋同类，不生效）" : "");
+                if (cl && imp) town.sunshine.corerpg.ConfirmTokens.sendClick(p, line + " ", "[烙印]", "/corerpg p1 sig imprint " + sd.id,
+                        "把「" + sd.name + "」烙到正在用的" + EmberItemData.slotName(sd.slot) + "上\n" + EmberSignature.IMPRINT_MARKS + " 枚 "
+                                + mk.toUpperCase(Locale.ROOT) + " 首领徽记 + " + EmberSignature.IMPRINT_COIN_PER_TIER + "×阶级 余烬币；覆盖原来的签名");
+                else p.sendMessage(line);
+            }
+        }
+        p.sendMessage(P + "§7来源：已首通的图普通重打每局 +1 徽记，基础掉落 " + Math.round(EmberSignature.STAMP_RATE * 100) + "% 是这张图的签名件；首通给 "
+                + EmberSignature.FC_MARKS + " 枚。" + (imp ? "" : "§8烬炉烙印在首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放。"));
+        return true;
+    }
+
+    private boolean imprint(Player p, PlayerData d, EmberLoadout lo, String[] args) {
+        EmberSignature.Def sd = EmberSignature.byId(args.length >= 4 ? args[3] : null);
+        if (sd == null) { p.sendMessage(P + "用法：/corerpg p1 sig imprint L01（先 /corerpg p1 sig 看图鉴）"); return true; }
+        String hold = EmberAssetGuard.hold(p);
+        if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
+        if (EmberMode.isP1World(p.getWorld())) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
+        EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
+        int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        int cur = t == null ? 0 : sigOf(d, t.uid);
+        String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+        if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
+        int coin = EmberSignature.imprintCoin(t.tier);
+        String fp = t.uid + "|" + sd.id + "|" + cur;
+        boolean go = "confirm".equalsIgnoreCase(args.length >= 5 ? args[4] : "");
+        if (go) {
+            String tok = args.length >= 6 && args[5].startsWith("tok:") ? args[5].substring(4) : "";
+            String bad = town.sunshine.corerpg.ConfirmTokens.consume(p, "p1sig", tok, fp);
+            if (bad != null) { p.sendMessage(P + ChatColor.RED + bad); go = false; }
+        }
+        EmberSignature.Def old = EmberSignature.byCode(cur);
+        if (!go) {
+            p.sendMessage(P + "烬炉烙印：把 §6" + sd.name + " §7烙到 §f" + t.shortLabel() + " §7· 花 " + EmberSignature.IMPRINT_MARKS + " 枚 "
+                    + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）+ " + coin + " 余烬币");
+            if (old != null) p.sendMessage(P + ChatColor.RED + "⚠ 这件现在的签名「" + old.name + "」会被覆盖，不能取回");
+            String tk = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1sig", fp);
+            town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "确认：", "[确认烙印]", "/corerpg p1 sig imprint " + sd.id + " confirm tok:" + tk,
+                    sd.name + "：" + sd.good + "\n代价：" + sd.bad);
+            return true;
+        }
+        // one PlayerData mutation (insignia + coins + the signature), then one checked save — never half applied
+        if (!d.takeCoin(coin)) { p.sendMessage(P + ChatColor.RED + "余烬币不够"); return true; }
+        d.addPeriodCount(EmberSignature.C_MARK + sd.map, "all", -EmberSignature.IMPRINT_MARKS);
+        d.addPeriodCount(EmberSignature.C_SIG + t.uid, "all", sd.code - cur);
+        boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
+        plugin.getLogger().info("[P1 sig] " + p.getName() + " imprint " + t.uid + " " + (old == null ? "-" : old.id) + " → " + sd.id
+                + " (-" + EmberSignature.IMPRINT_MARKS + " " + sd.map + " marks, -" + coin + " coin, saved=" + saved + ")");
+        p.sendMessage(P + "§a烙印完成：§f" + t.shortLabel() + " §7→ §6" + sd.name + "§7（剩 " + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记）"
+                + (saved ? "" : " §e（存档稍后重试）"));
+        String off = "blade".equals(sd.slot) ? EmberSignature.offReason(worn(d, t), null, lo.activeSet, picks(d).values(), true)
+                : EmberSignature.offReason(worn(d, t), worn(d, lo.blade), lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
+        if (off != null) p.sendMessage(P + "§e注意：现在不生效——" + off);
+        return true;
+    }
+
+    private boolean sigTest(org.bukkit.command.CommandSender s, String[] args) {
+        if (!s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+        String w = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+        String usage = P + "/corerpg p1 sig test marks <q01..> <n> [玩家] | stamp <blade|charm> <Lxx> [玩家] | clear [玩家]";
+        int pi = "marks".equals(w) ? 6 : "stamp".equals(w) ? 6 : 4;
+        Player t = args.length > pi ? Bukkit.getPlayerExact(args[pi]) : (s instanceof Player ? (Player) s : null);
+        if (t == null) { s.sendMessage(usage); return true; }
+        PlayerData d = data(t.getUniqueId());
+        if (d == null) { s.sendMessage(P + "数据还没加载好"); return true; }
+        EmberLoadout lo = runs.loadouts().get(t);
+        if ("marks".equals(w) && args.length >= 6) {
+            int n;
+            try { n = Integer.parseInt(args[5]); } catch (NumberFormatException e) { s.sendMessage(usage); return true; }
+            d.addPeriodCount(EmberSignature.C_MARK + args[4].toLowerCase(Locale.ROOT), "all", n);
+        } else if ("stamp".equals(w) && args.length >= 6) {
+            EmberItemData it = "charm".equalsIgnoreCase(args[4]) ? lo.charm : lo.blade;
+            EmberSignature.Def sd = EmberSignature.byId(args[5]);
+            if (it == null || sd == null || !EmberSignature.fits(sd, it.slot, it.family)) { s.sendMessage(P + "没有这件 / 签名不合这件"); return true; }
+            d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", sd.code - sigOf(d, it.uid));
+        } else if ("clear".equals(w)) {
+            for (String mk : EmberSignature.maps()) {
+                d.addPeriodCount(EmberSignature.C_MARK + mk, "all", -d.periodCount(EmberSignature.C_MARK + mk, "all"));
+            }
+            for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) if (it != null) d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", -sigOf(d, it.uid));
+        } else { s.sendMessage(usage); return true; }
+        runs.flushData(t.getUniqueId());
+        s.sendMessage(P + t.getName() + " · " + wornLine(d, lo, "blade") + " §7| " + wornLine(d, lo, "charm"));
+        StringBuilder sb = new StringBuilder();
+        for (String mk : EmberSignature.maps()) sb.append(mk).append('=').append(d.periodCount(EmberSignature.C_MARK + mk, "all")).append(' ');
+        s.sendMessage(P + "徽记 " + sb + "· mods " + mods(t));
+        return true;
+    }
+
+    private static String sigKey(List<EmberSignature.Def> sg) {
+        StringBuilder sb = new StringBuilder();
+        for (EmberSignature.Def x : sg) sb.append(x.code).append(',');
+        return sb.toString();
+    }
+
     private static String afKey(int[][] af) {
         StringBuilder sb = new StringBuilder();
         for (int[] x : af) sb.append(x == null ? "-" : x[0] + ":" + x[1]).append(',');
@@ -663,7 +820,7 @@ public final class EmberGrowthService implements Listener {
             if (r == null || !r.ok() || r.data == null) continue;
             EmberItemData x = r.data;
             if (lo.blade != null && x.uid.equals(lo.blade.uid) || lo.charm != null && x.uid.equals(lo.charm.uid)) continue;
-            if (EmberAffix.duplicateOk(t, x, affixOf(d, x.uid) > 0) == null) return i;
+            if (EmberAffix.duplicateOk(t, x, invested(d, x.uid)) == null) return i; // D174: signature = invested
         }
         return -1;
     }
@@ -672,7 +829,7 @@ public final class EmberGrowthService implements Listener {
     private EmberStorageRules.Entry findLibDup(Player p, PlayerData d, EmberItemData t) {
         EmberGearLib lib = EmberGearLib.get();
         if (lib == null) return null;
-        return lib.findDupForReroll(p, t, uid -> affixOf(d, uid) > 0);
+        return lib.findDupForReroll(p, t, uid -> invested(d, uid)); // D174: signature = invested
     }
 
     int rerollCoin(Player p, EmberItemData t) {

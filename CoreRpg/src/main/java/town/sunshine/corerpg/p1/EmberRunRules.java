@@ -323,9 +323,28 @@ public final class EmberRunRules {
         return new ItemRoll(fam, slot, tier, q, c);
     }
 
+    // ------------------------------------------------------------------ D174 签名传奇 grants
+
+    /**
+     * D174: grants of a repeat NORMAL clear of a signature map — 1 insignia, and with {@link EmberSignature#STAMP_RATE}
+     * (seeded per run + player) the base item becomes one of the map's fitting signatures. {@code base} = the
+     * "base_item" grant (null = none). Caller decides the run is a repeat normal main-story clear.
+     */
+    public static List<Grant> signatureGrants(String map, SettleInput in, Grant base) {
+        List<Grant> out = new ArrayList<Grant>(2);
+        if (!EmberSignature.hasMap(map)) return out;
+        out.add(new Grant("sig_mark", Kind.SIGMARK, map, EmberSignature.CLEAR_MARKS, null));
+        if (base != null && base.kind == Kind.ITEM && base.item != null && base.item.tier >= 1) {
+            double u = new Random(subSeed(in.seed, in.player, in.runId, "sig_stamp")).nextDouble();
+            EmberSignature.Def d = EmberSignature.rollStamp(map, base.item.slot, base.item.family, u);
+            if (d != null) out.add(new Grant("sig_stamp", Kind.SIG, base.id + "/" + d.id, 0, null));
+        }
+        return out;
+    }
+
     // ------------------------------------------------------------------ grants
 
-    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA, POTION }
+    public enum Kind { COIN, XP, MAT, MARK, ITEM, CHOICE, UNLOCK, STAMINA, POTION, SIGMARK, SIG } // D174: 首领徽记 (id = map) / 签名 stamp (id = uid/Lxx)
 
     /** D32 / B2.172: ledger run id of the once-per-day death refund (day = stamina day, DailyService.today()). */
     public static String deathRefundRun(String day) { return "deathrefund@" + day; }
@@ -392,6 +411,8 @@ public final class EmberRunRules {
                 case UNLOCK: return "unlock:" + id;
                 case STAMINA: return "stamina:" + amount;
                 case POTION: return "potion:" + amount + (id == null ? "" : ":" + id);
+                case SIGMARK: return "sigmark:" + id + ":" + amount;
+                case SIG: return "sig:" + id;
                 default: return "item:" + id + ":" + item;
             }
         }
@@ -409,6 +430,8 @@ public final class EmberRunRules {
                     case "unlock": return new Grant(key, Kind.UNLOCK, p[1], 0, null);
                     case "stamina": return new Grant(key, Kind.STAMINA, null, Integer.parseInt(p[1]), null);
                     case "potion": return new Grant(key, Kind.POTION, p.length > 2 ? p[2] : null, Integer.parseInt(p[1]), null);
+                    case "sigmark": return new Grant(key, Kind.SIGMARK, p[1], Integer.parseInt(p[2]), null);
+                    case "sig": return p.length > 1 && p[1].contains("/") ? new Grant(key, Kind.SIG, p[1], 0, null) : null;
                     case "item": return new Grant(key, Kind.ITEM, p[1], 1, new ItemRoll(p[2], p[3],
                             Integer.parseInt(p[4]), Integer.parseInt(p[5]), Integer.parseInt(p[6])));
                     default: return null;
