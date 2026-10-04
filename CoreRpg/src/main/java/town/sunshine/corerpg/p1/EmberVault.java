@@ -152,13 +152,24 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         return 0;
     }
 
-    /** the warehouse write reaches MySQL within ~2 s (one save per burst of pickups) */
+    /**
+     * the warehouse write reaches MySQL within ~2 s (one save per burst of pickups). D161 (persist-roundtrip f): the
+     * player's .dat is saved in the same tick, so a crash (kill -9) never finds the backpack and the warehouse from two
+     * different moments (deposited stacks back in the backpack = duplicate, withdrawn stacks gone = loss).
+     */
     private void flushSoon(final UUID id) {
         if (!flushQueued.add(id)) return;
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             flushQueued.remove(id);
             plugin.getDataStore().flushMutation(id);
+            savePlayerFile(Bukkit.getPlayer(id));
         }, 40L);
+    }
+
+    /** D161: write the vanilla player file now (backpack + ender chest), so it matches what was just written to MySQL */
+    static void savePlayerFile(org.bukkit.entity.Player p) {
+        if (p == null || !p.isOnline()) return;
+        try { p.saveData(); } catch (RuntimeException e) { Bukkit.getLogger().warning("[CoreRpg] [storage] saveData " + p.getName() + ": " + e); }
     }
 
     // ------------------------------------------------------------------ NiBridge.ExtraSource (P1 only)
@@ -192,6 +203,26 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         return true;
     }
 
+    /** D162 delivery: all-or-nothing credit to the warehouse (auto setting ignored); false = cap / disabled, nothing added */
+    public boolean credit(Player p, String niId, long n) {
+        if (p == null || n <= 0 || !enabled() || !accepts(niId)) return false;
+        long put = add(p, niId, n);
+        if (put < n) { if (put > 0) takeFrom(p, niId, put); return false; }
+        audit(p, niId, put, EmberVaultLog.DELIVERY);
+        return true;
+    }
+
+    /** D162 delivery debit (undo refund): warehouse first, then the backpack; returns what was taken */
+    public long debit(Player p, String niId, long n) {
+        if (p == null || n <= 0) return 0;
+        long t = enabled() && accepts(niId) ? takeFrom(p, niId, n) : 0;
+        if (t > 0) audit(p, niId, -t, EmberVaultLog.DELIVERY);
+        if (t < n) {
+            t += ni().consume(p, niId, (int) Math.min(Integer.MAX_VALUE, n - t)); // vault empty for this id now; consume audits spend_inv
+        }
+        return t;
+    }
+
     /** warehouse when auto is on, else the backpack (overflow at the feet, as before) */
     public void give(Player p, String niId, int n) {
         if (!autoDeposit(p, niId, n)) ni().giveNiItem(p, niId, n);
@@ -201,6 +232,7 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
     public void onPickup(EntityPickupItemEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         Player p = (Player) e.getEntity();
+        if (EmberAssetGuard.frozen(p.getUniqueId())) { e.setCancelled(true); return; } // D162: no pickups while a restore runs
         if (!enabled() || !autoOn(p)) return;
         Item ent = e.getItem();
         ItemStack st = ent.getItemStack();

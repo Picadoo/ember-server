@@ -73,8 +73,13 @@ public final class EmberGearLib implements Listener {
     public EmberGearLib(CoreRpgPlugin plugin, EmberLoadoutService loadouts) {
         this.plugin = plugin;
         this.loadouts = loadouts;
+        this.delivery = new EmberDelivery(plugin, loadouts);
         instance = this;
     }
+
+    private final EmberDelivery delivery;
+    /** D162: durable deliveries (owed materials / pieces / refunds), shared with the forge */
+    public EmberDelivery delivery() { return delivery; }
 
     private EmberItemStore store() { return loadouts.store(); }
     private EmberVault vault() { return EmberVault.get(); }
@@ -105,6 +110,8 @@ public final class EmberGearLib implements Listener {
 
     /** same rule as the forge: gear moves only outside P1 combat / instance worlds */
     String gate(Player p) {
+        String hold = EmberAssetGuard.hold(p); // D162: restore running / DB writes failing
+        if (hold != null) return hold;
         if (EmberMode.isP1World(p.getWorld())) return "请回城后操作（副本里不能存取装备）";
         QuestService q = plugin.getQuestService();
         if (q != null && q.isInstanceWorld(p.getWorld())) return "请回城后操作（副本里不能存取装备）";
@@ -221,11 +228,15 @@ public final class EmberGearLib implements Listener {
      */
     public boolean autoStash(Player p, EmberItemData d, int freeSlots, boolean upgradeCandidate, boolean hasActive) {
         if (!EmberStorageRules.autoStash(usable(), mode(p), freeSlots, minFree(), upgradeCandidate, hasActive)) return false;
+        if (EmberAssetGuard.hold(p) != null) return false;
         UUID id = p.getUniqueId();
         long now = System.currentTimeMillis();
-        store().upsertItem(d, id, "stored");
-        store().logCreate(d, id, "stored", d.source + " → 装备库（自动）");
-        store().saveLibFlags(d.uid, id, false, false, now);
+        // D162 (review A02): one synchronous DB transaction; "已存入装备库" only after COMMIT, else the caller hands out a
+        // backpack stack (or leaves the reward pending for 补领) — never reported stored while only queued
+        if (!store().autoStashNow(d, id, d.source + " → 装备库（自动）", now)) {
+            plugin.getLogger().warning("[P1 gearlib] auto-stash " + p.getName() + " " + d.uid.substring(0, 8) + " not committed → backpack path");
+            return false;
+        }
         loadouts.rememberRow(d.uid, id, d.rev, "stored");
         if (cache.containsKey(id)) replace(id, d.uid, new Entry(d, false, false, now));
         PlayerData pd = data(id);
@@ -259,10 +270,14 @@ public final class EmberGearLib implements Listener {
                         loadouts.rememberRow(d.uid, id, d.rev + 1, "stored");
                         store().saveLibFlags(d.uid, id, false, false, now);
                         replace(id, d.uid, new Entry(d.withRev(d.rev + 1), false, false, now));
+                        EmberVault.savePlayerFile(q); // D161: the .dat without the stack matches the stored row
                         cb.accept(d.shortLabel());
                     } else {
-                        if (q != null) giveBack(q, original);
-                        else plugin.getLogger().warning("[P1 gearlib] stash failed and " + id + " left: " + d.uid + " (" + res.detail + ") — row unchanged, stack lost with logout");
+                        if (q != null) { giveBack(q, original); EmberVault.savePlayerFile(q); }
+                        else { // D162 (A01): the player left with the stack out of the backpack — owe it back (row still active)
+                            plugin.getLogger().warning("[P1 gearlib] stash failed and " + id + " left: " + d.uid + " (" + res.detail + ") — delivery row, back at next join");
+                            store().insertDeliveries(id, "stashfail:" + d.uid + ":" + d.rev, Arrays.asList(EmberItemStore.Owed.gear(d.uid, "存入装备库没成功，退回背包")), null);
+                        }
                         cb.accept(null);
                     }
                 });
@@ -286,8 +301,10 @@ public final class EmberGearLib implements Listener {
         final ItemStack fresh = loadouts.items().create(after);
         if (fresh == null) { p.sendMessage(P + ChatColor.RED + "物品生成失败（NI 模板或签名密钥不可用），没有取出"); return; }
         busy.add(uid);
+        // D162 (A01): the piece owed to the backpack is a delivery row in the same transaction — handed out by
+        // EmberDelivery now when online, at the next join otherwise (exactly once: uid in the backpack / marker)
         store().commitTxn("unstash:" + uid + ":" + e.d.rev, "unstash", id, Arrays.asList(new TxnItem(e.d, null, "active", "stored")),
-                null, "从装备库取出 " + e.d.shortLabel(), res -> {
+                null, "从装备库取出 " + e.d.shortLabel(), Arrays.asList(EmberItemStore.Owed.gear(uid, "从装备库取出")), res -> {
                     busy.remove(uid);
                     if (res.status != TxnStatus.OK) {
                         Player q = Bukkit.getPlayer(id);
@@ -297,13 +314,15 @@ public final class EmberGearLib implements Listener {
                     }
                     loadouts.rememberRow(uid, id, after.rev, "active");
                     replace(id, uid, null);
-                    Player q = Bukkit.getPlayer(id);
-                    if (q == null) { plugin.getLogger().warning("[P1 gearlib] " + id + " left during withdraw of " + uid + "; row active, no stack — /corerpg p1 audit restore"); return; }
-                    giveBack(q, fresh);
-                    loadouts.refresh(q);
-                    q.sendMessage(P + ChatColor.GREEN + "已取出 " + after.shortLabel());
-                    q.playSound(q.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.6f, 1.0f);
-                    if (q.getOpenInventory().getTopInventory().getHolder() instanceof Holder) openLib(q, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).opener, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).page);
+                    final Player q = Bukkit.getPlayer(id);
+                    if (q == null || !q.isOnline()) { plugin.getLogger().info("[P1 gearlib] " + id + " left during withdraw of " + uid.substring(0, 8) + " — delivered at next join"); return; }
+                    delivery.kick(q, () -> {
+                        if (!q.isOnline()) return;
+                        loadouts.refresh(q);
+                        q.sendMessage(P + ChatColor.GREEN + "已取出 " + after.shortLabel());
+                        q.playSound(q.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.6f, 1.0f);
+                        if (q.getOpenInventory().getTopInventory().getHolder() instanceof Holder) openLib(q, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).opener, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).page);
+                    });
                 });
     }
 
@@ -312,6 +331,8 @@ public final class EmberGearLib implements Listener {
      * (not the hotbar, not the blade in use, not the selected charm) → library (town only).
      */
     public void depositAll(final Player p, final Runnable done) {
+        String hold = EmberAssetGuard.hold(p);
+        if (hold != null) { p.sendMessage(PV + ChatColor.RED + hold); if (done != null) done.run(); return; }
         Map<String, Long> mats = vault() == null ? new HashMap<String, Long>() : vault().depositAll(p);
         final List<String> parts = new ArrayList<String>();
         for (Map.Entry<String, Long> m : mats.entrySet()) parts.add(plugin.getNiBridge().displayName(m.getKey()) + " ×" + m.getValue());
@@ -433,7 +454,8 @@ public final class EmberGearLib implements Listener {
             busy.add(e.d.uid);
             final int y = EmberUpgradeRules.dismantleYield(e.d);
             store().commitTxn("glibdis:" + e.d.uid + ":" + e.d.rev, "glibdis", id, Arrays.asList(new TxnItem(e.d, null, "dismantled", "stored")),
-                    null, "装备库分解 " + e.d.shortLabel() + " → 胚料×" + y + " [批 " + batch + "]", res -> {
+                    null, "装备库分解 " + e.d.shortLabel() + " → 胚料×" + y + " [批 " + batch + "]",
+                    y > 0 ? Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, y, "分解 " + e.d.shortLabel())) : null, res -> {
                         busy.remove(e.d.uid);
                         if (res.status == TxnStatus.OK) {
                             okN[0]++; blanks[0] += y;
@@ -448,9 +470,10 @@ public final class EmberGearLib implements Listener {
 
     private void bulkDone(UUID id, int n, int blanks) {
         Player q = Bukkit.getPlayer(id);
-        if (q == null) { plugin.getLogger().warning("[P1 gearlib] bulk dismantle " + id + " left: " + n + " pieces, blanks " + blanks + " not given"); return; }
+        // D162 (A01): the blanks are delivery rows written with each dismantle — delivered now, or at the next join
+        if (q == null) { plugin.getLogger().info("[P1 gearlib] bulk dismantle " + id + " left: " + n + " pieces, blanks " + blanks + " owed (delivered at next join)"); return; }
         if (n > 0) ConfirmTokens.sendButtons(q, P + "整批撤销：", new String[]{"[撤销这一批]", "/corerpg p1 undo batch", "一次撤销最近这批分解（" + undoMinutes() + " 分钟内，要退回胚料）", "GREEN"});
-        if (blanks > 0) { if (vault() != null) vault().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else plugin.getNiBridge().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); }
+        if (blanks > 0) delivery.kick(q);
         plugin.getLogger().info("[P1 gearlib] bulk dismantle " + q.getName() + " " + n + " pieces → blanks " + blanks);
         q.sendMessage(P + ChatColor.GREEN + "已分解 " + n + " 件 → 胚料 ×" + blanks + ChatColor.GRAY + "（" + undoMinutes() + " 分钟内可撤销）");
         q.playSound(q.getLocation(), Sound.BLOCK_ANVIL_USE, 0.6f, 1.2f);
@@ -493,10 +516,11 @@ public final class EmberGearLib implements Listener {
             final int y = EmberUpgradeRules.dismantleYield(d);
             int have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
             if (have < y) { p.sendMessage(P + ChatColor.RED + "撤销要退回胚料 ×" + y + "，背包 + 仓库只有 " + have); return; }
-            if (y > 0 && plugin.getNiBridge().consume(p, EmberUpgradeRules.MAT_BLANK, y) < y) { p.sendMessage(P + ChatColor.RED + "扣胚料失败"); return; }
             busy.add(d.uid);
+            // D162 (A01): nothing taken up front; the blanks to return are a debit delivery row of the same transaction
             store().commitTxn("undo:" + d.uid + ":" + d.rev, "undo", id, Arrays.asList(new TxnItem(d, null, "stored", "dismantled")),
-                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（退回胚料×" + y + "，回到装备库）", res -> {
+                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（退回胚料×" + y + "，回到装备库）",
+                    y > 0 ? Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, -y, "撤销分解 " + d.shortLabel())) : null, res -> {
                         busy.remove(d.uid);
                         Player q = Bukkit.getPlayer(id);
                         if (res.status == TxnStatus.OK) {
@@ -505,10 +529,9 @@ public final class EmberGearLib implements Listener {
                             store().saveLibFlags(d.uid, id, false, false, t);
                             replace(id, d.uid, new Entry(d.withRev(d.rev + 1), false, false, t));
                             plugin.getLogger().info("[P1 gearlib] undo dismantle " + id + " " + d.uid.substring(0, 8) + " blanks back " + y);
-                            if (q != null) q.sendMessage(P + ChatColor.GREEN + "已撤销：" + d.shortLabel() + " 回到装备库（主菜单 仓库 → 装备库）");
+                            if (q != null) { delivery.kick(q); q.sendMessage(P + ChatColor.GREEN + "已撤销：" + d.shortLabel() + " 回到装备库（主菜单 仓库 → 装备库）"); }
                         } else {
-                            if (q != null) { if (vault() != null) vault().give(q, EmberUpgradeRules.MAT_BLANK, y); else plugin.getNiBridge().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, y); }
-                            if (q != null) q.sendMessage(P + ChatColor.RED + "没有撤销（" + res.status + ": " + res.detail + "），胚料已退回");
+                            if (q != null) q.sendMessage(P + ChatColor.RED + "没有撤销（" + res.status + ": " + res.detail + "），没有扣胚料");
                         }
                     });
         });
@@ -528,7 +551,6 @@ public final class EmberGearLib implements Listener {
         for (LibRow r : pick) need += EmberUpgradeRules.dismantleYield(r.data);
         int have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
         if (have < need) { p.sendMessage(P + ChatColor.RED + "整批撤销要退回胚料 ×" + need + "，背包 + 仓库只有 " + have + "（可以一件一件撤销）"); return; }
-        if (need > 0 && plugin.getNiBridge().consume(p, EmberUpgradeRules.MAT_BLANK, need) < need) { p.sendMessage(P + ChatColor.RED + "扣胚料失败"); return; }
         final UUID id = p.getUniqueId();
         final int[] left = {pick.size()}, ok = {0}, refund = {0};
         for (final LibRow r : pick) {
@@ -536,7 +558,8 @@ public final class EmberGearLib implements Listener {
             final int y = EmberUpgradeRules.dismantleYield(d);
             busy.add(d.uid);
             store().commitTxn("undo:" + d.uid + ":" + d.rev, "undo", id, Arrays.asList(new TxnItem(d, null, "stored", "dismantled")),
-                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（整批，退回胚料×" + y + "，回到装备库）", res -> {
+                    "{\"mat_ember_v1_blank\":" + y + "}", "撤销分解 " + d.shortLabel() + "（整批，退回胚料×" + y + "，回到装备库）",
+                    y > 0 ? Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, -y, "整批撤销分解 " + d.shortLabel())) : null, res -> {
                         busy.remove(d.uid);
                         if (res.status == TxnStatus.OK) {
                             long t = System.currentTimeMillis();
@@ -547,10 +570,10 @@ public final class EmberGearLib implements Listener {
                         } else refund[0] += y;
                         if (--left[0] == 0) {
                             Player q = Bukkit.getPlayer(id);
-                            if (refund[0] > 0 && q != null) { if (vault() != null) vault().give(q, EmberUpgradeRules.MAT_BLANK, refund[0]); else plugin.getNiBridge().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, refund[0]); }
-                            else if (refund[0] > 0) plugin.getLogger().warning("[P1 gearlib] batch undo " + id + " offline, blanks refund " + refund[0] + " not given");
-                            plugin.getLogger().info("[P1 gearlib] batch undo " + id + " " + ok[0] + "/" + pick.size() + " pieces, refund " + refund[0]);
-                            if (q != null) q.sendMessage(P + ChatColor.GREEN + "已整批撤销 " + ok[0] + " 件，回到装备库" + (refund[0] > 0 ? ChatColor.RED + "（" + (pick.size() - ok[0]) + " 件没撤成，胚料 ×" + refund[0] + " 已退回）" : ""));
+                            // D162: blanks are debited by the delivery rows of the pieces that did go back; failed ones cost nothing
+                            plugin.getLogger().info("[P1 gearlib] batch undo " + id + " " + ok[0] + "/" + pick.size() + " pieces, not charged " + refund[0]);
+                            if (q != null) delivery.kick(q);
+                            if (q != null) q.sendMessage(P + ChatColor.GREEN + "已整批撤销 " + ok[0] + " 件，回到装备库" + (refund[0] > 0 ? ChatColor.RED + "（" + (pick.size() - ok[0]) + " 件没撤成，这几件的胚料 ×" + refund[0] + " 没有扣）" : ""));
                         }
                     });
         }
@@ -591,14 +614,34 @@ public final class EmberGearLib implements Listener {
         return true;
     }
 
+    /** D162 test hook: /corerpg p1 fault <player> before_commit|after_commit|after_deliver|clear (CORERPG_TEST_FAULTS=1 only) */
+    private boolean fault(CommandSender s, String[] args) {
+        if (!s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+        if (!EmberFaults.enabled()) { s.sendMessage(P + "故障注入只在测试环境可用（启动时 CORERPG_TEST_FAULTS=1）"); return true; }
+        if (args.length < 4) { s.sendMessage(P + "/corerpg p1 fault <玩家> before_commit|after_commit|after_deliver|clear"); return true; }
+        Player t = Bukkit.getPlayerExact(args[2]);
+        if (t == null) { s.sendMessage(P + "玩家需在线"); return true; }
+        String pt = args[3].toLowerCase(Locale.ROOT);
+        boolean ok = EmberFaults.arm(t.getUniqueId(), pt);
+        s.sendMessage(P + (ok ? "fault armed " + t.getName() + " " + pt : "unknown fault point " + pt));
+        plugin.getLogger().warning("[P1 fault] " + s.getName() + " armed " + pt + " for " + t.getName() + " ok=" + ok);
+        return true;
+    }
+
     // ================================================================== commands
 
     /** /corerpg p1 vault | gearlib | stash | undo | itemlog */
     public boolean cmd(CommandSender s, String sub, String[] args) {
         if ("itemlog".equals(sub)) return itemlog(s, args);
+        if ("fault".equals(sub)) return fault(s, args);
         if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
         Player p = (Player) s;
         if (!EmberMode.active()) { p.sendMessage(P + "P1 模式未开启"); return true; }
+        if ("deliver".equals(sub)) { // D162: retry owed deliveries now (backpack was full, warehouse at the cap …)
+            p.sendMessage(P + "正在核对待到账的物品…");
+            delivery.onJoin(p);
+            return true;
+        }
         String a = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
         String opener = args.length >= 4 && "from".equals(a) ? args[3] : null;
         if ("undo".equals(sub)) return undo(p, args);
@@ -631,6 +674,8 @@ public final class EmberGearLib implements Listener {
 
     private void takeMat(Player p, String niId, long n) {
         if (vault() == null) return;
+        String hold = EmberAssetGuard.hold(p);
+        if (hold != null) { p.sendMessage(PV + ChatColor.RED + hold); return; }
         long got = vault().withdraw(p, niId, n);
         if (got < 0) p.sendMessage(PV + ChatColor.RED + "背包满了");
         else if (got == 0) p.sendMessage(PV + "仓库里没有 " + plugin.getNiBridge().displayName(niId));
@@ -826,7 +871,11 @@ public final class EmberGearLib implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(org.bukkit.event.player.PlayerJoinEvent e) {
-        if (EmberMode.active()) ensureLoaded(e.getPlayer());
+        if (!EmberMode.active()) return;
+        final Player p = e.getPlayer();
+        ensureLoaded(p);
+        // D162: owed deliveries after the invsnap queue (40 ticks) — a running restore freezes them until it is through
+        Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) delivery.onJoin(p); }, 60L);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

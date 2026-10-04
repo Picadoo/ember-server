@@ -85,7 +85,7 @@ public final class EmberCommand {
             return supplies.cmd(s, args);
         }
         if ("vault".equals(sub) || "仓库".equals(sub) || "gearlib".equals(sub) || "装备库".equals(sub) || "stash".equals(sub)
-                || "undo".equals(sub) || "itemlog".equals(sub)) { // 1.62 storage + data protection
+                || "undo".equals(sub) || "itemlog".equals(sub) || "deliver".equals(sub) || "fault".equals(sub)) { // 1.62 storage + data protection; D162 deliveries
             if (EmberGearLib.get() == null) { s.sendMessage(P + "仓库服务未加载"); return true; }
             return EmberGearLib.get().cmd(s, sub, args);
         }

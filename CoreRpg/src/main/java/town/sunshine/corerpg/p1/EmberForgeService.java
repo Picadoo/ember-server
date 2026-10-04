@@ -69,6 +69,7 @@ public final class EmberForgeService implements Listener {
     private NiBridge ni() { return plugin.getNiBridge(); }
     private EmberItems items() { return loadouts.items(); }
     private EmberItemStore store() { return loadouts.store(); }
+    private static EmberGearLib gl() { return EmberGearLib.get(); }
 
     // ================================================================== commands
 
@@ -115,6 +116,8 @@ public final class EmberForgeService implements Listener {
     /** @return null when forging is allowed here */
     private String gate(Player p) {
         if (!EmberMode.active()) return "P1 新模式未开启";
+        String hold = EmberAssetGuard.hold(p); // D162: restore running / DB writes failing
+        if (hold != null) return hold;
         if (EmberMode.isP1World(p.getWorld())) return "请回城后操作（P1 战斗世界内不可锻造）";
         QuestService q = plugin.getQuestService();
         if (q != null && q.isInstanceWorld(p.getWorld())) return "请回城后操作（副本内不可锻造）";
@@ -187,12 +190,68 @@ public final class EmberForgeService implements Listener {
         return null;
     }
 
+    /** D162: the cost as owed refund lines (materials + coins) */
+    private static List<EmberItemStore.Owed> owedRefund(Cost c, String note) {
+        List<EmberItemStore.Owed> l = new ArrayList<EmberItemStore.Owed>();
+        for (Map.Entry<String, Integer> m : c.materials().entrySet()) l.add(EmberItemStore.Owed.mat(m.getKey(), m.getValue(), note));
+        if (c.coins > 0) l.add(new EmberItemStore.Owed("coin", "coin", c.coins, note));
+        return l;
+    }
+
+    /**
+     * D162 (review A03): materials / coins live in PlayerData (MySQL cr_players + cr_warehouse, one save) and the backpack
+     * (.dat); the item in cr_p1_item — no single DB transaction spans them. Durable op record instead: refund hold
+     * (cr_p1_delivery 'hold') written first, then the cost taken and saved, then the item transaction, which voids the
+     * hold in its COMMIT. Failure → hold released → refunded exactly once by EmberDelivery; crash → settled at the next
+     * join (committed → void, else refund). YAML storage keeps the old in-memory path.
+     */
+    private void payDurable(final Player p, final String rid, final Cost cost, final Runnable go) {
+        List<String> lack = lacking(p, cost);
+        if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "材料不足（未扣除、未抽取、保底不变）: " + String.join("，", lack)); return; }
+        String hold = EmberAssetGuard.hold(p);
+        if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return; }
+        final List<EmberItemStore.Owed> owed = owedRefund(cost, "锻造没完成，退回");
+        if (!store().usable() || owed.isEmpty()) {
+            String err = pay(p, cost);
+            if (err != null) { p.sendMessage(P + ChatColor.RED + err); return; }
+            go.run();
+            return;
+        }
+        final UUID id = p.getUniqueId();
+        store().insertHolds(id, rid, owed, ok -> {
+            if (!p.isOnline()) { store().voidHolds(id, rid); return; }
+            if (!ok) { p.sendMessage(P + ChatColor.RED + "这次请求正在处理或数据库暂时写不进去，没有扣材料，稍后再试"); return; }
+            String err = pay(p, cost);
+            if (err != null) { store().voidHolds(id, rid); p.sendMessage(P + ChatColor.RED + err); return; }
+            PlayerData pd = plugin.getDataStore().get(id);
+            // saved with the deduction: "this cost was really taken" — one count per refund line, each refunded line takes one
+            if (pd != null) pd.addPeriodCount(EmberDelivery.paidMarker(rid), "1", owed.size() - pd.periodCount(EmberDelivery.paidMarker(rid), "1"));
+            boolean saved = pd != null && plugin.getDataStore().save(id, pd);
+            EmberVault.savePlayerFile(p);
+            if (!saved) { // deduction not durable: undo it in memory, drop the hold, do nothing
+                if (pd != null) pd.addPeriodCount(EmberDelivery.paidMarker(rid), "1", -pd.periodCount(EmberDelivery.paidMarker(rid), "1"));
+                giveBack(p, cost.materials(), cost.coins);
+                store().voidHolds(id, rid);
+                p.sendMessage(P + ChatColor.RED + "存档写入失败，已退回材料，没有锻造");
+                return;
+            }
+            go.run();
+        });
+    }
+
     private void giveBack(Player p, Map<String, Integer> mats, int coins) {
         for (Map.Entry<String, Integer> m : mats.entrySet()) if (m.getValue() > 0) ni().giveNiItem(p, m.getKey(), m.getValue());
         if (coins > 0) { PlayerData pd = plugin.getDataStore().get(p.getUniqueId()); if (pd != null) pd.addCoin(coins); }
     }
 
-    private void refund(UUID id, Cost c) {
+    private void refund(UUID id, Cost c) { refund(id, c, null); }
+
+    /** D162: with a rid and MySQL the paid cost comes back through its refund hold (durable, exactly once) */
+    private void refund(final UUID id, Cost c, String rid) {
+        if (rid != null && store().usable() && !owedRefund(c, "").isEmpty()) {
+            store().releaseHolds(id, rid, () -> { Player q = Bukkit.getPlayer(id); if (q != null && gl() != null) gl().delivery().kick(q); });
+            return;
+        }
         Player p = Bukkit.getPlayer(id);
         if (p == null) {
             List<Cost> l = pendingRefunds.get(id);
@@ -255,10 +314,11 @@ public final class EmberForgeService implements Listener {
         }
         String r = rid != null ? rid : "enh:" + d.uid + ":" + d.rev;
         if (replayed(p, r)) return true;
-        String err = pay(p, c.cost);
-        if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
-        Plan plan = EmberUpgradeRules.enhance(d, ThreadLocalRandom.current().nextDouble());
-        commit(p, "enhance", r, c.cost, Arrays.asList(new TxnItem(d, plan.after, null)), plan.note);
+        final String rr = r;
+        payDurable(p, rr, c.cost, () -> {
+            Plan plan = EmberUpgradeRules.enhance(d, ThreadLocalRandom.current().nextDouble());
+            commit(p, "enhance", rr, c.cost, Arrays.asList(new TxnItem(d, plan.after, null)), plan.note);
+        });
         return true;
     }
 
@@ -293,9 +353,8 @@ public final class EmberForgeService implements Listener {
         }
         String r = rid != null ? rid : kind + ":" + it.data.uid + ":" + it.data.rev;
         if (replayed(p, r)) return true;
-        String err = pay(p, plan.cost);
-        if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
-        commit(p, kind, r, plan.cost, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note);
+        final String rr = r;
+        payDurable(p, rr, plan.cost, () -> commit(p, kind, rr, plan.cost, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note));
         return true;
     }
 
@@ -471,7 +530,7 @@ public final class EmberForgeService implements Listener {
             if (t.after == null) continue;
             ItemStack st = items().create(t.after);
             if (st == null) {
-                refund(id, cost);
+                refund(id, cost, rid);
                 restoreDismantle(p, list);
                 p.sendMessage(P + ChatColor.RED + "无法生成新物品（NI 模板 " + t.after.ni + " 缺失或签名密钥不可用），已退回");
                 return;
@@ -484,6 +543,8 @@ public final class EmberForgeService implements Listener {
             Player q = Bukkit.getPlayer(id);
             if (res.status == TxnStatus.OK) {
                 done.put(rid, note);
+                PlayerData paid = plugin.getDataStore().get(id);
+                if (paid != null) paid.addPeriodCount(EmberDelivery.paidMarker(rid), "1", -paid.periodCount(EmberDelivery.paidMarker(rid), "1"));
                 for (TxnItem t : list) {
                     loadouts.rememberRow(t.before.uid, id, t.before.rev + 1, t.after == null ? t.retireState : "active");
                     if (t.after != null && q != null && !replace(q, t.before.uid, built.get(t.after.uid))) {
@@ -498,8 +559,9 @@ public final class EmberForgeService implements Listener {
                 if ("dismantle".equals(kind)) {
                     Object[] pd = pendingDismantle.remove(list.get(0).before.uid);
                     int blanks = pd == null ? 0 : (Integer) pd[1];
-                    if (q != null) { if (EmberVault.get() != null) EmberVault.get().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); }
-                    else plugin.getLogger().warning("[" + EmberMode.MODE_ID + "] dismantle blanks for offline " + id + " not given: " + blanks);
+                    if (!store().usable()) { if (q != null) { if (EmberVault.get() != null) EmberVault.get().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); } }
+                    else if (q != null && gl() != null) gl().delivery().kick(q); // D162: blanks = delivery row of the same txn
+                    if (q != null) EmberVault.savePlayerFile(q);
                 }
                 plugin.getLogger().info("[" + EmberMode.MODE_ID + "] forge " + kind + " " + rid + " " + id + " ok: " + note + " cost " + cost.json());
                 if (q != null) {
@@ -509,8 +571,11 @@ public final class EmberForgeService implements Listener {
                     loadouts.refresh(q);
                 }
             } else {
-                refund(id, cost);
-                if (q != null) restoreDismantle(q, list); else pendingDismantle.remove(list.get(0).before.uid);
+                refund(id, cost, rid);
+                if (q != null) restoreDismantle(q, list);
+                else if (pendingDismantle.remove(list.get(0).before.uid) != null) // D162: stack out of the backpack, owner gone → owe it back
+                    store().insertDeliveries(id, "disfail:" + list.get(0).before.uid + ":" + list.get(0).before.rev,
+                            Arrays.asList(EmberItemStore.Owed.gear(list.get(0).before.uid, "分解没成功，退回背包")), null);
                 java.util.function.Consumer<Boolean> rcb = rerollCb.remove(list.get(0).before.uid);
                 if (rcb != null) rcb.accept(false);
                 if (res.status == TxnStatus.REPLAY) {
@@ -521,7 +586,13 @@ public final class EmberForgeService implements Listener {
                 }
             }
         };
-        if (store().usable()) store().commitTxn(rid, kind, id, list, cost.json(), note, finish);
+        List<EmberItemStore.Owed> owed = null;
+        if ("dismantle".equals(kind)) { // D162 (A01): the blanks are owed in the same DB transaction as the retire
+            Object[] pd = pendingDismantle.get(list.get(0).before.uid);
+            int blanks = pd == null ? 0 : (Integer) pd[1];
+            if (blanks > 0) owed = Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, blanks, "分解 " + list.get(0).before.shortLabel()));
+        }
+        if (store().usable()) store().commitTxn(rid, kind, id, list, cost.json(), note, owed, finish);
         else finish.accept(new TxnResult(TxnStatus.OK, null)); // YAML storage: signed NBT is the only record
     }
 

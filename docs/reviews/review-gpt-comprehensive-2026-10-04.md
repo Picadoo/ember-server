@@ -439,3 +439,31 @@ assert values[0] != values[1]
 [S27]: https://docs.python.org/3/library/random.html
 [S28]: https://github.com/Picadoo/ember-server/blob/40441253f5f4e0aa1722ed3c5da0821b1e86256c/tools/p1sim/p1sim.py
 [S29]: https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches
+
+---
+
+## 附：§03 资产与存储整改状态（2026-10-04 11:50 CST，CoreRpg 1.65.1，D161 / D162）
+
+**测试元数据（Q01）：** 版本 CoreRpg 1.65.1（源码见本次提交；1.65.0 = 余烬连战 D160 + D161 存档同步，同批发布）· 管理员辅助：是（`ni give` / `corerpg p1 give|givedup` / `corerpg coin give` 造条件；故障点用仅测试环境可用的 `/corerpg p1 fault`，服务器以 `CORERPG_TEST_FAULTS=1` 启动，测完已无该变量重启，命令拒绝）· 覆盖：`tools/p1map/persist-roundtrip.sh` a–g（真实 bot、真实 MySQL、正常重启 ×3、kill -9 ×2）· 未覆盖：见每项「未覆盖」。
+
+基线 4044125 之后、本次之前已合入的相关改动：D157（1.64.0，快照恢复跳过材料 / 扭蛋券 / 国庆币）、D158（1.64.1，按 `cr_vault_log` + `gacha_ledger` 账本只扣快照后存走的量、`invsnap preview`、整批撤销）。D158 的整批撤销本身也带着「离线退款不发」的分支，本次一并改掉。
+
+| 项 | 状态 | 做了什么 | 证据 |
+|---|---|---|---|
+| A01 离线交付 | **已修复** | 新表 `cr_p1_delivery`（唯一键 owner + request + idx；kind mat / coin / gear；status pending → delivered / void，hold 见 A03；attempts + reason）。应发的胚料（库内分解、批量分解、工坊分解）、取出的装备、撤销分解要扣回的胚料，都在**同一个 DB 事务**里和装备状态一起写入（`commitTxn(..., owed, cb)`）。在线时回调里投递，离线时下次进服（60 tick 后）投递，`/corerpg p1 deliver` 可手动重试。只投固定的产物，不重新随机。恰好一次：材料 / 金币的变化与标记计数 `p1dlv_<id>` 在同一次 PlayerData 保存里（D162 起 `cr_players` + `cr_warehouse` 是一个事务），保存成功才 ack；装备靠 uid 在背包 / 末影箱里 + 同一标记判断「已发、缺 ack」。存入失败且玩家已下线：补一条 gear 投递行，下次进服退回背包（原来是丢）。撤销分解不再先扣胚料，改为同事务的扣回行，失败的那件什么都不扣。 | persist g1（批量分解，第一笔回调延后 10 s，期间断线 → 进服胚料 = 期初 + 3，再重登不变）、g3（取出，提交后断线 → 进服背包 1 件，行 delivered，再重登仍 1）、g3k（取出提交后 kill -9 → 重启进服 1 件）、g4（撤销，投递后 ack 前断线 → 只 ack，胚料只扣一次）、g6（取出，投递后 ack 前 kill -9 → 仍 1 件）；b（取出与断线同 tick → 进服背包 1 件）；c / c2（批量分解 + 整批撤销，含重启）全 PASS |
+| A02 自动入库 | **已修复** | `autoStash` 改为 `autoStashNow`：物品行（stored）+ 创建流水 + 装备库标记**一个同步事务**，COMMIT 之后才回「已存入装备库」。失败（含已存在同 uid）返回 false → 走原来的背包路径；背包满则这条奖励在奖励账本里保持 pending，可补领，不会凭空再发一件（uid 固定）。PENDING / PERSISTED / DELIVERED 对应：奖励账本 pending → 物品行已提交（入库即交付）→ 账本 delivered。 | 代码路径；单测 226 全过。**未覆盖**：bot 真打掉落触发自动入库 + 故障注入（需要整局结算，本轮没有跑；`before_commit` 钩子已接在 autoStashNow 上，可用同一脚本补测） |
+| A03 跨系统缝隙 | **已修复（有残留窗口，见下）** | 权威存储表见下。能放一个事务的：装备行 + 流水 + 应发行 + 退款保留作废（`commitTxn`）；玩家行 + 材料仓（`savePlayerAndWarehouse`）。放不进一个事务的工坊扣费（材料 / 金币在 PlayerData + 背包，装备在 `cr_p1_item`）：持久操作记录 + 补偿 —— 先写退款保留行（hold），再扣费并**同步保存**（带 `p1paid_` 标记），再提交装备事务，事务里把 hold 作废；失败 / 重放 → hold 转 pending → 恰好一次退回；崩溃 → 进服对账（事务在 → void，不在 → 退款；没有 `p1paid_` 标记 = 扣费没存上 → void，不倒贴）。同一请求重试取下一个 idx 段，进行中只允许一笔。写库持续失败暂停资产变更：P1 事务连续 3 次 ERROR（60 s 内）或玩家存档连续 3 次失败 → `EmberAssetGuard` 挡住仓库存取、一键存入、装备库、工坊、投递，查看不受影响，写成功后自动解除。 | g5a（强化，提交前失败 → 碎片 4 + 金币 40 退回，期末 = 期初）、g5b（强化提交后、回调前 kill -9 → 期末 = 期初 − 费用，恰好一次，hold 0 / void 2）；f（kill -9 前后材料总数不变）。**未覆盖**：真实断库（拔 MySQL）下的暂停与恢复（DbGuard 冒烟只测过启动），扭蛋（CoreGacha 自己的单事务，persist e 用例覆盖断线 / 重启） |
+| A04 快照恢复 | **部分已修复（D157/D158）+ 本次修复顺序与冻结** | 离线恢复请求只在恢复真正应用（.dat 已保存）后清除；失败保留并记 `attempts` / `last_error` / `last_attempt_at`，下次进服重试。恢复从 pre-restore 快照到 apply 结束冻结该玩家资产操作（仓库、装备库、工坊、投递、拾取进仓都挡住），结束后自动补投递。材料仓与快照的差异按 D158 账本净扣。 | d（离线排队 → 进服应用一次 → 再重启不重复，队列清除）PASS。**另有裁决**：不做全账号经济回滚（材料仓 / 扭蛋钱包 / 装备库不随快照回滚，`invsnap preview` 先看差异，D158）。**未覆盖**：恢复中途断线 / 快照缺失的重试分支只有代码路径，没有 bot 用例 |
+
+**A03 权威存储（谁说了算）：**
+
+| 资产 | 权威 | 一起提交的 | 跨不过去时 |
+|---|---|---|---|
+| P1 装备（刃 / 护符）状态、rev、归属 | MySQL `cr_p1_item`（NBT 只是副本，进服 resync） | `cr_p1_txn` 流水、`cr_p1_delivery` 应发行、退款 hold 作废 | — |
+| 装备库锁定 / 收藏 | `cr_p1_gearlib` | 自动入库时同事务；之后的锁 / 收藏单独写（丢了只影响标记） | — |
+| 材料仓、余烬币、计数器（含 `p1dlv_` / `p1paid_` 标记） | PlayerData → `cr_players` + `cr_warehouse`（一次保存一个事务） | 两表同事务 | 投递标记 / 付费标记 |
+| 背包、末影箱实物 | 原版 `.dat` | 关键点同 tick `saveData`（D161） | 装备 uid 扫描 + 标记 |
+| 应发 / 应退 | `cr_p1_delivery` | 与装备状态同事务 | hold + 进服对账 |
+| 扭蛋券 / 光屑 / 拥有 | CoreGacha 表（自身单事务） | — | 不在本次范围 |
+
+**残留（明确不宣称）：** ① 背包实物和 DB 之间没有共同事务：装备投递在 `saveData` 与标记保存之间（同一 tick 内）被 kill -9，且玩家进服几秒内把那件挪进箱子，才可能多一件；② 工坊扣费在 hold 写入后、扣费保存前（≤ 1 tick）被 kill -9：`p1paid_` 标记不在 → 退款作废，不会倒贴，但也不会多扣；③ 已提交事务的装备库缓存靠回调更新，回调丢失（只有测试钩子会丢）时到重登才刷新；④ 撤销分解扣回时胚料已被同一 tick 的另一笔花掉：扣到多少算多少并告警（预检通过后的毫秒级竞态）。

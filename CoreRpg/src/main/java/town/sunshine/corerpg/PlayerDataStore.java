@@ -337,11 +337,12 @@ public final class PlayerDataStore {
         return data;
     }
 
-    public void save(UUID uuid, PlayerData data) {
-        if (data == null) return;
+    /** @return true when MySQL (or the yml file) really took the write (D162: P1 delivery acks wait for this) */
+    public boolean save(UUID uuid, PlayerData data) {
+        if (data == null) return false;
         if (data.isLoadFailed()) { // 1.62 guard: a half-loaded player must never overwrite the stored row
             plugin.getLogger().warning("[storage] NOT saving " + uuid + ": its load from MySQL failed this session");
-            return;
+            return false;
         }
         FileConfiguration yaml = new YamlConfiguration();
         yaml.set("coin", data.getCoin());
@@ -453,19 +454,27 @@ public final class PlayerDataStore {
         if (mysql != null) {
             try {
                 String name = data.getLastKnownName();
-                mysql.savePlayerYaml(uuid, name, yaml.saveToString());
-                mysql.saveWarehouse(uuid, data.getWarehouseSlotsUnlocked(), data.getWarehouseJson());
+                mysql.savePlayerAndWarehouse(uuid, name, yaml.saveToString(), data.getWarehouseSlotsUnlocked(), data.getWarehouseJson());
                 data.markClean();
+                saveFailStreak = 0;
+                town.sunshine.corerpg.p1.EmberAssetGuard.saveStreak(0);
+                return true;
             } catch (SQLException e) {
-                plugin.getLogger().log(Level.WARNING, "Failed to save player MySQL " + uuid, e);
+                saveFailStreak++;
+                town.sunshine.corerpg.p1.EmberAssetGuard.saveStreak(saveFailStreak);
+                plugin.getLogger().log(Level.WARNING, "Failed to save player MySQL " + uuid + " (streak " + saveFailStreak + ")", e);
+                return false;
             }
-            return;
         }
         try {
             yaml.save(fileFor(uuid));
             data.markClean();
+            saveFailStreak = 0;
+            return true;
         } catch (IOException e) {
+            saveFailStreak++;
             plugin.getLogger().log(Level.WARNING, "Failed to save player " + uuid, e);
+            return false;
         }
     }
 
@@ -491,6 +500,16 @@ public final class PlayerDataStore {
     public void flushMutation(UUID uuid) {
         PlayerData data = cache.get(uuid);
         if (data != null) save(uuid, data);
+    }
+
+    // D162 (review A03): write health, read by the P1 asset gate (pause vault / gear-library mutations while saves fail)
+    private volatile int saveFailStreak;
+    public int saveFailStreak() { return saveFailStreak; }
+
+    /** synchronous save that reports whether MySQL (or the yml file) really took it; P1 delivery acks only after true */
+    public boolean flushMutationChecked(UUID uuid) {
+        PlayerData data = cache.get(uuid);
+        return data != null && save(uuid, data);
     }
 
 

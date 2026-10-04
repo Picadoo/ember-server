@@ -422,13 +422,29 @@ public final class InvSnapService implements Listener {
     // ================================================================== restore
 
     /** restores {@code s} onto online {@code p}: pre-restore snapshot first, P1 trust check, ledger net-out, then apply */
-    private void restore(final CommandSender admin, final Player p, final Snap s) {
+    private void restore(final CommandSender admin, final Player p, final Snap s) { restore(admin, p, s, null); }
+
+    /**
+     * D162 (review A04): the player's asset operations (vault / gear library / forge / deliveries / auto-pickup into the
+     * warehouse) are frozen from the pre-restore snapshot to the end of apply, so netOut's ledger reading and the restored
+     * backpack describe the same moment. {@code done} gets null on success, else the reason (nothing applied).
+     */
+    private void restore(final CommandSender admin, final Player p, final Snap s, final java.util.function.Consumer<String> done) {
+        final UUID u = p.getUniqueId();
+        if (town.sunshine.corerpg.p1.EmberAssetGuard.frozen(u)) { msg(admin, ChatColor.RED + "这个玩家正在恢复中，稍后再试"); if (done != null) done.accept("restore already running"); return; }
+        town.sunshine.corerpg.p1.EmberAssetGuard.freeze(u);
+        final java.util.function.Consumer<String> end = why -> {
+            town.sunshine.corerpg.p1.EmberAssetGuard.thaw(u);
+            if (done != null) done.accept(why);
+            Player q = Bukkit.getPlayer(u);
+            if (q != null && town.sunshine.corerpg.p1.EmberGearLib.get() != null) town.sunshine.corerpg.p1.EmberGearLib.get().delivery().kick(q);
+        };
         snapshot(p, "pre-restore", pre -> {
-            if (!p.isOnline()) { msg(admin, ChatColor.RED + "玩家已下线，未恢复"); return; }
-            if (pre == null) { msg(admin, ChatColor.RED + "恢复前快照写入失败，为安全起见未恢复"); return; }
+            if (!p.isOnline()) { msg(admin, ChatColor.RED + "玩家已下线，未恢复"); end.accept("offline before pre-restore"); return; }
+            if (pre == null) { msg(admin, ChatColor.RED + "恢复前快照写入失败，为安全起见未恢复"); end.accept("pre-restore snapshot failed"); return; }
             trustCheck(p, s, skipped -> netOut(p, s, net -> {
-                if (!p.isOnline()) { msg(admin, ChatColor.RED + "玩家已下线，未恢复"); return; }
-                apply(p, s);
+                if (!p.isOnline()) { msg(admin, ChatColor.RED + "玩家已下线，未恢复"); end.accept("offline before apply"); return; }
+                try { apply(p, s); } catch (RuntimeException ex) { plugin.getLogger().log(Level.SEVERE, "[invsnap] apply " + s.id + " for " + p.getName(), ex); end.accept("apply failed: " + ex); return; }
                 String undo = "/corerpg invsnap restore " + p.getName() + " " + pre;
                 msg(admin, ChatColor.GREEN + "已把 " + p.getName() + " 的背包/末影箱恢复到快照 #" + s.id + "（" + fmt(s.at) + " " + s.reason + "）");
                 report(admin, skipped, net);
@@ -436,6 +452,7 @@ public final class InvSnapService implements Listener {
                 p.sendMessage(P + ChatColor.YELLOW + "管理员已恢复你的背包与末影箱（快照 " + fmt(s.at) + "；材料仓与扭蛋钱包未回滚）");
                 plugin.getLogger().warning("[invsnap] " + admin.getName() + " restored " + p.getName() + " to snapshot " + s.id
                         + " (pre-restore " + pre + ", skipped P1 " + skipped.size() + ", net-out " + net.summary() + ")");
+                end.accept(null);
                 snapshot(p, "restored", null);
             }));
         });
@@ -481,6 +498,7 @@ public final class InvSnapService implements Listener {
         p.getEnderChest().setContents(en);
         p.updateInventory();
         lastHash.remove(p.getUniqueId());
+        try { p.saveData(); } catch (RuntimeException e) { plugin.getLogger().warning("[invsnap] saveData after restore: " + e); } // D161/D162: saved before the queue entry is cleared
         try {
             if (plugin.getEmberForge() != null) plugin.getEmberForge().resync(p, false);
             if (plugin.getEmberLoadouts() != null) plugin.getEmberLoadouts().refresh(p);
@@ -673,13 +691,37 @@ public final class InvSnapService implements Listener {
         try { y.save(pendingFile); } catch (IOException e) { plugin.getLogger().log(Level.SEVERE, "[invsnap] cannot save " + pendingFile, e); }
     }
 
+    /**
+     * D162 (review A04): the queue entry is cleared only after the restore really applied (the .dat was saved inside
+     * apply); a failed attempt keeps it with attempts + last reason and is retried at the next join.
+     */
     private void applyPending(final Player p, final String id) {
-        setPending(p.getUniqueId(), null, null);
-        load(p.getUniqueId(), id, s -> {
-            if (s == null) { plugin.getLogger().warning("[invsnap] queued restore " + id + " for " + p.getName() + " not found"); snapshot(p, "join", null); return; }
+        final UUID u = p.getUniqueId();
+        load(u, id, s -> {
+            if (s == null) {
+                pendingFailed(u, "snapshot " + id + " not found");
+                plugin.getLogger().warning("[invsnap] queued restore " + id + " for " + p.getName() + " not found (kept queued with the reason)");
+                snapshot(p, "join", null);
+                return;
+            }
+            if (!p.isOnline()) { pendingFailed(u, "offline before restore"); return; }
             plugin.getLogger().warning("[invsnap] applying queued restore " + id + " for " + p.getName());
-            restore(Bukkit.getConsoleSender(), p, s);
+            restore(Bukkit.getConsoleSender(), p, s, why -> {
+                if (why == null) { setPending(u, null, null); plugin.getLogger().warning("[invsnap] queued restore " + id + " for " + p.getName() + " applied, dequeued"); }
+                else { pendingFailed(u, why); plugin.getLogger().warning("[invsnap] queued restore " + id + " for " + p.getName() + " NOT applied (" + why + "), kept for the next join"); }
+            });
         });
+    }
+
+    /** keep the queued restore, count the attempt, remember why */
+    private synchronized void pendingFailed(UUID uuid, String why) {
+        if (!pendingFile.exists()) return;
+        YamlConfiguration y = YamlConfiguration.loadConfiguration(pendingFile);
+        if (y.getString(uuid.toString() + ".id") == null) return;
+        y.set(uuid.toString() + ".attempts", y.getInt(uuid.toString() + ".attempts", 0) + 1);
+        y.set(uuid.toString() + ".last_error", why);
+        y.set(uuid.toString() + ".last_attempt_at", System.currentTimeMillis());
+        try { y.save(pendingFile); } catch (IOException e) { plugin.getLogger().log(Level.SEVERE, "[invsnap] cannot save " + pendingFile, e); }
     }
 
     // ================================================================== commands

@@ -46,6 +46,8 @@ public final class EmberVaultLog {
     /** consumed straight from the backpack by a P1 cost (forge, festival buy …) */
     public static final String SPEND_INV = "spend_inv";
     public static final String PICKUP = "pickup", AUTO = "auto", WITHDRAW = "withdraw", SPEND_VAULT = "spend_vault";
+    /** D162: a cr_p1_delivery line credited to / debited from the warehouse */
+    public static final String DELIVERY = "delivery";
 
     private static volatile EmberVaultLog instance;
     public static EmberVaultLog get() { return instance; }

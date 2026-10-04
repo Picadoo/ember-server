@@ -298,6 +298,40 @@ public final class MysqlStorage {
         return null;
     }
 
+    /**
+     * D162 (review A03): the player row (counters incl. P1 delivery markers, coin, …) and the warehouse row in ONE
+     * transaction, so a crash between the two statements can no longer leave a delivery marker without its materials
+     * (or the materials without the marker).
+     */
+    public void savePlayerAndWarehouse(UUID uuid, String name, String yamlData, int slotsUnlocked, String slotsJson) throws SQLException {
+        try (Connection c = getConnection()) {
+            boolean auto = c.getAutoCommit();
+            c.setAutoCommit(false);
+            try {
+                try (PreparedStatement ps = c.prepareStatement("INSERT INTO cr_players (uuid, name, data) VALUES (?,?,?) "
+                        + "ON DUPLICATE KEY UPDATE name=VALUES(name), data=VALUES(data)")) {
+                    ps.setString(1, uuid.toString());
+                    ps.setString(2, name == null || name.isEmpty() ? null : truncate(name, 16));
+                    ps.setString(3, yamlData);
+                    ps.executeUpdate();
+                }
+                try (PreparedStatement ps = c.prepareStatement("INSERT INTO cr_warehouse (uuid, slots_unlocked, slots_json) VALUES (?,?,?) "
+                        + "ON DUPLICATE KEY UPDATE slots_unlocked=VALUES(slots_unlocked), slots_json=VALUES(slots_json)")) {
+                    ps.setString(1, uuid.toString());
+                    ps.setInt(2, slotsUnlocked);
+                    ps.setString(3, slotsJson == null ? "[]" : slotsJson);
+                    ps.executeUpdate();
+                }
+                c.commit();
+            } catch (SQLException | RuntimeException e) {
+                try { c.rollback(); } catch (SQLException ignored) {}
+                throw e;
+            } finally {
+                try { c.setAutoCommit(auto); } catch (SQLException ignored) {}
+            }
+        }
+    }
+
     public void saveWarehouse(UUID uuid, int slotsUnlocked, String slotsJson) throws SQLException {
         String sql = "INSERT INTO cr_warehouse (uuid, slots_unlocked, slots_json) VALUES (?,?,?) "
                 + "ON DUPLICATE KEY UPDATE slots_unlocked=VALUES(slots_unlocked), slots_json=VALUES(slots_json)";

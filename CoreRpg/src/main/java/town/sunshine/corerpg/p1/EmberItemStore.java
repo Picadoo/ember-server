@@ -129,6 +129,63 @@ public final class EmberItemStore {
                     + "KEY idx_p1_gearlib_owner (owner_uuid)"
                     + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
 
+    /**
+     * D162 (review A01): durable delivery records. A gear-library / forge transaction that owes the player something
+     * (materials back from a dismantle, a withdrawn piece, a refund, a debit) writes the owed lines here IN THE SAME DB
+     * transaction as the item state change. Unique (owner, request, idx): a replayed request never owes twice. Delivered
+     * on callback when online, else at the next join; exactly once through a marker in the player row (see EmberDelivery).
+     * status: pending → delivered (or void when the owed piece no longer exists); attempts / reason kept for the admin.
+     */
+    public static final String SCHEMA_DELIVERY =
+            "CREATE TABLE IF NOT EXISTS cr_p1_delivery ("
+                    + "id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+                    + "owner_uuid CHAR(36) NOT NULL,"
+                    + "request_id VARCHAR(96) NOT NULL,"
+                    + "idx INT NOT NULL DEFAULT 0,"
+                    + "kind VARCHAR(16) NOT NULL,"
+                    + "item VARCHAR(64) NOT NULL,"
+                    + "amount BIGINT NOT NULL,"
+                    + "status VARCHAR(12) NOT NULL DEFAULT 'pending',"
+                    + "attempts INT NOT NULL DEFAULT 0,"
+                    + "reason VARCHAR(160) NULL,"
+                    + "note VARCHAR(160) NULL,"
+                    + "created_at BIGINT NOT NULL,"
+                    + "updated_at BIGINT NOT NULL,"
+                    + "UNIQUE KEY uq_p1_delivery (owner_uuid,request_id,idx),"
+                    + "KEY idx_p1_delivery_owner (owner_uuid,status)"
+                    + ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+
+    /** one owed line: kind {@code mat} (item = NI id, amount &gt; 0 credit, &lt; 0 debit) or {@code gear} (item = uid, amount 1) */
+    public static final class Owed {
+        public final String kind, item, note;
+        public final long amount;
+        public Owed(String kind, String item, long amount, String note) { this.kind = kind; this.item = item; this.amount = amount; this.note = note; }
+        public static Owed mat(String ni, long n, String note) { return new Owed("mat", ni, n, note); }
+        public static Owed gear(String uid, String note) { return new Owed("gear", uid, 1, note); }
+    }
+
+    /** a pending delivery row */
+    public static final class Delivery {
+        public final long id;
+        public final String request, kind, item, note;
+        public final int idx, attempts;
+        public final long amount;
+        Delivery(long id, String request, int idx, String kind, String item, long amount, int attempts, String note) {
+            this.id = id; this.request = request; this.idx = idx; this.kind = kind; this.item = item; this.amount = amount;
+            this.attempts = attempts; this.note = note;
+        }
+    }
+
+    // D162 (review A03): write health of the P1 store — consecutive ERROR results pause asset mutations for a minute
+    private static volatile int errStreak;
+    private static volatile long lastErrAt;
+    public static boolean writesPaused() { return errStreak >= 3 && System.currentTimeMillis() - lastErrAt < 60000L; }
+    public static int errStreak() { return errStreak; }
+    private static void health(TxnStatus st) {
+        if (st == TxnStatus.ERROR) { errStreak++; lastErrAt = System.currentTimeMillis(); }
+        else errStreak = 0;
+    }
+
     /** DB view of one item, enough for the trust check. */
     public static final class Row {
         public final String owner;
@@ -174,10 +231,11 @@ public final class EmberItemStore {
                 st.executeUpdate(SCHEMA_RUN);
                 st.executeUpdate(SCHEMA_REWARD);
                 st.executeUpdate(SCHEMA_GEARLIB);
+                st.executeUpdate(SCHEMA_DELIVERY);
                 addColumnIfMissing(c, "cr_p1_loadout", "burst_cd_ms", "INT NOT NULL DEFAULT 0");
                 addColumnIfMissing(c, "cr_p1_loadout", "sustain_cd_ms", "INT NOT NULL DEFAULT 0");
                 schemaOk = true;
-                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn / cr_p1_run / cr_p1_reward / cr_p1_gearlib ready");
+                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn / cr_p1_run / cr_p1_reward / cr_p1_gearlib / cr_p1_delivery ready");
             } catch (Throwable t) {
                 schemaQueued = false;
                 plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] schema init failed: " + t.getMessage());
@@ -477,8 +535,19 @@ public final class EmberItemStore {
      */
     public void commitTxn(final String rid, final String kind, final UUID owner, final List<TxnItem> items,
                           final String costJson, final String note, final Consumer<TxnResult> cb) {
+        commitTxn(rid, kind, owner, items, costJson, note, null, cb);
+    }
+
+    /**
+     * D162: same, plus the owed lines written to cr_p1_delivery inside the same DB transaction (null/empty = none).
+     * Test env only (CORERPG_TEST_FAULTS=1): an armed fault makes it fail before COMMIT, or drop the callback after it.
+     */
+    public void commitTxn(final String rid, final String kind, final UUID owner, final List<TxnItem> items,
+                          final String costJson, final String note, final List<Owed> owed, final Consumer<TxnResult> cb) {
         if (!usable()) { cb.accept(new TxnResult(TxnStatus.ERROR, "MySQL 不可用")); return; }
         ensureSchema();
+        final boolean failBefore = EmberFaults.fire(owner, EmberFaults.BEFORE_COMMIT);
+        final boolean dropCb = !failBefore && EmberFaults.fire(owner, EmberFaults.AFTER_COMMIT);
         exec().submit(() -> {
             TxnResult res;
             Connection c = null;
@@ -486,6 +555,8 @@ public final class EmberItemStore {
                 c = plugin.getMysqlStorage().getConnection();
                 c.setAutoCommit(false);
                 res = doTxn(c, rid, kind, owner, items, costJson, note);
+                if (res.status == TxnStatus.OK && owed != null && !owed.isEmpty()) insertOwed(c, owner, rid, owed);
+                if (res.status == TxnStatus.OK && failBefore) throw new SQLException("TEST FAULT before_commit");
                 if (res.status == TxnStatus.OK) c.commit(); else c.rollback();
             } catch (Throwable t) {
                 try { if (c != null) c.rollback(); } catch (Throwable ignored) {}
@@ -500,8 +571,173 @@ public final class EmberItemStore {
                 }
             }
             final TxnResult r = res;
+            health(r.status);
+            if (dropCb && r.status == TxnStatus.OK) { // the window between COMMIT and the callback, widened to 10 s
+                plugin.getLogger().warning("[" + EmberMode.MODE_ID + "] TEST FAULT after_commit: txn " + kind + " " + rid + " committed, callback held 10 s");
+                if (plugin.isEnabled()) Bukkit.getScheduler().runTaskLater(plugin, () -> cb.accept(r), 200L);
+                return;
+            }
             if (plugin.isEnabled()) Bukkit.getScheduler().runTask(plugin, () -> cb.accept(r));
         });
+    }
+
+    private static void insertOwed(Connection c, UUID owner, String rid, List<Owed> owed) throws SQLException {
+        insertOwed(c, owner, rid, owed, "pending");
+    }
+
+    private static int insertOwed(Connection c, UUID owner, String rid, List<Owed> owed, String status) throws SQLException {
+        return insertOwed(c, owner, rid, owed, status, 0);
+    }
+
+    private static int insertOwed(Connection c, UUID owner, String rid, List<Owed> owed, String status, int base) throws SQLException {
+        long now = System.currentTimeMillis();
+        int n = 0;
+        try (PreparedStatement ps = c.prepareStatement("INSERT IGNORE INTO cr_p1_delivery"
+                + " (owner_uuid,request_id,idx,kind,item,amount,status,attempts,note,created_at,updated_at) VALUES (?,?,?,?,?,?,'" + status + "',0,?,?,?)")) {
+            for (int i = 0; i < owed.size(); i++) {
+                Owed o = owed.get(i);
+                ps.setString(1, owner.toString());
+                ps.setString(2, rid.length() > 96 ? rid.substring(0, 96) : rid);
+                ps.setInt(3, base + i);
+                ps.setString(4, o.kind);
+                ps.setString(5, o.item);
+                ps.setLong(6, o.amount);
+                String nt = o.note == null ? null : (o.note.length() > 160 ? o.note.substring(0, 160) : o.note);
+                if (nt == null) ps.setNull(7, Types.VARCHAR); else ps.setString(7, nt);
+                ps.setLong(8, now);
+                ps.setLong(9, now);
+                ps.addBatch();
+            }
+            for (int x : ps.executeBatch()) if (x > 0 || x == java.sql.Statement.SUCCESS_NO_INFO) n++;
+        }
+        return n;
+    }
+
+    /** D162: owed lines without an item transaction (e.g. a stash that failed after the player left). cb(ok) on the main thread. */
+    public void insertDeliveries(final UUID owner, final String rid, final List<Owed> owed, final Consumer<Boolean> cb) {
+        if (!usable()) { if (cb != null) cb.accept(false); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            boolean ok = false;
+            try (Connection c = plugin.getMysqlStorage().getConnection()) {
+                insertOwed(c, owner, rid, owed);
+                ok = true;
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.SEVERE, "[" + EmberMode.MODE_ID + "] delivery insert " + rid + " for " + owner + " FAILED: " + t.getMessage());
+            }
+            health(ok ? TxnStatus.OK : TxnStatus.ERROR);
+            final boolean r = ok;
+            if (cb != null) sync(() -> cb.accept(r));
+        });
+    }
+
+    /** D162: the owner's pending delivery rows, oldest first; cb on the main thread (null when the read failed) */
+    public void pendingDeliveries(final UUID owner, final Consumer<List<Delivery>> cb) {
+        if (!usable()) { cb.accept(null); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            List<Delivery> out = new java.util.ArrayList<Delivery>();
+            boolean ok = false;
+            try (Connection c = plugin.getMysqlStorage().getConnection();
+                 PreparedStatement ps = c.prepareStatement("SELECT id,request_id,idx,kind,item,amount,attempts,note FROM cr_p1_delivery"
+                         + " WHERE owner_uuid=? AND status='pending' ORDER BY id")) {
+                ps.setString(1, owner.toString());
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) out.add(new Delivery(rs.getLong(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5),
+                            rs.getLong(6), rs.getInt(7), rs.getString(8)));
+                }
+                ok = true;
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] pending deliveries " + owner + ": " + t.getMessage());
+            }
+            final List<Delivery> r = ok ? out : null;
+            sync(() -> cb.accept(r));
+        });
+    }
+
+    /**
+     * D162: close a delivery row ({@code status} delivered / void) or, with status null, just count a failed attempt and
+     * keep it pending with the reason. cb(true) only when the row really changed.
+     */
+    public void ackDelivery(final long id, final String status, final String reason, final Consumer<Boolean> cb) {
+        if (!usable()) { if (cb != null) cb.accept(false); return; }
+        exec().submit(() -> {
+            boolean ok = false;
+            try (Connection c = plugin.getMysqlStorage().getConnection();
+                 PreparedStatement ps = c.prepareStatement(status == null
+                         ? "UPDATE cr_p1_delivery SET attempts=attempts+1,reason=?,updated_at=? WHERE id=? AND status='pending'"
+                         : "UPDATE cr_p1_delivery SET status=?,attempts=attempts+1,reason=?,updated_at=? WHERE id=? AND status='pending'")) {
+                int i = 1;
+                if (status != null) ps.setString(i++, status);
+                String rs = reason == null ? null : (reason.length() > 160 ? reason.substring(0, 160) : reason);
+                if (rs == null) ps.setNull(i++, Types.VARCHAR); else ps.setString(i++, rs);
+                ps.setLong(i++, System.currentTimeMillis());
+                ps.setLong(i, id);
+                ok = ps.executeUpdate() == 1;
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] delivery ack " + id + ": " + t.getMessage());
+            }
+            final boolean r = ok;
+            if (cb != null) sync(() -> cb.accept(r));
+        });
+    }
+
+    /**
+     * D162 (review A02): auto-stash of a new piece as ONE transaction (item row stored + create ledger row + library flags),
+     * run synchronously so the caller only reports "已存入装备库" after COMMIT. A few ms on the main thread, once per drop.
+     * false = nothing written (or the commit is unknown and the row is not there) → the caller gives a backpack stack.
+     */
+    public boolean autoStashNow(EmberItemData d, UUID owner, String note, long storedAt) {
+        if (!usable() || !schemaOk) return false;
+        Connection c = null;
+        boolean ok = false;
+        try {
+            c = plugin.getMysqlStorage().getConnection();
+            c.setAutoCommit(false);
+            long now = System.currentTimeMillis();
+            try (PreparedStatement ps = c.prepareStatement("SELECT state FROM cr_p1_item WHERE item_uid=? FOR UPDATE")) {
+                ps.setString(1, d.uid);
+                try (ResultSet rs = ps.executeQuery()) { if (rs.next()) { c.rollback(); return false; } } // re-delivery of a known uid: not ours to stash
+            }
+            try (PreparedStatement ps = c.prepareStatement(
+                    "INSERT INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at)"
+                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'stored',?,?)")) {
+                int i = 1;
+                ps.setString(i++, d.uid); ps.setString(i++, owner.toString()); ps.setString(i++, d.ni); ps.setString(i++, d.family);
+                ps.setString(i++, d.slot); ps.setInt(i++, d.tier); ps.setInt(i++, d.quality); ps.setInt(i++, d.craft);
+                ps.setInt(i++, d.enhance); ps.setInt(i++, d.pity); ps.setInt(i++, d.bound ? 1 : 0); ps.setString(i++, d.source);
+                ps.setInt(i++, d.version); ps.setInt(i++, d.rev); ps.setLong(i++, now); ps.setLong(i, now);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = c.prepareStatement(
+                    "INSERT IGNORE INTO cr_p1_txn (request_id,kind,owner_uuid,uid_a,uid_b,before_json,after_json,cost_json,result,note,created_at)"
+                            + " VALUES (?,'create',?,?,NULL,'[null]',?,NULL,'ok',?,?)")) {
+                ps.setString(1, "create:" + d.uid); ps.setString(2, owner.toString()); ps.setString(3, d.uid);
+                ps.setString(4, json(d));
+                String nt = note == null ? null : (note.length() > 250 ? note.substring(0, 250) : note);
+                if (nt == null) ps.setNull(5, Types.VARCHAR); else ps.setString(5, nt);
+                ps.setLong(6, now);
+                ps.executeUpdate();
+            }
+            try (PreparedStatement ps = c.prepareStatement("INSERT INTO cr_p1_gearlib (item_uid,owner_uuid,locked,fav,stored_at) VALUES (?,?,0,0,?)"
+                    + " ON DUPLICATE KEY UPDATE owner_uuid=VALUES(owner_uuid),locked=0,fav=0,stored_at=VALUES(stored_at)")) {
+                ps.setString(1, d.uid); ps.setString(2, owner.toString()); ps.setLong(3, storedAt);
+                ps.executeUpdate();
+            }
+            if (EmberFaults.fire(owner, EmberFaults.BEFORE_COMMIT)) throw new SQLException("TEST FAULT before_commit (auto-stash)");
+            c.commit();
+            ok = true;
+        } catch (Throwable t) {
+            try { if (c != null) c.rollback(); } catch (Throwable ignored) {}
+            plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] auto-stash " + d.uid + " not committed: " + t.getMessage());
+        } finally {
+            if (c != null) {
+                try { c.setAutoCommit(true); } catch (Throwable ignored) {}
+                try { c.close(); } catch (Throwable ignored) {}
+            }
+        }
+        health(ok ? TxnStatus.OK : TxnStatus.ERROR);
+        return ok;
     }
 
     private TxnResult doTxn(Connection c, String rid, String kind, UUID owner, List<TxnItem> items,
@@ -572,7 +808,98 @@ public final class EmberItemStore {
             ps.setLong(11, now);
             ps.executeUpdate();
         }
+        // D162 (A03): a cost paid up front for this request is settled by the commit → its refund hold is void
+        try (PreparedStatement ps = c.prepareStatement("UPDATE cr_p1_delivery SET status='void',reason='committed',updated_at=?"
+                + " WHERE owner_uuid=? AND request_id=? AND status='hold'")) {
+            ps.setLong(1, now);
+            ps.setString(2, owner.toString());
+            ps.setString(3, holdId(rid));
+            ps.executeUpdate();
+        }
         return new TxnResult(TxnStatus.OK, null);
+    }
+
+    static String holdId(String rid) { String h = "refund:" + rid; return h.length() > 96 ? h.substring(0, 96) : h; }
+
+    /**
+     * D162 (A03): durable op record for a cost paid BEFORE the item transaction (forge materials / coins). Written as
+     * status 'hold' (request {@code refund:<rid>}) before the cost is taken; the item transaction voids it in the same
+     * COMMIT; a failed / replayed transaction releases it (→ pending → refunded exactly once by EmberDelivery); a crash
+     * in between is settled by {@link #reconcileHolds}: committed request → void, else → pending (refund).
+     */
+    public void insertHolds(final UUID owner, final String rid, final List<Owed> owed, final Consumer<Boolean> cb) {
+        if (!usable()) { cb.accept(false); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            boolean ok = false;
+            try (Connection c = plugin.getMysqlStorage().getConnection()) {
+                // one attempt in flight per request; a retry after a refunded attempt gets the next block of 16 idx
+                int base = 0;
+                boolean inFlight = false;
+                try (PreparedStatement ps = c.prepareStatement("SELECT status,idx FROM cr_p1_delivery WHERE owner_uuid=? AND request_id=?")) {
+                    ps.setString(1, owner.toString());
+                    ps.setString(2, holdId(rid));
+                    try (ResultSet rs = ps.executeQuery()) {
+                        while (rs.next()) { if ("hold".equals(rs.getString(1))) inFlight = true; base = Math.max(base, (rs.getInt(2) / 16 + 1) * 16); }
+                    }
+                }
+                ok = !inFlight && insertOwed(c, owner, holdId(rid), owed, "hold", base) == owed.size();
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] refund hold " + rid + ": " + t.getMessage());
+            }
+            health(ok ? TxnStatus.OK : TxnStatus.ERROR);
+            final boolean r = ok;
+            sync(() -> cb.accept(r));
+        });
+    }
+
+    /** D162: nothing was taken (pay failed / not durable) → the hold is void, never refunded */
+    public void voidHolds(final UUID owner, final String rid) {
+        run("void hold " + rid, c -> {
+            try (PreparedStatement ps = c.prepareStatement("UPDATE cr_p1_delivery SET status='void',reason='not paid',updated_at=?"
+                    + " WHERE owner_uuid=? AND request_id=? AND status='hold'")) {
+                ps.setLong(1, System.currentTimeMillis());
+                ps.setString(2, owner.toString());
+                ps.setString(3, holdId(rid));
+                ps.executeUpdate();
+            }
+        });
+    }
+
+    /** D162: the transaction did not happen → the held refund becomes a pending delivery. cb on the main thread. */
+    public void releaseHolds(final UUID owner, final String rid, final Runnable cb) {
+        run("release hold " + rid, c -> {
+            try (PreparedStatement ps = c.prepareStatement("UPDATE cr_p1_delivery SET status='pending',reason='txn not committed',updated_at=?"
+                    + " WHERE owner_uuid=? AND request_id=? AND status='hold'")) {
+                ps.setLong(1, System.currentTimeMillis());
+                ps.setString(2, owner.toString());
+                ps.setString(3, holdId(rid));
+                ps.executeUpdate();
+            }
+            if (cb != null) sync(cb);
+        });
+    }
+
+    /** D162: holds older than {@code olderThan} left by a crash: committed request → void, otherwise → pending (refund) */
+    public void reconcileHolds(final UUID owner, final long olderThan, final Runnable cb) {
+        if (!usable()) { if (cb != null) cb.run(); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            try (Connection c = plugin.getMysqlStorage().getConnection();
+                 PreparedStatement ps = c.prepareStatement("UPDATE cr_p1_delivery d LEFT JOIN cr_p1_txn t ON t.request_id=SUBSTRING(d.request_id,8)"
+                         + " SET d.status=IF(t.request_id IS NULL,'pending','void'),"
+                         + " d.reason=IF(t.request_id IS NULL,'reconciled: txn missing → refund','reconciled: committed'),d.updated_at=?"
+                         + " WHERE d.owner_uuid=? AND d.status='hold' AND d.created_at<?")) {
+                ps.setLong(1, System.currentTimeMillis());
+                ps.setString(2, owner.toString());
+                ps.setLong(3, olderThan);
+                int n = ps.executeUpdate();
+                if (n > 0) plugin.getLogger().warning("[" + EmberMode.MODE_ID + "] reconciled " + n + " refund hold(s) of " + owner);
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] reconcile holds " + owner + ": " + t.getMessage());
+            }
+            if (cb != null) sync(cb);
+        });
     }
 
     /** Full DB row as item data (+ owner/state), for re-syncing a stale NBT copy. */
