@@ -1510,6 +1510,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D164 | CoreRpg 1.65.3 | 天赋第二排 `t2c` 拆分 → **破甲**：`dmg_affix_shield` 1.60、`dmg_affix_blazing` 0.80、`dmg_affix_split` 0.80（分身也算分裂）；只作用于主线重打的词缀精英 |
 | D165 | CoreRpg 1.65.3 | 刃词条 裂身纹 `b_split` 移出洗练池（`rollable: false`）：洗不出来、不能锁定；已有的照常生效；洗练页 / 词条池 / 图鉴列为「已移出洗练池」 |
 | D166 | CoreRpg 1.65.3 | 文案：天赋第二排与 猎缀纹 / 裂身纹 / 抗缀纹 加「仅主线重打生效」；Q01 第一房提示退到门口打；首领前「留 2 瓶药」；R01 招募 / 开本 / 冒险页「建议队伍里有炽愈」。不改数值 |
+| D167 | 设计-only（无版本 bump；实现跟 6 槽 Stage 1–3） | 烬砧（锻造台）：**兑换**地板不变（刃 / 护符 8 枚印记 → 指定族部位标准件，护甲 4 枚）；**随机锻造** = 同印记 + 4 胚料 + 500 币，成色 [70,23,7,0]（极品并入卓越，锻造出不了极品）、精工 [70,20,9,1]；**余烬烙纹**（40 碎片 → 1）定向写入指定可洗词条类型，T1–T3 2/4/6 烙纹 + 洗练币（= 一次锁定洗练价），档位按 D143 截成色上限、共用 `p4_afp` 保底（第 6 次必到）；**锻造次数**每件 13（洗练 / 定向各 −1，旧件满次）；**每周转化** 1 次，同阶同部位改族，成色 ≤卓越、强化归零。不加宝石 / 攻速 / 暴伤 / 冷却。forgesim：W30 两条路线 ±0.00；否决“锻造含 1% 极品”（轮换 −1.03 周，16 印记仍 −0.58）与“转化保留极品”（−2.10 / −1.53）。前置：撤销扣胚料竞态修复、兑换迁 payDurable。`docs/design/DESIGN-ember-forge-random-2026-10-04.md` |
 | D169 | 文档定稿（无版本 bump） | 6 槽装备结构分阶段落地计划 SETTLED：`docs/design/DESIGN-ember-gear-staged-plan-2026-10-04.md`。目标刃+护符+4甲；每图掉全部位、甲另掉不稀释；2+4 件套；Stage 0–4 门禁。CoreRpg 结构代码仍 HOLD。不占 D167/D168 |
 | D170 | CoreRpg 1.65.4 | Q02–Q07 第一房战术提示（短中文）；Q04 r3 可选落差提醒；balance_version 仍 29；不改战斗数值 |
 
@@ -1580,3 +1581,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 为 Q02–Q07 第一房补短中文 `hint`（语气同 D166）；Q04 r3 补落差提醒；Q01 r1 门口提示保留 |
 | 不改 | 战斗数值、variety、技能、`balance_version`（29）、非 hint 键 |
 | 版本 | CoreRpg 1.65.4；状态 `docs/status/STATUS-ember-room-hints-1.65.4.md`；发布凭证 `docs/status/RELEASE-ember-1.65.4.md` |
+
+### 13.85 烬砧：兑换 / 随机锻造 / 烙纹定向 / 锻造次数 / 每周转化（D167，设计-only，2026-10-04）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | 锻造随机任务 + steering 15:45：对齐 RESEARCH `92f77fb` §3.4 / §3.5 / §4.4 与 D169（6 槽） |
+| 裁决 | 见 D167 行。数值：兑换 8 / 4 印记；随机锻造 +4 胚料 +500 币（护甲跟 Stage 1 护甲养成折扣，示意 2 / 250）；烙纹 40 碎片、定向 2/4/6 烙纹 + 300/600/1000 币；锻造次数 13；转化 1 / 周、2/4/6 胚料 + 300/600/1000 币、`quality_cap` 卓越 |
+| 证据 | `tools/p1sim/forgesim.py`（独立，只读 `rules.py`）→ `out-forgesim-d167.md`：随机锻造期望省养成 5.14 胚料 + 6.22 骨粉 + 514 币 ≈ 多付的价；定向最坏 6 次；13 次 = 最长单一词条路线（先定向后养成最坏 13，10 次会卡 12.5%）；W30 提案 ±0.00（轮换 + 团本 7.48、深渊 5.27，基线拟合 D144） |
+| 漏洞 | 现存：`EmberGearLib.undo / undoBatch` 先查后异步扣胚料，期间花掉 → 扣款只记 warning（锻造会放大）；兑换的印记扣减与 ledger 行分开写；洗练不走 payDurable。设计要求全部走 hold → pay → commit，RNG 在付款落盘后抽 |
+| 实现 | `ember-v1.yml forge:`（`enabled: false`）；`EmberForgeRoll` + `EmberForgeRollTest`；`EmberItemStore.commitCreate`；`EmberDelivery` mark 欠款；`/corerpg p1 forge redeem|roll|pin|convert|brand`；TrMenu 烬砧页 + PAPI `brand / charges / convert_left` |
+| 阶段 | 前置（撤销修复、兑换迁耐久）→ Stage 1 后：6 部位兑换 + 随机锻造 → Stage 2：转化 → Stage 3：烙纹 + 次数 |
