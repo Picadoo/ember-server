@@ -19,7 +19,7 @@ slot(){ ev "const w=bot.currentWindow; if(!w) return 'NOWIN'; const it=w.slots[$
 click(){ ev "const w=bot.currentWindow; if(!w) return 'NOWIN'; const n=bot.chatLog.length; try { await bot.clickWindow($1,0,${2:-0}); } catch(e) {} await wait(${3:-2200});
  return bot.chatLog.slice(n).map(s=>s.replace(/§./g,'')).join(' / ');"; }
 chatsince(){ ev "const n=bot.chatLog.length; bot.chat('$1'); await wait(${2:-1800}); return bot.chatLog.slice(n).map(s=>s.replace(/§./g,'')).join(' / ');"; }
-coin(){ $C play "papi parse $B CN=%corerpg_coin%" 0.8 | tr -d '\r' | grep -oE 'CN=[0-9]+' | tail -1 | cut -d= -f2; }
+coin(){ $C play "papi parse $B CN=%corerpg_coin%" 1.5 | tr -d '\r' | grep -oE 'CN=[0-9]+' | tail -1 | cut -d= -f2; }
 openhub(){ ev "if(bot.currentWindow) bot.closeWindow(bot.currentWindow); await wait(300); bot.chat('/ember'); await wait(2200); return 1" >/dev/null; }
 joinbot(){ curl -sf -m 90 "$BOTD/join?name=$B" >/dev/null || { bad "join"; exit 1; }; sleep 7; }
 
@@ -42,7 +42,7 @@ S=$(slot 16); echo "$S" | grep -q '首领徽记' && ok "cell 7 shows insignia" |
 R=$(click 10 0 2600); echo "$R" | cut -c1-200
 echo "$R" | grep -q '签到成功 · 本月第 1 次' && ok "click → signed n=1" || bad "sign click ($R)"
 C1=$(coin); echo "coin after $C1"
-[ -n "$C1" ] && [ -n "$C0" ] && [ $((C1-C0)) -eq 20 ] && ok "+20 coin" || bad "coin delta ($C0 → $C1)"
+# (papi parse cannot find a player in his first session — "Failed to find player" — so balances are read after the first reconnect)
 openhub; click 27 0 2600 >/dev/null
 S=$(slot 10); echo "$S" | grep -q '已领' && ok "cell 1 now 已领" || bad "cell 1 after ($S)"
 R=$(click 10 0 1800); echo "$R" | grep -qv '签到成功' && ok "second click: no second sign" || bad "double ($R)"
@@ -53,7 +53,7 @@ S=$(slot 46); echo "$S" | cut -c1-160; echo "$S" | grep -q '分钟后可补签' 
 ev "if(bot.currentWindow) bot.closeWindow(bot.currentWindow); return 1" >/dev/null
 curl -sf "$BOTD/quit?name=$B" >/dev/null 2>&1; sleep 3; joinbot
 R=$(chatsince '/corerpg p1 sign claim'); echo "$R" | grep -q '今天已经签到' && ok "after reconnect: already signed" || bad "reconnect ($R)"
-C2=$(coin); [ "$C2" = "$C1" ] && ok "coin unchanged after reconnect" || bad "coin after reconnect ($C1 → $C2)"
+C2=$(coin); [ "$C2" = "20" ] && ok "fresh bot coin = 20 after sign + reconnect (paid once)" || bad "coin after reconnect ($C2, want 20)"
 # 4) online: +60 counted min (admin test hook), claim by click
 $C play "corerpg p1 online test $B 60" 0.6 >/dev/null
 openhub; click 27 0 2600 >/dev/null
@@ -74,7 +74,8 @@ R=$(chatsince '/corerpg p1 online claim'); echo "$R" | grep -qE '还没到|都�
 C3=$(coin)
 chatsince '/corerpg sign' >/dev/null; chatsince '/corerpg activity claim' >/dev/null; chatsince '/corerpg bounty claim' >/dev/null
 ev "if(bot.currentWindow) bot.closeWindow(bot.currentWindow); return 1" >/dev/null
-C4=$(coin); [ "$C3" = "$C4" ] && ok "legacy sign/activity/bounty: coin unchanged ($C4)" || bad "legacy paid ($C3 → $C4)"
+C4=$(coin); [ "$C4" = "85" ] && ok "total 85 = sign 20 + online 10+15+20 + make-up 20 (each once)" || bad "total ($C4, want 85)"
+[ "$C3" = "$C4" ] && ok "legacy sign/activity/bounty: coin unchanged ($C4)" || bad "legacy paid ($C3 → $C4)"
 grep -a "\[P1 sign\] $B sign .*n=1" "$LOG" | tail -1 | grep -q . && ok "log: sign n=1" || bad "log sign"
 grep -a "\[P1 delivery\]\|P1 run\] undecodable" "$LOG" | grep -a "$B" | grep -qi "undecodable" && bad "undecodable ledger row" || ok "no undecodable rows"
 curl -sf "$BOTD/quit?name=$B" >/dev/null 2>&1 || true

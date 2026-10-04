@@ -1,6 +1,6 @@
 # STATUS · P1 每日签到 + 在线时长（D180，CoreRpg 1.65.16）— 2026-10-04
 
-**状态：Stage 1 已上线**（见 `docs/status/RELEASE-ember-1.65.16.md`）。研究 `docs/design/RESEARCH-ember-signin-online-2026-10-04.md` ·
+**状态：Stage 1 已上线**（21:25 CST，PID 1025678；见 `docs/status/RELEASE-ember-1.65.16.md`）。研究 `docs/design/RESEARCH-ember-signin-online-2026-10-04.md` ·
 设计 `docs/design/DESIGN-ember-signin-online-2026-10-04.md` · 协调 `/workspace/COORD-signin-online.txt`。
 
 ## 玩家看到什么（零命令）
