@@ -8,10 +8,10 @@ D173 Boss Moves Pack 2：主线 Q01–Q07 半血转阶段轻压。设计：`docs
 |---|---|
 | CoreRpg 版本 | **1.65.23** |
 | class major | **52**（JDK 8，tools/jdk8u504-b01）|
-| CoreRpg JAR sha256 | `JAR_SHA_PLACEHOLDER` |
+| CoreRpg JAR sha256 | `5a24b0abb22d94e078713b100169ee40205d9b0d7e519ff66558df9b3277ffb7` |
 | balance_version | **46** |
 | 回滚包 | `/workspace/backup/CoreRpg-1.65.22-pre-1.65.23.jar` |
-| 服务器 PID | **PID_PLACEHOLDER** |
+| 服务器 PID | **1215138** |
 | MySQL | `[CoreRpg] [storage] MySQL connected` · `[CoreGacha] [db] MySQL connected` |
 | SEVERE | 0 |
 | bossmoves 门禁 | MAX_ABS_DPP **2.2**（`tools/p1sim/out-bossmoves-d173.md`；硬顶 3，prefer ≤2）|
@@ -34,5 +34,5 @@ D173 Boss Moves Pack 2：主线 Q01–Q07 半血转阶段轻压。设计：`docs
 |---|---|
 | 单测 `mvn -o test`（JDK 8）| 280 / 0 |
 | bossmoves 5×4000 | MAX_ABS_DPP 2.2 |
-| 冒烟 FreshQ370+ | SMOKE_PLACEHOLDER |
+| 冒烟 FreshQ370+ | deferred to batch (POLICY 01:53; packs 1.65.20–1.65.23) |
 | 资产回归 | 无物品资产路径变化 → 未跑 persist-roundtrip |
