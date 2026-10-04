@@ -31,7 +31,7 @@ NPROC = int(os.environ.get('NPROC', '6'))
 SEEDS = tuple(int(x) for x in os.environ.get('ML_SEEDS', '7,11').split(','))
 STAGE = int(os.environ.get('ML_STAGE', '9'))  # only signatures of stage <= ML_STAGE
 # same tag as a talent node = does not stack: while that talent is picked the signature is off (Java EmberSignature.active)
-EXCL = {'L01': 't3a', 'L02': 't1c', 'L03': 't3b'}
+EXCL = {'L01': 't3a', 'L02': 't1c', 'L03': 't3b', 'L10': 't3b'}
 FAMS = ('burst', 'scorch', 'sustain')
 MAPS = ['q01', 'q02', 'q03', 'q04', 'q05', 'q06', 'q07']
 
@@ -45,12 +45,12 @@ SIGS = {
     'L05': ('q03', 'blade', 'sustain', 'mend', 1, '残誓长戟', {'sustain_every': -1}),
     'L06': ('q03', 'charm', 'any', 'supply', 1, '守誓残灯', {'potion': 1.05, 'taken_boss': 1.04}),
     # ---- Stage 2 · act 2 (T2 maps) — need Java hooks (烬斩形状 / 烬斩点燃 / 烬斩护盾 / 低血回涌)
-    'L07': ('q04', 'blade', 'any', 'shape', 2, '潮闸长杆', {'skill_var': 1, 'skill_cap': 3}),
-    'L08': ('q04', 'charm', 'scorch', 'burn', 2, '潮蚀护符', {'skill_var': 1, 'skill_ignite': 1, 'skill_ignite_n': 3, 'skill_burn': 1.0, 'burn_mult': 0.92}),
-    'L09': ('q05', 'blade', 'any', 'shape', 2, '断塔双斧', {'skill_var': 1, 'skill_plus': 2, 'skill_mult': 0.85}),
-    'L10': ('q05', 'charm', 'burst', 'burst', 2, '回廊护符', {'hit_burst': 1, 'dodge_burst': 1, 'burst_mult': 0.9}),
-    'L11': ('q06', 'blade', 'any', 'guard', 2, '霜封长刀', {'skill_var': 1, 'skill_shield': 0.03, 'skill_shield_max': 0.09, 'skill_shield_secs': 5, 'skill_mult': 0.9}),
-    'L12': ('q06', 'charm', 'sustain', 'heal', 2, '统领护符', {'sustain_low': 0.4, 'sustain_low_every': -2, 'sustain_mult': 0.9}),
+    'L07': ('q04', 'blade', 'any', 'shape', 2, '潮闸长杆', {'skill_var': 1, 'skill_cap': 3, 'skill_line': 5}),  # skill_line: Java-only reach (sim: cap only)
+    'L08': ('q04', 'charm', 'scorch', 'burn', 2, '潮蚀护符', {'skill_var': 1, 'skill_ignite': 1, 'skill_ignite_n': 1, 'skill_burn': 1.0, 'burn_mult': 0.92}),  # stage 2a: n 3 → 1 (+20 at q03r)
+    'L09': ('q05', 'blade', 'any', 'shape', 2, '断塔双斧', {'skill_var': 1, 'skill_cap': 3, 'skill_ring': 3.0}),  # stage 2a: ring ≤ 3 (skill_plus swept: +4 / −30 swings); skill_ring Java-only radius
+    'L10': ('q05', 'charm', 'burst', 'dodgeburst', 2, '回廊护符', {'hit_burst': 1, 'dodge_burst': 1, 'burst_mult': 0.9}),
+    'L11': ('q06', 'blade', 'any', 'guard', 2, '霜封长刀', {'skill_var': 1, 'skill_shield': 0.005, 'skill_shield_max': 0.01, 'skill_shield_secs': 5, 'skill_mult': 0.9, 'taken_boss': 1.05}),
+    'L12': ('q06', 'charm', 'sustain', 'heal', 2, '统领护符', {'sustain_low': 0.4, 'sustain_low_every': -2, 'sustain_mult': 0.99}),
     # ---- Stage 3 · Q07 (T3) — candidates, re-checked in stage 3
     'L13': ('q07', 'blade', 'any', 'shape', 3, '炉锁巨锤', {'skill_var': 1, 'skill_charge': 0.5, 'skill_plus': 1}),
     'L14': ('q07', 'charm', 'any', 'guard', 3, '炉芯护符', {'skill_var': 1, 'skill_shield': 0.02, 'skill_shield_max': 0.06, 'skill_shield_secs': 6, 'taken_mob': 1.03}),

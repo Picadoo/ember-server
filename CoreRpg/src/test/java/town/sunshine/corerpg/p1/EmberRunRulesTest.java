@@ -333,8 +333,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(33, m.balanceVersion);                // D177 P1 挂机庭 (D178 = 32, D174 = 31)
-        assertEquals("g04-1/b33", m.ruleVersion);
+        assertEquals(34, m.balanceVersion);                // D174 stage 2a (D177 = 33, D178 = 32, D174 s1 = 31)
+        assertEquals("g04-1/b34", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch

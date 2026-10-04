@@ -252,8 +252,46 @@ public final class EmberGrowthService implements Listener {
         EmberGrowth.Mods m = mods(p);
         if (m.isEmpty()) return EmberSetEngine.Tune.NONE;
         return new EmberSetEngine.Tune((int) Math.round(m.get("burst_every")), (int) Math.round(m.get("sustain_every")),
-                m.get("burn_mult"), m.get("burst_mult"), m.get("sustain_mult"), (int) Math.round(m.get("burn_ticks")), m.get("burn_spread"), m.get("spread_icd"));
+                m.get("burn_mult"), m.get("burst_mult"), m.get("sustain_mult"), (int) Math.round(m.get("burn_ticks")), m.get("burn_spread"), m.get("spread_icd"),
+                m.get("sustain_low"), (int) Math.round(m.get("sustain_low_every"))); // D174 L12
     }
+
+    // ------------------------------------------------------------------ D174 stage 2a: 烬斩 shield (L11) — absorbs P1 enemy damage
+
+    /** uuid → {shield HP, until ms} */
+    private final Map<UUID, double[]> shield = new ConcurrentHashMap<UUID, double[]>();
+
+    /**
+     * 烬斩 hit {@code n} targets: shield = skill_shield × H per target, capped at skill_shield_max × H, for skill_shield_secs;
+     * does not stack (keeps the larger of the still-active one and the new one; p1sim skill_variant).
+     */
+    public double giveSkillShield(Player p, EmberGrowth.Mods m, int n) {
+        double per = m.get("skill_shield");
+        if (p == null || per <= 0 || n <= 0) return 0;
+        double h = EmberHeal.maxHp(p), cap = (m.get("skill_shield_max") > 0 ? m.get("skill_shield_max") : per) * h;
+        double secs = m.get("skill_shield_secs") > 0 ? m.get("skill_shield_secs") : 5.0;
+        long now = System.currentTimeMillis();
+        double[] cur = shield.get(p.getUniqueId());
+        double keep = cur != null && now < cur[1] ? cur[0] : 0;
+        double got = Math.max(keep, Math.min(n * per * h, cap));
+        shield.put(p.getUniqueId(), new double[]{got, now + (long) (secs * 1000)});
+        p.sendActionBar(ChatColor.AQUA + "霜封护盾 " + String.format(Locale.ROOT, "%.1f", got) + "（" + String.format(Locale.ROOT, "%.0f", secs) + " 秒）");
+        return got;
+    }
+
+    /** P1 enemy damage after the multipliers → what is left after the shield (the shield shrinks) */
+    public double absorbShield(Player p, double dmg) {
+        if (p == null || dmg <= 0) return dmg;
+        double[] cur = shield.get(p.getUniqueId());
+        if (cur == null) return dmg;
+        if (System.currentTimeMillis() >= cur[1] || cur[0] <= 0) { shield.remove(p.getUniqueId()); return dmg; }
+        double used = Math.min(cur[0], dmg);
+        cur[0] -= used;
+        if (cur[0] <= 1e-9) shield.remove(p.getUniqueId());
+        return dmg - used;
+    }
+
+    public void clearShield(UUID u) { if (u != null) shield.remove(u); }
 
     static String pct(double x) { return String.format(Locale.ROOT, "%.0f%%", x * 100); }
 
@@ -261,7 +299,7 @@ public final class EmberGrowthService implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         UUID u = e.getPlayer().getUniqueId();
         cache.remove(u); dodgeUntil.remove(u); dodgeHealCd.remove(u); pendingRoll.remove(u); rerollBusy.remove(u);
-        SPICK.remove(u); SFROM.remove(u); // D174 stage 1.5
+        SPICK.remove(u); SFROM.remove(u); shield.remove(u); // D174 stage 1.5 / 2a
     }
 
     // ------------------------------------------------------------------ commands

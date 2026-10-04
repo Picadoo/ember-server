@@ -371,6 +371,16 @@ public final class SkillService implements Listener {
         double range = mode.d("skill.radius", 3.5);
         double arc = mode.d("skill.arc_degrees", 100.0);
         int maxTargets = Math.max(1, mode.i("skill.max_targets", 5));
+        // D174 stage 2a signature variants (book §4.2: the variant REPLACES the shared 烬斩, same 8 s CD, no crit, no set count;
+        // p1sim skill_variant): L07 line (skill_line blocks long, ≤ skill_cap) · L09 ring (skill_ring radius, 360°, ≤ skill_cap) · ×skill_mult
+        town.sunshine.corerpg.p1.EmberGrowthService gsv = town.sunshine.corerpg.p1.EmberGrowthService.get();
+        town.sunshine.corerpg.p1.EmberGrowth.Mods gmods = gsv == null ? town.sunshine.corerpg.p1.EmberGrowth.Mods.NONE : gsv.mods(player);
+        boolean variant = gmods.get("skill_var") > 0;
+        double line = variant ? gmods.get("skill_line") : 0;
+        if (variant && gmods.get("skill_plus") > 0) arc = 360.0;
+        if (variant && gmods.get("skill_ring") > 0) { arc = 360.0; range = gmods.get("skill_ring"); } // L09 环斩: smaller ring, no aiming
+        if (variant && gmods.get("skill_cap") > 0) maxTargets = Math.max(1, Math.min(maxTargets, (int) Math.round(gmods.get("skill_cap"))));
+        if (line > 0) range = Math.max(range, line);
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
         Location eye = player.getEyeLocation();
         Vector look = eye.getDirection().normalize();
@@ -383,7 +393,10 @@ public final class SkillService implements Listener {
             Vector to = le.getEyeLocation().toVector().subtract(eye.toVector());
             double dist = to.length();
             if (dist > range || dist < 0.05) continue;
-            if (look.dot(to.normalize()) < cosHalf) continue;
+            if (line > 0) { // narrow line: in front, within 1.0 block of the look ray
+                double along = look.dot(to);
+                if (along <= 0 || to.clone().subtract(look.clone().multiply(along)).length() > 1.0) continue;
+            } else if (arc < 360.0 && look.dot(to.normalize()) < cosHalf) continue;
             targets.add(le);
             distOf.put(le, dist);
         }
@@ -399,17 +412,32 @@ public final class SkillService implements Listener {
         });
         double b = ls.get(player).b;
         double dmg = town.sunshine.corerpg.p1.EmberFormula.skill(town.sunshine.corerpg.p1.EmberMode.tables(), b);
+        if (variant) dmg *= gmods.get("skill_mult");
         SkillDef look2 = getSkill("ember_blaze_slash");
         String prevTag = town.sunshine.corerpg.p1.EmberCombatListener.internalTag;
         town.sunshine.corerpg.p1.EmberCombatListener.internalTag = String.format(java.util.Locale.ROOT, "A12 烬斩 1.5×B(%.2f)=%.2f", b, dmg);
         try {
             int n = 0;
+            int igniteN = variant && gmods.get("skill_ignite") > 0 ? (int) Math.round(gmods.get("skill_ignite_n") > 0 ? gmods.get("skill_ignite_n") : 5) : 0;
+            List<LivingEntity> hit = new ArrayList<LivingEntity>();
             for (LivingEntity le : targets) {
                 if (n++ >= maxTargets) break;
                 town.sunshine.corerpg.p1.EmberCombatListener.dealP1(player, le, dmg,
                         town.sunshine.corerpg.p1.EmberSetEngine.Kind.SKILL,
                         town.sunshine.corerpg.p1.EmberCombatListener.internalTag);
+                hit.add(le);
                 if (look2 != null) spawnParticles(le.getLocation().add(0, 1, 0), look2.particles, 12);
+            }
+            if (variant && gsv != null) {
+                // L08 潮蚀护符: ignite the first skill_ignite_n targets still alive (焚烬 only); L11 霜封长刀: shield per target hit
+                town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
+                int lit = 0;
+                for (LivingEntity le : hit) {
+                    if (lit >= igniteN || sets == null) break;
+                    if (le.isDead() || !le.isValid()) continue;
+                    if (sets.skillIgnite(player, le, gmods.get("skill_burn"))) lit++;
+                }
+                gsv.giveSkillShield(player, gmods, hit.size());
             }
         } finally {
             town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;

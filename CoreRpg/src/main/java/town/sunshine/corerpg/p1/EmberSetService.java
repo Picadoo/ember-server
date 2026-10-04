@@ -130,6 +130,8 @@ public final class EmberSetService implements Listener {
         h.targetEnemy = isEnemy(le);
         h.targetInvulnerable = le.isInvulnerable();
         h.targetId = le.getUniqueId().toString();
+        double mh = EmberHeal.maxHp(p);
+        h.hpFrac = mh > 0 ? Math.max(0, Math.min(1, p.getHealth() / mh)) : 1.0; // D174 L12 低血回涌
         EmberLoadout l = loadouts.get(p);
         Outcome o = s.engine.onHit(h, now, l.b, EmberHeal.maxHp(p));
         if (!h.cancelled && h.finalDamage > 0) s.engine.touch(now);
@@ -234,6 +236,19 @@ public final class EmberSetService implements Listener {
     }
 
     private double b(Player p) { return loadouts.get(p).b; }
+
+    /**
+     * D174 L08 潮蚀护符: a 烬斩 target is ignited with the 焚烬 burn × {@code mult} — only while the scorch set is active
+     * (same snapshot / refresh / 5-target rules as the set's own ignite; p1sim skill_variant skill_ignite).
+     */
+    public boolean skillIgnite(Player p, LivingEntity le, double mult) {
+        Session s = session(p);
+        if (s == null || !"scorch".equals(s.engine.family()) || le == null) return false;
+        double perTick = EmberSetRules.burnCoef(s.engine.awakening()) * s.engine.tune().burnMult * b(p) * mult;
+        if (!(perTick > 0)) return false;
+        ignite(p, s, le, perTick);
+        return true;
+    }
 
     // ------------------------------------------------------------------ ticker
 

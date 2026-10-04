@@ -20,7 +20,14 @@ public final class EmberGrowth {
 
     /** additive keys (default 0); dodge_secs keeps the max, dodge_icd the min; share_w adds over a base of 1 */
     static final Set<String> ADD = new HashSet<String>(java.util.Arrays.asList(
-            "dodge_secs", "dodge_heal", "dodge_icd", "burn_ticks", "burst_every", "sustain_every", "shard_bonus", "burn_spread", "dodge_burst", "spread_icd", "hit_burst"));
+            "dodge_secs", "dodge_heal", "dodge_icd", "burn_ticks", "burst_every", "sustain_every", "shard_bonus", "burn_spread", "dodge_burst", "spread_icd", "hit_burst",
+            // D174 stage 2a signature hooks (烬斩形状 / 点燃 / 护盾 / 低血回涌); absent = 0 = off
+            "skill_var", "skill_cap", "skill_plus", "skill_line", "skill_ring", "skill_ignite", "skill_ignite_n", "skill_shield", "skill_shield_max", "skill_shield_secs",
+            "sustain_low", "sustain_low_every"));
+
+    /** D174 stage 2a: sizes / caps / durations — two sources keep the larger, never add */
+    static final Set<String> MAXK = new HashSet<String>(java.util.Arrays.asList(
+            "skill_cap", "skill_line", "skill_ring", "skill_ignite_n", "skill_shield_max", "skill_shield_secs", "sustain_low"));
 
     // ------------------------------------------------------------------ modifiers
 
@@ -48,7 +55,7 @@ public final class EmberGrowth {
                     String k = e.getKey();
                     double v = e.getValue();
                     Double cur = out.get(k);
-                    if ("dodge_secs".equals(k)) out.put(k, cur == null ? v : Math.max(cur, v));
+                    if ("dodge_secs".equals(k) || MAXK.contains(k)) out.put(k, cur == null ? v : Math.max(cur, v));
                     else if ("dodge_icd".equals(k) || "spread_icd".equals(k)) out.put(k, cur == null ? v : Math.min(cur, v));
                     else if (ADD.contains(k)) out.put(k, (cur == null ? 0.0 : cur) + v);
                     else if ("share_w".equals(k)) out.put(k, (cur == null ? 1.0 : cur) + (v - 1.0));

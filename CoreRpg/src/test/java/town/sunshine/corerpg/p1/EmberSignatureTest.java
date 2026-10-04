@@ -37,9 +37,11 @@ public class EmberSignatureTest {
         }
         assertEquals(1, EmberSignature.byId("L01").code); // stored in saves: never renumber
         assertEquals("L06", EmberSignature.byCode(6).id);
-        assertEquals(Arrays.asList("q01", "q02", "q03"), EmberSignature.maps());
+        assertEquals("L12", EmberSignature.byCode(12).id);
+        assertEquals(Arrays.asList("q01", "q02", "q03", "q04", "q05", "q06"), EmberSignature.maps());
         assertEquals(2, EmberSignature.forMap("q02").size());
-        assertFalse(EmberSignature.hasMap("q04")); // stage 2
+        assertEquals(2, EmberSignature.forMap("q06").size());
+        assertFalse(EmberSignature.hasMap("q07")); // stage 3
     }
 
     @Test
@@ -50,7 +52,9 @@ public class EmberSignatureTest {
         assertEquals("L02", EmberSignature.rollStamp("q01", "charm", "burst", 0.119).id);
         assertNull(EmberSignature.rollStamp("q01", "charm", "burst", EmberSignature.STAMP_RATE));
         assertNull(EmberSignature.rollStamp("q01", "charm", "burst", Double.NaN));
-        assertNull(EmberSignature.rollStamp("q04", "blade", "scorch", 0.0));
+        assertNull(EmberSignature.rollStamp("q07", "blade", "scorch", 0.0));
+        assertEquals("L07", EmberSignature.rollStamp("q04", "blade", "burst", 0.0).id);   // any-family blade
+        assertNull(EmberSignature.rollStamp("q04", "charm", "burst", 0.0));               // L08 is scorch-only
         int hit = 0, n = 100000;
         java.util.Random r = new java.util.Random(5);
         for (int i = 0; i < n; i++) if (EmberSignature.rollStamp("q03", "charm", "sustain", r.nextDouble()) != null) hit++;
@@ -88,6 +92,63 @@ public class EmberSignatureTest {
     }
 
     @Test
+    public void stage2aRules() {
+        List<String> none = Collections.emptyList();
+        // L10 shares the dodge_burst key with L04 → same tag: with L04 on the blade only the blade's counts
+        List<EmberSignature.Def> a = EmberSignature.active(w("L04", "blade", "burst"), w("L10", "charm", "burst"), "burst", none, true);
+        assertEquals(1, a.size());
+        assertEquals("L04", a.get(0).id);
+        // L10 has hit_burst like the talent 反震 (t3b) → off while t3b is picked
+        assertEquals("与已选天赋同类，不叠加", EmberSignature.offReason(w("L10", "charm", "burst"), null, "burst", Arrays.asList("t3b"), true));
+        // shape blade + scorch charm (different tags) both count; L08 needs the scorch set
+        assertEquals(2, EmberSignature.active(w("L07", "blade", "scorch"), w("L08", "charm", "scorch"), "scorch", none, true).size());
+        assertEquals(1, EmberSignature.active(w("L07", "blade", "burst"), w("L08", "charm", "scorch"), "burst", none, true).size());
+        // L01 (burn) + L08 (burn): only the blade's
+        assertEquals("L01", EmberSignature.active(w("L01", "blade", "scorch"), w("L08", "charm", "scorch"), "scorch", none, true).get(0).id);
+        assertEquals(1, EmberSignature.active(w("L01", "blade", "scorch"), w("L08", "charm", "scorch"), "scorch", none, true).size());
+        // combined mods: sizes / caps never add (MAXK), skill_var adds, multipliers multiply
+        EmberGrowth.Mods m = EmberGrowth.Mods.combine(Arrays.asList(EmberSignature.byId("L11").mods, EmberSignature.byId("L08").mods));
+        java.util.Map<String, Double> l11 = EmberSignature.byId("L11").mods, l08 = EmberSignature.byId("L08").mods;
+        assertEquals(l11.get("skill_shield_max"), m.get("skill_shield_max"), 1e-9);
+        assertEquals(1.0, m.get("skill_ignite_n"), 1e-9);
+        assertEquals(2.0, m.get("skill_var"), 1e-9);
+        assertEquals(l11.getOrDefault("skill_mult", 1.0) * l08.getOrDefault("skill_mult", 1.0), m.get("skill_mult"), 1e-9);
+        assertEquals(0.0, EmberGrowth.Mods.NONE.get("skill_cap"), 1e-9); // absent = off
+        assertEquals(1.0, EmberGrowth.Mods.NONE.get("skill_mult"), 1e-9);
+    }
+
+    @Test
+    public void lowHpSustainInterval() {
+        EmberSetEngine e = new EmberSetEngine();
+        e.setLoadout("sustain", 1);
+        EmberGrowth.Mods m = EmberGrowth.Mods.combine(Arrays.asList(EmberSignature.byId("L12").mods));
+        e.setTune(new EmberSetEngine.Tune(0, (int) Math.round(m.get("sustain_every")), 1, 1, m.get("sustain_mult"), 0, 0, 0,
+                m.get("sustain_low"), (int) Math.round(m.get("sustain_low_every"))));
+        assertEquals(5, e.everyAt(0.9));
+        assertEquals(5, e.everyAt(0.4));
+        assertEquals(3, e.everyAt(0.39));
+        // three valid swings below 40% HP heal; above 40% the third does not
+        long t = 1_000_000L;
+        EmberSetEngine.Outcome o = null;
+        for (int i = 1; i <= 3; i++) {
+            EmberSetEngine.Hit h = EmberSetEngine.Hit.melee(i, 1.0, 5, "m");
+            h.hpFrac = 0.3;
+            o = e.onHit(h, t + i, 10, 100);
+        }
+        assertEquals(EmberSetEngine.Trigger.HEAL, o.trigger);
+        assertEquals(0.99 * EmberSetRules.sustainPct(1) * 100, o.amount, 1e-9);
+        EmberSetEngine f = new EmberSetEngine();
+        f.setLoadout("sustain", 1);
+        f.setTune(e.tune());
+        for (int i = 1; i <= 3; i++) {
+            EmberSetEngine.Hit h = EmberSetEngine.Hit.melee(100 + i, 1.0, 5, "m");
+            h.hpFrac = 0.8;
+            o = f.onHit(h, t + i, 10, 100);
+        }
+        assertEquals(EmberSetEngine.Trigger.NONE, o.trigger);
+    }
+
+    @Test
     public void imprintCheck() {
         EmberSignature.Def l01 = EmberSignature.byId("L01"), l06 = EmberSignature.byId("L06");
         EmberItemData sb = item("a", "scorch", "blade", 2), bb = item("b", "burst", "blade", 1), ch = item("c", "sustain", "charm", 3);
@@ -121,7 +182,7 @@ public class EmberSignatureTest {
         List<EmberRunRules.Grant> a = EmberRunRules.signatureGrants("q01", in, base), b = EmberRunRules.signatureGrants("q01", in, base);
         assertEquals(a.toString(), b.toString());
         assertEquals("sig_mark", a.get(0).key);
-        assertTrue(EmberRunRules.signatureGrants("q05", in, base).isEmpty());
+        assertTrue(EmberRunRules.signatureGrants("q07", in, base).isEmpty());
         int stamps = 0;
         for (int i = 0; i < 4000; i++) {
             in.runId = "r" + i;

@@ -24,6 +24,8 @@ public final class EmberSetEngine {
         public boolean targetEnemy = true;
         public boolean targetInvulnerable;
         public String targetId;
+        /** D174 L12 低血回涌: the attacker's current HP / max HP when the hit lands (1 = unknown / full) */
+        public double hpFrac = 1.0;
 
         public static Hit melee(long root, double charge, double dmg, String target) {
             Hit h = new Hit();
@@ -60,15 +62,24 @@ public final class EmberSetEngine {
         public final double burnSpread;
         /** D141 燎原: at most one spread per this many seconds */
         public final double spreadIcd;
+        /** D174 L12 低血回涌: below this HP fraction the 炽愈 interval is SUSTAIN_EVERY + sustainLowEvery instead (0 = off) */
+        public final double sustainLow;
+        public final int sustainLowEvery;
         public Tune(int burstEveryDelta, int sustainEveryDelta, double burnMult, double burstMult, double sustainMult, int burnTicksExtra, double burnSpread, double spreadIcd) {
+            this(burstEveryDelta, sustainEveryDelta, burnMult, burstMult, sustainMult, burnTicksExtra, burnSpread, spreadIcd, 0.0, 0);
+        }
+        public Tune(int burstEveryDelta, int sustainEveryDelta, double burnMult, double burstMult, double sustainMult, int burnTicksExtra, double burnSpread, double spreadIcd,
+                    double sustainLow, int sustainLowEvery) {
             this.burstEveryDelta = burstEveryDelta; this.sustainEveryDelta = sustainEveryDelta; this.burnMult = burnMult;
             this.burstMult = burstMult; this.sustainMult = sustainMult; this.burnTicksExtra = burnTicksExtra; this.burnSpread = burnSpread; this.spreadIcd = spreadIcd;
+            this.sustainLow = sustainLow; this.sustainLowEvery = sustainLowEvery;
         }
         @Override public boolean equals(Object o) {
             if (!(o instanceof Tune)) return false;
             Tune t = (Tune) o;
             return t.burstEveryDelta == burstEveryDelta && t.sustainEveryDelta == sustainEveryDelta && t.burnTicksExtra == burnTicksExtra
-                    && t.burnMult == burnMult && t.burstMult == burstMult && t.sustainMult == sustainMult && t.burnSpread == burnSpread && t.spreadIcd == spreadIcd;
+                    && t.burnMult == burnMult && t.burstMult == burstMult && t.sustainMult == sustainMult && t.burnSpread == burnSpread && t.spreadIcd == spreadIcd
+                    && t.sustainLow == sustainLow && t.sustainLowEvery == sustainLowEvery;
         }
         @Override public int hashCode() { return burstEveryDelta * 31 + sustainEveryDelta * 7 + burnTicksExtra + (int) (burnSpread * 1000); }
     }
@@ -154,6 +165,13 @@ public final class EmberSetEngine {
         return 0;
     }
 
+    /** the interval at this HP fraction (D174 L12: below tune.sustainLow the 炽愈 interval moves by sustainLowEvery instead; p1sim sustain_every) */
+    public int everyAt(double hpFrac) {
+        if ("sustain".equals(family) && tune.sustainLow > 0 && hpFrac < tune.sustainLow)
+            return Math.max(2, EmberSetRules.SUSTAIN_EVERY + tune.sustainLowEvery);
+        return every();
+    }
+
     /**
      * Counts a hit if it is a valid direct main-target melee (§4.4) and returns the trigger it causes.
      * @param b     current base hit B (for 烬爆 / 焚烬 snapshot)
@@ -197,7 +215,8 @@ public final class EmberSetEngine {
             return new Outcome(true, counter >= ev ? "held (icd)" : "count", Trigger.NONE, 0, 0, counter);
         }
         // sustain
-        counter = Math.min(ev, counter + 1);
+        ev = everyAt(h.hpFrac);
+        counter = Math.min(Math.max(ev, every()), counter + 1);
         if (counter >= ev && now >= sustainCdUntil) {
             counter = 0;
             sustainCdUntil = now + EmberSetRules.SUSTAIN_ICD_MS;

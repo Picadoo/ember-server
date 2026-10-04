@@ -295,6 +295,10 @@ public final class EmberCombatListener implements Listener {
                     pipe += String.format(Locale.ROOT, " · D141 天赋 %s ×%.3f", cls, gm);
                 }
             }
+            if (gs != null) { // D174 L11 霜封长刀: the 烬斩 shield takes enemy damage first
+                double left = gs.absorbShield(p, base);
+                if (left < base) { pipe += String.format(Locale.ROOT, " · 霜封护盾吸收 %.2f", base - left); base = left; }
+            }
         } else {
             pipe = "B12 环境管道（原值，不乘 M）";
         }

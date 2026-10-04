@@ -54,7 +54,7 @@ public final class EmberSignature {
         return out;
     }
 
-    /** stage 1 = Q01–Q03 (live Java keys only). Codes are stored in saves: never reuse or renumber. */
+    /** stage 1 = Q01–Q03 (live Java keys only), stage 2a = Q04–Q06 (new hooks). Codes are stored in saves: never reuse or renumber. */
     public static final List<Def> DEFS = Collections.unmodifiableList(java.util.Arrays.asList(
             new Def(1, "L01", "q01", "blade", "scorch", "burn", "t3a", "残门焚斧", "残门蛮兵",
                     "燃烧中的敌人倒下时，把最多 2 秒燃烧传给 4 格内最近的敌人（10 秒一次）", "焚烬燃烧每跳伤害 ×0.95",
@@ -73,7 +73,26 @@ public final class EmberSignature {
                     m("sustain_every", -1)),
             new Def(6, "L06", "q03", "charm", "any", "supply", "", "守誓残灯", "残誓守卫",
                     "回复药回复量 ×1.05", "受到首领伤害 ×1.04",
-                    m("potion", 1.05, "taken_boss", 1.04))));
+                    m("potion", 1.05, "taken_boss", 1.04)),
+            // ---- stage 2a · act 2 (T2 maps): 烬斩 variants (SkillService) / 低血回涌 (EmberSetEngine.everyAt) — p1sim mainline.py SIGS
+            new Def(7, "L07", "q04", "blade", "any", "shape", "", "潮闸长杆", "潮闸重卫",
+                    "烬斩改成直线穿刺：正前方 5 格一条线（宽 1 格）", "最多打 3 个（原来前方扇形 3.5 格、最多 5 个）",
+                    m("skill_var", 1, "skill_cap", 3, "skill_line", 5)),
+            new Def(8, "L08", "q04", "charm", "scorch", "burn", "", "潮蚀护符", "潮闸重卫",
+                    "烬斩点燃命中的第 1 个敌人（焚烬燃烧，和套装点燃同一规则）", "焚烬燃烧每跳伤害 ×0.92",
+                    m("skill_var", 1, "skill_ignite", 1, "skill_ignite_n", 1, "skill_burn", 1.0, "burn_mult", 0.92)),
+            new Def(9, "L09", "q05", "blade", "any", "shape", "", "断塔双斧", "断塔斧卫",
+                    "烬斩改成环斩：身边一圈（不用对准，背后的也打）", "半径 3 格（原来 3.5）、最多打 3 个（原来 5 个）",
+                    m("skill_var", 1, "skill_cap", 3, "skill_ring", 3.0)),
+            new Def(10, "L10", "q05", "charm", "burst", "dodgeburst", "t3b", "回廊护符", "断塔斧卫",
+                    "躲开或被首领预警招打中，烬爆计数都 +1", "烬爆伤害 ×0.9",
+                    m("hit_burst", 1, "dodge_burst", 1, "burst_mult", 0.9)),
+            new Def(11, "L11", "q06", "blade", "any", "guard", "", "霜封长刀", "霜封统领",
+                    "烬斩每命中 1 个敌人得 0.5% 最大生命的护盾（最多 1%，5 秒，不叠加）", "烬斩每下伤害 ×0.9，受到首领伤害 ×1.05",
+                    m("skill_var", 1, "skill_shield", 0.005, "skill_shield_max", 0.01, "skill_shield_secs", 5, "skill_mult", 0.9, "taken_boss", 1.05)),
+            new Def(12, "L12", "q06", "charm", "sustain", "heal", "", "统领护符", "霜封统领",
+                    "生命低于 40% 时，炽愈每 3 下就触发（平时 5 下）", "炽愈每次回复量 ×0.99",
+                    m("sustain_low", 0.4, "sustain_low_every", -2, "sustain_mult", 0.99))));
 
     public static Def byCode(int code) { for (Def d : DEFS) if (d.code == code) return d; return null; }
 

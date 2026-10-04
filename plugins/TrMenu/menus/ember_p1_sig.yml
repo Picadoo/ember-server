@@ -1,7 +1,7 @@
 # D174 第 1.5 阶段 · 签名传奇页（docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §2.4）
 # 图鉴（每个首领两件：获得过 / 还没获得 / 未解锁 + 效果 + 代价）· 正在用的两件上的签名（点击开关）· 点一条签名 → 烬炉烙印页。
 # 文字 / 状态全部来自 PAPI %corerpg_p1_sig_*%（EmberGrowthService.sigPapi），菜单不自己算；按钮只调 /corerpg p1 sig 的子命令。
-# 签名按 EmberSignature.DEFS 的顺序编号：n_1 = L01 …；第 2a 阶段（Q04–Q06）在第 4、5 排加图标。
+# 签名按 EmberSignature.DEFS 的顺序编号：n_1 = L01 … n_12 = L12（第 2a 阶段 Q04–Q06 在第 4、5 排）。
 # 入口：装备页「签名传奇」、首通解锁消息里的 [打开签名页]、/corerpg p1 sig。返回键回到打开它的那一页。
 
 Title: '§6签名传奇'
@@ -20,8 +20,8 @@ Layout:
   - '####I####'
   - '#M W C R#'
   - '#u12 v34#'
-  - '#w56    #'
-  - '#########'
+  - '#w56 x78#'
+  - '#y9J zKL#'
   - '###b#X###'
 
 Events:
@@ -169,6 +169,77 @@ Icons:
       lore: ['%corerpg_p1_sig_k_6%', '%corerpg_p1_sig_g_6%', '%corerpg_p1_sig_b_6%', '', '%corerpg_p1_sig_s_6%', '%corerpg_p1_sig_a_6%']
     actions:
       all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L06']
+
+  x:
+    update: 20
+    display:
+      material: book
+      name: '%corerpg_p1_sig_mn_q04%'
+      lore:
+        - '%corerpg_p1_sig_m_q04%'
+  y:
+    update: 20
+    display:
+      material: book
+      name: '%corerpg_p1_sig_mn_q05%'
+      lore:
+        - '%corerpg_p1_sig_m_q05%'
+  z:
+    update: 20
+    display:
+      material: book
+      name: '%corerpg_p1_sig_mn_q06%'
+      lore:
+        - '%corerpg_p1_sig_m_q06%'
+
+  '7':
+    update: 20
+    display:
+      material: blaze rod
+      name: '%corerpg_p1_sig_n_7%'
+      lore: ['%corerpg_p1_sig_k_7%', '%corerpg_p1_sig_g_7%', '%corerpg_p1_sig_b_7%', '', '%corerpg_p1_sig_s_7%', '%corerpg_p1_sig_a_7%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L07']
+  '8':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_8%'
+      lore: ['%corerpg_p1_sig_k_8%', '%corerpg_p1_sig_g_8%', '%corerpg_p1_sig_b_8%', '', '%corerpg_p1_sig_s_8%', '%corerpg_p1_sig_a_8%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L08']
+  '9':
+    update: 20
+    display:
+      material: iron axe
+      name: '%corerpg_p1_sig_n_9%'
+      lore: ['%corerpg_p1_sig_k_9%', '%corerpg_p1_sig_g_9%', '%corerpg_p1_sig_b_9%', '', '%corerpg_p1_sig_s_9%', '%corerpg_p1_sig_a_9%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L09']
+  'J':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_10%'
+      lore: ['%corerpg_p1_sig_k_10%', '%corerpg_p1_sig_g_10%', '%corerpg_p1_sig_b_10%', '', '%corerpg_p1_sig_s_10%', '%corerpg_p1_sig_a_10%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L10']
+  'K':
+    update: 20
+    display:
+      material: diamond sword
+      name: '%corerpg_p1_sig_n_11%'
+      lore: ['%corerpg_p1_sig_k_11%', '%corerpg_p1_sig_g_11%', '%corerpg_p1_sig_b_11%', '', '%corerpg_p1_sig_s_11%', '%corerpg_p1_sig_a_11%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L11']
+  'L':
+    update: 20
+    display:
+      material: totem
+      name: '%corerpg_p1_sig_n_12%'
+      lore: ['%corerpg_p1_sig_k_12%', '%corerpg_p1_sig_g_12%', '%corerpg_p1_sig_b_12%', '', '%corerpg_p1_sig_s_12%', '%corerpg_p1_sig_a_12%']
+    actions:
+      all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L12']
 
   b:
     update: 20
