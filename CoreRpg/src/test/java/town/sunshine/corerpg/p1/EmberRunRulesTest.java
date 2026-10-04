@@ -281,6 +281,17 @@ public class EmberRunRulesTest {
         return EmberRunMaps.parse((Map<?, ?>) root);
     }
 
+    @Test public void textHints_D166() {
+        EmberRunMaps m = bundled();
+        EmberRunMaps.MapDef q01 = m.byKey("q01");
+        assertEquals("r1", q01.rooms.get(0).id);
+        assertTrue(q01.rooms.get(0).hint.contains("进门后退到门口打，别站进怪堆"));
+        assertEquals("only the first room of Q01", "", q01.rooms.get(1).hint);
+        assertTrue(m.byKey("r01").partyHint.contains("建议队伍里有炽愈"));
+        assertEquals("", m.byKey("r02").partyHint);
+        assertTrue(EmberRunRules.PRE_BOSS_HINT.contains("首领前留 2 瓶药"));
+    }
+
     @Test public void bundledMapsValidateAgainstTheCaps() {
         EmberRunMaps m = bundled();
         assertEquals(30, m.cost);

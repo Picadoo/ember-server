@@ -205,6 +205,7 @@ maps:
     rooms:
       r1:
         label: 破旗前庭
+        hint: "进门后退到门口打，别站进怪堆（怪会追过来，一次只面对一两只）"  # D166: real-gear playtest — standing in the pack dies in R2/R3
         trigger: [-12, 63, 18, 12, 68, 38]
         points: [[-6, 64, 29], [0, 64, 29], [6, 64, 29], [-6, 64, 34], [0, 64, 34], [6, 64, 34], [-9, 64, 28], [9, 64, 28]]
         door: [16, 64, 29, 16, 69, 35]
@@ -733,6 +734,8 @@ raids:
     requires: q07
     unlocks: ""
     purpose: "团本（3～5 人）：同一伤害管道与三套装；掉落同挑战版（T3、挑战成色）、每次多 1 件 T3 与 1 枚 T3 印记；与 r02 合计每周 3 次"
+    # D166 (build-diversity §6 raidcomp: 3 人全焚烬 R01 −27 点 [−29, −25]，要续航) — text only, no raid number change
+    party_hint: "建议队伍里有炽愈：首领半血时加怪、单下伤害高，要有人回血"
     b_ref: 90
     # P2-5: 3–5 players, its own stamina and weekly cap (book §18.4); no first-clear package, no exclusive drops
     party_min: 3

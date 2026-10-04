@@ -149,6 +149,9 @@ public final class EmberRunRules {
         return weights.length - 1;
     }
 
+    /** D166: told once when the last room is cleared, before the boss hall */
+    public static final String PRE_BOSS_HINT = "§e首领前留 2 瓶药 §7· 首领战更长、伤害更高；清房时生命够就别急着喝";
+
     /** D89: player-facing room line, e.g. "近战 ×3 · 远程 ×1 §8（远程会站远放箭，先清）" from layout rows {role, point}. */
     public static String compositionLabel(List<String[]> layout) {
         String[] order = {"melee", "ranged", "caster", "heavy", "elite"};

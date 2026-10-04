@@ -46,7 +46,7 @@ final class EmberRunDirector {
         Vector castDir;
         Location castOrigin;
         String affix;               // D138 repeat-run variety: blazing / split / shield (null = plain)
-        boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 拆分)
+        boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
         long affixNext, affixAt;
         Location affixOrigin;
         Tracked(LivingEntity le, String role, String roomId, EmberRunMaps.Pt home, EmberRunMaps.Box leash,
@@ -401,6 +401,7 @@ final class EmberRunDirector {
             bossAt = System.currentTimeMillis() + 1500L;
             svc.tellRun(s, bossDef().waitInArea ? "§c" + bossDef().name + " §7在前方首领厅等候，走进大厅即现身"
                     : "§c" + bossDef().name + " §7即将在大厅中央现身（1.5 秒）");
+            svc.tellRun(s, EmberRunRules.PRE_BOSS_HINT); // D166 (real-gear kite playtest: Q04 boss lost after the potions ran out)
         }
     }
 

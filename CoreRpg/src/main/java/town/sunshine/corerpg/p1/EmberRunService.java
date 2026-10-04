@@ -712,6 +712,7 @@ public final class EmberRunService implements Listener {
         if (vm != null && vm.raid) {
             tellRun(s, "§6团本开始 §7· " + s.partySize + " 人 · 掉落 T3 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
                     + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 倒下后观战队友，下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次 · 走进前方房间开战 · 首领死后统一结算");
+            if (!vm.partyHint.isEmpty()) tellRun(s, "§e" + vm.partyHint); // D166
             return;
         }
         EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
@@ -850,6 +851,7 @@ public final class EmberRunService implements Listener {
         store.save(s);
         // D89: say what is in the room (the A/B variant letter meant nothing to players; it stays in the log)
         tellRun(s, "§e" + r.label + " §7· 敌人 " + spawned + (spawned < planned ? "/" + planned : "") + "：" + comp);
+        if (!r.hint.isEmpty()) tellRun(s, "§e提示：§f" + r.hint); // D166
         log().info("[P1 run] " + s.runId + " " + r.id + " variant " + (b ? "B" : "A") + " " + comp.replaceAll("§.", ""));
         reviveFallen(s, "新房间开打"); // D106
     }
@@ -2242,6 +2244,16 @@ public final class EmberRunService implements Listener {
         return "mob";
     }
 
+    /** D164 破甲: elite type (blazing / split / shield) of a run mob; "split" for split adds; null otherwise */
+    public String mobAffix(Entity e) {
+        if (e == null) return null;
+        EmberRunDirector d = byEntity.get(e.getUniqueId());
+        if (d == null) return null;
+        EmberRunDirector.Tracked t = d.mobs.get(e.getUniqueId());
+        if (t == null || t.boss()) return null;
+        return t.splitAdd ? "split" : t.affix;
+    }
+
     /** D141 growth: class of the hit a player is taking from {@code src} right now (null = not a run hit). */
     public String hitClass(Entity src) {
         if (skillDepth > 0 && skillKind != null) {
@@ -2802,7 +2814,7 @@ public final class EmberRunService implements Listener {
         List<UUID> team = EmberRunBridges.teamMembers(p);
         int need = Math.max(0, maps.partyMin(m) - team.size());
         String line = P + "§6" + p.getName() + " §f招 §e" + m.name + " §f队员（现在 " + team.size() + " 人"
-                + (need > 0 ? "，还差 " + need + " 人开本" : "") + "；人越多越稳，最多 5 人） ";
+                + (need > 0 ? "，还差 " + need + " 人开本" : "") + "；人越多越稳，最多 5 人）" + (m.partyHint.isEmpty() ? "" : " §e" + m.partyHint) + " ";
         recruits.put(p.getUniqueId(), new Recruit(p.getUniqueId(), p.getName(), m.key, m.name, now)); // E-review #5: the board
         int sent = 0;
         for (Player o : Bukkit.getOnlinePlayers()) {

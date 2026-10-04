@@ -61,6 +61,8 @@ public final class EmberRunMaps {
 
     public static final class Room {
         public final String id, label;
+        /** D166: one-line tip shown when this room starts ("" = none), e.g. Q01 r1 「进门后退到门口打，别站进怪堆」 */
+        public final String hint;
         public final Box trigger;
         public final Box door; // null for the last room (boss shares the hall)
         public final List<Pt> points;
@@ -68,6 +70,7 @@ public final class EmberRunMaps {
         Room(String id, Map<?, ?> m) {
             this.id = id;
             this.label = str(m.get("label"), id);
+            this.hint = str(m.get("hint"), "");
             this.trigger = box(m.get("trigger"));
             this.door = m.get("door") == null ? null : box(m.get("door"));
             this.points = pts(m.get("points"));
@@ -201,6 +204,8 @@ public final class EmberRunMaps {
 
     public static final class MapDef {
         public final String key, name, dungeon, template, dropLabel, contentVersion, mapVersion, requires, unlocks, purpose;
+        /** D166: party advice shown at the raid start and in the recruit call ("" = none), e.g. R01 「建议队伍里有炽愈」 */
+        public final String partyHint;
         public final int tier;
         public final double bRef;
         public final Pt spawn;
@@ -268,6 +273,7 @@ public final class EmberRunMaps {
             hpPerMember = num(m.get("hp_per_member"), -1);
             dmgPerMember = num(m.get("dmg_per_member"), 0);
             purpose = str(m.get("purpose"), "");
+            partyHint = str(m.get("party_hint"), "");
             bRef = num(m.get("b_ref"), 12);
             spawn = pt(m.get("spawn"));
             Map<?, ?> fc = m.get("first_clear") instanceof Map ? (Map<?, ?>) m.get("first_clear") : Collections.emptyMap();
