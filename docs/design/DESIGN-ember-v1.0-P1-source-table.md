@@ -1465,3 +1465,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 数 | 两件极品深渊 56～74% 对 38～40%；先精工：精工成色做满周 4 / 3 / 4 对 4 / 3 / 1，卡精工周数中位 3 / 3 / 4 对 3 / 3 / 1，B 134.6 相同；降层费后余币 1380→1387 / 1545 / 1900 / 1490 |
 | 裁决 | 不卡（自愿花余币），`abyss.tiers[].fee` / `fee_mark_coin` 不动，不加结算币；STATUS `docs/status/STATUS-ember-abyss-coin-2026-10-04.md`，P2 草案 §5zd |
 
+### 13.75 P2-8 第 5 条周规则「卫士潮」（CoreRpg 1.63.1，D154，balance_version 27）
+
+| 项 | 内容 |
+|---|---|
+| 来源 | handoff 候选：精选周规则可再加几条；计时/黑暗在 P2 草案 §5e 明确否决；卫士潮复用已有 `Modifier.remap` |
+| 规则 | `guards` / 卫士潮：`remap: {ranged: heavy}`；挑战专用（不设 `normal: true`，与 `casters` / `disarm` 相同）；不改奖励、不加倍率（§23.3） |
+| 参数源 | `ember-v1-runs.yml` `rotation.modifiers` 第五条（两份）；balance_version 27；轮换 5×7=35 周组合 |
+| 模型 | `p2econ.py --mods` → `tools/p1sim/out-p2econ-mods-d154.md`：guards 通关率差 +0 点（躲避 0.5 已顶 100%）；第 8 周印记/币相对轮换噪声内；未触发 −12 点否决线 |
+| 测试 | 单测 `EmberRunRulesTest`：5 modifiers、guards ranged→heavy on q01/q3、`!normal`、35 pairs；线上冒烟 FreshQ45：`modifier forced guards` + 聊天「卫士潮」+ `r1/r2/r3 rule guards` |
+| 上线 | 10-04 08:21 CST，日志 `Enabling CoreRpg v1.63.1` + `[storage] MySQL connected`；STATUS `docs/status/STATUS-ember-modifier-guards-d154.md` |
+
