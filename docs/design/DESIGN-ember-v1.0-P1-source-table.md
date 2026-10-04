@@ -1486,3 +1486,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 模型 | `p2econ.py --mods` → `tools/p1sim/out-p2econ-mods-d155.md`：wall 通关率差 +0 点（躲避 0.5 已顶 100%）；第 8 周印记/币相对轮换噪声内；未触发 −12 点否决线 |
 | 测试 | 单测 `EmberRunRulesTest`：6 modifiers、wall melee→heavy on q01、ranged unchanged、`!normal`、42 pairs；线上冒烟 FreshQ46：`modifier forced wall` + 聊天「铁卫」+ `rN rule wall` |
 | 上线 | 10-04 08:52 CST，日志 `Enabling CoreRpg v1.63.2` + `[storage] MySQL connected`；STATUS `docs/status/STATUS-ember-modifier-wall-d155.md` |
+
+### D156（2026-10-04）国庆活动结束后路径冒烟
+
+临时改 `ember-v1-festival.yml` end→`fest reload`→FreshQ47：D145 主菜单「国庆纪念」+ 装备页常驻格、D146 常驻价 15000 币购符 / 结束后足迹 / 剩币换徽 / 徽价门闩均 PASS；立刻还原 10-08。不改数值。STATUS `docs/status/STATUS-ember-fest-after-end-smoke.md`。
