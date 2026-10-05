@@ -81,7 +81,7 @@ class Party:
                     m.hp = min(st['H'], m.hp + dh * st['H'])
                 if p1sim.gm(st, 'dodge_burst', 0.0) > 0:  # D141 借势: counter + n
                     m.hits += int(p1sim.gm(st, 'dodge_burst', 0.0))
-            return
+            return False
         if st.get('mods'):
             raw *= p1sim.gm(st, 'taken_' + kind) * p1sim.gm(st, 'taken_all')
             if kind == 'tele' and p1sim.gm(st, 'hit_burst', 0.0) > 0:  # D141 反震
@@ -93,11 +93,13 @@ class Party:
             m.potions -= 1; m.used += 1
             m.pcd = self.t + cfg['potion_cd']
             m.hp = min(m.st['H'], m.hp + cfg['potion_pct'] * p1sim.gm(st, 'potion') * m.st['H'])
+        return True
 
     def skill_hit(self, sk, raw):
+        """Returns how many members the telegraph landed on (None for a share circle / nobody alive)."""
         liv = self.living()
         if not liv:
-            return
+            return None
         tgt = self.rng.choice(liv)
         if str(sk.get('share', '')).lower() == 'true':
             # R03 (D137) 烬核: the target is in the circle; every other living member gets there in the 3 s warning with
@@ -109,11 +111,20 @@ class Party:
             for m, wi in zip(inside, w):
                 self.hurt(m, raw * wi / sum(w) * p1sim.gm(m.st, 'share_taken'), True, dodgeable=False, kind='share')
             self.shares = getattr(self, 'shares', []) + [len(inside)]
-            return
+            return None
         sp = SPLASH.get(sk.get('type'), 0.35)
+        landed = 0
         for m in liv:
             if m is tgt or self.rng.random() < sp:
-                self.hurt(m, raw, True, kind='tele')
+                landed += 1 if self.hurt(m, raw, True, kind='tele') else 0
+        return landed
+
+    def stun_boss(self, boss, skills, s, secs, t):
+        """D188 / D192 / D195: boss stunned `secs` (no melee, no skills; every skill timer slides, like p1sim solo)."""
+        boss['next'] = max(boss['next'], t) + secs
+        for _s in skills:
+            _s['next'] += secs
+        self.stuns = getattr(self, 'stuns', 0.0) + secs
 
     def segment(self, mobs, boss=None, mapdef=None):
         cfg, rng = self.cfg, self.rng
@@ -217,7 +228,18 @@ class Party:
                     sk = s['s']
                     s['next'] = t + sk['every']
                     if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
-                        self.skill_hit(sk, sk['dmg'])
+                        landed = self.skill_hit(sk, sk['dmg'])
+                        # D195 团本破绽: the target is always inside at warn start (Java arms the whiff only then), so a
+                        # whiff_stun telegraph that lands on nobody staggers the boss
+                        if RAID_STUN and sk.get('whiff_stun') and landed == 0 and boss['hp'] > 0:
+                            self.stun_boss(boss, skills, s, float(sk['whiff_stun']), t)
+                        # D188 / D195 撞墙破绽: mean stun per charge = wall_stun × mean living dodge × p1sim.WALL_STUN_K
+                        if RAID_STUN and sk.get('wall_stun') and boss['hp'] > 0:
+                            _liv = self.living()
+                            _wp = (statistics.mean(x.kn.dodge for x in _liv) * p1sim.WALL_STUN_K if p1sim.WALL_STUN_P is None
+                                   else p1sim.WALL_STUN_P) if _liv else 0.0
+                            if _wp > 0:
+                                self.stun_boss(boss, skills, s, float(sk['wall_stun']) * _wp, t)
                         f = sk.get('follow')
                         if f and (f.get('below') is None or boss['hp'] <= f['below'] * boss['max']):
                             pending.append((t + f.get('delay', 1.0), f['dmg'], f))
@@ -232,6 +254,7 @@ class Party:
 
 
 REVIVE = True  # D106 (--no-revive for the old rule)
+RAID_STUN = True  # D195: whiff_stun / wall_stun on raid boss skills (False = strip the stagger, baseline)
 LAST_REVIVE_HP, LAST_REVIVE_DELAY = 0.25, 10.0  # D118 (ember-v1-runs.yml raid_revive; --last-revive-hp 0 = off)
 
 

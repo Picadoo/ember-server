@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(55, m.balanceVersion);                // D194 gated-skill re-anchor (D193 = 54, D192 = 53, D191 = 52, D189 = 51, D188 = 50, …)
-        assertEquals("g04-1/b55", m.ruleVersion);
+        assertEquals(56, m.balanceVersion);                // D195 团本破绽 (D194 = 55, D193 = 54, D192 = 53, D191 = 52, D189 = 51, D188 = 50, …)
+        assertEquals("g04-1/b56", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1761,7 +1761,8 @@ public class EmberRunRulesTest {
             assertEquals("charge", found.type);
             assertEquals(w[0] + " wall stun", 1.5, found.wallStun, 0);
         }
-        for (EmberRunMaps.Skill sk : m.byKey("r01").boss.skills) assertEquals("raid untouched", 0.0, sk.wallStun, 0);
+        for (String k : new String[]{"r02", "r03"})   // D195: r01 冲撞 has it now (raidBossesInheritCounterplay_D195)
+            for (EmberRunMaps.Skill sk : m.byKey(k).boss.skills) assertEquals(k + " no wall stun", 0.0, sk.wallStun, 0);
     }
 
     @Test public void earlyBossesStaggerOnAWhiffedHeavyMove_D192() {
@@ -1775,8 +1776,37 @@ public class EmberRunRulesTest {
             }
             assertEquals(w[0] + " exactly one whiff move", 1, n);
         }
-        for (String k : new String[]{"q06", "q07", "r01", "r02", "r03"})
+        for (String k : new String[]{"q06", "q07", "r01"})   // D195: r02 / r03 have one each (raidBossesInheritCounterplay_D195)
             for (EmberRunMaps.Skill sk : m.byKey(k).boss.skills) assertEquals(k + " untouched", 0.0, sk.whiffStun, 0);
+    }
+
+    @Test public void raidBossesInheritCounterplay_D195() {
+        EmberRunMaps m = bundled();
+        // each raid boss gets the stagger window its source boss already teaches; nothing else on the raid moves changes
+        String[][] want = {{"r01", "冲撞", "wall", "1.5", "94"}, {"r02", "砸地", "whiff", "0.5", "88"}, {"r03", "斧刃横扫", "whiff", "0.5", "84"}};
+        for (String[] w : want) {
+            int n = 0;
+            for (EmberRunMaps.Skill sk : m.byKey(w[0]).boss.skills) {
+                if (sk.follow != null) { assertEquals("follow untouched", 0.0, sk.follow.whiffStun, 0); assertEquals(0.0, sk.follow.wallStun, 0); }
+                assertEquals(w[0] + " no break channel", 0.0, sk.breakHp, 0);
+                if (sk.wallStun <= 0 && sk.whiffStun <= 0) continue;
+                n++;
+                assertEquals(w[0], w[1], sk.name);
+                assertEquals(w[0] + " " + w[2], Double.parseDouble(w[3]), "wall".equals(w[2]) ? sk.wallStun : sk.whiffStun, 0);
+                assertEquals(w[0] + " " + w[2] + " only", 0.0, "wall".equals(w[2]) ? sk.whiffStun : sk.wallStun, 0);
+                assertEquals(w[0] + " dmg offset (raidwin gate)", Double.parseDouble(w[4]), sk.dmg, 0);
+                assertFalse(w[0] + " heavy move", sk.light);
+                assertFalse(sk.share);
+            }
+            assertEquals(w[0] + " exactly one stagger window", 1, n);
+        }
+        assertEquals("r02 砸地 still half-HP only", 0.5, skillNamed(m, "r02", "砸地").below, 0);
+        assertEquals("charge", skillNamed(m, "r01", "冲撞").type);
+    }
+
+    private static EmberRunMaps.Skill skillNamed(EmberRunMaps m, String key, String name) {
+        for (EmberRunMaps.Skill sk : m.byKey(key).boss.skills) if (name.equals(sk.name)) return sk;
+        throw new AssertionError(key + " " + name);
     }
 
     @Test public void lateBossesHaveOneHalfHpBreakChannel_D193() {
