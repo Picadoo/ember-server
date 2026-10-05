@@ -59,3 +59,5 @@ python3 growthrun.py p2econ-real '{"talents":[…],"affixes":{…},"policy":"gea
 python3 growthrun.py weeks out1.md out2.md …                 # W30（候选策略中达到 30% 双极品拥有率的最早插值周）+ P50 / P90 / 第 12 周未拥有
 B03_DIR=… python3 b03report.py                               # → out-build-diversity-b03-b04.md
 ```
+
+- `skillkit.py`（D210）：技能组 S0——`p1sim.py` 的可选 `kit_*` 键（守招 / 副招 / 身法变体 / 共享充能，无键时逐位一致），42 格 × 3 套对照基线 + 择优行 → `out-skillkit-d210-r1..r5.md`；`SK_ROUND=2..5 NPROC=7 python3 skillkit.py run 1500 /tmp/sk/rN.pkl`，`SK_BEST=1 python3 skillkit.py report …`。

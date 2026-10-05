@@ -266,7 +266,7 @@ def skill_variant(owner, alive, t, next_swing):
       skill_shield    shield = this × H per target hit (cap skill_shield_max × H), lasts skill_shield_secs, not stacking
     Row-1 / row-3 growth multipliers apply to the HIT only (dmult), never to the shield size."""
     st, cfg, kn = owner.st, owner.cfg, owner.kn
-    n = max(1, min(int(gm(st, 'skill_cap', 5)), kn.skill_hits + int(gm(st, 'skill_plus', 0)), 5))
+    n = max(1, min(int(gm(st, 'skill_cap', 5)), getattr(owner, '_sh', kn.skill_hits) + int(gm(st, 'skill_plus', 0)), 5))
     caught = alive[:n]
     ch = gm(st, 'skill_charge', 0.0)
     for m in caught:
@@ -327,6 +327,134 @@ def spread_burn(owner, mobs, t):
                     rec['n_spread'] += 1
 
 
+# ---------------------------------------------------------------- PROPOSAL D210 skill kit (S0 offline, not in Java)
+# DESIGN-ember-skill-kit-2026-10-06.md. Opt-in growth keys; absent keys = today's model, bit-identical. Every kit roll
+# uses its own time-seeded Random, so the dodge / crit / spawn streams are never shifted.
+#   守招 (Q, one of):  kit_guard_cd / kit_guard_secs / kit_guard_red   守墓壁垒: pressed on a boss telegraph when ready;
+#                      −red on every hit for secs, no swing meanwhile (the cost)
+#                      kit_int_cd / kit_int_p                          破势: pressed on a boss telegraph when ready; with
+#                      prob p the move is cancelled (no hit, no whiff/dodge procs); 0.5 s no swing; never on 破招 moves
+#   副招 (sneak+F, one of; cast on a swing slot, instant like 烬斩 (kit_sec_cost: optional swing delay); no crit,
+#                      no set counter):
+#                      kit_gather_cd / kit_gather_plus / kit_gather_secs   聚火: trash only (no boss in the fight),
+#                      >= 3 alive; for secs 烬斩 / 烬爆 catch +plus (cap 5) and one more melee body engages (the cost)
+#                      kit_dash_cd / kit_dash_mult / kit_dash_n / kit_dash_boss   烬突: >= 2 non-boss alive; mult × B to
+#                      the first n alive (boss × kit_dash_boss)
+#                      kit_mark_cd / kit_mark_delay / kit_mark_boss    灰印: front target's next attack pushed back by
+#                      delay s (boss: × kit_mark_boss) — the Slowness I model; no damage
+#   身法 (sneak+Q):    kit_step_cd / kit_step_n / kit_step_cost        火痕步 (焚烬 only): on cd ignite the first n alive
+#                      with the 焚烬 burn ×1.0 (C4); the step costs cost × one swing period
+#   shared cooldowns (S0 recommendation, WoW 1.12 shocks-style): kit_sec_shared = the 副招 spends the 烬斩 charge (8 s,
+#                      no own cd; 灰印 then only on boss fights); kit_q_shared = 守招 uses 身法's cooldown → while it is
+#                      down boss telegraphs keep only kit_q_keep × tele_bonus (default 0: no step to dodge with),
+#                      the triggering one included · kit_guard_charge: 守墓壁垒 spends the 烬斩 charge instead
+#                      (usable only while 烬斩 is ready; 烬斩 then waits a full cd) · kit_mark_mult / kit_gather_mult: the 副招's own hit (× B) when shared
+KIT_KEYS = frozenset(('kit_guard_cd', 'kit_int_cd', 'kit_gather_cd', 'kit_dash_cd', 'kit_mark_cd', 'kit_step_cd'))
+
+
+def _krng(owner, salt):
+    return random.Random(int(owner.t * 1000) * 7919 + salt)
+
+
+def kit_tele(owner):
+    """a boss telegraph is about to land: maybe press 守招. Returns None when 破势 cancelled it, else True."""
+    st, t, rec = owner.st, owner.t, owner.rec
+    gc = gm(st, 'kit_guard_cd', 0.0)
+    chg = gm(st, 'kit_guard_charge', 0.0) > 0  # 守招 spends the 烬斩 charge (no own cd): ready only when 烬斩 is
+    if gc > 0 and t >= getattr(owner, 'guard_ready', -1.0) and (not chg or t >= getattr(owner, '_nsk', 1e18)):
+        if chg:
+            owner._charge_block = t + owner.cfg['skill_cd']
+        owner.guard_ready = t + gc
+        owner.guard_until = t + gm(st, 'kit_guard_secs', 2.0)
+        owner.busy_until = max(getattr(owner, 'busy_until', -1.0), owner.guard_until)
+        if rec is not None:
+            rec['n_guard'] += 1
+    ic = gm(st, 'kit_int_cd', 0.0)
+    ichg = gm(st, 'kit_int_charge', 0.0) > 0
+    if ic > 0 and not getattr(owner, '_noint', False) and t >= getattr(owner, 'int_ready', -1.0) and (not ichg or t >= getattr(owner, '_nsk', 1e18)):
+        if ichg:
+            owner._charge_block = t + owner.cfg['skill_cd']
+        owner.int_ready = t + ic
+        owner.busy_until = max(getattr(owner, 'busy_until', -1.0), t + 0.5)
+        if _krng(owner, 31).random() < gm(st, 'kit_int_p', 0.6):
+            if rec is not None:
+                rec['n_int'] += 1
+            return None
+        if rec is not None:
+            rec['n_int_fail'] += 1
+    return True
+
+
+def kit_swing(owner, alive, t, boss, period):
+    """a swing slot: guard stance blocks it; a ready 副招 is cast. Returns the next swing time, or None = swing."""
+    st, cfg, rec = owner.st, owner.cfg, owner.rec
+    bu = getattr(owner, 'busy_until', -1.0)
+    if t < bu:
+        return bu
+    if gm(st, 'kit_sec_shared', 0.0) > 0 or t < getattr(owner, 'sec_ready', -1.0):
+        return None
+    if kit_sec(owner, alive, t, boss):
+        owner.sec_ready = t + max(gm(st, 'kit_gather_cd', 0.0), gm(st, 'kit_dash_cd', 0.0), gm(st, 'kit_mark_cd', 0.0))
+        return _sec_cost(owner, t, period)
+    return None
+
+
+def kit_sec(owner, alive, t, boss):
+    """cast the 副招 if its use condition holds (聚火: trash, >= 3 alive · 烬突: >= 2 non-boss · 灰印: always). True = cast.
+    kit_sec_shared: it spends the 烬斩 charge instead of its own cooldown (the caller then skips 烬斩)."""
+    st, rec = owner.st, owner.rec
+    nb = [m for m in alive if m['role'] != 'boss']
+    if gm(st, 'kit_gather_cd', 0.0) > 0:
+        if boss is None and len(alive) >= 3 and t >= getattr(owner, 'gather_until', -1.0):
+            owner.gather_until = t + gm(st, 'kit_gather_secs', 4.0)
+            for m in alive[:min(5, owner.kn.skill_hits)]:
+                if gm(st, 'kit_gather_mult', 0.0) > 0:  # the pull pulse itself (× B, no crit)
+                    owner.hit(m, gm(st, 'kit_gather_mult', 0.0) * st['B'] * dmult(st, m, t, owner), 'dash')
+            if rec is not None:
+                rec['n_gather'] += 1
+            return True
+    elif gm(st, 'kit_dash_cd', 0.0) > 0:
+        if len(nb) >= 2:
+            for m in alive[:int(gm(st, 'kit_dash_n', 3))]:
+                k = gm(st, 'kit_dash_boss', 0.5) if m['role'] == 'boss' else 1.0
+                owner.hit(m, gm(st, 'kit_dash_mult', 0.5) * k * st['B'] * dmult(st, m, t, owner), 'dash')
+            if rec is not None:
+                rec['n_dash'] += 1
+            return True
+    elif gm(st, 'kit_mark_cd', 0.0) > 0:
+        if boss is not None or gm(st, 'kit_sec_shared', 0.0) <= 0:
+            tgt = alive[0]
+            if gm(st, 'kit_mark_mult', 0.0) > 0:  # the brand's hit (single target, × B, no crit)
+                owner.hit(tgt, gm(st, 'kit_mark_mult', 0.0) * st['B'] * dmult(st, tgt, t, owner), 'dash')
+            if tgt['atk'] > 0:
+                tgt['next'] += gm(st, 'kit_mark_delay', 0.5) * (gm(st, 'kit_mark_boss', 0.5) if tgt['role'] == 'boss' else 1.0)
+            if rec is not None:
+                rec['n_mark'] += 1
+            return True
+    return False
+
+
+def _sec_cost(owner, t, period):
+    """a 副招 cast is instant like 烬斩 (Java: no swing reset) → None = the swing still happens; kit_sec_cost > 0 delays
+    it by that share of a swing period (sweep knob)"""
+    c = gm(owner.st, 'kit_sec_cost', 0.0)
+    return None if c <= 0 else t + c * period
+
+
+def kit_step(owner, alive, t, period):
+    """火痕步 on cooldown (焚烬 only): ignite the first n alive; returns the swing delay it costs."""
+    st = owner.st
+    sc = gm(st, 'kit_step_cd', 0.0)
+    if sc <= 0 or st['set'] != 'scorch' or t < getattr(owner, 'step_ready', -1.0):
+        return 0.0
+    owner.step_ready = t + sc
+    for m in alive[:int(gm(st, 'kit_step_n', 2))]:
+        ignite(owner, m, t, 1.0)
+    if owner.rec is not None:
+        owner.rec['n_step'] += 1
+    return gm(st, 'kit_step_cost', 0.5) * period
+
+
 class Fight:
     def __init__(self, cfg, st, kn, rng, potions, crit_rng=None, spawn_rng=None):
         # M02: rng = incoming hits (dodge rolls); crits and mid-fight spawns (split / boss adds) have own streams, so a
@@ -375,6 +503,12 @@ class Fight:
         kn, st = self.kn, self.st
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
         rec = self.rec
+        if kind == 'tele' and st.get('mods') and KIT_KEYS & st['mods'].keys():  # PROPOSAL D210 skill kit (not in Java)
+            if kit_tele(self) is None:
+                return None  # 破势: the move was interrupted (no hit, no dodge / whiff effects)
+            if gm(st, 'kit_q_shared', 0.0) > 0 and self.t < max(getattr(self, 'guard_ready', -1.0), getattr(self, 'int_ready', -1.0)):
+                p = min(0.95, kn.dodge + kn.tele_bonus * gm(st, 'kit_q_keep', 0.0))  # 守招 used 身法's cooldown: the
+                # telegraph bonus drops to kit_q_keep of itself until the step is back (this hit included)
         if kind == 'tele' and st.get('mods') and 'win_dmg' in st['mods']:  # PROPOSAL 破绽窗口: opens on every boss telegraph
             self.win_until = self.t + gm(st, 'win_secs', 0.0)
             if rec is not None:
@@ -404,6 +538,10 @@ class Fight:
                 if rec is not None:
                     rec['n_hit_burst'] += 1
         dmg = raw * self.st['M']
+        if self.t < getattr(self, 'guard_until', -1.0):  # PROPOSAL D210 守墓壁垒: −kit_guard_red on every hit in the window
+            if rec is not None:
+                rec['guard_abs'] += dmg * gm(st, 'kit_guard_red', 0.4)
+            dmg *= 1.0 - gm(st, 'kit_guard_red', 0.4)
         if getattr(self, 'shield', 0.0) > 0:  # PROPOSAL 护心斩 (set-specific 烬斩, not in Java): absorbs before HP
             if self.t < self.shield_until:
                 a = min(self.shield, dmg)
@@ -435,6 +573,7 @@ class Fight:
         t = self.t
         next_swing = t + 1.0
         next_skill = t + 1.0
+        self._nsk = next_skill
         skills = []
         adds_done = False
         if boss is not None:
@@ -471,7 +610,7 @@ class Fight:
             # next event
             cand = [next_swing]
             melee_alive = [m for m in alive if m['role'] in MELEE_ROLES or m['role'] == 'boss']
-            engaged = set(id(m) for m in melee_alive[:kn.engage])
+            engaged = set(id(m) for m in melee_alive[:kn.engage + (1 if t < getattr(self, 'gather_until', -1.0) else 0)])
             for m in alive:
                 if m['atk'] > 0:
                     cand.append(m['next'])
@@ -493,21 +632,35 @@ class Fight:
                 fest_proc(self, alive, t, st['B'], kn.skill_hits)
             if t == next_swing:
                 next_swing = t + period
+                if st.get('mods') and KIT_KEYS & st['mods'].keys():  # PROPOSAL D210 skill kit (not in Java)
+                    _ks = kit_swing(self, alive, t, boss, period)
+                    if _ks is not None:
+                        next_swing = max(next_swing, _ks)
+                        continue  # the swing slot was spent (guard stance / secondary cast)
+                    self._sh = min(5, kn.skill_hits + int(gm(st, 'kit_gather_plus', 0))) if (boss is None and t < getattr(self, 'gather_until', -1.0)) else kn.skill_hits
+                    next_swing += kit_step(self, alive, t, period)
                 tgt = alive[0]
                 crit = self.crit_rng.random() < cfg['crit_rate']
                 self.hit(tgt, st['B'] * (cfg['crit_mult'] if crit else 1.0) * dmult(st, tgt, t, self), 'swing')
                 self.hits += 1
                 hold = getattr(kn, 'hold_skill', False) and boss is not None and t >= getattr(self, 'win_until', -1.0)
+                if boss is not None and st.get('mods') and (gm(st, 'kit_guard_charge', 0.0) > 0 or gm(st, 'kit_int_charge', 0.0) > 0):
+                    hold = True  # PROPOSAL D210: a 守招-on-charge player keeps the charge for the next boss telegraph
+                if t < getattr(self, '_charge_block', -1.0):  # PROPOSAL D210: the charge went to 守招
+                    next_skill = max(next_skill, self._charge_block)
                 if t >= next_skill and not hold:  # hold_skill (behaviour knob): keep 烬斩 for the 破绽窗口
-                    if st.get('mods') and 'skill_var' in st['mods']:
+                    if st.get('mods') and gm(st, 'kit_sec_shared', 0.0) > 0 and kit_sec(self, alive, t, boss):
+                        pass  # PROPOSAL D210: the 烬斩 charge was spent on the 副招
+                    elif st.get('mods') and 'skill_var' in st['mods']:
                         next_swing = skill_variant(self, alive, t, next_swing)
                     else:
-                        for m in alive[:kn.skill_hits]:
+                        for m in alive[:getattr(self, '_sh', kn.skill_hits)]:
                             self.hit(m, cfg['skill_mult'] * st['B'] * dmult(st, m, t, self), 'skill')
                     next_skill = t + cfg['skill_cd']
+                self._nsk = next_skill
                 bev = cfg['burst_every'] + int(gm(st, 'burst_every', 0))
                 if st['set'] == 'burst' and self.hits >= bev and t >= self.burst_cd:
-                    caught = alive[:min(kn.skill_hits, 5)]
+                    caught = alive[:min(getattr(self, '_sh', kn.skill_hits), 5)]
                     bm = burst_n_mult(st, len(caught))
                     for m in caught:
                         self.hit(m, cfg['burst'][st['awk']] * gm(st, 'burst_mult') * bm * gm(st, 'set_dmg') * st['B'] * dmult(st, m, t, self), 'burst')
@@ -582,7 +735,9 @@ class Fight:
                                 if self.rec is not None:
                                     self.rec['n_break'] = self.rec.get('n_break', 0) + 1
                             else:
+                                self._noint = True
                                 self.hurt(sk['dmg'], True, 'tele')
+                                self._noint = False
                                 BREAK_STATS[1] += 1
                                 if self.rec is not None:
                                     self.rec['n_break_fail'] = self.rec.get('n_break_fail', 0) + 1
