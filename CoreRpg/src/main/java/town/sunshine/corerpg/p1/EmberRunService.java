@@ -68,7 +68,7 @@ public final class EmberRunService implements Listener {
     /** P2-1: weekly challenge rotation bonus clears, period = rotation week key */
     static final String C_ROTATION = "p2_rotation";
     static final String C_UNLOCK = "p1_unlock_";
-    static final String C_FIRST = EmberForgeService.FLAG_PREFIX; // p1_first_clear_<map>@<content version>
+    static final String C_FIRST = EmberForgeService.FLAG_PREFIX; // D205: fact p1_first_clear_<map>@all (see EmberFirstClear); package paid = p1_fcpay_<map>@<ver>
 
     private static volatile EmberRunService instance;
 
@@ -184,20 +184,25 @@ public final class EmberRunService implements Listener {
         return m.requires == null || m.requires.isEmpty() || d.periodCount(C_UNLOCK + m.key, "all") > 0;
     }
 
-    /** B2.143: first clear of a map key at its configured content version (false when the map is not defined yet). */
+    /** D205: first-clear fact of a map key (any content version, or the admin stub) — unlocks / gates / hints. */
     public boolean firstClearedKey(PlayerData d, String key) {
-        EmberRunMaps.MapDef m = key == null ? null : maps.byKey(key);
-        return m != null && firstCleared(d, m);
+        return EmberFirstClear.fact(d, key);
     }
 
-    /** first clear of {@code key} by a real run, or the admin stub flag (@all) used before the map existed. */
+    /** D205: first clear of {@code key} ever (fact key @all, legacy @ver, or the admin stub). Null key = no requirement. */
     public boolean progressFlag(PlayerData d, String key) {
         if (key == null) return true;
-        return firstClearedKey(d, key) || d.periodCount(C_FIRST + key, "all") > 0;
+        return EmberFirstClear.fact(d, key);
     }
 
+    /** D205: first-clear fact of a map (display / progression). */
+    public boolean firstClearDone(PlayerData d, EmberRunMaps.MapDef m) {
+        return EmberFirstClear.fact(d, m.key);
+    }
+
+    /** D205: the first-clear package of this map's current content version was paid ("first clears stay canonical"). */
     public boolean firstCleared(PlayerData d, EmberRunMaps.MapDef m) {
-        return d.periodCount(C_FIRST + m.key, m.contentVersion) > 0;
+        return EmberFirstClear.paid(d, m.key, m.contentVersion);
     }
 
     public String target(PlayerData d) {
@@ -510,7 +515,7 @@ public final class EmberRunService implements Listener {
             List<String> warn = new ArrayList<String>();
             boolean noCharm = false;
             if (ls != null && q1 != null && !m.key.equals(q1.key)) for (Player p : party) {
-                if (firstCleared(data(p.getUniqueId()), m)) continue;
+                if (firstClearDone(data(p.getUniqueId()), m)) continue;
                 EmberLoadout l = ls.refresh(p);
                 // D98: Q01 first clear now gives the T1 charm; the T1 blade comes from Q01 drops (Q01 leans to blades)
                 if (l.blade == null || l.blade.tier < 1) warn.add(p.getName() + " 主手还没有 T1 刃：回 Q01 多打几局（Q01 偏向掉刃），拿到会自动放到快捷栏第 1 格");
@@ -1518,7 +1523,7 @@ public final class EmberRunService implements Listener {
         if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0)
             pd.addPeriodCount(EmberGrowthService.C_CHAL + m.key, "all", 1); // D141: challenge first clear per map (talent point / honors)
         if (in.firstClear != null) {
-            pd.addPeriodCount(C_FIRST + m.key, m.contentVersion, 1); // §9.4: once per character + content version
+            EmberFirstClear.record(pd, m.key, m.contentVersion); // §9.4 + D205: package once per content version; fact @all never deleted
             if (cosmetics != null) cosmetics.onFirstClear(Bukkit.getPlayer(u), m.key); // D103 milestone titles
         }
         boolean newBest = s.abyss > 0 && s.abyss > abyssBest(pd);
@@ -3394,7 +3399,7 @@ public final class EmberRunService implements Listener {
             if (t == null || m == null) { s.sendMessage(P + "玩家不在线或地图未知"); return true; }
             PlayerData d = data(t.getUniqueId());
             boolean clear = args.length >= 6 && "clear".equalsIgnoreCase(args[5]);
-            d.addPeriodCount(C_FIRST + m.key, m.contentVersion, (clear ? 0 : 1) - d.periodCount(C_FIRST + m.key, m.contentVersion));
+            EmberFirstClear.setBoth(d, m.key, m.contentVersion, !clear); // D205: fact @all + package @ver
             plugin.getDataStore().flushMutation(t.getUniqueId());
             s.sendMessage(P + t.getName() + " " + m.key + "@" + m.contentVersion + " first_clear=" + !clear);
             return true;
@@ -3610,7 +3615,7 @@ public final class EmberRunService implements Listener {
     }
 
     public String stateLabel(PlayerData d, EmberRunMaps.MapDef m) {
-        if (firstCleared(d, m)) return "已首通";
+        if (firstClearDone(d, m)) return "已首通";
         if (unlocked(d, m)) return "已解锁";
         EmberRunMaps.MapDef req = maps.byKey(m.requires);
         return "未解锁（需 " + (req == null ? m.requires : req.key.toUpperCase(Locale.ROOT)) + " 首通）";
@@ -3759,7 +3764,7 @@ public final class EmberRunService implements Listener {
                 switch (f) {
                     case "state": return stateLabel(d, m);
                     case "open": return unlocked(d, m) ? "yes" : "no";
-                    case "cleared": return firstCleared(d, m) ? "yes" : "no";
+                    case "cleared": return firstClearDone(d, m) ? "yes" : "no";
                     case "name": return m.name;
                     case "cost": return maps.cost(m) + " 体力";
                     case "tier": return m.dropLabel;

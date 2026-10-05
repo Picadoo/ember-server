@@ -243,10 +243,8 @@ public final class EmberForgeService implements Listener {
         if (flag == null) return false;
         PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
         if (pd == null) return false;
-        // B2.143: the run service writes p1_first_clear_<map>@<content version>; the admin stub writes @all
-        EmberRunService runs = plugin.getEmberRuns();
-        if (runs != null && runs.firstClearedKey(pd, flag)) return true;
-        return pd.periodCount(FLAG_PREFIX + flag, "all") > 0; // admin stub (/corerpg p1 flag) until Q04/Q07 exist
+        // D205: fact key p1_first_clear_<map>@all (real clears + admin stub) or a legacy @<content version> key
+        return EmberFirstClear.fact(pd, flag);
     }
 
     // ================================================================== operations
@@ -637,11 +635,9 @@ public final class EmberForgeService implements Listener {
         if (t == null || !("q04".equals(f) || "q07".equals(f))) { s.sendMessage(P + "玩家需在线，标记只能是 q04/q07"); return true; }
         PlayerData pd = plugin.getDataStore().get(t.getUniqueId());
         if (pd == null) { s.sendMessage(P + "玩家数据未加载"); return true; }
-        int cur = pd.periodCount(FLAG_PREFIX + f, "all");
         boolean clear = args.length >= 5 && "clear".equalsIgnoreCase(args[4]);
-        if (clear && cur > 0) pd.addPeriodCount(FLAG_PREFIX + f, "all", -cur);
-        if (!clear && cur == 0) pd.addPeriodCount(FLAG_PREFIX + f, "all", 1);
-        s.sendMessage(P + t.getName() + " 首通 " + f.toUpperCase(Locale.ROOT) + " = " + (pd.periodCount(FLAG_PREFIX + f, "all") > 0));
+        EmberFirstClear.setFact(pd, f, !clear); // D205: fact only; the paid package record (p1_fcpay_) is kept
+        s.sendMessage(P + t.getName() + " 首通 " + f.toUpperCase(Locale.ROOT) + " = " + EmberFirstClear.fact(pd, f));
         return true;
     }
 }
