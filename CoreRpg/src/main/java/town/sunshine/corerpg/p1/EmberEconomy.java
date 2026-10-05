@@ -125,7 +125,7 @@ public final class EmberEconomy {
         src("S07", "首通徽记", "EmberSignature.FC_MARKS", Period.ONCE).acc(INS).keys("p1_sigfc_", "p1_sigmark_").model(NONE).g("insignia", 3).done();
         src("S08", "重打普通主线（签名图）", "EmberSignature.CLEAR_MARKS / STAMP_RATE", Period.RUN).acc(INS, GEAR)
             .keys("p1_sigmark_").model(NONE).g("insignia", 1).g("stamp_rate", 0.12).done();
-        src("S09", "自选誓约", "EmberRunService C_PLEDGE", Period.RUN).acc(INS).keys("p1_pledge_", "p1_sigmark_").model(PART).done();
+        src("S09", "自选誓约", "EmberPledgeService C_PLEDGE", Period.RUN).acc(INS).keys("p1_pledge_", "p1_sigmark_").model(PART).done();
         src("S10", "精选周挑战加印", "ember-v1-runs.yml rotation", Period.WEEK).acc(MARK).keys("p2_rotation", "p1_mark_t").model(FULL)
             .g("mark", 1).g("weekly_cap", 3).done();
         src("S11", "精选周普通重打加印", "ember-v1-runs.yml rotation.normal_bonus_marks", Period.WEEK).acc(MARK)

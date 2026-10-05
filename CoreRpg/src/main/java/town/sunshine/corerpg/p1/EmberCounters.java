@@ -14,7 +14,7 @@ import java.util.Map;
  * here, on dead entries, and on prefix families that swallow one another (except the listed exemptions).
  * Config-defined weekly claim keys ({@code ember-v1-runs.yml rush.<key>.claim}) are checked against it on load
  * ({@link #rushClaimError}).
- * <p>Numbers and keys are unchanged (balance_version 57); renames proposed by the REG doc (codex, insignia) are not done.
+ * <p>Numbers and keys are unchanged (balance_version 58); renames proposed by the REG doc (codex, insignia) are not done.
  */
 public final class EmberCounters {
     /** How the {@code @period} part is written. */
@@ -121,7 +121,7 @@ public final class EmberCounters {
         x("p4_rush_claim", "EmberRushService", W, CL, RL, "main rush weekly reward claim");
         add("p4_outpost_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "outpost weekly claim (config)");
         add("p4_echo_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "echo weekly claim, shared by echo_q01..q07 (config)");
-        px("p1_pledge_", "EmberRunService", A, SE, NV, "Q06 chosen pledge rule");
+        px("p1_pledge_", "EmberPledgeService", A, SE, NV, "Q06 chosen pledge rule");
         // 2.2 signatures, insignia, tuning (EmberSignature, EmberGrowthService)
         px("p1_sig_", "EmberSignature", A, IT, NV, "LEGACY item signature code by uid — migrated to EmberItemData.sigCode / cr_p1_item.sig_code (S1-4 done, D208); read only for v1 items, cleared when folded");
         px("p1_sigmark_", "EmberSignature", A, AS, ZR, "boss insignia per map (6 sources)");

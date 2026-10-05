@@ -1574,6 +1574,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D229 | CoreRpg 1.65.55 / bv58 | ARCH S2-9：深渊层结算 SourceId 与 S01 分开 — `sourceForGrant(base_*, <map>a<n>-…)` → **S13**（数量仍读 S01 BASE_*，不变）；`p1/` vault 写入扫描（`autoDeposit`/`creditBound`/`credit`/`EmberVault.get().give` 须经 grantMat 或 `econ-ok:`）。S01 登记名去掉「深渊」。 |
 | D230 | CoreRpg 1.65.56 / bv58 | ARCH S3-1：从 `EmberRunService` 抽出 `EmberRushService`（连战 / 残响 / 前哨 settle + menu + stage 钩子）；`applyGrants` Bukkit-free 单测钉死发放；公开 API 薄委托。**行为 / 数量不变**。 |
 | D231 | CoreRpg 1.65.57 / bv58 | ARCH S3-2：从 `EmberRunService` 抽出 `EmberAbyssService`（层费 C08 spend/refund、`p2_abyss_best` 层纪录、`/corerpg p1 abyss` 菜单）；`feeMarks`/`applyFloorGrant`/`applyFeeSpend`/`applyFeeRefund` Bukkit-free 单测；公开 API 薄委托。选 Abyss 而非 Pledge：层费/层纪录缝更清晰。**行为 / 数量不变**。 |
+| D232 | CoreRpg 1.65.58 / bv58 | ARCH S3-3：从 `EmberRunService` 抽出 `EmberPledgeService`（`p1_pledge_*` 计数器、toggle/off/list 菜单、sessionKey encode、settle count、PAPI）；`isOn`/`applyToggle`/`applyOff`/`countInModifier`/`encodeKey`/`settleGrant` Bukkit-free 单测；公开 API 薄委托。Pledge 缝可拆：enter 仅在周规则空时回落。**行为 / 数量不变**。 |
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）

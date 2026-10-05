@@ -59,6 +59,7 @@ import java.util.logging.Logger;
  * wait in the ledger for /corerpg p1 claim), first clears, forge marks, starter kit and target family.
  * <p>D230 / ARCH S3-1: rush / echo / outpost settle + menu live in {@link EmberRushService}; this class keeps thin delegates.
  * <p>D231 / ARCH S3-2: abyss fee / floor-best / menu live in {@link EmberAbyssService}; this class keeps thin delegates.
+ * <p>D232 / ARCH S3-3: 自选誓约 live in {@link EmberPledgeService}; this class keeps thin delegates.
  */
 public final class EmberRunService implements Listener {
 
@@ -79,6 +80,7 @@ public final class EmberRunService implements Listener {
     private final EmberRunStore store;
     private final EmberRushService rush;
     private final EmberAbyssService abyss;
+    private final EmberPledgeService pledge;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -98,6 +100,7 @@ public final class EmberRunService implements Listener {
         this.store = new EmberRunStore(plugin, mirror);
         this.rush = new EmberRushService(this);
         this.abyss = new EmberAbyssService(this);
+        this.pledge = new EmberPledgeService(this);
         instance = this;
         load();
     }
@@ -114,6 +117,8 @@ public final class EmberRunService implements Listener {
     EmberRushService rush() { return rush; }
 
     EmberAbyssService abyss() { return abyss; }
+
+    EmberPledgeService pledge() { return pledge; }
 
     /** package seed for {@link EmberAbyssService#tryEnter} (same SecureRandom as other entries). */
     long nextSeed() { return rnd.nextLong(); }
@@ -600,8 +605,8 @@ public final class EmberRunService implements Listener {
                 forcedModifier = null;
             }
             s.modifier = mod == null ? "" : mod.id;
-            if (mod == null) { // D174 stage 2b 自选誓约: the leader's pledge, only where the weekly rule is off and everyone has the first clear
-                String pk = pledgeKey(leader, m, party);
+            if (mod == null) { // D174 stage 2b 自选誓约: the leader's pledge, only where the weekly rule is off and everyone has the first clear (D232 → EmberPledgeService)
+                String pk = pledge.sessionKey(leader, m, party);
                 if (pk != null) {
                     s.modifier = pk;
                     log().info("[P1 run] " + s.runId + " pledge " + pk + " by " + leader.getName());
@@ -1372,9 +1377,11 @@ public final class EmberRunService implements Listener {
             for (EmberRunRules.Grant g : grants) if ("base_item".equals(g.key)) base = g;
             grants.addAll(EmberRunRules.signatureGrants(m.key, in, base));
         }
-        final int pledged = pledgeCount(s.modifier);
-        if (sigRun && in.firstClear == null && progressFlag(pd, m.key) && pledged > 0) // D174 stage 2b 自选誓约: +1 insignia per pledged rule
-            grants.add(new EmberRunRules.Grant("pledge_sigmark", EmberRunRules.Kind.SIGMARK, m.key, pledged, null));
+        final int pledged = pledge.count(s.modifier);
+        if (sigRun && in.firstClear == null && progressFlag(pd, m.key) && pledged > 0) { // D174 stage 2b 自选誓约: +1 insignia per pledged rule (D232 → EmberPledgeService)
+            EmberRunRules.Grant pg = EmberPledgeService.settleGrant(m.key, pledged);
+            if (pg != null) grants.add(pg);
+        }
         final boolean sigFc = sigRun && in.firstClear != null && pd.periodCount(EmberSignature.C_FC + m.key, "all") <= 0;
         if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.FC_MARKS, null));
         if (!s.challenge && s.abyss == 0 && !m.raid) // D138 repeat-run variety (rolled only when every member had the first clear)
@@ -2689,7 +2696,7 @@ public final class EmberRunService implements Listener {
                 if (!(s instanceof Player) || season == null) return true;
                 return season.goalsCommand((Player) s);
             case "rush": return cmdRush(s, args); // D144
-            case "pledge": return cmdPledge(s, args); // D174 stage 2b
+            case "pledge": return cmdPledge(s, args); // D174 stage 2b → EmberPledgeService (D232)
             case "modes": // D174 stage 2b: the 进阶模式 page (首领残响 / 连战·前哨 / 自选誓约)
                 if (s instanceof Player) openMenuFor((Player) s, "ember_p1_modes");
                 return true;
@@ -2700,8 +2707,8 @@ public final class EmberRunService implements Listener {
 
     // ------------------------------------------------------------------ D174 stage 2b 自选誓约 (Q06)
 
-    static final String C_PLEDGE = "p1_pledge_"; // + rule id, period all: 1 = the player pledges this rule on the repeat normal runs they lead
-    static final String PLEDGE_UNLOCK = "q06";
+    static final String C_PLEDGE = EmberPledgeService.C_PLEDGE; // D232
+    static final String PLEDGE_UNLOCK = EmberPledgeService.UNLOCK; // D232
 
     /** D174 stage 2b: the mode a map's first clear opens (null = none yet live) */
     static String modeUnlock(String mapKey) {
@@ -2711,110 +2718,34 @@ public final class EmberRunService implements Listener {
         return null;
     }
 
-    private void openMenuFor(Player p, String menu) {
+    void openMenuFor(Player p, String menu) { // package: EmberPledgeService menu
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (p.isOnline()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open " + menu + " " + p.getName());
         });
     }
 
+    // ------------------------------------------------------------------ D174 stage 2b 自选誓约 — logic in EmberPledgeService (D232 / ARCH S3-3)
+
     /** the pledged rules that count: still in the pool (normal: true), config order */
-    List<EmberRunMaps.Modifier> pledged(PlayerData d) {
-        List<EmberRunMaps.Modifier> out = new ArrayList<EmberRunMaps.Modifier>();
-        if (d == null || maps == null) return out;
-        for (EmberRunMaps.Modifier m : maps.pledgePool()) if (d.periodCount(C_PLEDGE + m.id, "all") > 0) out.add(m);
-        return out;
-    }
+    List<EmberRunMaps.Modifier> pledged(PlayerData d) { return pledge.pledged(d); }
 
     /** settlement: how many pledged rules the session carried (pool members only — a rule dropped from the pool pays nothing) */
-    int pledgeCount(String modifier) {
-        int n = 0;
-        if (maps == null) return 0;
-        for (String id : EmberRunMaps.pledgeIds(modifier)) for (EmberRunMaps.Modifier m : maps.pledgePool()) if (m.id.equals(id)) n++;
-        return n;
-    }
+    int pledgeCount(String modifier) { return pledge.count(modifier); }
 
     /**
      * the session modifier for the leader's pledge, or null: leader's own Q06 first clear, a repeat NORMAL run of a
      * signature map (Q01–Q07 — the pledge pays that map's insignia), every member already first-cleared it.
+     * Delegated to {@link EmberPledgeService} (D232).
      */
-    String pledgeKey(Player leader, EmberRunMaps.MapDef m, List<Player> party) {
-        PlayerData d = data(leader.getUniqueId());
-        if (d == null || !progressFlag(d, PLEDGE_UNLOCK) || !EmberSignature.hasMap(m.key)) return null;
-        List<EmberRunMaps.Modifier> l = pledged(d);
-        if (l.isEmpty()) return null;
-        for (Player p : party) if (!firstCleared(data(p.getUniqueId()), m)) {
-            leader.sendMessage(P + "§7自选誓约这局不生效：" + p.getName() + " 还没首通 " + m.key.toUpperCase(Locale.ROOT) + "（首通保持原样）");
-            return null;
-        }
-        StringBuilder b = new StringBuilder(EmberRunMaps.PLEDGE);
-        for (int i = 0; i < l.size(); i++) b.append(i == 0 ? "" : "+").append(l.get(i).id);
-        return b.toString();
-    }
+    String pledgeKey(Player leader, EmberRunMaps.MapDef m, List<Player> party) { return pledge.sessionKey(leader, m, party); }
 
-    /** /corerpg p1 pledge [toggle &lt;id&gt; | off | list] — bare = the menu */
-    private boolean cmdPledge(CommandSender s, String[] args) {
-        if (!(s instanceof Player)) return true;
-        Player p = (Player) s;
-        PlayerData d = data(p.getUniqueId());
-        String op = args.length > 2 ? args[2].toLowerCase(Locale.ROOT) : "";
-        if (op.isEmpty()) { openMenuFor(p, "ember_p1_pledge"); return true; }
-        if (d == null) return true;
-        if ("list".equals(op)) {
-            p.sendMessage(P + "§d自选誓约 §7— " + pledgeHead(d));
-            for (EmberRunMaps.Modifier m : maps.pledgePool())
-                p.sendMessage(P + (d.periodCount(C_PLEDGE + m.id, "all") > 0 ? "§a● " : "§8○ ") + "§f" + m.name + " §7" + m.text);
-            return true;
-        }
-        if (!progressFlag(d, PLEDGE_UNLOCK)) { p.sendMessage(P + ChatColor.RED + "自选誓约需本人首通 Q06 霜封哨所。"); return true; }
-        if ("off".equals(op)) {
-            for (EmberRunMaps.Modifier m : maps.pledgePool()) if (d.periodCount(C_PLEDGE + m.id, "all") > 0) d.addPeriodCount(C_PLEDGE + m.id, "all", -d.periodCount(C_PLEDGE + m.id, "all"));
-            flushData(p.getUniqueId());
-            p.sendMessage(P + "§7自选誓约已全部取消。");
-            return true;
-        }
-        if ("toggle".equals(op) && args.length > 3) {
-            String id = args[3].toLowerCase(Locale.ROOT);
-            EmberRunMaps.Modifier pick = null;
-            for (EmberRunMaps.Modifier m : maps.pledgePool()) if (m.id.equals(id)) pick = m;
-            if (pick == null) { p.sendMessage(P + ChatColor.RED + "没有这条可挂的规则：" + id); return true; }
-            int cur = d.periodCount(C_PLEDGE + id, "all");
-            d.addPeriodCount(C_PLEDGE + id, "all", cur > 0 ? -cur : 1);
-            flushData(p.getUniqueId());
-            p.sendMessage(P + (cur > 0 ? "§7已取消誓约「" + pick.name + "」" : "§d已挂上誓约「" + pick.name + "」§7" + pick.text) + " · " + pledgeHead(d));
-            return true;
-        }
-        p.sendMessage(P + "用法：/corerpg p1 pledge（打开誓约页）· toggle <规则> · off · list");
-        return true;
-    }
+    /** /corerpg p1 pledge [toggle &lt;id&gt; | off | list] — delegated to {@link EmberPledgeService} (D232). */
+    private boolean cmdPledge(CommandSender s, String[] args) { return pledge.cmd(s, args); }
 
-    /** %corerpg_p1_pledge_head|ok|s_&lt;id&gt;|n_&lt;id&gt;|t_&lt;id&gt;% for ember_p1_pledge / ember_p1_modes */
-    String pledgePapi(PlayerData d, String k) {
-        if (d == null) return "";
-        if ("head".equals(k)) return pledgeHead(d);
-        if ("ok".equals(k)) return progressFlag(d, PLEDGE_UNLOCK) ? "1" : "0";
-        if (k.length() > 2 && k.charAt(1) == '_') {
-            EmberRunMaps.Modifier m = null;
-            for (EmberRunMaps.Modifier x : maps.pledgePool()) if (x.id.equals(k.substring(2))) m = x;
-            if (m == null) return "";
-            boolean on = d.periodCount(C_PLEDGE + m.id, "all") > 0;
-            switch (k.charAt(0)) {
-                case 's': return on ? "§a● 已挂上（左键取消）" : "§8○ 未挂（左键挂上）";
-                case 'n': return m.name;
-                case 't': return m.text;
-                default: return "";
-            }
-        }
-        return "";
-    }
+    /** %corerpg_p1_pledge_head|ok|s_&lt;id&gt;|n_&lt;id&gt;|t_&lt;id&gt;% — delegated to {@link EmberPledgeService} (D232). */
+    String pledgePapi(PlayerData d, String k) { return pledge.papi(d, k); }
 
-    String pledgeHead(PlayerData d) {
-        List<EmberRunMaps.Modifier> l = pledged(d);
-        if (!progressFlag(d, PLEDGE_UNLOCK)) return "§8首通 Q06 后开放";
-        if (l.isEmpty()) return "§7现在没挂规则（重打按原样）";
-        StringBuilder b = new StringBuilder();
-        for (EmberRunMaps.Modifier m : l) b.append(b.length() == 0 ? "" : "+").append(m.name);
-        return "§d已挂：" + b + " §7· 你当队长重打已首通的 Q01–Q07 普通版时生效，每条 +1 本图徽记（本周精选图的周规则那天优先）";
-    }
+    String pledgeHead(PlayerData d) { return pledge.head(d); }
 
     /** D144 /corerpg p1 rush [go] — delegated to {@link EmberRushService} (D230). */
     private boolean cmdRush(CommandSender s, String[] args) { return rush.cmd(s, args); }
