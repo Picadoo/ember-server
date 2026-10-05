@@ -1,6 +1,6 @@
 # DESIGN · `ember-v1-economy.yml` 真源草案（REG §6.3 · D220 文档）
 
-> **状态：E1 SoT 已落地（D224 / 1.65.52）。** `ember-v1-economy.yml` 是 `amount()` 真源；启动加载；缺/坏/漂移 → SEVERE fail-closed；Java golden 作二次断言（单测 + `amount()` 双读）。D223 已镜像 + Delivery 标签。
+> **状态：E1 SoT 已落地（D224 / 1.65.52）；E3 p1sim 同读已落地（D225）。** `ember-v1-economy.yml` 是 `amount()` 真源；启动加载；缺/坏/漂移 → SEVERE fail-closed；Java golden 作二次断言（单测 + `amount()` 双读）。D223 已镜像 + Delivery 标签。p1sim `rules.py` 同读；yml 对齐金样时数值结果不变。
 > **上游：** `REG-ember-source-sink-cap-2026-10-05.md` §6.3；`EmberEconomy`（D213 登记 + D215/D216/D218 grant/spend 路由）。
 > **目的：** 把现在散落在 Java 常量（`BASE_*`、`CLEAR_MARKS`、`MARKS_PER_EXCHANGE`…）与多份 yml（`ember-v1.yml` / `ember-v1-runs.yml` / `ember-v1-growth.yml` / `ember-v1-festival.yml`）里的**数量与上限**收成一份可读真源，供运行时与 `tools/p1sim/rules.py` 同读。本阶段**不改任何数值**（bv57）。
 
@@ -10,7 +10,7 @@
 
 今天发币 / 扣币已经大多走了 `EmberEconomy.grant*` / `spend*`（S01–S03 / S23–S24 / C03–C14 等），但**数量**仍写在代码金样或业务 yml 里。下一刀是：新建 `plugins/CoreRpg/ember-v1-economy.yml`，表里每一行对应一个 `Sxx`/`Cxx` 的 `golden` 键；Java 启动时加载进 `EmberEconomy`；单测继续钉金样；p1sim 只读这一份。数值不动，只搬家。
 
-**已路由：** C18 / S22 / Delivery（D221–D223）。**仍占位：** C15/C16（化妆品 DEFER）。E3 = p1sim 同读 yml。
+**已路由：** C18 / S22 / Delivery（D221–D223）。**仍占位：** C15/C16（化妆品 DEFER）。**E3 已完成（D225）：** p1sim 同读 yml。
 
 ---
 
@@ -65,7 +65,7 @@ caps:
 | **E0（本稿）** | 定形态 + 把现有 `EmberEconomy.golden` 键列成清单 | 否 |
 | **E1** | 生成 `ember-v1-economy.yml`（从 golden 导出）、加载器、单测双钉（yml ↔ golden）；数量不变 | **D223 镜像；D224 `amount()` SoT** |
 | **E2** | C18 国庆商店 spend 走 `EmberEconomy`；S22 挂机庭 grant 单入口；Delivery debit 标签化 | **C18+S22 D221；Delivery D223** |
-| **E3** | p1sim 改读 yml；徽记账户进模型（REG §5 #1） | p1sim 车道 |
+| **E3** | p1sim 改读 yml；徽记账户进模型（REG §5 #1） | **D225**（读 yml）；徽记账户 **D222** |
 
 ---
 
@@ -78,7 +78,7 @@ caps:
 | **S22 挂机庭** | **D221 已统一入口** FULL | `p1afk-` → S22 → `grant*` |
 | EmberDelivery 扣币 | **D223 已标签化** | — |
 | C15 / C16 化妆品 | DEFER | 只占位 |
-| 徽记 p1sim | TODO（D216） | E3 / p1sim 车道 |
+| 徽记 p1sim | **D222 账户；D225 读 yml** | 高图周来源见 DESIGN-ember-insignia-weekly-highmap |
 
 ---
 
@@ -89,3 +89,10 @@ caps:
 - [x] 缺文件仍可启动（回退；`economyYmlDrift(null)` 空）
 - [x] 不改 bv、不改资产路径 → 不跑 persist-roundtrip
 - [x] yml 作 `amount()` 真源（D224 / 1.65.52；缺/坏 fail-closed；golden 二次断言）
+
+## 5. 验收（E3 · D225）
+
+- [x] `rules.py` PAIRS 含 economy；plugins ↔ src 不一致 → RuleError
+- [x] `p1config` / `insignia` / `afk` 经 `rules.amount`；yml↔Java 金样 dual-assert
+- [x] 默认 `p2econ` 数值结果与改前逐位一致（stamp 可变）
+- [x] README 记载用法；不 bump bv、不动 CoreRpg

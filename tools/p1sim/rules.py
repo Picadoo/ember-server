@@ -2,7 +2,7 @@
 festsim, growthcheck / growthraid / growthrun, builddiv ...). Nothing else in tools/p1sim may open a rule file.
 
 - Sources: the deployed copies under plugins/ (what the server runs) + the CoreRpg/src/main/resources copies of the
-  files that exist in both and that sims used to read from either place (runs / growth / festival). A pair must parse
+  files that exist in both and that sims used to read from either place (runs / growth / festival / economy). A pair must parse
   to identical data, else RuleError — every entry point fails instead of warning and printing a plausible table.
 - Validation: every growth mod key (talents / honors / affixes) must be one the model implements (or a known economic key
   listed as unmodelled); week-rule `converted` multipliers only hp / atk / interval / speed. Unsupported → RuleError.
@@ -26,6 +26,8 @@ PAIRS = {
     'runs': ('plugins/CoreRpg/ember-v1-runs.yml', 'CoreRpg/src/main/resources/ember-v1-runs.yml'),
     'growth': ('plugins/CoreRpg/ember-v1-growth.yml', 'CoreRpg/src/main/resources/ember-v1-growth.yml'),
     'festival': ('plugins/CoreRpg/ember-v1-festival.yml', 'CoreRpg/src/main/resources/ember-v1-festival.yml'),
+    # E3 / D225: amount() SoT (live D224); plugins/ vs src must match like the other paired yml
+    'economy': ('plugins/CoreRpg/ember-v1-economy.yml', 'CoreRpg/src/main/resources/ember-v1-economy.yml'),
 }
 # deployed copy only (the src copies of these differ by design: the server writes runtime values into plugins/)
 SINGLE = {
@@ -101,6 +103,17 @@ def validate(data):
                 errs.append('week rule %s: converted.%s is not implemented by the simulator' % (m.get('id'), k))
     if str(data['runs'].get('balance_version')) in ('', 'None'):
         errs.append('ember-v1-runs.yml: balance_version missing')
+    econ = data.get('economy') or {}
+    if not econ:
+        errs.append('ember-v1-economy.yml: missing or empty (E3 SoT required)')
+    else:
+        if str(econ.get('balance_version')) in ('', 'None'):
+            errs.append('ember-v1-economy.yml: balance_version missing')
+        elif str(econ.get('balance_version')) != str(data['runs'].get('balance_version')):
+            errs.append('ember-v1-economy.yml balance_version %s != runs %s' % (
+                econ.get('balance_version'), data['runs'].get('balance_version')))
+        if not isinstance(econ.get('sources'), dict) or not isinstance(econ.get('sinks'), dict):
+            errs.append('ember-v1-economy.yml: sources/sinks maps required')
     if errs:
         raise RuleError('rule snapshot rejected:\n  ' + '\n  '.join(errs))
     return sorted(unmod)
@@ -212,6 +225,30 @@ def growth():
 
 def festival():
     return copy.deepcopy(snapshot()['data']['festival'])
+
+
+def economy():
+    """E3 / D225: ember-v1-economy.yml (amount SoT; same tree live EmberEconomy.amount reads)."""
+    return copy.deepcopy(snapshot()['data']['economy'])
+
+
+def amount(row_id, key, default=None):
+    """Integer amount for sources.<id>.<key> or sinks.<id>.<key> (mirrors EmberEconomy.amount).
+    Missing key → default if given, else RuleError (fail-closed like live)."""
+    e = snapshot()['data']['economy']
+    block = None
+    if isinstance(e.get('sources'), dict) and row_id in e['sources']:
+        block = e['sources'][row_id]
+    elif isinstance(e.get('sinks'), dict) and row_id in e['sinks']:
+        block = e['sinks'][row_id]
+    if not isinstance(block, dict) or key not in block:
+        if default is not None:
+            return default
+        raise RuleError('economy amount missing: %s.%s' % (row_id, key))
+    v = block[key]
+    if isinstance(v, bool) or not isinstance(v, (int, float)):
+        raise RuleError('economy amount not numeric: %s.%s = %r' % (row_id, key, v))
+    return int(v)
 
 
 def data(name):

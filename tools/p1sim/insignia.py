@@ -1,4 +1,5 @@
 """D222 首领徽记 (boss insignia, counter p1_sigmark_<map>) account — REG §5 gaps 1–3 (model coverage only, no numbers changed).
+E3 / D225: S07/S08/S17/S18/C12/C13 amounts load from ember-v1-economy.yml via rules.amount (same SoT as live).
 
 OPT-IN: nothing here runs unless install() is called (p2econ --insignia, or `python3 insignia.py report`). Without it every
 p1sim / p2econ / signin output stays bit-identical. The account never touches the run / drop rng streams.
@@ -37,12 +38,28 @@ import argparse, os, random, statistics, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 MAPS = ('q01', 'q02', 'q03', 'q04', 'q05', 'q06', 'q07')      # EmberSignature.maps(): every main map has signatures
-FC_MARKS, CLEAR_MARKS, IMPRINT_MARKS, IMPRINT_COIN_PER_TIER = 3, 1, 5, 300   # EmberSignature
-IMPRINT_UNLOCK, ALT_UNLOCK, ALT_MARKS = 'q02', 'q07', 10
+IMPRINT_UNLOCK, ALT_UNLOCK = 'q02', 'q07'
 PLEDGE_UNLOCK = 'q06'                                            # EmberRunService.PLEDGE_UNLOCK
-ECHO = {'maps': ('q01', 'q02', 'q03', 'q04'), 'requires': 'q04', 'claims': 3, 'per': 2}   # ember-v1-runs.yml echo_q0*
-OUTPOST = {'chain': ('q01', 'q02', 'q03'), 'requires': 'q05', 'per': 2}                     # ember-v1-runs.yml outpost
+# echo/outpost map lists + caps still from runs yml shape; per-claim insignia from economy SoT (S17/S18)
+ECHO = {'maps': ('q01', 'q02', 'q03', 'q04'), 'requires': 'q04', 'claims': 3, 'per': None}
+OUTPOST = {'chain': ('q01', 'q02', 'q03'), 'requires': 'q05', 'per': None}
 BRAND_RESERVE = 1000
+# Amounts filled by _load_amounts() from ember-v1-economy.yml (fail-closed if missing)
+FC_MARKS = CLEAR_MARKS = IMPRINT_MARKS = IMPRINT_COIN_PER_TIER = ALT_MARKS = None
+
+
+def _load_amounts():
+    """E3: pull S07/S08/S17/S18/C12/C13 from economy yml; keep module-level names for call sites."""
+    import rules
+    global FC_MARKS, CLEAR_MARKS, IMPRINT_MARKS, IMPRINT_COIN_PER_TIER, ALT_MARKS
+    FC_MARKS = rules.amount('S07', 'insignia')
+    CLEAR_MARKS = rules.amount('S08', 'insignia')
+    IMPRINT_MARKS = rules.amount('C12', 'insignia')
+    IMPRINT_COIN_PER_TIER = rules.amount('C12', 'coin_per_tier')
+    ALT_MARKS = rules.amount('C13', 'insignia')
+    ECHO['per'] = rules.amount('S18', 'insignia')
+    ECHO['claims'] = rules.amount('S18', 'weekly')
+    OUTPOST['per'] = rules.amount('S17', 'insignia')
 # (map, slot, family) — EmberSignature.DEFS / mainline.py SIGS
 DEFS = {'L01': ('q01', 'blade', 'scorch'), 'L02': ('q01', 'charm', 'any'), 'L03': ('q02', 'charm', 'burst'),
         'L04': ('q02', 'blade', 'burst'), 'L05': ('q03', 'blade', 'sustain'), 'L06': ('q03', 'charm', 'any'),
@@ -195,6 +212,7 @@ def _p2mods():
 
 def install(pledge=0, signin=False, echo=True, outpost=True, pledge_q07=True):
     import p1sim
+    _load_amounts()
     CONF.update(pledge=pledge, echo=echo, outpost=outpost, pledge_q07=pledge_q07)
     if signin:
         import signin  # noqa: F401

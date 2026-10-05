@@ -12,7 +12,8 @@ Python 3 标准库，不联网、不连服务器。用仓库里的**真实配置
 | 等级攻击 / 生命、等级上下限、烬斩倍率 | `EmberTables.java` DEFAULTS |
 | 强化成功率 / 保底 / 碎片 / 核心 / 币，升阶配方 | `EmberUpgradeRules.java` |
 | 三套觉醒系数、触发间隔、内置冷却 | `EmberSetRules.java` |
-| 基础结算、额外事件权重与奖励、成色 / 精工权重、目标族权重、印记兑换 | `EmberRunRules.java` |
+| 基础结算、额外事件权重与奖励、成色 / 精工权重、目标族权重、印记兑换 | `EmberRunRules.java`（权重 / 公式仍读 Java；**数量**见下一行） |
+| **结算 / 徽记 / 兑换数量（E3 · D225）** | `plugins/CoreRpg/ember-v1-economy.yml`（与 `CoreRpg/src/main/resources/` 比对；与线上 `EmberEconomy.amount()` 同真源；S01–S03 / C07 / S07–S08 / S17–S18 / C12–C13 / S22） |
 | 每天体力 | `plugins/CoreRpg/cash.yml` `stamina.base_max` |
 | 余烬经验曲线 | `plugins/CoreRpg/progress.yml` `ember_xp.curve` |
 
@@ -63,3 +64,5 @@ B03_DIR=… python3 b03report.py                               # → out-build-d
 - `skillkit.py`（D210）：技能组 S0——`p1sim.py` 的可选 `kit_*` 键（守招 / 副招 / 身法变体 / 共享充能，无键时逐位一致），42 格 × 3 套对照基线 + 择优行 → `out-skillkit-d210-r1..r5.md`；`SK_ROUND=2..5 NPROC=7 python3 skillkit.py run 1500 /tmp/sk/rN.pkl`，`SK_BEST=1 python3 skillkit.py report …`。
 
 - `insignia.py`（D222）：首领徽记分图账户（S07/S08/S09/S17/S18/S23 → C12 烙印 / C13 调律），**opt-in**，不开时所有输出逐位不变；花费策略见模块说明（假设）。`python3 p2econ.py --insignia [--ins-pledge 2] …` 在周表后加徽记表；`python3 insignia.py report --signin [--pledge 2]` → `out-insignia-d222-w30*.md`（3 档躲避 × 方案，Q07 后 30 周：徽记结余 / 烙印次数 / 调律次数）。
+
+- **economy yml（E3 · D225）**：`rules.py` 把 `ember-v1-economy.yml` 纳入规范快照（plugins/ ↔ src 必须一致，且 `balance_version` = runs）。`p1config` 的 `base` / `treasure_coin` / `elite_*` / `marks_per`、`insignia.py` 的 S07/S08/S17/S18/C12/C13、`afk.py` 的 `daily_kills` 都经 `rules.amount`。与 Java 金样不一致 → `RuleError`（拒跑）。改数量只改 yml（并 bump bv + 对齐 Java golden）后重跑即可；yml 对齐现网金样时**数值结果**与改前一致（rules sha256 戳会变，因为快照多了 economy 文件）。

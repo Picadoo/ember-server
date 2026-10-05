@@ -16,4 +16,4 @@
 
 ## 未做 / 下一刀
 
-- C15 外观（暂停）；yml→p1sim 同读（E3）；D222 insignia p1sim（routine 车道）
+- C15 外观（暂停）；**E3 p1sim 同读 yml 已完成（D225）**；徽记高图周来源 R1-sim（设计笔记，未改 live）

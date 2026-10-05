@@ -229,3 +229,4 @@
 | 2026-10-06 | D222（p1sim，无发版；CoreRpg 不动 / bv57）：§5 缺口 1–3 进模型 — `tools/p1sim/insignia.py` 首领徽记分图账户（S07/S08/S09/S17/S18/S23 → C12/C13，花费策略为假设），`p2econ --insignia` / `insignia.py report`；默认输出逐位不变。§7 第 3 条打勾。 |
 | 2026-10-06 | D223（CoreRpg 1.65.51）：EmberDelivery 负额扣币标签化（`spendCoinDelivery`）；E1 `ember-v1-economy.yml` 镜像防漂移（yml 尚未真源）。 |
 | 2026-10-06 | D224（CoreRpg 1.65.52）：E1 `amount()` 以 `ember-v1-economy.yml` 为真源；缺/坏/漂移 SEVERE fail-closed；Java golden 二次断言；数量不变。 |
+| 2026-10-06 | D225（p1sim + 文档；CoreRpg 不动 / bv57）：E3 p1sim 同读 `ember-v1-economy.yml`；徽记高图周来源设计笔记（研究 only，含 REG S09/S23/C12 文案重写提案）。 |

@@ -1,4 +1,10 @@
-"""Load every number the simulator uses from the real repo files (no hard-coded balance)."""
+"""Load every number the simulator uses from the real repo files (no hard-coded balance).
+
+E3 / D225: settle amounts (S01–S03 base/treasure/elite) and C07 marks_per come from
+`ember-v1-economy.yml` via rules.py (same SoT as live EmberEconomy.amount after D224).
+When the yml mirrors the Java goldens, default sim output stays numerically identical;
+the rules sha256 stamp changes because economy is now in the snapshot.
+"""
 import copy
 import os
 import re
@@ -12,6 +18,8 @@ P1 = 'CoreRpg/src/main/java/town/sunshine/corerpg/p1/'
 FILES = {
     'runs': 'plugins/CoreRpg/ember-v1-runs.yml',
     'runs_src': 'CoreRpg/src/main/resources/ember-v1-runs.yml',
+    'economy': 'plugins/CoreRpg/ember-v1-economy.yml',
+    'economy_src': 'CoreRpg/src/main/resources/ember-v1-economy.yml',
     'p1': 'plugins/CoreRpg/ember-v1.yml',
     'mm': 'plugins/MythicMobs/Mobs/EmberP1Main.yml',
     'cash': 'plugins/CoreRpg/cash.yml',
@@ -116,10 +124,11 @@ def load(profile='current'):
         'scorch_every': _java_const(st, 'SCORCH_EVERY'), 'burst_every': _java_const(st, 'BURST_EVERY'),
         'sustain_every': _java_const(st, 'SUSTAIN_EVERY'),
         'burst_icd': _java_const(st, 'BURST_ICD_MS') / 1000.0, 'sustain_icd': _java_const(st, 'SUSTAIN_ICD_MS') / 1000.0,
-        # §9.1 / §9.3 settlement
-        'base': {k: _java_const(se, 'BASE_' + k.upper()) for k in ('coin', 'shard', 'bone', 'core', 'xp', 'mark')},
-        'treasure_coin': _java_const(se, 'TREASURE_COIN'), 'elite_shard': _java_const(se, 'ELITE_SHARD'),
-        'elite_core': _java_const(se, 'ELITE_CORE'), 'marks_per': _java_const(se, 'MARKS_PER_EXCHANGE'),
+        # §9.1 / §9.3 settlement — E3/D225: amounts from ember-v1-economy.yml (SoT); Java BASE_* dual-assert
+        'base': {k: rules.amount('S01', k) for k in ('coin', 'shard', 'bone', 'core', 'xp', 'mark')},
+        'treasure_coin': rules.amount('S02', 'coin'),
+        'elite_shard': rules.amount('S03', 'shard'), 'elite_core': rules.amount('S03', 'core'),
+        'marks_per': rules.amount('C07', 'marks'),
         'target_weight': _java_const(se, 'TARGET_WEIGHT'),
         'quality_w': _java_array(se, 'QUALITY_WEIGHTS'), 'craft_w': _java_array(se, 'CRAFT_WEIGHTS'),
         'extra_w': _java_array(se, 'EXTRA_WEIGHTS'),
@@ -158,4 +167,20 @@ def load(profile='current'):
         node[parts[-1]] = v
     cfg['warnings'] = warnings
     cfg['profile'] = profile
+    # Dual-assert: economy yml must still match Java goldens (live amount() does the same)
+    drift = []
+    for k in ('coin', 'shard', 'bone', 'core', 'xp', 'mark'):
+        jv = _java_const(se, 'BASE_' + k.upper())
+        if cfg['base'][k] != jv:
+            drift.append('S01.%s yml=%s java=%s' % (k, cfg['base'][k], jv))
+    for label, yv, jname in (
+            ('S02.coin', cfg['treasure_coin'], 'TREASURE_COIN'),
+            ('S03.shard', cfg['elite_shard'], 'ELITE_SHARD'),
+            ('S03.core', cfg['elite_core'], 'ELITE_CORE'),
+            ('C07.marks', cfg['marks_per'], 'MARKS_PER_EXCHANGE')):
+        jv = _java_const(se, jname)
+        if yv != jv:
+            drift.append('%s yml=%s java=%s' % (label, yv, jv))
+    if drift:
+        raise rules.RuleError('economy yml drifted from Java goldens (refusing to simulate):\n  ' + '\n  '.join(drift))
     return cfg

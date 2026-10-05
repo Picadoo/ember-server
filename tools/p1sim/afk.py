@@ -27,7 +27,7 @@ import argparse, os, random, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 # mirrors ember-v1.yml afk: (D177 rev 2 §3) — CoreRpg EmberAfkConfigTest checks the shipped file against these
-DAILY_KILLS = 2400          # rewarded kills / day (online + offline)
+DAILY_KILLS = 2400          # rewarded kills / day (online + offline); E3 overrides from economy S22 on install()
 PACK = 3                    # personal mobs per wave
 RESPAWN = 4.0               # s between a cleared wave and the next
 REGEN_PCT = 0.08            # out-of-combat regen (no own mob alive): 8 % H / s
@@ -149,6 +149,9 @@ def rate(a):
 
 def install(share):
     import p1sim
+    import rules
+    global DAILY_KILLS
+    DAILY_KILLS = rules.amount('S22', 'daily_kills')  # E3 / D225: same SoT as live EmberEconomy
     STATE['share'] = float(share)
     if getattr(p1sim.Player, '_afk_installed', False):
         return
