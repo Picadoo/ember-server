@@ -90,6 +90,7 @@ final class EmberRunDirector {
     private Location lockOrigin;
     private Vector lockDir;
     private long[] nextAt = new long[0]; // per skill, anchored at the boss spawn (§10.I: cooldowns from fight start)
+    private boolean[] gateOpened = new boolean[0]; // D194: a phase-gated skill re-anchors its cooldown at its first cast
     private long recoverUntil;           // §10.I 收招: no new skill before this
     private int casts;
     private EmberRunMaps.Skill follow;
@@ -1466,6 +1467,7 @@ final class EmberRunDirector {
         for (int i = 0; i < nextAt.length; i++) nextAt[i] = now + (long) (b.skills.get(i).every * 1000);
         // D193: 余烬连战 keeps its own tuned move table — the break channel never comes due in a rush
         for (int i = 0; i < nextAt.length; i++) if (def.rush && b.skills.get(i).breakHp > 0) nextAt[i] = Long.MAX_VALUE / 4;
+        gateOpened = new boolean[nextAt.length];
         bossSpawnedAt = now;
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss spawned hp=%.0f party=%d", s.runId, le.getMaxHealth(), s.partySize));
         svc.onBossSpawned(s, b);
@@ -1684,7 +1686,11 @@ final class EmberRunDirector {
         if (due >= 0) {
             EmberRunMaps.Skill sk = b.skills.get(due);
             startWarn(sk, now, le);
-            nextAt[due] = nextDue(nextAt[due], (long) (sk.every * 1000), now);
+            // D194: the first cast of a phase-gated skill (below ≤ 1.0) re-anchors at now + every; the spawn grid it waited
+            // on is stale by then, so the old grid let the 2nd cast follow the 1st after only a few seconds (smoke 09:44)
+            boolean first = sk.below <= 1.0 && due < gateOpened.length && !gateOpened[due];
+            if (first) gateOpened[due] = true;
+            nextAt[due] = gatedNext(nextAt[due], (long) (sk.every * 1000), now, first);
         }
     }
 
@@ -1726,6 +1732,12 @@ final class EmberRunDirector {
     }
 
     /** Keeps the schedule anchored at the fight start: next slot strictly after {@code now}. */
+    /** D194: next due time after a cast; {@code firstGated} (first cast once an HP gate opened) → a full cooldown from now. */
+    static long gatedNext(long at, long every, long now, boolean firstGated) {
+        if (every <= 0) return Long.MAX_VALUE / 4;
+        return firstGated ? now + every : nextDue(at, every, now);
+    }
+
     static long nextDue(long at, long every, long now) {
         if (every <= 0) return Long.MAX_VALUE / 4;
         long n = at;

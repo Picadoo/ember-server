@@ -106,6 +106,16 @@ public class EmberRunShapeTest {
         assertEquals(100000, EmberRunDirector.nextDue(70000, 10000, 95000));
     }
 
+    /** D194: a half-HP gated skill (every 25 s, spawn grid 25/50/75…) whose gate opens at 68 s fires then and next at
+     *  93 s — not on the stale grid at 75 s (the 2nd 炉心聚爆 ~7 s after the 1st in the 09:44 smoke). Later casts keep the grid. */
+    @Test public void gatedSkillReanchorsOnFirstCast() {
+        assertEquals(75000, EmberRunDirector.nextDue(25000, 25000, 68000));           // old behaviour
+        assertEquals(93000, EmberRunDirector.gatedNext(25000, 25000, 68000, true));   // first cast after the gate
+        assertEquals(118000, EmberRunDirector.gatedNext(93000, 25000, 93000, false)); // then its own 25 s grid
+        assertEquals(20000, EmberRunDirector.gatedNext(10000, 10000, 10000, false));  // ungated: unchanged §10.I grid
+        assertEquals(Long.MAX_VALUE / 4, EmberRunDirector.gatedNext(0, 0, 5000, true));
+    }
+
     /** Q06 两段刀气 (book ch. 16 §7): band 6 long × 3 wide, 1..7 ahead; second band 4 to the right, left stays safe. */
     @Test public void q06BladeBandsStartOneAheadAndShiftRight() {
         EmberRunMaps.Skill s = skill("type", "line", "start", 1, "length", 6, "width", 3);

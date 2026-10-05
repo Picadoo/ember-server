@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(54, m.balanceVersion);                // D193 Boss Moves Pack 5 破招 (D192 = 53, D191 = 52, D189 = 51, D188 = 50, …)
-        assertEquals("g04-1/b54", m.ruleVersion);
+        assertEquals(55, m.balanceVersion);                // D194 gated-skill re-anchor (D193 = 54, D192 = 53, D191 = 52, D189 = 51, D188 = 50, …)
+        assertEquals("g04-1/b55", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
