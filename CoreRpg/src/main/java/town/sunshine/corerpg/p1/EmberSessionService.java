@@ -28,10 +28,8 @@ import java.util.UUID;
  *   <li>{@link #commit} / {@link #release} / {@link #releaseFee}: ledger cost / cost_coin status flips
  *       shared with abort / world-change commit (thin delegates on {@link EmberRunService}).</li>
  * </ol>
- * <p><b>Settlement TODO (next cut):</b> {@code onBossKilled} / {@code settleFor} / {@code failRefund}
- * stay in {@link EmberRunService} — they share the same session map + ledger but are a large grant
- * tree (rotation / signature / bounty / variety / honor / season). Leave them until a dedicated
- * Settlement slice.
+ * <p>Settlement ({@code onBossKilled} / {@code settleFor} / {@code failRefund}) lives in
+ * {@link EmberSettleService} (D238) — shares the same session map + ledger via package accessors.
  * <p>The static {@code *Text} / variety / runId helpers are Bukkit-free so unit tests pin shapes
  * (bv58 unchanged).
  */

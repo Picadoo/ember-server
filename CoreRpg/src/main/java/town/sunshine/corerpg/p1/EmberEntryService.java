@@ -31,8 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *   <li>{@link #enteringLine}: the per-member「正在创建实例……」line.</li>
  * </ol>
  * <p>Session create / seed / extra / variety, stamina + abyss-fee <b>reservation</b>, DP dispatch and
- * {@code verifyEntry} commit/release live in {@link EmberSessionService} (D237). Settlement
- * ({@code settleFor} / {@code onBossKilled}) stays in {@link EmberRunService} (TODO).
+ * {@code verifyEntry} commit/release live in {@link EmberSessionService} (D237). Settlement ({@code settleFor} / {@code onBossKilled} / {@code failRefund}) lives in {@link EmberSettleService} (D238).
  * <p>The static {@code *Text} / {@code *Problem} / {@code *Rule} helpers are Bukkit-free so unit tests pin
  * gate wording and rule selection (bv58 unchanged).
  */

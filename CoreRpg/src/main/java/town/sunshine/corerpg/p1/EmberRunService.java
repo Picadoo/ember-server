@@ -68,7 +68,9 @@ import java.util.logging.Logger;
  * <p>D235 / ARCH S3-6: entry gates (party / stamina / problem lines / mode gates), D96/D104 readiness and the weekly-rule /
  * pledge pick live in {@link EmberEntryService}.
  * <p>D237 / ARCH S3-8: session create / stamina+fee reservation / DP dispatch / verifyEntry / commit / release live in
- * {@link EmberSessionService}; settlement ({@code settleFor} / {@code onBossKilled} / {@code failRefund}) stays here (TODO).
+ * {@link EmberSessionService}.
+ * <p>D238 / ARCH S3-9: settlement ({@code settleFor} / {@code onBossKilled} / {@code failRefund}) live in
+ * {@link EmberSettleService}; this class keeps thin delegates.
  */
 public final class EmberRunService implements Listener {
 
@@ -94,6 +96,7 @@ public final class EmberRunService implements Listener {
     private final EmberRecruitService recruit;
     private final EmberEntryService entry;
     private final EmberSessionService session;
+    private final EmberSettleService settle;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -118,6 +121,7 @@ public final class EmberRunService implements Listener {
         this.recruit = new EmberRecruitService(this);
         this.entry = new EmberEntryService(this);
         this.session = new EmberSessionService(this);
+        this.settle = new EmberSettleService(this);
         instance = this;
         load();
     }
@@ -144,6 +148,11 @@ public final class EmberRunService implements Listener {
     EmberEntryService entry() { return entry; }
 
     EmberSessionService session() { return session; }
+
+    EmberSettleService settle() { return settle; }
+
+    /** package: display-only leaderboard (nullable) — EmberSettleService D238 */
+    EmberLeaderboard leaderboard() { return top; }
 
     /** package: the director bound to an instance world (null = none) — EmberRaidService D106 flow */
     EmberRunDirector director(String world) { return byWorld.get(world); }
@@ -515,7 +524,7 @@ public final class EmberRunService implements Listener {
     /**
      * Shared entry: gates / readiness / weekly rule live in {@link EmberEntryService} (D235 / ARCH S3-6); session create,
      * seed / extra / variety, stamina + abyss-fee reservation, DP dispatch and verifyEntry live in
-     * {@link EmberSessionService} (D237 / ARCH S3-8). Settlement stays here (TODO).
+     * {@link EmberSessionService} (D237 / ARCH S3-8). Settlement lives in {@link EmberSettleService} (D238).
      */
     private boolean enter(final Player leader, String mapKey, final boolean challenge, final int abyss, long presetSeed) {
         final EmberEntryService.Admit a = entry.admit(leader, mapKey, challenge, abyss);
@@ -540,41 +549,11 @@ public final class EmberRunService implements Listener {
     /** F-review #5 (D124): T3 marks that would pay this fee — delegated to {@link EmberAbyssService} (D231). */
     int feeMarks(PlayerData d, int fee) { return abyss.feeMarks(d, fee); }
 
-    /**
-     * Endgame #6 (D128): the first failed challenge / abyss run of the stamina day gives back runs.yml fail_refund of the
-     * stamina it cost (no loot, no coins, the abyss fee stays spent). One ledger row per (player, day) like the death
-     * refund: record() never overwrites, so a second fail, a relog or a restart pays nothing more.
-     * Returns the stamina given back, 0 = already used today, -1 = not eligible (off / no committed cost).
-     */
-    private int failRefund(UUID u, EmberRunSession s) {
-        Integer c = s.cost.get(u);
-        int back = EmberRunRules.failRefundAmount(c == null ? 0 : c, maps.failRefund);
-        StaminaService st = plugin.getStaminaService();
-        if (back <= 0 || st == null) return -1;
-        EmberRunRules.Ledger l = store.ledger(u);
-        EmberRunRules.Row cost = l.get(s.runId, "cost");
-        if (cost == null || EmberRunRules.ST_RELEASED.equals(cost.status)) return -1;
-        String day = town.sunshine.corerpg.DailyService.today();
-        boolean[] created = new boolean[1];
-        EmberRunRules.Row r = l.record(EmberRunRules.failRefundRun(day), EmberRunRules.FAIL_REFUND_KEY,
-                "stamina:" + back + ":" + s.runId, EmberRunRules.ST_DELIVERED, System.currentTimeMillis(), created);
-        if (!created[0]) {
-            log().info("[P1 run] fail refund " + u + " " + day + ": already used today (" + r.result + ")");
-            return 0;
-        }
-        store.saveLedger(u, Collections.singletonList(r));
-        st.releaseFlat(u, back);
-        log().info("[P1 run] fail refund " + u + " " + day + " run " + s.runId + ": " + back + " stamina (cost " + c + ")");
-        return back;
-    }
+    /** D128 fail refund — {@link EmberSettleService} (D238). */
+    private int failRefund(UUID u, EmberRunSession s) { return settle.failRefund(u, s); }
 
-    /** D128 PAPI p1_failrefund: whether today's failed-challenge refund is still there */
-    String failRefundLabel(UUID u) {
-        if (maps.failRefund <= 0) return "";
-        int pct = (int) Math.round(maps.failRefund * 100);
-        boolean used = store.ledger(u).get(EmberRunRules.failRefundRun(town.sunshine.corerpg.DailyService.today()), EmberRunRules.FAIL_REFUND_KEY) != null;
-        return used ? "§8今天的失败退还已用过（明天 0 点再有）" : "§a每天第一次失败退还 " + pct + "% 体力（" + EmberRunRules.failRefundAmount(maps.cost, maps.failRefund) + " 点；不给掉落和币）";
-    }
+    /** D128 PAPI p1_failrefund — {@link EmberSettleService} (D238). */
+    String failRefundLabel(UUID u) { return settle.failRefundLabel(u); }
 
     /** PAPI %corerpg_p1_pass_q01%: only a CoreRpg-paid entry passes the DP js-condition. */
     public boolean hasPass(UUID id, String mapKey) {
@@ -786,9 +765,9 @@ public final class EmberRunService implements Listener {
             Player p = Bukkit.getPlayer(u);
             if (p == null || !p.isOnline()) continue;
             p.sendMessage(P + ChatColor.RED + "本局失败：" + why + (back > 0
-                    ? "§a · 今天第一次挑战失败：退还 " + back + " 体力（花费的 " + Math.round(maps.failRefund * 100) + "%，每天一次；不给掉落和币" + (s.abyss > 0 ? "，层费不退" : "") + "）"
-                    : back == 0 ? "§c（今天的失败退还已经用过，明天再有；未结算的额外奖励作废）"
-                    : "§c（已开战不退体力；未结算的额外奖励作废）"));
+                    ? EmberSettleService.failRefundGrantedSuffix(back, EmberSettleService.failRefundPct(maps.failRefund), s.abyss > 0)
+                    : back == 0 ? EmberSettleService.failRefundAlreadyUsedSuffix()
+                    : EmberSettleService.failRefundIneligibleSuffix()));
         }
         if (chFail) { // endgame #6 (D120): a failed challenge says what makes the next try likelier
             for (UUID u : s.committed) {
@@ -804,7 +783,7 @@ public final class EmberRunService implements Listener {
     }
 
     /** Ends the DP instance via the ember-p1 script group; falls back to /dp leave for anyone still inside. */
-    private void endInstance(final EmberRunSession s, final boolean complete) {
+    void endInstance(final EmberRunSession s, final boolean complete) { // package: EmberSettleService D238
         final String world = s.world;
         Bukkit.getScheduler().runTaskLater(plugin, () -> { if (!s.open()) sessions.remove(s.runId); }, 1200L);
         EmberRunDirector d = world == null ? null : byWorld.get(world);
@@ -870,222 +849,10 @@ public final class EmberRunService implements Listener {
 
     private void rushSettle(EmberRunSession s, EmberRunMaps.MapDef m, UUID u) { rush.settle(s, m, u); }
 
-    // ------------------------------------------------------------------ boss kill → settlement (§9, §20.5)
+    // ------------------------------------------------------------------ boss kill → settlement (§9, §20.5) — EmberSettleService D238
 
     private void onBossKilled(EmberRunDirector d, LivingEntity boss, boolean byParticipant) {
-        EmberRunSession s = d.s;
-        if (!s.open() || EmberRunSession.SETTLING.equals(s.state)) return; // duplicate death event → nothing (E02)
-        if (!byParticipant) {
-            onBroken(s, "首领非玩家击杀（" + (boss.getLastDamageCause() == null ? "?" : boss.getLastDamageCause().getCause()) + "）");
-            return;
-        }
-        s.state = EmberRunSession.SETTLING;
-        store.save(s);
-        if (d.bossSpawnedAt > 0) log().info(String.format(Locale.ROOT, "[P1 run] %s boss killed after %.1f s", s.runId, (System.currentTimeMillis() - d.bossSpawnedAt) / 1000.0));
-        EmberRunMaps.MapDef m = d.def;
-        World w = d.w;
-        for (UUID u : s.participants) {
-            Player p = Bukkit.getPlayer(u);
-            boolean present = !s.left.contains(u) && (p == null || !p.isOnline() || p.getWorld().equals(w));
-            boolean ok = EmberRunRules.eligible(s.committed.contains(u), s.acted.contains(u), present, s.died.contains(u));
-            if (!ok) {
-                if (p != null) p.sendMessage(P + ChatColor.RED + "本局没有你的结算资格（未参与战斗或中途离开）。");
-                log().info("[P1 run] " + s.runId + " not eligible " + u + " committed=" + s.committed.contains(u)
-                        + " acted=" + s.acted.contains(u) + " present=" + present + " died=" + s.died.contains(u));
-                continue;
-            }
-            if (m.event) { if (festival != null) festival.onClear(s, u, cosmetics); } // D139: no main-line settlement
-            else if (m.rush) rushSettle(s, m, u); // D144: marks / 余烬徽 / title only
-            else settleFor(s, m, u);
-        }
-        s.state = EmberRunSession.COMPLETE;
-        store.save(s);
-        tellRun(s, "§a" + d.bossDef().name + " 已击败 · 结算完成，实例稍后关闭");
-        if (!d.anomalies.isEmpty()) log().warning("[P1 run] " + s.runId + " anomalies: " + d.anomalies);
-        endInstance(s, true);
-    }
-
-    private void settleFor(EmberRunSession s, EmberRunMaps.MapDef m, UUID u) {
-        PlayerData pd = data(u);
-        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
-        in.runId = s.runId;
-        in.player = u.toString();
-        in.seed = s.seed;
-        in.tier = s.tier;
-        in.target = s.targetOf(u);
-        in.bossKilled = true;
-        in.extra = s.extra;
-        in.extraDone = s.extraDone;
-        // §18.1: challenge runs never carry the first-clear package (first clears are per map + content version, normal)
-        in.firstClear = s.challenge || m.raid || firstCleared(pd, m) ? null : m.firstClear;
-        if (m.raid && maps.challenge != null) in.qualityWeights = maps.challenge.quality; // P2-5: no exclusive drop table
-        if (s.challenge && maps.challenge != null) in.qualityWeights = maps.challenge.quality;
-        EmberRunMaps.AbyssTier abT = s.abyss > 0 ? maps.abyssTier(s.abyss) : null;
-        if (abT != null) in.qualityWeights = abT.quality; // P2-2 tier quality table
-        in.loot = m.raid ? null : maps.lootBias(m); // P2-9 (D81) map loot identity (abyss segments: the segment map)
-        List<EmberRunRules.Grant> grants = new ArrayList<EmberRunRules.Grant>(EmberRunRules.settle(in));
-        // P2-1 weekly challenge rotation: featured map, first 3 challenge clears of the week → +1 mark of the run tier
-        java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
-        String week = EmberRunRules.rotationWeekKey(today);
-        boolean rotation = s.challenge && s.abyss == 0 && m.key.equals(featured(today)) && maps.rotationBonusMarks > 0
-                && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
-        // D108: a repeat NORMAL clear of the featured T1/T2 map (Q01–Q06) → +normal_bonus_marks of the map tier; one
-        // weekly counter with the challenge bonus (C_ROTATION), so the week's featured bonus stays 3 clears in total
-        boolean featNormal = !s.challenge && s.abyss == 0 && !m.raid && in.firstClear == null && s.tier < 3
-                && m.key.equals(featured(today)) && maps.rotationNormalBonusMarks > 0
-                && !progressFlag(pd, "q07") // E-review #7: after the own Q07 first clear a normal repeat neither pays nor uses a challenge slot
-                && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
-        if (featNormal) rotation = true;
-        final int rotMarks = s.challenge ? maps.rotationBonusMarks : maps.rotationNormalBonusMarks;
-        if (m.raid) // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic (D233 → EmberRaidService)
-            grants.addAll(EmberRaidService.settleGrants(in, m, maps.raidItemQualityFloor, s.tier));
-        if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
-        // D174 签名传奇: repeat NORMAL clear of a signature map → 1 insignia + maybe a signature stamp on the base item;
-        // the map's first clear → the first-clear insignia, once per map (not per content version, C_FC)
-        boolean sigRun = !s.challenge && s.abyss == 0 && !m.raid && !m.event && !m.rush && EmberSignature.hasMap(m.key);
-        if (sigRun && in.firstClear == null && progressFlag(pd, m.key)) {
-            EmberRunRules.Grant base = null;
-            for (EmberRunRules.Grant g : grants) if ("base_item".equals(g.key)) base = g;
-            grants.addAll(EmberRunRules.signatureGrants(m.key, in, base));
-        }
-        final int pledged = pledge.count(s.modifier);
-        if (sigRun && in.firstClear == null && progressFlag(pd, m.key) && pledged > 0) { // D174 stage 2b 自选誓约: +1 insignia per pledged rule (D232 → EmberPledgeService)
-            EmberRunRules.Grant pg = EmberPledgeService.settleGrant(m.key, pledged);
-            if (pg != null) grants.add(pg);
-        }
-        final boolean sigFc = sigRun && in.firstClear != null && pd.periodCount(EmberSignature.C_FC + m.key, "all") <= 0;
-        if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.FC_MARKS, null));
-        if (!s.challenge && s.abyss == 0 && !m.raid) // D138 repeat-run variety (rolled only when every member had the first clear)
-            grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, maps.variety.affixShard, s.eventDone, maps.variety.eventCore, s.eventKind));
-        EmberRunRules.Ledger l = store.ledger(u);
-        // P2-7 daily bounty (D79): the n-th settled clear of the stamina day; counted once per run (fresh = no base row yet)
-        final boolean fresh = l.get(s.runId, "base_coin") == null;
-        final String bDay = town.sunshine.corerpg.DailyService.today();
-        final List<EmberRunRules.BountyTier> tiers = bountyTiers();
-        final int bountyW = m.raid ? 2 : 1; // D105: a raid clear (50 stamina) counts as 2 runs toward the daily bounty
-        final int bountyPrev = fresh ? pd.periodCount(C_BOUNTY, bDay) : 0;
-        final int bountyN = fresh ? bountyPrev + bountyW : 0;
-        List<EmberRunRules.Grant> bountyPaid = fresh ? EmberRunRules.bountyGrants(tiers, bountyPrev, bountyN) : Collections.<EmberRunRules.Grant>emptyList();
-        grants.addAll(bountyPaid);
-        // D144 花样委托: repeat normal runs only (where the variety rolls); counted once per run (fresh)
-        final boolean varRun = fresh && !s.challenge && s.abyss == 0 && !m.raid && !m.event && in.firstClear == null;
-        final List<EmberRunRules.VarietyBounty> vbs = varRun ? varietyBounties() : Collections.<EmberRunRules.VarietyBounty>emptyList();
-        final List<String> vbDone = new ArrayList<String>();
-        boolean vbMoved = false;
-        for (EmberRunRules.VarietyBounty vb : vbs) {
-            boolean hit = "affix".equals(vb.kind) ? s.affixDone : s.eventDone;
-            if (!hit) continue;
-            int prev = pd.periodCount(C_VBOUNTY + vb.kind, bDay);
-            List<EmberRunRules.Grant> g = EmberRunRules.varietyBountyGrants(vb, prev, true);
-            if (prev < vb.count) { pd.addPeriodCount(C_VBOUNTY + vb.kind, bDay, 1); vbMoved = true; }
-            if (!g.isEmpty()) { grants.addAll(g); vbDone.add(vb.label() + "（" + vb.rewardText() + "）"); }
-        }
-        EmberGrowthService growth = EmberGrowthService.get(); // D142 余烬勋记: settlement coin % / +shards (own ledger rows)
-        Player gp = Bukkit.getPlayer(u);
-        if (growth != null && gp != null) {
-            int coins = 0;
-            for (EmberRunRules.Grant g : grants) if (g.kind == EmberRunRules.Kind.COIN) coins += g.amount;
-            int hc = growth.honorCoin(gp, coins), hs = growth.honorShard(gp);
-            if (hc > 0) grants.add(new EmberRunRules.Grant("honor_coin", EmberRunRules.Kind.COIN, null, hc, null));
-            if (hs > 0) grants.add(new EmberRunRules.Grant("honor_shard", EmberRunRules.Kind.MAT, EmberUpgradeRules.MAT_SHARD, hs, null));
-        }
-        List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
-        long now = System.currentTimeMillis();
-        boolean[] created = new boolean[1];
-        for (EmberRunRules.Grant g : grants) {
-            String st = g.kind == EmberRunRules.Kind.CHOICE ? EmberRunRules.ST_AWAIT : EmberRunRules.ST_PENDING;
-            EmberRunRules.Row r = l.record(s.runId, g.key, g.encode(), st, now, created);
-            if (created[0]) changed.add(r);
-            if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(C_ROTATION, week, 1); // counted once per run (ledger key)
-            EmberRaidService.applyClearCount(pd, m, week, g.key, created[0]); // P2-5 weekly cap (P2-6: per cap_group), D233
-            if (created[0] && "fc_sigmark".equals(g.key)) pd.addPeriodCount(EmberSignature.C_FC + m.key, "all", 1); // D174: once per map
-        }
-        if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, bountyW);
-        if (fresh && m.raid && cosmetics != null) cosmetics.onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
-        if (fresh && season != null && s.coreClean.contains(u)) season.addGoal(u, pd, "core", 1); // D144 烬核同心 (optional goal)
-        if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0)
-            pd.addPeriodCount(EmberGrowthService.C_CHAL + m.key, "all", 1); // D141: challenge first clear per map (talent point / honors)
-        if (in.firstClear != null) {
-            EmberFirstClear.record(pd, m.key, m.contentVersion); // §9.4 + D205: package once per content version; fact @all never deleted
-            if (cosmetics != null) cosmetics.onFirstClear(Bukkit.getPlayer(u), m.key); // D103 milestone titles
-        }
-        boolean newBest = false;
-        int oldBest = abyssBest(pd);
-        if (s.abyss > 0) {
-            EmberAbyssService.FloorResult floor = EmberAbyssService.applyFloorGrant(pd, s.abyss); // P2-2: opens tier + 1
-            newBest = floor.newBest;
-            oldBest = floor.oldBest;
-        }
-        if (newBest && cosmetics != null) cosmetics.onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
-        if (growth != null && gp != null) growth.refreshHonors(gp); // D142: one-time unlock notice
-        if (top != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records
-            String nm = Bukkit.getOfflinePlayer(u).getName();
-            if (s.abyss > 0) top.abyssBest(u, nm, abyssBest(pd));
-            if (fresh && s.challenge && s.abyss == 0 && m.key.equals(featured(today))) top.featuredClear(u, nm, week);
-        }
-        if (season != null && fresh) { // D116 season boards + D117 weekly goals (display / cosmetic currency only)
-            String nm = Bukkit.getOfflinePlayer(u).getName();
-            if (s.abyss > 0) { // F-review #4: the clear time breaks ties on the abyss board
-                long a0 = s.fightStart > 0 ? s.fightStart : s.created;
-                season.onAbyss(u, nm, s.abyss, a0 > 0 ? (int) Math.max(1, (System.currentTimeMillis() - a0) / 1000L) : 0);
-                season.addGoal(u, pd, "abyss", 1);
-            }
-            if (s.challenge && s.abyss == 0 && m.key.equals(featured(today))) { season.onFeatured(u, nm); season.addGoal(u, pd, "featured", 1); }
-            if (m.raid) {
-                long t0 = s.fightStart > 0 ? s.fightStart : s.created;
-                season.onRaid(u, nm, m.key, t0 > 0 ? (int) Math.max(1, (System.currentTimeMillis() - t0) / 1000L) : 0);
-                season.addGoal(u, pd, "raid", 1);
-            }
-            int topClears = tiers.isEmpty() ? 0 : tiers.get(tiers.size() - 1).clears;
-            if (topClears > 0 && bountyPrev < topClears && bountyN >= topClears) season.addGoal(u, pd, "bounty", 1);
-        }
-        store.saveLedger(u, changed);
-        plugin.getDataStore().flushMutation(u);
-        log().info("[P1 run] " + s.runId + " settle " + u + " rows+" + changed.size() + (in.firstClear != null ? " (first clear)" : "")
-                + (s.abyss > 0 ? " (abyss " + s.abyss + ")" : s.challenge ? " (challenge T" + s.tier + ")" : ""));
-        Player p = Bukkit.getPlayer(u);
-        if (p != null && p.isOnline() && s.abyss > 0) {
-            p.sendMessage(P + "§5深渊第 " + s.abyss + " 层 已完整通关" + (newBest ? " §a· 新纪录，开放第 " + abyssMaxStart(pd) + " 层" : "")
-                    + " §7（下一层需重新确认与付费：冒险页 → 深渊）");
-        }
-        if (p != null && p.isOnline() && rotation) {
-            p.sendMessage(P + "§b本周精选" + (s.challenge ? "挑战" : "重打") + " §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + rotMarks
-                    + "§7（本周 " + pd.periodCount(C_ROTATION, week) + "/" + maps.rotationWeeklyCap + "）");
-        }
-        if (p != null && p.isOnline() && vbMoved) // D144
-            p.sendMessage(P + "§e花样委托 §7" + (vbDone.isEmpty() ? "" : "§a完成：" + String.join("、", vbDone) + " §7· ") + varietyBountyLine(pd));
-        if (p != null && p.isOnline() && fresh && !tiers.isEmpty()) {
-            p.sendMessage(P + "§e每日委托 §7" + (bountyW > 1 ? "§7团本算 " + bountyW + " 局 · " : "") + (bountyPaid.isEmpty() ? "" : "§a完成第 " + bountyN + " 局档 §7· ")
-                    + EmberRunRules.bountyLine(tiers, bountyN));
-        }
-        if (p != null && p.isOnline()) {
-            deliver(p);
-            if (in.firstClear != null && maps.challenge != null && m.key.equals(maps.challenge.requires)) endOfP1(p);
-        }
-    }
-
-    /** Batch 3: the Q07 first clear ends the P1 main line (§2 table, §18.1): say what it opened, once. */
-    private void endOfP1(Player p) {
-        p.sendMessage(P + "§6§l余烬主线完结§r §7— 已首通最后一张主线图 Q07。");
-        p.sendMessage(P + "§a已开放：§fT3 定向锻造§7（工坊）· §fT2→T3 升阶§7 · §f七图挑战版、深渊、团本§7（冒险页，掉落 T3 与 T3 印记）");
-        p.sendMessage(P + "§7长线目标：同族 T3 两件套 +9 = 觉醒III（装备页看成套进度）");
-        // D104 (midgame #2): the challenge is tuned for T3 — say how to get there before the first attempt
-        p.sendMessage(P + "§e挑战版按 T3 装备来调。§7刚首通：先用 T3 印记兑换（或升阶）把刃换到 T3，再到工坊「互换」免费把强化挪过去；"
-                + "七张挑战图强度相同，只是掉落偏向的族 / 部位不同。");
-        PlayerData d = data(p.getUniqueId());
-        if (season != null) { season.markGraduated(d); flushData(p.getUniqueId()); } // D134: the bounty goal is prorated in the graduation week
-        if (season != null && season.goalsOn()) {
-            // F-review #8: today's daily bounty counts for the week even when it was finished before the Q07 clear
-            List<EmberRunRules.BountyTier> tiers = bountyTiers();
-            int topClears = tiers.isEmpty() ? 0 : tiers.get(tiers.size() - 1).clears;
-            if (topClears > 0 && d.periodCount(C_BOUNTY, town.sunshine.corerpg.DailyService.today()) >= topClears && season.progress(d, "bounty") == 0)
-                season.addGoal(p.getUniqueId(), d, "bounty", 1);
-            // F-review #3: the weekly goals and the season are the reason to come back — say so at graduation
-            p.sendMessage(P + "§d周目标和赛季已开放：§7" + goalsShort(d) + "（每周 4 个，完成得余烬徽换外观；赛季榜 4 周一季）");
-        }
-        town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[打开冒险页]", "/ember_p1_adventure", "挑战版 / 深渊 / 团本都在这里", "GREEN"},
-                new String[]{"[赛季 · 周目标]", "/ember_p1_season", "本周目标、排行榜、赛季奖励、外观商店", "LIGHT_PURPLE"});
-        p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 1.0f, 1.0f);
+        settle.onBossKilled(d, boss, byParticipant);
     }
 
     // ------------------------------------------------------------------ B2.180 图录 · 装备
