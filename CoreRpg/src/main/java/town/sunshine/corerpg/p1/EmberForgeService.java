@@ -341,7 +341,7 @@ public final class EmberForgeService implements Listener {
                 p.sendMessage(P + ChatColor.RED + "⚠ 这件已投入：" + String.join(" · ", inv) + "，分解只给胚料 ×" + blanks + "，这些投入全部丢失");
             }
             EmberGrowthService gsv = EmberGrowthService.get(); // D174: a signature is lost with the piece (no insignia back)
-            EmberSignature.Def sg = gsv == null ? null : EmberSignature.byCode(gsv.sigOf(plugin.getDataStore().get(p.getUniqueId()), it.data.uid));
+            EmberSignature.Def sg = gsv == null ? null : EmberSignature.byCode(gsv.sigOf(plugin.getDataStore().get(p.getUniqueId()), it.data));
             if (sg != null) p.sendMessage(P + ChatColor.RED + "⚠ 这件是签名传奇「" + sg.name + "」，分解后签名一起消失（不退首领徽记）");
             String t = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1dismantle", fp);
             town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "物品将被永久销毁：", "[确认分解]",
@@ -371,6 +371,15 @@ public final class EmberForgeService implements Listener {
 
     /** D172: {@code rid} = the paid reroll's request id → this retire is the transaction that settles its payment */
     public void consumeForReroll(Player p, int index, EmberItemData dup, String note, String rid, java.util.function.Consumer<Boolean> cb) {
+        consumeForReroll(p, index, dup, note, rid, null, null, cb);
+    }
+
+    /**
+     * D208: same, plus {@code target} (the rerolled piece: before → after with the roll's item keys) in the SAME item
+     * transaction — the roll is part of the commit that settles the payment, so there is no "paid, roll owed" window.
+     */
+    public void consumeForReroll(Player p, int index, EmberItemData dup, String note, String rid, TxnItem target, String costJson,
+                                 java.util.function.Consumer<Boolean> cb) {
         String g = gate(p);
         if (g != null) { p.sendMessage(P + ChatColor.RED + g); cb.accept(false); return; }
         ItemStack st = p.getInventory().getItem(index);
@@ -385,11 +394,25 @@ public final class EmberForgeService implements Listener {
         final ItemStack original = st.clone();
         p.getInventory().setItem(index, null);
         pendingDismantle.put(dup.uid, new Object[]{original, 0});
-        rerollCb.put(dup.uid, cb);
-        commit(p, "reroll", r, Cost.NONE, Arrays.asList(new TxnItem(dup, null, "dismantled")), note);
+        List<TxnItem> list = new ArrayList<TxnItem>();
+        list.add(new TxnItem(dup, null, "dismantled")); // first: the duplicate (uid_a, pendingDismantle key)
+        if (target != null) list.add(target);
+        commit(p, "reroll", r, Cost.NONE, list, note, costJson, cb);
     }
 
-    private final Map<String, java.util.function.Consumer<Boolean>> rerollCb = new HashMap<String, java.util.function.Consumer<Boolean>>();
+    /**
+     * D208: one item transaction on behalf of another service (reroll result, keep-new, imprint, admin stamp): signed
+     * stacks pre-built, one DB transaction, the stacks replaced by uid on OK, v1 pieces folded to v2 with their legacy
+     * counters. Nothing is paid or refunded here — the caller settles / releases its own EmberPay request in {@code cb}.
+     */
+    public void commitItem(Player p, String kind, String rid, List<TxnItem> list, String note, String costJson,
+                           java.util.function.Consumer<Boolean> cb) {
+        if (replayed(p, rid)) { if (cb != null) cb.accept(false); return; }
+        commit(p, kind, rid, Cost.NONE, list, note, costJson, cb);
+    }
+
+    /** D208: put a fresh stack in place of the one carrying {@code uid} (false when it is not in the inventory) */
+    public boolean replaceStack(Player p, String uid, ItemStack fresh) { return replace(p, uid, fresh); }
 
     /** B2.137: true when no other inventory slot holds a valid P1 blade. */
     private boolean onlyBlade(Player p, int except) {
@@ -492,7 +515,26 @@ public final class EmberForgeService implements Listener {
 
     private void commit(final Player p, final String kind, final String rid, final Cost cost, final List<TxnItem> list,
                         final String note) {
+        commit(p, kind, rid, cost, list, note, null, null);
+    }
+
+    private void commit(final Player p, final String kind, final String rid, final Cost cost, final List<TxnItem> in,
+                        final String note, final String costJson, final java.util.function.Consumer<Boolean> cb) {
         final UUID id = p.getUniqueId();
+        // D208 (ARCH S1-4): a v1 piece written here becomes v2 with its legacy counters folded in (affix / pity / signature /
+        // reroll sequence now travel with the item); the counters are dropped once the transaction committed
+        final PlayerData owner = plugin.getDataStore().get(id);
+        final List<TxnItem> list = new ArrayList<TxnItem>(in.size());
+        final List<String> folded = new ArrayList<String>();
+        for (TxnItem t : in) {
+            if (t.after != null && !t.after.itemKeys() && owner != null && !owner.isLoadFailed()) { // no data = no fold (never fold zeros)
+                list.add(new TxnItem(t.before, EmberItemKeys.fold(owner, t.after), t.retireState, t.expectState));
+                folded.add(t.before.uid);
+            } else {
+                if (t.after != null && !t.before.itemKeys()) folded.add(t.before.uid); // caller folded already (reroll / imprint)
+                list.add(t);
+            }
+        }
         // pre-build the new stacks: if a template is missing nothing has been written yet
         final Map<String, ItemStack> built = new HashMap<String, ItemStack>();
         for (TxnItem t : list) {
@@ -502,6 +544,7 @@ public final class EmberForgeService implements Listener {
                 refund(id, cost, rid);
                 restoreDismantle(p, list);
                 p.sendMessage(P + ChatColor.RED + "无法生成新物品（NI 模板 " + t.after.ni + " 缺失或签名密钥不可用），已退回");
+                if (cb != null) cb.accept(false);
                 return;
             }
             built.put(t.after.uid, st);
@@ -520,11 +563,13 @@ public final class EmberForgeService implements Listener {
                         q.sendMessage(P + ChatColor.YELLOW + "物品已不在背包，记录已更新；放回背包后重新登录即可同步");
                     }
                 }
-                if ("reroll".equals(kind)) { // D143: duplicate eaten, no blanks
-                    pendingDismantle.remove(list.get(0).before.uid);
-                    java.util.function.Consumer<Boolean> cb = rerollCb.remove(list.get(0).before.uid);
-                    if (cb != null) cb.accept(true);
+                if (!folded.isEmpty()) { // D208: the fold committed → the legacy counters of those uids are done
+                    PlayerData od = plugin.getDataStore().get(id);
+                    boolean ch = false;
+                    for (String u : folded) ch |= EmberItemKeys.clearLegacy(od, u);
+                    if (ch) plugin.getDataStore().flushMutation(id);
                 }
+                if ("reroll".equals(kind)) pendingDismantle.remove(list.get(0).before.uid); // D143: duplicate eaten, no blanks
                 if ("dismantle".equals(kind)) {
                     Object[] pd = pendingDismantle.remove(list.get(0).before.uid);
                     int blanks = pd == null ? 0 : (Integer) pd[1];
@@ -532,21 +577,21 @@ public final class EmberForgeService implements Listener {
                     else if (q != null && gl() != null) gl().delivery().kick(q); // D162: blanks = delivery row of the same txn
                     if (q != null) EmberVault.savePlayerFile(q);
                 }
-                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] forge " + kind + " " + rid + " " + id + " ok: " + note + " cost " + cost.json());
+                plugin.getLogger().info("[" + EmberMode.MODE_ID + "] forge " + kind + " " + rid + " " + id + " ok: " + note + " cost " + (costJson != null ? costJson : cost.json()));
                 if (q != null) {
                     q.sendMessage(P + ChatColor.GREEN + note);
                     for (TxnItem t : list) if (t.after != null) q.sendMessage(P + "现在: " + preview(t.after));
                     q.playSound(q.getLocation(), Sound.BLOCK_ANVIL_USE, 0.7f, 1.2f);
                     loadouts.refresh(q);
                 }
+                if (cb != null) cb.accept(true);
             } else {
                 refund(id, cost, rid);
                 if (q != null) restoreDismantle(q, list);
                 else if (pendingDismantle.remove(list.get(0).before.uid) != null) // D162: stack out of the backpack, owner gone → owe it back
                     store().insertDeliveries(id, "disfail:" + list.get(0).before.uid + ":" + list.get(0).before.rev,
                             Arrays.asList(EmberItemStore.Owed.gear(list.get(0).before.uid, "分解没成功，退回背包")), null);
-                java.util.function.Consumer<Boolean> rcb = rerollCb.remove(list.get(0).before.uid);
-                if (rcb != null) rcb.accept(false);
+                if (cb != null) cb.accept(false);
                 if (res.status == TxnStatus.REPLAY) {
                     done.put(rid, res.detail == null ? "(原结果)" : res.detail);
                     if (q != null) q.sendMessage(P + ChatColor.YELLOW + "请求 " + rid + " 已处理过（重放），未再次执行，材料已退回: " + res.detail);
@@ -561,7 +606,7 @@ public final class EmberForgeService implements Listener {
             int blanks = pd == null ? 0 : (Integer) pd[1];
             if (blanks > 0) owed = Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, blanks, "分解 " + list.get(0).before.shortLabel()));
         }
-        if (store().usable()) store().commitTxn(rid, kind, id, list, cost.json(), note, owed, finish);
+        if (store().usable()) store().commitTxn(rid, kind, id, list, costJson != null ? costJson : cost.json(), note, owed, finish);
         else finish.accept(new TxnResult(TxnStatus.OK, null)); // YAML storage: signed NBT is the only record
     }
 

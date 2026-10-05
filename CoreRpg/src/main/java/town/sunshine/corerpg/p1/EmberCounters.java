@@ -121,7 +121,7 @@ public final class EmberCounters {
         add("p4_echo_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "echo weekly claim, shared by the echo halls (config)");
         px("p1_pledge_", "EmberRunService", A, SE, NV, "Q06 chosen pledge rule");
         // 2.2 signatures, insignia, tuning (EmberSignature, EmberGrowthService)
-        px("p1_sig_", "EmberSignature", A, IT, NV, "item signature code by uid (S1-4: move to item)");
+        px("p1_sig_", "EmberSignature", A, IT, NV, "LEGACY item signature code by uid — migrated to EmberItemData.sigCode / cr_p1_item.sig_code (S1-4 done, D208); read only for v1 items, cleared when folded");
         px("p1_sigmark_", "EmberSignature", A, AS, ZR, "boss insignia per map (6 sources)");
         px("p1_sigfc_", "EmberSignature", A, CL, NV, "first-clear insignia paid, once per map");
         px("p1_sigaltu_", "EmberSignature", A, PR, NV, "tuned variant unlocked");
@@ -135,10 +135,10 @@ public final class EmberCounters {
         px("p4_chal_", "EmberGrowthService", A, PR, NV, "challenge first clear (talent point source); scanned by prefix");
         px("p4_honor_", "EmberGrowthService", A, HI, NV, "honor unlocked hint shown");
         px("p4_honortest_", "EmberGrowthService", A, AD, NV, "admin test grant");
-        px("p4_af_", "EmberGrowthService", A, IT, NV, "item affix code*10+tier by uid (S1-4: move to item)");
-        px("p4_afp_", "EmberGrowthService", A, IT, NV, "item reroll pity by uid (S1-4: move to item)");
-        px("p4_rrn_", "EmberPayRules", A, IT, NV, "item paid reroll sequence by uid (pairs with cr_p1_txn rerollRid)");
-        px("p4_rro_", "EmberPayRules", A, TX, ZR, "reroll paid, result pending (n*2+lock); recoverRolls scans by prefix");
+        px("p4_af_", "EmberGrowthService", A, IT, NV, "LEGACY item affix by uid — migrated to EmberItemData.affix / cr_p1_item.affix (S1-4 done, D208); read only for v1 items, cleared when folded");
+        px("p4_afp_", "EmberGrowthService", A, IT, NV, "LEGACY item reroll pity by uid — migrated to EmberItemData.afPity / cr_p1_item.af_pity (S1-4 done, D208); read only for v1 items");
+        px("p4_rrn_", "EmberPayRules", A, IT, NV, "LEGACY paid reroll sequence by uid — migrated to EmberItemData.rerollN / cr_p1_item.reroll_n (S1-4 done, D208); read only for v1 items");
+        px("p4_rro_", "EmberPayRules", A, TX, ZR, "LEGACY reroll paid, result pending (n*2+lock) — never written since D208 (the roll commits in the cr_p1_txn row with the payment); recoverRolls still settles old ones");
         // 2.4 season (EmberSeason)
         px("p3_goal_", "EmberSeason", W, PR, RL, "weekly goal progress");
         px("p3_goalpay_", "EmberSeason", W, CL, RL, "weekly goal paid (+ goal id | all)");

@@ -35,25 +35,39 @@ public final class EmberPay {
     public static final class Price {
         public final Cost cost;
         public final int markTier, marks;
-        public Price(Cost cost, int markTier, int marks) { this.cost = cost == null ? Cost.NONE : cost; this.markTier = markTier; this.marks = Math.max(0, marks); }
+        /** D208: boss insignia of one map (EmberSignature.C_MARK + map) — the imprint price, refundable like forge marks */
+        public final String sigMap;
+        public final int sigMarks;
+        public Price(Cost cost, int markTier, int marks) { this(cost, markTier, marks, null, 0); }
+        public Price(Cost cost, int markTier, int marks, String sigMap, int sigMarks) {
+            this.cost = cost == null ? Cost.NONE : cost; this.markTier = markTier; this.marks = Math.max(0, marks);
+            this.sigMarks = sigMap == null ? 0 : Math.max(0, sigMarks); this.sigMap = this.sigMarks > 0 ? sigMap : null;
+        }
         public static Price of(Cost c) { return new Price(c, 0, 0); }
         public static Price marks(int tier, int n) { return new Price(Cost.NONE, tier, n); }
+        /** D208: coins + boss insignia (烬炉烙印) */
+        public static Price insignia(int coins, String map, int n) { return new Price(new Cost(0, 0, 0, 0, coins), 0, 0, map, n); }
         public Price plus(Price o) {
             Cost a = cost, b = o.cost;
             int tier = marks > 0 ? markTier : o.markTier;
             if (marks > 0 && o.marks > 0 && markTier != o.markTier) throw new IllegalArgumentException("mixed mark tiers");
-            return new Price(new Cost(a.shards + b.shards, a.cores + b.cores, a.blanks + b.blanks, a.bone + b.bone, a.coins + b.coins), tier, marks + o.marks);
+            if (sigMarks > 0 && o.sigMarks > 0 && !sigMap.equals(o.sigMap)) throw new IllegalArgumentException("mixed insignia maps");
+            return new Price(new Cost(a.shards + b.shards, a.cores + b.cores, a.blanks + b.blanks, a.bone + b.bone, a.coins + b.coins), tier, marks + o.marks,
+                    sigMarks > 0 ? sigMap : o.sigMap, sigMarks + o.sigMarks);
         }
-        public List<EmberItemStore.Owed> owed(String note) { return EmberPayRules.owed(cost.materials(), cost.coins, markTier, marks, note); }
+        public List<EmberItemStore.Owed> owed(String note) { return EmberPayRules.owed(cost.materials(), cost.coins, markTier, marks, sigMap, sigMarks, note); }
         public boolean free() { return owed("").isEmpty(); }
         public String json() {
             String c = cost.json();
-            return marks > 0 ? c.substring(0, c.length() - 1) + ",\"mark_t" + markTier + "\":" + marks + "}" : c;
+            if (marks > 0) c = c.substring(0, c.length() - 1) + ",\"mark_t" + markTier + "\":" + marks + "}";
+            if (sigMarks > 0) c = c.substring(0, c.length() - 1) + ",\"sigmark_" + sigMap + "\":" + sigMarks + "}";
+            return c;
         }
         public String label() {
             String c = cost.label();
-            if (marks <= 0) return c;
-            return ("免费".equals(c) ? "" : c + " ") + "T" + markTier + " 印记×" + marks;
+            if (marks > 0) c = ("免费".equals(c) ? "" : c + " ") + "T" + markTier + " 印记×" + marks;
+            if (sigMarks > 0) c = ("免费".equals(c) ? "" : c + " ") + sigMap.toUpperCase(java.util.Locale.ROOT) + " 首领徽记×" + sigMarks;
+            return c;
         }
     }
 
@@ -87,6 +101,10 @@ public final class EmberPay {
             int have = pd == null ? 0 : pd.periodCount(EmberPayRules.MARK_COUNTER + c.markTier, "all");
             if (have < c.marks) out.add("T" + c.markTier + " 印记 " + have + "/" + c.marks);
         }
+        if (c.sigMarks > 0) {
+            int have = pd == null ? 0 : pd.periodCount(EmberSignature.C_MARK + c.sigMap, "all");
+            if (have < c.sigMarks) out.add(c.sigMap.toUpperCase(java.util.Locale.ROOT) + " 首领徽记 " + have + "/" + c.sigMarks);
+        }
         return out;
     }
 
@@ -107,10 +125,23 @@ public final class EmberPay {
             if (pd == null || pd.periodCount(k, "all") < c.marks) { giveBack(p, taken, c.cost.coins, 0, 0); return "扣除印记失败，已退回"; }
             pd.addPeriodCount(k, "all", -c.marks);
         }
+        if (c.sigMarks > 0) {
+            String k = EmberSignature.C_MARK + c.sigMap;
+            if (pd == null || pd.periodCount(k, "all") < c.sigMarks) {
+                giveBack(p, taken, c.cost.coins, 0, 0);
+                if (c.marks > 0 && pd != null) pd.addPeriodCount(EmberPayRules.MARK_COUNTER + c.markTier, "all", c.marks);
+                return "扣除首领徽记失败，已退回";
+            }
+            pd.addPeriodCount(k, "all", -c.sigMarks);
+        }
         return null;
     }
 
-    void giveBack(Player p, Price c) { giveBack(p, c.cost.materials(), c.cost.coins, c.markTier, c.marks); }
+    void giveBack(Player p, Price c) {
+        giveBack(p, c.cost.materials(), c.cost.coins, c.markTier, c.marks);
+        PlayerData pd = data(p.getUniqueId());
+        if (pd != null && c.sigMarks > 0) pd.addPeriodCount(EmberSignature.C_MARK + c.sigMap, "all", c.sigMarks);
+    }
 
     private void giveBack(Player p, Map<String, Integer> mats, int coins, int markTier, int marks) {
         for (Map.Entry<String, Integer> m : mats.entrySet()) if (m.getValue() > 0) ni().giveNiItem(p, m.getKey(), m.getValue());

@@ -652,6 +652,7 @@ public final class EmberGrowthService implements Listener {
 
     // ------------------------------------------------------------------ affix reroll (D143)
 
+    // D208 (ARCH S1-4): legacy only — the affix and its pity are EmberItemData.affix / afPity on v2 items (EmberItemKeys)
     static final String C_AF = "p4_af_";    // + item uid, period all: affix code * 10 + tier (0 = empty)
     static final String C_AFP = "p4_afp_";  // + item uid, period all: tries in a row below the quality cap (pity)
     public static final String REROLL_MENU = "ember_p1_reroll";
@@ -667,24 +668,77 @@ public final class EmberGrowthService implements Listener {
 
     public EmberAffix.Rules reroll() { return reroll; }
 
-    public int affixOf(PlayerData d, String uid) { return d == null || uid == null ? 0 : d.periodCount(C_AF + uid, "all"); }
+    /** D208: the piece's affix — on the item (v2) or its legacy counter (v1) */
+    public int affixOf(PlayerData d, EmberItemData it) { return EmberItemKeys.affix(d, it); }
+
+    /** D208: the piece's reroll pity — on the item (v2) or its legacy counter (v1) */
+    public int afPityOf(PlayerData d, EmberItemData it) { return EmberItemKeys.afPity(d, it); }
 
     private int[][] affixItems(PlayerData d, EmberLoadout lo) {
         if (reroll == null || lo == null) return new int[0][];
-        return new int[][]{lo.blade == null ? null : new int[]{affixOf(d, lo.blade.uid), lo.blade.quality},
-                lo.charm == null ? null : new int[]{affixOf(d, lo.charm.uid), lo.charm.quality}};
+        return new int[][]{lo.blade == null ? null : new int[]{affixOf(d, lo.blade), lo.blade.quality},
+                lo.charm == null ? null : new int[]{affixOf(d, lo.charm), lo.charm.quality}};
     }
 
     // ------------------------------------------------------------------ D174 签名传奇
 
-    /** signature code on this uid (0 = none) */
-    public int sigOf(PlayerData d, String uid) { return d == null || uid == null ? 0 : d.periodCount(EmberSignature.C_SIG + uid, "all"); }
+    /** signature code of this piece (0 = none) — D208: on the item (v2) or its legacy counter (v1) */
+    public int sigOf(PlayerData d, EmberItemData it) { return EmberItemKeys.sig(d, it); }
 
     /** D174: an affix or a signature = invested (never a reroll duplicate, skipped by bulk dismantle) */
-    public boolean invested(PlayerData d, String uid) { return affixOf(d, uid) > 0 || sigOf(d, uid) > 0; }
+    public boolean invested(PlayerData d, EmberItemData it) { return affixOf(d, it) > 0 || sigOf(d, it) > 0; }
+
+    // ------------------------------------------------------------------ D208: item-key writes (one item transaction each)
+
+    /**
+     * D208: commits item changes (signed stacks pre-built, one cr_p1_item transaction, owner online or not). On OK: row
+     * cache, stack replaced by uid when the owner is online (otherwise the join resync rewrites it from the DB row),
+     * legacy counters of every v1 piece folded here dropped, loadout refreshed. YAML storage: NBT only, applied inline.
+     */
+    void commitOnItem(final UUID id, final String kind, final String rid, final List<EmberItemStore.TxnItem> items,
+                      final String costJson, final String note, final java.util.function.Consumer<Boolean> cb) {
+        final Map<String, org.bukkit.inventory.ItemStack> built = new HashMap<String, org.bukkit.inventory.ItemStack>();
+        for (EmberItemStore.TxnItem t : items) {
+            if (t.after == null) continue;
+            org.bukkit.inventory.ItemStack st = runs.loadouts().items().create(t.after);
+            if (st == null) { plugin.getLogger().warning("[P1 growth] " + kind + " " + rid + ": stack for " + t.after.uid + " not buildable"); cb.accept(false); return; }
+            built.put(t.after.uid, st);
+        }
+        final EmberItemStore store = runs.loadouts().store();
+        java.util.function.Consumer<EmberItemStore.TxnResult> fin = res -> {
+            boolean ok = res.status == EmberItemStore.TxnStatus.OK || res.status == EmberItemStore.TxnStatus.REPLAY;
+            if (ok) itemsCommitted(id, items, built);
+            else plugin.getLogger().info("[P1 growth] " + kind + " " + rid + " not committed: " + res.status + " " + res.detail);
+            cb.accept(ok);
+        };
+        if (store.usable()) store.commitTxn(rid, kind, id, items, costJson, note, fin);
+        else fin.accept(new EmberItemStore.TxnResult(EmberItemStore.TxnStatus.OK, null));
+    }
+
+    /** D208: bookkeeping after an item transaction committed (also used for the gear-library duplicate path) */
+    void itemsCommitted(UUID id, List<EmberItemStore.TxnItem> items, Map<String, org.bukkit.inventory.ItemStack> built) {
+        Player q = Bukkit.getPlayer(id);
+        PlayerData x = data(id);
+        boolean ch = false;
+        for (EmberItemStore.TxnItem t : items) {
+            if (t.after == null) continue;
+            runs.loadouts().rememberRow(t.after.uid, id, t.after.rev, t.expectState);
+            if (!t.before.itemKeys()) ch |= EmberItemKeys.clearLegacy(x, t.before.uid);
+            org.bukkit.inventory.ItemStack st = built == null ? null : built.get(t.after.uid);
+            if (q != null && st != null && "active".equals(t.expectState)) plugin.getEmberForge().replaceStack(q, t.after.uid, st);
+        }
+        if (ch) plugin.getDataStore().flushMutation(id);
+        epoch++;
+        if (q != null) runs.loadouts().refresh(q);
+    }
+
+    /** D208: the v2 data of {@code t} after a write (legacy counters folded in, rev + 1) */
+    static EmberItemData next(PlayerData d, EmberItemData t, int affix, int afPity, int sig, int rerollN) {
+        return EmberItemKeys.fold(d, t).withItemKeys(affix, afPity, sig, rerollN).withRev(t.rev + 1);
+    }
 
     EmberSignature.Worn worn(PlayerData d, EmberItemData it) {
-        return it == null ? null : new EmberSignature.Worn(EmberSignature.byCode(sigOf(d, it.uid)), it.slot, it.family);
+        return it == null ? null : new EmberSignature.Worn(EmberSignature.byCode(sigOf(d, it)), it.slot, it.family);
     }
 
     /** D174 stage 1.5: the player switched this slot's signature off in the menu (period all, 1 = off) */
@@ -832,7 +886,7 @@ public final class EmberGrowthService implements Listener {
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
         EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
-        int cur = t == null ? 0 : sigOf(d, t.uid);
+        int cur = t == null ? 0 : sigOf(d, t);
         String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         int coin = EmberSignature.imprintCoin(t.tier);
@@ -859,24 +913,50 @@ public final class EmberGrowthService implements Listener {
 
     private boolean inRun(Player p) { return EmberMode.isP1World(p.getWorld()) || runs.isRunWorld(p.getWorld()); }
 
-    /** one PlayerData mutation (insignia + coins + the signature + seen), then one checked save — never half applied */
+    private final java.util.Set<String> impBusy = java.util.Collections.newSetFromMap(new ConcurrentHashMap<String, Boolean>());
+
+    /**
+     * D208 (ARCH S1-4): the signature is written on the ITEM (v2 NBT + cr_p1_item.sig_code, HMAC) through the durable
+     * payment path: refund hold → insignia + coins taken in one save → the item transaction (which voids the hold) →
+     * insignia / coins come back exactly once when it does not commit (EmberDelivery kinds sigmark / coin).
+     * Returns true when the payment started.
+     */
     private boolean doImprint(Player p, PlayerData d, EmberLoadout lo, EmberSignature.Def sd, EmberItemData t, int cur, int coin, String via) {
-        if (!d.takeCoin(coin)) { p.sendMessage(P + ChatColor.RED + "余烬币不够"); return false; }
-        EmberSignature.Def old = EmberSignature.byCode(cur);
-        d.addPeriodCount(EmberSignature.C_MARK + sd.map, "all", -EmberSignature.IMPRINT_MARKS);
-        d.addPeriodCount(EmberSignature.C_SIG + t.uid, "all", sd.code - cur);
-        markSeen(d, sd);
-        boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
-        plugin.getLogger().info("[P1 sig] " + p.getName() + " imprint " + t.uid + " " + (old == null ? "-" : old.id) + " → " + sd.id
-                + " (-" + EmberSignature.IMPRINT_MARKS + " " + sd.map + " marks, -" + coin + " coin, via " + via + ", saved=" + saved + ")");
-        p.sendMessage(P + "§a烙印完成：§f" + t.shortLabel() + " §7→ §6" + sd.name + "§7（剩 " + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记）"
-                + (saved ? "" : " §e（存档稍后重试）"));
-        boolean worn = "blade".equals(sd.slot) ? lo.blade != null && lo.blade.uid.equals(t.uid) : lo.charm != null && lo.charm.uid.equals(t.uid);
-        if (!worn) p.sendMessage(P + "§e注意：这件现在没在用（选定 / 手持后才生效）");
-        else {
-            String off = sigWhy(d, lo, sd.slot);
-            if (off != null) p.sendMessage(P + "§e注意：现在不生效——" + off);
-        }
+        final EmberPay pay = EmberPay.get();
+        if (pay == null) { p.sendMessage(P + ChatColor.RED + "烙印暂不可用（服务未就绪）"); return false; }
+        if (!t.itemKeys() && d.isLoadFailed()) { p.sendMessage(P + ChatColor.RED + "数据没加载完整，稍后再试"); return false; }
+        if (!impBusy.add(t.uid)) { p.sendMessage(P + ChatColor.RED + "这件的烙印还在处理"); return false; }
+        final UUID id = p.getUniqueId();
+        final EmberSignature.Def old = EmberSignature.byCode(cur);
+        final EmberItemData after = next(d, t, affixOf(d, t), afPityOf(d, t), sd.code, EmberItemKeys.rerollN(d, t));
+        final String rid = EmberPayRules.imprintRid(t.uid, t.rev, System.currentTimeMillis());
+        final EmberPay.Price price = EmberPay.Price.insignia(coin, sd.map, EmberSignature.IMPRINT_MARKS);
+        final String note = "烙印 " + t.shortLabel() + " " + (old == null ? "-" : old.id) + " → " + sd.id;
+        pay.pay(p, rid, price, "烙印没完成，退回", null, () -> commitOnItem(id, "imprint", rid,
+                java.util.Collections.singletonList(new EmberItemStore.TxnItem(t, after, null)), price.json(), note, ok -> {
+                    impBusy.remove(t.uid);
+                    Player q = Bukkit.getPlayer(id);
+                    if (!ok) {
+                        pay.release(id, rid);
+                        if (q != null) q.sendMessage(P + ChatColor.RED + "烙印没完成（签名没变），" + price.label() + " 会退回");
+                        return;
+                    }
+                    pay.settled(id, rid);
+                    PlayerData x = data(id);
+                    markSeen(x, sd);
+                    boolean saved = plugin.getDataStore().flushMutationChecked(id);
+                    plugin.getLogger().info("[P1 sig] " + (q == null ? id.toString() : q.getName()) + " imprint " + t.uid + " " + (old == null ? "-" : old.id) + " → " + sd.id
+                            + " (-" + EmberSignature.IMPRINT_MARKS + " " + sd.map + " marks, -" + coin + " coin, via " + via + ", item rev " + after.rev + ", " + rid + ", saved=" + saved + ")");
+                    if (q == null || x == null) return;
+                    q.sendMessage(P + "§a烙印完成：§f" + t.shortLabel() + " §7→ §6" + sd.name + "§7（剩 " + x.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记）");
+                    EmberLoadout l2 = runs.loadouts().get(q);
+                    boolean worn = "blade".equals(sd.slot) ? l2.blade != null && l2.blade.uid.equals(t.uid) : l2.charm != null && l2.charm.uid.equals(t.uid);
+                    if (!worn) q.sendMessage(P + "§e注意：这件现在没在用（选定 / 手持后才生效）");
+                    else {
+                        String off = sigWhy(x, l2, sd.slot);
+                        if (off != null) q.sendMessage(P + "§e注意：现在不生效——" + off);
+                    }
+                }), err -> { impBusy.remove(t.uid); if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有烙印：" + err); });
         return true;
     }
 
@@ -984,7 +1064,7 @@ public final class EmberGrowthService implements Listener {
         if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
         EmberItemData t = pickTarget(p, lo, sd, pk[1]);
-        int cur = t == null ? 0 : sigOf(d, t.uid);
+        int cur = t == null ? 0 : sigOf(d, t);
         String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map),
                 d.periodCount(EmberSignature.C_MARK + sd.map, "all"), d.getCoin(), cur);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); openMenu(p, SIG_IMP_MENU); return true; }
@@ -1046,7 +1126,7 @@ public final class EmberGrowthService implements Listener {
             String slot = key.substring(0, 5);
             EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
             if (sigOff(d, slot)) return "§e➥ 点击重新打开这条签名";
-            if (it == null || sigOf(d, it.uid) <= 0) return "§8这件没有签名（在下面点一条签名可以烙印）";
+            if (it == null || sigOf(d, it) <= 0) return "§8这件没有签名（在下面点一条签名可以烙印）";
             return "§e➥ 点击关闭这条签名 §8（有代价时可以先关掉；随时再开）";
         }
         // per signature by index (1 = DEFS[0]): n_ name · k_ kind/map/boss · g_ good · b_ bad · s_ status · a_ action
@@ -1099,7 +1179,7 @@ public final class EmberGrowthService implements Listener {
         String ex = !sd.excl.isEmpty() && picks(d).values().contains(sd.excl) ? " §c· 与已选天赋同类，不生效" : "";
         for (String slot : new String[]{"blade", "charm"}) {
             EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
-            if (it != null && sigOf(d, it.uid) == sd.code) {
+            if (it != null && sigOf(d, it) == sd.code) {
                 String why = sigWhy(d, lo, slot);
                 return why == null ? "§a▶ 穿着 · 生效中" : "§e▶ 穿着 · 不生效：" + why;
             }
@@ -1114,7 +1194,7 @@ public final class EmberGrowthService implements Listener {
         if (sd == null) return "nok".equals(k) ? "1" : "§8先在签名页点一条签名";
         String which = pk[1];
         EmberItemData t = pickTarget(p, lo, sd, which);
-        int cur = t == null ? 0 : sigOf(d, t.uid), marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        int cur = t == null ? 0 : sigOf(d, t), marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
         String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
         switch (k) {
             case "name": return "§6" + sd.name + " §7（" + sd.kindText() + " · " + mapLabel(sd.map) + "）";
@@ -1150,7 +1230,7 @@ public final class EmberGrowthService implements Listener {
     }
 
     private String sigNow(PlayerData d, EmberItemData it) {
-        EmberSignature.Def c = EmberSignature.byCode(sigOf(d, it.uid));
+        EmberSignature.Def c = EmberSignature.byCode(sigOf(d, it));
         return c == null ? " §8（无签名）" : " §7· 现在：§6" + c.name;
     }
 
@@ -1172,7 +1252,7 @@ public final class EmberGrowthService implements Listener {
             EmberItemData it = "charm".equalsIgnoreCase(args[4]) ? lo.charm : lo.blade;
             EmberSignature.Def sd = EmberSignature.byId(args[5]);
             if (it == null || sd == null || !EmberSignature.fits(sd, it.slot, it.family)) { s.sendMessage(P + "没有这件 / 签名不合这件"); return true; }
-            d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", sd.code - sigOf(d, it.uid));
+            sigTestWrite(s, t, d, it, sd.code); // D208: on the item (async item transaction)
         } else if ("alt".equals(w) && args.length >= 6) { // stage 3: unlock + pick the 调律 version without insignia (smoke)
             EmberSignature.Def sd = EmberSignature.byId(args[4]);
             if (EmberSignature.alt(sd) == null) { s.sendMessage(P + "没有这条签名的调律版"); return true; }
@@ -1185,7 +1265,7 @@ public final class EmberGrowthService implements Listener {
             for (String mk : EmberSignature.maps()) {
                 d.addPeriodCount(EmberSignature.C_MARK + mk, "all", -d.periodCount(EmberSignature.C_MARK + mk, "all"));
             }
-            for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) if (it != null) d.addPeriodCount(EmberSignature.C_SIG + it.uid, "all", -sigOf(d, it.uid));
+            for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) if (it != null && sigOf(d, it) > 0) sigTestWrite(s, t, d, it, 0); // D208
             for (String sl : new String[]{"blade", "charm"}) d.addPeriodCount(C_SIGOFF + sl, "all", -d.periodCount(C_SIGOFF + sl, "all"));
             for (EmberSignature.Def sd : EmberSignature.DEFS) d.addPeriodCount(C_SIGSEEN + sd.id, "all", -d.periodCount(C_SIGSEEN + sd.id, "all"));
             for (String id : EmberSignature.ALTS.keySet()) {
@@ -1202,6 +1282,13 @@ public final class EmberGrowthService implements Listener {
         s.sendMessage(P + "徽记 " + sb + "· off blade=" + sigOff(d, "blade") + " charm=" + sigOff(d, "charm") + " · seen " + seen + "· active "
                 + sigKey(d, signatures(d, lo)) + " · 调律 " + altKey(d) + " · mods " + mods(t));
         return true;
+    }
+
+    /** D208 admin smoke: set / clear the signature of a worn piece through an item transaction */
+    private void sigTestWrite(final org.bukkit.command.CommandSender s, Player t, PlayerData d, EmberItemData it, final int code) {
+        final EmberItemData after = next(d, it, affixOf(d, it), afPityOf(d, it), code, EmberItemKeys.rerollN(d, it));
+        commitOnItem(t.getUniqueId(), "sigtest", "sigtest:" + it.uid + ":" + it.rev, java.util.Collections.singletonList(new EmberItemStore.TxnItem(it, after, null)),
+                null, "管理员测试签名 " + code, ok -> s.sendMessage(P + "签名测试写入 " + it.uid.substring(0, 8) + " = " + code + (ok ? " §a已提交（物品 rev " + after.rev + "）" : " §c未提交")));
     }
 
     private String sigKey(PlayerData d, List<EmberSignature.Def> sg) {
@@ -1248,7 +1335,7 @@ public final class EmberGrowthService implements Listener {
             if (r == null || !r.ok() || r.data == null) continue;
             EmberItemData x = r.data;
             if (lo.blade != null && x.uid.equals(lo.blade.uid) || lo.charm != null && x.uid.equals(lo.charm.uid)) continue;
-            if (EmberAffix.duplicateOk(t, x, invested(d, x.uid)) == null) return i; // D174: signature = invested
+            if (EmberAffix.duplicateOk(t, x, invested(d, x)) == null) return i; // D174: signature = invested
         }
         return -1;
     }
@@ -1257,7 +1344,7 @@ public final class EmberGrowthService implements Listener {
     private EmberStorageRules.Entry findLibDup(Player p, PlayerData d, EmberItemData t) {
         EmberGearLib lib = EmberGearLib.get();
         if (lib == null) return null;
-        return lib.findDupForReroll(p, t, uid -> invested(d, uid)); // D174: signature = invested
+        return lib.findDupForReroll(p, t, x -> invested(d, x)); // D174: signature = invested (D208: item keys on the row)
     }
 
     int rerollCoin(Player p, EmberItemData t) {
@@ -1305,21 +1392,21 @@ public final class EmberGrowthService implements Listener {
         int di = dup ? findDup(p, d, t) : -1;
         EmberStorageRules.Entry libDup = (dup && di < 0) ? findLibDup(p, d, t) : null;
         boolean haveDup = di >= 0 || libDup != null;
-        int cap = reroll.cap(t.quality), pity = d.periodCount(C_AFP + t.uid, "all");
+        int cap = reroll.cap(t.quality), pity = afPityOf(d, t);
         // D148 lock: keep the current affix, roll only the tier, for lock_shard extra shards
-        EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t.uid));
+        EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t));
         int lockShard = reroll.lockShardFor(t.tier);
         if (lock) {
             if (lockShard <= 0) { p.sendMessage(P + "§c锁定词条没有开放"); return true; }
             if (cur == null) { p.sendMessage(P + "§c词条槽还是空的，没有可锁定的词条（先普通洗一次）"); return true; }
             if (!cur.rollable) { p.sendMessage(P + "§c" + cur.name + " 已移出洗练池，不能锁定再洗（已有的照常生效；普通洗会换成别的词条）"); return true; }
-            if (Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) >= cap) { p.sendMessage(P + "§c" + cur.name + " 已经是这件成色的上限档（" + cap + " 档），锁定再洗没有意义"); return true; }
+            if (Math.min(EmberAffix.decodeTier(affixOf(d, t)), cap) >= cap) { p.sendMessage(P + "§c" + cur.name + " 已经是这件成色的上限档（" + cap + " 档），锁定再洗没有意义"); return true; }
         }
         int needShard = (dup ? 0 : shard) + (lock ? lockShard : 0);
         String mode = (dup ? "dup" : "shard") + (lock ? " lock" : "");
         if (!confirm) {
             p.sendMessage(P + "§6词条洗练 · " + t.shortLabel());
-            p.sendMessage(P + "现在：" + affixText(affixOf(d, t.uid), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality) + "最高 §f" + cap + " §7档 · 保底 §f" + pity + "/" + reroll.pity
+            p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality) + "最高 §f" + cap + " §7档 · 保底 §f" + pity + "/" + reroll.pity
                     + (pity >= reroll.pity ? " §a（这次必出 " + cap + " 档）" : ""));
             p.sendMessage(P + "档位概率：" + oddsText(cap));
             p.sendMessage(P + (lock ? "§a锁定词条：§f" + cur.name + " §7不变，只重抽档位" : "词条：本部位 " + reroll.pool(slot).size() + " 个里随机（保底只保档位，不保词条）"));
@@ -1331,7 +1418,7 @@ public final class EmberGrowthService implements Listener {
             if (dup && !haveDup) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
             List<String[]> btn = new ArrayList<String[]>();
             btn.add(new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + mode + " confirm", "扣上面的花费，" + (lock ? "锁定「" + cur.name + "」重抽档位" : "抽一次" + name + "的词条"), "GREEN"});
-            if (!lock && cur != null && cur.rollable && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), cap) < cap)
+            if (!lock && cur != null && cur.rollable && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t)), cap) < cap)
                 btn.add(new String[]{"[锁定" + cur.name + "再洗]", "/corerpg p1 reroll " + slot + " " + (dup ? "dup" : "shard") + " lock", "保留「" + cur.name + "」只重抽档位，另加 " + lockShard + " 碎片", "AQUA"});
             btn.add(new String[]{"[回洗练页]", "/corerpg p1 reroll from " + rfromKey(p), "不洗，回去看看", "GRAY"});
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
@@ -1339,77 +1426,91 @@ public final class EmberGrowthService implements Listener {
         }
         if (gate(p)) return true;
         final UUID id = p.getUniqueId();
-        if (d.periodCount(EmberPayRules.C_RRO + t.uid, "all") > 0) { recoverRolls(p, 0); p.sendMessage(P + "§c这件上一次洗练已付款、结果还在处理（几秒后自动出结果）"); return true; }
+        if (d.periodCount(EmberPayRules.C_RRO + t.uid, "all") > 0) { recoverRolls(p, 0); p.sendMessage(P + "§c这件上一次洗练已付款、结果还在处理（几秒后自动出结果）"); return true; } // pre-1.65.42 owed roll
         final EmberPay pay = EmberPay.get();
         if (pay == null) { p.sendMessage(P + "§c洗练暂不可用（服务未就绪）"); return true; }
+        if (!t.itemKeys() && d.isLoadFailed()) { p.sendMessage(P + "§c数据没加载完整，稍后再试"); return true; }
         if (!rerollBusy.add(id)) { p.sendMessage(P + "§c上一次洗练还在处理"); return true; }
         if (dup && !haveDup) { rerollBusy.remove(id); p.sendMessage(P + "§c背包或装备库里没有可用的重复件"); return true; }
         final EmberItemData dupData = !dup ? null : di >= 0 ? runs.loadouts().items().read(p.getInventory().getItem(di)).data : libDup.d;
         final int dupIndex = di;
         final String lockPaid = lock ? " + 锁定 " + lockShard + " 碎片" : "";
         final String paid = coin + " 币 + " + (dup ? "重复件" : shard + " 碎片") + lockPaid;
-        // D172 (forge review X15): the durable payment path. Refund hold → coins / shards taken + "roll owed" (n, lock) in ONE
-        // save → the settling transaction (ledger row, or the duplicate's retire) → only THEN the roll, seeded by the request
-        // id, written in the save that clears "roll owed". Disconnect / kill at any step: refund once, or the same roll
-        // once at the next join — never a free roll, never a paid roll lost.
-        final int n = d.periodCount(EmberPayRules.C_RRN + t.uid, "all") + 1;
-        final String rid = EmberPayRules.rerollRid(t.uid, n);
-        final boolean lockF = lock;
+        // D208 (ARCH S1-4 · REG §4-4): the durable payment path of D172, with the roll INSIDE the settling transaction.
+        // Refund hold → coins / shards taken in one save → ONE item transaction (the target's new affix / pity / reroll
+        // sequence on cr_p1_item + the ledger row + the void of the hold, plus the duplicate's retire when one is eaten)
+        // → stack rewritten. The roll is seeded by the request id and computed before the commit; nothing is "owed"
+        // afterwards (no p4_rro_), so a disconnect / kill at any step means: refunded once, or rolled once on the item.
+        final int n = EmberItemKeys.rerollN(d, t) + 1;
+        final String rid = EmberPayRules.rerollRid(t.uid, n, System.currentTimeMillis());
+        final RollPlan plan = plan(d, t, id, rid, lock, n);
+        if (plan == null) { rerollBusy.remove(id); p.sendMessage(P + "§c这个部位没有词条池"); return true; }
+        pendingRoll.remove(id); // an older 保留新 / 保留旧 choice is void once a new roll is paid
         final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(needShard, 0, 0, 0, coin));
-        EmberPay.Hook hook = new EmberPay.Hook() {
-            @Override public void apply(PlayerData x) {
-                x.addPeriodCount(EmberPayRules.C_RRN + t.uid, "all", n - x.periodCount(EmberPayRules.C_RRN + t.uid, "all"));
-                x.addPeriodCount(EmberPayRules.C_RRO + t.uid, "all", EmberPayRules.owedValue(n, lockF) - x.periodCount(EmberPayRules.C_RRO + t.uid, "all"));
-                pendingRoll.remove(id); // an older 保留新 / 保留旧 choice is void once a new roll is paid
-            }
-            @Override public void revert(PlayerData x) {
-                x.addPeriodCount(EmberPayRules.C_RRN + t.uid, "all", (n - 1) - x.periodCount(EmberPayRules.C_RRN + t.uid, "all"));
-                x.addPeriodCount(EmberPayRules.C_RRO + t.uid, "all", -x.periodCount(EmberPayRules.C_RRO + t.uid, "all"));
-            }
-        };
-        pay.pay(p, rid, price, "洗练没完成，退回", hook, () -> settleReroll(id, t, rid, dup, dupIndex, dupData, price, paid),
+        pay.pay(p, rid, price, "洗练没完成，退回", null, () -> settleReroll(id, t, rid, dup, dupIndex, dupData, price, paid, plan),
                 err -> { rerollBusy.remove(id); if (p.isOnline()) p.sendMessage(P + "§c没有洗练：" + err); });
         return true;
     }
 
-    /** D172: the transaction that makes the payment final; the roll follows it (or the refund, if it did not commit) */
+    /** D208: one paid roll, computed before its transaction: the target's data after it, the roll, new / old affix */
+    static final class RollPlan {
+        final EmberItemData after; final EmberAffix.Roll roll; final int enc, old, pity; final boolean lock;
+        RollPlan(EmberItemData after, EmberAffix.Roll roll, int enc, int old, int pity, boolean lock) { this.after = after; this.roll = roll; this.enc = enc; this.old = old; this.pity = pity; this.lock = lock; }
+    }
+
+    /**
+     * D208: the roll of request {@code rid} on piece {@code t} (legacy counters folded in): seeded by the request id, so
+     * the same request always gives the same roll. An empty slot takes the roll; otherwise the old affix stays and the
+     * candidate waits for 保留新 / 保留旧. Pity and the reroll sequence n move in the same item write. null = no pool.
+     */
+    private RollPlan plan(PlayerData d, EmberItemData t, UUID id, String rid, boolean lock, int n) {
+        int old = affixOf(d, t), pity = afPityOf(d, t);
+        String lockId = null;
+        if (lock) { EmberAffix.Def cur = EmberAffix.decodeDef(reroll, old); lockId = cur == null ? null : cur.id; }
+        EmberAffix.Roll r = EmberAffix.roll(reroll, t.slot, t.quality, pity, new java.util.Random(EmberPayRules.seed(salt(), id.toString(), rid)), lockId);
+        if (r == null) return null;
+        int enc = EmberAffix.encode(reroll.def(r.id), r.tier);
+        return new RollPlan(next(d, t, old == 0 ? enc : old, r.pityAfter, sigOf(d, t), n), r, enc, old, pity, lockId != null);
+    }
+
+    /** D172 → D208: the item transaction that makes the payment final AND carries the roll (or the refund, if it did not commit) */
     private void settleReroll(final UUID id, final EmberItemData t, final String rid, boolean dup, int dupIndex, EmberItemData dupData,
-                              EmberPay.Price price, final String paid) {
+                              final EmberPay.Price price, final String paid, final RollPlan plan) {
         final EmberPay pay = EmberPay.get();
+        final EmberItemStore.TxnItem target = new EmberItemStore.TxnItem(t, plan.after, null);
+        final String note = "洗练 " + t.shortLabel() + "（" + paid + "）→ " + plan.roll.id + " t" + plan.roll.tier;
         final java.util.function.Consumer<Boolean> after = committed -> {
             rerollBusy.remove(id);
             if (committed) {
                 pay.settled(id, rid);
-                Player q = Bukkit.getPlayer(id);
-                if (q != null) applyOwed(q, t.uid, t.quality, t.slot, rid, paid, false); // offline: rolled at the next join
+                rolled(id, t, rid, plan, paid, false);
                 return;
             }
-            pay.release(id, rid); // not committed → the coins / shards come back once
+            if (pay.durable()) pay.release(id, rid); // not committed → the coins / shards come back once
+            else pay.refundInMemory(Bukkit.getPlayer(id), price);
             Player q = Bukkit.getPlayer(id);
-            if (q != null) q.sendMessage(P + "§c洗练没完成（结果没抽），" + paid.replace(" + 重复件", "") + " 会退回");
-            recoverRolls(id, 0); // after the release (same DB queue): txn missing → the owed roll is dropped
+            if (q != null) q.sendMessage(P + "§c洗练没完成（词条没变），" + paid.replace(" + 重复件", "") + " 会退回");
         };
         Player p = Bukkit.getPlayer(id);
-        if (!pay.durable()) { // YAML storage: the old in-memory path (dup consumption is MySQL-only anyway)
-            if (dup && p != null) consumeDup(p, dupIndex, dupData, t, null, ok -> { if (!ok) pay.refundInMemory(Bukkit.getPlayer(id), price); rerollBusy.remove(id);
-                Player q = Bukkit.getPlayer(id); PlayerData x = data(id);
-                if (ok && q != null) applyOwed(q, t.uid, t.quality, t.slot, rid, paid, false);
-                else if (x != null) x.addPeriodCount(EmberPayRules.C_RRO + t.uid, "all", -x.periodCount(EmberPayRules.C_RRO + t.uid, "all")); });
-            else { rerollBusy.remove(id); if (p != null) applyOwed(p, t.uid, t.quality, t.slot, rid, paid, false); }
-            return;
-        }
-        if (!dup) {
-            runs.loadouts().store().commitPlain(rid, "reroll", id, t.uid, price.json(), "洗练 " + t.shortLabel() + "（" + paid + "）",
-                    res -> after.accept(res.status == EmberItemStore.TxnStatus.OK || res.status == EmberItemStore.TxnStatus.REPLAY));
+        if (!dup) { // works while the owner is offline (after_pay + disconnect): the join resync rewrites the stack
+            commitOnItem(id, "reroll", rid, java.util.Collections.singletonList(target), price.json(), note, after);
             return;
         }
         if (p == null) { after.accept(false); return; }
-        consumeDup(p, dupIndex, dupData, t, rid, after);
-    }
-
-    private void consumeDup(Player p, int dupIndex, EmberItemData dupData, EmberItemData t, String rid, java.util.function.Consumer<Boolean> cb) {
-        if (dupIndex >= 0) plugin.getEmberForge().consumeForReroll(p, dupIndex, dupData, "洗练 " + t.shortLabel() + " 用掉重复件 " + dupData.shortLabel(), rid, cb);
-        else EmberGearLib.get().consumeForReroll(p, dupData.uid, "洗练 " + t.shortLabel() + " 用掉装备库重复件 " + dupData.shortLabel(), rid, cb);
+        if (dupIndex >= 0) { // inventory duplicate: the forge commit retires it and rewrites the target stack in one go
+            plugin.getEmberForge().consumeForReroll(p, dupIndex, dupData, note + " 用掉重复件 " + dupData.shortLabel(), rid, target, price.json(), after);
+            return;
+        }
+        final org.bukkit.inventory.ItemStack st = runs.loadouts().items().create(plan.after);
+        if (st == null) { after.accept(false); return; }
+        EmberGearLib.get().consumeForReroll(p, dupData.uid, note + " 用掉装备库重复件 " + dupData.shortLabel(), rid, target, price.json(), ok -> {
+            if (ok) {
+                Map<String, org.bukkit.inventory.ItemStack> b = new HashMap<String, org.bukkit.inventory.ItemStack>();
+                b.put(plan.after.uid, st);
+                itemsCommitted(id, java.util.Collections.singletonList(target), b);
+            }
+            after.accept(ok);
+        });
     }
 
     private String oddsText(int cap) {
@@ -1446,53 +1547,47 @@ public final class EmberGrowthService implements Listener {
     }
 
     /**
-     * D172: rolls a PAID reroll exactly once. Only when "roll owed" still names this request; the seed comes from the
-     * request id, so a roll computed (and maybe shown) but not saved before a crash comes out the same when re-applied.
-     * Pity + affix (or the 保留新/旧 candidate) and the cleared "roll owed" go into one save.
+     * D208: a paid roll committed on the item — log it (also when the owner is already offline) and show it: an empty slot
+     * took it; otherwise the candidate waits for 保留新 / 保留旧 (not choosing = keep the old one, cost not refunded).
      */
-    private void applyOwed(Player p, String uid, int quality, String slot, String rid, String paid, boolean recovered) {
-        UUID id = p.getUniqueId();
-        PlayerData d = data(id);
-        if (d == null || reroll == null) return;
-        int v = d.periodCount(EmberPayRules.C_RRO + uid, "all");
-        if (v <= 0 || !rid.equals(EmberPayRules.rerollRid(uid, EmberPayRules.owedSeq(v)))) return; // applied already
-        String lockId = null;
-        if (EmberPayRules.owedLock(v)) { EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, uid)); lockId = cur == null ? null : cur.id; }
-        int pity = d.periodCount(C_AFP + uid, "all");
-        EmberAffix.Roll r = EmberAffix.roll(reroll, slot, quality, pity, new java.util.Random(EmberPayRules.seed(salt(), id.toString(), rid)), lockId);
-        d.addPeriodCount(EmberPayRules.C_RRO + uid, "all", -v);
-        if (r == null) { plugin.getDataStore().save(id, d); p.sendMessage(P + "§c这个部位没有词条池"); return; }
-        d.addPeriodCount(C_AFP + uid, "all", r.pityAfter - pity);
-        int enc = EmberAffix.encode(reroll.def(r.id), r.tier), old = affixOf(d, uid);
-        if (old == 0) { d.addPeriodCount(C_AF + uid, "all", enc); epoch++; }
-        boolean saved = plugin.getDataStore().save(id, d);
-        plugin.getLogger().info("[P1 growth] " + p.getName() + " reroll " + uid + " " + rid + " " + paid + " → " + r.id + " t" + r.tier + (lockId != null ? " (lock)" : "")
-                + (r.forced ? " (pity)" : "") + " pity " + pity + "→" + r.pityAfter + (recovered ? " (recovered at join)" : "") + (saved ? "" : " (save failed, retried)"));
+    private void rolled(UUID id, EmberItemData t, String rid, RollPlan pl, String paid, boolean recovered) {
+        Player p = Bukkit.getPlayer(id);
+        EmberAffix.Roll r = pl.roll;
+        plugin.getLogger().info("[P1 growth] " + (p == null ? id.toString() : p.getName()) + " reroll " + t.uid + " " + rid + " " + paid + " → " + r.id + " t" + r.tier
+                + (pl.lock ? " (lock)" : "") + (r.forced ? " (pity)" : "") + " pity " + pl.pity + "→" + r.pityAfter + " n=" + pl.after.rerollN + " rev=" + pl.after.rev
+                + (pl.old == 0 ? " installed" : " candidate") + (recovered ? " (recovered at join)" : "") + (p == null ? " (owner offline, on the item)" : ""));
+        if (p == null) return;
+        int quality = t.quality;
         if (recovered) p.sendMessage(P + "§e上次洗练（掉线 / 重启前已付款）的结果：");
-        p.sendMessage(P + "§6洗练结果：" + affixText(enc, quality) + (r.forced ? " §a（保底）" : "") + " §7· 保底 " + r.pityAfter + "/" + reroll.pity);
-        if (old == 0) {
+        p.sendMessage(P + "§6洗练结果：" + affixText(pl.enc, quality) + (r.forced ? " §a（保底）" : "") + " §7· 保底 " + r.pityAfter + "/" + reroll.pity);
+        if (pl.old == 0) {
             pendingRoll.remove(id);
             p.sendMessage(P + "§a词条槽原来是空的，直接装上了");
         } else {
-            pendingRoll.put(id, new Object[]{uid, slot, enc, old, quality});
-            p.sendMessage(P + "原来：" + affixText(old, quality));
+            pendingRoll.put(id, new Object[]{t.uid, t.slot, pl.enc, pl.old, quality});
+            p.sendMessage(P + "原来：" + affixText(pl.old, quality));
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
-                    new String[]{"[保留新]", "/corerpg p1 reroll keep new", "换成：" + affixText(enc, quality).replaceAll("§.", ""), "GREEN"},
+                    new String[]{"[保留新]", "/corerpg p1 reroll keep new", "换成：" + affixText(pl.enc, quality).replaceAll("§.", ""), "GREEN"},
                     new String[]{"[保留旧]", "/corerpg p1 reroll keep old", "不换（不选也等于保留旧，花费不退）", "GRAY"});
         }
         if (!recovered) openMenu(p, REROLL_MENU);
     }
 
-    /** D172: settle every "roll owed" of a player (join, or after a refunded attempt); retried while a hold is in flight */
+    /** D172: settle every pre-1.65.42 "roll owed" counter of a player (join, or after a refunded attempt) */
     void recoverRolls(final UUID id, final int attempt) {
         Player p = Bukkit.getPlayer(id);
         if (p != null) recoverRolls(p, attempt);
     }
 
+    /**
+     * D172 → D208: legacy recovery only. 1.65.42 never writes {@code p4_rro_} (the roll commits with the payment); a
+     * counter left by an older version is settled once: its request committed → the roll (same seed) is written on the
+     * item in an item transaction and the counter dropped; hold still open → retry; neither → dropped (refunded).
+     */
     private void recoverRolls(final Player p, final int attempt) {
         final UUID id = p.getUniqueId();
         PlayerData d = data(id);
-        if (d == null || !p.isOnline()) return;
+        if (d == null || !p.isOnline() || reroll == null) return;
         final EmberItemStore store = runs.loadouts().store();
         for (Map.Entry<String, Integer> e : new ArrayList<Map.Entry<String, Integer>>(d.getCounters().entrySet())) {
             String k = e.getKey();
@@ -1508,18 +1603,26 @@ public final class EmberGrowthService implements Listener {
                 switch (EmberPayRules.recovery(st)) {
                     case APPLY:
                         store.lookupFull(uid, row -> {
-                            Player q2 = Bukkit.getPlayer(id);
                             PlayerData x2 = data(id);
-                            if (q2 == null || x2 == null) return;
-                            if (row == null) { // the piece is gone: nothing to roll on
-                                x2.addPeriodCount(EmberPayRules.C_RRO + uid, "all", -x2.periodCount(EmberPayRules.C_RRO + uid, "all"));
+                            if (Bukkit.getPlayer(id) == null || x2 == null || x2.periodCount(EmberPayRules.C_RRO + uid, "all") != v) return;
+                            if (row == null || !id.toString().equals(row.owner) || !("active".equals(row.state) || "stored".equals(row.state))) {
+                                x2.addPeriodCount(EmberPayRules.C_RRO + uid, "all", -v);
                                 plugin.getDataStore().save(id, x2);
-                                plugin.getLogger().warning("[P1 growth] " + q2.getName() + " reroll " + rid + " owed on a missing item, dropped");
+                                plugin.getLogger().warning("[P1 growth] " + id + " reroll " + rid + " owed on a missing item, dropped");
                                 return;
                             }
-                            EmberPay pay = EmberPay.get();
-                            if (pay != null) pay.settled(id, rid);
-                            applyOwed(q2, uid, row.data.quality, row.data.slot, rid, "已付款", true);
+                            final RollPlan pl = plan(x2, row.data, id, rid, EmberPayRules.owedLock(v), EmberPayRules.owedSeq(v));
+                            if (pl == null) { x2.addPeriodCount(EmberPayRules.C_RRO + uid, "all", -v); plugin.getDataStore().save(id, x2); return; }
+                            commitOnItem(id, "reroll", "afxrec:" + uid + ":" + EmberPayRules.owedSeq(v), java.util.Collections.singletonList(
+                                    new EmberItemStore.TxnItem(row.data, pl.after, null, row.state)), null, "洗练（升级前已付款）→ " + pl.roll.id + " t" + pl.roll.tier, ok -> {
+                                PlayerData x3 = data(id);
+                                if (!ok || x3 == null) return; // retried at the next join
+                                x3.addPeriodCount(EmberPayRules.C_RRO + uid, "all", -x3.periodCount(EmberPayRules.C_RRO + uid, "all"));
+                                plugin.getDataStore().save(id, x3);
+                                EmberPay pay = EmberPay.get();
+                                if (pay != null) pay.settled(id, rid);
+                                rolled(id, row.data, rid, pl, "已付款", true);
+                            });
                         });
                         break;
                     case WAIT:
@@ -1537,17 +1640,23 @@ public final class EmberGrowthService implements Listener {
     private boolean keep(Player p, PlayerData d, boolean takeNew) {
         Object[] pr = pendingRoll.remove(p.getUniqueId());
         if (pr == null) { p.sendMessage(P + "没有待选的洗练结果"); return true; }
-        String uid = (String) pr[0];
-        int enc = (Integer) pr[2], old = (Integer) pr[3], q = (Integer) pr[4];
-        if (takeNew) {
-            if (affixOf(d, uid) != old) { p.sendMessage(P + "§c这件的词条已经变了，结果作废"); return true; }
-            d.addPeriodCount(C_AF + uid, "all", enc - old);
-            epoch++;
-            runs.flushData(p.getUniqueId());
-            plugin.getLogger().info("[P1 growth] " + p.getName() + " reroll keep new " + uid + " " + old + "→" + enc);
-            p.sendMessage(P + "§a已换成：" + affixText(enc, q));
-        } else p.sendMessage(P + "§7保留原来的：" + affixText(old, q));
-        openMenu(p, REROLL_MENU);
+        final String uid = (String) pr[0], slot = (String) pr[1];
+        final int enc = (Integer) pr[2], old = (Integer) pr[3], q = (Integer) pr[4];
+        if (!takeNew) { p.sendMessage(P + "§7保留原来的：" + affixText(old, q)); openMenu(p, REROLL_MENU); return true; }
+        EmberItemData cur = target(p, slot);
+        if (cur == null || !cur.uid.equals(uid) || affixOf(d, cur) != old) { p.sendMessage(P + "§c这件的词条已经变了（或这件已不在用），结果作废"); return true; }
+        // D208: 保留新 = one item transaction on the piece (affix on cr_p1_item + NBT); nothing is paid here
+        final UUID id = p.getUniqueId();
+        final EmberItemData after = next(d, cur, enc, afPityOf(d, cur), sigOf(d, cur), EmberItemKeys.rerollN(d, cur));
+        commitOnItem(id, "afxkeep", "afxkeep:" + uid + ":" + cur.rev, java.util.Collections.singletonList(new EmberItemStore.TxnItem(cur, after, null)),
+                null, "洗练保留新 " + cur.shortLabel() + " " + old + "→" + enc, ok -> {
+                    Player x = Bukkit.getPlayer(id);
+                    plugin.getLogger().info("[P1 growth] " + (x == null ? id.toString() : x.getName()) + " reroll keep new " + uid + " " + old + "→" + enc + (ok ? " rev " + after.rev : " NOT committed"));
+                    if (x == null) return;
+                    if (ok) x.sendMessage(P + "§a已换成：" + affixText(enc, q));
+                    else x.sendMessage(P + "§c没换成（物品刚被改过或数据库暂时写不进去），原来的词条不变");
+                    openMenu(x, REROLL_MENU);
+                });
         return true;
     }
 
@@ -1587,9 +1696,9 @@ public final class EmberGrowthService implements Listener {
         if (t == null) return "item".equals(k) ? ("charm".equals(slot) ? "§8还没有选定的护符" : "§8主手没有余烬刃（拿在主手再打开）") : "";
         if ("item".equals(k)) return "§f" + t.shortLabel();
         if (EmberAffix.eligible(t) != null) return "cur".equals(k) ? "§8" + EmberAffix.eligible(t) : "";
-        if ("cur".equals(k)) return "§7词条：" + affixText(affixOf(d, t.uid), t.quality);
+        if ("cur".equals(k)) return "§7词条：" + affixText(affixOf(d, t), t.quality);
         if ("cap".equals(k)) {
-            int pity = d.periodCount(C_AFP + t.uid, "all");
+            int pity = afPityOf(d, t);
             return "§7成色" + EmberItemData.qualityName(t.quality) + " · 最高 §f" + reroll.cap(t.quality) + " §7档 · 保底 §f" + pity + "/" + reroll.pity;
         }
         if ("dup".equals(k)) {
@@ -1599,12 +1708,12 @@ public final class EmberGrowthService implements Listener {
         }
         if ("shard".equals(k)) return "§7" + reroll.shardFor(t.tier) + " 碎片 + " + rerollCoin(p, t) + " 币";
         if ("lock".equals(k)) { // D148
-            EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t.uid));
+            EmberAffix.Def cur = EmberAffix.decodeDef(reroll, affixOf(d, t));
             int ls = reroll.lockShardFor(t.tier);
             if (ls <= 0) return "";
             if (cur == null) return "§8锁定词条：词条槽还是空的";
             if (!cur.rollable) return "§8" + cur.name + " 已移出洗练池，不能锁定（普通洗会换成别的词条）";
-            if (Math.min(EmberAffix.decodeTier(affixOf(d, t.uid)), reroll.cap(t.quality)) >= reroll.cap(t.quality)) return "§a" + cur.name + " 已是上限档";
+            if (Math.min(EmberAffix.decodeTier(affixOf(d, t)), reroll.cap(t.quality)) >= reroll.cap(t.quality)) return "§a" + cur.name + " 已是上限档";
             return "§bShift+点击：锁定「" + cur.name + "」只重抽档位（另加 " + ls + " 碎片）";
         }
         return "";

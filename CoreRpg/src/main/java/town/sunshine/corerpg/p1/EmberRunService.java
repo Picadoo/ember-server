@@ -1675,6 +1675,21 @@ public final class EmberRunService implements Listener {
         long now = System.currentTimeMillis();
         boolean[] hbEmpty = new boolean[9];
         for (int i = 0; i < 9; i++) { ItemStack x = p.getInventory().getItem(i); hbEmpty[i] = x == null || x.getType() == org.bukkit.Material.AIR; }
+        // D208 (ARCH S1-4): a settlement signature is written INTO the piece when the piece is created (v2 sig_code on
+        // cr_p1_item + NBT, inside the signed data) — no p1_sig_ counter. SIG rows settle after the ITEM rows below.
+        Map<String, Integer> sigFor = new HashMap<String, Integer>();
+        java.util.Set<String> itemOpen = new java.util.HashSet<String>(), stamped = new java.util.HashSet<String>(), itemsGiven = new java.util.HashSet<String>();
+        List<EmberRunRules.Row> sigRows = new ArrayList<EmberRunRules.Row>();
+        for (EmberRunRules.Row r : open) {
+            EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
+            if (g == null) continue;
+            if (g.kind == EmberRunRules.Kind.ITEM) itemOpen.add(g.id);
+            if (g.kind == EmberRunRules.Kind.SIG && !EmberRunRules.ST_AWAIT.equals(r.status)) {
+                int cut = g.id.indexOf('/');
+                EmberSignature.Def sd = cut > 0 ? EmberSignature.byId(g.id.substring(cut + 1)) : null;
+                if (sd != null) sigFor.put(g.id.substring(0, cut), sd.code);
+            }
+        }
         for (EmberRunRules.Row r : open) {
             if (EmberRunRules.ST_AWAIT.equals(r.status)) { choices++; continue; }
             EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
@@ -1768,27 +1783,42 @@ public final class EmberRunService implements Listener {
                     done = true;
                     break;
                 }
-                case SIG: { // D174: the base item of this run (same uid) carries a signature; never overwrites one
+                case SIG: { // D174 → D208: settled after the ITEM rows (the piece is created with its signature inside)
                     int cut = g.id.indexOf('/');
-                    EmberSignature.Def sd = cut > 0 ? EmberSignature.byId(g.id.substring(cut + 1)) : null;
-                    if (sd == null) { log().warning("[P1 sig] bad stamp row " + r.runId + " " + g.id); done = true; break; }
-                    String uid = g.id.substring(0, cut);
-                    if (d.periodCount(EmberSignature.C_SIG + uid, "all") <= 0) d.addPeriodCount(EmberSignature.C_SIG + uid, "all", sd.code);
-                    EmberGrowthService.markSeen(d, sd); // stage 1.5 codex 「获得过」
-                    got.add("§6签名传奇！§e" + sd.name + "§f（" + sd.kindText() + "，" + sd.boss + "）");
-                    log().info("[P1 sig] " + p.getName() + " stamp " + uid + " " + sd.id + " (" + r.runId + ")");
-                    done = true;
+                    if (cut <= 0 || EmberSignature.byId(g.id.substring(cut + 1)) == null) { log().warning("[P1 sig] bad stamp row " + r.runId + " " + g.id); done = true; break; }
+                    sigRows.add(r);
                     break;
                 }
                 case ITEM: {
-                    String res = giveItem(p, g);
-                    if (res != null) { got.add(res); done = true; } else waiting++;
+                    Integer sc = sigFor.get(g.id);
+                    String res = giveItem(p, g, sc == null ? 0 : sc);
+                    if (res != null) {
+                        got.add(res); done = true; itemsGiven.add(g.id);
+                        if (sc != null && !res.endsWith("（已在背包）")) stamped.add(g.id);
+                    } else waiting++;
                     break;
                 }
                 default:
                     break;
             }
             if (done) { r.status = EmberRunRules.ST_DELIVERED; r.updated = now; changed.add(r); }
+        }
+        for (EmberRunRules.Row r : sigRows) { // D208: the run's base piece carries the signature; never overwrites one
+            EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
+            int cut = g.id.indexOf('/');
+            EmberSignature.Def sd = EmberSignature.byId(g.id.substring(cut + 1));
+            String uid = g.id.substring(0, cut);
+            String how;
+            if (stamped.contains(uid)) how = "on the item";
+            else if (itemOpen.contains(uid) && !itemsGiven.contains(uid)) continue; // the piece is still waiting: so is its signature
+            else { // a piece delivered before 1.65.42 (v1, legacy counter read until its next durable write folds it)
+                if (d.periodCount(EmberSignature.C_SIG + uid, "all") <= 0) d.addPeriodCount(EmberSignature.C_SIG + uid, "all", sd.code);
+                how = "legacy counter";
+            }
+            EmberGrowthService.markSeen(d, sd); // stage 1.5 codex 「获得过」
+            got.add("§6签名传奇！§e" + sd.name + "§f（" + sd.kindText() + "，" + sd.boss + "）");
+            log().info("[P1 sig] " + p.getName() + " stamp " + uid + " " + sd.id + " (" + r.runId + ", " + how + ")");
+            r.status = EmberRunRules.ST_DELIVERED; r.updated = now; changed.add(r);
         }
         if (!mail.isEmpty()) {
             MailService ms = plugin.getMailService();
@@ -1839,12 +1869,12 @@ public final class EmberRunService implements Listener {
     }
 
     /** @return label when given (or already present with the same uid), null when the inventory has no room. */
-    private String giveItem(Player p, EmberRunRules.Grant g) {
+    private String giveItem(Player p, EmberRunRules.Grant g, int sigCode) {
         EmberRunRules.ItemRoll it = g.item;
         String src = g.key.startsWith("fc_") || g.key.startsWith("starter_") ? "quest" : "drop";
         EmberItemData d = new EmberItemData(g.id, EmberItemData.templateId(it.tier == 0 ? "none" : it.family, it.slot, it.tier),
                 it.tier == 0 ? "none" : it.family, it.slot, it.tier, it.quality, it.craft, 0, 0, true, src,
-                EmberItemData.DATA_VERSION, 0);
+                EmberItemData.DATA_VERSION, 0, 0, 0, sigCode, 0); // D208: the settlement signature lives in the signed data
         for (ItemStack s : p.getInventory().getContents()) {
             if (s == null || !loadouts.items().hasData(s)) continue;
             EmberItems.Read r = loadouts.items().read(s);

@@ -17,6 +17,7 @@
 #      kill -9 · affix reroll — normal, before_commit, after_commit + disconnect, instant disconnect, after_pay +
 #      disconnect, library-duplicate after_commit + disconnect, after_commit + kill -9, after_pay + kill -9. Asserts
 #      conservation (blanks / marks / coins / shards), exactly-once items and exactly one roll per committed reroll.
+#      D208: the roll commits in the settling item transaction (cr_p1_item affix / af_pity / reroll_n), no p4_rro_.
 # usage: tools/p1map/persist-roundtrip.sh [A_BOT] [D_BOT] [E_BOT] [F_BOT] [G1_BOT] [G2_BOT] [H1_BOT] [H2_BOT] [H3_BOT]
 #        (fresh bots every run) · ONLY=g or ONLY=g,h … runs only those phases ("1" = a–f); NOG=1 skips g
 #        COORDF=… file that gets the RESTART / KILL9 notes (default /workspace/COORD-rush-retry-persist.txt)
@@ -407,29 +408,36 @@ RR="/corerpg p1 reroll blade shard confirm"
 kshard(){ sql "SELECT COUNT(*) FROM cr_p1_txn WHERE owner_uuid='$UH2' AND request_id LIKE 'afx:$RB:%' AND uid_a='$RB'"; }
 lastrid(){ sql "SELECT request_id FROM cr_p1_txn WHERE owner_uuid='$UH2' AND request_id LIKE 'afx:$RB:%' ORDER BY created_at DESC LIMIT 1"; }
 kall(){ sql "SELECT COUNT(*) FROM cr_p1_txn WHERE owner_uuid='$UH2' AND request_id LIKE 'afx:$RB:%'"; }
-rolls(){ hlogs | grep -E "reroll $RB afx:$RB:[0-9]+ .* → " | grep -oE "afx:$RB:[0-9]+" | sort | uniq -c | awk '{print $1}' | sort -u | tr '\n' ' '; }
-nrolls(){ hlogs | grep -E "reroll $RB afx:$RB:[0-9]+ .* → " | wc -l; }
+# D208 (ARCH S1-4): the roll commits INSIDE the settling item transaction (affix / af_pity / reroll_n on cr_p1_item,
+# data_version 2); request ids are afx:<uid>:<n>:<base36 ms> (never reused); no p4_rro_ "owed roll" counter any more
+rolls(){ hlogs | grep -E "reroll $RB afx:$RB:[0-9]+:[0-9a-z]+ .* → " | grep -oE "afx:$RB:[0-9]+:[0-9a-z]+" | sort | uniq -c | awk '{print $1}' | sort -u | tr '\n' ' '; }
+nrolls(){ hlogs | grep -E "reroll $RB afx:$RB:[0-9]+:[0-9a-z]+ .* → " | wc -l; }
+icol(){ sql "SELECT $2 FROM cr_p1_item WHERE item_uid='$1'"; }
+srev(){ evalb "$1" "const f=(o)=>{ if(!o||typeof o!=='object') return null; if(o.rev&&o.rev.value!==undefined) return o.rev.value; for (const k in o){ const r=f(o[k]); if(r!==null) return r; } return null; }; for (const i of bot.inventory.slots) { if (i && JSON.stringify(i.nbt||'').includes('$2')) return String(f(i.nbt)); } return 'none';"; }
+LOSTR=0 # roll log lines lost with a kill -9 between COMMIT and the callback (the roll itself is on the item row)
 rrcheck(){ # conservation over every reroll of the phase
   local ks ka; ks=$(kshard); ka=$(kall); read -r _ sh _ co <<< "$(snap $BH2 $UH2)"
   chk "$1: coins = start − 300 × committed rerolls ($ka)" "$co" "$(( CO0 - 300 * ka ))"
   chk "$1: shards = start − 40 × committed shard rerolls ($ks)" "$sh" "$(( SH0 - 40 * ks ))"
-  chk "$1: exactly one roll per committed reroll" "$(nrolls)" "$ka"
-  [ "$ka" = 0 ] || chk "$1: no rid rolled twice" "$(rolls)" "1 "
-  # p4_rrn_ counts paid attempts (a refunded attempt keeps its number, request ids are never reused)
-  [ "$(ctr $UH2 p4_rrn_$RB)" -ge "$ka" ] && ok "$1: paid-attempt counter $(ctr $UH2 p4_rrn_$RB) ≥ committed $ka" || bad "$1: paid-attempt counter $(ctr $UH2 p4_rrn_$RB) < committed $ka"
-  chk "$1: no owed roll left" "$(ctr $UH2 p4_rro_$RB)" "0"; chk "$1: no hold / pending" "$(pend $UH2)" "0"; }
+  chk "$1: exactly one roll per committed reroll (logged + $LOSTR lost to kill -9)" "$(( $(nrolls) + LOSTR ))" "$ka"
+  [ "$ka" = 0 ] || [ "$(nrolls)" = 0 ] || chk "$1: no rid rolled twice" "$(rolls)" "1 "
+  chk "$1: item reroll_n = committed rerolls (on cr_p1_item, data_version 2)" "$(icol $RB reroll_n):$(icol $RB data_version)" "$ka:2"
+  chk "$1: no legacy counters written (p4_af_/p4_afp_/p4_rrn_/p4_rro_)" "$(ctr $UH2 p4_af_$RB):$(ctr $UH2 p4_afp_$RB):$(ctr $UH2 p4_rrn_$RB):$(ctr $UH2 p4_rro_$RB)" "0:0:0:0"
+  chk "$1: no hold / pending" "$(pend $UH2)" "0"; }
 echo "=== h3a) reroll (shard) normal → paid once, rolled once, affix installed in the empty slot"
 chat $BH2 "$RR" 3000 | grep -E '洗练|词条' | head -2; sleep 2
-[ "$(ctr $UH2 p4_af_$RB)" != 0 ] && ok "h3a: affix installed ($(ctr $UH2 p4_af_$RB))" || bad "h3a: no affix after a reroll"
+[ "$(icol $RB affix)" != 0 ] && ok "h3a: affix installed on the item row ($(icol $RB affix))" || bad "h3a: no affix on the item row after a reroll"
+chk "h3a: backpack stack rev = DB rev" "$(srev $BH2 $RB)" "$(gstate $RB | cut -d: -f2)"
 rrcheck h3a
 echo "=== h3b) reroll · before_commit → cost refunded once, nothing rolled"
-AF=$(ctr $UH2 p4_af_$RB); arm $BH2 before_commit; chat $BH2 "$RR" 3000 | grep -E '洗练|退' | head -2; sleep 5; disarm $BH2
-chk "h3b: affix unchanged" "$(ctr $UH2 p4_af_$RB)" "$AF"; rrcheck h3b
-echo "=== h3c) reroll · after_commit (callback held 10 s) · abrupt disconnect → rolled once at the next join"
-arm $BH2 after_commit; chat $BH2 "$RR" 1500 >/dev/null
-chk "h3c: owed roll persisted with the payment" "$( [ "$(ctr $UH2 p4_rro_$RB)" -gt 0 ] && echo yes || echo no)" "yes"
+AF=$(icol $RB affix); arm $BH2 before_commit; chat $BH2 "$RR" 3000 | grep -E '洗练|退' | head -2; sleep 5; disarm $BH2
+chk "h3b: affix unchanged" "$(icol $RB affix)" "$AF"; rrcheck h3b
+echo "=== h3c) reroll · after_commit (callback held 10 s) · abrupt disconnect → the roll is already on the item row"
+K0=$(kall); arm $BH2 after_commit; chat $BH2 "$RR" 1500 >/dev/null
+chk "h3c: committed with the payment (reroll_n advanced before the callback)" "$(kall):$(icol $RB reroll_n)" "$((K0 + 1)):$((K0 + 1))"
 abrupt $BH2; sleep 8; join $BH2; sleep 10; disarm $BH2
-chk "h3c: the roll was applied at join" "$(hlogs | grep -cE "reroll $RB $(lastrid) .*recovered at join")" "1"; rrcheck h3c
+chk "h3c: the roll logged once (callback ran, owner offline or back)" "$(hlogs | grep -cE "reroll $RB $(lastrid) ")" "1"
+chk "h3c: stack rev = DB rev after rejoin (resync)" "$(srev $BH2 $RB)" "$(gstate $RB | cut -d: -f2)"; rrcheck h3c
 echo "=== h3d) reroll + socket destroyed in the same tick → nothing or everything"
 evalb $BH2 "bot.chat('$RR'); setTimeout(()=>{ try { bot._client.socket.destroy() } catch (e) {} }, 0); return 'cut';" >/dev/null; sleep 12; join $BH2; sleep 10
 rrcheck h3d
@@ -453,14 +461,15 @@ evalb $BH1 "bot.chat('/corerpg p1 undo $UD1'); return 'x';" >/dev/null; evalb $B
 chk "h1d: blanks paid before the kill" "$(blanks $BH1 $UH1)" "$((B1 - 1))"
 chk "h2c: marks paid + txn committed before the kill" "$(ctr $UH3 p1_mark_t1):$(redeemed)" "$((M0 - 8)):$((K3 + 1))"; G=$(newest)
 chk "h2c: callback held → no stack yet" "$(hasuid $BH3 $G)" "0"
-chk "h3g: committed, roll owed before the kill" "$(kall):$( [ "$(ctr $UH2 p4_rro_$RB)" -gt 0 ] && echo owed)" "$((K2 + 1)):owed"
+chk "h3g: committed with the roll before the kill (reroll_n on the row)" "$(kall):$(icol $RB reroll_n)" "$((K2 + 1)):$((K2 + 1))"
 killfaults
 quit $BH1; quit $BH2; quit $BH3; sleep 4; join $BH1; join $BH2; join $BH3; sleep 12
 chk "h1d: piece still dismantled (undo never committed)" "$(gstate $UD1)" "$R1"; chk "h1d: blanks refunded once" "$(blanks $BH1 $UH1)" "$B1"
 chk "h1d: refund hold reconciled → delivered once, no hold left" "$(ndel $UH1 refund:undo:$UD1):$(nhold $UH1 refund:undo:$UD1)" "$((D1 + 1)):0"
 chk "h2c: marks −8 exactly once" "$(ctr $UH3 p1_mark_t1)" "$((M0 - 8))"; chk "h2c: blade delivered once at join" "$(hasuid $BH3 $G)" "1"
 chk "h2c: hold void, gear row delivered" "$(dstat $UH3 "refund:$(sql "SELECT request_id FROM cr_p1_txn WHERE owner_uuid='$UH3' AND kind='mark_redeem' ORDER BY created_at DESC LIMIT 1")"):$(sql "SELECT status FROM cr_p1_delivery WHERE kind='gear' AND item='$G'")" "void:delivered"
-chk "h3g: the roll was applied at join after kill -9" "$(hlogs | grep -cE "reroll $RB $(lastrid) .*recovered at join")" "1"; rrcheck h3g
+LOSTR=$(( LOSTR + 1 - $(hlogs | grep -cE "reroll $RB $(lastrid) ") ))
+chk "h3g: stack rev = DB rev after kill -9 + join (resync, roll kept)" "$(srev $BH2 $RB)" "$(gstate $RB | cut -d: -f2)"; rrcheck h3g
 
 echo "=== kill -9 bundle 2: h2d redeem after_pay (BH3) · h3h reroll after_pay (BH2)"
 M0=$(ctr $UH3 p1_mark_t1); K3=$(redeemed); K2=$(kall); read -r _ SHB _ COB <<< "$(snap $BH2 $UH2)"

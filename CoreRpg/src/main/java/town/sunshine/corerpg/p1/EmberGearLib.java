@@ -176,12 +176,12 @@ public final class EmberGearLib implements Listener {
      * {@code target}. {@code hasAffix} is true when that uid already carries a 词条 (investment). Null when none /
      * library not ready yet (ensureLoaded kicked if needed).
      */
-    public Entry findDupForReroll(Player p, EmberItemData target, java.util.function.Function<String, Boolean> hasAffix) {
+    public Entry findDupForReroll(Player p, EmberItemData target, java.util.function.Function<EmberItemData, Boolean> hasAffix) {
         if (p == null || target == null || !usable()) return null;
         UUID id = p.getUniqueId();
         if (!loaded.contains(id)) { ensureLoaded(p); return null; }
         for (Entry e : new ArrayList<Entry>(entries(id))) {
-            boolean aff = hasAffix != null && Boolean.TRUE.equals(hasAffix.apply(e.d.uid));
+            boolean aff = hasAffix != null && Boolean.TRUE.equals(hasAffix.apply(e.d)); // D208: item keys on the row (v2) or legacy counters (v1)
             if (EmberStorageRules.libDupEligible(e, target, aff)) return e;
         }
         return null;
@@ -197,6 +197,15 @@ public final class EmberGearLib implements Listener {
 
     /** D172: {@code rid} = the paid reroll's request id → this retire is the transaction that settles its payment */
     public void consumeForReroll(final Player p, final String uid, final String note, final String rid, final java.util.function.Consumer<Boolean> cb) {
+        consumeForReroll(p, uid, note, rid, null, null, cb);
+    }
+
+    /**
+     * D208: same, plus {@code target} (the rerolled piece with the roll's item keys) in the SAME item transaction, so the
+     * roll commits together with the duplicate's retire. The caller replaces the target's stack on OK.
+     */
+    public void consumeForReroll(final Player p, final String uid, final String note, final String rid, final TxnItem target,
+                                 final String costJson, final java.util.function.Consumer<Boolean> cb) {
         if (p == null || uid == null || cb == null) { if (cb != null) cb.accept(false); return; }
         String g = gate(p);
         if (g != null) { p.sendMessage(P + ChatColor.RED + g); cb.accept(false); return; }
@@ -208,9 +217,11 @@ public final class EmberGearLib implements Listener {
         if (busy.contains(uid)) { p.sendMessage(P + ChatColor.RED + "这件正在处理中"); cb.accept(false); return; }
         busy.add(uid);
         final String n = note == null ? ("洗练用掉装备库重复件 " + e.d.shortLabel()) : note;
-        store().commitTxn(rid != null ? rid : "reroll:" + e.d.uid + ":" + e.d.rev, "reroll", id,
-                Arrays.asList(new TxnItem(e.d, null, "dismantled", "stored")),
-                null, n, res -> {
+        List<TxnItem> items = new ArrayList<TxnItem>();
+        items.add(new TxnItem(e.d, null, "dismantled", "stored")); // first: the duplicate (uid_a)
+        if (target != null) items.add(target);
+        store().commitTxn(rid != null ? rid : "reroll:" + e.d.uid + ":" + e.d.rev, "reroll", id, items,
+                costJson, n, res -> {
                     busy.remove(uid);
                     if (res.status == TxnStatus.OK) {
                         loadouts.rememberRow(e.d.uid, id, e.d.rev + 1, "dismantled");
@@ -398,7 +409,7 @@ public final class EmberGearLib implements Listener {
         try { pd = plugin.getDataStore().get(p.getUniqueId()); } catch (RuntimeException e) { return out; }
         if (pd == null) return out;
         for (Entry e : view) {
-            try { if (gs.invested(pd, e.d.uid)) out.add(e.d.uid); } catch (RuntimeException ignored) {} // D174: + signature
+            try { if (gs.invested(pd, e.d)) out.add(e.d.uid); } catch (RuntimeException ignored) {} // D174: + signature (D208: on the item)
         }
         return out;
     }
@@ -788,8 +799,8 @@ public final class EmberGearLib implements Listener {
         int lv = pd == null ? 10 : pd.getEmberLevel();
         for (String l : EmberCompare.card(EmberMode.tables(), e.d, lv)) lore.add("§7" + l);
         EmberGrowthService gs = EmberGrowthService.get();
-        if (gs != null && e.d.tier > 0) try { lore.add("§7词条：" + gs.affixText(gs.affixOf(pd, e.d.uid), e.d.quality)); } catch (RuntimeException ignored) {}
-        if (gs != null) try { EmberSignature.Def sg = EmberSignature.byCode(gs.sigOf(pd, e.d.uid)); if (sg != null) lore.add("§6签名：" + sg.name + " §7（" + sg.boss + "）" + sg.good); } catch (RuntimeException ignored) {} // D174
+        if (gs != null && e.d.tier > 0) try { lore.add("§7词条：" + gs.affixText(gs.affixOf(pd, e.d), e.d.quality)); } catch (RuntimeException ignored) {}
+        if (gs != null) try { EmberSignature.Def sg = EmberSignature.byCode(gs.sigOf(pd, e.d)); if (sg != null) lore.add("§6签名：" + sg.name + " §7（" + sg.boss + "）" + sg.good); } catch (RuntimeException ignored) {} // D174
         lore.add("§8来源 " + EmberCompare.sourceName(e.d.source) + " · uid " + e.d.uid.substring(0, 8));
         lore.add("");
         lore.add("§e左键 §f取出到背包" + (gate(p) != null ? " §c(回城后)" : ""));

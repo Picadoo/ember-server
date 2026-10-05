@@ -18,11 +18,20 @@ import java.util.regex.Pattern;
  * tier, quality, craft, enhance, pity, bound, source, data version, revision. Stored as the NBT compound
  * {@value #NBT_KEY} on the item and mirrored in MySQL {@code cr_p1_item}. Display name and lore are never
  * identity. Immutable value object + pure codec/validation (no Bukkit), unit-tested offline.
+ *
+ * <p>D208 (ARCH S1-4 · REG §4-4): data version 2 also carries the four item keys that used to live in the owner's
+ * PlayerData counters — affix ({@code code*10+tier}, was {@code p4_af_<uid>}), reroll pity ({@code p4_afp_}), signature
+ * code ({@code p1_sig_}) and the committed reroll sequence ({@code p4_rrn_}). They are part of {@link #canonical()} (HMAC)
+ * and of the {@code cr_p1_item} row. A version 1 item still verifies with the old canonical shape and carries none of
+ * them (its values are read from the legacy counters until its next durable write folds them in as version 2).</p>
  */
 public final class EmberItemData {
 
     public static final String NBT_KEY = "ember_v1";
-    public static final int DATA_VERSION = 1;
+    public static final int DATA_VERSION = 2;
+    /** D208: the pre-item-keys shape (no affix / pity / signature / reroll sequence on the item) */
+    public static final int V1 = 1;
+    public static final int MAX_AFFIX = 9999, MAX_AF_PITY = 999, MAX_SIG = 999;
     public static final int MAX_PITY = 12; // §6.1 largest 本档最多尝试 (+10: 12)
 
     public static final Set<String> FAMILIES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("scorch", "burst", "sustain", "none")));
@@ -44,13 +53,31 @@ public final class EmberItemData {
     public final String source;
     public final int version;
     public final int rev;
+    /** D208 (v2 only; always 0 on v1): affix code*10+tier (0 = empty slot) */
+    public final int affix;
+    /** D208: reroll tries in a row below the quality cap (affix pity) */
+    public final int afPity;
+    /** D208: signature legend {@code EmberSignature.Def.code} (0 = none) */
+    public final int sigCode;
+    /** D208: sequence n of the last committed paid reroll (request {@code afx:<uid>:<n>:…}) */
+    public final int rerollN;
 
     public EmberItemData(String uid, String ni, String family, String slot, int tier, int quality, int craft,
                          int enhance, int pity, boolean bound, String source, int version, int rev) {
+        this(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, version, rev, 0, 0, 0, 0);
+    }
+
+    public EmberItemData(String uid, String ni, String family, String slot, int tier, int quality, int craft,
+                         int enhance, int pity, boolean bound, String source, int version, int rev,
+                         int affix, int afPity, int sigCode, int rerollN) {
         this.uid = uid; this.ni = ni; this.family = family; this.slot = slot; this.tier = tier;
         this.quality = quality; this.craft = craft; this.enhance = enhance; this.pity = pity;
         this.bound = bound; this.source = source; this.version = version; this.rev = rev;
+        this.affix = affix; this.afPity = afPity; this.sigCode = sigCode; this.rerollN = rerollN;
     }
+
+    /** D208: the item keys live on the item (v2); false = read them from the legacy PlayerData counters */
+    public boolean itemKeys() { return version >= 2; }
 
     /** New item with a fresh server-generated uid, the template id derived from family/slot/tier, rev 0. */
     public static EmberItemData create(String family, String slot, int tier, int quality, int craft, int enhance,
@@ -74,7 +101,12 @@ public final class EmberItemData {
     /** @return null when valid, else the first reason it is not trustworthy */
     public String validate() {
         if (uid == null || !UID.matcher(uid).matches()) return "bad uid";
-        if (version != DATA_VERSION) return "unsupported version " + version;
+        if (version != V1 && version != DATA_VERSION) return "unsupported version " + version;
+        if (version == V1 && (affix != 0 || afPity != 0 || sigCode != 0 || rerollN != 0)) return "v1 carries item keys";
+        if (affix < 0 || affix > MAX_AFFIX) return "bad affix " + affix;
+        if (afPity < 0 || afPity > MAX_AF_PITY) return "bad affix pity " + afPity;
+        if (sigCode < 0 || sigCode > MAX_SIG) return "bad signature " + sigCode;
+        if (rerollN < 0) return "bad reroll sequence " + rerollN;
         if (!SLOTS.contains(slot)) return "bad slot " + slot;
         if (!FAMILIES.contains(family)) return "bad family " + family;
         if (tier < 0 || tier > EmberTables.MAX_TIER) return "bad tier " + tier;
@@ -89,10 +121,15 @@ public final class EmberItemData {
         return null;
     }
 
-    /** Stable field order used for the signature; changing it invalidates every signed item. */
+    /**
+     * Stable field order used for the signature; changing it invalidates every signed item. Version 1 keeps its
+     * original shape exactly (so every v1 item ever signed still verifies); version 2 appends the item keys.
+     */
     public String canonical() {
-        return "v" + version + "|" + uid + "|" + ni + "|" + family + "|" + slot + "|" + tier + "|" + quality + "|"
+        String base = "v" + version + "|" + uid + "|" + ni + "|" + family + "|" + slot + "|" + tier + "|" + quality + "|"
                 + craft + "|" + enhance + "|" + pity + "|" + (bound ? 1 : 0) + "|" + source + "|" + rev;
+        if (version < 2) return base;
+        return base + "|" + affix + "|" + afPity + "|" + sigCode + "|" + rerollN;
     }
 
     /** HMAC-SHA256 over {@link #canonical()}, first 128 bits as lowercase hex. */
@@ -136,6 +173,12 @@ public final class EmberItemData {
         m.put("src", source);
         m.put("ver", version);
         m.put("rev", rev);
+        if (version >= 2) { // D208: v1 NBT stays byte-identical
+            m.put("af", affix);
+            m.put("afp", afPity);
+            m.put("sigc", sigCode);
+            m.put("rrn", rerollN);
+        }
         return m;
     }
 
@@ -144,8 +187,11 @@ public final class EmberItemData {
         if (m == null) return null;
         return new EmberItemData(str(m, "uid"), str(m, "ni"), str(m, "fam"), str(m, "slot"), num(m, "tier"),
                 num(m, "q"), num(m, "craft"), num(m, "enh"), num(m, "pity"), num(m, "bound") != 0, str(m, "src"),
-                num(m, "ver"), num(m, "rev"));
+                num(m, "ver"), num(m, "rev"), opt(m, "af"), opt(m, "afp"), opt(m, "sigc"), opt(m, "rrn"));
     }
+
+    /** D208: an item key absent from the compound (every v1 item) is 0; garbled = -1 (fails validate) */
+    private static int opt(Map<String, ?> m, String k) { return m.containsKey(k) ? num(m, k) : 0; }
 
     private static String str(Map<String, ?> m, String k) {
         Object o = m.get(k);
@@ -159,9 +205,20 @@ public final class EmberItemData {
         try { return Integer.parseInt(String.valueOf(o).trim()); } catch (NumberFormatException e) { return -1; }
     }
 
+    /** same data and version (the gear library moves rows without touching the item keys) */
     public EmberItemData withRev(int newRev) {
-        return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, version, newRev);
+        return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, version, newRev,
+                affix, afPity, sigCode, rerollN);
     }
+
+    /** D208: same piece as version 2 with these item keys (rev unchanged; the caller bumps it in the transaction) */
+    public EmberItemData withItemKeys(int newAffix, int newAfPity, int newSig, int newRerollN) {
+        return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, DATA_VERSION, rev,
+                newAffix, newAfPity, newSig, newRerollN);
+    }
+
+    public EmberItemData withAffix(int newAffix) { return withItemKeys(newAffix, afPity, sigCode, rerollN); }
+    public EmberItemData withSig(int newSig) { return withItemKeys(affix, afPity, newSig, rerollN); }
 
     // ------------------------------------------------------------------ display helpers
 

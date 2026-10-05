@@ -101,7 +101,7 @@ public final class EmberDelivery {
         final Delivery d = rows.get(i);
         final Runnable next = () -> step(p, rows, i + 1, left);
         if (EmberAssetGuard.frozen(p.getUniqueId()) || EmberAssetGuard.paused()) { left[0]++; next.run(); return; }
-        if ("mat".equals(d.kind) || "coin".equals(d.kind) || "mark".equals(d.kind)) { mat(p, d, left, next); return; }
+        if ("mat".equals(d.kind) || "coin".equals(d.kind) || "mark".equals(d.kind) || "sigmark".equals(d.kind)) { mat(p, d, left, next); return; }
         if ("gear".equals(d.kind)) { gear(p, d, left, next); return; }
         store().ackDelivery(d.id, "void", "unknown kind " + d.kind, ok -> next.run());
     }
@@ -125,9 +125,14 @@ public final class EmberDelivery {
             store().ackDelivery(d.id, "void", "bad mark item " + d.item, ok -> next.run());
             return;
         }
-        String name = "coin".equals(d.kind) ? "余烬币" : "mark".equals(d.kind) ? d.item.toUpperCase(java.util.Locale.ROOT) + " 锻造印记" : plugin.getNiBridge().displayName(d.item);
-        if (!applied && "mark".equals(d.kind)) { // D172 (forge review X4): marks refunded in the same save as the row marker
-            String k = EmberPayRules.markCounter(d.item);
+        if ("sigmark".equals(d.kind) && !EmberPayRules.sigItem(d.item)) { // D208: only the boss insignia of a signature map
+            store().ackDelivery(d.id, "void", "bad insignia map " + d.item, ok -> next.run());
+            return;
+        }
+        String name = "coin".equals(d.kind) ? "余烬币" : "mark".equals(d.kind) ? d.item.toUpperCase(java.util.Locale.ROOT) + " 锻造印记"
+                : "sigmark".equals(d.kind) ? d.item.toUpperCase(java.util.Locale.ROOT) + " 首领徽记" : plugin.getNiBridge().displayName(d.item);
+        if (!applied && ("mark".equals(d.kind) || "sigmark".equals(d.kind))) { // D172 (X4): marks refunded in the same save as the row marker
+            String k = "sigmark".equals(d.kind) ? EmberSignature.C_MARK + d.item : EmberPayRules.markCounter(d.item); // D208: + insignia
             if (d.amount > 0) pd.addPeriodCount(k, "all", (int) d.amount);
             else if (d.amount < 0) {
                 int have = pd.periodCount(k, "all"), take = (int) Math.min(have, -d.amount);
