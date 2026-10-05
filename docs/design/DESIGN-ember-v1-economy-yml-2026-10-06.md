@@ -1,6 +1,6 @@
 # DESIGN · `ember-v1-economy.yml` 真源草案（REG §6.3 · D220 文档）
 
-> **状态：E1 镜像已落地（D223 / 1.65.51）。** `ember-v1-economy.yml` 随 jar 部署；`economyYmlDrift` 单测 + 启动 WARNING；**`amount()` 仍读 Java golden**（yml 作真源留待迁移窗）。Delivery 扣币已在同窗路由。
+> **状态：E1 SoT 已落地（D224 / 1.65.52）。** `ember-v1-economy.yml` 是 `amount()` 真源；启动加载；缺/坏/漂移 → SEVERE fail-closed；Java golden 作二次断言（单测 + `amount()` 双读）。D223 已镜像 + Delivery 标签。
 > **上游：** `REG-ember-source-sink-cap-2026-10-05.md` §6.3；`EmberEconomy`（D213 登记 + D215/D216/D218 grant/spend 路由）。
 > **目的：** 把现在散落在 Java 常量（`BASE_*`、`CLEAR_MARKS`、`MARKS_PER_EXCHANGE`…）与多份 yml（`ember-v1.yml` / `ember-v1-runs.yml` / `ember-v1-growth.yml` / `ember-v1-festival.yml`）里的**数量与上限**收成一份可读真源，供运行时与 `tools/p1sim/rules.py` 同读。本阶段**不改任何数值**（bv57）。
 
@@ -10,7 +10,7 @@
 
 今天发币 / 扣币已经大多走了 `EmberEconomy.grant*` / `spend*`（S01–S03 / S23–S24 / C03–C14 等），但**数量**仍写在代码金样或业务 yml 里。下一刀是：新建 `plugins/CoreRpg/ember-v1-economy.yml`，表里每一行对应一个 `Sxx`/`Cxx` 的 `golden` 键；Java 启动时加载进 `EmberEconomy`；单测继续钉金样；p1sim 只读这一份。数值不动，只搬家。
 
-**还没路由完、本草案只占位的：** C18 国庆商店、S22 挂机庭发放入口、EmberDelivery 扣币、C15/C16（化妆品 DEFER）。实现窗另开 D 行。
+**已路由：** C18 / S22 / Delivery（D221–D223）。**仍占位：** C15/C16（化妆品 DEFER）。E3 = p1sim 同读 yml。
 
 ---
 
@@ -63,7 +63,7 @@ caps:
 | 阶段 | 内容 | 碰 CoreRpg？ |
 |---|---|---|
 | **E0（本稿）** | 定形态 + 把现有 `EmberEconomy.golden` 键列成清单 | 否 |
-| **E1** | 生成 `ember-v1-economy.yml`（从 golden 导出）、加载器、单测双钉（yml ↔ golden）；数量不变 | **D223 已镜像防漂移**（yml 尚未真源） |
+| **E1** | 生成 `ember-v1-economy.yml`（从 golden 导出）、加载器、单测双钉（yml ↔ golden）；数量不变 | **D223 镜像；D224 `amount()` SoT** |
 | **E2** | C18 国庆商店 spend 走 `EmberEconomy`；S22 挂机庭 grant 单入口；Delivery debit 标签化 | **C18+S22 D221；Delivery D223** |
 | **E3** | p1sim 改读 yml；徽记账户进模型（REG §5 #1） | p1sim 车道 |
 
@@ -88,4 +88,4 @@ caps:
 - [x] `EmberEconomyTest`：yml 金样 = 内置 golden（`economyYmlDrift`）；现网行为冒烟数量不变
 - [x] 缺文件仍可启动（回退；`economyYmlDrift(null)` 空）
 - [x] 不改 bv、不改资产路径 → 不跑 persist-roundtrip
-- [ ] yml 作 `amount()` 真源（迁移窗）
+- [x] yml 作 `amount()` 真源（D224 / 1.65.52；缺/坏 fail-closed；golden 二次断言）

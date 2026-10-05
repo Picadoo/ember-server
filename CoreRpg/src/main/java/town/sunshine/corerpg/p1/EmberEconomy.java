@@ -15,17 +15,18 @@ import town.sunshine.corerpg.PlayerData;
  * D213 registry + D215–D218/D221/D223 (ARCH S2-2…S2-6) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
  * closed <b>legacy source</b> (L-S1…L-S5) and <b>sink</b> (C01–C18) from
  * {@code docs/design/REG-ember-source-sink-cap-2026-10-05.md}.
- * <p>Lookups stay Bukkit-free. {@link #amount} is the amount source of truth for routed rows (settle S01–S03,
+ * <p>Lookups stay Bukkit-free. {@link #amount} reads {@code ember-v1-economy.yml} (SoT) for routed rows (settle S01–S03,
  * shop C14, signin S23 daily/fallback/makeup, online S24 totals, festival C18 goldens). {@link #grantCoin} /
  * {@link #grantMark} / {@link #grantXp} / {@link #grantMat} / {@link #spendCoin} / {@link #spendMark} /
  * {@link #spendInsignia} / {@link #spendMat} / {@link #spendBadge} / {@link #spendFestCoin} /
  * {@link #spendCoinDelivery} are the tagged entry points (PlayerData only where possible — no Bukkit). D218 (S2-4):
  * workshop C03–C13. D221 (S2-5): festival shop C18 spends + AFK S22 grant entry via {@link #sourceForGrant}
  * {@code p1afk-} run id. D223 (S2-6): EmberDelivery coin debits via {@link #spendCoinDelivery} +
- * {@link #sinkForDeliveryRequest}; E1 {@code ember-v1-economy.yml} mirror-check ({@link #economyYmlDrift}, yml is
- * <b>not</b> yet the {@link #amount} source of truth). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
- * <p>{@code EmberEconomyTest} pins golden amounts, proves settle / shop / sign / fest / AFK / delivery / grant* routing,
- * scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist, and fails on economy-yml drift.
+ * {@link #sinkForDeliveryRequest}; E1 {@code ember-v1-economy.yml} is the {@link #amount} source of truth (D224):
+ * startup / classpath {@link #loadEconomyYml}; fail-closed if missing/corrupt; Java {@code golden} stays a secondary assert
+ * (drift → SEVERE / refuse). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
+ * <p>{@code EmberEconomyTest} pins loaded yml amounts to Java golden, proves settle / shop / sign / fest / AFK / delivery /
+ * grant* routing, scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist, and fails on drift.
  * Numbers unchanged (balance_version 57).
  */
 public final class EmberEconomy {
@@ -244,9 +245,25 @@ public final class EmberEconomy {
         return out;
     }
 
-    /** Integer golden amount for a registered row (throws if the id or key is missing). */
+    /**
+     * Integer amount for a registered row from {@code ember-v1-economy.yml} (SoT, D224).
+     * Dual-asserts the Java golden; throws if the yml is not loaded/corrupt, the key is missing, or they drift.
+     * Call {@link #loadEconomyYml} (or rely on classpath auto-load) before first use.
+     */
     public static int amount(String id, String key) {
-        return (int) Math.round(require(id).golden(key));
+        ensureClasspathEconomyYml();
+        double golden = require(id).golden(key);
+        if (!ymlOk) {
+            throw new IllegalStateException(ECONOMY_YML + " not loaded/corrupt: " + ymlError);
+        }
+        Double y = ymlAmount(id, key);
+        if (y == null) {
+            throw new IllegalArgumentException(id + " has no yml amount " + key);
+        }
+        if (Math.abs(y.doubleValue() - golden) > 1e-9) {
+            throw new IllegalStateException(id + "." + key + ": yml " + y + " != golden " + golden);
+        }
+        return (int) Math.round(y.doubleValue());
     }
 
     /** Row by id, or throw. */
@@ -306,6 +323,8 @@ public final class EmberEconomy {
      */
     public static boolean grantCoin(PlayerData d, String sourceId, int amount) {
         if (d == null || amount <= 0) return false;
+        ensureClasspathEconomyYml();
+        if (!ymlOk) return false; // fail-closed: refuse grant when yml missing/corrupt
         if (!pays(sourceId, Account.COIN)) return false;
         d.addCoin(amount);
         return true;
@@ -486,23 +505,126 @@ public final class EmberEconomy {
         return d.takeCoin(amount);
     }
 
-    /** Bundled / deployed economy mirror filename (REG §6.3 · E1). */
+    /** Bundled / deployed economy amounts filename (REG §6.3 · E1 → SoT D224). */
     public static final String ECONOMY_YML = "ember-v1-economy.yml";
+
+    /** Expected balance_version in economy yml (must match ember-v1.yml). */
+    public static final int ECONOMY_BV = 57;
+
+    /** id → (key → amount) from the last successful {@link #loadEconomyYml}. */
+    private static volatile Map<String, Map<String, Double>> ymlAmounts = Collections.emptyMap();
+    private static volatile boolean ymlOk;
+    private static volatile String ymlError = "not loaded";
+    private static volatile boolean classpathTried;
+    /** True after {@link #loadEconomyYml} — blocks classpath auto-load from undoing fail-closed. */
+    private static volatile boolean explicitLoad;
+
+    /** True after a successful load with zero drift against Java golden. */
+    public static boolean economyYmlReady() { return ymlOk; }
+
+    /** Last load error / "not loaded" when {@link #economyYmlReady} is false. */
+    public static String economyYmlError() { return ymlError; }
+
+    /** Yml amount for id.key, or null if missing / not loaded. */
+    public static Double ymlAmount(String id, String key) {
+        Map<String, Map<String, Double>> m = ymlAmounts;
+        if (m == null || id == null || key == null) return null;
+        Map<String, Double> block = m.get(id);
+        return block == null ? null : block.get(key);
+    }
+
+    /**
+     * Load / replace the runtime amount table from a parsed {@code ember-v1-economy.yml} tree.
+     * Null / empty → fail-closed (not ready). Drift vs Java golden → fail-closed and return the drift list.
+     * Success → {@link #amount} reads yml; golden remains the secondary assert inside {@link #amount}.
+     */
+    @SuppressWarnings("unchecked")
+    public static synchronized List<String> loadEconomyYml(Map<String, Object> root) {
+        explicitLoad = true;
+        List<String> drift = economyYmlDrift(root);
+        if (root == null || root.isEmpty()) {
+            ymlAmounts = Collections.emptyMap();
+            ymlOk = false;
+            ymlError = "missing";
+            return drift.isEmpty() ? Collections.singletonList("missing") : drift;
+        }
+        if (!drift.isEmpty()) {
+            ymlAmounts = Collections.emptyMap();
+            ymlOk = false;
+            ymlError = "drift: " + drift;
+            return drift;
+        }
+        Map<String, Map<String, Double>> next = new LinkedHashMap<String, Map<String, Double>>();
+        Map<String, Object> sources = (Map<String, Object>) root.get("sources");
+        Map<String, Object> sinks = (Map<String, Object>) root.get("sinks");
+        for (Row r : BY_ID.values()) {
+            if (r.golden.isEmpty()) continue;
+            Map<String, Object> block = r.sink
+                    ? (sinks == null ? null : (Map<String, Object>) sinks.get(r.id))
+                    : (sources == null ? null : (Map<String, Object>) sources.get(r.id));
+            if (block == null) continue;
+            Map<String, Double> flat = new LinkedHashMap<String, Double>();
+            for (Map.Entry<String, Double> g : r.golden.entrySet()) {
+                Object v = block.get(g.getKey());
+                if (v instanceof Number) flat.put(g.getKey(), ((Number) v).doubleValue());
+            }
+            next.put(r.id, Collections.unmodifiableMap(flat));
+        }
+        ymlAmounts = Collections.unmodifiableMap(next);
+        ymlOk = true;
+        ymlError = "";
+        return Collections.emptyList();
+    }
+
+    /** Auto-load the bundled classpath resource once when nothing has been loaded yet (unit tests / early callers). */
+    public static synchronized void ensureClasspathEconomyYml() {
+        if (ymlOk || classpathTried || explicitLoad) return;
+        classpathTried = true;
+        try {
+            java.io.InputStream in = EmberEconomy.class.getResourceAsStream("/" + ECONOMY_YML);
+            if (in == null) {
+                loadEconomyYml(null);
+                ymlError = "classpath missing";
+                return;
+            }
+            try {
+                Object root = new org.yaml.snakeyaml.Yaml().load(
+                        new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
+                @SuppressWarnings("unchecked")
+                Map<String, Object> map = root instanceof Map ? (Map<String, Object>) root : null;
+                loadEconomyYml(map);
+            } finally {
+                in.close();
+            }
+        } catch (Throwable t) {
+            ymlAmounts = Collections.emptyMap();
+            ymlOk = false;
+            ymlError = "classpath: " + t.getMessage();
+        }
+    }
+
+    /** Reset load state (tests only). Next {@link #amount} will classpath-load again. */
+    public static synchronized void resetEconomyYmlForTest() {
+        ymlAmounts = Collections.emptyMap();
+        ymlOk = false;
+        ymlError = "not loaded";
+        classpathTried = false;
+        explicitLoad = false;
+    }
 
     /**
      * Compare a parsed {@code ember-v1-economy.yml} tree to the built-in golden map (fail-on-drift).
-     * Null / empty root = no file → empty list (fallback to Java golden). Every golden key must appear under
-     * {@code sources.<id>} or {@code sinks.<id>} with the same number; unknown ids / extra keys / wrong
-     * {@code balance_version} are reported. Does <b>not</b> change {@link #amount} — yml is a mirror until E1
-     * switches to yaml-as-source after a tested migration.
+     * Null / empty root → empty list (caller treats as missing). Every golden key must appear under
+     * {@code sources.<id>} or {@code sinks.<id>} with the same number; wrong {@code balance_version} is reported.
+     * Does not mutate runtime state — use {@link #loadEconomyYml} to install.
      */
     @SuppressWarnings("unchecked")
     public static List<String> economyYmlDrift(Map<String, Object> root) {
         List<String> out = new ArrayList<String>();
         if (root == null || root.isEmpty()) return out;
         Object bv = root.get("balance_version");
-        if (!(bv instanceof Number) || ((Number) bv).intValue() != 57)
-            out.add("balance_version: want 57 got " + bv);
+        if (!(bv instanceof Number) || ((Number) bv).intValue() != ECONOMY_BV)
+            out.add("balance_version: want " + ECONOMY_BV + " got " + bv);
         Map<String, Object> sources = root.get("sources") instanceof Map ? (Map<String, Object>) root.get("sources") : null;
         Map<String, Object> sinks = root.get("sinks") instanceof Map ? (Map<String, Object>) root.get("sinks") : null;
         for (Row r : BY_ID.values()) {

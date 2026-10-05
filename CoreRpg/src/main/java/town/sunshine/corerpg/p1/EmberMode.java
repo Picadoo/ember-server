@@ -166,29 +166,53 @@ public final class EmberMode {
     }
 
 
-    /** D223 / E1: if ember-v1-economy.yml is present, warn when it drifts from EmberEconomy.golden (amount() still golden). */
+    /**
+     * D224 / E1 SoT: load ember-v1-economy.yml into EmberEconomy (amount() reads yml).
+     * Plugins folder first ({@code saveResource} if absent). If the file is missing after that, fall back to the
+     * bundled classpath resource. Drift / corrupt on the plugins file → SEVERE fail-closed (no silent classpath
+     * override). Missing everywhere → classpath try, then fail-closed.
+     */
     private void checkEconomyYmlMirror() {
         File f = new File(plugin.getDataFolder(), EmberEconomy.ECONOMY_YML);
         if (!f.exists()) {
             try { plugin.saveResource(EmberEconomy.ECONOMY_YML, false); } catch (Throwable ignored) {}
         }
-        if (!f.exists()) return; // missing → fallback to Java golden
         try {
-            // SnakeYAML (Paper ships it): keeps quoted dotted keys flat — Bukkit path API would split them.
-            org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml();
-            Object root;
-            try (java.io.Reader r = new InputStreamReader(new java.io.FileInputStream(f), StandardCharsets.UTF_8)) {
-                root = yaml.load(r);
+            if (f.exists()) {
+                org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml();
+                Object root;
+                try (java.io.Reader r = new InputStreamReader(new java.io.FileInputStream(f), StandardCharsets.UTF_8)) {
+                    root = yaml.load(r);
+                }
+                @SuppressWarnings("unchecked")
+                java.util.Map<String, Object> map = root instanceof java.util.Map ? (java.util.Map<String, Object>) root : null;
+                java.util.List<String> drift = EmberEconomy.loadEconomyYml(map);
+                if (EmberEconomy.economyYmlReady()) {
+                    plugin.getLogger().info("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML
+                            + " loaded as amount() SoT (bv" + EmberEconomy.ECONOMY_BV + ")");
+                } else {
+                    plugin.getLogger().severe("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML
+                            + " FAIL-CLOSED: " + EmberEconomy.economyYmlError()
+                            + (drift.isEmpty() ? "" : " drift=" + drift)
+                            + " — amount()/grantCoin refuse until fixed");
+                }
+                return;
             }
-            @SuppressWarnings("unchecked")
-            java.util.Map<String, Object> map = root instanceof java.util.Map ? (java.util.Map<String, Object>) root : null;
-            java.util.List<String> drift = EmberEconomy.economyYmlDrift(map);
-            if (!drift.isEmpty())
-                plugin.getLogger().warning("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML + " drifted from registry golden: " + drift);
-            else
-                plugin.getLogger().info("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML + " mirrors registry golden (bv57)");
+            // no plugins file → bundled classpath
+            EmberEconomy.resetEconomyYmlForTest();
+            EmberEconomy.ensureClasspathEconomyYml();
+            if (EmberEconomy.economyYmlReady()) {
+                plugin.getLogger().info("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML
+                        + " loaded from classpath as amount() SoT (bv" + EmberEconomy.ECONOMY_BV + ")");
+            } else {
+                plugin.getLogger().severe("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML
+                        + " FAIL-CLOSED missing: " + EmberEconomy.economyYmlError()
+                        + " — amount()/grantCoin refuse until fixed");
+            }
         } catch (Throwable t) {
-            plugin.getLogger().warning("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML + " unreadable: " + t.getMessage());
+            EmberEconomy.loadEconomyYml(null);
+            plugin.getLogger().severe("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML
+                    + " FAIL-CLOSED unreadable: " + t.getMessage());
         }
     }
 

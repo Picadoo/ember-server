@@ -1,7 +1,7 @@
-# ember-v1-economy.yml — P1 economy golden mirror (REG §6.3 · E1)
-# Mirror of EmberEconomy.golden; NOT yet the runtime amount() source of truth.
+# ember-v1-economy.yml — P1 economy amounts (REG §6.3 · E1 SoT · D224)
+# Source of truth for EmberEconomy.amount(); Java golden is the secondary assert (fail-on-drift).
 # balance_version must match ember-v1.yml; bump only when numbers change.
-# Missing file → fallback to Java golden. Present file → must match golden (fail-on-drift).
+# Missing/corrupt → fail-closed (amount/grantCoin refuse). Must match Java golden.
 balance_version: 57
 
 sources:

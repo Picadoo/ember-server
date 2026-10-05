@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
@@ -31,7 +32,7 @@ import town.sunshine.corerpg.PlayerData;
  * and a scoped {@code p1/} addCoin scan fails on new grant paths that skip the registry. D218 (S2-4): workshop / mark
  * exchange / abyss fee / talent / reroll / imprint / attune spends (C03–C13) route through spend* and a {@code p1/}
  * takeCoin scan guards new direct spends. D223 (S2-6): delivery coin debit via spendCoinDelivery;
- * EmberDelivery off the takeCoin allowlist; ember-v1-economy.yml fail-on-drift mirror (E1).
+ * EmberDelivery off the takeCoin allowlist. D224: ember-v1-economy.yml is amount() SoT (load + dual-assert golden).
  */
 public class EmberEconomyTest {
     private static final double EPS = 1e-9;
@@ -65,6 +66,15 @@ public class EmberEconomyTest {
 
     private static void eq(String id, String k, double live) {
         assertEquals(id + " " + k + " (registry vs live)", EmberEconomy.byId(id).golden(k), live, EPS);
+    }
+
+    /** D224: each test starts with classpath yml loaded as SoT (isolates fail-closed tests). */
+    @Before
+    public void loadEconomyYmlFromClasspath() throws Exception {
+        EmberEconomy.resetEconomyYmlForTest();
+        Map<String, Object> y = yml(EmberEconomy.ECONOMY_YML);
+        assertEquals(new ArrayList<String>(), EmberEconomy.loadEconomyYml(y));
+        assertTrue(EmberEconomy.economyYmlReady());
     }
 
     @Test
@@ -665,13 +675,13 @@ public class EmberEconomyTest {
         assertFalse("null data", EmberEconomy.spendCoinDelivery(null, "enh:u:6", 1));
     }
 
-    /** E1: shipped ember-v1-economy.yml mirrors every golden; missing file would be empty drift (fallback). */
+    /** E1/D224: shipped yml mirrors every golden; load installs SoT; amount() == golden. */
     @Test
     public void economyYmlMirrorsGolden() throws Exception {
         assertEquals(new ArrayList<String>(), EmberEconomy.economyYmlDrift(null));
         assertEquals(new ArrayList<String>(), EmberEconomy.economyYmlDrift(new java.util.LinkedHashMap<String, Object>()));
         Map<String, Object> y = yml(EmberEconomy.ECONOMY_YML);
-        assertEquals(57, ((Number) y.get("balance_version")).intValue());
+        assertEquals(EmberEconomy.ECONOMY_BV, ((Number) y.get("balance_version")).intValue());
         assertEquals("yml drifted from EmberEconomy.golden", new ArrayList<String>(), EmberEconomy.economyYmlDrift(y));
         // synthetic drift is caught
         @SuppressWarnings("unchecked")
@@ -682,6 +692,50 @@ public class EmberEconomyTest {
         List<String> drift = EmberEconomy.economyYmlDrift(y);
         assertFalse(drift.isEmpty());
         assertTrue(drift.toString(), drift.get(0).contains("C14.coin"));
+    }
+
+    /** D224: loadEconomyYml installs SoT; every golden key readable via amount() equals Java golden. */
+    @Test
+    public void amountReadsLoadedYmlMatchingGolden() throws Exception {
+        EmberEconomy.resetEconomyYmlForTest();
+        Map<String, Object> y = yml(EmberEconomy.ECONOMY_YML);
+        assertEquals(new ArrayList<String>(), EmberEconomy.loadEconomyYml(y));
+        assertTrue(EmberEconomy.economyYmlReady());
+        for (EmberEconomy.Row r : EmberEconomy.all()) {
+            for (Map.Entry<String, Double> g : r.golden.entrySet()) {
+                // amount() is int-rounded; skip non-integral goldens (e.g. stamp_rate 0.12)
+                if (Math.abs(g.getValue() - Math.rint(g.getValue())) > EPS) {
+                    assertEquals(r.id + "." + g.getKey(), g.getValue(), EmberEconomy.ymlAmount(r.id, g.getKey()), EPS);
+                    continue;
+                }
+                assertEquals(r.id + "." + g.getKey(), (int) Math.round(g.getValue()), EmberEconomy.amount(r.id, g.getKey()));
+            }
+        }
+    }
+
+    /** D224: missing / drifted yml → fail-closed (not ready; grantCoin refuses; amount throws). */
+    @Test
+    public void amountFailClosedWhenYmlMissingOrCorrupt() throws Exception {
+        EmberEconomy.resetEconomyYmlForTest();
+        assertFalse(EmberEconomy.loadEconomyYml(null).isEmpty());
+        assertFalse(EmberEconomy.economyYmlReady());
+        PlayerData d = new PlayerData();
+        assertFalse("grant refused when yml missing", EmberEconomy.grantCoin(d, "S01", 300));
+        assertEquals(0, d.getCoin());
+        boolean threw = false;
+        try { EmberEconomy.amount("S01", "coin"); } catch (IllegalStateException e) { threw = true; }
+        assertTrue("amount throws when not ready", threw);
+
+        EmberEconomy.resetEconomyYmlForTest();
+        Map<String, Object> y = yml(EmberEconomy.ECONOMY_YML);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> sinks = (Map<String, Object>) y.get("sinks");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> c14 = (Map<String, Object>) sinks.get("C14");
+        c14.put("coin", 11);
+        assertFalse(EmberEconomy.loadEconomyYml(y).isEmpty());
+        assertFalse(EmberEconomy.economyYmlReady());
+        assertFalse(EmberEconomy.grantCoin(d, "S01", 300));
     }
 
 }

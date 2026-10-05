@@ -1566,6 +1566,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D221 | CoreRpg 1.65.50 / bv57 | ARCH S2-5：C18 国庆商店 spend 走 EmberEconomy（`spendFestCoin` / `spendCoin` / `spendBadge`；金样钉 festival yml）；S22 挂机庭 `sourceForGrant(p1afk-)` + deliver `grantCoin`/`grantXp`/`grantMat`（BOUND_MAT）；`EmberFestival` 移出 takeCoin 白名单。数量不变。E1 yml 加载器仍设计稿。 |
 | D222 | 无发版（tools/p1sim + 文档；CoreRpg 仍 1.65.50 / bv57，不 bump）| REG §5 缺口 1–3：`tools/p1sim/insignia.py` 首领徽记分图账户（S07 首通 3 / S08 重打 1 / S09 誓约 N / S17 前哨 q01–q03 各 2 / S18 残响 3×2 / S23 签到最高图 1 → C12 烙印 5+300×阶 / C13 调律 10），opt-in（`p2econ --insignia`、`insignia.py report`、`signin.py` `INS_HOOK`），默认输出逐位不变。W30：结余中位 ~315–340，其中 Q01–Q04 ~300+ 堆积；Q07（熟练档）与 Q05/Q06 偏饥饿，L10b/L12b 调律 30 周内基本解不开；无绕周上限的刷法。建议只记录（R1 高图周来源 / 低图兑换）。`out-insignia-d222-w30*.md`，`docs/status/STATUS-ember-p1sim-insignia-2026-10-06.md`。 |
 | D223 | CoreRpg 1.65.51 / bv57 | ARCH S2-6：EmberDelivery 负额扣币经 `spendCoinDelivery`/`sinkForDeliveryRequest`（enh→C03…imp→C12）；`EmberDelivery` 移出 takeCoin 白名单；E1 `ember-v1-economy.yml` 镜像 + `economyYmlDrift` fail-on-drift（`amount()` 仍 golden）。数量不变。 |
+| D224 | CoreRpg 1.65.52 / bv57 | ARCH S2-7 / E1：`amount()` 读 `ember-v1-economy.yml` SoT；fail-closed；golden 二次断言。数量不变。 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
