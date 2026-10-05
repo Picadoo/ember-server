@@ -1564,6 +1564,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D219 | CoreRpg 1.65.49 / bv57 | 技能组身法·后撤步（D217 定稿）：技能页「身法方向」前冲/后撤（`p1_step_dir@all` SETTING，Q01 起三套通用）；后撤 4 格、无伤害、无无敌、共用 14s 身法冷却、落地保持朝向、严格落点（拒悬崖/岩浆/火/仙人掌/蛛网）；火痕·后撤点燃起跳点 3 格内最近 1（`skillIgnite` ×1.0）；出本换方向后身法 CD 转满；共享 `EmberDash` 斜角缝 body 采样（±0.3）修复。PAPI `kit_step_dir`；TrMenu G/H。不绑套装；bv57 不动；无资产路径 → 不跑 persist-roundtrip。 |
 | D220 | 无发版（只改文档；CoreRpg 仍是 1.65.49 / bv57）| ARCH · `ember-v1-economy.yml` 真源草案（REG §6.3）：`docs/design/DESIGN-ember-v1-economy-yml-2026-10-06.md`。形态 = sources/sinks/caps 镜像 `EmberEconomy.golden`；E1 加载器+双钉、数量不变；E2 C18/S22/Delivery；E3 p1sim 同读。本窗不实现 C18/S22 代码（刚发 D219，不抢部署锁）。 |
 | D221 | CoreRpg 1.65.50 / bv57 | ARCH S2-5：C18 国庆商店 spend 走 EmberEconomy（`spendFestCoin` / `spendCoin` / `spendBadge`；金样钉 festival yml）；S22 挂机庭 `sourceForGrant(p1afk-)` + deliver `grantCoin`/`grantXp`/`grantMat`（BOUND_MAT）；`EmberFestival` 移出 takeCoin 白名单。数量不变。E1 yml 加载器仍设计稿。 |
+| D223 | CoreRpg 1.65.51 / bv57 | ARCH S2-6：EmberDelivery 负额扣币经 `spendCoinDelivery`/`sinkForDeliveryRequest`（enh→C03…imp→C12）；`EmberDelivery` 移出 takeCoin 白名单；E1 `ember-v1-economy.yml` 镜像 + `economyYmlDrift` fail-on-drift（`amount()` 仍 golden）。数量不变。 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 

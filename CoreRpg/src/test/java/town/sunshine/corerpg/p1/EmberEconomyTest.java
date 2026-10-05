@@ -30,7 +30,8 @@ import town.sunshine.corerpg.PlayerData;
  * settle / shop / sign / grantCoin/Mark/Xp/Mat / spendCoin route through the registry without changing amounts,
  * and a scoped {@code p1/} addCoin scan fails on new grant paths that skip the registry. D218 (S2-4): workshop / mark
  * exchange / abyss fee / talent / reroll / imprint / attune spends (C03–C13) route through spend* and a {@code p1/}
- * takeCoin scan guards new direct spends.
+ * takeCoin scan guards new direct spends. D223 (S2-6): delivery coin debit via spendCoinDelivery;
+ * EmberDelivery off the takeCoin allowlist; ember-v1-economy.yml fail-on-drift mirror (E1).
  */
 public class EmberEconomyTest {
     private static final double EPS = 1e-9;
@@ -534,14 +535,13 @@ public class EmberEconomyTest {
 
     /**
      * Scoped unregistered-spend scan (REG §6.4, S2-4): every {@code .takeCoin(} in {@code p1/} lives in EmberEconomy or an
-     * allowlisted file whose sink is not routed yet (C15 paused, delivery debit, EmberPay untagged undo).
+     * allowlisted file whose sink is not routed yet (C15 paused, EmberPay untagged undo). Delivery debit routed D223.
      */
     @Test
     public void p1TakeCoinIsEconomyOrAllowlisted() throws Exception {
         Set<String> allowFiles = new HashSet<String>(Arrays.asList(
-                "EmberEconomy.java",   // spendCoin
+                "EmberEconomy.java",   // spendCoin / spendCoinDelivery
                 "EmberPay.java",       // untagged price (dismantle undo) direct path
-                "EmberDelivery.java",  // A01 durable txn debit
                 "EmberCosmetics.java"  // C15 (paused, OUT of the model)
         ));
         Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
@@ -629,4 +629,59 @@ public class EmberEconomyTest {
         assertFalse("sink", EmberEconomy.grantCoin(d, "C18", 1));
         assertFalse("S02 pays coin only", EmberEconomy.grantMat("S02", EmberUpgradeRules.MAT_SHARD, 1));
     }
+
+    // ------------------------------------------------------------------ D223 / ARCH S2-6 delivery debit + E1 yml
+
+    @Test
+    public void deliveryRequestMapsToWorkshopSinks() {
+        assertEquals("C03", EmberEconomy.sinkForDeliveryRequest("enh:uid:1"));
+        assertEquals("C03", EmberEconomy.sinkForDeliveryRequest("refund:enh:uid:1"));
+        assertEquals("C04", EmberEconomy.sinkForDeliveryRequest("upgrade:uid:2"));
+        assertEquals("C05", EmberEconomy.sinkForDeliveryRequest("refine:uid:3"));
+        assertEquals("C06", EmberEconomy.sinkForDeliveryRequest("quality:uid:4"));
+        assertEquals("C11", EmberEconomy.sinkForDeliveryRequest("afx:uid:5:abc"));
+        assertEquals("C11", EmberEconomy.sinkForDeliveryRequest("reroll:uid:5"));
+        assertEquals("C12", EmberEconomy.sinkForDeliveryRequest("imp:uid:6:xyz"));
+        assertEquals(null, EmberEconomy.sinkForDeliveryRequest("undo:uid:1"));
+        assertEquals(null, EmberEconomy.sinkForDeliveryRequest("dis:uid:1"));
+        assertEquals(null, EmberEconomy.sinkForDeliveryRequest("swap:abc"));
+        assertEquals(null, EmberEconomy.sinkForDeliveryRequest(null));
+        assertEquals(null, EmberEconomy.sinkForDeliveryRequest(""));
+    }
+
+    @Test
+    public void spendCoinDeliveryTagsOrFallsBack() {
+        PlayerData d = new PlayerData();
+        d.setCoin(1000);
+        assertTrue(EmberEconomy.spendCoinDelivery(d, "enh:u:1", 40));
+        assertEquals(960, d.getCoin());
+        assertTrue("mapped refine", EmberEconomy.spendCoinDelivery(d, "refund:refine:u:2", 100));
+        assertEquals(860, d.getCoin());
+        assertTrue("unmapped still takes", EmberEconomy.spendCoinDelivery(d, "undo:u:3", 10));
+        assertEquals(850, d.getCoin());
+        assertFalse("short", EmberEconomy.spendCoinDelivery(d, "enh:u:4", 9000));
+        assertEquals(850, d.getCoin());
+        assertFalse("zero", EmberEconomy.spendCoinDelivery(d, "enh:u:5", 0));
+        assertFalse("null data", EmberEconomy.spendCoinDelivery(null, "enh:u:6", 1));
+    }
+
+    /** E1: shipped ember-v1-economy.yml mirrors every golden; missing file would be empty drift (fallback). */
+    @Test
+    public void economyYmlMirrorsGolden() throws Exception {
+        assertEquals(new ArrayList<String>(), EmberEconomy.economyYmlDrift(null));
+        assertEquals(new ArrayList<String>(), EmberEconomy.economyYmlDrift(new java.util.LinkedHashMap<String, Object>()));
+        Map<String, Object> y = yml(EmberEconomy.ECONOMY_YML);
+        assertEquals(57, ((Number) y.get("balance_version")).intValue());
+        assertEquals("yml drifted from EmberEconomy.golden", new ArrayList<String>(), EmberEconomy.economyYmlDrift(y));
+        // synthetic drift is caught
+        @SuppressWarnings("unchecked")
+        Map<String, Object> sinks = (Map<String, Object>) y.get("sinks");
+        @SuppressWarnings("unchecked")
+        Map<String, Object> c14 = (Map<String, Object>) sinks.get("C14");
+        c14.put("coin", 11);
+        List<String> drift = EmberEconomy.economyYmlDrift(y);
+        assertFalse(drift.isEmpty());
+        assertTrue(drift.toString(), drift.get(0).contains("C14.coin"));
+    }
+
 }

@@ -226,3 +226,4 @@
 | 2026-10-06 | D218（CoreRpg 1.65.48）：S2-4 — 消耗 C03–C13 走登记表（工坊 C03–C06 / 洗练 C11 / 烙印 C12 经 `EmberPay.Price.at`；C07 兑换数量读 amount；C08 层费币+T3 印记；C09/C10 天赋币，加金样钉 growth yml；C13 调律 `spendInsignia`）；p1 takeCoin 扫描。数量不变（bv57）。 |
 | 2026-10-06 | D220（文档）：§6.3 yaml 真源草案 `DESIGN-ember-v1-economy-yml-2026-10-06.md`（E0）；CoreRpg 仍 1.65.49。C18/S22 实现留给 E2。 |
 | 2026-10-06 | D221（CoreRpg 1.65.50）：C18 国庆商店 spend 走 EmberEconomy；S22 挂机庭 grant 经 `sourceForGrant(p1afk-)` + grant*；E1 yml 仍草案。 |
+| 2026-10-06 | D223（CoreRpg 1.65.51）：EmberDelivery 负额扣币标签化（`spendCoinDelivery`）；E1 `ember-v1-economy.yml` 镜像防漂移（yml 尚未真源）。 |

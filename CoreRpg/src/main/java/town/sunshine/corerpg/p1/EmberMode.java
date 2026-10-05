@@ -160,8 +160,36 @@ public final class EmberMode {
         }
         loadBoardExclude(y);
         checkConflicts();
+        checkEconomyYmlMirror();
         plugin.getLogger().info("[" + MODE_ID + "] config enabled=" + configEnabled + " worlds=" + cfgWorlds
                 + " prefixes=" + cfgPrefixes + (blocked ? " BLOCKED: " + blockedReason : ""));
+    }
+
+
+    /** D223 / E1: if ember-v1-economy.yml is present, warn when it drifts from EmberEconomy.golden (amount() still golden). */
+    private void checkEconomyYmlMirror() {
+        File f = new File(plugin.getDataFolder(), EmberEconomy.ECONOMY_YML);
+        if (!f.exists()) {
+            try { plugin.saveResource(EmberEconomy.ECONOMY_YML, false); } catch (Throwable ignored) {}
+        }
+        if (!f.exists()) return; // missing → fallback to Java golden
+        try {
+            // SnakeYAML (Paper ships it): keeps quoted dotted keys flat — Bukkit path API would split them.
+            org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml();
+            Object root;
+            try (java.io.Reader r = new InputStreamReader(new java.io.FileInputStream(f), StandardCharsets.UTF_8)) {
+                root = yaml.load(r);
+            }
+            @SuppressWarnings("unchecked")
+            java.util.Map<String, Object> map = root instanceof java.util.Map ? (java.util.Map<String, Object>) root : null;
+            java.util.List<String> drift = EmberEconomy.economyYmlDrift(map);
+            if (!drift.isEmpty())
+                plugin.getLogger().warning("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML + " drifted from registry golden: " + drift);
+            else
+                plugin.getLogger().info("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML + " mirrors registry golden (bv57)");
+        } catch (Throwable t) {
+            plugin.getLogger().warning("[" + MODE_ID + "] " + EmberEconomy.ECONOMY_YML + " unreadable: " + t.getMessage());
+        }
     }
 
     /** P1 refuses to run next to a second attribute engine (source table A23). */

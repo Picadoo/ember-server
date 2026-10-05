@@ -12,19 +12,21 @@ import java.util.Set;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D213 registry + D215–D218/D221 (ARCH S2-2…S2-5) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
+ * D213 registry + D215–D218/D221/D223 (ARCH S2-2…S2-6) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
  * closed <b>legacy source</b> (L-S1…L-S5) and <b>sink</b> (C01–C18) from
  * {@code docs/design/REG-ember-source-sink-cap-2026-10-05.md}.
  * <p>Lookups stay Bukkit-free. {@link #amount} is the amount source of truth for routed rows (settle S01–S03,
  * shop C14, signin S23 daily/fallback/makeup, online S24 totals, festival C18 goldens). {@link #grantCoin} /
  * {@link #grantMark} / {@link #grantXp} / {@link #grantMat} / {@link #spendCoin} / {@link #spendMark} /
- * {@link #spendInsignia} / {@link #spendMat} / {@link #spendBadge} / {@link #spendFestCoin} are the tagged entry
- * points (PlayerData only where possible — no Bukkit). D218 (S2-4): workshop C03–C13. D221 (S2-5): festival shop
- * C18 spends + AFK S22 grant entry via {@link #sourceForGrant} {@code p1afk-} run id. Unrouted paths still call
- * {@code PlayerData.addCoin}/{@code takeCoin} directly.
- * <p>{@code EmberEconomyTest} pins golden amounts, proves settle / shop / sign / fest / AFK / grant* routing, and
- * scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist. Numbers unchanged
- * (balance_version 57).
+ * {@link #spendInsignia} / {@link #spendMat} / {@link #spendBadge} / {@link #spendFestCoin} /
+ * {@link #spendCoinDelivery} are the tagged entry points (PlayerData only where possible — no Bukkit). D218 (S2-4):
+ * workshop C03–C13. D221 (S2-5): festival shop C18 spends + AFK S22 grant entry via {@link #sourceForGrant}
+ * {@code p1afk-} run id. D223 (S2-6): EmberDelivery coin debits via {@link #spendCoinDelivery} +
+ * {@link #sinkForDeliveryRequest}; E1 {@code ember-v1-economy.yml} mirror-check ({@link #economyYmlDrift}, yml is
+ * <b>not</b> yet the {@link #amount} source of truth). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
+ * <p>{@code EmberEconomyTest} pins golden amounts, proves settle / shop / sign / fest / AFK / delivery / grant* routing,
+ * scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist, and fails on economy-yml drift.
+ * Numbers unchanged (balance_version 57).
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -454,4 +456,76 @@ public final class EmberEconomy {
             default: return null;
         }
     }
+
+    /**
+     * Map a durable delivery {@code request_id} to the REG sink that originally spent the coins (D223 / ARCH S2-6).
+     * Strips a leading {@code refund:} (hold id) so a clawback of an enhance hold still tags C03. Null = unmapped /
+     * not a coin sink (undo / dismantle / swap / unknown) — {@link #spendCoinDelivery} then takes without a sink tag.
+     */
+    public static String sinkForDeliveryRequest(String request) {
+        if (request == null || request.isEmpty()) return null;
+        String r = request.startsWith("refund:") ? request.substring(7) : request;
+        if (r.startsWith("enh:")) return "C03";
+        if (r.startsWith("upgrade:")) return "C04";
+        if (r.startsWith("refine:")) return "C05";
+        if (r.startsWith("quality:")) return "C06";
+        if (r.startsWith("afx:") || r.startsWith("reroll:")) return "C11";
+        if (r.startsWith("imp:")) return "C12";
+        return null;
+    }
+
+    /**
+     * Coin debit from a durable delivery row (negative {@code kind=coin} amount). Tags the debit with
+     * {@link #sinkForDeliveryRequest} when mappable; otherwise {@link PlayerData#takeCoin} inside this helper so
+     * {@code EmberDelivery} stays off the direct-takeCoin allowlist. Amounts unchanged.
+     */
+    public static boolean spendCoinDelivery(PlayerData d, String request, int amount) {
+        if (d == null || amount <= 0) return false;
+        String sink = sinkForDeliveryRequest(request);
+        if (sink != null) return spendCoin(d, sink, amount);
+        return d.takeCoin(amount);
+    }
+
+    /** Bundled / deployed economy mirror filename (REG §6.3 · E1). */
+    public static final String ECONOMY_YML = "ember-v1-economy.yml";
+
+    /**
+     * Compare a parsed {@code ember-v1-economy.yml} tree to the built-in golden map (fail-on-drift).
+     * Null / empty root = no file → empty list (fallback to Java golden). Every golden key must appear under
+     * {@code sources.<id>} or {@code sinks.<id>} with the same number; unknown ids / extra keys / wrong
+     * {@code balance_version} are reported. Does <b>not</b> change {@link #amount} — yml is a mirror until E1
+     * switches to yaml-as-source after a tested migration.
+     */
+    @SuppressWarnings("unchecked")
+    public static List<String> economyYmlDrift(Map<String, Object> root) {
+        List<String> out = new ArrayList<String>();
+        if (root == null || root.isEmpty()) return out;
+        Object bv = root.get("balance_version");
+        if (!(bv instanceof Number) || ((Number) bv).intValue() != 57)
+            out.add("balance_version: want 57 got " + bv);
+        Map<String, Object> sources = root.get("sources") instanceof Map ? (Map<String, Object>) root.get("sources") : null;
+        Map<String, Object> sinks = root.get("sinks") instanceof Map ? (Map<String, Object>) root.get("sinks") : null;
+        for (Row r : BY_ID.values()) {
+            if (r.golden.isEmpty()) continue;
+            Map<String, Object> block = r.sink
+                    ? (sinks == null ? null : (Map<String, Object>) sinks.get(r.id))
+                    : (sources == null ? null : (Map<String, Object>) sources.get(r.id));
+            if (block == null) {
+                out.add(r.id + ": missing block");
+                continue;
+            }
+            for (Map.Entry<String, Double> g : r.golden.entrySet()) {
+                Object v = block.get(g.getKey());
+                if (!(v instanceof Number)) {
+                    out.add(r.id + "." + g.getKey() + ": missing");
+                    continue;
+                }
+                double live = ((Number) v).doubleValue();
+                if (Math.abs(live - g.getValue()) > 1e-9)
+                    out.add(r.id + "." + g.getKey() + ": yml " + live + " != golden " + g.getValue());
+            }
+        }
+        return out;
+    }
+
 }

@@ -1,6 +1,6 @@
 # DESIGN · `ember-v1-economy.yml` 真源草案（REG §6.3 · D220 文档）
 
-> **状态：草案，只是离线文档。** 没有改 CoreRpg / yml 部署 / p1sim / 重启（skill-d219 刚把 CoreRpg 发到 1.65.49；本窗不抢部署锁）。
+> **状态：E1 镜像已落地（D223 / 1.65.51）。** `ember-v1-economy.yml` 随 jar 部署；`economyYmlDrift` 单测 + 启动 WARNING；**`amount()` 仍读 Java golden**（yml 作真源留待迁移窗）。Delivery 扣币已在同窗路由。
 > **上游：** `REG-ember-source-sink-cap-2026-10-05.md` §6.3；`EmberEconomy`（D213 登记 + D215/D216/D218 grant/spend 路由）。
 > **目的：** 把现在散落在 Java 常量（`BASE_*`、`CLEAR_MARKS`、`MARKS_PER_EXCHANGE`…）与多份 yml（`ember-v1.yml` / `ember-v1-runs.yml` / `ember-v1-growth.yml` / `ember-v1-festival.yml`）里的**数量与上限**收成一份可读真源，供运行时与 `tools/p1sim/rules.py` 同读。本阶段**不改任何数值**（bv57）。
 
@@ -63,8 +63,8 @@ caps:
 | 阶段 | 内容 | 碰 CoreRpg？ |
 |---|---|---|
 | **E0（本稿）** | 定形态 + 把现有 `EmberEconomy.golden` 键列成清单 | 否 |
-| **E1** | 生成 `ember-v1-economy.yml`（从 golden 导出）、加载器、单测双钉（yml ↔ golden）；数量不变 | 是（小版本） |
-| **E2** | C18 国庆商店 spend 走 `EmberEconomy`；S22 挂机庭 grant 单入口；Delivery debit 标签化 | **C18+S22 已在 D221 / 1.65.50**；Delivery 仍待 |
+| **E1** | 生成 `ember-v1-economy.yml`（从 golden 导出）、加载器、单测双钉（yml ↔ golden）；数量不变 | **D223 已镜像防漂移**（yml 尚未真源） |
+| **E2** | C18 国庆商店 spend 走 `EmberEconomy`；S22 挂机庭 grant 单入口；Delivery debit 标签化 | **C18+S22 D221；Delivery D223** |
 | **E3** | p1sim 改读 yml；徽记账户进模型（REG §5 #1） | p1sim 车道 |
 
 ---
@@ -76,7 +76,7 @@ caps:
 | C03–C13 / C14 / S01–S03 / S23–S24 | 已路由（D215–D218） | E1 搬家数量 |
 | **C18 国庆商店** | **D221 已路由** PART | 价目仍在 `ember-v1-festival.yml`；金样已钉 |
 | **S22 挂机庭** | **D221 已统一入口** FULL | `p1afk-` → S22 → `grant*` |
-| EmberDelivery 扣币 | 部分 grant 已路由 | E2 对称 debit |
+| EmberDelivery 扣币 | **D223 已标签化** | — |
 | C15 / C16 化妆品 | DEFER | 只占位 |
 | 徽记 p1sim | TODO（D216） | E3 / p1sim 车道 |
 
@@ -84,7 +84,8 @@ caps:
 
 ## 4. 验收（E1 落地时）
 
-- [ ] 部署目录有 `ember-v1-economy.yml`，`balance_version: 57`
-- [ ] `EmberEconomyTest`：yml 金样 = 内置 golden = 现网行为（FreshQ 冒烟数量不变）
-- [ ] 缺文件仍可启动（回退）
-- [ ] 不改 bv、不改资产路径 → 不跑 persist-roundtrip
+- [x] 部署目录有 `ember-v1-economy.yml`，`balance_version: 57`（D223）
+- [x] `EmberEconomyTest`：yml 金样 = 内置 golden（`economyYmlDrift`）；现网行为冒烟数量不变
+- [x] 缺文件仍可启动（回退；`economyYmlDrift(null)` 空）
+- [x] 不改 bv、不改资产路径 → 不跑 persist-roundtrip
+- [ ] yml 作 `amount()` 真源（迁移窗）

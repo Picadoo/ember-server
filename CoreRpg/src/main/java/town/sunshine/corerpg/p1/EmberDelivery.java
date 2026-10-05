@@ -142,8 +142,9 @@ public final class EmberDelivery {
             tell(p, (d.amount > 0 ? ChatColor.GREEN + "退回 " : "扣回 ") + name + " ×" + Math.abs(d.amount) + ChatColor.GRAY + "（" + why(d) + "）");
             pd.addPeriodCount(mk, "1", 1);
         } else if (!applied && "coin".equals(d.kind)) {
-            if (d.amount > 0) pd.addCoin((int) d.amount);
-            else if (d.amount < 0 && !pd.takeCoin((int) -d.amount)) plugin.getLogger().warning("[P1 delivery] " + p.getName() + " coin debit " + d.request + " short");
+            if (d.amount > 0) pd.addCoin((int) d.amount); // refund / credit — not a REG grant (stay direct)
+            else if (d.amount < 0 && !EmberEconomy.spendCoinDelivery(pd, d.request, (int) -d.amount)) // D223: tagged debit
+                plugin.getLogger().warning("[P1 delivery] " + p.getName() + " coin debit " + d.request + " short");
             tell(p, (d.amount > 0 ? ChatColor.GREEN + "退回 " : "扣回 ") + name + " ×" + Math.abs(d.amount) + ChatColor.GRAY + "（" + why(d) + "）");
             pd.addPeriodCount(mk, "1", 1);
         } else if (!applied) {
