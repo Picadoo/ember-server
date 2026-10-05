@@ -1784,6 +1784,13 @@ public final class EmberRunService implements Listener {
                     break;
                 }
                 case BMAT: { // D177 rev 2 挂机庭 loot: warehouse entry marked account-bound (never a physical item, never mailed)
+                    // D221 / ARCH S2-5: AFK (and other) BMAT grants with a known REG source are validated via grantMat
+                    String src = EmberEconomy.sourceForGrant(g.key, r.runId);
+                    if (src != null && !EmberEconomy.grantMat(src, g.id, g.amount)) {
+                        log().warning("[P1 run] economy grantMat refused " + src + " bmat " + g.id + " " + g.amount + " for " + p.getName());
+                        done = true;
+                        break;
+                    }
                     EmberVault vlt = EmberVault.get();
                     if (ni != null && vlt != null && vlt.creditBound(p, g.id, g.amount)) {
                         got.add("挂机 " + ni.displayName(g.id) + " ×" + g.amount + "（进仓库 · 账号绑定）");

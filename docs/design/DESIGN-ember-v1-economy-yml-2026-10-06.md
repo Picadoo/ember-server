@@ -64,7 +64,7 @@ caps:
 |---|---|---|
 | **E0（本稿）** | 定形态 + 把现有 `EmberEconomy.golden` 键列成清单 | 否 |
 | **E1** | 生成 `ember-v1-economy.yml`（从 golden 导出）、加载器、单测双钉（yml ↔ golden）；数量不变 | 是（小版本） |
-| **E2** | C18 国庆商店 spend 走 `EmberEconomy`；S22 挂机庭 grant 单入口；Delivery debit 标签化 | 是 |
+| **E2** | C18 国庆商店 spend 走 `EmberEconomy`；S22 挂机庭 grant 单入口；Delivery debit 标签化 | **C18+S22 已在 D221 / 1.65.50**；Delivery 仍待 |
 | **E3** | p1sim 改读 yml；徽记账户进模型（REG §5 #1） | p1sim 车道 |
 
 ---
@@ -74,8 +74,8 @@ caps:
 | 项 | 状态 | 本草案 |
 |---|---|---|
 | C03–C13 / C14 / S01–S03 / S23–S24 | 已路由（D215–D218） | E1 搬家数量 |
-| **C18 国庆商店** | 登记 PART，代码未走 spend | E2；价目在 `ember-v1-festival.yml` |
-| **S22 挂机庭** | 登记 FULL，发放未统一入口 | E2；`EmberAfkService` → `grant*` |
+| **C18 国庆商店** | **D221 已路由** PART | 价目仍在 `ember-v1-festival.yml`；金样已钉 |
+| **S22 挂机庭** | **D221 已统一入口** FULL | `p1afk-` → S22 → `grant*` |
 | EmberDelivery 扣币 | 部分 grant 已路由 | E2 对称 debit |
 | C15 / C16 化妆品 | DEFER | 只占位 |
 | 徽记 p1sim | TODO（D216） | E3 / p1sim 车道 |

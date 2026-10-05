@@ -387,19 +387,19 @@ public final class EmberFestival implements Listener {
         long now = System.currentTimeMillis();
         if (!enabled && !charm || now < startMs) { p.sendMessage(P + ChatColor.RED + name + " 还没开始（" + windowText() + "）"); return true; }
         NiBridge ni = ((town.sunshine.corerpg.CoreRpgPlugin) plugin).getNiBridge();
-        if (now < endMs && enabled) { // event shop: 国庆币 only
+        if (now < endMs && enabled) { // event shop: 国庆币 only — D221 REG C18
             int price = charm ? priceEvent : trailPrice;
             int have = countCoins(p);
-            if (have < price || ni == null || !ni.consumeExact(p, coinNi, price)) {
+            if (have < price || !EmberEconomy.spendFestCoin("C18", price) || ni == null || !ni.consumeExact(p, coinNi, price)) {
                 p.sendMessage(P + ChatColor.RED + coinName + "不够（要 " + price + "，背包里 " + have + "）· 活动本小怪和首领掉落");
                 return true;
             }
             grant(p, d, charm, coinName + " " + price);
             return true;
         }
-        if (!charm && trailAfter) { // D146: after the event, only with 国庆币 already earned
+        if (!charm && trailAfter) { // D146: after the event, only with 国庆币 already earned — D221 REG C18
             int have = countCoins(p);
-            if (have < trailPrice || ni == null || !ni.consumeExact(p, coinNi, trailPrice)) {
+            if (have < trailPrice || !EmberEconomy.spendFestCoin("C18", trailPrice) || ni == null || !ni.consumeExact(p, coinNi, trailPrice)) {
                 p.sendMessage(P + ChatColor.RED + coinName + "不够（要 " + trailPrice + "，背包里 " + have + "）· 活动已结束，不再掉落");
                 return true;
             }
@@ -407,14 +407,19 @@ public final class EmberFestival implements Listener {
             return true;
         }
         if (!charm) { p.sendMessage(P + ChatColor.RED + "限时足迹只在活动期间出售（" + windowText() + "）"); return true; }
-        // after the event: permanent price, 余烬币 or 余烬徽
+        // after the event: permanent price, 余烬币 or 余烬徽 — D221 REG C18
         boolean badge = "badge".equals(pay) || "徽".equals(pay);
         if (badge) {
-            if (afterBadge <= 0 || EmberSeason.badges(d) < afterBadge) { p.sendMessage(P + ChatColor.RED + "余烬徽不够（要 " + afterBadge + "，有 " + EmberSeason.badges(d) + "）"); return true; }
-            d.addPeriodCount(EmberSeason.C_BADGE, "all", -afterBadge);
+            if (afterBadge <= 0 || !EmberEconomy.spendBadge(d, "C18", afterBadge)) {
+                p.sendMessage(P + ChatColor.RED + "余烬徽不够（要 " + afterBadge + "，有 " + EmberSeason.badges(d) + "）");
+                return true;
+            }
             grant(p, d, true, "余烬徽 " + afterBadge);
         } else {
-            if (afterCoin <= 0 || !d.takeCoin(afterCoin)) { p.sendMessage(P + ChatColor.RED + "余烬币不够（要 " + afterCoin + "，有 " + d.getCoin() + "）"); return true; }
+            if (afterCoin <= 0 || !EmberEconomy.spendCoin(d, "C18", afterCoin)) {
+                p.sendMessage(P + ChatColor.RED + "余烬币不够（要 " + afterCoin + "，有 " + d.getCoin() + "）");
+                return true;
+            }
             grant(p, d, true, "余烬币 " + afterCoin);
         }
         return true;
@@ -428,7 +433,7 @@ public final class EmberFestival implements Listener {
         if ("memo".equals(what)) {
             if (memoId.isEmpty() || memoPrice <= 0) { p.sendMessage(P + "纪念称号未开放。"); return true; }
             if (trailOwned(d, memoId)) { p.sendMessage(P + "已经有称号「" + memoLabel + "§7」了"); return true; }
-            if (have < memoPrice || ni == null || !ni.consumeExact(p, coinNi, memoPrice)) {
+            if (have < memoPrice || !EmberEconomy.spendFestCoin("C18", memoPrice) || ni == null || !ni.consumeExact(p, coinNi, memoPrice)) {
                 p.sendMessage(P + ChatColor.RED + coinName + "不够（要 " + memoPrice + "，背包里 " + have + "）");
                 return true;
             }
@@ -445,7 +450,10 @@ public final class EmberFestival implements Listener {
         int want = "all".equals(amount) || amount.isEmpty() ? left : (int) Math.max(0, num(amount, 0));
         int n = Math.min(Math.min(want, left), have / badgeRate);
         if (n <= 0) { p.sendMessage(P + ChatColor.RED + coinName + "不够（" + badgeRate + " 枚换 1 徽，背包里 " + have + "）"); return true; }
-        if (ni == null || !ni.consumeExact(p, coinNi, n * badgeRate)) { p.sendMessage(P + ChatColor.RED + "扣除" + coinName + "失败，什么都没换"); return true; }
+        if (!EmberEconomy.spendFestCoin("C18", n * badgeRate) || ni == null || !ni.consumeExact(p, coinNi, n * badgeRate)) {
+            p.sendMessage(P + ChatColor.RED + "扣除" + coinName + "失败，什么都没换");
+            return true;
+        }
         d.addPeriodCount(C_XBADGE + id, "all", n);
         d.addPeriodCount(EmberSeason.C_BADGE, "all", n);
         runs.flushData(p.getUniqueId());

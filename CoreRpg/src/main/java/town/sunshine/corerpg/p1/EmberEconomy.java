@@ -12,17 +12,19 @@ import java.util.Set;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D213 registry + D215/D216/D218 (ARCH S2-2/S2-3/S2-4) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
+ * D213 registry + D215–D218/D221 (ARCH S2-2…S2-5) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
  * closed <b>legacy source</b> (L-S1…L-S5) and <b>sink</b> (C01–C18) from
  * {@code docs/design/REG-ember-source-sink-cap-2026-10-05.md}.
  * <p>Lookups stay Bukkit-free. {@link #amount} is the amount source of truth for routed rows (settle S01–S03,
- * shop C14, signin S23 daily/fallback/makeup, online S24 totals). {@link #grantCoin} / {@link #grantMark} /
- * {@link #grantXp} / {@link #grantMat} / {@link #spendCoin} / {@link #spendMark} / {@link #spendInsignia} /
- * {@link #spendMat} are the tagged entry points (PlayerData only where possible — no Bukkit). D218 (S2-4): workshop
- * C03–C06 ({@link #sinkForForge}), mark exchange C07, abyss fee C08, talent learn / respec C09 / C10, reroll C11,
- * imprint C12 and attune unlock C13 spend through these. Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
- * <p>{@code EmberEconomyTest} pins golden amounts, proves settle / shop / sign / grant* routing, and scans
- * {@code p1/} for direct {@code addCoin} outside the allowlist. Numbers unchanged (balance_version 57).
+ * shop C14, signin S23 daily/fallback/makeup, online S24 totals, festival C18 goldens). {@link #grantCoin} /
+ * {@link #grantMark} / {@link #grantXp} / {@link #grantMat} / {@link #spendCoin} / {@link #spendMark} /
+ * {@link #spendInsignia} / {@link #spendMat} / {@link #spendBadge} / {@link #spendFestCoin} are the tagged entry
+ * points (PlayerData only where possible — no Bukkit). D218 (S2-4): workshop C03–C13. D221 (S2-5): festival shop
+ * C18 spends + AFK S22 grant entry via {@link #sourceForGrant} {@code p1afk-} run id. Unrouted paths still call
+ * {@code PlayerData.addCoin}/{@code takeCoin} directly.
+ * <p>{@code EmberEconomyTest} pins golden amounts, proves settle / shop / sign / fest / AFK / grant* routing, and
+ * scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist. Numbers unchanged
+ * (balance_version 57).
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -189,7 +191,9 @@ public final class EmberEconomy {
         sink("C15", "外观商店（暂停）", "EmberCosmetics", Period.NONE).acc(COIN, BADGE, MARK, Account.COSMETIC).keys("p2_cosbuy_").model(OUT).done();
         sink("C16", "扭蛋兑券（暂停）", "CoreGacha exchange", Period.DAY).acc(COIN, BADGE, Account.GACHA_TICKET).model(NONE).done();
         sink("C17", "生活 offer", "life.yml", Period.DAY).acc(COIN, CORE).keys("life_").model(NONE).done();
-        sink("C18", "国庆商店", "ember-v1-festival.yml shop", Period.EVENT).acc(Account.FEST_COIN, COIN, BADGE).model(PART).done();
+        sink("C18", "国庆商店", "ember-v1-festival.yml shop", Period.EVENT).acc(Account.FEST_COIN, COIN, BADGE).model(PART)
+            .g("charm_event", 60).g("trail_event", 30).g("after_coin", 15000).g("after_badge", 300)
+            .g("memo", 120).g("badge_rate", 5).g("badge_cap", 40).done();
     }
 
     private EmberEconomy() {}
@@ -282,6 +286,7 @@ public final class EmberEconomy {
         if (runId != null) {
             if (runId.startsWith("p1sign-")) return "S23";
             if (runId.startsWith("p1online-")) return "S24";
+            if (runId.startsWith("p1afk-")) return "S22"; // D221 / ARCH S2-5
         }
         return null;
     }
@@ -334,7 +339,11 @@ public final class EmberEconomy {
         Row r = byId(sourceId);
         if (r == null || r.sink || r.legacy) return false;
         Account a = matAccount(matId);
-        if (a != null) return r.accounts.contains(a);
+        if (a != null) {
+            if (r.accounts.contains(a)) return true;
+            // S22 AFK (and similar) pays the four warehouse mats as account-bound credit under BOUND_MAT
+            return r.accounts.contains(Account.BOUND_MAT);
+        }
         return r.accounts.contains(Account.BOUND_MAT) || r.accounts.contains(Account.GEAR);
     }
 
@@ -402,6 +411,30 @@ public final class EmberEconomy {
         if (amount <= 0) return false;
         Account a = matAccount(matId);
         return a != null && takes(sinkId, a);
+    }
+
+    /** Ember badge counter family (period all) — same string as {@code EmberSeason.C_BADGE}. */
+    public static final String BADGE_COUNTER = "p3_badge";
+
+    /**
+     * Badge spend tagged with a registered P1 sink (C18 festival after-event charm). Refuses rows that do not take
+     * BADGE, non-positive amounts and a short balance. Writes {@code p3_badge@all}.
+     */
+    public static boolean spendBadge(PlayerData d, String sinkId, int amount) {
+        if (d == null || amount <= 0) return false;
+        if (!takes(sinkId, Account.BADGE)) return false;
+        if (d.periodCount(BADGE_COUNTER, "all") < amount) return false;
+        d.addPeriodCount(BADGE_COUNTER, "all", -amount);
+        return true;
+    }
+
+    /**
+     * Festival-coin spend tagged with a registered P1 sink (C18 shop). Validates only — the caller still consumes via
+     * Ni ({@code consumeExact} on the event coin item). Same shape as {@link #spendMat}.
+     */
+    public static boolean spendFestCoin(String sinkId, int amount) {
+        if (amount <= 0) return false;
+        return takes(sinkId, Account.FEST_COIN);
     }
 
     /**

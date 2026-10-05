@@ -325,8 +325,11 @@ public class EmberEconomyTest {
         assertEquals("S23", EmberEconomy.sourceForGrant("n7s", "p1sign-2026-10"));
         assertEquals("S24", EmberEconomy.sourceForGrant("m15c", "p1online-2026-10-06"));
         assertEquals("S24", EmberEconomy.sourceForGrant("m120x", "p1online-2026-10-06"));
+        assertEquals("S22", EmberEconomy.sourceForGrant("c120", "p1afk-2026-10-06")); // D221 AFK ledger
+        assertEquals("S22", EmberEconomy.sourceForGrant("s2400", "p1afk-2026-10-06"));
         assertEquals(null, EmberEconomy.sourceForGrant("n1c", "other-run"));
         assertEquals("S01", EmberEconomy.sourceForGrant("base_coin", "p1sign-ignored")); // key wins over run
+        assertEquals("S01", EmberEconomy.sourceForGrant("base_coin", "p1afk-ignored"));
 
         PlayerData d = new PlayerData();
         assertTrue(EmberEconomy.grantCoin(d, "S23", EmberEconomy.amount("S23", "daily.coin")));
@@ -531,7 +534,7 @@ public class EmberEconomyTest {
 
     /**
      * Scoped unregistered-spend scan (REG §6.4, S2-4): every {@code .takeCoin(} in {@code p1/} lives in EmberEconomy or an
-     * allowlisted file whose sink is not routed yet (C15 paused, C18 festival, delivery debit, EmberPay untagged undo).
+     * allowlisted file whose sink is not routed yet (C15 paused, delivery debit, EmberPay untagged undo).
      */
     @Test
     public void p1TakeCoinIsEconomyOrAllowlisted() throws Exception {
@@ -539,8 +542,7 @@ public class EmberEconomyTest {
                 "EmberEconomy.java",   // spendCoin
                 "EmberPay.java",       // untagged price (dismantle undo) direct path
                 "EmberDelivery.java",  // A01 durable txn debit
-                "EmberCosmetics.java", // C15 (paused, OUT of the model)
-                "EmberFestival.java"   // C18 festival shop (PART) — next slice
+                "EmberCosmetics.java"  // C15 (paused, OUT of the model)
         ));
         Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
         List<String> hits = new ArrayList<String>();
@@ -560,5 +562,71 @@ public class EmberEconomyTest {
             }
         }
         assertEquals("route new p1 takeCoin through EmberEconomy.spendCoin (or extend the allowlist)", new ArrayList<String>(), hits);
+    }
+
+    /** D221 / ARCH S2-5: C18 festival goldens match ember-v1-festival.yml; spendCoin/Badge/FestCoin refuse wrong rows. */
+    @Test
+    public void festivalC18AmountsAndSpends() throws Exception {
+        assertEquals(60, EmberEconomy.amount("C18", "charm_event"));
+        assertEquals(30, EmberEconomy.amount("C18", "trail_event"));
+        assertEquals(15000, EmberEconomy.amount("C18", "after_coin"));
+        assertEquals(300, EmberEconomy.amount("C18", "after_badge"));
+        assertEquals(120, EmberEconomy.amount("C18", "memo"));
+        assertEquals(5, EmberEconomy.amount("C18", "badge_rate"));
+        assertEquals(40, EmberEconomy.amount("C18", "badge_cap"));
+
+        // pin to deployed festival yml (no number change)
+        Map<String, Object> fy = yml("ember-v1-festival.yml");
+        eq("C18", "charm_event", num(fy, "charm.price_event"));
+        eq("C18", "after_coin", num(fy, "charm.after.price_coin"));
+        eq("C18", "after_badge", num(fy, "charm.after.price_badge"));
+        eq("C18", "trail_event", num(fy, "trail.price_event"));
+        eq("C18", "memo", num(fy, "exchange.memo.price"));
+        eq("C18", "badge_rate", num(fy, "exchange.badge.rate"));
+        eq("C18", "badge_cap", num(fy, "exchange.badge.cap"));
+
+        assertTrue(EmberEconomy.takes("C18", EmberEconomy.Account.FEST_COIN));
+        assertTrue(EmberEconomy.takes("C18", EmberEconomy.Account.COIN));
+        assertTrue(EmberEconomy.takes("C18", EmberEconomy.Account.BADGE));
+        assertTrue(EmberEconomy.spendFestCoin("C18", EmberEconomy.amount("C18", "charm_event")));
+        assertFalse("source", EmberEconomy.spendFestCoin("S26", 1));
+        assertFalse("zero", EmberEconomy.spendFestCoin("C18", 0));
+
+        PlayerData d = new PlayerData();
+        d.setCoin(20000);
+        assertTrue(EmberEconomy.spendCoin(d, "C18", EmberEconomy.amount("C18", "after_coin")));
+        assertEquals(5000, d.getCoin());
+        assertFalse("short", EmberEconomy.spendCoin(d, "C18", 15000));
+        assertEquals(5000, d.getCoin());
+
+        d.addPeriodCount(EmberEconomy.BADGE_COUNTER, "all", 350);
+        assertEquals(EmberSeason.C_BADGE, EmberEconomy.BADGE_COUNTER);
+        assertTrue(EmberEconomy.spendBadge(d, "C18", EmberEconomy.amount("C18", "after_badge")));
+        assertEquals(50, d.periodCount(EmberEconomy.BADGE_COUNTER, "all"));
+        assertFalse("short badge", EmberEconomy.spendBadge(d, "C18", 300));
+        assertFalse("C14 takes no badge", EmberEconomy.spendBadge(d, "C14", 1));
+        assertFalse("source S27", EmberEconomy.spendBadge(d, "S27", 1));
+        assertEquals(50, d.periodCount(EmberEconomy.BADGE_COUNTER, "all"));
+    }
+
+    /** D221 / ARCH S2-5: S22 AFK pays coin/xp/bound mats; grantMat accepts BOUND_MAT for known mats. */
+    @Test
+    public void afkS22GrantEntry() {
+        assertEquals(2400, EmberEconomy.amount("S22", "daily_kills"));
+        assertEquals(1200, EmberEconomy.amount("S22", "offline_max_kills"));
+        assertTrue(EmberEconomy.pays("S22", EmberEconomy.Account.COIN));
+        assertTrue(EmberEconomy.pays("S22", EmberEconomy.Account.XP));
+        assertTrue(EmberEconomy.pays("S22", EmberEconomy.Account.BOUND_MAT));
+
+        PlayerData d = new PlayerData();
+        assertTrue(EmberEconomy.grantCoin(d, "S22", 60));
+        assertEquals(60, d.getCoin());
+        assertTrue(EmberEconomy.grantXp("S22", 10));
+        assertTrue(EmberEconomy.grantMat("S22", EmberUpgradeRules.MAT_SHARD, 1));
+        assertTrue(EmberEconomy.grantMat("S22", EmberUpgradeRules.MAT_BONE, 1));
+        assertTrue(EmberEconomy.grantMat("S22", EmberUpgradeRules.MAT_CORE, 1));
+        assertTrue(EmberEconomy.grantMat("S22", EmberUpgradeRules.MAT_BLANK, 1));
+        assertFalse("sink", EmberEconomy.grantCoin(d, "C18", 1));
+        assertFalse("S02 pays coin only", EmberEconomy.grantMat("S02", EmberUpgradeRules.MAT_SHARD, 1));
     }
 }

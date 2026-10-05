@@ -1563,6 +1563,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D218 | CoreRpg 1.65.48 / bv57 | ARCH S2-4：消耗走 EmberEconomy — 工坊 C03 强化 / C04 升阶 / C05 精工 / C06 成色（`EmberPay.Price.at(sinkForForge(kind))`，扣前 `sinkRefusal` 整单校验）、C07 8 印记兑换（数量读 `amount("C07","marks")`，`spendMark`）、C08 深渊层费（币 `spendCoin` / T3 印记 `spendMark`）、C09 天赋学习 / C10 重置（`spendCoin`；金样 800/2000/4000 与 respec 2000 钉 growth yml）、邻行 C11 洗练 / C12 烙印 / C13 调律解锁（`spendInsignia`）。新 `spendMark`/`spendInsignia`/`spendMat`/`takes`；p1 takeCoin 白名单扫描。数量不变。unit 386/0。冒烟 FreshQ779 Q01 首通 + C07 兑换 + C03 强化 PASS（二会话 papi 4/4）。下一步 C18 / S22 / yaml 真源 / 徽记 p1sim。 |
 | D219 | CoreRpg 1.65.49 / bv57 | 技能组身法·后撤步（D217 定稿）：技能页「身法方向」前冲/后撤（`p1_step_dir@all` SETTING，Q01 起三套通用）；后撤 4 格、无伤害、无无敌、共用 14s 身法冷却、落地保持朝向、严格落点（拒悬崖/岩浆/火/仙人掌/蛛网）；火痕·后撤点燃起跳点 3 格内最近 1（`skillIgnite` ×1.0）；出本换方向后身法 CD 转满；共享 `EmberDash` 斜角缝 body 采样（±0.3）修复。PAPI `kit_step_dir`；TrMenu G/H。不绑套装；bv57 不动；无资产路径 → 不跑 persist-roundtrip。 |
 | D220 | 无发版（只改文档；CoreRpg 仍是 1.65.49 / bv57）| ARCH · `ember-v1-economy.yml` 真源草案（REG §6.3）：`docs/design/DESIGN-ember-v1-economy-yml-2026-10-06.md`。形态 = sources/sinks/caps 镜像 `EmberEconomy.golden`；E1 加载器+双钉、数量不变；E2 C18/S22/Delivery；E3 p1sim 同读。本窗不实现 C18/S22 代码（刚发 D219，不抢部署锁）。 |
+| D221 | CoreRpg 1.65.50 / bv57 | ARCH S2-5：C18 国庆商店 spend 走 EmberEconomy（`spendFestCoin` / `spendCoin` / `spendBadge`；金样钉 festival yml）；S22 挂机庭 `sourceForGrant(p1afk-)` + deliver `grantCoin`/`grantXp`/`grantMat`（BOUND_MAT）；`EmberFestival` 移出 takeCoin 白名单。数量不变。E1 yml 加载器仍设计稿。 |
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
