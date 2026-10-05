@@ -187,7 +187,7 @@ public class EmberEconomyTest {
         eq("S17", "mark_tier", num(y, "rush.outpost.reward.mark_tier"));
         eq("S17", "insignia", num(y, "rush.outpost.reward.sigmarks"));
         eq("S17", "weekly", num(y, "rush.outpost.weekly"));
-        for (String h : Arrays.asList("echo_q01", "echo_q02", "echo_q03", "echo_q04")) {
+        for (String h : Arrays.asList("echo_q01", "echo_q02", "echo_q03", "echo_q04", "echo_q05", "echo_q06", "echo_q07")) {
             eq("S18", "insignia", num(y, "rush." + h + ".reward.sigmarks"));
             eq("S18", "weekly", num(y, "rush." + h + ".weekly"));
             assertEquals(h + " shares p4_echo_claim", "p4_echo_claim", at(y, "rush." + h + ".claim"));

@@ -80,7 +80,7 @@
 |---|---|---|---|---|---|---|
 | S16 | 余烬连战（rush） | T3 印记 1 + 余烬徽 20 + 称号 | 每周首次结算通关领奖；失败可无限重试；不扣体力 | `week` × 1 领奖 | `p4_rush_claim`（尝试 `p4_rush`） | ✓ `p2econ --rush` / `rushsim`（印记）；徽 ✗ |
 | S17 | 连战·前哨（outpost） | 每条链图徽记 2 + T2 印记 1 | 每周首次结算；之后练习无奖；需 Q05 首通 | `week` × 1 | `p4_outpost_claim` | △ `P1_OUTPOST` 只加 T2 印记上界；徽 ✗ |
-| S18 | 首领残响（echo_q01–q04） | 该图徽记 ×2 / 次 | 四条入口共用每周 3 次领奖；需 Q04 首通 | `week` × 3 | `p4_echo_claim` | ✗ |
+| S18 | 首领残响（echo_q01–q07） | 该图徽记 ×2 / 次 | 七条入口共用每周 3 次领奖；Q01–Q04 需 Q04 首通，Q05–Q07 需本图首通（D227 option B；周发放总量不变） | `week` × 3 | `p4_echo_claim` | ✗ |
 | S19 | 周目标 | 余烬徽 | 每项目标 15；全满再 +20（合计最多 15×5+20=95 / 周）；仅本人已通 Q07 | `week`；毕业周委托目标按剩余天数折算 | 周目标进度（见 N2 REG） | ✓ `p2econ --goals`（行为）；徽本身不进战力模型（设计如此） |
 | S20 | 每日委托 | 币 / 碎片 | 1 局：30 币；3 局：60 币 + 碎片 6 | `day` | `p2_bounty`（局数） | ✓ `p1sim.bounty` |
 | S21 | 花样委托 | 币 | 词缀精英 ×2 → 20；房间事件 ×1 → 20 | `day` | `p4_vb_<kind>` | ✓ `p1sim` |
@@ -231,3 +231,4 @@
 | 2026-10-06 | D224（CoreRpg 1.65.52）：E1 `amount()` 以 `ember-v1-economy.yml` 为真源；缺/坏/漂移 SEVERE fail-closed；Java golden 二次断言；数量不变。 |
 | 2026-10-06 | D225（p1sim + 文档；CoreRpg 不动 / bv57）：E3 p1sim 同读 `ember-v1-economy.yml`；徽记高图周来源设计笔记（研究 only，含 REG S09/S23/C12 文案重写提案）。 |
 | 2026-10-06 | D226（p1sim + 文档；CoreRpg 不动 / bv57）：R1-sim 徽记 what-if A/B/C（`insignia.py --whatif`）；W30 对照 `out-insignia-r1-*.md`；**推荐 B**（残响厅扩 Q05–Q07、共用周帽）；本表 S09/S23/C12 **只改措辞**对齐代码（不改发放逻辑 / 数量）。 |
+| 2026-10-06 | D227（CoreRpg 1.65.53 / bv58）：S18 残响厅扩 echo_q05–q07，共用 `p4_echo_claim`=3、`S18.insignia`=2 **数量不变**（只改可领图集合 / retarget）；本表 S18 行同步。 |

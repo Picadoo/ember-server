@@ -12,7 +12,7 @@ Sources (CoreRpg EmberRunService / EmberSignature / EmberSignService / ember-v1-
                                                             penalised (upper bound, like p1sim P1_PLEDGE)
   S17 连战·前哨 outpost (needs Q05 first clear)            : 2 × each chain map (q01, q02, q03), first settled clear of the
                                                             week only — assumed cleared every week (upper bound)
-  S18 首领残响 echo_q01..q04 (needs Q04 first clear)        : 2 of that boss's map per claim, 3 claims / week shared
+  S18 首领残响 echo_q01..q07 (q01–q04 need Q04; q05–q07 need that map) : 2 of that boss's map per claim, 3 claims / week shared (D227 B)
                                                             (p4_echo_claim) — assumed all 3 claimed (upper bound)
   S23 sign-in 7th / 21st sign                              : 1 of the HIGHEST first-cleared signature map
                                                             (EmberSignService.sigMap); via signin.py hook (--ins-signin)
@@ -36,7 +36,7 @@ SPEND POLICY (assumption, not a server rule):
 
 WHAT-IF (R1 / D226 — temporary design flags; default = baseline, bit-identical to D222):
   --whatif A | echo_mode=highest : S18 claims → highest first-cleared signature map (S23 rule); claims/per unchanged
-  --whatif B | echo_mode=halls   : S18 maps expand to q01–q07 (shared weekly claims); still lowest-balance pick
+  --whatif B | echo_mode=halls   : S18 maps = q01–q07 (shared weekly claims); still lowest-balance pick (D227 live default)
   --whatif C | swap=N,M          : each week convert up to M times: N low-map (q01–q04) insignia → 1 high (want/tune target)
   Flags are sim-only; they do NOT change economy yml or CoreRpg.
 """
@@ -47,7 +47,7 @@ MAPS = ('q01', 'q02', 'q03', 'q04', 'q05', 'q06', 'q07')      # EmberSignature.m
 IMPRINT_UNLOCK, ALT_UNLOCK = 'q02', 'q07'
 PLEDGE_UNLOCK = 'q06'                                            # EmberRunService.PLEDGE_UNLOCK
 # echo/outpost map lists + caps still from runs yml shape; per-claim insignia from economy SoT (S17/S18)
-ECHO = {'maps': ('q01', 'q02', 'q03', 'q04'), 'requires': 'q04', 'claims': 3, 'per': None}
+ECHO = {'maps': ('q01', 'q02', 'q03', 'q04', 'q05', 'q06', 'q07'), 'requires': 'q04', 'claims': 3, 'per': None}  # D227 live = B
 OUTPOST = {'chain': ('q01', 'q02', 'q03'), 'requires': 'q05', 'per': None}
 BRAND_RESERVE = 1000
 # Amounts filled by _load_amounts() from ember-v1-economy.yml (fail-closed if missing)

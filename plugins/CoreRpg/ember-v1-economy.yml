@@ -1,8 +1,8 @@
 # ember-v1-economy.yml — P1 economy amounts (REG §6.3 · E1 SoT · D224)
 # Source of truth for EmberEconomy.amount(); Java golden is the secondary assert (fail-on-drift).
-# balance_version must match ember-v1.yml; bump only when numbers change.
+# balance_version must match ember-v1-runs.yml; bump with runs even if amounts unchanged (p1sim dual-assert).
 # Missing/corrupt → fail-closed (amount/grantCoin refuse). Must match Java golden.
-balance_version: 57
+balance_version: 58
 
 sources:
   S01:

@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(57, m.balanceVersion);                // D196 Affix Pack 5 (D195 = 56, D194 = 55, D193 = 54, D192 = 53, D191 = 52, D189 = 51, D188 = 50, …)
-        assertEquals("g04-1/b57", m.ruleVersion);
+        assertEquals(58, m.balanceVersion);                // D227 echo_q05..q07 (D196 Affix Pack 5 = 57, …)
+        assertEquals("g04-1/b58", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1064,15 +1064,18 @@ public class EmberRunRulesTest {
         assertEquals("[]", m.validate().toString());
     }
 
-    @Test public void echoFightsOneBossOnASharedWeeklyClaim_D174() { // stage 2b 首领残响
+    @Test public void echoFightsOneBossOnASharedWeeklyClaim_D174() { // stage 2b 首领残响 + D227 Q05–Q07
         EmberRunMaps m = bundled();
-        for (String k : new String[]{"q01", "q02", "q03", "q04"}) {
+        String[] keys = new String[]{"q01", "q02", "q03", "q04", "q05", "q06", "q07"};
+        String[] reqs = new String[]{"q04", "q04", "q04", "q04", "q05", "q06", "q07"};
+        for (int i = 0; i < keys.length; i++) {
+            String k = keys[i];
             EmberRunMaps.MapDef e = m.byKey("echo_" + k);
             assertNotNull(k, e);
             assertEquals("echo", e.rushMode);
             assertEquals("[" + k + "]", e.chainKeys.toString());
             assertEquals(m.byKey(k).boss.name, e.chain.get(0).name);
-            assertEquals("q04", e.requires);
+            assertEquals(reqs[i], e.requires);
             assertEquals("p4_echo_claim", e.rushClaim);
             assertEquals(3, e.rushWeekly);
             assertEquals(0, e.rushMarks);

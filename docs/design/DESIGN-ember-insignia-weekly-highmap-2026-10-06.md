@@ -1,8 +1,8 @@
 # DESIGN · 首领徽记 · 每周有上限的高图来源（研究笔记 · D225）
 
-> **状态：研究 / 提案 only。** 不改 CoreRpg、不 bump `balance_version`、不把任何新数字写进线上配置。
+> **状态：B 已落地（D227 / CoreRpg 1.65.53 / bv58）。** 厅扩 echo_q05–q07、共用周帽 3；S18 数量不变。
 > **上游：** D222 W30 徽记账户报告（`tools/p1sim/out-insignia-d222-w30.md` / `-pledge2.md`；状态 `docs/status/STATUS-ember-p1sim-insignia-2026-10-06.md`）。
-> **闸门：** 任一选项落地前必须先在 `tools/p1sim/insignia.py` 里做 what-if / 分支再跑 W30，并对照下表验收；**禁止**直接改 live。
+> **闸门（历史）：** R1 要求先 what-if 再改 live；B 已过闸（D226 sim → D227 代码）。A/C 若再开仍须先 sim。
 
 日期：2026-10-06 · 车道：p1sim / docs（E3 同窗文档）· 作者：Picadoo executor
 
@@ -141,7 +141,7 @@ D222 已按**代码**建模。建议 REG / 书只重写措辞，**不改发放�
 
 ## 9. 下一步
 
-1. ~~p1sim R1-sim what-if + W30~~ → **D226 完成**：`tools/p1sim/out-insignia-r1-compare.md`；**推荐 B**（厅扩 Q05–Q07、共用周帽 3；总量不变）。A 解 Q07 但调律仍卡；C 两边能到但 W12 调律慢且需新兑换口。
+1. ~~p1sim R1-sim what-if + W30~~ → **D226 完成**：`tools/p1sim/out-insignia-r1-compare.md`；**推荐 B**。
 2. ~~REG S09/S23/C12 文案~~ → **D226 已重写措辞**（不改行为）。
-3. **业主确认 B**（或否决 / 改选）后，再开 CoreRpg 窗走 R1-yml → R1-code → R1-gate；**禁止**未确认直接改 live。
-4. 可选 R2：B 落地后若 Q01–Q04 死库存仍刺眼，再扫 C 的 N/周帽（独立窗）。
+3. ~~业主确认 B → R1-yml/code/gate~~ → **D227 完成**（CoreRpg 1.65.53 / bv58）：echo_q05–q07 上线，共用 `p4_echo_claim`=3；冒烟 FreshQ787 PASS。
+4. 可选 R2：若 Q01–Q04 死库存仍刺眼，再扫 C 的 N/周帽（独立窗）。

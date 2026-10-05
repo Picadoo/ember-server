@@ -1568,6 +1568,9 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D223 | CoreRpg 1.65.51 / bv57 | ARCH S2-6：EmberDelivery 负额扣币经 `spendCoinDelivery`/`sinkForDeliveryRequest`（enh→C03…imp→C12）；`EmberDelivery` 移出 takeCoin 白名单；E1 `ember-v1-economy.yml` 镜像 + `economyYmlDrift` fail-on-drift（`amount()` 仍 golden）。数量不变。 |
 | D224 | CoreRpg 1.65.52 / bv57 | ARCH S2-7 / E1：`amount()` 读 `ember-v1-economy.yml` SoT；fail-closed；golden 二次断言。数量不变。 |
 | D225 | 无发版（tools/p1sim + 文档；CoreRpg 仍 1.65.52 / bv57，不 bump）| E3：`tools/p1sim/rules.py` 把 `ember-v1-economy.yml` 纳入规范快照（plugins↔src）；`p1config` S01–S03/C07、`insignia.py` S07/S08/S17/S18/C12/C13、`afk.py` S22 `daily_kills` 经 `rules.amount`；yml↔Java 金样 dual-assert；默认 p2econ **数值**逐位不变（rules sha256 戳变）。徽记设计笔记 `docs/design/DESIGN-ember-insignia-weekly-highmap-2026-10-06.md`（D222 W30：Q01–Q04 堆积 / Q05–Q06 卡 2–6 / 熟练 Q07 短；提案 A 残响最高图 / B Q05–Q07 厅 / C 有帽兑换 + re-sim 闸；REG S09/S23/C12 文案差只重写）。未动 live。 |
+| D226 | 无发版（tools/p1sim + 文档；CoreRpg 仍 1.65.52 / bv57，不 bump）| R1-sim 徽记 what-if A/B/C（`insignia.py --whatif`）；W30 对照 `out-insignia-r1-*.md`；**推荐 B**（残响厅扩 Q05–Q07、共用周帽 3）；REG S09/S23/C12 文案 only。 |
+| D227 | CoreRpg 1.65.53 / bv58 | 徽记 option B 落地：`echo_q05..q07` 入残响（共用 `p4_echo_claim`=3、`S18.insignia`=2，周发放总量不变）；modes UI 七厅；`insignia.py` 默认 maps=q01–q07；REG S18。冒烟 FreshQ787 PASS。 |
+
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 

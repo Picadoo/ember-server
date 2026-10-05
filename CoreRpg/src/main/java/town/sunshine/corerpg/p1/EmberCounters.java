@@ -120,7 +120,7 @@ public final class EmberCounters {
         x("p4_rush", "EmberRunService", W, ST, RL, "rush attempts (stat only since D160)");
         x("p4_rush_claim", "EmberRunService", W, CL, RL, "main rush weekly reward claim");
         add("p4_outpost_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "outpost weekly claim (config)");
-        add("p4_echo_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "echo weekly claim, shared by the echo halls (config)");
+        add("p4_echo_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "echo weekly claim, shared by echo_q01..q07 (config)");
         px("p1_pledge_", "EmberRunService", A, SE, NV, "Q06 chosen pledge rule");
         // 2.2 signatures, insignia, tuning (EmberSignature, EmberGrowthService)
         px("p1_sig_", "EmberSignature", A, IT, NV, "LEGACY item signature code by uid — migrated to EmberItemData.sigCode / cr_p1_item.sig_code (S1-4 done, D208); read only for v1 items, cleared when folded");

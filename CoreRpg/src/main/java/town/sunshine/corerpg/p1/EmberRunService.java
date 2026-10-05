@@ -2795,7 +2795,7 @@ public final class EmberRunService implements Listener {
     /** D174 stage 2b: the mode a map's first clear opens (null = none yet live) */
     static String modeUnlock(String mapKey) {
         if (PLEDGE_UNLOCK.equals(mapKey)) return "自选誓约（重打已首通的 Q01–Q07 普通版时自己挂规则，每条 +1 本图徽记）";
-        if ("q04".equals(mapKey)) return "首领残响（每周 3 次单独再打 Q01–Q04 的强化首领，每次 2 枚那张图的徽记）";
+        if ("q04".equals(mapKey)) return "首领残响（每周 3 次单独再打 Q01–Q07 的强化首领，每次 2 枚那张图的徽记）";
         if ("q05".equals(mapKey)) return "连战·前哨（Q01→Q02→Q03 三首领连战，每周领一次：每张图 2 枚徽记 + 1 枚 T2 印记）";
         return null;
     }

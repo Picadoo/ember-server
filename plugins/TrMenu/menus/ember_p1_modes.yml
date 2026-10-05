@@ -1,5 +1,5 @@
 # D174 第 2b 阶段 · 进阶模式页（docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §4 Q04 / Q05 / Q06）
-# 三个模式各由一张主线图的首通打开：首领残响（Q04）、连战·前哨（Q05）、自选誓约（Q06）。
+# 三个模式各由一张主线图的首通打开：首领残响（Q04，厅扩至 Q01–Q07 / D227）、连战·前哨（Q05）、自选誓约（Q06）。
 # 文字 / 状态来自 PAPI（%corerpg_p1_pledge_*% …），菜单不自己算；按钮只调 /corerpg p1 的子命令，资格全在服务端校验。
 # 入口：冒险页「进阶模式」、首通解锁消息里的 [打开进阶模式]、/corerpg p1 modes。
 
@@ -19,6 +19,7 @@ Layout:
   - '#########'
   - '#E  O  P#'
   - '#1 2 3 4#'
+  - '#5 6 7  #'
   - '####B####'
 
 Events:
@@ -40,7 +41,7 @@ Icons:
           name: '§7首领残响 §8（首通 Q04 潮蚀水道后开放）'
           lore:
             - ''
-            - '§7每周 3 次：单独再打一个 Q01–Q04 首领（按 T2 加强）'
+            - '§7每周 3 次：单独再打一个 Q01–Q07 首领（按 T2 加强）'
             - '§7每次必得这张图 2 枚首领徽记 · 不耗体力 · 不掉装备'
     update: 20
     display:
@@ -49,8 +50,8 @@ Icons:
       lore:
         - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q01%'
-        - '§7选一个 Q01–Q04 首领，单独在首领厅再打一次（招式不变，按 T2 加强）'
-        - '§e四个首领合计每周前 3 次通关领奖：每次 2 枚那张图的首领徽记'
+        - '§7选一个已首通的 Q01–Q07 首领，单独在首领厅再打一次（招式不变，按 T2 加强）'
+        - '§e七个首领合计每周前 3 次通关领奖：每次 2 枚那张图的首领徽记'
         - '§7不耗体力 · 失败不扣任何东西，可以无限重试；领完后是练习'
         - '§8不给余烬币、装备、碎片和印记，不算每日委托'
 
@@ -139,7 +140,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q01%'
         - '§7生命 ×12、伤害 ×3（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
-        - '§e通关领奖：Q01 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§e通关领奖：Q01 首领徽记 +2（七个首领合计每周 3 次）'
         - '§a参考：最容易：T2 基本都能过'
         - ''
         - '§e➥ §f左键：开始（组队时队长点）'
@@ -168,7 +169,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q02%'
         - '§7生命 ×3.5、伤害 ×2.2（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
-        - '§e通关领奖：Q02 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§e通关领奖：Q02 首领徽记 +2（七个首领合计每周 3 次）'
         - '§a参考：T2 +4 躲得中等约 9 成'
         - ''
         - '§e➥ §f左键：开始（组队时队长点）'
@@ -197,7 +198,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q03%'
         - '§7生命 ×3.2、伤害 ×2.0（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
-        - '§e通关领奖：Q03 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§e通关领奖：Q03 首领徽记 +2（七个首领合计每周 3 次）'
         - '§a参考：最难：T2 +4 躲得中等约 6 成、+8 基本稳'
         - ''
         - '§e➥ §f左键：开始（组队时队长点）'
@@ -226,7 +227,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_rush_echo_q04%'
         - '§7生命 ×2.0、伤害 ×1.8（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
-        - '§e通关领奖：Q04 首领徽记 +2（四个首领合计每周 3 次）'
+        - '§e通关领奖：Q04 首领徽记 +2（七个首领合计每周 3 次）'
         - '§a参考：T2 +4 躲得中等约 9 成'
         - ''
         - '§e➥ §f左键：开始（组队时队长点）'
@@ -239,6 +240,95 @@ Icons:
       right:
         - 'sound: UI_BUTTON_CLICK-1-1'
         - 'command: corerpg p1 rush echo_q04'
+        - close
+
+
+  '5':
+    icons:
+      - condition: 'check papi %corerpg_p1_q05done% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§8需首通 Q05'
+    update: 20
+    display:
+      material: golden axe
+      name: '§b残响 · Q05 断塔斧卫'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush_echo_q05%'
+        - '§7生命 ×1.3、伤害 ×1.4（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
+        - '§e通关领奖：Q05 首领徽记 +2（七个首领合计每周 3 次）'
+        - '§a参考：需本人首通 Q05；T2 毕业档可打'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点）'
+        - '§e➥ §f右键：规则（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush echo_q05 go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush echo_q05'
+        - close
+  '6':
+    icons:
+      - condition: 'check papi %corerpg_p1_q06done% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§8需首通 Q06'
+    update: 20
+    display:
+      material: packed ice
+      name: '§b残响 · Q06 霜封统领'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush_echo_q06%'
+        - '§7生命 ×1.15、伤害 ×1.2（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
+        - '§e通关领奖：Q06 首领徽记 +2（七个首领合计每周 3 次）'
+        - '§a参考：需本人首通 Q06'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点）'
+        - '§e➥ §f右键：规则（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush echo_q06 go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush echo_q06'
+        - close
+  '7':
+    icons:
+      - condition: 'check papi %corerpg_p1_q07done% < 1'
+        priority: 1
+        display:
+          material: gray stained glass pane
+          name: '§8需首通 Q07'
+    update: 20
+    display:
+      material: iron block
+      name: '§b残响 · Q07 炉锁巨卫'
+      lore:
+        - ''
+        - '§7状态：§f%corerpg_p1_rush_echo_q07%'
+        - '§7生命 ×1.0、伤害 ×1.1（组队另按人数加生命）· 1～3 人 · 倒下观战，没有复活'
+        - '§e通关领奖：Q07 首领徽记 +2（七个首领合计每周 3 次）'
+        - '§a参考：需本人首通 Q07；熟练档主刷目标'
+        - ''
+        - '§e➥ §f左键：开始（组队时队长点）'
+        - '§e➥ §f右键：规则（聊天栏）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 rush echo_q07 go'
+        - close
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'command: corerpg p1 rush echo_q07'
         - close
 
   B:

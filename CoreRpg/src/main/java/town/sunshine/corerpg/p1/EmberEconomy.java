@@ -27,7 +27,7 @@ import town.sunshine.corerpg.PlayerData;
  * (drift → SEVERE / refuse). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
  * <p>{@code EmberEconomyTest} pins loaded yml amounts to Java golden, proves settle / shop / sign / fest / AFK / delivery /
  * grant* routing, scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist, and fails on drift.
- * Numbers unchanged (balance_version 57).
+ * Amounts unchanged from bv57; balance_version tracks runs (58 = D227 echo halls B).
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -141,7 +141,7 @@ public final class EmberEconomy {
             .keys("p4_rush_claim", "p4_rush", "p1_mark_t", "p3_badge").model(PART).g("mark", 1).g("badge", 20).done();
         src("S17", "连战·前哨", "ember-v1-runs.yml rush.outpost", Period.WEEK).acc(INS, MARK)
             .keys("p4_outpost_claim", "p1_sigmark_", "p1_mark_t").model(PART).g("mark", 1).g("mark_tier", 2).g("insignia", 2).g("weekly", 1).done();
-        src("S18", "首领残响", "ember-v1-runs.yml rush.echo_q01..q04", Period.WEEK).acc(INS)
+        src("S18", "首领残响", "ember-v1-runs.yml rush.echo_q01..q07", Period.WEEK).acc(INS)
             .keys("p4_echo_claim", "p1_sigmark_").model(NONE).g("insignia", 2).g("weekly", 3).done();
         src("S19", "周目标", "EmberSeason / ember-v1-runs.yml weekly_goals", Period.WEEK).acc(BADGE)
             .keys("p3_goal_", "p3_goalpay_", "p3_badge").model(OUT).done();
@@ -509,7 +509,7 @@ public final class EmberEconomy {
     public static final String ECONOMY_YML = "ember-v1-economy.yml";
 
     /** Expected balance_version in economy yml (must match ember-v1.yml). */
-    public static final int ECONOMY_BV = 57;
+    public static final int ECONOMY_BV = 58;
 
     /** id → (key → amount) from the last successful {@link #loadEconomyYml}. */
     private static volatile Map<String, Map<String, Double>> ymlAmounts = Collections.emptyMap();
