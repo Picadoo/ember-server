@@ -12,15 +12,15 @@ import java.util.Set;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D213 registry + D215 (ARCH S2-2) first grant/spend routes: every P1 economy <b>source</b> (S01–S32),
+ * D213 registry + D215/D216 (ARCH S2-2/S2-3) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
  * closed <b>legacy source</b> (L-S1…L-S5) and <b>sink</b> (C01–C18) from
  * {@code docs/design/REG-ember-source-sink-cap-2026-10-05.md}.
  * <p>Lookups stay Bukkit-free. {@link #amount} is the amount source of truth for routed rows (settle S01–S03,
- * shop C14). {@link #grantCoin} / {@link #spendCoin} are the coin entry points tagged by registry id
- * (PlayerData only — no Bukkit). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
- * <p>{@code EmberEconomyTest} pins golden amounts to Java constants / shipped yml, counter families to
- * {@link EmberCounters}, and proves settle / shop / grantCoin / spendCoin use the registry. Numbers unchanged
- * (balance_version 57).
+ * shop C14, signin S23 daily/fallback/makeup, online S24 totals). {@link #grantCoin} / {@link #grantMark} /
+ * {@link #grantXp} / {@link #grantMat} / {@link #spendCoin} are the tagged entry points (PlayerData only where
+ * possible — no Bukkit). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
+ * <p>{@code EmberEconomyTest} pins golden amounts, proves settle / shop / sign / grant* routing, and scans
+ * {@code p1/} for direct {@code addCoin} outside the allowlist. Numbers unchanged (balance_version 57).
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -246,15 +246,21 @@ public final class EmberEconomy {
         return r;
     }
 
+    /** Forge-mark counter family prefix (tier 1..3 → p1_mark_t1..t3). */
+    public static final String MARK_COUNTER = "p1_mark_t";
+
     /**
-     * Map a settle / ledger grant key to the REG source that pays it (S2-2 routed set).
-     * Unknown / not-yet-routed keys return null — callers keep the prior direct {@code addCoin} path.
+     * Map a settle / ledger grant key to the REG source that pays it (S2-2/S2-3 routed set).
+     * Unknown / not-yet-routed keys return null — callers keep the prior direct path (or use
+     * {@link #sourceForGrant(String, String)} with the ledger run id for sign/online).
      */
     public static String sourceForGrantKey(String key) {
         if (key == null || key.isEmpty()) return null;
         if (key.startsWith("base_")) return "S01";
         if (key.startsWith("extra_treasure_")) return "S02";
         if (key.startsWith("extra_elite_")) return "S03";
+        if (key.startsWith("var_affix_")) return "S04";
+        if (key.startsWith("var_event_") || key.startsWith("event_")) return "S05";
         if (key.startsWith("bounty_")) return "S20";
         if (key.startsWith("vb_")) return "S21";
         if (key.startsWith("fc_")) return "S06";
@@ -263,16 +269,79 @@ public final class EmberEconomy {
     }
 
     /**
+     * Resolve the REG source for a ledger grant: key prefix first, then sign/online run id
+     * ({@code p1sign-…} → S23, {@code p1online-…} → S24).
+     */
+    public static String sourceForGrant(String key, String runId) {
+        String s = sourceForGrantKey(key);
+        if (s != null) return s;
+        if (runId != null) {
+            if (runId.startsWith("p1sign-")) return "S23";
+            if (runId.startsWith("p1online-")) return "S24";
+        }
+        return null;
+    }
+
+    /** True when {@code r} may pay {@code a} (P1 source, not sink/legacy). */
+    public static boolean pays(String sourceId, Account a) {
+        Row r = byId(sourceId);
+        return r != null && !r.sink && !r.legacy && a != null && r.accounts.contains(a);
+    }
+
+    /**
      * Coin grant tagged with a registered P1 source. Refuses sinks, legacy rows, rows that do not pay COIN,
      * non-positive amounts, and a null data row. Does not look up golden — the caller supplies the amount
-     * (settle already took it from {@link #amount} for S01–S03).
+     * (settle / sign already took it from {@link #amount} where routed).
      */
     public static boolean grantCoin(PlayerData d, String sourceId, int amount) {
         if (d == null || amount <= 0) return false;
-        Row r = byId(sourceId);
-        if (r == null || r.sink || r.legacy || !r.accounts.contains(Account.COIN)) return false;
+        if (!pays(sourceId, Account.COIN)) return false;
         d.addCoin(amount);
         return true;
+    }
+
+    /**
+     * Forge-mark grant tagged with a registered P1 source. Tier must be 1..3. Writes
+     * {@code p1_mark_t<tier>@all}.
+     */
+    public static boolean grantMark(PlayerData d, String sourceId, int tier, int amount) {
+        if (d == null || amount <= 0 || tier < 1 || tier > 3) return false;
+        if (!pays(sourceId, Account.MARK)) return false;
+        d.addPeriodCount(MARK_COUNTER + tier, "all", amount);
+        return true;
+    }
+
+    /**
+     * XP grant tagged with a registered P1 source. Validates only — the caller still applies XP via
+     * {@code ProgressService.grantFlatEmberXp} (needs Player / level-up). Returns false when refused.
+     */
+    public static boolean grantXp(String sourceId, int amount) {
+        if (amount <= 0) return false;
+        return pays(sourceId, Account.XP);
+    }
+
+    /**
+     * Material grant tagged with a registered P1 source. Validates only — the caller still delivers via
+     * vault / Ni / mail. Known mat ids must match the row's SHARD/CORE/BONE/BLANK account; other ids need
+     * BOUND_MAT (or GEAR) on the row.
+     */
+    public static boolean grantMat(String sourceId, String matId, int amount) {
+        if (amount <= 0) return false;
+        Row r = byId(sourceId);
+        if (r == null || r.sink || r.legacy) return false;
+        Account a = matAccount(matId);
+        if (a != null) return r.accounts.contains(a);
+        return r.accounts.contains(Account.BOUND_MAT) || r.accounts.contains(Account.GEAR);
+    }
+
+    /** Map a known P1 material id to its registry account; null = not one of the four warehouse mats. */
+    public static Account matAccount(String matId) {
+        if (matId == null) return null;
+        if (EmberUpgradeRules.MAT_SHARD.equals(matId)) return Account.SHARD;
+        if (EmberUpgradeRules.MAT_CORE.equals(matId)) return Account.CORE;
+        if (EmberUpgradeRules.MAT_BONE.equals(matId)) return Account.BONE;
+        if (EmberUpgradeRules.MAT_BLANK.equals(matId)) return Account.BLANK;
+        return null;
     }
 
     /**

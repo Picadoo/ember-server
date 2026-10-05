@@ -54,6 +54,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * state counter is advanced and flushed BEFORE the once-only PENDING ledger rows ({@code p1sign-<yyyy-MM>/n<k>*},
  * {@code p1online-<day>/m<min>*}) are written and delivered by {@link EmberRunService#deliverQuiet}; a crash in between
  * loses that reward, never doubles it. A server clock that went backwards freezes sign-in and counting until it catches up.
+ * <p>D216 / ARCH S2-3: ordinary daily coin/xp, makeup_per_month and sigmark_fallback_coin read
+ * {@link EmberEconomy#amount} (S23); online milestone totals are checked against S24 golden; ledger delivery tags
+ * S23/S24 via {@link EmberEconomy#sourceForGrant}.
  */
 public final class EmberSignService implements Listener {
 
@@ -124,7 +127,10 @@ public final class EmberSignService implements Listener {
         signOn = s != null && s.getBoolean("enabled", false);
         onlineOn = o != null && o.getBoolean("enabled", false);
         if (s != null) {
-            daily = Reward.of(s.getConfigurationSection("daily"));
+            // D216: ordinary daily coin/xp from EmberEconomy S23 (yml still ships the same numbers; golden-pinned)
+            Reward yDaily = Reward.of(s.getConfigurationSection("daily"));
+            daily = new Reward(EmberEconomy.amount("S23", "daily.coin"), EmberEconomy.amount("S23", "daily.xp"),
+                    yDaily.mark, yDaily.sigmark);
             extra = Reward.of(s.getConfigurationSection("extra"));
             Map<Integer, Reward> sp = new TreeMap<Integer, Reward>();
             ConfigurationSection ss = s.getConfigurationSection("special");
@@ -133,8 +139,8 @@ public final class EmberSignService implements Listener {
                 catch (RuntimeException e) { plugin.getLogger().warning("[P1 sign] bad special " + k + ": " + e); }
             }
             special = Collections.unmodifiableMap(sp);
-            fallbackCoin = Math.max(0, s.getInt("sigmark_fallback_coin", 60));
-            makeupPerMonth = Math.max(0, s.getInt("makeup_per_month", 3));
+            fallbackCoin = Math.max(0, s.getInt("sigmark_fallback_coin", EmberEconomy.amount("S23", "sigmark_fallback_coin")));
+            makeupPerMonth = Math.max(0, s.getInt("makeup_per_month", EmberEconomy.amount("S23", "makeup_per_month")));
             makeupNeeds = Math.max(0, s.getInt("makeup_needs_online", 60));
         }
         List<Milestone> ms = new ArrayList<Milestone>();
@@ -152,6 +158,15 @@ public final class EmberSignService implements Listener {
         Collections.sort(ms, (a, b) -> a.min - b.min);
         while (ms.size() > 30) ms.remove(ms.size() - 1); // claim mask is an int
         milestones = Collections.unmodifiableList(ms);
+        // D216: milestone cells stay yml-driven; totals must match S24 golden (no silent drift)
+        int coinSum = 0, xpSum = 0, top = 0;
+        for (Milestone mile : ms) { coinSum += mile.r.coin; xpSum += mile.r.xp; if (mile.min > top) top = mile.min; }
+        if (!ms.isEmpty() && (coinSum != EmberEconomy.amount("S24", "coin_total")
+                || xpSum != EmberEconomy.amount("S24", "xp_total")
+                || top != EmberEconomy.amount("S24", "top_min")))
+            plugin.getLogger().warning("[P1 online] milestone totals coin=" + coinSum + " xp=" + xpSum + " top=" + top
+                    + " != EmberEconomy S24 (" + EmberEconomy.amount("S24", "coin_total") + "/"
+                    + EmberEconomy.amount("S24", "xp_total") + "/" + EmberEconomy.amount("S24", "top_min") + ")");
         if (taskId != -1) { Bukkit.getScheduler().cancelTask(taskId); taskId = -1; }
         if (onlineOn) taskId = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 1200L, 1200L).getTaskId();
         long now = System.currentTimeMillis();

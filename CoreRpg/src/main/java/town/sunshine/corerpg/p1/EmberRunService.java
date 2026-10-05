@@ -1697,8 +1697,8 @@ public final class EmberRunService implements Listener {
             boolean done = false;
             switch (g.kind) {
                 case COIN: {
-                    // D215 / ARCH S2-2: coin grants with a known REG source go through EmberEconomy.grantCoin
-                    String src = EmberEconomy.sourceForGrantKey(g.key);
+                    // D215/D216: coin grants with a known REG source (incl. sign/online run id) go through grantCoin
+                    String src = EmberEconomy.sourceForGrant(g.key, r.runId);
                     if (src != null) {
                         if (!EmberEconomy.grantCoin(d, src, g.amount))
                             log().warning("[P1 run] economy grantCoin refused " + src + " " + g.amount + " for " + p.getName());
@@ -1710,8 +1710,14 @@ public final class EmberRunService implements Listener {
                     break;
                 }
                 case XP: {
-                    ProgressService ps = plugin.getProgressService();
-                    if (ps != null) ps.grantFlatEmberXp(p, g.amount, "余烬主线");
+                    // D216 / ARCH S2-3: XP grants with a known REG source are validated via grantXp
+                    String src = EmberEconomy.sourceForGrant(g.key, r.runId);
+                    if (src != null && !EmberEconomy.grantXp(src, g.amount))
+                        log().warning("[P1 run] economy grantXp refused " + src + " " + g.amount + " for " + p.getName());
+                    else {
+                        ProgressService ps = plugin.getProgressService();
+                        if (ps != null) ps.grantFlatEmberXp(p, g.amount, "余烬主线");
+                    }
                     got.add("余烬经验 " + g.amount);
                     done = true;
                     break;
@@ -1736,7 +1742,14 @@ public final class EmberRunService implements Listener {
                 }
                 case MARK: {
                     int tier = Integer.parseInt(g.id);
-                    d.addPeriodCount(C_MARK + tier, "all", g.amount);
+                    // D216 / ARCH S2-3: mark grants with a known REG source go through grantMark
+                    String src = EmberEconomy.sourceForGrant(g.key, r.runId);
+                    if (src != null) {
+                        if (!EmberEconomy.grantMark(d, src, tier, g.amount))
+                            log().warning("[P1 run] economy grantMark refused " + src + " T" + tier + " " + g.amount + " for " + p.getName());
+                    } else {
+                        d.addPeriodCount(C_MARK + tier, "all", g.amount);
+                    }
                     got.add("T" + tier + " 锻造印记 " + g.amount + "（共 " + marks(d, tier) + "）");
                     done = true;
                     break;
@@ -1749,6 +1762,13 @@ public final class EmberRunService implements Listener {
                     break;
                 }
                 case MAT: {
+                    // D216 / ARCH S2-3: mat grants with a known REG source are validated via grantMat first
+                    String src = EmberEconomy.sourceForGrant(g.key, r.runId);
+                    if (src != null && !EmberEconomy.grantMat(src, g.id, g.amount)) {
+                        log().warning("[P1 run] economy grantMat refused " + src + " " + g.id + " " + g.amount + " for " + p.getName());
+                        done = true; // refuse without delivering — keeps the ledger closed so it cannot retry forever
+                        break;
+                    }
                     EmberVault vlt = EmberVault.get(); // 1.62: whitelisted materials go straight into the warehouse (自动入库)
                     if (ni != null && vlt != null && vlt.autoDeposit(p, g.id, g.amount)) {
                         got.add(matSource(r.key) + ni.displayName(g.id) + " ×" + g.amount + "（进仓库）");

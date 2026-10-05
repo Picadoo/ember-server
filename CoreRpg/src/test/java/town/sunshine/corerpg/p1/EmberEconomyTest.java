@@ -25,9 +25,10 @@ import org.yaml.snakeyaml.Yaml;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D213 registry + D215 (ARCH S2-2): {@link EmberEconomy} matches REG-ember-source-sink-cap and the live game —
+ * D213 registry + D215/D216 (ARCH S2-2/S2-3): {@link EmberEconomy} matches REG-ember-source-sink-cap and the live game —
  * counter families exist, golden amounts equal the constants / shipped plugin yml, the unmodelled set is pinned,
- * and settle / shop / grantCoin / spendCoin route through the registry without changing amounts.
+ * settle / shop / sign / grantCoin/Mark/Xp/Mat / spendCoin route through the registry without changing amounts,
+ * and a scoped {@code p1/} addCoin scan fails on new grant paths that skip the registry.
  */
 public class EmberEconomyTest {
     private static final double EPS = 1e-9;
@@ -290,6 +291,8 @@ public class EmberEconomyTest {
         assertEquals("S01", EmberEconomy.sourceForGrantKey("base_coin"));
         assertEquals("S02", EmberEconomy.sourceForGrantKey("extra_treasure_coin"));
         assertEquals("S03", EmberEconomy.sourceForGrantKey("extra_elite_shard"));
+        assertEquals("S04", EmberEconomy.sourceForGrantKey("var_affix_shard"));
+        assertEquals("S05", EmberEconomy.sourceForGrantKey("var_event_core"));
         assertEquals("S20", EmberEconomy.sourceForGrantKey("bounty_coin_1"));
         assertEquals("S06", EmberEconomy.sourceForGrantKey("fc_q03_coin"));
         assertEquals(null, EmberEconomy.sourceForGrantKey("unknown_key"));
@@ -303,5 +306,102 @@ public class EmberEconomyTest {
         assertFalse("legacy refused", EmberEconomy.grantCoin(d, "LS2", 10));
         assertFalse("zero refused", EmberEconomy.grantCoin(d, "S01", 0));
         assertEquals(EmberRunRules.BASE_COIN + EmberRunRules.TREASURE_COIN, d.getCoin());
+    }
+
+    @Test
+    public void signAndOnlineAmountsAndSources() {
+        // S23 daily / makeup / fallback are the registry amounts EmberSignService.reload reads
+        assertEquals(20, EmberEconomy.amount("S23", "daily.coin"));
+        assertEquals(5, EmberEconomy.amount("S23", "daily.xp"));
+        assertEquals(3, EmberEconomy.amount("S23", "makeup_per_month"));
+        assertEquals(60, EmberEconomy.amount("S23", "sigmark_fallback_coin"));
+        assertEquals(70, EmberEconomy.amount("S24", "coin_total"));
+        assertEquals(20, EmberEconomy.amount("S24", "xp_total"));
+        assertEquals(120, EmberEconomy.amount("S24", "top_min"));
+
+        assertEquals("S23", EmberEconomy.sourceForGrant("n1c", "p1sign-2026-10"));
+        assertEquals("S23", EmberEconomy.sourceForGrant("n7s", "p1sign-2026-10"));
+        assertEquals("S24", EmberEconomy.sourceForGrant("m15c", "p1online-2026-10-06"));
+        assertEquals("S24", EmberEconomy.sourceForGrant("m120x", "p1online-2026-10-06"));
+        assertEquals(null, EmberEconomy.sourceForGrant("n1c", "other-run"));
+        assertEquals("S01", EmberEconomy.sourceForGrant("base_coin", "p1sign-ignored")); // key wins over run
+
+        PlayerData d = new PlayerData();
+        assertTrue(EmberEconomy.grantCoin(d, "S23", EmberEconomy.amount("S23", "daily.coin")));
+        assertEquals(20, d.getCoin());
+        assertTrue(EmberEconomy.grantXp("S23", EmberEconomy.amount("S23", "daily.xp")));
+        assertTrue(EmberEconomy.grantXp("S24", 10));
+        assertFalse("sink", EmberEconomy.grantXp("C14", 10));
+        assertFalse("no xp on S02", EmberEconomy.grantXp("S02", 10));
+    }
+
+    @Test
+    public void grantMarkMatHelpers() {
+        PlayerData d = new PlayerData();
+        assertTrue(EmberEconomy.grantMark(d, "S01", 1, EmberEconomy.amount("S01", "mark")));
+        assertEquals(1, d.periodCount(EmberEconomy.MARK_COUNTER + 1, "all"));
+        assertTrue(EmberEconomy.grantMark(d, "S23", 2, 1));
+        assertEquals(1, d.periodCount(EmberEconomy.MARK_COUNTER + 2, "all"));
+        assertFalse("bad tier", EmberEconomy.grantMark(d, "S01", 4, 1));
+        assertFalse("sink", EmberEconomy.grantMark(d, "C07", 1, 1));
+        assertFalse("S02 pays no mark", EmberEconomy.grantMark(d, "S02", 1, 1));
+
+        assertTrue(EmberEconomy.grantMat("S01", EmberUpgradeRules.MAT_SHARD, EmberEconomy.amount("S01", "shard")));
+        assertTrue(EmberEconomy.grantMat("S03", EmberUpgradeRules.MAT_CORE, EmberEconomy.amount("S03", "core")));
+        assertTrue(EmberEconomy.grantMat("S04", EmberUpgradeRules.MAT_SHARD, EmberEconomy.amount("S04", "shard")));
+        assertTrue(EmberEconomy.grantMat("S05", EmberUpgradeRules.MAT_CORE, EmberEconomy.amount("S05", "core")));
+        assertFalse("S02 pays coin only", EmberEconomy.grantMat("S02", EmberUpgradeRules.MAT_SHARD, 1));
+        assertFalse("sink", EmberEconomy.grantMat("C03", EmberUpgradeRules.MAT_SHARD, 1));
+        assertEquals(EmberEconomy.Account.SHARD, EmberEconomy.matAccount(EmberUpgradeRules.MAT_SHARD));
+        assertEquals(EmberEconomy.Account.BLANK, EmberEconomy.matAccount(EmberUpgradeRules.MAT_BLANK));
+        assertEquals(null, EmberEconomy.matAccount("mat_unknown"));
+    }
+
+    @Test
+    public void settleMatXpMarkKeysMapToRegistry() {
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.bossKilled = true; in.tier = 2; in.seed = 1L; in.player = "t"; in.runId = "r";
+        for (EmberRunRules.Grant g : EmberRunRules.settle(in)) {
+            if (g.kind == EmberRunRules.Kind.COIN || g.kind == EmberRunRules.Kind.XP
+                    || g.kind == EmberRunRules.Kind.MARK || g.kind == EmberRunRules.Kind.MAT)
+                assertNotNull(g.key + " needs a REG source", EmberEconomy.sourceForGrantKey(g.key));
+        }
+        for (EmberRunRules.Grant g : EmberRunRules.varietyGrants(false, true, 2, true, 1, "crystal"))
+            assertNotNull(g.key, EmberEconomy.sourceForGrantKey(g.key));
+    }
+
+    /**
+     * Scoped unregistered-grant scan (REG §6.4 first cut): every {@code .addCoin(} in {@code p1/} must live in
+     * EmberEconomy.grantCoin or an allowlisted refund / txn / deliver-fallback file. A new direct grant path fails CI.
+     */
+    @Test
+    public void p1AddCoinIsEconomyOrAllowlisted() throws Exception {
+        Set<String> allowFiles = new HashSet<String>(Arrays.asList(
+                "EmberEconomy.java",       // grantCoin
+                "EmberSupplyService.java", // shop buy rollback
+                "EmberPay.java",           // spend giveBack
+                "EmberDelivery.java",      // A01 durable txn apply
+                "EmberForgeService.java",  // legacy YAML giveBack (MySQL uses EmberPay)
+                "EmberRunService.java"     // abyss fee release + deliver unrouted fallback
+        ));
+        Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
+        List<String> hits = new ArrayList<String>();
+        try (java.util.stream.Stream<Path> walk = Files.walk(root)) {
+            for (Path f : walk.filter(x -> x.toString().endsWith(".java")).collect(java.util.stream.Collectors.toList())) {
+                String name = f.getFileName().toString();
+                String body = new String(Files.readAllBytes(f), StandardCharsets.UTF_8);
+                int from = 0;
+                while (true) {
+                    int i = body.indexOf(".addCoin(", from);
+                    if (i < 0) break;
+                    int line = 1;
+                    for (int c = 0; c < i; c++) if (body.charAt(c) == '\n') line++;
+                    if (!allowFiles.contains(name)) hits.add(name + ":" + line);
+                    from = i + 8;
+                }
+            }
+        }
+        assertEquals("route new p1 addCoin through EmberEconomy.grantCoin (or extend the refund allowlist)",
+                new ArrayList<String>(), hits);
     }
 }
