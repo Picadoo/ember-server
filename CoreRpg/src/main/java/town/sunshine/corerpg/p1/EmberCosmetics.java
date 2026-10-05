@@ -547,7 +547,7 @@ public final class EmberCosmetics implements Listener {
             if (badge) {
                 int bh = EmberSeason.badges(d);
                 if (bh < c.points()) { p.sendMessage(P + "§c余烬徽不足（需要 " + c.points() + "，现有 " + bh + "）"); return true; }
-                d.addPeriodCount(EmberSeason.C_BADGE, "all", -c.points());
+                d.addPeriodCount(EmberSeason.C_BADGE, "all", -c.points()); // econ-ok: C15 spend (cosmetics paused, OUT of the model)
                 paid = c.points() + " 余烬徽（剩余 " + EmberSeason.badges(d) + "）";
             } else if (coin) {
                 if (c.price <= 0) { p.sendMessage(P + "§c这件只能用印记换。"); return true; }
@@ -557,7 +557,7 @@ public final class EmberCosmetics implements Listener {
             } else {
                 int need = markCost(c, tier);
                 if (surplus(d, tier) < need) { p.sendMessage(P + "§cT" + tier + " 印记不够：需要 " + need + " 枚，可用 " + surplus(d, tier) + "（留 " + MARK_RESERVE + " 枚备用兑换）"); return true; }
-                d.addPeriodCount(EmberRunService.C_MARK + tier, "all", -need);
+                d.addPeriodCount(EmberRunService.C_MARK + tier, "all", -need); // econ-ok: C15 spend (cosmetics paused, OUT of the model)
                 paid = need + " 枚 T" + tier + " 印记（剩余 " + runs.marks(d, tier) + "）";
             }
             d.addPeriodCount(C_BOUGHT + c.id, "all", 1);

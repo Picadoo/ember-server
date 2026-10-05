@@ -200,6 +200,7 @@
 2. **单一消耗入口**：对称的 `EmberEconomy.spend(…, SinkId, Cost…)`；失败不写半态（沿用 `EmberPay` hold）。
 3. **yaml 真源**：把 §2 / §3 的数量与上限迁到 `ember-v1-economy.yml`（或扩 `ember-v1.yml` 一节）；Java 常量 `BASE_*`、`CLEAR_MARKS` 等改为读表；`tools/p1sim/rules.py` 只读这一份。
 4. **未登记即拒**：单元测试扫描 `addCoin` / `grantFlatEmberXp` / `addPeriodCount(p1_mark|p1_sigmark|p3_badge)` / vault 写入，调用栈必须经过 `EmberEconomy`（白名单测试钩子除外）。
+   → 进度：`addCoin`（D216）/ `takeCoin`（D218）/ **`addPeriodCount(p1_mark_t|p1_sigmark_|p3_badge)` + `grantFlatEmberXp`（D228，行级扫描，例外行须带 `econ-ok:` 理由）** 已上；vault 写入扫描未做（下一刀候选）。
 5. **旧路径**：保持 S0-1～S0-5；本表 §2.5 作为回归清单；重新放行必须同时加 p1sim 行。
 6. **不做的事（本阶段）**：不改数值、不加永久战力、不重开宝石、不推化妆品；生活 / 扭蛋可先登记为 `DEFER` 或在 P1 白名单里关掉吃核心的 offer。
 
@@ -207,7 +208,7 @@
 
 ## 7. 验收清单（S2 落地时）
 
-- [ ] §2 每一行都有 `SourceId` + 单元测试夹具能复现数量
+- [ ] §2 每一行都有 `SourceId` + 单元测试夹具能复现数量（D228：徽记 S07/S08/S09/S17/S18/S23、徽 S16/S19/S27、印记 S10/S11/S12/S16/S17 的发放现在都带 SourceId；S13 深渊层仍记作 S01 基线、S14/S15 体力/药未经 grant*）
 - [ ] §3 每一行都有 `SinkId` + 余额不足时 0 副作用
 - [x] §5 缺口 1–2（徽记账户 + 残响）已进 `p1sim` / `p2econ`，W30 报告多一列「徽记结余 / 烙印次数」 — D222：`tools/p1sim/insignia.py`（opt-in `p2econ --insignia`；S23 经 `signin.py` 钩子，缺口 3 一并补上），报告 `tools/p1sim/out-insignia-d222-w30*.md`，状态 `docs/status/STATUS-ember-p1sim-insignia-2026-10-06.md`
 - [ ] §2.5 L-S* 在 FreshQ 非 OP 上冒烟仍为 0
@@ -232,3 +233,4 @@
 | 2026-10-06 | D225（p1sim + 文档；CoreRpg 不动 / bv57）：E3 p1sim 同读 `ember-v1-economy.yml`；徽记高图周来源设计笔记（研究 only，含 REG S09/S23/C12 文案重写提案）。 |
 | 2026-10-06 | D226（p1sim + 文档；CoreRpg 不动 / bv57）：R1-sim 徽记 what-if A/B/C（`insignia.py --whatif`）；W30 对照 `out-insignia-r1-*.md`；**推荐 B**（残响厅扩 Q05–Q07、共用周帽）；本表 S09/S23/C12 **只改措辞**对齐代码（不改发放逻辑 / 数量）。 |
 | 2026-10-06 | D227（CoreRpg 1.65.53 / bv58）：S18 残响厅扩 echo_q05–q07，共用 `p4_echo_claim`=3、`S18.insignia`=2 **数量不变**（只改可领图集合 / retarget）；本表 S18 行同步。 |
+| 2026-10-06 | D228（CoreRpg 1.65.54 / bv58）：S2-8 — `grantInsignia` / `grantBadge`；账本 MARK / SIGMARK 行经 `creditMarkLedger` / `creditInsigniaLedger`（sig_mark S08、fc_sigmark S07、pledge_sigmark S09、raid_mark S12、rot_mark S10/S11、rush_mark S16/S17、rush_sig_* S17/S18；未知键 untagged 照发）；连战徽 S16 / 周目标徽 S19 / 国庆兑换徽 S27 走 grantBadge；§6.4 扫描扩到 `p1_mark_t` / `p1_sigmark_` / `p3_badge` 直写 + `grantFlatEmberXp`。数量不变。 |

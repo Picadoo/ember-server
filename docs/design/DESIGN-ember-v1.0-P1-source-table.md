@@ -1570,6 +1570,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D225 | 无发版（tools/p1sim + 文档；CoreRpg 仍 1.65.52 / bv57，不 bump）| E3：`tools/p1sim/rules.py` 把 `ember-v1-economy.yml` 纳入规范快照（plugins↔src）；`p1config` S01–S03/C07、`insignia.py` S07/S08/S17/S18/C12/C13、`afk.py` S22 `daily_kills` 经 `rules.amount`；yml↔Java 金样 dual-assert；默认 p2econ **数值**逐位不变（rules sha256 戳变）。徽记设计笔记 `docs/design/DESIGN-ember-insignia-weekly-highmap-2026-10-06.md`（D222 W30：Q01–Q04 堆积 / Q05–Q06 卡 2–6 / 熟练 Q07 短；提案 A 残响最高图 / B Q05–Q07 厅 / C 有帽兑换 + re-sim 闸；REG S09/S23/C12 文案差只重写）。未动 live。 |
 | D226 | 无发版（tools/p1sim + 文档；CoreRpg 仍 1.65.52 / bv57，不 bump）| R1-sim 徽记 what-if A/B/C（`insignia.py --whatif`）；W30 对照 `out-insignia-r1-*.md`；**推荐 B**（残响厅扩 Q05–Q07、共用周帽 3）；REG S09/S23/C12 文案 only。 |
 | D227 | CoreRpg 1.65.53 / bv58 | 徽记 option B 落地：`echo_q05..q07` 入残响（共用 `p4_echo_claim`=3、`S18.insignia`=2，周发放总量不变）；modes UI 七厅；`insignia.py` 默认 maps=q01–q07；REG S18。冒烟 FreshQ787 PASS。 |
+| D228 | CoreRpg 1.65.54 / bv58 | ARCH S2-8：首领徽记 / 余烬徽 / 剩余印记发放走 EmberEconomy — 新入口 `grantInsignia` / `grantBadge`；账本行经 `creditMarkLedger` / `creditInsigniaLedger`（sig_mark→S08、fc_sigmark→S07、pledge_sigmark→S09、raid_mark→S12、rot_mark→S10/S11、rush_mark→S16/S17、rush_sig_*→S17/S18，按 run id 图段区分；未知键=untagged 照发不丢）；连战徽 S16、周目标徽 S19、国庆兑换徽 S27 走 grantBadge；`p1/` 扫描：直接写 `p1_mark_t`/`p1_sigmark_`/`p3_badge` 或 `grantFlatEmberXp` 必须在 EmberEconomy 或带 `econ-ok:` 理由。**数量不变**。另：残响 Q05–Q07 echotune 离线核对（T2+4 躲避 0.5：88/80/73%，落在旧厅 69–100% 区间内）→ 不改。 |
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）

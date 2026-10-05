@@ -427,13 +427,15 @@ public final class EmberSeason {
         if (after >= t && d.periodCount(C_GOALPAY + g, wk) == 0) {
             d.addPeriodCount(C_GOALPAY + g, wk, 1);
             int pay = maps().goalReward;
-            if (pay > 0) d.addPeriodCount(C_BADGE, "all", pay);
+            if (pay > 0 && !EmberEconomy.grantBadge(d, "S19", pay)) // D228 / ARCH S2-8
+                Bukkit.getLogger().warning("[P1 goals] economy grantBadge refused S19 " + pay + " for " + u);
             if (p != null) p.sendMessage(P + "§a周目标完成：" + goalName(g) + " §7· 余烬徽 +" + pay + "（共 " + badges(d) + "，外观商店用）· 本周 "
                     + goalsDone(d) + "/" + goalCount());
             if (goalsDone(d) >= goalCount() && d.periodCount(C_GOALPAY + "all", wk) == 0) {
                 d.addPeriodCount(C_GOALPAY + "all", wk, 1);
                 int b = maps().goalBonus;
-                if (b > 0) d.addPeriodCount(C_BADGE, "all", b);
+                if (b > 0 && !EmberEconomy.grantBadge(d, "S19", b)) // D228 / ARCH S2-8
+                    Bukkit.getLogger().warning("[P1 goals] economy grantBadge refused S19 bonus " + b + " for " + u);
                 if (p != null) p.sendMessage(P + "§d本周目标全部完成！§7余烬徽 +" + b + "（共 " + badges(d) + "）");
             }
             Bukkit.getLogger().info("[P1 goals] " + u + " " + g + " done " + wk);

@@ -455,7 +455,8 @@ public final class EmberFestival implements Listener {
             return true;
         }
         d.addPeriodCount(C_XBADGE + id, "all", n);
-        d.addPeriodCount(EmberSeason.C_BADGE, "all", n);
+        if (!EmberEconomy.grantBadge(d, "S27", n)) // D228 / ARCH S2-8 (S27 always pays BADGE; n > 0 checked above)
+            runs.log().warning("[P1 fest] economy grantBadge refused S27 " + n + " for " + p.getName());
         runs.flushData(p.getUniqueId());
         runs.log().info("[P1 fest] exchange " + p.getName() + " " + (n * badgeRate) + " " + coinName + " → " + n + " badges (" + badgeConverted(d) + "/" + badgeCap + ")");
         p.sendMessage(P + "§a" + coinName + " " + (n * badgeRate) + " → 余烬徽 +" + n + " §7（共 " + EmberSeason.badges(d) + "；兑换额度 " + badgeConverted(d) + "/" + badgeCap + "）· 余烬徽只买外观");

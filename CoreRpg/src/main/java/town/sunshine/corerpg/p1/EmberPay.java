@@ -145,7 +145,7 @@ public final class EmberPay {
         if (c.marks > 0 && (pd == null || !spendMarks(pd, c))) { giveBack(p, taken, c.cost.coins, 0, 0); return "扣除印记失败，已退回"; }
         if (c.sigMarks > 0 && (pd == null || !spendInsignia(pd, c))) {
             giveBack(p, taken, c.cost.coins, 0, 0);
-            if (c.marks > 0 && pd != null) pd.addPeriodCount(EmberPayRules.MARK_COUNTER + c.markTier, "all", c.marks);
+            if (c.marks > 0 && pd != null) pd.addPeriodCount(EmberPayRules.MARK_COUNTER + c.markTier, "all", c.marks); // econ-ok: spend rollback
             return "扣除首领徽记失败，已退回";
         }
         return null;
@@ -175,7 +175,7 @@ public final class EmberPay {
     void giveBack(Player p, Price c) {
         giveBack(p, c.cost.materials(), c.cost.coins, c.markTier, c.marks);
         PlayerData pd = data(p.getUniqueId());
-        if (pd != null && c.sigMarks > 0) pd.addPeriodCount(EmberSignature.C_MARK + c.sigMap, "all", c.sigMarks);
+        if (pd != null && c.sigMarks > 0) pd.addPeriodCount(EmberSignature.C_MARK + c.sigMap, "all", c.sigMarks); // econ-ok: spend rollback
     }
 
     private void giveBack(Player p, Map<String, Integer> mats, int coins, int markTier, int marks) {
@@ -183,7 +183,7 @@ public final class EmberPay {
         PlayerData pd = data(p.getUniqueId());
         if (pd == null) return;
         if (coins > 0) pd.addCoin(coins);
-        if (marks > 0) pd.addPeriodCount(EmberPayRules.MARK_COUNTER + markTier, "all", marks);
+        if (marks > 0) pd.addPeriodCount(EmberPayRules.MARK_COUNTER + markTier, "all", marks); // econ-ok: spend rollback
     }
 
     /** single request: see {@link #payAll} */

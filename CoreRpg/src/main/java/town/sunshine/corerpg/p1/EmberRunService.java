@@ -821,7 +821,7 @@ public final class EmberRunService implements Listener {
         Integer fee = s.fee.get(u);
         EmberRunRules.Grant paid = EmberRunRules.Grant.decode("cost_coin", f.result);
         if (paid != null && paid.kind == EmberRunRules.Kind.MARK) { // F-review #5: marks go back as marks
-            data(u).addPeriodCount(C_MARK + paid.id, "all", paid.amount);
+            data(u).addPeriodCount(C_MARK + paid.id, "all", paid.amount); // econ-ok: C08 abyss fee release (returns a spendMark)
             plugin.getDataStore().flushMutation(u);
         } else if (fee != null && fee > 0) {
             data(u).addCoin(fee);
@@ -1367,7 +1367,8 @@ public final class EmberRunService implements Listener {
         int secs = t0 > 0 ? (int) Math.max(1, (System.currentTimeMillis() - t0) / 1000L) : 0;
         if (fresh && pays) {
             pd.addPeriodCount(m.mainRush() ? C_RUSH_CLAIM : m.rushClaim, rushWeekKey(), 1); // D160: the week's reward is claimed
-            if (m.rushBadges > 0) pd.addPeriodCount(EmberSeason.C_BADGE, "all", m.rushBadges);
+            if (m.rushBadges > 0 && !EmberEconomy.grantBadge(pd, EmberEconomy.sourceForRushMode(m.rushMode), m.rushBadges)) // D228 S2-8: S16
+                log().warning("[P1 run] economy grantBadge refused " + m.rushMode + " " + m.rushBadges + " for " + u);
             if (cosmetics != null && m.mainRush()) cosmetics.onRaidClear(p, pd, m.key); // first clear → the 连战不息 title (counts clears)
         }
         if (fresh && m.mainRush() && season != null && secs > 0) season.onRush(u, Bukkit.getOfflinePlayer(u).getName(), secs); // D160: practice clears count on the time board too
@@ -1715,7 +1716,7 @@ public final class EmberRunService implements Listener {
                         log().warning("[P1 run] economy grantXp refused " + src + " " + g.amount + " for " + p.getName());
                     else {
                         ProgressService ps = plugin.getProgressService();
-                        if (ps != null) ps.grantFlatEmberXp(p, g.amount, "余烬主线");
+                        if (ps != null) ps.grantFlatEmberXp(p, g.amount, "余烬主线"); // econ-ok: grantXp validated above (S2-3)
                     }
                     got.add("余烬经验 " + g.amount);
                     done = true;
@@ -1741,14 +1742,13 @@ public final class EmberRunService implements Listener {
                 }
                 case MARK: {
                     int tier = Integer.parseInt(g.id);
-                    // D216 / ARCH S2-3: mark grants with a known REG source go through grantMark
-                    String src = EmberEconomy.sourceForGrant(g.key, r.runId);
-                    if (src != null) {
-                        if (!EmberEconomy.grantMark(d, src, tier, g.amount))
-                            log().warning("[P1 run] economy grantMark refused " + src + " T" + tier + " " + g.amount + " for " + p.getName());
-                    } else {
-                        d.addPeriodCount(C_MARK + tier, "all", g.amount);
-                    }
+                    // D216 / ARCH S2-3 + D228 / S2-8: every mark ledger row is credited by EmberEconomy (rush / outpost / raid /
+                    // featured-week keys now resolve to S10–S12 / S16 / S17; unknown keys stay an untagged credit)
+                    EmberEconomy.Credit cr = EmberEconomy.creditMarkLedger(d, g.key, r.runId, tier, g.amount);
+                    if (cr == EmberEconomy.Credit.REFUSED)
+                        log().warning("[P1 run] economy grantMark refused " + EmberEconomy.sourceForGrant(g.key, r.runId) + " " + g.key + " T" + tier + " " + g.amount + " for " + p.getName());
+                    else if (cr == EmberEconomy.Credit.UNTAGGED)
+                        log().info("[P1 run] untagged mark row " + r.runId + "/" + g.key + " T" + tier + " " + g.amount + " for " + p.getName());
                     got.add("T" + tier + " 锻造印记 " + g.amount + "（共 " + marks(d, tier) + "）");
                     done = true;
                     break;
@@ -1799,7 +1799,12 @@ public final class EmberRunService implements Listener {
                     break;
                 }
                 case SIGMARK: { // D174 首领徽记: an account counter like the forge marks
-                    d.addPeriodCount(EmberSignature.C_MARK + g.id, "all", g.amount);
+                    // D228 / ARCH S2-8: S07 fc / S08 repeat / S09 pledge / S17 outpost / S18 echo / S23 sign-in via grantInsignia
+                    EmberEconomy.Credit cr = EmberEconomy.creditInsigniaLedger(d, g.key, r.runId, g.id, g.amount);
+                    if (cr == EmberEconomy.Credit.REFUSED)
+                        log().warning("[P1 run] economy grantInsignia refused " + EmberEconomy.sourceForGrant(g.key, r.runId) + " " + g.key + " " + g.id + " " + g.amount + " for " + p.getName());
+                    else if (cr == EmberEconomy.Credit.UNTAGGED)
+                        log().info("[P1 run] untagged insignia row " + r.runId + "/" + g.key + " " + g.id + " " + g.amount + " for " + p.getName());
                     got.add(g.id.toUpperCase(Locale.ROOT) + " 首领徽记 " + g.amount + "（共 " + d.periodCount(EmberSignature.C_MARK + g.id, "all") + "）");
                     if ("fc_sigmark".equals(r.key)) { // D174: the first clear of a signature map also announces its new unlock
                         String un = EmberSignature.IMPRINT_UNLOCK.equals(g.id) ? "烬炉烙印（用徽记把签名烙到自己的件上）"
@@ -3400,7 +3405,7 @@ public final class EmberRunService implements Listener {
             try { tier = Integer.parseInt(args[4]); n = Integer.parseInt(args[5]); }
             catch (NumberFormatException ex) { s.sendMessage(P + "阶与数量需为整数"); return true; }
             PlayerData d = data(t.getUniqueId());
-            d.addPeriodCount(C_MARK + tier, "all", Math.max(n, -marks(d, tier)));
+            d.addPeriodCount(C_MARK + tier, "all", Math.max(n, -marks(d, tier))); // econ-ok: admin test hook
             plugin.getDataStore().flushMutation(t.getUniqueId());
             s.sendMessage(P + t.getName() + " T" + tier + " 锻造印记 = " + marks(d, tier));
             log().info("[P1 run] admin " + s.getName() + " marks " + t.getName() + " T" + tier + " " + n + " → " + marks(d, tier));
@@ -3418,7 +3423,7 @@ public final class EmberRunService implements Listener {
                 if (c == null || !c.id.startsWith("season_")) { s.sendMessage(P + "没有这个赛季奖励：" + args[5]); return true; }
                 season.adminAward(t, c.id);
             } else if ("badges".equals(w) && args.length >= 6) {
-                td.addPeriodCount(EmberSeason.C_BADGE, "all", Integer.parseInt(args[5]));
+                td.addPeriodCount(EmberSeason.C_BADGE, "all", Integer.parseInt(args[5])); // econ-ok: admin test hook
                 flushData(t.getUniqueId());
             } else if ("goal".equals(w) && args.length >= 7) {
                 season.addGoal(t.getUniqueId(), td, args[5], Integer.parseInt(args[6]));

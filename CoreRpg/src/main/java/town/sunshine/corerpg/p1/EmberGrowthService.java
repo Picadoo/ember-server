@@ -1247,7 +1247,7 @@ public final class EmberGrowthService implements Listener {
         if ("marks".equals(w) && args.length >= 6) {
             int n;
             try { n = Integer.parseInt(args[5]); } catch (NumberFormatException e) { s.sendMessage(usage); return true; }
-            d.addPeriodCount(EmberSignature.C_MARK + args[4].toLowerCase(Locale.ROOT), "all", n);
+            d.addPeriodCount(EmberSignature.C_MARK + args[4].toLowerCase(Locale.ROOT), "all", n); // econ-ok: admin test hook
         } else if ("stamp".equals(w) && args.length >= 6) {
             EmberItemData it = "charm".equalsIgnoreCase(args[4]) ? lo.charm : lo.blade;
             EmberSignature.Def sd = EmberSignature.byId(args[5]);
@@ -1263,7 +1263,7 @@ public final class EmberGrowthService implements Listener {
             // read only
         } else if ("clear".equals(w)) {
             for (String mk : EmberSignature.maps()) {
-                d.addPeriodCount(EmberSignature.C_MARK + mk, "all", -d.periodCount(EmberSignature.C_MARK + mk, "all"));
+                d.addPeriodCount(EmberSignature.C_MARK + mk, "all", -d.periodCount(EmberSignature.C_MARK + mk, "all")); // econ-ok: admin test hook
             }
             for (EmberItemData it : new EmberItemData[]{lo.blade, lo.charm}) if (it != null && sigOf(d, it) > 0) sigTestWrite(s, t, d, it, 0); // D208
             for (String sl : new String[]{"blade", "charm"}) d.addPeriodCount(C_SIGOFF + sl, "all", -d.periodCount(C_SIGOFF + sl, "all"));

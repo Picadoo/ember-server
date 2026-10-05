@@ -738,4 +738,162 @@ public class EmberEconomyTest {
         assertFalse(EmberEconomy.grantCoin(d, "S01", 300));
     }
 
+    // ------------------------------------------------------------------ D228 / ARCH S2-8 insignia / badge / weekly marks
+
+    /** D228: every insignia / weekly-mark ledger key resolves to its REG row (key alone or run id map part). */
+    @Test
+    public void s28LedgerKeysResolveToRegSources() {
+        assertEquals("S07", EmberEconomy.sourceForGrantKey("fc_sigmark"));
+        assertEquals("S06 pack keys unchanged", "S06", EmberEconomy.sourceForGrantKey("fc_q05_coin"));
+        assertEquals("S08", EmberEconomy.sourceForGrantKey("sig_mark"));
+        assertEquals("S09", EmberEconomy.sourceForGrantKey("pledge_sigmark"));
+        assertEquals("S12", EmberEconomy.sourceForGrantKey("raid_mark"));
+        assertEquals("S10", EmberEconomy.sourceForGrant("rot_mark", "q04c-mabc12-x1z"));
+        assertEquals("S11", EmberEconomy.sourceForGrant("rot_mark", "q04-mabc12-x1z"));
+        assertEquals(null, EmberEconomy.sourceForGrant("rot_mark", "r01-mabc12-x1z"));
+        assertEquals("S16", EmberEconomy.sourceForGrant("rush_mark", "rush-mabc12-x1z"));
+        assertEquals("S17", EmberEconomy.sourceForGrant("rush_mark", "outpost-mabc12-x1z"));
+        assertEquals(null, EmberEconomy.sourceForGrant("rush_mark", "echo_q05-mabc12-x1z"));
+        assertEquals("S17", EmberEconomy.sourceForGrant("rush_sig_q02", "outpost-mabc12-x1z"));
+        assertEquals("S18", EmberEconomy.sourceForGrant("rush_sig_q07", "echo_q07-mabc12-x1z"));
+        assertEquals(null, EmberEconomy.sourceForGrant("rush_sig_q07", "rush-mabc12-x1z"));
+        assertEquals(null, EmberEconomy.sourceForGrant("rush_mark", null));
+        assertEquals("S23 sign sigmark row", "S23", EmberEconomy.sourceForGrant("n7s", "p1sign-2026-10"));
+        // each resolved row pays the account the ledger kind writes
+        for (String[] c : new String[][]{{"fc_sigmark", ""}, {"sig_mark", ""}, {"pledge_sigmark", ""},
+                {"rush_sig_q01", "outpost-a-b"}, {"rush_sig_q05", "echo_q05-a-b"}, {"n7s", "p1sign-2026-10"}})
+            assertTrue(c[0], EmberEconomy.pays(EmberEconomy.sourceForGrant(c[0], c[1]), EmberEconomy.Account.INSIGNIA));
+        for (String[] c : new String[][]{{"raid_mark", ""}, {"rot_mark", "q01c-a-b"}, {"rot_mark", "q01-a-b"},
+                {"rush_mark", "rush-a-b"}, {"rush_mark", "outpost-a-b"}, {"base_mark", ""}})
+            assertTrue(c[0] + " " + c[1], EmberEconomy.pays(EmberEconomy.sourceForGrant(c[0], c[1]), EmberEconomy.Account.MARK));
+    }
+
+    /** D228: literal MARK / SIGMARK ledger keys in p1/ are all known to the router — a new key fails until it is mapped. */
+    @Test
+    public void everyMarkAndInsigniaLedgerKeyIsKnown() throws Exception {
+        Set<String> known = new HashSet<String>(Arrays.asList("base_mark", "raid_mark", "rot_mark", "rush_mark",
+                "rush_practice", "rush_paid", // amount-0 DELIVERED markers (never credited)
+                "sig_mark", "pledge_sigmark", "fc_sigmark", "rush_sig_"));
+        java.util.regex.Pattern pat = java.util.regex.Pattern.compile(
+                "new (?:EmberRunRules\\.)?Grant\\(\"([a-z_]+)\"(?: \\+ [a-zA-Z]+)?, (?:EmberRunRules\\.)?Kind\\.(MARK|SIGMARK),");
+        Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
+        Set<String> seen = new HashSet<String>();
+        List<String> unknown = new ArrayList<String>();
+        try (java.util.stream.Stream<Path> walk = Files.walk(root)) {
+            for (Path f : walk.filter(x -> x.toString().endsWith(".java")).collect(java.util.stream.Collectors.toList())) {
+                java.util.regex.Matcher m = pat.matcher(new String(Files.readAllBytes(f), StandardCharsets.UTF_8));
+                while (m.find()) { seen.add(m.group(1)); if (!known.contains(m.group(1))) unknown.add(f.getFileName() + ":" + m.group(1)); }
+            }
+        }
+        assertEquals("map the new ledger key in EmberEconomy.sourceForGrant (D228)", new ArrayList<String>(), unknown);
+        assertTrue("scan still sees the keys " + seen, seen.containsAll(Arrays.asList("base_mark", "raid_mark", "rot_mark",
+                "rush_mark", "sig_mark", "pledge_sigmark", "fc_sigmark", "rush_sig_")));
+    }
+
+    @Test
+    public void grantInsigniaAndBadge() {
+        PlayerData d = new PlayerData();
+        for (String src : new String[]{"S07", "S08", "S09", "S17", "S18", "S23"})
+            assertTrue(src, EmberEconomy.grantInsignia(d, src, "q05", 1));
+        assertEquals(6, d.periodCount(EmberEconomy.INSIGNIA_COUNTER + "q05", "all"));
+        assertFalse("S16 pays no insignia", EmberEconomy.grantInsignia(d, "S16", "q05", 1));
+        assertFalse("sink", EmberEconomy.grantInsignia(d, "C12", "q05", 1));
+        assertFalse("legacy", EmberEconomy.grantInsignia(d, "LS1", "q05", 1));
+        assertFalse("no map", EmberEconomy.grantInsignia(d, "S08", "", 1));
+        assertFalse("zero", EmberEconomy.grantInsignia(d, "S08", "q05", 0));
+        assertFalse("null data", EmberEconomy.grantInsignia(null, "S08", "q05", 1));
+        assertEquals(6, d.periodCount(EmberEconomy.INSIGNIA_COUNTER + "q05", "all"));
+
+        for (String src : new String[]{"S16", "S19", "S27"}) assertTrue(src, EmberEconomy.grantBadge(d, src, 5));
+        assertEquals(15, d.periodCount(EmberEconomy.BADGE_COUNTER, "all"));
+        assertFalse("S17 pays no badge", EmberEconomy.grantBadge(d, "S17", 1));
+        assertFalse("sink C18", EmberEconomy.grantBadge(d, "C18", 1));
+        assertFalse("negative", EmberEconomy.grantBadge(d, "S19", -3));
+        assertEquals(15, d.periodCount(EmberEconomy.BADGE_COUNTER, "all"));
+        assertEquals(EmberSeason.C_BADGE, EmberEconomy.BADGE_COUNTER);
+    }
+
+    @Test
+    public void creditLedgerTaggedUntaggedRefused() {
+        PlayerData d = new PlayerData();
+        assertEquals(EmberEconomy.Credit.TAGGED, EmberEconomy.creditMarkLedger(d, "rush_mark", "rush-a-b", 3, 1));
+        assertEquals(EmberEconomy.Credit.TAGGED, EmberEconomy.creditMarkLedger(d, "rot_mark", "q02c-a-b", 1, 1));
+        assertEquals("pre-S2 / unknown key keeps the credit", EmberEconomy.Credit.UNTAGGED,
+                EmberEconomy.creditMarkLedger(d, "mystery_mark", "q02-a-b", 1, 2));
+        assertEquals(EmberEconomy.Credit.REFUSED, EmberEconomy.creditMarkLedger(d, "rush_mark", "rush-a-b", 4, 1));
+        assertEquals(EmberEconomy.Credit.REFUSED, EmberEconomy.creditMarkLedger(d, "rush_mark", "rush-a-b", 3, 0));
+        assertEquals(1, d.periodCount(EmberEconomy.MARK_COUNTER + 3, "all"));
+        assertEquals(3, d.periodCount(EmberEconomy.MARK_COUNTER + 1, "all"));
+
+        assertEquals(EmberEconomy.Credit.TAGGED, EmberEconomy.creditInsigniaLedger(d, "rush_sig_q06", "echo_q06-a-b", "q06", 2));
+        assertEquals(EmberEconomy.Credit.TAGGED, EmberEconomy.creditInsigniaLedger(d, "fc_sigmark", "q06-a-b", "q06", 3));
+        assertEquals(EmberEconomy.Credit.UNTAGGED, EmberEconomy.creditInsigniaLedger(d, "old_sig", "x", "q06", 1));
+        assertEquals("S06 fc pack key pays no insignia", EmberEconomy.Credit.REFUSED,
+                EmberEconomy.creditInsigniaLedger(d, "fc_q06_coin", "q06-a-b", "q06", 1));
+        assertEquals(EmberEconomy.Credit.REFUSED, EmberEconomy.creditInsigniaLedger(d, "sig_mark", "q06-a-b", "", 1));
+        assertEquals(6, d.periodCount(EmberEconomy.INSIGNIA_COUNTER + "q06", "all"));
+    }
+
+    /** D228: each shipped rush-hall mode resolves to a REG row that pays every reward it configures (marks / badges / sigmarks). */
+    @Test
+    @SuppressWarnings("unchecked")
+    public void rushModesPayTheirConfiguredRewards() throws Exception {
+        Map<String, Object> rush = (Map<String, Object>) at(yml("ember-v1-runs.yml"), "rush");
+        int n = 0;
+        for (Map.Entry<String, Object> e : rush.entrySet()) {
+            if (!(e.getValue() instanceof Map)) continue;
+            Map<String, Object> h = (Map<String, Object>) e.getValue();
+            if (h.get("chain") == null) continue;
+            String mode = h.get("mode") == null ? "rush" : String.valueOf(h.get("mode")).toLowerCase(java.util.Locale.ROOT);
+            String src = EmberEconomy.sourceForRushMode(mode);
+            assertNotNull(e.getKey() + " mode " + mode, src);
+            Map<String, Object> rw = h.get("reward") instanceof Map ? (Map<String, Object>) h.get("reward") : new java.util.HashMap<String, Object>();
+            if (rw.get("marks") != null && ((Number) rw.get("marks")).intValue() > 0) {
+                assertTrue(e.getKey() + " marks", EmberEconomy.pays(src, EmberEconomy.Account.MARK));
+                assertEquals(e.getKey() + " rush_mark resolves to the mode row", src, EmberEconomy.sourceForGrant("rush_mark", e.getKey() + "-a-b"));
+            }
+            if (rw.get("badges") != null && ((Number) rw.get("badges")).intValue() > 0)
+                assertTrue(e.getKey() + " badges", EmberEconomy.pays(src, EmberEconomy.Account.BADGE));
+            if (rw.get("sigmarks") != null && ((Number) rw.get("sigmarks")).intValue() > 0) {
+                assertTrue(e.getKey() + " sigmarks", EmberEconomy.pays(src, EmberEconomy.Account.INSIGNIA));
+                assertEquals(e.getKey() + " rush_sig resolves to the mode row", src, EmberEconomy.sourceForGrant("rush_sig_q01", e.getKey() + "-a-b"));
+            }
+            n++;
+        }
+        assertEquals("rush + outpost + echo_q01..q07", 9, n);
+        assertEquals(null, EmberEconomy.sourceForRushMode("nope"));
+    }
+
+    /**
+     * D228 (REG §6.4 second cut): no direct write of the mark / insignia / badge account counters and no
+     * {@code grantFlatEmberXp} in {@code p1/} outside EmberEconomy unless the line carries an {@code econ-ok:} reason
+     * (admin hook, spend rollback, C15 paused spend, fee release). Line-level: a counter held in a local variable
+     * (EmberPay untagged undo, EmberDelivery durable apply) is a reviewed exception, not caught here.
+     */
+    @Test
+    public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
+        java.util.regex.Pattern write = java.util.regex.Pattern.compile(
+                "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");
+        Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
+        List<String> hits = new ArrayList<String>();
+        int tagged = 0;
+        try (java.util.stream.Stream<Path> walk = Files.walk(root)) {
+            for (Path f : walk.filter(x -> x.toString().endsWith(".java")).collect(java.util.stream.Collectors.toList())) {
+                String name = f.getFileName().toString();
+                if ("EmberEconomy.java".equals(name)) continue;
+                List<String> lines = Files.readAllLines(f, StandardCharsets.UTF_8);
+                for (int i = 0; i < lines.size(); i++) {
+                    String ln = lines.get(i);
+                    if (!write.matcher(ln).find() && !ln.contains(".grantFlatEmberXp(")) continue;
+                    // EmberSignature.C_MARK / EmberRunService.C_MARK are account counters; other C_MARK-like names are not used in p1/
+                    if (ln.contains("econ-ok:")) { tagged++; continue; }
+                    hits.add(name + ":" + (i + 1));
+                }
+            }
+        }
+        assertEquals("route through EmberEconomy.grantMark/grantInsignia/grantBadge (or tag the line `// econ-ok: <reason>`)",
+                new ArrayList<String>(), hits);
+        assertTrue("scan sees the tagged exceptions (" + tagged + ")", tagged >= 8);
+    }
+
 }

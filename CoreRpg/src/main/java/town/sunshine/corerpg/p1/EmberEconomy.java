@@ -290,9 +290,21 @@ public final class EmberEconomy {
         if (key.startsWith("var_event_") || key.startsWith("event_")) return "S05";
         if (key.startsWith("bounty_")) return "S20";
         if (key.startsWith("vb_")) return "S21";
+        // D228 (S2-8): insignia / weekly-mark ledger keys whose source the key alone names
+        if ("fc_sigmark".equals(key)) return "S07"; // before the generic fc_ (S06 first-clear pack) prefix
         if (key.startsWith("fc_")) return "S06";
         if (key.startsWith("honor_")) return "S25";
+        if ("sig_mark".equals(key)) return "S08";
+        if ("pledge_sigmark".equals(key)) return "S09";
+        if ("raid_mark".equals(key)) return "S12";
         return null;
+    }
+
+    /** Map part of a run id ({@code <mapKey>[c|a<n>]-<ts36>-<rnd36>}); null when there is no {@code -}. */
+    static String runHead(String runId) {
+        if (runId == null) return null;
+        int cut = runId.indexOf('-');
+        return cut > 0 ? runId.substring(0, cut) : null;
     }
 
     /**
@@ -302,6 +314,14 @@ public final class EmberEconomy {
     public static String sourceForGrant(String key, String runId) {
         String s = sourceForGrantKey(key);
         if (s != null) return s;
+        // D228 (S2-8): weekly-mode ledger keys shared by several modes — the run id's map part tells which
+        String head = runHead(runId);
+        if (key != null && head != null) {
+            if ("rot_mark".equals(key)) // featured-map bonus: challenge run id q0Nc → S10, normal repeat q0N → S11
+                return head.matches("q\\d\\dc") ? "S10" : head.matches("q\\d\\d") ? "S11" : null;
+            if ("rush_mark".equals(key)) return "rush".equals(head) ? "S16" : "outpost".equals(head) ? "S17" : null;
+            if (key.startsWith("rush_sig_")) return "outpost".equals(head) ? "S17" : head.startsWith("echo_") ? "S18" : null;
+        }
         if (runId != null) {
             if (runId.startsWith("p1sign-")) return "S23";
             if (runId.startsWith("p1online-")) return "S24";
@@ -339,6 +359,69 @@ public final class EmberEconomy {
         if (!pays(sourceId, Account.MARK)) return false;
         d.addPeriodCount(MARK_COUNTER + tier, "all", amount);
         return true;
+    }
+
+    /**
+     * D228 (S2-8): boss-insignia grant tagged with a registered P1 source (S07 first clear, S08 repeat, S09 pledge,
+     * S17 outpost, S18 echo, S23 sign-in). Refuses rows that do not pay INSIGNIA, an empty map and non-positive amounts.
+     * Writes {@code p1_sigmark_<map>@all}.
+     */
+    public static boolean grantInsignia(PlayerData d, String sourceId, String map, int amount) {
+        if (d == null || amount <= 0 || map == null || map.isEmpty()) return false;
+        if (!pays(sourceId, Account.INSIGNIA)) return false;
+        d.addPeriodCount(INSIGNIA_COUNTER + map, "all", amount);
+        return true;
+    }
+
+    /**
+     * D228 (S2-8): ember-badge grant tagged with a registered P1 source (S16 rush, S19 weekly goals, S27 festival
+     * exchange). Refuses rows that do not pay BADGE and non-positive amounts. Writes {@code p3_badge@all}.
+     */
+    public static boolean grantBadge(PlayerData d, String sourceId, int amount) {
+        if (d == null || amount <= 0) return false;
+        if (!pays(sourceId, Account.BADGE)) return false;
+        d.addPeriodCount(BADGE_COUNTER, "all", amount);
+        return true;
+    }
+
+    /** Outcome of a ledger-row credit ({@link #creditMarkLedger} / {@link #creditInsigniaLedger}). */
+    public enum Credit {
+        /** paid through the resolved REG source */
+        TAGGED,
+        /** no REG source for this key / run id (pre-S2 ledger row, admin row) — credited anyway so a durable row is never lost */
+        UNTAGGED,
+        /** a source resolved but refused (wrong account / bad tier / bad map / amount ≤ 0) — nothing written */
+        REFUSED
+    }
+
+    /**
+     * D228 (S2-8): deliver one forge-mark ledger row. A resolvable source ({@link #sourceForGrant}) goes through
+     * {@link #grantMark}; an unresolvable one is credited untagged (same as the pre-S2 direct path) so the only
+     * {@code p1_mark_t} write for ledger rows lives here.
+     */
+    public static Credit creditMarkLedger(PlayerData d, String key, String runId, int tier, int amount) {
+        if (d == null || amount <= 0 || tier < 1 || tier > 3) return Credit.REFUSED;
+        String src = sourceForGrant(key, runId);
+        if (src != null) return grantMark(d, src, tier, amount) ? Credit.TAGGED : Credit.REFUSED;
+        d.addPeriodCount(MARK_COUNTER + tier, "all", amount);
+        return Credit.UNTAGGED;
+    }
+
+    /** D228 (S2-8): deliver one boss-insignia ledger row — {@link #grantInsignia} when the source resolves, else untagged. */
+    public static Credit creditInsigniaLedger(PlayerData d, String key, String runId, String map, int amount) {
+        if (d == null || amount <= 0 || map == null || map.isEmpty()) return Credit.REFUSED;
+        String src = sourceForGrant(key, runId);
+        if (src != null) return grantInsignia(d, src, map, amount) ? Credit.TAGGED : Credit.REFUSED;
+        d.addPeriodCount(INSIGNIA_COUNTER + map, "all", amount);
+        return Credit.UNTAGGED;
+    }
+
+    /** D228 (S2-8): REG source of a rush-hall settlement by mode (rush S16 · outpost S17 · echo S18); null = unknown mode. */
+    public static String sourceForRushMode(String mode) {
+        if ("rush".equals(mode)) return "S16";
+        if ("outpost".equals(mode)) return "S17";
+        if ("echo".equals(mode)) return "S18";
+        return null;
     }
 
     /**
