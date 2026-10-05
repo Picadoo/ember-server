@@ -385,5 +385,6 @@ flowchart LR
 2. **N2 · 计数器注册表草案（离线，只写文档）**：把 §2.3 / R3 的约 70 个前缀整理成表（键、所属类、周期、资产与否、清理规则、是否物品属性），标出要迁回物品的 3 个（`p4_af_` / `p4_afp_` / `p1_sig_`）和首通 `content_version` 问题，作为 S1 的规格。
    → 已完成：[`REG-ember-counter-registry-2026-10-05.md`](REG-ember-counter-registry-2026-10-05.md)（D203，2026-10-05）：81 个键族（P1 70 + 旧 11）；物品属性挂在主人身上的其实是 5 个（加 `p4_rrn_` / `p4_rro_`）；首通 `content_version` 换期会删掉旧版本键（不只是重发首通包），建议拆成「首通事实 @all」+「首通包已领 @ver」；`p1_codex_` 与 `p1_codex_stage_` 前缀包含；`bmat:` / `failrefund@` 不是计数器键。
 3. **N3 · 来源 / 消耗 / 上限总表（离线，只写文档）**：从 `EmberRunRules`、`ember-v1*.yml`、`EmberSignature`、`EmberSignService`、`EmberAfkService` 读出每条发放与消耗，对照 `tools/p1sim/p2econ.py` 实际建模了哪些，列出未建模项（含 §3 O1–O3 的旧来源），作为 S2 的规格。
+   → 已完成：[`REG-ember-source-sink-cap-2026-10-05.md`](REG-ember-source-sink-cap-2026-10-05.md)（D204，2026-10-05）：P1 来源 32 条 + 旧来源 5 组（S0 后全为 0）、消耗 18 条、按账户的上限表、p1sim 族覆盖矩阵；未建模的主要是首领徽记账户（首通 / 重打 / 誓约 / 残响 / 前哨徽记 + 烙印 / 调律消耗）、余烬徽库存、生活玩法（稳固符每周吃 3 核心）、扭蛋兑券；附 S2 单一发放 / 消耗入口规格六条。
 
 > 这三项都不改源码、配置和 p1sim，不需要部署或机器人；做完后由总控决定是否开 S0 实现。
