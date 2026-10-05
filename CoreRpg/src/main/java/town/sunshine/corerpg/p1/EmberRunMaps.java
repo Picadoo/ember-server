@@ -1320,6 +1320,8 @@ public final class EmberRunMaps {
             if (d.rushWeekly < 1 || d.rushWeekly > 3 || d.rushSig < 0 || d.rushSig > 3 || d.rushMarks > 1 || d.rushMarkTier < 1 || d.rushMarkTier > 3)
                 out.add(d.key + ": rush weekly 1..3 / sigmarks 0..3 / marks ≤ 1 / mark_tier 1..3");
             if (!d.mainRush() && (d.rushClaim.equals("p4_rush_claim") || !d.rushClaim.startsWith("p4_"))) out.add(d.key + ": a stage-2b entry needs its own p4_* claim counter");
+            String claimErr = EmberCounters.rushClaimError(d.rushClaim); // D206: config claim keys may not reuse a registered counter family
+            if (claimErr != null) out.add(d.key + ": " + claimErr);
             for (MapDef o : rush.values()) if (o != d && o.rushClaim.equals(d.rushClaim) && o.rushWeekly != d.rushWeekly) out.add(d.key + ": entries sharing " + d.rushClaim + " need the same weekly");
             if (d.boss == null || d.boss.at == null || d.boss.area == null) out.add(d.key + ": rush hall boss.at / area missing");
             if (maps.containsKey(d.key) || raids.containsKey(d.key)) out.add(d.key + ": rush key collides with a map / raid");
