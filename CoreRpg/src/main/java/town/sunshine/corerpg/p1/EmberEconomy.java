@@ -9,15 +9,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import town.sunshine.corerpg.PlayerData;
+
 /**
- * D213 (ARCH S2-1 · REG-ember-source-sink-cap §6.1/§6.2, first step): the registry of every P1 economy
- * <b>source</b> (S01–S32), every closed <b>legacy source</b> (L-S1…L-S5) and every <b>sink</b> (C01–C18) from
- * {@code docs/design/REG-ember-source-sink-cap-2026-10-05.md}. Pure data + lookups, no Bukkit, no behaviour:
- * nothing calls through it yet (S2-2 routes {@code grant} / {@code spend} through these ids).
- * <p>{@code EmberEconomyTest} pins it to the live game: every counter family named here must exist in
- * {@link EmberCounters}; every golden amount must equal the Java constant or shipped yml value that really pays it;
- * the set of sources the offline sim does not model ({@link Model#NONE} / {@link Model#PARTIAL}) is pinned so a new
- * unmodelled source fails the build until the table and p1sim are updated. Numbers unchanged (balance_version 57).
+ * D213 registry + D215 (ARCH S2-2) first grant/spend routes: every P1 economy <b>source</b> (S01–S32),
+ * closed <b>legacy source</b> (L-S1…L-S5) and <b>sink</b> (C01–C18) from
+ * {@code docs/design/REG-ember-source-sink-cap-2026-10-05.md}.
+ * <p>Lookups stay Bukkit-free. {@link #amount} is the amount source of truth for routed rows (settle S01–S03,
+ * shop C14). {@link #grantCoin} / {@link #spendCoin} are the coin entry points tagged by registry id
+ * (PlayerData only — no Bukkit). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
+ * <p>{@code EmberEconomyTest} pins golden amounts to Java constants / shipped yml, counter families to
+ * {@link EmberCounters}, and proves settle / shop / grantCoin / spendCoin use the registry. Numbers unchanged
+ * (balance_version 57).
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -229,5 +232,57 @@ public final class EmberEconomy {
         for (Row r : BY_ID.values())
             for (String k : r.counters) if (EmberCounters.byKey(k) == null) out.add(r.id + ":" + k);
         return out;
+    }
+
+    /** Integer golden amount for a registered row (throws if the id or key is missing). */
+    public static int amount(String id, String key) {
+        return (int) Math.round(require(id).golden(key));
+    }
+
+    /** Row by id, or throw. */
+    public static Row require(String id) {
+        Row r = byId(id);
+        if (r == null) throw new IllegalArgumentException("unknown economy id " + id);
+        return r;
+    }
+
+    /**
+     * Map a settle / ledger grant key to the REG source that pays it (S2-2 routed set).
+     * Unknown / not-yet-routed keys return null — callers keep the prior direct {@code addCoin} path.
+     */
+    public static String sourceForGrantKey(String key) {
+        if (key == null || key.isEmpty()) return null;
+        if (key.startsWith("base_")) return "S01";
+        if (key.startsWith("extra_treasure_")) return "S02";
+        if (key.startsWith("extra_elite_")) return "S03";
+        if (key.startsWith("bounty_")) return "S20";
+        if (key.startsWith("vb_")) return "S21";
+        if (key.startsWith("fc_")) return "S06";
+        if (key.startsWith("honor_")) return "S25";
+        return null;
+    }
+
+    /**
+     * Coin grant tagged with a registered P1 source. Refuses sinks, legacy rows, rows that do not pay COIN,
+     * non-positive amounts, and a null data row. Does not look up golden — the caller supplies the amount
+     * (settle already took it from {@link #amount} for S01–S03).
+     */
+    public static boolean grantCoin(PlayerData d, String sourceId, int amount) {
+        if (d == null || amount <= 0) return false;
+        Row r = byId(sourceId);
+        if (r == null || r.sink || r.legacy || !r.accounts.contains(Account.COIN)) return false;
+        d.addCoin(amount);
+        return true;
+    }
+
+    /**
+     * Coin spend tagged with a registered P1 sink. Refuses sources, legacy rows, rows that do not take COIN,
+     * and non-positive amounts. Returns false when the balance is short (same as {@link PlayerData#takeCoin}).
+     */
+    public static boolean spendCoin(PlayerData d, String sinkId, int amount) {
+        if (d == null || amount <= 0) return false;
+        Row r = byId(sinkId);
+        if (r == null || !r.sink || r.legacy || !r.accounts.contains(Account.COIN)) return false;
+        return d.takeCoin(amount);
     }
 }

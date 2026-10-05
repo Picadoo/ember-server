@@ -1696,11 +1696,19 @@ public final class EmberRunService implements Listener {
             if (g == null) { log().warning("[P1 run] undecodable ledger row " + r.runId + "/" + r.key + " = " + r.result); continue; }
             boolean done = false;
             switch (g.kind) {
-                case COIN:
-                    d.addCoin(g.amount);
+                case COIN: {
+                    // D215 / ARCH S2-2: coin grants with a known REG source go through EmberEconomy.grantCoin
+                    String src = EmberEconomy.sourceForGrantKey(g.key);
+                    if (src != null) {
+                        if (!EmberEconomy.grantCoin(d, src, g.amount))
+                            log().warning("[P1 run] economy grantCoin refused " + src + " " + g.amount + " for " + p.getName());
+                    } else {
+                        d.addCoin(g.amount);
+                    }
                     got.add("余烬币 " + g.amount);
                     done = true;
                     break;
+                }
                 case XP: {
                     ProgressService ps = plugin.getProgressService();
                     if (ps != null) ps.grantFlatEmberXp(p, g.amount, "余烬主线");

@@ -21,9 +21,9 @@ import java.util.Map;
 /**
  * B2.169 — book §19.4 supply shop and §3.1 starter supplies.
  * <ul>
- *   <li>{@code /corerpg p1 shop [buy [n]]}: the P1 standard healing potion for {@code shop.heal_potion.price} 余烬币
- *       (book: 10), bound, never sold back (there is no sell-back path at all). Only while P1 is on and outside P1
- *       run worlds (book「城内可正常补满」; buying mid-run would bypass the supply budget).</li>
+ *   <li>{@code /corerpg p1 shop [buy [n]]}: the P1 standard healing potion for {@link EmberEconomy} C14 余烬币
+ *       (book: 10; golden pinned to {@code shop.heal_potion.price}), bound, never sold back. Only while P1 is on
+ *       and outside P1 run worlds (book「城内可正常补满」; buying mid-run would bypass the supply budget).</li>
  *   <li>Starter supplies: {@code starter.heal_potions} bound potions (D28 default 5) with the T0 kit, once.</li>
  * </ul>
  * Bound = NBT {@value #BOUND_KEY} + lore line; a bound item cannot be dropped or listed on the auction house.
@@ -38,7 +38,8 @@ public final class EmberSupplyService implements Listener {
     public EmberSupplyService(CoreRpgPlugin plugin) { this.plugin = plugin; }
 
     private static EmberMode mode() { return EmberMode.get(); }
-    public static int price() { return mode() == null ? 10 : Math.max(1, mode().i("shop.heal_potion.price", 10)); }
+    /** D215 / ARCH S2-2 C14: price is the EmberEconomy golden (pinned to shop.heal_potion.price in tests). */
+    public static int price() { return Math.max(1, EmberEconomy.amount("C14", "coin")); }
     public static int starterPotions() { return mode() == null ? 5 : Math.max(0, mode().i("starter.heal_potions", 5)); }
     static String potionId() {
         List<String> l = mode() == null ? null : mode().list("heal_potion.items");
@@ -188,9 +189,9 @@ public final class EmberSupplyService implements Listener {
             p.sendMessage(P + ChatColor.RED + (coins < price ? "余烬币不足（需要 " + price + "，现有 " + coins + "）" : "背包没有空格"));
             return true;
         }
-        if (pd == null || !pd.takeCoin(n * price)) { p.sendMessage(P + ChatColor.RED + "扣除余烬币失败"); return true; }
+        if (pd == null || !EmberEconomy.spendCoin(pd, "C14", n * price)) { p.sendMessage(P + ChatColor.RED + "扣除余烬币失败"); return true; }
         int got = give(p, n, "shop");
-        if (got < n) pd.addCoin((n - got) * price);
+        if (got < n) pd.addCoin((n - got) * price); // rollback only — not a REG source
         plugin.getDataStore().flushMutation(p.getUniqueId());
         plugin.getLogger().info("[P1 supply] shop " + p.getName() + " bought " + got + " heal potion(s) for " + (got * price) + " coin");
         p.sendMessage(P + ChatColor.GREEN + "购买余烬回复药 ×" + got + "，花费 " + (got * price) + " 余烬币（剩余 " + pd.getCoin() + "）"

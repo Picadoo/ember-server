@@ -22,9 +22,12 @@ import java.util.Set;
 import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
+import town.sunshine.corerpg.PlayerData;
+
 /**
- * D213 (ARCH S2-1): {@link EmberEconomy} matches REG-ember-source-sink-cap and the live game — counter families exist,
- * golden amounts equal the constants / shipped plugin yml that really pay them, and the unmodelled set is pinned.
+ * D213 registry + D215 (ARCH S2-2): {@link EmberEconomy} matches REG-ember-source-sink-cap and the live game —
+ * counter families exist, golden amounts equal the constants / shipped plugin yml, the unmodelled set is pinned,
+ * and settle / shop / grantCoin / spendCoin route through the registry without changing amounts.
  */
 public class EmberEconomyTest {
     private static final double EPS = 1e-9;
@@ -228,5 +231,77 @@ public class EmberEconomyTest {
             assertEquals(r.id, EmberEconomy.Model.OUT, r.model);
             assertTrue(r.id + " pays nothing under P1", r.accounts.isEmpty());
         }
+    }
+
+    @Test
+    public void settleBaseAndExtrasUseRegistryAmounts() {
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.bossKilled = true;
+        in.tier = 1;
+        in.seed = 1L;
+        in.player = "t";
+        in.runId = "r";
+        Map<String, EmberRunRules.Grant> g = new java.util.LinkedHashMap<String, EmberRunRules.Grant>();
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) g.put(x.key, x);
+        assertEquals(EmberEconomy.amount("S01", "coin"), g.get("base_coin").amount);
+        assertEquals(EmberEconomy.amount("S01", "shard"), g.get("base_shard").amount);
+        assertEquals(EmberEconomy.amount("S01", "bone"), g.get("base_bone").amount);
+        assertEquals(EmberEconomy.amount("S01", "core"), g.get("base_core").amount);
+        assertEquals(EmberEconomy.amount("S01", "xp"), g.get("base_xp").amount);
+        assertEquals(EmberEconomy.amount("S01", "mark"), g.get("base_mark").amount);
+        // still equal to the historical Java constants (no number change)
+        assertEquals(EmberRunRules.BASE_COIN, g.get("base_coin").amount);
+        assertEquals(EmberRunRules.BASE_SHARD, g.get("base_shard").amount);
+
+        in.extraDone = true;
+        in.extra = EmberRunRules.Extra.TREASURE;
+        g.clear();
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) g.put(x.key, x);
+        assertEquals(EmberEconomy.amount("S02", "coin"), g.get("extra_treasure_coin").amount);
+        assertEquals(EmberRunRules.TREASURE_COIN, g.get("extra_treasure_coin").amount);
+
+        in.extra = EmberRunRules.Extra.ELITE;
+        g.clear();
+        for (EmberRunRules.Grant x : EmberRunRules.settle(in)) g.put(x.key, x);
+        assertEquals(EmberEconomy.amount("S03", "shard"), g.get("extra_elite_shard").amount);
+        assertEquals(EmberEconomy.amount("S03", "core"), g.get("extra_elite_core").amount);
+        assertEquals(EmberRunRules.ELITE_SHARD, g.get("extra_elite_shard").amount);
+        assertEquals(EmberRunRules.ELITE_CORE, g.get("extra_elite_core").amount);
+    }
+
+    @Test
+    public void shopPriceAndSpendRouteThroughC14() {
+        assertEquals(EmberEconomy.amount("C14", "coin"), EmberSupplyService.price());
+        assertEquals(10, EmberSupplyService.price()); // book / yml / golden = 10
+
+        PlayerData d = new PlayerData();
+        d.setCoin(100);
+        assertTrue(EmberEconomy.spendCoin(d, "C14", EmberEconomy.amount("C14", "coin")));
+        assertEquals(90, d.getCoin());
+        assertFalse("short balance", EmberEconomy.spendCoin(d, "C14", 1000));
+        assertEquals(90, d.getCoin());
+        assertFalse("source is not a sink", EmberEconomy.spendCoin(d, "S01", 10));
+        assertFalse("legacy refused", EmberEconomy.spendCoin(d, "LS1", 10));
+        assertEquals(90, d.getCoin());
+    }
+
+    @Test
+    public void grantCoinRoutesSourcesAndRefusesSinks() {
+        assertEquals("S01", EmberEconomy.sourceForGrantKey("base_coin"));
+        assertEquals("S02", EmberEconomy.sourceForGrantKey("extra_treasure_coin"));
+        assertEquals("S03", EmberEconomy.sourceForGrantKey("extra_elite_shard"));
+        assertEquals("S20", EmberEconomy.sourceForGrantKey("bounty_coin_1"));
+        assertEquals("S06", EmberEconomy.sourceForGrantKey("fc_q03_coin"));
+        assertEquals(null, EmberEconomy.sourceForGrantKey("unknown_key"));
+
+        PlayerData d = new PlayerData();
+        assertTrue(EmberEconomy.grantCoin(d, "S01", EmberEconomy.amount("S01", "coin")));
+        assertEquals(EmberRunRules.BASE_COIN, d.getCoin());
+        assertTrue(EmberEconomy.grantCoin(d, "S02", EmberEconomy.amount("S02", "coin")));
+        assertEquals(EmberRunRules.BASE_COIN + EmberRunRules.TREASURE_COIN, d.getCoin());
+        assertFalse("sink refused", EmberEconomy.grantCoin(d, "C14", 10));
+        assertFalse("legacy refused", EmberEconomy.grantCoin(d, "LS2", 10));
+        assertFalse("zero refused", EmberEconomy.grantCoin(d, "S01", 0));
+        assertEquals(EmberRunRules.BASE_COIN + EmberRunRules.TREASURE_COIN, d.getCoin());
     }
 }

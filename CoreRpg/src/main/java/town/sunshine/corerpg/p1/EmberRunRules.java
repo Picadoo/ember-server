@@ -494,21 +494,22 @@ public final class EmberRunRules {
     public static List<Grant> settle(SettleInput in) {
         if (in == null || !in.bossKilled) return Collections.emptyList();
         List<Grant> out = new ArrayList<Grant>();
-        out.add(new Grant("base_coin", Kind.COIN, null, BASE_COIN, null));
-        out.add(new Grant("base_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, BASE_SHARD, null));
-        out.add(new Grant("base_bone", Kind.MAT, EmberUpgradeRules.MAT_BONE, BASE_BONE, null));
-        out.add(new Grant("base_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, BASE_CORE, null));
-        out.add(new Grant("base_xp", Kind.XP, null, BASE_XP, null));
-        out.add(new Grant("base_mark", Kind.MARK, String.valueOf(in.tier), BASE_MARK, null));
+        // D215 / ARCH S2-2: S01–S03 amounts come from EmberEconomy (golden pinned to BASE_* / TREASURE_* / ELITE_*)
+        out.add(new Grant("base_coin", Kind.COIN, null, EmberEconomy.amount("S01", "coin"), null));
+        out.add(new Grant("base_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, EmberEconomy.amount("S01", "shard"), null));
+        out.add(new Grant("base_bone", Kind.MAT, EmberUpgradeRules.MAT_BONE, EmberEconomy.amount("S01", "bone"), null));
+        out.add(new Grant("base_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, EmberEconomy.amount("S01", "core"), null));
+        out.add(new Grant("base_xp", Kind.XP, null, EmberEconomy.amount("S01", "xp"), null));
+        out.add(new Grant("base_mark", Kind.MARK, String.valueOf(in.tier), EmberEconomy.amount("S01", "mark"), null));
         out.add(item(in, "base_item"));
         if (in.extraDone) {
             switch (in.extra) {
                 case TREASURE:
-                    out.add(new Grant("extra_treasure_coin", Kind.COIN, null, TREASURE_COIN, null));
+                    out.add(new Grant("extra_treasure_coin", Kind.COIN, null, EmberEconomy.amount("S02", "coin"), null));
                     break;
                 case ELITE:
-                    out.add(new Grant("extra_elite_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, ELITE_SHARD, null));
-                    out.add(new Grant("extra_elite_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, ELITE_CORE, null));
+                    out.add(new Grant("extra_elite_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, EmberEconomy.amount("S03", "shard"), null));
+                    out.add(new Grant("extra_elite_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, EmberEconomy.amount("S03", "core"), null));
                     break;
                 case CHEST:
                     out.add(item(in, "extra_chest_item")); // same tier, same target pool (E04: never above the map tier)

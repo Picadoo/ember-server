@@ -221,3 +221,4 @@
 |---|---|
 | 2026-10-05 | D204 初稿：来源 32 + 旧 5、消耗 18、上限表、模型矩阵、S2 规格六条。CoreRpg 不发版（仍 1.65.38 / bv57）。 |
 | 2026-10-06 | D213（CoreRpg 1.65.44）：本表进代码 `EmberEconomy`（S01–S32 / L-S1～L-S5 / C01–C18，账户、周期、键族、模型覆盖、金样数量），`EmberEconomyTest` 把金样钉在 Java 常量与部署 yml 上、把 §5 未建模清单钉死。§6 第 1–2 条的"编号"已就位；`grant` / `spend` 改走编号（S2-2）尚未做。 |
+| 2026-10-06 | D215（CoreRpg 1.65.46）：S2-2 第一步 — `EmberEconomy.amount` / `grantCoin` / `spendCoin`；`EmberRunRules.settle` S01–S03 数量改读登记表；通关币发放走 `grantCoin`（base/treasure/elite/bounty/fc/honor）；C14 回复药价与扣币走登记表。数量不变（bv57）。 |
