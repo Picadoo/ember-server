@@ -168,6 +168,7 @@ public final class ProgressService {
     public int grantEmberXp(Player p, String source) {
         if (!emberEnabled || p == null) return 0;
         String key = source == null ? "" : source.toLowerCase();
+        if (plugin.legacyXpBlocked(key)) return 0; // D200 S0-4 ①: every grantEmberXp(source) caller is a pre-P1 source; P1 pays via grantFlatEmberXp
         Integer base = emberSources.get(key);
         if (base == null || base <= 0) return 0;
         PlayerData d = dataStore.get(p.getUniqueId());
@@ -422,6 +423,7 @@ public final class ProgressService {
     /** @return xp actually granted (after cap). */
     public int grantPassXp(Player p, String source) {
         if (!passEnabled || p == null) return 0;
+        if (plugin.legacyXpBlocked(source)) return 0; // D200 S0-4 ①: legacy pass XP closed while P1 is on (pass claim already refused, D199)
         Integer want = passSources.get(source == null ? "" : source.toLowerCase());
         if (want == null || want <= 0) return 0;
         PlayerData d = dataStore.get(p.getUniqueId());

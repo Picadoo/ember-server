@@ -834,7 +834,11 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         Player killer = entity.getKiller();
         if (killer == null && questService != null && !(entity instanceof Player)) killer = questService.anyPlayerDamager(entity.getUniqueId(), entity.getWorld()); // 1.8.1: last player who hit it, same world, any time
         if (calamityService != null && calamityService.isPublicCalamityBoss(entity)) { // 2026-09-27: guild-boss variant no longer settles as calamity
-            calamityService.onCalamityKilled(killer);
+            if (LegacyGate.blocksCalamitySettle(town.sunshine.corerpg.p1.EmberMode.active(), legacyPayoutGuard())) { // D200 S0-4 ④
+                getLogger().info("[legacy_gate] payout skip calamity settle (P1 on)");
+            } else {
+                calamityService.onCalamityKilled(killer);
+            }
         }
         if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(entity)) return; // G04 E02/E11: P1 run kills pay only through the run settlement
         if (town.sunshine.corerpg.p1.EmberAfkService.blocksLegacyPayout(entity.getWorld())) return; // D177: no kill coin / kill XP / legacy drops in the P1 挂机庭
@@ -843,6 +847,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         if (killer != null && questService != null && !(entity instanceof Player)) questService.onKill(killer, entity);
         if (killer == null || !isQualifyingKill(entity)) return;
+        if (legacyKillPayoutBlocked(killer.getWorld().getName())) return; // D200 S0-4 ②: no legacy kill coin / activity / XP / bounty outside P1 worlds while P1 is on
         ensureBounty(killer);
         PlayerData data = dataStore.get(killer.getUniqueId());
         data.addKillToday();
@@ -1090,6 +1095,35 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         sendHelp(sender);
         return true;
+    }
+
+    /** D200 / ARCH S0-4: ember-v1.yml legacy_gate.payout_guard (default true). */
+    public boolean legacyPayoutGuard() {
+        org.bukkit.configuration.ConfigurationSection gate = (emberMode != null && emberMode.config() != null)
+                ? emberMode.config().getConfigurationSection("legacy_gate") : null;
+        return gate == null || gate.getBoolean("payout_guard", true);
+    }
+
+    private java.util.Set<String> legacyGateList(String key) {
+        org.bukkit.configuration.ConfigurationSection gate = (emberMode != null && emberMode.config() != null)
+                ? emberMode.config().getConfigurationSection("legacy_gate") : null;
+        java.util.Set<String> out = new java.util.HashSet<String>();
+        if (gate != null) for (String v : gate.getStringList(key)) if (v != null) out.add(v.trim().toLowerCase(java.util.Locale.ROOT));
+        return out;
+    }
+
+    /** D200 S0-4 ①: legacy ember / pass XP source closed while P1 is on (legacy_gate.xp_sources_allow re-opens one). */
+    public boolean legacyXpBlocked(String source) {
+        boolean p1 = town.sunshine.corerpg.p1.EmberMode.active();
+        if (!p1) return false;
+        return LegacyGate.blocksLegacyXp(true, legacyPayoutGuard(), source, legacyGateList("xp_sources_allow"));
+    }
+
+    /** D200 S0-4 ② ③: legacy kill / MM payouts closed in this world while P1 is on (legacy_gate.kill_payout_worlds re-opens one). */
+    public boolean legacyKillPayoutBlocked(String world) {
+        boolean p1 = town.sunshine.corerpg.p1.EmberMode.active();
+        if (!p1) return false;
+        return LegacyGate.blocksLegacyKillPayout(true, legacyPayoutGuard(), world, legacyGateList("kill_payout_worlds"));
     }
 
     /**
@@ -1455,6 +1489,10 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         if (p == null || !p.isOnline()) return true;
         if (town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(en) || town.sunshine.corerpg.p1.EmberRunService.blocksLegacy(p)) return true; // G04 E02
         if (town.sunshine.corerpg.p1.EmberAfkService.blocksLegacyPayout(p.getWorld())) return true; // D177: P1 挂机庭 pays only by rounds
+        if (legacyKillPayoutBlocked(p.getWorld().getName())) { // D200 S0-4 ③: legacy MM drops / XP closed while P1 is on
+            getLogger().info("[legacy_gate] payout skip " + args[0] + " " + args[2] + " " + p.getName() + " @" + p.getWorld().getName());
+            return true;
+        }
         if (xp) {
             progressService.grantKillLevels(p, args[2]);
             progressService.grantEmberXp(p, args[2]);

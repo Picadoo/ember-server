@@ -146,4 +146,40 @@ public final class LegacyGate {
     public static boolean refuseLegacyEnter(boolean p1Active, boolean kindIsP1, boolean privileged) {
         return p1Active && !kindIsP1 && !privileged;
     }
+    // ------------------------------------------------------------------ S0-4 (D200) payout defence-in-depth
+
+    /**
+     * S0-4 ①: true → {@code ProgressService.grantEmberXp / grantPassXp(source)} pays nothing. Every caller of those
+     * two methods is a pre-P1 source (legacy dungeon clears via console {@code progress}, MM {@code mmxp},
+     * field kills, legacy sign / bounty); P1 pays ember XP only through {@code grantFlatEmberXp} (run settlement,
+     * mainline quests). Applies to everyone (also OP-run legacy dungeons) because ember level feeds the P1
+     * formula (AUDIT L6).
+     *
+     * @param guard        {@code ember-v1.yml legacy_gate.payout_guard} (default true)
+     * @param allowSources lower-case sources still paid while P1 is on ({@code legacy_gate.xp_sources_allow}); null = none
+     */
+    public static boolean blocksLegacyXp(boolean p1Active, boolean guard, String source, Set<String> allowSources) {
+        if (!p1Active || !guard) return false;
+        String k = source == null ? "" : source.toLowerCase(Locale.ROOT);
+        return allowSources == null || !allowSources.contains(k);
+    }
+
+    /**
+     * S0-4 ② ③: true → no legacy kill coin / activity / kill XP / bounty progress ({@code onDeath}) and no
+     * {@code mmgive / mmxp} payout. Callers check the P1 run worlds ({@code dungeon_EmberQ0*}) and the P1 挂机庭
+     * first, so whatever reaches this point while P1 is on is a legacy world (old dungeon instances,
+     * {@code ember_event}, field). AUDIT L12.
+     *
+     * @param allowWorlds lower-case world names still paid ({@code legacy_gate.kill_payout_worlds}); null = none
+     */
+    public static boolean blocksLegacyKillPayout(boolean p1Active, boolean guard, String world, Set<String> allowWorlds) {
+        if (!p1Active || !guard) return false;
+        String w = world == null ? "" : world.toLowerCase(Locale.ROOT);
+        return allowWorlds == null || !allowWorlds.contains(w);
+    }
+
+    /** S0-4 ④: true → the public calamity kill does not settle (participation A / daily chest B) while P1 is on. */
+    public static boolean blocksCalamitySettle(boolean p1Active, boolean guard) {
+        return p1Active && guard;
+    }
 }

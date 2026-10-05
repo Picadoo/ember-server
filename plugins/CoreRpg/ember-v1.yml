@@ -166,6 +166,15 @@ legacy_gate:
     calamity: ['', status, info]
     abyss: ['', status, info]
     elite: [status]
+  # D200 / ARCH S0-4 纵深防御（AUDIT L6 / L12 / 灾厄）：P1 开着时旧发奖端一律不发——
+  #   ① grantEmberXp / grantPassXp(旧 source：日本/周本/深渊/团本/盟 Boss/精英/首领/击杀/悬赏/旧签到) → 0；
+  #      P1 自己的经验只走 grantFlatEmberXp（主线结算、主线任务），不受影响；
+  #   ② P1 本（dungeon_EmberQ0*）和挂机庭以外的世界：不发旧击杀币 / 活跃 / 击杀经验 / 悬赏进度；
+  #   ③ 同样的世界里 MM 的 corerpg mmgive / mmxp 不发；④ 公共灾厄使被杀不结算。
+  # 对所有人生效（含 OP 开的旧本），因为余烬等级进 P1 公式。P1 关掉时行为不变。false = 整段关掉。
+  payout_guard: true
+  xp_sources_allow: []     # 例外：仍要发的旧经验 source（小写），默认无
+  kill_payout_worlds: []   # 例外：仍发旧击杀奖励的世界名（小写），默认无
 
 # D102：测试号 / 机器人不上排行榜、主城排行榜悬浮字和荣誉陈列（名字不区分大小写）。
 # names 精确匹配；prefixes 前缀匹配；patterns 是整名匹配的正则。改完 /corerpg reload 或重启生效。

@@ -129,5 +129,37 @@ public class LegacyGateTest {
         }
         assertEquals(LegacyGate.DEFAULT_ALLOW, m);
     }
-}
+    // D200 / ARCH S0-4
+    @Test public void s04LegacyXpBlockedOnlyWhileP1AndGuardOn() {
+        java.util.Set<String> none = java.util.Collections.<String>emptySet();
+        for (String src : new String[] {"daily_clear", "weekly_clear", "abyss_clear", "raid_clear", "guild_boss_clear",
+                "elite_weekly", "elite", "boss", "kill", "bounty", "sign", "KILL", "", null}) {
+            assertTrue(String.valueOf(src), LegacyGate.blocksLegacyXp(true, true, src, none));
+            assertTrue(String.valueOf(src), LegacyGate.blocksLegacyXp(true, true, src, null));
+            assertFalse(String.valueOf(src), LegacyGate.blocksLegacyXp(false, true, src, none)); // P1 off: unchanged
+            assertFalse(String.valueOf(src), LegacyGate.blocksLegacyXp(true, false, src, none)); // guard off
+        }
+        java.util.Set<String> allow = new java.util.HashSet<String>(java.util.Arrays.asList("sign"));
+        assertFalse(LegacyGate.blocksLegacyXp(true, true, "SIGN", allow));
+        assertTrue(LegacyGate.blocksLegacyXp(true, true, "daily_clear", allow));
+    }
 
+    @Test public void s04LegacyKillPayoutBlockedOnlyWhileP1AndGuardOn() {
+        java.util.Set<String> none = java.util.Collections.<String>emptySet();
+        for (String w : new String[] {"ember_hub", "ember_event", "dungeon_EmberDaily_1A2B", "world", "", null}) {
+            assertTrue(String.valueOf(w), LegacyGate.blocksLegacyKillPayout(true, true, w, none));
+            assertFalse(String.valueOf(w), LegacyGate.blocksLegacyKillPayout(false, true, w, none));
+            assertFalse(String.valueOf(w), LegacyGate.blocksLegacyKillPayout(true, false, w, none));
+        }
+        java.util.Set<String> allow = new java.util.HashSet<String>(java.util.Arrays.asList("ember_hub"));
+        assertFalse(LegacyGate.blocksLegacyKillPayout(true, true, "Ember_Hub", allow));
+        assertTrue(LegacyGate.blocksLegacyKillPayout(true, true, "ember_event", allow));
+    }
+
+    @Test public void s04CalamitySettleBlockedOnlyWhileP1AndGuardOn() {
+        assertTrue(LegacyGate.blocksCalamitySettle(true, true));
+        assertFalse(LegacyGate.blocksCalamitySettle(true, false));
+        assertFalse(LegacyGate.blocksCalamitySettle(false, true));
+        assertFalse(LegacyGate.blocksCalamitySettle(false, false));
+    }
+}
