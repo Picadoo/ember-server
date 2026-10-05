@@ -15,7 +15,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import town.sunshine.corerpg.p1.encounter.EmberBossMove;
 import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
+import town.sunshine.corerpg.p1.encounter.EmberRoomObjective;
 import town.sunshine.corerpg.p1.encounter.RevivePoint;
 
 import java.util.ArrayList;
@@ -1258,20 +1260,19 @@ final class EmberRunDirector {
 
     // ------------------------------------------------------------------ D179 hold / beacon / relay
 
-    /** D179 unit helper: hold only accumulates when a grounded player is inside the circle. */
+    /** D179 unit helper → EmberRoomObjective (D239). */
     static boolean holdCounts(boolean inRadius, boolean onGround) {
-        return inRadius && onGround;
+        return EmberRoomObjective.holdCounts(inRadius, onGround);
     }
 
-    /** D179 unit helper: relay advances only when the next ordered index is pressed. */
+    /** D179 unit helper → EmberRoomObjective (D239). */
     static int relayAdvance(int nextIndex, int pressedIndex, int count) {
-        if (pressedIndex != nextIndex || nextIndex < 0 || nextIndex >= count) return nextIndex;
-        return nextIndex + 1;
+        return EmberRoomObjective.relayAdvance(nextIndex, pressedIndex, count);
     }
 
-    /** D179: beacon is never Extra.TREASURE and never blocks room-clear (tracked outside mobs). */
-    static boolean beaconIsTreasureExtra() { return false; }
-    static boolean beaconBlocksRoomClear() { return false; }
+    /** D179 → EmberRoomObjective (D239). */
+    static boolean beaconIsTreasureExtra() { return EmberRoomObjective.beaconIsTreasureExtra(); }
+    static boolean beaconBlocksRoomClear() { return EmberRoomObjective.beaconBlocksRoomClear(); }
 
     private EmberRunMaps.Pt eventAnchorPt(EmberRunMaps.Room r) {
         if (r == null) return new EmberRunMaps.Pt(0, 64, 0);
@@ -1470,32 +1471,31 @@ final class EmberRunDirector {
 
     // ------------------------------------------------------------------ D191 breach / chain / unscathed
 
-    /** D191 unit helper: radius after {@code dt} seconds of shrinking (never below 0). */
-    static double breachStep(double r, double dt, double shrink) { return Math.max(0.0, r - Math.max(0.0, dt) * shrink); }
+    /** D191 → EmberRoomObjective (D239). */
+    static double breachStep(double r, double dt, double shrink) { return EmberRoomObjective.breachStep(r, dt, shrink); }
 
-    /** D191 unit helper: a kill inside the rift pushes it back out, capped at {@code max}. */
-    static double breachGrow(double r, double grow, double max) { return Math.min(max, r + grow); }
+    /** D191 → EmberRoomObjective (D239). */
+    static double breachGrow(double r, double grow, double max) { return EmberRoomObjective.breachGrow(r, grow, max); }
 
-    /** D191 unit helper: the rift has closed (event failed). */
-    static boolean breachCollapsed(double r, double min) { return r <= min; }
+    /** D191 → EmberRoomObjective (D239). */
+    static boolean breachCollapsed(double r, double min) { return EmberRoomObjective.breachCollapsed(r, min); }
 
-    /** D191 unit helper: horizontal distance check for a kill inside the rift. */
-    static boolean breachInside(double dx, double dz, double r) { return dx * dx + dz * dz <= r * r; }
+    /** D191 → EmberRoomObjective (D239). */
+    static boolean breachInside(double dx, double dz, double r) { return EmberRoomObjective.breachInside(dx, dz, r); }
 
-    /** D191 unit helper: streak after a kill at {@code nowMs} (first kill / gap exceeded → 1). */
+    /** D191 → EmberRoomObjective (D239). */
     static int chainNext(int streak, long lastMs, long nowMs, double gapSecs) {
-        if (streak <= 0 || lastMs <= 0 || nowMs - lastMs > (long) (gapSecs * 1000)) return 1;
-        return streak + 1;
+        return EmberRoomObjective.chainNext(streak, lastMs, nowMs, gapSecs);
     }
 
-    /** D191 unit helper: kills needed = min(config need, mobs spawned in the room), at least 1. */
-    static int chainNeedFor(int need, int spawned) { return Math.max(1, Math.min(need, spawned)); }
+    /** D191 → EmberRoomObjective (D239). */
+    static int chainNeedFor(int need, int spawned) { return EmberRoomObjective.chainNeedFor(need, spawned); }
 
-    /** D191 unit helper: hit budget of the party (base + per extra member). */
-    static int unscathedBudget(int hits, int perMember, int party) { return Math.max(0, hits) + Math.max(0, perMember) * Math.max(0, party - 1); }
+    /** D191 → EmberRoomObjective (D239). */
+    static int unscathedBudget(int hits, int perMember, int party) { return EmberRoomObjective.unscathedBudget(hits, perMember, party); }
 
-    /** D191 unit helper: still within budget. */
-    static boolean unscathedOk(int taken, int budget) { return budget >= 0 && taken <= budget; }
+    /** D191 → EmberRoomObjective (D239). */
+    static boolean unscathedOk(int taken, int budget) { return EmberRoomObjective.unscathedOk(taken, budget); }
 
     private boolean eventLive(String kind) {
         return eventStart > 0 && !eventFailed && !s.eventDone && activeRoom != null && activeRoom.equals(s.eventRoom)
@@ -1876,19 +1876,15 @@ final class EmberRunDirector {
     }
 
     /**
-     * §10.I: the first-listed skill wins when several are due in the same tick; the other waits until the current
-     * action and its recovery are over (it stays due, it is not skipped). @return index or −1
+     * §10.I → EmberBossMove (D239). @return index or −1
      */
     static int dueSkill(long[] nextAt, long now) {
-        for (int i = 0; i < nextAt.length; i++) if (now >= nextAt[i]) return i;
-        return -1;
+        return EmberBossMove.dueSkill(nextAt, now);
     }
 
-    /** P2-6: like dueSkill, but a skill with below[i] fires only while the boss HP ratio is under it (a gated skill whose
-     *  slot passes waits, so it opens the second phase as soon as the threshold is crossed). */
+    /** P2-6 → EmberBossMove (D239). */
     static int dueSkill(long[] nextAt, long now, double[] below, double ratio) {
-        for (int i = 0; i < nextAt.length; i++) if (now >= nextAt[i] && (below == null || ratio < below[i])) return i;
-        return -1;
+        return EmberBossMove.dueSkill(nextAt, now, below, ratio);
     }
 
     private double[] belowCache;
@@ -1902,28 +1898,19 @@ final class EmberRunDirector {
         return belowCache;
     }
 
-    /** D173 / P2-6: true if any top-level or follow skill is phase-gated (below ≤ 1.0). */
+    /** D173 / P2-6 → EmberBossMove (D239). */
     static boolean hasBelowPressure(EmberRunMaps.Boss b) {
-        if (b == null || b.skills == null) return false;
-        for (EmberRunMaps.Skill sk : b.skills) {
-            if (sk.below <= 1.0) return true;
-            if (sk.follow != null && sk.follow.below <= 1.0) return true;
-        }
-        return false;
+        return EmberBossMove.hasBelowPressure(b);
     }
 
-    /** Keeps the schedule anchored at the fight start: next slot strictly after {@code now}. */
-    /** D194: next due time after a cast; {@code firstGated} (first cast once an HP gate opened) → a full cooldown from now. */
+    /** D194 → EmberBossMove (D239). */
     static long gatedNext(long at, long every, long now, boolean firstGated) {
-        if (every <= 0) return Long.MAX_VALUE / 4;
-        return firstGated ? now + every : nextDue(at, every, now);
+        return EmberBossMove.gatedNext(at, every, now, firstGated);
     }
 
+    /** → EmberBossMove (D239). */
     static long nextDue(long at, long every, long now) {
-        if (every <= 0) return Long.MAX_VALUE / 4;
-        long n = at;
-        while (n <= now) n += every;
-        return n;
+        return EmberBossMove.nextDue(at, every, now);
     }
 
     /**

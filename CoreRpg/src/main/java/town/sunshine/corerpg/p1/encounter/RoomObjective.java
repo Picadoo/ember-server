@@ -1,12 +1,12 @@
 package town.sunshine.corerpg.p1.encounter;
 
 /**
- * D236 stub: a room clear goal as a data-driven primitive
+ * D236 stub / D239 adapter seam: a room clear goal as a data-driven primitive
  * (timer / hold-point / escort / chain-kill / unscathed / breach / …).
- * <p>Live room ticks still live in {@code EmberRunDirector}; variety events (D138 / D171 / D179 /
- * D191) are hand-written branches today. This interface is the seam for a later adapter so new
- * room events can compose existing objective types from yml.
- * <p>Not wired in D236 — Session/Settlement and RoomObjective adapters are the next cuts.
+ * <p>Live room ticks still live in {@code EmberRunDirector}; the live adapter
+ * {@link EmberRoomObjective} owns Bukkit-free event helpers (D179 hold/relay/beacon,
+ * D191 breach/chain/unscathed) and family labels so new room events can compose
+ * existing objective types from yml.
  */
 public interface RoomObjective {
 

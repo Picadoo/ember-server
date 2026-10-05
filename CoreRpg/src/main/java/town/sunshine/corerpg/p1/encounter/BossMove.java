@@ -3,11 +3,10 @@ package town.sunshine.corerpg.p1.encounter;
 import town.sunshine.corerpg.p1.EmberRunMaps;
 
 /**
- * D236 stub: one telegraphed boss (or elite-twist) move as a data-driven view.
- * <p>Live cast / telegraph / damage still runs inside {@code EmberRunDirector}; this interface
- * documents the seam for a later adapter that would wrap {@link EmberRunMaps.Skill} and expose
- * shape / counterplay / phase gate without Director knowing yml keys.
- * <p>Not wired in D236 — do not implement production callers yet.
+ * D236 stub / D239 adapter seam: one telegraphed boss (or elite-twist) move as a data-driven view.
+ * <p>Live cast / telegraph / damage still runs inside {@code EmberRunDirector}; the live adapter
+ * {@link EmberBossMove} wraps {@link EmberRunMaps.Skill} and owns the Bukkit-free schedule helpers
+ * ({@code dueSkill} / {@code gatedNext} / {@code nextDue} / {@code hasBelowPressure}).
  */
 public interface BossMove {
 

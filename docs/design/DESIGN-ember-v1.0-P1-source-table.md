@@ -1581,6 +1581,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D236 | CoreRpg 1.65.62 / bv58 | ARCH S3-7：遭遇原语包 `p1.encounter`——接口（`RoomObjective` / `BossMove` 桩）+ 第一适配器 `EmberCounterplay`（D188 撞墙 / D192 落空 / D193 破招判定与眩晕时长，Director 薄委托）+ `RevivePoint` 枚举（D106 why 原文）。`EmberCounterplayTest` ×11、`RevivePointTest` ×3。**行为 / 数量不变**；Session/Settlement 与 BossMove/Room 适配器下一刀。 |
 | D237 | CoreRpg 1.65.63 / bv58 | ARCH S3-8：从 `EmberRunService` 抽出 `EmberSessionService`（会话创建 / 体力+层费预留 / DP 派发 / verifyEntry / commit / release；`forcedExtra`/`forcedVariety` 随迁）。`EmberRunService.enter` = admit → readinessHold → `session.start`。结算（`settleFor` / `onBossKilled` / `failRefund`）留 TODO。`EmberSessionServiceTest` ×6。**行为 / 数量不变**。 |
 | D238 | CoreRpg 1.65.64 / bv58 | ARCH S3-9：从 `EmberRunService` 抽出 `EmberSettleService`（`onBossKilled` / `settleFor` / `failRefund` / `endOfP1`；与 Session 共享会话表 + 账本）。`appendBonuses` 钉死 grant 顺序。`EmberSettleServiceTest` ×7。**行为 / 数量不变**。 |
+| D239 | CoreRpg 1.65.65 / bv58 | ARCH S3-10：BossMove / RoomObjective 适配器——`EmberBossMove`（Skill 视图 + dueSkill/gatedNext/nextDue/hasBelowPressure）+ `EmberRoomObjective`（family 标签 + D179/D191 Bukkit-free 助手）。Director 薄委托；`EmberBossMoveTest` / `EmberRoomObjectiveTest`。**行为 / 数量不变**；Papi / 词缀原语下一刀。 |
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
