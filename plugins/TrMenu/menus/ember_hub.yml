@@ -1,5 +1,5 @@
 # 余烬主界面（P1 默认模式，D63）— 书 §19.1「一级菜单只需要冒险、装备、工坊、仓库与设置」
-# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；P2-2 深渊 · 余烬层（D70）；P2-5 团本（D75）；另有图录 / 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 荣誉与排行 / 帮助（盟约 D102 起不在主菜单）
+# 主路：冒险 · 主线本（Q01–Q07）→ 装备 → 工坊；P2-2 深渊 · 余烬层（D70）；P2-5 团本（D75）；另有图录 / 技能组（D211）/ 轻技（余烬踏步）/ 补给·生活 / 邮寄 / 好友 / 荣誉与排行 / 帮助（盟约 D102 起不在主菜单）
 # 旧模式入口（挂机 / 日常 / 周常 / 精英 / 深渊 / 团本 / 灾厄 / 誓约 / 天赋 / 使魔 / 旧强化镶嵌附魔 / 商城等）整页留在
 # ember_hub_legacy.yml（不绑定命令，管理员 trmenu open ember_hub_legacy），源表 §13.15 D63
 Title: '§6余烬 · 冒险枢纽'
@@ -13,7 +13,7 @@ Options:
   Hide-Player-Inventory: false
   Min-Click-Delay: 200
 Layout:
-  - 'Ln o p F '
+  - 'Ln o p FS'
   - 'Tm X k i '
   - 'ZR c Y d '
   - 'Q A G U j'
@@ -228,6 +228,25 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_bestiary'
+
+
+  # D211 余烬技能组 S1：烬斩 / 烬突 / 烬斩符文
+  S:
+    update: 40
+    display:
+      material: blaze powder
+      name: '§6技能组'
+      lore:
+        - ''
+        - '§7烬斩 §fF §7· 烬突 §f潜行+F §7（Q02）· 踏步 §f潜行+Q'
+        - '§7当前形状：§f%corerpg_kit_shape% §8· 充能 %corerpg_kit_charge%'
+        - '§8烬突解锁 %corerpg_kit_dash_unlock% · 符文解锁 %corerpg_kit_shape_unlock%'
+        - ''
+        - '§e➥ §f打开技能组'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_skill_kit'
 
   m:
     display:

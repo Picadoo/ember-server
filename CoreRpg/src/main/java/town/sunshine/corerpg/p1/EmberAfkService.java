@@ -403,31 +403,48 @@ public final class EmberAfkService implements Listener {
         le.damage(attr + ChargeEstimator.sharpnessBonus(sharp), p); // a real full-charge player attack → onMelee
     }
 
-    /** Same damage, radius, arc and targets as the manual 烬斩 (SkillService.castEmberSlashP1), own mobs only, silent. */
+    /** Same damage / shape as manual 烬斩 (chosen rune or signature override). Never 烬突 (X7 — would leave the AFK spot). */
     private boolean autoSkill(Player p, Fight f, EmberPlayerState st, LivingEntity near, long now) {
         EmberMode mode = EmberMode.get();
         EmberLoadoutService ls = plugin.getEmberLoadouts();
         if (mode == null || ls == null) return false;
-        double range = mode.d("skill.radius", 3.5);
-        int maxTargets = Math.max(1, mode.i("skill.max_targets", 5));
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
+        town.sunshine.corerpg.SkillService skills = plugin.getSkillService();
+        EmberSkillKit.Shape sh = skills == null ? EmberSkillKit.resolve(p, null, null, mode, EmberGrowth.Mods.NONE)
+                : skills.resolveSlashShape(p);
         face(p, near);
         Location eye = p.getEyeLocation();
         Vector look = eye.getDirection().normalize();
-        double cosHalf = Math.cos(Math.toRadians(Math.max(1.0, mode.d("skill.arc_degrees", 100.0)) / 2.0));
+        double cosHalf = Math.cos(Math.toRadians(Math.max(1.0, sh.arc) / 2.0));
         List<LivingEntity> ts = new ArrayList<LivingEntity>();
+        final Map<LivingEntity, Double> distOf = new HashMap<LivingEntity, Double>();
         for (UUID id : f.mobs) {
             Entity e = Bukkit.getEntity(id);
             if (!(e instanceof LivingEntity) || e.isDead()) continue;
-            Vector to = ((LivingEntity) e).getEyeLocation().toVector().subtract(eye.toVector());
+            LivingEntity le = (LivingEntity) e;
+            Vector to = le.getEyeLocation().toVector().subtract(eye.toVector());
             double dist = to.length();
-            if (dist > range || dist < 0.05 || look.dot(to.normalize()) < cosHalf) continue;
-            ts.add((LivingEntity) e);
+            if (dist > sh.range || dist < 0.05) continue;
+            if (sh.line > 0) {
+                double along = look.dot(to);
+                if (along <= 0 || to.clone().subtract(look.clone().multiply(along)).length() > 1.0) continue;
+            } else if (sh.arc < 360.0 && look.dot(to.normalize()) < cosHalf) continue;
+            ts.add(le);
+            distOf.put(le, dist);
         }
         if (ts.isEmpty()) return false;
+        java.util.Collections.sort(ts, new java.util.Comparator<LivingEntity>() {
+            @Override public int compare(LivingEntity a, LivingEntity b) {
+                int c = Double.compare(distOf.get(a), distOf.get(b));
+                return c != 0 ? c : Integer.compare(a.getEntityId(), b.getEntityId());
+            }
+        });
         double dmg = EmberFormula.skill(EmberMode.tables(), ls.get(p).b);
-        String tag = String.format(Locale.ROOT, "A12 烬斩(自动) 1.5×B=%.2f", dmg);
-        for (int i = 0; i < ts.size() && i < maxTargets; i++) EmberCombatListener.dealP1(p, ts.get(i), dmg, EmberSetEngine.Kind.SKILL, tag);
+        EmberGrowthService gsv = EmberGrowthService.get();
+        EmberGrowth.Mods gmods = gsv == null ? EmberGrowth.Mods.NONE : gsv.mods(p);
+        if (gmods.get("skill_var") > 0) dmg *= gmods.get("skill_mult");
+        String tag = String.format(Locale.ROOT, "A12 烬斩(自动/%s) 1.5×B=%.2f", sh.label, dmg);
+        for (int i = 0; i < ts.size() && i < sh.maxTargets; i++) EmberCombatListener.dealP1(p, ts.get(i), dmg, EmberSetEngine.Kind.SKILL, tag);
         st.skillCdUntil = now + cd * 1000L;
         return true;
     }

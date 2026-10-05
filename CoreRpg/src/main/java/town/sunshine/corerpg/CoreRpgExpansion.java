@@ -41,6 +41,29 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
             FlexSkillService.FlexDef def = fs.getFlex(data.getFlexSkillId());
             return def == null ? data.getFlexSkillId() : ChatColor.stripColor(def.display);
         }
+        if ("kit_shape".equals(key) || "slash_shape".equals(key)) {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            int id = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
+            return town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id);
+        }
+        if ("kit_shape_key".equals(key)) {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            return town.sunshine.corerpg.p1.EmberSkillKit.shapeKey(town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs));
+        }
+        if ("kit_dash".equals(key) || "kit_dash_unlock".equals(key)) {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            return town.sunshine.corerpg.p1.EmberSkillKit.dashUnlocked(data, runs) ? "yes" : "no";
+        }
+        if ("kit_shape_unlock".equals(key)) {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            return town.sunshine.corerpg.p1.EmberSkillKit.shapeUnlocked(data, runs) ? "yes" : "no";
+        }
+        if ("kit_charge".equals(key) || "skill_charge_ready".equals(key)) {
+            town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+            if (ls == null) return "就绪";
+            long left = ls.state(player.getUniqueId()).skillCdUntil - System.currentTimeMillis();
+            return left > 0 ? ("冷却 " + (int) Math.ceil(left / 1000.0) + "s") : "就绪";
+        }
         if ("talent_points".equals(key) || "talent_available".equals(key)) {
             return String.valueOf(data.getTalentPointsAvailable());
         }

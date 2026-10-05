@@ -2484,6 +2484,16 @@ public final class EmberRunService implements Listener {
 
     public boolean isRunWorld(World w) { return w != null && byWorld.containsKey(w.getName()); }
 
+    /** D211 烬突: true when {@code e} is the live boss Tracked of its run world (bosses take ×0.5). */
+    public boolean isRunBoss(Entity e) {
+        if (e == null || e.getWorld() == null) return false;
+        EmberRunDirector d = byWorld.get(e.getWorld().getName());
+        if (d == null) return false;
+        EmberRunDirector.Tracked t = d.mobs.get(e.getUniqueId());
+        return t != null && t.boss();
+    }
+
+
     @EventHandler(priority = EventPriority.HIGH)
     public void onMobDeath(EntityDeathEvent e) {
         EmberRunDirector d = byEntity.remove(e.getEntity().getUniqueId());

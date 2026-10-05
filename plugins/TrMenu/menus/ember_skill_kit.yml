@@ -1,0 +1,152 @@
+# D211 · 余烬技能组 S1（烬斩 / 烬突 / 烬斩符文）
+# 枢纽入口；符文切换走 /corerpg skill shape（出本，切换后充能转满）
+
+Title: '§6余烬 · 技能组'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '# A B C #'
+  - '# D E F #'
+  - '#   I   #'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §7技能组 · 充能 §f%corerpg_kit_charge%§7 · 烬斩形状 §f%corerpg_kit_shape%'
+    - 'command: corerpg skill kit'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+
+  A:
+    display:
+      material: blaze powder
+      name: '§6烬斩 · F'
+      lore:
+        - ''
+        - '§7主招 · 1.5B · 8 秒余烬充能'
+        - '§7当前形状：§f%corerpg_kit_shape%'
+        - '§7充能：§f%corerpg_kit_charge%'
+        - ''
+        - '§8不暴击 · 不吸血 · 不触发套装计数'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg skill kit'
+
+  B:
+    display:
+      material: diamond sword
+      name: '§c烬突 · 潜行+F'
+      lore:
+        - ''
+        - '§7副招 · 花掉本次余烬充能'
+        - '§7向前冲 §f4 §7格 · 穿过最多 §f3 §7个'
+        - '§7各 1.5B · 首领 §f×0.5'
+        - ''
+        - '§8解锁：§f%corerpg_kit_dash_unlock% §8（首通 Q02）'
+        - '§8未解锁时潜行+F 仍放烬斩'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg skill kit'
+
+  C:
+    display:
+      material: feather
+      name: '§a踏步 · 潜行+Q'
+      lore:
+        - ''
+        - '§7身法 · 向前 §f5 §7格 · 冷却 14 秒'
+        - '§7无伤害 · 零体力 · 不穿墙'
+        - ''
+        - '§8当前装配：§f%corerpg_flex_skill_name%'
+        - '§8身法变体（火痕步等）→ S2'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_flex_skill'
+
+  D:
+    display:
+      material: gold sword
+      name: '§e符文 · 扇形'
+      lore:
+        - ''
+        - '§7正前 100° · 3.5 格 · 最多 5'
+        - '§8解锁：§f%corerpg_kit_shape_unlock% §8（首通 Q04）'
+        - ''
+        - '§8出本免费换 · 换后充能转满'
+        - '§8签名直线/环斩会覆盖符文'
+        - ''
+        - '§e➥ §f点击切换为扇形'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg skill shape fan'
+        - 'tell: §6【技能】 §7已请求切换扇形'
+
+  E:
+    display:
+      material: iron sword
+      name: '§b符文 · 直线穿刺'
+      lore:
+        - ''
+        - '§7正前 5 格一条线（宽 1）· 最多 3'
+        - '§8（= 签名 L07 形状）'
+        - '§8解锁：§f%corerpg_kit_shape_unlock%'
+        - ''
+        - '§e➥ §f点击切换为直线'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg skill shape line'
+        - 'tell: §6【技能】 §7已请求切换直线穿刺'
+
+  F:
+    display:
+      material: stone sword
+      name: '§d符文 · 原地环斩'
+      lore:
+        - ''
+        - '§7身边一圈半径 3 格 · 最多 3'
+        - '§8（= 签名 L09 形状）'
+        - '§8解锁：§f%corerpg_kit_shape_unlock%'
+        - ''
+        - '§e➥ §f点击切换为环斩'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg skill shape ring'
+        - 'tell: §6【技能】 §7已请求切换环斩'
+
+  I:
+    display:
+      material: book
+      name: '§f说明'
+      lore:
+        - ''
+        - '§7每 8 秒一份余烬充能：'
+        - '§f  F §7放烬斩 · §f潜行+F §7放烬突（二选一）'
+        - ''
+        - '§7守招（单按 Q）暂缓 · 见 S0b'
+        - '§7火痕步 / 后撤步 → S2'

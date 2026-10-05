@@ -2,7 +2,6 @@ package town.sunshine.corerpg;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -16,7 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.util.Vector;
 
 import java.io.File;
 import java.io.InputStream;
@@ -272,91 +270,16 @@ public final class FlexSkillService implements Listener {
      */
     private boolean castStep(Player player, FlexDef def) {
         Location from = player.getLocation();
-        if (from.getWorld() == null) {
-            player.sendMessage(PREFIX + ChatColor.YELLOW + "无法踏步");
+        Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, def.distance);
+        if (best == null) {
+            player.sendMessage(PREFIX + ChatColor.YELLOW + (from.getWorld() == null ? "无法踏步" : "前方受阻，无法踏步"));
             return false;
         }
-        Vector look = from.getDirection().clone();
-        look.setY(0);
-        if (look.lengthSquared() < 1.0e-6) {
-            // Looking straight up/down — use yaw
-            double yaw = Math.toRadians(from.getYaw());
-            look = new Vector(-Math.sin(yaw), 0, Math.cos(yaw));
-        }
-        look.normalize();
-
-        Location best = null;
-        double step = 0.25;
-        double max = def.distance;
-        for (double d = step; d <= max + 1.0e-6; d += step) {
-            Location cand = from.clone().add(look.clone().multiply(d));
-            cand.setYaw(from.getYaw());
-            cand.setPitch(from.getPitch());
-            if (!isPassableFeet(cand)) break;
-            // Prefer standing on solid ground when possible (drop ≤1)
-            Location grounded = snapGround(cand);
-            if (grounded != null) {
-                best = grounded;
-            } else if (isPassableFeet(cand) && isPassableHead(cand)) {
-                best = cand;
-            } else {
-                break;
-            }
-        }
-
-        if (best == null || best.distanceSquared(from) < 0.36) {
-            player.sendMessage(PREFIX + ChatColor.YELLOW + "前方受阻，无法踏步");
-            return false;
-        }
-
         spawnParticles(from.clone().add(0, 0.2, 0), def.particles, 10);
         player.teleport(best);
         spawnParticles(best.clone().add(0, 0.2, 0), def.particles, 14);
         playSound(best, def.sound);
         return true;
-    }
-
-    private static boolean isPassableFeet(Location loc) {
-        if (loc == null || loc.getWorld() == null) return false;
-        Block feet = loc.getBlock();
-        Block head = loc.clone().add(0, 1, 0).getBlock();
-        return !isSolid(feet) && !isSolid(head);
-    }
-
-    private static boolean isPassableHead(Location loc) {
-        if (loc == null || loc.getWorld() == null) return false;
-        return !isSolid(loc.clone().add(0, 1, 0).getBlock());
-    }
-
-    /** Drop at most 1 block to stand on solid; null if no safe footing nearby. */
-    private static Location snapGround(Location cand) {
-        if (cand == null || cand.getWorld() == null) return null;
-        for (int drop = 0; drop <= 1; drop++) {
-            Location tryLoc = cand.clone().add(0, -drop, 0);
-            Block below = tryLoc.clone().add(0, -0.05, 0).getBlock();
-            if (!isPassableFeet(tryLoc)) continue;
-            if (isSolid(below) || below.getType() == Material.WATER || below.getType() == Material.STATIONARY_WATER) {
-                tryLoc.setX(Math.floor(tryLoc.getX()) + 0.5);
-                tryLoc.setZ(Math.floor(tryLoc.getZ()) + 0.5);
-                return tryLoc;
-            }
-        }
-        // Allow mid-air short hop if feet+head clear (e.g. jumping over gap start)
-        if (isPassableFeet(cand)) {
-            Location mid = cand.clone();
-            mid.setX(Math.floor(mid.getX()) + 0.5);
-            mid.setZ(Math.floor(mid.getZ()) + 0.5);
-            return mid;
-        }
-        return null;
-    }
-
-    private static boolean isSolid(Block b) {
-        if (b == null) return true;
-        Material m = b.getType();
-        if (m == null || m == Material.AIR) return false;
-        // 1.12: isSolid covers most; exclude non-colliding plants etc. via isSolid
-        return m.isSolid();
     }
 
     private void startCooldown(UUID uuid, String skillId, int seconds) {

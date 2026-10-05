@@ -219,11 +219,106 @@ public final class SkillService implements Listener {
             player.sendMessage(PREFIX + ChatColor.RED + "功能未启用");
             return;
         }
-        if (args.length >= 2 && "info".equalsIgnoreCase(args[1])) {
+        String act = args.length >= 2 ? args[1].toLowerCase(java.util.Locale.ROOT) : "";
+        if ("info".equals(act) || "kit".equals(act) || "技能组".equals(act) || "组".equals(act)) {
+            // Hub is outside P1 combat scope; kit UI still uses active() (D211)
+            if (town.sunshine.corerpg.p1.EmberMode.active()) { cmdKitInfo(player); return; }
             cmdInfo(player);
             return;
         }
+        if ("shape".equals(act) || "符文".equals(act) || "形状".equals(act)) {
+            cmdShape(player, args.length >= 3 ? args[2] : null);
+            return;
+        }
         cast(player);
+    }
+
+    /** D211: P1 skill-kit page text (also driven by TrMenu ember_skill_kit). */
+    public void cmdKitInfo(Player player) {
+        town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+        PlayerData data = dataStore.get(player.getUniqueId());
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        town.sunshine.corerpg.p1.EmberPlayerState st = ls == null ? null : ls.state(player.getUniqueId());
+        long now = System.currentTimeMillis();
+        long left = st == null ? 0 : Math.max(0, st.skillCdUntil - now);
+        String charge = left > 0
+                ? ChatColor.RED + "充能中 " + (int) Math.ceil(left / 1000.0) + "s"
+                : ChatColor.GREEN + "就绪";
+        boolean dash = town.sunshine.corerpg.p1.EmberSkillKit.dashUnlocked(data, runs);
+        boolean shapes = town.sunshine.corerpg.p1.EmberSkillKit.shapeUnlocked(data, runs);
+        town.sunshine.corerpg.p1.EmberGrowthService gsv = town.sunshine.corerpg.p1.EmberGrowthService.get();
+        town.sunshine.corerpg.p1.EmberGrowth.Mods gmods = gsv == null ? town.sunshine.corerpg.p1.EmberGrowth.Mods.NONE : gsv.mods(player);
+        town.sunshine.corerpg.p1.EmberSkillKit.Shape sh = town.sunshine.corerpg.p1.EmberSkillKit.resolve(
+                player, data, runs, town.sunshine.corerpg.p1.EmberMode.get(), gmods);
+        player.sendMessage(PREFIX + ChatColor.GOLD + "余烬技能组");
+        player.sendMessage(ChatColor.GRAY + "  余烬充能（烬斩 / 烬突共用）· " + charge);
+        player.sendMessage(ChatColor.YELLOW + "  F" + ChatColor.GRAY + " 烬斩 · 形状 "
+                + ChatColor.WHITE + sh.label
+                + (sh.sigOverride ? ChatColor.DARK_GRAY + "（签名覆盖符文）" : ""));
+        if (dash) {
+            player.sendMessage(ChatColor.YELLOW + "  潜行+F" + ChatColor.GRAY + " 烬突 · 冲 4 格 · 最多 3 个各 1.5B（首领×0.5）· 花掉本次充能");
+        } else {
+            player.sendMessage(ChatColor.DARK_GRAY + "  潜行+F 烬突 · 首通 Q02 后解锁（此前仍放烬斩）");
+        }
+        player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 踏步 · 14 秒（身法变体 S2）");
+        if (shapes) {
+            int id = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
+            player.sendMessage(ChatColor.GRAY + "  符文：扇形 / 直线 / 环斩 · 当前 "
+                    + ChatColor.WHITE + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
+                    + ChatColor.DARK_GRAY + " · 出本点技能页切换（切换后充能转满）");
+        } else {
+            player.sendMessage(ChatColor.DARK_GRAY + "  烬斩符文 · 首通 Q04 后解锁");
+        }
+    }
+
+    /** D211: /corerpg skill shape <fan|line|ring> — hub only; puts 烬斩 on full CD (X1). */
+    public void cmdShape(Player player, String raw) {
+        if (!town.sunshine.corerpg.p1.EmberMode.active()) {
+            player.sendMessage(PREFIX + ChatColor.RED + "仅 P1 可用");
+            return;
+        }
+        town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+        PlayerData data = dataStore.get(player.getUniqueId());
+        if (!town.sunshine.corerpg.p1.EmberSkillKit.shapeUnlocked(data, runs)) {
+            player.sendMessage(PREFIX + ChatColor.RED + "烬斩符文未解锁（首通 Q04）");
+            return;
+        }
+        if (town.sunshine.corerpg.p1.EmberSkillKit.inDungeon(player, runs)) {
+            player.sendMessage(PREFIX + ChatColor.RED + "副本里不能换符文，请回城后再换");
+            return;
+        }
+        if (raw == null || raw.isEmpty()) {
+            int id = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
+            player.sendMessage(PREFIX + "当前烬斩符文：" + ChatColor.WHITE
+                    + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
+                    + ChatColor.GRAY + " · 用法 /corerpg skill shape <fan|line|ring>");
+            return;
+        }
+        int id = town.sunshine.corerpg.p1.EmberSkillKit.parseShape(raw);
+        if (id < 0) {
+            player.sendMessage(PREFIX + ChatColor.RED + "未知形状 · fan / line / ring");
+            return;
+        }
+        boolean changed = town.sunshine.corerpg.p1.EmberSkillKit.setShape(data, id);
+        dataStore.flushMutation(player.getUniqueId());
+        // X1: swapping always puts the shared charge on full CD
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        town.sunshine.corerpg.p1.EmberMode mode = town.sunshine.corerpg.p1.EmberMode.get();
+        int cd = Math.max(0, mode == null ? 8 : mode.i("skill.cooldown_seconds", 8));
+        if (ls != null) {
+            town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(player.getUniqueId());
+            st.skillCdUntil = System.currentTimeMillis() + cd * 1000L;
+            ls.saveState(player);
+        }
+        if (changed) {
+            player.sendMessage(PREFIX + ChatColor.GREEN + "烬斩符文 → "
+                    + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
+                    + ChatColor.GRAY + " · 充能转满（" + cd + "s）");
+        } else {
+            player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 "
+                    + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
+                    + ChatColor.GRAY + " · 充能仍转满（" + cd + "s）");
+        }
     }
 
     public void cmdInfo(Player player) {
@@ -350,6 +445,15 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberLoadout l = ls == null ? null : ls.get(player);
         if (l == null || l.blade == null) return;
         event.setCancelled(true);
+        // D211 / X12: sneak+F = 烬突 after Q02 first clear; before that (and bare F) still 烬斩
+        if (player.isSneaking()) {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            PlayerData data = dataStore.get(player.getUniqueId());
+            if (town.sunshine.corerpg.p1.EmberSkillKit.dashUnlocked(data, runs)) {
+                castEmberDashP1(player);
+                return;
+            }
+        }
         castEmberSlashP1(player);
     }
 
@@ -368,22 +472,15 @@ public final class SkillService implements Listener {
             player.sendMessage(PREFIX + ChatColor.RED + "烬斩冷却中，剩余 " + (int) Math.ceil((st.skillCdUntil - now) / 1000.0) + "s");
             return;
         }
-        double range = mode.d("skill.radius", 3.5);
-        double arc = mode.d("skill.arc_degrees", 100.0);
-        int maxTargets = Math.max(1, mode.i("skill.max_targets", 5));
-        // D174 stage 2a signature variants (book §4.2: the variant REPLACES the shared 烬斩, same 8 s CD, no crit, no set count;
-        // p1sim skill_variant): L07 line (skill_line blocks long, ≤ skill_cap) · L09 ring (skill_ring radius, 360°, ≤ skill_cap) · ×skill_mult
+        // D174 signature + D211 rune shapes (EmberSkillKit.resolve: signature line/ring/charge overrides the chosen rune)
         town.sunshine.corerpg.p1.EmberGrowthService gsv = town.sunshine.corerpg.p1.EmberGrowthService.get();
         town.sunshine.corerpg.p1.EmberGrowth.Mods gmods = gsv == null ? town.sunshine.corerpg.p1.EmberGrowth.Mods.NONE : gsv.mods(player);
         boolean variant = gmods.get("skill_var") > 0;
-        double line = variant ? gmods.get("skill_line") : 0;
-        if (variant && gmods.get("skill_plus") > 0) arc = 360.0;
-        if (variant && gmods.get("skill_ring") > 0) { arc = 360.0; range = gmods.get("skill_ring"); } // L09 环斩: smaller ring, no aiming
-        if (variant && gmods.get("skill_cap") > 0) maxTargets = Math.max(1, Math.min(maxTargets, (int) Math.round(gmods.get("skill_cap"))));
-        if (line > 0) range = Math.max(range, line);
+        town.sunshine.corerpg.p1.EmberSkillKit.Shape sh = town.sunshine.corerpg.p1.EmberSkillKit.resolve(
+                player, dataStore.get(player.getUniqueId()), plugin.getEmberRuns(), mode, gmods);
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
-        final double fRange = range, fArc = arc, fLine = line;
-        final int fMax = maxTargets;
+        final double fRange = sh.range, fArc = sh.arc, fLine = sh.line;
+        final int fMax = sh.maxTargets;
         if (slashTargets(player, fRange, fArc, fLine).isEmpty()) {
             player.sendMessage(PREFIX + ChatColor.YELLOW + "附近没有目标");
             return;
@@ -412,7 +509,92 @@ public final class SkillService implements Listener {
             return;
         }
         landEmberSlash(player, ls, slashTargets(player, fRange, fArc, fLine), fMax, gmods, variant, gsv);
-        player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩");
+        String tip = sh.sigOverride || sh.id != town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_FAN
+                ? "释放 烬斩（" + sh.label + "）" : "释放 烬斩";
+        player.sendMessage(PREFIX + ChatColor.GREEN + tip);
+    }
+
+    /**
+     * D211 烬突 (DESIGN §3 DS15): spends the shared 烬斩 charge, dash 4 blocks (EmberDash = 踏步 collision/doors),
+     * hits ≤3 enemies along the path for 1.5B each (bosses ×0.5). No crit / lifesteal / set count; signature
+     * "on 烬斩 hit" effects (L08/L11/L14) do NOT apply (X11).
+     */
+    private void castEmberDashP1(Player player) {
+        town.sunshine.corerpg.p1.EmberMode mode = town.sunshine.corerpg.p1.EmberMode.get();
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (mode == null || ls == null) return;
+        town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(player.getUniqueId());
+        long now = System.currentTimeMillis();
+        if (st.skillCdUntil > now) {
+            player.sendMessage(PREFIX + ChatColor.RED + "余烬充能中，剩余 " + (int) Math.ceil((st.skillCdUntil - now) / 1000.0) + "s");
+            return;
+        }
+        Location from = player.getLocation();
+        Location dest = town.sunshine.corerpg.p1.EmberDash.tryDash(player, town.sunshine.corerpg.p1.EmberSkillKit.DASH_DISTANCE);
+        if (dest == null) {
+            player.sendMessage(PREFIX + ChatColor.YELLOW + "前方受阻，无法烬突");
+            return;
+        }
+        int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
+        st.skillCdUntil = now + cd * 1000L;
+        ls.saveState(player);
+
+        double b = ls.get(player).b;
+        double base = town.sunshine.corerpg.p1.EmberFormula.skill(town.sunshine.corerpg.p1.EmberMode.tables(), b);
+        town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+        java.util.LinkedHashSet<LivingEntity> hitSet = new java.util.LinkedHashSet<LivingEntity>();
+        for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
+            if (sample.getWorld() == null) continue;
+            double r = town.sunshine.corerpg.p1.EmberSkillKit.DASH_HIT_RADIUS;
+            for (Entity e : sample.getWorld().getNearbyEntities(sample, r, r, r)) {
+                if (!isMonsterTarget(player, e)) continue;
+                if (e.getLocation().distanceSquared(sample) > r * r) continue;
+                hitSet.add((LivingEntity) e);
+            }
+        }
+        List<LivingEntity> ordered = new ArrayList<LivingEntity>(hitSet);
+        final Location origin = from;
+        java.util.Collections.sort(ordered, new java.util.Comparator<LivingEntity>() {
+            @Override public int compare(LivingEntity a, LivingEntity b2) {
+                int c = Double.compare(a.getLocation().distanceSquared(origin), b2.getLocation().distanceSquared(origin));
+                return c != 0 ? c : Integer.compare(a.getEntityId(), b2.getEntityId());
+            }
+        });
+
+        spawnParticles(from.clone().add(0, 0.2, 0), "FLAME", 12);
+        player.teleport(dest);
+        spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 18);
+        playSound(dest, "ENTITY_ENDERDRAGON_FLAP");
+
+        String prevTag = town.sunshine.corerpg.p1.EmberCombatListener.internalTag;
+        int n = 0;
+        try {
+            for (LivingEntity le : ordered) {
+                if (n >= town.sunshine.corerpg.p1.EmberSkillKit.DASH_MAX_TARGETS) break;
+                boolean boss = runs != null && runs.isRunBoss(le);
+                double dmg = base * (boss ? town.sunshine.corerpg.p1.EmberSkillKit.DASH_BOSS_MULT : 1.0);
+                town.sunshine.corerpg.p1.EmberCombatListener.internalTag = String.format(java.util.Locale.ROOT,
+                        "D211 烬突 1.5×B(%.2f)%s=%.2f", b, boss ? "×0.5" : "", dmg);
+                town.sunshine.corerpg.p1.EmberCombatListener.dealP1(player, le, dmg,
+                        town.sunshine.corerpg.p1.EmberSetEngine.Kind.SKILL,
+                        town.sunshine.corerpg.p1.EmberCombatListener.internalTag);
+                spawnParticles(le.getLocation().add(0, 1, 0), "FLAME", 10);
+                n++;
+            }
+        } finally {
+            town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;
+        }
+        player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬突"
+                + (n > 0 ? ChatColor.GRAY + " · 命中 " + n : ChatColor.DARK_GRAY + " · 未命中"));
+    }
+
+    /** D211: AFK / menus — resolve the effective 烬斩 shape for this player right now. */
+    public town.sunshine.corerpg.p1.EmberSkillKit.Shape resolveSlashShape(Player player) {
+        town.sunshine.corerpg.p1.EmberGrowthService gsv = town.sunshine.corerpg.p1.EmberGrowthService.get();
+        town.sunshine.corerpg.p1.EmberGrowth.Mods gmods = gsv == null ? town.sunshine.corerpg.p1.EmberGrowth.Mods.NONE : gsv.mods(player);
+        return town.sunshine.corerpg.p1.EmberSkillKit.resolve(
+                player, dataStore.get(player.getUniqueId()), plugin.getEmberRuns(),
+                town.sunshine.corerpg.p1.EmberMode.get(), gmods);
     }
 
     /** D174 stage 3: uuid → wind-up end (ms) of a charged 烬斩 (L13); melee is cancelled until then */

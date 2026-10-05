@@ -108,6 +108,7 @@ public final class EmberCounters {
         px("p1_fcpay_", "EmberFirstClear", Period.VER, CL, RL, "first-clear package paid @<content_version> (D205)");
         px("p1_unlock_", "EmberRunService", A, PR, NV, "map unlocks granted by settlement / admin");
         x("p1_target", "EmberForgeService", A, SE, OW, "current forge target");
+        x("p1_slash_shape", "SkillService", A, SE, OW, "D211 烬斩符文 0=fan 1=line 2=ring (Q04+); signature shape overrides");
         x("p1_starter", "EmberRunService", A, CL, NV, "starter pack claimed");
         px("p1_mark_t", "EmberRunService/EmberPay", A, AS, ZR, "forge marks t1..t3; EmberDelivery may re-credit (MARK_COUNTER)");
         x("p2_rotation", "EmberRunService", W, CL, RL, "featured-week extra runs (weekly_cap 3)");
