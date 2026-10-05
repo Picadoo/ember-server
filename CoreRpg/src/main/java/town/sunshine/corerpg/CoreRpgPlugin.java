@@ -942,6 +942,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                 && !label.equalsIgnoreCase("crpg") && !label.equalsIgnoreCase("rpg")) return false;
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) { sendHelp(sender); return true; }
         String sub = args[0].toLowerCase();
+        if (legacyRouteRefused(sender, args)) return true;
         if ("reload".equals(sub)) {
             if (!sender.hasPermission("corerpg.admin")) { sender.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
             reloadLocal();
@@ -1088,6 +1089,37 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             return true;
         }
         sendHelp(sender);
+        return true;
+    }
+
+    /**
+     * D199 / ARCH S0-3: deny-by-default /corerpg route gate while P1 is on (non-admin players only; console, OP and
+     * corerpg.admin pass). Whitelist = ember-v1.yml legacy_gate.allow (LegacyGate.DEFAULT_ALLOW if missing).
+     */
+    private boolean legacyRouteRefused(CommandSender sender, String[] args) {
+        boolean p1 = town.sunshine.corerpg.p1.EmberMode.active();
+        if (!p1 || !(sender instanceof Player)) return false;
+        boolean privileged = sender.isOp() || sender.hasPermission("corerpg.admin");
+        org.bukkit.configuration.ConfigurationSection gate = (emberMode != null && emberMode.config() != null)
+                ? emberMode.config().getConfigurationSection("legacy_gate") : null;
+        if (gate != null && !gate.getBoolean("route_whitelist", true)) return false;
+        java.util.Map<String, java.util.Set<String>> allow = null;
+        org.bukkit.configuration.ConfigurationSection sec = gate != null ? gate.getConfigurationSection("allow") : null;
+        if (sec != null) {
+            allow = new java.util.HashMap<String, java.util.Set<String>>();
+            for (String k : sec.getKeys(false)) {
+                java.util.Set<String> acts = new java.util.HashSet<String>();
+                if (sec.isList(k)) {
+                    for (Object o : sec.getList(k)) acts.add(o == null ? "" : String.valueOf(o).toLowerCase(java.util.Locale.ROOT));
+                } else {
+                    acts.add(String.valueOf(sec.get(k)).trim().toLowerCase(java.util.Locale.ROOT));
+                }
+                allow.put(LegacyGate.canonical(k), acts);
+            }
+        }
+        if (!LegacyGate.refuseRoute(true, true, privileged, allow, args)) return false;
+        sender.sendMessage(ChatColor.GRAY + "[余烬] " + LegacyGate.ROUTE_CLOSED_MSG);
+        getLogger().info("[legacy_gate] deny " + sender.getName() + " /corerpg " + String.join(" ", args));
         return true;
     }
 
