@@ -114,7 +114,7 @@ public final class EmberCounters {
         px("p1_mark_t", "EmberRunService/EmberPay", A, AS, ZR, "forge marks t1..t3; EmberDelivery may re-credit (MARK_COUNTER)");
         x("p2_rotation", "EmberRunService", W, CL, RL, "featured-week extra runs (weekly_cap 3)");
         px("p2_raid_", "EmberRunService", W, CL, RL, "raid weekly cap per cap_group / map");
-        x("p2_abyss_best", "EmberRunService", A, ST, OW, "best abyss floor");
+        x("p2_abyss_best", "EmberAbyssService", A, ST, OW, "best abyss floor");
         x("p2_bounty", "EmberRunService", D, CL, RL, "daily bounty");
         px("p4_vb_", "EmberRunService", D, CL, RL, "variety bounties settled today per kind");
         x("p4_rush", "EmberRushService", W, ST, RL, "rush attempts (stat only since D160)");

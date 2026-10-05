@@ -58,6 +58,7 @@ import java.util.logging.Logger;
  * participant through the idempotent RewardLedger, delivery with retry (inventory full → mail for materials, P1 items
  * wait in the ledger for /corerpg p1 claim), first clears, forge marks, starter kit and target family.
  * <p>D230 / ARCH S3-1: rush / echo / outpost settle + menu live in {@link EmberRushService}; this class keeps thin delegates.
+ * <p>D231 / ARCH S3-2: abyss fee / floor-best / menu live in {@link EmberAbyssService}; this class keeps thin delegates.
  */
 public final class EmberRunService implements Listener {
 
@@ -77,6 +78,7 @@ public final class EmberRunService implements Listener {
     private final EmberLoadoutService loadouts;
     private final EmberRunStore store;
     private final EmberRushService rush;
+    private final EmberAbyssService abyss;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -95,6 +97,7 @@ public final class EmberRunService implements Listener {
         this.loadouts = loadouts;
         this.store = new EmberRunStore(plugin, mirror);
         this.rush = new EmberRushService(this);
+        this.abyss = new EmberAbyssService(this);
         instance = this;
         load();
     }
@@ -109,6 +112,16 @@ public final class EmberRunService implements Listener {
     EmberRunStore store() { return store; }
 
     EmberRushService rush() { return rush; }
+
+    EmberAbyssService abyss() { return abyss; }
+
+    /** package seed for {@link EmberAbyssService#tryEnter} (same SecureRandom as other entries). */
+    long nextSeed() { return rnd.nextLong(); }
+
+    /** package entry point for an abyss segment (challenge=true, abyss tier, preset seed). */
+    boolean enterAbyssSegment(Player leader, String mapKey, int abyssTier, long seed) {
+        return enter(leader, mapKey, true, abyssTier, seed);
+    }
 
     // ------------------------------------------------------------------ config
 
@@ -246,9 +259,9 @@ public final class EmberRunService implements Listener {
         return enter(leader, mapKey, challenge, 0, 0L);
     }
 
-    // ------------------------------------------------------------------ P2-2 abyss (book §18.3, D70)
+    // ------------------------------------------------------------------ P2-2 abyss (book §18.3, D70) — logic in EmberAbyssService (D231 / ARCH S3-2)
 
-    static final String C_ABYSS_BEST = "p2_abyss_best";
+    static final String C_ABYSS_BEST = EmberAbyssService.C_ABYSS_BEST;
     static final String C_RAID = "p2_raid_";
     static final String C_BOUNTY = "p2_bounty";
 
@@ -432,27 +445,20 @@ public final class EmberRunService implements Listener {
         return "本周 " + raidWeek(d, m) + "/" + m.weeklyCap + (capKey(m).equals(m.key) ? "" : "（团本合计）") + " · " + maps.partyMin(m) + "～" + maps.partyMax(m) + " 人 · " + maps.cost(m) + " 体力";
     }
 
-    public boolean abyssOpen(PlayerData d) {
-        return maps.challenge != null && !maps.abyss.isEmpty() && progressFlag(d, maps.abyssRequires);
-    }
+    public boolean abyssOpen(PlayerData d) { return abyss.open(d); }
 
     /** highest fully cleared abyss tier of this character (0 = none) */
-    public int abyssBest(PlayerData d) { return d.periodCount(C_ABYSS_BEST, "all"); }
+    public int abyssBest(PlayerData d) { return abyss.best(d); }
 
     /** highest tier this character may start now (best + 1, capped by the table) */
-    public int abyssMaxStart(PlayerData d) { return Math.min(maps.abyss.size(), abyssBest(d) + 1); }
+    public int abyssMaxStart(PlayerData d) { return abyss.maxStart(d); }
 
     /**
      * One abyss segment = one new entry (book §18.3): the seeded map at challenge values × tier factors, 30 stamina +
      * the tier fee reserved now and refunded like stamina, settled only when its boss dies.
+     * Delegated to {@link EmberAbyssService} (D231).
      */
-    public boolean tryEnterAbyss(final Player leader, int tier) {
-        if (maps.abyssTier(tier) == null) { leader.sendMessage(P + ChatColor.RED + "深渊层数 1～" + maps.abyss.size()); return true; }
-        long seed = rnd.nextLong();
-        EmberRunMaps.MapDef m = maps.abyssMap(seed);
-        if (m == null) { leader.sendMessage(P + "深渊未配置。"); return true; }
-        return enter(leader, m.key, true, tier, seed);
-    }
+    public boolean tryEnterAbyss(final Player leader, int tier) { return abyss.tryEnter(leader, tier); }
 
     private boolean enter(final Player leader, String mapKey, final boolean challenge, final int abyss, long presetSeed) {
         if (!EmberMode.active()) {
@@ -649,22 +655,20 @@ public final class EmberRunService implements Listener {
             ledgerRow(p.getUniqueId(), s.runId, "cost", "stamina:" + r.cost, EmberRunRules.ST_RESERVED);
             reserved.add(p);
             final int pfee = at == null ? 0 : feeFor(p, at.fee); // D142 深渊行者: own fee per player
-            if (at != null && pfee > 0) { // P2-2: the segment fee rides with the stamina reservation
+            if (at != null && pfee > 0) { // P2-2: the segment fee rides with the stamina reservation (D231 → EmberAbyssService)
                 PlayerData pd = data(p.getUniqueId());
-                int fm = pd.getCoin() < pfee ? feeMarks(pd, pfee) : 0; // F-review #5: surplus T3 marks pay when coins cannot
-                if (fm > 0 && EmberEconomy.spendMark(pd, "C08", 3, fm)) { // D218: REG C08 (feeMarks already left the reserve)
-                    s.fee.put(p.getUniqueId(), 0);
-                    ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "mark:3:" + fm, EmberRunRules.ST_RESERVED);
-                    p.sendMessage(P + "§7这一层的费用 " + pfee + " 币用 §f" + fm + " 枚 T3 印记§7抵了（余烬币不够；1 枚抵 " + maps.abyssFeeMarkCoin
-                            + " 币，剩 " + marks(pd, 3) + " 枚）· 没打成会和体力一起退回");
-                    log().info("[P1 run] " + s.runId + " abyss fee " + p.getName() + ": " + fm + " T3 mark(s) for " + pfee + " coin");
-                } else if (!EmberEconomy.spendCoin(pd, "C08", pfee)) { // D218: REG C08 abyss segment fee
+                EmberAbyssService.FeeSpendResult spent = EmberAbyssService.applyFeeSpend(pd, pfee, maps.abyssFeeMarkCoin);
+                if (!spent.ok) {
                     for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
                     for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（这一层 " + pfee + "）");
                     return true;
-                } else {
-                    s.fee.put(p.getUniqueId(), pfee);
-                    ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "coin:" + pfee, EmberRunRules.ST_RESERVED);
+                }
+                s.fee.put(p.getUniqueId(), spent.feeStored);
+                ledgerRow(p.getUniqueId(), s.runId, "cost_coin", spent.ledgerResult, EmberRunRules.ST_RESERVED);
+                if (spent.marksSpent > 0) {
+                    p.sendMessage(P + "§7这一层的费用 " + pfee + " 币用 §f" + spent.marksSpent + " 枚 T3 印记§7抵了（余烬币不够；1 枚抵 " + maps.abyssFeeMarkCoin
+                            + " 币，剩 " + marks(pd, 3) + " 枚）· 没打成会和体力一起退回");
+                    log().info("[P1 run] " + s.runId + " abyss fee " + p.getName() + ": " + spent.marksSpent + " T3 mark(s) for " + pfee + " coin");
                 }
                 plugin.getDataStore().flushMutation(p.getUniqueId());
             }
@@ -778,12 +782,8 @@ public final class EmberRunService implements Listener {
         log().info("[P1 run] " + s.runId + " release " + u + " (" + why + ")");
     }
 
-    /** F-review #5 (D124): T3 marks that would pay this fee (0 = off / not enough surplus above the exchange reserve) */
-    int feeMarks(PlayerData d, int fee) {
-        if (fee <= 0 || maps.abyssFeeMarkCoin <= 0 || d == null) return 0;
-        int need = (fee + maps.abyssFeeMarkCoin - 1) / maps.abyssFeeMarkCoin;
-        return marks(d, 3) - EmberCosmetics.MARK_RESERVE >= need ? need : 0;
-    }
+    /** F-review #5 (D124): T3 marks that would pay this fee — delegated to {@link EmberAbyssService} (D231). */
+    int feeMarks(PlayerData d, int fee) { return abyss.feeMarks(d, fee); }
 
     /**
      * Endgame #6 (D128): the first failed challenge / abyss run of the stamina day gives back runs.yml fail_refund of the
@@ -821,19 +821,13 @@ public final class EmberRunService implements Listener {
         return used ? "§8今天的失败退还已用过（明天 0 点再有）" : "§a每天第一次失败退还 " + pct + "% 体力（" + EmberRunRules.failRefundAmount(maps.cost, maps.failRefund) + " 点；不给掉落和币）";
     }
 
-    /** P2-2: the abyss fee goes back together with the stamina, once (ledger "cost_coin" status). */
+    /** P2-2: the abyss fee goes back together with the stamina, once (ledger "cost_coin" status). D231 → EmberAbyssService. */
     private void releaseFee(EmberRunSession s, UUID u, EmberRunRules.Ledger l) {
         EmberRunRules.Row f = l.get(s.runId, "cost_coin");
         if (f == null || EmberRunRules.ST_RELEASED.equals(f.status)) return;
         Integer fee = s.fee.get(u);
-        EmberRunRules.Grant paid = EmberRunRules.Grant.decode("cost_coin", f.result);
-        if (paid != null && paid.kind == EmberRunRules.Kind.MARK) { // F-review #5: marks go back as marks
-            data(u).addPeriodCount(C_MARK + paid.id, "all", paid.amount); // econ-ok: C08 abyss fee release (returns a spendMark)
-            plugin.getDataStore().flushMutation(u);
-        } else if (fee != null && fee > 0) {
-            data(u).addCoin(fee);
-            plugin.getDataStore().flushMutation(u);
-        }
+        EmberAbyssService.FeeRefundResult r = EmberAbyssService.applyFeeRefund(data(u), f.result, fee == null ? 0 : fee);
+        if (r.refunded) plugin.getDataStore().flushMutation(u);
         l.mark(s.runId, "cost_coin", EmberRunRules.ST_RELEASED, System.currentTimeMillis());
         store.saveLedger(u, Collections.singletonList(f));
     }
@@ -1437,9 +1431,13 @@ public final class EmberRunService implements Listener {
             EmberFirstClear.record(pd, m.key, m.contentVersion); // §9.4 + D205: package once per content version; fact @all never deleted
             if (cosmetics != null) cosmetics.onFirstClear(Bukkit.getPlayer(u), m.key); // D103 milestone titles
         }
-        boolean newBest = s.abyss > 0 && s.abyss > abyssBest(pd);
+        boolean newBest = false;
         int oldBest = abyssBest(pd);
-        if (newBest) pd.addPeriodCount(C_ABYSS_BEST, "all", s.abyss - abyssBest(pd)); // P2-2: opens tier + 1
+        if (s.abyss > 0) {
+            EmberAbyssService.FloorResult floor = EmberAbyssService.applyFloorGrant(pd, s.abyss); // P2-2: opens tier + 1
+            newBest = floor.newBest;
+            oldBest = floor.oldBest;
+        }
         if (newBest && cosmetics != null) cosmetics.onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
         if (growth != null && gp != null) growth.refreshHonors(gp); // D142: one-time unlock notice
         if (top != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records
@@ -2413,11 +2411,8 @@ public final class EmberRunService implements Listener {
         return "split".equals(c) ? "affix" : c;
     }
 
-    /** D142 深渊行者: this player's segment fee */
-    int feeFor(Player p, int fee) {
-        EmberGrowthService g = EmberGrowthService.get();
-        return g == null ? fee : g.abyssFee(p, fee);
-    }
+    /** D142 深渊行者: this player's segment fee — delegated to {@link EmberAbyssService} (D231). */
+    int feeFor(Player p, int fee) { return abyss.feeFor(p, fee); }
 
     /** D188 撞墙破绽: {@code src} is a run boss in its wall-crash stun (its plain melee does nothing) */
     public boolean bossStunned(Entity src) {
@@ -2824,26 +2819,8 @@ public final class EmberRunService implements Listener {
     /** D144 /corerpg p1 rush [go] — delegated to {@link EmberRushService} (D230). */
     private boolean cmdRush(CommandSender s, String[] args) { return rush.cmd(s, args); }
 
-    /** /corerpg p1 abyss [层] — without a tier: the table and this character's state; with one: start that segment. */
-    private boolean cmdAbyss(CommandSender s, String[] args) {
-        if (!(s instanceof Player)) return true;
-        Player p = (Player) s;
-        PlayerData d = data(p.getUniqueId());
-        if (maps.abyss.isEmpty() || maps.challenge == null) { p.sendMessage(P + "深渊 · 余烬层未配置。"); return true; }
-        if (args.length >= 3) {
-            int t;
-            try { t = Integer.parseInt(args[2]); } catch (NumberFormatException e) { t = "next".equalsIgnoreCase(args[2]) ? abyssMaxStart(d) : -1; }
-            return tryEnterAbyss(p, t);
-        }
-        p.sendMessage(P + "§5深渊 · 余烬层 §7— 每层 = 随机一张主线图打一局（3 房 + 首领），打赢第 N 层开放第 N+1 层；共 "
-                + maps.abyss.size() + " 层封顶");
-        p.sendMessage(P + "§7每层单独确认：" + maps.cost + " 体力 + 层费（余烬币）；没开打就退出（含服务器重启）全额退还；打完首领才结算，失败只丢这一层的花费（每天第一次失败退一半体力，层费不退），不掉装备不降强化");
-        if (!abyssOpen(d)) { p.sendMessage(P + "§c需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)); return true; }
-        p.sendMessage(P + "最高通关 第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层 · 余烬币 " + d.getCoin());
-        for (EmberRunMaps.AbyssTier t : maps.abyss) p.sendMessage(P + abyssLine(d, t));
-        p.sendMessage(P + "§7开始：冒险页 → 深渊，点要下潜的层");
-        return true;
-    }
+    /** /corerpg p1 abyss [层] — delegated to {@link EmberAbyssService} (D231). */
+    private boolean cmdAbyss(CommandSender s, String[] args) { return abyss.cmd(s, args); }
 
     /** D101: a player's name for messages (offline players too), never a raw uuid */
     static String nameOf(UUID u) {
@@ -2852,12 +2829,7 @@ public final class EmberRunService implements Listener {
         return n == null ? "（未知玩家）" : n;
     }
 
-    String abyssLine(PlayerData d, EmberRunMaps.AbyssTier t) {
-        String st = t.index <= abyssBest(d) ? "§a已通关" : t.index <= abyssMaxStart(d) ? "§e可开" : "§8未开放";
-        return "§d第 " + t.index + " 层 " + st + " §7· 生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
-                + String.format(Locale.ROOT, "%.2f", t.dmg) + " · 掉落成色 " + qualityLabel(t.quality) + " · 费 " + t.fee + " 币"
-                + (t.index == 1 ? " §8（= 挑战版强度：挑战版能过就能下）" : t.index == maps.abyss.size() ? " §8（两件 T3 +10、卓越以上再来）" : "");
-    }
+    String abyssLine(PlayerData d, EmberRunMaps.AbyssTier t) { return abyss.line(d, t); }
 
     static String qualityLabel(int[] q) {
         return "精良" + q[1] + "% 卓越" + q[2] + "% 极品" + q[3] + "%";

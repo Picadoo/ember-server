@@ -399,7 +399,8 @@ public class EmberEconomyTest {
                 "EmberPay.java",           // spend giveBack
                 "EmberDelivery.java",      // A01 durable txn apply
                 "EmberForgeService.java",  // legacy YAML giveBack (MySQL uses EmberPay)
-                "EmberRunService.java"     // abyss fee release + deliver unrouted fallback
+                "EmberRunService.java",    // deliver unrouted fallback
+                "EmberAbyssService.java"   // C08 abyss fee release (D231)
         ));
         Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
         List<String> hits = new ArrayList<String>();
