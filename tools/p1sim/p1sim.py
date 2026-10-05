@@ -211,6 +211,14 @@ WALL_STUN_K = 0.5
 # (the player always stands in melee). WHIFF_STUN = False strips the mechanic (baseline).
 WHIFF_STUN = True
 WHIFF_ARM = 1.0
+# D193 破招: a boss channel that carries break_hp is broken (no hit, boss staggers break_stun s) when the player deals
+# >= break_hp x boss max HP during its warn; otherwise it lands like any telegraph (dodge + tele_bonus: run out of the ring).
+# Solo model: swings in the window = warn x BREAK_UPTIME / swing (fractional part drawn from a per-cast rng so paired runs
+# stay paired), each B x dmult x crit. A gated break skill waits for its HP gate (Java dueSkill), it is not skipped.
+# BREAK = False strips break skills entirely (baseline = live without the new move).
+BREAK = True
+BREAK_UPTIME = 0.85
+BREAK_STATS = [0, 0]  # D193 [broken, landed] channels since the last reset (gate report only; no rng)
 _UID = itertools.count(1)  # M03: burn-book key of a mob (unique per process; never touches an rng)
 
 
@@ -431,6 +439,8 @@ class Fight:
         adds_done = False
         if boss is not None:
             for s in mapdef['boss'].get('skills', []):
+                if s.get('break_hp') and not BREAK:
+                    continue  # D193 baseline: the break channel does not exist
                 skills.append({'s': s, 'next': t + s['every']})
         pending = []  # (time, raw dmg) of follow-up hits
         while True:
@@ -552,7 +562,31 @@ class Fight:
                 for s in skills:
                     if s['next'] == t:
                         sk = s['s']
+                        if sk.get('break_hp') and sk.get('below') is not None and boss['hp'] > sk['below'] * boss['max']:
+                            s['next'] = t + 0.5  # D193: Java keeps a gated skill due until its HP gate opens
+                            break
                         s['next'] = t + sk['every']
+                        if sk.get('break_hp') and boss['hp'] > 0:  # D193 破招
+                            _br = random.Random(int(t * 1000) * 7919 + int(boss['max']))
+                            _n = float(sk['warn']) * BREAK_UPTIME / kn.swing
+                            _w = int(_n) + (1 if _br.random() < _n - int(_n) else 0)
+                            _d = sum(st['B'] * (cfg['crit_mult'] if _br.random() < cfg['crit_rate'] else 1.0) * dmult(st, boss, t, self) for _ in range(_w))
+                            if _d >= float(sk['break_hp']) * boss['max']:
+                                _st = float(sk.get('break_stun', 1.0))
+                                boss['next'] = max(boss['next'], t) + _st
+                                for _s in skills:
+                                    if _s is not s:
+                                        _s['next'] += _st
+                                s['next'] += _st
+                                BREAK_STATS[0] += 1
+                                if self.rec is not None:
+                                    self.rec['n_break'] = self.rec.get('n_break', 0) + 1
+                            else:
+                                self.hurt(sk['dmg'], True, 'tele')
+                                BREAK_STATS[1] += 1
+                                if self.rec is not None:
+                                    self.rec['n_break_fail'] = self.rec.get('n_break_fail', 0) + 1
+                            break
                         if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
                             _dodged = self.hurt(sk['dmg'], True, 'tele')
                             if WHIFF_STUN and sk.get('whiff_stun') and _dodged and boss['hp'] > 0:  # D192 落空破绽 (solo: dodged = whiff)

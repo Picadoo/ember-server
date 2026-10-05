@@ -97,6 +97,9 @@ final class EmberRunDirector {
     private boolean pendingCrash;        // D188 撞墙破绽: the pending charge was cut short by a real wall
     private boolean pendingArmed;        // D192 落空破绽: someone stood inside the pending telegraph when its warning began
     private long stunUntil;              // D188: boss stunned (no skills, no melee) until this
+    private double breakNeed;            // D193 破招: player damage needed to break the pending channel (0 = none armed)
+    private double breakDone;            // D193: player damage dealt to the boss since that channel's warning began
+    private long breakBarAt;             // D193: next action-bar progress line
     private boolean addsDone;
     private long addsAt;
     private boolean extraSpawned;
@@ -1461,6 +1464,8 @@ final class EmberRunDirector {
         svc.index(le.getUniqueId(), this);
         nextAt = new long[b.skills.size()];
         for (int i = 0; i < nextAt.length; i++) nextAt[i] = now + (long) (b.skills.get(i).every * 1000);
+        // D193: 余烬连战 keeps its own tuned move table — the break channel never comes due in a rush
+        for (int i = 0; i < nextAt.length; i++) if (def.rush && b.skills.get(i).breakHp > 0) nextAt[i] = Long.MAX_VALUE / 4;
         bossSpawnedAt = now;
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss spawned hp=%.0f party=%d", s.runId, le.getMaxHealth(), s.partySize));
         svc.onBossSpawned(s, b);
@@ -1631,7 +1636,10 @@ final class EmberRunDirector {
         }
         if (pending != null) {
             drawShape(pending, lockOrigin, lockDir);
+            if (broken(breakNeed, breakDone) && !le.isDead()) { breakCast(pending, now, le, b); return; }
+            if (breakNeed > 0 && now >= breakBarAt) { breakBarAt = now + 250; breakBar(); }
             if (now >= pendingAt) {
+                breakNeed = 0;
                 int landed = execute(pending, lockOrigin, lockDir, le);
                 EmberRunMaps.Skill done = pending;
                 pending = null;
@@ -1783,6 +1791,9 @@ final class EmberRunDirector {
         if ("charge".equals(sk.type)) pending = pending.withLength(run);
         pendingAt = now + (long) (sk.warn * 1000);
         pendingArmed = sk.whiffStun > 0 && anyoneInside(pending, lockOrigin, lockDir); // D192: only a real dodge counts
+        breakNeed = sk.breakHp > 0 ? Math.max(1.0, le.getMaxHealth() * sk.breakHp) : 0; // D193 破招
+        breakDone = 0;
+        breakBarAt = now;
         casts++;
         Location face = o.clone();
         face.setDirection(dir);
@@ -1795,7 +1806,51 @@ final class EmberRunDirector {
         if (sk.share) who += " §6· 全队靠拢进圈分摊（人越多每人越少，一个人扛会很痛）";
         if (sk.wallStun > 0) who += " §a· 让它撞上墙会晕 " + fmt(sk.wallStun) + " 秒";
         if (sk.whiffStun > 0 && pendingArmed) who += " §a· 全员躲开它会踉跄 " + fmt(sk.whiffStun) + " 秒";
+        if (breakNeed > 0) who += " §a· 蓄力期间全队打掉它 " + Math.round(breakNeed) + " 点血可打断（踉跄 " + fmt(sk.breakStun) + " 秒）§7· 打不动就跑出圈";
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
+    }
+
+    /** D193 破招: a channel is armed (need > 0) and the party's damage since its warning began reached the need. */
+    static boolean broken(double need, double done) {
+        return need > 0 && done >= need;
+    }
+
+    /** D193: player damage on this director's boss while a break channel winds up (Service MONITOR hook, finalDamage). */
+    void noteBossHurt(org.bukkit.entity.Entity e, double dmg) {
+        if (boss == null || e != boss.le || pending == null || breakNeed <= 0 || dmg <= 0) return;
+        breakDone += dmg;
+    }
+
+    private void breakBar() {
+        int pct = (int) Math.min(100, Math.floor(100.0 * breakDone / breakNeed));
+        String bar = "§b破招 §f" + pct + "% §7（" + Math.round(breakDone) + " / " + Math.round(breakNeed) + "）";
+        for (Player p : participantsHere()) {
+            try { p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(bar)); } catch (Throwable ignored) { }
+        }
+    }
+
+    /** D193 破招: the channel never lands; the boss staggers breakStun s (same stunUntil as D188 / D192). */
+    private void breakCast(EmberRunMaps.Skill sk, long now, LivingEntity le, EmberRunMaps.Boss b) {
+        double need = breakNeed, done = breakDone;
+        pending = null;
+        breakNeed = 0;
+        pendingCrash = false;
+        pendingArmed = false;
+        recoverUntil = now + (long) ((Double.isNaN(sk.recover) ? b.recover : sk.recover) * 1000);
+        long ms = (long) (sk.breakStun * 1000);
+        le.removePotionEffect(PotionEffectType.SLOW); // the wind-up root ends with the cast
+        if (ms > 0) {
+            stunUntil = now + ms;
+            recoverUntil = Math.max(recoverUntil, stunUntil);
+            if (follow != null) followStart = Math.max(followStart, stunUntil);
+            le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.breakStun * 20) + 4, 10, false, false), true);
+        }
+        Location at = le.getLocation();
+        w.spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 2.2, 0), 16, 0.5, 0.3, 0.5, 0.1);
+        w.playSound(at, Sound.BLOCK_GLASS_BREAK, 1.0f, 0.8f);
+        svc.tellRun(s, "§a破招！§c" + bossDef().name + " §7的「" + sk.name + "」被打断"
+                + (ms > 0 ? " §e踉跄 " + fmt(sk.breakStun) + " 秒 §7· 趁现在输出" : ""));
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s break %s %.0f/%.0f stun %.1fs", s.runId, sk.name, done, need, sk.breakStun));
     }
 
     /** D192 落空破绽: armed at warn start (someone inside) and the hit landed on nobody → the boss staggers. */

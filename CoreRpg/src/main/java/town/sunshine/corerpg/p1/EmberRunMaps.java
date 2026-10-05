@@ -108,6 +108,9 @@ public final class EmberRunMaps {
         /** D192 落空破绽: not a charge — when someone stood inside the telegraph as the warning started and nobody is
          *  inside when it lands (everyone dodged), the boss staggers this many seconds (no skills, no melee, rooted); 0 = off */
         public final double whiffStun;
+        /** D193 破招: not a charge, not a share — the party deals breakHp × the boss's max HP during the warning → the cast
+         *  is broken (it does not land) and the boss staggers breakStun s; 0 = off (≤ 0.5 of max HP, stun ≤ 2 s) */
+        public final double breakHp, breakStun;
         Skill(Map<?, ?> m) {
             type = str(m.get("type"), "cone");
             target = str(m.get("target"), "");
@@ -133,6 +136,8 @@ public final class EmberRunMaps {
             share = Boolean.TRUE.equals(m.get("share")) || "true".equals(String.valueOf(m.get("share")));
             wallStun = "charge".equals(type) ? Math.max(0, Math.min(3.0, num(m.get("wall_stun"), 0))) : 0; // D188: ≤ 3 s
             whiffStun = "charge".equals(type) || share ? 0 : Math.max(0, Math.min(2.0, num(m.get("whiff_stun"), 0))); // D192: ≤ 2 s
+            breakHp = "charge".equals(type) || share ? 0 : Math.max(0, Math.min(0.5, num(m.get("break_hp"), 0))); // D193
+            breakStun = breakHp > 0 ? Math.max(0, Math.min(2.0, num(m.get("break_stun"), 1.0))) : 0;
             follow = m.get("follow") instanceof Map ? new Skill((Map<?, ?>) m.get("follow")) : null;
         }
 
@@ -140,6 +145,7 @@ public final class EmberRunMaps {
             type = o.type; name = o.name; every = o.every; warn = o.warn; this.dmg = dmg; angle = o.angle; range = o.range;
             radius = o.radius; ahead = o.ahead; this.length = length; width = o.width; below = o.below; delay = o.delay;
             kb = o.kb; target = o.target; follow = o.follow; start = o.start; shift = o.shift; recover = o.recover; light = o.light; share = o.share; wallStun = o.wallStun; whiffStun = o.whiffStun;
+            breakHp = o.breakHp; breakStun = o.breakStun;
         }
 
         /** same skill with another strip length (charge clipped at a wall / the boss area edge) */

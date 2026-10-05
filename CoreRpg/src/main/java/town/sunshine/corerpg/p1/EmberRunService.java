@@ -2363,6 +2363,7 @@ public final class EmberRunService implements Listener {
         Entity src = e.getDamager();
         if (src instanceof Projectile && ((Projectile) src).getShooter() instanceof Entity) src = (Entity) ((Projectile) src).getShooter();
         if (src instanceof Player) markActed(d.s, (Player) src);
+        if (src instanceof Player) d.noteBossHurt(e.getEntity(), e.getFinalDamage()); // D193 破招 (player damage only)
         EmberRunDirector.Tracked t = d.mobs.get(e.getEntity().getUniqueId());
         if (t != null && "regen".equals(t.affix)) d.noteRegenHurt(t, e.getFinalDamage());
     }

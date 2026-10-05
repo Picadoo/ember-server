@@ -210,4 +210,26 @@ public class EmberRunShapeTest {
         assertFalse(EmberRunDirector.whiffs(true, 0, skill("type", "cone")));
         assertFalse(EmberRunDirector.whiffs(true, 0, null));
     }
+
+    @Test public void breakParsesOffChargeAndShareAndIsCapped_D193() {
+        EmberRunMaps.Skill c = skill("type", "circle", "break_hp", 0.065, "break_stun", 0.5);
+        assertEquals(0.065, c.breakHp, 1e-9);
+        assertEquals(0.5, c.breakStun, 0);
+        assertEquals(1.0, skill("type", "circle", "break_hp", 0.1).breakStun, 0); // default stun 1 s
+        assertEquals(0.0, skill("type", "circle").breakHp, 0);
+        assertEquals(0.0, skill("type", "circle", "break_stun", 1.0).breakStun, 0); // no break_hp → no stun
+        assertEquals(0.0, skill("type", "charge", "break_hp", 0.1).breakHp, 0);
+        assertEquals(0.0, skill("type", "circle", "share", true, "break_hp", 0.1).breakHp, 0);
+        assertEquals(0.5, skill("type", "circle", "break_hp", 9).breakHp, 0);       // ≤ half the boss
+        assertEquals(2.0, skill("type", "circle", "break_hp", 0.1, "break_stun", 9).breakStun, 0); // ≤ 2 s
+        assertEquals(0.065, c.withDmg(61).breakHp, 1e-9); // challenge copy keeps it
+        assertEquals(0.5, c.withDmg(61).breakStun, 0);
+    }
+
+    @Test public void brokenOnlyWhenArmedAndNeedReached_D193() {
+        assertTrue(EmberRunDirector.broken(200, 200));
+        assertTrue(EmberRunDirector.broken(200, 250));
+        assertFalse(EmberRunDirector.broken(200, 199.9));
+        assertFalse(EmberRunDirector.broken(0, 500)); // nothing armed
+    }
 }

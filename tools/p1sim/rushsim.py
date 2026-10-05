@@ -31,6 +31,7 @@ def run_rush(cfg, rc, st, kn, rng, potions):
         b = md['boss']
         b['hp'] = float(b['hp']) * rc['hp']
         b['atk'] = b['atk'] * rc['dmg']
+        b['skills'] = [s for s in b.get('skills', []) if not s.get('break_hp')]  # D193: no break channel in a rush (EmberRunDirector def.rush)
         for s in b.get('skills', []):
             s['dmg'] = s['dmg'] * rc['dmg']
             if s.get('follow'):
