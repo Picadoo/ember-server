@@ -221,6 +221,39 @@ public final class EmberCounters {
         return best;
     }
 
+    /**
+     * D207 (ARCH S1-5 · REG §4-5): periodic CLAIM families get the clock-rollback guard in
+     * {@link town.sunshine.corerpg.PlayerData#periodCount} / {@code addPeriodCount}: while the blob already holds a key of
+     * the same name for a <em>later</em> period, the older period reads as saturated and cannot be written, so a server
+     * clock set back cannot re-open a daily / weekly / monthly claim. Assets, progress, stats and hints are not guarded.
+     */
+    public static boolean clockGuarded(Family f) {
+        if (f == null || f.category != Category.CLAIM) return false;
+        return f.period == Period.DAY || f.period == Period.PWEEK || f.period == Period.LWEEK || f.period == Period.MONTH;
+    }
+
+    private static final java.util.regex.Pattern P_DAY = java.util.regex.Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+    private static final java.util.regex.Pattern P_MONTH = java.util.regex.Pattern.compile("\\d{4}-\\d{2}");
+    private static final java.util.regex.Pattern P_LWEEK = java.util.regex.Pattern.compile("\\d{4}-W\\d{2}");
+    private static final java.util.regex.Pattern P_PWEEK = java.util.regex.Pattern.compile("w-?\\d{1,12}");
+
+    /**
+     * Is period {@code a} strictly later than period {@code b} for this period kind? False when either side does not
+     * parse in that kind's format (unknown shapes are never guarded), and for non-periodic kinds.
+     */
+    public static boolean laterPeriod(Period kind, String a, String b) {
+        if (kind == null || a == null || b == null) return false;
+        switch (kind) {
+            case DAY: return P_DAY.matcher(a).matches() && P_DAY.matcher(b).matches() && a.compareTo(b) > 0;
+            case MONTH: return P_MONTH.matcher(a).matches() && P_MONTH.matcher(b).matches() && a.compareTo(b) > 0;
+            case LWEEK: return P_LWEEK.matcher(a).matches() && P_LWEEK.matcher(b).matches() && a.compareTo(b) > 0;
+            case PWEEK:
+                if (!P_PWEEK.matcher(a).matches() || !P_PWEEK.matcher(b).matches()) return false;
+                return Long.parseLong(a.substring(1)) > Long.parseLong(b.substring(1));
+            default: return false;
+        }
+    }
+
     /** Pairs (a, b) where prefix family a swallows b's key and the pair is not in {@link #PREFIX_EXEMPT}. Empty = clean. */
     public static List<String> prefixConflicts() {
         List<String> out = new ArrayList<String>();

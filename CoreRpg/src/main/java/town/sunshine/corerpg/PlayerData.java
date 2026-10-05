@@ -520,13 +520,53 @@ public final class PlayerData {
         }
         dirty = true;
     }
+    /**
+     * D207 (ARCH S1-5): value a periodic CLAIM counter reads as while a later period of the same name is already held
+     * (server clock set back). All 30 low bits set, so caps (">= cap"), bitmaps ("bit i claimed") and "used + n"
+     * checks all see "already claimed" without int overflow.
+     */
+    public static final int CLOCK_SATURATED = 0x3FFFFFFF;
+    private static final java.util.concurrent.ConcurrentHashMap<String, Object> GUARD_CACHE = new java.util.concurrent.ConcurrentHashMap<String, Object>();
+    private static final Object UNGUARDED = new Object();
+    private static final java.util.concurrent.atomic.AtomicLong CLOCK_GUARD_HITS = new java.util.concurrent.atomic.AtomicLong();
+    /** How many reads / writes the clock-rollback guard has blocked since start (diagnostics). */
+    public static long clockGuardHits() { return CLOCK_GUARD_HITS.get(); }
+
+    private static town.sunshine.corerpg.p1.EmberCounters.Family guardFamily(String name) {
+        Object o = GUARD_CACHE.get(name);
+        if (o == null) {
+            town.sunshine.corerpg.p1.EmberCounters.Family f = town.sunshine.corerpg.p1.EmberCounters.lookup(name);
+            o = town.sunshine.corerpg.p1.EmberCounters.clockGuarded(f) ? f : UNGUARDED;
+            if (GUARD_CACHE.size() < 4096) GUARD_CACHE.put(name, o);
+        }
+        return o == UNGUARDED ? null : (town.sunshine.corerpg.p1.EmberCounters.Family) o;
+    }
+
+    /** True when name is a guarded periodic claim and the blob holds name@p for some p later than period. */
+    private boolean laterPeriodHeld(String name, String period) {
+        town.sunshine.corerpg.p1.EmberCounters.Family f = guardFamily(name);
+        if (f == null) return false;
+        String pre = name + "@";
+        for (String k : counters.keySet()) {
+            if (k.startsWith(pre) && town.sunshine.corerpg.p1.EmberCounters.laterPeriod(f.period, k.substring(pre.length()), period)) return true;
+        }
+        return false;
+    }
+
     public int periodCount(String name, String period) {
         Integer v = counters.get(name + "@" + period);
-        return v == null ? 0 : v.intValue();
+        if (v != null) return v.intValue();
+        if (laterPeriodHeld(name, period)) { CLOCK_GUARD_HITS.incrementAndGet(); return CLOCK_SATURATED; }
+        return 0;
     }
-    /** Adds n to name@period and drops stale periods of the same name. Returns the new value. */
+    /**
+     * Adds n to name@period and drops stale periods of the same name. Returns the new value.
+     * D207: for a guarded periodic claim, a write to a period older than one already held is refused (nothing changes,
+     * the later key is kept) and {@link #CLOCK_SATURATED} is returned.
+     */
     public int addPeriodCount(String name, String period, int n) {
         String key = name + "@" + period;
+        if (!counters.containsKey(key) && laterPeriodHeld(name, period)) { CLOCK_GUARD_HITS.incrementAndGet(); return CLOCK_SATURATED; }
         java.util.Iterator<String> it = counters.keySet().iterator();
         while (it.hasNext()) { String k = it.next(); if (k.startsWith(name + "@") && !k.equals(key)) it.remove(); }
         int v = periodCount(name, period) + n;
