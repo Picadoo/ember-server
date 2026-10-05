@@ -54,7 +54,7 @@
 | S06 | 首通包 | 自选装备或材料包 | Q01 自选 T1 护符；Q02 自选 T1 刃；Q03–Q07 材料+币（见下） | `once` / 内容版本 | `p1_first_clear_<map>@<ver>`（N2：换版会删旧键） | ✓ `p1sim`（材料/币）；自选走脚本策略 |
 | S07 | 首通徽记 | 首领徽记 | 3 / 图 | `once` / 图（不跟 content_version） | `p1_sigfc_<map>` | ✗（`p1sim` 不计徽记库存） |
 | S08 | 重打普通主线（签名图） | 首领徽记 + 12% 签名烙印在基装上 | 徽记 1；`STAMP_RATE=0.12` | `run`（需已首通该图） | `p1_sigmark_<map>` 累加 | ✗ 徽记；签名掉落 △ `mainline.py` |
-| S09 | 自选誓约 | 首领徽记 | +1 / 条已誓约规则（池里 `normal: true` 目前 lean / reverse = 最多 +2） | `run`（队长已誓约且全员已首通） | `p1_pledge_<id>`（all） | △ `P1_PLEDGE=` 环境上界，不计徽记 |
+| S09 | 自选誓约 | 首领徽记 | +1 / 条已誓约规则（池里 `normal: true` 目前 lean / reverse = 最多 +2） | `run`：队长本人已首通 **Q06**；本局无周规则（`mod == null`）；可誓约 **Q01–Q07** 签名图；队长已誓约且全员已首通该图 | `p1_pledge_<id>`（all） | △ `insignia.py --pledge` 上界（不计战斗惩罚）；`P1_PLEDGE=` 环境上界 |
 | S10 | 精选周挑战加印 | 印记(本阶) | +1；每周最多 3 次（与 S11 共用） | `week` × 3 | `p2_rotation` / 周 | ✓ `p2econ` / `p1sim` |
 | S11 | 精选周普通重打加印 | 印记(地图阶，仅 T1/T2) | +1；与 S10 共用周上限 3；本人已通 Q07 后不再发也不占名额 | `week` × 3 | 同上 | ✓ `p1sim --normal-mods` |
 | S12 | 团本结算 | T3 装备(地板精良) + 印记 T3 ×1 | `raid_item` + `raid_mark`；无首通包 | `week` × 3（R01–R03 共用 `cap_group: raid`）；体力 50 | `p2_raid_<group>` / 周 | ✓ `p2econ --raid` |
@@ -90,7 +90,7 @@
 | # | 来源 | 发什么 | 数量 / 规则 | 周期 / 上限 | 上限键 | 模型 |
 |---|---|---|---|---|---|---|
 | S22 | 挂机庭击杀 | 币 / 经验 / 绑定碎片·骨尘·核心·胚料 | 打满 `daily_kills=2400` 按层：币 60–120、经验 10–25、材料见 `afk.tiers`；离线 = 实测速 × 0.25，日最多 1200 只 | `day` 击杀封顶 2400（在线+离线） | `p1_afk_kill` / `p1_afk_offk` / `p1_afk_acc_<res>` + `bmat:` 账本 | ✓ `afk.py` |
-| S23 | 每日签到 | 币 / 经验 / 印记 / 徽记 | 普通格 20 币 + 5 经验；第 7/21 次：40 币 + 徽记 1（无签名图 → 60 币）；第 14/28 次：40/80 币 + 印记 1；第 29–31：10 币 + 5 经验 | `month` 累计格；补签 ≤ 3 / 月且需当日在线 ≥ 60 | `p1_sign_mask` / `p1_sign_mk` / `p1_sign_mkd` | ✓ `signin.py` |
+| S23 | 每日签到 | 币 / 经验 / 印记 / 徽记 | 普通格 20 币 + 5 经验；第 7/21 次：40 币 + 徽记 1 → **本人已首通的最高签名图**（`EmberSignService.sigMap`；尚无任一首通签名图 → `sigmark_fallback_coin` 60 币）；第 14/28 次：40/80 币 + 印记 1；第 29–31：10 币 + 5 经验 | `month` 累计格；补签 ≤ 3 / 月且需当日在线 ≥ 60 | `p1_sign_mask` / `p1_sign_mk` / `p1_sign_mkd` | ✓ `signin.py`（徽记钩 `signin.INS_HOOK`） |
 | S24 | 在线时长档 | 币 / 经验 | 15′→10 币；30′→15+5xp；60′→20+5xp；120′→25+10xp（合计 70 币 + 20 xp / 日）；挂机庭分钟计入；挂机战斗算活动 | `day`；过 0 点未领自动补发 | `p1_on_min` / `p1_on_claim` | ✓ `signin.py` |
 
 ### 2.4 成长旁路 / 活动 / 其它
@@ -135,7 +135,7 @@
 | C09 | 天赋学习 | 币 | 行 1/2/3：800 / 2000 / 4000；点数预算 1+2+3 | `all`（点数） | ✓ `realcost` |
 | C10 | 天赋重置 | 币 | `respec_coin: 2000` | — | △ `realcost`（有字段，默认路径少用） |
 | C11 | 洗练 | 币 + 碎片（或重复件） | T1–T3：币 300/600/1000；碎片 40/80/120；锁定另加同量 `lock_shard`；保底 5 | 件上词条槽 | ✓ `realcost` / `rerollsim` |
-| C12 | 烬炉烙印 | 徽记 5 + 币 `300 × tier` | 需本人首通 Q02；把签名烙到自有件 | — | ✗ |
+| C12 | 烬炉烙印 | 徽记 5 + 币 `300 × tier` | 需本人首通 **Q02**，且**该签名所属主线图已首通**（`mapCleared`）；消耗该图徽记 5 + 币 `300×件阶`；把签名烙到自有件（换件丢失、不退） | — | ✓ `insignia.py`（opt-in） |
 | C13 | 签名调律 | 徽记 10（`ALT_MARKS`） | 需本人首通 Q07（`ALT_UNLOCK`）；7 件调律版；解锁记 `p1_sigaltu_` | — | ✗ |
 | C14 | 回复药购买 | 币 | `shop.heal_potion.price: 10` | — | ✓ `p1sim` 带药 |
 | C15 | 外观商店 | 币 或 徽（1 徽 = 50 币标价点）或印记点 | `EmberCosmetics`：深渊称号等按层价；足迹 / 称号多为通关解锁（0 价） | — | ✗（外观不进战力；化妆品暂停） |
@@ -230,3 +230,4 @@
 | 2026-10-06 | D223（CoreRpg 1.65.51）：EmberDelivery 负额扣币标签化（`spendCoinDelivery`）；E1 `ember-v1-economy.yml` 镜像防漂移（yml 尚未真源）。 |
 | 2026-10-06 | D224（CoreRpg 1.65.52）：E1 `amount()` 以 `ember-v1-economy.yml` 为真源；缺/坏/漂移 SEVERE fail-closed；Java golden 二次断言；数量不变。 |
 | 2026-10-06 | D225（p1sim + 文档；CoreRpg 不动 / bv57）：E3 p1sim 同读 `ember-v1-economy.yml`；徽记高图周来源设计笔记（研究 only，含 REG S09/S23/C12 文案重写提案）。 |
+| 2026-10-06 | D226（p1sim + 文档；CoreRpg 不动 / bv57）：R1-sim 徽记 what-if A/B/C（`insignia.py --whatif`）；W30 对照 `out-insignia-r1-*.md`；**推荐 B**（残响厅扩 Q05–Q07、共用周帽）；本表 S09/S23/C12 **只改措辞**对齐代码（不改发放逻辑 / 数量）。 |
