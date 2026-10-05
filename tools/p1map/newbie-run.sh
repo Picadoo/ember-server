@@ -46,6 +46,21 @@ IFS='|' read -ra L <<< "$ROUTE"
 DIED=-; DRK=0
 for i in 0 1 2 3; do
   if [ "$MOVE" = kite ]; then IFS=';' read -r WALK DOOR ROOM <<< "${L[$i]}"; else WALK=${L[$i]}; fi
+  # 2026-10-05 (D202 follow-up): rest in the cleared room before the next leg, like a player would.
+  # Kite bots used to walk into the boss hall at 0.5 HP with potions spent (D200/D201 smoke deaths).
+  # HP does not regenerate on its own in P1 runs, so "resting" = top up with the hotbar potion (20 %, 15 s cooldown)
+  # while HP < REST_PCT % of max HP (default 70), for up to REST_MAX s (default 40). Stops early with no potion left.
+  if [ "$MOVE" = kite ] && [ "$i" -gt 0 ]; then
+    RJ=$($T/b.sh eval $N "const RH=${REST_PCT:-70}, RM=${REST_MAX:-40}*1000, t0=Date.now(); let dr=0, next=0;
+      const mx=()=>((((bot.entity||{}).attributes||{})['generic.maxHealth']||{}).value)||20, pct=()=>bot.entity?Math.round(100*bot.health/mx()):-1;
+      while (Date.now()-t0<RM && pct()>=0 && pct()<RH) {
+        const pi=bot.inventory.slots.slice(36,45).findIndex(x=>x&&x.name==='potion'); if (pi<0) break;
+        if (Date.now()>=next) { const s0=bot.quickBarSlot; bot.clearControlStates(); bot.setQuickBarSlot(pi); bot.activateItem(); await wait(1800); bot.deactivateItem(); bot.setQuickBarSlot(s0); dr++; next=Date.now()+15500 }
+        else await wait(500) }
+      return {ms:Date.now()-t0, hp:pct(), drinks:dr}" | tr -d '\n ')
+    echo "REST before leg $i: $RJ"
+    D2=$(echo "$RJ" | grep -o '"drinks":[0-9]*' | cut -d: -f2); DRK=$((DRK + ${D2:-0}))
+  fi
   $T/walk.sh $N "$WALK" | tr -d '\n ' | tail -c 80; echo
   $T/b.sh eval $N "return bot.chatLog.slice(-8).join('')" | grep -q "本局失败\|阵亡\|你已倒下" && { echo "FAILED/DEAD before leg $i"; DIED=$i; break; }
   if [ "$MOVE" = kite ]; then
