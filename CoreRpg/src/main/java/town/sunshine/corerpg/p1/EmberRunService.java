@@ -61,7 +61,9 @@ import java.util.logging.Logger;
  * <p>D231 / ARCH S3-2: abyss fee / floor-best / menu live in {@link EmberAbyssService}; this class keeps thin delegates.
  * <p>D232 / ARCH S3-3: 自选誓约 live in {@link EmberPledgeService}; this class keeps thin delegates.
  * <p>D233 / ARCH S3-4: 团本 weekly cap / labels / settle grants / D106 falls live in {@link EmberRaidService}; this class
- * keeps thin delegates and forwards the raid {@code @EventHandler}s. The recruit board stays here (next cut).
+ * keeps thin delegates and forwards the raid {@code @EventHandler}s.
+ * <p>D234 / ARCH S3-5: 招募板 live in {@link EmberRecruitService}; this class keeps thin delegates and forwards the
+ * recruit {@code @EventHandler}s (season apply on join stays here).
  */
 public final class EmberRunService implements Listener {
 
@@ -84,6 +86,7 @@ public final class EmberRunService implements Listener {
     private final EmberAbyssService abyss;
     private final EmberPledgeService pledge;
     private final EmberRaidService raid;
+    private final EmberRecruitService recruit;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -105,6 +108,7 @@ public final class EmberRunService implements Listener {
         this.abyss = new EmberAbyssService(this);
         this.pledge = new EmberPledgeService(this);
         this.raid = new EmberRaidService(this);
+        this.recruit = new EmberRecruitService(this);
         instance = this;
         load();
     }
@@ -125,6 +129,8 @@ public final class EmberRunService implements Listener {
     EmberPledgeService pledge() { return pledge; }
 
     EmberRaidService raid() { return raid; }
+
+    EmberRecruitService recruit() { return recruit; }
 
     /** package: the director bound to an instance world (null = none) — EmberRaidService D106 flow */
     EmberRunDirector director(String world) { return byWorld.get(world); }
@@ -2516,7 +2522,7 @@ public final class EmberRunService implements Listener {
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) forcedReady.add(((Player) s).getUniqueId()); // D96
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
-            case "recruit": return cmdRecruit(s, args); // D104 (midgame #5)
+            case "recruit": return recruit.cmd(s, args); // D104 / D234 → EmberRecruitService
             case "watch": return cmdWatch(s); // D106
             case "season": // D116
                 if (!(s instanceof Player) || season == null) return true;
@@ -2844,127 +2850,31 @@ public final class EmberRunService implements Listener {
     /** D99: the starter kit delivery prints no "结算到账" line (main thread only) */
     private boolean quietDeliver;
 
-    /** D96: leaders who clicked [仍然进入] skip the readiness warning once */
-    private final Map<UUID, Long> recruitAt = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+    // ------------------------------------------------------------------ E-review #5 / D234: recruit board — EmberRecruitService
 
-    /**
-     * D104 (midgame #5): /corerpg p1 recruit <r01|r02|r03> — the leader (a DP team is created if needed) sends every online
-     * player with their own Q07 first clear a clickable call; /corerpg p1 recruit join <leader> sends the DP join request
-     * and gives the leader a clickable [同意]. 60 s cooldown per leader.
-     */
-    private boolean cmdRecruit(CommandSender s, String[] args) {
-        if (!(s instanceof Player)) return true;
-        Player p = (Player) s;
-        if (args.length >= 4 && "join".equalsIgnoreCase(args[2])) {
-            Player l = Bukkit.getPlayerExact(args[3]);
-            if (l == null || l.equals(p)) { p.sendMessage(P + ChatColor.RED + "队长不在线。"); return true; }
-            if (EmberRunBridges.hasTeam(p)) { p.sendMessage(P + ChatColor.RED + "你已经在一支队伍里了，先退出再申请。"); return true; }
-            // E-review #5: DP's own line already carries [同意] [拒绝] — no second [同意] from us
-            p.performCommand("dungeon-team request join " + l.getName());
-            return true;
-        }
-        if (args.length >= 3 && "list".equalsIgnoreCase(args[2])) { showRecruits(p, true); return true; }
-        String key = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "r01";
-        EmberRunMaps.MapDef m = maps.byKey(key);
-        if (m == null || !m.raid) { p.sendMessage(P + "/corerpg p1 recruit <r01|r02|r03> — 全服招募团本队员"); return true; }
-        if (!progressFlag(data(p.getUniqueId()), m.requires)) { p.sendMessage(P + ChatColor.RED + "先首通 " + m.requires.toUpperCase(Locale.ROOT) + " 才能开团本。"); return true; }
-        if (!EmberRunBridges.teamLeader(p)) { p.sendMessage(P + ChatColor.RED + "只有队长能招募。"); return true; }
-        long now = System.currentTimeMillis();
-        Long last = recruitAt.get(p.getUniqueId());
-        if (last != null && now - last < 60_000L) { p.sendMessage(P + ChatColor.RED + "招募 60 秒内只能发一次（还剩 " + (60 - (now - last) / 1000) + " 秒）。"); return true; }
-        if (!EmberRunBridges.hasTeam(p)) p.performCommand("dungeon-team create");
-        recruitAt.put(p.getUniqueId(), now);
-        List<UUID> team = EmberRunBridges.teamMembers(p);
-        int need = Math.max(0, maps.partyMin(m) - team.size());
-        String line = P + "§6" + p.getName() + " §f招 §e" + m.name + " §f队员（现在 " + team.size() + " 人"
-                + (need > 0 ? "，还差 " + need + " 人开本" : "") + "；人越多越稳，最多 5 人）" + (m.partyHint.isEmpty() ? "" : " §e" + m.partyHint) + " ";
-        recruits.put(p.getUniqueId(), new Recruit(p.getUniqueId(), p.getName(), m.key, m.name, now)); // E-review #5: the board
-        int sent = 0;
-        for (Player o : Bukkit.getOnlinePlayers()) {
-            if (o.equals(p) || team.contains(o.getUniqueId())) continue;
-            if (!progressFlag(data(o.getUniqueId()), m.requires)) continue;
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(o, line,
-                    new String[]{"[申请入队]", "/corerpg p1 recruit join " + p.getName(), "向队长申请；队长同意后入队", "GREEN"});
-            sent++;
-        }
-        p.sendMessage(P + (sent > 0 ? "§a已向 " + sent + " 位已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的在线玩家发出招募；有人申请时会出现 [同意] [拒绝]。"
-                : "§7现在没有其他已首通 " + m.requires.toUpperCase(Locale.ROOT) + " 的玩家在线。") + "§7招募挂在冒险页团本图标上 10 分钟，之后上线的人也看得到。");
-        return true;
-    }
+    /** board TTL (alias for tests / callers that still read the pre-extract name). */
+    static final long RECRUIT_TTL = EmberRecruitService.TTL_MS;
 
-    // ------------------------------------------------------------------ E-review #5: recruit board (10 minutes)
+    /** %corerpg_p1_recruits%: up to two board entries for the adventure icons — {@link EmberRecruitService} (D234). */
+    public String recruitsLabel() { return recruit.label(); }
 
-    static final long RECRUIT_TTL = 10 * 60_000L;
+    /** chat list with [申请入队] — {@link EmberRecruitService#show} (D234). */
+    void showRecruits(Player p, boolean tellEmpty) { recruit.show(p, tellEmpty); }
 
-    private static final class Recruit {
-        final UUID leader; final String name, raid, raidName; final long at;
-        Recruit(UUID leader, String name, String raid, String raidName, long at) { this.leader = leader; this.name = name; this.raid = raid; this.raidName = raidName; this.at = at; }
-    }
-    private final Map<UUID, Recruit> recruits = new java.util.concurrent.ConcurrentHashMap<UUID, Recruit>();
-
-    /** live board entries: younger than 10 min, leader online, still leading a team that is not full and not in a run */
-    private List<Recruit> liveRecruits() {
-        long now = System.currentTimeMillis();
-        List<Recruit> out = new ArrayList<Recruit>();
-        for (Recruit r : new ArrayList<Recruit>(recruits.values())) {
-            Player l = Bukkit.getPlayer(r.leader);
-            boolean ok = now - r.at < RECRUIT_TTL && l != null && l.isOnline() && !blocksLegacy(l.getWorld())
-                    && EmberRunBridges.hasTeam(l) && EmberRunBridges.teamLeader(l) && EmberRunBridges.teamMembers(l).size() < 5;
-            if (ok) out.add(r); else recruits.remove(r.leader);
-        }
-        out.sort((a, b) -> Long.compare(b.at, a.at));
-        return out;
-    }
-
-    private String recruitText(Recruit r) {
-        Player l = Bukkit.getPlayer(r.leader);
-        int n = l == null ? 1 : EmberRunBridges.teamMembers(l).size();
-        EmberRunMaps.MapDef m = maps.byKey(r.raid);
-        int min = m == null ? 3 : maps.partyMin(m);
-        long mins = (System.currentTimeMillis() - r.at) / 60_000L;
-        return r.raid.toUpperCase(Locale.ROOT) + " · " + r.name + " · " + n + "/" + min + (n >= min ? "（可开本）" : "") + " · " + (mins == 0 ? "刚刚" : mins + " 分钟前");
-    }
-
-    /** %corerpg_p1_recruits%: up to two board entries for the adventure icons */
-    public String recruitsLabel() {
-        List<Recruit> live = liveRecruits();
-        if (live.isEmpty()) return "暂无（右键发一个）";
-        StringBuilder b = new StringBuilder();
-        for (int i = 0; i < Math.min(2, live.size()); i++) b.append(i == 0 ? "" : " ｜ ").append(recruitText(live.get(i)));
-        return b + (live.size() > 2 ? " 等 " + live.size() + " 个" : "");
-    }
-
-    /** chat list with [申请入队] (players with their own Q07 first clear, not already in a team) */
-    void showRecruits(Player p, boolean tellEmpty) {
-        List<Recruit> live = liveRecruits();
-        if (live.isEmpty()) { if (tellEmpty) p.sendMessage(P + "现在没有团本在招人。冒险页团本图标右键可以自己发一个。"); return; }
-        p.sendMessage(P + "§6团本招募板§7（挂 10 分钟）：");
-        for (Recruit r : live) {
-            if (r.leader.equals(p.getUniqueId())) { p.sendMessage(P + "  §7" + recruitText(r) + "（你的招募）"); continue; }
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "  §f" + recruitText(r) + " ",
-                    new String[]{"[申请入队]", "/corerpg p1 recruit join " + r.name, "向队长申请；队长同意后入队", "GREEN"});
-        }
-    }
-
-    /** E-review #5: players with a Q07 first clear see open recruits when they log in */
+    /** E-review #5: season apply (D116) + Q07 recruit board flash — season stays here; board → {@link EmberRecruitService} (D234). */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoinRecruits(org.bukkit.event.player.PlayerJoinEvent e) {
         final Player p = e.getPlayer();
         if (season != null) Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) season.apply(p); }, 60L); // D116
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (!p.isOnline() || !progressFlag(data(p.getUniqueId()), "q07") || liveRecruits().isEmpty()) return;
-            showRecruits(p, false);
-        }, 100L);
+        Bukkit.getScheduler().runTaskLater(plugin, () -> recruit.onJoinShow(p), 100L);
     }
 
-    /** E-review #5: DP says nothing to a leader who refused an application ([拒绝] runs request unaccept <name>) */
+    /** E-review #5: DP says nothing to a leader who refused an application ([拒绝] runs request unaccept <name>) — {@link EmberRecruitService} (D234). */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRequestRefused(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
-        String[] a = e.getMessage().replaceFirst("^/", "").trim().split("\\s+");
-        if (a.length < 4 || !a[0].toLowerCase(Locale.ROOT).endsWith("dungeon-team") || !"request".equalsIgnoreCase(a[1])
-                || !"unaccept".equalsIgnoreCase(a[2])) return;
-        e.getPlayer().sendMessage(P + "已拒绝 " + a[3] + " 的入队申请。");
+        recruit.onRequestRefused(e);
     }
+
 
     private final java.util.Set<UUID> warnedT3 = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>()); // D104
     private final java.util.Set<UUID> forcedReady = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
