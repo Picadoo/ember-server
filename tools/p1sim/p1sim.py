@@ -698,6 +698,10 @@ def event_ok(cfg, kind, f, t0, h0, mobs, vseed):
     return f.t - t0 <= float(v['event_secs'])
 
 
+AFFIX_STRESS = False  # D196 gate: periodic affix hits start right at room start (t0 + 1.5) instead of after one cycle
+FIRECHAIN_EXPOSURE = 1.0 / 3.0  # D196: share of the fight a player spends touching the 火链 tether (sim has no positions)
+
+
 def affix_mob(cfg, m, mobs, kind, t0):
     """Promote the toughest mob of the room (heavy, else melee, else the first) — mirrors EmberRunDirector."""
     v = cfg['variety']
@@ -714,6 +718,20 @@ def affix_mob(cfg, m, mobs, kind, t0):
         # the 1 s jailer root is not modelled (no extra hit is forced during it)
         b = v[kind]
         pick_['blaze'] = (t0 + 1.5 + float(b['every']), float(b['every']), pick_['atk'] * float(b['dmg']))
+    elif kind == 'arcane' and isinstance(v.get('arcane'), dict):
+        # D196 旋光: one telegraphed hit per cast (once per player), cast cycle = every + spin (the beam turns for spin s)
+        b = v['arcane']
+        cyc = float(b['every']) + float(b.get('spin', 3.0))
+        pick_['blaze'] = (t0 + 1.5 + cyc, cyc, pick_['atk'] * float(b['dmg']))
+    elif kind == 'firechain' and isinstance(v.get('firechain'), dict):
+        # D196 火链: burns at most once per `tick` s while touching; the sim has no positions, so a player is assumed to
+        # touch the chain FIRECHAIN_EXPOSURE of the time while the elite has a partner (= the room is not yet down to it)
+        b = v['firechain']
+        per = float(b.get('tick', 1.0)) / FIRECHAIN_EXPOSURE
+        pick_['blaze'] = (t0 + 1.5 + float(b.get('warn', 1.2)) + per, per, pick_['atk'] * float(b['dmg']))
+    if AFFIX_STRESS and 'blaze' in pick_ and kind in ('venom', 'jailer', 'arcane', 'firechain'):
+        _, ev, dmg = pick_['blaze']
+        pick_['blaze'] = (t0 + 1.5, ev, dmg)  # worst case: the first cast lands as soon as the room opens
     pick_['affix'] = True
     pick_['affix_kind'] = kind
     return pick_

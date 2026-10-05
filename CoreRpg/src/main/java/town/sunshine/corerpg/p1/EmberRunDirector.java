@@ -45,7 +45,7 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
-        String affix;               // D138/D171/D181/D189: blazing/split/shield/regen/charge/frost/mortar/molten/venom/jailer (null = plain)
+        String affix;               // D138/D171/D181/D189/D196: blazing/split/shield/regen/charge/frost/mortar/molten/venom/jailer/arcane/firechain (null = plain)
         boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
         boolean varietyEscort;      // D171: escort rabbit — must not pay treasure coin; excluded from room-clear count
         long affixNext, affixAt;
@@ -55,6 +55,15 @@ final class EmberRunDirector {
         double regenHurt;           // D171 damage taken during the current interrupt window
         long frostNext;             // D171 next frost aura tick
         boolean venomDiag;          // D189 毒十字: false = "+" (axis), true = "x" (diagonal); flips after every cast
+        // D196 旋光 (rotating beam): start angle (rad), turn sign (+1 / −1, flips every cast), last angle checked,
+        // players already hit by this cast (once per cast)
+        double arcaneStart, arcanePrev;
+        int arcaneSign = 1;
+        java.util.Set<UUID> arcaneHit = new java.util.HashSet<UUID>();
+        // D196 火链 (tether to another room mob): partner, when the link turns live (after its warning), last burn per player
+        Tracked chainTo;
+        long chainLiveAt;
+        Map<UUID, Long> chainBurnAt = new HashMap<UUID, Long>();
         EmberRunMaps.Skill twist;   // D182 Extra.ELITE light move (null = plain stump)
         EmberRunMaps.Skill twistAlt; // D185 Pack 2 second light move (null = Pack 1 only)
         boolean twistUseAlt;         // D185: true → fire twistAlt next
@@ -585,6 +594,8 @@ final class EmberRunDirector {
                 : "mortar".equals(t.affix) ? v.mortarEvery
                 : "venom".equals(t.affix) ? v.venomEvery
                 : "jailer".equals(t.affix) ? v.jailerEvery
+                : "arcane".equals(t.affix) ? v.arcaneEvery
+                : "firechain".equals(t.affix) ? v.chainLinkWarn
                 : v.blazeEvery; // molten has no live tick; split/shield idle glow only
         t.affixNext = System.currentTimeMillis() + 1500L + (long) (every * 1000);
         String tag = EmberRunMaps.Variety.label(t.affix);
@@ -603,6 +614,8 @@ final class EmberRunDirector {
         else if ("molten".equals(t.affix)) how = "杀掉后尸体要炸，立刻退开";
         else if ("venom".equals(t.affix)) how = "身上会亮十字（+ 和 × 轮换），站到两条线之间的空隙里";
         else if ("jailer".equals(t.affix)) how = "脚下亮小圈就走开，被罩住会定身 " + fmt(v.jailerRoot) + " 秒";
+        else if ("arcane".equals(t.affix)) how = "脚下会亮起一道光束并转半圈（紫色预警标出起点和扫过的半边），退到 " + fmt(v.arcaneLength) + " 格外或站到另半边";
+        else if ("firechain".equals(t.affix)) how = "和身边一只怪连着一条火链，别站在两只怪之间；先杀掉被连的那只，火链会换人（换之前有 " + fmt(v.chainLinkWarn) + " 秒烟线预警）";
         else how = t.affix;
         svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));
@@ -618,6 +631,8 @@ final class EmberRunDirector {
                 : "molten".equals(t.affix) ? Particle.LAVA
                 : "venom".equals(t.affix) ? Particle.SPELL_MOB
                 : "jailer".equals(t.affix) ? Particle.CRIT_MAGIC
+                : "arcane".equals(t.affix) ? Particle.SPELL_WITCH
+                : "firechain".equals(t.affix) ? Particle.FLAME
                 : Particle.END_ROD;
         w.spawnParticle(fx, t.le.getLocation().add(0, 1.0, 0), 3, 0.3, 0.5, 0.3, 0.01);
         EmberRunMaps.Variety v = svc.maps().variety;
@@ -788,6 +803,169 @@ final class EmberRunDirector {
             if (feet == null) return;
             t.affixOrigin = feet;
             t.affixAt = now + (long) (v.jailerWarn * 1000);
+            return;
+        }
+        if ("arcane".equals(t.affix)) {
+            // D196 旋光 (D3 Arcane Enchanted): a beam from the elite's (locked) feet; the warning shows the start line and the
+            // swept half; then it turns `sweep`° in `spin` s. A player is hit at most once per cast (swept-interval check, so a
+            // fast step between two ticks cannot jump over the beam). The nearest player sits in the middle of the swept arc.
+            double sweep = Math.toRadians(v.arcaneSweep);
+            if (t.affixAt > 0) {
+                if (now < t.affixAt) {
+                    drawBeam(t.affixOrigin, t.arcaneStart, v.arcaneLength, Particle.SPELL_WITCH);
+                    drawArc(t.affixOrigin, t.arcaneStart, t.arcaneSign * sweep, v.arcaneLength, Particle.SPELL_WITCH);
+                    return;
+                }
+                double el = (now - t.affixAt) / 1000.0;
+                double cur = arcaneAngle(t.arcaneStart, t.arcaneSign, sweep, v.arcaneSpin, el);
+                drawBeam(t.affixOrigin, cur, v.arcaneLength, Particle.END_ROD);
+                double dmg = t.atk * v.arcaneDmg;
+                for (Player p : participantsHere()) {
+                    if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                    if (t.arcaneHit.contains(p.getUniqueId())) continue;
+                    if (!arcaneSwept(t.affixOrigin, t.arcanePrev, cur, v.arcaneLength, v.arcaneWidth, p.getLocation())) continue;
+                    t.arcaneHit.add(p.getUniqueId());
+                    if (dmg > 0) svc.skillHit(s, p, t.le, dmg, "mob");
+                }
+                t.arcanePrev = cur;
+                if (el >= v.arcaneSpin) {
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s arcane %s hit=%d", s.runId, t.arcaneSign > 0 ? "ccw" : "cw", t.arcaneHit.size()));
+                    t.arcaneSign = -t.arcaneSign;
+                    t.arcaneHit.clear();
+                    t.affixAt = 0;
+                    t.affixNext = now + (long) (v.arcaneEvery * 1000);
+                }
+                return;
+            }
+            Player tgt = nearest(t.le.getLocation(), 8);
+            if (now < t.affixNext || tgt == null) return;
+            Location o = t.le.getLocation().clone();
+            o.setY(Math.floor(o.getY()));
+            t.affixOrigin = o;
+            t.arcaneStart = arcaneStartAngle(o, tgt.getLocation(), t.arcaneSign, sweep);
+            t.arcanePrev = t.arcaneStart;
+            t.arcaneHit.clear();
+            t.affixAt = now + (long) (v.arcaneWarn * 1000);
+            w.playSound(o, Sound.BLOCK_NOTE_PLING, 0.6f, 0.8f);
+            return;
+        }
+        if ("firechain".equals(t.affix)) {
+            // D196 火链 (D3 Fire Chains): a burning tether between the elite and its nearest room mob; touching it burns
+            // (atk × dmg, at most once per `tick` s per player). Partner dead / gone → the chain re-forms on the next nearest
+            // after a `warn` s smoke line. No partner left → no chain.
+            Tracked q = t.chainTo;
+            if (q != null && (q.le.isDead() || !q.le.isValid() || !mobs.containsKey(q.le.getUniqueId())
+                    || q.le.getLocation().distanceSquared(t.le.getLocation()) > (v.chainLinkRange + 4) * (v.chainLinkRange + 4))) {
+                t.chainTo = null;
+                q = null;
+                t.affixNext = now; // re-link right away; the new link still waits its warning before it burns
+            }
+            if (q == null) {
+                if (now < t.affixNext) return;
+                Tracked best = chainPartner(t, mobs.values(), v.chainLinkRange);
+                if (best == null) { t.affixNext = now + 1000L; return; }
+                t.chainTo = best;
+                t.chainLiveAt = now + (long) (v.chainLinkWarn * 1000);
+                svc.log().info(String.format(Locale.ROOT, "[P1 run] %s firechain link %s", s.runId, best.role));
+                return;
+            }
+            Location a = t.le.getLocation(), b = q.le.getLocation();
+            boolean live = now >= t.chainLiveAt;
+            drawLink(a, b, live ? Particle.FLAME : Particle.SMOKE_NORMAL);
+            if (!live) return;
+            double dmg = t.atk * v.chainLinkDmg;
+            for (Player p : participantsHere()) {
+                if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                if (!chainTouches(a, b, v.chainLinkWidth, p.getLocation())) continue;
+                if (!chainBurnReady(t.chainBurnAt.get(p.getUniqueId()), now, v.chainLinkTick)) continue;
+                t.chainBurnAt.put(p.getUniqueId(), now);
+                if (dmg > 0) svc.skillHit(s, p, t.le, dmg, "mob");
+            }
+        }
+    }
+
+    /** D196 旋光: beam angle (rad) {@code elapsed} s into the spin; stops at the end of the sweep. */
+    static double arcaneAngle(double start, int sign, double sweepRad, double spin, double elapsed) {
+        double f = spin <= 0 ? 1.0 : Math.max(0.0, Math.min(1.0, elapsed / spin));
+        return start + (sign >= 0 ? 1 : -1) * sweepRad * f;
+    }
+
+    /** D196 旋光: start angle so the target sits in the middle of the swept arc. */
+    static double arcaneStartAngle(Location o, Location target, int sign, double sweepRad) {
+        double base = Math.atan2(target.getZ() - o.getZ(), target.getX() - o.getX());
+        return base - (sign >= 0 ? 1 : -1) * sweepRad / 2.0;
+    }
+
+    /**
+     * D196 旋光: did the beam (length {@code len}, width {@code width}) pass over {@code p} while turning from {@code a0} to
+     * {@code a1}? Swept-interval test on the player's polar angle, widened by the beam's half width at that distance.
+     */
+    static boolean arcaneSwept(Location o, double a0, double a1, double len, double width, Location p) {
+        if (Math.abs(p.getY() - o.getY()) > 2.5) return false;
+        double dx = p.getX() - o.getX(), dz = p.getZ() - o.getZ();
+        double r = Math.sqrt(dx * dx + dz * dz);
+        if (r > len) return false;
+        if (r < 0.6) return true; // standing on the elite's feet: the pivot
+        double lo = Math.min(a0, a1), span = Math.abs(a1 - a0);
+        double half = Math.asin(Math.min(1.0, (width / 2.0) / r));
+        double d = (Math.atan2(dz, dx) - lo + half) % (2 * Math.PI);
+        if (d < 0) d += 2 * Math.PI;
+        return d <= span + 2 * half;
+    }
+
+    /** D196 火链: is {@code p} touching the chain segment a–b (horizontal distance ≤ width/2, within the two mobs' heights)? */
+    static boolean chainTouches(Location a, Location b, double width, Location p) {
+        double lo = Math.min(a.getY(), b.getY()) - 1.0, hi = Math.max(a.getY(), b.getY()) + 2.5;
+        if (p.getY() < lo || p.getY() > hi) return false;
+        double ax = a.getX(), az = a.getZ(), bx = b.getX() - ax, bz = b.getZ() - az;
+        double px = p.getX() - ax, pz = p.getZ() - az;
+        double l2 = bx * bx + bz * bz;
+        double f = l2 < 1e-9 ? 0.0 : Math.max(0.0, Math.min(1.0, (px * bx + pz * bz) / l2));
+        double ex = px - f * bx, ez = pz - f * bz;
+        return ex * ex + ez * ez <= (width / 2.0) * (width / 2.0);
+    }
+
+    /** D196 火链: per-player burn cooldown. */
+    static boolean chainBurnReady(Long last, long now, double tick) {
+        return last == null || now - last >= (long) (tick * 1000);
+    }
+
+    /** D196 火链: nearest living mob of the same room (never the boss, the escort rabbit or itself) within {@code range}. */
+    static Tracked chainPartner(Tracked t, Iterable<Tracked> all, double range) {
+        Tracked best = null;
+        double bd = range * range;
+        Location l = t.le.getLocation();
+        for (Tracked o : all) {
+            if (o == t || o.boss() || o.varietyEscort || o.le == null || o.le.isDead() || !o.le.isValid()) continue;
+            if (t.roomId == null || !t.roomId.equals(o.roomId)) continue;
+            double d = o.le.getLocation().distanceSquared(l);
+            if (d <= bd) { bd = d; best = o; }
+        }
+        return best;
+    }
+
+    private void drawBeam(Location o, double ang, double len, Particle fx) {
+        double y = o.getY() + 0.6;
+        for (double r = 0.5; r <= len + 1e-9; r += 0.5)
+            w.spawnParticle(fx, o.getX() + Math.cos(ang) * r, y, o.getZ() + Math.sin(ang) * r, 1, 0, 0, 0, 0);
+    }
+
+    private void drawArc(Location o, double start, double sweep, double r, Particle fx) {
+        double y = o.getY() + 0.15;
+        int n = Math.max(6, (int) (Math.abs(sweep) * r * 2));
+        for (int i = 0; i <= n; i++) {
+            double a = start + sweep * i / n;
+            w.spawnParticle(fx, o.getX() + Math.cos(a) * r, y, o.getZ() + Math.sin(a) * r, 1, 0, 0, 0, 0);
+        }
+    }
+
+    private void drawLink(Location a, Location b, Particle fx) {
+        double dx = b.getX() - a.getX(), dy = b.getY() - a.getY(), dz = b.getZ() - a.getZ();
+        double len = Math.sqrt(dx * dx + dz * dz);
+        int n = Math.max(2, (int) (len * 2));
+        for (int i = 0; i <= n; i++) {
+            double f = (double) i / n;
+            w.spawnParticle(fx, a.getX() + dx * f, a.getY() + 1.0 + dy * f, a.getZ() + dz * f, 1, 0, 0, 0, 0);
         }
     }
 

@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(56, m.balanceVersion);                // D195 团本破绽 (D194 = 55, D193 = 54, D192 = 53, D191 = 52, D189 = 51, D188 = 50, …)
-        assertEquals("g04-1/b56", m.ruleVersion);
+        assertEquals(57, m.balanceVersion);                // D196 Affix Pack 5 (D195 = 56, D194 = 55, D193 = 54, D192 = 53, D191 = 52, D189 = 51, D188 = 50, …)
+        assertEquals("g04-1/b57", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1331,7 +1331,7 @@ public class EmberRunRulesTest {
 
     @Test public void varietyPack2RollsNewAffixesAndEventsOffFirstClears_D171() {
         EmberRunMaps.Variety v = bundled().variety;
-        assertEquals(10, EmberRunMaps.Variety.KNOWN.size()); // D181 Pack 3 expanded 6→8, D189 Pack 4 8→10
+        assertEquals(12, EmberRunMaps.Variety.KNOWN.size()); // D181 Pack 3 expanded 6→8, D189 Pack 4 8→10, D196 Pack 5 10→12
         assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("regen", "charge", "frost", "mortar", "molten")));
         assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
@@ -1405,7 +1405,7 @@ public class EmberRunRulesTest {
 
     @Test public void varietyPack3MortarMolten_D181() {
         EmberRunMaps.Variety v = bundled().variety;
-        assertEquals(10, EmberRunMaps.Variety.KNOWN.size()); // D189 Pack 4: +venom/jailer
+        assertEquals(12, EmberRunMaps.Variety.KNOWN.size()); // D189 Pack 4: +venom/jailer; D196 Pack 5: +arcane/firechain
         assertTrue(EmberRunMaps.Variety.KNOWN.containsAll(java.util.Arrays.asList("mortar", "molten")));
         assertEquals(EmberRunMaps.Variety.KNOWN, v.affixes);
         assertEquals(5.0, v.mortarEvery, 1e-9);
@@ -1456,7 +1456,7 @@ public class EmberRunRulesTest {
     @Test public void varietyPack4VenomJailer_D189() {
         EmberRunMaps.Variety v = bundled().variety;
         assertTrue(v.affixes.containsAll(java.util.Arrays.asList("venom", "jailer")));
-        assertEquals(10, v.affixes.size());
+        assertEquals(12, v.affixes.size()); // D196: +arcane/firechain
         assertEquals("毒十字", EmberRunMaps.Variety.label("venom"));
         assertEquals("禁锢", EmberRunMaps.Variety.label("jailer"));
         assertEquals(6.0, v.venomEvery, 1e-9);
@@ -1517,6 +1517,91 @@ public class EmberRunRulesTest {
         assertTrue(aff.containsAll(java.util.Arrays.asList("venom", "jailer")));
     }
 
+    @Test public void varietyPack5ArcaneFirechain_D196() {
+        EmberRunMaps.Variety v = bundled().variety;
+        assertTrue(v.affixes.containsAll(java.util.Arrays.asList("arcane", "firechain")));
+        assertEquals("旋光", EmberRunMaps.Variety.label("arcane"));
+        assertEquals("火链", EmberRunMaps.Variety.label("firechain"));
+        assertEquals(8.0, v.arcaneEvery, 1e-9);
+        assertEquals(1.5, v.arcaneWarn, 1e-9);
+        assertEquals(5.0, v.arcaneLength, 1e-9);
+        assertEquals(1.2, v.arcaneWidth, 1e-9);
+        assertEquals(180.0, v.arcaneSweep, 1e-9);
+        assertEquals(3.0, v.arcaneSpin, 1e-9);
+        assertEquals(1.0, v.arcaneDmg, 1e-9);
+        assertEquals(1.2, v.chainLinkWarn, 1e-9);
+        assertEquals(1.0, v.chainLinkWidth, 1e-9);
+        assertEquals(1.0, v.chainLinkTick, 1e-9);
+        assertEquals(0.3, v.chainLinkDmg, 1e-9);
+        assertEquals(10.0, v.chainLinkRange, 1e-9);
+        assertEquals(2, v.affixShard); // reward unchanged
+        // clamps: never more than a half turn, never faster than 120°/s, warn ≥ 1.2, burn ≤ 1.0 atk and ≤ 2 / s
+        java.util.Map<String, Object> raw = new java.util.LinkedHashMap<String, Object>();
+        raw.put("affix_rate", 1.0);
+        raw.put("affixes", java.util.Arrays.asList("arcane", "firechain", "orbiter", "waller"));
+        java.util.Map<String, Object> ar = new java.util.LinkedHashMap<String, Object>();
+        ar.put("sweep", 720); ar.put("spin", 0.2); ar.put("warn", 0.1); ar.put("every", 1); ar.put("length", 40);
+        raw.put("arcane", ar);
+        java.util.Map<String, Object> fc = new java.util.LinkedHashMap<String, Object>();
+        fc.put("warn", 0.0); fc.put("tick", 0.05); fc.put("dmg", 9); fc.put("range", 99);
+        raw.put("firechain", fc);
+        EmberRunMaps.Variety cl = new EmberRunMaps.Variety(raw);
+        assertEquals(java.util.Arrays.asList("arcane", "firechain"), cl.affixes); // unknown ids dropped
+        assertEquals(180.0, cl.arcaneSweep, 1e-9);
+        assertEquals(1.5, cl.arcaneSpin, 1e-9);
+        assertEquals(1.2, cl.arcaneWarn, 1e-9);
+        assertEquals(4.0, cl.arcaneEvery, 1e-9);
+        assertEquals(6.0, cl.arcaneLength, 1e-9);
+        assertEquals(1.2, cl.chainLinkWarn, 1e-9);
+        assertEquals(0.5, cl.chainLinkTick, 1e-9);
+        assertEquals(1.0, cl.chainLinkDmg, 1e-9);
+        assertEquals(12.0, cl.chainLinkRange, 1e-9);
+        // beam: the target sits mid-arc; angle runs start → start ± sweep and stops there
+        org.bukkit.Location o = new org.bukkit.Location(null, 0, 64, 0);
+        double half = Math.PI / 2;
+        double st = EmberRunDirector.arcaneStartAngle(o, new org.bukkit.Location(null, 3, 64, 0), 1, Math.PI);
+        assertEquals(-half, st, 1e-9);
+        assertEquals(st, EmberRunDirector.arcaneAngle(st, 1, Math.PI, 3.0, 0.0), 1e-9);
+        assertEquals(0.0, EmberRunDirector.arcaneAngle(st, 1, Math.PI, 3.0, 1.5), 1e-9);
+        assertEquals(half, EmberRunDirector.arcaneAngle(st, 1, Math.PI, 3.0, 9.0), 1e-9);
+        assertEquals(-half + Math.PI, EmberRunDirector.arcaneAngle(st, 1, Math.PI, 3.0, 3.0), 1e-9);
+        assertEquals(half, EmberRunDirector.arcaneStartAngle(o, new org.bukkit.Location(null, 3, 64, 0), -1, Math.PI), 1e-9);
+        // swept-interval: a tick from −10° to +10° hits a player at 0° r 3, misses one at 40°, misses beyond length
+        double a0 = Math.toRadians(-10), a1 = Math.toRadians(10);
+        assertTrue(EmberRunDirector.arcaneSwept(o, a0, a1, 5.0, 1.2, new org.bukkit.Location(null, 3, 64, 0)));
+        assertTrue(EmberRunDirector.arcaneSwept(o, a1, a0, 5.0, 1.2, new org.bukkit.Location(null, 3, 64, 0))); // either turn
+        assertFalse(EmberRunDirector.arcaneSwept(o, a0, a1, 5.0, 1.2, new org.bukkit.Location(null, 3 * Math.cos(Math.toRadians(40)), 64, 3 * Math.sin(Math.toRadians(40)))));
+        assertFalse(EmberRunDirector.arcaneSwept(o, a0, a1, 5.0, 1.2, new org.bukkit.Location(null, 5.4, 64, 0)));
+        assertFalse(EmberRunDirector.arcaneSwept(o, a0, a1, 5.0, 1.2, new org.bukkit.Location(null, 3, 68, 0))); // other floor
+        assertTrue(EmberRunDirector.arcaneSwept(o, a0, a1, 5.0, 1.2, new org.bukkit.Location(null, 0.3, 64, 2.0 * 0)));  // pivot
+        // the beam's half width widens the hit near the edge: 12° off at r 3 (≈ 0.62 off the line) is just outside 0.6
+        assertFalse(EmberRunDirector.arcaneSwept(o, 0.0, 0.0, 5.0, 1.2, new org.bukkit.Location(null, 3 * Math.cos(Math.toRadians(12)), 64, 3 * Math.sin(Math.toRadians(12)))));
+        assertTrue(EmberRunDirector.arcaneSwept(o, 0.0, 0.0, 5.0, 1.2, new org.bukkit.Location(null, 3 * Math.cos(Math.toRadians(10)), 64, 3 * Math.sin(Math.toRadians(10)))));
+        // across the ±π seam: −170° → +170° the short way is NOT what the beam does; a1 − a0 is the real turn
+        assertTrue(EmberRunDirector.arcaneSwept(o, Math.toRadians(170), Math.toRadians(190), 5.0, 1.2, new org.bukkit.Location(null, -3, 64, 0)));
+        // the whole cast never touches the back half: a full 180° sweep from −90° to +90° misses a player behind (−x)
+        assertFalse(EmberRunDirector.arcaneSwept(o, -half, half, 5.0, 1.2, new org.bukkit.Location(null, -3, 64, 0)));
+        // chain: a segment between two mobs; touching = within width / 2 horizontally, inside the height band
+        org.bukkit.Location ea = new org.bukkit.Location(null, 0, 64, 0), eb = new org.bukkit.Location(null, 6, 64, 0);
+        assertTrue(EmberRunDirector.chainTouches(ea, eb, 1.0, new org.bukkit.Location(null, 3, 64, 0.4)));
+        assertFalse(EmberRunDirector.chainTouches(ea, eb, 1.0, new org.bukkit.Location(null, 3, 64, 0.6)));
+        assertFalse(EmberRunDirector.chainTouches(ea, eb, 1.0, new org.bukkit.Location(null, 7, 64, 0)));   // past the end
+        assertFalse(EmberRunDirector.chainTouches(ea, eb, 1.0, new org.bukkit.Location(null, 3, 70, 0)));   // above
+        assertTrue(EmberRunDirector.chainTouches(ea, ea, 1.0, new org.bukkit.Location(null, 0.2, 64, 0)));  // degenerate
+        // burn cooldown per player
+        assertTrue(EmberRunDirector.chainBurnReady(null, 5000L, 1.0));
+        assertFalse(EmberRunDirector.chainBurnReady(4500L, 5000L, 1.0));
+        assertTrue(EmberRunDirector.chainBurnReady(4000L, 5000L, 1.0));
+        // the roll reaches both new affixes
+        java.util.Set<String> aff = new java.util.HashSet<String>();
+        for (long seed = 0; seed < 8000; seed++) {
+            String[] a = v.roll(EmberRunRules.subSeed(seed, "variety"));
+            if (!a[1].isEmpty()) aff.add(a[1]);
+        }
+        assertTrue(aff.containsAll(java.util.Arrays.asList("arcane", "firechain")));
+        assertEquals(12, aff.size());
+    }
+
     @Test public void escortRabbitDoesNotPayTreasureCoin_D171() {
         // variety escort is tracked separately; Extra.TREASURE settlement is the only path to treasure coin
         EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
@@ -1550,7 +1635,7 @@ public class EmberRunRulesTest {
         EmberRunMaps.Variety v = bundled().variety;
         assertEquals(9, EmberRunMaps.Variety.EVENTS.size()); // D191 Pack 4: 6 → 9
         assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("hold", "beacon", "relay")));
-        assertEquals(10, EmberRunMaps.Variety.KNOWN.size()); // affix pool unchanged by D179 (D189 later 8→10)
+        assertEquals(12, EmberRunMaps.Variety.KNOWN.size()); // affix pool unchanged by D179 (D189 later 8→10, D196 10→12)
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
         assertEquals(2.5, v.holdRadius, 1e-9);
         assertEquals(12.0, v.holdNeed, 1e-9);
@@ -1630,7 +1715,7 @@ public class EmberRunRulesTest {
     @Test public void varietyPack4RollsBreachChainUnscathed_D191() {
         EmberRunMaps.Variety v = bundled().variety;
         assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("breach", "chain", "unscathed")));
-        assertEquals(10, EmberRunMaps.Variety.KNOWN.size()); // affix pool untouched by D191
+        assertEquals(12, EmberRunMaps.Variety.KNOWN.size()); // affix pool untouched by D191 (D196 later 10→12)
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
         assertEquals(0.5, v.eventRate, 1e-9);               // rate unchanged
         assertEquals(1, v.eventCore);                       // reward amount unchanged
