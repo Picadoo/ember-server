@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(52, m.balanceVersion);                // D191 Room Events Pack 4 裂隙/连斩/无伤 (D189 = 51, D188 = 50, …)
-        assertEquals("g04-1/b52", m.ruleVersion);
+        assertEquals(53, m.balanceVersion);                // D192 Boss Moves Pack 4 落空破绽 (D191 = 52, D189 = 51, D188 = 50, …)
+        assertEquals("g04-1/b53", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1762,6 +1762,21 @@ public class EmberRunRulesTest {
             assertEquals(w[0] + " wall stun", 1.5, found.wallStun, 0);
         }
         for (EmberRunMaps.Skill sk : m.byKey("r01").boss.skills) assertEquals("raid untouched", 0.0, sk.wallStun, 0);
+    }
+
+    @Test public void earlyBossesStaggerOnAWhiffedHeavyMove_D192() {
+        EmberRunMaps m = bundled();
+        String[][] want = {{"q01", "重斩"}, {"q02", "砸地"}, {"q03", "誓斩"}, {"q04", "冲击圈"}, {"q05", "斧刃横扫"}};
+        for (String[] w : want) {
+            int n = 0;
+            for (EmberRunMaps.Skill sk : m.byKey(w[0]).boss.skills) {
+                if (sk.whiffStun > 0) { n++; assertEquals(w[0], w[1], sk.name); assertEquals(0.5, sk.whiffStun, 0); assertFalse(sk.light); }
+                if (sk.follow != null) assertEquals("follow untouched", 0.0, sk.follow.whiffStun, 0);
+            }
+            assertEquals(w[0] + " exactly one whiff move", 1, n);
+        }
+        for (String k : new String[]{"q06", "q07", "r01", "r02", "r03"})
+            for (EmberRunMaps.Skill sk : m.byKey(k).boss.skills) assertEquals(k + " untouched", 0.0, sk.whiffStun, 0);
     }
 
     @Test public void everyMainBossHasHalfHpTelegraphedLightPressure_D173() {

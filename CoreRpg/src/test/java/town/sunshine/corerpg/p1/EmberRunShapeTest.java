@@ -191,4 +191,23 @@ public class EmberRunShapeTest {
         assertEquals(2.0, c.withLength(5).wallStun, 0); // clipped copy keeps it
         assertEquals(2.0, c.withDmg(79).wallStun, 0);   // challenge copy keeps it
     }
+
+    @Test public void whiffStunParsesOffChargeAndShareAndIsCapped_D192() {
+        assertEquals(1.0, skill("type", "cone", "whiff_stun", 1.0).whiffStun, 0);
+        assertEquals(0.0, skill("type", "cone").whiffStun, 0);
+        assertEquals(0.0, skill("type", "charge", "whiff_stun", 1.0).whiffStun, 0); // a charge has the wall stun instead
+        assertEquals(0.0, skill("type", "circle", "share", true, "whiff_stun", 1.0).whiffStun, 0); // share wants people in
+        assertEquals(2.0, skill("type", "line", "whiff_stun", 9).whiffStun, 0); // ≤ 2 s
+        EmberRunMaps.Skill c = skill("type", "circle", "whiff_stun", 1.0);
+        assertEquals(1.0, c.withDmg(79).whiffStun, 0); // challenge copy keeps it
+    }
+
+    @Test public void whiffOnlyWhenArmedAndNobodyHit_D192() {
+        EmberRunMaps.Skill sk = skill("type", "cone", "whiff_stun", 1.0);
+        assertTrue(EmberRunDirector.whiffs(true, 0, sk));
+        assertFalse(EmberRunDirector.whiffs(true, 1, sk));  // someone got hit
+        assertFalse(EmberRunDirector.whiffs(false, 0, sk)); // nobody was in it at warn start (standing far away ≠ dodge)
+        assertFalse(EmberRunDirector.whiffs(true, 0, skill("type", "cone")));
+        assertFalse(EmberRunDirector.whiffs(true, 0, null));
+    }
 }

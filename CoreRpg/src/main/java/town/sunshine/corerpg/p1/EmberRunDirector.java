@@ -95,6 +95,7 @@ final class EmberRunDirector {
     private EmberRunMaps.Skill follow;
     private long followStart;
     private boolean pendingCrash;        // D188 撞墙破绽: the pending charge was cut short by a real wall
+    private boolean pendingArmed;        // D192 落空破绽: someone stood inside the pending telegraph when its warning began
     private long stunUntil;              // D188: boss stunned (no skills, no melee) until this
     private boolean addsDone;
     private long addsAt;
@@ -1631,7 +1632,7 @@ final class EmberRunDirector {
         if (pending != null) {
             drawShape(pending, lockOrigin, lockDir);
             if (now >= pendingAt) {
-                execute(pending, lockOrigin, lockDir, le);
+                int landed = execute(pending, lockOrigin, lockDir, le);
                 EmberRunMaps.Skill done = pending;
                 pending = null;
                 recoverUntil = now + (long) ((Double.isNaN(done.recover) ? b.recover : done.recover) * 1000);
@@ -1640,7 +1641,9 @@ final class EmberRunDirector {
                     followStart = now + (long) (done.follow.delay * 1000);
                 }
                 if (pendingCrash && done.wallStun > 0 && !le.isDead()) wallStun(done, now, le);
+                else if (whiffs(pendingArmed, landed, done) && !le.isDead()) whiffStun(done, now, le);
                 pendingCrash = false;
+                pendingArmed = false;
             }
             return;
         }
@@ -1735,6 +1738,7 @@ final class EmberRunDirector {
     private void startShifted(EmberRunMaps.Skill sk, long now, LivingEntity le) {
         lockOrigin = lockOrigin.clone().add(rightOf(lockDir).multiply(sk.shift));
         pending = skillFor(sk);
+        pendingArmed = false; // D192: a shifted band is never a whiff window
         pendingAt = now + (long) (sk.warn * 1000);
         casts++;
         le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
@@ -1778,6 +1782,7 @@ final class EmberRunDirector {
         pending = skillFor(sk);
         if ("charge".equals(sk.type)) pending = pending.withLength(run);
         pendingAt = now + (long) (sk.warn * 1000);
+        pendingArmed = sk.whiffStun > 0 && anyoneInside(pending, lockOrigin, lockDir); // D192: only a real dodge counts
         casts++;
         Location face = o.clone();
         face.setDirection(dir);
@@ -1789,7 +1794,37 @@ final class EmberRunDirector {
                 + ("circle".equals(sk.type) && sk.radius > 0 ? " · 半径 " + fmt(sk.radius) + " 格" : "") : shapeHint(pending);
         if (sk.share) who += " §6· 全队靠拢进圈分摊（人越多每人越少，一个人扛会很痛）";
         if (sk.wallStun > 0) who += " §a· 让它撞上墙会晕 " + fmt(sk.wallStun) + " 秒";
+        if (sk.whiffStun > 0 && pendingArmed) who += " §a· 全员躲开它会踉跄 " + fmt(sk.whiffStun) + " 秒";
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
+    }
+
+    /** D192 落空破绽: armed at warn start (someone inside) and the hit landed on nobody → the boss staggers. */
+    static boolean whiffs(boolean armed, int landed, EmberRunMaps.Skill done) {
+        return armed && landed == 0 && done != null && done.whiffStun > 0;
+    }
+
+    /** D192: a living, non-spectator participant stands inside {@code sk} as drawn from {@code o} / {@code dir} now. */
+    private boolean anyoneInside(EmberRunMaps.Skill sk, Location o, Vector dir) {
+        if (o == null || dir == null) return false;
+        for (Player p : participantsHere()) {
+            if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+            if (inShape(sk, o, dir, p.getLocation())) return true;
+        }
+        return false;
+    }
+
+    /** D192 落空破绽: same stagger as the wall stun (rooted, no skill, no melee; a queued follow-up waits), shorter. */
+    private void whiffStun(EmberRunMaps.Skill done, long now, LivingEntity le) {
+        long ms = (long) (done.whiffStun * 1000);
+        stunUntil = now + ms;
+        recoverUntil = Math.max(recoverUntil, stunUntil);
+        if (follow != null) followStart = Math.max(followStart, stunUntil);
+        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (done.whiffStun * 20) + 4, 10, false, false), true);
+        Location at = le.getLocation();
+        w.spawnParticle(Particle.CRIT, at.clone().add(0, 2.2, 0), 10, 0.4, 0.2, 0.4, 0.05);
+        w.playSound(at, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.8f, 0.6f);
+        svc.tellRun(s, "§a落空！§c" + bossDef().name + " §e踉跄 " + fmt(done.whiffStun) + " 秒 §7· 破绽，趁现在输出");
+        svc.log().info(String.format(Locale.ROOT, "[P1 run] %s whiff stun %s %.1fs", s.runId, done.name, done.whiffStun));
     }
 
     /** D188 撞墙破绽: rooted, no skill and no melee for {@code done.wallStun} s; a queued follow-up waits until it ends. */
@@ -1920,7 +1955,8 @@ final class EmberRunDirector {
         return new EmberRunMaps.Skill(m);
     }
 
-    private void execute(EmberRunMaps.Skill sk, Location o, Vector dir, LivingEntity src) {
+    /** @return how many players the shape landed on (D192 落空破绽 reads 0 = everyone dodged) */
+    private int execute(EmberRunMaps.Skill sk, Location o, Vector dir, LivingEntity src) {
         int hit = 0;
         List<Player> inside = new ArrayList<Player>();
         for (Player p : w.getPlayers()) {
@@ -1971,6 +2007,7 @@ final class EmberRunDirector {
             src.teleport(end);
         }
         if (hit == 0 && src == (boss == null ? null : boss.le)) svc.log().fine("[P1 run] " + sk.name + " missed");
+        return hit;
     }
 
     /** R03 (D137): the whole hit split equally between everyone standing in the circle (alone = all of it). */

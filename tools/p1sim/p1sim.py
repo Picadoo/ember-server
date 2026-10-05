@@ -206,6 +206,11 @@ def power(cfg, st, kn):
 # 1.0 = upper bound (every charge crashes). Java stuns only when a real wall cuts the strip short.
 WALL_STUN_P = None
 WALL_STUN_K = 0.5
+# D192 落空破绽: a dodged boss telegraph that carries whiff_stun staggers the boss (solo model: dodged = nobody hit).
+# WHIFF_ARM = share of casts where the player was inside the shape at warn start (Java arms only then); 1.0 = upper bound
+# (the player always stands in melee). WHIFF_STUN = False strips the mechanic (baseline).
+WHIFF_STUN = True
+WHIFF_ARM = 1.0
 _UID = itertools.count(1)  # M03: burn-book key of a mob (unique per process; never touches an rng)
 
 
@@ -381,7 +386,7 @@ class Fight:
                     self.hits += int(gm(st, 'dodge_burst', 0.0))
                     if rec is not None:
                         rec['n_dodge_burst'] += 1
-            return
+            return True  # D192: dodged (callers that ignore the value are unchanged)
         if st.get('mods'):
             raw *= gm(st, 'taken_' + kind) * (gm(st, 'taken_affix') if affix else 1.0) * gm(st, 'taken_all')
             if self.cfg.get('abyss'):
@@ -549,7 +554,16 @@ class Fight:
                         sk = s['s']
                         s['next'] = t + sk['every']
                         if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
-                            self.hurt(sk['dmg'], True, 'tele')
+                            _dodged = self.hurt(sk['dmg'], True, 'tele')
+                            if WHIFF_STUN and sk.get('whiff_stun') and _dodged and boss['hp'] > 0:  # D192 落空破绽 (solo: dodged = whiff)
+                                _st = float(sk['whiff_stun']) * WHIFF_ARM
+                                boss['next'] = max(boss['next'], t) + _st
+                                for _s in skills:
+                                    if _s is not s:
+                                        _s['next'] += _st
+                                s['next'] += _st
+                                if self.rec is not None:
+                                    self.rec['n_whiff_stun'] = self.rec.get('n_whiff_stun', 0) + 1
                             _wp = (kn.dodge * WALL_STUN_K) if WALL_STUN_P is None else WALL_STUN_P
                             if sk.get('wall_stun') and _wp > 0 and boss['hp'] > 0:  # D188 撞墙破绽 (mean stun per charge)
                                 _st = float(sk['wall_stun']) * _wp
