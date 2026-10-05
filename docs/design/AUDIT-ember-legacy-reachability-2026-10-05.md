@@ -197,7 +197,7 @@
 | 旧本实例 `dungeon_EmberDaily*_…` 等 | §2 的 MM 小怪 / Boss | **发且不封顶**（击杀币 1 / 只 + 经验 2 + `mmgive` 材料 / 旧装） | 经 L1 / L2 | **L12** |
 | `ember_event`（灾厄公共窗） | 灾厄使 + 召唤物（`MM/EmberCalamity.yml` 12 处 `mmgive`：T3 旧装、孔石、核心 2、稳定符等） | **发且不封顶** + 灾厄 A / B | 经 `calamity join`（Lv30） | **L7** |
 | `world`（主世界） | 竞技场对战垫（`P/arena.yml:21`）；`MM/RandomSpawns` 示例对 `world` 做 REPLACE，是否真的刷：未确认 | 击杀币封顶 150 / 日（`P/config.yml:101`）；竞技币另算（L3） | 经 `arena queue`（传送到对战垫） | L3（击杀币部分：未确认有怪） |
-| `ember_daily_crypt`、`ember_daily_ash`（Multiverse 常驻世界） | 建图用 | 未确认有无怪 | 无玩家入口（无传送门 / 无 `/warp`；`mvtp` 普通玩家权限未确认） | 待测第 7 条 |
+| `ember_daily_crypt`、`ember_daily_ash`（Multiverse 常驻世界） | 建图用 | 未确认有无怪 | 无玩家入口（无传送门 / 无 `/warp`；`mvtp` 普通玩家无权限，D202 实测） | 待测第 7 条 |
 | `world_nether`、`world_the_end` | 原版 | 合格击杀 = 僵尸 / 骷髅类 → 1 币 + 2 经验，不封顶 | 无传送门；能否通过原版下界门从 `world` 过去：未确认 | 待测第 7 条 |
 
 ---
@@ -257,7 +257,7 @@
 | **S0-5** ✅ **已建（D201，CoreRpg 1.65.38）** | **L3 无上限的根因**（即使 S0-3 关了竞技场，日后重开也要有上限） | `J/ArenaService.java:624` `settleWinLoss`：加每日计币场次上限（配置 `P/arena.yml match.daily_coin_matches`），`forfeit` / 掉线结算不发参战币 | 小；低 | 静态 |
 | **S0-6** | 晶钻相关 DEAD 路径（防止日后误开） | `shop / monthly / pass_unlock` 在 P1 下并入 S0-3 拒绝表；`cash give` 保持 OP | 随 S0-3 | — |
 | **S0-7** | 旧宝石显式关闭（ARCH O6 / G5） | `P/enhance.yml` 加 `socket.enabled: false` 或 S0-3 拒绝 `socket`；孔石来源（旧本 / 灾厄 / `scrap`）随 S0-1～S0-4 一并断 | 随 S0-3 | 待测第 11 条 |
-| **S0-8** | 旧本菜单 / 旧枢纽菜单的「手打 `trmenu open`」风险 | 先做待测第 7 条；若普通玩家能 `trmenu open`，则给 `ember_hub_legacy` 及其子菜单加 TrMenu `Open-Requirement`（OP） | 视实测而定 | 待测第 7 条 |
+| **S0-8** ✅ **实测不需要（D202，2026-10-05 18:14）** | 旧本菜单 / 旧枢纽菜单的「手打 `trmenu open`」风险 | 待测第 7 条已做：普通玩家（非 OP 新号 FreshQ736）执行 `/trmenu`、`/trmenu open ember_hub_legacy / ember_daily / ember_arena / ember_shop / ember_calamity / ember_guild` 全部回「no permission」；旧菜单都没有 `Bindings: Commands`（只有 `ember_hub`（/ember、/menu）、`ember_help`、`ember_gacha` 和 `ember_p1_*` 绑了命令）；从这些入口按 `menu:` 动作走的静态可达闭包只到 `ember_bestiary / flex_skill / friends / life / mail / settings / pet`（`pet` 是纯外观，见 §1），碰不到任何旧本 / 旧枢纽菜单。所以不加 `Open-Requirement`。 | 无改动 | `tools/p1map/d202-s08-probe.sh`；`docs/tests/smoke-2026-10-05-d202-s08-probe.md` |
 | **S0-9** | `ember_event` / `world` / 下界 / 末地的世界级兜底 | 进世界时（`PlayerChangedWorldEvent`）P1 开着、非 OP、目标不在白名单 → 送回 `ember_hub`。是最后一道闸，挡住所有未知传送路径（含 `mvtp` 若有权限） | 小；中（要排除竞技场 / 灾厄这类本来由控制台传送的合法路径——在 S0-3 关掉它们之后才安全） | 冒烟：待测第 5、7 条 |
 | **S0-10** | 旧仓库写路径（ARCH R5 ②） | `J/WarehouseService.java:172` deposit / `:242` withdraw 在 P1 下改为只读或转给 `EmberVault` 的同一守卫；需 persist 往返测 | 中（涉及资产存取 → 按规矩要跑丢失 / 复制回归） | 资产回归（不是可达性问题，放最后） |
 
@@ -276,6 +276,7 @@
 5. Lv30 号 `/corerpg calamity join`：是否被传送到 `ember_event`？窗口外是否也能进？→ 定 L7。
 6. 新号（Lv10）`/dp start EmberWeekly`：应被 Lv20 门拒绝（验证 `gate_` 生效，作为 S0-1 的对照）。
 7. 普通玩家能否执行 `/trmenu open ember_daily`、`/trmenu open ember_hub_legacy`、`/mvtp ember_event`、`/mv tp`？→ 定 S0-8 / S0-9 是否必要。
+   - **结果（D202，2026-10-05 18:14，FreshQ736，非 OP）：** `/trmenu` 与所有 `trmenu open <旧菜单>` 都是「no permission」；`/mvtp ember_event`、`/mv tp ember_event`、`/mvtp world` 回「缺 multiverse.teleport.*」；`/mv list`、`/tp`、`/ni`、`/mm` 也都被拒；`/dp start EmberDaily` 被开本条件拒（S0-1）；`/warp`、`/lp` 不存在；`Multiverse-Portals/portals.yml` 没有任何传送门。→ **S0-8 不需要**；S0-9（世界级兜底）降为可选纵深防御，目前没有已知的普通玩家传送路径。
 8. 穿 P1 装备的号能否实际打通一个旧日常（旧怪数值 vs P1 战力）——决定 L1 / L2 的实际风险大小，不影响「入口应关」的结论。
 9. P1 主线实例里执行 `/corerpg abyss evacuate`：会不会触发 `dp leave` 之外的效果（例如对无会话结算）？→ 决定 S0-3 白名单里 `abyss evacuate` 的处理。
 10. 旧日常通关前后 `/corerpg level`：余烬经验是否 +60、等级是否上涨？→ 定 L6。
@@ -297,3 +298,4 @@
 - 2026-10-05：D199 / CoreRpg 1.65.36 —— S0-3 路由级默认拒绝白名单（`legacy_gate.allow`）已建并上线，随附 S0-6（shop / monthly）与 S0-7（socket）；封 L3 / L4 / L5 / L7 / L8 / L9 / L10 / L11 的玩家入口；控制台 / OP / 管理员放行，P1 关时不变。
 - 2026-10-05：D200 / CoreRpg 1.65.37 —— S0-4 旧发奖端纵深防御（旧经验 / 旧击杀币与经验 / mmgive·mmxp / 公共灾厄结算在 P1 下不发）已建并上线；P1 关时不变，`legacy_gate.payout_guard: false` 可整段关。
 - 2026-10-05：D201 / CoreRpg 1.65.38 —— S0-5 竞技场对战币每日计币场次上限（`arena.yml match.daily_coin_matches: 5`）+ 认输 / 掉线方不发参与币 + 开打不足 30 秒的认输胜利不发胜利币（`match.forfeit_min_coin_seconds: 30`）；`/corerpg pass` 在 P1 下不再提示 `pass free`。L3 根因关闭（日后重开竞技场也有上限）。
+- 2026-10-05：D202（只改文档）—— 待测第 7 条实服确认：普通玩家打不开任何旧 TrMenu 菜单、不能 `mvtp` / `mv tp` / `tp`，旧菜单无命令绑定，P1 菜单的 `menu:` 闭包碰不到旧菜单 → S0-8 关闭（不需要改动），S0-9 降为可选。
