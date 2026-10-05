@@ -395,7 +395,7 @@ flowchart LR
 |---|---|---|
 | S0 | S0-1～S0-5、S0-8 探针（D198–D202，1.65.35–1.65.38） | — |
 | S1 | S1-1 计数器注册表 D206、首通拆分（S1 第 3 条）D205、S1-4 物品键回物品 D208、S1-5 周期回拨防护 D207 | 计数器注册表 ↔ 源码字面量覆盖率随新键维护 |
-| S2 | S2-1 登记表 D213 → S2-2～S2-6 grant/spend 路由 D215–D223 → S2-7 yml 真源 D224 → S2-8 徽记/徽/印记 D228（1.65.54）→ **S2-9 S13 深渊 SourceId + vault 写入扫描 D229（1.65.55）** | C15/C16 暂停期不动；p2econ 徽库存（化妆品重启前）；S3 EmberRushService 拆分 |
-| S3 | — | `EmberRunService` 按分节拆类（行为不变）、遭遇原语接口 |
+| S2 | S2-1 登记表 D213 → S2-2～S2-6 grant/spend 路由 D215–D223 → S2-7 yml 真源 D224 → S2-8 徽记/徽/印记 D228（1.65.54）→ S2-9 S13 深渊 SourceId + vault 写入扫描 D229（1.65.55） | C15/C16 暂停期不动；p2econ 徽库存（化妆品重启前） |
+| S3 | **S3-1 EmberRushService 抽出 D230（1.65.56）** | 继续按分节拆 Entry/Settlement/Abyss/Raid/Pledge/Recruit/Papi；遭遇原语接口 |
 | S4 | — | 装备结构合并文档 + `source_map` |
 

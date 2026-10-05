@@ -117,8 +117,8 @@ public final class EmberCounters {
         x("p2_abyss_best", "EmberRunService", A, ST, OW, "best abyss floor");
         x("p2_bounty", "EmberRunService", D, CL, RL, "daily bounty");
         px("p4_vb_", "EmberRunService", D, CL, RL, "variety bounties settled today per kind");
-        x("p4_rush", "EmberRunService", W, ST, RL, "rush attempts (stat only since D160)");
-        x("p4_rush_claim", "EmberRunService", W, CL, RL, "main rush weekly reward claim");
+        x("p4_rush", "EmberRushService", W, ST, RL, "rush attempts (stat only since D160)");
+        x("p4_rush_claim", "EmberRushService", W, CL, RL, "main rush weekly reward claim");
         add("p4_outpost_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "outpost weekly claim (config)");
         add("p4_echo_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "echo weekly claim, shared by echo_q01..q07 (config)");
         px("p1_pledge_", "EmberRunService", A, SE, NV, "Q06 chosen pledge rule");

@@ -1572,6 +1572,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D227 | CoreRpg 1.65.53 / bv58 | 徽记 option B 落地：`echo_q05..q07` 入残响（共用 `p4_echo_claim`=3、`S18.insignia`=2，周发放总量不变）；modes UI 七厅；`insignia.py` 默认 maps=q01–q07；REG S18。冒烟 FreshQ787 PASS。 |
 | D228 | CoreRpg 1.65.54 / bv58 | ARCH S2-8：首领徽记 / 余烬徽 / 剩余印记发放走 EmberEconomy — 新入口 `grantInsignia` / `grantBadge`；账本行经 `creditMarkLedger` / `creditInsigniaLedger`（sig_mark→S08、fc_sigmark→S07、pledge_sigmark→S09、raid_mark→S12、rot_mark→S10/S11、rush_mark→S16/S17、rush_sig_*→S17/S18，按 run id 图段区分；未知键=untagged 照发不丢）；连战徽 S16、周目标徽 S19、国庆兑换徽 S27 走 grantBadge；`p1/` 扫描：直接写 `p1_mark_t`/`p1_sigmark_`/`p3_badge` 或 `grantFlatEmberXp` 必须在 EmberEconomy 或带 `econ-ok:` 理由。**数量不变**。另：残响 Q05–Q07 echotune 离线核对（T2+4 躲避 0.5：88/80/73%，落在旧厅 69–100% 区间内）→ 不改。 |
 | D229 | CoreRpg 1.65.55 / bv58 | ARCH S2-9：深渊层结算 SourceId 与 S01 分开 — `sourceForGrant(base_*, <map>a<n>-…)` → **S13**（数量仍读 S01 BASE_*，不变）；`p1/` vault 写入扫描（`autoDeposit`/`creditBound`/`credit`/`EmberVault.get().give` 须经 grantMat 或 `econ-ok:`）。S01 登记名去掉「深渊」。 |
+| D230 | CoreRpg 1.65.56 / bv58 | ARCH S3-1：从 `EmberRunService` 抽出 `EmberRushService`（连战 / 残响 / 前哨 settle + menu + stage 钩子）；`applyGrants` Bukkit-free 单测钉死发放；公开 API 薄委托。**行为 / 数量不变**。 |
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
