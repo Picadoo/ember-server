@@ -645,14 +645,13 @@ public final class EmberRunService implements Listener {
             if (at != null && pfee > 0) { // P2-2: the segment fee rides with the stamina reservation
                 PlayerData pd = data(p.getUniqueId());
                 int fm = pd.getCoin() < pfee ? feeMarks(pd, pfee) : 0; // F-review #5: surplus T3 marks pay when coins cannot
-                if (fm > 0) {
-                    pd.addPeriodCount(C_MARK + 3, "all", -fm);
+                if (fm > 0 && EmberEconomy.spendMark(pd, "C08", 3, fm)) { // D218: REG C08 (feeMarks already left the reserve)
                     s.fee.put(p.getUniqueId(), 0);
                     ledgerRow(p.getUniqueId(), s.runId, "cost_coin", "mark:3:" + fm, EmberRunRules.ST_RESERVED);
                     p.sendMessage(P + "§7这一层的费用 " + pfee + " 币用 §f" + fm + " 枚 T3 印记§7抵了（余烬币不够；1 枚抵 " + maps.abyssFeeMarkCoin
                             + " 币，剩 " + marks(pd, 3) + " 枚）· 没打成会和体力一起退回");
                     log().info("[P1 run] " + s.runId + " abyss fee " + p.getName() + ": " + fm + " T3 mark(s) for " + pfee + " coin");
-                } else if (!pd.takeCoin(pfee)) {
+                } else if (!EmberEconomy.spendCoin(pd, "C08", pfee)) { // D218: REG C08 abyss segment fee
                     for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
                     for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（这一层 " + pfee + "）");
                     return true;
@@ -3111,7 +3110,7 @@ public final class EmberRunService implements Listener {
         EmberPay pay = EmberPay.get();
         if (pay != null && pay.durable()) return redeemDurable(p, pay, fam, slot, tier);
         // YAML storage (no MySQL): the old in-memory path
-        d.addPeriodCount(C_MARK + tier, "all", -EmberRunRules.MARKS_PER_EXCHANGE);
+        if (!EmberEconomy.spendMark(d, "C07", tier, EmberEconomy.amount("C07", "marks"))) { p.sendMessage(P + ChatColor.RED + "扣除印记失败"); return true; } // D218
         String run = "mark-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(1296), 36);
         String uid = EmberRunRules.rewardUid(rnd.nextLong(), p.getUniqueId().toString(), run, "mark_item");
         ledgerRow(p.getUniqueId(), run, "mark_item", "item:" + uid + ":" + fam + ":" + slot + ":" + tier + ":0:0", EmberRunRules.ST_PENDING);
@@ -3137,7 +3136,7 @@ public final class EmberRunService implements Listener {
         final String uid = EmberRunRules.rewardUid(rnd.nextLong(), id.toString(), rid, "mark_item");
         final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, 0, 0, 0, 0, true, "drop",
                 EmberItemData.DATA_VERSION, 0);
-        final EmberPay.Price price = EmberPay.Price.marks(tier, EmberRunRules.MARKS_PER_EXCHANGE);
+        final EmberPay.Price price = EmberPay.Price.marks(tier, EmberEconomy.amount("C07", "marks")).at("C07"); // D218: REG C07 (golden = MARKS_PER_EXCHANGE)
         final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         pay.pay(p, rid, price, "兑换没完成，退回印记", null, () ->
                 loadouts.store().commitCreate(rid, "mark_redeem", id, item, price.json(),

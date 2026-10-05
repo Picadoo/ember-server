@@ -193,13 +193,14 @@ public final class EmberForgeService implements Listener {
      * hold in its COMMIT. Failure → hold released → refunded exactly once by EmberDelivery; crash → settled at the next
      * join (committed → void, else refund). YAML storage keeps the old in-memory path.
      */
-    private void payDurable(final Player p, final String rid, final Cost cost, final Runnable go) {
+    private void payDurable(final Player p, final String rid, final String kind, final Cost cost, final Runnable go) {
         List<String> lack = lacking(p, cost);
         if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "材料不足（未扣除、未抽取、保底不变）: " + String.join("，", lack)); return; }
         String hold = EmberAssetGuard.hold(p);
         if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return; }
         // D172: the same hold → pay + save → commit path now lives in EmberPay (shared with undo / mark redeem / reroll)
-        pay.pay(p, rid, EmberPay.Price.of(cost), "锻造没完成，退回", null, go, err -> { if (p.isOnline()) p.sendMessage(P + ChatColor.RED + err); });
+        // D218 (ARCH S2-4): tagged with the REG sink of the op (enhance C03 / upgrade C04 / refine C05 / quality C06)
+        pay.pay(p, rid, EmberPay.Price.of(cost).at(EmberEconomy.sinkForForge(kind)), "锻造没完成，退回", null, go, err -> { if (p.isOnline()) p.sendMessage(P + ChatColor.RED + err); });
     }
 
     private void giveBack(Player p, Map<String, Integer> mats, int coins) {
@@ -276,7 +277,7 @@ public final class EmberForgeService implements Listener {
         String r = rid != null ? rid : "enh:" + d.uid + ":" + d.rev;
         if (replayed(p, r)) return true;
         final String rr = r;
-        payDurable(p, rr, c.cost, () -> {
+        payDurable(p, rr, "enhance", c.cost, () -> {
             Plan plan = EmberUpgradeRules.enhance(d, ThreadLocalRandom.current().nextDouble());
             commit(p, "enhance", rr, c.cost, Arrays.asList(new TxnItem(d, plan.after, null)), plan.note);
         });
@@ -315,7 +316,7 @@ public final class EmberForgeService implements Listener {
         String r = rid != null ? rid : kind + ":" + it.data.uid + ":" + it.data.rev;
         if (replayed(p, r)) return true;
         final String rr = r;
-        payDurable(p, rr, plan.cost, () -> commit(p, kind, rr, plan.cost, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note));
+        payDurable(p, rr, kind, plan.cost, () -> commit(p, kind, rr, plan.cost, Arrays.asList(new TxnItem(it.data, plan.after, null)), plan.note));
         return true;
     }
 

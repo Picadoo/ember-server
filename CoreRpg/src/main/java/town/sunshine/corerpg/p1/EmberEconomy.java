@@ -12,13 +12,15 @@ import java.util.Set;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D213 registry + D215/D216 (ARCH S2-2/S2-3) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
+ * D213 registry + D215/D216/D218 (ARCH S2-2/S2-3/S2-4) grant/spend routes: every P1 economy <b>source</b> (S01–S32),
  * closed <b>legacy source</b> (L-S1…L-S5) and <b>sink</b> (C01–C18) from
  * {@code docs/design/REG-ember-source-sink-cap-2026-10-05.md}.
  * <p>Lookups stay Bukkit-free. {@link #amount} is the amount source of truth for routed rows (settle S01–S03,
  * shop C14, signin S23 daily/fallback/makeup, online S24 totals). {@link #grantCoin} / {@link #grantMark} /
- * {@link #grantXp} / {@link #grantMat} / {@link #spendCoin} are the tagged entry points (PlayerData only where
- * possible — no Bukkit). Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
+ * {@link #grantXp} / {@link #grantMat} / {@link #spendCoin} / {@link #spendMark} / {@link #spendInsignia} /
+ * {@link #spendMat} are the tagged entry points (PlayerData only where possible — no Bukkit). D218 (S2-4): workshop
+ * C03–C06 ({@link #sinkForForge}), mark exchange C07, abyss fee C08, talent learn / respec C09 / C10, reroll C11,
+ * imprint C12 and attune unlock C13 spend through these. Unrouted paths still call {@code PlayerData.addCoin}/{@code takeCoin} directly.
  * <p>{@code EmberEconomyTest} pins golden amounts, proves settle / shop / sign / grant* routing, and scans
  * {@code p1/} for direct {@code addCoin} outside the allowlist. Numbers unchanged (balance_version 57).
  */
@@ -174,8 +176,10 @@ public final class EmberEconomy {
         sink("C06", "成色", "EmberUpgradeRules", Period.NONE).acc(BLANK, BONE, COIN).model(FULL).done();
         sink("C07", "8 印记兑换", "EmberRunRules.MARKS_PER_EXCHANGE", Period.NONE).acc(MARK).keys("p1_mark_t").model(FULL).g("marks", 8).done();
         sink("C08", "深渊层费", "ember-v1-runs.yml abyss", Period.RUN).acc(COIN, MARK).model(FULL).done();
-        sink("C09", "天赋学习", "ember-v1-growth.yml talents", Period.ALL).acc(COIN).keys("p4_spec_learn_").model(FULL).done();
-        sink("C10", "天赋重置", "ember-v1-growth.yml respec_coin", Period.NONE).acc(COIN).keys("p4_spec_resets").model(PART).done();
+        sink("C09", "天赋学习", "ember-v1-growth.yml talents", Period.ALL).acc(COIN).keys("p4_spec_learn_").model(FULL)
+            .g("row1.coin", 800).g("row2.coin", 2000).g("row3.coin", 4000).done();
+        sink("C10", "天赋重置", "ember-v1-growth.yml respec_coin", Period.NONE).acc(COIN).keys("p4_spec_resets").model(PART)
+            .g("respec_coin", 2000).done();
         sink("C11", "洗练", "EmberGrowthService / EmberPayRules", Period.NONE).acc(COIN, SHARD, GEAR).model(FULL).done();
         sink("C12", "烬炉烙印", "EmberSignature.IMPRINT_*", Period.NONE).acc(INS, COIN).keys("p1_sigmark_").model(NONE)
             .g("insignia", 5).g("coin_per_tier", 300).done();
@@ -353,5 +357,68 @@ public final class EmberEconomy {
         Row r = byId(sinkId);
         if (r == null || !r.sink || r.legacy || !r.accounts.contains(Account.COIN)) return false;
         return d.takeCoin(amount);
+    }
+
+    /** Boss-insignia counter family prefix (+ map key, period all) — same string as {@code EmberSignature.C_MARK}. */
+    public static final String INSIGNIA_COUNTER = "p1_sigmark_";
+
+    /** True when {@code sinkId} is a registered P1 sink (not a source / legacy row) that takes {@code a}. */
+    public static boolean takes(String sinkId, Account a) {
+        Row r = byId(sinkId);
+        return r != null && r.sink && !r.legacy && a != null && r.accounts.contains(a);
+    }
+
+    /**
+     * Forge-mark spend tagged with a registered P1 sink (C07 exchange, C08 abyss fee). Tier 1..3; refuses rows that do
+     * not take MARK, non-positive amounts and a short balance (nothing changes then). Writes {@code p1_mark_t<tier>@all}.
+     */
+    public static boolean spendMark(PlayerData d, String sinkId, int tier, int amount) {
+        if (d == null || amount <= 0 || tier < 1 || tier > 3) return false;
+        if (!takes(sinkId, Account.MARK)) return false;
+        String k = MARK_COUNTER + tier;
+        if (d.periodCount(k, "all") < amount) return false;
+        d.addPeriodCount(k, "all", -amount);
+        return true;
+    }
+
+    /**
+     * Boss-insignia spend tagged with a registered P1 sink (C12 imprint, C13 attune unlock). Refuses rows that do not
+     * take INSIGNIA, an empty map, non-positive amounts and a short balance. Writes {@code p1_sigmark_<map>@all}.
+     */
+    public static boolean spendInsignia(PlayerData d, String sinkId, String map, int amount) {
+        if (d == null || amount <= 0 || map == null || map.isEmpty()) return false;
+        if (!takes(sinkId, Account.INSIGNIA)) return false;
+        String k = INSIGNIA_COUNTER + map;
+        if (d.periodCount(k, "all") < amount) return false;
+        d.addPeriodCount(k, "all", -amount);
+        return true;
+    }
+
+    /**
+     * Warehouse-material spend tagged with a registered P1 sink. Validates only — the caller still consumes via Ni
+     * (backpack / warehouse). The mat id must be one of the four P1 mats and its account on the sink row.
+     */
+    public static boolean spendMat(String sinkId, String matId, int amount) {
+        if (amount <= 0) return false;
+        Account a = matAccount(matId);
+        return a != null && takes(sinkId, a);
+    }
+
+    /**
+     * Workshop op kind (EmberForgeService / EmberGrowthService commit kinds) → REG sink: enhance C03, upgrade C04,
+     * refine (精工) C05, quality (成色) C06, reroll (洗练) C11, imprint (烙印) C12. Null = not a registered spend
+     * (dismantle, swap, dismantle undo — those give or move, they do not sink).
+     */
+    public static String sinkForForge(String kind) {
+        if (kind == null) return null;
+        switch (kind) {
+            case "enhance": return "C03";
+            case "upgrade": return "C04";
+            case "refine": return "C05";
+            case "quality": return "C06";
+            case "reroll": return "C11";
+            case "imprint": return "C12";
+            default: return null;
+        }
     }
 }

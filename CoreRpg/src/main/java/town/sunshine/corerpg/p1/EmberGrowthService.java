@@ -348,7 +348,7 @@ public final class EmberGrowthService implements Listener {
                     new String[]{"[回天赋页]", "/corerpg p1 spec from " + fromKey(p), "不学，回去看看", "GRAY"});
             return true;
         }
-        if (coin > 0 && !d.takeCoin(coin)) { p.sendMessage(P + "§c余烬币不够（要 " + coin + "）"); return true; }
+        if (coin > 0 && !EmberEconomy.spendCoin(d, "C09", coin)) { p.sendMessage(P + "§c余烬币不够（要 " + coin + "）"); return true; } // D218 REG C09
         if (learn) d.addPeriodCount(C_LEARN + n.id, "all", 1);
         int idx = talents.inRow(n.row).indexOf(n) + 1;
         d.addPeriodCount(C_ROW + n.row, "all", idx - d.periodCount(C_ROW + n.row, "all"));
@@ -376,7 +376,7 @@ public final class EmberGrowthService implements Listener {
             return true;
         }
         if (cost > 0 && d.getCoin() < cost) { p.sendMessage(P + "§c重置要 " + cost + " 余烬币，现有 " + d.getCoin()); return true; }
-        if (cost > 0 && !d.takeCoin(cost)) { p.sendMessage(P + "§c扣币失败"); return true; }
+        if (cost > 0 && !EmberEconomy.spendCoin(d, "C10", cost)) { p.sendMessage(P + "§c扣币失败"); return true; } // D218 REG C10
         for (EmberGrowth.Row r : talents.rows) d.addPeriodCount(C_ROW + r.row, "all", -d.periodCount(C_ROW + r.row, "all"));
         d.addPeriodCount(C_RESETS, "all", 1);
         epoch++;
@@ -930,7 +930,7 @@ public final class EmberGrowthService implements Listener {
         final EmberSignature.Def old = EmberSignature.byCode(cur);
         final EmberItemData after = next(d, t, affixOf(d, t), afPityOf(d, t), sd.code, EmberItemKeys.rerollN(d, t));
         final String rid = EmberPayRules.imprintRid(t.uid, t.rev, System.currentTimeMillis());
-        final EmberPay.Price price = EmberPay.Price.insignia(coin, sd.map, EmberSignature.IMPRINT_MARKS);
+        final EmberPay.Price price = EmberPay.Price.insignia(coin, sd.map, EmberSignature.IMPRINT_MARKS).at(EmberEconomy.sinkForForge("imprint")); // D218 C12
         final String note = "烙印 " + t.shortLabel() + " " + (old == null ? "-" : old.id) + " → " + sd.id;
         pay.pay(p, rid, price, "烙印没完成，退回", null, () -> commitOnItem(id, "imprint", rid,
                 java.util.Collections.singletonList(new EmberItemStore.TxnItem(t, after, null)), price.json(), note, ok -> {
@@ -1004,7 +1004,7 @@ public final class EmberGrowthService implements Listener {
             }
             String hold = EmberAssetGuard.hold(p);
             if (hold != null) { p.sendMessage(P + ChatColor.RED + hold); return true; }
-            d.addPeriodCount(EmberSignature.C_MARK + sd.map, "all", -EmberSignature.ALT_MARKS);
+            if (!EmberEconomy.spendInsignia(d, "C13", sd.map, EmberSignature.ALT_MARKS)) { p.sendMessage(P + ChatColor.RED + "扣除首领徽记失败"); return true; } // D218 REG C13
             d.addPeriodCount(EmberSignature.C_ALTU + sd.id, "all", 1);
             d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", 1 - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
             boolean saved = plugin.getDataStore().flushMutationChecked(p.getUniqueId());
@@ -1446,7 +1446,7 @@ public final class EmberGrowthService implements Listener {
         final RollPlan plan = plan(d, t, id, rid, lock, n);
         if (plan == null) { rerollBusy.remove(id); p.sendMessage(P + "§c这个部位没有词条池"); return true; }
         pendingRoll.remove(id); // an older 保留新 / 保留旧 choice is void once a new roll is paid
-        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(needShard, 0, 0, 0, coin));
+        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(needShard, 0, 0, 0, coin)).at(EmberEconomy.sinkForForge("reroll")); // D218 C11
         pay.pay(p, rid, price, "洗练没完成，退回", null, () -> settleReroll(id, t, rid, dup, dupIndex, dupData, price, paid, plan),
                 err -> { rerollBusy.remove(id); if (p.isOnline()) p.sendMessage(P + "§c没有洗练：" + err); });
         return true;

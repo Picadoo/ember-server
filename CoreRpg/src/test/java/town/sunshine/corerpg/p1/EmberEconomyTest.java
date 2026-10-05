@@ -28,7 +28,9 @@ import town.sunshine.corerpg.PlayerData;
  * D213 registry + D215/D216 (ARCH S2-2/S2-3): {@link EmberEconomy} matches REG-ember-source-sink-cap and the live game —
  * counter families exist, golden amounts equal the constants / shipped plugin yml, the unmodelled set is pinned,
  * settle / shop / sign / grantCoin/Mark/Xp/Mat / spendCoin route through the registry without changing amounts,
- * and a scoped {@code p1/} addCoin scan fails on new grant paths that skip the registry.
+ * and a scoped {@code p1/} addCoin scan fails on new grant paths that skip the registry. D218 (S2-4): workshop / mark
+ * exchange / abyss fee / talent / reroll / imprint / attune spends (C03–C13) route through spend* and a {@code p1/}
+ * takeCoin scan guards new direct spends.
  */
 public class EmberEconomyTest {
     private static final double EPS = 1e-9;
@@ -403,5 +405,160 @@ public class EmberEconomyTest {
         }
         assertEquals("route new p1 addCoin through EmberEconomy.grantCoin (or extend the refund allowlist)",
                 new ArrayList<String>(), hits);
+    }
+
+    // ------------------------------------------------------------------ D218 / ARCH S2-4 spends
+
+    @Test
+    @SuppressWarnings("unchecked")
+    public void talentGoldensMatchShippedGrowthYml() throws Exception {
+        Map<String, Object> y = yml("ember-v1-growth.yml");
+        eq("C10", "respec_coin", num(y, "talents.respec_coin"));
+        List<Object> rows = (List<Object>) at(y, "talents.rows");
+        assertEquals(3, rows.size());
+        for (Object o : rows) {
+            Map<String, Object> r = (Map<String, Object>) o;
+            int row = ((Number) r.get("row")).intValue();
+            eq("C09", "row" + row + ".coin", ((Number) r.get("coin")).doubleValue());
+        }
+        // parsed talents (the live owner) agree too
+        EmberGrowth.Talents t = EmberGrowth.parseTalents(y);
+        assertNotNull(t);
+        assertEquals(EmberEconomy.amount("C10", "respec_coin"), EmberGrowth.respecCost(t, 1));
+        assertEquals(0, EmberGrowth.respecCost(t, 0));
+        for (EmberGrowth.Row r : t.rows) assertEquals(EmberEconomy.amount("C09", "row" + r.row + ".coin"), r.coin);
+    }
+
+    @Test
+    public void forgeKindsMapToWorkshopSinks() {
+        assertEquals("C03", EmberEconomy.sinkForForge("enhance"));
+        assertEquals("C04", EmberEconomy.sinkForForge("upgrade"));
+        assertEquals("C05", EmberEconomy.sinkForForge("refine"));
+        assertEquals("C06", EmberEconomy.sinkForForge("quality"));
+        assertEquals("C11", EmberEconomy.sinkForForge("reroll"));
+        assertEquals("C12", EmberEconomy.sinkForForge("imprint"));
+        assertEquals(null, EmberEconomy.sinkForForge("dismantle"));
+        assertEquals(null, EmberEconomy.sinkForForge("swap"));
+        assertEquals(null, EmberEconomy.sinkForForge(null));
+        for (String k : new String[]{"enhance", "upgrade", "refine", "quality", "reroll", "imprint"}) {
+            EmberEconomy.Row r = EmberEconomy.byId(EmberEconomy.sinkForForge(k));
+            assertTrue(k + " → sink row", r.sink && !r.legacy);
+        }
+    }
+
+    /** Every live workshop price must be fully accepted by its sink row — otherwise routing would refuse a forge. */
+    @Test
+    public void everyWorkshopCostIsTakenByItsSink() {
+        List<EmberUpgradeRules.Cost> enh = new ArrayList<EmberUpgradeRules.Cost>();
+        for (int e = 0; e < EmberTables.MAX_ENHANCE; e++) enh.add(EmberUpgradeRules.enhanceCost(e));
+        assertCostsTaken("C03", enh);
+        assertCostsTaken("C04", Arrays.asList(EmberUpgradeRules.upgradeCost(1), EmberUpgradeRules.upgradeCost(2)));
+        assertCostsTaken("C05", Arrays.asList(EmberUpgradeRules.refineCost(0), EmberUpgradeRules.refineCost(1), EmberUpgradeRules.refineCost(2)));
+        assertCostsTaken("C06", Arrays.asList(EmberUpgradeRules.qualityCost(0), EmberUpgradeRules.qualityCost(1)));
+        assertCostsTaken("C11", Arrays.asList(new EmberUpgradeRules.Cost(40, 0, 0, 0, 1200)));
+        // imprint = coins + boss insignia (EmberPay.Price.insignia), mark exchange = marks only
+        assertEquals(null, EmberPay.Price.insignia(EmberSignature.IMPRINT_COIN_PER_TIER, "q01", EmberSignature.IMPRINT_MARKS).at("C12").sinkRefusal());
+        assertEquals(null, EmberPay.Price.marks(2, EmberEconomy.amount("C07", "marks")).at("C07").sinkRefusal());
+        // wrong tag is caught before anything is taken
+        assertNotNull(EmberPay.Price.marks(2, 8).at("C03").sinkRefusal());
+        assertNotNull(EmberPay.Price.of(EmberUpgradeRules.upgradeCost(1)).at("C03").sinkRefusal()); // C03 takes no blanks
+        assertNotNull(EmberPay.Price.insignia(300, "q01", 5).at("C11").sinkRefusal());
+        assertEquals("untagged (dismantle undo) keeps the direct path", null,
+                EmberPay.Price.of(new EmberUpgradeRules.Cost(0, 0, 3, 0, 0)).sinkRefusal());
+    }
+
+    private static void assertCostsTaken(String sink, List<EmberUpgradeRules.Cost> costs) {
+        for (EmberUpgradeRules.Cost c : costs) {
+            assertNotNull(sink + " cost", c);
+            EmberPay.Price p = EmberPay.Price.of(c).at(sink);
+            assertEquals(sink + " " + c.json(), null, p.sinkRefusal());
+            assertEquals("tag does not change the amount", EmberPay.Price.of(c).json(), p.json());
+        }
+    }
+
+    @Test
+    public void priceTagSurvivesPlusOnlyWhenSinksAgree() {
+        EmberPay.Price a = EmberPay.Price.of(EmberUpgradeRules.refineCost(0)).at("C05");
+        EmberPay.Price b = EmberPay.Price.of(EmberUpgradeRules.refineCost(1)).at("C05");
+        assertEquals("C05", a.plus(b).sink);
+        assertEquals("C05", a.plus(EmberPay.Price.of(EmberUpgradeRules.Cost.NONE)).sink);
+        assertEquals(null, a.plus(EmberPay.Price.of(EmberUpgradeRules.qualityCost(0)).at("C06")).sink);
+        assertEquals(null, EmberPay.Price.of(EmberUpgradeRules.Cost.NONE).sink);
+    }
+
+    @Test
+    public void spendMarkInsigniaMatHelpers() {
+        PlayerData d = new PlayerData();
+        d.addPeriodCount(EmberEconomy.MARK_COUNTER + 2, "all", 10);
+        assertTrue(EmberEconomy.spendMark(d, "C07", 2, EmberEconomy.amount("C07", "marks")));
+        assertEquals(2, d.periodCount(EmberEconomy.MARK_COUNTER + 2, "all"));
+        assertFalse("short", EmberEconomy.spendMark(d, "C07", 2, 8));
+        assertEquals(2, d.periodCount(EmberEconomy.MARK_COUNTER + 2, "all"));
+        d.addPeriodCount(EmberEconomy.MARK_COUNTER + 3, "all", 5);
+        assertTrue("abyss fee in T3 marks", EmberEconomy.spendMark(d, "C08", 3, 2));
+        assertEquals(3, d.periodCount(EmberEconomy.MARK_COUNTER + 3, "all"));
+        assertFalse("C09 takes coin only", EmberEconomy.spendMark(d, "C09", 3, 1));
+        assertFalse("source", EmberEconomy.spendMark(d, "S01", 3, 1));
+        assertFalse("bad tier", EmberEconomy.spendMark(d, "C07", 0, 1));
+        assertFalse("zero", EmberEconomy.spendMark(d, "C07", 3, 0));
+        assertEquals(3, d.periodCount(EmberEconomy.MARK_COUNTER + 3, "all"));
+
+        assertEquals(EmberSignature.C_MARK, EmberEconomy.INSIGNIA_COUNTER);
+        d.addPeriodCount(EmberSignature.C_MARK + "q02", "all", 12);
+        assertTrue(EmberEconomy.spendInsignia(d, "C13", "q02", EmberSignature.ALT_MARKS));
+        assertEquals(2, d.periodCount(EmberSignature.C_MARK + "q02", "all"));
+        assertFalse("short", EmberEconomy.spendInsignia(d, "C12", "q02", EmberSignature.IMPRINT_MARKS));
+        assertFalse("C03 takes no insignia", EmberEconomy.spendInsignia(d, "C03", "q02", 1));
+        assertFalse("source S07", EmberEconomy.spendInsignia(d, "S07", "q02", 1));
+        assertFalse("no map", EmberEconomy.spendInsignia(d, "C12", "", 1));
+        assertEquals(2, d.periodCount(EmberSignature.C_MARK + "q02", "all"));
+
+        assertTrue(EmberEconomy.spendMat("C03", EmberUpgradeRules.MAT_SHARD, 1));
+        assertTrue(EmberEconomy.spendMat("C05", EmberUpgradeRules.MAT_BONE, 1));
+        assertFalse("C03 takes no bone", EmberEconomy.spendMat("C03", EmberUpgradeRules.MAT_BONE, 1));
+        assertFalse("unknown mat", EmberEconomy.spendMat("C03", "mat_unknown", 1));
+        assertFalse("source", EmberEconomy.spendMat("S01", EmberUpgradeRules.MAT_SHARD, 1));
+
+        d.setCoin(10000);
+        assertTrue(EmberEconomy.spendCoin(d, "C08", 500));
+        assertTrue(EmberEconomy.spendCoin(d, "C09", EmberEconomy.amount("C09", "row1.coin")));
+        assertTrue(EmberEconomy.spendCoin(d, "C10", EmberEconomy.amount("C10", "respec_coin")));
+        assertEquals(10000 - 500 - 800 - 2000, d.getCoin());
+        assertFalse("C07 takes no coin", EmberEconomy.spendCoin(d, "C07", 1));
+        assertTrue(EmberEconomy.takes("C08", EmberEconomy.Account.MARK));
+        assertFalse(EmberEconomy.takes("S13", EmberEconomy.Account.COIN));
+    }
+
+    /**
+     * Scoped unregistered-spend scan (REG §6.4, S2-4): every {@code .takeCoin(} in {@code p1/} lives in EmberEconomy or an
+     * allowlisted file whose sink is not routed yet (C15 paused, C18 festival, delivery debit, EmberPay untagged undo).
+     */
+    @Test
+    public void p1TakeCoinIsEconomyOrAllowlisted() throws Exception {
+        Set<String> allowFiles = new HashSet<String>(Arrays.asList(
+                "EmberEconomy.java",   // spendCoin
+                "EmberPay.java",       // untagged price (dismantle undo) direct path
+                "EmberDelivery.java",  // A01 durable txn debit
+                "EmberCosmetics.java", // C15 (paused, OUT of the model)
+                "EmberFestival.java"   // C18 festival shop (PART) — next slice
+        ));
+        Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
+        List<String> hits = new ArrayList<String>();
+        try (java.util.stream.Stream<Path> walk = Files.walk(root)) {
+            for (Path f : walk.filter(x -> x.toString().endsWith(".java")).collect(java.util.stream.Collectors.toList())) {
+                String name = f.getFileName().toString();
+                String body = new String(Files.readAllBytes(f), StandardCharsets.UTF_8);
+                int from = 0;
+                while (true) {
+                    int i = body.indexOf(".takeCoin(", from);
+                    if (i < 0) break;
+                    int line = 1;
+                    for (int c = 0; c < i; c++) if (body.charAt(c) == '\n') line++;
+                    if (!allowFiles.contains(name)) hits.add(name + ":" + line);
+                    from = i + 9;
+                }
+            }
+        }
+        assertEquals("route new p1 takeCoin through EmberEconomy.spendCoin (or extend the allowlist)", new ArrayList<String>(), hits);
     }
 }

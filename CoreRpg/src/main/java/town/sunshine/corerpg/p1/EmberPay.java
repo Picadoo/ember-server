@@ -38,11 +38,17 @@ public final class EmberPay {
         /** D208: boss insignia of one map (EmberSignature.C_MARK + map) — the imprint price, refundable like forge marks */
         public final String sigMap;
         public final int sigMarks;
+        /** D218 (ARCH S2-4): the EmberEconomy sink this price is spent on (C03–C07, C11, C12); null = not a sink (undo) */
+        public final String sink;
         public Price(Cost cost, int markTier, int marks) { this(cost, markTier, marks, null, 0); }
-        public Price(Cost cost, int markTier, int marks, String sigMap, int sigMarks) {
+        public Price(Cost cost, int markTier, int marks, String sigMap, int sigMarks) { this(cost, markTier, marks, sigMap, sigMarks, null); }
+        private Price(Cost cost, int markTier, int marks, String sigMap, int sigMarks, String sink) {
             this.cost = cost == null ? Cost.NONE : cost; this.markTier = markTier; this.marks = Math.max(0, marks);
             this.sigMarks = sigMap == null ? 0 : Math.max(0, sigMarks); this.sigMap = this.sigMarks > 0 ? sigMap : null;
+            this.sink = sink;
         }
+        /** the same price tagged with a REG sink id (amounts unchanged) */
+        public Price at(String sinkId) { return new Price(cost, markTier, marks, sigMap, sigMarks, sinkId); }
         public static Price of(Cost c) { return new Price(c, 0, 0); }
         public static Price marks(int tier, int n) { return new Price(Cost.NONE, tier, n); }
         /** D208: coins + boss insignia (烬炉烙印) */
@@ -52,8 +58,22 @@ public final class EmberPay {
             int tier = marks > 0 ? markTier : o.markTier;
             if (marks > 0 && o.marks > 0 && markTier != o.markTier) throw new IllegalArgumentException("mixed mark tiers");
             if (sigMarks > 0 && o.sigMarks > 0 && !sigMap.equals(o.sigMap)) throw new IllegalArgumentException("mixed insignia maps");
+            String sk = sink == null ? o.sink : (o.sink == null || sink.equals(o.sink) ? sink : null); // mixed sinks → untagged
             return new Price(new Cost(a.shards + b.shards, a.cores + b.cores, a.blanks + b.blanks, a.bone + b.bone, a.coins + b.coins), tier, marks + o.marks,
-                    sigMarks > 0 ? sigMap : o.sigMap, sigMarks + o.sigMarks);
+                    sigMarks > 0 ? sigMap : o.sigMap, sigMarks + o.sigMarks, sk);
+        }
+        /**
+         * D218: null when every part of this price is taken by its sink row (or the price is untagged), else why not —
+         * checked before anything is taken so a registry mismatch never half-charges.
+         */
+        public String sinkRefusal() {
+            if (sink == null) return null;
+            for (Map.Entry<String, Integer> m : cost.materials().entrySet())
+                if (m.getValue() > 0 && !EmberEconomy.spendMat(sink, m.getKey(), m.getValue())) return sink + " does not take " + m.getKey();
+            if (cost.coins > 0 && !EmberEconomy.takes(sink, EmberEconomy.Account.COIN)) return sink + " does not take coin";
+            if (marks > 0 && !EmberEconomy.takes(sink, EmberEconomy.Account.MARK)) return sink + " does not take marks";
+            if (sigMarks > 0 && !EmberEconomy.takes(sink, EmberEconomy.Account.INSIGNIA)) return sink + " does not take insignia";
+            return null;
         }
         public List<EmberItemStore.Owed> owed(String note) { return EmberPayRules.owed(cost.materials(), cost.coins, markTier, marks, sigMap, sigMarks, note); }
         public boolean free() { return owed("").isEmpty(); }
@@ -112,6 +132,8 @@ public final class EmberPay {
     String take(Player p, Price c) {
         List<String> lack = lacking(p, c);
         if (!lack.isEmpty()) return "不够（没有扣除，什么都没变）: " + String.join("，", lack);
+        String refused = c.sinkRefusal();
+        if (refused != null) { plugin.getLogger().warning("[P1 pay] registry refused " + refused); return "账目登记不符（" + c.sink + "），没有扣除"; }
         Map<String, Integer> taken = new LinkedHashMap<String, Integer>();
         for (Map.Entry<String, Integer> m : c.cost.materials().entrySet()) {
             int got = ni().consume(p, m.getKey(), m.getValue());
@@ -119,22 +141,35 @@ public final class EmberPay {
             if (got < m.getValue()) { giveBack(p, taken, 0, 0, 0); return "扣除材料失败，已退回"; }
         }
         PlayerData pd = data(p.getUniqueId());
-        if (c.cost.coins > 0 && (pd == null || !pd.takeCoin(c.cost.coins))) { giveBack(p, taken, 0, 0, 0); return "扣除余烬币失败，已退回"; }
-        if (c.marks > 0) {
-            String k = EmberPayRules.MARK_COUNTER + c.markTier;
-            if (pd == null || pd.periodCount(k, "all") < c.marks) { giveBack(p, taken, c.cost.coins, 0, 0); return "扣除印记失败，已退回"; }
-            pd.addPeriodCount(k, "all", -c.marks);
-        }
-        if (c.sigMarks > 0) {
-            String k = EmberSignature.C_MARK + c.sigMap;
-            if (pd == null || pd.periodCount(k, "all") < c.sigMarks) {
-                giveBack(p, taken, c.cost.coins, 0, 0);
-                if (c.marks > 0 && pd != null) pd.addPeriodCount(EmberPayRules.MARK_COUNTER + c.markTier, "all", c.marks);
-                return "扣除首领徽记失败，已退回";
-            }
-            pd.addPeriodCount(k, "all", -c.sigMarks);
+        if (c.cost.coins > 0 && (pd == null || !spendCoin(pd, c))) { giveBack(p, taken, 0, 0, 0); return "扣除余烬币失败，已退回"; }
+        if (c.marks > 0 && (pd == null || !spendMarks(pd, c))) { giveBack(p, taken, c.cost.coins, 0, 0); return "扣除印记失败，已退回"; }
+        if (c.sigMarks > 0 && (pd == null || !spendInsignia(pd, c))) {
+            giveBack(p, taken, c.cost.coins, 0, 0);
+            if (c.marks > 0 && pd != null) pd.addPeriodCount(EmberPayRules.MARK_COUNTER + c.markTier, "all", c.marks);
+            return "扣除首领徽记失败，已退回";
         }
         return null;
+    }
+
+    /** D218: tagged prices spend through EmberEconomy; an untagged price (dismantle undo) keeps the direct path. */
+    static boolean spendCoin(PlayerData pd, Price c) {
+        return c.sink != null ? EmberEconomy.spendCoin(pd, c.sink, c.cost.coins) : pd.takeCoin(c.cost.coins);
+    }
+
+    static boolean spendMarks(PlayerData pd, Price c) {
+        if (c.sink != null) return EmberEconomy.spendMark(pd, c.sink, c.markTier, c.marks);
+        String k = EmberPayRules.MARK_COUNTER + c.markTier;
+        if (pd.periodCount(k, "all") < c.marks) return false;
+        pd.addPeriodCount(k, "all", -c.marks);
+        return true;
+    }
+
+    static boolean spendInsignia(PlayerData pd, Price c) {
+        if (c.sink != null) return EmberEconomy.spendInsignia(pd, c.sink, c.sigMap, c.sigMarks);
+        String k = EmberSignature.C_MARK + c.sigMap;
+        if (pd.periodCount(k, "all") < c.sigMarks) return false;
+        pd.addPeriodCount(k, "all", -c.sigMarks);
+        return true;
     }
 
     void giveBack(Player p, Price c) {
