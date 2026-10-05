@@ -52,6 +52,8 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
         }
         if (key.startsWith("gate_")) {
             String gateId = key.substring(5);
+            // D198 / S0-1: P1 on → legacy DP gates closed for everyone (OP passes via %player_is_op% in option.yml)
+            if (LegacyGate.gateClosed(town.sunshine.corerpg.p1.EmberMode.active(), gateId)) return "no";
             // Stage 4.4 / S0: elite gate = Lv + 本周未通关（体力 / 本周免费在 TicketEntryService 扣；OP 由 DP || %player_is_op%）
             if ("elite".equals(gateId)) {
                 EliteService es = plugin.getEliteService();
@@ -87,6 +89,8 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
             return cash == null ? "6" : String.valueOf(cash.getHardCap());
         }
         if ("guildboss_pass".equals(key)) {
+            // D198 / S0-1: P1 on → legacy guild boss closed (OP passes via %player_is_op% in option.yml)
+            if (LegacyGate.guildBossPassClosed(town.sunshine.corerpg.p1.EmberMode.active())) return "no";
             GuildService gs = plugin.getGuildService();
             return gs != null && gs.hasBossPass(player.getUniqueId()) ? "yes" : "no";
         }

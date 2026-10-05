@@ -117,8 +117,15 @@ public final class TicketEntryService {
             if (runs == null) { player.sendMessage(ChatColor.RED + "主线本服务未加载"); return true; }
             return runs.tryEnter(player, kind.key);
         }
-        PlayerData data = dataStore.get(player.getUniqueId());
         boolean op = player.isOp() || player.hasPermission("corerpg.admin");
+        // D198 / S0-2: P1 on → legacy kinds (daily* / weekly / abyss / raid / elite) closed for players; admins pass.
+        // Console never reaches here (cmdEnter / elite start are player-only), so DP / MM reward scripts are untouched.
+        if (LegacyGate.refuseLegacyEnter(town.sunshine.corerpg.p1.EmberMode.active(), false, op)) {
+            player.sendMessage(ChatColor.RED + "[余烬] " + LegacyGate.CLOSED_MSG
+                    + ChatColor.GRAY + " · 主线副本请走 /ember → 冒险");
+            return true;
+        }
+        PlayerData data = dataStore.get(player.getUniqueId());
         StaminaService stamina = plugin.getStaminaService();
 
         if (!op) {

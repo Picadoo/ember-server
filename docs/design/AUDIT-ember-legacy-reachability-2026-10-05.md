@@ -232,6 +232,8 @@
 
 ## 5. S0 草案：默认拒绝 + 白名单（**提案，未实现，未上线**）
 
+> **2026-10-05 更新（D198）：** S0-1、S0-2 已实现并随 CoreRpg 1.65.35 上线（`J/LegacyGate.java` + `J/CoreRpgExpansion.java` gate_ / guildboss_pass + `J/TicketEntryService.java` tryEnter；P1 开着才生效，OP / `corerpg.admin` / 控制台放行）。S0-3～S0-10 仍是提案。
+
 > 本节是给后续例行窗口的**草案**。每条都尽量小到「一个窗口：改一处 + 静态测 + 进下一次合并冒烟」。按风险从高到低排；S0-1～S0-3 合起来就能封住 L1～L5、L7～L11 的入口，S0-4 是纵深防御（即使有人绕过入口，发奖端也不发）。所有闸门都只在 `EmberMode.active()` 为真时生效，P1 关掉（旧模式）时行为不变；管理员（`corerpg.admin`）和**控制台**一律放行——DP / MM 的发奖脚本都以控制台身份调 `/corerpg …`，绝不能挡控制台。
 
 ### 5.1 白名单（P1 开着时普通玩家仍可达）
@@ -244,8 +246,8 @@
 
 | # | 封什么 | 建议改哪里 | 大小 / 风险 | 测法 |
 |---|---|---|---|---|
-| **S0-1** | **L1（`/dp start` 直开旧本）+ L2 的 DP 侧** | `J/CoreRpgExpansion.java:53–61`：`gate_*` 在 `EmberMode.active()` 时对旧 gate id（`daily / weekly / abyss / raid / elite`）返回 `"no"`；`guildboss_pass`（`:89`）同理。DP 会对全队每人求值，所以不管谁开、走哪条路都会被拒；OP 仍被 `%player_is_op%` 放行。**备选**：把 `SR/permissions.yml:5–7` `dungeon.start` 改为 `default: false`——前提是先确认 P1 所有开本都只走控制台 `dp start-console`（`J/TicketEntryService.java:177`、P1 `EmberRunService`），且没有菜单让玩家自己执行 `dp start`（`TM/ember_calamity.yml:98` 是唯一一处，且只对 OP 有效）。 | 改 1 个方法约 5 行；风险低（只影响旧本） | 静态：`rg gate_` 确认无 P1 本使用这些 id；冒烟：待测第 1、6 条 |
-| **S0-2** | **L2（`/corerpg enter <旧>` / `/corerpg elite`）** | `J/TicketEntryService.java:115` 的 `if (kind.p1())` 分支之后加：`EmberMode.active() && !admin` → 提示「P1 模式下旧副本已关闭」并 `return true`。`EliteService.cmdStart`（`:63`）走的就是 `tryEnter(ELITE)`，一并覆盖。 | 约 5 行；低 | 冒烟：待测第 2 条（应被拒） |
+| **S0-1** ✅ **已建（D198，CoreRpg 1.65.35）** | **L1（`/dp start` 直开旧本）+ L2 的 DP 侧** | `J/CoreRpgExpansion.java:53–61`：`gate_*` 在 `EmberMode.active()` 时对旧 gate id（`daily / weekly / abyss / raid / elite`）返回 `"no"`；`guildboss_pass`（`:89`）同理。DP 会对全队每人求值，所以不管谁开、走哪条路都会被拒；OP 仍被 `%player_is_op%` 放行。**备选**：把 `SR/permissions.yml:5–7` `dungeon.start` 改为 `default: false`——前提是先确认 P1 所有开本都只走控制台 `dp start-console`（`J/TicketEntryService.java:177`、P1 `EmberRunService`），且没有菜单让玩家自己执行 `dp start`（`TM/ember_calamity.yml:98` 是唯一一处，且只对 OP 有效）。 | 改 1 个方法约 5 行；风险低（只影响旧本） | 静态：`rg gate_` 确认无 P1 本使用这些 id；冒烟：待测第 1、6 条 |
+| **S0-2** ✅ **已建（D198，CoreRpg 1.65.35）** | **L2（`/corerpg enter <旧>` / `/corerpg elite`）** | `J/TicketEntryService.java:115` 的 `if (kind.p1())` 分支之后加：`EmberMode.active() && !admin` → 提示「P1 模式下旧副本已关闭」并 `return true`。`EliteService.cmdStart`（`:63`）走的就是 `tryEnter(ELITE)`，一并覆盖。 | 约 5 行；低 | 冒烟：待测第 2 条（应被拒） |
 | **S0-3** | **L3 / L4 / L5 / L7 / L8 / L9 / L10 / L11 入口** | `J/CoreRpgPlugin.java:944`（`sub` 解析后）加**路由级默认拒绝**：仅当 `sender instanceof Player && EmberMode.active() && !sender.hasPermission("corerpg.admin")`，`sub` 不在白名单（§5.1）时拒绝；对带子动作的命令（`calamity join`、`pass free/claim`、`vip claim`、`arena *`、`abyss settle/evacuate`）按「子命令 + 动作」匹配。白名单写进 `P/ember-v1.yml` 新节 `legacy_gate:`（仿 `legacy_auction` `:126` 的写法，默认拒绝、可逐条放开），而不是硬编码。第一批拒绝：`arena`、`pass free`、`pass claim`、`vip claim`、`calamity join`、`guild`、`scrap`、`reforge`、`socket`、`enhance`、`forge`、`part`、`covenant`、`talent`（旧）、`shop`、`monthly`、`stamina convert`、`elite`（非 status）、`abyss`（P1 外的 settle）。 | 一次改 1 处 + 1 段配置；中（要逐条核对白名单，别误伤 P1 子命令；`abyss evacuate` 在 P1 本内的用途要先确认，见待测第 9 条） | 静态：把 §1 表逐行跑一遍白名单判断；冒烟：待测第 3–5、11 条（应被拒） |
 | **S0-4** | **L6 / L12 + 灾厄发奖（纵深防御）** | ① `J/ProgressService.java:168` `grantEmberXp` / `:423` `grantPassXp`：P1 开着时忽略旧 source（`daily_clear / weekly_clear / abyss_clear / raid_clear / guild_boss_clear / elite_weekly / elite / boss / kill / bounty`），只保留 P1 结算路径；② `J/CoreRpgPlugin.java:839–840`：P1 开着时，除 `ember_hub` 外所有非 P1 世界都不发旧击杀币 / 旧经验；③ `:1424–1425,1448–1449`：`mmgive / mmxp` 同理；④ `J/CoreRpgPlugin.java:836–837` / `J/CalamityService.java:433`：P1 开着时不结算公共灾厄（或连同调度一起停）。 | 4 处小改，可拆成 2 个窗口（经验一窗、击杀 / 灾厄一窗）；中（要确认 P1 自己的经验不走 `grantEmberXp(source)` 的旧 source 名） | 静态：`rg grantEmberXp\|grantPassXp` 列出全部调用点逐一标注 P1 / 旧；冒烟：待测第 10 条 |
 | **S0-5** | **L3 无上限的根因**（即使 S0-3 关了竞技场，日后重开也要有上限） | `J/ArenaService.java:624` `settleWinLoss`：加每日计币场次上限（配置 `P/arena.yml match.daily_coin_matches`），`forfeit` / 掉线结算不发参战币 | 小；低 | 静态 |
@@ -287,3 +289,4 @@
 ## 变更记录
 
 - 2026-10-05：初稿（D197，ARCH §6 N1）。只写文档，不改代码 / 配置 / 菜单 / 模拟器。
+- 2026-10-05：D198 / CoreRpg 1.65.35 —— S0-1（旧 `gate_*` / `guildboss_pass` 在 P1 下回 `no`，封 L1 与 L2 的 DP 侧）+ S0-2（`tryEnter` 在 P1 下拒绝非 P1 kind，含 `/corerpg elite`，封 L2 命令侧）已建并上线；OP / 管理员 / 控制台放行，P1 关时不变；冒烟 `docs/tests/smoke-2026-10-05-1.65.35-s0gate.md`。§0 表 L1 / L2 的「P1 是否拦」从此为「是」（OP 除外）。
