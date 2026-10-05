@@ -60,6 +60,8 @@ import java.util.logging.Logger;
  * <p>D230 / ARCH S3-1: rush / echo / outpost settle + menu live in {@link EmberRushService}; this class keeps thin delegates.
  * <p>D231 / ARCH S3-2: abyss fee / floor-best / menu live in {@link EmberAbyssService}; this class keeps thin delegates.
  * <p>D232 / ARCH S3-3: 自选誓约 live in {@link EmberPledgeService}; this class keeps thin delegates.
+ * <p>D233 / ARCH S3-4: 团本 weekly cap / labels / settle grants / D106 falls live in {@link EmberRaidService}; this class
+ * keeps thin delegates and forwards the raid {@code @EventHandler}s. The recruit board stays here (next cut).
  */
 public final class EmberRunService implements Listener {
 
@@ -81,6 +83,7 @@ public final class EmberRunService implements Listener {
     private final EmberRushService rush;
     private final EmberAbyssService abyss;
     private final EmberPledgeService pledge;
+    private final EmberRaidService raid;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -101,6 +104,7 @@ public final class EmberRunService implements Listener {
         this.rush = new EmberRushService(this);
         this.abyss = new EmberAbyssService(this);
         this.pledge = new EmberPledgeService(this);
+        this.raid = new EmberRaidService(this);
         instance = this;
         load();
     }
@@ -119,6 +123,11 @@ public final class EmberRunService implements Listener {
     EmberAbyssService abyss() { return abyss; }
 
     EmberPledgeService pledge() { return pledge; }
+
+    EmberRaidService raid() { return raid; }
+
+    /** package: the director bound to an instance world (null = none) — EmberRaidService D106 flow */
+    EmberRunDirector director(String world) { return byWorld.get(world); }
 
     /** package seed for {@link EmberAbyssService#tryEnter} (same SecureRandom as other entries). */
     long nextSeed() { return rnd.nextLong(); }
@@ -267,7 +276,7 @@ public final class EmberRunService implements Listener {
     // ------------------------------------------------------------------ P2-2 abyss (book §18.3, D70) — logic in EmberAbyssService (D231 / ARCH S3-2)
 
     static final String C_ABYSS_BEST = EmberAbyssService.C_ABYSS_BEST;
-    static final String C_RAID = "p2_raid_";
+    static final String C_RAID = EmberRaidService.C_RAID; // D233
     static final String C_BOUNTY = "p2_bounty";
 
     /** P2-7 (D79): ember-v1.yml bounty.daily */
@@ -437,18 +446,16 @@ public final class EmberRunService implements Listener {
         return b.toString();
     }
 
-    /** P2-5: settled clears of this raid in the current Monday-based week */
-    public int raidWeek(PlayerData d, EmberRunMaps.MapDef m) {
-        return d.periodCount(C_RAID + capKey(m), EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
-    }
+    // ------------------------------------------------------------------ P2-5 raids — logic in EmberRaidService (D233 / ARCH S3-4)
 
-    /** P2-6 (D78): the weekly counter of a raid = its cap_group, else its own key */
-    static String capKey(EmberRunMaps.MapDef m) { return m.capGroup == null || m.capGroup.isEmpty() ? m.key : m.capGroup; }
+    /** P2-5: settled clears of this raid in the current Monday-based week — delegated to {@link EmberRaidService} (D233). */
+    public int raidWeek(PlayerData d, EmberRunMaps.MapDef m) { return raid.week(d, m); }
 
-    public String raidLabel(PlayerData d, EmberRunMaps.MapDef m) {
-        if (!progressFlag(d, m.requires)) return "需本人首通 " + m.requires.toUpperCase(Locale.ROOT);
-        return "本周 " + raidWeek(d, m) + "/" + m.weeklyCap + (capKey(m).equals(m.key) ? "" : "（团本合计）") + " · " + maps.partyMin(m) + "～" + maps.partyMax(m) + " 人 · " + maps.cost(m) + " 体力";
-    }
+    /** P2-6 (D78): the weekly counter of a raid = its cap_group, else its own key — {@link EmberRaidService#capKey} (D233). */
+    static String capKey(EmberRunMaps.MapDef m) { return EmberRaidService.capKey(m); }
+
+    /** menu / PAPI label — delegated to {@link EmberRaidService} (D233). */
+    public String raidLabel(PlayerData d, EmberRunMaps.MapDef m) { return raid.label(d, m); }
 
     public boolean abyssOpen(PlayerData d) { return abyss.open(d); }
 
@@ -509,9 +516,9 @@ public final class EmberRunService implements Listener {
             } else if (m.rush) { // D144: own Q07 first clear; D160: no weekly entry limit (the reward is claimed once a week)
                 if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放" + m.rushLabel + "（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
                 else for (String ck : m.chainKeys) if (!progressFlag(d, ck)) { problems.add(p.getName() + " 还没首通 " + ck.toUpperCase(Locale.ROOT) + "（" + m.rushLabel + "只打已首通的图的首领）"); break; } // D174 stage 2b
-            } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears
-                if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放团本（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
-                else if (m.weeklyCap > 0 && raidWeek(d, m) >= m.weeklyCap) problems.add(p.getName() + " 本周团本次数已满（" + raidWeek(d, m) + "/" + m.weeklyCap + "，周一 0 点重置）");
+            } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears (D233 → EmberRaidService)
+                String why = raid.entryProblem(p, d, m);
+                if (why != null) problems.add(why);
             } else if (!challenge && !unlocked(d, m)) {
                 EmberRunMaps.MapDef req = maps.byKey(m.requires);
                 problems.add(p.getName() + " 未解锁（需先首通 " + (req == null ? m.requires : req.key.toUpperCase(Locale.ROOT) + " " + req.name) + "）");
@@ -748,10 +755,8 @@ public final class EmberRunService implements Listener {
                     + Math.round(vm.rushHeal * 100) + "% 生命" : "") + " · 倒下观战，没有复活 · 只发" + rushRewardText(vm));
             return;
         }
-        if (vm != null && vm.raid) {
-            tellRun(s, "§6团本开始 §7· " + s.partySize + " 人 · 掉落 T3 · 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + " · 倒下后观战队友，下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次 · 走进前方房间开战 · 首领死后统一结算");
-            if (!vm.partyHint.isEmpty()) tellRun(s, "§e" + vm.partyHint); // D166
+        if (vm != null && vm.raid) { // D233 → EmberRaidService
+            raid.onStart(s, vm);
             return;
         }
         EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
@@ -908,189 +913,37 @@ public final class EmberRunService implements Listener {
         reviveFallen(s, "首领现身"); // D106
     }
 
-    // ------------------------------------------------------------------ D106 raid falls: watch a teammate, revive later
+    // ------------------------------------------------------------------ D106 raid falls — logic in EmberRaidService (D233 / ARCH S3-4)
 
     void onBossPhase(EmberRunSession s, String why) { reviveFallen(s, why); }
 
-    boolean isRaid(EmberRunSession s) { return raidRun(s); }
+    boolean isRaid(EmberRunSession s) { return raid.isRaid(s); }
 
-    private boolean raidRun(EmberRunSession s) {
-        EmberRunMaps.MapDef m = maps.byKey(s.mapKey);
-        return m != null && m.raid;
-    }
+    private boolean raidRun(EmberRunSession s) { return raid.isRaid(s); }
 
-    /** committed members standing in the instance (not fallen, not left, not spectating) */
-    private List<Player> livingIn(EmberRunSession s) {
-        List<Player> out = new ArrayList<Player>();
-        for (UUID u : s.committed) {
-            if (s.died.contains(u) || s.left.contains(u)) continue;
-            Player p = Bukkit.getPlayer(u);
-            if (p == null || !p.isOnline() || p.isDead() || p.getGameMode() == GameMode.SPECTATOR) continue;
-            if (s.world != null && !s.world.equals(p.getWorld().getName())) continue;
-            out.add(p);
-        }
-        return out;
-    }
+    /** committed members standing in the instance (not fallen, not left, not spectating) — {@link EmberRaidService} (D233) */
+    private List<Player> livingIn(EmberRunSession s) { return raid.livingIn(s); }
 
-    private Player nearestLiving(EmberRunSession s, Player from) {
-        Player best = null;
-        double bd = Double.MAX_VALUE;
-        for (Player o : livingIn(s)) {
-            double d = o.getWorld() == from.getWorld() ? o.getLocation().distanceSquared(from.getLocation()) : Double.MAX_VALUE / 2;
-            if (best == null || d < bd) { best = o; bd = d; }
-        }
-        return best;
-    }
+    private Player nearestLiving(EmberRunSession s, Player from) { return raid.nearestLiving(s, from); }
 
-    private String nextReviveText(EmberRunSession s) {
-        EmberRunDirector d = s.world == null ? null : byWorld.get(s.world);
-        String n = d == null ? null : d.nextRevive();
-        return n == null ? "本局没有复活点了，等队友打完（首领死后照常结算）" : n + "自动复活（50% 生命）";
-    }
+    private void watchTeammate(Player p, EmberRunSession s, boolean tell) { raid.watchTeammate(p, s, tell); }
 
-    /** a fallen raid member: spectator mode, camera on a living teammate, plus the [观战队友] button and next revive */
-    private void watchTeammate(Player p, EmberRunSession s, boolean tell) {
-        p.setGameMode(GameMode.SPECTATOR);
-        Player t = nearestLiving(s, p);
-        if (t != null) {
-            if (p.getWorld() != t.getWorld() || p.getLocation().distanceSquared(t.getLocation()) > 4) p.teleport(t.getLocation());
-            try { p.setSpectatorTarget(t); } catch (Throwable ignored) { }
-        }
-        if (tell) {
-            p.sendMessage(P + "§c你已倒下§7：观战队友" + (t == null ? "" : " §f" + t.getName()) + "§7 · 下一次复活：§e" + nextReviveText(s));
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[观战队友]", "/corerpg p1 watch", "换下一个还站着的队友", "AQUA"});
-        }
-    }
+    /** D106: revive every fallen raid member still in the instance at 50 % HP next to a living teammate (D233 → EmberRaidService). */
+    void reviveFallen(EmberRunSession s, String why) { raid.reviveFallen(s, why); }
 
-    /** D106: revive every fallen raid member still in the instance at 50 % HP next to a living teammate. */
-    void reviveFallen(EmberRunSession s, String why) {
-        if (!s.open() || s.died.isEmpty() || !raidRun(s)) return;
-        List<Player> alive = livingIn(s);
-        if (alive.isEmpty()) return;
-        List<String> names = new ArrayList<String>();
-        for (UUID u : new ArrayList<UUID>(s.died)) {
-            Player p = Bukkit.getPlayer(u);
-            if (p == null || !p.isOnline() || s.left.contains(u) || p.isDead()) continue;
-            if (s.world == null || !s.world.equals(p.getWorld().getName())) continue;
-            Player a0 = nearestLiving(s, p);
-            final Player a = a0 == null ? alive.get(0) : a0;
-            try { p.setSpectatorTarget(null); } catch (Throwable ignored) { }
-            // DP keeps a fallen raider in its own "dead" state (revive=true, number=0): clear it first, or DP would
-            // count the revived player as dead and end the dungeon when the last DP-alive member falls.
-            try { Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "dp revive " + p.getName() + " true true"); }
-            catch (RuntimeException ex) { log().warning("[P1 run] dp revive " + p.getName() + ": " + ex); }
-            s.died.remove(u);
-            names.add(p.getName());
-            final String world = s.world;
-            Bukkit.getScheduler().runTaskLater(plugin, () -> { // after DP's own respawn teleport
-                if (!p.isOnline() || !world.equals(p.getWorld().getName())) return;
-                Location to = a.isOnline() && a.getWorld() == p.getWorld() ? a.getLocation() : p.getLocation();
-                p.teleport(to);
-                p.setGameMode(GameMode.ADVENTURE);
-                double max = EmberHeal.maxHp(p);
-                p.setHealth(Math.max(1.0, Math.min(max, max * 0.5)));
-                EmberHeal.rebase(p); // sanctioned HP change: the B2.144 guard must not revert it
-                p.setFireTicks(0);
-                p.setFallDistance(0f);
-                p.sendMessage(P + "§a" + why + "：你已复活（50% 生命），回到 §f" + a.getName() + " §a身边");
-            }, 3L);
-            Bukkit.getScheduler().runTaskLater(plugin, () -> { // DP may put the player back on the death point a bit later
-                if (!p.isOnline() || !a.isOnline() || a.getWorld() != p.getWorld() || !world.equals(p.getWorld().getName())) return;
-                if (p.getLocation().distanceSquared(a.getLocation()) > 64) p.teleport(a.getLocation());
-            }, 20L);
-        }
-        if (names.isEmpty()) return;
-        store.save(s);
-        tellRun(s, "§a" + why + " · 复活：§f" + String.join("、", names));
-        log().info("[P1 run] " + s.runId + " raid revive (" + why + "): " + names);
-    }
+    /** D106: once a second — fallen raid member leash (D233 → EmberRaidService). */
+    void leashFallen(EmberRunDirector d) { raid.leashFallen(d); }
 
-    private final Map<UUID, Long> leashTold = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
-
-    /** D106: once a second — a fallen raid member who drifts more than 24 blocks from every living teammate (or out of
-     *  the instance world) is put back on a teammate's camera. */
-    void leashFallen(EmberRunDirector d) {
-        EmberRunSession s = d.s;
-        if (!s.open() || s.died.isEmpty()) return;
-        for (UUID u : s.died) {
-            Player p = Bukkit.getPlayer(u);
-            if (p == null || !p.isOnline() || p.getGameMode() != GameMode.SPECTATOR || s.left.contains(u)) continue;
-            if (p.getWorld() != d.w) continue; // left the instance: handled by onChangedWorld (counts as left)
-            if (p.getSpectatorTarget() != null) continue;
-            Player t = nearestLiving(s, p);
-            if (t == null) continue;
-            if (t.getLocation().distanceSquared(p.getLocation()) > 24 * 24) {
-                watchTeammate(p, s, false);
-                Long last = leashTold.get(u); // F-review #7: once every 10 s, not every second
-                long now = System.currentTimeMillis();
-                if (last == null || now - last >= 10_000L) {
-                    leashTold.put(u, now);
-                    p.sendMessage(P + "§7倒下时只能在队友身边 24 格内观战 · 下一次复活：§e" + nextReviveText(s));
-                }
-            }
-        }
-    }
-
-    /** D106: spectator-menu teleports out of the raid instance are blocked for fallen members. */
+    /** D106: spectator-menu teleports out of the raid instance are blocked for fallen members (D233 → EmberRaidService). */
     @EventHandler(ignoreCancelled = true)
-    public void onSpectateTeleport(org.bukkit.event.player.PlayerTeleportEvent e) {
-        if (e.getCause() != org.bukkit.event.player.PlayerTeleportEvent.TeleportCause.SPECTATE || e.getTo() == null) return;
-        Player p = e.getPlayer();
-        EmberRunDirector d = byWorld.get(p.getWorld().getName());
-        if (d == null || !d.def.raid || !d.s.died.contains(p.getUniqueId())) return;
-        if (e.getTo().getWorld() != d.w) {
-            e.setCancelled(true);
-            p.sendMessage(P + "§7倒下时只能观战本局队友。");
-        }
-    }
+    public void onSpectateTeleport(org.bukkit.event.player.PlayerTeleportEvent e) { raid.onSpectateTeleport(e); }
 
-    private final Map<UUID, Long> leaveAsked = new HashMap<UUID, Long>();
-
-    /** D106: a fallen raid member cannot walk out of the instance — /dp leave is held once; a second /dp leave within
-     *  10 s is a deliberate give-up (counts as leaving: no revive, no settlement). Hub commands are blocked by QuestService. */
+    /** D106: a fallen raid member's /dp leave is held once, /dp revive refused (D233 → EmberRaidService). */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onFallenLeave(org.bukkit.event.player.PlayerCommandPreprocessEvent e) {
-        Player p = e.getPlayer();
-        EmberRunDirector d = byWorld.get(p.getWorld().getName());
-        if (d == null || !d.def.raid || !d.s.open() || !d.s.died.contains(p.getUniqueId())) return;
-        String[] a = e.getMessage().replaceFirst("^/", "").trim().toLowerCase(Locale.ROOT).split("\\s+");
-        String root = a[0].contains(":") ? a[0].substring(a[0].indexOf(':') + 1) : a[0];
-        if ((root.equals("dp") || root.startsWith("dungeon")) && a.length >= 2 && "revive".equals(a[1])) { // F-review #7
-            e.setCancelled(true);
-            p.sendMessage(P + "§7团本里倒下后不能自己复活 · 下一次复活：§e" + nextReviveText(d.s));
-            if (plugin.getQuestService() != null) plugin.getQuestService().quietHint(p.getUniqueId()); // no second "不可用" line
-            return;
-        }
-        if (!(root.equals("dp") || root.startsWith("dungeon")) || a.length < 2 || !"leave".equals(a[1])) return;
-        Long t = leaveAsked.get(p.getUniqueId());
-        long now = System.currentTimeMillis();
-        if (t != null && now - t < 10000L) { leaveAsked.remove(p.getUniqueId()); return; } // confirmed give-up
-        leaveAsked.put(p.getUniqueId(), now);
-        e.setCancelled(true);
-        if (plugin.getQuestService() != null) plugin.getQuestService().quietHint(p.getUniqueId());
-        p.sendMessage(P + "§c倒下后不能离开团本§7：下一次复活 §e" + nextReviveText(d.s)
-                + "§7；本局结束会自动送回。§c确实要放弃本局结算§7：10 秒内再输一次 /dp leave");
-    }
+    public void onFallenLeave(org.bukkit.event.player.PlayerCommandPreprocessEvent e) { raid.onFallenLeave(e); }
 
-    /** /corerpg p1 watch — a fallen raid member cycles the camera through the living teammates. */
-    private boolean cmdWatch(CommandSender sender) {
-        if (!(sender instanceof Player)) return true;
-        Player p = (Player) sender;
-        EmberRunDirector d = byWorld.get(p.getWorld().getName());
-        if (d == null || !d.s.died.contains(p.getUniqueId()) || !d.s.open()) { p.sendMessage(P + "只有团本里倒下的人可以观战队友。"); return true; }
-        List<Player> alive = livingIn(d.s);
-        if (alive.isEmpty()) { p.sendMessage(P + "没有还站着的队友。"); return true; }
-        Entity cur = p.getSpectatorTarget();
-        int i = 0;
-        for (int k = 0; k < alive.size(); k++) if (alive.get(k).equals(cur)) { i = (k + 1) % alive.size(); break; }
-        Player t = alive.get(i);
-        p.setGameMode(GameMode.SPECTATOR);
-        try { p.setSpectatorTarget(null); } catch (Throwable ignored) { }
-        p.teleport(t.getLocation());
-        try { p.setSpectatorTarget(t); } catch (Throwable ignored) { }
-        p.sendMessage(P + "§7正在观战 §f" + t.getName() + " §7· 下一次复活：§e" + nextReviveText(d.s));
-        return true;
-    }
+    /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
+    private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
     void onExtraSpawned(EmberRunSession s) {
         // D182: reward elite announces its fixed light move (dodge hint + same 10+1 rewards)
@@ -1190,14 +1043,7 @@ public final class EmberRunService implements Listener {
         store.save(s);
         EmberRunMaps.MapDef fm = maps.byKey(s.mapKey);
         if (!chFail && fm != null && fm.raid && fm.weeklyCap > 0) { // recheck #3 (D133): the weekly raid count only moves on a clear
-            for (UUID u : s.participants) {
-                Player p = Bukkit.getPlayer(u);
-                if (p == null || !p.isOnline()) continue;
-                int used = raidWeek(data(u), fm);
-                p.sendMessage(P + ChatColor.RED + "本局失败：" + why + "（已开战不退体力；未结算的额外奖励作废）");
-                p.sendMessage(P + "§a本周团本次数没有扣§7：还是 " + used + "/" + fm.weeklyCap + (capKey(fm).equals(fm.key) ? "" : "（团本合计）")
-                        + (used < fm.weeklyCap ? "，体力够就可以再来（只有通关才算一次）" : ""));
-            }
+            raid.tellFailNoBurn(s, fm, why); // D233 → EmberRaidService
         } else if (!chFail && fm != null && fm.rush) { // D160: a failed rush costs nothing — say so, plus the reward state
             for (UUID u : s.participants) {
                 Player p = Bukkit.getPlayer(u);
@@ -1364,10 +1210,8 @@ public final class EmberRunService implements Listener {
                 && pd.periodCount(C_ROTATION, week) < maps.rotationWeeklyCap;
         if (featNormal) rotation = true;
         final int rotMarks = s.challenge ? maps.rotationBonusMarks : maps.rotationNormalBonusMarks;
-        if (m.raid) { // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic
-            grants.add(EmberRunRules.raidItem(in, "raid_item", m.lootFamily, maps.raidItemQualityFloor)); // P2-9 (D82)
-            grants.add(new EmberRunRules.Grant("raid_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), 1, null));
-        }
+        if (m.raid) // P2-5 + P2-9 (D82): one targeted T3 roll (floor 精良) + 1 T3 mark; titles / trail are cosmetic (D233 → EmberRaidService)
+            grants.addAll(EmberRaidService.settleGrants(in, m, maps.raidItemQualityFloor, s.tier));
         if (rotation) grants.add(new EmberRunRules.Grant("rot_mark", EmberRunRules.Kind.MARK, String.valueOf(s.tier), rotMarks, null));
         // D174 签名传奇: repeat NORMAL clear of a signature map → 1 insignia + maybe a signature stamp on the base item;
         // the map's first clear → the first-clear insignia, once per map (not per content version, C_FC)
@@ -1426,7 +1270,7 @@ public final class EmberRunService implements Listener {
             EmberRunRules.Row r = l.record(s.runId, g.key, g.encode(), st, now, created);
             if (created[0]) changed.add(r);
             if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(C_ROTATION, week, 1); // counted once per run (ledger key)
-            if (created[0] && "raid_mark".equals(g.key)) pd.addPeriodCount(C_RAID + capKey(m), week, 1); // P2-5 weekly cap (P2-6: per cap_group)
+            EmberRaidService.applyClearCount(pd, m, week, g.key, created[0]); // P2-5 weekly cap (P2-6: per cap_group), D233
             if (created[0] && "fc_sigmark".equals(g.key)) pd.addPeriodCount(EmberSignature.C_FC + m.key, "all", 1); // D174: once per map
         }
         if (fresh) pd.addPeriodCount(C_BOUNTY, bDay, bountyW);
@@ -2514,20 +2358,7 @@ public final class EmberRunService implements Listener {
         store.save(d.s);
         deathRefund(p, d.s);
         checkWipe(d.s);
-        if (d.def.raid && d.s.open() && !livingIn(d.s).isEmpty()) { // D106
-            tellRun(d.s, "§c" + p.getName() + " 倒下 §7· 下一次复活：§e" + nextReviveText(d.s));
-            watchLater(p, d.s, 10L, 3); // DP keeps the fallen raider in the instance (dead state) — put the camera on a teammate
-        }
-    }
-
-    /** D106: once the fallen raider is back on their feet (DP auto-respawn), switch to watching a teammate. */
-    private void watchLater(final Player p, final EmberRunSession rs, long delay, final int tries) {
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (!p.isOnline() || !rs.open() || !rs.died.contains(p.getUniqueId()) || rs.world == null
-                    || !rs.world.equals(p.getWorld().getName())) return;
-            if (p.isDead()) { if (tries > 0) watchLater(p, rs, 20L, tries - 1); return; }
-            watchTeammate(p, rs, true);
-        }, delay);
+        if (d.def.raid && d.s.open() && !livingIn(d.s).isEmpty()) raid.onFall(p, d.s); // D106 (D233 → EmberRaidService)
     }
 
     /** D32 / B2.172: a heal potion drunk inside a P1 main run (called by LifeService after the cooldown check). */
@@ -3277,9 +3108,7 @@ public final class EmberRunService implements Listener {
         String t = target(d);
         p.sendMessage(P + "挑战版（七图）：" + (challengeOpen(d) ? "§a已开放 §7· 冒险页「挑战版」选图 · 掉落 T3"
                 : "§7需本人首通 " + (maps.challenge == null ? "Q07" : maps.challenge.requires.toUpperCase(Locale.ROOT))));
-        for (EmberRunMaps.MapDef rm : maps.raids.values())
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§6团本 " + rm.key.toUpperCase(Locale.ROOT) + " " + rm.name + " §7" + raidLabel(d, rm) + " ",
-                    new String[]{"[开本]", "/corerpg p1 enter " + rm.key, "队长点：全队需各自首通 Q07，3～5 人", "GOLD"});
+        raid.menuButtons(p, d); // D233 → EmberRaidService
         p.sendMessage(P + "§e每日委托 §7" + bountyLabel(d)); // P2-7
         p.sendMessage(P + "本周精选：§b" + featuredLabel(d) + " §7（前 " + maps.rotationWeeklyCap + " 次精选通关各多 1 枚印记：挑战版给 T3，Q01–Q06 首通后的普通版重打给本图阶）");
         if (!maps.modifiers.isEmpty()) p.sendMessage(P + "本周规则（精选图的挑战版" + (normalRule() ? "和首通后的普通版重打；首通不受影响" : "；普通版不变") + "；奖励不变）：§b" + modifierLabel());
@@ -3547,10 +3376,7 @@ public final class EmberRunService implements Listener {
         if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
         if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
         if ("next".equals(key)) return nextStep(d, p.getUniqueId()); // new-player polish %corerpg_p1_next%
-        if (key.startsWith("raid_")) { // P2-5 %corerpg_p1_raid_r01%
-            EmberRunMaps.MapDef rm = maps.raids.get(key.substring(5));
-            return rm == null ? "" : raidLabel(d, rm);
-        }
+        if (key.startsWith("raid_")) return raid.papi(d, key.substring(5)); // P2-5 %corerpg_p1_raid_r01% (D233 → EmberRaidService)
         if ("abyss_state".equals(key)) return maps.abyss.isEmpty() ? "未配置" : !abyssOpen(d) ? "需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)
                 : "最高第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层";
         if (key.startsWith("abyss_t")) {
