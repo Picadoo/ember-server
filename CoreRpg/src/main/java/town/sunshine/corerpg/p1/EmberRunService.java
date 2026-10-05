@@ -97,6 +97,7 @@ public final class EmberRunService implements Listener {
     private final EmberEntryService entry;
     private final EmberSessionService session;
     private final EmberSettleService settle;
+    private final EmberRunPapi papi;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -122,6 +123,7 @@ public final class EmberRunService implements Listener {
         this.entry = new EmberEntryService(this);
         this.session = new EmberSessionService(this);
         this.settle = new EmberSettleService(this);
+        this.papi = new EmberRunPapi(this);
         instance = this;
         load();
     }
@@ -2680,154 +2682,13 @@ public final class EmberRunService implements Listener {
 
     // ------------------------------------------------------------------ PAPI %corerpg_p1_*%
 
-    public String placeholder(Player p, String key) {
-        if (p == null || maps == null) return "";
-        PlayerData d = data(p.getUniqueId());
-        if (key.startsWith("pass_")) return hasPass(p.getUniqueId(), key.substring(5)) ? "yes" : "no";
-        if ("target".equals(key)) { String t = target(d); return t == null ? "未选择" : EmberItemData.familyName(t); }
-        if (key.startsWith("marks_t")) {
-            try { return String.valueOf(marks(d, Integer.parseInt(key.substring(7)))); } catch (NumberFormatException e) { return "0"; }
-        }
-        if ("pending".equals(key)) { // D93: a first-clear choice waiting for a click is not "stuck in storage"
-            int n = 0;
-            for (EmberRunRules.Row r : store.ledger(p.getUniqueId()).open()) if (!EmberRunRules.ST_AWAIT.equals(r.status)) n++;
-            return String.valueOf(n);
-        }
-        if ("active".equals(key)) return EmberMode.active() ? "yes" : "no";
-        if ("vbounty".equals(key)) { String l = varietyBountyLine(d); return l.isEmpty() ? "—" : l; } // D144 花样委托
-        if ("rush".equals(key)) { // D144 余烬连战 menu line
-            if (maps.rush.isEmpty()) return "未配置";
-            if (!progressFlag(d, "q07")) return "§8需本人首通 Q07";
-            int used = rushWeek(d, p == null ? null : p.getUniqueId()); // D160
-            return EmberRunRules.rushPaysReward(used, RUSH_WEEKLY) ? "§a本周奖励未领 · 失败可无限重试" : "§7本周奖励已领 · 可练习（无奖励）";
-        }
-        if (key.startsWith("pledge_")) return pledgePapi(d, key.substring(7)); // D174 stage 2b 自选誓约
-        if (key.startsWith("rush_") && maps.rush.containsKey(key.substring(5))) { // D174 stage 2b: %corerpg_p1_rush_<entry>% menu line
-            EmberRunMaps.MapDef rm = maps.rush.get(key.substring(5));
-            if (!progressFlag(d, rm.requires)) return "§8需本人首通 " + rm.requires.toUpperCase(Locale.ROOT);
-            for (String ck : rm.chainKeys) if (!progressFlag(d, ck)) return "§8需本人首通 " + ck.toUpperCase(Locale.ROOT);
-            int used = rushWeek(d, p.getUniqueId(), rm);
-            return EmberRunRules.rushPaysReward(used, rm.rushWeekly) ? "§a本周已领 " + used + "/" + rm.rushWeekly + " · 失败可无限重试" : "§7本周 " + rm.rushWeekly + " 次已领完 · 可练习（无奖励）";
-        }
-        if (key.startsWith("passd_")) { // D174 stage 2b: entries sharing one DP hall dungeon check the pass by dungeon
-            Object[] ps = passes.get(p.getUniqueId());
-            EmberRunMaps.MapDef pm = ps == null || System.currentTimeMillis() > (Long) ps[1] ? null : maps.byKey((String) ps[0]);
-            return pm != null && pm.dungeon.equalsIgnoreCase(key.substring(6)) ? "yes" : "no";
-        }
-        if (key.startsWith("sign_")) { EmberSignService g = EmberSignService.get(); return g == null ? "" : g.signPapi(p, d, key.substring(5)); } // D180
-        if (key.startsWith("online_")) { EmberSignService g = EmberSignService.get(); return g == null ? "" : g.onlinePapi(p, d, key.substring(7)); } // D180
-        if (key.startsWith("afk_")) { EmberAfkService a = EmberAfkService.get(); return a == null ? "" : a.papi(p, d, key.substring(4)); } // D177
-        if (key.startsWith("sig_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.sigPapi(p, d, key.substring(4)); } // D174 stage 1.5
-        if (key.startsWith("reroll_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.rerollPapi(p, d, key.substring(7)); } // D143
-        if (key.startsWith("honor_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.honorPapi(p, d, key.substring(6)); } // D142
-        if (key.startsWith("spec_")) { EmberGrowthService g = EmberGrowthService.get(); return g == null ? "" : g.papi(p, d, key.substring(5)); } // D141
-        if ("forge_t2".equals(key)) return progressFlag(d, "q04") ? "已开放" : "需本人首通 Q04";
-        if ("forge_t3".equals(key)) return progressFlag(d, "q07") ? "已开放" : "需本人首通 Q07";
-        if ("challenge".equals(key)) return challengeOpen(d) ? "已开放" : "需本人首通 Q07";
-        if ("q07done".equals(key)) return progressFlag(d, "q07") ? "1" : "0"; // D99 menu condition (post-Q07 icons)
-        if (key.length() == 7 && key.startsWith("q0") && key.endsWith("done")) return progressFlag(d, key.substring(0, 3)) ? "1" : "0"; // D174 stage 2b: q04done / q05done / q06done
-        if ("featured".equals(key)) return featuredLabel(d); // P2-1
-        if ("modifier".equals(key)) return modifierLabel(); // P2-8
-        if (key.startsWith("rule_")) return ruleLine(d, key.substring(5)); // D94
-        if (key.startsWith("top_abyss_") || key.startsWith("top_featured_")) { // P2-10 %corerpg_p1_top_abyss_1%
-            boolean ab = key.startsWith("top_abyss_");
-            int i;
-            try { i = Integer.parseInt(key.substring(ab ? 10 : 13)); } catch (NumberFormatException e) { return ""; }
-            if (i < 1 || i > 10) return "";
-            if (season != null) { // F-review #2: the season week board (same rows as the season page)
-                java.util.List<EmberSeason.Row> sr = season.weekTop(ab ? "abyss" : "featured", i);
-                return sr.size() < i ? "—" : sr.get(i - 1).name + " · " + EmberSeason.rowText(ab ? "abyss" : "featured", sr.get(i - 1));
-            }
-            if (top == null) return "";
-            java.util.List<EmberLeaderboard.Row> rows = top.top(ab, EmberRunRules.rotationWeekKey(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())), i);
-            if (rows.size() < i) return "—";
-            EmberLeaderboard.Row r = rows.get(i - 1);
-            return r.name + " · " + (ab ? "第 " + r.value + " 层" : r.value + " 次");
-        }
-        if (season != null && (key.startsWith("goal") || key.startsWith("season") || key.startsWith("sboard_") || key.startsWith("srank_") || "badges".equals(key))) {
-            String v = season.papi(p == null ? null : p.getUniqueId(), d, key); // D116 / D117
-            if (v != null) return v;
-        }
-        if (key.startsWith("shop") && !key.startsWith("shop_") && cosmetics != null) { // F-review #2 (D121)
-            String v = cosmetics.papi(p == null ? null : p.getUniqueId(), d, key);
-            if (v != null) return v;
-        }
-        if (key.startsWith("shop_") && cosmetics != null) return cosmetics.shopLabel(p == null ? null : p.getUniqueId(), d, key.substring(5)); // D119
-        if (key.startsWith("fest_") && festival != null) { String v = festival.papi(p, d, key.substring(5)); return v == null ? "" : v; } // D139
-        if ("title".equals(key)) return cosmetics == null ? "" : cosmetics.titleMenuText(d); // P2-9 %corerpg_p1_title% (D103: never empty)
-        if ("honors".equals(key)) return cosmetics == null ? "0/0" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size();
-        if (key.startsWith("loot_")) { EmberRunMaps.MapDef lm = maps.byKey(key.substring(5)); if (lm == null) lm = maps.raids.get(key.substring(5)); return EmberRunMaps.lootLabel(lm) + lootOdds(d, lm); }
-        if ("abyss_best".equals(key)) return String.valueOf(abyssBest(d)); // P2-2
-        if ("bounty".equals(key)) return bountyLabel(d); // P2-7 %corerpg_p1_bounty%
-        if ("next".equals(key)) return nextStep(d, p.getUniqueId()); // new-player polish %corerpg_p1_next%
-        if (key.startsWith("raid_")) return raid.papi(d, key.substring(5)); // P2-5 %corerpg_p1_raid_r01% (D233 → EmberRaidService)
-        if ("abyss_state".equals(key)) return maps.abyss.isEmpty() ? "未配置" : !abyssOpen(d) ? "需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT)
-                : "最高第 " + abyssBest(d) + " 层 · 可开 1～" + abyssMaxStart(d) + " 层";
-        if (key.startsWith("abyss_t")) {
-            try {
-                EmberRunMaps.AbyssTier t = maps.abyssTier(Integer.parseInt(key.substring(7)));
-                return t == null ? "" : abyssLine(d, t);
-            } catch (NumberFormatException e) { return ""; }
-        }
-        if ("recruits".equals(key)) return recruitsLabel(); // E-review #5
-        if ("failrefund".equals(key)) return failRefundLabel(p.getUniqueId()); // D128
-        if ("featured_key".equals(key)) return String.valueOf(featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone())));
-        if ("awaken_route".equals(key)) { // D120: cheapest real route (first line)
-            List<String> r;
-            if (Bukkit.isPrimaryThread()) r = breakthroughRoutes(p, null);
-            else try { final Player fp = p; r = Bukkit.getScheduler().callSyncMethod(plugin, () -> breakthroughRoutes(fp, null)).get(750, java.util.concurrent.TimeUnit.MILLISECONDS); }
-            catch (Exception e) { return ""; }
-            return r.isEmpty() ? "" : "§7路线：" + r.get(0) + (r.size() > 1 ? " §8（还有 " + (r.size() - 1) + " 条，点开看）" : "");
-        }
-                if ("awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "stats".equals(key)
-                || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)) {
-            EmberLoadoutService ls = plugin.getEmberLoadouts();
-            EmberLoadout l = ls == null ? null : ls.get(p);
-            if (l == null && ls != null) l = ls.refresh(p);
-            if (l == null) return "";
-            switch (key) {
-                case "awaken": return l.setLabel();
-                case "set_progress": return l.setProgress();
-                // B2.174 §19.1 装备页: actual B / H / D (formula output, §19.2), main hand + selected charm
-                case "stats": return String.format(Locale.ROOT, "攻击 %.1f · 生命 %.0f · 防御 %.0f（承伤 ×%.2f）· Lv%d",
-                        l.b, l.h, l.d, l.m, l.level);
-                case "ehp": return String.format(Locale.ROOT, "%.0f", l.ehp());
-                case "blade": return l.blade == null ? "主手没拿余烬刃" : l.blade.shortLabel();
-                case "charm": return l.charm == null ? "未选定护符" : l.charm.shortLabel();
-                default: return l.nextAwakeningHint();
-            }
-        }
-        if (key.startsWith("codex")) { // B2.180 图录 · 装备 (display only, §19.5)
-            EmberLoadoutService ls = plugin.getEmberLoadouts();
-            if (ls != null) ls.backfillCodex(p);
-            if ("codex_count".equals(key)) return EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size();
-            if (key.startsWith("codex_stage_")) {
-                try {
-                    int i = Integer.parseInt(key.substring(12));
-                    return i >= 0 && i < EmberCodex.STAGE_AT.length ? EmberCodex.stageLabel(d, i) : "";
-                } catch (NumberFormatException e) { return ""; }
-            }
-            if (key.startsWith("codex_")) return EmberCodex.has(d, key.substring(6)) ? "§a已登记" : "§8未获得";
-            return "";
-        }
-        int us = key.indexOf('_');
-        if (us > 0) {
-            EmberRunMaps.MapDef m = maps.byKey(key.substring(0, us));
-            String f = key.substring(us + 1);
-            if (m != null) {
-                switch (f) {
-                    case "state": return stateLabel(d, m);
-                    case "open": return unlocked(d, m) ? "yes" : "no";
-                    case "cleared": return firstClearDone(d, m) ? "yes" : "no";
-                    case "name": return m.name;
-                    case "cost": return maps.cost(m) + " 体力";
-                    case "tier": return m.dropLabel;
-                    case "purpose": return m.purpose;
-                    case "fc": return firstCleared(d, m) ? "已领取" : m.firstClearLabel();
-                    default: return "";
-                }
-            }
-        }
-        return "";
-    }
+    /** D240 / ARCH S3-11: sections live in {@link EmberRunPapi} (same keys / values / first-match order). */
+    public String placeholder(Player p, String key) { return papi.placeholder(p, key); }
+
+    /** D240: PAPI section accessors (read-only). */
+    Object[] passOf(UUID u) { return passes.get(u); }
+
+    EmberLeaderboard top() { return top; }
+
+    EmberRunPapi papi() { return papi; }
 }

@@ -33,7 +33,7 @@ public class EmberCountersTest {
     /** Literals that look like counter keys but are not (file:literal → reason). */
     private static final Set<String> NOT_COUNTERS = new HashSet<String>(Arrays.asList(
         "EmberRunService.java:p1_",     // mail id prefix "p1_" + base36 time
-        "CoreRpgExpansion.java:p1_",    // PlaceholderAPI key namespace
+        "CorePapi.java:p1_",            // PlaceholderAPI key namespace (D240: routed in CorePapi)
         "EmberRunMaps.java:p4_"));      // rush claim validation: config claim keys must start with p4_
 
     private static List<Path> sources() throws IOException {
