@@ -64,6 +64,8 @@ import java.util.logging.Logger;
  * keeps thin delegates and forwards the raid {@code @EventHandler}s.
  * <p>D234 / ARCH S3-5: 招募板 live in {@link EmberRecruitService}; this class keeps thin delegates and forwards the
  * recruit {@code @EventHandler}s (season apply on join stays here).
+ * <p>D235 / ARCH S3-6: entry gates (party / stamina / problem lines / mode gates), D96/D104 readiness and the weekly-rule /
+ * pledge pick live in {@link EmberEntryService}; session create, reservation and DP dispatch stay here.
  */
 public final class EmberRunService implements Listener {
 
@@ -87,6 +89,7 @@ public final class EmberRunService implements Listener {
     private final EmberPledgeService pledge;
     private final EmberRaidService raid;
     private final EmberRecruitService recruit;
+    private final EmberEntryService entry;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -109,6 +112,7 @@ public final class EmberRunService implements Listener {
         this.pledge = new EmberPledgeService(this);
         this.raid = new EmberRaidService(this);
         this.recruit = new EmberRecruitService(this);
+        this.entry = new EmberEntryService(this);
         instance = this;
         load();
     }
@@ -131,6 +135,8 @@ public final class EmberRunService implements Listener {
     EmberRaidService raid() { return raid; }
 
     EmberRecruitService recruit() { return recruit; }
+
+    EmberEntryService entry() { return entry; }
 
     /** package: the director bound to an instance world (null = none) — EmberRaidService D106 flow */
     EmberRunDirector director(String world) { return byWorld.get(world); }
@@ -254,7 +260,8 @@ public final class EmberRunService implements Listener {
 
     // ------------------------------------------------------------------ entry (§20.5 reserve → create → commit)
 
-    private EmberRunSession openSessionOf(UUID id) {
+    /** package: the open session this player is in (EmberEntryService busy gate, D235) */
+    EmberRunSession openSessionOf(UUID id) {
         for (EmberRunSession s : sessions.values()) if (s.open() && s.participants.contains(id) && !s.left.contains(id)) return s;
         return null;
     }
@@ -478,115 +485,19 @@ public final class EmberRunService implements Listener {
      */
     public boolean tryEnterAbyss(final Player leader, int tier) { return abyss.tryEnter(leader, tier); }
 
+    /**
+     * Shared entry: gates / readiness / weekly rule live in {@link EmberEntryService} (D235 / ARCH S3-6); session create,
+     * seed / extra / variety, stamina + abyss-fee reservation and DP dispatch stay here (session map + ledger).
+     */
     private boolean enter(final Player leader, String mapKey, final boolean challenge, final int abyss, long presetSeed) {
-        if (!EmberMode.active()) {
-            leader.sendMessage(P + "新模式（ember-v1.0-P1）尚未开启，主线 Q 本暂不可进入。");
-            return true;
-        }
-        final EmberRunMaps.MapDef m = maps.byKey(mapKey);
-        if (m == null) { leader.sendMessage(P + "未知主线本 " + mapKey); return true; }
-        if (challenge && maps.challenge == null) { leader.sendMessage(P + "挑战版未配置。"); return true; }
-        final EmberRunMaps.AbyssTier at = abyss > 0 ? maps.abyssTier(abyss) : null;
-        if (abyss > 0 && at == null) { leader.sendMessage(P + "深渊未配置。"); return true; }
-        if (!EmberRunBridges.teamLeader(leader)) { leader.sendMessage(P + "组队时由队长开本。"); return true; }
-        List<UUID> ids = EmberRunBridges.teamMembers(leader);
-        List<Player> party = new ArrayList<Player>();
-        List<String> problems = new ArrayList<String>();
-        for (UUID u : ids) {
-            Player p = Bukkit.getPlayer(u);
-            if (p == null || !p.isOnline()) { problems.add("队员不在线：" + nameOf(u)); continue; } // D101: a name, not a uuid
-            party.add(p);
-        }
-        final int cost = maps.cost(m);
-        if (party.size() < maps.partyMin(m) || party.size() > maps.partyMax(m))
-            problems.add("人数 " + maps.partyMin(m) + "～" + maps.partyMax(m) + "，当前 " + party.size());
-        if (m.raid && (challenge || abyss > 0)) problems.add("团本没有挑战 / 深渊版本");
-        if (m.event && (challenge || abyss > 0)) problems.add("活动本没有挑战 / 深渊版本");
-        if (m.rush && (challenge || abyss > 0)) problems.add(m.rushLabel + "没有挑战 / 深渊版本");
-        StaminaService st = plugin.getStaminaService();
-        if (st == null) problems.add("体力服务未就绪");
-        for (Player p : party) {
-            PlayerData d = data(p.getUniqueId());
-            if (at != null) {
-                if (!abyssOpen(d)) problems.add(p.getName() + " 未开放深渊（需本人首通 " + maps.abyssRequires.toUpperCase(Locale.ROOT) + "）");
-                else if (abyss > abyssMaxStart(d)) problems.add(p.getName() + " 深渊最高只能开第 " + abyssMaxStart(d) + " 层（先完整通关第 " + abyssBest(d) + " 层）");
-                int fee0 = feeFor(p, at.fee); // D142 深渊行者
-                if (d.getCoin() < fee0 && feeMarks(d, fee0) == 0)
-                    problems.add(p.getName() + " 余烬币不足（这一层 " + fee0 + "，当前 " + d.getCoin() + "）"
-                            + (maps.abyssFeeMarkCoin > 0 ? "，多出来的 T3 印记也不够抵（1 枚抵 " + maps.abyssFeeMarkCoin + " 币，留 " + EmberCosmetics.MARK_RESERVE + " 枚）" : ""));
-            } else if (challenge && !challengeOpen(d)) {
-                problems.add(p.getName() + " 未开放挑战版（需本人首通 " + maps.challenge.requires.toUpperCase(Locale.ROOT) + "）");
-            } else if (m.event) { // D139: festival window, own first clear of `requires`, daily entries
-                String why = festival == null ? "活动未加载" : festival.entryProblem(p, d);
-                if (why != null) problems.add(why);
-            } else if (m.rush) { // D144: own Q07 first clear; D160: no weekly entry limit (the reward is claimed once a week)
-                if (!progressFlag(d, m.requires)) problems.add(p.getName() + " 未开放" + m.rushLabel + "（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）");
-                else for (String ck : m.chainKeys) if (!progressFlag(d, ck)) { problems.add(p.getName() + " 还没首通 " + ck.toUpperCase(Locale.ROOT) + "（" + m.rushLabel + "只打已首通的图的首领）"); break; } // D174 stage 2b
-            } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears (D233 → EmberRaidService)
-                String why = raid.entryProblem(p, d, m);
-                if (why != null) problems.add(why);
-            } else if (!challenge && !unlocked(d, m)) {
-                EmberRunMaps.MapDef req = maps.byKey(m.requires);
-                problems.add(p.getName() + " 未解锁（需先首通 " + (req == null ? m.requires : req.key.toUpperCase(Locale.ROOT) + " " + req.name) + "）");
-            }
-            if (openSessionOf(p.getUniqueId()) != null) problems.add(p.getName() + " 已在另一局主线本中");
-            if (p.getWorld().getName().startsWith("dungeon_")) problems.add(p.getName() + " 仍在副本内");
-            if (st != null && st.staminaOf(p) < cost) problems.add(p.getName() + " 体力不足（需 " + cost + "，当前 " + st.staminaOf(p) + "）");
-        }
-        if (!problems.isEmpty()) {
-            for (Player p : party) for (String s : problems) p.sendMessage(P + ChatColor.RED + s);
-            if (!party.contains(leader)) for (String s : problems) leader.sendMessage(P + ChatColor.RED + s);
-            return true;
-        }
-        // D96: a first attempt at Q02+ without a T1 blade in hand or a selected T1 charm is a near-certain death (p1sim
-        // 0 % even at dodge 0.5) that costs a third of the day's stamina: warn once, entering stays the player's choice.
-        if (!challenge && abyss == 0 && !m.raid && !m.event && !m.rush && !forcedReady.remove(leader.getUniqueId())) {
-            EmberLoadoutService ls = plugin.getEmberLoadouts();
-            EmberRunMaps.MapDef q1 = maps.maps.isEmpty() ? null : maps.maps.values().iterator().next();
-            List<String> warn = new ArrayList<String>();
-            boolean noCharm = false;
-            if (ls != null && q1 != null && !m.key.equals(q1.key)) for (Player p : party) {
-                if (firstClearDone(data(p.getUniqueId()), m)) continue;
-                EmberLoadout l = ls.refresh(p);
-                // D98: Q01 first clear now gives the T1 charm; the T1 blade comes from Q01 drops (Q01 leans to blades)
-                if (l.blade == null || l.blade.tier < 1) warn.add(p.getName() + " 主手还没有 T1 刃：回 Q01 多打几局（Q01 偏向掉刃），拿到会自动放到快捷栏第 1 格");
-                if (l.charm == null || l.charm.tier < 1) {
-                    warn.add(p.getName() + " 还没有生效的 T1 护符（生命只有一半）：先领 Q01 首通自选的护符");
-                    if (p.equals(leader)) noCharm = true;
-                }
-            }
-            if (!warn.isEmpty()) {
-                // D101 (midgame recheck #1): say the whole rule — both T1 pieces come from Q01; the Q02 first-clear blade
-                // is a second, chosen-family blade (to match the charm), not the way in
-                leader.sendMessage(P + "§e" + m.key.toUpperCase(Locale.ROOT) + " 首通推荐：T1 刃 + T1 护符，两件都来自 Q01"
-                        + "（护符 = Q01 首通自选，刃 = Q01 掉落）。" + (m.key.equals("q02") ? "Q02 首通送一次免费定向兑换（自选族和部位的 T1 件），用来补齐同族的那一件。" : ""));
-                for (String w : warn) leader.sendMessage(P + ChatColor.YELLOW + "⚠ " + w);
-                leader.sendMessage(P + "§7这样首通 " + m.key.toUpperCase(Locale.ROOT) + " 几乎打不过，倒下不退体力。");
-                List<String[]> btn = new ArrayList<String[]>();
-                if (noCharm) btn.add(new String[]{"[领 Q01 首通护符]", "/corerpg p1 firstclear", "领取 Q01 首通自选的 T1 护符（选族）", "GREEN"});
-                btn.add(new String[]{"[回 Q01]", "/corerpg p1 enter " + q1.key, "开一局 Q01（30 体力），刷 T1 刃", "GREEN"});
-                btn.add(new String[]{"[仍然进入]", "/corerpg p1 enter " + m.key + " force", "本次不再提醒，直接开本", "RED"});
-                town.sunshine.corerpg.ConfirmTokens.sendButtons(leader, P, btn.toArray(new String[0][]));
-                return true;
-            }
-        }
-        // D104 (midgame #2): the challenge is tuned for T3 — warn once per server session when someone still has a T2 blade
-        if (challenge && abyss == 0 && !forcedReady.remove(leader.getUniqueId()) && warnedT3.add(leader.getUniqueId())) {
-            EmberLoadoutService ls = plugin.getEmberLoadouts();
-            List<String> low = new ArrayList<String>();
-            if (ls != null) for (Player p : party) {
-                EmberLoadout l = ls.refresh(p);
-                if (l.blade == null || l.blade.tier < 3) low.add(p.getName());
-            }
-            if (!low.isEmpty()) {
-                leader.sendMessage(P + "§e挑战版按 T3 装备来调；" + String.join("、", low) + " 主手还不是 T3 刃。");
-                leader.sendMessage(P + "§7先用 8 枚 T3 印记兑换（或升阶）一把 T3 刃，再到工坊「互换」免费把强化挪过去，通关率会高很多。");
-                town.sunshine.corerpg.ConfirmTokens.sendButtons(leader, P,
-                        new String[]{"[印记兑换]", "/corerpg p1 marks", "看看能兑换什么", "GREEN"},
-                        new String[]{"[仍然进入]", "/corerpg p1 enter " + m.key + " challenge force", "本次不再提醒，直接开本", "RED"});
-                return true;
-            }
-        }
+        final EmberEntryService.Admit a = entry.admit(leader, mapKey, challenge, abyss);
+        if (a == null) return true;
+        final EmberRunMaps.MapDef m = a.map;
+        final EmberRunMaps.AbyssTier at = a.tier;
+        final List<Player> party = a.party;
+        final int cost = a.cost;
+        final StaminaService st = a.stamina;
+        if (entry.readinessHold(leader, m, party, challenge, abyss)) return true;
         // create the session first (seed, snapshot, extra event fixed now — never re-rolled on reconnect)
         final EmberRunSession s = new EmberRunSession();
         s.runId = m.key + (abyss > 0 ? "a" + abyss : challenge ? "c" : "") + "-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(36 * 36 * 36), 36);
@@ -598,34 +509,7 @@ public final class EmberRunService implements Listener {
         s.challenge = challenge;
         s.abyss = abyss;
         s.tier = challenge ? maps.challenge.tier : m.tier;
-        if (challenge && abyss == 0) { // P2-8 weekly rule, fixed at entry
-            java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
-            EmberRunMaps.Modifier mod = m.key.equals(featured(today)) ? maps.modifierFor(today) : null;
-            if (forcedModifier != null) {
-                log().info("[P1 run] " + s.runId + " modifier forced " + forcedModifier.id + " (admin test)");
-                mod = forcedModifier;
-                forcedModifier = null;
-            }
-            s.modifier = mod == null ? "" : mod.id;
-        } else if (!challenge && abyss == 0 && !m.raid && !m.event && !m.rush) { // D94: repeat normal runs of the featured map get the rule too
-            java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
-            EmberRunMaps.Modifier mod = m.key.equals(featured(today)) ? maps.modifierFor(today) : null;
-            if (mod != null && !mod.normal) mod = null;                 // 术者换防 stays challenge-only (model: +6～+17 points)
-            if (mod != null) for (Player p : party) if (!firstCleared(data(p.getUniqueId()), m)) { mod = null; break; } // first clears stay canonical
-            if (forcedModifier != null) {
-                log().info("[P1 run] " + s.runId + " modifier forced " + forcedModifier.id + " (admin test, normal run)");
-                mod = forcedModifier;
-                forcedModifier = null;
-            }
-            s.modifier = mod == null ? "" : mod.id;
-            if (mod == null) { // D174 stage 2b 自选誓约: the leader's pledge, only where the weekly rule is off and everyone has the first clear (D232 → EmberPledgeService)
-                String pk = pledge.sessionKey(leader, m, party);
-                if (pk != null) {
-                    s.modifier = pk;
-                    log().info("[P1 run] " + s.runId + " pledge " + pk + " by " + leader.getName());
-                }
-            }
-        }
+        entry.applyWeeklyRule(s, leader, m, party, challenge, abyss); // P2-8 / D94 / D174 (D235 → EmberEntryService)
         s.seed = presetSeed != 0L ? presetSeed : rnd.nextLong();
         s.created = System.currentTimeMillis();
         s.leader = leader.getUniqueId();
@@ -696,12 +580,7 @@ public final class EmberRunService implements Listener {
         long until = System.currentTimeMillis() + maps.passSeconds * 1000L;
         for (Player p : party) {
             passes.put(p.getUniqueId(), new Object[]{m.key, until});
-            p.sendMessage(P + (at != null ? "§5深渊 · 余烬层 第 " + abyss + " 层 §7→ §e" + m.key.toUpperCase(Locale.ROOT) + " " + m.name
-                    + " §7正在创建实例……（已预留体力 " + cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）"
-                    : m.rush ? "§c" + m.rushLabel + " §7正在创建实例……（不耗体力 · " + rushRuleText(m) + " · "
-                            + (EmberRunRules.rushPaysReward(rushWeek(data(p.getUniqueId()), p.getUniqueId(), m), m.rushWeekly) ? "§a你本周奖励未领完§7" : "§e你本周已领完，这局是练习（无奖励）§7") + "）"
-                    : m.event ? "§c国庆活动本 §6" + m.name + " §7正在创建实例……（不耗体力 · 今日第 " + (festival.entriesToday(data(p.getUniqueId())) + 1) + "/" + festival.dailyEntries + " 次）"
-                    : "§e" + (m.raid ? "团本 " : "") + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + cost + "）"));
+            p.sendMessage(P + entry.enteringLine(p, m, at, abyss, challenge, cost)); // D235 → EmberEntryService
         }
         boolean ok = plugin.getTicketEntryService() != null
                 && plugin.getTicketEntryService().dispatchStart(leader, m.dungeon);
@@ -2519,7 +2398,7 @@ public final class EmberRunService implements Listener {
                 return true;
             case "enter":
                 if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07> [challenge]"); return true; }
-                if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) forcedReady.add(((Player) s).getUniqueId()); // D96
+                if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);
             case "recruit": return recruit.cmd(s, args); // D104 / D234 → EmberRecruitService
@@ -2876,13 +2755,10 @@ public final class EmberRunService implements Listener {
     }
 
 
-    private final java.util.Set<UUID> warnedT3 = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>()); // D104
-    private final java.util.Set<UUID> forcedReady = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
+    // D96 forcedReady / D104 warnedT3 / P2-8 forcedModifier live in EmberEntryService (D235)
 
     /** admin test hook: the next started run uses this extra event instead of the seeded roll (one shot). */
     private volatile EmberRunRules.Extra forcedExtra;
-    /** P2-8 admin test hook: the next challenge run uses this weekly rule (one shot). */
-    private volatile EmberRunMaps.Modifier forcedModifier;
     /** D138 admin test hook: the next normal run gets this affix / event ("blazing:r2", "event:r1"; one shot). */
     private volatile String forcedVariety;
 
@@ -2890,8 +2766,8 @@ public final class EmberRunService implements Listener {
         boolean admin = s.hasPermission("corerpg.admin");
         String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
         if (admin && "modifier".equals(op) && args.length >= 4) { // P2-8 test hook: next challenge run (any map) uses this rule
-            forcedModifier = "clear".equalsIgnoreCase(args[3]) ? null : maps.modifier(args[3]);
-            s.sendMessage(P + "下一局规则（挑战或精选图普通版，仅一次，测试用）= " + (forcedModifier == null ? "按周" : forcedModifier.id));
+            entry.forceModifier("clear".equalsIgnoreCase(args[3]) ? null : maps.modifier(args[3])); // D235 → EmberEntryService
+            s.sendMessage(P + "下一局规则（挑战或精选图普通版，仅一次，测试用）= " + (entry.forcedModifier() == null ? "按周" : entry.forcedModifier().id));
             return true;
         }
         if (admin && "variety".equals(op) && args.length >= 4) { // D138/D171/D181/D189/D196: blazing|…|frost|mortar|molten|venom|jailer|arcane|firechain|timed|crystal|escort|event[:rN]|clear

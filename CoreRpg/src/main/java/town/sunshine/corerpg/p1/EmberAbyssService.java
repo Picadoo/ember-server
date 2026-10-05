@@ -170,6 +170,33 @@ public final class EmberAbyssService {
         return runs.enterAbyssSegment(leader, m.key, tier, seed);
     }
 
+    /** D235: abyss gate wording (Bukkit-free) — same text as the pre-extract {@code enter}. */
+    static String lockedText(String name, String requires) {
+        return name + " 未开放深渊（需本人首通 " + requires.toUpperCase(Locale.ROOT) + "）";
+    }
+
+    static String tierTooHighText(String name, int maxStart, int best) {
+        return name + " 深渊最高只能开第 " + maxStart + " 层（先完整通关第 " + best + " 层）";
+    }
+
+    static String feeShortText(String name, int fee, int coin, int feeMarkCoin, int reserve) {
+        return name + " 余烬币不足（这一层 " + fee + "，当前 " + coin + "）"
+                + (feeMarkCoin > 0 ? "，多出来的 T3 印记也不够抵（1 枚抵 " + feeMarkCoin + " 币，留 " + reserve + " 枚）" : "");
+    }
+
+    /**
+     * D235: one member's abyss entry gate for {@link EmberEntryService#admit} — open (own first clear), tier ≤ best + 1,
+     * fee affordable in coin or surplus T3 marks. Appends 0..2 lines in the pre-extract order.
+     */
+    void entryProblems(Player p, PlayerData d, EmberRunMaps.AbyssTier at, int tier, java.util.List<String> out) {
+        EmberRunMaps maps = runs.maps();
+        if (!open(d)) out.add(lockedText(p.getName(), maps.abyssRequires));
+        else if (tier > maxStart(d)) out.add(tierTooHighText(p.getName(), maxStart(d), best(d)));
+        int fee0 = feeFor(p, at.fee); // D142 深渊行者
+        if (d.getCoin() < fee0 && feeMarks(d, fee0) == 0)
+            out.add(feeShortText(p.getName(), fee0, d.getCoin(), maps.abyssFeeMarkCoin, EmberCosmetics.MARK_RESERVE));
+    }
+
     /** D142 深渊行者: this player's segment fee (honors may discount). */
     int feeFor(Player p, int fee) {
         EmberGrowthService g = EmberGrowthService.get();

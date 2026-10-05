@@ -72,6 +72,25 @@ public final class EmberRushService {
         return b.toString();
     }
 
+    /**
+     * D235: rush entry gate wording (Bukkit-free). {@code open} = own first clear of {@code m.requires};
+     * {@code missingChain} = first chain map key without a first clear (null = all done). Null = may enter.
+     * D160: no weekly entry limit (the reward is claimed once a week).
+     */
+    static String entryProblemText(String name, EmberRunMaps.MapDef m, boolean open, String missingChain) {
+        if (!open) return name + " 未开放" + m.rushLabel + "（需本人首通 " + m.requires.toUpperCase(Locale.ROOT) + "）";
+        if (missingChain != null) return name + " 还没首通 " + missingChain.toUpperCase(Locale.ROOT) + "（" + m.rushLabel + "只打已首通的图的首领）"; // D174 stage 2b
+        return null;
+    }
+
+    /** D235: one member's rush gate for {@link EmberEntryService#admit} (D144 own Q07 first clear; D174 chain maps first-cleared). */
+    String entryProblem(Player p, PlayerData d, EmberRunMaps.MapDef m) {
+        boolean open = runs.progressFlag(d, m.requires);
+        String missing = null;
+        if (open) for (String ck : m.chainKeys) if (!runs.progressFlag(d, ck)) { missing = ck; break; }
+        return entryProblemText(p.getName(), m, open, missing);
+    }
+
     void onStart(EmberRunSession s, EmberRunMaps.MapDef m, EmberRunMaps.Boss first) {
         runs.tellRun(s, "§c" + m.rushLabel + " §7· 5 秒后 §f" + first.name + " §7现身（1/" + m.chain.size() + "）· " + ruleText(m) + "；领完后是练习（无奖励）");
     }
