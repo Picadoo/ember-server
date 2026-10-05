@@ -230,6 +230,12 @@ public final class SkillService implements Listener {
             cmdShape(player, args.length >= 3 ? args[2] : null);
             return;
         }
+        if ("dir".equals(act) || "stepdir".equals(act) || "方向".equals(act) || "后撤".equals(act) || "前冲".equals(act)) {
+            String raw = args.length >= 3 ? args[2] : null;
+            if (raw == null && ("后撤".equals(act) || "前冲".equals(act))) raw = act;
+            cmdStepDir(player, raw);
+            return;
+        }
         cast(player);
     }
 
@@ -263,15 +269,21 @@ public final class SkillService implements Listener {
         boolean stepUnlock = town.sunshine.corerpg.p1.EmberSkillKit.stepVariantUnlocked(data, runs);
         town.sunshine.corerpg.p1.EmberLoadout lo = ls == null ? null : ls.get(player);
         boolean huohen = town.sunshine.corerpg.p1.EmberSkillKit.huohenActive(data, runs, lo == null ? "none" : lo.activeSet);
-        if (huohen) {
-            player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 火痕步 · 14 秒 · 落点点燃 1（焚烬同系数）");
-        } else if (stepUnlock) {
-            player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 踏步 · 14 秒"
-                    + ChatColor.DARK_GRAY + " · 焚烬两件套时自动变为火痕步");
-        } else {
-            player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 踏步 · 14 秒"
-                    + ChatColor.DARK_GRAY + " · 火痕步：首通 Q05 + 焚烬两件套");
+        boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
+        String stepName = town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen, back);
+        String ignite = huohen ? (back ? " · 起跳点燃 1（焚烬同系数）" : " · 落点点燃 1（焚烬同系数）") : "";
+        String distNote = back ? "后撤 4 格" : "前冲 5 格";
+        player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " " + stepName
+                + " · 14 秒 · " + distNote + ignite);
+        if (!huohen && stepUnlock) {
+            player.sendMessage(ChatColor.DARK_GRAY + "    焚烬两件套时自动变为火痕步（方向开关仍有效）");
+        } else if (!huohen && !stepUnlock) {
+            player.sendMessage(ChatColor.DARK_GRAY + "    火痕步：首通 Q05 + 焚烬两件套");
         }
+        player.sendMessage(ChatColor.GRAY + "  身法方向：前冲 / 后撤 · 当前 "
+                + ChatColor.WHITE + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(
+                        town.sunshine.corerpg.p1.EmberSkillKit.stepDirId(data))
+                + ChatColor.DARK_GRAY + " · 出本点技能页切换（切换后身法冷却转满）");
         if (shapes) {
             int id = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
             player.sendMessage(ChatColor.GRAY + "  符文：扇形 / 直线 / 环斩 · 当前 "
@@ -329,6 +341,50 @@ public final class SkillService implements Listener {
             player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 "
                     + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
                     + ChatColor.GRAY + " · 充能仍转满（" + cd + "s）");
+        }
+    }
+
+    /** D219: /corerpg skill dir <forward|back> — hub only; puts 身法 on full CD. */
+    public void cmdStepDir(Player player, String raw) {
+        if (!town.sunshine.corerpg.p1.EmberMode.active()) {
+            player.sendMessage(PREFIX + ChatColor.RED + "仅 P1 可用");
+            return;
+        }
+        town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+        PlayerData data = dataStore.get(player.getUniqueId());
+        if (town.sunshine.corerpg.p1.EmberSkillKit.inDungeon(player, runs)) {
+            player.sendMessage(PREFIX + ChatColor.RED + "副本里不能换身法方向，请回城后再换");
+            return;
+        }
+        if (raw == null || raw.isEmpty()) {
+            int id = town.sunshine.corerpg.p1.EmberSkillKit.stepDirId(data);
+            player.sendMessage(PREFIX + "当前身法方向：" + ChatColor.WHITE
+                    + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id)
+                    + ChatColor.GRAY + " · 用法 /corerpg skill dir <forward|back>");
+            return;
+        }
+        int id = town.sunshine.corerpg.p1.EmberSkillKit.parseStepDir(raw);
+        if (id < 0) {
+            player.sendMessage(PREFIX + ChatColor.RED + "未知方向 · forward / back（前冲 / 后撤）");
+            return;
+        }
+        boolean changed = town.sunshine.corerpg.p1.EmberSkillKit.setStepDir(data, id);
+        dataStore.flushMutation(player.getUniqueId());
+        FlexSkillService flex = plugin.getFlexSkillService();
+        int cd = 14;
+        if (flex != null) {
+            FlexSkillService.FlexDef def = data.hasFlexSkill() ? flex.getFlex(data.getFlexSkillId()) : null;
+            if (def != null) cd = Math.max(0, def.cooldownSeconds);
+            flex.putEquippedOnFullCooldown(player);
+        }
+        if (changed) {
+            player.sendMessage(PREFIX + ChatColor.GREEN + "身法方向 → "
+                    + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id)
+                    + ChatColor.GRAY + " · 身法冷却转满（" + cd + "s）");
+        } else {
+            player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 "
+                    + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id)
+                    + ChatColor.GRAY + " · 身法冷却仍转满（" + cd + "s）");
         }
     }
 

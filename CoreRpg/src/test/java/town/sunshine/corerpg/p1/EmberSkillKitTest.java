@@ -130,4 +130,49 @@ public class EmberSkillKitTest {
         assertFalse(EmberSkillKit.huohenActive(new PlayerData(), null, "burst"));
         assertFalse(EmberSkillKit.huohenActive(new PlayerData(), null, "none"));
     }
+
+    @Test
+    public void backstepConstantsMatchDesign() {
+        assertEquals(4.0, EmberSkillKit.BACKSTEP_DISTANCE, 1e-9);
+        assertEquals(0, EmberSkillKit.DIR_FORWARD);
+        assertEquals(1, EmberSkillKit.DIR_BACK);
+        assertEquals("后撤步", EmberSkillKit.stepDisplayName(false, true));
+        assertEquals("火痕·后撤", EmberSkillKit.stepDisplayName(true, true));
+        assertEquals("踏步", EmberSkillKit.stepDisplayName(false, false));
+        assertEquals("火痕步", EmberSkillKit.stepDisplayName(true, false));
+    }
+
+    @Test
+    public void parseStepDirAndNames() {
+        assertEquals(EmberSkillKit.DIR_FORWARD, EmberSkillKit.parseStepDir("forward"));
+        assertEquals(EmberSkillKit.DIR_FORWARD, EmberSkillKit.parseStepDir("前冲"));
+        assertEquals(EmberSkillKit.DIR_BACK, EmberSkillKit.parseStepDir("back"));
+        assertEquals(EmberSkillKit.DIR_BACK, EmberSkillKit.parseStepDir("后撤"));
+        assertEquals(EmberSkillKit.DIR_BACK, EmberSkillKit.parseStepDir("后撤步"));
+        assertEquals(-1, EmberSkillKit.parseStepDir("sideways"));
+        assertEquals("前冲", EmberSkillKit.stepDirName(0));
+        assertEquals("后撤", EmberSkillKit.stepDirName(1));
+        assertEquals("back", EmberSkillKit.stepDirKey(1));
+    }
+
+    @Test
+    public void setStepDirRoundTrip() {
+        PlayerData d = new PlayerData();
+        assertEquals(EmberSkillKit.DIR_FORWARD, EmberSkillKit.stepDirId(d));
+        assertFalse(EmberSkillKit.stepBackward(d));
+        assertTrue(EmberSkillKit.setStepDir(d, EmberSkillKit.DIR_BACK));
+        assertEquals(1, d.periodCount(EmberSkillKit.C_STEP_DIR, "all"));
+        assertTrue(EmberSkillKit.stepBackward(d));
+        assertFalse(EmberSkillKit.setStepDir(d, EmberSkillKit.DIR_BACK));
+        assertTrue(EmberSkillKit.setStepDir(d, EmberSkillKit.DIR_FORWARD));
+        assertEquals(0, d.periodCount(EmberSkillKit.C_STEP_DIR, "all"));
+        assertFalse(EmberSkillKit.stepBackward(d));
+    }
+
+    @Test
+    public void stepDirCounterFamilyRegistered() {
+        EmberCounters.Family f = EmberCounters.lookup(EmberSkillKit.C_STEP_DIR);
+        assertNotNull(f);
+        assertEquals(EmberCounters.Category.SETTING, f.category);
+    }
 }

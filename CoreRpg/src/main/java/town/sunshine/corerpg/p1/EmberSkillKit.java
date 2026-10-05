@@ -10,14 +10,16 @@ import org.bukkit.entity.Player;
  * Numbers are the S0-passed values (DS15 / L07 / L09 / F14c0n1); no permanent damage multipliers.
  * <p>Shape preference lives in {@code p1_slash_shape@all} (0 = fan, 1 = line, 2 = ring). Signature shape mods
  * ({@code skill_line}/{@code skill_ring}/{@code skill_plus}/{@code skill_charge}) override the chosen rune.
- * <p>后撤步 (backward 4) is deferred: design lists it as a Q05 variant with no set-specific sim numbers beyond
- * "same as 踏步 in the model"; ship when set affinity + menu choice are defined.
+ * <p>D219 / RESEARCH-ember-backstep: 身法方向 preference in {@code p1_step_dir@all} (0 = 前冲, 1 = 后撤).
+ * Available from Q01 for all sets; not a set-bound variant. Shares the 14s 踏步/火痕步 CD.
  */
 public final class EmberSkillKit {
     public static final String C_SHAPE = "p1_slash_shape";
+    /** D219 身法方向: 0 = forward (前冲), 1 = back (后撤). */
+    public static final String C_STEP_DIR = "p1_step_dir";
     public static final String UNLOCK_DASH = "q02";
     public static final String UNLOCK_SHAPE = "q04";
-    /** S2 火痕步 / (deferred) 后撤步 unlock. */
+    /** S2 火痕步 unlock (焚烬 auto-replace). Direction switch is Q01 / always. */
     public static final String UNLOCK_STEP = "q05";
 
     /** S0-passed 烬突 (DS15): 4 blocks, ≤3 targets, 1.5B each, bosses ×0.5. */
@@ -31,8 +33,13 @@ public final class EmberSkillKit {
     public static final String HUOHEN_FAMILY = "scorch";
     public static final int STEP_IGNITE_N = 1;
     public static final double STEP_BURN_MULT = 1.0;
-    /** Search radius around landing for the single ignite target (blocks). */
+    /** Search radius around landing/takeoff for the single ignite target (blocks). */
     public static final double STEP_IGNITE_RADIUS = 3.0;
+    /** D219 后撤步 distance (forward 踏步 stays skills.yml 5.0). */
+    public static final double BACKSTEP_DISTANCE = 4.0;
+
+    public static final int DIR_FORWARD = 0;
+    public static final int DIR_BACK = 1;
 
     public static final int SHAPE_FAN = 0;
     public static final int SHAPE_LINE = 1;
@@ -76,7 +83,57 @@ public final class EmberSkillKit {
     }
 
     public static String stepDisplayName(boolean huohen) {
-        return huohen ? "火痕步" : "踏步";
+        return stepDisplayName(huohen, false);
+    }
+
+    /** 踏步 / 后撤步 / 火痕步 / 火痕·后撤 */
+    public static String stepDisplayName(boolean huohen, boolean backward) {
+        if (huohen) return backward ? "火痕·后撤" : "火痕步";
+        return backward ? "后撤步" : "踏步";
+    }
+
+    /** 0 = forward, 1 = back; absent → forward. Always available (Q01). */
+    public static int stepDirId(PlayerData d) {
+        if (d == null) return DIR_FORWARD;
+        int v = d.periodCount(C_STEP_DIR, "all");
+        return v == DIR_BACK ? DIR_BACK : DIR_FORWARD;
+    }
+
+    public static boolean stepBackward(PlayerData d) {
+        return stepDirId(d) == DIR_BACK;
+    }
+
+    public static String stepDirName(int id) {
+        return id == DIR_BACK ? "后撤" : "前冲";
+    }
+
+    public static String stepDirKey(int id) {
+        return id == DIR_BACK ? "back" : "forward";
+    }
+
+    public static int parseStepDir(String raw) {
+        if (raw == null) return -1;
+        String s = raw.trim().toLowerCase(java.util.Locale.ROOT);
+        if ("forward".equals(s) || "front".equals(s) || "前冲".equals(s) || "前".equals(s) || "0".equals(s)) return DIR_FORWARD;
+        if ("back".equals(s) || "backward".equals(s) || "backstep".equals(s)
+                || "后撤".equals(s) || "后".equals(s) || "后撤步".equals(s) || "1".equals(s)) return DIR_BACK;
+        return -1;
+    }
+
+    /**
+     * Persist 身法方向. Caller checks safe zone. Puts {@code p1_step_dir@all} (forward clears the key).
+     * Returns true when the stored value changed.
+     */
+    public static boolean setStepDir(PlayerData d, int id) {
+        if (d == null) return false;
+        if (id != DIR_FORWARD && id != DIR_BACK) return false;
+        int cur = d.periodCount(C_STEP_DIR, "all");
+        if (cur == id || (id == DIR_FORWARD && cur == 0)) {
+            if (id == DIR_FORWARD && cur != 0) d.addPeriodCount(C_STEP_DIR, "all", -cur);
+            return false;
+        }
+        d.addPeriodCount(C_STEP_DIR, "all", id - cur);
+        return true;
     }
 
     /** 0/1/2; absent or unknown → fan. Locked players always read as fan. */

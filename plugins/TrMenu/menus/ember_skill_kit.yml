@@ -1,6 +1,7 @@
 # D211 · 余烬技能组 S1（烬斩 / 烬突 / 烬斩符文）
-# D214 · S2 火痕步（焚烬 2pc + Q05 替换踏步）；后撤步暂缓
-# 枢纽入口；符文切换走 /corerpg skill shape（出本，切换后充能转满）
+# D214 · S2 火痕步（焚烬 2pc + Q05 替换踏步）
+# D219 · 身法方向 前冲/后撤（Q01起，出本切换，身法 CD 转满）
+# 枢纽入口；符文切换走 /corerpg skill shape；方向走 /corerpg skill dir
 
 Title: '§6余烬 · 技能组'
 
@@ -14,13 +15,13 @@ Layout:
   - '#########'
   - '# A B C #'
   - '# D E F #'
-  - '#   I   #'
+  - '# G I H #'
   - '####X####'
 
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §7技能组 · 充能 §f%corerpg_kit_charge%§7 · 烬斩形状 §f%corerpg_kit_shape%'
+    - 'tell: §7技能组 · 充能 §f%corerpg_kit_charge%§7 · 烬斩形状 §f%corerpg_kit_shape%§7 · 身法方向 §f%corerpg_kit_step_dir%'
     - 'command: corerpg skill kit'
 
 Icons:
@@ -77,13 +78,13 @@ Icons:
       name: '§a%corerpg_kit_step% · 潜行+Q'
       lore:
         - ''
-        - '§7身法 · 向前 §f5 §7格 · 冷却 14 秒'
-        - '§7零体力 · 不穿墙'
-        - '§7火痕步（焚烬两件套）：落点点燃 1 · 套装同系数'
+        - '§7身法 · 前冲 §f5 §7格 / 后撤 §f4 §7格 · 冷却 14 秒'
+        - '§7零体力 · 不穿墙 · 当前方向 §f%corerpg_kit_step_dir%'
+        - '§7火痕步（焚烬两件套）：前冲落点 / 后撤起跳 点燃 1 · 套装同系数'
         - ''
         - '§8当前：§f%corerpg_kit_step% §8· 装配 §f%corerpg_flex_skill_name%'
         - '§8解锁火痕步：§f%corerpg_kit_step_unlock% §8（首通 Q05）'
-        - '§8后撤步暂缓（无套装定稿）'
+        - '§e➥ §f点下方前冲/后撤切换方向（出本）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -142,6 +143,41 @@ Icons:
         - 'command: corerpg skill shape ring'
         - 'tell: §6【技能】 §7已请求切换环斩'
 
+  G:
+    display:
+      material: sugar
+      name: '§a身法方向 · 前冲'
+      lore:
+        - ''
+        - '§7向前最多 §f5 §7格 · 无伤害'
+        - '§7当前：§f%corerpg_kit_step_dir%'
+        - ''
+        - '§8出本免费换 · 换后身法冷却转满'
+        - '§e➥ §f点击切换为前冲'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg skill dir forward'
+        - 'tell: §6【技能】 §7已请求切换前冲'
+
+  H:
+    display:
+      material: rabbit foot
+      name: '§b身法方向 · 后撤'
+      lore:
+        - ''
+        - '§7向后最多 §f4 §7格 · 无伤害 · 保持朝向'
+        - '§7火痕·后撤：起跳点点燃 1'
+        - '§7当前：§f%corerpg_kit_step_dir%'
+        - ''
+        - '§8出本免费换 · 换后身法冷却转满'
+        - '§e➥ §f点击切换为后撤'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg skill dir back'
+        - 'tell: §6【技能】 §7已请求切换后撤'
+
   I:
     display:
       material: book
@@ -153,4 +189,4 @@ Icons:
         - ''
         - '§7守招（单按 Q）搁置 · 见 S0b'
         - '§7火痕步：Q05 + 焚烬两件套自动替换踏步'
-        - '§7后撤步暂缓'
+        - '§7身法方向：前冲/后撤（一开始就有，三套通用）'

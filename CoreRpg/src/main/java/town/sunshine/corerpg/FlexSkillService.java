@@ -39,7 +39,8 @@ import java.util.UUID;
  * Pilot: flex_ember_step — horizontal look-dir dash ~5 blocks, no wall clip, no damage, CD 14s, zero stamina.
  * B-flex-4: sneak+Q (PlayerDropItemEvent) world hotkey proxy → cast when flex equipped.
  * D214 / skill-kit S2: when Q05 first-cleared + 焚烬 2pc, the same cast becomes 火痕步 (landing ignites 1 enemy
- * at set burn rate ×1.0). AFK never auto-casts flex (X7). 后撤步 deferred.
+ * at set burn rate ×1.0). D219: skill-page 前冲/后撤 direction (4 blocks back, no dmg, shared CD; 火痕·后撤
+ * ignites takeoff). AFK never auto-casts flex (X7).
  */
 public final class FlexSkillService implements Listener {
 
@@ -236,16 +237,19 @@ public final class FlexSkillService implements Listener {
                 ? ChatColor.RED + "冷却中 " + String.format("%.0f", Math.ceil(remainMs / 1000.0)) + "s"
                 : ChatColor.GREEN + "就绪";
         boolean huohen = isHuohenActive(player);
+        boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
         String name = (PILOT_ID.equals(def.id) || "step".equals(def.type))
-                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen) : def.display;
+                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen, back) : def.display;
         player.sendMessage(PREFIX + name + ChatColor.GRAY + " · " + cdRemain);
-        if (huohen) {
-            player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s · 位移约 "
-                    + (int) Math.round(def.distance) + " 格 · 零体力 · 落点点燃 1（焚烬同系数）");
-        } else {
-            player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s · 位移约 "
-                    + (int) Math.round(def.distance) + " 格 · 零体力 · 无伤害");
-        }
+        double dist = back ? town.sunshine.corerpg.p1.EmberSkillKit.BACKSTEP_DISTANCE : def.distance;
+        String igniteNote = huohen
+                ? (back ? " · 起跳点燃 1（焚烬同系数）" : " · 落点点燃 1（焚烬同系数）")
+                : " · 无伤害";
+        player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s · 位移约 "
+                + (int) Math.round(dist) + " 格 · 零体力" + igniteNote
+                + ChatColor.DARK_GRAY + " · 方向 "
+                + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(
+                        town.sunshine.corerpg.p1.EmberSkillKit.stepDirId(data)));
     }
 
     public void cast(Player player) {
@@ -280,32 +284,47 @@ public final class FlexSkillService implements Listener {
         if (!ok) return;
         startCooldown(player.getUniqueId(), def.id, def.cooldownSeconds);
         boolean huohen = lastCastWasHuohen(player);
+        boolean back = lastCastWasBack(player);
         String shown = (PILOT_ID.equals(def.id) || "step".equals(def.type) || "dash".equals(def.type))
-                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen)
+                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen, back)
                 : ChatColor.stripColor(def.display);
-        player.sendMessage(PREFIX + ChatColor.GREEN + "释放 " + ChatColor.RESET + shown
-                + (huohen ? ChatColor.GRAY + " · 落点点燃" : ""));
+        String tip = "";
+        if (huohen) tip = back ? ChatColor.GRAY + " · 起跳点燃" : ChatColor.GRAY + " · 落点点燃";
+        player.sendMessage(PREFIX + ChatColor.GREEN + "释放 " + ChatColor.RESET + shown + tip);
     }
 
-    /** Set by {@link #castStep} when 火痕步 ignited (or would have, if no target). */
+    /** Set by {@link #castStep} when 火痕步 variant is active for the cast. */
     private final java.util.Map<UUID, Boolean> lastHuohen = new HashMap<UUID, Boolean>();
+    /** Set by {@link #castStep} when the cast used 后撤 direction. */
+    private final java.util.Map<UUID, Boolean> lastBack = new HashMap<UUID, Boolean>();
 
     private boolean lastCastWasHuohen(Player player) {
         Boolean v = lastHuohen.remove(player.getUniqueId());
         return v != null && v.booleanValue();
     }
 
+    private boolean lastCastWasBack(Player player) {
+        Boolean v = lastBack.remove(player.getUniqueId());
+        return v != null && v.booleanValue();
+    }
+
     /**
-     * Horizontal look-dir dash up to {@code def.distance} blocks.
-     * Does not clip through solid blocks; on failure stays put + short tip.
-     * No damage. No stamina. Optional ≤5 tick invuln omitted (not needed for thin pilot).
+     * Horizontal look-dir dash. Forward uses {@code def.distance} (5); back uses {@link
+     * town.sunshine.corerpg.p1.EmberSkillKit#BACKSTEP_DISTANCE} (4) + strictGround.
+     * Does not clip through solid blocks; on failure stays put + short tip. No damage / stamina / invuln.
      */
     private boolean castStep(Player player, FlexDef def) {
         Location from = player.getLocation();
-        Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, def.distance);
+        PlayerData data = dataStore.get(player.getUniqueId());
+        boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
+        double dist = back ? town.sunshine.corerpg.p1.EmberSkillKit.BACKSTEP_DISTANCE : def.distance;
+        Location best = town.sunshine.corerpg.p1.EmberDash.tryDash(player, dist, back, back);
         if (best == null) {
-            player.sendMessage(PREFIX + ChatColor.YELLOW + (from.getWorld() == null ? "无法踏步" : "前方受阻，无法踏步"));
+            String fail = from.getWorld() == null ? "无法踏步"
+                    : (back ? "后方受阻，无法后撤" : "前方受阻，无法踏步");
+            player.sendMessage(PREFIX + ChatColor.YELLOW + fail);
             lastHuohen.put(player.getUniqueId(), Boolean.FALSE);
+            lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
             return false;
         }
         spawnParticles(from.clone().add(0, 0.2, 0), def.particles, 10);
@@ -314,18 +333,22 @@ public final class FlexSkillService implements Listener {
         playSound(best, def.sound);
         // Display name follows unlock+焚烬 even in hub; ignite only fires in P1 worlds.
         boolean variant = isHuohenActive(player);
-        if (variant) applyHuohenIfActive(player, best);
+        if (variant) {
+            // D219: 火痕·后撤 ignites takeoff; forward 火痕步 still ignites landing (B-R4 / D217).
+            applyHuohenIfActive(player, back ? from : best);
+        }
         lastHuohen.put(player.getUniqueId(), Boolean.valueOf(variant));
+        lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
         return true;
     }
 
     /**
-     * D214 火痕步 (F14c0n1): Q05 + 焚烬 2pc → ignite the nearest enemy within
-     * {@link town.sunshine.corerpg.p1.EmberSkillKit#STEP_IGNITE_RADIUS} of landing at set burn ×1.0.
-     * Returns true when the variant is active (even if no target was in range).
+     * D214/D219 火痕步: Q05 + 焚烬 2pc → ignite nearest enemy within
+     * {@link town.sunshine.corerpg.p1.EmberSkillKit#STEP_IGNITE_RADIUS} of {@code at}
+     * (landing for forward, takeoff for back) at set burn ×1.0.
      */
-    private boolean applyHuohenIfActive(Player player, Location landing) {
-        if (player == null || landing == null || landing.getWorld() == null) return false;
+    private boolean applyHuohenIfActive(Player player, Location at) {
+        if (player == null || at == null || at.getWorld() == null) return false;
         if (!town.sunshine.corerpg.p1.EmberMode.isP1(player)) return false;
         town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
         PlayerData data = dataStore.get(player.getUniqueId());
@@ -335,12 +358,11 @@ public final class FlexSkillService implements Listener {
         if (!town.sunshine.corerpg.p1.EmberSkillKit.huohenActive(data, runs, fam)) return false;
         town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
         if (sets == null) return true;
-        LivingEntity target = nearestEnemy(player, landing,
+        LivingEntity target = nearestEnemy(player, at,
                 town.sunshine.corerpg.p1.EmberSkillKit.STEP_IGNITE_RADIUS);
         if (target == null) return true;
         sets.skillIgnite(player, target, town.sunshine.corerpg.p1.EmberSkillKit.STEP_BURN_MULT);
-        // Extra FLAME so the step feels distinct from set-proc ignite
-        landing.getWorld().spawnParticle(Particle.FLAME, landing.clone().add(0, 0.3, 0), 18, 0.4, 0.2, 0.4, 0.02);
+        at.getWorld().spawnParticle(Particle.FLAME, at.clone().add(0, 0.3, 0), 18, 0.4, 0.2, 0.4, 0.02);
         return true;
     }
 
@@ -443,6 +465,19 @@ public final class FlexSkillService implements Listener {
 
     /** Monotonic ms (book §20.6: a system clock change must not shorten or reset a cooldown). */
     private static long nowMs() { return System.nanoTime() / 1000000L; }
+
+    /**
+     * D219: skill-page direction swap puts the shared 身法 CD on full (same rule as X1 for 烬斩符文).
+     * No-op when no flex equipped.
+     */
+    public void putEquippedOnFullCooldown(Player player) {
+        if (player == null) return;
+        PlayerData data = dataStore.get(player.getUniqueId());
+        if (data == null || !data.hasFlexSkill()) return;
+        FlexDef def = flexSkills.get(data.getFlexSkillId());
+        if (def == null) return;
+        startCooldown(player.getUniqueId(), def.id, def.cooldownSeconds);
+    }
 
     /** Book §20.6 / G05: relogging must not reset the step cooldown, so only expired entries are dropped here. */
     public void onQuit(UUID uuid) {

@@ -1167,7 +1167,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GOLD + "  hubnpc" + ChatColor.GRAY + " · 工坊 NPC ensure|purge|count|list|reload");
         sender.sendMessage(ChatColor.GRAY + "  calamity [status|forceopen|forceend|trigger] · abyss [progress|settle|evacuate] · elite [start|weekly-first|status]");
         sender.sendMessage(ChatColor.GRAY + "  raid [ring|claim-ring|grant-ring] · set");
-        sender.sendMessage(ChatColor.GRAY + "  covenant [set <id>|reset] · talent [info|unlock|reset|grant] · skill [info|kit|shape <fan|line|ring>] · flex [equip|unequip|cast|info]");
+        sender.sendMessage(ChatColor.GRAY + "  covenant [set <id>|reset] · talent [info|unlock|reset|grant] · skill [info|kit|shape <fan|line|ring>|dir <forward|back>] · flex [equip|unequip|cast|info]");
         sender.sendMessage(ChatColor.GRAY + "  cash · tickets · shop buy daily_ticket|pass_unlock|weekly_ticket · monthly [buy] · vip [claim]");
         sender.sendMessage(ChatColor.GRAY + "  mail [read|claim|delete|send] · friend [add|accept|deny|remove|invite|mentor]");
         sender.sendMessage(ChatColor.GRAY + "  settings [sound|tip|privacy]");
