@@ -66,7 +66,9 @@ import java.util.logging.Logger;
  * <p>D234 / ARCH S3-5: 招募板 live in {@link EmberRecruitService}; this class keeps thin delegates and forwards the
  * recruit {@code @EventHandler}s (season apply on join stays here).
  * <p>D235 / ARCH S3-6: entry gates (party / stamina / problem lines / mode gates), D96/D104 readiness and the weekly-rule /
- * pledge pick live in {@link EmberEntryService}; session create, reservation and DP dispatch stay here.
+ * pledge pick live in {@link EmberEntryService}.
+ * <p>D237 / ARCH S3-8: session create / stamina+fee reservation / DP dispatch / verifyEntry / commit / release live in
+ * {@link EmberSessionService}; settlement ({@code settleFor} / {@code onBossKilled} / {@code failRefund}) stays here (TODO).
  */
 public final class EmberRunService implements Listener {
 
@@ -91,6 +93,7 @@ public final class EmberRunService implements Listener {
     private final EmberRaidService raid;
     private final EmberRecruitService recruit;
     private final EmberEntryService entry;
+    private final EmberSessionService session;
     private EmberRunMaps maps;
     private final SecureRandom rnd = new SecureRandom();
 
@@ -114,6 +117,7 @@ public final class EmberRunService implements Listener {
         this.raid = new EmberRaidService(this);
         this.recruit = new EmberRecruitService(this);
         this.entry = new EmberEntryService(this);
+        this.session = new EmberSessionService(this);
         instance = this;
         load();
     }
@@ -139,15 +143,37 @@ public final class EmberRunService implements Listener {
 
     EmberEntryService entry() { return entry; }
 
+    EmberSessionService session() { return session; }
+
     /** package: the director bound to an instance world (null = none) — EmberRaidService D106 flow */
     EmberRunDirector director(String world) { return byWorld.get(world); }
 
     /** package seed for {@link EmberAbyssService#tryEnter} (same SecureRandom as other entries). */
     long nextSeed() { return rnd.nextLong(); }
 
+    /** package: 0..46655 token for {@link EmberSessionService#runId} (same SecureRandom). */
+    int nextRunToken() { return rnd.nextInt(36 * 36 * 36); }
+
     /** package entry point for an abyss segment (challenge=true, abyss tier, preset seed). */
     boolean enterAbyssSegment(Player leader, String mapKey, int abyssTier, long seed) {
         return enter(leader, mapKey, true, abyssTier, seed);
+    }
+
+    // ------------------------------------------------------------------ session map / passes (EmberSessionService D237)
+
+    void putSession(EmberRunSession s) { sessions.put(s.runId, s); }
+
+    void removeSession(String runId) { sessions.remove(runId); }
+
+    void putPass(UUID id, String mapKey, long untilMs) { passes.put(id, new Object[]{mapKey, untilMs}); }
+
+    void clearPass(UUID id) { passes.remove(id); }
+
+    void ledgerRow(UUID u, String run, String key, String result, String status) {
+        EmberRunRules.Ledger l = store.ledger(u);
+        boolean[] c = new boolean[1];
+        EmberRunRules.Row r = l.record(run, key, result, status, System.currentTimeMillis(), c);
+        if (c[0]) store.saveLedger(u, Collections.singletonList(r));
     }
 
     // ------------------------------------------------------------------ config
@@ -269,7 +295,7 @@ public final class EmberRunService implements Listener {
 
     /**
      * Entry for /corerpg enter q01..q05 (TicketEntryService routes the P1 kinds here). Validates every participant
-     * (unlock, stamina, not already in a run), reserves 30 stamina each, creates the session, then lets DP create the
+     * (unlock, stamina, not already in a run); session create / reserve / DP live in EmberSessionService (D237);
      * instance; members not inside 2 s later get their reservation released.
      */
     public boolean tryEnter(final Player leader, String mapKey) { return tryEnter(leader, mapKey, false); }
@@ -488,195 +514,28 @@ public final class EmberRunService implements Listener {
 
     /**
      * Shared entry: gates / readiness / weekly rule live in {@link EmberEntryService} (D235 / ARCH S3-6); session create,
-     * seed / extra / variety, stamina + abyss-fee reservation and DP dispatch stay here (session map + ledger).
+     * seed / extra / variety, stamina + abyss-fee reservation, DP dispatch and verifyEntry live in
+     * {@link EmberSessionService} (D237 / ARCH S3-8). Settlement stays here (TODO).
      */
     private boolean enter(final Player leader, String mapKey, final boolean challenge, final int abyss, long presetSeed) {
         final EmberEntryService.Admit a = entry.admit(leader, mapKey, challenge, abyss);
         if (a == null) return true;
-        final EmberRunMaps.MapDef m = a.map;
-        final EmberRunMaps.AbyssTier at = a.tier;
-        final List<Player> party = a.party;
-        final int cost = a.cost;
-        final StaminaService st = a.stamina;
-        if (entry.readinessHold(leader, m, party, challenge, abyss)) return true;
-        // create the session first (seed, snapshot, extra event fixed now — never re-rolled on reconnect)
-        final EmberRunSession s = new EmberRunSession();
-        s.runId = m.key + (abyss > 0 ? "a" + abyss : challenge ? "c" : "") + "-" + Long.toString(System.currentTimeMillis(), 36) + "-" + Integer.toString(rnd.nextInt(36 * 36 * 36), 36);
-        s.mapKey = m.key;
-        s.dungeon = m.dungeon;
-        s.mapVersion = m.mapVersion;
-        s.ruleVersion = maps.ruleVersion;
-        s.contentVersion = m.contentVersion;
-        s.challenge = challenge;
-        s.abyss = abyss;
-        s.tier = challenge ? maps.challenge.tier : m.tier;
-        entry.applyWeeklyRule(s, leader, m, party, challenge, abyss); // P2-8 / D94 / D174 (D235 → EmberEntryService)
-        s.seed = presetSeed != 0L ? presetSeed : rnd.nextLong();
-        s.created = System.currentTimeMillis();
-        s.leader = leader.getUniqueId();
-        s.extra = EmberRunRules.rollExtra(new java.util.Random(EmberRunRules.subSeed(s.seed, "extra")).nextDouble());
-        if (forcedExtra != null) { // admin test hook, one shot
-            log().info("[P1 run] " + s.runId + " extra forced " + s.extra.id + " → " + forcedExtra.id + " (admin test)");
-            s.extra = forcedExtra;
-            forcedExtra = null;
-        }
-        if (!challenge && abyss == 0 && !m.raid && !m.rush && maps.variety.on()) { // D138: repeat-run variety, first clears stay canonical
-            boolean all = true;
-            for (Player p : party) if (!firstCleared(data(p.getUniqueId()), m)) { all = false; break; }
-            if (all || forcedVariety != null) {
-                String[] v = maps.variety.roll(EmberRunRules.subSeed(s.seed, "variety"));
-                if (forcedVariety != null) { // admin test hook, one shot: "regen:r1" / "crystal:r2" / "event:r1" / "escort:r2"
-                    String[] fv = forcedVariety.split(":");
-                    String id = fv[0], room = fv.length > 1 ? fv[1] : "r1";
-                    if (EmberRunMaps.Variety.KNOWN.contains(id)) { v[1] = id; v[0] = room; }
-                    else if ("event".equals(id) || "timed".equals(id)) { v[2] = room; if (v.length > 3) v[3] = "timed"; }
-                    else if (EmberRunMaps.Variety.EVENTS.contains(id)) { v[2] = room; if (v.length > 3) v[3] = id; }
-                    log().info("[P1 run] " + s.runId + " variety forced " + forcedVariety + " (admin test)");
-                    forcedVariety = null;
-                }
-                s.affixRoom = v[0];
-                s.affix = v[1];
-                s.eventRoom = v[2];
-                s.eventKind = v.length > 3 && v[3] != null ? v[3] : (!v[2].isEmpty() ? "timed" : "");
-            }
-        }
-        for (Player p : party) {
-            s.participants.add(p.getUniqueId());
-            String t = target(data(p.getUniqueId()));
-            s.target.put(p.getUniqueId(), t == null ? "" : t);
-        }
-        // reserve
-        List<Player> reserved = new ArrayList<Player>();
-        for (Player p : party) {
-            StaminaService.ConsumeResult r = st.reserveFlat(p, cost);
-            if (!r.ok) {
-                for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
-                for (Player q : party) q.sendMessage(P + ChatColor.RED + (r.failMessage == null ? "体力不足" : r.failMessage));
-                return true;
-            }
-            s.cost.put(p.getUniqueId(), r.cost);
-            ledgerRow(p.getUniqueId(), s.runId, "cost", "stamina:" + r.cost, EmberRunRules.ST_RESERVED);
-            reserved.add(p);
-            final int pfee = at == null ? 0 : feeFor(p, at.fee); // D142 深渊行者: own fee per player
-            if (at != null && pfee > 0) { // P2-2: the segment fee rides with the stamina reservation (D231 → EmberAbyssService)
-                PlayerData pd = data(p.getUniqueId());
-                EmberAbyssService.FeeSpendResult spent = EmberAbyssService.applyFeeSpend(pd, pfee, maps.abyssFeeMarkCoin);
-                if (!spent.ok) {
-                    for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
-                    for (Player q : party) q.sendMessage(P + ChatColor.RED + p.getName() + " 余烬币不足（这一层 " + pfee + "）");
-                    return true;
-                }
-                s.fee.put(p.getUniqueId(), spent.feeStored);
-                ledgerRow(p.getUniqueId(), s.runId, "cost_coin", spent.ledgerResult, EmberRunRules.ST_RESERVED);
-                if (spent.marksSpent > 0) {
-                    p.sendMessage(P + "§7这一层的费用 " + pfee + " 币用 §f" + spent.marksSpent + " 枚 T3 印记§7抵了（余烬币不够；1 枚抵 " + maps.abyssFeeMarkCoin
-                            + " 币，剩 " + marks(pd, 3) + " 枚）· 没打成会和体力一起退回");
-                    log().info("[P1 run] " + s.runId + " abyss fee " + p.getName() + ": " + spent.marksSpent + " T3 mark(s) for " + pfee + " coin");
-                }
-                plugin.getDataStore().flushMutation(p.getUniqueId());
-            }
-        }
-        sessions.put(s.runId, s);
-        store.save(s);
-        long until = System.currentTimeMillis() + maps.passSeconds * 1000L;
-        for (Player p : party) {
-            passes.put(p.getUniqueId(), new Object[]{m.key, until});
-            p.sendMessage(P + entry.enteringLine(p, m, at, abyss, challenge, cost)); // D235 → EmberEntryService
-        }
-        boolean ok = plugin.getTicketEntryService() != null
-                && plugin.getTicketEntryService().dispatchStart(leader, m.dungeon);
-        if (!ok) {
-            abort(s, "DP 实例创建失败", true);
-            return true;
-        }
-        Bukkit.getScheduler().runTaskLater(plugin, () -> verifyEntry(s), 40L);
-        return true;
+        if (entry.readinessHold(leader, a.map, a.party, challenge, abyss)) return true;
+        return session.start(leader, a, challenge, abyss, presetSeed);
     }
 
-    private void verifyEntry(EmberRunSession s) {
+    /** package: DP create failed / nobody entered — {@link EmberSessionService} (D237). */
+    void abort(EmberRunSession s, String why, boolean refund) {
         if (!s.open()) return;
-        for (UUID u : new ArrayList<UUID>(s.participants)) {
-            Player p = Bukkit.getPlayer(u);
-            boolean in = p != null && p.isOnline() && s.world != null && p.getWorld().getName().equals(s.world);
-            if (in) commit(s, u);
-            else if (!s.committed.contains(u)) {
-                release(s, u, "未进入实例");
-                s.participants.remove(u);
-                if (p != null) p.sendMessage(P + "没能进入实例，预留的体力已退还。原因见上方 DP 提示（人数 / 冷却约 5 秒）。");
-            }
-            passes.remove(u);
-        }
-        if (s.committed.isEmpty()) {
-            s.state = EmberRunSession.ABORTED;
-            s.reason = "nobody entered";
-            store.save(s);
-            sessions.remove(s.runId);
-            return;
-        }
-        if (EmberRunSession.PREPARE.equals(s.state)) s.state = EmberRunSession.ENTERED;
-        // A18: party HP multiplier locked now for the whole run
-        s.partySize = s.committed.size();
-        EmberRunMaps.MapDef vm = maps.byKey(s.mapKey);
-        s.hpFactor = EmberRunMaps.hpFactor(vm, s.partySize);
-        s.dmgFactor = EmberRunMaps.dmgFactor(vm, s.partySize); // P2-5 raids only (1.0 elsewhere)
+        s.state = EmberRunSession.ABORTED;
+        s.reason = why;
+        if (refund) for (UUID u : s.participants) session.release(s, u, why);
         store.save(s);
-        if (s.abyss > 0) {
-            EmberRunMaps.AbyssTier t = maps.abyssTier(s.abyss);
-            if (t != null) tellRun(s, "§5深渊第 " + s.abyss + " 层 §7· 敌方生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
-                    + String.format(Locale.ROOT, "%.2f", t.dmg) + "（在挑战版之上）· 掉落成色 " + qualityLabel(t.quality) + " · 打完首领才结算，失败只丢这一层的花费");
-        }
-        potionCheck(s);
-        if (vm != null && vm.event && festival != null) { // D139: the day's entry counts once the player is inside
-            for (UUID u : s.committed) { PlayerData pd = data(u); if (pd != null) { festival.countEntry(pd); flushData(u); } }
-            tellRun(s, "§c国庆 · " + vm.name + " §7· " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                    + "）· 小怪和首领掉" + festival.coinName + " · 不发余烬币和装备 · 首次通关得限时称号 · 倒下即失败");
-            return;
-        }
-        if (vm != null && vm.rush) { // D144: chain bosses × rush HP / damage on top of the party HP factor
-            s.hpFactor = s.hpFactor * vm.rushHp;
-            s.dmgFactor = vm.rushDmg;
-            store.save(s);
-            tellRun(s, "§c" + vm.rushLabel + " §7· " + s.partySize + " 人 · " + rushChainText(vm) + " · 首领生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                    + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", s.dmgFactor) + (vm.chain.size() > 1 ? " · 每打倒一个休息 " + Math.round(vm.rushBreak) + " 秒、站着的人回复 "
-                    + Math.round(vm.rushHeal * 100) + "% 生命" : "") + " · 倒下观战，没有复活 · 只发" + rushRewardText(vm));
-            return;
-        }
-        if (vm != null && vm.raid) { // D233 → EmberRaidService
-            raid.onStart(s, vm);
-            return;
-        }
-        EmberRunMaps.Modifier mod = maps.modifier(s.modifier);
-        int npl = EmberRunMaps.pledgeIds(s.modifier).size();
-        if (mod != null && npl > 0) tellRun(s, "§d自选誓约「" + mod.name + "」§7" + mod.text + " · 通关结算每人 +" + npl + " 枚本图首领徽记（掉落不变）");
-        else if (mod != null) tellRun(s, "§b本周规则「" + mod.name + "」§7" + mod.text + "（奖励不变" + (s.challenge ? "" : "；本周精选图首通后的重打") + "）");
-        tellRun(s, (s.abyss > 0 ? "§5深渊 §7· 掉落 T3 · " : s.challenge ? "§c挑战版 §7· 掉落 T3 · " : "§7") + "主线本开始 · " + s.partySize + " 人（敌方生命 ×" + String.format(Locale.ROOT, "%.2f", s.hpFactor)
-                + "）· 走进前方房间开战 · 击败首领后统一结算");
+        endInstance(s, false);
     }
 
-    private void commit(EmberRunSession s, UUID u) {
-        if (!s.committed.add(u)) return;
-        EmberRunRules.Ledger l = store.ledger(u);
-        l.mark(s.runId, "cost", EmberRunRules.ST_COMMITTED, System.currentTimeMillis());
-        store.saveLedger(u, Collections.singletonList(l.get(s.runId, "cost")));
-        if (l.get(s.runId, "cost_coin") != null) {
-            l.mark(s.runId, "cost_coin", EmberRunRules.ST_COMMITTED, System.currentTimeMillis());
-            store.saveLedger(u, Collections.singletonList(l.get(s.runId, "cost_coin")));
-        }
-    }
-
-    /** Releases a reservation once (idempotent through the ledger "cost" row status). */
-    private void release(EmberRunSession s, UUID u, String why) {
-        EmberRunRules.Ledger l = store.ledger(u);
-        EmberRunRules.Row r = l.get(s.runId, "cost");
-        if (r == null || EmberRunRules.ST_RELEASED.equals(r.status)) return;
-        Integer c = s.cost.get(u);
-        StaminaService st = plugin.getStaminaService();
-        if (c != null && c > 0 && st != null) st.releaseFlat(u, c);
-        l.mark(s.runId, "cost", EmberRunRules.ST_RELEASED, System.currentTimeMillis());
-        store.saveLedger(u, Collections.singletonList(r));
-        releaseFee(s, u, l);
-        log().info("[P1 run] " + s.runId + " release " + u + " (" + why + ")");
-    }
+    /** package: world-change commit — {@link EmberSessionService} (D237). */
+    void commit(EmberRunSession s, UUID u) { session.commit(s, u); }
 
     /** F-review #5 (D124): T3 marks that would pay this fee — delegated to {@link EmberAbyssService} (D231). */
     int feeMarks(PlayerData d, int fee) { return abyss.feeMarks(d, fee); }
@@ -715,17 +574,6 @@ public final class EmberRunService implements Listener {
         int pct = (int) Math.round(maps.failRefund * 100);
         boolean used = store.ledger(u).get(EmberRunRules.failRefundRun(town.sunshine.corerpg.DailyService.today()), EmberRunRules.FAIL_REFUND_KEY) != null;
         return used ? "§8今天的失败退还已用过（明天 0 点再有）" : "§a每天第一次失败退还 " + pct + "% 体力（" + EmberRunRules.failRefundAmount(maps.cost, maps.failRefund) + " 点；不给掉落和币）";
-    }
-
-    /** P2-2: the abyss fee goes back together with the stamina, once (ledger "cost_coin" status). D231 → EmberAbyssService. */
-    private void releaseFee(EmberRunSession s, UUID u, EmberRunRules.Ledger l) {
-        EmberRunRules.Row f = l.get(s.runId, "cost_coin");
-        if (f == null || EmberRunRules.ST_RELEASED.equals(f.status)) return;
-        Integer fee = s.fee.get(u);
-        EmberAbyssService.FeeRefundResult r = EmberAbyssService.applyFeeRefund(data(u), f.result, fee == null ? 0 : fee);
-        if (r.refunded) plugin.getDataStore().flushMutation(u);
-        l.mark(s.runId, "cost_coin", EmberRunRules.ST_RELEASED, System.currentTimeMillis());
-        store.saveLedger(u, Collections.singletonList(f));
     }
 
     /** PAPI %corerpg_p1_pass_q01%: only a CoreRpg-paid entry passes the DP js-condition. */
@@ -894,7 +742,7 @@ public final class EmberRunService implements Listener {
     }
 
     /** New-player polish: at run start, tell each participant where their heal potions are (or that they have none). */
-    private void potionCheck(EmberRunSession s) {
+    void potionCheck(EmberRunSession s) {
         EmberSupplyService sup = plugin.getEmberSupplies();
         if (sup == null) return;
         for (UUID u : s.participants) {
@@ -912,15 +760,6 @@ public final class EmberRunService implements Listener {
             Player p = Bukkit.getPlayer(u);
             if (p != null && p.isOnline()) p.sendMessage(P + msg);
         }
-    }
-
-    private void abort(EmberRunSession s, String why, boolean refund) {
-        if (!s.open()) return;
-        s.state = EmberRunSession.ABORTED;
-        s.reason = why;
-        if (refund) for (UUID u : s.participants) release(s, u, why);
-        store.save(s);
-        endInstance(s, false);
     }
 
     private void fail(EmberRunSession s, String why) {
@@ -1298,13 +1137,6 @@ public final class EmberRunService implements Listener {
     public int deliverQuiet(Player p) {
         quietDeliver = true;
         try { return deliver(p); } finally { quietDeliver = false; }
-    }
-
-    private void ledgerRow(UUID u, String run, String key, String result, String status) {
-        EmberRunRules.Ledger l = store.ledger(u);
-        boolean[] c = new boolean[1];
-        EmberRunRules.Row r = l.record(run, key, result, status, System.currentTimeMillis(), c);
-        if (c[0]) store.saveLedger(u, Collections.singletonList(r));
     }
 
     /** Applies every pending row once; rows that cannot be delivered now stay pending with their original result. */
@@ -2759,11 +2591,7 @@ public final class EmberRunService implements Listener {
 
 
     // D96 forcedReady / D104 warnedT3 / P2-8 forcedModifier live in EmberEntryService (D235)
-
-    /** admin test hook: the next started run uses this extra event instead of the seeded roll (one shot). */
-    private volatile EmberRunRules.Extra forcedExtra;
-    /** D138 admin test hook: the next normal run gets this affix / event ("blazing:r2", "event:r1"; one shot). */
-    private volatile String forcedVariety;
+    // forcedExtra / forcedVariety live in EmberSessionService (D237)
 
     private boolean cmdRuns(CommandSender s, String[] args) {
         boolean admin = s.hasPermission("corerpg.admin");
@@ -2774,13 +2602,13 @@ public final class EmberRunService implements Listener {
             return true;
         }
         if (admin && "variety".equals(op) && args.length >= 4) { // D138/D171/D181/D189/D196: blazing|…|frost|mortar|molten|venom|jailer|arcane|firechain|timed|crystal|escort|event[:rN]|clear
-            forcedVariety = "clear".equalsIgnoreCase(args[3]) ? null : args[3].toLowerCase(Locale.ROOT);
-            s.sendMessage(P + "下一局普通版花样（仅一次，测试用）= " + (forcedVariety == null ? "按种子" : forcedVariety));
+            session.forceVariety("clear".equalsIgnoreCase(args[3]) ? null : args[3].toLowerCase(Locale.ROOT)); // D237 → EmberSessionService
+            s.sendMessage(P + "下一局普通版花样（仅一次，测试用）= " + (session.forcedVariety() == null ? "按种子" : session.forcedVariety()));
             return true;
         }
         if (admin && "extra".equals(op) && args.length >= 4) {
-            forcedExtra = "clear".equalsIgnoreCase(args[3]) ? null : EmberRunRules.Extra.parse(args[3]);
-            s.sendMessage(P + "下一局额外事件（仅一次，测试用）= " + (forcedExtra == null ? "按种子" : forcedExtra.id));
+            session.forceExtra("clear".equalsIgnoreCase(args[3]) ? null : EmberRunRules.Extra.parse(args[3])); // D237 → EmberSessionService
+            s.sendMessage(P + "下一局额外事件（仅一次，测试用）= " + (session.forcedExtra() == null ? "按种子" : session.forcedExtra().id));
             return true;
         }
         if (admin && "marks".equals(op) && args.length >= 6) { // test grant: runs marks <玩家> <阶> <±n>

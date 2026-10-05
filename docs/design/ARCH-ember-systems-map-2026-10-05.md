@@ -52,7 +52,7 @@
 
 | 系统 | 目的 | 主要类 / 配置 | 持久化 | 状态 |
 |---|---|---|---|---|
-| 主线 Q01–Q07 | 入场 reserve → create → commit、每房 A/B、首领、唯一结算 | `EmberRunService`、`EmberRunSession`、`EmberRunDirector`、`EmberRunMaps`、`EmberRunBridges`（MM / DP 反射）；`P/ember-v1-runs.yml maps.q01..q07`；DP `plugins/DungeonPlus/dungeon/EmberQ01..07`；入口 `TicketEntryService.Kind.Q01..Q07` → `EmberRunService.tryEnter` | `EmberRunStore`：**权威是 YAML**（`P/p1-runs/runs/*.yml`、`p1-runs/ledger/<player>.yml`），MySQL `cr_p1_run` / `cr_p1_reward` 只是镜像 | 上线 |
+| 主线 Q01–Q07 | 入场 reserve → create → commit、每房 A/B、首领、唯一结算 | `EmberRunService`、`EmberEntryService`、`EmberSessionService`、`EmberRunSession`、`EmberRunDirector`、`EmberRunMaps`、`EmberRunBridges`（MM / DP 反射）；`P/ember-v1-runs.yml maps.q01..q07`；DP `plugins/DungeonPlus/dungeon/EmberQ01..07`；入口 `TicketEntryService.Kind.Q01..Q07` → `EmberRunService.tryEnter` | `EmberRunStore`：**权威是 YAML**（`P/p1-runs/runs/*.yml`、`p1-runs/ledger/<player>.yml`），MySQL `cr_p1_run` / `cr_p1_reward` 只是镜像 | 上线 |
 | 解锁链 + 首通包 | `requires / unlocks`；Q01 自选护符、Q02 自选件、Q03–Q07 材料 + 币 | 同上 `maps.*.first_clear` | `p1_first_clear_<map>@<content_version>`（`EmberRunService:200/1521`，「once per character + content version」）、`p1_unlock_*` | 上线 |
 | 每图新解锁 | Q01 签名 + 徽记 + 图鉴；Q02 烬炉烙印；Q03 双签名；Q04 首领残响；Q05 连战·前哨；Q06 自选誓约；Q07 签名调律 | `docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §0`；代码分散在 `EmberRunService`（誓约 §2711、连战 §1259）与 `EmberGrowthService`（烙印 / 调律） | 各自计数 | 上线 |
 | 重打花样（已暂停扩包） | 词缀精英 12 种、房间事件 9 种、奖励精英每图 2 招 | `EmberRunDirector` §531 / §1158 / §1256 / §1468；`P/ember-v1-runs.yml variety / elite_twists` | `p4_vb_*` | 上线；新包暂停（POLICY 12:19） |
@@ -396,6 +396,6 @@ flowchart LR
 | S0 | S0-1～S0-5、S0-8 探针（D198–D202，1.65.35–1.65.38） | — |
 | S1 | S1-1 计数器注册表 D206、首通拆分（S1 第 3 条）D205、S1-4 物品键回物品 D208、S1-5 周期回拨防护 D207 | 计数器注册表 ↔ 源码字面量覆盖率随新键维护 |
 | S2 | S2-1 登记表 D213 → S2-2～S2-6 grant/spend 路由 D215–D223 → S2-7 yml 真源 D224 → S2-8 徽记/徽/印记 D228（1.65.54）→ S2-9 S13 深渊 SourceId + vault 写入扫描 D229（1.65.55） | C15/C16 暂停期不动；p2econ 徽库存（化妆品重启前） |
-| S3 | **S3-1 Rush D230（1.65.56）· S3-2 Abyss D231（1.65.57）· S3-3 Pledge D232（1.65.58）· S3-4 Raid D233（1.65.59）· S3-5 Recruit D234（1.65.60）· S3-6 Entry gates D235（1.65.61）· S3-7 encounter primitives D236（1.65.62）** | Entry 余部随 Settlement 拆；Papi；BossMove / RoomObjective 适配器；词缀原语 |
+| S3 | **S3-1 Rush D230（1.65.56）· S3-2 Abyss D231（1.65.57）· S3-3 Pledge D232（1.65.58）· S3-4 Raid D233（1.65.59）· S3-5 Recruit D234（1.65.60）· S3-6 Entry gates D235（1.65.61）· S3-7 encounter primitives D236（1.65.62）· S3-8 Session D237（1.65.63）** | Settlement（settleFor / onBossKilled / failRefund）；Papi；BossMove / RoomObjective 适配器；词缀原语 |
 | S4 | — | 装备结构合并文档 + `source_map` |
 
