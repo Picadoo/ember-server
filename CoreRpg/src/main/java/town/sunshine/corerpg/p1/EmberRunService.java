@@ -29,6 +29,7 @@ import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.inventory.ItemStack;
 import org.yaml.snakeyaml.Yaml;
 import town.sunshine.corerpg.CoreRpgPlugin;
+import town.sunshine.corerpg.p1.encounter.RevivePoint;
 import town.sunshine.corerpg.MailService;
 import town.sunshine.corerpg.NiBridge;
 import town.sunshine.corerpg.PlayerData;
@@ -774,7 +775,7 @@ public final class EmberRunService implements Listener {
         tellRun(s, "§e" + r.label + " §7· 敌人 " + spawned + (spawned < planned ? "/" + planned : "") + "：" + comp);
         if (!r.hint.isEmpty()) tellRun(s, "§e提示：§f" + r.hint); // D166
         log().info("[P1 run] " + s.runId + " " + r.id + " variant " + (b ? "B" : "A") + " " + comp.replaceAll("§.", ""));
-        reviveFallen(s, "新房间开打"); // D106
+        reviveFallen(s, RevivePoint.ROOM_OPEN); // D106
     }
 
     void onRoomCleared(EmberRunSession s, EmberRunMaps.Room r, boolean last) {
@@ -795,11 +796,12 @@ public final class EmberRunService implements Listener {
             store.save(s);
         }
         tellRun(s, "§c首领 " + b.name + (s.challenge ? "（挑战）" : "") + " §7现身 · 招式都有预警，看清地面火线再躲");
-        reviveFallen(s, "首领现身"); // D106
+        reviveFallen(s, RevivePoint.BOSS_SPAWN); // D106
     }
 
     // ------------------------------------------------------------------ D106 raid falls — logic in EmberRaidService (D233 / ARCH S3-4)
 
+    void onBossPhase(EmberRunSession s, RevivePoint point) { reviveFallen(s, point == null ? null : point.why); }
     void onBossPhase(EmberRunSession s, String why) { reviveFallen(s, why); }
 
     boolean isRaid(EmberRunSession s) { return raid.isRaid(s); }
@@ -814,6 +816,7 @@ public final class EmberRunService implements Listener {
     private void watchTeammate(Player p, EmberRunSession s, boolean tell) { raid.watchTeammate(p, s, tell); }
 
     /** D106: revive every fallen raid member still in the instance at 50 % HP next to a living teammate (D233 → EmberRaidService). */
+    void reviveFallen(EmberRunSession s, RevivePoint point) { raid.reviveFallen(s, point == null ? null : point.why); }
     void reviveFallen(EmberRunSession s, String why) { raid.reviveFallen(s, why); }
 
     /** D106: once a second — fallen raid member leash (D233 → EmberRaidService). */

@@ -15,6 +15,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
+import town.sunshine.corerpg.p1.encounter.RevivePoint;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -1797,14 +1800,14 @@ final class EmberRunDirector {
             phaseTold = true;
             svc.tellRun(s, "§e首领进入半血 · 招式变强，盯紧预警");
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss half-HP phase at %.0f%%", s.runId, ratio * 100));
-            svc.onBossPhase(s, "首领进入半血"); // D106 raid revive point
+            svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
         }
         // §13 adds: once at 50 % after a 1 s warning
         if (b.adds != null && !addsDone && ratio <= b.adds.atHp) {
             addsDone = true;
             addsAt = now + (long) (b.adds.warn * 1000);
             svc.tellRun(s, "§c" + b.name + " §7高举誓印——两侧将出现援兵！");
-            svc.onBossPhase(s, "首领半血转阶段"); // D106 raid revive point
+            svc.onBossPhase(s, RevivePoint.ADDS_PHASE); // D106 raid revive point
         }
         if (addsAt > 0) {
             if (now >= addsAt) {
@@ -1848,7 +1851,7 @@ final class EmberRunDirector {
             phaseTold = true;
             svc.tellRun(s, "§e首领进入半血 · 招式变强，盯紧预警");
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
-            svc.onBossPhase(s, "首领进入半血"); // D106 raid revive point
+            svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
         }
         double lrh = svc.maps().raidLastReviveHp; // D118: armed at <= lrh with someone down, once per raid
         if (lrh > 0 && !lastRevDone && svc.isRaid(s) && lastPhase() && ratio <= lrh) {
@@ -1858,7 +1861,7 @@ final class EmberRunDirector {
             }
             if (lastRevAt > 0 && now >= lastRevAt) {
                 lastRevDone = true;
-                svc.onBossPhase(s, "最后阶段额外复活");
+                svc.onBossPhase(s, RevivePoint.LAST_PHASE);
             }
         }
         if (due >= 0) {
@@ -1973,15 +1976,15 @@ final class EmberRunDirector {
                 svc.log().fine("[P1 run] " + s.runId + " " + sk.name + " skipped (no room: " + fmt(run) + ")");
                 return;
             }
-            pendingCrash = sk.wallStun > 0 && crashesIntoWall(o, dir, run, sk.length);
+            pendingCrash = EmberCounterplay.armWallCrash(sk.wallStun, crashesIntoWall(o, dir, run, sk.length));
         }
         lockOrigin = "player".equals(sk.target) && target != null ? target.getLocation().clone() : o.clone();
         lockDir = dir;
         pending = skillFor(sk);
         if ("charge".equals(sk.type)) pending = pending.withLength(run);
         pendingAt = now + (long) (sk.warn * 1000);
-        pendingArmed = sk.whiffStun > 0 && anyoneInside(pending, lockOrigin, lockDir); // D192: only a real dodge counts
-        breakNeed = sk.breakHp > 0 ? Math.max(1.0, le.getMaxHealth() * sk.breakHp) : 0; // D193 破招
+        pendingArmed = EmberCounterplay.armWhiff(sk.whiffStun, anyoneInside(pending, lockOrigin, lockDir)); // D192: only a real dodge counts
+        breakNeed = EmberCounterplay.armBreakNeed(le.getMaxHealth(), sk.breakHp); // D193 破招
         breakDone = 0;
         breakBarAt = now;
         casts++;
@@ -1994,15 +1997,15 @@ final class EmberRunDirector {
         String who = "player".equals(sk.target) && target != null ? "锁定 " + target.getName() + " 脚下"
                 + ("circle".equals(sk.type) && sk.radius > 0 ? " · 半径 " + fmt(sk.radius) + " 格" : "") : shapeHint(pending);
         if (sk.share) who += " §6· 全队靠拢进圈分摊（人越多每人越少，一个人扛会很痛）";
-        if (sk.wallStun > 0) who += " §a· 让它撞上墙会晕 " + fmt(sk.wallStun) + " 秒";
-        if (sk.whiffStun > 0 && pendingArmed) who += " §a· 全员躲开它会踉跄 " + fmt(sk.whiffStun) + " 秒";
-        if (breakNeed > 0) who += " §a· 蓄力期间全队打掉它 " + Math.round(breakNeed) + " 点血可打断（踉跄 " + fmt(sk.breakStun) + " 秒）§7· 打不动就跑出圈";
+        who += EmberCounterplay.wallHint(sk.wallStun, fmt(sk.wallStun));
+        who += EmberCounterplay.whiffHint(sk.whiffStun, pendingArmed, fmt(sk.whiffStun));
+        who += EmberCounterplay.breakHint(breakNeed, sk.breakStun, fmt(sk.breakStun));
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
     }
 
     /** D193 破招: a channel is armed (need > 0) and the party's damage since its warning began reached the need. */
     static boolean broken(double need, double done) {
-        return need > 0 && done >= need;
+        return EmberCounterplay.broken(need, done);
     }
 
     /** D193: player damage on this director's boss while a break channel winds up (Service MONITOR hook, finalDamage). */
@@ -2027,13 +2030,12 @@ final class EmberRunDirector {
         pendingCrash = false;
         pendingArmed = false;
         recoverUntil = now + (long) ((Double.isNaN(sk.recover) ? b.recover : sk.recover) * 1000);
-        long ms = (long) (sk.breakStun * 1000);
+        long ms = EmberCounterplay.stunMs(sk.breakStun);
         le.removePotionEffect(PotionEffectType.SLOW); // the wind-up root ends with the cast
         if (ms > 0) {
-            stunUntil = now + ms;
-            recoverUntil = Math.max(recoverUntil, stunUntil);
-            if (follow != null) followStart = Math.max(followStart, stunUntil);
-            le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.breakStun * 20) + 4, 10, false, false), true);
+            long[] bb = EmberCounterplay.applyStunBounds(now, ms, recoverUntil, followStart);
+            stunUntil = bb[0]; recoverUntil = bb[1]; if (follow != null) followStart = bb[2];
+            le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(sk.breakStun), 10, false, false), true);
         }
         Location at = le.getLocation();
         w.spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 2.2, 0), 16, 0.5, 0.3, 0.5, 0.1);
@@ -2045,7 +2047,7 @@ final class EmberRunDirector {
 
     /** D192 落空破绽: armed at warn start (someone inside) and the hit landed on nobody → the boss staggers. */
     static boolean whiffs(boolean armed, int landed, EmberRunMaps.Skill done) {
-        return armed && landed == 0 && done != null && done.whiffStun > 0;
+        return EmberCounterplay.whiffs(armed, landed, done);
     }
 
     /** D192: a living, non-spectator participant stands inside {@code sk} as drawn from {@code o} / {@code dir} now. */
@@ -2060,11 +2062,10 @@ final class EmberRunDirector {
 
     /** D192 落空破绽: same stagger as the wall stun (rooted, no skill, no melee; a queued follow-up waits), shorter. */
     private void whiffStun(EmberRunMaps.Skill done, long now, LivingEntity le) {
-        long ms = (long) (done.whiffStun * 1000);
-        stunUntil = now + ms;
-        recoverUntil = Math.max(recoverUntil, stunUntil);
-        if (follow != null) followStart = Math.max(followStart, stunUntil);
-        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (done.whiffStun * 20) + 4, 10, false, false), true);
+        long ms = EmberCounterplay.stunMs(done.whiffStun);
+        long[] b = EmberCounterplay.applyStunBounds(now, ms, recoverUntil, followStart);
+        stunUntil = b[0]; recoverUntil = b[1]; if (follow != null) followStart = b[2];
+        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(done.whiffStun), 10, false, false), true);
         Location at = le.getLocation();
         w.spawnParticle(Particle.CRIT, at.clone().add(0, 2.2, 0), 10, 0.4, 0.2, 0.4, 0.05);
         w.playSound(at, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.8f, 0.6f);
@@ -2074,11 +2075,10 @@ final class EmberRunDirector {
 
     /** D188 撞墙破绽: rooted, no skill and no melee for {@code done.wallStun} s; a queued follow-up waits until it ends. */
     private void wallStun(EmberRunMaps.Skill done, long now, LivingEntity le) {
-        long ms = (long) (done.wallStun * 1000);
-        stunUntil = now + ms;
-        recoverUntil = Math.max(recoverUntil, stunUntil);
-        if (follow != null) followStart = Math.max(followStart, stunUntil);
-        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (done.wallStun * 20) + 4, 10, false, false), true);
+        long ms = EmberCounterplay.stunMs(done.wallStun);
+        long[] b = EmberCounterplay.applyStunBounds(now, ms, recoverUntil, followStart);
+        stunUntil = b[0]; recoverUntil = b[1]; if (follow != null) followStart = b[2];
+        le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberCounterplay.stunPotionTicks(done.wallStun), 10, false, false), true);
         Location at = le.getLocation();
         w.spawnParticle(Particle.CRIT, at.clone().add(0, 2.2, 0), 16, 0.4, 0.2, 0.4, 0.05);
         w.playSound(at, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.7f);
@@ -2104,11 +2104,7 @@ final class EmberRunDirector {
      * wall. A strip that ran its full length, or stopped at a ledge / the invisible boss-area edge, is no crash.
      */
     static boolean crashGrid(GroundTest wall, double ox, double oz, double dx, double dz, double run, double max, double half) {
-        if (run >= max - 1e-9) return false;
-        double k = run + 0.25, px = -dz, pz = dx;
-        double cx = ox + dx * k, cz = oz + dz * k;
-        return wall.ok(cx, cz) || wall.ok(cx + px * half, cz + pz * half) || wall.ok(cx - px * half, cz - pz * half)
-                || wall.ok(cx + dx * half, cz + dz * half);
+        return EmberCounterplay.crashGrid(wall, ox, oz, dx, dz, run, max, half);
     }
 
     /** One committed participant in range, chosen from the run seed + cast number (reproducible, not always the tank). */
@@ -2401,9 +2397,10 @@ final class EmberRunDirector {
     }
 
     /** half of the boss's footprint (zombie 0.6) plus a margin: the charge end must not put its box into a wall */
-    static final double BOSS_HALF_WIDTH = 0.4;
+    static final double BOSS_HALF_WIDTH = EmberCounterplay.BOSS_HALF_WIDTH;
 
-    interface GroundTest { boolean ok(double x, double z); }
+    /** D236: alias of {@link EmberCounterplay.GroundTest} so existing shape tests keep compiling. */
+    interface GroundTest extends EmberCounterplay.GroundTest { }
 
     /**
      * B2.165: how far the boss can charge along (dx, dz): every 0.25 step the centre AND the box edges (± half
@@ -2412,18 +2409,11 @@ final class EmberRunDirector {
      * on the roof (y70) for the rest of the fight.
      */
     static double clearRunGrid(GroundTest g, double ox, double oz, double dx, double dz, double max, double half) {
-        double best = 0, px = -dz, pz = dx;
-        for (double k = 0.25; k <= max + 1e-9; k += 0.25) {
-            double cx = ox + dx * k, cz = oz + dz * k;
-            if (!g.ok(cx, cz) || !g.ok(cx + px * half, cz + pz * half) || !g.ok(cx - px * half, cz - pz * half)
-                    || !g.ok(cx + dx * half, cz + dz * half)) break;
-            best = k;
-        }
-        return best;
+        return EmberCounterplay.clearRunGrid(g, ox, oz, dx, dz, max, half);
     }
 
     /** a charge shorter than this is not worth a telegraph (book: 冲撞 = up to 8 blocks) */
-    static final double CHARGE_MIN = 2.0;
+    static final double CHARGE_MIN = EmberCounterplay.CHARGE_MIN;
 
     static boolean standableIds(boolean belowSolid, boolean feetSolid, boolean headSolid) {
         return belowSolid && !feetSolid && !headSolid;
