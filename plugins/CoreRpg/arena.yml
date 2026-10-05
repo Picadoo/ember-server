@@ -18,6 +18,10 @@ match:
   lose_points: 5
   participate_coin: 10
   win_coin: 25
+  # D201 / ARCH S0-5：每人每天最多几场发对战币（胜 / 负 / 平都算一场；<=0 不限）。超出后照常记积分和胜负，只是不发币。
+  daily_coin_matches: 5
+  # D201 / ARCH S0-5：认输 / 掉线的一方不发参与币；对手认输 / 离场带来的胜利，开打不足这么多秒不发胜利币（<=0 不限）。
+  forfeit_min_coin_seconds: 30
   world: world
   pad_a: { x: 100.5, y: 65, z: 100.5, yaw: 0 }
   pad_b: { x: 110.5, y: 65, z: 100.5, yaw: 180 }

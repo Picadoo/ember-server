@@ -68,6 +68,8 @@ public final class ArenaService implements Listener {
         final Map<UUID, Integer> teamOf = new HashMap<UUID, Integer>();
         final Map<UUID, Location> returnLocations = new HashMap<UUID, Location>();
         final Set<UUID> dead = new HashSet<UUID>();
+        /** D201 S0-5: players who forfeited / disconnected (no participation coin). */
+        final Set<UUID> quitters = new HashSet<UUID>();
         final long startMillis;
         volatile boolean settled;
         BukkitTask timeoutTask;
@@ -94,6 +96,10 @@ public final class ArenaService implements Listener {
     private int losePoints = 5;
     private int participateCoin = 10;
     private int winCoin = 25;
+    /** D201 S0-5: coin-paying matches per player per day (<= 0 = no cap). */
+    private int dailyCoinMatches = ArenaCoinRules.DEFAULT_DAILY_COIN_MATCHES;
+    /** D201 S0-5: a win by forfeit / leave pays coin only after this many seconds (<= 0 = always). */
+    private int forfeitMinCoinSeconds = ArenaCoinRules.DEFAULT_FORFEIT_MIN_COIN_SECONDS;
     private String matchWorldName = "world";
     private PadDef padA = new PadDef(100.5, 65, 100.5, 0f);
     private PadDef padB = new PadDef(110.5, 65, 100.5, 180f);
@@ -166,6 +172,9 @@ public final class ArenaService implements Listener {
             losePoints = Math.max(0, match.getInt("lose_points", 5));
             participateCoin = Math.max(0, match.getInt("participate_coin", 10));
             winCoin = Math.max(0, match.getInt("win_coin", 25));
+            dailyCoinMatches = match.getInt("daily_coin_matches", ArenaCoinRules.DEFAULT_DAILY_COIN_MATCHES);
+            forfeitMinCoinSeconds = match.getInt("forfeit_min_coin_seconds",
+                    ArenaCoinRules.DEFAULT_FORFEIT_MIN_COIN_SECONDS);
             String wn = match.getString("world", "world");
             matchWorldName = (wn == null || wn.isEmpty()) ? "world" : wn;
             padA = readPad(match.getConfigurationSection("pad_a"), 100.5, 65, 100.5, 0f);
@@ -557,6 +566,7 @@ public final class ArenaService implements Listener {
 
     private void settleQuit(ActiveMatch m, UUID quitterId) {
         if (m.settled) return;
+        m.quitters.add(quitterId);
         Integer quitTeam = m.teamOf.get(quitterId);
         if (quitTeam == null) {
             settleDraw(m);
@@ -608,13 +618,13 @@ public final class ArenaService implements Listener {
         for (UUID id : m.participants) {
             PlayerData d = dataStore.get(id);
             d.setArenaPoints(d.getArenaPoints() + losePoints);
-            if (participateCoin > 0) d.addCoin(participateCoin);
+            int coin = payMatchCoin(d, m, id, participateCoin, false);
             dataStore.flushMutation(id);
             Player pl = Bukkit.getPlayer(id);
             if (pl != null && pl.isOnline()) {
                 RankDef rank = resolveRank(d.getArenaPoints());
                 pl.sendMessage(PREFIX + ChatColor.YELLOW + "平局（超时）"
-                        + ChatColor.GRAY + " · 参与 +" + losePoints + " 积分 · 余烬币 ×" + participateCoin
+                        + ChatColor.GRAY + " · 参与 +" + losePoints + " 积分 · 余烬币 ×" + coin + coinNote(d, coin, participateCoin)
                         + ChatColor.DARK_GRAY + "（积分 " + d.getArenaPoints() + " · " + rank.name + "）");
             }
         }
@@ -631,14 +641,14 @@ public final class ArenaService implements Listener {
             PlayerData d = dataStore.get(id);
             d.setArenaWins(d.getArenaWins() + 1);
             d.setArenaPoints(d.getArenaPoints() + winPoints);
-            if (winCoin > 0) d.addCoin(winCoin);
+            int coin = payMatchCoin(d, m, id, winCoin, !m.quitters.isEmpty());
             dataStore.flushMutation(id);
             Player pl = Bukkit.getPlayer(id);
             if (pl != null && pl.isOnline()) {
                 RankDef rank = resolveRank(d.getArenaPoints());
                 pl.sendMessage(PREFIX + ChatColor.GREEN + "本场胜出！"
                         + ChatColor.GRAY + "（" + reason + "）"
-                        + ChatColor.YELLOW + " +" + winPoints + " 积分 · 余烬币 ×" + winCoin
+                        + ChatColor.YELLOW + " +" + winPoints + " 积分 · 余烬币 ×" + coin + coinNote(d, coin, winCoin)
                         + ChatColor.GRAY + "（积分 " + d.getArenaPoints() + " · " + rank.name + "）");
             }
         }
@@ -646,17 +656,46 @@ public final class ArenaService implements Listener {
             PlayerData d = dataStore.get(id);
             d.setArenaLosses(d.getArenaLosses() + 1);
             d.setArenaPoints(d.getArenaPoints() + losePoints);
-            if (participateCoin > 0) d.addCoin(participateCoin);
+            int coin = payMatchCoin(d, m, id, participateCoin, false);
             dataStore.flushMutation(id);
             Player pl = Bukkit.getPlayer(id);
             if (pl != null && pl.isOnline()) {
                 pl.sendMessage(PREFIX + ChatColor.GRAY + "本场落败"
-                        + ChatColor.YELLOW + " +" + losePoints + " 积分 · 余烬币 ×" + participateCoin
+                        + ChatColor.YELLOW + " +" + losePoints + " 积分 · 余烬币 ×" + coin + coinNote(d, coin, participateCoin)
                         + ChatColor.GRAY + "（胜方 " + winnerNames
                         + " · 积分 " + d.getArenaPoints() + "）");
             }
         }
         finishMatch(m);
+    }
+
+    /**
+     * D201 S0-5: pays this participant's match coin under {@link ArenaCoinRules} (daily cap, no coin for the quitter,
+     * no win coin for an instant forfeit) and bumps the daily counter when coin was paid. Returns the coin paid.
+     */
+    private int payMatchCoin(PlayerData d, ActiveMatch m, UUID id, int base, boolean wonByQuit) {
+        long dur = m == null ? 0L : System.currentTimeMillis() - m.startMillis;
+        boolean quitter = m != null && m.quitters.contains(id);
+        return payCoin(d, base, quitter, wonByQuit, dur);
+    }
+
+    private int payCoin(PlayerData d, int base, boolean quitter, boolean wonByQuit, long durationMs) {
+        String today = DailyService.today();
+        int paid = d.periodCount(ArenaCoinRules.COUNTER, today);
+        int coin = ArenaCoinRules.coinFor(base, quitter, wonByQuit, durationMs, paid,
+                dailyCoinMatches, forfeitMinCoinSeconds);
+        if (coin > 0) {
+            d.addCoin(coin);
+            d.addPeriodCount(ArenaCoinRules.COUNTER, today, 1);
+        }
+        return coin;
+    }
+
+    /** Short reason when the configured coin was withheld. */
+    private String coinNote(PlayerData d, int coin, int base) {
+        if (coin > 0 || base <= 0) return "";
+        int left = ArenaCoinRules.remaining(d.periodCount(ArenaCoinRules.COUNTER, DailyService.today()), dailyCoinMatches);
+        return ChatColor.DARK_GRAY + (left == 0 ? "（今日计币场次已满 " + dailyCoinMatches + " 场）" : "（认输 / 离场不计币）");
     }
 
     private String namesOf(Set<UUID> ids) {
@@ -736,14 +775,15 @@ public final class ArenaService implements Listener {
         for (Player pl : online) {
             PlayerData d = dataStore.get(pl.getUniqueId());
             boolean win = pl.getUniqueId().equals(winner.getUniqueId());
+            int coin;
             if (win) {
                 d.setArenaWins(d.getArenaWins() + 1);
                 d.setArenaPoints(d.getArenaPoints() + winPoints);
-                if (winCoin > 0) d.addCoin(winCoin);
+                coin = payCoin(d, winCoin, false, false, Long.MAX_VALUE);
             } else {
                 d.setArenaLosses(d.getArenaLosses() + 1);
                 d.setArenaPoints(d.getArenaPoints() + losePoints);
-                if (participateCoin > 0) d.addCoin(participateCoin);
+                coin = payCoin(d, participateCoin, false, false, Long.MAX_VALUE);
             }
             dataStore.flushMutation(pl.getUniqueId());
             RankDef rank = resolveRank(d.getArenaPoints());
@@ -751,11 +791,11 @@ public final class ArenaService implements Listener {
                     + names);
             if (win) {
                 pl.sendMessage(PREFIX + ChatColor.GREEN + "本场胜出！"
-                        + ChatColor.YELLOW + " +" + winPoints + " 积分 · 余烬币 ×" + winCoin
+                        + ChatColor.YELLOW + " +" + winPoints + " 积分 · 余烬币 ×" + coin + coinNote(d, coin, winCoin)
                         + ChatColor.GRAY + "（积分 " + d.getArenaPoints() + " · " + rank.name + "）");
             } else {
                 pl.sendMessage(PREFIX + ChatColor.GRAY + "本场参与奖励"
-                        + ChatColor.YELLOW + " +" + losePoints + " 积分 · 余烬币 ×" + participateCoin
+                        + ChatColor.YELLOW + " +" + losePoints + " 积分 · 余烬币 ×" + coin + coinNote(d, coin, participateCoin)
                         + ChatColor.GRAY + "（胜者 " + winner.getName()
                         + " · 积分 " + d.getArenaPoints() + "）");
             }

@@ -549,6 +549,13 @@ public final class CashService {
         if (plugin instanceof CoreRpgPlugin && ((CoreRpgPlugin) plugin).getProgressService() != null) {
             ((CoreRpgPlugin) plugin).getProgressService().ensureSeason(data);
         }
+        if (town.sunshine.corerpg.p1.EmberMode.active() && !player.hasPermission("corerpg.admin")) {
+            // D201 (AUDIT S0-3/S0-4 follow-up): while P1 is on, pass free/claim are refused and legacy pass XP pays 0 —
+            // don't advertise /corerpg pass free or the legacy XP sources; point at the P1 menu instead.
+            player.sendMessage(ChatColor.AQUA + "[战令] " + ChatColor.GRAY + "P1 模式下旧战令已停用（不再累积、不再领取），"
+                    + "每日奖励请用 /ember 主菜单的签到与在线奖励。");
+            return;
+        }
         boolean claimed = DailyService.today().equals(data.getPassFreeClaimDate());
         player.sendMessage(ChatColor.AQUA + "[战令] 付费轨：" + (data.isSeasonPassPaid() ? ChatColor.GREEN + "已开通" : ChatColor.GRAY + "未开通")
                 + ChatColor.GRAY + " · 免费轨今日补给：" + (claimed ? ChatColor.GREEN + "已领" : ChatColor.YELLOW + "未领 /corerpg pass free"));

@@ -234,7 +234,7 @@
 
 > **2026-10-05 更新（D198）：** S0-1、S0-2 已实现并随 CoreRpg 1.65.35 上线（`J/LegacyGate.java` + `J/CoreRpgExpansion.java` gate_ / guildboss_pass + `J/TicketEntryService.java` tryEnter；P1 开着才生效，OP / `corerpg.admin` / 控制台放行）。S0-3～S0-10 仍是提案。
 >
-> **2026-10-05 更新（D199）：** S0-3（含 S0-6 / S0-7）已实现并随 CoreRpg 1.65.36 上线：`J/CoreRpgPlugin.java onCommand → legacyRouteRefused` + `J/LegacyGate.refuseRoute`，白名单在 `P/ember-v1.yml legacy_gate.allow`。S0-4、S0-5、S0-8～S0-10 仍是提案。
+> **2026-10-05 更新（D199）：** S0-3（含 S0-6 / S0-7）已实现并随 CoreRpg 1.65.36 上线：`J/CoreRpgPlugin.java onCommand → legacyRouteRefused` + `J/LegacyGate.refuseRoute`，白名单在 `P/ember-v1.yml legacy_gate.allow`。S0-4（D200，1.65.37）、S0-5（D201，1.65.38）随后也已上线；S0-8～S0-10 仍是提案。
 >
 > **2026-10-05 更新（D200）：** S0-4（①～④ 全部）已实现并随 CoreRpg 1.65.37 上线：`ProgressService.grantEmberXp / grantPassXp` 开头 `legacyXpBlocked`、`onDeath` / `cmdMmCredit` 的 `legacyKillPayoutBlocked(world)`、公共灾厄 `blocksCalamitySettle`；配置 `P/ember-v1.yml legacy_gate.payout_guard / xp_sources_allow / kill_payout_worlds`。
 
@@ -254,7 +254,7 @@
 | **S0-2** ✅ **已建（D198，CoreRpg 1.65.35）** | **L2（`/corerpg enter <旧>` / `/corerpg elite`）** | `J/TicketEntryService.java:115` 的 `if (kind.p1())` 分支之后加：`EmberMode.active() && !admin` → 提示「P1 模式下旧副本已关闭」并 `return true`。`EliteService.cmdStart`（`:63`）走的就是 `tryEnter(ELITE)`，一并覆盖。 | 约 5 行；低 | 冒烟：待测第 2 条（应被拒） |
 | **S0-3** ✅ **已建（D199，CoreRpg 1.65.36）** | **L3 / L4 / L5 / L7 / L8 / L9 / L10 / L11 入口** | `J/CoreRpgPlugin.java:944`（`sub` 解析后）加**路由级默认拒绝**：仅当 `sender instanceof Player && EmberMode.active() && !sender.hasPermission("corerpg.admin")`，`sub` 不在白名单（§5.1）时拒绝；对带子动作的命令（`calamity join`、`pass free/claim`、`vip claim`、`arena *`、`abyss settle/evacuate`）按「子命令 + 动作」匹配。白名单写进 `P/ember-v1.yml` 新节 `legacy_gate:`（仿 `legacy_auction` `:126` 的写法，默认拒绝、可逐条放开），而不是硬编码。第一批拒绝：`arena`、`pass free`、`pass claim`、`vip claim`、`calamity join`、`guild`、`scrap`、`reforge`、`socket`、`enhance`、`forge`、`part`、`covenant`、`talent`（旧）、`shop`、`monthly`、`stamina convert`、`elite`（非 status）、`abyss`（P1 外的 settle）。 | 一次改 1 处 + 1 段配置；中（要逐条核对白名单，别误伤 P1 子命令；`abyss evacuate` 在 P1 本内的用途要先确认，见待测第 9 条） | 静态：把 §1 表逐行跑一遍白名单判断；冒烟：待测第 3–5、11 条（应被拒） |
 | **S0-4** ✅ **已建（D200，CoreRpg 1.65.37）** | **L6 / L12 + 灾厄发奖（纵深防御）** | ① `J/ProgressService.java:168` `grantEmberXp` / `:423` `grantPassXp`：P1 开着时忽略旧 source（`daily_clear / weekly_clear / abyss_clear / raid_clear / guild_boss_clear / elite_weekly / elite / boss / kill / bounty`），只保留 P1 结算路径；② `J/CoreRpgPlugin.java:839–840`：P1 开着时，除 `ember_hub` 外所有非 P1 世界都不发旧击杀币 / 旧经验；③ `:1424–1425,1448–1449`：`mmgive / mmxp` 同理；④ `J/CoreRpgPlugin.java:836–837` / `J/CalamityService.java:433`：P1 开着时不结算公共灾厄（或连同调度一起停）。 | 4 处小改，可拆成 2 个窗口（经验一窗、击杀 / 灾厄一窗）；中（要确认 P1 自己的经验不走 `grantEmberXp(source)` 的旧 source 名） | 静态：`rg grantEmberXp\|grantPassXp` 列出全部调用点逐一标注 P1 / 旧；冒烟：待测第 10 条 |
-| **S0-5** | **L3 无上限的根因**（即使 S0-3 关了竞技场，日后重开也要有上限） | `J/ArenaService.java:624` `settleWinLoss`：加每日计币场次上限（配置 `P/arena.yml match.daily_coin_matches`），`forfeit` / 掉线结算不发参战币 | 小；低 | 静态 |
+| **S0-5** ✅ **已建（D201，CoreRpg 1.65.38）** | **L3 无上限的根因**（即使 S0-3 关了竞技场，日后重开也要有上限） | `J/ArenaService.java:624` `settleWinLoss`：加每日计币场次上限（配置 `P/arena.yml match.daily_coin_matches`），`forfeit` / 掉线结算不发参战币 | 小；低 | 静态 |
 | **S0-6** | 晶钻相关 DEAD 路径（防止日后误开） | `shop / monthly / pass_unlock` 在 P1 下并入 S0-3 拒绝表；`cash give` 保持 OP | 随 S0-3 | — |
 | **S0-7** | 旧宝石显式关闭（ARCH O6 / G5） | `P/enhance.yml` 加 `socket.enabled: false` 或 S0-3 拒绝 `socket`；孔石来源（旧本 / 灾厄 / `scrap`）随 S0-1～S0-4 一并断 | 随 S0-3 | 待测第 11 条 |
 | **S0-8** | 旧本菜单 / 旧枢纽菜单的「手打 `trmenu open`」风险 | 先做待测第 7 条；若普通玩家能 `trmenu open`，则给 `ember_hub_legacy` 及其子菜单加 TrMenu `Open-Requirement`（OP） | 视实测而定 | 待测第 7 条 |
@@ -296,3 +296,4 @@
 - 2026-10-05：D198 / CoreRpg 1.65.35 —— S0-1（旧 `gate_*` / `guildboss_pass` 在 P1 下回 `no`，封 L1 与 L2 的 DP 侧）+ S0-2（`tryEnter` 在 P1 下拒绝非 P1 kind，含 `/corerpg elite`，封 L2 命令侧）已建并上线；OP / 管理员 / 控制台放行，P1 关时不变；冒烟 `docs/tests/smoke-2026-10-05-1.65.35-s0gate.md`。§0 表 L1 / L2 的「P1 是否拦」从此为「是」（OP 除外）。
 - 2026-10-05：D199 / CoreRpg 1.65.36 —— S0-3 路由级默认拒绝白名单（`legacy_gate.allow`）已建并上线，随附 S0-6（shop / monthly）与 S0-7（socket）；封 L3 / L4 / L5 / L7 / L8 / L9 / L10 / L11 的玩家入口；控制台 / OP / 管理员放行，P1 关时不变。
 - 2026-10-05：D200 / CoreRpg 1.65.37 —— S0-4 旧发奖端纵深防御（旧经验 / 旧击杀币与经验 / mmgive·mmxp / 公共灾厄结算在 P1 下不发）已建并上线；P1 关时不变，`legacy_gate.payout_guard: false` 可整段关。
+- 2026-10-05：D201 / CoreRpg 1.65.38 —— S0-5 竞技场对战币每日计币场次上限（`arena.yml match.daily_coin_matches: 5`）+ 认输 / 掉线方不发参与币 + 开打不足 30 秒的认输胜利不发胜利币（`match.forfeit_min_coin_seconds: 30`）；`/corerpg pass` 在 P1 下不再提示 `pass free`。L3 根因关闭（日后重开竞技场也有上限）。
