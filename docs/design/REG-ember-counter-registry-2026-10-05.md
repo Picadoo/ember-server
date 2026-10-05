@@ -168,6 +168,7 @@
 3. **首通拆分**（修 R3，仍不动数值）：真实首通写两个键——`p1_first_clear_<map>@all`（事实，永不删，解锁 / 门槛 / 图录只读它）+ `p1_fcpay_<map>@<ver>`（首通包已领）。改 `content_version` 时只会重发首通包，不会让解锁倒退或删历史；是否真要「改版本重发首通包」由那次改动的设计自己决定（参照 `p1_sigfc_` 已经是「每图一次、不随版本」）。读取兼容：旧键 `@v1` 视为两键都有（测试号一次性迁移，服主 10-02：无老玩家）。
 4. **5 个物品键迁回物品**：`p4_af_ / p4_afp_ / p1_sig_ / p4_rrn_` 进 `ember_v1` NBT + `cr_p1_item` 列并纳入 HMAC；`p4_rro_` 进 `cr_p1_txn` 行状态。动到物品 / 洗练恢复 / 分解路径 → 必须跑 `tools/p1map/persist-roundtrip.sh`（POLICY 01:53）。资产计数（`p1_mark_t*`、`p1_sigmark_*`、`p3_badge`）的增减写一条 `cr_p1_txn`，供 `EmberAudit` 对账——这一步属于 S2（与 N3 来源表一起）。
 5. **统一时钟回拨防护**：`PlayerData` 记最近一次写入的日 / 周 / 月；新周期比记录还早时拒绝换期（沿用 `p1_sign_last` 的做法），只对 `领取` 类生效。
+   → 已完成（D207，CoreRpg 1.65.41）：防护放在 `PlayerData.periodCount` / `addPeriodCount` 一处，只管周期性领取类键族（`EmberCounters.clockGuarded`）；旧周期读作饱和、写入被拒。
 6. **两种周写法收敛**：P1 用 `w<n>`，旧系统用 `yyyy-Www`。P1 内部已统一；旧系统不改（S0 后不再写），注册表里标明即可。
 7. **验证**：`balance_version` 不变、p1sim 输出逐位不变；单测覆盖注册表扫描与首通兼容读取；短冒烟（Q01 首通 → 解锁 Q02，重启后仍解锁）；第 4 条才需要 persist-roundtrip。
 
