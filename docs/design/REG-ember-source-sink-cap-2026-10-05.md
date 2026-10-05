@@ -209,7 +209,7 @@
 
 - [ ] §2 每一行都有 `SourceId` + 单元测试夹具能复现数量
 - [ ] §3 每一行都有 `SinkId` + 余额不足时 0 副作用
-- [ ] §5 缺口 1–2（徽记账户 + 残响）已进 `p1sim` / `p2econ`，W30 报告多一列「徽记结余 / 烙印次数」
+- [x] §5 缺口 1–2（徽记账户 + 残响）已进 `p1sim` / `p2econ`，W30 报告多一列「徽记结余 / 烙印次数」 — D222：`tools/p1sim/insignia.py`（opt-in `p2econ --insignia`；S23 经 `signin.py` 钩子，缺口 3 一并补上），报告 `tools/p1sim/out-insignia-d222-w30*.md`，状态 `docs/status/STATUS-ember-p1sim-insignia-2026-10-06.md`
 - [ ] §2.5 L-S* 在 FreshQ 非 OP 上冒烟仍为 0
 - [ ] `tools/p1sim` 与线上 `balance_version` 同源（改表必 bump）
 
@@ -226,4 +226,5 @@
 | 2026-10-06 | D218（CoreRpg 1.65.48）：S2-4 — 消耗 C03–C13 走登记表（工坊 C03–C06 / 洗练 C11 / 烙印 C12 经 `EmberPay.Price.at`；C07 兑换数量读 amount；C08 层费币+T3 印记；C09/C10 天赋币，加金样钉 growth yml；C13 调律 `spendInsignia`）；p1 takeCoin 扫描。数量不变（bv57）。 |
 | 2026-10-06 | D220（文档）：§6.3 yaml 真源草案 `DESIGN-ember-v1-economy-yml-2026-10-06.md`（E0）；CoreRpg 仍 1.65.49。C18/S22 实现留给 E2。 |
 | 2026-10-06 | D221（CoreRpg 1.65.50）：C18 国庆商店 spend 走 EmberEconomy；S22 挂机庭 grant 经 `sourceForGrant(p1afk-)` + grant*；E1 yml 仍草案。 |
+| 2026-10-06 | D222（p1sim，无发版；CoreRpg 不动 / bv57）：§5 缺口 1–3 进模型 — `tools/p1sim/insignia.py` 首领徽记分图账户（S07/S08/S09/S17/S18/S23 → C12/C13，花费策略为假设），`p2econ --insignia` / `insignia.py report`；默认输出逐位不变。§7 第 3 条打勾。 |
 | 2026-10-06 | D223（CoreRpg 1.65.51）：EmberDelivery 负额扣币标签化（`spendCoinDelivery`）；E1 `ember-v1-economy.yml` 镜像防漂移（yml 尚未真源）。 |

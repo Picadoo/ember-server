@@ -28,6 +28,7 @@ CFG_PATH = os.path.join(HERE, '..', '..', 'plugins', 'CoreRpg', 'ember-v1.yml')
 STATE = {'on': False, 'online': 120, 'sign_share': 1.0, 'paid_days': 0, 'signed': 0, 'coin': 0, 'xp': 0, 'mark': 0, 'sigmark': 0}
 SIG_MAPS = ('q01', 'q02', 'q03')  # D174 stage 1 signature maps (live); Q04–Q06 come in stage 2a
 T = {}
+INS_HOOK = None  # D222 insignia.py: called as INS_HOOK(p, n) for a paid sigmark when the opt-in insignia account is installed
 
 
 def load(path=CFG_PATH):
@@ -64,6 +65,8 @@ def _pay(p, row):
     if row.get('sigmark'):
         if any(k in p.cleared for k in SIG_MAPS):
             STATE['sigmark'] += int(row['sigmark'])
+            if INS_HOOK is not None:
+                INS_HOOK(p, int(row['sigmark']))
         else:
             c += T['fallback']
     if row.get('mark'):

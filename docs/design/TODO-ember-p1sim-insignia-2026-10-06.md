@@ -1,5 +1,7 @@
 # TODO · p1sim 徽记 / 账户缺口（ARCH S2-3 备忘，D216）
 
+> **状态：DONE（2026-10-06，D222）** — `tools/p1sim/insignia.py`（opt-in：`p2econ.py --insignia [--ins-pledge N]`、`insignia.py report`；S23 走 `signin.py` 的 `INS_HOOK`）。W30 报告 `tools/p1sim/out-insignia-d222-w30.md` / `-pledge2.md`；结论见 `docs/status/STATUS-ember-p1sim-insignia-2026-10-06.md`。未 bump `balance_version`，CoreRpg 未改。
+
 REG §5 缺口 1–2；本窗不改 `tools/p1sim`（full update 留给 p1sim lane）。
 
 ## 缺口

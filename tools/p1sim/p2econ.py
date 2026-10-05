@@ -687,8 +687,13 @@ def main():
     ap.add_argument('--rush', action='store_true', help='D144: the weekly 余烬连战 (one free entry, T3 marks on a clear)')
     ap.add_argument('--rush-tries', type=int, default=1, help='D160: free 余烬连战 attempts per week until the first clear (reward still once a week)')
     ap.add_argument('--abyss-forge-first', action='store_true', help='abyss players buy craft/quality steps each morning before tier fees')
+    ap.add_argument('--insignia', action='store_true', help='D222: opt-in 首领徽记 account (insignia.py: S07/S08/S09/S17/S18/S23 → C12/C13) + table')
+    ap.add_argument('--ins-pledge', type=int, default=0, help='D222 with --insignia: S09 insignia per repeat normal run after own Q06 (0 / 1 / 2)')
     a = ap.parse_args()
-    print('# ' + __import__('rules').stamp(), flush=True)  # M06: which rule snapshot produced this report
+    print('# ' + __import__('rules').stamp(), flush=True)
+    if a.insignia:
+        import insignia
+        insignia.install(pledge=a.ins_pledge)  # M06: which rule snapshot produced this report
     global ABYSS_FORGE_FIRST
     ABYSS_FORGE_FIRST = a.abyss_forge_first
     global FORGE_SINK
@@ -795,6 +800,14 @@ def main():
             n, b, v = stats.get(m['id'], [0, 0.0, 0.0])
             print('| %s %s | %d | %d%% | %d%% | %+d 点 |' % (m['id'], m.get('name', ''), n, round(100 * b / max(1, n)),
                                                        round(100 * v / max(1, n)), round(100 * (v - b) / max(1, n))))
+    if a.insignia:
+        import insignia
+        print()
+        print('D222 首领徽记账户（insignia.py；策略见模块说明：前哨 / 残响按每周领满上界，签名掉落不计）：')
+        for line in insignia.table(res, modes, a.weeks, insignia.LABEL, a.every_week):
+            print(line)
+        for line in insignia.src_line(res, modes, a.weeks):
+            print(line)
     if RUSH:
         rw = RUSH_STATS['paid'] + RUSH_STATS['unpaid_weeks']
         print()

@@ -61,3 +61,5 @@ B03_DIR=… python3 b03report.py                               # → out-build-d
 ```
 
 - `skillkit.py`（D210）：技能组 S0——`p1sim.py` 的可选 `kit_*` 键（守招 / 副招 / 身法变体 / 共享充能，无键时逐位一致），42 格 × 3 套对照基线 + 择优行 → `out-skillkit-d210-r1..r5.md`；`SK_ROUND=2..5 NPROC=7 python3 skillkit.py run 1500 /tmp/sk/rN.pkl`，`SK_BEST=1 python3 skillkit.py report …`。
+
+- `insignia.py`（D222）：首领徽记分图账户（S07/S08/S09/S17/S18/S23 → C12 烙印 / C13 调律），**opt-in**，不开时所有输出逐位不变；花费策略见模块说明（假设）。`python3 p2econ.py --insignia [--ins-pledge 2] …` 在周表后加徽记表；`python3 insignia.py report --signin [--pledge 2]` → `out-insignia-d222-w30*.md`（3 档躲避 × 方案，Q07 后 30 周：徽记结余 / 烙印次数 / 调律次数）。
