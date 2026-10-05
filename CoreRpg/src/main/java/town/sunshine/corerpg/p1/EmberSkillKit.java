@@ -6,14 +6,19 @@ import org.bukkit.entity.Player;
 
 /**
  * D211 / skill-kit S1 (DESIGN-ember-skill-kit-2026-10-06.md §3): 烬斩 shape runes + unlock gates for 烬突.
- * Numbers are the S0-passed values (DS15 / L07 / L09); no permanent damage multipliers.
+ * D214 / skill-kit S2: 身法·火痕步 (焚烬 2pc + Q05) — replaces 踏步 with landing ignite ×1 at set burn rate.
+ * Numbers are the S0-passed values (DS15 / L07 / L09 / F14c0n1); no permanent damage multipliers.
  * <p>Shape preference lives in {@code p1_slash_shape@all} (0 = fan, 1 = line, 2 = ring). Signature shape mods
  * ({@code skill_line}/{@code skill_ring}/{@code skill_plus}/{@code skill_charge}) override the chosen rune.
+ * <p>后撤步 (backward 4) is deferred: design lists it as a Q05 variant with no set-specific sim numbers beyond
+ * "same as 踏步 in the model"; ship when set affinity + menu choice are defined.
  */
 public final class EmberSkillKit {
     public static final String C_SHAPE = "p1_slash_shape";
     public static final String UNLOCK_DASH = "q02";
     public static final String UNLOCK_SHAPE = "q04";
+    /** S2 火痕步 / (deferred) 后撤步 unlock. */
+    public static final String UNLOCK_STEP = "q05";
 
     /** S0-passed 烬突 (DS15): 4 blocks, ≤3 targets, 1.5B each, bosses ×0.5. */
     public static final double DASH_DISTANCE = 4.0;
@@ -21,6 +26,13 @@ public final class EmberSkillKit {
     public static final double DASH_BOSS_MULT = 0.5;
     /** Hit radius around the dash path (blocks). */
     public static final double DASH_HIT_RADIUS = 1.25;
+
+    /** S0-passed 火痕步 (F14c0n1): replace 踏步, ignite 1 at landing, burn mult = set coef ×1.0. */
+    public static final String HUOHEN_FAMILY = "scorch";
+    public static final int STEP_IGNITE_N = 1;
+    public static final double STEP_BURN_MULT = 1.0;
+    /** Search radius around landing for the single ignite target (blocks). */
+    public static final double STEP_IGNITE_RADIUS = 3.0;
 
     public static final int SHAPE_FAN = 0;
     public static final int SHAPE_LINE = 1;
@@ -49,6 +61,22 @@ public final class EmberSkillKit {
 
     public static boolean shapeUnlocked(PlayerData d, EmberRunService runs) {
         return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_SHAPE);
+    }
+
+    public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {
+        return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_STEP);
+    }
+
+    /**
+     * 火痕步 is active when Q05 is first-cleared and the equipped pair forms the 焚烬 (scorch) two-piece set.
+     * Otherwise sneak+Q stays plain 踏步. No stored preference (auto-replaces).
+     */
+    public static boolean huohenActive(PlayerData d, EmberRunService runs, String activeSetFamily) {
+        return stepVariantUnlocked(d, runs) && HUOHEN_FAMILY.equals(activeSetFamily);
+    }
+
+    public static String stepDisplayName(boolean huohen) {
+        return huohen ? "火痕步" : "踏步";
     }
 
     /** 0/1/2; absent or unknown → fan. Locked players always read as fan. */

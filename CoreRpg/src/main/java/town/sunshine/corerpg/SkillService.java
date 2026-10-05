@@ -260,7 +260,18 @@ public final class SkillService implements Listener {
         } else {
             player.sendMessage(ChatColor.DARK_GRAY + "  潜行+F 烬突 · 首通 Q02 后解锁（此前仍放烬斩）");
         }
-        player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 踏步 · 14 秒（身法变体 S2）");
+        boolean stepUnlock = town.sunshine.corerpg.p1.EmberSkillKit.stepVariantUnlocked(data, runs);
+        town.sunshine.corerpg.p1.EmberLoadout lo = ls == null ? null : ls.get(player);
+        boolean huohen = town.sunshine.corerpg.p1.EmberSkillKit.huohenActive(data, runs, lo == null ? "none" : lo.activeSet);
+        if (huohen) {
+            player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 火痕步 · 14 秒 · 落点点燃 1（焚烬同系数）");
+        } else if (stepUnlock) {
+            player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 踏步 · 14 秒"
+                    + ChatColor.DARK_GRAY + " · 焚烬两件套时自动变为火痕步");
+        } else {
+            player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " 踏步 · 14 秒"
+                    + ChatColor.DARK_GRAY + " · 火痕步：首通 Q05 + 焚烬两件套");
+        }
         if (shapes) {
             int id = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
             player.sendMessage(ChatColor.GRAY + "  符文：扇形 / 直线 / 环斩 · 当前 "

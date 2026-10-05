@@ -1,4 +1,5 @@
 # D211 · 余烬技能组 S1（烬斩 / 烬突 / 烬斩符文）
+# D214 · S2 火痕步（焚烬 2pc + Q05 替换踏步）；后撤步暂缓
 # 枢纽入口；符文切换走 /corerpg skill shape（出本，切换后充能转满）
 
 Title: '§6余烬 · 技能组'
@@ -73,14 +74,16 @@ Icons:
   C:
     display:
       material: feather
-      name: '§a踏步 · 潜行+Q'
+      name: '§a%corerpg_kit_step% · 潜行+Q'
       lore:
         - ''
         - '§7身法 · 向前 §f5 §7格 · 冷却 14 秒'
-        - '§7无伤害 · 零体力 · 不穿墙'
+        - '§7零体力 · 不穿墙'
+        - '§7火痕步（焚烬两件套）：落点点燃 1 · 套装同系数'
         - ''
-        - '§8当前装配：§f%corerpg_flex_skill_name%'
-        - '§8身法变体（火痕步等）→ S2'
+        - '§8当前：§f%corerpg_kit_step% §8· 装配 §f%corerpg_flex_skill_name%'
+        - '§8解锁火痕步：§f%corerpg_kit_step_unlock% §8（首通 Q05）'
+        - '§8后撤步暂缓（无套装定稿）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -148,5 +151,6 @@ Icons:
         - '§7每 8 秒一份余烬充能：'
         - '§f  F §7放烬斩 · §f潜行+F §7放烬突（二选一）'
         - ''
-        - '§7守招（单按 Q）暂缓 · 见 S0b'
-        - '§7火痕步 / 后撤步 → S2'
+        - '§7守招（单按 Q）搁置 · 见 S0b'
+        - '§7火痕步：Q05 + 焚烬两件套自动替换踏步'
+        - '§7后撤步暂缓'

@@ -38,6 +38,12 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
         if ("flex_skill_name".equals(key) || "flex_display".equals(key)) {
             FlexSkillService fs = plugin.getFlexSkillService();
             if (fs == null || !data.hasFlexSkill()) return "未装配";
+            if (fs.isHuohenActive(player)
+                    && (FlexSkillService.PILOT_ID.equals(data.getFlexSkillId())
+                        || (fs.getFlex(data.getFlexSkillId()) != null
+                            && "step".equals(fs.getFlex(data.getFlexSkillId()).type)))) {
+                return "火痕步";
+            }
             FlexSkillService.FlexDef def = fs.getFlex(data.getFlexSkillId());
             return def == null ? data.getFlexSkillId() : ChatColor.stripColor(def.display);
         }
@@ -57,6 +63,15 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
         if ("kit_shape_unlock".equals(key)) {
             town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
             return town.sunshine.corerpg.p1.EmberSkillKit.shapeUnlocked(data, runs) ? "yes" : "no";
+        }
+        if ("kit_step_unlock".equals(key) || "kit_huohen_unlock".equals(key)) {
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            return town.sunshine.corerpg.p1.EmberSkillKit.stepVariantUnlocked(data, runs) ? "yes" : "no";
+        }
+        if ("kit_step".equals(key) || "kit_step_name".equals(key) || "kit_huohen".equals(key)) {
+            FlexSkillService fs = plugin.getFlexSkillService();
+            boolean huohen = fs != null && fs.isHuohenActive(player);
+            return town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen);
         }
         if ("kit_charge".equals(key) || "skill_charge_ready".equals(key)) {
             town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();

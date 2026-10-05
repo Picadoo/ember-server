@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
-/** D211 skill-kit S1: shape preference + resolve (signature override) without Bukkit. */
+/** D211/D214 skill-kit S1+S2: shape preference + 火痕步 gates without Bukkit. */
 public class EmberSkillKitTest {
 
     private static EmberGrowth.Mods mods(Object... kv) {
@@ -108,5 +108,26 @@ public class EmberSkillKitTest {
         EmberCounters.Family f = EmberCounters.lookup(EmberSkillKit.C_SHAPE);
         assertNotNull(f);
         assertEquals(EmberCounters.Category.SETTING, f.category);
+    }
+
+    @Test
+    public void huohenConstantsMatchDesign() {
+        assertEquals("q05", EmberSkillKit.UNLOCK_STEP);
+        assertEquals("scorch", EmberSkillKit.HUOHEN_FAMILY);
+        assertEquals(1, EmberSkillKit.STEP_IGNITE_N);
+        assertEquals(1.0, EmberSkillKit.STEP_BURN_MULT, 1e-9);
+        assertEquals(3.0, EmberSkillKit.STEP_IGNITE_RADIUS, 1e-9);
+        assertEquals("火痕步", EmberSkillKit.stepDisplayName(true));
+        assertEquals("踏步", EmberSkillKit.stepDisplayName(false));
+    }
+
+    @Test
+    public void huohenRequiresUnlockAndScorch() {
+        // no runs → unlock false
+        assertFalse(EmberSkillKit.huohenActive(new PlayerData(), null, "scorch"));
+        assertFalse(EmberSkillKit.stepVariantUnlocked(new PlayerData(), null));
+        // family mismatch even if somehow unlocked without runs stays false
+        assertFalse(EmberSkillKit.huohenActive(new PlayerData(), null, "burst"));
+        assertFalse(EmberSkillKit.huohenActive(new PlayerData(), null, "none"));
     }
 }
