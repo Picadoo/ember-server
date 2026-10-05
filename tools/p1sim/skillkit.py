@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """D210 skill kit S0 (技能架构 第 0 阶段) · offline budget checks for the 4-input kit of
-docs/design/RESEARCH-ember-skill-architecture-2026-10-06.md §4 → docs/design/DESIGN-ember-skill-kit-2026-10-06.md.
+docs/design/RESEARCH-ember-skill-architecture-2026-10-06.md §4 → docs/design/DESIGN-ember-skill-kit-2026-10-06.md (incl. S0b D212 守招).
 Standard library only; offline. Models live in p1sim.py (PROPOSAL D210 kit_* keys; absent = today, bit-identical).
 
   python3 skillkit.py list
@@ -119,7 +119,65 @@ CANDS5 = {
     'GChs1': ('q03', 'any', '守招·壁垒 共享烬斩充能 首领战留给预警 1s −60%', M(GUARD, CHG, {'kit_guard_red': 0.6, 'kit_guard_secs': 1})),
     'ICh': ('q07', 'any', '守招·破势 共享烬斩充能 首领战留给预警 p0.6', M(INT, {'kit_int_cd': 8, 'kit_int_charge': 1})),
 }
-ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5)
+# S0b (D212): 守招 without permanent survival — 醉拳 defer (total taken unchanged) and/or heavy-only (non-light telegraphs)
+# so 守招 and 踏步 do not overlap. Prefer share with 身法 OR long CD.
+DEFER = {'kit_guard_defer': 1, 'kit_guard_pay': 4.0, 'kit_guard_red': 0.0}  # red ignored when defer on
+HEAVY = {'kit_guard_heavy': 1}
+CANDS_S0B = {
+    # round s0b-r1: pure defer (own CD) — does free spike-window alone blow clear rate?
+    'GDf18': ('q03', 'any', '守招·醉拳 cd18 吸2s 摊4s', M(GUARD, DEFER, {'kit_guard_cd': 18})),
+    'GDf30': ('q03', 'any', '守招·醉拳 cd30 吸2s 摊4s', M(GUARD, DEFER, {'kit_guard_cd': 30})),
+    # defer + share 身法 (opportunity cost)
+    'GDfS': ('q03', 'any', '守招·醉拳 共享身法 吸2s 摊4s', M(GUARD, DEFER, QSH, {'kit_guard_cd': 14})),
+    'GDfSk50': ('q03', 'any', '守招·醉拳 共享身法 留50%预警 吸2s 摊4s', M(GUARD, DEFER, QSH, {'kit_guard_cd': 14, 'kit_q_keep': 0.5})),
+    # heavy-only reduce (no defer) — only non-light telegraphs
+    'GHv18': ('q03', 'any', '守招·重压壁垒 cd18 仅非轻招 −40%', M(GUARD, HEAVY, {'kit_guard_cd': 18})),
+    'GHv30': ('q03', 'any', '守招·重压壁垒 cd30 仅非轻招 −40%', M(GUARD, HEAVY, {'kit_guard_cd': 30})),
+    'GHvS': ('q03', 'any', '守招·重压壁垒 共享身法 仅非轻招 −40%', M(GUARD, HEAVY, QSH, {'kit_guard_cd': 14})),
+    'GHvSk50': ('q03', 'any', '守招·重压壁垒 共享身法 留50% 仅非轻招 −40%', M(GUARD, HEAVY, QSH, {'kit_guard_cd': 14, 'kit_q_keep': 0.5})),
+    # heavy-only + defer
+    'GHvDf18': ('q03', 'any', '守招·重压醉拳 cd18 仅非轻招 吸2s 摊4s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18})),
+    'GHvDfS': ('q03', 'any', '守招·重压醉拳 共享身法 仅非轻招 吸2s 摊4s', M(GUARD, HEAVY, DEFER, QSH, {'kit_guard_cd': 14})),
+}
+# S0b round 2: shorten absorb / one-hit / nobusy — probe r1: GHvDf18 closest (择优 ✅) but always-press −8～−10 from busy
+CANDS_S0B2 = {
+    'GHvDf1s': ('q03', 'any', '守招·重压醉拳 cd18 仅非轻招 吸1s 摊3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 1, 'kit_guard_pay': 3.0})),
+    'GHvDf0': ('q03', 'any', '守招·重压醉拳 cd18 仅非轻招 一击摊4s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3})),
+    'GHvDf0b0': ('q03', 'any', '守招·重压醉拳 cd18 仅非轻招 一击摊4s 无僵直', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_nobusy': 1})),
+    'GHvDf24': ('q03', 'any', '守招·重压醉拳 cd24 仅非轻招 吸2s 摊4s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24})),
+    'GHvDf30': ('q03', 'any', '守招·重压醉拳 cd30 仅非轻招 吸2s 摊4s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 30})),
+    'GHvDf18nb': ('q03', 'any', '守招·重压醉拳 cd18 仅非轻招 吸2s 摊4s 无僵直', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_nobusy': 1})),
+    'GDf0': ('q03', 'any', '守招·醉拳 cd24 一击摊4s 僵直0.3s', M(GUARD, DEFER, {'kit_guard_cd': 24, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3})),
+    'GDf0b0': ('q03', 'any', '守招·醉拳 cd24 一击摊4s 无僵直', M(GUARD, DEFER, {'kit_guard_cd': 24, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_nobusy': 1})),
+    'GHvDf0cd30': ('q03', 'any', '守招·重压醉拳 cd30 仅非轻招 一击摊4s 僵直0.3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 30, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3})),
+    'GHvDfSk75': ('q03', 'any', '守招·重压醉拳 共享身法 留75% 仅非轻招 一击摊4s', M(GUARD, HEAVY, DEFER, QSH, {'kit_guard_cd': 14, 'kit_q_keep': 0.75, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3})),
+}
+# S0b round 3: HP-gated press / payback tax / short busy — r2 d0.3 upward OK on GHvDf24/1s/30 but busy hurts always-press
+CANDS_S0B3 = {
+    'GHvDf24hp50': ('q03', 'any', '守招·重压醉拳 cd24 仅非轻招 吸2s 摊4s HP<50%才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24, 'kit_guard_hp': 0.5})),
+    'GHvDf24hp60': ('q03', 'any', '守招·重压醉拳 cd24 仅非轻招 吸2s 摊4s HP<60%才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24, 'kit_guard_hp': 0.6})),
+    'GHvDf18hp50': ('q03', 'any', '守招·重压醉拳 cd18 仅非轻招 吸2s 摊4s HP<50%才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_hp': 0.5})),
+    'GHvDf0t15': ('q03', 'any', '守招·重压醉拳 cd18 一击摊4s 回敬1.15× 僵直0.3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_pay_mult': 1.15})),
+    'GHvDf0t25': ('q03', 'any', '守招·重压醉拳 cd18 一击摊4s 回敬1.25× 僵直0.3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_pay_mult': 1.25})),
+    'GHvDf0cd36': ('q03', 'any', '守招·重压醉拳 cd36 一击摊4s 僵直0.3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 36, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3})),
+    'GHvDf24b05': ('q03', 'any', '守招·重压醉拳 cd24 吸2s 摊4s 僵直0.5s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24, 'kit_guard_busy_secs': 0.5})),
+    'GHvDf24b10': ('q03', 'any', '守招·重压醉拳 cd24 吸2s 摊4s 僵直1.0s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24, 'kit_guard_busy_secs': 1.0})),
+    'GDf24hp50': ('q03', 'any', '守招·醉拳 cd24 吸2s 摊4s HP<50%才按', M(GUARD, DEFER, {'kit_guard_cd': 24, 'kit_guard_hp': 0.5})),
+    'GHvDf1shp50': ('q03', 'any', '守招·重压醉拳 cd18 吸1s 摊3s HP<50%才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 1, 'kit_guard_pay': 3.0, 'kit_guard_hp': 0.5})),
+}
+# S0b round 4: lethal-gated + confirm closest r2/r3 (GHvDf0cd36 / GHvDf24 / GHvDf1s)
+CANDS_S0B4 = {
+    # confirm aliases of r2 closest (unique ids; same mods)
+    'GHvDf0cd36c': ('q03', 'any', '守招·重压醉拳 cd36 一击摊4s 僵直0.3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 36, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3})),
+    'GHvDf24c': ('q03', 'any', '守招·重压醉拳 cd24 仅非轻招 吸2s 摊4s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24})),
+    'GHvDf1sc': ('q03', 'any', '守招·重压醉拳 cd18 仅非轻招 吸1s 摊3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 1, 'kit_guard_pay': 3.0})),
+    'GHvDf0L': ('q03', 'any', '守招·重压醉拳 cd18 一击摊4s 濒死才按 僵直0.3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 18, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_lethal': 0.35})),
+    'GHvDf0Lcd30': ('q03', 'any', '守招·重压醉拳 cd30 一击摊4s 濒死才按 僵直0.3s', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 30, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_lethal': 0.35})),
+    'GHvDf24L': ('q03', 'any', '守招·重压醉拳 cd24 吸2s 摊4s 濒死才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24, 'kit_guard_lethal': 0.35})),
+    'GHvDf0Lcd36': ('q03', 'any', '守招·重压醉拳 cd36 一击摊4s 濒死才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 36, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_lethal': 0.35})),
+    'GHvDf0L25': ('q03', 'any', '守招·重压醉拳 cd24 一击摊4s 濒死<25%才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_lethal': 0.25})),
+}
+ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4)
 
 
 def fams(c):
@@ -224,7 +282,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return

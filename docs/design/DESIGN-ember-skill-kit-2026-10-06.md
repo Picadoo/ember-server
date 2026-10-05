@@ -1,6 +1,6 @@
 # DESIGN · 余烬技能组 S0 离线模拟定稿（D210）
 
-> **状态：S0 定稿保留；S1 已在 CoreRpg 1.65.43（D211）落地：输入分流 + 烬突 + 技能页 + 烬斩三形状。火痕步 / 后撤步 → S2；守招 → S0b。**
+> **状态：S0 定稿保留；S1 已在 CoreRpg 1.65.43（D211）落地：输入分流 + 烬突 + 技能页 + 烬斩三形状。火痕步 / 后撤步 → S2；**守招 S0b（D212）离线仍全 ❌ → 建议搁置 / 等真人数据，不写 CoreRpg。**
 > **上游：** `docs/design/RESEARCH-ember-skill-architecture-2026-10-06.md`（D209，业主 2026-10-05 23:21「烬斩从新手到毕业太素了」）§6 的 S0：先在 p1sim 里给副招 / 守招 / 身法变体 / 烬斩符文建模，"在范围内"才写代码。
 > **工具：** `tools/p1sim/p1sim.py` 新增 `kit_*` 提案键（不带这些键时与旧模型逐位一致，见 §6）；`tools/p1sim/skillkit.py` 跑候选；结果 `tools/p1sim/out-skillkit-d210-r1.md` ～ `r5.md`。
 > **硬限：** 不加永久乘区（成长只能侧移），旧宝石系统保持关闭，技能不暴击、不吸血、不触发套装计数（C2），烬斩 1.5B 不降（C3），技能点燃用套装同系数（C4）。
@@ -111,14 +111,37 @@
 
 ---
 
-## 4. 守招为什么没过、下一轮怎么试（S0b，不在这次做）
+## 4. 守招 S0b（D212）— 仍全 ❌，建议搁置
 
-守招的问题是"挡住首领最重的一下"在临界格里价值极高：白给就太强，拿踏步或烬斩去换又太亏，中间点在模型里非常窄（GSk75 两头各超 7～11 个百分点）。下一轮只试**不加生存总量**的方向，例如：
+S0 五轮之后按 §4 原提案又跑了四轮（`tools/p1sim/out-skillkit-s0b-r1-probe.md`～`r4.md`；模型新增 `kit_guard_defer` / `kit_guard_pay` / `kit_guard_heavy` / `kit_guard_nobusy` / `kit_guard_hp` / `kit_guard_lethal` / `kit_guard_pay_mult`，无键时仍逐位一致）。
 
-- 守招只对"本来就躲不开的"招生效（全屏 / 读条类），与踏步分工而不是重叠；需要先给 runs yml 的首领招加一个"可躲 / 不可躲"标记再模拟。
-- 守招把伤害**推迟**而不是减少（2 秒内受到的伤害在之后 4 秒平摊，类似"醉拳"式的延迟伤害），生存总量不变，只是给了喝药 / 回血的窗口。
+### 4.1 试过的方向
 
-两条都要先过 S0b 再写代码。
+| 方向 | 代表候选 | 结果 |
+|---|---|---|
+| 醉拳 defer（吸窗后原量摊还）+ 自有 CD | GDf18 / GDf30 | 不涨通关（常为负）；僵直代价让 always-press −3～−10；择优 ≈ 0～+3 → 要么白送要么没人按 |
+| 醉拳 + 共享身法 | GDfS / GDfSk50 | 择优 0（永远不值得按）|
+| 仅非轻招 −40%（与踏步分工） | GHv18 / GHv30 | d0.3 **+7～+16** ❌（"挡住最重一下"仍过强）|
+| 仅非轻招 + 醉拳 | GHvDf18 / GHvDf24 / GHvDf1s | d0.3 上沿多 ≤+2；always-press 被僵直拉到 −4～−10；择优 +0.6～+2.5 |
+| 一击醉拳 + 长 CD | **GHvDf0cd36**（最接近） | scorch / sustain 🟡；burst 因单格 −3.8 仍 ❌；sustain d0.3 **+2.8** 刚过 "≤~2" 目标 |
+| 回敬税 1.15～1.25× | GHvDf0t15 / t25 | 择优 → 0（没人按）|
+| HP / 濒死才按 | GHvDf0L* | sustain ✅，但 scorch 临界格 **+3.6** ❌ |
+
+### 4.2 为什么中间带是空的
+
+同一结构性矛盾（S0 已见）：**临界格里"活过首领最重一下"的价值极高**。
+
+- 代价太轻（无僵直 / 短 CD / 只 defer 不减伤）→ 低操作格通关率 +3～+16。
+- 代价太重（共享身法 / 回敬税 / 长僵直）→ 择优 0，玩家永远不按。
+- 最接近的 GHvDf0cd36（仅非轻招、一击 defer、cd36、僵直 0.3s）在 n=1500 下仍不能三套装同时进 ✅/🟡，且 d0.3 上沿在 sustain 到 +2.8。
+
+位移 / 站位价值 p1sim 没有，真人手感可能比表好一点——但**通关率预算**在离线模型里过不了，不能拿"手感"开例外。
+
+### 4.3 裁决（D212）
+
+- **不实现** CoreRpg 守招代码（单按 Q 仍不取消扔刃；X2 / X8 不动）。
+- **建议搁置**；若以后重开，只在有**真人通关 / 死亡回放**后再定数值，不再扩离线候选。
+- 技能组下一档仍是 S2：火痕步 / 后撤步（S0 已 ✅），与守招无关。
 
 ---
 
@@ -138,7 +161,7 @@
 
 ## 6. 模型改动与复现
 
-- `p1sim.py`：新增 `kit_tele / kit_swing / kit_sec / kit_step / _sec_cost` 和 `KIT_KEYS`；`Fight.hurt` / `Fight.segment` 只在 `st['mods']` 里有 `kit_*` 键时进入新分支；所有新随机数用按时间取种的独立 `Random`，不动躲招 / 暴击 / 刷怪流。
+- `p1sim.py`：新增 `kit_tele / kit_swing / kit_sec / kit_step / _sec_cost` 和 `KIT_KEYS`（S0b 另加 `kit_guard_defer` / `heavy` / `nobusy` / `hp` / `lethal` / `pay_mult`）；`Fight.hurt` / `Fight.segment` 只在 `st['mods']` 里有 `kit_*` 键时进入新分支；所有新随机数用按时间取种的独立 `Random`，不动躲招 / 暴击 / 刷怪流。
 - **逐位一致检查：** 19 个基线 / 签名格子（含 L09 形状）新旧 `p1sim.py` 输出逐字节相同（每轮改模型后都复查）。
 - `selfcheck.py`：新旧都是同样 2 条既有失败（Q06 / Q07 图鉴缺"预警 3.0 秒"字样；`signin.py:34` 直接读规则文件），与本次无关，没有新增失败。
 - 复现（仓库根目录）：
@@ -147,6 +170,7 @@
 NPROC=7 python3 tools/p1sim/skillkit.py run 1500 /tmp/sk/r1.pkl                 # 第 1 轮（独立冷却）
 SK_ROUND=2 NPROC=7 python3 tools/p1sim/skillkit.py run 1500 /tmp/sk/r2.pkl      # 第 2～5 轮同理 SK_ROUND=3/4/5
 SK_BEST=1 python3 tools/p1sim/skillkit.py report /tmp/sk/r2.pkl                 # 表 + 择优行
+SK_ROUND=s0b4 NPROC=7 python3 tools/p1sim/skillkit.py run 1500 /tmp/sk/s0b-r4.pkl  # S0b 确认
 ```
 
 **模型局限（如实写）：** 位移本身的价值（躲开站位类招、追远程）在 p1sim 里没有，所以烬突、后撤步只按伤害算——实际体验会比表上好一点；烬斩"打中几个"是固定的 3（`skill_hits`），所以三种形状在模拟里完全等价，真实差别要靠 S1 冒烟看手感。

@@ -349,6 +349,13 @@ def spread_burn(owner, mobs, t):
 #                      down boss telegraphs keep only kit_q_keep × tele_bonus (default 0: no step to dodge with),
 #                      the triggering one included · kit_guard_charge: 守墓壁垒 spends the 烬斩 charge instead
 #                      (usable only while 烬斩 is ready; 烬斩 then waits a full cd) · kit_mark_mult / kit_gather_mult: the 副招's own hit (× B) when shared
+#   S0b 守招 (D212):   kit_guard_defer / kit_guard_pay   醉拳: during the guard window damage is pooled (HP untouched);
+#                      after the window it is paid evenly over kit_guard_pay seconds (total taken unchanged; only a
+#                      potion / heal window). kit_guard_red is ignored when defer is on.
+#                      kit_guard_heavy   only press on a non-light boss telegraph (no light:true; break_hp / heavy main
+#                      moves). Light / follow-up / unknown skills never trigger the press — so 守招 and 踏步 do not
+#                      overlap on the same dodgeable cone/line.
+#                      kit_guard_nobusy / kit_guard_busy_secs  absorb without locking swings (or shorter lock).
 KIT_KEYS = frozenset(('kit_guard_cd', 'kit_int_cd', 'kit_gather_cd', 'kit_dash_cd', 'kit_mark_cd', 'kit_step_cd'))
 
 
@@ -356,17 +363,41 @@ def _krng(owner, salt):
     return random.Random(int(owner.t * 1000) * 7919 + salt)
 
 
-def kit_tele(owner):
-    """a boss telegraph is about to land: maybe press 守招. Returns None when 破势 cancelled it, else True."""
+def kit_tele(owner, skill=None, raw=0.0):
+    """a boss telegraph is about to land: maybe press 守招. Returns None when 破势 cancelled it, else True.
+    skill = the boss skill dict (S0b: kit_guard_heavy skips light:true / unknown).
+    raw = pre-mitigation skill damage (S0b kit_guard_lethal: only press if the hit threatens)."""
     st, t, rec = owner.st, owner.t, owner.rec
     gc = gm(st, 'kit_guard_cd', 0.0)
     chg = gm(st, 'kit_guard_charge', 0.0) > 0  # 守招 spends the 烬斩 charge (no own cd): ready only when 烬斩 is
-    if gc > 0 and t >= getattr(owner, 'guard_ready', -1.0) and (not chg or t >= getattr(owner, '_nsk', 1e18)):
+    heavy_ok = True
+    if gm(st, 'kit_guard_heavy', 0.0) > 0:  # S0b: only non-light telegraphs (break channels / main heavies)
+        heavy_ok = bool(skill) and not skill.get('light')
+    hp_ok = True
+    hp_gate = gm(st, 'kit_guard_hp', 0.0)  # S0b: only press when current HP fraction < gate (0 = always)
+    if hp_gate > 0:
+        hp_ok = (owner.hp / owner.st['H']) < hp_gate
+    lethal_ok = True
+    if gm(st, 'kit_guard_lethal', 0.0) > 0 and raw > 0:  # S0b: only if hit would drop HP below fraction (default 0.35)
+        est = raw * owner.st['M']
+        thr = gm(st, 'kit_guard_lethal', 0.35) * owner.st['H']
+        lethal_ok = (owner.hp - est) < thr
+    if gc > 0 and heavy_ok and hp_ok and lethal_ok and t >= getattr(owner, 'guard_ready', -1.0) and (not chg or t >= getattr(owner, '_nsk', 1e18)):
         if chg:
             owner._charge_block = t + owner.cfg['skill_cd']
         owner.guard_ready = t + gc
-        owner.guard_until = t + gm(st, 'kit_guard_secs', 2.0)
-        owner.busy_until = max(getattr(owner, 'busy_until', -1.0), owner.guard_until)
+        secs = gm(st, 'kit_guard_secs', 2.0)
+        owner.guard_until = t + secs
+        # S0b: kit_guard_nobusy = can still swing during absorb (cost is CD / shared only); else busy for the window
+        # kit_guard_busy_secs overrides the busy length (default = absorb window)
+        if gm(st, 'kit_guard_nobusy', 0.0) <= 0:
+            bsec = gm(st, 'kit_guard_busy_secs', secs)
+            owner.busy_until = max(getattr(owner, 'busy_until', -1.0), t + bsec)
+        if gm(st, 'kit_guard_defer', 0.0) > 0:  # S0b 醉拳: start (or refresh) the absorb window; payback after
+            owner.guard_pool = getattr(owner, 'guard_pool', 0.0)
+            owner.guard_pay_t0 = owner.guard_until
+            owner.guard_pay_t1 = owner.guard_until + gm(st, 'kit_guard_pay', 4.0)
+            owner.guard_pay_next = owner.guard_pay_t0
         if rec is not None:
             rec['n_guard'] += 1
     ic = gm(st, 'kit_int_cd', 0.0)
@@ -499,12 +530,12 @@ class Fight:
                     rec['d_boss_win'] += eff
         tgt['hp'] -= amount
 
-    def hurt(self, raw, tele, kind='mob', affix=False):
+    def hurt(self, raw, tele, kind='mob', affix=False, skill=None):
         kn, st = self.kn, self.st
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
         rec = self.rec
         if kind == 'tele' and st.get('mods') and KIT_KEYS & st['mods'].keys():  # PROPOSAL D210 skill kit (not in Java)
-            if kit_tele(self) is None:
+            if kit_tele(self, skill, raw) is None:
                 return None  # 破势: the move was interrupted (no hit, no dodge / whiff effects)
             if gm(st, 'kit_q_shared', 0.0) > 0 and self.t < max(getattr(self, 'guard_ready', -1.0), getattr(self, 'int_ready', -1.0)):
                 p = min(0.95, kn.dodge + kn.tele_bonus * gm(st, 'kit_q_keep', 0.0))  # 守招 used 身法's cooldown: the
@@ -538,10 +569,19 @@ class Fight:
                 if rec is not None:
                     rec['n_hit_burst'] += 1
         dmg = raw * self.st['M']
-        if self.t < getattr(self, 'guard_until', -1.0):  # PROPOSAL D210 守墓壁垒: −kit_guard_red on every hit in the window
-            if rec is not None:
-                rec['guard_abs'] += dmg * gm(st, 'kit_guard_red', 0.4)
-            dmg *= 1.0 - gm(st, 'kit_guard_red', 0.4)
+        if self.t < getattr(self, 'guard_until', -1.0):  # PROPOSAL D210 守墓壁垒 / S0b 醉拳
+            if gm(st, 'kit_guard_defer', 0.0) > 0:  # S0b: pool the hit; pay it back after the window
+                # kit_guard_pay_mult > 1 = tax (pay back more than absorbed) — opportunity cost without sharing 身法
+                pooled = dmg * gm(st, 'kit_guard_pay_mult', 1.0)
+                self.guard_pool = getattr(self, 'guard_pool', 0.0) + pooled
+                if rec is not None:
+                    rec['guard_defer'] = rec.get('guard_defer', 0.0) + pooled
+                    rec['n_guard_hit'] = rec.get('n_guard_hit', 0) + 1
+                dmg = 0.0
+            else:
+                if rec is not None:
+                    rec['guard_abs'] += dmg * gm(st, 'kit_guard_red', 0.4)
+                dmg *= 1.0 - gm(st, 'kit_guard_red', 0.4)
         if getattr(self, 'shield', 0.0) > 0:  # PROPOSAL 护心斩 (set-specific 烬斩, not in Java): absorbs before HP
             if self.t < self.shield_until:
                 a = min(self.shield, dmg)
@@ -565,6 +605,47 @@ class Fight:
             if rec is not None:
                 rec['heal_potion'] += min(self.st['H'], self.hp + self.cfg['potion_pct'] * gm(self.st, 'potion') * self.st['H']) - self.hp
             self.hp = min(self.st['H'], self.hp + self.cfg['potion_pct'] * gm(self.st, 'potion') * self.st['H'])
+
+    def _guard_pay(self, t):
+        """S0b 醉拳 payback: drain guard_pool evenly over [guard_pay_t0, guard_pay_t1]. Sets guard_pay_next."""
+        pool = getattr(self, 'guard_pool', 0.0)
+        t0 = getattr(self, 'guard_pay_t0', -1.0)
+        t1 = getattr(self, 'guard_pay_t1', -1.0)
+        if pool <= 0 or t1 <= t0:
+            self.guard_pool = 0.0
+            self.guard_pay_next = None
+            return None
+        if t < t0:
+            self.guard_pay_next = t0
+            return t0
+        step = 0.25
+        nxt = min(t1, t + step)
+        take = pool if nxt >= t1 else pool * ((nxt - t) / (t1 - t))
+        take = min(pool, max(0.0, take))
+        self.guard_pool = pool - take
+        if take > 0:
+            self.hp -= take
+            self.taken += take
+            self.nhit += 1
+            rec = self.rec
+            if rec is not None:
+                rec['taken_guard_pay'] = rec.get('taken_guard_pay', 0.0) + take
+                rec['n_guard_pay'] = rec.get('n_guard_pay', 0) + 1
+                self.min_hp = min(self.min_hp, max(0.0, self.hp) / self.st['H'])
+            if self.hp > 0 and self.hp < self.kn.potion_at * self.st['H'] and self.potions > 0 and t >= self.pcd:
+                self.potions -= 1
+                self.used += 1
+                self.pcd = t + self.cfg['potion_cd']
+                heal = self.cfg['potion_pct'] * gm(self.st, 'potion') * self.st['H']
+                if rec is not None:
+                    rec['heal_potion'] += min(self.st['H'], self.hp + heal) - self.hp
+                self.hp = min(self.st['H'], self.hp + heal)
+        if self.guard_pool <= 1e-9 or nxt >= t1:
+            self.guard_pool = 0.0
+            self.guard_pay_next = None
+        else:
+            self.guard_pay_next = nxt
+        return self.guard_pay_next
 
     def segment(self, mobs, boss=None, mapdef=None):
         """Fight until every mob (and the boss) is dead or the player dies. Returns True on clear."""
@@ -620,6 +701,9 @@ class Fight:
                 cand.append(s['next'])
             for p in pending:
                 cand.append(p[0])
+            gpn = getattr(self, 'guard_pay_next', None)
+            if gpn is not None:
+                cand.append(gpn)
             nd = self.burns.next_due()
             if nd is not None:
                 cand.append(nd / 1000.0)
@@ -630,6 +714,11 @@ class Fight:
                 burn_ticks(self, t)
             if FEST:
                 fest_proc(self, alive, t, st['B'], kn.skill_hits)
+            if gpn is not None and t == gpn:  # S0b 醉拳 payback tick
+                self._guard_pay(t)
+                if self.hp <= 0:
+                    return False
+                continue
             if t == next_swing:
                 next_swing = t + period
                 if st.get('mods') and KIT_KEYS & st['mods'].keys():  # PROPOSAL D210 skill kit (not in Java)
@@ -736,14 +825,14 @@ class Fight:
                                     self.rec['n_break'] = self.rec.get('n_break', 0) + 1
                             else:
                                 self._noint = True
-                                self.hurt(sk['dmg'], True, 'tele')
+                                self.hurt(sk['dmg'], True, 'tele', skill=sk)
                                 self._noint = False
                                 BREAK_STATS[1] += 1
                                 if self.rec is not None:
                                     self.rec['n_break_fail'] = self.rec.get('n_break_fail', 0) + 1
                             break
                         if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
-                            _dodged = self.hurt(sk['dmg'], True, 'tele')
+                            _dodged = self.hurt(sk['dmg'], True, 'tele', skill=sk)
                             if WHIFF_STUN and sk.get('whiff_stun') and _dodged and boss['hp'] > 0:  # D192 落空破绽 (solo: dodged = whiff)
                                 _st = float(sk['whiff_stun']) * WHIFF_ARM
                                 boss['next'] = max(boss['next'], t) + _st
