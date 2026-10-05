@@ -28,6 +28,8 @@ import town.sunshine.corerpg.PlayerData;
  * <p>{@code EmberEconomyTest} pins loaded yml amounts to Java golden, proves settle / shop / sign / fest / AFK / delivery /
  * grant* routing, scans {@code p1/} for direct {@code addCoin}/{@code takeCoin} outside the allowlist, and fails on drift.
  * Amounts unchanged from bv57; balance_version tracks runs (58 = D227 echo halls B).
+ * D229 (S2-9): abyss floor settle tags as S13 via {@link #sourceForGrant} (run-id head {@code <map>a<n>});
+ * vault write scan in {@code EmberEconomyTest} (callers must {@code grantMat} first or tag {@code econ-ok:}).
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -107,7 +109,7 @@ public final class EmberEconomy {
 
     static {
         // §2.1 main line / challenge / abyss / raid (EmberRunRules + EmberRunService)
-        src("S01", "主线 / 挑战 / 深渊结算基线", "EmberRunRules.BASE_*", Period.RUN).acc(COIN, SHARD, BONE, CORE, XP, MARK, GEAR)
+        src("S01", "主线 / 挑战结算基线", "EmberRunRules.BASE_*", Period.RUN).acc(COIN, SHARD, BONE, CORE, XP, MARK, GEAR)
             .model(FULL).g("coin", 300).g("shard", 24).g("bone", 6).g("core", 2).g("xp", 120).g("mark", 1).done();
         src("S02", "宝箱怪", "EmberRunRules.TREASURE_COIN", Period.RUN).acc(COIN).model(FULL).g("coin", 100).done();
         src("S03", "精英房", "EmberRunRules.ELITE_*", Period.RUN).acc(SHARD, CORE).model(FULL).g("shard", 10).g("core", 1).done();
@@ -308,14 +310,24 @@ public final class EmberEconomy {
     }
 
     /**
+     * D229: abyss entry stamps the run id as {@code <mapKey>a<tier>-…} (challenge uses {@code c}, normal has neither).
+     * Head alone is enough — no need to parse the tier number for SourceId routing.
+     */
+    static boolean isAbyssHead(String head) {
+        return head != null && head.matches("[a-z0-9_]+a\\d+");
+    }
+
+    /**
      * Resolve the REG source for a ledger grant: key prefix first, then sign/online run id
      * ({@code p1sign-…} → S23, {@code p1online-…} → S24).
      */
     public static String sourceForGrant(String key, String runId) {
+        String head = runHead(runId);
+        // D229 (S2-9): abyss floor settle — same BASE_* amounts as S01, separate SourceId S13
+        if (key != null && key.startsWith("base_") && isAbyssHead(head)) return "S13";
         String s = sourceForGrantKey(key);
         if (s != null) return s;
         // D228 (S2-8): weekly-mode ledger keys shared by several modes — the run id's map part tells which
-        String head = runHead(runId);
         if (key != null && head != null) {
             if ("rot_mark".equals(key)) // featured-map bonus: challenge run id q0Nc → S10, normal repeat q0N → S11
                 return head.matches("q\\d\\dc") ? "S10" : head.matches("q\\d\\d") ? "S11" : null;

@@ -33,6 +33,7 @@ import town.sunshine.corerpg.PlayerData;
  * exchange / abyss fee / talent / reroll / imprint / attune spends (C03–C13) route through spend* and a {@code p1/}
  * takeCoin scan guards new direct spends. D223 (S2-6): delivery coin debit via spendCoinDelivery;
  * EmberDelivery off the takeCoin allowlist. D224: ember-v1-economy.yml is amount() SoT (load + dual-assert golden).
+ * D228 (S2-8): insignia/badge grants + account-counter scan. D229 (S2-9): abyss floor SourceId S13 + vault-write scan.
  */
 public class EmberEconomyTest {
     private static final double EPS = 1e-9;
@@ -894,6 +895,75 @@ public class EmberEconomyTest {
         assertEquals("route through EmberEconomy.grantMark/grantInsignia/grantBadge (or tag the line `// econ-ok: <reason>`)",
                 new ArrayList<String>(), hits);
         assertTrue("scan sees the tagged exceptions (" + tagged + ")", tagged >= 8);
+    }
+
+    // ------------------------------------------------------------------ D229 / ARCH S2-9 — S13 abyss + vault scan
+
+    @Test
+    public void abyssFloorSettleTagsAsS13NotS01() {
+        assertTrue(EmberEconomy.isAbyssHead("q01a1"));
+        assertTrue(EmberEconomy.isAbyssHead("q07a10"));
+        assertFalse(EmberEconomy.isAbyssHead("q01"));
+        assertFalse(EmberEconomy.isAbyssHead("q01c"));
+        assertFalse(EmberEconomy.isAbyssHead("outpost"));
+        assertFalse(EmberEconomy.isAbyssHead("echo_q01"));
+        assertFalse(EmberEconomy.isAbyssHead(null));
+
+        // key alone still names S01 (no run context); run id with abyss head remaps to S13
+        assertEquals("S01", EmberEconomy.sourceForGrantKey("base_coin"));
+        assertEquals("S13", EmberEconomy.sourceForGrant("base_coin", "q01a5-mabc12-x1z"));
+        assertEquals("S13", EmberEconomy.sourceForGrant("base_shard", "q07a10-aaa-bbb"));
+        assertEquals("S13", EmberEconomy.sourceForGrant("base_mark", "q03a1-ts-rnd"));
+        assertEquals("S13", EmberEconomy.sourceForGrant("base_xp", "q02a2-ts-rnd"));
+        assertEquals("S01", EmberEconomy.sourceForGrant("base_coin", "q01-mabc12-x1z"));
+        assertEquals("S01", EmberEconomy.sourceForGrant("base_coin", "q01c-mabc12-x1z"));
+        assertEquals("S01", EmberEconomy.sourceForGrant("base_coin", null));
+        // non-base keys are unaffected by abyss head
+        assertEquals("S02", EmberEconomy.sourceForGrant("extra_treasure_coin", "q01a5-mabc12-x1z"));
+
+        for (EmberEconomy.Account a : new EmberEconomy.Account[]{
+                EmberEconomy.Account.COIN, EmberEconomy.Account.SHARD, EmberEconomy.Account.BONE,
+                EmberEconomy.Account.CORE, EmberEconomy.Account.XP, EmberEconomy.Account.MARK, EmberEconomy.Account.GEAR}) {
+            assertTrue("S13 pays " + a, EmberEconomy.pays("S13", a));
+            assertTrue("S01 still pays " + a, EmberEconomy.pays("S01", a));
+        }
+        // amounts unchanged: settle still reads S01 goldens; S13 is a tag only
+        assertEquals(EmberEconomy.amount("S01", "coin"), EmberRunRules.BASE_COIN);
+        PlayerData d = new PlayerData();
+        assertTrue(EmberEconomy.grantCoin(d, "S13", EmberEconomy.amount("S01", "coin")));
+        assertEquals(EmberRunRules.BASE_COIN, d.getCoin());
+        assertTrue(EmberEconomy.grantMat("S13", EmberUpgradeRules.MAT_SHARD, 24));
+        assertTrue(EmberEconomy.grantMark(d, "S13", 3, 1));
+    }
+
+    /**
+     * D229 (REG §6.4 vault cut): every warehouse credit in {@code p1/} outside {@code EmberVault} must carry an
+     * {@code econ-ok:} reason (grantMat already validated, durable delivery apply, S29 dismantle legacy path).
+     * Pickup / internal {@code add} live inside EmberVault and are not scanned here.
+     */
+    @Test
+    public void p1VaultWritesAreEconomyOrTagged() throws Exception {
+        java.util.regex.Pattern write = java.util.regex.Pattern.compile(
+                "\\.(autoDeposit|creditBound)\\(|EmberVault\\.get\\(\\)\\.give\\(|\\.credit\\(p,");
+        Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
+        List<String> hits = new ArrayList<String>();
+        int tagged = 0;
+        try (java.util.stream.Stream<Path> walk = Files.walk(root)) {
+            for (Path f : walk.filter(x -> x.toString().endsWith(".java")).collect(java.util.stream.Collectors.toList())) {
+                String name = f.getFileName().toString();
+                if ("EmberVault.java".equals(name) || "EmberEconomy.java".equals(name)) continue;
+                List<String> lines = Files.readAllLines(f, StandardCharsets.UTF_8);
+                for (int i = 0; i < lines.size(); i++) {
+                    String ln = lines.get(i);
+                    if (!write.matcher(ln).find()) continue;
+                    if (ln.contains("econ-ok:")) { tagged++; continue; }
+                    hits.add(name + ":" + (i + 1));
+                }
+            }
+        }
+        assertEquals("route vault credits through grantMat first (or tag the line `// econ-ok: <reason>`)",
+                new ArrayList<String>(), hits);
+        assertTrue("scan sees the tagged vault exceptions (" + tagged + ")", tagged >= 4);
     }
 
 }

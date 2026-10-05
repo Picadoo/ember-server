@@ -574,7 +574,7 @@ public final class EmberForgeService implements Listener {
                 if ("dismantle".equals(kind)) {
                     Object[] pd = pendingDismantle.remove(list.get(0).before.uid);
                     int blanks = pd == null ? 0 : (Integer) pd[1];
-                    if (!store().usable()) { if (q != null) { if (EmberVault.get() != null) EmberVault.get().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); } }
+                    if (!store().usable()) { if (q != null) { if (EmberVault.get() != null) EmberVault.get().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); } } // econ-ok: S29 dismantle blanks (legacy YAML path; MySQL uses delivery)
                     else if (q != null && gl() != null) gl().delivery().kick(q); // D162: blanks = delivery row of the same txn
                     if (q != null) EmberVault.savePlayerFile(q);
                 }

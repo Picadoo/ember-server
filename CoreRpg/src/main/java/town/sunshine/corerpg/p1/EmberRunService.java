@@ -1769,7 +1769,7 @@ public final class EmberRunService implements Listener {
                         break;
                     }
                     EmberVault vlt = EmberVault.get(); // 1.62: whitelisted materials go straight into the warehouse (自动入库)
-                    if (ni != null && vlt != null && vlt.autoDeposit(p, g.id, g.amount)) {
+                    if (ni != null && vlt != null && vlt.autoDeposit(p, g.id, g.amount)) { // econ-ok: grantMat validated above
                         got.add(matSource(r.key) + ni.displayName(g.id) + " ×" + g.amount + "（进仓库）");
                         done = true;
                         break;
@@ -1792,7 +1792,7 @@ public final class EmberRunService implements Listener {
                         break;
                     }
                     EmberVault vlt = EmberVault.get();
-                    if (ni != null && vlt != null && vlt.creditBound(p, g.id, g.amount)) {
+                    if (ni != null && vlt != null && vlt.creditBound(p, g.id, g.amount)) { // econ-ok: grantMat validated above
                         got.add("挂机 " + ni.displayName(g.id) + " ×" + g.amount + "（进仓库 · 账号绑定）");
                         done = true;
                     } else waiting++; // stays pending (vault off / at cap) — retried on the next delivery

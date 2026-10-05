@@ -150,7 +150,7 @@ public final class EmberDelivery {
         } else if (!applied) {
             EmberVault v = EmberVault.get();
             if (d.amount > 0) {
-                if (v == null || !v.credit(p, d.item, d.amount)) { keep(d, "warehouse full / disabled", left, next); tell(p, "仓库放不下 " + name + " ×" + d.amount + "，腾出空间后 /corerpg p1 deliver 领取"); return; }
+                if (v == null || !v.credit(p, d.item, d.amount)) { keep(d, "warehouse full / disabled", left, next); tell(p, "仓库放不下 " + name + " ×" + d.amount + "，腾出空间后 /corerpg p1 deliver 领取"); return; } // econ-ok: durable delivery apply (ledger already granted)
                 tell(p, ChatColor.GREEN + "到账 " + name + " ×" + d.amount + " → 仓库" + ChatColor.GRAY + "（" + why(d) + "）");
             } else if (d.amount < 0) {
                 long want = -d.amount, got = v != null ? v.debit(p, d.item, want) : plugin.getNiBridge().consume(p, d.item, (int) want);

@@ -46,7 +46,7 @@
 
 | # | 来源 | 发什么 | 数量 / 规则 | 周期 / 上限 | 上限键 | 模型 |
 |---|---|---|---|---|---|---|
-| S01 | 主线 / 挑战 / 深渊结算基线 | 币 / 碎片 / 骨尘 / 核心 / 经验 / 印记(本阶) / 装备 1 | `BASE_*`：300 / 24 / 6 / 2 / 120 / 1；装备按品质权重 | `run`；体力 30 / 局（挑战同；深渊另扣层费） | 体力日；深渊层费见 S26 | ✓ `p1sim` / `p2econ` |
+| S01 | 主线 / 挑战结算基线 | 币 / 碎片 / 骨尘 / 核心 / 经验 / 印记(本阶) / 装备 1 | `BASE_*`：300 / 24 / 6 / 2 / 120 / 1；装备按品质权重 | `run`；体力 30 / 局（挑战同） | 体力日 | ✓ `p1sim` / `p2econ` |
 | S02 | 宝箱怪 | 币 | +100 | `run` 内触发 | — | ✓ `p1sim` |
 | S03 | 精英房 | 碎片 / 核心 | +10 / +1 | `run` 内触发 | — | ✓ `p1sim` |
 | S04 | 词缀精英结算 | 碎片 | `variety.affix_shard` = 2 | 仅全员已首通的普通重打 | — | ✓ `p1sim` |
@@ -58,7 +58,7 @@
 | S10 | 精选周挑战加印 | 印记(本阶) | +1；每周最多 3 次（与 S11 共用） | `week` × 3 | `p2_rotation` / 周 | ✓ `p2econ` / `p1sim` |
 | S11 | 精选周普通重打加印 | 印记(地图阶，仅 T1/T2) | +1；与 S10 共用周上限 3；本人已通 Q07 后不再发也不占名额 | `week` × 3 | 同上 | ✓ `p1sim --normal-mods` |
 | S12 | 团本结算 | T3 装备(地板精良) + 印记 T3 ×1 | `raid_item` + `raid_mark`；无首通包 | `week` × 3（R01–R03 共用 `cap_group: raid`）；体力 50 | `p2_raid_<group>` / 周 | ✓ `p2econ --raid` |
-| S13 | 深渊层结算 | 同挑战基线 + 层品质表 | 无首通 / 无精选加印；层费见 C08 | 层 1–10；无尽层 | 层进度计数 | ✓ `p2econ --abyss` |
+| S13 | 深渊层结算 | 同 S01 基线数量 + 层品质表 | 无首通 / 无精选加印；层费见 C08；**D229 起 `sourceForGrant(base_*, <map>a<n>-…)` → S13**（数量仍读 S01） | 层 1–10；无尽层 | `p2_abyss_best` | ✓ `p2econ --abyss` |
 | S14 | 失败退体力 | 体力 | 当天首次挑战 / 深渊失败退 `fail_refund=0.5` × 30 | `day` × 1 | `failrefund@<day>`（账本，非 counters） | ✓ `p2econ` |
 | S15 | 当日首次倒下退药 | 回复药（绑定） | 最多 `death_refund.max_potions=5` | `day` × 1 | 账本行 | ✓ `p1sim` |
 
@@ -200,7 +200,7 @@
 2. **单一消耗入口**：对称的 `EmberEconomy.spend(…, SinkId, Cost…)`；失败不写半态（沿用 `EmberPay` hold）。
 3. **yaml 真源**：把 §2 / §3 的数量与上限迁到 `ember-v1-economy.yml`（或扩 `ember-v1.yml` 一节）；Java 常量 `BASE_*`、`CLEAR_MARKS` 等改为读表；`tools/p1sim/rules.py` 只读这一份。
 4. **未登记即拒**：单元测试扫描 `addCoin` / `grantFlatEmberXp` / `addPeriodCount(p1_mark|p1_sigmark|p3_badge)` / vault 写入，调用栈必须经过 `EmberEconomy`（白名单测试钩子除外）。
-   → 进度：`addCoin`（D216）/ `takeCoin`（D218）/ **`addPeriodCount(p1_mark_t|p1_sigmark_|p3_badge)` + `grantFlatEmberXp`（D228，行级扫描，例外行须带 `econ-ok:` 理由）** 已上；vault 写入扫描未做（下一刀候选）。
+   → 进度：`addCoin`（D216）/ `takeCoin`（D218）/ **`addPeriodCount(p1_mark_t|p1_sigmark_|p3_badge)` + `grantFlatEmberXp`（D228）** / **vault 写入 `autoDeposit`/`creditBound`/`credit`/`EmberVault.get().give`（D229，行级扫描，例外行须带 `econ-ok:` 理由）** 已上。
 5. **旧路径**：保持 S0-1～S0-5；本表 §2.5 作为回归清单；重新放行必须同时加 p1sim 行。
 6. **不做的事（本阶段）**：不改数值、不加永久战力、不重开宝石、不推化妆品；生活 / 扭蛋可先登记为 `DEFER` 或在 P1 白名单里关掉吃核心的 offer。
 
@@ -208,7 +208,7 @@
 
 ## 7. 验收清单（S2 落地时）
 
-- [ ] §2 每一行都有 `SourceId` + 单元测试夹具能复现数量（D228：徽记 S07/S08/S09/S17/S18/S23、徽 S16/S19/S27、印记 S10/S11/S12/S16/S17 的发放现在都带 SourceId；S13 深渊层仍记作 S01 基线、S14/S15 体力/药未经 grant*）
+- [ ] §2 每一行都有 `SourceId` + 单元测试夹具能复现数量（D228：徽记 S07/S08/S09/S17/S18/S23、徽 S16/S19/S27、印记 S10/S11/S12/S16/S17；**D229：S13 深渊层经 `sourceForGrant` 与 S01 分开**；S14/S15 体力/药未经 grant*）
 - [ ] §3 每一行都有 `SinkId` + 余额不足时 0 副作用
 - [x] §5 缺口 1–2（徽记账户 + 残响）已进 `p1sim` / `p2econ`，W30 报告多一列「徽记结余 / 烙印次数」 — D222：`tools/p1sim/insignia.py`（opt-in `p2econ --insignia`；S23 经 `signin.py` 钩子，缺口 3 一并补上），报告 `tools/p1sim/out-insignia-d222-w30*.md`，状态 `docs/status/STATUS-ember-p1sim-insignia-2026-10-06.md`
 - [ ] §2.5 L-S* 在 FreshQ 非 OP 上冒烟仍为 0
@@ -234,3 +234,4 @@
 | 2026-10-06 | D226（p1sim + 文档；CoreRpg 不动 / bv57）：R1-sim 徽记 what-if A/B/C（`insignia.py --whatif`）；W30 对照 `out-insignia-r1-*.md`；**推荐 B**（残响厅扩 Q05–Q07、共用周帽）；本表 S09/S23/C12 **只改措辞**对齐代码（不改发放逻辑 / 数量）。 |
 | 2026-10-06 | D227（CoreRpg 1.65.53 / bv58）：S18 残响厅扩 echo_q05–q07，共用 `p4_echo_claim`=3、`S18.insignia`=2 **数量不变**（只改可领图集合 / retarget）；本表 S18 行同步。 |
 | 2026-10-06 | D228（CoreRpg 1.65.54 / bv58）：S2-8 — `grantInsignia` / `grantBadge`；账本 MARK / SIGMARK 行经 `creditMarkLedger` / `creditInsigniaLedger`（sig_mark S08、fc_sigmark S07、pledge_sigmark S09、raid_mark S12、rot_mark S10/S11、rush_mark S16/S17、rush_sig_* S17/S18；未知键 untagged 照发）；连战徽 S16 / 周目标徽 S19 / 国庆兑换徽 S27 走 grantBadge；§6.4 扫描扩到 `p1_mark_t` / `p1_sigmark_` / `p3_badge` 直写 + `grantFlatEmberXp`。数量不变。 |
+| 2026-10-06 | D229（CoreRpg 1.65.55 / bv58）：S2-9 — 深渊层结算 SourceId 与 S01 分开（`sourceForGrant(base_*, <map>a<n>-…)` → S13；数量仍读 S01 BASE_*）；§6.4 vault 写入扫描（`autoDeposit` / `creditBound` / `credit` / `EmberVault.get().give`，例外行 `econ-ok:`）。数量不变。 |
