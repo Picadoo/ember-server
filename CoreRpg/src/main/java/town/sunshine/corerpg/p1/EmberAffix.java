@@ -132,7 +132,8 @@ public final class EmberAffix {
         if (dup == null) return "没有可用的重复件";
         if (dup.uid.equals(target.uid)) return "不能拿自己当重复件";
         if (!dup.slot.equals(target.slot) || dup.tier != target.tier) return "重复件要同部位、同阶（" + EmberItemData.slotName(target.slot) + " T" + target.tier + "）";
-        if (!"drop".equals(dup.source)) return "只有掉落来的件能当重复件";
+        // D243 (G4): OP test duplicates (/corerpg p1 givedup) are source "admin" (not dismantlable); they stay usable here
+        if (!"drop".equals(dup.source) && !"admin".equals(dup.source)) return "只有掉落来的件能当重复件";
         if (dup.enhance > 0 || dup.quality > 0 || dup.craft > 0 || dupHasAffix)
             return "这件有投入（强化 / 成色 / 精工 / 词条），不拿来当重复件";
         return null;

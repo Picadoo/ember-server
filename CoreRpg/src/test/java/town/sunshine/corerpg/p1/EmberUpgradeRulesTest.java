@@ -270,4 +270,21 @@ public class EmberUpgradeRulesTest {
         for (int i = 0; i < hist.length; i++) { cum += hist[i]; if (cum >= runs / 2) { median = i; break; } }
         assertEquals(22, median);
     }
+
+    /** D243 (G4): /corerpg p1 givedup items are source admin — not dismantlable, not codex, still a reroll duplicate. */
+    @Test
+    public void adminDuplicateIsNotDismantlable() {
+        EmberItemData target = EmberItemData.create("burst", "blade", 2, 1, 0, 3, true, "drop");
+        EmberItemData dup = EmberItemData.create("burst", "blade", 2, 0, 0, 0, true, "admin");
+        assertNull(dup.validate());
+        assertEquals(0, EmberUpgradeRules.dismantleYield(dup));
+        assertNotNull(EmberUpgradeRules.dismantleCheck(dup));
+        assertFalse(EmberCodex.counts(dup));
+        assertNull("admin test duplicate still feeds the reroll", EmberAffix.duplicateOk(target, dup, false));
+        EmberItemData drop = EmberItemData.create("burst", "blade", 2, 0, 0, 0, true, "drop");
+        assertEquals(2, EmberUpgradeRules.dismantleYield(drop));
+        assertNull(EmberAffix.duplicateOk(target, drop, false));
+        EmberItemData quest = EmberItemData.create("burst", "blade", 2, 0, 0, 0, true, "quest");
+        assertNotNull("quest pieces are never duplicates", EmberAffix.duplicateOk(target, quest, false));
+    }
 }

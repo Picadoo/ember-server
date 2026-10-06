@@ -30,6 +30,8 @@ import town.sunshine.corerpg.PlayerData;
  * Amounts unchanged from bv57; balance_version tracks runs (58 = D227 echo halls B).
  * D229 (S2-9): abyss floor settle tags as S13 via {@link #sourceForGrant} (run-id head {@code <map>a<n>});
  * vault write scan in {@code EmberEconomyTest} (callers must {@code grantMat} first or tag {@code econ-ok:}).
+ * D243 (S4-2): S33 codex stage coin (run {@code codex} → tagged grantCoin), S34 chest extra gear roll, S35 starter kit,
+ * S09 {@code per_rule} yml key — amounts unchanged (tags / registry only); docs/design/ember-source-map.yml lists them.
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -125,7 +127,8 @@ public final class EmberEconomy {
         src("S07", "首通徽记", "EmberSignature.FC_MARKS", Period.ONCE).acc(INS).keys("p1_sigfc_", "p1_sigmark_").model(NONE).g("insignia", 3).done();
         src("S08", "重打普通主线（签名图）", "EmberSignature.CLEAR_MARKS / STAMP_RATE", Period.RUN).acc(INS, GEAR)
             .keys("p1_sigmark_").model(NONE).g("insignia", 1).g("stamp_rate", 0.12).done();
-        src("S09", "自选誓约", "EmberPledgeService C_PLEDGE", Period.RUN).acc(INS).keys("p1_pledge_", "p1_sigmark_").model(PART).done();
+        src("S09", "自选誓约", "EmberPledgeService C_PLEDGE", Period.RUN).acc(INS).keys("p1_pledge_", "p1_sigmark_").model(PART)
+            .g("per_rule", 1).done(); // D243 (G8): insignia per pledged rule, now an economy yml key (same value)
         src("S10", "精选周挑战加印", "ember-v1-runs.yml rotation", Period.WEEK).acc(MARK).keys("p2_rotation", "p1_mark_t").model(FULL)
             .g("mark", 1).g("weekly_cap", 3).done();
         src("S11", "精选周普通重打加印", "ember-v1-runs.yml rotation.normal_bonus_marks", Period.WEEK).acc(MARK)
@@ -168,6 +171,14 @@ public final class EmberEconomy {
         src("S30", "生活玩法产出", "life.yml", Period.DAY).acc(Account.LIFE_ITEM, POT).keys("life_", "life_xp").model(NONE).done();
         src("S31", "旧任务线（P1 下不推进）", "quest.yml / QuestService", Period.NONE).acc(XP).model(NONE).done();
         src("S32", "邮件附件", "MailService", Period.NONE).acc(COIN, Account.MAIL).model(NONE).done();
+        // D243 / ARCH S4-2: sources found by the D242 source map (G1–G3) — registered with unchanged amounts (tags only)
+        src("S33", "图录阶段奖励", "EmberCodex.STAGE_COIN (ledger run codex)", Period.ONCE).acc(COIN)
+            .keys("p1_codex_", "p1_codex_stage_").ledger("codex/stage<n>").model(FULL)
+            .g("at5.coin", 200).g("at10.coin", 400).g("at15.coin", 600).g("at20.coin", 1000).done();
+        src("S34", "宝箱额外装备", "EmberRunRules.EXTRA_WEIGHTS chest", Period.RUN).acc(GEAR).ledger("extra_chest_item").model(FULL)
+            .g("chest_weight", 5).done();
+        src("S35", "起步包", "EmberRunService.giveStarter + EmberSupplyService.giveStarter", Period.ONCE).acc(GEAR, POT)
+            .keys("p1_starter").ledger("starter/starter_<slot>").model(FULL).g("pieces", 2).g("potions", 5).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -299,6 +310,7 @@ public final class EmberEconomy {
         if ("sig_mark".equals(key)) return "S08";
         if ("pledge_sigmark".equals(key)) return "S09";
         if ("raid_mark".equals(key)) return "S12";
+        if ("extra_chest_item".equals(key)) return "S34"; // D243 (G2): the chest's extra gear roll (item row; tag only)
         return null;
     }
 
@@ -338,6 +350,9 @@ public final class EmberEconomy {
             if (runId.startsWith("p1sign-")) return "S23";
             if (runId.startsWith("p1online-")) return "S24";
             if (runId.startsWith("p1afk-")) return "S22"; // D221 / ARCH S2-5
+            // D243 (G1 / G3): codex stage coin (run "codex", key stage<i>) and the starter kit (run "starter")
+            if (EmberCodex.LEDGER_RUN.equals(runId) && key != null && key.startsWith("stage")) return "S33";
+            if ("starter".equals(runId) && key != null && key.startsWith("starter_")) return "S35";
         }
         return null;
     }

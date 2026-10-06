@@ -95,10 +95,13 @@ public final class EmberPledgeService {
         return n;
     }
 
-    /** S09 settle grant: +1 insignia per pledged rule on a signature-map repeat clear. Null when pledged≤0. */
+    /**
+     * S09 settle grant: {@code S09.per_rule} (ember-v1-economy.yml, = 1) insignia per pledged rule on a signature-map
+     * repeat clear. Null when pledged≤0. D243 (G8): the per-rule amount moved from code to the economy yml (same value).
+     */
     public static EmberRunRules.Grant settleGrant(String mapKey, int pledged) {
         if (pledged <= 0 || mapKey == null) return null;
-        return new EmberRunRules.Grant("pledge_sigmark", EmberRunRules.Kind.SIGMARK, mapKey, pledged, null);
+        return new EmberRunRules.Grant("pledge_sigmark", EmberRunRules.Kind.SIGMARK, mapKey, pledged * EmberEconomy.amount("S09", "per_rule"), null);
     }
 
     // ------------------------------------------------------------------ live wrappers

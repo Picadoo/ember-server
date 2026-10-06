@@ -503,4 +503,17 @@ public class EmberSourceMapTest {
         if (bv != null) assertEquals("source map balance_version (update the map with the balance change)", String.valueOf(bv), str(map.get("balance_version")));
         if (bv == null) fail("balance_version not found in ember-v1-runs.yml / ember-v1.yml");
     }
+
+    /** D243 (G5): the bundled ember-v1*.yml resources are the live configs byte for byte (no silent first-start drift). */
+    @Test
+    public void bundledConfigsMatchLive() throws IOException {
+        List<String> bad = new ArrayList<String>();
+        for (String f : new String[] {"ember-v1.yml", "ember-v1-runs.yml", "ember-v1-growth.yml", "ember-v1-festival.yml", "ember-v1-economy.yml"}) {
+            Path live = configRoot.resolve(f), res = Paths.get("src/main/resources", f);
+            if (!Files.isRegularFile(res)) { bad.add("missing bundled " + res); continue; }
+            if (!java.util.Arrays.equals(Files.readAllBytes(live), Files.readAllBytes(res)))
+                bad.add("bundled " + res + " differs from live " + live + " — copy the live file into the resources in the same commit");
+        }
+        assertTrue(String.join("\n", bad), bad.isEmpty());
+    }
 }

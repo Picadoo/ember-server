@@ -54,7 +54,7 @@
 | S06 | 首通包 | 自选装备或材料包 | Q01 自选族 T1 护符；Q02 一次免费定向兑换（自选族 × 部位，T1 刃或护符，`choice: piece`，D110）；Q03–Q07 材料+币（见下） | `once` / 内容版本 | `p1_first_clear_<map>@<ver>`（N2：换版会删旧键） | ✓ `p1sim`（材料/币）；自选走脚本策略 |
 | S07 | 首通徽记 | 首领徽记 | 3 / 图 | `once` / 图（不跟 content_version） | `p1_sigfc_<map>` | ✗（`p1sim` 不计徽记库存） |
 | S08 | 重打普通主线（签名图） | 首领徽记 + 12% 签名烙印在基装上（仅当该图有适配基装部位 / 家族的签名时） | 徽记 1；`STAMP_RATE=0.12`（无适配签名 = 0） | `run`（需已首通该图） | `p1_sigmark_<map>` 累加 | ✗ 徽记；签名掉落 △ `mainline.py` |
-| S09 | 自选誓约 | 首领徽记 | +1 / 条已誓约规则（池里 `normal: true` 目前 lean / reverse = 最多 +2） | `run`：队长本人已首通 **Q06**；本局无周规则（`mod == null`）；可誓约 **Q01–Q07** 签名图；队长已誓约且全员已首通该图 | `p1_pledge_<id>`（all） | △ `insignia.py --pledge` 上界（不计战斗惩罚）；`P1_PLEDGE=` 环境上界 |
+| S09 | 自选誓约 | 首领徽记 | +1 / 条已誓约规则（D243：E1 `S09.per_rule` = 1）（池里 `normal: true` 目前 lean / reverse = 最多 +2） | `run`：队长本人已首通 **Q06**；本局无周规则（`mod == null`）；可誓约 **Q01–Q07** 签名图；队长已誓约且全员已首通该图 | `p1_pledge_<id>`（all） | △ `insignia.py --pledge` 上界（不计战斗惩罚）；`P1_PLEDGE=` 环境上界 |
 | S10 | 精选周挑战加印 | 印记(本阶) | +1；每周最多 3 次（与 S11 共用） | `week` × 3 | `p2_rotation` / 周 | ✓ `p2econ` / `p1sim` |
 | S11 | 精选周普通重打加印 | 印记(地图阶，仅 T1/T2) | +1；与 S10 共用周上限 3；本人已通 Q07 后不再发也不占名额 | `week` × 3 | 同上 | ✓ `p1sim --normal-mods` |
 | S12 | 团本结算 | T3 装备(地板精良) + 印记 T3 ×1 | `raid_item` + `raid_mark`；无首通包 | `week` × 3（R01–R03 共用 `cap_group: raid`）；体力 50 | `p2_raid_<group>` / 周 | ✓ `p2econ --raid` |
@@ -105,6 +105,9 @@
 | S30 | 生活玩法产出 | 回复药 / 重铸石 / 稳固符 / 魂尘 / 宠物蛋 / 食物 | 见 `life.yml`；稳固符吃 3 核心 + 300 币 / 周 1；宠物蛋 600 币 + 10 魂尘 / 周 1 | 日 / 周 offer 上限 | `life_<id>` | ✗ |
 | S31 | 旧任务线 | 经验 / 旧材料 / 体力药 | `quest.yml` 合计约 9560 平坦经验 + 多段 `mat_ember_*`；**P1 开着时旧链不推进（`QuestService:238` `EmberMode.active()` 即 return，`:465` 引导改走 P1）**【码，未单独实测】 | — | — | ✗（且 P1 下死） |
 | S32 | 邮件附件 | 币 / NI | 通道；P1 下旧 `pass free/claim` 入口已拒，残留是 OP / 控制台发件 | — | — | ✗ |
+| S33 | 图录阶段奖励（D243，原 G1 / X01） | 币 | 集齐 5 / 10 / 15 / 20 种：200 / 400 / 600 / 1000（`EmberCodex.STAGE_COIN`；E1 `S33.at5.coin`…`at20.coin`）；`/corerpg p1 codex claim`，账本 `codex/stage<n>` → 带标签 `grantCoin(S33)` | 每角色每阶段一次（`p1_codex_stage_<n>@all`） | `p1_codex_stage_` | ✓ `p1sim`（D243 `sourcemap.py` `codex_stage`） |
+| S34 | 宝箱额外装备（D243，原 G2，从 S01 拆出） | 装备 1 | 宝箱 5 % 额外一件（`EXTRA_WEIGHTS[3]`；E1 `S34.chest_weight`）；账本键 `extra_chest_item` | `run` | — | ✓ `p1sim`（原 S01 内） |
+| S35 | 起步包（D243，原 G3 / X02） | T0 刃 + T0 护符（`source=quest`，不可分解）+ 回复药 5 | E1 `S35.pieces` 2、`S35.potions` 5（= `ember-v1.yml starter.heal_potions`）；账本 `starter/starter_<slot>` | 每角色一次（`p1_starter@all`） | `p1_starter` | ✓ `p1sim`（D243 `sourcemap.py` `starter_kit`） |
 
 ### 2.5 旧来源（O1–O3，S0 后状态）
 
@@ -236,3 +239,4 @@
 | 2026-10-06 | D228（CoreRpg 1.65.54 / bv58）：S2-8 — `grantInsignia` / `grantBadge`；账本 MARK / SIGMARK 行经 `creditMarkLedger` / `creditInsigniaLedger`（sig_mark S08、fc_sigmark S07、pledge_sigmark S09、raid_mark S12、rot_mark S10/S11、rush_mark S16/S17、rush_sig_* S17/S18；未知键 untagged 照发）；连战徽 S16 / 周目标徽 S19 / 国庆兑换徽 S27 走 grantBadge；§6.4 扫描扩到 `p1_mark_t` / `p1_sigmark_` / `p3_badge` 直写 + `grantFlatEmberXp`。数量不变。 |
 | 2026-10-06 | D229（CoreRpg 1.65.55 / bv58）：S2-9 — 深渊层结算 SourceId 与 S01 分开（`sourceForGrant(base_*, <map>a<n>-…)` → S13；数量仍读 S01 BASE_*）；§6.4 vault 写入扫描（`autoDeposit` / `creditBound` / `credit` / `EmberVault.get().give`，例外行 `econ-ok:`）。数量不变。 |
 | 2026-10-06 | D242（ARCH S4-1，文档 + 测试；CoreRpg 不发版 / 1.65.67 / bv58）：装备结构权威文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读来源表 `ember-source-map.yml`（S01–S32 / LS1–LS5 / C01–C18 + 未登记 X01 图录币 · X02 起步包 · X03 管理员发放），`EmberSourceMapTest` 防漂移。本表文案修：S06 Q02 = 自选族 × 部位、S08 12% 仅适配时、S13 无无尽层、C13 调律 6 件。缺口 G1–G11 见新文档 §8。 |
+| 2026-10-06 | D243（ARCH S4-2，CoreRpg 1.65.68 / bv58）：登记 S33 图录阶段奖励 / S34 宝箱额外装备（从 S01 拆出）/ S35 起步包，数量不变只加标签（`EmberEconomy` S01–S35、E1 yml 加块、图录币走 `grantCoin(S33)`）；S09 加 `per_rule` 键（值 1）；OP `givedup` 改 `source=admin`。p1sim 经 `ember-source-map.yml` 计入 S33 / S35（21 格 A/B 全部 ±2pp 内）。 |

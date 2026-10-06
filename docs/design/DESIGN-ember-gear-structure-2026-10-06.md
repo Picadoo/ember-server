@@ -94,19 +94,20 @@
 | `item_sources` | 物品 `source` 值与可否分解 |
 | `content` | q01–q07、挑战、深渊、r01–r03、连战 / 前哨 / 残响、gq26、挂机庭 4 档、账号菜单；阶级 / 名称 / 首领 / 掉落家族 / 签名 / 来源 |
 | `signatures` / `item_affixes` | L01–L15、6 个洗练词条 |
-| `sources` | S01–S32（REG / `EmberEconomy` 行）+ X01–X03（未登记来源，见 §8 G1/G3/G4） |
+| `sources` | S01–S35（REG / `EmberEconomy` 行；D243 起 S33 图录阶段币 / S34 宝箱额外件 / S35 起步包）+ X03（OP `give` / `givedup` 的 `admin` 件，不是经济来源） |
 | `legacy` / `sinks` | LS1–LS5（P1 下关闭）、C01–C18 |
 
-`EmberSourceMapTest`（JDK8 单测，12 个）在以下情况**让构建失败**：
+`EmberSourceMapTest`（JDK8 单测，13 个）在以下情况**让构建失败**：
 
 1. `EmberEconomy` 有行（S/LS/C）没在表里，或表里引用了不存在的行；
 2. `ember-v1-economy.yml` 的 `sources/sinks` 下有键没进任何 `economy_keys`（或列了已删除的键）；
 3. 扫描 `p1/*.java` 得到的发放 / 账本键（`Grant(…)`、`ledgerRow(…)`、`.record(…)`、`item(…)`、`raidItem(…)`、首通 choice→item、`var_event_*`、签到 / 在线后缀）或账本 run 前缀（`p1afk-`、`p1sign-`、`p1online-`、`mark-`、`failrefund@`、`deathrefund@`、`codex`、`starter`）没被任何 `grant_keys / ledger_keys / ledger_runs` 覆盖；反过来表里的模式在代码里找不到（`runtime_keys: true` 的运行时拼键除外）；
 4. `ember-v1-runs.yml` 的 maps / raids / rush、挑战、深渊、国庆本、挂机庭档位缺失，或名称 / 阶级 / 首领 / 掉落家族不一致；内容 ↔ 来源互链不对称；
 5. 签名与 `EmberSignature.DEFS` / `ALTS` 不一致；词条与 `reroll.affixes` 不一致；`item_sources` ≠ `EmberItemData.SOURCES`；金库白名单 / `EmberUpgradeRules.MAT_*` 没有对应账户；
-6. 任何代码引用（`文件#片段`）或配置引用（`文件#点分键`）失效；计数器族不在 `EmberCounters`；`balance_version` 与线上不一致。
+6. 任何代码引用（`文件#片段`）或配置引用（`文件#点分键`）失效；计数器族不在 `EmberCounters`；`balance_version` 与线上不一致；
+7. （D243）打包进 jar 的 5 个 `ember-v1*.yml`（`src/main/resources`）与线上 `plugins/CoreRpg/` 不是逐字节相同。
 
-**规则：新来源 / 新经济键 / 新图 / 新签名 / 新词条，同一提交里更新 `ember-source-map.yml`。** 本文件不被插件读取，零行为影响。
+**规则：新来源 / 新经济键 / 新图 / 新签名 / 新词条，同一提交里更新 `ember-source-map.yml`。** 插件不读本文件；D243 起 p1sim 读它（`tools/p1sim/sourcemap.py`：带 `sim:` 的来源 = S33 `codex_stage`、S35 `starter_kit`，数量从 `ember-v1-economy.yml` 取并与 Java 常量双重断言）。
 
 ## 7. 被取代 / 仍有效的旧文档索引
 
@@ -154,6 +155,22 @@
 | G10 | REG §5 物品级缺口仍在（徽记 / 余烬徽库存、生活产出、扭蛋） | 见 REG §5 | — |
 | G11 | 线上 `ember-v1-runs.yml` balance_version 历史注释 41 写「7 件调律版」，代码 6 件 | 只是注释 | 下次配置发版改「6 件（L11b 不开放）」 |
 
+**D243（CoreRpg 1.65.68，ARCH S4-2）处理状态：**
+
+| # | 状态 | 怎么修的 |
+|---|---|---|
+| G1 | **已修** | REG / `EmberEconomy` **S33**「图录阶段奖励」（COIN，一次性，键 `p1_codex_` / `p1_codex_stage_`，账本 `codex/stage<n>`），金样 `at5/10/15/20.coin` = 200 / 400 / 600 / 1000（= `EmberCodex.STAGE_COIN`，数不变）；账本币行 `sourceForGrant` → S33，走带标签的 `grantCoin` |
+| G2 | **已修** | **S34**「宝箱额外装备」（GEAR，按局），金样 `chest_weight` 5（= `EXTRA_WEIGHTS[3]`）；`extra_chest_item` 从 S01 移到 S34 |
+| G3 | **已修** | **S35**「起步包」（GEAR + POT，一次性，键 `p1_starter`，账本 `starter/starter_<slot>`），金样 `pieces` 2、`potions` 5（= `starter.heal_potions`） |
+| G4 | **已修** | `/corerpg p1 givedup` 生成 `source=admin`（原 `drop`）：不可分解、不进图录；`EmberAffix.duplicateOk` 接受 drop 或 admin，所以 OP 洗练测试照常 |
+| G5 | **已修** | 打包的 5 个 `ember-v1*.yml` 与线上逐字节相同（`ember-v1.yml` 补 `legacy_gate` 块与 MapV2 前缀）；`EmberSourceMapTest.bundledConfigsMatchLive` 守住 |
+| G6 | **已修** | 挂机庭注释改为 rev 2 实际发的绑定材料 |
+| G7 | **已修** | raids 注释改「r01 + r02 + r03 共用」（顺带 r01 / r02 `purpose` 文案「与 r02 / r03 合计」「与 r01 / r03 合计」） |
+| G8 | **已修** | `ember-v1-economy.yml` `S09.per_rule: 1`；`EmberPledgeService.settleGrant` = 誓约条数 × `amount("S09","per_rule")`（值不变） |
+| G9 | **已修** | p1sim 经 `sourcemap.py` 读 S33 / S35（见 §6.2）；21 格 A/B 全部 ±2pp 内 |
+| G10 | 仍在 | REG §5 物品级缺口不变 |
+| G11 | **已修** | bv41 注释改「6 件调律版 L01/L02/L06/L08/L10/L12，L11b 不开放」 |
+
 ## 9. 未来 / 计划状态（不是现行规则）
 
 - **D169 6 槽分阶段**：SETTLED（文档），结构代码 HOLD（`/workspace/COORD-gear-structure-hold.txt`）。Stage 1 需服主显式开工，且单独 `balance_version`。
@@ -169,3 +186,4 @@
 | 日 | 项 |
 |---|---|
 | 2026-10-06 | D242（ARCH S4-1）：初版。合并装备结构文档；`ember-source-map.yml` + `EmberSourceMapTest`（12 测试，全套 530 / 0，JDK8）；旧文档加指针头；修 F1–F9；记 G1–G11。CoreRpg 不发版（仍 1.65.67 / bv58）。 |
+| 2026-10-06 | D243（ARCH S4-2，CoreRpg 1.65.68 / bv58）：G1–G9、G11 修（S33–S35 登记、S09.per_rule、givedup src admin、打包配置同步、注释、p1sim 读 source map）；G10 仍在。`EmberSourceMapTest` 13 个，全套 533 / 0（JDK8）。 |

@@ -81,14 +81,16 @@ bounty:
     - {clears: 1, coin: 30}
     - {clears: 3, coin: 60, shard: 6}
   # D144 花样委托（每日，和上面的局数委托分开计）：重打普通主线本时的两种花样各算一档，做满当天发一次。
-  # affix = 击败词缀精英（D138/D171，只在全员已首通的普通重打里出现）；timed = 房间事件达标（限时清房/砸晶/护宝兔，id 保留兼容）。奖励只用现有类型。
+  # affix = 击败词缀精英（D138/D171，只在全员已首通的普通重打里出现）；timed = 房间事件达标（限时清房/砸晶/护宝兔/占点/护灯/传火/裂隙/连斩/无伤，id 保留兼容）。奖励只用现有类型。
   # 模型：tools/p1sim（p1sim / p2econ 都读这里）；两件极品最快路线变化 ≤ 0.5 周（P2 草案 §5zb）。
   variety:
     - {kind: affix, count: 2, coin: 20}
     - {kind: timed, count: 1, coin: 20}
 
 # D177 P1 挂机庭（docs/design/DESIGN-ember-afk-p1-2026-10-04.md）：复用 ember_afk 世界；四层按主线首通开放；
-# 只发账号绑定的余烬币 + 余烬经验（不发材料 / 核心 / 印记 / 装备，旧怪在 P1 下不掉东西）。
+# rev 1 原文「只发余烬币 + 经验、不发材料」已作废（D243 注）：rev 2 起每击杀发余烬币 + 余烬经验 + 账号绑定材料
+# （碎片 / 骨尘 / 核心 / 胚料，按层见下方 tiers，经 bmat: 进绑定库存）；不发印记 / 装备，旧怪在 P1 下不掉东西。
+# 下面三行「轮 / round」为 rev 1 计时模型说明，rev 2 的击杀上限见 afk.daily_kills / afk.offline。
 # 在线：人在挂机庭（任意位置、活着）每 round_minutes 分钟结算一轮，按已解锁的最高层计。
 # 离线：下线分钟 ÷ offline_ratio 折成计时分钟（WoW 野外休息 1/4 速），每天最多 offline_rounds 轮，下次上线结算。
 # 在线 + 离线每天合计最多 daily_rounds 轮（0 点重置）。每层每日上限 = 每轮 × daily_rounds；模型 tools/p1sim/afk.py。
@@ -125,6 +127,57 @@ afk:
 # D177 漏洞审查：旧寄售（/corerpg ah，余烬币标价）能在账号之间转移余烬币和核心碎片；P1 不开放交易（D73），默认关。
 legacy_auction: false
 
+# D199 / ARCH S0-3（docs/design/AUDIT-ember-legacy-reachability-2026-10-05.md §5.1–5.2）：P1 开着时，普通玩家只能用下面列出的
+# /corerpg 子命令，其余一律拒绝（默认拒绝；别名自动折算，如 ember→p1、ec→enderchest、战令→pass）。控制台 / OP / corerpg.admin 不受影响
+# （DP / MM 发奖脚本以控制台调 /corerpg）。值 '*' = 该子命令所有动作都放行；列表 = 只放行这些第一个动作（'' = 不带动作）。
+# 默认被拒：arena、pass free/claim、vip、calamity join、guild、scrap、reforge、socket、enhance、forge、part、covenant、talent（旧）、
+# shop、monthly、stamina convert、elite（除 status）、abyss settle/evacuate、建图 / 管理命令、未知子命令。
+# 想临时放开某条旧功能：加到 allow 里再 /corerpg reload；route_whitelist: false 整个关掉本闸。缺这一节时用代码内同款默认表。
+legacy_gate:
+  route_whitelist: true
+  allow:
+    status: '*'
+    coin: '*'          # give 本身要 OP
+    sign: '*'          # P1 下已改道 P1 签到
+    activity: '*'      # P1 下只开在线页
+    bounty: '*'        # P1 下已关领取
+    stats: '*'
+    p1: '*'            # P1 本体（管理子命令另查 OP）
+    quest: '*'
+    afk: '*'
+    life: '*'
+    level: '*'
+    enter: '*'         # 旧本 kind 由 S0-2（D198）在 tryEnter 里拒
+    tickets: '*'       # consume 本身要 OP
+    cash: '*'          # give 本身要 OP
+    storage: '*'       # guard release 本身要 OP
+    mail: '*'          # send 本身要 corerpg.mail.send
+    friend: '*'
+    settings: '*'
+    ladder: '*'        # refresh / set 本身要 OP
+    pet: '*'
+    skill: '*'
+    flex: '*'
+    set: '*'
+    enderchest: '*'
+    warehouse: '*'     # 写路径收口是 S0-10
+    raid: '*'          # 自领 / grant-ring 本身要 OP / 控制台
+    auction: '*'       # 由上面的 legacy_auction 单独关
+    pass: ['', show, info, rewards, season]
+    stamina: ['', show, info]
+    calamity: ['', status, info]
+    abyss: ['', status, info]
+    elite: [status]
+  # D200 / ARCH S0-4 纵深防御（AUDIT L6 / L12 / 灾厄）：P1 开着时旧发奖端一律不发——
+  #   ① grantEmberXp / grantPassXp(旧 source：日本/周本/深渊/团本/盟 Boss/精英/首领/击杀/悬赏/旧签到) → 0；
+  #      P1 自己的经验只走 grantFlatEmberXp（主线结算、主线任务），不受影响；
+  #   ② P1 本（dungeon_EmberQ0*）和挂机庭以外的世界：不发旧击杀币 / 活跃 / 击杀经验 / 悬赏进度；
+  #   ③ 同样的世界里 MM 的 corerpg mmgive / mmxp 不发；④ 公共灾厄使被杀不结算。
+  # 对所有人生效（含 OP 开的旧本），因为余烬等级进 P1 公式。P1 关掉时行为不变。false = 整段关掉。
+  payout_guard: true
+  xp_sources_allow: []     # 例外：仍要发的旧经验 source（小写），默认无
+  kill_payout_worlds: []   # 例外：仍发旧击杀奖励的世界名（小写），默认无
+
 # D102：测试号 / 机器人不上排行榜、主城排行榜悬浮字和荣誉陈列（名字不区分大小写）。
 # names 精确匹配；prefixes 前缀匹配；patterns 是整名匹配的正则。改完 /corerpg reload 或重启生效。
 leaderboard_exclude:
@@ -132,7 +185,7 @@ leaderboard_exclude:
           SetBot, ThemeBot, TicketBot, WareBot, WeekBot, AbyssBot, AbyssBot2, AbyssBot3, CalAssist, CalBotA, CalBotB,
           CalBotC, CalWatch, CalWatch2, ArenaA, ArenaB, RaidA, RaidB, RaidC, RaidD, RaidE, RaidProbeA, RaidProbeB,
           ScrapT1, ProxyT1, QProbe2]
-  prefixes: [Fresh, Rev, CriticNew, SmokeT, QProbe, FestQ]
+  prefixes: [Fresh, Rev, CriticNew, SmokeT, QProbe, MapV2, FestQ]
   patterns:
     - '^P1[A-Z][a-z]+$'                     # P1Alpha / P1Fox / P1Rookie …（套件与模拟测试号）
     - '^.+(926|0926)$'                      # 9/26 批量测试号（RaidA926、GbL0926 …）

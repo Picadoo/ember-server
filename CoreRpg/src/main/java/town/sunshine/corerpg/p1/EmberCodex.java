@@ -21,7 +21,8 @@ public final class EmberCodex {
     public static final String C_CLAIM = "p1_codex_stage_";  // p1_codex_stage_<n>@all = 1 once claimed
     public static final String LEDGER_RUN = "codex";
 
-    /** D42: thresholds (registered entries) and their one-time coin rewards. */
+    /** D42: thresholds (registered entries) and their one-time coin rewards. D243: registered as economy row S33
+     *  (at5/at10/at15/at20.coin, dual-asserted by EmberEconomyTest); the ledger coin is tagged S33 on delivery. */
     public static final int[] STAGE_AT = {5, 10, 15, 20};
     public static final int[] STAGE_COIN = {200, 400, 600, 1000};
 

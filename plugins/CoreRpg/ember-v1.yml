@@ -1,4 +1,4 @@
-# ember-v1.0-P1 (余烬策划书 v1.0 · 来源开关表 docs/DESIGN-ember-v1.0-P1-source-table.md)
+# ember-v1.0-P1 (余烬策划书 v1.0 · 来源开关表 docs/design/DESIGN-ember-v1.0-P1-source-table.md)
 # D61（2026-10-02 用户授权，服内没有旧玩家）：P1 是默认模式。新角色进服领 P1 起步包与补给，枢纽主路是主线本。
 # 战斗规则只在 scope 内的世界生效（Q01–Q07 主线本实例）；枢纽是城内，按 §19.4「城内可正常补满」不进 scope（原版回血照常）。
 # 旧模式内容（挂机 / 日常 / 周常 / 深渊 / 团本 / 灾厄……）还在各自世界按旧规则运行，但不在玩家菜单里（D63）。
@@ -88,7 +88,9 @@ bounty:
     - {kind: timed, count: 1, coin: 20}
 
 # D177 P1 挂机庭（docs/design/DESIGN-ember-afk-p1-2026-10-04.md）：复用 ember_afk 世界；四层按主线首通开放；
-# 只发账号绑定的余烬币 + 余烬经验（不发材料 / 核心 / 印记 / 装备，旧怪在 P1 下不掉东西）。
+# rev 1 原文「只发余烬币 + 经验、不发材料」已作废（D243 注）：rev 2 起每击杀发余烬币 + 余烬经验 + 账号绑定材料
+# （碎片 / 骨尘 / 核心 / 胚料，按层见下方 tiers，经 bmat: 进绑定库存）；不发印记 / 装备，旧怪在 P1 下不掉东西。
+# 下面三行「轮 / round」为 rev 1 计时模型说明，rev 2 的击杀上限见 afk.daily_kills / afk.offline。
 # 在线：人在挂机庭（任意位置、活着）每 round_minutes 分钟结算一轮，按已解锁的最高层计。
 # 离线：下线分钟 ÷ offline_ratio 折成计时分钟（WoW 野外休息 1/4 速），每天最多 offline_rounds 轮，下次上线结算。
 # 在线 + 离线每天合计最多 daily_rounds 轮（0 点重置）。每层每日上限 = 每轮 × daily_rounds；模型 tools/p1sim/afk.py。

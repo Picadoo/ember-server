@@ -36,12 +36,15 @@ SINGLE = {
     'mm_fest': 'plugins/MythicMobs/Mobs/EmberFestival.yml',
     'cash': 'plugins/CoreRpg/cash.yml',
     'progress': 'plugins/CoreRpg/progress.yml',
+    # D243 / ARCH S4-2: the machine-readable source map (one-time sources the sim pays: `sim:` entries → sourcemap.py)
+    'sourcemap': 'docs/design/ember-source-map.yml',
 }
 JAVA = {
     'upgrade': P1 + 'EmberUpgradeRules.java',
     'sets': P1 + 'EmberSetRules.java',
     'settle': P1 + 'EmberRunRules.java',
     'tables': P1 + 'EmberTables.java',
+    'codex': P1 + 'EmberCodex.java',  # D243: STAGE_AT / STAGE_COIN dual-assert for the S33 codex stage coin
 }
 # growth mod keys the model implements (p1sim.gm / p2econ / growth.combine) ...
 SIM_KEYS = {'abyss_taken', 'burn_mult', 'burn_spread', 'burn_ticks', 'burst_every', 'burst_mult', 'coin', 'dmg_affix',
@@ -114,6 +117,14 @@ def validate(data):
                 econ.get('balance_version'), data['runs'].get('balance_version')))
         if not isinstance(econ.get('sources'), dict) or not isinstance(econ.get('sinks'), dict):
             errs.append('ember-v1-economy.yml: sources/sinks maps required')
+    # D243: every one-time source the sim pays (`sim:` in ember-source-map.yml) must name a registered economy row
+    sm = data.get('sourcemap') or {}
+    if sm:
+        rows = set((econ.get('sources') or {}).keys())
+        for sid, e in (sm.get('sources') or {}).items():
+            if isinstance(e, dict) and e.get('sim') and str(e.get('econ_row')) not in rows:
+                errs.append('ember-source-map.yml %s (sim %s): econ_row %s has no ember-v1-economy.yml sources row'
+                            % (sid, e.get('sim'), e.get('econ_row')))
     if errs:
         raise RuleError('rule snapshot rejected:\n  ' + '\n  '.join(errs))
     return sorted(unmod)

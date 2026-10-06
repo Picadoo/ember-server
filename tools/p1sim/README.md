@@ -14,6 +14,7 @@ Python 3 标准库，不联网、不连服务器。用仓库里的**真实配置
 | 三套觉醒系数、触发间隔、内置冷却 | `EmberSetRules.java` |
 | 基础结算、额外事件权重与奖励、成色 / 精工权重、目标族权重、印记兑换 | `EmberRunRules.java`（权重 / 公式仍读 Java；**数量**见下一行） |
 | **结算 / 徽记 / 兑换数量（E3 · D225）** | `plugins/CoreRpg/ember-v1-economy.yml`（与 `CoreRpg/src/main/resources/` 比对；与线上 `EmberEconomy.amount()` 同真源；S01–S03 / C07 / S07–S08 / S17–S18 / C12–C13 / S22） |
+| **图录阶段币 / 起步包（D243）** | `docs/design/ember-source-map.yml`（带 `sim:` 的 S33 `codex_stage` / S35 `starter_kit`）→ 数量仍从 `ember-v1-economy.yml` 取，与 `EmberCodex.java` / `ember-v1.yml` 双重断言（`sourcemap.py`） |
 | 每天体力 | `plugins/CoreRpg/cash.yml` `stamina.base_max` |
 | 余烬经验曲线 | `plugins/CoreRpg/progress.yml` `ember_xp.curve` |
 
@@ -67,3 +68,4 @@ B03_DIR=… python3 b03report.py                               # → out-build-d
 - `insignia.py` R1 what-if（D226）：`--whatif A|B|C`（A=echo→最高已通图；B=残响厅 q01–q07 共用周帽；C=有帽低→高兑换，默认 5×2/周仅 sim）。报告 `out-insignia-r1-*.md` / `out-insignia-r1-compare.md`；**推荐 B**（设计，未改 live）。
 
 - **economy yml（E3 · D225）**：`rules.py` 把 `ember-v1-economy.yml` 纳入规范快照（plugins/ ↔ src 必须一致，且 `balance_version` = runs）。`p1config` 的 `base` / `treasure_coin` / `elite_*` / `marks_per`、`insignia.py` 的 S07/S08/S17/S18/C12/C13、`afk.py` 的 `daily_kills` 都经 `rules.amount`。与 Java 金样不一致 → `RuleError`（拒跑）。改数量只改 yml（并 bump bv + 对齐 Java golden）后重跑即可；yml 对齐现网金样时**数值结果**与改前一致（rules sha256 戳会变，因为快照多了 economy 文件）。
+- **source map（D243 · ARCH S4-2）**：`rules.py` 把 `docs/design/ember-source-map.yml` 纳入规范快照（`validate()` 要求每个带 `sim:` 的来源在 economy yml 里有块）。`sourcemap.py` 读其中的 S33 图录阶段币（`codex_stage`：阶段 / 币数从 `S33.at<n>.coin` 取，并与 `EmberCodex.STAGE_AT` / `STAGE_COIN` / `FAMILIES` 双重断言）和 S35 起步包（`starter_kit`：药数 = `S35.potions` = `ember-v1.yml starter.heal_potions`）。`p1sim.py` 的 `codex_see()` 在 T0 起步件和每次拿到新件时登记图录种类并发阶段币（不抽随机数）。`P1SIM_NO_CODEX=1` 关掉 → 输出与 D242 逐位相同（只有 rules 戳不同）。`python3 sourcemap.py show` 打印读到的数；`python3 sourcemap.py dyn --players 800` = 21 格 A/B（关 / 开图录币，±2pp）。

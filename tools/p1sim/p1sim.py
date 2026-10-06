@@ -31,6 +31,13 @@ GROWTH = None
 # mechanic triggers, damage taken by kind and segment times. Counting only — never touches the rng, so results are
 # bit-identical with RECORD on or off.
 RECORD = False
+# D243 / ARCH S4-2: one-time sources from docs/design/ember-source-map.yml (sourcemap.py). CODEX = pay the S33 codex
+# stage coin when the player's registered item kinds reach 5 / 10 / 15 / 20 (claimed at once). Pure bookkeeping on the
+# coin balance — never touches the rng. P1SIM_NO_CODEX=1 (or CODEX = False) = the pre-D243 sim (A/B).
+import sourcemap
+CODEX = os.environ.get('P1SIM_NO_CODEX') != '1'
+CODEX_STAGES = sourcemap.codex_stages()
+CODEX_STATS = {}  # {'coin': total paid, 'players': players created} while CODEX is on (sourcemap.py dyn report)
 
 
 def gm(st, k, d=1.0):
@@ -1073,7 +1080,11 @@ class Player:
         self.charm = item('none', 'charm', 0, src='starter')
         self.armor = [item('none', a, 0, src='starter') for a in ARMOR_SLOTS] if SIX is not None else None
         self.coin = self.shard = self.core = self.bone = self.blank = self.xp = 0
-        self.potions = cfg['starter_potions']
+        self.potions = sourcemap.starter_kit(cfg['starter_potions'])['potions']  # D243: S35 starter kit (= starter.heal_potions)
+        self.codex, self.codex_paid, self.codex_coin = set(), 0, 0
+        self.codex_see(self.blade); self.codex_see(self.charm)  # the T0 kit pieces are codex entries 1 and 2
+        if CODEX:
+            CODEX_STATS['players'] = CODEX_STATS.get('players', 0) + 1
         self.marks = {1: 0, 2: 0, 3: 0}
         self.cleared = set()
         self.save_for_upgrade = False
@@ -1134,9 +1145,21 @@ class Player:
             slot = 'blade' if r.random() < 0.5 else 'charm'
         return item(fam, slot, tier, pick(cfg['quality_w'], r.random()), pick(cfg['craft_w'], r.random()))
 
+    def codex_see(self, it):
+        """D243: register the item kind (live: EmberCodex.register on the inventory scan) and claim reached S33 stages."""
+        k = sourcemap.codex_key(it)
+        if k is None or k in self.codex:
+            return
+        self.codex.add(k)
+        while CODEX and self.codex_paid < len(CODEX_STAGES) and len(self.codex) >= CODEX_STAGES[self.codex_paid][0]:
+            c = CODEX_STAGES[self.codex_paid][1]
+            self.coin += c; self.codex_coin += c; self.codex_paid += 1
+            CODEX_STATS['coin'] = CODEX_STATS.get('coin', 0) + c
+
     def consider(self, new):
         """Equip `new` if the whole loadout gets stronger; dismantle what is not worn."""
         cfg, kn = self.cfg, self.kn
+        self.codex_see(new)  # D243: every piece handed to the player registers (drops, first-clear picks, marks, raid items)
         slot = new['slot']
         if slot in ARMOR_SLOTS:
             return self.consider_armor(new)

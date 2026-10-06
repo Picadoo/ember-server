@@ -168,7 +168,7 @@ public final class EmberCommand {
         s.sendMessage(P + "/corerpg p1 world add|remove [世界] | world list");
         s.sendMessage(P + "/corerpg p1 debug [all|console|off]  — 每击伤害来源日志");
         s.sendMessage(P + "/corerpg p1 give <scorch|burst|sustain|t0> <blade|charm> <阶0-3> [成色0-3] [精工0-3] [强化0-10] [玩家]");
-        s.sendMessage(P + "/corerpg p1 givedup <blade|charm> [玩家] [成色0-3]  — 洗练测试：发一件和正在用的那件同族同部位同阶、掉落来源（src=drop）的重复件");
+        s.sendMessage(P + "/corerpg p1 givedup <blade|charm> [玩家] [成色0-3]  — 洗练测试：发一件和正在用的那件同族同部位同阶的重复件（src=admin：可当洗练重复件，不可分解、不计图录）");
         s.sendMessage(P + "/corerpg p1 honor test <勋记id|条件|all|clear|show> [玩家]  — 勋记测试：直接满足条件（会发解锁提示）/ 清掉");
         s.sendMessage(P + "/corerpg p1 heal [玩家]  — 经账本回满（P1 世界内其它直接改血会被回退）");
         s.sendMessage(P + "/corerpg p1 charm select|clear  ·  /corerpg p1 inspect  — 手持物品身份/校验");
@@ -373,8 +373,9 @@ public final class EmberCommand {
     }
 
     /**
-     * Admin (10-04): a "dropped-style" duplicate of the target's equipped blade / selected charm for D143 reroll tests —
-     * same family, slot and tier, no enhance / craft, source=drop (admin-sourced items never count as duplicates).
+     * Admin (10-04): a duplicate of the target's equipped blade / selected charm for D143 reroll tests — same family,
+     * slot and tier, no enhance / craft. D243 (G4): source=admin (was drop): not dismantlable, no codex entry; still a
+     * valid reroll duplicate (EmberAffix.duplicateOk accepts drop or admin).
      * The optional quality is for making a test target, not a duplicate (a duplicate must stay 标准).
      */
     private boolean giveDup(CommandSender s, String[] args) {
@@ -389,7 +390,9 @@ public final class EmberCommand {
         EmberLoadout lo = loadouts.refresh(target);
         EmberItemData cur = "charm".equals(slot) ? lo.charm : lo.blade;
         if (cur == null || cur.tier < 1) { s.sendMessage(P + target.getName() + " 没有正在用的 T1+ " + ("charm".equals(slot) ? "护符" : "刃")); return true; }
-        EmberItemData d = EmberItemData.create(cur.family, cur.slot, cur.tier, q, 0, 0, true, "drop");
+        // D243 (G4): an OP test duplicate is source "admin" — never dismantlable, never a codex entry. EmberAffix.duplicateOk
+        // still accepts it as the reroll duplicate (that is what this test command is for).
+        EmberItemData d = EmberItemData.create(cur.family, cur.slot, cur.tier, q, 0, 0, true, "admin");
         String bad = d.validate();
         if (bad != null) { s.sendMessage(P + ChatColor.RED + "参数无效: " + bad); return true; }
         org.bukkit.inventory.ItemStack item = loadouts.items().create(d);
@@ -397,7 +400,7 @@ public final class EmberCommand {
         loadouts.remember(d, target.getUniqueId());
         java.util.Map<Integer, org.bukkit.inventory.ItemStack> left = target.getInventory().addItem(item);
         for (org.bukkit.inventory.ItemStack drop : left.values()) target.getWorld().dropItemNaturally(target.getLocation(), drop);
-        s.sendMessage(P + "已发放重复件（测试，src=drop）" + d.shortLabel() + " uid=" + d.uid + " → " + target.getName());
+        s.sendMessage(P + "已发放重复件（测试，src=admin，不可分解）" + d.shortLabel() + " uid=" + d.uid + " → " + target.getName());
         Bukkit.getLogger().info("[P1] admin " + s.getName() + " givedup " + d.shortLabel() + " uid=" + d.uid + " q=" + q + " → " + target.getName());
         return true;
     }

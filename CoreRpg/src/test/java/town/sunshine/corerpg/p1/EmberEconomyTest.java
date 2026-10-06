@@ -81,13 +81,13 @@ public class EmberEconomyTest {
     @Test
     public void idsAreCompleteAndOrdered() {
         List<String> want = new ArrayList<String>();
-        for (int i = 1; i <= 32; i++) want.add(String.format("S%02d", i));
+        for (int i = 1; i <= 35; i++) want.add(String.format("S%02d", i)); // D243: S33 codex · S34 chest item · S35 starter
         for (int i = 1; i <= 5; i++) want.add("LS" + i);
         for (int i = 1; i <= 18; i++) want.add(String.format("C%02d", i));
         List<String> got = new ArrayList<String>();
         for (EmberEconomy.Row r : EmberEconomy.all()) got.add(r.id);
         assertEquals(want, got);
-        assertEquals(32, EmberEconomy.sources().size());
+        assertEquals(35, EmberEconomy.sources().size());
         assertEquals(5, EmberEconomy.legacySources().size());
         assertEquals(18, EmberEconomy.sinks().size());
         for (EmberEconomy.Row r : EmberEconomy.all()) {
@@ -148,6 +148,35 @@ public class EmberEconomyTest {
         eq("C12", "insignia", EmberSignature.IMPRINT_MARKS);
         eq("C12", "coin_per_tier", EmberSignature.IMPRINT_COIN_PER_TIER);
         eq("C13", "insignia", EmberSignature.ALT_MARKS);
+        // D243 (S4-2): G1 codex stage coin, G2 chest extra roll, G3 starter kit, G8 pledge per rule
+        for (int i = 0; i < EmberCodex.STAGE_AT.length; i++) eq("S33", "at" + EmberCodex.STAGE_AT[i] + ".coin", EmberCodex.STAGE_COIN[i]);
+        assertEquals("S33 rows = codex stages", EmberCodex.STAGE_AT.length, EmberEconomy.byId("S33").golden.size());
+        eq("S34", "chest_weight", EmberRunRules.EXTRA_WEIGHTS[3]);
+        eq("S35", "pieces", 2);
+        eq("S09", "per_rule", 1);
+    }
+
+    /** D243 (S4-2): new rows are tags only — routing of the codex coin / chest item / starter rows, amounts unchanged. */
+    @Test
+    public void d243RoutesCodexChestStarter() {
+        assertEquals("S33", EmberEconomy.sourceForGrant("stage0", EmberCodex.LEDGER_RUN));
+        assertEquals("S33", EmberEconomy.sourceForGrant("stage3", "codex"));
+        assertEquals(null, EmberEconomy.sourceForGrant("stage0", "q01-abc-def"));
+        assertEquals("S34", EmberEconomy.sourceForGrant("extra_chest_item", "q03-abc-def"));
+        assertEquals("S34", EmberEconomy.sourceForGrantKey("extra_chest_item"));
+        assertEquals("S01", EmberEconomy.sourceForGrant("base_item", "q03-abc-def"));
+        assertEquals("S35", EmberEconomy.sourceForGrant("starter_blade", "starter"));
+        assertEquals("S35", EmberEconomy.sourceForGrant("starter_charm", "starter"));
+        assertTrue(EmberEconomy.pays("S33", EmberEconomy.Account.COIN));
+        assertTrue(EmberEconomy.pays("S35", EmberEconomy.Account.POTION));
+        assertTrue(EmberEconomy.pays("S34", EmberEconomy.Account.GEAR));
+        PlayerData d = new PlayerData();
+        int c0 = d.getCoin();
+        assertTrue(EmberEconomy.grantCoin(d, EmberEconomy.sourceForGrant("stage1", "codex"), EmberCodex.STAGE_COIN[1]));
+        assertEquals(c0 + 400, d.getCoin());
+        assertEquals(1, EmberEconomy.amount("S09", "per_rule"));
+        EmberRunRules.Grant g = EmberPledgeService.settleGrant("q02", 3);
+        assertEquals(3, g.amount);
     }
 
     @Test
@@ -201,6 +230,7 @@ public class EmberEconomyTest {
     public void goldenAmountsMatchShippedEmberYml() throws Exception {
         Map<String, Object> y = yml("ember-v1.yml");
         eq("S15", "max_potions", num(y, "death_refund.max_potions"));
+        eq("S35", "potions", num(y, "starter.heal_potions")); // D243 (G3)
         List<Object> daily = (List<Object>) at(y, "bounty.daily");
         Map<String, Object> d1 = (Map<String, Object>) daily.get(0), d3 = (Map<String, Object>) daily.get(1);
         assertEquals(1, ((Number) d1.get("clears")).intValue());
