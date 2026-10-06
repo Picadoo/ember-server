@@ -177,7 +177,7 @@
 ## 9. 未来 / 计划状态（不是现行规则）
 
 - **D169 6 槽分阶段**：SETTLED（文档），结构代码 HOLD（`/workspace/COORD-gear-structure-hold.txt`）。Stage 1 需服主显式开工，且单独 `balance_version`。
-- **Stage 0 6 槽**：设计 GO；10-04 掉落模型 NO-GO → **D246（10-06）修正后 GO**：w80_cap = 护符 80% / 每件甲 5%，费用 × 0.85 / × 0.05，护甲升阶不超过护符阶级，护甲每局另掉 1 件（全部位、刃 / 护符掉率不变）；静态 42/42、动态 21/21、W30 全路线 ±0.5 内（Stage 0 文档 D246 节）。Stage 1 前置已满足，代码待总控 / 服主显式开工。
+- **Stage 0 6 槽**：设计 GO；10-04 掉落模型 NO-GO → **D246（10-06）修正后 GO**：w80_cap = 护符 80% / 每件甲 5%，费用 × 0.85 / × 0.05，护甲升阶不超过护符阶级，护甲每局另掉 1 件（全部位、刃 / 护符掉率不变）；静态 42/42、动态 21/21、W30 全路线 ±0.5 内（Stage 0 文档 D246 节）。Stage 1 前置已满足。**D248（10-06 12:31）总控裁决：Stage 1 开工**（服主委托），w80_cap → CoreRpg 1.66.0 / bv59，实现中（`COORD-stage1`）；上线前本文 §1–§4 仍描述现行 2 槽。
 - **物品来源记录**：D245（1.65.70）已上线（§6.1），ARCH 系统图 S4 第 4 步完成。
 - **D168 8 槽**：取消。
 - **D167 随机锻造**：设计-only。
@@ -194,3 +194,4 @@
 | 2026-10-06 | D244（ARCH S4-3，CoreRpg 1.65.69 / bv58）：G10 修（S36–S38 / C19 登记、C17 加 LIFE_ITEM、source map `stocks:` 块 + `stocksMatchEconomyAndItemConfigs`）。另：词缀原语导出表 `tools/p1sim/affix-table.json`，p1sim 读表（见 `DESIGN-ember-affix-primitives-d241.md` §3.1）。数量不变。 |
 | 2026-10-06 | D245（ARCH S4-4，CoreRpg 1.65.70 / bv58）：物品来源记录 `origin`（NBT `om/os/or/ot` + `cr_p1_item.origin`），行为中性，旧件照常有效；`ember-source-map.yml` `item_provenance:` + `itemProvenanceMatchesCode`。全套 547 / 0（JDK8）。D246（6 槽掉落模型重跑）未完成，不在本次。 |
 | 2026-10-06 | D246（离线，无发版，1.65.70 / bv58 不变）：p1sim 共同随机数（`P1SIM_CRN=1`，默认输出逐位不变）+ 配对 CI 工具；旧刷图 W30 残差 = 随机流错位伪影；6 槽掉落模型修正 w80_cap 过全部 gate（42/42 · 21/21 · W30 最早 5.36→5.50）。Stage 1 前置满足，代码仍待显式开工。 |
+| 2026-10-06 | D248 裁决（总控，服主委托）：开 Stage 1（6 槽，只有属性），数值 = D246 w80_cap；目标 CoreRpg 1.66.0 / bv59。实现与上线另记。 |
