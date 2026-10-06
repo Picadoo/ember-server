@@ -83,7 +83,7 @@ public final class EmberUpgradeRules {
         // D208: the item keys (affix / pity / signature / reroll sequence) stay with the piece; a v1 piece is folded to v2
         // by the forge commit (EmberItemKeys.fold) with its legacy counters
         return new EmberItemData(d.uid, EmberItemData.templateId(fam, d.slot, tier), fam, d.slot, tier, q, craft, enh, pity,
-                bound, d.source, d.version, d.rev + 1, d.affix, d.afPity, d.sigCode, d.rerollN);
+                bound, d.source, d.version, d.rev + 1, d.affix, d.afPity, d.sigCode, d.rerollN, d.origin); // D245: provenance stays
     }
 
     private static String basic(EmberItemData d) {

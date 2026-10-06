@@ -1079,7 +1079,7 @@ public final class EmberRunService implements Listener {
                 }
                 case ITEM: {
                     Integer sc = sigFor.get(g.id);
-                    String res = giveItem(p, g, sc == null ? 0 : sc);
+                    String res = giveItem(p, g, sc == null ? 0 : sc, r);
                     if (res != null) {
                         got.add(res); done = true; itemsGiven.add(g.id);
                         if (sc != null && !res.endsWith("（已在背包）")) stamped.add(g.id);
@@ -1157,12 +1157,13 @@ public final class EmberRunService implements Listener {
     }
 
     /** @return label when given (or already present with the same uid), null when the inventory has no room. */
-    private String giveItem(Player p, EmberRunRules.Grant g, int sigCode) {
+    private String giveItem(Player p, EmberRunRules.Grant g, int sigCode, EmberRunRules.Row row) {
         EmberRunRules.ItemRoll it = g.item;
         String src = g.key.startsWith("fc_") || g.key.startsWith("starter_") ? "quest" : "drop";
         EmberItemData d = new EmberItemData(g.id, EmberItemData.templateId(it.tier == 0 ? "none" : it.family, it.slot, it.tier),
                 it.tier == 0 ? "none" : it.family, it.slot, it.tier, it.quality, it.craft, 0, 0, true, src,
-                EmberItemData.DATA_VERSION, 0, 0, 0, sigCode, 0); // D208: the settlement signature lives in the signed data
+                EmberItemData.DATA_VERSION, 0, 0, 0, sigCode, 0, // D208: the settlement signature lives in the signed data
+                EmberProvenance.forReward(g.key, row.runId, row.created)); // D245: map / REG row / run / time (deterministic per row)
         for (ItemStack s : p.getInventory().getContents()) {
             if (s == null || !loadouts.items().hasData(s)) continue;
             EmberItems.Read r = loadouts.items().read(s);
@@ -2232,7 +2233,7 @@ public final class EmberRunService implements Listener {
         final String rid = EmberPayRules.redeemRid(id, System.currentTimeMillis(), rnd.nextInt(46656));
         final String uid = EmberRunRules.rewardUid(rnd.nextLong(), id.toString(), rid, "mark_item");
         final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, 0, 0, 0, 0, true, "drop",
-                EmberItemData.DATA_VERSION, 0);
+                EmberItemData.DATA_VERSION, 0, 0, 0, 0, 0, EmberProvenance.forRedeem(rid, System.currentTimeMillis())); // D245: forge / S28
         final EmberPay.Price price = EmberPay.Price.marks(tier, EmberEconomy.amount("C07", "marks")).at("C07"); // D218: REG C07 (golden = MARKS_PER_EXCHANGE)
         final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         pay.pay(p, rid, price, "兑换没完成，退回印记", null, () ->

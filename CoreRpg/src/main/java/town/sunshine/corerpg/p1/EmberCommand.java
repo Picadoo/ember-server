@@ -306,6 +306,8 @@ public final class EmberCommand {
         EmberLoadout cur = loadouts.refresh(p); // fresh: the held slot may have just changed / a DB lookup may have landed
         boolean pending = String.join(";", loadouts.notes(p)).contains("查询中");
         for (String line : EmberCompare.card(EmberMode.tables(), d, cur.level)) s.sendMessage(P + line);
+        if (s.hasPermission("corerpg.admin")) // D245: provenance for OPs only (never in lore)
+            s.sendMessage(P + "§8来源记录：" + (d.origin.present() ? d.origin.map + " · " + d.origin.src + " · " + d.origin.run + " · " + d.origin.at : "无（1.65.70 之前的件）"));
         if (!r.ok()) {
             s.sendMessage(P + ChatColor.RED + "这件物品校验失败，P1 中不生效：" + r.problem);
         } else if (d.isCharm()) {
@@ -356,7 +358,8 @@ public final class EmberCommand {
         Player target = args.length >= 9 ? Bukkit.getPlayerExact(args[8]) : (s instanceof Player ? (Player) s : null);
         if (target == null) { s.sendMessage(P + "找不到目标玩家"); return true; }
         if (!NmsNbt.isReady()) { s.sendMessage(P + ChatColor.RED + "NBT 桥不可用: " + NmsNbt.error()); return true; }
-        EmberItemData d = EmberItemData.create(fam, slot, tier, q, craft, enh, true, "admin");
+        EmberItemData d = EmberItemData.create(fam, slot, tier, q, craft, enh, true, "admin")
+                .withOrigin(EmberProvenance.forAdmin("give", System.currentTimeMillis())); // D245
         String bad = d.validate();
         if (bad != null) { s.sendMessage(P + ChatColor.RED + "参数无效: " + bad); return true; }
         org.bukkit.inventory.ItemStack item = loadouts.items().create(d);
@@ -392,7 +395,8 @@ public final class EmberCommand {
         if (cur == null || cur.tier < 1) { s.sendMessage(P + target.getName() + " 没有正在用的 T1+ " + ("charm".equals(slot) ? "护符" : "刃")); return true; }
         // D243 (G4): an OP test duplicate is source "admin" — never dismantlable, never a codex entry. EmberAffix.duplicateOk
         // still accepts it as the reroll duplicate (that is what this test command is for).
-        EmberItemData d = EmberItemData.create(cur.family, cur.slot, cur.tier, q, 0, 0, true, "admin");
+        EmberItemData d = EmberItemData.create(cur.family, cur.slot, cur.tier, q, 0, 0, true, "admin")
+                .withOrigin(EmberProvenance.forAdmin("givedup", System.currentTimeMillis())); // D245
         String bad = d.validate();
         if (bad != null) { s.sendMessage(P + ChatColor.RED + "参数无效: " + bad); return true; }
         org.bukkit.inventory.ItemStack item = loadouts.items().create(d);

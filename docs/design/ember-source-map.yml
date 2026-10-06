@@ -13,6 +13,8 @@
 #     an item source value or a vault material is missing (or its tier / boss / name / slot disagree with the config / code);
 #   · a code ref (file#text) or config ref (file#dotted.key) below no longer resolves; a counter family is not in EmberCounters;
 #   · (D243) a bundled CoreRpg/src/main/resources/ember-v1*.yml differs from the live plugins/CoreRpg copy;
+#   · (D245) item_provenance below disagrees with EmberItemData / EmberProvenance / EmberItemStore (NBT keys, column,
+#     rule examples → map / source row);
 #   · (D244) a stock below does not list exactly the EmberEconomy rows touching its account, a life.yml / CoreFish item is
 #     missing from stocks.life_item, a CoreGacha ticket grant is missing, or a gacha item has a non-cosmetic kind.
 # tools/p1sim reads this file (rules.py snapshot → sourcemap.py): entries with `sim:` are one-time sources the sim pays.
@@ -22,7 +24,7 @@
 
 version: 1
 balance_version: 58
-built_against: "CoreRpg 1.65.69 (D244)"
+built_against: "CoreRpg 1.65.70 (D245)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 
@@ -56,6 +58,27 @@ item_sources:
   admin:   {meaning: "/corerpg p1 give / givedup (OP test items); never counts for the codex; givedup may feed the reroll duplicate (D243)", dismantle: false, code: ["p1/EmberCommand.java#\"admin\""]}
   reissue: {meaning: "manual re-issue by staff", dismantle: false, code: ["p1/EmberCompare.java#\"reissue\""]}
   migrate: {meaning: "legacy migration (none on live: no old players)", dismantle: false, code: ["p1/EmberCompare.java#\"migrate\""]}
+
+# item provenance (D245 · ARCH systems-map step 4) — WHERE a piece came from, stored on the item next to the D208 keys.
+# Behaviour-neutral: no stat / lore / dismantle / codex rule reads it; shown to OPs only (/corerpg p1 inspect). Pieces made before
+# 1.65.70 have no origin and stay valid (their canonical / HMAC bytes are unchanged; v2 canonical appends "|o:<packed>" only when
+# present). The DB column is never wiped by a later write (UPDATE / upsert keep a non-empty origin).
+item_provenance:
+  nbt: {om: "map / mode id (lower [a-z0-9_], ≤ 24)", os: "source row S## / X##", or: "run id / request id (≤ 48)", ot: "unix seconds (int)"}
+  column: "cr_p1_item.origin VARCHAR(128) NOT NULL DEFAULT ''"
+  packed: "map|src|run|at"
+  unknown_source: X00
+  code: ["p1/EmberProvenance.java#public static EmberItemData.Origin forReward(", "p1/EmberItemData.java#public static final class Origin", "p1/EmberItemStore.java#\"origin\", \"VARCHAR(128) NOT NULL DEFAULT ''\"", "p1/EmberRunService.java#EmberProvenance.forReward(g.key, row.runId, row.created)"]
+  rules:  # example = [ledger reward key, ledger run id] → expected map / src (pinned by EmberSourceMapTest.itemProvenanceMatchesCode)
+    base_item:      {example: [base_item, q01-k3x9a-1b2c], map: q01, src: S01, meaning: "settlement random roll (normal / repeat)"}
+    challenge_item: {example: [base_item, q03c-k3x9a-1b2c], map: q03c, src: S01, meaning: "challenge settlement roll"}
+    abyss_item:     {example: [base_item, q05a2-k3x9a-1b2c], map: q05a2, src: S13, meaning: "abyss floor settlement roll"}
+    chest_item:     {example: [extra_chest_item, q02-k3x9a-1b2c], map: q02, src: S34, meaning: "chest extra roll"}
+    raid_item:      {example: [raid_item, r01-k3x9a-1b2c], map: r01, src: S12, meaning: "raid settlement piece"}
+    fc_item:        {example: [fc_q01_blade_item, q01-k3x9a-1b2c], map: q01, src: S06, meaning: "first-clear choice piece"}
+    starter:        {example: [starter_blade, starter], map: starter, src: S35, meaning: "T0 starter kit"}
+    mark_redeem:    {map: forge, src: S28, meaning: "8-mark exchange (run = payment request id)", code: ["p1/EmberRunService.java#EmberProvenance.forRedeem(rid"]}
+    admin:          {map: admin, src: X03, meaning: "/corerpg p1 give / givedup (run = give / givedup)", code: ["p1/EmberCommand.java#EmberProvenance.forAdmin(\"give\"", "p1/EmberCommand.java#EmberProvenance.forAdmin(\"givedup\""]}
 
 # ---------------------------------------------------------------------------------------------------- content
 # Every place that can pay. sources = entries below that pay there. Checked against ember-v1-runs.yml / festival / afk.

@@ -83,6 +83,7 @@
 - NBT：`ember_v1`（数据）+ `cr_p1_item`（标记）+ HMAC 签名（密钥 `ember-v1-item.key`，gitignore，不入库）。
 - 字段：`uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, version, rev, affix, afPity, sigCode, rerollN`。D208 已把旧计数 `p4_af_ / p4_afp_ / p1_sig_ / p4_rrn_` 折叠进物品。
 - `source` ∈ `drop | quest | admin | reissue | migrate`（`EmberItemData.SOURCES`）：决定分解 / 图录 / 洗练重复判定。`drop` = 结算随机件、团本额外件、宝箱额外件、8 印记兑换件；`quest` = 首通自选件、起步包；`admin` = OP 发放。
+- **来源记录 `origin`（D245，1.65.70 起）**：新件在物品上记「从哪来」，与 D208 键并列：NBT `om`（图 / 模式 id：`q01`、挑战 `q03c`、深渊层 `q05a2`、团本 `r01`、`starter`、`forge`、`admin`）、`os`（来源行 S## / X##）、`or`（账本 run id / 兑换请求 id / `give`）、`ot`（unix 秒，账本行创建时间 → 同一奖励重投递得到同一份签名数据）；DB 列 `cr_p1_item.origin`（`map|src|run|at`，旧件 `''`）。映射：`base_item` → 图 / S01（深渊层 S13）、`extra_chest_item` → S34、`raid_item` → S12、`fc_<map>_*_item` → S06、起步包 → `starter` / S35、8 印记兑换 → `forge` / S28、`/corerpg p1 give|givedup` → `admin` / X03；未登记 → X00（单测保证代码写出的每个 ITEM 键都解析到真实行）。**行为中性**：不进属性 / lore / 分解 / 图录 / 洗练判定；只给 OP 在 `/corerpg p1 inspect` 看。旧件（无 origin）照常有效：v2 规范串只在有 origin 时追加 `|o:…`，旧件签名字节不变；DB 写入（UPDATE / upsert）不会把非空 origin 覆盖成空。机器可读：`ember-source-map.yml` `item_provenance:`（`EmberSourceMapTest.itemProvenanceMatchesCode`）。
 
 ### 6.2 `ember-source-map.yml`
 
@@ -176,7 +177,8 @@
 ## 9. 未来 / 计划状态（不是现行规则）
 
 - **D169 6 槽分阶段**：SETTLED（文档），结构代码 HOLD（`/workspace/COORD-gear-structure-hold.txt`）。Stage 1 需服主显式开工，且单独 `balance_version`。
-- **Stage 0 6 槽**：设计 GO，该掉落模型 NO-GO。
+- **Stage 0 6 槽**：设计 GO，该掉落模型 NO-GO；D246（离线重跑 + 修正掉落模型）进行中，10-06 只有部分结果，Stage 1 仍不可开。
+- **物品来源记录**：D245（1.65.70）已上线（§6.1），ARCH 系统图 S4 第 4 步完成。
 - **D168 8 槽**：取消。
 - **D167 随机锻造**：设计-only。
 - **成长 sidegrade**：待 6 槽复核。
@@ -190,3 +192,4 @@
 | 2026-10-06 | D242（ARCH S4-1）：初版。合并装备结构文档；`ember-source-map.yml` + `EmberSourceMapTest`（12 测试，全套 530 / 0，JDK8）；旧文档加指针头；修 F1–F9；记 G1–G11。CoreRpg 不发版（仍 1.65.67 / bv58）。 |
 | 2026-10-06 | D243（ARCH S4-2，CoreRpg 1.65.68 / bv58）：G1–G9、G11 修（S33–S35 登记、S09.per_rule、givedup src admin、打包配置同步、注释、p1sim 读 source map）；G10 仍在。`EmberSourceMapTest` 13 个，全套 533 / 0（JDK8）。 |
 | 2026-10-06 | D244（ARCH S4-3，CoreRpg 1.65.69 / bv58）：G10 修（S36–S38 / C19 登记、C17 加 LIFE_ITEM、source map `stocks:` 块 + `stocksMatchEconomyAndItemConfigs`）。另：词缀原语导出表 `tools/p1sim/affix-table.json`，p1sim 读表（见 `DESIGN-ember-affix-primitives-d241.md` §3.1）。数量不变。 |
+| 2026-10-06 | D245（ARCH S4-4，CoreRpg 1.65.70 / bv58）：物品来源记录 `origin`（NBT `om/os/or/ot` + `cr_p1_item.origin`），行为中性，旧件照常有效；`ember-source-map.yml` `item_provenance:` + `itemProvenanceMatchesCode`。全套 547 / 0（JDK8）。D246（6 槽掉落模型重跑）未完成，不在本次。 |

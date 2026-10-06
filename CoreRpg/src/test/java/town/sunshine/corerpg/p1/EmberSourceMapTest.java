@@ -452,6 +452,43 @@ public class EmberSourceMapTest {
         assertTrue(String.join("\n", bad), bad.isEmpty());
     }
 
+    // ------------------------------------------------------------------------------------------------ (D245) item provenance
+
+    @Test
+    public void itemProvenanceMatchesCode() throws IOException {
+        Map<String, Object> pv = m(map.get("item_provenance"));
+        List<String> bad = new ArrayList<String>();
+        EmberItemData d = new EmberItemData("0123456789abcdef0123456789abcdef", "ember_v1_scorch_blade_t2", "scorch", "blade", 2, 1, 2, 0, 0,
+                false, "drop", EmberItemData.DATA_VERSION, 0, 0, 0, 0, 0, EmberItemData.Origin.of("q01", "S01", "q01-a-b", 1700000000L));
+        Set<String> nbt = new TreeSet<String>(d.toMap().keySet());
+        nbt.removeAll(d.withOrigin(EmberItemData.Origin.NONE).toMap().keySet());
+        assertEquals("item_provenance.nbt == the keys EmberItemData.toMap adds for an origin", nbt, new TreeSet<String>(m(pv.get("nbt")).keySet()));
+        assertEquals("packed shape", "q01|S01|q01-a-b|1700000000", d.origin.packed());
+        assertEquals("packed field order", "map|src|run|at", str(pv.get("packed")));
+        assertEquals(EmberProvenance.SRC_UNKNOWN, str(pv.get("unknown_source")));
+        String col = str(pv.get("column"));
+        String store = new String(Files.readAllBytes(codeRoot.resolve("p1/EmberItemStore.java")), StandardCharsets.UTF_8);
+        if (!col.startsWith("cr_p1_item.origin ") || !store.contains("\"" + col.substring("cr_p1_item.origin ".length()) + "\""))
+            bad.add("column " + col + " does not match the EmberItemStore schema");
+        Map<String, Object> rules = m(pv.get("rules"));
+        for (Map.Entry<String, Object> e : rules.entrySet()) {
+            Map<String, Object> r = m(e.getValue());
+            List<String> ex = l(r.get("example"));
+            if (r.get("map") == null || r.get("src") == null) bad.add(e.getKey() + ": map / src missing");
+            if (ex.isEmpty()) continue;
+            EmberItemData.Origin o = EmberProvenance.forReward(ex.get(0), ex.get(1), 1700000000000L);
+            cmp(bad, e.getKey() + ".map", r.get("map"), o.map);
+            cmp(bad, e.getKey() + ".src", r.get("src"), o.src);
+            if (!m(map.get("sources")).containsKey(o.src)) bad.add(e.getKey() + ": source " + o.src + " is not a sources entry");
+        }
+        EmberItemData.Origin f = EmberProvenance.forRedeem("rid", 0L), a = EmberProvenance.forAdmin("give", 0L);
+        cmp(bad, "mark_redeem.map", m(rules.get("mark_redeem")).get("map"), f.map);
+        cmp(bad, "mark_redeem.src", m(rules.get("mark_redeem")).get("src"), f.src);
+        cmp(bad, "admin.map", m(rules.get("admin")).get("map"), a.map);
+        cmp(bad, "admin.src", m(rules.get("admin")).get("src"), a.src);
+        assertTrue(String.join("\n", bad), bad.isEmpty());
+    }
+
     // ------------------------------------------------------------------------------------------------ (i, j) refs and counters
 
     @Test
@@ -461,6 +498,9 @@ public class EmberSourceMapTest {
         for (String s : new String[] {"content", "item_sources"})
             for (Map.Entry<String, Object> e : m(map.get(s)).entrySet())
                 all.add(new java.util.AbstractMap.SimpleEntry<String, Map<String, Object>>(s + "." + e.getKey(), m(e.getValue())));
+        all.add(new java.util.AbstractMap.SimpleEntry<String, Map<String, Object>>("item_provenance", m(map.get("item_provenance"))));
+        for (Map.Entry<String, Object> e : m(m(map.get("item_provenance")).get("rules")).entrySet())
+            all.add(new java.util.AbstractMap.SimpleEntry<String, Map<String, Object>>("item_provenance.rules." + e.getKey(), m(e.getValue())));
         Map<String, Map<String, Object>> cfgCache = new TreeMap<String, Map<String, Object>>();
         int n = 0;
         for (Map.Entry<String, Map<String, Object>> e : all) {
