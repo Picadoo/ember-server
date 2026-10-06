@@ -98,7 +98,8 @@ def _prog_job(a):
 
 
 def prog(V, n, out):
-    jobs = [(nm, six, d, 1000 + i) for nm, six in V.items() for d in (0.3, 0.5, 0.7) for i in range(n)]
+    s0 = int(os.environ.get('GEAR6_SEED0', '1000'))  # D246: seed offset for unpaired null runs (default unchanged)
+    jobs = [(nm, six, d, s0 + i) for nm, six in V.items() for d in (0.3, 0.5, 0.7) for i in range(n)]
     with Pool(NPROC) as p:
         res = p.map(_prog_job, jobs, chunksize=2)
     R = pickle.load(open(out, 'rb')) if os.path.exists(out) else {}
@@ -156,6 +157,59 @@ def entrep(path):
             print('| %s | %s | %s |' % (nm, ' | '.join(cells), '—' if nm == 'base' else '%d/7' % ok))
 
 
+def entci(path, B=2000, ref='base', tol=2.0):
+    """D246: entry-rate deltas vs `ref` with a seed-paired bootstrap (95% CI). Pass rule: point |Δ| <= tol;
+    'noise' = point outside tol but CI reaches inside it; 'FAIL' = whole CI outside tol."""
+    import numpy as np
+    R = pickle.load(open(path, 'rb'))
+    names = sorted({k[0] for k in R if k[0] != ref})
+    rs = np.random.default_rng(12345)
+    out = {}
+    for d in (0.3, 0.5, 0.7):
+        seeds = sorted({k[2] for k in R if k[1] == d and k[0] == ref})
+        idx = rs.integers(0, len(seeds), size=(B, len(seeds)))
+
+        def arr(nm, m):
+            ind = np.array([R[(nm, d, s)][m]['fc_day'] is not None for s in seeds], float)
+            ent = np.array([(R[(nm, d, s)][m]['front_entries'] or 0) if R[(nm, d, s)][m]['fc_day'] is not None else 0
+                            for s in seeds], float)
+            return ind, ent
+        for nm in names:
+            if not all((nm, d, s) in R for s in seeds):
+                continue
+            for m in MAPS:
+                bi, be = arr(ref, m)
+                vi, ve = arr(nm, m)
+                pt = 100 * (vi.sum() / ve.sum() - bi.sum() / be.sum())
+                bs = 100 * (vi[idx].sum(1) / ve[idx].sum(1) - bi[idx].sum(1) / be[idx].sum(1))
+                lo, hi = np.percentile(bs, [2.5, 97.5])
+                out[(nm, d, m)] = (pt, lo, hi, bs.std(), 100 * bi.sum() / be.sum())
+    print('\n### 前线通关率 Δpp（vs %s，同种子配对 bootstrap 95%% CI，n=%d 种子/躲避）\n' % (ref, len(seeds)))
+    for nm in names:
+        print('\n**%s**\n' % nm)
+        print('| 躲避 | ' + ' | '.join(m.upper() for m in MAPS) + ' | 点估 ±%g 内 | 含噪声 |' % tol)
+        print('|---|' + '---|' * (len(MAPS) + 2))
+        tot_p = tot_n = 0
+        for d in (0.3, 0.5, 0.7):
+            cells, p_, n_ = [], 0, 0
+            for m in MAPS:
+                if (nm, d, m) not in out:
+                    cells.append('—')
+                    continue
+                pt, lo, hi, sd, br = out[(nm, d, m)]
+                st = abs(pt) <= tol
+                nz = (not st) and lo <= tol and hi >= -tol
+                p_ += st
+                n_ += st or nz
+                cells.append('%+.1f [%+.1f,%+.1f]%s' % (pt, lo, hi, '' if st else (' ~' if nz else ' ✗')))
+            tot_p += p_
+            tot_n += n_
+            print('| %.1f | %s | %d/7 | %d/7 |' % (d, ' | '.join(cells), p_, n_))
+        print('\n%s: 点估 %d/21 · 含噪声 %d/21 · 最大 CI 半宽 %.2f pp' % (
+            nm, tot_p, tot_n, max((v[2] - v[1]) / 2 for k, v in out.items() if k[0] == nm)))
+    return out
+
+
 AFFIX_V = {'none': None, 'c_affix1': {'taken_affix': 0.84}, 'c_affix5': {'taken_affix': 0.84 ** 5},
            'c_share1': {'share_taken': 0.96}, 'c_share5': {'share_taken': 0.96 ** 5},
            'c_tele1': {'taken_tele': 0.98}, 'c_tele5': {'taken_tele': 0.98 ** 5}}
@@ -196,6 +250,8 @@ if __name__ == '__main__':
         tol(json.loads(sys.argv[2]), int(sys.argv[3]), sys.argv[4], [int(x) for x in sys.argv[5].split(',')])
     elif cmd == 'prog':
         prog(json.loads(sys.argv[2]), int(sys.argv[3]), sys.argv[4])
+    elif cmd == 'entci':
+        entci(sys.argv[2], ref=sys.argv[3] if len(sys.argv) > 3 else 'base')
     elif cmd in ('tolrep', 'progrep', 'entrep'):
         globals()[cmd](sys.argv[2])
     elif cmd == 'affix':

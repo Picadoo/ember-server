@@ -193,5 +193,28 @@ def pooled(six, players=1200, mode='base', weeks=12, procs=8, chunk=75):
     hw = [w30_of([sum(1 for r in h if r['two'] and r['two'] <= w) / len(h) for w in range(1, weeks + 1)]) for h in half]
     return {'n': n, 'W30': w30_of(share), 'W30_halves': hw, 'w12': share[-1], 'off0': sum(r['off0'] for r in rows) / n,
             'off12': sum(r['off12'] for r in rows) / n, 'tgt12': sum(r['tgt12'] for r in rows) / n,
-            'rej_curoff': sum(r['cnt'].get('rej_curoff', 0) for r in rows) / n, 'share': share}
+            'rej_curoff': sum(r['cnt'].get('rej_curoff', 0) for r in rows) / n, 'share': share,
+            'two': [[r['i'], r['two']] for r in rows]}
+
+
+def w30_paired(a, b, B=2000, weeks=12, seed=12345):
+    """D246: ΔW30 (b − a) with a player-paired bootstrap; a, b = pooled() results on the same seeds (CRN)."""
+    import numpy as np
+    da, db = {i: t for i, t in a['two']}, {i: t for i, t in b['two']}
+    ids = sorted(set(da) & set(db))
+    big = weeks + 99
+    ta = np.array([da[i] or big for i in ids]); tb = np.array([db[i] or big for i in ids])
+    ws = np.arange(1, weeks + 1)
+
+    def w30v(t):  # t: (B, n) → W30 per row
+        sh = (t[:, :, None] <= ws).mean(1)
+        res = []
+        for row in sh:
+            res.append(w30_of(list(row)))
+        return np.array([np.nan if x is None else x for x in res])
+    pt = w30_of(list((tb[:, None] <= ws).mean(0))) - w30_of(list((ta[:, None] <= ws).mean(0)))
+    idx = np.random.default_rng(seed).integers(0, len(ids), size=(B, len(ids)))
+    bs = w30v(tb[idx]) - w30v(ta[idx])
+    lo, hi = np.nanpercentile(bs, [2.5, 97.5])
+    return pt, lo, hi, len(ids)
 

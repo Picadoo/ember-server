@@ -303,6 +303,7 @@ def phase2_abyss(cfg, ccfg, kn, p, rng, weeks, per_day, reserve=1000, goals=Fals
     out, marks_earned, ch_runs, best, fees, tiers_played, blocked, top_short = [], 0, 0, 0, 0, [], 0, 0
     acfgs = {t: abyss_cfg(ccfg, t) for t in range(1, len(ABYSS) + 1)}
     for w in range(weeks):
+        p1sim.crn_reseed(p, rng, getattr(p, '_crn_seed', 0), 100000 + w)  # D246 (no-op unless P1SIM_CRN)
         rush_week(cfg, kn, p, random.Random(w * 7919 + 17))  # D144: own stream, so --rush keeps the run stream
         rates = {k: p1sim.clear_rate(ccfg, k, p.st(), kn, 10, seed=rng.randrange(1 << 30)) for k in order}
         can_ch = max(rates.values()) >= 0.5
@@ -422,10 +423,12 @@ def to_q07(cfg, kn, seed):
     offset = random.Random(seed * 7919 + 13).randrange(7 * len(order) * max(1, len(p1sim.MODS)))  # D94 calendar position
     modded = {}
     while runs < 60 * per_day:
+        p1sim.crn_reseed(p, rng, seed, runs)  # D246 (no-op unless P1SIM_CRN)
         front = next((i for i, k in enumerate(order) if k not in p.cleared), None)
         if front is None:
             # D108 shared cap: featured bonuses already taken in the week of the Q07 first clear
             p.feat_carry = p.feat_n if getattr(p, 'feat_wk', None) == p1sim.feat_week(order, p.day, offset)[0] else 0
+            p._crn_seed = seed
             return p, runs, rng
         cur = min(cur, front)
         key = order[cur]
@@ -588,6 +591,7 @@ def phase2(cfg, ccfg, kn, p, rng, weeks, rotation, per_day, start_run, trade=Fal
         planned, i = max(1, runs_left), -1
         while i + 1 < runs_left:
             i += 1
+            p1sim.crn_reseed(p, rng, getattr(p, '_crn_seed', 0), 100000 + w, 1 + i)  # D246 (no-op unless P1SIM_CRN)
             p.day = 1000 + w * 7 + min(6, i * 7 // planned)
             if can_ch:
                 use, key = ccfg, (featured if rotation and bonus_left > 0 and rates[featured] >= 0.3 else farm_map(p, kn, ccfg, rates, best))

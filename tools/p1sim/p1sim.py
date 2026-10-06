@@ -157,6 +157,23 @@ def awakening(blade, charm):
 # armor piece equal to the charm (tier / enhance / quality / craft) H and M are exactly the 2-slot values.
 SIX = __import__('json').loads(os.environ['P1SIM_SIX']) if os.environ.get('P1SIM_SIX') else None  # e.g. {"w": [0.4, 0.15, 0.15, 0.15, 0.15], "drop": 1, "start": true, "cost": {"charm": 0.4, "armor": 0.15}}
 ARMOR_SLOTS = ('head', 'chest', 'legs', 'boots')
+# D246 common random numbers (opt-in, P1SIM_CRN=1): every run reseeds the combat stream, the drop / enhance stream and a
+# separate armor stream from (player seed, run index), and every armor draw (armor drop count / roll / slot, armor
+# enhance) uses the armor stream. A 2-slot and a 6-slot player on the same seed then see the same blade / charm drops and
+# the same combat randomness run by run, so a paired difference measures the model, not stream drift. Off = unchanged.
+CRN = bool(os.environ.get('P1SIM_CRN'))
+
+
+def crn_reseed(p, rng, *parts):
+    """D246: reseed the run streams from integers (no-op unless CRN)"""
+    if not CRN:
+        return
+    h = 1469598103934665603
+    for x in parts:
+        h = ((h ^ (int(x) & 0xFFFFFFFFFFFF)) * 1099511628211) & 0xFFFFFFFFFFFFFFFF
+    rng.seed(h ^ 0x9E3779B97F4A7C15)
+    p.rng.seed(h ^ 0x632BE59BD9B4E019)
+    p.arng.seed(h ^ 0x85EBCA77C2B2AE63)
 
 
 def hp_def(cfg, charm, armor=None):
@@ -1072,6 +1089,7 @@ class Player:
         self.blade = item('none', 'blade', 0, src='starter')
         self.charm = item('none', 'charm', 0, src='starter')
         self.armor = [item('none', a, 0, src='starter') for a in ARMOR_SLOTS] if SIX is not None else None
+        self.arng = random.Random(0)  # D246: armor stream, used (and reseeded per run) only under CRN
         self.coin = self.shard = self.core = self.bone = self.blank = self.xp = 0
         self.potions = sourcemap.starter_kit(cfg['starter_potions'])['potions']  # D243: S35 starter kit (= starter.heal_potions)
         self.codex, self.codex_paid, self.codex_coin = set(), 0, 0
@@ -1092,8 +1110,16 @@ class Player:
         quality / craft from the same tables"""
         if SIX.get('arm_cap') == 'all':  # rule option: an armor drop never exceeds the worn charm's tier
             tier = min(tier, max(1, self.charm['tier']))
-        it = self.roll_item(tier, key)
-        r = self.rng
+        if CRN:
+            saved, self.rng = self.rng, self.arng
+            try:
+                it = self.roll_item(tier, key)
+            finally:
+                self.rng = saved
+            r = self.arng
+        else:
+            it = self.roll_item(tier, key)
+            r = self.rng
         ws = [2.0 if SIX.get('gap') and (a['tier'] < tier or a['fam'] != self.kn.target) else 1.0 for a in self.armor]
         it['slot'] = ARMOR_SLOTS[pick(ws, r.random())]
         return it
@@ -1255,7 +1281,7 @@ class Player:
         drops = [self.roll_base(tier, key)]
         if SIX is not None:
             dr = float(SIX.get('drop', 1))  # fractional = probability of one more armor drop
-            na = int(dr) + (self.rng.random() < dr - int(dr) if dr != int(dr) else 0)
+            na = int(dr) + ((self.arng if CRN else self.rng).random() < dr - int(dr) if dr != int(dr) else 0)
             front = key not in self.cleared  # D246 options: the player's own first clear of this map
             if SIX.get('arm_repeat') and front:
                 na = 0  # armor only from repeat runs (the first clear pays its first-clear package instead)
@@ -1334,7 +1360,8 @@ class Player:
             if self.shard < sh or self.core < co or self.coin - cn < reserve:
                 break
             self.shard -= sh; self.core -= co; self.coin -= cn
-            if it['pity'] + 1 >= cfg['enh_max'][t] or self.rng.random() < cfg['enh_rate'][t]:
+            rr = self.arng if CRN and it['slot'] in ARMOR_SLOTS else self.rng  # D246 CRN: armor enhance on the armor stream
+            if it['pity'] + 1 >= cfg['enh_max'][t] or rr.random() < cfg['enh_rate'][t]:
                 it['enh'] = t; it['pity'] = 0
             else:
                 it['pity'] += 1
@@ -1475,6 +1502,7 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
         front = next((i for i, k in enumerate(order) if k not in p.cleared), None)
         if front is None or stop_at in p.cleared:
             break
+        crn_reseed(p, rng, seed, runs)  # D246 (no-op unless CRN)
         cur = min(cur, front)
         key = order[cur]
         if kn.feat_farm:  # D108 detour: spend this week's bonus clears on the featured map when it pays

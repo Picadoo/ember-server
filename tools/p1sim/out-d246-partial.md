@@ -154,3 +154,16 @@ phase-2 totals per player: ch_clears 231.63, q3_blade_off 0.90, q3_blade_tgt 1.8
 - **Turning part of the base roll into armor (`base_armor`, i.e. "base covers all slots")** brings farm W30 to parity: b50m −0.15 / −0.25 at 300 players. But it cuts blade/charm drop rates, which violates staged-plan §4.4 ("不稀释刃 / 护符掉率来塞护甲"). It also fails dynamic cells (b50m 11/21). Rejected unless the owner lifts §4.4.
 - **The dynamic 21 cells under today's rules at 800 players look noise-limited.** Cell swings are ±3–5 pp between near-identical variants. rec = 16/21 today, vs 19/21 on 10-04. A 4000-player run with a noise control (`ctl`) was started and then killed at the routine stop (no output). Next run: 4000+ players with the control before choosing a variant.
 - **No variant passes every gate yet → Stage 1 is NOT clear to open.**
+
+## D246 milestone 2 — common random numbers (opt-in `P1SIM_CRN=1`)
+
+- p1sim: `crn_reseed(p, rng, *parts)` reseeds the combat rng, `p.rng` (drops/enhance) and a separate armor stream `p.arng`
+  from (seed, run) at every run; armor rolls / armor drop counts / armor enhance draws use `p.arng` only under CRN, so adding
+  armor never shifts blade/charm draws. p2econ: `to_q07` per run, `phase2` per week + per farm run (raid/goals loops not reseeded).
+- Default (CRN off) is byte-identical to 22624a7: p1sim default, `--ref`, `p2econ --players 40 --weeks 4 --abyss --raid --goals`,
+  `gear6 prog` base+rec 200 players (pickle byte-identical, entrep+progrep identical).
+- Plumbing check: zero-weight / zero-cost / no-blank control `ctl` = `{"w":[1,0,0,0,0],"drop":1,"start":"q01","up_all":true,
+  "cost":{"charm":1.0,"armor":0.0},"blank":0}` is **exactly** equal to base under CRN (dynamic: 0 of 8400 cells differ at 400
+  seeds; farm W30 1200 players: identical 6.84 / w12 0.569).
+- New tooling: `gear6.py entci PKL [ref]` (seed-paired bootstrap 95% CI per dynamic cell), `GEAR6_SEED0` (seed offset for
+  unpaired null runs), `gear6w30.py` now prints paired ΔW30 CIs vs `base`.
