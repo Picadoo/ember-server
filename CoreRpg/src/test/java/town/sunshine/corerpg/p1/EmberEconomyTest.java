@@ -81,15 +81,15 @@ public class EmberEconomyTest {
     @Test
     public void idsAreCompleteAndOrdered() {
         List<String> want = new ArrayList<String>();
-        for (int i = 1; i <= 35; i++) want.add(String.format("S%02d", i)); // D243: S33 codex · S34 chest item · S35 starter
+        for (int i = 1; i <= 38; i++) want.add(String.format("S%02d", i)); // D243: S33 codex · S34 chest item · S35 starter; D244: S36–S38
         for (int i = 1; i <= 5; i++) want.add("LS" + i);
-        for (int i = 1; i <= 18; i++) want.add(String.format("C%02d", i));
+        for (int i = 1; i <= 19; i++) want.add(String.format("C%02d", i)); // D244: C19 gacha pull
         List<String> got = new ArrayList<String>();
         for (EmberEconomy.Row r : EmberEconomy.all()) got.add(r.id);
         assertEquals(want, got);
-        assertEquals(35, EmberEconomy.sources().size());
+        assertEquals(38, EmberEconomy.sources().size());
         assertEquals(5, EmberEconomy.legacySources().size());
-        assertEquals(18, EmberEconomy.sinks().size());
+        assertEquals(19, EmberEconomy.sinks().size());
         for (EmberEconomy.Row r : EmberEconomy.all()) {
             assertFalse(r.id + " name", r.name.isEmpty());
             assertFalse(r.id + " owner", r.owner.isEmpty());
@@ -263,7 +263,7 @@ public class EmberEconomyTest {
     public void modelGapsArePinned() {
         // REG §5: the S2 work list. Closing a gap (adding it to p1sim / p2econ) or adding an unmodelled source must
         // update this list, the REG table and the source-table D row together.
-        assertEquals(Arrays.asList("S07", "S08", "S09", "S16", "S17", "S18", "S27", "S30", "S31", "S32",
+        assertEquals(Arrays.asList("S07", "S08", "S09", "S16", "S17", "S18", "S27", "S30", "S31", "S32", "S36", "S37",
                 "C10", "C12", "C13", "C16", "C17", "C18"), EmberEconomy.modelGaps());
         // insignia: every source and both sinks are outside the offline sim today (REG §4 / §5 gap 1)
         for (EmberEconomy.Row r : EmberEconomy.touching(EmberEconomy.Account.INSIGNIA))
@@ -997,4 +997,22 @@ public class EmberEconomyTest {
         assertTrue("scan sees the tagged vault exceptions (" + tagged + ")", tagged >= 4);
     }
 
+
+    /** D244 (G10): item-level rows outside CoreRpg — registered (tags only, no goldens), never a grant route */
+    @Test
+    public void d244ItemLevelRowsAreTagsOnly() {
+        for (String id : new String[]{"S36", "S37", "S38", "C19"}) {
+            EmberEconomy.Row r = EmberEconomy.byId(id);
+            assertNotNull(id, r);
+            assertTrue(id + " has no goldens", r.golden.isEmpty());
+            assertTrue(id + " no counters", r.counters.isEmpty() && r.ledgers.isEmpty());
+        }
+        assertTrue(EmberEconomy.pays("S36", EmberEconomy.Account.LIFE_ITEM));
+        assertTrue(EmberEconomy.pays("S37", EmberEconomy.Account.GACHA_TICKET));
+        assertTrue(EmberEconomy.pays("S38", EmberEconomy.Account.COSMETIC));
+        assertTrue(EmberEconomy.byId("C19").sink);
+        for (String k : new String[]{"fish", "gacha", "ticket", "pull", "welcome"})
+            for (String run : new String[]{null, "gacha", "fish", "life"})
+                org.junit.Assert.assertNull(k + "@" + run, EmberEconomy.sourceForGrant(k, run));
+    }
 }

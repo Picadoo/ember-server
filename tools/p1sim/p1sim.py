@@ -35,6 +35,7 @@ RECORD = False
 # stage coin when the player's registered item kinds reach 5 / 10 / 15 / 20 (claimed at once). Pure bookkeeping on the
 # coin balance — never touches the rng. P1SIM_NO_CODEX=1 (or CODEX = False) = the pre-D243 sim (A/B).
 import sourcemap
+import affixtable  # D244 / ARCH S4-3: affix numbers exported from the Java primitives
 CODEX = os.environ.get('P1SIM_NO_CODEX') != '1'
 CODEX_STAGES = sourcemap.codex_stages()
 CODEX_STATS = {}  # {'coin': total paid, 'players': players created} while CODEX is on (sourcemap.py dyn report)
@@ -949,40 +950,32 @@ def event_ok(cfg, kind, f, t0, h0, mobs, vseed):
     return f.t - t0 <= float(v['event_secs'])
 
 
-AFFIX_STRESS = False  # D196 gate: periodic affix hits start right at room start (t0 + 1.5) instead of after one cycle
+AFFIX_STRESS = False  # D196 gate: periodic affix hits start right at room start (t0 + grace_s, D244 table) instead of after one cycle
 FIRECHAIN_EXPOSURE = 1.0 / 3.0  # D196: share of the fight a player spends touching the 火链 tether (sim has no positions)
 
 
 def affix_mob(cfg, m, mobs, kind, t0):
-    """Promote the toughest mob of the room (heavy, else melee, else the first) — mirrors EmberRunDirector."""
-    v = cfg['variety']
+    """Promote the toughest mob of the room (heavy, else melee, else the first) — mirrors EmberRunDirector.
+    D244: every number comes from tools/p1sim/affix-table.json (exported from the Java affix primitives; affixtable.py)."""
     pick_ = next((x for x in mobs if x['role'] == 'heavy'), None) or next((x for x in mobs if x['role'] == 'melee'), None) or mobs[0]
+    A = affixtable.row(cfg, kind) if kind in affixtable.MODELLED else None
     if kind == 'shield':
-        pick_['hp'] *= float(v['shield']['hp'])
-    elif kind == 'blazing':
-        b = v['blazing']
-        pick_['blaze'] = (t0 + 1.5 + float(b['every']), float(b['every']), pick_['atk'] * float(b['dmg']))
+        pick_['hp'] *= float(A['hp_mult'])
     elif kind == 'split':
-        pick_['split'] = (int(v['split']['count']), float(v['split']['hp']), m)
-    elif kind in ('venom', 'jailer') and isinstance(v.get(kind), dict):
-        # D189 毒十字 / 禁锢: periodic telegraphed hit on the elite's own timer (same dodge path as blazing);
-        # the 1 s jailer root is not modelled (no extra hit is forced during it)
-        b = v[kind]
-        pick_['blaze'] = (t0 + 1.5 + float(b['every']), float(b['every']), pick_['atk'] * float(b['dmg']))
-    elif kind == 'arcane' and isinstance(v.get('arcane'), dict):
-        # D196 旋光: one telegraphed hit per cast (once per player), cast cycle = every + spin (the beam turns for spin s)
-        b = v['arcane']
-        cyc = float(b['every']) + float(b.get('spin', 3.0))
-        pick_['blaze'] = (t0 + 1.5 + cyc, cyc, pick_['atk'] * float(b['dmg']))
-    elif kind == 'firechain' and isinstance(v.get('firechain'), dict):
-        # D196 火链: burns at most once per `tick` s while touching; the sim has no positions, so a player is assumed to
-        # touch the chain FIRECHAIN_EXPOSURE of the time while the elite has a partner (= the room is not yet down to it)
-        b = v['firechain']
-        per = float(b.get('tick', 1.0)) / FIRECHAIN_EXPOSURE
-        pick_['blaze'] = (t0 + 1.5 + float(b.get('warn', 1.2)) + per, per, pick_['atk'] * float(b['dmg']))
+        pick_['split'] = (int(A['count']), float(A['add_hp']), m)
+    elif kind in affixtable.PERIODIC:
+        # D138 炽热 / D189 毒十字 · 禁锢 / D196 旋光: one telegraphed hit per cast (same dodge path), at the Java cadence:
+        # first hit = 1.5 s grace + every + warn (旋光: + spin/2, target mid-arc), period = every + warn (旋光: + spin).
+        # The 1 s jailer root is not modelled (no extra hit is forced during it).
+        pick_['blaze'] = (t0 + float(A['first_hit_s']), float(A['period_s']), pick_['atk'] * float(A['dmg_atk']))
+    elif kind == 'firechain':
+        # D196 火链: burns at most once per burn_every_s while touching; the sim has no positions, so a player is assumed
+        # to touch the chain FIRECHAIN_EXPOSURE of the time while the elite has a partner (= the room is not yet down to it)
+        per = float(A['burn_every_s']) / FIRECHAIN_EXPOSURE
+        pick_['blaze'] = (t0 + float(A['first_burn_s']) + per, per, pick_['atk'] * float(A['dmg_atk']))
     if AFFIX_STRESS and 'blaze' in pick_ and kind in ('venom', 'jailer', 'arcane', 'firechain'):
         _, ev, dmg = pick_['blaze']
-        pick_['blaze'] = (t0 + 1.5, ev, dmg)  # worst case: the first cast lands as soon as the room opens
+        pick_['blaze'] = (t0 + affixtable.grace(), ev, dmg)  # worst case: the first cast lands as soon as the room opens
     pick_['affix'] = True
     pick_['affix_kind'] = kind
     return pick_

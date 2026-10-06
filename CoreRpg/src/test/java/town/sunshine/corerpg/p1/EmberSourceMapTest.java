@@ -516,4 +516,56 @@ public class EmberSourceMapTest {
         }
         assertTrue(String.join("\n", bad), bad.isEmpty());
     }
+
+    /**
+     * D244 (G10): item-level stocks — each stock lists exactly the EmberEconomy rows touching its account (sinks only in
+     * rows_out); life.yml / CoreFish items, CoreGacha ticket grants and gacha item kinds are all accounted for.
+     */
+    @Test
+    public void stocksMatchEconomyAndItemConfigs() throws IOException {
+        List<String> bad = new ArrayList<String>();
+        Map<String, Object> stocks = m(map.get("stocks"));
+        Set<String> seen = new TreeSet<String>();
+        for (Map.Entry<String, Object> e : stocks.entrySet()) {
+            Map<String, Object> st = m(e.getValue());
+            EmberEconomy.Account a = EmberEconomy.Account.valueOf(str(st.get("econ")));
+            seen.add(a.name());
+            Set<String> want = new TreeSet<String>(), have = new TreeSet<String>(l(st.get("rows_in")));
+            for (EmberEconomy.Row r : EmberEconomy.touching(a)) want.add(r.id);
+            for (String id : l(st.get("rows_out"))) {
+                have.add(id);
+                EmberEconomy.Row r = EmberEconomy.byId(id);
+                if (r == null || !r.sink) bad.add("stocks." + e.getKey() + ".rows_out " + id + " is not a sink row");
+            }
+            if (!want.equals(have)) bad.add("stocks." + e.getKey() + ": rows " + have + " != EmberEconomy.touching(" + a + ") " + want);
+        }
+        for (String need : new String[]{"INSIGNIA", "BADGE", "LIFE_ITEM", "GACHA_TICKET", "COSMETIC"})
+            if (!seen.contains(need)) bad.add("no stock for " + need);
+        // life items: every item in life.yml (offers give / inputs, cook) and CoreFish tables, minus other accounts' ni
+        Set<String> otherNi = new TreeSet<String>();
+        for (Object a : m(map.get("accounts")).values()) if (m(a).get("ni") != null) otherNi.add(str(m(a).get("ni")));
+        Set<String> items = new TreeSet<String>();
+        Map<String, Object> life = config("life.yml");
+        for (Object o : m(life.get("offers")).values()) {
+            items.addAll(m(m(o).get("give")).keySet());
+            items.addAll(m(m(o).get("inputs")).keySet());
+        }
+        Map<String, Object> cook = m(life.get("cook"));
+        items.addAll(l(cook.get("inputs")));
+        items.add(str(cook.get("output")));
+        Map<String, Object> fish = config("../CoreFish/config.yml");
+        for (Object t : m(fish.get("tables")).values())
+            for (Object row : (List<?>) t) items.add(str(m(row).get("ni_id")));
+        items.removeAll(otherNi);
+        Set<String> listed = new TreeSet<String>(l(m(stocks.get("life_item")).get("items")));
+        if (!items.equals(listed)) bad.add("stocks.life_item.items " + listed + " != life.yml + CoreFish items " + items);
+        // gacha: ticket grants == CoreGacha config tickets keys; gacha items are cosmetics only
+        Set<String> grants = new TreeSet<String>(m(config("../CoreGacha/config.yml").get("tickets")).keySet());
+        Set<String> lg = new TreeSet<String>(l(m(stocks.get("gacha_ticket")).get("grants")));
+        if (!grants.equals(lg)) bad.add("stocks.gacha_ticket.grants " + lg + " != CoreGacha tickets " + grants);
+        Set<String> kinds = new TreeSet<String>(l(m(stocks.get("cosmetic")).get("gacha_kinds")));
+        for (Map.Entry<String, Object> it : m(config("../CoreGacha/gacha.yml").get("items")).entrySet())
+            if (!kinds.contains(str(m(it.getValue()).get("kind")))) bad.add("gacha item " + it.getKey() + " kind " + m(it.getValue()).get("kind") + " is not a cosmetic kind");
+        assertTrue(String.join("\n", bad), bad.isEmpty());
+    }
 }

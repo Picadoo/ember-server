@@ -5,14 +5,16 @@
 # Authoritative prose: docs/design/DESIGN-ember-gear-structure-2026-10-06.md (§6 explains this file).
 #
 # Guarded by CoreRpg/src/test/java/town/sunshine/corerpg/p1/EmberSourceMapTest.java — the build fails when
-#   · an EmberEconomy row (S01–S35, LS1–LS5, C01–C18) has no entry here;
+#   · an EmberEconomy row (S01–S38, LS1–LS5, C01–C19) has no entry here;
 #   · a key under sources/sinks in plugins/CoreRpg/ember-v1-economy.yml is not listed in some economy_keys (or a listed one is gone);
 #   · a ledger / grant key or ledger run prefix written by p1/*.java is not covered by some grant_keys / ledger_runs pattern
 #     (or a pattern here no longer matches anything in the code);
 #   · a map / raid / rush entry in ember-v1-runs.yml, the festival dungeon, an AFK tier, a signature, an item affix,
 #     an item source value or a vault material is missing (or its tier / boss / name / slot disagree with the config / code);
 #   · a code ref (file#text) or config ref (file#dotted.key) below no longer resolves; a counter family is not in EmberCounters;
-#   · (D243) a bundled CoreRpg/src/main/resources/ember-v1*.yml differs from the live plugins/CoreRpg copy.
+#   · (D243) a bundled CoreRpg/src/main/resources/ember-v1*.yml differs from the live plugins/CoreRpg copy;
+#   · (D244) a stock below does not list exactly the EmberEconomy rows touching its account, a life.yml / CoreFish item is
+#     missing from stocks.life_item, a CoreGacha ticket grant is missing, or a gacha item has a non-cosmetic kind.
 # tools/p1sim reads this file (rules.py snapshot → sourcemap.py): entries with `sim:` are one-time sources the sim pays.
 # Patterns: <map> <n> <kind> <slot> <day> <month> <res> … = one dynamic segment ([a-z0-9_]+).
 # Refs: code paths are relative to code_root, config paths to config_root; "#text" for code = a substring that must appear in the file.
@@ -20,7 +22,7 @@
 
 version: 1
 balance_version: 58
-built_against: "CoreRpg 1.65.68 (D243)"
+built_against: "CoreRpg 1.65.69 (D244)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 
@@ -84,7 +86,7 @@ content:
   afk_t2: {mode: afk, name: 荒原, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t3: {mode: afk, name: 焦土, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t4: {mode: afk, name: 烬原深处, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
-  account: {mode: account, name: 账号 / 菜单（不在副本里）, sources: [S15, S19, S23, S24, S27, S28, S29, S30, S31, S32, S33, S35, X03]}
+  account: {mode: account, name: 账号 / 菜单（不在副本里）, sources: [S15, S19, S23, S24, S27, S28, S29, S30, S31, S32, S33, S35, S36, S37, S38, X03]}
 
 # ---------------------------------------------------------------------------------------------------- signatures (D174)
 # Checked field by field against EmberSignature.DEFS (code / map / slot / family / name / boss); alt = has a 调律 version (EmberSignature.ALTS).
@@ -534,6 +536,33 @@ sources:
     config: ["ember-v1-economy.yml#sources.S35", "ember-v1.yml#starter.heal_potions"]
     code: ["p1/EmberRunService.java#private void giveStarter(", "p1/EmberSupplyService.java#public static int starterPotions("]
     notes: "D243 (was X02 / gap G3): T0 kit source quest (not dismantlable); potions = ember-v1.yml starter.heal_potions (dual-asserted)"
+  S36:
+    name: 钓鱼产出（CoreFish：鱼 / 宝物 / 杂物）
+    econ_row: S36
+    status: live
+    pays: [life_item]
+    period: none
+    content: [account]
+    config: ["../CoreFish/config.yml#tables", "../CoreFish/config.yml#category_weights"]
+    notes: "D244 (G10): CoreFish NI-only loot (fish 80 / treasure 10 / junk 10); feeds the life.yml offers (stocks.life_item). Registered, tags only — CoreRpg does not pay it"
+  S37:
+    name: 扭蛋券发放（CoreGacha：新人 / 在线 / 委托）
+    econ_row: S37
+    status: live
+    pays: [gacha_ticket]
+    period: day
+    content: [account]
+    config: ["../CoreGacha/config.yml#tickets.welcome", "../CoreGacha/config.yml#tickets.online_minutes", "../CoreGacha/config.yml#tickets.bounty_clears"]
+    notes: "D244 (G10): welcome 5 once; online minutes [30, 90] and daily bounty clears [1, 3] → 1 each per day; the coin / badge exchange is C16. Registered, tags only"
+  S38:
+    name: 扭蛋抽取产出（CoreGacha，只出外观）
+    econ_row: S38
+    status: live
+    pays: [cosmetic]
+    period: day
+    content: [account]
+    config: ["../CoreGacha/gacha.yml#items", "../CoreGacha/gacha.yml#daily_pull_cap", "../CoreGacha/gacha.yml#shards"]
+    notes: "D244 (G10): cosmetics only (kinds badge / tag / aura / pet / show / corerpg; no power, material or currency — checked); duplicates → 光屑 (CoreGacha wallet), spark 200. Model OUT (outside the power model)"
   X03:
     name: 管理员发放 / 测试（/corerpg p1 give · give dup · coin give）
     econ_row: null
@@ -570,5 +599,51 @@ sinks:
   C14: {econ_row: C14, name: 回复药购买, takes: [coin], economy_keys: [C14.coin], config: ["ember-v1-economy.yml#sinks.C14", "ember-v1.yml#shop.heal_potion.price"]}
   C15: {econ_row: C15, name: 外观商店（暂停）, takes: [coin, badge, mark, cosmetic], code: ["p1/EmberCosmetics.java#C_BOUGHT"]}
   C16: {econ_row: C16, name: 扭蛋兑券（暂停）, takes: [coin, badge, gacha_ticket]}
-  C17: {econ_row: C17, name: 生活 offer, takes: [coin, core], config: ["life.yml"]}
+  C17: {econ_row: C17, name: 生活 offer, takes: [coin, core, life_item], config: ["life.yml#offers"], notes: "D244: offers also eat life items (fish / junk / relic / pearl / soul dust) — see stocks.life_item"}
   C18: {econ_row: C18, name: 国庆商店, takes: [fest_coin, coin, badge], economy_keys: [C18.charm_event, C18.trail_event, C18.after_coin, C18.after_badge, C18.memo, C18.badge_rate, C18.badge_cap], config: ["ember-v1-economy.yml#sinks.C18", "ember-v1-festival.yml#charm"]}
+  C19: {econ_row: C19, name: 扭蛋抽取（耗券）, takes: [gacha_ticket], config: ["../CoreGacha/gacha.yml#cost_per_pull", "../CoreGacha/gacha.yml#daily_pull_cap"], notes: "D244 (G10): 1 ticket / pull, ≤ 50 pulls / day. Registered, tags only"}
+
+# ---------------------------------------------------------------------------------------------------- stocks (D244 / G10)
+# Item-level stocks: where the balance lives, which registered rows add to it (rows_in — incl. sinks that convert into it)
+# and which take from it (rows_out), plus the item ids. EmberSourceMapTest: rows_in ∪ rows_out == EmberEconomy.touching(econ),
+# rows_out are sinks; life_item.items == every item in life.yml (offers / cook) + CoreFish tables that is not another
+# account's ni; gacha_ticket.grants == CoreGacha config tickets keys; every gacha.yml item kind ∈ cosmetic.gacha_kinds.
+stocks:
+  insignia:
+    econ: INSIGNIA
+    store: "p1_sigmark_<map>@all (one balance per signature map, not interchangeable)"
+    rows_in: [S07, S08, S09, S17, S18, S23]
+    rows_out: [C12, C13]
+    cap: none
+    model: "tools/p1sim/insignia.py (D222, opt-in: S07/S08/S09/S17/S18/S23 → C12/C13; p2econ --insignia)"
+  badge:
+    econ: BADGE
+    store: "p3_badge@all"
+    rows_in: [S16, S19, S27]
+    rows_out: [C15, C16, C18]
+    cap: "S27 exchange cap 40 (event); others uncapped"
+    model: "p2econ behaviour only (earning); stock / spend not modelled — sinks C15 / C16 paused, C18 event-only"
+  life_item:
+    econ: LIFE_ITEM
+    store: "inventory NI items (not in the vault whitelist)"
+    rows_in: [S30, S36]
+    rows_out: [C17]
+    cap: "life.yml offers daily / weekly (soul dust 2/day, reforge stone 5/week, stable charm 1/week, pets 1/week)"
+    model: "none (REG §5: 生活玩法; C17 stable charm eats 3 core / week — the only exit into the power economy)"
+    items: [fish_ember_cod, fish_ember_salmon, fish_ember_puffer, treasure_ember_relic, treasure_ember_pearl, junk_ember_boot, junk_ember_bone, food_ember_bread, food_ember_grilled_fish, tool_ember_rod, mat_ember_reforge_stone, mat_ember_stable_charm, mat_ember_soul_dust, pet_ember_ashling, pet_ember_cinder, acc_ember_offhand_ward, acc_ember_offhand_vita]
+  gacha_ticket:
+    econ: GACHA_TICKET
+    store: "CoreGacha wallet (gacha_* tables); NI item ember_gacha_ticket redeems into it"
+    rows_in: [S37, C16]
+    rows_out: [C19]
+    cap: "exchange 5 / day (C16); pulls 50 / day (C19)"
+    model: "none (cosmetics only; outside the power model)"
+    grants: [welcome, online_minutes, afk_worlds, bounty_clears, exchange, ni_item]   # afk_worlds = where online minutes do not count
+  cosmetic:
+    econ: COSMETIC
+    store: "CoreGacha owned items + EmberCosmetics p2_cosbuy_"
+    rows_in: [S38, C15]
+    rows_out: []
+    cap: none
+    model: "OUT (no stats)"
+    gacha_kinds: [badge, tag, aura, pet, show, corerpg]

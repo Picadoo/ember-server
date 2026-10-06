@@ -39,7 +39,7 @@
 - **伤害轨迹回放**：`EmberAffixReplayTest`。`LegacyAffixPath` = 46736db（1.65.66）Director 静态方法逐字拷贝；`PrimitiveAffixPath` = D241 原语。`AffixReplay` 用固定种子生成脚本（玩家走位 / 受击 / 死亡），640 tick × 50 ms，第 520 tick 精英死亡（触发熔火 / 分裂）。200 种子 × 12 词缀 → 18133 行轨迹（施放 / 命中 / 伤害 / 其他事件），两条路径 **sha256 相同**：`de42455402bbce314c4d6622e603c2f4d4a761bc03981634066fa1f1b5797c39`。第二个测试把一处伤害改 1 ULP，确认比对能抓到。输出：`CoreRpg/target/affix-replay/summary.txt` + 两个 `.tsv`。
 - **live 冒烟**：12 个词缀在 Q01 重复本各强制一次（`corerpg p1 runs variety <affix>:r1`），见 `docs/tests/smoke-2026-10-06-d241-papi-affix.md`。
 
-## 3. p1sim 怎么用同一套原语（本刀未改 p1sim）
+## 3. p1sim 怎么用同一套原语（D241 未改 p1sim；D244 已接表，见 §3.1）
 
 现状（`tools/p1sim/p1sim.py` `affix_mob`，约 949 行）与 Java 原语的差异：
 
@@ -59,6 +59,24 @@ p1sim 偏差方向：周期词缀**偏密**（更难），是安全侧；直接�
 2. p1sim `affix_mob` 读这张表，替换手抄的 `every` / `dmg`；形状族决定闪避模型（CIRCLE / CROSS / STRIP 走现有 dodge；BEAM 一次 / 人 / 轮；TETHER 按暴露比例；AURA / STAT / DEATH_* 走 HP 或节奏修正）。
 3. 加一个 `javacheck` 一致性检查（像 burncheck）：表里数值与 p1sim 实际用的数值不一致就失败，防止再手抄漂移。
 4. 有了表之后再决定是否把 mortar / charge / regen / frost / molten 纳入 sim（会让结果更难，需要重新看 gate）。
+
+### 3.1 D244（CoreRpg 1.65.69）：已做 —— 导出表 + p1sim 读表 + 漂移测试
+
+- **导出**：`CoreRpg/src/test/java/town/sunshine/corerpg/p1/EmberAffixExportTest.java` 用 `EmberAffixes.all()` + `AffixCycle` + 各 `Affix*` 原语的静态方法，对线上 `plugins/CoreRpg/ember-v1-runs.yml` 的 `variety` 块算出每个词缀的 `family`、`first_arm_s`、`first_hit_s`、`period_s`、`warn_s`、`dmg_atk`、形状参数和 yml 输入，生成入库的 **`tools/p1sim/affix-table.json`**（grace 1.5 s、bv58）。重新导出：`cd CoreRpg && mvn -o test -Dtest=EmberAffixExportTest -Daffix.export=write`。
+- **漂移即失败**：`exportMatchesCheckedInTable`（Java 端：原语 / yml 一改而表没重导 → 单测红）；首次就绪时间再和回放 harness 的 PROMOTE `next=` 交叉核对（`AffixReplay` / `PrimitiveAffixPath`）。p1sim 端 `rules.affix_table_drift()`：表的 yml 输入 ≠ 线上 `variety` 或 bv 不同 → `validate()` 拒跑；`affixtable.row()` 对 what-if 改了 variety 却没重导的情况抛 `RuleError`。selfcheck 加 4 条 D244 检查。
+- **p1sim**：`affix_mob` 不再手抄 `every` / `dmg`：周期词缀（blazing / venom / jailer / arcane）用表里的 `first_hit_s` / `period_s` / `dmg_atk`；火链用 `first_burn_s` + `burn_every_s / FIRECHAIN_EXPOSURE`；`AFFIX_STRESS` 用表里的 grace。覆盖面不变：regen / charge / frost / mortar / molten 仍未建模（§3 第 4 条另议）。
+
+节奏变化（`python3 tools/p1sim/affixtable.py diff`；伤害系数全部不变）：
+
+| 词缀 | 首击 s 旧 → 新 | 周期 s 旧 → 新 |
+|---|---:|---:|
+| blazing | 4.5 → 5.5 | 3.0 → 4.0 |
+| venom | 7.5 → 8.8 | 6.0 → 7.3 |
+| jailer | 8.5 → 9.7 | 7.0 → 8.2 |
+| arcane | 12.5 → 12.5 | 11.0 → 12.5 |
+| firechain（首次可烧） | 2.7 → 3.9 | 1.0 → 1.0（每人烧伤间隔，再 ÷ exposure） |
+
+sim 的词缀从「偏密」变成和 Java 一致（略稀 = 略容易）。Gate 前 / 后见 `docs/status/STATUS-ember-arch-s4-3-1.65.69.md`：无翻转，未调参。
 
 ## 4. 不变
 

@@ -94,11 +94,13 @@ _bv = next((ln.split(':')[1].strip() for ln in open(os.path.join(os.path.dirname
 print('# D196 affixpack5 gate — rules balance_version %s, N=%d × seeds %s, FIRECHAIN_EXPOSURE %.2f'
       % (_bv, N, SEEDS, p1sim.FIRECHAIN_EXPOSURE))
 print('# arcane %s / firechain %s' % (v0.get('arcane'), v0.get('firechain')))
-print('# pressure (atk/s if every cast lands): mortar %.3f · venom %.3f · arcane %.3f · firechain %.3f (≤ 1/tick × exposure)' % (
-    v0['mortar']['dmg'] / (v0['mortar']['every'] + v0['mortar']['warn']),
-    v0['venom']['dmg'] / (v0['venom']['every'] + v0['venom']['warn']),
-    v0['arcane']['dmg'] / (v0['arcane']['every'] + v0['arcane']['warn'] + v0['arcane']['spin']),
-    v0['firechain']['dmg'] / v0['firechain']['tick'] * p1sim.FIRECHAIN_EXPOSURE))
+import affixtable  # D244: cadence / damage from the exported Java table
+_T = affixtable.table()['affixes']
+print('# pressure (atk/s if every cast lands, affix-table.json): mortar %.3f · venom %.3f · arcane %.3f · firechain %.3f (≤ 1/tick × exposure)' % (
+    _T['mortar']['dmg_atk'] / _T['mortar']['period_s'],
+    _T['venom']['dmg_atk'] / _T['venom']['period_s'],
+    _T['arcane']['dmg_atk'] / _T['arcane']['period_s'],
+    _T['firechain']['dmg_atk'] / _T['firechain']['burn_every_s'] * p1sim.FIRECHAIN_EXPOSURE))
 print()
 print('Stress columns (压力): the first venom / arcane / firechain hit comes at room start + 1.5 s instead of after one')
 print('cycle (the sim clears rooms faster than people, so in the plain columns the 11 s 旋光 cycle rarely fires before the')

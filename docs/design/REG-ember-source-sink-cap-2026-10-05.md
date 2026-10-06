@@ -108,6 +108,9 @@
 | S33 | 图录阶段奖励（D243，原 G1 / X01） | 币 | 集齐 5 / 10 / 15 / 20 种：200 / 400 / 600 / 1000（`EmberCodex.STAGE_COIN`；E1 `S33.at5.coin`…`at20.coin`）；`/corerpg p1 codex claim`，账本 `codex/stage<n>` → 带标签 `grantCoin(S33)` | 每角色每阶段一次（`p1_codex_stage_<n>@all`） | `p1_codex_stage_` | ✓ `p1sim`（D243 `sourcemap.py` `codex_stage`） |
 | S34 | 宝箱额外装备（D243，原 G2，从 S01 拆出） | 装备 1 | 宝箱 5 % 额外一件（`EXTRA_WEIGHTS[3]`；E1 `S34.chest_weight`）；账本键 `extra_chest_item` | `run` | — | ✓ `p1sim`（原 S01 内） |
 | S35 | 起步包（D243，原 G3 / X02） | T0 刃 + T0 护符（`source=quest`，不可分解）+ 回复药 5 | E1 `S35.pieces` 2、`S35.potions` 5（= `ember-v1.yml starter.heal_potions`）；账本 `starter/starter_<slot>` | 每角色一次（`p1_starter@all`） | `p1_starter` | ✓ `p1sim`（D243 `sourcemap.py` `starter_kit`） |
+| S36 | 钓鱼产出（D244，G10；CoreFish） | 鱼 / 宝藏 / 垃圾 NI 件（`fish_ember_*` / `treasure_ember_*` / `junk_ember_*`） | `plugins/CoreFish/config.yml` `category_weights` + `tables`；只进背包，不进 vault 白名单；卖 / 熬药走 C17 | 无周期帽（体力外；靠钓鱼时长） | — | ✗（`EmberEconomy` 登记，`LIFE_ITEM`，标签 only，无金样，无路由） |
+| S37 | 扭蛋券发放（D244，G10；CoreGacha） | 扭蛋券（CoreGacha 钱包） | `CoreGacha/config.yml tickets`：`welcome` 5；当日在线 30 / 90 分钟各 1（`afk_worlds` 不计）；当日委托结算 1 / 3 局各 1；实物券 `ember_gacha_ticket` 右键入包。兑换（币 / 徽）仍是 C16 | 日 | — | ✗（`GACHA_TICKET`，标签 only，无金样） |
+| S38 | 扭蛋抽取产出（D244，G10；CoreGacha） | 外观（badge / tag / aura / pet / show / corerpg 外观店件） | `CoreGacha/gacha.yml items`，只放外观、无属性 | 日（随 C19 抽数） | — | OUT（外观不进战力模型） |
 
 ### 2.5 旧来源（O1–O3，S0 后状态）
 
@@ -143,8 +146,9 @@
 | C14 | 回复药购买 | 币 | `shop.heal_potion.price: 10` | — | ✓ `p1sim` 带药 |
 | C15 | 外观商店 | 币 或 徽（1 徽 = 50 币标价点）或印记点 | `EmberCosmetics`：深渊称号等按层价；足迹 / 称号多为通关解锁（0 价） | — | ✗（外观不进战力；化妆品暂停） |
 | C16 | 扭蛋兑券 | 币 1200 或 徽 20 / 张 | 日帽 5 张（`CoreGacha exchange.daily_cap`） | `day` × 5 | ✗ |
-| C17 | 生活 offer | 币 + 材料 | 面包 40、钓竿 60、熬药 10+鱼、稳固符 300+3 核心 / 周 1、宠物蛋 600 / 周 1 等 | 日 / 周 | ✗ |
+| C17 | 生活 offer | 币 + 材料 + 生活件（D244：账户加 `LIFE_ITEM`） | 面包 40、钓竿 60、熬药 10+鱼、稳固符 300+3 核心 / 周 1、宠物蛋 600 / 周 1 等 | 日 / 周 | ✗ |
 | C18 | 国庆商店 | 国庆币 / 活动后币+徽 | 符 60 国庆币（售后 15000 币 + 300 徽）；足迹 / 纪念见 `festival.yml` | 活动期 | △ `festsim` |
+| C19 | 扭蛋抽取（D244，G10；CoreGacha） | 扭蛋券 | `gacha.yml` `cost_per_pull` 1、`daily_pull_cap` 50 → 产出 S38 | 日 50 抽 | OUT（外观；标签 only） |
 
 ---
 
@@ -173,18 +177,18 @@
 | 委托 / 花样委托 | ✓ | ✓ | | | | | | | |
 | 挑战 / 深渊 / 团本 / 精选印 | ✓ | ✓ | | | | | | | |
 | 连战印记 | | ✓ | | | ✓ | | | | 徽 20 ✗ |
-| 前哨 | | △ 印记上界 | | | | | | | 徽记 ✗ |
+| 前哨 | | △ 印记上界 | | | | | | | 徽记 ✗ → D222 `insignia.py`（opt-in）+ D244 `stocks.insignia` |
 | 残响 | | | | | | | | | **全无** |
-| 誓约徽记 | △ 环境 | | | | | | | | 徽记库存 ✗ |
+| 誓约徽记 | △ 环境 | | | | | | | | 徽记库存 ✗ → D222 `insignia.py`（opt-in）+ D244 `stocks.insignia` |
 | 签名掉落率 | | | | | | | | △ | 烙印 / 调律消耗 ✗ |
 | 挂机 | | | ✓ | | | | | | |
 | 签到 / 在线 | | | | ✓ | | | | | |
 | 勋记 | ✓ | ✓ | | | | | ✓ | | |
 | 天赋 / 洗练 | | | | | | | ✓ | | 重置少用 |
 | 国庆 | ✓ | | | | | ✓ | | | |
-| 余烬徽库存 | | 行为 ✓ | | | | | | | 库存 / 外观店 ✗ |
-| 扭蛋兑券 | | | | | | | | | **全无** |
-| 生活玩法 | | | | | | | | | **全无** |
+| 余烬徽库存 | | 行为 ✓ | | | | | | | 库存 / 外观店 ✗；**D244 已登记**：source map `stocks.badge`（S16 / S19 / S27 → C15 / C16 / C18） |
+| 扭蛋兑券 | | | | | | | | | 不建模（外观）；**D244 已登记**：S37 / C16 → C19 → S38，`stocks.gacha_ticket` / `stocks.cosmetic` |
+| 生活玩法 | | | | | | | | | 不建模；**D244 已登记**：S30 / S36 → C17，`stocks.life_item`（17 个 NI 件 = life.yml + CoreFish，单测钉死） |
 | 旧 O1–O3 | | | | | | | | | 故意不建；靠 S0 |
 
 **S2 优先补进模型的缺口（建议顺序）**：
@@ -240,3 +244,4 @@
 | 2026-10-06 | D229（CoreRpg 1.65.55 / bv58）：S2-9 — 深渊层结算 SourceId 与 S01 分开（`sourceForGrant(base_*, <map>a<n>-…)` → S13；数量仍读 S01 BASE_*）；§6.4 vault 写入扫描（`autoDeposit` / `creditBound` / `credit` / `EmberVault.get().give`，例外行 `econ-ok:`）。数量不变。 |
 | 2026-10-06 | D242（ARCH S4-1，文档 + 测试；CoreRpg 不发版 / 1.65.67 / bv58）：装备结构权威文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读来源表 `ember-source-map.yml`（S01–S32 / LS1–LS5 / C01–C18 + 未登记 X01 图录币 · X02 起步包 · X03 管理员发放），`EmberSourceMapTest` 防漂移。本表文案修：S06 Q02 = 自选族 × 部位、S08 12% 仅适配时、S13 无无尽层、C13 调律 6 件。缺口 G1–G11 见新文档 §8。 |
 | 2026-10-06 | D243（ARCH S4-2，CoreRpg 1.65.68 / bv58）：登记 S33 图录阶段奖励 / S34 宝箱额外装备（从 S01 拆出）/ S35 起步包，数量不变只加标签（`EmberEconomy` S01–S35、E1 yml 加块、图录币走 `grantCoin(S33)`）；S09 加 `per_rule` 键（值 1）；OP `givedup` 改 `source=admin`。p1sim 经 `ember-source-map.yml` 计入 S33 / S35（21 格 A/B 全部 ±2pp 内）。 |
+| 2026-10-06 | D244（ARCH S4-3，CoreRpg 1.65.69 / bv58）：G10 物品级缺口登记 — S36 钓鱼产出（CoreFish，`LIFE_ITEM`）、S37 扭蛋券发放、S38 扭蛋抽取产出（外观，OUT）、C19 扭蛋抽取（耗券）；C17 账户加 `LIFE_ITEM`。**只登记 / 打标签**：无金样、无路由、数量全不变。`ember-source-map.yml` 新 `stocks:` 块（徽记 / 余烬徽 / 生活件 / 扭蛋券 / 外观），`EmberSourceMapTest.stocksMatchEconomyAndItemConfigs` 把每个库存的来源 ∪ 消耗钉在 `EmberEconomy.touching()`、生活件清单钉在 life.yml + CoreFish、券来源钉在 CoreGacha `tickets`、扭蛋件 kind 钉成外观。§5 矩阵 3 行改「已登记」。 |

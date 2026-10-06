@@ -38,6 +38,8 @@ SINGLE = {
     'progress': 'plugins/CoreRpg/progress.yml',
     # D243 / ARCH S4-2: the machine-readable source map (one-time sources the sim pays: `sim:` entries → sourcemap.py)
     'sourcemap': 'docs/design/ember-source-map.yml',
+    # D244 / ARCH S4-3: affix cadence / damage exported from the D241 primitives (EmberAffixExportTest, checked in)
+    'affixtable': 'tools/p1sim/affix-table.json',
 }
 JAVA = {
     'upgrade': P1 + 'EmberUpgradeRules.java',
@@ -79,6 +81,13 @@ def _canon(x):
 
 def _hash(data):
     return hashlib.sha256(_canon(data).encode('utf-8')).hexdigest()
+
+
+def _load_rel(rel, text=None):
+    """yml via miniyaml; .json (the generated affix table) via json"""
+    if rel.endswith('.json'):
+        return json.loads(text if text is not None else _read(rel))
+    return miniyaml.loads(text) if text is not None else miniyaml.load(os.path.join(ROOT, rel))
 
 
 def _read(rel):
@@ -125,9 +134,33 @@ def validate(data):
             if isinstance(e, dict) and e.get('sim') and str(e.get('econ_row')) not in rows:
                 errs.append('ember-source-map.yml %s (sim %s): econ_row %s has no ember-v1-economy.yml sources row'
                             % (sid, e.get('sim'), e.get('econ_row')))
+    # D244: the exported affix table must have been generated from the live variety numbers (else re-export)
+    at = data.get('affixtable') or {}
+    if not at:
+        errs.append('tools/p1sim/affix-table.json missing (EmberAffixExportTest -Daffix.export=write)')
+    else:
+        errs += affix_table_drift(at, data['runs'])
     if errs:
         raise RuleError('rule snapshot rejected:\n  ' + '\n  '.join(errs))
     return sorted(unmod)
+
+
+def affix_table_drift(at, runs):
+    """D244: affix-table.json vs ember-v1-runs.yml variety — [] when the table was exported from these numbers"""
+    errs, var = [], runs.get('variety') or {}
+    fix = ' — re-export: cd CoreRpg && mvn -o test -Dtest=EmberAffixExportTest -Daffix.export=write'
+    if str(at.get('balance_version')) != str(runs.get('balance_version')):
+        errs.append('affix-table.json balance_version %s != runs %s%s' % (at.get('balance_version'), runs.get('balance_version'), fix))
+    aff = at.get('affixes') or {}
+    for kind in var.get('affixes') or []:
+        if kind not in aff:
+            errs.append('affix-table.json has no row for live affix %s%s' % (kind, fix))
+    for kind, row in aff.items():
+        live = var.get(kind) or {}
+        inp = row.get('yml') or {}
+        if set(map(str, live)) != set(map(str, inp)) or any(abs(float(live[k]) - float(inp[str(k)])) > 1e-9 for k in live):
+            errs.append('affix-table.json %s inputs %s != live variety.%s %s%s' % (kind, inp, kind, dict(live), fix))
+    return errs
 
 
 def build():
@@ -140,7 +173,7 @@ def build():
         files[dep] = files[src] = hashlib.sha256(_read(dep).encode('utf-8')).hexdigest()[:12]
     for name, rel in SINGLE.items():
         p = os.path.join(ROOT, rel)
-        data[name] = miniyaml.load(p) if os.path.exists(p) else {}
+        data[name] = _load_rel(rel) if os.path.exists(p) else {}
         if os.path.exists(p):
             files[rel] = hashlib.sha256(_read(rel).encode('utf-8')).hexdigest()[:12]
     data['java'] = {k: _read(v) for k, v in JAVA.items()}
@@ -163,7 +196,7 @@ def _parse_texts(texts, java):
     for name, (dep, _src) in PAIRS.items():
         data[name] = miniyaml.loads(texts[dep])
     for name, rel in SINGLE.items():
-        data[name] = miniyaml.loads(texts[rel]) if rel in texts else {}
+        data[name] = _load_rel(rel, texts[rel]) if rel in texts else {}
     data['java'] = dict(java)
     return data
 

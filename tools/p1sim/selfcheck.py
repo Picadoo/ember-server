@@ -217,5 +217,22 @@ try:
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 
+
+# D244 / ARCH S4-3: affix numbers come from the exported table (EmberAffixExportTest), never re-derived by hand
+import affixtable, copy as _copy
+_at = affixtable.table()
+check('D244 affix table covers the live pool', all(k in _at['affixes'] for k in cfg['variety']['affixes']), str(cfg['variety']['affixes']))
+check('D244 rules: table inputs == live variety', not rules.affix_table_drift(_at, rules.runs()), '; '.join(rules.affix_table_drift(_at, rules.runs())))
+_c2 = _copy.deepcopy(cfg); _c2['variety']['blazing']['every'] = float(_c2['variety']['blazing']['every']) + 1.0
+try:
+    affixtable.row(_c2, 'blazing'); _drift_caught = False
+except rules.RuleError:
+    _drift_caught = True
+check('D244 a variety what-if without re-export is refused', _drift_caught)
+_mobs = [{'role': 'heavy', 'hp': 100.0, 'atk': 10.0}]
+_am = p1sim.affix_mob(cfg, None, _mobs, 'venom', 100.0)
+_v = _at['affixes']['venom']
+check('D244 affix_mob uses the table cadence', _am['blaze'] == (100.0 + _v['first_hit_s'], _v['period_s'], 10.0 * _v['dmg_atk']), str(_am['blaze']))
+
 print('\n%d failed' % len(fails))
 sys.exit(1 if fails else 0)

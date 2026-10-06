@@ -32,6 +32,8 @@ import town.sunshine.corerpg.PlayerData;
  * vault write scan in {@code EmberEconomyTest} (callers must {@code grantMat} first or tag {@code econ-ok:}).
  * D243 (S4-2): S33 codex stage coin (run {@code codex} → tagged grantCoin), S34 chest extra gear roll, S35 starter kit,
  * S09 {@code per_rule} yml key — amounts unchanged (tags / registry only); docs/design/ember-source-map.yml lists them.
+ * D244 (S4-3, G10): S36 fishing (CoreFish), S37 gacha tickets, S38 gacha pulls (cosmetics), C19 gacha pull cost —
+ * registry rows only (other plugins pay / take them; no goldens, nothing routes here); stocks in ember-source-map.yml.
  */
 public final class EmberEconomy {
     /** What a row pays or takes. */
@@ -179,6 +181,14 @@ public final class EmberEconomy {
             .g("chest_weight", 5).done();
         src("S35", "起步包", "EmberRunService.giveStarter + EmberSupplyService.giveStarter", Period.ONCE).acc(GEAR, POT)
             .keys("p1_starter").ledger("starter/starter_<slot>").model(FULL).g("pieces", 2).g("potions", 5).done();
+        // D244 (G10): item-level sources outside CoreRpg's grant code — registered for the audit / source map (tags only,
+        // no goldens: their numbers live in the other plugins' configs; CoreRpg never pays them, so nothing routes here)
+        src("S36", "钓鱼产出（CoreFish）", "plugins/CoreFish/config.yml tables", Period.NONE).acc(Account.LIFE_ITEM)
+            .model(NONE).done();
+        src("S37", "扭蛋券发放（CoreGacha）", "plugins/CoreGacha/config.yml tickets", Period.DAY).acc(Account.GACHA_TICKET)
+            .model(NONE).done();
+        src("S38", "扭蛋抽取产出（CoreGacha，外观）", "plugins/CoreGacha/gacha.yml items", Period.DAY).acc(Account.COSMETIC)
+            .model(OUT).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -206,10 +216,12 @@ public final class EmberEconomy {
         sink("C14", "回复药购买", "ember-v1.yml shop.heal_potion.price", Period.NONE).acc(COIN).model(FULL).g("coin", 10).done();
         sink("C15", "外观商店（暂停）", "EmberCosmetics", Period.NONE).acc(COIN, BADGE, MARK, Account.COSMETIC).keys("p2_cosbuy_").model(OUT).done();
         sink("C16", "扭蛋兑券（暂停）", "CoreGacha exchange", Period.DAY).acc(COIN, BADGE, Account.GACHA_TICKET).model(NONE).done();
-        sink("C17", "生活 offer", "life.yml", Period.DAY).acc(COIN, CORE).keys("life_").model(NONE).done();
+        sink("C17", "生活 offer", "life.yml", Period.DAY).acc(COIN, CORE, Account.LIFE_ITEM).keys("life_").model(NONE).done(); // D244: offers eat life items too
         sink("C18", "国庆商店", "ember-v1-festival.yml shop", Period.EVENT).acc(Account.FEST_COIN, COIN, BADGE).model(PART)
             .g("charm_event", 60).g("trail_event", 30).g("after_coin", 15000).g("after_badge", 300)
             .g("memo", 120).g("badge_rate", 5).g("badge_cap", 40).done();
+        sink("C19", "扭蛋抽取（耗券，CoreGacha）", "plugins/CoreGacha/gacha.yml cost_per_pull / daily_pull_cap", Period.DAY)
+            .acc(Account.GACHA_TICKET).model(OUT).done(); // D244 (G10): registered, tags only
     }
 
     private EmberEconomy() {}
