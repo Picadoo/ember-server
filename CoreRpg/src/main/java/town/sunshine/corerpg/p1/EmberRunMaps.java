@@ -111,6 +111,8 @@ public final class EmberRunMaps {
         /** D193 破招: not a charge, not a share — the party deals breakHp × the boss's max HP during the warning → the cast
          *  is broken (it does not land) and the boss staggers breakStun s; 0 = off (≤ 0.5 of max HP, stun ≤ 2 s) */
         public final double breakHp, breakStun;
+        /** D241: public factory for {@code p1.encounter} affix primitives (same parsing as the package constructor). */
+        public static Skill of(Map<?, ?> m) { return new Skill(m); }
         Skill(Map<?, ?> m) {
             type = str(m.get("type"), "cone");
             target = str(m.get("target"), "");

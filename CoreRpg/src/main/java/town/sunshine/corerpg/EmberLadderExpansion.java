@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 /**
  * PlaceholderAPI identifier {@code ember} for hologram ladder lines.
  * Examples: %ember_ladder_power_1_name%, %ember_power_score%
+ * <p>D241: {@code %ember_daily_left%} / {@code %ember_weekly_left%} (dungeon counts, {@link EmberPapiCounts}).
  */
 public final class EmberLadderExpansion extends PlaceholderExpansion {
 
@@ -45,6 +46,13 @@ public final class EmberLadderExpansion extends PlaceholderExpansion {
             if (player == null) return "0";
             PlayerData data = plugin.getDataStore().get(player.getUniqueId());
             return String.valueOf(data.getWeeklyBestSec());
+        }
+
+        // D241 counts: daily_left / weekly_left (were referenced but unprovided → PAPI showed the literal)
+        if (EmberPapiCounts.KEYS.contains(key)) {
+            if (player == null) return "0";
+            return EmberPapiCounts.resolve(plugin.getStaminaService(),
+                    plugin.getDataStore().get(player.getUniqueId()), key);
         }
 
         // Ladder: ladder_<board>_<N>_<name|value>

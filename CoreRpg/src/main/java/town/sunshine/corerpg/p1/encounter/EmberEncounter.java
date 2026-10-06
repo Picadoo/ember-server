@@ -15,16 +15,19 @@ package town.sunshine.corerpg.p1.encounter;
  *   <li>{@link EmberCounterplay} — counterplay windows: wall stun (D188), whiff stun (D192),
  *       break / interrupt (D193). Live since D236.</li>
  *   <li>{@link RevivePoint} — D106 raid revive triggers. Live since D236.</li>
+ *   <li>{@link AffixBehavior} / {@link EmberAffixes} — D241: one primitive class per affix ({@code Affix*}, 12) in
+ *       {@link AffixFamily} families + the shared {@link AffixCycle} telegraph clock and {@link EmberShape} geometry.
+ *       Director keeps entities / FX / chat; fixed-seed damage replay vs the 46736db code is identical.</li>
  * </ul>
- * Next slices: Papi 分节; affix behaviour primitives; more Director FX behind adapters.
+ * Next: S4 (gear structure merge doc + source_map); more Director FX behind adapters when content resumes.
  */
 public final class EmberEncounter {
 
     private EmberEncounter() { }
 
     /** human label for logs / STATUS */
-    public static final String SLICE = "S3-10 BossMove + RoomObjective adapters";
+    public static final String SLICE = "S3-12 affix behaviour primitives";
 
     /** D239 deliverable id */
-    public static final String D = "D239";
+    public static final String D = "D241";
 }

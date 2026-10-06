@@ -15,7 +15,22 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
+import town.sunshine.corerpg.p1.encounter.AffixArcane;
+import town.sunshine.corerpg.p1.encounter.AffixBlazing;
+import town.sunshine.corerpg.p1.encounter.AffixCharge;
+import town.sunshine.corerpg.p1.encounter.AffixCycle;
+import town.sunshine.corerpg.p1.encounter.AffixFirechain;
+import town.sunshine.corerpg.p1.encounter.AffixFrost;
+import town.sunshine.corerpg.p1.encounter.AffixJailer;
+import town.sunshine.corerpg.p1.encounter.AffixMolten;
+import town.sunshine.corerpg.p1.encounter.AffixMortar;
+import town.sunshine.corerpg.p1.encounter.AffixRegen;
+import town.sunshine.corerpg.p1.encounter.AffixShield;
+import town.sunshine.corerpg.p1.encounter.AffixSplit;
+import town.sunshine.corerpg.p1.encounter.AffixVenom;
+import town.sunshine.corerpg.p1.encounter.EmberAffixes;
 import town.sunshine.corerpg.p1.encounter.EmberBossMove;
+import town.sunshine.corerpg.p1.encounter.EmberShape;
 import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
 import town.sunshine.corerpg.p1.encounter.EmberRoomObjective;
 import town.sunshine.corerpg.p1.encounter.RevivePoint;
@@ -588,81 +603,60 @@ final class EmberRunDirector {
         if ("shield".equals(t.affix)) {
             AttributeInstance a = t.le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
             if (a != null) {
-                a.setBaseValue(a.getBaseValue() * v.shieldHp);
+                a.setBaseValue(AffixShield.maxHp(a.getBaseValue(), v));
                 t.le.setHealth(t.le.getMaxHealth());
             }
         }
-        double every = "blazing".equals(t.affix) ? v.blazeEvery
-                : "regen".equals(t.affix) ? v.regenEvery
-                : "charge".equals(t.affix) ? v.chargeEvery
-                : "frost".equals(t.affix) ? v.frostTick
-                : "mortar".equals(t.affix) ? v.mortarEvery
-                : "venom".equals(t.affix) ? v.venomEvery
-                : "jailer".equals(t.affix) ? v.jailerEvery
-                : "arcane".equals(t.affix) ? v.arcaneEvery
-                : "firechain".equals(t.affix) ? v.chainLinkWarn
-                : v.blazeEvery; // molten has no live tick; split/shield idle glow only
-        t.affixNext = System.currentTimeMillis() + 1500L + (long) (every * 1000);
+        // D241: cadence / intro / glow come from the affix primitive (p1.encounter.Affix*; unknown id → old fallbacks)
+        double every = EmberAffixes.firstEvery(t.affix, v); // molten has no live tick; split/shield idle glow only
+        t.affixNext = AffixCycle.firstNext(System.currentTimeMillis(), every);
         String tag = EmberRunMaps.Variety.label(t.affix);
         String old = t.le.getCustomName();
         t.le.setCustomName("§6[" + tag + "] §r" + (old == null ? t.le.getName() : old));
         t.le.setCustomNameVisible(true);
         t.le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
-        String how;
-        if ("blazing".equals(t.affix)) how = "脚下每 " + fmt(v.blazeEvery) + " 秒落一圈火（半径 " + fmt(v.blazeRadius) + "，" + fmt(v.blazeWarn) + " 秒预警，看到火圈就退开）";
-        else if ("split".equals(t.affix)) how = "死后分裂成 " + v.splitCount + " 个小怪（门要等它们也倒下）";
-        else if ("shield".equals(t.affix)) how = "生命 ×" + fmt(v.shieldHp);
-        else if ("regen".equals(t.affix)) how = "发光读条时猛打可打断回血";
-        else if ("charge".equals(t.affix)) how = "看见脚下亮带就躲开";
-        else if ("frost".equals(t.affix)) how = "别站在它身边的霜圈里（出圈即解除）";
-        else if ("mortar".equals(t.affix)) how = "脚下附近会亮圈，走开再打";
-        else if ("molten".equals(t.affix)) how = "杀掉后尸体要炸，立刻退开";
-        else if ("venom".equals(t.affix)) how = "身上会亮十字（+ 和 × 轮换），站到两条线之间的空隙里";
-        else if ("jailer".equals(t.affix)) how = "脚下亮小圈就走开，被罩住会定身 " + fmt(v.jailerRoot) + " 秒";
-        else if ("arcane".equals(t.affix)) how = "脚下会亮起一道光束并转半圈（紫色预警标出起点和扫过的半边），退到 " + fmt(v.arcaneLength) + " 格外或站到另半边";
-        else if ("firechain".equals(t.affix)) how = "和身边一只怪连着一条火链，别站在两只怪之间；先杀掉被连的那只，火链会换人（换之前有 " + fmt(v.chainLinkWarn) + " 秒烟线预警）";
-        else how = t.affix;
+        String how = EmberAffixes.how(t.affix, v);
         svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));
     }
 
+    /** D241: idle glow per affix primitive ({@code AffixBehavior.fx()}), resolved once; unknown id → END_ROD. */
+    private static final Map<String, Particle> AFFIX_FX = new HashMap<String, Particle>();
+    static {
+        for (String id : EmberAffixes.all().keySet()) AFFIX_FX.put(id, Particle.valueOf(EmberAffixes.fx(id)));
+    }
+
+    static Particle affixFx(String affix) {
+        Particle p = affix == null ? null : AFFIX_FX.get(affix);
+        return p == null ? Particle.END_ROD : p;
+    }
+
     private void affixTick(Tracked t, long now) {
-        Particle fx = "blazing".equals(t.affix) ? Particle.FLAME
-                : "split".equals(t.affix) ? Particle.SPELL_WITCH
-                : "regen".equals(t.affix) ? Particle.HEART
-                : "charge".equals(t.affix) ? Particle.CRIT
-                : "frost".equals(t.affix) ? Particle.SNOW_SHOVEL
-                : "mortar".equals(t.affix) ? Particle.FLAME
-                : "molten".equals(t.affix) ? Particle.LAVA
-                : "venom".equals(t.affix) ? Particle.SPELL_MOB
-                : "jailer".equals(t.affix) ? Particle.CRIT_MAGIC
-                : "arcane".equals(t.affix) ? Particle.SPELL_WITCH
-                : "firechain".equals(t.affix) ? Particle.FLAME
-                : Particle.END_ROD;
+        Particle fx = affixFx(t.affix);
         w.spawnParticle(fx, t.le.getLocation().add(0, 1.0, 0), 3, 0.3, 0.5, 0.3, 0.01);
         EmberRunMaps.Variety v = svc.maps().variety;
         if ("blazing".equals(t.affix)) {
-            if (t.affixAt > 0) {
+            if (AffixCycle.armed(t.affixAt)) {
                 warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.blazeRadius, Particle.FLAME);
-                if (now >= t.affixAt) {
+                if (AffixCycle.lands(now, t.affixAt)) {
                     execute(blazeSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
                     t.affixAt = 0;
-                    t.affixNext = now + (long) (v.blazeEvery * 1000);
+                    t.affixNext = AffixCycle.after(now, v.blazeEvery);
                 }
                 return;
             }
-            if (now < t.affixNext || nearest(t.le.getLocation(), 6) == null) return;
+            if (!AffixCycle.ready(now, t.affixNext) || nearest(t.le.getLocation(), AffixBlazing.ENGAGE) == null) return;
             t.affixOrigin = t.le.getLocation().clone();
-            t.affixAt = now + (long) (v.blazeWarn * 1000);
+            t.affixAt = AffixCycle.after(now, v.blazeWarn);
             return;
         }
         if ("regen".equals(t.affix)) {
             if (t.regenWindowEnd > 0) {
                 // flash name during interrupt window
                 if ((now / 200) % 2 == 0) t.le.setCustomNameVisible(true);
-                if (now >= t.regenWindowEnd) {
-                    if (t.regenHurt < t.le.getMaxHealth() * v.regenInterruptHp) {
-                        double heal = Math.min(t.le.getMaxHealth() - t.le.getHealth(), t.le.getMaxHealth() * v.regenHeal);
+                if (AffixCycle.lands(now, t.regenWindowEnd)) {
+                    if (!AffixRegen.interrupted(t.regenHurt, t.le.getMaxHealth(), v)) {
+                        double heal = AffixRegen.heal(t.le.getHealth(), t.le.getMaxHealth(), v);
                         if (heal > 0) t.le.setHealth(Math.min(t.le.getMaxHealth(), t.le.getHealth() + heal));
                         svc.tellRun(s, "§6「再生」§7回血了（未打断）");
                     } else {
@@ -670,56 +664,51 @@ final class EmberRunDirector {
                     }
                     t.regenWindowEnd = 0;
                     t.regenHurt = 0;
-                    t.affixNext = now + (long) (v.regenEvery * 1000);
+                    t.affixNext = AffixCycle.after(now, v.regenEvery);
                 }
                 return;
             }
-            if (now < t.affixNext || nearest(t.le.getLocation(), 8) == null) return;
-            t.regenWindowEnd = now + (long) (v.regenInterruptWindow * 1000);
+            if (!AffixCycle.ready(now, t.affixNext) || nearest(t.le.getLocation(), AffixRegen.ENGAGE) == null) return;
+            t.regenWindowEnd = AffixRegen.windowEnd(now, v);
             t.regenHurt = 0;
             svc.tellRun(s, "§6「再生」§7读条中 · 猛打可打断");
             return;
         }
         if ("charge".equals(t.affix)) {
             // D171: telegraph strip only — no body dash out of leash (execute skips teleport when src != boss)
-            if (t.affixAt > 0) {
+            if (AffixCycle.armed(t.affixAt)) {
                 EmberRunMaps.Skill sk = chargeSkill(t, v, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir);
                 drawShape(sk, t.affixOrigin, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir);
-                if (now >= t.affixAt) {
+                if (AffixCycle.lands(now, t.affixAt)) {
                     execute(sk, t.affixOrigin, t.affixDir == null ? new Vector(1, 0, 0) : t.affixDir, t.le);
                     t.affixAt = 0;
-                    t.affixNext = now + (long) (v.chargeEvery * 1000);
+                    t.affixNext = AffixCycle.after(now, v.chargeEvery);
                 }
                 return;
             }
-            Player tgt = nearest(t.le.getLocation(), 10);
-            if (now < t.affixNext || tgt == null) return;
+            Player tgt = nearest(t.le.getLocation(), AffixCharge.ENGAGE);
+            if (!AffixCycle.ready(now, t.affixNext) || tgt == null) return;
             Location o = t.le.getLocation().clone();
-            Vector dir = tgt.getLocation().toVector().subtract(o.toVector());
-            dir.setY(0);
-            if (dir.lengthSquared() < 1e-6) dir = new Vector(0, 0, 1);
-            dir.normalize();
+            Vector dir = AffixCharge.aim(o.getX(), o.getZ(), tgt.getLocation().getX(), tgt.getLocation().getZ());
             double run = clearRun(o, dir, v.chargeLength);
-            if (run < CHARGE_MIN) return; // no room — skip this attempt, keep cooldown
+            if (!AffixCharge.roomFor(run)) return; // no room — skip this attempt, keep cooldown
             t.affixOrigin = o;
             t.affixDir = dir;
-            t.affixAt = now + (long) (v.chargeWarn * 1000);
+            t.affixAt = AffixCycle.after(now, v.chargeWarn);
             return;
         }
         if ("frost".equals(t.affix)) {
-            if (now < t.frostNext) return;
-            t.frostNext = now + (long) (v.frostTick * 1000);
+            if (!AffixCycle.ready(now, t.frostNext)) return;
+            t.frostNext = AffixFrost.nextTick(now, v);
             Location c = t.le.getLocation();
             warnCircle(c.clone().add(0, 0.15, 0), v.frostRadius, Particle.SNOW_SHOVEL);
-            double r2 = v.frostRadius * v.frostRadius;
             for (Player p : participantsHere()) {
                 if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
-                if (p.getLocation().distanceSquared(c) <= r2) {
-                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (v.frostTick * 20) + 10, v.frostAmplifier, false, true), true);
+                if (AffixFrost.inAura(p.getLocation().distanceSquared(c), v)) {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, AffixFrost.slowTicks(v), v.frostAmplifier, false, true), true);
                 } else {
                     for (PotionEffect cur : p.getActivePotionEffects()) {
-                        if (cur.getType().equals(PotionEffectType.SLOW) && cur.getAmplifier() == v.frostAmplifier
-                                && cur.getDuration() <= (int) (v.frostTick * 20) + 15) {
+                        if (cur.getType().equals(PotionEffectType.SLOW) && AffixFrost.ownSlow(cur.getAmplifier(), cur.getDuration(), v)) {
                             p.removePotionEffect(PotionEffectType.SLOW);
                             break;
                         }
@@ -730,28 +719,28 @@ final class EmberRunDirector {
         }
         if ("mortar".equals(t.affix)) {
             // D181: periodic circle near nearest in-run player feet (onGround Y); kb=0
-            if (t.affixAt > 0) {
+            if (AffixCycle.armed(t.affixAt)) {
                 warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.mortarRadius, Particle.FLAME);
-                if (now >= t.affixAt) {
+                if (AffixCycle.lands(now, t.affixAt)) {
                     execute(mortarSkill(t, v), t.affixOrigin, new Vector(1, 0, 0), t.le);
                     t.affixAt = 0;
-                    t.affixNext = now + (long) (v.mortarEvery * 1000);
+                    t.affixNext = AffixCycle.after(now, v.mortarEvery);
                 }
                 return;
             }
-            if (now < t.affixNext) return;
+            if (!AffixCycle.ready(now, t.affixNext)) return;
             Location feet = mortarTargetFeet(t, v);
             if (feet == null) return;
             t.affixOrigin = feet;
-            t.affixAt = now + (long) (v.mortarWarn * 1000);
+            t.affixAt = AffixCycle.after(now, v.mortarWarn);
             return;
         }
         if ("venom".equals(t.affix)) {
             // D189 毒十字: two lines crossing at the elite's feet ("+" then "x"); a player is hit at most once per cast
             EmberRunMaps.Skill arm = venomSkill(t, v);
-            if (t.affixAt > 0) {
+            if (AffixCycle.armed(t.affixAt)) {
                 for (Vector d : venomDirs(t.venomDiag)) drawShape(arm, t.affixOrigin, d);
-                if (now >= t.affixAt) {
+                if (AffixCycle.lands(now, t.affixAt)) {
                     Vector[] dirs = venomDirs(t.venomDiag);
                     int hit = 0;
                     for (Player p : participantsHere()) {
@@ -765,23 +754,23 @@ final class EmberRunDirector {
                     svc.log().info(String.format(Locale.ROOT, "[P1 run] %s venom %s hit=%d", s.runId, t.venomDiag ? "x" : "+", hit));
                     t.venomDiag = !t.venomDiag;
                     t.affixAt = 0;
-                    t.affixNext = now + (long) (v.venomEvery * 1000);
+                    t.affixNext = AffixCycle.after(now, v.venomEvery);
                 }
                 return;
             }
-            if (now < t.affixNext || nearest(t.le.getLocation(), 8) == null) return;
+            if (!AffixCycle.ready(now, t.affixNext) || nearest(t.le.getLocation(), AffixVenom.ENGAGE) == null) return;
             Location o = t.le.getLocation().clone();
             o.setY(Math.floor(o.getY()));
             t.affixOrigin = o;
-            t.affixAt = now + (long) (v.venomWarn * 1000);
+            t.affixAt = AffixCycle.after(now, v.venomWarn);
             return;
         }
         if ("jailer".equals(t.affix)) {
             // D189 禁锢: small circle at the nearest player's feet; inside when it lands = light hit + rooted (≤1.5 s)
-            if (t.affixAt > 0) {
+            if (AffixCycle.armed(t.affixAt)) {
                 warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius, Particle.CRIT_MAGIC);
                 warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.jailerRadius * 0.5, Particle.CRIT_MAGIC);
-                if (now >= t.affixAt) {
+                if (AffixCycle.lands(now, t.affixAt)) {
                     EmberRunMaps.Skill sk = jailerSkill(t, v);
                     int ticks = jailerRootTicks(v);
                     int rooted = 0;
@@ -799,24 +788,24 @@ final class EmberRunDirector {
                     w.playSound(t.affixOrigin, Sound.BLOCK_ANVIL_LAND, 0.5f, 1.4f);
                     svc.log().info(String.format(Locale.ROOT, "[P1 run] %s jailer rooted=%d", s.runId, rooted));
                     t.affixAt = 0;
-                    t.affixNext = now + (long) (v.jailerEvery * 1000);
+                    t.affixNext = AffixCycle.after(now, v.jailerEvery);
                 }
                 return;
             }
-            if (now < t.affixNext) return;
+            if (!AffixCycle.ready(now, t.affixNext)) return;
             Location feet = mortarTargetFeet(t, v, 0.0);
             if (feet == null) return;
             t.affixOrigin = feet;
-            t.affixAt = now + (long) (v.jailerWarn * 1000);
+            t.affixAt = AffixCycle.after(now, v.jailerWarn);
             return;
         }
         if ("arcane".equals(t.affix)) {
             // D196 旋光 (D3 Arcane Enchanted): a beam from the elite's (locked) feet; the warning shows the start line and the
             // swept half; then it turns `sweep`° in `spin` s. A player is hit at most once per cast (swept-interval check, so a
             // fast step between two ticks cannot jump over the beam). The nearest player sits in the middle of the swept arc.
-            double sweep = Math.toRadians(v.arcaneSweep);
-            if (t.affixAt > 0) {
-                if (now < t.affixAt) {
+            double sweep = AffixArcane.sweepRad(v);
+            if (AffixCycle.armed(t.affixAt)) {
+                if (!AffixCycle.lands(now, t.affixAt)) {
                     drawBeam(t.affixOrigin, t.arcaneStart, v.arcaneLength, Particle.SPELL_WITCH);
                     drawArc(t.affixOrigin, t.arcaneStart, t.arcaneSign * sweep, v.arcaneLength, Particle.SPELL_WITCH);
                     return;
@@ -824,7 +813,7 @@ final class EmberRunDirector {
                 double el = (now - t.affixAt) / 1000.0;
                 double cur = arcaneAngle(t.arcaneStart, t.arcaneSign, sweep, v.arcaneSpin, el);
                 drawBeam(t.affixOrigin, cur, v.arcaneLength, Particle.END_ROD);
-                double dmg = t.atk * v.arcaneDmg;
+                double dmg = AffixArcane.dmg(t.atk, v);
                 for (Player p : participantsHere()) {
                     if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
                     if (t.arcaneHit.contains(p.getUniqueId())) continue;
@@ -833,24 +822,24 @@ final class EmberRunDirector {
                     if (dmg > 0) svc.skillHit(s, p, t.le, dmg, "mob");
                 }
                 t.arcanePrev = cur;
-                if (el >= v.arcaneSpin) {
+                if (AffixArcane.spun(el, v)) {
                     svc.log().info(String.format(Locale.ROOT, "[P1 run] %s arcane %s hit=%d", s.runId, t.arcaneSign > 0 ? "ccw" : "cw", t.arcaneHit.size()));
                     t.arcaneSign = -t.arcaneSign;
                     t.arcaneHit.clear();
                     t.affixAt = 0;
-                    t.affixNext = now + (long) (v.arcaneEvery * 1000);
+                    t.affixNext = AffixCycle.after(now, v.arcaneEvery);
                 }
                 return;
             }
-            Player tgt = nearest(t.le.getLocation(), 8);
-            if (now < t.affixNext || tgt == null) return;
+            Player tgt = nearest(t.le.getLocation(), AffixArcane.ENGAGE);
+            if (!AffixCycle.ready(now, t.affixNext) || tgt == null) return;
             Location o = t.le.getLocation().clone();
             o.setY(Math.floor(o.getY()));
             t.affixOrigin = o;
             t.arcaneStart = arcaneStartAngle(o, tgt.getLocation(), t.arcaneSign, sweep);
             t.arcanePrev = t.arcaneStart;
             t.arcaneHit.clear();
-            t.affixAt = now + (long) (v.arcaneWarn * 1000);
+            t.affixAt = AffixCycle.after(now, v.arcaneWarn);
             w.playSound(o, Sound.BLOCK_NOTE_PLING, 0.6f, 0.8f);
             return;
         }
@@ -860,25 +849,25 @@ final class EmberRunDirector {
             // after a `warn` s smoke line. No partner left → no chain.
             Tracked q = t.chainTo;
             if (q != null && (q.le.isDead() || !q.le.isValid() || !mobs.containsKey(q.le.getUniqueId())
-                    || q.le.getLocation().distanceSquared(t.le.getLocation()) > (v.chainLinkRange + 4) * (v.chainLinkRange + 4))) {
+                    || AffixFirechain.tooFar(q.le.getLocation().distanceSquared(t.le.getLocation()), v))) {
                 t.chainTo = null;
                 q = null;
                 t.affixNext = now; // re-link right away; the new link still waits its warning before it burns
             }
             if (q == null) {
-                if (now < t.affixNext) return;
+                if (!AffixCycle.ready(now, t.affixNext)) return;
                 Tracked best = chainPartner(t, mobs.values(), v.chainLinkRange);
-                if (best == null) { t.affixNext = now + 1000L; return; }
+                if (best == null) { t.affixNext = now + AffixFirechain.RELINK_RETRY_MS; return; }
                 t.chainTo = best;
-                t.chainLiveAt = now + (long) (v.chainLinkWarn * 1000);
+                t.chainLiveAt = AffixFirechain.liveAt(now, v);
                 svc.log().info(String.format(Locale.ROOT, "[P1 run] %s firechain link %s", s.runId, best.role));
                 return;
             }
             Location a = t.le.getLocation(), b = q.le.getLocation();
-            boolean live = now >= t.chainLiveAt;
+            boolean live = AffixCycle.lands(now, t.chainLiveAt);
             drawLink(a, b, live ? Particle.FLAME : Particle.SMOKE_NORMAL);
             if (!live) return;
-            double dmg = t.atk * v.chainLinkDmg;
+            double dmg = AffixFirechain.dmg(t.atk, v);
             for (Player p : participantsHere()) {
                 if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
                 if (!chainTouches(a, b, v.chainLinkWidth, p.getLocation())) continue;
@@ -890,49 +879,34 @@ final class EmberRunDirector {
     }
 
     /** D196 旋光: beam angle (rad) {@code elapsed} s into the spin; stops at the end of the sweep. */
+    /** D196 旋光: beam angle (rad) {@code elapsed} s into the spin. D241: {@link AffixArcane#angle}. */
     static double arcaneAngle(double start, int sign, double sweepRad, double spin, double elapsed) {
-        double f = spin <= 0 ? 1.0 : Math.max(0.0, Math.min(1.0, elapsed / spin));
-        return start + (sign >= 0 ? 1 : -1) * sweepRad * f;
+        return AffixArcane.angle(start, sign, sweepRad, spin, elapsed);
     }
 
-    /** D196 旋光: start angle so the target sits in the middle of the swept arc. */
+    /** D196 旋光: start angle so the target sits in the middle of the swept arc. D241: {@link AffixArcane#startAngle}. */
     static double arcaneStartAngle(Location o, Location target, int sign, double sweepRad) {
-        double base = Math.atan2(target.getZ() - o.getZ(), target.getX() - o.getX());
-        return base - (sign >= 0 ? 1 : -1) * sweepRad / 2.0;
+        return AffixArcane.startAngle(o, target, sign, sweepRad);
     }
 
     /**
      * D196 旋光: did the beam (length {@code len}, width {@code width}) pass over {@code p} while turning from {@code a0} to
      * {@code a1}? Swept-interval test on the player's polar angle, widened by the beam's half width at that distance.
      */
+    /** D196 旋光: swept-interval beam hit test. D241: {@link AffixArcane#swept}. */
     static boolean arcaneSwept(Location o, double a0, double a1, double len, double width, Location p) {
-        if (Math.abs(p.getY() - o.getY()) > 2.5) return false;
-        double dx = p.getX() - o.getX(), dz = p.getZ() - o.getZ();
-        double r = Math.sqrt(dx * dx + dz * dz);
-        if (r > len) return false;
-        if (r < 0.6) return true; // standing on the elite's feet: the pivot
-        double lo = Math.min(a0, a1), span = Math.abs(a1 - a0);
-        double half = Math.asin(Math.min(1.0, (width / 2.0) / r));
-        double d = (Math.atan2(dz, dx) - lo + half) % (2 * Math.PI);
-        if (d < 0) d += 2 * Math.PI;
-        return d <= span + 2 * half;
+        return AffixArcane.swept(o, a0, a1, len, width, p);
     }
 
     /** D196 火链: is {@code p} touching the chain segment a–b (horizontal distance ≤ width/2, within the two mobs' heights)? */
+    /** D196 火链: touching the chain segment a–b? D241: {@link AffixFirechain#touches}. */
     static boolean chainTouches(Location a, Location b, double width, Location p) {
-        double lo = Math.min(a.getY(), b.getY()) - 1.0, hi = Math.max(a.getY(), b.getY()) + 2.5;
-        if (p.getY() < lo || p.getY() > hi) return false;
-        double ax = a.getX(), az = a.getZ(), bx = b.getX() - ax, bz = b.getZ() - az;
-        double px = p.getX() - ax, pz = p.getZ() - az;
-        double l2 = bx * bx + bz * bz;
-        double f = l2 < 1e-9 ? 0.0 : Math.max(0.0, Math.min(1.0, (px * bx + pz * bz) / l2));
-        double ex = px - f * bx, ez = pz - f * bz;
-        return ex * ex + ez * ez <= (width / 2.0) * (width / 2.0);
+        return AffixFirechain.touches(a, b, width, p);
     }
 
-    /** D196 火链: per-player burn cooldown. */
+    /** D196 火链: per-player burn cooldown. D241: {@link AffixFirechain#burnReady}. */
     static boolean chainBurnReady(Long last, long now, double tick) {
-        return last == null || now - last >= (long) (tick * 1000);
+        return AffixFirechain.burnReady(last, now, tick);
     }
 
     /** D196 火链: nearest living mob of the same room (never the boss, the escort rabbit or itself) within {@code range}. */
@@ -975,102 +949,38 @@ final class EmberRunDirector {
     }
 
     /** D189 毒十字 arm: one line through the centre, {@code -arm .. +arm}; kb 0. */
-    static EmberRunMaps.Skill venomSkill(Tracked t, EmberRunMaps.Variety v) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("type", "line");
-        m.put("name", "毒十字");
-        m.put("start", -v.venomArm);
-        m.put("length", 2 * v.venomArm);
-        m.put("width", v.venomWidth);
-        m.put("warn", v.venomWarn);
-        m.put("dmg", t.atk * v.venomDmg);
-        m.put("kb", 0);
-        return new EmberRunMaps.Skill(m);
-    }
+    /** D189 毒十字 arm. D241: {@link AffixVenom#skill}. */
+    static EmberRunMaps.Skill venomSkill(Tracked t, EmberRunMaps.Variety v) { return AffixVenom.skill(t.atk, v); }
 
-    /** D189: the two arm directions — "+" (x / z axes) or "x" (the two diagonals). */
-    static Vector[] venomDirs(boolean diag) {
-        if (!diag) return new Vector[]{new Vector(1, 0, 0), new Vector(0, 0, 1)};
-        double c = Math.sqrt(0.5);
-        return new Vector[]{new Vector(c, 0, c), new Vector(c, 0, -c)};
-    }
+    /** D189: "+" / "x" arm directions. D241: {@link AffixVenom#dirs}. */
+    static Vector[] venomDirs(boolean diag) { return AffixVenom.dirs(diag); }
 
-    /** D189: inside either arm (the crossing square counts once — caller hits each player at most once). */
-    static boolean venomHits(EmberRunMaps.Skill arm, Location o, Vector[] dirs, Location p) {
-        for (Vector d : dirs) if (inShape(arm, o, d, p)) return true;
-        return false;
-    }
+    /** D189: inside either arm. D241: {@link AffixVenom#hits}. */
+    static boolean venomHits(EmberRunMaps.Skill arm, Location o, Vector[] dirs, Location p) { return AffixVenom.hits(arm, o, dirs, p); }
 
-    /** D189 禁锢 circle at a player's feet; kb 0. */
-    static EmberRunMaps.Skill jailerSkill(Tracked t, EmberRunMaps.Variety v) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("type", "circle");
-        m.put("name", "禁锢圈");
-        m.put("radius", v.jailerRadius);
-        m.put("warn", v.jailerWarn);
-        m.put("ahead", 0.0);
-        m.put("dmg", t.atk * v.jailerDmg);
-        m.put("kb", 0);
-        return new EmberRunMaps.Skill(m);
-    }
+    /** D189 禁锢 circle. D241: {@link AffixJailer#skill}. */
+    static EmberRunMaps.Skill jailerSkill(Tracked t, EmberRunMaps.Variety v) { return AffixJailer.skill(t.atk, v); }
 
-    /** D189: root length in ticks (config clamps to ≤ 1.5 s). */
-    static int jailerRootTicks(EmberRunMaps.Variety v) { return (int) Math.round(v.jailerRoot * 20); }
+    /** D189: root length in ticks (config clamps to ≤ 1.5 s). D241: {@link AffixJailer#rootTicks}. */
+    static int jailerRootTicks(EmberRunMaps.Variety v) { return AffixJailer.rootTicks(v); }
 
-    static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("type", "circle");
-        m.put("name", "炽热火圈");
-        m.put("radius", v.blazeRadius);
-        m.put("warn", v.blazeWarn);
-        m.put("dmg", t.atk * v.blazeDmg);
-        return new EmberRunMaps.Skill(m);
-    }
+    /** D138 炽热 circle. D241: {@link AffixBlazing#skill}. */
+    static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) { return AffixBlazing.skill(t.atk, v); }
 
-    /** D171 charge affix: strip damage only (src != boss → execute will not teleport the body). */
-    static EmberRunMaps.Skill chargeSkill(Tracked t, EmberRunMaps.Variety v, Vector dir) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("type", "charge");
-        m.put("name", "冲锋条带");
-        m.put("length", v.chargeLength);
-        m.put("width", v.chargeWidth);
-        m.put("warn", v.chargeWarn);
-        m.put("dmg", t.atk * v.chargeDmg);
-        EmberRunMaps.Skill sk = new EmberRunMaps.Skill(m);
-        // clip to clearRun length when origin known — caller already clipped via clearRun; length stays config max
-        return sk;
-    }
+    /** D171 charge affix strip (src != boss → execute will not teleport the body). D241: {@link AffixCharge#skill}. */
+    static EmberRunMaps.Skill chargeSkill(Tracked t, EmberRunMaps.Variety v, Vector dir) { return AffixCharge.skill(t.atk, v, dir); }
 
-    /** D181 mortar: circle at player feet; kb forced 0 (Q04 ledge discipline). */
-    static EmberRunMaps.Skill mortarSkill(Tracked t, EmberRunMaps.Variety v) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("type", "circle");
-        m.put("name", "投弹圈");
-        m.put("radius", v.mortarRadius);
-        m.put("warn", v.mortarWarn);
-        m.put("ahead", v.mortarAhead);
-        m.put("dmg", t.atk * v.mortarDmg);
-        m.put("kb", 0);
-        return new EmberRunMaps.Skill(m);
-    }
+    /** D181 mortar circle at player feet; kb 0. D241: {@link AffixMortar#skill}. */
+    static EmberRunMaps.Skill mortarSkill(Tracked t, EmberRunMaps.Variety v) { return AffixMortar.skill(t.atk, v); }
 
-    /** D181 molten corpse blast (atk snapped at death). kb=0. */
-    static EmberRunMaps.Skill moltenSkill(double atk, EmberRunMaps.Variety v) {
-        Map<String, Object> m = new HashMap<String, Object>();
-        m.put("type", "circle");
-        m.put("name", "亡爆圈");
-        m.put("radius", v.moltenRadius);
-        m.put("warn", v.moltenWarn);
-        m.put("dmg", atk * v.moltenDmg);
-        m.put("kb", 0);
-        return new EmberRunMaps.Skill(m);
-    }
+    /** D181 molten corpse blast (atk snapped at death). kb=0. D241: {@link AffixMolten#skill}. */
+    static EmberRunMaps.Skill moltenSkill(double atk, EmberRunMaps.Variety v) { return AffixMolten.skill(atk, v); }
 
     /** Nearest participant feet on ground Y; fallback elite feet. null only when nobody is in the instance. */
     private Location mortarTargetFeet(Tracked t, EmberRunMaps.Variety v) { return mortarTargetFeet(t, v, v.mortarAhead); }
 
     private Location mortarTargetFeet(Tracked t, EmberRunMaps.Variety v, double ahead) {
-        Player tgt = nearest(t.le.getLocation(), 16);
+        Player tgt = nearest(t.le.getLocation(), AffixMortar.REACH);
         Location base;
         if (tgt != null) {
             Location l = tgt.getLocation();
@@ -1094,15 +1004,15 @@ final class EmberRunDirector {
     }
 
     private void scheduleMolten(Tracked t) {
-        if (t == null || t.splitAdd) return; // splitAdds must NOT trigger molten
+        if (t == null || !AffixMolten.triggers(t.splitAdd)) return; // splitAdds must NOT trigger molten
         EmberRunMaps.Variety v = svc.maps().variety;
         Location at = t.le.getLocation().clone();
         at.setY(Math.floor(at.getY()));
         moltenOrigin = at;
-        moltenDmg = t.atk * v.moltenDmg; // store absolute for execute path via skill
+        moltenDmg = AffixMolten.blastDmg(t.atk, v); // store absolute for execute path via skill
         long now = System.currentTimeMillis();
-        moltenWarnAt = now + (long) (v.moltenDelay * 1000);
-        moltenBoomAt = moltenWarnAt + (long) (v.moltenWarn * 1000);
+        moltenWarnAt = AffixMolten.warnAt(now, v);
+        moltenBoomAt = AffixMolten.boomAt(moltenWarnAt, v);
         svc.tellRun(s, "§c亡爆 §7· 尸体要炸，退后！");
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s molten scheduled at %.1f %.1f %.1f",
                 s.runId, at.getX(), at.getY(), at.getZ()));
@@ -1113,16 +1023,9 @@ final class EmberRunDirector {
         EmberRunMaps.Variety v = svc.maps().variety;
         if (now < moltenWarnAt) return;
         warnCircle(moltenOrigin.clone().add(0, 0.15, 0), v.moltenRadius, Particle.LAVA);
-        if (now >= moltenBoomAt) {
+        if (AffixCycle.lands(now, moltenBoomAt)) {
             // rebuild skill with stored absolute dmg (atk already folded)
-            Map<String, Object> m = new HashMap<String, Object>();
-            m.put("type", "circle");
-            m.put("name", "亡爆圈");
-            m.put("radius", v.moltenRadius);
-            m.put("warn", v.moltenWarn);
-            m.put("dmg", moltenDmg);
-            m.put("kb", 0);
-            execute(new EmberRunMaps.Skill(m), moltenOrigin, new Vector(1, 0, 0), null);
+            execute(AffixMolten.blast(moltenDmg, v), moltenOrigin, new Vector(1, 0, 0), null);
             clearMolten();
         }
     }
@@ -1136,23 +1039,23 @@ final class EmberRunDirector {
 
     /** D171: damage taken by a regen elite during its interrupt window. */
     void noteRegenHurt(Tracked t, double dmg) {
-        if (t == null || !"regen".equals(t.affix) || t.regenWindowEnd <= 0 || dmg <= 0) return;
+        if (t == null || !"regen".equals(t.affix) || !AffixRegen.counts(t.regenWindowEnd, dmg)) return;
         t.regenHurt += dmg;
     }
 
     private void splitAdds(Tracked t) {
         EmberRunMaps.Variety v = svc.maps().variety;
         EmberRunMaps.Role role = def.role("melee", ch);
-        if (role == null || v.splitCount <= 0) return;
+        if (role == null || AffixSplit.count(v) <= 0) return;
         Location l = t.le.getLocation();
         EmberRunMaps.Pt pt = new EmberRunMaps.Pt(Math.floor(l.getX()), Math.floor(l.getY()), Math.floor(l.getZ()));
         int n = 0;
-        for (int i = 0; i < v.splitCount; i++) {
+        for (int i = 0; i < AffixSplit.count(v); i++) {
             Tracked a = spawn(role, "melee", t.roomId, pt, t.leash);
             if (a == null) continue;
             a.splitAdd = true;
             AttributeInstance at = a.le.getAttribute(Attribute.GENERIC_MAX_HEALTH);
-            if (at != null) { at.setBaseValue(Math.max(1.0, at.getBaseValue() * v.splitHp)); a.le.setHealth(a.le.getMaxHealth()); }
+            if (at != null) { at.setBaseValue(AffixSplit.addMaxHp(at.getBaseValue(), v)); a.le.setHealth(a.le.getMaxHealth()); }
             String old = a.le.getCustomName();
             a.le.setCustomName("§7[分身] §r" + (old == null ? a.le.getName() : old));
             n++;
@@ -2257,31 +2160,8 @@ final class EmberRunDirector {
         return sk.range;
     }
 
-    /** Shapes never exceed the drawn warning (book: 实际范围不超过预警). */
-    static boolean inShape(EmberRunMaps.Skill sk, Location o, Vector dir, Location p) {
-        if (Math.abs(p.getY() - o.getY()) > 2.5) return false;
-        double dx = p.getX() - o.getX(), dz = p.getZ() - o.getZ();
-        switch (sk.type) {
-            case "circle": {
-                double cx = dir.getX() * sk.ahead, cz = dir.getZ() * sk.ahead;
-                double ex = dx - cx, ez = dz - cz;
-                return ex * ex + ez * ez <= sk.radius * sk.radius;
-            }
-            case "line":
-            case "charge": {
-                double along = dx * dir.getX() + dz * dir.getZ();
-                double perp = Math.abs(-dx * dir.getZ() + dz * dir.getX());
-                return along >= sk.stripFrom() && along <= sk.stripTo() && perp <= sk.width / 2.0;
-            }
-            default: { // cone
-                double dist = Math.sqrt(dx * dx + dz * dz);
-                if (dist > sk.range) return false;
-                if (dist < 0.6) return true;
-                double cos = (dx * dir.getX() + dz * dir.getZ()) / dist;
-                return cos >= Math.cos(Math.toRadians(sk.angle / 2.0));
-            }
-        }
-    }
+    /** Shapes never exceed the drawn warning (book: 实际范围不超过预警). D241: geometry in {@link EmberShape#inShape}. */
+    static boolean inShape(EmberRunMaps.Skill sk, Location o, Vector dir, Location p) { return EmberShape.inShape(sk, o, dir, p); }
 
     private static String shapeHint(EmberRunMaps.Skill sk) {
         switch (sk.type) {

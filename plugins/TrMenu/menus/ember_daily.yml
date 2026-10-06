@@ -34,6 +34,7 @@ Icons:
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
       lore:
         - ''
+        - '§7今日还能进 §f%ember_daily_left% §7次日常（按当前体力）'
         - '§7每日 §f0:00 §7（上海）回满'
         - '§7日常消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§8出本后再进约等 5 秒（缓存冷却），不是进本坏了'

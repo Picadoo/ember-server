@@ -30,7 +30,7 @@
 
 1. **挂机传送**：当前为 `tp %player_name% -40 65 270`（RpgBot 测试点）；后续可评估改为 `warp afk` 或真实大厅坐标。
 2. **进本命令**：当前记录为 `dp start EmberDaily` / `dp start EmberWeekly`（官方命令）；入口接线时再核对实际用法。
-3. **次数占位符**：菜单文案目前写死 3/1；PAPI `%ember_daily_left%` / `%ember_weekly_left%` 尚未接入，接线后再改 lore。
+3. **次数占位符**（D241 / CoreRpg 1.65.67 已接入）：`%ember_daily_left%` = 当前体力还能进几次日常（体力 ÷ 日常消耗，满体力 90 → 3，月卡 120 → 4，不算体力银行）；`%ember_weekly_left%` = 本周周本免费抵扣剩余次数（= `%corerpg_stamina_credit_weekly%`，每周一 0:00 回到 1，商城 / 主线可再加）。已写进 `ember_daily.yml` 顶栏「T」与 `ember_weekly.yml`「次数说明」lore。
 4. **音效**：当前使用 1.12 风格 `BLOCK_NOTE_PLING`；若 TrMenu 映射失败，再换成插件支持名。
 5. **材质**：`stained glass pane` / `watch` / `ender chest` 等若在 1.12 + TrMenu 3.12 解析异常，再改成 `glass` / `clock` / `chest`。
 

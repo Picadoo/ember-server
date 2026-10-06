@@ -26,7 +26,7 @@ ARCH §5 S3 余部：`EmberRunService` 末尾 `placeholder()` 是约 150 行、4
 
 ## 发现（未改，非本刀）
 
-- `%ember_daily_left%` / `%ember_weekly_left%` 在 live 配置里被引用，但 `EmberLadderExpansion` 没有这两个键（部署前后都原样显示字面量）。属既有缺口，未在行为保持刀里补。
+- `%ember_daily_left%` / `%ember_weekly_left%` 在 live 配置里被引用，但 `EmberLadderExpansion` 没有这两个键（部署前后都原样显示字面量）。属既有缺口，未在行为保持刀里补。（D241 更正：只在 `plugins/TrMenu/menus/README-ember.md` 里被提到，没有会渲染的菜单在用；D241 / 1.65.67 已补上，见 `STATUS-ember-arch-s3-12-1.65.67.md`。）
 - 新注册的 bot 首个会话里 `papi parse <name>` 找不到玩家（PAPI 按缓存名查，退出一次后才行）；冒烟因此以第 2 / 3 会话比对。
 
 ## 下一刀
