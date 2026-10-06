@@ -14,6 +14,10 @@ probability); start = true (Q01 head+chest, Q02 legs+boots) | "q01" (all four at
 armor piece in one invest pass; gap = gap-weighted armor slot; cost = {"charm": x, "armor": y} enhance / upgrade cost multipliers;
 cost_up = same shape, upgrade-only override; arm_cap = true (armor upgraded only up to the charm tier) | "all" (drops capped too);
 blank = white-blank yield of a dismantled armor piece (x tier; default 1.0).
+D246 (2026-10-06): base_armor = share of the settlement base roll that becomes armor (today's "base covers all slots";
+violates the staged-plan §4.4 no-dilution limit, diagnostic only); base_mapslot / chest_armor = variants; arm_repeat = the
+extra armor drop only on repeat runs (none on the player's own first-clear run of a map); arm_front = armor dropped on a
+first-clear run is one tier lower.
 """
 import os
 import pickle

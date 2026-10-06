@@ -1098,6 +1098,26 @@ class Player:
         it['slot'] = ARMOR_SLOTS[pick(ws, r.random())]
         return it
 
+    def roll_base(self, tier, key=None):
+        """D246 (today's structure): the settlement base roll covers all six slots. SIX['base_armor'] = a: the roll is an
+        armor piece with probability a (else blade / charm by roll_item). SIX['base_mapslot']: a map with a loot slot keeps
+        P(map slot) = loot_bias.slot and a applies only to the rest. No SIX / no base_armor: plain roll_item (same RNG stream)."""
+        a = float(SIX.get('base_armor', 0)) if SIX is not None else 0.0
+        if a <= 0:
+            return self.roll_item(tier, key)
+        r = self.rng.random()
+        if SIX.get('base_mapslot'):
+            lb = self.cfg.get('loot_bias') or {}
+            ms = ((self.cfg['maps'].get(key) or {}).get('loot') or {}).get('slot') if key and lb else None
+            if ms:
+                sw = float(lb.get('slot', 0.5))
+                if r < sw:
+                    it = self.roll_item(tier, key)
+                    it['slot'] = ms
+                    return it
+                r = (r - sw) / (1 - sw)
+        return self.roll_armor(tier, key) if r < a else self.roll_item(tier, key)
+
     def consider_armor(self, new):
         cfg, kn = self.cfg, self.kn
         i = ARMOR_SLOTS.index(new['slot'])
@@ -1232,10 +1252,14 @@ class Player:
         self.xp += b['xp']
         tier = m['tier']
         self.marks[tier] += b['mark']
-        drops = [self.roll_item(tier, key)]
+        drops = [self.roll_base(tier, key)]
         if SIX is not None:
             dr = float(SIX.get('drop', 1))  # fractional = probability of one more armor drop
-            drops += [self.roll_armor(tier, key) for _ in range(int(dr) + (self.rng.random() < dr - int(dr) if dr != int(dr) else 0))]
+            na = int(dr) + (self.rng.random() < dr - int(dr) if dr != int(dr) else 0)
+            front = key not in self.cleared  # D246 options: the player's own first clear of this map
+            if SIX.get('arm_repeat') and front:
+                na = 0  # armor only from repeat runs (the first clear pays its first-clear package instead)
+            drops += [self.roll_armor(max(1, tier - 1) if SIX.get('arm_front') and front else tier, key) for _ in range(na)]
             if SIX.get('start') and key not in self.cleared and key in ('q01', 'q02'):  # research §4.3 starter armor
                 four = SIX.get('start') == 'q01'  # all four at the Q01 first clear (no Q02 gap)
                 for a in (ARMOR_SLOTS if four and key == 'q01' else () if four else ('head', 'chest') if key == 'q01' else ('legs', 'boots')):
@@ -1245,7 +1269,7 @@ class Player:
         elif extra == 'elite':
             self.shard += cfg['elite_shard']; self.core += cfg['elite_core']
         elif extra == 'chest':
-            drops.append(self.roll_item(tier, key))
+            drops.append(self.roll_base(tier, key) if SIX is not None and SIX.get('chest_armor') else self.roll_item(tier, key))
         if key not in self.cleared:
             self.cleared.add(key)
             fc = m.get('first_clear') or {}
