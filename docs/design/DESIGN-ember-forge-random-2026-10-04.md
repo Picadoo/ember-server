@@ -1,5 +1,7 @@
 # Ember 烬砧（锻造台）：兑换 / 随机锻造 / 烙纹定向 / 锻造次数 / 每周转化（D167，设计-only，2026-10-04）
 
+> **D242 指针（2026-10-06）：** 现行装备结构的权威说明已合并到 [`docs/design/DESIGN-ember-gear-structure-2026-10-06.md`](DESIGN-ember-gear-structure-2026-10-06.md)（CoreRpg 1.65.67 / bv58）。本文（D167 随机锻造 / 烬砧）仍是**设计-only，未实现**；现行锻造 = 8 印记兑换标准件 + 升阶 + 工坊（新文档 §4）。
+
 > 状态：**设计 + 离线模拟，未实现**。没有改 CoreRpg 源码、配置、菜单；没有部署 / 重启 / 机器人。
 > 对齐：`docs/design/RESEARCH-ember-gear-reference-2026-10-04.md`（`92f77fb`，§3.4 / §3.5 / §4.4）与 `DESIGN-ember-gear-staged-plan-2026-10-04.md`（D169：6 槽 = 刃 + 护符 + 原版 4 甲，结构代码 HOLD）。
 > 实现时机：**6 槽 Stage 1 之后**。本文各块按 D169 阶段拆开（§6.6），每块单独 `balance_version`、单独审批。

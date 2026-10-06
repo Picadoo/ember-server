@@ -1,5 +1,7 @@
 # Ember 装备结构分阶段落地计划（已定稿 · 2026-10-04）
 
+> **D242 指针（2026-10-06）：** 现行装备结构的权威说明已合并到 [`docs/design/DESIGN-ember-gear-structure-2026-10-06.md`](DESIGN-ember-gear-structure-2026-10-06.md)（CoreRpg 1.65.67 / bv58）。本文作为**计划**仍 SETTLED（D169，结构代码 HOLD）；现行 2 槽规则以新文档 §1–§6 为准。§0「每张图掉所有部位、地图只决定阶级」已由 D174 补充为「基础掉落全部位 + 每图签名叠加」（新文档 §1 / §3.2）。
+
 > **状态：SETTLED（文档定稿，D169）。** 依据 `docs/design/RESEARCH-ember-gear-reference-2026-10-04.md`（commit `92f77fb`）。
 > **不改** CoreRpg 槽位 / 套装 / 主动 / 锻造 Java，直到 Stage 0 文档与模拟通过、且 Stage 1 被显式开工。
 > 服主硬约束：**禁止按图锁部位**（否决「每张图掉不同部位」——否则靴子会卡在后期图）。外观 / 粒子 / 宠物等化妆品仍暂停。

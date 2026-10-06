@@ -1,0 +1,552 @@
+# ember-source-map.yml — D242 / ARCH S4-1 · machine-readable source map for Ember P1 gear / materials / currencies
+#
+# Every way a P1 character can GET gear, a material or a currency (and every registered sink) → where it happens
+# (content / mode / boss / drop table / economy key) → which config file and which code location decide it.
+# Authoritative prose: docs/design/DESIGN-ember-gear-structure-2026-10-06.md (§6 explains this file).
+#
+# Guarded by CoreRpg/src/test/java/town/sunshine/corerpg/p1/EmberSourceMapTest.java — the build fails when
+#   · an EmberEconomy row (S01–S32, LS1–LS5, C01–C18) has no entry here;
+#   · a key under sources/sinks in plugins/CoreRpg/ember-v1-economy.yml is not listed in some economy_keys (or a listed one is gone);
+#   · a ledger / grant key or ledger run prefix written by p1/*.java is not covered by some grant_keys / ledger_runs pattern
+#     (or a pattern here no longer matches anything in the code);
+#   · a map / raid / rush entry in ember-v1-runs.yml, the festival dungeon, an AFK tier, a signature, an item affix,
+#     an item source value or a vault material is missing (or its tier / boss / name / slot disagree with the config / code);
+#   · a code ref (file#text) or config ref (file#dotted.key) below no longer resolves; a counter family is not in EmberCounters.
+# Patterns: <map> <n> <kind> <slot> <day> <month> <res> … = one dynamic segment ([a-z0-9_]+).
+# Refs: code paths are relative to code_root, config paths to config_root; "#text" for code = a substring that must appear in the file.
+# Behaviour-neutral: nothing in CoreRpg reads this file. Update it in the same commit as any new source / key / map.
+
+version: 1
+balance_version: 58
+built_against: "CoreRpg 1.65.67 (fa92a49)"
+code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
+config_root: plugins/CoreRpg/
+
+# ---------------------------------------------------------------------------------------------------- accounts
+# What can be owned. store = where the balance lives. econ = EmberEconomy.Account.
+accounts:
+  coin:        {name: 余烬币, econ: COIN, store: "PlayerData.coin (cr_players)"}
+  xp:          {name: 余烬经验, econ: XP, store: "ProgressService grantFlatEmberXp (progress.yml ember_xp.curve)"}
+  shard:       {name: 余烬碎片, econ: SHARD, ni: mat_ember_shard, store: "EmberVault → cr_warehouse"}
+  core:        {name: 核心碎片, econ: CORE, ni: mat_ember_core_fragment, store: "EmberVault → cr_warehouse"}
+  bone:        {name: 骨尘, econ: BONE, ni: mat_ember_bone_dust, store: "EmberVault → cr_warehouse"}
+  blank:       {name: 装备胚料, econ: BLANK, ni: mat_ember_v1_blank, store: "EmberVault → cr_warehouse"}
+  bound_mat:   {name: 绑定材料, econ: BOUND_MAT, store: "p1_vbound_<ni> counter (cannot leave the account)"}
+  mark:        {name: 锻造印记 T1–T3, econ: MARK, store: "p1_mark_t<n> counter"}
+  insignia:    {name: 首领徽记（每图）, econ: INSIGNIA, store: "p1_sigmark_<map> counter"}
+  badge:       {name: 余烬徽, econ: BADGE, store: "p3_badge counter"}
+  stamina:     {name: 体力, econ: STAMINA, store: "StaminaService (cash.yml stamina)"}
+  potion:      {name: 回复药（绑定）, econ: POTION, ni: potion_ember_heal, store: "inventory (EmberSupplyService)"}
+  gear:        {name: P1 装备, econ: GEAR, store: "item NBT ember_v1 + cr_p1_item (EmberItemData v2, HMAC)"}
+  title:       {name: 称号, econ: TITLE, store: "EmberCosmetics p2_title_ / p2_cosbuy_"}
+  fest_coin:   {name: 国庆币, econ: FEST_COIN, ni: ember_fest_coin_gq26, store: "EmberVault → cr_warehouse (event)"}
+  life_item:   {name: 生活产出, econ: LIFE_ITEM, store: "life.yml offers → NI items"}
+  gacha_ticket: {name: 扭蛋券, econ: GACHA_TICKET, store: "CoreGacha tables"}
+  cosmetic:    {name: 外观, econ: COSMETIC, store: "EmberCosmetics p2_cosbuy_"}
+  mail:        {name: 邮件附件, econ: MAIL, store: "MailService"}
+
+# item `source` field (EmberItemData.SOURCES) — decides dismantle / duplicate eligibility
+item_sources:
+  drop:    {meaning: "settlement random roll, raid_item, chest extra, 8-mark exchange (mark_item)", dismantle: true, code: ["p1/EmberRunService.java#: \"drop\""]}
+  quest:   {meaning: "first-clear choice item (fc_<map>_item) / starter kit (starter_<slot>)", dismantle: false, code: ["p1/EmberRunService.java#startsWith(\"starter_\") ? \"quest\""]}
+  admin:   {meaning: "/corerpg p1 give (OP test item); never counts for the codex", dismantle: false, code: ["p1/EmberCommand.java#\"admin\""]}
+  reissue: {meaning: "manual re-issue by staff", dismantle: false, code: ["p1/EmberCompare.java#\"reissue\""]}
+  migrate: {meaning: "legacy migration (none on live: no old players)", dismantle: false, code: ["p1/EmberCompare.java#\"migrate\""]}
+
+# ---------------------------------------------------------------------------------------------------- content
+# Every place that can pay. sources = entries below that pay there. Checked against ember-v1-runs.yml / festival / afk.
+content:
+  q01: {mode: normal, tier: 1, name: 灰烬庭院, boss: 残门蛮兵, loot: {family: scorch, slot: blade}, first_clear: "choice charm T1", signatures: [L01, L02], sources: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q01"]}
+  q02: {mode: normal, tier: 1, name: 焦骨甬道, boss: 守炉蛮兵, loot: {family: burst, slot: charm}, first_clear: "choice piece T1 (family × slot)", signatures: [L03, L04], sources: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q02"]}
+  q03: {mode: normal, tier: 1, name: 残誓地窖, boss: 残誓守卫, loot: {family: sustain, slot: blade}, first_clear: "shard 30 + core 4 + coin 600", signatures: [L05, L06], sources: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q03"]}
+  q04: {mode: normal, tier: 2, name: 潮蚀水道, boss: 潮闸重卫, loot: {family: scorch, slot: charm}, first_clear: "blank 6 + core 6 + coin 2100", signatures: [L07, L08], sources: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q04"]}
+  q05: {mode: normal, tier: 2, name: 断塔回廊, boss: 断塔斧卫, loot: {family: burst, slot: blade}, first_clear: "bone 20 + blank 6 + coin 900", signatures: [L09, L10], sources: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q05"]}
+  q06: {mode: normal, tier: 2, name: 霜封哨所, boss: 霜封统领, loot: {family: sustain, slot: charm}, first_clear: "core 10 + coin 1200", signatures: [L11, L12], sources: [S01, S02, S03, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q06"]}
+  q07: {mode: normal, tier: 3, name: 锈轨矿道, boss: 炉锁巨卫, loot: {family: burst}, first_clear: "blank 12 + core 12 + coin 1800", signatures: [L13, L14, L15], sources: [S01, S02, S03, S04, S05, S06, S07, S08, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q07"]}
+  challenge: {mode: challenge, tier: 3, name: 挑战版（Q01–Q07）, boss: "map boss at challenge values", loot: {quality: "60/28/10/2"}, sources: [S01, S02, S03, S10, S14, S20, S25], config: ["ember-v1-runs.yml#challenge", "ember-v1-runs.yml#rotation"]}
+  abyss: {mode: abyss, tier: 3, name: 深渊·余烬层 1–10, boss: "segment map boss × tier factors", loot: {quality: "abyss.tiers[*].quality"}, sources: [S13, S14, S20, S25], config: ["ember-v1-runs.yml#abyss.tiers"]}
+  r01: {mode: raid, tier: 3, name: 锈轨矿道·团, boss: 炉锁巨卫·团, loot: {family: burst}, sources: [S01, S12, S20, S25], config: ["ember-v1-runs.yml#raids.r01"]}
+  r02: {mode: raid, tier: 3, name: 霜封哨所·团, boss: 霜封统领·团, loot: {family: sustain}, sources: [S01, S12, S20, S25], config: ["ember-v1-runs.yml#raids.r02"]}
+  r03: {mode: raid, tier: 3, name: 断塔回廊·团, boss: 断塔斧卫·团, loot: {family: scorch}, sources: [S01, S12, S20, S25], config: ["ember-v1-runs.yml#raids.r03"]}
+  rush: {mode: rush, tier: 3, name: 余烬连战, boss: "chain q05 → q06 → q07", sources: [S16], config: ["ember-v1-runs.yml#rush.rush.reward"]}
+  outpost: {mode: outpost, tier: 2, name: 连战·前哨, boss: "chain q01 → q02 → q03", sources: [S17], config: ["ember-v1-runs.yml#rush.outpost.reward"]}
+  echo_q01: {mode: echo, tier: 2, name: 首领残响·Q01, boss: "chain q01", sources: [S18], config: ["ember-v1-runs.yml#rush.echo_q01.reward"]}
+  echo_q02: {mode: echo, tier: 2, name: 首领残响·Q02, boss: "chain q02", sources: [S18], config: ["ember-v1-runs.yml#rush.echo_q02.reward"]}
+  echo_q03: {mode: echo, tier: 2, name: 首领残响·Q03, boss: "chain q03", sources: [S18], config: ["ember-v1-runs.yml#rush.echo_q03.reward"]}
+  echo_q04: {mode: echo, tier: 2, name: 首领残响·Q04, boss: "chain q04", sources: [S18], config: ["ember-v1-runs.yml#rush.echo_q04.reward"]}
+  echo_q05: {mode: echo, tier: 2, name: 首领残响·Q05, boss: "chain q05", sources: [S18], config: ["ember-v1-runs.yml#rush.echo_q05.reward"]}
+  echo_q06: {mode: echo, tier: 2, name: 首领残响·Q06, boss: "chain q06", sources: [S18], config: ["ember-v1-runs.yml#rush.echo_q06.reward"]}
+  echo_q07: {mode: echo, tier: 2, name: 首领残响·Q07, boss: "chain q07", sources: [S18], config: ["ember-v1-runs.yml#rush.echo_q07.reward"]}
+  gq26: {mode: festival, tier: 2, name: 烟火庙会, boss: 年兽 · 焰狮, sources: [S26], config: ["ember-v1-festival.yml#dungeon", "ember-v1-festival.yml#drops"]}
+  afk_t1: {mode: afk, name: 灰坡, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
+  afk_t2: {mode: afk, name: 荒原, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
+  afk_t3: {mode: afk, name: 焦土, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
+  afk_t4: {mode: afk, name: 烬原深处, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
+  account: {mode: account, name: 账号 / 菜单（不在副本里）, sources: [S15, S19, S23, S24, S27, S28, S29, S30, S31, S32, X01, X02, X03]}
+
+# ---------------------------------------------------------------------------------------------------- signatures (D174)
+# Checked field by field against EmberSignature.DEFS (code / map / slot / family / name / boss); alt = has a 调律 version (EmberSignature.ALTS).
+signatures:
+  L01: {code: 1, map: q01, slot: blade, family: scorch, name: 残门焚斧, boss: 残门蛮兵, alt: true}
+  L02: {code: 2, map: q01, slot: charm, family: any, name: 门楼余烬, boss: 残门蛮兵, alt: true}
+  L03: {code: 3, map: q02, slot: charm, family: burst, name: 炉心护符, boss: 守炉蛮兵, alt: false}
+  L04: {code: 4, map: q02, slot: blade, family: burst, name: 守炉重锤, boss: 守炉蛮兵, alt: false}
+  L05: {code: 5, map: q03, slot: blade, family: sustain, name: 残誓长戟, boss: 残誓守卫, alt: false}
+  L06: {code: 6, map: q03, slot: charm, family: any, name: 守誓残灯, boss: 残誓守卫, alt: true}
+  L07: {code: 7, map: q04, slot: blade, family: any, name: 潮闸长杆, boss: 潮闸重卫, alt: false}
+  L08: {code: 8, map: q04, slot: charm, family: scorch, name: 潮蚀护符, boss: 潮闸重卫, alt: true}
+  L09: {code: 9, map: q05, slot: blade, family: any, name: 断塔双斧, boss: 断塔斧卫, alt: false}
+  L10: {code: 10, map: q05, slot: charm, family: burst, name: 回廊护符, boss: 断塔斧卫, alt: true}
+  L11: {code: 11, map: q06, slot: blade, family: any, name: 霜封长刀, boss: 霜封统领, alt: false}
+  L12: {code: 12, map: q06, slot: charm, family: sustain, name: 统领护符, boss: 霜封统领, alt: true}
+  L13: {code: 13, map: q07, slot: blade, family: any, name: 炉锁巨锤, boss: 炉锁巨卫, alt: false}
+  L14: {code: 14, map: q07, slot: charm, family: any, name: 炉芯护符, boss: 炉锁巨卫, alt: false}
+  L15: {code: 15, map: q07, slot: charm, family: scorch, name: 锈轨余火, boss: 炉锁巨卫, alt: false}
+
+# ---------------------------------------------------------------------------------------------------- item affixes (D143 洗练)
+# Checked against ember-v1-growth.yml reroll.affixes (id / code / slot / rollable). Paid by sink C11.
+item_affixes:
+  b_affix: {code: 1, slot: blade, name: 猎缀纹, rollable: true}
+  b_set:   {code: 2, slot: blade, name: 余烬纹, rollable: true}
+  b_split: {code: 3, slot: blade, name: 裂身纹, rollable: false}
+  c_tele:  {code: 4, slot: charm, name: 定身纹, rollable: true}
+  c_share: {code: 6, slot: charm, name: 分核纹, rollable: true}
+  c_affix: {code: 7, slot: charm, name: 抗缀纹, rollable: true}
+
+# ---------------------------------------------------------------------------------------------------- sources
+sources:
+  S01:
+    name: 主线 / 挑战 / 团本结算基线（每局 1 件装备）
+    econ_row: S01
+    status: live
+    pays: [coin, shard, bone, core, xp, mark, gear]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06, q07, challenge, r01, r02, r03]
+    drop_table: "gear: EmberRunRules.rollItem — family TARGET_WEIGHT 0.60 + loot_bias (own_family / map_share / slot), quality QUALITY_WEIGHTS 70/23/6/1 (challenge & raid 60/28/10/2), craft CRAFT_WEIGHTS 70/20/9/1, tier = map tier; chest extra (EXTRA_WEIGHTS 5 %) = one more roll"
+    grant_keys: [base_coin, base_shard, base_bone, base_core, base_xp, base_mark, base_item, extra_chest_item]
+    economy_keys: [S01.coin, S01.shard, S01.bone, S01.core, S01.xp, S01.mark]
+    config: ["ember-v1-economy.yml#sources.S01", "ember-v1-runs.yml#loot_bias", "ember-v1-runs.yml#challenge.quality"]
+    code: ["p1/EmberRunRules.java#public static List<Grant> settle(", "p1/EmberRunRules.java#QUALITY_WEIGHTS", "p1/EmberRunRules.java#\"extra_chest_item\"", "p1/EmberSettleService.java#void settleFor("]
+    notes: "extra_chest_item has no own REG row (gap G2). Raid / abyss settles reuse the same keys; abyss base_* is re-tagged S13 by EmberEconomy.sourceForGrant."
+  S02:
+    name: 宝箱怪
+    econ_row: S02
+    status: live
+    pays: [coin]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06, q07, challenge]
+    drop_table: "EmberRunRules.EXTRA_WEIGHTS none/treasure/elite/chest = 70/15/10/5"
+    grant_keys: [extra_treasure_coin]
+    economy_keys: [S02.coin]
+    config: ["ember-v1-economy.yml#sources.S02"]
+    code: ["p1/EmberRunRules.java#\"extra_treasure_coin\""]
+  S03:
+    name: 精英房
+    econ_row: S03
+    status: live
+    pays: [shard, core]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06, q07, challenge]
+    grant_keys: [extra_elite_shard, extra_elite_core]
+    economy_keys: [S03.shard, S03.core]
+    config: ["ember-v1-economy.yml#sources.S03"]
+    code: ["p1/EmberRunRules.java#\"extra_elite_shard\""]
+  S04:
+    name: 词缀精英结算
+    econ_row: S04
+    status: live
+    pays: [shard]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06, q07]
+    grant_keys: [var_affix_shard]
+    economy_keys: [S04.shard]
+    config: ["ember-v1-economy.yml#sources.S04", "ember-v1-runs.yml#variety.affix_shard"]
+    code: ["p1/EmberRunRules.java#public static List<Grant> varietyGrants("]
+  S05:
+    name: 房间事件达标
+    econ_row: S05
+    status: live
+    pays: [core]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06, q07]
+    grant_keys: [var_event_core, "var_event_<kind>"]
+    economy_keys: [S05.core]
+    config: ["ember-v1-economy.yml#sources.S05", "ember-v1-runs.yml#variety.event_core"]
+    code: ["p1/EmberRunRules.java#\"var_event_core\""]
+  S06:
+    name: 首通包（自选件 / 材料币）
+    econ_row: S06
+    status: live
+    pays: [gear, shard, core, bone, blank, coin]
+    period: once
+    content: [q01, q02, q03, q04, q05, q06, q07]
+    drop_table: "ember-v1-runs.yml maps.<map>.first_clear; choice item = standard q0 / craft 0 / +0, source quest"
+    grant_keys: ["fc_<map>_choice", "fc_<map>_item", "fc_<map>_shard", "fc_<map>_core", "fc_<map>_coin", "fc_<map>_bone", "fc_<map>_blank", "fc_<map>_unlock"]
+    economy_keys: [S06.q03.shard, S06.q03.core, S06.q03.coin, S06.q04.blank, S06.q04.core, S06.q04.coin, S06.q05.bone, S06.q05.blank, S06.q05.coin, S06.q06.core, S06.q06.coin, S06.q07.blank, S06.q07.core, S06.q07.coin]
+    counters: [p1_first_clear_, p1_fcpay_]
+    config: ["ember-v1-economy.yml#sources.S06", "ember-v1-runs.yml#maps.q01.first_clear", "ember-v1-runs.yml#maps.q02.first_clear"]
+    code: ["p1/EmberRunRules.java#String p = \"fc_\" + fc.mapKey + \"_\"", "p1/EmberRunRules.java#public static Grant choiceItem(", "p1/EmberFirstClear.java#C_PAID"]
+  S07:
+    name: 首通徽记
+    econ_row: S07
+    status: live
+    pays: [insignia]
+    period: once
+    content: [q01, q02, q03, q04, q05, q06, q07]
+    grant_keys: [fc_sigmark]
+    economy_keys: [S07.insignia]
+    counters: [p1_sigfc_, p1_sigmark_]
+    config: ["ember-v1-economy.yml#sources.S07"]
+    code: ["p1/EmberSettleService.java#\"fc_sigmark\"", "p1/EmberSignature.java#FC_MARKS = 3"]
+  S08:
+    name: 重打普通主线（签名图）：徽记 + 签名烙印
+    econ_row: S08
+    status: live
+    pays: [insignia, gear]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06, q07]
+    drop_table: "EmberSignature.rollStamp: u < STAMP_RATE 0.12 AND the map has a signature that fits the base item's slot and family (or family any) — uniform among the fitting ones"
+    grant_keys: [sig_mark, sig_stamp]
+    economy_keys: [S08.insignia, S08.stamp_rate]
+    counters: [p1_sigmark_]
+    config: ["ember-v1-economy.yml#sources.S08"]
+    code: ["p1/EmberRunRules.java#public static List<Grant> signatureGrants(", "p1/EmberSignature.java#public static Def rollStamp("]
+  S09:
+    name: 自选誓约
+    econ_row: S09
+    status: live
+    pays: [insignia]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06]
+    grant_keys: [pledge_sigmark]
+    counters: [p1_pledge_, p1_sigmark_]
+    code: ["p1/EmberPledgeService.java#\"pledge_sigmark\""]
+    notes: "amount = number of pledged normal:true rules (no yml amount key; EmberPledgeService)"
+  S10:
+    name: 精选周挑战加印
+    econ_row: S10
+    status: live
+    pays: [mark]
+    period: week
+    content: [challenge]
+    grant_keys: [rot_mark]
+    economy_keys: [S10.mark, S10.weekly_cap]
+    counters: [p2_rotation, p1_mark_t]
+    config: ["ember-v1-economy.yml#sources.S10", "ember-v1-runs.yml#rotation.bonus_marks"]
+    code: ["p1/EmberSettleService.java#\"rot_mark\"", "p1/EmberEconomy.java#\"rot_mark\".equals(key)"]
+  S11:
+    name: 精选周普通重打加印
+    econ_row: S11
+    status: live
+    pays: [mark]
+    period: week
+    content: [q01, q02, q03, q04, q05, q06]
+    grant_keys: [rot_mark]
+    economy_keys: [S11.weekly_cap]
+    counters: [p2_rotation, p1_mark_t]
+    config: ["ember-v1-economy.yml#sources.S11", "ember-v1-runs.yml#rotation.normal_bonus_marks"]
+    code: ["p1/EmberSettleService.java#\"rot_mark\""]
+  S12:
+    name: 团本额外装备 + T3 印记
+    econ_row: S12
+    status: live
+    pays: [gear, mark]
+    period: week
+    content: [r01, r02, r03]
+    drop_table: "raid_item: entry target family → raid loot.family → plain draw; slot 50/50; challenge quality table with quality_floor 1"
+    grant_keys: [raid_item, raid_mark]
+    economy_keys: [S12.weekly_cap]
+    counters: [p2_raid_, p1_mark_t]
+    config: ["ember-v1-economy.yml#sources.S12", "ember-v1-runs.yml#raid_item.quality_floor", "ember-v1-runs.yml#raids.r01.cap_group"]
+    code: ["p1/EmberRaidService.java#G_ITEM = \"raid_item\"", "p1/EmberRunRules.java#public static Grant raidItem("]
+  S13:
+    name: 深渊层结算
+    econ_row: S13
+    status: live
+    pays: [coin, shard, bone, core, xp, mark, gear]
+    period: run
+    content: [abyss]
+    drop_table: "same BASE_* as S01 (tier 3) with abyss.tiers[t].quality; no rotation bonus, no first clear, no extra coin"
+    grant_keys: [base_coin, base_shard, base_bone, base_core, base_xp, base_mark, base_item]
+    counters: [p2_abyss_best]
+    config: ["ember-v1-runs.yml#abyss.tiers"]
+    code: ["p1/EmberEconomy.java#static boolean isAbyssHead("]
+  S14:
+    name: 失败退体力（当日首次挑战 / 深渊失败）
+    econ_row: S14
+    status: live
+    pays: [stamina]
+    period: day
+    content: [challenge, abyss]
+    ledger_runs: ["failrefund@<day>"]
+    economy_keys: [S14.rate, S14.cost]
+    config: ["ember-v1-economy.yml#sources.S14", "ember-v1-runs.yml#fail_refund"]
+    code: ["p1/EmberSettleService.java#int failRefund(", "p1/EmberRunRules.java#\"failrefund@\""]
+  S15:
+    name: 当日首次倒下退药
+    econ_row: S15
+    status: live
+    pays: [potion]
+    period: day
+    content: [account]
+    ledger_runs: ["deathrefund@<day>"]
+    economy_keys: [S15.max_potions]
+    config: ["ember-v1-economy.yml#sources.S15", "ember-v1.yml#death_refund.max_potions"]
+    code: ["p1/EmberRunService.java#private void deathRefund(", "p1/EmberRunRules.java#\"deathrefund@\""]
+  S16:
+    name: 余烬连战
+    econ_row: S16
+    status: live
+    pays: [mark, badge, title]
+    period: week
+    content: [rush]
+    grant_keys: [rush_mark, rush_practice, rush_paid]
+    economy_keys: [S16.mark, S16.badge]
+    counters: [p4_rush_claim, p4_rush, p1_mark_t, p3_badge]
+    config: ["ember-v1-economy.yml#sources.S16", "ember-v1-runs.yml#rush.rush.reward"]
+    code: ["p1/EmberRushService.java#public static SettleResult applyGrants(", "p1/EmberEconomy.java#public static String sourceForRushMode("]
+  S17:
+    name: 连战·前哨
+    econ_row: S17
+    status: live
+    pays: [insignia, mark]
+    period: week
+    content: [outpost]
+    grant_keys: [rush_mark, "rush_sig_<map>"]
+    economy_keys: [S17.mark, S17.mark_tier, S17.insignia, S17.weekly]
+    counters: [p4_outpost_claim, p1_sigmark_, p1_mark_t]
+    config: ["ember-v1-economy.yml#sources.S17", "ember-v1-runs.yml#rush.outpost.reward"]
+    code: ["p1/EmberRushService.java#\"rush_sig_\" + ck"]
+  S18:
+    name: 首领残响 echo_q01–q07
+    econ_row: S18
+    status: live
+    pays: [insignia]
+    period: week
+    content: [echo_q01, echo_q02, echo_q03, echo_q04, echo_q05, echo_q06, echo_q07]
+    grant_keys: ["rush_sig_<map>"]
+    economy_keys: [S18.insignia, S18.weekly]
+    counters: [p4_echo_claim, p1_sigmark_]
+    config: ["ember-v1-economy.yml#sources.S18", "ember-v1-runs.yml#rush.echo_q01.claim"]
+    code: ["p1/EmberEconomy.java#head.startsWith(\"echo_\")"]
+  S19:
+    name: 周目标
+    econ_row: S19
+    status: live
+    pays: [badge]
+    period: week
+    content: [account]
+    counters: [p3_goal_, p3_goalpay_, p3_badge]
+    config: ["ember-v1-runs.yml#weekly_goals.reward", "ember-v1-runs.yml#weekly_goals.bonus"]
+    code: ["p1/EmberSeason.java#EmberEconomy.grantBadge(d, \"S19\""]
+  S20:
+    name: 每日委托
+    econ_row: S20
+    status: live
+    pays: [coin, shard]
+    period: day
+    content: [q01, q02, q03, q04, q05, q06, q07, challenge, abyss, r01, r02, r03]
+    grant_keys: ["bounty_coin_<n>", "bounty_shard_<n>", "bounty_bone_<n>", "bounty_core_<n>"]
+    economy_keys: [S20.c1.coin, S20.c3.coin, S20.c3.shard]
+    counters: [p2_bounty]
+    config: ["ember-v1-economy.yml#sources.S20", "ember-v1.yml#bounty.daily"]
+    code: ["p1/EmberRunRules.java#public static List<Grant> bountyGrants(List<BountyTier> tiers, int n)"]
+  S21:
+    name: 花样委托
+    econ_row: S21
+    status: live
+    pays: [coin]
+    period: day
+    content: [q01, q02, q03, q04, q05, q06, q07]
+    grant_keys: ["vb_<kind>", "vb_<kind>_shard"]
+    economy_keys: [S21.coin]
+    counters: [p4_vb_]
+    config: ["ember-v1-economy.yml#sources.S21", "ember-v1.yml#bounty.variety"]
+    code: ["p1/EmberRunRules.java#public static List<Grant> varietyBountyGrants("]
+  S22:
+    name: 挂机庭击杀
+    econ_row: S22
+    status: live
+    pays: [coin, xp, bound_mat]
+    period: day
+    content: [afk_t1, afk_t2, afk_t3, afk_t4]
+    drop_table: "ember-v1.yml afk.tiers[n] daily amounts ÷ daily_kills per kill (deterministic accumulator), bound materials via bmat:"
+    ledger_runs: ["p1afk-<day>"]
+    grant_keys: ["c<n>", "x<n>", "s<n>", "b<n>", "k<n>", "p<n>"]
+    runtime_keys: true
+    economy_keys: [S22.daily_kills, S22.offline_max_kills]
+    counters: [p1_afk_kill, p1_afk_offk, p1_afk_acc_, p1_vbound_]
+    config: ["ember-v1-economy.yml#sources.S22", "ember-v1.yml#afk.tiers", "ember-v1-economy.yml#caps.afk_kills_day", "ember-v1-economy.yml#caps.afk_offline_kills_day"]
+    code: ["p1/EmberAfkService.java#RES_KEY = { \"c\", \"x\", \"s\", \"b\", \"k\", \"p\" }", "p1/EmberAfkService.java#LEDGER_PREFIX = \"p1afk-\""]
+  S23:
+    name: 每日签到
+    econ_row: S23
+    status: live
+    pays: [coin, xp, mark, insignia]
+    period: month
+    content: [account]
+    ledger_runs: ["p1sign-<month>"]
+    grant_keys: ["n<n>s", "n<n>m", "n<n>c", "n<n>x"]
+    runtime_keys: true
+    economy_keys: [S23.daily.coin, S23.daily.xp, S23.makeup_per_month, S23.sigmark_fallback_coin]
+    counters: [p1_sign_mask, p1_sign_mk, p1_sign_mkd, p1_sign_last, p1_mark_t, p1_sigmark_]
+    config: ["ember-v1-economy.yml#sources.S23", "ember-v1.yml#signin.special"]
+    code: ["p1/EmberSignService.java#SIGN_RUN = \"p1sign-\"", "p1/EmberSignService.java#rs.grantRow(u, run, key + \"s\""]
+  S24:
+    name: 在线时长档
+    econ_row: S24
+    status: live
+    pays: [coin, xp]
+    period: day
+    content: [account]
+    ledger_runs: ["p1online-<day>"]
+    grant_keys: ["m<n>c", "m<n>x"]
+    runtime_keys: true
+    economy_keys: [S24.coin_total, S24.xp_total, S24.top_min]
+    counters: [p1_on_min, p1_on_claim]
+    config: ["ember-v1-economy.yml#sources.S24", "ember-v1.yml#online.milestones"]
+    code: ["p1/EmberSignService.java#ON_RUN = \"p1online-\""]
+  S25:
+    name: 勋记（结算额外币% / 碎片）
+    econ_row: S25
+    status: live
+    pays: [coin, shard]
+    period: all
+    content: [q01, q02, q03, q04, q05, q06, q07, challenge, abyss, r01, r02, r03]
+    grant_keys: [honor_coin, honor_shard]
+    counters: [p4_chal_, p4_honor_]
+    config: ["ember-v1-growth.yml#honors.caps"]
+    code: ["p1/EmberSettleService.java#\"honor_coin\""]
+  S26:
+    name: 国庆本 gq26 国庆币
+    econ_row: S26
+    status: event
+    pays: [fest_coin]
+    period: event
+    content: [gq26]
+    drop_table: "ember-v1-festival.yml drops: mob_chance 0.25 per kill, elite 2, treasure 3, clear 10; daily_entries 3"
+    counters: [p3_fest_entry_]
+    config: ["ember-v1-festival.yml#drops.clear", "ember-v1-festival.yml#daily_entries"]
+    code: ["p1/EmberFestival.java#private void giveCoins("]
+  S27:
+    name: 国庆币兑换余烬徽
+    econ_row: S27
+    status: event
+    pays: [badge]
+    period: event
+    content: [account]
+    counters: [p3_fest_xbadge_, p3_badge]
+    config: ["ember-v1-festival.yml#exchange"]
+    code: ["p1/EmberFestival.java#EmberEconomy.grantBadge(d, \"S27\""]
+  S28:
+    name: 8 印记兑换（同阶指定族 + 部位标准件）
+    econ_row: S28
+    status: live
+    pays: [gear]
+    period: none
+    content: [account]
+    drop_table: "chosen family + slot, map tier = mark tier, quality 0, craft 0, +0, bound, source drop (dismantlable — book §E12)"
+    ledger_runs: ["mark-"]
+    grant_keys: [mark_item]
+    economy_keys: [S28.marks]
+    counters: [p1_mark_t]
+    config: ["ember-v1-economy.yml#sources.S28"]
+    code: ["p1/EmberRunService.java#\"mark_item\"", "p1/EmberRunRules.java#MARKS_PER_EXCHANGE = 8"]
+  S29:
+    name: 分解装备 → 胚料
+    econ_row: S29
+    status: live
+    pays: [blank]
+    period: none
+    content: [account]
+    drop_table: "EmberUpgradeRules.dismantleYield = tier (T1–T3), source drop only"
+    code: ["p1/EmberUpgradeRules.java#public static int dismantleYield(", "p1/EmberGearLib.java#\"dismantled\""]
+  S30:
+    name: 生活玩法产出
+    econ_row: S30
+    status: live
+    pays: [life_item, potion]
+    period: day
+    content: [account]
+    counters: [life_, life_xp]
+    config: ["life.yml"]
+  S31:
+    name: 旧任务线（P1 下不推进）
+    econ_row: S31
+    status: dead_in_p1
+    pays: [xp]
+    period: none
+    content: [account]
+    config: ["quest.yml"]
+  S32:
+    name: 邮件附件（OP / 控制台发件）
+    econ_row: S32
+    status: channel
+    pays: [coin, mail]
+    period: none
+    content: [account]
+    config: ["mail.yml"]
+  X01:
+    name: 图录阶段奖励（集齐 5 / 10 / 15 / 20 种）
+    econ_row: null
+    status: unregistered
+    pays: [coin]
+    period: once
+    content: [account]
+    drop_table: "EmberCodex.STAGE_COIN 200 / 400 / 600 / 1000 (2200 once per character)"
+    ledger_runs: [codex]
+    grant_keys: ["stage<n>"]
+    counters: [p1_codex_, p1_codex_stage_]
+    code: ["p1/EmberCodex.java#STAGE_COIN = {200, 400, 600, 1000}", "p1/EmberRunService.java#\"stage\" + i"]
+    notes: "gap G1 — no REG / EmberEconomy row, untagged coin (sourceForGrant → null), not in p1sim"
+  X02:
+    name: 起步包（T0 刃 + T0 护符 + 5 瓶回复药）
+    econ_row: null
+    status: unregistered
+    pays: [gear, potion]
+    period: once
+    content: [account]
+    ledger_runs: [starter]
+    grant_keys: ["starter_<slot>"]
+    counters: [p1_starter]
+    config: ["ember-v1.yml#starter.heal_potions"]
+    code: ["p1/EmberRunService.java#private void giveStarter(", "p1/EmberSupplyService.java#public static int starterPotions("]
+    notes: "gap G3 — T0 kit + starter potions are not REG rows (power-neutral: T0 has no set; potions bounded by starter.heal_potions)"
+  X03:
+    name: 管理员发放 / 测试（/corerpg p1 give · give dup · coin give）
+    econ_row: null
+    status: admin_only
+    pays: [gear, coin]
+    period: none
+    content: [account]
+    code: ["p1/EmberCommand.java#private boolean give(", "p1/EmberCommand.java#private boolean giveDup("]
+    notes: "OP-only; give = source admin (not dismantlable, not codex); give dup = source drop for reroll duplicate tests (gap G4)"
+
+# ---------------------------------------------------------------------------------------------------- legacy (closed while P1 is on)
+legacy:
+  LS1: {econ_row: LS1, name: "/dp start · /corerpg enter 旧本", status: closed, code: ["LegacyGate.java#class LegacyGate"]}
+  LS2: {econ_row: LS2, name: 竞技场对战币 / 日箱, status: closed, config: ["arena.yml"]}
+  LS3: {econ_row: LS3, name: pass / vip / 月卡登录币, status: closed, config: ["ember-v1.yml#legacy_gate.allow.pass"]}
+  LS4: {econ_row: LS4, name: 灾厄 / 旧击杀币, status: closed, config: ["ember-v1.yml#legacy_gate.payout_guard"]}
+  LS5: {econ_row: LS5, name: scrap / reforge / 旧 enhance, status: closed, config: ["scrap.yml", "enhance.yml"]}
+
+# ---------------------------------------------------------------------------------------------------- sinks
+sinks:
+  C01: {econ_row: C01, name: 进主线 / 挑战 / 深渊段（体力）, takes: [stamina], ledger_keys: [cost, refund], economy_keys: [C01.stamina], config: ["ember-v1-economy.yml#sinks.C01", "ember-v1-runs.yml#cost"], code: ["p1/EmberSessionService.java#\"cost\""]}
+  C02: {econ_row: C02, name: 进团本（体力 50）, takes: [stamina], config: ["ember-v1-runs.yml#raids.r01.cost"], code: ["p1/EmberRaidService.java#C_RAID"]}
+  C03: {econ_row: C03, name: 强化, takes: [shard, core, coin], code: ["p1/EmberUpgradeRules.java#SHARDS = {0, 4, 6, 8, 12, 16, 22, 30, 40, 54, 72}", "p1/EmberEconomy.java#case \"enhance\": return \"C03\""]}
+  C04: {econ_row: C04, name: 升阶, takes: [shard, core, blank, coin], code: ["p1/EmberUpgradeRules.java#public static Cost upgradeCost(int tier)"]}
+  C05: {econ_row: C05, name: 精工, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"refine\": return \"C05\""]}
+  C06: {econ_row: C06, name: 成色, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"quality\": return \"C06\""]}
+  C07: {econ_row: C07, name: 8 印记兑换（付印记）, takes: [mark], economy_keys: [C07.marks], config: ["ember-v1-economy.yml#sinks.C07"], code: ["p1/EmberRunService.java#EmberEconomy.spendMark(d, \"C07\""]}
+  C08: {econ_row: C08, name: 深渊层费（币 / 超额 T3 印记）, takes: [coin, mark], ledger_keys: [cost_coin, refund_coin], config: ["ember-v1-runs.yml#abyss.fee_mark_coin"], code: ["p1/EmberAbyssService.java#EmberEconomy.spendCoin(pd, \"C08\""]}
+  C09: {econ_row: C09, name: 天赋学习, takes: [coin], economy_keys: [C09.row1.coin, C09.row2.coin, C09.row3.coin], config: ["ember-v1-economy.yml#sinks.C09", "ember-v1-growth.yml#talents.rows"]}
+  C10: {econ_row: C10, name: 天赋重置, takes: [coin], economy_keys: [C10.respec_coin], config: ["ember-v1-economy.yml#sinks.C10", "ember-v1-growth.yml#talents.respec_coin"]}
+  C11: {econ_row: C11, name: 洗练（词条）, takes: [coin, shard, gear], config: ["ember-v1-growth.yml#reroll.coin", "ember-v1-growth.yml#reroll.affixes"], code: ["p1/EmberEconomy.java#case \"reroll\": return \"C11\""]}
+  C12: {econ_row: C12, name: 烬炉烙印, takes: [insignia, coin], economy_keys: [C12.insignia, C12.coin_per_tier], config: ["ember-v1-economy.yml#sinks.C12"], code: ["p1/EmberSignature.java#IMPRINT_MARKS = 5"]}
+  C13: {econ_row: C13, name: 签名调律, takes: [insignia], economy_keys: [C13.insignia], config: ["ember-v1-economy.yml#sinks.C13"], code: ["p1/EmberSignature.java#ALT_MARKS = 10"]}
+  C14: {econ_row: C14, name: 回复药购买, takes: [coin], economy_keys: [C14.coin], config: ["ember-v1-economy.yml#sinks.C14", "ember-v1.yml#shop.heal_potion.price"]}
+  C15: {econ_row: C15, name: 外观商店（暂停）, takes: [coin, badge, mark, cosmetic], code: ["p1/EmberCosmetics.java#C_BOUGHT"]}
+  C16: {econ_row: C16, name: 扭蛋兑券（暂停）, takes: [coin, badge, gacha_ticket]}
+  C17: {econ_row: C17, name: 生活 offer, takes: [coin, core], config: ["life.yml"]}
+  C18: {econ_row: C18, name: 国庆商店, takes: [fest_coin, coin, badge], economy_keys: [C18.charm_event, C18.trail_event, C18.after_coin, C18.after_badge, C18.memo, C18.badge_rate, C18.badge_cap], config: ["ember-v1-economy.yml#sinks.C18", "ember-v1-festival.yml#charm"]}

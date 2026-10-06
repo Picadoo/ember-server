@@ -1,5 +1,7 @@
 # Ember gear stats — how NI lore turns into combat numbers (CoreRpg 1.9.0, 2026-09-27 CST)
 
+> **D242 指针（2026-10-06）：** 现行装备结构的权威说明已合并到 [`docs/design/DESIGN-ember-gear-structure-2026-10-06.md`](design/DESIGN-ember-gear-structure-2026-10-06.md)（CoreRpg 1.65.67 / bv58）。本文描述**旧 StatService 词条**，P1 结算不读 lore 词条；现行数值见新文档 §2 / P1 书第 07 章。
+
 Why: AttributePlus is parked (`plugins/_parked`, the server hangs on startup with it), so the lore lines on Ember gear
 (`物理伤害: +14`, `生命力: +35`, `物理防御: +6`) did nothing. A T1/T2 blade was just a diamond sword and talismans were decoration.
 CoreRpg `StatService` now applies them. Config: `plugins/CoreRpg/config.yml` → `stats:`.

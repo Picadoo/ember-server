@@ -1,5 +1,7 @@
 # 余烬强化 + 镶嵌 — 落地规格（对齐物品 / 插件 / RpgBot）
 
+> **D242 指针（2026-10-06）：** 现行装备结构的权威说明已合并到 [`docs/design/DESIGN-ember-gear-structure-2026-10-06.md`](DESIGN-ember-gear-structure-2026-10-06.md)（CoreRpg 1.65.67 / bv58）。本文是**旧系统（镶嵌 / 孔石 / 保护券），P1 下不适用**；现行强化见新文档 §4（EmberUpgradeRules）。
+
 **日期：** 2026-09-12（Asia/Shanghai）  
 **承接：** `docs/design/DESIGN-ember-rpg-systems.md` §3；装备 NI 见 `docs/design/DESIGN-ember-enchant-anvil.md`；孔石/保护券见 `plugins/NeigeItems/Items/ember-enhance-gems.yml`  
 **栈：** Paper 1.12.2 · CoreRpg（插件岗实现）· NeigeItems · TrMenu  

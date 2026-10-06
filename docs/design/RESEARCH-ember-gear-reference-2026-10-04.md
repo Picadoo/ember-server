@@ -1,5 +1,7 @@
 # Ember 装备 / 技能 / 锻造：成熟游戏怎么做，Ember 该学哪几条（调研，2026-10-04）
 
+> **D242 指针（2026-10-06）：** 现行装备结构的权威说明已合并到 [`docs/design/DESIGN-ember-gear-structure-2026-10-06.md`](DESIGN-ember-gear-structure-2026-10-06.md)（CoreRpg 1.65.67 / bv58）。本文是**调研输入**，不是规则；现行结构见新文档。
+
 > 状态：**调研 + 提案**。没有改任何配置、物品、菜单或 CoreRpg 源码。所有数值都是示意，上线前必须过 `tools/p1sim` / `p2econ` 的现行容差（42 格 ±2pp、双极品 W30 ±0.5 周，见 `DESIGN-ember-build-diversity-2026-10-04.md` §7）。
 > 依据：本地 `design-ember-v1.0-P1.md`（下称 P1 书）、`DESIGN-ember-build-diversity-2026-10-04.md`（下称构筑报告）、`design-ember-v1.1-P2-draft.md`、`design-ember-offhand-slot-pilot.md`、`design-ember-flex-skill-slot-pilot.md`；外部来源见文末 §7，正文用 [S#] 标注。带「（常识，未逐条核对）」的句子没有找到可引用的页面，只作背景。
 > 服主已否决「每张图掉不同部位」（第 8 张图才有靴子）。本文所有方案都遵守：**任何部位在第一张能掉装备的图就能掉，地图只决定阶级和偏向。**

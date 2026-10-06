@@ -1,5 +1,7 @@
 # 成长 sidegrade 方案（B02 后续）· 2026-10-04
 
+> **D242 指针（2026-10-06）：** 现行装备结构的权威说明已合并到 [`docs/design/DESIGN-ember-gear-structure-2026-10-06.md`](DESIGN-ember-gear-structure-2026-10-06.md)（CoreRpg 1.65.67 / bv58）。本文方案仍**待 6 槽复核、未上线**；现行成长规则见新文档 §2–§5。
+
 > **状态（15:45 起）：所有方案都「待 6 槽装备模型下复核」（pending re-check under the 6-slot model）。**
 > 装备结构改成 6 槽（刃、护符 + 4 件原版护甲，护甲分走护符的生命 / 防御，见 `RESEARCH-ember-gear-reference-2026-10-04.md`）以后，
 > H / D / B 的分布和套装成套条件都会变，本文所有数字都是在**现行 2 槽模型**（CoreRpg 1.65.3，`rules sha256 f23d20ef0ce2779e`）下测的。

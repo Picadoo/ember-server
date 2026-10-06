@@ -51,14 +51,14 @@
 | S03 | 精英房 | 碎片 / 核心 | +10 / +1 | `run` 内触发 | — | ✓ `p1sim` |
 | S04 | 词缀精英结算 | 碎片 | `variety.affix_shard` = 2 | 仅全员已首通的普通重打 | — | ✓ `p1sim` |
 | S05 | 房间事件达标 | 核心 | `variety.event_core` = 1 | 同上 | — | ✓ `p1sim` |
-| S06 | 首通包 | 自选装备或材料包 | Q01 自选 T1 护符；Q02 自选 T1 刃；Q03–Q07 材料+币（见下） | `once` / 内容版本 | `p1_first_clear_<map>@<ver>`（N2：换版会删旧键） | ✓ `p1sim`（材料/币）；自选走脚本策略 |
+| S06 | 首通包 | 自选装备或材料包 | Q01 自选族 T1 护符；Q02 一次免费定向兑换（自选族 × 部位，T1 刃或护符，`choice: piece`，D110）；Q03–Q07 材料+币（见下） | `once` / 内容版本 | `p1_first_clear_<map>@<ver>`（N2：换版会删旧键） | ✓ `p1sim`（材料/币）；自选走脚本策略 |
 | S07 | 首通徽记 | 首领徽记 | 3 / 图 | `once` / 图（不跟 content_version） | `p1_sigfc_<map>` | ✗（`p1sim` 不计徽记库存） |
-| S08 | 重打普通主线（签名图） | 首领徽记 + 12% 签名烙印在基装上 | 徽记 1；`STAMP_RATE=0.12` | `run`（需已首通该图） | `p1_sigmark_<map>` 累加 | ✗ 徽记；签名掉落 △ `mainline.py` |
+| S08 | 重打普通主线（签名图） | 首领徽记 + 12% 签名烙印在基装上（仅当该图有适配基装部位 / 家族的签名时） | 徽记 1；`STAMP_RATE=0.12`（无适配签名 = 0） | `run`（需已首通该图） | `p1_sigmark_<map>` 累加 | ✗ 徽记；签名掉落 △ `mainline.py` |
 | S09 | 自选誓约 | 首领徽记 | +1 / 条已誓约规则（池里 `normal: true` 目前 lean / reverse = 最多 +2） | `run`：队长本人已首通 **Q06**；本局无周规则（`mod == null`）；可誓约 **Q01–Q07** 签名图；队长已誓约且全员已首通该图 | `p1_pledge_<id>`（all） | △ `insignia.py --pledge` 上界（不计战斗惩罚）；`P1_PLEDGE=` 环境上界 |
 | S10 | 精选周挑战加印 | 印记(本阶) | +1；每周最多 3 次（与 S11 共用） | `week` × 3 | `p2_rotation` / 周 | ✓ `p2econ` / `p1sim` |
 | S11 | 精选周普通重打加印 | 印记(地图阶，仅 T1/T2) | +1；与 S10 共用周上限 3；本人已通 Q07 后不再发也不占名额 | `week` × 3 | 同上 | ✓ `p1sim --normal-mods` |
 | S12 | 团本结算 | T3 装备(地板精良) + 印记 T3 ×1 | `raid_item` + `raid_mark`；无首通包 | `week` × 3（R01–R03 共用 `cap_group: raid`）；体力 50 | `p2_raid_<group>` / 周 | ✓ `p2econ --raid` |
-| S13 | 深渊层结算 | 同 S01 基线数量 + 层品质表 | 无首通 / 无精选加印；层费见 C08；**D229 起 `sourceForGrant(base_*, <map>a<n>-…)` → S13**（数量仍读 S01） | 层 1–10；无尽层 | `p2_abyss_best` | ✓ `p2econ --abyss` |
+| S13 | 深渊层结算 | 同 S01 基线数量 + 层品质表 | 无首通 / 无精选加印；层费见 C08；**D229 起 `sourceForGrant(base_*, <map>a<n>-…)` → S13**（数量仍读 S01） | 层 1–10（10 层硬上限，无无尽层） | `p2_abyss_best` | ✓ `p2econ --abyss` |
 | S14 | 失败退体力 | 体力 | 当天首次挑战 / 深渊失败退 `fail_refund=0.5` × 30 | `day` × 1 | `failrefund@<day>`（账本，非 counters） | ✓ `p2econ` |
 | S15 | 当日首次倒下退药 | 回复药（绑定） | 最多 `death_refund.max_potions=5` | `day` × 1 | 账本行 | ✓ `p1sim` |
 
@@ -136,7 +136,7 @@
 | C10 | 天赋重置 | 币 | `respec_coin: 2000` | — | △ `realcost`（有字段，默认路径少用） |
 | C11 | 洗练 | 币 + 碎片（或重复件） | T1–T3：币 300/600/1000；碎片 40/80/120；锁定另加同量 `lock_shard`；保底 5 | 件上词条槽 | ✓ `realcost` / `rerollsim` |
 | C12 | 烬炉烙印 | 徽记 5 + 币 `300 × tier` | 需本人首通 **Q02**，且**该签名所属主线图已首通**（`mapCleared`）；消耗该图徽记 5 + 币 `300×件阶`；把签名烙到自有件（换件丢失、不退） | — | ✓ `insignia.py`（opt-in） |
-| C13 | 签名调律 | 徽记 10（`ALT_MARKS`） | 需本人首通 Q07（`ALT_UNLOCK`）；7 件调律版；解锁记 `p1_sigaltu_` | — | ✗ |
+| C13 | 签名调律 | 徽记 10（`ALT_MARKS`） | 需本人首通 Q07（`ALT_UNLOCK`）；6 件调律版（L01 / L02 / L06 / L08 / L10 / L12，`EmberSignature.ALTS`；L11b 不开放）；解锁记 `p1_sigaltu_` | — | ✗ |
 | C14 | 回复药购买 | 币 | `shop.heal_potion.price: 10` | — | ✓ `p1sim` 带药 |
 | C15 | 外观商店 | 币 或 徽（1 徽 = 50 币标价点）或印记点 | `EmberCosmetics`：深渊称号等按层价；足迹 / 称号多为通关解锁（0 价） | — | ✗（外观不进战力；化妆品暂停） |
 | C16 | 扭蛋兑券 | 币 1200 或 徽 20 / 张 | 日帽 5 张（`CoreGacha exchange.daily_cap`） | `day` × 5 | ✗ |
@@ -235,3 +235,4 @@
 | 2026-10-06 | D227（CoreRpg 1.65.53 / bv58）：S18 残响厅扩 echo_q05–q07，共用 `p4_echo_claim`=3、`S18.insignia`=2 **数量不变**（只改可领图集合 / retarget）；本表 S18 行同步。 |
 | 2026-10-06 | D228（CoreRpg 1.65.54 / bv58）：S2-8 — `grantInsignia` / `grantBadge`；账本 MARK / SIGMARK 行经 `creditMarkLedger` / `creditInsigniaLedger`（sig_mark S08、fc_sigmark S07、pledge_sigmark S09、raid_mark S12、rot_mark S10/S11、rush_mark S16/S17、rush_sig_* S17/S18；未知键 untagged 照发）；连战徽 S16 / 周目标徽 S19 / 国庆兑换徽 S27 走 grantBadge；§6.4 扫描扩到 `p1_mark_t` / `p1_sigmark_` / `p3_badge` 直写 + `grantFlatEmberXp`。数量不变。 |
 | 2026-10-06 | D229（CoreRpg 1.65.55 / bv58）：S2-9 — 深渊层结算 SourceId 与 S01 分开（`sourceForGrant(base_*, <map>a<n>-…)` → S13；数量仍读 S01 BASE_*）；§6.4 vault 写入扫描（`autoDeposit` / `creditBound` / `credit` / `EmberVault.get().give`，例外行 `econ-ok:`）。数量不变。 |
+| 2026-10-06 | D242（ARCH S4-1，文档 + 测试；CoreRpg 不发版 / 1.65.67 / bv58）：装备结构权威文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读来源表 `ember-source-map.yml`（S01–S32 / LS1–LS5 / C01–C18 + 未登记 X01 图录币 · X02 起步包 · X03 管理员发放），`EmberSourceMapTest` 防漂移。本表文案修：S06 Q02 = 自选族 × 部位、S08 12% 仅适配时、S13 无无尽层、C13 调律 6 件。缺口 G1–G11 见新文档 §8。 |

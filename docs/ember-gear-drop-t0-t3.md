@@ -1,5 +1,7 @@
 # T0→T3 装备掉落表（对齐成长曲线 §3）
 
+> **D242 指针（2026-10-06）：** 现行装备结构的权威说明已合并到 [`docs/design/DESIGN-ember-gear-structure-2026-10-06.md`](design/DESIGN-ember-gear-structure-2026-10-06.md)（CoreRpg 1.65.67 / bv58）。本文是**旧 T0–T3 掉落表，P1 下不适用**；现行掉落见新文档 §2 与 `docs/design/ember-source-map.yml`。
+
 **日期：** 2026-09-13（Asia/Shanghai）  
 **依据：** `docs/design/DESIGN-ember-growth-curve.md` §3  
 **约束：** 只定 ID / 来源 / 概率口径；NI 实体由物品岗做；MM/`ni give`/DP `dungeon-reward-script` 由怪物·插件接线。  
