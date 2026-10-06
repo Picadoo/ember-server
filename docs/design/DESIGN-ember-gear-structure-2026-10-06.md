@@ -17,7 +17,7 @@
 | 战斗槽 | **2 槽：刃（blade）+ 护符（charm）**。没有护甲槽；原版护甲 / 附魔 / 旧 StatService 词条不进 P1 结算 | `EmberItemData.slot`、P1 书 §4.1 / §4.5 |
 | 国庆护符 | `fest_charm`：活动限定外观 / 小幅属性护符，**不是套装件、不参与觉醒** | `ember-v1-festival.yml` `charm`、C18 |
 | 部位锁 | **不按图锁部位**（服主硬约束）：任何能掉装备的图都掉两个部位；地图只决定阶级、家族偏向（`loot_bias`），再叠该图专属签名（§3） | `ember-v1-runs.yml` `maps.<q>.loot` / `loot_bias` |
-| 6 槽 / 8 槽 | **未上线**。D169 6 槽分阶段计划 = SETTLED（文档），代码 HOLD；Stage 0 = 设计 GO / 该掉落模型 NO-GO；Stage 1 未开。8 槽（gear8 草稿，未入库）= 取消 | §9 |
+| 6 槽 / 8 槽 | **未上线**。D169 6 槽分阶段计划 = SETTLED（文档），代码 HOLD；Stage 0 = 设计 GO，掉落模型经 D246 修正为 GO（w80_cap）；Stage 1 未开（前置已满足）。8 槽（gear8 草稿，未入库）= 取消 | §9 |
 
 ## 2. 家族、阶级、成色、精工（随机装备）
 
@@ -177,7 +177,7 @@
 ## 9. 未来 / 计划状态（不是现行规则）
 
 - **D169 6 槽分阶段**：SETTLED（文档），结构代码 HOLD（`/workspace/COORD-gear-structure-hold.txt`）。Stage 1 需服主显式开工，且单独 `balance_version`。
-- **Stage 0 6 槽**：设计 GO，该掉落模型 NO-GO；D246（离线重跑 + 修正掉落模型）进行中，10-06 只有部分结果，Stage 1 仍不可开。
+- **Stage 0 6 槽**：设计 GO；10-04 掉落模型 NO-GO → **D246（10-06）修正后 GO**：w80_cap = 护符 80% / 每件甲 5%，费用 × 0.85 / × 0.05，护甲升阶不超过护符阶级，护甲每局另掉 1 件（全部位、刃 / 护符掉率不变）；静态 42/42、动态 21/21、W30 全路线 ±0.5 内（Stage 0 文档 D246 节）。Stage 1 前置已满足，代码待总控 / 服主显式开工。
 - **物品来源记录**：D245（1.65.70）已上线（§6.1），ARCH 系统图 S4 第 4 步完成。
 - **D168 8 槽**：取消。
 - **D167 随机锻造**：设计-only。
@@ -193,3 +193,4 @@
 | 2026-10-06 | D243（ARCH S4-2，CoreRpg 1.65.68 / bv58）：G1–G9、G11 修（S33–S35 登记、S09.per_rule、givedup src admin、打包配置同步、注释、p1sim 读 source map）；G10 仍在。`EmberSourceMapTest` 13 个，全套 533 / 0（JDK8）。 |
 | 2026-10-06 | D244（ARCH S4-3，CoreRpg 1.65.69 / bv58）：G10 修（S36–S38 / C19 登记、C17 加 LIFE_ITEM、source map `stocks:` 块 + `stocksMatchEconomyAndItemConfigs`）。另：词缀原语导出表 `tools/p1sim/affix-table.json`，p1sim 读表（见 `DESIGN-ember-affix-primitives-d241.md` §3.1）。数量不变。 |
 | 2026-10-06 | D245（ARCH S4-4，CoreRpg 1.65.70 / bv58）：物品来源记录 `origin`（NBT `om/os/or/ot` + `cr_p1_item.origin`），行为中性，旧件照常有效；`ember-source-map.yml` `item_provenance:` + `itemProvenanceMatchesCode`。全套 547 / 0（JDK8）。D246（6 槽掉落模型重跑）未完成，不在本次。 |
+| 2026-10-06 | D246（离线，无发版，1.65.70 / bv58 不变）：p1sim 共同随机数（`P1SIM_CRN=1`，默认输出逐位不变）+ 配对 CI 工具；旧刷图 W30 残差 = 随机流错位伪影；6 槽掉落模型修正 w80_cap 过全部 gate（42/42 · 21/21 · W30 最早 5.36→5.50）。Stage 1 前置满足，代码仍待显式开工。 |
