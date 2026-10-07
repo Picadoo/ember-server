@@ -261,7 +261,7 @@
 | **S0-7** | 旧宝石显式关闭（ARCH O6 / G5） | `P/enhance.yml` 加 `socket.enabled: false` 或 S0-3 拒绝 `socket`；孔石来源（旧本 / 灾厄 / `scrap`）随 S0-1～S0-4 一并断 | 随 S0-3 | 待测第 11 条 |
 | **S0-8** ✅ **实测不需要（D202，2026-10-05 18:14）** | 旧本菜单 / 旧枢纽菜单的「手打 `trmenu open`」风险 | 待测第 7 条已做：普通玩家（非 OP 新号 FreshQ736）执行 `/trmenu`、`/trmenu open ember_hub_legacy / ember_daily / ember_arena / ember_shop / ember_calamity / ember_guild` 全部回「no permission」；旧菜单都没有 `Bindings: Commands`（只有 `ember_hub`（/ember、/menu）、`ember_help`、`ember_gacha` 和 `ember_p1_*` 绑了命令）；从这些入口按 `menu:` 动作走的静态可达闭包只到 `ember_bestiary / flex_skill / friends / life / mail / settings / pet`（`pet` 是纯外观，见 §1），碰不到任何旧本 / 旧枢纽菜单。所以不加 `Open-Requirement`。 | 无改动 | `tools/p1map/d202-s08-probe.sh`；`docs/tests/smoke-2026-10-05-d202-s08-probe.md` |
 | **S0-9** ⏸ **HOLD（D251）** | `ember_event` / `world` / 下界 / 末地的世界级兜底 | 规格：`PlayerChangedWorldEvent` + `legacy_gate.world_allow` → 非白名单送回 `ember_hub`。D202 后无已知普通玩家传送口 → **不实现**，除非出现新后门 | 小；可选 | 见 D251 §1；冒烟仅在实现窗 |
-| **S0-10** ✅ **已建（D252，CoreRpg 1.65.71）** | 旧仓库写路径（ARCH R5 ②） | `legacy_gate.allow.warehouse` = list/info；`WarehouseService` 写子命令双闸。详 D251 §2 / STATUS-d252 | 中 | 单测 s010 + 实服拒写冒烟（完整 persist 可另窗） |
+| **S0-10** ✅ **已建（D252，1.65.71）+ 轻测 PASS（D261）** | 旧仓库写路径（ARCH R5 ②） | 同上；FreshW10 实服：deposit/withdraw/unlock 拒；`p1 stash`/`vault take` 通 | 中 | `STATUS-ember-s0-10-live-smoke-d261.md`；完整 persist 可选 |
 
 **推荐先做的前三个：S0-1 → S0-2 → S0-3。** S0-1 / S0-2 各约 5 行就把「最大量、不扣体力、新号即可」的旧本口子封掉；S0-3 一个路由闸 + 一段配置封住其余 8 条 LEAK 的入口，并且把「默认拒绝」变成以后新加命令的默认姿态（ARCH §5 S0 的核心诉求）。
 
