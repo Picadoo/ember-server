@@ -24,7 +24,7 @@ import java.util.UUID;
  *       {@link #verifyEntry}.</li>
  *   <li>{@link #verifyEntry}: commit anyone already in the instance world, release no-shows, abort when
  *       nobody entered, lock A18 party HP/dmg factors, mode opening lines (abyss / festival / rush /
- *       raid / pledge / weekly / main).</li>
+ *       raid / pledge / weekly / main; D302 abyss rhythm reveal).</li>
  *   <li>{@link #commit} / {@link #release} / {@link #releaseFee}: ledger cost / cost_coin status flips
  *       shared with abort / world-change commit (thin delegates on {@link EmberRunService}).</li>
  * </ol>
@@ -104,6 +104,31 @@ public final class EmberSessionService {
 
     static String nobodyEnteredText() {
         return "没能进入实例，预留的体力已退还。原因见上方 DP 提示（人数 / 冷却约 5 秒）。";
+    }
+
+    /**
+     * D302 / D300: short rhythm tag from map event.after + any room door_delay > 0.
+     * Matches TrMenu adventure/challenge 「节奏：…」 copy (事件偏早/居中/偏晚 · 门慢半拍).
+     */
+    static String rhythmTag(String eventAfter, boolean doorSlow) {
+        String ev;
+        if ("r1".equals(eventAfter)) ev = "事件偏早";
+        else if ("r3".equals(eventAfter)) ev = "事件偏晚";
+        else ev = "事件居中"; // r2 or missing → mid
+        return doorSlow ? ev + " · 门慢半拍" : ev;
+    }
+
+    /** True if any room on the map has door_delay > 0 (D300 W1b). */
+    static boolean mapHasDoorDelay(EmberRunMaps.MapDef m) {
+        if (m == null || m.rooms == null) return false;
+        for (EmberRunMaps.Room r : m.rooms) if (r != null && r.doorDelay > 0) return true;
+        return false;
+    }
+
+    /** D302 W1b: abyss enter reveal — map display name + D300 rhythm short tag. */
+    static String abyssRhythmRevealText(String mapName, String eventAfter, boolean doorSlow) {
+        String name = mapName == null || mapName.isEmpty() ? "?" : mapName;
+        return "§5本层地图：§f" + name + " §7· 节奏：§b" + rhythmTag(eventAfter, doorSlow);
     }
 
     static String abyssOpeningText(int abyss, double hp, double dmg, String qualityLabel) {
@@ -282,6 +307,8 @@ public final class EmberSessionService {
         if (s.abyss > 0) {
             EmberRunMaps.AbyssTier t = maps.abyssTier(s.abyss);
             if (t != null) runs.tellRun(s, abyssOpeningText(s.abyss, t.hp, t.dmg, EmberRunService.qualityLabel(t.quality)));
+            // D302 W1b: map display name + D300 rhythm short tag (real event.after / door_delay)
+            if (vm != null) runs.tellRun(s, abyssRhythmRevealText(vm.name, vm.eventAfter, mapHasDoorDelay(vm)));
         }
         runs.potionCheck(s);
         if (vm != null && vm.event && runs.festival() != null) { // D139: the day's entry counts once the player is inside

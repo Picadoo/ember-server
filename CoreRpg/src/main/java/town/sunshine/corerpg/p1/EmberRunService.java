@@ -2488,6 +2488,19 @@ public final class EmberRunService implements Listener {
             s.sendMessage(P + t.getName() + " " + key + " unlock=" + !clear);
             return true;
         }
+        if (admin && "abyssbest".equals(op) && args.length >= 5) { // D302 smoke / ops: set p2_abyss_best
+            Player t = Bukkit.getPlayerExact(args[3]);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            int n;
+            try { n = Integer.parseInt(args[4]); } catch (NumberFormatException e) { s.sendMessage(P + "层数须为整数"); return true; }
+            n = Math.max(0, Math.min(maps.abyss.size(), n));
+            PlayerData d = data(t.getUniqueId());
+            int cur = abyss.best(d);
+            d.addPeriodCount(EmberAbyssService.C_ABYSS_BEST, "all", n - cur);
+            plugin.getDataStore().flushMutation(t.getUniqueId());
+            s.sendMessage(P + t.getName() + " p2_abyss_best=" + abyss.best(d) + "（可开 1～" + abyss.maxStart(d) + "）");
+            return true;
+        }
         if (admin && "firstclear".equals(op) && args.length >= 5) {
             Player t = Bukkit.getPlayerExact(args[3]);
             EmberRunMaps.MapDef m = maps.byKey(args[4]);
@@ -2516,7 +2529,7 @@ public final class EmberRunService implements Listener {
             return true;
         }
         if (!(s instanceof Player)) {
-            s.sendMessage(P + "/corerpg p1 runs list | unlock <玩家> <q02..q05> [clear] | firstclear <玩家> <q01..> [clear] | starter <玩家> [reset] | marks <玩家> <阶> <±n> | extra <none|treasure|elite|chest|clear>");
+            s.sendMessage(P + "/corerpg p1 runs list | unlock <玩家> <q02..q05> [clear] | firstclear <玩家> <q01..> [clear] | abyssbest <玩家> <层> | starter <玩家> [reset] | marks <玩家> <阶> <±n> | extra <none|treasure|elite|chest|clear>");
             return true;
         }
         Player p = (Player) s;

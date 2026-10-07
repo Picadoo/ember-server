@@ -136,4 +136,30 @@ public final class EmberSessionServiceTest {
         assertTrue(maps.passSeconds > 0);
         assertEquals(60, maps.balanceVersion); // bv60 pin — session extract must not bump numbers
     }
+
+    @Test public void abyssRhythmReveal_matchesD300Copy() {
+        EmberRunMaps maps = bundled();
+        // D300 W1c TrMenu copy pins — must stay identical for abyss enter reveal
+        String[][] expect = {
+                {"q01", "灰烬庭院", "事件偏早 · 门慢半拍"},
+                {"q02", "焦骨甬道", "事件居中"},
+                {"q03", "残誓地窖", "事件偏晚 · 门慢半拍"},
+                {"q04", "潮蚀水道", "事件居中"},
+                {"q05", "断塔回廊", "事件偏早"},
+                {"q06", "霜封哨所", "事件偏晚 · 门慢半拍"},
+                {"q07", "锈轨矿道", "事件居中 · 门慢半拍"},
+        };
+        for (String[] row : expect) {
+            EmberRunMaps.MapDef m = maps.byKey(row[0]);
+            assertNotNull(m);
+            assertEquals(row[1], m.name);
+            boolean door = EmberSessionService.mapHasDoorDelay(m);
+            assertEquals(row[2], EmberSessionService.rhythmTag(m.eventAfter, door));
+            assertEquals("§5本层地图：§f" + row[1] + " §7· 节奏：§b" + row[2],
+                    EmberSessionService.abyssRhythmRevealText(m.name, m.eventAfter, door));
+        }
+        assertEquals("§5本层地图：§f? §7· 节奏：§b事件居中",
+                EmberSessionService.abyssRhythmRevealText(null, null, false));
+    }
+
 }

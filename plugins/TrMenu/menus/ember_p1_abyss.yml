@@ -2,6 +2,7 @@
 # 挑战版数值 × 层系数；十层封顶。每层单独确认与付费（30 体力 + 层费余烬币，没开打就退出 / 重启全退），
 # 打完首领才结算（挑战版固定结算 + 本层成色表），失败只丢本段，不掉装备不降强化。
 # 只转发 /corerpg p1 abyss <层>；层数、费用、资格全在服务端校验，lore 全部来自 PAPI（参数源 ember-v1-runs.yml abyss:）。
+# D302：软三段签 浅1–3/中4–7/深8–10 + 段门槛短提示；进层节奏揭示在 jar（本层地图 + D300 短签）。
 # 入口：冒险页「深渊 · 余烬层」、主菜单、/ember_p1_abyss。
 
 Title: '§5余烬 · 深渊 · 余烬层'
@@ -40,6 +41,8 @@ Icons:
       name: '§5深渊 · 余烬层：§f%corerpg_p1_abyss_state%'
       lore:
         - ''
+        - '§a浅渊 §7L1–3 · 近挑战强度 · 层费低/免'
+        - '§e中渊 §7L4–7 · 成色右移 · 层费抬升 · §c深渊 §7L8–10 · 顶压 + 高费'
         - '§7体力：§f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8（每层 30）'
         - '§7余烬币：§f%corerpg_coin%'
         - '§7每层 = 随机一张主线图打一局（3 房 + 首领）'
@@ -62,12 +65,15 @@ Icons:
     update: 20
     display:
       material: stone sword
-      name: '§5深渊 第 1 层'
+      name: '§a浅渊 · 第 1 层'
       lore:
         - ''
+        - '§a段：浅渊 §7· 近挑战强度 · 层费低/免'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t1%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -78,12 +84,15 @@ Icons:
     update: 20
     display:
       material: stone sword
-      name: '§5深渊 第 2 层'
+      name: '§a浅渊 · 第 2 层'
       lore:
         - ''
+        - '§a段：浅渊 §7· 近挑战强度 · 层费低/免'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t2%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -93,13 +102,16 @@ Icons:
   '3':
     update: 20
     display:
-      material: iron sword
-      name: '§5深渊 第 3 层'
+      material: stone sword
+      name: '§a浅渊 · 第 3 层'
       lore:
         - ''
+        - '§a段：浅渊 §7· 近挑战强度 · 层费低/免'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t3%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -109,13 +121,16 @@ Icons:
   '4':
     update: 20
     display:
-      material: iron sword
-      name: '§5深渊 第 4 层'
+      material: gold sword
+      name: '§e中渊 · 第 4 层'
       lore:
         - ''
+        - '§e段：中渊 §7· 成色右移 · 层费抬升'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t4%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -125,13 +140,16 @@ Icons:
   '5':
     update: 20
     display:
-      material: iron sword
-      name: '§5深渊 第 5 层'
+      material: gold sword
+      name: '§e中渊 · 第 5 层'
       lore:
         - ''
+        - '§e段：中渊 §7· 成色右移 · 层费抬升'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t5%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -142,12 +160,15 @@ Icons:
     update: 20
     display:
       material: gold sword
-      name: '§5深渊 第 6 层'
+      name: '§e中渊 · 第 6 层'
       lore:
         - ''
+        - '§e段：中渊 §7· 成色右移 · 层费抬升'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t6%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -158,12 +179,15 @@ Icons:
     update: 20
     display:
       material: gold sword
-      name: '§5深渊 第 7 层'
+      name: '§e中渊 · 第 7 层'
       lore:
         - ''
+        - '§e段：中渊 §7· 成色右移 · 层费抬升'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t7%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -174,12 +198,16 @@ Icons:
     update: 20
     display:
       material: diamond sword
-      name: '§5深渊 第 8 层'
+      shiny: true
+      name: '§c深渊 · 第 8 层'
       lore:
         - ''
+        - '§c段：深渊 §7· 顶压 · 高费换更高成色'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t8%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -190,12 +218,16 @@ Icons:
     update: 20
     display:
       material: diamond sword
-      name: '§5深渊 第 9 层'
+      shiny: true
+      name: '§c深渊 · 第 9 层'
       lore:
         - ''
+        - '§c段：深渊 §7· 顶压 · 高费换更高成色'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t9%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -206,12 +238,16 @@ Icons:
     update: 20
     display:
       material: nether star
-      name: '§5深渊 第 10 层'
+      shiny: true
+      name: '§c深渊 · 第 10 层'
       lore:
         - ''
+        - '§c段：深渊 §7· 顶压 · 高费换更高成色'
+        - '§8进层后揭示本层抽中主线图的节奏名片'
         - '%corerpg_p1_abyss_t10%'
         - ''
         - '§e➥ §f点击开始这一层（队长点；会预留 30 体力与层费）'
+
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
