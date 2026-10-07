@@ -123,6 +123,7 @@
 - **T0'' 结论：❌** — **禁开 T1**；**不放宽 ±2**；**禁止再交 T0'''**（两轮有界幅度已够）。
 - **回备忘 HOLD：** 换机制（通关率敏感有界幅度）轨暂停；若再开须**非通关率敏感效用**另起规格，勿再削 `dodge_dmg`/`procs`/`stance_*`/`win_*` 小数式收窄。
 - **零**线上 talent yml / jar 改动。
+- **下一难活 tip：** [`STATUS-ember-next-hard-debt-guard-skill-need-design-2026-10-07.md`](STATUS-ember-next-hard-debt-guard-skill-need-design-2026-10-07.md)（守招换思路 · 加固债#2 · 禁天赋续跑）。
 
 ## 7. 产物
 
