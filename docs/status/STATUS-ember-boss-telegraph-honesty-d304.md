@@ -43,3 +43,4 @@
 
 - **R**（半血前提示 / ActionBar 持续 warn）**后置**；仅总控另批 M+R 时开  
 - **禁** Pack6 / 新招 / 抬体力掉率 / 六槽 / 天赋续跑 / 灰印续跑 / 事件 R/W / 调律 R / 深渊 R / 周本 R  
+- **下一档硬债 tip：** [`STATUS-ember-next-hard-debt-hang-farm-identity-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-hang-farm-identity-need-design-2026-10-08.md)（挂机庭软身份 / 层可感差 · 需策划）  

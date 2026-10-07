@@ -108,3 +108,6 @@
 - Git：本地 commit；GitHub 推送暂堵时总控代推
 
 *服务器：proxy/login/play 保持 up；本 tip 零部署。*
+
+**结案指针：** D304 已上线 · 下一档 tip → [`STATUS-ember-next-hard-debt-hang-farm-identity-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-hang-farm-identity-need-design-2026-10-08.md)。
+
