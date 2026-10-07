@@ -276,6 +276,23 @@ public final class EmberAfkService implements Listener {
 
     static int epochMinute(long ms) { return (int) (ms / 60000L); }
 
+
+    /** D285: chat when the daily kill cap stops auto-combat. */
+    static String capStopText(int daily) {
+        return "§a今日挂机收益已满（" + daily + "/" + daily + " 只）· 明天 0 点重置。§e体力还在 · 打开菜单去冒险。";
+    }
+
+    /** D285: ActionBar while standing in AFK after the daily cap. */
+    static String capActionBar(int daily) {
+        return "§a今日挂机已满 §f" + daily + "/" + daily + " §7· §e体力还在 · 去冒险";
+    }
+
+    /** D285: menu / PAPI status when capped. */
+    static String capStatusWord() {
+        return "§a今日已满 · 体力还在 · 去冒险";
+    }
+
+
     // ---------------------------------------------------------------- the loop (every 2 ticks)
 
     private void tick() {
@@ -290,9 +307,9 @@ public final class EmberAfkService implements Listener {
             if (p.isDead() || !p.isOnline()) continue;
             Fight f = fights.get(u);
             if (f == null) {
-                if (autoOff.contains(u)) { regenIdle(p, null, now); continue; }
+                if (autoOff.contains(u)) { regenIdle(p, null, now); flashCapBar(p); continue; }
                 f = start(p, now);
-                if (f == null) { regenIdle(p, null, now); continue; }
+                if (f == null) { regenIdle(p, null, now); flashCapBar(p); continue; }
             }
             step(p, f, now);
         }
@@ -324,7 +341,7 @@ public final class EmberAfkService implements Listener {
         if (d == null) return;
         String day = DailyService.today();
         if (d.periodCount(C_KILL, day) >= dailyKills) {
-            stop(p, f, "§a今日挂机收益已满（" + dailyKills + "/" + dailyKills + " 只）· 明天 0 点重置。§e想更快变强还是打主线本。");
+            stop(p, f, capStopText(dailyKills));
             return;
         }
         int here = tierHere(p);
@@ -750,10 +767,22 @@ public final class EmberAfkService implements Listener {
 
     // ---------------------------------------------------------------- PAPI %corerpg_p1_afk_<key>%
 
+
+    /** D285: remind capped players still standing in AFK to spend stamina on adventure. */
+    private void flashCapBar(Player p) {
+        if (ticks % 40 != 0 || p == null) return;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null || dailyKills <= 0 || d.periodCount(C_KILL, DailyService.today()) < dailyKills) return;
+        try {
+            p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                    new net.md_5.bungee.api.chat.TextComponent(capActionBar(dailyKills)));
+        } catch (Throwable ignored) { }
+    }
+
     private String statusWord(Player p, PlayerData d) {
         if (!p1()) return "§7未开启";
         if (d == null || tierFor(d) == null) return "§7首通 Q01 后开放";
-        if (d.periodCount(C_KILL, DailyService.today()) >= dailyKills) return "§a今日已满 · 明天 0 点重置";
+        if (d.periodCount(C_KILL, DailyService.today()) >= dailyKills) return capStatusWord();
         Fight f = fights.get(p.getUniqueId());
         if (f != null) return f.pauseNote != null ? "§e暂停：" + f.pauseNote : "§a自动战斗中";
         if (autoOff.contains(p.getUniqueId())) return "§e已暂停（点击继续）";
@@ -775,6 +804,7 @@ public final class EmberAfkService implements Listener {
         Tier cur = f != null && tier(f.tier) != null ? tier(f.tier) : tier(d.periodCount(C_LT, "all")) != null ? tier(d.periodCount(C_LT, "all")) : top;
         switch (key) {
             case "on": return p1() ? "1" : "0";
+            case "full": return kills >= dailyKills && dailyKills > 0 ? "1" : "0"; // D285 menu CTA
             case "tier": return top == null ? "§7未解锁（首通 Q01 后开放）" : "§f" + top.name + " §7(" + "首通 " + top.requires.toUpperCase(Locale.ROOT) + ")";
             case "here": return cur == null ? "—" : "§f" + cur.name;
             case "state": return statusWord(p, d);

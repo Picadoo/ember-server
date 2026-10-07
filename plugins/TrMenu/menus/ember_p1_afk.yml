@@ -17,6 +17,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'tell: §8挂机庭 · 日 2400 只封顶 · 满后体力还能去冒险'
 Icons:
   '#':
     display:
@@ -49,8 +50,26 @@ Icons:
         - '§7规则：站在层里就自动打怪、自动放烬斩，战利品直接到账'
         - '§7装备越好打得越快、能挂的层越高；10 分钟死 3 次会停下'
         - '§7每日 2400 只封顶（在线 + 离线），0 点重置；材料账号绑定'
-        - '§8挂满一天 < 一次通关的收益 · 想快速变强还是打主线本'
+        - '§8挂满一天 < 一次通关的收益 · 今日已满请点「去冒险」'
   F:
+    icons:
+      # D285: daily kill cap → steer to adventure (stamina still usable)
+      - condition: 'check papi %corerpg_p1_afk_full% >= 1'
+        priority: 1
+        display:
+          material: diamond sword
+          name: '§e体力还在 · 去冒险'
+          lore:
+            - ''
+            - '§a今日挂机击杀已满（%corerpg_p1_afk_today%）'
+            - '§7再挂没有收益 · 体力还能打主线本'
+            - '§7状态：%corerpg_p1_afk_state%'
+            - ''
+            - '§e➥ §f打开冒险页'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'menu: ember_p1_adventure'
     update: 20
     display:
       material: iron sword
@@ -59,6 +78,7 @@ Icons:
         - ''
         - '§7现在：%corerpg_p1_afk_state%'
         - '§7进入挂机庭会自动开打；想站着聊天就先暂停'
+        - '§8今日打满后这里会变成「去冒险」'
         - ''
         - '§e➥ §f点击切换'
     actions:

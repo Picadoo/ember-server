@@ -104,4 +104,12 @@ public class EmberAfkServiceTest {
         assertEquals(4, EmberVault.boundAfterSpend(5, 0, 4));   // an admin take / undo debit clamps
         assertEquals(0, EmberVault.boundAfterSpend(0, 3, 8));
     }
+
+    @Test public void capStopText_D285_pointsToAdventure() {
+        String s = EmberAfkService.capStopText(2400);
+        assertTrue(s.contains("2400/2400"));
+        assertTrue(s.contains("去冒险"));
+        assertTrue(EmberAfkService.capActionBar(2400).contains("体力还在"));
+        assertTrue(EmberAfkService.capStatusWord().contains("去冒险"));
+    }
 }
