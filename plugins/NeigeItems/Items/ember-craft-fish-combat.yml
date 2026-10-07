@@ -82,7 +82,6 @@ totem_ember_life:
   material: TOTEM
   name: '&a余烬续命图腾'
   lore:
-    - '&7totem_ember_life'
     - '&8唯一有效的不死图腾'
     - '&c原版图腾无效'
   enchantments:
