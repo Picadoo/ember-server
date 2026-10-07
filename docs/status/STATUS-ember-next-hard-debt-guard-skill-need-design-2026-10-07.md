@@ -86,6 +86,7 @@
 - 守招失败备忘 · [`DESIGN-ember-skill-kit-2026-10-06.md`](../design/DESIGN-ember-skill-kit-2026-10-06.md) §2 五轮 + §4 D212  
 - D287 技能决策（不扩守招）· [`STATUS-ember-playfeel-skill-kit-d287.md`](STATUS-ember-playfeel-skill-kit-d287.md)  
 - 加固债 #2 · [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](../design/DESIGN-ember-playfeel-hardening-2026-10-07.md)
+- **硬规格（待批 A）：** [`DESIGN-ember-guard-skill-pivot-2026-10-07.md`](../design/DESIGN-ember-guard-skill-pivot-2026-10-07.md) · 荐 **方案 M**（预警短窗招架）· R=搁置改灰印横向 · W 否决旧壁垒表
 
 ---
 
