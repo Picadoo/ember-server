@@ -46,5 +46,6 @@
 
 ## 下一窗 tip
 
+- **下一档硬债（已开窗）** · [`STATUS-ember-next-hard-debt-talent-mech-pivot-need-design-2026-10-07.md`](STATUS-ember-next-hard-debt-talent-mech-pivot-need-design-2026-10-07.md) · 天赋一排**换机制**硬规格（备忘 §2；禁盲调系数 / 禁 T1）  
 - **W2**（精英位 / 房压形状轻排）**后置**，等真人是否仍喊「一条廊」  
-- **R** 钩表后置；**禁** Pack6 / 事件 R/W / 调律 R / 六槽 / 天赋盲调  
+- **R** 钩表后置；**禁** Pack6 / 事件 R/W / 调律 R / 六槽 / 天赋盲调系数表  
