@@ -5,7 +5,7 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D307 工坊菜单诚实已收 · 加固 §1 主循环/枢纽/挂机软债 M 波已清 · 非样本门禁薄体验债（走廊/深渊/团本/预警/挂机层/日路由/工坊菜单）已连收 · 灰印/天赋 HOLD · **余下真硬战斗/经济债几乎全是样本门禁 R**  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（待策划）：** 派单策划出 `docs/design/DESIGN-ember-sample-window-readiness-2026-10-08.md` · STATUS=待批 A · 荐 M/R/W · backlog `B-sample-window-readiness`  
+**硬规格（已上线 D308 · docs-only）：** [`DESIGN-ember-sample-window-readiness-2026-10-08.md`](../design/DESIGN-ember-sample-window-readiness-2026-10-08.md) · STATUS=已批 A · 批 M · [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) · backlog `B-sample-window-readiness`  
 **打开理由：** D298 遥测管已上线，但各 R 窗「何时算样本够、谁签字再开、最小门槛是什么」仍散落在各 DESIGN 后置句里——总控/策划容易误把「人感一句」或「薄 UX 余感」当成可开 R 的门槛。要在**不开任何战斗/经济 R、不改玩法数值**前提下，把**样本窗就绪清单 + 再开门禁**写成可批硬规格（docs-only）。
 
 ---
