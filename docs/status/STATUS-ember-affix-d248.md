@@ -43,5 +43,5 @@ python3 tools/p1sim/growthrun.py weeks tools/p1sim/out-d248-w30.md
 
 ## 下一扇候选（仍不开六槽）
 
-- 修离线自检里 3 条老红灯（图录「预警秒数」说法、两处模拟脚本规范）
-- 或其它文案 / 注释薄扫
+- ~~自检 3 条老红灯~~ → **D249 清零**（`STATUS-ember-selfcheck-d249.md`）
+- 其它文案 / 注释薄扫，或 ARCH 文档债

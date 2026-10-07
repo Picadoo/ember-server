@@ -161,13 +161,14 @@ def entci(path, B=2000, ref='base', tol=2.0):
     """D246: entry-rate deltas vs `ref` with a seed-paired bootstrap (95% CI). Pass rule: point |Δ| <= tol;
     'noise' = point outside tol but CI reaches inside it; 'FAIL' = whole CI outside tol."""
     import numpy as np
+    import random
     R = pickle.load(open(path, 'rb'))
     names = sorted({k[0] for k in R if k[0] != ref})
-    rs = np.random.default_rng(12345)
+    rs = random.Random(12345)  # D249: M01 — only random.Random(seed), not np.random.default_rng
     out = {}
     for d in (0.3, 0.5, 0.7):
         seeds = sorted({k[2] for k in R if k[1] == d and k[0] == ref})
-        idx = rs.integers(0, len(seeds), size=(B, len(seeds)))
+        idx = np.array([[rs.randrange(len(seeds)) for _ in range(len(seeds))] for _ in range(B)])
 
         def arr(nm, m):
             ind = np.array([R[(nm, d, s)][m]['fc_day'] is not None for s in seeds], float)

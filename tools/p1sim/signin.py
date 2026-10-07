@@ -22,7 +22,7 @@ Usage (repo root):
 import argparse, importlib.util, os, random, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import miniyaml  # noqa: E402
+import rules  # noqa: E402  # D249: M06 — config only via rules.py
 
 CFG_PATH = os.path.join(HERE, '..', '..', 'plugins', 'CoreRpg', 'ember-v1.yml')
 STATE = {'on': False, 'online': 120, 'sign_share': 1.0, 'paid_days': 0, 'signed': 0, 'coin': 0, 'xp': 0, 'mark': 0, 'sigmark': 0}
@@ -32,7 +32,10 @@ INS_HOOK = None  # D222 insignia.py: called as INS_HOOK(p, n) for a paid sigmark
 
 
 def load(path=CFG_PATH):
-    c = miniyaml.load(path)
+    # D249 M06: always the shipped snapshot (rules.py); path arg kept for call-site compat, ignored when default
+    if path != CFG_PATH:
+        raise ValueError('signin.load what-if path removed — edit plugins/CoreRpg/ember-v1.yml (rules snapshot)')
+    c = rules.data('p1')
     s, o = c.get('signin') or {}, c.get('online') or {}
     T['daily'] = s.get('daily') or {}
     T['special'] = {int(k): v for k, v in (s.get('special') or {}).items()}
