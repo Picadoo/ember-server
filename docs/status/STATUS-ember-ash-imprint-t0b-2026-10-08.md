@@ -51,6 +51,9 @@
 
 ## 3. 结论与下一窗
 
+> **下一档硬债 tip（已开）：** [`STATUS-ember-next-hard-debt-weekly-raid-feel-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-weekly-raid-feel-need-design-2026-10-08.md) · 选题 **G** 团本/周本入口+本间段感 · **需策划** · 非灰印续跑。
+
+
 - **T0b 结论：❌** — **禁开 T1**；**HOLD**（设计 §4：再 ❌ → HOLD 或改派；**不**再开 T0c / **不**放宽 ±2）。  
 - **给总控：** 独立 CD + 纯控/标记在现行 p1sim 廊内夹不住「烬爆粘格」与「可感择优」同时过线；若续做须**改派新形状**（非本窗小数再拧），或接受 HOLD 直到邻域模型/门禁策略另议。  
 - **仍禁：** 旧 `kit_mark_*` cand、永久伤税、*d、共享充能灰印、Pack6、六槽、守招再调、天赋。
