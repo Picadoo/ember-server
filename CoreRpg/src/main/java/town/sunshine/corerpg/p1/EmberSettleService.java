@@ -380,6 +380,9 @@ public final class EmberSettleService {
             runs.deliver(p);
             if (in.firstClear != null && runs.maps().challenge != null && m.key.equals(runs.maps().challenge.requires)) endOfP1(p);
         }
+        // D298 W1a(+R): playfeel telemetry — clear path (vbMoved = variety bounty progress)
+        EmberPlayfeelTelemetry.record(s, m, u, pd, true, vbMoved, runs.log(), runs.plugin().getDataFolder());
+        runs.plugin().getDataStore().flushMutation(u);
     }
 
     private void endOfP1(Player p) {

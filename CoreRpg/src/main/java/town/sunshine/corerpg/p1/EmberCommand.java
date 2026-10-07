@@ -141,6 +141,11 @@ public final class EmberCommand {
             return true;
         }
         if ("world".equals(sub)) return world(s, args);
+        if ("telemetry".equals(sub) || "遥测".equals(sub)) { // D298 playfeel telemetry OP read-only
+            org.bukkit.plugin.Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+            if (!(pl instanceof town.sunshine.corerpg.CoreRpgPlugin)) { s.sendMessage(P + "CoreRpg 未加载"); return true; }
+            return EmberPlayfeelTelemetry.cmd(s, args, (town.sunshine.corerpg.CoreRpgPlugin) pl);
+        }
         if ("debug".equals(sub)) return debug(s, args);
         if ("calc".equals(sub)) return calc(s, args);
         if ("give".equals(sub)) return give(s, args);
@@ -167,6 +172,7 @@ public final class EmberCommand {
         s.sendMessage(P + "/corerpg p1 status | enable | disable | follow");
         s.sendMessage(P + "/corerpg p1 world add|remove [世界] | world list");
         s.sendMessage(P + "/corerpg p1 debug [all|console|off]  — 每击伤害来源日志");
+        s.sendMessage(P + "/corerpg p1 telemetry [玩家|server]  — D298 玩法可感周摘要（只读）");
         s.sendMessage(P + "/corerpg p1 give <scorch|burst|sustain|t0> <blade|charm> <阶0-3> [成色0-3] [精工0-3] [强化0-10] [玩家]");
         s.sendMessage(P + "/corerpg p1 givedup <blade|charm> [玩家] [成色0-3]  — 洗练测试：发一件和正在用的那件同族同部位同阶的重复件（src=admin：可当洗练重复件，不可分解、不计图录）");
         s.sendMessage(P + "/corerpg p1 honor test <勋记id|条件|all|clear|show> [玩家]  — 勋记测试：直接满足条件（会发解锁提示）/ 清掉");

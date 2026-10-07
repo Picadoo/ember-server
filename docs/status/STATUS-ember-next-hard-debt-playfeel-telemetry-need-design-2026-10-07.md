@@ -84,3 +84,7 @@
 ---
 
 *服务器：proxy/login/play 保持 up；本 tip 零部署。*
+
+---
+
+**续（2026-10-07）：** 已批 A 并施工 **D298**（1.65.88）。见 `STATUS-ember-playfeel-telemetry-d298.md`。

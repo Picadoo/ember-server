@@ -1,6 +1,6 @@
 # 玩法可感轻量遥测（OP / 日志仪表盘）· 2026-10-07
 
-> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
+> **STATUS：已批 A · 已施工 D298**（总控批 · 施工 2026-10-07 Asia/Shanghai · CoreRpg 1.65.88）  
 > **批注：** 总控批 · 采纳 **方案 M**：W1a+W1b **必做**；W1c **全服周滚同批**；**R**（结算 JSON 日志）作**旁路同批可加**；**W 否决**。施工已派 **D298**。本批注仍只动 docs。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** 总控派单「硬设计待批 A」· tip [`STATUS-ember-next-hard-debt-playfeel-telemetry-need-design-2026-10-07.md`](../status/STATUS-ember-next-hard-debt-playfeel-telemetry-need-design-2026-10-07.md) · D297 签名调律决策密度 PASS 后下一档**证据基建**硬债  
@@ -186,6 +186,8 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-07 | 策划 · 初稿 STATUS **待批 A** · 荐批 **M**；R 可替代或同批；W 否决 |
+| 2026-10-07 | 总控 · **已批 A** · M（W1a+b+c）+ 旁路 R；施工已派 |
+| 2026-10-07 | 施工 · **D298** · 1.65.88 上线 |
 | 2026-10-07 | 总控 · **已批 A** · M（W1a+W1b 必做；W1c 全服周滚同批）；R 旁路同批可加；W 否决；施工 **D298** |
 
 ---
@@ -193,7 +195,7 @@
 ## 10. 交付与喊代推
 
 - 路径：`docs/design/DESIGN-ember-playfeel-telemetry-2026-10-07.md`  
-- backlog：`B-playfeel-telemetry` → **已批 A**（方案 M · W1a/b/c；R 旁路可加；W 否决 · D298）  
+- backlog：`B-playfeel-telemetry` → **已批 A · 已施工 D298**（方案 M · W1a/b/c；R 旁路可加；W 否决 · D298）  
 - **只 docs**；本地 commit；**不 push**（总控代推）
 
 ---

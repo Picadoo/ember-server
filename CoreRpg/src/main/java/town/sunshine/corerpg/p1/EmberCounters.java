@@ -118,6 +118,21 @@ public final class EmberCounters {
         x("p2_bounty", "EmberRunService", D, CL, RL, "daily bounty");
         px("p4_vb_", "EmberRunService", D, CL, RL, "variety bounties settled today per kind");
         x("p4_rush", "EmberRushService", W, ST, RL, "rush attempts (stat only since D160)");
+        // D296 W1b account first-of-kind event teach
+        px("p1_evteach_", "EmberEventTeach", A, HI, NV, "D296 room-event kind first flash (@all)");
+        // D297 W1c weekly attune confirm shown
+        x("p1_attuneprompt", "EmberGrowthService", LW, HI, RL, "D297 weekly attune enter confirm shown");
+        // D298 playfeel telemetry (STAT · PWEEK · design §3)
+        x("p1_pf_runs", "EmberPlayfeelTelemetry", W, ST, RL, "D298 eligible q01-q07 settle/fail runs this P-week");
+        x("p1_pf_wall", "EmberPlayfeelTelemetry", W, ST, RL, "D298 wall counterplay successes");
+        x("p1_pf_whiff", "EmberPlayfeelTelemetry", W, ST, RL, "D298 whiff counterplay successes");
+        x("p1_pf_break", "EmberPlayfeelTelemetry", W, ST, RL, "D298 break counterplay successes");
+        x("p1_pf_evt_roll", "EmberPlayfeelTelemetry", W, ST, RL, "D298 runs with event room rolled");
+        x("p1_pf_evt_ok", "EmberPlayfeelTelemetry", W, ST, RL, "D298 runs with event completed");
+        x("p1_pf_sig_wear", "EmberPlayfeelTelemetry", W, ST, RL, "D298 runs with ≥1 active signature");
+        x("p1_pf_sig_alt", "EmberPlayfeelTelemetry", W, ST, RL, "D298 runs with ≥1 attune edition active");
+        x("p1_pf_vb_hit", "EmberPlayfeelTelemetry", W, ST, RL, "D298 runs with variety-bounty progress");
+
         x("p4_rush_claim", "EmberRushService", W, CL, RL, "main rush weekly reward claim");
         add("p4_outpost_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "outpost weekly claim (config)");
         add("p4_echo_claim", false, "ember-v1-runs.yml rush.claim", W, CL, RL, false, true, "echo weekly claim, shared by echo_q01..q07 (config)");

@@ -790,11 +790,18 @@ public final class EmberRunService implements Listener {
             }
         }
         // D295: fail also gets D283 playfeel summary (was settle-only — wipe taught nothing)
+        EmberRunMaps.MapDef telemMap = maps.byKey(s.mapKey);
         for (UUID u : s.participants) {
             Player p = Bukkit.getPlayer(u);
             if (p == null || !p.isOnline()) continue;
             String feel = EmberSettleService.failPlayfeelLine(s);
             if (!feel.isEmpty()) p.sendMessage(P + feel);
+            // D298: fail also counts (same eligible q01–q07口径)
+            PlayerData pd = data(u);
+            boolean vbApprox = !s.challenge && s.abyss == 0 && telemMap != null && !telemMap.raid && !telemMap.event
+                    && (s.affixDone || s.eventDone);
+            EmberPlayfeelTelemetry.record(s, telemMap, u, pd, false, vbApprox, log(), plugin.getDataFolder());
+            if (pd != null) plugin.getDataStore().flushMutation(u);
         }
         endInstance(s, false);
     }

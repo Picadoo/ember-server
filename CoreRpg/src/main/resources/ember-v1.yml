@@ -194,6 +194,14 @@ leaderboard_exclude:
     - '(?-i)^.*Bot\d*$'                  # …Bot、…Bot2（区分大小写，避免误伤 Abbot）
 
 # 1.62 P1 storage (DESIGN-ember-material-warehouse.md §P1 · DESIGN-ember-data-protection.md)
+
+# D298 玩法可感轻量遥测（OP / 日志 · 非玩家面）
+# exclude_uuids：全服周合计额外排除（名字规则仍走 leaderboard_exclude）
+# json_log：结算旁路打一行 [P1 pf] JSON（方案 R；默认开）
+telemetry:
+  json_log: true
+  exclude_uuids: []
+
 storage:
   vault:                       # 材料仓库: whitelisted NI materials, no slot limit, 2e9 per id, counted by every P1 cost
     enabled: true
