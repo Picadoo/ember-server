@@ -940,6 +940,7 @@ public final class EmberRunService implements Listener {
         NiBridge ni = plugin.getNiBridge();
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
         List<String> got = new ArrayList<String>();
+        List<String> relLines = new ArrayList<String>(); // D299 W1c 相对穿着（无变化不入列）
         int waiting = 0, choices = 0;
         Map<String, Integer> mail = new LinkedHashMap<String, Integer>();
         List<EmberRunRules.Row> mailRows = new ArrayList<EmberRunRules.Row>();
@@ -1101,10 +1102,17 @@ public final class EmberRunService implements Listener {
                 }
                 case ITEM: {
                     Integer sc = sigFor.get(g.id);
+                    // D299 W1c：发件前快照同部位穿着，通关到账时对照（quietDeliver=补领静默；失败无 ITEM）
+                    EmberItemData wornSnap = null;
+                    if (!quietDeliver && g.item != null && g.item.slot != null) wornSnap = activePiece(p, g.item.slot);
                     String res = giveItem(p, g, sc == null ? 0 : sc, r);
                     if (res != null) {
                         got.add(res); done = true; itemsGiven.add(g.id);
                         if (sc != null && !res.endsWith("（已在背包）")) stamped.add(g.id);
+                        if (wornSnap != null && g.item != null) {
+                            String rel = EmberGearNextHint.relativeStats(g.item.quality, g.item.craft, wornSnap);
+                            if (rel != null) relLines.add(rel + "§8（" + EmberItemData.slotName(g.item.slot) + "）");
+                        }
                     } else waiting++;
                     break;
                 }
@@ -1146,6 +1154,9 @@ public final class EmberRunService implements Listener {
         }
         tidyHotbar(p, hbEmpty);
         if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
+        if (!relLines.isEmpty() && !quietDeliver) { // D299 W1c：相对穿着一行（并列 D295 摘要，不改破绽语义）
+            for (String rel : relLines) p.sendMessage(P + "§7" + rel);
+        }
         sendUpgradeAsks(p); // D120
         if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后点：",
                 "[补领]", "/corerpg p1 claim", "领取暂存的奖励（装备页也有「补领」）"); // D95

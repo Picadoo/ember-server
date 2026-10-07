@@ -68,12 +68,16 @@ Icons:
         - 'command: corerpg p1 upgrade confirm'
         - close
   R:
+    update: 20
     display:
       material: blaze powder
       name: '§6精工 · 预览'
       lore:
         - '§7让这件的成长 +2%/档（0→2%→4%→6%）'
         - '§7确定成功'
+        - ''
+        - '§e手持件：§f%corerpg_p1_held_next_c%'
+        - '§8费用以聊天预览为准'
     actions:
       all:
         - 'command: corerpg p1 refine craft'
@@ -87,12 +91,16 @@ Icons:
       all:
         - 'command: corerpg p1 refine craft confirm'
   Q:
+    update: 20
     display:
       material: gold nugget
       name: '§e成色 · 预览'
       lore:
         - '§7标准→精良→卓越：每档成长 +4%（极品 +12%，只从掉落获得）'
         - '§8强化一档 +4%～8%，通常先强化更划算'
+        - ''
+        - '§e手持件：§f%corerpg_p1_held_next_q%'
+        - '§8费用以聊天预览为准'
     actions:
       all:
         - 'command: corerpg p1 refine quality'

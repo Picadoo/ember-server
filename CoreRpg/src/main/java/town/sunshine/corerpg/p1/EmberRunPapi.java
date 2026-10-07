@@ -42,7 +42,7 @@ public final class EmberRunPapi {
         ABYSS,
         /** raid_&lt;raid&gt; */
         RAID,
-        /** awaken_route / awaken / awaken_next / set_progress / stats / ehp / blade / charm */
+        /** awaken_route / awaken / awaken_next / set_progress / stats / ehp / blade / charm / D299 next_* / held_next_* */
         LOADOUT,
         /** codex* */
         CODEX,
@@ -102,7 +102,11 @@ public final class EmberRunPapi {
 
     static boolean isLoadoutKey(String key) {
         return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "stats".equals(key)
-                || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key);
+                || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)
+                // D299 再刷短反馈：装备页近档 + 工坊手持近档
+                || "blade_next_q".equals(key) || "blade_next_c".equals(key)
+                || "charm_next_q".equals(key) || "charm_next_c".equals(key)
+                || "held_next_q".equals(key) || "held_next_c".equals(key);
     }
 
     /** D144 余烬连战 menu line (weekly reward still open vs. practice only). */
@@ -318,8 +322,28 @@ public final class EmberRunPapi {
             case "ehp": return String.format(Locale.ROOT, "%.0f", l.ehp());
             case "blade": return l.blade == null ? "主手没拿余烬刃" : l.blade.shortLabel();
             case "charm": return l.charm == null ? "未选定护符" : l.charm.shortLabel();
+            // D299 W1a：穿着刃/护符成色·精工近档
+            case "blade_next_q": return l.blade == null ? "§8主手无刃" : EmberGearNextHint.qualityLine(l.blade);
+            case "blade_next_c": return l.blade == null ? "§8主手无刃" : EmberGearNextHint.craftLine(l.blade);
+            case "charm_next_q": return l.charm == null ? "§8未选护符" : EmberGearNextHint.qualityLine(l.charm);
+            case "charm_next_c": return l.charm == null ? "§8未选护符" : EmberGearNextHint.craftLine(l.charm);
+            // D299 W1b：工坊手持件近档（无手持 / 非 P1 → 提示）
+            case "held_next_q": return heldNext(p, true);
+            case "held_next_c": return heldNext(p, false);
             default: return l.nextAwakeningHint();
         }
+    }
+
+    /** D299 W1b：主手 P1 件的成色/精工近档；非 P1 或空手则短提示。 */
+    private String heldNext(Player p, boolean quality) {
+        org.bukkit.inventory.ItemStack it = p.getInventory().getItemInMainHand();
+        EmberLoadoutService ls = runs.plugin().getEmberLoadouts();
+        if (ls == null || it == null || !ls.items().hasData(it)) return "§8手持刃或护符看近档";
+        EmberItems.Read r = ls.items().read(it);
+        if (r == null || r.data == null) return "§8手持刃或护符看近档";
+        EmberItemData d = r.data;
+        if (ls.trust(p, d) != null) return "§8这件不是你的";
+        return quality ? EmberGearNextHint.qualityLine(d) : EmberGearNextHint.craftLine(d);
     }
 
     private String codex(Player p, PlayerData d, String key) { // B2.180 图录 · 装备 (display only, §19.5)

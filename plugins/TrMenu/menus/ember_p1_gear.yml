@@ -35,6 +35,8 @@ Icons:
       name: '§6主手 · 刃'
       lore:
         - '§f%corerpg_p1_blade%'
+        - '§7%corerpg_p1_blade_next_q%'
+        - '§7%corerpg_p1_blade_next_c%'
         - ''
         - '§7只认§f主手§7那一把；背包里的其他刃§c不生效'
         - '§7比较时看整套：换异族刃会取消套装'
@@ -53,6 +55,8 @@ Icons:
       name: '§6已选护符'
       lore:
         - '§f%corerpg_p1_charm%'
+        - '§7%corerpg_p1_charm_next_q%'
+        - '§7%corerpg_p1_charm_next_c%'
         - ''
         - '§7只认「已选」的一件；放副手不算第二份护符'
         - '§7护符提供生命与防御；成色 / 精工 / 强化只加生命'

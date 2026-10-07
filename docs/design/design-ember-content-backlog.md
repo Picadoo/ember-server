@@ -4,7 +4,7 @@
 ## Progress snapshot — 2026-10-01 13:37 Asia/Shanghai (总控 · B2.111 PASS · 勾销 · 流水线暂停，等用户/GPT 策划意见；下一默认窗 B2.113)
 
 ### 指针 · 下一阶段玩法/体验加固（2026-10-07）
-- **B-refarm-short-feedback（已批 A · 待施工 D299）：** [`docs/design/DESIGN-ember-refarm-short-feedback-2026-10-07.md`](DESIGN-ember-refarm-short-feedback-2026-10-07.md) · 方案 **M**：W1a+W1b 必做；W1c 同批（无变化静默）；R 后置；**W 否决** · tip `703b0839` · **禁** 六槽/天赋盲调/Pack6/事件R/W/调律R/抬掉率·单局币/图专属基础件
+- **B-refarm-short-feedback（已批 A · 已施工 D299）：** [`DESIGN-ember-refarm-short-feedback-2026-10-07.md`](DESIGN-ember-refarm-short-feedback-2026-10-07.md) · [`STATUS-ember-refarm-short-feedback-d299.md`](../status/STATUS-ember-refarm-short-feedback-d299.md) · 方案 M · CoreRpg **1.65.89** · bv **60** · R 后置 · **W 否决** · **禁** 抬掉率/新材料/六槽/天赋盲调/Pack6/事件R/W/调律R
 - **B-room-event-mustfeel（已批 A）：** [`docs/design/DESIGN-ember-room-event-mustfeel-2026-10-07.md`](DESIGN-ember-room-event-mustfeel-2026-10-07.md) · 方案 M：W1a `event_rate` 0.5→0.85 + W1b 种首次短闪 + W1c 开房 HUD；R/W 续窗后开 · **禁 Pack6** · 施工已派
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 - **2026-10-07 续：** 窗1–5 + D287–D289 已落地；**D290** 技能↔签名深链 + 团本炽愈提示（1.65.82）；**D291** 推荐打法页（零 jar）；**D292** 花样委托 +1 + 每图徽记一眼（1.65.83）· `STATUS-ember-playfeel-vbounty-plus-d292.md`

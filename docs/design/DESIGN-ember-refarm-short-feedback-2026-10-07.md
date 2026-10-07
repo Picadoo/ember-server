@@ -1,7 +1,7 @@
 # 再刷短反馈（成色 / 精工 / 印记可感节奏）· 2026-10-07
 
-> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
-> **批注：** 总控批 · 采纳 **方案 M**：W1a+W1b **必做**；W1c **同批**（相对穿着无变化则静默，防刷屏）；**R 后置**；**W 否决**。施工派 **D299**。本批注仍只动 docs。  
+> **STATUS：已批 A · 已施工 D299**（总控批 · 施工 2026-10-07 Asia/Shanghai · CoreRpg 1.65.89）  
+> **批注：** 总控批 · 采纳 **方案 M**：W1a+W1b **必做**；W1c **同批**（相对穿着无变化则静默，防刷屏）；**R 后置**；**W 否决**。施工 **D299** 已落地。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** 总控派单「硬设计待批 A」· tip [`STATUS-ember-next-hard-debt-refarm-short-feedback-need-design-2026-10-07.md`](../status/STATUS-ember-next-hard-debt-refarm-short-feedback-need-design-2026-10-07.md)（`703b0839`）· D298 玩法可感遥测 PASS 后下一档**体验**硬债  
 > **性质：** 硬设计已批；施工按方案 M（W1a+W1b+W1c）；R 后置。  
