@@ -211,8 +211,44 @@ CANDS_PARRY_T0B = {
                           {'kit_guard_parry_cd': 27, 'kit_guard_parry': 1, 'kit_guard_parry_keep': 0.5,
                            'kit_guard_parry_land_p': 0.45, 'kit_guard_parry_spam': 0.12}),
 }
+
+# T0 ash-imprint pivot (DESIGN-ember-ash-imprint-pivot · 已批 A · 方案 R): independent CD + mark/defer
+# New key family kit_ash_* — NOT old kit_mark_* cand decimals; NO kit_sec_shared / NO 烬斩 spend / NO dmg tax.
+# A = Slow I mark window; B = one-shot next-hit defer; opt_win>0 = optimal (press when foe hits soon); ap = always-press.
+ASH_A = {'kit_ash_cd': 15, 'kit_ash_mark_secs': 2.5, 'kit_ash_slow': 0.2, 'kit_ash_opt_win': 1.2}
+CANDS_ASH_T0 = {
+    'A_imprint_A': ('q02', 'any', '灰印·A cd15 标2.5s 缓+0.2·最优', dict(ASH_A)),
+    'A_imprint_A_ap': ('q02', 'any', '灰印·A cd15 标2.5s 缓+0.2·乱按',
+                      {'kit_ash_cd': 15, 'kit_ash_mark_secs': 2.5, 'kit_ash_slow': 0.2}),
+    'A_imprint_A18': ('q02', 'any', '灰印·A18 cd18 标2.5s 缓+0.2·最优',
+                     {'kit_ash_cd': 18, 'kit_ash_mark_secs': 2.5, 'kit_ash_slow': 0.2, 'kit_ash_opt_win': 1.2}),
+    'A_imprint_B': ('q02', 'any', '灰印·B cd15 下击推迟0.4s·最优',
+                   {'kit_ash_cd': 15, 'kit_ash_defer': 0.4, 'kit_ash_opt_win': 1.2}),
+    'A_imprint_B_ap': ('q02', 'any', '灰印·B cd15 下击推迟0.4s·乱按',
+                      {'kit_ash_cd': 15, 'kit_ash_defer': 0.4}),
+    'A_imprint_B18': ('q02', 'any', '灰印·B18 cd18 下击推迟0.35s·最优',
+                     {'kit_ash_cd': 18, 'kit_ash_defer': 0.35, 'kit_ash_opt_win': 1.2}),
+}
+
+# T0b narrow (设计 §4：换 CD/窗长/效用 A↔B 一轮；仍禁旧 mark / 永久伤税 / 放宽 ±2)
+CANDS_ASH_T0B = {
+    'A2_imprint_A': ('q02', 'any', 'T0b·灰印 A cd16 标2.0s 缓+0.15·最优',
+                    {'kit_ash_cd': 16, 'kit_ash_mark_secs': 2.0, 'kit_ash_slow': 0.15, 'kit_ash_opt_win': 1.2}),
+    'A2_imprint_A_ap': ('q02', 'any', 'T0b·灰印 A cd16 标2.0s 缓+0.15·乱按',
+                       {'kit_ash_cd': 16, 'kit_ash_mark_secs': 2.0, 'kit_ash_slow': 0.15}),
+    'A2_imprint_A18': ('q02', 'any', 'T0b·灰印 A18 cd18 标2.0s 缓+0.15·最优',
+                      {'kit_ash_cd': 18, 'kit_ash_mark_secs': 2.0, 'kit_ash_slow': 0.15, 'kit_ash_opt_win': 1.2}),
+    'A2_imprint_A18_ap': ('q02', 'any', 'T0b·灰印 A18 cd18 标2.0s 缓+0.15·乱按',
+                         {'kit_ash_cd': 18, 'kit_ash_mark_secs': 2.0, 'kit_ash_slow': 0.15}),
+    'A2_imprint_Aw': ('q02', 'any', 'T0b·灰印 Aw cd15 标2.0s 缓+0.12·最优',
+                     {'kit_ash_cd': 15, 'kit_ash_mark_secs': 2.0, 'kit_ash_slow': 0.12, 'kit_ash_opt_win': 1.2}),
+    'A2_imprint_B': ('q02', 'any', 'T0b·灰印 B cd18 下击推迟0.25s·最优',
+                    {'kit_ash_cd': 18, 'kit_ash_defer': 0.25, 'kit_ash_opt_win': 1.2}),
+    'A2_imprint_B_ap': ('q02', 'any', 'T0b·灰印 B cd18 下击推迟0.25s·乱按',
+                       {'kit_ash_cd': 18, 'kit_ash_defer': 0.25}),
+}
 ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,
-           **CANDS_PARRY, **CANDS_PARRY_T0B)
+           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B)
 
 
 def fams(c):
@@ -317,7 +353,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return

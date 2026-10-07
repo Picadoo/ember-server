@@ -389,8 +389,13 @@ def spread_burn(owner, mobs, t):
 #                      kit_guard_parry_flat / kit_guard_parry_keep / kit_guard_parry_land_p / kit_guard_parry_spam
 #                      预警落地短窗：窗内 → 无效(A) / 保留比例(A_weak keep) / flat 反打(B)；窗外/乱按耗独立 CD 无减伤。
 #                      禁均匀 kit_guard_red 永久乘 / kit_q_shared / kit_guard_charge。
+#   灰印副招枢轴 (T0 · DESIGN-ember-ash-imprint-pivot · 批 R): kit_ash_cd / kit_ash_mark_secs /
+#                      kit_ash_slow / kit_ash_defer / kit_ash_opt_win
+#                      新键族（禁复用旧 kit_mark_* cand 小数）；独立 CD；无 kit_sec_shared / 无花烬斩；
+#                      A=标记 N 秒缓慢（每次攻击 +slow）；B=下一次攻击 defer 秒；opt_win>0=仅目标即将出手时按。
+#                      禁永久伤税 / 易伤% / *d。
 KIT_KEYS = frozenset(('kit_guard_cd', 'kit_int_cd', 'kit_gather_cd', 'kit_dash_cd', 'kit_mark_cd', 'kit_step_cd',
-                      'kit_guard_parry_cd'))
+                      'kit_guard_parry_cd', 'kit_ash_cd'))
 
 
 def _krng(owner, salt):
@@ -472,7 +477,8 @@ def kit_swing(owner, alive, t, boss, period):
     if gm(st, 'kit_sec_shared', 0.0) > 0 or t < getattr(owner, 'sec_ready', -1.0):
         return None
     if kit_sec(owner, alive, t, boss):
-        owner.sec_ready = t + max(gm(st, 'kit_gather_cd', 0.0), gm(st, 'kit_dash_cd', 0.0), gm(st, 'kit_mark_cd', 0.0))
+        owner.sec_ready = t + max(gm(st, 'kit_gather_cd', 0.0), gm(st, 'kit_dash_cd', 0.0),
+                                  gm(st, 'kit_mark_cd', 0.0), gm(st, 'kit_ash_cd', 0.0))
         return _sec_cost(owner, t, period)
     return None
 
@@ -509,6 +515,21 @@ def kit_sec(owner, alive, t, boss):
             if rec is not None:
                 rec['n_mark'] += 1
             return True
+    elif gm(st, 'kit_ash_cd', 0.0) > 0:
+        # T0 ash imprint pivot (new key family): independent CD; mark Slow window and/or one-shot defer.
+        # Never spends 烬斩 / kit_sec_shared; no dmg / vuln / *d.
+        tgt = alive[0]
+        opt = gm(st, 'kit_ash_opt_win', 0.0)
+        if opt > 0 and tgt.get('atk', 0) > 0 and (tgt['next'] - t) > opt:
+            return False  # hold for a soon-hitting foe (optimal timing)
+        if gm(st, 'kit_ash_mark_secs', 0.0) > 0:
+            tgt['ash_until'] = t + gm(st, 'kit_ash_mark_secs', 0.0)
+            tgt['ash_slow'] = gm(st, 'kit_ash_slow', 0.2)
+        if gm(st, 'kit_ash_defer', 0.0) > 0 and tgt.get('atk', 0) > 0:
+            tgt['next'] += gm(st, 'kit_ash_defer', 0.0)
+        if rec is not None:
+            rec['n_ash'] = rec.get('n_ash', 0) + 1
+        return True
     return False
 
 
@@ -933,7 +954,11 @@ class Fight:
                 continue
             for m in alive:
                 if m['atk'] > 0 and m['next'] == t:
-                    m['next'] = t + m['iv']
+                    # ash imprint Slow I window: each attack while marked adds ash_slow to interval
+                    _iv = m['iv']
+                    if m.get('ash_until', -1.0) > t:
+                        _iv = _iv + float(m.get('ash_slow', 0.0))
+                    m['next'] = t + _iv
                     if (m['role'] in MELEE_ROLES or m['role'] == 'boss') and id(m) not in engaged:
                         break
                     self.hurt(m['atk'], m['tele'], 'boss' if m['role'] == 'boss' else 'mob', bool(m.get('affix')))
