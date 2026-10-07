@@ -1,16 +1,17 @@
 # 天赋一排「条件型侧移」返工规格 · 2026-10-07
 
-> **STATUS：待批 A**  
+> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
+> **批注：** 总控批 · 采纳 **§3** 三节点条件型形状 + **§5** 门禁（42/33 ±2pp + 择优）+ **§6** 切窗。下一步由总控开 **T0** 模拟（`sidegrade.py`）；**不过线不开 T1**。本批注提交仍只动 docs。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** 总控「下一难活」· 加固批体验 P4 / 风险「假选择」（`DESIGN-ember-playfeel-hardening-2026-10-07.md` §P4、§6-3）  
-> **性质：** 硬设计规格；**未批不落地**。本提交**只动 docs**；禁改 `ember-v1-growth.yml` / Java / NI / p1sim 代码；禁提交「已通过」假模拟报告冒充施工。  
+> **性质：** 硬设计已批；**T0 未过线前零线上改动**（不改 `ember-v1-growth.yml` / Java / NI）；禁提交「已通过」假模拟报告冒充施工。  
 > **硬约束：** 六槽不做（D169 HOLD）；**现行 2 槽下复跑**（废止 growth-sidegrades「待 6 槽复核」挂起口径）；禁止新永久乘区；禁止再堆 Pack / Director 大分支；不抬通关率预算；TrMenu / NI；玩家入口点选。
 
 ---
 
 ## 0. 一句话
 
-第一排「应变」现行三节点是**假选择**（build-diversity：体感 ≤2.2%）。返工必须走 **条件型侧移**（躲/扛/压上窗口），沿用 skill-kit / sidegrade 门禁：**42 格 ±2pp + 侧移择优**；过线才开 YAML/Java；批 A 前零施工。
+第一排「应变」现行三节点是**假选择**（build-diversity：体感 ≤2.2%）。返工必须走 **条件型侧移**（躲/扛/压上窗口），沿用 skill-kit / sidegrade 门禁：**42 格 ±2pp + 侧移择优**；过线才开 YAML/Java；**已批 A**，T0 未过线前零线上施工。
 
 ---
 
@@ -187,16 +188,16 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 
 ## 8. 批前禁止 + 变更记录
 
-### 8.1 批前禁止
+### 8.1 批后仍禁（至 T0 过线 / 另派 T1）
 
-- 改 `ember-v1-growth.yml` / `EmberGrowth*.java` / TrMenu 成长玩法键  
+- 改 `ember-v1-growth.yml` / `EmberGrowth*.java` / TrMenu 成长玩法键（T1 未派不开）  
 - 改 `sidegrade.py` / `p1sim` 为「好看」  
-- 开 Pack、六槽、副手、诚实薄窗夹带  
-- 宣称本稿「已批」或「已过门禁」
+- 开 Pack、六槽、副手夹带；新永久乘区  
+- 宣称「已过门禁」或「T1 已开」（T0 由总控跑；不过线不开 T1）
 
-### 8.2 荐批口径（供总控勾选）
+### 8.2 批注勾选
 
-- [ ] **批 A**：采纳 §3 三节点条件型形状为 T0 模拟规格；门禁 §5（42/33 格 ±2pp + 择优）；切窗 §6；过线前零线上改动  
+- [x] **批 A**：采纳 §3 三节点条件型形状为 T0 模拟规格；门禁 §5（42/33 格 ±2pp + 择优）；切窗 §6；过线前零线上改动  
 - [ ] 驳回 / 改批：说明要换的机制或容差
 
 ### 8.3 变更记录
@@ -204,6 +205,7 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 | 时 | 谁 | 事 |
 |----|----|-----|
 | 2026-10-07 | 余烬-策划 | 初稿 STATUS **待批 A**；路径本文件；backlog **B-talent-row1** 指针 |
+| 2026-10-07 | 总控 / 策划 | **已批 A**；采纳 §3+§5+§6；下一步 T0 模拟；不过线不开 T1 |
 
 ---
 
@@ -211,7 +213,7 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 
 | 文件 | 用途 |
 |------|------|
-| 本文件 | 一排条件型侧移硬规格（待批 A） |
+| 本文件 | 一排条件型侧移硬规格（**已批 A**） |
 | `DESIGN-ember-growth-sidegrades-2026-10-04.md` | 条件型候选与旧 ±3 跑数（**改为 2 槽复跑**，不以旧数为证） |
 | `DESIGN-ember-build-diversity-2026-10-04.md` | 一排无感证据 |
 | `DESIGN-ember-playfeel-hardening-2026-10-07.md` | P4 / 假选择 / 开窗依据 |

@@ -6,7 +6,7 @@
 ### 指针 · 下一阶段玩法/体验加固（2026-10-07）
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 - **2026-10-07 续：** 窗1–5 + D287–D289 已落地；**D290** 技能↔签名深链 + 团本炽愈提示（1.65.82）；**D291** 推荐打法页（零 jar）；**D292** 花样委托 +1 + 每图徽记一眼（1.65.83）· `STATUS-ember-playfeel-vbounty-plus-d292.md`
-- **B-talent-row1（待批 A）：** [`docs/design/DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`](DESIGN-ember-talent-row1-sidegrade-2026-10-07.md) · 天赋一排条件型侧移返工（机动/站桩/压上）；42 格 ±2pp + 择优；六槽不做 · 2 槽复跑；禁均匀乘区 / 新永久乘区 / Pack；**未批不施工**
+- **B-talent-row1（已批 A）：** [`docs/design/DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`](DESIGN-ember-talent-row1-sidegrade-2026-10-07.md) · 天赋一排条件型侧移返工（机动/站桩/压上）；42 格 ±2pp + 择优；六槽不做 · 2 槽复跑；禁均匀乘区 / 新永久乘区 / Pack；**下一步 T0 模拟，不过线不开 T1**
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
@@ -739,7 +739,7 @@
 - ~~灰箍碎片抢口文案~~ → **B2.45 PASS · 勾销**（文案表）
 - ~~踏步热键~~ → **B-flex-4 PASS · 勾销**（潜行+Q）
 - 副手并轨/不并轨决策页 → **B-flex-5 已批 A · 方案 A**（`DESIGN-ember-offhand-budget-decision-2026-10-07.md` · 永不进 B/H；方案 B 搁置；可开诚实半行）
-- 天赋一排条件型侧移 → **B-talent-row1 待批 A**（`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md` · 2 槽复跑 · ±2pp/择优 · 禁均匀乘区）
+- 天赋一排条件型侧移 → **B-talent-row1 已批 A**（`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md` · T0 模拟中 · 不过线不开 T1）
 - ~~拆解管理注释~~ → **B2.46 PASS · 勾销**
 - ~~拆解 Open tell「逻辑待 CoreRpg 接线」~~ → **B2.47 PASS · 勾销**（测 `6952749`）
 - ~~公会 Open tell「逻辑待 CoreRpg 接线」~~ → **B2.48 PASS · 勾销**（测 `8d3f3cf`）
