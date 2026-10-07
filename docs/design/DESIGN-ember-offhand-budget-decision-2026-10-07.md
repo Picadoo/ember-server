@@ -271,3 +271,4 @@ P1 公式轴（`tools/p1sim/p1sim.py` `stats()`）：
 | 2026-10-07 | 初稿 · STATUS **待批 A** · 荐方案 A · 只动 docs |
 | 2026-10-07 | 总控批 **已批 A · 方案 A**；方案 B 搁置；可开诚实半行薄窗（不改数值） |
 | 2026-10-07 | A1 文案诚实薄窗 **已施工 D289**（TrMenu set/life/hub/gear · 零 jar） |
+| 2026-10-07 | 施工/D294 | 灰箍 `ember_forge`/`ember_part`/NI lore 对齐诚实半行 · `STATUS-ember-ash-brace-honesty-d294.md` |

@@ -7,6 +7,7 @@
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 - **2026-10-07 续：** 窗1–5 + D287–D289 已落地；**D290** 技能↔签名深链 + 团本炽愈提示（1.65.82）；**D291** 推荐打法页（零 jar）；**D292** 花样委托 +1 + 每图徽记一眼（1.65.83）· `STATUS-ember-playfeel-vbounty-plus-d292.md`
 - **B-talent-row1-mech-pivot（备忘 · HOLD）：** [`docs/design/DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md) · T0c ❌ 后总控裁决：一排数值返工 **HOLD**；禁 D1d 式盲调；再开须换触发/换键；**D291 标签保留**；禁 T1
+- **D294（PASS）：** [`STATUS-ember-ash-brace-honesty-d294.md`](../status/STATUS-ember-ash-brace-honesty-d294.md) · 灰箍获取口对齐副手诚实半行（零 jar）
 - **B-sustain-s2（D293 PASS）：** [`STATUS-ember-sustain-s2-d293.md`](../status/STATUS-ember-sustain-s2-d293.md) · 炽愈 `sustain_hp_mult` **1.00** · CoreRpg **1.65.84** · bv **59**；sim 见 `STATUS-ember-sustain-s2-2slot-sim-2026-10-07.md`
 - **B-talent-row1-t0c（已批 A · ❌）：** [`docs/design/DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md) · D1c/F7c/W6c 复跑 **❌**（`0d4481ad`）；系数轨停
 - **B-talent-row1-t0b（已批 A · ❌）：** [`docs/design/DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md) · D1b/F7b/W6b **❌**
@@ -732,7 +733,7 @@
 | **B-flex-2** | **可装配轻技 1 槽**（位移 **或** 保命择一；荐 A · 位移「余烬踏步」；TrMenu 点击；零体力） | 静态 `rg` 轻技 id / 1 槽字段；菜单装配+释放轻测；**禁** wall-clock / DPS；不叫挑刺；**禁**动誓约三主动数值、体力日周门、四件甲、锻炉大改、T0–T3 刃护符；**勿**位移+保命双上 | **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 补记 `3841f4f` · 测 `1c36873` · close 本提交；报告 `docs/status/STATUS-ember-flex-skill-slot-pilot-test.md`；CoreRpg **1.15.25**） |
 | ~~**B-flex-3**~~ | 副手 **守腕/生坠薄获取口**（灰粮 stub 币购） | life offhand_ward/vita + ember_life O/W | **PASS · 勾销**（设计 `8a605f3` · 批准 `440e632` · 施工 `58baffe` · 测 `4a3b373` · close 本提交） |
 | **B-flex-4** | 踏步少开菜单热键（挑刺 #2） | 潜行+Q → cancel+cast；菜单口保留；**勿**改 CD14/距离5 | **PASS · 勾销**（设计 `a9311ac` · 批准 `7b4a8b6` · 插件 `005a03b` · 测 `a1d5f7c` · close `6b0ce3d`；报告 `docs/status/STATUS-ember-flex-hotkey-sneak-drop-test.md`；CoreRpg **1.15.28**） |
-| **B-flex-5** | **副手并轨/不并轨决策页**（加固 §8-5 · 替换预算表） | 只 docs：`DESIGN-ember-offhand-budget-decision-2026-10-07.md`；**已批 A · 方案 A**（永不进 P1 B/H）；方案 B 搁置；可开诚实半行薄窗（不改数值）；六槽不做；不新增 DPS 轴 | **已批 A · 方案 A** |
+| **B-flex-5** | **副手并轨/不并轨决策页**（加固 §8-5 · 替换预算表） | 只 docs：`DESIGN-ember-offhand-budget-decision-2026-10-07.md`；**已批 A · 方案 A**；D289 守腕/生坠诚实；**D294 灰箍获取口诚实** | **已批 A · 方案 A · 诚实半行 PASS** |
 
 **并行不捆：** **B2.17** 已 **PASS · 勾销**；文案薄窗暂缓；**勿捆 B2.x**；B-flex-1 已结（`d333b01`）；B-flex-2 已结（close 本提交）。
 

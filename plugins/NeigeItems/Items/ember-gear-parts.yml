@@ -6,8 +6,9 @@ part_ember_ash_brace:
   material: FLINT
   name: '&a余烬灰箍'
   lore:
-    - '&8部件 · 放副手槽生效'
+    - '&8部件 · 放副手槽生效 · 微量守势'
     - '&7烬砧材料炼成 · 微量物防（薄于守腕）'
+    - '&8不计入主线刃/护符战力（永不进 P1 B/H）'
     - ''
     - '物理防御: +1'
   enchantments:
