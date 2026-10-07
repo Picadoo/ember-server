@@ -321,6 +321,11 @@ public final class ArenaService implements Listener {
             p.sendMessage(PREFIX + ChatColor.RED + "今日日奖励箱已领取，明日再来。");
             return;
         }
+        // D279: P1 on → no claim coin (same depth as match settle); cosmetic shard still ok for OP smoke if configured
+        if (ArenaCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
+            p.sendMessage(PREFIX + ChatColor.GRAY + "P1 模式下竞技场不发余烬币（请用主线 / 挂机庭）。");
+            return;
+        }
         d.setArenaDailyClaimDate(today);
         if (dailyCoin > 0) d.addCoin(dailyCoin);
         dataStore.flushMutation(p.getUniqueId());
@@ -680,6 +685,8 @@ public final class ArenaService implements Listener {
     }
 
     private int payCoin(PlayerData d, int base, boolean quitter, boolean wonByQuit, long durationMs) {
+        // D279 / ARCH R6: P1 on → no arena match coin (route already closed for players; OP tests use /corerpg coin give)
+        if (ArenaCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) return 0;
         String today = DailyService.today();
         int paid = d.periodCount(ArenaCoinRules.COUNTER, today);
         int coin = ArenaCoinRules.coinFor(base, quitter, wonByQuit, durationMs, paid,

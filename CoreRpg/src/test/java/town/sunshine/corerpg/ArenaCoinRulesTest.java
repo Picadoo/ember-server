@@ -59,4 +59,10 @@ public class ArenaCoinRulesTest {
         assertEquals(2, ArenaCoinRules.remaining(3, 5));
         assertEquals(0, ArenaCoinRules.remaining(9, 5));
     }
+
+    @Test
+    public void p1BlocksCoinWhenModeOn() {
+        assertTrue(ArenaCoinRules.p1BlocksCoin(true));
+        assertFalse(ArenaCoinRules.p1BlocksCoin(false));
+    }
 }

@@ -15,6 +15,10 @@ package town.sunshine.corerpg;
  *       {@code match.forfeit_min_coin_seconds}; otherwise points only.</li>
  * </ul>
  * Points, ranks and the daily box ({@code arena claim}) are unchanged.
+ *
+ * <p>D279 / ARCH R6: while P1 ({@code EmberMode.active()}) is on, {@link ArenaService} pays <b>0</b> match coin and
+ * refuses {@code arena claim} coin — S0-3 already closes the route for players; this is payout-side depth so an OP
+ * test match or a future reopen cannot mint unmodelled 余烬币 into the P1 economy.</p>
  */
 public final class ArenaCoinRules {
 
@@ -25,6 +29,9 @@ public final class ArenaCoinRules {
     public static final int DEFAULT_FORFEIT_MIN_COIN_SECONDS = 30;
 
     private ArenaCoinRules() {}
+
+    /** D279: true → ArenaService must pay 0 match/claim coin (P1 master switch on). */
+    public static boolean p1BlocksCoin(boolean p1Active) { return p1Active; }
 
     /**
      * Coin to pay one participant for one settled match.
