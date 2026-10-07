@@ -41,4 +41,5 @@
 
 ## 下一窗
 
-总控另选题；forge R / 灰印 HOLD / 天赋 HOLD 仍等人感门禁。
+- **下一档硬债 tip（已选定 · 需策划）：** [`STATUS-ember-next-hard-debt-sample-window-readiness-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-sample-window-readiness-need-design-2026-10-08.md) · **样本窗就绪清单 / 何时再开 R**（docs-only；**不**偷开战斗/经济 R）
+- forge R / 事件 R/W / 调律 R / 走廊 W2 / 深渊·周本·Boss·挂机 R · 灰印 HOLD · 天赋 HOLD —— 仍等人感或 D298 周样本
