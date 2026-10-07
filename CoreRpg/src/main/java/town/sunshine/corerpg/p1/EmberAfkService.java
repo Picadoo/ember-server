@@ -682,6 +682,13 @@ public final class EmberAfkService implements Listener {
     }
 
     // ---------------------------------------------------------------- account-bound P1 materials (D73 no trading)
+    // D275 / ARCH O9: handlers gate on EmberMode.active(), NOT afk.enabled — turning AFK off must not
+    // disable drop/container/frame/stand anti-transfer. Class still hosts the listeners (extract later).
+
+    /** True when account-bound transfer guards run. Follows P1 master switch only (not afk.enabled). */
+    static boolean bindGuardsActive() {
+        return EmberMode.active();
+    }
 
     /** P1 upgrade materials and P1 gear (both can carry 挂机庭 value: bound shards / cores enhance gear, bound blanks forge it) */
     private boolean boundMat(ItemStack s) {
@@ -696,7 +703,7 @@ public final class EmberAfkService implements Listener {
     /** item frames / armor stands as a mailbox */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onFrame(org.bukkit.event.player.PlayerInteractEntityEvent e) {
-        if (!enabled || !(e.getRightClicked() instanceof org.bukkit.entity.ItemFrame)) return;
+        if (!bindGuardsActive() || !(e.getRightClicked() instanceof org.bukkit.entity.ItemFrame)) return;
         if (!boundMat(e.getPlayer().getInventory().getItemInMainHand()) && !boundMat(e.getPlayer().getInventory().getItemInOffHand())) return;
         e.setCancelled(true);
         e.getPlayer().sendMessage(P + "§c余烬材料和装备账号绑定，不能放进展示框。");
@@ -704,14 +711,14 @@ public final class EmberAfkService implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onStand(org.bukkit.event.player.PlayerArmorStandManipulateEvent e) {
-        if (!enabled || !boundMat(e.getPlayerItem())) return;
+        if (!bindGuardsActive() || !boundMat(e.getPlayerItem())) return;
         e.setCancelled(true);
         e.getPlayer().sendMessage(P + "§c余烬材料和装备账号绑定，不能放到盔甲架上。");
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onDrop(PlayerDropItemEvent e) {
-        if (!enabled || !boundMat(e.getItemDrop().getItemStack())) return;
+        if (!bindGuardsActive() || !boundMat(e.getItemDrop().getItemStack())) return;
         e.setCancelled(true);
         e.getPlayer().sendMessage(P + "§c余烬材料和装备账号绑定，不能丢出或转给别人（材料存仓库，装备放装备库）。");
     }
@@ -727,7 +734,7 @@ public final class EmberAfkService implements Listener {
     /** Putting P1 materials into world containers (chests, shulkers, hoppers, horses …) — the alt-account mailbox. */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onContainerClick(InventoryClickEvent e) {
-        if (!enabled || e.getView().getTopInventory() == null) return;
+        if (!bindGuardsActive() || e.getView().getTopInventory() == null) return;
         if (!blockContainer(e.getView().getTopInventory().getHolder(), e.getView().getTopInventory().getType())) return;
         boolean top = e.getRawSlot() >= 0 && e.getRawSlot() < e.getView().getTopInventory().getSize();
         boolean in = (top && boundMat(e.getCursor()))                                   // place into the container
@@ -741,7 +748,7 @@ public final class EmberAfkService implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onContainerDrag(InventoryDragEvent e) {
-        if (!enabled || !boundMat(e.getOldCursor())) return;
+        if (!bindGuardsActive() || !boundMat(e.getOldCursor())) return;
         if (!blockContainer(e.getView().getTopInventory().getHolder(), e.getView().getTopInventory().getType())) return;
         int size = e.getView().getTopInventory().getSize();
         for (int raw : e.getRawSlots()) if (raw < size) { e.setCancelled(true); return; }

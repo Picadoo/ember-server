@@ -108,4 +108,10 @@ public class EmberAfkServiceTest {
         assertFalse(EmberAfkService.blockContainer(null, org.bukkit.event.inventory.InventoryType.ENDER_CHEST));
         assertFalse(EmberAfkService.blockContainer(null, org.bukkit.event.inventory.InventoryType.CHEST));
     }
+
+    /** D275 / ARCH O9: bind guards follow P1 master switch; with no EmberMode instance they stay off. */
+    @Test public void bindGuardsFollowP1MasterSwitchNotAfkFlag() {
+        assertFalse(EmberAfkService.bindGuardsActive());
+        assertEquals(EmberMode.active(), EmberAfkService.bindGuardsActive());
+    }
 }
