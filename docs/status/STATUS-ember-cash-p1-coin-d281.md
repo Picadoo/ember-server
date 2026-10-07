@@ -30,6 +30,10 @@ S0-3 已经挡住玩家敲 `/corerpg vip|pass free|claim|monthly`。但月卡登
 - 不改养成数值；P1 主线 / 签到 / 挂机庭发币不变
 - 命令路由 LegacyGate 仍在；本窗只补发奖纵深
 
+## 修订
+
+- **D282**：业主裁决月卡照常发 → 已撤 `processMonthlyLogin` 的 P1 挡；vip/pass 仍挡。
+
 ## 下一扇候选
 
 - Flex 冲刺：实为 P1 技能组设计内，ARCH R6 措辞待 sync（非 bug）

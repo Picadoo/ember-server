@@ -286,10 +286,7 @@ public final class CashService {
         }
         data.setMonthlyCard(true);
         if (today.equals(data.getMonthlyLastGrantDate())) return;
-        // D281: join-path grant bypasses LegacyGate — freeze payout while P1 is on (lastGrantDate unset so off-P1 same day still pays)
-        if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
-            return;
-        }
+        // D282: monthly login gifts stay on under P1 (owner: 月卡照常发). Vip/pass claim still gated below.
 
         data.addCoin(monthlyLoginCoin);
         int staminaAmt = 0;
