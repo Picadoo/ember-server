@@ -37,7 +37,7 @@ NPROC = int(os.environ.get('NPROC', '6'))
 def _tol_job(j):
     import builddiv as bd
     r = bd.measure(j)
-    return {'clear': r['clear'], 'H': r['H']}
+    return {'clear': r['clear'], 'H': r['H'], 'B': r['B']}  # D313: B kept for the G5 zero-drift check
 
 
 def tol(V, n, out, seeds):

@@ -182,8 +182,10 @@ def w30_of(share):
     return None
 
 
-def pooled(six, players=1200, mode='base', weeks=12, procs=8, chunk=75):
+def pooled(six, players=1200, mode='base', weeks=12, procs=None, chunk=75):
     from multiprocessing import Pool
+    import os
+    procs = procs or int(os.environ.get('NPROC', '8'))  # D313: NPROC caps workers (shared host); results do not depend on it
     jobs = [(six, f, min(chunk, players - f), mode, weeks) for f in range(0, players, chunk)]
     with Pool(procs) as pool:
         rows = [r for part in pool.map(run_slice, jobs) for r in part]

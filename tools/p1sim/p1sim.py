@@ -1510,7 +1510,7 @@ class Player:
             if SIX is not None and SIX.get('arm_cap') and it['slot'] in ARMOR_SLOTS and it['tier'] >= self.charm['tier']:
                 continue  # STAGE 0 rule option: an armor piece is upgraded only up to the charm's tier (drops are not capped)
             k = self.cost_mult(it, up=True)
-            c = {x: v * k for x, v in cfg['upgrade'][it['tier']].items()}
+            c = {x: self.cost_round(v, k) for x, v in cfg['upgrade'][it['tier']].items()}
             if self.shard >= c['shard'] and self.core >= c['core'] and self.blank >= c['blank']:
                 if self.coin - c['coin'] >= reserve:
                     self.shard -= c['shard']; self.core -= c['core']; self.blank -= c['blank']; self.coin -= c['coin']
@@ -1528,7 +1528,7 @@ class Player:
                 break
             t = it['enh'] + 1
             k = self.cost_mult(it)
-            sh, co, cn = cfg['enh_shard'][t] * k, cfg['enh_core'][t] * k, cfg['enh_coin'][t] * k
+            sh, co, cn = self.cost_round(cfg['enh_shard'][t], k), self.cost_round(cfg['enh_core'][t], k), self.cost_round(cfg['enh_coin'][t], k)
             if self.shard < sh or self.core < co or self.coin - cn < reserve:
                 break
             self.shard -= sh; self.core -= co; self.coin -= cn
@@ -1547,6 +1547,17 @@ class Player:
         if up and kind in (SIX.get('cost_up') or {}):
             return float(SIX['cost_up'][kind])
         return float((SIX.get('cost') or {}).get(kind, 1.0))
+
+    @staticmethod
+    def cost_round(v, k):
+        """D313 (six-slot Stage1 T0 · G7): one cost component v × multiplier k. Default (no SIX / no SIX['round']) = the
+        plain product v * k, bit-identical to before. SIX['round'] == 'ceil1' = the integer rule T1 would ship: each
+        nonzero component ceil(v * k) with a floor of 1 (zero stays zero); k == 1 (blade / 2-slot) is left untouched."""
+        if SIX is None or SIX.get('round') != 'ceil1' or k == 1.0:
+            return v * k
+        if not v:
+            return 0
+        return max(1, math.ceil(round(v * k, 9)))
 
     def buy_potions(self):
         while self.potions < self.kn.potion_keep and self.coin >= self.cfg['potion_price']:
