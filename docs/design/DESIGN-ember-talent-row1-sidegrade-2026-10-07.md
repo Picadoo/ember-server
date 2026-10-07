@@ -210,6 +210,7 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 | 2026-10-07 | 总控 / 策划 | **已批 A**；采纳 §3+§5+§6；下一步 T0 模拟；不过线不开 T1 |
 | 2026-10-07 | 策划 | T0 ❌ → 收窄半页指针 §10（D1b/F7b/W6b · 待批） |
 | 2026-10-07 | 总控 / 策划 | T0b 收窄 **已批 A**；按 D1b/F7b/W6b 复跑 |
+| 2026-10-07 | 施工/T0b | 批定收窄 D1b/F7b/W6b 复跑 → **❌**（D1b/F7b 下砸；W6b 近线）· `STATUS-ember-talent-row1-t0b-2026-10-07.md` |
 
 ---
 

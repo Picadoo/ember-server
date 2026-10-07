@@ -80,6 +80,7 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1b,F7b,W6b --n 2000 -
 |----|-----|
 | 2026-10-07 | 初稿 · 待批 A · 响应 T0 ❌ 边缘 |
 | 2026-10-07 | 总控批 **已批 A** · 采纳 D1b/F7b/W6b · T0b 复跑中 |
+| 2026-10-07 | 施工/T0b | 按 §1 系数复跑 D1b/F7b/W6b · ±2pp → **❌** · `STATUS-ember-talent-row1-t0b-2026-10-07.md`；不开 T1 |
 
 - 主规格：`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`（已批 A；本半页 = T0b 系数补丁）  
 - T0 报告：`STATUS-ember-talent-row1-t0-2026-10-07.md`

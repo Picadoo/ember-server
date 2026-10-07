@@ -57,6 +57,12 @@ for i, (w, sec, o) in enumerate(((1.30, 2, 0.90), (1.25, 1.5, 0.94)), 5):
     cand('W%d' % i, 'row1', '回身斩→破绽 首领预警招落下后 %.1f 秒对首领 ×%.2f / 其余时间 ×%.2f（NEW win_*）' % (sec, w, o),
          {'win_dmg': w, 'win_secs': sec, 'win_out': o})
 
+# T0b narrowed shapes (screen-only; DESIGN-ember-talent-row1-t0b-narrow · 已批 A)
+# Do NOT overwrite D1/F7/W6. Pair: D1b↔t1a, F7b↔t1b, W6b↔t1c.
+cand('D1b', 'row1', 'T0b 机动 躲后3s×1.22 / 首领×0.86', {'dodge_dmg': 1.22, 'dodge_secs': 3, 'dmg_boss': 0.86})
+cand('F7b', 'row1', 'T0b 站桩 预警×0.90 / 普攻×1.07', {'taken_tele': 0.90, 'taken_boss': 1.07})
+cand('W6b', 'row1', 'T0b 压上 窗1.2s×1.18 / 窗外×0.97', {'win_dmg': 1.18, 'win_secs': 1.2, 'win_out': 0.97})
+
 # row 3 (set-locked: only the matching set) · target metric in brackets
 cand('t3a', 'cur', '现行 燎原', {'burn_spread': 1, 'spread_icd': 15, 'burn_mult': 0.94}, 't3a', sets=('scorch',))
 cand('t3b', 'cur', '现行 反震', {'hit_burst': 1, 'taken_tele': 1.02}, 't3b', sets=('burst',))
