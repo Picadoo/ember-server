@@ -8,6 +8,8 @@
 
 ## 1. 在新机器上恢复
 
+> **box 被重建、`/workspace` 还在（2026-10-08 起）：** 不用走下面全流程，直接跑 `scripts/ember-recover-after-rebuild.sh`（装 MariaDB → 指向 `/workspace/mysql-data` → 启动 → 缺库则导最新每小时备份 → `ember-up.sh`；可重复跑，`--check` 只看不改）。说明：[`docs/ops/OPS-ember-recover-after-rebuild.md`](../ops/OPS-ember-recover-after-rebuild.md)。MariaDB 数据目录已在 `/workspace/mysql-data`（`/etc/mysql/mariadb.conf.d/99-ember-datadir.cnf`）。
+
 1. **克隆到固定路径**（`env.sh` / `start.sh` / 测试脚本都写死了 `/workspace/minecraft`）：
    ```bash
    git clone https://github.com/Picadoo/ember-server.git /workspace/minecraft
@@ -30,7 +32,7 @@
    cp secrets/mysql-ember.env.example secrets/mysql-ember.env && chmod 600 secrets/mysql-ember.env   # 填密码
    ```
    然后把同一密码填进：`plugins/CoreRpg/config.yml` 的 `mysql.password`（仓库里是 `CHANGE_ME`）、登录服 AuthMe 配置（`login-runtime/plugins/AuthMe/config.yml`）。`secrets/bot-passwords.json` 由测试库首次运行自动生成。
-6. **MariaDB**（10.x/11.x）安装与恢复：
+6. **MariaDB**（10.x/11.x）安装与恢复（全新机器；只是重建且 `/workspace` 还在时用 `scripts/ember-recover-after-rebuild.sh`）：
    ```bash
    sudo apt-get install -y mariadb-server && sudo service mariadb start
    set -a; source secrets/mysql-ember.env; set +a
