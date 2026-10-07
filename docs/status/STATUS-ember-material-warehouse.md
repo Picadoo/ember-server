@@ -1,5 +1,7 @@
 # STATUS · 材料仓库
 
+> **D256 追记（2026-10-07）：** P1 现行玩家存取 = 枢纽 EmberVault。旧 `/corerpg warehouse` 对非 OP **只读**（S0-10 / D252+）；总览不再提示「解锁下一格」。下文保留 2026-09-13 旧命令验收快照。
+
 **日期：** 2026-09-13（Asia/Shanghai）  
 **插件：** CoreRpg **1.4.5**（4726067）· storage=mysql  
 **规格：** `docs/design/DESIGN-ember-material-warehouse.md`
@@ -24,4 +26,4 @@
 
 ## 菜单
 
-`ember_storage.yml`：总览 / 存入 / 解锁 / 末影箱
+`ember_storage.yml`：现行 = 材料仓/装备库/一键存入（p1 vault）；旧「存入/解锁」按钮已不给玩家

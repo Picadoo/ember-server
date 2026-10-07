@@ -181,8 +181,13 @@ public final class WarehouseService {
                     + ChatColor.AQUA + s.niId + ChatColor.GRAY + " × "
                     + ChatColor.WHITE + s.amount);
         }
-        int nextPrice = unlockCoinPrice(data);
-        if (total < maxSlots) {
+        // D256: P1 non-OP view-only — do not teach paid unlock (hub EmberVault has no slot cap)
+        boolean p1Player = town.sunshine.corerpg.p1.EmberMode.active()
+                && !p.isOp() && !p.hasPermission("corerpg.admin");
+        if (p1Player) {
+            p.sendMessage(PREFIX + ChatColor.GRAY + "仅供查看 · 存取请用枢纽菜单「仓库」。");
+        } else if (total < maxSlots) {
+            int nextPrice = unlockCoinPrice(data);
             p.sendMessage(PREFIX + ChatColor.GRAY + "解锁下一格: "
                     + ChatColor.GOLD + nextPrice + " 余烬币"
                     + (allowCash ? ChatColor.GRAY + " 或 " + ChatColor.LIGHT_PURPLE + cashPrice + " 晶钻" : ""));
@@ -229,7 +234,7 @@ public final class WarehouseService {
             }
             if (occupied >= unlocked) {
                 p.sendMessage(PREFIX + ChatColor.RED + "仓库已满（" + occupied + "/" + unlocked
-                        + "）。请先 /corerpg warehouse unlock 或取出空格。");
+                        + "）。请先 unlock 扩格或取出空格（OP）。");
                 return;
             }
             long put = Math.min((long) amount, perSlotCap);
