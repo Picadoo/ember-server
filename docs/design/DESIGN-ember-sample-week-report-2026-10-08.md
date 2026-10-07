@@ -3,8 +3,8 @@
 > **STATUS：已批 A**（总控 · 2026-10-08 Asia/Shanghai）  
 > **日期：** 2026-10-08 Asia/Shanghai  
 > **来源：** 总控派单「硬设计待批 A」· tip [`STATUS-ember-next-hard-debt-sample-week-report-need-design-2026-10-08.md`](../status/STATUS-ember-next-hard-debt-sample-week-report-need-design-2026-10-08.md)（`adb09d7d`）· D309 副手关窗后下一档**证据工具**硬债 · 对齐 D308 方案 **R 后置**  
-> **性质：** 硬设计 **已批 A**；本批注仍 **只 docs**；施工号 **D310**（**docs-only** · 落可复用周报检查单 + tip/backlog/D308 STATUS 同步 · 禁自动开闸 · 禁开任一 R · 禁改 D308 门槛数 · 脚本方案 R 仍后置）。  
-> **批注：** 总控批 · 采纳 **方案 M**（只 docs 周报 markdown 检查单 + 空周/半满周示例）；**未勾**批 R / M+R（脚本另号后置）；**W 否决**。  
+> **性质：** 硬设计 **已批 A**；本批注仍 **只 docs**；施工号 **D310**（**docs-only** · 落可复用周报检查单 + tip/backlog/D308 STATUS 同步 · 禁自动开闸 · 禁开任一 R · 禁改 D308 门槛数 · 脚本方案 R → **已由 D311 落**，本号仍 docs-only）。  
+> **批注：** 总控批 · 采纳 **方案 M**（只 docs 周报 markdown 检查单 + 空周/半满周示例）；当时 **未勾**批 R / M+R（脚本后置）；嗣后总控另批脚本债 **M+R · D311**；本页仍钉 **批 M**；**W 否决**。  
 > **硬约束：** **六槽不做** · **禁 Pack6 / 新模式图包** · **禁抬体力 / 掉率 / event_rate / ALTS** · **禁改 refineCost / qualityCost / enhance 价表（= 偷开 forge R）** · **禁天赋续跑（HOLD）** · **禁灰印续跑（HOLD）** · **禁守招邻域再调** · **禁偷开：事件 R/W · 调律 R · 工坊 R · 走廊 W2 · 深渊 R · 周本 R · Boss 预警 R · 挂机 R** · **禁重开 D307 / D308 / D309** · **禁纯 lore** · **禁玩家面遥测 KPI / 排行榜 / 成就** · **禁无总控签字自动「建议开 R」变施工** · 门槛口径**以 D308 DESIGN 为准（本模板不得改门槛数字）** · 玩家面不写「请执行 /corerpg p1 telemetry …」。  
 > **Backlog 指针：** `B-sample-week-report` · [`STATUS-ember-sample-week-report-d310.md`](../status/STATUS-ember-sample-week-report-d310.md) · 检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](../status/STATUS-ember-sample-week-report-checklist-d310.md)  
 > **邻域边界：** D308 就绪硬表 **已批 M · 当前全表不得开**（周报模板后置 → **本页已批 M · D310 已落**）；D298 证据管 **已收**（只读复用）；D309 副手方案 A **已关 §8-5**；灰印/天赋 **HOLD**。
@@ -274,7 +274,7 @@ tools/p1-telemetry-week-report.py \
 
 1. 文首改「已批 A」+ 勾选；**设计主交付表体勿改门槛口径**（除非总控改派）。  
 2. **批 M 已落（D310）：** §2.1.1 → [`STATUS-ember-sample-week-report-checklist-d310.md`](../status/STATUS-ember-sample-week-report-checklist-d310.md)；STATUS / tip / backlog / D308 旁注已链 · **禁玩家面**。  
-3. 若嗣后 **批 R / M+R**：脚本**另派施工号**；只读 yml→md；禁改战斗/经济；禁与样本 R 同号。  
+3. 嗣后 **批 M+R · 同号 D311**：脚本已落；只读 yml→md；禁改战斗/经济；禁与样本 R 同号；**本页批 M 结论不改**。  
 4. **禁同塞：** 事件 R/W、调律 R、forge R、走廊 W2、深渊 R、周本 R、Boss R、挂机 R、天赋/灰印、Pack6、六槽、重开 D307–D309、玩家看板。  
 5. 真开某 R：先周报勾到「可讨论」+ 总控签字进入该债待批 A → 再派该债硬设计（不得跳过）。
 
@@ -316,6 +316,7 @@ tools/p1-telemetry-week-report.py \
 |----|-----|
 | 2026-10-08 | 策划 · 初稿 STATUS **待批 A** · 荐方案 **M**；R / M+R 可勾；W 否决；检查单全文 + 空周/半满周示例；门槛数字钉 D308 未改 |
 | 2026-10-08 | 总控批 **已批 A · 批 M · D310 docs-only**；R / M+R 未勾（脚本仍后置）；W 否决；门槛数字未改 · [`STATUS-ember-sample-week-report-d310.md`](../status/STATUS-ember-sample-week-report-d310.md) · 检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](../status/STATUS-ember-sample-week-report-checklist-d310.md) |
+| 2026-10-08 | 旁注：脚本方案 R **已由 D311 批 M+R 同号落地**（[`DESIGN-ember-sample-week-report-script-2026-10-08.md`](DESIGN-ember-sample-week-report-script-2026-10-08.md) · [`STATUS-ember-sample-week-report-script-d311.md`](../status/STATUS-ember-sample-week-report-script-d311.md)）；**本页已批 M 检查单结论不改** |
 | 2026-10-08 | 策划旁注 · §2.2 加指针 → 脚本契约待批稿 `DESIGN-ember-sample-week-report-script-2026-10-08.md`（**不改**已批 M / 门槛 / 检查单） |
 
 ---
@@ -328,7 +329,7 @@ tools/p1-telemetry-week-report.py \
 - D308：[`DESIGN-ember-sample-window-readiness-2026-10-08.md`](DESIGN-ember-sample-window-readiness-2026-10-08.md) · [`STATUS-ember-sample-window-readiness-d308.md`](../status/STATUS-ember-sample-window-readiness-d308.md)  
 - D298：[`DESIGN-ember-playfeel-telemetry-2026-10-07.md`](DESIGN-ember-playfeel-telemetry-2026-10-07.md) · [`STATUS-ember-playfeel-telemetry-d298.md`](../status/STATUS-ember-playfeel-telemetry-d298.md)  
 - STATUS：[`STATUS-ember-sample-week-report-d310.md`](../status/STATUS-ember-sample-week-report-d310.md) · 检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](../status/STATUS-ember-sample-week-report-checklist-d310.md)  
-- **只 docs**；施工号 **D310**；脚本方案 R **仍后置**
+- **只 docs**；施工号 **D310**；脚本方案 R → **D311**（本号不兼开）
 
 ---
 

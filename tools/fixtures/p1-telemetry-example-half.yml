@@ -1,0 +1,14 @@
+# EXAMPLE ONLY · D311 fixture · 半满周量级（runs=22 < 30）· 无真玩家 UUID / 隐私
+week: 2026W42
+updated: 1728950400000
+note: "D298 W1c EXAMPLE fixture · half-full week · NOT live data"
+counts:
+  p1_pf_runs: 22
+  p1_pf_wall: 8
+  p1_pf_whiff: 3
+  p1_pf_break: 2
+  p1_pf_evt_roll: 12
+  p1_pf_evt_ok: 7
+  p1_pf_sig_wear: 15
+  p1_pf_sig_alt: 4
+  p1_pf_vb_hit: 6

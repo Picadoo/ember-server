@@ -33,7 +33,7 @@ D298 遥测管已有，但各 R「样本够不够、读哪行、谁签字」仍�
 - `refineCost` / `qualityCost` / `enhanceCost` / `upgradeCost` · 掉落 / `event_rate` / ALTS · 体力  
 - Pack6 / 六槽 / 新模式图包 · 天赋 HOLD · 灰印 HOLD · 守招再调  
 - D307 工坊菜单主交付 · 玩家面遥测 KPI / 排行榜 / 成就  
-- 周报模板（方案 **R**）**后置于 D308 批注** → **已由 D310 落 docs 检查单**（批 M · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md)；脚本仍后置；**门槛表未改**）  
+- 周报模板（方案 **R**）**后置于 D308 批注** → **已由 D310 落 docs 检查单**（批 M · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md)；脚本已由 **D311** 落（批 M+R 同号 · [`STATUS-ember-sample-week-report-script-d311.md`](STATUS-ember-sample-week-report-script-d311.md)；**门槛表未改**）  
 - CoreRpg jar · TrMenu / `ember-v1*.yml` 玩法键 · bv **60** · login/proxy/play **未停未换**
 
 ## 验收

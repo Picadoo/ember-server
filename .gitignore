@@ -16,6 +16,9 @@ node_modules/
 tools/*
 !tools/p1sim/
 tools/p1sim/__pycache__/
+!tools/p1-telemetry-week-report.py
+!tools/fixtures/
+!tools/fixtures/**
 
 # ---- 运行时数据 ----
 logs/

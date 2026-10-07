@@ -1,0 +1,14 @@
+# EXAMPLE ONLY · D311 fixture · runs=35 达分母数字但仍不得自动开（须 A1/人感/总控）· 无真玩家隐私
+week: 2026W43
+updated: 1729555200000
+note: "D298 W1c EXAMPLE fixture · runs>=30 digit only · NOT live data · still 不得自动开闸"
+counts:
+  p1_pf_runs: 35
+  p1_pf_wall: 14
+  p1_pf_whiff: 5
+  p1_pf_break: 4
+  p1_pf_evt_roll: 20
+  p1_pf_evt_ok: 11
+  p1_pf_sig_wear: 28
+  p1_pf_sig_alt: 9
+  p1_pf_vb_hit: 10

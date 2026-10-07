@@ -1,0 +1,14 @@
+# EXAMPLE ONLY · D311 fixture · 空周量级 · 无真玩家 UUID / 隐私
+week: 2026W41
+updated: 1728345600000
+note: "D298 W1c EXAMPLE fixture · excludes leaderboard_exclude + telemetry.exclude_uuids · NOT live data"
+counts:
+  p1_pf_runs: 4
+  p1_pf_wall: 1
+  p1_pf_whiff: 0
+  p1_pf_break: 0
+  p1_pf_evt_roll: 2
+  p1_pf_evt_ok: 1
+  p1_pf_sig_wear: 3
+  p1_pf_sig_alt: 1
+  p1_pf_vb_hit: 1
