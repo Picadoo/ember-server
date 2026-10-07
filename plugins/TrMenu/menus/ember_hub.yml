@@ -14,7 +14,7 @@ Options:
   Min-Click-Delay: 200
 Layout:
   - 'Ln o p FS'
-  - 'Tm X k i '
+  - 'TBmX k i '
   - 'ZR c Y d '
   - 'Q A G U j'
 Events:
@@ -57,6 +57,7 @@ Icons:
         - '§7三样都是打法取舍和小加成，不是变强；装备的阶、成色、强化才是主线'
         - ''
         - '§8第 2 排天赋 / 猎缀类词条：仅主线重打词缀精英'
+        - '§e推荐打法：§7旁格「机动/站桩/压上」标签页'
         - '§e➥ §f左键：天赋 · 右键：勋记 · Shift+左键：洗练'
     actions:
       left:
@@ -71,6 +72,23 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 reroll from hub'
+  # D291 推荐打法（§3.3-2 认知标签）
+  B:
+    display:
+      material: map
+      name: '§e推荐打法'
+      lore:
+        - ''
+        - '§7机动 / 站桩 / 压上 ↔ 天赋一排目标'
+        - '§8回身斩 · 稳桩 · 踏步回气（数值弱，先认标签）'
+        - '§7可跳技能组 / 签名 / 天赋'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_playstyle'
+
   # D139 国庆限时活动（时间来自 ember-v1-festival.yml，PAPI %corerpg_p1_fest_open%）。D145：活动结束后这一格变成
   # 「国庆纪念」入口（烟火符常驻商店 + 剩余国庆币兑换），不再是一块无名灰玻璃
   L:

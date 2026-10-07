@@ -1,0 +1,189 @@
+# D291 · 推荐打法（DESIGN playfeel §3.3-2）
+# 认知标签：机动 / 站桩 / 压上 ↔ 天赋第 1 排（回身斩 / 稳桩 / 踏步回气）
+# 数值不动；侧移提案（sidegrades）未施工。状态 / 得失 / 适合 来自既有 PAPI。
+# 入口：主菜单、技能组、签名页、天赋页、帮助「变强」；/ember_p1_playstyle
+
+Title: '§e推荐打法'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_playstyle'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 300
+
+Layout:
+  - '####I####'
+  - '##A#B#C##'
+  - '##S#G#N##'
+  - '####X####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.1'
+    - 'tell: §e推荐打法 §7· 先认标签再点天赋一排；§f数值弱、不是变强§7（装备阶/成色/强化才是主线）'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: map
+      name: '§e推荐打法 · 认知标签'
+      lore:
+        - ''
+        - '§7三种打法标签 ↔ 天赋第 1 排「应变」三选一'
+        - '§7专精：%corerpg_p1_spec_pts%'
+        - '§8%corerpg_p1_spec_row_1%'
+        - ''
+        - '§e机动 §8→ §f回身斩 §7· 躲完再打'
+        - '§e站桩 §8→ §f稳桩 §7· 吃预警求稳'
+        - '§e压上 §8→ §f踏步回气 §7· 躲招换续航'
+        - ''
+        - '§7下面三格看得失 / 适合 / 你是否已点'
+        - '§8点格不会直接学天赋：去「天赋」页点选（城里）'
+        - '§8数值仍弱；侧移大改未上 —— 本页只立标签'
+        - ''
+        - '§7搭配：技能组（形状/身法）· 签名（可盖符文）'
+
+  A:
+    update: 20
+    display:
+      material: feather
+      name: '§b机动 §8· §f%corerpg_p1_spec_name_t1a%'
+      lore:
+        - ''
+        - '§e认知：§b机动 §7— 预警大多躲开，躲完窗口再输出'
+        - '§7天赋一排目标：§f回身斩'
+        - ''
+        - '%corerpg_p1_spec_good_t1a%'
+        - '%corerpg_p1_spec_bad_t1a%'
+        - '%corerpg_p1_spec_fit_t1a%'
+        - ''
+        - '%corerpg_p1_spec_st_t1a%'
+        - ''
+        - '§7技能侧：身法前冲/后撤练躲招 · 标题看方向'
+        - '§7签名侧：别指望签名抬「机动」乘区；形状覆盖另看'
+        - ''
+        - '§e➥ §f打开天赋页点选 / 确认'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec from hub'
+
+  B:
+    update: 20
+    display:
+      material: shield
+      name: '§a站桩 §8· §f%corerpg_p1_spec_name_t1b%'
+      lore:
+        - ''
+        - '§e认知：§a站桩 §7— 预警常中、求稳减伤，换一点输出'
+        - '§7天赋一排目标：§f稳桩'
+        - ''
+        - '%corerpg_p1_spec_good_t1b%'
+        - '%corerpg_p1_spec_bad_t1b%'
+        - '%corerpg_p1_spec_fit_t1b%'
+        - ''
+        - '%corerpg_p1_spec_st_t1b%'
+        - ''
+        - '§7技能侧：不必硬绑身法；先活着打完预警'
+        - '§7签名侧：生存向签名/护符别和「求快」混为一谈'
+        - ''
+        - '§e➥ §f打开天赋页点选 / 确认'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec from hub'
+
+  C:
+    update: 20
+    display:
+      material: sugar
+      name: '§6压上 §8· §f%corerpg_p1_spec_name_t1c%'
+      lore:
+        - ''
+        - '§e认知：§6压上 §7— 躲招稳、用踏步换续航再贴输出'
+        - '§7天赋一排目标：§f踏步回气'
+        - ''
+        - '%corerpg_p1_spec_good_t1c%'
+        - '%corerpg_p1_spec_bad_t1c%'
+        - '%corerpg_p1_spec_fit_t1c%'
+        - ''
+        - '%corerpg_p1_spec_st_t1c%'
+        - ''
+        - '§7技能侧：轻技踏步 + 身法方向练「躲完再上」'
+        - '§8现行是躲后回血，不是侧移提案的「预警后伤害窗」'
+        - ''
+        - '§e➥ §f打开天赋页点选 / 确认'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 spec from hub'
+
+  S:
+    display:
+      material: blaze powder
+      name: '§6技能组'
+      lore:
+        - ''
+        - '§7烬斩/烬突二选一 · 形状预览 · 身法方向'
+        - '§7当前 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_skill_kit'
+
+  G:
+    display:
+      material: enchanted book
+      name: '§6天赋专精'
+      lore:
+        - ''
+        - '§7第 1 排三选一就在这里点'
+        - '§7%corerpg_p1_spec_pts%'
+        - ''
+        - '§e➥ §f打开天赋页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - close
+        - 'command: corerpg p1 spec from hub'
+
+  N:
+    display:
+      material: nether star
+      name: '§6签名传奇'
+      lore:
+        - ''
+        - '§7刃/护符签名可覆盖烬斩符文'
+        - '§8L07 直线 · L09 环 · L13 蓄力环'
+        - ''
+        - '§e➥ §f打开签名页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 sig from hub'
+        - close
+
+  X:
+    display:
+      material: arrow
+      name: '§7返回主菜单'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_hub'
+

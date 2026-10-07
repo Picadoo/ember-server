@@ -87,6 +87,13 @@ Icons:
         - '§f分解§7：多余的掉落件换胚料（精工 / 成色 / 升阶用）'
         - ''
         - '§8都在「装备 → 工坊」里，点按钮即可'
+        - ''
+        - '§e推荐打法：§7机动/站桩/压上 ↔ 天赋一排标签'
+        - '§e➥ §f点击打开推荐打法页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_playstyle'
 
   E:
     display:

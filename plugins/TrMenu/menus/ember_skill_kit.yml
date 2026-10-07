@@ -3,6 +3,7 @@
 # D219 · 身法方向 前冲/后撤（Q01起，出本切换，身法 CD 转满）
 # D287 · 局内决策加固：二选一醒目 · 出本形状预览 · 身法方向一眼可见（零数值 / 守招仍搁置）
 # D290 · 与签名页互相深链；L07/L09/L13 覆盖符文写清
+# D291 · P「推荐打法」深链
 
 Title: '§6技能 · §e%corerpg_kit_shape% §8· §b%corerpg_kit_step_dir% §8· %corerpg_kit_charge%'
 
@@ -17,7 +18,7 @@ Layout:
   - '# S A B #'
   - '# C D E #'
   - '# F G H #'
-  - '# Y I # X#'
+  - '# Y I P X#'
 
 Events:
   Open:
@@ -31,6 +32,22 @@ Icons:
     display:
       material: stained glass pane
       name: '§8 '
+
+  # D291
+  P:
+    display:
+      material: map
+      name: '§e推荐打法'
+      lore:
+        - ''
+        - '§7机动 / 站桩 / 压上 ↔ 天赋一排'
+        - '§8与本页身法/形状一起认标签'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_playstyle'
 
   X:
     display:

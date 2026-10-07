@@ -18,7 +18,7 @@ Options:
   Min-Click-Delay: 400
 
 Layout:
-  - '####I#T##'
+  - '###PI#T##'
   - '#M W C R#'
   - '#u12 v34#'
   - '#w56 x78#'
@@ -34,6 +34,22 @@ Icons:
     display:
       material: gray stained glass pane
       name: '§8'
+
+  # D291
+  P:
+    display:
+      material: map
+      name: '§e推荐打法'
+      lore:
+        - ''
+        - '§7机动 / 站桩 / 压上 ↔ 天赋一排'
+        - '§8签名覆盖形状时仍先认打法标签'
+        - ''
+        - '§e➥ §f打开'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_playstyle'
 
   I:
     update: 20
