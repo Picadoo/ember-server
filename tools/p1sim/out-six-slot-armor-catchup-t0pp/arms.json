@@ -1,0 +1,3 @@
+{"F": {"w": [0.8, 0.05, 0.05, 0.05, 0.05], "drop": 1, "start": "q01", "up_all": true, "cost": {"charm": 1.0, "armor": 0.05}, "arm_cap": true, "round": "c1a0", "follow": "all"},
+ "E": {"w": [0.8, 0.05, 0.05, 0.05, 0.05], "drop": 1, "start": "q01", "up_all": true, "cost": {"charm": 1.0, "armor": 0.05}, "cost_up": {"charm": 0.85}, "arm_cap": true, "round": "c1a0", "follow": "enh"},
+ "t0p_A": {"w": [0.8, 0.05, 0.05, 0.05, 0.05], "drop": 1, "start": "q01", "up_all": true, "cost": {"charm": 0.85, "armor": 0.05}, "arm_cap": true, "round": "c1a0"}}

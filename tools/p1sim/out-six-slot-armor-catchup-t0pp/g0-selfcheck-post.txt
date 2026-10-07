@@ -1,0 +1,48 @@
+PASS miniyaml subset — {'a': 1, 'b': [{'x': 1, 'y': [1, 2], 'z': {'w': 'q#r'}}, {'k': 'v', 'n': 2}], 'c': ['a', 'b c']}
+PASS config loads, 7 maps in unlock order — ['q01', 'q02', 'q03', 'q04', 'q05', 'q06', 'q07']
+PASS runs yml copies + MM Health agree
+PASS §7.4 B = 58.6 — 58.6000
+PASS §7.4 H = 163.5 — 163.5000
+PASS §7.4 EHP = 204.375 — 204.3750
+PASS §7.4 炽愈 H = 163.5 × sustain_hp (book 183.12 @1.12; now 1.00) — 163.5000
+PASS awakening II at T2 +6/+6
+PASS awakening I at T2 +6/+5
+PASS mixed family = no set
+PASS §6.2 expected tries 22.784 — 22.7836
+PASS §6.2 expected coins 12,984.12 — 12984.12
+PASS §9.3 expected coin per clear 315 — 315.0
+PASS level curve
+PASS deterministic with a seed
+PASS T2+6 clears Q02 more often than T0 — 0.00 vs 1.00
+PASS T2+6 at dodge 0.5 nearly always clears Q01
+PASS v2 profile restores pre-D31 numbers
+PASS codex menu numbers match MM + runs yml
+PASS M01 no module-level random.* in sim code (only random.Random(seed) instances)
+PASS M06 no sim reads a rule file directly (all via rules.py)
+PASS M01 same seed ⇒ same player trajectory, whatever the global random does
+PASS M01 same seed ⇒ same raid entries (p1party.Member takes the entry rng)
+PASS M02 one entry advances the caller rng by exactly 4 draws (whatever the fight did)
+PASS M02 raid line-ups depend on (seed, size) only
+PASS M02 compared configs fight with identical line-ups (easier boss: same members in every entry) — 0.58 vs 0.98
+PASS M03 two 焚烬 players on one target: 0 at 500 ms, 10 + 20 at 1000 ms (review R03 / R04) — 0 / 30
+PASS M03 Java EmberBurnBook == burnbook.py on identical event scripts — burncheck: 201 scripts, 20380 events, 20978 burn ticks compared: Java == Python
+PASS M03 p1party keeps one burn per (player, target)
+PASS M06 canonical snapshot has a content hash and balance_version — rules sha256 82d6f1fa59b0f440 (balance_version 60, repo, unmodelled keys: reroll_coin)
+PASS M06 a plugins/ vs src rule difference is a hard error
+PASS M06 an unsupported growth mod key is a hard error
+PASS M06 an exported snapshot re-loads type-exact (same hash, same parsed data)
+PASS D244 affix table covers the live pool — ['blazing', 'split', 'shield', 'regen', 'charge', 'frost', 'mortar', 'molten', 'venom', 'jailer', 'arcane', 'firechain']
+PASS D244 rules: table inputs == live variety
+PASS D244 a variety what-if without re-export is refused
+PASS D244 affix_mob uses the table cadence — (108.8, 7.3, 10.0)
+PASS D247 MODELLED covers regen/charge/frost/mortar/molten
+PASS D247 charge/mortar are PERIODIC
+PASS D247 charge uses table cadence — (108.2, 6.7, 10.0)
+PASS D247 frost sets amplifier — 1.0
+PASS D247 regen arms channel — (107.0, 5.5, 0.1, 0.05, 1.5, 0.0)
+PASS D247 molten schedules death blast — (1.7, 12.0)
+PASS D247 _plain is pressure-free — {'role': 'heavy', 'hp': 100.0, 'atk': 10.0, 'affix': True, 'affix_kind': '_plain'}
+PASS D316 SIX without follow = D313 weighted hp_def, bit for bit (3000 random sets) — 0 differ
+PASS D316 follow 'all' + armor of the charm's quality / craft = 2-slot H / M / D / B, bit for bit (3000) — 0 differ
+
+0 failed
