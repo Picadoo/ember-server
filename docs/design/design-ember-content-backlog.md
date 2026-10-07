@@ -8,6 +8,7 @@
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 - **2026-10-07 续：** 窗1–5 + D287–D289 已落地；**D290** 技能↔签名深链 + 团本炽愈提示（1.65.82）；**D291** 推荐打法页（零 jar）；**D292** 花样委托 +1 + 每图徽记一眼（1.65.83）· `STATUS-ember-playfeel-vbounty-plus-d292.md`
 - **B-talent-row1-mech-pivot（备忘 · HOLD）：** [`docs/design/DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md) · T0c ❌ 后总控裁决：一排数值返工 **HOLD**；禁 D1d 式盲调；再开须换触发/换键；**D291 标签保留**；禁 T1
+- **下一档硬债（需策划）：** [`STATUS-ember-next-hard-debt-sig-attune-need-design-2026-10-07.md`](../status/STATUS-ember-next-hard-debt-sig-attune-need-design-2026-10-07.md) · 签名调律可感决策 · **禁** R/W / 六槽 / 天赋盲调 / Pack6 / 纯 lore
 - **D296-econ（PASS）：** [`STATUS-ember-d296-event-rate-econ-tip.md`](../status/STATUS-ember-d296-event-rate-econ-tip.md) · event_rate 0.85 两件极品周门禁 · max Δ两件极品 **+4pp** · E[core] **×1.72**
 - **D296（PASS）：** [`STATUS-ember-room-event-mustfeel-d296.md`](../status/STATUS-ember-room-event-mustfeel-d296.md) · 房间事件必感 M · event_rate **0.85** · CoreRpg **1.65.86** · bv **60**
 - **D295（PASS）：** [`STATUS-ember-playfeel-fail-summary-d295.md`](../status/STATUS-ember-playfeel-fail-summary-d295.md) · 失败路径也发本局摘要 · CoreRpg **1.65.85** · bv **59** 不变
