@@ -1744,7 +1744,8 @@ final class EmberRunDirector {
         // D173: half-HP team line when any top-level or follow skill is gated at below≤1.0 (Pack 2 + existing 踏地/横扫)
         if (!phaseTold && ratio < 0.5 && hasBelowPressure(b)) {
             phaseTold = true;
-            svc.tellRun(s, "§e首领进入半血 · 招式变强，盯紧预警");
+            String halfCue = svc.isRaid(s) ? EmberRaidService.halfHpCue(s.mapKey) : null; // D303
+            svc.tellRun(s, halfCue != null ? halfCue : "§e首领进入半血 · 招式变强，盯紧预警");
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss half-HP phase at %.0f%%", s.runId, ratio * 100));
             svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
         }
@@ -1752,7 +1753,8 @@ final class EmberRunDirector {
         if (b.adds != null && !addsDone && ratio <= b.adds.atHp) {
             addsDone = true;
             addsAt = now + (long) (b.adds.warn * 1000);
-            svc.tellRun(s, "§c" + b.name + " §7高举誓印——两侧将出现援兵！");
+            String addCue = svc.isRaid(s) ? EmberRaidService.halfHpCue(s.mapKey) : null; // D303 R01 半血增援
+            svc.tellRun(s, addCue != null ? addCue : ("§c" + b.name + " §7高举誓印——两侧将出现援兵！"));
             svc.onBossPhase(s, RevivePoint.ADDS_PHASE); // D106 raid revive point
         }
         if (addsAt > 0) {
@@ -1795,7 +1797,8 @@ final class EmberRunDirector {
         // D173: half-HP tell already fired above when ratio < 0.5; keep fallback if a below-gated skill comes due first frame
         if (!phaseTold && due >= 0 && b.skills.get(due).below <= 1.0) {
             phaseTold = true;
-            svc.tellRun(s, "§e首领进入半血 · 招式变强，盯紧预警");
+            String halfCue2 = svc.isRaid(s) ? EmberRaidService.halfHpCue(s.mapKey) : null; // D303
+            svc.tellRun(s, halfCue2 != null ? halfCue2 : "§e首领进入半血 · 招式变强，盯紧预警");
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
             svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
         }

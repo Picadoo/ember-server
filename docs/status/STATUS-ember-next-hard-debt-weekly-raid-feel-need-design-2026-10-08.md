@@ -5,7 +5,7 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** 灰印 HOLD · D302/D301 已收 · 天赋 HOLD · 样本门禁 R 窗后置 · 成长 #2 招架已收、灰印停泊  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（已批 A · 施工 D303）：** [`DESIGN-ember-weekly-raid-feel-diff-2026-10-08.md`](../design/DESIGN-ember-weekly-raid-feel-diff-2026-10-08.md) · **方案 M**（W1a 入口短签 + W1b 进本/本内软段线索；W1c/d 同批；R 后置；W 否决）· 总控已派施工；勿再改设计主交付  
+**硬规格（已批 A · 已施工 D303）：** [`DESIGN-ember-weekly-raid-feel-diff-2026-10-08.md`](../design/DESIGN-ember-weekly-raid-feel-diff-2026-10-08.md) · 施工 [`STATUS-ember-weekly-raid-feel-diff-d303.md`](STATUS-ember-weekly-raid-feel-diff-d303.md) · **方案 M**（W1a+W1b+W1c+W1d；R 后置；W 否决）· CoreRpg **1.65.93** · bv **60**
 **打开理由：** 日刷走廊感（D300）与深渊段感（D302）已让 Q01–Q07 / 深渊 10 层可分辨；**团本 R01–R03**（及周规则入口侧）仍偏「同骨架换 Boss 名片」——要在不扩 Pack6、不新开团本/周本地图包、不抬体力/掉率前提下，让入口与本间/段节奏可感差（同 Multiverse 轻差异，对齐深渊 tip 形）。
 
 ---

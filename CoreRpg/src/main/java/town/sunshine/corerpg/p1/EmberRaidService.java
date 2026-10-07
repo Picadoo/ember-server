@@ -112,6 +112,46 @@ public final class EmberRaidService {
                 + " 伤害 ×" + String.format(Locale.ROOT, "%.2f", dmgFactor) + " · 倒下后观战队友，下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次 · 走进前方房间开战 · 首领死后统一结算";
     }
 
+    /**
+     * D303 W1b: short identity card matching TrMenu §d名片 (R01 冲撞撞墙 / R02 半血砸地 / R03 烬核分摊).
+     */
+    static String cardTag(String mapKey) {
+        if ("r01".equals(mapKey)) return "冲撞撞墙";
+        if ("r02".equals(mapKey)) return "半血砸地";
+        if ("r03".equals(mapKey)) return "烬核分摊";
+        return "?";
+    }
+
+    /** D303 W1b: enter reveal — 本局 name + 名片. */
+    static String enterRevealText(String name, String mapKey) {
+        String n = name == null || name.isEmpty() ? "?" : name;
+        return "§6本局：§f" + n + " §7· 名片：§d" + cardTag(mapKey);
+    }
+
+    /** D303 W1b: room-clear soft segment cue (≤1 line; replaces generic clear on raids). */
+    static String roomClearCue(String label) {
+        String L = label == null || label.isEmpty() ? "?" : label;
+        return "§b本间：§f" + L + " §a已清 §7· 三房推进";
+    }
+
+    /** D303 W1b: boss-hall identity nail. */
+    static String bossCue(String mapKey) {
+        if ("r01".equals(mapKey)) return "§c首领厅 §7· 名片：§d冲撞撞墙破绽 §7· 招式有预警";
+        if ("r02".equals(mapKey)) return "§c首领厅 §7· 名片：§d半血砸地破绽 §7· 招式有预警";
+        if ("r03".equals(mapKey)) return "§c首领厅 §7· 名片：§d烬核分摊 · 全队靠拢 §7· 招式有预警";
+        return "§c首领厅 §7· 招式有预警";
+    }
+
+    /**
+     * D303 W1b: half-HP / adds phase cue (null = keep generic / no raid-specific line).
+     * R01 = 半血增援; R02 = 半血转阶段; R03 = null (烬核 is share warn).
+     */
+    static String halfHpCue(String mapKey) {
+        if ("r01".equals(mapKey)) return "§e半血增援 §7· 四角加怪";
+        if ("r02".equals(mapKey)) return "§e半血转阶段 §7· 砸地接横扫";
+        return null;
+    }
+
     // ------------------------------------------------------------------ live counter / text wrappers
 
     static String weekKey() {
@@ -144,9 +184,10 @@ public final class EmberRaidService {
         }
     }
 
-    /** raid start lines (verifyEntry) */
+    /** raid start lines (verifyEntry) · D303 W1b enter reveal */
     void onStart(EmberRunSession s, EmberRunMaps.MapDef vm) {
         runs.tellRun(s, startText(s.partySize, s.hpFactor, s.dmgFactor));
+        runs.tellRun(s, enterRevealText(vm.name, vm.key)); // D303
         if (!vm.partyHint.isEmpty()) runs.tellRun(s, "§e" + vm.partyHint); // D166
     }
 

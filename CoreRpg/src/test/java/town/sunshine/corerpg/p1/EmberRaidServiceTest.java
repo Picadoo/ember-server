@@ -165,4 +165,29 @@ public final class EmberRaidServiceTest {
         assertTrue(f.matches("p2_raid_raid"));
         assertTrue(EmberCounters.clockGuarded(EmberCounters.lookup("p2_raid_raid")));
     }
+
+    @Test public void enterReveal_matchesMenuCard() {
+        assertEquals("冲撞撞墙", EmberRaidService.cardTag("r01"));
+        assertEquals("半血砸地", EmberRaidService.cardTag("r02"));
+        assertEquals("烬核分摊", EmberRaidService.cardTag("r03"));
+        assertEquals("?", EmberRaidService.cardTag("r99"));
+        assertEquals("§6本局：§f锈轨矿道·团 §7· 名片：§d冲撞撞墙",
+                EmberRaidService.enterRevealText("锈轨矿道·团", "r01"));
+        assertEquals("§6本局：§f霜封哨所·团 §7· 名片：§d半血砸地",
+                EmberRaidService.enterRevealText("霜封哨所·团", "r02"));
+        assertEquals("§6本局：§f断塔回廊·团 §7· 名片：§d烬核分摊",
+                EmberRaidService.enterRevealText("断塔回廊·团", "r03"));
+        assertEquals("§6本局：§f? §7· 名片：§d?", EmberRaidService.enterRevealText(null, null));
+    }
+
+    @Test public void softSegmentCues_matchD195Anchors() {
+        assertEquals("§b本间：§f装卸场 §a已清 §7· 三房推进", EmberRaidService.roomClearCue("装卸场"));
+        assertTrue(EmberRaidService.bossCue("r01").contains("冲撞撞墙破绽"));
+        assertTrue(EmberRaidService.bossCue("r02").contains("半血砸地破绽"));
+        assertTrue(EmberRaidService.bossCue("r03").contains("烬核分摊"));
+        assertEquals("§e半血增援 §7· 四角加怪", EmberRaidService.halfHpCue("r01"));
+        assertEquals("§e半血转阶段 §7· 砸地接横扫", EmberRaidService.halfHpCue("r02"));
+        assertNull(EmberRaidService.halfHpCue("r03"));
+    }
+
 }

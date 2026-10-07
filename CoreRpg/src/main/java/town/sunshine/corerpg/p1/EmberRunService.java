@@ -617,7 +617,11 @@ public final class EmberRunService implements Listener {
 
     void onRoomCleared(EmberRunSession s, EmberRunMaps.Room r, boolean last) {
         store.save(s);
-        tellRun(s, "§a" + r.label + " 已清空" + (r.door != null ? " · 门已打开" : "") + (last ? "" : ""));
+        if (raidRun(s)) { // D303 W1b: soft segment cue (≤1 line)
+            tellRun(s, EmberRaidService.roomClearCue(r.label) + (r.door != null ? " §7· 门已开" : ""));
+        } else {
+            tellRun(s, "§a" + r.label + " 已清空" + (r.door != null ? " · 门已打开" : "") + (last ? "" : ""));
+        }
     }
 
     void onBossSpawned(EmberRunSession s, EmberRunMaps.Boss b) {
@@ -632,7 +636,11 @@ public final class EmberRunService implements Listener {
             }
             store.save(s);
         }
-        tellRun(s, "§c首领 " + b.name + (s.challenge ? "（挑战）" : "") + " §7现身 · 招式都有预警，看清地面火线再躲");
+        if (raidRun(s)) { // D303 W1b: boss-hall identity nail (≤1 line)
+            tellRun(s, EmberRaidService.bossCue(s.mapKey));
+        } else {
+            tellRun(s, "§c首领 " + b.name + (s.challenge ? "（挑战）" : "") + " §7现身 · 招式都有预警，看清地面火线再躲");
+        }
         reviveFallen(s, RevivePoint.BOSS_SPAWN); // D106
     }
 
