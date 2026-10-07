@@ -205,6 +205,8 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 | 时 | 谁 | 事 |
 |----|----|-----|
 | 2026-10-07 | 余烬-策划 | 初稿 STATUS **待批 A**；路径本文件；backlog **B-talent-row1** 指针 |
+| 2026-10-07 | 总控 | **批 A**：§3 形状 + §5 门禁 + §6 切窗；开 T0 模拟 |
+| 2026-10-07 | 施工/T0 | T0 复跑 D1/F7/W6 vs t1a/b/c · 2 槽 · ±2pp → **❌** · `STATUS-ember-talent-row1-t0-2026-10-07.md`；不开 T1 |
 | 2026-10-07 | 总控 / 策划 | **已批 A**；采纳 §3+§5+§6；下一步 T0 模拟；不过线不开 T1 |
 
 ---
