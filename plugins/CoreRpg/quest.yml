@@ -36,19 +36,19 @@ chapters:
         xp: 60
         done:
           - '§6灰烛：§f这城烧了三十年，火没灭，只是躲进了地底。'
-          - '§6灰烛：§f挂机庭有游荡的尸骸，先去活动活动筋骨。'
+          - '§6灰烛：§f挂机庭灰坡能自动打怪，先去活动活动筋骨。'
       - type: kill
-        mobs: [EmberAfkZombie]
+        mobs: [EmberQ01Melee]
         count: 6
-        desc: 在挂机庭击败 挂机庭僵尸
-        hint: 打开枢纽菜单 → 挂机庭 → ① 灰坡 · 落点往西偏北五十来格的草坡是怪区 · 手持余烬之刃 · 打不过就打开枢纽菜单返回
+        desc: 在挂机庭 ① 灰坡靠自动战斗击败 6 只怪
+        hint: 打开枢纽菜单 → 挂机庭 → ① 灰坡 · 站在层内会自动开打 · 战利品直达账户 · 打不过就回枢纽
         xp: 100
         done: ['§7腐肉里嵌着暗红的碎片，还带着余温。']
       - type: kill
-        mobs: [EmberAfkSkeleton, EmberAfkZombie]
+        mobs: [EmberQ01Melee]
         count: 4
-        desc: 再击败 4 只挂机庭的怪（僵尸或骷髅）
-        hint: 骷髅会放箭，贴近了再打 · 血少就后退或打开枢纽菜单返回
+        desc: 再击败 4 只灰坡挂机怪（自动战斗）
+        hint: 继续站在 ① 灰坡层内自动开打 · 血少就回枢纽补给
         xp: 100
         done: ['§7骨头碎了，里面的火星却不肯熄。']
       - type: event
@@ -299,10 +299,10 @@ chapters:
         done:
           - '§6灰烛：§fLv40 才能在 ④ 层站稳。材料日顶四层共用，别贪。'
       - type: kill
-        mobs: ['EmberAfk4*']
+        mobs: [EmberQ07Melee]
         count: 12
-        desc: 在挂机庭 ④ 烬原深处击败 12 只怪
-        hint: 打开枢纽菜单 → 挂机庭 → ④ 烬原深处（需 Lv40）；危险就回枢纽找灰烛
+        desc: 在挂机庭 ④ 烬原深处靠自动战斗击败 12 只怪
+        hint: 打开枢纽菜单 → 挂机庭 → ④ 烬原深处（需 Q07 首通）；站层内自动开打 · 危险就回枢纽
         xp: 200
         done: ['§7深处的灰是热的。']
       - type: event
