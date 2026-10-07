@@ -107,9 +107,9 @@ Icons:
       name: '§e次数说明'
       lore:
         - ''
-        - '§7本周首次免费（账户抵扣）· 其后扣 45 体力'
+        - '§7本周首次免费（账户抵扣）· 其后扣 %corerpg_stamina_cost_weekly% 体力'
         - '§7本周免费剩余 §f%ember_weekly_left% §7次'
-        - '§7商城可再补 §f1 §7张 · 主线第 2 章送 1 张'
+        - '§7体力不够可买商城「周体力包」· 主线送体力药'
         - '§7重置：§f周一 00:00 Asia/Shanghai'
         - '§7进本即扣 · 失败不返还'
         - ''
@@ -117,4 +117,4 @@ Icons:
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §6周本本周首次免费，其后消耗 45 体力；每日 0:00 回满体力。'
+        - 'tell: §6周本本周首次免费，其后消耗 %corerpg_stamina_cost_weekly% 体力；每日 0:00 回满体力。'
