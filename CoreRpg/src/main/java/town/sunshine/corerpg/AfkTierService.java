@@ -311,10 +311,10 @@ public class AfkTierService implements Listener {
         p.teleport(to);
         protect(p);
         town.sunshine.corerpg.p1.EmberAfkService ea = p1afk();
-        if (ea != null) { // D177
-            p.sendMessage(ChatColor.GREEN + "[挂机庭] 已到达 " + ChatColor.YELLOW + t.name + ChatColor.GRAY
-                    + " · 站着不动就会自动战斗：自动打怪、自动放烬斩、战利品直接进账（击杀速度和能不能扛住看你的装备）");
-            p.sendMessage(ChatColor.GRAY + "  今日 " + ea.statusLine(p) + ChatColor.GRAY + " · 死亡不掉落，自动复活在本层入口 · 打开枢纽菜单可返回");
+        if (ea != null) { // D177 + D305 W1a enter reveal
+            ea.tellEnterReveal(p, t.n);
+            p.sendMessage(ChatColor.GRAY + "[挂机庭] 站着不动就会自动战斗 · 今日 " + ea.statusLine(p)
+                    + ChatColor.GRAY + " · 死亡不掉落，自动复活在本层入口 · 打开枢纽菜单可返回");
             return true;
         }
         p.sendMessage(ChatColor.GREEN + "[挂机] 已到达 " + ChatColor.YELLOW + t.name + ChatColor.GREEN + "（Lv." + t.level + "）"

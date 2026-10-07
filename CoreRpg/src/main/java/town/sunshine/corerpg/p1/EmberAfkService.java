@@ -108,6 +108,8 @@ public final class EmberAfkService implements Listener {
         int minuteKills, sessKills, unsettled;
         String pauseNote;
         final Deque<Long> deaths = new ArrayDeque<Long>();
+        boolean upgradeHinted; // D305 W1b: one soft upgrade cue per fight
+        int lastRevealTier = -1; // D305 W1a: enter-tier card reveal once per tier
         Fight(UUID u, long now) { this.u = u; this.minuteStart = now; this.startMs = now; }
     }
 
@@ -125,6 +127,9 @@ public final class EmberAfkService implements Listener {
     private volatile int pack = 3, swingTicks = 14, dailyKills = 2400, settleEvery = 100, deathStop = 3, deathWindowMin = 10;
     private volatile double respawnSec = 4, spawnRadius = 4, attackRange = 3.2, leash = 14, regenPct = 0.08;
     private volatile double offRatio = 0.25; private volatile int offMax = 1200, offHours = 12, offMinFight = 5;
+    /** D305 W1b: soft upgrade cue (hot-offable; default on, conservative thresholds). */
+    private volatile boolean upgradeHint = true;
+    private volatile int upgradeHintMinKills = 40, upgradeHintMinKph = 800;
     private volatile List<Tier> tiers = Collections.emptyList();
     private int taskId = -1;
     private long ticks;
@@ -169,6 +174,16 @@ public final class EmberAfkService implements Listener {
                 offMax = Math.max(0, o.getInt("max_kills", 1200));
                 offHours = Math.max(0, o.getInt("max_hours", 12));
                 offMinFight = Math.max(1, o.getInt("min_fight_minutes", 5));
+            ConfigurationSection feel = s.getConfigurationSection("feel");
+            if (feel != null) {
+                upgradeHint = feel.getBoolean("upgrade_hint", true);
+                upgradeHintMinKills = Math.max(1, feel.getInt("upgrade_hint_min_kills", 40));
+                upgradeHintMinKph = Math.max(1, feel.getInt("upgrade_hint_min_kph", 800));
+            } else {
+                upgradeHint = true;
+                upgradeHintMinKills = 40;
+                upgradeHintMinKph = 800;
+            }
             }
             for (Map<?, ?> t : s.getMapList("tiers")) {
                 try {
@@ -292,6 +307,49 @@ public final class EmberAfkService implements Listener {
         return "§a今日已满 · 体力还在 · 去冒险";
     }
 
+    /** D305 W1a: short card name matching TrMenu §d名片 (T1–T4). */
+    static String cardTag(int tier) {
+        switch (tier) {
+            case 1: return "入门稳挂";
+            case 2: return "核心入门";
+            case 3: return "胚料起步";
+            case 4: return "满表材料";
+            default: return "";
+        }
+    }
+
+    /** D305 W1a: §b养 short line matching real ember-v1.yml daily columns. */
+    static String farmLine(int tier) {
+        switch (tier) {
+            case 1: return "币·碎片·骨尘（无核心/胚料）";
+            case 2: return "+核心碎片";
+            case 3: return "+胚料 · 核心续";
+            case 4: return "币/碎片/核心最高档 · 刚通 Q07 多半扛不住";
+            default: return "";
+        }
+    }
+
+    /** D305 W1a: enter-tier reveal (chat ≤1 line). */
+    static String enterRevealText(String name, int tier) {
+        String n = name == null || name.isEmpty() ? ("T" + tier) : name;
+        return "§6本层：§f" + n + " §7· 名片：§d" + cardTag(tier) + " §7· §b养：" + farmLine(tier);
+    }
+
+    /** D305 W1b: soft upgrade cue (never claims higher pay table). */
+    static String upgradeHintText() {
+        return "§e装备可能够挂更高层 · 菜单可换层";
+    }
+
+    /**
+     * D305 W1b gate: conservative, hot-offable; never when capped / deaths / no next unlock / already hinted.
+     */
+    static boolean shouldUpgradeHint(boolean enabled, boolean alreadyHinted, boolean capped,
+                                     boolean deathsEmpty, boolean nextUnlocked,
+                                     int sessKills, int minKills, double kph, int minKph) {
+        return enabled && !alreadyHinted && !capped && deathsEmpty && nextUnlocked
+                && sessKills >= minKills && kph >= minKph;
+    }
+
 
     // ---------------------------------------------------------------- the loop (every 2 ticks)
 
@@ -333,6 +391,9 @@ public final class EmberAfkService implements Listener {
         fights.put(p.getUniqueId(), f);
         p.sendMessage(P + "§a自动战斗开始 §7· 角色会自己打附近的怪、冷却好了自动放烬斩、战利品直接进账"
                 + " §8（挂机庭菜单可暂停）");
+        // D305: enter reveal comes from menu warp (tellEnterReveal) or tier-change below — avoid double on start
+        Tier startT = tier(f.tier);
+        if (startT != null) f.lastRevealTier = startT.n;
         return f;
     }
 
@@ -345,7 +406,11 @@ public final class EmberAfkService implements Listener {
             return;
         }
         int here = tierHere(p);
-        if (here != f.tier) { clearMobs(f); f.tier = here; f.nextWave = now + 1500L; f.pauseNote = null; }
+        if (here != f.tier) {
+            clearMobs(f); f.tier = here; f.nextWave = now + 1500L; f.pauseNote = null;
+            Tier ch = tier(here);
+            if (ch != null) maybeReveal(p, f, ch); // D305 W1a
+        }
         Tier t = tier(f.tier);
         if (t == null || !flag(d, t.requires)) {
             if (f.pauseNote == null) {
@@ -387,11 +452,14 @@ public final class EmberAfkService implements Listener {
                 }
             }
         }
-        if (ticks % 40 == 0) { // live ActionBar: tier · today's kills / cap · kill speed
+        if (ticks % 40 == 0) { // live ActionBar: tier · card · today's kills / cap · kill speed (D305 W1a card half-line)
             long ms = Math.max(60000L, now - f.startMs);
-            String bar = "§6挂机 §f" + t.name + " §7· 今日 §f" + d.periodCount(C_KILL, day) + "/" + dailyKills + " §7只 · §f"
-                    + Math.round(f.sessKills * 3600000.0 / ms) + " §7只/小时" + (f.deaths.isEmpty() ? "" : " §c· 阵亡 " + f.deaths.size() + "/" + deathStop);
+            double kphNow = f.sessKills * 3600000.0 / ms;
+            String bar = "§6挂机 §f" + t.name + " §7· §d" + cardTag(t.n) + " §7· 今日 §f" + d.periodCount(C_KILL, day) + "/" + dailyKills
+                    + " §7只 · §f" + Math.round(kphNow) + " §7只/小时"
+                    + (f.deaths.isEmpty() ? "" : " §c· 阵亡 " + f.deaths.size() + "/" + deathStop);
             p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(bar));
+            maybeUpgradeHint(p, f, d, t, kphNow); // D305 W1b · once / fight · hot-offable
         }
         if (now - f.minuteStart >= 60000L) { // measured rate (for offline credit)
             int min = Math.min(10000, d.periodCount(C_FMIN, "all"));
@@ -767,6 +835,35 @@ public final class EmberAfkService implements Listener {
 
     // ---------------------------------------------------------------- PAPI %corerpg_p1_afk_<key>%
 
+
+    /** D305 W1a: chat enter-reveal once per tier per fight. */
+    private void maybeReveal(Player p, Fight f, Tier t) {
+        if (p == null || f == null || t == null || f.lastRevealTier == t.n) return;
+        f.lastRevealTier = t.n;
+        p.sendMessage(P + enterRevealText(t.name, t.n));
+    }
+
+    /** D305 W1a public: menu warp path (`/corerpg afk N`). */
+    public void tellEnterReveal(Player p, int tierN) {
+        Tier t = tier(tierN);
+        if (p == null || t == null) return;
+        p.sendMessage(P + enterRevealText(t.name, t.n));
+        Fight f = fights.get(p.getUniqueId());
+        if (f != null) f.lastRevealTier = t.n; // suppress duplicate if fight already running
+    }
+
+    /** D305 W1b: one soft upgrade cue when pace healthy and next tier unlocked. */
+    private void maybeUpgradeHint(Player p, Fight f, PlayerData d, Tier t, double kph) {
+        if (p == null || f == null || d == null || t == null) return;
+        boolean nextOk = false;
+        Tier next = tier(t.n + 1);
+        if (next != null) nextOk = flag(d, next.requires);
+        boolean capped = dailyKills > 0 && d.periodCount(C_KILL, DailyService.today()) >= dailyKills;
+        if (!shouldUpgradeHint(upgradeHint, f.upgradeHinted, capped, f.deaths.isEmpty(), nextOk,
+                f.sessKills, upgradeHintMinKills, kph, upgradeHintMinKph)) return;
+        f.upgradeHinted = true;
+        p.sendMessage(P + upgradeHintText());
+    }
 
     /** D285: remind capped players still standing in AFK to spend stamina on adventure. */
     private void flashCapBar(Player p) {

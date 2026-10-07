@@ -112,4 +112,43 @@ public class EmberAfkServiceTest {
         assertTrue(EmberAfkService.capActionBar(2400).contains("体力还在"));
         assertTrue(EmberAfkService.capStatusWord().contains("去冒险"));
     }
+
+    @Test public void softIdentity_D305_cardsMatchDesignAndTiers() {
+        assertEquals("入门稳挂", EmberAfkService.cardTag(1));
+        assertEquals("核心入门", EmberAfkService.cardTag(2));
+        assertEquals("胚料起步", EmberAfkService.cardTag(3));
+        assertEquals("满表材料", EmberAfkService.cardTag(4));
+        assertTrue(EmberAfkService.farmLine(1).contains("无核心"));
+        assertTrue(EmberAfkService.farmLine(2).contains("核心"));
+        assertTrue(EmberAfkService.farmLine(3).contains("胚料"));
+        assertTrue(EmberAfkService.farmLine(4).contains("最高档"));
+        String r1 = EmberAfkService.enterRevealText("灰坡", 1);
+        assertTrue(r1.contains("名片"));
+        assertTrue(r1.contains("入门稳挂"));
+        assertTrue(r1.contains("养"));
+        String r4 = EmberAfkService.enterRevealText("烬原深处", 4);
+        assertTrue(r4.contains("满表材料"));
+        // static vs shipped tiers: T1 no core/blank, T2 core, T3+ blank
+        ConfigurationSection s = afk();
+        java.util.List<java.util.Map<?, ?>> ts = s.getMapList("tiers");
+        assertEquals(0, Integer.parseInt(String.valueOf(ts.get(0).get("core"))));
+        assertEquals(0, Integer.parseInt(String.valueOf(ts.get(0).get("blank"))));
+        assertEquals(1, Integer.parseInt(String.valueOf(ts.get(1).get("core"))));
+        assertEquals(1, Integer.parseInt(String.valueOf(ts.get(2).get("blank"))));
+        assertEquals(2, Integer.parseInt(String.valueOf(ts.get(3).get("core"))));
+        assertTrue(EmberAfkService.upgradeHintText().contains("更高层"));
+        assertTrue(EmberAfkService.shouldUpgradeHint(true, false, false, true, true, 40, 40, 800, 800));
+        assertFalse("capped never hints", EmberAfkService.shouldUpgradeHint(true, false, true, true, true, 40, 40, 800, 800));
+        assertFalse("hot-off", EmberAfkService.shouldUpgradeHint(false, false, false, true, true, 40, 40, 800, 800));
+        assertFalse("no next unlock", EmberAfkService.shouldUpgradeHint(true, false, false, true, false, 40, 40, 800, 800));
+        assertFalse("deaths block", EmberAfkService.shouldUpgradeHint(true, false, false, false, true, 40, 40, 800, 800));
+        assertFalse("already hinted", EmberAfkService.shouldUpgradeHint(true, true, false, true, true, 40, 40, 800, 800));
+        assertFalse("kph gate", EmberAfkService.shouldUpgradeHint(true, false, false, true, true, 40, 40, 799, 800));
+        assertEquals(2400, s.getInt("daily_kills"));
+        assertEquals(0.25, s.getDouble("offline.ratio"), 1e-9);
+        assertTrue(s.getBoolean("feel.upgrade_hint", false));
+        assertEquals(3, s.getInt("combat.death_stop"));
+        assertTrue(EmberAfkService.capActionBar(2400).contains("去冒险"));
+    }
+
 }

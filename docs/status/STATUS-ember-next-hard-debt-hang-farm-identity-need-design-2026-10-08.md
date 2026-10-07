@@ -102,3 +102,7 @@
 ---
 
 *服务器：proxy/login/play 保持 up；本 tip 零部署。*
+
+---
+
+**结案（2026-10-08）：** 设计已批 A · 方案 M · 施工 **D305**（CoreRpg 1.65.95）见 [`STATUS-ember-hang-farm-soft-identity-d305.md`](STATUS-ember-hang-farm-soft-identity-d305.md)。

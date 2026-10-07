@@ -118,6 +118,11 @@ afk:
     max_kills: 1200         # 每日离线最多折 1200 只（日上限的一半，算在 daily_kills 内）
     max_hours: 12
     min_fight_minutes: 5    # 在线自动战斗满 5 分钟才有实测速度
+  # D305 W1b: soft upgrade cue (zero economy; hot-off = upgrade_hint: false)
+  feel:
+    upgrade_hint: true
+    upgrade_hint_min_kills: 40   # session kills before cue
+    upgrade_hint_min_kph: 800    # conservative vs design 650–950 band
   # 每层：怪（主线同款 MM 模型，挂机专用血量/攻击）+ 打满 daily_kills 只的每日量（币 / 经验 / 碎片 / 骨尘 / 核心碎片 / 胚料）
   tiers:
     - {n: 1, name: 灰坡, requires: q01, mm: EmberQ01Melee, hp: 160, atk: 1.5, interval: 2.5, coin: 60, xp: 10, shard: 2, bone: 2, core: 0, blank: 0}
