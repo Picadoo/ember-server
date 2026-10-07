@@ -1,12 +1,12 @@
 # 状态 · D309：副手并轨 / 不并轨决策页关窗（方案 A · docs-only）
 
 **日期：** 2026-10-08（上海时间）  
-**上游：** 总控批 A · [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) 方案 A（待批稿 `f4840478`）  
+**上游：** 总控批 A · [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) 方案 A（待批稿 `f4840478` · 批注 `bc6ca94f`）  
 **版本：** **docs-only** · CoreRpg **未升**（仍 **1.65.97**）· `balance_version` **60**（未抬）· **零部署**
 
 ## 人话
 
-灰粮副手（StatService 守腕/生坠/灰箍）与 P1 刃+护符双轨并行；10-07 已批「永不进 B/H」，但加固§8-5 仍写待派。本窗**只落 docs 关窗**：正式确认 **方案 A**——副手是展示/微量生存，**永不进** P1 B/H；方案 B 搁置；**不写新物品、不并轨插件、不开任一 R**。
+**已上线（docs-only 关窗）。** 灰粮副手（StatService 守腕/生坠/灰箍）与 P1 刃+护符双轨并行；10-07 已批「永不进 B/H」，但加固§8-5 仍写待派。本窗**只落 docs 关窗**：正式确认 **方案 A**——副手是展示/微量生存，**永不进** P1 B/H；方案 B 搁置；**不写新物品、不并轨插件、不开任一 R**。
 
 ## 改了什么
 

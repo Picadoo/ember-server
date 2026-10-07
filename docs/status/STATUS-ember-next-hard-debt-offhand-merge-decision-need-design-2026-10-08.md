@@ -5,7 +5,7 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D308 样本窗门禁已收 · §1 M 波 + D301–D307 已收 · 样本 R 全表不得开 · 灰印副招 **T0/T0b ❌ · HOLD** · 天赋换机制 **HOLD** · Pack6 / 六槽 **HOLD**  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R**  
-**硬规格（已批 A · 方案 A · D309 · docs-only）：** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) · STATUS=已批 A · 批方案 A · [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md) · backlog `B-offhand-merge-decision` · 加固§8-5 **已关窗**。  
+**硬规格（已上线 D309 · 方案 A · docs-only）：** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) · STATUS=已批 A · 批方案 A · [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md) · backlog `B-offhand-merge-decision` · 加固§8-5 **已关窗**。  
 **打开理由：** D308 钉死后，样本门禁 R 全表不得开；下一档真硬债若仍去偷开 R / 天赋灰印 / Pack6 六槽 = 假活。加固§8 仅余 **窗 5 副手并轨决策页**未在加固稿上关指针——要在**不开 R、不写新 NI、不开六槽**前提下，把「并轨 / 不并轨 + 替换预算表 + p1sim 怎么验」写成可批硬规格（docs/design only），并同步加固§8-5。
 
 > **关窗：** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) · **STATUS 已批 A · 方案 A · D309** · 永不进 P1 B/H；与 10-07 已批 A 对齐；方案 B 搁置；W 否决 · 加固§8-5 **已正式关窗** · tip/backlog/旧决策页已同步 · [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md)。
