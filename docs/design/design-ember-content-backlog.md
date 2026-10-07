@@ -4,7 +4,7 @@
 ## Progress snapshot — 2026-10-01 13:37 Asia/Shanghai (总控 · B2.111 PASS · 勾销 · 流水线暂停，等用户/GPT 策划意见；下一默认窗 B2.113)
 
 ### 指针 · 下一阶段玩法/体验加固（2026-10-07）
-- **B-corridor-feel-diff（待批 A）：** [`DESIGN-ember-corridor-feel-diff-2026-10-07.md`](DESIGN-ember-corridor-feel-diff-2026-10-07.md) · tip [`STATUS-ember-next-hard-debt-corridor-feel-need-design-2026-10-07.md`](../status/STATUS-ember-next-hard-debt-corridor-feel-need-design-2026-10-07.md)（`dcc0018c`）· 荐 **方案 M**（W1a 事件挂点分图 + W1b 门延迟 + W1c 节奏短签）· R 后置 · **W 否决** · **禁** Pack6/新kind/重做七图/事件R/W/调律R/六槽/天赋盲调
+- **B-corridor-feel-diff（已批 A · 待/已派 D300）：** [`DESIGN-ember-corridor-feel-diff-2026-10-07.md`](DESIGN-ember-corridor-feel-diff-2026-10-07.md) · tip [`STATUS-ember-next-hard-debt-corridor-feel-need-design-2026-10-07.md`](../status/STATUS-ember-next-hard-debt-corridor-feel-need-design-2026-10-07.md)（`dcc0018c`）· **方案 M**（W1a 事件挂点分图 + W1b 门延迟 + W1c 节奏短签）· W2/R 后置 · **W 否决** · 施工 **D300** · **禁** Pack6/新kind/重做七图/事件R/W/调律R/六槽/天赋盲调
 - **B-refarm-short-feedback（已批 A · 已施工 D299）：** [`DESIGN-ember-refarm-short-feedback-2026-10-07.md`](DESIGN-ember-refarm-short-feedback-2026-10-07.md) · [`STATUS-ember-refarm-short-feedback-d299.md`](../status/STATUS-ember-refarm-short-feedback-d299.md) · 方案 M · CoreRpg **1.65.89** · bv **60** · R 后置 · **W 否决** · **禁** 抬掉率/新材料/六槽/天赋盲调/Pack6/事件R/W/调律R
 - **B-room-event-mustfeel（已批 A）：** [`docs/design/DESIGN-ember-room-event-mustfeel-2026-10-07.md`](DESIGN-ember-room-event-mustfeel-2026-10-07.md) · 方案 M：W1a `event_rate` 0.5→0.85 + W1b 种首次短闪 + W1c 开房 HUD；R/W 续窗后开 · **禁 Pack6** · 施工已派
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
