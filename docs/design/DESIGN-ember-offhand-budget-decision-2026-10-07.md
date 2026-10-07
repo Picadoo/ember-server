@@ -1,6 +1,7 @@
 # 副手并轨 / 不并轨决策页（替换预算表）· 2026-10-07
 
-> **STATUS：已批 A · 方案 A**（总控 · 2026-10-07 Asia/Shanghai）  
+> **STATUS：已批 A · 方案 A**（总控 · 2026-10-07 Asia/Shanghai）· **加固§8-5 关窗 / 再确认 → 见接替页** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](DESIGN-ember-offhand-merge-decision-2026-10-08.md)（**待批 A** · tip `06a56eba`）  
+> **关窗说明：** 本页历史批注（方案 A · D289/D294 诚实半行）**仍然有效**；D308 后为对齐加固稿「仍待另派」指针，总控另派 2026-10-08 决策页作**正式关窗 / 再确认**。未批 10-08 前**勿**宣称§8-5 已关；批后以 10-08 页为准同步加固指针。  
 > **批注：** 总控批 · 采纳 **方案 A**：灰粮副手**永不进** P1 B/H，维持展示 / 微量生存；**禁止**物伤 / 暴击 / 技能系数。**方案 B 搁置**（若改批再开）。后续可开薄窗：套装 / 灰粮菜单诚实半行（**不改数值**）。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** 加固批 A §8 第 5 条（`DESIGN-ember-playfeel-hardening-2026-10-07.md`）· 总控派单「窗 5」  
@@ -272,3 +273,4 @@ P1 公式轴（`tools/p1sim/p1sim.py` `stats()`）：
 | 2026-10-07 | 总控批 **已批 A · 方案 A**；方案 B 搁置；可开诚实半行薄窗（不改数值） |
 | 2026-10-07 | A1 文案诚实薄窗 **已施工 D289**（TrMenu set/life/hub/gear · 零 jar） |
 | 2026-10-07 | 施工/D294 | 灰箍 `ember_forge`/`ember_part`/NI lore 对齐诚实半行 · `STATUS-ember-ash-brace-honesty-d294.md` |
+| 2026-10-08 | 文首加接替指针 → [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](DESIGN-ember-offhand-merge-decision-2026-10-08.md)（待批 A · 加固§8-5 正式关窗 / 再确认）；本页方案 A 历史批注仍有效 |

@@ -8,6 +8,8 @@
 **硬规格（待策划交稿）：** 加固 [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](../design/DESIGN-ember-playfeel-hardening-2026-10-07.md) **§8 第 5 条**仍标「**仍待总控另派**」；既有仓内决策页 [`DESIGN-ember-offhand-budget-decision-2026-10-07.md`](../design/DESIGN-ember-offhand-budget-decision-2026-10-07.md)（**已批 A · 方案 A** · B-flex-5 · D289/D294 诚实半行已落）与加固文首/§8 指针**未完全对齐关窗**——本 tip 正式派「关窗 / 再确认」硬规格，**不施工物品**。  
 **打开理由：** D308 钉死后，样本门禁 R 全表不得开；下一档真硬债若仍去偷开 R / 天赋灰印 / Pack6 六槽 = 假活。加固§8 仅余 **窗 5 副手并轨决策页**未在加固稿上关指针——要在**不开 R、不写新 NI、不开六槽**前提下，把「并轨 / 不并轨 + 替换预算表 + p1sim 怎么验」写成可批硬规格（docs/design only），并同步加固§8-5。
 
+> **交稿：** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) · **STATUS 待批 A** · 荐 **方案 A**（永不进 P1 B/H；与 10-07 已批 A 对齐；方案 B/W 见稿）· 旧决策页已加关窗指针 · 加固§8-5 已指到待批稿（**未宣称已关结论**）· **等总控批 A/B**。
+
 ---
 
 ## 0. 局势一句话（样本门禁声明）
