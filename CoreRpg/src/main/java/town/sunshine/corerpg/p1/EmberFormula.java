@@ -6,7 +6,7 @@ package town.sunshine.corerpg.p1;
  * <pre>
  * B  = A × (1 + e_w + q_w + f_w) + 0.2 × (L − 10)
  * H0 = 20 + h × (1 + e_c + q_c + f_c) + (L − 10)
- * H  = 1.12 × H0 (炽愈成套) else H0
+ * H  = sustain_hp_mult × H0 (炽愈成套；D293 现行 1.00) else H0
  * M  = max(0.5, 40 / (40 + D));  EHP = H / M
  * melee = B × (0.2 + 0.8c²) × (1.5 if crit);  crit: 10%, only when c ≥ 0.9
  * 烬斩 = 1.5 × B, no crit

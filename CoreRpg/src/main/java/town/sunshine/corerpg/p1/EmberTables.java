@@ -59,7 +59,7 @@ public final class EmberTables {
             new double[]{0.00, 0.04, 0.08, 0.12},
             new double[]{0.00, 0.02, 0.04, 0.06},
             new double[]{0.00, 0.04, 0.08, 0.13, 0.18, 0.24, 0.30, 0.37, 0.44, 0.52, 0.60},
-            0.10, 1.5, 0.9, 40.0, 0.5, 1.12, 0.2, 1.0, 10, 60, 1.5);
+            0.10, 1.5, 0.9, 40.0, 0.5, 1.00, 0.2, 1.0, 10, 60, 1.5);
 
     public static EmberTables defaults() { return DEFAULTS; }
 

@@ -28,7 +28,7 @@ crit:
 defense:
   k: 40
   floor: 0.5
-sustain_hp_mult: 1.12
+sustain_hp_mult: 1.00
 
 # 烬斩 (A12，P1 唯一主动入口)
 skill:

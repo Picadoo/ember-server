@@ -30,8 +30,8 @@ public class EmberFormulaTest {
 
     @Test public void example1_sustain() {
         double h = EmberFormula.maxHp(t, EmberFormula.baseHp(t, 2, 0, 0, 6, 30), true);
-        assertEquals(183.12, h, EPS);
-        assertEquals(228.9, EmberFormula.ehp(h, 0.8), EPS);
+        assertEquals(163.5, h, EPS); // D293 sustain_hp 1.00
+        assertEquals(204.375, EmberFormula.ehp(h, 0.8), EPS);
     }
 
     @Test public void example1_expectedDps() {
@@ -52,8 +52,8 @@ public class EmberFormulaTest {
         assertEquals(40.0 / 54.0, m, EPS);
         assertEquals(490.995, EmberFormula.ehp(h0, m), 1e-6);
         double hs = EmberFormula.maxHp(t, h0, true);
-        assertEquals(407.344, hs, 1e-9);
-        assertEquals(549.9144, EmberFormula.ehp(hs, m), 1e-6);
+        assertEquals(363.7, hs, 1e-9); // D293 sustain_hp 1.00 → same as h0
+        assertEquals(490.995, EmberFormula.ehp(hs, m), 1e-6);
     }
 
     @Test public void growthIsAdditiveNotMultiplicative() {

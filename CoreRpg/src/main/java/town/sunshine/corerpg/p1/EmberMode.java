@@ -153,7 +153,7 @@ public final class EmberMode {
                     nums(t, "quality"), nums(t, "craft"), nums(t, "enhance"),
                     y.getDouble("crit.rate", 0.10), y.getDouble("crit.mult", 1.5),
                     y.getDouble("defense.k", 40.0), y.getDouble("defense.floor", 0.5),
-                    y.getDouble("sustain_hp_mult", 1.12));
+                    y.getDouble("sustain_hp_mult", 1.00));
         } catch (IllegalArgumentException ex) {
             tables = EmberTables.defaults();
             plugin.getLogger().log(Level.WARNING, "[" + MODE_ID + "] bad tables in " + FILE + ", using book defaults: " + ex.getMessage());

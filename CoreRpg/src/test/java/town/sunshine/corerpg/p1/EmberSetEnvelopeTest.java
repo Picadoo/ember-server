@@ -24,9 +24,9 @@ public class EmberSetEnvelopeTest {
     @Test public void topGearStats_C14() {
         EmberLoadout l = top("sustain");
         assertEquals(134.6, l.b, 1e-9);
-        assertEquals(407.344, l.h, 1e-9);
+        assertEquals(363.7, l.h, 1e-9); // D293
         assertEquals(14.0, l.d, 1e-9);
-        assertEquals(549.9144, l.ehp(), 1e-6);
+        assertEquals(490.995, l.ehp(), 1e-6);
         assertEquals(3, l.awakening);
     }
 

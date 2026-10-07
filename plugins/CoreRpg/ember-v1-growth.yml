@@ -21,7 +21,7 @@
 #   burn_spread / spread_icd         燃烧中的敌人倒下时把最多几秒的燃烧传给 4 格内最近的敌人 / 每几秒最多传一次
 #   dodge_burst / hit_burst          躲开 / 被打中首领预警招时烬爆计数 +n（内置冷却照旧）
 #   burst_every / burst_mult         烬爆每几次普攻（加减）/ 系数 ×（只在烬爆成套时）
-#   sustain_every / sustain_mult / sustain_hp   炽愈回复间隔（加减）/ 回复 × / 生命加成（1.12 的 0.12 部分）×
+#   sustain_every / sustain_mult / sustain_hp   炽愈回复间隔（加减）/ 回复 × / 生命加成（相对成套基线；D293 成套基线 1.00）×
 #   share_w / share_taken            烬核分摊时自己算几份 / 自己那份 ×
 #   set_dmg                          焚烬 / 烬爆 套装事件伤害 ×
 #   max_hp                           最大生命 ×

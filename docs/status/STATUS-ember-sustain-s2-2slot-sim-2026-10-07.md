@@ -95,3 +95,6 @@
 | `tools/p1sim/out-sustain-s2-raid.json` / `-report.md` | 团本原始 |
 | `/tmp/sg/sustain-s2-2slot*.pkl` | 主线原始（未入库） |
 
+---
+
+**后续：** 2026-10-07 总控批 A → **D293 已施工**（`STATUS-ember-sustain-s2-d293.md` · CoreRpg 1.65.84 · bv 59）。

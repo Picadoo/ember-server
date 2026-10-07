@@ -30,15 +30,15 @@ public class EmberLoadoutTest {
 
     @Test public void bookExample1SustainThroughLoadout() {
         EmberLoadout l = EmberLoadout.compute(t, blade("sustain", 2, 0, 0, 6), charm("sustain", 2, 0, 0, 6), 30);
-        assertEquals(183.12, l.h, EPS);
-        assertEquals(228.9, l.ehp(), EPS);
+        assertEquals(163.5, l.h, EPS); // D293 sustain_hp 1.00
+        assertEquals(204.375, l.ehp(), EPS);
     }
 
     @Test public void bookExample2SustainThroughLoadout() {
         EmberLoadout l = EmberLoadout.compute(t, blade("sustain", 3, 3, 3, 10), charm("sustain", 3, 3, 3, 10), 60);
         assertEquals(134.6, l.b, EPS);
-        assertEquals(407.344, l.h, EPS);
-        assertEquals(549.9144, l.ehp(), 1e-6);
+        assertEquals(363.7, l.h, EPS); // D293
+        assertEquals(490.995, l.ehp(), 1e-6);
         assertEquals(3, l.awakening);
     }
 
@@ -47,7 +47,7 @@ public class EmberLoadoutTest {
         assertEquals("none", l.activeSet);
         assertEquals(0, l.awakening);
         assertEquals(70.0, l.b, EPS);
-        assertEquals(185.0, l.h, EPS); // no ×1.12 without the set
+        assertEquals(185.0, l.h, EPS); // no sustain_hp without the set
         assertEquals(14.0, l.d, EPS);
     }
 
