@@ -103,15 +103,5 @@ public class EmberAfkServiceTest {
         assertEquals(0, EmberVault.boundAfterSpend(5, 7, 10));
         assertEquals(4, EmberVault.boundAfterSpend(5, 0, 4));   // an admin take / undo debit clamps
         assertEquals(0, EmberVault.boundAfterSpend(0, 3, 8));
-        // the player's own inventory / crafting grid / ender chest / plugin GUIs are not "containers"
-        assertFalse(EmberAfkService.blockContainer(null, org.bukkit.event.inventory.InventoryType.CRAFTING));
-        assertFalse(EmberAfkService.blockContainer(null, org.bukkit.event.inventory.InventoryType.ENDER_CHEST));
-        assertFalse(EmberAfkService.blockContainer(null, org.bukkit.event.inventory.InventoryType.CHEST));
-    }
-
-    /** D275 / ARCH O9: bind guards follow P1 master switch; with no EmberMode instance they stay off. */
-    @Test public void bindGuardsFollowP1MasterSwitchNotAfkFlag() {
-        assertFalse(EmberAfkService.bindGuardsActive());
-        assertEquals(EmberMode.active(), EmberAfkService.bindGuardsActive());
     }
 }

@@ -194,6 +194,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         partService = new PartService(this, niBridge);
         afkTierService = new AfkTierService(this, dataStore);
         emberAfk = new town.sunshine.corerpg.p1.EmberAfkService(this); // D177 (config: ember-v1.yml afk, read in reloadLocal)
+        new town.sunshine.corerpg.p1.EmberBindGuard(this); // D276 O9: bind guards outside AFK class
         hubPlazaService = new HubPlazaService(this);
         hubNpcService = new HubNpcService(this);
         abyssShaftService = new AbyssShaftService(this);
