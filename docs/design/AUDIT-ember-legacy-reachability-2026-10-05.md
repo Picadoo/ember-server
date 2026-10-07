@@ -122,7 +122,7 @@
 | `arena queue 1v1/2v2` / `forfeit` | `J/ArenaService.java:226–249,374–382` | 所有人 | **否** | 传送到 `world` 对战垫（`P/arena.yml:21–23`）；胜 25 / 负或平 10 币（`:611–649`；世界缺失时即时随机结算 `:725–760`） | 否 | **LEAK L3** |
 | `arena claim` | `J/ArenaService.java:242–243,308–321` | 所有人 | **否** | 每日 80 币 + `cosmetic_calamity_shard` ×1 | 否 | **LEAK L5** |
 | `auction` / `寄售` / `ah` | `:1059–1069` | 玩家在 P1 下被拒；OP 可用 | **是**（`:1062–1066`，`P/ember-v1.yml:126 legacy_auction: false`） | — | — | OK（已封） |
-| `warehouse` / `仓库` / `wh`（list / deposit / withdraw / unlock / info） | `:1070–1073`；`J/WarehouseService.java:102–138` | 所有人 | 否（只在 withdraw 里扣绑定部分 `:257–261`） | 存取同一份材料仓（`EmberVault` 复用）；`unlock` 扣币 / 晶钻扩格（`:335`） | 否 | OK·只读（D252；写路径已收口，ARCH R5 ②） |
+| `warehouse` / `仓库` / `wh` | `:1070–1073`；`J/WarehouseService` + `legacy_gate.allow` | 所有人可 **list/info**；deposit/withdraw/unlock 非 OP **拒**（D252） | 否 | 与 `EmberVault` 同库；玩家存取走枢纽仓库 | 否 | OK·只读（D252） |
 | `skill` / `技能` [info] | `:1074–1077`；`J/SkillService.java:212–227` | 所有人 | 是（P1 世界内只有烬斩 `:267`） | 无 | — | OK |
 | `flex` / `轻技`（equip / unequip / cast / info） | `:1078–1081`；`J/FlexSkillService.java:147–175` | 所有人（P1 主菜单链接 `TM/ember_hub.yml:246`） | 否 | 无经济；5 格冲刺位移（ARCH R6） | — | OK（非经济；战斗面未建模见 ARCH R6） |
 | `raid` / `团本`（status / ring / claim-ring / claim） | `:1082–1085`；`J/RaidService.java:53–90` | 所有人只看状态；自领要 OP（`:80`） | 否 | 无 | — | OK |
@@ -242,10 +242,10 @@
 
 > 本节是给后续例行窗口的**草案**。每条都尽量小到「一个窗口：改一处 + 静态测 + 进下一次合并冒烟」。按风险从高到低排；S0-1～S0-3 合起来就能封住 L1～L5、L7～L11 的入口，S0-4 是纵深防御（即使有人绕过入口，发奖端也不发）。所有闸门都只在 `EmberMode.active()` 为真时生效，P1 关掉（旧模式）时行为不变；管理员（`corerpg.admin`）和**控制台**一律放行——DP / MM 的发奖脚本都以控制台身份调 `/corerpg …`，绝不能挡控制台。
 
-### 5.1 白名单（P1 开着时普通玩家仍可达）
+### 5.1 白名单（P1 开着时普通玩家仍可达；**warehouse 自 D252 起仅 list/info**）
 
 - **世界：** `ember_hub`、`ember_afk`、`dungeon_EmberQ0*`（Q01–Q07、R1–R3、B1/B2、节日 F1 至 10-08）。其余（`ember_event`、旧本实例、`world`、`world_nether`、`world_the_end`、`ember_daily_*` 常驻图）在 P1 下不应有玩家入口。
-- **`/corerpg` 子命令：** `help / status / coin（查看） / sign / activity / bounty / stats / p1|ember（玩家部分） / quest（talk） / afk / life / level / enter q0x / tickets（查看） / cash（查看） / stamina（查看） / pass（查看） / storage（查看） / mail（读 / 领 / 删） / friend / settings / ladder（查看） / pet / skill / flex / set / enderchest / warehouse / calamity status / abyss status / elite status / raid status`，以及 `/hub`。
+- **`/corerpg` 子命令：** `help / status / coin（查看） / sign / activity / bounty / stats / p1|ember（玩家部分） / quest（talk） / afk / life / level / enter q0x / tickets（查看） / cash（查看） / stamina（查看） / pass（查看） / storage（查看） / mail（读 / 领 / 删） / friend / settings / ladder（查看） / pet / skill / flex / set / enderchest / warehouse（只读） / calamity status / abyss status / elite status / raid status`，以及 `/hub`。
 - **DP：** 玩家侧只需要 `dp team` / `dp leave` 一类（`TM/ember_friends.yml:88`）；开本一律走 CoreRpg 的控制台 `dp start-console`（`J/TicketEntryService.java:177`，P1 本经 `EmberRunService.tryEnter`）。
 
 ### 5.2 按风险排序的窗口

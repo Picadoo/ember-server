@@ -1,4 +1,6 @@
 # 余烬材料仓 — docs/design/DESIGN-ember-material-warehouse.md
+# P1 现行玩家存取 = 枢纽 EmberVault；本文件格数/解锁仅服务旧 WarehouseService
+#（P1 非 OP 只读 list/info，S0-10 / D252 / CoreRpg 1.65.71）。
 enabled: true
 default_slots: 8
 max_slots: 48
