@@ -1,9 +1,10 @@
 # 天赋一排侧移 · T0b 收窄修订（半页）· 2026-10-07
 
-> **STATUS：待批 A**（收窄系数 · 供 T0b）  
+> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
+> **批注：** 总控批 · 采纳 **D1b / F7b / W6b** 系数表；已令模拟按此表复跑 T0b。**禁 T1**，直至 T0b ✅ 且另派。本批注仍只动 docs。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** T0 ❌ [`STATUS-ember-talent-row1-t0-2026-10-07.md`](../status/STATUS-ember-talent-row1-t0-2026-10-07.md)（`bc3d29bc`）· 主规格 §5.3  
-> **性质：** **只 docs**；给可入 `sidegrade.py` 的新系数表。**禁 T1**；禁均匀乘区 / 新永久乘区 / 六槽 / Pack。  
+> **性质：** 收窄系数已批；可入 `sidegrade.py` 登记复跑。**禁 T1**；禁均匀乘区 / 新永久乘区 / 六槽 / Pack。  
 > **硬规则：** 形状不变（机动躲窗 / 站桩分流 / 压上 win 窗）；只许 ↓ 窗口收益或 ↑ 窗外代价 / 缩窗秒。
 
 ---
@@ -67,7 +68,7 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1b,F7b,W6b --n 2000 -
 
 ## 4. 批注勾选
 
-- [ ] **批 A · 采纳 §1 系数开 T0b**（登记 D1b/F7b/W6b；禁 T1）  
+- [x] **批 A · 采纳 §1 系数开 T0b**（登记 D1b/F7b/W6b；禁 T1）  
 - [ ] 改口：说明要换的数 ________  
 - [ ] 驳回：改机制（退出本条件型形状）
 
@@ -78,6 +79,7 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1b,F7b,W6b --n 2000 -
 | 日 | 事 |
 |----|-----|
 | 2026-10-07 | 初稿 · 待批 A · 响应 T0 ❌ 边缘 |
+| 2026-10-07 | 总控批 **已批 A** · 采纳 D1b/F7b/W6b · T0b 复跑中 |
 
 - 主规格：`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`（已批 A；本半页 = T0b 系数补丁）  
 - T0 报告：`STATUS-ember-talent-row1-t0-2026-10-07.md`

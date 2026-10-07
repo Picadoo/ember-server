@@ -209,6 +209,7 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 | 2026-10-07 | 施工/T0 | T0 复跑 D1/F7/W6 vs t1a/b/c · 2 槽 · ±2pp → **❌** · `STATUS-ember-talent-row1-t0-2026-10-07.md`；不开 T1 |
 | 2026-10-07 | 总控 / 策划 | **已批 A**；采纳 §3+§5+§6；下一步 T0 模拟；不过线不开 T1 |
 | 2026-10-07 | 策划 | T0 ❌ → 收窄半页指针 §10（D1b/F7b/W6b · 待批） |
+| 2026-10-07 | 总控 / 策划 | T0b 收窄 **已批 A**；按 D1b/F7b/W6b 复跑 |
 
 ---
 
@@ -228,5 +229,5 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 
 ## 10. T0b 收窄补丁（指针）
 
-T0 ❌ 后收窄系数见 [`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md)（**待批 A** · D1b/F7b/W6b）。**禁 T1**，直至 T0b ✅ 且总控另派。
+T0 ❌ 后收窄系数见 [`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md)（**已批 A** · D1b/F7b/W6b · T0b 复跑中）。**禁 T1**，直至 T0b ✅ 且总控另派。
 
