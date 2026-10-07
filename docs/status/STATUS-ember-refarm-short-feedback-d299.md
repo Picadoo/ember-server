@@ -36,4 +36,5 @@
 ## 下一窗 tip
 
 - 方案 **R**（工坊单档轻调）**后置**，等真人是否仍「看得见但养不起」  
-- **禁抬掉率** / 新材料轨 / 事件 R/W / 调律 R / 六槽 / 天赋盲调 / Pack6
+- **禁抬掉率** / 新材料轨 / 事件 R/W / 调律 R / 六槽 / 天赋盲调 / Pack6  
+- **下一档硬债（走廊感）** · [`STATUS-ember-next-hard-debt-corridor-feel-need-design-2026-10-07.md`](STATUS-ember-next-hard-debt-corridor-feel-need-design-2026-10-07.md) · 日刷同骨架图间可感差 · 需策划
