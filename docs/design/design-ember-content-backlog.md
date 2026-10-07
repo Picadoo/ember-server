@@ -4,7 +4,7 @@
 ## Progress snapshot — 2026-10-01 13:37 Asia/Shanghai (总控 · B2.111 PASS · 勾销 · 流水线暂停，等用户/GPT 策划意见；下一默认窗 B2.113)
 
 ### 指针 · 下一阶段玩法/体验加固（2026-10-07）
-- **B-room-event-mustfeel（待批 A）：** [`docs/design/DESIGN-ember-room-event-mustfeel-2026-10-07.md`](DESIGN-ember-room-event-mustfeel-2026-10-07.md) · 候选(1) 房间事件「本局必感」· `event_rate` 0.5→0.85 + 种首次短闪 · **禁 Pack6** · 天赋 HOLD / 六槽不动
+- **B-room-event-mustfeel（已批 A）：** [`docs/design/DESIGN-ember-room-event-mustfeel-2026-10-07.md`](DESIGN-ember-room-event-mustfeel-2026-10-07.md) · 方案 M：W1a `event_rate` 0.5→0.85 + W1b 种首次短闪 + W1c 开房 HUD；R/W 续窗后开 · **禁 Pack6** · 施工已派
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 - **2026-10-07 续：** 窗1–5 + D287–D289 已落地；**D290** 技能↔签名深链 + 团本炽愈提示（1.65.82）；**D291** 推荐打法页（零 jar）；**D292** 花样委托 +1 + 每图徽记一眼（1.65.83）· `STATUS-ember-playfeel-vbounty-plus-d292.md`
 - **B-talent-row1-mech-pivot（备忘 · HOLD）：** [`docs/design/DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md) · T0c ❌ 后总控裁决：一排数值返工 **HOLD**；禁 D1d 式盲调；再开须换触发/换键；**D291 标签保留**；禁 T1
