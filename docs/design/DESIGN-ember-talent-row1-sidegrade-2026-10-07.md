@@ -214,6 +214,7 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 | 2026-10-07 | 施工/T0b | 批定收窄 D1b/F7b/W6b 复跑 → **❌**（D1b/F7b 下砸；W6b 近线）· `STATUS-ember-talent-row1-t0b-2026-10-07.md` |
 | 2026-10-07 | 施工/T0c | 回补 D1c/F7c/W6c 复跑 → **❌** · `STATUS-ember-talent-row1-t0c-2026-10-07.md` |
 | 2026-10-07 | 总控 / 策划 | T0c ❌ → **数值 HOLD**；禁盲调系数；机制换向备忘 · `DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`；禁 T1 |
+| 2026-10-07 | 策划 | 换机制硬规格待批 A · `DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md`（荐 M）；系数轨仍 HOLD |
 
 ---
 
@@ -222,7 +223,8 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 | 文件 | 用途 |
 |------|------|
 | 本文件 | 一排条件型侧移硬规格（**已批 A · 数值 HOLD**） |
-| `DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md` | T0c 后机制换向备忘（HOLD · 禁盲调） |
+| `DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md` | **换机制硬规格**（待批 A · 荐方案 M） |
+| `DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md` | T0c 后机制换向备忘（数值 HOLD · 禁盲调） |
 | `DESIGN-ember-growth-sidegrades-2026-10-04.md` | 条件型候选与旧 ±3 跑数（**改为 2 槽复跑**，不以旧数为证） |
 | `DESIGN-ember-build-diversity-2026-10-04.md` | 一排无感证据 |
 | `DESIGN-ember-playfeel-hardening-2026-10-07.md` | P4 / 假选择 / 开窗依据 |
