@@ -474,13 +474,8 @@ def build_parser() -> argparse.ArgumentParser:
         "--yml",
         dest="yml",
         metavar="PATH",
-        help="周文件路径（真源 plugins/CoreRpg/p1-telemetry/<week>.yml）",
-    )
-    p.add_argument(
-        "yml_pos",
-        nargs="?",
-        metavar="YML",
-        help="周文件路径（位置参数；与 --yml 二选一）",
+        required=True,
+        help="周文件路径（必填 · 真源 plugins/CoreRpg/p1-telemetry/<week>.yml）",
     )
     p.add_argument(
         "--json-log",
@@ -493,18 +488,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--out",
         dest="out",
         metavar="PATH",
-        default=None,
-        help="输出 markdown 路径；缺省写 stdout（契约荐写 docs/status/reports/…）",
+        required=True,
+        help="输出 markdown 路径（必填 · 荐 docs/status/reports/sample-week-<week>.md）",
     )
     return p
 
 
 def main(argv: Optional[list] = None) -> int:
     args = build_parser().parse_args(argv)
-    yml = args.yml or args.yml_pos
-    if not yml:
-        die(2, "须提供 --yml PATH 或位置参数 YML")
-    yml_path = Path(yml)
+    yml_path = Path(args.yml)
     data = load_yml(yml_path)
     week, counts, runs = validate(data)
     json_note = maybe_json_note(Path(args.json_log) if args.json_log else None)
@@ -517,15 +509,13 @@ def main(argv: Optional[list] = None) -> int:
         note=data.get("note"),
         json_note=json_note,
     )
-    if args.out:
-        out_path = Path(args.out)
-        try:
-            out_path.parent.mkdir(parents=True, exist_ok=True)
-            out_path.write_text(md, encoding="utf-8")
-        except OSError as e:
-            die(4, f"--out 无法写入：{out_path} ({e})")
-    else:
-        sys.stdout.write(md)
+    out_path = Path(args.out)
+    try:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        out_path.write_text(md, encoding="utf-8")
+    except OSError as e:
+        die(4, f"--out 无法写入：{out_path} ({e})")
+    print(f"wrote {out_path} · week={week} · runs={runs}")
     return 0
 
 
