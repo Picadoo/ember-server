@@ -82,6 +82,18 @@ cand('M_winhit', 'row1', "T0' 压上 窗2s内至多5刀×1.30/窗外×1.00（命
      {'win_dmg': 1.30, 'win_secs': 2.0, 'win_out': 1.0, 'win_hits_cap': 5})
 C['M_winhit']['base'] = 't1c'
 
+# T0'' narrowed mech-pivot (screen-only; same DESIGN · §4 re-shape amp; do NOT overwrite M_*)
+# Pair: M2_dodge↔t1a, M2_stance↔t1b, M2_winhit↔t1c. Still no permanent tax keys.
+cand('M2_dodge', 'row1', "T0'' 机动 躲窗至多2次·1.2s×1.15（无永久首领税）",
+     {'dodge_procs_cap': 2, 'dodge_secs': 1.2, 'dodge_dmg': 1.15})
+C['M2_dodge']['base'] = 't1a'
+cand('M2_stance', 'row1', "T0'' 站桩 预警落地后1.5s受预警×0.90（窗外无普攻罚）",
+     {'stance_secs': 1.5, 'stance_taken_tele': 0.90})
+C['M2_stance']['base'] = 't1b'
+cand('M2_winhit', 'row1', "T0'' 压上 窗1.5s内至多3刀×1.12/窗外×1.00（命中封顶）",
+     {'win_dmg': 1.12, 'win_secs': 1.5, 'win_out': 1.0, 'win_hits_cap': 3})
+C['M2_winhit']['base'] = 't1c'
+
 # row 3 (set-locked: only the matching set) · target metric in brackets
 cand('t3a', 'cur', '现行 燎原', {'burn_spread': 1, 'spread_icd': 15, 'burn_mult': 0.94}, 't3a', sets=('scorch',))
 cand('t3b', 'cur', '现行 反震', {'hit_burst': 1, 'taken_tele': 1.02}, 't3b', sets=('burst',))

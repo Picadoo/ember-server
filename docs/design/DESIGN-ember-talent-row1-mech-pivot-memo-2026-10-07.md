@@ -2,7 +2,7 @@
 
 > **STATUS：备忘 · HOLD（数值轨）**（总控裁决 · 2026-10-07 Asia/Shanghai）  
 > **性质：** 半页换向备忘；一排**数值返工 HOLD**；**D291** 认知标签（机动 / 站桩 / 压上）**保留**。  
-> **硬规格（已批 A · 方案 M）：** [`DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md) · tip `5f2624e3` · **以硬规格为准**；本备忘仍为数值 HOLD 记录。  
+> **硬规格（已批 A · 方案 M）：** [`DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md) · tip `5f2624e3` · **以硬规格为准**；T0'/T0'' 均 ❌ → **换机制（通关率敏感有界幅度）轨 HOLD**；本备忘仍为数值 HOLD 记录。  
 > **来源：** T0 → T0b → T0c 均 ❌（`0d4481ad` / `STATUS-ember-talent-row1-t0c-2026-10-07.md`）· 主规格 §5.3-2。  
 > **硬令：** **禁止**再交 D1d / F7d / W6d 式盲抬/盲收系数表；再开必须**换触发或换键**（见硬规格，勿在本备忘续 cand）。
 
@@ -15,6 +15,8 @@
 | **T0** | D1/F7/W6 上冲 / 出廊 |
 | **T0b** | 收窄 → D1b/F7b **过收下砸**；W6b 近线 |
 | **T0c** | 回补 → D1c **双向出廊**；F7c 仍 ❌；W6c 下砸修好又**上冲** |
+| **T0'** | 换机制去税 → 单向上冲（机动~+11 / 压上~+13） |
+| **T0''** | 收窄有界幅度 → 峰值下移但仍 ❌（压上 +5.08；机动/站桩贴墙）→ **HOLD** |
 
 ±2pp（42+33）对现行三形状（窗伤×永久窗外代价 / 预警减伤×普攻罚 / 窗伤×窗外罚）**夹不住**：抬窗则首通上冲，加罚则挑战下砸，中间带仍有 \|Δ\|>3。继续微调 = 违反 §5.3-2。
 
@@ -47,11 +49,11 @@
 
 ## 3. 指针
 
-- **硬规格（已批 A · 方案 M）：** `DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md`（换触发/换键 · T0' ❌）· **以该页为准**  
+- **硬规格（已批 A · 方案 M）：** `DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md`（换触发/换键 · T0' ❌ · T0'' ❌ → **HOLD** · 禁 T0'''）· **以该页为准**  
 - 主规格：`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`（§5.3-2 · 数值 HOLD）  
 - T0c 报告：`STATUS-ember-talent-row1-t0c-2026-10-07.md`  
 - tip：`STATUS-ember-next-hard-debt-talent-mech-pivot-need-design-2026-10-07.md`（`5f2624e3`）  
-- backlog：**B-talent-row1-mech-pivot → 已批 A · T0' ❌**；硬规格已批，以 `DESIGN-ember-talent-row1-mech-pivot-2026-10-07` 为准；本备忘仍为数值 HOLD 记录
+- backlog：**B-talent-row1-mech-pivot → 已批 A · T0'' ❌ · HOLD**；硬规格已批，以 `DESIGN-ember-talent-row1-mech-pivot-2026-10-07` 为准；本备忘仍为数值 HOLD 记录；再开须非通关率敏感效用另起规格
 
 | 日 | 事 |
 |----|-----|
@@ -59,3 +61,4 @@
 | 2026-10-07 | 策划 · 硬规格出稿待批 A · 本备忘指针改挂硬规格；数值轨仍 HOLD |
 | 2026-10-07 | 总控 · 硬规格 **已批 A**（方案 M）· backlog→已批 A · T0' 中；本备忘仍 HOLD |
 | 2026-10-07 | 总控 · T0' **❌**（去税后单向上冲）· 不开 T1 · 不放宽 ±2 · 本备忘仍 HOLD |
+| 2026-10-07 | 总控 · T0'' **❌**（M2_* 收窄仍未过 ±2；压上峰 +5.08）· **换机制轨 HOLD** · 禁 T0''' · 不开 T1 · 本备忘仍 HOLD |
