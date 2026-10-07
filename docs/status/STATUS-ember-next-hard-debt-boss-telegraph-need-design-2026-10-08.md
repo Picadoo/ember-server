@@ -5,7 +5,7 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D303 周本段感已收 · 灰印 HOLD · 天赋 HOLD · 样本门禁 R 窗后置 · D283/D295 破绽闪与本局摘要已收  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格：** （待策划交稿）  
+**硬规格：** [`DESIGN-ember-boss-telegraph-honesty-2026-10-08.md`](../design/DESIGN-ember-boss-telegraph-honesty-2026-10-08.md) · STATUS **待批 A** · 荐 **方案 M**（起手短签+相位短线索+诚实规则；R 后置；W 否决）· backlog `B-boss-telegraph-honesty`  
 **打开理由：** 走廊/深渊/团本入口段感（D300–D303）与破绽成功闪+结算摘要（D283/D295）已落；**招式起手预警与相位切换线索**仍参差——玩家常在「半血砸地 / 冲撞 / 烬核」真正到来前读不清或读到假线索。要在不扩 Pack6、不新开 Boss 招、不抬体力/掉率前提下，让预警与相位可感且诚实。
 
 ---
@@ -98,5 +98,13 @@
 - 加固债总览 · [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](../design/DESIGN-ember-playfeel-hardening-2026-10-07.md)
 
 ---
+
+
+## 7. 策划交稿（待批 A）
+
+- 硬设计：[`DESIGN-ember-boss-telegraph-honesty-2026-10-08.md`](../design/DESIGN-ember-boss-telegraph-honesty-2026-10-08.md) · **待批 A** · 荐 **批 M**
+- Backlog：`B-boss-telegraph-honesty`（待批 A）
+- 批准前禁 YAML/Java；施工号建议 D304+（总控另派）
+- Git：本地 commit；GitHub 推送暂堵时总控代推
 
 *服务器：proxy/login/play 保持 up；本 tip 零部署。*
