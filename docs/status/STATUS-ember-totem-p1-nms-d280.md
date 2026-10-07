@@ -42,5 +42,6 @@ Ember：`EmberCombatListener.onResurrect` HIGH + `EmberMode.isP1` → `setCancel
 
 ## 下一扇候选
 
-- FlexSkillService 冲刺是否该认 P1（R6 另一条）
+- ~~月卡进服发币 / vip·pass~~ → **D281**
+- Flex 冲刺为 P1 技能组设计内（非 bug）
 - 或有实机证据的玩法问题

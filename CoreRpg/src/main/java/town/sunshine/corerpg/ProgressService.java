@@ -278,6 +278,10 @@ public final class ProgressService {
     }
 
     public void cmdPassClaim(Player p) {
+        if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
+            p.sendMessage(ChatColor.GRAY + "[战令] P1 模式下不发旧战令等级奖励（请用主线 / 签到）。");
+            return;
+        }
         PlayerData d = dataStore.get(p.getUniqueId());
         ensureSeason(d);
         int lv = passLevel(d);

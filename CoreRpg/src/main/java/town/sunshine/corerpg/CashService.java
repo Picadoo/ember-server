@@ -286,6 +286,10 @@ public final class CashService {
         }
         data.setMonthlyCard(true);
         if (today.equals(data.getMonthlyLastGrantDate())) return;
+        // D281: join-path grant bypasses LegacyGate — freeze payout while P1 is on (lastGrantDate unset so off-P1 same day still pays)
+        if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
+            return;
+        }
 
         data.addCoin(monthlyLoginCoin);
         int staminaAmt = 0;
@@ -508,6 +512,10 @@ public final class CashService {
             player.sendMessage(ChatColor.RED + "[勋阶] 日礼未启用");
             return;
         }
+        if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
+            player.sendMessage(ChatColor.GRAY + "[勋阶] P1 模式下不发余烬币日礼（请用主线 / 挂机庭）。");
+            return;
+        }
         PlayerData data = dataStore.get(player.getUniqueId());
         String today = DailyService.today();
         if (today.equals(data.getVipDailyClaimDate())) {
@@ -524,6 +532,10 @@ public final class CashService {
 
     /** 1.4.10: free pass-track supply (mail template pass_track_free), once per day. */
     public void cmdPassFree(Player player) {
+        if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
+            player.sendMessage(ChatColor.GRAY + "[战令·免费轨] P1 模式下不发旧战令补给（请用主线 / 签到）。");
+            return;
+        }
         PlayerData data = dataStore.get(player.getUniqueId());
         String today = DailyService.today();
         if (today.equals(data.getPassFreeClaimDate())) {
