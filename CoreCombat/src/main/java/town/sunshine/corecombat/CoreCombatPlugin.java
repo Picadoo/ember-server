@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -111,6 +112,11 @@ public final class CoreCombatPlugin extends JavaPlugin implements Listener {
                     if (stack == null) {
                         return false;
                     }
+                    // D280: P1 worlds refuse totem at NMS select — EntityLiving only subtracts after
+                    // EntityResurrectEvent succeeds; Ember also cancels the event (B08). Both layers keep the item.
+                    if (emberP1World(entity)) {
+                        return false;
+                    }
                     ItemInfo info = ItemManager.INSTANCE.isNiItem(stack);
                     if (info == null || !localTotems.contains(info.getId())) {
                         return false;
@@ -145,6 +151,28 @@ public final class CoreCombatPlugin extends JavaPlugin implements Listener {
             getLogger().info("Pushed ShieldNmsHooks override=" + shieldDisableVanilla
                     + " ids=" + localShields + " durMult=" + shieldDurabilityMult
                     + " active=" + ShieldNmsHooks.isActive());
+        }
+    }
+
+
+    /**
+     * D280: soft-detect Ember P1 world without compile-time CoreRpg dependency.
+     * When true, NI totem must not be selected for resurrection (hub/login unaffected).
+     */
+    static boolean emberP1World(LivingEntity entity) {
+        if (entity == null) {
+            return false;
+        }
+        try {
+            Plugin core = Bukkit.getPluginManager().getPlugin("CoreRpg");
+            if (core == null || !core.isEnabled()) {
+                return false;
+            }
+            Class<?> mode = Class.forName("town.sunshine.corerpg.p1.EmberMode", true, core.getClass().getClassLoader());
+            Object ok = mode.getMethod("isP1", org.bukkit.entity.Entity.class).invoke(null, entity);
+            return Boolean.TRUE.equals(ok);
+        } catch (Throwable ignored) {
+            return false;
         }
     }
 

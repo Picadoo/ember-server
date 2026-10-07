@@ -343,6 +343,11 @@ public final class EmberCombatListener implements Listener {
                 + " +" + EmberDamageTrace.fmt(e.getAmount()) + " → 取消（未登记回复）");
     }
 
+    /**
+     * B08 / D280: refuse totem revive in P1. Paper {@code EntityLiving#e} only {@code subtract}s the totem
+     * after this event succeeds — cancelling here keeps {@code totem_ember_life}. CoreCombat 1.0.1 also
+     * rejects P1 in TotemNmsHooks so NMS never selects the stack.
+     */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onResurrect(EntityResurrectEvent e) {
         if (e.getEntity() instanceof Player && EmberMode.isP1(e.getEntity())) {

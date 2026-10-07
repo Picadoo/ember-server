@@ -1,6 +1,6 @@
 name: CoreCombat
 main: town.sunshine.corecombat.CoreCombatPlugin
-version: 1.0.0
+version: 1.0.1
 author: sunshine-town
 description: NI-only totem of undying + shield blocking via TotemNmsHooks / ShieldNmsHooks
 depend: [NeigeItems]

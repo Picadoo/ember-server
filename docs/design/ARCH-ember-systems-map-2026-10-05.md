@@ -309,7 +309,7 @@ flowchart LR
 | 重试滥用 | 连战失败无限重试但只首通领奖（D160）；首败退一半体力每天一次（`failrefund@`）；深渊段「开打前中止 / 重启」全额退费——应确认退费后段种子不变（否则可免费重抽段地图） | `ember-v1-runs.yml` `fail_refund`、`abyss` 注释 |
 | 小号转移 | P1 材料 / 装备禁丢出 / 入容器（`EmberBindGuard`）；旧寄售关；邮件 `corerpg.mail.send: op`；~~竞技胜场币~~ → **D279**：P1 下对战/日箱币 0（入口 S0-3 已拒） | `EmberBindGuard`、`ArenaService.payCoin`/`cmdClaim`、`plugin.yml` |
 | 内容版本 | 改 `content_version` 重发首通 | R3 |
-| 未建模的机动 / 生存 | 旧 `FlexSkillService`（5 格冲刺、14 秒冷却、无 P1 判断）由 P1 主菜单链接；CoreCombat 的不死图腾 / 盾牌格挡不认 P1 世界——是否绕过 `EmberCombatListener` 的统一结算未核 | `FlexSkillService` 类注释、`ember_hub.yml:246`、CoreCombat 源码无 P1 引用 |
+| 未建模的机动 / 生存 | 旧 `FlexSkillService`（5 格冲刺、14 秒冷却、无 P1 判断）由 P1 主菜单链接；~~CoreCombat 图腾不认 P1 / 是否仍耗图腾~~ → **D280**：Paper 仅在事件未取消时 subtract；Ember B08 取消 ⇒ 不耗；CoreCombat **1.0.1** P1 世界 validator 直接拒选。盾牌格挡仍未单独建模 | `EntityLiving#e` 1047–1049、`EmberCombatListener` B08、`CoreCombatPlugin.emberP1World` |
 
 **R7 · 硬编码 vs 配置（中）**：结算基础数、套装系数、签名数值、来源提示文案都在 Java（§3 O6）。调这些数 = 重编 jar；p1sim 通过解析 Java 源码读常量（README「读哪些文件」表）基本跟得上，`mainline.py SIGS` 是例外。
 
