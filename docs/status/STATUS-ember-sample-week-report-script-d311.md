@@ -58,5 +58,6 @@ python3 tools/p1-telemetry-week-report.py --yml tools/fixtures/p1-telemetry-exam
 
 ## 下一窗
 
+- **下一档 tip（已派）：** [`STATUS-ember-next-hard-debt-six-slot-stage1-decision-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-six-slot-stage1-decision-need-design-2026-10-08.md) · backlog `B-six-slot-stage1-decision` · **六槽 Stage1 关窗/开工决策页（docs-only）** · 荐 A 继续 HOLD · 可选 B 显式开工规格（本窗仍零代码）· **W 否决**默默开六槽/与样本 R 同号  
 - 真开某 R：先周报（手填检查单或本脚本预填）勾到「可讨论」+ 总控签字进入该债待批 A → 再派该债硬设计（不得跳过）· 对照 [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) + D298 + D310 检查单  
-- **禁** 偷开任一 R · 改价(=forge R) · Pack6/六槽 · 天赋/灰印续跑 · 重开 D307–D311 · 玩家面遥测 · 改 D308 门槛数 · 薄 UX 抬假硬债挡窗 · 无签字自动开闸
+- **禁** 偷开任一 R · 改价(=forge R) · Pack6/默默写六槽代码 · 天赋/灰印续跑 · 重开 D307–D311 · 玩家面遥测 · 改 D308 门槛数 · 薄 UX 抬假硬债挡窗 · 无签字自动开闸
