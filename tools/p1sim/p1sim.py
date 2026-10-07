@@ -62,7 +62,11 @@ def dmult(st, tgt, t, owner):
     if t < getattr(owner, 'dodge_until', -1.0):
         r *= gm(st, 'dodge_dmg')
     if tgt['role'] == 'boss' and 'win_dmg' in st['mods']:  # PROPOSAL (builddiv 10-04, not in Java): 破绽窗口
-        r *= gm(st, 'win_dmg') if t < getattr(owner, 'win_until', -1.0) else gm(st, 'win_out')
+        # T0' mech-pivot: win_hits_cap bounds how many in-window hits keep win_dmg (else win_out)
+        in_win = t < getattr(owner, 'win_until', -1.0)
+        cap = st['mods'].get('win_hits_cap')
+        under = cap is None or getattr(owner, 'win_hits_used', 0) < cap
+        r *= gm(st, 'win_dmg') if (in_win and under) else gm(st, 'win_out')
     return r
 
 
@@ -553,6 +557,10 @@ class Fight:
                 rec['d_boss_all'] += eff
                 if self.t < getattr(self, 'win_until', -1.0):
                     rec['d_boss_win'] += eff
+        # T0' mech-pivot: count in-window boss hits toward win_hits_cap (after dmult already applied)
+        if tgt['role'] == 'boss' and self.st.get('mods') and 'win_hits_cap' in self.st['mods']:
+            if self.t < getattr(self, 'win_until', -1.0) and amount > 0:
+                self.win_hits_used = getattr(self, 'win_hits_used', 0) + 1
         tgt['hp'] -= amount
         if amount > 0 and 'regen' in tgt:  # D247: damage during an open channel window counts toward interrupt
             nt, per, heal, ihp, win, hurt = tgt['regen']
@@ -576,13 +584,29 @@ class Fight:
                 # telegraph bonus drops to kit_q_keep of itself until the step is back (this hit included)
         if kind == 'tele' and st.get('mods') and 'win_dmg' in st['mods']:  # PROPOSAL 破绽窗口: opens on every boss telegraph
             self.win_until = self.t + gm(st, 'win_secs', 0.0)
+            self.win_hits_used = 0  # T0': per-window hit cap resets on each telegraph
             if rec is not None:
                 rec['n_window'] += 1
+        # T0' stance: capture whether previous posture window still covers THIS tele, then refresh (落地后)
+        in_stance = False
+        if kind == 'tele' and st.get('mods') and 'stance_secs' in st['mods']:
+            in_stance = self.t < getattr(self, 'stance_until', -1.0)
+            self.stance_until = self.t + gm(st, 'stance_secs', 0.0)
+            if rec is not None:
+                rec['n_stance'] = rec.get('n_stance', 0) + 1
         if self.rng.random() < p:
             if rec is not None:
                 rec['n_dodge_' + ('tele' if kind == 'tele' else ('blaze' if tele and affix else 'mob'))] += 1
             if kind == 'tele' and st.get('mods'):  # D141: a dodged boss telegraph
-                self.dodge_until = self.t + gm(st, 'dodge_secs', 0.0)
+                # T0' dodge_procs_cap: at most N after-dodge damage windows per fight (heal/burst ungated)
+                cap = st['mods'].get('dodge_procs_cap')
+                used = getattr(self, 'dodge_procs_used', 0)
+                if cap is None or used < cap:
+                    self.dodge_until = self.t + gm(st, 'dodge_secs', 0.0)
+                    if cap is not None:
+                        self.dodge_procs_used = used + 1
+                        if rec is not None:
+                            rec['n_dodge_proc'] = rec.get('n_dodge_proc', 0) + 1
                 dh = gm(st, 'dodge_heal', 0.0)
                 if dh > 0 and self.t >= getattr(self, 'dodge_heal_cd', -1.0):
                     self.dodge_heal_cd = self.t + gm(st, 'dodge_icd', 6.0)
@@ -595,7 +619,12 @@ class Fight:
                         rec['n_dodge_burst'] += 1
             return True  # D192: dodged (callers that ignore the value are unchanged)
         if st.get('mods'):
-            raw *= gm(st, 'taken_' + kind) * (gm(st, 'taken_affix') if affix else 1.0) * gm(st, 'taken_all')
+            # T0' stance_taken_tele: only inside posture window; outside falls back to taken_tele (default 1.0)
+            if kind == 'tele' and 'stance_taken_tele' in st['mods']:
+                tm = gm(st, 'stance_taken_tele') if in_stance else gm(st, 'taken_tele')
+                raw *= tm * (gm(st, 'taken_affix') if affix else 1.0) * gm(st, 'taken_all')
+            else:
+                raw *= gm(st, 'taken_' + kind) * (gm(st, 'taken_affix') if affix else 1.0) * gm(st, 'taken_all')
             if self.cfg.get('abyss'):
                 raw *= gm(st, 'abyss_taken')
             if kind == 'tele' and gm(st, 'hit_burst', 0.0) > 0:  # D141 反震: hit by a boss telegraph → 烬爆 counter + n

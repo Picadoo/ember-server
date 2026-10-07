@@ -69,6 +69,19 @@ cand('D1c', 'row1', 'T0c 机动 躲后3s×1.28 / 首领×0.90', {'dodge_dmg': 1.
 cand('F7c', 'row1', 'T0c 站桩 预警×0.88 / 普攻×1.05', {'taken_tele': 0.88, 'taken_boss': 1.05})
 cand('W6c', 'row1', 'T0c 压上 窗1.2s×1.18 / 窗外×0.98', {'win_dmg': 1.18, 'win_secs': 1.2, 'win_out': 0.98})
 
+# T0' mech-pivot (screen-only; DESIGN-ember-talent-row1-mech-pivot · 已批 A · 方案 M)
+# Do NOT overwrite D1*/F7*/W6*. Pair: M_dodge↔t1a, M_stance↔t1b, M_winhit↔t1c.
+# No permanent dmg_boss / taken_boss / win_out<1 tax keys.
+cand('M_dodge', 'row1', "T0' 机动 躲窗至多3次·2s×1.40（无永久首领税）",
+     {'dodge_procs_cap': 3, 'dodge_secs': 2, 'dodge_dmg': 1.40})
+C['M_dodge']['base'] = 't1a'
+cand('M_stance', 'row1', "T0' 站桩 预警落地后2.5s受预警×0.80（窗外无普攻罚）",
+     {'stance_secs': 2.5, 'stance_taken_tele': 0.80})
+C['M_stance']['base'] = 't1b'
+cand('M_winhit', 'row1', "T0' 压上 窗2s内至多5刀×1.30/窗外×1.00（命中封顶）",
+     {'win_dmg': 1.30, 'win_secs': 2.0, 'win_out': 1.0, 'win_hits_cap': 5})
+C['M_winhit']['base'] = 't1c'
+
 # row 3 (set-locked: only the matching set) · target metric in brackets
 cand('t3a', 'cur', '现行 燎原', {'burn_spread': 1, 'spread_icd': 15, 'burn_mult': 0.94}, 't3a', sets=('scorch',))
 cand('t3b', 'cur', '现行 反震', {'hit_burst': 1, 'taken_tele': 1.02}, 't3b', sets=('burst',))

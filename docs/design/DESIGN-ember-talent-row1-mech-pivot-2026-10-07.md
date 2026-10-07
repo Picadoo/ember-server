@@ -4,7 +4,7 @@
 > **批注：** 总控批 · 采纳 **方案 M**：三标签换触发/换键（机动次数封顶、站桩短姿态窗、压上命中封顶；去永久税键）→ 先开 **T0' 模拟**；过线才 T1；门禁仍 42±2；**R 不首批**；**W 否决**。本批注仍只动 docs。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** 总控派单「硬设计待批 A」· tip [`STATUS-ember-next-hard-debt-talent-mech-pivot-need-design-2026-10-07.md`](../status/STATUS-ember-next-hard-debt-talent-mech-pivot-need-design-2026-10-07.md)（`5f2624e3`）· D300 后下一档**成长**硬债 · 对齐加固债 **#2** · 备忘 §2  
-> **性质：** 硬设计 **已批 A**；**T0' 换机制模拟**可开；过线前 **禁** 改线上 YAML / Java / 声称 T1。  
+> **性质：** 硬设计 **已批 A**；T0' **❌**（见 [`STATUS-ember-talent-row1-mech-t0prime-2026-10-07.md`](../status/STATUS-ember-talent-row1-mech-t0prime-2026-10-07.md)）；过线前 **禁** 改线上 YAML / Java / 声称 T1。  
 > **硬约束：** TrMenu 点选 · NI · 玩家不打指令 · **D291** 机动/站桩/压上标签**保留** · **六槽不做** · **禁 Pack6** · **禁 D1d/F7d/W6d 式盲调系数表** · **禁均匀乘区 / 新永久乘区** · **禁放宽 ±2 冒充过线** · **禁事件 R/W · 调律 R · 纯 lore** · **禁未过线声称 T1**。  
 > **Backlog 指针：** `B-talent-row1-mech-pivot`  
 > **邻域边界：** 主规格 [`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`](DESIGN-ember-talent-row1-sidegrade-2026-10-07.md) §5.3-2（系数轨 **HOLD**）· 备忘 [`DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md) · T0/T0b/T0c ❌ · D291 推荐打法页
@@ -173,6 +173,7 @@
 |----|-----|
 | 2026-10-07 | 策划 · 初稿 STATUS **待批 A** · 荐方案 M（三标签换触发）；R=压上试点可选；W 否决 |
 | 2026-10-07 | 总控 · **已批 A** · 方案 M（三标签换触发/换键 → T0'；过线才 T1；门禁 42±2；R 不首批；W 否决） |
+| 2026-10-07 | 总控 · T0' **❌**（`STATUS-ember-talent-row1-mech-t0prime-2026-10-07`）· 不开 T1 · 不放宽 ±2 |
 
 ---
 
@@ -187,4 +188,4 @@
 
 ---
 
-*已批 A；T0' 模拟可开；过线前禁线上 yml/Java / 声称 T1。*
+*已批 A；T0' ❌；过线前禁线上 yml/Java / 声称 T1。*

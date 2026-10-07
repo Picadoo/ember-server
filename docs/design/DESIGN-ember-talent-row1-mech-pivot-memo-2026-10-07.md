@@ -47,14 +47,15 @@
 
 ## 3. 指针
 
-- **硬规格（已批 A · 方案 M）：** `DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md`（换触发/换键 · T0' 中）· **以该页为准**  
+- **硬规格（已批 A · 方案 M）：** `DESIGN-ember-talent-row1-mech-pivot-2026-10-07.md`（换触发/换键 · T0' ❌）· **以该页为准**  
 - 主规格：`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`（§5.3-2 · 数值 HOLD）  
 - T0c 报告：`STATUS-ember-talent-row1-t0c-2026-10-07.md`  
 - tip：`STATUS-ember-next-hard-debt-talent-mech-pivot-need-design-2026-10-07.md`（`5f2624e3`）  
-- backlog：**B-talent-row1-mech-pivot → 已批 A · T0' 中**；硬规格已批，以 `DESIGN-ember-talent-row1-mech-pivot-2026-10-07` 为准；本备忘仍为数值 HOLD 记录
+- backlog：**B-talent-row1-mech-pivot → 已批 A · T0' ❌**；硬规格已批，以 `DESIGN-ember-talent-row1-mech-pivot-2026-10-07` 为准；本备忘仍为数值 HOLD 记录
 
 | 日 | 事 |
 |----|-----|
 | 2026-10-07 | 策划 · T0c ❌ 后按总控裁决写本备忘；数值轨 HOLD；禁 D1d 式表；禁 T1 |
 | 2026-10-07 | 策划 · 硬规格出稿待批 A · 本备忘指针改挂硬规格；数值轨仍 HOLD |
 | 2026-10-07 | 总控 · 硬规格 **已批 A**（方案 M）· backlog→已批 A · T0' 中；本备忘仍 HOLD |
+| 2026-10-07 | 总控 · T0' **❌**（去税后单向上冲）· 不开 T1 · 不放宽 ±2 · 本备忘仍 HOLD |
