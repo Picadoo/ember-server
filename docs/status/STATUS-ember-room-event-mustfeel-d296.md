@@ -29,7 +29,7 @@
 |---|---|
 | 单测 | `EmberEventTeachTest` MC 出事件率 ∈ [0.80, 0.90]；`event_core==1`；种首次只记一次 |
 | 期望核心 | MC：出事件率 ≈0.85；E[S05 core/重打]@70%成功 ≈ **×1.68**（相对 0.5）；**未**抬 `event_core` |
-| 全量 p2econ | **本窗未重跑**周表（规则快照已齐 bv60）；若真人/周报破源汇带 → 降 rate 或砍 W2，禁暗抬 core |
+| 全量 p2econ | **PASS** · [`STATUS-ember-d296-event-rate-econ-tip.md`](STATUS-ember-d296-event-rate-econ-tip.md) · `out-d296-event-rate-econ.md`（Δ两件极品 max +4pp · E[core] ×1.72） |
 
 ## 验收
 
