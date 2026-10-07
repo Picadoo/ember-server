@@ -1,8 +1,8 @@
 # 余烬日/周本 — 路径清单
 
 设计：`/workspace/minecraft/docs/design/DESIGN-dungeon-daily-weekly.md`  
-维护备忘：玩家入口=TrMenu 点击进本（日/周/深渊/团本/精英）· 体力扣次；进本门控仍挂
-管理/测本：`dp start-console <玩家> <DungeonId>` · 灾厄测本 `/dp start EmberCalamity`（须标仅测试）· 盟 Boss：`/corerpg guild boss`
+维护备忘：P1 现行玩家入口 = TrMenu 主枢纽进 **Q01–Q07**（`/corerpg enter q0x`）· 扣体力。旧日/周/深渊/团本/精英菜单与 NI「票」是遗留物——**S0 闸门（D198–D202）下普通玩家进不了旧本**；次数体感以体力为准，不要写成「门票」。
+管理/测本（OP / 控制台）：`dp start-console <玩家> <DungeonId>` · 灾厄测本 `/dp start EmberCalamity`（仅测试）· 盟 Boss：`/corerpg guild boss`
 
 ## 地牢配置
 
@@ -26,23 +26,24 @@
 | `plugins/DungeonPlus/map/ember_raid/` | EmberRaid 独立图（石英大平台） |
 | `plugins/DungeonPlus/config.yml` | `dungeon-pre-folder` 已注册各 map |
 
-## 次数（遗留票物 / 体力）
+## 次数（遗留票物 · 现行=体力）
 
-维护备忘：DP 1.4 无原生「每日 N 次」字段，物品仅用于 DP 入场条件；现行玩家次数以体力为准。
+维护备忘：DP 1.4 无原生「每日 N 次」字段。下表 NI 是**遗留入场条件物**，不是给玩家教的「门票」；P1 现行扣次 = 体力。旧本在 S0 下对非 OP 已关，这些票不会成为玩家日常货币。
 
 | NI ID | 显示名 | 规则 |
 |-------|--------|------|
-| `ticket_ember_daily` | 余烬日票 | 进本扣 1；遗留票物 / DP 入场条件；现行次数=体力 |
-| `ticket_ember_weekly` | 余烬周票 | 进本扣 1；遗留票物 / DP 入场条件；现行次数=体力 |
-| `ticket_ember_abyss` | 余烬深渊票 | 进本扣 1；遗留票物 / DP 入场条件；现行次数=体力 |
+| `ticket_ember_daily` | 余烬日票 | 遗留 DP 入场条件物；现行次数=体力 |
+| `ticket_ember_weekly` | 余烬周票 | 同上 |
+| `ticket_ember_abyss` | 余烬深渊票 | 同上 |
 
 物品草案：`plugins/NeigeItems/Items/ember-dungeon-tickets.yml`  
-> **维护备忘（票务 NI 对齐）：** 进本扣次仍用 DP `<item:显示名>`（官方只认物品名）；给票/计数已走 NI ID。详见 `/workspace/minecraft/docs/status/STATUS-ember-ticket-ni-audit.md`。  
-维护备忘：自动发放未落地前，仅管理/测试可用 `/ni give <玩家> ticket_ember_daily 3` 做物测；不作为玩家操作说明。
+> **维护备忘：** 旧 DP `<item:显示名>` 条件仍可能引用显示名；给物/计数走 NI ID。详见 `docs/status/STATUS-ember-ticket-ni-audit.md`。  
+仅管理/测试可用 `/ni give <玩家> ticket_ember_daily 3` 做物测；**不要写成玩家操作说明**。
 
 ## 菜单
 
-`plugins/TrMenu/menus/ember_daily.yml` / `ember_weekly.yml` 进本已改为 `dp start …`
+- **P1 现行：** `plugins/TrMenu/menus/ember_hub.yml`（及 `ember_p1_*`）→ `/corerpg enter q01..q07`。
+- **遗留旧本菜单：** `ember_daily.yml` / `ember_weekly.yml` 等仍写 `corerpg enter daily|…`——普通玩家会被 S0-2 拒绝；菜单本身也无命令绑定（S0-8）。勿再写「已改为 `dp start`」（与现文件不符）。
 
 ## 重载建议
 
@@ -52,7 +53,7 @@
 /trmenu reload
 ```
 
-权限：玩家需 `dungeon.user` / `dungeon.start`（见 DP 文档）。
+权限：DP 仍声明 `dungeon.user` / `dungeon.start`；P1 下旧本另受 `%corerpg_gate_*%`（S0-1）约束，勿以为有 `dungeon.start` 就能开旧本。
 
 ## 维护备忘（地图与脚本）
 

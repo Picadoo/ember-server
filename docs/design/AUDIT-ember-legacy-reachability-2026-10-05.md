@@ -1,7 +1,8 @@
 # AUDIT · Ember 旧路径可达性审计（2026-10-05）— ARCH §6 N1
 
-> **性质：** 离线审计（只写文档），**不是决策、不是上线**：不改 Java / 配置 / TrMenu / `tools/p1sim`，不构建、不部署、不重启、不开机器人。§5 的 S0 草案是**提案，未实现**。
-> **基线：** `main` = `origin/main` `087fc8c`；线上 CoreRpg **1.65.34**（线上 jar 内 `plugin.yml` 与 `CoreRpg/src/main/resources/plugin.yml` 逐字相同，`unzip -p plugins/CoreRpg.jar plugin.yml | diff`）；P1 开关 `P/ember-v1.yml:6 enabled: true`；没有真实玩家，只有测试号。
+> **性质：** 离线审计快照（D197，2026-10-05）——当时只写文档、不改代码。§1–§4 的 LEAK 表保留为**历史证据**；§5 S0 条目已标 ✅ 落地状态。
+> **落地状态（D250 追记，2026-10-07）：** S0-1～S0-5、S0-8 已随 CoreRpg **1.65.35–1.65.38** 上线（D198–D202）。普通玩家侧 L1–L12 入口 / 发奖纵深已关；OP / 控制台仍放行。残余提案：S0-9（世界级传送兜底）、S0-10（旧仓库写路径）。对照 ARCH §0 #2 / §3 O1–O3 / §4 R1 / §6.1。
+> **基线（审计当时）：** `main` = `087fc8c`；CoreRpg **1.65.34**；P1 `enabled: true`。
 > **上级文档：** `docs/design/ARCH-ember-systems-map-2026-10-05.md`（§2 数据流、§3 O1–O3、§5 S0、§6 N1）。
 > **方法：** 从 `J/CoreRpgPlugin.java:939–1092 onCommand` 逐条路由到各服务的 `cmd / cmdRoot`；对照 `CoreRpg/src/main/resources/plugin.yml`、`server-runtime/permissions.yml`、`plugins/DungeonPlus/dungeon/*/option.yml`、`plugins/TrMenu/menus/*.yml`、`plugins/MythicMobs/Mobs/*.yml`、`P/*.yml`；`tools/p1sim/*.py` 用 `rg -i` 逐词确认是否建模。
 > **证据等级：** 【码】源码确认 ·【配】配置确认 ·【文】只见于文档 / 历史测试记录 ·【待测】静态推断、需实服验证 · **未确认** = 没能静态确认，不猜。
@@ -10,7 +11,7 @@
 
 ## 0. 一页结论
 
-1. **共 12 条 LEAK**（P1 开着时普通玩家能拿到 p1sim / p2econ 没建模的奖励），按风险排：
+1. **共 12 条 LEAK（审计当时快照）**——P1 开着时普通玩家曾能拿到 p1sim / p2econ 没建模的奖励。**D250：玩家侧已由 S0 关闭**；下表保留证据，勿再当「现行开放清单」：
 
 | # | 风险 | 一句话 | 主要证据 |
 |---|---|---|---|
@@ -27,12 +28,12 @@
 | L11 | 低 | `/corerpg guild create/donate/boss`：5000 币建盟 + 捐 200 碎片 → 盟 Boss，全队每人碎片 8 / 核心 1 / 骨尘 4 / `guild_gem` + 余烬经验 100；材料净亏但队友白拿、经验未建模 | `J/GuildService.java:487,696–770,782–830`、`P/guild.yml:4–34`、`DP/EmberGuildBoss/option.yml:16–18,30–39`【码 / 配】 |
 | L12 | 低（依赖 L1/L2/L7 才能到达） | 旧击杀币 / 旧击杀经验 / 旧悬赏进度：旧本实例和 `ember_event` 不在 `afk_caps.worlds` → **不封顶**；旧本小怪 `corerpg mmgive` 掉材料 / 旧装也不封顶 | `J/CoreRpgPlugin.java:839–877,1402–1461,1472–1494`、`P/config.yml:22,99–114`【码 / 配】 |
 
-2. **ARCH O1–O3 全部成立，而且比 ARCH 写的更松**：ARCH 只提到 `/corerpg enter`；静态读到的最大口子其实是 `/dp start` 直开（L1，连体力都不扣），以及「新号就是 Lv10」让日常门槛形同虚设（`J/PlayerData.java:36`、`P/progress.yml:140–141`）。
+2. **ARCH O1–O3 在审计当时全部成立，而且比当时 ARCH 写的更松**（最大口子是 `/dp start` 直开 L1 + 新号 Lv10）。**现况：** O1/O2/O3 已 CLOSED（S0-1～S0-4）；ARCH 正文已于 D250 与实现对齐。
 3. **菜单 / NPC 不是入口**：P1 主菜单 `TM/ember_hub.yml`（绑定 `ember` / `menu`，`:6–9`）及其可达子菜单里**没有**任何旧本或旧领取按钮（§2.3 的可达图）；旧入口菜单只挂在**不绑定命令**的 `TM/ember_hub_legacy.yml`（`:218/233/283/298`）；枢纽 NPC 只开 P1 菜单（`P/hub_npcs.yml:18–68`）；没有 Multiverse 传送门（`plugins/Multiverse-Portals/portals.yml` = `portals: {}`）；没有 Essentials / `/warp`（`SR/logs/latest.log` Enabling 列表）。**所有旧路径都是「手打命令」路径**——这对 S0 是好消息：一个命令层闸门就能封住绝大多数。
 4. **已经封好的**：`sign / activity / bounty`（`J/CoreRpgPlugin.java:1207/1237/1287`）、`auction`（`:1062`）、旧主线引路人（`J/QuestService.java:238,465`）、挂机庭旧发奖（`J/p1/EmberAfkService.java:216–219` + `P/ember-v1.yml:101 legacy_payouts: false`）、P1 本内旧击杀币（`J/p1/EmberRunService.java:154–161`）、P1 世界里旧属性 / 旧药（`J/StatService.java:318`、`J/LifeService.java:160`）、`EmberCalamity` DP 实例（OP 才能开，`DP/EmberCalamity/option.yml:17`）。
 5. **DEAD**：晶钻（`ember_crystal_cash`）没有玩家来源（只有管理员 `cash give` `J/CoreRpgPlugin.java:1656–1657` 和管理员邮件模板 `P/mail.yml:11–16`），所以 `shop buy * / monthly buy / 月卡登录币 / 战令付费轨` 对玩家是死路；`cash.yml` 各 `free_tickets` 发放函数恒返回 0（`J/TicketGrantService.java:110–113`）。
 6. **p2econ / p1sim 覆盖**：`rg -i` 在 `tools/p1sim/*.py` 里对 `arena / vip / monthly / kill_reward / EmberDaily / EmberWeekly / mail / guild / calamity / scrap / reforge / socket / warehouse / auction / free_tickets` 全部 0 命中；`cash.yml` 只读了 `stamina.base_max`（`tools/p1sim/p1config.py:84,103`）。也就是说 **12 条 LEAK 没有一条在模型里**。
-7. **推荐的前三个 S0 窗口**（§5）：① 旧本开本条件在 P1 下关门（改 `%corerpg_gate_*%` 一处，同时封 L1 / L2 的 DP 侧）；② `TicketEntryService.tryEnter` 非 P1 kind 在 P1 下拒绝（L2 命令侧，含 `/corerpg elite`）；③ 命令路由默认拒绝表先上 `arena / pass / vip / calamity join / scrap / reforge / socket / guild`（L3–L5、L7–L11）。
+7. **推荐的前三个 S0 窗口（当时）→ 均已落地**：① S0-1 `%corerpg_gate_*%`（D198）；② S0-2 `TicketEntryService` 拒旧 kind（D198）；③ S0-3 路由默认拒绝 + `legacy_gate.allow`（D199）。后续 S0-4 发奖纵深（D200）、S0-5 竞技场上限（D201）、S0-8 菜单探针无需改码（D202）。
 
 ---
 
@@ -230,7 +231,7 @@
 
 ---
 
-## 5. S0 草案：默认拒绝 + 白名单（**提案，未实现，未上线**）
+## 5. S0：默认拒绝 + 白名单（**S0-1～S0-5 / S0-8 已落地 · D198–D202**；S0-9 / S0-10 仍提案）
 
 > **2026-10-05 更新（D198）：** S0-1、S0-2 已实现并随 CoreRpg 1.65.35 上线（`J/LegacyGate.java` + `J/CoreRpgExpansion.java` gate_ / guildboss_pass + `J/TicketEntryService.java` tryEnter；P1 开着才生效，OP / `corerpg.admin` / 控制台放行）。S0-3～S0-10 仍是提案。
 >

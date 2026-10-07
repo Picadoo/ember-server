@@ -10,7 +10,7 @@
 ## 0. 一页结论
 
 1. **P1 已经是一套完整的第二个游戏，但它寄生在旧插件骨架上。** `CoreRpgPlugin.onEnable`（`J/CoreRpgPlugin.java:148–277`）仍无条件实例化 40 多个旧服务；P1 的烬斩、药水、进本路由、经验、材料仓数据分别住在旧类 `SkillService` / `LifeService` / `QuestService`+`TicketEntryService` / `ProgressService` / `WarehouseService` 里【码】。
-2. **最大的结构风险是「P1 下仍可达的旧奖励路径」**：`/corerpg enter daily|weekly|abyss|raid|elite` 不查 P1 开关、旧本发的 `mat_ember_shard` 等正是 P1 材料仓白名单里的材料；`/corerpg arena claim`（80 币/天）、`vip claim`（20 币/天）、旧击杀币等也都对所有玩家开放（没有权限插件，`plugin.yml` 全是 `default: true`）【码 / 配，待测】。这些来源都不在 p1sim / p2econ 里。
+2. **旧奖励路径曾是最大结构风险，S0 已对普通玩家封口（D198–D202 / 1.65.35–1.65.38）**【码 / 配】：`LegacyGate` + `ember-v1.yml legacy_gate` 挡住 `/corerpg enter <旧>`、`/dp start` 旧 gate、`arena/vip/pass/calamity/scrap/…` 路由，以及旧经验 / 击杀币 / 灾厄结算纵深防御。OP / `corerpg.admin` / 控制台仍放行（DP/MM 发奖脚本要走控制台）。历史口子见 AUDIT；残余提案仅 S0-9（世界级兜底）/ S0-10（旧仓库写路径）。这些旧来源仍不在 p1sim / p2econ 里——因为玩家侧已为 0。
 3. **玩家状态是一个字符串键大杂烩**：约 70 种计数器前缀挤在 `PlayerData.counters`（`cr_players.data` 一列 LONGTEXT）里；连「这件装备的词条 / 签名」都记在**主人**的计数器上（`p4_af_<uid>`、`p1_sig_<uid>`），不在 `cr_p1_item`，分解后也不清理【码】。
 4. **上帝类**：`EmberRunService` 3,774 行（入场、深渊、团本倒地、连战、结算、图录、投递、重启恢复、誓约、招募、PAPI 全在一起）、`EmberRunDirector` 2,471 行（每个内容包都是手写分支）、`CoreRpgPlugin` 1,856 行、`EmberGrowthService` 1,629 行【码】。每个内容包 = Java + yml + p1sim 模型 + 专用冒烟脚本，成本不会因为「暂停」而下降。
 5. **「每张图有自己的装备」目前只靠签名传奇 + 首领徽记实现**：基础件只有 3 个阶级 × 族 / 部位偏向（`loot_bias`），物品身份里没有来源地图（`source` 只有 `quest` / `drop`，`J/p1/EmberRunService.java:1839`）【码】。装备结构（6 槽 D169 / 6 槽第 0 阶段 / 8 槽 D168）三份文档互相取代，结构代码仍 HOLD【文】。
@@ -181,7 +181,7 @@ flowchart LR
   RR --> SIGAF
   IMP --> SIGAF
   SIGAF -.->|"生效于"| GEAR
-  LEG["旧路径（P1 下仍可达，§3 O1–O3）<br/>/corerpg enter daily…elite · arena / vip / monthly / pass 领取 · 旧击杀币"]
+  LEG["旧路径（§3 O1–O3 · S0 已对非 OP 封口）<br/>历史：/corerpg enter daily…elite · arena / vip / pass · 旧击杀币"]
   XP -.->|"等级达门槛"| LEG
   LEG -.-> COIN
   LEG -.-> MAT
@@ -191,7 +191,7 @@ flowchart LR
 
 - **主循环（与服主方向一致）**：主线结算是唯一同时产出装备、币、材料、印记、徽记的来源；挂机庭只产币 / 经验 / 绑定材料，满额每天 60–120 币（`P/ember-v1.yml afk.tiers`），低于一局主线的 300 币（`EmberRunRules.BASE_COIN`）——「挂机低于副本」在数值上成立【配 / 码】。挂机效率来自真实 P1 普攻公式（`afk` 注释：「自动普攻（真实 P1 满蓄力一击…）」），所以装备 → 挂机速度 → 材料 → 回去养装备的闭环成立，但挂机**不产任何装备或徽记**。
 - **一个币、两个世界**：余烬币只有一个字段，旧系统（竞技、勋阶、月卡、战令、邮件附件、旧击杀）和 P1 都往里写；`CoreGacha` 也通过反射直接读写它（`CoreRpgBridge`）。
-- **经验串起新旧**：P1 用旧 `ProgressService.grantFlatEmberXp`（`EmberRunService:1686`）发经验，同一个等级又是旧本的门槛（`progress.yml level_gates`），所以 P1 进度会自动「解锁」旧本入口（§3 O1）。
+- **经验串起新旧（入口已闸）**：P1 仍用旧 `ProgressService.grantFlatEmberXp` 发经验，等级仍是旧本门槛键；但 S0-1/S0-2 已让普通玩家进不了旧本，S0-4 也挡住旧 source 的经验发放——「升级 ≈ 解锁旧本」在玩家侧不再成立（§3 O1 CLOSED）。
 - **徽记 / 印记的来源很多**：同一种首领徽记有 6 条来源（重打、首通、残响、前哨、誓约、签到），每条有自己的计数器与周 / 月上限，规则分散在 `EmberRunService`、`EmberSignService`、`EmberGrowthService`（grep `EmberSignature.C_MARK`）【码】。
 
 ### 2.3 谁读写玩家状态
@@ -210,20 +210,19 @@ flowchart LR
 
 ## 3. 重叠与冲突
 
-**O1 · 旧副本入口在 P1 下仍可达，而且发 P1 材料**【码 / 配，待测】
-- `TicketEntryService.tryEnter`（`J/TicketEntryService.java:113–154`）只对 `kind.p1()`（q0x）转给 `EmberRunService`；`DAILY…DAILY_RAIL / WEEKLY / ABYSS / RAID / ELITE` 走旧流程（等级门 + 体力或「周免费抵扣」+ `dp start`），**不查** `EmberMode`。`cmdEnter`（`:271–297`）对玩家开放。
-- 旧本奖励直接 `ni give`：`plugins/DungeonPlus/dungeon/EmberDaily/option.yml:24–26`（核心碎片 1、附魔晶 1、碎片 5）、`EmberWeekly/option.yml:29–35`（核心 3、碎片 8、骨尘 4 + `corerpg loot … weekly_t1`）；这些 id 正是 `P/ember-v1.yml storage.vault.whitelist`。旧 DP 本里共有 11 个 `option.yml` 含 `mat_ember_shard`（EmberDaily* 7 个 + EmberWeekly / EmberRaid / EmberEliteWeekly / EmberGuildBoss）。
-- 门槛是余烬等级（`P/progress.yml level_gates`: daily 10、weekly 20、abyss 25、calamity 30、raid 35、elite 40），P1 经验会推高它（§2.2）。主菜单不再链接这些本（`ember_hub.yml` 只开 P1 菜单），但命令可打。
-- 旧本世界不在 P1 范围（前缀只有 `dungeon_EmberQ0`），里面是旧战斗规则，击杀还会触发 O3 的旧击杀币。
+**O1 · 旧副本入口曾可达且发 P1 材料 → CLOSED（S0-1 / S0-2，D198，1.65.35）**【码 / 配】
+- **现状：** P1 开着时，普通玩家 `/corerpg enter <旧 kind>` 被 `TicketEntryService` 拒绝；`/dp start` 旧本被 `%corerpg_gate_*%` / `guildboss_pass` 返回 `"no"`。OP / 控制台仍可测本。
+- **历史（审计快照）：** `TicketEntryService.tryEnter` 曾只对 `kind.p1()`（q0x）转给 `EmberRunService`；`DAILY…DAILY_RAIL / WEEKLY / ABYSS / RAID / ELITE` 走旧流程且**不查** `EmberMode`。
+- **历史发奖形态（配置仍在，入口已闸）：** 旧本 `option.yml` 仍写 `ni give` 核心碎片 / 碎片等（正是 vault 白名单 id）；11 个旧 DP 本含 `mat_ember_shard`。等级门槛仍在 `progress.yml level_gates`，但非 OP 进不去。主菜单本就不链旧本；命令侧由 S0-2 拒绝。
+- **历史战斗侧：** 旧本世界不在 P1 前缀（仅 `dungeon_EmberQ0`）；若有人（OP）硬开，击杀曾走 O3——现由 S0-4 纵深挡住。
 
-**O2 · 旧的每日领币命令仍开放**【码 / 配，待测】
-- `/corerpg arena claim` → `ArenaService.cmdClaim`（`:308–317`）每天 `daily.coin: 80`（`P/arena.yml:11–12`），另有参赛 10 / 胜 25 币（两号互刷胜场可得币）。
-- `/corerpg vip claim` → `CashService.cmdVipClaim`（`:505–520`），勋阶 0 也给 `tier0_daily_claim_coin: 20`（`P/cash.yml:99–103`，`vip.enabled: true`）。
-- 月卡登录币（`CashService:290`）、战令 `pass free / claim`（`CoreRpgPlugin` `cmdPass`）、战令付费解锁的兜底 300 币（`CashService:429`）都还在。
-- D180 只在 P1 下关了 `sign / activity / bounty`（`CoreRpgPlugin:1207 / 1237 / 1287`），这些没关。没有加载任何权限插件（`server-runtime/logs/latest.log` 的 Enabling 列表里无 LuckPerms；`plugins/LuckPerms/` 只有目录无 jar），`plugin.yml` 里 `corerpg.use / arena / shop / monthly …` 全是 `default: true`。
+**O2 · 旧的每日领币命令曾开放 → CLOSED（S0-3，D199，1.65.36；S0-5 场次上限 D201）**【码 / 配】
+- **现状：** P1 开着时，`LegacyGate.refuseRoute` 拒绝普通玩家的 `arena` / `vip claim` / `pass free|claim` / `monthly` / `shop` 等（白名单见 `P/ember-v1.yml legacy_gate.allow`）。竞技场另有 `daily_coin_matches` 上限（即使日后重开也不无顶）。
+- **历史：** `/corerpg arena claim` 80 币/天、`vip claim` 勋阶 0 也 20 币、月卡登录币、战令 `pass free/claim` 曾对所有人开放；D180 只关了 `sign/activity/bounty`。无权限插件、`plugin.yml` 多为 `default: true`——故必须靠路由闸，不能靠权限。
 
-**O3 · 旧击杀币在 P1 世界之外照发**【码 / 配】
-`CoreRpgPlugin.onDeath`（`:831–877`）：P1 本（`EmberRunService.blocksLegacy`）和挂机庭（`EmberAfkService.blocksLegacyPayout`）之外，名字含「余烬 / Ember / Crypt」或僵尸 / 骷髅的击杀给 `coin.kill_reward: 1`（`P/config.yml:22`）+ 旧经验 + 旧悬赏进度；`afk_caps.worlds: [ember_afk, world]` 之外的世界 `inst = true` → **不封顶**（`:851–852`）。
+**O3 · 旧击杀币曾在 P1 世界外照发 → CLOSED（S0-4，D200，1.65.37）**【码 / 配】
+- **现状：** P1 开着时 `legacyKillPayoutBlocked(world)` / `legacyXpBlocked(source)` 挡住非白名单世界的旧击杀币 / 旧经验；公共灾厄结算亦被拒。白名单世界见 `legacy_gate.kill_payout_worlds`（默认空 = 全关）。
+- **历史：** `onDeath` 在 P1 本与挂机庭之外，对「余烬 / Ember / Crypt」名或僵尸 / 骷髅发 `kill_reward: 1`，且 `afk_caps` 外世界不封顶。
 
 **O4 · 同一职能的新旧两套并存**【码】
 
@@ -271,11 +270,11 @@ flowchart LR
 | G2 | 签名传奇只改行为、限 2 条、同 tag 不叠、有预算 | 已上线；上限 / 同 tag / 与天赋同 tag 互斥在 `EmberSignature` + `EmberGrowthService`；预算在 `tools/p1sim/mainline.py` 检查（`out-d174-mainline.md`）。`COORD-legendary-effects` 已 CLOSED-STALE，并入 D174 | 新效果只能用 Java 里已有的修饰键（D174 §0 第 5 条）；新增一种行为 = 改 Java + 手改 `mainline.py SIGS`。没有「效果原语表」 | 中 |
 | G3 | 挂机把玩家推回主线刷装 | 层门槛只看首通（`requires: q01/q03/q05/q07`），奖励只有币 / 经验 / 绑定材料；速度来自真实 P1 普攻 → 装备越好挂得越快（D177 rev 2） | 闭环成立但只走「材料 → 强化」一条线；没有任何挂机层要求某张图的签名 / 族才能扛住——这不一定要加（会变成新的锁），但应在 S4 一并决定 | 低 |
 | G4 | 不加新的永久战力 | 新内容都守住了；**既有**的 D142 勋记仍含永久加成：`coin 1.04`、`abyss_taken 0.98`（只在深渊）、`shard_bonus 1`（`P/ember-v1-growth.yml honors.caps`） | 不是新增，只是记录：以后「勋记 / 图鉴」扩展必须走经济 / 便利，不能再加战斗类 | 低 |
-| G5 | 旧宝石关闭 | 只靠 id 不匹配（§3 O6） | 没有显式开关；旧命令可用 | 低 |
+| G5 | 旧宝石关闭 | S0-3 路由拒绝 `socket`（D199）；P1 件 id 本就不在旧 `socket:` 表（§3 O6） | 命令层已关；无单独 `socket.enabled: false` 键（可接受） | 低 |
 
 ### 4.2 结构风险
 
-**R1 · 旧奖励路径绕过 P1 经济（高）**——§3 O1–O3。p2econ / p1sim 只模拟 P1 来源，旧来源让「范围内」结论在真人上线后不成立；同时也是「两号互刷竞技胜场」这类利用面。【码 / 配，待测：需要 1 个测试号实际敲一遍命令确认】
+**R1 · 旧奖励路径绕过 P1 经济 → 玩家侧 CLOSED（S0-1～S0-5 / S0-8，D198–D202）**【码 / 配】——§3 O1–O3 入口与发奖纵深已闸；p2econ / p1sim 仍只模拟 P1 来源（正确：旧来源对非 OP 应为 0）。残余：S0-9 世界级传送兜底、S0-10 旧仓库写路径（非来源 LEAK）。
 
 **R2 · 上帝类（中）**
 
@@ -381,13 +380,13 @@ flowchart LR
 ## 6. 下一步（按优先级，每项都是一个例行窗口能做完的离线活）
 
 1. **N1 · 旧路径可达性审计表（离线，只写文档）**：逐条列出 `/corerpg` 全部子命令（`CoreRpgPlugin.onCommand` 路由 + `plugin.yml` 权限）× 是否查 P1 开关 × 发什么 / 扣什么 × 是否进 p2econ，再加 DP 旧本定义（`plugins/DungeonPlus/dungeon/` 下 13 个 `Ember*` 非 `EmberQ0*` 目录：EmberDaily* 7 个 + EmberWeekly / EmberAbyss / EmberRaid / EmberEliteWeekly / EmberGuildBoss / EmberCalamity；小写目录是地图模板）的奖励行、旧击杀币世界清单；给出 S0 的默认拒绝 / 白名单草案。产出 `docs/design/AUDIT-ember-legacy-reachability-<date>.md`。不改代码；如需确认「真的进得去」，留给下一次合批冒烟用 1 个测试号验证。
-   → 已完成：[`AUDIT-ember-legacy-reachability-2026-10-05.md`](AUDIT-ember-legacy-reachability-2026-10-05.md)（D197，2026-10-05）：12 条 LEAK（最高风险：`/dp start` 直开旧本不扣体力、`/corerpg enter <旧>` 不查 P1、竞技场对战币无上限）+ S0 默认拒绝 / 白名单草案（提案，未实现）+ 11 条待实测。
+   → 已完成：[`AUDIT-ember-legacy-reachability-2026-10-05.md`](AUDIT-ember-legacy-reachability-2026-10-05.md)（D197，2026-10-05）：12 条 LEAK 快照 + S0 草案。**S0 实现：** S0-1/2 D198（1.65.35）、S0-3/6/7 D199（1.65.36）、S0-4 D200（1.65.37）、S0-5 D201（1.65.38）、S0-8 探针 D202（无需改码）。文档同步见 **D250**。
 2. **N2 · 计数器注册表草案（离线，只写文档）**：把 §2.3 / R3 的约 70 个前缀整理成表（键、所属类、周期、资产与否、清理规则、是否物品属性），标出要迁回物品的 3 个（`p4_af_` / `p4_afp_` / `p1_sig_`）和首通 `content_version` 问题，作为 S1 的规格。
    → 已完成：[`REG-ember-counter-registry-2026-10-05.md`](REG-ember-counter-registry-2026-10-05.md)（D203，2026-10-05）：81 个键族（P1 70 + 旧 11）；物品属性挂在主人身上的其实是 5 个（加 `p4_rrn_` / `p4_rro_`）；首通 `content_version` 换期会删掉旧版本键（不只是重发首通包），建议拆成「首通事实 @all」+「首通包已领 @ver」；`p1_codex_` 与 `p1_codex_stage_` 前缀包含；`bmat:` / `failrefund@` 不是计数器键。
 3. **N3 · 来源 / 消耗 / 上限总表（离线，只写文档）**：从 `EmberRunRules`、`ember-v1*.yml`、`EmberSignature`、`EmberSignService`、`EmberAfkService` 读出每条发放与消耗，对照 `tools/p1sim/p2econ.py` 实际建模了哪些，列出未建模项（含 §3 O1–O3 的旧来源），作为 S2 的规格。
    → 已完成：[`REG-ember-source-sink-cap-2026-10-05.md`](REG-ember-source-sink-cap-2026-10-05.md)（D204，2026-10-05）：P1 来源 32 条 + 旧来源 5 组（S0 后全为 0）、消耗 18 条、按账户的上限表、p1sim 族覆盖矩阵；未建模的主要是首领徽记账户（首通 / 重打 / 誓约 / 残响 / 前哨徽记 + 烙印 / 调律消耗）、余烬徽库存、生活玩法（稳固符每周吃 3 核心）、扭蛋兑券；附 S2 单一发放 / 消耗入口规格六条。
 
-> 这三项都不改源码、配置和 p1sim，不需要部署或机器人；做完后由总控决定是否开 S0 实现。
+> 这三项当时都不改源码；N1–N3 文档已完成，S0 实现已落地（见 §6.1），本文 §0 / §3 / §4 R1 的「仍可达」措辞已在 D250 与实现对齐。
 
 ### 6.1 实现进度（2026-10-06 追记）
 
@@ -397,5 +396,5 @@ flowchart LR
 | S1 | S1-1 计数器注册表 D206、首通拆分（S1 第 3 条）D205、S1-4 物品键回物品 D208、S1-5 周期回拨防护 D207 | 计数器注册表 ↔ 源码字面量覆盖率随新键维护 |
 | S2 | S2-1 登记表 D213 → S2-2～S2-6 grant/spend 路由 D215–D223 → S2-7 yml 真源 D224 → S2-8 徽记/徽/印记 D228（1.65.54）→ S2-9 S13 深渊 SourceId + vault 写入扫描 D229（1.65.55） | C15/C16 暂停期不动；p2econ 徽库存（化妆品重启前） |
 | S3 | **S3-1 Rush D230（1.65.56）· S3-2 Abyss D231（1.65.57）· S3-3 Pledge D232（1.65.58）· S3-4 Raid D233（1.65.59）· S3-5 Recruit D234（1.65.60）· S3-6 Entry gates D235（1.65.61）· S3-7 encounter primitives D236（1.65.62）· S3-8 Session D237（1.65.63）· S3-9 Settlement D238（1.65.64）· S3-10 BossMove/RoomObjective D239（1.65.65）· S3-11 Papi 分节 D240（1.65.66）· S3-12 词缀行为原语 + `%ember_daily/weekly_left%` D241（1.65.67）** | —（S3 完成；p1sim 读原语表见 `DESIGN-ember-affix-primitives-d241.md` §3，排在 S4 后） |
-| S4 | **S4-1 D242（文档 + 测试，无发版，1.65.67 不变）**：权威装备结构文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读 `ember-source-map.yml` + `EmberSourceMapTest`（缺来源 / 经济键 / 账本键即失败）；缺口 G1–G11 · **S4-2 D243（1.65.68 / bv58）**：G1–G3 登记 S33 图录阶段币 / S34 宝箱额外件 / S35 起步包（数量不变，只加标签）、G8 `S09.per_rule`、G4 `givedup` → `source=admin`、G5 打包配置 = 线上、G6/G7/G11 注释、G9 p1sim 读 `ember-source-map.yml`（21 格 A/B 全部 ±2pp 内） · **S4-3 D244（1.65.69 / bv58）**：词缀原语导出表 `tools/p1sim/affix-table.json`（`EmberAffixExportTest`，漂移即失败），p1sim 读表（gate 无翻转，W30 5.50 → 5.31）；G10 登记 S36 钓鱼 / S37 扭蛋券 / S38 扭蛋产出 / C19 扭蛋抽取 + source map `stocks:`（只打标签） · **S4-4 D245（1.65.70 / bv58）**：第 4 步「物品身份加 `source_map`」完成——新装备在物品上记来源 `origin`（NBT `om/os/or/ot` = 图 / 模式、来源行 S##、run id、时间；`cr_p1_item.origin`），行为中性、旧件照常有效；source map `item_provenance:` + `itemProvenanceMatchesCode` | **D246（离线，10-06）完成**：6 槽掉落模型修正 w80_cap 过全部 gate（Stage 0 文档 D246 节）· **D247（离线，10-07）完成**：regen/charge/frost/mortar/molten 进 p1sim（`_plain` 基线，室门 2.9 pp）· **D248（离线，10-07）完成**：D247 全量 300 人养成周数关账（深渊 5.11，相对 D244 的 5.31 = −0.20，六路线 ±0.5 内）；**D249（离线，10-07）完成**：自检 3 条老红灯清零（图录预警秒数、gear6/gear6diag Random、signin 走 rules）；**下一薄窗**：文案/注释或其它文档债（六槽护甲仍待显式开工，本流水线不开） |
+| S4 | **S4-1 D242（文档 + 测试，无发版，1.65.67 不变）**：权威装备结构文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读 `ember-source-map.yml` + `EmberSourceMapTest`（缺来源 / 经济键 / 账本键即失败）；缺口 G1–G11 · **S4-2 D243（1.65.68 / bv58）**：G1–G3 登记 S33 图录阶段币 / S34 宝箱额外件 / S35 起步包（数量不变，只加标签）、G8 `S09.per_rule`、G4 `givedup` → `source=admin`、G5 打包配置 = 线上、G6/G7/G11 注释、G9 p1sim 读 `ember-source-map.yml`（21 格 A/B 全部 ±2pp 内） · **S4-3 D244（1.65.69 / bv58）**：词缀原语导出表 `tools/p1sim/affix-table.json`（`EmberAffixExportTest`，漂移即失败），p1sim 读表（gate 无翻转，W30 5.50 → 5.31）；G10 登记 S36 钓鱼 / S37 扭蛋券 / S38 扭蛋产出 / C19 扭蛋抽取 + source map `stocks:`（只打标签） · **S4-4 D245（1.65.70 / bv58）**：第 4 步「物品身份加 `source_map`」完成——新装备在物品上记来源 `origin`（NBT `om/os/or/ot` = 图 / 模式、来源行 S##、run id、时间；`cr_p1_item.origin`），行为中性、旧件照常有效；source map `item_provenance:` + `itemProvenanceMatchesCode` | **D246（离线，10-06）完成**：6 槽掉落模型修正 w80_cap 过全部 gate（Stage 0 文档 D246 节）· **D247（离线，10-07）完成**：regen/charge/frost/mortar/molten 进 p1sim（`_plain` 基线，室门 2.9 pp）· **D248（离线，10-07）完成**：D247 全量 300 人养成周数关账（深渊 5.11，相对 D244 的 5.31 = −0.20，六路线 ±0.5 内）；**D249（离线，10-07）完成**：自检 3 条老红灯清零（图录预警秒数、gear6/gear6diag Random、signin 走 rules）；**D250（离线，10-07）完成**：ARCH/AUDIT/DP README 同步——O1/O2/O3/R1 与 N1「提案未实现」改为 S0 已落地（D198–D202）；**下一薄窗**：其它文案/注释债或 S0-9/S0-10 规格薄扫（六槽护甲仍待显式开工，本流水线不开） |
 
