@@ -1,0 +1,5 @@
+base       rot n=1200 W30 6.95 (halves [6.72, 7.14]) w12 0.571 off@Q07 0.207 off@w12 0.140 T3tgt2@w12 0.860 rej_curoff 0.39
+w80_cap    rot n=1200 W30 6.9 (halves [6.64, 7.14]) w12 0.568 off@Q07 0.146 off@w12 0.142 T3tgt2@w12 0.858 rej_curoff 0.40
+w80_cap_int rot n=1200 W30 6.85 (halves [6.47, 7.2]) w12 0.572 off@Q07 0.146 off@w12 0.138 T3tgt2@w12 0.863 rej_curoff 0.38
+w80_cap    ΔW30 vs base -0.04 wk, paired 95% CI [-0.23, +0.16] (n=1200)
+w80_cap_int ΔW30 vs base -0.09 wk, paired 95% CI [-0.27, +0.11] (n=1200)

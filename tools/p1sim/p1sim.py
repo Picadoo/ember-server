@@ -161,6 +161,7 @@ def awakening(blade, charm):
 # armor piece equal to the charm (tier / enhance / quality / craft) H and M are exactly the 2-slot values.
 SIX = __import__('json').loads(os.environ['P1SIM_SIX']) if os.environ.get('P1SIM_SIX') else None  # e.g. {"w": [0.4, 0.15, 0.15, 0.15, 0.15], "drop": 1, "start": true, "cost": {"charm": 0.4, "armor": 0.15}}
 ARMOR_SLOTS = ('head', 'chest', 'legs', 'boots')
+ARMOR_ROUND_K = 0.25  # D313 T0': cost multipliers at or below this are the armor coefficient (charm >= 0.7 in every variant)
 # D246 common random numbers (opt-in, P1SIM_CRN=1): every run reseeds the combat stream, the drop / enhance stream and a
 # separate armor stream from (player seed, run index), and every armor draw (armor drop count / roll / slot, armor
 # enhance) uses the armor stream. A 2-slot and a 6-slot player on the same seed then see the same blade / charm drops and
@@ -1552,11 +1553,16 @@ class Player:
     def cost_round(v, k):
         """D313 (six-slot Stage1 T0 · G7): one cost component v × multiplier k. Default (no SIX / no SIX['round']) = the
         plain product v * k, bit-identical to before. SIX['round'] == 'ceil1' = the integer rule T1 would ship: each
-        nonzero component ceil(v * k) with a floor of 1 (zero stays zero); k == 1 (blade / 2-slot) is left untouched."""
-        if SIX is None or SIX.get('round') != 'ceil1' or k == 1.0:
+        nonzero component ceil(v * k) with a floor of 1 (zero stays zero); k == 1 (blade / 2-slot) is left untouched.
+        T0' 'c1a0': charm components as 'ceil1'; armor components (multiplier <= ARMOR_ROUND_K = the armor coefficient)
+        rounded to the nearest integer, half up, with a floor of 0 (a 0.2-shard armor step is free)."""
+        mode = SIX.get('round') if SIX is not None else None
+        if mode not in ('ceil1', 'c1a0') or k == 1.0:
             return v * k
         if not v:
             return 0
+        if mode == 'c1a0' and k <= ARMOR_ROUND_K:  # T0' (D313): armor items nearest (half up), floor 0
+            return math.floor(round(v * k, 9) + 0.5)
         return max(1, math.ceil(round(v * k, 9)))
 
     def buy_potions(self):
