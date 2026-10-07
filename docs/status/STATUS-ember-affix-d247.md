@@ -23,7 +23,7 @@
 | selfcheck D247 7 条 | **PASS**（仓库原有 3 个已知 FAIL 不变：图录预警文案、gear6 `default_rng`、signin 直读） |
 | `affix-d247.py --n 150`（42 格 ×5 新词缀 vs `_plain`，帽 3.0 pp） | **WITHIN RANGE** · MAX_ABS_DPP **2.9**（q07 书参考 dodge 0.5 · charge） |
 | `affixpack5.py --n 150`（旋光/火链 vs `_plain`） | **WITHIN RANGE** · MAX_ABS_DPP **2.9** · 压力 −毒十字 **1.8** |
-| W30 p2econ | **室门优先已过**；全量 300 人因本机墙钟延后。spot `n=40` 最早 **4.67** 周（D244 `n=300` 为 5.31；样本量不同，不据此宣称翻转） |
+| W30 p2econ 300×12 | **D248 关账**：标题深渊 **5.11** 周（相对 D244 的 5.31 = −0.20）；六路线全在 ±0.5 内。见 `STATUS-ember-affix-d248.md` |
 
 原始表：`tools/p1sim/out-affix-d247.md`。
 
@@ -34,5 +34,6 @@
 
 ## 下一刀
 
-- Stage 1（6 槽护甲只有属性）仍待总控 / 服主**显式开工**（D246 前置已满足）
-- 可选：把 D247 的 exposure / frost 代理换成有坐标的闪避模型（另开窗）
+- ~~全量 W30~~ → **D248 关账**
+- 六槽护甲施工仍**不开**（要等明确开工令）
+- 下一薄窗候选：自检 3 条老红灯 / 文案注释
