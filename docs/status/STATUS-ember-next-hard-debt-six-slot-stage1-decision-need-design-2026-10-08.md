@@ -6,6 +6,7 @@
 **上游：** D311 周报脚本已收 · D310 检查单已收 · D309 副手关窗 · D308 就绪硬表已收 · §1 M 波 + D301–D307 已收 · 样本 R 全表不得开 · 灰印副招 **T0/T0b ❌ · HOLD** · 天赋换机制 **HOLD** · Pack6 **硬禁** · 六槽 Stage1 **文档 SETTLED · 代码 HOLD**（D169；Stage0 前置「已满足」· 加固硬约束仍写 **六槽不做**）  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R** · **不写六槽代码**  
 **硬规格（待策划交稿）：** [`DESIGN-ember-six-slot-stage1-decision-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage1-decision-2026-10-08.md)（待建）· STATUS=待批 A · backlog `B-six-slot-stage1-decision`  
+**交稿旁注（2026-10-08 · 策划）：** 已交 [`DESIGN-ember-six-slot-stage1-decision-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage1-decision-2026-10-08.md) · **STATUS=待批 A** · 策划据证据改荐 **方案 B**（权威 §9「前置已满足、待显式开工」已核实；加固「六槽不做」作用域 = 已收的加固窗；D309 关副手后甲槽为唯一正规横向槽位；p1sim 已有六槽模型，T0 = bv60 复跑 + 小接线，不过即回 HOLD）；本窗零代码、不跑 p1sim、不开任一 R；可选方案 A；W 否决。待总控批注。  
 **打开理由：** D169 / 装备权威写「Stage0 前置已满足 · Stage1 待总控/服主显式开工」；加固稿与近档 tip 一律 **六槽不做**。两套口径并存 = 假悬空硬债。要在**不开样本 R、不写六槽 Java/NI、不偷开 Pack6**前提下，出一张正式决策页：**继续 HOLD 关窗（荐 A）** 或 **显式开工规格（B · 仍本窗零代码）**——对齐副手 D309 关窗范式。
 
 ---
