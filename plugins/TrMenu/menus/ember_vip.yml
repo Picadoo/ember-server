@@ -1,5 +1,5 @@
-# 余烬勋阶 — 累计充值晶钻晋升 0～10（CoreRpg 1.6.0 progress.yml vip_tiers）· 日礼 1 次/日
-# docs/design/DESIGN-ember-rpg-systems.md §8.2
+# 余烬勋阶 — 累计充值晶钻晋升 0～10（CoreRpg progress.yml vip_tiers）
+# D284：P1 下旧勋阶日礼币挡发（D281）；菜单诚实，不暗示可领币
 
 Title: '§6余烬 · 勋阶'
 
@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1'
-    - 'tell: §6【勋阶】 §7QoL 为主 · 累计充值晶钻晋升 · 日礼每日 1 次'
+    - 'tell: §6【勋阶】 §7P1 下暂不发放旧勋阶币礼 · 请用签到 / 周目标 / 挂机庭'
 
 Icons:
   '#':
@@ -36,7 +36,8 @@ Icons:
         - '§7层级 §f0～10§7（累计充值晶钻，不降级）'
         - '§8I 68 · II 198 · III 488 · IV 988 · V 1988 …'
         - ''
-        - '§7特权：日礼币 / 余烬经验 +1%/阶 / 仓库 +1 格/阶 / 称号'
+        - '§cP1 现行：旧日礼币不发'
+        - '§7可查层级 / 称号等展示位；币请走签到、周目标、挂机'
         - ''
         - '§e➥ §f查看我的勋阶'
     actions:
@@ -47,18 +48,19 @@ Icons:
   Q:
     display:
       material: emerald
-      name: '§a领取日礼'
+      name: '§8领取日礼 · P1 暂停'
       lore:
         - ''
-        - '§7轻量 QoL：余烬币（未开通勋阶 20 · 勋阶I+ 120）'
-        - '§8每日 1 次'
+        - '§cP1 下暂不发放旧勋阶日礼币'
+        - '§7请用：签到 / 周目标 / 挂机庭'
+        - '§8点这里只会收到灰字说明，不会到账'
         - '§c不含攻击加成'
         - ''
-        - '§e➥ §f领取'
+        - '§e➥ §f查看说明（不会发币）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a【勋阶·日礼】 §7尝试领取…'
+        - 'tell: §8【勋阶·日礼】 §7P1 下暂不发放 · 请用签到 / 周目标 / 挂机庭'
         - 'command: corerpg vip claim'
         - 'command: corerpg vip'
 
@@ -68,7 +70,7 @@ Icons:
       name: '§e前往商城'
       lore:
         - ''
-        - '§7月卡 / 战令 / 体力药'
+        - '§7月卡登录礼照常 · 战令/勋阶币礼 P1 暂停'
         - ''
         - '§e➥ §f打开商城'
     actions:
@@ -82,7 +84,8 @@ Icons:
       name: '§e打开邮寄'
       lore:
         - ''
-        - '§7领取勋阶 / 战令附件'
+        - '§7系统邮件 / 维护补偿'
+        - '§8旧勋阶附件在 P1 下也不会新发币礼'
         - ''
         - '§e➥ §f邮寄'
     actions:

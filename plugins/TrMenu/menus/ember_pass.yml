@@ -1,5 +1,5 @@
-# 余烬战令 — 每日免费补给 + 赛季 Lv1～30 等级奖励（CoreRpg 1.6.0 progress.yml pass_rewards，邮件发货）
-# docs/design/DESIGN-ember-economy-monetization.md §5.3
+# 余烬战令 — 旧免费补给 / 等级奖励在 P1 下挡发（D281）
+# D284：菜单诚实；付费轨解锁入口仍可点，但不暗示 P1 可领旧币礼
 
 Title: '§b余烬 · 战令'
 
@@ -19,7 +19,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-1'
-    - 'tell: §b【战令】 §7每日补给 + 等级奖励（Lv1～30）· 付费轨需解锁 · §c不出核心'
+    - 'tell: §b【战令】 §7P1 下暂不发放旧战令币礼 · 请用签到 / 周目标 / 外观'
 
 Icons:
   '#':
@@ -30,21 +30,19 @@ Icons:
   F:
     display:
       material: paper
-      name: '§a免费轨 · 领取补给'
+      name: '§8免费轨补给 · P1 暂停'
       lore:
         - ''
-        - '§7余烬币 80 + 碎片 ×2'
-        - '§8经系统邮件发放 · §e每日 1 次'
-        - '§8赛季经验：签到 10 · 日常通关 20 · 周本 40 · 深渊 20 · 团本 40 · 盟Boss 20 · 精英周 15（日上限 120）'
+        - '§cP1 下暂不发放旧战令免费轨币/碎片'
+        - '§7请用：签到 / 周目标 / 外观（余烬徽）'
+        - '§8点这里只会收到灰字说明，不会到账'
         - ''
-        - '§e➥ §f发送并尝试一键领取'
+        - '§e➥ §f查看说明（不会发奖）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        # 2026-09-26 audit: was console mail send on every click (unlimited coin/shards) → CoreRpg 1.4.10 daily-limited
+        - 'tell: §8【战令·免费轨】 §7P1 下暂不发放 · 请用签到 / 周目标 / 外观'
         - 'command: corerpg pass free'
-        - 'command: corerpg mail claim all'
-        - 'tell: §8若未自动入账，打开枢纽 → 邮寄 领取'
 
   U:
     display:
@@ -52,57 +50,53 @@ Icons:
       name: '§6解锁付费轨'
       lore:
         - ''
-        - '§7外观、币、体力药 ×5（6/12/18/24/30 级）'
-        - '§c不出核心、不出成品高伤装'
+        - '§7晶钻解锁本季付费轨标记（外观向）'
+        - '§cP1 下旧等级币礼 / 补给仍不发'
+        - '§8不卖毕业伤害 · 不出核心'
         - ''
         - '§6价 §f48 §6晶钻'
-        - '§8购买后寄出欢迎礼 · 自动领取邮件'
         - ''
-        - '§e➥ §f查看晶钻并领欢迎礼'
+        - '§e➥ §f尝试解锁（币礼仍挡）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §6【战令·付费轨】 §7尝试解锁 · 价 §f48 §7晶钻'
+        - 'tell: §6【战令·付费轨】 §7解锁不恢复 P1 下的旧币礼 · 价 §f48 §7晶钻'
         - 'command: corerpg shop buy pass_unlock'
         - 'command: corerpg cash'
-        - 'command: corerpg mail claim all'
 
   I:
     display:
       material: book
-      name: '§e赛季规则'
+      name: '§e赛季说明 · P1'
       lore:
         - ''
-        - '§7约 30 天一季'
-        - '§7双轨并行 · 等级共享经验'
-        - '§7经验：签到 10 · 日常通关 20 · 周本 40 · 深渊 20 · 团本 40 · 盟Boss 20 · 精英周 15'
-        - '§8每日上限 120 · 80 经验/级 · 最高 30 级'
-        - '§8红线：不卖毕业伤害'
+        - '§c旧战令经验 / 领取在 P1 下已停用'
+        - '§7日常目标请用主菜单：签到 · 周目标 · 赛季外观'
+        - '§8与月卡登录礼无关（月卡照常发）'
         - ''
-        - '§e➥ §f查看我的赛季等级'
+        - '§e➥ §f查看说明'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'tell: §e【战令】 §7约30天季 · 双轨 · 付费轨外观+券+体力药，无核心'
+        - 'tell: §e【战令】 §7P1 下旧轨停用 · 请用签到 / 周目标 / 外观'
         - 'command: corerpg pass'
 
   L:
     display:
       material: chest
-      name: '§6等级奖励 · 一键领取'
+      name: '§8等级奖励 · P1 暂停'
       lore:
         - ''
-        - '§7赛季 Lv1～30：币 / 碎片 / 附魔晶 / 体力药'
-        - '§7Lv30 外观碎片 · §8免费轨无装备'
-        - '§7付费轨（已解锁）另有体力药×5、保护券、孔石'
+        - '§cP1 下暂不发放旧战令等级币礼'
+        - '§7请用：签到 / 周目标 / 外观'
+        - '§8点这里只会收到灰字说明'
         - ''
-        - '§e➥ §f领取已达成等级的奖励（邮件）'
+        - '§e➥ §f查看说明（不会发奖）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'tell: §8【战令·等级】 §7P1 下暂不发放 · 请用签到 / 周目标 / 外观'
         - 'command: corerpg pass claim'
-        - 'command: corerpg mail claim all'
-        - 'command: corerpg pass rewards'
 
   C:
     display:
@@ -110,7 +104,7 @@ Icons:
       name: '§e打开邮寄'
       lore:
         - ''
-        - '§7查看 / 领取战令邮件附件'
+        - '§7查看 / 领取系统邮件'
         - ''
         - '§e➥ §f打开邮寄'
     actions:

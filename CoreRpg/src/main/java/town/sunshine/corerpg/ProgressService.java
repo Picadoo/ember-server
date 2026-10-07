@@ -279,7 +279,7 @@ public final class ProgressService {
 
     public void cmdPassClaim(Player p) {
         if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
-            p.sendMessage(ChatColor.GRAY + "[战令] P1 模式下不发旧战令等级奖励（请用主线 / 签到）。");
+            p.sendMessage(ChatColor.GRAY + "[战令] P1 下暂不发放旧战令币礼 · 请用签到 / 周目标 / 外观。");
             return;
         }
         PlayerData d = dataStore.get(p.getUniqueId());

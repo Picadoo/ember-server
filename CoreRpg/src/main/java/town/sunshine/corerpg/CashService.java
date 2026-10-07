@@ -498,6 +498,11 @@ public final class CashService {
             player.sendMessage(ChatColor.DARK_GRAY + "  日礼未启用");
             return;
         }
+        if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
+            // D284: don't advertise claim while P1 blocks payouts
+            player.sendMessage(ChatColor.GRAY + "  日礼币：P1 下暂不发放旧勋阶币礼 · 请用签到 / 周目标 / 挂机庭");
+            return;
+        }
         String today = DailyService.today();
         boolean claimed = today.equals(data.getVipDailyClaimDate());
         player.sendMessage(ChatColor.GRAY + "  日礼币 " + (tier <= 0 ? vipTier0ClaimCoin : vipDailyClaimCoin)
@@ -510,7 +515,7 @@ public final class CashService {
             return;
         }
         if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
-            player.sendMessage(ChatColor.GRAY + "[勋阶] P1 模式下不发余烬币日礼（请用主线 / 挂机庭）。");
+            player.sendMessage(ChatColor.GRAY + "[勋阶] P1 下暂不发放旧勋阶币礼 · 请用签到 / 周目标 / 挂机庭。");
             return;
         }
         PlayerData data = dataStore.get(player.getUniqueId());
@@ -530,7 +535,7 @@ public final class CashService {
     /** 1.4.10: free pass-track supply (mail template pass_track_free), once per day. */
     public void cmdPassFree(Player player) {
         if (CashCoinRules.p1BlocksCoin(town.sunshine.corerpg.p1.EmberMode.active())) {
-            player.sendMessage(ChatColor.GRAY + "[战令·免费轨] P1 模式下不发旧战令补给（请用主线 / 签到）。");
+            player.sendMessage(ChatColor.GRAY + "[战令·免费轨] P1 下暂不发放旧战令币礼 · 请用签到 / 周目标 / 外观。");
             return;
         }
         PlayerData data = dataStore.get(player.getUniqueId());
@@ -561,8 +566,8 @@ public final class CashService {
         if (town.sunshine.corerpg.p1.EmberMode.active() && !player.hasPermission("corerpg.admin")) {
             // D201 (AUDIT S0-3/S0-4 follow-up): while P1 is on, pass free/claim are refused and legacy pass XP pays 0 —
             // don't advertise /corerpg pass free or the legacy XP sources; point at the P1 menu instead.
-            player.sendMessage(ChatColor.AQUA + "[战令] " + ChatColor.GRAY + "P1 模式下旧战令已停用（不再累积、不再领取），"
-                    + "每日奖励请用 /ember 主菜单的签到与在线奖励。");
+            player.sendMessage(ChatColor.AQUA + "[战令] " + ChatColor.GRAY + "P1 下暂不发放旧战令币礼（不再累积、不再领取）· "
+                    + "请用签到 / 周目标 / 外观。");
             return;
         }
         boolean claimed = DailyService.today().equals(data.getPassFreeClaimDate());
