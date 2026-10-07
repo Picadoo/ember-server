@@ -1175,8 +1175,9 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         sender.sendMessage(ChatColor.GRAY + "  pet [list|summon|dismiss|unlock|feed]");
         sender.sendMessage(ChatColor.GRAY + "  guild|alliance [create|info|invite|accept|leave|kick|donate|boss]");
         sender.sendMessage(ChatColor.GRAY + "  arena|pvp [queue 1v1|2v2|leave|stats|claim|forfeit] · auction [list|sell|buy|cancel]");
-        sender.sendMessage(ChatColor.GRAY + "  warehouse [deposit|withdraw <slot|id> [n]|unlock [coin|cash]|info <slot>]");
-        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: xpreward · passxp · progress · pass season reset · enhance set · calamity forceopen/forceend · p1 status/debug/world · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
+        // D255 / S0-10: player help shows view-only; write ops only on admin line
+        sender.sendMessage(ChatColor.GRAY + "  warehouse [list|info] · 存取请用枢纽「仓库」（P1 下不可 deposit/withdraw/unlock）");
+        sender.sendMessage(ChatColor.DARK_GRAY + "  admin: warehouse deposit|withdraw|unlock · xpreward · passxp · progress · pass season reset · enhance set · calamity forceopen/forceend · p1 status/debug/world · talent grant · cash give · mail send · ladder set/refresh · migrate-yaml-to-mysql");
         sender.sendMessage(ChatColor.DARK_GRAY + "  storage — 显示 yaml|mysql 与 ping · storage guard [release] — 数据库断线保护");
         sender.sendMessage(ChatColor.DARK_GRAY + "  invsnap list|view|restore|diff|take <玩家> [id] — 背包/末影箱快照（管理员）");
     }

@@ -139,7 +139,7 @@ public final class WarehouseService {
             return;
         }
         p.sendMessage(PREFIX + ChatColor.YELLOW
-                + "/corerpg warehouse | deposit | withdraw <slot|id> [n] | unlock [coin|cash] | info <slot]");
+                + "/corerpg warehouse | list | info <slot>（存取请用枢纽仓库；OP 可用 deposit/withdraw/unlock）");
     }
 
     /** D252 / S0-10: true → write sub refused (player told to use hub vault). */
