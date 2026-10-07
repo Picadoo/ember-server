@@ -42,3 +42,4 @@
 
 - **R**（按段轻 Director）**后置**；仅总控另批 M+R 时开  
 - **禁** Pack6 / 新深渊图 / 抬体力掉率 / 六槽 / 天赋续跑 / 事件 R/W / 调律 R  
+- **下一档硬债 tip：** [`STATUS-ember-next-hard-debt-ash-imprint-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-ash-imprint-need-design-2026-10-08.md) · 灰印副招枢轴（需策划）  
