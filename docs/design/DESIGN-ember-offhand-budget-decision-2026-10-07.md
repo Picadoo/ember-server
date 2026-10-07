@@ -228,7 +228,7 @@ P1 公式轴（`tools/p1sim/p1sim.py` `stats()`）：
 
 | 序 | 窗 | 边界 |
 |----|----|------|
-| A1 | **文案诚实薄窗** | 只动 TrMenu lore / 短 tell（set / life / hub）；NI 属性数字不动 |
+| A1 | **文案诚实薄窗** · **已施工 D289** | 只动 TrMenu lore / 短 tell（set / life / hub / gear）；NI 属性数字不动 |
 | A2 | （可选）测报一行 | rg 确认无物伤键；目视 P1 状态不受副手影响 |
 | — | **不开** | Loadout 三槽、p1sim offhand、六槽、新饰品 DPS |
 
@@ -270,3 +270,4 @@ P1 公式轴（`tools/p1sim/p1sim.py` `stats()`）：
 |----|------|
 | 2026-10-07 | 初稿 · STATUS **待批 A** · 荐方案 A · 只动 docs |
 | 2026-10-07 | 总控批 **已批 A · 方案 A**；方案 B 搁置；可开诚实半行薄窗（不改数值） |
+| 2026-10-07 | A1 文案诚实薄窗 **已施工 D289**（TrMenu set/life/hub/gear · 零 jar） |

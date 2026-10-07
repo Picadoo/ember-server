@@ -13,6 +13,7 @@ Layout:
   - '#   D   #'
   - '#########'
   - '####I##Z#'
+# D289：副手诚实半行（方案 A）· 守腕/生坠 lore 写明微量守势、不进 P1 B/H。
 # D99: 重铸石 / 稳固符 / 魂尘 / 使魔 / 副手饰品 / 旧票 belong to the stowed legacy systems (主线本里不生效);
 # their icons stay defined below but are no longer in the layout (admin: ember_hub_legacy).
 
@@ -106,7 +107,7 @@ Icons:
     display:
       material: iron nugget
       name: '§a余烬守腕'
-      lore: ['', '§780 余烬币', '§8每周 1 次', '§8副手饰品 · 放副手槽生效', '', '§e➥ §f购买']
+      lore: ['', '§780 余烬币', '§8每周 1 次', '§7副手饰品 · 放副手槽 · 微量守势', '§8不计入主线刃/护符战力（永不进 P1 B/H）', '', '§e➥ §f购买']
     actions:
       all:
         - 'command: corerpg life buy offhand_ward'
@@ -114,7 +115,7 @@ Icons:
     display:
       material: emerald
       name: '§a余烬生坠'
-      lore: ['', '§780 余烬币', '§8每周 1 次', '§8副手饰品 · 放副手槽生效', '', '§e➥ §f购买']
+      lore: ['', '§780 余烬币', '§8每周 1 次', '§7副手饰品 · 放副手槽 · 微量守势', '§8不计入主线刃/护符战力（永不进 P1 B/H）', '', '§e➥ §f购买']
     actions:
       all:
         - 'command: corerpg life buy offhand_vita'

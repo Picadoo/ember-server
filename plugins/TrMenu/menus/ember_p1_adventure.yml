@@ -2,6 +2,7 @@
 # 只转发到 CoreRpg 命令；解锁、体力、队伍校验全在服务端（锁定的本点了只会提示原因）。
 # 不写通关时长承诺。P1 未启用（ember-v1.yml enabled=false）时进本命令会直接拒绝。
 # 入口：主菜单 ember_hub 的「冒险 · 主线本」图标，或 /ember_p1_adventure。
+# D288：左上「本周短目标」一眼精选剩次 / 事件池 / 誓约 / 残响 claim / 花样。
 
 Title: '§6余烬 · 冒险'
 
@@ -17,7 +18,7 @@ Options:
 
 Layout:
   - '#########'
-  - '#TVX A K#'
+  - '#TVXSA K#'
   - '#1234567#'
   - '#Ws b u n'
   - '#GMRFZCYD'
@@ -45,7 +46,11 @@ Icons:
         - '§e花样委托 §8（重打已首通的普通版时才有花样）'
         - '§7%corerpg_p1_vbounty%'
         - '§7当天击败 2 只词缀精英：20 余烬币 · 当天 1 次房间事件达标：20 余烬币'
+        - '§a达标通关时聊天栏立刻刷「花样委托 · 完成：…」· 本行进度 +1'
         - '§8和上面的局数委托分开计，各发一次'
+        - ''
+        - '§b一眼短目标 §8（左上「本周短目标」）'
+        - '§7本周精选剩次 · 事件池 · 誓约 · 残响 claim'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
@@ -170,6 +175,7 @@ Icons:
         - '§7首领残响 §8（Q04 首通·Q01–Q07）§7· 连战·前哨 §8（Q05 首通）§7· 自选誓约 §8（Q06 首通）'
         - '§7重打已通的图拿首领徽记（用来烙签名）'
         - '§7自选誓约：%corerpg_p1_pledge_head%'
+        - '§7残响本周 claim：§f%corerpg_p1_rush_echo_q01% §8（七首领共用 3 次）'
         - ''
         - '§e➥ §f打开'
     actions:
@@ -189,6 +195,36 @@ Icons:
         - '§7开本失败退还 · 开打后离开不退'
         - '§7只有 Boss 倒下才结算（中途离开无奖励）'
         - '§81～3 人 · 敌人血量按开局人数锁定'
+
+  # D288: 重打短目标一眼（精选剩次 / 事件池 / 誓约 / 残响 claim / 花样）
+  S:
+    update: 20
+    display:
+      material: map
+      name: '§e本周短目标'
+      lore:
+        - ''
+        - '§b本周精选：§f%corerpg_p1_featured%'
+        - '§b本周规则：§f%corerpg_p1_modifier%'
+        - '§8精选图前 3 次通关各多 1 枚印记（挑战 T3；Q01–Q06 普通重打给本图阶，共用次数）'
+        - ''
+        - '§e花样委托：§f%corerpg_p1_vbounty%'
+        - '§7重打已首通普通版：词缀精英必出 · 约一半局有房间事件'
+        - '§7事件池：§f限时清房 / 砸晶 / 护宝兔 / 占点 / 护灯 / 传火 / 裂隙 / 连斩 / 无伤'
+        - '§a达标通关 → 聊天栏「花样委托 · 完成」· 进度 +1'
+        - ''
+        - '§d誓约已选：§f%corerpg_p1_pledge_head%'
+        - '§b残响本周：§f%corerpg_p1_rush_echo_q01% §8（Q01–Q07 共用 3 次领奖）'
+        - ''
+        - '§e➥ §f左键：进阶模式（残响 / 前哨 / 誓约）'
+        - '§e➥ §f右键：挑战版（看精选图）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_modes'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_challenge'
 
   K:
     update: 20
