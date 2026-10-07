@@ -38,4 +38,5 @@
 - 方案 B（替换预算并轨）**搁置**；若总控改批须另派数值+p1sim+插件号（本号不解禁）  
 - 诚实半行 D289/D294 **已够**；再拧菜单半行 = 薄 UX，不另开  
 - 样本门禁 R 仍按 D308 硬表：**当前全表不得开**  
+- **下一档硬债 tip（已写 · 非开 R）：** [`STATUS-ember-next-hard-debt-sample-week-report-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-sample-week-report-need-design-2026-10-08.md) · D308 方案 R 周报模板后置 · backlog `B-sample-week-report` · docs checklist · **禁**无签字自动开闸 · **禁**玩家面 KPI  
 - **禁** 偷开任一 R · 改价(=forge R) · Pack6/六槽 · 天赋/灰印续跑 · 新副手 DPS NI · 默默叠 Stat→EmberFormula · 重开 D307/D308 · 薄 UX 抬假硬债  

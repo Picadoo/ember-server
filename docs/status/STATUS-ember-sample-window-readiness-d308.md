@@ -47,6 +47,6 @@ D298 遥测管已有，但各 R「样本够不够、读哪行、谁签字」仍�
 
 - **等** ≥1 完整 P 周真人样本（荐 2）且全服 `p1_pf_runs`≥30（排除测试号）后再议事件 R/W · 调律 R  
 - 编排/演出/挂机类：人感 ≥3 非测试 + 距对应 M ≥3 日 → 再派**该债**硬设计待批 A（须先把表内「当前态」升「满」）  
-- 方案 **R**（周报模板）后置；脚本另号 · **禁**与战斗/经济 R 同号  
+- 方案 **R**（周报模板）→ **已升 tip（非开战斗 R）：** [`STATUS-ember-next-hard-debt-sample-week-report-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-sample-week-report-need-design-2026-10-08.md) · backlog `B-sample-week-report` · docs checklist；脚本另号 · **禁**与战斗/经济 R 同号 · **禁**无签字自动开闸 · **禁**玩家面 KPI  
 - **禁** 偷开任一 R · 改价(=forge R) · Pack6/六槽 · 天赋/灰印续跑 · 重开 D307 · 玩家面遥测 · 薄 UX 抬假硬债挡窗  
-- **下一档硬债 tip（已写 · 非开 R）：** [`STATUS-ember-next-hard-debt-offhand-merge-decision-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-offhand-merge-decision-need-design-2026-10-08.md) · 加固§8-5 副手并轨/不并轨决策页 · docs-only · **不施工物品** · **仍禁**在样本未满时改派开任一 R
+- 副手 tip / D309：加固§8-5 **已关**（方案 A · `e0e8ded6`）· **仍禁**在样本未满时改派开任一 R
