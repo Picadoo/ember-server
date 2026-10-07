@@ -1,6 +1,7 @@
 # 六槽 Stage1 关窗 / 开工决策页（D169 HOLD · docs-only）· 2026-10-08
 
-> **STATUS：已批 B · 方案 B · D312**（总控 2026-10-08：只授权另号 **T0** 离线〔D313〕；T1–T3 各需总控签字；T0/T0' 不过即回 HOLD；不开任何 R）  
+> **STATUS：已批 B → T0 未过 · 回 HOLD · D314**（总控 2026-10-08 签 D313：T0/T0' 未过〔G8 团本结构性缺口〕→ 回 HOLD，线上零变化；T1–T3 不开；重开条件见 §4 D314 批注）  
+> **原 STATUS：已批 B · 方案 B · D312**（总控 2026-10-08：只授权另号 **T0** 离线〔D313〕；T1–T3 各需总控签字；T0/T0' 不过即回 HOLD；不开任何 R）  
 > **日期：** 2026-10-08 Asia/Shanghai  
 > **来源：** 总控派单「硬设计待批 A」· tip [`STATUS-ember-next-hard-debt-six-slot-stage1-decision-need-design-2026-10-08.md`](../status/STATUS-ember-next-hard-debt-six-slot-stage1-decision-need-design-2026-10-08.md)（`ab927e5c`）· D311 后下一档**结构规格**硬债 · 对齐 D309 副手关窗范式（docs-only 拍死）  
 > **性质：** 硬设计 **待批 A**；本稿**只 docs**：零六槽代码、零玩法 yml / jar / NI / TrMenu、**不跑 p1sim**（本稿 §0 对 p1sim 只做只读代码核实）、零部署、零 bv 变动。  
@@ -291,6 +292,12 @@
 
 **总控批注（2026-10-08）：** 批 B。只授权另号 T0 离线（D313）；T1–T3 各需总控签字；T0/T0' 不过即回 HOLD；不开任何 R。D308 表不变；天赋 row1 / 灰印 HOLD；Pack6 禁；CoreRpg 1.65.97 · bv 60 不变。
 
+**总控签字 · D314（2026-10-08 · 批 B → T0 未过回 HOLD）：** T0/T0' 未过（G8 团本结构性缺口）→ 回 HOLD，线上零变化。重开条件：策划另交护甲追赶/团本甲来源设计稿并经总控批，再另号 T0″。T1–T3 不开。
+
+- 依据：[`tools/p1sim/out-six-slot-stage1-t0.md`](../../tools/p1sim/out-six-slot-stage1-t0.md) · [`STATUS-ember-six-slot-stage1-t0-d313.md`](../status/STATUS-ember-six-slot-stage1-t0-d313.md)（`4f91a300`）。G8 团本浮点原方案 / T0' 变体 A / 变体 B 均 3/9：R01 3 人 −4.5、R02 4 人 −4.7、R03 4 人 −3.6 pp（变体 A）；团本阶段护甲落后护符一截，属结构缺口，超出 T0' 允许空间（只能动 w / 费用系数 / arm_cap）。
+- 备忘（留给将来 T1，不是本号授权）：G6 迁移不变量在 Java 里须走定点 / 同档短路（same-tier carry-over），让 golden 单测逐位相等。
+- 本页回到 HOLD；D169 SETTLED · 代码 HOLD 照旧；p1sim `SIX` 默认仍 None；CoreRpg 1.65.97 · bv 60 不变；不开任何 R；D308 表不变。状态：[`STATUS-ember-six-slot-stage1-hold-d314.md`](../status/STATUS-ember-six-slot-stage1-hold-d314.md)。
+
 ---
 
 ## 5. 批后下一窗边界（不写代码 / 不写 YAML）
@@ -331,7 +338,8 @@
 |----|------|
 | 2026-10-08 | 策划交稿待批 A（`b87d8583`，荐 B） |
 | 2026-10-08 | 总控 **批 B** · D312 docs 落批注；T0 → D313（另号离线） |
+| 2026-10-08 | D313 T0/T0' 报告（`4f91a300`）：G8 团本 3/9 未过；总控签 **回 HOLD** · D314 docs（T1–T3 不开；重开 = 护甲追赶 / 团本甲来源设计稿经批 → 另号 T0″） |
 
 ---
 
-*文末：**已批 B · D312**（原：待批 A）· 只 docs。荐 **方案 B**（显式开工规格；本窗零代码、不跑 p1sim；批 B 只授权另号 T0 离线复验，T1 起每阶总控签字；T0 不过即回 HOLD）。可选 **方案 A**（继续 HOLD 正式关窗 + 重开条件）。**W 否决**。不开任一 R、不改 D308 门槛、不动 D309 副手 A。本地 commit，总控代推。零部署。*
+*文末：**T0 未过 · 回 HOLD · D314**（批 B · D312 → T0 D313 未过；原：待批 A）· 只 docs。荐 **方案 B**（显式开工规格；本窗零代码、不跑 p1sim；批 B 只授权另号 T0 离线复验，T1 起每阶总控签字；T0 不过即回 HOLD）。可选 **方案 A**（继续 HOLD 正式关窗 + 重开条件）。**W 否决**。不开任一 R、不改 D308 门槛、不动 D309 副手 A。本地 commit，总控代推。零部署。*
