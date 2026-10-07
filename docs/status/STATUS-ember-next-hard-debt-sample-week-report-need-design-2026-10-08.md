@@ -5,10 +5,10 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D309 副手关窗已收 · D308 就绪硬表已收（R 周报后置）· §1 M 波 + D301–D307 已收 · 样本 R 全表不得开 · 灰印副招 **T0/T0b ❌ · HOLD** · 天赋换机制 **HOLD** · Pack6 / 六槽 **HOLD**  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R**  
-**硬规格（待策划交稿）：** `docs/design/DESIGN-ember-sample-week-report-2026-10-08.md` · STATUS=待批 A · backlog `B-sample-week-report`  
+**硬规格（已上线 D310 · 方案 M · docs-only）：** [`DESIGN-ember-sample-week-report-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-2026-10-08.md) · STATUS=已批 A · 批 M · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · 检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md) · backlog `B-sample-week-report`  
 **打开理由：** D308 钉死「何时算够、谁签字」的**手查硬表**；仍缺从 `p1-telemetry/<week>.yml` 生成的 **markdown 周报检查单**（减 OP 抄写、统一勾选栏）。D308 批注明文 **R 周报后置**——本 tip 把它升为下一档 docs 硬债，**仍零玩法、禁自动开闸、禁玩家面 KPI**。
 
-> **交稿：** [`DESIGN-ember-sample-week-report-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-2026-10-08.md) · **STATUS 待批 A** · 荐 **方案 M**（只 docs 周报 markdown 检查单 + 空周/半满周示例；门槛钉 D308 未改；方案 R/M+R 可勾；**W 否决**自动建议开 R / 玩家面 KPI / 偷开 R）· **等总控批 M / R / M+R**。
+> **关窗：** [`DESIGN-ember-sample-week-report-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-2026-10-08.md) · **STATUS 已批 A · 批 M · D310** · 只 docs 检查单已落 [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md)；门槛钉 D308 **未改**；R/M+R 后置；W 否决 · tip/backlog/D308 STATUS 已同步 · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md)。
 
 ---
 
@@ -102,9 +102,10 @@ D308 手查硬表已有；OP 仍要手抄 `p1-telemetry/<week>.yml`——要在*
 
 ## 6. 刚结指针
 
+- D310 · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · docs-only · **批 M · 检查单已落 · 本 tip 关窗**  
 - D309 · [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md) · docs-only · `e0e8ded6` · **§8-5 已关 · 方案 A · 本 tip 上游**  
 - 副手 tip · [`STATUS-ember-next-hard-debt-offhand-merge-decision-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-offhand-merge-decision-need-design-2026-10-08.md) · 已关窗  
-- D308 · [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) · docs-only · `27750279` · **M 已落 · 方案 R 周报后置 → 本 tip**  
+- D308 · [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) · docs-only · `27750279` · **M 已落 · 方案 R 周报后置 → 本 tip 已关 · D310**  
 - 样本窗 tip · [`STATUS-ember-next-hard-debt-sample-window-readiness-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-sample-window-readiness-need-design-2026-10-08.md)  
 - D307 · [`STATUS-ember-workshop-menu-honesty-d307.md`](STATUS-ember-workshop-menu-honesty-d307.md) · CoreRpg **1.65.97** · **≠ forge R**  
 - D306–D301 · 枢纽 / 挂机 / 预警 / 周本 / 深渊 / 守招 · 见各 STATUS  
@@ -114,4 +115,4 @@ D308 手查硬表已有；OP 仍要手抄 `p1-telemetry/<week>.yml`——要在*
 
 ---
 
-*服务器：proxy/login/play 保持 up；本 tip 零部署。样本门禁 R 全表不得开——本 tip 只派周报模板（D308 方案 R 后置），不开任一 R。*
+*服务器：proxy/login/play 保持 up；本 tip 零部署。样本门禁 R 全表不得开——本 tip 已关窗（已批 A · 批 M · D310 · docs-only · 禁自动开闸 · 禁玩家面 KPI）。*
