@@ -275,6 +275,7 @@ maps:
         trigger: [-12, 63, 18, 12, 68, 38]
         points: [[-6, 64, 29], [0, 64, 29], [6, 64, 29], [-6, 64, 34], [0, 64, 34], [6, 64, 34], [-9, 64, 28], [9, 64, 28]]
         door: [16, 64, 29, 16, 69, 35]
+        door_delay: 0.8  # D300 走廊感：清完喘半拍
         a: {melee: 4}
         b: {melee: 3, ranged: 1}
       r2:
@@ -305,7 +306,7 @@ maps:
            follow: {type: circle, name: 踏地, below: 0.5, delay: 2.0, warn: 1.2, radius: 2.5, ahead: 0, dmg: 3, light: true}}
         - {type: line, name: 门廊突刺, every: 40, warn: 1.5, length: 5, width: 2, dmg: 2, light: true, below: 0.5}  # D173: every 40 (gate; challenge light=37)
     event:
-      after: r2
+      after: r1  # D300 走廊感：事件偏早
       anchor: [54, 64, 38]
       area: [48, 63, 32, 60, 70, 44]
 
@@ -423,6 +424,7 @@ maps:
         trigger: [-40, 55, 48, -18, 60, 70]
         points: [[-35, 56, 60], [-29, 56, 60], [-23, 56, 60], [-35, 56, 65], [-29, 56, 65], [-23, 56, 65], [-32, 56, 59], [-26, 56, 59]]
         door: [-1, 56, 72, 5, 61, 72]
+        door_delay: 1.0  # D300 走廊感：清完喘半拍
         a: {melee: 4, caster: 1}
         b: {melee: 4, ranged: 1}
       r3:
@@ -452,7 +454,7 @@ maps:
         # book: boss x±8, z−4 (D15 hall)
         points: [[-8, 56, 119], [8, 56, 119]]
     event:
-      after: r2
+      after: r3  # D300 走廊感
       anchor: [-54, 56, 60]
       area: [-60, 55, 54, -48, 62, 66]
 
@@ -607,7 +609,7 @@ maps:
            follow: {type: circle, name: 余震, below: 0.5, delay: 2.0, warn: 1.5, radius: 2.5, ahead: 0, dmg: 5, light: true}}  # D173 Pack 2 half-HP
       recover: 0.5
     event:
-      after: r2
+      after: r1  # D300 走廊感
       anchor: [66, 72, 63]
       area: [60, 71, 57, 72, 78, 69]
 
@@ -646,6 +648,7 @@ maps:
         trigger: [-18, 63, 20, 18, 68, 44]
         points: [[-6, 64, 33], [0, 64, 33], [6, 64, 33], [-6, 64, 38], [0, 64, 38], [6, 64, 38], [-15, 64, 32], [15, 64, 32]]
         door: [37, 64, 48, 43, 69, 48]
+        door_delay: 1.2  # D300 走廊感：清完喘半拍
         a: {melee: 6, ranged: 1}
         b: {melee: 5, heavy: 1}
       r2:
@@ -683,7 +686,7 @@ maps:
         - {type: circle, name: 霜潮汲取, every: 25, below: 0.5, warn: 3.0, radius: 5, ahead: 0, dmg: 30, break_hp: 0.065, break_stun: 0.3}  # gate: stun 0.4+ → Q06 challenge +3.5
       recover: 0.5
     event:
-      after: r2
+      after: r3  # D300 走廊感
       anchor: [66, 64, 64]
       area: [60, 63, 58, 72, 70, 70]
 
@@ -736,6 +739,7 @@ maps:
         trigger: [-16, 63, 84, 12, 68, 110]
         points: [[-8, 64, 98], [-2, 64, 98], [4, 64, 98], [-8, 64, 103], [-2, 64, 103], [4, 64, 103], [-13, 64, 97], [9, 64, 97]]
         door: [-3, 64, 117, 3, 69, 117]
+        door_delay: 0.9  # D300 走廊感：清完喘半拍
         a: {melee: 6, heavy: 1}
         b: {melee: 6, ranged: 1}
     boss:

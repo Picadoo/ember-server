@@ -341,6 +341,13 @@ public class EmberRunRulesTest {
         assertEquals("ember_daily_v1", q1.template); // D15 book white boxes
         assertEquals("ember_daily_ash_v1", q2.template);
         assertEquals("ember_daily_crypt_v1", q3.template);
+        // D300 corridor-feel: event.after hang points + optional door_delay
+        assertEquals("r1", q1.eventAfter);
+        assertEquals("r2", q2.eventAfter);
+        assertEquals("r3", q3.eventAfter);
+        assertEquals(0.8, q1.room("r1").doorDelay, 1e-9);
+        assertEquals(0.0, q2.room("r1").doorDelay, 1e-9);
+        assertEquals(1.0, q3.room("r2").doorDelay, 1e-9);
         assertEquals("", q1.requires);
         assertEquals("q01", q2.requires);
         assertEquals("q02", q3.requires);
@@ -525,8 +532,8 @@ public class EmberRunRulesTest {
         assertEquals(0, q5.rails.size());
         assertEquals(true, q5.boss.waitInArea);
         assertEquals(0, q5.clear.size());
-        assertEquals("r2", q4.eventAfter); // D15: E is entered from R2 on every book map
-        assertEquals("r2", q5.eventAfter);
+        assertEquals("r2", q4.eventAfter); // D300: corridor-feel hang points differ per map
+        assertEquals("r1", q5.eventAfter); // D300
         assertSame(q5, m.byWorld("dungeon_EmberQ05_0A1B2C3D"));
         // batch 3 (§23.2 后段): Q05 → Q06 → Q07, Q07 drops T3 and unlocks nothing (challenge + T3 forge hang on its flag)
         EmberRunMaps.MapDef q6 = m.byKey("q06"), q7 = m.byKey("q07");
@@ -583,8 +590,12 @@ public class EmberRunRulesTest {
             assertTrue(d.key, d.boss.area.contains(d.boss.at.x, d.boss.at.y, d.boss.at.z));
         }
         assertEquals(32, q6.boss.area.x1 - q6.boss.area.x0); // 33 wide (RB −16..16)
-        assertEquals("r2", q6.eventAfter);
-        assertEquals("r2", q7.eventAfter);
+        assertEquals("r3", q6.eventAfter); // D300
+        assertEquals("r2", q7.eventAfter); // D300
+        assertEquals(1.2, q6.room("r1").doorDelay, 1e-9); // D300
+        assertEquals(0.9, q7.room("r3").doorDelay, 1e-9); // D300
+        assertEquals(0.0, q4.room("r1").doorDelay, 1e-9);
+        assertEquals(0.0, q5.room("r2").doorDelay, 1e-9);
         assertSame(q7, m.byWorld("dungeon_EmberQ07_0A1B2C3D"));
     }
 

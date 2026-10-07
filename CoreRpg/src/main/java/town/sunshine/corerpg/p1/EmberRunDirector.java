@@ -110,6 +110,9 @@ final class EmberRunDirector {
     private int next;                 // index of the next room to trigger
     private String activeRoom;        // room currently fighting
     private long bossAt;              // boss spawn time (after the warning)
+    /** D300: deferred door open (0 = none pending) */
+    private long doorOpenAt;
+    private EmberRunMaps.Room doorPending;
     Tracked boss;
     private boolean bossDead;
     /** D144 余烬连战: index of the current chain boss (0 for every other run) */
@@ -239,6 +242,12 @@ final class EmberRunDirector {
                 Location l = p.getLocation();
                 if (r.trigger.contains(l.getX(), l.getY(), l.getZ())) { spawnRoom(r); break; }
             }
+        }
+        // D300: deferred door open (door_delay breath between clear and passage)
+        if (doorOpenAt > 0 && doorPending != null && now >= doorOpenAt) {
+            openDoorNow(doorPending);
+            doorPending = null;
+            doorOpenAt = 0;
         }
         // passages (spire): once the room is cleared, stepping into the passage box moves the player up
         for (EmberRunMaps.Link k : def.links) {
@@ -484,6 +493,13 @@ final class EmberRunDirector {
         }
     }
 
+    /** D300: remove the iron fence door and play the open cue. */
+    private void openDoorNow(EmberRunMaps.Room r) {
+        if (r == null || r.door == null) return;
+        setBox(r.door, Material.AIR, Material.IRON_FENCE);
+        w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
     private void roomCleared(EmberRunMaps.Room r) {
         activeRoom = null;
         if (r == null) return;
@@ -526,8 +542,13 @@ final class EmberRunDirector {
         if (!s.cleared.contains(r.id)) s.cleared.add(r.id);
         next = Math.max(next, def.roomIndex(r.id) + 1);
         if (r.door != null) {
-            setBox(r.door, Material.AIR, Material.IRON_FENCE);
-            w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+            if (r.doorDelay > 0) {
+                doorPending = r;
+                doorOpenAt = System.currentTimeMillis() + (long) (r.doorDelay * 1000.0);
+                svc.tellRun(s, "§7门扇缓缓开启…");
+            } else {
+                openDoorNow(r);
+            }
         }
         for (EmberRunMaps.Link k : def.links) if (k.after.equals(r.id)) svc.tellRun(s, "§7通道已开启：" + k.label);
         if (r.id.equals(def.eventAfter)) spawnExtra();
@@ -1681,6 +1702,8 @@ final class EmberRunDirector {
     }
 
     void finish() {
+        doorPending = null;
+        doorOpenAt = 0;
         finished = true;
         clearCrystals();
         clearHold();

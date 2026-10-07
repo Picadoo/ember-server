@@ -65,6 +65,8 @@ public final class EmberRunMaps {
         public final String hint;
         public final Box trigger;
         public final Box door; // null for the last room (boss shares the hall)
+        /** D300: seconds after clear before the door opens (0 = immediate; capped at 1.5) */
+        public final double doorDelay;
         public final List<Pt> points;
         public final Map<String, Integer> a, b;
         Room(String id, Map<?, ?> m) {
@@ -73,6 +75,7 @@ public final class EmberRunMaps {
             this.hint = str(m.get("hint"), "");
             this.trigger = box(m.get("trigger"));
             this.door = m.get("door") == null ? null : box(m.get("door"));
+            this.doorDelay = Math.max(0, Math.min(1.5, num(m.get("door_delay"), 0)));
             this.points = pts(m.get("points"));
             this.a = counts(m.get("a"));
             this.b = counts(m.get("b"));
