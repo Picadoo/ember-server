@@ -1,5 +1,9 @@
 # 余烬晶钻 · 日票限购 · 月卡 — 落地规格
 
+> **D257 追记（2026-10-07）：** 现行进本消耗 = **体力**（`cash.yml` `stamina`）；NI `ticket_ember_*` 与文中「日票」为**遗留票物/历史规格**。
+> 商城/月卡若仍出现 ticket 键名，按体力折算维护，**不要写成给玩家的门票教程**。真源以线上 `plugins/CoreRpg/cash.yml` 注释为准。
+
+
 **日期：** 2026-09-12（Asia/Shanghai）  
 **状态：** 规格锁定（YAML + 菜单壳；**不**改 `CoreRpg.jar` / Paper）  
 **承接：** `docs/design/DESIGN-ember-economy-monetization.md` §2 E / §4 / §5.2（红线以彼为准，本文定存档键与命令面）  

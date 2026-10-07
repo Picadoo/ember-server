@@ -1,11 +1,11 @@
-# CoreRpg cash — 晶钻 / 日票限购 / 月卡（docs/design/DESIGN-ember-cash-monthly.md）
-# STUB：插件岗实现命令前可先落盘；挂到 /corerpg reload（落地后）
-# 红线：不直售碎片/晶/核心；日票硬顶是总进本 6（免费+氪+月卡）
+# CoreRpg cash — 晶钻 / 体力 / 遗留票物 / 月卡（docs/design/DESIGN-ember-cash-monthly.md）
+# 维护备忘：配置可先落盘；落地后纳入 CoreRpg reload
+# 红线：不直售碎片/晶/核心；总进本次数硬顶仍为 6（免费+氪+月卡），按体力口径维护
 enabled: true
 
 timezone: Asia/Shanghai
 
-# S0 余烬体力（design-ember-stamina-dnf-daily §A）— 停发票；进本扣体力
+# S0 余烬体力（design-ember-stamina-dnf-daily §A）— 遗留票物停发；进本扣体力
 stamina:
   base_max: 90
   monthly_bonus: 30
@@ -42,9 +42,9 @@ currency:
   # 现有 PlayerDataStore 已写 crystalCash；读时兼容，写契约键
   legacy_yml_key: crystalCash
 
-# 日本：免费张数 + 总硬顶（进本/发票共用）
+# 遗留票物/体力口径维护备忘：免费张数 + 总硬顶（进本/发放共用）
 daily:
-  free_tickets: 0  # S0: 停发日票，改体力日回满
+  free_tickets: 0  # S0 维护备忘：遗留票物停发；现行按体力日回满
   hard_cap: 6
   ticket_ni_id: ticket_ember_daily
 
@@ -64,7 +64,7 @@ shop:
     id: weekly_ticket
     price: 180
     sku_limit: 1          # 晶钻购买次数/周；仍受 hard_cap 约束
-    hard_cap: 2          # 免费1+氪≤2
+    hard_cap: 2          # 维护备忘：遗留票物/体力口径；免费1+氪≤2
     grant_ni: true
     ticket_ni_id: ticket_ember_weekly
 
@@ -80,28 +80,28 @@ monthly:
     daily_ticket: 1       # S0: 每点折算体力+30（非 NI 票）
 
 weekly:
-  free_tickets: 0
+  free_tickets: 0          # 维护备忘：遗留票物/体力口径；周本 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_weekly
 raid:
-  free_tickets: 0          # 2026-09-27: weekly login grant (menu promises 每周团本票×1)
+  free_tickets: 0          # 2026-09-27: 维护备忘：遗留票物/体力口径；周登录团本票发放口径留档（现行 0；团本按体力进，本周首次免费）
   ticket_ni_id: ticket_ember_raid
 abyss:
-  free_tickets: 0
+  free_tickets: 0          # 维护备忘：遗留票物/体力口径；深渊 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_abyss
 
-# Stage 4.4 精英试炼周票 — 周一 0:00 Asia/Shanghai 与周本同节奏；不进商城日票池；持有硬顶 1
+# Stage 4.4 精英试炼 · 遗留周票物键（维护备忘）— 周一 0:00 Asia/Shanghai；现行进本按体力；hard_cap 现无代码消费，键保留
 elite:
-  free_tickets: 0
+  free_tickets: 0          # 维护备忘：遗留票物/体力口径；精英 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_elite
   hard_cap: 1
 
-# 勋阶轻量 stub（无 LuckPerms）
+# 维护备忘：勋阶轻量档（当前无 LuckPerms）
 vip:
   enabled: true
   daily_claim_coin: 120        # 勋阶 ≥1
   # 2026-09-26：勋阶 0（未开通）只给象征性日礼；设计未给层级数值，保守取 20
   tier0_daily_claim_coin: 20
-  # tiers stub — PlayerData.vipTier default 0
+  # 维护备忘：tiers — PlayerData.vipTier 默认 0
   tiers:
     0: { name: "无" }
     1: { name: "勋阶I" }

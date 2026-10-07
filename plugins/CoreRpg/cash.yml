@@ -89,7 +89,7 @@ abyss:
   free_tickets: 0          # 维护备忘：遗留票物/体力口径；深渊 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_abyss
 
-# Stage 4.4 精英试炼周票 — 周一 0:00 Asia/Shanghai 与周本同节奏；不进商城遗留票物/体力相关池；维护备忘；hard_cap 现无代码消费（TicketGrantService 只读不用），键保留
+# Stage 4.4 精英试炼 · 遗留周票物键（维护备忘）— 周一 0:00 Asia/Shanghai；现行进本按体力；hard_cap 现无代码消费，键保留
 elite:
   free_tickets: 0          # 维护备忘：遗留票物/体力口径；精英 free_tickets 发放口径留档（现行 0）
   ticket_ni_id: ticket_ember_elite
