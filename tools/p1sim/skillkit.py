@@ -177,7 +177,22 @@ CANDS_S0B4 = {
     'GHvDf0Lcd36': ('q03', 'any', '守招·重压醉拳 cd36 一击摊4s 濒死才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 36, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_lethal': 0.35})),
     'GHvDf0L25': ('q03', 'any', '守招·重压醉拳 cd24 一击摊4s 濒死<25%才按', M(GUARD, HEAVY, DEFER, {'kit_guard_cd': 24, 'kit_guard_secs': 0.05, 'kit_guard_pay': 4.0, 'kit_guard_busy_secs': 0.3, 'kit_guard_lethal': 0.25})),
 }
-ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4)
+
+# T0 guard-skill pivot (DESIGN-ember-guard-skill-pivot · 已批 A · 方案 M): 预警短窗招架
+# Independent CD + single-hit nullify (A) / flat counter (B). No kit_guard_red / kit_q_shared / charge.
+# land_p=1 = 最优时机（按在落地窗）；spam>0 = always-press 乱按耗 CD；从不按 = baseline.
+PARRY_A = {'kit_guard_parry_cd': 24, 'kit_guard_parry': 1, 'kit_guard_parry_land_p': 1.0}
+CANDS_PARRY = {
+    'G_parry_A': ('q03', 'any', '守招·余烬招架 A cd24 窗≈0.45 一次无效·最优', dict(PARRY_A)),
+    'G_parry_A2': ('q03', 'any', '守招·余烬招架 A2 cd28 稍紧·一次无效·最优',
+                   {'kit_guard_parry_cd': 28, 'kit_guard_parry': 1, 'kit_guard_parry_land_p': 1.0}),
+    'G_parry_A_ap': ('q03', 'any', '守招·余烬招架 A cd24 always-press 乱按',
+                    {'kit_guard_parry_cd': 24, 'kit_guard_parry': 1, 'kit_guard_parry_land_p': 0.45,
+                     'kit_guard_parry_spam': 0.12}),
+    'G_parry_B': ('q03', 'any', '守招·余烬招架 B cd24 一次 flat×1.5B 反打·最优',
+                 {'kit_guard_parry_cd': 24, 'kit_guard_parry_flat': 1.5, 'kit_guard_parry_land_p': 1.0}),
+}
+ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4, **CANDS_PARRY)
 
 
 def fams(c):
@@ -282,7 +297,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return

@@ -385,7 +385,12 @@ def spread_burn(owner, mobs, t):
 #                      moves). Light / follow-up / unknown skills never trigger the press — so 守招 and 踏步 do not
 #                      overlap on the same dodgeable cone/line.
 #                      kit_guard_nobusy / kit_guard_busy_secs  absorb without locking swings (or shorter lock).
-KIT_KEYS = frozenset(('kit_guard_cd', 'kit_int_cd', 'kit_gather_cd', 'kit_dash_cd', 'kit_mark_cd', 'kit_step_cd'))
+#   守招招架 (T0 换机制 · DESIGN-ember-guard-skill-pivot): kit_guard_parry_cd / kit_guard_parry /
+#                      kit_guard_parry_flat / kit_guard_parry_land_p / kit_guard_parry_spam
+#                      预警落地短窗：按在窗内 → 单次无效(A) 或 一次 flat 反打(B)；窗外/乱按耗独立 CD 无减伤。
+#                      禁均匀 kit_guard_red 永久乘 / kit_q_shared / kit_guard_charge。
+KIT_KEYS = frozenset(('kit_guard_cd', 'kit_int_cd', 'kit_gather_cd', 'kit_dash_cd', 'kit_mark_cd', 'kit_step_cd',
+                      'kit_guard_parry_cd'))
 
 
 def _krng(owner, salt):
@@ -397,6 +402,19 @@ def kit_tele(owner, skill=None, raw=0.0):
     skill = the boss skill dict (S0b: kit_guard_heavy skips light:true / unknown).
     raw = pre-mitigation skill damage (S0b kit_guard_lethal: only press if the hit threatens)."""
     st, t, rec = owner.st, owner.t, owner.rec
+    # T0 parry (new key family): press on tele land; land_p = in-window; miss still burns CD
+    pc = gm(st, 'kit_guard_parry_cd', 0.0)
+    if pc > 0 and t >= getattr(owner, 'guard_ready', -1.0):
+        owner.guard_ready = t + pc
+        land_p = gm(st, 'kit_guard_parry_land_p', 1.0)
+        if _krng(owner, 37).random() < land_p:
+            owner.parry_once = True
+            if rec is not None:
+                rec['n_parry'] = rec.get('n_parry', 0) + 1
+        else:
+            if rec is not None:
+                rec['n_parry_miss'] = rec.get('n_parry_miss', 0) + 1
+        # no busy / no multi-second absorb — single-hit utility only
     gc = gm(st, 'kit_guard_cd', 0.0)
     chg = gm(st, 'kit_guard_charge', 0.0) > 0  # 守招 spends the 烬斩 charge (no own cd): ready only when 烬斩 is
     heavy_ok = True
@@ -617,6 +635,7 @@ class Fight:
                     self.hits += int(gm(st, 'dodge_burst', 0.0))
                     if rec is not None:
                         rec['n_dodge_burst'] += 1
+            self.parry_once = False  # T0: press spent on a dodged tele (no nullify left)
             return True  # D192: dodged (callers that ignore the value are unchanged)
         if st.get('mods'):
             # T0' stance_taken_tele: only inside posture window; outside falls back to taken_tele (default 1.0)
@@ -632,6 +651,21 @@ class Fight:
                 if rec is not None:
                     rec['n_hit_burst'] += 1
         dmg = raw * self.st['M']
+        # T0 parry: single telegraph nullify (A) or flat counter (B); outside window = no mitigation
+        if kind == 'tele' and getattr(self, 'parry_once', False):
+            self.parry_once = False
+            flat = gm(st, 'kit_guard_parry_flat', 0.0)
+            if flat > 0:
+                # Mode B: counter flat × B to boss (tele still lands); pending applied in segment
+                self.parry_flat_pending = flat * st['B']
+                if rec is not None:
+                    rec['n_parry_flat'] = rec.get('n_parry_flat', 0) + 1
+            else:
+                # Mode A: this telegraph hit nullified
+                if rec is not None:
+                    rec['parry_abs'] = rec.get('parry_abs', 0.0) + dmg
+                    rec['n_parry_hit'] = rec.get('n_parry_hit', 0) + 1
+                dmg = 0.0
         if self.t < getattr(self, 'guard_until', -1.0):  # PROPOSAL D210 守墓壁垒 / S0b 醉拳
             if gm(st, 'kit_guard_defer', 0.0) > 0:  # S0b: pool the hit; pay it back after the window
                 # kit_guard_pay_mult > 1 = tax (pay back more than absorbed) — opportunity cost without sharing 身法
@@ -720,6 +754,7 @@ class Fight:
         self._nsk = next_skill
         skills = []
         adds_done = False
+        self._boss_ref = boss
         if boss is not None:
             for s in mapdef['boss'].get('skills', []):
                 if s.get('break_hp') and not BREAK:
@@ -797,6 +832,13 @@ class Fight:
                 if not alive:
                     continue  # D247: only molten blast left — do not swing into an empty room
                 if st.get('mods') and KIT_KEYS & st['mods'].keys():  # PROPOSAL D210 skill kit (not in Java)
+                    # T0 parry always-press: off-window Q waste burns independent CD (no mitigation)
+                    _ps = gm(st, 'kit_guard_parry_spam', 0.0)
+                    if _ps > 0 and gm(st, 'kit_guard_parry_cd', 0.0) > 0 and t >= getattr(self, 'guard_ready', -1.0):
+                        if _krng(self, 41).random() < _ps:
+                            self.guard_ready = t + gm(st, 'kit_guard_parry_cd', 0.0)
+                            if self.rec is not None:
+                                self.rec['n_parry_spam'] = self.rec.get('n_parry_spam', 0) + 1
                     _ks = kit_swing(self, alive, t, boss, period)
                     if _ks is not None:
                         next_swing = max(next_swing, _ks)
@@ -914,6 +956,10 @@ class Fight:
                             else:
                                 self._noint = True
                                 self.hurt(sk['dmg'], True, 'tele', skill=sk)
+                                _pf = getattr(self, 'parry_flat_pending', 0.0)
+                                if _pf > 0 and boss['hp'] > 0:
+                                    self.hit(boss, _pf * dmult(st, boss, t, self), 'parry')
+                                    self.parry_flat_pending = 0.0
                                 self._noint = False
                                 BREAK_STATS[1] += 1
                                 if self.rec is not None:
@@ -921,6 +967,10 @@ class Fight:
                             break
                         if boss['hp'] > 0 and (sk.get('below') is None or boss['hp'] <= sk['below'] * boss['max']):  # phase gate (P2-6)
                             _dodged = self.hurt(sk['dmg'], True, 'tele', skill=sk)
+                            _pf = getattr(self, 'parry_flat_pending', 0.0)
+                            if _pf > 0 and boss['hp'] > 0:
+                                self.hit(boss, _pf * dmult(st, boss, t, self), 'parry')
+                                self.parry_flat_pending = 0.0
                             if WHIFF_STUN and sk.get('whiff_stun') and _dodged and boss['hp'] > 0:  # D192 落空破绽 (solo: dodged = whiff)
                                 _st = float(sk['whiff_stun']) * WHIFF_ARM
                                 boss['next'] = max(boss['next'], t) + _st
