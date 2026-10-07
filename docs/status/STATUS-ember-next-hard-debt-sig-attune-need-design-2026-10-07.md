@@ -73,3 +73,7 @@ Q07 后玩家有 6 件调律版（L01/L02/L06/L08/L10/L12），城内解锁/切�
 ---
 
 *服务器：proxy/login/play 保持 up；本 tip 零部署。*
+
+---
+
+**续（2026-10-07）：** 选题 E 已批 A 并施工 **D297**（1.65.87）。下一档改派见 [`STATUS-ember-next-hard-debt-playfeel-telemetry-need-design-2026-10-07.md`](STATUS-ember-next-hard-debt-playfeel-telemetry-need-design-2026-10-07.md)。
