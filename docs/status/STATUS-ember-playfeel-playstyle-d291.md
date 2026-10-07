@@ -13,7 +13,7 @@
 |---|---|
 | `ember_p1_playstyle.yml` | 新菜单；三标签卡 + PAPI；深链技能/签名/天赋/hub |
 | `ember_hub.yml` | B「推荐打法」；成长格旁提示 |
-| `ember_skill_kit` / `ember_p1_sig` / `ember_p1_spec` | P 深链 |
+| `ember_skill_kit` / `ember_p1_sig` / `ember_p1_spec V 深链 |
 | `ember_help.yml` 变强 | 可点进推荐打法 |
 | 设计稿 §3.3-2 | 标已施工 D291 |
 
