@@ -1,0 +1,93 @@
+# D297 W1c · 本周首次日刷/挑战进本确认（轻量）
+# 条件：Q07 已开 + 至少一件已解锁调律；同周弹一次（jar p1_attuneprompt）。
+# 按钮：去调律 / 就这样进本 / 取消。只转发 /corerpg p1 sig runconfirm <go|attune|cancel>。
+
+Title: '§d本局签名确认'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_sig_runconfirm'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: true
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '#   H   #'
+  - '#  A G  #'
+  - '#   X   #'
+  - '#########'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-1.2'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  H:
+    update: 20
+    display:
+      material: enchanted book
+      name: '§d本局生效 · 签名调律'
+      lore:
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
+        - ''
+        - '§7本周首次进日刷/挑战前确认一次'
+        - '§7可先去调律页换代价，或直接进本'
+        - '§8同周不再打断 · 城内有效 · 非战斗热换'
+
+  A:
+    update: 20
+    display:
+      material: enchantment table
+      name: '§d去调律'
+      lore:
+        - '§7打开签名调律页'
+        - '§7换完后再从冒险/挑战进本'
+        - ''
+        - '§e➥ §f点击'
+    actions:
+      all:
+        - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.4'
+        - close
+        - 'command: corerpg p1 sig runconfirm attune'
+
+  G:
+    update: 20
+    display:
+      material: emerald
+      name: '§a就这样进本'
+      lore:
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
+        - ''
+        - '§7按当前原版/调律直接进本'
+        - ''
+        - '§e➥ §f点击进本'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - close
+        - 'command: corerpg p1 sig runconfirm go'
+
+  X:
+    display:
+      material: barrier
+      name: '§c取消'
+      lore:
+        - '§7不进本 · 关闭面板'
+        - ''
+        - '§e➥ §f点击'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 sig runconfirm cancel'

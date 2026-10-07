@@ -212,8 +212,10 @@ Icons:
       lore:
         - '%corerpg_p1_sig_head%'
         - '%corerpg_p1_sig_blade%'
+        - '%corerpg_p1_sig_blade_o%'
         - '%corerpg_p1_sig_charm%'
-        - '§7每个首领自己的效果 · 首领徽记 · 烬炉烙印 · 开关'
+        - '%corerpg_p1_sig_charm_o%'
+        - '§7每个首领自己的效果 · 首领徽记 · 烬炉烙印 · 开关 · 原版/调律'
         - ''
         - '§e➥ §f打开签名页'
     actions:

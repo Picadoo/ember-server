@@ -1,6 +1,6 @@
 # 签名调律「可感决策」· 城内侧移可见 · 2026-10-07
 
-> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
+> **STATUS：已批 A · 已施工 D297**（总控批 · 施工 2026-10-07 Asia/Shanghai · CoreRpg 1.65.87）  
 > **批注：** 总控批 · 采纳 **方案 M**：W1a+W1b **必做**；W1c **轻量本周首次确认同批**；**R 后置**；**W 否决**。施工已派。本批注仍只动 docs。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** 总控派单「硬设计待批 A」· tip [`STATUS-ember-next-hard-debt-sig-attune-need-design-2026-10-07.md`](../status/STATUS-ember-next-hard-debt-sig-attune-need-design-2026-10-07.md) · D296 房间事件必感 PASS 后下一档横向手感硬债  
@@ -159,13 +159,14 @@
 |----|-----|
 | 2026-10-07 | 策划 · 初稿 STATUS **待批 A** · 荐批 M |
 | 2026-10-07 | 总控 · **已批 A** · M（W1a+W1b 必做；W1c 本周首次确认同批）；R 后置；W 否决；施工已派 |
+| 2026-10-07 | 施工 · **D297** · W1a+W1b+轻量 W1c 上线 1.65.87；ECONOMY_BV 顺修 60；R 仍后置 |
 
 ---
 
 ## 10. 交付与喊代推
 
 - 路径：`docs/design/DESIGN-ember-sig-attune-decision-2026-10-07.md`  
-- backlog：`B-sig-attune-decision` → **已批 A**（方案 M · W1a/b/c；R 后置；W 否决）  
+- backlog：`B-sig-attune-decision` → **已批 A · 已施工 D297**（方案 M · W1a/b/c；R 后置；W 否决）  
 - **只 docs**；本地 commit；**不 push**（总控代推）
 
 ---

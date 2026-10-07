@@ -1,3 +1,4 @@
+# D297：进本 lore「本局生效」+ 短代价（%p1_sig_run% / run_cost）。
 # 余烬 v1 (P1) 挑战版选图 — 书 §18.1：Q07 普通首通后七张图开放独立挑战难度（1～3 人、30 体力、统一 T3 参照、
 # 掉落与印记全部 T3、成色 60/28/10/2、无首通奖励）。只转发 /corerpg enter <qXX> challenge；资格全在服务端校验。
 # 入口：冒险页 ember_p1_adventure 的「挑战版 · 七图」图标，或 /ember_p1_challenge。
@@ -72,6 +73,8 @@ Icons:
         - '§7普通版：§f%corerpg_p1_q01_state%'
         - '§d名片：§f学预警 · 重斩落空破绽'
         - '§7签名：%corerpg_p1_sig_m_q01%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -92,6 +95,8 @@ Icons:
         - '§7普通版：§f%corerpg_p1_q02_state%'
         - '§d名片：§f冲撞引墙'
         - '§7签名：%corerpg_p1_sig_m_q02%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -112,6 +117,8 @@ Icons:
         - '§7普通版：§f%corerpg_p1_q03_state%'
         - '§d名片：§f召唤压力 + 双签名门槛'
         - '§7签名：%corerpg_p1_sig_m_q03%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -132,6 +139,8 @@ Icons:
         - '§7普通版：§f%corerpg_p1_q04_state%'
         - '§d名片：§f落差 / 冲击圈走位'
         - '§7签名：%corerpg_p1_sig_m_q04%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -152,6 +161,8 @@ Icons:
         - '§7普通版：§f%corerpg_p1_q05_state%'
         - '§d名片：§f斧刃横扫 · 团本同源'
         - '§7签名：%corerpg_p1_sig_m_q05%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -172,6 +183,8 @@ Icons:
         - '§7普通版：§f%corerpg_p1_q06_state%'
         - '§d名片：§f半血破招（霜潮汲取）'
         - '§7签名：%corerpg_p1_sig_m_q06%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -192,6 +205,8 @@ Icons:
         - '§7普通版：§f%corerpg_p1_q07_state%'
         - '§d名片：§f冲撞撞墙 + 炉心破招'
         - '§7签名：%corerpg_p1_sig_m_q07%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:

@@ -4,6 +4,7 @@
 # 入口：主菜单 ember_hub 的「冒险 · 主线本」图标，或 /ember_p1_adventure。
 # D288：左上「本周短目标」一眼精选剩次 / 事件池 / 誓约 / 残响 claim / 花样。
 # D292：每图「签名：%sig_m_qXX%」徽记一眼；结算花样委托 +1（jar）。
+# D297：有签名且 Q07 后 lore 增「本局生效」+ 短代价（%p1_sig_run% / run_cost；空则无行感）。
 
 Title: '§6余烬 · 冒险'
 
@@ -273,6 +274,8 @@ Icons:
         - '§7首通：§f%corerpg_p1_q01_fc%'
         - '§d名片：§f学预警 · 重斩落空破绽'
         - '§7签名：%corerpg_p1_sig_m_q01%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进本（队长点；队员需各自满足条件）'
     actions:
@@ -295,6 +298,8 @@ Icons:
         - '§7首通：§f%corerpg_p1_q02_fc%'
         - '§d名片：§f冲撞引墙'
         - '§7签名：%corerpg_p1_sig_m_q02%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进本（需 Q01 首通）'
     actions:
@@ -317,6 +322,8 @@ Icons:
         - '§7首通：§f%corerpg_p1_q03_fc%'
         - '§d名片：§f召唤压力 + 双签名门槛'
         - '§7签名：%corerpg_p1_sig_m_q03%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进本（需 Q02 首通）'
     actions:
@@ -339,6 +346,8 @@ Icons:
         - '§7首通：§f%corerpg_p1_q04_fc%'
         - '§d名片：§f落差 / 冲击圈走位'
         - '§7签名：%corerpg_p1_sig_m_q04%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进本（需 Q03 首通）'
     actions:
@@ -361,6 +370,8 @@ Icons:
         - '§7首通：§f%corerpg_p1_q05_fc%'
         - '§d名片：§f斧刃横扫 · 团本同源'
         - '§7签名：%corerpg_p1_sig_m_q05%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进本（需 Q04 首通）'
     actions:
@@ -384,6 +395,8 @@ Icons:
         - '§7首通：§f%corerpg_p1_q06_fc%'
         - '§d名片：§f半血破招（霜潮汲取）'
         - '§7签名：%corerpg_p1_sig_m_q06%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进本（需 Q05 首通）'
     actions:
@@ -406,6 +419,8 @@ Icons:
         - '§7首通：§f%corerpg_p1_q07_fc%'
         - '§d名片：§f冲撞撞墙 + 炉心破招'
         - '§7签名：%corerpg_p1_sig_m_q07%'
+        - '%corerpg_p1_sig_run%'
+        - '%corerpg_p1_sig_run_cost%'
         - ''
         - '§e➥ §f点击进本（需 Q06 首通）'
     actions:

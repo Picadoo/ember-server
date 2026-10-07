@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.yaml.snakeyaml.Yaml;
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
+import town.sunshine.corerpg.DailyService;
+import town.sunshine.corerpg.p1.encounter.EmberSigAttunePreview;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -300,6 +302,7 @@ public final class EmberGrowthService implements Listener {
         UUID u = e.getPlayer().getUniqueId();
         cache.remove(u); dodgeUntil.remove(u); dodgeHealCd.remove(u); pendingRoll.remove(u); rerollBusy.remove(u);
         SPICK.remove(u); SFROM.remove(u); shield.remove(u); // D174 stage 1.5 / 2a
+        pendingEnter.remove(u); // D297 W1c
     }
 
     // ------------------------------------------------------------------ commands
@@ -745,6 +748,11 @@ public final class EmberGrowthService implements Listener {
     static final String C_SIGOFF = "p1_sigoff_";
     /** D174 stage 1.5: this signature was ever stamped / imprinted for this player (period all; codex 「获得过」) */
     static final String C_SIGSEEN = "p1_sigseen_";
+    /** D297 W1c: week key already showed attune confirm (period = ISO week) */
+    static final String C_ATTUNE_PROMPT = "p1_attuneprompt";
+    public static final String SIG_RUN_CONFIRM = "ember_p1_sig_runconfirm";
+    /** pending enter after confirm: {mapKey, "1"|"0" challenge} */
+    private final Map<UUID, String[]> pendingEnter = new ConcurrentHashMap<UUID, String[]>();
 
     public boolean sigOff(PlayerData d, String slot) { return d != null && d.periodCount(C_SIGOFF + slot, "all") > 0; }
 
@@ -800,7 +808,115 @@ public final class EmberGrowthService implements Listener {
         EmberSignature.Worn w = worn(d, it);
         if (w.def == null) return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §8（无签名）";
         String why = sigWhy(d, lo, slot);
-        return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §6" + w.def.name + (why == null ? " §a生效" : " §c不生效：" + why);
+        String ed = "";
+        if (why == null && EmberSignature.alt(w.def) != null && altUnlocked(d, w.def))
+            ed = sigAlt(d, w.def) ? " §d·调律" : " §a·原版";
+        return "§7" + EmberItemData.slotName(slot) + "：§f" + it.shortLabel() + " §6" + w.def.name
+                + (why == null ? " §a生效" : " §c不生效：" + why) + ed;
+    }
+
+    /** D297 W1b: other-edition cost for the worn slot (empty if none / locked). */
+    private String wornOtherCost(PlayerData d, EmberLoadout lo, String slot) {
+        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        if (it == null) return "";
+        EmberSignature.Worn w = worn(d, it);
+        if (w == null || w.def == null || EmberSignature.alt(w.def) == null) return "";
+        if (!altUnlocked(d, w.def)) return "§8调律版未解锁";
+        return altOther(d, w.def);
+    }
+
+    /** D297: active worn signatures that participate in combat (same as signatures()). */
+    private EmberSigAttunePreview.Slot previewSlot(PlayerData d, EmberLoadout lo, String slot) {
+        EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+        if (it == null || sigOff(d, slot)) return null;
+        EmberSignature.Worn w = worn(d, it);
+        if (w == null || w.def == null) return null;
+        if (sigWhy(d, lo, slot) != null) return null; // not active
+        boolean alt = sigAlt(d, w.def);
+        String other = EmberSignature.alt(w.def) == null ? null
+                : (alt ? w.def.bad : EmberSignature.alt(w.def).bad);
+        return new EmberSigAttunePreview.Slot(EmberItemData.slotName(slot),
+                alt ? "调律" : "原版", EmberSignature.badOf(w.def, alt), other);
+    }
+
+    /** D297 W1a: empty unless Q07 open and at least one active signature. */
+    String runPreviewLine(PlayerData d, EmberLoadout lo) {
+        if (d == null || lo == null || !runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return "";
+        return EmberSigAttunePreview.runLine(EmberSigAttunePreview.listOf(previewSlot(d, lo, "blade"), previewSlot(d, lo, "charm")));
+    }
+
+    String runPreviewCost(PlayerData d, EmberLoadout lo) {
+        if (d == null || lo == null || !runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return "";
+        return EmberSigAttunePreview.costLine(EmberSigAttunePreview.listOf(previewSlot(d, lo, "blade"), previewSlot(d, lo, "charm")));
+    }
+
+    /** true if at least one worn active sig has unlocked attune. */
+    boolean anyUnlockedAttuneWorn(PlayerData d, EmberLoadout lo) {
+        if (d == null || lo == null || !runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return false;
+        for (String slot : new String[]{"blade", "charm"}) {
+            EmberItemData it = "blade".equals(slot) ? lo.blade : lo.charm;
+            if (it == null || sigOff(d, slot)) continue;
+            EmberSignature.Worn w = worn(d, it);
+            if (w == null || w.def == null || sigWhy(d, lo, slot) != null) continue;
+            if (altUnlocked(d, w.def)) return true;
+        }
+        return false;
+    }
+
+    boolean needAttunePrompt(PlayerData d, EmberLoadout lo) {
+        if (!anyUnlockedAttuneWorn(d, lo)) return false;
+        return d.periodCount(C_ATTUNE_PROMPT, DailyService.weekId()) <= 0;
+    }
+
+    void markAttunePromptShown(PlayerData d) {
+        if (d == null) return;
+        String wk = DailyService.weekId();
+        if (d.periodCount(C_ATTUNE_PROMPT, wk) <= 0) d.addPeriodCount(C_ATTUNE_PROMPT, wk, 1);
+    }
+
+    /**
+     * D297 W1c: if first weekly confirm needed, stash enter and open panel; return true = caller must not start run.
+     */
+    public boolean maybeAttunePrompt(Player leader, String mapKey, boolean challenge) {
+        if (leader == null || mapKey == null) return false;
+        String mk = mapKey.toLowerCase(Locale.ROOT);
+        if (!mk.matches("q0[1-7]")) return false; // D297: 日刷/挑战 (q01–q07) only; not raid/abyss
+        PlayerData d = plugin.getDataStore().get(leader.getUniqueId());
+        EmberLoadout lo = runs.loadouts().get(leader);
+        if (!needAttunePrompt(d, lo)) return false;
+        pendingEnter.put(leader.getUniqueId(), new String[]{mk, challenge ? "1" : "0"});
+        markAttunePromptShown(d); // 同周不重复：弹出即记
+        plugin.getDataStore().flushMutation(leader.getUniqueId());
+        openMenu(leader, SIG_RUN_CONFIRM);
+        return true;
+    }
+
+    /** D297: confirm panel actions — go | attune | cancel */
+    boolean sigRunConfirm(Player p, PlayerData d, String action) {
+        String[] pend = pendingEnter.get(p.getUniqueId());
+        if ("attune".equals(action) || "调律".equals(action)) {
+            pendingEnter.remove(p.getUniqueId());
+            markAttunePromptShown(d);
+            plugin.getDataStore().flushMutation(p.getUniqueId());
+            openMenu(p, SIG_ALT_MENU);
+            return true;
+        }
+        if ("cancel".equals(action) || "取消".equals(action)) {
+            pendingEnter.remove(p.getUniqueId());
+            p.sendMessage(P + "§7已取消进本确认");
+            return true;
+        }
+        // go / 就这样
+        if (pend == null) {
+            p.sendMessage(P + "§7没有待确认的进本（从冒险/挑战再点一次）");
+            return true;
+        }
+        pendingEnter.remove(p.getUniqueId());
+        markAttunePromptShown(d);
+        plugin.getDataStore().flushMutation(p.getUniqueId());
+        boolean ch = "1".equals(pend[1]);
+        runs.tryEnterAfterAttuneConfirm(p, pend[0], ch);
+        return true;
     }
 
     /** why the worn {@code slot} signature is off (null = on; "无" = no signature) */
@@ -841,6 +957,9 @@ public final class EmberGrowthService implements Listener {
             return true;
         }
         if ("toggle".equals(op)) return sigToggle(p, d, lo, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "");
+        if ("runconfirm".equals(op) || "进本确认".equals(op)) { // D297 W1c
+            return sigRunConfirm(p, d, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "go");
+        }
         if ("attune".equals(op) || "调律".equals(op)) { // stage 3: bare = the 调律 page; <Lxx> = switch; <Lxx> unlock = pay 10 insignia
             if (args.length < 4) { openMenu(p, SIG_ALT_MENU); return true; }
             return sigAttune(p, d, args[3], args.length >= 5 && "unlock".equalsIgnoreCase(args[4]));
@@ -1152,6 +1271,10 @@ public final class EmberGrowthService implements Listener {
                             + EmberSignature.IMPRINT_COIN_PER_TIER + "×阶级 币）";
             }
         }
+        if ("run".equals(key)) return runPreviewLine(d, lo);
+        if ("run_cost".equals(key)) return runPreviewCost(d, lo);
+        if ("blade_o".equals(key)) return wornOtherCost(d, lo, "blade");
+        if ("charm_o".equals(key)) return wornOtherCost(d, lo, "charm");
         if (key.startsWith("p_")) return impPapi(p, d, lo, key.substring(2));
         return "";
     }

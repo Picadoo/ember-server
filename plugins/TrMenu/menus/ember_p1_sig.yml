@@ -2,6 +2,7 @@
 # 图鉴（每个首领两件：获得过 / 还没获得 / 未解锁 + 效果 + 代价）· 正在用的两件上的签名（点击开关）· 点一条签名 → 烬炉烙印页。
 # 文字 / 状态全部来自 PAPI %corerpg_p1_sig_*%（EmberGrowthService.sigPapi），菜单不自己算；按钮只调 /corerpg p1 sig 的子命令。
 # 签名按 EmberSignature.DEFS 的顺序编号：n_1 = L01 … n_15 = L15（第 2a 阶段 Q04–Q06 在第 4、5 排；第 3 阶段 Q07 在最后一排，T = 签名调律页）。
+# D297：穿着摘要标原版/调律（wornLine）+ 另一版代价（blade_o/charm_o）。
 # 入口：装备页「签名传奇」、技能组「签名传奇」、首通解锁消息里的 [打开签名页]、/corerpg p1 sig。返回键回到打开它的那一页。
 # D290：与技能组互相深链（from skill → 返回技能组）。
 
@@ -95,6 +96,7 @@ Icons:
       name: '§6正在用的刃'
       lore:
         - '%corerpg_p1_sig_blade%'
+        - '%corerpg_p1_sig_blade_o%'
         - ''
         - '%corerpg_p1_sig_blade_t%'
         - '§8只能在城里开关'
@@ -110,6 +112,7 @@ Icons:
       name: '§6已选护符'
       lore:
         - '%corerpg_p1_sig_charm%'
+        - '%corerpg_p1_sig_charm_o%'
         - ''
         - '%corerpg_p1_sig_charm_t%'
         - '§8只能在城里开关'

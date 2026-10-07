@@ -321,6 +321,14 @@ public final class EmberRunService implements Listener {
      *                  challenge HP and damage, no first-clear package, same 30 stamina
      */
     public boolean tryEnter(final Player leader, String mapKey, final boolean challenge) {
+        // D297 W1c: first weekly attune confirm (town only; not abyss)
+        EmberGrowthService g = EmberGrowthService.get();
+        if (g != null && g.maybeAttunePrompt(leader, mapKey, challenge)) return true;
+        return enter(leader, mapKey, challenge, 0, 0L);
+    }
+
+    /** D297: confirm panel "就这样进本" bypasses the weekly prompt (already marked). */
+    public boolean tryEnterAfterAttuneConfirm(final Player leader, String mapKey, final boolean challenge) {
         return enter(leader, mapKey, challenge, 0, 0L);
     }
 
