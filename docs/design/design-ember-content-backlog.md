@@ -726,7 +726,7 @@
 | **B-flex-2** | **可装配轻技 1 槽**（位移 **或** 保命择一；荐 A · 位移「余烬踏步」；TrMenu 点击；零体力） | 静态 `rg` 轻技 id / 1 槽字段；菜单装配+释放轻测；**禁** wall-clock / DPS；不叫挑刺；**禁**动誓约三主动数值、体力日周门、四件甲、锻炉大改、T0–T3 刃护符；**勿**位移+保命双上 | **PASS · 勾销**（设计 `d1e88e4` · 批准 `7d7bf5a` · 插件 `fc89225` · 补记 `3841f4f` · 测 `1c36873` · close 本提交；报告 `docs/status/STATUS-ember-flex-skill-slot-pilot-test.md`；CoreRpg **1.15.25**） |
 | ~~**B-flex-3**~~ | 副手 **守腕/生坠薄获取口**（灰粮 stub 币购） | life offhand_ward/vita + ember_life O/W | **PASS · 勾销**（设计 `8a605f3` · 批准 `440e632` · 施工 `58baffe` · 测 `4a3b373` · close 本提交） |
 | **B-flex-4** | 踏步少开菜单热键（挑刺 #2） | 潜行+Q → cancel+cast；菜单口保留；**勿**改 CD14/距离5 | **PASS · 勾销**（设计 `a9311ac` · 批准 `7b4a8b6` · 插件 `005a03b` · 测 `a1d5f7c` · close `6b0ce3d`；报告 `docs/status/STATUS-ember-flex-hotkey-sneak-drop-test.md`；CoreRpg **1.15.28**） |
-| **B-flex-5** | **副手并轨/不并轨决策页**（加固 §8-5 · 替换预算表） | 只 docs：`DESIGN-ember-offhand-budget-decision-2026-10-07.md`；荐 A 永不进 P1 B/H；**待批 A**；批前禁施工 NI/Loadout/p1sim；六槽不做；不新增 DPS 轴 | **待批 A**（设计本提交；指针 · 不扩施工） |
+| **B-flex-5** | **副手并轨/不并轨决策页**（加固 §8-5 · 替换预算表） | 只 docs：`DESIGN-ember-offhand-budget-decision-2026-10-07.md`；**已批 A · 方案 A**（永不进 P1 B/H）；方案 B 搁置；可开诚实半行薄窗（不改数值）；六槽不做；不新增 DPS 轴 | **已批 A · 方案 A** |
 
 **并行不捆：** **B2.17** 已 **PASS · 勾销**；文案薄窗暂缓；**勿捆 B2.x**；B-flex-1 已结（`d333b01`）；B-flex-2 已结（close 本提交）。
 
@@ -736,7 +736,7 @@
 - ~~副手薄获取~~ → **B-flex-3 PASS · 勾销**（close 本提交）
 - ~~灰箍碎片抢口文案~~ → **B2.45 PASS · 勾销**（文案表）
 - ~~踏步热键~~ → **B-flex-4 PASS · 勾销**（潜行+Q）
-- 副手并轨/不并轨决策页 → **B-flex-5 待批 A**（`DESIGN-ember-offhand-budget-decision-2026-10-07.md` · 加固 §8-5；荐 A；批前禁施工）
+- 副手并轨/不并轨决策页 → **B-flex-5 已批 A · 方案 A**（`DESIGN-ember-offhand-budget-decision-2026-10-07.md` · 永不进 B/H；方案 B 搁置；可开诚实半行）
 - ~~拆解管理注释~~ → **B2.46 PASS · 勾销**
 - ~~拆解 Open tell「逻辑待 CoreRpg 接线」~~ → **B2.47 PASS · 勾销**（测 `6952749`）
 - ~~公会 Open tell「逻辑待 CoreRpg 接线」~~ → **B2.48 PASS · 勾销**（测 `8d3f3cf`）
