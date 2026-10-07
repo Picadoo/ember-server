@@ -45,6 +45,6 @@ D308 手查硬表已有；OP 仍要手抄 `p1-telemetry/<week>.yml`。本窗**�
 
 ## 下一窗
 
-- **脚本方案 R**（`tools/p1-telemetry-week-report.py`）→ **仍后置**；若总控另批须**另派施工号**（docs/tools only）；输出只得门槛勾选+当前态摘要；**禁**无签字「建议开 R」；**禁**与战斗/经济 R 同号  
+- **脚本方案 R** → tip 已升档：[`STATUS-ember-next-hard-debt-sample-week-report-script-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-sample-week-report-script-need-design-2026-10-08.md) · backlog `B-sample-week-report-script` · 荐 docs 脚本契约（可修订本 DESIGN §2.2）；落脚本须总控批 A 后 docs/tools only；输出只得门槛勾选+当前态摘要；**禁**无签字「建议开 R」；**禁**与战斗/经济 R 同号  
 - 真开某 R：先周报勾到「可讨论」+ 总控签字进入该债待批 A → 再派该债硬设计（不得跳过）· 对照 [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) + D298  
-- **禁** 偷开任一 R · 改价(=forge R) · Pack6/六槽 · 天赋/灰印续跑 · 重开 D307–D309 · 玩家面遥测 · 改 D308 门槛数 · 薄 UX 抬假硬债挡窗
+- **禁** 偷开任一 R · 改价(=forge R) · Pack6/六槽 · 天赋/灰印续跑 · 重开 D307–D310 · 玩家面遥测 · 改 D308 门槛数 · 薄 UX 抬假硬债挡窗
