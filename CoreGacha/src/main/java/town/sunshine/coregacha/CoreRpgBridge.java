@@ -14,6 +14,9 @@ import org.bukkit.plugin.Plugin;
  * {@code flushMutation}. Coins ({@code getCoin/takeCoin/addCoin}) and 余烬徽 ({@code p3_badge@all}) the same way.
  * MAIN THREAD ONLY (CoreRpg mutates PlayerData on the main thread). Any reflection failure = "not available" → the
  * caller rolls back / refunds.
+ *
+ * <p>D278 exchange path: {@link #takeCoinHold}/{@link #takeBadgesHold} then gacha MySQL, then {@link #flushPlayer}
+ * on success (or memory refund on failure) — avoids persisting a coin debit before tickets exist.</p>
  */
 public final class CoreRpgBridge {
     static final String C_BOUGHT = "p2_cosbuy_";
@@ -98,8 +101,20 @@ public final class CoreRpgBridge {
         try { return ready() ? (Integer) getCoin.invoke(data(u)) : 0; } catch (Throwable t) { return 0; }
     }
 
+    /**
+     * D278: memory-only take for cross-plugin exchange. Do <b>not</b> flush here — persist only after the
+     * gacha MySQL ticket credit commits ({@link #flushPlayer}). Kill-9 between take and gacha commit then
+     * reloads the pre-take balance from CoreRpg (player-safe). Crash after gacha commit but before flush
+     * can leave free tickets (economy leak, not coin loss) — full atomicity needs an intent ledger (see STATUS).
+     */
+    public boolean takeCoinHold(UUID u, int n) {
+        try { return ready() && (Boolean) takeCoin.invoke(data(u), n); }
+        catch (Throwable t) { log.warning("[bridge] takeCoinHold: " + t); return false; }
+    }
+
+    /** Immediate take + flush (legacy; prefer {@link #takeCoinHold} + {@link #flushPlayer} for exchange). */
     public boolean takeCoin(UUID u, int n) {
-        try { boolean ok = ready() && (Boolean) takeCoin.invoke(data(u), n); if (ok) flush(u); return ok; }
+        try { boolean ok = takeCoinHold(u, n); if (ok) flush(u); return ok; }
         catch (Throwable t) { log.warning("[bridge] takeCoin: " + t); return false; }
     }
 
@@ -107,18 +122,25 @@ public final class CoreRpgBridge {
         try { addCoin.invoke(data(u), n); flush(u); } catch (Throwable t) { log.severe("[bridge] REFUND addCoin " + n + " → " + u + " failed: " + t); }
     }
 
+    /** Persist CoreRpg PlayerData after a successful gacha-side commit. */
+    public void flushPlayer(UUID u) { flush(u); }
+
     public int badges(UUID u) {
         try { return ready() ? (Integer) periodCount.invoke(data(u), C_BADGE, "all") : 0; } catch (Throwable t) { return 0; }
     }
 
-    public boolean takeBadges(UUID u, int n) {
+    public boolean takeBadgesHold(UUID u, int n) {
         try {
             Object d = data(u);
             if ((Integer) periodCount.invoke(d, C_BADGE, "all") < n) return false;
             addPeriodCount.invoke(d, C_BADGE, "all", -n);
-            flush(u);
             return true;
-        } catch (Throwable t) { log.warning("[bridge] takeBadges: " + t); return false; }
+        } catch (Throwable t) { log.warning("[bridge] takeBadgesHold: " + t); return false; }
+    }
+
+    public boolean takeBadges(UUID u, int n) {
+        try { boolean ok = takeBadgesHold(u, n); if (ok) flush(u); return ok; }
+        catch (Throwable t) { log.warning("[bridge] takeBadges: " + t); return false; }
     }
 
     public void addBadges(UUID u, int n) {

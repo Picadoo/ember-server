@@ -524,7 +524,11 @@ public final class GachaService {
         });
     }
 
-    /** 余烬币 / 余烬徽 → 扭蛋券: take on the main thread, add in a transaction, give back if that fails */
+    /**
+     * 余烬币 / 余烬徽 → 扭蛋券.
+     * D278: deduct CoreRpg balance in memory only, credit tickets in gacha MySQL, then flush CoreRpg on success
+     * (or restore memory on failure). Avoids persisting a coin/badge debit before tickets exist (ARCH R5 ①).
+     */
     void exchange(Player p, String what, int n) {
         final UUID u = p.getUniqueId(); final String name = p.getName();
         boolean coin = "coin".equals(what);
@@ -540,7 +544,7 @@ public final class GachaService {
         final int unit = pl.getConfig().getInt(coin ? "tickets.exchange.coin" : "tickets.exchange.badge", coin ? 1200 : 20);
         final int price = unit * k;
         if (!busy.add(u)) { p.sendMessage(P + "§c上一个操作还没结束。"); return; }
-        boolean took = coin ? rpg.takeCoin(u, price) : rpg.takeBadges(u, price);
+        boolean took = coin ? rpg.takeCoinHold(u, price) : rpg.takeBadgesHold(u, price);
         if (!took) {
             busy.remove(u);
             p.sendMessage(P + "§c" + (coin ? "余烬币" : "余烬徽") + "不够：" + k + " 张要 " + price + "，现有 " + (coin ? rpg.coin(u) : rpg.badges(u)));
@@ -560,10 +564,11 @@ public final class GachaService {
             busy.remove(u);
             if (t == null || t < 0) {
                 if (coin) rpg.addCoin(u, price); else rpg.addBadges(u, price);
-                pl.getLogger().warning("[exchange] " + name + " failed, refunded " + price + " " + what);
+                pl.getLogger().warning("[exchange] " + name + " failed, restored " + price + " " + what + " (memory; D278 hold)");
                 msg(u, "§c兑换失败，已退还 " + price + (coin ? " 余烬币" : " 余烬徽") + "。");
                 return;
             }
+            rpg.flushPlayer(u); // D278: persist debit only after tickets committed
             PCache c1 = cache.get(u);
             if (c1 != null) { c1.tickets = t; if (!day.equals(c1.day)) { c1.daily.clear(); c1.day = day; } c1.daily.merge("exch", k, Integer::sum); }
             pl.getLogger().info("[exchange] " + name + " " + price + " " + what + " → " + k + " tickets");
