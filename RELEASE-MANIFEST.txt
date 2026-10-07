@@ -16,6 +16,8 @@
     ember_daily_frost_v1, ember_daily_rail_v1（P1 主线 Q01–Q07 书白盒，2026-10-02 新增；未进下一个 binaries 包前
     可在服内重建：/corerpg p1 mapbuild q01..q07，Q05 也可 /corerpg spirebuild v1；
     备份包：Release maps-v1-2026-10-02 资产 ember-p1-maps-v1-2026-10-02.zip，解压到仓库根目录）
+    ⚠ 现行版本是 Release maps-v2-2026-10-03（ember-p1-maps-v2-2026-10-03.zip）。binaries 包不含 *_v1：恢复后必须跑
+      scripts/dp-maps-v2-verify.sh（--restore-broken 补缺失/软链）；2026-10-08 曾发现 *_v1 被软链到旧日图，P1 全部副本跑在错图上
   server-runtime/libs, server-runtime/libraries, server-runtime/cache               运行库缓存（可选）
   **/*.jar                                                                            paper-custom.jar、原版 paper-1.12.2-1620.jar、全部插件 jar、客户端 mod
   plugins/**/*.db, login-runtime/plugins/AuthMe/authme.db                             插件本地数据（sqlite）

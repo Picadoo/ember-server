@@ -28,7 +28,8 @@
 4. MariaDB 没响应 → 后台 `mysqld_safe --user=mysql`，确认跑在 `/workspace/mysql-data`；
 5. 应用账号 `ember@127.0.0.1/localhost` 不存在 → 用 `plugins/CoreRpg/config.yml` 里的密码新建（已存在的账号**不改**；密码不打印、不进命令行）；
 6. `ember` / `authme` 库缺表 → `scripts/db-restore.sh latest --live --yes`（最新每小时备份，先试导核对再导正式库）；
-7. 登录 / 游玩 / 代理没全在跑 → `setsid nohup scripts/ember-up.sh`。
+7. DP 的 P1 地图模板（`plugins/DungeonPlus/map/ember_daily*_v1`，**不在 binaries 包里**）缺失或是软链 → `scripts/dp-maps-v2-verify.sh --restore-broken`（从 Release `maps-v2-2026-10-03` 恢复；只在游玩服没跑时做；内容不同只报告不覆盖）；
+8. 登录 / 游玩 / 代理没全在跑 → `setsid nohup scripts/ember-up.sh`。
 
 跑完核对：端口 3306 / 25565 / 25566 / 25567 在监听；`server-runtime/logs/latest.log` 有 `MySQL connected` 和 `Done (`；`login-runtime/logs/latest.log` 有 `[AuthMe] MySQL setup finished`。
 
@@ -38,4 +39,4 @@
 
 - CoreRpg / AuthMe 配置里的数据库密码仍是仓库占位值，与 `secrets/mysql-ember.env` 不一致；库用户密码按配置设置（只允许本机登录）。统一密码需另行决定。
 - `server-runtime/ops.json` 有 17 个测试号是 4 级管理员（重启前即如此），是否清理待定。
-- `ember_daily_ash_v1` / `ember_daily_crypt_v1` 两张图 Multiverse 报加载失败，重启前就有。
+- ~~`ember_daily_ash_v1` / `ember_daily_crypt_v1` 两张图 Multiverse 报加载失败~~ → 已查清并处理（同时发现 P1 副本模板是软链到旧图），见 [`STATUS-ember-dp-p1-maps-restore-2026-10-08.md`](../status/STATUS-ember-dp-p1-maps-restore-2026-10-08.md)。

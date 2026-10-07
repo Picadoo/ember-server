@@ -15,7 +15,9 @@
 #   5. app user `ember`@127.0.0.1/localhost  → CREATE USER IF NOT EXISTS with the password from plugins/CoreRpg/config.yml
 #                                              (an existing user is never altered; password never printed / never in argv)
 #   6. ember or authme DB missing / empty    → scripts/db-restore.sh latest --live --yes (newest verified hourly dump)
-#   7. login / play / proxy not all running  → scripts/ember-up.sh (setsid nohup; start.sh skips what already runs)
+#   7. DP P1 map templates missing/symlinked → scripts/dp-maps-v2-verify.sh --restore-broken (only while play is down;
+#                                              content diffs are only reported, never overwritten here)
+#   8. login / play / proxy not all running  → scripts/ember-up.sh (setsid nohup; start.sh skips what already runs)
 # No auto-start hook is installed; run this by hand after a rebuild. Needs passwordless sudo.
 set -uo pipefail
 M="${EMBER_RUNTIME:-/workspace/minecraft}"
@@ -25,7 +27,7 @@ CHECK=0; DBONLY=0
 for a in "$@"; do
   case "$a" in
     --check) CHECK=1 ;; --db-only) DBONLY=1 ;;
-    -h|--help) sed -n '2,21p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,23p' "$0"; exit 0 ;;
     *) echo "unknown option $a" >&2; exit 2 ;;
   esac
 done
@@ -109,9 +111,17 @@ SQL
   fi
 fi
 
-# 7. stack
 [ "$DBONLY" = 1 ] && { say "done (--db-only)"; exit 0; }
 alive() { [ -f "$1" ] && kill -0 "$(cat "$1")" 2>/dev/null; }
+
+# 7. DungeonPlus P1 map templates (not in the binaries pack; were symlinks to old maps on 2026-10-08)
+if [ "$CHECK" = 1 ] || alive "$M/server-runtime/server.pid"; then
+  "$M/scripts/dp-maps-v2-verify.sh" | sed 's/^/  /' || say "WARN: DP map templates do not match maps-v2 (see above; restore needs the play server stopped)"
+else
+  "$M/scripts/dp-maps-v2-verify.sh" --restore-broken | sed 's/^/  /' || say "WARN: DP map templates: content differs from maps-v2 (left as is) or restore failed"
+fi
+
+# 8. stack
 if alive "$M/login-runtime/server.pid" && alive "$M/server-runtime/server.pid" && alive "$M/proxy-runtime/proxy.pid"; then
   say "ok: login/play/proxy already running"
 elif act "start stack (scripts/ember-up.sh via setsid nohup; log /tmp/ember-up.log)"; then
