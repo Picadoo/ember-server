@@ -63,6 +63,12 @@ cand('D1b', 'row1', 'T0b 机动 躲后3s×1.22 / 首领×0.86', {'dodge_dmg': 1.
 cand('F7b', 'row1', 'T0b 站桩 预警×0.90 / 普攻×1.07', {'taken_tele': 0.90, 'taken_boss': 1.07})
 cand('W6b', 'row1', 'T0b 压上 窗1.2s×1.18 / 窗外×0.97', {'win_dmg': 1.18, 'win_secs': 1.2, 'win_out': 0.97})
 
+# T0c mid-corridor (screen-only; DESIGN-ember-talent-row1-t0c-narrow · 已批 A)
+# Do NOT overwrite D1/D1b/F7/F7b/W6/W6b. Pair: D1c↔t1a, F7c↔t1b, W6c↔t1c.
+cand('D1c', 'row1', 'T0c 机动 躲后3s×1.28 / 首领×0.90', {'dodge_dmg': 1.28, 'dodge_secs': 3, 'dmg_boss': 0.90})
+cand('F7c', 'row1', 'T0c 站桩 预警×0.88 / 普攻×1.05', {'taken_tele': 0.88, 'taken_boss': 1.05})
+cand('W6c', 'row1', 'T0c 压上 窗1.2s×1.18 / 窗外×0.98', {'win_dmg': 1.18, 'win_secs': 1.2, 'win_out': 0.98})
+
 # row 3 (set-locked: only the matching set) · target metric in brackets
 cand('t3a', 'cur', '现行 燎原', {'burn_spread': 1, 'spread_icd': 15, 'burn_mult': 0.94}, 't3a', sets=('scorch',))
 cand('t3b', 'cur', '现行 反震', {'hit_burst': 1, 'taken_tele': 1.02}, 't3b', sets=('burst',))

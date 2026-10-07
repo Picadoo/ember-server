@@ -77,6 +77,7 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1c,F7c,W6c --n 2000 -
 |----|-----|
 | 2026-10-07 | 初稿 · 待批 A · 响应 T0b 过收下砸 |
 | 2026-10-07 | 总控批 **已批 A** · 采纳 D1c/F7c/W6c · T0c 复跑中 |
+| 2026-10-07 | 施工/T0c | 按 §1 复跑 D1c/F7c/W6c · ±2pp → **❌** · `STATUS-ember-talent-row1-t0c-2026-10-07.md`；不开 T1 |
 
 - T0b 收窄：`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`  
 - 主规格：`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`  
