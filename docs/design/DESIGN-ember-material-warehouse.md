@@ -4,6 +4,8 @@
 **诉求：** 玩家仓库；**单种物品几乎无限堆**；**可解锁新格子**。  
 **承接：** `docs/design/DESIGN-ember-character-storage.md`（末影箱保留）；本文件替换「扩展页占位」。
 
+> **D253 追记（2026-10-07）：** P1 现行玩家存取走枢纽「仓库」→ `EmberVault`（§8）。旧 `/corerpg warehouse` 在 P1 下对非 OP **只读**（S0-10 / D252 / CoreRpg 1.65.71）：可 `list`/`info`，不可 `deposit`/`withdraw`/`unlock`。下文 §1–§7 保留作旧命令能力说明与 OP 测本参考，**不要写成给玩家的操作教程**。
+
 ---
 
 ## 1. 产品定案
@@ -23,15 +25,16 @@
 
 ## 2. 命令面（CoreRpg）
 
-> 注意：现有 `/corerpg storage` = 显示 yaml|mysql ping。**材料仓用 `warehouse` 子命令**，避免撞名。
+> 注意：现有 `/corerpg storage` = 显示 yaml|mysql ping。**材料仓用 `warehouse` 子命令**，避免撞名。  
+> **P1 现行（D252）：** 非 OP 仅总览 / info；写命令被拒并提示用枢纽仓库。OP / `corerpg.admin` 仍可全套（测本）。
 
-| 命令 | 行为 |
-|------|------|
-| `/corerpg warehouse` | 总览：已用/总格、每格 id×数量 |
-| `/corerpg warehouse deposit` | 将 **主手** NI 物品全部存入（同 id 叠；无空格且无同 id → 失败） |
-| `/corerpg warehouse withdraw <slot\|id> [n]` | 取出；默认取出 64 或整堆（可配） |
-| `/corerpg warehouse unlock [coin\|cash]` | 解锁 +1 格；默认 coin；cash=晶钻 |
-| `/corerpg warehouse info <slot>` | 单格详情 |
+| 命令 | 行为 | P1 非 OP |
+|------|------|----------|
+| `/corerpg warehouse` | 总览：已用/总格、每格 id×数量 | ✅ 可 |
+| `/corerpg warehouse info <slot>` | 单格详情 | ✅ 可 |
+| `/corerpg warehouse deposit` | 将 **主手** NI 物品全部存入（同 id 叠；无空格且无同 id → 失败） | ❌ 拒（用枢纽仓库） |
+| `/corerpg warehouse withdraw <slot\|id> [n]` | 取出；默认取出 64 或整堆（可配） | ❌ 拒 |
+| `/corerpg warehouse unlock [coin\|cash]` | 解锁 +1 格；默认 coin；cash=晶钻 | ❌ 拒（P1 本无格上限） |
 
 权限：`corerpg.warehouse`（含于 `corerpg.use`）。
 
@@ -56,12 +59,12 @@ whitelist:
   - mat_ember_core_fragment
   - mat_ember_enchant_crystal
   - gem_ember_sharp
-  - ticket_ember_daily
+  - ticket_ember_daily   # 遗留票物；不是玩家「门票」货币（见 DP README）
   - ticket_ember_weekly
   - ticket_ember_abyss
 ```
 
-（具体 id 以服内 NI 实名为准；插件岗落地时扫一遍 Items/ 对齐。）
+（具体 id 以服内 NI 实名为准；P1 现行白名单以 `ember-v1.yml storage.vault.whitelist` 为准，见 §8。）
 
 ---
 
@@ -79,15 +82,13 @@ YAML 玩家文件兼容键：`warehouseSlots` / `warehouseJson`。
 
 ---
 
-## 5. 菜单（TrMenu `ember_storage.yml`）
+## 5. 菜单（TrMenu）
 
-| 图标 | 行为 |
-|------|------|
-| 材料仓 | `corerpg warehouse` |
-| 存入主手 | `corerpg warehouse deposit` |
-| 解锁一格 | `corerpg warehouse unlock` |
-| 末影箱 | 保留 `/enderchest` |
-| 返回 | hub |
+| 入口 | 现行行为 |
+|------|----------|
+| 主菜单「仓库」 | `corerpg p1 vault from hub` → **EmberVault**（§8） |
+| `ember_storage.yml` | 备用二级页（末影箱等）；**不要**再挂 `warehouse deposit/unlock` 给普通玩家 |
+| 旧命令面 | 见 §2；P1 非 OP 只读 |
 
 ---
 
@@ -99,14 +100,17 @@ YAML 玩家文件兼容键：`warehouseSlots` / `warehouseJson`。
 
 ---
 
-## 7. 验收
+## 7. 验收（历史 · 旧命令 / OP）
 
-- [ ] 新号默认 8 格；`deposit` 白名单碎片成功叠数量
-- [ ] 同 id 再存合并；异 id 占新格；满格拒存
-- [ ] `unlock` 扣币成功 +1；到 max 拒绝
-- [ ] `withdraw` 回背包 NI；数量正确
+下列针对 **OP 测本** 或 P1 关闭时的旧路径；P1 普通玩家请用 §8 枢纽仓库验收。
+
+- [ ]（OP）`deposit` 白名单碎片成功叠数量
+- [ ]（OP）同 id 再存合并；异 id 占新格；满格拒存
+- [ ]（OP）`unlock` 扣币成功 +1；到 max 拒绝
+- [ ]（OP）`withdraw` 回背包 NI；数量正确
 - [ ] MySQL 重启后数据仍在
 - [ ] 非白名单装备拒存并提示
+- [x] **D252：** P1 非 OP `deposit`/`withdraw`/`unlock` 被拒；`warehouse`/`list`/`info` 仍可看
 
 
 ## 8. P1 材料仓库 + 装备库（CoreRpg 1.62.0，10-04）

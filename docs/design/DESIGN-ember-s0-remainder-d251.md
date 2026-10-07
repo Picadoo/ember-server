@@ -2,7 +2,8 @@
 
 > **性质：离线规格草稿，不是开工令。** 不改 Java / yml / TrMenu / p1sim，不构建、不部署、不停服、不开六槽护甲。
 > **上游：** AUDIT §5 S0-9 / S0-10 · ARCH §0 #2 / R1 / R5 ② · D202 探针（S0-8 关闭、S0-9 降为可选）· D250 文档对齐。
-> **基线：** `main` @ D250 `39fcb810`；CoreRpg **1.65.70** / `balance_version` **58**（本窗不发版）。
+> **基线（起草时）：** `main` @ D250 `39fcb810`；CoreRpg **1.65.70**。
+> **落地：** S0-10 = **D252 / CoreRpg 1.65.71**（`e5e5c5bc`）；S0-9 仍 HOLD。本文 §2 保留为当时规格，现况以 STATUS-d252 / RELEASE-1.65.71 为准。
 
 ---
 
@@ -51,12 +52,12 @@
 
 ---
 
-## 2. S0-10 · 旧仓库写路径（READY 规格）
+## 2. S0-10 · 旧仓库写路径（**DONE · D252 / 1.65.71**）
 
 ### 2.1 问题【码】
 
 - P1 玩家菜单走 `corerpg p1 vault from hub`（`ember_hub.yml`）→ `EmberVault`（无格上限、有 `cr_vault_log`、绑定材料不可取出）。
-- 旧命令 `/corerpg warehouse deposit|withdraw|unlock|…` 仍对所有人开放（`ember-v1.yml legacy_gate.allow` 写明 `warehouse: '*' # 写路径收口是 S0-10`）。
+- **历史问题：** 旧命令 `/corerpg warehouse deposit|withdraw|unlock|…` 曾对所有人开放（`warehouse: '*'`）。
 - `WarehouseService.cmdDeposit` / `cmdWithdraw` / `cmdUnlock` 直接改同一份 `PlayerData` 仓库槽 + `flushMutation`，**不走** `EmberVault` 守卫与流水；`unlock` 扣余烬币扩格，与 P1「无格子上限」矛盾（`EmberVault` 类注释）。
 
 ### 2.2 推荐方案（薄、可回滚）
@@ -69,10 +70,10 @@
 | `deposit` / `withdraw` / `unlock`（及中文别名 存/取） | **拒绝**，tell：请打开枢纽「仓库」（`/ember` → 仓库），勿手打旧命令 |
 | OP / `corerpg.admin` / 控制台 | 全部放行（测本 / 修复用） |
 
-落地方式（实现窗再选一，本草稿不改码）：
+**落地（D252，两闸都上）：**
 
-1. **配置优先：** `legacy_gate.allow.warehouse` 从 `'*'` 改为 `['', list, overview, info]`（若路由层已按子命令匹配；需核对 `LegacyGate.refuseRoute` 对 `warehouse` 子动作的解析是否与 `pass`/`stamina` 同形）。
-2. **或服务内闸：** `WarehouseService.cmdRoot` 开头 `if (EmberMode.active() && !admin && isWriteSub(sub)) refuse`。
+1. `legacy_gate.allow.warehouse: ['', list, overview, info]`（线上 + 打包 yml）。
+2. `WarehouseService.refuseWriteWhileP1` 纵深拒绝写子命令，并提示用枢纽仓库。
 
 **方案 B（更重，不推荐作首窗）：** 写路径委托 `EmberVault.depositAll` / `withdraw`——行为要对齐绑定材料、流水、自动入仓；改动面大，必跑完整资产回归。留给方案 A 之后若仍需要兼容旧命令时再做。
 
@@ -80,15 +81,14 @@
 
 - 不删 `WarehouseService`、不迁表、不改 `cr_warehouse` schema。
 - 不动 `EmberVault` 数值 / 白名单材料 id。
-- 不在本离线窗改 `ember-v1.yml`（避免未跑回归就改线上配置）。
+- （起草时）不在 D251 离线窗改 yml；D252 已改。
 
-### 2.4 验证清单（将来代码窗）
+### 2.4 验证清单（D252）
 
-1. **静态：** `rg` 确认玩家菜单只调 `p1 vault`；`legacy_gate` 注释与 allow 一致。
-2. **冒烟：** Fresh 号 `/corerpg warehouse deposit|withdraw|unlock` → 被拒；`/corerpg warehouse` list 仍可用（若选保留）；枢纽仓库存取正常。
-3. **资产：** `tools/p1map/persist-roundtrip.sh`（或现行等价）——正常重启 + kill -9；材料数量不丢不双。
-4. **p1sim：** 不建模仓库命令 → 期望逐位不变。
-5. **发版：** 若只改 Java + 打包 yml 同步，按惯例 bump CoreRpg 小版；`balance_version` **不动**。
+1. **静态：** `LegacyGateTest` 15/0（含 s010）；yml allow 与 DEFAULT_ALLOW 一致。
+2. **实服：** CoreRpg **1.65.71** 已部署；完整 bot 拒写冒烟 / persist-roundtrip 可另窗补（玩家写路径已关，EmberVault 未改）。
+3. **p1sim：** 不建模仓库命令 → 不变。
+4. **发版：** 1.65.71；`balance_version` 58 不动。
 
 ### 2.5 风险
 
@@ -102,14 +102,12 @@
 
 ## 3. 与 ARCH / AUDIT 的关系
 
-- AUDIT §5 S0-9 / S0-10 行：状态见本草稿 §0；细节以本文为准。
-- ARCH §6.1：D251 = 本规格；**不**宣称 S0-9/S0-10 已实现。
+- AUDIT / ARCH：S0-10 已标 DONE（D252）；S0-9 仍 HOLD。
 - 六槽护甲 / Stage 1：无关，本流水线不开。
 
 ---
 
 ## 4. 建议的下一窗顺序
 
-1. **文案/注释其它薄债**（若有现成候选），或  
-2. **S0-10 实现窗**（需显式开工 + 资产回归），或  
-3. 继续 HOLD S0-9，直到出现新传送证据。
+1. **文案/注释其它薄债**（D253 起继续），或  
+2. 继续 HOLD S0-9，直到出现新传送证据。

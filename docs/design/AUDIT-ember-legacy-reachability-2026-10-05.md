@@ -122,7 +122,7 @@
 | `arena queue 1v1/2v2` / `forfeit` | `J/ArenaService.java:226–249,374–382` | 所有人 | **否** | 传送到 `world` 对战垫（`P/arena.yml:21–23`）；胜 25 / 负或平 10 币（`:611–649`；世界缺失时即时随机结算 `:725–760`） | 否 | **LEAK L3** |
 | `arena claim` | `J/ArenaService.java:242–243,308–321` | 所有人 | **否** | 每日 80 币 + `cosmetic_calamity_shard` ×1 | 否 | **LEAK L5** |
 | `auction` / `寄售` / `ah` | `:1059–1069` | 玩家在 P1 下被拒；OP 可用 | **是**（`:1062–1066`，`P/ember-v1.yml:126 legacy_auction: false`） | — | — | OK（已封） |
-| `warehouse` / `仓库` / `wh`（list / deposit / withdraw / unlock / info） | `:1070–1073`；`J/WarehouseService.java:102–138` | 所有人 | 否（只在 withdraw 里扣绑定部分 `:257–261`） | 存取同一份材料仓（`EmberVault` 复用）；`unlock` 扣币 / 晶钻扩格（`:335`） | 否 | OK（不是来源；但写同一份 P1 数据，ARCH R5 ② → S0-10） |
+| `warehouse` / `仓库` / `wh`（list / deposit / withdraw / unlock / info） | `:1070–1073`；`J/WarehouseService.java:102–138` | 所有人 | 否（只在 withdraw 里扣绑定部分 `:257–261`） | 存取同一份材料仓（`EmberVault` 复用）；`unlock` 扣币 / 晶钻扩格（`:335`） | 否 | OK·只读（D252；写路径已收口，ARCH R5 ②） |
 | `skill` / `技能` [info] | `:1074–1077`；`J/SkillService.java:212–227` | 所有人 | 是（P1 世界内只有烬斩 `:267`） | 无 | — | OK |
 | `flex` / `轻技`（equip / unequip / cast / info） | `:1078–1081`；`J/FlexSkillService.java:147–175` | 所有人（P1 主菜单链接 `TM/ember_hub.yml:246`） | 否 | 无经济；5 格冲刺位移（ARCH R6） | — | OK（非经济；战斗面未建模见 ARCH R6） |
 | `raid` / `团本`（status / ring / claim-ring / claim） | `:1082–1085`；`J/RaidService.java:53–90` | 所有人只看状态；自领要 OP（`:80`） | 否 | 无 | — | OK |
@@ -224,7 +224,7 @@
 | 旧天赋 / 旧誓约 | 开放；只影响旧属性 | `J/TalentService.java:267–462`、`J/CovenantService.java:185–260` | OK*（与 P1 Q06 誓约同名不同物，ARCH O8） |
 | 拆解 / 重铸 | 开放 | `J/ScrapService.java:253–420` | **L9** |
 | 旧强化 / 锻造 / 部件 | 开放；只认旧 id | `P/enhance.yml:4–12`、`P/forge.yml:7–10`、`J/PartService.java:66` | OK*（币 / 材料消耗；与 P1 精工 / 强化共用币池但未建模） |
-| 材料仓 `warehouse` | 开放；与 P1 金库共用数据（ARCH R5 ②） | `J/WarehouseService.java:102–335` | OK（不是来源；写路径需 S0-10 往返测） |
+| 材料仓 `warehouse` | P1 非 OP **只读**（D252）；与 P1 金库共用数据（ARCH R5 ②） | `J/WarehouseService.java` + `legacy_gate.allow` | OK（不是来源；写路径已收口） |
 | 邮件 | 通道；发件 OP | `J/MailService.java:136–137,320,422–447` | OK（来源在 L4 / L8） |
 | 扭蛋 CoreGacha（`gacha`，P1 主菜单 `TM/ember_hub.yml:391`） | 设计为只出无属性外观 | 本次未审计 CoreGacha 源码 | 未确认（不在 N1 范围） |
 | 灾厄公共窗 | 开放（Lv30） | §3 | **L7** |
