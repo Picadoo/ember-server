@@ -42,5 +42,6 @@ Q07 后入口变多，枢纽仍靠一行 `p1_next`。本窗**零经济 / 零新�
 ## 下一窗
 
 - **R**（高亮/菜单序）**后置**；仅总控另批 M+R 时开  
-- **禁** Pack6 / 抬体力 / 假推荐 / 重开 D305  
+- **禁** Pack6 / 抬体力 / 假推荐 / 重开 D305 · **禁**本 STATUS 邻域再拧（D306 已收）  
+- **下一档硬债 tip（需策划）：** [`STATUS-ember-next-hard-debt-workshop-menu-honesty-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-workshop-menu-honesty-need-design-2026-10-08.md) · 工坊菜单诚实（费用同屏 · **非** forge R）· §1B 已收后余下真硬债多为样本门禁 R，本窗改采纳零改价菜单诚实  
 
