@@ -1,9 +1,9 @@
 # D211 · 余烬技能组 S1（烬斩 / 烬突 / 烬斩符文）
 # D214 · S2 火痕步（焚烬 2pc + Q05 替换踏步）
 # D219 · 身法方向 前冲/后撤（Q01起，出本切换，身法 CD 转满）
-# 枢纽入口；符文切换走 /corerpg skill shape；方向走 /corerpg skill dir
+# D287 · 局内决策加固：二选一醒目 · 出本形状预览 · 身法方向一眼可见（零数值 / 守招仍搁置）
 
-Title: '§6余烬 · 技能组'
+Title: '§6技能 · §e%corerpg_kit_shape% §8· §b%corerpg_kit_step_dir% §8· %corerpg_kit_charge%'
 
 Options:
   Arguments: false
@@ -13,15 +13,16 @@ Options:
 
 Layout:
   - '#########'
-  - '# A B C #'
-  - '# D E F #'
-  - '# G I H #'
-  - '####X####'
+  - '# S A B #'
+  - '# C D E #'
+  - '# F G H #'
+  - '# # I # X#'
 
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §7技能组 · 充能 §f%corerpg_kit_charge%§7 · 烬斩形状 §f%corerpg_kit_shape%§7 · 身法方向 §f%corerpg_kit_step_dir%'
+    - 'tell: §e每 8 秒二选一：§fF 烬斩 §7/ §f潜行+F 烬突 §8（共享充能 · 挂机不自动烬突）'
+    - 'tell: §7当前 §f%corerpg_kit_shape% §7· 身法 §f%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
     - 'command: corerpg skill kit'
 
 Icons:
@@ -39,154 +40,219 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-0'
         - 'menu: ember_hub'
 
-  A:
+  # —— 一眼状态条 ——
+  S:
+    update: 20
     display:
-      material: blaze powder
-      name: '§6烬斩 · F'
+      material: nether star
+      name: '§6此刻状态'
       lore:
         - ''
-        - '§7主招 · 1.5B · 8 秒余烬充能'
-        - '§7当前形状：§f%corerpg_kit_shape%'
+        - '§7余烬充能：§f%corerpg_kit_charge%'
+        - '§7烬斩形状：§f%corerpg_kit_shape%'
+        - '§7身法方向：§b%corerpg_kit_step_dir%'
+        - '§7身法名：§f%corerpg_kit_step%'
+        - ''
+        - '§e每 8 秒一份充能 · 二选一（不能两招各放一次）'
+        - '§f  F §7→ 烬斩（当前形状）'
+        - '§f  潜行+F §7→ 烬突（花掉本次充能）'
+        - '§8烬突解锁：§f%corerpg_kit_dash_unlock% §8（首通 Q02）'
+        - ''
+        - '§7符文 / 身法方向：§e出本才可换 §7· 换后对应 CD 转满'
+        - '§8守招（单按 Q）仍搁置 · 不在本页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg skill kit'
+
+  # —— 二选一：烬斩 / 烬突 ——
+  A:
+    update: 20
+    display:
+      material: blaze powder
+      name: '§6① 烬斩 · F'
+      lore:
+        - ''
+        - '§a主招 · 共享充能的一半'
+        - '§7按 F：按当前形状挥砍 · 1.5B'
+        - '§7当前形状：§e%corerpg_kit_shape%'
         - '§7充能：§f%corerpg_kit_charge%'
         - ''
         - '§8不暴击 · 不吸血 · 不触发套装计数'
+        - '§e与烬突二选一 · 同一次充能只能花一次'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg skill kit'
 
   B:
+    update: 20
     display:
       material: diamond sword
-      name: '§c烬突 · 潜行+F'
+      name: '§c② 烬突 · 潜行+F'
       lore:
         - ''
-        - '§7副招 · 花掉本次余烬充能'
-        - '§7向前冲 §f4 §7格 · 穿过最多 §f3 §7个'
+        - '§c副招 · 花掉本次余烬充能'
+        - '§7潜行+F：向前冲 §f4 §7格 · 穿过最多 §f3 §7个'
         - '§7各 1.5B · 首领 §f×0.5'
+        - '§7充能：§f%corerpg_kit_charge%'
         - ''
         - '§8解锁：§f%corerpg_kit_dash_unlock% §8（首通 Q02）'
         - '§8未解锁时潜行+F 仍放烬斩'
+        - '§8挂机庭不会自动烬突'
+        - '§e与烬斩二选一 · 同一次充能只能花一次'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'command: corerpg skill kit'
 
+  # —— 身法总览（一眼） ——
   C:
+    update: 20
     display:
       material: feather
-      name: '§a%corerpg_kit_step% · 潜行+Q'
+      name: '§b身法 · §f%corerpg_kit_step_dir% §8· %corerpg_kit_step%'
       lore:
         - ''
-        - '§7身法 · 前冲 §f5 §7格 / 后撤 §f4 §7格 · 冷却 14 秒'
-        - '§7零体力 · 不穿墙 · 当前方向 §f%corerpg_kit_step_dir%'
-        - '§7火痕步（焚烬两件套）：前冲落点 / 后撤起跳 点燃 1 · 套装同系数'
+        - '§7键位：§f潜行+Q'
+        - '§7当前方向：§b%corerpg_kit_step_dir%'
+        - '§7显示名：§f%corerpg_kit_step%'
+        - '§7前冲 §f5 §7格 / 后撤 §f4 §7格 · CD 14 秒 · 零伤害'
         - ''
-        - '§8当前：§f%corerpg_kit_step% §8· 装配 §f%corerpg_flex_skill_name%'
-        - '§8解锁火痕步：§f%corerpg_kit_step_unlock% §8（首通 Q05）'
-        - '§e➥ §f点下方前冲/后撤切换方向（出本）'
+        - '§7火痕步（焚烬两件套 + Q05）：前冲落点 / 后撤起跳点燃'
+        - '§8火痕解锁：§f%corerpg_kit_step_unlock%'
+        - ''
+        - '§e➥ §f点右侧「前冲 / 后撤」切换（须出本）'
+        - '§8也可打开轻技页查看装配'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'menu: ember_flex_skill'
 
+  # —— 形状预览（本页=安全区详情） ——
   D:
+    update: 20
     display:
       material: gold sword
       name: '§e符文 · 扇形'
       lore:
         - ''
-        - '§7正前 100° · 3.5 格 · 最多 5'
+        - '§6预览（出本切换）'
+        - '§f  正前扇面 §e100° §f· 半径 §e3.5 §f格 · 最多 §e5'
+        - '§7适合：贴脸清小群'
+        - ''
+        - '§7你当前：§f%corerpg_kit_shape%'
         - '§8解锁：§f%corerpg_kit_shape_unlock% §8（首通 Q04）'
+        - '§8签名直线/环斩/蓄力会覆盖符文'
+        - '§8换后烬斩充能转满'
         - ''
-        - '§8出本免费换 · 换后充能转满'
-        - '§8签名直线/环斩会覆盖符文'
-        - ''
-        - '§e➥ §f点击切换为扇形'
+        - '§e➥ §f点击切为扇形'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg skill shape fan'
-        - 'tell: §6【技能】 §7已请求切换扇形'
+        - 'tell: §6【技能】 §7请求扇形 · 当前 %corerpg_kit_shape%'
 
   E:
+    update: 20
     display:
       material: iron sword
       name: '§b符文 · 直线穿刺'
       lore:
         - ''
-        - '§7正前 5 格一条线（宽 1）· 最多 3'
-        - '§8（= 签名 L07 形状）'
-        - '§8解锁：§f%corerpg_kit_shape_unlock%'
+        - '§6预览（出本切换）'
+        - '§f  正前一条线 §e5 §f格（宽 1）· 最多 §e3'
+        - '§7适合：走廊点名 / 窄道'
+        - '§8（几何同签名 L07）'
         - ''
-        - '§e➥ §f点击切换为直线'
+        - '§7你当前：§f%corerpg_kit_shape%'
+        - '§8解锁：§f%corerpg_kit_shape_unlock%'
+        - '§8换后烬斩充能转满'
+        - ''
+        - '§e➥ §f点击切为直线'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg skill shape line'
-        - 'tell: §6【技能】 §7已请求切换直线穿刺'
+        - 'tell: §6【技能】 §7请求直线穿刺 · 当前 %corerpg_kit_shape%'
 
   F:
+    update: 20
     display:
       material: stone sword
       name: '§d符文 · 原地环斩'
       lore:
         - ''
-        - '§7身边一圈半径 3 格 · 最多 3'
-        - '§8（= 签名 L09 形状）'
-        - '§8解锁：§f%corerpg_kit_shape_unlock%'
+        - '§6预览（出本切换）'
+        - '§f  身边一圈半径 §e3 §f格 · 最多 §e3'
+        - '§7适合：被围时清身'
+        - '§8（几何同签名 L09）'
         - ''
-        - '§e➥ §f点击切换为环斩'
+        - '§7你当前：§f%corerpg_kit_shape%'
+        - '§8解锁：§f%corerpg_kit_shape_unlock%'
+        - '§8换后烬斩充能转满'
+        - ''
+        - '§e➥ §f点击切为环斩'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg skill shape ring'
-        - 'tell: §6【技能】 §7已请求切换环斩'
+        - 'tell: §6【技能】 §7请求环斩 · 当前 %corerpg_kit_shape%'
 
+  # —— 身法方向切换 ——
   G:
+    update: 20
     display:
       material: sugar
-      name: '§a身法方向 · 前冲'
+      name: '§a身法 · 前冲'
       lore:
         - ''
         - '§7向前最多 §f5 §7格 · 无伤害'
-        - '§7当前：§f%corerpg_kit_step_dir%'
+        - '§7你当前方向：§b%corerpg_kit_step_dir%'
+        - '§7火痕·前冲：落点点燃'
         - ''
-        - '§8出本免费换 · 换后身法冷却转满'
-        - '§e➥ §f点击切换为前冲'
+        - '§8出本免费换 · 换后身法 CD 转满'
+        - '§e➥ §f切换为前冲'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg skill dir forward'
-        - 'tell: §6【技能】 §7已请求切换前冲'
+        - 'tell: §6【技能】 §7请求前冲 · 当前 %corerpg_kit_step_dir%'
 
   H:
+    update: 20
     display:
       material: rabbit foot
-      name: '§b身法方向 · 后撤'
+      name: '§b身法 · 后撤'
       lore:
         - ''
         - '§7向后最多 §f4 §7格 · 无伤害 · 保持朝向'
-        - '§7火痕·后撤：起跳点点燃 1'
-        - '§7当前：§f%corerpg_kit_step_dir%'
+        - '§7你当前方向：§b%corerpg_kit_step_dir%'
+        - '§7火痕·后撤：起跳点点燃'
         - ''
-        - '§8出本免费换 · 换后身法冷却转满'
-        - '§e➥ §f点击切换为后撤'
+        - '§8出本免费换 · 换后身法 CD 转满'
+        - '§e➥ §f切换为后撤'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg skill dir back'
-        - 'tell: §6【技能】 §7已请求切换后撤'
+        - 'tell: §6【技能】 §7请求后撤 · 当前 %corerpg_kit_step_dir%'
 
   I:
+    update: 20
     display:
       material: book
-      name: '§f说明'
+      name: '§f说明 · 决策要点'
       lore:
         - ''
-        - '§7每 8 秒一份余烬充能：'
-        - '§f  F §7放烬斩 · §f潜行+F §7放烬突（二选一）'
+        - '§e1. 每 8 秒二选一'
+        - '§f   F §7烬斩 · §f潜行+F §7烬突 · §c共享一份充能'
+        - '§8   数值 1.5B / 共享结构不变 · 挂机不自动烬突'
         - ''
-        - '§7守招（单按 Q）搁置 · 见 S0b'
-        - '§7火痕步：Q05 + 焚烬两件套自动替换踏步'
-        - '§7身法方向：前冲/后撤（一开始就有，三套通用）'
+        - '§e2. 形状只在出本换（本页=预览）'
+        - '§7   扇 / 直线 / 环 · 签名可覆盖符文'
+        - ''
+        - '§e3. 身法方向一眼看标题与「身法」格'
+        - '§7   前冲 / 后撤 · 标题栏也会显示'
+        - ''
+        - '§8守招（单按 Q）搁置 · 见 D212 · 本窗不开放'

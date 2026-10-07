@@ -239,11 +239,11 @@ Icons:
       name: '§6技能组'
       lore:
         - ''
-        - '§7烬斩 §fF §7· 烬突 §f潜行+F §7（Q02）· 踏步 §f潜行+Q'
-        - '§7当前形状：§f%corerpg_kit_shape% §8· 充能 %corerpg_kit_charge%'
-        - '§8烬突解锁 %corerpg_kit_dash_unlock% · 符文解锁 %corerpg_kit_shape_unlock%'
+        - '§e每 8 秒二选一：§fF 烬斩 §7/ §f潜行+F 烬突'
+        - '§7形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
+        - '§8烬突 %corerpg_kit_dash_unlock% · 符文 %corerpg_kit_shape_unlock% · 火痕 %corerpg_kit_step_unlock%'
         - ''
-        - '§e➥ §f打开技能组'
+        - '§e➥ §f打开技能组（出本换形状/身法）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
