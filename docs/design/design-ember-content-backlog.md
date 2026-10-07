@@ -7,6 +7,7 @@
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 - **2026-10-07 续：** 窗1–5 + D287–D289 已落地；**D290** 技能↔签名深链 + 团本炽愈提示（1.65.82）；**D291** 推荐打法页（零 jar）；**D292** 花样委托 +1 + 每图徽记一眼（1.65.83）· `STATUS-ember-playfeel-vbounty-plus-d292.md`
 - **B-talent-row1-mech-pivot（备忘 · HOLD）：** [`docs/design/DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md) · T0c ❌ 后总控裁决：一排数值返工 **HOLD**；禁 D1d 式盲调；再开须换触发/换键；**D291 标签保留**；禁 T1
+- **B-sustain-s2（模拟 ✅ 荐 · 需批施工）：** [`STATUS-ember-sustain-s2-2slot-sim-2026-10-07.md`](../status/STATUS-ember-sustain-s2-2slot-sim-2026-10-07.md) · 炽愈 `sustain_hp` 1.12→1.00 在 **2 槽**复跑达标；**未改 yml**；天赋一排数字 HOLD
 - **B-talent-row1-t0c（已批 A · ❌）：** [`docs/design/DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md) · D1c/F7c/W6c 复跑 **❌**（`0d4481ad`）；系数轨停
 - **B-talent-row1-t0b（已批 A · ❌）：** [`docs/design/DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md) · D1b/F7b/W6b **❌**
 - **B-talent-row1（已批 A · 数值 HOLD）：** [`docs/design/DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`](DESIGN-ember-talent-row1-sidegrade-2026-10-07.md) · T0→T0b→T0c 均 ❌ · §5.3-2 换机制；**不开 T1**
