@@ -5,10 +5,10 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D308 样本窗门禁已收 · §1 M 波 + D301–D307 已收 · 样本 R 全表不得开 · 灰印副招 **T0/T0b ❌ · HOLD** · 天赋换机制 **HOLD** · Pack6 / 六槽 **HOLD**  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R**  
-**硬规格（待策划交稿）：** 加固 [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](../design/DESIGN-ember-playfeel-hardening-2026-10-07.md) **§8 第 5 条**仍标「**仍待总控另派**」；既有仓内决策页 [`DESIGN-ember-offhand-budget-decision-2026-10-07.md`](../design/DESIGN-ember-offhand-budget-decision-2026-10-07.md)（**已批 A · 方案 A** · B-flex-5 · D289/D294 诚实半行已落）与加固文首/§8 指针**未完全对齐关窗**——本 tip 正式派「关窗 / 再确认」硬规格，**不施工物品**。  
+**硬规格（已批 A · 方案 A · D309 · docs-only）：** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) · STATUS=已批 A · 批方案 A · [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md) · backlog `B-offhand-merge-decision` · 加固§8-5 **已关窗**。  
 **打开理由：** D308 钉死后，样本门禁 R 全表不得开；下一档真硬债若仍去偷开 R / 天赋灰印 / Pack6 六槽 = 假活。加固§8 仅余 **窗 5 副手并轨决策页**未在加固稿上关指针——要在**不开 R、不写新 NI、不开六槽**前提下，把「并轨 / 不并轨 + 替换预算表 + p1sim 怎么验」写成可批硬规格（docs/design only），并同步加固§8-5。
 
-> **交稿：** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) · **STATUS 待批 A** · 荐 **方案 A**（永不进 P1 B/H；与 10-07 已批 A 对齐；方案 B/W 见稿）· 旧决策页已加关窗指针 · 加固§8-5 已指到待批稿（**未宣称已关结论**）· **等总控批 A/B**。
+> **关窗：** [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](../design/DESIGN-ember-offhand-merge-decision-2026-10-08.md) · **STATUS 已批 A · 方案 A · D309** · 永不进 P1 B/H；与 10-07 已批 A 对齐；方案 B 搁置；W 否决 · 加固§8-5 **已正式关窗** · tip/backlog/旧决策页已同步 · [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md)。
 
 ---
 
@@ -111,8 +111,9 @@ D308 就绪清单已收；战斗/经济 R **全表不得开**。加固§1～§8-
 - D289 · [`STATUS-ember-offhand-honesty-d289.md`](STATUS-ember-offhand-honesty-d289.md) · 守腕/生坠诚实半行  
 - D294 · [`STATUS-ember-ash-brace-honesty-d294.md`](STATUS-ember-ash-brace-honesty-d294.md) · 灰箍诚实半行  
 - 灰印 T0b **HOLD** · 天赋 HOLD  
-- 加固债总览 · [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](../design/DESIGN-ember-playfeel-hardening-2026-10-07.md) · §8-5 **本 tip 正式派关窗**
+- 加固债总览 · [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](../design/DESIGN-ember-playfeel-hardening-2026-10-07.md) · §8-5 **已关窗 · 方案 A · D309**  
+- D309 · [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md) · docs-only · **副手永不进 P1 B/H · 零物品**
 
 ---
 
-*服务器：proxy/login/play 保持 up；本 tip 零部署。样本门禁 R 全表不得开——本窗只派副手决策页（docs-only · 不施工物品）。*
+*服务器：proxy/login/play 保持 up；本 tip 零部署。样本门禁 R 全表不得开——本 tip 已关窗（已批 A · 方案 A · D309 · docs-only · 不施工物品）。*

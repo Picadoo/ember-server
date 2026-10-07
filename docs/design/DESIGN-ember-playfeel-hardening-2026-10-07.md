@@ -1,7 +1,7 @@
 # DESIGN · 下一阶段玩法 / 体验加固（2026-10-07）
 
 > **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
-> **批注：** 总控批 · 开窗顺序 **1→5**（先做 §8-1【P0 反馈】；2 付费诚实 → 3 挂机到顶 → 4 成长诚实 → 5 副手决策页；**窗 5 规格稿已交 [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](DESIGN-ember-offhand-merge-decision-2026-10-08.md)（待批 A）**）。口径维持：D282 月卡开、D281 VIP/战令挡；六槽不做；先体验反馈、禁再堆 Pack / Director 大分支。  
+> **批注：** 总控批 · 开窗顺序 **1→5**（先做 §8-1【P0 反馈】；2 付费诚实 → 3 挂机到顶 → 4 成长诚实 → 5 副手决策页；**窗 5 已关窗 · 已批 A · 方案 A · D309** — [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](DESIGN-ember-offhand-merge-decision-2026-10-08.md) · [`STATUS-ember-offhand-merge-decision-d309.md`](../status/STATUS-ember-offhand-merge-decision-d309.md)）。口径维持：D282 月卡开、D281 VIP/战令挡；六槽不做；先体验反馈、禁再堆 Pack / Director 大分支。  
 > **路径：** `docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`  
 > **基线：** CoreRpg **1.65.78**（`CoreRpg/pom.xml` / `plugin.yml`）· `balance_version` **58**（`plugins/CoreRpg/ember-v1-runs.yml`）· 月卡口径见 `docs/status/STATUS-ember-monthly-p1-allow-d282.md`  
 > **性质：** 策划已批。按 §8 顺序开窗施工；**本批注提交仍只动 docs**。  
@@ -304,7 +304,7 @@
 4d. **【构筑深链】技能↔签名 + 团本炽愈提示** — **已施工 D290**（`STATUS-ember-playfeel-kit-sig-deeplink-d290.md` · 1.65.82）。  
 4e. **【推荐打法】机动/站桩/压上标签页** — **已施工 D291**（`STATUS-ember-playfeel-playstyle-d291.md` · 零 jar）。  
 4f. **【花样 +1 / G1 徽记一眼】** — **已施工 D292**（1.65.83 · `STATUS-ember-playfeel-vbounty-plus-d292.md`）。  
-5. **【横向规格】副手并轨 / 不并轨决策页（替换预算表）** — 范围：只出 `docs/design/` 规格 + p1sim 怎么验；**不施工物品**。施工岗：策划；规格稿 [`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](DESIGN-ember-offhand-merge-decision-2026-10-08.md)（**待批 A** · tip `06a56eba` · 接替/关窗对齐 [`DESIGN-ember-offhand-budget-decision-2026-10-07.md`](DESIGN-ember-offhand-budget-decision-2026-10-07.md) 已批方案 A）；**结论未定前勿宣称已并轨/永不并轨已关**——待总控批 A/B 后再改本条为已关窗。
+5. **【横向规格】副手并轨 / 不并轨决策页（替换预算表）** — ~~施工岗~~ · **已关窗 · 已批 A · 方案 A · D309**（[`DESIGN-ember-offhand-merge-decision-2026-10-08.md`](DESIGN-ember-offhand-merge-decision-2026-10-08.md) · [`STATUS-ember-offhand-merge-decision-d309.md`](../status/STATUS-ember-offhand-merge-decision-d309.md)）：灰粮副手**永不进** P1 B/H；维持展示/微量生存；与 [`DESIGN-ember-offhand-budget-decision-2026-10-07.md`](DESIGN-ember-offhand-budget-decision-2026-10-07.md) 对齐；方案 B 搁置；**W 否决**默默双计/六槽/新 DPS；**docs-only** · 禁物品 / 禁并轨插件 / 禁偷开任一 R · 六槽仍 HOLD。
 
 ---
 

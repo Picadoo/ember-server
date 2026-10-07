@@ -1,11 +1,12 @@
 # 副手并轨 / 不并轨决策页（替换预算表 · 加固§8-5 关窗）· 2026-10-08
 
-> **STATUS：待批 A**  
+> **STATUS：已批 A**（总控 · 2026-10-08 Asia/Shanghai）  
 > **日期：** 2026-10-08 Asia/Shanghai  
 > **来源：** 总控派单「硬设计待批 A」· tip [`STATUS-ember-next-hard-debt-offhand-merge-decision-need-design-2026-10-08.md`](../status/STATUS-ember-next-hard-debt-offhand-merge-decision-need-design-2026-10-08.md)（`06a56eba`）· D308 样本窗就绪后下一档**横向规格**硬债 · 对齐加固 [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md) **§8 第 5 条**  
-> **性质：** 硬设计 **待批 A**；本交稿 **只 docs**；批准前 **禁** YAML / Java / NI；零物品施工、零玩法 yml/jar、默认不部署。  
+> **性质：** 硬设计 **已批 A**；本批注仍 **只 docs**；施工号 **D309**（**docs-only** · 关加固§8-5 指针 + tip/backlog/旧决策页关窗同步 · 禁物品 / 禁并轨插件 / 禁偷开任一 R）。  
+> **批注：** 总控批 · 采纳 **方案 A**：灰粮副手**永不进** P1 B/H；维持展示/微量生存；与 10-07 对齐；**方案 B 搁置**；**W 否决**。  
 > **硬约束：** **六槽不做（D169 HOLD）** · **禁 Pack6 / 新模式图包** · **禁抬体力 / 掉率 / event_rate / ALTS** · **禁改 refineCost / qualityCost / enhance 价表（= 偷开 forge R）** · **禁天赋续跑（HOLD）** · **禁灰印续跑（HOLD）** · **禁守招邻域再调** · **禁偷开：事件 R/W · 调律 R · 工坊 R · 走廊 W2 · 深渊 R · 周本 R · Boss 预警 R · 挂机 R** · **禁重开 D307 / D308 门禁改数** · **禁新 NI 副手 DPS 物品** · **禁默默把 StatService 副手叠进 EmberFormula B/H** · **禁纯 lore 挡本窗** · **禁玩家面遥测 KPI / 排行榜** · 玩家入口 TrMenu 点选、不教 `/corerpg`。  
-> **Backlog 指针：** `B-offhand-merge-decision`（接替 / 关窗对齐既有 `B-flex-5`）  
+> **Backlog 指针：** `B-offhand-merge-decision`（接替 / 关窗对齐既有 `B-flex-5`）· [`STATUS-ember-offhand-merge-decision-d309.md`](../status/STATUS-ember-offhand-merge-decision-d309.md)  
 > **邻域边界：** 既有 [`DESIGN-ember-offhand-budget-decision-2026-10-07.md`](DESIGN-ember-offhand-budget-decision-2026-10-07.md) **已批方案 A** + D289/D294 诚实半行 **已落**；本页为加固§8-5 **正式关窗 / 再确认**；D308 **当前全表不得开 R**；灰印/天赋 **HOLD**。
 
 ---
@@ -200,9 +201,9 @@ D308 硬表当前全表不得开；本债是**横向规格 docs**，零战斗压
 
 | 总控勾选 | |
 |----------|--|
-| [ ] **批 A · 方案 A**（**荐** · 与 10-07 对齐） | 灰粮副手**永不进** P1 B/H；维持展示/微量生存；同窗 docs 可关加固§8-5 指针；零物品；不跑 p1sim |
-| [ ] **批 B · 方案 B** | 替换预算并轨（主扣护符 H；禁新增 DPS）；本窗仍不施工物品；另派 p1sim+插件号 |
-| [ ] **驳回改派** | 其它薄 UX · **须点名**且**不得**偷开 R / 六槽 / 新 DPS 副手：________ |
+| [x] **批 A · 方案 A**（**荐** · 与 10-07 对齐） | 灰粮副手**永不进** P1 B/H；维持展示/微量生存；同窗 docs 可关加固§8-5 指针；零物品；不跑 p1sim · **已勾 · 施工 D309** |
+| [ ] **批 B · 方案 B** | 替换预算并轨（主扣护符 H；禁新增 DPS）；本窗仍不施工物品；另派 p1sim+插件号 · **搁置** |
+| [ ] **驳回改派** | 其它薄 UX · **须点名**且**不得**偷开 R / 六槽 / 新 DPS 副手：________ · **未勾** |
 
 ---
 
@@ -240,7 +241,8 @@ D308 硬表当前全表不得开；本债是**横向规格 docs**，零战斗压
 | 日 | 内容 |
 |----|------|
 | 2026-10-08 | 初稿 · STATUS **待批 A** · 荐方案 A · 关窗对齐加固§8-5 · 接替 10-07 决策页指针 · 只动 docs |
+| 2026-10-08 | 总控批 **已批 A · 方案 A**；方案 B 搁置；W 否决；施工号 **D309**（docs-only · 关加固§8-5 + tip/backlog/旧决策页关窗同步）· [`STATUS-ember-offhand-merge-decision-d309.md`](../status/STATUS-ember-offhand-merge-decision-d309.md) |
 
 ---
 
-*文末：批准前禁止改玩法 YAML / 源码 / NI；本地 commit 文档即可，总控代推。方案 A 不跑 p1sim；方案 B 仅批后另窗。本 tip 窗默认不部署。*
+*文末：已批 A · 方案 A · 施工 **D309**（docs-only）。本号只 docs：关加固§8-5 指针 + tip/backlog/旧决策页关窗同步；**禁**借号开任一 R / 写新副手物品 / 并轨插件 / 改编 ward·vita·灰箍数值。方案 A 不跑 p1sim；方案 B 搁置（若改批须另号）。本地 commit 文档即可，总控代推。零部署。*
