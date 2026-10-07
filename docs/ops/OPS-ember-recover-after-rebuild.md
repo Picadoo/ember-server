@@ -35,6 +35,10 @@
 
 **没有装开机自启**（机器没有 systemd / cron）；重建后需人工或值班 agent 跑一次上面的命令。需要免密 sudo。
 
+## 仓库操作禁忌
+
+`/workspace/minecraft` 的运行时文件（玩家档、worlds.yml、server.properties 等）故意保持未提交。**不要用 `git stash` / `git reset --hard` / `git checkout -- .`**：2026-10-08 一次 stash 就把 P1 地图模板写回成旧图软链。提交只 add 自己的文件。
+
 ## 已知遗留（本次未动）
 
 - CoreRpg / AuthMe 配置里的数据库密码仍是仓库占位值，与 `secrets/mysql-ember.env` 不一致；库用户密码按配置设置（只允许本机登录）。统一密码需另行决定。

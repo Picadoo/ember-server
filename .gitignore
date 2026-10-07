@@ -61,7 +61,10 @@ server-runtime/ember_daily_ash_build/
 server-runtime/ember_daily_crypt_build/
 login-runtime/world/
 login-runtime/world_the_end/
+# DP map templates come from Release assets only (P1: maps-v2-2026-10-03, check with scripts/dp-maps-v2-verify.sh).
+# Never `git add -f` anything here: tracked *_v1 symlinks to the old maps were written back over the v2 folders on 2026-10-08.
 plugins/DungeonPlus/map/
+plugins/DungeonPlus/map/*_v1
 server-runtime/assets/
 server-runtime/libraries/
 server-runtime/libs/

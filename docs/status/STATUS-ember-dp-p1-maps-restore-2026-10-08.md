@@ -34,3 +34,11 @@
 ## 不动
 
 数值 / 掉落 / 体力 / 刷怪点 / `ember-v1-runs.yml` / DP 副本配置 / TrMenu；旧日图 `ember_daily*`（非 v1）和 `server-runtime/ember_daily_*` 编辑世界文件夹都原样保留；国庆活动图 `ember_fest_gq26_v1` 未恢复（活动已结束）。
+
+## 补记 · 06:55 模板被写回软链 → 二次恢复 + 取消跟踪
+
+- **发现：** 余烬-测试复跑（[`STATUS-ember-dp-p1-maps-rerun-test-2026-10-08.md`](STATUS-ember-dp-p1-maps-rerun-test-2026-10-08.md)，`75d86c4f`）时 `dp-maps-v2-verify.sh` 又报 7 个 `*_v1` 全 BROKEN（软链，时间 05:48）。
+- **原因：** 这 7 个软链虽在 `.gitignore` 的 `plugins/DungeonPlus/map/` 之下，却在 `c6196b43`（D302，10-08 00:11）被一起提交进了 git。05:47–05:48 推 `704dcebd` 时我用 `git stash` / `git stash pop` 绕开脏工作区做 rebase，stash 把「软链被删」当改动收走、又把 git 里的软链写回，盖掉了 v2 文件夹。当时在跑的游玩服用的是启动时复制的 v2 缓存，所以测试本身跑在 v2 上；但下次重启就会回到旧图。
+- **处理（06:55，0 人在线）：** 停游玩服 → `git rm --cached` 7 个软链（git 里不再跟踪，`plugins/DungeonPlus/map/` 下已无任何被跟踪文件）→ `.gitignore` 加注释和 `plugins/DungeonPlus/map/*_v1` → `dp-maps-v2-verify.sh --restore-broken`（7 个恢复，复检 exit 0，`SHA256SUMS` 全部一致，7 个都是真文件夹）→ 启游玩服：`Done (6.531s)`、CoreRpg `MySQL connected`、0 条 ERROR；12 个 `dungeon_EmberQ…` 缓存的全部 region 与 v2 逐字节一致；`check-dp-spawns.py` 只剩已结束的 EmberQ0F1。
+- **脚本复核：** 模板目录缺失时 verify 报 `BROKEN … missing`（exit 1），`--restore-broken` 补齐后 exit 0；`ember-recover-after-rebuild.sh --check` 正常。两个脚本都不依赖 git 跟踪状态。
+- **规矩：** `/workspace/minecraft` 里运行时文件是故意不提交的脏文件——**不要再用 `git stash`、`git reset --hard`、`git checkout -- .`**；提交只 `git add` 指定文件；`git pull --rebase --autostash` 一样会走 stash，也不要用。远端已前进时：`git fetch` 后在单独的 `git worktree`（干净目录）里 rebase / cherry-pick 再推，或 `git merge --ff-only` 能快进时直接快进。
