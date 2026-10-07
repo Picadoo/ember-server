@@ -26,6 +26,8 @@ D308 手查硬表已有；OP 仍要手抄 `p1-telemetry/<week>.yml`。本窗**�
 | D308 门槛数字 | **未改** |
 | 脚本方案 R / M+R | **后置**（另号） |
 
+> **脚本契约指针（2026-10-08 · 不改本号已批 M）：** D310 方案 R 后置 → 待批稿 [`DESIGN-ember-sample-week-report-script-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-script-2026-10-08.md) · tip [`STATUS-ember-next-hard-debt-sample-week-report-script-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-sample-week-report-script-need-design-2026-10-08.md) · `B-sample-week-report-script` · **仍未写** `tools/p1-telemetry-week-report.py`。
+
 ## 不动
 
 - 任一 R 窗施工本体（事件 R/W · 调律 R · 工坊 R · 走廊 W2 · 深渊 R · 周本 R · Boss 预警 R · 挂机 R）  

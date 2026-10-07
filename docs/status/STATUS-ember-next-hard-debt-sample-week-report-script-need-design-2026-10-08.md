@@ -6,6 +6,9 @@
 **上游：** D310 周报检查单已收（R 脚本后置）· D309 副手关窗 · D308 就绪硬表已收 · §1 M 波 + D301–D307 已收 · 样本 R 全表不得开 · 灰印副招 **T0/T0b ❌ · HOLD** · 天赋换机制 **HOLD** · Pack6 / 六槽 **HOLD**  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · **未写** `tools/p1-telemetry-week-report.py` · 服务器保持 up · **不开任一样本门禁 R**  
 **硬规格（待策划交稿）：** [`DESIGN-ember-sample-week-report-script-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-script-2026-10-08.md)（或修订 D310 DESIGN §2.2 成可跑脚本契约）· STATUS=待批 A · backlog `B-sample-week-report-script`  
+
+> **策划交稿旁注（2026-10-08 Asia/Shanghai）：** 硬规格已交 [`DESIGN-ember-sample-week-report-script-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-script-2026-10-08.md) · STATUS=**待批 A** · 荐 **方案 M**（只 docs 脚本契约：CLI `--yml`/`--json-log`/`--out` · 必读键 · 派生两率 · 预填 A–C · **D/E/G 留空** · 禁句 · 退出码 · 出参对照 D310 检查单）· 可选批 R / M+R（脚本落地号钉死；禁与战斗/经济 R 同号）· **W 否决** · **未写** `tools/p1-telemetry-week-report.py` · 门槛钉 D308 **未改** · 零玩法 · 等总控批 A。
+
 **打开理由：** D310 已落手填检查单；OP 仍要手抄 `p1-telemetry/<week>.yml` 数字。D310 DESIGN §2.2 / 批注明文 **方案 R 脚本后置**——本 tip 把它升为下一档 docs/tools 硬债：**写清脚本契约**（读 yml → 同结构检查单 md；D/E/G 人感与签字留空；禁无总控签字输出「建议立即开 X R」），**仍零玩法、禁自动开闸、禁玩家面 KPI、禁改 D308 门槛数**。
 
 ---

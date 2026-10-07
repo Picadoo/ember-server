@@ -206,6 +206,9 @@ D308 硬表当前全表「未满 / 不得开」；本债是 **docs 证据工具*
 
 ### 2.2 方案 R（M 模板之上 · tools 脚本路径 · 仍零玩法）
 
+> **脚本契约指针（2026-10-08 · 不改本页已批 M 结论）：** 方案 R 可验收规格见待批稿 [`DESIGN-ember-sample-week-report-script-2026-10-08.md`](DESIGN-ember-sample-week-report-script-2026-10-08.md)（`B-sample-week-report-script` · STATUS=待批 A · 荐 M=只 docs 契约 · 本页仍 **未落** `.py`）。
+
+
 | 项 | 内容 |
 |----|------|
 | **做什么** | 在方案 M 同一检查单结构上，写清脚本落地路径：建议 `tools/p1-telemetry-week-report.py`（或 `.sh`）— **读** `plugins/CoreRpg/p1-telemetry/<week>.yml`（可选 stdin/JSON 旁路）→ **吐** 同结构 markdown 检查单（预填 A–C 数字与派生两率；D/E/G 人感与签字栏留空勾选） |
@@ -313,6 +316,7 @@ tools/p1-telemetry-week-report.py \
 |----|-----|
 | 2026-10-08 | 策划 · 初稿 STATUS **待批 A** · 荐方案 **M**；R / M+R 可勾；W 否决；检查单全文 + 空周/半满周示例；门槛数字钉 D308 未改 |
 | 2026-10-08 | 总控批 **已批 A · 批 M · D310 docs-only**；R / M+R 未勾（脚本仍后置）；W 否决；门槛数字未改 · [`STATUS-ember-sample-week-report-d310.md`](../status/STATUS-ember-sample-week-report-d310.md) · 检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](../status/STATUS-ember-sample-week-report-checklist-d310.md) |
+| 2026-10-08 | 策划旁注 · §2.2 加指针 → 脚本契约待批稿 `DESIGN-ember-sample-week-report-script-2026-10-08.md`（**不改**已批 M / 门槛 / 检查单） |
 
 ---
 
