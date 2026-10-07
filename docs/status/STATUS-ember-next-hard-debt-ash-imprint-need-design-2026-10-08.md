@@ -5,7 +5,7 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D302 深渊感已收 · D301 招架已收 · 天赋 HOLD · 事件 R/W / 调律 R / 工坊 R / 走廊 W2 等人 · 深渊 R（Director）刚上 M，等人感  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（待批 A）：** [`DESIGN-ember-ash-imprint-pivot-2026-10-08.md`](../design/DESIGN-ember-ash-imprint-pivot-2026-10-08.md) · 荐 **方案 R**（独立 CD/窗/标记或短推迟；M 不荐首批；W 否决）· 批准前禁 YAML/Java  
+**硬规格（已批 A · T0 模拟）：** [`DESIGN-ember-ash-imprint-pivot-2026-10-08.md`](../design/DESIGN-ember-ash-imprint-pivot-2026-10-08.md) · **方案 R**（独立 CD + 标记/短推迟进 T0；过线才 T1；M 不单独首批；W 否决）· 设计主交付勿改  
 **打开理由：** 招架落地后，技能装仍缺一条清晰的**副招进攻/控制身份**；旧灰印在 skill-kit 已删（白送或没人用）；守招稿方案 R 曾指向灰印作另一横向——本窗正式打开**灰印枢轴硬设计**（非 Pack6、非六槽）。
 
 ---
