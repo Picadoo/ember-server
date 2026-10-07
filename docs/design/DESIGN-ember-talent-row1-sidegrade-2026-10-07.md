@@ -1,7 +1,7 @@
 # 天赋一排「条件型侧移」返工规格 · 2026-10-07
 
-> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
-> **批注：** 总控批 · 采纳 **§3** 三节点条件型形状 + **§5** 门禁（42/33 ±2pp + 择优）+ **§6** 切窗。下一步由总控开 **T0** 模拟（`sidegrade.py`）；**不过线不开 T1**。本批注提交仍只动 docs。  
+> **STATUS：已批 A · 数值返工 HOLD**（总控 · 2026-10-07 Asia/Shanghai）  
+> **批注：** 总控批 · 采纳 **§3** 三节点条件型形状 + **§5** 门禁（42/33 ±2pp + 择优）+ **§6** 切窗。T0→T0b→T0c 均 ❌ → 按 §5.3-2 **停系数循环**；备忘 [`DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md)。**D291 保留**；**禁 T1**；再开须换触发/换键。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** 总控「下一难活」· 加固批体验 P4 / 风险「假选择」（`DESIGN-ember-playfeel-hardening-2026-10-07.md` §P4、§6-3）  
 > **性质：** 硬设计已批；**T0 未过线前零线上改动**（不改 `ember-v1-growth.yml` / Java / NI）；禁提交「已通过」假模拟报告冒充施工。  
@@ -213,6 +213,7 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 | 2026-10-07 | 策划 | T0b ❌ → T0c 回补半页（D1c/F7c/W6c · 待批） |
 | 2026-10-07 | 施工/T0b | 批定收窄 D1b/F7b/W6b 复跑 → **❌**（D1b/F7b 下砸；W6b 近线）· `STATUS-ember-talent-row1-t0b-2026-10-07.md` |
 | 2026-10-07 | 施工/T0c | 回补 D1c/F7c/W6c 复跑 → **❌** · `STATUS-ember-talent-row1-t0c-2026-10-07.md` |
+| 2026-10-07 | 总控 / 策划 | T0c ❌ → **数值 HOLD**；禁盲调系数；机制换向备忘 · `DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`；禁 T1 |
 
 ---
 
@@ -220,7 +221,8 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 
 | 文件 | 用途 |
 |------|------|
-| 本文件 | 一排条件型侧移硬规格（**已批 A**） |
+| 本文件 | 一排条件型侧移硬规格（**已批 A · 数值 HOLD**） |
+| `DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md` | T0c 后机制换向备忘（HOLD · 禁盲调） |
 | `DESIGN-ember-growth-sidegrades-2026-10-04.md` | 条件型候选与旧 ±3 跑数（**改为 2 槽复跑**，不以旧数为证） |
 | `DESIGN-ember-build-diversity-2026-10-04.md` | 一排无感证据 |
 | `DESIGN-ember-playfeel-hardening-2026-10-07.md` | P4 / 假选择 / 开窗依据 |
@@ -230,7 +232,7 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 
 ---
 
-## 10. T0b 收窄补丁（指针）
+## 10. 收窄轨 / HOLD（指针）
 
-T0 ❌ 收窄见 [`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md)（已批 A · T0b ❌）。T0c 回补见 [`DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md)（**已批 A** · D1c/F7c/W6c · T0c 复跑中）。**禁 T1**，直至某轮 T0 ✅ 且总控另派。
+T0b：[`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md)（❌）。T0c：[`DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md)（❌ · `0d4481ad`）。**数值返工 HOLD**；换向备忘：[`DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md)。**禁**再交 D1d 式系数表；**禁 T1**，直至换机制过线且总控另派。
 
