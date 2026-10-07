@@ -36,4 +36,5 @@
 ## 下一窗 tip
 
 - 攒 1～2 周真人样本后再议：事件 R/W、调律 R、是否扩 Pack  
-- 禁：玩家面遥测 KPI · 六槽 · 天赋盲调 · Pack6
+- 禁：玩家面遥测 KPI · 六槽 · 天赋盲调 · Pack6  
+- **下一档硬债 tip（非遥测续窗）：** [`STATUS-ember-next-hard-debt-refarm-short-feedback-need-design-2026-10-07.md`](STATUS-ember-next-hard-debt-refarm-short-feedback-need-design-2026-10-07.md) · 再刷短反馈 / 成色·精工可感节奏 · **需策划**（对齐加固债 #3）
