@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * D238 / ARCH S3-9: settlement helpers moved from {@code EmberRunService} into {@link EmberSettleService}.
  * Pins fail-refund / not-eligible texts, rotation mark amount, and grant-key order/amounts for a plain
- * Q01 clear (+ featured rotation / variety / bounty) against the pre-extract concatenations (bv58 unchanged).
+ * Q01 clear (+ featured rotation / variety / bounty) against the pre-extract concatenations (bv59 · D293; D295 playfeel only).
  */
 public final class EmberSettleServiceTest {
 
@@ -207,7 +207,7 @@ public final class EmberSettleServiceTest {
 
     @Test public void bundledBalanceVersion_unchanged() {
         EmberRunMaps maps = bundled();
-        assertEquals(58, maps.balanceVersion);
+        assertEquals(59, maps.balanceVersion);
         assertEquals(30, maps.cost);
         assertEquals(0.5, maps.failRefund, 1e-9);
     }
@@ -231,5 +231,24 @@ public final class EmberSettleServiceTest {
                 EmberSettleService.varietyBountyTip(
                         java.util.Collections.singletonList("击败词缀精英（20 余烬币）"),
                         "§e击败词缀精英 1/2"));
+    }
+
+    @Test public void failPlayfeelLine_D295_usesSessionCounters() {
+        EmberRunSession s = new EmberRunSession();
+        s.wallHits = 2;
+        s.whiffHits = 0;
+        s.breakHits = 1;
+        s.affix = "blazing";
+        s.affixDone = true;
+        s.eventRoom = "r2";
+        s.eventKind = "timed";
+        s.eventDone = false;
+        String line = EmberSettleService.failPlayfeelLine(s);
+        assertTrue(line.contains("撞墙破绽 ×2"));
+        assertTrue(line.contains("破招 ×1"));
+        assertTrue(line.contains("✔"));
+        assertTrue(line.contains("✘"));
+        assertEquals("", EmberSettleService.failPlayfeelLine(null));
+        assertEquals("", EmberSettleService.failPlayfeelLine(new EmberRunSession()));
     }
 }

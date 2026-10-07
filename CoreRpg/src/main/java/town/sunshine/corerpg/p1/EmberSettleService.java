@@ -106,6 +106,14 @@ public final class EmberSettleService {
         return sb.toString();
     }
 
+    /** D295: same summary line for fail/wipe — players need the lesson when they lose. */
+    static String failPlayfeelLine(EmberRunSession s) {
+        if (s == null) return "";
+        return playfeelSummary(s.wallHits, s.whiffHits, s.breakHits,
+                s.affixDone, s.affix, s.eventRoom != null && !s.eventRoom.isEmpty(), s.eventDone, s.eventKind);
+    }
+
+
 
     /**
      * Append the post-base bonuses {@link #settleFor} adds after {@link EmberRunRules#settle}, in the same order

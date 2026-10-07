@@ -781,6 +781,13 @@ public final class EmberRunService implements Listener {
                 } catch (RuntimeException ignored) { /* hint only */ }
             }
         }
+        // D295: fail also gets D283 playfeel summary (was settle-only — wipe taught nothing)
+        for (UUID u : s.participants) {
+            Player p = Bukkit.getPlayer(u);
+            if (p == null || !p.isOnline()) continue;
+            String feel = EmberSettleService.failPlayfeelLine(s);
+            if (!feel.isEmpty()) p.sendMessage(P + feel);
+        }
         endInstance(s, false);
     }
 
