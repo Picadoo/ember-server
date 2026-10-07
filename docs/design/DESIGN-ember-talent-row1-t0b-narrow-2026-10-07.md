@@ -90,5 +90,5 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1b,F7b,W6b --n 2000 -
 
 ## 6. T0c 回补指针
 
-T0b ❌ 后回补见 [`DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md)（**待批 A** · D1c/F7c/W6c）。**禁 T1**。
+T0b ❌ 后回补见 [`DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md)（**已批 A** · D1c/F7c/W6c · T0c 复跑中）。**禁 T1**。
 

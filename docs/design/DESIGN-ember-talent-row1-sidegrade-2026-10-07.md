@@ -231,5 +231,5 @@ python3 tools/p1sim/sidegrade.py report   # → tools/p1sim/out-growth-sidegrade
 
 ## 10. T0b 收窄补丁（指针）
 
-T0 ❌ 收窄见 [`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md)（已批 A · T0b ❌）。T0c 回补见 [`DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md)（**待批 A** · D1c/F7c/W6c）。**禁 T1**，直至某轮 T0 ✅ 且总控另派。
+T0 ❌ 收窄见 [`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md)（已批 A · T0b ❌）。T0c 回补见 [`DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md)（**已批 A** · D1c/F7c/W6c · T0c 复跑中）。**禁 T1**，直至某轮 T0 ✅ 且总控另派。
 

@@ -1,9 +1,10 @@
 # 天赋一排侧移 · T0c 回补修订（半页）· 2026-10-07
 
-> **STATUS：待批 A**（回补系数 · 供 T0c）  
+> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
+> **批注：** 总控批 · 采纳 **D1c / F7c / W6c**；已开 T0c 模拟。**禁 T1**，直至 T0c ✅ 且另派。本批注仍只动 docs。  
 > **日期：** 2026-10-07 Asia/Shanghai  
 > **来源：** T0b ❌ [`STATUS-ember-talent-row1-t0b-2026-10-07.md`](../status/STATUS-ember-talent-row1-t0b-2026-10-07.md)（`70b0acc4`）· 总控读数：D1b/F7b **过收下砸** → 回补窗外代价；W6b **近线** → `win_out→0.98`  
-> **性质：** **只 docs**；新 id **D1c / F7c / W6c**。**禁 T1**；禁均匀乘区 / 新永久乘区 / 六槽 / Pack。  
+> **性质：** 回补系数已批；可入 `sidegrade.py` 登记复跑。**禁 T1**；禁均匀乘区 / 新永久乘区 / 六槽 / Pack。  
 > **硬规则：** 形状不变；**禁止再加罚**（勿再 ↓ `dmg_boss` / ↑ `taken_boss`）；本轮 = **减轻窗外代价 + 略回窗口收益**。
 
 ---
@@ -64,7 +65,7 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1c,F7c,W6c --n 2000 -
 
 ## 4. 批注勾选
 
-- [ ] **批 A · 采纳 §1 开 T0c**（D1c/F7c/W6c；禁 T1）  
+- [x] **批 A · 采纳 §1 开 T0c**（D1c/F7c/W6c；禁 T1）  
 - [ ] 改口：________  
 - [ ] 驳回：换机制
 
@@ -75,6 +76,7 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1c,F7c,W6c --n 2000 -
 | 日 | 事 |
 |----|-----|
 | 2026-10-07 | 初稿 · 待批 A · 响应 T0b 过收下砸 |
+| 2026-10-07 | 总控批 **已批 A** · 采纳 D1c/F7c/W6c · T0c 复跑中 |
 
 - T0b 收窄：`DESIGN-ember-talent-row1-t0b-narrow-2026-10-07.md`  
 - 主规格：`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`  
