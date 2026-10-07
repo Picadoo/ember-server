@@ -45,6 +45,7 @@
 
 ## 下一窗 tip
 
+- **下一档硬债（已开 tip）：** [`STATUS-ember-next-hard-debt-abyss-feel-need-design-2026-10-07.md`](STATUS-ember-next-hard-debt-abyss-feel-need-design-2026-10-07.md) · 深渊层感轻差异需策划（荐 F）
 - **禁** 旧壁垒表再交 · **禁** 天赋续跑 T0'''
-- 事件 R/W · 调律 R **后置**（等遥测样本）
+- 事件 R/W · 调律 R · 工坊 R · 走廊 W2 **后置**（等遥测/真人样本）
 - 真人招架窗手感若偏紧/偏松，只允许换窗长/CD/flat 在 T0b 邻域内另开模拟，**不**放宽 ±2
