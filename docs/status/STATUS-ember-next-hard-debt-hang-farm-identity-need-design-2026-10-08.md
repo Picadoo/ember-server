@@ -106,3 +106,5 @@
 ---
 
 **结案（2026-10-08）：** 设计已批 A · 方案 M · 施工 **D305**（CoreRpg 1.65.95）见 [`STATUS-ember-hang-farm-soft-identity-d305.md`](STATUS-ember-hang-farm-soft-identity-d305.md)。
+
+**结案指针：** D305 已上线 · 下一档 tip → [`STATUS-ember-next-hard-debt-hub-daily-routing-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-hub-daily-routing-need-design-2026-10-08.md)。

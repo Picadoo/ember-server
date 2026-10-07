@@ -41,3 +41,5 @@
 
 - **R**（提示密度）**后置**；仅总控另批 M+R 时开  
 - **禁** Pack6 / 抬封顶收益 / 假平面 / 天赋灰印续跑  
+
+- **下一档硬债 tip：** [`STATUS-ember-next-hard-debt-hub-daily-routing-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-hub-daily-routing-need-design-2026-10-08.md)（枢纽「今天该打哪」日路由诚实 · 需策划）  
