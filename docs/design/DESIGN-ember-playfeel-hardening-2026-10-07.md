@@ -1,9 +1,10 @@
 # DESIGN · 下一阶段玩法 / 体验加固（2026-10-07）
 
-> **STATUS：待批 A（未批不施工）**  
+> **STATUS：已批 A**（总控 · 2026-10-07 Asia/Shanghai）  
+> **批注：** 总控批 · 开窗顺序 **1→5**（先做 §8-1【P0 反馈】；2 付费诚实 → 3 挂机到顶 → 4 成长诚实 → 5 副手决策页；**窗 5 等总控另派再写规格**）。口径维持：D282 月卡开、D281 VIP/战令挡；六槽不做；先体验反馈、禁再堆 Pack / Director 大分支。  
 > **路径：** `docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`  
 > **基线：** CoreRpg **1.65.78**（`CoreRpg/pom.xml` / `plugin.yml`）· `balance_version` **58**（`plugins/CoreRpg/ember-v1-runs.yml`）· 月卡口径见 `docs/status/STATUS-ember-monthly-p1-allow-d282.md`  
-> **性质：** 策划交稿。只定问题排序、窗口切分与验收；**批准前不改玩法 YAML / 不改源码 / 不 git push**。  
+> **性质：** 策划已批。按 §8 顺序开窗施工；**本批注提交仍只动 docs**。  
 > **硬约束：** TrMenu 玩家面 · NI 道具 · 同服 Multiverse · 体力门 · 不暴露玩家指令 · **六槽护甲本窗明确不做** · 不写 NMS · 不宣称 B0.1 已清 · 禁长测 / 挑刺玩家 · P2「不卖战力」。
 
 ---

@@ -4,7 +4,7 @@
 ## Progress snapshot — 2026-10-01 13:37 Asia/Shanghai (总控 · B2.111 PASS · 勾销 · 流水线暂停，等用户/GPT 策划意见；下一默认窗 B2.113)
 
 ### 指针 · 下一阶段玩法/体验加固（2026-10-07）
-- **待批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（主循环可感反馈 / 横向替换预算 / 付费口径 / 维护性；**未批不施工**；勿与 B2.x 薄窗编号搅在一起）
+- **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 
 ### 用户拍板（高优先）
 - **票→体力**：否决票券观感；日回体力 + 按玩法消耗；菜单显示，玩家不打指令。
