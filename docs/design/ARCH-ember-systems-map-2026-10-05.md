@@ -11,7 +11,7 @@
 
 1. **P1 已经是一套完整的第二个游戏，但它寄生在旧插件骨架上。** `CoreRpgPlugin.onEnable`（`J/CoreRpgPlugin.java:148–277`）仍无条件实例化 40 多个旧服务；P1 的烬斩、药水、进本路由、经验、材料仓数据分别住在旧类 `SkillService` / `LifeService` / `QuestService`+`TicketEntryService` / `ProgressService` / `WarehouseService` 里【码】。
 2. **旧奖励路径曾是最大结构风险，S0 已对普通玩家封口（D198–D202 / 1.65.35–1.65.38）**【码 / 配】：`LegacyGate` + `ember-v1.yml legacy_gate` 挡住 `/corerpg enter <旧>`、`/dp start` 旧 gate、`arena/vip/pass/calamity/scrap/…` 路由，以及旧经验 / 击杀币 / 灾厄结算纵深防御。OP / `corerpg.admin` / 控制台仍放行（DP/MM 发奖脚本要走控制台）。历史口子见 AUDIT；残余提案仅 S0-9（世界级传送兜底，D251=HOLD）。S0-10 旧仓库只读已落地（D252 / 1.65.71）。这些旧来源仍不在 p1sim / p2econ 里——因为玩家侧已为 0。
-3. **玩家状态是一个字符串键大杂烩**：约 70 种计数器前缀挤在 `PlayerData.counters`（`cr_players.data` 一列 LONGTEXT）里；连「这件装备的词条 / 签名」都记在**主人**的计数器上（`p4_af_<uid>`、`p1_sig_<uid>`），不在 `cr_p1_item`，分解后也不清理【码】。
+3. **玩家状态仍是字符串键大杂烩，但物品键已回物品（D208）**【码】：约 70 种计数器前缀仍挤在 `PlayerData.counters`；词条 / 洗练保底 / 签名 / 洗练序号已在 `EmberItemData` v2 + `cr_p1_item`（`affix/af_pity/sig_code/reroll_n`）并进 HMAC；旧 `p4_af_/p4_afp_/p1_sig_/p4_rrn_` 仅兼容未折叠的 v1 测试件，写入时 fold+clearLegacy。
 4. **上帝类**：`EmberRunService` 3,774 行（入场、深渊、团本倒地、连战、结算、图录、投递、重启恢复、誓约、招募、PAPI 全在一起）、`EmberRunDirector` 2,471 行（每个内容包都是手写分支）、`CoreRpgPlugin` 1,856 行、`EmberGrowthService` 1,629 行【码】。每个内容包 = Java + yml + p1sim 模型 + 专用冒烟脚本，成本不会因为「暂停」而下降。
 5. **「每张图有自己的装备」目前只靠签名传奇 + 首领徽记实现**：基础件只有 3 个阶级 × 族 / 部位偏向（`loot_bias`），物品身份里没有来源地图（`source` 只有 `quest` / `drop`，`J/p1/EmberRunService.java:1839`）【码】。装备结构（6 槽 D169 / 6 槽第 0 阶段 / 8 槽 D168）三份文档互相取代，结构代码仍 HOLD【文】。
 6. **资产路径的事务化（D162 / D172）做得扎实**，残留窗口已在审查附录写明；剩下的主要缝隙是跨插件（CoreGacha 反射改 CoreRpg 的 `PlayerData`）；旧 `/corerpg warehouse` 写路径已对非 OP 收口（S0-10 / D252，只读 list/info）【码】。
@@ -147,7 +147,7 @@ flowchart LR
     INS["首领徽记<br/>p1_sigmark_*"]
     BADGE["余烬徽 p3_badge"]
     GEAR["P1 装备<br/>cr_p1_item"]
-    SIGAF["签名 / 词条<br/>p1_sig_* / p4_af_*（主人计数）"]
+    SIGAF["签名 / 词条<br/>cr_p1_item 列（D208；旧计数仅 v1）"]
   end
   subgraph SINK["消耗"]
     FORGE["烬砧 强化/升阶/精工/成色/分解"]
@@ -288,16 +288,16 @@ flowchart LR
 
 后果：内容包上线要同时动 `EmberRunDirector` + `EmberRunMaps` + yml + p1sim 模型 + `tools/p1map/d1xx-*.sh` 冒烟脚本（`tools/p1map/` 现有 43 个文件，其中 35 个 `.sh`）；两个人很难同时改主线相关代码（`COORD-mainline-unlocks` 里反复出现「CoreRpg tree busy」与 worktree 绕行）。
 
-**R3 · 字符串键状态与「物品属性挂在主人身上」（中）**
-- `PlayerData.counters` 单一 `Map<String,Integer>`（`J/PlayerData.java:513–534`），`p1/` 里约 70 种前缀（`p1_* / p2_* / p3_* / p4_* / p5_* / bmat: / failrefund@`）；只有一个通用测试 `PlayerDataCountersTest`。没有注册表说明每个键的周期、归属、是否资产、何时清理。
-- 词条 `p4_af_<uid>`、洗练保底 `p4_afp_<uid>`、签名 `p1_sig_<uid>` 是**物品属性**却存在主人的计数里；`EmberForgeService` / `EmberGearLib` / `EmberItemStore` / `InvSnapService` / `EmberDelivery` 都不引用这些键（grep 为 0）。分解后键永久留在 blob 里；`EmberAudit` 对账、`cr_p1_txn` 流水看不到词条 / 签名变化；HMAC 只签 NBT 身份，不覆盖它们。将来若要邮寄 / 交易装备，必须先迁移。
-- 首通标记带内容版本：`p1_first_clear_<map>@<content_version>`（「once per character + content version」）。**改任一图的 `content_version` = 所有人重新拿一次首通包**（币 600–2100 + 材料，Q01 / Q02 的自选件），同时影响依赖首通的解锁判断。S4 做「每图专属装备」时极易误触。
+**R3 · 字符串键状态与「物品属性挂在主人身上」→ 物品键 CLOSED（D208 / 1.65.42）；计数器大杂烩仍在**【码】**
+- **已落地（S1-4 / D208）**：词条 / 洗练保底 / 签名 / 洗练序号在 `EmberItemData` v2（NBT + `cr_p1_item.affix/af_pity/sig_code/reroll_n` + HMAC）；读写经 `EmberItemKeys`；v1 测试件读旧计数，下一次耐久写入 fold 进 v2 并 `clearLegacy`。冒烟 + persist-roundtrip：`docs/tests/smoke-2026-10-05-d208-itemkeys.md`（PASS）。`p4_rro_` 新写路径已废，进服仍恢复老欠账。
+- **仍在**：`PlayerData.counters` 仍是大杂烩（注册表 D206 / `EmberCounters`）；非物品键的清理规则要靠注册表维护。
+- **旁注（原挂在 R3 下，属 S1 第 3 条，D205 已拆首通）**：首通与 `content_version` 解耦见 D205；改图版本误触首通包的风险以 D205 现状为准，不再当作「物品键未迁」的证据。
 
 **R4 · 测试覆盖集中在纯规则（中）**：CoreRpg 300 个单测（`RELEASE-ember-1.65.34.md`），`EmberRunRulesTest` 一个文件 2,004 行。下列类**没有任何单测引用**：`EmberForgeService`、`EmberGearLib`、`EmberVaultLog`、`EmberLoadoutService`、`EmberSetService`、`EmberRunStore`、`EmberCommand`、`EmberItems`、`EmberLeaderboard`、`EmberRunBridges`、`EmberDamageTrace`、`NmsNbt`、`EmberPlayerState`（按类名 grep `src/test`）。资产路径靠 `tools/p1map/persist-roundtrip.sh`（真 bot、真 MySQL、正常重启 + kill -9）兜底；旧服务除 `InvSnapRules` / `DbGuard` 外无测试。
 
 **R5 · 资产路径 loss / dup 面（中）**
 - 已修并有证据：A01–A04、D172（审查附录 §03）。残留 4 个窗口已写明（同一 tick 的 `saveData` 与标记之间 kill -9 等）。
-- 仍在的面：① CoreGacha 兑券 = CoreRpg 内存扣币 → gacha MySQL 写券 → 失败再 `addCoin` 补偿（`GachaService:540–562`），两个存储没有共同事务，补偿依赖进程活着；② ~~旧 `WarehouseService` 玩家可写~~ → **D252 收口**：P1 非 OP 只读；OP 仍可写（D177 绑定不可取出仍有效）；③ 词条 / 签名不在物品行（R3）；④ ~~账号绑定守卫随 `afk.enabled` / 住在挂机庭~~ → **D275+D276 收口**：`EmberBindGuard`，只跟 P1。
+- 仍在的面：① CoreGacha 兑券 = CoreRpg 内存扣币 → gacha MySQL 写券 → 失败再 `addCoin` 补偿（`GachaService:540–562`），两个存储没有共同事务，补偿依赖进程活着；② ~~旧 `WarehouseService` 玩家可写~~ → **D252 收口**：P1 非 OP 只读；OP 仍可写（D177 绑定不可取出仍有效）；③ ~~词条 / 签名不在物品行~~ → **D208 收口**（R3 物品键）；④ ~~账号绑定守卫随 `afk.enabled` / 住在挂机庭~~ → **D275+D276 收口**：`EmberBindGuard`，只跟 P1。
 - 每次动到存取 / 分解 / 撤销 / 快照 / 扭蛋 / 投递，仍要跑 persist-roundtrip（POLICY 01:53）。
 
 **R6 · 利用面清单（需逐项审计，未全部实测）**
@@ -307,7 +307,7 @@ flowchart LR
 | 重复领取 | 主线 / 团本 / 签到走幂等账本（`EmberRunRules.Ledger`、`rs.grantRow`）；连战每周一次（`p4_rush_claim`）；投递恰好一次（`p1dlv_`） | 代码 + persist g1–g6 |
 | 周上限绕过 | 精选周 `weekly_cap 3`（普通 + 挑战共用一个计数）、团本合计周上限、残响 3 次共享；周 / 日键全用服务器时钟（`DailyService`）。只有签到写了时钟回拨防护（`p1_sign_last` 注释 clock-back guard） | `ember-v1-runs.yml rotation`、`EmberSignService:60–66` |
 | 重试滥用 | 连战失败无限重试但只首通领奖（D160）；首败退一半体力每天一次（`failrefund@`）；深渊段「开打前中止 / 重启」全额退费——应确认退费后段种子不变（否则可免费重抽段地图） | `ember-v1-runs.yml` `fail_refund`、`abyss` 注释 |
-| 小号转移 | P1 材料 / 装备禁丢出 / 入容器（守卫在挂机类里）；旧寄售关；邮件发送 `corerpg.mail.send: op`；**竞技胜场币**未关 | `EmberAfkService:667–723`、`plugin.yml`、`arena.yml` |
+| 小号转移 | P1 材料 / 装备禁丢出 / 入容器（`EmberBindGuard`，只跟 P1）；旧寄售关；邮件发送 `corerpg.mail.send: op`；**竞技胜场币**未关 | `EmberBindGuard`、`plugin.yml`、`arena.yml` |
 | 内容版本 | 改 `content_version` 重发首通 | R3 |
 | 未建模的机动 / 生存 | 旧 `FlexSkillService`（5 格冲刺、14 秒冷却、无 P1 判断）由 P1 主菜单链接；CoreCombat 的不死图腾 / 盾牌格挡不认 P1 世界——是否绕过 `EmberCombatListener` 的统一结算未核 | `FlexSkillService` 类注释、`ember_hub.yml:246`、CoreCombat 源码无 P1 引用 |
 
@@ -335,7 +335,7 @@ flowchart LR
 - **目标**：每一个持久化的键都有主人、周期、是否资产、清理规则；物品的东西跟着物品走。
 - **范围**：
   1. `EmberCounters` 注册表（纯 Java，列出全部前缀：所属系统、`@all / @day / @week / @month`、资产与否、可否被管理员改、分解 / 过期时是否清理）；单测扫描 `p1/` 源码里的字符串字面量，未注册的前缀让测试失败。
-  2. 词条 / 洗练保底 / 签名迁到物品：`cr_p1_item` 加列或进 `ember_v1` NBT 并纳入 HMAC + `cr_p1_txn` 流水；读取时兼容旧计数，一次性迁移测试号（服主 10-02：没有老玩家，不做正式迁移）。
+  2. 词条 / 洗练保底 / 签名迁到物品 → **D208 DONE**（`EmberItemKeys` + v2 列；v1 兼容 fold；无正式老玩家迁移）。
   3. 首通标记与 `content_version` 解耦：首通包领取记录改为「每图一次」的独立账本行（参照 `p1_sigfc_` 已经是 once per map），`content_version` 只用于地图 / 规则版本。
 - **解锁**：S4 的「图专属基础件」可以把 `source_map` 放进物品身份；审计 / 恢复能看到完整物品状态；邮寄 / 交易不再被数据模型卡死（是否开放仍是设计问题，P2-3 D73 已否决交易）。
 - **验证**：单测（注册表覆盖、迁移往返、HMAC 覆盖新字段）；**persist-roundtrip 全套**（改了物品行）；p1sim 逐位不变；冒烟（洗练 / 烙印 / 分解撤销后词条与签名仍在）。
@@ -396,5 +396,5 @@ flowchart LR
 | S1 | S1-1 计数器注册表 D206、首通拆分（S1 第 3 条）D205、S1-4 物品键回物品 D208、S1-5 周期回拨防护 D207 | 计数器注册表 ↔ 源码字面量覆盖率随新键维护 |
 | S2 | S2-1 登记表 D213 → S2-2～S2-6 grant/spend 路由 D215–D223 → S2-7 yml 真源 D224 → S2-8 徽记/徽/印记 D228（1.65.54）→ S2-9 S13 深渊 SourceId + vault 写入扫描 D229（1.65.55） | C15/C16 暂停期不动；p2econ 徽库存（化妆品重启前） |
 | S3 | **S3-1 Rush D230（1.65.56）· S3-2 Abyss D231（1.65.57）· S3-3 Pledge D232（1.65.58）· S3-4 Raid D233（1.65.59）· S3-5 Recruit D234（1.65.60）· S3-6 Entry gates D235（1.65.61）· S3-7 encounter primitives D236（1.65.62）· S3-8 Session D237（1.65.63）· S3-9 Settlement D238（1.65.64）· S3-10 BossMove/RoomObjective D239（1.65.65）· S3-11 Papi 分节 D240（1.65.66）· S3-12 词缀行为原语 + `%ember_daily/weekly_left%` D241（1.65.67）** | —（S3 完成；p1sim 读原语表见 `DESIGN-ember-affix-primitives-d241.md` §3，排在 S4 后） |
-| S4 | **S4-1 D242（文档 + 测试，无发版，1.65.67 不变）**：权威装备结构文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读 `ember-source-map.yml` + `EmberSourceMapTest`（缺来源 / 经济键 / 账本键即失败）；缺口 G1–G11 · **S4-2 D243（1.65.68 / bv58）**：G1–G3 登记 S33 图录阶段币 / S34 宝箱额外件 / S35 起步包（数量不变，只加标签）、G8 `S09.per_rule`、G4 `givedup` → `source=admin`、G5 打包配置 = 线上、G6/G7/G11 注释、G9 p1sim 读 `ember-source-map.yml`（21 格 A/B 全部 ±2pp 内） · **S4-3 D244（1.65.69 / bv58）**：词缀原语导出表 `tools/p1sim/affix-table.json`（`EmberAffixExportTest`，漂移即失败），p1sim 读表（gate 无翻转，W30 5.50 → 5.31）；G10 登记 S36 钓鱼 / S37 扭蛋券 / S38 扭蛋产出 / C19 扭蛋抽取 + source map `stocks:`（只打标签） · **S4-4 D245（1.65.70 / bv58）**：第 4 步「物品身份加 `source_map`」完成——新装备在物品上记来源 `origin`（NBT `om/os/or/ot` = 图 / 模式、来源行 S##、run id、时间；`cr_p1_item.origin`），行为中性、旧件照常有效；source map `item_provenance:` + `itemProvenanceMatchesCode` | **D246（离线，10-06）完成**：6 槽掉落模型修正 w80_cap 过全部 gate（Stage 0 文档 D246 节）· **D247（离线，10-07）完成**：regen/charge/frost/mortar/molten 进 p1sim（`_plain` 基线，室门 2.9 pp）· **D248（离线，10-07）完成**：D247 全量 300 人养成周数关账（深渊 5.11，相对 D244 的 5.31 = −0.20，六路线 ±0.5 内）；**D249（离线，10-07）完成**：自检 3 条老红灯清零（图录预警秒数、gear6/gear6diag Random、signin 走 rules）；**D250（离线，10-07）完成**：ARCH/AUDIT/DP README 同步——O1/O2/O3/R1 与 N1「提案未实现」改为 S0 已落地（D198–D202）· **D251（离线，10-07）完成**：S0-9 HOLD / S0-10 READY 规格 [`DESIGN-ember-s0-remainder-d251.md`](DESIGN-ember-s0-remainder-d251.md)；**D252（1.65.71，10-07）完成**：S0-10 旧仓库只读 · **D253（离线，10-07）完成**：材料仓设计 / S0 残余规格文案对齐 D252 · **D254（离线，10-07）完成**：ARCH/AUDIT 旧仓库文案 · **D255（1.65.72，10-07）完成**：help 仓库行 · **D256（1.65.73，10-07）完成**：总览/描述 · **D257（离线，10-07）完成**：打包 yml 注释 · **D258（离线，10-07）完成**：文档头注 · **D259–D260**：票旁记收口停开 · **D261（10-07）完成**：S0-10 轻量实服 6/6 PASS（`s0-10-warehouse-smoke.js`）· **D262–D274**：票/假文案薄扫后停开 · **D275（1.65.74，10-07）完成**：O9 门闩跟 P1 · **D276（1.65.75，10-07）完成**：O9 拆到 `EmberBindGuard`；下一非填充：R3 / 其它真债（S0-9 HOLD；六槽仍待显式开工） |
+| S4 | **S4-1 D242（文档 + 测试，无发版，1.65.67 不变）**：权威装备结构文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读 `ember-source-map.yml` + `EmberSourceMapTest`（缺来源 / 经济键 / 账本键即失败）；缺口 G1–G11 · **S4-2 D243（1.65.68 / bv58）**：G1–G3 登记 S33 图录阶段币 / S34 宝箱额外件 / S35 起步包（数量不变，只加标签）、G8 `S09.per_rule`、G4 `givedup` → `source=admin`、G5 打包配置 = 线上、G6/G7/G11 注释、G9 p1sim 读 `ember-source-map.yml`（21 格 A/B 全部 ±2pp 内） · **S4-3 D244（1.65.69 / bv58）**：词缀原语导出表 `tools/p1sim/affix-table.json`（`EmberAffixExportTest`，漂移即失败），p1sim 读表（gate 无翻转，W30 5.50 → 5.31）；G10 登记 S36 钓鱼 / S37 扭蛋券 / S38 扭蛋产出 / C19 扭蛋抽取 + source map `stocks:`（只打标签） · **S4-4 D245（1.65.70 / bv58）**：第 4 步「物品身份加 `source_map`」完成——新装备在物品上记来源 `origin`（NBT `om/os/or/ot` = 图 / 模式、来源行 S##、run id、时间；`cr_p1_item.origin`），行为中性、旧件照常有效；source map `item_provenance:` + `itemProvenanceMatchesCode` | **D246（离线，10-06）完成**：6 槽掉落模型修正 w80_cap 过全部 gate（Stage 0 文档 D246 节）· **D247（离线，10-07）完成**：regen/charge/frost/mortar/molten 进 p1sim（`_plain` 基线，室门 2.9 pp）· **D248（离线，10-07）完成**：D247 全量 300 人养成周数关账（深渊 5.11，相对 D244 的 5.31 = −0.20，六路线 ±0.5 内）；**D249（离线，10-07）完成**：自检 3 条老红灯清零（图录预警秒数、gear6/gear6diag Random、signin 走 rules）；**D250（离线，10-07）完成**：ARCH/AUDIT/DP README 同步——O1/O2/O3/R1 与 N1「提案未实现」改为 S0 已落地（D198–D202）· **D251（离线，10-07）完成**：S0-9 HOLD / S0-10 READY 规格 [`DESIGN-ember-s0-remainder-d251.md`](DESIGN-ember-s0-remainder-d251.md)；**D252（1.65.71，10-07）完成**：S0-10 旧仓库只读 · **D253（离线，10-07）完成**：材料仓设计 / S0 残余规格文案对齐 D252 · **D254（离线，10-07）完成**：ARCH/AUDIT 旧仓库文案 · **D255（1.65.72，10-07）完成**：help 仓库行 · **D256（1.65.73，10-07）完成**：总览/描述 · **D257（离线，10-07）完成**：打包 yml 注释 · **D258（离线，10-07）完成**：文档头注 · **D259–D260**：票旁记收口停开 · **D261（10-07）完成**：S0-10 轻量实服 6/6 PASS（`s0-10-warehouse-smoke.js`）· **D262–D274**：票/假文案薄扫后停开 · **D275（1.65.74，10-07）完成**：O9 门闩跟 P1 · **D276（1.65.75，10-07）完成**：O9 拆到 `EmberBindGuard` · **D277（离线，10-07）完成**：R3 物品键文档对齐为 D208 已 CLOSED；下一非填充：其它真债 / CoreGacha 跨库缝 / 非物品计数器清理纪律（S0-9 HOLD；六槽仍待显式开工） |
 
