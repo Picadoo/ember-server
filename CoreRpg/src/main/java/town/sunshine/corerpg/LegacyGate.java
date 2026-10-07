@@ -81,9 +81,11 @@ public final class LegacyGate {
         Map<String, Set<String>> m = new LinkedHashMap<String, Set<String>>();
         for (String s : new String[] {"status", "coin", "sign", "activity", "bounty", "stats", "p1", "quest", "afk",
                 "life", "level", "enter", "tickets", "cash", "storage", "mail", "friend", "settings", "ladder", "pet",
-                "skill", "flex", "set", "enderchest", "warehouse", "raid", "auction"}) {
+                "skill", "flex", "set", "enderchest", "raid", "auction"}) {
             m.put(s, Collections.singleton(ANY));
         }
+        // D252 / ARCH S0-10: warehouse view-only (list/info); deposit/withdraw/unlock refused for non-OP
+        m.put("warehouse", set("", "list", "overview", "info"));
         m.put("pass", set("", "show", "info", "rewards", "season"));
         m.put("stamina", set("", "show", "info"));
         m.put("calamity", set("", "status", "info"));

@@ -2,7 +2,7 @@
 
 > **性质：** 离线审计快照（D197，2026-10-05）——当时只写文档、不改代码。§1–§4 的 LEAK 表保留为**历史证据**；§5 S0 条目已标 ✅ 落地状态。
 > **落地状态（D250 追记，2026-10-07）：** S0-1～S0-5、S0-8 已随 CoreRpg **1.65.35–1.65.38** 上线（D198–D202）。普通玩家侧 L1–L12 入口 / 发奖纵深已关；OP / 控制台仍放行。对照 ARCH §0 #2 / §3 O1–O3 / §4 R1 / §6.1。
-> **D251（2026-10-07）：** 残余规格见 [`DESIGN-ember-s0-remainder-d251.md`](DESIGN-ember-s0-remainder-d251.md)——**S0-9 = HOLD**（可选纵深，D202 后无已知玩家传送口）、**S0-10 = READY**（P1 下拒 warehouse 写路径，须资产回归；本窗未改码）。
+> **D251（2026-10-07）：** 残余规格见 [`DESIGN-ember-s0-remainder-d251.md`](DESIGN-ember-s0-remainder-d251.md)——**S0-9 = HOLD**（可选纵深，D202 后无已知玩家传送口）、**S0-10 = DONE（D252 / 1.65.71）**；S0-9 仍 HOLD。
 > **基线（审计当时）：** `main` = `087fc8c`；CoreRpg **1.65.34**；P1 `enabled: true`。
 > **上级文档：** `docs/design/ARCH-ember-systems-map-2026-10-05.md`（§2 数据流、§3 O1–O3、§5 S0、§6 N1）。
 > **方法：** 从 `J/CoreRpgPlugin.java:939–1092 onCommand` 逐条路由到各服务的 `cmd / cmdRoot`；对照 `CoreRpg/src/main/resources/plugin.yml`、`server-runtime/permissions.yml`、`plugins/DungeonPlus/dungeon/*/option.yml`、`plugins/TrMenu/menus/*.yml`、`plugins/MythicMobs/Mobs/*.yml`、`P/*.yml`；`tools/p1sim/*.py` 用 `rg -i` 逐词确认是否建模。
@@ -232,7 +232,7 @@
 
 ---
 
-## 5. S0：默认拒绝 + 白名单（**S0-1～S0-5 / S0-8 已落地 · D198–D202**；S0-9 HOLD / S0-10 READY 规格 · D251）
+## 5. S0：默认拒绝 + 白名单（**S0-1～S0-5 / S0-8 已落地 · D198–D202**；S0-9 HOLD · S0-10 DONE D252）
 
 > **2026-10-05 更新（D198）：** S0-1、S0-2 已实现并随 CoreRpg 1.65.35 上线（`J/LegacyGate.java` + `J/CoreRpgExpansion.java` gate_ / guildboss_pass + `J/TicketEntryService.java` tryEnter；P1 开着才生效，OP / `corerpg.admin` / 控制台放行）。S0-3～S0-10 仍是提案。
 >
@@ -261,7 +261,7 @@
 | **S0-7** | 旧宝石显式关闭（ARCH O6 / G5） | `P/enhance.yml` 加 `socket.enabled: false` 或 S0-3 拒绝 `socket`；孔石来源（旧本 / 灾厄 / `scrap`）随 S0-1～S0-4 一并断 | 随 S0-3 | 待测第 11 条 |
 | **S0-8** ✅ **实测不需要（D202，2026-10-05 18:14）** | 旧本菜单 / 旧枢纽菜单的「手打 `trmenu open`」风险 | 待测第 7 条已做：普通玩家（非 OP 新号 FreshQ736）执行 `/trmenu`、`/trmenu open ember_hub_legacy / ember_daily / ember_arena / ember_shop / ember_calamity / ember_guild` 全部回「no permission」；旧菜单都没有 `Bindings: Commands`（只有 `ember_hub`（/ember、/menu）、`ember_help`、`ember_gacha` 和 `ember_p1_*` 绑了命令）；从这些入口按 `menu:` 动作走的静态可达闭包只到 `ember_bestiary / flex_skill / friends / life / mail / settings / pet`（`pet` 是纯外观，见 §1），碰不到任何旧本 / 旧枢纽菜单。所以不加 `Open-Requirement`。 | 无改动 | `tools/p1map/d202-s08-probe.sh`；`docs/tests/smoke-2026-10-05-d202-s08-probe.md` |
 | **S0-9** ⏸ **HOLD（D251）** | `ember_event` / `world` / 下界 / 末地的世界级兜底 | 规格：`PlayerChangedWorldEvent` + `legacy_gate.world_allow` → 非白名单送回 `ember_hub`。D202 后无已知普通玩家传送口 → **不实现**，除非出现新后门 | 小；可选 | 见 D251 §1；冒烟仅在实现窗 |
-| **S0-10** 📋 **READY 规格（D251，未改码）** | 旧仓库写路径（ARCH R5 ②） | P1 下非 OP：拒 `deposit/withdraw/unlock`，保留 `list/info`；或收窄 `legacy_gate.allow.warehouse`。推荐方案 A。详 [`DESIGN-ember-s0-remainder-d251.md`](DESIGN-ember-s0-remainder-d251.md) §2 | 中（资产路径） | 将来：冒烟 + **persist-roundtrip** |
+| **S0-10** ✅ **已建（D252，CoreRpg 1.65.71）** | 旧仓库写路径（ARCH R5 ②） | `legacy_gate.allow.warehouse` = list/info；`WarehouseService` 写子命令双闸。详 D251 §2 / STATUS-d252 | 中 | 单测 s010 + 实服拒写冒烟（完整 persist 可另窗） |
 
 **推荐先做的前三个：S0-1 → S0-2 → S0-3。** S0-1 / S0-2 各约 5 行就把「最大量、不扣体力、新号即可」的旧本口子封掉；S0-3 一个路由闸 + 一段配置封住其余 8 条 LEAK 的入口，并且把「默认拒绝」变成以后新加命令的默认姿态（ARCH §5 S0 的核心诉求）。
 

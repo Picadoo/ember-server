@@ -21,6 +21,8 @@ import java.util.Set;
 /**
  * Material warehouse — virtual slots of NI id × amount (DESIGN-ember-material-warehouse).
  * Commands under /corerpg warehouse (not /corerpg storage).
+ * D252 / ARCH S0-10: while P1 is on, non-OP players may only view (list/info); deposit / withdraw / unlock
+ * are refused (hub menu uses {@code EmberVault} instead). OP / {@code corerpg.admin} still full access.
  */
 public final class WarehouseService {
 
@@ -118,6 +120,12 @@ public final class WarehouseService {
             cmdOverview(p);
             return;
         }
+        if ("info".equals(sub)) {
+            cmdInfo(p, args);
+            return;
+        }
+        // D252 S0-10: P1 view-only for non-OP (belt-and-suspenders vs legacy_gate.allow)
+        if (refuseWriteWhileP1(p, sub)) return;
         if ("deposit".equals(sub) || "in".equals(sub) || "存".equals(sub)) {
             cmdDeposit(p);
             return;
@@ -130,12 +138,24 @@ public final class WarehouseService {
             cmdUnlock(p, args);
             return;
         }
-        if ("info".equals(sub)) {
-            cmdInfo(p, args);
-            return;
-        }
         p.sendMessage(PREFIX + ChatColor.YELLOW
-                + "/corerpg warehouse | deposit | withdraw <slot|id> [n] | unlock [coin|cash] | info <slot>");
+                + "/corerpg warehouse | deposit | withdraw <slot|id> [n] | unlock [coin|cash] | info <slot]");
+    }
+
+    /** D252 / S0-10: true → write sub refused (player told to use hub vault). */
+    private boolean refuseWriteWhileP1(Player p, String sub) {
+        if (!isWriteSub(sub)) return false;
+        if (!town.sunshine.corerpg.p1.EmberMode.active()) return false;
+        if (p.isOp() || p.hasPermission("corerpg.admin")) return false;
+        p.sendMessage(PREFIX + ChatColor.YELLOW
+                + "P1 模式下请打开枢纽「仓库」存取材料；旧仓库命令只可查看。");
+        return true;
+    }
+
+    private static boolean isWriteSub(String sub) {
+        return "deposit".equals(sub) || "in".equals(sub) || "存".equals(sub)
+                || "withdraw".equals(sub) || "out".equals(sub) || "取".equals(sub)
+                || "unlock".equals(sub) || "expand".equals(sub);
     }
 
     private void cmdOverview(Player p) {
@@ -151,7 +171,7 @@ public final class WarehouseService {
                 + ChatColor.WHITE + used + "/" + total
                 + ChatColor.GRAY + " 格（上限 " + maxSlots + "）");
         if (slots.isEmpty()) {
-            p.sendMessage(PREFIX + ChatColor.GRAY + "空仓。手持白名单材料 /corerpg warehouse deposit");
+            p.sendMessage(PREFIX + ChatColor.GRAY + "空仓。请用枢纽菜单「仓库」存入材料。");
             return;
         }
         for (int i = 0; i < slots.size(); i++) {

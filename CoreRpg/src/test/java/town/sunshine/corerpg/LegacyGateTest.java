@@ -129,6 +129,23 @@ public class LegacyGateTest {
         }
         assertEquals(LegacyGate.DEFAULT_ALLOW, m);
     }
+    // D252 / ARCH S0-10 warehouse view-only
+    @Test public void s010WarehouseViewOnlyForPlayers() {
+        assertFalse("bare warehouse", refused("warehouse"));
+        assertFalse("list", refused("warehouse", "list"));
+        assertFalse("overview", refused("warehouse", "overview"));
+        assertFalse("info", refused("warehouse", "info"));
+        assertFalse("wh list", refused("wh", "list"));
+        assertFalse("仓库", refused("仓库"));
+        for (String[] a : new String[][] {
+                {"warehouse", "deposit"}, {"warehouse", "in"}, {"warehouse", "存"},
+                {"warehouse", "withdraw"}, {"warehouse", "out"}, {"warehouse", "取"},
+                {"warehouse", "unlock"}, {"warehouse", "expand"}, {"wh", "deposit"}, {"仓库", "unlock"},
+        }) assertTrue(String.join(" ", a), refused(a));
+        assertFalse("admin write", LegacyGate.refuseRoute(true, true, true, null, new String[] {"warehouse", "deposit"}));
+        assertFalse("P1 off write", LegacyGate.refuseRoute(false, true, false, null, new String[] {"warehouse", "deposit"}));
+    }
+
     // D200 / ARCH S0-4
     @Test public void s04LegacyXpBlockedOnlyWhileP1AndGuardOn() {
         java.util.Set<String> none = java.util.Collections.<String>emptySet();

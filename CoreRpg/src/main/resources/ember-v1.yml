@@ -160,7 +160,7 @@ legacy_gate:
     flex: '*'
     set: '*'
     enderchest: '*'
-    warehouse: '*'     # 写路径收口是 S0-10
+    warehouse: ['', list, overview, info]  # S0-10 D252: 只读查看；deposit/withdraw/unlock 拒
     raid: '*'          # 自领 / grant-ring 本身要 OP / 控制台
     auction: '*'       # 由上面的 legacy_auction 单独关
     pass: ['', show, info, rewards, season]

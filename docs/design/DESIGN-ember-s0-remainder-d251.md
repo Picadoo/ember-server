@@ -11,7 +11,7 @@
 | 项 | 建议状态 | 为何 | 下一实现窗何时开 |
 |---|---|---|---|
 | **S0-9** 进世界兜底 | **HOLD（可选纵深）** | D202：普通玩家无 `mvtp` / `trmenu open` 旧菜单 / 传送门；已知入口已被 S0-1～S0-4 封 | 出现**新的**非 OP 进禁世界路径（插件、脚本、后门命令）后再做 |
-| **S0-10** 旧仓库写路径 | **READY（优先下一代码薄窗）** | `/corerpg warehouse` 仍在 `legacy_gate.allow: '*'`；与 `EmberVault` 共写 `cr_warehouse`，绕过金库日志 / 「无格上限」语义；`unlock` 还会扣币扩格（P1 本无格上限） | 服主点名开代码窗；**必须**跑资产往返（persist-roundtrip），本草稿不开工 |
+| **S0-10** 旧仓库写路径 | **DONE（D252 / CoreRpg 1.65.71）** | P1 非 OP：只读 list/info；拒 deposit/withdraw/unlock（`LegacyGate` + `WarehouseService` 双闸） | 已落地；完整 persist-roundtrip 未在本窗跑（写路径对玩家已关闭，EmberVault 未改）；轻量实服拒写冒烟 |
 
 ---
 
