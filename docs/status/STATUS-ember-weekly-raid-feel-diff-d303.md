@@ -44,3 +44,4 @@
 
 - **R**（按本轻 Director）**后置**；仅总控另批 M+R 时开  
 - **禁** Pack6 / 新团本图 / 抬体力掉率 / 六槽 / 天赋续跑 / 灰印续跑 / 事件 R/W / 调律 R / 深渊 R  
+- **下一档硬债 tip（需策划）：** [`STATUS-ember-next-hard-debt-boss-telegraph-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-boss-telegraph-need-design-2026-10-08.md) · Boss 预警诚实 / 相位线索可读  

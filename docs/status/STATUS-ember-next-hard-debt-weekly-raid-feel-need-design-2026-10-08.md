@@ -69,6 +69,8 @@
 
 有硬规格且总控批 A 后，另派施工号（建议 **D303+**；若方案含战斗压旋钮先 T0 再 T1）。
 
+**结案指针：** D303 已上线 · 下一档 tip → [`STATUS-ember-next-hard-debt-boss-telegraph-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-boss-telegraph-need-design-2026-10-08.md)。
+
 ---
 
 ## 5. 备选（本窗不采纳 · 记档）
