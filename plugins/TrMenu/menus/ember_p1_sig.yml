@@ -2,7 +2,8 @@
 # 图鉴（每个首领两件：获得过 / 还没获得 / 未解锁 + 效果 + 代价）· 正在用的两件上的签名（点击开关）· 点一条签名 → 烬炉烙印页。
 # 文字 / 状态全部来自 PAPI %corerpg_p1_sig_*%（EmberGrowthService.sigPapi），菜单不自己算；按钮只调 /corerpg p1 sig 的子命令。
 # 签名按 EmberSignature.DEFS 的顺序编号：n_1 = L01 … n_15 = L15（第 2a 阶段 Q04–Q06 在第 4、5 排；第 3 阶段 Q07 在最后一排，T = 签名调律页）。
-# 入口：装备页「签名传奇」、首通解锁消息里的 [打开签名页]、/corerpg p1 sig。返回键回到打开它的那一页。
+# 入口：装备页「签名传奇」、技能组「签名传奇」、首通解锁消息里的 [打开签名页]、/corerpg p1 sig。返回键回到打开它的那一页。
+# D290：与技能组互相深链（from skill → 返回技能组）。
 
 Title: '§6签名传奇'
 
@@ -22,7 +23,7 @@ Layout:
   - '#u12 v34#'
   - '#w56 x78#'
   - '#y9J zKL#'
-  - '#qDEF#bX#'
+  - '#qDEFNbX#'
 
 Events:
   Open:
@@ -46,6 +47,8 @@ Icons:
         - '§7生效：正在用的刃 1 条 + 已选护符 1 条；同类不叠；和已选天赋同类的不生效'
         - '§7来源：首通后普通重打这张图 → 每局 1 枚首领徽记，基础掉落 12% 是签名件'
         - '§7烬炉烙印：5 枚这张图的徽记 + 300×阶级 币，把签名烙到自己的件上'
+        - '§e刃签名可覆盖烬斩符文：§fL07 直线 · L09 环斩 · L13 蓄力环斩'
+        - '§8形状预览 / 二选一 → 右下「技能组」'
         - '§8签名记在你的存档上，跟着这件的编号走：升阶 / 强化 / 洗练都不丢；分解就没了'
 
   M:
@@ -290,6 +293,22 @@ Icons:
       lore: ['%corerpg_p1_sig_k_15%', '%corerpg_p1_sig_g_15%', '%corerpg_p1_sig_b_15%', '', '%corerpg_p1_sig_s_15%', '%corerpg_p1_sig_a_15%']
     actions:
       all: ['sound: UI_BUTTON_CLICK-1-1', 'command: corerpg p1 sig pick L15']
+
+  # D290：技能组深链
+  N:
+    display:
+      material: diamond sword
+      name: '§6技能组'
+      lore:
+        - ''
+        - '§7烬斩 / 烬突二选一 · 形状预览 · 身法方向'
+        - '§8L07/L09/L13 覆盖符文时，以本页签名为准'
+        - ''
+        - '§e➥ §f打开技能组'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_skill_kit'
 
   b:
     update: 20

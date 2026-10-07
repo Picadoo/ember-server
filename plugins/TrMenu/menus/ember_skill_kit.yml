@@ -2,6 +2,7 @@
 # D214 · S2 火痕步（焚烬 2pc + Q05 替换踏步）
 # D219 · 身法方向 前冲/后撤（Q01起，出本切换，身法 CD 转满）
 # D287 · 局内决策加固：二选一醒目 · 出本形状预览 · 身法方向一眼可见（零数值 / 守招仍搁置）
+# D290 · 与签名页互相深链；L07/L09/L13 覆盖符文写清
 
 Title: '§6技能 · §e%corerpg_kit_shape% §8· §b%corerpg_kit_step_dir% §8· %corerpg_kit_charge%'
 
@@ -16,7 +17,7 @@ Layout:
   - '# S A B #'
   - '# C D E #'
   - '# F G H #'
-  - '# # I # X#'
+  - '# Y I # X#'
 
 Events:
   Open:
@@ -143,7 +144,7 @@ Icons:
         - ''
         - '§7你当前：§f%corerpg_kit_shape%'
         - '§8解锁：§f%corerpg_kit_shape_unlock% §8（首通 Q04）'
-        - '§8签名直线/环斩/蓄力会覆盖符文'
+        - '§8签名覆盖时本格仅预览 · 左下「签名传奇」看生效'
         - '§8换后烬斩充能转满'
         - ''
         - '§e➥ §f点击切为扇形'
@@ -163,7 +164,7 @@ Icons:
         - '§6预览（出本切换）'
         - '§f  正前一条线 §e5 §f格（宽 1）· 最多 §e3'
         - '§7适合：走廊点名 / 窄道'
-        - '§8（几何同签名 L07）'
+        - '§8（几何同签名 L07 · 烙上则覆盖符文）'
         - ''
         - '§7你当前：§f%corerpg_kit_shape%'
         - '§8解锁：§f%corerpg_kit_shape_unlock%'
@@ -186,7 +187,8 @@ Icons:
         - '§6预览（出本切换）'
         - '§f  身边一圈半径 §e3 §f格 · 最多 §e3'
         - '§7适合：被围时清身'
-        - '§8（几何同签名 L09）'
+        - '§8（几何同签名 L09 · 烙上则覆盖符文）'
+        - '§8L13 蓄力环斩另见签名页（Q07 · 覆盖本符文）'
         - ''
         - '§7你当前：§f%corerpg_kit_shape%'
         - '§8解锁：§f%corerpg_kit_shape_unlock%'
@@ -238,6 +240,25 @@ Icons:
         - 'command: corerpg skill dir back'
         - 'tell: §6【技能】 §7请求后撤 · 当前 %corerpg_kit_step_dir%'
 
+  # D290：签名传奇深链（形状覆盖看这里）
+  Y:
+    update: 20
+    display:
+      material: nether star
+      name: '§6签名传奇'
+      lore:
+        - ''
+        - '§7刃/护符上的签名会§e覆盖§7烬斩符文形状'
+        - '§8L07 直线 · L09 环斩 · L13 蓄力环斩（Q07）'
+        - '§7本页符文预览仍可看；生效以签名为准'
+        - ''
+        - '§e➥ §f打开签名页（返回键回技能组）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 sig from skill'
+        - close
+
   I:
     update: 20
     display:
@@ -251,6 +272,7 @@ Icons:
         - ''
         - '§e2. 形状只在出本换（本页=预览）'
         - '§7   扇 / 直线 / 环 · 签名可覆盖符文'
+        - '§8   覆盖：L07 直线 / L09 环 / L13 蓄力环 → 左下「签名传奇」'
         - ''
         - '§e3. 身法方向一眼看标题与「身法」格'
         - '§7   前冲 / 后撤 · 标题栏也会显示'

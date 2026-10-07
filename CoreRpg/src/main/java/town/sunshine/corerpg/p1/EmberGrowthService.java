@@ -967,6 +967,7 @@ public final class EmberGrowthService implements Listener {
     static {
         SIG_FROM.put("gear", "ember_p1_gear");
         SIG_FROM.put("hub", "ember_hub");
+        SIG_FROM.put("skill", "ember_skill_kit"); // D290: 技能组 ↔ 签名深链
     }
     private static final Map<UUID, String> SFROM = new ConcurrentHashMap<UUID, String>();
     /** uuid → {signature id, "worn" | "held"} — the imprint page's current choice */
@@ -1110,7 +1111,7 @@ public final class EmberGrowthService implements Listener {
         }
         if ("back".equals(key)) {
             String f = SFROM.get(p.getUniqueId());
-            return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "§7关闭";
+            return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "skill".equals(f) ? "§7返回技能组" : "§7关闭";
         }
         if ("blade".equals(key) || "charm".equals(key)) return wornLine(d, lo, key);
         if (key.startsWith("mn_") || key.startsWith("m_")) { // per map: mn_q01 = name line, m_q01 = first clear + insignia
