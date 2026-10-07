@@ -75,55 +75,53 @@ async function runLine(runId) {
 const field = (l, k) => { const m = l.match(new RegExp(k + '=(\\S+)')); return m ? m[1] : null }
 
 // fight inside box until runs list reports `done(line)`; weaken fallback after softMs; hard stop after hardMs
+// 2026-10-08 stall recheck (diag d14b70d2): a downed raid bot is a spectator locked onto a teammate, so "tp the
+// others to the leader" silently stops working and the leftover bow skeleton (vanilla BowShoot AI keeps ~7.5–13
+// blocks away) is never inside the bot's 4-block reach. Now: only living, non-spectator bots act; each one is
+// teleported straight to its own target; a ranged mob still > 4 blocks away is pulled next to that bot with an
+// `execute … tp @e[type=skeleton,r=24,c=1] <bot>` test command (the kill is still the bot's own hit).
+const isUp = b => b && b.entity && b.game && b.game.gameMode !== 'spectator' && (b.health === undefined || b.health > 0)
+const upBots = bots => bots.filter(isUp)
+const pos = p => `${p.x.toFixed(1)} ${p.y.toFixed(1)} ${p.z.toFixed(1)}`
+// stall = no room advance and no drop of the director's live-mob count for stallMs (default 120 s)
 async function fight(bots, leader, runId, box, done, softMs, hardMs, label, R) {
-  const t0 = Date.now(); let lastTp = 0, weakens = 0, lastWeaken = 0, lastPoll = 0, line = '', lastHeal = 0
+  const t0 = Date.now(); let weakens = 0, lastWeaken = 0, lastPoll = 0, line = '', lastHeal = 0, pulls = 0, tps = 0
+  const stallMs = Number(process.env.STALL_MS || 120000)
+  let lastProgress = Date.now(), lastAlive = null, stalled = false, minUp = bots.length
+  const lastTp = {}, lastPull = {}
   while (Date.now() - t0 < hardMs) {
+    const up = upBots(bots)
+    minUp = Math.min(minUp, up.length)
     if (Date.now() - lastHeal > 700) { for (const b of bots) cons.send(`corerpg p1 heal ${b.username}`); lastHeal = Date.now() }
     if (Date.now() - lastPoll > 1500) {
       line = await runLine(runId); lastPoll = Date.now(); if (!line || done(line)) break
-      // weaken (1 HP) whatever is alive once softMs passed; re-applied for late spawns / adds; the bot still lands every kill
       const alive = Number(field(line, 'alive') || 0)
-      if (alive > 0 && Date.now() - t0 >= softMs && Date.now() - lastWeaken > 2000) { cons.send(`corerpg p1 runs weaken ${leader.username}`); weakens++; lastWeaken = Date.now() }
+      if (lastAlive === null || alive < lastAlive) lastProgress = Date.now()
+      lastAlive = alive
+      if (Date.now() - lastProgress > stallMs) { stalled = true; break }
+      // weaken (1 HP) everything tracked once softMs passed; re-applied for late spawns / adds; the bot still lands every kill
+      if (alive > 0 && Date.now() - t0 >= softMs && Date.now() - lastWeaken > 2000) { cons.send(`corerpg p1 runs weaken ${(up[0] || leader).username}`); weakens++; lastWeaken = Date.now() }
     }
-    let e = hostiles(leader, box)[0]
-    const aliveNow = Number(field(line, 'alive') || 0)
-    if (!e && aliveNow > 0 && Date.now() - t0 > 5000) {
-      // nothing left inside the room box but the director still counts a live mob: look wider and record where it is
-      e = hostiles(leader, null).filter(x => x.position.distanceTo(leader.entity.position) < 64)[0]
-      if (!e && Date.now() - (R._lastSel || 0) > 4000) {
-        // still nothing visible: let the server pick the nearest live room mob and put the leader next to it,
-        // then record where that was (evidence for an unreachable perch / wall pocket)
-        R._lastSel = Date.now()
-        const typ = ['skeleton', 'zombie', 'vindication_illager'][Math.floor(Date.now() / 4000) % 3]
-        cons.send(`execute ${leader.username} ~ ~ ~ tp ${leader.username} @e[type=${typ},r=96,c=1]`)
-        await wait(900)
-        const p = leader.entity.position, hb = leader.blockAt(p.offset(0, 1.5, 0)), fb = leader.blockAt(p)
-        R.selectorTp = R.selectorTp || []
-        if (R.selectorTp.length < 12) R.selectorTp.push({ room: label, type: typ, at: `${p.x.toFixed(1)},${p.y.toFixed(1)},${p.z.toFixed(1)}`, feet: fb && fb.name, head: hb && hb.name, t: new Date().toTimeString().slice(0, 8) })
-        e = hostiles(leader, null).filter(x => x.position.distanceTo(leader.entity.position) < 6)[0]
+    for (const b of up) {
+      let t = hostiles(b, box)[0]
+      if (!t) continue
+      let d = t.position.distanceTo(b.entity.position)
+      if (d > 3 && Date.now() - (lastTp[b.username] || 0) > 1200) {
+        cons.send(`tp ${b.username} ${pos(t.position)}`); lastTp[b.username] = Date.now(); tps++
+        await wait(250); d = t.position.distanceTo(b.entity.position)
       }
-      if (e) {
-        const hb = leader.blockAt(e.position.offset(0, 1.5, 0)), fb = leader.blockAt(e.position)
-        const key = `${e.name}@${e.position.x.toFixed(0)},${e.position.y.toFixed(0)},${e.position.z.toFixed(0)}`
-        R.outside = R.outside || {}
-        if (!R.outside[key]) R.outside[key] = { room: label, feet: fb && fb.name, head: hb && hb.name, at: new Date().toTimeString().slice(0, 8) }
+      if (d > 4 && t.name === 'skeleton' && Date.now() - (lastPull[b.username] || 0) > 2000) {
+        cons.send(`execute ${b.username} ~ ~ ~ tp @e[type=skeleton,r=24,c=1] ${b.username}`); lastPull[b.username] = Date.now(); pulls++
+        await wait(250); d = t.position.distanceTo(b.entity.position)
       }
+      if (d <= 4) { try { await b.lookAt(t.position.offset(0, (t.height || 1.8) * 0.8, 0), true) } catch (_) {} b.attack(t) }
     }
-    if (e) {
-      const d = e.position.distanceTo(leader.entity.position)
-      if (d > 3 && Date.now() - lastTp > 1200) {
-        cons.send(`tp ${leader.username} ${e.position.x.toFixed(1)} ${e.position.y.toFixed(1)} ${e.position.z.toFixed(1)}`)
-        for (const b of bots) if (b !== leader) cons.send(`tp ${b.username} ${leader.username}`)
-        lastTp = Date.now()
-      }
-      for (const b of bots) {
-        const t = hostiles(b, box)[0]
-        if (t && t.position.distanceTo(b.entity.position) <= 4) { try { await b.lookAt(t.position.offset(0, (t.height || 1.8) * 0.8, 0), true) } catch (_) {} b.attack(t) }
-      }
-    }
-    await wait(350)
+    await wait(300)
   }
-  R.steps.push({ step: label, ms: Date.now() - t0, weakenCalls: weakens, end: line.replace(/^.*?world=\S+\s*/, '').slice(0, 160) })
+  const step = { step: label, ms: Date.now() - t0, stalled, weakenCalls: weakens, tps, rangedPulls: pulls, minUpBots: minUp,
+    end: line.replace(/^.*?world=\S+\s*/, '').slice(0, 160) }
+  if (!stalled && line && !done(line) && Date.now() - t0 >= hardMs) step.hardTimeout = true
+  R.steps.push(step)
   return line
 }
 
@@ -176,11 +174,21 @@ async function runMap(bots, key) {
   for (let i = 0; i < rooms.length; i++) {
     const r = rooms[i]
     const p = r.p0
-    cons.send(`tp ${leader.username} ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`)
-    for (const b of bots.slice(1)) cons.send(`tp ${b.username} ${leader.username}`)
+    for (const b of upBots(bots)) cons.send(`tp ${b.username} ${p[0] + 0.5} ${p[1]} ${p[2] + 0.5}`)
     await wait(700)
     const nextId = i + 1 < rooms.length ? rooms[i + 1].id : 'boss'
-    const line = await fight(bots, leader, runId, r.trigger, l => field(l, 'next') === nextId && field(l, 'active') === '-', SOFT_MS, 120000, r.id, R)
+    const roomDone = l => field(l, 'next') === nextId && field(l, 'active') === '-' // room clear = active, not alive
+    let line = await fight(bots, leader, runId, r.trigger, roomDone, SOFT_MS, 240000, r.id, R)
+    const st = R.steps[R.steps.length - 1]
+    if (st.stalled && line) {
+      // count the stall, then unblock with a console kill so the later rooms of this round are still measured
+      R.stalls = (R.stalls || 0) + 1; R.stallRooms = (R.stallRooms || []).concat(`${r.id} (${r.label})`)
+      const ex = (upBots(bots)[0] || leader).username
+      for (const t of ['skeleton', 'zombie', 'vindication_illager']) cons.send(`execute ${ex} ~ ~ ~ kill @e[type=${t},r=40]`)
+      await wait(1500)
+      line = await fight(bots, leader, runId, r.trigger, roomDone, 0, 30000, r.id + '-after-unblock', R)
+      st.unblockedByConsoleKill = !!(line && roomDone(line))
+    }
     if (line && field(line, 'next') === nextId) R.roomsCleared++
     else { R.stuckAt = `${r.id} (${r.label})`; for (const b of bots) b.chat('/dp leave'); await wait(4000); break }
     await wait(1800) // door_delay
@@ -188,12 +196,11 @@ async function runMap(bots, key) {
   if (R.roomsCleared === rooms.length) {
     // boss: walk into the hall via the rb safe point, wait for the spawn
     const rb = def.safe.rb
-    cons.send(`tp ${leader.username} ${rb[0] + 0.5} ${rb[1]} ${rb[2] + 0.5}`)
-    for (const b of bots.slice(1)) cons.send(`tp ${b.username} ${leader.username}`)
+    for (const b of upBots(bots)) cons.send(`tp ${b.username} ${rb[0] + 0.5} ${rb[1]} ${rb[2] + 0.5}`)
     let line = ''
     for (let w = 0; w < 40; w++) { // wait_in_area: the boss shows once the (living) party stands in the hall
       await wait(1000); line = await runLine(runId); if (/boss=\d/.test(line) || !line) break
-      if (w % 4 === 3) { cons.send(`tp ${leader.username} ${rb[0] + 0.5} ${rb[1]} ${rb[2] + 0.5}`); for (const b of bots.slice(1)) cons.send(`tp ${b.username} ${leader.username}`) }
+      if (w % 4 === 3) for (const b of upBots(bots)) cons.send(`tp ${b.username} ${rb[0] + 0.5} ${rb[1]} ${rb[2] + 0.5}`)
       for (const b of bots) cons.send(`corerpg p1 heal ${b.username}`)
     }
     R.bossAtS = Math.round((Date.now() - tStart.getTime()) / 1000) // s since menu click
