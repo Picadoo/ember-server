@@ -3,8 +3,10 @@
 **日期：** 2026-09-12（Asia/Shanghai）  
 **状态：** 设计锁定稿（先设计、后落地）  
 **承接：** `docs/design/DESIGN-dungeon-daily-weekly.md`、`docs/design/DESIGN-ember-enchant-anvil.md`  
-**落地规格（晶钻/日票/月卡）：** `docs/design/DESIGN-ember-cash-monthly.md` · 旋钮 stub `plugins/CoreRpg/cash.yml`  
+**落地规格（晶钻/月卡；文中「日票/门票」多为历史称呼）：** `docs/design/DESIGN-ember-cash-monthly.md` · 旋钮 `plugins/CoreRpg/cash.yml`  
 **约束：** 不改方块；奖励只走 NI / MM / 副本结算；不装 Citizens；经济走 Vault 实现。玩家硬通货键 **`ember_crystal_cash`**。
+
+> **D258 追记（2026-10-07）：** 现行进本消耗 = **体力**。下文「门票 / 日票」作历史经济设计对照，落地以 `cash.yml` `stamina` 与枢纽菜单为准；勿当玩家教程。
 
 ---
 
