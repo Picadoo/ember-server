@@ -152,14 +152,48 @@ public final class EmberCounterplay {
         return " §a· 让它撞上墙会晕 " + fmtSeconds + " 秒";
     }
 
+    /**
+     * D304 W1c: when {@code whiff_stun} is set, always append the hint (armed only gates settlement).
+     * Copy is honest about the condition: 先踩进圈再躲开.
+     * {@code armed} kept for call-site compatibility; ignored for the suffix text.
+     */
     public static String whiffHint(double whiffStun, boolean armed, String fmtSeconds) {
-        if (whiffStun <= 0 || !armed) return "";
-        return " §a· 全员躲开它会踉跄 " + fmtSeconds + " 秒";
+        if (whiffStun <= 0) return "";
+        return " §a· 先踩进圈再躲开会踉跄 " + fmtSeconds + " 秒";
     }
 
     public static String breakHint(double breakNeed, double breakStun, String fmtStun) {
         if (breakNeed <= 0) return "";
         return " §a· 蓄力期间全队打掉它 " + Math.round(breakNeed) + " 点血可打断（踉跄 " + fmtStun + " 秒）§7· 打不动就跑出圈";
+    }
+
+    /** D304 W1a: short shape word for ActionBar (full geometry stays in chat). */
+    public static String shapeShort(String type) {
+        if (type == null) return "?";
+        switch (type) {
+            case "circle": return "圆形";
+            case "line": return "直线";
+            case "charge": return "冲撞";
+            case "cone": return "扇形";
+            default: return type;
+        }
+    }
+
+    /**
+     * D304 W1a: cast-start ActionBar (each cast). Chat warn line stays full via Director.
+     * Suffixes are key-gated (wall / whiff / break / share); no fake telegraph.
+     */
+    public static String castStartBar(String skillName, String type, double warnSec,
+                                      double wallStun, double whiffStun, double breakNeed, boolean share) {
+        String name = skillName == null || skillName.isEmpty() ? "?" : skillName;
+        String warn = (warnSec == Math.rint(warnSec)) ? String.valueOf((int) warnSec) : String.valueOf(warnSec);
+        StringBuilder sb = new StringBuilder();
+        sb.append("§e蓄力 · «").append(name).append("» · ").append(shapeShort(type)).append(" · ").append(warn).append("s");
+        if (wallStun > 0) sb.append(" §a·撞墙");
+        if (whiffStun > 0) sb.append(" §a·先踩再躲");
+        if (breakNeed > 0) sb.append(" §a·可破招");
+        if (share) sb.append(" §6·靠拢分摊");
+        return sb.toString();
     }
 
     /**

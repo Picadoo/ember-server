@@ -101,11 +101,31 @@ public class EmberCounterplayTest {
     @Test public void hintSuffixesMatchLiveWarnLines() {
         assertEquals("", EmberCounterplay.wallHint(0, "1.5"));
         assertEquals(" §a· 让它撞上墙会晕 1.5 秒", EmberCounterplay.wallHint(1.5, "1.5"));
-        assertEquals("", EmberCounterplay.whiffHint(0.5, false, "0.5"));
-        assertEquals(" §a· 全员躲开它会踉跄 0.5 秒", EmberCounterplay.whiffHint(0.5, true, "0.5"));
+        // D304 W1c: whiff key always hints (armed ignored); honest 先踩进圈再躲开
+        assertEquals("", EmberCounterplay.whiffHint(0, true, "0.5"));
+        assertEquals(" §a· 先踩进圈再躲开会踉跄 0.5 秒", EmberCounterplay.whiffHint(0.5, false, "0.5"));
+        assertEquals(" §a· 先踩进圈再躲开会踉跄 0.5 秒", EmberCounterplay.whiffHint(0.5, true, "0.5"));
         assertTrue(EmberCounterplay.breakHint(65, 0.5, "0.5").contains("65"));
         assertTrue(EmberCounterplay.breakHint(65, 0.5, "0.5").contains("可打断"));
         assertEquals("", EmberCounterplay.breakHint(0, 0.5, "0.5"));
+    }
+
+    @Test public void castStartBar_keyGatedSuffixes() {
+        assertEquals("圆形", EmberCounterplay.shapeShort("circle"));
+        assertEquals("冲撞", EmberCounterplay.shapeShort("charge"));
+        String bar = EmberCounterplay.castStartBar("重斩", "cone", 1.0, 0, 0.5, 0, false);
+        assertTrue(bar.contains("«重斩»"));
+        assertTrue(bar.contains("扇形"));
+        assertTrue(bar.contains("1s"));
+        assertTrue(bar.contains("先踩再躲"));
+        assertFalse(bar.contains("撞墙"));
+        assertFalse(bar.contains("可破招"));
+        String share = EmberCounterplay.castStartBar("烬核", "circle", 3.0, 0, 0, 0, true);
+        assertTrue(share.contains("靠拢分摊"));
+        String wall = EmberCounterplay.castStartBar("冲撞", "charge", 1.3, 1.5, 0, 0, false);
+        assertTrue(wall.contains("撞墙"));
+        String brk = EmberCounterplay.castStartBar("霜潮汲取", "circle", 3.0, 0, 0, 65, false);
+        assertTrue(brk.contains("可破招"));
     }
 
     @Test public void kindOfReadsParsedSkillFields() {

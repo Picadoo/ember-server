@@ -180,6 +180,18 @@ public final class EmberRaidServiceTest {
         assertEquals("§6本局：§f? §7· 名片：§d?", EmberRaidService.enterRevealText(null, null));
     }
 
+
+    @Test public void storyHalfHpCue_qMapsMatchHooks() {
+        assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("q01"));
+        assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("q02"));
+        assertEquals("§e半血增援 §7· 两侧加怪", EmberRunDirector.storyHalfHpCue("q03"));
+        assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("q04"));
+        assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("q05"));
+        assertEquals("§e半血破招 §7· 霜潮汲取可打断", EmberRunDirector.storyHalfHpCue("q06"));
+        assertEquals("§e半血破招 §7· 炉心聚爆可打断", EmberRunDirector.storyHalfHpCue("q07"));
+        assertEquals("§e半血 · 招式变强", EmberRunDirector.storyHalfHpCue("unknown"));
+    }
+
     @Test public void softSegmentCues_matchD195Anchors() {
         assertEquals("§b本间：§f装卸场 §a已清 §7· 三房推进", EmberRaidService.roomClearCue("装卸场"));
         assertTrue(EmberRaidService.bossCue("r01").contains("冲撞撞墙破绽"));

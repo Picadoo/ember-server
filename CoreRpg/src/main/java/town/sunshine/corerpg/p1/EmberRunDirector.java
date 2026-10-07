@@ -1744,8 +1744,7 @@ final class EmberRunDirector {
         // D173: half-HP team line when any top-level or follow skill is gated at below≤1.0 (Pack 2 + existing 踏地/横扫)
         if (!phaseTold && ratio < 0.5 && hasBelowPressure(b)) {
             phaseTold = true;
-            String halfCue = svc.isRaid(s) ? EmberRaidService.halfHpCue(s.mapKey) : null; // D303
-            svc.tellRun(s, halfCue != null ? halfCue : "§e首领进入半血 · 招式变强，盯紧预警");
+            svc.tellRun(s, halfHpTellLine()); // D303 raid / D304 story
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss half-HP phase at %.0f%%", s.runId, ratio * 100));
             svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
         }
@@ -1753,8 +1752,11 @@ final class EmberRunDirector {
         if (b.adds != null && !addsDone && ratio <= b.adds.atHp) {
             addsDone = true;
             addsAt = now + (long) (b.adds.warn * 1000);
-            String addCue = svc.isRaid(s) ? EmberRaidService.halfHpCue(s.mapKey) : null; // D303 R01 半血增援
-            svc.tellRun(s, addCue != null ? addCue : ("§c" + b.name + " §7高举誓印——两侧将出现援兵！"));
+            String addCue = addsTellLine(b);
+            // D304: skip duplicate when phase already told the same adds-themed line this tick
+            if (!phaseTold || !addCue.equals(halfHpTellLine())) {
+                svc.tellRun(s, addCue);
+            }
             svc.onBossPhase(s, RevivePoint.ADDS_PHASE); // D106 raid revive point
         }
         if (addsAt > 0) {
@@ -1797,8 +1799,7 @@ final class EmberRunDirector {
         // D173: half-HP tell already fired above when ratio < 0.5; keep fallback if a below-gated skill comes due first frame
         if (!phaseTold && due >= 0 && b.skills.get(due).below <= 1.0) {
             phaseTold = true;
-            String halfCue2 = svc.isRaid(s) ? EmberRaidService.halfHpCue(s.mapKey) : null; // D303
-            svc.tellRun(s, halfCue2 != null ? halfCue2 : "§e首领进入半血 · 招式变强，盯紧预警");
+            svc.tellRun(s, halfHpTellLine()); // D303 raid / D304 story
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
             svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
         }
@@ -1888,6 +1889,38 @@ final class EmberRunDirector {
         return ch == null ? sk : sk.withDmg(ch.skillDmg(sk));
     }
 
+    /**
+     * D304 W1b: Q01–Q07 half-HP honest ≤1 line by real hooks (adds / break / below).
+     * Raids keep {@link EmberRaidService#halfHpCue}; R03 share stays on warn line.
+     */
+    static String storyHalfHpCue(String mapKey) {
+        if ("q03".equals(mapKey)) return "§e半血增援 §7· 两侧加怪";
+        if ("q06".equals(mapKey)) return "§e半血破招 §7· 霜潮汲取可打断";
+        if ("q07".equals(mapKey)) return "§e半血破招 §7· 炉心聚爆可打断";
+        return "§e半血 · 招式变强"; // q01 / q02 / q04 / q05 + default
+    }
+
+    /** D304 / D303: resolve half-HP chat line for current run map. */
+    private String halfHpTellLine() {
+        if (svc.isRaid(s)) {
+            String r = EmberRaidService.halfHpCue(s.mapKey);
+            return r != null ? r : "§e首领进入半血 · 招式变强，盯紧预警";
+        }
+        return storyHalfHpCue(s.mapKey);
+    }
+
+    /** D304: adds-phase line (raid cue / story cue / sworn-seal fallback). */
+    private String addsTellLine(EmberRunMaps.Boss b) {
+        if (svc.isRaid(s)) {
+            String r = EmberRaidService.halfHpCue(s.mapKey);
+            if (r != null) return r;
+        } else {
+            String st = storyHalfHpCue(s.mapKey);
+            if (st != null && st.contains("增援")) return st;
+        }
+        return "§c" + b.name + " §7高举誓印——两侧将出现援兵！";
+    }
+
     private void startWarn(EmberRunMaps.Skill sk, long now, LivingEntity le) {
         Location o = le.getLocation();
         Player target = "player".equals(sk.target) ? pickTarget(o, 24) : nearest(o, 24);
@@ -1937,6 +1970,8 @@ final class EmberRunDirector {
         who += EmberCounterplay.whiffHint(sk.whiffStun, pendingArmed, fmt(sk.whiffStun));
         who += EmberCounterplay.breakHint(breakNeed, sk.breakStun, fmt(sk.breakStun));
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
+        // D304 W1a: cast-start ActionBar each cast (chat kept); charge 0-cell already returned above
+        flashActionBar(EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share));
     }
 
     /** D193 破招: a channel is armed (need > 0) and the party's damage since its warning began reached the need. */
