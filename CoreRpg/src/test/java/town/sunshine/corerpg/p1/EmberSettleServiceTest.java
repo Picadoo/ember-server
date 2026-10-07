@@ -224,4 +224,12 @@ public final class EmberSettleServiceTest {
         assertTrue(fail.contains("破招 ×1"));
         assertTrue(fail.contains("砸余烬晶 ✘"));
     }
+
+    @Test public void varietyBountyTip_D292_leadsWithPlusOne() {
+        assertEquals("§e花样委托 §a+1", EmberSettleService.varietyBountyTip(java.util.Collections.<String>emptyList(), ""));
+        assertEquals("§e花样委托 §a+1 §7· §a完成：击败词缀精英（20 余烬币） §7· §e击败词缀精英 1/2",
+                EmberSettleService.varietyBountyTip(
+                        java.util.Collections.singletonList("击败词缀精英（20 余烬币）"),
+                        "§e击败词缀精英 1/2"));
+    }
 }

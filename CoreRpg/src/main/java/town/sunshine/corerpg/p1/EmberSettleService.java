@@ -74,6 +74,16 @@ public final class EmberSettleService {
      * D283: one settlement line — counterplay counts + event/affix outcome. Empty when nothing to show.
      * Bukkit-free for unit tests. Verbs only; no numbers beyond counts.
      */
+    /** D292: settle chat for variety bounty progress — always lead with visible +1 when the counter moved. */
+    static String varietyBountyTip(java.util.List<String> vbDone, String progressLine) {
+        StringBuilder sb = new StringBuilder("§e花样委托 §a+1");
+        if (vbDone != null && !vbDone.isEmpty())
+            sb.append(" §7· §a完成：").append(String.join("、", vbDone));
+        if (progressLine != null && !progressLine.isEmpty())
+            sb.append(" §7· ").append(progressLine);
+        return sb.toString();
+    }
+
     static String playfeelSummary(int wall, int whiff, int brk,
                                   boolean affixDone, String affixId,
                                   boolean eventRolled, boolean eventDone, String eventKind) {
@@ -349,8 +359,8 @@ public final class EmberSettleService {
             p.sendMessage(EmberRunService.P + "§b本周精选" + (s.challenge ? "挑战" : "重打") + " §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + rotMarks
                     + "§7（本周 " + pd.periodCount(EmberRunService.C_ROTATION, week) + "/" + runs.maps().rotationWeeklyCap + "）");
         }
-        if (p != null && p.isOnline() && vbMoved) // D144
-            p.sendMessage(EmberRunService.P + "§e花样委托 §7" + (vbDone.isEmpty() ? "" : "§a完成：" + String.join("、", vbDone) + " §7· ") + runs.varietyBountyLine(pd));
+        if (p != null && p.isOnline() && vbMoved) // D144 / D292
+            p.sendMessage(EmberRunService.P + varietyBountyTip(vbDone, runs.varietyBountyLine(pd)));
         if (p != null && p.isOnline() && fresh && !tiers.isEmpty()) {
             p.sendMessage(EmberRunService.P + "§e每日委托 §7" + (bountyW > 1 ? "§7团本算 " + bountyW + " 局 · " : "") + (bountyPaid.isEmpty() ? "" : "§a完成第 " + bountyN + " 局档 §7· ")
                     + EmberRunRules.bountyLine(tiers, bountyN));

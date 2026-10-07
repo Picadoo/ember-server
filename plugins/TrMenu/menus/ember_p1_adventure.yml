@@ -3,6 +3,7 @@
 # 不写通关时长承诺。P1 未启用（ember-v1.yml enabled=false）时进本命令会直接拒绝。
 # 入口：主菜单 ember_hub 的「冒险 · 主线本」图标，或 /ember_p1_adventure。
 # D288：左上「本周短目标」一眼精选剩次 / 事件池 / 誓约 / 残响 claim / 花样。
+# D292：每图「签名：%sig_m_qXX%」徽记一眼；结算花样委托 +1（jar）。
 
 Title: '§6余烬 · 冒险'
 
@@ -46,7 +47,7 @@ Icons:
         - '§e花样委托 §8（重打已首通的普通版时才有花样）'
         - '§7%corerpg_p1_vbounty%'
         - '§7当天击败 2 只词缀精英：20 余烬币 · 当天 1 次房间事件达标：20 余烬币'
-        - '§a达标通关时聊天栏立刻刷「花样委托 · 完成：…」· 本行进度 +1'
+        - '§a达标通关时聊天栏立刻刷「花样委托 +1」· 本行进度同步'
         - '§8和上面的局数委托分开计，各发一次'
         - ''
         - '§b一眼短目标 §8（左上「本周短目标」）'
@@ -213,7 +214,7 @@ Icons:
         - '§e花样委托：§f%corerpg_p1_vbounty%'
         - '§7重打已首通普通版：词缀精英必出 · 约一半局有房间事件'
         - '§7事件池：§f限时清房 / 砸晶 / 护宝兔 / 占点 / 护灯 / 传火 / 裂隙 / 连斩 / 无伤'
-        - '§a达标通关 → 聊天栏「花样委托 · 完成」· 进度 +1'
+        - '§a达标通关 → 聊天栏「花样委托 +1」· 进度同步'
         - ''
         - '§d誓约已选：§f%corerpg_p1_pledge_head%'
         - '§b残响本周：§f%corerpg_p1_rush_echo_q01% §8（Q01–Q07 共用 3 次领奖）'
@@ -271,6 +272,7 @@ Icons:
         - '§7用途：§f%corerpg_p1_q01_purpose%'
         - '§7首通：§f%corerpg_p1_q01_fc%'
         - '§d名片：§f学预警 · 重斩落空破绽'
+        - '§7签名：%corerpg_p1_sig_m_q01%'
         - ''
         - '§e➥ §f点击进本（队长点；队员需各自满足条件）'
     actions:
@@ -292,6 +294,7 @@ Icons:
         - '§7用途：§f%corerpg_p1_q02_purpose%'
         - '§7首通：§f%corerpg_p1_q02_fc%'
         - '§d名片：§f冲撞引墙'
+        - '§7签名：%corerpg_p1_sig_m_q02%'
         - ''
         - '§e➥ §f点击进本（需 Q01 首通）'
     actions:
@@ -313,6 +316,7 @@ Icons:
         - '§7用途：§f%corerpg_p1_q03_purpose%'
         - '§7首通：§f%corerpg_p1_q03_fc%'
         - '§d名片：§f召唤压力 + 双签名门槛'
+        - '§7签名：%corerpg_p1_sig_m_q03%'
         - ''
         - '§e➥ §f点击进本（需 Q02 首通）'
     actions:
@@ -334,6 +338,7 @@ Icons:
         - '§7用途：§f%corerpg_p1_q04_purpose%'
         - '§7首通：§f%corerpg_p1_q04_fc%'
         - '§d名片：§f落差 / 冲击圈走位'
+        - '§7签名：%corerpg_p1_sig_m_q04%'
         - ''
         - '§e➥ §f点击进本（需 Q03 首通）'
     actions:
@@ -355,6 +360,7 @@ Icons:
         - '§7用途：§f%corerpg_p1_q05_purpose%'
         - '§7首通：§f%corerpg_p1_q05_fc%'
         - '§d名片：§f斧刃横扫 · 团本同源'
+        - '§7签名：%corerpg_p1_sig_m_q05%'
         - ''
         - '§e➥ §f点击进本（需 Q04 首通）'
     actions:
@@ -377,6 +383,7 @@ Icons:
         - '§7用途：§f%corerpg_p1_q06_purpose%'
         - '§7首通：§f%corerpg_p1_q06_fc%'
         - '§d名片：§f半血破招（霜潮汲取）'
+        - '§7签名：%corerpg_p1_sig_m_q06%'
         - ''
         - '§e➥ §f点击进本（需 Q05 首通）'
     actions:
@@ -398,6 +405,7 @@ Icons:
         - '§7用途：§f%corerpg_p1_q07_purpose%'
         - '§7首通：§f%corerpg_p1_q07_fc%'
         - '§d名片：§f冲撞撞墙 + 炉心破招'
+        - '§7签名：%corerpg_p1_sig_m_q07%'
         - ''
         - '§e➥ §f点击进本（需 Q06 首通）'
     actions:
