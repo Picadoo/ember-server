@@ -28,7 +28,6 @@ gear_ember_blade:
   material: IRON_SWORD
   name: '&c余烬之刃'
   lore:
-    - '&7gear_ember_blade'
     - '&6套装：余烬同袍 &8· 与团戒同持'
     - '&8余烬地窟武器'
     - ''
@@ -42,7 +41,6 @@ gear_ember_charm:
   material: GOLD_NUGGET
   name: '&e余烬护符'
   lore:
-    - '&7gear_ember_charm'
     - '&8余烬地窟饰品'
     - ''
     - '生命力: +20'

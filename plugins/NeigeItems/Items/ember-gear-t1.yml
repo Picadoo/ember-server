@@ -6,7 +6,6 @@ gear_ember_t1_blade:
   material: DIAMOND_SWORD
   name: '&b余烬精炼之刃'
   lore:
-    - '&7gear_ember_t1_blade'
     - '&a[T1] &8精炼 · 日本高难 / 周本'
     - '&6套装：余烬同袍 &8· 与团戒同持'
     - '&8建议强化上限 +6'
@@ -21,7 +20,6 @@ gear_ember_t1_talisman:
   material: EMERALD
   name: '&b余烬精炼护符'
   lore:
-    - '&7gear_ember_t1_talisman'
     - '&a[T1] &8精炼 · 日本高难 / 周本'
     - '&8建议强化上限 +6'
     - ''
@@ -37,7 +35,6 @@ acc_ember_raid_ring:
   material: GOLD_INGOT
   name: '&6余烬团本之戒'
   lore:
-    - '&7acc_ember_raid_ring'
     - '&6[团饰] &8EmberRaid · 周首通保底'
     - '&6套装：余烬同袍'
     - '&7与任意余烬之刃（T0～T3）同持激活 2 件'

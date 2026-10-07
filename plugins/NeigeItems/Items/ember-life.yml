@@ -4,14 +4,12 @@ food_ember_bread:
   material: BREAD
   name: '&e余烬面包'
   lore:
-    - '&7food_ember_bread'
     - '&8枢纽补给商 · 饱食 +5'
 
 food_ember_grilled_fish:
   material: COOKED_FISH
   name: '&6炭烤余烬鱼'
   lore:
-    - '&7food_ember_grilled_fish'
     - '&8饱食 +6 · 再生 I 6 秒'
     - '&8钓鱼 → 补给商代烤 / 熔炉烤制'
 
@@ -19,12 +17,10 @@ potion_ember_heal:
   material: POTION
   name: '&c余烬回复药'
   lore:
-    - '&8potion_ember_heal'
     - '&7回复最大生命 20% · 所有回复药共用 15 秒冷却'
 
 tool_ember_rod:
   material: FISHING_ROD
   name: '&b余烬钓竿'
   lore:
-    - '&7tool_ember_rod'
     - '&8在水边右键抛竿 · 鱼 / 遗物 / 宝珠'
