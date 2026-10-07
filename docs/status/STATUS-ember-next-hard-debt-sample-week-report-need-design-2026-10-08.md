@@ -8,6 +8,8 @@
 **硬规格（待策划交稿）：** `docs/design/DESIGN-ember-sample-week-report-2026-10-08.md` · STATUS=待批 A · backlog `B-sample-week-report`  
 **打开理由：** D308 钉死「何时算够、谁签字」的**手查硬表**；仍缺从 `p1-telemetry/<week>.yml` 生成的 **markdown 周报检查单**（减 OP 抄写、统一勾选栏）。D308 批注明文 **R 周报后置**——本 tip 把它升为下一档 docs 硬债，**仍零玩法、禁自动开闸、禁玩家面 KPI**。
 
+> **交稿：** [`DESIGN-ember-sample-week-report-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-2026-10-08.md) · **STATUS 待批 A** · 荐 **方案 M**（只 docs 周报 markdown 检查单 + 空周/半满周示例；门槛钉 D308 未改；方案 R/M+R 可勾；**W 否决**自动建议开 R / 玩家面 KPI / 偷开 R）· **等总控批 M / R / M+R**。
+
 ---
 
 ## 0. 局势一句话（样本门禁声明）
