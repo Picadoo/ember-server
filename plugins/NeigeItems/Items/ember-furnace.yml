@@ -124,7 +124,6 @@ crystal_ember_enchant:
   damage: 4
   name: '&d余烬附魔晶'
   lore:
-    - '&7crystal_ember_enchant'
     - '&8附魔台专用催化剂'
     - '&8合成：3碎片+1骨尘 → 1'
     - '&8合成：1核心+2碎片 → 2'
