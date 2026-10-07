@@ -162,6 +162,20 @@ public final class EmberCounterplay {
         return " §a· 蓄力期间全队打掉它 " + Math.round(breakNeed) + " 点血可打断（踉跄 " + fmtStun + " 秒）§7· 打不动就跑出圈";
     }
 
+    /**
+     * D283: ActionBar / subtitle flash on the <b>first</b> success of each kind this run (anti-spam).
+     * Short verbs only — chat tellRun still fires every time.
+     */
+    public static String firstFlash(CounterplayKind k) {
+        if (k == null) return "";
+        switch (k) {
+            case WALL:  return "§a撞墙破绽！§e趁现在输出";
+            case WHIFF: return "§a落空破绽！§e趁现在输出";
+            case BREAK: return "§a破招成功！§e趁现在输出";
+            default:    return "";
+        }
+    }
+
     /** log / chat kind label for unit tests */
     public static String kindOf(EmberRunMaps.Skill sk) {
         if (hasWall(sk)) return CounterplayKind.WALL.name();

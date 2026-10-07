@@ -71,6 +71,33 @@ public final class EmberSettleService {
     }
 
     /**
+     * D283: one settlement line — counterplay counts + event/affix outcome. Empty when nothing to show.
+     * Bukkit-free for unit tests. Verbs only; no numbers beyond counts.
+     */
+    static String playfeelSummary(int wall, int whiff, int brk,
+                                  boolean affixDone, String affixId,
+                                  boolean eventRolled, boolean eventDone, String eventKind) {
+        List<String> parts = new ArrayList<String>();
+        if (wall > 0) parts.add("撞墙破绽 ×" + wall);
+        if (whiff > 0) parts.add("落空破绽 ×" + whiff);
+        if (brk > 0) parts.add("破招 ×" + brk);
+        if (affixDone && affixId != null && !affixId.isEmpty())
+            parts.add("词缀「" + EmberRunMaps.Variety.label(affixId) + "」✔");
+        if (eventRolled) {
+            String el = EmberRunMaps.Variety.eventLabel(eventKind == null ? "" : eventKind);
+            parts.add(el + (eventDone ? " ✔" : " ✘"));
+        }
+        if (parts.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder("§e本局：§f");
+        for (int i = 0; i < parts.size(); i++) {
+            if (i > 0) sb.append(" §7· §f");
+            sb.append(parts.get(i));
+        }
+        return sb.toString();
+    }
+
+
+    /**
      * Append the post-base bonuses {@link #settleFor} adds after {@link EmberRunRules#settle}, in the same order
      * (raid → rot_mark → signature → pledge → fc_sigmark → variety → bounty). Bukkit-free so unit tests pin
      * grant key order and amounts. Honor / variety-bounty need live player state and stay in {@link #settleFor}.
@@ -329,6 +356,9 @@ public final class EmberSettleService {
                     + EmberRunRules.bountyLine(tiers, bountyN));
         }
         if (p != null && p.isOnline()) {
+            String feel = playfeelSummary(s.wallHits, s.whiffHits, s.breakHits,
+                    s.affixDone, s.affix, !s.eventRoom.isEmpty(), s.eventDone, s.eventKind);
+            if (!feel.isEmpty()) p.sendMessage(EmberRunService.P + feel);
             runs.deliver(p);
             if (in.firstClear != null && runs.maps().challenge != null && m.key.equals(runs.maps().challenge.requires)) endOfP1(p);
         }

@@ -1,5 +1,6 @@
 package town.sunshine.corerpg.p1;
 
+import town.sunshine.corerpg.p1.encounter.CounterplayKind;
 import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
 
 import org.junit.Test;
@@ -124,5 +125,23 @@ public class EmberCounterplayTest {
                 EmberCounterplay.broken(100, 100));
         assertEquals(EmberCounterplay.BOSS_HALF_WIDTH, EmberRunDirector.BOSS_HALF_WIDTH, 0);
         assertEquals(EmberCounterplay.CHARGE_MIN, EmberRunDirector.CHARGE_MIN, 0);
+    }
+
+    @Test public void firstFlash_D283_shortVerbs() {
+        assertTrue(EmberCounterplay.firstFlash(CounterplayKind.WALL).contains("撞墙破绽"));
+        assertTrue(EmberCounterplay.firstFlash(CounterplayKind.WHIFF).contains("落空破绽"));
+        assertTrue(EmberCounterplay.firstFlash(CounterplayKind.BREAK).contains("破招成功"));
+        assertEquals("", EmberCounterplay.firstFlash(null));
+    }
+
+    @Test public void noteCounterplay_D283_firstOnly() {
+        EmberRunSession s = new EmberRunSession();
+        assertTrue(s.noteCounterplay(CounterplayKind.WALL));
+        assertFalse(s.noteCounterplay(CounterplayKind.WALL));
+        assertEquals(2, s.wallHits);
+        assertTrue(s.noteCounterplay(CounterplayKind.WHIFF));
+        assertEquals(1, s.whiffHits);
+        assertTrue(s.noteCounterplay(CounterplayKind.BREAK));
+        assertEquals(1, s.breakHits);
     }
 }

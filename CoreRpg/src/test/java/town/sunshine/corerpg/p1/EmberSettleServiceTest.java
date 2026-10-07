@@ -211,4 +211,17 @@ public final class EmberSettleServiceTest {
         assertEquals(30, maps.cost);
         assertEquals(0.5, maps.failRefund, 1e-9);
     }
+
+    @Test public void playfeelSummary_D283_line() {
+        assertEquals("", EmberSettleService.playfeelSummary(0, 0, 0, false, "", false, false, ""));
+        String s = EmberSettleService.playfeelSummary(1, 2, 0, true, "blazing", true, true, "timed");
+        assertTrue(s.contains("本局："));
+        assertTrue(s.contains("撞墙破绽 ×1"));
+        assertTrue(s.contains("落空破绽 ×2"));
+        assertTrue(s.contains("词缀「炽热」✔"));
+        assertTrue(s.contains("限时清房 ✔"));
+        String fail = EmberSettleService.playfeelSummary(0, 0, 1, false, "", true, false, "crystal");
+        assertTrue(fail.contains("破招 ×1"));
+        assertTrue(fail.contains("砸余烬晶 ✘"));
+    }
 }

@@ -42,6 +42,10 @@ public final class EmberRunSession {
     public long created;
     /** D144 烬核同心: members who were in a clean 烬核 stack this run (2+, everyone standing inside; not persisted) */
     public final transient Set<UUID> coreClean = new LinkedHashSet<UUID>();
+    /** D283 playfeel: counterplay success counts this run (transient; settlement summary) */
+    public transient int wallHits, whiffHits, breakHits;
+    /** D283: first ActionBar/title flash already shown per kind this run */
+    public transient boolean tipWall, tipWhiff, tipBreak;
     public transient long fightStart; // D116: first room started (raid clear time; not persisted)
     public long updated;
     public String state = PREPARE;
@@ -80,6 +84,34 @@ public final class EmberRunSession {
     }
 
     public long roomSeed(String roomId) { return EmberRunRules.subSeed(seed, "points", roomId); }
+
+
+    /**
+     * D283: record a counterplay success. Increments the count; returns true when this is the
+     * first success of that kind this run (caller should flash ActionBar/title once).
+     */
+    public boolean noteCounterplay(town.sunshine.corerpg.p1.encounter.CounterplayKind k) {
+        if (k == null) return false;
+        switch (k) {
+            case WALL:
+                wallHits++;
+                if (tipWall) return false;
+                tipWall = true;
+                return true;
+            case WHIFF:
+                whiffHits++;
+                if (tipWhiff) return false;
+                tipWhiff = true;
+                return true;
+            case BREAK:
+                breakHits++;
+                if (tipBreak) return false;
+                tipBreak = true;
+                return true;
+            default:
+                return false;
+        }
+    }
 
     public String targetOf(UUID id) {
         String t = target.get(id);

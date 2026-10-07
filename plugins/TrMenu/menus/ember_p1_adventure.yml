@@ -232,6 +232,7 @@ Icons:
         - '§7偏向：§f%corerpg_p1_loot_q01%'
         - '§7用途：§f%corerpg_p1_q01_purpose%'
         - '§7首通：§f%corerpg_p1_q01_fc%'
+        - '§d名片：§f学预警 · 重斩落空破绽'
         - ''
         - '§e➥ §f点击进本（队长点；队员需各自满足条件）'
     actions:
@@ -252,6 +253,7 @@ Icons:
         - '§7偏向：§f%corerpg_p1_loot_q02%'
         - '§7用途：§f%corerpg_p1_q02_purpose%'
         - '§7首通：§f%corerpg_p1_q02_fc%'
+        - '§d名片：§f冲撞引墙'
         - ''
         - '§e➥ §f点击进本（需 Q01 首通）'
     actions:
@@ -272,6 +274,7 @@ Icons:
         - '§7偏向：§f%corerpg_p1_loot_q03%'
         - '§7用途：§f%corerpg_p1_q03_purpose%'
         - '§7首通：§f%corerpg_p1_q03_fc%'
+        - '§d名片：§f召唤压力 + 双签名门槛'
         - ''
         - '§e➥ §f点击进本（需 Q02 首通）'
     actions:
@@ -292,6 +295,7 @@ Icons:
         - '§7偏向：§f%corerpg_p1_loot_q04%'
         - '§7用途：§f%corerpg_p1_q04_purpose%'
         - '§7首通：§f%corerpg_p1_q04_fc%'
+        - '§d名片：§f落差 / 冲击圈走位'
         - ''
         - '§e➥ §f点击进本（需 Q03 首通）'
     actions:
@@ -312,6 +316,7 @@ Icons:
         - '§7偏向：§f%corerpg_p1_loot_q05%'
         - '§7用途：§f%corerpg_p1_q05_purpose%'
         - '§7首通：§f%corerpg_p1_q05_fc%'
+        - '§d名片：§f斧刃横扫 · 团本同源'
         - ''
         - '§e➥ §f点击进本（需 Q04 首通）'
     actions:
@@ -333,6 +338,7 @@ Icons:
         - '§7偏向：§f%corerpg_p1_loot_q06%'
         - '§7用途：§f%corerpg_p1_q06_purpose%'
         - '§7首通：§f%corerpg_p1_q06_fc%'
+        - '§d名片：§f半血破招（霜潮汲取）'
         - ''
         - '§e➥ §f点击进本（需 Q05 首通）'
     actions:
@@ -353,6 +359,7 @@ Icons:
         - '§7偏向：§f%corerpg_p1_loot_q07%'
         - '§7用途：§f%corerpg_p1_q07_purpose%'
         - '§7首通：§f%corerpg_p1_q07_fc%'
+        - '§d名片：§f冲撞撞墙 + 炉心破招'
         - ''
         - '§e➥ §f点击进本（需 Q06 首通）'
     actions:

@@ -64,6 +64,7 @@ Icons:
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q01_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q01_state%'
+        - '§d名片：§f学预警 · 重斩落空破绽'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -82,6 +83,7 @@ Icons:
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q02_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q02_state%'
+        - '§d名片：§f冲撞引墙'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -100,6 +102,7 @@ Icons:
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q03_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q03_state%'
+        - '§d名片：§f召唤压力 + 双签名门槛'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -118,6 +121,7 @@ Icons:
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q04_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q04_state%'
+        - '§d名片：§f落差 / 冲击圈走位'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -136,6 +140,7 @@ Icons:
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q05_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q05_state%'
+        - '§d名片：§f斧刃横扫 · 团本同源'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -154,6 +159,7 @@ Icons:
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q06_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q06_state%'
+        - '§d名片：§f半血破招（霜潮汲取）'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:
@@ -172,6 +178,7 @@ Icons:
         - '§7开放：§f%corerpg_p1_challenge%'
         - '§7消耗：§e%corerpg_p1_q07_cost% §7· 掉落：§fT3'
         - '§7普通版：§f%corerpg_p1_q07_state%'
+        - '§d名片：§f冲撞撞墙 + 炉心破招'
         - ''
         - '§e➥ §f点击进入挑战版（队长点；队员需各自首通 Q07）'
     actions:

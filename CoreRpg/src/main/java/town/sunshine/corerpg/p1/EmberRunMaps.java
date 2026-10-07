@@ -220,6 +220,8 @@ public final class EmberRunMaps {
 
     public static final class MapDef {
         public final String key, name, dungeon, template, dropLabel, contentVersion, mapVersion, requires, unlocks, purpose;
+        /** D283: player-facing map card (adventure lore); "" = none. Pure copy — not a room hint. */
+        public final String hint;
         /** D166: party advice shown at the raid start and in the recruit call ("" = none), e.g. R01 「建议队伍里有炽愈」 */
         public final String partyHint;
         public final int tier;
@@ -298,6 +300,7 @@ public final class EmberRunMaps {
             hpPerMember = num(m.get("hp_per_member"), -1);
             dmgPerMember = num(m.get("dmg_per_member"), 0);
             purpose = str(m.get("purpose"), "");
+            hint = str(m.get("hint"), ""); // D283 card lore (map-level; rooms keep their own hint)
             partyHint = str(m.get("party_hint"), "");
             bRef = num(m.get("b_ref"), 12);
             spawn = pt(m.get("spawn"));

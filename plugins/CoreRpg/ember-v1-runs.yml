@@ -243,6 +243,7 @@ abyss:
 maps:
   q01:
     name: 灰烬庭院
+    hint: "学预警 · 重斩落空破绽"  # D283 名片（纯文案）
     loot: {family: scorch, slot: blade}  # P2-9 loot identity (D81)
     dungeon: EmberQ01
     template: ember_daily_v1
@@ -310,6 +311,7 @@ maps:
 
   q02:
     name: 焦骨甬道
+    hint: "冲撞引墙"  # D283 名片（纯文案）
     loot: {family: burst, slot: charm}  # P2-9 loot identity (D81)
     dungeon: EmberQ02
     template: ember_daily_ash_v1
@@ -381,6 +383,7 @@ maps:
 
   q03:
     name: 残誓地窖
+    hint: "召唤压力 + 双签名门槛"  # D283 名片（纯文案）
     loot: {family: sustain, slot: blade}  # P2-9 loot identity (D81)
     dungeon: EmberQ03
     template: ember_daily_crypt_v1
@@ -456,6 +459,7 @@ maps:
   # ---- batch 2 (book §23.2 "Q04～05＋升阶＋二阶觉醒"; decisions: source table §11) ----
   q04:
     name: 潮蚀水道
+    hint: "落差 / 冲击圈走位"  # D283 名片（纯文案）
     loot: {family: scorch, slot: charm}  # P2-9 loot identity (D81)
     dungeon: EmberQ04
     template: ember_daily_tide_v1
@@ -535,6 +539,7 @@ maps:
 
   q05:
     name: 断塔回廊
+    hint: "斧刃横扫 · 团本同源"  # D283 名片（纯文案）
     loot: {family: burst, slot: blade}  # P2-9 loot identity (D81)
     dungeon: EmberQ05
     template: ember_daily_spire_v1
@@ -608,6 +613,7 @@ maps:
 
   q06:
     name: 霜封哨所
+    hint: "半血破招（霜潮汲取）"  # D283 名片（纯文案）
     loot: {family: sustain, slot: charm}  # P2-9 loot identity (D81)
     dungeon: EmberQ06
     template: ember_daily_frost_v1
@@ -683,6 +689,7 @@ maps:
 
   q07:
     name: 锈轨矿道
+    hint: "冲撞撞墙 + 炉心破招"  # D283 名片（纯文案）
     loot: {family: burst}  # P2-9 loot identity (D81)
     dungeon: EmberQ07
     template: ember_daily_rail_v1
