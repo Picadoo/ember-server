@@ -8,6 +8,7 @@
 - **已批 A：** [`docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md`](DESIGN-ember-playfeel-hardening-2026-10-07.md)（总控批 · 开窗顺序 1→5；先做 P0 反馈；口径 D282/D281；六槽不做；窗5等另派；勿与 B2.x 薄窗编号搅在一起）
 - **2026-10-07 续：** 窗1–5 + D287–D289 已落地；**D290** 技能↔签名深链 + 团本炽愈提示（1.65.82）；**D291** 推荐打法页（零 jar）；**D292** 花样委托 +1 + 每图徽记一眼（1.65.83）· `STATUS-ember-playfeel-vbounty-plus-d292.md`
 - **B-talent-row1-mech-pivot（备忘 · HOLD）：** [`docs/design/DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md`](DESIGN-ember-talent-row1-mech-pivot-memo-2026-10-07.md) · T0c ❌ 后总控裁决：一排数值返工 **HOLD**；禁 D1d 式盲调；再开须换触发/换键；**D291 标签保留**；禁 T1
+- **D296（PASS）：** [`STATUS-ember-room-event-mustfeel-d296.md`](../status/STATUS-ember-room-event-mustfeel-d296.md) · 房间事件必感 M · event_rate **0.85** · CoreRpg **1.65.86** · bv **60**
 - **D295（PASS）：** [`STATUS-ember-playfeel-fail-summary-d295.md`](../status/STATUS-ember-playfeel-fail-summary-d295.md) · 失败路径也发本局摘要 · CoreRpg **1.65.85** · bv **59** 不变
 - **D294（PASS）：** [`STATUS-ember-ash-brace-honesty-d294.md`](../status/STATUS-ember-ash-brace-honesty-d294.md) · 灰箍获取口对齐副手诚实半行（零 jar）
 - **B-sustain-s2（D293 PASS）：** [`STATUS-ember-sustain-s2-d293.md`](../status/STATUS-ember-sustain-s2-d293.md) · 炽愈 `sustain_hp_mult` **1.00** · CoreRpg **1.65.84** · bv **59**；sim 见 `STATUS-ember-sustain-s2-2slot-sim-2026-10-07.md`

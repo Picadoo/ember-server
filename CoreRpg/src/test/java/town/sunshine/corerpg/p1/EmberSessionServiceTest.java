@@ -17,7 +17,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * D237 / ARCH S3-8: session create / variety / opening-line helpers moved from {@code EmberRunService}
  * into {@link EmberSessionService}. Pins runId shape, D138 variety force parsing, eligibility, and
- * the verifyEntry opening lines against the pre-extract string concatenations (bv58 unchanged).
+ * the verifyEntry opening lines against the pre-extract string concatenations (bv60 pin).
  */
 public final class EmberSessionServiceTest {
 
@@ -134,6 +134,6 @@ public final class EmberSessionServiceTest {
         assertEquals(30, maps.cost);
         assertEquals(30, maps.cost(maps.byKey("q01")));
         assertTrue(maps.passSeconds > 0);
-        assertEquals(58, maps.balanceVersion); // bv58 pin — session extract must not bump numbers
+        assertEquals(60, maps.balanceVersion); // bv60 pin — session extract must not bump numbers
     }
 }

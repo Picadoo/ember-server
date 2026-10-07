@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * D238 / ARCH S3-9: settlement helpers moved from {@code EmberRunService} into {@link EmberSettleService}.
  * Pins fail-refund / not-eligible texts, rotation mark amount, and grant-key order/amounts for a plain
- * Q01 clear (+ featured rotation / variety / bounty) against the pre-extract concatenations (bv59 · D293; D295 playfeel only).
+ * Q01 clear (+ featured rotation / variety / bounty) against the pre-extract concatenations (bv60 · D296 event_rate).
  */
 public final class EmberSettleServiceTest {
 
@@ -207,7 +207,7 @@ public final class EmberSettleServiceTest {
 
     @Test public void bundledBalanceVersion_unchanged() {
         EmberRunMaps maps = bundled();
-        assertEquals(59, maps.balanceVersion);
+        assertEquals(60, maps.balanceVersion);
         assertEquals(30, maps.cost);
         assertEquals(0.5, maps.failRefund, 1e-9);
     }

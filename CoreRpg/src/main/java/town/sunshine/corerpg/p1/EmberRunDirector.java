@@ -33,6 +33,8 @@ import town.sunshine.corerpg.p1.encounter.EmberBossMove;
 import town.sunshine.corerpg.p1.encounter.EmberShape;
 import town.sunshine.corerpg.p1.encounter.CounterplayKind;
 import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
+import town.sunshine.corerpg.p1.encounter.EmberEventTeach;
+import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.encounter.EmberRoomObjective;
 import town.sunshine.corerpg.p1.encounter.RevivePoint;
 
@@ -457,6 +459,23 @@ final class EmberRunDirector {
                 svc.tellRun(s, "§b无伤 §7· 清完这个房间时全队被怪打中不超过 " + unscathedBudgetNow + " 次 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
             } else {
                 svc.tellRun(s, "§b限时清房 §7· " + v.eventLimit(kind) + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+            }
+            // D296 W1c: per-run first event-room ActionBar short name (chat still fires every time)
+            if (!s.eventHudShown) {
+                s.eventHudShown = true;
+                flashActionBar(EmberEventTeach.openHud(kind));
+            }
+            // D296 W1b: account first-of-kind teach flash (ledger p1_evteach_<kind>)
+            String teach = EmberEventTeach.teachFlash(kind);
+            if (!teach.isEmpty()) {
+                for (Player p : participantsHere()) {
+                    PlayerData pd = svc.dataOf(p.getUniqueId());
+                    if (EmberEventTeach.tryMarkTeach(pd, kind)) {
+                        try { p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(teach)); } catch (Throwable ignored) { }
+                        try { p.sendTitle("", teach, 5, 35, 10); } catch (Throwable ignored) { }
+                        svc.flushData(p.getUniqueId());
+                    }
+                }
             }
         }
         if (ok == 0) {
@@ -1911,6 +1930,14 @@ final class EmberRunDirector {
         for (Player p : participantsHere()) {
             try { p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(msg)); } catch (Throwable ignored) { }
             try { p.sendTitle("", msg, 5, 35, 10); } catch (Throwable ignored) { }
+        }
+    }
+
+    /** D296 W1c: ActionBar only (short event name). */
+    private void flashActionBar(String msg) {
+        if (msg == null || msg.isEmpty()) return;
+        for (Player p : participantsHere()) {
+            try { p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, net.md_5.bungee.api.chat.TextComponent.fromLegacyText(msg)); } catch (Throwable ignored) { }
         }
     }
 

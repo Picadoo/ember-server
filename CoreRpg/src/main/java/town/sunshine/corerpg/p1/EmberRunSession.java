@@ -64,6 +64,8 @@ public final class EmberRunSession {
     /** D138/D171 repeat-run variety fixed at entry ("" = none): affixed elite room + type, event room + kind; done flags */
     public String affixRoom = "", affix = "", eventRoom = "", eventKind = "";
     public boolean affixDone, eventDone;
+    /** D296 W1c: ActionBar short name already shown this run (transient) */
+    public transient boolean eventHudShown;
     public final Set<UUID> acted = new LinkedHashSet<UUID>();
     public final Set<UUID> died = new LinkedHashSet<UUID>();
     /** D32: P1 heal potions each participant drank in this run (for the first-death-of-the-day refund) */

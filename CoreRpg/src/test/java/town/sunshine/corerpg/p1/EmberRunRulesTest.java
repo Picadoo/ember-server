@@ -354,8 +354,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(58, m.balanceVersion);                // D227 echo_q05..q07 (D196 Affix Pack 5 = 57, …)
-        assertEquals("g04-1/b58", m.ruleVersion);
+        assertEquals(60, m.balanceVersion);                // D296 event_rate 0.85 (D293 bv59 / D227…)
+        assertEquals("g04-1/b60", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -1720,7 +1720,7 @@ public class EmberRunRulesTest {
         assertTrue(EmberRunMaps.Variety.EVENTS.containsAll(java.util.Arrays.asList("breach", "chain", "unscathed")));
         assertEquals(12, EmberRunMaps.Variety.KNOWN.size()); // affix pool untouched by D191 (D196 later 10→12)
         assertEquals(EmberRunMaps.Variety.EVENTS, v.events);
-        assertEquals(0.5, v.eventRate, 1e-9);               // rate unchanged
+        assertEquals(0.85, v.eventRate, 1e-9);              // D296 W1a 房间事件必感
         assertEquals(1, v.eventCore);                       // reward amount unchanged
         assertEquals(5.0, v.breachRadius, 1e-9);
         assertEquals(1.5, v.breachMin, 1e-9);
