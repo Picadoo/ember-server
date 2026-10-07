@@ -256,5 +256,33 @@ _mobs6 = [{'role': 'heavy', 'hp': 100.0, 'atk': 10.0}]
 _am_p = p1sim.affix_mob(cfg, None, list(_mobs6), affixtable.PLAIN, 100.0)
 check('D247 _plain is pressure-free', 'blaze' not in _am_p and 'frost_amp' not in _am_p and 'regen' not in _am_p and 'molten' not in _am_p and _am_p.get('affix'), str(_am_p))
 
+# D316 (six-slot armor catch-up T0″): SIX['follow'] is opt-in — absent = the D313 weighted formula, bit for bit;
+# 'all' with armor of the charm's quality / craft (any armor tier / enhance) = the 2-slot H / M / D, bit for bit
+_six0 = p1sim.SIX
+_W = [0.8, 0.05, 0.05, 0.05, 0.05]
+_rf = random.Random(316)
+_g = lambda it: 1 + cfg['e'][it['enh']] + cfg['q'][it['q']] + cfg['f'][it['f']]
+_bad_def = _bad_all = 0
+for _i in range(3000):
+    _fam = _rf.choice(('burst', 'scorch', 'sustain'))
+    _ch = dict(p1sim.item(_fam, 'charm', _rf.randrange(1, 4)), enh=_rf.randrange(11), q=_rf.randrange(4), f=_rf.randrange(4))
+    _bl = dict(p1sim.item(_fam, 'blade', _rf.randrange(1, 4)), enh=_rf.randrange(11))
+    _arm = [dict(p1sim.item(_rf.choice(('burst', 'scorch', 'sustain')), a, _rf.randrange(1, 4)), enh=_rf.randrange(11),
+                 q=_rf.randrange(4), f=_rf.randrange(4)) for a in p1sim.ARMOR_SLOTS]
+    _lv = _rf.choice((1, 15, 30))
+    p1sim.SIX = {'w': _W}
+    _ps = (_ch,) + tuple(_arm)
+    _ref = (sum(w * cfg['h'][it['tier']] * _g(it) for w, it in zip(_W, _ps)), sum(w * cfg['D'][it['tier']] for w, it in zip(_W, _ps)))
+    _bad_def += p1sim.hp_def(cfg, _ch, _arm) != _ref
+    _same = [dict(a, q=_ch['q'], f=_ch['f']) for a in _arm]
+    p1sim.SIX = {'w': _W, 'follow': 'all'}
+    _s6, _hd6 = p1sim.stats(cfg, _bl, _ch, _lv, None, _same), p1sim.hp_def(cfg, _ch, _same)
+    p1sim.SIX = None
+    _s2, _hd2 = p1sim.stats(cfg, _bl, _ch, _lv), p1sim.hp_def(cfg, _ch)
+    _bad_all += not (_s6['H'] == _s2['H'] and _s6['M'] == _s2['M'] and _hd6 == _hd2 and _s6['B'] == _s2['B'])
+p1sim.SIX = _six0
+check('D316 SIX without follow = D313 weighted hp_def, bit for bit (3000 random sets)', _bad_def == 0, '%d differ' % _bad_def)
+check("D316 follow 'all' + armor of the charm's quality / craft = 2-slot H / M / D / B, bit for bit (3000)", _bad_all == 0, '%d differ' % _bad_all)
+
 print('\n%d failed' % len(fails))
 sys.exit(1 if fails else 0)

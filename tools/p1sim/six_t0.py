@@ -5,7 +5,7 @@ p1sim.SIX stays None unless a command sets it inside its own process (default ru
   python3 six_t0.py g56 '<SIX json>'                              # G5 B zero drift + G6 migration invariant (exhaustive)
   P1SIM_CRN=1 python3 six_t0.py afk '<SIX json>' [PLAYERS] [OUT.json]   # G8 挂机庭: 2-slot+AFK vs 6-slot+AFK, 21 cells
   P1SIM_CRN=1 python3 six_t0.py raid '<SIX json>' [OUT.json] [--trials T] [--procs P]   # G8 团本: R01–R03 natural teams
-  python3 six_t0.py raidrep OUT.json
+  python3 six_t0.py raidrep OUT.json                              # + D316 G10 per-player lag table when OUT has 'g10'
 
 G6 compares the 6-slot formula (charm + 4 armor pieces with the charm's tier / enhance / quality / craft) to the 2-slot
 formula with exact float equality and with |Δ| ≤ 1e-9; T1 mirrors it as a Java unit test.
@@ -128,33 +128,134 @@ def afk_dyn(six, players=800, out=None, procs=4, chunks=6):
         json.dump({'six': six, 'players': players, 'table': table}, open(out, 'w'))
 
 
-def _raid_job(j):
-    raid, seed0, six, trials = j
-    import raidcomp, p1party, rules
-    cfg = p1config.load()
+def _pool(cfg, dodge, seed0):
+    """raidcomp.players (same loop, same seeds, same RNG use) that also returns each player's seed index, so the
+    2-slot and 6-slot pools pair player by player (D316 G10)."""
+    import raidcomp, p2econ, growth
     raidcomp.cfg = cfg
+    growth.disable()
+    ccfg = p2econ.challenge_cfg(cfg)
+    per_day = cfg['stamina_day'] // cfg['run_cost']
+    out, i = [], 0
+    while len(out) < raidcomp.POOL and i < raidcomp.POOL * 3:
+        kn = p1sim.Knobs(dodge)
+        p, runs, rng = p2econ.to_q07(cfg, kn, seed0 + i)
+        i += 1
+        if p is None:
+            continue
+        kn.swap = True
+        p2econ.phase2(cfg, ccfg, kn, p, random.Random(seed0 + 99 + i), 2, False, per_day, runs)
+        out.append((p, kn, i - 1))
+    return out
+
+
+def _pstate(p, st, sid):
+    """D316 G10: one pool member — charm / armor (tier, enhance, quality, craft; armor = the piece's own values), B, H, M"""
+    te = lambda it: [it['tier'], it['enh'], it['q'], it['f']]
+    return {'sid': sid, 'charm': te(p.charm), 'blade': te(p.blade), 'armor': [te(a) for a in p.armor] if p.armor is not None else None,
+            'B': st['B'], 'H': st['H'], 'M': st['M']}
+
+
+def _raid_job(j):
+    """one player pool (seed0): build the 2-slot and the 6-slot pool once, evaluate R01–R03 on both (D316: the pools do
+    not depend on the raid, so this equals the D313 per-(raid, pool) jobs bit for bit, at a third of the pool cost)"""
+    raids, seed0, six, trials = j
+    import p1party, rules
+    cfg = p1config.load()
     rr = rules.runs().get('raid_revive') or {}
     p1party.LAST_REVIVE_HP = float(rr.get('last_phase_hp', 0)); p1party.LAST_REVIVE_DELAY = float(rr.get('delay', 10))
-    m = p1party.raid_map(cfg, raid)
-    out = {}
+    pools, states = {}, {}
     for lab, sx in (('two', None), ('six', six)):
         p1sim.SIX = sx
-        ps = raidcomp.players(0.5, seed0)
-        pool = [(p.st(), kn) for p, kn in ps]
+        ps = _pool(cfg, 0.5, seed0)
+        pools[lab] = [(p.st(), kn) for p, kn, _ in ps]
+        states[lab] = [_pstate(p, st, sid) for (p, _, sid), (st, _) in zip(ps, pools[lab])]
         p1sim.SIX = None
-        ev = p1party.evaluate(cfg, m, pool, (3, 4, 5), trials, random.Random(11))
-        out[lab] = {str(n): x['rate'] for n, x in ev.items()}
-        out[lab + '_H'] = statistics.median(s['H'] for s, _ in pool)
-    return [raid, seed0], out
+    res = []
+    for raid in raids:
+        m = p1party.raid_map(cfg, raid)
+        out = {}
+        for lab in ('two', 'six'):
+            ev = p1party.evaluate(cfg, m, pools[lab], (3, 4, 5), trials, random.Random(11))
+            out[lab] = {str(n): x['rate'] for n, x in ev.items()}
+            out[lab + '_H'] = statistics.median(s['H'] for s, _ in pools[lab])
+        res.append([[raid, seed0], out])
+    return res, seed0, states
 
 
 def raid(six, out, trials=1500, procs=4):
     import raidcomp
-    js = [(r, s, six, trials) for r in ('r01', 'r02', 'r03') for s in raidcomp.POOLS]
+    js = [(('r01', 'r02', 'r03'), s, six, trials) for s in raidcomp.POOLS]
     with mp.Pool(procs) as p:
-        res = p.map(_raid_job, js, chunksize=1)
-    json.dump({'six': six, 'trials': trials, 'results': res}, open(out, 'w'))
+        rs = p.map(_raid_job, js, chunksize=1)
+    res = sorted((x for r, _, _ in rs for x in r), key=lambda x: (x[0][0], raidcomp.POOLS.index(x[0][1])))
+    json.dump({'six': six, 'trials': trials, 'results': res, 'g10': {str(s): st for _, s, st in rs}}, open(out, 'w'))
     raidrep(out)
+
+
+def _q(xs, p):
+    xs = sorted(xs)
+    if not xs:
+        return float('nan')
+    k = (len(xs) - 1) * p
+    lo = int(k)
+    return xs[lo] + (xs[min(lo + 1, len(xs) - 1)] - xs[lo]) * (k - lo)
+
+
+def g10(d):
+    """D316 G10: per-player armor lag in the raid pools (Q07 first clear + 2 weeks) and the paired 6-slot vs 2-slot
+    B / H / M gaps. Effective tier / enhance follow the charm under SIX['follow'] ('all': both, 'enh': enhance)."""
+    cfg = p1config.load()
+    fol = (d.get('six') or {}).get('follow')
+    rows = []
+    for s0, st in sorted(d['g10'].items(), key=lambda x: int(x[0])):
+        two = {x['sid']: x for x in st['two']}
+        for x in st['six']:
+            ch = x['charm']
+            arm = x['armor'] or []
+            et = [ch[0] if fol == 'all' else a[0] for a in arm]
+            ee = [ch[1] if fol in ('all', 'enh') else a[1] for a in arm]
+            r = {'low': sum(t < ch[0] for t in et), 'own_low': sum(a[0] < ch[0] for a in arm),
+                 'enh': statistics.mean(ee) - ch[1] if arm else 0.0, 'own_enh': statistics.mean(a[1] for a in arm) - ch[1] if arm else 0.0,
+                 'q': ch[2] - statistics.mean(a[2] for a in arm) if arm else 0.0,
+                 'f': ch[3] - statistics.mean(a[3] for a in arm) if arm else 0.0,
+                 'qv': (cfg['q'][ch[2]] + cfg['f'][ch[3]]) - statistics.mean(cfg['q'][a[2]] + cfg['f'][a[3]] for a in arm) if arm else 0.0}
+            y = two.get(x['sid'])
+            if y:
+                r.update(dB=100 * (x['B'] / y['B'] - 1), dH=100 * (x['H'] / y['H'] - 1), dM=100 * (x['M'] / y['M'] - 1))
+            rows.append(r)
+    pr = [r for r in rows if 'dH' in r]
+    n2 = sum(len(st['two']) for st in d['g10'].values())
+    print('\n### G10 · 团本池逐人落后分布（%d 池，6 槽 %d 人；与 2 槽同种子配对 %d 人 / 2 槽 %d 人；follow=%s）\n' % (
+        len(d['g10']), len(rows), len(pr), n2, fol or '缺省'))
+    print('| 指标 | 均值 | 中位 | p10 | p90 | 尾部 |')
+    print('|---|---:|---:|---:|---:|---|')
+    def line(lab, xs, tail, fmt='%+.2f'):
+        if not xs:
+            return
+        print(('| %s | ' + fmt + ' | ' + fmt + ' | ' + fmt + ' | ' + fmt + ' | %s |') % (lab, statistics.mean(xs), statistics.median(xs), _q(xs, .1), _q(xs, .9), tail))
+    lw = [r['low'] for r in rows]
+    line('甲比护符低阶件数（有效）', lw, '≥1 件 %.1f%% · ≥2 件 %.1f%%' % (100 * statistics.mean(v >= 1 for v in lw), 100 * statistics.mean(v >= 2 for v in lw)), '%.2f')
+    ol = [r['own_low'] for r in rows]
+    if fol:
+        line('（参考）甲件自身阶低于护符件数', ol, '≥1 件 %.1f%%' % (100 * statistics.mean(v >= 1 for v in ol)), '%.2f')
+    en = [r['enh'] for r in rows]
+    line('强化差（有效，甲均 − 护符）', en, '≤ −2 级 %.1f%%' % (100 * statistics.mean(v <= -2 for v in en)))
+    if fol:
+        line('（参考）甲件自身强化差', [r['own_enh'] for r in rows], '')
+    qs = [r['q'] for r in rows]
+    line('成色差（护符 − 甲均，档）', qs, '≥1 档 %.1f%%' % (100 * statistics.mean(v >= 1 for v in qs)))
+    fs = [r['f'] for r in rows]
+    line('精工差（护符 − 甲均，档）', fs, '≥1 档 %.1f%%' % (100 * statistics.mean(v >= 1 for v in fs)))
+    line('成色+精工系数差（护符 − 甲均）', [r['qv'] for r in rows], '', '%+.4f')
+    if pr:
+        dh = [r['dH'] for r in pr]
+        line('H 6 槽 vs 2 槽（%）', dh, '≤ −2%% %.1f%% · ≤ −4%% %.1f%%' % (100 * statistics.mean(v <= -2 for v in dh), 100 * statistics.mean(v <= -4 for v in dh)))
+        db = [r['dB'] for r in pr]
+        line('B 6 槽 vs 2 槽（%）', db, '≤ −2%% %.1f%%' % (100 * statistics.mean(v <= -2 for v in db)))
+        dm = [r['dM'] for r in pr]
+        line('M（受伤系数）6 槽 vs 2 槽（%，正 = 更脆）', dm, '≥ +2%% %.1f%%' % (100 * statistics.mean(v >= 2 for v in dm)))
+    return rows
 
 
 def raidrep(path):
@@ -163,19 +264,23 @@ def raidrep(path):
     by = {}
     for (r, s0), o in d['results']:
         by.setdefault(r, []).append(o)
-    print('| 团本 | 随机组队 | 2 槽 | 6 槽 | Δpp（池聚类 95%% 区间，%d 池 × %d 局） | 队员 H 中位 2 槽 / 6 槽 |' % (len(by.get('r01', [])), d['trials']))
-    print('|---|---|---:|---:|---|---|')
-    inside = tot = 0
+    print('| 团本 | 随机组队 | 2 槽 | 6 槽 | Δpp（池聚类 95%% 区间，%d 池 × %d 局） | 判定 | 队员 H 中位 2 槽 / 6 槽 |' % (len(by.get('r01', [])), d['trials']))
+    print('|---|---|---:|---:|---|---|---|')
+    inside = noise = fail = tot = 0
     for r, rs in sorted(by.items()):
         for n in ('3', '4', '5'):
             a = [100 * o['two'][n] for o in rs]; b = [100 * o['six'][n] for o in rs]
             dm, dh = raidcomp.ci([y - x for x, y in zip(a, b)])
             tot += 1
-            inside += abs(dm) <= 2
-            print('| %s | %s 人 | %.1f | %.1f | %+.1f [%+.1f, %+.1f] | %.0f / %.0f |' % (
-                r.upper(), n, statistics.mean(a), statistics.mean(b), dm, dm - dh, dm + dh,
+            ok = abs(dm) <= 2
+            nz = not ok and dm - dh <= 2 and dm + dh >= -2
+            inside += ok; noise += nz; fail += not ok and not nz
+            print('| %s | %s 人 | %.1f | %.1f | %+.1f [%+.1f, %+.1f] | %s | %.0f / %.0f |' % (
+                r.upper(), n, statistics.mean(a), statistics.mean(b), dm, dm - dh, dm + dh, '过' if ok else ('~ 噪声内' if nz else '✗'),
                 statistics.mean(o['two_H'] for o in rs), statistics.mean(o['six_H'] for o in rs)))
-    print('\n**G8 团本 %d/%d 格点估 ±2pp 内**' % (inside, tot))
+    print('\n**G8 团本 %d/%d 格点估 ±2pp 内 · 含噪声 %d/%d · 整段 CI 在 ±2 外 %d 格**' % (inside, tot, inside + noise, tot, fail))
+    if d.get('g10'):
+        g10(d)
 
 
 if __name__ == '__main__':

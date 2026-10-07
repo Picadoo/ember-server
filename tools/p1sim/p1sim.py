@@ -186,7 +186,20 @@ def hp_def(cfg, charm, armor=None):
     g = lambda it: 1 + cfg['e'][it['enh']] + cfg['q'][it['q']] + cfg['f'][it['f']]
     if SIX is None or armor is None:
         return cfg['h'][charm['tier']] * g(charm), cfg['D'][charm['tier']]
+    fol = SIX.get('follow')
+    if fol == 'all':
+        # D316 (armor catch-up 档 F「共鸣」): every armor piece takes the charm's tier and enhance; quality / craft (and
+        # family) stay the piece's own. With sum(w) == 1 the weighted sum is h·(g(charm) + Σ w_a·Δqf_a) and D = D[charm
+        # tier]; armor with the charm's quality / craft gives Δqf = 0.0 → H / M / D bit-identical to the 2-slot formula.
+        qf = lambda it: cfg['q'][it['q']] + cfg['f'][it['f']]
+        c = qf(charm)
+        dq = sum(w * (qf(a) - c) for w, a in zip(SIX['w'][1:], armor))
+        return cfg['h'][charm['tier']] * (g(charm) + dq), cfg['D'][charm['tier']]
     ps = (charm,) + tuple(armor)
+    if fol == 'enh':  # D316 档 E: armor enhance = the charm's; tier / quality / craft the piece's own
+        ge = lambda it: 1 + cfg['e'][charm['enh']] + cfg['q'][it['q']] + cfg['f'][it['f']]
+        return (sum(w * cfg['h'][it['tier']] * ge(it) for w, it in zip(SIX['w'], ps)),
+                sum(w * cfg['D'][it['tier']] for w, it in zip(SIX['w'], ps)))
     return (sum(w * cfg['h'][it['tier']] * g(it) for w, it in zip(SIX['w'], ps)),
             sum(w * cfg['D'][it['tier']] for w, it in zip(SIX['w'], ps)))
 
@@ -1503,7 +1516,8 @@ class Player:
         reserve = kn.coin_reserve
         # §6.4 upgrade first (T1→T2 after q04, T2→T3 after q07); lower piece first, blade on ties
         self.save_for_upgrade = False
-        pieces = (self.blade, self.charm) + (tuple(self.armor) if self.armor is not None else ())
+        fol = SIX.get('follow') if SIX is not None else None  # D316: 'all' = armor has no upgrade / enhance track, 'enh' = no enhance track
+        pieces = (self.blade, self.charm) + (tuple(self.armor) if self.armor is not None and fol != 'all' else ())
         for it in sorted(pieces, key=lambda x: (x['tier'], ('blade', 'charm').index(x['slot']) if x['slot'] in ('blade', 'charm') else 2)):
             flag = {1: 'q04', 2: 'q07'}.get(it['tier'])
             if not flag or flag not in self.cleared or it['fam'] == 'none':
@@ -1523,6 +1537,8 @@ class Player:
                     reserve += c['coin']
                 break
         # §6.1 enhance the lower piece while affordable
+        if fol == 'enh':
+            pieces = (self.blade, self.charm)
         while True:
             it = min(pieces, key=lambda x: (x['enh'], ('blade', 'charm').index(x['slot']) if x['slot'] in ('blade', 'charm') else 2))
             if it['enh'] >= 10 or it['tier'] == 0 and it['enh'] >= 10:
@@ -1725,9 +1741,9 @@ def simulate_player(cfg, kn, seed, max_runs=600, stop_at=None):
                 r['gear'] = desc(p.blade) + ' ' + desc(p.charm)
                 r['B'], r['H'], r['lv'] = st['B'], st['H'], level_of(cfg, p.xp)
                 r['M'] = st['M']
-                r['charm_te'] = (p.charm['tier'], p.charm['enh'], p.charm['q'])
-                if p.armor is not None:  # STAGE 0: armor worn at the first clear (tier, enhance, quality)
-                    r['armor'] = [(a['tier'], a['enh'], a['q']) for a in p.armor]
+                r['charm_te'] = (p.charm['tier'], p.charm['enh'], p.charm['q'], p.charm['f'])  # D316: + craft (field only)
+                if p.armor is not None:  # STAGE 0: armor worn at the first clear (tier, enhance, quality, D316: craft)
+                    r['armor'] = [(a['tier'], a['enh'], a['q'], a['f']) for a in p.armor]
             feat_pay(p, kn, cfg, order, day, offset, key)
             p.settle(key, extra, dict(LAST_VAR) if rep else None)
             if first:
