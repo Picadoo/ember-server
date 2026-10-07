@@ -3,6 +3,7 @@ package town.sunshine.corerpg.p1;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import town.sunshine.corerpg.PlayerData;
+import town.sunshine.corerpg.StaminaService;
 
 import java.util.List;
 import java.util.Locale;
@@ -85,6 +86,7 @@ public final class EmberRunPapi {
         if (key.startsWith("loot_")) return Section.ROTATION;
         if ("abyss_best".equals(key)) return Section.ABYSS;
         if ("bounty".equals(key)) return Section.ROTATION;
+        if ("route_pri".equals(key) || "route_sec".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
         if ("abyss_state".equals(key) || key.startsWith("abyss_t")) return Section.ABYSS;
@@ -180,6 +182,31 @@ public final class EmberRunPapi {
 
     // ------------------------------------------------------------------ sections
 
+
+    /** D306: hub 「今天该打哪」 primary / secondary from real stamina / afk_full / featured / q07. */
+    private String routeLine(Player p, PlayerData d, String key) {
+        StaminaService st = runs.plugin().getStaminaService();
+        int stamina = st == null ? 0 : st.getStamina(d);
+        int staminaMax = st == null ? 90 : st.getMax(d);
+        int daily = st == null ? 30 : st.costOf("daily");
+        int abyss = st == null ? 30 : st.costOf("abyss");
+        int raid = st == null ? 50 : st.costOf("raid");
+        boolean q07 = runs.progressFlag(d, "q07");
+        int featuredLeft = runs.featuredLeft(d);
+        String featuredShort = runs.featuredShort();
+        String next = runs.nextStep(d, p == null ? null : p.getUniqueId());
+        boolean afkFull = false;
+        EmberAfkService afk = EmberAfkService.get();
+        if (afk != null && p != null) {
+            String f = afk.papi(p, d, "full");
+            afkFull = "1".equals(f);
+        }
+        if ("route_sec".equals(key)) {
+            return EmberHubRoute.secondary(stamina, daily, abyss, raid, afkFull, q07, featuredLeft);
+        }
+        return EmberHubRoute.primary(next, stamina, staminaMax, daily, abyss, raid, afkFull, q07, featuredLeft, featuredShort);
+    }
+
     private String entry(Player p, PlayerData d, String key, EmberRunMaps maps) {
         if (key.startsWith("pass_")) return runs.hasPass(p.getUniqueId(), key.substring(5)) ? "yes" : "no";
         if ("target".equals(key)) { String t = runs.target(d); return t == null ? "未选择" : EmberItemData.familyName(t); }
@@ -197,6 +224,8 @@ public final class EmberRunPapi {
             EmberRunMaps.MapDef pm = ps == null || System.currentTimeMillis() > (Long) ps[1] ? null : maps.byKey((String) ps[0]);
             return pm != null && pm.dungeon.equalsIgnoreCase(key.substring(6)) ? "yes" : "no";
         }
+        if ("featured_left".equals(key)) return String.valueOf(runs.featuredLeft(d)); // D306
+        if ("route_pri".equals(key) || "route_sec".equals(key)) return routeLine(p, d, key); // D306 hub daily routing
         if ("next".equals(key)) return runs.nextStep(d, p.getUniqueId()); // new-player polish %corerpg_p1_next%
         if ("recruits".equals(key)) return runs.recruitsLabel(); // E-review #5
         return runs.failRefundLabel(p.getUniqueId()); // failrefund · D128

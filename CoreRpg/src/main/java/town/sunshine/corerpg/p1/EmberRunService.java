@@ -2637,6 +2637,13 @@ public final class EmberRunService implements Listener {
         return out;
     }
 
+    /** D306: weekly featured bonus clears remaining (0 when no rotation). */
+    public int featuredLeft(PlayerData d) {
+        if (maps == null || maps.rotationBonusMarks <= 0 || maps.rotationWeeklyCap <= 0 || d == null) return 0;
+        java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
+        return Math.max(0, maps.rotationWeeklyCap - d.periodCount(C_ROTATION, EmberRunRules.rotationWeekKey(today)));
+    }
+
     /** D97 hub text, e.g. 「Q03 残誓地窖 · 规则「逆行」」 */
     public String featuredShort() {
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
