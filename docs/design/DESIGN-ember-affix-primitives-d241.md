@@ -48,7 +48,7 @@
 | blazing / venom / jailer | 周期 = `every`，首击 t0 + 1.5 + every | 周期 = every + warn（`ready` 后才开始预警，`lands` 在 warn 之后，再 `next = now + every`），首击晚 warn 秒 |
 | arcane | 周期 = every + spin | 周期 = warn + spin + every |
 | firechain | tick / FIRECHAIN_EXPOSURE（无坐标，按接触比例） | 每 tick 秒最多烧一次，需真正碰到链（`touches`） |
-| mortar / charge / regen / frost / molten | 未建模 | 有 |
+| mortar / charge / regen / frost / molten | **D247 已建模**（见 STATUS-ember-affix-d247.md） | 有 |
 | shield / split | 已建模（血量倍率 / 分裂） | 同 |
 
 p1sim 偏差方向：周期词缀**偏密**（更难），是安全侧；直接改数字会移动 gate 结果，所以本刀不动。
@@ -64,7 +64,7 @@ p1sim 偏差方向：周期词缀**偏密**（更难），是安全侧；直接�
 
 - **导出**：`CoreRpg/src/test/java/town/sunshine/corerpg/p1/EmberAffixExportTest.java` 用 `EmberAffixes.all()` + `AffixCycle` + 各 `Affix*` 原语的静态方法，对线上 `plugins/CoreRpg/ember-v1-runs.yml` 的 `variety` 块算出每个词缀的 `family`、`first_arm_s`、`first_hit_s`、`period_s`、`warn_s`、`dmg_atk`、形状参数和 yml 输入，生成入库的 **`tools/p1sim/affix-table.json`**（grace 1.5 s、bv58）。重新导出：`cd CoreRpg && mvn -o test -Dtest=EmberAffixExportTest -Daffix.export=write`。
 - **漂移即失败**：`exportMatchesCheckedInTable`（Java 端：原语 / yml 一改而表没重导 → 单测红）；首次就绪时间再和回放 harness 的 PROMOTE `next=` 交叉核对（`AffixReplay` / `PrimitiveAffixPath`）。p1sim 端 `rules.affix_table_drift()`：表的 yml 输入 ≠ 线上 `variety` 或 bv 不同 → `validate()` 拒跑；`affixtable.row()` 对 what-if 改了 variety 却没重导的情况抛 `RuleError`。selfcheck 加 4 条 D244 检查。
-- **p1sim**：`affix_mob` 不再手抄 `every` / `dmg`：周期词缀（blazing / venom / jailer / arcane）用表里的 `first_hit_s` / `period_s` / `dmg_atk`；火链用 `first_burn_s` + `burn_every_s / FIRECHAIN_EXPOSURE`；`AFFIX_STRESS` 用表里的 grace。覆盖面不变：regen / charge / frost / mortar / molten 仍未建模（§3 第 4 条另议）。
+- **p1sim**：`affix_mob` 不再手抄 `every` / `dmg`：周期词缀（blazing / venom / jailer / arcane / **charge / mortar**）用表里的 `first_hit_s` / `period_s` / `dmg_atk`；火链用 `first_burn_s` + `burn_every_s / FIRECHAIN_EXPOSURE`；`AFFIX_STRESS` 用表里的 grace。**D247**：regen（CHANNEL）、frost（AURA dodge 代理）、molten（DEATH_BLAST + `MOLTEN_EXPOSURE`）已建模；门禁基线改 `_plain`。
 
 节奏变化（`python3 tools/p1sim/affixtable.py diff`；伤害系数全部不变）：
 

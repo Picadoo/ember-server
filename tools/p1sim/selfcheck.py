@@ -234,5 +234,26 @@ _am = p1sim.affix_mob(cfg, None, _mobs, 'venom', 100.0)
 _v = _at['affixes']['venom']
 check('D244 affix_mob uses the table cadence', _am['blaze'] == (100.0 + _v['first_hit_s'], _v['period_s'], 10.0 * _v['dmg_atk']), str(_am['blaze']))
 
+# D247: five previously-unmodelled affixes now modelled; gate baseline sentinel `_plain`
+check('D247 MODELLED covers regen/charge/frost/mortar/molten', all(k in affixtable.MODELLED for k in ('regen','charge','frost','mortar','molten')))
+check('D247 charge/mortar are PERIODIC', all(k in affixtable.PERIODIC for k in ('charge','mortar')))
+_mobs2 = [{'role': 'heavy', 'hp': 100.0, 'atk': 10.0}]
+_am_c = p1sim.affix_mob(cfg, None, list(_mobs2), 'charge', 100.0)
+_c = _at['affixes']['charge']
+check('D247 charge uses table cadence', _am_c['blaze'] == (100.0 + _c['first_hit_s'], _c['period_s'], 10.0 * _c['dmg_atk']), str(_am_c.get('blaze')))
+_mobs3 = [{'role': 'heavy', 'hp': 100.0, 'atk': 10.0}]
+_am_f = p1sim.affix_mob(cfg, None, list(_mobs3), 'frost', 100.0)
+check('D247 frost sets amplifier', _am_f.get('frost_amp') == float(_at['affixes']['frost']['amplifier']), str(_am_f.get('frost_amp')))
+_mobs4 = [{'role': 'heavy', 'hp': 200.0, 'atk': 10.0}]
+_am_r = p1sim.affix_mob(cfg, None, list(_mobs4), 'regen', 100.0)
+_r = _at['affixes']['regen']
+check('D247 regen arms channel', _am_r.get('max') == 200.0 and abs(_am_r['regen'][0] - (100.0 + _r['first_arm_s'] + _r['window_s'])) < 1e-9, str(_am_r.get('regen')))
+_mobs5 = [{'role': 'heavy', 'hp': 100.0, 'atk': 10.0}]
+_am_m = p1sim.affix_mob(cfg, None, list(_mobs5), 'molten', 100.0)
+check('D247 molten schedules death blast', _am_m.get('molten') == (_at['affixes']['molten']['hit_after_death_s'], 10.0 * _at['affixes']['molten']['dmg_atk']), str(_am_m.get('molten')))
+_mobs6 = [{'role': 'heavy', 'hp': 100.0, 'atk': 10.0}]
+_am_p = p1sim.affix_mob(cfg, None, list(_mobs6), affixtable.PLAIN, 100.0)
+check('D247 _plain is pressure-free', 'blaze' not in _am_p and 'frost_amp' not in _am_p and 'regen' not in _am_p and 'molten' not in _am_p and _am_p.get('affix'), str(_am_p))
+
 print('\n%d failed' % len(fails))
 sys.exit(1 if fails else 0)

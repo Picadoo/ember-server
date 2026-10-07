@@ -2,10 +2,10 @@
 
 Part A — per-affix room cost: every repeat normal run gets the affixed elite (affix_rate 1.0, pool forced to one id, no
 room event) on Q01–Q07 at the book reference loadout (p1sim.REF_GEAR) and at T3 +6, dodge 0.3 / 0.5 / 0.7, SEEDS × N
-runs. Baseline = mortar 投弹 (D181): p1sim never modelled its circles (Stage C deferred), so in the sim it is a plain
-promoted elite — the no-pressure baseline. The D189 venom 毒十字 column is the modelled live reference. A new affix passes
-when its clear rate stays within MAX_ABS_DPP_CAP pp of that baseline in every cell (it pays the same affix_shard, so it
-must not be a much harder room; it cannot be easier than a plain elite).
+runs. Baseline = `_plain` (D247): a promoted elite with no combat pressure. (Pre-D247 used mortar 投弹 as an unmodelled
+stand-in; mortar is now modelled as a CIRCLE telegraph.) The D189 venom 毒十字 column is the modelled live reference.
+A new affix passes when its clear rate stays within MAX_ABS_DPP_CAP pp of that baseline in every cell (it pays the same
+affix_shard, so it must not be a much harder room; it cannot be easier than a plain elite).
 
 Part B (--econ): p2econ with the shipped 12-affix pool vs the pre-D196 10-affix pool (pass p2econ args after --econ);
 compare the two tables with --diff <new.md> <old.md> (max |Δ| over the percentage columns, cap 3.0 pp).
@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import p1config, p1sim
 
 NEW = ('arcane', 'firechain')
-REF = ('mortar', 'venom')
+REF = ('_plain', 'venom')  # D247: plain promoted elite (mortar now modelled)
 MAX_ABS_DPP_CAP = 3.0
 
 if '--diff' in sys.argv:
@@ -96,8 +96,7 @@ print('# D196 affixpack5 gate — rules balance_version %s, N=%d × seeds %s, FI
 print('# arcane %s / firechain %s' % (v0.get('arcane'), v0.get('firechain')))
 import affixtable  # D244: cadence / damage from the exported Java table
 _T = affixtable.table()['affixes']
-print('# pressure (atk/s if every cast lands, affix-table.json): mortar %.3f · venom %.3f · arcane %.3f · firechain %.3f (≤ 1/tick × exposure)' % (
-    _T['mortar']['dmg_atk'] / _T['mortar']['period_s'],
+print('# pressure (atk/s if every cast lands, affix-table.json): plain=0 · venom %.3f · arcane %.3f · firechain %.3f (≤ 1/tick × exposure)' % (
     _T['venom']['dmg_atk'] / _T['venom']['period_s'],
     _T['arcane']['dmg_atk'] / _T['arcane']['period_s'],
     _T['firechain']['dmg_atk'] / _T['firechain']['burn_every_s'] * p1sim.FIRECHAIN_EXPOSURE))
@@ -106,7 +105,7 @@ print('Stress columns (压力): the first venom / arcane / firechain hit comes a
 print('cycle (the sim clears rooms faster than people, so in the plain columns the 11 s 旋光 cycle rarely fires before the')
 print('elite dies). Stress pass: new affix − venom under the same stress ≤ cap (not harder than the live 毒十字).')
 print()
-print('| 图 | 装备 | 躲避 | 基线 mortar（sim 无圈 = 普通精英） | 毒十字 venom | 旋光 arcane | 火链 firechain | 旋光 / 火链 − 基线 (pp) | 压力 毒十字 | 压力 旋光 | 压力 火链 | 压力 旋光 / 火链 − 毒十字 (pp) |')
+print('| 图 | 装备 | 躲避 | 基线 _plain（无战斗压力） | 毒十字 venom | 旋光 arcane | 火链 firechain | 旋光 / 火链 − 基线 (pp) | 压力 毒十字 | 压力 旋光 | 压力 火链 | 压力 旋光 / 火链 − 毒十字 (pp) |')
 print('|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|')
 worst = 0.0
 worst_s = 0.0
@@ -118,12 +117,12 @@ for k in MAPS:
         for d in (0.3, 0.5, 0.7):
             r = {kind: sum(rate(cfgs[kind], k, st, d, s) for s in SEEDS) / len(SEEDS) for kind in REF + NEW}
             rs = {kind: sum(rate(cfgs[kind], k, st, d, s, True) for s in SEEDS) / len(SEEDS) for kind in ('venom',) + NEW}
-            dd = [100 * (r[x] - r['mortar']) for x in NEW]
+            dd = [100 * (r[x] - r['_plain']) for x in NEW]
             ds = [100 * (rs['venom'] - rs[x]) for x in NEW]  # positive = the new affix is harder than venom
             worst = max(worst, max(abs(x) for x in dd))
             worst_s = max(worst_s, max(ds))
             print('| %s | %s | %.1f | %.1f%% | %.1f%% | %.1f%% | %.1f%% | %+.1f / %+.1f | %.1f%% | %.1f%% | %.1f%% | %+.1f / %+.1f |' % (
-                k, gname, d, 100 * r['mortar'], 100 * r['venom'], 100 * r['arcane'], 100 * r['firechain'], dd[0], dd[1],
+                k, gname, d, 100 * r['_plain'], 100 * r['venom'], 100 * r['arcane'], 100 * r['firechain'], dd[0], dd[1],
                 100 * rs['venom'], 100 * rs['arcane'], 100 * rs['firechain'], -ds[0], -ds[1]), flush=True)
 print()
 print('MAX_ABS_DPP (new affix clear rate vs baseline, any cell) = %.1f (cap %.1f) → %s'

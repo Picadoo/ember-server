@@ -554,10 +554,19 @@ class Fight:
                 if self.t < getattr(self, 'win_until', -1.0):
                     rec['d_boss_win'] += eff
         tgt['hp'] -= amount
+        if amount > 0 and 'regen' in tgt:  # D247: damage during an open channel window counts toward interrupt
+            nt, per, heal, ihp, win, hurt = tgt['regen']
+            # window is the win seconds before nt; count hurt only inside it
+            if self.t >= nt - win:
+                tgt['regen'] = (nt, per, heal, ihp, win, hurt + amount)
 
     def hurt(self, raw, tele, kind='mob', affix=False, skill=None):
         kn, st = self.kn, self.st
         p = min(0.95, kn.dodge + kn.tele_bonus) if tele else kn.dodge
+        # D247 frost: living AURA elite → dodge timing penalty (movement slow proxy)
+        fa = getattr(self, '_frost_amp', 0.0)
+        if fa > 0:
+            p = min(0.95, p / (1.0 + FROST_DODGE_PEN * fa))
         rec = self.rec
         if kind == 'tele' and st.get('mods') and KIT_KEYS & st['mods'].keys():  # PROPOSAL D210 skill kit (not in Java)
             if kit_tele(self, skill, raw) is None:
@@ -709,8 +718,16 @@ class Fight:
             for m in mobs:  # D191: death time of every room mob (连斩 chain / 裂隙 breach models)
                 if m['hp'] <= 0 and '_dt' not in m:
                     m['_dt'] = t
+                    # D247 亡爆: schedule one post-death blast (not on split adds); door waits for it
+                    if m.get('molten') and not m.get('split_add') and not m.get('_molten_armed'):
+                        delay, dmg = m['molten']
+                        m['_molten_armed'] = True
+                        pending.append((t + delay, dmg, 'molten'))
             alive = [m for m in mobs if m['hp'] > 0]
-            if not alive:
+            # D247 frost AURA: refresh dodge penalty from any living frost elite
+            self._frost_amp = max((float(m.get('frost_amp', 0.0)) for m in alive), default=0.0)
+            molten_pending = [p for p in pending if len(p) > 2 and p[2] == 'molten']
+            if not alive and not molten_pending:
                 self.t = t
                 return True
             # next event
@@ -722,6 +739,8 @@ class Fight:
                     cand.append(m['next'])
                 if 'blaze' in m:
                     cand.append(m['blaze'][0])
+                if 'regen' in m:
+                    cand.append(m['regen'][0])
             for s in skills:
                 cand.append(s['next'])
             for p in pending:
@@ -746,6 +765,8 @@ class Fight:
                 continue
             if t == next_swing:
                 next_swing = t + period
+                if not alive:
+                    continue  # D247: only molten blast left — do not swing into an empty room
                 if st.get('mods') and KIT_KEYS & st['mods'].keys():  # PROPOSAL D210 skill kit (not in Java)
                     _ks = kit_swing(self, alive, t, boss, period)
                     if _ks is not None:
@@ -818,6 +839,19 @@ class Fight:
                 if self.hp <= 0:
                     return False
                 continue
+            # D247 再生: channel window ends → heal unless interrupt damage threshold met
+            regen_done = False
+            for m in alive:
+                if 'regen' in m and m['regen'][0] == t:
+                    nt, per, heal, ihp, win, hurt = m['regen']
+                    maxhp = float(m['max'])
+                    if hurt < maxhp * ihp:
+                        m['hp'] = min(maxhp, m['hp'] + maxhp * heal)
+                    m['regen'] = (t + per, per, heal, ihp, win, 0.0)
+                    regen_done = True
+                    break
+            if regen_done:
+                continue
             for m in alive:
                 if m['atk'] > 0 and m['next'] == t:
                     m['next'] = t + m['iv']
@@ -877,13 +911,18 @@ class Fight:
                                 s['next'] += _st
                             f = sk.get('follow')
                             if f and (f.get('below') is None or boss['hp'] <= f['below'] * boss['max']):
-                                pending.append((t + f.get('delay', 1.0), f['dmg']))
+                                pending.append((t + f.get('delay', 1.0), f['dmg'], 'follow'))
                         break
                 else:
                     for p in list(pending):
                         if p[0] == t:
                             pending.remove(p)
-                            if boss['hp'] > 0:
+                            tag = p[2] if len(p) > 2 else 'follow'
+                            if tag == 'molten':
+                                # D247: no positions — MOLTEN_EXPOSURE of blasts still threaten; rest = stepped out
+                                if self.rng.random() < MOLTEN_EXPOSURE:
+                                    self.hurt(p[1], True, 'mob', True)
+                            elif boss is not None and boss['hp'] > 0:
                                 self.hurt(p[1], True, 'tele')
                             break
             if self.hp <= 0:
@@ -969,20 +1008,27 @@ def event_ok(cfg, kind, f, t0, h0, mobs, vseed):
 
 AFFIX_STRESS = False  # D196 gate: periodic affix hits start right at room start (t0 + grace_s, D244 table) instead of after one cycle
 FIRECHAIN_EXPOSURE = 1.0 / 3.0  # D196: share of the fight a player spends touching the 火链 tether (sim has no positions)
+MOLTEN_EXPOSURE = 1.0 / 3.0  # D247: share of 亡爆 circles that still threaten (no positions; players usually step out)
+FROST_DODGE_PEN = 0.05  # D247: per-amplifier dodge timing penalty (Slowness is move-only; mild proxy)
 
 
 def affix_mob(cfg, m, mobs, kind, t0):
     """Promote the toughest mob of the room (heavy, else melee, else the first) — mirrors EmberRunDirector.
-    D244: every number comes from tools/p1sim/affix-table.json (exported from the Java affix primitives; affixtable.py)."""
+    D244: every number comes from tools/p1sim/affix-table.json (exported from the Java affix primitives; affixtable.py).
+    D247: charge / mortar join PERIODIC; frost / regen / molten get family models; `_plain` = gate baseline."""
     pick_ = next((x for x in mobs if x['role'] == 'heavy'), None) or next((x for x in mobs if x['role'] == 'melee'), None) or mobs[0]
+    if kind == affixtable.PLAIN or kind is None:
+        # gate-only: promoted elite, no combat pressure (affixpack5 baseline after D247 modelled mortar)
+        pick_['affix'] = True
+        pick_['affix_kind'] = affixtable.PLAIN
+        return pick_
     A = affixtable.row(cfg, kind) if kind in affixtable.MODELLED else None
     if kind == 'shield':
         pick_['hp'] *= float(A['hp_mult'])
     elif kind == 'split':
         pick_['split'] = (int(A['count']), float(A['add_hp']), m)
     elif kind in affixtable.PERIODIC:
-        # D138 炽热 / D189 毒十字 · 禁锢 / D196 旋光: one telegraphed hit per cast (same dodge path), at the Java cadence:
-        # first hit = 1.5 s grace + every + warn (旋光: + spin/2, target mid-arc), period = every + warn (旋光: + spin).
+        # D138 炽热 / D189 毒十字 · 禁锢 / D196 旋光 / D247 冲锋 · 投弹: one telegraphed hit per cast (same dodge path).
         # The 1 s jailer root is not modelled (no extra hit is forced during it).
         pick_['blaze'] = (t0 + float(A['first_hit_s']), float(A['period_s']), pick_['atk'] * float(A['dmg_atk']))
     elif kind == 'firechain':
@@ -990,7 +1036,21 @@ def affix_mob(cfg, m, mobs, kind, t0):
         # to touch the chain FIRECHAIN_EXPOSURE of the time while the elite has a partner (= the room is not yet down to it)
         per = float(A['burn_every_s']) / FIRECHAIN_EXPOSURE
         pick_['blaze'] = (t0 + float(A['first_burn_s']) + per, per, pick_['atk'] * float(A['dmg_atk']))
-    if AFFIX_STRESS and 'blaze' in pick_ and kind in ('venom', 'jailer', 'arcane', 'firechain'):
+    elif kind == 'frost':
+        # D247 凝霜 AURA: vanilla Slowness only slows movement. Positionless sim ≈ harder to leave telegraphs → dodge×.
+        # amp 1 → ×1/(1+FROST_DODGE_PEN); keep mild (move-only effect, not attack-speed).
+        pick_['frost_amp'] = float(A['amplifier'])
+    elif kind == 'regen':
+        # D247 再生 CHANNEL: next window-end, period, heal frac, interrupt frac, window length; hurt accumulator.
+        # first channel ends at t0 + first_arm_s + window_s (Java: ready → channel window → heal or interrupt).
+        win = float(A['window_s'])
+        pick_['max'] = float(pick_['hp'])  # snap max HP at promote (Java heal caps at missing HP)
+        pick_['regen'] = (t0 + float(A['first_arm_s']) + win, float(A['period_s']), float(A['heal_maxhp']),
+                          float(A['interrupt_maxhp']), win, 0.0)
+    elif kind == 'molten':
+        # D247 亡爆: on death schedule one telegraphed blast at hit_after_death_s (atk snapped at promote time).
+        pick_['molten'] = (float(A['hit_after_death_s']), pick_['atk'] * float(A['dmg_atk']))
+    if AFFIX_STRESS and 'blaze' in pick_ and kind in ('venom', 'jailer', 'arcane', 'firechain', 'charge', 'mortar'):
         _, ev, dmg = pick_['blaze']
         pick_['blaze'] = (t0 + affixtable.grace(), ev, dmg)  # worst case: the first cast lands as soon as the room opens
     pick_['affix'] = True
