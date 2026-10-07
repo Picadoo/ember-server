@@ -50,7 +50,7 @@ talents:
   rows:
     # theme = shown to players (no internal D-numbers; D147 review 10-04 #3 / #8 / #10)
     - {row: 1, name: "应变", points: 1, coin: 800, theme: "首领预警招 · 3% ≈ Q07 重砸每次 1 点"}
-    - {row: 2, name: "猎手", points: 2, coin: 2000, theme: "仅主线重打生效 · 只作用于词缀精英（每局 1 只；首通、挑战、团本、深渊都没有）"}
+    - {row: 2, name: "猎手", points: 2, coin: 2000, theme: "仅主线重打词缀精英（首通 / 挑战 / 团本 / 深渊无效；每局约 1 只）"}
     - {row: 3, name: "套装专精", points: 3, coin: 4000, theme: "只在对应套装成套时生效"}
   nodes:
     # 第 1 排「应变」：首领预警招（D140）。fit = 菜单里「适合 / 不适合」一行（D147，评审 10-04 #3）。得失都只在首领战里。
@@ -78,14 +78,14 @@ talents:
       good: "躲开首领预警招回 0.8% 最大生命（15 秒一次）"
       bad: "被首领预警招打中多受 3%"
       fit: "适合：躲招稳、常用踏步的人 · 不适合：常被预警招打中（那样是净亏）"
-    # 第 2 排「猎手」：重复刷图的词缀精英（D138）。得失都只落在词缀精英（含分身）身上，首通局和首领战不受影响。
+    # 第 2 排「猎手」：仅主线重打词缀精英（D138）。得失只落在词缀精英（含分身）；首通 / 挑战 / 团本 / 深渊无效。
     # D164：三选一 = 破缀（全打快、多挨打）/ 守缀（少挨打、打得慢）/ 破甲（专打厚甲，另两种慢）。
     - id: t2a
       row: 2
       name: "破缀"
       family: burst
       mods: {dmg_affix: 1.30, taken_affix: 1.20}
-      good: "对词缀精英（含分身）伤害 +30%（仅主线重打生效）"
+      good: "对词缀精英（含分身）伤害 +30%（仅主线重打词缀精英）"
       bad: "受到词缀精英（含分身、炽热火圈）伤害 +20%"
       fit: "适合：想快点清掉词缀精英 · 不适合：容易被精英火圈 / 分身围住"
     - id: t2b
@@ -93,7 +93,7 @@ talents:
       name: "守缀"
       family: sustain
       mods: {taken_affix: 0.75, dmg_affix: 0.85}
-      good: "受到词缀精英（含分身、炽热火圈）伤害 -25%（仅主线重打生效）"
+      good: "受到词缀精英（含分身、炽热火圈）伤害 -25%（仅主线重打词缀精英）"
       bad: "对词缀精英（含分身）伤害 -15%"
       fit: "适合：怕词缀精英的人 · 不适合：想快清精英的人"
     - id: t2c
@@ -101,7 +101,7 @@ talents:
       name: "破甲"
       family: scorch
       mods: {dmg_affix_shield: 1.60, dmg_affix_blazing: 0.80, dmg_affix_split: 0.80}
-      good: "对厚甲精英伤害 +60%（正好抵掉它的 1.6 倍生命；仅主线重打生效）"
+      good: "对厚甲精英伤害 +60%（正好抵掉它的 1.6 倍生命；仅主线重打词缀精英）"
       bad: "对炽热 / 分裂精英（含分身）伤害 -20%"
       fit: "适合：专门对付厚甲精英 · 不适合：遇到炽热 / 分裂精英（会更慢）"
     # 第 3 排「套装专精」：只在穿对应套装成套时生效（换套自动失效，不用重置）。
@@ -168,12 +168,12 @@ reroll:
   # code = 存档里的编号（玩家数据 p4_af_<物品 uid> = code × 10 + 档），上线后不要改
   affixes:
     blade:
-      - {id: b_affix, code: 1, name: "猎缀纹", key: dmg_affix, desc: "对词缀精英伤害", note: "仅主线重打生效", values: [1.04, 1.08, 1.12, 1.16]}
+      - {id: b_affix, code: 1, name: "猎缀纹", key: dmg_affix, desc: "对词缀精英伤害", note: "仅主线重打词缀精英", values: [1.04, 1.08, 1.12, 1.16]}
       - {id: b_set, code: 2, name: "余烬纹", key: set_dmg, desc: "套装事件（燃烧 / 烬爆）伤害", values: [1.0025, 1.005, 1.0075, 1.01]}
       # D164（build-diversity R5）：裂身纹移出洗练池（rollable: false）——洗不出来、也不能锁定再洗；已经有的照常生效、照常显示。
       #   code 3 不要复用。刃池 3 → 2：极品件洗到指定 4 档（锁定路线）6.2 → 5.6 次。
-      - {id: b_split, code: 3, name: "裂身纹", key: dmg_split, desc: "对分身伤害", note: "仅主线重打生效", rollable: false, values: [1.05, 1.10, 1.15, 1.20]}
+      - {id: b_split, code: 3, name: "裂身纹", key: dmg_split, desc: "对分身伤害", note: "仅主线重打词缀精英", rollable: false, values: [1.05, 1.10, 1.15, 1.20]}
     charm:
       - {id: c_tele, code: 4, name: "定身纹", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
       - {id: c_share, code: 6, name: "分核纹", key: share_taken, desc: "烬核自己那份", values: [0.99, 0.98, 0.97, 0.96]}
-      - {id: c_affix, code: 7, name: "抗缀纹", key: taken_affix, desc: "受到词缀精英伤害", note: "仅主线重打生效", values: [0.96, 0.92, 0.88, 0.84]}
+      - {id: c_affix, code: 7, name: "抗缀纹", key: taken_affix, desc: "受到词缀精英伤害", note: "仅主线重打词缀精英", values: [0.96, 0.92, 0.88, 0.84]}
