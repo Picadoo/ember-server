@@ -292,6 +292,18 @@ public final class SkillService implements Listener {
         } else {
             player.sendMessage(ChatColor.DARK_GRAY + "  烬斩符文 · 首通 Q04 后解锁");
         }
+        boolean parry = town.sunshine.corerpg.p1.EmberSkillKit.parryUnlocked(data, runs);
+        if (parry) {
+            town.sunshine.corerpg.p1.EmberParry ep = town.sunshine.corerpg.p1.EmberParry.get();
+            int pLeft = ep == null ? 0 : ep.cdLeftSeconds(player.getUniqueId());
+            String pCd = pLeft > 0 ? (ChatColor.RED + "冷却 " + pLeft + "s") : (ChatColor.GREEN + "就绪");
+            player.sendMessage(ChatColor.YELLOW + "  Q" + ChatColor.GRAY + " "
+                    + town.sunshine.corerpg.p1.EmberSkillKit.DISPLAY_PARRY
+                    + " · 预警砸中你后半秒内按 · 反打 0.45B · 独立 28s · " + pCd);
+            player.sendMessage(ChatColor.DARK_GRAY + "    好：对齐落地窗口 · 坏：窗外乱按白丢 CD · 不挡预警伤");
+        } else {
+            player.sendMessage(ChatColor.DARK_GRAY + "  守招·余烬招架 · 首通 Q03 后解锁（单按 Q）");
+        }
     }
 
     /** D211: /corerpg skill shape <fan|line|ring> — hub only; puts 烬斩 on full CD (X1). */

@@ -2179,6 +2179,11 @@ final class EmberRunDirector {
             Player p = inside.get(i);
             svc.skillHit(s, p, src, share != null ? share[i] : each, kind);
             if (bossSkill && !sk.share && g != null && !p.isDead()) g.onTeleHit(p); // D141 反震
+            // D301: open 余烬招架 window only for players the boss tele actually hit (non-share)
+            if (bossSkill && !sk.share && src != null && !p.isDead()) {
+                EmberParry parry = EmberParry.get();
+                if (parry != null) parry.openWindow(p, src);
+            }
             if (sk.kb > 0 && !p.isDead()) push(p, src == null ? o : src.getLocation(), sk.kb);
             hit++;
         }

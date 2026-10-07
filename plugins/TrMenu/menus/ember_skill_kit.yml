@@ -4,6 +4,7 @@
 # D287 · 局内决策加固：二选一醒目 · 出本形状预览 · 身法方向一眼可见（零数值 / 守招仍搁置）
 # D290 · 与签名页互相深链；L07/L09/L13 覆盖符文写清
 # D291 · P「推荐打法」深链
+# D301 · 守招·余烬招架（Q03 · 单按 Q · G2_parry_B2）
 
 Title: '§6技能 · §e%corerpg_kit_shape% §8· §b%corerpg_kit_step_dir% §8· %corerpg_kit_charge%'
 
@@ -18,13 +19,14 @@ Layout:
   - '# S A B #'
   - '# C D E #'
   - '# F G H #'
-  - '# Y I P X#'
+  - '# Y Q P X#'
 
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §e每 8 秒二选一：§fF 烬斩 §7/ §f潜行+F 烬突 §8（共享充能 · 挂机不自动烬突）'
     - 'tell: §7当前 §f%corerpg_kit_shape% §7· 身法 §f%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
+    - 'tell: §b守招 §f%corerpg_kit_parry_name% §7· 解锁 §f%corerpg_kit_parry_unlock% §7· %corerpg_kit_parry_cd%'
     - 'command: corerpg skill kit'
 
 Icons:
@@ -77,7 +79,7 @@ Icons:
         - '§8烬突解锁：§f%corerpg_kit_dash_unlock% §8（首通 Q02）'
         - ''
         - '§7符文 / 身法方向：§e出本才可换 §7· 换后对应 CD 转满'
-        - '§8守招（单按 Q）仍搁置 · 不在本页'
+        - '§b守招：§f%corerpg_kit_parry_name% §7· §f%corerpg_kit_parry_cd% §8（解锁 %corerpg_kit_parry_unlock% · Q03）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -276,22 +278,23 @@ Icons:
         - 'command: corerpg p1 sig from skill'
         - close
 
-  I:
+  Q:
     update: 20
     display:
-      material: book
-      name: '§f说明 · 决策要点'
+      material: iron chestplate
+      name: '§b守招 · §f%corerpg_kit_parry_name%'
       lore:
         - ''
-        - '§e1. 每 8 秒二选一'
-        - '§f   F §7烬斩 · §f潜行+F §7烬突 · §c共享一份充能'
-        - '§8   数值 1.5B / 共享结构不变 · 挂机不自动烬突'
+        - '§7键位：§f单按 Q §8（解锁后替换扔刃）'
+        - '§7解锁：§f%corerpg_kit_parry_unlock% §8（首通 Q03）'
+        - '§7冷却：§f%corerpg_kit_parry_cd% §8（独立 28s · 不花烬斩/身法）'
         - ''
-        - '§e2. 形状只在出本换（本页=预览）'
-        - '§7   扇 / 直线 / 环 · 签名可覆盖符文'
-        - '§8   覆盖：L07 直线 / L09 环 / L13 蓄力环 → 左下「签名传奇」'
+        - '§e怎么用'
+        - '§7  首领预警§f砸中你§7后约半秒内再按 Q'
+        - '§7  成功：对首领反打 §f0.45B §7（预警伤仍生效）'
         - ''
-        - '§e3. 身法方向一眼看标题与「身法」格'
-        - '§7   前冲 / 后撤 · 标题栏也会显示'
+        - '§a好：对齐落地窗口赚反打'
+        - '§c坏：窗外乱按白丢独立 CD'
         - ''
-        - '§8守招（单按 Q）搁置 · 见 D212 · 本窗不开放'
+        - '§8与身法（潜行+Q）/ 烬斩·烬突（F）分工：守招=防御时机键'
+        - '§8不挡预警伤 · 无位移 · 无均匀减伤窗'

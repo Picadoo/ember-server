@@ -25,7 +25,8 @@ public final class CorePapi {
     static final Set<String> KIT = set("flex_skill", "flex_skill_id", "flex_skill_name", "flex_display",
             "kit_shape", "slash_shape", "kit_shape_key", "kit_dash", "kit_dash_unlock", "kit_shape_unlock",
             "kit_step_unlock", "kit_huohen_unlock", "kit_step", "kit_step_name", "kit_huohen",
-            "kit_step_dir", "step_dir", "kit_step_dir_key", "kit_charge", "skill_charge_ready");
+            "kit_step_dir", "step_dir", "kit_step_dir_key", "kit_charge", "skill_charge_ready",
+            "kit_parry", "kit_parry_unlock", "kit_parry_name", "kit_parry_cd");
     static final Set<String> PROGRESS = set("talent_points", "talent_available", "ember_xp", "ember_level", "level",
             "ember_xp_need", "vip_title", "talent_spent", "talent_earned");
     static final Set<String> STAMINA = set("stamina", "stamina_max", "stamina_bank",

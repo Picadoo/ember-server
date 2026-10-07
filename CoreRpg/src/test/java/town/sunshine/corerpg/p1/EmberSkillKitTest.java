@@ -175,4 +175,33 @@ public class EmberSkillKitTest {
         assertNotNull(f);
         assertEquals(EmberCounters.Category.SETTING, f.category);
     }
+
+    @Test
+    public void parryConstantsMatchT0b() {
+        assertEquals("q03", EmberSkillKit.UNLOCK_PARRY);
+        assertEquals(28, EmberSkillKit.PARRY_CD_SECONDS);
+        assertEquals(28_000L, EmberSkillKit.PARRY_CD_MS);
+        assertEquals(0.45, EmberSkillKit.PARRY_FLAT_MULT, 1e-9);
+        assertEquals("余烬招架", EmberSkillKit.DISPLAY_PARRY);
+        assertTrue(EmberSkillKit.PARRY_WINDOW_MS >= 350L);
+        assertTrue(EmberSkillKit.PARRY_WINDOW_MS <= 550L);
+    }
+
+    @Test
+    public void parryFlatAndWindowHelpers() {
+        assertEquals(45.0, EmberSkillKit.parryFlat(100.0), 1e-9);
+        assertEquals(0.0, EmberSkillKit.parryFlat(0.0), 1e-9);
+        assertEquals(0.0, EmberSkillKit.parryFlat(-5.0), 1e-9);
+        assertTrue(EmberSkillKit.parryWindowOpen(1000L, 1450L));
+        assertTrue(EmberSkillKit.parryWindowOpen(1450L, 1450L));
+        assertFalse(EmberSkillKit.parryWindowOpen(1451L, 1450L));
+        assertFalse(EmberSkillKit.parryWindowOpen(1000L, 0L));
+    }
+
+    @Test
+    public void parryUnlockRequiresRuns() {
+        assertFalse(EmberSkillKit.parryUnlocked(new PlayerData(), null));
+        assertFalse(EmberSkillKit.parryUnlocked(null, null));
+    }
+
 }

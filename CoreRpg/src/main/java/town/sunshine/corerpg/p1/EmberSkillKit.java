@@ -12,6 +12,8 @@ import org.bukkit.entity.Player;
  * ({@code skill_line}/{@code skill_ring}/{@code skill_plus}/{@code skill_charge}) override the chosen rune.
  * <p>D219 / RESEARCH-ember-backstep: 身法方向 preference in {@code p1_step_dir@all} (0 = 前冲, 1 = 后撤).
  * Available from Q01 for all sets; not a set-bound variant. Shares the 14s 踏步/火痕步 CD.
+ * <p>D301 / DESIGN-ember-guard-skill-pivot: 守招·余烬招架 (G2_parry_B2) — Q03 unlock, bare Q, independent CD,
+ * flat ×0.45B on successful parry of a boss tele hit. No shared dash tax / slash charge / uniform red.
  */
 public final class EmberSkillKit {
     public static final String C_SHAPE = "p1_slash_shape";
@@ -21,6 +23,8 @@ public final class EmberSkillKit {
     public static final String UNLOCK_SHAPE = "q04";
     /** S2 火痕步 unlock (焚烬 auto-replace). Direction switch is Q01 / always. */
     public static final String UNLOCK_STEP = "q05";
+    /** D301 守招·余烬招架 unlock (T0b G2_parry_B2 reachable from Q03). */
+    public static final String UNLOCK_PARRY = "q03";
 
     /** S0-passed 烬突 (DS15): 4 blocks, ≤3 targets, 1.5B each, bosses ×0.5. */
     public static final double DASH_DISTANCE = 4.0;
@@ -37,6 +41,15 @@ public final class EmberSkillKit {
     public static final double STEP_IGNITE_RADIUS = 3.0;
     /** D219 后撤步 distance (forward 踏步 stays skills.yml 5.0). */
     public static final double BACKSTEP_DISTANCE = 4.0;
+
+    /** D301 T0b G2_parry_B2: independent CD seconds. */
+    public static final int PARRY_CD_SECONDS = 28;
+    public static final long PARRY_CD_MS = PARRY_CD_SECONDS * 1000L;
+    /** Parry window after boss tele land (ms); mid of design 0.35–0.55s. */
+    public static final long PARRY_WINDOW_MS = 450L;
+    /** Flat retaliate multiplier × blade B on successful parry (tele still lands). */
+    public static final double PARRY_FLAT_MULT = 0.45;
+    public static final String DISPLAY_PARRY = "余烬招架";
 
     public static final int DIR_FORWARD = 0;
     public static final int DIR_BACK = 1;
@@ -72,6 +85,21 @@ public final class EmberSkillKit {
 
     public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {
         return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_STEP);
+    }
+
+    /** D301: 余烬招架 after first-clear Q03. */
+    public static boolean parryUnlocked(PlayerData d, EmberRunService runs) {
+        return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_PARRY);
+    }
+
+    /** Flat retaliate amount for a successful parry (0 if B ≤ 0). */
+    public static double parryFlat(double bladeB) {
+        return PARRY_FLAT_MULT * Math.max(0.0, bladeB);
+    }
+
+    /** True while {@code nowMs} is still inside an opened parry window ending at {@code windowUntilMs}. */
+    public static boolean parryWindowOpen(long nowMs, long windowUntilMs) {
+        return windowUntilMs > 0 && nowMs <= windowUntilMs;
     }
 
     /**

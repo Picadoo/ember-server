@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import town.sunshine.corerpg.p1.EmberLoadoutService;
 import town.sunshine.corerpg.p1.EmberRunService;
+import town.sunshine.corerpg.p1.EmberParry;
 import town.sunshine.corerpg.p1.EmberSkillKit;
 
 /** D240 / ARCH S3-11: %corerpg_*% flex skill + skill kit section (moved verbatim from CoreRpgExpansion). */
@@ -65,6 +66,19 @@ final class CorePapiKit {
             if (ls == null) return "就绪";
             long left = ls.state(player.getUniqueId()).skillCdUntil - System.currentTimeMillis();
             return left > 0 ? ("冷却 " + (int) Math.ceil(left / 1000.0) + "s") : "就绪";
+        }
+        if ("kit_parry".equals(key) || "kit_parry_unlock".equals(key)) {
+            EmberRunService runs = plugin.getEmberRuns();
+            return EmberSkillKit.parryUnlocked(data, runs) ? "yes" : "no";
+        }
+        if ("kit_parry_name".equals(key)) {
+            return EmberSkillKit.DISPLAY_PARRY;
+        }
+        if ("kit_parry_cd".equals(key)) {
+            EmberParry parry = EmberParry.get();
+            if (parry == null) return "就绪";
+            int left = parry.cdLeftSeconds(player.getUniqueId());
+            return left > 0 ? ("冷却 " + left + "s") : "就绪";
         }
         return null;
     }
