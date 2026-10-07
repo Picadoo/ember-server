@@ -192,7 +192,27 @@ CANDS_PARRY = {
     'G_parry_B': ('q03', 'any', '守招·余烬招架 B cd24 一次 flat×1.5B 反打·最优',
                  {'kit_guard_parry_cd': 24, 'kit_guard_parry_flat': 1.5, 'kit_guard_parry_land_p': 1.0}),
 }
-ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4, **CANDS_PARRY)
+# T0b narrow (压 B / 弱化 A): flatter 0.6~0.8×B + 更长 CD; B2 更弱; A_weak=半伤非全抹
+CANDS_PARRY_T0B = {
+    'G2_parry_B': ('q03', 'any', 'T0b·招架 B cd27 flat×0.7B·最优',
+                  {'kit_guard_parry_cd': 27, 'kit_guard_parry_flat': 0.7, 'kit_guard_parry_land_p': 1.0}),
+    'G2_parry_B_ap': ('q03', 'any', 'T0b·招架 B cd27 flat×0.7B·乱按',
+                     {'kit_guard_parry_cd': 27, 'kit_guard_parry_flat': 0.7, 'kit_guard_parry_land_p': 0.45,
+                      'kit_guard_parry_spam': 0.12}),
+    'G2_parry_B2': ('q03', 'any', 'T0b·招架 B2 cd28 flat×0.45B·最优',
+                   {'kit_guard_parry_cd': 28, 'kit_guard_parry_flat': 0.45, 'kit_guard_parry_land_p': 1.0}),
+    'G2_parry_B2_ap': ('q03', 'any', 'T0b·招架 B2 cd28 flat×0.45B·乱按',
+                      {'kit_guard_parry_cd': 28, 'kit_guard_parry_flat': 0.45, 'kit_guard_parry_land_p': 0.45,
+                       'kit_guard_parry_spam': 0.12}),
+    'G2_parry_A_weak': ('q03', 'any', 'T0b·招架 A_weak cd27 预警半伤·最优',
+                       {'kit_guard_parry_cd': 27, 'kit_guard_parry': 1, 'kit_guard_parry_keep': 0.5,
+                        'kit_guard_parry_land_p': 1.0}),
+    'G2_parry_A_weak_ap': ('q03', 'any', 'T0b·招架 A_weak cd27 预警半伤·乱按',
+                          {'kit_guard_parry_cd': 27, 'kit_guard_parry': 1, 'kit_guard_parry_keep': 0.5,
+                           'kit_guard_parry_land_p': 0.45, 'kit_guard_parry_spam': 0.12}),
+}
+ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,
+           **CANDS_PARRY, **CANDS_PARRY_T0B)
 
 
 def fams(c):
@@ -297,7 +317,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return

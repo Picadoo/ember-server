@@ -180,6 +180,7 @@
 | 2026-10-07 | 策划 · 初稿 STATUS **待批 A** · 荐方案 M（预警短窗招架）；R=搁置改灰印横向；W 否决旧壁垒表 |
 | 2026-10-07 | 总控 · STATUS **已批 A** · 采纳方案 M（先 T0；R 不首批；W 否决）；本批注只 docs |
 | 2026-10-07 | 总控 · T0 招架模拟 **❌**（见 STATUS-ember-guard-skill-parry-t0）；不开 T1；可换窗长/CD/A↔B 再跑 |
+| 2026-10-07 | 总控 · T0b 收窄 **✅**（见 STATUS-ember-guard-skill-parry-t0b）；过线 `G2_parry_B2`；**可批 T1**；不开 T0c；不落 R |
 
 ---
 
@@ -194,4 +195,4 @@
 
 ---
 
-*已批 A（方案 M）；T0 ❌（见 STATUS）；过线前禁线上 yml/Java / 声称 T1。*
+*已批 A（方案 M）；T0 ❌ · T0b ✅（`G2_parry_B2`）；**可批 T1 施工**；施工前仍禁擅自改线上 yml/Java。*

@@ -385,9 +385,9 @@ def spread_burn(owner, mobs, t):
 #                      moves). Light / follow-up / unknown skills never trigger the press — so 守招 and 踏步 do not
 #                      overlap on the same dodgeable cone/line.
 #                      kit_guard_nobusy / kit_guard_busy_secs  absorb without locking swings (or shorter lock).
-#   守招招架 (T0 换机制 · DESIGN-ember-guard-skill-pivot): kit_guard_parry_cd / kit_guard_parry /
-#                      kit_guard_parry_flat / kit_guard_parry_land_p / kit_guard_parry_spam
-#                      预警落地短窗：按在窗内 → 单次无效(A) 或 一次 flat 反打(B)；窗外/乱按耗独立 CD 无减伤。
+#   守招招架 (T0/T0b · DESIGN-ember-guard-skill-pivot): kit_guard_parry_cd / kit_guard_parry /
+#                      kit_guard_parry_flat / kit_guard_parry_keep / kit_guard_parry_land_p / kit_guard_parry_spam
+#                      预警落地短窗：窗内 → 无效(A) / 保留比例(A_weak keep) / flat 反打(B)；窗外/乱按耗独立 CD 无减伤。
 #                      禁均匀 kit_guard_red 永久乘 / kit_q_shared / kit_guard_charge。
 KIT_KEYS = frozenset(('kit_guard_cd', 'kit_int_cd', 'kit_gather_cd', 'kit_dash_cd', 'kit_mark_cd', 'kit_step_cd',
                       'kit_guard_parry_cd'))
@@ -651,15 +651,23 @@ class Fight:
                 if rec is not None:
                     rec['n_hit_burst'] += 1
         dmg = raw * self.st['M']
-        # T0 parry: single telegraph nullify (A) or flat counter (B); outside window = no mitigation
+        # T0/T0b parry: nullify (A) / keep-frac (A_weak) / flat counter (B); outside window = no mitigation
         if kind == 'tele' and getattr(self, 'parry_once', False):
             self.parry_once = False
             flat = gm(st, 'kit_guard_parry_flat', 0.0)
+            keep = gm(st, 'kit_guard_parry_keep', 0.0)
             if flat > 0:
                 # Mode B: counter flat × B to boss (tele still lands); pending applied in segment
                 self.parry_flat_pending = flat * st['B']
                 if rec is not None:
                     rec['n_parry_flat'] = rec.get('n_parry_flat', 0) + 1
+            elif keep > 0:
+                # Mode A_weak: this telegraph lands at keep fraction (e.g. 0.5 = half); not uniform window red
+                absorbed = dmg * (1.0 - keep)
+                if rec is not None:
+                    rec['parry_abs'] = rec.get('parry_abs', 0.0) + absorbed
+                    rec['n_parry_hit'] = rec.get('n_parry_hit', 0) + 1
+                dmg = dmg * keep
             else:
                 # Mode A: this telegraph hit nullified
                 if rec is not None:
