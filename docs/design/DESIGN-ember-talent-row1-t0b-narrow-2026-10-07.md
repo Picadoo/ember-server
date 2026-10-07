@@ -80,7 +80,15 @@ python3 tools/p1sim/sidegrade.py screen --ids t1a,t1b,t1c,D1b,F7b,W6b --n 2000 -
 |----|-----|
 | 2026-10-07 | 初稿 · 待批 A · 响应 T0 ❌ 边缘 |
 | 2026-10-07 | 总控批 **已批 A** · 采纳 D1b/F7b/W6b · T0b 复跑中 |
+| 2026-10-07 | T0b ❌ → T0c 回补半页指针（D1c/F7c/W6c · 待批） |
 | 2026-10-07 | 施工/T0b | 按 §1 系数复跑 D1b/F7b/W6b · ±2pp → **❌** · `STATUS-ember-talent-row1-t0b-2026-10-07.md`；不开 T1 |
 
 - 主规格：`DESIGN-ember-talent-row1-sidegrade-2026-10-07.md`（已批 A；本半页 = T0b 系数补丁）  
 - T0 报告：`STATUS-ember-talent-row1-t0-2026-10-07.md`
+
+---
+
+## 6. T0c 回补指针
+
+T0b ❌ 后回补见 [`DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md`](DESIGN-ember-talent-row1-t0c-narrow-2026-10-07.md)（**待批 A** · D1c/F7c/W6c）。**禁 T1**。
+
