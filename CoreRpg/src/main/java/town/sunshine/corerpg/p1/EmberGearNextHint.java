@@ -3,17 +3,22 @@ package town.sunshine.corerpg.p1;
 import town.sunshine.corerpg.p1.EmberUpgradeRules.Cost;
 
 /**
- * D299 · 再刷短反馈方案 M：成色 / 精工近档文案（装备页 / 工坊只读）+ 结算相对穿着对照。
+ * D299 · 再刷短反馈：成色 / 精工近档；D307 · 工坊菜单诚实：强化/升阶/互换/分解费用行 + 缺料半行。
  * Bukkit-free so unit tests pin the strings.
  */
 public final class EmberGearNextHint {
 
     private EmberGearNextHint() {}
 
-    /** Compact cost: {@code 胚16 骨16 币1600} (matches design). */
+    /**
+     * Compact cost mirroring {@link Cost#label()} order: shards/cores/blanks/bone/coins.
+     * Refine/quality stay {@code 胚N 骨N 币N}; enhance/upgrade add {@code 碎片N 核心N}.
+     */
     public static String costShort(Cost c) {
         if (c == null) return "";
         StringBuilder sb = new StringBuilder();
+        if (c.shards > 0) sb.append("碎片").append(c.shards).append(' ');
+        if (c.cores > 0) sb.append("核心").append(c.cores).append(' ');
         if (c.blanks > 0) sb.append("胚").append(c.blanks).append(' ');
         if (c.bone > 0) sb.append("骨").append(c.bone).append(' ');
         if (c.coins > 0) sb.append("币").append(c.coins);
@@ -49,6 +54,62 @@ public final class EmberGearNextHint {
         Cost c = EmberUpgradeRules.refineCost(d.craft);
         if (c == null) return "精工 " + craftPct(d.craft) + " · 已满";
         return "精工 " + craftPct(d.craft) + " → " + craftPct(d.craft + 1) + "（" + costShort(c) + "）";
+    }
+
+    /**
+     * D307 W1a · 强化本次费用 + 成功率/保底。满档或异常返回错误短句。
+     * 形：{@code +3→+4 · 碎片12 币120 · 85%（1/3）}；保底次加「必成」。
+     */
+    public static String enhanceLine(EmberItemData d) {
+        if (d == null) return "";
+        EmberUpgradeRules.Plan c = EmberUpgradeRules.enhanceCheck(d);
+        if (!c.ok()) return c.error;
+        int t = d.enhance + 1;
+        int pct = (int) Math.round(EmberUpgradeRules.rate(t) * 100);
+        int n = EmberUpgradeRules.attemptNo(d);
+        int max = EmberUpgradeRules.maxTries(t);
+        String pity = EmberUpgradeRules.guaranteed(d)
+                ? n + "/" + max + "必成"
+                : n + "/" + max;
+        return "+" + d.enhance + "→+" + t + " · " + costShort(c.cost) + " · " + pct + "%（" + pity + "）";
+    }
+
+    /**
+     * D307 W1a · 升阶本次费用。闸未开时诚实「需首通 Q0x」；不可升阶时短句。
+     * {@code gateOk} = 本人已首通 upgradeFlag(tier)。
+     */
+    public static String upgradeLine(EmberItemData d, boolean gateOk) {
+        if (d == null) return "";
+        Cost c = EmberUpgradeRules.upgradeCost(d.tier);
+        if (c == null) {
+            if (d.tier == 0) return "T0 不能升阶";
+            return "已是最高阶 T" + d.tier;
+        }
+        String flag = EmberUpgradeRules.upgradeFlag(d.tier);
+        String step = "T" + d.tier + "→T" + (d.tier + 1) + " · " + costShort(c);
+        if (!gateOk) return "需首通 " + flag.toUpperCase(java.util.Locale.ROOT) + " · " + costShort(c);
+        return step;
+    }
+
+    /** D307 W1a · 互换免费口径（与 ForgeService 聊天预览一致）。 */
+    public static String swapLine() {
+        return "免费 · 交换强化等级+失败计数";
+    }
+
+    /**
+     * D307 W1a · 分解只读得胚预览。不可分解时返回检查短句；可分解 {@code 得胚×T}。
+     */
+    public static String dismantleYieldLine(EmberItemData d) {
+        if (d == null) return "";
+        String why = EmberUpgradeRules.dismantleCheck(d);
+        if (why != null) return why;
+        return "得胚×" + EmberUpgradeRules.dismantleYield(d);
+    }
+
+    /** D307 W1b · 缺料半行；空列表 → 空串（材料够不刷红）。口径对齐 ForgeService lacking 人话。 */
+    public static String lackHalf(java.util.List<String> lack) {
+        if (lack == null || lack.isEmpty()) return "";
+        return "缺少：" + String.join("，", lack);
     }
 
     /**

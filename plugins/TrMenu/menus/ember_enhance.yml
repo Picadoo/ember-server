@@ -1,5 +1,6 @@
 # 强化子菜单 — docs/design/DESIGN-ember-enhance-socket.md §7
 # 手持余烬装备后进行强化
+# D307 W1d：旧轨旁注 — P1 请走主菜单工坊（不重做旧强化经济）
 
 Title: '§c余烬 · 强化'
 
@@ -20,6 +21,7 @@ Events:
   Open:
     - 'sound: BLOCK_ANVIL_LAND-1-0.6'
     - 'tell: §7请手持 §c余烬之刃 §7或 §e余烬护符 §7后再操作。'
+    - 'tell: §8P1 装备请走主菜单「工坊」（ember_p1_forge）；本页仅旧物品强化。'
 
 Icons:
   '#':
@@ -82,6 +84,8 @@ Icons:
         - '§7+4～+6 §e中危 · 失败掉 1'
         - '§7+7～+9 §c高危 · 可用保护券'
         - '§7+10 §b需稳固符 · 失败不掉档'
+        - ''
+        - '§8P1 请走主菜单工坊（本页旧物）'
         - ''
     actions:
       all:

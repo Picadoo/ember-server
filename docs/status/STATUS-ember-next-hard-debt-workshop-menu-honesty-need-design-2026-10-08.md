@@ -5,7 +5,7 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D306 日路由已收 · 加固 §1A–§1C 主债 M 波已清（走廊 D300 · 挂机 D285+D305 · 枢纽 §1B D306）· 战斗可感波 D301–D304 已收 · 灰印/天赋 HOLD · **样本门禁 R 窗仍为余下「真硬」战斗/经济债**  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（待批 A）：** 派单策划出 [`DESIGN-ember-workshop-menu-honesty-2026-10-08.md`](../design/DESIGN-ember-workshop-menu-honesty-2026-10-08.md) · STATUS=待批 A · 荐 M/R/W · backlog `B-workshop-menu-honesty`  
+**硬规格（已上线 D307）：** 派单策划出 [`DESIGN-ember-workshop-menu-honesty-2026-10-08.md`](../design/DESIGN-ember-workshop-menu-honesty-2026-10-08.md) · STATUS=待批 A · 荐 M/R/W · backlog `B-workshop-menu-honesty`  
 **打开理由：** 非样本门禁的体验硬债（走廊/深渊/团本/预警/挂机层/枢纽日路由）M 波已收；余下战斗/价窗真硬债几乎全是 **样本门禁 R**。现网工坊页仍多处写「**消耗以聊天为准**」——D299 只补了近档/相对穿着短反馈，**费用仍不跟菜单同屏**。要在**不改 refineCost/qualityCost、不改掉落、不抬体力**前提下，让强化/升阶/精工/成色/互换的消耗与材料闸**菜单内诚实可读**（**≠ forge R 价/节奏样本窗**）。
 
 ---

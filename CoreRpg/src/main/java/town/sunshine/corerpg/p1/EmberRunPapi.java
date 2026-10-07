@@ -43,7 +43,7 @@ public final class EmberRunPapi {
         ABYSS,
         /** raid_&lt;raid&gt; */
         RAID,
-        /** awaken_route / awaken / awaken_next / set_progress / stats / ehp / blade / charm / D299 next_* / held_next_* */
+        /** awaken_route / awaken / awaken_next / set_progress / stats / ehp / blade / charm / D299 next_* / held_next_* / D307 held_*_cost|lack */
         LOADOUT,
         /** codex* */
         CODEX,
@@ -108,7 +108,12 @@ public final class EmberRunPapi {
                 // D299 再刷短反馈：装备页近档 + 工坊手持近档
                 || "blade_next_q".equals(key) || "blade_next_c".equals(key)
                 || "charm_next_q".equals(key) || "charm_next_c".equals(key)
-                || "held_next_q".equals(key) || "held_next_c".equals(key);
+                || "held_next_q".equals(key) || "held_next_c".equals(key)
+                // D307 工坊菜单诚实：本次费用 / 缺料 / 互换免费 / 分解得胚
+                || "held_enhance_cost".equals(key) || "held_enhance_lack".equals(key)
+                || "held_upgrade_cost".equals(key) || "held_upgrade_lack".equals(key)
+                || "held_refine_lack".equals(key) || "held_quality_lack".equals(key)
+                || "held_swap_cost".equals(key) || "held_dismantle_yield".equals(key);
     }
 
     /** D144 余烬连战 menu line (weekly reward still open vs. practice only). */
@@ -359,20 +364,75 @@ public final class EmberRunPapi {
             // D299 W1b：工坊手持件近档（无手持 / 非 P1 → 提示）
             case "held_next_q": return heldNext(p, true);
             case "held_next_c": return heldNext(p, false);
+            // D307 W1a/b：工坊本次费用 / 缺料 / 互换免费 / 分解得胚
+            case "held_enhance_cost": return heldForgeLine(p, "enhance");
+            case "held_enhance_lack": return heldForgeLack(p, "enhance");
+            case "held_upgrade_cost": return heldForgeLine(p, "upgrade");
+            case "held_upgrade_lack": return heldForgeLack(p, "upgrade");
+            case "held_refine_lack": return heldForgeLack(p, "refine");
+            case "held_quality_lack": return heldForgeLack(p, "quality");
+            case "held_swap_cost": return EmberGearNextHint.swapLine();
+            case "held_dismantle_yield": return heldForgeLine(p, "dismantle");
             default: return l.nextAwakeningHint();
         }
     }
 
     /** D299 W1b：主手 P1 件的成色/精工近档；非 P1 或空手则短提示。 */
     private String heldNext(Player p, boolean quality) {
+        EmberItemData d = heldTrusted(p);
+        if (d == null) return "§8手持刃或护符看近档";
+        return quality ? EmberGearNextHint.qualityLine(d) : EmberGearNextHint.craftLine(d);
+    }
+
+    /** D307：主手可信 P1 件；空手/非 P1/非本人 → null。 */
+    private EmberItemData heldTrusted(Player p) {
         org.bukkit.inventory.ItemStack it = p.getInventory().getItemInMainHand();
         EmberLoadoutService ls = runs.plugin().getEmberLoadouts();
-        if (ls == null || it == null || !ls.items().hasData(it)) return "§8手持刃或护符看近档";
+        if (ls == null || it == null || !ls.items().hasData(it)) return null;
         EmberItems.Read r = ls.items().read(it);
-        if (r == null || r.data == null) return "§8手持刃或护符看近档";
-        EmberItemData d = r.data;
-        if (ls.trust(p, d) != null) return "§8这件不是你的";
-        return quality ? EmberGearNextHint.qualityLine(d) : EmberGearNextHint.craftLine(d);
+        if (r == null || r.data == null) return null;
+        if (ls.trust(p, r.data) != null) return null;
+        return r.data;
+    }
+
+    /** D307 W1a：费用/闸/得胚行（与 UpgradeRules / Forge 预览同源）。 */
+    private String heldForgeLine(Player p, String kind) {
+        EmberItemData d = heldTrusted(p);
+        if (d == null) return "§8手持刃或护符";
+        if ("enhance".equals(kind)) return EmberGearNextHint.enhanceLine(d);
+        if ("upgrade".equals(kind)) {
+            String flag = EmberUpgradeRules.upgradeFlag(d.tier);
+            boolean gate = flag != null && runs.progressFlag(runs.plugin().getDataStore().get(p.getUniqueId()), flag);
+            return EmberGearNextHint.upgradeLine(d, gate);
+        }
+        if ("dismantle".equals(kind)) return EmberGearNextHint.dismantleYieldLine(d);
+        return "";
+    }
+
+    /** D307 W1b：缺料半行；材料够 / 无费用 → 空。 */
+    private String heldForgeLack(Player p, String kind) {
+        EmberItemData d = heldTrusted(p);
+        if (d == null) return "";
+        EmberUpgradeRules.Cost cost = null;
+        if ("enhance".equals(kind)) {
+            EmberUpgradeRules.Plan c = EmberUpgradeRules.enhanceCheck(d);
+            if (!c.ok()) return "";
+            cost = c.cost;
+        } else if ("upgrade".equals(kind)) {
+            cost = EmberUpgradeRules.upgradeCost(d.tier);
+            if (cost == null) return "";
+            String flag = EmberUpgradeRules.upgradeFlag(d.tier);
+            boolean gate = flag != null && runs.progressFlag(runs.plugin().getDataStore().get(p.getUniqueId()), flag);
+            if (!gate) return ""; // gate message already on cost line
+        } else if ("refine".equals(kind)) {
+            cost = EmberUpgradeRules.refineCost(d.craft);
+        } else if ("quality".equals(kind)) {
+            cost = EmberUpgradeRules.qualityCost(d.quality);
+        }
+        if (cost == null) return "";
+        EmberForgeService forge = runs.plugin().getEmberForge();
+        if (forge == null) return "";
+        return EmberGearNextHint.lackHalf(forge.lackingFor(p, cost));
     }
 
     private String codex(Player p, PlayerData d, String key) { // B2.180 图录 · 装备 (display only, §19.5)
