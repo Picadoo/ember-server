@@ -23,7 +23,7 @@
 # Behaviour-neutral: nothing in CoreRpg reads this file. Update it in the same commit as any new source / key / map.
 
 version: 1
-balance_version: 58
+balance_version: 60
 built_against: "CoreRpg 1.65.70 (D245)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
