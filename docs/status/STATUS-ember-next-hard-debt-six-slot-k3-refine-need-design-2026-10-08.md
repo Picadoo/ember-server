@@ -6,6 +6,7 @@
 **上游：** D326 观察批 M 执行中 · D325 live PASS · D324 Stage1 S3 观察继续 · D318 批 A·K0（K3 转备选、不授权 T0‴）· D308 门槛钉死 · 灰印/天赋 HOLD · Pack6 硬禁  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R** · **不改线上 set_bonus / bv / jar** · **观察期内不部署 K3** · **不写六槽新代码（本 tip 窗）**  
 **硬规格（待策划交稿）：** [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md)（待建）· STATUS=待批 A · backlog `B-six-slot-k3-same-slot-refine`  
+> **交稿旁注（D327 · 策划执行手）：** 硬规格已交 [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md) · STATUS=待批 A · 荐方案 M（观察期可离线 T0‴；施工/部署等绿出口或另签）· **本旁注零施工**（未改 jar/yml/开关）。
 **打开理由：** Stage2 已进 48h 观察，总控要求**持续推进**、不闲置在观察文档 alone。下一档真结构硬债 = D318 搁置的 **K3 同部位熔炼**——须先出 **docs-only 决策页**（是否做、规则钉死、何时授权另号 T0‴），**本窗零 live jar/yml**，观察期内**禁止部署**。
 
 ---
