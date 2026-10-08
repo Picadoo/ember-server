@@ -283,7 +283,7 @@ R6：标签和甲位在同一份 `.dat` 里，同一次存档写入。每个点�
 
 ---
 
-# 新 tip f6868515 复跑（进行中 · 中途存档 1 · 2026-10-08 14:00 UTC+8）
+# 新 tip f6868515 复跑（收束 · 中途存档 2 · 2026-10-08 14:06 UTC+8；后续在 tip 4d82b518 续跑）
 
 - tip `f6868515`（含 remember 落库门 DB_PENDING、pieces 自愈、待领与开关解耦、G8 菜单、超时文案、手册 §3.3/§3.4）。
 - worktree 已切到该 tip。全量测试：`Tests run: 666, Failures: 2`，失败仅 `EmberGrowthTest` D164/D165（预期）。`BUILD SUCCESS`，jar 已换到测试服（`server/plugins/CoreRpg.jar` sha256 前缀 `ac17b0b709d83b9c`，旧 jar 留在 `parked/CoreRpg-f3f1a065.jar`）。
@@ -333,3 +333,18 @@ R6：标签和甲位在同一份 `.dat` 里，同一次存档写入。每个点�
 **A1-6/A1-7 阻塞项：本 tip 已过。** DB_PENDING 期间 kill 与完成标记后 kill 均不再丢迁移甲 DB 行。
 
 A5（待领领取 kill 点）正在跑；其后 G、DB 宕机/自愈、E、H1 重跑。
+
+## A5 待领领取（f6868515，6/8 完成）
+
+| 例 | 写点 | 结果 |
+|---|---|---|
+| NA5-1…6 | claim give 前 → 最后 persist 后（行号 526–536） | 6 PASS，恰好领 1 次 |
+| NA5-7、NA5-8 | settle 重领 kill 点 | **未跑**（总控改切 tip 4d82b518，改在新 tip 续） |
+
+未在本 tip 跑完的：A6 抽查、G1–G8、G5 开关全关、DB 宕机、自愈、E 复核、N-H12 口径重跑、H7。总控正式指令：口径以 **4d82b518** 为准，下面切 tip 续跑。
+
+**f6868515 已确认的阻塞项消除证据（可保留）：**
+
+- NA1-6 / NA1-7 / NA1-5b：PASS（完成标记后 kill、DB_PENDING 期间 kill 均不丢迁移甲 DB 行，H=139.70）
+- NA2-6/7：`r`+uid 进待领、DB_PENDING 不二次重发
+- 全量测试 666/2（仅 D164/D165）
