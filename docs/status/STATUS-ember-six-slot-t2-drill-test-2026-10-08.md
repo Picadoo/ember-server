@@ -371,6 +371,19 @@ A5（待领领取 kill 点）正在跑；其后 G、DB 宕机/自愈、E、H1 �
 | 同 uid 在线副本数 | 1 |
 | 不变量 | 违反 0 |
 
-## A1 关键点抽查（4d82b518）
+## A1 关键点抽查（4d82b518）——3/3 PASS
 
-进行中：NA1-5b / NA1-6 / NA1-7。其后续：NA5-7/8、A6、G1–G8、DB 宕机、自愈、E、H12b。
+| 例 | 结果 | 要点 |
+|---|---|---|
+| NA1-5b | PASS | DB_PENDING 期间 kill，续上后 4 件齐全 |
+| NA1-6 | PASS | 完成标记+pieces 后 kill，ALREADY+(b)，4 件 active，H=139.70 |
+| NA1-7 | PASS | 去标签未存档 kill，同上 |
+
+## A5 收尾（NA5-7/8）——PASS
+
+| NA5-7 | settle C1 persist 前 | PASS |
+| NA5-8 | settle C1 后 / C2 save 前 | PASS |
+
+A5 全组 8/8 PASS（1–6 在 f6868515，7–8 在 4d82b518）。
+
+A6 因 tip 换行号（swapIn `savePlayerFile` 现为 577）误用 563 的一次作废，正在用 577 重跑；其后 G / DB / 自愈 / E / H12b。
