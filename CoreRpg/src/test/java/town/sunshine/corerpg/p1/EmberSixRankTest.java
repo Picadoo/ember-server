@@ -94,7 +94,8 @@ public class EmberSixRankTest {
         assertEquals("§f背包里：护腿 · 炽愈族", EmberSixPapi.text(true, v, 0, "armor_legs_cand"));
         assertEquals("1", EmberSixPapi.text(true, v, 0, "armor_all_has"));
         assertTrue(EmberSixPapi.text(true, v, 0, "armor_all").startsWith("§7将换上 2 件 · 生命 +"));
-        assertEquals("§e待领物品 3 件 · 点击领取", EmberSixPapi.text(true, v, 3, "armor_stash_line"));
+        assertEquals("§7护甲位原来的 3 件已存好 · §e点这里领取", EmberSixPapi.text(true, v, 3, "armor_stash_line"));
+        assertEquals("§7没有待领物品", EmberSixPapi.text(true, v, 0, "armor_stash_line"));
         assertEquals("3", EmberSixPapi.text(true, v, 3, "armor_stash"));
         assertEquals("", EmberSixPapi.text(true, v, 0, "armor_nosuch_x"));
         // switch off: everything blank, armor_on 0
@@ -146,5 +147,128 @@ public class EmberSixRankTest {
             }
         }
         assertTrue(keys >= 30);
+    }
+
+    static EmberItemData at(EmberItemData d, long sec) { return d.withOrigin(EmberItemData.Origin.of("ember_abyss", "boss", "r1", sec)); }
+
+    static String uidOrder(EmberSixRank.View v, int slot) {
+        StringBuilder sb = new StringBuilder();
+        for (EmberSixRank.Pick p : v.ranked.get(slot)) sb.append(p.piece.uid).append(',');
+        return sb.toString();
+    }
+
+    /** spec §5.4-3 final keys: delta → worn family (skipped for an empty slot) → charm family → tier → newer 获得时间 → uid */
+    @Test public void finalKeysAcquiredTimeThenUid() {
+        EmberItemData charm = piece("burst", "charm", 2, 1, 1, 3);
+        EmberItemData worn = piece("scorch", "chest", 2, 0, 0, 0);
+        // identical delta / family / tier: only 获得时间 differs → newer first; no provenance (0) is oldest
+        EmberItemData old = at(piece("sustain", "chest", 2, 2, 1, 0), 1_790_000_000L);
+        EmberItemData neu = at(piece("sustain", "chest", 2, 2, 1, 0), 1_791_000_000L);
+        EmberItemData none = piece("sustain", "chest", 2, 2, 1, 0);
+        assertEquals(0L, EmberSixRank.acquiredAt(none));
+        EmberSixRank.View v = EmberSixRank.view(T, null, charm, 20, 0, 0, new EmberItemData[]{null, worn, null, null}, Arrays.asList(none, old, neu));
+        assertSame(neu, v.ranked.get(1).get(0).piece);
+        assertSame(old, v.ranked.get(1).get(1).piece);
+        assertSame(none, v.ranked.get(1).get(2).piece);
+        // everything equal incl. time → uid ascending decides
+        EmberItemData u1 = at(piece("sustain", "chest", 2, 2, 1, 0), 5L), u2 = at(piece("sustain", "chest", 2, 2, 1, 0), 5L);
+        EmberItemData lo = u1.uid.compareTo(u2.uid) < 0 ? u1 : u2;
+        v = EmberSixRank.view(T, null, charm, 20, 0, 0, new EmberItemData[]{null, worn, null, null}, Arrays.asList(u2, u1));
+        assertSame(lo, v.best[1].piece);
+        // time is below tier: an older higher-tier piece beats a newer lower-tier one (same delta / family)
+        EmberItemData t3old = at(piece("sustain", "chest", 3, 2, 1, 0), 1L), t1new = at(piece("sustain", "chest", 1, 2, 1, 0), 9L);
+        v = EmberSixRank.view(T, null, charm, 20, 0, 0, new EmberItemData[]{null, worn, null, null}, Arrays.asList(t1new, t3old));
+        assertSame(t3old, v.best[1].piece);
+        // empty slot: the worn-family key is skipped, the charm family decides before tier / time
+        EmberItemData sc = at(piece("scorch", "chest", 3, 2, 1, 0), 9L), bu = at(piece("burst", "chest", 1, 2, 1, 0), 1L);
+        v = EmberSixRank.view(T, null, charm, 20, 0, 0, new EmberItemData[4], Arrays.asList(sc, bu));
+        assertSame(bu, v.best[1].piece);
+        v = EmberSixRank.view(T, null, charm, 20, 0, 0, new EmberItemData[]{null, worn, null, null}, Arrays.asList(bu, sc));
+        assertSame("worn slot: worn family (scorch) first", sc, v.best[1].piece);
+    }
+
+    /** T1-8: the same state refreshed many times (any backpack order) gives the identical full order in every slot */
+    @Test public void sameInputRefreshedManyTimesKeepsTheOrder() {
+        Random r = new Random(5318);
+        for (int n = 0; n < 300; n++) {
+            EmberItemData charm = piece(FAM[r.nextInt(3)], "charm", 1 + r.nextInt(3), r.nextInt(4), r.nextInt(4), r.nextInt(11));
+            EmberItemData[] worn = new EmberItemData[4];
+            for (int i = 0; i < 4; i++) if (r.nextBoolean()) worn[i] = piece(FAM[r.nextInt(3)], EmberItemData.ARMOR_SLOTS.get(i), 1 + r.nextInt(3), r.nextInt(4), r.nextInt(4), 0);
+            List<EmberItemData> cands = new ArrayList<EmberItemData>();
+            int k = 4 + r.nextInt(14);
+            for (int j = 0; j < k; j++) { // few distinct values → many full ties down to time / uid
+                EmberItemData d = piece(FAM[r.nextInt(2)], EmberItemData.ARMOR_SLOTS.get(r.nextInt(4)), 1 + r.nextInt(2), r.nextInt(2), r.nextInt(2), 0);
+                cands.add(r.nextBoolean() ? at(d, 1_790_000_000L + r.nextInt(3)) : d);
+            }
+            int lv = 1 + r.nextInt(30);
+            EmberSixRank.View first = EmberSixRank.view(T, null, charm, lv, 0, 0, worn, cands);
+            String[] ref = new String[4];
+            for (int i = 0; i < 4; i++) ref[i] = uidOrder(first, i);
+            String plan = EmberSixRank.planKey(first, EmberSixRank.allPlan(first));
+            for (int rep = 0; rep < 20; rep++) {
+                List<EmberItemData> sh = new ArrayList<EmberItemData>(cands);
+                java.util.Collections.shuffle(sh, r);
+                EmberSixRank.View v = EmberSixRank.view(T, null, charm, lv, 0, 0, worn, sh);
+                for (int i = 0; i < 4; i++) assertEquals(ref[i], uidOrder(v, i));
+                assertEquals(plan, EmberSixRank.planKey(v, EmberSixRank.allPlan(v)));
+            }
+            // the comparator is a strict total order on distinct pieces (never 0 → no reliance on sort stability)
+            for (int i = 0; i < 4; i++) {
+                List<EmberSixRank.Pick> ps = first.ranked.get(i);
+                for (int a = 0; a < ps.size(); a++) for (int b = 0; b < ps.size(); b++) {
+                    int c = EmberSixRank.order(ps.get(a), ps.get(b), first.worn[i], charm);
+                    assertEquals(Integer.signum(Integer.compare(a, b)), Integer.signum(c));
+                }
+            }
+        }
+    }
+
+    /** 「全部换上」: ties keep the worn piece; two clicks within 30 s on the same plan run it; changed / expired → refresh, never silent */
+    @Test public void equipAllTwoClickConfirm() {
+        assertEquals(EmberSixRank.Confirm.PREVIEW, EmberSixRank.confirm(null, null, 1000L, "1:a;"));
+        assertEquals(EmberSixRank.Confirm.EXECUTE, EmberSixRank.confirm(1000L, "1:a;", 1000L + 29_999L, "1:a;"));
+        assertEquals(EmberSixRank.Confirm.EXECUTE, EmberSixRank.confirm(1000L, "1:a;", 1000L + 30_000L, "1:a;"));
+        assertEquals("timed out", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(1000L, "1:a;", 1000L + 30_001L, "1:a;"));
+        assertEquals("plan changed", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(1000L, "1:a;", 2000L, "1:b;"));
+        assertEquals("plan grew", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(1000L, "1:a;", 2000L, "1:a;2:c;"));
+        assertEquals("clock went back", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(5000L, "1:a;", 4000L, "1:a;"));
+        assertEquals("§7背包有变化，已刷新方案", EmberSixRank.REFRESHED_TEXT);
+
+        EmberItemData charm = piece("scorch", "charm", 2, 2, 2, 5);
+        EmberItemData[] worn = {piece("scorch", "head", 2, 2, 2, 0), null, null, piece("scorch", "boots", 2, 1, 1, 0)};
+        EmberItemData sameHead = piece("burst", "head", 3, 2, 2, 0); // same q / f → delta 0 → keep the worn head
+        EmberItemData chest = piece("sustain", "chest", 1, 0, 0, 0);  // empty slot → filled even at delta 0
+        EmberItemData boots = piece("scorch", "boots", 2, 3, 3, 0);
+        List<EmberItemData> cands = new ArrayList<EmberItemData>(Arrays.asList(sameHead, chest, boots));
+        EmberSixRank.View v = EmberSixRank.view(T, null, charm, 25, 0, 0, worn, cands);
+        assertEquals(0.0, v.best[0].delta, 0);
+        List<Integer> todo = EmberSixRank.allPlan(v);
+        assertEquals(Arrays.asList(1, 3), todo);
+        String k1 = EmberSixRank.planKey(v, todo);
+        // simulated clicks: preview → (backpack changes: a better chest arrives) → refresh, nothing runs → confirm runs
+        long t0 = 10_000L;
+        assertEquals(EmberSixRank.Confirm.PREVIEW, EmberSixRank.confirm(null, null, t0, k1));
+        EmberItemData chest2 = piece("scorch", "chest", 2, 3, 3, 0);
+        cands.add(chest2);
+        v = EmberSixRank.view(T, null, charm, 25, 0, 0, worn, cands);
+        String k2 = EmberSixRank.planKey(v, EmberSixRank.allPlan(v));
+        assertNotEquals(k1, k2);
+        assertEquals(EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(t0, k1, t0 + 5_000L, k2));
+        assertEquals(EmberSixRank.Confirm.EXECUTE, EmberSixRank.confirm(t0 + 5_000L, k2, t0 + 9_000L, k2));
+        // refreshing the same state never changes the key (no spurious "changed")
+        assertEquals(k2, EmberSixRank.planKey(EmberSixRank.view(T, null, charm, 25, 0, 0, worn, Arrays.asList(chest2, boots, chest, sameHead)),
+                EmberSixRank.allPlan(EmberSixRank.view(T, null, charm, 25, 0, 0, worn, Arrays.asList(chest2, boots, chest, sameHead)))));
+    }
+
+    /** the service wiring: refresh text is sent before the new preview; the empty-plan branch also reports a stale preview */
+    @Test public void serviceUsesTheConfirmDecision() throws java.io.IOException {
+        String src = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberSixSlotService.java")),
+                java.nio.charset.StandardCharsets.UTF_8);
+        int a = src.indexOf("void equipAll(");
+        String body = src.substring(a, src.indexOf("boolean swapIn(", a));
+        assertTrue(body.contains("EmberSixRank.confirm("));
+        assertTrue(body.indexOf("REFRESHED_TEXT") < body.indexOf("将换上："));
+        assertTrue(body.indexOf("c != EmberSixRank.Confirm.EXECUTE") < body.indexOf("swapIn("));
+        assertTrue(src.contains("EmberSixMigration.claimGuarded("));
     }
 }

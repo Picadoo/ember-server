@@ -34,10 +34,13 @@ public final class EmberSixRank {
         public final EmberItemData[] worn;
         public final Pick[] best = new Pick[4];
         public final int[] count = new int[4];
+        /** every candidate per slot in final order (best first); empty list when the backpack has none */
+        public final List<List<Pick>> ranked = new ArrayList<List<Pick>>();
         public final double h;
         View(EmberTables t, EmberItemData blade, EmberItemData charm, int level, double festHp, double festDef, EmberItemData[] worn, double h) {
             this.t = t; this.blade = blade; this.charm = charm; this.level = level; this.festHp = festHp; this.festDef = festDef;
             this.worn = worn; this.h = h;
+            for (int i = 0; i < 4; i++) ranked.add(Collections.<Pick>emptyList());
         }
         public double hWith(EmberItemData[] armor) {
             return EmberLoadout.compute(t, blade, charm, level, festHp, festDef, armor).h;
@@ -68,11 +71,16 @@ public final class EmberSixRank {
                 @Override public int compare(Pick x, Pick y) { return order(x, y, w[slot], v.charm); }
             });
             v.best[i] = ps.get(0);
+            v.ranked.set(i, Collections.unmodifiableList(ps));
         }
         return v;
     }
 
-    /** negative = x first */
+    /**
+     * Sort keys (spec §5.4-3): whole-loadout H delta (larger first) → same family as the piece worn in that slot (skipped
+     * when the slot is empty) → same family as the charm → higher drop tier → newer {@link #acquiredAt} → uid.
+     * negative = x first
+     */
     static int order(Pick x, Pick y, EmberItemData worn, EmberItemData charm) {
         int c = Double.compare(y.delta, x.delta);
         if (c != 0) return c;
@@ -86,7 +94,41 @@ public final class EmberSixRank {
         }
         c = Integer.compare(y.piece.tier, x.piece.tier);
         if (c != 0) return c;
-        return x.piece.uid.compareTo(y.piece.uid);
+        c = Long.compare(acquiredAt(y.piece), acquiredAt(x.piece)); // newer first
+        if (c != 0) return c;
+        return x.piece.uid.compareTo(y.piece.uid); // deterministic last key: the same state never reorders on refresh
+    }
+
+    /**
+     * 获得时间 for the tie-break (spec §5.4-3). Items carry no separate "obtained" field; the D245 provenance stamp
+     * {@code origin.at} (epoch seconds of the reward / issue that created the piece) is used. Pieces without provenance
+     * (0) sort as the oldest.
+     */
+    static long acquiredAt(EmberItemData d) {
+        return d == null || d.origin == null || !d.origin.present() ? 0L : Math.max(0L, d.origin.at);
+    }
+
+    public enum Confirm { PREVIEW, REFRESHED, EXECUTE }
+
+    public static final long CONFIRM_MS = 30000L;
+    public static final String REFRESHED_TEXT = "§7背包有变化，已刷新方案";
+
+    /** the plan's identity: slot → piece uid, in slot order */
+    public static String planKey(View v, List<Integer> todo) {
+        StringBuilder key = new StringBuilder();
+        for (int i : todo) key.append(i).append(':').append(v.best[i].piece.uid).append(';');
+        return key.toString();
+    }
+
+    /**
+     * 「全部换上」 two-click confirm (spec §5.4-4): no pending preview → PREVIEW; a pending preview for the same plan within
+     * 30 s → EXECUTE; a pending preview that timed out or whose plan changed → REFRESHED (nothing runs, the new plan is
+     * shown with {@link #REFRESHED_TEXT}; never a silent failure).
+     */
+    public static Confirm confirm(Long pendingAt, String pendingKey, long now, String key) {
+        if (pendingAt == null || pendingKey == null) return Confirm.PREVIEW;
+        if (now - pendingAt <= CONFIRM_MS && now >= pendingAt && key.equals(pendingKey)) return Confirm.EXECUTE;
+        return Confirm.REFRESHED;
     }
 
     /** 「全部换上」: slots whose best candidate raises H, or fills an empty slot (ties keep the current piece and family) */

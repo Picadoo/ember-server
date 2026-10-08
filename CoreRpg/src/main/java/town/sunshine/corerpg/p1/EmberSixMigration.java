@@ -319,6 +319,19 @@ public final class EmberSixMigration<S> {
         return new int[]{got, rec.stash.size()};
     }
 
+    /**
+     * {@link #claim} with a per-player in-flight guard: a second claim for the same key while one is running (repeated
+     * click, re-entrant event) returns null and touches nothing.
+     */
+    public static <S> int[] claimGuarded(java.util.Set<Object> busy, Object key, Port<S> port, ClaimPort<S> cp) {
+        if (!busy.add(key)) return null;
+        try {
+            return claim(port, cp);
+        } finally {
+            busy.remove(key);
+        }
+    }
+
     /** drop entries whose tagged stack already reached the player (crash between give and save); untag leftovers */
     public static <S> int settleClaims(Port<S> port, ClaimPort<S> cp, Record<S> rec) {
         int n = 0;

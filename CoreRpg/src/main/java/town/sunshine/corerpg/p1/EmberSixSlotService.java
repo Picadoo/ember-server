@@ -273,7 +273,7 @@ public final class EmberSixSlotService implements Listener {
                 loadouts.markDirty(p);
                 p.sendMessage(P + "护甲栏已换上和你护符对应的四件护甲，生命和防御不变。");
                 int n = stashCount(p.getUniqueId());
-                if (n > 0) p.sendMessage(P + "护甲栏里原来的 " + n + " 件东西已收进「待领物品」：打开 装备 → 护甲，点「领取」即可拿回。");
+                if (n > 0) p.sendMessage(P + EmberSixPapi.stashLine(n) + "§7（装备 → 护甲）");
             } else if (o == EmberSixMigration.Outcome.NO_TEMPLATE) {
                 alert(p, "六槽迁移未执行：护甲物品模板缺失 " + m.lastDetail);
             }
@@ -315,12 +315,15 @@ public final class EmberSixSlotService implements Listener {
         return true;
     }
 
+    private final Set<Object> claimBusy = Collections.synchronizedSet(new HashSet<Object>());
+
     public void claim(Player p) {
         viewCache.remove(p.getUniqueId());
         LivePort port = new LivePort(p);
         int[] r;
         try {
-            r = EmberSixMigration.claim(port, port);
+            r = EmberSixMigration.claimGuarded(claimBusy, p.getUniqueId(), port, port);
+            if (r == null) return; // a claim for this player is still running (repeated click): it finishes the job
         } catch (RuntimeException ex) {
             alert(p, "待领领取中断：" + ex);
             p.sendMessage(P + ChatColor.RED + "领取没有完成，物品仍在待领里，稍后再试。");
@@ -386,16 +389,20 @@ public final class EmberSixSlotService implements Listener {
     void equipAll(Player p, boolean confirm) {
         EmberSixRank.View v = view(p);
         List<Integer> todo = EmberSixRank.allPlan(v);
-        if (todo.isEmpty()) { p.sendMessage(P + "四个部位都已是最好的一件，不用换。"); return; }
-        StringBuilder key = new StringBuilder();
-        for (int i : todo) key.append(i).append(':').append(v.best[i].piece.uid).append(';');
+        if (todo.isEmpty()) {
+            if (allPending.remove(p.getUniqueId()) != null) p.sendMessage(P + EmberSixRank.REFRESHED_TEXT);
+            p.sendMessage(P + "四个部位都已是最好的一件，不用换。");
+            return;
+        }
+        String key = EmberSixRank.planKey(v, todo);
         Object[] at = allPending.get(p.getUniqueId());
-        // second click within 30 s on the same plan = confirm (same as the forge); a changed plan previews again
-        boolean armed = at != null && System.currentTimeMillis() - (Long) at[0] <= 30000L && key.toString().equals(at[1]);
-        if (!armed) {
-            allPending.put(p.getUniqueId(), new Object[]{System.currentTimeMillis(), key.toString()});
+        long now = System.currentTimeMillis();
+        EmberSixRank.Confirm c = EmberSixRank.confirm(at == null ? null : (Long) at[0], at == null ? null : (String) at[1], now, key);
+        if (c != EmberSixRank.Confirm.EXECUTE) {
+            allPending.put(p.getUniqueId(), new Object[]{now, key});
             StringBuilder sb = new StringBuilder();
             for (int i : todo) sb.append(sb.length() == 0 ? "" : "、").append(EmberSixSlot.slotLabel(i));
+            if (c == EmberSixRank.Confirm.REFRESHED) p.sendMessage(P + EmberSixRank.REFRESHED_TEXT);
             p.sendMessage(P + "将换上：" + sb + "（合计" + EmberSixRank.deltaText(EmberSixRank.allDelta(v, todo)) + "）。30 秒内再点一次「全部换上」确认。");
             return;
         }

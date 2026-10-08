@@ -32,7 +32,7 @@ public class EmberSixMigrationTest {
     }
 
     /** the whole fake player + server: live inventory, player file on disk, record file, DB */
-    static final class World implements EmberSixMigration.Port<String>, EmberSixMigration.ClaimPort<String> {
+    static class World implements EmberSixMigration.Port<String>, EmberSixMigration.ClaimPort<String> {
         String[] armor = new String[4];
         String[] pack = new String[36];
         String[] diskArmor, diskPack;
@@ -405,5 +405,101 @@ public class EmberSixMigrationTest {
             assertEquals(4, w.db.size());
             if (f0 != null) assertEquals(f0, w.foreign());
         }
+    }
+
+    static int countOrig(World w) { int n = 0; for (String x : w.all()) { String t = World.strip(x); if (t.matches("a[0-3]")) n++; } return n; }
+
+    /** spec §5.4-1: claim what fits, the rest stays in 待领; a crash / graceful stop / hard kill mid-claim at any step loses or doubles nothing */
+    @Test public void partialClaimUnderCrashesAtEveryStep() {
+        int scenarios = 0;
+        for (int free = 0; free <= 5; free++) {
+            World probe = world(3);
+            probe.migrate();
+            for (int i = 0; i < free; i++) probe.pack[i * 7] = null;
+            probe.persistInventory0();
+            int c0 = probe.calls;
+            int[] r = EmberSixMigration.claim(probe, probe);
+            int fit = Math.min(free, 4);
+            assertArrayEquals("free " + free, new int[]{fit, 4 - fit}, r);
+            int steps = Math.max(1, probe.calls - c0);
+            for (int crash = 1; crash <= steps; crash++) for (int restart = 0; restart < 3; restart++) {
+                World w = world(3);
+                w.migrate();
+                for (int i = 0; i < free; i++) w.pack[i * 7] = null;
+                w.persistInventory0();
+                List<String> f0 = w.foreign();
+                w.crashAt = w.calls + crash;
+                try { EmberSixMigration.claim(w, w); } catch (Crash expected) { }
+                if (restart == 1) w.softRestart(); else if (restart == 2) w.hardRestart(); else w.crashAt = -1;
+                String why = "free " + free + " crash@" + crash + " restart " + restart;
+                assertEquals(why + " after crash", f0, w.foreign());
+                for (int rep = 0; rep < 3; rep++) EmberSixMigration.claim(w, w); // the player clicks again (and again)
+                assertEquals(why, f0, w.foreign());
+                assertEquals(why + " what fits is in the backpack", fit, countOrig(w));
+                assertEquals(why + " the rest still waits", 4 - fit, w.disk.stash.size());
+                for (String x : w.pack) assertTrue(why + " untagged", x == null || x.indexOf('#') < 0);
+                scenarios++;
+            }
+        }
+        assertTrue(scenarios > 60);
+    }
+
+    /** rapid / repeated clicks: each click claims what fits now; nothing is handed out twice */
+    @Test public void repeatedClicksNeverDuplicate() {
+        World w = world(3);
+        w.migrate();
+        List<String> f0 = w.foreign();
+        for (int i = 0; i < 5; i++) assertArrayEquals(new int[]{0, 4}, EmberSixMigration.claim(w, w)); // full: 5 clicks, nothing moves
+        assertEquals(f0, w.foreign());
+        w.pack[3] = null;
+        f0 = w.foreign();
+        assertArrayEquals(new int[]{1, 3}, EmberSixMigration.claim(w, w));
+        for (int i = 0; i < 5; i++) assertArrayEquals(new int[]{0, 3}, EmberSixMigration.claim(w, w));
+        assertEquals(f0, w.foreign());
+        for (int i = 0; i < 36; i++) if (w.pack[i] != null && w.pack[i].startsWith("fill")) w.pack[i] = null;
+        f0 = w.foreign();
+        assertArrayEquals(new int[]{3, 0}, EmberSixMigration.claim(w, w));
+        for (int i = 0; i < 5; i++) assertArrayEquals(new int[]{0, 0}, EmberSixMigration.claim(w, w));
+        assertEquals(f0, w.foreign());
+        assertEquals(4, countOrig(w));
+        assertTrue(w.disk.stash.isEmpty());
+    }
+
+    /** a second click arriving while a claim is still running (re-entrant / concurrent) is refused by the per-player guard */
+    @Test public void concurrentClickIsRefusedWhileAClaimRuns() {
+        final Set<Object> busy = Collections.synchronizedSet(new HashSet<Object>());
+        final List<int[]> nested = new ArrayList<int[]>();
+        final Object player = "uuid-1";
+        World w = new World() {
+            @Override public boolean give(String stack, String id) {
+                nested.add(EmberSixMigration.claimGuarded(busy, player, this, this)); // the double click lands mid-claim
+                return super.give(stack, id);
+            }
+        };
+        w.charm = piece("scorch", "charm", 1, 2, 3, 7);
+        w.armor = new String[]{"a0", "a1", "a2", "a3"};
+        for (int i = 0; i < 36; i++) w.pack[i] = i < 34 ? "fill" + i : null; // two free slots
+        w.persistInventory0();
+        w.migrate();
+        List<String> f0 = w.foreign();
+        int[] r = EmberSixMigration.claimGuarded(busy, player, w, w);
+        assertArrayEquals(new int[]{2, 2}, r);
+        assertFalse(nested.isEmpty());
+        for (int[] n : nested) assertNull("refused, touched nothing", n);
+        assertTrue("guard released", busy.isEmpty());
+        assertEquals(f0, w.foreign());
+        assertEquals(2, countOrig(w));
+        // another player is not blocked by this one
+        busy.add("uuid-2");
+        assertNotNull(EmberSixMigration.claimGuarded(busy, player, new World(), new World()));
+        // a crash inside the claim releases the guard (next click works)
+        World c = world(3);
+        c.migrate();
+        c.pack[0] = null;
+        c.crashAt = c.calls + 1;
+        try { EmberSixMigration.claimGuarded(busy, player, c, c); fail(); } catch (Crash expected) { }
+        assertFalse(busy.contains(player));
+        c.crashAt = -1;
+        assertNotNull(EmberSixMigration.claimGuarded(busy, player, c, c));
     }
 }

@@ -19,7 +19,7 @@ import java.util.List;
  * armor_all                    "§7将换上 2 件 · 生命 +1.2" / "§7四个部位都已是最好的一件"
  * armor_all_has                1 / 0
  * armor_stash                  待领 count
- * armor_stash_line             "§e待领物品 2 件 · 点击领取" / "§7没有待领物品"
+ * armor_stash_line             "§7护甲位原来的 2 件已存好 · §e点这里领取" / "§7没有待领物品"
  * </pre>
  */
 public final class EmberSixPapi {
@@ -32,7 +32,7 @@ public final class EmberSixPapi {
         if ("armor_on".equals(key)) return enabled ? "1" : "0";
         if (!enabled || v == null) return "";
         if ("armor_stash".equals(key)) return String.valueOf(stash);
-        if ("armor_stash_line".equals(key)) return stash > 0 ? "§e待领物品 " + stash + " 件 · 点击领取" : "§7没有待领物品";
+        if ("armor_stash_line".equals(key)) return stash > 0 ? stashLine(stash) : "§7没有待领物品";
         if ("armor_set".equals(key)) {
             Object[] s = EmberSixRank.setProgress(v.worn);
             return s == null ? "§7还没有穿带族的护甲" : "§f" + EmberItemData.familyName((String) s[0]) + "族 " + s[1] + "/4 · 需掉落阶 T" + s[2] + "+";
@@ -89,4 +89,7 @@ public final class EmberSixPapi {
         }
         return "§8" + EmberUpgradeRules.ARMOR_REFUSE;
     }
+
+    /** spec §5.4-1 player copy for items waiting in 待领 */
+    public static String stashLine(int n) { return "§7护甲位原来的 " + n + " 件已存好 · §e点这里领取"; }
 }
