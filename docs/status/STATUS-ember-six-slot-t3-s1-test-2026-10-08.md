@@ -109,3 +109,14 @@ D12 阻塞已解除：按插件岗通关脚本实机打出首领结算 + drop �
 ### 7.4 清场
 
 证据包：`/workspace/tmp/t3-s1-evidence-d12-rerun-2026-10-08.tar.gz`（gzip）。随后停测服 Paper / 独立 Waterfall / 临时 mariadbd，删 `/workspace/tmp/t3-s1/`，再核线上 PID 与 sha。
+
+## 总控签字（D323 · 用户确认）
+
+| 项 | 签认 |
+|---|---|
+| S1 | **PASS**（本报告 · tip `d4ab102c` · 收口 commit `dec1c625`；H8 / D12 ①②③ / 迁移 / 待领 / ACTIVE_IN_STASH 均 PASS） |
+| **⑦ 部署** | **[x] 已签** → 授权插件岗：线上升 jar（含 tip ≥ `4d82b518` 六槽能力）+ 写 **bv=61** + 按 OPS §1.2 **两开关同开** |
+| 本号 | **只 docs**；总控不亲手改线上 jar / yml |
+| 禁 | 不开 R 窗；不与价表 / 掉率 / 事件同号同周 |
+
+**签字：总控 · 2026-10-08 · D323 · 用户确认**
