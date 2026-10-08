@@ -228,10 +228,10 @@ public class EmberSixRankTest {
         assertEquals(EmberSixRank.Confirm.PREVIEW, EmberSixRank.confirm(null, null, 1000L, "1:a;"));
         assertEquals(EmberSixRank.Confirm.EXECUTE, EmberSixRank.confirm(1000L, "1:a;", 1000L + 29_999L, "1:a;"));
         assertEquals(EmberSixRank.Confirm.EXECUTE, EmberSixRank.confirm(1000L, "1:a;", 1000L + 30_000L, "1:a;"));
-        assertEquals("timed out", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(1000L, "1:a;", 1000L + 30_001L, "1:a;"));
+        assertEquals("timed out", EmberSixRank.Confirm.EXPIRED, EmberSixRank.confirm(1000L, "1:a;", 1000L + 30_001L, "1:a;"));
         assertEquals("plan changed", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(1000L, "1:a;", 2000L, "1:b;"));
         assertEquals("plan grew", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(1000L, "1:a;", 2000L, "1:a;2:c;"));
-        assertEquals("clock went back", EmberSixRank.Confirm.REFRESHED, EmberSixRank.confirm(5000L, "1:a;", 4000L, "1:a;"));
+        assertEquals("clock went back", EmberSixRank.Confirm.EXPIRED, EmberSixRank.confirm(5000L, "1:a;", 4000L, "1:a;"));
         assertEquals("§7背包有变化，已刷新方案", EmberSixRank.REFRESHED_TEXT);
 
         EmberItemData charm = piece("scorch", "charm", 2, 2, 2, 5);
@@ -260,6 +260,29 @@ public class EmberSixRankTest {
                 EmberSixRank.allPlan(EmberSixRank.view(T, null, charm, 25, 0, 0, worn, Arrays.asList(chest2, boots, chest, sameHead)))));
     }
 
+    /** D320 ⑥: pure timeout and plan change have different texts; plan change wins when both happened */
+    @Test public void timeoutAndPlanChangeAreDifferentTexts_D320() {
+        assertEquals("§7确认已超时，请再点一次", EmberSixRank.EXPIRED_TEXT);
+        assertNotEquals(EmberSixRank.EXPIRED_TEXT, EmberSixRank.REFRESHED_TEXT);
+        assertEquals(EmberSixRank.EXPIRED_TEXT, EmberSixRank.confirmText(EmberSixRank.confirm(0L, "1:a;", 30_001L, "1:a;")));
+        assertEquals(EmberSixRank.EXPIRED_TEXT, EmberSixRank.confirmText(EmberSixRank.confirm(0L, "1:a;", 3_600_000L, "1:a;")));
+        assertEquals(EmberSixRank.REFRESHED_TEXT, EmberSixRank.confirmText(EmberSixRank.confirm(0L, "1:a;", 5_000L, "1:b;")));
+        assertEquals("changed and expired → the change is what the player needs to know", EmberSixRank.REFRESHED_TEXT,
+                EmberSixRank.confirmText(EmberSixRank.confirm(0L, "1:a;", 60_000L, "1:b;")));
+        assertNull(EmberSixRank.confirmText(EmberSixRank.Confirm.PREVIEW));
+        assertNull(EmberSixRank.confirmText(EmberSixRank.Confirm.EXECUTE));
+        // window edges, any key: within 30 s and same plan always runs; past it never runs
+        Random r = new Random(320);
+        for (int n = 0; n < 5000; n++) {
+            long at = r.nextInt(1_000_000), dt = r.nextInt(70_000) - 5_000;
+            String k = "1:" + r.nextInt(3) + ";", k2 = r.nextBoolean() ? k : "1:" + r.nextInt(3) + ";";
+            EmberSixRank.Confirm c = EmberSixRank.confirm(at, k, at + dt, k2);
+            if (!k.equals(k2)) assertEquals(EmberSixRank.Confirm.REFRESHED, c);
+            else if (dt >= 0 && dt <= EmberSixRank.CONFIRM_MS) assertEquals(EmberSixRank.Confirm.EXECUTE, c);
+            else assertEquals(EmberSixRank.Confirm.EXPIRED, c);
+        }
+    }
+
     /** the service wiring: refresh text is sent before the new preview; the empty-plan branch also reports a stale preview */
     @Test public void serviceUsesTheConfirmDecision() throws java.io.IOException {
         String src = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberSixSlotService.java")),
@@ -268,6 +291,7 @@ public class EmberSixRankTest {
         String body = src.substring(a, src.indexOf("boolean swapIn(", a));
         assertTrue(body.contains("EmberSixRank.confirm("));
         assertTrue(body.indexOf("REFRESHED_TEXT") < body.indexOf("将换上："));
+        assertTrue(body.indexOf("EmberSixRank.confirmText(c)") < body.indexOf("将换上："));
         assertTrue(body.indexOf("c != EmberSixRank.Confirm.EXECUTE") < body.indexOf("swapIn("));
         assertTrue(src.contains("EmberSixMigration.claimGuarded("));
     }

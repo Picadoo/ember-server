@@ -509,7 +509,7 @@ public final class EmberSixSlotService implements Listener {
         EmberSixRank.View v = view(p);
         List<Integer> todo = EmberSixRank.allPlan(v);
         if (todo.isEmpty()) {
-            if (allPending.remove(p.getUniqueId()) != null) p.sendMessage(P + EmberSixRank.REFRESHED_TEXT);
+            if (allPending.remove(p.getUniqueId()) != null) p.sendMessage(P + EmberSixRank.REFRESHED_TEXT); // the plan changed to "nothing"
             p.sendMessage(P + "四个部位都已是最好的一件，不用换。");
             return;
         }
@@ -521,7 +521,8 @@ public final class EmberSixSlotService implements Listener {
             allPending.put(p.getUniqueId(), new Object[]{now, key});
             StringBuilder sb = new StringBuilder();
             for (int i : todo) sb.append(sb.length() == 0 ? "" : "、").append(EmberSixSlot.slotLabel(i));
-            if (c == EmberSixRank.Confirm.REFRESHED) p.sendMessage(P + EmberSixRank.REFRESHED_TEXT);
+            String why = EmberSixRank.confirmText(c); // REFRESHED: 背包有变化 / EXPIRED: 确认已超时 (D320 ⑥)
+            if (why != null) p.sendMessage(P + why);
             p.sendMessage(P + "将换上：" + sb + "（合计" + EmberSixRank.deltaText(EmberSixRank.allDelta(v, todo)) + "）。30 秒内再点一次「全部换上」确认。");
             return;
         }

@@ -108,10 +108,12 @@ public final class EmberSixRank {
         return d == null || d.origin == null || !d.origin.present() ? 0L : Math.max(0L, d.origin.at);
     }
 
-    public enum Confirm { PREVIEW, REFRESHED, EXECUTE }
+    public enum Confirm { PREVIEW, REFRESHED, EXPIRED, EXECUTE }
 
     public static final long CONFIRM_MS = 30000L;
     public static final String REFRESHED_TEXT = "§7背包有变化，已刷新方案";
+    /** D320 ⑥: the same plan, only the 30 s window passed (or the clock went back) */
+    public static final String EXPIRED_TEXT = "§7确认已超时，请再点一次";
 
     /** the plan's identity: slot → piece uid, in slot order */
     public static String planKey(View v, List<Integer> todo) {
@@ -122,13 +124,20 @@ public final class EmberSixRank {
 
     /**
      * 「全部换上」 two-click confirm (spec §5.4-4): no pending preview → PREVIEW; a pending preview for the same plan within
-     * 30 s → EXECUTE; a pending preview that timed out or whose plan changed → REFRESHED (nothing runs, the new plan is
-     * shown with {@link #REFRESHED_TEXT}; never a silent failure).
+     * 30 s → EXECUTE; a pending preview whose plan changed → REFRESHED ({@link #REFRESHED_TEXT}, the plan change wins
+     * even when the window also passed); the same plan after the window (or a clock that went back) → EXPIRED
+     * ({@link #EXPIRED_TEXT}). Nothing runs on REFRESHED / EXPIRED and the plan is shown again; never a silent failure.
      */
     public static Confirm confirm(Long pendingAt, String pendingKey, long now, String key) {
         if (pendingAt == null || pendingKey == null) return Confirm.PREVIEW;
-        if (now - pendingAt <= CONFIRM_MS && now >= pendingAt && key.equals(pendingKey)) return Confirm.EXECUTE;
-        return Confirm.REFRESHED;
+        if (!key.equals(pendingKey)) return Confirm.REFRESHED;
+        if (now - pendingAt <= CONFIRM_MS && now >= pendingAt) return Confirm.EXECUTE;
+        return Confirm.EXPIRED;
+    }
+
+    /** the line sent before the re-shown plan: REFRESHED / EXPIRED have their own text, PREVIEW / EXECUTE none */
+    public static String confirmText(Confirm c) {
+        return c == Confirm.REFRESHED ? REFRESHED_TEXT : c == Confirm.EXPIRED ? EXPIRED_TEXT : null;
     }
 
     /** 「全部换上」: slots whose best candidate raises H, or fills an empty slot (ties keep the current piece and family) */
