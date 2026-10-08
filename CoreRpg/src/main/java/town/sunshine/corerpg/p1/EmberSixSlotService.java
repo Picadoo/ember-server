@@ -144,6 +144,20 @@ public final class EmberSixSlotService implements Listener {
         if (n == null) stashN.put(id, n = load(id).stash.size());
         return n;
     }
+
+    /**
+     * D321 H7: every P1 uid sitting in {@code p1-six/<uuid>.yml} 待领 — any stash key (migration originals
+     * {@code m…}, re-issued {@code r}+uid, …). Reads the ItemStack's signed uid; non-P1 originals contribute nothing.
+     */
+    public java.util.Set<String> stashP1Uids(UUID id) {
+        java.util.Set<String> out = new java.util.LinkedHashSet<String>();
+        for (EmberSixMigration.StashEntry<ItemStack> e : load(id).stash.values()) {
+            if (e.item == null || !loadouts.items().hasData(e.item)) continue;
+            EmberItems.Read r = loadouts.items().read(e.item);
+            if (r != null && r.data != null && r.data.uid != null) out.add(r.data.uid);
+        }
+        return out;
+    }
     public boolean migrated(UUID id) { return load(id).flag; }
 
     /**

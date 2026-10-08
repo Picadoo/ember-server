@@ -1,7 +1,7 @@
 # 运维手册 · 余烬六槽护甲迁移（gear.six_slot）
 
 - 适用对象：运维 / OP（权限 `corerpg.admin`）。本手册只列游戏内或控制台可用的命令，均以代码为准。
-- 代码基准：CoreRpg `origin/main`，含 D319 的 invsnap 守卫、孤儿标签清理和收尾存档，以及 D320 的「完成前等 DB 确认」「DB 行自愈」「待领与开关脱钩」。线上目前仍跑 1.65.97，**这里所有功能线上都没有**。开关默认关，未部署。
+- 代码基准：CoreRpg `origin/main`，含 D319–D321：invsnap 守卫、孤儿标签清理、收尾存档、完成前等 DB 确认、pieces 自愈、待领与开关脱钩、audit 把待领计入 held。线上目前仍跑 1.65.97，**这里所有功能线上都没有**。开关默认关，未部署。
 - 本手册**不授权**任何上线、切开关或迁移动作。T2 演练、T3 上线、部署都要各自另签（见 `docs/status/STATUS-ember-six-slot-t1-accept-test-2026-10-08.md` 的总控签字）。
 - 相关文档：规格 `docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md`；T2 演练计划 `docs/status/PLAN-ember-six-slot-t2-drill.md`。
 
@@ -111,6 +111,7 @@ gear:
   - 日志：每次检查都写 `[P1 six] <玩家> migration DB_PENDING … · waiting for the DB to confirm n of 4 pieces (journal kept)`；确认后紧跟一行 `MIGRATED` 或 `ROLLED_FORWARD`。
 - `DB_PENDING` 期间 `status` 显示 `journal=true`，invsnap 恢复被暂时拒绝（§6 规则 2），属于预期。DB 正常时这段时间通常只有几十毫秒。
 - 长时间停在 `DB_PENDING`，说明 DB 写不进去，按 3.1 / 3.2 处理。
+- **与 invsnap 的关系（E4 放大路径已消）**：旧 tip 在「完成标记已写、部分 remember 未落库」时，恢复迁移后快照会把无 DB 行的迁移甲当「DB 无记录」跳过，甲直接丢失。现在完成标记只在 4 件确认之后才写，未决 journal 期间 invsnap 守卫会暂时拒绝恢复；进服 `onJoin` 的 pieces 自愈也在排队恢复（第 40 tick）之前跑。T2 在 tip f6868515 上复跑 NA1-6 / NA1-7 / NA1-5b 均 PASS。
 - 只有 MySQL 存储处于激活状态（`/corerpg storage` 显示 `storage=mysql`）时才等待。YAML 模式下没有 DB 可等，直接完成，但 YAML 模式本来就禁止开迁移（见本节开头）。运行中 DB 断开时，MySQL 仍是激活状态，写入会失败，按上面的「写失败」处理，不会误标完成。
 
 ### 3.4 已完成玩家的 DB 行自愈（D320 ②）
@@ -131,7 +132,14 @@ gear:
 - 迁移续上时，如果某件已发的新甲在提交前离开了玩家（扔到地上、放进箱子、死亡掉落），会用新 uid 重发一件，旧 uid 记入 `voided` 并在 DB 置为 `retired`。
 - **旧件实体不会被回收**，会以无效物品的形式一直留在世界里（地上、箱子），装备计算不认它。
 - 玩家把它捡回来后，`/corerpg p1 audit <玩家>` 会报 `HELD_NOT_ACTIVE <uid> state=retired`。这是**预期结果**，不是复制。处理方式是让玩家丢弃或忽略它。
-- 不要对这类 uid 用 `/corerpg p1 audit restore`。那条命令只用于 DB 为 active 但身上没有的件（`ACTIVE_NOT_HELD`）。
+- 不要对这类 uid 用 `/corerpg p1 audit restore`。那条命令只用于 DB 为 active、身上和待领都没有的件（`ACTIVE_NOT_HELD`）。
+
+### 4.1 audit 与六槽待领（D321 H7）
+
+- `/corerpg p1 audit` 会扫 `plugins/CoreRpg/p1-six/<uuid>.yml` 的待领（任意键：迁移原物、重发进待领的 `r`+uid 等）。待领里的 P1 uid 算 held。
+- 若某 uid 的 DB 行是 active、只在待领里、不在背包/甲位/末影箱：finding 是 **`ACTIVE_IN_STASH <uid> · 在六槽待领，勿 audit restore（让玩家去 装备→护甲 领取）`**，**不是** `ACTIVE_NOT_HELD`。
+- `/corerpg p1 audit restore` 若该 uid 已在待领里，会拒绝并提示「该 uid 在六槽待领里，勿补发；让玩家去 装备→护甲 领取」。照旧 restore 会再补一份，玩家再领待领就两份有效，违反同 uid 有效 ≤1。
+- 真正的 `ACTIVE_NOT_HELD`（身上和待领都没有）才考虑 restore，且仍要过「在线副本」检查。
 
 ---
 
