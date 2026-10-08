@@ -172,7 +172,7 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
 | R 自检失败撤回 | **R1** `save(reverting)` → **R2** `save(被占槽原物进待领)` → R3 `take` → **R4** `apply(原物 + 去标签)` → **R5** `persistInventory` → **R6** `save(done, voided)` → **R7** `retire` | 240、298、304、306、307、311、313 |
 | D 未换装就丢弃 journal | D1 `take` → **D2** `persistInventory` → **D3** `save(voided)` → **D4** `retire` | 262、263、267、269 |
 | C 待领领取 | C1 settle `persist` → C2 settle `save` → C3 `untagExcept` → **C4** `give(物品 + 标签)` → **C5** `persist` → **C6** `save(删条目)` → **C7** `untag` → **C8** 最后一次 `persist` | 429、459（settle）、claim 循环 |
-| E 护甲页换上 | **E1** `swapIn`：`setItem` + `setArmorContents` + `savePlayerFile` | Service 466–476 |
+| E 护甲页换上 | **E1** `swapIn`：`setItem` + `setArmorContents` + `savePlayerFile` | Service 479–495 |
 
 **定点触发方式：** 代码里**没有**测试钩子或系统属性（`rg getProperty|getenv` 在两个类里 0 处命中）。两种办法：
 
@@ -181,7 +181,7 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
    - 执行 `jdb -attach 127.0.0.1:25578`，然后 `stop at town.sunshine.corerpg.p1.EmberSixMigration:<行>`，行号用上表；
    - 断点命中时主线程（默认是全部线程）挂起，**立刻 `kill -9 <测试服 pid>`**，效果等于「在该语句执行之前进程死亡」；
    - 同一断点跑两轮：「命中即杀」和「`next` 单步后再杀」，覆盖写点的前后两侧；
-   - R 组需要强制自检失败：在 236 行（post 赋值之后）断下，执行 `set post = "drill"`，后续即走撤回路径；
+   - R 组需要强制自检失败：在 238 行（`if (post != null)`，post 已算完）断下，执行 `set post = "drill"`，后续即走撤回路径；
    - 风险：Paper watchdog 默认 60 秒报警。断点到 kill 控制在 10 秒内，必要时把 `spigot.yml` `timeout-time` 调大到 300（只改测试服）。
    - 构建默认带行号（maven `-g`），构建后用 `javap -l` 抽查确认。
 2. **测试钩子（可选，需插件岗加，列为待拍板 §9-2）。**
