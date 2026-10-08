@@ -54,8 +54,8 @@ public final class EmberFormula {
      * its own quality / craft count, as a share-weighted difference to the charm:
      * <pre>H0 = 20 + h[T_c] · ( g_c + Σ_a w_a · ((q_a + f_a) − (q_c + f_c)) ) + level part</pre>
      * Written as "charm + difference" (never a five-term weighted sum): with q_a = q_c and f_a = f_c every difference is
-     * exactly 0.0, so H0 is bit-identical to {@link #baseHp}. Same operation order as tools/p1sim {@code hp_def} with
-     * {@code follow: "all"} (Python {@code sum} from 0, left to right head / chest / legs / boots). {@code tier < 0} (no
+     * exactly 0.0, so H0 is bit-identical to {@link #baseHp}. Same operations as tools/p1sim {@code hp_def} with
+     * {@code follow: "all"} (Python {@code sum} over head / chest / legs / boots, see {@link #pySum}). {@code tier < 0} (no
      * valid charm): armor adds nothing (20 + level part, the 2-slot no-charm value). An empty armor slot = q0 f0.
      *
      * @param w  the four armor shares (head, chest, legs, boots)
@@ -66,9 +66,30 @@ public final class EmberFormula {
         double lv = levelHp(t, level);
         if (tier < 0) return 20.0 + lv;
         double c = t.quality(quality) + t.craft(craft);
-        double dq = 0.0;
-        for (int i = 0; i < w.length; i++) dq += w[i] * ((t.quality(aq[i]) + t.craft(af[i])) - c);
-        return 20.0 + t.charmH(tier) * (growth(t, quality, craft, enhance) + dq) + lv;
+        double[] terms = new double[w.length];
+        for (int i = 0; i < w.length; i++) terms[i] = w[i] * ((t.quality(aq[i]) + t.craft(af[i])) - c);
+        return 20.0 + t.charmH(tier) * (growth(t, quality, craft, enhance) + pySum(terms)) + lv;
+    }
+
+    /**
+     * D318 T1-2: Python's built-in {@code sum()} of floats exactly as CPython ≥ 3.12 computes it (p1sim runs on the box's
+     * python3, 3.13): the first term is added to the int start 0, the rest with Neumaier compensation, and the
+     * compensation is added once at the end when it is non-zero and finite. A naive left-to-right loop differs by 1 ulp
+     * in ~0.2 % of mixed-quality armor cells. All-zero terms (the migration invariant) give exactly 0.0 either way.
+     */
+    static double pySum(double[] xs) {
+        if (xs.length == 0) return 0.0;
+        double f = 0.0 + xs[0];
+        double comp = 0.0;
+        for (int i = 1; i < xs.length; i++) {
+            double x = xs[i];
+            double s = f + x;
+            if (Math.abs(f) >= Math.abs(x)) comp += (f - s) + x;
+            else comp += (x - s) + f;
+            f = s;
+        }
+        if (comp != 0.0 && !Double.isNaN(comp) && !Double.isInfinite(comp)) f += comp;
+        return f;
     }
 
     public static double maxHp(EmberTables t, double h0, boolean sustainSet) {
