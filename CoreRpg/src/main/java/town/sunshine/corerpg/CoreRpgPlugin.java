@@ -250,6 +250,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }
         emberRuns = new town.sunshine.corerpg.p1.EmberRunService(this, emberLoadouts, emberStore); // G04 Q01–Q03 runs + settlement
         Bukkit.getPluginManager().registerEvents(emberRuns, this);
+        // D318 六槽 T1: migration trigger / 待领 / armor page actions (gear.six_slot.* default off → handlers return at once)
+        Bukkit.getPluginManager().registerEvents(new town.sunshine.corerpg.p1.EmberSixSlotService(this, emberLoadouts), this);
         emberSign = new town.sunshine.corerpg.p1.EmberSignService(this); // D180 每日签到 + 在线时长 (ember-v1.yml signin / online)
         emberSign.reload();
         { // P2-9 (D83) titles + trails (cosmetic only)

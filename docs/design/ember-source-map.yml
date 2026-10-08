@@ -109,7 +109,7 @@ content:
   afk_t2: {mode: afk, name: 荒原, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t3: {mode: afk, name: 焦土, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t4: {mode: afk, name: 烬原深处, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
-  account: {mode: account, name: 账号 / 菜单（不在副本里）, sources: [S15, S19, S23, S24, S27, S28, S29, S30, S31, S32, S33, S35, S36, S37, S38, X03]}
+  account: {mode: account, name: 账号 / 菜单（不在副本里）, sources: [S15, S19, S23, S24, S27, S28, S29, S30, S31, S32, S33, S35, S36, S37, S38, X03, X04]}
 
 # ---------------------------------------------------------------------------------------------------- signatures (D174)
 # Checked field by field against EmberSignature.DEFS (code / map / slot / family / name / boss); alt = has a 调律 version (EmberSignature.ALTS).
@@ -597,6 +597,16 @@ sources:
     grant_keys: [six_armor]
     code: ["p1/EmberRunRules.java#G_SIX_ARMOR = \"six_armor\"", "p1/EmberEconomy.java#\"six_armor\".equals(key)", "p1/EmberSettleService.java#in.sixArmor = modelled"]
     notes: "D318 six-slot T1 (spec 2026-10-08 §3.3 · 已批 A); flag off = never pays; registry + tag only (no economy yml key, no golden); 白板经济模型未覆盖"
+  X04:
+    name: 六槽迁移补发（source=migrate，等价换算，不产生新价值）
+    econ_row: null
+    status: flag_off
+    pays: [gear]
+    period: once
+    content: [account]
+    counters: []
+    code: ["p1/EmberSixMigration.java#ORIGIN_SRC = \"X04\""]
+    notes: "D318 six-slot migration (spec §3.2): 4 armor pieces with the charm's family / tier / quality / craft (H / D bit-identical), bound, not dismantlable; idempotency flag p1_six_mig in plugins/CoreRpg/p1-six/<uuid>.yml; switch gear.six_slot.migrate default off"
   X03:
     name: 管理员发放 / 测试（/corerpg p1 give · give dup · coin give）
     econ_row: null

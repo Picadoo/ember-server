@@ -97,6 +97,10 @@ public final class EmberCommand {
             if (EmberGearLib.get() == null) { s.sendMessage(P + "仓库服务未加载"); return true; }
             return EmberGearLib.get().cmd(s, sub, args);
         }
+        if ("armor".equals(sub) || "护甲".equals(sub)) { // D318 六槽护甲页（菜单代发；开关 gear.six_slot.enabled 默认关）
+            if (EmberSixSlotService.get() == null) { s.sendMessage(P + "护甲服务未加载"); return true; }
+            return EmberSixSlotService.get().cmd(s, args);
+        }
         if ("audit".equals(sub)) {
             if (loadouts == null) { s.sendMessage(P + "装备服务未加载"); return true; }
             return new EmberAudit(loadouts).cmd(s, args); // B2.170, checks corerpg.admin itself
