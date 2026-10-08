@@ -123,3 +123,50 @@ FAIL 只留证据，没有改代码或菜单。
 - 没有写线上库，没有动线上 bv 和配置，没有给线上任何号 op。临时 op 只在测试服用来读 status，用完立即 deop。
 - 本段结束：测试服已 stop，临时 mariadbd 已 shutdown，memmon 和控制台 fifo holder 已停。25577、25578、3317 端口已释放，没有残留的 t2-drill 进程。
 - 测试目录和 worktree 保留给第二段；`ember-v1.yml` 已恢复为 enabled=true、migrate=true。
+
+---
+
+# 第二段（进行中 · 中途存档 1 · 2026-10-08 12:00 UTC+8）
+
+- 同 tip `f3f1a065`，约束同第一段。第二段开始于 11:09 UTC+8。
+- 第一步先起临时库，再跑 `restore-pre.sh`。测试库回到迁移前：8 行 active，逐行与 `.dat` 实物对上（`ev/check-pre2.json`，`active_without_item = []`），第一段误删头盔留下的 4 行孤儿记录已随之消失。之后每个用例开头都会再跑一次 `restore-pre.sh`，所以各用例的前置互相独立。
+- 驱动方式：jdb attach 127.0.0.1:25578，用 `stop at EmberSixMigration:<行>`（行号按 f3f1a065 用 javap 核过）下断点。断点一命中就 kill -9；「后侧」先 `next` 单步再 kill。R 组在 261 行执行 `set post = "drill"` 强制自检失败。没有加任何测试钩子。
+- 每个用例走五步：
+  1. kill，然后马上解析 `.dat` 和 `p1-six` 做 C 检查（标签 ⇔ 甲位）；
+  2. 重启，bot 进服，用 `armor mig` 一路续到 ALREADY；
+  3. 再 kill -9 一次，重启复核；
+  4. 跑不变量 ① ②；
+  5. 核对：每部位恰好 1 件迁移甲有效（临时库 migrate·active 每部位 = 1）、作废 uid 在库里为 retired、`/corerpg p1 status` 的 B/H/D/M/EHP 与迁移前逐位相等。
+  证据在 `ev/A/<编号>/`（k1、k2、final 下的 `.dat` JSON、yml，以及 `result.json`）。
+- 工具说明：
+  - `check.py` 增加了 `T2_GRANTED` 白名单，只用于 A3-2、A3-7：用控制台发的那顶原版皮帽不算翻倍。
+  - A2/A3 中玩家动过甲位之后的 C 检查用宽松规则：只判「带标签时甲位出现原物」。
+  - A5 中 kill 后那一刻的 ② 只作瞬态记录（已发出、待下次 claim 结算的条目），判定以结算后的严格检查为准。
+
+## A 组进度（已完成 24/43）
+
+| 例 | 写点 | 结果 | 要点 |
+|---|---|---|---|
+| A1-1 | M2 前 | PASS | 无 journal，重启后 MIGRATED |
+| A1-2 | M2 后 | PASS | journal 未带标签，`.dat` 仍是原物（C 一致）→ JOURNAL_DROPPED → 4 个 uid 都 retired → MIGRATED |
+| A1-3 | M3 后 / M4 前 | PASS | 同上，内存里的换甲没有落盘 |
+| A1-4 | M4 后 | PASS | 带标签且甲位是 issued（C 一致）→ ROLLED_FORWARD |
+| A1-5 | M5 后 / M6 前 | PASS | ROLLED_FORWARD，重新 remember |
+| **A1-6** | **M6 后（完成标记已写）/ M7 前**（关键 kill 点） | **FAIL** | (b) 生效：重启后 ALREADY，日志 `orphan swap mark cleared (1), saved`，`.dat` 不再带标签。但 4 件迁移甲只有 head 在临时库有记录，chest/legs/boots 的异步 remember（upsert active）随 kill 丢失，而 ALREADY 路径不会补写。dbCheck 判这 3 件「DB 记录未找到」，不计入护甲，t2a 的 H 从 139.70 降到 138.56，EHP 从 174.6 降到 173.2。两次独立运行都复现 |
+| **A1-7** | **M7 后 / M8 收尾存档前**（孤儿标签窗口） | **FAIL** | 同 A1-6：(b) 日志与清标签都正确，但 3 件迁移甲没有 DB 记录，H/D 与迁移前不等。复现 2 次 |
+| A1-8 | M8 后 | PASS | (c) 生效：收尾 Checked 存档后 `.dat` 不带标签。`next` 期间异步写已落，4 件都有记录 |
+| A2-1…5 | F2 前、F2 后、F3 后、F4 后、F5 后（先把头盔放进末影箱，让它不在身上，再进入续上/重发路径） | 5 PASS | ROLLED_FORWARD「re-issued 1」。旧 uid（含末影箱里的那件）记进 voided 并在库里为 retired。F2 后到 F4 后之间被 kill 的，重启会再重发一次，前一个新 uid 也会作废，最终每部位只有 1 件有效 |
+| A3-1…6 | R1 后、R2 后（玩家先在头部穿上自己的皮帽）、R4 前、R5 前、R6 前、R7 前 | 6 PASS | CHECK_FAILED「revert finished」→ 重新 MIGRATED。A3-2 中原铁盔被划出 journal、进了待领，玩家的皮帽没被动。A3-6 的 DB retire 丢失，进服后 resendVoids 补写为 retired |
+| A3-7 | 撤回中途玩家往空槽穿自己的东西（不 kill） | PASS | 原物进待领，玩家物品保留 |
+| A4-1…4 | D1 take 前、D2 persist 前、D3 save 前、D4 retire 前（A1-3 状态） | 4 PASS | JOURNAL_DROPPED。A4-4 的 retire 未发出，重启后补写为 4 行 retired |
+
+**A1-6 / A1-7 的性质（待总控定级）：**
+
+- 不违反 ① ②，原物都在待领。
+- 但违反 A 组断言「身上加待领的迁移甲每个部位恰好 1 件有效」，并造成玩家 H/D 下降，而且没有自愈路径：ALREADY 只清孤儿标签，不会补 remember。
+- 这是 jdb 能覆盖的「异步写未落」一侧，现实中的窗口是 remember（异步）到 DB 落库之间的几十毫秒。
+- 修法交插件岗，例如：
+  - ALREADY 或进服时，对身上和待领里缺 DB 记录的 src=migrate 件补 upsert；
+  - 或 commit 在写 flag 之前等 DB 确认。
+
+A5（待领领取）、A6、A7 正在跑。
