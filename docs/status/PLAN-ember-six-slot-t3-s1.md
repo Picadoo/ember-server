@@ -1,7 +1,7 @@
-# 余烬 · 六槽 T3 · S1 隔离测服短计划（余烬-测试 · 2026-10-08 · tip `d4ab102c` 已收 · 执行中）
+# 余烬 · 六槽 T3 · S1 隔离测服短计划（余烬-测试 · 2026-10-08 · tip `d4ab102c` 已收 · 已交 STATUS · 暂不建议签⑦）
 
 - 依据：设计稿 `docs/design/DESIGN-ember-six-slot-t3-rollout-2026-10-08.md`（**D322 批 A + ⑥ 仅 S1**）；T2 计划 `PLAN-ember-six-slot-t2-drill.md`；OPS `docs/ops/OPS-ember-six-slot-migration.md`；T2 最终 STATUS `ee733764` / tip `4d82b518`（D321 已签 T2）。
-- 状态：**tip 已收，执行中。** tip = `d4ab102c`（全 `d4ab102cf1a49b058459df15ce5477ba434da1e7`，≥ `4d82b518`）；测服 jar = `/workspace/tmp/d322/CoreRpg-1.65.98-d322.local.jar`（sha256 `abc96aca51517216afa25d8ee14649acc55aed5d6b569826dba2308240139661`，plugin.yml `1.65.98-d322.local`）；配置草稿 `/workspace/tmp/d322/`（bv61 + 两开关起步 false）。段末交 STATUS，并建议是否可签 **⑦ 部署**。
+- 状态：**已交 STATUS（`1c2adb84`）；D12 结算未完 → 暂不建议签⑦。** tip = `d4ab102c`（全 `d4ab102cf1a49b058459df15ce5477ba434da1e7`，≥ `4d82b518`）；测服 jar = `/workspace/tmp/d322/CoreRpg-1.65.98-d322.local.jar`（sha256 `abc96aca51517216afa25d8ee14649acc55aed5d6b569826dba2308240139661`，plugin.yml `1.65.98-d322.local`）；配置草稿 `/workspace/tmp/d322/`（bv61 + 两开关起步 false）。段末交 STATUS，并建议是否可签 **⑦ 部署**。
 - 范围：**冒烟 + H8 + D12 + §1.3 出口标准**。不重跑 T2 全 89 例 kill 矩阵。
 
 ## 0 相对 T2 的差异（一览）
