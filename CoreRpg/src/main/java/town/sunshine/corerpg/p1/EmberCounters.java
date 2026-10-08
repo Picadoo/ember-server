@@ -111,6 +111,7 @@ public final class EmberCounters {
         x("p1_slash_shape", "SkillService", A, SE, OW, "D211 烬斩符文 0=fan 1=line 2=ring (Q04+); signature shape overrides");
         x("p1_step_dir", "FlexSkillService", A, SE, OW, "D219 身法方向 0=前冲 1=后撤 (Q01+; shares 14s CD; 火痕·后撤 ignites takeoff)");
         x("p1_starter", "EmberRunService", A, CL, NV, "starter pack claimed");
+        x("p1_blank_tenths", "EmberForgeService", A, AS, ZR, "D318 six-slot armor dismantle 胚零头 in tenths of a blank (0.1 × tier; 10 → 1 blank)");
         px("p1_mark_t", "EmberRunService/EmberPay", A, AS, ZR, "forge marks t1..t3; EmberDelivery may re-credit (MARK_COUNTER)");
         x("p2_rotation", "EmberRunService", W, CL, RL, "featured-week extra runs (weekly_cap 3)");
         px("p2_raid_", "EmberRaidService", W, CL, RL, "raid weekly cap per cap_group / map");

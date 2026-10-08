@@ -238,6 +238,11 @@ public final class EmberSettleService {
         EmberRunMaps.AbyssTier abT = s.abyss > 0 ? runs.maps().abyssTier(s.abyss) : null;
         if (abT != null) in.qualityWeights = abT.quality; // P2-2 tier quality table
         in.loot = m.raid ? null : runs.maps().lootBias(m); // P2-9 (D81) map loot identity (abyss segments: the segment map)
+        if (EmberSixSlot.enabled()) { // D318 六槽 T1-7: only the clears p1sim models (normal main-story settle; no challenge / abyss / raid / event / rush)
+            boolean modelled = !s.challenge && s.abyss == 0 && !m.raid && !m.event && !m.rush;
+            in.sixArmor = modelled;
+            in.sixStarter = modelled && in.firstClear != null && "q01".equals(m.key);
+        }
         List<EmberRunRules.Grant> grants = new ArrayList<EmberRunRules.Grant>(EmberRunRules.settle(in));
         // P2-1 weekly challenge rotation: featured map, first 3 challenge clears of the week → +1 mark of the run tier
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());

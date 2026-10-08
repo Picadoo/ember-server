@@ -83,13 +83,13 @@ item_provenance:
 # ---------------------------------------------------------------------------------------------------- content
 # Every place that can pay. sources = entries below that pay there. Checked against ember-v1-runs.yml / festival / afk.
 content:
-  q01: {mode: normal, tier: 1, name: 灰烬庭院, boss: 残门蛮兵, loot: {family: scorch, slot: blade}, first_clear: "choice charm T1", signatures: [L01, L02], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q01"]}
-  q02: {mode: normal, tier: 1, name: 焦骨甬道, boss: 守炉蛮兵, loot: {family: burst, slot: charm}, first_clear: "choice piece T1 (family × slot)", signatures: [L03, L04], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q02"]}
-  q03: {mode: normal, tier: 1, name: 残誓地窖, boss: 残誓守卫, loot: {family: sustain, slot: blade}, first_clear: "shard 30 + core 4 + coin 600", signatures: [L05, L06], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q03"]}
-  q04: {mode: normal, tier: 2, name: 潮蚀水道, boss: 潮闸重卫, loot: {family: scorch, slot: charm}, first_clear: "blank 6 + core 6 + coin 2100", signatures: [L07, L08], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q04"]}
-  q05: {mode: normal, tier: 2, name: 断塔回廊, boss: 断塔斧卫, loot: {family: burst, slot: blade}, first_clear: "bone 20 + blank 6 + coin 900", signatures: [L09, L10], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q05"]}
-  q06: {mode: normal, tier: 2, name: 霜封哨所, boss: 霜封统领, loot: {family: sustain, slot: charm}, first_clear: "core 10 + coin 1200", signatures: [L11, L12], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q06"]}
-  q07: {mode: normal, tier: 3, name: 锈轨矿道, boss: 炉锁巨卫, loot: {family: burst}, first_clear: "blank 12 + core 12 + coin 1800", signatures: [L13, L14, L15], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S20, S21, S25], config: ["ember-v1-runs.yml#maps.q07"]}
+  q01: {mode: normal, tier: 1, name: 灰烬庭院, boss: 残门蛮兵, loot: {family: scorch, slot: blade}, first_clear: "choice charm T1", signatures: [L01, L02], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25, S39], config: ["ember-v1-runs.yml#maps.q01"]}
+  q02: {mode: normal, tier: 1, name: 焦骨甬道, boss: 守炉蛮兵, loot: {family: burst, slot: charm}, first_clear: "choice piece T1 (family × slot)", signatures: [L03, L04], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25, S39], config: ["ember-v1-runs.yml#maps.q02"]}
+  q03: {mode: normal, tier: 1, name: 残誓地窖, boss: 残誓守卫, loot: {family: sustain, slot: blade}, first_clear: "shard 30 + core 4 + coin 600", signatures: [L05, L06], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25, S39], config: ["ember-v1-runs.yml#maps.q03"]}
+  q04: {mode: normal, tier: 2, name: 潮蚀水道, boss: 潮闸重卫, loot: {family: scorch, slot: charm}, first_clear: "blank 6 + core 6 + coin 2100", signatures: [L07, L08], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25, S39], config: ["ember-v1-runs.yml#maps.q04"]}
+  q05: {mode: normal, tier: 2, name: 断塔回廊, boss: 断塔斧卫, loot: {family: burst, slot: blade}, first_clear: "bone 20 + blank 6 + coin 900", signatures: [L09, L10], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25, S39], config: ["ember-v1-runs.yml#maps.q05"]}
+  q06: {mode: normal, tier: 2, name: 霜封哨所, boss: 霜封统领, loot: {family: sustain, slot: charm}, first_clear: "core 10 + coin 1200", signatures: [L11, L12], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S09, S11, S20, S21, S25, S39], config: ["ember-v1-runs.yml#maps.q06"]}
+  q07: {mode: normal, tier: 3, name: 锈轨矿道, boss: 炉锁巨卫, loot: {family: burst}, first_clear: "blank 12 + core 12 + coin 1800", signatures: [L13, L14, L15], sources: [S01, S02, S03, S34, S04, S05, S06, S07, S08, S20, S21, S25, S39], config: ["ember-v1-runs.yml#maps.q07"]}
   challenge: {mode: challenge, tier: 3, name: 挑战版（Q01–Q07）, boss: "map boss at challenge values", loot: {quality: "60/28/10/2"}, sources: [S01, S02, S03, S34, S10, S14, S20, S25], config: ["ember-v1-runs.yml#challenge", "ember-v1-runs.yml#rotation"]}
   abyss: {mode: abyss, tier: 3, name: 深渊·余烬层 1–10, boss: "segment map boss × tier factors", loot: {quality: "abyss.tiers[*].quality"}, sources: [S13, S14, S20, S25], config: ["ember-v1-runs.yml#abyss.tiers"]}
   r01: {mode: raid, tier: 3, name: 锈轨矿道·团, boss: 炉锁巨卫·团, loot: {family: burst}, sources: [S01, S12, S20, S25], config: ["ember-v1-runs.yml#raids.r01"]}
@@ -208,7 +208,7 @@ sources:
     period: once
     content: [q01, q02, q03, q04, q05, q06, q07]
     drop_table: "ember-v1-runs.yml maps.<map>.first_clear; choice item = standard q0 / craft 0 / +0, source quest"
-    grant_keys: ["fc_<map>_choice", "fc_<map>_item", "fc_<map>_shard", "fc_<map>_core", "fc_<map>_coin", "fc_<map>_bone", "fc_<map>_blank", "fc_<map>_unlock"]
+    grant_keys: ["fc_<map>_choice", "fc_<map>_item", "fc_<map>_shard", "fc_<map>_core", "fc_<map>_coin", "fc_<map>_bone", "fc_<map>_blank", "fc_<map>_unlock", "fc_<map>_armor_<slot>"]
     economy_keys: [S06.q03.shard, S06.q03.core, S06.q03.coin, S06.q04.blank, S06.q04.core, S06.q04.coin, S06.q05.bone, S06.q05.blank, S06.q05.coin, S06.q06.core, S06.q06.coin, S06.q07.blank, S06.q07.core, S06.q07.coin]
     counters: [p1_first_clear_, p1_fcpay_]
     config: ["ember-v1-economy.yml#sources.S06", "ember-v1-runs.yml#maps.q01.first_clear", "ember-v1-runs.yml#maps.q02.first_clear"]
@@ -586,6 +586,17 @@ sources:
     content: [account]
     config: ["../CoreGacha/gacha.yml#items", "../CoreGacha/gacha.yml#daily_pull_cap", "../CoreGacha/gacha.yml#shards"]
     notes: "D244 (G10): cosmetics only (kinds badge / tag / aura / pet / show / corerpg; no power, material or currency — checked); duplicates → 光屑 (CoreGacha wallet), spark 200. Model OUT (outside the power model)"
+  S39:
+    name: 六槽护甲掉落（每局完整通关 +1 件，开关 gear.six_slot.enabled 默认关）
+    econ_row: S39
+    status: flag_off
+    pays: [gear]
+    period: run
+    content: [q01, q02, q03, q04, q05, q06, q07]
+    drop_table: "D318 T1-7: normal main-story full clear only (no challenge / abyss / raid / event / rush); family = rollItem target / map rule, slot uniform head/chest/legs/boots, quality / craft = §5.1 tables, tier = map tier; Q01 first clear (switch on) adds four T1 q0 f0 target-family pieces fc_q01_armor_<slot> (S06)"
+    grant_keys: [six_armor]
+    code: ["p1/EmberRunRules.java#G_SIX_ARMOR = \"six_armor\"", "p1/EmberEconomy.java#\"six_armor\".equals(key)", "p1/EmberSettleService.java#in.sixArmor = modelled"]
+    notes: "D318 six-slot T1 (spec 2026-10-08 §3.3 · 已批 A); flag off = never pays; registry + tag only (no economy yml key, no golden); 白板经济模型未覆盖"
   X03:
     name: 管理员发放 / 测试（/corerpg p1 give · give dup · coin give）
     econ_row: null

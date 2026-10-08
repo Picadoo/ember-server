@@ -92,6 +92,18 @@ public final class EmberUpgradeRules {
         return v == null ? null : "物品数据无效: " + v;
     }
 
+    /**
+     * D318 六槽 K0 (spec §1.3): armor has no forge track — enhance / upgrade / craft / quality / swap are refused before
+     * anything is paid. Armor follows the selected charm's tier and enhance; quality and craft come only from drops.
+     */
+    public static final String ARMOR_REFUSE = "护甲随护符成长；成色和精工看掉落";
+
+    private static String forgeable(EmberItemData d) {
+        String b = basic(d);
+        if (b != null) return b;
+        return d.isArmor() ? ARMOR_REFUSE : null;
+    }
+
     // ------------------------------------------------------------------ §6.1 enhance
 
     public static Cost enhanceCost(int currentEnh) {
@@ -102,7 +114,7 @@ public final class EmberUpgradeRules {
 
     /** Pre-roll check: everything that can refuse an attempt without touching RNG. */
     public static Plan enhanceCheck(EmberItemData d) {
-        String b = basic(d);
+        String b = forgeable(d);
         if (b != null) return Plan.fail(b);
         if (d.enhance >= EmberTables.MAX_ENHANCE) return Plan.fail("已是 +" + EmberTables.MAX_ENHANCE);
         int t = d.enhance + 1;
@@ -149,8 +161,8 @@ public final class EmberUpgradeRules {
 
     /** Exchanges enhance + current pity between two same-slot items; everything else stays; both become bound. */
     public static SwapPlan swap(EmberItemData a, EmberItemData b) {
-        String x = basic(a);
-        if (x == null) x = basic(b);
+        String x = forgeable(a);
+        if (x == null) x = forgeable(b);
         if (x != null) return new SwapPlan(x, null, null);
         if (a.uid.equals(b.uid)) return new SwapPlan("不能与自身互换", null, null);
         if (!a.slot.equals(b.slot)) return new SwapPlan("不同部位不能互换（刃只能和刃，护符只能和护符）", null, null);
@@ -176,7 +188,7 @@ public final class EmberUpgradeRules {
 
     /** In-place same-family upgrade: keeps uid, family, enhance track (level + pity), quality, craft, bound. */
     public static Plan upgrade(EmberItemData d, boolean firstClearDone) {
-        String b = basic(d);
+        String b = forgeable(d);
         if (b != null) return Plan.fail(b);
         Cost c = upgradeCost(d.tier);
         if (c == null) return Plan.fail(d.tier == 0 ? "T0 不能升阶（同族升阶只有 T1→T2、T2→T3）" : "已是最高阶 T" + d.tier);
@@ -195,7 +207,7 @@ public final class EmberUpgradeRules {
     }
 
     public static Plan refine(EmberItemData d) {
-        String b = basic(d);
+        String b = forgeable(d);
         if (b != null) return Plan.fail(b);
         Cost c = refineCost(d.craft);
         if (c == null) return Plan.fail("精工已满（6%）");
@@ -210,7 +222,7 @@ public final class EmberUpgradeRules {
     }
 
     public static Plan quality(EmberItemData d) {
-        String b = basic(d);
+        String b = forgeable(d);
         if (b != null) return Plan.fail(b);
         Cost c = qualityCost(d.quality);
         if (c == null) return Plan.fail(d.quality == 2 ? "卓越 → 极品不能养成（极品只从正常随机掉落获得）" : "已是极品");
@@ -223,7 +235,24 @@ public final class EmberUpgradeRules {
     /** Blanks returned; only normal random drops (src=drop) of T1–T3. Nothing else is refunded. */
     public static int dismantleYield(EmberItemData d) {
         if (d == null || d.validate() != null || !"drop".equals(d.source) || d.tier < 1) return 0;
+        if (d.isArmor()) return 0; // D318: armor pays 0.1 × tier into the personal tenths ledger ({@link #armorDismantleTenths})
         return d.tier;
+    }
+
+    /**
+     * D318 六槽 §1.4 (白板 ×0.1): what dismantling a random-drop armor piece adds to the player's personal 胚零头, in tenths of
+     * a blank (0.1 × tier = tier tenths). Integer tenths, never a float sum (T1-3). 0 for anything else.
+     */
+    public static int armorDismantleTenths(EmberItemData d) {
+        if (d == null || !d.isArmor() || d.validate() != null || !"drop".equals(d.source) || d.tier < 1) return 0;
+        return d.tier;
+    }
+
+    /** D318: whole blanks paid out and the tenths left when {@code addTenths} joins {@code haveTenths} ({@code [blanks, rest]}). */
+    public static int[] addTenths(int haveTenths, int addTenths) {
+        int have = Math.max(0, haveTenths), add = Math.max(0, addTenths);
+        long total = (long) have + add;
+        return new int[]{(int) (total / 10), (int) (total % 10)};
     }
 
     public static String dismantleCheck(EmberItemData d) {

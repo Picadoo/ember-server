@@ -485,6 +485,32 @@ public final class EmberRunRules {
         public FirstClear firstClear;   // null when this character already has the first clear of this content version
         public int[] qualityWeights;    // null = normal §5.1; challenge §18.1 60/28/10/2
         public LootBias loot;           // P2-9 map loot identity (null = plain 60/20/20, 50/50)
+        /** D318 六槽 T1-7: +1 armor piece ({@link #G_SIX_ARMOR}); the caller sets it only for a modelled full clear with the switch on */
+        public boolean sixArmor;
+        /** D318: this clear is the Q01 first clear with the switch on → four T1 starter armor pieces of the target family */
+        public boolean sixStarter;
+    }
+
+    /** D318: ledger key of the per-clear armor drop (REG S39) */
+    public static final String G_SIX_ARMOR = "six_armor";
+
+    /**
+     * D318 六槽 T1-7: the extra armor piece of a full clear (D246 model, spec §3.3): family by the same target / map rule as
+     * {@link #rollItem}, slot uniform over head / chest / legs / boots, quality / craft from the same tables, tier = the map
+     * tier. Own seeded stream per key (subSeed), so no other grant of the run changes.
+     */
+    static ItemRoll rollArmor(int tier, String target, Random r, int[] qualityWeights, LootBias lb) {
+        String fam = pickFamily(target, lb, r.nextDouble());
+        String slot = pickArmorSlot(r.nextDouble());
+        int q = pickQuality(qualityWeights, r.nextDouble());
+        int c = pickCraft(r.nextDouble());
+        return new ItemRoll(fam, slot, tier, q, c);
+    }
+
+    /** D318: uniform over the four armor slots for u in [0,1) */
+    public static String pickArmorSlot(double u) {
+        int i = (int) Math.floor(Math.max(0.0, Math.min(0.999999999, u)) * 4);
+        return EmberItemData.ARMOR_SLOTS.get(i);
     }
 
     /**
@@ -502,6 +528,11 @@ public final class EmberRunRules {
         out.add(new Grant("base_xp", Kind.XP, null, EmberEconomy.amount("S01", "xp"), null));
         out.add(new Grant("base_mark", Kind.MARK, String.valueOf(in.tier), EmberEconomy.amount("S01", "mark"), null));
         out.add(item(in, "base_item"));
+        if (in.sixArmor) { // D318 六槽 T1-7 (switch on, modelled full clear only)
+            Random ar = new Random(subSeed(in.seed, in.player, in.runId, G_SIX_ARMOR));
+            out.add(new Grant(G_SIX_ARMOR, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, G_SIX_ARMOR), 1,
+                    rollArmor(in.tier, in.target, ar, in.qualityWeights, in.loot)));
+        }
         if (in.extraDone) {
             switch (in.extra) {
                 case TREASURE:
@@ -528,6 +559,23 @@ public final class EmberRunRules {
             if (fc.bone > 0) out.add(new Grant(p + "bone", Kind.MAT, EmberUpgradeRules.MAT_BONE, fc.bone, null));
             if (fc.blank > 0) out.add(new Grant(p + "blank", Kind.MAT, EmberUpgradeRules.MAT_BLANK, fc.blank, null));
             if (fc.unlocks != null && !fc.unlocks.isEmpty()) out.add(new Grant(p + "unlock", Kind.UNLOCK, fc.unlocks, 0, null));
+            if (in.sixStarter) out.addAll(sixStarterGrants(in, fc.mapKey)); // D318: Q01 first clear → four T1 starter armor pieces
+        }
+        return out;
+    }
+
+    /**
+     * D318 六槽 (spec §3.3 "Q01 首通 4 件 T1 目标族起步件"): standard q0 / craft 0 T1 pieces of the entry target family, one
+     * per armor slot, keys {@code fc_<map>_armor_<slot>} (source quest via the fc_ prefix, REG S06). No valid target: one
+     * seeded family draw for the four pieces (same rule as an untargeted roll).
+     */
+    public static List<Grant> sixStarterGrants(SettleInput in, String mapKey) {
+        List<Grant> out = new ArrayList<Grant>(4);
+        String fam = validFamily(in.target) ? in.target
+                : pickFamily(null, new Random(subSeed(in.seed, in.player, in.runId, "fc_" + mapKey + "_armor")).nextDouble());
+        for (String slot : EmberItemData.ARMOR_SLOTS) {
+            String key = "fc_" + mapKey + "_armor_" + slot;
+            out.add(new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, new ItemRoll(fam, slot, 1, 0, 0)));
         }
         return out;
     }

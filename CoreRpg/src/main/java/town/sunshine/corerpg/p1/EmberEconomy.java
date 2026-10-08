@@ -169,7 +169,7 @@ public final class EmberEconomy {
         src("S26", "国庆本 gq26", "ember-v1-festival.yml drops", Period.EVENT).acc(Account.FEST_COIN).keys("p3_fest_entry_").model(FULL).done();
         src("S27", "国庆兑换徽", "ember-v1-festival.yml", Period.EVENT).acc(BADGE).keys("p3_fest_xbadge_", "p3_badge").model(PART).done();
         src("S28", "8 印记兑换", "EmberRunRules.MARKS_PER_EXCHANGE", Period.NONE).acc(GEAR).keys("p1_mark_t").model(FULL).g("marks", 8).done();
-        src("S29", "分解装备", "EmberForgeService dismantle", Period.NONE).acc(BLANK).model(FULL).done();
+        src("S29", "分解装备", "EmberForgeService dismantle", Period.NONE).acc(BLANK).keys("p1_blank_tenths").model(FULL).done(); // D318: armor 0.1 × tier tenths (flag off → never written)
         src("S30", "生活玩法产出", "life.yml", Period.DAY).acc(Account.LIFE_ITEM, POT).keys("life_", "life_xp").model(NONE).done();
         src("S31", "旧任务线（P1 下不推进）", "quest.yml / QuestService", Period.NONE).acc(XP).model(NONE).done();
         src("S32", "邮件附件", "MailService", Period.NONE).acc(COIN, Account.MAIL).model(NONE).done();
@@ -189,6 +189,10 @@ public final class EmberEconomy {
             .model(NONE).done();
         src("S38", "扭蛋抽取产出（CoreGacha，外观）", "plugins/CoreGacha/gacha.yml items", Period.DAY).acc(Account.COSMETIC)
             .model(OUT).done();
+        // D318 六槽 T1-7: +1 armor piece per modelled full clear (gear.six_slot.enabled, default off → never pays); p1sim models it
+        // only under SIX (T0″ F arm), the default sim does not — PARTIAL. Registry + tag only, no economy yml key, no golden.
+        src("S39", "六槽护甲掉落（每局 +1，开关默认关）", "EmberRunRules.settle six_armor (gear.six_slot.enabled)", Period.RUN).acc(GEAR)
+            .ledger("six_armor").model(PART).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -323,6 +327,7 @@ public final class EmberEconomy {
         if ("pledge_sigmark".equals(key)) return "S09";
         if ("raid_mark".equals(key)) return "S12";
         if ("extra_chest_item".equals(key)) return "S34"; // D243 (G2): the chest's extra gear roll (item row; tag only)
+        if ("six_armor".equals(key)) return "S39"; // D318 六槽: per-clear armor drop (switch default off)
         return null;
     }
 

@@ -101,7 +101,7 @@ public class EmberCountersTest {
             if (f.asset()) assets.add(f.key);
             if (f.item()) items.add(f.key);
         }
-        assertEquals(new TreeSet<String>(Arrays.asList("p1_mark_t", "p1_sigmark_", "p3_badge", "p1_afk_acc_", "p1_vbound_")), new TreeSet<String>(assets));
+        assertEquals(new TreeSet<String>(Arrays.asList("p1_mark_t", "p1_sigmark_", "p3_badge", "p1_afk_acc_", "p1_vbound_", "p1_blank_tenths")), new TreeSet<String>(assets)); // D318: armor dismantle tenths
         assertEquals(new TreeSet<String>(Arrays.asList("p4_af_", "p4_afp_", "p1_sig_", "p4_rrn_", "p4_rro_")), new TreeSet<String>(items));
     }
 

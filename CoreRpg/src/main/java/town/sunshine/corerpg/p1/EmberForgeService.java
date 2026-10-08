@@ -320,10 +320,20 @@ public final class EmberForgeService implements Listener {
         return true;
     }
 
+    /** D318 六槽 §1.4: armor dismantle 胚零头 in tenths of a blank (0..9 between dismantles; asset, audit-visible in the log) */
+    public static final String C_BLANK_TENTHS = "p1_blank_tenths";
+    /** D318: one armor dismantle in flight per player (the tenths delta is applied on commit) */
+    private final Set<UUID> armorDisBusy = new HashSet<UUID>();
+
     private boolean dismantle(Player p, Slot it, boolean go, String rid, String tok) {
         String why = EmberUpgradeRules.dismantleCheck(it.data);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
-        int blanks = EmberUpgradeRules.dismantleYield(it.data);
+        final boolean armor = it.data.isArmor(); // D318: armor pays 0.1 × tier into the tenths ledger, whole blanks when it reaches 1
+        int tenths = armor ? EmberUpgradeRules.armorDismantleTenths(it.data) : 0;
+        PlayerData tpd = armor ? plugin.getDataStore().get(p.getUniqueId()) : null;
+        int haveT = tpd == null ? 0 : tpd.periodCount(C_BLANK_TENTHS, "all");
+        int[] tp = EmberUpgradeRules.addTenths(haveT, tenths);
+        int blanks = armor ? tp[0] : EmberUpgradeRules.dismantleYield(it.data);
         // B2.137: destroying needs the one-shot token from a preview (clickable [确认分解]), bound to uid+rev+slot
         String fp = it.data.uid + "|" + it.data.rev + "|" + it.index;
         if (go) {
@@ -331,6 +341,9 @@ public final class EmberForgeService implements Listener {
             if (bad != null) { p.sendMessage(P + ChatColor.RED + bad); go = false; }
         }
         if (!go) {
+            if (armor) p.sendMessage(P + "分解 " + it.data.shortLabel() + " → 胚料 +0." + tenths + "（护甲按 0.1 × 掉落阶 记零头，满 1 出 1 件；现有零头 0." + haveT
+                    + (blanks > 0 ? "，这次凑满 → 胚料 ×" + blanks : "") + "）");
+            else
             p.sendMessage(P + "分解 " + it.data.shortLabel() + " → 胚料 ×" + blanks + "（不退强化材料与金币，物品永久销毁）");
             if (it.data.isBlade() && onlyBlade(p, it.index))
                 p.sendMessage(P + ChatColor.RED + "⚠ 这是你背包里唯一的余烬刃，分解后副本里将没有可用武器");
@@ -352,10 +365,12 @@ public final class EmberForgeService implements Listener {
         if (ni().createNiItem(EmberUpgradeRules.MAT_BLANK) == null) { p.sendMessage(P + ChatColor.RED + "胚料模板 " + EmberUpgradeRules.MAT_BLANK + " 未加载（需 ni reload/重启）"); return true; }
         String r = rid != null ? rid : "dis:" + it.data.uid + ":" + it.data.rev;
         if (replayed(p, r)) return true;
+        if (armor && !armorDisBusy.add(p.getUniqueId())) { p.sendMessage(P + ChatColor.YELLOW + "上一件护甲还在分解中，稍等再点"); return true; }
         // take the item out first so it cannot be used or moved while the transaction runs
         final ItemStack original = it.stack.clone();
         p.getInventory().setItem(it.index, null);
-        pendingDismantle.put(it.data.uid, new Object[]{original, blanks}); // before commit: YAML mode finishes inline
+        pendingDismantle.put(it.data.uid, armor ? new Object[]{original, blanks, tenths - 10 * blanks, haveT} // D318: tenths delta on commit
+                : new Object[]{original, blanks}); // before commit: YAML mode finishes inline
         commit(p, "dismantle", r, Cost.NONE, Arrays.asList(new TxnItem(it.data, null, "dismantled")),
                 "分解 " + it.data.shortLabel() + " → 胚料×" + blanks);
         return true;
@@ -553,6 +568,7 @@ public final class EmberForgeService implements Listener {
         for (TxnItem t : list) busy.add(t.before.uid);
         java.util.function.Consumer<TxnResult> finish = res -> {
             for (TxnItem t : list) busy.remove(t.before.uid);
+            if ("dismantle".equals(kind) && list.get(0).before.isArmor()) armorDisBusy.remove(id); // D318
             Player q = Bukkit.getPlayer(id);
             if (res.status == TxnStatus.OK) {
                 done.put(rid, note);
@@ -574,6 +590,16 @@ public final class EmberForgeService implements Listener {
                 if ("dismantle".equals(kind)) {
                     Object[] pd = pendingDismantle.remove(list.get(0).before.uid);
                     int blanks = pd == null ? 0 : (Integer) pd[1];
+                    if (pd != null && pd.length > 2) { // D318: armor tenths ledger (asset) moves with the committed retire
+                        PlayerData tpd = plugin.getDataStore().get(id);
+                        if (tpd != null) {
+                            int before = tpd.periodCount(C_BLANK_TENTHS, "all");
+                            tpd.addPeriodCount(C_BLANK_TENTHS, "all", (Integer) pd[2]);
+                            plugin.getDataStore().flushMutation(id);
+                            plugin.getLogger().info("[" + EmberMode.MODE_ID + "] six-slot armor dismantle " + rid + " " + id + " tenths " + before + " → "
+                                    + tpd.periodCount(C_BLANK_TENTHS, "all") + " blanks " + blanks);
+                        }
+                    }
                     if (!store().usable()) { if (q != null) { if (EmberVault.get() != null) EmberVault.get().give(q, EmberUpgradeRules.MAT_BLANK, blanks); else ni().giveNiItem(q, EmberUpgradeRules.MAT_BLANK, blanks); } } // econ-ok: S29 dismantle blanks (legacy YAML path; MySQL uses delivery)
                     else if (q != null && gl() != null) gl().delivery().kick(q); // D162: blanks = delivery row of the same txn
                     if (q != null) EmberVault.savePlayerFile(q);

@@ -1210,6 +1210,14 @@ public final class EmberRunService implements Listener {
             EmberItems.Read r = loadouts.items().read(s);
             if (r != null && r.data != null && g.id.equals(r.data.uid)) return d.shortLabel() + "（已在背包）";
         }
+        if (d.isArmor()) { // D318 六槽: armor goes to the backpack (no gear library / auto-equip); wearing it = the armor page or drag
+            if (freeSlots(p) <= 0) return null;
+            ItemStack stack = loadouts.items().create(d);
+            if (stack == null) return null;
+            loadouts.remember(d, p.getUniqueId());
+            p.getInventory().addItem(stack);
+            return d.shortLabel() + "（护甲已放进背包，装备页「护甲」里可对比换上）";
+        }
         EmberGearLib lib = EmberGearLib.get(); // 1.62 装备库: new drops go to the library while the backpack is nearly full
         if (lib != null && lib.usable()) {
             EmberItemData act = activePiece(p, d.slot);
@@ -1260,6 +1268,7 @@ public final class EmberRunService implements Listener {
     EmberItemData activePiece(Player p, String slot) {
         EmberLoadout cur = loadouts.refresh(p);
         if ("charm".equals(slot)) return cur.charm;
+        if (EmberItemData.isArmorSlot(slot)) return cur.armor(EmberItemData.armorIndex(slot)); // D318 (null = empty / 2-slot)
         if (cur.blade != null) return cur.blade;
         String last = loadouts.state(p.getUniqueId()).mainhandUid;
         if (last == null) return null;
