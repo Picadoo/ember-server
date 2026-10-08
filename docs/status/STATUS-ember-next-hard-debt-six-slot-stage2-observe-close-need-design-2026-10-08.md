@@ -6,6 +6,8 @@
 **上游：** D325 live PASS · 隔离验收 `baa6306a` · 施工 tip `b02ca9f3` · D324 Stage1 S3 观察继续 · D308 门槛钉死 · D309–D311 证据链已闭 · 灰印/天赋 HOLD · K3 备选未授权 · Pack6 硬禁  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R** · **不改线上 set_bonus / bv / jar** · **不写六槽新代码**  
 **硬规格（待策划交稿）：** [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md)（待建）· STATUS=待批 A · backlog `B-six-slot-stage2-observe-close`  
+
+> **交稿旁注（D326 · 策划执行手）：** 硬规格已交 [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) · STATUS=待批 A · 荐方案 M · **本旁注零施工**（未改 jar/yml/开关）。
 **打开理由：** Stage2 已上线进观察，但**尚无正式「观察关窗」检查单**——何时可签「观察结束 / 维持观察 / 回滚」、要采哪些人感与抽查、红线是什么、与 Stage1 观察如何并行。要在**不动 jar/yml、不开 R、不偷开 K3/S 档/Pack6/天赋/灰印**前提下，出一张 docs-only 关窗规格。
 
 ---
