@@ -315,38 +315,95 @@ public final class EmberItemStore {
     }
 
     public void upsertItem(final EmberItemData d, final UUID owner, final String state) {
-        run("upsert item " + d.uid, c -> {
-            long now = System.currentTimeMillis();
-            try (PreparedStatement ps = c.prepareStatement(
-                    "INSERT INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at," + INSERT_KEY_COLS + ")"
-                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                            + " ON DUPLICATE KEY UPDATE owner_uuid=VALUES(owner_uuid),ni_id=VALUES(ni_id),family=VALUES(family),slot=VALUES(slot),"
-                            + "tier=VALUES(tier),quality=VALUES(quality),craft=VALUES(craft),enhance=VALUES(enhance),pity=VALUES(pity),"
-                            + "bound=VALUES(bound),source=VALUES(source),data_version=VALUES(data_version),rev=VALUES(rev),state=VALUES(state),"
-                            + "updated_at=VALUES(updated_at),affix=VALUES(affix),af_pity=VALUES(af_pity),sig_code=VALUES(sig_code),reroll_n=VALUES(reroll_n),"
-                            + ORIGIN_KEEP)) {
-                int i = 1;
-                ps.setString(i++, d.uid);
-                if (owner == null) ps.setNull(i++, Types.CHAR); else ps.setString(i++, owner.toString());
-                ps.setString(i++, d.ni);
-                ps.setString(i++, d.family);
-                ps.setString(i++, d.slot);
-                ps.setInt(i++, d.tier);
-                ps.setInt(i++, d.quality);
-                ps.setInt(i++, d.craft);
-                ps.setInt(i++, d.enhance);
-                ps.setInt(i++, d.pity);
-                ps.setInt(i++, d.bound ? 1 : 0);
-                ps.setString(i++, d.source);
-                ps.setInt(i++, d.version);
-                ps.setInt(i++, d.rev);
-                ps.setString(i++, state == null ? "active" : state);
-                ps.setLong(i++, now);
-                ps.setLong(i++, now);
-                setInsertKeys(ps, i, d);
-                ps.executeUpdate();
+        run("upsert item " + d.uid, c -> upsertItem0(c, d, owner, state));
+    }
+
+    /**
+     * D320 ①: the same upsert, and {@code cb} (main thread) learns whether it reached the DB: true = committed, false =
+     * failed (or no MySQL: nothing to confirm). The six-slot migration sets its flag only after every issued piece is true.
+     */
+    public void upsertItem(final EmberItemData d, final UUID owner, final String state, final Consumer<Boolean> cb) {
+        if (!usable()) { if (cb != null) cb.accept(false); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            boolean ok = false;
+            try (Connection c = plugin.getMysqlStorage().getConnection()) {
+                upsertItem0(c, d, owner, state);
+                ok = true;
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] upsert item " + d.uid + " failed: " + t.getMessage());
             }
+            final boolean r = ok;
+            if (cb != null) sync(() -> cb.accept(r));
         });
+    }
+
+    /**
+     * D320 ②: insert the row (state active) only when no row with this uid exists — an existing row in any state
+     * (retired / stored / another owner) is never touched — then {@code cb} (main thread) gets the row the DB holds
+     * afterwards (null = query failed / no MySQL).
+     */
+    public void insertItemIfAbsent(final EmberItemData d, final UUID owner, final Consumer<Row> cb) {
+        if (!usable()) { if (cb != null) cb.accept(null); return; }
+        ensureSchema();
+        exec().submit(() -> {
+            Row row = null;
+            try (Connection c = plugin.getMysqlStorage().getConnection()) {
+                try (PreparedStatement ps = c.prepareStatement(
+                        "INSERT IGNORE INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at," + INSERT_KEY_COLS + ")"
+                                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+                    bindItem(ps, d, owner, "active", System.currentTimeMillis());
+                    ps.executeUpdate();
+                }
+                try (PreparedStatement ps = c.prepareStatement("SELECT owner_uuid,rev,state FROM cr_p1_item WHERE item_uid=?")) {
+                    ps.setString(1, d.uid);
+                    try (ResultSet rs = ps.executeQuery()) { if (rs.next()) row = new Row(rs.getString(1), rs.getInt(2), rs.getString(3)); }
+                }
+            } catch (Throwable t) {
+                plugin.getLogger().log(Level.WARNING, "[" + EmberMode.MODE_ID + "] insert-if-absent item " + d.uid + " failed: " + t.getMessage());
+                row = null;
+            }
+            final Row r = row;
+            if (cb != null) sync(() -> cb.accept(r));
+        });
+    }
+
+    private static void upsertItem0(Connection c, EmberItemData d, UUID owner, String state) throws SQLException {
+        long now = System.currentTimeMillis();
+        try (PreparedStatement ps = c.prepareStatement(
+                "INSERT INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at," + INSERT_KEY_COLS + ")"
+                        + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                        + " ON DUPLICATE KEY UPDATE owner_uuid=VALUES(owner_uuid),ni_id=VALUES(ni_id),family=VALUES(family),slot=VALUES(slot),"
+                        + "tier=VALUES(tier),quality=VALUES(quality),craft=VALUES(craft),enhance=VALUES(enhance),pity=VALUES(pity),"
+                        + "bound=VALUES(bound),source=VALUES(source),data_version=VALUES(data_version),rev=VALUES(rev),state=VALUES(state),"
+                        + "updated_at=VALUES(updated_at),affix=VALUES(affix),af_pity=VALUES(af_pity),sig_code=VALUES(sig_code),reroll_n=VALUES(reroll_n),"
+                        + ORIGIN_KEEP)) {
+            bindItem(ps, d, owner, state, now);
+            ps.executeUpdate();
+        }
+    }
+
+    /** the 22 values of the cr_p1_item insert column list (item_uid … updated_at + INSERT_KEY_COLS) */
+    private static void bindItem(PreparedStatement ps, EmberItemData d, UUID owner, String state, long now) throws SQLException {
+        int i = 1;
+        ps.setString(i++, d.uid);
+        if (owner == null) ps.setNull(i++, Types.CHAR); else ps.setString(i++, owner.toString());
+        ps.setString(i++, d.ni);
+        ps.setString(i++, d.family);
+        ps.setString(i++, d.slot);
+        ps.setInt(i++, d.tier);
+        ps.setInt(i++, d.quality);
+        ps.setInt(i++, d.craft);
+        ps.setInt(i++, d.enhance);
+        ps.setInt(i++, d.pity);
+        ps.setInt(i++, d.bound ? 1 : 0);
+        ps.setString(i++, d.source);
+        ps.setInt(i++, d.version);
+        ps.setInt(i++, d.rev);
+        ps.setString(i++, state == null ? "active" : state);
+        ps.setLong(i++, now);
+        ps.setLong(i++, now);
+        setInsertKeys(ps, i, d);
     }
 
     public void loadOwnerItems(final UUID owner, final Consumer<Map<String, Row>> cb) {

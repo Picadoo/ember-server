@@ -51,6 +51,18 @@ public class EmberSixMigrationTest {
         final Set<String> dbRetired = new HashSet<String>(), cacheRetired = new HashSet<String>();
         /** the async DB retire write is lost (DB down) */
         boolean loseDbWrites;
+        final List<String> healedUids = new ArrayList<String>();
+        /**
+         * D320: remember writes are async — queued in {@code pendingDb} until {@link #flushDb} (the DB answers); a hard kill
+         * lands only the queued writes whose bit is set in {@code killLandMask} (any subset can be lost); a graceful stop
+         * drains the queue. Off (default): a remember lands and is confirmed at once (the T1 model).
+         */
+        boolean asyncDb;
+        final List<String> pendingDb = new ArrayList<String>();
+        int killLandMask;
+        /** uids whose active row the DB confirmed in this process (lost on any restart) */
+        final Set<String> confirmedDb = new HashSet<String>();
+        int heals;
         final Map<String, EmberItemData> created = new HashMap<String, EmberItemData>();
         final Set<String> everIssued = new HashSet<String>();
         EmberItemData blade, charm;
@@ -71,12 +83,30 @@ public class EmberSixMigrationTest {
         void hardRestart() {
             armor = diskArmor.clone(); pack = diskPack.clone(); marks = new HashSet<String>(diskMarks);
             ground = new ArrayList<String>(diskGround); chest = new ArrayList<String>(diskChest);
+            for (int i = 0; i < pendingDb.size(); i++) if ((killLandMask >> i & 1) == 1) db.add(pendingDb.get(i));
+            pendingDb.clear(); confirmedDb.clear();
             crashAt = -1; clearFail(); cacheRetired.clear(); join();
         }
-        /** graceful stop (or quit + rejoin): the server saves the player on the way down */
-        void softRestart() { persistInventory0(); crashAt = -1; clearFail(); cacheRetired.clear(); join(); }
-        /** PlayerJoinEvent: voided uids re-sent (trust cache + DB) */
-        void join() { int c = crashAt; crashAt = -1; EmberSixMigration.resendVoids(this); crashAt = c; }
+        /** graceful stop (or quit + rejoin): the server saves the player on the way down (and the DB queue drains) */
+        void softRestart() {
+            persistInventory0(); db.addAll(pendingDb); pendingDb.clear(); confirmedDb.clear();
+            crashAt = -1; clearFail(); cacheRetired.clear(); join();
+        }
+        /** PlayerJoinEvent: voided uids re-sent (trust cache + DB), completed pieces self-healed (D320 ②) */
+        void join() { int c = crashAt; crashAt = -1; EmberSixMigration.onJoin(this); crashAt = c; }
+        /** the DB answers every queued remember (it landed) */
+        void flushDb() { for (String u : pendingDb) { db.add(u); confirmedDb.add(u); } pendingDb.clear(); }
+        /** the DB answers the queued remembers whose bit is set in {@code mask} (landed + confirmed); the rest stay queued */
+        void flushSome(int mask) {
+            List<String> left = new ArrayList<String>();
+            for (int i = 0; i < pendingDb.size(); i++) {
+                String u = pendingDb.get(i);
+                if ((mask >> i & 1) == 1) { db.add(u); confirmedDb.add(u); } else left.add(u);
+            }
+            pendingDb.clear(); pendingDb.addAll(left);
+        }
+        /** the queued remembers fail (connection error): nothing lands, nothing is confirmed */
+        void dropPending() { pendingDb.clear(); }
 
         /** player-file save failure injection: 0 none, 1 every save fails, n ≥ 2 only the n-th save from now fails */
         int failMode;
@@ -156,7 +186,22 @@ public class EmberSixMigrationTest {
             persistInventory0();
             return true;
         }
-        public void remember(EmberItemData d) { tick(); if (firstRememberCall == 0) firstRememberCall = calls; db.add(d.uid); }
+        public void remember(EmberItemData d) {
+            tick();
+            if (firstRememberCall == 0) firstRememberCall = calls;
+            if (asyncDb) { if (!pendingDb.contains(d.uid)) pendingDb.add(d.uid); }
+            else { db.add(d.uid); confirmedDb.add(d.uid); }
+        }
+        public boolean confirmed(String uid) { return confirmedDb.contains(uid); }
+        /** insert-if-absent active: a row in any state (active / retired) is left as it is; DB down → nothing */
+        public void heal(EmberItemData d) {
+            tick();
+            heals++;
+            healedUids.add(d.uid);
+            if (loseDbWrites) return;
+            if (!db.contains(d.uid) && !dbRetired.contains(d.uid)) db.add(d.uid);
+            if (valid(d.uid)) confirmedDb.add(d.uid);
+        }
         public void retire(EmberItemData d) { tick(); cacheRetired.add(d.uid); if (!loseDbWrites) dbRetired.add(d.uid); }
         boolean valid(String uid) { return db.contains(uid) && !dbRetired.contains(uid) && !cacheRetired.contains(uid); }
         Set<String> validDb() { Set<String> v = new HashSet<String>(); for (String u : db) if (valid(u)) v.add(u); return v; }
@@ -603,14 +648,19 @@ public class EmberSixMigrationTest {
 
     // ------------------------------------------------------------------ T1-4 acceptance fix: persist before mark
 
-    static boolean done(EmberSixMigration.Outcome o) {
+    static boolean done(EmberSixMigration.Outcome o) { return done0(o); }
+    static boolean done0(EmberSixMigration.Outcome o) {
         return o == EmberSixMigration.Outcome.MIGRATED || o == EmberSixMigration.Outcome.ROLLED_FORWARD || o == EmberSixMigration.Outcome.ALREADY;
     }
 
     /** later hub visits with nothing injected until the migration is through (journal dropped / revert finished → visit again) */
     static EmberSixMigration.Outcome settle(World w, String why) {
         EmberSixMigration.Outcome o = null;
-        for (int i = 0; i < 4; i++) { o = w.migrate(); if (done(o)) return o; }
+        for (int i = 0; i < 6; i++) {
+            o = w.migrate();
+            if (done(o)) return o;
+            if (o == EmberSixMigration.Outcome.DB_PENDING) w.flushDb(); // the DB answers → the migration runs again
+        }
         fail(why + " did not settle: " + o + " " + w.detail);
         return o;
     }
@@ -900,14 +950,16 @@ public class EmberSixMigrationTest {
      */
     @Test public void conservationFuzzWithHardKillsAndSaveFailures() {
         Random rnd = new Random(20261008L);
-        int runs = 50000, ops = 0, crashes = 0, saveFails = 0, kills = 0, tosses = 0;
+        int runs = 50000, ops = 0, crashes = 0, saveFails = 0, kills = 0, tosses = 0, dbEvents = 0, pendings = 0;
         for (int run = 0; run < runs; run++) {
             World w = world(rnd.nextInt(5));
             for (int i = 0; i < 36; i++) if (rnd.nextInt(3) == 0) w.pack[i] = null;
             w.persistInventory0();
+            w.asyncDb = rnd.nextBoolean(); // D320: async remember (lost on a kill / failed / answered late) in half the runs
             List<String> f0 = new ArrayList<String>(w.foreign());
-            StringBuilder log = new StringBuilder();
+            StringBuilder log = new StringBuilder(w.asyncDb ? " [asyncDb]" : "");
             for (int op = 0; op < 12; op++, ops++) {
+                w.killLandMask = rnd.nextInt(16); // which queued DB writes a hard kill lets land
                 int kind = rnd.nextInt(10);
                 if (kind < 7) {
                     boolean mig = kind < 4;
@@ -917,7 +969,9 @@ public class EmberSixMigrationTest {
                     int fs = w.failedSaves;
                     log.append(mig ? " mig" : " claim");
                     try {
-                        log.append('=').append(mig ? String.valueOf(w.migrate()) : Arrays.toString(EmberSixMigration.claim(w, w)));
+                        String res = mig ? String.valueOf(w.migrate()) : Arrays.toString(EmberSixMigration.claim(w, w));
+                        if ("DB_PENDING".equals(res)) pendings++;
+                        log.append('=').append(res);
                     } catch (Crash e) {
                         crashes++;
                         int k = rnd.nextInt(3);
@@ -934,8 +988,11 @@ public class EmberSixMigrationTest {
                 } else if (kind == 7) {
                     log.append(" kill"); w.hardRestart(); kills++;
                 } else if (kind == 8) {
-                    if (rnd.nextBoolean()) { log.append(" stop"); w.softRestart(); }
-                    else { log.append(" autosave"); w.persistInventory0(); } // the server's periodic player save, at any moment
+                    int e = rnd.nextInt(4);
+                    if (e == 0) { log.append(" stop"); w.softRestart(); }
+                    else if (e == 1) { log.append(" autosave"); w.persistInventory0(); } // the server's periodic player save, at any moment
+                    else if (e == 2) { int m = rnd.nextInt(16); log.append(" dbAnswer").append(m); w.flushSome(m); dbEvents++; }
+                    else { log.append(" dbLost"); w.dropPending(); dbEvents++; } // D320: queued remembers fail
                 } else { // player actions: throw / store / pick up / relog
                     int act = rnd.nextInt(7);
                     if (act <= 2 || act == 6) tosses++;
@@ -957,7 +1014,8 @@ public class EmberSixMigrationTest {
             assertTrue("run " + run + log, w.disk.flag);
         }
         System.out.println("[T1-4] fuzz: " + runs + " runs / " + ops + " ops (" + crashes + " crashes, " + saveFails + " failed-save visits, "
-                + kills + " hard kills, " + tosses + " throws / stores), bad 0");
+                + kills + " hard kills, " + tosses + " throws / stores, " + pendings + " DB_PENDING visits, " + dbEvents + " DB answer / loss events), bad 0");
+        assertTrue(pendings > 5000 && dbEvents > 5000);
         assertTrue(saveFails > 10000 && kills > 10000);
         assertTrue(tosses > 20000);
     }
@@ -1327,5 +1385,173 @@ public class EmberSixMigrationTest {
             }
         }
         assertEquals(25, scenarios);
+    }
+
+    // ------------------------------------------------------------------ D320 ① DB confirm before the flag / ② self-heal
+
+    static Set<String> pieceUids(World w) {
+        Set<String> u = new HashSet<String>();
+        for (EmberItemData d : w.disk.pieces) u.add(d.uid);
+        return u;
+    }
+
+    /**
+     * T2 A1-6 / A1-7: the async remembers of the issued pieces are lost (any subset of the 4) at every write point of the
+     * visit × no restart (the DB answers a subset) / graceful / hard kill (a subset lands unconfirmed); then the re-run,
+     * a hard kill before the DB answers again, settle, hard kill. The flag is never written before all four are confirmed,
+     * so after it the DB holds exactly the 4 worn pieces (H / D bits equal; total invariant after every step).
+     */
+    @Test public void rememberLossAtEveryWritePointTimesRestart_D320() {
+        int scenarios = 0, pendingVisits = 0;
+        for (int k = 0; k < 5; k++) {
+            World probe = world(k);
+            probe.asyncDb = true;
+            assertEquals(EmberSixMigration.Outcome.DB_PENDING, probe.migrate());
+            assertFalse("no flag while the DB has not answered", probe.disk.flag);
+            assertNotNull(probe.disk.journal);
+            int steps = probe.calls;
+            for (int c = 0; c <= steps; c++) for (int r = 0; r < 3; r++) for (int mask = 0; mask < 16; mask++) {
+                if (r == 1 && mask > 0) continue; // a graceful stop drains the queue: one case
+                World w = world(k);
+                w.asyncDb = true;
+                List<String> f0 = w.foreign();
+                String why = "case " + k + " crash@" + c + " " + RS[r] + " mask " + mask;
+                if (c > 0) { w.crashAt = c; try { w.migrate(); fail(why + " crash not hit"); } catch (Crash expected) { } }
+                else assertEquals(why, EmberSixMigration.Outcome.DB_PENDING, w.migrate());
+                assertFalse(why + " flag before the DB confirmed all four", w.disk.flag);
+                assertSound(w, f0, why + " visit 1");
+                if (r == 2) { w.killLandMask = mask; w.hardRestart(); }
+                else if (r == 1) w.softRestart();
+                else { w.crashAt = -1; w.flushSome(mask); }
+                assertSound(w, f0, why + " restart");
+                EmberSixMigration.Outcome o = w.migrate();
+                if (o == EmberSixMigration.Outcome.DB_PENDING) { pendingVisits++; assertFalse(why, w.disk.flag); }
+                assertSound(w, f0, why + " re-run " + o);
+                w.killLandMask = 0;
+                w.hardRestart(); // the queued writes of the re-run are lost
+                assertSound(w, f0, why + " kill after the re-run");
+                settle(w, why);
+                assertSound(w, f0, why + " settled");
+                w.hardRestart();
+                assertMigrated(w, f0, why);
+                assertEquals(why, pieceUids(w), w.validDb());
+                assertEquals(EmberSixMigration.Outcome.ALREADY, w.migrate());
+                scenarios++;
+            }
+        }
+        System.out.println("[D320] remember loss (subset 0-4) × write point × restart: " + scenarios + " scenarios (" + pendingVisits + " DB_PENDING re-runs), bad 0");
+        assertTrue(scenarios > 1500 && pendingVisits > 1000);
+    }
+
+    /**
+     * the exact T2 kill points after the DB answered: DB_PENDING → the DB confirms → the re-run is killed at every write
+     * point (incl. after the flag, before / after the unmark, before the post-commit save) × 3 restarts → the four rows
+     * are there, 4 valid, nothing re-migrated.
+     */
+    @Test public void killAfterConfirmAtEveryWritePoint_D320() {
+        int scenarios = 0;
+        for (int k = 0; k < 5; k++) {
+            World probe = world(k);
+            probe.asyncDb = true;
+            probe.migrate(); probe.flushDb();
+            int base = probe.calls;
+            assertEquals(EmberSixMigration.Outcome.ROLLED_FORWARD, probe.migrate());
+            int steps = probe.calls - base;
+            for (int c = 1; c <= steps; c++) for (int r = 0; r < 3; r++) {
+                World w = world(k);
+                w.asyncDb = true;
+                List<String> f0 = w.foreign();
+                String why = "case " + k + " re-run crash@" + c + " " + RS[r];
+                w.migrate(); w.flushDb();
+                w.crashAt = w.calls + c;
+                try { w.migrate(); fail(why); } catch (Crash expected) { }
+                restart(w, r);
+                assertSound(w, f0, why);
+                settle(w, why);
+                w.hardRestart();
+                assertMigrated(w, f0, why);
+                assertEquals(why, 4, w.everIssued.size());
+                scenarios++;
+            }
+        }
+        System.out.println("[D320] kill after the DB confirmed × write point × restart: " + scenarios + " scenarios, bad 0");
+        assertTrue(scenarios >= 5 * 4 * 3);
+    }
+
+    /**
+     * ② self-heal of a completed migration whose rows are gone (the T2 A1-6 state of a pre-D320 build, or a DB restore):
+     * every subset of the 4 rows lost × heal on join after a hard kill / on the next completed-migration visit / DB down
+     * at the first join then a later join. Afterwards the 4 worn pieces are valid again (H / D bits). A retired row and a
+     * voided uid are never revived.
+     */
+    @Test public void selfHealRestoresLostRowsNeverRevivesRetired_D320() {
+        int scenarios = 0;
+        for (int k = 0; k < 5; k++) for (int mask = 1; mask < 16; mask++) for (int path = 0; path < 3; path++) {
+            World w = world(k);
+            List<String> f0 = w.foreign();
+            assertEquals(EmberSixMigration.Outcome.MIGRATED, w.migrate());
+            String why = "case " + k + " lost " + mask + " path " + path;
+            List<EmberItemData> pieces = new ArrayList<EmberItemData>(w.disk.pieces);
+            assertEquals(why, 4, pieces.size());
+            for (int i = 0; i < 4; i++) if ((mask >> i & 1) == 1) w.db.remove(pieces.get(i).uid);
+            assertTrue(why + " rows lost → those pieces do not count", w.validDb().size() < 4);
+            int h0 = w.heals;
+            if (path == 0) w.hardRestart();
+            else if (path == 1) { w.confirmedDb.clear(); assertEquals(EmberSixMigration.Outcome.ALREADY, w.migrate()); }
+            else {
+                w.loseDbWrites = true;
+                w.hardRestart();
+                assertTrue(why + " DB down: still missing", w.validDb().size() < 4);
+                w.loseDbWrites = false;
+                w.softRestart();
+            }
+            // after a restart nothing is confirmed in-process: every held piece gets an insert-if-absent (only the lost rows change)
+            assertEquals(why + " one insert-if-absent per held piece (+4 while the DB was down)", path == 2 ? 8 : 4, w.heals - h0);
+            assertMigrated(w, f0, why + " healed");
+            assertEquals(why, pieceUids(w), w.validDb());
+            // idempotent: confirmed now → no more DB traffic
+            int h1 = w.heals;
+            assertEquals(EmberSixMigration.Outcome.ALREADY, w.migrate());
+            assertEquals(why, h1, w.heals);
+            scenarios++;
+        }
+        // a retired row stays retired; a voided uid is never sent
+        for (int k = 0; k < 5; k++) {
+            World w = world(k);
+            assertEquals(EmberSixMigration.Outcome.MIGRATED, w.migrate());
+            EmberItemData p0 = w.disk.pieces.get(0), p1 = w.disk.pieces.get(1);
+            w.dbRetired.add(p0.uid);               // the DB says retired (whatever made it so)
+            w.db.remove(p1.uid);                   // row gone …
+            w.disk.voided.add(p1);                 // … and the uid is on the voided list
+            w.dbRetired.remove(p1.uid);
+            w.hardRestart();
+            assertFalse("case " + k + " retired row not revived", w.valid(p0.uid));
+            assertFalse("case " + k + " voided uid not revived", w.valid(p1.uid));
+            assertTrue("case " + k + " voided uid re-retired", w.dbRetired.contains(p1.uid));
+            assertFalse("case " + k + " voided uid never got an active row", w.db.contains(p1.uid));
+            assertFalse("case " + k + " voided uid never sent to the DB as active (not even insert-if-absent)", w.healedUids.contains(p1.uid));
+            assertTrue("case " + k + " the retired-row piece was asked (insert-if-absent leaves it retired)", w.healedUids.contains(p0.uid));
+        }
+        System.out.println("[D320] self-heal: " + scenarios + " scenarios (lost-row subsets × join / ALREADY / DB down), bad 0");
+        assertEquals(5 * 15 * 3, scenarios);
+    }
+
+    /** wiring of ① ② on the live side */
+    @Test public void dbConfirmAndSelfHealWiring_D320() throws Exception {
+        String mig = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberSixMigration.java")), java.nio.charset.StandardCharsets.UTF_8);
+        String svc = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberSixSlotService.java")), java.nio.charset.StandardCharsets.UTF_8);
+        String store = new String(java.nio.file.Files.readAllBytes(java.nio.file.Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberItemStore.java")), java.nio.charset.StandardCharsets.UTF_8);
+        int gate = mig.indexOf("return Outcome.DB_PENDING;"), flag = mig.indexOf("next.flag = true;");
+        assertTrue("DB confirm gate before the flag", gate > 0 && gate < flag);
+        assertTrue(mig.contains("if (rec.journal == null) { tidyOrphanMarks(); heal(port, rec); }"));
+        assertTrue(svc.contains("EmberSixMigration.onJoin(new LivePort(p));"));
+        assertTrue(svc.contains("loadouts.store().upsertItem(d, owner, \"active\", ok -> dbAnswer(owner, uid, ok));"));
+        assertTrue(svc.contains("loadouts.store().insertItemIfAbsent(d, owner, row -> {"));
+        assertTrue(svc.contains("Bukkit.getScheduler().runTask(plugin, () -> tryMigrate(p));"));
+        assertTrue(svc.contains("y.createSection(\"pieces.\" + i"));
+        int a = store.indexOf("public void insertItemIfAbsent("), b = store.indexOf("private static void upsertItem0(");
+        String ins = store.substring(a, b);
+        assertTrue(ins.contains("INSERT IGNORE INTO cr_p1_item"));
+        assertFalse("insert-if-absent never updates an existing row", ins.contains("ON DUPLICATE KEY UPDATE"));
     }
 }

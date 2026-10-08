@@ -22,8 +22,16 @@ import java.util.List;
  *   <li><b>swap</b>: the four slots and the swap mark on the player change in one step ({@link Port#apply}); save the
  *       player file;</li>
  *   <li><b>post-check</b> from the stacks actually worn — mismatch → revert (originals back, mark off), no DB row;</li>
- *   <li>DB remember the issued pieces; commit = flag 1 + originals into 待领 + journal cleared, one atomic record save.</li>
+ *   <li>DB remember the issued pieces and <b>wait for the DB to confirm</b> each (D320 ①; not confirmed yet →
+ *       {@link Outcome#DB_PENDING}, journal + mark stay, the confirmation re-runs the migration, a failure waits for the
+ *       next visit); commit = flag 1 + done_at + the four pieces + originals into 待领 + journal cleared, one atomic
+ *       record save; then mark off + player save (D319 (c)).</li>
  * </ol>
+ *
+ * <p><b>Self-heal</b> (D320 ②, {@link #heal}): after the flag, on join and on every completed-migration visit, each of the
+ * record's four pieces that the player holds and the DB has not confirmed in this process gets an insert-if-absent
+ * (state active). A row that exists in any state — retired, stored, another owner — is never touched, and voided uids are
+ * skipped, so a retired uid is never revived.
  *
  * <p><b>Where the originals are</b> (T1 acceptance, residual risk A/B/C): the swap mark travels with the inventory in
  * the player file (live: a scoreboard tag), so a journal is resolved from the mark, never from whether the issued pieces
@@ -46,7 +54,10 @@ public final class EmberSixMigration<S> {
     public static final String ORIGIN_MAP = "migrate";
     public static final String SOURCE = "migrate";
 
-    public enum Outcome { ALREADY, MIGRATED, ROLLED_FORWARD, JOURNAL_DROPPED, CHECK_FAILED, NO_TEMPLATE, SAVE_FAILED, ERROR }
+    public enum Outcome { ALREADY, MIGRATED, ROLLED_FORWARD, JOURNAL_DROPPED, CHECK_FAILED, NO_TEMPLATE, SAVE_FAILED, DB_PENDING, ERROR }
+
+    /** 待领 entry id of a re-issued piece that found no free slot (keyed by its uid: a resumed reconcile sees it is there) */
+    static final String RE_ENTRY = "r";
 
     /** the player file could not be written during a 待领 claim; nothing was marked, the entry is still owed */
     public static final class SaveFailed extends RuntimeException {
@@ -86,9 +97,12 @@ public final class EmberSixMigration<S> {
         public final List<EmberItemData> voided = new ArrayList<EmberItemData>();
         /** epoch seconds of the commit that set the flag (0 = not migrated); the invsnap restore guard compares snapshots to it */
         public long doneAt;
+        /** D320 ②: the four pieces the commit made valid (self-heal source); empty before the flag / in pre-D320 records */
+        public final List<EmberItemData> pieces = new ArrayList<EmberItemData>();
         public Record<S> copy() {
             Record<S> r = new Record<S>();
             r.flag = flag; r.journal = journal; r.seq = seq; r.stash.putAll(stash); r.voided.addAll(voided); r.doneAt = doneAt;
+            r.pieces.addAll(pieces);
             return r;
         }
     }
@@ -135,7 +149,18 @@ public final class EmberSixMigration<S> {
         boolean take(String uid);
         /** write the player file (armor + backpack + marks) now; false = the write did not go through (it may or may not be on disk) */
         boolean persistInventory();
+        /** DB: write the row (state active) and the trust cache; the DB write is async, its outcome arrives via {@link #confirmed} */
         void remember(EmberItemData d);
+        /**
+         * D320 ①: the DB has confirmed an active row for this uid in this process (a {@link #remember} or {@link #heal}
+         * reached it). No DB in use (YAML) → always true. Lost on restart (the next visit sends again).
+         */
+        boolean confirmed(String uid);
+        /**
+         * D320 ②: insert the row (state active) only when the DB has no row for this uid; an existing row in any state is
+         * left as it is. Async; a confirmed active row makes {@link #confirmed} true.
+         */
+        void heal(EmberItemData d);
         /** DB: this uid is void (state retired, trust cache updated now; the DB write is async and idempotent) */
         void retire(EmberItemData d);
         void alert(String msg);
@@ -214,7 +239,7 @@ public final class EmberSixMigration<S> {
         Record<S> rec = port.load();
         for (EmberItemData d : rec.voided) port.retire(d); // idempotent; covers a retire lost to a crash / failed DB write
         if (rec.flag) {
-            if (rec.journal == null) tidyOrphanMarks();
+            if (rec.journal == null) { tidyOrphanMarks(); heal(port, rec); }
             return Outcome.ALREADY;
         }
         if (rec.journal != null) return reconcile(rec);
@@ -266,9 +291,7 @@ public final class EmberSixMigration<S> {
             if (!revert(rec)) return saveFailed("during the revert (journal kept, reverting)");
             return Outcome.CHECK_FAILED;
         }
-        boolean saved = commit(rec, null);
-        lastDetail = "issued " + issue[0].ni + "…" + (saved ? "" : POST_SAVE_FAILED);
-        return Outcome.MIGRATED;
+        return commit(rec, Outcome.MIGRATED, "issued " + issue[0].ni + "…");
     }
 
     private Outcome saveFailed(String where) {
@@ -362,7 +385,7 @@ public final class EmberSixMigration<S> {
         List<EmberItemData> old = new ArrayList<EmberItemData>();
         List<S> fresh = new ArrayList<S>(Arrays.asList(null, null, null, null));
         for (int i = 0; i < 4; i++) {
-            if (port.holds(issued.get(i).uid)) continue;
+            if (port.holds(issued.get(i).uid) || rec.stash.containsKey(RE_ENTRY + issued.get(i).uid)) continue; // on the player / already in 待领
             EmberItemData n = reissue(issued.get(i), port.newUid());
             S s = port.create(n);
             if (s == null) { lastDetail = "missing template " + n.ni; return Outcome.NO_TEMPLATE; }
@@ -374,15 +397,21 @@ public final class EmberSixMigration<S> {
             Record<S> next = rec.copy();
             next.journal = j = j.with(j.originals, issued, false);
             next.voided.addAll(old);
+            // D320: a re-issued piece whose slot is taken goes to 待领 in this same write (keyed by its uid), so a commit
+            // that has to wait for the DB (DB_PENDING) never makes the next visit re-issue it again
+            boolean[] toSlot = new boolean[4];
+            for (int i = 0; i < 4; i++) {
+                if (fresh.get(i) == null) continue;
+                if (port.armor(i) == null) toSlot[i] = true;
+                else { String id = RE_ENTRY + issued.get(i).uid; next.stash.put(id, new StashEntry<S>(id, i, fresh.get(i))); }
+            }
             port.save(next); // void first: from here no path can make an old uid valid again
-            rec.journal = j; rec.voided.clear(); rec.voided.addAll(next.voided);
+            rec.journal = j; rec.voided.clear(); rec.voided.addAll(next.voided); rec.stash.clear(); rec.stash.putAll(next.stash);
             for (EmberItemData d : old) port.retire(d);
-            for (int i = 0; i < 4; i++) if (fresh.get(i) != null && port.armor(i) == null) { port.setArmor(i, fresh.get(i)); fresh.set(i, null); }
+            for (int i = 0; i < 4; i++) if (toSlot[i]) port.setArmor(i, fresh.get(i));
         }
         if (!port.persistInventory()) return saveFailed("rolling forward (journal kept)");
-        boolean saved = commit(rec, fresh);
-        lastDetail = "rolled forward" + (old.isEmpty() ? "" : ", re-issued " + old.size()) + (saved ? "" : POST_SAVE_FAILED);
-        return Outcome.ROLLED_FORWARD;
+        return commit(rec, Outcome.ROLLED_FORWARD, "rolled forward" + (old.isEmpty() ? "" : ", re-issued " + old.size()));
     }
 
     private static <S> void stash(Record<S> next, long at, int slot, S o) {
@@ -395,26 +424,63 @@ public final class EmberSixMigration<S> {
     static final String POST_SAVE_FAILED = " · post-commit player save failed (orphan swap mark cleared next visit)";
 
     /**
-     * DB remember, then flag + done_at + 待领 (originals, plus re-issued pieces that found no free slot) + journal cleared in
-     * one record write; then the mark comes off and the player file is written at once (D319 (c), checked). @return false
-     * when that last save failed: logged + alerted only, the migration stays complete; the next completed-migration
-     * visit clears the orphan mark and saves again ({@link #tidyOrphanMarks}).
+     * D320 ①: DB remember every issued piece the DB has not confirmed yet, and go on only when all four are confirmed —
+     * otherwise {@link Outcome#DB_PENDING}: nothing else changes (journal + mark stay, the pieces are worn / in 待领 and
+     * count in this process through the trust cache), the confirmation re-runs the migration ({@link #reconcile} → here),
+     * a failed write waits for the next visit. Then flag + done_at + the four pieces + 待领 (originals) + journal cleared
+     * in one record write; then the mark comes off and the player file is written at once (D319 (c), checked). A failed
+     * last save is logged + alerted only, the migration stays complete; the next completed-migration visit clears the
+     * orphan mark and saves again ({@link #tidyOrphanMarks}).
      */
-    private boolean commit(Record<S> rec, List<S> extra) {
+    private Outcome commit(Record<S> rec, Outcome done, String detail) {
         Journal<S> j = rec.journal;
-        for (EmberItemData d : j.issued) port.remember(d);
+        for (EmberItemData d : j.issued) if (!port.confirmed(d.uid)) port.remember(d);
+        int waiting = 0;
+        for (EmberItemData d : j.issued) if (!port.confirmed(d.uid)) waiting++;
+        if (waiting > 0) {
+            lastDetail = detail + " · waiting for the DB to confirm " + waiting + " of 4 pieces (journal kept)";
+            return Outcome.DB_PENDING;
+        }
         Record<S> next = rec.copy();
         for (int i = 0; i < 4; i++) if (j.originals.get(i) != null) stash(next, j.at, i, j.originals.get(i));
-        if (extra != null) for (int i = 0; i < 4; i++) if (extra.get(i) != null) stash(next, j.at, i, extra.get(i));
         next.flag = true;
         next.doneAt = port.nowSec();
+        next.pieces.clear();
+        next.pieces.addAll(j.issued);
         next.journal = null;
-        port.save(next); // flag + 待领 + journal cleared in one record write
-        rec.flag = true; rec.doneAt = next.doneAt; rec.journal = null; rec.seq = next.seq; rec.stash.clear(); rec.stash.putAll(next.stash);
+        port.save(next); // flag + done_at + pieces + 待领 + journal cleared in one record write
+        rec.flag = true; rec.doneAt = next.doneAt; rec.pieces.clear(); rec.pieces.addAll(next.pieces);
+        rec.journal = null; rec.seq = next.seq; rec.stash.clear(); rec.stash.putAll(next.stash);
         port.apply(null, j.mark, false); // tidy: the mark is no longer needed (null armor = slots untouched)
         boolean saved = port.persistInventory(); // D319 (c): without it a kill before the auto-save leaves an orphan mark
         if (!saved) port.alert("六槽迁移已完成，但去掉换装标签后的玩家存档失败（下次回枢纽时清掉残留标签并补存；迁移结果不受影响）");
-        return saved;
+        lastDetail = detail + (saved ? "" : POST_SAVE_FAILED);
+        return done;
+    }
+
+    /**
+     * D320 ②: completed migration (flag, no journal) → each recorded piece the player holds, not voided, not confirmed by
+     * the DB in this process → insert-if-absent active ({@link Port#heal}). Never touches an existing row (a retired /
+     * stored / given-away piece stays as it is) and never a voided uid. @return how many were sent
+     */
+    public static <S> int heal(Port<S> port, Record<S> rec) {
+        if (!rec.flag || rec.journal != null) return 0;
+        java.util.Set<String> voided = new java.util.HashSet<String>();
+        for (EmberItemData d : rec.voided) voided.add(d.uid);
+        int n = 0;
+        for (EmberItemData d : rec.pieces) {
+            if (voided.contains(d.uid) || port.confirmed(d.uid) || !port.holds(d.uid)) continue;
+            port.heal(d);
+            n++;
+        }
+        return n;
+    }
+
+    /** join: re-send the voided uids' retire, then self-heal the completed migration's pieces (D320 ②) */
+    public static <S> void onJoin(Port<S> port) {
+        Record<S> rec = port.load();
+        for (EmberItemData d : rec.voided) port.retire(d);
+        heal(port, rec);
     }
 
     /** re-send the DB retire of every voided uid (join; the async write of an earlier one may have been lost) */

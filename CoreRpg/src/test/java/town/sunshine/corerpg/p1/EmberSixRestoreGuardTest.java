@@ -248,12 +248,12 @@ public class EmberSixRestoreGuardTest {
         assertFalse(rg.contains("getScoreboardTags"));
         // the flag and done_at are written in the same record save
         String mig = src("p1/EmberSixMigration.java");
-        String commit = mig.substring(mig.indexOf("next.flag = true;"), mig.indexOf("port.save(next); // flag + 待领"));
+        String commit = mig.substring(mig.indexOf("next.flag = true;"), mig.indexOf("port.save(next); // flag + done_at + pieces + 待领"));
         assertTrue(commit.contains("next.doneAt = port.nowSec();"));
         // orphan clean-up: ALREADY + no journal → drop marks + checked save
         String run = body(mig, "public Outcome run()");
-        assertTrue(run.contains("if (rec.journal == null) tidyOrphanMarks();"));
-        String cm = body(mig, "private boolean commit(Record<S> rec, List<S> extra)");
+        assertTrue(run.contains("if (rec.journal == null) { tidyOrphanMarks(); heal(port, rec); }"));
+        String cm = body(mig, "private Outcome commit(Record<S> rec, Outcome done, String detail)");
         assertTrue("(c) save right after the unmark", cm.indexOf("port.apply(null, j.mark, false)") < cm.indexOf("port.persistInventory()"));
         String tidy = body(mig, "private void tidyOrphanMarks()");
         assertTrue(tidy.indexOf("port.dropSwapMarks()") < tidy.indexOf("port.persistInventory()"));

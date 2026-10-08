@@ -52,6 +52,10 @@ public final class EmberSixSlotService implements Listener {
     private final Map<UUID, Object[]> allPending = new HashMap<UUID, Object[]>();
     private final Map<UUID, Integer> stashN = new java.util.concurrent.ConcurrentHashMap<UUID, Integer>();
     private final Map<UUID, Object[]> viewCache = new HashMap<UUID, Object[]>();
+    /** D320 ①: uids whose active row the DB confirmed in this process (remember / heal callback) */
+    private final Set<String> dbConfirmed = Collections.synchronizedSet(new HashSet<String>());
+    /** D320 ①: per player, the issued uids a DB_PENDING commit waits for (main thread only) */
+    private final Map<UUID, Set<String>> awaiting = new HashMap<UUID, Set<String>>();
 
     public EmberSixSlotService(CoreRpgPlugin plugin, EmberLoadoutService loadouts) {
         this.plugin = plugin;
@@ -94,6 +98,11 @@ public final class EmberSixSlotService implements Listener {
             ConfigurationSection d = v.getConfigurationSection(k);
             if (d != null) r.voided.add(EmberItemData.fromMap(d.getValues(false)));
         }
+        ConfigurationSection pc = y.getConfigurationSection("pieces");
+        if (pc != null) for (String k : pc.getKeys(false)) {
+            ConfigurationSection d = pc.getConfigurationSection(k);
+            if (d != null) r.pieces.add(EmberItemData.fromMap(d.getValues(false)));
+        }
         return r;
     }
 
@@ -116,6 +125,7 @@ public final class EmberSixSlotService implements Listener {
             y.set("stash." + e.id + ".item", e.item);
         }
         for (int i = 0; i < r.voided.size(); i++) y.createSection("voided." + i, r.voided.get(i).toMap());
+        for (int i = 0; i < r.pieces.size(); i++) y.createSection("pieces." + i, r.pieces.get(i).toMap());
         stashN.put(id, r.stash.size());
         File f = file(id);
         try {
@@ -213,7 +223,31 @@ public final class EmberSixSlotService implements Listener {
             return false;
         }
         public boolean persistInventory() { return EmberVault.savePlayerFileChecked(p); }
-        public void remember(EmberItemData d) { loadouts.remember(d, p.getUniqueId()); }
+        public void remember(EmberItemData d) {
+            final UUID owner = p.getUniqueId();
+            final String uid = d.uid;
+            loadouts.rememberRow(uid, owner, d.rev, "active"); // trust cache now (same as EmberLoadoutService.remember)
+            loadouts.store().logCreate(d, owner, "active", null);
+            Set<String> w = awaiting.get(owner);
+            if (w == null) awaiting.put(owner, w = new HashSet<String>());
+            w.add(uid);
+            loadouts.store().upsertItem(d, owner, "active", ok -> dbAnswer(owner, uid, ok));
+        }
+        public boolean confirmed(String uid) { return !loadouts.store().usable() || dbConfirmed.contains(uid); }
+        public void heal(EmberItemData d) {
+            final UUID owner = p.getUniqueId();
+            final String uid = d.uid;
+            loadouts.store().insertItemIfAbsent(d, owner, row -> {
+                if (row == null) { plugin.getLogger().warning("[P1 six] " + p.getName() + " self-heal " + uid + ": DB query failed (retried next join / hub visit)"); return; }
+                UUID o = null;
+                try { if (row.owner != null) o = UUID.fromString(row.owner); } catch (IllegalArgumentException ignored) {}
+                loadouts.rememberRow(uid, o, row.rev, row.state); // whatever the DB really holds (a retired row stays retired)
+                if ("active".equals(row.state) && owner.toString().equals(row.owner)) dbConfirmed.add(uid);
+                else plugin.getLogger().warning("[P1 six] " + p.getName() + " self-heal " + uid + ": DB row is " + row.state + " / owner " + row.owner + " — left as it is");
+                Player on = Bukkit.getPlayer(owner);
+                if (on != null) loadouts.markDirty(on);
+            });
+        }
         public void retire(EmberItemData d) {
             loadouts.rememberRow(d.uid, p.getUniqueId(), d.rev, "retired"); // trust cache: void now, whatever the DB write does
             loadouts.store().upsertItem(d, p.getUniqueId(), "retired");     // async, idempotent; re-sent on join / hub
@@ -293,8 +327,8 @@ public final class EmberSixSlotService implements Listener {
         if (!EmberSixSlot.enabled()) return;
         final Player p = e.getPlayer();
         if (file(p.getUniqueId()).exists()) {
-            try { EmberSixMigration.resendVoids(new LivePort(p)); } // voided uids: trust cache now, DB write again
-            catch (RuntimeException ex) { alert(p, "六槽作废 uid 重发失败：" + ex); }
+            try { EmberSixMigration.onJoin(new LivePort(p)); } // voided uids: trust cache now, DB write again; D320 ② self-heal
+            catch (RuntimeException ex) { alert(p, "六槽作废 uid 重发 / 自愈失败：" + ex); }
         }
         if (!EmberSixSlot.migrateEnabled()) return;
         Bukkit.getScheduler().runTaskLater(plugin, () -> tryMigrate(p), 120L); // after invsnap (40) and deliveries (60)
@@ -311,6 +345,7 @@ public final class EmberSixSlotService implements Listener {
     public void onQuit(PlayerQuitEvent e) {
         UUID id = e.getPlayer().getUniqueId();
         allPending.remove(id);
+        awaiting.remove(id); // a late DB answer still lands in dbConfirmed; the next visit commits
         stashN.remove(id);
         viewCache.remove(id);
     }
@@ -334,6 +369,8 @@ public final class EmberSixSlotService implements Listener {
                 p.sendMessage(P + "护甲栏已换上和你护符对应的四件护甲，生命和防御不变。");
                 int n = stashCount(p.getUniqueId());
                 if (n > 0) p.sendMessage(P + EmberSixPapi.stashLine(n) + "§7（装备 → 护甲）");
+            } else if (o == EmberSixMigration.Outcome.DB_PENDING) {
+                // D320 ①: the DB answer re-runs the migration (dbAnswer); nothing to tell the player yet
             } else if (o == EmberSixMigration.Outcome.SAVE_FAILED) {
                 alert(p, "六槽迁移未完成：" + m.lastDetail); // nothing marked; the next hub visit resumes
             } else if (o == EmberSixMigration.Outcome.NO_TEMPLATE) {
@@ -343,6 +380,26 @@ public final class EmberSixSlotService implements Listener {
         } finally {
             busy.remove(p.getUniqueId());
         }
+    }
+
+    /**
+     * D320 ①: a confirmed / failed DB write of an issued piece (main thread). All of the player's awaited uids confirmed →
+     * run the migration again (it commits); a failure → OP alert, the next hub visit sends again.
+     */
+    void dbAnswer(UUID owner, String uid, boolean ok) {
+        Set<String> w = awaiting.get(owner);
+        if (ok) dbConfirmed.add(uid);
+        Player p = Bukkit.getPlayer(owner);
+        if (!ok) {
+            if (w != null) w.remove(uid);
+            alert(p, "六槽迁移等待 DB 确认失败（" + uid + "），未置完成标记；下次回到枢纽重试（DB 状态见运维手册）");
+            return;
+        }
+        if (w == null) return;
+        w.remove(uid);
+        if (!w.isEmpty()) return;
+        awaiting.remove(owner);
+        if (p != null && p.isOnline()) Bukkit.getScheduler().runTask(plugin, () -> tryMigrate(p));
     }
 
     // ------------------------------------------------------------------ commands (menu only)
