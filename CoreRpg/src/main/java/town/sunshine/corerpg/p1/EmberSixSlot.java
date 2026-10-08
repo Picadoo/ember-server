@@ -13,6 +13,8 @@ import java.util.Locale;
  *   drop and forge path is the 2-slot one bit for bit (T1-1 golden). Requires the P1 mode itself to be active.</li>
  *   <li>{@value #KEY_MIGRATE} — the one-time migration of old characters (spec §3.2). Off (default): not executed even when
  *   the master switch is on.</li>
+ *   <li>{@value #KEY_SET_BONUS} — D325 Stage2 four-piece set bonus (tier C: taken ×0.97). Off (default): no set-bonus
+ *   damage mult; Stage1 observation baseline bit for bit. Requires the master switch.</li>
  * </ul>
  * <p><b>F 共鸣:</b> armor has no tier / enhance of its own in the formula — it follows the selected charm; quality / craft /
  * family are the piece's own. Shares w = [charm .80, head / chest / legs / boots .05 each] (T0″ F arm, {@code arms.json}).
@@ -24,6 +26,14 @@ public final class EmberSixSlot {
 
     public static final String KEY_ENABLED = "gear.six_slot.enabled";
     public static final String KEY_MIGRATE = "gear.six_slot.migrate";
+    /** D325 Stage2 四件套效果（档 C）；默认关；关 = 与观察期基线逐位一致（无减伤） */
+    public static final String KEY_SET_BONUS = "gear.six_slot.set_bonus";
+
+    /** Stage2 C: incoming P1 damage × this when four-piece active (never enters Formula B/H) */
+    public static final double SET_BONUS_TAKEN_MULT = 0.97;
+    /** D169: need this many same-family armor pieces with drop tier ≥ {@link #SET_MIN_TIER} */
+    public static final int SET_NEED = 2;
+    public static final int SET_MIN_TIER = 2;
 
     /** F: charm share (informational: under follow-all only the armor shares enter the difference term) */
     public static final double CHARM_W = 0.8;
@@ -33,7 +43,7 @@ public final class EmberSixSlot {
     public static double[] armorWeights() { return ARMOR_W.clone(); }
 
     /** test hook (null = follow config) */
-    static volatile Boolean testEnabled, testMigrate;
+    static volatile Boolean testEnabled, testMigrate, testSetBonus;
 
     /** master switch: P1 active + {@value #KEY_ENABLED} (default false) */
     public static boolean enabled() {
@@ -49,6 +59,14 @@ public final class EmberSixSlot {
         if (t != null) return t && enabled();
         EmberMode m = EmberMode.get();
         return enabled() && m != null && m.b(KEY_MIGRATE, false);
+    }
+
+    /** D325 Stage2 set-bonus switch: master switch + {@value #KEY_SET_BONUS} (default false) */
+    public static boolean setBonusEnabled() {
+        Boolean t = testSetBonus;
+        if (t != null) return t && enabled();
+        EmberMode m = EmberMode.get();
+        return enabled() && m != null && m.b(KEY_SET_BONUS, false);
     }
 
     /**
@@ -136,7 +154,7 @@ public final class EmberSixSlot {
         EmberTables t = EmberMode.tables();
         l.add("§7成色 §f" + EmberItemData.qualityName(d.quality) + "§7（+" + Math.round(t.quality(d.quality) * 100) + "%） · 精工 §f"
                 + Math.round(t.craft(d.craft) * 100) + "%");
-        l.add("§8掉落阶 T" + d.tier + " · 四件套只看这一行（后续开放）");
+        l.add("§8掉落阶 T" + d.tier + " · 四件套看这一行（同族≥T2 计件）");
         l.add("§8" + (d.bound ? "绑定" : "未绑定") + " · " + EmberCompare.sourceName(d.source));
         return l;
     }

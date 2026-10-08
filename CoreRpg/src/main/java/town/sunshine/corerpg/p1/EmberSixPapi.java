@@ -15,8 +15,10 @@ import java.util.List;
  * armor_&lt;slot&gt;_cand            "§f背包里：胸甲 · 灰烬族" / "§8背包里没有同部位的护甲"
  * armor_&lt;slot&gt;_cmp             "§7成色 精良 → 卓越 · 精工 2% → 4%"
  * armor_&lt;slot&gt;_delta           "§a生命 +0.5" / "§7生命 不变" / "§c生命 -0.3"
- * armor_&lt;slot&gt;_fam             "§e族不同：四件套 2/4 → 1/4" (only when the family changes)
- * armor_set                    "§f灰烬族 3/4 · 需掉落阶 T2+" / "§7还没有穿带族的护甲"
+ * armor_&lt;slot&gt;_fam             set-progress change on equip (D169 /2); empty when unchanged
+ * armor_set                    D169 progress / active line
+ * armor_set_active             1 / 0 (four-piece active)
+ * armor_set_busy               1 / 0 (two-piece on, four-piece not yet)
  * armor_all                    "§7将换上 2 件 · 生命 +1.2" / "§7四个部位都已是最好的一件"
  * armor_all_has                1 / 0
  * armor_stash                  待领 count (also when off)
@@ -36,9 +38,23 @@ public final class EmberSixPapi {
         if ("armor_stash_has".equals(key)) return stash > 0 ? "1" : "0";
         if ("armor_stash_line".equals(key)) return stash > 0 ? stashLine(stash) : "§7没有待领物品";
         if (!enabled || v == null) return "";
+        if ("armor_set_active".equals(key)) {
+            Object[] s = EmberSixRank.setProgress(v.blade, v.charm, v.worn);
+            return Boolean.TRUE.equals(s[3]) ? "1" : "0";
+        }
+        if ("armor_set_busy".equals(key)) {
+            Object[] s = EmberSixRank.setProgress(v.blade, v.charm, v.worn);
+            String fam = (String) s[0];
+            return fam != null && !fam.isEmpty() && !Boolean.TRUE.equals(s[3]) ? "1" : "0";
+        }
         if ("armor_set".equals(key)) {
-            Object[] s = EmberSixRank.setProgress(v.worn);
-            return s == null ? "§7还没有穿带族的护甲" : "§f" + EmberItemData.familyName((String) s[0]) + "族 " + s[1] + "/4 · 需掉落阶 T" + s[2] + "+";
+            Object[] s = EmberSixRank.setProgress(v.blade, v.charm, v.worn);
+            String fam = (String) s[0];
+            int n = ((Integer) s[1]).intValue();
+            if (fam == null || fam.isEmpty()) return "§7先让刃与护符同族";
+            if (Boolean.TRUE.equals(s[3]))
+                return "§a" + EmberItemData.familyName(fam) + "族 护甲 " + n + "/2 · 受伤 −3%";
+            return "§e" + EmberItemData.familyName(fam) + "族 护甲 " + n + "/2 · 需同族掉落阶 T2+";
         }
         if ("armor_all".equals(key) || "armor_all_has".equals(key)) {
             List<Integer> todo = EmberSixRank.allPlan(v);
@@ -70,14 +86,17 @@ public final class EmberSixPapi {
                 if (c == null) return "";
                 return (c.delta > 0 ? "§a" : c.delta < 0 ? "§c" : "§7") + EmberSixRank.deltaText(c.delta);
             case "fam": {
-                if (c == null || w != null && w.family.equals(c.piece.family)) return "";
-                Object[] before = EmberSixRank.setProgress(v.worn);
-                EmberItemData[] after = v.worn.clone();
-                after[i] = c.piece;
-                Object[] aft = EmberSixRank.setProgress(after);
-                int b = before == null ? 0 : (Integer) before[1], a = aft == null ? 0 : (Integer) aft[1];
-                String fb = before == null ? "" : EmberItemData.familyName((String) before[0]) + "族 ";
-                return "§e族不同：四件套 " + fb + b + "/4 → " + (aft == null ? "" : EmberItemData.familyName((String) aft[0]) + "族 ") + a + "/4";
+                if (c == null) return "";
+                Object[] before = EmberSixRank.setProgress(v.blade, v.charm, v.worn);
+                EmberItemData[] afterWorn = v.worn.clone();
+                afterWorn[i] = c.piece;
+                Object[] aft = EmberSixRank.setProgress(v.blade, v.charm, afterWorn);
+                int b = ((Integer) before[1]).intValue(), a = ((Integer) aft[1]).intValue();
+                boolean ba = Boolean.TRUE.equals(before[3]), aa = Boolean.TRUE.equals(aft[3]);
+                if (b == a && ba == aa) return ""; // 族不变且进度不变：不刷套装行
+                if (ba && !aa) return "§c四件套将中断（护甲 " + b + "/2 → " + a + "/2）";
+                if (!ba && aa) return "§e四件套 护甲 " + b + "/2 → " + a + "/2（可激活）";
+                return "§e四件套 护甲 " + b + "/2 → " + a + "/2";
             }
             default: return "";
         }
@@ -124,11 +143,17 @@ public final class EmberSixPapi {
                 + " · 精工 " + (w.craft * 2) + "%。" + how;
     }
 
-    /** click on the 四件套 icon: progress only, the effect is not open yet */
+    /** click on the 四件套 icon: D169 progress + Stage2 C effect copy when active */
     public static String setReply(EmberSixRank.View v) {
-        Object[] s = v == null ? null : EmberSixRank.setProgress(v.worn);
-        String now = s == null ? "现在还没有穿带族的护甲" : "现在 " + EmberItemData.familyName((String) s[0]) + "族 " + s[1] + "/4";
-        return "四件套效果之后开放，" + now + "；目前成色和精工照常加生命。";
+        if (v == null) return "四件套未激活：先让刃与护符同族。";
+        Object[] s = EmberSixRank.setProgress(v.blade, v.charm, v.worn);
+        String fam = (String) s[0];
+        int n = ((Integer) s[1]).intValue();
+        if (fam == null || fam.isEmpty()) return "四件套未激活：先让刃与护符同族。";
+        String name = EmberItemData.familyName(fam);
+        if (Boolean.TRUE.equals(s[3]))
+            return "四件套已激活（" + name + "族护甲 " + n + "/2）：受伤略减（−3%）。另 2 甲位可穿异族追成色。";
+        return "四件套进行中：" + name + "族护甲 " + n + "/2，再凑同族掉落阶 T2+ 的护甲即可激活。";
     }
 
     /** spec §5.4-1 player copy for items waiting in 待领 */

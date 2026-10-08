@@ -84,9 +84,12 @@ public class EmberSixRankTest {
         assertEquals("§7生命 不变", EmberSixPapi.text(true, v, 0, "armor_head_delta"));
         assertTrue(EmberSixPapi.text(true, v, 0, "armor_chest_delta").startsWith("§c生命 -"));
         assertTrue(EmberSixPapi.text(true, v, 0, "armor_boots_delta").startsWith("§a生命 +"));
-        assertEquals("§e族不同：四件套 焚烬族 2/4 → 焚烬族 3/4", EmberSixPapi.text(true, v, 0, "armor_chest_fam"));
+        // D325: no blade → no two-piece → set progress inactive; fam only when progress would change
+        assertEquals("", EmberSixPapi.text(true, v, 0, "armor_chest_fam"));
         assertEquals("", EmberSixPapi.text(true, v, 0, "armor_head_fam"));
-        assertEquals("§f焚烬族 2/4 · 需掉落阶 T2+", EmberSixPapi.text(true, v, 0, "armor_set"));
+        assertEquals("§7先让刃与护符同族", EmberSixPapi.text(true, v, 0, "armor_set"));
+        assertEquals("0", EmberSixPapi.text(true, v, 0, "armor_set_active"));
+        assertEquals("0", EmberSixPapi.text(true, v, 0, "armor_set_busy"));
         assertEquals("§8护腿：空（按成色标准、精工 0% 计算）", EmberSixPapi.text(true, v, 0, "armor_legs"));
         assertEquals("§f胸甲 · 烬爆族", EmberSixPapi.text(true, v, 0, "armor_chest"));
         assertEquals("§7成色 极品 · 精工 6% · §8掉落阶 T2", EmberSixPapi.text(true, v, 0, "armor_chest_info"));
@@ -181,8 +184,9 @@ public class EmberSixRankTest {
         assertTrue(legs, legs.startsWith("护腿位空着") && legs.contains("背包里暂时没有可换的护腿"));
         assertEquals("请从护甲页点选部位。", EmberSixPapi.wornReply(v, -1));
         assertEquals("请从护甲页点选部位。", EmberSixPapi.wornReply(null, 0));
-        assertTrue(EmberSixPapi.setReply(v).startsWith("四件套效果之后开放，现在 焚烬族 1/4"));
-        assertTrue(EmberSixPapi.setReply(EmberSixRank.view(T, null, charm, 25, 0, 0, new EmberItemData[4], new ArrayList<EmberItemData>())).contains("还没有穿带族的护甲"));
+        assertEquals("四件套未激活：先让刃与护符同族。", EmberSixPapi.setReply(v));
+        assertEquals("四件套未激活：先让刃与护符同族。",
+                EmberSixPapi.setReply(EmberSixRank.view(T, null, charm, 25, 0, 0, new EmberItemData[4], new ArrayList<EmberItemData>())));
         for (String t : new String[]{head, chest, legs, EmberSixPapi.setReply(v)})
         {
             assertFalse(t, java.util.regex.Pattern.compile("/[a-zA-Z]").matcher(t).find());

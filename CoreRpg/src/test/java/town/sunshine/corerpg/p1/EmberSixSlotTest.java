@@ -14,7 +14,7 @@ public class EmberSixSlotTest {
 
     private final EmberTables t = EmberTables.defaults();
 
-    @After public void reset() { EmberSixSlot.testEnabled = null; EmberSixSlot.testMigrate = null; }
+    @After public void reset() { EmberSixSlot.testEnabled = null; EmberSixSlot.testMigrate = null; EmberSixSlot.testSetBonus = null; }
 
     static EmberItemData piece(String fam, String slot, int tier, int q, int f, int e) {
         return new EmberItemData(EmberItemData.newUid(), EmberItemData.templateId(tier == 0 ? "none" : fam, slot, tier),
@@ -31,8 +31,11 @@ public class EmberSixSlotTest {
         assertNull(EmberMode.get() == null ? null : "mode present in unit test");
         assertFalse(EmberSixSlot.enabled());
         assertFalse(EmberSixSlot.migrateEnabled());
+        assertFalse(EmberSixSlot.setBonusEnabled());
         EmberSixSlot.testMigrate = true; // migrate alone never runs without the master switch
         assertFalse(EmberSixSlot.migrateEnabled());
+        EmberSixSlot.testSetBonus = true;
+        assertFalse(EmberSixSlot.setBonusEnabled());
     }
 
     @Test public void armorSlotsAreValidItemSlots() {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -164,18 +163,43 @@ public final class EmberSixRank {
         return String.format(Locale.ROOT, d > 0 ? "生命 +%.1f" : "生命 %.1f", d);
     }
 
-    /** 四件套 progress (Stage 2): the family with most worn pieces → {family, count, minTier}; null when nothing worn */
-    public static Object[] setProgress(EmberItemData[] worn) {
-        Map<String, int[]> m = new LinkedHashMap<String, int[]>();
-        for (EmberItemData d : worn) {
-            if (d == null || d.tier < 1 || !EmberRunRules.validFamily(d.family)) continue;
-            int[] c = m.get(d.family);
-            if (c == null) m.put(d.family, c = new int[]{0, Integer.MAX_VALUE});
-            c[0]++;
-            c[1] = Math.min(c[1], d.tier);
+    /**
+     * D325 Stage2 · D169 四件套进度：刃+护符同族 X 已激活两件套时，穿着甲中族=X 且<strong>自身掉落阶</strong>≥T2 的件数。
+     * 成色/精工/F 跟随生效阶不计。返回 {@code {family, qualifyingCount, need=2, active}}；
+     * 未成两件套时 family=""、qualifying=0、active=false（仍返回数组，菜单可画「未激活」）。
+     */
+    public static Object[] setProgress(EmberItemData blade, EmberItemData charm, EmberItemData[] worn) {
+        String fam = EmberLoadout.setFamily(blade, charm);
+        boolean two = fam != null && !"none".equals(fam);
+        int q = 0;
+        if (two && worn != null) {
+            for (EmberItemData d : worn) {
+                if (d == null || d.tier < EmberSixSlot.SET_MIN_TIER) continue;
+                if (!fam.equals(d.family) || !EmberRunRules.validFamily(d.family)) continue;
+                q++;
+            }
         }
-        String best = null;
-        for (Map.Entry<String, int[]> e : m.entrySet()) if (best == null || e.getValue()[0] > m.get(best)[0]) best = e.getKey();
-        return best == null ? null : new Object[]{best, m.get(best)[0], m.get(best)[1]};
+        return new Object[]{
+                two ? fam : "",
+                Integer.valueOf(q),
+                Integer.valueOf(EmberSixSlot.SET_NEED),
+                Boolean.valueOf(two && q >= EmberSixSlot.SET_NEED)
+        };
+    }
+
+    /**
+     * Stage2 档 C：四件套激活时受伤 ×{@link EmberSixSlot#SET_BONUS_TAKEN_MULT}；开关关或未激活 = 1.0。
+     * 纯函数，不进 {@link EmberFormula} 的 B/H0/H/D/M。
+     */
+    public static double setBonusTakenMult(boolean setBonusOn, EmberItemData blade, EmberItemData charm, EmberItemData[] worn) {
+        if (!setBonusOn) return 1.0;
+        Object[] s = setProgress(blade, charm, worn);
+        return Boolean.TRUE.equals(s[3]) ? EmberSixSlot.SET_BONUS_TAKEN_MULT : 1.0;
+    }
+
+    /** Apply Stage2 C taken mult once (identity when off / inactive). */
+    public static double applySetBonusTaken(boolean setBonusOn, EmberItemData blade, EmberItemData charm,
+                                            EmberItemData[] worn, double damage) {
+        return damage * setBonusTakenMult(setBonusOn, blade, charm, worn);
     }
 }

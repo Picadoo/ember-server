@@ -310,6 +310,15 @@ public final class EmberCombatListener implements Listener {
                 double left = gs.absorbShield(p, base);
                 if (left < base) { pipe += String.format(Locale.ROOT, " · 霜封护盾吸收 %.2f", base - left); base = left; }
             }
+            // D325 Stage2 档 C: 四件套受伤 ×0.97 — 单一钩子（本方法），不进 Formula B/H；开关关 = ×1
+            if (EmberSixSlot.setBonusEnabled()) {
+                EmberItemData[] arm = l.armorCopy();
+                double sm = EmberSixRank.setBonusTakenMult(true, l.blade, l.charm, arm);
+                if (sm != 1.0) {
+                    base *= sm;
+                    pipe += String.format(Locale.ROOT, " · D325 四件套受伤 ×%.2f", sm);
+                }
+            }
         } else {
             pipe = "B12 环境管道（原值，不乘 M）";
         }
