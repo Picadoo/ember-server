@@ -1,0 +1,125 @@
+# 余烬 · 六槽护甲 T2 演练 · 第一段报告（余烬-测试 · 2026-10-08）
+
+- 计划：`docs/status/PLAN-ember-six-slot-t2-drill.md`（已批 D320）。本段 = 计划步 0–5：预检 / 构建全测 / 合成迁移前档 / H1 H2 H5 H6 / F G（菜单、reload）/ D（事件级 T1-6）。
+- GUARD_SHA = `f3f1a065823a8c3f449dec1ab01b77f8ea8473e5`（守卫代码 `dc69ee23`，tip 另含 `docs/ops/OPS-ember-six-slot-migration.md`）。
+- 执行时间：2026-10-08 10:27–11:08 UTC+8。测试服 `/workspace/tmp/t2-drill/`，证据都在 `/workspace/tmp/t2-drill/evidence/`（下文简写为 `ev/`）。
+- **结论：本段 28 例，PASS 26，FAIL 1（G8，菜单层，不影响资产，归入「需修，可带条件过」），部分 1（D12：拒绝分解迁移件 PASS，掉落甲分解路径 SKIP）。不变量 ① ② 全程无违例**（唯一 ② 报警来自测试者用控制台 `clear` 删掉的圆石，属预期，见 §4）。没有阻塞项。
+
+## 1 预检
+
+| 项 | 结果 | 证据 |
+|---|---|---|
+| 构建 + 全测（worktree @f3f1a065，nice / 单线程） | 658 例 / 2 失败，与基线一致：只有 `EmberGrowthTest` D164、D165 两例已知失败 | `ev/build-test.log` |
+| 产物 | CoreRpg.jar `801812d41461420a…`，其余插件、paper 的 sha256 见 `ev/artifacts.sha256` | |
+| (a) invsnap 守卫只读记录 | `EmberSixSlotService.restoreGuard`（:144–150）只读 `p1-six/<uuid>.yml` 里的 flag、journal、done_at，不看 NBT 标签；调用点 `InvSnapService` :434（restore）、:478（preview）、:726（排队恢复，判定为永久拒绝时出队） | 代码 |
+| (b) 孤儿换装标签 | `EmberSixMigration.run()` :216–217 `if (rec.flag) { if (rec.journal == null) tidyOrphanMarks(); … ALREADY }`。`tidyOrphanMarks` 在 :193–197 去掉标签，再做 checked 存档，日志写 `orphan swap mark cleared (n), saved` | 代码 |
+| (c) 提交后补存档 | `commit()` 先 :412 `port.save(next)`（flag、待领、journal 一次写完），再 :414 `apply(null, mark, false)` 去掉标签，然后 :415 `persistInventory()`（`EmberVault.savePlayerFileChecked`）；存档失败时发告警 | 代码 |
+| (d) 快照时间守卫 | `EmberSixRestoreGuard.check` :50 `doneAt <= 0` 永久拒绝；:51 `snapAtMs < (doneAt+1)*1000` 永久拒绝 | 代码 |
+
+(a)–(d) 四项都在代码里，行为与计划断言一致。运行时行为（E4–E7、A 组 kill 点）留到第二段实测。
+
+## 2 环境
+
+- Paper 1.12.2（线上同款 jar），端口 25577；jdb 25578；临时 mariadbd 3317（独立 datadir 和 socket）。三者都只绑 127.0.0.1。
+- `online-mode=false`，`bungeecord=false`，gamemode 0。不接 Waterfall。
+- 配置取自 git f3f1a065。`ember-v1-item.key` 由测试服自行生成，没有拷线上密钥；没有拷真实玩家档，玩家都是合成号 t2a–t2e、t2op、t2peer。
+- 只在测试服的 `ember-v1.yml` 里打开 `gear.six_slot.enabled` 和 `migrate` 两个开关。G8 那一轮临时关掉 enabled，测完已改回 true。
+- 测试服堆 `-Xmx1536M`，SerialGC。后台 `memmon.sh` 每 5 秒记一次可用内存，写到 `ev/mem.log`。**本段可用内存最低 5459 MB**，从未触及 1.5 G 暂停线。
+- 已知环境处理：
+  - TrMenu 首次启动会去 Mojang 下载语言文件，网络不通会卡住。处理：把线上 `assets/` 只读拷进测试目录。
+  - 平坦世界出生点改到 y=4。
+
+## 3 结果
+
+### H 组（迁移主路径）
+
+| 例 | 结果 | 关键证据 |
+|---|---|---|
+| H1 迁移等价 | **PASS** | 5/5 MIGRATED（`ev/H1-log.txt`）。迁移前后 B、H、D、M、EHP 逐号完全相同（`ev/H1-pre-hd.jsonl` vs `ev/H1-post-hd.jsonl`，例如 t2a 前后都是 `B=51.66 H=139.70 D=10 EHP=174.6`）。flag=1，无 `ember_six_*` 标签，done_at 已写，原物全部在待领，DB 新增 20 行 migrate 且都是 active，① ② 无违例（`ev/check-H1.json`） |
+| H2 幂等 | **PASS** | 重登 3 次，再执行 `armor mig`：5 个号都是 ALREADY ×5（`ev/H2-log.txt`），DB 行数不变（28），`ev/check-H2.json` 无违例 |
+| H5 migrate 关 | **PASS** | 只开 enabled、关 migrate：不迁移，不发件，不打标签（`ev/check-H5.json`） |
+| H6 模板缺失 | **PASS** | 拿掉模板后结果为 NO_TEMPLATE，没有发出任何件。恢复模板并 `ni reload` 后重登，结果 MIGRATED（`ev/check-H6a.json`、`ev/check-H6b.json`） |
+
+### F 组（属性 / reload）
+
+| 例 | 结果 | 关键证据 |
+|---|---|---|
+| F1 护甲值为 0、属性不外露 | **PASS** | 穿着的和背包里的 P1 甲：generic.armor 与 toughness 都是 0，Unbreakable 1，HideFlags 7；客户端 generic.armor = 0。`/ni reload` 后不变（`ev/F1-before.json`、`ev/F-after-reload.json`）。D1–D3 过程中客户端 armor 属性也始终为 0（`ev/D1-3.json`） |
+| F2 reload 后发件 | **PASS（部分）** | reload 后新 give 的件正常。「reload 后补发（reissue）」部分按计划留到第二段 A2 |
+
+### G 组（菜单 `ember_p1_armor`，mineflayer 真点击）
+
+| 例 | 结果 | 关键证据 |
+|---|---|---|
+| G1 打开 | **PASS** | 4 格穿着、4 格候选、S、A、L、R 全部渲染，没有未解析的 `%corerpg_p1_*%`，玩家文案里没有命令教学（`ev/G1-t2a.json`） |
+| G2 排序 | **PASS（只验证了第一键）** | 背包里放 3 件同部位头盔（q1c1、q3c3、q0c0），候选格显示 q3c3：`成色 精良 → 极品 · 精工 4% → 6% · 生命 +0.5`，符合第一键「生命差」（`ev/G-t2a.json`）。并列时的后续键（同族、护符同族、掉落阶、时间、uid）没有专门造并列数据，第二段若有余量再补 |
+| G3 单件换上 | **PASS** | 点候选：头盔 9eda8f22 → 6cc833b9；换下的 9eda8f22 回到候选原来所在的背包格（41）。`.dat` 已存（check 读的是 `.dat`），① ② 无违例（`ev/G-t2a.json`、`ev/check-G3G4G6.json`） |
+| G4 全部换上 | **PASS** | 第一次点只提示「将换上：胸甲（合计生命 +0.5）。30 秒内再点一次…确认」，甲位不变。等 31 秒再点，又回到提示（重新计时），甲位仍不变。30 秒内第三次点才执行：「已换上 1 件护甲。」（`ev/G4-t2a.json`）。文案观察：纯超时也显示「背包有变化，已刷新方案」，措辞不准，不影响资产 |
+| G5 待领领取（含背包满） | **PASS** | t2d 背包满：领取得到「已领取 0 件；背包满了，还有 4 件留在待领里」。腾出 2 格后领到 2 件，余 2 件；再腾格后全部领完。`ember_six_c_*` 清空，待领显示「没有待领物品」（`ev/G5-t2d.json`、`ev/check-G5G6.json`） |
+| G6 防连点 | **PASS** | 不等回包连点「换上」10 次：只换 1 次，换下的件 1 份。连点「领取」10 次：只领 1 次（2 件），没有复制。① 无违例 |
+| G7 关闭再打开 | **PASS** | 换上和领取之后重开菜单，显示与实际一致：穿着格、候选格、「四个部位都已是最好的一件」、待领件数都对得上 |
+| G8 开关关 | **FAIL（菜单层，不影响资产 → 需修，可带条件过）** | 见 §3.1 |
+
+### 3.1 G8 FAIL 详情
+
+计划断言：「护甲格显示普通玻璃板；任何点击只回『护甲功能尚未开放』」。实测（`ev/G8-t2a.json`、`ev/G8b-direct.json`）：
+
+- ✅ 装备页的「护甲」入口（ember_p1_gear 第 12 格）显示为灰玻璃板，点击没有任何动作，正常路径进不去。
+- ✅ 服务端全部拒绝：`armor equip head`、`armor all confirm`、`armor claim` 都只回「护甲功能尚未开放」，甲位不变。
+- ❌ 护甲页仍能直接打开：TrMenu 的 Bindings 命令 `ember_p1_armor`，玩家输入 `/ember_p1_armor` 就能打开。
+- ❌ 页面里 4 个穿着格（10/12/14/16）仍显示皮革甲图标「穿着 · 头盔」等，不是普通玻璃板。
+- ❌ 点穿着格、候选格（已是灰玻璃板）、「全部换上」（煤炭）、四件套，都没有任何回复；只有「待领物品」会回「护甲功能尚未开放」。
+
+建议（菜单岗）二选一：
+
+- 开关关时让 Bindings 不生效，或者打开时直接拦截；
+- 给各格加 `armor_on == 0` 的分支，显示玻璃板并统一回「尚未开放」。
+
+FAIL 只留证据，没有改代码或菜单。
+
+### D 组（事件级 T1-6，t2a / t2d）
+
+| 例 | 结果 | 关键证据 |
+|---|---|---|
+| D1 拖放 | **PASS** | 头盔拖到背包：H 140.84 → 139.98。迁移头盔拖上身：H 变为 140.37（与菜单里 -0.5 的差值一致）。D 一直是 10（按设计 `EmberLoadout`「B and D never change」，D 只由护符决定）。① ② 无违例（`ev/D1-3.json`、`ev/check-D1-3.json`） |
+| D2 shift 点击 | **PASS** | 穿和脱各一次，H 都随之刷新（139.98 ↔ 140.84）。mineflayer 客户端视图有滞后，以服务端 status 和 `.dat` 为准 |
+| D3 数字键 | **PASS** | 甲位 ↔ 快捷栏 9 来回交换，H 都正确刷新 |
+| D4 发射器 | **PASS** | 头部留空，站在发射器前，红石触发后原版铁头盔上身，其余三格 P1 甲不变（`ev/D-A.json`）。注：发射器由控制台 setblock 放置，与计划写的「t2op 放置」效果等价 |
+| D5 盔甲架 | **PASS** | 手持 P1 甲右键盔甲架被拦，提示「不能放到盔甲架上」，P1 件仍在手里。空手从盔甲架取下原版金头盔正常 |
+| D6 死亡掉落 | **PASS** | `keepInventory false` 下执行 kill，10 件 P1（含 4 件穿着）掉落后自动捡回，uid 全部不变，地上没有残留，DB 全部 active，无复制（`ev/D-B.json`）。插件同时记了 death 快照 #49 |
+| D7 换世界 | **PASS** | world → t2_alt → world，甲位 4 件 uid 不变（`ev/D-B.json`） |
+| D8 Q 丢出 | **PASS** | 被拦，提示「余烬材料和装备账号绑定，不能丢出…」，物品仍在手里，地上没有掉落物 |
+| D9 箱子 / 漏斗 | **PASS** | 箱子、漏斗各试三种：点放、shift、数字键。每次都提示「不能放进箱子 / 容器」，重开后服务端容器为空，物品仍在手里 |
+| D10 展示框 | **PASS** | 被拦，提示「不能放进展示框」，物品仍在手里，展示框为空 |
+| D11 装备库往返 | **PASS** | `p1 stash` 后 DB 状态 active → stored，owner 不变；`gearlib take` 后 stored → active，owner 不变，uid 不变，背包里只有 1 份（`ev/D13-D11.json`） |
+| D12 分解 | **部分：拒绝 PASS / 掉落路径 SKIP** | 手持迁移件分解被拒：「这件是迁移（不可分解）…」，DB 仍是 active（`ev/D-B.json`）。src=drop 的护甲只能从副本掉落获得（`EmberRunService`），而本次不装 DungeonPlus，测试服拿不到掉落甲，所以「件作废 + 白板 ×0.1 记账」这条路径 SKIP。单测 `EmberSixSlotRulesTest` 覆盖了 `armorDismantleTenths` / `addTenths`；实机验证与 H8 一起留到 T3 |
+| D13 invsnap 防复制 | **PASS** | 拍快照 #52（X 在背包）→ 把 X 存入装备库 → restore #52：日志 `skipped P1 1`，「…@背包1（已在装备库）」，X 没有回到背包，DB 仍是 stored；取回后只有 1 份（`ev/D13-D11.json`）。变体：快照后把 X 穿上身再 restore #57，restore 连甲位一起覆盖成快照状态，X 只有 1 份，`skipped P1 0`，因为不存在复制来源（`ev/D13-worn.json`、`ev/check-D13.json`） |
+| D14 末影箱 | **PASS** | 放入允许，存档后 `.dat` 的末影箱里有该件；取回到快捷栏 1 后末影箱为空，① ② 无违例（`ev/D14.json`） |
+
+全员终检 `ev/check-D-end.json`：t2a、t2b、t2d 都是 flag=1，没有标签，四格甲都在。t2c、t2e 是迁移前档，保留给第二段。① 无违例。
+
+## 4 测试者操作事件（不是插件缺陷，如实记录）
+
+1. **误删 4 件 P1 头盔。** 11:00 UTC+8 清理 D4、D5 留下的原版头盔时，用了控制台 `clear t2a minecraft:iron_helmet`。P1 头盔的物品材质也是 iron_helmet，结果连同 4 件 P1 头盔一起删掉了：6475738c、6cc833b9、a6fbee68 是测试中 give 的，9eda8f22 是 t2a 的迁移头盔。DB 里这 4 行仍是 active，成了没有实物的孤儿行。这是测试者操作失误，原版 `/clear` 本来就绕过插件。第二段开始前会按计划用 `restore-pre.sh` 回到迁移前档。旁证：运维手册可以补一句「不要按材质 clear 玩家，P1 甲与原版甲同材质」。
+2. **G5 的 ② 报警是预期的。** 为了腾出背包格，用控制台清掉了 t2d 的 4 组圆石，所以 check 报 ② 丢失 4 组圆石。这是预期，不是违例。
+3. **工具修正。**
+   - `check.py` 增加「基线之后 give 的单份件」归类，不再误报成翻倍（真翻倍时同 uid 计数 >1，仍会报）。
+   - `lib.logSince` 原来按字符切按字节记的偏移，已修正。复核 H1、H2 的日志证据完整：MIGRATED ×5、ALREADY ×5。
+
+## 5 剩余场景（第二段）
+
+- **A 组 43 例**：kill -9 / jdb 断点，含关键 kill 点「done flag 已写、提交后存档前」以及 (b)(c) 必测。
+- B 组 5 例，C 组 3 例。
+- E 组 7 例：E4 迁移完成 + 孤儿标签，重启后标签被清、守卫放行；E5 永久拒绝并出队；排队恢复在 tick 40 复核。
+- H3、H4、H7。
+- F2 的 reissue 部分（随 A2）。
+- 合计 61 例。计划总数 89（另 H8 SKIP）= 本段 28 + 余 61。
+- **SKIP**：H8（不装 DungeonPlus，留到 T3）；A 组里「异步写已落、主线程未推进」一侧（D320 ②，总控已确认，列入残余风险）；D12 掉落甲分解路径（同 H8 原因）。
+
+## 6 线上与收尾
+
+- 线上 4 个服务全程未动。pid 与启动时间和开测前一致：mariadbd 47100（05:38:04），登录服 47542（05:38:18），代理 47617（05:38:18），游玩服 101651（06:55:31）。
+- 线上快照 128 个文件 `sha256sum -c` 全部 OK。线上 DB 只读查询的结果与开测前逐字一致（`snap/live-db-before.txt`）。
+- 没有写线上库，没有动线上 bv 和配置，没有给线上任何号 op。临时 op 只在测试服用来读 status，用完立即 deop。
+- 本段结束：测试服已 stop，临时 mariadbd 已 shutdown，memmon 和控制台 fifo holder 已停。25577、25578、3317 端口已释放，没有残留的 t2-drill 进程。
+- 测试目录和 worktree 保留给第二段；`ember-v1.yml` 已恢复为 enabled=true、migrate=true。
