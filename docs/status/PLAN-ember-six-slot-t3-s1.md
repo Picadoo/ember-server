@@ -1,7 +1,7 @@
-# 余烬 · 六槽 T3 · S1 隔离测服短计划（余烬-测试 · 2026-10-08 · 等插件 tip）
+# 余烬 · 六槽 T3 · S1 隔离测服短计划（余烬-测试 · 2026-10-08 · tip `d4ab102c` 已收 · 执行中）
 
 - 依据：设计稿 `docs/design/DESIGN-ember-six-slot-t3-rollout-2026-10-08.md`（**D322 批 A + ⑥ 仅 S1**）；T2 计划 `PLAN-ember-six-slot-t2-drill.md`；OPS `docs/ops/OPS-ember-six-slot-migration.md`；T2 最终 STATUS `ee733764` / tip `4d82b518`（D321 已签 T2）。
-- 状态：**只交本计划，不起服。** 插件岗发来 tip **≥ `4d82b518`** 的测服 jar 后执行；段末交 STATUS，并建议是否可签 **⑦ 部署**。
+- 状态：**tip 已收，执行中。** tip = `d4ab102c`（全 `d4ab102cf1a49b058459df15ce5477ba434da1e7`，≥ `4d82b518`）；测服 jar = `/workspace/tmp/d322/CoreRpg-1.65.98-d322.local.jar`（sha256 `abc96aca51517216afa25d8ee14649acc55aed5d6b569826dba2308240139661`，plugin.yml `1.65.98-d322.local`）；配置草稿 `/workspace/tmp/d322/`（bv61 + 两开关起步 false）。段末交 STATUS，并建议是否可签 **⑦ 部署**。
 - 范围：**冒烟 + H8 + D12 + §1.3 出口标准**。不重跑 T2 全 89 例 kill 矩阵。
 
 ## 0 相对 T2 的差异（一览）
@@ -13,7 +13,7 @@
 | DungeonPlus | 不装（结算掉甲 SKIP） | **装 DP**（及软依赖）；验 **D12** |
 | kill -9 / jdb 矩阵 | A 组 43 例全跑 | **不重跑**；仅在出口失败或 H8/D12 异常时按需定点 |
 | 用例量 | 89 执行 + SKIP | **约 15–20 例**（见 §4） |
-| tip | 最终签线 `4d82b518` | **≥ `4d82b518`**（插件岗另发） |
+| tip | 最终签线 `4d82b518` | **`d4ab102c` / jar sha `abc96aca…` 已收** |
 | 两开关 | 仅测服同开 | 同左；**线上仍关** |
 | 出口 | 建议签「T2 过线」 | 建议是否可签 **⑦ 部署** |
 
@@ -87,9 +87,9 @@
 
 | 构件 | 要求 |
 |---|---|
-| CoreRpg.jar | tip **≥ `4d82b518`**（含 DB_PENDING / 自愈 / ACTIVE_IN_STASH / G8 菜单修复）；worktree 构建 `nice -n 19 mvn -o -B package -DskipTests`；全测对齐当时基线 |
+| CoreRpg.jar | **已收** tip `d4ab102c` 预构建 jar（`/workspace/tmp/d322/CoreRpg-1.65.98-d322.local.jar`，sha256 已核）；不再现场 mvn（省内存）；需要时可 worktree 复核 |
 | 其余 | Paper / NI / PAPI / TrMenu / ProtocolLib / Vault / Multiverse-Core 同 T2 只读拷；**另加** DungeonPlus + 软依赖 |
-| `<S1_TIP>` | 插件岗推送后填入；本计划提交时仍为**待发** |
+| `<S1_TIP>` | **`d4ab102c`**（已填） |
 
 ## 4 场景矩阵（冒烟，非全量）
 
@@ -158,8 +158,8 @@
 | # | 项 | 状态 |
 |---|---|---|
 | 1 | D322 ⑥ 仅授权隔离测服 S1 | ✅ |
-| 2 | 插件 tip ≥ `4d82b518` 测服 jar | **⏳ 等插件岗**（本计划不起服） |
+| 2 | 插件 tip ≥ `4d82b518` 测服 jar | **✅ `d4ab102c` / sha `abc96aca…` 已收** |
 | 3 | 本短计划 commit+push | 交稿即完成 |
 | 4 | ⑦ 部署 | ❌ 等 S1 PASS 后总控另签 |
 
-> 拿到 tip 后直接按本计划起 `/workspace/tmp/t3-s1/`，不必再问总控。最终 STATUS + 是否建议签 ⑦。
+> tip 已收（`d4ab102c`）。按本计划起 `/workspace/tmp/t3-s1/`，不必再问总控。最终 STATUS + 是否建议签 ⑦。
