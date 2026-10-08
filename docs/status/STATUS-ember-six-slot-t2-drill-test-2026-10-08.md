@@ -352,38 +352,122 @@ A5（待领领取 kill 点）正在跑；其后 G、DB 宕机/自愈、E、H1 �
 
 ---
 
-# tip 4d82b518 续跑（进行中 · 中途存档 1 · 2026-10-08 14:12 UTC+8）
+# tip 4d82b518 续跑与最终结论（2026-10-08 14:56 UTC+8）
 
-- tip `4d82b518`（D321 H7：audit 扫 p1-six 待领；`ACTIVE_IN_STASH`；restore 拒补发）。
-- 全量测试：`Tests run: 669, Failures: 2`（仍仅 EmberGrowthTest D164/D165，预期）。`BUILD SUCCESS`。jar sha256 前缀 `659d496b86a98853`（f6868515 jar 留在 `parked/CoreRpg-f6868515.jar`）。
-- f6868515 上已 PASS 且与 H7/菜单无关的结果保留（NA1 全组、NA2–NA4、NA5-1…6、NA7）。
+- tip `4d82b518`（D321 H7：audit 扫 p1-six 待领；`ACTIVE_IN_STASH`；restore 拒补发）。其上继承 f6868515 的 DB_PENDING / pieces 自愈 / 待领与开关解耦 / G8 / 超时文案。
+- 全量测试：`Tests run: 669, Failures: 2`（仅 EmberGrowthTest D164/D165，预期）。`BUILD SUCCESS`。jar sha256 前缀 `659d496b86a98853`。
+- f6868515 上已 PASS、与 H7 无关的结果保留不重跑（NA1 全组、NA2–NA4、NA5-1…6、NA7）。证据根：`/workspace/tmp/t2-drill/evidence/N/`。
 
-## H7（阻塞项）——PASS
+## H7（阻塞）——PASS
 
-证据：`ev/N/H/H7c/result.json`。
+证据：`ev/N/H/H7c/result.json`（已于 aad76d6f 通报）。
 
 | 检查 | 结果 |
 |---|---|
-| 迁移后 5 人在线 `corerpg p1 audit` | t2a 报 **`ACTIVE_IN_STASH df5cb4bb… · 在六槽待领，勿 audit restore（让玩家去 装备→护甲 领取）`** |
-| 同 uid **不**报 `ACTIVE_NOT_HELD` | 是 |
-| `audit restore t2a df5cb4bb` | 拒绝：`该 uid 在六槽待领里，勿补发；让玩家去 装备→护甲 领取`（未补发） |
-| t2a 领取待领后 | 领到 3 件；再 audit，对该 uid 无 ACTIVE_IN_STASH / ACTIVE_NOT_HELD / DUPLICATE |
-| 同 uid 在线副本数 | 1 |
+| 5 人在线 `corerpg p1 audit` | t2a：**`ACTIVE_IN_STASH df5cb4bb… · 在六槽待领，勿 audit restore（让玩家去 装备→护甲 领取）`** |
+| 同 uid 不报 `ACTIVE_NOT_HELD` | 是 |
+| `audit restore t2a df5cb4bb` | 拒绝：`该 uid 在六槽待领里，勿补发；让玩家去 装备→护甲 领取` |
+| 领取后 | 领到 3 件；再 audit 对该 uid 无 ACTIVE_IN_STASH / ACTIVE_NOT_HELD / DUPLICATE；在线副本数 = 1 |
 | 不变量 | 违反 0 |
 
-## A1 关键点抽查（4d82b518）——3/3 PASS
+## A1 关键点抽查——3/3 PASS
+
+| NA1-5b | DB_PENDING 期间 kill | PASS |
+| NA1-6 | 完成标记+pieces 后 kill | PASS（4 件 active，H=139.70，(b) 清标签） |
+| NA1-7 | 去标签未存档 kill | PASS |
+
+## A5 收尾 / A6——PASS
+
+| NA5-7、NA5-8 | settle 重领 kill | 2 PASS（与 f6868515 的 NA5-1…6 合计 A5 8/8） |
+| A6-1 | swapIn `savePlayerFile` 前（行 577） | PASS |
+| A6-2 | swapIn `savePlayerFile` 后（step → 578） | PASS |
+
+## G1–G8——PASS
+
+证据：`ev/N/G/result.json`、`ev/N/G/fix.json`、`gfix-run.log`。
 
 | 例 | 结果 | 要点 |
 |---|---|---|
-| NA1-5b | PASS | DB_PENDING 期间 kill，续上后 4 件齐全 |
-| NA1-6 | PASS | 完成标记+pieces 后 kill，ALREADY+(b)，4 件 active，H=139.70 |
-| NA1-7 | PASS | 去标签未存档 kill，同上 |
+| G1 | PASS | 护甲页标题 `§6余烬 · 护甲`，穿着/候选槽位正常 |
+| G2 | PASS | 候选区显示可换头盔 |
+| G3 | PASS | 单击换上：头 uid 从 d5e3c66a → 024dd819，聊天「已换上头盔…」 |
+| G4 超时 | PASS | 30s 后再点：`§7确认已超时，请再点一次`，甲位未变；再确认后换上 |
+| G4 方案变化 | PASS | 预览后 give 新件再点：`§7背包有变化，已刷新方案`，方案从「胸甲」变为「胸甲、护腿」 |
+| G5 开 | PASS | 背包满：领 0、待领留 4；腾 1 格领 1；连点 10 次不复制，最终待领=0 |
+| G5 开关全关 | PASS | `enabled=false migrate=false` 下同样：满包领 0、腾格可领；status `待领=0 enabled=false` |
+| G6 | PASS | 候选连点 10 次，甲位 uid 不变（无复制） |
+| G7 | PASS | 重开护甲页与穿着一致 |
+| G8 开 | PASS | 占位符无残留；领取按钮可领；装备指令有回话 |
+| G8 关 | PASS | `equip` / `all` →「护甲功能尚未开放。」；**`claim` 仍可领**（已领取 3 件）；页面可开 |
 
-## A5 收尾（NA5-7/8）——PASS
+## DB 宕机迁移——第 3 次 PASS（前两次 FAIL 留证）
 
-| NA5-7 | settle C1 persist 前 | PASS |
-| NA5-8 | settle C1 后 / C2 save 前 | PASS |
+只停临时库 3317，从未碰线上 mariadbd 47100。
 
-A5 全组 8/8 PASS（1–6 在 f6868515，7–8 在 4d82b518）。
+| 次 | 结果 | 要点 |
+|---|---|---|
+| 1（down） | FAIL `alert,doneAfter,inv` | 已见 `DB_PENDING`、宕机时 flag=0；起库后未干净重连导致 settle 失败 |
+| 2（down2） | FAIL 仅 `alert` | `pendingLogged/flagNotSet/journalKept/doneAfter/slots/hd/inv` 全 true；告警未捕获（停服早于 upsert 超时回调） |
+| **3（down3）** | **PASS** | 在线等到回调：`DB_PENDING` → `upsert item … failed` → 告警「六槽迁移等待 DB 确认失败…未置完成标记」；flag 未写；起库+重服后 ROLLED_FORWARD，4 件 active，H=139.70，违反 0 |
 
-A6 因 tip 换行号（swapIn `savePlayerFile` 现为 577）误用 563 的一次作废，正在用 577 重跑；其后 G / DB / 自愈 / E / H12b。
+## 自愈——PASS
+
+证据：`ev/N/DB/heal/result.json`。
+
+- 新完成记录删 chest 行 → 进服 insert-if-absent，H 恢复 139.70
+- 再删 legs 行 → 新进程进服补回
+- head 行改 retired → 保持 retired，日志 `self-heal … retired … left as it is`，不复活
+
+## E 组复核——7/7 PASS
+
+| E1–E3、E5–E7 | 守卫行为与 f3f1a065 一致 | PASS |
+| **E4** | 孤儿标签清 + invsnap 恢复 | **PASS**：`skipped P1 0`，最终 4 部位 migrate·active 各 1，不再丢甲（对比旧 tip E4 跳过 3 件） |
+
+## N-H12b（H1/H2 口径）——PASS
+
+证据：`ev/N/H12b/result.json`。
+
+- **2 槽 pre**（`enabled=false`）五号 = 第一段基线；**迁移后 post** = 2 槽 pre = 基线
+- H2：ALREADY，行数 28→28
+- 过渡态（`enabled=true migrate=false`）混原版甲的号 H 偏低（t2a 138.47 等）：属开关打开、尚未迁移时的计入差，**不是回归**；迁移完成后回到设计值。初跑 N-H12 字面 FAIL 由此澄清
+
+---
+
+# 最终汇总与是否建议签「T2 过线」
+
+## 总表
+
+| 范围 | 例数口径 | PASS | FAIL | SKIP |
+|---|---|---|---|---|
+| f3f1a065 两段（H/F/G/D + A/B/C/E/H3–H7） | 90 | 85 | 4（A1-6/7、G8、H7） | H8、已落盘侧、D12 掉落→T3 |
+| f6868515 复跑（NA1–NA4/NA7、NA5-1…6、构建） | — | 关键阻塞点与 A 组抽查均 PASS | N-H12 字面 FAIL（口径，后由 H12b 澄清） | — |
+| 4d82b518 续跑（H7、A1 抽查、A5 尾、A6、G、DB、自愈、E、H12b） | — | **全部目标项 PASS** | DBDOWN 第 1/2 次设计/窗口问题（第 3 次 PASS） | 同左 |
+
+## 不变量
+
+- 全历程 ① 同 uid 两份有效、② 原物丢失/翻倍：**0 次**
+- C 组标签⇔甲位、B 组标签跨事件：f3f1a065 已 PASS，本 tip 未回退相关代码路径
+
+## 原阻塞项
+
+| 项 | 状态 |
+|---|---|
+| A1-6 / A1-7（完成标记先于 DB 行） | **已消**：DB_PENDING + pieces；NA1-6/7/5b PASS；E4 不再丢甲 |
+| G8 菜单层 | **已消**：开关关仅「尚未开放」+ 待领可领 |
+| H7 audit 不看待领 | **已消**：ACTIVE_IN_STASH + restore 拒补发 |
+
+## 残余风险（非本轮阻塞）
+
+1. **H8** 跨服/代理：SKIP
+2. **「已落盘、主线程未前进」**：jdb 无法构造，SKIP
+3. **D12 掉落路径**：归 T3
+4. admin give 先写 DB、后存背包窗口（布置问题，非六槽）
+5. H4 第 1 次：库宕时进服主线程被加载超时卡住（观察，非迁移逻辑）
+6. 过渡态 `enabled=true migrate=false` 时混原版甲 H 偏低（运维应按手册顺序开开关；迁移完成后回到设计值）
+
+## 结论
+
+**建议签「T2 过线」。**  
+阻塞项 A1-6/A1-7、G8、H7 均已在 tip `4d82b518`（含 f6868515 能力）上复跑 PASS；不变量全程 0 违反；E4 / DB 宕机 / 自愈 / H1·H2 口径 / G4 文案与 G5 开关全关领取均通过。残余项为 SKIP 或非阻塞观察，不挡 T2。
+
+签线 tip：`4d82b51805591895cbce5b88da44ed501e561ff0`。
