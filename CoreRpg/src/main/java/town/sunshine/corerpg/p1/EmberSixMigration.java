@@ -119,6 +119,12 @@ public final class EmberSixMigration<S> {
         void apply(List<S> armor, String mark, boolean marked);
         /** the swap mark is on the player (live) */
         boolean marked(String mark);
+        /**
+         * take every swap mark (any journal's) off the live player, armor untouched; @return how many were removed. Used
+         * only once the migration is complete (flag, no journal): such a mark is an orphan left by a kill between the
+         * commit's in-memory unmark and the next player save.
+         */
+        int dropSwapMarks();
         /** a fresh signed stack for {@code d}; null = template missing */
         S create(EmberItemData d);
         /** the P1 data the worn stack carries (signature-verified), null = none */
@@ -178,6 +184,20 @@ public final class EmberSixMigration<S> {
 
     // ------------------------------------------------------------------ run
 
+    /**
+     * D319 (b)+(c): the migration is complete (flag set, no journal) but the player still carries an {@code ember_six_m_*}
+     * mark — the commit took it off in memory only and the server was killed before the next player save. Take it off
+     * and write the player file once (checked). A failed save is only logged: the next completed-migration visit clears it
+     * again; the completed state (flag, 待领, issued pieces) is not touched either way.
+     */
+    private void tidyOrphanMarks() {
+        int n = port.dropSwapMarks();
+        if (n <= 0) return;
+        boolean ok = port.persistInventory();
+        lastDetail = "orphan swap mark cleared (" + n + ")" + (ok ? ", saved" : ", player file save failed (cleared again next time)");
+        if (!ok) port.alert("六槽孤儿换装标签已在内存清除，但玩家存档失败（下次回枢纽再清；迁移已完成，不受影响）");
+    }
+
     /** the swap mark for a journal whose first issued uid is {@code uid0} */
     static String markFor(String uid0) {
         String m = uid0 == null ? "" : uid0.replaceAll("[^A-Za-z0-9]", "");
@@ -193,7 +213,10 @@ public final class EmberSixMigration<S> {
     public Outcome run() {
         Record<S> rec = port.load();
         for (EmberItemData d : rec.voided) port.retire(d); // idempotent; covers a retire lost to a crash / failed DB write
-        if (rec.flag) return Outcome.ALREADY;
+        if (rec.flag) {
+            if (rec.journal == null) tidyOrphanMarks();
+            return Outcome.ALREADY;
+        }
         if (rec.journal != null) return reconcile(rec);
 
         Snapshot snap = port.snapshot();
@@ -243,8 +266,8 @@ public final class EmberSixMigration<S> {
             if (!revert(rec)) return saveFailed("during the revert (journal kept, reverting)");
             return Outcome.CHECK_FAILED;
         }
-        commit(rec, null);
-        lastDetail = "issued " + issue[0].ni + "…";
+        boolean saved = commit(rec, null);
+        lastDetail = "issued " + issue[0].ni + "…" + (saved ? "" : POST_SAVE_FAILED);
         return Outcome.MIGRATED;
     }
 
@@ -357,8 +380,8 @@ public final class EmberSixMigration<S> {
             for (int i = 0; i < 4; i++) if (fresh.get(i) != null && port.armor(i) == null) { port.setArmor(i, fresh.get(i)); fresh.set(i, null); }
         }
         if (!port.persistInventory()) return saveFailed("rolling forward (journal kept)");
-        commit(rec, fresh);
-        lastDetail = "rolled forward" + (old.isEmpty() ? "" : ", re-issued " + old.size());
+        boolean saved = commit(rec, fresh);
+        lastDetail = "rolled forward" + (old.isEmpty() ? "" : ", re-issued " + old.size()) + (saved ? "" : POST_SAVE_FAILED);
         return Outcome.ROLLED_FORWARD;
     }
 
@@ -368,8 +391,16 @@ public final class EmberSixMigration<S> {
         next.stash.put(id, new StashEntry<S>(id, slot, o));
     }
 
-    /** DB remember, then flag + 待领 (originals, plus re-issued pieces that found no free slot) + journal cleared in one write */
-    private void commit(Record<S> rec, List<S> extra) {
+    /** lastDetail suffix: the player save right after the commit's unmark failed (the orphan mark is cleared next visit) */
+    static final String POST_SAVE_FAILED = " · post-commit player save failed (orphan swap mark cleared next visit)";
+
+    /**
+     * DB remember, then flag + done_at + 待领 (originals, plus re-issued pieces that found no free slot) + journal cleared in
+     * one record write; then the mark comes off and the player file is written at once (D319 (c), checked). @return false
+     * when that last save failed: logged + alerted only, the migration stays complete; the next completed-migration
+     * visit clears the orphan mark and saves again ({@link #tidyOrphanMarks}).
+     */
+    private boolean commit(Record<S> rec, List<S> extra) {
         Journal<S> j = rec.journal;
         for (EmberItemData d : j.issued) port.remember(d);
         Record<S> next = rec.copy();
@@ -381,6 +412,9 @@ public final class EmberSixMigration<S> {
         port.save(next); // flag + 待领 + journal cleared in one record write
         rec.flag = true; rec.doneAt = next.doneAt; rec.journal = null; rec.seq = next.seq; rec.stash.clear(); rec.stash.putAll(next.stash);
         port.apply(null, j.mark, false); // tidy: the mark is no longer needed (null armor = slots untouched)
+        boolean saved = port.persistInventory(); // D319 (c): without it a kill before the auto-save leaves an orphan mark
+        if (!saved) port.alert("六槽迁移已完成，但去掉换装标签后的玩家存档失败（下次回枢纽时清掉残留标签并补存；迁移结果不受影响）");
+        return saved;
     }
 
     /** re-send the DB retire of every voided uid (join; the async write of an earlier one may have been lost) */

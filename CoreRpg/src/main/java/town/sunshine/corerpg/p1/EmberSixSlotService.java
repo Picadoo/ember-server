@@ -138,19 +138,15 @@ public final class EmberSixSlotService implements Listener {
 
     /**
      * D319 invsnap restore guard ({@link EmberSixRestoreGuard}) for online {@code p} and a snapshot taken at
-     * {@code snapAtMs}; null = allow. Never migrated (no record file, no swap tag) → null without reading anything else.
+     * {@code snapAtMs}; null = allow. Reads the record only (journal / flag / done_at), never the scoreboard tags (D319 (a)).
+     * Never migrated (no record file) → null after one {@code exists()}.
      */
     public static EmberSixRestoreGuard.Verdict restoreGuard(Player p, long snapAtMs) {
         EmberSixSlotService svc = instance;
         if (svc == null || p == null) return null;
-        boolean exists = svc.file(p.getUniqueId()).exists();
-        boolean swapTag = false;
-        for (String t : p.getScoreboardTags()) if (t.startsWith(MARK_SWAP)) { swapTag = true; break; }
-        if (!exists && !swapTag) return null;
-        EmberSixMigration.Record<ItemStack> r = exists ? svc.load(p.getUniqueId()) : new EmberSixMigration.Record<ItemStack>();
-        boolean owed = false;
-        for (String t : p.getScoreboardTags()) if (t.startsWith(MARK_CLAIM) && r.stash.containsKey(t.substring(MARK_CLAIM.length()))) { owed = true; break; }
-        return EmberSixRestoreGuard.check(exists, r.flag, r.journal != null, r.doneAt, swapTag, owed, snapAtMs);
+        if (!svc.file(p.getUniqueId()).exists()) return null;
+        EmberSixMigration.Record<ItemStack> r = svc.load(p.getUniqueId());
+        return EmberSixRestoreGuard.check(true, r.flag, r.journal != null, r.doneAt, snapAtMs);
     }
 
     // ------------------------------------------------------------------ ports
@@ -184,6 +180,11 @@ public final class EmberSixSlotService implements Listener {
             if (marked) p.addScoreboardTag(MARK_SWAP + mark); else p.removeScoreboardTag(MARK_SWAP + mark);
         }
         public boolean marked(String mark) { return p.getScoreboardTags().contains(MARK_SWAP + mark); }
+        public int dropSwapMarks() {
+            int n = 0;
+            for (String t : new ArrayList<String>(p.getScoreboardTags())) if (t.startsWith(MARK_SWAP) && p.removeScoreboardTag(t)) n++;
+            return n;
+        }
         public ItemStack create(EmberItemData d) { return loadouts.items().create(d); }
         public EmberItemData readWorn(int i) {
             ItemStack it = armor(i);
@@ -327,7 +328,7 @@ public final class EmberSixSlotService implements Listener {
                 alert(p, "六槽迁移中断（下次回到枢纽时自动续上或作废）：" + ex);
                 return EmberSixMigration.Outcome.ERROR;
             }
-            if (o != EmberSixMigration.Outcome.ALREADY) plugin.getLogger().info("[P1 six] " + p.getName() + " migration " + o + " " + m.lastDetail);
+            if (o != EmberSixMigration.Outcome.ALREADY || !m.lastDetail.isEmpty()) plugin.getLogger().info("[P1 six] " + p.getName() + " migration " + o + " " + m.lastDetail);
             if (o == EmberSixMigration.Outcome.MIGRATED || o == EmberSixMigration.Outcome.ROLLED_FORWARD) {
                 loadouts.markDirty(p);
                 p.sendMessage(P + "护甲栏已换上和你护符对应的四件护甲，生命和防御不变。");

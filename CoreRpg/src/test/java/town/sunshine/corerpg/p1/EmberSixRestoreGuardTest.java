@@ -22,58 +22,44 @@ public class EmberSixRestoreGuardTest {
     // ------------------------------------------------------------------ pure rules
 
     @Test public void neverMigratedAllowsEverything_switchOffUnchanged() {
-        // the switch-off / never-enabled state: no p1-six/<uuid>.yml, no ember_six_m_* tag → always allow, whatever else
+        // the switch-off / never-enabled state: no p1-six/<uuid>.yml → always allow, whatever else
         for (boolean flag : new boolean[]{false, true})
             for (boolean j : new boolean[]{false, true})
-                for (boolean owed : new boolean[]{false, true})
-                    for (long done : new long[]{0, DONE})
-                        for (long at : new long[]{0, 1, DONE * 1000L - 1, DONE * 1000L, Long.MAX_VALUE})
-                            assertNull(EmberSixRestoreGuard.check(false, flag, j, done, false, owed, at));
-        // a record that is merely there (e.g. a dropped journal, nothing migrated, no tag) blocks nothing either
-        assertNull(EmberSixRestoreGuard.check(true, false, false, 0, false, false, 5));
+                for (long done : new long[]{0, DONE})
+                    for (long at : new long[]{0, 1, DONE * 1000L - 1, DONE * 1000L, Long.MAX_VALUE})
+                        assertNull(EmberSixRestoreGuard.check(false, flag, j, done, at));
+        // a record without flag and without journal (dropped journal / self-check revert: inventory back to pre-migration)
+        assertNull(EmberSixRestoreGuard.check(true, false, false, 0, 5));
     }
 
     @Test public void journalPendingRefusesTemporarily() {
-        for (boolean tag : new boolean[]{false, true})
-            for (long at : new long[]{0, DONE * 1000L, (DONE + 999) * 1000L}) {
-                EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(true, false, true, 0, tag, false, at);
-                assertNotNull(v);
-                assertFalse("journal pending is resolved by the next hub visit → keep the queued restore", v.permanent);
-                assertTrue(v.reason, v.reason.contains("journal"));
-            }
-    }
-
-    @Test public void swapTagWithoutFlagRefusesTemporarily() {
-        for (boolean exists : new boolean[]{false, true}) {
-            EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(exists, false, false, 0, true, false, DONE * 1000L);
-            assertNotNull("tag present → refuse (record file " + exists + ")", v);
-            assertFalse(v.permanent);
-            assertTrue(v.reason, v.reason.contains("ember_six_m_"));
+        for (long at : new long[]{0, DONE * 1000L, (DONE + 999) * 1000L}) {
+            EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(true, false, true, 0, at);
+            assertNotNull(v);
+            assertFalse("journal pending is resolved by the next hub visit → keep the queued restore", v.permanent);
+            assertTrue(v.reason, v.reason.contains("journal"));
         }
-    }
-
-    @Test public void unsettledClaimRefusesTemporarily() {
-        EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(true, true, false, DONE, false, true, (DONE + 60) * 1000L);
-        assertNotNull(v);
-        assertFalse(v.permanent);
     }
 
     @Test public void migratedSnapshotBeforeDoneRefusedForGoodAfterAllowed() {
         // before the migration finished (incl. the same second: seconds-resolution done_at) → permanent
         for (long at : new long[]{0, (DONE - 3600) * 1000L, DONE * 1000L, DONE * 1000L + 999}) {
-            EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(true, true, false, DONE, false, false, at);
+            EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(true, true, false, DONE, at);
             assertNotNull("snapshot @" + at, v);
             assertTrue(v.permanent);
             assertTrue(v.reason, v.reason.contains("复制"));
         }
-        // after → allow, also with a stale swap tag (crash between the record save and the unmark)
-        for (boolean staleTag : new boolean[]{false, true})
-            for (long at : new long[]{(DONE + 1) * 1000L, (DONE + 86400) * 1000L})
-                assertNull(EmberSixRestoreGuard.check(true, true, false, DONE, staleTag, false, at));
-        // migrated but the finish time is unknown → cannot tell before / after → permanent refuse
-        EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(true, true, false, 0, false, false, Long.MAX_VALUE);
-        assertNotNull(v);
-        assertTrue(v.permanent);
+        for (long at : new long[]{(DONE + 1) * 1000L, (DONE + 86400) * 1000L})
+            assertNull(EmberSixRestoreGuard.check(true, true, false, DONE, at));
+    }
+
+    @Test public void oldRecordWithoutDoneAtIsRefusedConservatively() {
+        for (long at : new long[]{0, DONE * 1000L, Long.MAX_VALUE}) {
+            EmberSixRestoreGuard.Verdict v = EmberSixRestoreGuard.check(true, true, false, 0, at);
+            assertNotNull(v);
+            assertTrue(v.permanent);
+            assertTrue(v.reason, v.reason.contains("done_at"));
+        }
     }
 
     @Test public void reasonPointsToTheRunbook() {
@@ -89,22 +75,14 @@ public class EmberSixRestoreGuardTest {
         void restoreOnto(EmberSixMigrationTest.World w) { w.armor = armor.clone(); w.pack = pack.clone(); w.persistInventory0(); }
     }
 
-    /** {@link EmberSixSlotService#restoreGuard} on the World: record file / swap tag / owed claim marks */
+    /** {@link EmberSixSlotService#restoreGuard} on the World: the record only (journal / flag / done_at), never the tags */
     static EmberSixRestoreGuard.Verdict guard(EmberSixMigrationTest.World w, Snap s) {
         EmberSixMigration.Record<String> r = w.disk;
         boolean exists = r.flag || r.journal != null || !r.stash.isEmpty() || !r.voided.isEmpty();
-        boolean swapTag = false, owed = false;
-        for (String m : w.marks) {
-            if (m.startsWith("m:")) swapTag = true;
-            if (m.startsWith("c:") && r.stash.containsKey(m.substring(2))) owed = true;
-        }
-        return EmberSixRestoreGuard.check(exists, r.flag, r.journal != null, r.doneAt, swapTag, owed, s.atMs);
+        return EmberSixRestoreGuard.check(exists, r.flag, r.journal != null, r.doneAt, s.atMs);
     }
 
-    static boolean swapMarked(EmberSixMigrationTest.World w) {
-        for (String m : w.marks) if (m.startsWith("m:")) return true;
-        return false;
-    }
+    static boolean swapMarked(EmberSixMigrationTest.World w) { return w.swapMarkLive(); }
 
     /**
      * QA R3: the migration crashed after the swap (journal pending, swap mark on, new pieces worn); the admin queued a
@@ -190,6 +168,28 @@ public class EmberSixRestoreGuardTest {
         }
     }
 
+    /** D319 (a): an orphan swap tag (kill after the commit) does not lock the player out; only the snapshot time counts */
+    @Test public void orphanTagDoesNotBlockPostMigrationRestore() {
+        for (int k = 0; k < 5; k++) {
+            EmberSixMigrationTest.World w = EmberSixMigrationTest.world(k);
+            List<String> f0 = w.foreign();
+            Snap pre = new Snap(w, (DONE - 60) * 1000L);
+            w.crashAt = EmberSixMigrationTest.world(k).migrateCalls(); // kill at the post-commit save
+            try { w.migrate(); fail(); } catch (EmberSixMigrationTest.Crash expected) { }
+            w.hardRestart(); // orphan swap tag back from the player file
+            assertTrue(w.swapMarkLive());
+            Snap post = new Snap(w, (DONE + 30) * 1000L);
+            assertNull("case " + k + " orphan tag ignored", guard(w, post));
+            EmberSixRestoreGuard.Verdict v = guard(w, pre);
+            assertNotNull(v);
+            assertTrue(v.permanent);
+            post.restoreOnto(w);
+            assertEquals(EmberSixMigration.Outcome.ALREADY, w.migrate()); // and the visit tidies the tag
+            assertFalse(w.swapMarkLive());
+            EmberSixMigrationTest.assertMigrated(w, f0, "case " + k);
+        }
+    }
+
     @Test public void doneAtOnlyOnCommit() {
         EmberSixMigrationTest.World w = EmberSixMigrationTest.world(0);
         assertEquals(0, w.disk.doneAt);
@@ -242,9 +242,22 @@ public class EmberSixRestoreGuardTest {
         assertTrue(body(inv, "public void onJoin(PlayerJoinEvent e)").contains("}, 40L);"));
         String six = src("p1/EmberSixSlotService.java");
         assertTrue(six.contains("() -> tryMigrate(p), 120L);"));
-        // never migrated → null before any record read (switch-off path: one exists() + a tag scan)
+        // never migrated → null after one exists(), before any record read; tags never read (D319 (a))
         String rg = body(six, "public static EmberSixRestoreGuard.Verdict restoreGuard(Player p, long snapAtMs)");
-        assertTrue(rg.indexOf("if (!exists && !swapTag) return null;") < rg.indexOf("svc.load("));
+        assertTrue(rg.indexOf("if (!svc.file(p.getUniqueId()).exists()) return null;") < rg.indexOf("svc.load("));
+        assertFalse(rg.contains("getScoreboardTags"));
+        // the flag and done_at are written in the same record save
+        String mig = src("p1/EmberSixMigration.java");
+        String commit = mig.substring(mig.indexOf("next.flag = true;"), mig.indexOf("port.save(next); // flag + 待领"));
+        assertTrue(commit.contains("next.doneAt = port.nowSec();"));
+        // orphan clean-up: ALREADY + no journal → drop marks + checked save
+        String run = body(mig, "public Outcome run()");
+        assertTrue(run.contains("if (rec.journal == null) tidyOrphanMarks();"));
+        String cm = body(mig, "private boolean commit(Record<S> rec, List<S> extra)");
+        assertTrue("(c) save right after the unmark", cm.indexOf("port.apply(null, j.mark, false)") < cm.indexOf("port.persistInventory()"));
+        String tidy = body(mig, "private void tidyOrphanMarks()");
+        assertTrue(tidy.indexOf("port.dropSwapMarks()") < tidy.indexOf("port.persistInventory()"));
+        assertTrue(body(six, "public boolean persistInventory()").contains("savePlayerFileChecked"));
         assertTrue(six.contains("r.doneAt = y.getLong(\"done_at\", 0L);"));
         assertTrue(six.contains("if (r.doneAt > 0) y.set(\"done_at\", r.doneAt);"));
     }
@@ -252,5 +265,6 @@ public class EmberSixRestoreGuardTest {
     @Test public void tagPrefixesMatchTheService() throws Exception {
         String six = src("p1/EmberSixSlotService.java");
         assertTrue(six.contains("MARK_SWAP = \"ember_six_m_\", MARK_CLAIM = \"ember_six_c_\""));
+        assertTrue(body(six, "public int dropSwapMarks()").contains("t.startsWith(MARK_SWAP)"));
     }
 }

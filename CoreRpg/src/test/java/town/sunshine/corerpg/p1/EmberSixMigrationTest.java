@@ -105,6 +105,17 @@ public class EmberSixMigrationTest {
             if (on) marks.add("m:" + mark); else marks.remove("m:" + mark);
         }
         public boolean marked(String mark) { return marks.contains("m:" + mark); }
+        public int dropSwapMarks() {
+            List<String> on = new ArrayList<String>();
+            for (String m : marks) if (m.startsWith("m:")) on.add(m);
+            if (on.isEmpty()) return 0;
+            tick();
+            marks.removeAll(on);
+            return on.size();
+        }
+        boolean swapMarkLive() { for (String m : marks) if (m.startsWith("m:")) return true; return false; }
+        boolean swapMarkOnDisk() { for (String m : diskMarks) if (m.startsWith("m:")) return true; return false; }
+        final List<String> alerts = new ArrayList<String>();
         public String create(EmberItemData d) {
             tick();
             if (noTemplate) return null;
@@ -149,7 +160,7 @@ public class EmberSixMigrationTest {
         public void retire(EmberItemData d) { tick(); cacheRetired.add(d.uid); if (!loseDbWrites) dbRetired.add(d.uid); }
         boolean valid(String uid) { return db.contains(uid) && !dbRetired.contains(uid) && !cacheRetired.contains(uid); }
         Set<String> validDb() { Set<String> v = new HashSet<String>(); for (String u : db) if (valid(u)) v.add(u); return v; }
-        public void alert(String msg) { }
+        public void alert(String msg) { alerts.add(msg); }
         public String newUid() { uidSeq++; return EmberItemData.newUid(); }
         public long nowSec() { return 1760000000L; }
 
@@ -186,6 +197,8 @@ public class EmberSixMigrationTest {
             EmberSixMigration<String> m = new EmberSixMigration<String>(this);
             try { return m.run(); } finally { detail = m.lastDetail; }
         }
+        /** side-effect calls of a fresh migration of this world (probe) */
+        int migrateCalls() { migrate(); return calls; }
         EmberItemData[] worn() { EmberItemData[] w = new EmberItemData[4]; boolean t = tamper; tamper = false; for (int i = 0; i < 4; i++) w[i] = readWorn(i); tamper = t; return w; }
 
         /** every stack that physically exists: live inventory, ground, chest, 待领 entries not handed out in this state */
@@ -755,7 +768,14 @@ public class EmberSixMigrationTest {
                                 w.failSaves(mode[v], ghost == 1);
                                 EmberSixMigration.Outcome o = w.migrate();
                                 w.tamper = false;
-                                if (w.failedSaves > fs) {
+                                if (w.failedSaves > fs && w.disk.flag) {
+                                    // D319 (b)/(c): only the post-commit save / the orphan clean-up save fails after the flag; logged + alerted, the migration stays complete
+                                    assertTrue(why + " visit " + v + " → " + o, o == EmberSixMigration.Outcome.ALREADY
+                                            || o == EmberSixMigration.Outcome.MIGRATED || o == EmberSixMigration.Outcome.ROLLED_FORWARD);
+                                    assertTrue(why + " " + w.detail, w.detail.startsWith("orphan swap mark cleared")
+                                            || w.detail.endsWith(EmberSixMigration.POST_SAVE_FAILED));
+                                    assertFalse(why, w.alerts.isEmpty());
+                                } else if (w.failedSaves > fs) {
                                     failed++;
                                     assertEquals(why + " visit " + v, EmberSixMigration.Outcome.SAVE_FAILED, o);
                                     assertEquals(why + " a failed save never sets the flag", flag0, w.disk.flag);
@@ -1222,5 +1242,90 @@ public class EmberSixMigrationTest {
         assertTrue("the original helmet went to 待领", inStash);
         assertSound(w, f0, "targeted revert");
         System.out.println("[T1-4] revert × every write point × throw / wear × 3 restarts: " + scenarios + " scenarios (+1 targeted), bad 0");
+    }
+
+    // ------------------------------------------------------------------ D319 orphan swap mark
+
+    /**
+     * 总控 D319 (b)+(c). (c) the commit takes the swap mark off and writes the player file at once (checked); (b) a completed
+     * migration (flag, no journal) takes any left-over {@code ember_six_m_*} mark off on the next hub visit and writes the
+     * player file once (checked). Variants: 0 kill -9 at the post-commit save (after the unmark, before any auto-save) ·
+     * 1 the post-commit save fails · 2 = 0 + the clean-up save fails · 3 = 0 + kill at the clean-up's unmark · 4 = 0 + kill at
+     * the clean-up's save. Each time: rejoin → mark cleared and saved, assets unchanged, nothing re-migrated.
+     */
+    @Test public void orphanSwapMarkKillAfterCommitClearedOnRejoin_D319() {
+        int scenarios = 0;
+        for (int k = 0; k < 5; k++) {
+            World probe = world(k);
+            probe.failSaves(0, false);
+            assertEquals(EmberSixMigration.Outcome.MIGRATED, probe.migrate());
+            int steps = probe.calls, saves = probe.persistsSinceArm;
+            // (c) on the normal path: the player file no longer carries the mark right after the migration
+            assertFalse("case " + k + " (c) unmark saved", probe.swapMarkOnDisk());
+            probe.hardRestart();
+            assertFalse("case " + k + " no orphan after a kill once (c) went through", probe.swapMarkLive());
+            assertEquals(EmberSixMigration.Outcome.ALREADY, probe.migrate());
+            assertEquals("case " + k + " nothing to tidy", "", probe.detail);
+            for (int variant = 0; variant < 5; variant++) {
+                World w = world(k);
+                List<String> f0 = w.foreign();
+                String why = "case " + k + " variant " + variant;
+                if (variant == 1) {
+                    w.failSaves(saves, false); // exactly the post-commit save fails
+                    assertEquals(why, EmberSixMigration.Outcome.MIGRATED, w.migrate());
+                    assertTrue(why + " " + w.detail, w.detail.endsWith(EmberSixMigration.POST_SAVE_FAILED));
+                    assertFalse(why + " alerted", w.alerts.isEmpty());
+                    assertTrue(why + " complete", w.disk.flag && w.disk.journal == null && w.disk.doneAt > 0);
+                    assertFalse(why + " unmarked live", w.swapMarkLive());
+                } else {
+                    w.crashAt = steps; // the last write of the migration = the post-commit save
+                    try { w.migrate(); fail(why + " crash not hit"); } catch (Crash expected) { }
+                    assertTrue(why + " record already complete", w.disk.flag && w.disk.journal == null);
+                }
+                assertTrue(why + " the player file still carries the mark", w.swapMarkOnDisk());
+                w.hardRestart(); // kill -9 before the auto-save → rejoin
+                assertTrue(why + " orphan", w.swapMarkLive());
+                assertMigrated(w, f0, why + " orphan state");
+                Set<String> db0 = new HashSet<String>(w.db), valid0 = w.validDb();
+                int issued0 = w.everIssued.size();
+                long done0 = w.disk.doneAt;
+                Set<String> stash0 = new HashSet<String>(w.disk.stash.keySet());
+                if (variant == 2) {
+                    w.failSaves(1, false);
+                    int a0 = w.alerts.size();
+                    assertEquals(why, EmberSixMigration.Outcome.ALREADY, w.migrate());
+                    assertTrue(why + " " + w.detail, w.detail.contains("save failed"));
+                    assertFalse(why + " cleared in memory", w.swapMarkLive());
+                    assertTrue(why + " save failed: still on disk", w.swapMarkOnDisk());
+                    assertTrue(why + " alerted", w.alerts.size() > a0);
+                    assertTrue(why + " completed state untouched", w.disk.flag && w.disk.doneAt == done0);
+                    w.hardRestart();
+                    assertTrue(why + " orphan again", w.swapMarkLive());
+                } else if (variant >= 3) {
+                    w.crashAt = w.calls + (variant == 3 ? 1 : 2);
+                    try { w.migrate(); fail(why + " crash not hit"); } catch (Crash expected) { }
+                    w.hardRestart();
+                    assertTrue(why + " kill in the clean-up: still an orphan", w.swapMarkLive());
+                }
+                assertEquals(why, EmberSixMigration.Outcome.ALREADY, w.migrate());
+                assertTrue(why + " " + w.detail, w.detail.startsWith("orphan swap mark cleared (1), saved"));
+                assertFalse(why + " live clean", w.swapMarkLive());
+                assertFalse(why + " saved (checked)", w.swapMarkOnDisk());
+                w.hardRestart();
+                assertFalse(why + " stays clean after another kill", w.swapMarkLive());
+                assertMigrated(w, f0, why);
+                assertEquals(why + " no re-migration", issued0, w.everIssued.size());
+                assertEquals(why + " no re-migration", 4, w.everIssued.size());
+                assertEquals(why, db0, w.db);
+                assertEquals(why, valid0, w.validDb());
+                assertEquals(why, done0, w.disk.doneAt);
+                assertEquals(why, stash0, w.disk.stash.keySet());
+                int c = w.calls;
+                assertEquals(EmberSixMigration.Outcome.ALREADY, w.migrate());
+                assertEquals(why + " nothing to tidy → no write at all", c, w.calls);
+                scenarios++;
+            }
+        }
+        assertEquals(25, scenarios);
     }
 }
