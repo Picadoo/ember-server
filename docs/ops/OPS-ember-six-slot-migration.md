@@ -1,7 +1,7 @@
 # 运维手册 · 余烬六槽护甲迁移（gear.six_slot）
 
 - 适用对象：运维 / OP（权限 `corerpg.admin`）。本手册只列游戏内或控制台可用的命令，均以代码为准。
-- 代码基准：CoreRpg `origin/main`，含 D319 的 invsnap 守卫、孤儿标签清理和收尾存档。线上目前仍跑 1.65.97，**这里所有功能线上都没有**。开关默认关，未部署。
+- 代码基准：CoreRpg `origin/main`，含 D319 的 invsnap 守卫、孤儿标签清理和收尾存档，以及 D320 的「完成前等 DB 确认」「DB 行自愈」「待领与开关脱钩」。线上目前仍跑 1.65.97，**这里所有功能线上都没有**。开关默认关，未部署。
 - 本手册**不授权**任何上线、切开关或迁移动作。T2 演练、T3 上线、部署都要各自另签（见 `docs/status/STATUS-ember-six-slot-t1-accept-test-2026-10-08.md` 的总控签字）。
 - 相关文档：规格 `docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md`；T2 演练计划 `docs/status/PLAN-ember-six-slot-t2-drill.md`。
 
@@ -11,7 +11,7 @@
 
 | 键（`plugins/CoreRpg/ember-v1.yml`） | 代码默认 | 作用 |
 |---|---|---|
-| `gear.six_slot.enabled` | `false` | 总开关。关：装备计算走 2 槽公式，逐位不变（T1-1 golden）。甲位上的东西一律忽略，护甲页、待领领取、结算掉甲、护甲 PAPI 都不生效。还要求 P1 模式本身开着（同一文件顶层的 `enabled: true`）。 |
+| `gear.six_slot.enabled` | `false` | 总开关。关：装备计算走 2 槽公式，逐位不变（T1-1 golden）。甲位上的东西一律忽略，护甲页（只显示「护甲功能尚未开放」）、结算掉甲、护甲 PAPI 都不生效。**例外：待领领取与开关无关**（D320 ④），有待领时开关关也能领，护甲 PAPI 的待领三个键也照常有值。还要求 P1 模式本身开着（同一文件顶层的 `enabled: true`）。 |
 | `gear.six_slot.migrate` | `false` | 老角色一次性迁移。只在总开关也开着时才有效（代码：`migrateEnabled() = enabled() && migrate`）。 |
 
 线上的 `ember-v1.yml` 和 jar 内自带的 yml **都没有这两个键**，缺省就是关。
@@ -71,6 +71,9 @@ gear:
 - **禁止离线改玩家 NBT**（`world/playerdata/<uuid>.dat`），包括甲位、背包、Tags。原因同上：标签和甲位一旦不一致，结果就是原物翻倍或丢失。
 - **禁止手改或删除 `plugins/CoreRpg/p1-six/<uuid>.yml`**。待领物品只存在这个文件里，迁移完成标记也在这里；删掉后再开迁移会重复发甲，待领也没了。
 - `ember_six_c_<id>` 是待领领取时的发放标记，同样不要动。
+- **禁止按材质 clear 玩家**，例如 `/clear <玩家> minecraft:iron_helmet`、`/minecraft:clear <玩家> <材质>`，或任何按物品类型批量删的插件命令。
+  - 原因：迁移发的四件甲和玩家原来的甲用的是同一批原版材质。按材质清会把迁移甲（DB 里仍是 active）和原物（身上的、刚从待领领回的）一起删掉。前者让护甲不再计入、H 下降，`audit` 报 `ACTIVE_NOT_HELD`；后者直接丢原物。两者都破坏守恒（「迁移前有的，迁移后在身上或待领里一件不少」），而且 DB 和记录文件都无法自动补回。T2 第一段已经出现过一次：操作员清 `iron_helmet` 时把 P1 头盔一起删了。
+  - 需要腾背包时，让玩家自己挪或丢。测试服确实要用 `clear` 时，只清明确不是装备的东西（例如圆石），并在测试记录里写明；巡检报的「② 丢失」属于预期。
 
 ---
 
@@ -95,6 +98,31 @@ gear:
 - **立即把 `gear.six_slot.migrate` 改成 `false` 并执行 `/corerpg reload`。**
 - DB 恢复、§3.1 全部合格后，再按 1.2 重新打开。
 - 宕机期间丢失的 retired 写入会自动补发：玩家进服时，以及迁移判定为已完成或续上时，都会重发作废 uid（幂等）。DB 恢复后让相关玩家重登一次即可。
+- 宕机期间正在迁移的玩家不会被标记完成（见 3.3），四件甲的 DB 行也会在 DB 恢复后补上（见 3.3、3.4）。
+
+### 3.3 迁移完成前等 DB 确认（D320 ①）
+
+- **成因（T2 A1-6/A1-7）**：新发四件甲的 DB 行（`cr_p1_item` active）是异步写的。以前完成标记先落盘，异步写还没落库时被 kill -9，部分件的 DB 行丢失。之后判定「已完成」不会再写，这些件不计入，H 下降。
+- **现在的做法**：
+  - 收尾时，插件先对四件甲逐件补发 DB 写入（upsert active），然后**等 DB 回执**。回执在 DB 线程完成后回到主线程，**不阻塞主线程**。
+  - 四件都确认之前，结果是 `DB_PENDING`：journal 和换装标签都保留，不写完成标记、不写 `done_at`。这段时间内四件甲照常计入（内存校验缓存已认它们）。
+  - 四件都确认后，插件回到主线程自动重跑一次迁移检查（续上 → 收尾）。这时才在**同一次记录写入**里写完成标记、`done_at`、`pieces` 和待领。
+  - 有一件写失败（DB 断开、SQL 错误）：不写完成标记，发告警 `六槽迁移等待 DB 确认失败（<uid>），未置完成标记；下次回到枢纽重试`。journal 保留，下次回枢纽（或 `/corerpg p1 armor mig`）时重来，可以重复进入。
+  - 日志：每次检查都写 `[P1 six] <玩家> migration DB_PENDING … · waiting for the DB to confirm n of 4 pieces (journal kept)`；确认后紧跟一行 `MIGRATED` 或 `ROLLED_FORWARD`。
+- `DB_PENDING` 期间 `status` 显示 `journal=true`，invsnap 恢复被暂时拒绝（§6 规则 2），属于预期。DB 正常时这段时间通常只有几十毫秒。
+- 长时间停在 `DB_PENDING`，说明 DB 写不进去，按 3.1 / 3.2 处理。
+- 只有 MySQL 存储处于激活状态（`/corerpg storage` 显示 `storage=mysql`）时才等待。YAML 模式下没有 DB 可等，直接完成，但 YAML 模式本来就禁止开迁移（见本节开头）。运行中 DB 断开时，MySQL 仍是激活状态，写入会失败，按上面的「写失败」处理，不会误标完成。
+
+### 3.4 已完成玩家的 DB 行自愈（D320 ②）
+
+- 记录文件新增 `pieces.<n>`，记下迁移发出的四件甲（与完成标记同次写入）。
+- 下面两个时机，插件会对这四件里**还在玩家身上、没有作废、本次进程还没确认过**的件，逐件做一次「DB 里没有这行才插入 active」（`INSERT IGNORE`）：
+  - 玩家进服（要求 `enabled` 开着），和重发作废 uid 同一步；
+  - 迁移检查判定「已完成」（ALREADY，要求 `migrate` 开着），和孤儿标签清理同一步。
+- 幂等：已有的行**一律不改**。retired 的不会复活，在装备库里（stored）或属于别人的也不动，只记一行警告 `self-heal <uid>: DB row is <state> / owner <uuid> — left as it is`。`voided` 里的 uid 根本不发。
+- 插入后按 DB 实际状态刷新校验缓存并重算属性，所以护甲重新计入，H/D 回到原值，不需要重登第二次。
+- DB 不可用时不做任何事，下次进服或回枢纽再试（日志 `self-heal <uid>: DB query failed …`）。
+- **限制**：D320 之前写的完成记录没有 `pieces`，无法从记录自愈。这类记录只存在于测试服（线上从未开过开关）；测试服如有 A1-6/A1-7 遗留的号，用 `/corerpg p1 audit` 核对后按测试岗的流程处理。
 
 ---
 
@@ -174,6 +202,7 @@ gear:
 | `journal.{at, reverting, mark, originals.0-3, issued.0-3}` | **未决 journal**：迁移进行中或中断时存在。`originals` 是换下的原物，`issued` 是新发的甲，`mark` 对应换装标签 `ember_six_m_<mark>` |
 | `stash.<id>.{slot, item}` | **待领**：原甲位物品，以及重发后没有空位的甲。玩家在 装备 → 护甲 页「领取」后，对应条目会被移除 |
 | `voided.<n>` | 作废的旧 uid，每次进服都会重发 DB retired |
+| `pieces.<n>` | D320 起：迁移发出的四件甲（uid 等），进服和「已完成」检查时据此自愈 DB 行（§3.4）。与完成标记同次写入 |
 
 - 在线玩家可以用 `/corerpg p1 armor status <玩家>` 查看 `p1_six_mig`、`journal`、`待领` 数量。
 - 离线玩家只能只读查看这个文件。查看「谁还有未决 journal」时，看文件里是否有 `journal:` 段。
@@ -184,8 +213,8 @@ gear:
 |---|---|---|
 | 新迁移 | 不再发生 | 不再发生 |
 | 已迁移玩家的四件甲 | 照常计入六槽公式 | 成为惰性物品：装备计算走 2 槽公式，逐位等于开关从未打开时 |
-| 待领领取 | 可领 | **不可领**（护甲页和领取都回复「护甲功能尚未开放」）。物品仍完好存在记录文件里，重新打开 `enabled` 后可领 |
-| 进服重发作废 uid | 照常 | 停止。已写入的 retired 仍然有效，DB 校验与开关无关 |
+| 待领领取 | 可领 | **可领**（D320 ④ 起与开关脱钩）。护甲页只剩「护甲功能尚未开放」和待领入口，装备页的护甲格在有待领时显示「待领物品」。领取的防连点、幂等和存档顺序与开关开时完全相同 |
+| 进服重发作废 uid、DB 行自愈 | 照常 | 停止。已写入的 retired 仍然有效，DB 校验与开关无关 |
 | invsnap 守卫 | 生效 | **仍然生效**：只要有记录文件就检查 |
 | 孤儿标签清理 | 停止（无害，见 §5） | 停止 |
 
@@ -205,7 +234,7 @@ gear:
 
 - 新发的四件甲在 DB 里是 `cr_p1_item` 的 active 行（`source=migrate`）。按 D245 安全路径**不删 DB 行**。物品本身留在玩家身上，开关关时是惰性物品。
 - 作废的旧 uid 在 DB 里是 `retired`，**不会恢复成 active**，实体残留见 §4。
-- 原甲位物品已从甲位移到待领。只能由玩家在 `enabled` 开着时自己领回，**没有 OP 发放命令**，也不会自动放回甲位。
+- 原甲位物品已从甲位移到待领。只能由玩家自己领回（开关开或关都可以），**没有 OP 发放命令**，也不会自动放回甲位。
 - `p1_six_mig: 1` 和 `done_at` 是永久记录。
 - 迁移完成后，迁移完成之前的 invsnap 快照**永远不能再恢复**到这个玩家身上（规则 3、4）。
 
@@ -225,7 +254,7 @@ gear:
 | `/corerpg invsnap preview <玩家> <id>` | 预演恢复，含六槽守卫判定 |
 | `/corerpg invsnap restore <玩家> <id>` | 恢复；离线玩家则排队，进服第 40 tick 执行（执行时再过守卫） |
 
-`/corerpg p1 armor claim | equip | all` 是给玩家用的，由菜单代发，不属于运维命令。
+`/corerpg p1 armor claim | equip | all | worn | set` 是给玩家用的，由菜单代发，不属于运维命令。每个都会回一句话；开关关时除有待领的 `claim` 外一律回「护甲功能尚未开放。」
 
 ---
 
@@ -238,12 +267,15 @@ gear:
 | `六槽迁移未执行：护甲物品模板缺失 …` | NI 模板没加载。停 `migrate`，修好模板后再开 |
 | `六槽迁移已完成，但去掉换装标签后的玩家存档失败…` | (c) 失败。迁移已完成，残留标签会由 (b) 下次清理 |
 | `六槽孤儿换装标签已在内存清除，但玩家存档失败…` | (b) 存档失败，下次再清 |
-| `六槽作废 uid 重发失败：…` | 进服重发 retired 出错。查 DB（§3.1） |
+| `六槽作废 uid 重发 / 自愈失败：…` | 进服重发 retired 或自愈出错。查 DB（§3.1） |
+| `六槽迁移等待 DB 确认失败（<uid>），未置完成标记…` | §3.3：四件甲有一件 DB 写失败。没有标记完成，journal 保留，下次回枢纽重试。查 DB |
+| （仅日志）`self-heal <uid>: DB row is … — left as it is` | §3.4：DB 里这行不是本人的 active（retired / stored / 别人），按设计不改。retired 属预期；其余情况用 `audit` 核对 |
+| （仅日志）`self-heal <uid>: DB query failed …` | §3.4：DB 不可用，下次进服 / 回枢纽再试 |
 | `待领领取中断：…` | 领取中途出错。物品仍在待领里，让玩家稍后再领 |
 
 ---
 
-## 附：代码位置（@ dc69ee23）
+## 附：代码位置（@ D320，见 git log）
 
 | 规则 | 位置 | 离线测试 |
 |---|---|---|
@@ -252,3 +284,7 @@ gear:
 | (b) 已完成时清孤儿标签并存档 | `p1/EmberSixMigration.run()` → `tidyOrphanMarks()`；`LivePort.dropSwapMarks()` | 同上；`EmberSixRestoreGuardTest.orphanTagDoesNotBlockPostMigrationRestore` |
 | `done_at` 与完成标记同次写入 | `EmberSixMigration.commit()`；`EmberSixSlotService.load/save`（键 `done_at`） | `EmberSixRestoreGuardTest.doneAtOnlyOnCommit` |
 | (a)(d) invsnap 守卫 | `p1/EmberSixRestoreGuard.check()`；`EmberSixSlotService.restoreGuard()`；`InvSnapService.restore()` / `applyPending()` / `preview()` / `refuseSix()` | `EmberSixRestoreGuardTest`（11 个，含 `queuedRestoreAtTick40BeforeMigrationAtTick120`） |
+| ① 完成标记前等 4 件 DB 确认 | `p1/EmberSixMigration.commit()`（`return Outcome.DB_PENDING;` 在 `next.flag = true;` 之前）；`LivePort.remember/confirmed`、`EmberSixSlotService.dbAnswer()`；`EmberItemStore.upsertItem(d, owner, state, cb)` | `EmberSixMigrationTest.rememberLossAtEveryWritePointTimesRestart_D320`、`killAfterConfirmAtEveryWritePoint_D320`、`conservationFuzzWithHardKillsAndSaveFailures`、`dbConfirmAndSelfHealWiring_D320` |
+| ② 已完成玩家 DB 行自愈 | `p1/EmberSixMigration.heal()`，调用点 `run()` 的 ALREADY 分支和 `onJoin()`；`LivePort.heal` → `EmberItemStore.insertItemIfAbsent`（`INSERT IGNORE`） | `EmberSixMigrationTest.selfHealRestoresLostRowsNeverRevivesRetired_D320` |
+| ④ 待领与开关脱钩 / ⑤ 每个按钮都回话 | `p1/EmberSixSlotService.cmd()` → `EmberSixPapi.route()`；`EmberRunPapi.armor()`（开关关时待领键仍取真实件数）；菜单稿 `docs/design/staged/d318-six-slot/trmenu/` | `EmberSixRankTest.claimWorksOffAndEveryClickHasAReply_D320`、`serviceCmdRoutesEveryClick_D320`、`stagedMenuEveryButtonReplies_D320` |
+| ⑥ 全部换上：超时与方案变化分开提示 | `p1/EmberSixRank.confirm()` / `confirmText()` | `EmberSixRankTest.timeoutAndPlanChangeAreDifferentTexts_D320` |
