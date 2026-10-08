@@ -41,6 +41,8 @@ public final class EmberSixSlotService implements Listener {
 
     public static final String DIR = "p1-six";
     public static final String CLAIM_TAG = "ember_six_c";
+    /** player scoreboard tags (saved with the inventory in the player file): swap mark / 待领 hand-out mark */
+    static final String MARK_SWAP = "ember_six_m_", MARK_CLAIM = "ember_six_c_";
     private static final String P = ChatColor.GOLD + "[余烬] " + ChatColor.GRAY;
     private static volatile EmberSixSlotService instance;
 
@@ -79,12 +81,17 @@ public final class EmberSixSlotService implements Listener {
                 ConfigurationSection d = j.getConfigurationSection("issued." + i);
                 if (d != null) issued.add(EmberItemData.fromMap(d.getValues(false)));
             }
-            r.journal = new EmberSixMigration.Journal<ItemStack>(orig, issued, j.getLong("at"), j.getBoolean("reverting", false));
+            r.journal = new EmberSixMigration.Journal<ItemStack>(orig, issued, j.getLong("at"), j.getBoolean("reverting", false), j.getString("mark", ""));
         }
         ConfigurationSection s = y.getConfigurationSection("stash");
         if (s != null) for (String k : s.getKeys(false)) {
             ItemStack it = s.getItemStack(k + ".item");
             if (it != null) r.stash.put(k, new EmberSixMigration.StashEntry<ItemStack>(k, s.getInt(k + ".slot"), it));
+        }
+        ConfigurationSection v = y.getConfigurationSection("voided");
+        if (v != null) for (String k : v.getKeys(false)) {
+            ConfigurationSection d = v.getConfigurationSection(k);
+            if (d != null) r.voided.add(EmberItemData.fromMap(d.getValues(false)));
         }
         return r;
     }
@@ -96,6 +103,7 @@ public final class EmberSixSlotService implements Listener {
         if (r.journal != null) {
             y.set("journal.at", r.journal.at);
             y.set("journal.reverting", r.journal.reverting);
+            y.set("journal.mark", r.journal.mark);
             for (int i = 0; i < 4; i++) {
                 if (i < r.journal.originals.size() && r.journal.originals.get(i) != null) y.set("journal.originals." + i, r.journal.originals.get(i));
                 if (i < r.journal.issued.size()) y.createSection("journal.issued." + i, r.journal.issued.get(i).toMap());
@@ -105,6 +113,7 @@ public final class EmberSixSlotService implements Listener {
             y.set("stash." + e.id + ".slot", e.slot);
             y.set("stash." + e.id + ".item", e.item);
         }
+        for (int i = 0; i < r.voided.size(); i++) y.createSection("voided." + i, r.voided.get(i).toMap());
         stashN.put(id, r.stash.size());
         File f = file(id);
         try {
@@ -146,6 +155,16 @@ public final class EmberSixSlotService implements Listener {
             a[EmberSixSlot.toArmorContents(i)] = s;
             inv.setArmorContents(a);
         }
+        public void apply(List<ItemStack> armor, String mark, boolean marked) {
+            if (armor != null) {
+                PlayerInventory inv = p.getInventory();
+                ItemStack[] a = inv.getArmorContents();
+                for (int i = 0; i < 4; i++) a[EmberSixSlot.toArmorContents(i)] = armor.get(i);
+                inv.setArmorContents(a);
+            }
+            if (marked) p.addScoreboardTag(MARK_SWAP + mark); else p.removeScoreboardTag(MARK_SWAP + mark);
+        }
+        public boolean marked(String mark) { return p.getScoreboardTags().contains(MARK_SWAP + mark); }
         public ItemStack create(EmberItemData d) { return loadouts.items().create(d); }
         public EmberItemData readWorn(int i) {
             ItemStack it = armor(i);
@@ -175,6 +194,10 @@ public final class EmberSixSlotService implements Listener {
         }
         public boolean persistInventory() { return EmberVault.savePlayerFileChecked(p); }
         public void remember(EmberItemData d) { loadouts.remember(d, p.getUniqueId()); }
+        public void retire(EmberItemData d) {
+            loadouts.rememberRow(d.uid, p.getUniqueId(), d.rev, "retired"); // trust cache: void now, whatever the DB write does
+            loadouts.store().upsertItem(d, p.getUniqueId(), "retired");     // async, idempotent; re-sent on join / hub
+        }
         public void alert(String msg) { EmberSixSlotService.this.alert(p, msg); }
         public String newUid() { return EmberItemData.newUid(); }
         public long nowSec() { return System.currentTimeMillis() / 1000L; }
@@ -189,9 +212,11 @@ public final class EmberSixSlotService implements Listener {
             ItemStack t = NmsNbt.write(stack, CLAIM_TAG, tag);
             if (t == null) return false;
             inv.setItem(slot, t);
+            p.addScoreboardTag(MARK_CLAIM + entryId);
             return true;
         }
-        public boolean tagged(String entryId) { return findTag(entryId) >= 0; }
+        /** the hand-out mark (on the player, saved with the inventory) — not the stack, which the player may have moved */
+        public boolean tagged(String entryId) { return p.getScoreboardTags().contains(MARK_CLAIM + entryId); }
         int findTag(String entryId) {
             ItemStack[] c = p.getInventory().getContents();
             for (int i = 0; i < c.length; i++) {
@@ -201,18 +226,22 @@ public final class EmberSixSlotService implements Listener {
             return -1;
         }
         public void untag(String entryId) {
+            p.removeScoreboardTag(MARK_CLAIM + entryId);
             int i = findTag(entryId);
             if (i < 0) return;
             ItemStack clean = NmsNbt.write(p.getInventory().getContents()[i], CLAIM_TAG, null);
             if (clean != null) p.getInventory().setItem(i, clean);
         }
         public boolean revoke(String entryId) {
+            p.removeScoreboardTag(MARK_CLAIM + entryId);
             int i = findTag(entryId);
             if (i < 0) return false;
             p.getInventory().setItem(i, null);
             return true;
         }
         public void untagExcept(Set<String> owed) {
+            for (String t : new ArrayList<String>(p.getScoreboardTags()))
+                if (t.startsWith(MARK_CLAIM) && !owed.contains(t.substring(MARK_CLAIM.length()))) p.removeScoreboardTag(t);
             ItemStack[] c = p.getInventory().getContents();
             for (int i = 0; i < c.length; i++) {
                 Map<String, Object> m = c[i] == null ? null : NmsNbt.read(c[i], CLAIM_TAG);
@@ -241,8 +270,13 @@ public final class EmberSixSlotService implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
-        if (!EmberSixSlot.migrateEnabled()) return;
+        if (!EmberSixSlot.enabled()) return;
         final Player p = e.getPlayer();
+        if (file(p.getUniqueId()).exists()) {
+            try { EmberSixMigration.resendVoids(new LivePort(p)); } // voided uids: trust cache now, DB write again
+            catch (RuntimeException ex) { alert(p, "六槽作废 uid 重发失败：" + ex); }
+        }
+        if (!EmberSixSlot.migrateEnabled()) return;
         Bukkit.getScheduler().runTaskLater(plugin, () -> tryMigrate(p), 120L); // after invsnap (40) and deliveries (60)
     }
 

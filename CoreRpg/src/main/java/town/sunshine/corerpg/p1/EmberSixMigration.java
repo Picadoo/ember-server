@@ -10,28 +10,34 @@ import java.util.List;
  * ({@code EmberSixMigrationTest}). The Bukkit side is {@link EmberSixSlotService}; {@code S} is the stack type
  * (ItemStack live, String in tests).
  *
- * <p>Order (crash-safe, at most one issue):
+ * <p>Order (crash-safe, at most one valid issue):
  * <ol>
  *   <li>flag {@code p1_six_mig} set → return (idempotent);</li>
- *   <li>a journal left by an earlier crash → {@link #reconcile}: issued uids still worn → roll forward (DB remember,
- *       originals into 待领, flag); none worn → the inventory never saw the swap → drop the journal;</li>
+ *   <li>a journal left by an earlier crash → {@link #reconcile};</li>
  *   <li>plan 4 pieces (charm family / tier / quality / craft, enhance 0, source migrate, bound, origin X04; no or T0 charm
  *       → 4 × T0) and <b>pre-check</b> H0/H/D/M/EHP bits (2-slot vs six-slot with the planned pieces) — mismatch → nothing
  *       happens, OP alert;</li>
  *   <li>build the stacks (missing NI template → nothing happens);</li>
- *   <li>save the journal (originals + issued data) — PREPARED;</li>
- *   <li>swap the armor slots and save the player file;</li>
- *   <li><b>post-check</b> from the stacks actually worn — mismatch → put the originals back, drop the journal, OP alert
- *       (the issued uids were never written to the DB, so nothing is left behind);</li>
+ *   <li>save the journal (originals + issued data + swap mark) — PREPARED;</li>
+ *   <li><b>swap</b>: the four slots and the swap mark on the player change in one step ({@link Port#apply}); save the
+ *       player file;</li>
+ *   <li><b>post-check</b> from the stacks actually worn — mismatch → revert (originals back, mark off), no DB row;</li>
  *   <li>DB remember the issued pieces; commit = flag 1 + originals into 待领 + journal cleared, one atomic record save.</li>
  * </ol>
  *
- * <p><b>Persist before mark</b> (T1-4 acceptance fix): every record write that relies on the player's inventory being in
- * some state (commit / journal dropped / 待领 entry removed) comes <i>after</i> a successful player-file save of exactly
- * that state. {@link Port#persistInventory} reports success; a failed save never sets the flag or drops / clears
- * anything — the live inventory is put back to what the record still describes where that is possible, the journal or
- * 待领 entry stays, the run returns {@link Outcome#SAVE_FAILED} (claim throws {@link SaveFailed}), and the next visit
- * resumes. A hard kill at any point therefore finds a record that never runs ahead of the player file on disk.
+ * <p><b>Where the originals are</b> (T1 acceptance, residual risk A/B/C): the swap mark travels with the inventory in
+ * the player file (live: a scoreboard tag), so a journal is resolved from the mark, never from whether the issued pieces
+ * are still on the player (the player may have thrown, stored or lost them). No mark → this inventory never saw the swap,
+ * the originals are wherever the player keeps them → the journal (a note) is dropped. Mark → the swap took the originals
+ * off the player, the journal is their only copy → they go to 待领 in the commit (or back into their slots on a revert),
+ * whatever happened to the issued pieces. A missing issued piece is re-issued under a <b>new</b> uid; the old uid is
+ * written to the record's {@code voided} list first and then retired in the DB (state retired + trust cache), and the
+ * list is re-sent on every join, so one piece never has two valid uids even when the async DB write is lost.
+ *
+ * <p><b>Persist before mark</b>: every record write that relies on the player's inventory being in some state (commit /
+ * journal dropped / 待领 entry removed) comes <i>after</i> a successful player-file save of exactly that state.
+ * {@link Port#persistInventory} reports success; a failed save never sets the flag or drops / clears anything, returns
+ * {@link Outcome#SAVE_FAILED} (claim throws {@link SaveFailed}), and the next visit resumes.
  */
 public final class EmberSixMigration<S> {
 
@@ -47,7 +53,7 @@ public final class EmberSixMigration<S> {
         public SaveFailed(String msg) { super(msg); }
     }
 
-    /** One 待领 entry: an item that sat in an armor slot before the migration. */
+    /** One 待领 entry: an item that sat in an armor slot before the migration (or a re-issued piece with no free slot). */
     public static final class StashEntry<S> {
         public final String id;
         public final int slot;
@@ -57,26 +63,30 @@ public final class EmberSixMigration<S> {
 
     /** PREPARED journal: what was in the slots and what is being issued (P1 order head, chest, legs, boots). */
     public static final class Journal<S> {
-        public final List<S> originals;          // size 4, null = empty slot
+        public final List<S> originals;          // size 4, null = empty slot (or already moved to 待领 by a revert)
         public final List<EmberItemData> issued; // size 4
         public final long at;
         /** true once the post-check failed: a crash mid-revert finishes the revert, never the issue */
         public final boolean reverting;
-        public Journal(List<S> originals, List<EmberItemData> issued, long at) { this(originals, issued, at, false); }
-        public Journal(List<S> originals, List<EmberItemData> issued, long at, boolean reverting) {
-            this.originals = originals; this.issued = issued; this.at = at; this.reverting = reverting;
+        /** the swap mark this journal's swap puts on the player (stays the same when a piece is re-issued) */
+        public final String mark;
+        public Journal(List<S> originals, List<EmberItemData> issued, long at, boolean reverting, String mark) {
+            this.originals = originals; this.issued = issued; this.at = at; this.reverting = reverting; this.mark = mark;
         }
+        Journal<S> with(List<S> o, List<EmberItemData> iss, boolean rev) { return new Journal<S>(o, iss, at, rev, mark); }
     }
 
-    /** The per-player record file (flag + journal + 待领). */
+    /** The per-player record file (flag + journal + 待领 + voided uids). */
     public static final class Record<S> {
         public boolean flag;
         public Journal<S> journal;
         public final LinkedHashMap<String, StashEntry<S>> stash = new LinkedHashMap<String, StashEntry<S>>();
         public int seq;
+        /** issued pieces whose uid was given up (re-issued / never handed out): retired in the DB, re-sent on join */
+        public final List<EmberItemData> voided = new ArrayList<EmberItemData>();
         public Record<S> copy() {
             Record<S> r = new Record<S>();
-            r.flag = flag; r.journal = journal; r.seq = seq; r.stash.putAll(stash);
+            r.flag = flag; r.journal = journal; r.seq = seq; r.stash.putAll(stash); r.voided.addAll(voided);
             return r;
         }
     }
@@ -100,6 +110,13 @@ public final class EmberSixMigration<S> {
         /** current armor stacks, P1 order */
         S armor(int i);
         void setArmor(int i, S stack);
+        /**
+         * set all four armor slots and put on ({@code marked}) / take off the swap mark, as one step (same tick: no player
+         * save can see one without the other). The mark is saved with the inventory in the player file.
+         */
+        void apply(List<S> armor, String mark, boolean marked);
+        /** the swap mark is on the player (live) */
+        boolean marked(String mark);
         /** a fresh signed stack for {@code d}; null = template missing */
         S create(EmberItemData d);
         /** the P1 data the worn stack carries (signature-verified), null = none */
@@ -108,9 +125,11 @@ public final class EmberSixMigration<S> {
         boolean holds(String uid);
         /** remove the stack with this uid from wherever it is on the player; true when one was removed */
         boolean take(String uid);
-        /** write the player file (armor + backpack) now; false = the write did not go through (it may or may not be on disk) */
+        /** write the player file (armor + backpack + marks) now; false = the write did not go through (it may or may not be on disk) */
         boolean persistInventory();
         void remember(EmberItemData d);
+        /** DB: this uid is void (state retired, trust cache updated now; the DB write is async and idempotent) */
+        void retire(EmberItemData d);
         void alert(String msg);
         String newUid();
         long nowSec();
@@ -157,8 +176,21 @@ public final class EmberSixMigration<S> {
 
     // ------------------------------------------------------------------ run
 
+    /** the swap mark for a journal whose first issued uid is {@code uid0} */
+    static String markFor(String uid0) {
+        String m = uid0 == null ? "" : uid0.replaceAll("[^A-Za-z0-9]", "");
+        return m.length() > 16 ? m.substring(0, 16) : m;
+    }
+
+    /** the same piece under a new uid (re-issue of a piece that left the player before the commit) */
+    static EmberItemData reissue(EmberItemData d, String uid) {
+        return new EmberItemData(uid, d.ni, d.family, d.slot, d.tier, d.quality, d.craft, d.enhance, d.pity, d.bound, d.source,
+                d.version, d.rev, d.affix, d.afPity, d.sigCode, d.rerollN, d.origin);
+    }
+
     public Outcome run() {
         Record<S> rec = port.load();
+        for (EmberItemData d : rec.voided) port.retire(d); // idempotent; covers a retire lost to a crash / failed DB write
         if (rec.flag) return Outcome.ALREADY;
         if (rec.journal != null) return reconcile(rec);
 
@@ -181,15 +213,15 @@ public final class EmberSixMigration<S> {
         }
         List<S> originals = new ArrayList<S>(4);
         for (int i = 0; i < 4; i++) originals.add(port.armor(i));
+        String mark = markFor(uids[0]);
 
         // PREPARED
-        rec.journal = new Journal<S>(originals, Arrays.asList(issue), now);
+        rec.journal = new Journal<S>(originals, Arrays.asList(issue), now, false, mark);
         port.save(rec);
 
-        for (int i = 0; i < 4; i++) port.setArmor(i, stacks.get(i));
+        port.apply(stacks, mark, true); // swap + mark, one step
         if (!port.persistInventory()) {
-            // undo the live swap; the journal stays (the disk may hold either state) → the next visit drops it or rolls forward
-            for (int i = 0; i < 4; i++) port.setArmor(i, originals.get(i));
+            port.apply(originals, mark, false); // undo the live swap (+ mark); the journal stays → the next visit resolves it
             return saveFailed("after the swap (live swap undone, journal kept)");
         }
 
@@ -204,43 +236,14 @@ public final class EmberSixMigration<S> {
         if (post != null) {
             lastDetail = "post-check " + post;
             port.alert("六槽迁移自检未通过（已撤回）：" + post);
-            rec.journal = new Journal<S>(originals, Arrays.asList(issue), now, true);
+            rec.journal = rec.journal.with(originals, Arrays.asList(issue), true);
             port.save(rec);
             if (!revert(rec)) return saveFailed("during the revert (journal kept, reverting)");
             return Outcome.CHECK_FAILED;
         }
-        commit(rec);
+        commit(rec, null);
         lastDetail = "issued " + issue[0].ni + "…";
         return Outcome.MIGRATED;
-    }
-
-    /**
-     * Revert (post-check failed, or a crash in the middle of one). Per slot, idempotent: the issued piece still in its
-     * slot → the original overwrites it (one call, nothing in between); the issued piece moved elsewhere → the original
-     * goes to 待领 and is crossed out of the journal in the same record write, then the piece is taken; the issued piece
-     * gone → that slot is already back. Issued uids were never written to the DB, so they simply stop existing. No flag.
-     */
-    private boolean revert(Record<S> rec) {
-        for (int i = 0; i < 4; i++) {
-            Journal<S> j = rec.journal;
-            String uid = j.issued.get(i).uid;
-            EmberItemData w = port.readWorn(i);
-            if (w != null && uid.equals(w.uid)) { port.setArmor(i, j.originals.get(i)); continue; }
-            if (!port.holds(uid)) continue;
-            S o = j.originals.get(i);
-            if (o != null) {
-                List<S> orig = new ArrayList<S>(j.originals);
-                orig.set(i, null);
-                stash(rec, j.at, i, o);
-                rec.journal = new Journal<S>(orig, j.issued, j.at, true);
-                port.save(rec);
-            }
-            port.take(uid);
-        }
-        if (!port.persistInventory()) return false; // journal (reverting) stays: the next visit finishes the revert
-        rec.journal = null;
-        port.save(rec);
-        return true;
     }
 
     private Outcome saveFailed(String where) {
@@ -250,10 +253,73 @@ public final class EmberSixMigration<S> {
     }
 
     /**
-     * A journal survived a crash: decide from what the player actually holds. Nothing issued on the player → the swap
-     * never reached the player file, the originals are where they were → drop the journal. Some issued → finish the
-     * swap: slots whose piece is missing get it now (the live content of that slot is first written into the journal as
-     * its original, so a second crash cannot lose or double it), then commit.
+     * The inventory state without the swap mark: the originals are on the player as they keep them, the issued pieces
+     * never existed in this state. Take any stray issued stack (defensive), save the player file, then drop the journal
+     * and void its uids in one record write; retire them in the DB.
+     */
+    private boolean dropUnswapped(Record<S> rec) {
+        Journal<S> j = rec.journal;
+        for (EmberItemData d : j.issued) port.take(d.uid);
+        if (!port.persistInventory()) return false;
+        Record<S> next = rec.copy();
+        next.journal = null;
+        next.voided.addAll(j.issued);
+        port.save(next);
+        rec.journal = null; rec.voided.clear(); rec.voided.addAll(next.voided);
+        for (EmberItemData d : j.issued) port.retire(d);
+        return true;
+    }
+
+    /**
+     * Revert (post-check failed, or a crash in the middle of one). Unmarked state → nothing was swapped here: drop.
+     * Marked → the originals live only in the journal: each goes back into its slot when that slot is empty or holds the
+     * issued piece, otherwise (the player put something there) into 待领 — those are crossed out of the journal in the
+     * same record write, before anything on the player changes. Then the issued pieces are taken, the slots and the
+     * mark are set in one step, the player file is saved, and only then the journal goes (uids voided). Idempotent.
+     * @return false = the player file save failed (journal kept, still reverting)
+     */
+    private boolean revert(Record<S> rec) {
+        Journal<S> j = rec.journal;
+        if (!port.marked(j.mark)) return dropUnswapped(rec);
+        List<S> orig = new ArrayList<S>(j.originals);
+        List<S> target = new ArrayList<S>(4);
+        Record<S> next = rec.copy();
+        boolean moved = false;
+        for (int i = 0; i < 4; i++) {
+            S cur = port.armor(i);
+            EmberItemData w = port.readWorn(i);
+            boolean free = cur == null || w != null && w.uid.equals(j.issued.get(i).uid);
+            if (free) { target.add(orig.get(i)); continue; }
+            target.add(cur);
+            if (orig.get(i) != null) { stash(next, j.at, i, orig.get(i)); orig.set(i, null); moved = true; }
+        }
+        if (moved) {
+            next.journal = j = j.with(orig, j.issued, true);
+            port.save(next);
+            rec.journal = j; rec.seq = next.seq; rec.stash.clear(); rec.stash.putAll(next.stash);
+        }
+        for (int i = 0; i < 4; i++) {
+            String uid = j.issued.get(i).uid;
+            EmberItemData w = port.readWorn(i);
+            if (!(w != null && uid.equals(w.uid)) && port.holds(uid)) port.take(uid);
+        }
+        port.apply(target, j.mark, false); // originals back + mark off, one step (an issued piece in a slot is replaced)
+        if (!port.persistInventory()) return false;
+        Record<S> done = rec.copy();
+        done.journal = null;
+        done.voided.addAll(j.issued);
+        port.save(done);
+        rec.journal = null; rec.voided.clear(); rec.voided.addAll(done.voided);
+        for (EmberItemData d : j.issued) port.retire(d);
+        return true;
+    }
+
+    /**
+     * A journal survived a crash / failed save. Decided by the swap mark (see the class doc), never by where the issued
+     * pieces are: unmarked → drop; marked → roll forward: issued pieces no longer on the player are re-issued under new
+     * uids (old uids voided in the record first, then retired), each new piece goes into its slot when the slot is empty
+     * (else to 待领 in the commit; a slot's current content is never overwritten or taken for an original), the player
+     * file is saved, then the commit puts the journal's originals into 待领.
      */
     Outcome reconcile(Record<S> rec) {
         Journal<S> j = rec.journal;
@@ -262,44 +328,35 @@ public final class EmberSixMigration<S> {
             lastDetail = "revert finished";
             return Outcome.CHECK_FAILED;
         }
-        boolean[] has = new boolean[4];
-        boolean any = false;
-        for (int i = 0; i < 4; i++) { has[i] = port.holds(j.issued.get(i).uid); any |= has[i]; }
-        if (!any) {
-            // the originals are on the player: make the player file say so before the journal (their only other copy) goes
-            if (!port.persistInventory()) return saveFailed("before dropping the journal (journal kept)");
-            rec.journal = null;
-            port.save(rec);
-            lastDetail = "journal dropped (nothing issued)";
+        if (!port.marked(j.mark)) {
+            if (!dropUnswapped(rec)) return saveFailed("before dropping the journal (journal kept)");
+            lastDetail = "journal dropped (the swap never reached this inventory)";
             return Outcome.JOURNAL_DROPPED;
         }
-        boolean all = true;
-        for (boolean h : has) all &= h;
-        if (!all) {
-            List<S> orig = new ArrayList<S>(j.originals);
-            List<S> stacks = new ArrayList<S>(4);
-            for (int i = 0; i < 4; i++) {
-                stacks.add(null);
-                if (has[i]) continue;
-                S s = port.create(j.issued.get(i));
-                if (s == null) { lastDetail = "missing template " + j.issued.get(i).ni; return Outcome.NO_TEMPLATE; }
-                stacks.set(i, s);
-                orig.set(i, port.armor(i));
-            }
-            rec.journal = j = new Journal<S>(orig, j.issued, j.at, false);
-            port.save(rec);
-            for (int i = 0; i < 4; i++) if (!has[i]) port.setArmor(i, stacks.get(i));
-            if (!port.persistInventory()) {
-                for (int i = 0; i < 4; i++) if (!has[i]) port.setArmor(i, orig.get(i)); // back to what the journal records as live
-                return saveFailed("rolling forward (journal kept)");
-            }
-        } else if (!port.persistInventory()) {
-            // all four were already on the player, but the live state may never have reached the player file (a save that
-            // failed / crashed before this visit): write it now, and only then set the flag
-            return saveFailed("rolling forward, all pieces held (journal kept)");
+        List<EmberItemData> issued = new ArrayList<EmberItemData>(j.issued);
+        List<EmberItemData> old = new ArrayList<EmberItemData>();
+        List<S> fresh = new ArrayList<S>(Arrays.asList(null, null, null, null));
+        for (int i = 0; i < 4; i++) {
+            if (port.holds(issued.get(i).uid)) continue;
+            EmberItemData n = reissue(issued.get(i), port.newUid());
+            S s = port.create(n);
+            if (s == null) { lastDetail = "missing template " + n.ni; return Outcome.NO_TEMPLATE; }
+            old.add(issued.get(i));
+            issued.set(i, n);
+            fresh.set(i, s);
         }
-        commit(rec);
-        lastDetail = "rolled forward";
+        if (!old.isEmpty()) {
+            Record<S> next = rec.copy();
+            next.journal = j = j.with(j.originals, issued, false);
+            next.voided.addAll(old);
+            port.save(next); // void first: from here no path can make an old uid valid again
+            rec.journal = j; rec.voided.clear(); rec.voided.addAll(next.voided);
+            for (EmberItemData d : old) port.retire(d);
+            for (int i = 0; i < 4; i++) if (fresh.get(i) != null && port.armor(i) == null) { port.setArmor(i, fresh.get(i)); fresh.set(i, null); }
+        }
+        if (!port.persistInventory()) return saveFailed("rolling forward (journal kept)");
+        commit(rec, fresh);
+        lastDetail = "rolled forward" + (old.isEmpty() ? "" : ", re-issued " + old.size());
         return Outcome.ROLLED_FORWARD;
     }
 
@@ -309,38 +366,53 @@ public final class EmberSixMigration<S> {
         next.stash.put(id, new StashEntry<S>(id, slot, o));
     }
 
-    private void commit(Record<S> rec) {
+    /** DB remember, then flag + 待领 (originals, plus re-issued pieces that found no free slot) + journal cleared in one write */
+    private void commit(Record<S> rec, List<S> extra) {
         Journal<S> j = rec.journal;
         for (EmberItemData d : j.issued) port.remember(d);
         Record<S> next = rec.copy();
         for (int i = 0; i < 4; i++) if (j.originals.get(i) != null) stash(next, j.at, i, j.originals.get(i));
+        if (extra != null) for (int i = 0; i < 4; i++) if (extra.get(i) != null) stash(next, j.at, i, extra.get(i));
         next.flag = true;
         next.journal = null;
         port.save(next); // flag + 待领 + journal cleared in one record write
         rec.flag = true; rec.journal = null; rec.seq = next.seq; rec.stash.clear(); rec.stash.putAll(next.stash);
+        port.apply(null, j.mark, false); // tidy: the mark is no longer needed (null armor = slots untouched)
+    }
+
+    /** re-send the DB retire of every voided uid (join; the async write of an earlier one may have been lost) */
+    public static <S> int resendVoids(Port<S> port) {
+        Record<S> rec = port.load();
+        for (EmberItemData d : rec.voided) port.retire(d);
+        return rec.voided.size();
     }
 
     // ------------------------------------------------------------------ 待领 (claim, exactly once)
 
     /** Claim side effects. */
     public interface ClaimPort<S> {
-        /** put the stack (tagged with the entry id) into free backpack space; false = no room */
+        /**
+         * put the stack (tagged with the entry id) into free backpack space and the hand-out mark for the entry on the
+         * player, as one step (saved together in the player file); false = no room, nothing changed
+         */
         boolean give(S stack, String entryId);
-        /** true when a stack tagged with this entry id is on the player */
+        /** the hand-out mark for this entry is on the player: the stack was handed out in this inventory state (wherever it is now) */
         boolean tagged(String entryId);
-        /** remove the claim tag from the stack (it is the player's own item from now on) */
+        /** remove the claim tag from the stack and the hand-out mark (it is the player's own item from now on) */
         void untag(String entryId);
         /** write the player file now; false = the write did not go through */
         boolean persistInventory();
-        /** take the stack tagged with this entry id back off the player (its save failed, the entry is still owed) */
+        /** take the stack tagged with this entry id back off the player and remove its mark, one step (its save failed, the entry is still owed) */
         boolean revoke(String entryId);
-        /** strip claim tags whose entry is no longer owed (crash between record save and untag) */
+        /** strip claim tags / hand-out marks whose entry is no longer owed (crash between record save and untag) */
         void untagExcept(java.util.Set<String> owed);
     }
 
     /**
-     * Claims every entry that fits. Exactly once: give (tagged) → record save without the entry → untag. A crash after the
-     * give leaves a tagged stack; {@link #settleClaims} then drops the entry instead of giving again.
+     * Claims every entry that fits. Exactly once: give (tagged stack + hand-out mark, one step) → player file saved →
+     * record save without the entry → untag. A crash after the give leaves the mark in that inventory state;
+     * {@link #settleClaims} then drops the entry instead of giving again — even if the player has since thrown or stored
+     * the stack (the mark is on the player, not on the stack).
      * @return {claimed, left}
      */
     public static <S> int[] claim(Port<S> port, ClaimPort<S> cp) {
@@ -375,7 +447,7 @@ public final class EmberSixMigration<S> {
         }
     }
 
-    /** drop entries whose tagged stack already reached the player (crash between give and save); untag leftovers */
+    /** drop entries whose hand-out already reached this inventory state (crash between give and save); untag leftovers */
     public static <S> int settleClaims(Port<S> port, ClaimPort<S> cp, Record<S> rec) {
         int n = 0;
         for (StashEntry<S> e : new ArrayList<StashEntry<S>>(rec.stash.values())) {

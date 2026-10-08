@@ -31,13 +31,26 @@ public class EmberSixMigrationTest {
                 tier == 0 ? "none" : fam, slot, tier, q, f, e, 0, true, "drop", EmberItemData.DATA_VERSION, 0);
     }
 
-    /** the whole fake player + server: live inventory, player file on disk, record file, DB */
+    /**
+     * The whole fake player + server: live inventory (+ player marks), player file on disk, record file, DB, and the world
+     * around the player (ground, a chest). The world is saved together with the player file (and rolls back with it on a
+     * hard kill), so a vanilla save-ordering dup / loss is never blamed on the migration.
+     */
     static class World implements EmberSixMigration.Port<String>, EmberSixMigration.ClaimPort<String> {
         String[] armor = new String[4];
         String[] pack = new String[36];
+        Set<String> marks = new HashSet<String>();
+        List<String> ground = new ArrayList<String>(), chest = new ArrayList<String>();
         String[] diskArmor, diskPack;
+        Set<String> diskMarks;
+        List<String> diskGround, diskChest;
         EmberSixMigration.Record<String> disk = new EmberSixMigration.Record<String>();
+        /** remembered uids (DB rows written active) */
         final Set<String> db = new HashSet<String>();
+        /** DB rows written retired; the in-process trust cache (lost on any restart) */
+        final Set<String> dbRetired = new HashSet<String>(), cacheRetired = new HashSet<String>();
+        /** the async DB retire write is lost (DB down) */
+        boolean loseDbWrites;
         final Map<String, EmberItemData> created = new HashMap<String, EmberItemData>();
         final Set<String> everIssued = new HashSet<String>();
         EmberItemData blade, charm;
@@ -45,15 +58,25 @@ public class EmberSixMigrationTest {
         int calls, crashAt = -1;
         boolean tamper, noTemplate;
         int uidSeq;
+        int firstPersistCall, firstRememberCall;
 
         World() { persistInventory0(); }
 
         void tick() { calls++; if (calls == crashAt) throw new Crash(); }
-        void persistInventory0() { diskArmor = armor.clone(); diskPack = pack.clone(); }
-        /** hard kill: the live inventory is lost, the player file on disk comes back */
-        void hardRestart() { armor = diskArmor.clone(); pack = diskPack.clone(); crashAt = -1; clearFail(); }
-        /** graceful stop: the server saves the player on the way down */
-        void softRestart() { persistInventory0(); crashAt = -1; clearFail(); }
+        void persistInventory0() {
+            diskArmor = armor.clone(); diskPack = pack.clone(); diskMarks = new HashSet<String>(marks);
+            diskGround = new ArrayList<String>(ground); diskChest = new ArrayList<String>(chest);
+        }
+        /** hard kill: the live inventory (and the world since its last save) is lost, the files on disk come back */
+        void hardRestart() {
+            armor = diskArmor.clone(); pack = diskPack.clone(); marks = new HashSet<String>(diskMarks);
+            ground = new ArrayList<String>(diskGround); chest = new ArrayList<String>(diskChest);
+            crashAt = -1; clearFail(); cacheRetired.clear(); join();
+        }
+        /** graceful stop (or quit + rejoin): the server saves the player on the way down */
+        void softRestart() { persistInventory0(); crashAt = -1; clearFail(); cacheRetired.clear(); join(); }
+        /** PlayerJoinEvent: voided uids re-sent (trust cache + DB) */
+        void join() { int c = crashAt; crashAt = -1; EmberSixMigration.resendVoids(this); crashAt = c; }
 
         /** player-file save failure injection: 0 none, 1 every save fails, n ≥ 2 only the n-th save from now fails */
         int failMode;
@@ -67,7 +90,7 @@ public class EmberSixMigrationTest {
         static EmberSixMigration.Record<String> copy(EmberSixMigration.Record<String> r) {
             EmberSixMigration.Record<String> c = r.copy();
             if (r.journal != null) c.journal = new EmberSixMigration.Journal<String>(new ArrayList<String>(r.journal.originals),
-                    new ArrayList<EmberItemData>(r.journal.issued), r.journal.at, r.journal.reverting);
+                    new ArrayList<EmberItemData>(r.journal.issued), r.journal.at, r.journal.reverting, r.journal.mark);
             return c;
         }
 
@@ -76,6 +99,12 @@ public class EmberSixMigrationTest {
         public EmberSixMigration.Snapshot snapshot() { return new EmberSixMigration.Snapshot(T, blade, charm, level, 0, 0); }
         public String armor(int i) { return armor[i]; }
         public void setArmor(int i, String s) { tick(); armor[i] = s; }
+        public void apply(List<String> a, String mark, boolean on) {
+            tick();
+            if (a != null) for (int i = 0; i < 4; i++) armor[i] = a.get(i);
+            if (on) marks.add("m:" + mark); else marks.remove("m:" + mark);
+        }
+        public boolean marked(String mark) { return marks.contains("m:" + mark); }
         public String create(EmberItemData d) {
             tick();
             if (noTemplate) return null;
@@ -86,7 +115,7 @@ public class EmberSixMigrationTest {
         public EmberItemData readWorn(int i) {
             String s = armor[i];
             if (s == null || !s.startsWith("P1:")) return null;
-            EmberItemData d = created.get(s.substring(3));
+            EmberItemData d = created.get(strip(s).substring(3));
             if (d != null && tamper) d = new EmberItemData(d.uid, d.ni, d.family, d.slot, d.tier, d.quality, d.craft < EmberTables.MAX_CRAFT ? d.craft + 1 : d.craft - 1, 0, 0, true,
                     d.source, d.version, d.rev, 0, 0, 0, 0, d.origin);
             return d;
@@ -97,15 +126,16 @@ public class EmberSixMigrationTest {
             for (String s : pack) if (s != null) l.add(s);
             return l;
         }
-        public boolean holds(String uid) { for (String s : all()) if (s.equals("P1:" + uid)) return true; return false; }
+        public boolean holds(String uid) { for (String s : all()) if (strip(s).equals("P1:" + uid)) return true; return false; }
         public boolean take(String uid) {
             tick();
-            for (int i = 0; i < 4; i++) if (("P1:" + uid).equals(armor[i])) { armor[i] = null; return true; }
-            for (int i = 0; i < 36; i++) if (("P1:" + uid).equals(pack[i])) { pack[i] = null; return true; }
+            for (int i = 0; i < 4; i++) if (armor[i] != null && strip(armor[i]).equals("P1:" + uid)) { armor[i] = null; return true; }
+            for (int i = 0; i < 36; i++) if (pack[i] != null && strip(pack[i]).equals("P1:" + uid)) { pack[i] = null; return true; }
             return false;
         }
         public boolean persistInventory() {
             tick();
+            if (firstPersistCall == 0) firstPersistCall = calls;
             persistsSinceArm++;
             if (failMode == 1 || failMode >= 2 && persistsSinceArm == failMode) {
                 failedSaves++;
@@ -115,33 +145,38 @@ public class EmberSixMigrationTest {
             persistInventory0();
             return true;
         }
-        public void remember(EmberItemData d) { tick(); db.add(d.uid); }
+        public void remember(EmberItemData d) { tick(); if (firstRememberCall == 0) firstRememberCall = calls; db.add(d.uid); }
+        public void retire(EmberItemData d) { tick(); cacheRetired.add(d.uid); if (!loseDbWrites) dbRetired.add(d.uid); }
+        boolean valid(String uid) { return db.contains(uid) && !dbRetired.contains(uid) && !cacheRetired.contains(uid); }
+        Set<String> validDb() { Set<String> v = new HashSet<String>(); for (String u : db) if (valid(u)) v.add(u); return v; }
         public void alert(String msg) { }
         public String newUid() { uidSeq++; return EmberItemData.newUid(); }
         public long nowSec() { return 1760000000L; }
 
-        // claim
+        // claim: the stack carries "#id"; the hand-out mark "c:id" is on the player (saved with the inventory)
         public boolean give(String stack, String id) {
             tick();
-            for (int i = 0; i < 36; i++) if (pack[i] == null) { pack[i] = stack + "#" + id; return true; }
+            for (int i = 0; i < 36; i++) if (pack[i] == null) { pack[i] = stack + "#" + id; marks.add("c:" + id); return true; }
             return false;
         }
-        public boolean tagged(String id) { for (String s : pack) if (s != null && s.endsWith("#" + id)) return true; return false; }
+        public boolean tagged(String id) { return marks.contains("c:" + id); }
         public void untag(String id) {
             tick();
-            for (int i = 0; i < 36; i++) if (pack[i] != null && pack[i].endsWith("#" + id)) pack[i] = pack[i].substring(0, pack[i].length() - id.length() - 1);
+            marks.remove("c:" + id);
+            for (int i = 0; i < 36; i++) if (pack[i] != null && pack[i].endsWith("#" + id)) pack[i] = strip(pack[i]);
         }
         public boolean revoke(String id) {
             tick();
+            marks.remove("c:" + id);
             for (int i = 0; i < 36; i++) if (pack[i] != null && pack[i].endsWith("#" + id)) { pack[i] = null; return true; }
             return false;
         }
         public void untagExcept(Set<String> owed) {
+            for (String m : new ArrayList<String>(marks)) if (m.startsWith("c:") && !owed.contains(m.substring(2))) marks.remove(m);
             for (int i = 0; i < 36; i++) {
                 String s = pack[i];
                 if (s == null || s.indexOf('#') < 0) continue;
-                String id = s.substring(s.indexOf('#') + 1);
-                if (!owed.contains(id)) pack[i] = s.substring(0, s.indexOf('#'));
+                if (!owed.contains(s.substring(s.indexOf('#') + 1))) pack[i] = strip(s);
             }
         }
 
@@ -153,18 +188,43 @@ public class EmberSixMigrationTest {
         }
         EmberItemData[] worn() { EmberItemData[] w = new EmberItemData[4]; boolean t = tamper; tamper = false; for (int i = 0; i < 4; i++) w[i] = readWorn(i); tamper = t; return w; }
 
-        /** every non-P1 item, wherever it is (live inventory + 待领), tags stripped */
+        /** every stack that physically exists: live inventory, ground, chest, 待领 entries not handed out in this state */
+        List<String> everything() {
+            List<String> l = new ArrayList<String>(all());
+            l.addAll(ground);
+            l.addAll(chest);
+            for (EmberSixMigration.StashEntry<String> e : disk.stash.values()) if (!tagged(e.id)) l.add(e.item);
+            return l;
+        }
+        /**
+         * every non-P1 item (the originals and the player's own things), tags stripped: everything() plus the journal's
+         * originals while the swap mark is on the player (the swap took them off the player; the journal is their copy)
+         */
         List<String> foreign() {
             List<String> l = new ArrayList<String>();
-            for (String s : all()) if (!s.startsWith("P1:")) l.add(strip(s));
-            for (EmberSixMigration.StashEntry<String> e : disk.stash.values()) if (!tagged(e.id)) l.add(strip(e.item)); // tagged = already handed out (settled on the next claim)
-            if (disk.journal != null) // mid-migration: an original whose slot already holds the issued piece lives in the journal
-                for (int i = 0; i < 4; i++) if (disk.journal.originals.get(i) != null && holds(disk.journal.issued.get(i).uid)) l.add(disk.journal.originals.get(i));
+            for (String s : everything()) if (!strip(s).startsWith("P1:")) l.add(strip(s));
+            if (disk.journal != null && marked(disk.journal.mark))
+                for (String o : disk.journal.originals) if (o != null) l.add(o);
             Collections.sort(l);
             return l;
         }
-        List<String> p1OnPlayer() { List<String> l = new ArrayList<String>(); for (String s : all()) if (s.startsWith("P1:")) l.add(strip(s)); return l; }
+        List<String> p1OnPlayer() { List<String> l = new ArrayList<String>(); for (String s : all()) if (strip(s).startsWith("P1:")) l.add(strip(s)); return l; }
         static String strip(String s) { int i = s.indexOf('#'); return i < 0 ? s : s.substring(0, i); }
+
+        // player actions
+        /** take the piece off armor slot i onto the ground / into the chest */
+        void tossArmor(int i, boolean toChest) { if (armor[i] != null) { (toChest ? chest : ground).add(armor[i]); armor[i] = null; } }
+        void tossBody(int n, boolean toChest) { for (int i = 0; i < 4 && n > 0; i++) if (armor[i] != null && strip(armor[i]).startsWith("P1:")) { tossArmor(i, toChest); n--; } }
+        void tossPack(int a, boolean toChest) { if (pack[a] != null) { (toChest ? chest : ground).add(pack[a]); pack[a] = null; } }
+        /** put backpack stack a on in armor slot i when that slot is empty (the player wears something of their own) */
+        void wear(int a, int i) { if (armor[i] == null && pack[a] != null) { armor[i] = pack[a]; pack[a] = null; } }
+        /** take everything back from the chest / pick everything up, as far as the backpack has room */
+        void pickUp(List<String> from) {
+            for (java.util.Iterator<String> it = from.iterator(); it.hasNext(); ) {
+                String x = it.next();
+                for (int i = 0; i < 36; i++) if (pack[i] == null) { pack[i] = x; it.remove(); break; }
+            }
+        }
     }
 
     static World world(int kase) {
@@ -206,7 +266,7 @@ public class EmberSixMigrationTest {
         assertEquals(why + " distinct uids", 4, new HashSet<String>(p1).size());
         Set<String> uids = new HashSet<String>();
         for (String s : p1) uids.add(s.substring(3));
-        assertEquals(why + " DB = worn", uids, w.db);
+        assertEquals(why + " valid DB rows = worn", uids, w.validDb());
         EmberItemData[] worn = w.worn();
         for (int i = 0; i < 4; i++) {
             assertNotNull(why + " slot " + i, worn[i]);
@@ -542,21 +602,33 @@ public class EmberSixMigrationTest {
         return o;
     }
 
-    /** soundness at any moment: nothing lost / doubled, one uid in one place, a set flag means the 4 DB pieces are held */
+    /**
+     * The total invariant (checked after every step): (1) the originals and the player's own items — on the body, in the
+     * backpack, in 待领, in the journal while it is their only copy, on the ground, in the chest — are exactly the starting
+     * multiset (never fewer, never doubled); (2) any uid has at most one valid copy anywhere; (3) one armor slot has at most
+     * one valid migrated piece (one piece never has two valid uids); (4) once the flag is set: 4 valid pieces, each with
+     * exactly one copy.
+     */
     static void assertSound(World w, List<String> f0, String why) {
-        assertEquals(why + " foreign", f0, w.foreign());
-        List<String> p1 = w.p1OnPlayer();
-        assertEquals(why + " uid in one place", p1.size(), new HashSet<String>(p1).size());
-        assertTrue(why + " ≤ 4 P1", p1.size() <= 4);
+        assertEquals(why + " originals / own items neither lost nor doubled", f0, w.foreign());
+        Map<String, Integer> copies = new HashMap<String, Integer>();
+        for (String x : w.everything()) {
+            String t = World.strip(x);
+            if (!t.startsWith("P1:") || !w.valid(t.substring(3))) continue;
+            Integer c = copies.get(t.substring(3));
+            copies.put(t.substring(3), c == null ? 1 : c + 1);
+        }
+        int[] perSlot = new int[4];
+        for (Map.Entry<String, Integer> e : copies.entrySet()) {
+            assertTrue(why + " uid " + e.getKey() + " has " + e.getValue() + " valid copies", e.getValue() <= 1);
+            perSlot[EmberItemData.armorIndex(w.created.get(e.getKey()).slot)]++;
+        }
+        Set<String> validRows = w.validDb();
+        for (int i = 0; i < 4; i++) assertTrue(why + " slot " + i + " has " + perSlot[i] + " valid migrated pieces", perSlot[i] <= 1);
         if (w.disk.flag) {
             assertNull(why + " journal", w.disk.journal);
-            Set<String> held = new HashSet<String>();
-            for (String x : p1) held.add(x.substring(3));
-            assertEquals(why + " flag set ⇒ the 4 remembered pieces are on the player", w.db, held);
-            assertEquals(4, w.db.size());
-        } else {
-            for (String x : p1) assertTrue(why + " unflagged P1 belongs to the journal",
-                    w.disk.journal != null && journalUids(w).contains(x.substring(3)));
+            assertEquals(why + " flag set ⇒ 4 valid pieces " + validRows, 4, validRows.size());
+            for (String u : validRows) assertEquals(why + " flag set ⇒ valid piece " + u + " exists once", Integer.valueOf(1), copies.get(u));
         }
     }
 
@@ -572,10 +644,11 @@ public class EmberSixMigrationTest {
     /** the 余烬-测试 counterexample, verbatim: crash@10 (player-file save), no restart, resume, hard kill */
     @Test public void qaReproCrashAtSaveResumeThenHardKill() {
         for (int k = 0; k < 5; k++) {
+            World probe = world(k); probe.migrate();
             World w = world(k);
             List<String> f0 = w.foreign();
-            w.crashAt = 10;
-            try { w.migrate(); fail("crash@10 not hit"); } catch (Crash expected) { }
+            w.crashAt = probe.firstPersistCall; // the old crash@10 = the player-file save after the swap
+            try { w.migrate(); fail("crash not hit"); } catch (Crash expected) { }
             w.crashAt = -1;
             assertEquals(EmberSixMigration.Outcome.ROLLED_FORWARD, w.migrate());
             w.hardRestart();
@@ -597,10 +670,11 @@ public class EmberSixMigrationTest {
                 w.hardRestart();
                 pat++;
                 if (!f0.equals(w.foreign()) || w.p1OnPlayer().size() != 4 || !w.disk.flag) bad++;
+                assertSound(w, f0, "qa225 case " + k + " crash@" + c + " " + RS[r]);
             }
         }
-        System.out.println("[T1-4] qa225: " + pat + " scenarios, bad " + bad);
-        assertEquals(225, pat);
+        System.out.println("[T1-4] qa225 pattern (every write point × 3 restarts): " + pat + " scenarios, bad " + bad);
+        assertTrue(pat >= 5 * 12 * 3);
         assertEquals(0, bad);
     }
 
@@ -798,13 +872,15 @@ public class EmberSixMigrationTest {
     }
 
     /**
-     * 50,000 runs × 12 ops: migrate / claim / hard kill / graceful stop / autosave / the player throws a foreign item away, each visit
+     * 50,000 runs × 12 ops: migrate / claim / hard kill / graceful stop / autosave / player actions (throw an armor piece,
+     * 1 or 4 migrated pieces, or a backpack stack — incl. claim-tagged and P1 — onto the ground or into a chest, pick up,
+     * relog), each visit
      * possibly crashed at a random call and / or with failing player-file saves (ghost or not); after every op the
      * soundness check, at the end clear → settle → hard kill → exactly one set.
      */
     @Test public void conservationFuzzWithHardKillsAndSaveFailures() {
         Random rnd = new Random(20261008L);
-        int runs = 50000, ops = 0, crashes = 0, saveFails = 0, kills = 0;
+        int runs = 50000, ops = 0, crashes = 0, saveFails = 0, kills = 0, tosses = 0;
         for (int run = 0; run < runs; run++) {
             World w = world(rnd.nextInt(5));
             for (int i = 0; i < 36; i++) if (rnd.nextInt(3) == 0) w.pack[i] = null;
@@ -840,26 +916,30 @@ public class EmberSixMigrationTest {
                 } else if (kind == 8) {
                     if (rnd.nextBoolean()) { log.append(" stop"); w.softRestart(); }
                     else { log.append(" autosave"); w.persistInventory0(); } // the server's periodic player save, at any moment
-                } else { // the player throws one of their own (untagged, non-P1) items away (then an autosave)
-                    int a = rnd.nextInt(36);
-                    if (w.pack[a] != null && !w.pack[a].startsWith("P1:") && w.pack[a].indexOf('#') < 0) {
-                        log.append(" toss ").append(w.pack[a]);
-                        f0.remove(w.pack[a]);
-                        w.pack[a] = null;
-                        w.persistInventory0();
-                    }
+                } else { // player actions: throw / store / pick up / relog
+                    int act = rnd.nextInt(7);
+                    if (act <= 2 || act == 6) tosses++;
+                    if (act == 0) { int i = rnd.nextInt(4); log.append(" tossArmor").append(i); w.tossArmor(i, rnd.nextBoolean()); }
+                    else if (act == 1) { int n = rnd.nextBoolean() ? 1 : 4; log.append(" tossP1x").append(n); w.tossBody(n, rnd.nextBoolean()); }
+                    else if (act == 2) { int a = rnd.nextInt(36); log.append(" tossPack").append(a); w.tossPack(a, rnd.nextBoolean()); }
+                    else if (act == 3) { log.append(" pickUp"); w.pickUp(rnd.nextBoolean() ? w.ground : w.chest); }
+                    else if (act == 4) { log.append(" relog"); w.softRestart(); }
+                    else if (act == 5) { log.append(" autosave"); w.persistInventory0(); }
+                    else { int i = rnd.nextInt(4), a = rnd.nextInt(36); log.append(" wear").append(a).append("→").append(i); w.wear(a, i); }
+                    if (rnd.nextInt(3) == 0) w.persistInventory0(); // an autosave right after
                 }
                 assertSound(w, f0, "run " + run + " op " + op + log);
             }
             settle(w, "run " + run + log);
+            assertSound(w, f0, "run " + run + " settled" + log);
             w.hardRestart();
             assertSound(w, f0, "run " + run + " final" + log);
             assertTrue("run " + run + log, w.disk.flag);
-            assertEquals(4, w.p1OnPlayer().size());
         }
         System.out.println("[T1-4] fuzz: " + runs + " runs / " + ops + " ops (" + crashes + " crashes, " + saveFails + " failed-save visits, "
-                + kills + " hard kills), bad 0");
+                + kills + " hard kills, " + tosses + " throws / stores), bad 0");
         assertTrue(saveFails > 10000 && kills > 10000);
+        assertTrue(tosses > 20000);
     }
 
     /** wiring: the live port reports the save outcome through a separate checked variant; savePlayerFile stays as it was */
@@ -928,5 +1008,219 @@ public class EmberSixMigrationTest {
             for (String x : c.pack) assertTrue("no tagged stack left on the player", x == null || x.indexOf('#') < 0);
             assertEquals(1, countOrig(c));
         }
+    }
+
+    // ------------------------------------------------------------------ residual risk A / B / C: the player moves the pieces before the resume
+
+    /** done: flag, journal gone, the total invariant, 4 valid pieces in their (empty-before) slots, H / D bits as before */
+    static void assertDone(World w, List<String> f0, String why) {
+        assertTrue(why + " flag " + w.detail, w.disk.flag);
+        assertSound(w, f0, why);
+        EmberItemData[] worn = w.worn();
+        for (int i = 0; i < 4; i++) {
+            assertNotNull(why + " slot " + i, worn[i]);
+            assertTrue(why + " slot " + i + " valid", w.valid(worn[i].uid));
+            assertEquals("X04", worn[i].origin.src);
+        }
+        assertNull(why + " H/D bits", EmberSixMigration.check(w.snapshot(), worn));
+    }
+
+    static final String[] TOSS = {"none", "1 ground", "4 ground", "4 chest", "1 chest", "all slots ground", "4 ground + wear own"};
+    static void toss(World w, int t) {
+        if (t == 1) w.tossBody(1, false);
+        else if (t == 2) w.tossBody(4, false);
+        else if (t == 3) w.tossBody(4, true);
+        else if (t == 4) w.tossBody(1, true);
+        else if (t == 5) for (int i = 0; i < 4; i++) w.tossArmor(i, false);
+        else if (t == 6) { w.tossBody(4, false); for (int i = 0; i < 4; i++) for (int a = 0; a < 36; a++) w.wear(a, i); }
+    }
+    static final String[] AFTER = {"hub", "relog then hub", "hard kill then hub"};
+
+    /** entry A: the first run's save reports failure but landed (ghost), hard restart → disk has the swap, journal kept */
+    static World entryA(int k) {
+        World w = world(k); w.f0 = w.foreign();
+        w.failSaves(1, true);
+        assertEquals(EmberSixMigration.Outcome.SAVE_FAILED, w.migrate());
+        w.hardRestart();
+        return w;
+    }
+    /** entry B: crash at the player-file save, then the resume's save fails (ghost or not), server keeps running */
+    static World entryB(int k, boolean ghost) {
+        World probe = world(k); probe.migrate();
+        World w = world(k); w.f0 = w.foreign();
+        w.crashAt = probe.firstPersistCall;
+        try { w.migrate(); fail(); } catch (Crash e) { }
+        w.crashAt = -1;
+        w.failSaves(1, ghost);
+        assertEquals(EmberSixMigration.Outcome.SAVE_FAILED, w.migrate());
+        w.clearFail();
+        return w;
+    }
+    /** entry C: the process dies after the swap was saved, before the mark (1st remember), hard restart — no save failure */
+    static World entryC(int k) {
+        World probe = world(k); probe.migrate();
+        World w = world(k); w.f0 = w.foreign();
+        w.crashAt = probe.firstRememberCall;
+        try { w.migrate(); fail(); } catch (Crash e) { }
+        w.hardRestart();
+        return w;
+    }
+
+    /** the 余烬-测试 variants by name (C0–C5, B1–B3, A1), every case: 0 originals lost, 0 doubled, 0 uid with two valid copies */
+    @Test public void residualRiskVariantsABC() {
+        int n = 0;
+        for (int k = 0; k < 5; k++) {
+            String c = "case " + k + " ";
+            World w;
+            w = entryC(k); assertSound(w, w.f0, c + "C entry"); settle(w, c + "C0"); w.hardRestart(); assertDone(w, w.f0, c + "C0 no throw");
+            w = entryC(k); w.tossBody(4, false); settle(w, c + "C1"); w.hardRestart(); assertDone(w, w.f0, c + "C1 throw all, hub");
+            w = entryC(k); w.tossBody(1, false); settle(w, c + "C2"); w.hardRestart(); assertDone(w, w.f0, c + "C2 throw 1, hub");
+            w = entryC(k); w.tossBody(4, true); settle(w, c + "C3"); w.pickUp(w.chest); assertSound(w, w.f0, c + "C3 take back");
+            w.persistInventory0(); w.hardRestart(); assertDone(w, w.f0, c + "C3 all into chest, hub, take back");
+            int voidStacks = 0;
+            for (String x : w.everything()) if (World.strip(x).startsWith("P1:") && !w.valid(World.strip(x).substring(3))) voidStacks++;
+            assertEquals(c + "C3 the 4 old pieces (taken back / still in the chest) are void", 4, voidStacks);
+            w = entryC(k); w.tossBody(4, false); w.softRestart(); settle(w, c + "C4"); w.hardRestart(); assertDone(w, w.f0, c + "C4 throw all, relog, hub");
+            w = entryC(k); w.tossBody(4, false); w.hardRestart(); settle(w, c + "C5"); w.hardRestart(); assertDone(w, w.f0, c + "C5 throw all, hard kill, hub");
+            for (int g = 0; g < 2; g++) {
+                String b = c + (g == 1 ? "ghost " : "");
+                w = entryB(k, g == 1); w.tossBody(4, false); settle(w, b + "B1"); w.hardRestart(); assertDone(w, w.f0, b + "B1 throw all, hub");
+                w = entryB(k, g == 1); w.tossBody(1, false); settle(w, b + "B2"); w.hardRestart(); assertDone(w, w.f0, b + "B2 throw 1, hub");
+                w = entryB(k, g == 1); w.tossBody(4, false); w.softRestart(); settle(w, b + "B3"); w.hardRestart(); assertDone(w, w.f0, b + "B3 throw all, relog, hub");
+            }
+            w = entryA(k); w.tossBody(4, false); settle(w, c + "A1"); w.hardRestart(); assertDone(w, w.f0, c + "A1 ghost save, hard kill, throw all, hub");
+            w = entryA(k); w.tossBody(1, true); settle(w, c + "A2"); w.hardRestart(); assertDone(w, w.f0, c + "A2 ghost save, hard kill, 1 into chest, hub");
+            n += 15;
+        }
+        System.out.println("[T1-4] residual A/B/C named variants: " + n + " scenarios, bad 0");
+    }
+
+    /**
+     * ④ every write point of the first run (crash) × 3 restarts, plus the save-failure entries (A ghost + hard kill, B
+     * crash → failing resume, ghost or not, × 3 restarts) — × throw 0 / 1 / 4 (ground, chest, every slot) × then hub /
+     * relog / hard kill — × settle → (chest picked up) → hard kill. The total invariant after every step.
+     */
+    @Test public void writePointTimesThrowTimesRestart() {
+        int scenarios = 0;
+        for (int k = 0; k < 5; k++) {
+            World probe = world(k); probe.migrate(); int steps = probe.calls;
+            List<Object[]> entries = new ArrayList<Object[]>();
+            for (int c = 1; c <= steps; c++) for (int r = 0; r < 3; r++) entries.add(new Object[]{"crash@" + c + "/" + RS[r], c, r});
+            for (int r = 0; r < 3; r++) for (int g = 0; g < 2; g++) {
+                entries.add(new Object[]{"saveFail" + (g == 1 ? "(ghost)" : "") + "/" + RS[r], -1, r, g});
+                entries.add(new Object[]{"B crash@save→resume saveFail" + (g == 1 ? "(ghost)" : "") + "/" + RS[r], -2, r, g});
+            }
+            for (Object[] en : entries) for (int t = 0; t < TOSS.length; t++) for (int after = 0; after < 3; after++) {
+                World w = world(k);
+                List<String> f0 = w.foreign();
+                int c = (Integer) en[1], r = (Integer) en[2];
+                String why = "case " + k + " " + en[0] + " throw " + TOSS[t] + " " + AFTER[after];
+                if (c > 0) {
+                    w.crashAt = c;
+                    try { w.migrate(); fail(why + " crash not hit"); } catch (Crash e) { }
+                } else {
+                    boolean g = (Integer) en[3] == 1;
+                    if (c == -2) {
+                        w.crashAt = probe.firstPersistCall;
+                        try { w.migrate(); fail(); } catch (Crash e) { }
+                        w.crashAt = -1;
+                    }
+                    w.failSaves(1, g);
+                    assertEquals(why, EmberSixMigration.Outcome.SAVE_FAILED, w.migrate());
+                }
+                restart(w, r);
+                assertSound(w, f0, why + " entry");
+                boolean doneBefore = w.disk.flag; // the throw then happens after a finished migration: the player's own business
+                toss(w, t);
+                assertSound(w, f0, why + " thrown");
+                if (after == 1) w.softRestart(); else if (after == 2) w.hardRestart();
+                assertSound(w, f0, why + " after");
+                settle(w, why);
+                assertSound(w, f0, why + " settled");
+                if (!w.chest.isEmpty()) { w.pickUp(w.chest); w.persistInventory0(); assertSound(w, f0, why + " picked up"); }
+                w.hardRestart();
+                assertSound(w, f0, why + " hard kill");
+                assertTrue(why, w.disk.flag);
+                if (t < 5 && !doneBefore) assertDone(w, f0, why);
+                assertEquals(EmberSixMigration.Outcome.ALREADY, w.migrate());
+                scenarios++;
+            }
+        }
+        System.out.println("[T1-4] write point × throw 0/1/4 (ground/chest/all) × hub/relog/hard kill: " + scenarios + " scenarios, bad 0");
+        assertTrue(scenarios > 3000);
+    }
+
+    /** ③ the retire write is lost (DB down): the old uid is void through the trust cache now and again after every join */
+    @Test public void lostRetireWriteIsResentOnJoin() {
+        World w = world(0); w.f0 = w.foreign();
+        World probe = world(0); probe.migrate();
+        w.crashAt = probe.firstRememberCall + 4; // all 4 remembered (valid rows), crash at the flag save
+        try { w.migrate(); fail(); } catch (Crash e) { }
+        w.hardRestart();
+        assertEquals(4, w.validDb().size());
+        w.loseDbWrites = true;
+        w.tossBody(2, false); // two valid old pieces on the ground
+        assertEquals(EmberSixMigration.Outcome.ROLLED_FORWARD, w.migrate());
+        assertSound(w, w.f0, "after the re-issue");
+        assertEquals(2, w.disk.voided.size());
+        for (EmberItemData d : w.disk.voided) assertFalse("void now (cache)", w.valid(d.uid));
+        w.softRestart(); // cache gone, DB write lost — join re-sends
+        for (EmberItemData d : w.disk.voided) assertFalse("void after the join", w.valid(d.uid));
+        assertSound(w, w.f0, "after relog");
+        w.loseDbWrites = false;
+        w.hardRestart();
+        for (EmberItemData d : w.disk.voided) assertTrue("DB row retired once the DB is back", w.dbRetired.contains(d.uid));
+        assertDone(w, w.f0, "final");
+    }
+
+    /**
+     * the revert path (post-check failed) crashed at every write point × 3 restarts × throw 0 / 1 / 4 / chest / every slot /
+     * throw + wear own items in the emptied slots — then the revert finishes and the migration runs: the total invariant
+     * after every step (an original whose slot the player has filled in the meantime goes to 待领).
+     */
+    @Test public void revertAtEveryWritePointTimesThrowAndWear() {
+        int scenarios = 0;
+        for (int k = 0; k < 5; k++) {
+            if (k == 1) continue; // no charm: a wrong piece cannot change H, no revert
+            World probe = world(k); probe.tamper = true; probe.migrate(); int steps = probe.calls;
+            for (int c = 1; c <= steps; c++) for (int r = 0; r < 3; r++) for (int t = 0; t < TOSS.length; t++) {
+                World w = world(k);
+                List<String> f0 = w.foreign();
+                String why = "case " + k + " revert crash@" + c + "/" + RS[r] + " throw " + TOSS[t];
+                w.tamper = true;
+                w.crashAt = c;
+                try { w.migrate(); fail(why + " crash not hit"); } catch (Crash e) { }
+                restart(w, r);
+                w.tamper = false;
+                assertSound(w, f0, why + " entry");
+                toss(w, t);
+                assertSound(w, f0, why + " thrown");
+                settle(w, why);
+                assertSound(w, f0, why + " settled");
+                w.hardRestart();
+                assertSound(w, f0, why + " hard kill");
+                assertTrue(why, w.disk.flag);
+                scenarios++;
+            }
+        }
+        // the targeted case: revert interrupted, the player wears an own item where an original belongs
+        World w = world(0);
+        List<String> f0 = w.foreign();
+        World probe = world(0); probe.tamper = true; probe.migrate();
+        w.tamper = true;
+        w.crashAt = probe.firstPersistCall + 2; // swap saved, reverting journal saved, crash at the revert's first change
+        try { w.migrate(); fail(); } catch (Crash e) { }
+        w.crashAt = -1; w.tamper = false;
+        assertTrue(w.disk.journal != null && w.disk.journal.reverting);
+        w.tossArmor(0, false);              // the issued helmet onto the ground
+        w.pack[35] = null; w.pack[35] = "own_hat"; f0 = new ArrayList<String>(f0); f0.add("own_hat"); Collections.sort(f0);
+        w.wear(35, 0);                      // an own hat in the head slot
+        assertEquals(EmberSixMigration.Outcome.CHECK_FAILED, w.migrate()); // the revert finishes
+        assertEquals("own_hat", w.armor[0]);
+        boolean inStash = false;
+        for (EmberSixMigration.StashEntry<String> e : w.disk.stash.values()) inStash |= "iron_helmet".equals(e.item);
+        assertTrue("the original helmet went to 待领", inStash);
+        assertSound(w, f0, "targeted revert");
+        System.out.println("[T1-4] revert × every write point × throw / wear × 3 restarts: " + scenarios + " scenarios (+1 targeted), bad 0");
     }
 }
