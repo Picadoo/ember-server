@@ -126,7 +126,7 @@ FAIL 只留证据，没有改代码或菜单。
 
 ---
 
-# 第二段（进行中 · 中途存档 2 · 2026-10-08 12:50 UTC+8）
+# 第二段（进行中 · 中途存档 3 · 2026-10-08 12:55 UTC+8）
 
 - 同 tip `f3f1a065`，约束同第一段。第二段开始于 11:09 UTC+8。
 - 第一步先起临时库，再跑 `restore-pre.sh`。测试库回到迁移前：8 行 active，逐行与 `.dat` 实物对上（`ev/check-pre2.json`，`active_without_item = []`），第一段误删头盔留下的 4 行孤儿记录已随之消失。之后每个用例开头都会再跑一次 `restore-pre.sh`，所以各用例的前置互相独立。
@@ -183,4 +183,19 @@ FAIL 只留证据，没有改代码或菜单。
   - ALREADY 或进服时，对身上和待领里缺 DB 记录的 src=migrate 件补 upsert；
   - 或 commit 在写 flag 之前等 DB 确认。
 
-B、C、E、H3/H4/H7、F2 重发部分正在跑。
+
+## B 组结果（5/5 PASS）
+
+前置：A1-4 状态，即 M4 后 kill，journal 未决，`.dat` 带 `ember_six_m_*` 且甲位是 issued。先关 migrate，把迁移挂起，再依次做事件；每一步之后都解析 `.dat` 看标签。证据见 `ev/B/chainA`、`ev/B/chainB` 和 `ev/B/result.json`。
+
+| 例 | 事件 | 结果 | 要点 |
+|---|---|---|---|
+| B2 | 退出→重连 ×2 | PASS | 标签 `ember_six_m_511dc6b8…` 在 |
+| B4 | 正常 `stop` → 起服 | PASS | 标签在 |
+| B5 | `save-all` 后 kill -9 → 起服 | PASS | kill 后、重启进服后标签都在 |
+| B3 | `mv tp t2_alt` 再回 `world`；之后开 migrate，`corerpg reload`，进服约 1 秒就换到 t2_alt | PASS | 标签在。续上发生在换世界约 2–3 秒后：12:46:53 进服，12:46:57 ROLLED_FORWARD，早于进服 120 tick（6 秒）的触发点，说明是 `onWorld` 第 40 tick 续上的。续上后 `p1_six_mig=1 journal=false 待领=3` |
+| B1 | 死亡（`/kill`，keepInventory=false）→ 重生，原地捡回 | PASS | 重生后标签仍在（MC-85730 不复现）。4 件迁移甲掉落后被捡回背包。回枢纽后 ROLLED_FORWARD，① ② 成立，每部位恰好 1 件 active，awi 为空 |
+
+两条链最后都是：违反 0，`active_without_item` 为空，migrate·active 每部位 1 件，flag=1，无 journal，无标签。
+
+C、E、H3/H4/H7、F2 重发部分正在跑。
