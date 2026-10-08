@@ -348,3 +348,29 @@ A5（待领领取 kill 点）正在跑；其后 G、DB 宕机/自愈、E、H1 �
 - NA1-6 / NA1-7 / NA1-5b：PASS（完成标记后 kill、DB_PENDING 期间 kill 均不丢迁移甲 DB 行，H=139.70）
 - NA2-6/7：`r`+uid 进待领、DB_PENDING 不二次重发
 - 全量测试 666/2（仅 D164/D165）
+
+
+---
+
+# tip 4d82b518 续跑（进行中 · 中途存档 1 · 2026-10-08 14:12 UTC+8）
+
+- tip `4d82b518`（D321 H7：audit 扫 p1-six 待领；`ACTIVE_IN_STASH`；restore 拒补发）。
+- 全量测试：`Tests run: 669, Failures: 2`（仍仅 EmberGrowthTest D164/D165，预期）。`BUILD SUCCESS`。jar sha256 前缀 `659d496b86a98853`（f6868515 jar 留在 `parked/CoreRpg-f6868515.jar`）。
+- f6868515 上已 PASS 且与 H7/菜单无关的结果保留（NA1 全组、NA2–NA4、NA5-1…6、NA7）。
+
+## H7（阻塞项）——PASS
+
+证据：`ev/N/H/H7c/result.json`。
+
+| 检查 | 结果 |
+|---|---|
+| 迁移后 5 人在线 `corerpg p1 audit` | t2a 报 **`ACTIVE_IN_STASH df5cb4bb… · 在六槽待领，勿 audit restore（让玩家去 装备→护甲 领取）`** |
+| 同 uid **不**报 `ACTIVE_NOT_HELD` | 是 |
+| `audit restore t2a df5cb4bb` | 拒绝：`该 uid 在六槽待领里，勿补发；让玩家去 装备→护甲 领取`（未补发） |
+| t2a 领取待领后 | 领到 3 件；再 audit，对该 uid 无 ACTIVE_IN_STASH / ACTIVE_NOT_HELD / DUPLICATE |
+| 同 uid 在线副本数 | 1 |
+| 不变量 | 违反 0 |
+
+## A1 关键点抽查（4d82b518）
+
+进行中：NA1-5b / NA1-6 / NA1-7。其后续：NA5-7/8、A6、G1–G8、DB 宕机、自愈、E、H12b。
