@@ -5,8 +5,10 @@
 **日期：** 2026-10-08（上海时间）  
 **上游：** D326 观察批 M 执行中 · D325 live PASS · D324 Stage1 S3 观察继续 · D318 批 A·K0（K3 转备选、不授权 T0‴）· D308 门槛钉死 · 灰印/天赋 HOLD · Pack6 硬禁  
 **本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R** · **不改线上 set_bonus / bv / jar** · **观察期内不部署 K3** · **不写六槽新代码（本 tip 窗）**  
-**硬规格（待策划交稿）：** [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md)（待建）· STATUS=待批 A · backlog `B-six-slot-k3-same-slot-refine`  
+**硬规格（已批）：** [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md) · STATUS=**已批 A · 批 M** · backlog `B-six-slot-k3-same-slot-refine` · D327  
 > **交稿旁注（D327 · 策划执行手）：** 硬规格已交 [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md) · STATUS=待批 A · 荐方案 M（观察期可离线 T0‴；施工/部署等绿出口或另签）· **本旁注零施工**（未改 jar/yml/开关）。
+>
+> **结案旁注（D327 · 总控）：** 本 tip **已关 · 批 A · 批 M · D327**；授权另号离线 T0‴；施工/部署默认等 Stage2 绿出口；不批 L；本号不另签并行施工。见 [`STATUS-ember-six-slot-k3-refine-d327-2026-10-08.md`](STATUS-ember-six-slot-k3-refine-d327-2026-10-08.md)。
 **打开理由：** Stage2 已进 48h 观察，总控要求**持续推进**、不闲置在观察文档 alone。下一档真结构硬债 = D318 搁置的 **K3 同部位熔炼**——须先出 **docs-only 决策页**（是否做、规则钉死、何时授权另号 T0‴），**本窗零 live jar/yml**，观察期内**禁止部署**。
 
 ---
@@ -114,4 +116,4 @@ D326 观察执行中；战斗/经济 R **全表不得开**。下一档若去偷�
 
 ---
 
-*服务器：proxy/login/play 保持 up；本 tip 零部署。样本门禁 R 全表不得开——本 tip 只升 K3 同部位熔炼决策页（docs-only · 选题 H · 荐 M：观察期可离线 T0‴、施工部署须绿出口或另签 · 禁偷开 R / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 关 set_bonus / 观察期上线）。*
+*服务器：proxy/login/play 保持 up；本 tip 零部署。**已关 · 批 A · 批 M · D327**——授权另号离线 T0‴；施工/部署默认等 Stage2 绿出口；不批 L；本号不另签并行施工；样本门禁 R 全表不得开；禁偷开 R / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 关 set_bonus / 观察期上线。*
