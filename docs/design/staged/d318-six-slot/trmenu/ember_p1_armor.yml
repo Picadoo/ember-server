@@ -1,0 +1,252 @@
+# 余烬 v1 (P1) 护甲页（D318 六槽 T1 · 预置稿，T2 由菜单岗定稿后再放进 plugins/TrMenu/menus/）
+#   spec: docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md §2.3（示例布局）
+#   数值全部来自 CoreRpg 占位符 %corerpg_p1_armor_*%（插件真实公式算的整装生命差），菜单不自己算。
+#   开关 gear.six_slot.enabled 关时：所有 armor_* 占位符为空、armor_on = 0，点击只回「护甲功能尚未开放」。
+#   点击 = 菜单代发内部命令（同 ember_p1_forge 写法），玩家看不到也不需要打命令。
+# 打开：装备页「护甲」格（见 ember_p1_gear.armor-slot.snippet.yml）
+
+Title: '§6余烬 · 护甲'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_armor'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '#1 2 3 4#'
+  - '#a b c d#'
+  - '#S A L R#'
+  - '#########'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  # 穿着：头盔（只读）
+  '1':
+    update: 20
+    display:
+      material: leather helmet
+      name: '§6穿着 · 头盔'
+      lore:
+        - '%corerpg_p1_armor_head%'
+        - '%corerpg_p1_armor_head_info%'
+        - ''
+        - '§7护甲的阶级和强化跟随已选护符'
+        - '§7成色和精工看掉落：换一件更好的，生命就多一点'
+        - '§8也可以照旧直接拖进护甲栏'
+
+  # 背包里同部位最好的一件
+  'a':
+    update: 20
+    display:
+      material: gray stained glass pane
+      name: '§8背包里：头盔'
+      lore:
+        - '%corerpg_p1_armor_head_cand%'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_head_has% == 1'
+        priority: 2
+        display:
+          material: leather helmet
+          name: '§e可换上 · 头盔'
+          lore:
+            - '%corerpg_p1_armor_head_cand%'
+            - '%corerpg_p1_armor_head_cmp%'
+            - '%corerpg_p1_armor_head_delta%'
+            - '%corerpg_p1_armor_head_fam%'
+            - ''
+            - '§7换下来的那件回到背包'
+            - '§e➥ §f点击换上'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor equip head'
+
+  # 穿着：胸甲（只读）
+  '2':
+    update: 20
+    display:
+      material: leather chestplate
+      name: '§6穿着 · 胸甲'
+      lore:
+        - '%corerpg_p1_armor_chest%'
+        - '%corerpg_p1_armor_chest_info%'
+        - ''
+        - '§7护甲的阶级和强化跟随已选护符'
+        - '§7成色和精工看掉落：换一件更好的，生命就多一点'
+        - '§8也可以照旧直接拖进护甲栏'
+
+  # 背包里同部位最好的一件
+  'b':
+    update: 20
+    display:
+      material: gray stained glass pane
+      name: '§8背包里：胸甲'
+      lore:
+        - '%corerpg_p1_armor_chest_cand%'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_chest_has% == 1'
+        priority: 2
+        display:
+          material: leather chestplate
+          name: '§e可换上 · 胸甲'
+          lore:
+            - '%corerpg_p1_armor_chest_cand%'
+            - '%corerpg_p1_armor_chest_cmp%'
+            - '%corerpg_p1_armor_chest_delta%'
+            - '%corerpg_p1_armor_chest_fam%'
+            - ''
+            - '§7换下来的那件回到背包'
+            - '§e➥ §f点击换上'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor equip chest'
+
+  # 穿着：护腿（只读）
+  '3':
+    update: 20
+    display:
+      material: leather leggings
+      name: '§6穿着 · 护腿'
+      lore:
+        - '%corerpg_p1_armor_legs%'
+        - '%corerpg_p1_armor_legs_info%'
+        - ''
+        - '§7护甲的阶级和强化跟随已选护符'
+        - '§7成色和精工看掉落：换一件更好的，生命就多一点'
+        - '§8也可以照旧直接拖进护甲栏'
+
+  # 背包里同部位最好的一件
+  'c':
+    update: 20
+    display:
+      material: gray stained glass pane
+      name: '§8背包里：护腿'
+      lore:
+        - '%corerpg_p1_armor_legs_cand%'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_legs_has% == 1'
+        priority: 2
+        display:
+          material: leather leggings
+          name: '§e可换上 · 护腿'
+          lore:
+            - '%corerpg_p1_armor_legs_cand%'
+            - '%corerpg_p1_armor_legs_cmp%'
+            - '%corerpg_p1_armor_legs_delta%'
+            - '%corerpg_p1_armor_legs_fam%'
+            - ''
+            - '§7换下来的那件回到背包'
+            - '§e➥ §f点击换上'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor equip legs'
+
+  # 穿着：靴子（只读）
+  '4':
+    update: 20
+    display:
+      material: leather boots
+      name: '§6穿着 · 靴子'
+      lore:
+        - '%corerpg_p1_armor_boots%'
+        - '%corerpg_p1_armor_boots_info%'
+        - ''
+        - '§7护甲的阶级和强化跟随已选护符'
+        - '§7成色和精工看掉落：换一件更好的，生命就多一点'
+        - '§8也可以照旧直接拖进护甲栏'
+
+  # 背包里同部位最好的一件
+  'd':
+    update: 20
+    display:
+      material: gray stained glass pane
+      name: '§8背包里：靴子'
+      lore:
+        - '%corerpg_p1_armor_boots_cand%'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_boots_has% == 1'
+        priority: 2
+        display:
+          material: leather boots
+          name: '§e可换上 · 靴子'
+          lore:
+            - '%corerpg_p1_armor_boots_cand%'
+            - '%corerpg_p1_armor_boots_cmp%'
+            - '%corerpg_p1_armor_boots_delta%'
+            - '%corerpg_p1_armor_boots_fam%'
+            - ''
+            - '§7换下来的那件回到背包'
+            - '§e➥ §f点击换上'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor equip boots'
+
+  S:
+    update: 20
+    display:
+      material: book
+      name: '§7四件套（后续开放）'
+      lore:
+        - '%corerpg_p1_armor_set%'
+        - ''
+        - '§8四件同族、掉落阶够高时才算（之后开放）'
+
+  A:
+    update: 20
+    display:
+      material: coal
+      name: '§7全部换上'
+      lore:
+        - '%corerpg_p1_armor_all%'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_all_has% == 1'
+        priority: 2
+        display:
+          material: emerald
+          name: '§a全部换上'
+          lore:
+            - '%corerpg_p1_armor_all%'
+            - ''
+            - '§7每个部位换成生命最高的一件'
+            - '§7同样高时保留现在的族'
+            - '§e➥ §f第一次点击看清单，30 秒内再点一次确认'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor all'
+
+  L:
+    update: 20
+    display:
+      material: chest
+      name: '§6待领物品'
+      lore:
+        - '%corerpg_p1_armor_stash_line%'
+        - ''
+        - '§7护甲栏启用时，原来穿着的东西会收在这里，一件不少'
+        - '§e➥ §f点击领取到背包（背包满时留在这里，腾出空位再来）'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 armor claim'
+
+  R:
+    display:
+      material: arrow
+      name: '§7返回装备页'
+    actions:
+      all:
+        - 'menu: ember_p1_gear'

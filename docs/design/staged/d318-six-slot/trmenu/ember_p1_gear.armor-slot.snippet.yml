@@ -1,0 +1,26 @@
+# D318 六槽 T1 · 装备页「护甲」格（预置片段，菜单岗定稿时并入 ember_p1_gear.yml 的 Icons，格位由菜单岗选；T2 前不放进线上目录）
+# 开关关（armor_on = 0）时这一格显示成普通玻璃板，装备页其余内容逐字不变。
+  M:
+    update: 20
+    display:
+      material: gray stained glass pane
+      name: '§8'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: iron chestplate
+          name: '§6护甲'
+          lore:
+            - '%corerpg_p1_armor_head%'
+            - '%corerpg_p1_armor_chest%'
+            - '%corerpg_p1_armor_legs%'
+            - '%corerpg_p1_armor_boots%'
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '§7阶级和强化跟随已选护符；成色 / 精工看掉落'
+            - '§e➥ §f打开护甲页（对比后换上）'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'menu: ember_p1_armor'

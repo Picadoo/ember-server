@@ -47,7 +47,7 @@ public final class EmberSixSlotService implements Listener {
     private final CoreRpgPlugin plugin;
     private final EmberLoadoutService loadouts;
     private final Set<UUID> busy = Collections.synchronizedSet(new HashSet<UUID>());
-    private final Map<UUID, Long> allPending = new HashMap<UUID, Long>();
+    private final Map<UUID, Object[]> allPending = new HashMap<UUID, Object[]>();
     private final Map<UUID, Integer> stashN = new java.util.concurrent.ConcurrentHashMap<UUID, Integer>();
     private final Map<UUID, Object[]> viewCache = new HashMap<UUID, Object[]>();
 
@@ -387,12 +387,16 @@ public final class EmberSixSlotService implements Listener {
         EmberSixRank.View v = view(p);
         List<Integer> todo = EmberSixRank.allPlan(v);
         if (todo.isEmpty()) { p.sendMessage(P + "四个部位都已是最好的一件，不用换。"); return; }
-        Long at = allPending.get(p.getUniqueId());
-        if (!confirm || at == null || System.currentTimeMillis() - at > 30000L) {
-            allPending.put(p.getUniqueId(), System.currentTimeMillis());
+        StringBuilder key = new StringBuilder();
+        for (int i : todo) key.append(i).append(':').append(v.best[i].piece.uid).append(';');
+        Object[] at = allPending.get(p.getUniqueId());
+        // second click within 30 s on the same plan = confirm (same as the forge); a changed plan previews again
+        boolean armed = at != null && System.currentTimeMillis() - (Long) at[0] <= 30000L && key.toString().equals(at[1]);
+        if (!armed) {
+            allPending.put(p.getUniqueId(), new Object[]{System.currentTimeMillis(), key.toString()});
             StringBuilder sb = new StringBuilder();
             for (int i : todo) sb.append(sb.length() == 0 ? "" : "、").append(EmberSixSlot.slotLabel(i));
-            p.sendMessage(P + "将换上：" + sb + "（合计" + EmberSixRank.deltaText(EmberSixRank.allDelta(v, todo)) + "）。再点一次「确认全部换上」生效。");
+            p.sendMessage(P + "将换上：" + sb + "（合计" + EmberSixRank.deltaText(EmberSixRank.allDelta(v, todo)) + "）。30 秒内再点一次「全部换上」确认。");
             return;
         }
         allPending.remove(p.getUniqueId());

@@ -123,4 +123,28 @@ public class EmberSixRankTest {
         EmberItemData m = new EmberItemData(EmberItemData.newUid(), a.ni, "burst", "legs", 2, 1, 1, 0, 0, true, "migrate", 2, 0);
         assertEquals("§8这件护甲不能分解", EmberSixPapi.heldArmorLine(m, "dismantle"));
     }
+
+    /** staged ember_p1_armor + gear snippet: every placeholder routes to a plugin section; player copy has no command teaching / internal words */
+    @Test public void stagedMenuKeysRouteAndHaveNoCommandText() throws java.io.IOException {
+        java.nio.file.Path dir = java.nio.file.Paths.get("../docs/design/staged/d318-six-slot/trmenu");
+        org.junit.Assume.assumeTrue(java.nio.file.Files.isDirectory(dir));
+        java.util.regex.Pattern ph = java.util.regex.Pattern.compile("%corerpg_p1_([a-z0-9_]+)%");
+        int keys = 0;
+        try (java.util.stream.Stream<java.nio.file.Path> st = java.nio.file.Files.list(dir)) {
+            for (java.nio.file.Path f : (Iterable<java.nio.file.Path>) st::iterator) {
+                String y = new String(java.nio.file.Files.readAllBytes(f), java.nio.charset.StandardCharsets.UTF_8);
+                java.util.regex.Matcher m = ph.matcher(y);
+                while (m.find()) { keys++; assertEquals(m.group(1), EmberRunPapi.Section.ARMOR, EmberRunPapi.route(m.group(1))); }
+                for (String line : y.split("\n")) {
+                    String t = line.trim();
+                    if (!(t.startsWith("- '") || t.startsWith("name:"))) continue;
+                    if (t.startsWith("- 'command:") || t.startsWith("- 'menu:") || t.startsWith("- 'sound:") || t.startsWith("- '(?i)")) continue;
+                    assertFalse(f + ": " + t, java.util.regex.Pattern.compile("/[a-zA-Z]").matcher(t).find()); // no /command
+                    assertFalse(f + ": " + t, t.contains("corerpg") && !t.contains("%corerpg_"));
+                    for (String bad : new String[]{"维护", "备忘", "命令", "指令", "开关", "gear.six_slot", "T1", "D318"}) assertFalse(f + ": " + t, t.contains(bad));
+                }
+            }
+        }
+        assertTrue(keys >= 30);
+    }
 }
