@@ -1,7 +1,27 @@
-# 余烬 · 六槽护甲 T2 测试服演练计划（余烬-测试 · 2026-10-08 · 草案，待总控批）
+# 余烬 · 六槽护甲 T2 测试服演练计划（余烬-测试 · 2026-10-08 · **已批 D320**）
+
+## 总控批示 D320（2026-10-08 10:20 UTC+8）
+
+计划 `5329227e` / `c6f885a9` 已批准。§9 待拍板各项定为：
+
+| # | 批示 | 落到正文 |
+|---|---|---|
+| ① | 用**临时 mariadbd 实例**（独立 datadir、端口 3317、独立 socket），线上库零写入 | §1.2 |
+| ② | **不加测试钩子**，用 jdb 断点 + kill -9；「异步 DB 写未落盘」那一侧记 SKIP，并列入残余风险 | §5-A、§6；见下方测试岗注 |
+| ③ | **不接 Waterfall** | §1.3 |
+| ④ | 孤儿标签按 **a+b** 处理，并顺手补存档 **(c)**，已派插件岗 | §5-A 的 A1、§5-E 的 E4 |
+| ⑤ | **由守卫拦**：快照早于迁移完成就拒绝恢复。已派插件岗，场景里要加测 | §5-E 的 E5–E7 |
+| ⑥ | **不装 DungeonPlus**，主线结算掉甲记 SKIP，留到 T3 | §3、§5-H 的 H8、§6 |
+| 内存 | 可用内存 <1.5 GB 暂停，<1 GB 立停；线上 4 个服务全程不动 | §2、§7 |
+| 节奏 | 可以分段跑，每段结束 commit + push 一份报告存档 | §7 |
+| 启动 | 插件岗把含守卫的 tip 发来就开始执行，不必再问总控。最终交 STATUS 报告，并给出是否建议签「T2 过线」 | §7、§9 |
+
+> **测试岗注（关于 ②）：** jdb 断点默认挂起**全部线程**，所以 kill -9 时异步 DB 写一定还没执行，jdb 实际覆盖的正是「异步写**未落**」这一侧。jdb 覆盖不到的是「异步写**已落**、主线程还没往下走」这一侧。执行时按机制把**「已落」侧记 SKIP**，并列入残余风险。这一侧在离线 World 模型里已覆盖（模型中 `remember` / `retire` 是同步写入），风险低。如果总控本意确实是另一侧，请更正。
+
+
 
 - 依据：D319（T1 过线 @`e558e38f`），T2 硬前置 a–d。本计划覆盖 a（R1/R6 kill -9 演练）、c（事件级 T1-6）、d（`/ni reload` + 菜单 `ember_p1_armor`），并复核 b（invsnap 守卫）。
-- 状态：**只交稿，未起服**。执行需要两个条件同时满足：①插件岗推送 invsnap 守卫提交（下文记作 `<GUARD_SHA>`）；② 总控批准本计划，并拍板 §9 的待定项。
+- 状态：**已批（D320），尚未执行，未起服。** 插件岗推送含 invsnap 守卫、孤儿标签修复和快照时间守卫的提交（下文记作 `<GUARD_SHA>`）后即开始执行，不再另问总控。
 - 调研方式全部只读（2026-10-08 10:20 UTC+8，仓库 `a2268e39`）：读仓库、`ss -ltnp`、`free -m`、`ps`、`sha256sum`。本次没有起进程，没有建库，没有拷世界。
 - 总不变量（贯穿全部场景）：**① 同一 uid 的有效副本 ≤1（有效 = DB 为 active，且不在作废名单）；② 原物多重集不变。** 原物的统计范围：身上 + 背包 + 末影箱 + 待领 + 地上/容器 + 带 `ember_six_m_*` 标签时 journal 里的原物。
 
@@ -19,9 +39,9 @@
 
 ### 1.2 DB 方案
 
-**推荐：临时 mariadbd 实例**，备选是在线上 MariaDB 里建独立 schema 和用户。由总控拍板（§9-3）。
+**已定（D320 ①）：临时 mariadbd 实例**，线上库零写入。B 方案不采用，下表保留作为记录。
 
-| | A 临时 mariadbd（推荐） | B 线上 MariaDB 建 schema + 用户 |
+| | **A 临时 mariadbd（已定）** | B 线上 MariaDB 建 schema + 用户（不采用） |
 |---|---|---|
 | 隔离 | 独立 datadir、端口、socket，与线上进程和数据零交集 | 同一个进程、同一份 `mysql.user`，共享 buffer pool 和连接数 |
 | 对线上的写入 | **0** | 要写 `CREATE DATABASE` / `CREATE USER` / `GRANT`，这是对线上 DB 的写操作，和「不写线上 DB」冲突 |
@@ -30,7 +50,7 @@
 | 内存 | +约 200 MB（buffer pool 64 MB） | +约 0 |
 | 清场 | 停进程 + `rm -rf db/` | DROP DATABASE / DROP USER，又是线上写 |
 
-A 的启动方式（批准后执行，现在不执行）：
+A 的启动方式（拿到 `<GUARD_SHA>` 后在步 1 执行，现在不执行）：
 ```
 mariadb-install-db --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --auth-root-authentication-method=socket
 mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --bind-address=127.0.0.1 \
@@ -42,7 +62,7 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
 
 ### 1.3 不接入 Waterfall
 
-测试服**不接代理**，mineflayer 直连 `127.0.0.1:25577`。理由：
+**已定（D320 ③）：** 测试服**不接代理**，mineflayer 直连 `127.0.0.1:25577`。理由：
 1. 接入要改线上 `proxy-runtime/config.yml` 的 `servers:` 段（现有 login@25566、play@25567），这属于动线上配置；
 2. 接入后线上玩家可能被路由到测试服，测试号也可能进到线上；
 3. 演练要对测试服反复 kill -9，代理侧会产生断线噪声；
@@ -127,7 +147,7 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
 | ProtocolLib | `plugins/ProtocolLib.jar` | 8932f867d162… |
 | Vault | `plugins/Vault.jar` | a6b5ed97f43a… |
 | Multiverse-Core | `plugins/Multiverse-Core.jar`（建第二个平地世界 `t2_alt`，用于换世界场景） | f43b8aa54870… |
-| 不装 | MythicMobs、Adyeshach、DungeonPlus、HolographicDisplays、LuckPerms、Multiverse-Portals、spark、Core* 小插件 | 与演练无关，省内存；CoreRpg 对这些都是 softdepend |
+| 不装 | MythicMobs、Adyeshach、**DungeonPlus（D320 ⑥）**、HolographicDisplays、LuckPerms、Multiverse-Portals、spark、Core* 小插件 | 与演练无关，省内存；CoreRpg 对这些都是 softdepend |
 
 - jar 一律用 `cp --preserve=timestamps` **只读**拷入 `t2-drill/server/plugins/`，拷完核对 sha256。线上 `plugins/` 里不新增、不修改任何文件。
 - NI、PAPI、TrMenu 的配置目录：从 git 的 `<DRILL_SHA>` 导出（`plugins/NeigeItems/`、`plugins/TrMenu/`），不导出 `players/`、`*.db`、`data/`。
@@ -167,7 +187,7 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
 
 | 组 | 写点（按执行顺序） | 代码行 |
 |---|---|---|
-| M 首次迁移 | M0 `retire(voided)`（只在 voided 非空时）→ M1 `create`×4（NI 建物品，无持久化）→ **M2** `save(journal PREPARED)` 写 `p1-six/<uuid>.yml` → **M3** `apply(换甲 + 标签)`（只改内存）→ **M4** `persistInventory` 写 `.dat` → **M5** `remember`×4（信任缓存 + 异步 DB active）→ **M6** `save(flag + 待领 + 清 journal)` → **M7** `apply(null, 去标签)`（只改内存，**之后不再存档**） | 193、210、220、222、223、372、378、380 |
+| M 首次迁移 | M0 `retire(voided)`（只在 voided 非空时）→ M1 `create`×4（NI 建物品，无持久化）→ **M2** `save(journal PREPARED)` 写 `p1-six/<uuid>.yml` → **M3** `apply(换甲 + 标签)`（只改内存）→ **M4** `persistInventory` 写 `.dat` → **M5** `remember`×4（信任缓存 + 异步 DB active）→ **M6** `save(flag + 待领 + 清 journal)` → **M7** `apply(null, 去标签)`（只改内存；@e558e38f 之后不再存档）→ **M8** 补存档（D320 ④ c，以 `<GUARD_SHA>` 为准）；另有 ALREADY 路径清孤儿标签（④ b） | 193、210、220、222、223、372、378、380 |
 | F 续上 / 重发 | F1 `create` 新 uid → **F2** `save(voided + journal)` → **F3** `retire(旧 uid)` → **F4** `setArmor(新件)` → **F5** `persistInventory`，然后走 M5–M7 | 342、352、354、355、357 |
 | R 自检失败撤回 | **R1** `save(reverting)` → **R2** `save(被占槽原物进待领)` → R3 `take` → **R4** `apply(原物 + 去标签)` → **R5** `persistInventory` → **R6** `save(done, voided)` → **R7** `retire` | 240、298、304、306、307、311、313 |
 | D 未换装就丢弃 journal | D1 `take` → **D2** `persistInventory` → **D3** `save(voided)` → **D4** `retire` | 262、263、267、269 |
@@ -176,7 +196,9 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
 
 **定点触发方式：** 代码里**没有**测试钩子或系统属性（`rg getProperty|getenv` 在两个类里 0 处命中）。两种办法：
 
-1. **jdb 断点，不需要插件岗改代码（推荐作主方案）。**
+**已定（D320 ②）：不加钩子，只用 jdb 断点 + kill -9。** 写点行号以 `<DRILL_SHA>` 为准：④ 的补存档会让 `commit` 附近的行号移动，执行前用 `rg -n` 重新核对上表。
+
+1. **jdb 断点（采用）。**
    - 测试服加 `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=127.0.0.1:25578` 启动；
    - 执行 `jdb -attach 127.0.0.1:25578`，然后 `stop at town.sunshine.corerpg.p1.EmberSixMigration:<行>`，行号用上表；
    - 断点命中时主线程（默认是全部线程）挂起，**立刻 `kill -9 <测试服 pid>`**，效果等于「在该语句执行之前进程死亡」；
@@ -184,26 +206,33 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
    - R 组需要强制自检失败：在 238 行（`if (post != null)`，post 已算完）断下，执行 `set post = "drill"`，后续即走撤回路径；
    - 风险：Paper watchdog 默认 60 秒报警。断点到 kill 控制在 10 秒内，必要时把 `spigot.yml` `timeout-time` 调大到 300（只改测试服）。
    - 构建默认带行号（maven `-g`），构建后用 `javap -l` 抽查确认。
-2. **测试钩子（可选，需插件岗加，列为待拍板 §9-2）。**
+2. ~~测试钩子（D320 ② 不加，保留作为记录）。~~
    - 系统属性 `-Dember.six.drill.haltAt=<写点名>`，在指定写点之后调用 `Runtime.getRuntime().halt(137)`，等价于 kill -9：不跑 shutdown hook，不存档；
    - 只有属性存在时才生效，线上不设，零影响；
    - 好处是可以脚本化批量跑，还能区分「异步 DB 写已落 / 未落」：只挂起主线程，等异步线程写完再 halt。jdb 默认挂起全部线程，只能覆盖「异步写未落」的情况。
+
+**SKIP（D320 ②）：** jdb 覆盖不到的一侧（异步 DB 写已落、主线程还没往下走）在 A 组里统一记 SKIP，并列入残余风险。对应关系见文件顶部的测试岗注。
 
 **用例**（每例都是：从 `snap/pre/` 恢复 → 起服 → bot 进服（迁移在进服后第 120 tick 触发）→ 断点处 kill -9 → 重启测试服 → bot 重新进服 → 续上直到 ALREADY → 再 kill -9 一次 → 重启并核对）：
 
 | 编号 | 内容 | 例数 |
 |---|---|---|
-| A1 | M2…M7 每个写点的前、后两侧，外加「M7 之后、下一次自动存档之前」 | 7 |
+| A1 | M2…M7 每个写点的前、后两侧；**M7 之后、M8 补存档（D320 ④ c）之前**（孤儿标签窗口）；**M8 之后** | 8 |
 | A2 | F 组（先让 A1 停在 M4 之后，再让 bot 把迁移甲移到背包或死亡掉落，以此进入 F 路径）：F2…F5 | 5 |
 | A3 | R 组（用 `set post` 强制撤回）：R1、R2、R4、R5、R6、R7，另加 1 例「撤回中途玩家往空槽穿自己的东西」 | 7 |
 | A4 | D 组（A1 停在 M4 之前，此时 journal 未带标签）：D1…D4 | 4 |
 | A5 | C 组：C1…C8 | 8 |
 | A6 | E1 前后各一次 | 2 |
 | A7 | 待决窗口内玩家动作 × 3 个关键点（M4 后 / F2 后 / R2 后）× {不动、死亡掉落、穿到背包后重登} | 9 |
-| | **合计** | **42** |
+| | **合计** | **43** |
 
 - **断言：** 不变量 ①②；最终 `flag=1`、journal 为空；身上加待领的迁移甲每个部位恰好 1 件有效；所有作废 uid 在临时库里是 `retired`（异步写丢失的，进服后重发）；`audit` 无 `DUP`，作废件只报 HELD_NOT_ACTIVE（R5，属于预期）。
-- **A1 第 7 例重点观察**：M7 只在内存里去标签，之后没有存档。kill -9 后磁盘上的 `.dat` 会残留 `ember_six_m_*`，而 flag=1 时 run 直接返回 ALREADY，再也不会去掉它（孤儿标签）。如果 invsnap 守卫按「带 `ember_six_m_*` 标签就拒绝」判断（D319 (b) 的字面写法），这个玩家以后将**永远无法被 invsnap 恢复**。演练要记录这个现象；修法见 §9-4。
+- **A1 孤儿标签窗口（D320 ④，按 a+b+c 修后的断言）**：
+  - 在 M7（内存去标签）与 M8（补存档）之间 kill -9：磁盘上的 `.dat` 可能残留 `ember_six_m_*`，flag=1；
+  - 重启后 bot 回枢纽，run 走 ALREADY，(b) 清掉孤儿标签，之后存档的 `.dat` **不再带标签**；
+  - invsnap 守卫只看「journal 未决」(a)，所以恢复照常；
+  - M8 之后 kill：`.dat` 不带标签。
+  - 详见 E4。
 
 ### B · 标签 `ember_six_m_*` 能否跨事件保留
 
@@ -255,10 +284,12 @@ mariadbd --no-defaults --datadir=/workspace/tmp/t2-drill/db/data --port=3317 --b
 | E1 | journal 未决 + 带标签（A1 停在 M4 后，kill，重启，在非枢纽进服） | `corerpg invsnap restore <号> <迁移前快照>` | **拒绝**，并提示原因；背包、甲位、标签都不变 |
 | E2 | 同 E1，号离线 | 排队恢复 → 号进服（第 40 tick 执行，早于迁移的第 120 tick） | 排队恢复在进服时**被拒并保留排队**，不会先恢复再续上；不出现「原物翻倍」 |
 | E3 | 无 journal（已迁移，flag=1，磁盘上无孤儿标签） | 恢复到迁移**后**的快照 | **正常恢复**；P1 信任检查照常工作 |
-| E4 | 已迁移 + 孤儿标签（A1 第 7 例的结果） | 恢复 | 记录守卫的实际行为（拒 / 放）。按 §9-4 的拍板结果判定 |
-| E5 | 已迁移 | 恢复到迁移**前**的快照 | 记录结果：原物会同时出现在身上和待领里。守卫应拒绝或至少警告；不拦则写进运维手册 |
+| E4 | 孤儿标签（D320 ④）：迁移收尾时在 M7 与 M8 之间 kill -9 → 重启 → bot 回枢纽 | 解析 `.dat`；再恢复到迁移**后**的快照 | 重启后孤儿标签被清（下一次存档的 `.dat` 无 `ember_six_m_*`）；`armor status` 显示 flag=1、journal 为空；invsnap **正常恢复**；①② 成立 |
+| E5 | 已迁移（D320 ⑤） | 恢复到迁移**前**的快照（快照时间早于迁移完成） | **拒绝**，并提示原因；背包、甲位、待领都不变；原物不翻倍 |
+| E6 | 已迁移（D320 ⑤ 边界） | 恢复到迁移**进行中**拍的快照（journal 未决期间，例如死亡快照，时间早于迁移完成） | **拒绝** |
+| E7 | 已迁移、号离线（D320 ⑤） | 排队恢复一份迁移前的快照 → 号进服（第 40 tick） | 进服时**被拒**，排队保留并记录原因，不会先恢复；原物不翻倍 |
 
-共 **5 例**。
+共 **7 例**。
 
 ### F · `/ni reload`（前置 d）
 
@@ -297,20 +328,25 @@ bot 只通过 GUI 点击操作：`/ember` → 枢纽「装备」→ `ember_p1_ge
 | H5 | 开关关（`migrate=false`） | 进服不迁移，无新行 |
 | H6 | 缺 NI 模板（测试服暂时挪走 `ember-armor-v1.yml` 后执行 `/ni reload`） | NO_TEMPLATE，不发不扣；恢复模板后可以正常迁移 |
 | H7 | `corerpg p1 audit` 全员 | 0 差异 |
-| H8 | 白板 / 掉甲顺带冒烟：用 t2op 给的护符跑一次主线结算（如果测试服能跑 DP；跑不了就 SKIP 并说明） | 掉甲口径只在主线结算出现 |
+| ~~H8~~ | **SKIP（D320 ⑥）**：主线结算掉甲冒烟，测试服不装 DungeonPlus，留到 T3 | — |
 
-共 **8 例**。
+执行 **7 例**，H8 记 SKIP。
 
-**场景总数：A 42 + B 5 + C 3 + D 14 + E 5 + F 2 + G 8 + H 8 = 87。**
+**场景总数（D320 后）：执行 A 43 + B 5 + C 3 + D 14 + E 7 + F 2 + G 8 + H 7 = 89；另有 SKIP 1 例（H8）。** A 组每个写点 jdb 覆盖不到的「异步写已落」一侧统一记 SKIP，这是覆盖缺口，不单独计入场景数。
+
+变更说明（相对 87）：
+- A1 +1（M8 补存档后增加一个写点）；
+- E +2（E4 改为孤儿标签断言；E5 改为拒绝断言；新增 E6、E7）；
+- H8 从执行改为 SKIP（−1）。
 
 ## 6 通过标准
 
 | 等级 | 判定 |
 |---|---|
-| **阻塞（T2 不过）** | 任意场景违反总不变量 ①（同一 uid 出现 2 份有效副本）或 ②（原物丢失或翻倍）；C 组出现标签与甲位不一致；B 组标签丢失；E1/E2 守卫没拦住导致翻倍；F 组护甲值≠0 或属性外露；G6 连点产生复制；H1 的 H/D 不相等；H2 不幂等；作废 uid 在 DB 恢复并重登后仍是 active；测试服写到了线上路径或线上库（立即中止，见 §7） |
-| **需修，但可以带条件过（总控定）** | 孤儿标签导致守卫误拒（E4）；菜单文案或排序与 §5.4③ 有出入但不影响资产；D13 的提示文案；`.dat` 改名窗口的 Paper 通用风险（C 组附带记录） |
+| **阻塞（T2 不过）** | 任意场景违反总不变量 ①（同一 uid 出现 2 份有效副本）或 ②（原物丢失或翻倍）；C 组出现标签与甲位不一致；B 组标签丢失；E1/E2/E5/E6/E7 守卫没拦住（导致翻倍或恢复了早于迁移完成的快照）；E4 孤儿标签重启后没清、或 invsnap 被误拒；F 组护甲值≠0 或属性外露；G6 连点产生复制；H1 的 H/D 不相等；H2 不幂等；作废 uid 在 DB 恢复并重登后仍是 active；测试服写到了线上路径或线上库（立即中止，见 §7） |
+| **需修，但可以带条件过（总控定）** | 菜单文案或排序与 §5.4③ 有出入但不影响资产；D13 的提示文案；`.dat` 改名窗口的 Paper 通用风险（C 组附带记录） |
 | **可接受（预期）** | 作废件残留在世界里，`audit` 报 HELD_NOT_ACTIVE（R5）；kill -9 后异步 DB 写丢失、进服时补写（R7）；DB 宕机时迁移暂停或延后（R4，运维手册） |
-| **SKIP（需注明）** | H8 测试服跑不了 DP 本；跨代理换服（留给 T3 线上冒烟） |
+| **SKIP（需注明，列入残余风险）** | H8 主线结算掉甲（D320 ⑥，不装 DungeonPlus，留到 T3）；A 组「异步 DB 写已落」一侧（D320 ②，jdb 覆盖不到；离线 World 模型已覆盖）；跨代理换服（D320 ③，留给 T3 线上冒烟） |
 
 每条场景都要在 `t2-drill/evidence/<编号>/` 下留证据（日志片段、`.dat` JSON、yml、SQL 输出、bot 记录），报告里逐条写 PASS / FAIL / SKIP。
 
@@ -318,19 +354,21 @@ bot 只通过 GUI 点击操作：`/ember` → 枢纽「装备」→ `ember_p1_ge
 
 | 步 | 内容 | 估时 |
 |---|---|---|
-| 0 | 前置确认（§9 已拍板，`<GUARD_SHA>` 已推送），测前快照哈希（§8.1），端口复查，`free -m` | 0.3 h |
+| 0 | 前置确认（`<GUARD_SHA>` 已推送，含守卫、孤儿标签修复和快照时间守卫），测前快照哈希（§8.1），端口复查，`free -m` | 0.3 h |
 | 1 | worktree 构建与全量测试，导出配置，改配置，起临时库 | 0.8 h |
 | 2 | 关开关起服，合成 5 个「迁移前」档，存进 `snap/pre` | 0.5 h |
 | 3 | H1、H2、H5、H6（主流程，先确认基本面） | 0.5 h |
 | 4 | F、G（菜单和 reload） | 1.0 h |
 | 5 | D（事件级） | 1.0 h |
-| 6 | A + C（jdb 定点 kill，42 例；每例约 4 分钟，含两次重启） | 3.0 h |
-| 7 | B、E、H3、H4、H7 | 0.8 h |
+| 6 | A + C（jdb 定点 kill，43 例；每例约 4 分钟，含两次重启） | 3.0 h |
+| 7 | B、E（7 例）、H3、H4、H7 | 1.0 h |
 | 8 | 写报告，清场（§8） | 0.6 h |
-| | **合计** | **约 8.5 h**，可分两段：步 0–5 一段，步 6–8 一段，两段之间正常停测试服 |
+| | **合计** | **约 8.7 h**，分段执行（D320）：**段 1** 为步 0–5，**段 2** 为步 6–8；两段之间正常停测试服 |
+
+**分段存档（D320）：** 每段结束时把进度报告 `docs/status/STATUS-ember-six-slot-t2-drill-<日期>.md` commit + push（只 add 报告；推送被拒就 `pull --ff-only`，不强推）。最后一段交完整的 STATUS 报告，逐条写 PASS / FAIL / SKIP，并给出是否建议签「T2 过线」。
 
 **中止条件（任一触发就停）：**
-- available < 1 GB（见 §2）；
+- available < 1.5 GB 暂停、< 1 GB 立停（D320，见 §2）；
 - 线上 4 个进程（Waterfall、登录服、游玩服、MariaDB）任一异常（pid 消失、端口不在），或游玩服 TPS 明显下降；
 - 发现测试服进程写到了 `/workspace/minecraft/**` 下的任何文件：用 §8.1 的 stamp 文件配合 `find -newer` 检查，只看测试进程打开的文件（`ls -l /proc/<pid>/fd`）；
 - 发现测试服连到了 3306；
@@ -371,24 +409,17 @@ bot 只通过 GUI 点击操作：`/ember` → 枢纽「装备」→ `ember_p1_ge
    - 线上 4 个 pid 与启动时间未变。
 6. 报告写明清场结果和内存最低值。
 
-## 9 前置依赖与待总控拍板
+## 9 前置依赖与已定事项（D320）
 
 **前置依赖（不满足就不执行）：**
-1. **`<GUARD_SHA>`：插件岗的 invsnap 守卫提交。** 要已推送到 origin/main，并有离线单测；E 组以它为准。
-2. 总控批准本计划。
+1. **`<GUARD_SHA>`：插件岗的提交（已派）。** 需包含：invsnap 守卫（a：只看 journal 未决）、孤儿标签清理（b：ALREADY 时清）、`commit` 补存档（c），以及快照早于迁移完成就拒绝恢复（⑤）。要已推送到 origin/main，并有离线单测；E 组和 A1 以它为准。
+2. ~~总控批准本计划~~：**已批（D320）**。拿到 `<GUARD_SHA>` 即执行，不再另问总控。
 3. 测试服 jar 的 `<DRILL_SHA>`（含守卫）全量测试结果与基线一致（646/2 或更新后的基线）。
 
-**待拍板：**
-1. **DB 方案**：A 临时 mariadbd（推荐，对线上零写入），还是 B 线上建 schema + 用户（需要单独授权线上写）。
-2. **写点测试钩子**：要不要请插件岗加 `-Dember.six.drill.haltAt=<写点>`。
-   - 不加：A 组用 jdb 执行，能覆盖全部写点，但只能覆盖「异步 DB 写未落」一侧，而且要人工操作、更慢；
-   - 加：能脚本化，还能覆盖「异步写已落」一侧，钩子只在属性存在时生效。
-   - 测试岗建议：**先用 jdb 跑，不阻塞 T2**；如果插件岗顺手加，就一并使用。
-3. 测试服是否保持**不接 Waterfall**（建议不接，理由见 §1.3）。
-4. **孤儿标签与守卫口径**（本次读码发现，需插件岗确认）：`commit` 末尾 `apply(null, 去标签)` 之后没有存档。如果在下一次自动存档前 kill -9，flag=1 而 `.dat` 里残留 `ember_six_m_*`，并且之后不会被清掉。可选的处理：
-   - (a) 守卫只按「journal 未决」判断，不看标签；
-   - (b) run 走到 ALREADY 时顺手清掉孤儿 `ember_six_m_*`；
-   - (c) `commit` 去标签后补一次存档。
-   - 建议采用 (a)+(b)，由插件岗定。不处理的话，E4 会出现「该号永远无法恢复」。
-5. E5「迁移后恢复到迁移前的快照」由守卫拦，还是只写进运维手册。
-6. H8 主线结算掉甲冒烟：测试服是否装 DungeonPlus（会增加内存和准备时间）。不装就 SKIP，留给 T3。
+**已定（D320）：**
+1. **DB 方案**：已定 A，临时 mariadbd（3317、独立 datadir 和 socket），线上库零写入。
+2. **写点测试钩子**：已定不加，用 jdb 断点 + kill -9。jdb 覆盖不到的「异步写已落」一侧记 SKIP，并列入残余风险（见顶部测试岗注）。
+3. **Waterfall**：已定不接。
+4. **孤儿标签**：已定 a+b+c，已派插件岗。A1 加 M8 写点，E4 断言「重启后标签被清、invsnap 正常恢复」。
+5. **迁移后恢复到迁移前的快照**：已定由守卫拦（快照早于迁移完成就拒绝），已派插件岗。E5–E7 加测。
+6. **DungeonPlus**：已定不装，H8 主线结算掉甲记 SKIP，留到 T3。
