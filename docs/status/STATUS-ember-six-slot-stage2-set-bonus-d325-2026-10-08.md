@@ -1,7 +1,7 @@
 # 余烬 · 六槽 Stage2 档 C · D325 施工 STATUS（插件岗 · 2026-10-08）
 
 - 上游：总控 D325 批 A·档 C·开工；规格 `docs/design/DESIGN-ember-six-slot-stage2-set-bonus-2026-10-08.md`
-- tip：见本提交（施工完成后填）
+- tip：`b02ca9f3`（`b02ca9f3e553ae529f88f7b937cc94b6807a35c7`）
 - 测服 jar：`/workspace/tmp/d325/CoreRpg-1.65.99-d325.local.jar`（plugin.yml `1.65.99-d325.local`，**未**提交版本戳；sha 见同目录 `JAR.sha256`）
 - 线上：**未换 jar、未开 set_bonus、未动 bv / enabled / migrate**；login / proxy / MariaDB 未碰
 
