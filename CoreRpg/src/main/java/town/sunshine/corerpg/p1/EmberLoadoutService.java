@@ -186,8 +186,14 @@ public final class EmberLoadoutService implements Listener {
         } catch (Throwable ignored) {}
         EmberFestival fest = EmberFestival.get();
         double[] fs = fest == null ? null : fest.wornStats(p); // D139 festival charm slot (null = not worn)
-        EmberLoadout l = fs == null ? EmberLoadout.compute(EmberMode.tables(), blade, charm, level)
+        EmberLoadout l;
+        if (EmberSixSlot.enabled()) { // D318 六槽 T1: the four worn armor pieces (switch off → the 2-slot call below, unchanged)
+            EmberItemData[] worn = EmberSixSlot.wornPieces(readArmor(p, inv, why), blade, charm, count);
+            l = EmberLoadout.compute(EmberMode.tables(), blade, charm, level, fs == null ? 0 : fs[0], fs == null ? 0 : fs[1], worn);
+        } else {
+            l = fs == null ? EmberLoadout.compute(EmberMode.tables(), blade, charm, level)
                 : EmberLoadout.compute(EmberMode.tables(), blade, charm, level, fs[0], fs[1]);
+        }
         cache.put(p.getUniqueId(), l);
         notes.put(p.getUniqueId(), why);
         String mainUid = blade == null ? null : blade.uid;
@@ -200,6 +206,29 @@ public final class EmberLoadoutService implements Listener {
     }
 
     private static boolean eq(String a, String b) { return a == null ? b == null : a.equals(b); }
+
+    /**
+     * D318: verified P1 data of the four armor slots (index 0 head … 3 boots; null = empty / vanilla / untrusted). Same
+     * trust rules as the blade and charm (signed NBT, NI id, DB owner / rev / state); 1.12 {@code getArmorContents()} is
+     * boots, legs, chest, head. Only called while {@link EmberSixSlot#enabled()}.
+     */
+    EmberItemData[] readArmor(Player p, PlayerInventory inv, List<String> why) {
+        EmberItemData[] out = new EmberItemData[4];
+        ItemStack[] ac = inv.getArmorContents();
+        for (int bi = 0; ac != null && bi < ac.length && bi < 4; bi++) {
+            int i = EmberSixSlot.fromArmorContents(bi);
+            ItemStack it = ac[bi];
+            if (it == null || !items.hasData(it)) continue;
+            EmberItems.Read r = items.read(it);
+            String lab = EmberSixSlot.slotLabel(i) + ": ";
+            if (r == null || !r.ok()) { if (why != null) why.add(lab + (r == null ? "无 ember_v1 数据" : r.problem)); continue; }
+            if (!r.data.isArmor() || EmberItemData.armorIndex(r.data.slot) != i) { if (why != null) why.add(lab + "不是这个部位的护甲"); continue; }
+            String db = dbCheck(p, r.data);
+            if (db != null) { if (why != null) why.add(lab + db); continue; }
+            out[i] = r.data;
+        }
+        return out;
+    }
 
     /** @return null when the DB agrees (or there is no DB), else the reason. */
     private String dbCheck(Player p, EmberItemData d) {

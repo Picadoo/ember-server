@@ -41,7 +41,10 @@ public final class EmberItemData {
     public static final int MAX_PITY = 12; // §6.1 largest 本档最多尝试 (+10: 12)
 
     public static final Set<String> FAMILIES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("scorch", "burst", "sustain", "none")));
-    public static final Set<String> SLOTS = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("blade", "charm")));
+    /** D318 六槽 T1: the four armor slots (head / chest / legs / boots, this order everywhere in P1 code) */
+    public static final java.util.List<String> ARMOR_SLOTS = Collections.unmodifiableList(Arrays.asList("head", "chest", "legs", "boots"));
+    /** D318: blade + charm + the four armor slots (armor pieces exist only once gear.six_slot is used; blade / charm unchanged) */
+    public static final Set<String> SLOTS = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("blade", "charm", "head", "chest", "legs", "boots")));
     public static final Set<String> SOURCES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("drop", "quest", "admin", "reissue", "migrate")));
 
     private static final Pattern UID = Pattern.compile("[0-9a-f]{32}");
@@ -113,6 +116,11 @@ public final class EmberItemData {
 
     public boolean isBlade() { return "blade".equals(slot); }
     public boolean isCharm() { return "charm".equals(slot); }
+    /** D318: one of the four armor slots */
+    public boolean isArmor() { return isArmorSlot(slot); }
+    public static boolean isArmorSlot(String slot) { return slot != null && ARMOR_SLOTS.contains(slot); }
+    /** D318: 0..3 = head / chest / legs / boots, -1 = not armor */
+    public static int armorIndex(String slot) { return slot == null ? -1 : ARMOR_SLOTS.indexOf(slot); }
 
     /** @return null when valid, else the first reason it is not trustworthy */
     public String validate() {
@@ -334,7 +342,17 @@ public final class EmberItemData {
         return "无族";
     }
 
-    public static String slotName(String slot) { return "blade".equals(slot) ? "刃" : ("charm".equals(slot) ? "护符" : slot); }
+    public static String slotName(String slot) {
+        if ("blade".equals(slot)) return "刃";
+        if ("charm".equals(slot)) return "护符";
+        switch (slot == null ? "" : slot) { // D318 armor
+            case "head": return "头盔";
+            case "chest": return "胸甲";
+            case "legs": return "护腿";
+            case "boots": return "靴子";
+            default: return slot;
+        }
+    }
 
     public static String qualityName(int q) {
         switch (q) {
@@ -347,6 +365,8 @@ public final class EmberItemData {
 
     public String shortLabel() {
         // D101 (midgame #4): one name per property — the forge calls them 成色 / 精工, so the item does too
+        if (isArmor()) // D318: armor has no enhance of its own (阶 / 强化随护符), the T here is its own drop tier
+            return "T" + tier + " " + familyName(family) + slotName(slot) + "｜成色" + qualityName(quality) + "｜精工" + (craft * 2) + "%";
         return "T" + tier + " " + familyName(family) + slotName(slot) + "｜成色" + qualityName(quality) + "｜精工"
                 + (craft * 2) + "%｜+" + enhance;
     }

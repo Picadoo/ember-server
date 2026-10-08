@@ -49,6 +49,28 @@ public final class EmberFormula {
         return 20.0 + t.charmH(tier) * growth(t, quality, craft, enhance) + lv;
     }
 
+    /**
+     * D318 六槽 T1（F 共鸣口径，规格 §3.1）: H0 with the four armor pieces. Armor takes the charm's tier and enhance; only
+     * its own quality / craft count, as a share-weighted difference to the charm:
+     * <pre>H0 = 20 + h[T_c] · ( g_c + Σ_a w_a · ((q_a + f_a) − (q_c + f_c)) ) + level part</pre>
+     * Written as "charm + difference" (never a five-term weighted sum): with q_a = q_c and f_a = f_c every difference is
+     * exactly 0.0, so H0 is bit-identical to {@link #baseHp}. Same operation order as tools/p1sim {@code hp_def} with
+     * {@code follow: "all"} (Python {@code sum} from 0, left to right head / chest / legs / boots). {@code tier < 0} (no
+     * valid charm): armor adds nothing (20 + level part, the 2-slot no-charm value). An empty armor slot = q0 f0.
+     *
+     * @param w  the four armor shares (head, chest, legs, boots)
+     * @param aq armor quality per slot, @param af armor craft per slot (same order)
+     */
+    public static double baseHpSix(EmberTables t, int tier, int quality, int craft, int enhance, int level,
+                                   double[] w, int[] aq, int[] af) {
+        double lv = levelHp(t, level);
+        if (tier < 0) return 20.0 + lv;
+        double c = t.quality(quality) + t.craft(craft);
+        double dq = 0.0;
+        for (int i = 0; i < w.length; i++) dq += w[i] * ((t.quality(aq[i]) + t.craft(af[i])) - c);
+        return 20.0 + t.charmH(tier) * (growth(t, quality, craft, enhance) + dq) + lv;
+    }
+
     public static double maxHp(EmberTables t, double h0, boolean sustainSet) {
         return sustainSet ? t.sustainHpMult * h0 : h0;
     }

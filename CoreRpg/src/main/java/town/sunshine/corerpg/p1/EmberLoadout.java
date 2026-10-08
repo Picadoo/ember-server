@@ -19,12 +19,60 @@ public final class EmberLoadout {
     public final double b, h0, h, d, m;
     /** D139 festival charm slot (own slot, never part of a set): flat H0 / D added, capped at a standard T3 charm */
     public final double festHp, festDef;
+    /**
+     * D318 六槽: the four counted armor pieces (head, chest, legs, boots; an entry is null = empty slot = q0 f0), or null
+     * for the 2-slot loadout (switch off — every value below is then the pre-D318 one, bit for bit).
+     */
+    private final EmberItemData[] armor;
 
     private EmberLoadout(EmberItemData blade, EmberItemData charm, int level, String activeSet, int awakening,
                          double b, double h0, double h, double d, double m, double festHp, double festDef) {
+        this(blade, charm, level, activeSet, awakening, b, h0, h, d, m, festHp, festDef, null);
+    }
+
+    private EmberLoadout(EmberItemData blade, EmberItemData charm, int level, String activeSet, int awakening,
+                         double b, double h0, double h, double d, double m, double festHp, double festDef, EmberItemData[] armor) {
         this.blade = blade; this.charm = charm; this.level = level; this.activeSet = activeSet;
         this.awakening = awakening; this.b = b; this.h0 = h0; this.h = h; this.d = d; this.m = m;
-        this.festHp = festHp; this.festDef = festDef;
+        this.festHp = festHp; this.festDef = festDef; this.armor = armor;
+    }
+
+    /** D318: true when this loadout was computed with the six-slot formula (switch on) */
+    public boolean sixSlot() { return armor != null; }
+
+    /** D318: counted armor piece of slot i (0 head … 3 boots); null = empty or 2-slot loadout */
+    public EmberItemData armor(int i) { return armor == null || i < 0 || i > 3 ? null : armor[i]; }
+
+    /** D318: copy of the counted armor (null for the 2-slot loadout) */
+    public EmberItemData[] armorCopy() { return armor == null ? null : armor.clone(); }
+
+    /**
+     * D318 六槽 T1: the 2-slot loadout plus four armor pieces (spec §3.1, F 共鸣). {@code armor == null} → exactly
+     * {@link #compute(EmberTables, EmberItemData, EmberItemData, int, double, double)} (the switch-off path, T1-1).
+     * Otherwise H0 = {@link EmberFormula#baseHpSix} with each counted piece's own quality / craft (a slot is counted only
+     * when it holds armor of that slot whose uid is not the blade, the charm or another slot); B and D never change.
+     */
+    public static EmberLoadout compute(EmberTables t, EmberItemData blade, EmberItemData charm, int level, double festHp, double festDef,
+                                       EmberItemData[] armor) {
+        if (armor == null) return compute(t, blade, charm, level, festHp, festDef);
+        EmberLoadout two = compute(t, blade, charm, level, festHp, festDef);
+        EmberItemData[] a = new EmberItemData[4];
+        java.util.Set<String> seen = new java.util.HashSet<String>();
+        for (int i = 0; i < 4 && i < armor.length; i++) {
+            EmberItemData x = armor[i];
+            if (x == null || !x.isArmor() || EmberItemData.armorIndex(x.slot) != i) continue;
+            if ((two.blade != null && x.uid.equals(two.blade.uid)) || (two.charm != null && x.uid.equals(two.charm.uid))) continue;
+            if (!seen.add(x.uid)) continue;
+            a[i] = x;
+        }
+        int[] aq = new int[4], af = new int[4];
+        for (int i = 0; i < 4; i++) { aq[i] = a[i] == null ? 0 : a[i].quality; af[i] = a[i] == null ? 0 : a[i].craft; }
+        EmberItemData c = two.charm;
+        double h0 = c == null ? EmberFormula.baseHpSix(t, -1, 0, 0, 0, level, EmberSixSlot.armorWeights(), aq, af)
+                : EmberFormula.baseHpSix(t, c.tier, c.quality, c.craft, c.enhance, level, EmberSixSlot.armorWeights(), aq, af);
+        h0 += two.festHp;
+        double h = EmberFormula.maxHp(t, h0, "sustain".equals(two.activeSet));
+        return new EmberLoadout(two.blade, c, level, two.activeSet, two.awakening, two.b, h0, h, two.d, two.m, two.festHp, two.festDef, a);
     }
 
     public static EmberLoadout compute(EmberTables t, EmberItemData blade, EmberItemData charm, int level) {

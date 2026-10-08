@@ -149,6 +149,12 @@ public final class EmberItems {
         List<String> lore = meta.hasLore() ? new ArrayList<String>(meta.getLore()) : new ArrayList<String>();
         EmberTables t = EmberMode.tables();
         lore.add("");
+        if (d.isArmor()) { // D318 六槽: armor lines (follows the charm; no stat number of its own)
+            lore.addAll(EmberSixSlot.armorLore(d));
+            meta.setLore(lore);
+            item.setItemMeta(meta);
+            return;
+        }
         lore.add(ChatColor.GOLD + d.shortLabel());
         double g = EmberFormula.growth(t, d.quality, d.craft, d.enhance);
         if (d.isBlade()) {
