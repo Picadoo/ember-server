@@ -126,7 +126,7 @@ FAIL 只留证据，没有改代码或菜单。
 
 ---
 
-# 第二段（进行中 · 中途存档 3 · 2026-10-08 12:55 UTC+8）
+# 第二段（进行中 · 中途存档 4 · 2026-10-08 13:00 UTC+8）
 
 - 同 tip `f3f1a065`，约束同第一段。第二段开始于 11:09 UTC+8。
 - 第一步先起临时库，再跑 `restore-pre.sh`。测试库回到迁移前：8 行 active，逐行与 `.dat` 实物对上（`ev/check-pre2.json`，`active_without_item = []`），第一段误删头盔留下的 4 行孤儿记录已随之消失。之后每个用例开头都会再跑一次 `restore-pre.sh`，所以各用例的前置互相独立。
@@ -198,4 +198,16 @@ FAIL 只留证据，没有改代码或菜单。
 
 两条链最后都是：违反 0，`active_without_item` 为空，migrate·active 每部位 1 件，flag=1，无 journal，无标签。
 
-C、E、H3/H4/H7、F2 重发部分正在跑。
+## C 组结果（3/3 PASS，15 次 kill 全部一致）
+
+R6：标签和甲位在同一份 `.dat` 里，同一次存档写入。每个点从干净前置连续 kill 5 次，每次 kill 后立即解析 `.dat` 和 yml。证据在 `ev/C/<点>-<n>/result.json` 和 `ev/C/summary-all.json`。
+
+| 例 | kill 点 | 5 次结果 | 要点 |
+|---|---|---|---|
+| C1（M4） | run() 248 persist 后 | 5/5 一致 | 每次都是带标签且 4 个甲位都是 issued（新 uid），journal marked=true |
+| C2（R5） | revert() 332 persist 后（261 处强制自检失败） | 5/5 一致 | 每次都无标签，甲位按 journal originals 逐位是原物（铁盔 / 空 / 钻石护腿 / 同伴 P1 靴 df5cb4bb），marked=false |
+| C3（F5） | reconcile() 383 前（头盔先放末影箱，F 路径 persist 后） | 5/5 一致 | 每次都带标签，4 个甲位都是 issued（头部是重发件） |
+
+**落盘方式观察：** 15 次 kill 后都没有看到 `.dat_old` 或 tmp 残留，`dat_old_seen=0`、`tmp_seen=0`。1.12.2 的玩家存档是整文件替换，不会出现「标签在、甲位不在」或反过来的半写状态。
+
+E、H3/H4/H7、F2 重发部分正在跑。
