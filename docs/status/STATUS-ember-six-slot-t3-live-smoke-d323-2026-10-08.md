@@ -80,3 +80,9 @@ S2 注意：
 - 测号已下线；`list` = 0
 - 证据保留 `/workspace/tmp/d323-smoke/` + `d323-smoke.tgz`
 - 线上进程与开关保持 D323 部署态（本岗未改）
+
+## 总控注记（D324）
+
+线上管理号冒烟（本报告）+ Q01 结算掉甲抽查（[`STATUS-ember-six-slot-t3-live-q01-spot-d323-2026-10-08.md`](STATUS-ember-six-slot-t3-live-q01-spot-d323-2026-10-08.md)）均 **PASS**。总控签 **D324**：进入 **S3 全员观察期**；两开关保持开；D12-② 可后续补。详见设计稿 STATUS 与 backlog `B-six-slot-t3-rollout`。
+
+**签字：总控 · 2026-10-08 · D324**
