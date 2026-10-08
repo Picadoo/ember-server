@@ -6,22 +6,28 @@
 - 不部署、不重启任何服、不动 bv、不改配置或数值、未改插件代码。QA 自写的测试只临时放进 worktree，没有入库。源码存档在盒子上的 `/workspace/tmp/d318qa-src/`。
 - **白板经济模型未覆盖**（规格 §5.2 要求注明）。本次只验 Java 逻辑与公式对拍。
 
-## 总评（复测 @d5128ea5 后更新 · 09:54）
+## 总评（复测 @e558e38f 后更新 · 10:20）
 
-**原阻塞已修复，T1-4 / T1-5 在 `d5128ea5` 上 PASS。** 上次的 5 个坏场景和 fuzz 中坏的 1 轮都已变绿；全量测试 642 个，2 个失败，与基线自带的一致；T1-1 golden 仍绿；原 `savePlayerFile` 的方法体和其余调用点都没变（见「复测 @d5128ea5」一节）。
-**插件岗报的残余风险已离线复现，后果是原甲位物品丢失**（扔 1 件的变体还会出现同 uid 复制件）。触发需要两个条件叠加：在「已存档、未置标记」的窄窗口内进程死亡或存档失败，**并且**玩家在下一次枢纽续上之前把迁移甲从身上拿走。概率低，但迁移是对全服一次性、不可逆的操作，修法小而且能离线测。**测试岗建议先在 T1 内修完再签「T1 过线」**；如果总控接受这个风险，也可以签 T1，但必须把这项修复列为 T2 迁移演练的硬前置条件。由总控定夺。
-首轮（@163ca7f0）结论保留在下表和各节中作为记录。
+**测试岗建议签「T1 过线」（@`e558e38f`），附 T2 前置条件和运维文档条目。** 残余风险 A/B/C 已经在 T1 内修好，QA 在 `e558e38f` 上独立复跑通过：
+- 变体组 225 个组合（A/B/C × 扔 0/1/4、放箱子、扔完重登 × 3 种重启 × 5 个 case），坏 0；
+- 新种子 fuzz 3 × 1500 轮（含扔、存、捡、穿、重登），坏 0；
+- 旧种子 fuzz 9000 轮、逐写点崩溃 195 场景、双崩溃 260 场景，全部坏 0；
+- revert 定向测试 348 场景坏 0。上轮唯一存活的变异体（revert 时被占槽位的原物不进待领），本轮被插件岗用例和 QA 用例同时杀死；
+- 全量测试 646 个，2 个失败，与基线一致；T1-1 golden、T1-2 对拍仍绿；原 `savePlayerFile` 和 6 处外部调用未动。
+
+剩余风险只有一类会触发：在 journal 未决窗口内，外部手段让「换装标签」和「甲位」不一致。外部手段指管理员 invsnap 恢复、手动改 tag 或离线 NBT 编辑；插件自身的代码路径产生不了这种不一致。后果是原物翻倍或丢失。QA 已复现，按运维文档项加 T2 前置处理，不阻塞 T1。详见「复测 @e558e38f」一节。
+前两轮（@163ca7f0、@d5128ea5）的结论保留在下表和各节中作为记录。
 
 ## PASS / FAIL / SKIP 表
 
 | 项 | 结论 | SHA | 关键证据 / 数值 |
 |----|------|-----|-----------------|
-| 1 全量测试 | **PASS** | 163ca7f0 · f2b74dec（另跑 21327217）；复测 d5128ea5 | d5128ea5：642 / 2 / 0；163ca7f0：633 跑 / **2 失败** / 0 跳过；f2b74dec：592 / 3 / 0；21327217：624 / 3 / 0。163ca7f0 的 2 个失败在基线上同样失败（对照见 §1） |
-| T1-1 开关关逐位 | **PASS** | 21327217 + 163ca7f0 | golden `1838310 56afc560…dde4f6ee`。QA 在**基线 f2b74dec** 上独立重算出同一摘要；两个 SHA 上 2 槽重载与 armor=null 重载都和它逐位相等 |
-| T1-2 Java↔p1sim | **PASS** | 163ca7f0（另跑 21327217） | g6 101,376 · var 101,376 · mismatches B0 H0 M0 D0（doubleToLongBits，无容差）· 无护符 101,376 坏 0。导出文件在干净构建中由本地 python 现生成，解压后 sha256 与插件岗文件相同（`45f12318…`）。QA 另用种子 20261008 和 7（空位率 0.35）导出，两份都是 0 差 |
+| 1 全量测试 | **PASS** | 163ca7f0 · f2b74dec（另跑 21327217）；复测 d5128ea5 | **e558e38f：646 / 2 / 0**；d5128ea5：642 / 2 / 0；163ca7f0：633 跑 / **2 失败** / 0 跳过；f2b74dec：592 / 3 / 0；21327217：624 / 3 / 0。163ca7f0 的 2 个失败在基线上同样失败（对照见 §1） |
+| T1-1 开关关逐位 | **PASS** | 21327217 + 163ca7f0；复测 d5128ea5、e558e38f | golden `1838310 56afc560…dde4f6ee`。QA 在**基线 f2b74dec** 上独立重算出同一摘要；两个 SHA 上 2 槽重载与 armor=null 重载都和它逐位相等 |
+| T1-2 Java↔p1sim | **PASS** | 163ca7f0（另跑 21327217）；复测 e558e38f | g6 101,376 · var 101,376 · mismatches B0 H0 M0 D0（doubleToLongBits，无容差）· 无护符 101,376 坏 0。导出文件在干净构建中由本地 python 现生成，解压后 sha256 与插件岗文件相同（`45f12318…`）。QA 另用种子 20261008 和 7（空位率 0.35）导出，两份都是 0 差 |
 | T1-3 取整 | **PASS** | 21327217 + 163ca7f0 | `EmberSixSlotRulesTest` 6/6；静态 diff：`enhanceCost/upgradeCost/refineCost/qualityCost` 无改动；甲走 `forgeable()` 拒绝且不扣费；零头用整数十分位 `addTenths` |
-| T1-4 迁移幂等 | ~~FAIL~~ → **PASS @d5128ea5**（残余风险见复测节） | 21327217 + 163ca7f0；复测 d5128ea5 | 插件岗自带测试 9/9（head 12/12）可复现为绿；QA 扩展场景找到反例：225 个场景中 5 个坏，fuzz 6000 轮中 1 轮坏（见 §T1-4） |
-| T1-5 迁移不变量 | **PASS** | 21327217 + 163ca7f0；复测 d5128ea5 | `invariantPerCaseBitExact`、`failedSelfCheckRevertsEverything`、`crashDuringRevertFinishesTheRevert` 均绿；QA 复现日志里第 2 步之后 H/D 逐位相等 |
+| T1-4 迁移幂等 | ~~FAIL~~ → PASS @d5128ea5 → **PASS @e558e38f（残余 A/B/C 已修）** | 21327217 + 163ca7f0；复测 d5128ea5、e558e38f | 插件岗自带测试 9/9（head 12/12）可复现为绿；QA 扩展场景找到反例：225 个场景中 5 个坏，fuzz 6000 轮中 1 轮坏（见 §T1-4） |
+| T1-5 迁移不变量 | **PASS** | 21327217 + 163ca7f0；复测 d5128ea5、e558e38f | `invariantPerCaseBitExact`、`failedSelfCheckRevertsEverything`、`crashDuringRevertFinishesTheRevert` 均绿；QA 复现日志里第 2 步之后 H/D 逐位相等 |
 | T1-6 资产事件级 | **SKIP** | — | 派单：拖放 / 发射器 / 盔甲架 / 死亡 / 换世界留给 T2。注意：T1-4 的缺陷同样属于「资产不丢不复制」，T2 须复测 |
 | T1-7 掉甲口径 | **PASS** | 21327217 + 163ca7f0 | QA 独立 120,000 局（种子 700001 起，T1/T2/T3 × 无目标 / 三族）：部位 29574/30091/30145/30190，χ²=8.23（df3，临界 16.27）；成色 χ²=2.27（70/23/6/1）；精工 χ²=0.11（70/20/9/1）；目标族占比 0.6033（TARGET_WEIGHT 0.60）；阶≠图阶 0；额外件≠1 0；其它奖励被改 0；未击杀首领 = 空。开关关时 0 件甲。只在 `!challenge && abyss==0 && !raid && !event && !rush` 时发，与 p1sim `_settle` 一致（p1sim 只在主线结算 roll_armor）。S39 已入 source map |
 | T1-8 护甲页占位符 | **PASS** | 163ca7f0 | `EmberSixRankTest` 10/10。排序键与 §5.4③ 一致：生命差 → 现穿同族（空位跳过）→ 护符同族 → 掉落阶 → 获得时间新者 → uid。（21327217 缺「获得时间」键，由 694fef6d 补上） |
@@ -188,3 +194,99 @@
 - 复测环境：worktree `/workspace/tmp/d318-wt-fix`（d5128ea5）和 `d318-wt-prev`（163ca7f0，仅用于 diff），用完已删；可用内存最低 6015 MB；服务全程运行，未重启、未部署。
 
 *余烬-测试 · 只验收不修 · 白板经济模型未覆盖*
+
+## 复测 @e558e38f（残余风险 A/B/C 修复 · 2026-10-08 10:20）
+
+环境：worktree `/workspace/tmp/d318-wt-e558`，JDK 8u504，`nice -n 19`，surefire `-Xmx768m -XX:+UseSerialGC`，单进程。全程可用内存最低 5981 MB。QA 自写的测试改写到新规则后只临时放进 worktree，没有入库：
+- journal 里的原物只在玩家带换装标签时计入；
+- `Journal` 构造器改为 5 个参数。
+
+QA 源码存档在 `/workspace/tmp/d318qa-src/`，包括 `QaSixResidualTest` 和新增的 `QaSixRevertTest`。日志：`/workspace/tmp/d318qa-e558-{test,qa}.log`。
+
+**每一步之后都断言的不变量（QA 自己写的判定，不调用插件岗的 `foreign()`）：**
+- I1：每个 P1 uid 在身上、背包、地上、箱子和待领里的**有效**副本不超过 1 份（有效 = DB 有记录，且未 retired、未作废）；
+- I1b：每个部位的有效迁移甲不超过 1 件；
+- I2：原物和玩家自有物品的多重集合与开局完全相等，统计范围是身上 + 背包 + 地上 + 箱子 + 待领 + journal（只在带标签时计入）。I2 同时覆盖「总数不减」和「不复制」。
+
+### 变体组：A/B/C × 5 种动作 × 3 种重启（`QaSixResidualTest.variantMatrix`）
+
+进入条件：
+- **A**：换装存档失败但已落盘（ghost），再硬关；
+- **B**：C 之后，续上时存档失败；
+- **C**：已存档、写 DB 之前进程死亡，再硬关。
+
+动作之后分别做无重启、优雅重启或硬关，然后回枢纽续上直到完成，再硬关一次。最后把地上和箱子里的旧件全部捡回并穿上，再硬关一次（join 时重发作废 uid）。每格 = 5 个 case × 3 种重启。
+
+| 进入 \ 动作 | 扔 0 | 扔 1 | 扔 4 | 4 件放箱子 | 扔 4 后重登 |
+|---|---|---|---|---|---|
+| A ghost 存档 + 硬关 | 15 坏 0 | 15 坏 0 | 15 坏 0 | 15 坏 0 | 15 坏 0 |
+| B C + 续上存档失败 | 15 坏 0 | 15 坏 0 | 15 坏 0 | 15 坏 0 | 15 坏 0 |
+| C 存档后、写 DB 前死亡 | 15 坏 0 | 15 坏 0 | 15 坏 0 | 15 坏 0 | 15 坏 0 |
+
+合计 225 个组合，坏 0。三种进入条件下，进入后的状态都是「journal 在、带标签、身上 4 件」，续上的结果都是 ROLLED_FORWARD。以 case 0 为例，扔几件，作废的 uid 就有几个（0、1 或 4）；有效 DB 记录始终是 4 条，待领 3 件（即 3 件原物）。
+
+### T1-4 / T1-5 / 225 / fuzz 复跑
+
+| 用例 | 结果 |
+|---|---|
+| QA 迁移 3 次 = 1 次（5 个 case × 1 次 + 3 次重跑） | MIGRATED 一次，之后都是 ALREADY；每个 case 的 DB 记录都是 4 条 |
+| QA 双崩溃 | 260 个场景，最终结果 {ALREADY 82, MIGRATED 74, ROLLED_FORWARD 104}，全部恰好一次，0 丢 0 复制 |
+| QA「逐步崩溃 × 3 种重启 → 重跑 → 硬关」（原 225 用例） | **195 个场景，坏 0**。场景数变少，是因为新流程每个 case 的写点从 15 个降到 13 个（5 × 13 × 3），用例本身没改 |
+| QA 旧种子 fuzz（1/42/1008/20261008/777/31337） | 9000 轮 × 10 步，0 丢 0 复制，uid 唯一；计数版 6 × 1500 轮，坏 0 |
+| **QA 新种子 fuzz（2026/4242/99991）** | 每个种子 1500 轮 × 14 步，结束时续上再硬关：**3 × 1500 坏 0**。操作分布大致均匀，每类约 5.2k 次：枢纽续上（含随机崩溃和随机存档失败，失败分 ghost 和非 ghost）、领取（含崩溃和存档失败）、扔身上 1 件或 4 件（地上或箱子）、扔背包、捡回、穿上、重登、硬关或自动存档 |
+| QA revert 定向（`QaSixRevertTest`） | 自检失败（tamper）触发 revert × 每个写点崩溃 × {不动、扔 4 件后穿自己的东西、放箱子后穿自己的东西} × {硬关、优雅重启}：**348 个场景，坏 0** |
+| 上轮存活的变异体「revert 时被占槽位的原物不进待领」 | 本轮 QA 在 worktree 里手工植入该变异体：插件岗的 `revertAtEveryWritePointTimesThrowAndWear` 变红，QA 的 `QaSixRevertTest` 也变红（348 个场景中坏 18 个，原物丢失）。之后已还原，`git diff` 为空。**已被杀死** |
+| 插件岗 `EmberSixMigrationTest` | 25/25 |
+| T1-5 不变量（`invariantPerCaseBitExact` 等） | 绿 |
+
+### 标签与换甲能否落在不同存档里
+
+- **插件自身的路径不会。** 线上的 `LivePort.apply` 在同一个方法、同一个 tick 里 `setArmorContents` 并增删 scoreboard tag。Paper 1.12 的存档在主线程执行，同一份 `.dat` NBT 里同时包含 Inventory 和 Tags，`saveData` 先写 `.dat.tmp` 再改名，所以不会出现「只存了一半」。总控的第 5 条假设我认为成立，但应在 T2 演练中用 kill -9 实测一次。
+- 死亡不会造成不一致：scoreboard tag 在死亡后保留（MC-85730 已在 1.9 修复），死亡掉甲等同于「扔 4 件」，已在变体组里覆盖。T2 演练中顺带确认即可。
+- **外部手段可以造成不一致。** QA 用 `markAndSwapOutOfStep` 人为构造了两种情况，结果如下：
+
+| 不一致形态 | 现实来源 | 结果 |
+|---|---|---|
+| 标签在，甲位是原物 | 管理员 `/corerpg invsnap restore` 恢复到换装前的快照（只恢复背包和末影箱，不动 tags；**排队的恢复在 join 后第 40 tick 自动执行，早于迁移的第 120 tick**） | 续上结果 ROLLED_FORWARD：重发 4 件新甲，原物又进了待领，**原物翻倍**（case 0 是 3 件，case 3 是 4 件） |
+| 甲位是迁移甲，标签没了 | `/scoreboard players tag … remove`，或离线 NBT 编辑器 | 续上结果 JOURNAL_DROPPED，随后又执行了一次 MIGRATED：**原物丢失**（只剩 journal 里那份，journal 被丢弃） |
+
+两种情况都要求在「journal 未决」窗口里有人工外部操作。这个窗口只在迁移崩溃或存档失败之后、下次进服续上之前存在。同类问题还有一个：迁移完成后把玩家恢复到迁移前的快照，原物会同时出现在身上和待领里。这些都列为运维文档项和 T2 前置项（见下表 R3），不阻塞 T1。
+
+### 作废的旧 uid（地上或箱子里的旧件）
+
+- 离线模型（`voidedUidStaysVoid` + 变体组最后一步）：旧件从箱子或地上捡回并穿上后，有效副本 = 0。DB 的 retired 写入丢失（模拟 DB 宕机）并硬关后，join 重发，有效副本仍为 0。DB 恢复并重登后，retired 记录 4/4。
+- 线上代码（静态阅读）：`retire` 先写信任缓存 `rememberRow(…,"retired")`，再异步 `upsertItem(…,"retired")`；`EmberLoadoutService.dbCheck` 在 store 可用时拒绝 state≠active 的件。**旧件不会被回收**，会一直以无效物品的形式留在世界里，`EmberAudit` 会报 HELD_NOT_ACTIVE。
+- **前提是 `storage: mysql` 且 DB 可用**（线上是 mysql）。如果 store 不可用（YAML 模式或 DB 宕机），`dbCheck` 返回 null，退回只信 NBT，作废件会被当成有效件。所以 T3 执行迁移前必须确认 DB 健康，列为运维文档项。
+
+### 抽查
+
+| 项 | 结果 |
+|---|---|
+| 全量 `mvn clean test` | **646 跑 / 2 失败 / 0 跳过**。失败的是 `EmberGrowthTest.splitAffixRetiredFromPool_D165:289` 和 `t2cIsArmorBreak_D164:232`，与基线一致 |
+| T1-1 golden | 套件内 `EmberSixSlotOffGoldenTest` 绿；QA 的 `QaT1GoldenBaseTest` 输出 `1838310 56afc560…dde4f6ee`，与基线相同 |
+| T1-2 对拍 | `EmberSixP1simTest` 2/2：g6 101376 · mismatches B0 H0 M0 D0 · 无护符 101376 坏 0 |
+| 原 `savePlayerFile` 和 6 处调用 | `git diff d5128ea5 e558e38f` 只改了 `EmberSixMigration`、`EmberSixSlotService`、测试和本报告，**`EmberVault` 没有任何改动**。Forge:605、Pay:233、Delivery:164 和 199、GearLib:289 和 292 都在原位。`savePlayerFileChecked` 只被 `LivePort.persistInventory` 使用 |
+| 开关 | 代码默认值仍是 false。`onJoin` 改为 `enabled()` 开着且 `p1-six/<uuid>.yml` 存在时才重发作废 uid，开关关时没有新路径 |
+| 线上 MariaDB（只读） | 11.8.6-MariaDB，InnoDB，datadir `/workspace/mysql-data/`。`cr_p1_item` 共 82 行，全部 active；armor/migrate 行为 0。列宽 slot varchar(8)、state varchar(16)、source varchar(16)、ni_id varchar(64)、item_uid char(32)，能装下 head/chest/legs/boots、retired、migrate 和 NI id。会话设为 `READ ONLY`，只执行 SELECT 和 information_schema 查询，没有任何写入 |
+
+### 插件岗残余风险 1–7 的分类
+
+仓库里（`rg 残余`）和 `git log 163ca7f0..e558e38f` 的提交说明里都**找不到编号 1–7 的原文**，只有「residual A/B/C」。下表是 QA 按主题自行梳理的风险清单，并标出对应总控倾向的哪一条。原文编号以插件岗的汇报为准。
+
+| # | 风险 | 对应总控倾向 | QA 分类 | 理由 |
+|---|---|---|---|---|
+| R1 | 离线 World 替身不等于真服：`LivePort` 的 NBT、`toArmorContents` 下标映射、scoreboard tag 和 `saveData` 都没有在真服上跑过 | 2 → T2 前置 | **T2 演练硬前置**（同意） | 只能在测试服验证。要在每个写点 kill -9，并验证死亡、重登、换服后 tag 仍在 |
+| R2 | DB 兼容性与 retired 写入 | 3 → 确认线上 | **已确认不受影响**（同意） | 只读查询结果见抽查表 |
+| R3 | 标签和甲位被外部手段弄得不一致，包括 invsnap 恢复（含排队自动恢复）、手动改 tag、NBT 编辑；以及迁移后恢复到迁移前快照 | 运维文档（1/4/6 类） | **运维文档 + T2 前置**（补充意见） | QA 已复现原物翻倍或丢失。建议 T2 时给 invsnap restore 加一个小守卫：`p1-six/<uuid>.yml` 有 journal 时拒绝恢复，迁移后恢复到迁移前快照时提示与待领冲突。不加守卫的话，运维文档必须写明「迁移期间禁用」 |
+| R4 | 线上 store 不可用（YAML 或 DB 宕机）时，作废 uid 只凭 NBT 会被当成有效件 | 运维文档 | **运维文档**（同意） | T3 迁移前检查 `storage: mysql` 且 DB 健康；宕机期间关闭迁移开关 |
+| R5 | 作废件不回收，留在世界里；审计会报 HELD_NOT_ACTIVE | 运维文档 | **运维文档**（同意） | 不影响资产守恒。需要提前说明审计报告的口径，以免误报 |
+| R6 | 「标签与甲位在同一份 `.dat` 里原子落盘」这一假设 | 5 → 判断假设 | **假设合理**，T2 用 kill -9 复核 | 同 tick 主线程、同一个 NBT compound、tmp 文件再改名。delete 和 rename 之间的窗口是 Paper 本身的通用风险，与本修复无关 |
+| R7 | 异步 retire 写入丢失加信任缓存丢失 | — | **已覆盖** | join 和枢纽时都会重发，QA 与插件岗用例都是绿的 |
+
+我不知道总控第 7 条的原文，无法单独判断，请插件岗或总控补上原文。
+
+### 复测结论（@e558e38f）
+
+- T1-4 / T1-5：**PASS**。残余风险 A/B/C 的变体组 225 坏 0，新种子 fuzz 4500 坏 0，旧种子 fuzz 9000 坏 0，逐写点崩溃 195 坏 0，revert 348 坏 0，上轮存活的变异体已被杀死。
+- 抽查：全量 646/2 与基线一致，T1-1 和 T1-2 绿，`savePlayerFile` 未动，线上 DB 不受影响。
+- **测试岗建议签「T1 过线」。** 附带条件：R1 和 R3 的守卫或禁用规定列为 T2 迁移演练的硬前置；R3、R4、R5 写入运维文档。
