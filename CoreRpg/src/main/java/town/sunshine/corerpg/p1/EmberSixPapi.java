@@ -4,7 +4,8 @@ import java.util.List;
 
 /**
  * D318 六槽 T1-8 · {@code %corerpg_p1_armor_*%} texts for {@code ember_p1_armor} / the gear page (Bukkit-free; the
- * numbers come from {@link EmberSixRank}, i.e. the real formula). Switch off → every key is "" except {@code armor_on} = 0.
+ * numbers come from {@link EmberSixRank}, i.e. the real formula). Switch off → every key is "" except {@code armor_on} = 0
+ * and the 待领 keys (D320 ④: claim works with the switch off, so the menu can still show it).
  *
  * <pre>
  * armor_on                     1 / 0 (menu shows the 护甲 button only when 1)
@@ -18,8 +19,9 @@ import java.util.List;
  * armor_set                    "§f灰烬族 3/4 · 需掉落阶 T2+" / "§7还没有穿带族的护甲"
  * armor_all                    "§7将换上 2 件 · 生命 +1.2" / "§7四个部位都已是最好的一件"
  * armor_all_has                1 / 0
- * armor_stash                  待领 count
- * armor_stash_line             "§7护甲位原来的 2 件已存好 · §e点这里领取" / "§7没有待领物品"
+ * armor_stash                  待领 count (also when off)
+ * armor_stash_has              1 / 0 (also when off: the 待领 entry shows only when there is something to claim)
+ * armor_stash_line             "§7护甲位原来的 2 件已存好 · §e点这里领取" / "§7没有待领物品" (also when off)
  * </pre>
  */
 public final class EmberSixPapi {
@@ -30,9 +32,10 @@ public final class EmberSixPapi {
 
     public static String text(boolean enabled, EmberSixRank.View v, int stash, String key) {
         if ("armor_on".equals(key)) return enabled ? "1" : "0";
-        if (!enabled || v == null) return "";
-        if ("armor_stash".equals(key)) return String.valueOf(stash);
+        if ("armor_stash".equals(key)) return String.valueOf(Math.max(0, stash));
+        if ("armor_stash_has".equals(key)) return stash > 0 ? "1" : "0";
         if ("armor_stash_line".equals(key)) return stash > 0 ? stashLine(stash) : "§7没有待领物品";
+        if (!enabled || v == null) return "";
         if ("armor_set".equals(key)) {
             Object[] s = EmberSixRank.setProgress(v.worn);
             return s == null ? "§7还没有穿带族的护甲" : "§f" + EmberItemData.familyName((String) s[0]) + "族 " + s[1] + "/4 · 需掉落阶 T" + s[2] + "+";
@@ -88,6 +91,44 @@ public final class EmberSixPapi {
             return "§7分解得白板胚 " + (tenths / 10) + "." + (tenths % 10) + " 个（零头攒满 1 个自动到账）";
         }
         return "§8" + EmberUpgradeRules.ARMOR_REFUSE;
+    }
+
+    // ------------------------------------------------------------------ D320 ⑤ menu clicks: every click gets a reply
+
+    public static final String OFF_TEXT = "护甲功能尚未开放。";
+
+    public enum Route { CLAIM, EQUIP, ALL, WORN, SET, OFF, UNKNOWN }
+
+    /**
+     * what a click on ember_p1_armor does. Off: 待领 claim only while there is something to claim (D320 ④), every other
+     * button → OFF ({@link #OFF_TEXT}). On: the five page actions; anything else → UNKNOWN (the service still replies).
+     */
+    public static Route route(boolean enabled, int stash, String a) {
+        if (!enabled) return "claim".equals(a) && stash > 0 ? Route.CLAIM : Route.OFF;
+        if ("claim".equals(a)) return Route.CLAIM;
+        if ("equip".equals(a)) return Route.EQUIP;
+        if ("all".equals(a)) return Route.ALL;
+        if ("worn".equals(a)) return Route.WORN;
+        if ("set".equals(a)) return Route.SET;
+        return Route.UNKNOWN;
+    }
+
+    /** click on a worn slot (read-only icon): what is worn there and how to change it */
+    public static String wornReply(EmberSixRank.View v, int slot) {
+        if (v == null || slot < 0 || slot > 3) return "请从护甲页点选部位。";
+        String lab = EmberSixSlot.slotLabel(slot);
+        EmberItemData w = v.worn[slot];
+        String how = v.best[slot] == null ? "背包里暂时没有可换的" + lab + "。" : "下面一格是背包里最好的" + lab + "，点它就能换上。";
+        if (w == null) return lab + "位空着（按成色标准、精工 0% 计算）。" + how + "也可以直接把" + lab + "拖进护甲栏。";
+        return "穿着" + lab + "：" + EmberItemData.familyName(w.family) + "族 · 成色 " + EmberItemData.qualityName(w.quality)
+                + " · 精工 " + (w.craft * 2) + "%。" + how;
+    }
+
+    /** click on the 四件套 icon: progress only, the effect is not open yet */
+    public static String setReply(EmberSixRank.View v) {
+        Object[] s = v == null ? null : EmberSixRank.setProgress(v.worn);
+        String now = s == null ? "现在还没有穿带族的护甲" : "现在 " + EmberItemData.familyName((String) s[0]) + "族 " + s[1] + "/4";
+        return "四件套效果之后开放，" + now + "；目前成色和精工照常加生命。";
     }
 
     /** spec §5.4-1 player copy for items waiting in 待领 */

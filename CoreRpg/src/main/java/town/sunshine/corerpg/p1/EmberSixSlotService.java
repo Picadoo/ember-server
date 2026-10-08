@@ -404,18 +404,27 @@ public final class EmberSixSlotService implements Listener {
 
     // ------------------------------------------------------------------ commands (menu only)
 
-    /** /corerpg p1 armor claim | equip &lt;slot&gt; | all — sent by ember_p1_armor, never typed by players */
+    /**
+     * /corerpg p1 armor claim | equip &lt;slot&gt; | all | worn &lt;slot&gt; | set — sent by ember_p1_armor, never typed by
+     * players. Every click gets a reply ({@link EmberSixPapi#route}). D320 ④: 待领 claim does not depend on the switch
+     * (a rollback with the switch off must still hand the originals back); everything else answers 「尚未开放」 when off.
+     */
     public boolean cmd(CommandSender s, String[] args) {
         String a = args.length >= 3 ? args[2].toLowerCase(java.util.Locale.ROOT) : "";
         if ("mig".equals(a) || "status".equals(a)) return admin(s, a, args);
         if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
         Player p = (Player) s;
-        if (!EmberSixSlot.enabled()) { p.sendMessage(P + "护甲功能尚未开放。"); return true; }
-        if ("claim".equals(a)) { claim(p); return true; }
-        if ("equip".equals(a)) { equip(p, args.length >= 4 ? EmberSixSlot.parseSlot(args[3]) : -1); return true; }
-        if ("all".equals(a)) { equipAll(p, args.length >= 4 && "confirm".equalsIgnoreCase(args[3])); return true; }
-        p.sendMessage(P + "请从 装备 → 护甲 页操作。");
-        return true;
+        boolean on = EmberSixSlot.enabled();
+        int slot = args.length >= 4 ? EmberSixSlot.parseSlot(args[3]) : -1;
+        switch (EmberSixPapi.route(on, on || !"claim".equals(a) ? 0 : stashCount(p.getUniqueId()), a)) {
+            case CLAIM: claim(p); return true;
+            case EQUIP: equip(p, slot); return true;
+            case ALL: equipAll(p, args.length >= 4 && "confirm".equalsIgnoreCase(args[3])); return true;
+            case WORN: p.sendMessage(P + EmberSixPapi.wornReply(slot < 0 ? null : view(p), slot)); return true;
+            case SET: p.sendMessage(P + EmberSixPapi.setReply(view(p))); return true;
+            case OFF: p.sendMessage(P + EmberSixPapi.OFF_TEXT); return true;
+            default: p.sendMessage(P + "请从 装备 → 护甲 页操作。"); return true;
+        }
     }
 
     private boolean admin(CommandSender s, String a, String[] args) {

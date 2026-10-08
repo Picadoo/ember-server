@@ -191,11 +191,11 @@ public final class EmberRunPapi {
 
     // ------------------------------------------------------------------ sections
 
-    /** D318 %corerpg_p1_armor_*% (switch gear.six_slot.enabled off → "" / armor_on 0) */
+    /** D318 %corerpg_p1_armor_*% (switch gear.six_slot.enabled off → "" / armor_on 0; 待领 keys stay live, D320 ④) */
     private String armor(Player p, String key) {
         EmberSixSlotService s = EmberSixSlotService.get();
         boolean on = EmberSixSlot.enabled() && s != null;
-        if (!on) return EmberSixPapi.text(false, null, 0, key);
+        if (!on) return EmberSixPapi.text(false, null, s == null || p == null || !key.startsWith("armor_stash") ? 0 : s.stashCount(p.getUniqueId()), key);
         return EmberSixPapi.text(true, s.cachedView(p), s.stashCount(p.getUniqueId()), key);
     }
 

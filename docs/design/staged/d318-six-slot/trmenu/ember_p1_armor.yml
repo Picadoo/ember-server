@@ -1,9 +1,16 @@
 # 余烬 v1 (P1) 护甲页（D318 六槽 T1 · 预置稿，T2 由菜单岗定稿后再放进 plugins/TrMenu/menus/）
 #   spec: docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md §2.3（示例布局）
 #   数值全部来自 CoreRpg 占位符 %corerpg_p1_armor_*%（插件真实公式算的整装生命差），菜单不自己算。
-#   开关 gear.six_slot.enabled 关时：所有 armor_* 占位符为空、armor_on = 0，点击只回「护甲功能尚未开放」。
+#   D320 ⑤ 每一格的写法（TrMenu 子图标按 priority 从高到低取第一个条件成立的，都不成立显示默认图标）：
+#     默认图标 = 开关关时的样子：灰玻璃板「护甲功能尚未开放」，点击照样代发本格的命令，插件统一回「护甲功能尚未开放。」
+#     priority 2 = armor_on == 1（开关开）时的样子；priority 3 = 更具体的状态（有候选 / 能全部换上 / 有待领）。
+#     armor_<slot>_has、armor_all_has 在开关关时是空串，所以这两个 priority 3 分支只会在开关开时成立，不必再叠 armor_on。
+#     待领（L）例外：armor_stash_has 开关关也有值（待领与开关脱钩，回滚后仍能领回原物），有待领时开关关也显示领取入口。
+#   每一格点击都有一句回复，从不静默：穿着格 → armor worn <部位>（报穿着什么、怎么换）；候选格 → armor equip <部位>
+#     （没有候选回「背包里没有可换的…」）；全部换上 → armor all（没得换回「四个部位都已是最好的一件」）；
+#     四件套 → armor set（回进度、效果之后开放）；待领 → armor claim；返回 → 装备页。
 #   点击 = 菜单代发内部命令（同 ember_p1_forge 写法），玩家看不到也不需要打命令。
-# 打开：装备页「护甲」格（见 ember_p1_gear.armor-slot.snippet.yml）
+# 打开：装备页「护甲」格（见 ember_p1_gear.armor-slot.snippet.yml）；Bindings 直接打开时开关关也只看到「尚未开放」+ 待领。
 
 Title: '§6余烬 · 护甲'
 
@@ -30,31 +37,44 @@ Icons:
       material: gray stained glass pane
       name: '§8'
 
-  # 穿着：头盔（只读）
+  # 穿着：头盔（只读；点击回穿着什么、怎么换）
   '1':
     update: 20
     display:
-      material: leather helmet
-      name: '§6穿着 · 头盔'
-      lore:
-        - '%corerpg_p1_armor_head%'
-        - '%corerpg_p1_armor_head_info%'
-        - ''
-        - '§7护甲的阶级和强化跟随已选护符'
-        - '§7成色和精工看掉落，换更好的就多一点生命'
-        - '§8也可以照旧直接拖进护甲栏'
+      material: gray stained glass pane
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor worn head'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: leather helmet
+          name: '§6穿着 · 头盔'
+          lore:
+            - '%corerpg_p1_armor_head%'
+            - '%corerpg_p1_armor_head_info%'
+            - ''
+            - '§7护甲的阶级和强化跟随已选护符'
+            - '§7成色和精工看掉落，换更好的就多一点生命'
+            - '§8也可以照旧直接拖进护甲栏'
+        actions:
+          all:
+            - 'command: corerpg p1 armor worn head'
 
   # 背包里同部位最好的一件
   'a':
     update: 20
     display:
       material: gray stained glass pane
-      name: '§8背包里：头盔'
-      lore:
-        - '%corerpg_p1_armor_head_cand%'
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor equip head'
     icons:
       - condition: 'check papi %corerpg_p1_armor_head_has% == 1'
-        priority: 2
+        priority: 3
         display:
           material: leather helmet
           name: '§e可换上 · 头盔'
@@ -70,32 +90,55 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'command: corerpg p1 armor equip head'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: gray stained glass pane
+          name: '§8背包里：头盔'
+          lore:
+            - '%corerpg_p1_armor_head_cand%'
+        actions:
+          all:
+            - 'command: corerpg p1 armor equip head'
 
-  # 穿着：胸甲（只读）
+  # 穿着：胸甲（只读；点击回穿着什么、怎么换）
   '2':
     update: 20
     display:
-      material: leather chestplate
-      name: '§6穿着 · 胸甲'
-      lore:
-        - '%corerpg_p1_armor_chest%'
-        - '%corerpg_p1_armor_chest_info%'
-        - ''
-        - '§7护甲的阶级和强化跟随已选护符'
-        - '§7成色和精工看掉落，换更好的就多一点生命'
-        - '§8也可以照旧直接拖进护甲栏'
+      material: gray stained glass pane
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor worn chest'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: leather chestplate
+          name: '§6穿着 · 胸甲'
+          lore:
+            - '%corerpg_p1_armor_chest%'
+            - '%corerpg_p1_armor_chest_info%'
+            - ''
+            - '§7护甲的阶级和强化跟随已选护符'
+            - '§7成色和精工看掉落，换更好的就多一点生命'
+            - '§8也可以照旧直接拖进护甲栏'
+        actions:
+          all:
+            - 'command: corerpg p1 armor worn chest'
 
   # 背包里同部位最好的一件
   'b':
     update: 20
     display:
       material: gray stained glass pane
-      name: '§8背包里：胸甲'
-      lore:
-        - '%corerpg_p1_armor_chest_cand%'
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor equip chest'
     icons:
       - condition: 'check papi %corerpg_p1_armor_chest_has% == 1'
-        priority: 2
+        priority: 3
         display:
           material: leather chestplate
           name: '§e可换上 · 胸甲'
@@ -111,32 +154,55 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'command: corerpg p1 armor equip chest'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: gray stained glass pane
+          name: '§8背包里：胸甲'
+          lore:
+            - '%corerpg_p1_armor_chest_cand%'
+        actions:
+          all:
+            - 'command: corerpg p1 armor equip chest'
 
-  # 穿着：护腿（只读）
+  # 穿着：护腿（只读；点击回穿着什么、怎么换）
   '3':
     update: 20
     display:
-      material: leather leggings
-      name: '§6穿着 · 护腿'
-      lore:
-        - '%corerpg_p1_armor_legs%'
-        - '%corerpg_p1_armor_legs_info%'
-        - ''
-        - '§7护甲的阶级和强化跟随已选护符'
-        - '§7成色和精工看掉落，换更好的就多一点生命'
-        - '§8也可以照旧直接拖进护甲栏'
+      material: gray stained glass pane
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor worn legs'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: leather leggings
+          name: '§6穿着 · 护腿'
+          lore:
+            - '%corerpg_p1_armor_legs%'
+            - '%corerpg_p1_armor_legs_info%'
+            - ''
+            - '§7护甲的阶级和强化跟随已选护符'
+            - '§7成色和精工看掉落，换更好的就多一点生命'
+            - '§8也可以照旧直接拖进护甲栏'
+        actions:
+          all:
+            - 'command: corerpg p1 armor worn legs'
 
   # 背包里同部位最好的一件
   'c':
     update: 20
     display:
       material: gray stained glass pane
-      name: '§8背包里：护腿'
-      lore:
-        - '%corerpg_p1_armor_legs_cand%'
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor equip legs'
     icons:
       - condition: 'check papi %corerpg_p1_armor_legs_has% == 1'
-        priority: 2
+        priority: 3
         display:
           material: leather leggings
           name: '§e可换上 · 护腿'
@@ -152,32 +218,55 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'command: corerpg p1 armor equip legs'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: gray stained glass pane
+          name: '§8背包里：护腿'
+          lore:
+            - '%corerpg_p1_armor_legs_cand%'
+        actions:
+          all:
+            - 'command: corerpg p1 armor equip legs'
 
-  # 穿着：靴子（只读）
+  # 穿着：靴子（只读；点击回穿着什么、怎么换）
   '4':
     update: 20
     display:
-      material: leather boots
-      name: '§6穿着 · 靴子'
-      lore:
-        - '%corerpg_p1_armor_boots%'
-        - '%corerpg_p1_armor_boots_info%'
-        - ''
-        - '§7护甲的阶级和强化跟随已选护符'
-        - '§7成色和精工看掉落，换更好的就多一点生命'
-        - '§8也可以照旧直接拖进护甲栏'
+      material: gray stained glass pane
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor worn boots'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: leather boots
+          name: '§6穿着 · 靴子'
+          lore:
+            - '%corerpg_p1_armor_boots%'
+            - '%corerpg_p1_armor_boots_info%'
+            - ''
+            - '§7护甲的阶级和强化跟随已选护符'
+            - '§7成色和精工看掉落，换更好的就多一点生命'
+            - '§8也可以照旧直接拖进护甲栏'
+        actions:
+          all:
+            - 'command: corerpg p1 armor worn boots'
 
   # 背包里同部位最好的一件
   'd':
     update: 20
     display:
       material: gray stained glass pane
-      name: '§8背包里：靴子'
-      lore:
-        - '%corerpg_p1_armor_boots_cand%'
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor equip boots'
     icons:
       - condition: 'check papi %corerpg_p1_armor_boots_has% == 1'
-        priority: 2
+        priority: 3
         display:
           material: leather boots
           name: '§e可换上 · 靴子'
@@ -193,27 +282,50 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'command: corerpg p1 armor equip boots'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: gray stained glass pane
+          name: '§8背包里：靴子'
+          lore:
+            - '%corerpg_p1_armor_boots_cand%'
+        actions:
+          all:
+            - 'command: corerpg p1 armor equip boots'
 
   S:
     update: 20
     display:
-      material: book
-      name: '§7四件套（后续开放）'
-      lore:
-        - '%corerpg_p1_armor_set%'
-        - ''
-        - '§8四件同族、掉落阶够高时才算（之后开放）'
+      material: gray stained glass pane
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor set'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: book
+          name: '§7四件套（后续开放）'
+          lore:
+            - '%corerpg_p1_armor_set%'
+            - ''
+            - '§8四件同族、掉落阶够高时才算（之后开放）'
+        actions:
+          all:
+            - 'command: corerpg p1 armor set'
 
   A:
     update: 20
     display:
-      material: coal
-      name: '§7全部换上'
-      lore:
-        - '%corerpg_p1_armor_all%'
+      material: gray stained glass pane
+      name: '§8护甲功能尚未开放'
+    actions:
+      all:
+        - 'command: corerpg p1 armor all'
     icons:
       - condition: 'check papi %corerpg_p1_armor_all_has% == 1'
-        priority: 2
+        priority: 3
         display:
           material: emerald
           name: '§a全部换上'
@@ -227,21 +339,53 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'command: corerpg p1 armor all'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: coal
+          name: '§7全部换上'
+          lore:
+            - '%corerpg_p1_armor_all%'
+        actions:
+          all:
+            - 'command: corerpg p1 armor all'
 
+  # 待领：开关关也能领（有待领时才显示入口）
   L:
     update: 20
     display:
-      material: chest
-      name: '§6待领物品'
-      lore:
-        - '%corerpg_p1_armor_stash_line%'
-        - ''
-        - '§7护甲栏启用时，原来穿着的东西会收在这里，一件不少'
-        - '§e➥ §f点击领取到背包（背包满时留在这里，腾出空位再来）'
+      material: gray stained glass pane
+      name: '§8护甲功能尚未开放'
     actions:
       all:
-        - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 armor claim'
+    icons:
+      - condition: 'check papi %corerpg_p1_armor_stash_has% == 1'
+        priority: 3
+        display:
+          material: chest
+          name: '§6待领物品'
+          lore:
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '§7护甲栏启用时原来穿着的东西收在这里，一件不少'
+            - '§e➥ §f点击领取到背包（背包满时留在这里，腾出空位再来）'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor claim'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 2
+        display:
+          material: chest
+          name: '§6待领物品'
+          lore:
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '§7护甲栏启用时，原来穿着的东西会收在这里，一件不少'
+        actions:
+          all:
+            - 'command: corerpg p1 armor claim'
 
   R:
     display:
