@@ -47,6 +47,8 @@ public final class EmberRunPapi {
         LOADOUT,
         /** codex* */
         CODEX,
+        /** D318 armor / armor_* (六槽护甲页, {@link EmberSixPapi}) */
+        ARMOR,
         /** tail: &lt;map&gt;_&lt;state|open|cleared|name|cost|tier|purpose|fc&gt;, else "" */
         MAP
     }
@@ -94,6 +96,7 @@ public final class EmberRunPapi {
         if ("featured_key".equals(key)) return Section.ROTATION;
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
         if (key.startsWith("codex")) return Section.CODEX;
+        if (key.startsWith("armor_")) return Section.ARMOR; // D318 (no earlier prefix matches "armor")
         return Section.MAP;
     }
 
@@ -180,12 +183,21 @@ public final class EmberRunPapi {
             case RAID: v = runs.raid().papi(d, key.substring(5)); break; // P2-5 %corerpg_p1_raid_r01% (D233 → EmberRaidService)
             case LOADOUT: v = loadout(p, key); break;
             case CODEX: v = codex(p, d, key); break;
+            case ARMOR: v = armor(p, key); break;
             default: v = null;
         }
         return v != null ? v : map(d, key, maps);
     }
 
     // ------------------------------------------------------------------ sections
+
+    /** D318 %corerpg_p1_armor_*% (switch gear.six_slot.enabled off → "" / armor_on 0) */
+    private String armor(Player p, String key) {
+        EmberSixSlotService s = EmberSixSlotService.get();
+        boolean on = EmberSixSlot.enabled() && s != null;
+        if (!on) return EmberSixPapi.text(false, null, 0, key);
+        return EmberSixPapi.text(true, s.cachedView(p), s.stashCount(p.getUniqueId()), key);
+    }
 
 
     /** D306: hub 「今天该打哪」 primary / secondary from real stamina / afk_full / featured / q07. */
@@ -381,6 +393,7 @@ public final class EmberRunPapi {
     private String heldNext(Player p, boolean quality) {
         EmberItemData d = heldTrusted(p);
         if (d == null) return "§8手持刃或护符看近档";
+        if (d.isArmor()) return EmberSixPapi.heldArmorLine(d, "next"); // D318 K0
         return quality ? EmberGearNextHint.qualityLine(d) : EmberGearNextHint.craftLine(d);
     }
 
@@ -399,6 +412,7 @@ public final class EmberRunPapi {
     private String heldForgeLine(Player p, String kind) {
         EmberItemData d = heldTrusted(p);
         if (d == null) return "§8手持刃或护符";
+        if (d.isArmor()) return EmberSixPapi.heldArmorLine(d, kind); // D318 K0 / 分解 ×0.1
         if ("enhance".equals(kind)) return EmberGearNextHint.enhanceLine(d);
         if ("upgrade".equals(kind)) {
             String flag = EmberUpgradeRules.upgradeFlag(d.tier);
@@ -412,7 +426,7 @@ public final class EmberRunPapi {
     /** D307 W1b：缺料半行；材料够 / 无费用 → 空。 */
     private String heldForgeLack(Player p, String kind) {
         EmberItemData d = heldTrusted(p);
-        if (d == null) return "";
+        if (d == null || d.isArmor()) return ""; // D318: armor pays nothing (K0)
         EmberUpgradeRules.Cost cost = null;
         if ("enhance".equals(kind)) {
             EmberUpgradeRules.Plan c = EmberUpgradeRules.enhanceCheck(d);

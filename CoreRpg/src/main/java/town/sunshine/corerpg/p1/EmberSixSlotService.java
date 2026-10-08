@@ -48,6 +48,8 @@ public final class EmberSixSlotService implements Listener {
     private final EmberLoadoutService loadouts;
     private final Set<UUID> busy = Collections.synchronizedSet(new HashSet<UUID>());
     private final Map<UUID, Long> allPending = new HashMap<UUID, Long>();
+    private final Map<UUID, Integer> stashN = new java.util.concurrent.ConcurrentHashMap<UUID, Integer>();
+    private final Map<UUID, Object[]> viewCache = new HashMap<UUID, Object[]>();
 
     public EmberSixSlotService(CoreRpgPlugin plugin, EmberLoadoutService loadouts) {
         this.plugin = plugin;
@@ -103,6 +105,7 @@ public final class EmberSixSlotService implements Listener {
             y.set("stash." + e.id + ".slot", e.slot);
             y.set("stash." + e.id + ".item", e.item);
         }
+        stashN.put(id, r.stash.size());
         File f = file(id);
         try {
             f.getParentFile().mkdirs();
@@ -115,7 +118,11 @@ public final class EmberSixSlotService implements Listener {
     }
 
     /** number of items waiting in 待领 (PAPI) */
-    public int stashCount(UUID id) { return load(id).stash.size(); }
+    public int stashCount(UUID id) {
+        Integer n = stashN.get(id);
+        if (n == null) stashN.put(id, n = load(id).stash.size());
+        return n;
+    }
     public boolean migrated(UUID id) { return load(id).flag; }
 
     // ------------------------------------------------------------------ ports
@@ -241,7 +248,12 @@ public final class EmberSixSlotService implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onQuit(PlayerQuitEvent e) { allPending.remove(e.getPlayer().getUniqueId()); }
+    public void onQuit(PlayerQuitEvent e) {
+        UUID id = e.getPlayer().getUniqueId();
+        allPending.remove(id);
+        stashN.remove(id);
+        viewCache.remove(id);
+    }
 
     /** @return the outcome, or null when deferred / switched off */
     public EmberSixMigration.Outcome tryMigrate(Player p) {
@@ -304,6 +316,7 @@ public final class EmberSixSlotService implements Listener {
     }
 
     public void claim(Player p) {
+        viewCache.remove(p.getUniqueId());
         LivePort port = new LivePort(p);
         int[] r;
         try {
@@ -348,11 +361,22 @@ public final class EmberSixSlotService implements Listener {
         return EmberSixRank.view(EmberMode.tables(), cur.blade, cur.charm, cur.level, cur.festHp, cur.festDef, worn, cands);
     }
 
+    /** {@link #view} cached for one second (a menu page asks ~25 placeholders in one refresh) */
+    public EmberSixRank.View cachedView(Player p) {
+        Object[] c = viewCache.get(p.getUniqueId());
+        long now = System.currentTimeMillis();
+        if (c != null && now - (Long) c[0] < 1000L) return (EmberSixRank.View) c[1];
+        EmberSixRank.View v = view(p);
+        viewCache.put(p.getUniqueId(), new Object[]{now, v});
+        return v;
+    }
+
     void equip(Player p, int slot) {
         if (slot < 0 || slot > 3) { p.sendMessage(P + "请从护甲页点选部位。"); return; }
         EmberSixRank.View v = view(p);
         EmberSixRank.Pick pick = v.best[slot];
         if (pick == null) { p.sendMessage(P + "背包里没有可换的" + EmberSixSlot.slotLabel(slot) + "。"); return; }
+        viewCache.remove(p.getUniqueId());
         if (swapIn(p, slot, pick.piece.uid)) {
             p.sendMessage(P + "已换上" + EmberSixSlot.slotLabel(slot) + "：" + pick.piece.shortLabel() + "（" + EmberSixRank.deltaText(pick.delta) + "）。");
             loadouts.markDirty(p);
@@ -372,6 +396,7 @@ public final class EmberSixSlotService implements Listener {
             return;
         }
         allPending.remove(p.getUniqueId());
+        viewCache.remove(p.getUniqueId());
         int n = 0;
         for (int i : todo) if (swapIn(p, i, v.best[i].piece.uid)) n++;
         loadouts.markDirty(p);
