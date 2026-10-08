@@ -206,6 +206,15 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         try { p.saveData(); } catch (RuntimeException e) { Bukkit.getLogger().warning("[CoreRpg] [storage] saveData " + p.getName() + ": " + e); }
     }
 
+    /**
+     * D318 six-slot migration / 待领 only: {@link #savePlayerFile} with the outcome (false = offline or the write threw; the
+     * warning is logged the same way). {@code savePlayerFile} itself is unchanged for every other caller.
+     */
+    static boolean savePlayerFileChecked(org.bukkit.entity.Player p) {
+        if (p == null || !p.isOnline()) return false;
+        try { p.saveData(); return true; } catch (RuntimeException e) { Bukkit.getLogger().warning("[CoreRpg] [storage] saveData " + p.getName() + ": " + e); return false; }
+    }
+
     // ------------------------------------------------------------------ NiBridge.ExtraSource (P1 only)
 
     @Override public long count(Player player, String niId) {

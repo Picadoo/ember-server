@@ -173,7 +173,7 @@ public final class EmberSixSlotService implements Listener {
             }
             return false;
         }
-        public void persistInventory() { EmberVault.savePlayerFile(p); }
+        public boolean persistInventory() { return EmberVault.savePlayerFileChecked(p); }
         public void remember(EmberItemData d) { loadouts.remember(d, p.getUniqueId()); }
         public void alert(String msg) { EmberSixSlotService.this.alert(p, msg); }
         public String newUid() { return EmberItemData.newUid(); }
@@ -205,6 +205,12 @@ public final class EmberSixSlotService implements Listener {
             if (i < 0) return;
             ItemStack clean = NmsNbt.write(p.getInventory().getContents()[i], CLAIM_TAG, null);
             if (clean != null) p.getInventory().setItem(i, clean);
+        }
+        public boolean revoke(String entryId) {
+            int i = findTag(entryId);
+            if (i < 0) return false;
+            p.getInventory().setItem(i, null);
+            return true;
         }
         public void untagExcept(Set<String> owed) {
             ItemStack[] c = p.getInventory().getContents();
@@ -274,6 +280,8 @@ public final class EmberSixSlotService implements Listener {
                 p.sendMessage(P + "护甲栏已换上和你护符对应的四件护甲，生命和防御不变。");
                 int n = stashCount(p.getUniqueId());
                 if (n > 0) p.sendMessage(P + EmberSixPapi.stashLine(n) + "§7（装备 → 护甲）");
+            } else if (o == EmberSixMigration.Outcome.SAVE_FAILED) {
+                alert(p, "六槽迁移未完成：" + m.lastDetail); // nothing marked; the next hub visit resumes
             } else if (o == EmberSixMigration.Outcome.NO_TEMPLATE) {
                 alert(p, "六槽迁移未执行：护甲物品模板缺失 " + m.lastDetail);
             }
