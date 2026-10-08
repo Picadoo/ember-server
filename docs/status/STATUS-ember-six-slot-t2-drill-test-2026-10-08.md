@@ -279,3 +279,57 @@ R6：标签和甲位在同一份 `.dat` 里，同一次存档写入。每个点�
 8. admin give 先写 DB、后存背包的窗口（A6-1 布置时发现，不属于六槽）；库宕时进服主线程被卡、之后 H=20（H4 第 1 次）。
 
 **结论：不建议签「T2 过线」。** A1-6/A1-7 是阻塞项，待新 tip f6868515 复跑。复跑结果写在下面。
+
+
+---
+
+# 新 tip f6868515 复跑（进行中 · 中途存档 1 · 2026-10-08 14:00 UTC+8）
+
+- tip `f6868515`（含 remember 落库门 DB_PENDING、pieces 自愈、待领与开关解耦、G8 菜单、超时文案、手册 §3.3/§3.4）。
+- worktree 已切到该 tip。全量测试：`Tests run: 666, Failures: 2`，失败仅 `EmberGrowthTest` D164/D165（预期）。`BUILD SUCCESS`，jar 已换到测试服（`server/plugins/CoreRpg.jar` sha256 前缀 `ac17b0b709d83b9c`，旧 jar 留在 `parked/CoreRpg-f3f1a065.jar`）。
+- 证据根：`/workspace/tmp/t2-drill/evidence/N/`（旧 tip 证据仍在 `evidence/{A,B,C,E,H}/`，未覆盖）。
+- A1-6/A1-7 遗留号一律 `restore-pre.sh` 重来（旧完成记录无 `pieces`，无法自愈）。
+
+## N-H12（H1/H2 初跑）——判 FAIL，口径需澄清后重跑
+
+证据：`ev/N/H12/result.json`。
+
+| 项 | 结果 |
+|---|---|
+| 迁移路径 | 5 个号都是 `DB_PENDING` → 紧跟 `ROLLED_FORWARD`（异步 DB 确认后主线程重跑，属预期） |
+| H2 | **PASS**：每人再重登 3 次 + `armor mig` → 都是 ALREADY；`cr_p1_item` 总行 28→28，migrate·active 20→20 |
+| 不变量 | 违反 0，awi 空 |
+| 迁移后 H/D | 5 个号都与第一段基线 `H1-pre-hd.jsonl` **逐位相等**（t2a H=139.70 / t2c 313.70 / t2d 95.50 / t2b 20.00 / t2e 40.00） |
+| 本 tip 会话内「迁移前」读数 | t2a/t2c/t2d **低于**基线（t2a 138.47、t2c 307.76、t2d 94.10）；t2b/t2e 相等 |
+
+**为何记 FAIL：** 计划 H1 断言是「与迁移前逐位相等」。本脚本在 `enabled=true migrate=false` 下读的迁移前 H，对混有原版甲的号（t2a/t2c/t2d）低于迁移后；按字面断言 FAIL。
+
+**倾向判断（待 H1 重跑核实，不凭此过线）：**
+
+- 迁移**产出**的 H/D 与第一段基线完全一致，H2 幂等，不像发甲算错。
+- 更像是：六槽 `enabled=true` 后、尚未迁移前，原版甲位件的计入方式与第一段基线测量时不一致（或基线测量口径不同），导致「会话内 pre」被压低，迁移完成后回到设计值。
+- 重跑方案：① 关六槽读 2 槽 H/D 作 pre；② 开 `enabled+migrate` 完成迁移后读 post，断言 post==①；③ 同时再读一组 `enabled=true migrate=false` 的过渡态，单独记录。结果写在后续存档。
+
+## A 组 kill 点复跑（25/25 PASS，含原阻塞点）
+
+证据：`ev/N/A/<id>/result.json`，跑完于 13:57:48。行号按 f6868515 的 `EmberSixMigration`。
+
+| 例 | 写点 | 结果 | 要点 |
+|---|---|---|---|
+| NA1-1…4 | M2 前/后、M3/M4（273） | 4 PASS | 与旧 tip 行为一致 |
+| NA1-5 | commit 437 remember 未发 | PASS | 带标签；重启后 DB_PENDING→ROLLED_FORWARD；4 件 active，H=139.70 |
+| **NA1-5b** | **442 DB_PENDING（remember 已发、等 DB 回执）** | **PASS** | kill 时 flag=0、journal 在、标签在；重启续上完成，每部位 1 件，H/D 等于基线 |
+| NA1-6a | 451 前（4 件已确认、完成标记未写） | PASS | |
+| **NA1-6** | **451 后（完成标记+pieces 已写）/ 去标签前** | **PASS** | 旧阻塞点。kill 后 flag=1；重启 ALREADY，`(b) orphan swap mark cleared (1), saved`；**4 件 migrate·active**，H=139.70（不再丢 DB 行） |
+| **NA1-7** | **455 前（内存去标签、收尾存档前）** | **PASS** | 旧阻塞点。同上，4 件齐全，H/D 恢复 |
+| NA1-8 | 455 后 | PASS | |
+| NA2-1…5 | F 路径 408/410/411/413/414 | 5 PASS | 重发路径在 DB_PENDING 门后仍正确 |
+| **NA2-6** | 槽被占：头盔进末影箱 + 头部穿皮帽 → 自然续上（不 kill） | **PASS** | `re-issued 1`；待领里出现 `r`+新 uid（如 `rb575d41a…`）；领取后布局还原，H=139.70；旧 uid retired |
+| **NA2-7** | 同布置，在 442 DB_PENDING kill | **PASS** | kill 时 stash 已有 `r3a304f68…`（重发件进待领）；重启不再二次重发，最终每部位 1 件 |
+| NA3-1/2/5/6 | R 路径抽查 | 4 PASS | |
+| NA4-3/4 | D 路径抽查 | 2 PASS | |
+| NA7-2/8 | M4 后 / R2 后 × 死亡掉落 | 2 PASS | 读 H/D 前布局还原 |
+
+**A1-6/A1-7 阻塞项：本 tip 已过。** DB_PENDING 期间 kill 与完成标记后 kill 均不再丢迁移甲 DB 行。
+
+A5（待领领取 kill 点）正在跑；其后 G、DB 宕机/自愈、E、H1 重跑。
