@@ -31,8 +31,8 @@
 | **S1-G8 开关关** | **PASS** | `护甲功能尚未开放`；待领仍可领（t3a 关开关领取 4 件）。`ev/S1-G8/` |
 | **H8 代理路径** | **PASS** | 经 `25576` 进 play → 迁移后断线重连；uuid 不变；`p1_six_mig=1`；H/D 不变；audit 无 DUP / 无跨服双持。`ev/H8/reconnect.json` |
 | **D12-③ 迁移件拒分解** | **PASS** | 临时 `p1 world remove world` 后在 hub 锻造门放开：`这件是迁移（不可分解）：只有副本里随机掉落的装备能分解`；inspect `src=migrate`。`ev/D12/refuse-final.json` |
-| **D12-① 结算 +1 甲** | **FAIL / 未完成** | `/corerpg enter q01` 成功（DP 实例 `dungeon_EmberQ01_*`）；`runs weaken` 生效；房间触发文案出现。多轮清房/首领尝试未出现结算完成；DB `source=drop` 计数 **0**。证据：`ev/D12/q01-run.json`、`settle-final.json`、`boss-try.json`、`db-final.txt` |
-| **D12-② 掉落甲分解** | **SKIP** | 依赖 ① 拿到 `src=drop` 甲；未取得实物。单测 `armorDismantleTenths` 仍由 T1/T2 覆盖 |
+| **D12-① 结算 +1 甲** | **PASS（补跑）** | 见 §7；`boss killed` + `settle rows+16`；DB drop 胸甲 ≥1 |
+| **D12-② 掉落甲分解** | **PASS（补跑）** | drop 胸甲 → dismantled；`p1_blank_tenths@all: 1`（×0.1） |
 
 ### 出口标准（设计 §1.3）逐条
 
@@ -44,7 +44,7 @@
 | 4 | 无预期外 ACTIVE_NOT_HELD；待领内 ACTIVE_IN_STASH | ✅（vanilla 待领无 DB 行报 NO_ROW，非 ACTIVE_NOT_HELD） |
 | 5 | 无未决 journal | ✅ |
 | 6 | H8 PASS | ✅ |
-| 7 | D12 PASS | ❌ ①② 未过；③ 过 |
+| 7 | D12 PASS | ✅ ①②③（§7 补跑） |
 | 8 | ①② 不变量；线上未被动 | ✅；线上 PID 与测前一致 |
 
 ## 3 环境与约束
@@ -58,20 +58,54 @@
 
 | 级 | 项 | 说明 |
 |---|---|---|
-| **阻塞 ⑦** | D12 结算掉甲 + 掉落分解 | 隔离服上 Q01 完整通关未在窗口内打通（进本/削弱/房间 OK；首领结算未触发；无 drop 行）。建议：补跑脚本（清房开门→首领区 `weaken`→击杀至结算）或插件岗提供测服用结算钩子后再验 ①② |
+| ~~阻塞 ⑦~~ | D12 结算掉甲 + 掉落分解 | **已解除（§7）**：按通关脚本 PASS ①②；③ 抽查 PASS |
 | 观察 | audit NO_ROW | 待领里的原版甲无 DB 行 → NO_ROW；与 ACTIVE_IN_STASH（有 DB 的 P1 件）区分正确 |
 | 观察 | 锻造世界门 | `world` 在 P1 列表内不可锻；非 static 世界被 `isInstanceWorld` 挡住。测拒绝时需临时 `p1 world remove world` |
 
 ## 5 建议
 
-**暂不建议签「⑦ 部署」。**
+**建议签「⑦ 部署」。**（§7 D12 补跑通过后更新）
 
-已具备：H8、迁移主流程与出口 §1.3 主项、待领关开关可领、ACTIVE_IN_STASH、迁移件拒分解、测服 jar/bv61 草稿路径。
+已具备：H8、迁移主流程与出口 §1.3 全项（含 D12-①②③）、待领关开关可领、ACTIVE_IN_STASH、迁移件拒分解、测服 jar/bv61 草稿路径。
 
-缺：D12 结算 +1 甲与掉落甲 ×0.1 分解的实机 PASS。按 D322 / 设计 §4.2，该项须过后再签部署。
-
-补跑通过后可改结论为建议签 ⑦（仍不升线上 jar/bv/开关，直至总控另签）。
+仍不升线上 jar/bv/开关，直至总控另签 ⑦ 后按 OPS 执行。
 
 ## 6 清场
 
 见同次执行：停测服 Paper / 独立 Waterfall / 临时 mariadbd；删 `/workspace/tmp/t3-s1/`（证据可另打包）；核 `live-before.sha256` 与线上 PID。
+
+---
+
+## 7 D12 补跑（2026-10-08 15:43–15:55 CST · tip `d4ab102c` 不变）
+
+- 依据：插件岗 `D12-q01-clear-script.md`（判定为脚本未打到结算，非掉甲 bug）；总控「⑦ 不签，补跑后再议」。
+- 环境：重建 `/workspace/tmp/t3-s1/` · Paper `25577` · 独立 Waterfall `25576` · 临时 mariadbd `3317`/`ember_t3` · jar sha `abc96aca…` · bv61 · `gear.six_slot.enabled/migrate=true`（仅测服）。
+- 通关硬规则：全程 **零 Kick / 零 `/dp leave`**；每房 weaken → **bot 补刀至 `active=-`**；首领 **玩家最后一击**。
+
+### 7.1 结果
+
+| 编号 | 结果 | 关键证据 |
+|---|---|---|
+| **D12-① 结算 +1 甲** | **PASS** | `enter q01` → 三房清完 → `boss spawned hp=200` → `boss killed after 4.8 s` → `settle … rows+16 (first clear)`；聊天「残门蛮兵 已击败 · 结算完成」+「结算到账」含 `T1 炽愈胸甲…（护甲已放进背包…）`；DB `source=drop` 护甲 ≥1（`ember_v1_sustain_chest_t1` uid `426fde62…`）。`ev/D12/q01-clear.json`、`log-keywords.txt`、`db-drop.txt` |
+| **D12-② 掉落甲分解** | **PASS** | 手持 drop 胸甲 → 预览「胚料 +0.1」→ 确认后 DB `state=dismantled`；计数器 `p1_blank_tenths@all: 1`（=0.1 记账）。`ev/D12/dismantle.json`、`db-after-dismantle1.txt`、`blank-tenths.txt` |
+| **D12-③ 迁移件拒拆** | **PASS（抽查）** | 手持 `src=migrate` 头盔：`这件是迁移（不可分解）：只有副本里随机掉落的装备能分解`。`ev/D12/refuse-migrate.json` |
+| **H8 代理路径** | **PASS（抽查）** | 经 `25576` 进 play → 迁移 → 断线重连；uuid 不变；`p1_six_mig=1` + pieces；DB migrate×4 active。`ev/H8/reconnect.json` |
+| **S1-M 迁移主流程** | **PASS（抽查）** | 新号 t3h8a 穿原版皮甲 → 进枢纽/armor mig → `p1_six_mig=1`、pieces×4、DB migrate active×4。`ev/S1-M/spot.json` |
+
+### 7.2 出口标准（设计 §1.3）补跑后
+
+| # | 标准 | 判定 |
+|---|---|---|
+| 6 | H8 PASS | ✅ 抽查 |
+| 7 | D12 PASS | ✅ ①②③ |
+| 8 | ①② 不变量；线上未被动 | ✅；线上 PID 47100/47542/47617/101651 未变；live jar sha 复核 OK |
+
+### 7.3 建议（补跑后）
+
+**建议签「⑦ 部署」。**
+
+D12 阻塞已解除：按插件岗通关脚本实机打出首领结算 + drop 甲 + ×0.1 分解；迁移件仍拒拆；H8 / 迁移抽查仍绿。线上 jar / bv / 开关仍未动（本段仅隔离测服）。部署步骤仍按设计稿 / OPS，由总控另签后执行。
+
+### 7.4 清场
+
+证据包：`/workspace/tmp/t3-s1-evidence-d12-rerun-2026-10-08.tar.gz`（gzip）。随后停测服 Paper / 独立 Waterfall / 临时 mariadbd，删 `/workspace/tmp/t3-s1/`，再核线上 PID 与 sha。
