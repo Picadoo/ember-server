@@ -1,0 +1,1092 @@
+# ember-v1.0 D318 六槽护甲模板：头盔 / 胸甲 / 护腿 / 靴子，T0 起步件 + 焚烬 / 烬爆 / 炽愈 三族 T1–T3（共 40 件）
+# 材质按掉落阶：T0 皮革 · T1 锁链 · T2 铁 · T3 钻石；原版护甲与韧性覆盖为 0，不可破坏，隐藏属性，不带附魔。
+# 成色 / 精工 / 绑定 / 来源由物品 NBT ember_v1 记录，说明行由余烬插件生成时追加；这里不写 物理伤害 / 生命力 / 物理防御。
+# 需重启或重载 NeigeItems 后加载。
+
+# --- T0 起步件 ---
+
+ember_v1_t0_head:
+  material: LEATHER_HELMET
+  name: '&f余烬 · 起始头盔'
+  lore:
+    - '&8无族 · 头盔 · T0'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -7033419786964478006'
+        UUIDLeast: '(Long) -7888420808344248259'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4482202884822312963'
+        UUIDLeast: '(Long) -7647538722883603517'
+        Slot: head
+
+ember_v1_t0_chest:
+  material: LEATHER_CHESTPLATE
+  name: '&f余烬 · 起始胸甲'
+  lore:
+    - '&8无族 · 胸甲 · T0'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7632975669378309018'
+        UUIDLeast: '(Long) -7312664201106527056'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -578698987491075784'
+        UUIDLeast: '(Long) -8423019369213775830'
+        Slot: chest
+
+ember_v1_t0_legs:
+  material: LEATHER_LEGGINGS
+  name: '&f余烬 · 起始护腿'
+  lore:
+    - '&8无族 · 护腿 · T0'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7810201829872523581'
+        UUIDLeast: '(Long) -8960557003164570262'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 6791739861552617079'
+        UUIDLeast: '(Long) -6846377754356881602'
+        Slot: legs
+
+ember_v1_t0_boots:
+  material: LEATHER_BOOTS
+  name: '&f余烬 · 起始靴子'
+  lore:
+    - '&8无族 · 靴子 · T0'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 8311415112017991558'
+        UUIDLeast: '(Long) -5611226463751002086'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 5668320468268375445'
+        UUIDLeast: '(Long) -8123107783790653227'
+        Slot: feet
+
+# --- 焚烬 ---
+
+ember_v1_scorch_head_t1:
+  material: CHAINMAIL_HELMET
+  name: '&c[T1] 焚烬头盔'
+  lore:
+    - '&8焚烬 · 头盔 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 3023506047382411312'
+        UUIDLeast: '(Long) -7429570916547532114'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7310698903087831417'
+        UUIDLeast: '(Long) -4623683053995762028'
+        Slot: head
+
+ember_v1_scorch_chest_t1:
+  material: CHAINMAIL_CHESTPLATE
+  name: '&c[T1] 焚烬胸甲'
+  lore:
+    - '&8焚烬 · 胸甲 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -7783844344451476372'
+        UUIDLeast: '(Long) -8689728295320922006'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7397523959144863541'
+        UUIDLeast: '(Long) -5618115808205100835'
+        Slot: chest
+
+ember_v1_scorch_legs_t1:
+  material: CHAINMAIL_LEGGINGS
+  name: '&c[T1] 焚烬护腿'
+  lore:
+    - '&8焚烬 · 护腿 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 2310351549682177905'
+        UUIDLeast: '(Long) -8746280924427555361'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -2177029875004449144'
+        UUIDLeast: '(Long) -5546423539658425490'
+        Slot: legs
+
+ember_v1_scorch_boots_t1:
+  material: CHAINMAIL_BOOTS
+  name: '&c[T1] 焚烬靴子'
+  lore:
+    - '&8焚烬 · 靴子 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -8852176513134666017'
+        UUIDLeast: '(Long) -7989376414545113714'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 3274645819192202127'
+        UUIDLeast: '(Long) -8358847410149795954'
+        Slot: feet
+
+ember_v1_scorch_head_t2:
+  material: IRON_HELMET
+  name: '&c[T2] 焚烬头盔'
+  lore:
+    - '&8焚烬 · 头盔 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4177489010190557643'
+        UUIDLeast: '(Long) -5937027132002532326'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -3698287207543385686'
+        UUIDLeast: '(Long) -8072655355530256751'
+        Slot: head
+
+ember_v1_scorch_chest_t2:
+  material: IRON_CHESTPLATE
+  name: '&c[T2] 焚烬胸甲'
+  lore:
+    - '&8焚烬 · 胸甲 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -2835754336505736332'
+        UUIDLeast: '(Long) -6502655380287928950'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 4444230393779409715'
+        UUIDLeast: '(Long) -8105198294832363446'
+        Slot: chest
+
+ember_v1_scorch_legs_t2:
+  material: IRON_LEGGINGS
+  name: '&c[T2] 焚烬护腿'
+  lore:
+    - '&8焚烬 · 护腿 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -1630091858304935128'
+        UUIDLeast: '(Long) -8493657519900858110'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -924060202450788557'
+        UUIDLeast: '(Long) -6348434677762515553'
+        Slot: legs
+
+ember_v1_scorch_boots_t2:
+  material: IRON_BOOTS
+  name: '&c[T2] 焚烬靴子'
+  lore:
+    - '&8焚烬 · 靴子 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -2151727076998687805'
+        UUIDLeast: '(Long) -6546789544878871956'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4601073350151220402'
+        UUIDLeast: '(Long) -8478897163335972436'
+        Slot: feet
+
+ember_v1_scorch_head_t3:
+  material: DIAMOND_HELMET
+  name: '&c[T3] 焚烬头盔'
+  lore:
+    - '&8焚烬 · 头盔 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7461462172624117663'
+        UUIDLeast: '(Long) -7431971767797951461'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -7715553293722692652'
+        UUIDLeast: '(Long) -5115095224999094530'
+        Slot: head
+
+ember_v1_scorch_chest_t3:
+  material: DIAMOND_CHESTPLATE
+  name: '&c[T3] 焚烬胸甲'
+  lore:
+    - '&8焚烬 · 胸甲 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 2116601171718131797'
+        UUIDLeast: '(Long) -7543163026101630365'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -1654302545665894190'
+        UUIDLeast: '(Long) -5445804649097504575'
+        Slot: chest
+
+ember_v1_scorch_legs_t3:
+  material: DIAMOND_LEGGINGS
+  name: '&c[T3] 焚烬护腿'
+  lore:
+    - '&8焚烬 · 护腿 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7247598691949108741'
+        UUIDLeast: '(Long) -7371076618543349967'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 5673211594883027439'
+        UUIDLeast: '(Long) -4824332199602597741'
+        Slot: legs
+
+ember_v1_scorch_boots_t3:
+  material: DIAMOND_BOOTS
+  name: '&c[T3] 焚烬靴子'
+  lore:
+    - '&8焚烬 · 靴子 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -5277689287594910592'
+        UUIDLeast: '(Long) -7724194174275946973'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7925288237019519302'
+        UUIDLeast: '(Long) -7127944195118437933'
+        Slot: feet
+
+# --- 烬爆 ---
+
+ember_v1_burst_head_t1:
+  material: CHAINMAIL_HELMET
+  name: '&6[T1] 烬爆头盔'
+  lore:
+    - '&8烬爆 · 头盔 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -1993799707818895209'
+        UUIDLeast: '(Long) -5487683342549363386'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 4813905844358698397'
+        UUIDLeast: '(Long) -9048496803218521362'
+        Slot: head
+
+ember_v1_burst_chest_t1:
+  material: CHAINMAIL_CHESTPLATE
+  name: '&6[T1] 烬爆胸甲'
+  lore:
+    - '&8烬爆 · 胸甲 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -8283806396914707511'
+        UUIDLeast: '(Long) -5846547981416351250'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 3967301534885827570'
+        UUIDLeast: '(Long) -5604189778843205658'
+        Slot: chest
+
+ember_v1_burst_legs_t1:
+  material: CHAINMAIL_LEGGINGS
+  name: '&6[T1] 烬爆护腿'
+  lore:
+    - '&8烬爆 · 护腿 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -2970994282064945953'
+        UUIDLeast: '(Long) -7352011225910840982'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -8862866620679498924'
+        UUIDLeast: '(Long) -7887527107135811652'
+        Slot: legs
+
+ember_v1_burst_boots_t1:
+  material: CHAINMAIL_BOOTS
+  name: '&6[T1] 烬爆靴子'
+  lore:
+    - '&8烬爆 · 靴子 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 625552654987644942'
+        UUIDLeast: '(Long) -4680286101809067696'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7785611065447898661'
+        UUIDLeast: '(Long) -4775577286844512222'
+        Slot: feet
+
+ember_v1_burst_head_t2:
+  material: IRON_HELMET
+  name: '&6[T2] 烬爆头盔'
+  lore:
+    - '&8烬爆 · 头盔 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 645785870367415513'
+        UUIDLeast: '(Long) -6826544245771368197'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -6855238745576156473'
+        UUIDLeast: '(Long) -4909131432829341800'
+        Slot: head
+
+ember_v1_burst_chest_t2:
+  material: IRON_CHESTPLATE
+  name: '&6[T2] 烬爆胸甲'
+  lore:
+    - '&8烬爆 · 胸甲 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 3081905076699486550'
+        UUIDLeast: '(Long) -8766220897328114310'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4198783114728353328'
+        UUIDLeast: '(Long) -7795191330565085925'
+        Slot: chest
+
+ember_v1_burst_legs_t2:
+  material: IRON_LEGGINGS
+  name: '&6[T2] 烬爆护腿'
+  lore:
+    - '&8烬爆 · 护腿 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -5036574119484956693'
+        UUIDLeast: '(Long) -8798274688988525678'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 2057806746420665896'
+        UUIDLeast: '(Long) -4905466732373620990'
+        Slot: legs
+
+ember_v1_burst_boots_t2:
+  material: IRON_BOOTS
+  name: '&6[T2] 烬爆靴子'
+  lore:
+    - '&8烬爆 · 靴子 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 308949744951975410'
+        UUIDLeast: '(Long) -4957220331093590753'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4709557656151565393'
+        UUIDLeast: '(Long) -7309135599104226022'
+        Slot: feet
+
+ember_v1_burst_head_t3:
+  material: DIAMOND_HELMET
+  name: '&6[T3] 烬爆头盔'
+  lore:
+    - '&8烬爆 · 头盔 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -9100226026796329804'
+        UUIDLeast: '(Long) -7245167172686241480'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -6861780878274176613'
+        UUIDLeast: '(Long) -4957245904820921274'
+        Slot: head
+
+ember_v1_burst_chest_t3:
+  material: DIAMOND_CHESTPLATE
+  name: '&6[T3] 烬爆胸甲'
+  lore:
+    - '&8烬爆 · 胸甲 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4339629127298162980'
+        UUIDLeast: '(Long) -8752725457058251183'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 4191696326671685545'
+        UUIDLeast: '(Long) -4693397924467051432'
+        Slot: chest
+
+ember_v1_burst_legs_t3:
+  material: DIAMOND_LEGGINGS
+  name: '&6[T3] 烬爆护腿'
+  lore:
+    - '&8烬爆 · 护腿 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7007361502245575141'
+        UUIDLeast: '(Long) -5638908151551132857'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 4867516645352493105'
+        UUIDLeast: '(Long) -6273848580701579359'
+        Slot: legs
+
+ember_v1_burst_boots_t3:
+  material: DIAMOND_BOOTS
+  name: '&6[T3] 烬爆靴子'
+  lore:
+    - '&8烬爆 · 靴子 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 2054596114861808566'
+        UUIDLeast: '(Long) -5390604101838867312'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 8166677549281530226'
+        UUIDLeast: '(Long) -5179158072800740243'
+        Slot: feet
+
+# --- 炽愈 ---
+
+ember_v1_sustain_head_t1:
+  material: CHAINMAIL_HELMET
+  name: '&a[T1] 炽愈头盔'
+  lore:
+    - '&8炽愈 · 头盔 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 68747337785300417'
+        UUIDLeast: '(Long) -5615471938071080513'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -1231458907637719062'
+        UUIDLeast: '(Long) -5830386744825873287'
+        Slot: head
+
+ember_v1_sustain_chest_t1:
+  material: CHAINMAIL_CHESTPLATE
+  name: '&a[T1] 炽愈胸甲'
+  lore:
+    - '&8炽愈 · 胸甲 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 5981607971607633136'
+        UUIDLeast: '(Long) -5442080224745422706'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -3476288405534647904'
+        UUIDLeast: '(Long) -7059900259105707354'
+        Slot: chest
+
+ember_v1_sustain_legs_t1:
+  material: CHAINMAIL_LEGGINGS
+  name: '&a[T1] 炽愈护腿'
+  lore:
+    - '&8炽愈 · 护腿 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -1056949288391779186'
+        UUIDLeast: '(Long) -7126296488591031393'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -2386063017338646030'
+        UUIDLeast: '(Long) -6224567733023743850'
+        Slot: legs
+
+ember_v1_sustain_boots_t1:
+  material: CHAINMAIL_BOOTS
+  name: '&a[T1] 炽愈靴子'
+  lore:
+    - '&8炽愈 · 靴子 · T1'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -7203621047804011420'
+        UUIDLeast: '(Long) -8053451845167097415'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -2566739914318455204'
+        UUIDLeast: '(Long) -8934155993652495814'
+        Slot: feet
+
+ember_v1_sustain_head_t2:
+  material: IRON_HELMET
+  name: '&a[T2] 炽愈头盔'
+  lore:
+    - '&8炽愈 · 头盔 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -741149475233114734'
+        UUIDLeast: '(Long) -5195556437367648988'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 7083805375930128290'
+        UUIDLeast: '(Long) -7282388558769775289'
+        Slot: head
+
+ember_v1_sustain_chest_t2:
+  material: IRON_CHESTPLATE
+  name: '&a[T2] 炽愈胸甲'
+  lore:
+    - '&8炽愈 · 胸甲 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 2699444352474568489'
+        UUIDLeast: '(Long) -8089993957492125862'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 3325553437297038286'
+        UUIDLeast: '(Long) -7455861692736253446'
+        Slot: chest
+
+ember_v1_sustain_legs_t2:
+  material: IRON_LEGGINGS
+  name: '&a[T2] 炽愈护腿'
+  lore:
+    - '&8炽愈 · 护腿 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 742970135174664236'
+        UUIDLeast: '(Long) -5907402855873254179'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -3626693640339040101'
+        UUIDLeast: '(Long) -8640378742008124621'
+        Slot: legs
+
+ember_v1_sustain_boots_t2:
+  material: IRON_BOOTS
+  name: '&a[T2] 炽愈靴子'
+  lore:
+    - '&8炽愈 · 靴子 · T2'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 6836240404156014115'
+        UUIDLeast: '(Long) -5174008005600477333'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -6948621268336946967'
+        UUIDLeast: '(Long) -8211640412223296017'
+        Slot: feet
+
+ember_v1_sustain_head_t3:
+  material: DIAMOND_HELMET
+  name: '&a[T3] 炽愈头盔'
+  lore:
+    - '&8炽愈 · 头盔 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 2132327842437683371'
+        UUIDLeast: '(Long) -8089412580229217335'
+        Slot: head
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 2679426864533166211'
+        UUIDLeast: '(Long) -6659100500097001512'
+        Slot: head
+
+ember_v1_sustain_chest_t3:
+  material: DIAMOND_CHESTPLATE
+  name: '&a[T3] 炽愈胸甲'
+  lore:
+    - '&8炽愈 · 胸甲 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4216854154001033442'
+        UUIDLeast: '(Long) -6260856500799994200'
+        Slot: chest
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -1724415212501642842'
+        UUIDLeast: '(Long) -8973280367316917863'
+        Slot: chest
+
+ember_v1_sustain_legs_t3:
+  material: DIAMOND_LEGGINGS
+  name: '&a[T3] 炽愈护腿'
+  lore:
+    - '&8炽愈 · 护腿 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -8222531745564697296'
+        UUIDLeast: '(Long) -7184589572382624700'
+        Slot: legs
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -971735052626993512'
+        UUIDLeast: '(Long) -8936775634370652179'
+        Slot: legs
+
+ember_v1_sustain_boots_t3:
+  material: DIAMOND_BOOTS
+  name: '&a[T3] 炽愈靴子'
+  lore:
+    - '&8炽愈 · 靴子 · T3'
+  unbreakable: true
+  hideflags:
+    - HIDE_ATTRIBUTES
+    - HIDE_UNBREAKABLE
+    - HIDE_ENCHANTS
+  nbt:
+    AttributeModifiers:
+      - AttributeName: generic.armor
+        Name: ember_armor_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) -4297093862402076471'
+        UUIDLeast: '(Long) -5798288790682150213'
+        Slot: feet
+      - AttributeName: generic.armorToughness
+        Name: ember_toughness_zero
+        Amount: '(Double) 0'
+        Operation: '(Int) 0'
+        UUIDMost: '(Long) 8550428657285223693'
+        UUIDLeast: '(Long) -6523617327921928714'
+        Slot: feet
