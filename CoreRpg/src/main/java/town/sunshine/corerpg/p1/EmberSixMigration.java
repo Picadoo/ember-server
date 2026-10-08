@@ -84,9 +84,11 @@ public final class EmberSixMigration<S> {
         public int seq;
         /** issued pieces whose uid was given up (re-issued / never handed out): retired in the DB, re-sent on join */
         public final List<EmberItemData> voided = new ArrayList<EmberItemData>();
+        /** epoch seconds of the commit that set the flag (0 = not migrated); the invsnap restore guard compares snapshots to it */
+        public long doneAt;
         public Record<S> copy() {
             Record<S> r = new Record<S>();
-            r.flag = flag; r.journal = journal; r.seq = seq; r.stash.putAll(stash); r.voided.addAll(voided);
+            r.flag = flag; r.journal = journal; r.seq = seq; r.stash.putAll(stash); r.voided.addAll(voided); r.doneAt = doneAt;
             return r;
         }
     }
@@ -374,9 +376,10 @@ public final class EmberSixMigration<S> {
         for (int i = 0; i < 4; i++) if (j.originals.get(i) != null) stash(next, j.at, i, j.originals.get(i));
         if (extra != null) for (int i = 0; i < 4; i++) if (extra.get(i) != null) stash(next, j.at, i, extra.get(i));
         next.flag = true;
+        next.doneAt = port.nowSec();
         next.journal = null;
         port.save(next); // flag + 待领 + journal cleared in one record write
-        rec.flag = true; rec.journal = null; rec.seq = next.seq; rec.stash.clear(); rec.stash.putAll(next.stash);
+        rec.flag = true; rec.doneAt = next.doneAt; rec.journal = null; rec.seq = next.seq; rec.stash.clear(); rec.stash.putAll(next.stash);
         port.apply(null, j.mark, false); // tidy: the mark is no longer needed (null armor = slots untouched)
     }
 

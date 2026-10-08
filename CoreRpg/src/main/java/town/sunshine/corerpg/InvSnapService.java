@@ -431,6 +431,12 @@ public final class InvSnapService implements Listener {
      */
     private void restore(final CommandSender admin, final Player p, final Snap s, final java.util.function.Consumer<String> done) {
         final UUID u = p.getUniqueId();
+        final town.sunshine.corerpg.p1.EmberSixRestoreGuard.Verdict six = town.sunshine.corerpg.p1.EmberSixSlotService.restoreGuard(p, s.at);
+        if (six != null) { // D319: never restore across the six-slot migration (checked again here for queued restores)
+            refuseSix(admin, p, s, six);
+            if (done != null) done.accept("six-slot guard (" + six + ")");
+            return;
+        }
         if (town.sunshine.corerpg.p1.EmberAssetGuard.frozen(u)) { msg(admin, ChatColor.RED + "这个玩家正在恢复中，稍后再试"); if (done != null) done.accept("restore already running"); return; }
         town.sunshine.corerpg.p1.EmberAssetGuard.freeze(u);
         final java.util.function.Consumer<String> end = why -> {
@@ -458,8 +464,19 @@ public final class InvSnapService implements Listener {
         });
     }
 
+    /** D319: the six-slot guard refused a restore — reason + where the runbook explains it, to the admin and the log */
+    private void refuseSix(CommandSender admin, Player p, Snap s, town.sunshine.corerpg.p1.EmberSixRestoreGuard.Verdict v) {
+        msg(admin, ChatColor.RED + "已拒绝把 " + p.getName() + " 恢复到快照 #" + s.id + "（" + fmt(s.at) + "）：" + v.reason);
+        msg(admin, ChatColor.GRAY + (v.permanent ? "这张快照以后也不能恢复；请选迁移完成之后的快照。" : "稍后（问题解决后）可以再试。")
+                + "规则见运维手册 " + town.sunshine.corerpg.p1.EmberSixRestoreGuard.MANUAL);
+        plugin.getLogger().warning("[invsnap] six-slot guard refused restore " + s.id + " for " + p.getName() + " by "
+                + (admin == null ? "?" : admin.getName()) + ": " + v);
+    }
+
     /** /corerpg invsnap preview: same checks as restore, nothing applied */
     private void preview(final CommandSender admin, final Player p, final Snap s) {
+        final town.sunshine.corerpg.p1.EmberSixRestoreGuard.Verdict six = town.sunshine.corerpg.p1.EmberSixSlotService.restoreGuard(p, s.at);
+        if (six != null) msg(admin, ChatColor.RED + "注意：六槽迁移守卫会拒绝这次恢复：" + six.reason + "（" + town.sunshine.corerpg.p1.EmberSixRestoreGuard.MANUAL + "）");
         final int before = s.count();
         trustCheck(p, s, skipped -> netOut(p, s, net -> {
             msg(admin, ChatColor.AQUA + "预览：恢复 " + p.getName() + " 到快照 #" + s.id + "（" + fmt(s.at) + " " + s.reason + "）· 快照 " + before + " 格 → 实际恢复 " + s.count() + " 格");
@@ -705,6 +722,16 @@ public final class InvSnapService implements Listener {
                 return;
             }
             if (!p.isOnline()) { pendingFailed(u, "offline before restore"); return; }
+            // D319: checked when the queued restore runs (join + 40 ticks, before the six-slot migration at + 120)
+            final town.sunshine.corerpg.p1.EmberSixRestoreGuard.Verdict six = town.sunshine.corerpg.p1.EmberSixSlotService.restoreGuard(p, s.at);
+            if (six != null) {
+                refuseSix(Bukkit.getConsoleSender(), p, s, six);
+                for (Player op : Bukkit.getOnlinePlayers()) if (op.hasPermission("corerpg.admin")) msg(op, ChatColor.RED + "排队恢复 #" + id + "（" + p.getName() + "）被六槽迁移守卫拒绝：" + six.reason);
+                if (six.permanent) { setPending(u, null, null); plugin.getLogger().warning("[invsnap] queued restore " + id + " for " + p.getName() + " dropped (six-slot guard, permanent)"); }
+                else pendingFailed(u, "six-slot guard (" + six + ")");
+                snapshot(p, "join", null);
+                return;
+            }
             plugin.getLogger().warning("[invsnap] applying queued restore " + id + " for " + p.getName());
             restore(Bukkit.getConsoleSender(), p, s, why -> {
                 if (why == null) { setPending(u, null, null); plugin.getLogger().warning("[invsnap] queued restore " + id + " for " + p.getName() + " applied, dequeued"); }

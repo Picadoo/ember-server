@@ -71,6 +71,7 @@ public final class EmberSixSlotService implements Listener {
         if (!f.exists()) return r;
         YamlConfiguration y = YamlConfiguration.loadConfiguration(f);
         r.flag = y.getInt(EmberSixMigration.FLAG, 0) == 1;
+        r.doneAt = y.getLong("done_at", 0L);
         r.seq = y.getInt("seq", 0);
         ConfigurationSection j = y.getConfigurationSection("journal");
         if (j != null) {
@@ -99,6 +100,7 @@ public final class EmberSixSlotService implements Listener {
     void save(UUID id, EmberSixMigration.Record<ItemStack> r) {
         YamlConfiguration y = new YamlConfiguration();
         y.set(EmberSixMigration.FLAG, r.flag ? 1 : 0);
+        if (r.doneAt > 0) y.set("done_at", r.doneAt);
         y.set("seq", r.seq);
         if (r.journal != null) {
             y.set("journal.at", r.journal.at);
@@ -133,6 +135,23 @@ public final class EmberSixSlotService implements Listener {
         return n;
     }
     public boolean migrated(UUID id) { return load(id).flag; }
+
+    /**
+     * D319 invsnap restore guard ({@link EmberSixRestoreGuard}) for online {@code p} and a snapshot taken at
+     * {@code snapAtMs}; null = allow. Never migrated (no record file, no swap tag) → null without reading anything else.
+     */
+    public static EmberSixRestoreGuard.Verdict restoreGuard(Player p, long snapAtMs) {
+        EmberSixSlotService svc = instance;
+        if (svc == null || p == null) return null;
+        boolean exists = svc.file(p.getUniqueId()).exists();
+        boolean swapTag = false;
+        for (String t : p.getScoreboardTags()) if (t.startsWith(MARK_SWAP)) { swapTag = true; break; }
+        if (!exists && !swapTag) return null;
+        EmberSixMigration.Record<ItemStack> r = exists ? svc.load(p.getUniqueId()) : new EmberSixMigration.Record<ItemStack>();
+        boolean owed = false;
+        for (String t : p.getScoreboardTags()) if (t.startsWith(MARK_CLAIM) && r.stash.containsKey(t.substring(MARK_CLAIM.length()))) { owed = true; break; }
+        return EmberSixRestoreGuard.check(exists, r.flag, r.journal != null, r.doneAt, swapTag, owed, snapAtMs);
+    }
 
     // ------------------------------------------------------------------ ports
 
