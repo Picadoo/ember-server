@@ -42,10 +42,10 @@ afk.tiers / daily_kills · UpgradeRules 费用数组 · gate_daily · 观察三�
 
 | 项 | 值 |
 |----|----|
-| tip | _(commit 后回填)_ |
+| tip | `a6385f12` |
 | jar | `CoreRpg-1.65.113-d404.local.jar` |
-| sha256 | _(装服后回填)_ |
-| Enabling | _(装服后回填)_ |
+| sha256 | `b62819ed0844503396036c6ffb4fb3ec58b89377c0a10a8d7c4e705861e28978` |
+| Enabling | `CoreRpg v1.65.113-d404.local` · play PID 1151991 |
 
 ## 下一号
 
