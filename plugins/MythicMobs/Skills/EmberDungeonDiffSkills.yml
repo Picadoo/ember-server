@@ -180,3 +180,15 @@ EmberSpireSlamCast:
   - delay 25
   - damage{amount=1.2} @PlayersInRadius{r=5}
   - effect:particles{p=crit;amount=30;hSpread=5;ySpread=0.8;speed=0.02} @Self
+
+# --- 日常第三拍扩线 · 残誓地窖 Boss 守墓读条（可躲；无 SLOW，点名+SLOW~160 另挂）---
+EmberCryptOathCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&8【残誓】&f守墓蓄力——&7拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=36;hSpread=4;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=crit;amount=18;hSpread=3;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.6;pitch=0.65} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=28;hSpread=5;ySpread=0.6;speed=0.02} @Self
