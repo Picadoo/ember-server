@@ -159,6 +159,30 @@ public final class EmberShortRules {
         return "还有 " + n + " 本生涯首通未领";
     }
 
+    /**
+     * D409 W1a: second settle tell after a rewarded clear — vault→forge chase.
+     * Color codes may vary at call site; semantic must stay.
+     */
+    public static String spendChaseLine() {
+        return "§7材料已进仓 · 工坊可花（强化/精工/成色）";
+    }
+
+    /**
+     * D409 W1a optional: when this map's rewarded-after hits dailyCap, append day-full half-clause.
+     * Empty when still under cap (or cap≤0).
+     */
+    public static String spendChaseDayFullHalf(int rewardedAfter, int dailyCap) {
+        int cap = Math.max(0, dailyCap);
+        if (cap <= 0) return "";
+        if (Math.max(0, rewardedAfter) < cap) return "";
+        return " §8· 本本今日有奖已满";
+    }
+
+    /** D409 W1a: full second-line tell (chase + optional day-full). */
+    public static String spendChaseTell(int rewardedAfter, int dailyCap) {
+        return spendChaseLine() + spendChaseDayFullHalf(rewardedAfter, dailyCap);
+    }
+
     /** Claim counter id for a short map key ({@code p1_sx01_day} …). */
     public static String claimKey(String mapKey) {
         if (mapKey == null || mapKey.isEmpty()) return CLAIM;

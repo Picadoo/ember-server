@@ -12,7 +12,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * D391–D407 短征：进本门闩 + S40–S46 结算发放钩；D401 有奖结算挂钩可选周目标 {@code short}。
+ * D391–D407 短征：进本门闩 + S40–S46 结算发放钩；D401 有奖结算挂钩可选周目标 {@code short}；D409 W1a 有奖结算进仓/工坊半句。
  * 地图 / MM / TrMenu 另号；本号保证 {@code p1 enter sx01..sx07} 路由与发放可单测。
  */
 public final class EmberShortService {
@@ -117,6 +117,8 @@ public final class EmberShortService {
                 p.sendMessage(P() + "§e短征通关 §7· " + EmberShortRules.rewardLine(m.key)
                         + (r.firstClearPaidNow ? " §a（含生涯首通包）" : "")
                         + " §7· " + EmberShortRules.dayLine(r.rewardedAfter, dailyCap(m)));
+                // D409 W1a: vault→forge chase; optional day-full half when this map cap hit
+                p.sendMessage(P() + EmberShortRules.spendChaseTell(r.rewardedAfter, dailyCap(m)));
             } else if (r.fresh) {
                 p.sendMessage(P() + "§e短征通关（无奖）§7· " + EmberShortRules.dayLine(before, dailyCap(m))
                         + " · 0 点重置有奖次数");

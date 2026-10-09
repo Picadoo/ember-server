@@ -21,7 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D391–D407/D406: short expedition sx01–sx07 — entry gate + S40–S46 settle grants + fc aggregate.
+ * D391–D407/D406: short expedition sx01–sx07 — entry gate + S40–S46 settle grants + fc aggregate; D409 W1a spend-chase tell.
  */
 public class EmberShortRulesTest {
 
@@ -691,6 +691,49 @@ public class EmberShortRulesTest {
         assertEquals(0, pd.periodCount("p1_sx06_day", "2026-10-10"));
         assertEquals(0, pd.periodCount(EmberShortRules.CLAIM, "2026-10-10"));
         assertTrue(EmberFirstClear.paid(pd, "sx07", "v1"));
+    }
+
+    @Test
+    public void spendChaseTell_D409W1a() {
+        String line = EmberShortRules.spendChaseLine();
+        assertTrue(line.contains("材料已进仓"));
+        assertTrue(line.contains("工坊可花"));
+        assertTrue(line.contains("强化") && line.contains("精工") && line.contains("成色"));
+        // under cap: chase only, no day-full half
+        String under = EmberShortRules.spendChaseTell(1, 3);
+        assertEquals(line, under);
+        assertFalse(under.contains("本本今日有奖已满"));
+        assertEquals(line, EmberShortRules.spendChaseTell(2, 3));
+        // hit / over cap: optional half-clause
+        String full = EmberShortRules.spendChaseTell(3, 3);
+        assertTrue(full.startsWith(line));
+        assertTrue(full.contains("本本今日有奖已满"));
+        assertTrue(EmberShortRules.spendChaseTell(5, 3).contains("本本今日有奖已满"));
+        assertEquals("", EmberShortRules.spendChaseDayFullHalf(2, 3));
+        assertTrue(EmberShortRules.spendChaseDayFullHalf(3, 3).contains("本本今日有奖已满"));
+        assertEquals("", EmberShortRules.spendChaseDayFullHalf(1, 0));
+    }
+
+    /** D409 W1a: settle sends chase only on fresh+pays; never on no-reward path. */
+    @Test
+    public void settleSourceSendsChaseOnlyWhenPays_D409W1a() throws Exception {
+        String src = new String(java.nio.file.Files.readAllBytes(
+                java.nio.file.Paths.get("src/main/java/town/sunshine/corerpg/p1/EmberShortService.java")),
+                StandardCharsets.UTF_8);
+        int a = src.indexOf("void settle(");
+        assertTrue(a > 0);
+        String body = src.substring(a, src.indexOf("String enteringLine(", a));
+        assertTrue(body.contains("if (r.fresh && r.pays)"));
+        assertTrue(body.contains("spendChaseTell(r.rewardedAfter, dailyCap(m))"));
+        int paysIdx = body.indexOf("if (r.fresh && r.pays)");
+        int chaseIdx = body.indexOf("spendChaseTell");
+        int noRewardIdx = body.indexOf("} else if (r.fresh)");
+        assertTrue(paysIdx >= 0 && chaseIdx > paysIdx);
+        assertTrue(noRewardIdx > chaseIdx);
+        // no-reward branch must not call spendChase
+        String noRewardBranch = body.substring(noRewardIdx);
+        assertFalse(noRewardBranch.contains("spendChaseTell"));
+        assertTrue(noRewardBranch.contains("短征通关（无奖）"));
     }
 
     private static Map<String, Integer> byKey(List<EmberRunRules.Grant> g) {
