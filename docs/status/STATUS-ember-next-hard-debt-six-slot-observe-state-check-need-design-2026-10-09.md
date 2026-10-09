@@ -1,6 +1,7 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 观察现态复跑薄清单 · docs-only）
 
 > **旁注（已关 · 批 A · 批 M · D342）：** tip `76b8eb49` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-observe-state-check-d342-2026-10-09.md`](STATUS-ember-six-slot-observe-state-check-d342-2026-10-09.md) · **另号只读复跑 R0–R10** · **批 A ≠ 关观察** · 未满窗只做预检。
+> **旁注（D343 · 配置覆盖已恢复 · 观察续）：** 主工作区 checkout 曾盖掉 tracked `plugins/CoreRpg/ember-v1.yml`（无 six_slot / bv60）；已恢复三 true+bv62 并钉进 git · STATUS [`STATUS-ember-six-slot-config-overwrite-restore-d343-2026-10-09.md`](STATUS-ember-six-slot-config-overwrite-restore-d343-2026-10-09.md) · **禁止主仓切分支盖 live** · K3 只用独立 worktree · **≠关观察**。
 
 
 > **上游结案：** D341 K3 施工闸等待页已批 @ `e04c79be`（≠开闸）；D338 绿出口签字包模板已批（≠关观察）；D329–D340 诚实/薄抽/D12 已落。满窗不早于 **2026-10-10 17:40 CST**。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / K3 live / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零 live 玩法施工。**

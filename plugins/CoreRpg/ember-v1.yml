@@ -246,3 +246,10 @@ online:
     - {min: 30, coin: 15, xp: 5}
     - {min: 60, coin: 20, xp: 5}
     - {min: 120, coin: 25, xp: 10}
+
+# D323 六槽 Stage1 + D325 Stage2 set_bonus（开开关须同次改 true 后 /corerpg reload；jar 换档须重启）
+gear:
+  six_slot:
+    enabled: true
+    migrate: true
+    set_bonus: true  # D325 Stage2 四件套减伤；须 enabled
