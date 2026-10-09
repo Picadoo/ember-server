@@ -335,6 +335,43 @@ public final class EmberAfkService implements Listener {
         return "还差 " + remain + " 只 · 约 " + etaMinText(remain, kph) + " 分钟满";
     }
 
+
+    /**
+     * D411 W1a: layer-gap short mat for next_farm (灰坡→荒原=核心碎片; 荒原→焦土=胚料; 焦土→烬原=最高档).
+     */
+    static String gapMatShort(int curTierN) {
+        switch (curTierN) {
+            case 1: return "核心碎片";
+            case 2: return "胚料";
+            case 3: return "最高档";
+            default: return "材料";
+        }
+    }
+
+    /**
+     * D411 W1a %corerpg_p1_afk_next_farm%: personalized next-tier farm half-line (read-only).
+     * Priority: full → no-next/locked → stable+unlocked (reuse shouldUpgradeHint w/ alreadyHinted=false) → unlocked-not-stable.
+     * When {@code upgradeHintOn} is false, 「可试」honestly degrades to the not-stable line (STATUS-nailed).
+     */
+    static String nextFarmLine(boolean capped, int curTierN, String nextName, boolean nextUnlocked,
+                               boolean upgradeHintOn, boolean deathsEmpty,
+                               int sessKills, int minKills, double kph, int minKph) {
+        if (capped) return "今日已满 · 去冒险/短征/工坊";
+        boolean noHigher = curTierN >= 4 || nextName == null || nextName.isEmpty();
+        if (noHigher) {
+            if (curTierN >= 4) return "已是最高 · 打满去花或短征";
+            return "本层继续养 · 更高层需通主线";
+        }
+        if (!nextUnlocked) return "本层继续养 · 更高层需通主线";
+        // menu continuous mirror: ignore chat alreadyHinted; capped already handled above
+        boolean stable = shouldUpgradeHint(upgradeHintOn, false, false, deathsEmpty, true,
+                sessKills, minKills, kph, minKph);
+        if (stable) {
+            return "可试" + nextName + " · 多养" + gapMatShort(curTierN) + " · 点上排换层";
+        }
+        return "本层继续打稳 · 满速后再试" + nextName;
+    }
+
     /** D305 W1a: short card name matching TrMenu §d名片 (T1–T4). */
     static String cardTag(int tier) {
         switch (tier) {
@@ -961,6 +998,17 @@ public final class EmberAfkService implements Listener {
             case "remain": return String.valueOf(remainKills(kills, dailyKills)); // D405 numeric; full=0
             case "eta_min": return etaMinText(remainKills(kills, dailyKills), kph); // D405
             case "remain_line": return remainLine(remainKills(kills, dailyKills), kph); // D405 optional
+            case "next_farm": { // D411 W1a personalized next-tier farm half-line
+                boolean capped = dailyKills > 0 && kills >= dailyKills;
+                Tier next = cur == null ? null : tier(cur.n + 1);
+                boolean nextOk = next != null && flag(d, next.requires);
+                String nextName = next == null ? "" : next.name;
+                int curN = cur == null ? 0 : cur.n;
+                int sess = f == null ? 0 : f.sessKills;
+                boolean deathsEmpty = f == null || f.deaths.isEmpty();
+                return nextFarmLine(capped, curN, nextName, nextOk, upgradeHint, deathsEmpty,
+                        sess, upgradeHintMinKills, kph, upgradeHintMinKph);
+            }
             default: return "";
         }
     }

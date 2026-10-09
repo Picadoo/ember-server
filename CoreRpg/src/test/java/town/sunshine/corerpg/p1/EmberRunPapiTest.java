@@ -33,7 +33,7 @@ public final class EmberRunPapiTest {
         r(ENTRY, "pass_q01", "pass_rush", "pass_gq26", "passd_emberq01", "target", "marks_t1", "marks_t3", "marks_tx",
                 "pending", "active", "next", "recruits", "failrefund", "route_pri", "route_sec", "featured_left");
         r(RUSH, "vbounty", "rush", "rush_q0r1", "rush_nosuch", "pledge_head", "pledge_n_lean", "pledge_ok");
-        r(GROWTH, "sign_state", "online_d1", "online_min", "afk_today", "afk_t1", "afk_remain", "afk_eta_min", "afk_remain_line", "sig_q01", "reroll_blade_cap",
+        r(GROWTH, "sign_state", "online_d1", "online_min", "afk_today", "afk_t1", "afk_remain", "afk_eta_min", "afk_remain_line", "afk_next_farm", "sig_q01", "reroll_blade_cap",
                 "honor_name_1", "spec_x");
         r(GATE, "forge_t2", "forge_t3", "challenge", "q07done", "q04done", "q05done", "q06done", "q09done");
         r(ROTATION, "featured", "featured_key", "modifier", "rule_q01", "bounty", "loot_q01", "loot_r01");

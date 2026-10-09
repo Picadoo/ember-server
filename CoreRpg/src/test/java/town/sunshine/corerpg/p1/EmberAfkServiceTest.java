@@ -175,4 +175,48 @@ public class EmberAfkServiceTest {
         assertEquals(2400, afk().getInt("daily_kills"));
     }
 
+
+
+    /** D411 next_farm — STATUS-nailed state machine; upgrade_hint off → 可试 degrades to 未打稳. */
+    @Test public void nextFarm_D411_stateMachine() {
+        // 1 full
+        assertEquals("今日已满 · 去冒险/短征/工坊",
+                EmberAfkService.nextFarmLine(true, 1, "荒原", true, true, true, 40, 40, 800, 800));
+        // 2 T4 highest
+        assertEquals("已是最高 · 打满去花或短征",
+                EmberAfkService.nextFarmLine(false, 4, "", false, true, true, 40, 40, 800, 800));
+        // 2 next locked
+        assertEquals("本层继续养 · 更高层需通主线",
+                EmberAfkService.nextFarmLine(false, 1, "荒原", false, true, true, 40, 40, 800, 800));
+        // 2 no next name (unknown)
+        assertEquals("本层继续养 · 更高层需通主线",
+                EmberAfkService.nextFarmLine(false, 1, "", true, true, true, 40, 40, 800, 800));
+        // 3 stable + unlocked → 可试 + gap mat
+        assertEquals("可试荒原 · 多养核心碎片 · 点上排换层",
+                EmberAfkService.nextFarmLine(false, 1, "荒原", true, true, true, 40, 40, 800, 800));
+        assertEquals("可试焦土 · 多养胚料 · 点上排换层",
+                EmberAfkService.nextFarmLine(false, 2, "焦土", true, true, true, 40, 40, 800, 800));
+        assertEquals("可试烬原深处 · 多养最高档 · 点上排换层",
+                EmberAfkService.nextFarmLine(false, 3, "烬原深处", true, true, true, 40, 40, 800, 800));
+        // 4 unlocked not stable (kills / kph / deaths / hint-off)
+        assertEquals("本层继续打稳 · 满速后再试荒原",
+                EmberAfkService.nextFarmLine(false, 1, "荒原", true, true, true, 39, 40, 800, 800));
+        assertEquals("本层继续打稳 · 满速后再试荒原",
+                EmberAfkService.nextFarmLine(false, 1, "荒原", true, true, true, 40, 40, 799, 800));
+        assertEquals("本层继续打稳 · 满速后再试荒原",
+                EmberAfkService.nextFarmLine(false, 1, "荒原", true, true, false, 40, 40, 800, 800));
+        // upgrade_hint hot-off → 可试 degrades to 未打稳 (STATUS-nailed)
+        assertEquals("本层继续打稳 · 满速后再试荒原",
+                EmberAfkService.nextFarmLine(false, 1, "荒原", true, false, true, 40, 40, 800, 800));
+        assertEquals("核心碎片", EmberAfkService.gapMatShort(1));
+        assertEquals("胚料", EmberAfkService.gapMatShort(2));
+        assertEquals("最高档", EmberAfkService.gapMatShort(3));
+        // shipped defaults untouched
+        ConfigurationSection s = afk();
+        assertEquals(2400, s.getInt("daily_kills"));
+        assertTrue(s.getBoolean("feel.upgrade_hint", false));
+        assertEquals(40, s.getInt("feel.upgrade_hint_min_kills"));
+        assertEquals(800, s.getInt("feel.upgrade_hint_min_kph"));
+    }
+
 }
