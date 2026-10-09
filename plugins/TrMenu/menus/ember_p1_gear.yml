@@ -17,7 +17,7 @@ Options:
 
 Layout:
   - '#########'
-  - '# W T CF#'
+  - '# W TMCF#'
   - '# S N PL#'
   - '#h H q f#'
   - '#OEbABZX#'
@@ -327,3 +327,89 @@ Icons:
     actions:
       all:
         - close
+
+  M:
+    update: 20
+    display:
+      material: gray stained glass pane
+      name: '§8'
+    icons:
+      # D329：装备页护甲入口套装三态（与 ember_p1_armor S 格语义对齐；actions 仍进护甲页）
+      - condition: 'check papi %corerpg_p1_armor_set_active% == 1'
+        priority: 5
+        display:
+          material: iron chestplate
+          name: '§6护甲'
+          lore:
+            - '%corerpg_p1_armor_head%'
+            - '%corerpg_p1_armor_chest%'
+            - '%corerpg_p1_armor_legs%'
+            - '%corerpg_p1_armor_boots%'
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '%corerpg_p1_armor_set%'
+            - '§a受伤 −3%'
+            - '§7另 2 甲位可穿异族追成色'
+            - ''
+            - '§7阶级和强化跟随已选护符；成色 / 精工看掉落'
+            - '§e➥ §f打开护甲页（对比后换上）'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'menu: ember_p1_armor'
+      - condition: 'check papi %corerpg_p1_armor_set_busy% == 1'
+        priority: 4
+        display:
+          material: iron chestplate
+          name: '§6护甲'
+          lore:
+            - '%corerpg_p1_armor_head%'
+            - '%corerpg_p1_armor_chest%'
+            - '%corerpg_p1_armor_legs%'
+            - '%corerpg_p1_armor_boots%'
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '%corerpg_p1_armor_set%'
+            - '§7还缺：任意同族掉落阶 T2+ 护甲'
+            - ''
+            - '§7阶级和强化跟随已选护符；成色 / 精工看掉落'
+            - '§e➥ §f打开护甲页（对比后换上）'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'menu: ember_p1_armor'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 3
+        display:
+          material: iron chestplate
+          name: '§6护甲'
+          lore:
+            - '%corerpg_p1_armor_head%'
+            - '%corerpg_p1_armor_chest%'
+            - '%corerpg_p1_armor_legs%'
+            - '%corerpg_p1_armor_boots%'
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '%corerpg_p1_armor_set%'
+            - '§8先让刃与护符同族'
+            - ''
+            - '§7阶级和强化跟随已选护符；成色 / 精工看掉落'
+            - '§e➥ §f打开护甲页（对比后换上）'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'menu: ember_p1_armor'
+      - condition: 'check papi %corerpg_p1_armor_stash_has% == 1'
+        priority: 2
+        display:
+          material: chest
+          name: '§6待领物品'
+          lore:
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '§7原来穿着的东西收在这里，一件不少'
+            - '§e➥ §f点击领取到背包（背包满时留在这里，腾出空位再来）'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor claim'

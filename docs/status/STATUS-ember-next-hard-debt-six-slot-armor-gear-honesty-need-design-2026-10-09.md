@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（六槽装备页护甲入口诚实 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D329）：** tip `6d8b6565` 已关；总控已批 A·M；施工 STATUS [`STATUS-ember-six-slot-armor-gear-honesty-d329-2026-10-09.md`](STATUS-ember-six-slot-armor-gear-honesty-d329-2026-10-09.md)。
+
 > **上游结案：** Stage2 档 C 线上 bv62 · `set_bonus=true`（live `6e734dc7`）；观察关窗批 M 执行中（D326 · 绿出口不早于 **2026-10-10 17:40 CST** · 必抽已 PASS `54638e00`）；K3 已批 M、T0‴ 产物在汇总（**本窗不抢签 K3 施工**）。护甲页「后续开放」**线上已清**（D325 三态）。样本 R 全表不得开；天赋/灰印 HOLD；Pack6 硬禁；禁改 ×0.97 / 拧 set_bonus / 观察期部署 K3。
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + 硬规格** · **未改** yml / jar / 菜单 · 服务器保持 up · **零 live**  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md) · backlog `B-six-slot-armor-gear-honesty`  
+**硬规格（已批 A · 批 M · D329）：** [`DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md) · backlog `B-six-slot-armor-gear-honesty`  
 **打开理由：** 观察期要持续推进薄结构债；护甲页已诚实，但**装备页护甲入口**仍不提四件套进度 / −3%，玩家从 `/ember`→装备 看不到套装态——零数值、可只改 TrMenu/PAPI 镜像，观察期可批 A，施工另号。
 
 ---
@@ -36,7 +38,7 @@ Stage2 观察中、K3 施工勿抢。下一档若去开 R / Pack6 / 改 ×0.97 /
 
 ## 3. 派单句（已交 DESIGN）
 
-见同日 [`DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md) · STATUS=待批 A · 荐 M。
+见同日 [`DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md) · **已批 A · 批 M · D329**（原荐 M）。
 
 ---
 
