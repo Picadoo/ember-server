@@ -7,7 +7,7 @@
 - 测号：`D340Spot`（经代理 25565）；**未动真人档**；login/proxy/MariaDB 未动
 - 证据：`/workspace/tmp/d340-d339-hub-help-spot/`（主结果 `99-results.json`；另有 `d340-d339-hub-help-spot.tgz`）
 - 执行：2026-10-09 20:49–20:51 CST
-- **结论：PASS（S0–S6 全绿）**
+- **结论：PASS（S0–S6 全绿）** · **总控已签 D339 薄抽 PASS · 关清**
 
 ## 人话
 
@@ -45,6 +45,21 @@
 | 批 A tip（D340 docs） | 6369b8c1 |
 | DESIGN tip | 86e0f813 |
 
+## 总控签字栏（已签 · 2026-10-09）
+
+| 项 | 签认 |
+|----|------|
+| **D339 薄抽 PASS · 关清** | [x] |
+| S0–S6 | [x] PASS（测试 @ `7d560c39`） |
+| 活菜单 hub/help 四件套叙事可见 | [x] |
+| 工坊「甲仅分解」可见 | [x] |
+| 不重开文案 / 零改 yml·开关·jar·bv | [x] |
+| ≠关观察（满窗仍须 ≥2026-10-10 17:40 CST） | [x] |
+| 不抢 K3 | [x] |
+| 签字 / 日期 | **签字 总控 · 2026-10-09 · D340** |
+
+**总控批注（2026-10-09 · D340）：** **D339 薄抽 PASS · 关清。** S0–S6 全绿（测号 D340Spot @ `7d560c39`；证据 `/workspace/tmp/d340-d339-hub-help-spot/`）。关清 D339 DESIGN §2.6 玩家面可见性；旁注回写 D339 STATUS / D338 签字包附录 §2.3 / backlog `B-six-slot-d339-hub-help-spot`。**不改** 菜单文案 / jar / ×0.97 / set_bonus / bv。**不挡** 观察日历（满窗仍须 ≥2026-10-10 17:40 CST）。不抢 K3。不重开文案窗。
+
 ---
 
-*D340 薄抽验 PASS · 测号 D340Spot · 证据 `/workspace/tmp/d340-d339-hub-help-spot/` · 未改开关 · ≠关观察。*
+*D340 · D339 hub/help 薄抽 · **总控已签 PASS · 关清** · 测号 D340Spot · 未改开关 · ≠关观察。*

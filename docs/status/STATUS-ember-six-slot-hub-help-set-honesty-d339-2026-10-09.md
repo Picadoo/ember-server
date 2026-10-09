@@ -2,7 +2,7 @@
 
 **日期：** 2026-10-09（上海时间）  
 **上游：** tip [`STATUS-ember-next-hard-debt-six-slot-hub-help-set-honesty-need-design-2026-10-09.md`](STATUS-ember-next-hard-debt-six-slot-hub-help-set-honesty-need-design-2026-10-09.md) @ `027322ef` · DESIGN [`DESIGN-ember-six-slot-hub-help-set-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-hub-help-set-honesty-2026-10-09.md)  
-**裁决：** **已批 A · 批 M · D339** · 总控授权同号 TrMenu 施工（显示 only）  
+**裁决：** **已批 A · 批 M · D339** · 总控授权同号 TrMenu 施工（显示 only） · **D340 薄抽 PASS · 关清**  
 **版本：** **docs + `ember_hub.yml` + `ember_help.yml` only** · jar / ×0.97 / `set_bonus` / enabled / migrate / bv / K3 / `ember_set` / `ember_p1_gear` / `ember_p1_armor` / `ember_hub_legacy` **未动**
 
 ## 人话
@@ -47,6 +47,10 @@
 
 ×0.97 · set_bonus / enabled / migrate · bv · jar · K3 施工 · 关观察 · `ember_set.yml` · `ember_p1_gear.yml` · `ember_p1_armor.yml` · `ember_hub_legacy.yml` · 样本 R / Pack6 / 天赋 / 灰印
 
+## 总控旁注（2026-10-09 · D340）
+
+**D339 薄抽 PASS · 关清**——线上活菜单 S0–S6 全绿（STATUS [`STATUS-ember-six-slot-d339-hub-help-spot-d340-2026-10-09.md`](STATUS-ember-six-slot-d339-hub-help-spot-d340-2026-10-09.md) @ `7d560c39`）。DESIGN §2.6 玩家面可见性已闭合。**不改** 本号文案 / 开关 / jar / bv。**≠关观察**（满窗仍须 ≥2026-10-10 17:40 CST）。不抢 K3。
+
 ---
 
-*D339 批 A·M · tip `027322ef` · 显示 only · ≠关观察 · 观察期薄窗。*
+*D339 批 A·M · tip `027322ef` · 显示 only · **D340 薄抽 PASS · 关清** · ≠关观察 · 观察期薄窗。*
