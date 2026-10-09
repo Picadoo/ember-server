@@ -48,14 +48,14 @@ public final class EmberShortService {
      */
     public static SettleResult applyGrants(EmberRunMaps.MapDef m, EmberRunRules.Ledger l, String runId,
             PlayerData pd, int rewardedBefore, boolean firstClearPaid, String dayKey, long now) {
-        final boolean fresh = l.get(runId, EmberShortRules.G_CLEAR_COIN) == null
-                && l.get(runId, EmberShortRules.G_PRACTICE) == null;
+        String mapKey = m != null && m.key != null ? m.key : EmberShortRules.KEY;
+        final boolean fresh = l.get(runId, EmberShortRules.gClearCoin(mapKey)) == null
+                && l.get(runId, EmberShortRules.gPractice(mapKey)) == null;
         int cap = m != null && m.shortDailyCap > 0 ? m.shortDailyCap : EmberShortRules.DAILY_CAP;
         String claim = m != null && m.shortClaim != null && !m.shortClaim.isEmpty() ? m.shortClaim : EmberShortRules.CLAIM;
         String ver = m != null && m.contentVersion != null ? m.contentVersion : "v1";
-        String mapKey = m != null ? m.key : EmberShortRules.KEY;
         List<EmberRunRules.Grant> grants = fresh
-                ? EmberShortRules.settleGrants(rewardedBefore, cap, firstClearPaid)
+                ? EmberShortRules.settleGrants(mapKey, rewardedBefore, cap, firstClearPaid)
                 : CollectionsEmpty();
         boolean pays = fresh && EmberShortRules.paysReward(rewardedBefore, cap);
         List<EmberRunRules.Row> changed = new ArrayList<EmberRunRules.Row>();
@@ -105,7 +105,7 @@ public final class EmberShortService {
         Player p = Bukkit.getPlayer(u);
         if (p != null && p.isOnline()) {
             if (r.fresh && r.pays) {
-                p.sendMessage(P() + "§e短征通关 §7· " + EmberShortRules.rewardLine()
+                p.sendMessage(P() + "§e短征通关 §7· " + EmberShortRules.rewardLine(m.key)
                         + (r.firstClearPaidNow ? " §a（含生涯首通包）" : "")
                         + " §7· " + EmberShortRules.dayLine(r.rewardedAfter, dailyCap(m)));
             } else if (r.fresh) {

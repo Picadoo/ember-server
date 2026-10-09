@@ -81,13 +81,13 @@ public class EmberEconomyTest {
     @Test
     public void idsAreCompleteAndOrdered() {
         List<String> want = new ArrayList<String>();
-        for (int i = 1; i <= 40; i++) want.add(String.format("S%02d", i)); // D391: S40 short sx01; D318: S39; D243: S33–S35; D244: S36–S38
+        for (int i = 1; i <= 41; i++) want.add(String.format("S%02d", i)); // D392: S41 short sx02; D391: S40; D318: S39; D243: S33–S35; D244: S36–S38
         for (int i = 1; i <= 5; i++) want.add("LS" + i);
         for (int i = 1; i <= 19; i++) want.add(String.format("C%02d", i)); // D244: C19 gacha pull
         List<String> got = new ArrayList<String>();
         for (EmberEconomy.Row r : EmberEconomy.all()) got.add(r.id);
         assertEquals(want, got);
-        assertEquals(40, EmberEconomy.sources().size());
+        assertEquals(41, EmberEconomy.sources().size());
         assertEquals(5, EmberEconomy.legacySources().size());
         assertEquals(19, EmberEconomy.sinks().size());
         for (EmberEconomy.Row r : EmberEconomy.all()) {
