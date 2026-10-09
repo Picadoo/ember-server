@@ -1,0 +1,88 @@
+# 短征 sx07 · 烬塔回升（EmberSx07）— MythicMobs 4.11 / MC 1.12.2
+# 依据：docs/design/DESIGN-ember-short-dungeon-sx07-2026-10-10.md §2.2/§2.4（批 A·M · D407）
+# 对照源：EmberSx06（数值同档塔升主题差异）+ EmberSx06RingCast / EmberSx01SentryCast 范式
+# 三房：R1 塔卫+窗廊弩 · R2 精英 · R3 Boss+TowerCast；刷点坐标沿用 Q01/sx01–sx06 惯例（见 STATUS）
+# 键名对齐 short.sx07：Guard / Crossbow（设计「窗廊弩」；1.12 BOW）/ Elite / Warden
+# 禁：改旧七线 Daily；禁改 sx01–sx06；首航不发装备/徽记（薄材料+mmxp）
+
+EmberSx07Guard:
+  # R1 近战塔卫 · 对照 sx06 Guard 48/4
+  Type: ZOMBIE
+  Display: '&c塔卫'
+  Health: 48
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - LEATHER_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberSx07Crossbow:
+  # R1 远程窗廊弩 · 1.12 用 BOW；键名 Crossbow 对齐设计「窗廊弩」与 short.sx07 ranged
+  Type: SKELETON
+  Display: '&c窗廊弩'
+  Health: 32
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberSx07Elite:
+  # R2 精英塔廊督卫 · 对照 sx06 Elite 120/3
+  Type: HUSK
+  Display: '&c塔廊督卫'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.4
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
+
+EmberSx07Warden:
+  # R3 Boss 塔冠守吏 · TowerCast 塔冠坠焰/扫顶柱可读可躲；对照 sx06 Warden HP180；未抬过日更 Boss 210
+  Type: ZOMBIE
+  Display: '&c塔冠守吏'
+  Health: 180
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx07TowerCast} @self ~onTimer:80
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

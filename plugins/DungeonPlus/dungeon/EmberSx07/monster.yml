@@ -1,0 +1,13 @@
+# EmberSx06 同构：怪物由 CoreRpg 运行导演按 ember-v1-runs.yml short.sx07 生成（房间/门/首领/结算）。
+# D407：本文件 idle，禁改回 DP wave（D391 FAIL 教训）。MM EmberSx07* 怪物岗并行。
+# 意向挂表（键号写入 short.sx07 rooms/boss）：
+#   R1 · EmberSx07Guard 塔卫×3 · EmberSx07Crossbow 窗廊弩×2
+#   R2 · EmberSx07Elite 窗廊督卫
+#   R3 boss · EmberSx07Warden 塔冠守吏 + EmberSx07TowerCast（塔冠坠焰/扫顶柱）
+groups:
+  idle:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

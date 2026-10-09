@@ -206,6 +206,9 @@ dungeon-pre-folder:
   # D403 短征 sx06 · 烬环廊（map 本地骨架自 spire_v1；进本键/MM/S45 另号）
   ember_short_sx06:
     "EmberSx06": 1
+  # D407 短征 sx07 · 烬塔回升（map 本地骨架自 spire_v1；进本键/MM/S46 另号）
+  ember_short_sx07:
+    "EmberSx07": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:
