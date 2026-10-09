@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（D308 样本门禁现态旁注 · docs-only · 仍禁开 R）
 
+> **旁注（已关 · 批 A · 批 M · D360）：** tip `1de35881` 已关；总控已批 A·M；STATUS [`STATUS-ember-sample-window-readiness-observe-sync-d360-2026-10-09.md`](STATUS-ember-sample-window-readiness-observe-sync-d360-2026-10-09.md) · D308 DESIGN/STATUS/OP 旁注已落 · **仍全表不得开任一 R** · ≠关观察 ≠开 K3 · 不改周滚/`runs`≥30。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D359 K3 离线预备已落 @ `19ca34f1`（闸关 · **勿复述预备清单**）。D358 菜单诚实波停。禁开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / **开样本 R** / 改 ×0.97。**零玩法。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零 jar / 零开关 / 零 TrMenu** · **仍全表不得开任一 R**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-sample-window-readiness-observe-sync-2026-10-09.md`](../design/DESIGN-ember-sample-window-readiness-observe-sync-2026-10-09.md) · backlog `B-sample-window-readiness-observe-sync`  
+**本窗性质：** tip 已关 · 授权见 D360 STATUS · **零 jar / 零开关 / 零 TrMenu** · **仍全表不得开任一 R**  
+**硬规格（已批 A · 批 M · D360 · 旁注已落 · 仍禁开 R）：** [`DESIGN-ember-sample-window-readiness-observe-sync-2026-10-09.md`](../design/DESIGN-ember-sample-window-readiness-observe-sync-2026-10-09.md) · backlog `B-sample-window-readiness-observe-sync`  
 **打开理由：** D308 门禁表硬约束仍写 **「六槽不做」**，与 Stage2 六槽已 live 观察（D325+ · bv62/set_bonus）**口径分裂**；「当前态」钉在 2026-10-08。需 **docs 旁注/现态刷新**：纠正六槽措辞、对齐观察并行、**维持全表不得开 R**。
 
 ---
@@ -49,4 +51,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · D308 现态旁注 · 仍禁开 R · 勿关窗。*
+*选题 H · tip 已关 · 已批 A·M·D360 · D308 现态旁注已落 · 仍禁开 R · 勿关窗。*

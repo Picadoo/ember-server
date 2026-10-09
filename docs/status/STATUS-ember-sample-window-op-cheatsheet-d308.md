@@ -33,4 +33,4 @@
 | forge R | **不看**破绽行；人感「养不起」+ 经济草稿 | 菜单费用文案再改一版 |
 
 口径与门槛数字以 [`DESIGN-ember-sample-window-readiness-2026-10-08.md`](../design/DESIGN-ember-sample-window-readiness-2026-10-08.md) §2.1 为准。  
-**2026-10-08 当前态：全表不得开。**
+**2026-10-09 当前态：全表不得开。**（Stage2 六槽观察中 ≠ 可开 R · D360 旁注）

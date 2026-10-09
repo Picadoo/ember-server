@@ -1,6 +1,6 @@
 # 余烬 · D308 样本门禁现态旁注（Stage2 观察对齐 · 仍禁开 R）
 
-STATUS=**待批 A**（观察期 · docs-only · **仍全表不得开任一 R** · **≠关观察** · **≠开 K3 live** · **不**改 ×0.97 · **不**复述 D359 预备）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-sample-window-readiness-observe-sync-need-design-2026-10-09.md` · backlog `B-sample-window-readiness-observe-sync` · 真源 D308 [`DESIGN-ember-sample-window-readiness-2026-10-08.md`](DESIGN-ember-sample-window-readiness-2026-10-08.md)
+STATUS=**已批 A · 批 M · D360**（D308 旁注已落 · **仍全表不得开任一 R** · **≠关观察** · **≠开 K3 live** · **不**改 ×0.97 · **不**改周滚/`runs`≥30）· 2026-10-09 · 总控批注 · 上游 tip `1de35881` · backlog `B-sample-window-readiness-observe-sync` · 真源 D308 [`DESIGN-ember-sample-window-readiness-2026-10-08.md`](DESIGN-ember-sample-window-readiness-2026-10-08.md)
 
 > **一句话：** D308 仍写「六槽不做」。荐 **方案 M**：旁注对齐 Stage2 观察现态；**门槛「全表不得开 R」不变**。
 
@@ -101,11 +101,11 @@ STATUS=**待批 A**（观察期 · docs-only · **仍全表不得开任一 R** �
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2 旁注三文件（docs-only）  
+- [x] **批 A：采纳方案 M** → 另号按 §2 旁注三文件（docs-only）（总控已批 · D360）  
 - [ ] 升级 L（重算 telemetry 满周）  
 - [ ] 否决 / 改派  
 
-**总控批注：** （待填）
+**总控批注（2026-10-09 · D360）：** **批 A · 批 M**：按 §2.1–2.3 旁注 D308 DESIGN/STATUS/OP；六槽措辞对齐 Stage2 观察；**门槛数字未改**；**仍全表不得开任一 R**；≠关观察 ≠开 K3 ≠改 ×0.97。
 
 ---
 
@@ -114,5 +114,6 @@ STATUS=**待批 A**（观察期 · docs-only · **仍全表不得开任一 R** �
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · D308「六槽不做」与 Stage2 观察分裂 | 策划执行手 |
+| 2026-10-09 | D360 · 总控批 A·M；三文件旁注已落；仍全表不得开 R | 总控 / 执行手 |
 
-*D308 现态旁注 · **待批 A · 荐 M** · 仍全表不得开 R · ≠关观察 · ≠开 K3。*
+*D308 现态旁注 · **已批 A·M·D360** · 旁注已落 · 仍全表不得开 R · ≠关观察 · ≠开 K3。*
