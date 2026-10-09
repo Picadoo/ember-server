@@ -1,6 +1,6 @@
 # 余烬 · 日更七线菜单「终厅读条可躲」半行统一（施工后诚实宣传 · ≠复述 Cast）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-daily-menu-dodge-half-line-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-daily-menu-dodge-half-line-need-design-2026-10-10.md) · backlog `B-daily-menu-dodge-half-line` · 总控 D379 后内容真债
+STATUS=**已批 A · 批 M · D380 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-daily-menu-dodge-half-line-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-daily-menu-dodge-half-line-need-design-2026-10-10.md) · backlog `B-daily-menu-dodge-half-line` · 总控 D379 后内容真债
 
 > **一句话玩家价值：** 打开日常选线页就能看见「终厅读条可躲」——日刷预期从闷挨改成可读可躲，重刷更敢玩；**不**靠抬体力/掉落，**不**再设计 Cast。
 
@@ -156,7 +156,7 @@ lore:
 
 ## 5. 批注勾选（总控）
 
-- [ ] **批 M**（七键主+灰态半行必做；T 总述可选同批）· **策划荐**  
+- [x] **批 M**（七键主+灰态半行必做；T 总述可选同批）· **总控已批 · D380 已施工**  
 - [ ] **批 M′**（仅七键主 lore；灰态后置）· 可接受但不如 M  
 - [ ] **批 A**（只改顶栏 T / 帮助，不动七键）· **不荐**  
 - [ ] **批 L**（借窗改 Cast / 抬表）· **否决默认**  
@@ -173,6 +173,7 @@ lore:
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M；选题日更七线菜单可躲半行（D374/D379 后置升主） |
+| 2026-10-10 | 总控 · **批 A·M** · D380 TrMenu 七键主+灰态+T 半行已落地 · tip 关 · backlog 已关 |
 
 ---
 

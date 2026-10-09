@@ -34,6 +34,7 @@ Icons:
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
       lore:
         - ''
+        - '§e七线终厅：读条提示后环伤 · 拉开可躲'
         - '§7今日还能进 §f%ember_daily_left% §7次日常（按当前体力）'
         - '§7每日 §f0:00 §7（上海）回满'
         - '§7日常消耗 §e%corerpg_stamina_cost_daily% §7体力'
@@ -60,6 +61,7 @@ Icons:
           lore:
             - ''
             - '§8门廊 → 前厅 → 回廊 → Boss 垫'
+            - '§a终厅 · 读条提示后环伤 · 拉开可躲'
             - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
@@ -76,6 +78,7 @@ Icons:
       lore:
         - ''
         - '§8门廊 → 前厅 → 回廊 → Boss 垫'
+        - '§a终厅 · 读条提示后环伤 · 拉开可躲'
         - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
@@ -101,6 +104,7 @@ Icons:
           lore:
             - ''
             - '§7狭长焦土甬道 · 假岔 · 尽端鼓室'
+            - '§c终厅 · 读条提示后环伤 · 拉开可躲'
             - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
@@ -117,6 +121,7 @@ Icons:
       lore:
         - ''
         - '§7狭长焦土甬道 · 假岔 · 尽端鼓室'
+        - '§c终厅 · 读条提示后环伤 · 拉开可躲'
         - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
@@ -142,6 +147,7 @@ Icons:
           lore:
             - ''
             - '§7多层下阶地窖 · 中厅 · 底层圆厅'
+            - '§8终厅 · 读条提示后环伤 · 拉开可躲'
             - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
@@ -158,6 +164,7 @@ Icons:
       lore:
         - ''
         - '§7多层下阶地窖 · 中厅 · 底层圆厅'
+        - '§8终厅 · 读条提示后环伤 · 拉开可躲'
         - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
@@ -183,6 +190,7 @@ Icons:
           lore:
             - ''
             - '§7淹水运河 · 桥闸横推 · 闸厅 Boss'
+            - '§3终厅 · 读条提示后环伤 · 拉开可躲'
             - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
@@ -199,6 +207,7 @@ Icons:
       lore:
         - ''
         - '§7淹水运河 · 桥闸横推 · 闸厅 Boss'
+        - '§3终厅 · 读条提示后环伤 · 拉开可躲'
         - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
@@ -224,6 +233,7 @@ Icons:
           lore:
             - ''
             - '§7断塔上攀 · 中层环廊 · 顶台 Boss'
+            - '§7终厅 · 读条提示后环伤 · 拉开可躲'
             - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
@@ -240,6 +250,7 @@ Icons:
       lore:
         - ''
         - '§7断塔上攀 · 中层环廊 · 顶台 Boss'
+        - '§7终厅 · 读条提示后环伤 · 拉开可躲'
         - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
@@ -265,6 +276,7 @@ Icons:
           lore:
             - ''
             - '§7冰蓝裂隙 · 冻台横移 · 霜厅 Boss'
+            - '§b终厅 · 读条提示后环伤 · 拉开可躲'
             - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
@@ -281,6 +293,7 @@ Icons:
       lore:
         - ''
         - '§7冰蓝裂隙 · 冻台横移 · 霜厅 Boss'
+        - '§b终厅 · 读条提示后环伤 · 拉开可躲'
         - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
@@ -306,6 +319,7 @@ Icons:
           lore:
             - ''
             - '§7废弃矿轨 · 短支洞 · 机房 Boss'
+            - '§6终厅 · 读条提示后环伤 · 拉开可躲'
             - ''
             - '§7需要 §e%corerpg_stamina_cost_daily% §7体力 · 当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
             - '§c体力不足 · 每日 0:00 回满'
@@ -322,6 +336,7 @@ Icons:
       lore:
         - ''
         - '§7废弃矿轨 · 短支洞 · 机房 Boss'
+        - '§6终厅 · 读条提示后环伤 · 拉开可躲'
         - ''
         - '§7消耗 §e%corerpg_stamina_cost_daily% §7体力'
         - '§7当前 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
