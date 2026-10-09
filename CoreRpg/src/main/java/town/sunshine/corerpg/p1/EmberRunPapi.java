@@ -51,6 +51,8 @@ public final class EmberRunPapi {
         ARMOR,
         /** D395 short day-cap: sx0N_day / sx0N_day_line / sx0N_day_left / sx_day_left_sum */
         SHORT,
+        /** D404 vault balance + recipe gap: vault_* / recipe_gap_* */
+        VAULT,
         /** tail: &lt;map&gt;_&lt;state|open|cleared|name|cost|tier|purpose|fc&gt;, else "" */
         MAP
     }
@@ -100,6 +102,7 @@ public final class EmberRunPapi {
         if (key.startsWith("codex")) return Section.CODEX;
         if (key.startsWith("armor_")) return Section.ARMOR; // D318 (no earlier prefix matches "armor")
         if (isShortDayKey(key)) return Section.SHORT; // D395 short day-cap (before map tail sx0N_*)
+        if (isVaultKey(key)) return Section.VAULT; // D404 vault / recipe gap (before map tail)
         return Section.MAP;
     }
 
@@ -134,6 +137,45 @@ public final class EmberRunPapi {
         if (us != 4) return false;
         String rest = key.substring(5);
         return "day".equals(rest) || "day_line".equals(rest) || "day_left".equals(rest);
+    }
+
+    /** D404: vault_shard|bone|core|blank · recipe_gap_enhance1|upgrade_t2|refine1. */
+    static boolean isVaultKey(String key) {
+        if (key == null) return false;
+        return "vault_shard".equals(key) || "vault_bone".equals(key) || "vault_core".equals(key) || "vault_blank".equals(key)
+                || "recipe_gap_enhance1".equals(key) || "recipe_gap_upgrade_t2".equals(key) || "recipe_gap_refine1".equals(key);
+    }
+
+    /** D404: gap = max(0, need − have); Bukkit-free. */
+    static int recipeGap(int need, long have) {
+        long h = Math.max(0L, have);
+        long n = Math.max(0L, need);
+        long g = n - h;
+        return g <= 0 ? 0 : (int) Math.min(Integer.MAX_VALUE, g);
+    }
+
+    /** D404 %corerpg_p1_recipe_gap_enhance1% — 强化+1 碎片 gap（镜像 enhanceCost(0).shards=4）. */
+    static String recipeGapEnhance1(long shardHave) {
+        EmberUpgradeRules.Cost c = EmberUpgradeRules.enhanceCost(0);
+        int need = c == null ? 0 : c.shards;
+        return String.valueOf(recipeGap(need, shardHave));
+    }
+
+    /**
+     * D404 %corerpg_p1_recipe_gap_upgrade_t2% — T1→T2 多料拼接半行（钉死形态，非拆三键）.
+     * 例 {@code 碎差N·核差M·胚差K}；镜像 upgradeCost(1)=60/12/6.
+     */
+    static String recipeGapUpgradeT2(long shardHave, long coreHave, long blankHave) {
+        EmberUpgradeRules.Cost c = EmberUpgradeRules.upgradeCost(1);
+        int sh = c == null ? 0 : c.shards, co = c == null ? 0 : c.cores, bl = c == null ? 0 : c.blanks;
+        return "碎差" + recipeGap(sh, shardHave) + "·核差" + recipeGap(co, coreHave) + "·胚差" + recipeGap(bl, blankHave);
+    }
+
+    /** D404 可选 %corerpg_p1_recipe_gap_refine1% — 精工0→1 胚/骨拼接（镜像 refineCost(0)=胚3·骨5）. */
+    static String recipeGapRefine1(long blankHave, long boneHave) {
+        EmberUpgradeRules.Cost c = EmberUpgradeRules.refineCost(0);
+        int bl = c == null ? 0 : c.blanks, bo = c == null ? 0 : c.bone;
+        return "胚差" + recipeGap(bl, blankHave) + "·骨差" + recipeGap(bo, boneHave);
     }
 
     /** D144 余烬连战 menu line (weekly reward still open vs. practice only). */
@@ -202,6 +244,7 @@ public final class EmberRunPapi {
             case CODEX: v = codex(p, d, key); break;
             case ARMOR: v = armor(p, key); break;
             case SHORT: v = shortDay(d, key, maps); break;
+            case VAULT: v = vault(p, key); break;
             default: v = null;
         }
         return v != null ? v : map(d, key, maps);
@@ -254,6 +297,32 @@ public final class EmberRunPapi {
         EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(mapKey);
         if (shortEx != null && m != null) return shortEx.dailyCap(m);
         return EmberShortRules.DAILY_CAP;
+    }
+
+    /**
+     * D404 %corerpg_p1_vault_*% / recipe_gap_* — read-only EmberVault.count (仓内含绑定) + UpgradeRules 镜像 gap.
+     * Empty / vault absent → {@code 0} / 拼接零差. Does not change UpgradeRules / vault whitelist.
+     */
+    private String vault(Player p, String key) {
+        long shard = vaultCount(p, EmberUpgradeRules.MAT_SHARD);
+        long bone = vaultCount(p, EmberUpgradeRules.MAT_BONE);
+        long core = vaultCount(p, EmberUpgradeRules.MAT_CORE);
+        long blank = vaultCount(p, EmberUpgradeRules.MAT_BLANK);
+        if ("vault_shard".equals(key)) return String.valueOf(shard);
+        if ("vault_bone".equals(key)) return String.valueOf(bone);
+        if ("vault_core".equals(key)) return String.valueOf(core);
+        if ("vault_blank".equals(key)) return String.valueOf(blank);
+        if ("recipe_gap_enhance1".equals(key)) return recipeGapEnhance1(shard);
+        if ("recipe_gap_upgrade_t2".equals(key)) return recipeGapUpgradeT2(shard, core, blank);
+        if ("recipe_gap_refine1".equals(key)) return recipeGapRefine1(blank, bone);
+        return "";
+    }
+
+    private static long vaultCount(Player p, String niId) {
+        if (p == null || niId == null) return 0L;
+        EmberVault v = EmberVault.get();
+        if (v == null) return 0L;
+        try { return Math.max(0L, v.count(p, niId)); } catch (RuntimeException e) { return 0L; }
     }
 
     /** D306: hub 「今天该打哪」 primary / secondary from real stamina / afk_full / featured / q07. */

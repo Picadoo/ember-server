@@ -48,6 +48,7 @@ public final class EmberRunPapiTest {
         r(ARMOR, "armor_on", "armor_head", "armor_chest_cand", "armor_legs_delta", "armor_boots_fam", "armor_set", "armor_set_active", "armor_set_busy", "armor_sa", "armor_sb", "armor_all", "armor_stash_line"); // D318 + D335 sa/sb
         r(SHORT, "sx01_day", "sx02_day", "sx03_day", "sx04_day", "sx05_day", "sx06_day", "sx01_day_line", "sx02_day_line", "sx03_day_line", "sx04_day_line", "sx05_day_line", "sx06_day_line",
                 "sx01_day_left", "sx02_day_left", "sx03_day_left", "sx04_day_left", "sx05_day_left", "sx06_day_left", "sx_day_left_sum"); // D395+D397+D400+D403
+        r(VAULT, "vault_shard", "vault_bone", "vault_core", "vault_blank", "recipe_gap_enhance1", "recipe_gap_upgrade_t2", "recipe_gap_refine1"); // D404
         r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx03_fc", "sx04_fc", "sx05_fc", "sx06_fc");
     }
 
@@ -68,6 +69,9 @@ public final class EmberRunPapiTest {
         assertEquals(LOADOUT, EmberRunPapi.route("awaken_route"));
         assertEquals(SHORT, EmberRunPapi.route("sx01_day")); // D395 before map tail
         assertEquals(MAP, EmberRunPapi.route("sx01_state"));
+        assertEquals(VAULT, EmberRunPapi.route("vault_shard")); // D404 before map
+        assertEquals(VAULT, EmberRunPapi.route("recipe_gap_upgrade_t2"));
+        assertEquals(VAULT, EmberRunPapi.route("recipe_gap_refine1"));
         assertTrue(EmberRunPapi.isQDone("q04done"));
         assertFalse(EmberRunPapi.isQDone("q10done"));
         assertFalse(EmberRunPapi.isQDone("q04don"));
@@ -82,6 +86,15 @@ public final class EmberRunPapiTest {
         assertTrue(EmberRunPapi.isShortDayKey("sx_day_left_sum"));
         assertFalse(EmberRunPapi.isShortDayKey("sx01_state"));
         assertFalse(EmberRunPapi.isShortDayKey("sx01_day_extra"));
+        assertTrue(EmberRunPapi.isVaultKey("vault_shard"));
+        assertTrue(EmberRunPapi.isVaultKey("vault_bone"));
+        assertTrue(EmberRunPapi.isVaultKey("vault_core"));
+        assertTrue(EmberRunPapi.isVaultKey("vault_blank"));
+        assertTrue(EmberRunPapi.isVaultKey("recipe_gap_enhance1"));
+        assertTrue(EmberRunPapi.isVaultKey("recipe_gap_upgrade_t2"));
+        assertTrue(EmberRunPapi.isVaultKey("recipe_gap_refine1"));
+        assertFalse(EmberRunPapi.isVaultKey("vault_soul"));
+        assertFalse(EmberRunPapi.isVaultKey("held_enhance_lack"));
     }
 
     /** Every %corerpg_p1_*% key the live TrMenu / DP / resource configs use routes to a named section, or is a map field. */
@@ -124,6 +137,21 @@ public final class EmberRunPapiTest {
         assertEquals("", EmberRunPapi.awakenRouteLine(Collections.<String>emptyList()));
         assertEquals("§7路线：A", EmberRunPapi.awakenRouteLine(Collections.singletonList("A")));
         assertEquals("§7路线：A §8（还有 2 条，点开看）", EmberRunPapi.awakenRouteLine(Arrays.asList("A", "B", "C")));
+        // D404 recipe gap (mirror UpgradeRules; upgrade_t2 钉死拼接半行，非拆三键)
+        assertEquals(0, EmberRunPapi.recipeGap(4, 4));
+        assertEquals(0, EmberRunPapi.recipeGap(4, 10));
+        assertEquals(4, EmberRunPapi.recipeGap(4, 0));
+        assertEquals(1, EmberRunPapi.recipeGap(4, 3));
+        assertEquals("4", EmberRunPapi.recipeGapEnhance1(0));
+        assertEquals("0", EmberRunPapi.recipeGapEnhance1(4));
+        assertEquals("0", EmberRunPapi.recipeGapEnhance1(99));
+        assertEquals("1", EmberRunPapi.recipeGapEnhance1(3));
+        assertEquals("碎差60·核差12·胚差6", EmberRunPapi.recipeGapUpgradeT2(0, 0, 0));
+        assertEquals("碎差0·核差0·胚差0", EmberRunPapi.recipeGapUpgradeT2(60, 12, 6));
+        assertEquals("碎差10·核差2·胚差1", EmberRunPapi.recipeGapUpgradeT2(50, 10, 5));
+        assertEquals("胚差3·骨差5", EmberRunPapi.recipeGapRefine1(0, 0));
+        assertEquals("胚差0·骨差0", EmberRunPapi.recipeGapRefine1(3, 5));
+        assertEquals("胚差1·骨差2", EmberRunPapi.recipeGapRefine1(2, 3));
     }
 
     /** EmberRunService keeps only a one-line delegate; no section body is left behind. */
