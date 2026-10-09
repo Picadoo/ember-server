@@ -35,7 +35,7 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · Ember
 
 | 项 | 值 |
 |----|----|
-| tip | _(commit 后填)_ |
+| tip | `13583cfe` |
 | jar | `CoreRpg-1.65.119-d412.local.jar` |
-| sha256 | _(装服后填)_ |
-| Enabling | _(装服后填)_ |
+| sha256 | `fab84c141987b62f66c0042b7984f6c730df1972d9524c69bbb99ebeb847959a` |
+| Enabling | `CoreRpg v1.65.119-d412.local` · play PID 1317630 |
