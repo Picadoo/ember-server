@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（K3 施工闸等待页 · docs-only · 等绿出口 · 不授权部署）
 
+> **旁注（已关 · 批 A · 批 M · D341）：** tip `d3f6e77d` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-k3-build-gate-d341-2026-10-09.md`](STATUS-ember-six-slot-k3-build-gate-d341-2026-10-09.md) · **批 A 仅采纳闸页，≠开闸≠部署** · 开闸须 D338 绿出口已签或另签并行 · 闸关可离线预备禁 live。
+
 > **上游结案：** D340 已关清 D339 hub/help 薄抽 PASS @ `7d560c39`；D338 绿出口模板已批（≠关观察）；K3 **T0‴ PASS 已签**（D328）· **施工/部署仍等 Stage2 绿出口**（≥**2026-10-10 17:40 CST** + 观察另签）或另签并行。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / **本窗 K3 部署** / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零 live 玩法施工。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零 jar / 零熔炼代码进 live** · **批 A ≠ 授权施工**  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-k3-build-gate-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-build-gate-2026-10-09.md) · backlog `B-six-slot-k3-build-gate`  
+**本窗性质：** tip 已关 · 授权见 D341 STATUS · **零 jar / 零熔炼代码进 live** · **本窗不代替开闸**  
+**硬规格（已批 A · 批 M · D341 · 闸页已采纳 · ≠开闸≠部署）：** [`DESIGN-ember-six-slot-k3-build-gate-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-build-gate-2026-10-09.md) · backlog `B-six-slot-k3-build-gate`  
 **打开理由：** D327/D328 已钉「PASS 不自动施工 · 等绿出口」，但**缺一页施工闸等待页**汇总：开闸条件、可离线预备、禁项、与 D338 签字包衔接、开闸后另号施工边界——满窗前后易误把 T0‴ PASS 当成部署令。
 
 ---
@@ -40,7 +42,7 @@ K3 离线门禁已过；观察期诚实债已收；下一刀 docs 是把 **「�
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐 M。
+见 DESIGN 同 slug · **已批 A · 批 M · D341** · 闸页已采纳 · **≠开闸≠部署** · 开闸另号（§2.1）。
 
 ---
 
@@ -50,4 +52,4 @@ K3 离线门禁已过；观察期诚实债已收；下一刀 docs 是把 **「�
 
 ---
 
-*选题 H · 荐 M · 零 live · 等绿出口 · 不授权部署。*
+*选题 H · 已批 A·M·D341 · 零 live · 等绿出口 · 批A≠开闸≠部署。*
