@@ -3,6 +3,7 @@
 # 打开：/ember_p1_forge、主菜单「工坊」或装备页（B2.174）。互换确认按钮 B2.176（§19.1 不需要手打命令）
 # D307：确认/预览同屏嵌本次费用与缺料（PAPI 镜像 UpgradeRules；零改价；分解仍聊天确认）
 # D333：手持甲时养成格灰显/禁命令（held_is_armor）；分解 lore 去「胚料 1/2/3」、对齐白板零头
+# D381：底栏「材料哪来·挂机庭」→ember_p1_afk（产花反向互指；零改价/产量）
 
 Title: '§6余烬 · 锻造'
 
@@ -22,8 +23,13 @@ Layout:
   - '# e u r #'
   - '# Q S D #'
   - '# q s d #'
-  - '#   b  B#'
+  - '# A b  B#'
 # D100 (review #10): every confirm sits directly under its preview (same column); 分解 confirms in chat (one-shot token)
+
+Events:
+  Open:
+    - 'sound: BLOCK_ANVIL_LAND-1-0.6'
+    - 'tell: §8缺料？点「材料哪来」回挂机庭 · 产→仓→本页花'
 
 Icons:
   '#':
@@ -41,6 +47,7 @@ Icons:
         - ''
         - '§e本次：§f%corerpg_p1_held_enhance_cost%'
         - '§c%corerpg_p1_held_enhance_lack%'
+        - '§8材料多从挂机进仓 · 缺料点底栏「材料哪来」'
         - '§8与预览一致'
     actions:
       all:
@@ -326,6 +333,22 @@ Icons:
         - '§7只限普通掉落件；首通和起步件拆不了'
         - '§7甲为白板零头（0.1×阶），非整胚 1/2/3'
         - '§8销毁确认仍走聊天一键（不在菜单硬点）'
+  # D381: 产花反向 · 工坊→挂机庭
+  A:
+    display:
+      material: grass
+      name: '§a材料哪来 · 挂机庭'
+      lore:
+        - ''
+        - '§7挂机六键产 → 仓 → 本页花'
+        - '§7日顶仍 2400 · 魂尘≠挂机'
+        - '§8材料账号绑定进仓后扣本页费用'
+        - ''
+        - '§e➥ §f打开挂机庭'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_afk'
   b:
     display:
       material: arrow

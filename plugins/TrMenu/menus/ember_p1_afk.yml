@@ -103,6 +103,7 @@ Icons:
         - close
         - 'command: hub'
   # D375: 产→花可见跳转（零抬日表）
+# D381: 去哪花 lore +半行「工坊内可回本庭」（反向互指；不重做主格）
   S:
     display:
       material: anvil
@@ -119,6 +120,7 @@ Icons:
         - ''
         - '§e➥ §f打开工坊花材料'
         - '§7旁格「材料仓库」可查仓'
+        - '§8工坊内可回本庭（材料哪来）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'

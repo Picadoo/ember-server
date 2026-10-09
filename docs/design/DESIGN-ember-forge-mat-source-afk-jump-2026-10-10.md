@@ -1,6 +1,6 @@
 # 余烬 · 工坊页「材料哪来」→挂机庭反向跳（产花双向互指 · ≠抬日表）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-mat-source-afk-jump-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-mat-source-afk-jump-need-design-2026-10-10.md) · backlog `B-forge-mat-source-afk-jump` · 总控 D380 后内容真债（挂机/有趣 · 产花反向）
+STATUS=**已批 A · 批 M · D381 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-mat-source-afk-jump-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-mat-source-afk-jump-need-design-2026-10-10.md)（已关） · backlog `B-forge-mat-source-afk-jump` · STATUS [`STATUS-ember-forge-mat-source-afk-jump-d381-2026-10-10.md`](../status/STATUS-ember-forge-mat-source-afk-jump-d381-2026-10-10.md) · 总控批 A·M @`62d5aef2`
 
 > **一句话玩家价值：** 站在工坊缺料或想补账时，能**点一下**回到挂机庭看今日产/层名片——产→花→再产闭环双向可走，回城在线↑；**不**靠抬挂机产量或改工坊价。
 
@@ -49,6 +49,13 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | **L · 抬日表 / 新来源系统 / 改价** | 抬 `daily_kills`/层表，或新「材料获取」大页，或改强化费用 | **否决** — 硬禁抬表；过厚；本债是反向互指不是经济窗 |
 
 **批 A = 采纳方案（荐 M）。批 A ≠ 施工 ≠ 关观察 ≠ 抬挂机表 ≠ 开 R ≠ 开 K3。**
+
+### 批 A 勾选
+
+- [x] **方案 M**（W1a 跳转格 + W1b Open/半行；W1c 仓库半对齐 + W1d 挂机回指同批）
+- [x] 总控批 A @`62d5aef2` · 施工号 **D381**
+- [x] ≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠改价/产量
+
 
 ---
 
@@ -160,7 +167,8 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | 时 | 内容 |
 |----|------|
 | 2026-10-10 | 初稿 · STATUS=待批 A · 荐 M · tip 同学交 · D378 后置升主 |
+| 2026-10-10 | **已批 A · 批 M · D381** · 总控采纳方案 M（W1a+W1b 必做；W1c+W1d 同批）· TrMenu 已落地 · tip 已关 · ≠关观察 ≠抬日表 |
 
 ---
 
-*待批 A · 荐 M · ≠关观察 ≠抬挂机表 ≠开样本 R ≠复述 D375 主交付。*
+*已批 A · 批 M · D381 已施工 · ≠关观察 ≠抬挂机表 ≠开样本 R ≠复述 D375 主交付。*
