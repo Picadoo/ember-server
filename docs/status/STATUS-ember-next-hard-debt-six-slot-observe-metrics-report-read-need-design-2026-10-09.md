@@ -1,12 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 观察指标「报告读什么/不读什么」口径 · docs-only · ≠关观察 · ≠改系数）
 
-> **旁注（待批）：** tip 打开 · DESIGN STATUS=**待批 A** · 荐 **方案 M** · backlog `B-six-slot-observe-metrics-report-read`。
+> **旁注（已关 · 批 A · 批 M · D366）：** tip `b85b72ba` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-observe-metrics-report-read-d366-2026-10-09.md`](STATUS-ember-six-slot-observe-metrics-report-read-d366-2026-10-09.md) · 观察指标报告读法口径已采纳 · OPS 半行已落 · **≠关观察 ≠改系数 ≠开闸 ≠开 R ≠勾选 §2.4**。
 >
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D365 脏 runtime 防误 stage 已落 @ `83f31860`（**≠关观察 · 勿复述**）。D364 值班只读 / D363 勿提前关窗 / D362 K3 禁误读 / D361 白板注记 / D360 样本旁注已落（**勿复述 D360–D365**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1 / 翻 set_bonus / 改日历 / 改 ignore。**零玩法 · 零开开关。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **打开** · **待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠改 ×0.97** · **≠勾选 §2.4** · **≠ stage 脏 runtime**  
-**硬规格（待批 A · 荐 M · ≠关观察 ≠改系数）：** [`DESIGN-ember-six-slot-observe-metrics-report-read-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-metrics-report-read-2026-10-09.md) · backlog `B-six-slot-observe-metrics-report-read`  
+**本窗性质：** tip **已关** · **已批 A·M·D366** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠改 ×0.97** · **≠勾选 §2.4** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 批 M · D366 · 口径已采纳 · ≠关观察 ≠改系数）：** [`DESIGN-ember-six-slot-observe-metrics-report-read-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-metrics-report-read-2026-10-09.md) · backlog `B-six-slot-observe-metrics-report-read`  
 **打开理由：** D326/D327 钉「测什么」、D342/D364 钉「班次/签字复跑查什么」；观察报告里 **档 C / `set_bonus` / ×0.97 / D325 日志行** 的「读什么、不读成什么」仍散落口传。易把「见 ×0.97 / M2 PASS / set_bonus=true」误读成改系数、关窗、开闸或玩家面 KPI。本债只收口**报告读法口径**，**不**改系数、**不**关窗、**不**复述 D360–D365。
 
 ---
@@ -55,4 +55,4 @@
 
 ---
 
-*选题 H · tip 打开 · 待批 A · 观察指标报告读法 · ≠关观察 · ≠改系数 · ≠开闸。*
+*选题 H · tip 已关 · 已批 A·M·D366 · 观察指标报告读法 · ≠关观察 · ≠改系数 · ≠开闸。*
