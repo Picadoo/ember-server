@@ -1,10 +1,12 @@
+> **已关 · 批 A·M · D355 已落地** · 施工 STATUS [`STATUS-ember-six-slot-gear-forge-entry-honesty-d355-2026-10-09.md`](STATUS-ember-six-slot-gear-forge-entry-honesty-d355-2026-10-09.md) · DESIGN 方案 M · gear `f` +「手持护甲：仅可分解（白板零头）；养成随护符」· **未**改 forge 页内/hub 工坊 · **≠关观察** · 不抢 K3 · 未碰 d354-spot。
+
 # 状态 · 下一档硬债选定 · 需策划（装备页工坊入口 Stage2 护甲分解诚实 · docs-only）
 
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D354 gear「成套进度」已施工 @ `7538bbc9`（**测试薄抽中——本窗勿抢 D354 薄抽文件 / 勿交 D354 spot 清单**）。D329–D353 已收。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**硬禁复述：** 附录 · 已 PASS 薄抽 · tip 关闭包 · 钉盘。**零数值（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar** · 施工另号（可只 TrMenu）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-gear-forge-entry-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-gear-forge-entry-honesty-2026-10-09.md) · backlog `B-six-slot-gear-forge-entry-honesty`  
+**硬规格（已批 A · 批 M · D355 已落地）：** [`DESIGN-ember-six-slot-gear-forge-entry-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-gear-forge-entry-honesty-2026-10-09.md) · backlog `B-six-slot-gear-forge-entry-honesty`  
 **打开理由：** D339 已给 **主菜单工坊格** 补「手持护甲：仅可分解（白板零头）」；D333 工坊页内甲灰显/分解 lore 已诚实；但 **装备页工坊入口 `f`** 仍只写「手持要处理的刃或护符再打开」——玩家从装备页进工坊看不到甲可分解、K0 路径。与 hub 口径分裂。
 
 ---

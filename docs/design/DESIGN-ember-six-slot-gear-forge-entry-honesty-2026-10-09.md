@@ -1,6 +1,6 @@
 # 余烬 · 装备页工坊入口 Stage2 护甲分解诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**抢 D354 薄抽）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-gear-forge-entry-honesty-need-design-2026-10-09.md` · backlog `B-six-slot-gear-forge-entry-honesty`
+STATUS=**已批 A · 批 M · D355 已施工**（观察期 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**抢 D354 薄抽 · **不**改 forge 页内/hub 工坊）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-gear-forge-entry-honesty-need-design-2026-10-09.md` · backlog `B-six-slot-gear-forge-entry-honesty` · 施工 STATUS `STATUS-ember-six-slot-gear-forge-entry-honesty-d355-2026-10-09.md`
 
 > **一句话：** D339 hub 工坊已写甲仅分解，装备页入口 `f` 仍只叫刃护符。荐 **方案 M**：+1 行对齐 hub；零数值。
 
@@ -105,11 +105,11 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2.1 改 gear `f`（显示 only）  
+- [x] **批 A：采纳方案 M** → 另号按 §2.1 改 gear `f`（显示 only）  
 - [ ] 升级 L（含 help 旁扫；不荐为本窗必做）  
 - [ ] 否决 / 改派  
 
-**总控批注：** （待填）
+**总控批注：** **已批 A · 批 M · D355** · 同号 TrMenu 已按 §2.1 落地 gear `f` +1 行甲仅分解（对齐 hub D339）· **未**改 forge 页内 / hub 工坊 · **未**碰 `/workspace/tmp/d354-*` · **≠关观察** · 不抢 K3。
 
 ---
 
@@ -118,5 +118,6 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · D354 后菜单扫；工坊入口残留 | 策划执行手 |
+| 2026-10-09 | **已批 A · 批 M · D355** · gear `f` +甲仅分解行 · tip 关 · backlog 对齐 | 总控授权同号施工 |
 
-*gear 工坊入口 Stage2 护甲分解诚实 · **待批 A · 荐 M** · 显示 only · 零数值 · ≠关观察 · 勿抢 D354 薄抽。*
+*gear 工坊入口 Stage2 护甲分解诚实 · **已批 A · 批 M · D355 已施工** · 显示 only · 零数值 · ≠关观察 · 勿抢 D354 薄抽。*
