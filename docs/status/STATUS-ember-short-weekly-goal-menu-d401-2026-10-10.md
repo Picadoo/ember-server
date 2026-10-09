@@ -33,7 +33,7 @@
 | ID | 结果 | 备注 |
 |----|------|------|
 | V6 赛季页+短征选页 | **PASS（菜单）** | 可见可选短征格；点击进真选本；**无**假 ✔；**无**sx06；**无**旧日常窟 |
-| V6b 进度键 | **预留** | `%corerpg_p1_goal_short%` 未挂 live（YAML 注释写明）；键号后改挂 |
+| V6b 进度键 | **已挂** | 见 [`STATUS-ember-short-weekly-goal-papi-menu-d401-2026-10-10.md`](STATUS-ember-short-weekly-goal-papi-menu-d401-2026-10-10.md)；`%corerpg_p1_goal_short%` live |
 | V7 配置纪律 | **PASS** | 未改 afk / stamina / Stage2 / gate_daily / Java / runs.yml weekly_goals |
 | 文案禁 | **PASS** | 不暗示发币/印记/装备；只写外观徽；无旧日常/sx06 |
 | trmenu reload | **PASS** | `良好 \| 72 个菜单已加载 (129 ms)`（**06:28:06 CST**）；RegisterCommands `updateCommands` WARN 为 1.12 已知噪点 |
