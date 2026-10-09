@@ -1,13 +1,13 @@
 # D403 · 短征六本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊 · sx04 烬井螺旋 · sx05 裂谷风廊 · sx06 烬环廊）
-# 日帽同屏：sx01–sx05 挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum）；sx06 day_line 键未 live → 注释预留，禁假写个人 n/3。
+# 日帽同屏：sx01–sx06 挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum，含第六本）；禁假写个人 n/3。
 # 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|…|sx06。
 # 禁：教玩家手打 /dp start；假宣传旧日常窟开放；抬日表文案；假写个人日帽数字。
-# 键（sx01–sx05 live；sx06 进本/日帽键插件另号）：
-#   %corerpg_p1_sx01_day_line% … %corerpg_p1_sx05_day_line%
-#   # %corerpg_p1_sx06_day_line% · 合计扩第六本另号
+# 键（jar 1.65.112-d403.local · tip d96b0dd3 · sx01–sx06 live）：
+#   %corerpg_p1_sx01_day_line% … %corerpg_p1_sx06_day_line%
+#   %corerpg_p1_sx_day_left_sum% · %corerpg_p1_sx0N_day% / day_left
 # 挂点：A/C/E/G/K/M 主 lore + 灰态 · I 说明；update:20。
 # D401：Open/I 半行「本周可选周目标·短征」；进度键 %corerpg_p1_goal_short%。
-# 金额：有奖 80/4/3 · 首通各本略异（sx06 草案=130/6/1）· 体力 30 · 日帽 3 分开。
+# 金额：有奖 80/4/3 · 首通各本略异（sx06=130/6/1）· 体力 30 · 日帽 3 分开。
 
 Title: '§6短征 · 选本'
 
@@ -59,10 +59,8 @@ Icons:
         - '§e霜雾 · %corerpg_p1_sx03_day_line%'
         - '§e烬井 · %corerpg_p1_sx04_day_line%'
         - '§e裂谷 · %corerpg_p1_sx05_day_line%'
-        # D403：sx06 day_line 键未 live → 注释预留，禁假写个人 n/3
-        # - '§e烬环 · %corerpg_p1_sx06_day_line%'
-        - '§e烬环 · §7今日有奖最多 §e3 §7次（与前五本分开计 · 键号后出进度）'
-        - '§7今日剩余有奖合计（五本 live · 第六本计入另号）：§f%corerpg_p1_sx_day_left_sum%'
+        - '§e烬环 · %corerpg_p1_sx06_day_line%'
+        - '§7今日剩余有奖合计（六本）：§f%corerpg_p1_sx_day_left_sum%'
         - '§8不发主线装备/徽记/签名（首航）'
         - ''
         - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
@@ -306,8 +304,7 @@ Icons:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：外环庭→双环廊→环心 · 体力 30（与前五本分开）'
-            # - '§e%corerpg_p1_sx06_day_line%'
-            - '§7今日有奖最多 §e3 §7次（分开计 · 键号后出）'
+            - '§e%corerpg_p1_sx06_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
@@ -316,8 +313,7 @@ Icons:
           lore:
             - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
-            # - '§e%corerpg_p1_sx06_day_line%'
-            - '§7今日有奖最多 §e3 §7次（分开计 · 键号后出）'
+            - '§e%corerpg_p1_sx06_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
     update: 20
     display:
@@ -327,9 +323,7 @@ Icons:
         - ''
         - '§7解锁：§a已通 Q01'
         - '§7消耗：§e30 体力'
-        # D403：day_line 键未 live → 注释预留
-        # - '§e%corerpg_p1_sx06_day_line% §8（与前五本分开计 · 第 4+ 次无结算）'
-        - '§7今日有奖最多 §e3 §7次（与前五本分开计 · 键号后出 · 第 4+ 次无结算）'
+        - '§e%corerpg_p1_sx06_day_line% §8（与前五本分开计 · 第 4+ 次无结算）'
         - '§d名片：§f环扫斩/向心拉扯 · 退进外环龛或离开弧带'
         - '§b本间：§f外环庭 → 双环廊绕行 → 环心终厅'
         - '§7通关：币80 + 碎片4 + 骨尘3（S45）'
