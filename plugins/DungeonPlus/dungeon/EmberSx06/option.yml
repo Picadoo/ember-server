@@ -1,0 +1,24 @@
+# D403 骨架 · 短征 sx06 烬环廊（EmberSx06）— 与 EmberSx05 同构：DP 只建实例，不刷怪不发奖。
+# 地图：ember_short_sx06（本地自 ember_daily_spire_v1 拷贝；烬环廊主题 WE 另号）
+# 进入：只经 CoreRpg（菜单 / corerpg p1 enter sx06）→ 预留体力 30 → 发 P1 通行证再 dp start-console。
+# 房间/门/首领/S45 结算由 CoreRpg（ember-v1-runs.yml short.sx06）；结束走 ember_p1_complete / ember_p1_fail。
+# 首航硬提醒：short.sx06 须含 rooms×3+boss（防 D391 FAIL）。
+
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx06} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx06%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入烬环廊（体力与解锁由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e烬环廊 §7· 短征 · 外环庭→双环廊绕行→环心；清房开门，击败环心守吏后统一结算} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+
+dungeon-area: []
+
+# 结算由 CoreRpg（S45）；禁本文件发旧币表
+dungeon-reward-script: []

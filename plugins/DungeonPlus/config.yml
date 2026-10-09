@@ -203,6 +203,9 @@ dungeon-pre-folder:
   # D400 短征 sx05 · 裂谷风廊（map 本地骨架自 crypt_v1；进本键/MM/S44 另号）
   ember_short_sx05:
     "EmberSx05": 1
+  # D403 短征 sx06 · 烬环廊（map 本地骨架自 spire_v1；进本键/MM/S45 另号）
+  ember_short_sx06:
+    "EmberSx06": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

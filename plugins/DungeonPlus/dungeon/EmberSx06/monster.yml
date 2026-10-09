@@ -1,0 +1,13 @@
+# EmberSx05 同构：怪物由 CoreRpg 运行导演按 ember-v1-runs.yml short.sx06 生成（房间/门/首领/结算）。
+# D403：本文件 idle，禁改回 DP wave（D391 FAIL 教训）。MM EmberSx06* 怪物岗并行（磁盘已有草稿对齐）。
+# 意向挂表（键号写入 short.sx06 rooms/boss）：
+#   R1 · EmberSx06Guard 环卫×3 · EmberSx06Crossbow 环廊弩×2
+#   R2 · EmberSx06Elite 环廊督卫
+#   R3 boss · EmberSx06Warden 环心守吏 + EmberSx06RingCast（环扫斩/向心拉扯）
+groups:
+  idle:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

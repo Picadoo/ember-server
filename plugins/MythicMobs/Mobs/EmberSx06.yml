@@ -1,0 +1,88 @@
+# 短征 sx06 · 烬环廊（EmberSx06）— MythicMobs 4.11 / MC 1.12.2
+# 依据：docs/design/DESIGN-ember-short-dungeon-sx06-2026-10-10.md §2.2/§2.4（批 A·M · D403）
+# 对照源：EmberSx05（数值同档环廊主题差异）+ EmberSx05WindCast / EmberSx01SentryCast 范式
+# 三房：R1 环卫+环廊弩 · R2 精英 · R3 Boss+RingCast；刷点坐标沿用 Q01/sx01–sx05 惯例（见 STATUS）
+# 键名对齐 short.sx06：Guard / Crossbow（设计「环廊弩」；1.12 BOW）/ Elite / Warden
+# 禁：改旧七线 Daily；禁改 sx01–sx05；首航不发装备/徽记（薄材料+mmxp）
+
+EmberSx06Guard:
+  # R1 近战环卫 · 对照 sx05 Guard 48/4
+  Type: ZOMBIE
+  Display: '&c环卫'
+  Health: 48
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - LEATHER_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberSx06Crossbow:
+  # R1 远程环廊弩 · 1.12 用 BOW；键名 Crossbow 对齐设计「环廊弩」与 short.sx06 ranged
+  Type: SKELETON
+  Display: '&c环廊弩'
+  Health: 32
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberSx06Elite:
+  # R2 精英环廊督卫 · 对照 sx05 Elite 120/3
+  Type: HUSK
+  Display: '&c环廊督卫'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.4
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
+
+EmberSx06Warden:
+  # R3 Boss 环心守吏 · RingCast 环扫斩/向心拉扯可读可躲；对照 sx05 Warden HP180；未抬过日更 Boss 210
+  Type: ZOMBIE
+  Display: '&c环心守吏'
+  Health: 180
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx06RingCast} @self ~onTimer:80
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

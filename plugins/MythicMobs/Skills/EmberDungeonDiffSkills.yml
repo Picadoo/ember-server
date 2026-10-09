@@ -270,3 +270,20 @@ EmberSx05WindCast:
   - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.5;speed=0} @Self
   - effect:particles{p=crit;amount=22;hSpread=5;ySpread=0.4;speed=0.02} @Self
   - effect:particles{p=explode;amount=8;hSpread=4;ySpread=0.3;speed=0} @Self
+
+# --- 短征 sx06 · 烬环廊 Boss 环扫斩/向心拉扯（可躲；无 SLOW；范式 WindCast / SentryCast）---
+# 对照：EmberSx05WindCast / EmberSx01SentryCast；主题「环扫斩」：flame+lava 环心弧 + crit 扫线；结算 r5
+# 1.12.2：优先可读伤害圈；禁复杂 pull（jar 不稳）；message 标明退进外环龛或离开弧带
+EmberSx06RingCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&7【烬环】&f环扫斩——&7退进外环龛或离开弧带！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=40;hSpread=5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=lava;amount=18;hSpread=4.5;ySpread=0.4;speed=0} @Self
+  - effect:particles{p=crit;amount=22;hSpread=5;ySpread=0.3;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.85} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=32;hSpread=5;ySpread=0.6;speed=0.02} @Self
+  - effect:particles{p=lava;amount=16;hSpread=5;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=crit;amount=18;hSpread=5;ySpread=0.4;speed=0.02} @Self
