@@ -1,5 +1,7 @@
 本号只读 · ≠关观察 · ≠开 K3
 
+> **【D343 作废旁注】** 本文件为 **覆盖窗口证据 / 事故快照**（`a3fbf2b5`/`60090a7a`）。结论口径 **作废**；以 [`STATUS-ember-six-slot-observe-state-check-rerun-d343-2026-10-09.md`](STATUS-ember-six-slot-observe-state-check-rerun-d343-2026-10-09.md) 复跑为准。历史正文保留不删。
+
 > **路径说明：** 批 A 采纳 STATUS 已占 `STATUS-ember-six-slot-observe-state-check-d342-2026-10-09.md` @ `7dc7b54d`；本文件为**另号只读预检实跑**结果。
 
 
