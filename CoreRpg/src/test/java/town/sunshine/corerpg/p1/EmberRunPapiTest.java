@@ -43,7 +43,7 @@ public final class EmberRunPapiTest {
         r(FESTIVAL, "fest_name", "fest_charm_price", "fest_nosuch");
         r(ABYSS, "abyss_best", "abyss_state", "abyss_t1", "abyss_t10", "abyss_tx");
         r(RAID, "raid_r01", "raid_r03");
-        r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield");
+        r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield", "held_is_armor");
         r(CODEX, "codex_count", "codex_stage_0", "codex_burst_blade_t1", "codexx");
         r(ARMOR, "armor_on", "armor_head", "armor_chest_cand", "armor_legs_delta", "armor_boots_fam", "armor_set", "armor_all", "armor_stash_line"); // D318
         r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null);

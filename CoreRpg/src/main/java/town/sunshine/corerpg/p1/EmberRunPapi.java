@@ -43,7 +43,7 @@ public final class EmberRunPapi {
         ABYSS,
         /** raid_&lt;raid&gt; */
         RAID,
-        /** awaken_route / awaken / awaken_next / set_progress / stats / ehp / blade / charm / D299 next_* / held_next_* / D307 held_*_cost|lack */
+        /** awaken_route / awaken / awaken_next / set_progress / stats / ehp / blade / charm / D299 next_* / held_next_* / D307 held_*_cost|lack / D333 held_is_armor */
         LOADOUT,
         /** codex* */
         CODEX,
@@ -116,7 +116,9 @@ public final class EmberRunPapi {
                 || "held_enhance_cost".equals(key) || "held_enhance_lack".equals(key)
                 || "held_upgrade_cost".equals(key) || "held_upgrade_lack".equals(key)
                 || "held_refine_lack".equals(key) || "held_quality_lack".equals(key)
-                || "held_swap_cost".equals(key) || "held_dismantle_yield".equals(key);
+                || "held_swap_cost".equals(key) || "held_dismantle_yield".equals(key)
+                // D333 工坊手持甲菜单闸：主手可信 P1 甲 → 1，否则 0
+                || "held_is_armor".equals(key);
     }
 
     /** D144 余烬连战 menu line (weekly reward still open vs. practice only). */
@@ -385,6 +387,7 @@ public final class EmberRunPapi {
             case "held_quality_lack": return heldForgeLack(p, "quality");
             case "held_swap_cost": return EmberGearNextHint.swapLine();
             case "held_dismantle_yield": return heldForgeLine(p, "dismantle");
+            case "held_is_armor": return EmberSixPapi.heldIsArmor(heldTrusted(p)); // D333
             default: return l.nextAwakeningHint();
         }
     }

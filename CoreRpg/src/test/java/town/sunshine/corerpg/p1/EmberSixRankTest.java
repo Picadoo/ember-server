@@ -133,6 +133,21 @@ public class EmberSixRankTest {
         assertEquals("§8这件护甲不能分解", EmberSixPapi.heldArmorLine(m, "dismantle"));
     }
 
+    /** D333: %corerpg_p1_held_is_armor% — armor→1, blade/charm/null→0 */
+    @Test public void heldIsArmorFlag() {
+        assertEquals(EmberRunPapi.Section.LOADOUT, EmberRunPapi.route("held_is_armor"));
+        EmberItemData armor = piece("burst", "chest", 2, 1, 1, 0);
+        EmberItemData blade = piece("burst", "blade", 2, 1, 1, 0);
+        EmberItemData charm = piece("burst", "charm", 2, 1, 1, 0);
+        assertEquals("1", EmberSixPapi.heldIsArmor(armor));
+        assertEquals("0", EmberSixPapi.heldIsArmor(blade));
+        assertEquals("0", EmberSixPapi.heldIsArmor(charm));
+        assertEquals("0", EmberSixPapi.heldIsArmor(null));
+        assertTrue(armor.isArmor());
+        assertFalse(blade.isArmor());
+        assertFalse(charm.isArmor());
+    }
+
     /** staged ember_p1_armor + gear snippet: every placeholder routes to a plugin section; player copy has no command teaching / internal words */
     @Test public void stagedMenuKeysRouteAndHaveNoCommandText() throws java.io.IOException {
         java.nio.file.Path dir = java.nio.file.Paths.get("../docs/design/staged/d318-six-slot/trmenu");

@@ -102,6 +102,11 @@ public final class EmberSixPapi {
         }
     }
 
+    /** D333: forge menu gate — trusted P1 armor in hand → "1", else "0" (empty / blade / charm / null). */
+    public static String heldIsArmor(EmberItemData d) {
+        return d != null && d.isArmor() ? "1" : "0";
+    }
+
     /** forge page lines while holding armor: K0 refusal for every track; dismantle shows the 0.1 × tier tenths */
     public static String heldArmorLine(EmberItemData d, String kind) {
         if ("dismantle".equals(kind)) {
