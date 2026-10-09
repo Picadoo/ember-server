@@ -233,6 +233,11 @@ public final class EmberEconomy {
             .keys("p1_sx08_day").ledger("sx08_clear_", "sx08_fc_", "sx08_practice").model(FULL)
             .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
             .g("fc.coin", 110).g("fc.shard", 6).g("fc.blank", 1).g("daily_cap", 3).done();
+        // D412 短征 sx09：有奖同量级；首通略薄 100/6/1；日帽独立 p1_sx09_day；p1sim 另号。
+        src("S48", "短征通关（sx09）", "EmberShortRules / ember-v1-runs.yml short.sx09", Period.DAY).acc(COIN, SHARD, BONE, BLANK)
+            .keys("p1_sx09_day").ledger("sx09_clear_", "sx09_fc_", "sx09_practice").model(FULL)
+            .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
+            .g("fc.coin", 100).g("fc.shard", 6).g("fc.blank", 1).g("daily_cap", 3).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -370,6 +375,7 @@ public final class EmberEconomy {
         if ("six_armor".equals(key)) return "S39"; // D318 六槽: per-clear armor drop (switch default off)
         if (key.startsWith("sx05_clear_") || key.startsWith("sx05_fc_") || "sx05_practice".equals(key)) return "S44"; // D400 sx05
         if (key.startsWith("sx06_clear_") || key.startsWith("sx06_fc_") || "sx06_practice".equals(key)) return "S45"; // D403 sx06
+        if (key.startsWith("sx09_clear_") || key.startsWith("sx09_fc_") || "sx09_practice".equals(key)) return "S48"; // D412 sx09
         if (key.startsWith("sx08_clear_") || key.startsWith("sx08_fc_") || "sx08_practice".equals(key)) return "S47"; // D410 sx08
         if (key.startsWith("sx07_clear_") || key.startsWith("sx07_fc_") || "sx07_practice".equals(key)) return "S46"; // D407 sx07
         if (key.startsWith("sx04_clear_") || key.startsWith("sx04_fc_") || "sx04_practice".equals(key)) return "S43"; // D397 sx04

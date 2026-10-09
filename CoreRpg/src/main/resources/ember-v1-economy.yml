@@ -158,6 +158,15 @@ sources:
     "fc.shard": 6
     "fc.blank": 1
     daily_cap: 3
+  # D412 短征 sx09（S48）：有奖同量级；首通略薄 100/6/1；日帽独立（p1sim 另号）
+  S48:
+    "clear.coin": 80
+    "clear.shard": 4
+    "clear.bone": 3
+    "fc.coin": 100
+    "fc.shard": 6
+    "fc.blank": 1
+    daily_cap: 3
 
 sinks:
   C01: { stamina: 30 }

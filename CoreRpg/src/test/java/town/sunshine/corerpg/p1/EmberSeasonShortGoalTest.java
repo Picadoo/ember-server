@@ -65,7 +65,7 @@ public class EmberSeasonShortGoalTest {
             assertEquals(1, ((Number) targets.get("raid")).intValue());
             assertEquals(3, ((Number) targets.get("bounty")).intValue());
             assertEquals(2, ((Number) targets.get("core")).intValue());
-            assertEquals(72, ((Number) y.get("balance_version")).intValue());
+            assertEquals(73, ((Number) y.get("balance_version")).intValue());
         }
     }
 

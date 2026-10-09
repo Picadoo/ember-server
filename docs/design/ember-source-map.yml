@@ -113,6 +113,7 @@ content:
   sx06: {mode: short, tier: 1, name: 烬环廊, boss: "EmberSx06Warden", sources: [S45], config: ["ember-v1-runs.yml#short.sx06"]}
   sx07: {mode: short, tier: 1, name: 烬塔回升, boss: "EmberSx07Warden", sources: [S46], config: ["ember-v1-runs.yml#short.sx07"]}
   sx08: {mode: short, tier: 1, name: 错层烬庭, boss: "EmberSx08Warden", sources: [S47], config: ["ember-v1-runs.yml#short.sx08"]}
+  sx09: {mode: short, tier: 1, name: 烬渠跳石, boss: "EmberSx09Warden", sources: [S48], config: ["ember-v1-runs.yml#short.sx09"]}
   afk_t1: {mode: afk, name: 灰坡, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t2: {mode: afk, name: 荒原, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t3: {mode: afk, name: 焦土, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
@@ -725,6 +726,21 @@ sources:
     code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx08_clear_\")"]
     config: ["ember-v1-runs.yml#short.sx08", "ember-v1-economy.yml#sources.S47"]
     notes: "D410 批 A·M；有奖同量级；首通略薄 110/6/1；p1sim 另号；地图 WE / TrMenu 挂键另号（MM/DP idle 已就绪）；日帽 PAPI 扩第八本；sx_fc_* 扩扫 sx08；不抬 afk.tiers / daily_kills；不放开 gate_daily"
+  S48:
+    name: 短征通关（sx09 · 烬渠跳石）
+    econ_row: S48
+    status: live
+    pays: [coin, shard, bone, blank]
+    period: day
+    content: [sx09]
+    drop_table: "rewarded clear (≤3/day Asia/Shanghai p1_sx09_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 100 + shard 6 + blank 1; after daily cap: 0 (sx09_practice marker)"
+    runtime_keys: true
+    grant_keys: [sx09_clear_coin, sx09_clear_shard, sx09_clear_bone, sx09_fc_coin, sx09_fc_shard, sx09_fc_blank, sx09_practice]
+    economy_keys: [S48.clear.coin, S48.clear.shard, S48.clear.bone, S48.fc.coin, S48.fc.shard, S48.fc.blank, S48.daily_cap]
+    counters: [p1_sx09_day]
+    code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx09_clear_\")"]
+    config: ["ember-v1-runs.yml#short.sx09", "ember-v1-economy.yml#sources.S48"]
+    notes: "D412 批 A·M；有奖同量级；首通略薄 100/6/1；p1sim 另号；地图 WE / TrMenu 挂键另号（MM/DP idle 已就绪）；日帽 PAPI 扩第九本；sx_fc_* 扩扫 sx09；不抬 afk.tiers / daily_kills；不放开 gate_daily"
   X04:
     name: 六槽迁移补发（source=migrate，等价换算，不产生新价值）
     econ_row: null

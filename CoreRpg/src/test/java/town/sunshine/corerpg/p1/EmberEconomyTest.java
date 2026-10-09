@@ -81,13 +81,13 @@ public class EmberEconomyTest {
     @Test
     public void idsAreCompleteAndOrdered() {
         List<String> want = new ArrayList<String>();
-        for (int i = 1; i <= 47; i++) want.add(String.format("S%02d", i)); // D410: S47 short sx08; D407: S46; D403: S45; D400: S44; D397: S43; D393: S42; D392: S41; D391: S40; D318: S39; D243: S33–S35; D244: S36–S38
+        for (int i = 1; i <= 48; i++) want.add(String.format("S%02d", i)); // D412: S48 short sx09; D410: S47; D407: S46; D403: S45; D400: S44; D397: S43; D393: S42; D392: S41; D391: S40; D318: S39; D243: S33–S35; D244: S36–S38
         for (int i = 1; i <= 5; i++) want.add("LS" + i);
         for (int i = 1; i <= 19; i++) want.add(String.format("C%02d", i)); // D244: C19 gacha pull
         List<String> got = new ArrayList<String>();
         for (EmberEconomy.Row r : EmberEconomy.all()) got.add(r.id);
         assertEquals(want, got);
-        assertEquals(47, EmberEconomy.sources().size());
+        assertEquals(48, EmberEconomy.sources().size());
         assertEquals(5, EmberEconomy.legacySources().size());
         assertEquals(19, EmberEconomy.sinks().size());
         for (EmberEconomy.Row r : EmberEconomy.all()) {
