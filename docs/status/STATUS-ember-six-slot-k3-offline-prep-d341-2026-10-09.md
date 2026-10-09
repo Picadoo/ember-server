@@ -14,7 +14,7 @@
 |----|-----|
 | 分支名 | `feat/d341-k3-refine-offline` |
 | 基线 | `60090a7a`（origin/main；含 D341 闸页 `e04c79be`） |
-| tip | `e650ed7a` (`e650ed7a6515c000471e671cb2cce3142929771d`) |
+| tip | `5766ae17` (`5766ae178ac8bf77952f4072f492d41484667166`) |
 | main | **未** merge 本号代码（代码留在 feature 分支） |
 
 ## 实现摘要
