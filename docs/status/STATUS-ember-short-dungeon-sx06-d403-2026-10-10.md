@@ -85,4 +85,4 @@
 
 *D403 批 A·M · tip `33001f7a` · 短征 sx06 骨架启动 · 地图本地 spire 壳 · WE/进本键/S45/日帽键/MM 并行 · ≠关观察≠抬日表≠开旧日常闸。*
 
-**本号 tip：** `41ac7417`（地图 README + 六本菜单 + STATUS）· 批 A 旁注 `dd00a1f7` · MM/DP 壳 `7d251df4` · DESIGN tip `33001f7a`
+**本号 tip：** `a540365e`（地图 README + 六本菜单 + STATUS）· 批 A 旁注 `dd00a1f7` · MM/DP 壳 `7d251df4` · DESIGN tip `33001f7a`
