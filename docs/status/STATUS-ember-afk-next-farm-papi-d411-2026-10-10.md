@@ -42,10 +42,10 @@ daily_kills / afk.tiers / 离线% · feel.upgrade_hint* 默认 · gate_daily · 
 
 | 项 | 值 |
 |----|-----|
-| tip | `TIP_PENDING` |
+| tip | `3c59bab5` |
 | jar | `CoreRpg-1.65.119-d411.local.jar` |
-| sha256 | `SHA_PENDING` |
-| Enabling | `CoreRpg v1.65.119-d411.local` |
+| sha256 | `c432e1fceb67eec539671436b0f2ecba6b97cccf85cbe573409656d6792d6f58` |
+| Enabling | `CoreRpg v1.65.119-d411.local` · play PID 1314356 |
 
 ## 下一号
 
