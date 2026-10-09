@@ -1,10 +1,13 @@
 # 状态 · 下一档硬债选定 · 需策划（装备页「成套进度」Stage2 四件套诚实 · docs-only）
 
+> **已关 · 批 A·M · 含软化 · D354 已落地** · 施工 STATUS [`STATUS-ember-six-slot-gear-progress-honesty-d354-2026-10-09.md`](STATUS-ember-six-slot-gear-progress-honesty-d354-2026-10-09.md) · DESIGN 方案 M · gear `P` +armor_set +「刃·护符终点」软化 · **≠关观察** · 不抢 K3 · 未改 `S`/`M`/adventure。
+
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D353 绿出口附录续写已落 @ `9f8c2013`（**≠关观察**）。D329–D352 主路径 / 次入口 / help 改名已收。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**硬禁复述：** 附录续写 · 已 PASS 薄抽 · tip 关闭包 · 钉盘 · Pack6/天赋/灰印/样本 R/×0.97/K3 live。**零数值（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar** · 施工另号（可只 TrMenu）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-gear-progress-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-gear-progress-honesty-2026-10-09.md) · backlog `B-six-slot-gear-progress-honesty`  
+**硬规格（已批 A · 批 M · 含软化 · D354 已落地）：** [`DESIGN-ember-six-slot-gear-progress-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-gear-progress-honesty-2026-10-09.md) · backlog `B-six-slot-gear-progress-honesty`  
 **打开理由：** D345 已给冒险「我的进度」补 `%armor_set%`，D346 已给装备页**套装格 `S`** 补四件套行，但同页专用进度书 **`P`「成套进度」** 仍只镜像刃+护符 `set_progress`，并以「主线的终点 = 觉醒 III」收束——**无** `%corerpg_p1_armor_set%`。玩家养成日常点「成套进度」仍像 Stage1 半句。
 
 ---
@@ -46,7 +49,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐 M。
+见 DESIGN 同 slug · STATUS=已批 A · 批 M · 含软化 · D354 已落地。
 
 ---
 
@@ -56,4 +59,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · gear「成套进度」补 armor_set · 勿关窗。*
+*选题 H · **tip 已关 · 批 A·M · 含软化 · D354** · gear「成套进度」已补 armor_set · 勿关观察窗。*

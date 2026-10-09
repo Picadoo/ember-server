@@ -1,6 +1,6 @@
 # 余烬 · 装备页「成套进度」Stage2 四件套叙事诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**重开 D345/D346）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-gear-progress-honesty-need-design-2026-10-09.md` · backlog `B-six-slot-gear-progress-honesty`
+STATUS=**已批 A · 批 M · 含软化 · D354 已落地**（观察期 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**重开 D345/D346 `S`/adventure）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-gear-progress-honesty-need-design-2026-10-09.md` · 施工 STATUS `STATUS-ember-six-slot-gear-progress-honesty-d354-2026-10-09.md` · backlog `B-six-slot-gear-progress-honesty`
 
 > **一句话：** D345/D346 已补冒险进度与装备套装格，但同页 **「成套进度」`P`** 仍只写觉醒终点。荐 **方案 M**：+1 行 `%armor_set%`（可选软化终点句）；零数值。
 
@@ -105,13 +105,13 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2.1 改 `ember_p1_gear`「成套进度」`P`（显示 only）  
+- [x] **批 A：采纳方案 M** → 另号按 §2.1 改 `ember_p1_gear`「成套进度」`P`（显示 only）  
   - [ ] 勾选：最小（只 +armor_set 一行）  
-  - [ ] 勾选：含软化「主线的终点」→「刃·护符终点」  
+  - [x] 勾选：含软化「主线的终点」→「刃·护符终点」  
 - [ ] 升级 L（不荐）  
 - [ ] 否决 / 改派  
 
-**总控批注：** （待填）
+**总控批注：** **批 A · 批 M · 含软化** · 同号 D354 已落地 gear `P`：`set_progress` 后 +1 行 `%corerpg_p1_armor_set%`；「主线的终点」→「刃·护符终点」· `trmenu reload` · **≠关观察** · 不抢 K3 · 未改同页 `S`/`M` / adventure · jar/set_bonus/bv/CoreRpg live yml **未动**
 
 ---
 
@@ -120,5 +120,6 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 菜单扫后主交付；D353 后玩家面残留 | 策划执行手 |
+| 2026-10-09 | 批 A·M · **含软化** · D354 落地 gear `P` +armor_set + 终点句软化 · tip 关 · ≠关观察 | 总控委派 executor |
 
-*gear「成套进度」Stage2 叙事诚实 · **待批 A · 荐 M** · 显示 only · 零数值 · ≠关观察 · 不抢 K3。*
+*gear「成套进度」Stage2 叙事诚实 · **已批 A·M · 含软化 · D354 已落地** · 显示 only · 零数值 · ≠关观察 · 不抢 K3。*
