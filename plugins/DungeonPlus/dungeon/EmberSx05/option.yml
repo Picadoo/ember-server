@@ -1,0 +1,24 @@
+# D400 骨架 · 短征 sx05 裂谷风廊（EmberSx05）— 与 EmberSx04 同构：DP 只建实例，不刷怪不发奖。
+# 地图：ember_short_sx05（本地自 ember_daily_crypt_v1 拷贝；裂谷风廊主题 WE 另号）
+# 进入：只经 CoreRpg（菜单 / corerpg p1 enter sx05）→ 预留体力 30 → 发 P1 通行证再 dp start-console。
+# 房间/门/首领/S44 结算由 CoreRpg（ember-v1-runs.yml short.sx05）；结束走 ember_p1_complete / ember_p1_fail。
+# 首航硬提醒：short.sx05 须含 rooms×3+boss（防 D391 FAIL）。
+
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx05} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx05%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入裂谷风廊（体力与解锁由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e裂谷风廊 §7· 短征 · 从崖口过窄桥；清房开门，击败风心守吏后统一结算} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+
+dungeon-area: []
+
+# 结算由 CoreRpg（S44）；禁本文件发旧币表
+dungeon-reward-script: []
