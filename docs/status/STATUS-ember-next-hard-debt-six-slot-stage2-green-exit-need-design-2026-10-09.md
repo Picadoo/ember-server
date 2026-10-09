@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 观察绿出口签字包 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D338）：** tip `6927ef32` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-stage2-green-exit-d338-2026-10-09.md`](STATUS-ember-six-slot-stage2-green-exit-d338-2026-10-09.md) · **批 A 仅采纳模板，≠关观察** · 满窗≥2026-10-10 17:40 CST 另号复制 §2 签字 · 不授权 K3/样本 R · 关观察≠关 Stage1。
+
 > **上游结案：** D337 D12-②-C 跨 10 **PASS 已关清** @ `2c999fab`；D336 三态复测 PASS；D329–D333 玩家面诚实已落。Stage2 观察执行中（D326 · 绿出口**另签** · 不早于 **2026-10-10 17:40 CST**）。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / 拧 set_bonus / K3 部署 / 动 F / 样本 R。**零 live 玩法施工。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar/yml 玩法** · **本窗不代替关观察签字**  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-stage2-green-exit-2026-10-09.md`](../design/DESIGN-ember-six-slot-stage2-green-exit-2026-10-09.md) · backlog `B-six-slot-stage2-green-exit`  
+**本窗性质：** tip 已关 · 授权见 D338 STATUS · **零代码 / 零价表 / 零 jar/yml 玩法** · **本窗不代替关观察签字**  
+**硬规格（已批 A · 批 M · D338 · 模板已采纳 · ≠关观察）：** [`DESIGN-ember-six-slot-stage2-green-exit-2026-10-09.md`](../design/DESIGN-ember-six-slot-stage2-green-exit-2026-10-09.md) · backlog `B-six-slot-stage2-green-exit`  
 **打开理由：** D326 §4 要求关观察号写入必抽证据路径，但满窗前**无单页签字包**汇总日历门槛 + M1–M9 证据指针 + 观察期后诚实债旁注 + 签字栏；证据散落在 D327/D325/D332/D337/D336 等多份 STATUS——绿出口另签时易漏、易误把本包当授权开 K3。
 
 ---
@@ -37,7 +39,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐 M。
+见 DESIGN 同 slug · **已批 A · 批 M · D338** · 模板已采纳 · **≠关观察** · 满窗另号复制 §2 签字。
 
 ---
 
