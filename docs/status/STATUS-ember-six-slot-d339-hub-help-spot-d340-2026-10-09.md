@@ -1,59 +1,50 @@
-# 状态 · D340：D339 hub/help 落地薄抽清单（批 A·M · 授权测试抽测）
+# 余烬 · D340：D339 hub/help 落地薄抽（S0–S6）· 线上活菜单验收
 
-**日期：** 2026-10-09（上海时间）  
-**上游：** tip [`STATUS-ember-next-hard-debt-six-slot-d339-hub-help-spot-need-design-2026-10-09.md`](STATUS-ember-next-hard-debt-six-slot-d339-hub-help-spot-need-design-2026-10-09.md) @ `86e0f813` · DESIGN [`DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md`](../design/DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md)  
-**裁决：** **已批 A · 批 M · D340** · 总控采纳薄抽清单 · **授权另号测试**执行 S0–S6  
-**版本：** **docs only**（DESIGN · tip 旁注 · backlog · 本 STATUS）· jar / ×0.97 / `set_bonus` / enabled / migrate / bv / K3 / TrMenu / hub·help 文案 **未动** · **本号未跑实机** · **≠关观察**
+- **性质：观察期薄抽验 · 显示/菜单可见性 · 未改菜单 / 未动开关 / 未换 jar / 未关观察**
+- 上游施工：[`STATUS-ember-six-slot-hub-help-set-honesty-d339-2026-10-09.md`](STATUS-ember-six-slot-hub-help-set-honesty-d339-2026-10-09.md) · 菜单 tip **`2ba73e97`** · `trmenu reload` 已做
+- DESIGN：[`DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md`](../design/DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md) §2 · 批 A tip **`6369b8c1`** · DESIGN tip **`86e0f813`**
+- 现态：bv**62** · `enabled=true` · `migrate=true` · `set_bonus=true` · play PID **580488** · jar **`1.65.101-d335.local`** sha256 `2bd11b903c…850f`
+- 测号：`D340Spot`（经代理 25565）；**未动真人档**；login/proxy/MariaDB 未动
+- 证据：`/workspace/tmp/d340-d339-hub-help-spot/`（主结果 `99-results.json`；另有 `d340-d339-hub-help-spot.tgz`）
+- 执行：2026-10-09 20:49–20:51 CST
+- **结论：PASS（S0–S6 全绿）**
 
 ## 人话
 
-D339 hub/help 四件套叙事已落地（静态 H1–H4 PASS · `trmenu reload` 已做），但 DESIGN §2.6 要求的**打开窗口薄抽**尚无 live 证据。本号只批薄抽 checklist、授权测试另号跑 S0–S6；**不重开文案**；零改 yml/开关；不提前关观察；不抢 K3。
+测号进服打开 `/ember`：装备格已见「护甲四件套」且 PAPI 解析为「先让刃与护符同族」（非空、无「后续开放」、未激活不静态谎称 −3%）；工坊格有「手持护甲：仅可分解（白板零头）」且刃/护符养成句仍在。帮助「怎么玩」「三套装」两层叙事（族觉醒 vs 四件套受伤 −3%）齐全。点击装备→「余烬 · 装备」、工坊→「余烬 · 锻造」、帮助可关。抽后三开关/bv/play PID 未动。
 
-## 批注要点
+## 验收表（DESIGN §2.2）
 
-| 项 | 口径 |
-|----|------|
-| 采纳 | DESIGN §2 薄抽清单为唯一真源（方案 M） |
-| 执行 | **另号测试**跑 S0–S6；测号/管理号；**不碰真人档** |
-| 文案 | **不重开** hub/help 文案施工；失败另号回派菜单岗 |
-| 范围 | 只验 D339 落地可见性；不重跑 D336 三态主轨 |
-| live | **零改** jar / TrMenu yml / ×0.97 / set_bonus / bv |
-| 观察 | **≠关观察**（满窗仍须 ≥2026-10-10 17:40 CST） |
-| K3 | **不抢**（施工仍等绿出口） |
-| 旁注 | PASS 后可旁注回写 D339 STATUS / D338 签字包附录 |
+| # | 项 | 结果 | 证据 |
+|---|----|------|------|
+| **S0** | 基线三开关 + bv62 + jar tip | **PASS** | `true/true/true` · bv=62 · jar `1.65.101-d335.local` · PID 580488 · `00-precheck.json` |
+| **S1** | hub 装备格：护甲四件套 + armor_set 解析；无后续开放；未激活不静态谎称 −3% | **PASS** | lore `§8护甲四件套：§f§7先让刃与护符同族`；无 `%…%` 残留；无「后续开放」；值侧无 −3%。`10-hub.json` |
+| **S2** | hub 工坊格：「手持护甲：仅可分解（白板零头）」；刃护符养成句仍在 | **PASS** | 甲句 + `手持刃或护符：强化 / 升阶 / …`。`10-hub.json` |
+| **S3** | help 怎么玩：族觉醒 + 四件套 −3% 两层 | **PASS** | `刃+护符同族 = 族觉醒；再穿同族 T2+ 甲≥2 = 四件套（受伤 −3%）`。`30-help.json` |
+| **S4** | help 三套装：四件套 −3%/不进 B/H + 指向套装/装备/护甲 | **PASS** | 焚烬/烬爆/炽愈保留；`受伤 −3%，不进面板 B/H`；`详情：主菜单 → 套装 / 装备 / 护甲`。`30-help.json` |
+| **S5** | 点击烟：装备→gear；工坊→forge；帮助可关 | **PASS** | 标题「余烬 · 装备」「余烬 · 锻造」「余烬 · 帮助」；帮助可关。`20-gear-click.json` / `21-forge-click.json` / `30-help.json` |
+| **S6** | 不动复核：本号未改开关/文案 | **PASS** | 抽后仍 `true/true/true` · bv62 · PID 580488；hub/help 目标句仍在。`90-endstate.json` |
 
-## 改动（本号）
+## 手法与注记
 
-| 文件 | 改动 |
-|------|------|
-| `DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md` | STATUS→已批 A·M·D340；勾批 A；总控批注；变更记录 |
-| tip `…-d339-hub-help-spot-need-design-…` | 旁注已关 · 硬规格→已批 A·D340 |
-| backlog `B-six-slot-d339-hub-help-spot` | → **已批 A · 清单已采纳 · 待测试执行** |
-| 本 STATUS | 批 A · 授权测试抽测 |
-| jar / CoreRpg / TrMenu / 开关 / bv | **未动** |
+- mineflayer `D340Spot` + `lib/proxy-login`；脚本 `d340-spot.js`（`menu-lore-dump.js` 思路：`/ember` dump → 点装备/工坊/帮助）
+- 静态 `rg` 辅证：`00-static.txt`（与 live 一致）
+- **未**改 yml / jar / set_bonus / bv；login/proxy/MariaDB 未动
+- 可选 D339 抽验并入本号正式验收；证据目录用 `d340-d339-hub-help-spot/`（非旧 `d339-hub-help-spot/`）
+- **≠关观察**（满窗仍须 ≥2026-10-10 17:40 CST）；**不抢 K3**
 
-## 派给测试（另号）
+## 结束态
 
-执行 DESIGN §2.2：
-
-| ID | 焦点 |
-|----|------|
-| S0 | 基线：三开关 + bv + jar tip（与观察期钉死一致） |
-| S1 | hub 装备格：`护甲四件套` + `%armor_set%` 非空；无「后续开放」；未激活不静态谎称 −3% |
-| S2 | hub 工坊格：「手持护甲：仅可分解」类句；刃护符养成句仍在 |
-| S3 | help「怎么玩」：族觉醒 **与** 四件套（受伤 −3%）两层 |
-| S4 | help「三套装」：族被动保留 + 四件套 −3% / 不进 B/H + 指向 |
-| S5 | 点击烟：装备→`ember_p1_gear`；工坊→`ember_p1_forge`；帮助可关 |
-| S6 | 抽后开关/bv 未改 |
-
-**绿出口（测试号）：** S0–S6 PASS + 证据目录（例 `/workspace/tmp/d339-hub-help-spot/`）→ 总控另号签 **D339 薄抽 PASS**（可旁注 D339 / D338 附录）。  
-**中止：** PAPI 空 / 文案未进窗口 → 记 STATUS 回派菜单岗；**不**自动改 yml。  
-**不**因本清单提前关观察 / 开 K3。
-
-## 不动
-
-×0.97 · set_bonus / enabled / migrate · bv · jar · hub/help 文案再拧 · K3 施工 · 样本 R / Pack6 / 天赋 / 灰印 · 本号实机 · 提前关观察
+| 项 | 值 |
+|----|-----|
+| set_bonus / enabled / migrate | true / true / true |
+| balance_version | 62 |
+| play PID | 580488 |
+| jar | 1.65.101-d335.local · sha256 `2bd11b903c703163ec201075793b34b53c9d9e04a524a6ac85f2461bee9e850f` |
+| 菜单 tip（D339） | 2ba73e97 |
+| 批 A tip（D340 docs） | 6369b8c1 |
+| DESIGN tip | 86e0f813 |
 
 ---
 
-*D340 批 A·M · tip `86e0f813` · docs-only · 授权另号测试 S0–S6 · 不重开文案 · ≠关观察 · 观察期薄窗。*
+*D340 薄抽验 PASS · 测号 D340Spot · 证据 `/workspace/tmp/d340-d339-hub-help-spot/` · 未改开关 · ≠关观察。*
