@@ -1,10 +1,10 @@
 # 余烬 · 枢纽「今日可追」旁轨（生活·使魔·工坊 · ≠抬日表）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-hub-chase-side-track-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-hub-chase-side-track-need-design-2026-10-10.md) · backlog `B-hub-chase-side-track` · 总控 D376 后内容真债（日路由旁轨加厚）
+STATUS=**已批 A · 批 M · D377 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-hub-chase-side-track-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-hub-chase-side-track-need-design-2026-10-10.md) · backlog `B-hub-chase-side-track` · 总控 D376 后内容真债（日路由旁轨加厚）
 
 > **一句话玩家价值：** 打开枢纽「今天该打哪」，除了打本/挂机，还能看见「体力空档可追：生活·使魔 / 材料可去工坊花」——旁轨目标一屏可感，拉长在线趣味，**不**靠抬挂机产量或改体力。
 
-> **批 A = 采纳方案（荐 M）。批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 重写 D306 战斗主推荐。**
+> **已批 A · 批 M · D377 已施工。** 批 A ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 重写 D306 战斗主推荐。
 
 ---
 
@@ -43,7 +43,7 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | **M · 决策卡旁轨行 + 轻跳（荐）** | H 卡「今日四态」下加「今日可追·旁轨」1～2 行；可选条件轻跳生活/工坊；**不改**战斗 `route_*` 主逻辑 | **荐** — 对齐总控①；复用 D373–D376 真闭环；零经济 |
 | **L · 新「每日旁轨」玩法 / 抬体力或挂机表** | 新模式次数、抬日表「补偿旁轨」 | **否决** — 硬禁；过厚；本债是决策可见化 |
 
-**批注勾选意向：** 批 **M**（W1a+W1b 必做；W1c/W1d 可选）。**否决 L。**
+**批注勾选：** ✅ **M**（W1a+W1b+W1c+W1d 同号落地）。**否决 L。**
 
 ---
 
@@ -73,7 +73,7 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **待批 A · docs-only** |
+| 本窗 | **已批 A · D377 已施工（仅 TrMenu）** |
 | 施工 | 批 A 后总控另派；预期 **仅 TrMenu**（零 Java，除非总控另要 `route_*` 旁轨 PAPI——**本荐不做新 PAPI**） |
 | 观察 | **≠关观察**；**≠改 ×0.97 / set_bonus**；**≠开 K3 live** |
 | D306 | 战斗四态与主推荐**保留**；本债只加旁轨行 |
@@ -126,7 +126,8 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | 时 | 内容 |
 |----|------|
 | 2026-10-10 | 初稿 · STATUS=待批 A · 荐 M · tip 同学交 |
+| 2026-10-10 | **已批 A · 批 M · D377** · W1a/W1b/W1c/W1d 同号落地 · tip/backlog 关 |
 
 ---
 
-*待批 A · 荐 M · ≠关观察 ≠抬挂机表 ≠开样本 R · 批 A ≠ 施工。*
+*已批 A · 批 M · D377 已施工 · ≠关观察 ≠抬挂机表 ≠开样本 R。*

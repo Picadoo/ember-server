@@ -22,11 +22,13 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §e今天：§f%corerpg_p1_route_pri%'
     - 'tell: §8%corerpg_p1_route_sec%'
+    - 'tell: §8旁轨：生活·使魔 / 工坊见「今天该打哪」'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:
 
   # D306 枢纽「今天该打哪」日路由决策卡（方案 M · 零经济）
+  # D377：旁轨「今日可追」行 + 右键轻跳生活/工坊（左键主语义不动）
   H:
     update: 20
     icons:
@@ -47,11 +49,18 @@ Icons:
             - '§a挂机：§f%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
             - '§8体力不足：优先挂机/补给，不假开主线'
             - ''
-            - '§e➥ §f打开挂机庭'
+            - '§d今日可追：§a钓鱼兑魂尘养使魔 · §7材料可去工坊'
+            - '§8真入口：补给·生活（兑/孵）· 工坊（花材料）'
+            - ''
+            - '§e➥ §f左键：打开挂机庭'
+            - '§e➥ §f右键：补给·生活'
         actions:
-          all:
+          left:
             - 'sound: BLOCK_NOTE_PLING-1-1'
             - 'menu: ember_p1_afk'
+          right:
+            - 'sound: BLOCK_NOTE_PLING-1-1'
+            - 'menu: ember_life'
       - condition: 'check papi %corerpg_p1_afk_full% >= 1'
         priority: 2
         display:
@@ -70,11 +79,18 @@ Icons:
             - '§a挂机：§f满 · 去冒险 §7· 今日 %corerpg_p1_afk_today%'
             - '§8层名片仍在挂机页（不盖过满额→冒险）'
             - ''
-            - '§e➥ §f去冒险'
+            - '§d今日可追：§7工坊花材料 · 生活·使魔'
+            - '§8真入口：工坊（花材料）· 补给·生活（兑/孵）'
+            - ''
+            - '§e➥ §f左键：去冒险'
+            - '§e➥ §f右键：打开工坊'
         actions:
-          all:
+          left:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'menu: ember_p1_adventure'
+          right:
+            - 'sound: BLOCK_ANVIL_USE-1-1'
+            - 'menu: ember_p1_forge'
     display:
       material: compass
       name: '§e今天该打哪'
@@ -90,11 +106,18 @@ Icons:
         - '§a挂机：§f%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
         - '§8推荐对齐真实体力/精选/挂机/Q07 · 未解锁不推深渊/团本'
         - ''
-        - '§e➥ §f打开冒险页'
+        - '§d今日可追：§7生活·使魔（魂尘）· 工坊花材料'
+        - '§8真入口：补给·生活（兑/孵）· 工坊（花材料）'
+        - ''
+        - '§e➥ §f左键：打开冒险页'
+        - '§e➥ §f右键：补给·生活'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_adventure'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_life'
 
   # D177 rev 2 挂机庭（P1）：按主线首通开放四层，自动战斗；币 + 经验 + 账号绑定材料，每日 2400 只
   Z:
