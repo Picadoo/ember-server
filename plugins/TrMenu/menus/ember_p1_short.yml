@@ -1,5 +1,5 @@
-# D392 · 短征双本选页（sx01 烬门哨岗 · sx02 锈灯栈道）
-# 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|sx02。
+# D393 · 短征三本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊）
+# 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|sx02|sx03。
 # 禁：教玩家手打 /dp start；假宣传旧日常窟开放；抬日表文案。
 
 Title: '§6短征 · 选本'
@@ -17,14 +17,14 @@ Options:
 Layout:
   - '#########'
   - '#  I  S #'
-  - '#  A C  #'
+  - '# A C E #'
   - '#  B    #'
   - '####Z####'
 
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 · Q01 后 · 各体力30 · 日有奖帽分开计'
+    - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 · Q01 后 · 各体力30 · 日有奖帽分开计'
     - 'tell: §8独立短本 · 不是旧日常窟 · 材料进仓去工坊'
 
 Icons:
@@ -41,10 +41,10 @@ Icons:
       lore:
         - ''
         - '§7独立短本（§f不是§7旧日常窟）'
-        - '§7两本并列：§f烬门哨岗 §7/ §f锈灯栈道'
+        - '§7三本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊'
         - '§7各三房 · 约 5～8 分钟手感 · 终厅可读可躲'
         - '§7通关有币/碎片/骨尘 → 仓库 → 工坊花'
-        - '§8两本日有奖帽分开计 · 各最多 3 次/日'
+        - '§8三本日有奖帽分开计 · 各最多 3 次/日'
         - '§8不发主线装备/徽记/签名（首航）'
         - ''
         - '§8旧日常窟仍收起 · 勿找 ember_daily'
@@ -132,14 +132,55 @@ Icons:
         - '§7日有奖帽：§f最多 3 次/日 §8（与烬门分开计）'
         - '§d名片：§f灯塔扫线/落点 · 拉开或侧移'
         - '§b本间：§f抬升栈台 → 分叉灯桥 → 灯塔垫'
-        - '§7通关草案：币75 + 碎片3 + 骨尘5（S41 · 结算另号）'
+        - '§7通关：币80 + 碎片4 + 骨尘3（S41）'
         - '§7生涯首通另加薄包（略薄于烬门）'
+        - ''
+        - '§e➥ §f左键：进本（队长点）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter sx02'
+        - close
+
+  E:
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7霜雾闸廊 §8（需本人 Q01 首通）'
+          lore:
+            - ''
+            - '§c未解锁：先通主线 Q01 灰烬庭院'
+            - '§7解锁后：雾廊+双闸室+霜窖 · 体力 30 · 日有奖帽 3（与前两本分开）'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7霜雾闸廊 §8（体力不足）'
+          lore:
+            - ''
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7挂机/补给后再来 · 勿假开'
+    update: 20
+    display:
+      material: packed ice
+      name: '§6霜雾闸廊 §7· 短征 sx03'
+      lore:
+        - ''
+        - '§7解锁：§a已通 Q01'
+        - '§7消耗：§e30 体力'
+        - '§7日有奖帽：§f最多 3 次/日 §8（与烬门/锈灯分开计）'
+        - '§d名片：§f霜雾楔/冻圈 · 侧移或拉开'
+        - '§b本间：§f雾廊 → 双闸室（顺序开闸） → 霜窖终厅'
+        - '§7通关草案：币70 + 碎片5 + 骨尘3（S42 · 结算另号）'
+        - '§7生涯首通另加薄包（略薄于前两本）'
         - ''
         - '§e➥ §f左键：进本（队长点；进本键另号就绪后生效）'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'command: corerpg p1 enter sx02'
+        - 'command: corerpg p1 enter sx03'
         - close
 
   B:
