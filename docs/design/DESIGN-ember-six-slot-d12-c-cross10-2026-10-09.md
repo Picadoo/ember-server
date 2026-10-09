@@ -1,6 +1,6 @@
 # 余烬 · D12-②-C 跨 10 整胚补测清单（决策页）
 
-STATUS=**已批 A · 批 M · D337**（采纳补测清单 · **另号测试**执行 C0–C4 · 禁 admin 冒充 drop · 不重跑 A–G · 零改公式 · 不挡观察 · 不抢 K3）· 2026-10-09 · 总控批注 · 上游 tip `ccebafea`
+STATUS=**已批 A · 批 M · D337 · 实机 PASS · 关清**（采纳补测清单 · 测试 C0–C4 已交 · **总控签 D12-②-C PASS · 关清** · 禁 admin 冒充 drop · 不重跑 A–G · 零改公式 · 不挡观察 · 不抢 K3）· 2026-10-09 · 总控批注 · 上游 tip `ccebafea` · 实机 STATUS [`STATUS-ember-six-slot-d12-c-cross10-d337-2026-10-09.md`](../status/STATUS-ember-six-slot-d12-c-cross10-d337-2026-10-09.md)
 
 > **一句话：** 关清 D12-②-C——连续分解掉落甲使胚零头**跨 10 十分位 → 恰好多 1 整胚**。荐 **方案 M**（docs-only 补测 checklist）。主路径 A/B/D/E/F/G 已 PASS，**不重跑**。
 
@@ -9,7 +9,7 @@ STATUS=**已批 A · 批 M · D337**（采纳补测清单 · **另号测试**执
 | # | 来源 | 口径 |
 |---|------|------|
 | E1 | [`DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md`](DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md) §2.2 **D12-②-C** | T1×10 或 T2×5 → 整胚 +1、零头正确；浮点错账/丢零头=中止 |
-| E2 | [`STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md`](../status/STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md) | A/B/D/E/F/G **PASS**；**C=NA**（仅 2×T1，零头=2）；总控签 PASS（C=NA · 跨 10 另号可补） |
+| E2 | [`STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md`](../status/STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md) | A/B/D/E/F/G **PASS**；原 **C=NA**；**C 已由 D337 关清**（C0–C4 PASS @ `2c999fab`） |
 | E3 | `EmberUpgradeRules.armorDismantleTenths` / `addTenths` | drop 甲 → +`tier` 十分位；`total/10` 整胚、`total%10` 余零头（整数，禁浮点累加） |
 | E4 | T1 §1.4 / D318 | 白板 ×0.1；**白板经济模型未覆盖**（报告首行必写） |
 | E5 | D336 | 四件套三态复测 PASS——**本窗无关菜单**，不夹带 |
@@ -62,7 +62,7 @@ STATUS=**已批 A · 批 M · D337**（采纳补测清单 · **另号测试**执
 | 运维 | 线上时不碰真人；DB 只读核零头/整胚 |
 | 总控 | 另号签「D12-②-C PASS」或失败回派 |
 
-**绿出口：** C0–C4 PASS + 报告含「白板经济模型未覆盖」→ **关清 D12-②-C**（可旁注回写 D332 STATUS / backlog）。  
+**绿出口：** C0–C4 PASS + 报告含「白板经济模型未覆盖」→ **关清 D12-②-C**（可旁注回写 D332 STATUS / backlog）。**已签：** 实机 C0–C4 PASS · **总控签 D12-②-C PASS · 关清**（2026-10-09 · D337 @ `2c999fab`）。  
 **不**因本清单改 ×0.97 / set_bonus / 开 K3 / 重开主路径。  
 **失败中止：** ×1.0 整胚、双失、非 drop 冒充、错账 → 停测报总控；**不**自动改代码。
 
@@ -90,6 +90,7 @@ STATUS=**已批 A · 批 M · D337**（采纳补测清单 · **另号测试**执
 ## §4 批注栏
 
 - [x] **批 A：采纳方案 M（本补测清单）** → 另号测试执行 C0–C4（总控已批 · D337）
+- [x] **D12-②-C PASS · 关清**（总控签 · 2026-10-09 · 实机 STATUS @ `2c999fab`）
 - [ ] 升级 L（强制真人线上）
 - [ ] 否决 / 改派
 
@@ -103,5 +104,6 @@ STATUS=**已批 A · 批 M · D337**（采纳补测清单 · **另号测试**执
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D332 C=NA / D336 PASS | 策划执行手 |
 | 2026-10-09 | D337 · 总控批 A·M；采纳跨 10 补测清单；授权另号测试执行 C0–C4 | 总控 |
+| 2026-10-09 | D337 · **总控签 D12-②-C PASS · 关清**；C0–C4 PASS @ `2c999fab`；旁注 D332/backlog C 已关清；不挡观察；零改公式 | 总控 |
 
-*D12-②-C 补测 · 已批 A·M·D337 · 跨 10 整胚 · 白板模型未覆盖 · 零改公式 · 测另号。*
+*D12-②-C 补测 · 已批 A·M·D337 · **实机 PASS · 关清已签** · 跨 10 整胚 · 白板模型未覆盖 · 零改公式。*

@@ -1,12 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（D12-②-C 跨 10 整胚补测清单 · docs-only）
 
-> **旁注（已关 · 批 A · 批 M · D337）：** tip `ccebafea` 已关；总控已批 A·M；授权 STATUS [`STATUS-ember-six-slot-d12-c-cross10-d337-2026-10-09.md`](STATUS-ember-six-slot-d12-c-cross10-d337-2026-10-09.md) · **另号测试**执行 C0–C4 · 禁 admin 冒充 drop · 不重跑 A–G · 不挡观察。
+> **旁注（已关 · 批 A · 批 M · D337 · **实机 PASS · 关清已签**）：** tip `ccebafea` 已关；总控已批 A·M；实机 STATUS [`STATUS-ember-six-slot-d12-c-cross10-d337-2026-10-09.md`](STATUS-ember-six-slot-d12-c-cross10-d337-2026-10-09.md) · **总控签 D12-②-C PASS · 关清**（C0–C4 @ `2c999fab`）· 2026-10-09。
 
 > **上游结案：** D336 装备/护甲四件套三态复测 **PASS** @ `600c008b`；D332 主路径 **PASS（C=NA）**（跨 10 另号可补）@ `3e803266` / 实机 STATUS；D333 工坊手持甲诚实已落。Stage2 观察中（绿出口不早于 **2026-10-10 17:40 CST**）。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / 拧 set_bonus / K3 部署 / 动 F / 样本 R。**零 live 玩法施工（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** tip 已关 · 授权见 D337 STATUS · **零代码 / 零价表 / 零 live jar/yml 玩法**  
-**硬规格（已批 A · 批 M · D337 · 待测试执行）：** [`DESIGN-ember-six-slot-d12-c-cross10-2026-10-09.md`](../design/DESIGN-ember-six-slot-d12-c-cross10-2026-10-09.md) · backlog `B-six-slot-d12-c-cross10`  
+**硬规格（已批 A · 批 M · D337 · 实机 PASS · 关清已签）：** [`DESIGN-ember-six-slot-d12-c-cross10-2026-10-09.md`](../design/DESIGN-ember-six-slot-d12-c-cross10-2026-10-09.md) · backlog `B-six-slot-d12-c-cross10`  
 **打开理由：** D12-②-C「零头跨 10 → 整胚 +1」在 D332 因样件不足记 **NA**；总控已明示另号可补关清，但缺**可执行补测 checklist**（样件门槛、记账读数、中止条件）。本窗只交清单，测另号。
 
 ---
@@ -34,7 +34,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · **已批 A · 批 M · D337** · 另号测试执行 C0–C4。
+见 DESIGN 同 slug · **已批 A · 批 M · D337** · 实机 C0–C4 已交 · **总控签 D12-②-C PASS · 关清**。
 
 ---
 
