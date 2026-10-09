@@ -1,14 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D408 · 挂机满额→短征可追分支 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx08）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D408** · tip `191b845f` · 指针 DESIGN [`DESIGN-ember-afk-full-short-chase-2026-10-10.md`](../design/DESIGN-ember-afk-full-short-chase-2026-10-10.md) · 满额 F 左键仍去冒险 · 右键→短征选页 · lore sx_day_left_sum + 体力30 诚实 · Open/I 满额半行 · **施工另派 TrMenu** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠sx08 ≠开 R/K3 ≠拆 D285**。下文为交稿原文，保留备查。
->
-> **【D408 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **施工另派 TrMenu · 已批/施工中** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx08** · **≠拆 D285** · **≠ stage 脏 runtime**
+> **【已关 · 批 A·M · D408 · 已落地】** tip `191b845f` · DESIGN [`DESIGN-ember-afk-full-short-chase-2026-10-10.md`](../design/DESIGN-ember-afk-full-short-chase-2026-10-10.md) · 施工 STATUS [`STATUS-ember-afk-full-short-chase-d408-2026-10-10.md`](STATUS-ember-afk-full-short-chase-d408-2026-10-10.md) · 满额 F 左冒险/右短征 + Open/I 半行 + 体力&lt;30 诚实 tell · **TrMenu 已落地** · **≠关观察 ≠抬日表 ≠sx08 ≠开 R/K3 ≠拆 D285 ≠派测**。下文为交稿原文，保留备查。
 >
 > **上游结案：** 总控【催 D408 tip】· D406 合计挂齐；D405 PASS；D407 sx07 施工中 → 请交**下一内容向 tip**（有趣/日更/挂机；**sx08 等 D407 PASS**）。禁抬日表/假开旧日常/开R·K3/关观察。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D408** · **施工另派 TrMenu** · docs-only  
-**硬规格（已批 A · 方案 M · D408 · 施工另派 TrMenu）：** [`DESIGN-ember-afk-full-short-chase-2026-10-10.md`](../design/DESIGN-ember-afk-full-short-chase-2026-10-10.md) · backlog `B-afk-full-short-chase`（**已批/施工中**）  
+**本窗性质：** tip **已关 · 批 A·M · 已落地** · D408  
+**硬规格（已批 A · 方案 M · D408 · 已落地）：** [`DESIGN-ember-afk-full-short-chase-2026-10-10.md`](../design/DESIGN-ember-afk-full-short-chase-2026-10-10.md) · backlog `B-afk-full-short-chase`（**已批·已落地**）· STATUS [`STATUS-ember-afk-full-short-chase-d408-2026-10-10.md`](STATUS-ember-afk-full-short-chase-d408-2026-10-10.md)  
 **打开理由：** 挂机庭满额（`afk_full`）F 格只推「去冒险 / 主线本」，短征产品（sx01–sx07）与日帽合计键已齐，但**挂机结束态菜单零短征可追**——枢纽/冒险已有短征入口（D399），挂机玩家盯着的满额 CTA 仍断链；拉长「挂满→再刷短征」会话。sx08 禁交；D404–D406 / sx07 施工中禁复述。
 
 ---
@@ -69,7 +67,7 @@
 
 ---
 
-*选题挂机满额→短征可追分支 · tip 旁注已关 · 已批 A·方案 M · D408 · 设计待批关闭 · 施工另派 TrMenu · ≠关观察 ≠抬挂机表 ≠sx08 ≠拆 D285。*
+*选题挂机满额→短征可追分支 · tip 已关 · 批 A·M · 已落地 · D408 · ≠关观察 ≠抬挂机表 ≠sx08 ≠拆 D285。*
 
 ---
 
@@ -79,3 +77,4 @@
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题挂机满额→短征可追 · DESIGN 待批 A·荐 M |
 | 2026-10-10 | **旁注已关** · 总控批 A·M · D408 · 设计待批关闭 · **施工另派 TrMenu** · ≠关观察 ≠抬日表 ≠sx08 ≠开 R/K3 ≠拆 D285 |
+| 2026-10-10 | **已落地** · TrMenu W1a/W1b/W1c · ≠派测 |
