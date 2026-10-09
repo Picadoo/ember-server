@@ -1,12 +1,12 @@
 # 余烬 · 挂机→工坊仓材料还差可见化（挂机资源环深化 · ≠抬日表 · ≠sx07）
 
-STATUS=**已批 A · 方案 M · D404** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-forge-mat-gap-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-forge-mat-gap-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-forge-mat-gap-visible`（**已批/施工中**）· **施工另派** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D403 ≠改 UpgradeRules/afk.tiers**
+STATUS=**已批 A · 方案 M · D404 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-forge-mat-gap-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-forge-mat-gap-visible-need-design-2026-10-10.md)（**旁注已关 · 施工中**）· backlog `B-afk-forge-mat-gap-visible`（**已批/施工中**）· 菜单 STATUS [`STATUS-ember-afk-forge-mat-gap-visible-menu-d404-2026-10-10.md`](../status/STATUS-ember-afk-forge-mat-gap-visible-menu-d404-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D403 ≠改 UpgradeRules/afk.tiers**
 
 > **一句话玩家价值：** 打开配方速览（或挂机去哪花）就能看见「仓里现在有多少碎片/骨尘/核心/胚料」，以及对照强化+1 / 升阶代表档**还差多少**——产→花从「约够哪档」推进到「我还差啥」；**不**抬产量、不改价。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx07。**
 >
-> **总控批 A·M · 2026-10-10：** 采纳方案 M（vault 四材只读 + recipe_gap_enhance1 / upgrade_t2 · refine1 可选同批 + 速览挂键 + 挂机半行）；**施工另派**；≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3。
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（vault 四材只读 + recipe_gap_enhance1 / upgrade_t2 · refine1 可选同批 + 速览挂键 + 挂机半行）；**菜单 W1c/W1d/W1e 本号壳** · **插件 W1a/W1b 另派**；键未 live 前菜单注释预留禁假写；≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3。
 
 ---
 
@@ -62,7 +62,7 @@ STATUS=**已批 A · 方案 M · D404** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a 仓余额四键 + W1b 代表档还差键 + W1c 速览挂键 + W1d 挂机半行；见 §2）
 - [x] 否决 A（只写去仓库）/ L（抬表·改价·全档引擎）/ W（sx07/假开旧日常/假写/空转）
-- [x] 批注：总控批 A·M · 2026-10-10 · D404 · **施工另派** · vault 四材只读 + recipe_gap_enhance1 / upgrade_t2（refine1 可选同批）+ 速览挂键 + 挂机半行 · 零改产量/价表/UpgradeRules · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3
+- [x] 批注：总控批 A·M · 2026-10-10 · D404 · **施工中** · 菜单 W1c/W1d/W1e 本号壳 · 插件 W1a/W1b 另派 · 键未 live 注释预留禁假写 · 零改产量/价表/UpgradeRules · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3
 
 ---
 
@@ -129,7 +129,7 @@ STATUS=**已批 A · 方案 M · D404** · 2026-10-10 · tip [`STATUS-ember-next
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **待批 A · 荐 M** |
+| 本窗 | **已批 A · 方案 M · D404 · 施工中** |
 | 观察 | **≠关观察**；**≠改 ×0.97 / set_bonus**；**≠开 K3 live** |
 | D375/D381/D383/D398 | **保留**；本债补差距感，**不**复述其主交付 |
 | D403 sx06 | **并行施工**；本债不挡、不抢；**≠sx07** |
@@ -173,8 +173,8 @@ STATUS=**已批 A · 方案 M · D404** · 2026-10-10 · tip [`STATUS-ember-next
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机资源环·仓材料还差（兑现 D398 后置）· ≠sx07 |
-| 2026-10-10 | **已批 A · 方案 M · D404** · 总控批注勾选 · **施工另派** · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 |
+| 2026-10-10 | 总控批 A·M · D404 · **施工中** · 菜单 W1c/W1d/W1e 本号壳（键未 live 注释预留）· 插件另派 |
 
 ---
 
-*D404 · 挂机→工坊仓材料还差可见化 · 已批 A·方案 M · 施工另派 · ≠关观察 ≠抬日表 ≠sx07。*
+*D404 · 挂机→工坊仓材料还差可见化 · 已批 A·方案 M · 施工中 · ≠关观察 ≠抬日表 ≠sx07。*

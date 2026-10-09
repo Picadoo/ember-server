@@ -1,4 +1,5 @@
 # D398 · 工坊配方速览（静态镜像 EmberUpgradeRules · ≠改价 ≠抬日表）
+# D404 · 仓内现有 / 代表档还差壳（键未 live · 注释预留 · 禁假写数字）
 # 入口：ember_p1_forge「配方速览」P 格 · 挂机「去哪花」半行指本页
 # 数字照抄 DESIGN-ember-afk-forge-recipe-visible §2.2；日后改表须同步 lore，本窗禁改 Java。
 Title: '§6工坊 · 配方速览'
@@ -15,16 +16,17 @@ Options:
 
 Layout:
   - '#########'
-  - '#  I  K #'
+  - '# C I K #'
   - '# E U R #'
   - '# Q A V #'
-  - '####Z####'
+  - '# G##Z###'
 
 Events:
   Open:
     - 'sound: BLOCK_ANVIL_USE-1-1'
     - 'tell: §e配方速览：§7未持件也能看强化/升阶/精工大概要多少 · 按现网日表对照「约」够哪档 · §8不改产量'
     - 'tell: §8数字镜像工坊规则 · 手持件费用仍以本页预览为准'
+    - 'tell: §8仓内现有/还差格已预留 · 插件键上线后显示真数 · 不假写余额'
 
 Icons:
   '#':
@@ -124,11 +126,11 @@ Icons:
   K:
     display:
       material: chest
-      name: '§3材料在哪看'
+      name: '§3材料仓库'
       lore:
         - ''
         - '§7打开材料仓库查碎片/核心/胚料/骨尘'
-        - '§7本页不新挂余额键 · 仓里数字为准'
+        - '§7旁格「仓内现有」键上线后显示仓合计'
         - ''
         - '§e➥ §f打开材料仓库'
     actions:
@@ -150,6 +152,47 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_afk'
+
+  # D404 W1c：仓内现有（W1a 四键未 live · 注释预留 · 禁假写数字）
+  C:
+    display:
+      material: emerald
+      name: '§a仓内现有'
+      lore:
+        - ''
+        - '§7按现网配方 · 仓内合计（含挂机绑定）'
+        - '§8插件键部署后显示真数 · 不假写余额'
+        # D404：%corerpg_p1_vault_shard% 键未 live — 禁假写
+        - '§7碎片 · 键号后显示仓内数量'
+        # D404：%corerpg_p1_vault_bone% 键未 live — 禁假写
+        - '§7骨尘 · 键号后显示仓内数量'
+        # D404：%corerpg_p1_vault_core% 键未 live — 禁假写
+        - '§7核心 · 键号后显示仓内数量'
+        # D404：%corerpg_p1_vault_blank% 键未 live — 禁假写
+        - '§7胚料 · 键号后显示仓内数量'
+        - ''
+        - '§8魂尘≠挂机仓材 · 旧日常窟仍收起'
+        - '§7也可点「材料仓库」打开仓壳'
+
+  # D404 W1c：代表档还差（W1b gap 键未 live · 注释预留 · 禁假写）
+  G:
+    display:
+      material: redstone
+      name: '§c代表档 · 还差'
+      lore:
+        - ''
+        - '§7对照现网费用 · 仓内合计还差多少'
+        - '§8已够显示 0 / 已够 · 插件键部署后真切'
+        - '§8不保证今天能升阶 · 不加快产量'
+        # D404：%corerpg_p1_recipe_gap_enhance1% 键未 live — 禁假写
+        - '§e强化 +1 §7碎片还差 · 键号后显示（需×4）'
+        # D404：%corerpg_p1_recipe_gap_upgrade_t2% 键未 live — 禁假写
+        - '§e升阶 T1→T2 §7还差 · 键号后显示（碎60·核12·胚6）'
+        # D404：%corerpg_p1_recipe_gap_refine1% 可选同批 · 键未 live — 禁假写
+        - '§6精工 0→1 §7还差 · 键号后显示（胚3·骨5）'
+        - ''
+        - '§8其余档仍看静态表 / 手持件预览缺料'
+        - '§8零改 UpgradeRules · 零改挂机产量'
 
   Z:
     display:

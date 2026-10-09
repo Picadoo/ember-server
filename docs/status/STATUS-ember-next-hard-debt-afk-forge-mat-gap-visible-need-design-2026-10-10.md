@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D404 · 挂机→工坊仓材料还差可见化 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx07）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D404** · tip `110acd63` · 指针 DESIGN [`DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md`](../design/DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md) · **施工另派** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3**。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D404** · tip `110acd63` · 指针 DESIGN [`DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md`](../design/DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md) · **施工中** · 菜单 W1c/W1d/W1e 本号 · 插件 W1a/W1b 另派 · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3**。下文为交稿原文，保留备查。
 >
-> **【D404 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **施工另派 · 已批/施工中** · **零 jar（本策划号）** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D403**。
+> **【D404 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · 菜单本号 · 插件另派 · **零 jar（本菜单号）** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D403**。
 
 > **上游结案：** 总控【催 D404 tip】· D403 sx06 MM 已落、键/菜单施工中 → 请交**下一内容向 tip**（有趣/挂机/日更；**sx07 等 D403 PASS**）。禁抬日表/假开旧日常/开R·K3/关观察。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D404** · **施工另派** · docs-only  
-**硬规格（已批 A · 方案 M · D404 · 施工另派）：** [`DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md`](../design/DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md) · backlog `B-afk-forge-mat-gap-visible`（**已批/施工中**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D404** · **施工中** · 菜单落地中 · docs+TrMenu  
+**硬规格（已批 A · 方案 M · D404 · 施工中）：** [`DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md`](../design/DESIGN-ember-afk-forge-mat-gap-visible-2026-10-10.md) · backlog `B-afk-forge-mat-gap-visible`（**已批/施工中**）· 菜单 STATUS [`STATUS-ember-afk-forge-mat-gap-visible-menu-d404-2026-10-10.md`](STATUS-ember-afk-forge-mat-gap-visible-menu-d404-2026-10-10.md)  
 **打开理由：** D398 配方速览已给**静态 ×N**，但仍看不见**仓里现有多少 / 对照代表档还差多少**——产→花闭环停在「约够哪档」半步；D398/D399/D401 明文后置「余额差还差 PAPI」；sx06 施工中禁交 sx07。
 
 ---
@@ -67,7 +67,7 @@
 
 ---
 
-*选题挂机→工坊仓材料还差 · tip 旁注已关 · 已批 A·方案 M · D404 · 设计待批关闭 · 施工另派 · ≠关观察 ≠抬挂机表 ≠sx07。*
+*选题挂机→工坊仓材料还差 · tip 旁注已关 · 已批 A·方案 M · D404 · 施工中 · ≠关观察 ≠抬挂机表 ≠sx07。*
 
 ---
 
@@ -76,4 +76,5 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题挂机→工坊仓材料还差可见化 · DESIGN 待批 A·荐 M |
-| 2026-10-10 | **旁注已关** · 总控批 A·M · D404 · 设计待批关闭 · **施工另派** |
+| 2026-10-10 | 菜单 executor · W1c/W1d/W1e 壳落地（键未 live 注释预留）|
+| 2026-10-10 | **旁注已关** · 总控批 A·M · D404 · 设计待批关闭 · **施工中** · 菜单本号 |
