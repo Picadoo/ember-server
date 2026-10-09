@@ -1338,8 +1338,33 @@ class Player:
         alt = list(self.armor); alt[i] = new
         a, b = stats(cfg, self.blade, self.charm, lv, None, alt), stats(cfg, self.blade, self.charm, lv, None, self.armor)
         # 4-piece bookkeeping only (no effect in stage 0): prefer the target family on ties
-        if power(cfg, a, kn) > power(cfg, b, kn) * 1.0001 or (power(cfg, a, kn) >= power(cfg, b, kn) * 0.9999
-                                                             and new['fam'] == kn.target and cur['fam'] != kn.target):
+        pa, pb = power(cfg, a, kn), power(cfg, b, kn)
+        take = pa > pb * 1.0001 or (pa >= pb * 0.9999 and new['fam'] == kn.target and cur['fam'] != kn.target)
+        # D328 T0‴ K3 same-slot refine (opt-in SIX['k3_merge']): craft' = max(kept, material); material destroyed
+        # with no blank (白板少分解); quality / family / tier / enhance untouched. If max does not raise craft →
+        # skip merge and fall through to the normal equip / dismantle path (do not destroy for free).
+        if SIX is not None and SIX.get('k3_merge'):
+            if take:
+                kept = dict(new)
+                if cur['f'] > kept['f']:
+                    kept['f'] = cur['f']
+                    self.armor[i] = kept
+                    self.k3_merges = getattr(self, 'k3_merges', 0) + 1
+                    if cur['src'] in ('drop', 'mark') and cur['tier'] >= 1:
+                        self.k3_blank_foregone = getattr(self, 'k3_blank_foregone', 0) + cur['tier'] * float(SIX.get('blank', 1.0))
+                    return
+                self.armor[i] = kept
+                self.dismantle(cur)
+            else:
+                if new['f'] > cur['f']:
+                    self.armor[i] = dict(cur, f=new['f'])
+                    self.k3_merges = getattr(self, 'k3_merges', 0) + 1
+                    if new['src'] in ('drop', 'mark') and new['tier'] >= 1:
+                        self.k3_blank_foregone = getattr(self, 'k3_blank_foregone', 0) + new['tier'] * float(SIX.get('blank', 1.0))
+                    return
+                self.dismantle(new)
+            return
+        if take:
             self.armor[i] = new
             self.dismantle(cur)
         else:

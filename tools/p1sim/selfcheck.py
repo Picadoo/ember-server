@@ -284,5 +284,40 @@ p1sim.SIX = _six0
 check('D316 SIX without follow = D313 weighted hp_def, bit for bit (3000 random sets)', _bad_def == 0, '%d differ' % _bad_def)
 check("D316 follow 'all' + armor of the charm's quality / craft = 2-slot H / M / D / B, bit for bit (3000)", _bad_all == 0, '%d differ' % _bad_all)
 
+# D328 T0‴ K3 same-slot refine (SIX['k3_merge']): craft = max; material destroyed with no blank; q/fam/tier/enh
+# untouched; no-op (max does not raise) keeps the normal dismantle / blank path. Absent flag = bit-identical.
+_six0 = p1sim.SIX
+p1sim.SIX = {'w': _W, 'follow': 'all', 'k3_merge': True}
+_p = p1sim.Player(cfg, p1sim.Knobs(0.5), __import__("random").Random(328))
+_p.armor = [dict(p1sim.item('burst', a, 2), q=2, f=1, src='drop') for a in p1sim.ARMOR_SLOTS]
+_p.blank = 0
+_p.k3_merges = 0
+# keep worn (higher q), merge higher craft from drop → craft 1→3, no blank
+_p.consider_armor(dict(p1sim.item('burst', 'head', 2), q=1, f=3, src='drop'))
+check('D328 k3_merge raises worn craft and skips blank', _p.armor[0]['f'] == 3 and _p.armor[0]['q'] == 2 and _p.blank == 0 and _p.k3_merges == 1,
+      'f=%s q=%s blank=%s merges=%s' % (_p.armor[0]['f'], _p.armor[0]['q'], _p.blank, _p.k3_merges))
+# equip better-q drop (q3 f0 beats worn q1 f3 on qf), merge craft from old into new; no blank
+_p.armor[0] = dict(p1sim.item('burst', 'head', 2), q=1, f=3, src='drop')
+_p.blank = 0
+_p.consider_armor(dict(p1sim.item('burst', 'head', 2), q=3, f=0, src='drop'))
+check('D328 k3_merge into newly equipped piece keeps max craft, q from new', _p.armor[0]['f'] == 3 and _p.armor[0]['q'] == 3 and _p.blank == 0 and _p.k3_merges == 2,
+      'f=%s q=%s blank=%s merges=%s' % (_p.armor[0]['f'], _p.armor[0]['q'], _p.blank, _p.k3_merges))
+# max does not raise → normal dismantle (blank += tier)
+_before = (_p.armor[0]['f'], _p.armor[0]['q'], _p.blank, _p.k3_merges)
+_p.consider_armor(dict(p1sim.item('scorch', 'head', 2), q=0, f=1, src='drop'))  # worse power, lower craft
+check('D328 k3_merge skip when craft would not rise → dismantle for blank',
+      _p.armor[0]['f'] == _before[0] and _p.armor[0]['q'] == _before[1] and _p.blank == _before[2] + 2 and _p.k3_merges == _before[3],
+      'f=%s q=%s blank=%s merges=%s' % (_p.armor[0]['f'], _p.armor[0]['q'], _p.blank, _p.k3_merges))
+# flag off = previous dismantle-on-keep path (blank from discarded)
+p1sim.SIX = {'w': _W, 'follow': 'all'}
+_p2 = p1sim.Player(cfg, p1sim.Knobs(0.5), __import__("random").Random(329))
+_p2.armor = [dict(p1sim.item('burst', a, 2), q=2, f=1, src='drop') for a in p1sim.ARMOR_SLOTS]
+_p2.blank = 0
+_p2.consider_armor(dict(p1sim.item('burst', 'head', 2), q=1, f=3, src='drop'))
+check('D328 without k3_merge still dismantles non-equip for blank (craft stays)',
+      _p2.armor[0]['f'] == 1 and _p2.armor[0]['q'] == 2 and _p2.blank == 2,
+      'f=%s q=%s blank=%s' % (_p2.armor[0]['f'], _p2.armor[0]['q'], _p2.blank))
+p1sim.SIX = _six0
+
 print('\n%d failed' % len(fails))
 sys.exit(1 if fails else 0)
