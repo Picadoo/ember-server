@@ -208,6 +208,11 @@ public final class EmberEconomy {
             .keys("p1_sx03_day").ledger("sx03_clear_", "sx03_fc_", "sx03_practice").model(FULL)
             .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
             .g("fc.coin", 160).g("fc.shard", 8).g("fc.blank", 1).g("daily_cap", 3).done();
+        // D397 短征 sx04：有奖同量级；首通略薄 150/6/1；日帽独立 p1_sx04_day；p1sim 另号。
+        src("S43", "短征通关（sx04）", "EmberShortRules / ember-v1-runs.yml short.sx04", Period.DAY).acc(COIN, SHARD, BONE, BLANK)
+            .keys("p1_sx04_day").ledger("sx04_clear_", "sx04_fc_", "sx04_practice").model(FULL)
+            .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
+            .g("fc.coin", 150).g("fc.shard", 6).g("fc.blank", 1).g("daily_cap", 3).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -343,6 +348,7 @@ public final class EmberEconomy {
         if ("raid_mark".equals(key)) return "S12";
         if ("extra_chest_item".equals(key)) return "S34"; // D243 (G2): the chest's extra gear roll (item row; tag only)
         if ("six_armor".equals(key)) return "S39"; // D318 六槽: per-clear armor drop (switch default off)
+        if (key.startsWith("sx04_clear_") || key.startsWith("sx04_fc_") || "sx04_practice".equals(key)) return "S43"; // D397 sx04
         if (key.startsWith("sx03_clear_") || key.startsWith("sx03_fc_") || "sx03_practice".equals(key)) return "S42"; // D393 sx03
         if (key.startsWith("sx02_clear_") || key.startsWith("sx02_fc_") || "sx02_practice".equals(key)) return "S41"; // D392 sx02
         if (key.startsWith("sx_clear_") || key.startsWith("sx_fc_") || "sx_practice".equals(key)) return "S40"; // D391 sx01

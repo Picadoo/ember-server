@@ -225,7 +225,7 @@ public final class EmberRunPapi {
         EmberShortService shortEx = runs.shortExpedition();
         if ("sx_day_left_sum".equals(key)) {
             int sum = 0;
-            for (String mk : new String[] {"sx01", "sx02", "sx03"}) {
+            for (String mk : new String[] {"sx01", "sx02", "sx03", "sx04"}) {
                 sum += EmberShortRules.dayLeft(rewardedFor(d, maps, shortEx, mk), capFor(maps, shortEx, mk));
             }
             return String.valueOf(sum);
