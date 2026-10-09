@@ -1,0 +1,88 @@
+# 短征 sx03 · 霜雾闸廊（EmberSx03）— MythicMobs 4.11 / MC 1.12.2
+# 依据：docs/design/DESIGN-ember-short-dungeon-sx03-2026-10-10.md §2.2/§2.4（批 A·M @088fd3b7）
+# 对照源：EmberSx02（数值同档霜主题差异）+ EmberFrostNovaCast 范式
+# 三房：R1 巡卒+闸弩 · R2 精英 · R3 Boss+FrostCast；刷点坐标沿用 Q01/sx01/sx02 惯例（见 STATUS）
+# 键名对齐 short.sx03：Patrol / Crossbow（设计「闸弩」；禁 Archer 以免复 sx02 Crossbow≠Archer）/ Elite / Warden
+# 禁：改旧七线 Daily；禁改 sx01/sx02；首航不发装备/徽记（薄材料+mmxp）
+
+EmberSx03Patrol:
+  # R1 近战霜廊巡卒 · 对照 sx02 Guard 48/4
+  Type: ZOMBIE
+  Display: '&b霜廊巡卒'
+  Health: 48
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - LEATHER_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberSx03Crossbow:
+  # R1 远程闸弩 · 1.12 用 BOW；键名 Crossbow 对齐设计「闸弩」与 short.sx03 ranged
+  Type: SKELETON
+  Display: '&b闸弩'
+  Health: 32
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberSx03Elite:
+  # R2 精英霜闸督卫 · 对照 sx02 Elite 120/3
+  Type: HUSK
+  Display: '&b霜闸督卫'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.4
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
+
+EmberSx03Warden:
+  # R3 Boss 霜窖守吏 · FrostCast 雾楔/冻圈可读可躲；对照 sx02 Warden HP180；未抬过日更 Boss 210
+  Type: ZOMBIE
+  Display: '&b霜窖守吏'
+  Health: 180
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx03FrostCast} @self ~onTimer:80
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

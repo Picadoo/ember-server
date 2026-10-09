@@ -1,0 +1,13 @@
+# G04 / EmberSx02 同构：怪物由 CoreRpg 运行导演按 ember-v1-runs.yml short.sx03 生成（房间/门/首领/结算）。
+# D393：本文件 idle，禁改回 DP wave（D391 FAIL 教训）。MM EmberSx03* 另号。
+# 意向挂表（键号写入 short.sx03 rooms/boss）：
+#   R1 · EmberSx03Patrol 霜廊巡卒 · EmberSx03Crossbow 闸弩
+#   R2 · EmberSx03Elite
+#   R3 boss · EmberSx03Warden 霜窖守吏 + Cast（霜雾楔/冻圈）
+groups:
+  idle:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

@@ -194,6 +194,9 @@ dungeon-pre-folder:
   # D392 短征 sx02 · 锈灯栈道（map 本地骨架自 rail_v1；进本键/MM/S41 另号）
   ember_short_sx02:
     "EmberSx02": 1
+  # D393 短征 sx03 · 霜雾闸廊（map 本地骨架自 frost_v1；进本键/MM/S42 另号）
+  ember_short_sx03:
+    "EmberSx03": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

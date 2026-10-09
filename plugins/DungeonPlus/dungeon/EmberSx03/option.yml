@@ -1,0 +1,23 @@
+# D393 骨架 · 短征 sx03 霜雾闸廊（EmberSx03）— 与 EmberSx02 同构：DP 只建实例，不刷怪不发奖。
+# 地图：ember_short_sx03（骨架拷贝另落；霜雾闸廊主题 WE 另号）
+# 进入：只经 CoreRpg（菜单 / corerpg p1 enter sx03）→ 预留体力 30 → 发 P1 通行证再 dp start-console。
+# 房间/门/首领/S42 结算由 CoreRpg（ember-v1-runs.yml short.sx03）；结束走 ember_p1_complete / ember_p1_fail。
+
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx03} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx03%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入霜雾闸廊（体力与解锁由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e霜雾闸廊 §7· 短征 · 走进雾廊开始；清房开门，击败霜窖守吏后统一结算} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+
+dungeon-area: []
+
+# 结算由 CoreRpg（S42）；禁本文件发旧币表
+dungeon-reward-script: []

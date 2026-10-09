@@ -221,3 +221,19 @@ EmberSx02BeaconCast:
   - damage{amount=1.2} @PlayersInRadius{r=5}
   - effect:particles{p=flame;amount=30;hSpread=5;ySpread=0.6;speed=0.02} @Self
   - effect:particles{p=lava;amount=18;hSpread=5;ySpread=0.4;speed=0} @Self
+
+# --- 短征 sx03 · 霜雾闸廊 Boss 霜雾楔/冻圈（可躲；轻 SLOW 对齐 FrostNova）---
+# 对照：EmberFrostNovaCast / EmberSx02BeaconCast；主题「雾楔→冻圈」：cloud 雾压 + crit 落点；结算 r5 + 轻减速
+# 1.12.2 粒子：cloud + crit（禁无效粒子）
+EmberSx03FrostCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&b【霜雾】&f霜雾楔冻圈——&7侧移拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=40;hSpread=4;ySpread=1;speed=0} @Self
+  - effect:particles{p=crit;amount=22;hSpread=3.5;ySpread=0.6;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.6;pitch=0.7} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5}
+  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=crit;amount=24;hSpread=5;ySpread=0.6;speed=0.02} @Self
