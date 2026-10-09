@@ -192,3 +192,16 @@ EmberCryptOathCast:
   - delay 25
   - damage{amount=1.2} @PlayersInRadius{r=5}
   - effect:particles{p=crit;amount=28;hSpread=5;ySpread=0.6;speed=0.02} @Self
+
+# --- 短征 sx01 · 烬门哨岗 Boss 哨长读条（可躲；无 SLOW；范式 FrostNova）---
+# 对照：EmberFrostNovaCast / EmberYardPulseCast；主题粒子 flame（烬门）
+EmberSx01SentryCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&6【烬门】&f哨长蓄力——&7拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=36;hSpread=4;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=crit;amount=18;hSpread=3;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.6;pitch=0.75} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=28;hSpread=5;ySpread=0.6;speed=0.01} @Self

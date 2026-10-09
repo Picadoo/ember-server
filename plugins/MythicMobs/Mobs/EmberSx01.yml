@@ -1,0 +1,86 @@
+# 短征 sx01 · 烬门哨岗（EmberSx01）— MythicMobs 4.11 / MC 1.12.2
+# 依据：docs/design/DESIGN-ember-short-dungeon-p1-reachable-2026-10-10.md §2.3（批 A·M @234dea63）
+# 对照源：EmberDailyFrost / EmberDaily（庭院）数值档 + EmberFrostNovaCast 范式
+# 三房：R1 小怪清场 · R2 精英 · R3 Boss+Cast；地图 ember_short_sx01 刷点坐标由地图/DP 号钉死（本档只 MM）
+# 禁：改旧七线 Daily；首航不发装备/徽记（薄材料+mmxp）
+
+EmberSx01Zombie:
+  # R1 近战尸 · 对照庭院 EmberDailyZombie 45/4
+  Type: ZOMBIE
+  Display: '&6哨岗尸'
+  Health: 45
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberSx01Skeleton:
+  # R1 远程弓骷 · 对照霜晶 EmberDailyFrostSkeleton 弓手；HP/攻贴近庭院档
+  Type: SKELETON
+  Display: '&6哨弓骷'
+  Health: 35
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberSx01Elite:
+  # R2 精英伍长 · 轻压力；HP 介于小怪与 Boss（对照庭院蛮兵下调）
+  Type: HUSK
+  Display: '&6哨岗伍长'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.4
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
+
+EmberSx01Warden:
+  # R3 Boss 烬门哨长 · Cast 可读；对照庭院蛮兵 HP180；首航无装备掉落（设计 §2.5）
+  Type: ZOMBIE
+  Display: '&6烬门哨长'
+  Health: 180
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx01SentryCast} @self ~onTimer:80
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5
