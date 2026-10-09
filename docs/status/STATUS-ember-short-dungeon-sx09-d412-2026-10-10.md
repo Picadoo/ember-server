@@ -8,15 +8,15 @@
 
 ## 人话
 
-批了「烬渠跳石」第九条短征规格。仓里已有九本选页和 DP 本壳；地图在磁盘上从 **深渊白盒**（`ember_abyss`）复制了一份（**非** sx01–sx08 已占的 daily_v1/rail/frost/ash/crypt/spire/tide/elite 同观感），渠岸庭/离散跳石渡渠/对岸终厅还要等 WorldEdit。进本命令、刷怪波次、通关发奖（S48）、日帽键 `%corerpg_p1_sx09_day_line%` / 首通 `%corerpg_p1_sx09_fc%` 还没接——并行岗接着做。选页第九格日帽/首通行**注释预留**（禁假写个人 n/3）。
+批了「烬渠跳石」第九条短征规格。仓里已有九本选页和 DP 本壳；地图在磁盘上从 **深渊白盒**（`ember_abyss`）复制了一份（**非** sx01–sx08 已占的 daily_v1/rail/frost/ash/crypt/spire/tide/elite 同观感），渠岸庭/离散跳石渡渠/对岸终厅还要等 WorldEdit。进本命令、通关发奖（S48）、日帽键 `%corerpg_p1_sx09_day_line%` / 首通 `%corerpg_p1_sx09_fc%` 还没接——并行岗接着做。选页第九格日帽/首通行**注释预留**（禁假写个人 n/3）。
 
 ## 拆号（并行）
 
 | 号 | 内容 | 本号 D412 | 阻塞 / 下一步 |
 |----|------|-----------|----------------|
 | **地图号** | `ember_short_sx09` 渠岸/跳石渡渠/对岸烬台 + 出生/Boss 坐标 | **本地骨架已启**：`cp -a ember_abyss → ember_short_sx09`（~2.9M）；说明见 [`docs/maps/ember_short_sx09-README.md`](../maps/ember_short_sx09-README.md) | **阻塞 WE**：仓/play **无** WorldEdit/FAWE jar；**禁** `git add -f` map。烬渠主题换皮 → 地图岗进服 WE 另号 |
-| **MM 号** | 渠卫/跳石弩/对岸守吏 + `EmberSx09…Cast` | **未交**（本号扫仓无 EmberSx09 MM；DP 壳注释对齐预留） | 怪物岗另号 |
-| **DP+键号** | `EmberSx09` option/monster + `ember-v1-runs` `sx09`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **壳已落** + `config.yml` 登记；**键/S48/rooms 未写** | 插件键号另号 |
+| **MM 号** | 渠卫/跳石弩/对岸守吏 + `EmberSx09…Cast` | **并行已交** @`58f0e791`（本菜单/地图号对齐 DP 壳注释；不重交 MM） | CanalCast 已就绪 |
+| **DP+键号** | `EmberSx09` option/monster + `ember-v1-runs` `sx09`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **壳已落**（与 MM 号同构 @`58f0e791`）+ `config.yml` 登记；**键/S48/rooms 未写** | 插件键号另号 |
 | **插件日帽/首通号** | `%corerpg_p1_sx09_day_line%` / `_fc` + 合计扩第九本 | **注释预留**（菜单未挂假键） | 键号+挂盘另号 |
 | **菜单号** | `ember_p1_short` 九本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M/O/Q 保留 · **T=sx09** · adventure `H` + Open · hub Open/冒险格半指含「跳石」· **day_line/fc 注释预留** | sx01–sx09 选页；全链路另派 |
 | **经济号** | S48 发放 + REG/Economy/source-map +（荐）p1sim | **未动** | 另号金样；草案 80币+4碎+3骨尘；首通另加 100/6/1；**禁**抬挂机表 |
