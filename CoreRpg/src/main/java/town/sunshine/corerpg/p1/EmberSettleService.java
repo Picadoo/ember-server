@@ -211,6 +211,7 @@ public final class EmberSettleService {
             }
             if (m.event) { if (runs.festival() != null) runs.festival().onClear(s, u, runs.cosmetics()); } // D139: no main-line settlement
             else if (m.rush) runs.rush().settle(s, m, u); // D144: marks / 余烬徽 / title only
+            else if (m.shortExpedition) runs.shortExpedition().settle(s, m, u); // D391 S40
             else settleFor(s, m, u);
         }
         s.state = EmberRunSession.COMPLETE;

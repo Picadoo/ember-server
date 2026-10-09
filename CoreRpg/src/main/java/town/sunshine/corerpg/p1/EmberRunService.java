@@ -90,6 +90,7 @@ public final class EmberRunService implements Listener {
     private final EmberLoadoutService loadouts;
     private final EmberRunStore store;
     private final EmberRushService rush;
+    private final EmberShortService shortExpedition;
     private final EmberAbyssService abyss;
     private final EmberPledgeService pledge;
     private final EmberRaidService raid;
@@ -116,6 +117,7 @@ public final class EmberRunService implements Listener {
         this.loadouts = loadouts;
         this.store = new EmberRunStore(plugin, mirror);
         this.rush = new EmberRushService(this);
+        this.shortExpedition = new EmberShortService(this);
         this.abyss = new EmberAbyssService(this);
         this.pledge = new EmberPledgeService(this);
         this.raid = new EmberRaidService(this);
@@ -138,6 +140,7 @@ public final class EmberRunService implements Listener {
     EmberRunStore store() { return store; }
 
     EmberRushService rush() { return rush; }
+    EmberShortService shortExpedition() { return shortExpedition; }
 
     EmberAbyssService abyss() { return abyss; }
 
@@ -2052,7 +2055,7 @@ public final class EmberRunService implements Listener {
                     s.sendMessage(P + "没有可领取的暂存奖励。");
                 return true;
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);

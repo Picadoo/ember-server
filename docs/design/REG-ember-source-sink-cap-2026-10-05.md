@@ -111,6 +111,8 @@
 | S36 | 钓鱼产出（D244，G10；CoreFish） | 鱼 / 宝藏 / 垃圾 NI 件（`fish_ember_*` / `treasure_ember_*` / `junk_ember_*`） | `plugins/CoreFish/config.yml` `category_weights` + `tables`；只进背包，不进 vault 白名单；卖 / 熬药走 C17 | 无周期帽（体力外；靠钓鱼时长） | — | ✗（`EmberEconomy` 登记，`LIFE_ITEM`，标签 only，无金样，无路由） |
 | S37 | 扭蛋券发放（D244，G10；CoreGacha） | 扭蛋券（CoreGacha 钱包） | `CoreGacha/config.yml tickets`：`welcome` 5；当日在线 30 / 90 分钟各 1（`afk_worlds` 不计）；当日委托结算 1 / 3 局各 1；实物券 `ember_gacha_ticket` 右键入包。兑换（币 / 徽）仍是 C16 | 日 | — | ✗（`GACHA_TICKET`，标签 only，无金样） |
 | S38 | 扭蛋抽取产出（D244，G10；CoreGacha） | 外观（badge / tag / aura / pet / show / corerpg 外观店件） | `CoreGacha/gacha.yml items`，只放外观、无属性 | 日（随 C19 抽数） | — | OUT（外观不进战力模型） |
+| S39 | 六槽护甲掉落（D318） | 护甲 1 / 局 | 开关 `gear.six_slot.enabled`；默认关时不发 | `run` | — | △ PART（p1sim SIX） |
+| S40 | 短征通关 sx01（D391） | 币 / 碎片 / 骨尘 / 胚料 | 有奖通关：80 / 4 / 3；生涯首通另加 200 / 8 / 胚料 1；日有奖帽 3（`p1_sx01_day`）；帽后无奖仍可进 | `day` × 3 有奖 | `p1_sx01_day` | ✗（p1sim 另号；E1 `ember-v1-economy.yml` S40） |
 
 ### 2.5 旧来源（O1–O3，S0 后状态）
 
@@ -225,6 +227,7 @@
 
 ## 8. 变更记录
 
+- **D391（2026-10-10）**：新增 **S40 短征通关（sx01）** — 日有奖帽 3 · 有奖包币/碎片/骨尘 · 首通包币/碎片/胚料；不抬 `afk.tiers` / `daily_kills`；不放开 `gate_daily`。
 | 日 | 项 |
 |---|---|
 | 2026-10-05 | D204 初稿：来源 32 + 旧 5、消耗 18、上限表、模型矩阵、S2 规格六条。CoreRpg 不发版（仍 1.65.38 / bv57）。 |

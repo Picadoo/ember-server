@@ -73,14 +73,16 @@ public final class EmberEntryServiceTest {
         EmberRunMaps maps = bundled();
         EmberRunMaps.MapDef rush = maps.byKey("rush");
         assertNotNull(rush);
-        assertTrue(EmberEntryService.variantProblems(false, false, false, "", true, 0).isEmpty());
-        assertTrue(EmberEntryService.variantProblems(true, false, false, "", false, 0).isEmpty());
-        assertEquals(Collections.singletonList("团本没有挑战 / 深渊版本"), EmberEntryService.variantProblems(true, false, false, "", true, 0));
-        assertEquals(Collections.singletonList("活动本没有挑战 / 深渊版本"), EmberEntryService.variantProblems(false, true, false, "", false, 2));
+        assertTrue(EmberEntryService.variantProblems(false, false, false, false, "", true, 0).isEmpty());
+        assertTrue(EmberEntryService.variantProblems(true, false, false, false, "", false, 0).isEmpty());
+        assertEquals(Collections.singletonList("团本没有挑战 / 深渊版本"), EmberEntryService.variantProblems(true, false, false, false, "", true, 0));
+        assertEquals(Collections.singletonList("活动本没有挑战 / 深渊版本"), EmberEntryService.variantProblems(false, true, false, false, "", false, 2));
         assertEquals(Collections.singletonList(rush.rushLabel + "没有挑战 / 深渊版本"),
-                EmberEntryService.variantProblems(rush.raid, rush.event, rush.rush, rush.rushLabel, true, 0));
+                EmberEntryService.variantProblems(rush.raid, rush.event, rush.rush, false, rush.rushLabel, true, 0));
         assertEquals(Arrays.asList("团本没有挑战 / 深渊版本", "活动本没有挑战 / 深渊版本", "X没有挑战 / 深渊版本"),
-                EmberEntryService.variantProblems(true, true, true, "X", true, 1));
+                EmberEntryService.variantProblems(true, true, true, false, "X", true, 1));
+        assertEquals(Collections.singletonList("短征没有挑战 / 深渊版本"),
+                EmberEntryService.variantProblems(false, false, false, true, "", true, 0));
         assertEquals("A 未开放挑战版（需本人首通 Q07）", EmberEntryService.challengeLockedText("A", maps.challenge.requires));
         EmberRunMaps.MapDef q02 = maps.byKey("q02");
         EmberRunMaps.MapDef req = maps.byKey(q02.requires);

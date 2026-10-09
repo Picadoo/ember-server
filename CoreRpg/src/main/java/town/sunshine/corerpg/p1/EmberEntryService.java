@@ -81,12 +81,13 @@ public final class EmberEntryService {
     }
 
     /** raid / event / rush have no challenge or abyss variant (each one line, original order) */
-    static List<String> variantProblems(boolean raid, boolean event, boolean rush, String rushLabel, boolean challenge, int abyss) {
+    static List<String> variantProblems(boolean raid, boolean event, boolean rush, boolean shortExpedition, String rushLabel, boolean challenge, int abyss) {
         List<String> out = new ArrayList<String>();
         boolean variant = challenge || abyss > 0;
         if (raid && variant) out.add("团本没有挑战 / 深渊版本");
         if (event && variant) out.add("活动本没有挑战 / 深渊版本");
         if (rush && variant) out.add(rushLabel + "没有挑战 / 深渊版本");
+        if (shortExpedition && variant) out.add("短征没有挑战 / 深渊版本");
         return out;
     }
 
@@ -112,7 +113,7 @@ public final class EmberEntryService {
 
     /** D94 / D96 / D138: a plain repeatable main-line run (no challenge / abyss / raid / event / rush) */
     static boolean plainMainRun(EmberRunMaps.MapDef m, boolean challenge, int abyss) {
-        return !challenge && abyss == 0 && !m.raid && !m.event && !m.rush;
+        return !challenge && abyss == 0 && !m.raid && !m.event && !m.rush && !m.shortExpedition;
     }
 
     /** P2-8: the challenge weekly rule = this week's rule on the featured map only */
@@ -187,7 +188,7 @@ public final class EmberEntryService {
         final int cost = maps.cost(m);
         String size = partySizeProblem(party.size(), maps.partyMin(m), maps.partyMax(m));
         if (size != null) problems.add(size);
-        problems.addAll(variantProblems(m.raid, m.event, m.rush, m.rushLabel, challenge, abyss));
+        problems.addAll(variantProblems(m.raid, m.event, m.rush, m.shortExpedition, m.rushLabel, challenge, abyss));
         StaminaService st = runs.plugin().getStaminaService();
         if (st == null) problems.add(MSG_NO_STAMINA_SVC);
         for (Player p : party) {
@@ -202,6 +203,9 @@ public final class EmberEntryService {
                 if (why != null) problems.add(why);
             } else if (m.rush) { // D144 / D160 / D174 → EmberRushService (D230)
                 String why = runs.rush().entryProblem(p, d, m);
+                if (why != null) problems.add(why);
+            } else if (m.shortExpedition) { // D391 短征 sx01：Q01 首通；日帽不挡进本
+                String why = runs.shortExpedition().entryProblem(p, d, m);
                 if (why != null) problems.add(why);
             } else if (m.raid) { // P2-5: own Q07 first clear + weekly cap of settled clears (D233 → EmberRaidService)
                 String why = runs.raid().entryProblem(p, d, m);
@@ -328,6 +332,7 @@ public final class EmberEntryService {
                 + " §7正在创建实例……（已预留体力 " + cost + (at.fee > 0 ? " · 余烬币 " + at.fee : "") + "）";
         if (m.rush) return "§c" + m.rushLabel + " §7正在创建实例……（不耗体力 · " + EmberRushService.ruleText(m) + " · "
                 + (EmberRunRules.rushPaysReward(runs.rush().week(runs.dataOf(p.getUniqueId()), p.getUniqueId(), m), m.rushWeekly) ? "§a你本周奖励未领完§7" : "§e你本周已领完，这局是练习（无奖励）§7") + "）";
+        if (m.shortExpedition) return runs.shortExpedition().enteringLine(p, m, cost);
         if (m.event) {
             EmberFestival festival = runs.festival();
             return "§c国庆活动本 §6" + m.name + " §7正在创建实例……（不耗体力 · 今日第 " + (festival.entriesToday(runs.dataOf(p.getUniqueId())) + 1) + "/" + festival.dailyEntries + " 次）";

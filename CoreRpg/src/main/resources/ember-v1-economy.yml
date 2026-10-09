@@ -86,6 +86,15 @@ sources:
   S35:   # 起步包: T0 blade + T0 charm, starter potions = ember-v1.yml starter.heal_potions
     pieces: 2
     potions: 5
+  # D391 短征 sx01（S40）：有奖通关 + 生涯首通；日帽 3；金样对齐 DESIGN 草案（p1sim 另号）
+  S40:
+    "clear.coin": 80
+    "clear.shard": 4
+    "clear.bone": 3
+    "fc.coin": 200
+    "fc.shard": 8
+    "fc.blank": 1
+    daily_cap: 3
 
 sinks:
   C01: { stamina: 30 }

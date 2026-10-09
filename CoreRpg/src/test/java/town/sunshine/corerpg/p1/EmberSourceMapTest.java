@@ -308,21 +308,22 @@ public class EmberSourceMapTest {
         Map<String, Object> runs = config("ember-v1-runs.yml");
         List<String> bad = new ArrayList<String>();
         Set<String> expected = new TreeSet<String>();
-        for (String sec : new String[] {"maps", "raids", "rush"})
+        for (String sec : new String[] {"maps", "raids", "rush", "short"})
             for (Map.Entry<String, Object> e : m(runs.get(sec)).entrySet()) {
                 expected.add(e.getKey());
                 Map<String, Object> cfg = m(e.getValue()), c = m(content.get(e.getKey()));
                 if (c.isEmpty()) { bad.add("ember-v1-runs.yml " + sec + "." + e.getKey() + " missing from content"); continue; }
                 cmp(bad, e.getKey() + ".name", cfg.get("name"), c.get("name"));
                 cmp(bad, e.getKey() + ".tier", cfg.get("tier"), c.get("tier"));
-                if (!"rush".equals(sec)) {
+                if ("rush".equals(sec) || "short".equals(sec)) {
+                    String mode = str(cfg.get("mode"));
+                    String defMode = "rush".equals(sec) ? "rush" : "short";
+                    cmp(bad, e.getKey() + ".mode", mode == null ? defMode : mode, c.get("mode"));
+                } else {
                     cmp(bad, e.getKey() + ".boss", m(cfg.get("boss")).get("name"), c.get("boss"));
                     for (Map.Entry<String, Object> le : m(cfg.get("loot")).entrySet())
                         if (le.getValue() instanceof String) cmp(bad, e.getKey() + ".loot." + le.getKey(), le.getValue(), m(c.get("loot")).get(le.getKey()));
                     cmp(bad, e.getKey() + ".mode", "maps".equals(sec) ? "normal" : "raid", c.get("mode"));
-                } else {
-                    String mode = str(cfg.get("mode"));
-                    cmp(bad, e.getKey() + ".mode", mode == null ? "rush" : mode, c.get("mode"));
                 }
             }
         // challenge / abyss

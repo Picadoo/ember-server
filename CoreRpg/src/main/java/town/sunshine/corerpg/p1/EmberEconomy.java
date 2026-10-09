@@ -193,6 +193,11 @@ public final class EmberEconomy {
         // only under SIX (T0″ F arm), the default sim does not — PARTIAL. Registry + tag only, no economy yml key, no golden.
         src("S39", "六槽护甲掉落（每局 +1，开关默认关）", "EmberRunRules.settle six_armor (gear.six_slot.enabled)", Period.RUN).acc(GEAR)
             .ledger("six_armor").model(PART).done();
+        // D391 短征 sx01：日有奖帽 3；有奖通关币/碎片/骨尘 + 生涯首通包；日帽后无奖。金样见 ember-v1-economy.yml；p1sim 另号。
+        src("S40", "短征通关（sx01）", "EmberShortRules / ember-v1-runs.yml short.sx01", Period.DAY).acc(COIN, SHARD, BONE, BLANK)
+            .keys("p1_sx01_day").ledger("sx_clear_", "sx_fc_", "sx_practice").model(FULL)
+            .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
+            .g("fc.coin", 200).g("fc.shard", 8).g("fc.blank", 1).g("daily_cap", 3).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -328,6 +333,7 @@ public final class EmberEconomy {
         if ("raid_mark".equals(key)) return "S12";
         if ("extra_chest_item".equals(key)) return "S34"; // D243 (G2): the chest's extra gear roll (item row; tag only)
         if ("six_armor".equals(key)) return "S39"; // D318 六槽: per-clear armor drop (switch default off)
+        if (key.startsWith("sx_clear_") || key.startsWith("sx_fc_") || "sx_practice".equals(key)) return "S40"; // D391 短征
         return null;
     }
 

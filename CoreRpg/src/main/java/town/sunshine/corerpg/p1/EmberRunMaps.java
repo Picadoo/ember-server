@@ -279,6 +279,10 @@ public final class EmberRunMaps {
         public String rushMode = "rush", rushLabel = "余烬连战", rushClaim = "p4_rush_claim";
         public int rushWeekly = 1, rushMarkTier = 3, rushSig;
         public boolean mainRush() { return "rush".equals(rushMode); }
+        /** D391 短征（runs yml {@code short:}）：P1 原生短本，日有奖帽，结算走 S40 */
+        public boolean shortExpedition;
+        public int shortDailyCap;
+        public String shortClaim = "";
 
         MapDef(String key, Map<?, ?> m) {
             this.key = key;
@@ -592,6 +596,8 @@ public final class EmberRunMaps {
     public final Map<String, MapDef> events;
     /** D144 余烬连战 (runs yml `rush:`), keyed like maps (rush) */
     public final Map<String, MapDef> rush;
+    /** D391 短征 (runs yml `short:`), keyed like maps (sx01) */
+    public final Map<String, MapDef> shortMaps;
     /** P2-9 (D81) loot bias weights; P2-9 (D82) raid_item quality floor */
     public final double lootOwnFamily, lootMapShare, lootSlotWeight;
     public final int raidItemQualityFloor;
@@ -1171,6 +1177,30 @@ public final class EmberRunMaps {
             }
         }
         rush = Collections.unmodifiableMap(ru);
+        Map<String, MapDef> sh = new LinkedHashMap<String, MapDef>();
+        if (root.get("short") instanceof Map) {
+            for (Map.Entry<?, ?> e : ((Map<?, ?>) root.get("short")).entrySet()) {
+                if (e.getValue() instanceof Map) {
+                    String k = String.valueOf(e.getKey()).toLowerCase(Locale.ROOT);
+                    MapDef d = shortDef(k, (Map<?, ?>) e.getValue());
+                    if (d != null) sh.put(k, d);
+                }
+            }
+        }
+        shortMaps = Collections.unmodifiableMap(sh);
+    }
+
+    /**
+     * D391: one short-expedition entry. Rooms / MM may arrive in a later ticket; validate only checks
+     * dungeon / requires / daily cap (no full room composition yet).
+     */
+    static MapDef shortDef(String key, Map<?, ?> m) {
+        MapDef d = new MapDef(key, m);
+        d.shortExpedition = true;
+        d.shortDailyCap = (int) num(m.get("daily_reward_cap"), EmberShortRules.DAILY_CAP);
+        d.shortClaim = str(m.get("claim"), EmberShortRules.CLAIM);
+        // reward / first_clear amounts live in EmberEconomy S40; yml mirrors for readability / source-map
+        return d;
     }
 
     /**
@@ -1261,6 +1291,7 @@ public final class EmberRunMaps {
         MapDef d = maps.get(k);
         if (d == null) d = raids.get(k);
         if (d == null) d = rush.get(k);
+        if (d == null) d = shortMaps.get(k);
         return d != null ? d : events.get(k);
     }
 
@@ -1269,6 +1300,7 @@ public final class EmberRunMaps {
         for (MapDef d : raids.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         for (MapDef d : events.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         for (MapDef d : rush.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
+        for (MapDef d : shortMaps.values()) if (d.dungeon.equalsIgnoreCase(dungeonId)) return d;
         return null;
     }
 
@@ -1288,6 +1320,10 @@ public final class EmberRunMaps {
             if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
         }
         for (MapDef d : rush.values()) {
+            String p = "dungeon_" + d.dungeon + "_";
+            if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
+        }
+        for (MapDef d : shortMaps.values()) {
             String p = "dungeon_" + d.dungeon + "_";
             if (worldName.regionMatches(true, 0, p, 0, p.length())) return d;
         }
@@ -1340,6 +1376,16 @@ public final class EmberRunMaps {
             if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
                 out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);
         }
+        for (MapDef d : shortMaps.values()) { // D391: thin checks; full rooms/MM arrive with the map ticket
+            if (d.dungeon.isEmpty()) out.add(d.key + ": dungeon missing");
+            if (d.requires == null || d.requires.isEmpty()) out.add(d.key + ": requires missing");
+            if (d.shortDailyCap < 1 || d.shortDailyCap > 10) out.add(d.key + ": daily_reward_cap 1..10");
+            if (d.shortClaim == null || d.shortClaim.isEmpty() || !d.shortClaim.startsWith("p1_")) out.add(d.key + ": claim must be p1_* day counter");
+            if (d.cost >= 0 && d.cost != 30 && d.cost != 0) out.add(d.key + ": short cost should be 30 (or 0 for free test)");
+            if (maps.containsKey(d.key) || raids.containsKey(d.key) || rush.containsKey(d.key) || events.containsKey(d.key))
+                out.add(d.key + ": short key collides with a map / raid / rush / event");
+        }
+
         return out;
     }
 
