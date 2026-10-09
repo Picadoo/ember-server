@@ -1,6 +1,6 @@
 # 余烬 · 短征三本菜单打磨（陈旧假平面清零 + 日帽同屏 · ≠sx04 · ≠抬日表）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md) · backlog `B-short-menu-polish` · 总控 D393 三本齐后内容真债
+STATUS=**已批 A · 批 M · D395**（总控采纳方案 M · §2.1 假平面清零已落 · **日帽挂键等插件** · STATUS [`STATUS-ember-short-menu-polish-d395-2026-10-10.md`](../status/STATUS-ember-short-menu-polish-d395-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠改经济金额 ≠同号写 Java ≠假写个人日帽**）· 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md)（**已关**）· backlog `B-short-menu-polish`
 
 > **一句话玩家价值：** 打开短征选页，三本奖励与 live 一致、不再写「草案/另号未就绪」，并能一眼看见「今日有奖还剩几次」——日刷目标感更强；**不**抬日表，**不**硬凑第四本。
 
@@ -13,9 +13,9 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | # | 来源 | 口径 |
 |---|------|------|
 | E1 | D393 spot PASS @`73bb9b67` | sx03：Q01 · 体力30 · FrostCast · S42 实发 80/4/3 + 首通 160/8/1 · 日帽与 sx01/02 分开 · gate_daily 仍拒 |
-| E2 | 同 STATUS **旁注** | 菜单仍写「币70+碎片5+骨尘3（S42 · **结算另号**）」→ live 不符；**建议菜单岗对齐** |
-| E3 | `ember_p1_short.yml` Icon **E** | lore：「通关**草案**」「结算**另号**」「进本键**另号就绪后生效**」——键 `enter sx03` 已真 |
-| E4 | Icon A/C vs E | A/C 写 80/4/3（对齐 S40/S41）；E 写 70/5/3（**错**） |
+| E2 | 同 STATUS **旁注**（批 A 前） | 曾写「币70+碎片5+骨尘3（S42 · **结算另号**）」→ live 不符 |
+| E3 | D394 tip `cf12a560` | **已对齐金额**：E→S42 80/4/3 + 首通 160/8/1；去草案/另号就绪；A/C 首通亦齐 |
+| E4 | D395 实扫 `ember_p1_short.yml` | 玩家面 **零**「草案/另号/未就绪/70」；日帽仍静态「最多 3 次/日」（键未 live） |
 | E5 | 三本日帽文案 | 仅静态「最多 3 次/日」；盘面**无**个人 n/3 |
 | E6 | `EmberShortRules.dayLine` / 进本 tell | 聊天有「今日有奖 n/3」——**仅进本瞬间**，选页看不见 |
 | E7 | `p1_sx01_day` / `p1_sx02_day` / `p1_sx03_day` | `EmberCounters` + runs `claim:` 已登记（Asia/Shanghai 日） |
@@ -162,4 +162,10 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ---
 
-*待批 A · 荐 M · B-short-menu-polish · ≠关观察 · ≠抬日表 · ≠假开旧日常 · ≠复述 D373–D393 · ≠ sx04 本窗主债。*
+## 7. 批 A 落字
+
+| 时 | 口径 |
+|----|------|
+| 2026-10-10 | **已批 A·M · D395** · §2.1 假平面清零（含旁注 D394 `cf12a560` 金额对齐）已落 TrMenu · §2.2/§2.3 **日帽挂键等插件**（jar `1.65.107-d393.local` 无 `p1_sx0N_day*`；禁写不存在 `%…%`）· tip 关 · 插件岗并行补键后另号挂 lore |
+
+*STATUS=已批 A·M · D395 §2.1 已落 · 日帽挂键等插件 · B-short-menu-polish · ≠关观察 · ≠抬日表 · ≠假开旧日常 · ≠复述 D373–D393 · ≠ sx04 本窗主债。*
