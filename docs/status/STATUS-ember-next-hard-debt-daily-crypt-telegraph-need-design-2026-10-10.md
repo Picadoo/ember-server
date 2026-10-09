@@ -1,10 +1,12 @@
+> **旁注（已关 · 2026-10-10）：** 已批 A · 批 M · **D379 docs 占位 · 施工交怪物岗** · STATUS [`STATUS-ember-daily-crypt-telegraph-d379-2026-10-10.md`](STATUS-ember-daily-crypt-telegraph-d379-2026-10-10.md) · tip `b3c025f1` · **≠本号改 MM ≠改体力掉落 ≠关观察 ≠开 R**。下文为选题当时正文，保留作史。
+
 # 状态 · 下一档硬债选定 · 需策划（日更残誓地窖第三拍预警环 · D374 E8 后置升主）
 
 > **上游结案：** 总控 D378 已落 @`87991c6b`（使魔→生活兑尘跳转）→「请交下一内容真债 tip（提高在线/趣味；禁抬挂机日表、样本R、Pack6、天赋灰印、观察运维变体、改×0.97）」。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。禁复述刚落：使魔出战 D373 / 日更四线预警 D374 / 挂机去哪花 D375 / 生活 Layout D376 / 枢纽旁轨 D377 / 使魔→生活 D378。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **打开** · **待批 A** · docs-only · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠改体力掉落**  
-**硬规格（待批）：** [`DESIGN-ember-daily-crypt-telegraph-2026-10-10.md`](../design/DESIGN-ember-daily-crypt-telegraph-2026-10-10.md) · backlog `B-ember-daily-crypt-telegraph`  
+**本窗性质：** tip **已关 · 已批 A · 批 M · D379** · **docs 占位 · 施工交怪物岗** · **≠本号改 MM** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠改体力掉落**  
+**硬规格（已批 A · 批 M · D379）：** [`DESIGN-ember-daily-crypt-telegraph-2026-10-10.md`](../design/DESIGN-ember-daily-crypt-telegraph-2026-10-10.md) · backlog `B-ember-daily-crypt-telegraph`  
 **打开理由：** D374 已把庭院/焦骨/潮蚀/断塔四线修成可读第三拍，并**明文后置**残誓地窖（E8）。现态七线里只剩 `EmberDailyCryptWarden` 仍挂无预警 `damage 0.4 r6 ~onTimer:50`——日刷地窖终厅仍是「站着挨烫」，与六线可读节奏落差最大，重刷趣味被拖短。
 
 ---
@@ -89,7 +91,8 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题残誓地窖第三拍预警 · DESIGN 待批 A·荐 M |
+| 2026-10-10 | 总控 · tip **已关** · 批 A·M · **D379** docs 占位 · 施工交怪物岗 · STATUS `STATUS-ember-daily-crypt-telegraph-d379-2026-10-10.md` |
 
 ---
 
-*选题日更残誓地窖第三拍 · tip 打开 · 待批 A · 荐 M · ≠关观察 ≠抬日表 ≠复述 D374 四线。*
+*选题日更残誓地窖第三拍 · tip 已关 · 已批 A·M · D379 docs 占位 · 施工交怪物岗 · ≠本号改 MM ≠改体力掉落 ≠关观察。*

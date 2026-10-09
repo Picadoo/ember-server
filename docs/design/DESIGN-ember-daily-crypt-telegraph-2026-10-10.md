@@ -1,6 +1,6 @@
 # 余烬 · 日更残誓地窖第三拍预警环（D374 E8 后置升主 · ≠复述四线）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-daily-crypt-telegraph-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-daily-crypt-telegraph-need-design-2026-10-10.md) · backlog `B-ember-daily-crypt-telegraph` · 总控 D378 后内容真债
+STATUS=**已批 A · 批 M · D379 · 施工交怪物岗** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-daily-crypt-telegraph-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-daily-crypt-telegraph-need-design-2026-10-10.md)（已关）· backlog `B-ember-daily-crypt-telegraph` · STATUS [`STATUS-ember-daily-crypt-telegraph-d379-2026-10-10.md`](../status/STATUS-ember-daily-crypt-telegraph-d379-2026-10-10.md) · 总控 D378 后内容真债（D374 E8 后置升主）
 
 > **一句话玩家价值：** 残誓地窖终厅从「站着挨无预警环」变成与其它六线同档「看提示→拉开可躲」——七线日刷节奏齐平，重刷更有趣，不靠抬体力奖励。
 
@@ -116,8 +116,8 @@ Boss：删 `damage … ~onTimer:50` → 增 `skill{s=EmberCryptOathCast} @self ~
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **docs-only 待批 A** |
-| 批 A 后 | 另开施工号（怪物岗 MM）；测法复用霜/锈/D374 五条 |
+| 本窗 | **docs-only 已批 A · 批 M · D379** |
+| 批 A 后 | **MM 施工交怪物岗**（另号）；测法复用霜/锈/D374 五条 |
 | 观察 | **续**；绿出口仍 ≥**2026-10-10 17:40 CST**；本债**不**勾关窗 |
 
 ### 3.6 验收指针（批 A · 施工后 · 非本窗）
@@ -152,12 +152,17 @@ D374 四线已齐；七线只剩残誓地窖静默环——荐 **M** 同构 `Emb
 
 ## 6. 批注勾选（总控）
 
-- [ ] **批 M**（CryptOathCast 同构读条可躲 · 保留点名）· **策划荐**
+- [x] **批 M**（CryptOathCast 同构读条可躲 · 保留点名）→ **D379 已批 · 施工交怪物岗** · **策划荐 · 总控已批**
 - [ ] **批 A**（只改 lore/菜单半行）· **不荐独批**
 - [ ] **批 L**（新系统/假平面/抬体力掉落）· **否决**
 - [ ] 驳回改派（理由：________）
 
 **策划荐勾：** **批 M**。
+
+### 总控批注（D379）
+
+- **已批 A · 批 M** · 本号 **docs-only** 落字；**MM 施工交怪物岗**（另号）。
+- **≠本号改 MM** · **≠改体力/掉落** · **≠关观察** · **≠开 R** · **≠开 K3** · **≠改 ×0.97 / 三开关 / bv** · **≠假平面** · **≠复述 D374 四线**。
 
 **说明：** 批 A ≠ 施工 ≠ 关观察 ≠ 改掉落/体力 ≠ 开 R ≠ 抬日表。
 
@@ -167,17 +172,18 @@ D374 四线已齐；七线只剩残誓地窖静默环——荐 **M** 同构 `Emb
 
 | 日 | 事 |
 |----|-----|
-| 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M |
+| 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M；tip `b3c025f1` |
+| 2026-10-10 | 总控批 A·M · **D379** docs 占位 · tip 关 · backlog→已批 A·施工中·怪物岗 · **≠本号改 MM ≠改体力掉落 ≠关观察** |
 
 ---
 
 ## 8. 参考
 
-- tip · D374 DESIGN / STATUS / spot  
+- tip · STATUS D379 · D374 DESIGN / STATUS / spot  
 - `EmberDailyCrypt.yml` · `EmberDungeonDiffSkills.yml`  
 - 范式：`EmberFrostNovaCast` / `EmberRailSlamCast` / D374 四 Cast  
 - 入口：`plugins/TrMenu/menus/ember_daily.yml`
 
 ---
 
-*待批 A · 荐 M · docs-only · ≠施工 ≠关观察 ≠抬日表 ≠复述 D374 四线。*
+*已批 A · 批 M · D379 docs 占位 · 施工交怪物岗 · ≠本号改 MM ≠改体力掉落 ≠关观察 ≠开 R。*
