@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（D339 hub/help 落地薄抽验收清单 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D340）：** tip `86e0f813` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-d339-hub-help-spot-d340-2026-10-09.md`](STATUS-ember-six-slot-d339-hub-help-spot-d340-2026-10-09.md) · **另号测试 S0–S6** · **不重开文案** · ≠关观察 · 不抢 K3 · 零改 yml/开关。
+
 > **上游结案：** D339 hub/help 四件套叙事诚实 **已落地** @ `2ba73e97`（TrMenu + 静态 H1–H4 PASS · `trmenu reload` 已做）；D338 绿出口模板已批（≠关观察）。Stage2 观察中（满窗 ≥**2026-10-10 17:40 CST**）。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / K3 部署 / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零 live 玩法施工。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零改菜单/jar/开关** · 薄抽**另号**  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md`](../design/DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md) · backlog `B-six-slot-d339-hub-help-spot`  
+**本窗性质：** tip 已关 · 授权见 D340 STATUS · **零改菜单/jar/开关** · 薄抽**另号**  
+**硬规格（已批 A · 批 M · D340 · 清单已采纳 · 待测试执行 · ≠关观察）：** [`DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md`](../design/DESIGN-ember-six-slot-d339-hub-help-spot-2026-10-09.md) · backlog `B-six-slot-d339-hub-help-spot`  
 **打开理由：** D339 DESIGN §2.6 写明「静态+**薄抽**」；落地 STATUS 仅交**静态**验收。H2/H3（打开 hub 装备格 / help L·S 见四件套叙事）仍缺可执行线上薄抽清单——与 D333「施工后薄抽验」同形缺口。
 
 ---
@@ -39,7 +41,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐 M。
+见 DESIGN 同 slug · **已批 A · 批 M · D340** · 清单已采纳 · **另号测试**执行 S0–S6 · **不重开文案** · ≠关观察。
 
 ---
 
@@ -49,4 +51,4 @@
 
 ---
 
-*选题 H · 荐 M · 零 live 施工 · 不重复 D339 文案窗。*
+*选题 H · 已批 A·M·D340 · 零 live 施工 · 不重复 D339 文案窗 · 待测试薄抽。*
