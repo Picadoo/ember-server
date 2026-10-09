@@ -71,6 +71,7 @@ gear:
 - **回滚解耦：** 回滚 / 关 `set_bonus` **与** Stage1 的 `enabled` / `migrate` **解耦**——可只关四件套减伤而保留六槽甲路径与迁移；全关仍按 §1.3 / §7（先清未决 journal）。
 - **备份路径：** `/workspace/tmp/d325-bv62-backup-20261008173047/`（D325 live 备份）。触发红线（双计减伤、B/H 漂移、迁移回归、跨服复制等）时按观察结案回滚，勿手删 `p1-six` / 标签。
 - **K3：** T0‴ 已签 PASS，**施工 / 部署等绿出口**；本手册不授权观察期部署 K3。
+- **K3 禁误读短语（D362）：** 「已就位 / PASS / 批 A」**≠开闸**——见 DESIGN [`DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md`](../status/STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md)。**≠部署 ≠开 `k3_refine`；开闸真源仍 D341 §2.1。**
 - **白板经济注记（D361）：** 分解/验收报告须注记「白板经济模型未覆盖」——见本清单 DESIGN [`DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md`](../design/DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-blank-economy-note-d361-2026-10-09.md`](../status/STATUS-ember-six-slot-blank-economy-note-d361-2026-10-09.md)。**≠改 ×0.1 / dismantleYield；≠补 p1sim blank 建模；≠开 R。**
 
 ### 1.5 观察期 yml 真源与防冲（D344）

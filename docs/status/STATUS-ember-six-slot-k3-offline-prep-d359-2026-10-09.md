@@ -5,6 +5,9 @@
 **裁决：** **已批 A · 批 M · D359** · 总控采纳方案 M · 离线预备清单已批 · tip 旁注已关 · **闸关** · **≠开闸** · **≠部署** · **≠live** · **≠开 k3_refine** · **≠关观察**  
 **版本：** **docs-only**（DESIGN 勾批 · tip 关 · backlog · D341 闸页旁注 · 本 STATUS）· jar / ×0.97 / 三开关 / bv / TrMenu / live yml **未动**
 
+
+> **旁注（D362）：** 禁误读短语对照已批 · [`STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md`](STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md) · 「已就位 / PASS / 批 A」**≠开闸**。
+
 ## 人话
 
 闸关允许离线预备，缺可执行单。本号只把清单写进 docs，并钉明观察服 worktree **已经就位**——仍不开闸、不部署、不拧开关。

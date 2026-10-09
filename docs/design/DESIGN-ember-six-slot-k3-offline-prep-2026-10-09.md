@@ -4,6 +4,8 @@ STATUS=**已批 A · 批 M · D359**（采纳离线预备清单 · **批 A ≠ �
 
 > **一句话：** 闸关允许离线预备，缺可执行单。荐 **方案 M**：worktree + D344 对齐 + T0‴ 指针 + 开闸后第一步。**批 A ≠ 开闸。**
 
+> **旁注（D362）：** 禁误读短语对照 · [`DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md`](DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md) · 「已就位/PASS/批A」**≠开闸**。
+
 ### 0. 证据
 
 | # | 来源 | 缺口 |

@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（K3 offline/live 边界「禁误读」短语对照 · docs-only · ≠开闸）
 
+> **旁注（已关 · 批 A · 批 M · D362）：** tip `70a4efb1` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md`](STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md) · 禁误读对照已采纳 · OPS 半行已落 · **≠开闸 ≠部署 ≠开 k3_refine ≠关观察 ≠开 R**。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D361 白板注记已落 @ `48486056`（**≠改 ×0.1 · 勿复述**）。D360 样本门禁旁注已落（**仍禁开 R · 勿复述**）。D359 离线预备已落 · worktree **已就位**（**≠开闸 · 勿复述预备逐步**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1。**零改公式 · 零开开关。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip 开 · 待批 A · **零 jar / 零开关 / 零价表 / 零 worktree 施工 / 零部署** · **≠开 K3**  
-**硬规格（STATUS=待批 A · 荐 M）：** [`DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md) · backlog `B-six-slot-k3-offline-live-misread`  
+**本窗性质：** tip **已关** · **已批 A·M·D362** · **零 jar / 零开关 / 零价表 / 零 worktree 施工 / 零部署** · **≠开 K3**  
+**硬规格（已批 A · 批 M · D362 · 对照已采纳 · ≠开闸≠部署）：** [`DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md) · backlog `B-six-slot-k3-offline-live-misread`  
 **打开理由：** D328/D341/D359/OPS 各自写了「PASS≠施工 / 批 A≠开闸 / 已就位≠部署」，但**缺一张运维一眼对照表**——「已就位 / PASS / 批 A / 预备勾满 / 日历将满 / R 门闩再议」分别**不等于**什么。D359 后「worktree 已就位」高频出现，误读成可换 jar / 开 `k3_refine` 的风险升高。本债**只**收口禁误读短语，**不**重交预备逐步、**不**开闸。
 
 ---
@@ -50,4 +52,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · K3 禁误读对照 · ≠开闸 · 勿关窗。*
+*选题 H · tip 已关 · 已批 A·M·D362 · K3 禁误读对照已采纳 · ≠开闸≠部署 · 勿关窗。*

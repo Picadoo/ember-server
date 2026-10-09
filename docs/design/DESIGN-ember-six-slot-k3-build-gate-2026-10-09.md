@@ -50,6 +50,8 @@ STATUS=**已批 A · 批 M · D341**（采纳施工闸等待页 · **批 A 仅�
 
 **旁注（D359）：** 离线预备清单已批 · [`DESIGN-ember-six-slot-k3-offline-prep-2026-10-09.md`](DESIGN-ember-six-slot-k3-offline-prep-2026-10-09.md) · STATUS [`STATUS-ember-six-slot-k3-offline-prep-d359-2026-10-09.md`](../status/STATUS-ember-six-slot-k3-offline-prep-d359-2026-10-09.md) · worktree **已就位** `/workspace/minecraft-wt-d341` → `feat/d341-k3-refine-offline` @ `9ff421a8` · **仍 ≠开闸**。
 
+**旁注（D362）：** 禁误读短语对照 · [`DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md`](DESIGN-ember-six-slot-k3-offline-live-misread-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md`](../status/STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md) · 「已就位/PASS/批A」**≠开闸**。
+
 ### 2.3 闸关时禁止
 
 | 禁止 | 理由 |
@@ -118,5 +120,6 @@ STATUS=**已批 A · 批 M · D341**（采纳施工闸等待页 · **批 A 仅�
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D327/D328/D338/D340 | 策划执行手 |
 | 2026-10-09 | D341 · 总控批 A·M；采纳施工闸等待页；**批 A ≠ 开闸 ≠ 部署**；开闸须 D338 绿出口已签或另签并行；闸关可离线预备禁 live | 总控 |
 | 2026-10-09 | D359 旁注：离线预备清单已批；worktree 已就位指针；**仍 ≠开闸** | 执行手 |
+| 2026-10-09 | D362 旁注：禁误读短语对照指针；**仍 ≠开闸** | 执行手 |
 
 *K3 施工闸等待页 · 已批 A·M·D341 · 等绿出口 · 批A≠开闸≠部署 · 零 live。*
