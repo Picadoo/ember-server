@@ -1,10 +1,13 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 次入口「三套装」叙事诚实 · docs-only）
 
+> **已关 · 批 A·M · D351 已落地** · 施工 STATUS [`STATUS-ember-six-slot-secondary-set-copy-d351-2026-10-09.md`](STATUS-ember-six-slot-secondary-set-copy-d351-2026-10-09.md) · DESIGN 方案 M · adventure 团本×3 + hub/codex 帮助捷径 · **≠关观察** · 不抢 K3。
+
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D350 钉盘已落 @ `21606a3d`；D349 tip 关闭包已落；D329–D348 主路径菜单诚实已收。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**硬禁复述：** 已 PASS 薄抽清单 · tip 关闭包 · 钉盘。**零数值 / 本稿只 docs（施工另号可只 TrMenu）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar** · 施工另号（显示 only）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-secondary-set-copy-2026-10-09.md`](../design/DESIGN-ember-six-slot-secondary-set-copy-2026-10-09.md) · backlog `B-six-slot-secondary-set-copy`  
+**硬规格（已批 A · 批 M · D351 已落地）：** [`DESIGN-ember-six-slot-secondary-set-copy-2026-10-09.md`](../design/DESIGN-ember-six-slot-secondary-set-copy-2026-10-09.md) · backlog `B-six-slot-secondary-set-copy`  
 **打开理由：** 主路径（hub 装备/help 正文/gear/adventure 进度/set）已诚实，但**次入口**仍写「三套装」旧捷径或团本「三套装不变」——易被读成 Stage2 四件套未上线。多 tip 曾后置；主债已收后升本窗。
 
 ---
@@ -51,4 +54,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · 次入口三套装诚实 · 勿关窗。*
+*选题 H · tip 已关 · 批 A·M · D351 · 次入口三套装诚实 · 勿关窗。*

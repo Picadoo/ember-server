@@ -1,6 +1,6 @@
 # 余烬 · Stage2 次入口「三套装」叙事诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**复述薄抽/关闭包/钉盘）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-secondary-set-copy-need-design-2026-10-09.md`
+STATUS=**已批 A · 批 M · D351 已落地**（观察期 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**复述薄抽/关闭包/钉盘）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-secondary-set-copy-need-design-2026-10-09.md` · 施工 STATUS `STATUS-ember-six-slot-secondary-set-copy-d351-2026-10-09.md`
 
 > **一句话：** 主路径已诚实，团本旁注与帮助捷径仍写「三套装」。荐 **方案 M**：改 3+2 处捷径/旁注；零数值。
 
@@ -110,11 +110,11 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2 改 TrMenu  
+- [x] **批 A：采纳方案 M** → 同号按 §2 改 TrMenu（已批 · D351）  
 - [ ] 升级 L（含 help 图标改名）  
 - [ ] 否决 / 改派  
 
-**总控批注（待填）：** _
+**总控批注（2026-10-09 · D351）：** **批 A·M** · adventure×3 双行（战斗规则不变 + 族觉醒/护甲四件套同主线）· hub `i` / codex `H` →「套装（含四件套）」· `trmenu reload` · **≠关观察** · 不抢 K3 · jar/set_bonus/bv **未动**
 
 ---
 
@@ -123,5 +123,6 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D339/D345/D350；次入口后置债升主 | 策划执行手 |
+| 2026-10-09 | **批 A·M · D351** · TrMenu 落地（adventure×3 + hub i + codex H）· tip 关 | 总控执行手 |
 
-*次入口三套装叙事诚实 · 待批 A · 荐 M · 显示 only · ≠关观察 · 不抢 K3。*
+*次入口三套装叙事诚实 · 已批 A·M · D351 已落地 · 显示 only · ≠关观察 · 不抢 K3。*

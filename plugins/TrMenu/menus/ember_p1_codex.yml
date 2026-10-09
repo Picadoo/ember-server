@@ -346,7 +346,7 @@ Icons:
       material: compass
       name: '§e帮助'
       lore:
-        - '§7怎么玩 / 操作 / 三套装'
+        - '§7怎么玩 / 操作 / 套装（含四件套）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
