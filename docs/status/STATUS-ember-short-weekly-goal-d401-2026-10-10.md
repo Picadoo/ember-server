@@ -34,6 +34,7 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · stami
 
 | 项 | 值 |
 |----|------|
-| tip | （commit 后回填） |
+| tip | `746a5259` |
 | jar | `CoreRpg-1.65.111-d401.local.jar` |
-| sha256 | （装服后回填） |
+| sha256 | `12d954dcc7b8745fec8350fb7c7c6d48abc8fc8e8e9725d6df91563e067fa6b4` |
+| Enabling | `CoreRpg v1.65.111-d401.local` · play PID 1113657 |
