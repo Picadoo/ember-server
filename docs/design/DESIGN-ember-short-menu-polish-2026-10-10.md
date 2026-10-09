@@ -1,6 +1,6 @@
 # 余烬 · 短征三本菜单打磨（陈旧假平面清零 + 日帽同屏 · ≠sx04 · ≠抬日表）
 
-STATUS=**已批 A · 批 M · D395**（总控采纳方案 M · §2.1 假平面清零已落 · **日帽挂键等插件** · STATUS [`STATUS-ember-short-menu-polish-d395-2026-10-10.md`](../status/STATUS-ember-short-menu-polish-d395-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠改经济金额 ≠同号写 Java ≠假写个人日帽**）· 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md)（**已关**）· backlog `B-short-menu-polish`
+STATUS=**已批 A · 批 M · D395+D396 · 已落地**（§2.1 假平面清零 · §2.2 插件键 tip `ee765f56` · §2.3 菜单挂日帽 STATUS [`STATUS-ember-short-menu-daycap-d396-2026-10-10.md`](../status/STATUS-ember-short-menu-daycap-d396-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠改经济金额 ≠假写个人日帽**）· 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-menu-polish-need-design-2026-10-10.md)（**已关**）· backlog `B-short-menu-polish`（**已关**）
 
 > **一句话玩家价值：** 打开短征选页，三本奖励与 live 一致、不再写「草案/另号未就绪」，并能一眼看见「今日有奖还剩几次」——日刷目标感更强；**不**抬日表，**不**硬凑第四本。
 
@@ -167,5 +167,6 @@ STATUS=**已批 A · 批 M · D395**（总控采纳方案 M · §2.1 假平面�
 | 时 | 口径 |
 |----|------|
 | 2026-10-10 | **已批 A·M · D395** · §2.1 假平面清零（含旁注 D394 `cf12a560` 金额对齐）已落 TrMenu · §2.2/§2.3 **日帽挂键等插件**（jar `1.65.107-d393.local` 无 `p1_sx0N_day*`；禁写不存在 `%…%`）· tip 关 · 插件岗并行补键后另号挂 lore |
+| 2026-10-10 | **D396 §2.3 已落** · A/C/E/I 挂 `%corerpg_p1_sx0N_day_line%` + I `sx_day_left_sum` · jar `1.65.108-d395.local` tip `ee765f56` · STATUS [`STATUS-ember-short-menu-daycap-d396-2026-10-10.md`](../status/STATUS-ember-short-menu-daycap-d396-2026-10-10.md) · backlog **已关** |
 
-*STATUS=已批 A·M · D395 §2.1 已落 · 日帽挂键等插件 · B-short-menu-polish · ≠关观察 · ≠抬日表 · ≠假开旧日常 · ≠复述 D373–D393 · ≠ sx04 本窗主债。*
+*STATUS=已批 A·M · D395+D396 已落地 · B-short-menu-polish 已关 · ≠关观察 · ≠抬日表 · ≠假开旧日常 · ≠复述 D373–D395 · ≠ sx04 本窗主债。*

@@ -62,9 +62,9 @@
 
 ## 下一号
 
-1. **插件岗：** 注册 `%corerpg_p1_sx0N_day*%`（DESIGN §2.2）+ 单测；装 play。  
-2. **菜单另号：** 挂 `day_line` 到 A/C/E/I；灰态同步。  
-3. **测岗：** E 无草案；金额=S42；三本日帽随结算变；gate_daily 仍拒。
+1. **插件岗：** §2.2 tip `ee765f56` · jar `1.65.108-d395.local` **已交**。  
+2. **菜单另号：** **D396 已交** · STATUS [`STATUS-ember-short-menu-daycap-d396-2026-10-10.md`](STATUS-ember-short-menu-daycap-d396-2026-10-10.md)。  
+3. **测岗：** 选页 day_line 同屏；有奖后 line 变；gate_daily 仍拒。
 
 ## 不动
 

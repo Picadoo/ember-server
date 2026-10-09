@@ -48,3 +48,7 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · S40�
 | jar | `CoreRpg-1.65.108-d395.local.jar` |
 | sha256 | `f04ec5fa1949b836fe0950756ce7f9d3be6fae2c611031c2b6f19cf18428a648` |
 | Enabling | `CoreRpg v1.65.108-d395.local` · play PID 1037502 |
+
+## 下一号
+
+菜单岗 **D396 已交** · STATUS [`STATUS-ember-short-menu-daycap-d396-2026-10-10.md`](STATUS-ember-short-menu-daycap-d396-2026-10-10.md) · A/C/E/I 挂 day_line。

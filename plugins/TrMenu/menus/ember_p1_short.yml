@@ -1,11 +1,11 @@
-# D395 · 短征三本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊）
-# 假平面清零 + 奖励对齐 S40/S41/S42 实发（旁注 D394 tip `cf12a560` 已对齐金额）。
+# D396 · 短征三本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊）
+# 日帽同屏：挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum）；假平面/金额对齐见 D394–D395。
 # 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|sx02|sx03。
 # 禁：教玩家手打 /dp start；假宣传旧日常窟开放；抬日表文案；假写个人日帽数字。
-# 日帽同屏（约定键 · 待插件 live 后挂 lore，本号勿写不存在的 %…%）：
+# 键（jar 1.65.108-d395 · tip ee765f56）：
 #   %corerpg_p1_sx01_day_line% / %corerpg_p1_sx02_day_line% / %corerpg_p1_sx03_day_line%
-#   （可选 %corerpg_p1_sx0N_day% · %corerpg_p1_sx_day_left_sum%）
-# 挂点：A/C/E 主 lore + 灰态 · I 说明；update:20 已备。
+#   可选 %corerpg_p1_sx_day_left_sum% · %corerpg_p1_sx0N_day% / day_left
+# 挂点：A/C/E 主 lore + 灰态 · I 说明；update:20。
 
 Title: '§6短征 · 选本'
 
@@ -30,7 +30,7 @@ Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 · Q01 后 · 各体力30 · 日有奖帽分开计'
-    - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊'
+    - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
 
 Icons:
   '#':
@@ -50,8 +50,11 @@ Icons:
         - '§7各三房 · 约 5～8 分钟手感 · 终厅可读可躲'
         - '§7通关有奖：§f币80 + 碎片4 + 骨尘3 §7→ 仓库 → 工坊花'
         - '§7生涯首通另加薄包（各本略异）'
-        - '§7奖励以结算为准 · 日有奖各 3 次分开计'
-        - '§8各本今日有奖：悬停本键见「最多 3 次/日」'
+        - '§7奖励以结算为准 · 日有奖各本分开计'
+        - '§e烬门 · %corerpg_p1_sx01_day_line%'
+        - '§e锈灯 · %corerpg_p1_sx02_day_line%'
+        - '§e霜雾 · %corerpg_p1_sx03_day_line%'
+        - '§7三本今日剩余有奖合计：§f%corerpg_p1_sx_day_left_sum%'
         - '§8不发主线装备/徽记/签名（首航）'
         - ''
         - '§8旧日常窟仍收起 · 勿找 ember_daily'
@@ -77,7 +80,8 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：短征三房 · 体力 30 · 日有奖帽 3'
+            - '§7解锁后：短征三房 · 体力 30'
+            - '§e%corerpg_p1_sx01_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
@@ -86,6 +90,7 @@ Icons:
           lore:
             - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§e%corerpg_p1_sx01_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
     update: 20
     display:
@@ -95,7 +100,7 @@ Icons:
         - ''
         - '§7解锁：§a已通 Q01'
         - '§7消耗：§e30 体力'
-        - '§7日有奖帽：§f最多 3 次/日 §8（第 4+ 次无结算）'
+        - '§e%corerpg_p1_sx01_day_line% §8（第 4+ 次无结算）'
         - '§d名片：§f哨长读条 · 拉开'
         - '§b本间：§f院角 → 甬道 → Boss 垫'
         - '§7通关：币80 + 碎片4 + 骨尘3（S40）'
@@ -118,7 +123,8 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：抬升栈台+分叉灯桥 · 体力 30 · 日有奖帽 3（与烬门分开）'
+            - '§7解锁后：抬升栈台+分叉灯桥 · 体力 30（与烬门分开）'
+            - '§e%corerpg_p1_sx02_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
@@ -127,6 +133,7 @@ Icons:
           lore:
             - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§e%corerpg_p1_sx02_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
     update: 20
     display:
@@ -136,7 +143,7 @@ Icons:
         - ''
         - '§7解锁：§a已通 Q01'
         - '§7消耗：§e30 体力'
-        - '§7日有奖帽：§f最多 3 次/日 §8（与烬门分开计）'
+        - '§e%corerpg_p1_sx02_day_line% §8（与烬门分开计）'
         - '§d名片：§f灯塔扫线/落点 · 拉开或侧移'
         - '§b本间：§f抬升栈台 → 分叉灯桥 → 灯塔垫'
         - '§7通关：币80 + 碎片4 + 骨尘3（S41）'
@@ -159,7 +166,8 @@ Icons:
           lore:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
-            - '§7解锁后：雾廊+双闸室+霜窖 · 体力 30 · 日有奖帽 3（与前两本分开）'
+            - '§7解锁后：雾廊+双闸室+霜窖 · 体力 30（与前两本分开）'
+            - '§e%corerpg_p1_sx03_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
@@ -168,6 +176,7 @@ Icons:
           lore:
             - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§e%corerpg_p1_sx03_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
     update: 20
     display:
@@ -177,7 +186,7 @@ Icons:
         - ''
         - '§7解锁：§a已通 Q01'
         - '§7消耗：§e30 体力'
-        - '§7日有奖帽：§f最多 3 次/日 §8（与烬门/锈灯分开计）'
+        - '§e%corerpg_p1_sx03_day_line% §8（与烬门/锈灯分开计）'
         - '§d名片：§f霜雾楔/冻圈 · 侧移或拉开'
         - '§b本间：§f雾廊 → 双闸室（顺序开闸） → 霜窖终厅'
         - '§7通关：币80 + 碎片4 + 骨尘3（S42）'
