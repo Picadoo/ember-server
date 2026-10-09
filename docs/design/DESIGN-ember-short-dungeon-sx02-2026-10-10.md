@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx02（锈灯栈道 · P1 可达 + 薄经济 S41）
 
-STATUS=**待批 A · 荐方案 M**（总控 D391 PASS 后下一内容真债 · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 sx01 主规格空转 ≠纯换皮当主债**）· 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx02-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx02-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx02` · 上游 D391 PASS @`2375c206`
+STATUS=**已批 A · 批 M · D392**（总控采纳方案 M · 骨架启动 · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 sx01 主规格空转 ≠纯换皮当主债**）· 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx02-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx02-need-design-2026-10-10.md)（**已关**）· STATUS [`STATUS-ember-short-dungeon-sx02-d392-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx02-d392-2026-10-10.md) · backlog `B-short-dungeon-sx02` → **已批·施工中** · 上游 tip @`5bb2c41c` · D391 PASS @`2375c206`
 
 > **一句话玩家价值：** 今天在短征页除了烬门，还能再点进一条 **主题/走位都不同** 的 5～8 分钟短本；日有奖帽独立计算，材料仍进仓去工坊——**拉长可刷内容量**，不靠重开旧日常、也不抬挂机日表。
 
@@ -223,9 +223,9 @@ STATUS=**待批 A · 荐方案 M**（总控 D391 PASS 后下一内容真债 · *
 
 ## 7. 批注区（总控填）
 
-- [ ] **批 A · 方案 M**（短征 sx02 锈灯栈道全规格）
-- [ ] 否决 A 主交付（仅菜单打磨）/ L（纯换皮当主债）/ W（空转/假开旧日常/抬日表）
-- [ ] 批注：________________
+- [x] **批 A · 方案 M**（短征 sx02 锈灯栈道全规格）· D392 骨架启动（地图本地+DP壳+双本选页）
+- [x] 否决 A 主交付（仅菜单打磨）/ L（纯换皮当主债）/ W（空转/假开旧日常/抬日表）
+- [x] 批注：总控批 A·M @`5bb2c41c` · 进本键/MM/S41/主题 WE 并行 · ≠关观察 ≠抬日表 ≠开 gate_daily
 
 ---
 
@@ -234,3 +234,4 @@ STATUS=**待批 A · 荐方案 M**（总控 D391 PASS 后下一内容真债 · *
 | 日 | 说明 |
 |----|------|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 上游 D391 PASS |
+| 2026-10-10 | 总控批 A·M · D392 骨架启动 · tip 关 · backlog→施工中 |
