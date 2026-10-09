@@ -34,8 +34,8 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · 主�
 
 | 项 | 值 |
 |----|----|
-| tip |  |
+| tip | `8bd534fe` |
 | jar | `CoreRpg-1.65.109-d397.local.jar` |
 | sha256 |  |
-| Enabling |  · play PID 1057991 |
+| Enabling | `CoreRpg v1.65.109-d397.local` · play PID 1057991 |
 | bv | runs **67** · six_slot 三 true |
