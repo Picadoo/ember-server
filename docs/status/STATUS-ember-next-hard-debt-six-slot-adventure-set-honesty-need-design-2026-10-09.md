@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（冒险页「我的进度」Stage2 四件套诚实 · docs-only）
 
+> **已关 · 批 A·M · D345 已落地** · 施工 STATUS [`STATUS-ember-six-slot-adventure-set-honesty-d345-2026-10-09.md`](STATUS-ember-six-slot-adventure-set-honesty-d345-2026-10-09.md) · DESIGN 方案 M · adventure「我的进度」+1 行 armor_set · **≠关观察** · 不抢 K3。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D344 live-yml-protect 已批 A·M 并落 OPS @ `6af090f8`（**已含**「主工作区禁切分支 / K3 用独立 worktree / skip-worktree」——本窗复核通过，**无需旁注补行**）。D329–D343 / hub·help D339–D340 / 闸页 / 绿出口模板 / 现态复跑 / 防冲 OPS 已落。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / K3 live / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零 live 玩法大改（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar 玩法** · 施工另号（可只 TrMenu）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-adventure-set-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-adventure-set-honesty-2026-10-09.md) · backlog `B-six-slot-adventure-set-honesty`  
+**硬规格（已批 A · 批 M · D345 已落地）：** [`DESIGN-ember-six-slot-adventure-set-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-adventure-set-honesty-2026-10-09.md) · backlog `B-six-slot-adventure-set-honesty`  
 **打开理由：** D339 已修 hub/help，但 **冒险页 `ember_p1_adventure`「我的进度」** 仍只镜像族觉醒（`%awaken%` / `awaken_next` / 刃护符 `set_progress`），**无** `%corerpg_p1_armor_set%`——玩家从进本主路径仍看不到 Stage2 四件套态。D342/D344 tip 曾点名「adventure 仅 awaken」并因防冲事故后置；现防冲已落，升为本窗主交付。
 
 ---
@@ -51,4 +53,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · adventure 进度格补 armor_set · 勿关窗。*
+*选题 H · **tip 已关 · 批 A·M · D345** · adventure 进度格已补 armor_set · 勿关观察窗。*

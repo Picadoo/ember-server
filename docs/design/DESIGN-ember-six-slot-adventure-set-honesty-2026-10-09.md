@@ -1,6 +1,6 @@
 # 余烬 · 冒险页「我的进度」Stage2 四件套叙事诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-adventure-set-honesty-need-design-2026-10-09.md`
+STATUS=**已批 A · 批 M · D345 已落地**（观察期 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-adventure-set-honesty-need-design-2026-10-09.md` · 施工 STATUS `STATUS-ember-six-slot-adventure-set-honesty-d345-2026-10-09.md`
 
 > **一句话：** D339 hub/help 已诚实，但 **冒险页「我的进度」** 仍只写族觉醒，无护甲四件套态。荐 **方案 M**：补 1 行 `%corerpg_p1_armor_set%`；零数值。
 
@@ -107,11 +107,11 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2.1 改 `ember_p1_adventure`（显示 only）  
+- [x] **批 A：采纳方案 M** → 另号按 §2.1 改 `ember_p1_adventure`（显示 only）  
 - [ ] 升级 L（不荐）  
 - [ ] 否决 / 改派  
 
-**总控批注（待填）：** _
+**总控批注：** **批 A · 批 M** · 同号 D345 已落地 adventure「我的进度」+1 行 `%corerpg_p1_armor_set%` · `trmenu reload` · **≠关观察** · 不抢 K3 · jar/set_bonus/bv **未动**
 
 ---
 
@@ -120,5 +120,6 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D339/D344；OPS 禁切分支已复核无需旁注 | 策划执行手 |
+| 2026-10-09 | 批 A·M · D345 落地 adventure K +1 armor_set · tip 关 · ≠关观察 | 总控委派 executor |
 
-*adventure 进度格 Stage2 叙事诚实 · 待批 A · 荐 M · 显示 only · 零数值 · ≠关观察 · 不抢 K3。*
+*adventure 进度格 Stage2 叙事诚实 · **已批 A·M · D345 已落地** · 显示 only · 零数值 · ≠关观察 · 不抢 K3。*

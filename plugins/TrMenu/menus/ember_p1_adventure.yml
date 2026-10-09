@@ -252,6 +252,7 @@ Icons:
         - '§7套装：§f%corerpg_p1_awaken%'
         - '§7%corerpg_p1_awaken_next%'
         - '§7%corerpg_p1_set_progress%'
+        - '§8护甲四件套：§f%corerpg_p1_armor_set%'
         - '§7暂存待领：§f%corerpg_p1_pending% §7项'
         - ''
         # D138: numbers = ember-v1-runs.yml variety (affix_shard / event_secs / event_core)
