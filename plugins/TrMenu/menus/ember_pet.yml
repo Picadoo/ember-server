@@ -1,6 +1,7 @@
 # 使魔子菜单壳 — docs/design/DESIGN-ember-pet-bestiary.md
 # D373：出战接 summon/dismiss + 魂尘来源诚实（生活·钓鱼）· DESIGN-ember-pet-loop-honest-2026-10-10
 # D378：使魔→生活兑魂尘跳转 · DESIGN-ember-pet-life-jump-2026-10-10
+# D385：等级/投喂进度同屏（PAPI）· DESIGN-ember-pet-level-papi-2026-10-10 §2.2
 # 使魔
 
 Title: '§a余烬 · 使魔'
@@ -15,7 +16,7 @@ Layout:
   - '#########'
   - '#   F   #'
   - '# L E S #'
-  - '#       #'
+  - '#   I   #'
   - '####B####'
 
 Events:
@@ -24,6 +25,7 @@ Events:
     - 'tell: §a【使魔】 §7收集出战 · 偏外观与微量助战（≤战力 5%）。'
     - 'tell: §8魂尘：补给 · 生活（旧靴/碎骨兑换）· 非挂机日表'
     - 'tell: §8缺魂尘：点本页「去生活兑魂尘」'
+    - 'tell: §8本页可见等级与下一级魂尘'
 
 Icons:
   '#':
@@ -78,6 +80,7 @@ Icons:
       name: '§a出战 / 收回'
       lore:
         - ''
+        - '§7选定：§f%corerpg_pet_active_name% §8· %corerpg_pet_level_line%'
         - '§7同时出战 §f1 §7只'
         - '§8默认偏外观；属性≤总战力 5%'
         - '§8升级吃魂尘（生活·钓鱼兑换）'
@@ -101,6 +104,9 @@ Icons:
       name: '§6魂尘投喂'
       lore:
         - ''
+        - '§e%corerpg_pet_level_line%'
+        - '§6%corerpg_pet_feed_hint%'
+        - ''
         - '§7生活兑换魂尘升级使魔 · 非挂机日表'
         - '§8不消耗核心 / 毕业刃'
         - '§8魂尘：补给 · 生活'
@@ -115,3 +121,17 @@ Icons:
         - 'tell: §6【使魔】 §7投喂魂尘升级'
         - 'command: corerpg pet feed'
         - 'tell: §8没有魂尘？点本页「去生活兑魂尘」兑换'
+
+  I:
+    display:
+      material: name tag
+      name: '§a使魔状态'
+      lore:
+        - ''
+        - '§7选定：§f%corerpg_pet_active_name%'
+        - '§e%corerpg_pet_level_line%'
+        - '§6%corerpg_pet_feed_hint%'
+        - '§7展示战力加值：§f%corerpg_pet_power_bonus%'
+        - ''
+        - '§8投喂后重开本页可见变化'
+        - '§8缺尘 → 「去生活兑魂尘」'

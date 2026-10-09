@@ -1,8 +1,8 @@
-# 状态 · D384：使魔等级 PAPI 同屏（批 A·M · P1 插件补键已交 · 菜单挂键另号）
+# 状态 · D384：使魔等级 PAPI 同屏（批 A·M · P1 插件补键已交 · P2 菜单见 D385）
 
 **日期：** 2026-10-10（上海时间）  
 **上游：** tip [`STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md`](STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md) @ `a869c892` · DESIGN [`DESIGN-ember-pet-level-papi-2026-10-10.md`](../design/DESIGN-ember-pet-level-papi-2026-10-10.md)  
-**裁决：** **已批 A · 批 M · D384** · **本号交 `%corerpg_pet_*%` 最少集 + 可选键 + jar 并装 play** · 菜单挂键另号  
+**裁决：** **已批 A · 批 M · D384** · **本号交 `%corerpg_pet_*%` 最少集 + 可选键 + jar 并装 play** · 菜单挂键 → **D385 已交**  
 **版本：** jar **`1.65.102-d384.local`** · tip 见本 STATUS 交稿 commit · **未改** feed.* / set_bonus / enabled / migrate / bv62 / ×0.97 / K3 / TrMenu `ember_pet`
 
 ## 人话
@@ -72,7 +72,7 @@
 
 | 号 | 岗 | 指针 |
 |----|-----|------|
-| **P2** | 菜单岗 | DESIGN §2.2 W1a–W1c；键已在 live 可解析；禁假写固定 Lv |
+| **P2** | 菜单岗 | **已交 D385** · STATUS [`STATUS-ember-pet-level-menu-d385-2026-10-10.md`](STATUS-ember-pet-level-menu-d385-2026-10-10.md) · `ember_pet` W1a–W1d 已挂 |
 
 ## 不动
 

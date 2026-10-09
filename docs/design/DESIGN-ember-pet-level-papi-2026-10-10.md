@@ -1,6 +1,6 @@
 # 余烬 · 使魔等级 PAPI 同屏（主题 B · 先证插件缺口）
 
-STATUS=**已批 A · 批 M · D384 · 插件补键中 · 菜单挂键另号** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md)（已关）· backlog `B-pet-level-papi` · STATUS [`STATUS-ember-pet-level-papi-d384-2026-10-10.md`](../status/STATUS-ember-pet-level-papi-d384-2026-10-10.md) · 总控 D383 后点名主题 B
+STATUS=**已批 A · 批 M · D384+D385 已落地** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md)（已关）· backlog `B-pet-level-papi`（已关）· P1 STATUS [`STATUS-ember-pet-level-papi-d384-2026-10-10.md`](../status/STATUS-ember-pet-level-papi-d384-2026-10-10.md) · P2 STATUS [`STATUS-ember-pet-level-menu-d385-2026-10-10.md`](../status/STATUS-ember-pet-level-menu-d385-2026-10-10.md) · 总控 D383 后点名主题 B
 
 > **一句话玩家价值：** 使魔页一眼看见当前等级 / 满级与否 / 下一级魂尘——投喂有反馈，养成可感；**不**靠聊天刷屏，也**不**靠菜单假写固定字。
 
@@ -95,11 +95,11 @@ STATUS=**已批 A · 批 M · D384 · 插件补键中 · 菜单挂键另号** ·
 
 | 窗 | 做什么 | 不动 |
 |----|--------|------|
-| **W1a · 战况/状态格（必做）** | 增一格或复用空位（荐键名 **I** 或扩 E 上方空行）：name `§a使魔状态`；lore 挂 `%corerpg_pet_level_line%` · `%corerpg_pet_feed_hint%` · 可选 `%corerpg_pet_active_name%` / `%corerpg_pet_power_bonus%` | **不**改 F/L/E/S 既有 actions；**不**新造无目的跳转（F 兑尘已有） |
-| **W1b · 投喂格 S lore（必做）** | S 格 lore 顶部 +2 行：当前 `level_line` + `feed_hint`；actions 仍 `pet feed` | 不改 feed 命令与次数逻辑 |
-| **W1c · 出战格 E lore（同批）** | E 格 +1 行选定名/等级短签 | summon/dismiss 保留 |
-| **W1d · Open tell（可选）** | Open +半行「本页可见等级与下一级魂尘」 | 不复述 D378 跳转主交付 |
-| **W1e · 图鉴 L（可选）** | 仍可 `pet list`；若有 `unlocked_count` 可半行展示 | 不强制新图鉴墙 |
+| **W1a · 战况/状态格（必做）** ✅ D385 | 增一格或复用空位（荐键名 **I** 或扩 E 上方空行）：name `§a使魔状态`；lore 挂 `%corerpg_pet_level_line%` · `%corerpg_pet_feed_hint%` · 可选 `%corerpg_pet_active_name%` / `%corerpg_pet_power_bonus%` | **不**改 F/L/E/S 既有 actions；**不**新造无目的跳转（F 兑尘已有） |
+| **W1b · 投喂格 S lore（必做）** ✅ D385 | S 格 lore 顶部 +2 行：当前 `level_line` + `feed_hint`；actions 仍 `pet feed` | 不改 feed 命令与次数逻辑 |
+| **W1c · 出战格 E lore（同批）** ✅ D385 | E 格 +1 行选定名/等级短签 | summon/dismiss 保留 |
+| **W1d · Open tell（可选）** ✅ D385 | Open +半行「本页可见等级与下一级魂尘」 | 不复述 D378 跳转主交付 |
+| **W1e · 图鉴 L（可选）** | 仍可 `pet list`；若有 `unlocked_count` 可半行展示 | 不强制新图鉴墙 · **本号未做** |
 
 **Layout 建议（施工择一，不挤死现键）：**
 
@@ -173,7 +173,7 @@ STATUS=**已批 A · 批 M · D384 · 插件补键中 · 菜单挂键另号** ·
 
 ## 6. 批注区（总控填）
 
-- [x] **批 A · 方案 M**（§2.1 键规格 + §2.2 菜单草案；施工拆号 P1→P2）· tip `@a869c892` · **D384 docs 占位 · 插件补键中 · 菜单挂键另号**  
+- [x] **批 A · 方案 M**（§2.1 键规格 + §2.2 菜单草案；施工拆号 P1→P2）· tip `@a869c892` · **D384 插件键已交 · D385 菜单已挂**  
 - [x] 否决 A（菜单假写）、L（改公式/抬表/空跳转）  
 - [x] 批 A ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 同号写 Java（本号 docs-only）  
 
@@ -182,12 +182,19 @@ STATUS=**已批 A · 批 M · D384 · 插件补键中 · 菜单挂键另号** ·
 - **已批 A · 批 M** · 本号 **docs-only** 落字；**插件补键中**（P1 另号）；**菜单挂键另号**（P2，键就绪后）。
 - **≠本号写 Java** · **≠改 live 菜单** · **≠改 feed 公式** · **≠关观察** · **≠抬日表** · **≠开 R** · **≠开 K3** · **≠改 ×0.97 / 三开关 / bv** · **≠假写固定 Lv** · **≠复述 D373–D383**。
 
+### 总控批注（D385 · P2 菜单）
+
+- **已落地** · `ember_pet` W1a–W1d · 挂 `pet_level_line` / `pet_feed_hint` / `pet_active_name` / `pet_power_bonus` · trmenu reload 70 菜单 · STATUS [`STATUS-ember-pet-level-menu-d385-2026-10-10.md`](../status/STATUS-ember-pet-level-menu-d385-2026-10-10.md)
+- **≠改 Java** · **≠改 feed 公式** · **≠关观察** · **≠抬日表** · **≠开 R** · **≠开 K3** · **≠改 ×0.97 / 三开关 / bv** · **≠假写固定 Lv** · **≠新空跳转**
+
 ### 变更记录
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · DESIGN 待批 A·荐 M · 先证 **无** PAPI · 数据层有等级 · tip `a869c892` |
 | 2026-10-10 | 总控批 A·M · **D384** docs 占位 · tip 关 · backlog→已批·插件施工中 · 插件补键中 · 菜单挂键另号 · **≠本号写 Java ≠改菜单 ≠关观察** |
+| 2026-10-10 | 插件 D384 tip `1acd97da` · jar `1.65.102-d384.local` · 键就绪 |
+| 2026-10-10 | 菜单 **D385** · `ember_pet` W1a–W1d 已挂 · backlog 已关 · **≠改 feed ≠关观察** |
 
 ---
 
-*使魔等级 PAPI 同屏 · 已批 A·M · D384 docs 占位 · 插件补键中 · 菜单挂键另号 · ≠本号写 Java ≠关观察 ≠抬日表。*
+*使魔等级 PAPI 同屏 · 已批 A·M · D384 键 + D385 菜单已落地 · ≠改 feed ≠关观察 ≠抬日表。*
