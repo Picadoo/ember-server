@@ -1,6 +1,7 @@
 # D383: 战况今日软目标 + 层差一览 + 层格相对多养 + 去哪花旁文案（零改产量）
 # D405: 战况软目标块 +还差/约满（remain_line live · tip 7123d944 · 零改产量）
 # D408: 满额 F 双路径（左冒险 D285 / 右短征选页）+ Open/I 满额半行 · 体力<30 诚实 tell · 零改产量
+# D408-fix: W1c 右键改嵌套单条件 stamina+deny（删 and 独立档）· FAIL f45cc48f
 # P1 挂机庭 · 自动战斗（D177 rev 2，DESIGN-ember-afk-p1-2026-10-04.md）— CoreRpg EmberAfkService + AfkTierService（复用 ember_afk 世界）
 # 站在已解锁的层里角色自己打本层的个人怪：自动普攻 + 冷却好自动烬斩 + 战利品直接进账（材料进仓库）；击杀速度和能扛住哪层看装备
 # 四层按主线首通开放：灰坡 Q01 · 荒原 Q03 · 焦土 Q05 · 烬原深处 Q07；每日 2400 只封顶（在线 + 离线），离线按实测速度 × 25%、最多 1200 只
@@ -70,8 +71,9 @@ Icons:
         - '§8挂满一天 < 一次通关的收益 · 今日已满请点「去冒险」或右键「短征」'
   F:
     icons:
-      # D408 W1c: 满额 + 体力<30 → 左仍冒险；右诚实 tell，不假开选页
-      - condition: 'check papi %corerpg_p1_afk_full% >= 1 and check papi %corerpg_stamina% < 30'
+      # D408 fix W1c: 仅 afk_full 展示（禁 and 换皮）；右键嵌套单条件 stamina + deny
+      # FAIL spot f45cc48f：复合 and 未命中落到仅满额档，右键假开选页
+      - condition: 'check papi %corerpg_p1_afk_full% >= 1'
         priority: 1
         display:
           material: diamond sword
@@ -85,36 +87,19 @@ Icons:
             - '§7短征各 §e30 §7体力 · 日帽分开 · 不是旧日常窟'
             - '§7状态：%corerpg_p1_afk_state%'
             - ''
-            - '§e左键 ➥ §f冒险页 · §e右键 ➥ §f短征需30体力'
+            - '§e左键 ➥ §f冒险页 · §e右键 ➥ §f短征选本（体力够才开）'
         actions:
           left:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'menu: ember_p1_adventure'
           right:
-            - 'sound: BLOCK_NOTE_BASS-1-0'
-            - 'tell: §c短征需 30 体力 · 当前 %corerpg_stamina%'
-      # D285+D408: 满额双路径 · 左冒险（钉死）· 右短征选页
-      - condition: 'check papi %corerpg_p1_afk_full% >= 1'
-        priority: 2
-        display:
-          material: diamond sword
-          name: '§e体力还在 · 去冒险/短征'
-          lore:
-            - ''
-            - '§a今日挂机击杀已满（%corerpg_p1_afk_today%）'
-            - '§7再挂没有收益 · 体力还能打主线 / 短征'
-            - '§d短征还可追 · 今日剩余有奖 §f%corerpg_p1_sx_day_left_sum%'
-            - '§7短征各 §e30 §7体力 · 日帽分开 · 不是旧日常窟'
-            - '§7状态：%corerpg_p1_afk_state%'
-            - ''
-            - '§e左键 ➥ §f冒险页 · §e右键 ➥ §f短征选本'
-        actions:
-          left:
-            - 'sound: BLOCK_NOTE_PLING-1-2'
-            - 'menu: ember_p1_adventure'
-          right:
-            - 'sound: BLOCK_NOTE_PLING-1-2'
-            - 'menu: ember_p1_short'
+            - condition: 'check papi %corerpg_stamina% < 30'
+              actions:
+                - 'sound: BLOCK_NOTE_BASS-1-0'
+                - 'tell: §c短征需 30 体力 · 当前 %corerpg_stamina%'
+              deny:
+                - 'sound: BLOCK_NOTE_PLING-1-2'
+                - 'menu: ember_p1_short'
     update: 20
     display:
       material: iron sword
