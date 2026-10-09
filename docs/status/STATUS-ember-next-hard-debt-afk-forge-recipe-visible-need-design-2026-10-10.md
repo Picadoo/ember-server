@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D398 · 挂机→工坊配方速览 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R）
 
-> **【拟 D398 / 总控催稿】** tip+DESIGN **待批 A · 荐 M** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime** · **内容真债（够施工拆号）**
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D398** · tip `43d9d6f3` · 指针 DESIGN [`DESIGN-ember-afk-forge-recipe-visible-2026-10-10.md`](../design/DESIGN-ember-afk-forge-recipe-visible-2026-10-10.md) · **施工交菜单岗（TrMenu 另派）** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R ≠开 K3**。下文为交稿原文，保留备查。
+
+> **【D398 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **施工交菜单岗（TrMenu 另派 · 待施工）** · **零 jar（本策划号）** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**
 
 > **上游结案：** 总控催下一 tip · D397 sx04 烬井：MM `a2b3fe8b` + 骨架菜单 `52eeaeb7` 已齐；插件键+S43+jar 施工中（本机 tip 对齐 `8bd534fe`）→ 请交 **D398 内容向 tip**（挂机资源环 / 短日常 / 有趣系统择优；禁抬 afk.tiers/daily_kills、禁开 gate_daily 旧七线、禁 Pack6/天赋/灰印、禁开 R/K3 live、≠关 Stage2 观察）。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A · 荐 M** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠复述 D373–D397 为主交付** · **≠ sx05**（sx04 未 PASS 前勿堆）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-afk-forge-recipe-visible-2026-10-10.md`](../design/DESIGN-ember-afk-forge-recipe-visible-2026-10-10.md) · backlog `B-afk-forge-recipe-visible`  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D398** · **施工交菜单岗** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠复述 D373–D397 为主交付** · **≠ sx05**  
+**硬规格（已批 A · 方案 M · D398）：** [`DESIGN-ember-afk-forge-recipe-visible-2026-10-10.md`](../design/DESIGN-ember-afk-forge-recipe-visible-2026-10-10.md) · backlog `B-afk-forge-recipe-visible`（**已批 / 待施工**）  
 **打开理由：** 产→花跳转（D375/D381）与软目标（D383）已齐，但玩家仍只见「碎片→强化」**类别**，看不见 **EmberUpgradeRules 真数字**——不知道挂满一天大概够不够强化一档 / 升阶一档；目标感断在「还差多少材料」。
 
 ---
@@ -64,4 +66,13 @@
 
 ---
 
-*选题挂机→工坊配方速览 · tip 待批 A · 荐 M · ≠关观察 ≠抬挂机表。*
+*选题挂机→工坊配方速览 · tip 旁注已关 · 已批 A·方案 M · D398 · 施工交菜单岗 · ≠关观察 ≠抬挂机表。*
+
+---
+
+## 变更记录
+
+| 日 | 事 |
+|----|-----|
+| 2026-10-10 | 策划 · tip 打开 · 选题挂机→工坊配方速览 · DESIGN 待批 A·荐 M @`43d9d6f3` |
+| 2026-10-10 | **旁注已关** · 总控批 A·M · D398 · 施工交菜单岗 · 设计待批关闭 |
