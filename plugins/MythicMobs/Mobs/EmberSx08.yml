@@ -1,0 +1,88 @@
+# 短征 sx08 · 错层烬庭（EmberSx08）— MythicMobs 4.11 / MC 1.12.2
+# 依据：docs/design/DESIGN-ember-short-dungeon-sx08-2026-10-10.md §2.2/§2.4（批 A·M · D410）
+# 对照源：EmberSx07（数值同档错层主题差异）+ EmberSx07TowerCast / EmberSx01SentryCast 范式
+# 三房：R1 庭卫+错层弩 · R2 精英 · R3 Boss+LayerCast；刷点坐标沿用 Q01/sx01–sx07 惯例（见 STATUS）
+# 键名对齐 short.sx08：Guard / Crossbow（设计「错层弩」；1.12 BOW）/ Elite / Warden
+# 禁：改旧七线 Daily；禁改 sx01–sx07；首航不发装备/徽记（薄材料+mmxp）
+
+EmberSx08Guard:
+  # R1 近战庭卫 · 对照 sx07 Guard 48/4
+  Type: ZOMBIE
+  Display: '&c庭卫'
+  Health: 48
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - LEATHER_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberSx08Crossbow:
+  # R1 远程错层弩 · 1.12 用 BOW；键名 Crossbow 对齐设计「错层弩手」与 short.sx08 ranged
+  Type: SKELETON
+  Display: '&c错层弩'
+  Health: 32
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberSx08Elite:
+  # R2 精英错层督卫 · 对照 sx07 Elite 120/3；设计 R2「途中 1 波错层怪」
+  Type: HUSK
+  Display: '&c错层督卫'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.4
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
+
+EmberSx08Warden:
+  # R3 Boss 上层守吏 · LayerCast 层间砸落/扫层斩可读可躲；对照 sx07 Warden HP180；未抬过日更 Boss 210
+  Type: ZOMBIE
+  Display: '&c上层守吏'
+  Health: 180
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx08LayerCast} @self ~onTimer:80
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

@@ -209,6 +209,9 @@ dungeon-pre-folder:
   # D407 短征 sx07 · 烬塔回升（map 本地骨架自 tide_v1；进本键/MM/S46 另号）
   ember_short_sx07:
     "EmberSx07": 1
+  # D410 短征 sx08 · 错层烬庭（map 本地骨架自 daily_v1 庭院；进本键/MM/S47 另号）
+  ember_short_sx08:
+    "EmberSx08": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

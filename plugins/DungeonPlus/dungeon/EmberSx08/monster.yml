@@ -1,0 +1,8 @@
+# D410 骨架 · EmberSx08 怪组空壳（刷怪/波次由 CoreRpg rooms + MM 怪物岗另号）
+groups:
+  default:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false
