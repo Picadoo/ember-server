@@ -45,7 +45,7 @@ public final class EmberSeason {
     public static final String C_AWARD_LAST = "p3_seasonlast_"; // + award id, period "all": last season number
     public static final List<String> GOALS = Collections.unmodifiableList(Arrays.asList("featured", "abyss", "raid", "bounty"));
     /** D144: optional weekly goals — pay the goal reward, never count toward「全部完成」 */
-    public static final List<String> OPTIONAL = Collections.unmodifiableList(Arrays.asList("core"));
+    public static final List<String> OPTIONAL = Collections.unmodifiableList(Arrays.asList("core", "short")); // D144 core · D401 short
     public static final List<String> BOARDS = Collections.unmodifiableList(Arrays.asList("abyss", "featured", "raids", "time_r01", "time_r02", "time_r03", "time_rush"));
     private static final String P = "§6[余烬] §7";
 
@@ -403,6 +403,7 @@ public final class EmberSeason {
             case "raid": return "通关团本（R01、R02 或 R03）";
             case "bounty": return "做满每日委托（当天第 3 局）";
             case "core": return "烬核同心：团本 R03 里全员站进同一个烬核圈并通关（可选）"; // D144
+            case "short": return "周目标 · 短征（可选）"; // D401
             default: return g;
         }
     }
@@ -411,6 +412,7 @@ public final class EmberSeason {
         switch (g) {
             case "featured": return "/ember_p1_challenge";
             case "abyss": return "/ember_p1_abyss";
+            case "short": return "/ember_p1_short"; // D401
             default: return "/ember_p1_adventure";
         }
     }
@@ -475,7 +477,12 @@ public final class EmberSeason {
             }
             p.spigot().sendMessage(line);
         }
-        if (target("core") > 0) p.sendMessage(P + "§8「烬核同心」是可选目标：完成也给 " + maps().goalReward + " 余烬徽，但不算进「全部完成」");
+        if (target("core") > 0 || target("short") > 0) {
+            StringBuilder opt = new StringBuilder();
+            if (target("core") > 0) opt.append("「烬核同心」");
+            if (target("short") > 0) { if (opt.length() > 0) opt.append("、"); opt.append("「短征」"); }
+            p.sendMessage(P + "§8" + opt + "是可选目标：完成也给 " + maps().goalReward + " 余烬徽，但不算进「全部完成」");
+        }
         p.sendMessage(P + "§7全部完成再 +" + maps().goalBonus + " 余烬徽 · 余烬徽只能在外观商店换外观（1 徽 = 1 点 = 50 币标价），不加属性");
         town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, new String[]{"[赛季与周目标页]", "/ember_p1_season", "排行榜、周目标、赛季奖励", "GOLD"},
                 new String[]{"[外观商店]", "/corerpg p1 cosmetic", "用余烬徽 / 币 / 印记换外观", "AQUA"});

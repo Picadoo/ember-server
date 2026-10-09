@@ -12,8 +12,8 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * D391–D400 短征：进本门闩 + S40–S44 结算发放钩。地图 / MM / TrMenu 另号；本号保证
- * {@code p1 enter sx01/sx02/sx03/sx04/sx05} 路由与发放可单测。
+ * D391–D400 短征：进本门闩 + S40–S44 结算发放钩；D401 有奖结算挂钩可选周目标 {@code short}。
+ * 地图 / MM / TrMenu 另号；本号保证 {@code p1 enter sx01..sx05} 路由与发放可单测。
  */
 public final class EmberShortService {
 
@@ -91,6 +91,11 @@ public final class EmberShortService {
         }
     }
 
+    /** D401: only a fresh rewarded clear counts toward optional weekly goal {@code short} (4+ / fail → false). */
+    public static boolean countsTowardShortGoal(SettleResult r) {
+        return r != null && r.fresh && r.pays;
+    }
+
     void settle(EmberRunSession s, EmberRunMaps.MapDef m, UUID u) {
         PlayerData pd = runs.dataOf(u);
         EmberRunRules.Ledger l = runs.store().ledger(u);
@@ -99,6 +104,10 @@ public final class EmberShortService {
         SettleResult r = applyGrants(m, l, s.runId, pd, before, fcPaid, DailyService.today(), System.currentTimeMillis());
         runs.store().saveLedger(u, r.changed);
         runs.plugin().getDataStore().flushMutation(u);
+        // D401: optional weekly goal short — Q07 gate inside addGoal; 4+/fail (pays=false) skipped
+        if (countsTowardShortGoal(r) && runs.season() != null) {
+            runs.season().addGoal(u, pd, "short", 1);
+        }
         log().info("[P1 run] " + s.runId + " short settle " + u + " rows+" + r.changed.size()
                 + (r.fresh ? (r.pays ? " reward" : " no-reward") : " (repeat)")
                 + " day=" + r.rewardedAfter + "/" + dailyCap(m));

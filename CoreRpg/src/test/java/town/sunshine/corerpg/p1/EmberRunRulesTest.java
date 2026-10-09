@@ -361,8 +361,8 @@ public class EmberRunRulesTest {
         assertEquals(200, q1.boss.hp, 0); // D86 (book 240)
         assertEquals(900, q2.boss.hp, 0);
         assertEquals(950, q3.boss.hp, 0); // D60
-        assertEquals(60, m.balanceVersion);                // D296 event_rate 0.85 (D293 bv59 / D227…)
-        assertEquals("g04-1/b60", m.ruleVersion);
+        assertEquals(69, m.balanceVersion);                // D401 short weekly goal (D400 bv68 …)
+        assertEquals("g04-1/b69", m.ruleVersion);
         assertEquals(0.5, m.failRefund, 1e-9);             // D128 first failed challenge of the day: half the stamina back
         assertEquals(200, m.abyssFeeMarkCoin);             // D124 surplus T3 marks pay abyss fees
         assertEquals(63.5, m.byKey("q04").fallCatchY, 1e-9); // D122 Q04 fall-catch
@@ -376,8 +376,9 @@ public class EmberRunRulesTest {
         assertEquals(5, m.seasonDeepTier);                 // D123 (was 8)
         assertEquals(3, m.seasonTop);
         assertEquals(Integer.valueOf(3), m.goalTargets.get("abyss")); // D117 weekly goals (余烬徽 only)
-        assertEquals(5, m.goalTargets.size());             // D144 + optional core (烬核同心)
+        assertEquals(6, m.goalTargets.size());             // D144 core + D401 short
         assertEquals(Integer.valueOf(2), m.goalTargets.get("core"));
+        assertEquals(Integer.valueOf(5), m.goalTargets.get("short")); // D401 optional short
         assertEquals(15, m.goalReward);
         assertEquals(20, m.goalBonus);
         assertEquals(0.2, m.raidLastReviveHp, 1e-9);      // D118

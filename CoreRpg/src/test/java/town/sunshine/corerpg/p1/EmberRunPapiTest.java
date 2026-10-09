@@ -38,7 +38,7 @@ public final class EmberRunPapiTest {
         r(GATE, "forge_t2", "forge_t3", "challenge", "q07done", "q04done", "q05done", "q06done", "q09done");
         r(ROTATION, "featured", "featured_key", "modifier", "rule_q01", "bounty", "loot_q01", "loot_r01");
         r(BOARD, "top_abyss_1", "top_abyss_10", "top_featured_3", "top_abyss_x");
-        r(SEASON, "goals", "goal_core", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges");
+        r(SEASON, "goals", "goal_core", "goal_short", "goalnosuch", "season", "season_week", "sboard_1", "srank_abyss", "badges"); // D401 goal_short
         r(COSMETIC, "shop", "shopprice_x", "shopsel_name", "shop_x", "title", "honors");
         r(FESTIVAL, "fest_name", "fest_charm_price", "fest_nosuch");
         r(ABYSS, "abyss_best", "abyss_state", "abyss_t1", "abyss_t10", "abyss_tx");
