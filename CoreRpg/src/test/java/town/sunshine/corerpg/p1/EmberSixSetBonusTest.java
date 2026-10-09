@@ -156,6 +156,9 @@ public class EmberSixSetBonusTest {
                 Arrays.asList(piece("scorch", "chest", 2, 0, 0, 0)));
         assertEquals("0", EmberSixPapi.text(true, v1, 0, "armor_set_active"));
         assertEquals("1", EmberSixPapi.text(true, v1, 0, "armor_set_busy"));
+        // D335 short aliases must match long keys
+        assertEquals(EmberSixPapi.text(true, v1, 0, "armor_set_active"), EmberSixPapi.text(true, v1, 0, "armor_sa"));
+        assertEquals(EmberSixPapi.text(true, v1, 0, "armor_set_busy"), EmberSixPapi.text(true, v1, 0, "armor_sb"));
         assertEquals("§e焚烬族 护甲 1/2 · 需同族掉落阶 T2+", EmberSixPapi.text(true, v1, 0, "armor_set"));
         assertEquals("§e四件套 护甲 1/2 → 2/2（可激活）", EmberSixPapi.text(true, v1, 0, "armor_chest_fam"));
         assertTrue(EmberSixPapi.setReply(v1).startsWith("四件套进行中：焚烬族护甲 1/2"));
@@ -166,6 +169,8 @@ public class EmberSixSetBonusTest {
                 Arrays.asList(piece("burst", "chest", 3, 3, 3, 0)));
         assertEquals("1", EmberSixPapi.text(true, v2, 0, "armor_set_active"));
         assertEquals("0", EmberSixPapi.text(true, v2, 0, "armor_set_busy"));
+        assertEquals(EmberSixPapi.text(true, v2, 0, "armor_set_active"), EmberSixPapi.text(true, v2, 0, "armor_sa"));
+        assertEquals(EmberSixPapi.text(true, v2, 0, "armor_set_busy"), EmberSixPapi.text(true, v2, 0, "armor_sb"));
         assertEquals("§a焚烬族 护甲 2/2 · 受伤 −3%", EmberSixPapi.text(true, v2, 0, "armor_set"));
         assertEquals("§c四件套将中断（护甲 2/2 → 1/2）", EmberSixPapi.text(true, v2, 0, "armor_chest_fam"));
         assertTrue(EmberSixPapi.setReply(v2).contains("受伤略减（−3%）"));
@@ -174,11 +179,15 @@ public class EmberSixSetBonusTest {
         EmberSixRank.View v0 = EmberSixRank.view(T, null, charm, 25, 0, 0, worn2, Collections.<EmberItemData>emptyList());
         assertEquals("0", EmberSixPapi.text(true, v0, 0, "armor_set_active"));
         assertEquals("0", EmberSixPapi.text(true, v0, 0, "armor_set_busy"));
+        assertEquals(EmberSixPapi.text(true, v0, 0, "armor_set_active"), EmberSixPapi.text(true, v0, 0, "armor_sa"));
+        assertEquals(EmberSixPapi.text(true, v0, 0, "armor_set_busy"), EmberSixPapi.text(true, v0, 0, "armor_sb"));
         assertEquals("§7先让刃与护符同族", EmberSixPapi.text(true, v0, 0, "armor_set"));
         assertEquals("四件套未激活：先让刃与护符同族。", EmberSixPapi.setReply(v0));
         // switch off blanks new keys too
         assertEquals("", EmberSixPapi.text(false, v2, 0, "armor_set_active"));
         assertEquals("", EmberSixPapi.text(false, v2, 0, "armor_set_busy"));
+        assertEquals("", EmberSixPapi.text(false, v2, 0, "armor_sa"));
+        assertEquals("", EmberSixPapi.text(false, v2, 0, "armor_sb"));
     }
 
     @Test public void singleHookLivesInCombatListenerOnly() throws Exception {

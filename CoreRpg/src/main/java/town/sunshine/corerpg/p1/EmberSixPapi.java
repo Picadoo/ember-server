@@ -19,6 +19,8 @@ import java.util.List;
  * armor_set                    D169 progress / active line
  * armor_set_active             1 / 0 (four-piece active)
  * armor_set_busy               1 / 0 (two-piece on, four-piece not yet)
+ * armor_sa                     D335 short alias = armor_set_active (TrMenu check-friendly)
+ * armor_sb                     D335 short alias = armor_set_busy
  * armor_all                    "§7将换上 2 件 · 生命 +1.2" / "§7四个部位都已是最好的一件"
  * armor_all_has                1 / 0
  * armor_stash                  待领 count (also when off)
@@ -38,11 +40,12 @@ public final class EmberSixPapi {
         if ("armor_stash_has".equals(key)) return stash > 0 ? "1" : "0";
         if ("armor_stash_line".equals(key)) return stash > 0 ? stashLine(stash) : "§7没有待领物品";
         if (!enabled || v == null) return "";
-        if ("armor_set_active".equals(key)) {
+        // D335: armor_sa / armor_sb short aliases (same 1/0 as active/busy; TrMenu check-friendly)
+        if ("armor_set_active".equals(key) || "armor_sa".equals(key)) {
             Object[] s = EmberSixRank.setProgress(v.blade, v.charm, v.worn);
             return Boolean.TRUE.equals(s[3]) ? "1" : "0";
         }
-        if ("armor_set_busy".equals(key)) {
+        if ("armor_set_busy".equals(key) || "armor_sb".equals(key)) {
             Object[] s = EmberSixRank.setProgress(v.blade, v.charm, v.worn);
             String fam = (String) s[0];
             return fam != null && !fam.isEmpty() && !Boolean.TRUE.equals(s[3]) ? "1" : "0";
