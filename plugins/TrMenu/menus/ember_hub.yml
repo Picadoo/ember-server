@@ -491,6 +491,7 @@ Icons:
         - ''
         - '§7%corerpg_p1_season%'
         - '§7本周目标：§f%corerpg_p1_goals% §7· 余烬徽 §f%corerpg_p1_badges%'
+        - '§8含可选短征周目标（赛季页 · 键号后出进度）'
         - '§7深渊榜首：§f%corerpg_p1_top_abyss_1%'
         - '§7称号与足迹：已获得 §f%corerpg_p1_honors% §7· 当前 §f%corerpg_p1_title%'
         - '§8只做展示，不加属性'
