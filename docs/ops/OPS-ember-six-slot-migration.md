@@ -67,6 +67,7 @@ gear:
 ### 1.4 观察期（Stage2 · D326 / D330）
 
 - **红线 / 绿出口：** 见 [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) 与 [`STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md`](../status/STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md)。绿出口须另签；满窗不早于 **2026-10-10 17:40 CST**；必抽整轮 ≥1 PASS。
+- **观察勿提前关窗禁误读（D363）：** 「签字包已批 / 附录已写 / 预检 PASS / 结案」**≠关观察**——见 DESIGN [`DESIGN-ember-six-slot-observe-early-close-misread-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-early-close-misread-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-observe-early-close-misread-d363-2026-10-09.md`](../status/STATUS-ember-six-slot-observe-early-close-misread-d363-2026-10-09.md)。**≠勾选 §2.4 ≠改日历门槛；关窗真源仍 D326§4 / D338§2.4 满窗另号。**
 - **禁默改 ×0.97：** 档 C 减伤倍率钉死；观察期不得拧倍率、不得把减伤改写进 B/H。
 - **回滚解耦：** 回滚 / 关 `set_bonus` **与** Stage1 的 `enabled` / `migrate` **解耦**——可只关四件套减伤而保留六槽甲路径与迁移；全关仍按 §1.3 / §7（先清未决 journal）。
 - **备份路径：** `/workspace/tmp/d325-bv62-backup-20261008173047/`（D325 live 备份）。触发红线（双计减伤、B/H 漂移、迁移回归、跨服复制等）时按观察结案回滚，勿手删 `p1-six` / 标签。

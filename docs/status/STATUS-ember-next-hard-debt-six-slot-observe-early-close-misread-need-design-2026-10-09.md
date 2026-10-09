@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 观察「勿提前关窗」禁误读短语对照 · docs-only · ≠关观察）
 
+> **旁注（已关 · 批 A · 批 M · D363）：** tip `89305978` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-observe-early-close-misread-d363-2026-10-09.md`](STATUS-ember-six-slot-observe-early-close-misread-d363-2026-10-09.md) · 禁误读对照已采纳 · OPS 半行已落 · **≠关观察 ≠勾选 §2.4 ≠改日历门槛 ≠开闸 ≠开 R**。
+>
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D362 K3 禁误读对照已落 @ `82664121`（**≠开闸 · 勿复述**）。D361 白板注记 / D360 样本旁注 / D359 离线预备已落（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1。**零改公式 · 零开开关。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **打开** · **STATUS=待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-observe-early-close-misread-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-early-close-misread-2026-10-09.md) · backlog `B-six-slot-observe-early-close-misread`  
+**本窗性质：** tip **已关** · **已批 A·M·D363** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸**  
+**硬规格（已批 A · 批 M · D363 · 对照已采纳 · ≠关观察）：** [`DESIGN-ember-six-slot-observe-early-close-misread-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-early-close-misread-2026-10-09.md) · backlog `B-six-slot-observe-early-close-misread`  
 **打开理由：** D326/D338/D342/D349/D350/D353/D358 等多处写「批 A≠关观察 / 附录≠关窗 / 预检≠签字 / 结案≠勾选 §2.4」，但**缺一张运维一眼对照表**——「签字包已采纳 / 预检 PASS / 附录已写 / tip 关闭包 / 钉盘 / 菜单诚实结案 / 日历将满 / 本页批 A」分别**不等于**什么。满窗前夜「模板已批 + 附录写满」易被误读成可提前签「观察结束」。本债**只**收口观察侧禁误读短语，**不**交关窗决策、**不**改 D326/D338 门槛。
 
 ---
@@ -51,4 +53,4 @@
 
 ---
 
-*选题 H · tip 打开 · 待批 A · 荐 M · 观察「勿提前关窗」禁误读对照 · ≠关观察 · 勿开闸。*
+*选题 H · tip 已关 · 已批 A·M·D363 · 观察「勿提前关窗」禁误读对照已采纳 · ≠关观察 · 勿开闸 · 勿勾 §2.4。*
