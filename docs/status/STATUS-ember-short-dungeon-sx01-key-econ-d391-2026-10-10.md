@@ -3,7 +3,7 @@
 **日期：** 2026-10-10（上海时间）  
 **上游：** DESIGN [`DESIGN-ember-short-dungeon-p1-reachable-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-p1-reachable-2026-10-10.md) · 总控批 A·M @`234dea63`  
 **裁决：** **本号交** `short.sx01` 进本键 + S40 发放钩 + REG/Economy/source-map · **地图/MM/TrMenu 另号** · **未关观察 · 未开 K3 · 未动 ×0.97/set_bonus · 未抬 afk · 未放开 gate_daily**  
-**版本：** tip **`9df1444f`** · runs `balance_version` **63** · economy SoT 仍 bv60（仅增 S40 金样，未抬 ECONOMY_BV）
+**版本：** tip **`4d555507`** · runs `balance_version` **63** · economy SoT 仍 bv60（仅增 S40 金样，未抬 ECONOMY_BV）
 
 ## 人话
 
