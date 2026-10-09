@@ -302,8 +302,8 @@ Icons:
       all:
         - 'command: corerpg p1 armor set'
     icons:
-      # D325 Stage2：真实状态机（已激活 / 进行中 / 未激活）；计数 D169 护甲 n/2
-      - condition: 'check papi %corerpg_p1_armor_set_active% == 1'
+      # D334：三态改用 armor_set 文案 contains（active=受伤 / busy=需同族）；勿用 set_active|busy==1（TrMenu 不命中）
+      - condition: 'check papi %corerpg_p1_armor_set% contains 受伤'
         priority: 4
         display:
           material: enchanted book
@@ -317,7 +317,7 @@ Icons:
         actions:
           all:
             - 'command: corerpg p1 armor set'
-      - condition: 'check papi %corerpg_p1_armor_set_busy% == 1'
+      - condition: 'check papi %corerpg_p1_armor_set% contains 需同族'
         priority: 3
         display:
           material: book

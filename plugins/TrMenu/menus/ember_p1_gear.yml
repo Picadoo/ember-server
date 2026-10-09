@@ -334,8 +334,8 @@ Icons:
       material: gray stained glass pane
       name: '§8'
     icons:
-      # D329：装备页护甲入口套装三态（与 ember_p1_armor S 格语义对齐；actions 仍进护甲页）
-      - condition: 'check papi %corerpg_p1_armor_set_active% == 1'
+      # D334：装备页护甲入口三态（与 armor S 对齐）；条件用 armor_set contains；actions 仍进护甲页
+      - condition: 'check papi %corerpg_p1_armor_set% contains 受伤'
         priority: 5
         display:
           material: iron chestplate
@@ -357,7 +357,7 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'menu: ember_p1_armor'
-      - condition: 'check papi %corerpg_p1_armor_set_busy% == 1'
+      - condition: 'check papi %corerpg_p1_armor_set% contains 需同族'
         priority: 4
         display:
           material: iron chestplate
