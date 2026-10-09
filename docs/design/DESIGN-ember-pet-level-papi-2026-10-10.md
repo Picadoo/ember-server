@@ -1,6 +1,6 @@
 # 余烬 · 使魔等级 PAPI 同屏（主题 B · 先证插件缺口）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md) · backlog `B-pet-level-papi` · 总控 D383 后点名主题 B
+STATUS=**已批 A · 批 M · D384 · 插件补键中 · 菜单挂键另号** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-level-papi-need-design-2026-10-10.md)（已关）· backlog `B-pet-level-papi` · STATUS [`STATUS-ember-pet-level-papi-d384-2026-10-10.md`](../status/STATUS-ember-pet-level-papi-d384-2026-10-10.md) · 总控 D383 后点名主题 B
 
 > **一句话玩家价值：** 使魔页一眼看见当前等级 / 满级与否 / 下一级魂尘——投喂有反馈，养成可感；**不**靠聊天刷屏，也**不**靠菜单假写固定字。
 
@@ -173,15 +173,21 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ## 6. 批注区（总控填）
 
-- [ ] **批 A · 方案 M**（§2.1 键规格 + §2.2 菜单草案；施工拆号 P1→P2）  
-- [ ] 否决 A（菜单假写）、L（改公式/抬表/空跳转）  
-- [ ] 批 A ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 同号写 Java  
+- [x] **批 A · 方案 M**（§2.1 键规格 + §2.2 菜单草案；施工拆号 P1→P2）· tip `@a869c892` · **D384 docs 占位 · 插件补键中 · 菜单挂键另号**  
+- [x] 否决 A（菜单假写）、L（改公式/抬表/空跳转）  
+- [x] 批 A ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 同号写 Java（本号 docs-only）  
+
+### 总控批注（D384）
+
+- **已批 A · 批 M** · 本号 **docs-only** 落字；**插件补键中**（P1 另号）；**菜单挂键另号**（P2，键就绪后）。
+- **≠本号写 Java** · **≠改 live 菜单** · **≠改 feed 公式** · **≠关观察** · **≠抬日表** · **≠开 R** · **≠开 K3** · **≠改 ×0.97 / 三开关 / bv** · **≠假写固定 Lv** · **≠复述 D373–D383**。
 
 ### 变更记录
 | 日 | 事 |
 |----|-----|
-| 2026-10-10 | 策划 · DESIGN 待批 A·荐 M · 先证 **无** PAPI · 数据层有等级 |
+| 2026-10-10 | 策划 · DESIGN 待批 A·荐 M · 先证 **无** PAPI · 数据层有等级 · tip `a869c892` |
+| 2026-10-10 | 总控批 A·M · **D384** docs 占位 · tip 关 · backlog→已批·插件施工中 · 插件补键中 · 菜单挂键另号 · **≠本号写 Java ≠改菜单 ≠关观察** |
 
 ---
 
-*使魔等级 PAPI 同屏 · 待批 A · 荐 M · 插件补键→菜单挂键 · ≠关观察 ≠抬日表。*
+*使魔等级 PAPI 同屏 · 已批 A·M · D384 docs 占位 · 插件补键中 · 菜单挂键另号 · ≠本号写 Java ≠关观察 ≠抬日表。*

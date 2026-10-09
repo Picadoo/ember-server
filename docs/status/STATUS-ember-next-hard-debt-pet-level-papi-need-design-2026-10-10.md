@@ -1,10 +1,12 @@
+> **旁注（已关 · 2026-10-10）：** 已批 A · 批 M · **D384 docs 占位 · 插件补键中 · 菜单挂键另号** · STATUS [`STATUS-ember-pet-level-papi-d384-2026-10-10.md`](STATUS-ember-pet-level-papi-d384-2026-10-10.md) · tip `a869c892` · **≠本号写 Java ≠改菜单 ≠关观察 ≠抬日表 ≠开 R**。下文为选题当时正文，保留作史。
+
 # 状态 · 下一档硬债选定 · 需策划（使魔等级 PAPI 同屏 · 主题 B）
 
 > **上游结案：** 总控 D383 挂机层钩已落 @`137058ee` 后点名主题 B「使魔等级 PAPI 同屏（先证插件缺口）」。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。**≠复述 D373–D383 主交付。**
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **打开** · DESIGN **待批 A · 荐 M** · **≠关观察** · **≠抬日表** · **≠开样本 R** · **≠开 K3** · **≠空跳转** · **≠同号写 Java**  
-**硬规格（待批）：** [`DESIGN-ember-pet-level-papi-2026-10-10.md`](../design/DESIGN-ember-pet-level-papi-2026-10-10.md) · backlog `B-pet-level-papi`  
+**本窗性质：** tip **已关 · 已批 A · 批 M · D384** · **docs 占位 · 插件补键中 · 菜单挂键另号** · **≠本号写 Java** · **≠关观察** · **≠抬日表** · **≠开样本 R** · **≠开 K3** · **≠空跳转**  
+**硬规格（已批 A · 批 M · D384）：** [`DESIGN-ember-pet-level-papi-2026-10-10.md`](../design/DESIGN-ember-pet-level-papi-2026-10-10.md) · backlog `B-pet-level-papi` · STATUS [`STATUS-ember-pet-level-papi-d384-2026-10-10.md`](STATUS-ember-pet-level-papi-d384-2026-10-10.md)  
 **打开理由：** D373/D376/D378 使魔闭环与互指已齐，但使魔页**仍看不见等级/下一级魂尘**——养成反馈只靠 `pet list`/`feed` 聊天，菜单同屏缺真源。
 
 ---
@@ -62,7 +64,7 @@
 
 ---
 
-*选题使魔等级 PAPI 同屏 · tip 打开 · DESIGN 待批 A·荐 M · ≠关观察 ≠抬日表。*
+*选题使魔等级 PAPI 同屏 · tip 已关 · 已批 A·M · D384 docs 占位 · 插件补键中 · 菜单挂键另号 · ≠本号写 Java ≠关观察 ≠抬日表。*
 
 ---
 
@@ -71,3 +73,4 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 主题 B · 先证无 PAPI · DESIGN 待批 A·荐 M |
+| 2026-10-10 | 总控 · tip **已关** · 批 A·M · **D384** docs 占位 · 插件补键中 · 菜单挂键另号 · STATUS `STATUS-ember-pet-level-papi-d384-2026-10-10.md` |
