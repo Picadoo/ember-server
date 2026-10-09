@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（观察期别轨薄债本轮无可交 · docs-only · ≠关观察 · ≠开闸 · ≠开 R）
 
+> **旁注（已关 · 批 A · 批 M · D369）：** tip `580608b6` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-observe-thin-debt-exhausted-d369-2026-10-09.md`](STATUS-ember-six-slot-observe-thin-debt-exhausted-d369-2026-10-09.md) · exhausted 已确认 · **静默非默认 · 已改派非观察** · OPS 半行已落 · 观察续至满窗走 D367 · **≠关观察 ≠开闸 ≠开 R**。
+>
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗 · 勿勾 §2.4**）。D368 K3 wt↔主仓禁混用已落 @ `982b9a94`（**≠开闸 · 勿复述**）。D360–D367 已落（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1 / 翻 set_bonus / 改日历 / 改 ignore。**零玩法 · 零开开关。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠ stage 脏 runtime** · **诚实 exhausted（非硬凑）**  
-**硬规格（待批 A · 荐方案 M=静默待命）：** [`DESIGN-ember-six-slot-observe-thin-debt-exhausted-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-thin-debt-exhausted-2026-10-09.md) · backlog `B-six-slot-observe-thin-debt-exhausted`  
+**本窗性质：** tip **已关** · **已批 A·M·D369** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠ stage 脏 runtime** · **诚实 exhausted（非硬凑）** · **静默非默认 · 已改派非观察**  
+**硬规格（已批 A · 批 M · D369 · exhausted 已确认 · 已改派 · ≠关观察 ≠开闸）：** [`DESIGN-ember-six-slot-observe-thin-debt-exhausted-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-thin-debt-exhausted-2026-10-09.md) · backlog `B-six-slot-observe-thin-debt-exhausted`  
 **打开理由：** 总控 D368 后派「硬债仍暂空则交下一别轨薄债；若无可交须诚实交 exhausted」。本轮扫 `origin/main` 近百、backlog 指针、OPS §1.4/§1.5：**无**独立「缺半行真源」且非 D360–D368 同类变体。按严策略 **默认倾向无可交**，禁止硬凑禁误读/注记/值班/黑名单/读法/启动前置/路径防呆变体。
 
 ---
@@ -76,4 +78,4 @@
 
 ---
 
-*选题 H · tip 待批 A · 荐 M=静默待命 · 观察期别轨薄债 exhausted · ≠关观察 · ≠开闸。*
+*选题 H · tip 已关 · 已批 A·M·D369 · exhausted 已确认 · 静默非默认 · 已改派非观察 · ≠关观察 · ≠开闸。*
