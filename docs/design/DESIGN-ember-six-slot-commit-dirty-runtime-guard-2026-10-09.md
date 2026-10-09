@@ -1,6 +1,6 @@
 # 余烬 · Stage2 观察期 commit 前脏 runtime 防误 stage 薄清单（决策页 · ≠关观察）
 
-STATUS=**待批 A**（荐 **方案 M** · **≠关观察 ≠勾选 §2.4 ≠开闸 ≠开 R ≠改 ×0.97 ≠改 ×0.1 ≠翻 set_bonus ≠改日历门槛 ≠改 `.gitignore` / 取消跟踪** · **不**复述 D360–D364 正文 · **不**重写 D344 防冲政策）· 2026-10-09 · tip 同日 · backlog `B-six-slot-commit-dirty-runtime-guard` · 真源指针 D344 / OPS §1.5 / D364 D6（分工）/ 现网 `git status` 脏迹
+STATUS=**已批 A · 批 M · D365**（commit 前脏 runtime 防误 stage 薄清单已采纳 · OPS §1.5 半行已落 · **≠关观察 ≠勾选 §2.4 ≠开闸 ≠开 R ≠改 ×0.97 ≠改 ×0.1 ≠翻 set_bonus ≠改日历门槛 ≠改 `.gitignore` / 取消跟踪** · **不**复述 D360–D364 正文 · **不**重写 D344 防冲政策）· 2026-10-09 · 总控批注 · 上游 tip `a728c2a0` · backlog `B-six-slot-commit-dirty-runtime-guard` · 真源指针 D344 / OPS §1.5 / D364 D6（分工）/ 现网 `git status` 脏迹
 
 > **一句话：** D344 防 live 被冲；缺 commit 前「勿 stage 脏 runtime」黑名单。荐 **方案 M**：统一防误 stage 薄清单；零改 ignore、零改 live。
 
@@ -160,12 +160,21 @@ git restore --staged -- plugins/CoreRpg/ladder.yml plugins/CoreRpg/calamity-stat
 
 ---
 
-## §5 勾批栏（总控）
+## §5 批注栏
 
-- [ ] **批 A：采纳方案 M（本清单）**  
+- [x] **批 A：采纳方案 M（本清单）** → 本 commit 前脏 runtime 防误 stage 薄清单为运维真源；OPS §1.5 半行指针已落（总控已批 · D365）  
 - [ ] 升级 L（另号改 ignore / 取消跟踪）  
 - [ ] 否决 / 改派  
 
+**总控批注（2026-10-09 · D365）：** **批 A · 批 M**：采纳本页为 Stage2 观察期 commit 前脏 runtime 防误 stage 薄清单真源；§2.3 R1–R6 黑名单 + §2.4 显式路径 add + §2.5 C1–C5 勾选；与 D344 live 防冲 / D364 值班 D6 分工。OPS §1.5 半行指针已落。**批 A ≠ 关观察 ≠ 改 ignore ≠ 开闸 ≠ 开 R ≠ 勾选 §2.4。**
+
 ---
 
-*待批 A · 荐 M · B-six-slot-commit-dirty-runtime-guard · commit 防误 stage ≠ 关观察 ≠ 改 ignore ≠ 开闸。*
+## 变更记录
+
+| 日期 | 事件 | 谁 |
+|------|------|-----|
+| 2026-10-09 | 初稿 · 待批 A · 荐 M · commit 前脏 runtime 防误 stage 薄清单 | 策划执行手 |
+| 2026-10-09 | D365 · 总控批 A·M；清单已采纳；OPS 半行已落；≠关观察≠改 ignore≠开闸 | 总控 / 执行手 |
+
+*已批 A·M·D365 · B-six-slot-commit-dirty-runtime-guard · commit 防误 stage ≠ 关观察 ≠ 改 ignore ≠ 开闸。*

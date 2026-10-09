@@ -80,6 +80,8 @@ gear:
 
 > 规格真源：[`DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md`](../design/DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md)（**已批 A·M·D344**）。**批 A ≠ 改代码默认 true ≠ 关观察 ≠ 开 K3。**
 
+- **commit 前脏 runtime 黑名单（D365）：** commit 前脏 runtime 黑名单 R1–R6 → DESIGN [`DESIGN-ember-six-slot-commit-dirty-runtime-guard-2026-10-09.md`](../design/DESIGN-ember-six-slot-commit-dirty-runtime-guard-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-commit-dirty-runtime-guard-d365-2026-10-09.md`](../status/STATUS-ember-six-slot-commit-dirty-runtime-guard-d365-2026-10-09.md)（**≠改 ignore ≠关观察**）。显式路径 add；禁宽 add；误 stage 则 unstage。
+
 #### 真源
 
 | 路径 | 观察期角色 |

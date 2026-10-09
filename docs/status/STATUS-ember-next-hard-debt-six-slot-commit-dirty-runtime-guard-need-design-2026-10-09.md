@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（commit 前脏 runtime 防误 stage 薄清单 · docs-only · ≠关观察）
 
+> **旁注（已关 · 批 A · 批 M · D365）：** tip `a728c2a0` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-commit-dirty-runtime-guard-d365-2026-10-09.md`](STATUS-ember-six-slot-commit-dirty-runtime-guard-d365-2026-10-09.md) · commit 前脏 runtime 防误 stage 薄清单已采纳 · OPS 半行已落 · **≠关观察 ≠改 ignore ≠开闸 ≠开 R ≠勾选 §2.4**。
+>
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D364 值班只读清单已落 @ `0e75b7aa`（**≠关观察 · 勿复述**）。D363 勿提前关窗 / D362 K3 禁误读 / D361 白板注记 / D360 样本旁注已落（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1。**零改公式 · 零开开关。**
 >
 > **选题说明：** 扫后「短语对照 / 注记 / 值班清单」同类再交易空转。本债换类：D344 覆盖 live 真源与 resources→live / 主仓切分支，**未**钉 commit 侧「哪些脏 runtime 不得 `git add`」的可执行清单；现网工作区常驻 `ladder.yml` / `calamity-state.yml` / `p1-six/` 等脏迹，STATUS 仅散落写「未 stage 脏 runtime」。
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **打开 · STATUS=待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠改配置** · **≠ stage 脏 runtime**  
-**硬规格（待批 A · 荐 M · ≠关观察）：** [`DESIGN-ember-six-slot-commit-dirty-runtime-guard-2026-10-09.md`](../design/DESIGN-ember-six-slot-commit-dirty-runtime-guard-2026-10-09.md) · backlog `B-six-slot-commit-dirty-runtime-guard`  
+**本窗性质：** tip **已关** · **已批 A·M·D365** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠改配置** · **≠ stage 脏 runtime** · **≠改 ignore**  
+**硬规格（已批 A · 批 M · D365 · 清单已采纳 · ≠关观察）：** [`DESIGN-ember-six-slot-commit-dirty-runtime-guard-2026-10-09.md`](../design/DESIGN-ember-six-slot-commit-dirty-runtime-guard-2026-10-09.md) · backlog `B-six-slot-commit-dirty-runtime-guard`  
 **打开理由：** 观察期 docs/功能提交高频；被跟踪的 runtime 文件（`ladder.yml`、`calamity-state.yml` 等）与未跟踪 `p1-six/` 常驻脏。`git add -A` / 宽路径 `add plugins/CoreRpg` 易把脏态入仓。D344 防的是**冲掉 live 保护键**；D364 D6 防的是**resources→live 覆盖**——二者都**不是** commit 前「勿 stage 哪些路径」清单。本债只收口该清单，**不**改 ignore、**不**改 live、**不**关观察。
 
 ---
@@ -54,4 +56,4 @@
 
 ---
 
-*选题 H · tip 打开 · 待批 A · 荐 M · commit 脏 runtime 防误 stage · ≠关观察 · ≠改配置 · ≠开闸。*
+*选题 H · tip 已关 · 已批 A·M·D365 · commit 脏 runtime 防误 stage · ≠关观察 · ≠改 ignore · ≠开闸。*
