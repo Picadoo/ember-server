@@ -11,7 +11,7 @@
 | `short.sx09` | name 烬渠跳石 · EmberSx09 · cost 30 · Q01 · `p1_sx09_day`×3（与 sx01–sx08 **分开**） | — |
 | rooms×3+boss | 首航同构瘦表（EmberSx09* MM 已就绪；坐标参考 sx01 白盒；`map_version …@d412-pending`） | 完整烬渠跳石地形 / Cast 打磨 |
 | S48 | REG + EmberEconomy + economy.yml + source-map「短征通关（sx09）」；有奖 **80/4/3**；首通 **100/6/1**（DESIGN 略薄） | p1sim 薄模型 |
-| 日帽 PAPI | `p1_sx09_day` / `_day_line` / `_day_left`；`sx_day_left_sum` **纳入第九本** | TrMenu 九本选页挂键 |
+| 日帽 PAPI | `p1_sx09_day` / `_day_line` / `_day_left`；`sx_day_left_sum` **纳入第九本** | **挂盘已落**（STATUS-ember-short-sx09-dayline-d412） |
 | 首通合计 | `sx09_fc`（MAP+shortMaps）；`sx_fc_left` / `sx_fc_pending_line` 扩扫 sx09（文案「九本」） | — |
 | 代码 | EmberShortRules `economyId` sx09→S48；`SHORT_KEYS` 含 sx09；`p1 enter sx09` | — |
 | DP | `EmberSx09` idle 骨架已就绪（本号核对；Director 刷怪；boss `$end` → CoreRpg settle） | 地图 WE |

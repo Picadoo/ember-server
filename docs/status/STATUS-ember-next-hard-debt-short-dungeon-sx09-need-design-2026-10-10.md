@@ -71,3 +71,4 @@
 ## 变更记录
 
 | 2026-10-10 | **骨架已落** · map abyss 壳 + DP EmberSx09 + 九本选页 T=sx09 · day_line/fc 注释预留 · STATUS-ember-short-dungeon-sx09-d412 · backlog → 已批·施工中·骨架已落 |
+| 2026-10-10 | **挂盘已落** · 菜单号挂 `%corerpg_p1_sx09_day_line%` + `%corerpg_p1_sx09_fc%` · STATUS [`STATUS-ember-short-sx09-dayline-d412-2026-10-10.md`](STATUS-ember-short-sx09-dayline-d412-2026-10-10.md) · 键 tip `13583cfe` |
