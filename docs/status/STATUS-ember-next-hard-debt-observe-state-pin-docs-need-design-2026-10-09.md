@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（观察期现态钉盘小修 · OPS jar tip + 绿出口附录续写 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D350）：** tip `STATUS-ember-next-hard-debt-observe-state-pin-docs-need-design-2026-10-09.md` 已关；指向 STATUS [`STATUS-ember-observe-state-pin-docs-d350-2026-10-09.md`](STATUS-ember-observe-state-pin-docs-d350-2026-10-09.md) · OPS jar + gear-structure §9 + 绿出口 §2.3 附录已落 · **≠关观察** · **≠换 jar** · **≠开 K3**。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D348 已关清 D346 薄抽；过时 tip 关闭包 @ `5834dab8` **已批 A·M**（落字另号——**本窗勿重复关闭包**）。D329–D348 菜单/权威诚实主路径已收。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**零玩法 / 零 TrMenu（本稿只 docs 钉盘规格）。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar 换装 / 零菜单** · 落字另号  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-observe-state-pin-docs-2026-10-09.md`](../design/DESIGN-ember-observe-state-pin-docs-2026-10-09.md) · backlog `B-observe-state-pin-docs`  
+**本窗性质：** tip 已关 · 授权见 D350 STATUS · **零 TrMenu / 零开关 / 零换 jar** · **本窗不关观察**  
+**硬规格（已批 A · 批 M · D350 · 钉盘已落 · ≠关观察）：** [`DESIGN-ember-observe-state-pin-docs-2026-10-09.md`](../design/DESIGN-ember-observe-state-pin-docs-2026-10-09.md) · backlog `B-observe-state-pin-docs`  
 **打开理由：** （1）OPS / gear-structure 文首仍钉 jar **`1.65.99-d325.local`**，观察期进程真源已是 **`1.65.101-d335.local`**（D342 R4 已记漂移；§1.5 嘱「以进程为准」但文首未改）。（2）D338 绿出口 §2.3 增量附录只写到 D340，**缺 D341–D348** 指针——满窗签字前易空挂。二者均为观察期 docs 钉盘，**≠关窗、≠薄抽复述、≠ tip 关闭包**。
 
 ---

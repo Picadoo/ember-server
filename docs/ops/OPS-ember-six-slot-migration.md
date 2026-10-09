@@ -1,7 +1,7 @@
 # 运维手册 · 余烬六槽护甲迁移（gear.six_slot）
 
 - 适用对象：运维 / OP（权限 `corerpg.admin`）。本手册只列游戏内或控制台可用的命令，均以代码为准。
-- **线上状态（D330 口径钉死）：** jar **`1.65.99-d325.local`** · `balance_version` **62** · Stage1 **F** + Stage2 档 **C** · 三开关 **`enabled` / `migrate` / `set_bonus` 均为 true** · **观察中**（绿出口另签，不早于 **2026-10-10 17:40 CST**）。真源：**代码 / 线上配置 > 本文**。
+- **线上状态（D350 钉盘 · 观察期）：** jar **`1.65.101-d335.local`**（进程真源；D335 tip 起 · 薄抽/预检多次确认）· `balance_version` **62** · Stage1 **F** + Stage2 档 **C** · 三开关 **`enabled` / `migrate` / `set_bonus` 均为 true** · **观察中**（绿出口另签，不早于 **2026-10-10 17:40 CST**）。真源：**代码 / 线上配置 / 进程 > 本文**；若再漂移，以进程为准并旁注（§1.5）。**本行改 jar tip ≠ 授权换装或回滚。** D325 备份路径见 §1.4。
 - 代码基准：CoreRpg `origin/main`（含 D319–D325：invsnap 守卫、孤儿标签清理、收尾存档、完成前等 DB 确认、pieces 自愈、待领与开关脱钩、audit 待领计入 held、Stage2 `set_bonus` 四件套减伤）。代码默认三键仍为 `false`；**线上观察中为 true**——以线上 `ember-v1.yml` 与 `/corerpg p1 armor status` 为准。
 - 本手册**不擅自授权**任何上线、切开关、改 ×0.97 或迁移动作；须总控另签。T2 演练、T3 上线、部署、观察关窗、回滚都要各自另签。
 - 相关文档：规格 `docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md`；Stage2 `docs/design/DESIGN-ember-six-slot-stage2-set-bonus-2026-10-08.md`；观察结案 `docs/design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`；T2 演练计划 `docs/status/PLAN-ember-six-slot-t2-drill.md`；权威勘误 STATUS `docs/status/STATUS-ember-six-slot-authority-ops-align-d330-2026-10-09.md`。
