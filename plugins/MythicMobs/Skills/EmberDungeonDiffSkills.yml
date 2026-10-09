@@ -205,3 +205,19 @@ EmberSx01SentryCast:
   - delay 25
   - damage{amount=1.2} @PlayersInRadius{r=5}
   - effect:particles{p=flame;amount=28;hSpread=5;ySpread=0.6;speed=0.01} @Self
+
+# --- 短征 sx02 · 锈灯栈道 Boss 灯塔扫线落点（可躲；无 SLOW；范式 FrostNova）---
+# 对照：EmberSx01SentryCast / EmberFrostNovaCast；主题「扫线→落点圈」：蓄力宽幅粒子示扫线，结算 r5 落点圈
+# 1.12.2 粒子：flame + lava + crit（禁无效粒子）
+EmberSx02BeaconCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&e【锈灯】&f灯塔扫线落点——&7侧移拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=18;hSpread=1.2;ySpread=0.4;speed=0} @Self
+  - effect:particles{p=lava;amount=14;hSpread=2.8;ySpread=0.3;speed=0} @Self
+  - effect:particles{p=crit;amount=22;hSpread=4.5;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.65;pitch=0.85} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=30;hSpread=5;ySpread=0.6;speed=0.02} @Self
+  - effect:particles{p=lava;amount=18;hSpread=5;ySpread=0.4;speed=0} @Self

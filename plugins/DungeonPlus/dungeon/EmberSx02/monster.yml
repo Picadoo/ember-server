@@ -1,0 +1,15 @@
+# G04 / EmberSx01 同构：怪物由 CoreRpg 运行导演按 ember-v1-runs.yml short.sx02 生成（房间/门/首领/结算）。
+# D392 MM 号钉死四只 MM id + 意向刷点（Q01/sx01 三房坐标惯例）；本文件仍 idle，禁改回 DP wave（D391 FAIL 教训）。
+# 意向挂表（键号写入 short.sx02 rooms/boss 时用）：
+#   R1 wave1 · EmberSx02Guard 锈灯巡卫×3 @ (-6,64,29)×2 · (0,64,29)×1
+#   R1 wave1 · EmberSx02Archer 栈道弩手×2 @ (6,64,29)×1 · (9,64,28)×1
+#   R2 wave2 · EmberSx02Elite 栈道督卫×1 @ (30,64,39)
+#   R3 boss  · EmberSx02Warden 灯塔守吏×1 @ (0,64,102) + EmberSx02BeaconCast ~onTimer:80
+# mobs 槽位建议：melee=Guard · ranged=Archer · elite=Elite · boss.mm=Warden
+groups:
+  idle:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false
