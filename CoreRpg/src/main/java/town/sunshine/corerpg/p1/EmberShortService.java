@@ -12,8 +12,8 @@ import java.util.UUID;
 import java.util.logging.Logger;
 
 /**
- * D391–D400 短征：进本门闩 + S40–S44 结算发放钩；D401 有奖结算挂钩可选周目标 {@code short}。
- * 地图 / MM / TrMenu 另号；本号保证 {@code p1 enter sx01..sx05} 路由与发放可单测。
+ * D391–D403 短征：进本门闩 + S40–S45 结算发放钩；D401 有奖结算挂钩可选周目标 {@code short}。
+ * 地图 / MM / TrMenu 另号；本号保证 {@code p1 enter sx01..sx06} 路由与发放可单测。
  */
 public final class EmberShortService {
 
