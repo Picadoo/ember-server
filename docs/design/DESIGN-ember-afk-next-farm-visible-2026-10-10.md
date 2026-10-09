@@ -1,10 +1,12 @@
 # 余烬 · 挂机动态下一层养签（next_farm · 挂机资源环深化 · ≠抬日表 · ≠sx09）
 
-STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md) · backlog `B-afk-next-farm-visible`（**待批**） · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx09 ≠复述 D373–D410 ≠改 daily_kills/afk.tiers**
+STATUS=**已批 A · 方案 M · D411** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-next-farm-visible`（**已批/施工中**）· **施工中** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx09 ≠复述 D373–D410 ≠改 daily_kills/afk.tiers**
 
 > **一句话玩家价值：** 打开挂机战况就能看见「以你现在这层 · 本层继续打稳 / 可试上一层·多养什么 / 已是最高·打满去花」——多坐或换层有锚；**不**抬产量、不交 sx09。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx09。**
+>
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（next_farm 只读键+战况挂键）；否决 A/L/W；W1a 插件键+W1b 战况 I 必做、W1c Open 可选同批；零改产量/tiers/Stage2；≠sx09；**施工中**。
 
 ---
 
@@ -55,9 +57,9 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-next-
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a next_farm 键 + W1b 战况挂键 + W1c 可选 Open；见 §2）
-- [ ] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx09/仓差主债/复述）
-- [ ] 批注：＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+- [x] **方案 M**（W1a next_farm 键 + W1b 战况挂键 + W1c 可选 Open；见 §2）
+- [x] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx09/仓差主债/复述）
+- [x] 批注：总控批 A·M · 2026-10-10 · D411 · W1a 插件键+W1b 战况 I 必做 · W1c Open 可选同批 · 零改产量/tiers/Stage2 · ≠sx09 · **施工中**
 
 ---
 
@@ -176,7 +178,8 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-next-
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机动态下一层养签（兑现 D383 后置）· ≠sx09 |
+| 2026-10-10 | **已批 A · 方案 M · D411** · 总控批注勾选 · W1a 插件键+W1b 战况 I 必做 · W1c Open 可选同批 · 零改产量/tiers/Stage2 · ≠sx09 · **施工中** |
 
 ---
 
-*D411 · 挂机动态下一层养签 next_farm · 待批 A·荐方案 M · ≠关观察 ≠抬日表 ≠sx09。*
+*D411 · 挂机动态下一层养签 next_farm · 已批 A·方案 M · 施工中 · ≠关观察 ≠抬日表 ≠sx09。*
