@@ -237,3 +237,19 @@ EmberSx03FrostCast:
   - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5}
   - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.8;speed=0} @Self
   - effect:particles{p=crit;amount=24;hSpread=5;ySpread=0.6;speed=0.02} @Self
+
+# --- 短征 sx04 · 烬井螺旋 Boss 井心喷涌/灰柱（可躲；无 SLOW；范式 AshBurst / SentryCast）---
+# 对照：EmberAshBurstCast / EmberSx01SentryCast；主题「井心喷焰」：lava+flame 竖柱蓄力 + crit 环示意；结算 r5
+# 1.12.2 粒子：lava + flame + crit（禁无效粒子）；message 标明踏上井沿或拉开
+EmberSx04FurnaceCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&c【烬井】&f井心喷焰——&7踏上井沿或拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=28;hSpread=1.5;ySpread=2.2;speed=0} @Self
+  - effect:particles{p=flame;amount=36;hSpread=2;ySpread=2.5;speed=0.01} @Self
+  - effect:particles{p=crit;amount=20;hSpread=4;ySpread=0.6;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.5} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=lava;amount=24;hSpread=5;ySpread=1.2;speed=0} @Self
+  - effect:particles{p=flame;amount=32;hSpread=5;ySpread=0.8;speed=0.02} @Self

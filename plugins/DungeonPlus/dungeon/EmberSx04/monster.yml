@@ -1,0 +1,13 @@
+# EmberSx03 同构：怪物由 CoreRpg 运行导演按 ember-v1-runs.yml short.sx04 生成（房间/门/首领/结算）。
+# D397：本文件 idle，禁改回 DP wave（D391 FAIL 教训）。MM EmberSx04* 另号。
+# 意向挂表（键号写入 short.sx04 rooms/boss）：
+#   R1 · EmberSx04Zombie 井卫尸 · EmberSx04Crossbow 螺旋弩手
+#   R2 · EmberSx04Elite
+#   R3 boss · EmberSx04Warden 炉心井守 + Cast（井心喷焰/灰柱）
+groups:
+  idle:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false
