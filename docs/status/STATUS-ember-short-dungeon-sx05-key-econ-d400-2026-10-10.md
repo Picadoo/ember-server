@@ -34,7 +34,7 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · 主�
 
 | 项 | 值 |
 |----|----|
-| tip | （commit 后填） |
+| tip |  |
 | jar | `CoreRpg-1.65.110-d400.local.jar` |
-| sha256 | （装服后填） |
+| sha256 |  |
 | Enabling | （装服后填） |
