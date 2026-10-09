@@ -1,4 +1,5 @@
 # D407 · 短征七本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊 · sx04 烬井螺旋 · sx05 裂谷风廊 · sx06 烬环廊 · sx07 烬塔回升）
+# D409 · 日帽满（sx_day_left_sum==0）Open/I/B 追工坊（W1b/W1c）+ 可选满态右键挂机（W1d）；零改日帽/S40–S46/体力。
 # 日帽同屏：sx01–sx07 挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum 含第七本）；禁假写个人 n/3。
 # D406+D407 · 生涯首通同屏：A/C/E/G/K/M/O + I 挂 %corerpg_p1_sx0N_fc% + sx_fc_left/pending_line（合计含第七本）。
 # 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|…|sx07。
@@ -33,8 +34,15 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 / 烬井螺旋 / 裂谷风廊 / 烬环廊 / 烬塔回升 · Q01 后 · 各体力30 · 日有奖帽分开计'
-    - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
+    # D409 W1b：日帽合计满 → 满态 Open；未满保持现网选本句（真键 sx_day_left_sum · 禁假写固定 N）
+    - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0'
+      priority: 1
+      actions:
+        - 'tell: §e今日短征有奖已满 §7· 材料在仓 · 去工坊花'
+        - 'tell: §8练习仍可进 · 0 点重置有奖次数 · 不是旧日常窟'
+      deny-actions:
+        - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 / 烬井螺旋 / 裂谷风廊 / 烬环廊 / 烬塔回升 · Q01 后 · 各体力30 · 日有奖帽分开计'
+        - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
     - 'tell: §8生涯首通：各本悬停可见未领/已领取 · %corerpg_p1_sx_fc_pending_line%'
     - 'tell: §8本周可选周目标·短征：赛季页可看 · 有奖通关计入 · 只发外观徽 · 不算全部完成'
 
@@ -46,6 +54,81 @@ Icons:
 
   I:
     update: 20
+    icons:
+      # D409 W1b+W1d：日帽合计满 + 体力>0 → 满态说明 + 挂机半行（不盖工坊主 CTA）
+      - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0 and check papi %corerpg_stamina% > 0'
+        priority: 1
+        display:
+          material: paper
+          name: '§e今日有奖已满 · 去工坊花'
+          lore:
+            - ''
+            - '§a今日短征有奖已满 §7· 材料在仓 · 去工坊花'
+            - '§8练习仍可进 · 0 点重置有奖次数 · 不是旧日常窟'
+            - '§7今日剩余有奖合计（七本）：§f%corerpg_p1_sx_day_left_sum%'
+            - '§e碎片/骨尘/胚料在账号仓 · 点「去哪花」开工坊'
+            - '§8体力还在可挂机 · 「去哪花」右键进挂机庭'
+            - ''
+            - '§7独立短本（§f不是§7旧日常窟）'
+            - '§7七本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊 §7/ §f烬井螺旋 §7/ §f裂谷风廊 §7/ §f烬环廊 §7/ §f烬塔回升'
+            - '§7通关有奖：§f币80 + 碎片4 + 骨尘3 §7→ 仓库 → 工坊花'
+            - '§7烬门首通：§f%corerpg_p1_sx01_fc%'
+            - '§7锈灯首通：§f%corerpg_p1_sx02_fc%'
+            - '§7霜雾首通：§f%corerpg_p1_sx03_fc%'
+            - '§7烬井首通：§f%corerpg_p1_sx04_fc%'
+            - '§7裂谷首通：§f%corerpg_p1_sx05_fc%'
+            - '§7烬环首通：§f%corerpg_p1_sx06_fc%'
+            - '§7烬塔首通：§f%corerpg_p1_sx07_fc%'
+            - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
+            - '§8%corerpg_p1_sx_fc_pending_line%'
+            - '§e烬门 · %corerpg_p1_sx01_day_line%'
+            - '§e锈灯 · %corerpg_p1_sx02_day_line%'
+            - '§e霜雾 · %corerpg_p1_sx03_day_line%'
+            - '§e烬井 · %corerpg_p1_sx04_day_line%'
+            - '§e裂谷 · %corerpg_p1_sx05_day_line%'
+            - '§e烬环 · %corerpg_p1_sx06_day_line%'
+            - '§e烬塔 · %corerpg_p1_sx07_day_line%'
+            - '§8不发主线装备/徽记/签名（首航）'
+            - ''
+            - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
+            - '§8旧日常窟仍收起 · 勿找 ember_daily'
+      # D409 W1b：日帽合计满（体力已尽）→ 满态说明 · 仍追工坊
+      - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0'
+        priority: 2
+        display:
+          material: paper
+          name: '§e今日有奖已满 · 去工坊花'
+          lore:
+            - ''
+            - '§a今日短征有奖已满 §7· 材料在仓 · 去工坊花'
+            - '§8练习仍可进 · 0 点重置有奖次数 · 不是旧日常窟'
+            - '§7今日剩余有奖合计（七本）：§f%corerpg_p1_sx_day_left_sum%'
+            - '§e碎片/骨尘/胚料在账号仓 · 点「去哪花」开工坊'
+            - '§8体力已尽 · 先回满再挂机或练习进本'
+            - ''
+            - '§7独立短本（§f不是§7旧日常窟）'
+            - '§7七本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊 §7/ §f烬井螺旋 §7/ §f裂谷风廊 §7/ §f烬环廊 §7/ §f烬塔回升'
+            - '§7通关有奖：§f币80 + 碎片4 + 骨尘3 §7→ 仓库 → 工坊花'
+            - '§7烬门首通：§f%corerpg_p1_sx01_fc%'
+            - '§7锈灯首通：§f%corerpg_p1_sx02_fc%'
+            - '§7霜雾首通：§f%corerpg_p1_sx03_fc%'
+            - '§7烬井首通：§f%corerpg_p1_sx04_fc%'
+            - '§7裂谷首通：§f%corerpg_p1_sx05_fc%'
+            - '§7烬环首通：§f%corerpg_p1_sx06_fc%'
+            - '§7烬塔首通：§f%corerpg_p1_sx07_fc%'
+            - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
+            - '§8%corerpg_p1_sx_fc_pending_line%'
+            - '§e烬门 · %corerpg_p1_sx01_day_line%'
+            - '§e锈灯 · %corerpg_p1_sx02_day_line%'
+            - '§e霜雾 · %corerpg_p1_sx03_day_line%'
+            - '§e烬井 · %corerpg_p1_sx04_day_line%'
+            - '§e裂谷 · %corerpg_p1_sx05_day_line%'
+            - '§e烬环 · %corerpg_p1_sx06_day_line%'
+            - '§e烬塔 · %corerpg_p1_sx07_day_line%'
+            - '§8不发主线装备/徽记/签名（首航）'
+            - ''
+            - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
+            - '§8旧日常窟仍收起 · 勿找 ember_daily'
     display:
       material: paper
       name: '§e短征说明'
@@ -394,6 +477,44 @@ Icons:
 
   B:
     update: 20
+    icons:
+      # D409 W1c+W1d：日帽满 + 体力>0 · 左键仍工坊主 CTA · 右键挂机庭
+      - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0 and check papi %corerpg_stamina% > 0'
+        priority: 1
+        display:
+          material: book
+          name: '§a今日有奖已满 · 去工坊花材料'
+          lore:
+            - ''
+            - '§7碎片/骨尘/胚料在账号仓'
+            - '§7工坊：强化 / 精工 / 成色吃碎片·骨尘'
+            - '§8体力还在可挂机 · 右键进挂机庭（不盖工坊主路）'
+            - ''
+            - '§e左键 ➥ §f打开工坊 · §e右键 ➥ §f挂机庭'
+        actions:
+          left:
+            - 'sound: BLOCK_ANVIL_USE-1-1'
+            - 'menu: ember_p1_forge'
+          right:
+            - 'sound: BLOCK_NOTE_PLING-1-1'
+            - 'menu: ember_p1_afk'
+      # D409 W1c：日帽满 · 唯工坊（体力已尽不推挂机）
+      - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0'
+        priority: 2
+        display:
+          material: book
+          name: '§a今日有奖已满 · 去工坊花材料'
+          lore:
+            - ''
+            - '§7碎片/骨尘/胚料在账号仓'
+            - '§7工坊：强化 / 精工 / 成色吃碎片·骨尘'
+            - '§8体力已尽 · 先回满再挂机'
+            - ''
+            - '§e➥ §f打开工坊'
+        actions:
+          all:
+            - 'sound: BLOCK_ANVIL_USE-1-1'
+            - 'menu: ember_p1_forge'
     display:
       material: book
       name: '§b去哪花'

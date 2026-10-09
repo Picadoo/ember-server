@@ -1,12 +1,12 @@
 # 余烬 · 短征有奖→工坊可追（日更产→花 · ≠抬日表 · ≠sx08）
 
-STATUS=**已批 A · 方案 M · D409** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-reward-spend-chase-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-reward-spend-chase-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-short-reward-spend-chase`（**已批/施工中**）· **施工中** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx08 ≠复述 D373–D408 ≠改 daily_kills/afk.tiers/S40–S46/日帽/体力/UpgradeRules**
+STATUS=**已批 A · 方案 M · D409 · 菜单侧已落地** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-reward-spend-chase-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-reward-spend-chase-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-short-reward-spend-chase`（**菜单已落地 · W1a 插件另做**）· STATUS [`STATUS-ember-short-reward-spend-chase-d409-menu-2026-10-10.md`](../status/STATUS-ember-short-reward-spend-chase-d409-menu-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx08 ≠复述 D373–D408 ≠改 daily_kills/afk.tiers/S40–S46/日帽/体力/UpgradeRules**
 
 > **一句话玩家价值：** 短征有奖通关后立刻看见「材料已进仓 · 可去工坊花」；今日合计有奖打满打开选本，一眼「今日有奖已满 · 去工坊花材料」——日更产→花不断；**不**抬产量、**不**交 sx08、**不**改日帽/经济。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx08。**
 >
-> **总控批 A·M · 2026-10-10：** 采纳方案 M；否决 A/L/W；W1a 有奖结算半句（插件）+ W1b/c 日帽满 Open/I/B 追工坊（菜单）必做；W1d 满态挂机半行可选同批；零改日帽/S40–S46/产量/体力/Stage2；≠sx08；**施工中**。
+> **总控批 A·M · 2026-10-10：** 采纳方案 M；否决 A/L/W；W1a 有奖结算半句（插件）+ W1b/c 日帽满 Open/I/B 追工坊（菜单）必做；W1d 满态挂机半行可选同批；零改日帽/S40–S46/产量/体力/Stage2；≠sx08；**菜单 W1b/W1c+W1d 已落地** · W1a 插件另做。
 
 ---
 
@@ -60,7 +60,7 @@ STATUS=**已批 A · 方案 M · D409** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a 有奖结算半句 + W1b 日帽满 Open/I + W1c 满态「去哪花」；见 §2）
 - [x] 否决 A（只口号）/ L（抬表·假开）/ W（sx08/复述）
-- [x] 批注：总控批 A·M · 2026-10-10 · D409 · W1a+W1b/c 必做 · W1d 可选同批 · 零改日帽/S40–S46/产量/体力/Stage2 · ≠sx08 · **施工中**
+- [x] 批注：总控批 A·M · 2026-10-10 · D409 · **菜单 W1b/W1c+W1d 已落地** · W1a 插件另做 · 零改日帽/S40–S46/产量/体力/Stage2 · ≠sx08
 
 ---
 
@@ -168,7 +168,8 @@ STATUS=**已批 A · 方案 M · D409** · 2026-10-10 · tip [`STATUS-ember-next
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题短征有奖→工坊可追（对位 D408）· ≠sx08 |
 | 2026-10-10 | **已批 A · 方案 M · D409** · 总控批注勾选 · W1a+W1b/c 必做 · W1d 可选同批 · **施工中** · ≠关观察 ≠抬日表 ≠sx08 ≠开 R/K3 |
+| 2026-10-10 | **菜单侧已落地** · W1b/W1c+W1d · STATUS-ember-short-reward-spend-chase-d409-menu · W1a 插件另做 · ≠关观察 ≠抬日表 ≠sx08 |
 
 ---
 
-*D409 · 短征有奖→工坊可追 · 已批 A·方案 M · 施工中 · ≠关观察 ≠抬日表 ≠sx08。*
+*D409 · 短征有奖→工坊可追 · 已批 A·方案 M · 菜单侧已落地 · W1a 另做 · ≠关观察 ≠抬日表 ≠sx08。*
