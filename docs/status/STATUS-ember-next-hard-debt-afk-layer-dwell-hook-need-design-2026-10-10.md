@@ -3,8 +3,8 @@
 > **上游结案：** 总控批 A·M @`92359b65` 内容互指/日更可读面 exhausted（D373–D381）确认后**否决静默**，点名主题 A「新挂机层展示钩 / 挂机庭多坐一会儿趣味」。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。主题 B 使魔等级 PAPI **本号不写**（可另号）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A · 荐 M** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠新假平面** · **≠空跳转**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-afk-layer-dwell-hook-2026-10-10.md`](../design/DESIGN-ember-afk-layer-dwell-hook-2026-10-10.md) · backlog `B-afk-layer-dwell-hook`  
+**本窗性质：** tip **旁注已关** · **已批 A · 批 M · D383 已施工** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠新假平面** · **≠空跳转**  
+**硬规格（已批 A · 批 M · D383）：** [`DESIGN-ember-afk-layer-dwell-hook-2026-10-10.md`](../design/DESIGN-ember-afk-layer-dwell-hook-2026-10-10.md) · STATUS [`STATUS-ember-afk-layer-dwell-hook-d383-2026-10-10.md`](STATUS-ember-afk-layer-dwell-hook-d383-2026-10-10.md) · backlog `B-afk-layer-dwell-hook`  
 **打开理由：** D285/D305/D375 后，挂机页能看见今日条与层名片、也能去工坊花材料，但**缺「今天还差什么 / 下一层更好在哪」软目标展示**——停留动机与回城动机仍薄，玩家容易看一眼就关。
 
 ---
@@ -60,4 +60,14 @@
 
 ---
 
-*选题挂机层展示钩 · tip 待批 A · 荐 M · ≠关观察 ≠抬挂机表。*
+*选题挂机层展示钩 · tip 旁注已关 · 批 A·M · D383 · ≠关观察 ≠抬挂机表。*
+
+---
+
+## 变更记录
+
+| 日 | 事 |
+|----|-----|
+| 2026-10-10 | 策划 · tip 打开 · 选题挂机层展示钩 · DESIGN 待批 A·荐 M |
+| 2026-10-10 | **旁注已关** · 总控批 A·M · D383 已施工 · 见 STATUS-ember-afk-layer-dwell-hook-d383 |
+

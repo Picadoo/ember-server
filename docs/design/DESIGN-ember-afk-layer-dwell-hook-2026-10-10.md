@@ -1,6 +1,6 @@
 # 余烬 · 挂机层展示钩 / 多坐一会儿趣味（≠抬日表 · ≠假平面）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-layer-dwell-hook-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-layer-dwell-hook-need-design-2026-10-10.md) · backlog `B-afk-layer-dwell-hook` · 总控点名主题 A（内容 exhausted 后否决静默）
+STATUS=**已批 A · 批 M · D383 已落地** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-layer-dwell-hook-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-layer-dwell-hook-need-design-2026-10-10.md)（已关）· STATUS [`STATUS-ember-afk-layer-dwell-hook-d383-2026-10-10.md`](../status/STATUS-ember-afk-layer-dwell-hook-d383-2026-10-10.md) · backlog `B-afk-layer-dwell-hook` · 总控点名主题 A
 
 > **一句话玩家价值：** 挂机庭打开就能看见「今天还差多少才满、下一层更好在哪」——愿意多坐一会儿，满了有回城/去花动机；**不**靠抬产量或新假平面地图。
 
@@ -96,7 +96,7 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **待批 A · 荐 M** · docs-only |
+| 本窗 | **已批 A · 批 M · D383 已落地** · TrMenu-only |
 | 施工 | 批 A 后总控另派；预期 **仅 TrMenu**（零 Java，除非另批 remain/eta） |
 | 观察 | **≠关观察**；**≠改 ×0.97 / set_bonus**；**≠开 K3 live** |
 | D285 / D305 | **保留**；本债补菜单侧软目标与层差聚合，不重开软身份主交付 |
@@ -147,10 +147,16 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ## 6. 批注区（总控填）
 
-- [ ] **批 A · 方案 M**（W1a+W1b+W1c 必做；W1d 同批；W1e 可选）  
-- [ ] 否决 L（抬表 / 假平面 / 空跳转）  
-- [ ] 批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3  
+- [x] **批 A · 方案 M**（W1a+W1b+W1c 必做；W1d 同批；W1e 可选）· tip `@23ca4162` · **D383 已施工**  
+- [x] 否决 L（抬表 / 假平面 / 空跳转）  
+- [x] 批 A ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3（本号施工仅 TrMenu）  
+
+### 变更记录
+| 日 | 事 |
+|----|-----|
+| 2026-10-10 | 策划 · DESIGN 待批 A·荐 M |
+| 2026-10-10 | 总控批 A·M @`23ca4162` · D383 施工落地 · 见 STATUS-ember-afk-layer-dwell-hook-d383 |
 
 ---
 
-*挂机层展示钩 · 待批 A · 荐 M · 2026-10-10 Asia/Shanghai · ≠抬日表 ≠假平面 ≠主题B。*
+*挂机层展示钩 · 已批 A·M · D383 已落地 · 2026-10-10 Asia/Shanghai · ≠抬日表 ≠假平面 ≠主题B。*
