@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（套装页 Stage2 叙事诚实 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D331）：** tip `b9c03259` 已关；总控已批 A·M；施工 STATUS [`STATUS-ember-six-slot-set-page-honesty-d331-2026-10-09.md`](STATUS-ember-six-slot-set-page-honesty-d331-2026-10-09.md)。
+
 > **上游：** D329 装备页护甲入口诚实已落地 @ `7f1b165e`；D330 权威/OPS 落字进行中（**本窗不改** gear-structure / OPS / staged README）。Stage2 观察中；K3 施工等绿出口、**不抢签**。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / 拧 set_bonus / 动 F / 样本 R。
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零 live jar/yml** · 不碰 D330 正改文件  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-set-page-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-set-page-honesty-2026-10-09.md) · backlog `B-six-slot-set-page-honesty`  
+**硬规格（已批 A · 批 M · D331）：** [`DESIGN-ember-six-slot-set-page-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-set-page-honesty-2026-10-09.md) · backlog `B-six-slot-set-page-honesty`  
 **打开理由：** 枢纽「套装」页 `ember_set.yml` 仍按旧「戒+刃 / 护符套装后续开放 / 本期不改方块甲」叙事，与线上 **P1 刃+护符觉醒 + Stage2 四件套 −3%** 打架——玩家面诚实债；文案/PAPI 镜像即可，零数值。
 
 ---
@@ -36,14 +38,14 @@ D329/D330 分别收装备入口与权威文档；**套装页**仍撒谎说护符
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A。
+见 DESIGN 同 slug · **已批 A · 批 M · D331**（原荐 M）。
 
 ---
 
 ## 3. 暂不做什么
 
-不改 ×0.97 / set_bonus / jar / bv；不部署 K3；不开 R；**不改** D330 正改的 gear-structure / OPS；本 tip 窗不改 `ember_set.yml`（批后另号）。
+不改 ×0.97 / set_bonus / jar / bv；不部署 K3；不开 R；**不改** D330 正改的 gear-structure / OPS；本 tip 窗原不改 `ember_set.yml`；**D331 同号已落地**。
 
 ---
 
-*选题 H · 荐 M · 零 live · 不抢 D330/K3。*
+*选题 H · 已批 A·M · D331 已落地 · 不抢 D330/K3。*
