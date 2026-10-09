@@ -51,7 +51,7 @@
 
 | 项 | 值 |
 |----|-----|
-| tip | `bd3368c0` |
+| tip | `3e1a1294` |
 | jar | `CoreRpg-1.65.115-d406.local.jar` |
 | sha256 | `SHA_PENDING` |
 | Enabling | `CoreRpg v1.65.115-d406.local` · play PID TBD |
