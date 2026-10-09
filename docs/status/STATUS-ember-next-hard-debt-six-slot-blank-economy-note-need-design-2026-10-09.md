@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（白板经济「模型未覆盖」运维/报告注记清单 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D361）：** tip `9f17e2ce` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-blank-economy-note-d361-2026-10-09.md`](STATUS-ember-six-slot-blank-economy-note-d361-2026-10-09.md) · 注记清单已采纳 · OPS 半行已落 · **≠改 ×0.1 ≠ 补建模 ≠ 开 R ≠ 关观察 ≠ 开 K3**。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D360 样本门禁旁注已落 @ `b06eead8`（**仍禁开 R · 勿复述 D308**）。D359 预备已落（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97。**零改公式。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零 jar / 零开关 / 零价表 / 零 p1sim 建模**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md`](../design/DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md) · backlog `B-six-slot-blank-economy-note`  
+**本窗性质：** tip 已关 · 授权见 D361 STATUS · **零 jar / 零开关 / 零价表 / 零 p1sim 建模** · **≠改 ×0.1**  
+**硬规格（已批 A · 批 M · D361 · 清单已采纳 · ≠改 ×0.1）：** [`DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md`](../design/DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md) · backlog `B-six-slot-blank-economy-note`  
 **打开理由：** D318/T1 §1.4 钉「报告须注明白板经济模型未覆盖」；D319/D321/D332/D337 等已散落照抄，但**缺统一运维/报告注记清单**（何时写、写哪句、含义、禁借注记改 ×0.1 / 补建模偷开）。观察期分解/审计报告易漏写或误读成「该改公式了」。
 
 ---
@@ -49,4 +51,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · 白板注记清单 · ≠改公式 · 勿关窗。*
+*选题 H · tip 已关 · 已批 A·M·D361 · 白板注记清单已采纳 · ≠改公式 · 勿关窗。*
