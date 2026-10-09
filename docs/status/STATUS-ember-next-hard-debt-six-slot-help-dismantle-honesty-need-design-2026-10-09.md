@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（帮助「变强」分解行 Stage2 护甲零头诚实 · docs-only）
 
+> **已关 · 批 A·M · D356 已落地** · 施工 STATUS [`STATUS-ember-six-slot-help-dismantle-honesty-d356-2026-10-09.md`](STATUS-ember-six-slot-help-dismantle-honesty-d356-2026-10-09.md) · DESIGN 方案 M · help「变强」分解行 → 刃/护符胚料 + 甲白板零头 · **未**改 gear `f`/forge/hub 工坊 · **≠关观察** · 不抢 K3 · 未碰 d354/d355-spot。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D355 gear 工坊入口已施工 @ `f64ebbf2`（**测试薄抽中——本窗勿抢 D354/D355 薄抽文件 / 勿交其 spot 清单**）。D329–D354 已收。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**硬禁复述：** 附录 · 已 PASS 薄抽 · tip 关闭包 · 钉盘。**零数值（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar** · 施工另号（可只 TrMenu 一行）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-help-dismantle-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-help-dismantle-honesty-2026-10-09.md) · backlog `B-six-slot-help-dismantle-honesty`  
+**硬规格（已批 A · 批 M · D356 已落地）：** [`DESIGN-ember-six-slot-help-dismantle-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-help-dismantle-honesty-2026-10-09.md) · backlog `B-six-slot-help-dismantle-honesty`  
 **打开理由：** D339/D333/D355 已让 **hub / forge 页内 / 装备页工坊入口** 承认「甲仅分解·白板零头」；帮助页「变强」分解行仍写「多余的掉落件换胚料（精工/成色/升阶用）」——**零**护甲句，易被读成甲也走刃护符胚料养成轨。D355 DESIGN §2.2 曾标「可选旁扫」；入口落地后升本窗。
 
 ---
@@ -56,4 +58,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · help 变强分解行补甲零头 · 勿关窗 · 勿抢 D354/D355 薄抽。*
+*选题 H · tip **已关** · 批 A·M · D356 已落地 · help 变强分解行补甲零头 · 勿关窗 · 勿抢 D354/D355 薄抽。*

@@ -1,6 +1,6 @@
 # 余烬 · 帮助「变强」分解行 Stage2 护甲零头诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**抢 D354/D355 薄抽）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-help-dismantle-honesty-need-design-2026-10-09.md` · backlog `B-six-slot-help-dismantle-honesty`
+STATUS=**已批 A · 批 M · D356 已施工**（观察期 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97 · **不**抢 D354/D355 薄抽 · **不**改 gear `f`/forge/hub 工坊）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-help-dismantle-honesty-need-design-2026-10-09.md` · backlog `B-six-slot-help-dismantle-honesty` · 施工 STATUS `STATUS-ember-six-slot-help-dismantle-honesty-d356-2026-10-09.md`
 
 > **一句话：** 工坊入口已诚实，help「变强」分解行仍只讲胚料。荐 **方案 M**：补甲→白板零头半句；零数值。
 
@@ -104,11 +104,11 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2.1 改 help「变强」分解行（显示 only）  
+- [x] **批 A：采纳方案 M** → 另号按 §2.1 改 help「变强」分解行（显示 only）  
 - [ ] 升级 L（含 hub 软半行；不荐必做）  
 - [ ] 否决 / 改派  
 
-**总控批注：** （待填）
+**总控批注：** **已批 A · 批 M · D356** · 同号 TrMenu 已按 §2.1 荐单行落地 help「变强」分解行（刃/护符→胚料；甲→白板零头）· **未**改 gear `f` / forge / hub 工坊 · **未**碰 `/workspace/tmp/d354-*` `/workspace/tmp/d355-*` · **≠关观察** · 不抢 K3。
 
 ---
 
@@ -117,5 +117,6 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · D355 后置旁扫升主 | 策划执行手 |
+| 2026-10-09 | **已批 A · 批 M · D356** · help 变强分解行荐单行 · tip 关 · backlog 对齐 | 总控授权同号施工 |
 
-*help「变强」分解行 Stage2 诚实 · **待批 A · 荐 M** · 显示 only · 零数值 · ≠关观察 · 勿抢 D354/D355 薄抽。*
+*help「变强」分解行 Stage2 诚实 · **已批 A · 批 M · D356 已施工** · 显示 only · 零数值 · ≠关观察 · 勿抢 D354/D355 薄抽。*
