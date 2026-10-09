@@ -1,12 +1,12 @@
 # 余烬 · 挂机→工坊配方速览（具体数字可见化 · ≠抬日表）
 
-STATUS=**已批 A · 方案 M** · D398 · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-forge-recipe-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-forge-recipe-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-forge-recipe-visible` · **施工另派 TrMenu · 待施工** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3**
+STATUS=**已批 A · 方案 M · D398 · 已落地** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-forge-recipe-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-forge-recipe-visible-need-design-2026-10-10.md) · backlog `B-afk-forge-recipe-visible` · STATUS [`STATUS-ember-afk-forge-recipe-visible-d398-2026-10-10.md`](../status/STATUS-ember-afk-forge-recipe-visible-d398-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠开 K3**
 
 > **一句话玩家价值：** 挂机或进工坊时，不靠手持装备也能看见「强化 / 升阶 / 精工 / 成色大概要多少材料」，并对照「今天坐满大约够哪一档」——产→花闭环从「去哪花」推进到「还差多少」，拉长挂机停留与回城动机；**不**抬产量、不改价。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 复述 D373–D397 为主交付。**
 >
-> **总控批 A·M（2026-10-10）：** 采纳方案 M；施工另派 TrMenu；≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常。
+> **总控批 A·M（2026-10-10）：** 采纳方案 M；TrMenu 施工已落（薄页+工坊 P+挂机半行）；≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常。
 
 ---
 
@@ -51,7 +51,7 @@ STATUS=**已批 A · 方案 M** · D398 · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a 速览格/薄页 + W1b 静态数字表 + W1c 挂机对照「约」句 + W1d 互指半行）
 - [x] ≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠改 UpgradeRules / afk.tiers（硬禁项旁注保留）
-- [x] 总控批 A·M（2026-10-10）· 施工另派 TrMenu · ≠关观察 ≠抬日表
+- [x] 总控批 A·M（2026-10-10）· TrMenu 施工已落 · ≠关观察 ≠抬日表
 
 ---
 
@@ -140,7 +140,7 @@ STATUS=**已批 A · 方案 M** · D398 · 2026-10-10 · tip [`STATUS-ember-next
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **已批 A · 方案 M · D398 · 施工另派 TrMenu · 待施工** |
+| 本窗 | **已批 A · 方案 M · D398 · 已落地** |
 | 观察 | **≠关观察**；**≠改 ×0.97 / set_bonus**；**≠开 K3 live** |
 | D375/D381/D383 | **保留**；不复述为主交付 |
 | D397 sx04 | **并行**；本债不挡、不抢施工；≠sx05 |
@@ -179,4 +179,4 @@ STATUS=**已批 A · 方案 M** · D398 · 2026-10-10 · tip [`STATUS-ember-next
 
 ---
 
-*D398 · 挂机→工坊配方速览 · 已批 A·方案 M · 施工另派 TrMenu · ≠关观察 ≠抬日表。*
+*D398 · 挂机→工坊配方速览 · 已批 A·方案 M · 已落地 · ≠关观察 ≠抬日表。*

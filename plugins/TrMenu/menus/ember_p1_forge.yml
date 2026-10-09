@@ -4,6 +4,7 @@
 # D307：确认/预览同屏嵌本次费用与缺料（PAPI 镜像 UpgradeRules；零改价；分解仍聊天确认）
 # D333：手持甲时养成格灰显/禁命令（held_is_armor）；分解 lore 去「胚料 1/2/3」、对齐白板零头
 # D381：底栏「材料哪来·挂机庭」→ember_p1_afk（产花反向互指；零改价/产量）
+# D398：底栏「配方速览」P → ember_p1_forge_recipes（静态镜像 UpgradeRules；零改价/产量）
 
 Title: '§6余烬 · 锻造'
 
@@ -23,13 +24,14 @@ Layout:
   - '# e u r #'
   - '# Q S D #'
   - '# q s d #'
-  - '# A b  B#'
+  - '# A P bB#'
 # D100 (review #10): every confirm sits directly under its preview (same column); 分解 confirms in chat (one-shot token)
 
 Events:
   Open:
     - 'sound: BLOCK_ANVIL_LAND-1-0.6'
     - 'tell: §8缺料？点「材料哪来」回挂机庭 · 产→仓→本页花'
+    - 'tell: §8未持件也能看费用：点「配方速览」'
 
 Icons:
   '#':
@@ -349,6 +351,23 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_afk'
+  # D398: 配方速览（静态阶梯 · 未持件可读）
+  P:
+    display:
+      material: book
+      name: '§e配方速览'
+      lore:
+        - ''
+        - '§7未持装备也能看强化/升阶/精工大概要多少'
+        - '§7代表档 +1/+4/+7/+10 · 升阶/精工/成色表'
+        - '§7挂机打满「约」够哪档（按现网日表 · 不加快产量）'
+        - '§8数字镜像规则 · 真扣费仍以手持预览为准'
+        - ''
+        - '§e➥ §f查看阶梯'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_forge_recipes'
   b:
     display:
       material: arrow
