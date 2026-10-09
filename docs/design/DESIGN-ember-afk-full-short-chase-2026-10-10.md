@@ -1,10 +1,12 @@
 # 余烬 · 挂机满额→短征可追分支（挂机×日更闭环 · ≠抬日表 · ≠sx08）
 
-STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-full-short-chase-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-full-short-chase-need-design-2026-10-10.md) · backlog `B-afk-full-short-chase`（**待批**）· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx08 ≠复述 D373–D407 ≠改 daily_kills/afk.tiers ≠盖过 D285 去冒险**
+STATUS=**已批 A · 方案 M · D408** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-full-short-chase-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-full-short-chase-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-full-short-chase`（**已批/施工中**）· **施工另派 TrMenu** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx08 ≠复述 D373–D407 ≠改 daily_kills/afk.tiers ≠盖过 D285 去冒险**
 
 > **一句话玩家价值：** 挂机打满打开庭，一眼看见「短征还可追（今日剩余有奖 N）」——有体力就点进选本多刷一轮；**不**抬挂机产量、**不**交 sx08、**不**盖过「去冒险」。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx08。**
+>
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（满额 F 左键仍去冒险；右键→短征选页；lore 挂 sx_day_left_sum + 体力30 诚实；Open/I 满额半行）；**施工另派 TrMenu**；≠关观察 ≠抬日表 ≠sx08 ≠开 R/K3 ≠拆 D285。
 
 ---
 
@@ -57,9 +59,9 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-full-
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 满额 F 双路径 + W1b Open/I 半行 + W1c 体力不足诚实；见 §2）
-- [ ] 否决 A（只口号）/ L（抬表·假开）/ W（sx08/拆 D285/复述）
-- [ ] 批注：_______________________
+- [x] **方案 M**（W1a 满额 F 双路径 + W1b Open/I 半行 + W1c 体力不足诚实；见 §2）
+- [x] 否决 A（只口号）/ L（抬表·假开）/ W（sx08/拆 D285/复述）
+- [x] 批注：总控批 A·M · 2026-10-10 · D408 · 满额 F 左键仍去冒险 · 右键→短征选页 · lore sx_day_left_sum + 体力30 诚实 · Open/I 满额半行 · **施工另派 TrMenu** · ≠关观察 ≠抬日表 ≠sx08 ≠开 R/K3 ≠拆 D285
 
 ---
 
@@ -157,7 +159,8 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-full-
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机满额→短征可追（挂机×日更闭环）· ≠sx08 |
+| 2026-10-10 | **已批 A · 方案 M · D408** · 总控批注勾选 · 满额 F 双路径 + sx_day_left_sum · **施工另派 TrMenu** · ≠关观察 ≠抬日表 ≠sx08 ≠开 R/K3 ≠拆 D285 |
 
 ---
 
-*D408 · 挂机满额→短征可追分支 · 待批 A·荐方案 M · ≠关观察 ≠抬日表 ≠sx08。*
+*D408 · 挂机满额→短征可追分支 · 已批 A·方案 M · 施工另派 TrMenu · ≠关观察 ≠抬日表 ≠sx08 ≠拆 D285。*
