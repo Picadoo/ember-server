@@ -21,7 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D391–D403/D406: short expedition sx01–sx06 — entry gate + S40–S45 settle grants + fc aggregate.
+ * D391–D407/D406: short expedition sx01–sx07 — entry gate + S40–S46 settle grants + fc aggregate.
  */
 public class EmberShortRulesTest {
 
@@ -56,6 +56,7 @@ public class EmberShortRulesTest {
         assertEquals("p1_sx04_day", EmberShortRules.claimKey("sx04"));
         assertEquals("p1_sx05_day", EmberShortRules.claimKey("sx05"));
         assertEquals("p1_sx06_day", EmberShortRules.claimKey("sx06"));
+        assertEquals("p1_sx07_day", EmberShortRules.claimKey("sx07"));
         assertEquals(EmberShortRules.CLAIM, EmberShortRules.claimKey(null));
     }
 
@@ -566,10 +567,10 @@ public class EmberShortRulesTest {
         }
     }
 
-    /** D406: six short maps resolve via shortMaps + firstClearLabel (mapField fc path). */
+    /** D406/D407: seven short maps resolve via shortMaps + firstClearLabel (mapField fc path). */
     @Test
     public void shortMaps_firstClearLabel_D406_sixFcSample() throws Exception {
-        assertEquals(6, EmberShortRules.SHORT_KEYS.length);
+        assertEquals(7, EmberShortRules.SHORT_KEYS.length);
         try (InputStream in = EmberRunMaps.class.getResourceAsStream("/ember-v1-runs.yml");
              Reader r = new InputStreamReader(in, StandardCharsets.UTF_8)) {
             @SuppressWarnings("unchecked")
@@ -588,8 +589,8 @@ public class EmberShortRulesTest {
                 assertEquals(mk + "_fc must route MAP", EmberRunPapi.Section.MAP, EmberRunPapi.route(mk + "_fc"));
             }
         }
-        assertEquals("六本首通已齐", EmberShortRules.fcPendingLine(0));
-        assertEquals("还有 6 本生涯首通未领", EmberShortRules.fcPendingLine(6));
+        assertEquals("七本首通已齐", EmberShortRules.fcPendingLine(0));
+        assertEquals("还有 7 本生涯首通未领", EmberShortRules.fcPendingLine(7));
         assertEquals(4, EmberShortRules.fcLeft(4));
     }
 
@@ -607,6 +608,90 @@ public class EmberShortRulesTest {
     }
 
 
+
+
+    @Test
+    public void sx07RewardedClearPaysBaseline() {
+        List<EmberRunRules.Grant> g = EmberShortRules.settleGrants("sx07", 0, 3, true);
+        Map<String, Integer> by = byKey(g);
+        assertEquals(80, (int) by.get(EmberShortRules.gClearCoin("sx07")));
+        assertEquals(4, (int) by.get(EmberShortRules.gClearShard("sx07")));
+        assertEquals(3, (int) by.get(EmberShortRules.gClearBone("sx07")));
+        assertFalse(by.containsKey(EmberShortRules.gFcCoin("sx07")));
+    }
+
+    @Test
+    public void sx07FirstClearThinnerThanSx06() {
+        List<EmberRunRules.Grant> g = EmberShortRules.settleGrants("sx07", 0, 3, false);
+        Map<String, Integer> by = byKey(g);
+        assertEquals(120, (int) by.get(EmberShortRules.gFcCoin("sx07")));
+        assertEquals(6, (int) by.get(EmberShortRules.gFcShard("sx07")));
+        assertEquals(1, (int) by.get(EmberShortRules.gFcBlank("sx07")));
+        Map<String, Integer> sx06 = byKey(EmberShortRules.settleGrants("sx06", 0, 3, false));
+        assertEquals(130, (int) sx06.get(EmberShortRules.gFcCoin("sx06")));
+    }
+
+    @Test
+    public void sourceTagsS46ForSx07() {
+        assertEquals("S46", EmberEconomy.sourceForGrantKey(EmberShortRules.gClearCoin("sx07")));
+        assertEquals("S46", EmberEconomy.sourceForGrantKey(EmberShortRules.gFcBlank("sx07")));
+        assertEquals("S46", EmberEconomy.sourceForGrantKey(EmberShortRules.gPractice("sx07")));
+        assertEquals("S45", EmberEconomy.sourceForGrantKey(EmberShortRules.gClearCoin("sx06")));
+        assertEquals("S40", EmberEconomy.sourceForGrantKey(EmberShortRules.G_CLEAR_COIN));
+    }
+
+    @Test
+    public void runsYmlDefinesSx07() throws Exception {
+        try (InputStream in = EmberRunMaps.class.getResourceAsStream("/ember-v1-runs.yml");
+             Reader r = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> y = (Map<String, Object>) new Yaml().load(r);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> shortSec = (Map<String, Object>) y.get("short");
+            assertTrue(shortSec.containsKey("sx07"));
+            @SuppressWarnings("unchecked")
+            Map<String, Object> sx = (Map<String, Object>) shortSec.get("sx07");
+            assertEquals(30, ((Number) sx.get("cost")).intValue());
+            assertEquals("q01", sx.get("requires"));
+            assertEquals(3, ((Number) sx.get("daily_reward_cap")).intValue());
+            assertEquals("p1_sx07_day", sx.get("claim"));
+            assertEquals("EmberSx07", sx.get("dungeon"));
+            assertFalse("p1_sx01_day".equals(sx.get("claim")));
+            assertFalse("p1_sx06_day".equals(sx.get("claim")));
+        }
+    }
+
+    @Test
+    public void sx07HasRoomsAndBoss() throws Exception {
+        try (InputStream in = EmberRunMaps.class.getResourceAsStream("/ember-v1-runs.yml");
+             Reader r = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> y = (Map<String, Object>) new Yaml().load(r);
+            EmberRunMaps maps = EmberRunMaps.parse(y);
+            EmberRunMaps.MapDef m = maps.byKey("sx07");
+            assertNotNull(m);
+            assertTrue(m.shortExpedition);
+            assertEquals(3, m.rooms.size());
+            assertNotNull(m.boss);
+            assertEquals("EmberSx07Warden", m.boss.mm);
+            assertEquals("p1_sx07_day", m.shortClaim);
+            assertNull(m.validate());
+            assertTrue(maps.validate().stream().noneMatch(e -> e.startsWith("sx07:")));
+        }
+    }
+
+    @Test
+    public void applyGrantsSx07UsesOwnDayClaim() {
+        EmberRunRules.Ledger l = new EmberRunRules.Ledger();
+        PlayerData pd = new PlayerData();
+        EmberRunMaps.MapDef m = stubMap("sx07");
+        EmberShortService.SettleResult r1 = EmberShortService.applyGrants(m, l, "sx07-a", pd, 0, false, "2026-10-10", 1L);
+        assertTrue(r1.pays);
+        assertEquals(1, pd.periodCount("p1_sx07_day", "2026-10-10"));
+        assertEquals(0, pd.periodCount("p1_sx06_day", "2026-10-10"));
+        assertEquals(0, pd.periodCount(EmberShortRules.CLAIM, "2026-10-10"));
+        assertTrue(EmberFirstClear.paid(pd, "sx07", "v1"));
+    }
 
     private static Map<String, Integer> byKey(List<EmberRunRules.Grant> g) {
         Map<String, Integer> m = new HashMap<String, Integer>();
