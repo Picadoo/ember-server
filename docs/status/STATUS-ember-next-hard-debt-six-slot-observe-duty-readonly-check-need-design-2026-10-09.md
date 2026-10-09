@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（观察期值班只读核对薄清单 · docs-only · ≠关观察）
 
+> **旁注（已关 · 批 A · 批 M · D364）：** tip `f1031f8a` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-observe-duty-readonly-check-d364-2026-10-09.md`](STATUS-ember-six-slot-observe-duty-readonly-check-d364-2026-10-09.md) · 值班只读核对薄清单已采纳 · OPS 半行已落 · **≠关观察 ≠改配置 ≠开闸 ≠开 R ≠勾选 §2.4**。
+>
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D363 勿提前关窗禁误读对照已落 @ `bf14e811`（**≠关观察 · 勿复述**）。D362 K3 禁误读 / D361 白板注记 / D360 样本旁注 / D359 离线预备已落（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1。**零改公式 · 零开开关。**
 >
 > **选题回落说明：** 扫 D360–D363 后，运维/门禁旁注与禁误读对照真硬债暂空；同类短语对照再交易空转。总控明确允许交「观察期值班只读核对」薄清单（≠关窗）。
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **打开 · STATUS=待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠改配置**  
-**硬规格（待批 A · 荐 M · ≠关观察）：** [`DESIGN-ember-six-slot-observe-duty-readonly-check-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-duty-readonly-check-2026-10-09.md) · backlog `B-six-slot-observe-duty-readonly-check`  
+**本窗性质：** tip **已关** · **已批 A·M·D364** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠改配置**  
+**硬规格（已批 A · 批 M · D364 · 清单已采纳 · ≠关观察）：** [`DESIGN-ember-six-slot-observe-duty-readonly-check-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-duty-readonly-check-2026-10-09.md) · backlog `B-six-slot-observe-duty-readonly-check`  
 **打开理由：** D342 现态复跑是**签字前/满窗另号**一次性 R0–R10；观察维持期内值班员缺一张**班次只读核对**薄单——把现态开关、×0.97/set_bonus、绿出口日历未提前签、K3 仍 offline、脏 yml 未盖 live、白板注记指针、禁误读表指针收成班次检查项。发现问题**只记 STATUS，不擅自改 live**。本债**不**替代 D342 签字复跑，**不**交关窗。
 
 ---
@@ -54,4 +56,4 @@
 
 ---
 
-*选题 H · tip 打开 · 待批 A · 荐 M · 观察期值班只读核对 · ≠关观察 · ≠改配置 · ≠开闸。*
+*选题 H · tip 已关 · 已批 A·M·D364 · 观察期值班只读核对 · ≠关观察 · ≠改配置 · ≠开闸。*
