@@ -61,6 +61,18 @@
 2. 另号：Bukkit 提交 + 菜单 + 测服冒烟（K3-7/K3-8）  
 3. 部署另签；开关仍建议默认关，测服再开  
 
+
+## D343 旁注（已知悉 · 2026-10-09 ~21:05 CST · 插件岗）
+
+总控禁令：约 21:00 有人用 src/resources 默认 yml 覆盖 live `plugins/CoreRpg/ember-v1*.yml`，Stage2 三开关与 bv 被冲。
+
+本岗确认：
+- 离线分支 `feat/d341-k3-refine-offline` **未**再写 live plugins；K3 预备仅源码+单测。
+- **已知悉**：禁止用 src/resources 或 jar 内嵌默认 yml 覆盖 live；后续改默认须保留 `gear.six_slot` 三 true。
+- 核验时发现 live 仍缺 `six_slot`、runs 退回 bv60 → 已从备份恢复并 `corerpg reload`：`ember-v1.yml`←d335-backup（enabled/migrate/set_bonus=true）；`ember-v1-runs.yml`←d325-bv62-backup 后 `balance_version: 62`。破碎副本 `/workspace/tmp/d343-plugin-restore-*`。
+- src `ember-v1.yml` 已在 **main** 补 six_slot 三 true（`fix(D343)`），防再盖。
+- **仍未**开 `k3_refine`、**未**装 K3 jar、**未**开闸。
+
 ## blocker
 
 无（离线预备完成）。开闸条件未满足——属预期，非本号 blocker。
