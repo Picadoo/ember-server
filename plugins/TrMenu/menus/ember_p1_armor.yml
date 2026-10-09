@@ -302,8 +302,8 @@ Icons:
       all:
         - 'command: corerpg p1 armor set'
     icons:
-      # D334：三态改用 armor_set 文案 contains（active=受伤 / busy=需同族）；勿用 set_active|busy==1（TrMenu 不命中）
-      - condition: 'check papi %corerpg_p1_armor_set% contains 受伤'
+      # D335：三态改用 armor_sa/sb（≡active/busy）；active 优先级最高
+      - condition: 'check papi %corerpg_p1_armor_sa% == 1'
         priority: 4
         display:
           material: enchanted book
@@ -317,7 +317,7 @@ Icons:
         actions:
           all:
             - 'command: corerpg p1 armor set'
-      - condition: 'check papi %corerpg_p1_armor_set% contains 需同族'
+      - condition: 'check papi %corerpg_p1_armor_sb% == 1'
         priority: 3
         display:
           material: book
