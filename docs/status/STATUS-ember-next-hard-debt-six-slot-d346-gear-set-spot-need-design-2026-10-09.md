@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（D346 装备页套装格落地薄抽验收清单 · docs-only）
 
+> **本 tip 状态：已关清（D348 · 批 A·M · 旁注关清 · ≠再跑 · ≠关观察）。**  
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D346 gear 套装格诚实 **已施工** @ `d51b28a2`（静态 G1/G3/G4 PASS · `trmenu reload` 已做）；D345 adventure 薄抽 **已 PASS** @ `a9238b55`；D347 旁路 docs 勘误已落 @ `6e81d3fa`。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / K3 live / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零改菜单/开关（本稿只 docs checklist）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零改 yml/jar/开关** · 测另号  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-d346-gear-set-spot-2026-10-09.md`](../design/DESIGN-ember-six-slot-d346-gear-set-spot-2026-10-09.md) · backlog `B-six-slot-d346-gear-set-spot`  
-**打开理由：** D346 DESIGN §2.3 / 施工 STATUS 写明薄抽 **G2**（打开装备页套装格可见）交测试另号；落地 STATUS 仅交**静态**。与 D339→D340、D345 spot 同形缺口——需可执行活窗清单关清。
+**硬规格（已批 A · 批 M · D348 · **旁注关清**）：** [`DESIGN-ember-six-slot-d346-gear-set-spot-2026-10-09.md`](../design/DESIGN-ember-six-slot-d346-gear-set-spot-2026-10-09.md) · backlog `B-six-slot-d346-gear-set-spot` · 关清 STATUS [`STATUS-ember-six-slot-d346-gear-set-spot-d348-2026-10-09.md`](STATUS-ember-six-slot-d346-gear-set-spot-d348-2026-10-09.md) · 证据指针 spot @ `071bcc37` / `/workspace/tmp/d346-spot/`  
+**打开理由（史）：** D346 DESIGN §2.3 / 施工 STATUS 写明薄抽 **G2**（打开装备页套装格可见）交测试另号；落地 STATUS 仅交**静态**。与 D339→D340、D345 spot 同形缺口——需可执行活窗清单关清。
 
 ---
 
@@ -41,7 +42,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐 M。
+见 DESIGN 同 slug · **已批 A · 批 M · D348 · 旁注关清** · 并行薄抽 G1–G4 PASS @ `071bcc37` 覆盖 S0–S5 · **≠再跑** · **不重开文案** · ≠关观察。
 
 ---
 
@@ -51,4 +52,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · D346 薄抽清单 · 勿关窗 · hub_legacy 后置。*
+*选题 H · **已关 · 批 A·M·D348 · 旁注关清** · 证据 `071bcc37` / d346-spot · ≠再跑 · ≠关观察 · hub_legacy 后置。*

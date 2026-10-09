@@ -1,6 +1,6 @@
 # 余烬 · D346 装备页套装格落地薄抽验收清单（决策页）
 
-STATUS=**待批 A**（docs-only checklist · **不重开文案** · 零改 yml/开关 · **≠关观察** · **不**抢 K3 · **≠** D345 adventure 薄抽号）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-d346-gear-set-spot-need-design-2026-10-09.md`
+STATUS=**已批 A · 批 M · D348 · 旁注关清**（docs-only checklist · **不重开文案** · 零改 yml/开关 · **≠关观察** · **不**抢 K3 · **≠再跑实机** · **≠** D345 adventure 薄抽号）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-d346-gear-set-spot-need-design-2026-10-09.md` · 证据指针 [`STATUS-ember-six-slot-gear-set-icon-honesty-spot-d346-2026-10-09.md`](../status/STATUS-ember-six-slot-gear-set-icon-honesty-spot-d346-2026-10-09.md) @ `071bcc37` · `/workspace/tmp/d346-spot/`
 
 > **一句话：** 关清 D346 DESIGN §2.3 薄抽——测号打开装备页「套装」星，确认护甲四件套 PAPI **窗口可见**。荐 **方案 M**。
 
@@ -85,11 +85,11 @@ STATUS=**待批 A**（docs-only checklist · **不重开文案** · 零改 yml/�
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M（本薄抽清单）** → 另号测试执行 S0–S5  
+- [x] **批 A：采纳方案 M（本薄抽清单）** → **D348 总控签关清**（**≠再跑**；并行证据已覆盖）  
 - [ ] 升级 L  
 - [ ] 否决 / 改派  
 
-**总控批注（待填）：** _
+**总控批注（2026-10-09 · D348）：** **已批 A · 批 M · 旁注关清。** 并行事实：测试薄抽 **G1–G4 PASS** @ `071bcc37`（STATUS [`STATUS-ember-six-slot-gear-set-icon-honesty-spot-d346-2026-10-09.md`](../status/STATUS-ember-six-slot-gear-set-icon-honesty-spot-d346-2026-10-09.md)；证据 `/workspace/tmp/d346-spot/`）· 总控认定覆盖本清单 **S0–S5**。**批 A ≠ 再跑实机。** 关清 D346 DESIGN §2.3 玩家面可见性清单债；回写 tip / backlog `B-six-slot-d346-gear-set-spot` / STATUS-d348。**不改** 菜单文案 / jar / ×0.97 / set_bonus / bv。**≠关观察**（满窗仍须 ≥2026-10-10 17:40 CST）。不抢 K3。hub_legacy 仍后置。
 
 ---
 
@@ -98,5 +98,6 @@ STATUS=**待批 A**（docs-only checklist · **不重开文案** · 零改 yml/�
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D346 静态 only；hub_legacy 后置 | 策划执行手 |
+| 2026-10-09 | **批 A·M · D348 旁注关清** · 证据 `071bcc37` / d346-spot · **≠再跑** · ≠关观察 | 总控执行手 |
 
-*D346 薄抽清单 · 待批 A · 荐 M · docs-only · ≠关观察 · 不重开文案。*
+*D346 薄抽清单 · **已批 A·M·D348 · 旁注关清** · docs-only · ≠再跑 · ≠关观察 · 不重开文案。*
