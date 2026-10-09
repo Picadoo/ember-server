@@ -1191,8 +1191,7 @@ public final class EmberRunMaps {
     }
 
     /**
-     * D391: one short-expedition entry. Rooms / MM may arrive in a later ticket; validate only checks
-     * dungeon / requires / daily cap (no full room composition yet).
+     * D391: one short-expedition entry. D391 FAIL fix requires full rooms/boss (Director FIGHTING + S40).
      */
     static MapDef shortDef(String key, Map<?, ?> m) {
         MapDef d = new MapDef(key, m);
@@ -1376,7 +1375,9 @@ public final class EmberRunMaps {
             if (!("dungeon_" + d.dungeon).toLowerCase(Locale.ROOT).startsWith(worldPrefix.toLowerCase(Locale.ROOT)))
                 out.add(d.key + ": dungeon " + d.dungeon + " outside world_prefix " + worldPrefix);
         }
-        for (MapDef d : shortMaps.values()) { // D391: thin checks; full rooms/MM arrive with the map ticket
+        for (MapDef d : shortMaps.values()) { // D391 FAIL: rooms/boss required (same shape as main maps)
+            String e = d.validate();
+            if (e != null) out.add(e);
             if (d.dungeon.isEmpty()) out.add(d.key + ": dungeon missing");
             if (d.requires == null || d.requires.isEmpty()) out.add(d.key + ": requires missing");
             if (d.shortDailyCap < 1 || d.shortDailyCap > 10) out.add(d.key + ": daily_reward_cap 1..10");
@@ -1384,6 +1385,7 @@ public final class EmberRunMaps {
             if (d.cost >= 0 && d.cost != 30 && d.cost != 0) out.add(d.key + ": short cost should be 30 (or 0 for free test)");
             if (maps.containsKey(d.key) || raids.containsKey(d.key) || rush.containsKey(d.key) || events.containsKey(d.key))
                 out.add(d.key + ": short key collides with a map / raid / rush / event");
+            // EmberSx* is outside world_prefix dungeon_EmberQ0; scope.world_prefixes must list dungeon_EmberSx
         }
 
         return out;

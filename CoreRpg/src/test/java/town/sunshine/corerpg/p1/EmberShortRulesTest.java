@@ -123,6 +123,27 @@ public class EmberShortRulesTest {
         }
     }
 
+
+    @Test
+    public void sx01HasRoomsAndBoss() throws Exception {
+        try (InputStream in = EmberRunMaps.class.getResourceAsStream("/ember-v1-runs.yml");
+             Reader r = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> y = (Map<String, Object>) new Yaml().load(r);
+            EmberRunMaps maps = EmberRunMaps.parse(y);
+            EmberRunMaps.MapDef m = maps.byKey("sx01");
+            assertNotNull(m);
+            assertTrue(m.shortExpedition);
+            assertFalse(m.rooms.isEmpty());
+            assertEquals(3, m.rooms.size());
+            assertNotNull(m.boss);
+            assertEquals("EmberSx01Warden", m.boss.mm);
+            assertNotNull(m.boss.at);
+            assertNull(m.validate());
+            assertTrue(maps.validate().stream().noneMatch(e -> e.startsWith("sx01:")));
+        }
+    }
+
     private static Map<String, Integer> byKey(List<EmberRunRules.Grant> g) {
         Map<String, Integer> m = new HashMap<String, Integer>();
         for (EmberRunRules.Grant x : g) m.put(x.key, x.amount);
