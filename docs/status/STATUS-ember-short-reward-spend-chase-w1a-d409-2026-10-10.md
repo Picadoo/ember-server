@@ -38,8 +38,8 @@
 |----|----|
 | tip | `20cd1318` |
 | jar | `CoreRpg-1.65.117-d409.local.jar` |
-| sha256 | _(装服后填)_ |
-| Enabling | `CoreRpg v1.65.117-d409.local` |
+| sha256 | `7426e47aa9479e1a6c80dc248c3ed8ecc6058a4482a48382194cfb3dcc107558` |
+| Enabling | `CoreRpg v1.65.117-d409.local` · play PID 1237206 |
 
 ## 不动
 
