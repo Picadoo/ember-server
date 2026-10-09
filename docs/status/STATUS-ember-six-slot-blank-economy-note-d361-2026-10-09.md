@@ -35,6 +35,7 @@
 1. live 甲 `src=drop` 分解 → `0.1 × 掉落阶` 入个人胚零头（公式已钉，本号**不动**）。  
 2. p1sim 门禁 PASS **不能**证明真实胚经济无副作用。  
 3. 注记 ≠ 缺陷单；**禁**借注记改 ×0.1 / 开 R / 无总控批补建模。
+4. **补建模决策已拍（D370 · 后置绿出口）：** 是否/何时补 p1sim blank → [`STATUS-ember-six-slot-blank-economy-model-d370-2026-10-09.md`](STATUS-ember-six-slot-blank-economy-model-d370-2026-10-09.md)；**≠改 ×0.1 ≠同号补码**。
 
 真源：DESIGN §2.1–2.4 · 范例 D332/D337/T1 接受。
 
@@ -60,7 +61,7 @@
 
 ## 不动
 
-改 ×0.1 · 改 dismantleYield / 价表 · 补 p1sim blank 建模 · 开 forge/样本 R · 关观察 · 开 K3 live · 改 ×0.97 · 脏 runtime stage
+改 ×0.1 · 改 dismantleYield / 价表 · 本号补 p1sim blank（补建模另号见 D370 后置）· 开 forge/样本 R · 关观察 · 开 K3 live · 改 ×0.97 · 脏 runtime stage
 
 ---
 

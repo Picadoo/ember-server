@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（白板经济 p1sim 补建模决策页 · docs-only · ≠改 ×0.1 · ≠默默上线）
 
+> **旁注（已关 · 批 A · 批 M · 后置 · D370）：** tip `f8833a32` 已关；总控已批 A·M·后置；STATUS [`STATUS-ember-six-slot-blank-economy-model-d370-2026-10-09.md`](STATUS-ember-six-slot-blank-economy-model-d370-2026-10-09.md) · 决策页已采纳 · OPS 半行已落 · **≠改 ×0.1 ≠同号补码 ≠开 R ≠关观察 ≠开闸** · 绿出口后另号可开补建模。
+>
 > **上游结案：** 总控批 exhausted @`580608b6` 方案 M · **不走静默** · 改派非观察真债。Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D361 注记清单已落（**≠补建模**）。D360–D368 观察运维薄债已铺满（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 翻 set_bonus / 改 ignore / 改日历。**零改 live 比例。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **待批 A** · **零 jar / 零开关 / 零价表 / 零 p1sim 改码 / 零改 ×0.1** · **≠关观察** · **≠开闸** · **≠开 R** · **≠ stage 脏 runtime**  
-**硬规格（待批 A · 荐 M · ≠改 ×0.1 ≠立刻补码）：** [`DESIGN-ember-six-slot-blank-economy-model-2026-10-09.md`](../design/DESIGN-ember-six-slot-blank-economy-model-2026-10-09.md) · backlog `B-six-slot-blank-economy-model`  
+**本窗性质：** tip **已关** · **已批 A·M·后置·D370** · **零 jar / 零开关 / 零价表 / 零 p1sim 改码 / 零改 ×0.1** · **≠关观察** · **≠开闸** · **≠开 R** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 批 M · 后置 · D370 · 决策已拍 · ≠改 ×0.1 ≠同号补码）：** [`DESIGN-ember-six-slot-blank-economy-model-2026-10-09.md`](../design/DESIGN-ember-six-slot-blank-economy-model-2026-10-09.md) · backlog `B-six-slot-blank-economy-model`  
 **打开理由：** D361 只收口「模型未覆盖」**注记**，并明文 **≠补建模**；T1 §1.4 / D318 钉 live ×0.1，但 p1sim F **无 `blank` 键**（默认 ×1.0）、材料非门禁约束 → **「是否 / 如何补 blank 或等价模型」决策页仍缺**。本债交该决策页；**批 A ≠ 改现行 ×0.1 默默上线 ≠ 同号写 p1sim**。
 
 ---
@@ -31,7 +33,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐方案 M。
+见 DESIGN 同 slug · STATUS=已批 A·M·后置·D370。
 
 ---
 
@@ -41,4 +43,4 @@
 
 ---
 
-*选题 3 · tip 待批 A · 荐 M · 白板补建模决策 · ≠改 ×0.1 · ≠立刻补码 · ≠关观察。*
+*选题 3 · tip 已关 · 已批 A·M·后置·D370 · 白板补建模决策 · ≠改 ×0.1 · ≠同号补码 · ≠关观察。*
