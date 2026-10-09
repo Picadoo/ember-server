@@ -1,12 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 满窗绿出口「另号签字」启动前置模板 · docs-only · ≠关观察 · ≠现在勾 §2.4）
 
-> **旁注（打开 · 待批 A）：** tip 本提交打开；DESIGN 同 slug · STATUS=**待批 A** · 荐 **方案 M** · backlog `B-six-slot-green-exit-alt-sign-kickoff`。
+> **旁注（已关 · 批 A · 批 M · D367）：** tip `43f429fa` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-green-exit-alt-sign-kickoff-d367-2026-10-09.md`](STATUS-ember-six-slot-green-exit-alt-sign-kickoff-d367-2026-10-09.md) · 满窗另号签字启动前置模板已采纳 · OPS 半行已落 · **≠关观察 ≠勾选 §2.4 ≠开闸 ≠开 R ≠改日历**。
 >
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗 · 勿勾 §2.4**）。D366 观察指标报告读法已落 @ `168977e4`（**≠关观察 · 勿复述**）。D360–D365 已落（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1 / 翻 set_bonus / 改日历 / 改 ignore。**零玩法 · 零开开关。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **打开** · **待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠现在勾选 §2.4** · **≠开闸** · **≠改日历门槛** · **≠ stage 脏 runtime**  
-**硬规格（待批 A · 荐 M · ≠关观察 ≠现在勾 §2.4）：** [`DESIGN-ember-six-slot-green-exit-alt-sign-kickoff-2026-10-09.md`](../design/DESIGN-ember-six-slot-green-exit-alt-sign-kickoff-2026-10-09.md) · backlog `B-six-slot-green-exit-alt-sign-kickoff`  
+**本窗性质：** tip **已关** · **已批 A·M·D367** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠现在勾选 §2.4** · **≠开闸** · **≠改日历门槛** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 批 M · D367 · 模板已采纳 · ≠关观察 ≠现在勾 §2.4）：** [`DESIGN-ember-six-slot-green-exit-alt-sign-kickoff-2026-10-09.md`](../design/DESIGN-ember-six-slot-green-exit-alt-sign-kickoff-2026-10-09.md) · backlog `B-six-slot-green-exit-alt-sign-kickoff`  
 **打开理由：** D338 已采纳**签字包正文**（复制 §2）；D338 STATUS「给满窗关观察号」仅半页指针；**缺**「到点后另号怎么起」的启动前置步骤（何时开号、首行声明、时钟核、复制顺序、与 D342 分工、何时才可碰 §2.4）。观察将满（≥**2026-10-10 17:40 CST**），此项价值升高。本债只收口**另号启动前置**，**不**关观察、**不**改日历、**不**复述 D360–D366。
 
 ---
@@ -46,7 +46,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐 M。
+见 DESIGN 同 slug · STATUS=已批 A·M·D367 · 模板已采纳。
 
 ---
 
@@ -56,4 +56,4 @@
 
 ---
 
-*选题 H · tip 打开 · 待批 A · 满窗另号签字启动前置 · ≠关观察 · ≠现在勾 §2.4 · ≠改日历。*
+*选题 H · tip 已关 · 已批 A·M·D367 · 满窗另号签字启动前置 · ≠关观察 · ≠现在勾 §2.4 · ≠改日历。*
