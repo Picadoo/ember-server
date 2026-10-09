@@ -1,4 +1,5 @@
 # 使魔子菜单壳 — docs/design/DESIGN-ember-pet-bestiary.md
+# D373：出战接 summon/dismiss + 魂尘来源诚实（生活·钓鱼）· DESIGN-ember-pet-loop-honest-2026-10-10
 # 使魔
 
 Title: '§a余烬 · 使魔'
@@ -20,6 +21,7 @@ Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §a【使魔】 §7收集出战 · 偏外观与微量助战（≤战力 5%）。'
+    - 'tell: §8魂尘：补给 · 生活（旧靴/碎骨兑换）· 非挂机日表'
 
 Icons:
   '#':
@@ -61,17 +63,20 @@ Icons:
         - ''
         - '§7同时出战 §f1 §7只'
         - '§8默认偏外观；属性≤总战力 5%'
-        - '§8升级吃魂尘（挂机副产）'
+        - '§8升级吃魂尘（生活·钓鱼兑换）'
         - ''
-        - '§8点击出战'
+        - '§e➥ §f左键出战 · 右键收回'
         - ''
-        - '§a➥ §f查看说明'
+        - '§a➥ §f出战 / 收回'
     actions:
-      all:
+      left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
-        - 'tell: §a【使魔】 §7出战 / 收回 · 已解锁使魔见下方（孵化见「补给 · 生活」）'
-        - 'tell: §8氪皮 / 经验瓶 · 不卖满级战力宠'
-        - 'command: corerpg pet list'
+        - 'tell: §a【使魔】 §7正在出战…'
+        - 'command: corerpg pet summon'
+      right:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'tell: §a【使魔】 §7正在收回…'
+        - 'command: corerpg pet dismiss'
 
   S:
     display:
@@ -79,12 +84,13 @@ Icons:
       name: '§6魂尘投喂'
       lore:
         - ''
-        - '§7挂机副产魂尘升级使魔'
+        - '§7生活兑换魂尘升级使魔 · 非挂机日表'
         - '§8不消耗核心 / 毕业刃'
+        - '§8魂尘：补给 · 生活'
         - ''
         - '§8点击投喂'
         - ''
-        - '§6➥ §f查看说明'
+        - '§6➥ §f投喂'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

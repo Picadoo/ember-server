@@ -1,10 +1,12 @@
+> **旁注（已关 · 2026-10-10）：** 已批 A · 批 M · **D373 已施工** · STATUS [`STATUS-ember-pet-loop-honest-d373-2026-10-10.md`](STATUS-ember-pet-loop-honest-d373-2026-10-10.md) · tip `1d938a07` · **≠关观察 ≠挂机加魂尘 ≠开 R**。下文为选题当时正文，保留作史。
+
 # 状态 · 下一档硬债选定 · 需策划（使魔闭环诚实 · 挂机副产口径 + 出战可点）
 
 > **上游结案：** 总控加急·内容真债 1（用户要丰富玩法 / 在线时长 / 有趣系统）。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。挂机区加厚选题**作废本号**（改题使魔）。样本 R / Pack6 / 天赋·灰印 HOLD / 开 K3 live / 关观察 **仍禁**。排队债 2（日更短本第三拍）**本轮不写**。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A** · **docs-only** · **零 jar / 零改 daily_kills / 零改 ×0.97** · **≠关观察** · **≠开闸** · **≠开样本 R** · **≠ stage 脏 runtime**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-pet-loop-honest-2026-10-10.md`](../design/DESIGN-ember-pet-loop-honest-2026-10-10.md) · backlog `B-ember-pet-loop-honest`  
+**本窗性质：** tip **已关 · 已批 A · 批 M · D373** · **≠关观察** · **≠开闸** · **≠开样本 R** · **≠挂机加魂尘**  
+**硬规格（已批 A · 批 M · D373）：** [`DESIGN-ember-pet-loop-honest-2026-10-10.md`](../design/DESIGN-ember-pet-loop-honest-2026-10-10.md) · backlog `B-ember-pet-loop-honest`  
 **打开理由：** 使魔页宣称「升级吃魂尘（挂机副产）」，但 P1 挂机 RES **无** `soul_dust`；「出战 / 收回」只 tell + `pet list`，**不** `summon`/`dismiss`——闭环断在诚实与可点两处。
 
 ---
@@ -62,4 +64,4 @@
 
 ---
 
-*选题使魔闭环 · tip 待批 A · 荐 M · ≠关观察 ≠抬挂机表。*
+*选题使魔闭环 · tip 已关 · 已批 A·M · D373 已施工 · ≠关观察 ≠抬挂机表。*

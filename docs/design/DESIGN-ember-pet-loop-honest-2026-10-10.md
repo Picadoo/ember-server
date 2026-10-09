@@ -1,6 +1,6 @@
 # 余烬 · 使魔闭环诚实（挂机副产口径 + 出战可点）
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-ember-pet-loop-honest-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-ember-pet-loop-honest-need-design-2026-10-10.md) · backlog `B-ember-pet-loop-honest` · 总控加急内容真债 1
+STATUS=**已批 A · 批 M · D373 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-ember-pet-loop-honest-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-ember-pet-loop-honest-need-design-2026-10-10.md)（已关）· backlog `B-ember-pet-loop-honest` · STATUS [`STATUS-ember-pet-loop-honest-d373-2026-10-10.md`](../status/STATUS-ember-pet-loop-honest-d373-2026-10-10.md) · 总控加急内容真债 1
 
 > **一句话玩家价值：** 使魔从「菜单空壳」变成可出战的外观闭环；魂尘来源说真话（生活/钓鱼），点出战真的出宠——提高趣味与在线粘性，不抬挂机日顶。
 
@@ -124,7 +124,7 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard
 
 ## 5. 批注勾选（总控）
 
-- [ ] **批 M**（W1a 出战接真命令 + W1b/W1c lore·NI 诚实必做；W1d 可选）→ 另派施工号 · **策划荐**  
+- [x] **批 M**（W1a 出战接真命令 + W1b/W1c lore·NI 诚实必做；W1d 同批）→ **D373 已施工** · **策划荐 · 总控已批**  
 - [ ] **批 A**（仅 lore/NI 诚实；出战后置）· **不荐独批**  
 - [ ] **批 M+L**（M + 另开经济号议极薄挂机魂尘）· **不荐本窗绑死 L**  
 - [ ] **批 L 独开**（先动挂机 RES）· **否决默认**  
@@ -132,7 +132,12 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard
 
 **策划荐勾：** **批 M**。
 
-**说明：** 批 A ≠ 施工 ≠ 关观察 ≠ 开 R ≠ 授权挂机加魂尘。
+### 总控批注（D373）
+
+- **已批 A · 批 M**（含 W1d）· 施工号本窗落地。
+- **≠关观察 ≠改 ×0.97 / 三开关 / bv ≠开 R ≠给挂机加 soul_dust ≠改 afk.tiers。**
+
+**说明：** 批 A ≠ 关观察 ≠ 开 R ≠ 授权挂机加魂尘。
 
 ---
 
@@ -141,6 +146,7 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M；加急改题停挂机节奏稿；只交使魔号 |
+| 2026-10-10 | 总控批 A·M · D373 施工：TrMenu 出战接 summon/dismiss + lore/NI 诚实 + W1d 生活→使魔 · **≠关观察 ≠挂机加魂尘** |
 
 ---
 
@@ -155,4 +161,4 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard
 
 ---
 
-*待批 A · 荐方案 M · docs-only · ≠关观察 ≠抬挂机表 ≠开样本 R。*
+*已批 A · 批 M · D373 已施工 · ≠关观察 ≠抬挂机表 ≠开样本 R ≠挂机加魂尘。*
