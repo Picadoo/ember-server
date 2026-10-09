@@ -1,6 +1,6 @@
 # 余烬 · 枢纽短征体力旁注（今日可追入卡 · ≠抬日表 · ≠sx05）
 
-STATUS=**待批 A · 荐 M（拟 D399）** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-hub-short-stamina-note-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-hub-short-stamina-note-need-design-2026-10-10.md) · backlog `B-hub-short-stamina-note` · 总控催 D399（D398 配方速览已落 · D397 抽测中）
+STATUS=**已批 A · 方案 M · D399 · 已落地** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-hub-short-stamina-note-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-hub-short-stamina-note-need-design-2026-10-10.md) · backlog `B-hub-short-stamina-note` · STATUS [`STATUS-ember-hub-short-stamina-note-d399-2026-10-10.md`](../status/STATUS-ember-hub-short-stamina-note-d399-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠sx05**
 
 > **一句话玩家价值：** 打开枢纽「今天该打哪」，体力行写清「短征也是 30」，旁轨「今日可追」能看见短征（日帽/入口真可达）——有体力时多一条 5–8 分钟短本可追，拉长在线；**不**抬挂机表、**不**假开旧日常、**不**交 sx05。
 
@@ -54,8 +54,8 @@ STATUS=**待批 A · 荐 M（拟 D399）** · 2026-10-10 · tip [`STATUS-ember-n
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 体力行补短征30 + W1b 今日可追短征行 + W1c 互指/可选轻跳 + W1d 假平面禁）
-- [ ] ≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx05 ≠改 stamina / route_pri 主逻辑（硬禁项旁注保留）
+- [x] **方案 M**（W1a 体力行补短征30 + W1b 今日可追短征行 + W1c 互指/可选轻跳 + W1d 假平面禁）
+- [x] ≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx05 ≠改 stamina / route_pri 主逻辑（硬禁项旁注保留）
 
 ---
 
@@ -89,7 +89,7 @@ STATUS=**待批 A · 荐 M（拟 D399）** · 2026-10-10 · tip [`STATUS-ember-n
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **待批 A · 荐 M（拟 D399）** · docs-only |
+| 本窗 | **已批 A · 方案 M · D399 · 已落地** · TrMenu + docs |
 | 施工 | 批 A 后总控另派；预期 **仅 TrMenu**（零 Java；复用 D395 日帽 PAPI） |
 | 观察 | **≠关观察**；**≠改 ×0.97 / set_bonus**；**≠开 K3 live** |
 | D306 / D377 | 战斗主推荐与生活·工坊旁轨**保留**；本债 = 短征入决策卡 |
@@ -149,4 +149,4 @@ STATUS=**待批 A · 荐 M（拟 D399）** · 2026-10-10 · tip [`STATUS-ember-n
 
 ---
 
-*拟 D399 · 枢纽短征体力旁注 · 待批 A·荐 M · ≠关观察 ≠抬日表 ≠sx05。*
+*D399 · 枢纽短征体力旁注 · 已批 A·方案 M · 已落地 · ≠关观察 ≠抬日表 ≠sx05。*

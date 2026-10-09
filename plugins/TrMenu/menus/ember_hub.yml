@@ -30,6 +30,7 @@ Icons:
 
   # D306 枢纽「今天该打哪」日路由决策卡（方案 M · 零经济）
   # D377：旁轨「今日可追」行 + 右键轻跳生活/工坊（左键主语义不动）
+  # D399：体力行补短征30 + 今日可追短征半行 + 默认右键轻跳短征选页（体力不足禁进本跳）
   H:
     update: 20
     icons:
@@ -44,13 +45,14 @@ Icons:
             - '§8%corerpg_p1_route_sec%'
             - ''
             - '§7—— 今日四态 ——'
-            - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 深渊30 / 团本50'
+            - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 短征30 / 深渊30 / 团本50'
             - '§b精选：§f%corerpg_p1_featured%'
             - '§e花样：§f%corerpg_p1_vbounty%'
             - '§a挂机：§f%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
             - '§8体力不足：优先挂机/补给，不假开主线'
             - ''
             - '§d今日可追：§a钓鱼兑魂尘养使魔 · §7材料可去工坊'
+            - '§8短征需30体力 · 先挂机/补给 · 日帽见短征选本页'
             - '§8真入口：补给·生活（兑/孵）· 工坊（花材料）'
             - ''
             - '§e➥ §f左键：打开挂机庭'
@@ -74,17 +76,18 @@ Icons:
             - '§8%corerpg_p1_route_sec%'
             - ''
             - '§7—— 今日四态 ——'
-            - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 深渊30 / 团本50'
+            - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 短征30 / 深渊30 / 团本50'
             - '§b精选：§f%corerpg_p1_featured%'
             - '§e花样：§f%corerpg_p1_vbounty%'
             - '§a挂机：§f满 · 去冒险 §7· 今日 %corerpg_p1_afk_today%'
             - '§8层名片仍在挂机页（不盖过满额→冒险）'
             - ''
-            - '§d今日可追：§7工坊花材料 · 生活·使魔'
-            - '§8真入口：工坊（花材料）· 补给·生活（兑/孵）'
+            - '§d今日可追：§e短征（有体力可打 · 今日剩余有奖 %corerpg_p1_sx_day_left_sum%）· §7工坊/生活'
+            - '§8真入口：冒险页短征选本 · 工坊（花材料）· 补给·生活'
             - ''
             - '§e➥ §f左键：去冒险'
             - '§e➥ §f右键：打开工坊'
+            - '§e➥ §fShift+左键：短征选本'
         actions:
           left:
             - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -92,6 +95,9 @@ Icons:
           right:
             - 'sound: BLOCK_ANVIL_USE-1-1'
             - 'menu: ember_p1_forge'
+          shift_left:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'menu: ember_p1_short'
     display:
       material: compass
       name: '§e今天该打哪'
@@ -101,24 +107,25 @@ Icons:
         - '§8%corerpg_p1_route_sec%'
         - ''
         - '§7—— 今日四态 ——'
-        - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 深渊30 / 团本50'
+        - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 短征30 / 深渊30 / 团本50'
         - '§b精选：§f%corerpg_p1_featured%'
         - '§e花样：§f%corerpg_p1_vbounty%'
         - '§a挂机：§f%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
         - '§8推荐对齐真实体力/精选/挂机/Q07 · 未解锁不推深渊/团本'
         - ''
-        - '§d今日可追：§7生活·使魔（魂尘）· 工坊花材料'
-        - '§8真入口：补给·生活（兑/孵）· 工坊（花材料）'
+        - '§d今日可追：§e短征（冒险页 · 各30 · 日帽分开 · 今日剩余有奖 %corerpg_p1_sx_day_left_sum%）'
+        - '§7并列：生活·使魔（魂尘）· 工坊花材料'
+        - '§8真入口：短征选本 · 补给·生活（兑/孵）· 工坊（花材料）'
         - ''
         - '§e➥ §f左键：打开冒险页'
-        - '§e➥ §f右键：补给·生活'
+        - '§e➥ §f右键：短征选本'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_adventure'
       right:
-        - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'menu: ember_life'
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_short'
 
   # D177 rev 2 挂机庭（P1）：按主线首通开放四层，自动战斗；币 + 经验 + 账号绑定材料，每日 2400 只
   Z:
