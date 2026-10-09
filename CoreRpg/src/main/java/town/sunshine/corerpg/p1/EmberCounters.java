@@ -208,6 +208,7 @@ public final class EmberCounters {
         x("p1_sx05_day", "EmberShortService", D, CL, RL, "short expedition sx05 rewarded clears today (S44)");
         x("p1_sx06_day", "EmberShortService", D, CL, RL, "short expedition sx06 rewarded clears today (S45)");
         x("p1_sx07_day", "EmberShortService", D, CL, RL, "short expedition sx07 rewarded clears today (S46)");
+        x("p1_sx08_day", "EmberShortService", D, CL, RL, "short expedition sx08 rewarded clears today (S47)");
         px("p3_fest_entry_", "EmberFestival", D, CL, RL, "festival runs today");
         px("p3_fest_charm_", "EmberFestival", A, PR, NV, "festival charm owned");
         px("p3_fest_charmon_", "EmberFestival", A, SE, ZR, "festival charm worn");
