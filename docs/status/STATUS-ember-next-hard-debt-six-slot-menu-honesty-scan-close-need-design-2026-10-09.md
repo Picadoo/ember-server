@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 菜单诚实扫结案 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D358）：** tip 已关；扫结案已采纳；指向 STATUS [`STATUS-ember-six-slot-menu-honesty-scan-close-d358-2026-10-09.md`](STATUS-ember-six-slot-menu-honesty-scan-close-d358-2026-10-09.md) · 绿出口 §2.3 已旁注「菜单诚实波结案」· **≠关观察** · **≠勾选 §2.4** · **≠开 K3** · 零 TrMenu。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D357 hub 导语已施工 @ `744a9bec`。D329–D356 玩家面菜单诚实波已收。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**硬禁：** 空转附录复述 · 已 PASS 薄抽复述 · tip 关闭包 / 钉盘复述。**零数值 / 零 TrMenu 施工（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · 施工另号（可只 docs 旁注）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-menu-honesty-scan-close-2026-10-09.md`](../design/DESIGN-ember-six-slot-menu-honesty-scan-close-2026-10-09.md) · backlog `B-six-slot-menu-honesty-scan-close`  
+**本窗性质：** tip 已关 · 授权见 D358 STATUS · **零 TrMenu / 零开关 / 零换 jar** · **本窗不关观察**  
+**硬规格（已批 A · 批 M · D358 · 扫结案已采纳 · ≠关观察）：** [`DESIGN-ember-six-slot-menu-honesty-scan-close-2026-10-09.md`](../design/DESIGN-ember-six-slot-menu-honesty-scan-close-2026-10-09.md) · backlog `B-six-slot-menu-honesty-scan-close`  
 **打开理由：** D357 后对可达 TrMenu（排除 `ember_hub_legacy`）全面关键字扫 **无玩家面 Stage2 套装/工坊/分解叙事残留**；需正式结案清单 + hub_legacy 后置声明 + 绿出口附录**可**旁注「菜单诚实波结案」（≠关观察、≠空转复述旧附录正文）。
 
 ---
@@ -94,4 +96,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · 菜单诚实扫结案 · 可达页已净 · 勿关窗。*
+*选题 H · tip 已关 · 已批 A·M · D358 · 扫结案已采纳 · 可达页已净 · 勿关窗。*
