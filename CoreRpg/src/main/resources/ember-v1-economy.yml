@@ -122,6 +122,15 @@ sources:
     "fc.shard": 6
     "fc.blank": 1
     daily_cap: 3
+  # D400 短征 sx05（S44）：有奖同量级；首通略薄 140/6/1；日帽独立（p1sim 另号）
+  S44:
+    "clear.coin": 80
+    "clear.shard": 4
+    "clear.bone": 3
+    "fc.coin": 140
+    "fc.shard": 6
+    "fc.blank": 1
+    daily_cap: 3
 
 sinks:
   C01: { stamina: 30 }

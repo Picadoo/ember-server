@@ -23,7 +23,7 @@
 # Behaviour-neutral: nothing in CoreRpg reads this file. Update it in the same commit as any new source / key / map.
 
 version: 1
-balance_version: 63
+balance_version: 68
 built_against: "CoreRpg 1.65.70 (D245)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
@@ -109,6 +109,7 @@ content:
   sx02: {mode: short, tier: 1, name: 锈灯栈道, boss: "EmberSx02Warden (MM placeholder)", sources: [S41], config: ["ember-v1-runs.yml#short.sx02"]}
   sx03: {mode: short, tier: 1, name: 霜雾闸廊, boss: "EmberSx03Warden (MM placeholder)", sources: [S42], config: ["ember-v1-runs.yml#short.sx03"]}
   sx04: {mode: short, tier: 1, name: 烬井螺旋, boss: "EmberSx04Warden (MM placeholder)", sources: [S43], config: ["ember-v1-runs.yml#short.sx04"]}
+  sx05: {mode: short, tier: 1, name: 裂谷风廊, boss: "EmberSx05Warden", sources: [S44], config: ["ember-v1-runs.yml#short.sx05"]}
   afk_t1: {mode: afk, name: 灰坡, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t2: {mode: afk, name: 荒原, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t3: {mode: afk, name: 焦土, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
@@ -609,6 +610,7 @@ sources:
     period: day
     content: [sx01]
     drop_table: "rewarded clear (≤3/day Asia/Shanghai p1_sx01_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 200 + shard 8 + blank 1; after daily cap: 0 (sx_practice marker)"
+    runtime_keys: true
     grant_keys: [sx_clear_coin, sx_clear_shard, sx_clear_bone, sx_fc_coin, sx_fc_shard, sx_fc_blank, sx_practice]
     economy_keys: [S40.clear.coin, S40.clear.shard, S40.clear.bone, S40.fc.coin, S40.fc.shard, S40.fc.blank, S40.daily_cap]
     counters: [p1_sx01_day]
@@ -623,6 +625,7 @@ sources:
     period: day
     content: [sx02]
     drop_table: "rewarded clear (≤3/day Asia/Shanghai p1_sx02_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 180 + shard 6 + blank 1; after daily cap: 0 (sx02_practice marker)"
+    runtime_keys: true
     grant_keys: [sx02_clear_coin, sx02_clear_shard, sx02_clear_bone, sx02_fc_coin, sx02_fc_shard, sx02_fc_blank, sx02_practice]
     economy_keys: [S41.clear.coin, S41.clear.shard, S41.clear.bone, S41.fc.coin, S41.fc.shard, S41.fc.blank, S41.daily_cap]
     counters: [p1_sx02_day]
@@ -637,6 +640,7 @@ sources:
     period: day
     content: [sx03]
     drop_table: "rewarded clear (≤3/day Asia/Shanghai p1_sx03_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 160 + shard 8 + blank 1; after daily cap: 0 (sx03_practice marker)"
+    runtime_keys: true
     grant_keys: [sx03_clear_coin, sx03_clear_shard, sx03_clear_bone, sx03_fc_coin, sx03_fc_shard, sx03_fc_blank, sx03_practice]
     economy_keys: [S42.clear.coin, S42.clear.shard, S42.clear.bone, S42.fc.coin, S42.fc.shard, S42.fc.blank, S42.daily_cap]
     counters: [p1_sx03_day]
@@ -651,12 +655,28 @@ sources:
     period: day
     content: [sx04]
     drop_table: "rewarded clear (≤3/day Asia/Shanghai p1_sx04_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 150 + shard 6 + blank 1; after daily cap: 0 (sx04_practice marker)"
+    runtime_keys: true
     grant_keys: [sx04_clear_coin, sx04_clear_shard, sx04_clear_bone, sx04_fc_coin, sx04_fc_shard, sx04_fc_blank, sx04_practice]
     economy_keys: [S43.clear.coin, S43.clear.shard, S43.clear.bone, S43.fc.coin, S43.fc.shard, S43.fc.blank, S43.daily_cap]
     counters: [p1_sx04_day]
     code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx04_clear_\")"]
     config: ["ember-v1-runs.yml#short.sx04", "ember-v1-economy.yml#sources.S43"]
     notes: "D397 批 A·M；有奖同量级；首通略薄 150/6/1；p1sim 另号；地图/WE/TrMenu 另号（MM/DP idle 已就绪）；日帽 PAPI 扩第四本；不抬 afk.tiers / daily_kills；不放开 gate_daily"
+  S44:
+    name: 短征通关（sx05 · 裂谷风廊）
+    econ_row: S44
+    status: live
+    pays: [coin, shard, bone, blank]
+    period: day
+    content: [sx05]
+    drop_table: "rewarded clear (≤3/day Asia/Shanghai p1_sx05_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 140 + shard 6 + blank 1; after daily cap: 0 (sx05_practice marker)"
+    runtime_keys: true
+    grant_keys: [sx05_clear_coin, sx05_clear_shard, sx05_clear_bone, sx05_fc_coin, sx05_fc_shard, sx05_fc_blank, sx05_practice]
+    economy_keys: [S44.clear.coin, S44.clear.shard, S44.clear.bone, S44.fc.coin, S44.fc.shard, S44.fc.blank, S44.daily_cap]
+    counters: [p1_sx05_day]
+    code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx05_clear_\")"]
+    config: ["ember-v1-runs.yml#short.sx05", "ember-v1-economy.yml#sources.S44"]
+    notes: "D400 批 A·M；有奖同量级；首通略薄 140/6/1；p1sim 另号；地图 WE / TrMenu 挂键另号（MM/DP idle 已就绪）；日帽 PAPI 扩第五本；不抬 afk.tiers / daily_kills；不放开 gate_daily"
   X04:
     name: 六槽迁移补发（source=migrate，等价换算，不产生新价值）
     econ_row: null
