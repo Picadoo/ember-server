@@ -1,10 +1,12 @@
 # 余烬 · 使魔选定盘面化（有趣系统 · list→可点换宠 · ≠抬日表 · ≠sx06）
 
-STATUS=**待批 A · 荐 M · 拟 D402** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md)（**打开 · 待批 A**）· backlog `B-pet-select-menu`（**待批 A**）· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx06 ≠复述 D373–D401 为主交付 ≠空跳转当主交付 ≠教玩家手打指令**
+STATUS=**已批 A · 方案 M1 · D402** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-pet-select-menu`（**已批/待施工·菜单岗**）· **施工另派 TrMenu** · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx06 ≠复述 D373–D401 为主交付 ≠空跳转当主交付 ≠教玩家手打指令**
 
 > **一句话玩家价值：** 打开使魔页就能**点一下换灰灵/烬火**——不再靠聊天 list 和手打 `/corerpg pet summon <id>`；养成旁轨从「能养」变成「愿意换着玩」。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx06。**
+>
+> **总控批 A·M1 · 2026-10-10：** 采纳方案 **M1**（薄页 `ember_pet_select` · L→选定 · 灰灵/烬火点 `summon <id>` · 玩家路径禁教斜杠 · 未解锁禁假写已拥有；**非** M2 本页两格）；**施工另派 TrMenu**；≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3。
 
 ---
 
@@ -53,14 +55,14 @@ STATUS=**待批 A · 荐 M · 拟 D402** · 2026-10-10 · tip [`STATUS-ember-nex
 | **L · 新 `pet select` API + 按 id 解锁 PAPI + 第三只使魔 / 改 feed** | 大插件+新宠 | **否决当默认真** — 过厚；本窗不绑 |
 | **W · sx06 / 假开旧日常 / 抬日表 / 空跳转复述** | — | **否决** — 硬禁 |
 
-**批 A = 采纳方案（荐 M）。批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 交 sx06。**
+**批 A = 采纳方案 M1（薄页 `ember_pet_select`）。批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 交 sx06。**
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a–W1d 见 §2）
-- [ ] 钉死：两宠可点选定（`pet_ember_ashling` / `pet_ember_cinder`）· 复用现网 `summon <id>` · 玩家路径禁教手打斜杠 · 未解锁禁假写已拥有
-- [ ] 否决 A（只改 lore 仍 list）/ L（新宠/改 feed/大 API 当默认真）/ W（sx06/假开旧日常/空转）
-- [ ] 批注：总控批 A·M · 2026-10-10 · D402 · … · ≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3
+- [x] **方案 M1**（薄页 `ember_pet_select` · W1a–W1d 见 §2；**钉死 M1，非 M2 本页两格**）
+- [x] 钉死：薄页 `ember_pet_select` · 格 L → `menu: ember_pet_select` · 两宠可点选定（`pet_ember_ashling` / `pet_ember_cinder`）· 复用现网 `summon <id>` · 玩家路径禁教手打斜杠 · 未解锁禁假写已拥有 · 底栏返回 `ember_pet`
+- [x] 否决 A（只改 lore 仍 list）/ L（新宠/改 feed/大 API 当默认真）/ W（sx06/假开旧日常/空转）· **否决本窗默认真采用 M2**（本页两格；施工若极薄可另议，本批钉 M1）
+- [x] 批注：总控批 A·M1 · 2026-10-10 · D402 · **施工另派 TrMenu** · ≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3
 
 ---
 
@@ -71,8 +73,8 @@ STATUS=**待批 A · 荐 M · 拟 D402** · 2026-10-10 · tip [`STATUS-ember-nex
 | 项 | 钉 |
 |----|----|
 | 入口 | 现网 `ember_pet` 格 **L**（原「使魔图鉴」） |
-| 形态 **M1（荐）** | 新薄菜单 `ember_pet_select`（Title 如「§a使魔 · 选定」）· L → `menu: ember_pet_select` · 底栏返回 `ember_pet` |
-| 形态 **M2（可接受）** | 不新文件：在 `ember_pet` Layout 增两格（例 A/C）直接选定；L 改名「选定说明」或改为打开同一页锚点 |
+| 形态 **M1（已批钉死）** | 新薄菜单 `ember_pet_select`（Title 如「§a使魔 · 选定」）· L → `menu: ember_pet_select` · 底栏返回 `ember_pet` |
+| 形态 **M2（本批否决默认真）** | 不新文件：在 `ember_pet` Layout 增两格（例 A/C）直接选定；L 改名「选定说明」或改为打开同一页锚点 · **本批钉 M1，勿默认采用** |
 | 两宠格 | **灰灵** → `command: corerpg pet summon pet_ember_ashling`（或别名 `ashling`）· **烬火** → `… pet_ember_cinder` |
 | 点击语义 | 与现网 summon 一致：**设为选定 + 出战**（若已出战他宠则替换） |
 | 状态同屏 | 选定页可挂 `%corerpg_pet_active_name%` / `%corerpg_pet_level_line%`；返回使魔页后 E/S/I 已有 update:20 |
@@ -160,10 +162,11 @@ STATUS=**待批 A · 荐 M · 拟 D402** · 2026-10-10 · tip [`STATUS-ember-nex
 
 ---
 
-*拟 D402 · 使魔选定盘面化 · 待批 A·荐 M · ≠关观察 ≠抬日表 ≠sx06。*
+*D402 · 使魔选定盘面化 · 已批 A·方案 M1 · 施工另派 TrMenu · ≠关观察 ≠抬日表 ≠sx06。*
 
 ---
 
 | 日 | 说明 |
 |----|------|
-| 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D402 |
+| 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D402 · tip @`e12c548c` |
+| 2026-10-10 | **已批 A · 方案 M1 · D402** · 总控批注勾选（薄页 `ember_pet_select` · L→选定 · summon <id> · 非 M2）· **施工另派 TrMenu** · ≠关观察 ≠抬日表 ≠sx06 |
