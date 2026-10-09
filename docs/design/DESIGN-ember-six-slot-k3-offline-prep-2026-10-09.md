@@ -1,6 +1,6 @@
 # 余烬 · K3 离线预备清单（决策页 · ≠开闸≠部署≠live）
 
-STATUS=**待批 A**（观察期 · docs-only · **≠开闸** · **≠部署** · **≠live** · **不**改 ×0.97 · **不**关观察 · **不**重开菜单诚实）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-k3-offline-prep-need-design-2026-10-09.md` · backlog `B-six-slot-k3-offline-prep` · 上游闸页 D341 · T0‴ D328 · 防冲 D344
+STATUS=**已批 A · 批 M · D359**（采纳离线预备清单 · **批 A ≠ 开闸 ≠ 部署 ≠ live** · worktree **已就位** · 观察期 docs-only · **不**改 ×0.97 · **不**关观察）· 2026-10-09 · 总控批注 · 上游 tip `7cdf28b5` · backlog `B-six-slot-k3-offline-prep` · 上游闸页 D341 · T0‴ D328 · 防冲 D344
 
 > **一句话：** 闸关允许离线预备，缺可执行单。荐 **方案 M**：worktree + D344 对齐 + T0‴ 指针 + 开闸后第一步。**批 A ≠ 开闸。**
 
@@ -42,13 +42,24 @@ STATUS=**待批 A**（观察期 · docs-only · **≠开闸** · **≠部署** �
 
 **目的：** 在**不** `checkout`/`switch` 主工作区的前提下做 K3 分支/单测。
 
-**示例（路径/名可改；原则不可改）：**
+**观察服现态（总控加注 · D359 · 已就位 · ≠开闸）：**
+
+| 项 | 值 |
+|----|-----|
+| 路径 | `/workspace/minecraft-wt-d341`（**已就位** · 本机已核验目录存在） |
+| 分支 | `feat/d341-k3-refine-offline` |
+| HEAD | `9ff421a8`（插件结案 tip≈同 sha · docs(D341) 旁注 D343 禁令） |
+| 主仓 | `/workspace/minecraft` @ `main`（观察工作区 · **勿**为 K3 切走） |
+| 口径 | worktree **已就位** ≠ 开闸 ≠ 部署 ≠ 开 `k3_refine` ≠ live |
+
+**示例（路径/名可改；原则不可改；观察服已按上表就位，不必重建）：**
 ```bash
 # 在主仓所在机（观察期主工作区保持当前观察分支，勿为 K3 切走）
 git fetch origin
 git worktree add /path/to/ember-k3-offline <base-ref>   # base-ref 例：origin/main 某钉点
 cd /path/to/ember-k3-offline
 git switch -c wip/k3-refine-offline
+# 观察服既有：/workspace/minecraft-wt-d341 → feat/d341-k3-refine-offline @ 9ff421a8
 ```
 
 **硬对齐 D344 / OPS §1.5：**
@@ -134,11 +145,11 @@ git switch -c wip/k3-refine-offline
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 本清单纯发为闸关离线预备真源；**≠开闸**  
+- [x] **批 A：采纳方案 M** → 本清单纯发为闸关离线预备真源；**≠开闸**（总控已批 · D359）  
 - [ ] 升级 L（禁一切预备）  
 - [ ] 否决 / 改派  
 
-**总控批注：** （待填）
+**总控批注（2026-10-09 · D359）：** **批 A · 批 M**：采纳本页为闸关离线预备真源；**批 A ≠ 开闸 ≠ 部署 ≠ live**。观察服独立 worktree **已就位**：`/workspace/minecraft-wt-d341` → `feat/d341-k3-refine-offline` @ `9ff421a8`（插件结案 tip≈同 sha）；清单落字记「已就位」。T0‴ 证据仍 `/workspace/tmp/d328/`。闸关；开闸仍走 D341 §2.1。本号零 jar / yml / 开关 / bv / TrMenu；不关观察；不开 `k3_refine`。
 
 ---
 
@@ -147,5 +158,6 @@ git switch -c wip/k3-refine-offline
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · D358 后别轨；补 D341 预备空洞 | 策划执行手 |
+| 2026-10-09 | D359 · 总控批 A·M；采纳离线预备清单；worktree **已就位** `/workspace/minecraft-wt-d341` → `feat/d341-k3-refine-offline` @ `9ff421a8`；**≠开闸≠部署≠live** | 总控 / 执行手 |
 
-*K3 离线预备清单 · **待批 A · 荐 M** · docs-only · ≠开闸≠部署≠live · 对齐 D344 · 指针 D328。*
+*K3 离线预备清单 · **已批 A·M·D359** · docs-only · worktree 已就位 · ≠开闸≠部署≠live · 对齐 D344 · 指针 D328。*

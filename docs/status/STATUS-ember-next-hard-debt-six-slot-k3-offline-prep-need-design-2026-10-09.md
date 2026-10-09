@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（K3 离线预备清单 · docs-only · ≠开闸≠live）
 
+> **旁注（已关 · 批 A · 批 M · D359）：** tip `7cdf28b5` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-k3-offline-prep-d359-2026-10-09.md`](STATUS-ember-six-slot-k3-offline-prep-d359-2026-10-09.md) · 清单已采纳 · worktree **已就位** `/workspace/minecraft-wt-d341` → `feat/d341-k3-refine-offline` @ `9ff421a8` · **≠开闸≠部署≠live** · 闸关 · 不关观察。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D358 菜单诚实扫结案已落 @ `297a6c4b`（**菜单诚实波停**）。D341 K3 闸页已批（≠开闸）；D328 T0‴ PASS；D344 禁主仓切分支 + worktree。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / **开 K3 live** / 提前关观察 / 再开菜单诚实扫 / 附录空转 / 已关 tip 复述。**零 live。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零 jar / 零开关 / 零 TrMenu 玩法**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-k3-offline-prep-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-offline-prep-2026-10-09.md) · backlog `B-six-slot-k3-offline-prep`  
+**本窗性质：** tip 已关 · 授权见 D359 STATUS · **零 jar / 零开关 / 零 TrMenu 玩法** · **本窗不代替开闸**  
+**硬规格（已批 A · 批 M · D359 · 清单已采纳 · ≠开闸≠部署）：** [`DESIGN-ember-six-slot-k3-offline-prep-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-offline-prep-2026-10-09.md) · backlog `B-six-slot-k3-offline-prep`  
 **打开理由：** D341 §2.2 允许「闸关离线预备」但**无**可执行清单（worktree 步骤、D344 对齐、T0‴ 产物指针、开闸后施工号第一步）。满窗前后易空转或误在主仓切分支冲 live。
 
 ---
@@ -49,4 +51,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · K3 离线预备清单 · ≠开闸≠live · 勿关窗。*
+*选题 H · tip 已关 · 已批 A·M·D359 · K3 离线预备清单已采纳 · worktree 已就位 · ≠开闸≠live · 勿关窗。*

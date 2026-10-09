@@ -7,6 +7,8 @@
 
 ## 人话
 
+> **旁注（D359）：** 离线预备清单已批 · [`STATUS-ember-six-slot-k3-offline-prep-d359-2026-10-09.md`](STATUS-ember-six-slot-k3-offline-prep-d359-2026-10-09.md) · worktree **已就位** `/workspace/minecraft-wt-d341` → `feat/d341-k3-refine-offline` @ `9ff421a8` · **仍 ≠开闸**。
+
 T0‴ 已 PASS（D328），但缺一页说清「何时能动 K3 码/换 jar」。本号只批等待闸真源：开闸条件、闸关可预备、禁项、与 D338 衔接。**批 A 只采纳闸页**；开闸须 D338 绿出口已签（路径 A）或总控另签并行（路径 B）。闸关可做离线预备，**禁 live**。
 
 ## 批注要点
