@@ -40,10 +40,10 @@ daily_kills / afk.tiers / 离线% · UpgradeRules · gate_daily · 观察三开�
 
 | 项 | 值 |
 |----|-----|
-| tip | _(commit 后填)_ |
+| tip | `7123d944` |
 | jar | `CoreRpg-1.65.114-d405.local.jar` |
-| sha256 | _(装服后填)_ |
-| Enabling | `CoreRpg v1.65.114-d405.local` |
+| sha256 | `2098ca8935e74c612a0b737c547f4f8e53a21c288bde6ad600f1a34f4f7e910e` |
+| Enabling | `CoreRpg v1.65.114-d405.local` · play PID 1167759 |
 
 ## 下一号
 
