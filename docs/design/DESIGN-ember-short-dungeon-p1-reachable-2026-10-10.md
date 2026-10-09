@@ -1,6 +1,6 @@
 # 余烬 · 新短本房（P1 可达 + 经济回盘 · 短征 sx01）
 
-STATUS=**待批 A · 荐 M**（总控点名主题① · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假可达**）· 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-p1-reachable-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-p1-reachable-need-design-2026-10-10.md) · backlog `B-short-dungeon-p1-reachable` · 上游 D390 展示波 exhausted @`9d9dfd04` · 真源指针 D198/D202 LegacyGate · `ember_daily` 七线 · REG S01/S22/C03–C06 · map-plan · **不**重写其正文
+STATUS=**已批 A · 批 M · D391 · 骨架启动**（总控点名主题① · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠放开 gate_daily**）· 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-p1-reachable-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-p1-reachable-need-design-2026-10-10.md)（**已关**）· STATUS [`STATUS-ember-short-dungeon-sx01-d391-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx01-d391-2026-10-10.md) · backlog `B-short-dungeon-p1-reachable` · tip 设计稿 @`234dea63` · 上游 D390 @`9d9dfd04`
 
 > **一句话玩家价值：** 今天就能从枢纽点进一条 **5～8 分钟、多房可躲** 的短征；打完有币/材料进仓去工坊花——拉长在线，**不**靠重开旧日常、也**不**抬挂机日表。
 
@@ -135,7 +135,7 @@ STATUS=**待批 A · 荐 M**（总控点名主题① · **≠关观察 ≠开闸
 | 抬 `daily_kills` / afk.tiers | 硬禁 |
 | 空跳转 / 又以 PAPI 同屏当主交付 | 点名的是可打短本 |
 | 整包 Stage4 / 挂机第 5 层 | 总控暂不点名 |
-| 本号改 jar/MM/地图实体 | **docs-only**；批 A 后拆号 |
+| 本 DESIGN 号改 jar/MM/完整地形 | **docs-only**；批 A 后拆号（D391 已启地图本地骨架+菜单壳） |
 
 **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R。**
 
@@ -194,4 +194,22 @@ STATUS=**待批 A · 荐 M**（总控点名主题① · **≠关观察 ≠开闸
 
 ---
 
-*方案 M · 待批 A · 短征 sx01 · P1 可达 + 薄经济回盘 · ≠关观察 · ≠抬日表 · ≠开 R。*
+## 7. 批注区（总控填）
+
+- [x] **批 A · 方案 M**（P1 短征 sx01 全规格）· **D391 骨架启动**
+- [x] 否决 A（假可达 lore）/ L（放开旧七线）/ W（空菜单/抬日表）
+- [x] 批 A ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 放开 `gate_daily`
+
+---
+
+## 8. 变更记录
+
+| 日 | 事 |
+|----|-----|
+| 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M · tip @`234dea63` |
+| 2026-10-10 | 总控 · **批 A · 批 M · D391** · 地图本地骨架（复制 Q01 白盒→`ember_short_sx01`，map/ gitignore 不入仓）+ DP `EmberSx01` 壳 + TrMenu `ember_p1_short` + hub/adventure 半指 · 进本键/MM刷点/S40 金样 **并行另号** · ≠关观察 ≠抬日表 ≠开 gate_daily |
+
+---
+
+*方案 M · 已批 A·M · D391 骨架启动 · 短征 sx01 · ≠关观察 · ≠抬日表 · ≠开 R · ≠放开旧日常闸。*
+

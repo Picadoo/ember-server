@@ -188,6 +188,9 @@ dungeon-pre-folder:
     "EmberDailyFrost": 1
   ember_daily_rail:
     "EmberDailyRail": 1
+  # D391 短征 sx01 · 烬门哨岗（map 本地骨架；进本键另号）
+  ember_short_sx01:
+    "EmberSx01": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

@@ -1,0 +1,129 @@
+# D391 骨架 · 短征选本页（sx01 烬门哨岗）
+# 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01（键未就绪时服务端拒，菜单诚实写解锁/体力/日帽）。
+# 禁：教玩家手打 /dp start；假宣传旧日常窟开放；抬日表文案。
+
+Title: '§6短征 · 烬门哨岗'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_short'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '#########'
+  - '#  I  S #'
+  - '#   A   #'
+  - '#  B    #'
+  - '####Z####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'tell: §e短征：§f烬门哨岗 · Q01 后 · 体力30 · 日有奖帽3'
+    - 'tell: §8终厅读条后环伤 · 拉开可躲 · 材料进仓去工坊'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  I:
+    update: 20
+    display:
+      material: paper
+      name: '§e短征说明'
+      lore:
+        - ''
+        - '§7独立短本（§f不是§7旧日常窟）'
+        - '§7三房 · 约 5～8 分钟手感 · 终厅可读可躲'
+        - '§7通关有币/碎片/骨尘 → 仓库 → 工坊花'
+        - '§8日有奖通关最多 3 次 · 第 4+ 次无结算包（键齐后生效）'
+        - '§8不发主线装备/徽记/签名（首航）'
+        - ''
+        - '§8旧日常窟仍收起 · 勿找 ember_daily'
+
+  S:
+    update: 20
+    display:
+      material: glowstone dust
+      name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+      lore:
+        - ''
+        - '§7短征每次 §e30 §7体力（与主线同池）'
+        - '§7不足时灰显 · 开本失败退还'
+        - '§7每天 0 点回满（Asia/Shanghai）'
+
+  A:
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7烬门哨岗 §8（需本人 Q01 首通）'
+          lore:
+            - ''
+            - '§c未解锁：先通主线 Q01 灰烬庭院'
+            - '§7解锁后：短征三房 · 体力 30 · 日有奖帽 3'
+            - '§8进本键就绪前点了也会被服务端拒绝'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7烬门哨岗 §8（体力不足）'
+          lore:
+            - ''
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            - '§7挂机/补给后再来 · 勿假开'
+    update: 20
+    display:
+      material: shield
+      name: '§6烬门哨岗 §7· 短征 sx01'
+      lore:
+        - ''
+        - '§7解锁：§a已通 Q01'
+        - '§7消耗：§e30 体力'
+        - '§7日有奖帽：§f最多 3 次/日 §8（第 4+ 次无结算）'
+        - '§d名片：§f哨长读条 · 拉开'
+        - '§b本间：§f院角 → 甬道 → Boss 垫'
+        - '§7通关草案：币80 + 碎片4 + 骨尘3（S40 · 金样另号）'
+        - '§7生涯首通另加薄包（键齐后）'
+        - ''
+        - '§e➥ §f左键：进本（队长点；进本键未就绪会提示）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter sx01'
+        - close
+
+  B:
+    update: 20
+    display:
+      material: book
+      name: '§b去哪花'
+      lore:
+        - ''
+        - '§7通关材料进账号仓'
+        - '§7工坊：强化 / 精工 / 成色吃碎片·骨尘'
+        - ''
+        - '§e➥ §f打开工坊'
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-1-1'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: arrow
+      name: '§e返回冒险'
+      lore:
+        - '§7回冒险页'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - 'menu: ember_p1_adventure'

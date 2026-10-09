@@ -20,7 +20,7 @@ Options:
 
 Layout:
   - '#########'
-  - '#TVXSA K#'
+  - '#TVXSAHK#'
   - '#1234567#'
   - '#Ws b u n'
   - '#GMRFZCYD'
@@ -29,9 +29,39 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'tell: §8短征：本页「烬门哨岗」（Q01后 · 体力30 · 日有奖帽3）'
 
 Icons:
+  # D391 短征入口 → ember_p1_short（进本键另号；本号菜单骨架）
+  H:
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7短征 · 烬门哨岗 §8（需 Q01 首通）'
+          lore:
+            - ''
+            - '§c先通主线 Q01'
+            - '§7解锁后：三房短本 · 体力30 · 日有奖帽3'
+    update: 20
+    display:
+      material: shield
+      name: '§6短征 · 烬门哨岗'
+      lore:
+        - ''
+        - '§7P1 原生短本（§f不是§7旧日常窟）'
+        - '§7体力 §e30 §7· 日有奖帽 §f3'
+        - '§7终厅读条后环伤 · 拉开可躲'
+        - ''
+        - '§e➥ §f打开短征页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_short'
+
   W:
+
     update: 20
     display:
       material: paper

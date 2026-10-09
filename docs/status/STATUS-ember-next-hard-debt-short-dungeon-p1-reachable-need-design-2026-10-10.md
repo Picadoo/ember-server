@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（新短本房 · P1 可达 + 经济回盘 · docs-only · ≠关观察 · ≠开闸 · ≠开 R）
 
-> **【待批 A · 荐 M】** tip+DESIGN docs-only · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假可达 ≠空跳转 ≠又一个 PAPI 同屏当主交付 ≠复述 D373–D389 为主交付** · **总控点名主题①**
+> **旁注（已关 · 批 A · 批 M · D391）：** tip `234dea63` 已关；总控已批 A·M；STATUS [`STATUS-ember-short-dungeon-sx01-d391-2026-10-10.md`](STATUS-ember-short-dungeon-sx01-d391-2026-10-10.md) · 骨架启动（地图本地+DP壳+菜单）· 进本键/MM/S40 并行 · **≠关观察 ≠抬日表 ≠开 R ≠放开 gate_daily**。
+
+> **【已关 · 已批 A · 批 M · D391】** tip+DESIGN 已批 · 骨架启动 · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假可达 ≠空跳转 ≠又一个 PAPI 同屏当主交付 ≠复述 D373–D389 为主交付** · **总控点名主题①**
 
 > **上游结案：** 总控批 A·M · D390 内容展示波 exhausted @`9d9dfd04` → **点名主题①：新短本房（含 P1 可达 + 经济回盘）**；暂不②挂机第5层 / ③Stage4。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A · 荐 M** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime** · **内容真债（够施工拆号）**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-short-dungeon-p1-reachable-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-p1-reachable-2026-10-10.md) · backlog `B-short-dungeon-p1-reachable`  
+**本窗性质：** tip **已关** · **已批 A·M·D391** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime** · **内容真债（够施工拆号）**  
+**硬规格（已批 A · 批 M · D391 · 骨架启动 · ≠关观察 ≠抬日表 ≠开 R ≠放开 gate_daily）：** [`DESIGN-ember-short-dungeon-p1-reachable-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-p1-reachable-2026-10-10.md) · backlog `B-short-dungeon-p1-reachable`  
 **打开理由：** 展示波已 exhausted；旧七线日更在 P1 下 **LegacyGate 故意不可达**（D198/D202）；玩家缺一条「今天能打、5–8 分钟、打完有收获」的短本循环。总控点名本主题。
 
 ---
@@ -63,4 +65,4 @@
 
 ---
 
-*选题 F · tip 待批 A · 荐 M · 新短本房 P1 可达+经济回盘 · ≠关观察 · ≠开闸 · ≠抬日表。*
+*选题 F · tip 已关 · 批 A·M · D391 骨架启动 · ≠关观察 · ≠开闸 · ≠抬日表 · ≠放开旧日常闸。*
