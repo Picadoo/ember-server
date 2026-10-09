@@ -46,6 +46,9 @@ D338 绿出口签字包 G4「现态未偷改」只有一行门槛，缺可执行
 
 **本号不勾选关观察、不执行 R0–R10。**
 
+> **复跑实绩（另号）：** [`STATUS-ember-six-slot-observe-state-check-run-d342-2026-10-09.md`](STATUS-ember-six-slot-observe-state-check-run-d342-2026-10-09.md) · **R1+R2 红 · 须回滚评估 · 仅可继续观察**（未满窗）。
+
+
 ## 不动
 
 ×0.97 · set_bonus / enabled / migrate · bv · jar · K3 施工/部署 · 样本 R / Pack6 / 天赋 / 灰印 · 关 Stage2 观察 · 关 Stage1 · 本号实机 / live · 重开 D338 模板
