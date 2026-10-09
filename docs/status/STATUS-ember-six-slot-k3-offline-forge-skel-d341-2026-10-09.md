@@ -16,7 +16,7 @@
 |----|-----|
 | worktree | `/workspace/minecraft-wt-d341`（**禁止**主仓切分支） |
 | 分支名 | `feat/d341-k3-refine-offline` |
-| tip | `6aac6397` (`6aac63973bf1afa6b39d0289b316305196540738`) |
+| tip | `859750e3` (`859750e3670be5f2fb9c14d41d9851f458d1736f`) |
 | 主仓 `/workspace/minecraft` | 保持 **main**；本号未改其 tracked live yml |
 
 ## 接线摘要
