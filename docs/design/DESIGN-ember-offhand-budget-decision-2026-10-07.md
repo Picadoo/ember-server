@@ -256,7 +256,7 @@ P1 公式轴（`tools/p1sim/p1sim.py` `stats()`）：
 | `docs/design/DESIGN-ember-playfeel-hardening-2026-10-07.md` | §1.1 双轨；§3.2 副手替换预算；§5 风险 5；§8-5 本窗 |
 | `docs/design/design-ember-offhand-slot-pilot.md` | B-flex-1 白名单 / 微量防生命 / 禁物伤 |
 | `docs/design/design-ember-flex-offhand-thin-acquire.md` | 灰粮获取口；TrMenu 点选 |
-| `docs/design/DESIGN-ember-gear-structure-2026-10-06.md` | 2 槽权威；Stat 不进 P1；六槽未上线 |
+| `docs/design/DESIGN-ember-gear-structure-2026-10-06.md` | 2 槽权威史；Stat 不进 P1；**六槽已上线观察中（D330 勘误后正文）** |
 | `docs/design/DESIGN-ember-gear-staged-plan-2026-10-04.md` | D169 HOLD；预算守恒；Stage1 显式开工 |
 | `docs/design/DESIGN-ember-gear-6slot-stage0-2026-10-04.md` | 六槽仅离线模型；本决策不解锁 |
 | `docs/ember-gear-stats.md` | 旧 StatService 词条说明（P1 不读） |

@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（D330 后旁路设计文档 Stage2 诚实勘误 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D347）：** tip `91b1973f` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-docs-sidepath-honesty-d347-2026-10-09.md`](STATUS-ember-six-slot-docs-sidepath-honesty-d347-2026-10-09.md) · 旁路四文件已勘误 · **≠关观察** · 零 TrMenu · 不抢 K3 / D345/D346 薄抽。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D345 adventure / D346 gear 套装格诚实施工已落（测试薄抽中——**本窗勿抢 D345/D346 薄抽文件**）。D329–D344 / D330 权威 gear-structure+OPS 已落。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / K3 live / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零 live 玩法 / 零 TrMenu（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar / 零菜单** · 施工另号（docs 勘误）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-docs-sidepath-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-docs-sidepath-honesty-2026-10-09.md) · backlog `B-six-slot-docs-sidepath-honesty`  
+**本窗性质：** tip 已关 · 授权见 D347 STATUS · **零 live 玩法** · **本窗不关观察**  
+**硬规格（已批 A · 批 M · D347 · 旁路四文件已落 · ≠关观察）：** [`DESIGN-ember-six-slot-docs-sidepath-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-docs-sidepath-honesty-2026-10-09.md) · backlog `B-six-slot-docs-sidepath-honesty`  
 **打开理由：** D330 只勘误 **gear-structure / OPS / staged README**；旁路设计稿仍写「日后 4 件再扩 / **不改方块甲** / 本期先做 2 件」，且 offhand pilot **误称** `ember_set` 仍明文「日后 4 件」（D331 已删）。菜单主路径 D329–D346 已收；**文档真源残留**仍可误导观察期策划/运维。
 
 ---
@@ -53,4 +55,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · 旁路 docs 勘误 · 勿关窗 · 勿抢 D345/D346 薄抽。*
+*选题 H · tip **已关** · 批 A·M · D347 已落字 · 旁路 docs 勘误 · 勿关窗 · 勿抢 D345/D346 薄抽。*

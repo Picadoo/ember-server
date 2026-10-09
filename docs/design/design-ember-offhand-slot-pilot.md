@@ -42,7 +42,7 @@
 |----|-------------|
 | **刃** | NI：`gear_ember_blade` / `_t1/_t2/_t3_blade`（`plugins/NeigeItems/Items/ember-dungeon.yml`、`ember-gear-t1.yml`…）。`StatService`：**仅主手**计入；读 lore `物理伤害` → `phys_damage`。 |
 | **护符** | NI：T0 `gear_ember_charm`；T1+ `gear_ember_t*_talisman`。`StatService`：**背包任意格 + 副手**里白名单饰品取 **best 一件**（`max_health + phys_defense×3` 打分）；读 `生命力`/`物理防御`。默认白名单仅 charm/talisman 四档（config 未显式列出时走 Java 默认）。 |
-| **团戒** | `acc_ember_raid_ring`（`ember-gear-t1.yml`）· `set.yml` 与任意刃组成「余烬同袍」；**背包持有即计件**。lore 有微量属性，但 **不在** `accessoryIds` 默认白名单 → Stat 层不当护符叠。菜单：`ember_set`（明文「日后 4 件（甲/饰品）再扩」）。 |
+| **团戒** | `acc_ember_raid_ring`（`ember-gear-t1.yml`）· `set.yml` 与任意刃组成「余烬同袍」；**背包持有即计件**。lore 有微量属性，但 **不在** `accessoryIds` 默认白名单 → Stat 层不当护符叠。菜单：`ember_set`（同袍戒+刃说明 + P1 觉醒/四件套 −3% 短指针，D331）；团戒仍不进 accessory 白名单 / 不当护符叠。 |
 | **属性管线** | AttributePlus **已停放**（`plugins/_parked`）；战力靠 CoreRpg `StatService` + lore（见 `docs/ember-gear-stats.md`）。 |
 | **工坊 ≠ 多部位锻炉** | 枢纽 NPC `ember_smith`（烬砧）→ TrMenu `ember_forge`（`hub_npcs.yml` / `docs/design/design-ember-hub-workshop-npcs.md`）。现网是：**强化** `ember_enhance` / **镶嵌** `ember_socket` / **分解** `ember_disassemble` + **同槽升阶锻造**（`forge.yml`：T1↔T2↔T3 刃/护符配方）。**不是**头盔/胸甲等多部位锻炉产线。 |
 | **枢纽入口** | `ember_hub` 第 4 行「装备成长」：强化/镶嵌/附魔/套装/分解；工坊牌旁烬砧右键进锻炉（少打指令已满足）。 |

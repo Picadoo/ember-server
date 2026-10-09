@@ -1,6 +1,6 @@
 # 余烬 · D330 后旁路设计文档 Stage2 诚实勘误（决策页）
 
-STATUS=**待批 A**（观察期 docs-only 落字 · 零玩法 · 零 TrMenu · **≠关观察** · **不**抢 K3 · **不**抢 D345/D346 薄抽 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-docs-sidepath-honesty-need-design-2026-10-09.md`
+STATUS=**已批 A · 批 M · D347 已落字**（观察期 docs-only · 零玩法 · 零 TrMenu · **≠关观察** · **不**抢 K3 · **不**抢 D345/D346 薄抽 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-docs-sidepath-honesty-need-design-2026-10-09.md` · 施工 STATUS `STATUS-ember-six-slot-docs-sidepath-honesty-d347-2026-10-09.md`
 
 > **一句话：** D330 收了 gear-structure/OPS，旁路稿仍写「不改方块甲 / 日后 4 件」，offhand pilot 还**假称** ember_set 有该句。荐 **方案 M**：旁路勘误清单；批后另号落字。
 
@@ -105,11 +105,11 @@ STATUS=**待批 A**（观察期 docs-only 落字 · 零玩法 · 零 TrMenu · *
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2 落字  
+- [x] **批 A：采纳方案 M** → 同号 D347 按 §2.1–2.4 落字  
 - [ ] 升级 L（不荐）  
 - [ ] 否决 / 改派  
 
-**总控批注（待填）：** _
+**总控批注：** **批 A · 批 M** · 同号 D347 已落旁路四文件勘误 · tip 关 · backlog 对齐 · **≠关观察** · 不抢 K3 · 不动 TrMenu / jar / set_bonus / bv · 不动 raid「不改方块甲/Paper」
 
 ---
 
@@ -118,5 +118,6 @@ STATUS=**待批 A**（观察期 docs-only 落字 · 零玩法 · 零 TrMenu · *
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D330/D331；菜单主路径已 D329–D346 | 策划执行手 |
+| 2026-10-09 | 批 A·M · D347 落字 §2.1–2.4 四文件 · tip 关 · ≠关观察 | 总控委派 executor |
 
-*旁路 docs Stage2 诚实 · 待批 A · 荐 M · docs-only · ≠关观察 · 不抢 D345/D346/K3。*
+*旁路 docs Stage2 诚实 · **已批 A·M · D347 已落字** · docs-only · ≠关观察 · 不抢 D345/D346/K3。*
