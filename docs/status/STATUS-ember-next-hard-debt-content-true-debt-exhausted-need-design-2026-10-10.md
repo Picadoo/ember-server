@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（内容真债本轮无可交 · docs-only · exhausted · ≠关观察 · ≠开闸 · ≠开 R）
 
+> **旁注（已关 · 批 A · 批 M · D382）：** tip `92359b65` 已关；总控已批 A·M；STATUS [`STATUS-ember-content-true-debt-exhausted-d382-2026-10-10.md`](STATUS-ember-content-true-debt-exhausted-d382-2026-10-10.md) · 互指面 exhausted 已确认 · **总控已点名下一主题=挂机层趣味展示钩（非静默空等）** · **≠关观察 ≠开闸 ≠开 R ≠抬日表** · 否决 W。
+>
 > **上游结案：** 总控 D381 已落 @`0131087a`（工坊→挂机反向跳）；D379 PASS。派单：「请另交下一内容真债 tip（挂机/日更/有趣系统；禁复述 D373–D381；禁抬日表/开R/Pack6/天赋灰印/关观察/改×0.97/开K3）。若扫空则诚实内容面 exhausted。」Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A** · **荐方案 M** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime** · **诚实内容面 exhausted（非硬凑又一张跳转格）**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-content-true-debt-exhausted-2026-10-10.md`](../design/DESIGN-ember-content-true-debt-exhausted-2026-10-10.md) · backlog `B-content-true-debt-exhausted`  
+**本窗性质：** tip **已关** · **已批 A·M·D382** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime** · **诚实内容面 exhausted（非硬凑又一张跳转格）**  
+**硬规格（已批 A · 批 M · D382 · 互指面 exhausted 已确认 · 下一主题=挂机层趣味展示钩 · ≠关观察 ≠开闸 ≠抬日表）：** [`DESIGN-ember-content-true-debt-exhausted-2026-10-10.md`](../design/DESIGN-ember-content-true-debt-exhausted-2026-10-10.md) · backlog `B-content-true-debt-exhausted`  
 **打开理由：** 内容向互指链与日更 Cast/宣传波（D373–D381）已齐；本轮严扫 TrMenu/配置/backlog/`git log -100`，**无**「非又一张 A→B 跳转」且带现成证据的真缺口可写成待批 A。按派单允许 **诚实 exhausted**。
 
 ---
@@ -77,4 +79,4 @@
 
 ---
 
-*选题 I · tip 待批 A · 荐 M=内容真债 exhausted · ≠关观察 · ≠开闸 · ≠抬日表。*
+*选题 I · tip 已关 · 已批 A·M·D382 · 互指面 exhausted · 下一主题=挂机层趣味展示钩 · ≠关观察 · ≠开闸 · ≠抬日表。*
