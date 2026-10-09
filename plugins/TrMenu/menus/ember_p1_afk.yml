@@ -11,13 +11,14 @@ Options:
 Layout:
   - '#########'
   - '# 1 2 3 #'
-  - '#   4   #'
+  - '# S 4 V #'
   - '# I F H #'
   - '####B####'
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §8挂机庭 · 日 2400 只封顶 · 满后体力还能去冒险'
+    - 'tell: §8挂机庭 · 日 2400 只封顶 · 材料进仓库 · 点「去哪花」强化升阶'
+    - 'tell: §8满后体力还能去冒险'
 Icons:
   '#':
     display:
@@ -51,6 +52,7 @@ Icons:
         - '§7装备越好打得越快、能挂的层越高；10 分钟死 3 次会停下'
         - '§7每日 2400 只封顶（在线 + 离线），0 点重置；材料账号绑定'
         - '§7扛不住就降一层，不丢人（10 分钟死 3 次会停）'
+        - '§a材料进仓库 · 点「去哪花」强化升阶（魂尘≠挂机）'
         - '§8挂满一天 < 一次通关的收益 · 今日已满请点「去冒险」'
   F:
     icons:
@@ -100,6 +102,42 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-0'
         - close
         - 'command: hub'
+  # D375: 产→花可见跳转（零抬日表）
+  S:
+    display:
+      material: anvil
+      name: '§6战利品去哪花'
+      lore:
+        - ''
+        - '§7挂机六键 · 产→花对照'
+        - '§e币 §7→ 工坊强化/升阶等费用'
+        - '§e经验 §7→ 角色成长（非工坊材料）'
+        - '§e碎片/骨尘 §7→ 强化等（进仓库）'
+        - '§e核心 §7→ 升阶等（进仓库）'
+        - '§e胚料 §7→ 精工·成色·升阶（进仓库）'
+        - '§8魂尘≠挂机 · 生活·钓鱼兑换'
+        - ''
+        - '§e➥ §f打开工坊花材料'
+        - '§7旁格「材料仓库」可查仓'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_forge'
+  V:
+    display:
+      material: ender chest
+      name: '§3材料仓库'
+      lore:
+        - ''
+        - '§7查仓里有多少碎片/骨尘/核心/胚料'
+        - '§7强化升阶直接扣仓库材料'
+        - '§8挂机战利品账号绑定进仓'
+        - ''
+        - '§e➥ §f打开材料仓库'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_storage'
   '1':
     icons:
       - condition: 'check papi %corerpg_p1_afk_t1% < 1'

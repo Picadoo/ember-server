@@ -1,6 +1,6 @@
 # 余烬 · 挂机消费闭环可见化（产→花跳转 · ≠抬日表）
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-spend-loop-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-spend-loop-visible-need-design-2026-10-10.md) · backlog `B-afk-spend-loop-visible` · 总控 D373 后内容真债（挂机消费闭环可见化）
+STATUS=**已批 A · 批 M · D375 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-spend-loop-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-spend-loop-visible-need-design-2026-10-10.md)（已关）· backlog `B-afk-spend-loop-visible` · STATUS [`STATUS-ember-afk-spend-loop-visible-d375-2026-10-10.md`](../status/STATUS-ember-afk-spend-loop-visible-d375-2026-10-10.md) · 总控 D373 后内容真债（挂机消费闭环可见化）
 
 > **一句话玩家价值：** 挂机产出进账后，菜单一眼能看见「材料去工坊花、仓库可查」——产→花闭环可点，拉长目标感与回城在线，**不**靠抬挂机产量。
 
@@ -90,12 +90,12 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **docs-only** 待批 A |
-| 施工 | 总控批 A 后**另号**（主改 `ember_p1_afk.yml` ± hub/help 半行；**默认零 Java**） |
+| 本窗 | **已批 A · D375 已施工** |
+| 施工 | **同号已落**（`ember_p1_afk.yml` + hub Z 半行；**零 Java**） |
 | 观察 | **≠关观察**；**≠改 ×0.97 / set_bonus**；**≠开 K3 live** |
 | D305/D285 | 保留；不重开软身份主交付 |
 | D373 | 魂尘真源保留；本债补挂机六键「去哪花」 |
-| 日更第三拍 `a944ed30` | **不抢**；仍排队待批 |
+| 日更第三拍 `a944ed30` | **不抢**；D374 已另号施工 |
 | 样本 R / Pack6 / 天赋灰印 | **≠开** |
 
 ### 2.6 验收（施工号用 · 本号只定规格）
@@ -136,7 +136,7 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard
 | D373 使魔/魂尘 | 真源生活；本债防误读半行即可 |
 | 工坊诚实 D307/D333/D355 | 不重开工坊费用数字；只跳转进入 |
 | 白板经济 D361/D370 | 不改 ×0.1；不补 p1sim blank |
-| 日更第三拍 | 另 tip 待批；本号不写 MM |
+| 日更第三拍 | D374 另号；本号不写 MM |
 
 ---
 
@@ -145,7 +145,8 @@ STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard
 | 时 | 内容 |
 |----|------|
 | 2026-10-10 | 初稿 · STATUS=待批 A · 荐 M · tip 同学交 |
+| 2026-10-10 | 总控批 A·M · D375 施工：挂机页「战利品去哪花」→工坊 + 仓库邻格 + I/Open 半行 + hub Z 半行 · **≠关观察 ≠抬日表** |
 
 ---
 
-*批 A ≠ 施工 ≠ 关观察 ≠ 抬挂机表。荐 M = 产→花可见可点。*
+*已批 A · 批 M · D375 已施工 · ≠关观察 ≠抬挂机表 ≠开样本 R。*

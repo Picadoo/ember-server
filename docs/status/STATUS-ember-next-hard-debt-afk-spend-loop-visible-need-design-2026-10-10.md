@@ -1,10 +1,12 @@
+> **旁注（已关 · 2026-10-10）：** 已批 A · 批 M · **D375 已施工** · STATUS [`STATUS-ember-afk-spend-loop-visible-d375-2026-10-10.md`](STATUS-ember-afk-spend-loop-visible-d375-2026-10-10.md) · tip `819c1a33` · **≠关观察 ≠抬日表 ≠开 R**。下文为选题当时正文，保留作史。
+
 # 状态 · 下一档硬债选定 · 需策划（挂机消费闭环可见化）
 
 > **上游结案：** 总控 D373 已落 @`03e83b4e`（使魔出战+魂尘诚实）→「请交下一内容真债 tip（挂机消费闭环可见化 / 或其它提高在线）」。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。禁观察运维变体 / 禁抬挂机日表 / 禁样本 R / Pack6 / 天赋·灰印 / 开 K3。日更短本第三拍 tip `a944ed30` **仍排队待批**（本号不抢写）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A · 荐 M** · **docs-only** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3**  
-**硬规格（待批）：** [`DESIGN-ember-afk-spend-loop-visible-2026-10-10.md`](../design/DESIGN-ember-afk-spend-loop-visible-2026-10-10.md) · backlog `B-afk-spend-loop-visible`  
+**本窗性质：** tip **已关 · 已批 A · 批 M · D375** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3**  
+**硬规格（已批 A · 批 M · D375）：** [`DESIGN-ember-afk-spend-loop-visible-2026-10-10.md`](../design/DESIGN-ember-afk-spend-loop-visible-2026-10-10.md) · backlog `B-afk-spend-loop-visible`  
 **打开理由：** 挂机庭已能看见「今日产了多少 / 这层养什么」，但**看不到「材料去哪花」**——从挂机页到工坊/仓库无跳转、无消费短签；D373 后魂尘已不假称挂机副产，币·碎片·骨尘·核心·胚料的消费路径仍黑箱。
 
 ---
