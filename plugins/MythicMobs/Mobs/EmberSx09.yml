@@ -1,0 +1,88 @@
+# 短征 sx09 · 烬渠跳石（EmberSx09）— MythicMobs 4.11 / MC 1.12.2
+# 依据：docs/design/DESIGN-ember-short-dungeon-sx09-2026-10-10.md §2.2/§2.4（批 A·M · D412）
+# 对照源：EmberSx08（数值同档渠岸/跳石主题差异）+ EmberSx08LayerCast / EmberSx01SentryCast 范式
+# 三房：R1 渠卫+跳石弩 · R2 精英 · R3 Boss+CanalCast；刷点坐标沿用 Q01/sx01–sx08 惯例（见 STATUS）
+# 键名对齐 short.sx09：Guard / Crossbow（设计「跳石弩」；1.12 BOW）/ Elite / Warden
+# 禁：改旧七线 Daily；禁改 sx01–sx08；首航不发装备/徽记（薄材料+mmxp）
+
+EmberSx09Guard:
+  # R1 近战渠卫 · 对照 sx08 Guard 48/4
+  Type: ZOMBIE
+  Display: '&c渠卫'
+  Health: 48
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - LEATHER_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberSx09Crossbow:
+  # R1 远程跳石弩 · 1.12 用 BOW；键名 Crossbow 对齐设计「跳石弩手」与 short.sx09 ranged
+  Type: SKELETON
+  Display: '&c跳石弩'
+  Health: 32
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberSx09Elite:
+  # R2 精英跳石督卫 · 对照 sx08 Elite 120/3；设计 R2「途中 1 波跳石怪或岸弩」
+  Type: HUSK
+  Display: '&c跳石督卫'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.4
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
+
+EmberSx09Warden:
+  # R3 Boss 对岸守吏 · CanalCast 渠心溅浪/扫岸斩可读可躲；对照 sx08 Warden HP180；未抬过日更 Boss 210
+  Type: ZOMBIE
+  Display: '&c对岸守吏'
+  Health: 180
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx09CanalCast} @self ~onTimer:80
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

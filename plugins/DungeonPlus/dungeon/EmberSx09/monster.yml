@@ -1,0 +1,8 @@
+# D412 骨架 · EmberSx09 怪组空壳（刷怪/波次由 CoreRpg rooms + MM；禁 DP wave 自驱 · D391 FAIL）
+groups:
+  default:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false
