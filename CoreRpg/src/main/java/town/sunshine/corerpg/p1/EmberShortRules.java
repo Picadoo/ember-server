@@ -129,4 +129,15 @@ public final class EmberShortRules {
         if (n < cap) return "今日有奖 " + n + "/" + cap;
         return "今日有奖已满 " + n + "/" + cap + "（再通关无结算包，仍耗体力）";
     }
+
+    /** D395: remaining rewarded clears today (clamp ≥0). */
+    public static int dayLeft(int rewardedToday, int dailyCap) {
+        return Math.max(0, Math.max(0, dailyCap) - Math.max(0, rewardedToday));
+    }
+
+    /** Claim counter id for a short map key ({@code p1_sx01_day} …). */
+    public static String claimKey(String mapKey) {
+        if (mapKey == null || mapKey.isEmpty()) return CLAIM;
+        return "p1_" + mapKey.toLowerCase(Locale.ROOT) + "_day";
+    }
 }

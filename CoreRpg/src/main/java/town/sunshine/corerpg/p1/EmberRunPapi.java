@@ -49,6 +49,8 @@ public final class EmberRunPapi {
         CODEX,
         /** D318 armor / armor_* (六槽护甲页, {@link EmberSixPapi}) */
         ARMOR,
+        /** D395 short day-cap: sx0N_day / sx0N_day_line / sx0N_day_left / sx_day_left_sum */
+        SHORT,
         /** tail: &lt;map&gt;_&lt;state|open|cleared|name|cost|tier|purpose|fc&gt;, else "" */
         MAP
     }
@@ -97,6 +99,7 @@ public final class EmberRunPapi {
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
         if (key.startsWith("codex")) return Section.CODEX;
         if (key.startsWith("armor_")) return Section.ARMOR; // D318 (no earlier prefix matches "armor")
+        if (isShortDayKey(key)) return Section.SHORT; // D395 short day-cap (before map tail sx0N_*)
         return Section.MAP;
     }
 
@@ -119,6 +122,18 @@ public final class EmberRunPapi {
                 || "held_swap_cost".equals(key) || "held_dismantle_yield".equals(key)
                 // D333 工坊手持甲菜单闸：主手可信 P1 甲 → 1，否则 0
                 || "held_is_armor".equals(key);
+    }
+
+    /** D395: sx0N_day / sx0N_day_line / sx0N_day_left / sx_day_left_sum (not map fields). */
+    static boolean isShortDayKey(String key) {
+        if (key == null) return false;
+        if ("sx_day_left_sum".equals(key)) return true;
+        // sx0N_day | sx0N_day_line | sx0N_day_left  (map key length 4: sx01..)
+        if (key.length() < 8 || !key.startsWith("sx0")) return false;
+        int us = key.indexOf('_');
+        if (us != 4) return false;
+        String rest = key.substring(5);
+        return "day".equals(rest) || "day_line".equals(rest) || "day_left".equals(rest);
     }
 
     /** D144 余烬连战 menu line (weekly reward still open vs. practice only). */
@@ -186,6 +201,7 @@ public final class EmberRunPapi {
             case LOADOUT: v = loadout(p, key); break;
             case CODEX: v = codex(p, d, key); break;
             case ARMOR: v = armor(p, key); break;
+            case SHORT: v = shortDay(d, key, maps); break;
             default: v = null;
         }
         return v != null ? v : map(d, key, maps);
@@ -201,6 +217,44 @@ public final class EmberRunPapi {
         return EmberSixPapi.text(true, s.cachedView(p), s.stashCount(p.getUniqueId()), key);
     }
 
+    /**
+     * D395 %corerpg_p1_sx0N_day*% / sx_day_left_sum — read-only day-cap for short expeditions.
+     * Empty/exception → day returns {@code 0}; line always present (reuses {@link EmberShortRules#dayLine}).
+     */
+    private String shortDay(PlayerData d, String key, EmberRunMaps maps) {
+        EmberShortService shortEx = runs.shortExpedition();
+        if ("sx_day_left_sum".equals(key)) {
+            int sum = 0;
+            for (String mk : new String[] {"sx01", "sx02", "sx03"}) {
+                sum += EmberShortRules.dayLeft(rewardedFor(d, maps, shortEx, mk), capFor(maps, shortEx, mk));
+            }
+            return String.valueOf(sum);
+        }
+        int us = key.indexOf('_');
+        if (us <= 0) return "0";
+        String mapKey = key.substring(0, us);
+        String field = key.substring(us + 1);
+        int n = rewardedFor(d, maps, shortEx, mapKey);
+        int cap = capFor(maps, shortEx, mapKey);
+        if ("day".equals(field)) return String.valueOf(n);
+        if ("day_line".equals(field)) return EmberShortRules.dayLine(n, cap);
+        if ("day_left".equals(field)) return String.valueOf(EmberShortRules.dayLeft(n, cap));
+        return "";
+    }
+
+    private int rewardedFor(PlayerData d, EmberRunMaps maps, EmberShortService shortEx, String mapKey) {
+        if (d == null) return 0;
+        EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(mapKey);
+        if (shortEx != null && m != null) return shortEx.rewardedToday(d, m);
+        return Math.max(0, d.periodCount(EmberShortRules.claimKey(mapKey),
+                town.sunshine.corerpg.DailyService.today()));
+    }
+
+    private static int capFor(EmberRunMaps maps, EmberShortService shortEx, String mapKey) {
+        EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(mapKey);
+        if (shortEx != null && m != null) return shortEx.dailyCap(m);
+        return EmberShortRules.DAILY_CAP;
+    }
 
     /** D306: hub 「今天该打哪」 primary / secondary from real stamina / afk_full / featured / q07. */
     private String routeLine(Player p, PlayerData d, String key) {

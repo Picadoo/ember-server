@@ -42,6 +42,21 @@ public class EmberShortRulesTest {
     }
 
     @Test
+    public void dayLineAndLeftForMenuPapi() {
+        assertEquals("今日有奖 0/3", EmberShortRules.dayLine(0, 3));
+        assertEquals("今日有奖 2/3", EmberShortRules.dayLine(2, 3));
+        assertEquals("今日有奖已满 3/3（再通关无结算包，仍耗体力）", EmberShortRules.dayLine(3, 3));
+        assertEquals(3, EmberShortRules.dayLeft(0, 3));
+        assertEquals(1, EmberShortRules.dayLeft(2, 3));
+        assertEquals(0, EmberShortRules.dayLeft(3, 3));
+        assertEquals(0, EmberShortRules.dayLeft(5, 3));
+        assertEquals("p1_sx01_day", EmberShortRules.claimKey("sx01"));
+        assertEquals("p1_sx02_day", EmberShortRules.claimKey("sx02"));
+        assertEquals("p1_sx03_day", EmberShortRules.claimKey("SX03"));
+        assertEquals(EmberShortRules.CLAIM, EmberShortRules.claimKey(null));
+    }
+
+    @Test
     public void rewardedClearPaysBaseline() {
         List<EmberRunRules.Grant> g = EmberShortRules.settleGrants(0, 3, true);
         Map<String, Integer> by = byKey(g);

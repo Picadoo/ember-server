@@ -46,7 +46,9 @@ public final class EmberRunPapiTest {
         r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield", "held_is_armor");
         r(CODEX, "codex_count", "codex_stage_0", "codex_burst_blade_t1", "codexx");
         r(ARMOR, "armor_on", "armor_head", "armor_chest_cand", "armor_legs_delta", "armor_boots_fam", "armor_set", "armor_set_active", "armor_set_busy", "armor_sa", "armor_sb", "armor_all", "armor_stash_line"); // D318 + D335 sa/sb
-        r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null);
+        r(SHORT, "sx01_day", "sx02_day", "sx03_day", "sx01_day_line", "sx02_day_line", "sx03_day_line",
+                "sx01_day_left", "sx02_day_left", "sx03_day_left", "sx_day_left_sum"); // D395
+        r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx03_fc");
     }
 
     /** Order pins where a later check shares a prefix with an earlier one (old first-match must win). */
@@ -64,9 +66,16 @@ public final class EmberRunPapiTest {
         assertEquals(GATE, EmberRunPapi.route("q0xdone"));       // 7-char q0?done
         assertEquals(MAP, EmberRunPapi.route("q01done_x"));
         assertEquals(LOADOUT, EmberRunPapi.route("awaken_route"));
+        assertEquals(SHORT, EmberRunPapi.route("sx01_day")); // D395 before map tail
+        assertEquals(MAP, EmberRunPapi.route("sx01_state"));
         assertTrue(EmberRunPapi.isQDone("q04done"));
         assertFalse(EmberRunPapi.isQDone("q10done"));
         assertFalse(EmberRunPapi.isQDone("q04don"));
+        assertTrue(EmberRunPapi.isShortDayKey("sx01_day"));
+        assertTrue(EmberRunPapi.isShortDayKey("sx03_day_line"));
+        assertTrue(EmberRunPapi.isShortDayKey("sx_day_left_sum"));
+        assertFalse(EmberRunPapi.isShortDayKey("sx01_state"));
+        assertFalse(EmberRunPapi.isShortDayKey("sx01_day_extra"));
     }
 
     /** Every %corerpg_p1_*% key the live TrMenu / DP / resource configs use routes to a named section, or is a map field. */
