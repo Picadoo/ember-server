@@ -1,4 +1,5 @@
 # 1.11.0 (2026-09-27) 枢纽补给 · 生活 — CoreRpg LifeService（life.yml）
+# D376：G/K 魂尘兑换 + H/J 孵化回 Layout（使魔养成旁轨可点）· DESIGN-ember-life-soul-dust-layout-2026-10-10
 Title: '§a补给 · 生活'
 
 Options:
@@ -10,13 +11,18 @@ Options:
 Layout:
   - '#########'
   - '# A B C #'
-  - '#   D   #'
-  - '#########'
+  - '# G D K #'
+  - '# H   J #'
   - '###I#P#Z#'
+# D376：G/K 旧靴/碎骨→魂尘 · H/J 孵化灰灵/烬火 · 回盘可点；使魔主战在 ember_pet（D373）
 # D373 W1d：P=打开使魔（生活→使魔闭环）
 # D289：副手诚实半行（方案 A）· 守腕/生坠 lore 写明微量守势、不进 P1 B/H。
-# D99: 重铸石 / 稳固符 / 魂尘 / 使魔 / 副手饰品 / 旧票 belong to the stowed legacy systems (主线本里不生效);
-# their icons stay defined below but are no longer in the layout (admin: ember_hub_legacy). G/K/H/J 仍定义；P 为使魔直达。
+# D99 局部撤销：E/F/O/W/V 仍 stowed（定义保留、不入盘；admin: ember_hub_legacy）；魂尘/孵化已于 D376 回盘。
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §8魂尘：本页旧靴/碎骨兑换 · 非挂机'
 
 Icons:
   '#':
@@ -145,7 +151,7 @@ Icons:
     display:
       material: egg
       name: '§a打开使魔'
-      lore: ['', '§7出战 / 收回 / 投喂魂尘', '§8魂尘：本页旧靴/碎骨兑换（非挂机）', '', '§e➥ §f打开使魔']
+      lore: ['', '§7出战 / 收回 / 投喂魂尘', '§8魂尘见本页 G/K（旧靴/碎骨 · 非挂机）', '', '§e➥ §f打开使魔']
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'

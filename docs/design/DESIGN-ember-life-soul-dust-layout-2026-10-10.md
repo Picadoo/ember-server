@@ -1,6 +1,6 @@
 # 余烬 · 生活页魂尘兑换/孵化回 Layout（使魔养成旁轨可点 · ≠抬挂机）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-life-soul-dust-layout-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-life-soul-dust-layout-need-design-2026-10-10.md) · backlog `B-life-soul-dust-layout` · 总控 D375 后内容真债（养成旁轨轻循环）
+STATUS=**已批 A · 批 M · D376 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-life-soul-dust-layout-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-life-soul-dust-layout-need-design-2026-10-10.md)（已关）· backlog `B-life-soul-dust-layout` · STATUS [`STATUS-ember-life-soul-dust-layout-d376-2026-10-10.md`](../status/STATUS-ember-life-soul-dust-layout-d376-2026-10-10.md) · 总控 D375 后内容真债（养成旁轨轻循环）
 
 > **一句话玩家价值：** 补给·生活页能**点到**旧靴/碎骨兑魂尘、点到孵化——钓鱼→魂尘→投喂/孵化→出战真正闭环可玩，拉长在线趣味；**不**靠抬挂机产量。
 
@@ -128,7 +128,7 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ## 5. 批注勾选（总控）
 
-- [ ] **批 M**（W1a G+K 必做；W1b H+J 同批；W1c+W1d 必做；W1e 可选）→ 施工另号 · **策划荐**  
+- [x] **批 M**（W1a G+K 必做；W1b H+J 同批；W1c+W1d 必做；W1e 可选）→ **D376 已施工** · **策划荐 · 总控采纳**  
 - [ ] **批 M′**（仅 G+K；H/J 再后置）· 可接受但不如 M 完整  
 - [ ] **批 A**（只改 lore、不回盘）· **不荐**  
 - [ ] **批 L**（改价/抬顶/挂机加魂尘）· **否决默认**  
@@ -145,6 +145,7 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M；选题生活 Layout 回盘（D373 后置升主） |
+| 2026-10-10 | 总控批 A·M · D376 施工：Layout 纳入 G/K/H/J + D99 注释订正 + Open/P 对齐 + hub 半行 · **≠关观察 ≠改 life 价/次 ≠抬挂机表** |
 
 ---
 
@@ -158,4 +159,4 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ---
 
-*待批 A · 荐 M · ≠关观察 ≠抬挂机表 ≠开样本 R ≠复述 D373 出战主交付。*
+*已批 A · 批 M · D376 已施工 · ≠关观察 ≠抬挂机表 ≠开样本 R ≠复述 D373 出战主交付。*

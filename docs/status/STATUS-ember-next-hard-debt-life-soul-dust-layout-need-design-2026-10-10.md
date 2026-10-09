@@ -1,10 +1,12 @@
+> **旁注（已关 · 2026-10-10）：** 已批 A · 批 M · **D376 已施工** · STATUS [`STATUS-ember-life-soul-dust-layout-d376-2026-10-10.md`](STATUS-ember-life-soul-dust-layout-d376-2026-10-10.md) · tip `b24427a8` · **≠关观察 ≠改 life 价/次 ≠抬挂机表 ≠开 R**。下文为选题当时正文，保留作史。
+
 # 状态 · 下一档硬债选定 · 需策划（生活页魂尘兑换/孵化回 Layout · 使魔养成旁轨可点）
 
 > **上游结案：** 总控 D375 已落 @`26213df2`（挂机「去哪花」+仓库跳转）→「请交下一内容真债 tip（提高在线/趣味）」。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。禁抬挂机日表 / 样本 R / Pack6 / 天赋·灰印 / 观察运维变体 / 开 K3。**不复述**刚落的使魔出战 D373 / 日更第三拍 D374 / 挂机去哪花 D375 当新债本体。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A** · docs-only · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠重开 D373 出战主交付**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-life-soul-dust-layout-2026-10-10.md`](../design/DESIGN-ember-life-soul-dust-layout-2026-10-10.md) · backlog `B-life-soul-dust-layout`  
+**本窗性质：** tip **已关 · 已批 A · 批 M · D376** · **≠关观察** · **≠抬 daily_kills / afk.tiers** · **≠开样本 R** · **≠开 K3** · **≠重开 D373 出战主交付**  
+**硬规格（已批 A · 批 M · D376）：** [`DESIGN-ember-life-soul-dust-layout-2026-10-10.md`](../design/DESIGN-ember-life-soul-dust-layout-2026-10-10.md) · backlog `B-life-soul-dust-layout`  
 **打开理由：** D373 已把使魔出战接真、魂尘文案改「生活·钓鱼」；生活页 P 格还写「本页旧靴/碎骨兑换」——但 **G/K/H/J 仍不在 Layout**（D99 收起后未回盘）。钓鱼→兑魂尘→投喂/孵化→出战 **在玩家面断一截**，是假平面。
 
 ---
