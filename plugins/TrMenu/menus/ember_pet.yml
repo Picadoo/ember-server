@@ -1,5 +1,6 @@
 # 使魔子菜单壳 — docs/design/DESIGN-ember-pet-bestiary.md
 # D373：出战接 summon/dismiss + 魂尘来源诚实（生活·钓鱼）· DESIGN-ember-pet-loop-honest-2026-10-10
+# D378：使魔→生活兑魂尘跳转 · DESIGN-ember-pet-life-jump-2026-10-10
 # 使魔
 
 Title: '§a余烬 · 使魔'
@@ -12,7 +13,7 @@ Options:
 
 Layout:
   - '#########'
-  - '#       #'
+  - '#   F   #'
   - '# L E S #'
   - '#       #'
   - '####B####'
@@ -22,6 +23,7 @@ Events:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §a【使魔】 §7收集出战 · 偏外观与微量助战（≤战力 5%）。'
     - 'tell: §8魂尘：补给 · 生活（旧靴/碎骨兑换）· 非挂机日表'
+    - 'tell: §8缺魂尘：点本页「去生活兑魂尘」'
 
 Icons:
   '#':
@@ -37,6 +39,21 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-0'
         - 'menu: ember_hub'
+
+  F:
+    display:
+      material: chest
+      name: '§d去生活兑魂尘'
+      lore:
+        - ''
+        - '§7旧靴 / 碎骨 → 魂尘'
+        - '§8非挂机日表 · 补给·生活'
+        - ''
+        - '§d➥ §f打开补给 · 生活'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'menu: ember_life'
 
   L:
     display:
@@ -87,6 +104,7 @@ Icons:
         - '§7生活兑换魂尘升级使魔 · 非挂机日表'
         - '§8不消耗核心 / 毕业刃'
         - '§8魂尘：补给 · 生活'
+        - '§8缺尘点旁格「去生活兑魂尘」'
         - ''
         - '§8点击投喂'
         - ''
@@ -96,3 +114,4 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-1'
         - 'tell: §6【使魔】 §7投喂魂尘升级'
         - 'command: corerpg pet feed'
+        - 'tell: §8没有魂尘？点本页「去生活兑魂尘」兑换'

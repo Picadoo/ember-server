@@ -1,6 +1,6 @@
 # 余烬 · 使魔页→生活兑魂尘跳转（闭环反向互指 · ≠抬日表）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-life-jump-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-life-jump-need-design-2026-10-10.md) · backlog `B-pet-life-jump` · 总控 D377 后内容真债（使魔养成闭环反向可点）
+STATUS=**已批 A · 批 M · D378 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-life-jump-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-life-jump-need-design-2026-10-10.md)（已关） · backlog `B-pet-life-jump`（已关） · STATUS [`STATUS-ember-pet-life-jump-d378-2026-10-10.md`](../status/STATUS-ember-pet-life-jump-d378-2026-10-10.md) · 总控批 M · 使魔→生活兑魂尘跳转已落地
 
 > **一句话玩家价值：** 站在使魔页缺魂尘时，能**点一下**跳到补给·生活兑旧靴/碎骨——养成不绕枢纽，在线粘性↑；**不**靠抬挂机产量或改兑换价。
 
@@ -135,7 +135,7 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ## 5. 批注勾选（总控）
 
-- [ ] **批 M**（W1a 跳转格必做；W1b 互指必做；W1c 可选；W1d 可选）· **策划荐**  
+- [x] **批 M**（W1a 跳转格必做；W1b 互指必做；W1c 可选同批；W1d 可选未做）· **总控已批 · D378 已施工**  
 - [ ] **批 M′**（仅 W1a 跳转格；W1b 后置）· 可接受但不如 M  
 - [ ] **批 A**（只改 lore/tell、不加格）· **不荐**  
 - [ ] **批 L**（新 PAPI / 改价 / 挂机加尘）· **否决默认**  
@@ -152,6 +152,7 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M；选题使魔→生活兑尘跳转（D373 反向补齐） |
+| 2026-10-10 | 总控 · **已批 A · 批 M · D378** · 同号落地：F 跳转格 + Open/投喂互指 + W1c 失败导向 tell；tip/backlog 已关 |
 
 ---
 
