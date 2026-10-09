@@ -1,10 +1,12 @@
 # 余烬 · 短征生涯首通态同屏（日更追猎 · ≠抬日表 · ≠sx07）
 
-STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-firstclear-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-firstclear-visible-need-design-2026-10-10.md) · backlog `B-short-firstclear-visible`（**待批**）· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D405 ≠改 daily_kills/afk.tiers/S40–S45/首通包数额**
+STATUS=**已批 A · 方案 M · D406** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-firstclear-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-firstclear-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-short-firstclear-visible`（**已批/施工中**）· **施工另派** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D405 ≠改 daily_kills/afk.tiers/S40–S45/首通包数额**
 
 > **一句话玩家价值：** 打开短征选本就能看见「哪几本生涯首通还没领 / 已领变已领取」——六本各打一遍有追猎锚；**不**抬日帽、不改首通包、不交 sx07。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx07。**
+>
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（六本格+I 挂 `%corerpg_p1_sx0N_fc%` 替换静态首通行；可选同批 sx_fc_left/pending_line）；**施工另派**；≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3。
 
 ---
 
@@ -57,9 +59,9 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-fir
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 六本挂 fc + W1b I 同屏 + W1c 可选合计/半行；见 §2）
-- [ ] 否决 A（只口号）/ L（抬表·改包）/ W（sx07/假开旧日常/空转/复述挂机）
-- [ ] 批注：________________
+- [x] **方案 M**（W1a 六本挂 fc + W1b I 同屏 + W1c 可选合计/半行；见 §2）
+- [x] 否决 A（只口号）/ L（抬表·改包）/ W（sx07/假开旧日常/空转/复述挂机）
+- [x] 批注：总控批 A·M · 2026-10-10 · D406 · **施工另派** · 六本格+I 挂 `%corerpg_p1_sx0N_fc%` 替换静态首通行 · 可选 sx_fc_left/pending_line · 零改日帽/S40–S45/首通包 · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3
 
 ---
 
@@ -155,7 +157,8 @@ I 可选：`§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本`（键未 
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题短征生涯首通态同屏 · ≠sx07 |
+| 2026-10-10 | **已批 A · 方案 M · D406** · 总控批注勾选 · **施工另派** · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 |
 
 ---
 
-*拟 D406 · 短征生涯首通态同屏 · 待批 A·荐方案 M · ≠关观察 ≠抬日表 ≠sx07。*
+*D406 · 短征生涯首通态同屏 · 已批 A·方案 M · 施工另派 · ≠关观察 ≠抬日表 ≠sx07。*
