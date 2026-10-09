@@ -6,10 +6,11 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * D391/D392 短征（DESIGN short-dungeon）：Bukkit-free 日帽 / 首通 / 结算包。
+ * D391/D392/D393 短征（DESIGN short-dungeon）：Bukkit-free 日帽 / 首通 / 结算包。
  * <ul>
  *   <li>sx01 → S40：有奖 币80+碎片4+骨尘3；首通另加 200/8/胚料1</li>
  *   <li>sx02 → S41：有奖同 S40 量级；首通略薄 180/6/胚料1</li>
+ *   <li>sx03 → S42：有奖同 S40/S41 量级；首通略薄 160/8/胚料1</li>
  *   <li>日帽后（第 4+ 次）：仍可进本（体力照扣），结算包为空</li>
  * </ul>
  * 金额与 {@link EmberEconomy} / {@code ember-v1-economy.yml} 金样对齐；p1sim 模型另号。
@@ -33,8 +34,9 @@ public final class EmberShortRules {
 
     private EmberShortRules() {}
 
-    /** Economy source id for a short map key (sx01→S40, sx02→S41). */
+    /** Economy source id for a short map key (sx01→S40, sx02→S41, sx03→S42). */
     public static String economyId(String mapKey) {
+        if (mapKey != null && mapKey.equalsIgnoreCase("sx03")) return "S42";
         if (mapKey != null && mapKey.equalsIgnoreCase("sx02")) return "S41";
         return "S40";
     }
@@ -70,7 +72,7 @@ public final class EmberShortRules {
 
     /**
      * Build settlement grants for one clear.
-     * @param mapKey short map key (sx01 / sx02 / …)
+     * @param mapKey short map key (sx01 / sx02 / sx03 / …)
      * @param rewardedToday already-paid rewarded clears today (before this settle)
      * @param firstClearPaid whether the career first-clear package was already paid
      */

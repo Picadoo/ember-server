@@ -104,6 +104,15 @@ sources:
     "fc.shard": 6
     "fc.blank": 1
     daily_cap: 3
+  # D393 短征 sx03（S42）：有奖同 S40/S41 量级；首通略薄 160/8/1；日帽独立（p1sim 另号）
+  S42:
+    "clear.coin": 80
+    "clear.shard": 4
+    "clear.bone": 3
+    "fc.coin": 160
+    "fc.shard": 8
+    "fc.blank": 1
+    daily_cap: 3
 
 sinks:
   C01: { stamina: 30 }
