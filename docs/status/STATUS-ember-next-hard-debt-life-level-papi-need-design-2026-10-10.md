@@ -1,3 +1,5 @@
+> **旁注（已关 · 2026-10-10）：** 已批 A · 批 M · **D388 docs 占位 · 插件补键中 · 菜单挂键另号** · STATUS [`STATUS-ember-life-level-papi-d388-2026-10-10.md`](STATUS-ember-life-level-papi-d388-2026-10-10.md) · tip `8305129d` · **≠本号写 Java ≠改菜单 ≠关观察 ≠抬日表 ≠开 R**。下文为选题当时正文，保留作史。
+
 # 状态 · 下一档硬债选定 · 需策划（生活等级/次数同屏 · 先证插件缺口 · ≠抬日表）
 > **【待批 A · 荐 M】** tip+DESIGN docs-only · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠空跳转 ≠回盘 E/F ≠复述 D373–D386**
 
@@ -5,8 +7,8 @@
 > **上游结案：** 总控 D386 生活副手回盘已落 @`ce64fbdd` →「请交下一内容真债 tip（挂机/日更/有趣系统；禁复述 D373–D386；禁抬日表/开R/Pack6/天赋灰印/关观察/改×0.97/开K3/空跳转/回盘E/F）。若扫空则诚实 exhausted。」Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A** · **docs-only** · **≠关观察** · **≠抬日表** · **≠开样本 R** · **≠开 K3** · **≠空跳转** · **≠回盘 E/F** · **≠复述 D373–D386**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-life-level-papi-2026-10-10.md`](../design/DESIGN-ember-life-level-papi-2026-10-10.md) · backlog `B-life-level-papi`  
+**本窗性质：** tip **已关 · 已批 A · 批 M · D388** · **docs 占位 · 插件补键中 · 菜单挂键另号** · **≠本号写 Java** · **≠关观察** · **≠抬日表** · **≠开样本 R** · **≠开 K3** · **≠空跳转** · **≠回盘 E/F**  
+**硬规格（已批 A · 批 M · D388）：** [`DESIGN-ember-life-level-papi-2026-10-10.md`](../design/DESIGN-ember-life-level-papi-2026-10-10.md) · backlog `B-life-level-papi` · STATUS [`STATUS-ember-life-level-papi-d388-2026-10-10.md`](STATUS-ember-life-level-papi-d388-2026-10-10.md)  
 **打开理由：** 生活页配方多处写「需生活 Lv.N」、魂尘/孵化有日周顶，但盘面**零**等级/剩余次数；唯一「生活等级 / 次数」格 **I** 是 `close` + `corerpg life`（关菜单刷聊天）。数据在 `LifeService`，`CorePapi` **无** `life_*` 段——与使魔 D384 前同构缺口，但标的是**生活轨**（钓鱼→魂尘→孵化），**≠**复述使魔 PAPI 正文。
 
 ---
@@ -71,4 +73,13 @@
 
 ---
 
-*选题生活等级/次数同屏 · tip 待批 A · 荐 M · ≠关观察 ≠抬日表 ≠复述 D373–D386 ≠回盘 E/F。*
+*选题生活等级/次数同屏 · tip 已关 · 已批 A·M · D388 docs 占位 · 插件补键中 · 菜单挂键另号 · ≠本号写 Java ≠关观察 ≠抬日表。*
+
+---
+
+## 变更记录
+
+| 日 | 事 |
+|----|-----|
+| 2026-10-10 | 策划 · tip 打开 · 生活同屏 · 先证无 PAPI · DESIGN 待批 A·荐 M |
+| 2026-10-10 | 总控 · tip **已关** · 批 A·M · **D388** docs 占位 · 插件补键中 · 菜单挂键另号 · STATUS `STATUS-ember-life-level-papi-d388-2026-10-10.md` |

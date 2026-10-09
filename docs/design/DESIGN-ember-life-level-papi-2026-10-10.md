@@ -1,6 +1,6 @@
 # 余烬 · 生活等级/次数同屏（先证插件缺口 · ≠抬日表）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md) · backlog `B-life-level-papi` · 总控 D386 后内容真债（有趣系统 · 非空跳转 · 非又回盘）
+STATUS=**已批 A · 批 M · D388 · 插件补键中 · 菜单挂键另号** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md)（已关）· backlog `B-life-level-papi` · STATUS [`STATUS-ember-life-level-papi-d388-2026-10-10.md`](../status/STATUS-ember-life-level-papi-d388-2026-10-10.md) · 总控 D386 后内容真债（有趣系统 · 非空跳转 · 非又回盘）
 
 > **一句话玩家价值：** 补给·生活页一眼看见生活等级 / 经验进度 / 今日兑尘与本周孵化剩余——钓鱼与养成有目标感；**不**关菜单刷聊天，也**不**靠 lore 假写固定 Lv。
 
@@ -173,11 +173,17 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ## 6. 批注栏
 
-- [ ] **批 A：采纳方案 M（插件补 `life_*` 规格 + 菜单同屏草案 · 施工拆号）** → **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠同号 Java**
-- [ ] 升级 L（改曲线/抬顶/回盘 E/F · 不荐）
-- [ ] 否决 / 改派（须点名带证据新主题，如新短本房）
+- [x] **批 A：采纳方案 M（插件补 `life_*` 规格 + 菜单同屏草案 · 施工拆号）** → tip `@8305129d` · **D388 docs 占位 · 插件补键中 · 菜单挂键另号** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠同号 Java**
+- [x] 否决升级 L（改曲线/抬顶/回盘 E/F · 不荐）
+- [x] 否决 A（假写固定 Lv）· 否决改派（本债证据成立）
+- [x] 批 A ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 同号写 Java（本号 docs-only）
 
-**策划荐批：** **批 A · 方案 M**。
+### 总控批注（D388）
+
+- **已批 A · 批 M** · 本号 **docs-only** 落字；**插件补键中**（P1 另号）；**菜单挂键另号**（P2，键就绪后）。
+- **≠本号写 Java** · **≠改 live 菜单** · **≠改 life.yml 价/日周顶/level_xp** · **≠关观察** · **≠抬日表** · **≠开 R** · **≠开 K3** · **≠改 ×0.97 / 三开关 / bv** · **≠假写固定 Lv** · **≠回盘 E/F** · **≠空跳转** · **≠复述 D373–D386**。
+
+**策划荐批：** **批 A · 方案 M**（已采纳）。
 
 ---
 
@@ -185,8 +191,9 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 | 日期 | 事件 | 谁 |
 |------|------|-----|
-| 2026-10-10 | 初稿 · 待批 A · 荐 M · D386 后内容真债 · 生活同屏（类比使魔轨但标的不同） | 策划执行手 |
+| 2026-10-10 | 初稿 · 待批 A · 荐 M · D386 后内容真债 · 生活同屏（类比使魔轨但标的不同） · tip `8305129d` | 策划执行手 |
+| 2026-10-10 | 总控批 A·M · **D388** docs 占位 · tip 关 · backlog→已批·插件施工中 · 插件补键中 · 菜单挂键另号 · **≠本号写 Java ≠改菜单 ≠关观察** | 总控 |
 
 ---
 
-*STATUS=待批 A·荐 M · B-life-level-papi · ≠关观察 · ≠抬日表 · ≠复述 D373–D386。*
+*STATUS=已批 A·M · D388 docs 占位 · 插件补键中 · 菜单挂键另号 · B-life-level-papi · ≠本号写 Java · ≠关观察 · ≠抬日表 · ≠复述 D373–D386。*
