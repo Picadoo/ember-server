@@ -58,4 +58,4 @@
 
 ## 下一号
 
-菜单岗 W1a/b/c：`ember_p1_short` 六本格+I 挂 `sx0N_fc`；有合计键则挂 `sx_fc_left` / `pending_line`。
+菜单岗 W1a/b 已 `3e8cff26`；**合计挂键** I/Open → `sx_fc_left` / `pending_line`（本号续交 · 见 menu STATUS）。勿派测。

@@ -2,7 +2,7 @@
 
 **日期：** 2026-10-10（上海时间）  
 **上游：** DESIGN [`DESIGN-ember-short-firstclear-visible-2026-10-10.md`](../design/DESIGN-ember-short-firstclear-visible-2026-10-10.md) @ tip `0203bf16` · tip [`STATUS-ember-next-hard-debt-short-firstclear-visible-need-design-2026-10-10.md`](STATUS-ember-next-hard-debt-short-firstclear-visible-need-design-2026-10-10.md) · backlog `B-short-firstclear-visible`  
-**裁决：** **已批 A · 批 M · D406 · 已落地** · 本号交 W1a/W1b + W1c（冒险半行）· **零 Java** · 合计键 `sx_fc_left`/`pending_line` **未 live → 未挂** · **≠关观察** · **≠抬日表** · **≠改 S40–S45 / 首通包数额 / 日帽** · **≠开 gate_daily / R / K3** · **≠交 sx07** · **≠动 Stage2 三开关**  
+**裁决：** **已批 A · 批 M · D406 · 已落地** · W1a/W1b + W1c（冒险半行）已齐 · **续挂合计** I/Open → `sx_fc_left`/`pending_line`（插件 tip `af408d9e` jar `1.65.115-d406.local`）· **零改**日帽/S40–S45/首通包 · **≠关观察** · **≠抬日表** · **≠开 gate_daily / R / K3** · **≠交 sx07** · **≠动 Stage2 三开关** · **本号勿派测**  
 **toplevel：** `/workspace/minecraft` @ `main`
 
 ## 人话
@@ -15,8 +15,8 @@
 |----|------|------|
 | W1a 六本格挂 fc | **PASS** | A/C/E/G/K/M 主 lore：`§7生涯首通：§f%corerpg_p1_sx0N_fc%` 替换静态「另加：币…」；`day_line` 保留 |
 | W1b I 说明同屏 | **PASS** | 六行短名+fc；去掉「生涯首通另加薄包」独行；日帽六行+left_sum 保留 |
-| W1c 可选合计/冒险半行 | **部分 PASS** | 合计键未 live → **未挂**；冒险 H +半行「选本页可见生涯首通」；Open tell +半行 |
-| W1d 插件合计键 | **本号不做** | 未 live；禁假写 |
+| W1c 可选合计/冒险半行 | **PASS** | I 挂 `sx_fc_left`+`pending_line`；Open tell 挂 pending_line；冒险 H 半行保留 |
+| W1d 插件合计键 | **已交另号** | tip `af408d9e` · jar `1.65.115-d406.local` · 本号只挂菜单 |
 | W1e 改包/sx07 | **禁** | 未触 |
 
 ## 挂键清单
@@ -25,8 +25,8 @@
 |-------------|------|
 | `%corerpg_p1_sx01_fc%` … `%corerpg_p1_sx06_fc%` | A/C/E/G/K/M 各 1 · I 各 1 |
 | `%corerpg_p1_sx0N_day_line%` / `sx_day_left_sum` | **保留**（非本债） |
-
-未挂：`%corerpg_p1_sx_fc_left%` / `%corerpg_p1_sx_fc_pending_line%`（插件未交）。
+| `%corerpg_p1_sx_fc_left%` | I lore「生涯首通未领：N 本」 |
+| `%corerpg_p1_sx_fc_pending_line%` | I lore + Open tell |
 
 ## 改动清单（入仓）
 
@@ -44,13 +44,13 @@
 |----|------|------|
 | V 真键替换静态 | **PASS** | 无「生涯首通另加：币…」字面 |
 | V I 六本可扫 | **PASS** | 六行 fc + 日帽保留 |
-| V 合计未假写 | **PASS** | 无 left/pending 假数字 |
+| V 合计未假写 | **PASS** | 无固定「还有 N 本」假数字；真键挂上 |
 | V 零改表 | **PASS（纪律）** | 未 stage Java/runs/economy/afk/开关 |
-| trmenu reload | **PASS** | `良好 | 73 个菜单已加载 (103 ms)`（**06:59:46 CST**） |
+| trmenu reload | **PASS** | 见热更旁注（合计挂键后再 reload） |
 
 ## 不动
 
-- 关观察 · 抬 afk / daily_kills · 开 gate_daily · 改 S40–S45 / 首通包 · 同号写 Java · 假挂合计键 · 交 sx07 · stage 脏 runtime · 派测（总控钉死本号勿派测）
+- 关观察 · 抬 afk / daily_kills · 开 gate_daily · 改 S40–S45 / 首通包 · 同号写 Java · 假写合计数字 · 交 sx07 · stage 脏 runtime · 派测（总控钉死本号勿派测）
 
 ## 本号 commit 自检（D365）
 
@@ -60,5 +60,11 @@
 
 ## 热更旁注
 
-- play：`scripts/console.sh play "trmenu reload"` → 日志 `良好 | 73 个菜单已加载 (103 ms)`（**2026-10-10 06:59:46 CST**）
+- play：`scripts/console.sh play "trmenu reload"` → 日志 `良好 | 73 个菜单已加载 (101 ms)`（**2026-10-10 07:03:59 CST** · 合计挂键后）
 - 旁注：既有 TrMenu `Player.updateCommands` NoSuchMethodError（1.12）· 与本号无关 · 菜单数 73 正常
+
+## 合计挂键短注（续 · tip `af408d9e`）
+
+- I：`§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本` + `§8%corerpg_p1_sx_fc_pending_line%`
+- Open tell：挂 `%corerpg_p1_sx_fc_pending_line%`；去掉「未 live 合计键不挂」注释预留
+- 禁假写；未派测
