@@ -8,6 +8,8 @@
 
 > **旁注（D362）：** 禁误读短语对照已批 · [`STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md`](STATUS-ember-six-slot-k3-offline-live-misread-d362-2026-10-09.md) · 「已就位 / PASS / 批 A」**≠开闸**。
 
+> **旁注（D371）：** K3 离线 Forge 骨架已就位（wt tip `e8a7e2c2` · 代码 `859750e3` · 19/19）→ 主仓指针 [`STATUS-ember-six-slot-k3-offline-forge-skel-d371-2026-10-09.md`](STATUS-ember-six-slot-k3-offline-forge-skel-d371-2026-10-09.md)。**仍 ≠开闸 ≠装 play ≠开 `k3_refine`。**
+
 ## 人话
 
 闸关允许离线预备，缺可执行单。本号只把清单写进 docs，并钉明观察服 worktree **已经就位**——仍不开闸、不部署、不拧开关。

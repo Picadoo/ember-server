@@ -80,6 +80,7 @@ gear:
 - **观察期别轨 exhausted（D369）：** 观察期别轨薄债 exhausted D369；满窗走 D367；并行改派非观察 → DESIGN [`DESIGN-ember-six-slot-observe-thin-debt-exhausted-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-thin-debt-exhausted-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-observe-thin-debt-exhausted-d369-2026-10-09.md`](../status/STATUS-ember-six-slot-observe-thin-debt-exhausted-d369-2026-10-09.md)（**≠关观察 ≠开闸**）。静默非默认——已改派；禁硬凑别轨变体。
 - **白板经济注记（D361）：** 分解/验收报告须注记「白板经济模型未覆盖」——见本清单 DESIGN [`DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md`](../design/DESIGN-ember-six-slot-blank-economy-note-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-blank-economy-note-d361-2026-10-09.md`](../status/STATUS-ember-six-slot-blank-economy-note-d361-2026-10-09.md)。**≠改 ×0.1 / dismantleYield；≠补 p1sim blank 建模；≠开 R。**
 - **白板补建模决策（D370）：** 白板补建模决策→D370（后置绿出口；≠改×0.1）—— DESIGN [`DESIGN-ember-six-slot-blank-economy-model-2026-10-09.md`](../design/DESIGN-ember-six-slot-blank-economy-model-2026-10-09.md) / STATUS [`STATUS-ember-six-slot-blank-economy-model-d370-2026-10-09.md`](../status/STATUS-ember-six-slot-blank-economy-model-d370-2026-10-09.md)。**≠改 ×0.1 ≠同号补码；绿出口后另号可开补建模。**
+- **K3 离线 Forge 骨架指针（D371）：** K3 离线 Forge 骨架已就位（wt `e8a7e2c2`）→ D371；仍 **≠开闸**—— STATUS [`STATUS-ember-six-slot-k3-offline-forge-skel-d371-2026-10-09.md`](../status/STATUS-ember-six-slot-k3-offline-forge-skel-d371-2026-10-09.md)。代码 tip `859750e3` · 19/19 · **未**装 play · **未**开 `k3_refine` · 开闸后另号再挂 `commitTxn`+TrMenu；开闸真源仍 D341 §2.1。
 
 ### 1.5 观察期 yml 真源与防冲（D344）
 
