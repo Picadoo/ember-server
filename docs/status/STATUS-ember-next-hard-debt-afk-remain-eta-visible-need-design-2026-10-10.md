@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D405 · 挂机今日还差/约满 ETA 可见化 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx07）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D405** · tip `778a9371` · 指针 DESIGN [`DESIGN-ember-afk-remain-eta-visible-2026-10-10.md`](../design/DESIGN-ember-afk-remain-eta-visible-2026-10-10.md) · **施工另派** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 ≠复述仓差**。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D405** · tip `778a9371` · 指针 DESIGN [`DESIGN-ember-afk-remain-eta-visible-2026-10-10.md`](../design/DESIGN-ember-afk-remain-eta-visible-2026-10-10.md) · **施工中** · 菜单 W1c/W1d 本号 · 插件 tip `7123d944` · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 ≠复述仓差**。下文为交稿原文，保留备查。
 >
-> **【D405 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **施工另派 · 已批/施工中** · **零 jar（本策划号）** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述仓差**。
+> **【D405 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · 菜单本号 · 插件已 live · **零 jar（本菜单号）** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述仓差**。
 
 > **上游结案：** 总控【催 D405 tip】· D404 菜单壳已落 `d5afa0a2`、插件键施工中；D403 抽测中 → 请交**下一内容向 tip**（有趣/挂机/日更；**sx07 等 D403 PASS**）。禁抬日表/假开旧日常/开R·K3/关观察。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D405** · **施工另派** · docs-only  
-**硬规格（已批 A · 方案 M · D405 · 施工另派）：** [`DESIGN-ember-afk-remain-eta-visible-2026-10-10.md`](../design/DESIGN-ember-afk-remain-eta-visible-2026-10-10.md) · backlog `B-afk-remain-eta-visible`（**已批/施工中**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D405** · **施工中** · 菜单落地 · docs+TrMenu  
+**硬规格（已批 A · 方案 M · D405 · 施工中）：** [`DESIGN-ember-afk-remain-eta-visible-2026-10-10.md`](../design/DESIGN-ember-afk-remain-eta-visible-2026-10-10.md) · backlog `B-afk-remain-eta-visible`（**已批/施工中**）· 菜单 STATUS [`STATUS-ember-afk-remain-eta-visible-menu-d405-2026-10-10.md`](STATUS-ember-afk-remain-eta-visible-menu-d405-2026-10-10.md)  
 **打开理由：** D383 已用 `today`（N/2400）框「今日软目标」，但仍无**剩余击杀数**与**按当前速度约几分钟满**——多坐一会儿缺时间感；D383§2.3 / D404§5 明文后置 `remain`/`eta_min`；sx06 抽测中禁交 sx07；D404 仓差施工中禁复述。
 
 ---
@@ -68,7 +68,7 @@
 
 ---
 
-*选题挂机今日还差/约满 ETA · tip 旁注已关 · 已批 A·方案 M · D405 · 设计待批关闭 · 施工另派 · ≠关观察 ≠抬挂机表 ≠sx07。*
+*选题挂机今日还差/约满 ETA · tip 旁注已关 · 已批 A·方案 M · D405 · 施工中 · ≠关观察 ≠抬挂机表 ≠sx07。*
 
 ---
 
@@ -78,3 +78,4 @@
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题挂机 remain/eta 可见化 · DESIGN 待批 A·荐 M |
 | 2026-10-10 | **旁注已关** · 总控批 A·M · D405 · 设计待批关闭 · **施工另派** |
+| 2026-10-10 | 菜单 executor · W1c/W1d 挂 remain_line live（插件 tip `7123d944`）· **施工中** · 菜单本号 |

@@ -1,12 +1,12 @@
 # 余烬 · 挂机今日还差 / 约满 ETA 可见化（挂机资源环深化 · ≠抬日表 · ≠sx07）
 
-STATUS=**已批 A · 方案 M · D405** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-remain-eta-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-remain-eta-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-remain-eta-visible`（**已批/施工中**）· **施工另派** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D404 ≠改 daily_kills/afk.tiers**
+STATUS=**已批 A · 方案 M · D405 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-remain-eta-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-remain-eta-visible-need-design-2026-10-10.md)（**旁注已关 · 施工中**）· backlog `B-afk-remain-eta-visible`（**已批/施工中**）· 菜单 STATUS [`STATUS-ember-afk-remain-eta-visible-menu-d405-2026-10-10.md`](../status/STATUS-ember-afk-remain-eta-visible-menu-d405-2026-10-10.md) · 插件 tip `7123d944` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx07 ≠复述 D373–D404 ≠改 daily_kills/afk.tiers**
 
 > **一句话玩家价值：** 打开挂机战况就能看见「今天还差多少只、按现在速度大约几分钟满」——多坐一会儿有时间锚；满了仍走「去冒险 / 去哪花」；**不**抬产量、不改日顶。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx07。**
 >
-> **总控批 A·M · 2026-10-10：** 采纳方案 M（`p1_afk_remain` + `p1_afk_eta_min`（可选 remain_line）挂战况软目标块）；**施工另派**；≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 ≠复述仓差。
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（`p1_afk_remain` + `p1_afk_eta_min`（可选 remain_line）挂战况软目标块）；**菜单 W1c/W1d 本号** · **插件 W1a/W1b 已 live `7123d944`**；≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 ≠复述仓差。
 
 ---
 
@@ -62,7 +62,7 @@ STATUS=**已批 A · 方案 M · D405** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a remain 键 + W1b eta_min 键 + W1c 战况挂键 + W1d 可选半行；见 §2）
 - [x] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx07/假开旧日常/空转/复述仓差）
-- [x] 批注：总控批 A·M · 2026-10-10 · D405 · **施工另派** · `p1_afk_remain` + `p1_afk_eta_min`（可选 remain_line）挂战况软目标块 · 零改 daily_kills/tiers · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 ≠复述仓差
+- [x] 批注：总控批 A·M · 2026-10-10 · D405 · **施工中** · 菜单 W1c/W1d 本号挂 remain_line live · 插件 W1a/W1b tip `7123d944` · 零改 daily_kills/tiers · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 ≠复述仓差
 
 ---
 
@@ -167,7 +167,8 @@ STATUS=**已批 A · 方案 M · D405** · 2026-10-10 · tip [`STATUS-ember-next
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机 remain/eta（兑现 D383/D404 后置）· ≠sx07 |
 | 2026-10-10 | **已批 A · 方案 M · D405** · 总控批注勾选 · **施工另派** · ≠关观察 ≠抬日表 ≠sx07 ≠开 R/K3 ≠复述仓差 |
+| 2026-10-10 | 菜单 executor · W1c/W1d 挂 remain_line live（插件 tip `7123d944`）· **施工中** |
 
 ---
 
-*D405 · 挂机今日还差/约满 ETA 可见化 · 已批 A·方案 M · 施工另派 · ≠关观察 ≠抬日表 ≠sx07。*
+*D405 · 挂机今日还差/约满 ETA 可见化 · 已批 A·方案 M · 施工中 · ≠关观察 ≠抬日表 ≠sx07。*

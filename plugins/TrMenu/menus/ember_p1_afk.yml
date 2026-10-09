@@ -1,4 +1,5 @@
 # D383: 战况今日软目标 + 层差一览 + 层格相对多养 + 去哪花旁文案（零改产量）
+# D405: 战况软目标块 +还差/约满（remain_line live · tip 7123d944 · 零改产量）
 # P1 挂机庭 · 自动战斗（D177 rev 2，DESIGN-ember-afk-p1-2026-10-04.md）— CoreRpg EmberAfkService + AfkTierService（复用 ember_afk 世界）
 # 站在已解锁的层里角色自己打本层的个人怪：自动普攻 + 冷却好自动烬斩 + 战利品直接进账（材料进仓库）；击杀速度和能扛住哪层看装备
 # 四层按主线首通开放：灰坡 Q01 · 荒原 Q03 · 焦土 Q05 · 烬原深处 Q07；每日 2400 只封顶（在线 + 离线），离线按实测速度 × 25%、最多 1200 只
@@ -20,7 +21,7 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §8挂机庭 · 日 2400 只封顶 · 材料进仓库 · 点「去哪花」强化升阶'
     - 'tell: §8满后体力还能去冒险'
-    - 'tell: §8战况有今日软目标·层差一览 · 多坐一会儿看还差多少'
+    - 'tell: §8战况可看还差/约满 · 今日软目标·层差一览'
 Icons:
   '#':
     display:
@@ -44,6 +45,8 @@ Icons:
         - '§7状态：%corerpg_p1_afk_state%'
         - '§7当前层：%corerpg_p1_afk_here%'
         - '§e今日软目标：%corerpg_p1_afk_today%'
+        # D405 W1c：挂 remain_line（同批拆键 remain/eta_min 亦 live · tip 7123d944）· 禁假写「保证 X 分钟满」
+        - '§7%corerpg_p1_afk_remain_line%'
         - '§7未满就继续坐 · 满了点「去冒险」/「去哪花」'
         - '§7本次：%corerpg_p1_afk_session% · 速度：%corerpg_p1_afk_kph%'
         - '§7每小时战利品：%corerpg_p1_afk_loot%'
