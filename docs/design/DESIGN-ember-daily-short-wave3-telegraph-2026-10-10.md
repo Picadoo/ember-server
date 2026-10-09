@@ -1,6 +1,6 @@
 # 余烬 · 日更短本第三拍扩线（预警环伤 · 庭院/焦骨/潮蚀/断塔）
 
-STATUS=**待批 A · 荐方案 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-daily-short-wave3-telegraph-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-daily-short-wave3-telegraph-need-design-2026-10-10.md) · backlog `B-ember-daily-short-wave3-telegraph` · 总控排队内容真债 2（使魔 `1d938a07` 之后）
+STATUS=**已批 A · 批 M · D374 · 施工交怪物岗** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-daily-short-wave3-telegraph-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-daily-short-wave3-telegraph-need-design-2026-10-10.md)（已关）· backlog `B-ember-daily-short-wave3-telegraph` · STATUS [`STATUS-ember-daily-short-wave3-telegraph-d374-2026-10-10.md`](../status/STATUS-ember-daily-short-wave3-telegraph-d374-2026-10-10.md) · 总控排队内容真债 2（使魔 `1d938a07` 之后）
 
 > **一句话玩家价值：** 日刷终厅从「站着挨无预警环」变成「看提示→拉开可躲」的可读战斗节奏——四线重刷更有趣，不靠抬体力奖励。
 
@@ -117,7 +117,7 @@ Boss 挂载：删对应 `damage{…} ~onTimer:…`（潮蚀另删 SLOW onTimer�
 
 | 项 | 口径 |
 |----|------|
-| 本窗 | **docs-only** 待批 A |
+| 本窗 | **docs-only 已批 A** · MM 施工交怪物岗另号 |
 | 批 A 后 | 另开施工号（怪物岗 MM）；测法复用霜/锈五条（early / 圈内 1.2 / 拉开 miss / DP 零 diff / 禁 kill-any·掉落零改） |
 | 观察 | **续**；绿出口仍 ≥**2026-10-10 17:40 CST**；本债**不**勾关窗 |
 
@@ -150,3 +150,42 @@ Boss 挂载：删对应 `damage{…} ~onTimer:…`（潮蚀另删 SLOW onTimer�
 
 霜/锈第三拍已 PASS；庭院·焦骨·潮蚀·断塔仍无预警环——荐 **M** 同构四条主题读条，零动体力掉落地图；批 A ≠ 施工 ≠ 关观察。
 
+---
+
+## 5. 批注勾选（总控）
+
+- [x] **批 M**（四线同构读条可躲 · YardPulse/AshBurst/TideCrash/SpireSlam）→ **D374 已批 · 施工交怪物岗** · **策划荐 · 总控已批**
+- [ ] **批 A**（只改 lore/菜单半行）· **不荐独批**
+- [ ] **批 L**（新系统/假平面/抬体力掉落）· **否决**
+- [ ] 驳回改派（理由：________）
+
+**策划荐勾：** **批 M**。
+
+### 总控批注（D374）
+
+- **已批 A · 批 M** · 本号 **docs-only** 落字；**MM 施工交怪物岗**（另号）。
+- **≠本号改 MM** · **≠改体力/掉落** · **≠关观察** · **≠开 R** · **≠开 K3** · **≠改 ×0.97 / 三开关 / bv** · **≠假平面**。
+
+**说明：** 批 A ≠ 施工 ≠ 关观察 ≠ 改掉落/体力 ≠ 开 R。
+
+---
+
+## 6. 变更记录
+
+| 日 | 事 |
+|----|-----|
+| 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M；tip `a944ed30` |
+| 2026-10-10 | 总控批 A·M · **D374** docs 占位 · tip 关 · backlog→已批 A·施工中·怪物岗 · **≠本号改 MM ≠改体力掉落 ≠关观察** |
+
+---
+
+## 7. 参考
+
+- tip · STATUS D374
+- `EmberDungeonDiffSkills.yml` · `EmberDaily.yml` / `EmberDailyAsh.yml` / `EmberDailyTide.yml` / `EmberDailySpire.yml`
+- 范式：`EmberFrostNovaCast` / `EmberRailSlamCast` · 测报 `*-third-beat-test`
+- 入口：`plugins/TrMenu/menus/ember_daily.yml`
+
+---
+
+*已批 A · 批 M · D374 docs 占位 · 施工交怪物岗 · ≠本号改 MM ≠改体力掉落 ≠关观察 ≠开 R。*

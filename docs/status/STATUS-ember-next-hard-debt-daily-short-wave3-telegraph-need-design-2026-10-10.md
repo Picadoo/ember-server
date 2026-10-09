@@ -1,10 +1,12 @@
+> **旁注（已关 · 2026-10-10）：** 已批 A · 批 M · **D374 docs 占位 · 施工交怪物岗** · STATUS [`STATUS-ember-daily-short-wave3-telegraph-d374-2026-10-10.md`](STATUS-ember-daily-short-wave3-telegraph-d374-2026-10-10.md) · tip `a944ed30` · **≠本号改 MM ≠改体力掉落 ≠关观察 ≠开 R**。下文为选题当时正文，保留作史。
+
 # 状态 · 下一档硬债选定 · 需策划（日更短本第三拍扩线 · 预警环伤 · 庭院/焦骨/潮蚀/断塔）
 
 > **上游结案：** 使魔闭环诚实 tip `1d938a07` 已交待批；总控排队**内容真债 2** = 日更短本第三拍扩线。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。霜晶/锈轨第三拍已 PASS（`EmberFrostNovaCast` / `EmberRailSlamCast`）；庭院·焦骨·潮蚀·断塔 Boss 仍无预警 onTimer 环伤。样本 R / Pack6 / 天赋·灰印 HOLD / 开 K3 live / 关观察 / 抬体力·掉落 **仍禁**。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A** · **docs-only** · **零 jar / 零改体力 / 零改掉落 / 零改 ×0.97** · **≠关观察** · **≠开闸** · **≠开样本 R** · **≠ stage 脏 runtime** · **≠假平面**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-daily-short-wave3-telegraph-2026-10-10.md`](../design/DESIGN-ember-daily-short-wave3-telegraph-2026-10-10.md) · backlog `B-ember-daily-short-wave3-telegraph`  
+**本窗性质：** tip **已关 · 已批 A · 批 M · D374** · **docs 占位 · 施工交怪物岗** · **≠本号改 MM** · **≠关观察** · **≠开闸** · **≠开样本 R** · **≠改体力掉落**  
+**硬规格（已批 A · 批 M · D374）：** [`DESIGN-ember-daily-short-wave3-telegraph-2026-10-10.md`](../design/DESIGN-ember-daily-short-wave3-telegraph-2026-10-10.md) · backlog `B-ember-daily-short-wave3-telegraph`  
 **打开理由：** 七线日更短本里霜/锈已有「message→粒子→delay→半径伤」可读第三拍；另四线终厅仍是无预警环伤——打起来像「站着挨烫」，缺预警节奏。
 
 ---
@@ -67,3 +69,6 @@
 - 不改 MCA / 假平面 / 房2 链式 / boss_prep / 断塔环廊防坠
 - 不默默 stage 脏 runtime YAML
 
+---
+
+*选题日更短本第三拍扩线 · tip 已关 · 已批 A·M · D374 docs 占位 · 施工交怪物岗 · ≠本号改 MM ≠改体力掉落 ≠关观察。*
