@@ -35,7 +35,7 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · 主�
 
 | 项 | 值 |
 |----|----|
-| tip | _(commit 后填)_ |
+| tip | `24ffa712` |
 | jar | `CoreRpg-1.65.118-d410.local.jar` |
-| sha256 | _(装服后填)_ |
-| Enabling | `CoreRpg v1.65.118-d410.local` |
+| sha256 | `922a0c8124f2f3cca1d4fbe33898e1d0ec5096b32bba85b46aff4f5a91959c16` |
+| Enabling | `CoreRpg v1.65.118-d410.local` · play PID 1258611 |
