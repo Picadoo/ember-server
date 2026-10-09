@@ -2,6 +2,7 @@
 # 旧 ember_enhance / ember_forge / ember_disassemble 菜单不变（旧物品仍走旧强化）。
 # 打开：/ember_p1_forge、主菜单「工坊」或装备页（B2.174）。互换确认按钮 B2.176（§19.1 不需要手打命令）
 # D307：确认/预览同屏嵌本次费用与缺料（PAPI 镜像 UpgradeRules；零改价；分解仍聊天确认）
+# D333：手持甲时养成格灰显/禁命令（held_is_armor）；分解 lore 去「胚料 1/2/3」、对齐白板零头
 
 Title: '§6余烬 · 锻造'
 
@@ -44,6 +45,21 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 enhance'
+    icons:
+      # D333：手持甲 · 养成格灰显（待插件 %corerpg_p1_held_is_armor% 上线后生效）
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8强化 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e本次：§f%corerpg_p1_held_enhance_cost%'
+            - '§c%corerpg_p1_held_enhance_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   e:
     update: 20
     display:
@@ -56,6 +72,20 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 enhance confirm'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8强化 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e本次：§f%corerpg_p1_held_enhance_cost%'
+            - '§c%corerpg_p1_held_enhance_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   U:
     update: 20
     display:
@@ -71,6 +101,20 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 upgrade'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8升阶 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
+            - '§c%corerpg_p1_held_upgrade_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   u:
     update: 20
     display:
@@ -84,6 +128,20 @@ Icons:
       all:
         - 'command: corerpg p1 upgrade confirm'
         - close
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8升阶 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
+            - '§c%corerpg_p1_held_upgrade_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   R:
     update: 20
     display:
@@ -99,6 +157,20 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 refine craft'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8精工 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e手持件：§f%corerpg_p1_held_next_c%'
+            - '§c%corerpg_p1_held_refine_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   r:
     update: 20
     display:
@@ -111,6 +183,20 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 refine craft confirm'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8精工 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e手持件：§f%corerpg_p1_held_next_c%'
+            - '§c%corerpg_p1_held_refine_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   Q:
     update: 20
     display:
@@ -126,6 +212,20 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 refine quality'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8成色 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e手持件：§f%corerpg_p1_held_next_q%'
+            - '§c%corerpg_p1_held_quality_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   q:
     update: 20
     display:
@@ -138,6 +238,20 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 refine quality confirm'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8成色 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e手持件：§f%corerpg_p1_held_next_q%'
+            - '§c%corerpg_p1_held_quality_lack%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   S:
     update: 20
     display:
@@ -151,13 +265,26 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 swap'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8互换 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e%corerpg_p1_held_swap_cost%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   D:
     update: 20
     display:
       material: flint
       name: '§7分解 · 预览'
       lore:
-        - '§7只限普通掉落件 → 胚料 1/2/3'
+        - '§7只限普通掉落件；甲→白板胚零头（0.1×阶），攒满 1 到账'
         - '§e预览：§f%corerpg_p1_held_dismantle_yield%'
         - '§7预览后在聊天栏点击 §c[确认分解]§7（30 秒内有效）'
     actions:
@@ -177,6 +304,19 @@ Icons:
     actions:
       all:
         - 'command: corerpg p1 swap confirm'
+    icons:
+      - condition: 'check papi %corerpg_p1_held_is_armor% == 1'
+        priority: 5
+        display:
+          material: gray stained glass pane
+          name: '§8互换 · 不可用'
+          lore:
+            - '§8护甲随护符成长；成色和精工看掉落'
+            - '§e%corerpg_p1_held_swap_cost%'
+            - '§8甲 · K0 只能分解'
+        actions:
+          all:
+            - 'tell: §8护甲随护符成长；成色和精工看掉落'
   d:
     display:
       material: gray dye
@@ -184,6 +324,7 @@ Icons:
       lore:
         - '§7点上面的预览后，聊天栏出现 §c[确认分解]'
         - '§7只限普通掉落件；首通和起步件拆不了'
+        - '§7甲为白板零头（0.1×阶），非整胚 1/2/3'
         - '§8销毁确认仍走聊天一键（不在菜单硬点）'
   b:
     display:

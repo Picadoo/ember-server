@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（六槽工坊手持甲菜单诚实 · K0 只能分解 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D333）：** tip `5564ea55` 已关；总控已批 A·M；施工 STATUS [`STATUS-ember-six-slot-forge-armor-honesty-d333-2026-10-09.md`](STATUS-ember-six-slot-forge-armor-honesty-d333-2026-10-09.md)。
+
 > **上游结案：** D332 已批 A·M（D12-② 验收清单 · 测试另号）@ `fd9fd732`；D329 装备页入口诚实、D330 权威/OPS、D331 套装页诚实均已落。Stage2 观察中（绿出口不早于 **2026-10-10 17:40 CST**）；K3 T0‴ PASS · 施工等绿出口。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / 拧 set_bonus / 观察期部署 K3 / 动 F / 样本 R。**零 live jar 玩法施工（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 live jar/yml 玩法** · 勿抢测试正在动的分解抽测轨  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-forge-armor-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-forge-armor-honesty-2026-10-09.md) · backlog `B-six-slot-forge-armor-honesty`  
+**本窗性质：** tip 已关 · 施工见 D333 STATUS · 勿抢 D332 测试 / K3  
+**硬规格（已批 A · 批 M · D333）：** [`DESIGN-ember-six-slot-forge-armor-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-forge-armor-honesty-2026-10-09.md) · backlog `B-six-slot-forge-armor-honesty`  
 **打开理由：** K0「甲只能分解」代码/PAPI 已诚实，但 **工坊菜单** 强化/升阶/精工/成色/互换格仍按刃护符视觉可点；分解静态 lore 仍写「胚料 1/2/3」，与甲 ×0.1 零头口径不一致——观察期可钉显示规格，施工另号。
 
 ---
