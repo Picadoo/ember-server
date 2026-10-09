@@ -15,8 +15,8 @@
 | 号 | 内容 | 本号 D400 | 阻塞 / 下一步 |
 |----|------|-----------|----------------|
 | **地图号** | `ember_short_sx05` 崖口台/窄桥过隙/对岸风心 + 出生/Boss 坐标 | **本地骨架已启**：`cp -a ember_daily_crypt_v1 → ember_short_sx05`（~2.0M）；说明见 [`docs/maps/ember_short_sx05-README.md`](../maps/ember_short_sx05-README.md) | **阻塞 WE**：仓/play **无** WorldEdit/FAWE jar；**禁** `git add -f` map。裂谷主题换皮 → 地图岗进服 WE 另号 |
-| **MM 号** | 崖卫/风廊弩/风心守吏 + `EmberSx05…Cast` | **磁盘已有未入本 commit**（`Mobs/EmberSx05.yml` + WindCast；怪物岗并行，本号不重交） | 刷点坐标钉死后挂 runs/groups；MM tip 另 push |
-| **DP+键号** | `EmberSx05` option/monster + `ember-v1-runs` `sx05`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **壳已落**：`dungeon/EmberSx05/option.yml`（`$setmap` + `p1_pass_sx05` 门闩）+ `config.yml` 登记；**无** runs/jar 键 | 插件岗：`p1 enter sx05` · pass · `p1_sx05_day` · stamina 30 · rooms/boss 同构（防 D391 FAIL） |
+| **MM 号** | 崖卫/风廊弩/风心守吏 + `EmberSx05…Cast` | **已 push** tip `350f3666`（本号不重交） | 刷点坐标钉死后挂 runs/groups |
+| **DP+键号** | `EmberSx05` option/monster + `ember-v1-runs` `sx05`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **壳已落**（并行 MM tip `350f3666`，本号对齐不重交）：`dungeon/EmberSx05/option.yml`（`$setmap` + `p1_pass_sx05` 门闩）+ `config.yml` 登记；runs/jar 键插件并行中 | 插件岗：`p1 enter sx05` · pass · `p1_sx05_day` · stamina 30 · rooms/boss 同构（防 D391 FAIL） |
 | **插件日帽号** | `%corerpg_p1_sx05_day_line%` + 合计扩第五本 | **未动** | 另号；菜单已注释预留，禁假写 n/3 |
 | **菜单号** | `ember_p1_short` 五本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G 保留 · **K=sx05** · adventure `H` + Open · hub Open/冒险格半指含「裂谷」 | sx05 点进本=键未就绪时服务端拒（预期）；sx01–sx04 仍可进 |
 | **经济号** | S44 发放 + REG/Economy/source-map +（荐）p1sim | **未动** | 另号金样；草案 80币+4碎+3骨尘；首通另加 140/6/1；**禁**抬挂机表 |
@@ -84,3 +84,5 @@
 ---
 
 *D400 批 A·M · tip `109e02b3` · 短征 sx05 骨架启动 · 地图本地 crypt 壳 · WE/进本键/S44/日帽键/MM 并行 · ≠关观察≠抬日表≠开旧日常闸。*
+
+**本号 tip：** `a01fad52`（地图 README + 五本菜单 + STATUS）· 批 A 旁注 `b623f901` · MM/DP 壳 `350f3666` · DESIGN tip `109e02b3`
