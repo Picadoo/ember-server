@@ -413,6 +413,7 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public FriendService getFriendService() { return friendService; }
     public LadderService getLadderService() { return ladderService; }
     public PetService getPetService() { return petService; }
+    public LifeService getLifeService() { return lifeService; }
     public GuildService getGuildService() { return guildService; }
     public ArenaService getArenaService() { return arenaService; }
     public AuctionService getAuctionService() { return auctionService; }

@@ -1,74 +1,92 @@
-# 状态 · D388：生活等级/次数同屏（批 A·M · docs 占位 · 插件补键中 · 菜单挂键另号）
+# 状态 · D388：生活等级 PAPI 同屏（批 A·M · P1 插件补键已交 · P2 菜单另号）
 
 **日期：** 2026-10-10（上海时间）  
-**上游：** tip [`STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md`](STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md) @ `8305129d` · DESIGN [`DESIGN-ember-life-level-papi-2026-10-10.md`](../design/DESIGN-ember-life-level-papi-2026-10-10.md)  
-**裁决：** **已批 A · 批 M · D388** · 总控采纳方案 M · tip 旁注已关 · backlog→**已批·插件施工中** · **本号 docs-only 占位** · **插件补键中** · **菜单挂键另号** · **≠本号写 Java** · **≠改 live 菜单** · **≠改 life.yml 价/日周顶/level_xp** · **≠关观察** · **≠抬日表** · **≠开 R** · **≠开 K3** · **≠改 ×0.97 / 三开关 / bv** · **≠假写固定 Lv** · **≠回盘 E/F** · **≠空跳转** · **≠复述 D373–D386**  
-**版本：** **docs-only**（DESIGN 勾批 · tip 关 · backlog · 本 STATUS）· jar / CorePapi / TrMenu `ember_life` / life.yml / set_bonus / bv **未动**  
-**toplevel（落字时）：** `/workspace/minecraft` @ `main`（C0 合格）
+**上游：** tip [`STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md`](STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md) · DESIGN [`DESIGN-ember-life-level-papi-2026-10-10.md`](../design/DESIGN-ember-life-level-papi-2026-10-10.md) @ `8305129d`  
+**裁决：** **已批 A · 批 M · D388** · **本号交 `%corerpg_life_*%` 最少集 + jar 并装 play** · 菜单挂键 → **另号 P2**  
+**版本：** jar **`1.65.103-d388.local`** · tip 见本 STATUS 交稿 commit · **未改** life.yml 价/曲线/daily·weekly · set_bonus / enabled / migrate · bv62 · ×0.97 · K3 · TrMenu `ember_life`
 
 ## 人话
 
-生活等级与兑尘/孵化次数在 LifeService，菜单要关页刷聊天才看得见——缺 `%corerpg_life_*%`。本号只批方案并占位：**插件岗另号补键**；**菜单挂键另号**（键就绪后）；生活经济与观察不动。
+生活页缺的等级 / 经验进度 / 今日兑尘与本周孵化剩余占位已进 CoreRpg：`%corerpg_life_level_line%` 等只读真源 `LifeService`/`PlayerData`。play 已热换；菜单挂键仍由另号做。
 
-## 已批摘要（方案 M）
+## 计数约定（钉死）
 
-| 阶 | 岗 | 交付 |
-|----|-----|------|
-| **P1** | 插件岗（另号 · **补键中**） | 注册 DESIGN §2.1 最少集（`life_level` / `life_xp` / `life_xp_next` / `life_level_line` / `life_soul_daily_left` / `life_soul_daily_line` / `life_hatch_weekly_left` / `life_hatch_weekly_line` 等）；单测；发 jar |
-| **P2** | 菜单岗（另号 · **键就绪后**） | `ember_life` W1a–W1b（I 同屏 + G/K 半行；H/J/Open 可选）；TrMenu reload 验收 |
-| **本号** | docs | 勾批 · tip 关 · backlog 施工中 · 本 STATUS |
+| 键族 | 约定 |
+|------|------|
+| 魂尘日顶 | `soul_dust` + `soul_dust_bone` **各** `daily: 2` → **合计顶=4**；已用=`periodCount(life_soul_dust,today)+periodCount(life_soul_dust_bone,today)`；剩=`max(0,4-已用)` |
+| 孵化周顶 | `pet_ashling` + `pet_cinder` **各** `weekly: 1` → **合计顶=2**；已用=`periodCount(life_pet_ashling,week)+periodCount(life_pet_cinder,week)`；剩=`max(0,2-已用)` |
 
-**钉：** 只读 `LifeService.lifeLevel` / `lifeXp` / `levelXp` / `periodCount`；计数约定魂尘日顶合计 4、孵化周顶合计 2（见 DESIGN §2.1）；**禁**改 `life.yml` 价/daily/weekly/`level_xp`；**禁**菜单假写固定个人 Lv；**禁**挪用 `%corerpg_ember_level%` 冒充生活。  
-**禁：** 同号写 Java · 改 live 菜单 · 关观察 · 抬日表 · 开 R · 开 K3 · 改 ×0.97 · 回盘 E/F · 空跳转 · 复述 D373–D386。
+常量：`CorePapiLife.SOUL_DAILY_CAP=4` · `HATCH_WEEKLY_CAP=2`。
 
-## 本号范围
+## 键清单
 
-| 做 | 不做 |
-|----|------|
-| DESIGN 勾批 A·M · tip 关 · backlog→已批·插件施工中 · 本 STATUS 占位 | 改 `CorePapi` / Expansion / `LifeService` / jar |
-| 显式 add docs push（D365） | 改 `ember_life.yml` live · 改 `life.yml` 经济 · 开关 / bv |
+| Placeholder | 含义 | 空/异常 |
+|-------------|------|---------|
+| `%corerpg_life_level%` | 当前生活等级 | ≥1（空服务约定 `1`） |
+| `%corerpg_life_xp%` | 累计生活经验 | `0` |
+| `%corerpg_life_xp_next%` | 下一级累计 xp 门槛；满级 `0` | `0` |
+| `%corerpg_life_level_line%` | `生活 Lv.N（经验 x/next）` / `生活 Lv.N（已满级）` | 恒有 |
+| `%corerpg_life_soul_daily_left%` | 今日兑尘剩余（合计顶 4） | `0` |
+| `%corerpg_life_soul_daily_line%` | `今日兑尘 已用 a/4 · 剩 b` | 恒有 |
+| `%corerpg_life_hatch_weekly_left%` | 本周孵化剩余（合计顶 2） | `0` |
+| `%corerpg_life_hatch_weekly_line%` | `本周孵化 已用 a/2 · 剩 b` | 恒有 |
 
-## 验收自检（本号 docs）
+路由：`CorePapi.Section.LIFE` → `CorePapiLife`（**不**占 `p1_` / `gate_` / `pet_`；**不**挪用 `ember_level`）。
 
-| ID | 结果 | 备注 |
-|----|------|------|
-| D1 | **PASS** | DESIGN STATUS→已批 A·批 M·D388；勾批 M；总控批注 |
-| D2 | **PASS** | tip 旁注已关 · 硬规格→已批 |
-| D3 | **PASS** | backlog `B-life-level-papi` → **已批·插件施工中** |
-| D4 | **PASS** | 本号未碰 Java / 菜单 / life.yml / 三开关 / bv / jar |
-
-## 改动清单（本号）
+## 改动
 
 | 文件 | 改动 |
 |------|------|
-| `DESIGN-ember-life-level-papi-2026-10-10.md` | STATUS→已批；勾批；总控批注；变更记录 |
-| tip `…-life-level-papi-need-design-…` | 旁注已关 |
-| `design-ember-content-backlog.md` | `B-life-level-papi` → **已批·插件施工中** |
-| 本 STATUS | 占位 · 插件补键中 · 菜单挂键另号 |
-| CorePapi / jar / `ember_life.yml` / `life.yml` / ember-v1 | **未动** |
-| ladder / calamity-state / p1-six / MM SavedData | **未 stage** |
+| `CorePapi.java` | `Section.LIFE` + `LIFE` 键集 + route |
+| `CorePapiLife.java` | 新建只读 resolve/apply |
+| `CoreRpgExpansion.java` | `case LIFE` |
+| `LifeService.java` | 仅加 `lifeXpNext()` 只读（满级→0） |
+| `CoreRpgPlugin.java` | `getLifeService()` |
+| `CorePapiTest` / `CorePapiLifeTest` | 路由 + 中档/满级/顶满约定 |
+| TrMenu `ember_life.yml` / `life.yml` / ember-v1* | **未动** |
+
+## 产物
+
+| 项 | 值 |
+|----|-----|
+| jar | `/workspace/tmp/d388/CoreRpg-1.65.103-d388.local.jar` |
+| jar sha256 | `d7b46183e59b4988824c0ca992066bfd0dfc574ca30a679e1a54124e9532d025` |
+| plugin.yml（jar 内） | `1.65.103-d388.local`（源码 `plugin.yml` 仍 1.65.97，未提交版本戳） |
+| 单测 | `CorePapiTest` + `CorePapiLifeTest` + `CorePapiPetTest` **PASS** |
+
+## 装服（play）
+
+| 步 | 结果 |
+|----|------|
+| 备份 | `/workspace/tmp/d388-backup-20261010040622/`（旧 jar `1.65.102-d384.local` + ember-v1.yml） |
+| 换档 | `plugins/CoreRpg.jar` ← d388.local（sha 与产物一致） |
+| 停启 | play 停 → 新 PID **929948**；日志 `Enabling CoreRpg v1.65.103-d388.local` · `Done (7.813s)` |
+| sidecars | login **827830** · proxy / MariaDB **未动** |
+| 开关 / bv | set_bonus/enabled/migrate 仍 true · bv **62**（runs）· live yml 未改 |
+| PAPI | `Successfully registered expansion: corerpg` |
+
+## 验收
+
+| # | 项 | 结果 |
+|---|----|------|
+| P1 | 路由 `life_*` → LIFE；不抢 p1_/gate_/pet_/ember_level | 单测 PASS |
+| P2 | 中档：level_line + 兑尘/孵化剩次文案 | 单测 PASS |
+| P3 | 满级 xp_next=0；日/周顶耗尽 left=0 | 单测 PASS |
+| P4 | Enabling `1.65.103-d388.local` | 装服 PASS |
+| P5 | 零改 life.yml / set_bonus / bv / TrMenu | 本号未触 PASS |
+
+**实机菜单同屏：** 等菜单岗挂键后，有进度号 `/papi parse me %corerpg_life_level_line%` + 开 `ember_life`。
 
 ## 下一号
 
 | 号 | 岗 | 指针 |
 |----|-----|------|
-| **P1** | 插件岗 | DESIGN §2.1 / §2.3 P1；最少集键；单测；发 jar；**仍禁**改 life.yml 经济/曲线 |
-| **P2** | 菜单岗 | DESIGN §2.2 W1a–W1b；**键在 live 可解析后再挂**；禁提前写字面量冒充；禁回盘 E/F |
-
-## 本号 commit 自检（按 D365）
-
-| ID | 结果 | 备注 |
-|----|------|------|
-| C1 | **PASS** | 工作区有脏 runtime 常态 |
-| C2 | **待 commit 时核** | cached 仅授权 docs |
-| C3 | **待 commit 时核** | 显式 `git add` 路径；未用 `add -A` |
-| C4 | **PASS** | 未碰 live ember-v1；未切分支；toplevel=`/workspace/minecraft` |
-| C5 | **待 commit 时核** | 脏 runtime 未入暂存 |
+| **P2** | 菜单岗 | `ember_life` W1a–W1b 挂 `%corerpg_life_*_line%`（DESIGN §2.2） |
 
 ## 不动
 
-本号写 Java · 改 live 菜单 · 改 life.yml 价/日周顶/level_xp · 关观察 · 抬日表 · 开 R · 开 K3 · 改 ×0.97 / 三开关 / bv · Pack6 / 天赋 / 灰印 · 假写固定 Lv · 回盘 E/F · 空跳转 · stage 脏 runtime · 复述 D373–D386
+life.yml 价/曲线/daily·weekly · 关观察 · 开 K3 · ×0.97 / set_bonus / bv · TrMenu · live ember-v1* · 主仓切分支 · 样本 R / Pack6
 
 ---
 
-*D388 批 A·M · tip `8305129d` · docs 占位 · 插件补键中 · 菜单挂键另号 · ≠本号写 Java ≠改菜单 ≠关观察。*
+*D388 批 A·M · P1 生活 PAPI 补键装 play · 菜单挂键另号 · ≠改 life.yml ≠关观察。*

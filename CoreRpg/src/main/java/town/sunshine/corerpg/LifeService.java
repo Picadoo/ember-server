@@ -129,6 +129,12 @@ public final class LifeService implements Listener {
         return lv;
     }
 
+    /** D388: cumulative xp needed for next life level; 0 when already max (show() used -1). */
+    int lifeXpNext(PlayerData d) {
+        int lv = lifeLevel(d);
+        return lv < levelXp.length ? levelXp[lv] : 0;
+    }
+
     private void addXp(Player p, int n) {
         if (n <= 0) return;
         PlayerData d = dataStore.get(p.getUniqueId());

@@ -11,14 +11,15 @@ import java.util.Set;
  * {@link CorePapiAccount} (account / quest / mail / guild / cash), {@link CorePapiKit} (flex + skill kit),
  * {@link CorePapiProgress} (level / talent / vip / gate_), {@link CorePapiStamina} (S0 stamina),
  * {@code p1_} → {@code EmberRunService.placeholder} ({@code town.sunshine.corerpg.p1.EmberRunPapi}),
- * {@link CorePapiPet} (pet_* read-only · D384).
+ * {@link CorePapiPet} (pet_* read-only · D384),
+ * {@link CorePapiLife} (life_* read-only · D388).
  * The pre-D240 chain had no overlapping keys, so routing order only matters for {@code p1_} / {@code gate_} prefixes.
  */
 public final class CorePapi {
 
     private CorePapi() {}
 
-    public enum Section { ACCOUNT, CASH, KIT, PROGRESS, GATE, P1, STAMINA, PET, NONE }
+    public enum Section { ACCOUNT, CASH, KIT, PROGRESS, GATE, P1, STAMINA, PET, LIFE, NONE }
 
     static final Set<String> ACCOUNT = set("coin", "quest", "quest_objective", "quest_chapter", "signed", "activity",
             "abyss_used", "calamity_next", "covenant", "guildboss_pass", "mail_unread");
@@ -37,6 +38,9 @@ public final class CorePapi {
     /** D384 pet level / feed display (read-only). */
     static final Set<String> PET = set("pet_active_id", "pet_active_name", "pet_level", "pet_max_level",
             "pet_level_line", "pet_feed_cost", "pet_feed_hint", "pet_power_bonus", "pet_unlocked_count");
+    /** D388 life level / daily·weekly quota display (read-only). */
+    static final Set<String> LIFE = set("life_level", "life_xp", "life_xp_next", "life_level_line",
+            "life_soul_daily_left", "life_soul_daily_line", "life_hatch_weekly_left", "life_hatch_weekly_line");
 
     /** key is already lower-cased. Never null. */
     public static Section route(String key) {
@@ -49,6 +53,7 @@ public final class CorePapi {
         if (CASH.contains(key)) return Section.CASH;
         if (STAMINA.contains(key)) return Section.STAMINA;
         if (PET.contains(key)) return Section.PET;
+        if (LIFE.contains(key)) return Section.LIFE;
         return Section.NONE;
     }
 

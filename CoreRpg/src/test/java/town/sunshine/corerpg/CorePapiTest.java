@@ -58,6 +58,9 @@ public final class CorePapiTest {
         assertEquals(PET, CorePapi.route("pet_level"));
         assertEquals(PET, CorePapi.route("pet_feed_hint"));
         assertEquals(PET, CorePapi.route("pet_unlocked_count"));
+        assertEquals(LIFE, CorePapi.route("life_level"));
+        assertEquals(LIFE, CorePapi.route("life_soul_daily_line"));
+        assertEquals(LIFE, CorePapi.route("life_hatch_weekly_line"));
         assertEquals(P1, CorePapi.route("p1_q01_state"));
         assertEquals(P1, CorePapi.route("p1_"));
         assertEquals(GATE, CorePapi.route("gate_elite"));
@@ -76,6 +79,18 @@ public final class CorePapiTest {
         assertEquals(NONE, CorePapi.route("pet"));
         assertEquals(NONE, CorePapi.route("pet_nosuch"));
         assertEquals(P1, CorePapi.route("p1_pet_level")); // p1_ prefix wins; not a pet key
+    }
+
+
+    /** D388: life_* keys route to LIFE; do not steal p1_/gate_/ember_level/pet_*. */
+    @Test public void lifeKeysRoute() {
+        for (String k : CorePapi.LIFE) assertEquals(k, LIFE, CorePapi.route(k));
+        assertEquals(8, CorePapi.LIFE.size());
+        assertEquals(PROGRESS, CorePapi.route("ember_level")); // character level ≠ life
+        assertEquals(NONE, CorePapi.route("life"));
+        assertEquals(NONE, CorePapi.route("life_nosuch"));
+        assertEquals(P1, CorePapi.route("p1_life_level")); // p1_ prefix wins
+        assertEquals(PET, CorePapi.route("pet_level"));
     }
 
     /** Non-p1 %corerpg_*% keys used by live configs all resolve to a section. */
