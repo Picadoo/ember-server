@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（六槽权威文档 + OPS 对齐 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D330）：** tip `80d41c5c` 已关；总控已批 A·M；施工 STATUS [`STATUS-ember-six-slot-authority-ops-align-d330-2026-10-09.md`](STATUS-ember-six-slot-authority-ops-align-d330-2026-10-09.md)。
+
 > **上游结案：** D329 装备页护甲入口诚实 **已落地** @ `7f1b165e`（TrMenu + reload · 零数值）。Stage2 观察中（绿出口不早于 **2026-10-10 17:40 CST** · 必抽 PASS）。K3 T0‴ 已签 PASS（`b085e945`）· **施工等绿出口 · 本窗不抢签**。护甲页三态 / 候选 `_fam` 已诚实。样本 R 全表不得开；天赋/灰印 HOLD；Pack6 硬禁；禁改 ×0.97 / 拧 set_bonus / 观察期部署 K3。
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + 硬规格** · **未改** yml / jar / 菜单 · **零 live**  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md`](../design/DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md) · backlog `B-six-slot-authority-ops-align`  
+**硬规格（已批 A · 批 M · D330）：** [`DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md`](../design/DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md) · backlog `B-six-slot-authority-ops-align`  
 **打开理由：** 观察期要继续推进；玩家面菜单刚收一刀（D329），下一刀证据最硬的是 **权威文档仍写「六槽未上线」** + **OPS 仍写「线上 1.65.97 / 功能没有」且无 `set_bonus` 节**——运维误读风险高；纯 docs，观察期可批 A。
 
 ---
@@ -44,7 +46,7 @@ D329 已落地，**不要再做装备页护甲入口**。护甲页候选套装�
 
 ## 3. 派单句
 
-见 [`DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md`](../design/DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md) · STATUS=待批 A · 荐 M。
+见 [`DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md`](../design/DESIGN-ember-six-slot-authority-ops-align-2026-10-09.md) · **已批 A · 批 M · D330**（原荐 M）。
 
 ---
 
@@ -62,4 +64,4 @@ D329 已落地，**不要再做装备页护甲入口**。护甲页候选套装�
 
 ---
 
-*选题 H · 荐 M · 纯 docs · 禁偷开 R / K3 部署 / 改 ×0.97。*
+*选题 H · 已批 A·M · D330 已落字 · 纯 docs · 禁偷开 R / K3 部署 / 改 ×0.97。*

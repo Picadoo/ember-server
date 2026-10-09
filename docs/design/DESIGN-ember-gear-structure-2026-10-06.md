@@ -17,7 +17,7 @@
 | 战斗槽 | **2 槽：刃（blade）+ 护符（charm）**。没有护甲槽；原版护甲 / 附魔 / 旧 StatService 词条不进 P1 结算 | `EmberItemData.slot`、P1 书 §4.1 / §4.5 |
 | 国庆护符 | `fest_charm`：活动限定外观 / 小幅属性护符，**不是套装件、不参与觉醒** | `ember-v1-festival.yml` `charm`、C18 |
 | 部位锁 | **不按图锁部位**（服主硬约束）：任何能掉装备的图都掉两个部位；地图只决定阶级、家族偏向（`loot_bias`），再叠该图专属签名（§3） | `ember-v1-runs.yml` `maps.<q>.loot` / `loot_bias` |
-| 6 槽 / 8 槽 | **未上线**。D169 6 槽分阶段计划 = SETTLED（文档），代码 HOLD；Stage 0 = 设计 GO，掉落模型经 D246 修正为 GO（w80_cap）；Stage 1 未开（前置已满足）。8 槽（gear8 草稿，未入库）= 取消 | §9 |
+| 6 槽 / 8 槽 | **6 槽已上线观察中**（Stage1 **F** 共鸣 + Stage2 档 **C** 四件套减伤 −3% / ×0.97；bv**62**；开关键 `gear.six_slot.enabled` / `migrate` / `set_bonus`）。权威玩法规格指针：T1 规格 [`DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md`](DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md) · Stage2 set-bonus [`DESIGN-ember-six-slot-stage2-set-bonus-2026-10-08.md`](DESIGN-ember-six-slot-stage2-set-bonus-2026-10-08.md) · T3 rollout [`DESIGN-ember-six-slot-t3-rollout-2026-10-08.md`](DESIGN-ember-six-slot-t3-rollout-2026-10-08.md) · 观察结案 [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) · OPS [`OPS-ember-six-slot-migration.md`](../ops/OPS-ember-six-slot-migration.md)。**8 槽仍取消**。真源优先级不变：代码 / 线上配置 > 本文（D330 勘误） | §9 |
 
 ## 2. 家族、阶级、成色、精工（随机装备）
 
@@ -174,14 +174,16 @@
 | G10 | **已修（D244）** | REG / `EmberEconomy` **S36** 钓鱼产出（`LIFE_ITEM`）、**S37** 扭蛋券发放（`GACHA_TICKET`）、**S38** 扭蛋抽取产出（`COSMETIC`，OUT）、**C19** 扭蛋抽取；C17 加 `LIFE_ITEM`；source map `stocks:` 块登记徽记 / 余烬徽 / 生活件 / 扭蛋券 / 外观库存（§6.2）。只打标签：无金样、无路由、数量不变；库存仍不进 sim（除徽记 D222） |
 | G11 | **已修** | bv41 注释改「6 件调律版 L01/L02/L06/L08/L10/L12，L11b 不开放」 |
 
-## 9. 未来 / 计划状态（不是现行规则）
+## 9. 未来 / 计划状态（与现行对照）
 
-- **D169 6 槽分阶段**：SETTLED（文档），结构代码 HOLD（`/workspace/COORD-gear-structure-hold.txt`）。Stage 1 需服主显式开工，且单独 `balance_version`。
-- **Stage 0 6 槽**：设计 GO；10-04 掉落模型 NO-GO → **D246（10-06）修正后 GO**：w80_cap = 护符 80% / 每件甲 5%，费用 × 0.85 / × 0.05，护甲升阶不超过护符阶级，护甲每局另掉 1 件（全部位、刃 / 护符掉率不变）；静态 42/42、动态 21/21、W30 全路线 ±0.5 内（Stage 0 文档 D246 节）。Stage 1 前置已满足，代码待总控 / 服主显式开工。
+- **六槽 Stage1 + Stage2（现行）：** **已部署观察中**（D324/D325 · jar `1.65.99-d325.local` · bv**62** · `enabled`/`migrate`/`set_bonus` 开）。Stage1 **F**（甲阶级/强化随护符；成色/精工/族独立；护符费用 **×1.0**）；Stage2 档 **C**（四件套激活受伤 ×0.97 / −3%，不进 B/H）。观察结案另签（D326）；绿出口不早于 2026-10-10 17:40 CST。
+- **HOLD 仅适用于未授权项：** K3 同部位熔炼（T0‴ PASS · **施工等绿出口**）、档 S、Pack6、样本 R 全表、天赋/灰印续跑等——**不得**把「结构 HOLD」误读成六槽未上线。
+- **D169 6 槽分阶段（历史）：** SETTLED（文档）；代码路径已由 T1→T3 显式开工并部署；旧 HOLD 文件 `/workspace/COORD-gear-structure-hold.txt` 不再代表线上状态。
+- **Stage 0 6 槽（历史模拟）：** 设计 GO；D246 w80_cap 费用 ×0.85 / ×0.05 等为**历史模拟口径**；**现行 F 护符费用 ×1.0**（甲无工坊养成 / K0）。掉落模型经 D246 修正过线（静态 42/42、动态 21/21、W30 ±0.5）。
 - **物品来源记录**：D245（1.65.70）已上线（§6.1），ARCH 系统图 S4 第 4 步完成。
 - **D168 8 槽**：取消。
 - **D167 随机锻造**：设计-only。
-- **成长 sidegrade**：待 6 槽复核。
+- **成长 sidegrade**：待另签复核（不阻塞现行六槽观察）。
 - **D174 主线解锁**：阶段 1 / 1.5 / 2a / 2b / 3 已上线，2c 暂缓。
 - 硬约束：不按图锁部位；外观 / 粒子 / 宠物仍暂停。
 
@@ -194,3 +196,4 @@
 | 2026-10-06 | D244（ARCH S4-3，CoreRpg 1.65.69 / bv58）：G10 修（S36–S38 / C19 登记、C17 加 LIFE_ITEM、source map `stocks:` 块 + `stocksMatchEconomyAndItemConfigs`）。另：词缀原语导出表 `tools/p1sim/affix-table.json`，p1sim 读表（见 `DESIGN-ember-affix-primitives-d241.md` §3.1）。数量不变。 |
 | 2026-10-06 | D245（ARCH S4-4，CoreRpg 1.65.70 / bv58）：物品来源记录 `origin`（NBT `om/os/or/ot` + `cr_p1_item.origin`），行为中性，旧件照常有效；`ember-source-map.yml` `item_provenance:` + `itemProvenanceMatchesCode`。全套 547 / 0（JDK8）。D246（6 槽掉落模型重跑）未完成，不在本次。 |
 | 2026-10-06 | D246（离线，无发版，1.65.70 / bv58 不变）：p1sim 共同随机数（`P1SIM_CRN=1`，默认输出逐位不变）+ 配对 CI 工具；旧刷图 W30 残差 = 随机流错位伪影；6 槽掉落模型修正 w80_cap 过全部 gate（42/42 · 21/21 · W30 最早 5.36→5.50）。Stage 1 前置满足，代码仍待显式开工。 |
+| 2026-10-09 | **D330（docs-only）**：六槽权威勘误——§1 改为「已上线观察中」（F+Stage2 C · bv62 · 三开关）；§9 改为 Stage1+2 已部署观察，HOLD 仅未授权项；Stage0 ×0.85 标明历史模拟、现行 F 护符 ×1.0。零 jar/yml/玩法。 |

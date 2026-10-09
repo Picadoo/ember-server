@@ -1,35 +1,38 @@
 # 运维手册 · 余烬六槽护甲迁移（gear.six_slot）
 
 - 适用对象：运维 / OP（权限 `corerpg.admin`）。本手册只列游戏内或控制台可用的命令，均以代码为准。
-- 代码基准：CoreRpg `origin/main`，含 D319–D321：invsnap 守卫、孤儿标签清理、收尾存档、完成前等 DB 确认、pieces 自愈、待领与开关脱钩、audit 把待领计入 held。线上目前仍跑 1.65.97，**这里所有功能线上都没有**。开关默认关，未部署。
-- 本手册**不授权**任何上线、切开关或迁移动作。T2 演练、T3 上线、部署都要各自另签（见 `docs/status/STATUS-ember-six-slot-t1-accept-test-2026-10-08.md` 的总控签字）。
-- 相关文档：规格 `docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md`；T2 演练计划 `docs/status/PLAN-ember-six-slot-t2-drill.md`。
+- **线上状态（D330 口径钉死）：** jar **`1.65.99-d325.local`** · `balance_version` **62** · Stage1 **F** + Stage2 档 **C** · 三开关 **`enabled` / `migrate` / `set_bonus` 均为 true** · **观察中**（绿出口另签，不早于 **2026-10-10 17:40 CST**）。真源：**代码 / 线上配置 > 本文**。
+- 代码基准：CoreRpg `origin/main`（含 D319–D325：invsnap 守卫、孤儿标签清理、收尾存档、完成前等 DB 确认、pieces 自愈、待领与开关脱钩、audit 待领计入 held、Stage2 `set_bonus` 四件套减伤）。代码默认三键仍为 `false`；**线上观察中为 true**——以线上 `ember-v1.yml` 与 `/corerpg p1 armor status` 为准。
+- 本手册**不擅自授权**任何上线、切开关、改 ×0.97 或迁移动作；须总控另签。T2 演练、T3 上线、部署、观察关窗、回滚都要各自另签。
+- 相关文档：规格 `docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md`；Stage2 `docs/design/DESIGN-ember-six-slot-stage2-set-bonus-2026-10-08.md`；观察结案 `docs/design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`；T2 演练计划 `docs/status/PLAN-ember-six-slot-t2-drill.md`；权威勘误 STATUS `docs/status/STATUS-ember-six-slot-authority-ops-align-d330-2026-10-09.md`。
 
 ---
 
-## 1. 两个开关
+## 1. 三个开关
 
 | 键（`plugins/CoreRpg/ember-v1.yml`） | 代码默认 | 作用 |
 |---|---|---|
 | `gear.six_slot.enabled` | `false` | 总开关。关：装备计算走 2 槽公式，逐位不变（T1-1 golden）。甲位上的东西一律忽略，护甲页（只显示「护甲功能尚未开放」）、结算掉甲、护甲 PAPI 都不生效。**例外：待领领取与开关无关**（D320 ④），有待领时开关关也能领，护甲 PAPI 的待领三个键也照常有值。还要求 P1 模式本身开着（同一文件顶层的 `enabled: true`）。 |
 | `gear.six_slot.migrate` | `false` | 老角色一次性迁移。只在总开关也开着时才有效（代码：`migrateEnabled() = enabled() && migrate`）。 |
+| `gear.six_slot.set_bonus` | `false` | Stage2 四件套减伤（档 C：激活时受伤 ×0.97 / −3%，**不进 B/H**）。须 `enabled`。关：无四件套减伤；迁移 / 甲属性仍按 `enabled`。 |
 
-线上的 `ember-v1.yml` 和 jar 内自带的 yml **都没有这两个键**，缺省就是关。
+代码缺省为关。**线上观察中三键均为 `true`**（以线上 yml / `armor status` 为准）。缺键时按代码默认 `false`。
 
 ### 1.1 写法
 
-在 `plugins/CoreRpg/ember-v1.yml` 顶层新增一段（文件里原本没有顶层 `gear:`）：
+在 `plugins/CoreRpg/ember-v1.yml` 顶层 `gear.six_slot` 段（观察期线上示例）：
 
 ```yaml
 gear:
   six_slot:
     enabled: true
     migrate: true
+    set_bonus: true
 ```
 
 - 不要写到 `storage.gearlib` 下面，那是装备库，跟这里无关。
-- 改完在控制台执行 `/corerpg reload`，它会重读 `config.yml` 和 `ember-v1.yml`。
-- 拿一个在线的号核对：`/corerpg p1 armor status <玩家>`，输出末尾的 `enabled=… migrate=…` 是当前实际生效的值。
+- 改完在控制台执行 `/corerpg reload`，它会重读 `config.yml` 和 `ember-v1.yml`。**观察期禁擅自改真值**（须总控签）。
+- 拿一个在线的号核对：`/corerpg p1 armor status <玩家>`，输出末尾的 `enabled=… migrate=…`（及面板/日志中的 set_bonus 生效态）是当前实际生效的值。
 
 ### 1.2 开启顺序
 
@@ -60,6 +63,14 @@ gear:
   - 进服时重发作废 uid 这一步照常进行（它只要求总开关开着）。
   - 注意：只要 `enabled` 还开着，还没迁移的玩家就一直按空甲位计算（见 1.2 第 2 步）。所以迁移窗口结束后是否保留 `enabled`，要由总控定。
 - **全部回滚**：先确认没有未决 journal（见 §7.1），再把两个键都改成 `false`，`/corerpg reload`。完成后的状态见 §7。
+
+### 1.4 观察期（Stage2 · D326 / D330）
+
+- **红线 / 绿出口：** 见 [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) 与 [`STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md`](../status/STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md)。绿出口须另签；满窗不早于 **2026-10-10 17:40 CST**；必抽整轮 ≥1 PASS。
+- **禁默改 ×0.97：** 档 C 减伤倍率钉死；观察期不得拧倍率、不得把减伤改写进 B/H。
+- **回滚解耦：** 回滚 / 关 `set_bonus` **与** Stage1 的 `enabled` / `migrate` **解耦**——可只关四件套减伤而保留六槽甲路径与迁移；全关仍按 §1.3 / §7（先清未决 journal）。
+- **备份路径：** `/workspace/tmp/d325-bv62-backup-20261008173047/`（D325 live 备份）。触发红线（双计减伤、B/H 漂移、迁移回归、跨服复制等）时按观察结案回滚，勿手删 `p1-six` / 标签。
+- **K3：** T0‴ 已签 PASS，**施工 / 部署等绿出口**；本手册不授权观察期部署 K3。
 
 ---
 
