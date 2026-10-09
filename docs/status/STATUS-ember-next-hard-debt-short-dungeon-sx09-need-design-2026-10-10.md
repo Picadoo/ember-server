@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D412 · 短征 sx09 · 烬渠跳石 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D412** · tip `a35ae9bd` · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx09-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx09-2026-10-10.md) · 首航 rooms×3+boss · S48 80/4/3 · 首通100/6/1 · 体力30 · p1_sx09_day×3 · 九本选页 · 真离散跳石≥3 禁连续窄桥换皮 · **施工中** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常**。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D412** · tip `a35ae9bd` · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx09-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx09-2026-10-10.md) · 首航 rooms×3+boss · S48 80/4/3 · 首通100/6/1 · 体力30 · p1_sx09_day×3 · 九本选页 · 真离散跳石≥3 禁连续窄桥换皮 · **骨架已落** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常**。下文为交稿原文，保留备查。
 >
-> **【D412 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D411 / next_farm**
+> **【D412 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中·骨架已落** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D411 / next_farm**
 >
 > **上游结案：** 总控【D410 PASS · sx09 闸开】spot `b37aeca3` → **现可选题含 sx09**；D411 next_farm **施工中**（禁复述当本债主交付）。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D412** · **施工中** · docs-only · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
-**硬规格（已批 A · 方案 M · D412 · 施工中）：** [`DESIGN-ember-short-dungeon-sx09-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx09-2026-10-10.md) · backlog `B-short-dungeon-sx09`（**已批/施工中**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D412** · **施工中·骨架已落** · docs-only · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 方案 M · D412 · 骨架已落）：** [`DESIGN-ember-short-dungeon-sx09-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx09-2026-10-10.md) · backlog `B-short-dungeon-sx09`（**已批/施工中·骨架已落**） · STATUS [`STATUS-ember-short-dungeon-sx09-d412-2026-10-10.md`](STATUS-ember-short-dungeon-sx09-d412-2026-10-10.md)  
 **打开理由：** 短征八本（sx01–sx08）已可达且 D410 全链路 PASS；下一真增量=**第九条**同范式、**渠岸→跳石渡渠→对岸**新结构维的短本，继续拉日刷内容量。
 
 ---
@@ -70,7 +70,4 @@
 
 ## 变更记录
 
-| 日 | 事 |
-|----|-----|
-| 2026-10-10 | 策划 · tip 打开 · 选题短征 sx09 烬渠跳石 · DESIGN 待批 A·荐 M（拟 D412）· 上游 D410 PASS @`b37aeca3` · D411 施工中 |
-| 2026-10-10 | **旁注已关** · 总控批 A·M · D412 · 设计待批关闭 · **施工中** · 首航 rooms×3+boss · S48 80/4/3 · 首通100/6/1 · 体力30 · p1_sx09_day×3 · 九本选页 · 真离散跳石≥3 禁连续窄桥换皮 |
+| 2026-10-10 | **骨架已落** · map abyss 壳 + DP EmberSx09 + 九本选页 T=sx09 · day_line/fc 注释预留 · STATUS-ember-short-dungeon-sx09-d412 · backlog → 已批·施工中·骨架已落 |
