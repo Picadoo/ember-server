@@ -1,12 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（内容展示/同屏/互指波 exhausted · docs-only · ≠关观察 · ≠开闸 · ≠开 R）
 
-> **【待批 A · 荐 M】** tip+DESIGN docs-only · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠空跳转 ≠回盘 E/F ≠复述 D373–D389** · **诚实 exhausted（非硬凑又一张 PAPI/跳转/回盘）**
+> **旁注（已关 · 批 A · 批 M · D390）：** tip `9d9dfd04` 已关；总控已批 A·M；STATUS [`STATUS-ember-content-display-wave-exhausted-d390-2026-10-10.md`](STATUS-ember-content-display-wave-exhausted-d390-2026-10-10.md) · 展示波 exhausted 已确认 · **总控点名下一主题=①新短本房（P1可达+经济）；暂不②T5/③Stage4** · **≠关观察 ≠开闸 ≠开 R ≠抬日表** · 否决 W。
 
 > **上游结案：** 总控 D389 生活等级同屏已挂 @`8bb5e822`（jar d388）→「请交下一内容真债 tip（挂机/日更/有趣系统；禁复述 D373–D389；禁抬日表/开R/Pack6/天赋灰印/关观察/改×0.97/开K3/空跳转/回盘E/F）。若扫空则诚实 exhausted。」Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A · 荐 M** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime** · **诚实内容展示波 exhausted**  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-content-display-wave-exhausted-2026-10-10.md`](../design/DESIGN-ember-content-display-wave-exhausted-2026-10-10.md) · backlog `B-content-display-wave-exhausted`  
+**本窗性质：** tip **已关** · **已批 A·M·D390** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime** · **诚实内容展示波 exhausted（非硬凑又一张 PAPI/跳转/回盘）**  
+**硬规格（已批 A · 批 M · D390 · 展示波 exhausted 已确认 · 下一主题=①新短本房（P1可达+经济）；暂不②T5/③Stage4 · ≠关观察 ≠开闸 ≠抬日表）：** [`DESIGN-ember-content-display-wave-exhausted-2026-10-10.md`](../design/DESIGN-ember-content-display-wave-exhausted-2026-10-10.md) · backlog `B-content-display-wave-exhausted`  
 **打开理由：** D373–D389 内容向（使魔闭环→日更 Cast/可躲→互指链→挂机层钩→使魔/生活 PAPI 同屏→副手回盘）已齐；严扫 TrMenu/MM/backlog/`git log -150`，**无**「非又一个 PAPI 同屏 / 又一张跳转 / 又回盘」且带配置证据的新玩法缺口可写成待批 A。按派单允许 **诚实 exhausted**。
 
 ---
@@ -65,7 +65,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 方案 M（内容展示波 exhausted · 请总控点名新短本/新层/Stage4 等主题）。
+见 DESIGN 同 slug · STATUS=已批 A·M·D390 · 方案 M（内容展示波 exhausted · 下一主题=①新短本房（P1可达+经济）；暂不②T5/③Stage4）。
 
 ---
 
@@ -83,4 +83,4 @@
 
 ---
 
-*选题 L · tip 待批 A · 荐 M · 内容展示波 exhausted · ≠关观察 · ≠开闸 · ≠抬日表。*
+*选题 L · tip 已关 · 已批 A·M·D390 · 内容展示波 exhausted · 下一主题=①新短本房（P1可达+经济）；暂不②T5/③Stage4 · ≠关观察 · ≠开闸 · ≠抬日表。*
