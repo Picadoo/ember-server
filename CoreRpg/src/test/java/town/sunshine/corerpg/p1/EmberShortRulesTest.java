@@ -21,7 +21,7 @@ import org.yaml.snakeyaml.Yaml;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D391–D403: short expedition sx01–sx06 — entry gate + S40–S45 settle grants.
+ * D391–D403/D406: short expedition sx01–sx06 — entry gate + S40–S45 settle grants + fc aggregate.
  */
 public class EmberShortRulesTest {
 
@@ -564,6 +564,33 @@ public class EmberShortRulesTest {
             assertNull(m.validate());
             assertTrue(maps.validate().stream().noneMatch(e -> e.startsWith("sx06:")));
         }
+    }
+
+    /** D406: six short maps resolve via shortMaps + firstClearLabel (mapField fc path). */
+    @Test
+    public void shortMaps_firstClearLabel_D406_sixFcSample() throws Exception {
+        assertEquals(6, EmberShortRules.SHORT_KEYS.length);
+        try (InputStream in = EmberRunMaps.class.getResourceAsStream("/ember-v1-runs.yml");
+             Reader r = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> y = (Map<String, Object>) new Yaml().load(r);
+            EmberRunMaps maps = EmberRunMaps.parse(y);
+            for (String mk : EmberShortRules.SHORT_KEYS) {
+                EmberRunMaps.MapDef m = maps.byKey(mk);
+                assertNotNull(mk + " missing from shortMaps/byKey", m);
+                assertTrue(mk + " not shortExpedition", m.shortExpedition);
+                assertTrue(mk + " not in shortMaps", maps.shortMaps.containsKey(mk));
+                String label = m.firstClearLabel();
+                assertNotNull(mk + " firstClearLabel null", label);
+                assertFalse(mk + " firstClearLabel empty", label.isEmpty());
+                assertFalse(mk + " label should not be 已领取 (unpaid display)", "已领取".equals(label));
+                // unpaid → label; paid → 已领取 (EmberRunPapi.mapField fc) — route confirms MAP
+                assertEquals(mk + "_fc must route MAP", EmberRunPapi.Section.MAP, EmberRunPapi.route(mk + "_fc"));
+            }
+        }
+        assertEquals("六本首通已齐", EmberShortRules.fcPendingLine(0));
+        assertEquals("还有 6 本生涯首通未领", EmberShortRules.fcPendingLine(6));
+        assertEquals(4, EmberShortRules.fcLeft(4));
     }
 
     @Test

@@ -49,7 +49,7 @@ public final class EmberRunPapi {
         CODEX,
         /** D318 armor / armor_* (六槽护甲页, {@link EmberSixPapi}) */
         ARMOR,
-        /** D395 short day-cap: sx0N_day / sx0N_day_line / sx0N_day_left / sx_day_left_sum */
+        /** D395 short day-cap + D406 fc aggregate: sx0N_day* / sx_day_left_sum / sx_fc_left / sx_fc_pending_line */
         SHORT,
         /** D404 vault balance + recipe gap: vault_* / recipe_gap_* */
         VAULT,
@@ -127,10 +127,11 @@ public final class EmberRunPapi {
                 || "held_is_armor".equals(key);
     }
 
-    /** D395: sx0N_day / sx0N_day_line / sx0N_day_left / sx_day_left_sum (not map fields). */
+    /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
     static boolean isShortDayKey(String key) {
         if (key == null) return false;
         if ("sx_day_left_sum".equals(key)) return true;
+        if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key)) return true; // D406
         // sx0N_day | sx0N_day_line | sx0N_day_left  (map key length 4: sx01..)
         if (key.length() < 8 || !key.startsWith("sx0")) return false;
         int us = key.indexOf('_');
@@ -266,9 +267,19 @@ public final class EmberRunPapi {
      */
     private String shortDay(PlayerData d, String key, EmberRunMaps maps) {
         EmberShortService shortEx = runs.shortExpedition();
+        if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key)) { // D406 optional aggregate
+            int unpaid = 0;
+            for (String mk : EmberShortRules.SHORT_KEYS) {
+                EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(mk);
+                if (m == null || !runs.firstCleared(d, m)) unpaid++;
+            }
+            unpaid = EmberShortRules.fcLeft(unpaid);
+            if ("sx_fc_left".equals(key)) return String.valueOf(unpaid);
+            return EmberShortRules.fcPendingLine(unpaid);
+        }
         if ("sx_day_left_sum".equals(key)) {
             int sum = 0;
-            for (String mk : new String[] {"sx01", "sx02", "sx03", "sx04", "sx05", "sx06"}) {
+            for (String mk : EmberShortRules.SHORT_KEYS) {
                 sum += EmberShortRules.dayLeft(rewardedFor(d, maps, shortEx, mk), capFor(maps, shortEx, mk));
             }
             return String.valueOf(sum);

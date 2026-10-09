@@ -141,6 +141,22 @@ public final class EmberShortRules {
         return Math.max(0, Math.max(0, dailyCap) - Math.max(0, rewardedToday));
     }
 
+    /** Canonical short expedition keys (sx01–sx06). D406 fc aggregate scan order. */
+    public static final String[] SHORT_KEYS = {"sx01", "sx02", "sx03", "sx04", "sx05", "sx06"};
+
+    /** D406 %corerpg_p1_sx_fc_left%: unpaid first-clear count clamped to 0..6. */
+    public static int fcLeft(int unpaidCount) {
+        int n = Math.max(0, unpaidCount);
+        return n > SHORT_KEYS.length ? SHORT_KEYS.length : n;
+    }
+
+    /** D406 optional %corerpg_p1_sx_fc_pending_line%. */
+    public static String fcPendingLine(int unpaidCount) {
+        int n = fcLeft(unpaidCount);
+        if (n <= 0) return "六本首通已齐";
+        return "还有 " + n + " 本生涯首通未领";
+    }
+
     /** Claim counter id for a short map key ({@code p1_sx01_day} …). */
     public static String claimKey(String mapKey) {
         if (mapKey == null || mapKey.isEmpty()) return CLAIM;

@@ -47,9 +47,10 @@ public final class EmberRunPapiTest {
         r(CODEX, "codex_count", "codex_stage_0", "codex_burst_blade_t1", "codexx");
         r(ARMOR, "armor_on", "armor_head", "armor_chest_cand", "armor_legs_delta", "armor_boots_fam", "armor_set", "armor_set_active", "armor_set_busy", "armor_sa", "armor_sb", "armor_all", "armor_stash_line"); // D318 + D335 sa/sb
         r(SHORT, "sx01_day", "sx02_day", "sx03_day", "sx04_day", "sx05_day", "sx06_day", "sx01_day_line", "sx02_day_line", "sx03_day_line", "sx04_day_line", "sx05_day_line", "sx06_day_line",
-                "sx01_day_left", "sx02_day_left", "sx03_day_left", "sx04_day_left", "sx05_day_left", "sx06_day_left", "sx_day_left_sum"); // D395+D397+D400+D403
+                "sx01_day_left", "sx02_day_left", "sx03_day_left", "sx04_day_left", "sx05_day_left", "sx06_day_left", "sx_day_left_sum",
+                "sx_fc_left", "sx_fc_pending_line"); // D395+D397+D400+D403+D406
         r(VAULT, "vault_shard", "vault_bone", "vault_core", "vault_blank", "recipe_gap_enhance1", "recipe_gap_upgrade_t2", "recipe_gap_refine1"); // D404
-        r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx03_fc", "sx04_fc", "sx05_fc", "sx06_fc");
+        r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx01_fc", "sx02_fc", "sx03_fc", "sx04_fc", "sx05_fc", "sx06_fc"); // D406 six _fc → MAP
     }
 
     /** Order pins where a later check shares a prefix with an earlier one (old first-match must win). */
@@ -84,6 +85,11 @@ public final class EmberRunPapiTest {
         assertTrue(EmberRunPapi.isShortDayKey("sx06_day"));
         assertTrue(EmberRunPapi.isShortDayKey("sx06_day_line"));
         assertTrue(EmberRunPapi.isShortDayKey("sx_day_left_sum"));
+        assertTrue(EmberRunPapi.isShortDayKey("sx_fc_left")); // D406
+        assertTrue(EmberRunPapi.isShortDayKey("sx_fc_pending_line"));
+        assertEquals(SHORT, EmberRunPapi.route("sx_fc_left"));
+        assertEquals(SHORT, EmberRunPapi.route("sx_fc_pending_line"));
+        assertEquals(MAP, EmberRunPapi.route("sx01_fc")); // per-map fc stays MAP
         assertFalse(EmberRunPapi.isShortDayKey("sx01_state"));
         assertFalse(EmberRunPapi.isShortDayKey("sx01_day_extra"));
         assertTrue(EmberRunPapi.isVaultKey("vault_shard"));
@@ -152,6 +158,14 @@ public final class EmberRunPapiTest {
         assertEquals("胚差3·骨差5", EmberRunPapi.recipeGapRefine1(0, 0));
         assertEquals("胚差0·骨差0", EmberRunPapi.recipeGapRefine1(3, 5));
         assertEquals("胚差1·骨差2", EmberRunPapi.recipeGapRefine1(2, 3));
+        // D406 short first-clear aggregate (Bukkit-free)
+        assertEquals(0, EmberShortRules.fcLeft(0));
+        assertEquals(6, EmberShortRules.fcLeft(6));
+        assertEquals(6, EmberShortRules.fcLeft(99));
+        assertEquals(3, EmberShortRules.fcLeft(3));
+        assertEquals("六本首通已齐", EmberShortRules.fcPendingLine(0));
+        assertEquals("还有 1 本生涯首通未领", EmberShortRules.fcPendingLine(1));
+        assertEquals("还有 6 本生涯首通未领", EmberShortRules.fcPendingLine(6));
     }
 
     /** EmberRunService keeps only a one-line delegate; no section body is left behind. */
