@@ -1,12 +1,12 @@
 # 余烬 · 使魔选定盘面化（有趣系统 · list→可点换宠 · ≠抬日表 · ≠sx06）
 
-STATUS=**已批 A · 方案 M1 · D402** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-pet-select-menu`（**已批/待施工·菜单岗**）· **施工另派 TrMenu** · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx06 ≠复述 D373–D401 为主交付 ≠空跳转当主交付 ≠教玩家手打指令**
+STATUS=**已批 A · 批 M1 · D402 · 已落地** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-pet-select-menu-need-design-2026-10-10.md)（**已关 · 已批·已落地**）· backlog `B-pet-select-menu`（**已关 · 已落地**）· STATUS [`STATUS-ember-pet-select-menu-d402-2026-10-10.md`](../status/STATUS-ember-pet-select-menu-d402-2026-10-10.md) · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx06 ≠教玩家手打指令**
 
 > **一句话玩家价值：** 打开使魔页就能**点一下换灰灵/烬火**——不再靠聊天 list 和手打 `/corerpg pet summon <id>`；养成旁轨从「能养」变成「愿意换着玩」。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx06。**
 >
-> **总控批 A·M1 · 2026-10-10：** 采纳方案 **M1**（薄页 `ember_pet_select` · L→选定 · 灰灵/烬火点 `summon <id>` · 玩家路径禁教斜杠 · 未解锁禁假写已拥有；**非** M2 本页两格）；**施工另派 TrMenu**；≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3。
+> **总控批 A·M1 · 2026-10-10：** 采纳方案 **M1**（薄页 `ember_pet_select` · L→选定 · 灰灵/烬火点 `summon <id>` · 玩家路径禁教斜杠 · 未解锁禁假写已拥有；**非** M2 本页两格）；**同号已落地 TrMenu**；≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3 · 零改 Java/afk/Stage2。
 
 ---
 
@@ -62,7 +62,7 @@ STATUS=**已批 A · 方案 M1 · D402** · 2026-10-10 · tip [`STATUS-ember-nex
 - [x] **方案 M1**（薄页 `ember_pet_select` · W1a–W1d 见 §2；**钉死 M1，非 M2 本页两格**）
 - [x] 钉死：薄页 `ember_pet_select` · 格 L → `menu: ember_pet_select` · 两宠可点选定（`pet_ember_ashling` / `pet_ember_cinder`）· 复用现网 `summon <id>` · 玩家路径禁教手打斜杠 · 未解锁禁假写已拥有 · 底栏返回 `ember_pet`
 - [x] 否决 A（只改 lore 仍 list）/ L（新宠/改 feed/大 API 当默认真）/ W（sx06/假开旧日常/空转）· **否决本窗默认真采用 M2**（本页两格；施工若极薄可另议，本批钉 M1）
-- [x] 批注：总控批 A·M1 · 2026-10-10 · D402 · **施工另派 TrMenu** · ≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3
+- [x] 批注：总控批 A·M1 · 2026-10-10 · D402 · **同号已落地 TrMenu** · ≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3 · 零改 Java/afk/Stage2
 
 ---
 
@@ -162,7 +162,7 @@ STATUS=**已批 A · 方案 M1 · D402** · 2026-10-10 · tip [`STATUS-ember-nex
 
 ---
 
-*D402 · 使魔选定盘面化 · 已批 A·方案 M1 · 施工另派 TrMenu · ≠关观察 ≠抬日表 ≠sx06。*
+*D402 · 使魔选定盘面化 · 已批 A·M1 · 已落地 · ≠关观察 ≠抬日表 ≠sx06。*
 
 ---
 
@@ -170,3 +170,4 @@ STATUS=**已批 A · 方案 M1 · D402** · 2026-10-10 · tip [`STATUS-ember-nex
 |----|------|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D402 · tip @`e12c548c` |
 | 2026-10-10 | **已批 A · 方案 M1 · D402** · 总控批注勾选（薄页 `ember_pet_select` · L→选定 · summon <id> · 非 M2）· **施工另派 TrMenu** · ≠关观察 ≠抬日表 ≠sx06 |
+| 2026-10-10 | **已落地** · `ember_pet_select` + `ember_pet` L · 去 list · Open 换宠 tell · 去生活孵化半行 · tip/backlog 已关 · ≠改 Java/afk/Stage2 |

@@ -1,0 +1,110 @@
+# D402 · 使魔选定盘（list→可点换宠 · ≠教手打斜杠 · ≠抬日表 · ≠sx06）
+# 入口：ember_pet 格 L「选定使魔/换一只」· 复用现网 summon <id>
+# DESIGN-ember-pet-select-menu-2026-10-10 §2.1 M1
+Title: '§a使魔 · 选定'
+
+Bindings:
+  Commands:
+    - '(?i)ember_pet_select'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 200
+
+Layout:
+  - '#########'
+  - '#   I   #'
+  - '# A   C #'
+  - '#   L   #'
+  - '####B####'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.8'
+    - 'tell: §a【使魔】 §7点灰灵或烬火切换出战'
+    - 'tell: §8未解锁：生活页孵化 / 持蛋点选（插件诚实拒门）'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  I:
+    update: 20
+    display:
+      material: name tag
+      name: '§a当前选定'
+      lore:
+        - ''
+        - '§7选定：§f%corerpg_pet_active_name%'
+        - '§e%corerpg_pet_level_line%'
+        - '§7已解锁：§f%corerpg_pet_unlocked_count%'
+        - ''
+        - '§8点下方灰灵 / 烬火切换出战'
+
+  A:
+    update: 20
+    display:
+      material: slime ball
+      name: '§a余烬灰灵'
+      lore:
+        - ''
+        - '§7点一下：选定并出战'
+        - '§8当前选定：§f%corerpg_pet_active_name% §8· %corerpg_pet_level_line%'
+        - ''
+        - '§8未解锁：生活页孵化 / 持蛋点选'
+        - '§8禁假写「已拥有」· 点后走插件拒门'
+        - ''
+        - '§a➥ §f选定灰灵并出战'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.5'
+        - 'tell: §a【使魔】 §7切换灰灵…'
+        - 'command: corerpg pet summon pet_ember_ashling'
+
+  C:
+    update: 20
+    display:
+      material: blaze powder
+      name: '§6余烬烬火'
+      lore:
+        - ''
+        - '§7点一下：选定并出战'
+        - '§8当前选定：§f%corerpg_pet_active_name% §8· %corerpg_pet_level_line%'
+        - ''
+        - '§8未解锁：生活页孵化 / 持蛋点选'
+        - '§8禁假写「已拥有」· 点后走插件拒门'
+        - ''
+        - '§6➥ §f选定烬火并出战'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'tell: §6【使魔】 §7切换烬火…'
+        - 'command: corerpg pet summon pet_ember_cinder'
+
+  L:
+    display:
+      material: bread
+      name: '§d去生活孵化'
+      lore:
+        - ''
+        - '§7未解锁时去补给 · 生活孵化'
+        - '§8旧靴/碎骨兑魂尘 · 非挂机日表'
+        - ''
+        - '§d➥ §f打开补给 · 生活'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1.2'
+        - 'menu: ember_life'
+
+  B:
+    display:
+      material: arrow
+      name: '§7返回使魔'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_pet'

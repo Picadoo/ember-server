@@ -3,6 +3,7 @@
 # D378：使魔→生活兑魂尘跳转 · DESIGN-ember-pet-life-jump-2026-10-10
 # D385：等级/投喂进度同屏（PAPI）· DESIGN-ember-pet-level-papi-2026-10-10 §2.2
 # D387：I/S/E 补 update:20 · 投喂后同会话 lore 刷新
+# D402：L 改选定盘（list→可点换宠）· DESIGN-ember-pet-select-menu-2026-10-10 §2.1 M1
 # 使魔
 
 Title: '§a余烬 · 使魔'
@@ -23,7 +24,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
-    - 'tell: §a【使魔】 §7收集出战 · 偏外观与微量助战（≤战力 5%）。'
+    - 'tell: §a【使魔】 §7点灰灵或烬火切换出战'
     - 'tell: §8魂尘：补给 · 生活（旧靴/碎骨兑换）· 非挂机日表'
     - 'tell: §8缺魂尘：点本页「去生活兑魂尘」'
     - 'tell: §8本页可见等级与下一级魂尘'
@@ -61,19 +62,19 @@ Icons:
   L:
     display:
       material: book and quill
-      name: '§e使魔图鉴'
+      name: '§e选定使魔 / 换一只'
       lore:
         - ''
-        - '§7查看已收集使魔与碎片进度'
-        - '§8掉落蛋 / 碎片合成'
+        - '§7点开选定盘：灰灵 / 烬火'
+        - '§8点一下切换出战 · 不用聊天 list'
         - ''
-        - '§8点击查看已拥有使魔'
+        - '§8未解锁：生活页孵化 / 持蛋点选'
         - ''
-        - '§e➥ §f查看说明'
+        - '§e➥ §f打开选定盘'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
-        - 'command: corerpg pet list'
+        - 'menu: ember_pet_select'
 
   E:
     update: 20

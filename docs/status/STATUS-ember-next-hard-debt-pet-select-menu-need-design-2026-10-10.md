@@ -1,15 +1,15 @@
-# 状态 · 下一档硬债选定 · 需策划（拟 D402 · 使魔选定盘面化 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx06）
+# 状态 · 下一档硬债选定 · 需策划（拟 D402 · 使魔选定盘面化 · **已关 · 已批 A·M1 · 已落地** · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx06）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M1 · D402** · tip `e12c548c` · 指针 DESIGN [`DESIGN-ember-pet-select-menu-2026-10-10.md`](../design/DESIGN-ember-pet-select-menu-2026-10-10.md) · **施工另派 TrMenu · 交菜单岗** · 钉死薄页 `ember_pet_select`（非 M2）· 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3**。下文为交稿原文，保留备查。
+> **旁注（已关 · 已落地）· 2026-10-10：** 总控 **已批 A · 方案 M1 · D402 · 已落地** · tip `e12c548c` · 落地 STATUS [`STATUS-ember-pet-select-menu-d402-2026-10-10.md`](STATUS-ember-pet-select-menu-d402-2026-10-10.md) · 薄页 `ember_pet_select` + `ember_pet` L · **≠关观察 ≠抬日表 ≠sx06 ≠开 R ≠开 K3 ≠改 Java/afk/Stage2**。下文为交稿原文，保留备查。
 >
-> **【D402 · 已批 A · 方案 M1】** tip+DESIGN **已批 · 设计待批关闭** · **施工另派 TrMenu · 已批/待施工·菜单岗** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx06** · **≠复述 D373–D401 为主交付**（含周目标刚批、五本短征、配方速览、枢纽旁注、等级同屏） · **≠空跳转 / 空转菜单复扫** · **≠ stage 脏 runtime**
+> **【D402 · 已关 · 已批 A · 批 M1 · 已落地】** tip+DESIGN **关闭** · **零 jar** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx06** · **≠教玩家手打 `/corerpg pet`**
 
-> **上游结案：** 总控【催 D402 tip】D401 施工中；D400 day_line 已挂、抽测中。请交下一内容向 tip（有趣/挂机/日更体验；**sx06 等 D400 PASS**）。Stage2 观察照续（**≠关窗 ≠改×0.97**）。
+> **上游结案：** 总控批 A·M1 · 同号施工 TrMenu 已落地 · tip 关。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M1 · D402** · **施工另派 TrMenu** · docs-only  
-**硬规格（已批 A · 方案 M1 · D402 · 施工另派 TrMenu）：** [`DESIGN-ember-pet-select-menu-2026-10-10.md`](../design/DESIGN-ember-pet-select-menu-2026-10-10.md) · backlog `B-pet-select-menu`（**已批/待施工·菜单岗**）  
-**打开理由：** 使魔页「图鉴」仍 `corerpg pet list` **聊天灌指令**；换宠须手打 `summon <id>`——违「玩家不打指令」UX，且与 D373 出战可点、D385 等级同屏同页并存成**半假平面**。
+**本窗性质：** tip **已关 · 已批 A·M1 · 已落地**  
+**硬规格：** [`DESIGN-ember-pet-select-menu-2026-10-10.md`](../design/DESIGN-ember-pet-select-menu-2026-10-10.md) · backlog `B-pet-select-menu`（**已关 · 已落地**）  
+**打开理由（历史）：** 使魔页「图鉴」曾 `corerpg pet list` **聊天灌指令**；换宠须手打 `summon <id>`——违「玩家不打指令」UX。
 
 ---
 
@@ -78,3 +78,4 @@
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题使魔选定盘面化 · DESIGN 待批 A·荐 M（拟 D402）· 上游总控催 D402 · D401 施工中 · ≠sx06 |
 | 2026-10-10 | **旁注已关** · 总控批 A·M1 · D402 · 设计待批关闭 · **施工另派 TrMenu · 交菜单岗** · 钉死薄页 `ember_pet_select`（非 M2）· ≠sx06 |
+| 2026-10-10 | 总控批 A·M1 · M1 落地 · tip 关 · backlog 已关 · tip `e12c548c` |
