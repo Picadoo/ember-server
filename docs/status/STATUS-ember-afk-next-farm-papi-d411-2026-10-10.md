@@ -10,7 +10,7 @@
 |----|------|------|
 | next_farm | `EmberAfkService.papi` 扩键；纯函数 `nextFarmLine` / `gapMatShort`；打稳复用 `shouldUpgradeHint`（菜单侧 `alreadyHinted=false`） | — |
 | 路由 | 既有 `afk_*` → GROWTH → `EmberAfkService.papi` | — |
-| 战况挂键 / Open 半行 | — | W1b/c TrMenu 另号 |
+| 战况挂键 / Open 半行 | — | **菜单已落地** · STATUS-ember-afk-next-farm-menu-d411 · tip 本批 |
 
 ## 键清单（STATUS 钉死）
 
@@ -49,4 +49,4 @@ daily_kills / afk.tiers / 离线% · feel.upgrade_hint* 默认 · gate_daily · 
 
 ## 下一号
 
-菜单岗 W1b：`ember_p1_afk` 格 I 挂 `%corerpg_p1_afk_next_farm%`（键未 live 前禁假写）。
+菜单岗 W1b：**已落地** · STATUS [`STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md`](STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md) · `ember_p1_afk` 格 I 挂 `%corerpg_p1_afk_next_farm%` + Open 半行。

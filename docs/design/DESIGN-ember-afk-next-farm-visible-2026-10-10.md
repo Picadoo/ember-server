@@ -1,12 +1,13 @@
 # 余烬 · 挂机动态下一层养签（next_farm · 挂机资源环深化 · ≠抬日表 · ≠sx09）
 
-STATUS=**已批 A · 方案 M · D411** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-next-farm-visible`（**已批/施工中**）· **施工中** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx09 ≠复述 D373–D410 ≠改 daily_kills/afk.tiers**
+STATUS=**已批 A · 方案 M · D411 · 菜单侧已落地** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-next-farm-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-next-farm-visible`（**菜单侧已落地**）· 菜单 STATUS [`STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md`](../status/STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md) · 插件 tip `3c59bab5` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx09 ≠复述 D373–D410 ≠改 daily_kills/afk.tiers**
 
 > **一句话玩家价值：** 打开挂机战况就能看见「以你现在这层 · 本层继续打稳 / 可试上一层·多养什么 / 已是最高·打满去花」——多坐或换层有锚；**不**抬产量、不交 sx09。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx09。**
 >
-> **总控批 A·M · 2026-10-10：** 采纳方案 M（next_farm 只读键+战况挂键）；否决 A/L/W；W1a 插件键+W1b 战况 I 必做、W1c Open 可选同批；零改产量/tiers/Stage2；≠sx09；**施工中**。
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（next_farm 只读键+战况挂键）；否决 A/L/W；W1a 插件键+W1b 战况 I 必做、W1c Open 可选同批；零改产量/tiers/Stage2；≠sx09。
+> **菜单落地 · 2026-10-10：** W1b/W1c 已挂 `ember_p1_afk` · STATUS-ember-afk-next-farm-menu-d411 · trmenu reload PASS · **未派测**。
 
 ---
 
@@ -59,7 +60,8 @@ STATUS=**已批 A · 方案 M · D411** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a next_farm 键 + W1b 战况挂键 + W1c 可选 Open；见 §2）
 - [x] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx09/仓差主债/复述）
-- [x] 批注：总控批 A·M · 2026-10-10 · D411 · W1a 插件键+W1b 战况 I 必做 · W1c Open 可选同批 · 零改产量/tiers/Stage2 · ≠sx09 · **施工中**
+- [x] 批注：总控批 A·M · 2026-10-10 · D411 · W1a 插件键+W1b 战况 I 必做 · W1c Open 可选同批 · 零改产量/tiers/Stage2 · ≠sx09
+- [x] 菜单落地：W1b/W1c · STATUS-ember-afk-next-farm-menu-d411 · 插件 tip `3c59bab5` · **未派测**
 
 ---
 
@@ -179,7 +181,8 @@ STATUS=**已批 A · 方案 M · D411** · 2026-10-10 · tip [`STATUS-ember-next
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机动态下一层养签（兑现 D383 后置）· ≠sx09 |
 | 2026-10-10 | **已批 A · 方案 M · D411** · 总控批注勾选 · W1a 插件键+W1b 战况 I 必做 · W1c Open 可选同批 · 零改产量/tiers/Stage2 · ≠sx09 · **施工中** |
+| 2026-10-10 | **菜单侧已落地** · W1b 战况 I 挂 next_farm + W1c Open 半行 · STATUS-ember-afk-next-farm-menu-d411 · 插件 tip `3c59bab5` · trmenu reload PASS · **未派测** |
 
 ---
 
-*D411 · 挂机动态下一层养签 next_farm · 已批 A·方案 M · 施工中 · ≠关观察 ≠抬日表 ≠sx09。*
+*D411 · 挂机动态下一层养签 next_farm · 已批 A·方案 M · 菜单侧已落地 · ≠关观察 ≠抬日表 ≠sx09。*

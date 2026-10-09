@@ -1,6 +1,8 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D411 · 挂机动态下一层养签 next_farm · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx09）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D411** · tip `9a936440` · 指针 DESIGN [`DESIGN-ember-afk-next-farm-visible-2026-10-10.md`](../design/DESIGN-ember-afk-next-farm-visible-2026-10-10.md) · W1a 插件键+W1b 战况 I 必做 · W1c Open 可选同批 · 零改产量/tiers/Stage2 · ≠sx09 · **施工中** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D411** · tip `9a936440` · 指针 DESIGN [`DESIGN-ember-afk-next-farm-visible-2026-10-10.md`](../design/DESIGN-ember-afk-next-farm-visible-2026-10-10.md) · W1a 插件键+W1b 战况 I 必做 · W1c Open 可选同批 · 零改产量/tiers/Stage2 · ≠sx09 · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。
+>
+> **菜单落地旁注 · 2026-10-10：** W1b/W1c 已挂 · STATUS [`STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md`](STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md) · 插件 tip `3c59bab5` · trmenu reload PASS · **菜单侧已落地** · **未派测**。下文为交稿原文，保留备查。
 >
 > **【D411 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx09** · **≠ stage 脏 runtime**
 >
@@ -8,7 +10,7 @@
 
 **日期：** 2026-10-10（上海时间）  
 **本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D411** · **施工中** · docs-only  
-**硬规格（已批 A · 方案 M · D411 · 施工中）：** [`DESIGN-ember-afk-next-farm-visible-2026-10-10.md`](../design/DESIGN-ember-afk-next-farm-visible-2026-10-10.md) · backlog `B-afk-next-farm-visible`（**已批/施工中**）  
+**硬规格（已批 A · 方案 M · D411 · 菜单侧已落地）：** [`DESIGN-ember-afk-next-farm-visible-2026-10-10.md`](../design/DESIGN-ember-afk-next-farm-visible-2026-10-10.md) · backlog `B-afk-next-farm-visible`（**菜单侧已落地**）· 菜单 STATUS [`STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md`](STATUS-ember-afk-next-farm-menu-d411-2026-10-10.md)  
 **打开理由：** D383 已落静态「层差一览」+ D305 升层 chat cue，但战况**无**按玩家当前层/解锁/打稳态给出的个性化「下一层该不该试 / 本层继续养」半行——`next_farm` 自 D383§2.3 起反复后置。sx09 禁交；D404–D410（仓差/remain/首通/sx07/满额短征追/有奖花材追/sx08）禁复述。
 
 ---
@@ -78,3 +80,4 @@
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题挂机动态下一层养签 next_farm · DESIGN 待批 A·荐 M |
 | 2026-10-10 | **旁注已关** · 总控批 A·M · D411 · 设计待批关闭 · W1a+W1b 必做 · W1c 可选同批 · 零改产量/tiers/Stage2 · ≠sx09 · **施工中** |
+| 2026-10-10 | **菜单侧已落地** · W1b/W1c · STATUS-ember-afk-next-farm-menu-d411 · 插件 tip `3c59bab5` · trmenu reload PASS · **未派测** |
