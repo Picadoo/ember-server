@@ -1,10 +1,13 @@
 # 状态 · 下一档硬债选定 · 需策划（Stage2 观察现态复跑薄清单 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D342）：** tip `76b8eb49` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-observe-state-check-d342-2026-10-09.md`](STATUS-ember-six-slot-observe-state-check-d342-2026-10-09.md) · **另号只读复跑 R0–R10** · **批 A ≠ 关观察** · 未满窗只做预检。
+
+
 > **上游结案：** D341 K3 施工闸等待页已批 @ `e04c79be`（≠开闸）；D338 绿出口签字包模板已批（≠关观察）；D329–D340 诚实/薄抽/D12 已落。满窗不早于 **2026-10-10 17:40 CST**。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / K3 live / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零 live 玩法施工。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零改开关/jar** · 复跑抽检**另号**（只读）  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-observe-state-check-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-state-check-2026-10-09.md) · backlog `B-six-slot-observe-state-check`  
+**本窗性质：** tip 已关 · 授权见 D342 STATUS · **零改开关/jar** · 复跑抽检**另号**（只读）  
+**硬规格（已批 A · 批 M · D342 · 清单已采纳 · ≠关观察）：** [`DESIGN-ember-six-slot-observe-state-check-2026-10-09.md`](../design/DESIGN-ember-six-slot-observe-state-check-2026-10-09.md) · backlog `B-six-slot-observe-state-check`  
 **打开理由：** D338 §2.1 **G4「现态未偷改」** 仅一行门槛，无**可执行复跑步骤**（读哪份 yml、对哪几个键、如何证未开 K3/R、jar tip 与 OPS 文案漂移如何记）。满窗另号签字前缺运维/测试可勾薄清单——**不重开 D338 模板正文**。
 
 ---
@@ -40,7 +43,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐 M。
+见 DESIGN 同 slug · **已批 A · 批 M · D342** · 清单已采纳 · **≠关观察** · 另号只读 R0–R10。
 
 ---
 
@@ -50,4 +53,4 @@
 
 ---
 
-*选题 H · 荐 M · 零 live · 补 D338 G 项执行面 · 不重复模板。*
+*选题 H · 已批 A·M·D342 · 零 live · 补 D338 G 项执行面 · 批A≠关观察 · 未满窗只预检。*
