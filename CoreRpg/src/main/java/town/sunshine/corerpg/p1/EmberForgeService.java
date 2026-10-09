@@ -116,6 +116,25 @@ public final class EmberForgeService implements Listener {
 
     private boolean help(Player p) { helpLines(p); return true; }
 
+    // ================================================================== D341 K3 skeleton (gate closed · no player cmd)
+
+    /**
+     * D341 offline: K3 same-slot refine preview. Not wired into {@link #cmd} — switch defaults off;
+     * live apply / TrMenu wait for Stage2 green exit or explicit parallel-build sign-off.
+     */
+    public EmberK3RefineRules.Plan k3Preview(EmberItemData target, EmberItemData material, boolean materialWorn) {
+        return EmberK3RefineService.preview(target, material, materialWorn);
+    }
+
+    /**
+     * D341 offline: build commit intent (txn list + audit + zero cost). Does not call {@code commitTxn} /
+     * rewrite stacks / open menus. Caller after gate-open wires this into durable commit.
+     */
+    public EmberK3RefineService.CommitIntent k3CommitIntent(EmberItemData target, EmberItemData material,
+                                                           boolean materialWorn, String operatorId) {
+        return EmberK3RefineService.commitIntent(target, material, materialWorn, operatorId);
+    }
+
     /** @return null when forging is allowed here */
     private String gate(Player p) {
         if (!EmberMode.active()) return "P1 新模式未开启";
