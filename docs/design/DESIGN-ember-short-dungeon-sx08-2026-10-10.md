@@ -213,7 +213,7 @@ STATUS=**已批 A · 方案 M · D410** · 2026-10-10 · tip [`STATUS-ember-next
 | **MM 号** | 庭卫/错层弩/上层守吏 + `EmberSx08…Cast` | 地图坐标 |
 | **DP+键号** | `EmberSx08` + `ember-v1-runs` `short.sx08`（**含 rooms×3+boss**）+ `p1 enter sx08` + 体力 30 + `p1_sx08_day` | MM |
 | **插件日帽/首通号** | `%corerpg_p1_sx08_day_line%` + 合计扩第八本；`%corerpg_p1_sx08_fc%`（及合计扫 sx08） | 计数器/生涯键 |
-| **菜单号** | `ember_p1_short` 八本选页 + hub/adventure 半行 + 挂日帽/首通 | 插件键 |
+| **菜单号** | `ember_p1_short` 八本选页 + hub/adventure 半行 + 挂日帽/首通 | **挂盘已落**（day_line+fc · STATUS-ember-short-sx08-dayline-d410 · 上游键 tip `24ffa712`） |
 | **经济号** | S47 发放 + REG/Economy/source-map +（荐）p1sim 薄模型 | 结算钩 |
 
 可并行：地图 ∥ S47 金样草案；菜单与 DP 键同迭代。
