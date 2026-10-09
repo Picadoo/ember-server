@@ -334,9 +334,10 @@ Icons:
       material: gray stained glass pane
       name: '§8'
     icons:
+      # D336：本服 priority 数字越小越优先；sa/sb 必须压过 on（双命中）；stash 低于 sa/sb、高于 on
       # D335：装备页护甲入口三态改用 armor_sa/sb（≡active/busy）；actions 仍进护甲页
       - condition: 'check papi %corerpg_p1_armor_sa% == 1'
-        priority: 5
+        priority: 1
         display:
           material: iron chestplate
           name: '§6护甲'
@@ -358,7 +359,7 @@ Icons:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'menu: ember_p1_armor'
       - condition: 'check papi %corerpg_p1_armor_sb% == 1'
-        priority: 4
+        priority: 2
         display:
           material: iron chestplate
           name: '§6护甲'
@@ -378,8 +379,22 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'menu: ember_p1_armor'
-      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+      - condition: 'check papi %corerpg_p1_armor_stash_has% == 1'
         priority: 3
+        display:
+          material: chest
+          name: '§6待领物品'
+          lore:
+            - '%corerpg_p1_armor_stash_line%'
+            - ''
+            - '§7原来穿着的东西收在这里，一件不少'
+            - '§e➥ §f点击领取到背包（背包满时留在这里，腾出空位再来）'
+        actions:
+          all:
+            - 'sound: BLOCK_NOTE_PLING-1-2'
+            - 'command: corerpg p1 armor claim'
+      - condition: 'check papi %corerpg_p1_armor_on% == 1'
+        priority: 10
         display:
           material: iron chestplate
           name: '§6护甲'
@@ -399,17 +414,3 @@ Icons:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
             - 'menu: ember_p1_armor'
-      - condition: 'check papi %corerpg_p1_armor_stash_has% == 1'
-        priority: 2
-        display:
-          material: chest
-          name: '§6待领物品'
-          lore:
-            - '%corerpg_p1_armor_stash_line%'
-            - ''
-            - '§7原来穿着的东西收在这里，一件不少'
-            - '§e➥ §f点击领取到背包（背包满时留在这里，腾出空位再来）'
-        actions:
-          all:
-            - 'sound: BLOCK_NOTE_PLING-1-2'
-            - 'command: corerpg p1 armor claim'

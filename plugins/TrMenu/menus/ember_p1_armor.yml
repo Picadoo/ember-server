@@ -1,7 +1,7 @@
 # 余烬 v1 (P1) 护甲页（D318 六槽 T1 · 预置稿，T2 由菜单岗定稿后再放进 plugins/TrMenu/menus/）
 #   spec: docs/design/DESIGN-ember-six-slot-t1-spec-revision-2026-10-08.md §2.3（示例布局）
 #   数值全部来自 CoreRpg 占位符 %corerpg_p1_armor_*%（插件真实公式算的整装生命差），菜单不自己算。
-#   D320 ⑤ 每一格的写法（TrMenu 子图标按 priority 从高到低取第一个条件成立的，都不成立显示默认图标）：
+#   D320 ⑤ 每一格的写法（TrMenu 本服：priority 数字越小越优先，取第一个条件成立的；都不成立显示默认图标）：
 #     默认图标 = 开关关时的样子：灰玻璃板「护甲功能尚未开放」，点击照样代发本格的命令，插件统一回「护甲功能尚未开放。」
 #     priority 2 = armor_on == 1（开关开）时的样子；priority 3 = 更具体的状态（有候选 / 能全部换上 / 有待领）。
 #     armor_<slot>_has、armor_all_has 在开关关时是空串，所以这两个 priority 3 分支只会在开关开时成立，不必再叠 armor_on。
@@ -302,9 +302,10 @@ Icons:
       all:
         - 'command: corerpg p1 armor set'
     icons:
-      # D335：三态改用 armor_sa/sb（≡active/busy）；active 优先级最高
+      # D336：本服 priority 数字越小越优先；sa=1 时 on 也=1（双命中）→ 必须 sa < sb < on
+      # D335：三态改用 armor_sa/sb（≡active/busy）
       - condition: 'check papi %corerpg_p1_armor_sa% == 1'
-        priority: 4
+        priority: 1
         display:
           material: enchanted book
           name: '§a四件套 · 已激活'
@@ -318,7 +319,7 @@ Icons:
           all:
             - 'command: corerpg p1 armor set'
       - condition: 'check papi %corerpg_p1_armor_sb% == 1'
-        priority: 3
+        priority: 2
         display:
           material: book
           name: '§e四件套 · 进行中'
@@ -332,7 +333,7 @@ Icons:
           all:
             - 'command: corerpg p1 armor set'
       - condition: 'check papi %corerpg_p1_armor_on% == 1'
-        priority: 2
+        priority: 10
         display:
           material: book
           name: '§7四件套 · 未激活'
