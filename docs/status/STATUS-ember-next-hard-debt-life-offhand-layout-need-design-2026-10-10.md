@@ -1,4 +1,6 @@
 # 状态 · 下一档硬债选定 · 需策划（生活页副手守腕/生坠回 Layout · 灰粮可购成真）
+> **【已关 · 批 A·M · D386】** 总控采纳方案 M · TrMenu 已落地 · STATUS [`STATUS-ember-life-offhand-layout-d386-2026-10-10.md`](STATUS-ember-life-offhand-layout-d386-2026-10-10.md) · **≠关观察 ≠改 life 价/周顶 ≠回盘 E/F/V ≠开 R**
+
 
 > **上游结案：** 总控 D385 使魔等级同屏已挂 @`1e9a57b4`（jar d384）→「请交下一内容真债 tip（挂机/日更/有趣系统；禁复述 D373–D385；禁抬日表/开R/Pack6/天赋灰印/关观察/改×0.97/开K3/空跳转）。若扫空则诚实 exhausted。」Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 

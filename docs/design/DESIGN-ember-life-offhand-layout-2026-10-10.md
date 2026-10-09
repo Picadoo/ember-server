@@ -1,6 +1,6 @@
 # 余烬 · 生活页副手守腕/生坠回 Layout（灰粮可购成真 · ≠抬日表）
 
-STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-life-offhand-layout-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-life-offhand-layout-need-design-2026-10-10.md) · backlog `B-life-offhand-layout` · 总控 D385 后内容真债（轻量有趣循环 · 非空跳转）
+STATUS=**已批 A · 批 M · D386 · 已施工** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-life-offhand-layout-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-life-offhand-layout-need-design-2026-10-10.md) · backlog `B-life-offhand-layout` · 总控 D385 后内容真债（轻量有趣循环 · 非空跳转）
 
 > **一句话玩家价值：** 补给·生活页能**点到**守腕/生坠周购——套装页「灰粮可购」说真话；每周一次轻消费与副手选择感，拉长生活页停留；**不**抬挂机、**不**开旧强化闸。
 
@@ -146,9 +146,9 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 
 ## 6. 批注区（总控填）
 
-- [ ] **批 A · 方案 M**（O+W 回 Layout + 注释 + set 互指荐）  
-- [ ] 否决 A（只改 lore 收口）、L（E/F/改价/开强化闸）  
-- [ ] 批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 回盘 E/F  
+- [x] **批 A · 方案 M**（O+W 回 Layout + 注释 + set 互指荐）· **D386 已施工**  
+- [x] 否决 A（只改 lore 收口）、L（E/F/改价/开强化闸）  
+- [x] 批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 回盘 E/F  
 
 ---
 
@@ -157,7 +157,8 @@ STATUS=**待批 A · 荐 M** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS **待批 A** · 荐 M；选题生活副手 O/W 回盘（D376 另债升主 · set「灰粮可购」假平面） |
+| 2026-10-10 | 总控 · **批 A · 批 M · D386** · TrMenu 已落地（Layout O+W + stowed 注释 + set→life + Open 半行）· ≠改 life 价/周顶 ≠回盘 E/F/V |
 
 ---
 
-*生活页副手守腕/生坠回 Layout · 待批 A · 荐 M · 2026-10-10 Asia/Shanghai · ≠抬日表 ≠回盘 E/F ≠复述 D373–D385。*
+*生活页副手守腕/生坠回 Layout · 已批 A·M · D386 已施工 · 2026-10-10 Asia/Shanghai · ≠抬日表 ≠回盘 E/F ≠复述 D373–D385。*
