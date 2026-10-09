@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（K3 worktree ↔ 主仓路径/cwd/docs 禁混用防呆 · docs-only · ≠开闸 · ≠关观察）
 
+> **旁注（已关 · 批 A · 批 M · D368）：** tip `b66697fc` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-k3-worktree-cwd-mix-d368-2026-10-09.md`](STATUS-ember-six-slot-k3-worktree-cwd-mix-d368-2026-10-09.md) · K3 wt↔主仓 cwd/docs 禁混用清单已采纳 · OPS 半行已落 · **≠开闸 ≠关观察 ≠开 `k3_refine` ≠改 live ≠开 R**。
+>
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗 · 勿勾 §2.4**）。D367 满窗另号签字启动前置已落 @ `8d09075c`（**≠关观察 · 勿复述**）。D360–D366 已落（**勿复述**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 改 ×0.1 / 翻 set_bonus / 改日历 / 改 ignore。**零玩法 · 零开开关。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠ stage 脏 runtime**  
-**硬规格（STATUS=待批 A · 荐方案 M）：** [`DESIGN-ember-six-slot-k3-worktree-cwd-mix-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-worktree-cwd-mix-2026-10-09.md) · backlog `B-six-slot-k3-worktree-cwd-mix`  
+**本窗性质：** tip **已关** · **已批 A·M·D368** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 批 M · D368 · 清单已采纳 · ≠开闸 ≠关观察）：** [`DESIGN-ember-six-slot-k3-worktree-cwd-mix-2026-10-09.md`](../design/DESIGN-ember-six-slot-k3-worktree-cwd-mix-2026-10-09.md) · backlog `B-six-slot-k3-worktree-cwd-mix`  
 **打开理由：** D359 钉了 worktree **已就位**与禁主仓切分支；D344 钉了 live 防冲；D362 钉了「已就位≠开闸」短语——**缺**操作员每次动 shell 前「我在哪棵树」的 cwd/toplevel 闸，以及主仓 docs 真源 vs wt 陈旧 docs 的指针防混。本机核验：wt `@9ff421a8` **无** D359/D367 DESIGN，且自带 `plugins/CoreRpg/ember-v1.yml`（≠观察服 live 真源）。本债只收口**路径/cwd/docs 禁混用**，**不**开闸、**不**复述 D360–D367。
 
 ---
@@ -53,4 +55,4 @@
 
 ---
 
-*选题 H · tip 待批 A · 荐 M · K3 worktree↔主仓 cwd/docs 禁混用 · ≠开闸 · ≠关观察。*
+*选题 H · tip 已关 · 批 A·M·D368 · K3 worktree↔主仓 cwd/docs 禁混用已采纳 · ≠开闸 · ≠关观察。*

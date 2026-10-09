@@ -1,6 +1,6 @@
 # 余烬 · K3 worktree ↔ 主仓路径/cwd/docs 禁混用防呆（决策页 · ≠开闸 · ≠关观察）
 
-STATUS=**待批 A**（荐方案 **M** · docs-only · **≠开闸 ≠关观察 ≠开 `k3_refine` ≠改 live ≠改 ignore ≠改 ×0.97 ≠改 ×0.1 ≠翻 set_bonus ≠改日历 ≠复述 D360–D367**）· 2026-10-09 · 上游 tip 同 slug · backlog `B-six-slot-k3-worktree-cwd-mix` · 真源指针 D344 / D359 / D362 / OPS §1.5 · **不**重写其正文
+STATUS=**已批 A · 批 M · D368**（禁混用清单已采纳 · OPS §1.4 半行已落 · **≠开闸 ≠关观察 ≠开 `k3_refine` ≠改 live ≠改 ignore ≠改 ×0.97 ≠改 ×0.1 ≠翻 set_bonus ≠改日历 ≠复述 D360–D367**）· 2026-10-09 · 总控批注 · 上游 tip `b66697fc` · backlog `B-six-slot-k3-worktree-cwd-mix` · 真源指针 D344 / D359 / D362 / OPS §1.5 · **不**重写其正文
 
 > **一句话：** worktree 已就位，缺「先认树再动手」。荐 **方案 M**：统一路径/cwd/docs 禁混用薄清单；零开闸、零改 live。
 
@@ -78,7 +78,7 @@ STATUS=**待批 A**（荐方案 **M** · docs-only · **≠开闸 ≠关观察 �
 | 观察期 / Stage2 / 绿出口 / 值班 / 禁误读 / 白板注记等 **docs 真源** | **仅**主仓 `/workspace/minecraft/docs/` @ 观察分支 |
 | K3 wt 内 `docs/` | 分叉快照；可含闸关 WIP；**不得**当观察现态引用；缺页（如无 D359/D367）属正常 |
 | 跨树引用 | 主仓文档可**指针** wt 路径/分支/HEAD；wt 内若写指针，须标明「观察正文以主仓为准」 |
-| 批 A 后可选 | OPS §1.4 加半行：「K3 wt↔主仓 cwd/docs 禁混用见本 DESIGN」——**落字另号**；本待批窗不改 OPS |
+| 批 A 后 | OPS §1.4 半行：「K3 wt↔主仓 cwd/docs 禁混用见本 DESIGN」——**D368 已落** |
 
 ### 2.6 禁做（误读红线）
 
@@ -105,7 +105,7 @@ STATUS=**待批 A**（荐方案 **M** · docs-only · **≠开闸 ≠关观察 �
 
 | 文件 | 动作 |
 |------|------|
-| `OPS-ember-six-slot-migration.md` §1.4 | 可选半行指针：「K3 wt↔主仓 cwd/docs 禁混用见本 DESIGN」 |
+| `OPS-ember-six-slot-migration.md` §1.4 | 半行指针已落（D368）：「K3 wt↔主仓 cwd/docs 禁混用见本 DESIGN」 |
 | D359 / D344 / D362 正文 | **不**空转长复述；就位表/防冲/短语对照不改 |
 
 ### 2.9 验收（落字另号）
@@ -144,11 +144,11 @@ STATUS=**待批 A**（荐方案 **M** · docs-only · **≠开闸 ≠关观察 �
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M（本禁混用清单）** → 可选 OPS §1.4 半行指针另号落；**≠开闸 ≠关观察**  
+- [x] **批 A：采纳方案 M（本禁混用清单）** → OPS §1.4 半行指针已落（总控已批 · D368）；**≠开闸 ≠关观察**  
 - [ ] 升级 L（shell 包装 / pre-commit 拒错树）  
 - [ ] 否决 / 改派  
 
-**总控批注：** （待批）
+**总控批注（2026-10-09 · D368）：** **批 A · 批 M**：采纳本页为 K3 worktree ↔ 主仓路径/cwd/docs 禁混用真源；§2.2 双树身份 + §2.3 C0–C3 + §2.4 动作路由 + §2.5 docs 真源=主仓；与 D359 就位 / D344 防冲 / D362 短语 / D365 commit 黑名单分工。OPS §1.4 半行指针已落。**本号 ≠ 开闸 ≠ 关观察 ≠ 开 `k3_refine` ≠ 改 live ≠ 开 R。**
 
 ---
 
@@ -157,5 +157,6 @@ STATUS=**待批 A**（荐方案 **M** · docs-only · **≠开闸 ≠关观察 �
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D344/D359/D362 · D367 tip 曾标后置升主 · 本机 worktree/docs 核验 | 策划执行手 |
+| 2026-10-09 | D368 · 总控批 A·M；禁混用清单已采纳；OPS 半行已落；≠开闸≠关观察≠改 live | 总控 / 执行手 |
 
-*待批 A · B-six-slot-k3-worktree-cwd-mix · cwd/docs 禁混用 ≠ 开闸 ≠ 关观察 · 零 live。*
+*已批 A·M·D368 · B-six-slot-k3-worktree-cwd-mix · cwd/docs 禁混用 ≠ 开闸 ≠ 关观察 · 零 live。*
