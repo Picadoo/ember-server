@@ -59,7 +59,7 @@ Icons:
   S:
     display:
       material: nether star
-      name: '§d三套装'
+      name: '§d套装说明'
       lore:
         - '§6焚烬：每 3 次普攻点燃敌人（持续伤害），适合打首领'
         - '§c烬爆：每 5 次普攻炸开一圈（3 格范围伤害），适合清一群'

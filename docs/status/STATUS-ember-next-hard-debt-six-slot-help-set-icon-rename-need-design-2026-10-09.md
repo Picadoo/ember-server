@@ -1,10 +1,13 @@
 # 状态 · 下一档硬债选定 · 需策划（帮助页套装入口图标名 Stage2 诚实 · docs-only）
 
+> **已关 · 批 A·M · D352 已落地** · 施工 STATUS [`STATUS-ember-six-slot-help-set-icon-rename-d352-2026-10-09.md`](STATUS-ember-six-slot-help-set-icon-rename-d352-2026-10-09.md) · DESIGN 方案 M · `ember_help` `S` name → `套装说明` · **≠关观察** · 不抢 D351 薄抽 · 不抢 K3。
+
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D351 次入口诚实已施工 @ `b8bccabf`（测试薄抽中——**本窗勿抢 D351 薄抽文件 / 勿交 D351 spot 清单**）。D349–D350 关闭包/钉盘已落。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**硬禁复述：** 已 PASS 薄抽 · tip 关闭包 · 钉盘。**零数值（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar** · 施工另号（可只 TrMenu 一行 name）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-help-set-icon-rename-2026-10-09.md`](../design/DESIGN-ember-six-slot-help-set-icon-rename-2026-10-09.md) · backlog `B-six-slot-help-set-icon-rename`  
+**硬规格（已批 A · 批 M · D352 已落地）：** [`DESIGN-ember-six-slot-help-set-icon-rename-2026-10-09.md`](../design/DESIGN-ember-six-slot-help-set-icon-rename-2026-10-09.md) · backlog `B-six-slot-help-set-icon-rename`  
 **打开理由：** D351 已收团本旁注与 hub/codex 帮助**捷径**；help 页内套装格图标 **name 仍 `§d三套装`**，而同格 lore 已写四件套（D339）——入口标签与正文分裂。D351 DESIGN §2.4 曾标「可后置」；捷径落地后升本窗。
 
 ---
@@ -51,4 +54,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · help 套装图标改名 · 勿关窗 · 勿抢 D351 薄抽。*
+*选题 H · tip 已关 · 批 A·M · D352 已落地 · help 套装图标改名 · 勿关窗 · 勿抢 D351 薄抽。*

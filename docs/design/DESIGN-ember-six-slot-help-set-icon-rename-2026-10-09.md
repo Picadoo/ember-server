@@ -1,6 +1,6 @@
 # 余烬 · 帮助页套装入口图标名 Stage2 诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**抢 D351 薄抽 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-help-set-icon-rename-need-design-2026-10-09.md`
+STATUS=**已批 A · 批 M · D352 已落地**（观察期 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**抢 D351 薄抽 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-help-set-icon-rename-need-design-2026-10-09.md` · 施工 STATUS `STATUS-ember-six-slot-help-set-icon-rename-d352-2026-10-09.md`
 
 > **一句话：** D351 收了捷径，help 页套装星 **name 仍「三套装」**。荐 **方案 M**：改名一行；lore 不动。
 
@@ -88,11 +88,11 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号改 help `S` name  
+- [x] **批 A：采纳方案 M** → 同号改 help `S` name（已批 · D352）  
 - [ ] 升级 L  
 - [ ] 否决 / 改派  
 
-**总控批注（待填）：** _
+**总控批注（2026-10-09 · D352）：** **批 A·M** · `ember_help` 图标 `S` name → `§d套装说明` · lore/actions 不动 · `trmenu reload` · **≠关观察** · 不抢 D351 薄抽 · 不抢 K3 · jar/set_bonus/bv **未动**
 
 ---
 
@@ -101,5 +101,6 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D351 后置项升主 | 策划执行手 |
+| 2026-10-09 | **批 A·M · D352** · help `S` name → 套装说明 · tip 关 · `trmenu reload` | 总控执行手 |
 
-*help 套装图标改名 · 待批 A · 荐 M · 显示 only · ≠关观察 · 不抢 D351 薄抽。*
+*help 套装图标改名 · 已批 A·M · D352 已落地 · 显示 only · ≠关观察 · 不抢 D351 薄抽。*
