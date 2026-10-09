@@ -214,7 +214,7 @@ STATUS=**已批 A · 方案 M · D407** · 2026-10-10 · tip [`STATUS-ember-next
 | **MM 号** | 塔卫/窗廊弩/塔冠守吏 + `EmberSx07…Cast` | 地图坐标 |
 | **DP+键号** | `EmberSx07` + `ember-v1-runs` `short.sx07`（**含 rooms×3+boss**）+ `p1 enter sx07` + 体力 30 + `p1_sx07_day` | MM |
 | **插件日帽/首通号** | `%corerpg_p1_sx07_day_line%` + 合计扩第七本；`%corerpg_p1_sx07_fc%`（及合计扫 sx07） | 计数器/生涯键 |
-| **菜单号** | `ember_p1_short` 七本选页 + hub/adventure 半行 + 挂日帽/首通 | 进本键 + 日帽/首通键 |
+| **菜单号** | `ember_p1_short` 七本选页 + hub/adventure 半行 + 挂日帽/首通 | **挂盘已落**（day_line+fc · STATUS-ember-short-sx07-dayline-d407 · 上游键 tip `52adffc2`） |
 | **经济号** | S46 发放 + REG/Economy/source-map +（荐）p1sim 薄模型 | 结算钩 |
 
 可并行：地图 ∥ S46 金样草案；菜单与 DP 键同迭代。

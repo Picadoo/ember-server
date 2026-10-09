@@ -75,3 +75,4 @@
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题短征 sx07 烬塔回升 · DESIGN 待批 A·荐 M（拟 D407）· 上游 D403 PASS @`0894a924` · D406 @`3e8cff26` |
 | 2026-10-10 | **旁注已关** · 总控批 A·M · D407 · 设计待批关闭 · **并行施工已派** · S46 有奖80/4/3 · 首通120/6/1 |
+| 2026-10-10 | **挂盘已落** · 菜单号挂 `%corerpg_p1_sx07_day_line%` + `%corerpg_p1_sx07_fc%` · STATUS [`STATUS-ember-short-sx07-dayline-d407-2026-10-10.md`](STATUS-ember-short-sx07-dayline-d407-2026-10-10.md) · 键 tip `52adffc2` |

@@ -17,7 +17,7 @@
 | **地图号** | `ember_short_sx07` 塔基庭/折返上行/塔冠烬台 + 出生/Boss 坐标 | **本地骨架已启**：`cp -a ember_daily_tide_v1 → ember_short_sx07`（~1.2M）；说明见 [`docs/maps/ember_short_sx07-README.md`](../maps/ember_short_sx07-README.md) | **阻塞 WE**：仓/play **无** WorldEdit/FAWE jar；**禁** `git add -f` map。烬塔主题换皮 → 地图岗进服 WE 另号 |
 | **MM 号** | 塔卫/窗廊弩/塔冠守吏 + `EmberSx07…Cast` | **并行中**（磁盘草稿 `EmberSx07.yml` 另号；本号不重交） | 刷点坐标钉死后挂 runs/groups |
 | **DP+键号** | `EmberSx07` option/monster + `ember-v1-runs` `sx07`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **壳已落**：`dungeon/EmberSx07/option.yml`（`$setmap` + `p1_pass_sx07` 门闩）+ `config.yml` 登记；runs/jar 键插件并行中 | 插件岗：`p1 enter sx07` · pass · `p1_sx07_day` · stamina 30 · rooms/boss 同构（防 D391 FAIL） |
-| **插件日帽/首通号** | `%corerpg_p1_sx07_day_line%` / `_fc` + 合计扩第七本 | **未动** | 另号；菜单已注释预留，禁假写 n/3 |
+| **插件日帽/首通号** | `%corerpg_p1_sx07_day_line%` / `_fc` + 合计扩第七本 | **键+挂盘已落** tip `52adffc2` · 菜单 dayline STATUS | 全链路测另派 |
 | **菜单号** | `ember_p1_short` 七本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M 保留 · **O=sx07** · adventure `H` + Open · hub Open/冒险格半指含「烬塔」 | sx07 点进本=键未就绪时服务端拒（预期）；sx01–sx06 仍可进 |
 | **经济号** | S46 发放 + REG/Economy/source-map +（荐）p1sim | **未动** | 另号金样；草案 80币+4碎+3骨尘；首通另加 120/6/1；**禁**抬挂机表 |
 
@@ -52,7 +52,7 @@
 | V5 日帽诚实分开 | **PARTIAL** | 菜单纯文案「最多 3 · 分开计」；`p1_sx07_day` / day_line **未**接线（注释预留） |
 | V6 S46 登记 | **PENDING** | 经济另号 |
 | V7 rooms×3+boss | **PENDING** | 键号首航硬提醒；本号未写 runs |
-| V8 选页挂 day_line/fc | **PENDING** | 键未 live → 注释预留；禁假写个人 n/3 |
+| V8 选页挂 day_line/fc | **PASS（菜单）** | 挂盘见 [`STATUS-ember-short-sx07-dayline-d407-2026-10-10.md`](STATUS-ember-short-sx07-dayline-d407-2026-10-10.md) · 键 tip `52adffc2` |
 
 ## 改动清单（本号 · 入仓）
 
