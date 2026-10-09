@@ -1,8 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（玩法可感轻量遥测）
+> **旁注（已关 · 已施工 D298）：** tip `STATUS-ember-next-hard-debt-playfeel-telemetry-need-design-2026-10-07.md` 已关；指向 STATUS [`STATUS-ember-playfeel-telemetry-d298.md`](STATUS-ember-playfeel-telemetry-d298.md) · 玩法可感遥测已上线 · **≠关观察**。
 
 **日期：** 2026-10-07（上海时间）  
 **上游：** D297 签名调律决策密度 **PASS**（1.65.87）· D296 事件必感 + econ **PASS**  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up
+**本窗性质：** tip 已关 · 已施工 D298 · **零改本号**
 
 ---
 

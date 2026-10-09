@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（工坊菜单诚实 / 费用同屏 · 非 forge R）
+> **旁注（已关 · 已施工 D307）：** tip `STATUS-ember-next-hard-debt-workshop-menu-honesty-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-workshop-menu-honesty-d307.md`](STATUS-ember-workshop-menu-honesty-d307.md) · 工坊菜单诚实已上线 · **≠关观察**。
 
 > **上游结案：** D306 枢纽日路由诚实方案 **M 已上线**（CoreRpg **1.65.96** · `c3a804d2`）；加固稿 **§1B 枢纽反馈散已收**。Live **D301–D306**。灰印副招 **T0/T0b ❌ · HOLD**；天赋换机制 **HOLD**；事件 R/W / 调律 R / **工坊 R（价/节奏）** / 走廊 W2 / 深渊 R / 周本 R / Boss 预警 R / 挂机 R 均等人感或样本。见 [`STATUS-ember-hub-daily-routing-d306.md`](STATUS-ember-hub-daily-routing-d306.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D306 日路由已收 · 加固 §1A–§1C 主债 M 波已清（走廊 D300 · 挂机 D285+D305 · 枢纽 §1B D306）· 战斗可感波 D301–D304 已收 · 灰印/天赋 HOLD · **样本门禁 R 窗仍为余下「真硬」战斗/经济债**  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（已上线 D307）：** 派单策划出 [`DESIGN-ember-workshop-menu-honesty-2026-10-08.md`](../design/DESIGN-ember-workshop-menu-honesty-2026-10-08.md) · STATUS=待批 A · 荐 M/R/W · backlog `B-workshop-menu-honesty`  
+**本窗性质：** tip 已关 · 已施工 D307 · **零改本号**
+**硬规格（已批 A · 已施工 D307）：** 派单策划出 [`DESIGN-ember-workshop-menu-honesty-2026-10-08.md`](../design/DESIGN-ember-workshop-menu-honesty-2026-10-08.md) · 荐 M/R/W · backlog `B-workshop-menu-honesty`  
 **打开理由：** 非样本门禁的体验硬债（走廊/深渊/团本/预警/挂机层/枢纽日路由）M 波已收；余下战斗/价窗真硬债几乎全是 **样本门禁 R**。现网工坊页仍多处写「**消耗以聊天为准**」——D299 只补了近档/相对穿着短反馈，**费用仍不跟菜单同屏**。要在**不改 refineCost/qualityCost、不改掉落、不抬体力**前提下，让强化/升阶/精工/成色/互换的消耗与材料闸**菜单内诚实可读**（**≠ forge R 价/节奏样本窗**）。
 
 ---

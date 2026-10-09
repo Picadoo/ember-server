@@ -1,6 +1,6 @@
 # 余烬 · 观察期过时 tip 批量关闭包（决策页）
 
-STATUS=**待批 A**（docs-only 关闭规格 · **≠关观察** · **≠**薄抽复述 · **不**抢 K3 · **不**改 ×0.97 · **不**开样本 R）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-observe-stale-tip-close-pack-need-design-2026-10-09.md`
+STATUS=**已批 A · 批 M · D349**（docs-only 关闭规格 · **≠关观察** · **≠**薄抽复述 · **不**抢 K3 · **不**改 ×0.97 · **不**开样本 R）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-observe-stale-tip-close-pack-need-design-2026-10-09.md` · 落字 STATUS [`STATUS-ember-observe-stale-tip-close-pack-d349-2026-10-09.md`](../status/STATUS-ember-observe-stale-tip-close-pack-d349-2026-10-09.md)
 
 > **一句话：** 已施工/HOLD/关清的 `next-hard-debt` tip 缺标准「已关」头——荐 **方案 M**：模板 + 清单 + 另号批量旁注。
 
@@ -142,11 +142,11 @@ STATUS=**待批 A**（docs-only 关闭规格 · **≠关观察** · **≠**薄�
 
 ## §6 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2–§3 批量旁注  
+- [x] **批 A：采纳方案 M** → 另号按 §2–§3 批量旁注（D349 已落）  
 - [ ] 升级 L（不荐）  
 - [ ] 否决 / 改派  
 
-**总控批注（待填）：** _
+**总控批注：** **已批 A · 批 M · D349** · 方案 M 落地：§3.1–§3.4 tip 批量旁注关闭（D346 tip 跳过）· **≠关观察 · ≠开 K3 · ≠薄抽**。
 
 ---
 
@@ -155,5 +155,6 @@ STATUS=**待批 A**（docs-only 关闭规格 · **≠关观察** · **≠**薄�
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 禁薄抽复述；hub_legacy 后置 | 策划执行手 |
+| 2026-10-09 | **批 A · 批 M · D349** · 另号批量旁注落字 · C1–C4 自检 | 总控委派 executor |
 
-*过时 tip 关闭包 · 待批 A · 荐 M · docs-only · ≠关观察 · ≠薄抽复述。*
+*过时 tip 关闭包 · **已批 A · 批 M · D349** · docs-only · ≠关观察 · ≠薄抽复述。*

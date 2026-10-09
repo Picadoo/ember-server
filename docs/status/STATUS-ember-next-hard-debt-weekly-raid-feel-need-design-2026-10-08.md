@@ -1,10 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（团本/周本入口+本间段感 / 同 Multiverse 可感差）
+> **旁注（已关 · 已施工 D303）：** tip `STATUS-ember-next-hard-debt-weekly-raid-feel-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-weekly-raid-feel-diff-d303.md`](STATUS-ember-weekly-raid-feel-diff-d303.md) · 周本/团本段感已上线 · **≠关观察**。
 
 > **上游结案：** 灰印副招 **T0/T0b ❌ · HOLD**（`73491e7b` · 不开 T1 / 禁 T0c）；D302 深渊可感 **M 已上线**（1.65.92 · `c6196b43`）；D301 守招·余烬招架 **已上线**（1.65.91）；天赋换机制 **HOLD**；事件 R/W / 调律 R / 工坊 R / 走廊 W2 / 深渊 R 均等人感或样本。见 [`STATUS-ember-ash-imprint-t0b-2026-10-08.md`](STATUS-ember-ash-imprint-t0b-2026-10-08.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** 灰印 HOLD · D302/D301 已收 · 天赋 HOLD · 样本门禁 R 窗后置 · 成长 #2 招架已收、灰印停泊  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
+**本窗性质：** tip 已关 · 已施工 D303 · **零改本号**
 **硬规格（已批 A · 已施工 D303）：** [`DESIGN-ember-weekly-raid-feel-diff-2026-10-08.md`](../design/DESIGN-ember-weekly-raid-feel-diff-2026-10-08.md) · 施工 [`STATUS-ember-weekly-raid-feel-diff-d303.md`](STATUS-ember-weekly-raid-feel-diff-d303.md) · **方案 M**（W1a+W1b+W1c+W1d；R 后置；W 否决）· CoreRpg **1.65.93** · bv **60**
 **打开理由：** 日刷走廊感（D300）与深渊段感（D302）已让 Q01–Q07 / 深渊 10 层可分辨；**团本 R01–R03**（及周规则入口侧）仍偏「同骨架换 Boss 名片」——要在不扩 Pack6、不新开团本/周本地图包、不抬体力/掉率前提下，让入口与本间/段节奏可感差（同 Multiverse 轻差异，对齐深渊 tip 形）。
 

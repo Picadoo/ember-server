@@ -1,12 +1,13 @@
 # 状态 · 下一档硬债选定 · 需策划（枢纽「今天该打哪」日路由诚实）
+> **旁注（已关 · 已施工 D306）：** tip `STATUS-ember-next-hard-debt-hub-daily-routing-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-hub-daily-routing-d306.md`](STATUS-ember-hub-daily-routing-d306.md) · 枢纽日路由诚实已上线 · **≠关观察**。
 
 > **上游结案：** D305 挂机庭软身份方案 **M 已上线**（CoreRpg **1.65.95** · `53fb4a79`）；D304 Boss 预警诚实 **M 已上线**（1.65.94）；D303 周本段感 **M 已上线**（1.65.93）；D302 深渊可感 **M 已上线**（1.65.92）；D301 守招·余烬招架 **已上线**（1.65.91）；灰印副招 **T0/T0b ❌ · HOLD**；天赋换机制 **HOLD**；事件 R/W / 调律 R / 工坊 R / 走廊 W2 / 深渊 R / 周本 R / Boss 预警 R / 挂机 R 均等人感或样本。见 [`STATUS-ember-hang-farm-soft-identity-d305.md`](STATUS-ember-hang-farm-soft-identity-d305.md)。
 
 **施工：** D306 已上线 · CoreRpg **1.65.96** · STATUS [`STATUS-ember-hub-daily-routing-d306.md`](STATUS-ember-hub-daily-routing-d306.md)
 **日期：** 2026-10-08（上海时间）  
 **上游：** D305 挂机层身份已收 · D300–D304 战斗/入口可感波已收 · 灰印/天赋 HOLD · 样本门禁 R 窗后置 · 加固稿 **§1B 枢纽反馈散**仍开  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（已批 A · D306 已施工）：** 派单策划出 [`DESIGN-ember-hub-daily-routing-2026-10-08.md`](../design/DESIGN-ember-hub-daily-routing-2026-10-08.md) · STATUS=待批 A · 荐 M/R/W · backlog `B-hub-daily-routing`  
+**本窗性质：** tip 已关 · 已施工 D306 · **零改本号**
+**硬规格（已批 A · 已施工 D306）：** 派单策划出 [`DESIGN-ember-hub-daily-routing-2026-10-08.md`](../design/DESIGN-ember-hub-daily-routing-2026-10-08.md) · 荐 M/R/W · backlog `B-hub-daily-routing`  
 **打开理由：** 走廊/深渊/团本/Boss 预警/挂机层名片（D300–D305）已落；枢纽仍靠 `%corerpg_p1_next%` **一行**指路——Q07 后入口变多，玩家读不清「今天该打主线 / 挑战精选 / 深渊 / 团本 / 挂机降层 / 体力还够几局」。要在**不抬体力、不改掉落、不新开模式**前提下，让日路由决策一屏诚实可读。
 
 ---

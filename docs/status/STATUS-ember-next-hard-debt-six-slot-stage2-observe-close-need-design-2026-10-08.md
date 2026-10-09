@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（六槽 Stage2 观察关窗检查单 · docs-only）
+> **旁注（已关 · 观察执行中 · D326）：** tip `STATUS-ember-next-hard-debt-six-slot-stage2-observe-close-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md`](STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md) · 观察关窗检查单已批 A·M · 观察执行中 · 绿出口另签 · **≠关观察** · **≠绿出口已签 · ≠本号关观察**。
 
 > **上游结案：** D325 Stage2 档 C **线上 bv62 部署+烟测 PASS**（[`STATUS-ember-six-slot-stage2-set-bonus-live-d325-bv62-2026-10-08.md`](STATUS-ember-six-slot-stage2-set-bonus-live-d325-bv62-2026-10-08.md) · `6e734dc7`）；现态 jar `1.65.99-d325.local` tip `b02ca9f3` · sha `4c273c5a…` · **`set_bonus=true`** · **bv=62**；Stage1（D324 · enabled/migrate）+ Stage2 护甲路径**同开观察**。样本 R 全表不得开（D308）；天赋 **HOLD**；灰印 **HOLD**；Pack6 **硬禁**；K3 **未授权**；禁重开 D301–D311 与六槽 Stage1/2 **施工本体**。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D325 live PASS · 隔离验收 `baa6306a` · 施工 tip `b02ca9f3` · D324 Stage1 S3 观察继续 · D308 门槛钉死 · D309–D311 证据链已闭 · 灰印/天赋 HOLD · K3 备选未授权 · Pack6 硬禁  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R** · **不改线上 set_bonus / bv / jar** · **不写六槽新代码**  
-**硬规格（已批）：** [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) · STATUS=**已批 A · 批 M** · backlog `B-six-slot-stage2-observe-close` · D326  
+**本窗性质：** tip 已关 · 观察执行中 · **≠绿出口已签 · ≠本号关观察** · **零改本号**
+**硬规格（已批 A · 批 M · D326 · 观察执行中 · ≠绿出口已签 · ≠本号关观察）：** [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) · STATUS=**已批 A · 批 M** · backlog `B-six-slot-stage2-observe-close` · D326  
 
 > **交稿旁注（D326 · 策划执行手）：** 硬规格已交 [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) · STATUS=待批 A · 荐方案 M · **本旁注零施工**（未改 jar/yml/开关）。
 

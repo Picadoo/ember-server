@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（样本窗周报模板 · D308 方案 R 后置）
+> **旁注（已关 · 已落仓 D310）：** tip `STATUS-ember-next-hard-debt-sample-week-report-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · 样本窗周报检查单已落仓 · **≠关观察** · **≠开样本 R**。
 
 > **上游结案：** D309 副手并轨决策页方案 **A 已落仓**（docs-only · `e0e8ded6`）；加固稿 **§8-5 已关窗**；D308 样本窗就绪清单方案 **M 已落仓**（`27750279`），其 **方案 R 周报模板后置**（未勾 M+R）；加固 **1→5** 已关；战斗/经济 R **全表不得开**。见 [`STATUS-ember-offhand-merge-decision-d309.md`](STATUS-ember-offhand-merge-decision-d309.md) · [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D309 副手关窗已收 · D308 就绪硬表已收（R 周报后置）· §1 M 波 + D301–D307 已收 · 样本 R 全表不得开 · 灰印副招 **T0/T0b ❌ · HOLD** · 天赋换机制 **HOLD** · Pack6 / 六槽 **HOLD**  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R**  
-**硬规格（已上线 D310 · 方案 M · docs-only）：** [`DESIGN-ember-sample-week-report-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-2026-10-08.md) · STATUS=已批 A · 批 M · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · 检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md) · backlog `B-sample-week-report`  
+**本窗性质：** tip 已关 · 已落仓 D310 · **零改本号** · **不开样本 R**
+**硬规格（已批 A · 已落仓 D310）：** [`DESIGN-ember-sample-week-report-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-2026-10-08.md) · STATUS=已批 A · 批 M · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · 检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md) · backlog `B-sample-week-report`  
 **打开理由：** D308 钉死「何时算够、谁签字」的**手查硬表**；仍缺从 `p1-telemetry/<week>.yml` 生成的 **markdown 周报检查单**（减 OP 抄写、统一勾选栏）。D308 批注明文 **R 周报后置**——本 tip 把它升为下一档 docs 硬债，**仍零玩法、禁自动开闸、禁玩家面 KPI**。
 
 > **关窗：** [`DESIGN-ember-sample-week-report-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-2026-10-08.md) · **STATUS 已批 A · 批 M · D310** · 只 docs 检查单已落 [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md)；门槛钉 D308 **未改**；R/M+R 后置；W 否决 · tip/backlog/D308 STATUS 已同步 · [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md)。

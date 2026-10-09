@@ -1,8 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（签名调律可感决策）
+> **旁注（已关 · 已施工 D297）：** tip `STATUS-ember-next-hard-debt-sig-attune-need-design-2026-10-07.md` 已关；指向 STATUS [`STATUS-ember-sig-attune-decision-d297.md`](STATUS-ember-sig-attune-decision-d297.md) · 签名调律方案 M 已上线 · **≠关观察**。
 
 **日期：** 2026-10-07（上海时间）  
 **上游：** D296 房间事件必感 + 经济门禁 **PASS** · 总控令：勿开 R/W 续窗（无真人「仍空」证据）  
-**本窗性质：** **只 docs tip** · **未改** yml / jar / 菜单 · 服务器保持 up
+**本窗性质：** tip 已关 · 已施工 D297 · **零改本号**
 
 ---
 

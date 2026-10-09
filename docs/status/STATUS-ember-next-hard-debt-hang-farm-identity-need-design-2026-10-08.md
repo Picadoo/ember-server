@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（挂机庭软身份 / 层可感差）
+> **旁注（已关 · 已施工 D305）：** tip `STATUS-ember-next-hard-debt-hang-farm-identity-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-hang-farm-soft-identity-d305.md`](STATUS-ember-hang-farm-soft-identity-d305.md) · 挂机庭软身份已上线 · **≠关观察**。
 
 > **上游结案：** D304 Boss 预警诚实方案 **M 已上线**（CoreRpg **1.65.94** · `6e1ae075`）；D303 周本段感 **M 已上线**（1.65.93）；D302 深渊可感 **M 已上线**（1.65.92）；D301 守招·余烬招架 **已上线**（1.65.91）；灰印副招 **T0/T0b ❌ · HOLD**；天赋换机制 **HOLD**；事件 R/W / 调律 R / 工坊 R / 走廊 W2 / 深渊 R / 周本 R / Boss 预警 R 均等人感或样本。见 [`STATUS-ember-boss-telegraph-honesty-d304.md`](STATUS-ember-boss-telegraph-honesty-d304.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D304 预警诚实已收 · 战斗可感波（D300–D304）已收 · 灰印/天赋 HOLD · 样本门禁 R 窗后置 · D285 挂机到顶引导已收、**层身份仍薄**  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（待批 A）：** 派单策划出 [`DESIGN-ember-hang-farm-soft-identity-2026-10-08.md`](../design/DESIGN-ember-hang-farm-soft-identity-2026-10-08.md) · STATUS=待批 A · 荐 M/R/W · backlog `B-hang-farm-soft-identity`  
+**本窗性质：** tip 已关 · 已施工 D305 · **零改本号**
+**硬规格（已批 A · 已施工 D305）：** 派单策划出 [`DESIGN-ember-hang-farm-soft-identity-2026-10-08.md`](../design/DESIGN-ember-hang-farm-soft-identity-2026-10-08.md) · 荐 M/R/W · backlog `B-hang-farm-soft-identity`  
 **打开理由：** 日刷走廊 / 深渊 / 团本 / Boss 预警可感已落；挂机庭 **D285 只解决「满额→去冒险」**，站场时各层仍像编号楼梯——装备决定能站哪层，但玩家读不清「这层在养什么 / 该升还是该降」。要在**不改日 2400 封顶、不抬层收益、不新开挂机地图包**前提下，让层软身份可感。
 
 ---

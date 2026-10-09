@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（样本窗周报脚本规格 · D310 方案 R 后置）
+> **旁注（已关 · 已落仓 D311）：** tip `STATUS-ember-next-hard-debt-sample-week-report-script-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-sample-week-report-script-d311.md`](STATUS-ember-sample-week-report-script-d311.md) · 样本窗周报脚本已落仓 · **≠关观察** · **≠开样本 R** · **≠自动开闸**。
 
 > **上游结案：** D310 样本窗周报模板方案 **M 已落仓**（docs-only · `1cdbc233`）；可复用检查单 [`STATUS-ember-sample-week-report-checklist-d310.md`](STATUS-ember-sample-week-report-checklist-d310.md) 已入库；DESIGN §2.2 **方案 R（脚本）仍后置**；D308 门槛数字 **未改**；战斗/经济 R **全表不得开**。见 [`STATUS-ember-sample-week-report-d310.md`](STATUS-ember-sample-week-report-d310.md) · [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D310 周报检查单已收（R 脚本后置）· D309 副手关窗 · D308 就绪硬表已收 · §1 M 波 + D301–D307 已收 · 样本 R 全表不得开 · 灰印副招 **T0/T0b ❌ · HOLD** · 天赋换机制 **HOLD** · Pack6 / 六槽 **HOLD**  
-**本窗性质：** tip 已关窗（上游 D311 已落脚本）· **未改**玩法 yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R**  
-**硬规格（已上线 D311 · 批 M+R · docs+tools 同号）：** [`DESIGN-ember-sample-week-report-script-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-script-2026-10-08.md) · STATUS=已批 A · 批 M+R · [`STATUS-ember-sample-week-report-script-d311.md`](STATUS-ember-sample-week-report-script-d311.md) · 脚本 [`tools/p1-telemetry-week-report.py`](../../tools/p1-telemetry-week-report.py) · backlog `B-sample-week-report-script`  
+**本窗性质：** tip 已关 · 已落仓 D311 · **零改本号** · **不开样本 R**
+**硬规格（已批 A · 已落仓 D311）：** [`DESIGN-ember-sample-week-report-script-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-script-2026-10-08.md) · STATUS=已批 A · 批 M+R · [`STATUS-ember-sample-week-report-script-d311.md`](STATUS-ember-sample-week-report-script-d311.md) · 脚本 [`tools/p1-telemetry-week-report.py`](../../tools/p1-telemetry-week-report.py) · backlog `B-sample-week-report-script`  
 
 > **策划交稿旁注（2026-10-08 Asia/Shanghai）：** 硬规格已交 [`DESIGN-ember-sample-week-report-script-2026-10-08.md`](../design/DESIGN-ember-sample-week-report-script-2026-10-08.md) · 曾 STATUS=**待批 A** · 荐方案 M · 可选 R/M+R · **W 否决** · 门槛钉 D308 **未改**。  
 

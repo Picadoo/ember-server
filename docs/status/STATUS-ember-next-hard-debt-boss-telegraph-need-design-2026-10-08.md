@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（Boss 预警诚实 / 相位线索可读）
+> **旁注（已关 · 已施工 D304）：** tip `STATUS-ember-next-hard-debt-boss-telegraph-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-boss-telegraph-honesty-d304.md`](STATUS-ember-boss-telegraph-honesty-d304.md) · Boss 预警诚实已上线 · **≠关观察**。
 
 > **上游结案：** D303 周本/团本段感方案 **M 已上线**（CoreRpg **1.65.93** · `152ad6bc`）；灰印副招 **T0/T0b ❌ · HOLD**；D302 深渊可感 **M 已上线**（1.65.92）；D301 守招·余烬招架 **已上线**（1.65.91）；天赋换机制 **HOLD**；事件 R/W / 调律 R / 工坊 R / 走廊 W2 / 深渊 R / 周本 R 均等人感或样本。见 [`STATUS-ember-weekly-raid-feel-diff-d303.md`](STATUS-ember-weekly-raid-feel-diff-d303.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D303 周本段感已收 · 灰印 HOLD · 天赋 HOLD · 样本门禁 R 窗后置 · D283/D295 破绽闪与本局摘要已收  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（已批 A · 已施工 D304 · CoreRpg **1.65.94**）：** [`DESIGN-ember-boss-telegraph-honesty-2026-10-08.md`](../design/DESIGN-ember-boss-telegraph-honesty-2026-10-08.md) · **方案 M**（W1a+W1b+W1c 必做；W1d 同批；R 后置；W 否决；W1c whiff 键常驻+条件文案）· backlog `B-boss-telegraph-honesty` · 勿再改设计主交付  
+**本窗性质：** tip 已关 · 已施工 D304 · **零改本号**
+**硬规格（已批 A · 已施工 D304）：** [`DESIGN-ember-boss-telegraph-honesty-2026-10-08.md`](../design/DESIGN-ember-boss-telegraph-honesty-2026-10-08.md) · **方案 M**（W1a+W1b+W1c 必做；W1d 同批；R 后置；W 否决；W1c whiff 键常驻+条件文案）· backlog `B-boss-telegraph-honesty` · 勿再改设计主交付  
 **打开理由：** 走廊/深渊/团本入口段感（D300–D303）与破绽成功闪+结算摘要（D283/D295）已落；**招式起手预警与相位切换线索**仍参差——玩家常在「半血砸地 / 冲撞 / 烬核」真正到来前读不清或读到假线索。要在不扩 Pack6、不新开 Boss 招、不抬体力/掉率前提下，让预警与相位可感且诚实。
 
 ---

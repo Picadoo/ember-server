@@ -1,10 +1,11 @@
 # 状态 · 下一档硬债选定 · 需策划（深渊层感轻差异 / 同 Multiverse 可感差）
+> **旁注（已关 · 已施工 D302）：** tip `STATUS-ember-next-hard-debt-abyss-feel-need-design-2026-10-07.md` 已关；指向 STATUS [`STATUS-ember-abyss-feel-diff-d302.md`](STATUS-ember-abyss-feel-diff-d302.md) · 深渊层感差异已上线 · **≠关观察**。
 
 > **上游结案：** D301 守招·余烬招架 **已上线**（CoreRpg **1.65.91** · `78dec2ae`）；天赋换机制 **HOLD**；加固债 **#1** 走廊 W1（D300）与 **#3** 再刷短反馈（D299）已收；**#2** 成长横向本窗已得招架。见 [`STATUS-ember-guard-skill-parry-d301.md`](STATUS-ember-guard-skill-parry-d301.md)。
 
 **日期：** 2026-10-07（上海时间）  
 **上游：** D301 招架上线 · 天赋 HOLD · 事件 R/W / 调律 R / 工坊 R / 走廊 W2 均后置等人；日刷七图节奏短签已有，**深渊 10 层仍偏「编号楼梯」**  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
+**本窗性质：** tip 已关 · 已施工 D302 · **零改本号**
 **硬规格（已批 A · 已施工 D302）：** [`DESIGN-ember-abyss-feel-diff-2026-10-07.md`](../design/DESIGN-ember-abyss-feel-diff-2026-10-07.md) · 施工 [`STATUS-ember-abyss-feel-diff-d302.md`](STATUS-ember-abyss-feel-diff-d302.md) · **方案 M**（W1a+W1b+W1c；R 后置；W 否决）· CoreRpg **1.65.92** · bv **60**
 **打开理由：** 日刷走廊感（D300）已让 Q01–Q07 可分辨；深渊同 Multiverse 骨架下层间/段间手感仍薄——要在不扩 Pack、不新开深渊地图包、不抬体力/掉率前提下，让下潜有层感/段感。灰印重设计可作备选，**本窗不抢**。
 

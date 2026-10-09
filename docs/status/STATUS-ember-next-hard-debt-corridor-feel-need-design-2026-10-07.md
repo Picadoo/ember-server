@@ -1,8 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（日刷走廊感轻差异 / 同骨架可感差）
+> **旁注（已关 · 已施工 D300）：** tip `STATUS-ember-next-hard-debt-corridor-feel-need-design-2026-10-07.md` 已关；指向 STATUS [`STATUS-ember-corridor-feel-diff-d300.md`](STATUS-ember-corridor-feel-diff-d300.md) · 日刷走廊感差异已上线 · **≠关观察**。
 
 **日期：** 2026-10-07（上海时间）  
 **上游：** D299 再刷短反馈方案 M **已上线**（CoreRpg **1.65.89** · commit `3a24e277`）· R 后置；事件 R/W / 调律 R 仍等遥测样本；反馈层（D283–D298）与再刷可见（D299）已做完  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up
+**本窗性质：** tip 已关 · 已施工 D300 · **零改本号**
 
 ---
 

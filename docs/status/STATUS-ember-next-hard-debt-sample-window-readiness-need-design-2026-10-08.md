@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（样本窗就绪清单 / 何时再开 R）
+> **旁注（已关 · 已落仓 D308）：** tip `STATUS-ember-next-hard-debt-sample-window-readiness-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) · 样本窗就绪清单已落仓 · 全表不得开 R · **≠关观察** · **≠开样本 R**。
 
 > **上游结案：** D307 工坊菜单诚实方案 **M 已上线**（CoreRpg **1.65.97** · `3c04b9d6`）；加固稿 **§1A–§1C 主债 M 波已清**；战斗可感波 D301–D304、挂机 D305、枢纽 D306、工坊菜单 D307 已收。Live **D301–D307**。灰印副招 **T0/T0b ❌ · HOLD**；天赋换机制 **HOLD**；事件 R/W / 调律 R / **工坊 R（价/节奏）** / 走廊 W2 / 深渊 R / 周本 R / Boss 预警 R / 挂机 R 均等 **人感或 D298 周样本**。见 [`STATUS-ember-workshop-menu-honesty-d307.md`](STATUS-ember-workshop-menu-honesty-d307.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D307 工坊菜单诚实已收 · 加固 §1 主循环/枢纽/挂机软债 M 波已清 · 非样本门禁薄体验债（走廊/深渊/团本/预警/挂机层/日路由/工坊菜单）已连收 · 灰印/天赋 HOLD · **余下真硬战斗/经济债几乎全是样本门禁 R**  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（已上线 D308 · docs-only）：** [`DESIGN-ember-sample-window-readiness-2026-10-08.md`](../design/DESIGN-ember-sample-window-readiness-2026-10-08.md) · STATUS=已批 A · 批 M · [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) · backlog `B-sample-window-readiness`  
+**本窗性质：** tip 已关 · 已落仓 D308 · **零改本号** · **不开样本 R**
+**硬规格（已批 A · 已落仓 D308）：** [`DESIGN-ember-sample-window-readiness-2026-10-08.md`](../design/DESIGN-ember-sample-window-readiness-2026-10-08.md) · STATUS=已批 A · 批 M · [`STATUS-ember-sample-window-readiness-d308.md`](STATUS-ember-sample-window-readiness-d308.md) · backlog `B-sample-window-readiness`  
 **打开理由：** D298 遥测管已上线，但各 R 窗「何时算样本够、谁签字再开、最小门槛是什么」仍散落在各 DESIGN 后置句里——总控/策划容易误把「人感一句」或「薄 UX 余感」当成可开 R 的门槛。要在**不开任何战斗/经济 R、不改玩法数值**前提下，把**样本窗就绪清单 + 再开门禁**写成可批硬规格（docs-only）。
 
 ---

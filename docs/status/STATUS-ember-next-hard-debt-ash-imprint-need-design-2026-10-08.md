@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（灰印副招枢轴 / 成长横向第二技能身份）
+> **旁注（已关 · tip 已关 · 债 HOLD · 禁当上线）：** tip `STATUS-ember-next-hard-debt-ash-imprint-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-ash-imprint-t0b-2026-10-08.md`](STATUS-ember-ash-imprint-t0b-2026-10-08.md) · 灰印副招 T0/T0b ❌ · **HOLD · tip 已关 · 禁当施工债重开** · **≠关观察** · **HOLD · 禁当上线**。
 
 > **上游结案：** D302 深渊可感差异方案 **M 已上线**（CoreRpg **1.65.92** · `c6196b43`）；D301 守招·余烬招架 **已上线**（1.65.91 · `78dec2ae`）；天赋换机制 **HOLD**；事件 R/W / 调律 R / 工坊 R / 走廊 W2 均后置等人。见 [`STATUS-ember-abyss-feel-diff-d302.md`](STATUS-ember-abyss-feel-diff-d302.md)。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D302 深渊感已收 · D301 招架已收 · 天赋 HOLD · 事件 R/W / 调律 R / 工坊 R / 走廊 W2 等人 · 深渊 R（Director）刚上 M，等人感  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
-**硬规格（已批 A · T0/T0b ❌ · HOLD）：** [`DESIGN-ember-ash-imprint-pivot-2026-10-08.md`](../design/DESIGN-ember-ash-imprint-pivot-2026-10-08.md) · **方案 R** · T0/T0b 未过 42±2 · **不开 T1** · [`STATUS-ember-ash-imprint-t0b-2026-10-08.md`](STATUS-ember-ash-imprint-t0b-2026-10-08.md) · **下一档 tip：** [`STATUS-ember-next-hard-debt-weekly-raid-feel-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-weekly-raid-feel-need-design-2026-10-08.md) · 设计主交付勿改  
+**本窗性质：** tip 已关 · 债 HOLD · **禁当施工债重开 / 禁当上线** · **零改本号**
+**硬规格（已批 A · HOLD · T0/T0b ❌ · 禁当上线）：** [`DESIGN-ember-ash-imprint-pivot-2026-10-08.md`](../design/DESIGN-ember-ash-imprint-pivot-2026-10-08.md) · **方案 R** · T0/T0b 未过 42±2 · **不开 T1** · [`STATUS-ember-ash-imprint-t0b-2026-10-08.md`](STATUS-ember-ash-imprint-t0b-2026-10-08.md) · **下一档 tip：** [`STATUS-ember-next-hard-debt-weekly-raid-feel-need-design-2026-10-08.md`](STATUS-ember-next-hard-debt-weekly-raid-feel-need-design-2026-10-08.md) · 设计主交付勿改  
 **打开理由：** 招架落地后，技能装仍缺一条清晰的**副招进攻/控制身份**；旧灰印在 skill-kit 已删（白送或没人用）；守招稿方案 R 曾指向灰印作另一横向——本窗正式打开**灰印枢轴硬设计**（非 Pack6、非六槽）。
 
 ---

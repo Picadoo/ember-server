@@ -1,11 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（六槽 K3 同部位熔炼决策页 · docs-only）
+> **旁注（已关 · 已批 · T0‴ PASS · 施工等绿出口 · D327）：** tip `STATUS-ember-next-hard-debt-six-slot-k3-refine-need-design-2026-10-08.md` 已关；指向 STATUS [`STATUS-ember-six-slot-k3-refine-d327-2026-10-08.md`](STATUS-ember-six-slot-k3-refine-d327-2026-10-08.md) · K3 决策页已批 · T0‴ PASS · 施工等绿出口 · **≠关观察** · **≠开闸 ≠部署 K3 live**。
 
 > **上游结案：** D326 Stage2 观察关窗 **已批 A · 批 M · 观察执行中**（[`STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md`](STATUS-ember-six-slot-stage2-observe-close-d326-2026-10-08.md) · tip @ `b2f9b744` · DESIGN [`DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md`](../design/DESIGN-ember-six-slot-stage2-observe-close-2026-10-08.md) · 批 commit `00473c04`）；最短窗 **48h** 自 live 17:40 CST 起（不早于 **10-10 17:40**）+ §2 必抽整轮≥1 PASS → 绿出口**另签**。D325 Stage2 档 C **线上 bv62**（[`STATUS-ember-six-slot-stage2-set-bonus-live-d325-bv62-2026-10-08.md`](STATUS-ember-six-slot-stage2-set-bonus-live-d325-bv62-2026-10-08.md) · `6e734dc7`）· jar `1.65.99-d325.local` tip `b02ca9f3` · **`set_bonus=true`** · **bv=62**。K3 自 D318 起为 backlog 备选 **未授权**（`B-six-slot-k3-same-slot-refine`）。样本 R 全表不得开（D308）；天赋 **HOLD**；灰印 **HOLD**；Pack6 **硬禁**；禁重开 Stage1/2 **施工本体**；禁改 ×0.97 / 关 set_bonus。
 
 **日期：** 2026-10-08（上海时间）  
 **上游：** D326 观察批 M 执行中 · D325 live PASS · D324 Stage1 S3 观察继续 · D318 批 A·K0（K3 转备选、不授权 T0‴）· D308 门槛钉死 · 灰印/天赋 HOLD · Pack6 硬禁  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up · **不开任一样本门禁 R** · **不改线上 set_bonus / bv / jar** · **观察期内不部署 K3** · **不写六槽新代码（本 tip 窗）**  
-**硬规格（已批）：** [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md) · STATUS=**已批 A · 批 M** · backlog `B-six-slot-k3-same-slot-refine` · D327  
+**本窗性质：** tip 已关 · 已批 · T0‴ PASS · 施工等绿出口 · **≠开闸 ≠部署 K3 live** · **零改本号**
+**硬规格（已批 A · 批 M · D327 · T0‴ PASS · 施工等绿出口 · ≠开闸 ≠部署 K3 live）：** [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md) · STATUS=**已批 A · 批 M** · backlog `B-six-slot-k3-same-slot-refine` · D327  
 > **交稿旁注（D327 · 策划执行手）：** 硬规格已交 [`DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md`](../design/DESIGN-ember-six-slot-k3-same-slot-refine-2026-10-08.md) · STATUS=待批 A · 荐方案 M（观察期可离线 T0‴；施工/部署等绿出口或另签）· **本旁注零施工**（未改 jar/yml/开关）。
 >
 > **结案旁注（D327 · 总控）：** 本 tip **已关 · 批 A · 批 M · D327**；授权另号离线 T0‴；施工/部署默认等 Stage2 绿出口；不批 L；本号不另签并行施工。见 [`STATUS-ember-six-slot-k3-refine-d327-2026-10-08.md`](STATUS-ember-six-slot-k3-refine-d327-2026-10-08.md)。

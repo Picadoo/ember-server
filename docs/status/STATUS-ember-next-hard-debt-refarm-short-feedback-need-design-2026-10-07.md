@@ -1,8 +1,9 @@
 # 状态 · 下一档硬债选定 · 需策划（再刷短反馈 / 成色·精工可感节奏）
+> **旁注（已关 · 已施工 D299）：** tip `STATUS-ember-next-hard-debt-refarm-short-feedback-need-design-2026-10-07.md` 已关；指向 STATUS [`STATUS-ember-refarm-short-feedback-d299.md`](STATUS-ember-refarm-short-feedback-d299.md) · 再刷短反馈已上线 · **≠关观察**。
 
 **日期：** 2026-10-07（上海时间）  
 **上游：** D298 玩法可感遥测方案 M **已上线**（CoreRpg **1.65.88** · commit `038c4935`）· tip 明确攒 1～2 周真人样本后再议事件 R/W、调律 R、扩 Pack  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up
+**本窗性质：** tip 已关 · 已施工 D299 · **零改本号**
 
 ---
 

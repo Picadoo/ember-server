@@ -1,9 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（天赋一排换机制硬规格）
+
+> **旁注（已关 · tip 已关 · 债 HOLD · 禁当上线）：** tip `STATUS-ember-next-hard-debt-talent-mech-pivot-need-design-2026-10-07.md` 已关；指向 STATUS [`STATUS-ember-talent-row1-mech-t0dprime-2026-10-07.md`](STATUS-ember-talent-row1-mech-t0dprime-2026-10-07.md) · 天赋一排换机制 T0'/T0'' ❌ · **HOLD · tip 已关 · 禁当施工债重开** · **≠关观察** · **HOLD · 禁当上线**。
+
 > **结案补充（2026-10-07）：** T0' ❌ → T0'' ❌（M2_*）→ **换机制轨 HOLD**；禁 T0'''；见 `STATUS-ember-talent-row1-mech-t0dprime-2026-10-07.md`。下一难活勿再开小数轨 → [`STATUS-ember-next-hard-debt-guard-skill-need-design-2026-10-07.md`](STATUS-ember-next-hard-debt-guard-skill-need-design-2026-10-07.md)（守招换思路）。
 
 **日期：** 2026-10-07（上海时间）  
 **上游：** D300 日刷走廊感差异方案 M **已上线**（CoreRpg **1.65.90** · commit `9226304e`）· W2 / 事件 R/W / 调律 R / 工坊 R 均后置等人；遥测 / 再刷 / 走廊 W1 反馈层已清  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
+**本窗性质：** tip 已关 · 债 HOLD · **禁当施工债重开 / 禁当上线** · **零改本号**
 **打开理由：** 此前 tip 否「本窗开天赋」是因与遥测抢窗；现窗已空。总控**打开换机制硬设计窗**——仍禁数值盲调、禁 T1 冒充过线；对齐备忘 §2。
 
 ---

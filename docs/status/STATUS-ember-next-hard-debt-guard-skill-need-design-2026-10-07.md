@@ -1,9 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（守招换思路硬规格）
+
+> **旁注（已关 · 已施工 D301）：** tip `STATUS-ember-next-hard-debt-guard-skill-need-design-2026-10-07.md` 已关；指向 STATUS [`STATUS-ember-guard-skill-parry-d301.md`](STATUS-ember-guard-skill-parry-d301.md) · 守招·余烬招架已上线 · **≠关观察**。
+
 > **上游结案：** 天赋换机制 T0' ❌ → T0'' ❌ → **HOLD**（`9ff53940`）；**禁**再开天赋系数 / 有界幅度第三轮（T0'''）。见 `STATUS-ember-talent-row1-mech-t0dprime-2026-10-07.md`。
 
 **日期：** 2026-10-07（上海时间）  
 **上游：** 天赋换机制轨 **HOLD** · 事件 R/W / 调律 R / 工坊 R / 走廊 W2 均后置等人；遥测 / 再刷 / 走廊 W1 / 天赋换机制（模拟）窗已结  
-**本窗性质：** **只 docs tip + 派单文** · **未改** yml / jar / 菜单 · 服务器保持 up  
+**本窗性质：** tip 已关 · 已施工 D301 · **零改本号**
 **打开理由：** 加固债 **#2** 成长横向：技能 S1/S2 已落地；**守招 D212 搁置**（skill-kit 五轮 ❌，需换思路）。窗已空；总控打开**守招换思路硬设计窗**——禁重交旧壁垒表、禁抬通关率。
 
 ---
@@ -86,7 +89,7 @@
 - 守招失败备忘 · [`DESIGN-ember-skill-kit-2026-10-06.md`](../design/DESIGN-ember-skill-kit-2026-10-06.md) §2 五轮 + §4 D212  
 - D287 技能决策（不扩守招）· [`STATUS-ember-playfeel-skill-kit-d287.md`](STATUS-ember-playfeel-skill-kit-d287.md)  
 - 加固债 #2 · [`DESIGN-ember-playfeel-hardening-2026-10-07.md`](../design/DESIGN-ember-playfeel-hardening-2026-10-07.md)
-- **硬规格（待批 A）：** [`DESIGN-ember-guard-skill-pivot-2026-10-07.md`](../design/DESIGN-ember-guard-skill-pivot-2026-10-07.md) · 荐 **方案 M**（预警短窗招架）· R=搁置改灰印横向 · W 否决旧壁垒表
+- **硬规格（已批 A · 已施工 D301）：** [`DESIGN-ember-guard-skill-pivot-2026-10-07.md`](../design/DESIGN-ember-guard-skill-pivot-2026-10-07.md) · 荐 **方案 M**（预警短窗招架）· R=搁置改灰印横向 · W 否决旧壁垒表
 
 ---
 
