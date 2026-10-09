@@ -1,8 +1,8 @@
-# D391 骨架 · 短征 sx01 烬门哨岗（EmberSx01）
-# 地图：ember_short_sx01（本地自 ember_daily_v1 白盒复制 · 有墙有门有垫 · 主题换皮待 WE）
+# D391 续 · 短征 sx01 烬门哨岗（EmberSx01）— 刷点已钉
+# 地图：ember_short_sx01（自 ember_daily_v1 / Q01 白盒拷贝 · 有墙有门洞有垫）
 # 进入：只经 CoreRpg（菜单 / corerpg p1 enter sx01）→ 预留体力 30 → 发 P1 通行证再 dp start-console。
-# 本号：地图+DP 壳；刷怪/日帽/S40 结算 / p1 pass 键 → 并行号（MM / 插件键 / 经济）。
-# reward=false 路径：结算由 CoreRpg 单次发放（对齐 Q01）；本文件不发旧 DP 奖励。
+# reward=false：结算由 CoreRpg S40；本文件不发旧 DP 奖励。
+# 开本：关 Q01 三道门洞铁栅（模板为 AIR）→ 启 wave1
 
 dungeon-init-script:
   - "$setmap{name=ember_short_sx01} @init"
@@ -17,6 +17,70 @@ dungeon-start:
   action-script:
     - "$message{type=text;text=§6[余烬] §e烬门哨岗 §7· 短征 · 清三房 · 终厅拉开可躲} @dungeon"
     - "$teleport{location=0,64,5;defspawn=true} @player"
+    - "$operation-block{loc=16,64,29;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,64,30;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,64,31;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,64,32;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,64,33;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,64,34;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,64,35;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,65,29;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,65,30;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,65,31;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,65,32;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,65,33;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,65,34;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,65,35;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,66,29;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,66,30;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,66,31;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,66,32;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,66,33;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,66,34;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=16,66,35;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=29,64,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=29,65,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=29,66,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=30,64,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=30,65,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=30,66,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=31,64,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=31,65,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=31,66,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=32,64,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=32,65,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=32,66,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=33,64,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=33,65,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=33,66,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=34,64,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=34,65,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=34,66,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=35,64,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=35,65,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=35,66,52;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,64,91;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,64,92;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,64,93;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,64,94;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,64,95;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,64,96;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,64,97;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,65,91;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,65,92;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,65,93;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,65,94;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,65,95;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,65,96;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,65,97;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,66,91;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,66,92;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,66,93;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,66,94;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,66,95;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,66,96;mode=set;type=IRON_FENCE} @dungeon"
+    - "$operation-block{loc=18,66,97;mode=set;type=IRON_FENCE} @dungeon"
+    - "$monstergroup{group=wave1;repeat=false;delay=2} @dungeon"
 
 dungeon-area: []
 

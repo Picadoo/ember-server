@@ -1,2 +1,2 @@
-# D391 骨架 · EmberSx01 门/障碍占位（铁栅范式对齐日更 S 档；坐标待地图钉）
+# EmberSx01 门由 option/monster $operation-block 管（Q01 门洞 AABB）；无独立 obstacle 组
 obstacles: {}
