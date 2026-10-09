@@ -307,6 +307,34 @@ public final class EmberAfkService implements Listener {
         return "§a今日已满 · 体力还在 · 去冒险";
     }
 
+
+    /** D405: remain = max(0, daily_kills − kills); full → 0 (numeric, STATUS-nailed). */
+    static int remainKills(int kills, int dailyCap) {
+        return Math.max(0, dailyCap - Math.max(0, kills));
+    }
+
+    /**
+     * D405 %corerpg_p1_afk_eta_min%: full → {@code "0"}; kph≤0 → {@code "开打后估时"};
+     * else {@code ceil(remain/kph*60)} as digits (at least 1 when remain>0).
+     */
+    static String etaMinText(int remain, double kph) {
+        if (remain <= 0) return "0";
+        if (kph <= 0) return "开打后估时";
+        int min = (int) Math.ceil(remain / kph * 60.0);
+        if (min < 1) min = 1;
+        return String.valueOf(min);
+    }
+
+    /**
+     * D405 optional %corerpg_p1_afk_remain_line%: full / no-kph / timed half-line.
+     * Full: 「今日已满 · 去冒险 / 去哪花」; no kph: 「还差 X 只 · 开打后估时」; else 「还差 X 只 · 约 Y 分钟满」.
+     */
+    static String remainLine(int remain, double kph) {
+        if (remain <= 0) return "今日已满 · 去冒险 / 去哪花";
+        if (kph <= 0) return "还差 " + remain + " 只 · 开打后估时";
+        return "还差 " + remain + " 只 · 约 " + etaMinText(remain, kph) + " 分钟满";
+    }
+
     /** D305 W1a: short card name matching TrMenu §d名片 (T1–T4). */
     static String cardTag(int tier) {
         switch (tier) {
@@ -930,6 +958,9 @@ public final class EmberAfkService implements Listener {
                     : "§f实测 " + fmt(d.periodCount(C_KPM, "all") / 100.0) + " 只/分 × " + (int) Math.round(offRatio * 100) + "% · 每日最多 " + offMax + " 只";
             case "next": return statusWord(p, d);
             case "rounds": return String.valueOf(kills);
+            case "remain": return String.valueOf(remainKills(kills, dailyKills)); // D405 numeric; full=0
+            case "eta_min": return etaMinText(remainKills(kills, dailyKills), kph); // D405
+            case "remain_line": return remainLine(remainKills(kills, dailyKills), kph); // D405 optional
             default: return "";
         }
     }

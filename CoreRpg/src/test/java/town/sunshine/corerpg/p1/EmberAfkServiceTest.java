@@ -151,4 +151,28 @@ public class EmberAfkServiceTest {
         assertTrue(EmberAfkService.capActionBar(2400).contains("去冒险"));
     }
 
+
+    /** D405 remain / eta_min / remain_line — STATUS-nailed: remain/eta full=numeric 0; no-kph eta=「开打后估时」. */
+    @Test public void remainEta_D405_readOnlyDerivatives() {
+        assertEquals(2400, EmberAfkService.remainKills(0, 2400));
+        assertEquals(400, EmberAfkService.remainKills(2000, 2400));
+        assertEquals(0, EmberAfkService.remainKills(2400, 2400));
+        assertEquals(0, EmberAfkService.remainKills(2500, 2400)); // over-cap clamps
+        assertEquals(2400, EmberAfkService.remainKills(-1, 2400)); // negative kills clamped → treat as 0 kills
+        assertEquals("0", EmberAfkService.etaMinText(0, 600));    // full
+        assertEquals("开打后估时", EmberAfkService.etaMinText(400, 0));
+        assertEquals("开打后估时", EmberAfkService.etaMinText(400, -1));
+        // remain=600, kph=600 → ceil(600/600*60)=60
+        assertEquals("60", EmberAfkService.etaMinText(600, 600));
+        // remain=1, kph=600 → ceil(1/600*60)=ceil(0.1)=1 (at least 1)
+        assertEquals("1", EmberAfkService.etaMinText(1, 600));
+        // remain=100, kph=30 → ceil(100/30*60)=ceil(200)=200
+        assertEquals("200", EmberAfkService.etaMinText(100, 30));
+        assertEquals("今日已满 · 去冒险 / 去哪花", EmberAfkService.remainLine(0, 600));
+        assertEquals("还差 400 只 · 开打后估时", EmberAfkService.remainLine(400, 0));
+        assertEquals("还差 600 只 · 约 60 分钟满", EmberAfkService.remainLine(600, 600));
+        // shipped daily_kills still 2400 (zero改日顶)
+        assertEquals(2400, afk().getInt("daily_kills"));
+    }
+
 }
