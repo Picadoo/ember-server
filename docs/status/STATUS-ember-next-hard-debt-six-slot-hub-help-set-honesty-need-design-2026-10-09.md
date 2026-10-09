@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（主菜单/帮助页 Stage2 四件套叙事诚实 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D339）：** tip `027322ef` 已关；总控已批 A·M；施工 STATUS [`STATUS-ember-six-slot-hub-help-set-honesty-d339-2026-10-09.md`](STATUS-ember-six-slot-hub-help-set-honesty-d339-2026-10-09.md)。
+
 > **上游结案：** D338 绿出口签字包模板已批 @ `e55312cc`（≠关观察）；D329–D333 / D12 / D336–D337 已落。Stage2 观察中（满窗 ≥**2026-10-10 17:40 CST**）。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / K3 部署 / 提前关观察 / 拧 set_bonus / 动 F / 样本 R。**零 live 玩法施工（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar 玩法** · 施工另号（可只 TrMenu）  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-hub-help-set-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-hub-help-set-honesty-2026-10-09.md) · backlog `B-six-slot-hub-help-set-honesty`  
+**硬规格（已批 A · 批 M · D339）：** [`DESIGN-ember-six-slot-hub-help-set-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-hub-help-set-honesty-2026-10-09.md) · backlog `B-six-slot-hub-help-set-honesty`  
 **打开理由：** D331 已修 `ember_set` 套装页，但**主菜单装备入口 + 帮助「怎么玩/三套装」**仍只教「刃+护符同族=套装」，**零**四件套 / −3% / `%armor_set%`——玩家从 `/ember` 日常路径看不到 Stage2 已上线事实。
 
 ---
