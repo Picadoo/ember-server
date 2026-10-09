@@ -30,4 +30,10 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · 主�
 
 ## tip / jar
 
-见 commit 与装服回执（本 STATUS 随 commit 落盘）。
+| 项 | 值 |
+|----|----|
+| tip | `878b9938` |
+| jar | `CoreRpg-1.65.106-d392.local.jar` |
+| sha256 | `82de57177477cef3e3ce593bc1b5606cb2bf666e5dde388b964706968415ac3d` |
+| Enabling | `CoreRpg v1.65.106-d392.local` · play PID 1004829 |
+| bv | runs **65** · six_slot 三 true |
