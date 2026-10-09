@@ -1,12 +1,13 @@
 # D400 · 短征五本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊 · sx04 烬井螺旋 · sx05 裂谷风廊）
-# 日帽同屏：sx01–sx04 挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum）；sx05 day_line 键未 live → 注释预留，禁假写个人 n/3。
+# 日帽同屏：sx01–sx05 挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum，含第五本）；禁假写个人 n/3。
 # 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|sx02|sx03|sx04|sx05。
 # 禁：教玩家手打 /dp start；假宣传旧日常窟开放；抬日表文案；假写个人日帽数字。
-# 键（jar 1.65.109-d397 · tip 8bd534fe · sx01–sx04 live）：
-#   %corerpg_p1_sx01_day_line% / %corerpg_p1_sx02_day_line% / %corerpg_p1_sx03_day_line% / %corerpg_p1_sx04_day_line%
-#   可选 %corerpg_p1_sx_day_left_sum% · %corerpg_p1_sx0N_day% / day_left
-# 预留（插件键号后挂）：%corerpg_p1_sx05_day_line% · 合计须含第五本
+# 键（jar 1.65.110-d400.local · tip c89c0f41 · sx01–sx05 live）：
+#   %corerpg_p1_sx01_day_line% … %corerpg_p1_sx05_day_line%
+#   %corerpg_p1_sx_day_left_sum% · %corerpg_p1_sx0N_day% / day_left
 # 挂点：A/C/E/G/K 主 lore + 灰态 · I 说明；update:20。
+# D401：Open/I 半行「本周可选周目标·短征」；进度键 %corerpg_p1_goal_short% 插件未齐前不挂假 ✔。
+# 金额：有奖 80/4/3 · 首通各本略异（sx05=140/6/1）· 体力 30 · 日帽 3 分开。
 
 Title: '§6短征 · 选本'
 
@@ -32,6 +33,7 @@ Events:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 / 烬井螺旋 / 裂谷风廊 · Q01 后 · 各体力30 · 日有奖帽分开计'
     - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
+    - 'tell: §8本周可选周目标·短征：赛季页可看 · 有奖通关计入 · 只发外观徽 · 不算全部完成'
 
 Icons:
   '#':
@@ -56,11 +58,11 @@ Icons:
         - '§e锈灯 · %corerpg_p1_sx02_day_line%'
         - '§e霜雾 · %corerpg_p1_sx03_day_line%'
         - '§e烬井 · %corerpg_p1_sx04_day_line%'
-        # D400：sx05 day_line 键未 live — 禁假写个人 n/3；键号后改挂 %corerpg_p1_sx05_day_line%
-        - '§e裂谷 · §7今日有奖最多 3 次 · 与前四本分开计（日帽键另号）'
-        - '§7今日剩余有奖合计（现网合计键·键号后含第五本）：§f%corerpg_p1_sx_day_left_sum%'
+        - '§e裂谷 · %corerpg_p1_sx05_day_line%'
+        - '§7今日剩余有奖合计（五本）：§f%corerpg_p1_sx_day_left_sum%'
         - '§8不发主线装备/徽记/签名（首航）'
         - ''
+        - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
         - '§8旧日常窟仍收起 · 勿找 ember_daily'
 
   S:
@@ -257,8 +259,7 @@ Icons:
             - ''
             - '§c未解锁：先通主线 Q01 灰烬庭院'
             - '§7解锁后：崖口→窄桥过隙→风心 · 体力 30（与前四本分开）'
-            # D400：%corerpg_p1_sx05_day_line% 键未 live — 禁假写；键号后挂回
-            - '§7今日有奖最多 3 次 · 与前四本分开计'
+            - '§e%corerpg_p1_sx05_day_line%'
       - condition: 'check papi %corerpg_stamina% < 30'
         priority: 2
         display:
@@ -267,7 +268,7 @@ Icons:
           lore:
             - ''
             - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
-            - '§7今日有奖最多 3 次 · 与前四本分开计'
+            - '§e%corerpg_p1_sx05_day_line%'
             - '§7挂机/补给后再来 · 勿假开'
     update: 20
     display:
@@ -277,8 +278,7 @@ Icons:
         - ''
         - '§7解锁：§a已通 Q01'
         - '§7消耗：§e30 体力'
-        # D400：day_line 键未 live — 禁假写个人 n/3；键号后改挂 %corerpg_p1_sx05_day_line%
-        - '§e今日有奖最多 3 次 §8（与前四本分开计 · 第 4+ 次无结算 · 日帽键另号）'
+        - '§e%corerpg_p1_sx05_day_line% §8（与前四本分开计 · 第 4+ 次无结算）'
         - '§d名片：§f风剪条/侧风斩 · 退进侧龛或离开条带'
         - '§b本间：§f崖口台 → 风廊窄桥过隙 → 对岸风心'
         - '§7通关：币80 + 碎片4 + 骨尘3（S44）'
