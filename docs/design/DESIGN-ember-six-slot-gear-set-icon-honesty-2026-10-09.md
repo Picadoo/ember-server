@@ -1,6 +1,6 @@
 # 余烬 · 装备页套装格 Stage2 四件套叙事诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**抢 D345 薄抽 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-gear-set-icon-honesty-need-design-2026-10-09.md`
+STATUS=**已批 A · 批 M · D346 已落地**（观察期 TrMenu 施工 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**抢 D345 薄抽 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-gear-set-icon-honesty-need-design-2026-10-09.md` · 施工 STATUS `STATUS-ember-six-slot-gear-set-icon-honesty-d346-2026-10-09.md`
 
 > **一句话：** D329 护甲入口已诚实，但同页 **套装格 `S`** 仍只写族觉醒。荐 **方案 M**：补 `%armor_set%`（+可选护甲页指针）；零数值。
 
@@ -98,11 +98,11 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2.1 改 `ember_p1_gear` 套装格 `S`（显示 only）  
+- [x] **批 A：采纳方案 M** → 另号按 §2.1 改 `ember_p1_gear` 套装格 `S`（显示 only）  
 - [ ] 升级 L（不荐）  
 - [ ] 否决 / 改派  
 
-**总控批注（待填）：** _
+**总控批注：** **批 A · 批 M** · 同号 D346 已落地 gear 套装格 `S` 觉醒块末 +2 行 `%corerpg_p1_armor_set%` + 护甲页指针 · `trmenu reload` · **≠关观察** · 不抢 K3 · 不抢 D345 薄抽 · jar/set_bonus/bv **未动**
 
 ---
 
@@ -111,5 +111,6 @@ STATUS=**待批 A**（观察期可 TrMenu 施工 · 显示 only · 零数值 · 
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D329/D345；勿抢 D345 薄抽 | 策划执行手 |
+| 2026-10-09 | 批 A·M · D346 落地 gear `S` +2 armor_set 行 · tip 关 · ≠关观察 | 总控委派 executor |
 
-*gear 套装格 Stage2 叙事诚实 · 待批 A · 荐 M · 显示 only · 零数值 · ≠关观察 · 不抢 D345/K3。*
+*gear 套装格 Stage2 叙事诚实 · **已批 A·M · D346 已落地** · 显示 only · 零数值 · ≠关观察 · 不抢 D345/K3。*
