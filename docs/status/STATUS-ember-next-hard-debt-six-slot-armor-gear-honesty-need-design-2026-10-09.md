@@ -6,6 +6,8 @@
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + 硬规格** · **未改** yml / jar / 菜单 · 服务器保持 up · **零 live**  
+
+> **交班旁注（D329 后）：** 本债已落地 @ `7f1b165e`。下一档 tip → [`STATUS-ember-next-hard-debt-six-slot-authority-ops-align-need-design-2026-10-09.md`](STATUS-ember-next-hard-debt-six-slot-authority-ops-align-need-design-2026-10-09.md)。
 **硬规格（已批 A · 批 M · D329）：** [`DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-armor-gear-honesty-2026-10-09.md) · backlog `B-six-slot-armor-gear-honesty`  
 **打开理由：** 观察期要持续推进薄结构债；护甲页已诚实，但**装备页护甲入口**仍不提四件套进度 / −3%，玩家从 `/ember`→装备 看不到套装态——零数值、可只改 TrMenu/PAPI 镜像，观察期可批 A，施工另号。
 
