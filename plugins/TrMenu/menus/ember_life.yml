@@ -1,6 +1,7 @@
 # 1.11.0 (2026-09-27) 枢纽补给 · 生活 — CoreRpg LifeService（life.yml）
 # D376：G/K 魂尘兑换 + H/J 孵化回 Layout（使魔养成旁轨可点）· DESIGN-ember-life-soul-dust-layout-2026-10-10
 # D386：O/W 守腕/生坠回 Layout（灰粮可购成真）· DESIGN-ember-life-offhand-layout-2026-10-10
+# D389：I/G/K/H/J 挂 life_* PAPI 同屏 + update:20 · DESIGN-ember-life-level-papi-2026-10-10 §2.2
 Title: '§a补给 · 生活'
 
 Options:
@@ -26,6 +27,7 @@ Events:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §8魂尘：本页旧靴/碎骨兑换 · 非挂机'
     - 'tell: §8副手：本页守腕/生坠周购 · 不进主线战力'
+    - 'tell: §8本页可见生活等级与兑尘/孵化次数（I 格）'
 
 Icons:
   '#':
@@ -81,35 +83,69 @@ Icons:
       all:
         - 'command: corerpg life buy stable_charm'
   G:
+    update: 20
     display:
       material: sugar
       name: '§d旧靴 → 余烬魂尘'
-      lore: ['', '§7旧靴×2 + 5 币（钓鱼杂物）', '§8每日 2 次 · 需生活 Lv.2', '§8魂尘：喂养使魔 / 孵化使魔', '', '§e➥ §f兑换']
+      lore:
+        - ''
+        - '§7旧靴×2 + 5 币（钓鱼杂物）'
+        - '§8每日 2 次 · 需生活 Lv.2'
+        - '§e%corerpg_life_soul_daily_line%'
+        - '§8旧靴/碎骨各最多 2 次 · 合计顶 4'
+        - '§8魂尘：喂养使魔 / 孵化使魔'
+        - ''
+        - '§e➥ §f兑换'
     actions:
       all:
         - 'command: corerpg life buy soul_dust'
   K:
+    update: 20
     display:
       material: bone
       name: '§d碎骨 → 余烬魂尘'
-      lore: ['', '§7碎骨×2 + 5 币（钓鱼杂物）', '§8每日 2 次 · 需生活 Lv.2', '§8魂尘：喂养使魔 / 孵化使魔', '', '§e➥ §f兑换']
+      lore:
+        - ''
+        - '§7碎骨×2 + 5 币（钓鱼杂物）'
+        - '§8每日 2 次 · 需生活 Lv.2'
+        - '§e%corerpg_life_soul_daily_line%'
+        - '§8旧靴/碎骨各最多 2 次 · 合计顶 4'
+        - '§8魂尘：喂养使魔 / 孵化使魔'
+        - ''
+        - '§e➥ §f兑换'
     actions:
       all:
         - 'command: corerpg life buy soul_dust_bone'
   H:
+    update: 20
     display:
       material: monster egg
       name: '§a孵化 余烬灰灵（使魔）'
-      lore: ['', '§7魂尘×10 + 600 币', '§8每周 1 次 · 需生活 Lv.4', '§8孵化后打开使魔菜单出战', '', '§e➥ §f孵化']
+      lore:
+        - ''
+        - '§7魂尘×10 + 600 币'
+        - '§8每周 1 次 · 需生活 Lv.4'
+        - '§a%corerpg_life_hatch_weekly_line%'
+        - '§8孵化后打开使魔菜单出战'
+        - ''
+        - '§e➥ §f孵化'
     actions:
       all:
         - 'command: corerpg life buy pet_ashling'
         - 'menu: ember_pet'
   J:
+    update: 20
     display:
       material: monster egg
       name: '§6孵化 余烬烬火（使魔）'
-      lore: ['', '§7魂尘×10 + 600 币', '§8每周 1 次 · 需生活 Lv.4', '§8孵化后打开使魔菜单出战', '', '§e➥ §f孵化']
+      lore:
+        - ''
+        - '§7魂尘×10 + 600 币'
+        - '§8每周 1 次 · 需生活 Lv.4'
+        - '§a%corerpg_life_hatch_weekly_line%'
+        - '§8孵化后打开使魔菜单出战'
+        - ''
+        - '§e➥ §f孵化'
     actions:
       all:
         - 'command: corerpg life buy pet_cinder'
@@ -161,12 +197,25 @@ Icons:
         - 'menu: ember_pet'
 
   I:
+    update: 20
     display:
       material: book
-      name: '§f生活等级 / 次数'
-      lore: ['', '§7查看生活等级、每周剩余次数', '', '§e➥ §f查看']
+      name: '§f生活进度'
+      lore:
+        - ''
+        - '§e%corerpg_life_level_line%'
+        - '§d%corerpg_life_soul_daily_line%'
+        - '§a%corerpg_life_hatch_weekly_line%'
+        - ''
+        - '§8兑换/孵化后本页约 1 秒刷新'
+        - '§8右键：聊天完整列表（次要）'
+        - ''
+        - '§e➥ §f同屏可见 · 右键列表'
     actions:
-      all:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'tell: §8生活进度见本格 lore（约 1 秒刷新）'
+      right:
         - 'close'
         - 'command: corerpg life'
   Z:

@@ -2,12 +2,12 @@
 
 **日期：** 2026-10-10（上海时间）  
 **上游：** tip [`STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md`](STATUS-ember-next-hard-debt-life-level-papi-need-design-2026-10-10.md) · DESIGN [`DESIGN-ember-life-level-papi-2026-10-10.md`](../design/DESIGN-ember-life-level-papi-2026-10-10.md) @ `8305129d`  
-**裁决：** **已批 A · 批 M · D388** · **本号交 `%corerpg_life_*%` 最少集 + jar 并装 play** · 菜单挂键 → **另号 P2**  
+**裁决：** **已批 A · 批 M · D388** · **本号交 `%corerpg_life_*%` 最少集 + jar 并装 play** · 菜单挂键 → **D389 已交**（[`STATUS-ember-life-level-menu-d389-2026-10-10.md`](STATUS-ember-life-level-menu-d389-2026-10-10.md)）  
 **版本：** jar **`1.65.103-d388.local`** · tip 见本 STATUS 交稿 commit · **未改** life.yml 价/曲线/daily·weekly · set_bonus / enabled / migrate · bv62 · ×0.97 · K3 · TrMenu `ember_life`
 
 ## 人话
 
-生活页缺的等级 / 经验进度 / 今日兑尘与本周孵化剩余占位已进 CoreRpg：`%corerpg_life_level_line%` 等只读真源 `LifeService`/`PlayerData`。play 已热换；菜单挂键仍由另号做。
+生活页缺的等级 / 经验进度 / 今日兑尘与本周孵化剩余占位已进 CoreRpg：`%corerpg_life_level_line%` 等只读真源 `LifeService`/`PlayerData`。play 已热换；菜单挂键由 **D389** 落地。
 
 ## 计数约定（钉死）
 
@@ -75,13 +75,13 @@
 | P4 | Enabling `1.65.103-d388.local` | 装服 PASS |
 | P5 | 零改 life.yml / set_bonus / bv / TrMenu | 本号未触 PASS |
 
-**实机菜单同屏：** 等菜单岗挂键后，有进度号 `/papi parse me %corerpg_life_level_line%` + 开 `ember_life`。
+**实机菜单同屏：** **D389 已挂键** · 有进度号 `/papi parse me %corerpg_life_level_line%` + 开 `ember_life`。
 
 ## 下一号
 
 | 号 | 岗 | 指针 |
 |----|-----|------|
-| **P2** | 菜单岗 | `ember_life` W1a–W1b 挂 `%corerpg_life_*_line%`（DESIGN §2.2） |
+| **P2** | 菜单岗 | **已交** [`STATUS-ember-life-level-menu-d389-2026-10-10.md`](STATUS-ember-life-level-menu-d389-2026-10-10.md) |
 
 ## 不动
 
@@ -89,4 +89,4 @@ life.yml 价/曲线/daily·weekly · 关观察 · 开 K3 · ×0.97 / set_bonus /
 
 ---
 
-*D388 批 A·M · P1 生活 PAPI 补键装 play · 菜单挂键另号 · ≠改 life.yml ≠关观察。*
+*D388 批 A·M · P1 生活 PAPI 补键装 play · P2→D389 已交 · ≠改 life.yml ≠关观察。*
