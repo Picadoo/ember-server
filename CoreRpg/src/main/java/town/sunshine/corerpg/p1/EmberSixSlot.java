@@ -15,6 +15,9 @@ import java.util.Locale;
  *   the master switch is on.</li>
  *   <li>{@value #KEY_SET_BONUS} — D325 Stage2 four-piece set bonus (tier C: taken ×0.97). Off (default): no set-bonus
  *   damage mult; Stage1 observation baseline bit for bit. Requires the master switch.</li>
+ *   <li>{@value #KEY_K3_REFINE} — D341 K3 same-slot armor refine (craft=max, destroy material, zero cost). Off (default):
+ *   no refine entry / always refuse. Requires the master switch. Gate-closed offline prep only — do not enable live
+ *   until Stage2 green exit or an explicit parallel-build sign-off.</li>
  * </ul>
  * <p><b>F 共鸣:</b> armor has no tier / enhance of its own in the formula — it follows the selected charm; quality / craft /
  * family are the piece's own. Shares w = [charm .80, head / chest / legs / boots .05 each] (T0″ F arm, {@code arms.json}).
@@ -28,6 +31,8 @@ public final class EmberSixSlot {
     public static final String KEY_MIGRATE = "gear.six_slot.migrate";
     /** D325 Stage2 四件套效果（档 C）；默认关；关 = 与观察期基线逐位一致（无减伤） */
     public static final String KEY_SET_BONUS = "gear.six_slot.set_bonus";
+    /** D341 K3 同部位熔炼；默认关；关 = 与现网一致（无熔炼入口 / 一律拒绝）；须 enabled */
+    public static final String KEY_K3_REFINE = "gear.six_slot.k3_refine";
 
     /** Stage2 C: incoming P1 damage × this when four-piece active (never enters Formula B/H) */
     public static final double SET_BONUS_TAKEN_MULT = 0.97;
@@ -43,7 +48,7 @@ public final class EmberSixSlot {
     public static double[] armorWeights() { return ARMOR_W.clone(); }
 
     /** test hook (null = follow config) */
-    static volatile Boolean testEnabled, testMigrate, testSetBonus;
+    static volatile Boolean testEnabled, testMigrate, testSetBonus, testK3Refine;
 
     /** master switch: P1 active + {@value #KEY_ENABLED} (default false) */
     public static boolean enabled() {
@@ -67,6 +72,14 @@ public final class EmberSixSlot {
         if (t != null) return t && enabled();
         EmberMode m = EmberMode.get();
         return enabled() && m != null && m.b(KEY_SET_BONUS, false);
+    }
+
+    /** D341 K3 refine switch: master switch + {@value #KEY_K3_REFINE} (default false) */
+    public static boolean k3RefineEnabled() {
+        Boolean t = testK3Refine;
+        if (t != null) return t && enabled();
+        EmberMode m = EmberMode.get();
+        return enabled() && m != null && m.b(KEY_K3_REFINE, false);
     }
 
     /**
