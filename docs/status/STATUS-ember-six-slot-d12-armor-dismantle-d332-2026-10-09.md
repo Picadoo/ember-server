@@ -5,7 +5,7 @@
 **日期：** 2026-10-09（上海时间）  
 **上游：** DESIGN [`DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md`](../design/DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md) @ `09a387a3` · 批 A·M 授权  
 **号：** D332 · 余烬-测试岗 · 测号 `D332Dis`（uuid `405c6d70-cadc-371b-beda-ea6f55900a8e`）  
-**结论：** **PASS**（A/B/D/E/F/G PASS；**C=NA** 样件不足未跨 10 十分位，已注明缺口）  
+**结论：** **PASS**（A/B/D/E/F/G PASS；**C=NA** 样件不足未跨 10 十分位，已注明缺口）· **总控已签 D12-② PASS（C=NA · 跨 10 另号可补）**  
 **本号未改：** ×0.97 / set_bonus / enabled / migrate / bv / jar / 分解公式 / 价表 / K3 / ember_set（jar 被 **D333** 热换为 `1.65.100-d333.local`，非本号）
 
 ## 人话
@@ -47,6 +47,19 @@
 - 农场第 3 次通关中被 D333 kick（`jar hot-swap 短重启`）；续跑 rejoin 后完成分解验收。  
 - `p1 give` / admin 发放未用作 drop 样件；样件来自 Q01 结算 `source=drop`。
 
+## 总控签字栏（已签 · 2026-10-09）
+
+| 项 | 签认 |
+|----|------|
+| **D12-② PASS（C=NA · 跨 10 另号可补）** | [x] |
+| A/B/D/E/F/G | [x] PASS（测试 @ `ad49850f`） |
+| C 零头跨 10 | [x] **NA**（样件不足；另号 ≥10×T1 drop 或等价十分位可补关清） |
+| 不挡 Stage2 观察绿出口日历 | [x] |
+| 零改公式 / 价表 / set_bonus / bv / jar | [x] |
+| 签字 / 日期 | **签字 总控 · 2026-10-09 · D332** |
+
+**总控批注（2026-10-09 · D332）：** 主路径 **PASS**（A/B/D/E/F/G）；**C=NA** 不挡签；跨 10→整胚 +1 **另号可补**后关清。**不改** 分解公式 / 价表 / ×0.97 / set_bonus / bv。**不挡** 观察日历（满窗仍须 ≥2026-10-10 17:40 CST）。不抢 K3。
+
 ---
 
-*D332 测试执行 · 白板经济模型未覆盖 · tip 旁 DESIGN `09a387a3` · 观察期薄窗。*
+*D332 测试执行 · **总控已签 D12-② PASS（C=NA）** · 白板经济模型未覆盖 · tip 旁 DESIGN `09a387a3` · 观察期薄窗。*

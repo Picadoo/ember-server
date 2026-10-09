@@ -1,12 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（D12-② 掉落甲分解验收清单 · docs-only）
 
-> **旁注（已关 · 批 A · 批 M · D332）：** tip `09a387a3` 已关；总控已批 A·M；授权 STATUS [`STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md`](STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md) · **另号测试**执行 A–G。
+> **旁注（已关 · 批 A · 批 M · D332 · **实机 PASS（C=NA）已签**）：** tip `09a387a3` 已关；总控已批 A·M；实机 STATUS [`STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md`](STATUS-ember-six-slot-d12-armor-dismantle-d332-2026-10-09.md) · **总控签 D12-② PASS（C=NA · 跨 10 另号可补）** · 2026-10-09。
 
 > **上游：** D330 权威/OPS 落字 @ `422cc0f3`；D331 套装页诚实 **另轨施工中 · 本窗勿抢 `ember_set.yml`**。D12-① 结算掉甲线上 PASS（`b2cfc017`）；**D12-② 掉落甲分解 ×0.1 未跑**（D323/D324 可后续补）。Stage2 观察中；K3 施工等绿出口。禁 Pack6 / 天赋 / 灰印 / 改 ×0.97 / 拧 set_bonus / 动 F / 样本 R / K3 部署。
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 live jar/yml** · **不改 ember_set**  
-**硬规格（已批 A · 批 M · D332 · 待测试执行）：** [`DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md`](../design/DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md) · backlog `B-six-slot-d12-armor-dismantle`  
+**硬规格（已批 A · 批 M · D332 · 实机 PASS（C=NA）已签）：** [`DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md`](../design/DESIGN-ember-six-slot-d12-armor-dismantle-2026-10-09.md) · backlog `B-six-slot-d12-armor-dismantle`  
 **打开理由：** T3 残余 D12-② 仍缺可执行验收清单；观察期可钉 docs，抽测另号；不挡绿出口日历，但补齐资产路径诚实。
 
 ---
@@ -33,7 +33,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · **已批 A · 批 M · D332** · 另号测试执行 A–G。
+见 DESIGN 同 slug · **已批 A · 批 M · D332** · 实机 A–G 已交 · **总控签 PASS（C=NA）**。
 
 ---
 
