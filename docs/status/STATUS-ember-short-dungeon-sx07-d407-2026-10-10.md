@@ -85,4 +85,4 @@
 
 *D407 批 A·M · tip `4e522c19` · 短征 sx07 骨架启动 · 地图本地 tide_v1 壳 · WE/进本键/S46/日帽键/MM 并行 · ≠关观察≠抬日表≠开旧日常闸。*
 
-**本号 tip：** `4e2017d6`（地图 README + 七本菜单 + STATUS）· 批 A 旁注 `38a673eb` · MM/DP 壳 `bac92843` · DESIGN tip `4e522c19`
+**本号 tip：** `355b4753`（地图 README + 七本菜单 + STATUS）· 批 A 旁注 `38a673eb` · MM/DP 壳 `bac92843` · DESIGN tip `4e522c19`
