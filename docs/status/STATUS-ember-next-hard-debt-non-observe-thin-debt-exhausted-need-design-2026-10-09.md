@@ -1,10 +1,13 @@
 # 状态 · 下一档硬债选定 · 需策划（非观察真债本轮无可交 · docs-only · exhausted · ≠关观察 · ≠开闸 · ≠开 R）
 
+> **旁注（已关 · 批 A · 批 M · D372）：** tip `f523a6d5` 已关；总控已批 A·M；STATUS [`STATUS-ember-non-observe-thin-debt-exhausted-d372-2026-10-09.md`](STATUS-ember-non-observe-thin-debt-exhausted-d372-2026-10-09.md) · exhausted 已确认 · OPS 半行已落 · **≠关观察 ≠开闸 ≠开 R** · 静默至满窗走 D367；否决 W。
+>
+
 > **上游结案：** D370 白板补建模后置已关清 @`7b4e3363`（**≠改 ×0.1 ≠同号补码**）。总控改派三项均已消化：hub_legacy 不可达跳过 · K3 熔炼页规格已齐跳过 · 白板补建模 D370 已关。Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗 · 勿勾 §2.4**）。D360–D369 观察运维薄债 / 观察 exhausted 已落（**勿复述观察运维变体**）。禁开 R / 开 K3 live / 关观察 / 菜单诚实复扫 / 附录空转 / Pack6 / 天赋 / 灰印 / 改 ×0.97 / 翻 set_bonus / 改 ignore / 改日历 / 改 ×0.1。**零玩法 · 零开开关。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** tip **待批 A** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠ stage 脏 runtime** · **诚实 exhausted（非观察面 · 非硬凑）**  
-**硬规格（待批 A · 荐方案 M=静默或等总控再点名）：** [`DESIGN-ember-non-observe-thin-debt-exhausted-2026-10-09.md`](../design/DESIGN-ember-non-observe-thin-debt-exhausted-2026-10-09.md) · backlog `B-non-observe-thin-debt-exhausted`  
+**本窗性质：** tip **已关** · **已批 A·M·D372** · **零 jar / 零开关 / 零价表 / 零部署** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠ stage 脏 runtime** · **诚实 exhausted（非观察面 · 非硬凑）**  
+**硬规格（已批 A · 批 M · D372 · exhausted 已确认 · ≠关观察 ≠开闸 ≠开 R）：** [`DESIGN-ember-non-observe-thin-debt-exhausted-2026-10-09.md`](../design/DESIGN-ember-non-observe-thin-debt-exhausted-2026-10-09.md) · backlog `B-non-observe-thin-debt-exhausted`  
 **打开理由：** 总控 D370 后派「下一非观察真债 tip；若扫空可交 exhausted（非观察面）」。本轮扫 `origin/main` 近百、backlog 指针、开放 tip、改派三项剩余、B-flex/副手、体验硬债、菜单可达不诚实入口：**无**独立非观察真缺口可写成待批 A 薄债。按严策略 **默认倾向无可交**，禁止硬凑观察运维变体 / 菜单复扫 / HOLD 重开 / 样本 R。
 
 ---
@@ -63,7 +66,7 @@
 
 ## 2. 派单句
 
-见 DESIGN 同 slug · STATUS=待批 A · 荐方案 M（静默或等总控再点名）。
+见 DESIGN 同 slug · STATUS=已批 A·M·D372 · 方案 M（静默至满窗走 D367 或等总控再点名）。
 
 ---
 
@@ -81,4 +84,4 @@
 
 ---
 
-*选题 L · tip 待批 A · 荐 M=静默或等总控再点名 · 非观察真债 exhausted · ≠关观察 · ≠开闸。*
+*选题 L · tip 已关 · 已批 A·M·D372 · M=静默至满窗走 D367 · 非观察真债 exhausted · ≠关观察 · ≠开闸。*
