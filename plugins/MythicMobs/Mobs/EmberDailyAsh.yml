@@ -58,7 +58,7 @@ EmberAshBrute:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.2
   - skill{s=EmberEliteIgnite} @target ~onAttack 0.22
-  - damage{amount=0.5} @PlayersInRadius{r=5} ~onTimer:40
+  - skill{s=EmberAshBurstCast} @self ~onTimer:80
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> gear_ember_blade 1"} @Self ~onDeath 0.12
   - command{c="corerpg mmgive <caster.uuid> gear_ember_charm 1"} @Self ~onDeath 0.08

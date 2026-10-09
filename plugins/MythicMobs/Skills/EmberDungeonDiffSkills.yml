@@ -131,3 +131,52 @@ EmberRailSlamCast:
   - delay 25
   - damage{amount=1.2} @PlayersInRadius{r=5}
   - effect:particles{p=flame;amount=28;hSpread=5;ySpread=0.6;speed=0.01} @Self
+
+# --- 日常第三拍扩线 · 庭院 Boss 余烬脉冲读条（可躲；无 SLOW，学锈轨）---
+EmberYardPulseCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&a【庭院】&f蛮兵蓄力——&7拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=flame;amount=36;hSpread=4;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=crit;amount=16;hSpread=3;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.6;pitch=0.8} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=28;hSpread=5;ySpread=0.6;speed=0.01} @Self
+
+# --- 日常第三拍扩线 · 焦骨 Boss 焰爆读条（可躲；无 SLOW）---
+EmberAshBurstCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&c【焦骨】&f焦核蓄力焰爆——&7拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=lava;amount=36;hSpread=3.5;ySpread=0.9;speed=0} @Self
+  - effect:particles{p=crit;amount=18;hSpread=3;ySpread=0.6;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.5} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=32;hSpread=5;ySpread=0.7;speed=0.02} @Self
+
+# --- 日常第三拍扩线 · 潮蚀 Boss 拍水读条（可躲；轻 SLOW，替原独立光环）---
+EmberTideCrashCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&3【潮蚀】&f潮闸蓄力拍水——&7拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=40;hSpread=4;ySpread=1;speed=0} @Self
+  - effect:particles{p=crit;amount=16;hSpread=3;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.6;pitch=0.9} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5}
+  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
+
+# --- 日常第三拍扩线 · 断塔 Boss 砸石读条（可躲；无 SLOW；逼近 message 另挂）---
+EmberSpireSlamCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&7【断塔】&f守望蓄力砸石——&e拉开！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=4;ySpread=1;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=20;hSpread=3;ySpread=0.6;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.6} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=30;hSpread=5;ySpread=0.8;speed=0.02} @Self
