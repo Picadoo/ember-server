@@ -1,6 +1,6 @@
 # 余烬 · 主菜单装备格导语 Stage2 护甲诚实（文案补丁规格）
 
-STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-hub-equip-blurb-honesty-need-design-2026-10-09.md` · backlog `B-six-slot-hub-equip-blurb-honesty`
+STATUS=**已批 A · 批 M · D357 已施工**（观察期 · 显示 only · 零数值 · **≠关观察** · **不**抢 K3 · **不**改 ×0.97）· 2026-10-09 · 上游 tip `STATUS-ember-next-hard-debt-six-slot-hub-equip-blurb-honesty-need-design-2026-10-09.md` · backlog `B-six-slot-hub-equip-blurb-honesty` · 施工 STATUS `STATUS-ember-six-slot-hub-equip-blurb-honesty-d357-2026-10-09.md`
 
 > **一句话：** 关键字扫后菜单主路径已净；hub 装备格导语仍写「套装与觉醒」。荐 **方案 M**：导语补护甲半词；PAPI 不动。
 
@@ -88,11 +88,11 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M** → 另号按 §2.1 改 hub `o` 导语（显示 only）  
+- [x] **批 A：采纳方案 M** → 另号按 §2.1 改 hub `o` 导语（显示 only）  
 - [ ] 升级 L  
 - [ ] 否决 / 改派  
 
-**总控批注：** （待填）
+**总控批注：** **已批 A · 批 M · D357** · 同号 TrMenu 已按 §2.1 荐句落地 hub `o` 导语（`套装、觉醒与护甲`）· `%awaken%`/`%armor_set%`/actions **未动** · **≠关观察** · 不抢 K3。
 
 ---
 
@@ -101,5 +101,6 @@ STATUS=**待批 A**（观察期 · docs-only · 零数值 · **≠关观察** ·
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 菜单关键字已扫净；D356 后置项升主 | 策划执行手 |
+| 2026-10-09 | **已批 A · 批 M · D357** · hub `o` 导语荐句 · tip 关 · backlog 对齐 | 总控授权同号施工 |
 
-*hub 装备格导语 Stage2 诚实 · **待批 A · 荐 M** · 显示 only · 零数值 · ≠关观察。*
+*hub 装备格导语 Stage2 诚实 · **已批 A · 批 M · D357 已施工** · 显示 only · 零数值 · ≠关观察。*

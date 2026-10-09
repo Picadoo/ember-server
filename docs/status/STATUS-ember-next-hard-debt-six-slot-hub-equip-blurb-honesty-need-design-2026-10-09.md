@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（主菜单装备格导语 Stage2 护甲诚实 · docs-only）
 
+> **已关 · 批 A·M · D357 已落地** · 施工 STATUS [`STATUS-ember-six-slot-hub-equip-blurb-honesty-d357-2026-10-09.md`](STATUS-ember-six-slot-hub-equip-blurb-honesty-d357-2026-10-09.md) · DESIGN 方案 M · hub `o` 导语 →「套装、觉醒与护甲」· PAPI/actions **未动** · **≠关观察** · 不抢 K3。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D356 help 分解行已施工 @ `178458a9`。D329–D355 主路径 / 工坊入口 / 进度 / help 已收。禁 Pack6 / 天赋 / 灰印 / 样本 R / 改 ×0.97 / K3 live / 提前关观察。**硬禁复述：** 附录 · 已 PASS 薄抽 · tip 关闭包 · 钉盘。**零数值（本稿只 docs）。**
 
 **日期：** 2026-10-09（上海时间）  
 **本窗性质：** **只 docs tip + DESIGN** · **零代码 / 零价表 / 零 jar** · 施工另号（可只 TrMenu 一行）  
-**硬规格（待批 A · 荐 M）：** [`DESIGN-ember-six-slot-hub-equip-blurb-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-hub-equip-blurb-honesty-2026-10-09.md) · backlog `B-six-slot-hub-equip-blurb-honesty`  
+**硬规格（已批 A · 批 M · D357 已落地）：** [`DESIGN-ember-six-slot-hub-equip-blurb-honesty-2026-10-09.md`](../design/DESIGN-ember-six-slot-hub-equip-blurb-honesty-2026-10-09.md) · backlog `B-six-slot-hub-equip-blurb-honesty`  
 **打开理由：** 可达菜单关键字扫（见下）**已净**；多 tip（D354–D356）曾后置的 **hub 装备格导语「套装与觉醒」** 仍不点名护甲，而同格 PAPI 已有四件套行——扫读导语仍像 Stage1 半句。现升主交付。
 
 ---
@@ -57,4 +59,4 @@
 
 ---
 
-*选题 H · tip 开 · 待批 A · 荐 M · hub 装备导语补护甲 · 菜单关键字已扫净 · 勿关窗。*
+*选题 H · tip **已关** · 批 A·M · D357 · hub 装备导语补护甲 · 勿关窗。*
