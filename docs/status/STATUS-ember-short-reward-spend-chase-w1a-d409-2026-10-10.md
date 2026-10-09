@@ -36,7 +36,7 @@
 
 | 项 | 值 |
 |----|----|
-| tip | `a34ea8b7` |
+| tip | `20cd1318` |
 | jar | `CoreRpg-1.65.117-d409.local.jar` |
 | sha256 | _(装服后填)_ |
 | Enabling | `CoreRpg v1.65.117-d409.local` |
