@@ -1,10 +1,12 @@
 # 状态 · 下一档硬债选定 · 需策划（观察期 live yml 防源码默认冲掉 · docs-only）
 
+> **旁注（已关 · 批 A · 批 M · D344）：** tip `7c9b8ddd` 已关；总控已批 A·M；STATUS [`STATUS-ember-six-slot-live-yml-protect-d344-2026-10-09.md`](STATUS-ember-six-slot-live-yml-protect-d344-2026-10-09.md) · OPS 防冲小节已落 · **批 A ≠ 改默认 true ≠ 关观察 ≠ 开 K3** · 加注禁主仓切分支 + skip-worktree。
+
 > **上游结案：** Stage2 观察续（绿出口仍 ≥**2026-10-10 17:40 CST**，**勿交关窗**）。D342 现态复跑清单已批；预检实跑 **R1+R2 红**（21:00:03 live 被 src 整份替换）；**D343 已恢复**三 true + bv62。D341 K3 闸已批（≠开闸）。禁 Pack6 / 天赋 / 灰印 / 样本 R / K3 live / 提前关观察 / 拧 set_bonus / 改 ×0.97。**零 live 玩法大改（本稿 docs-only）。**
 
 **日期：** 2026-10-09（上海时间）  
-**本窗性质：** **只 docs tip + DESIGN** · **零改开关真值本窗** · 批后 OPS 对齐另号可落  
-**硬规格（待批 A）：** [`DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md`](../design/DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md) · backlog `B-six-slot-live-yml-protect`  
+**本窗性质：** tip 已关 · 授权见 D344 STATUS · **零改默认 true** · **本窗不关观察**  
+**硬规格（已批 A · 批 M · D344 · OPS 已落 · ≠关观察）：** [`DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md`](../design/DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md) · backlog `B-six-slot-live-yml-protect`  
 **打开理由：** 刚发生「`CoreRpg/src/main/resources/ember-v1*.yml` 同步进 `plugins/CoreRpg/` → 六槽段消失 / bv 回落」；恢复后缺**防再冲纪律页**（方向、禁令、核对、与 `bundledConfigsMatchLive` 关系）。
 
 ---
@@ -47,4 +49,4 @@
 
 ---
 
-*选题 H · 荐 M · 防再冲 · 零 live 玩法 · 勿关窗。*
+*选题 H · 已关 · 批 A·M·D344 · 防再冲 · OPS 已落 · 勿关窗。*

@@ -1,6 +1,6 @@
 # 余烬 · 观察期 live yml 防源码默认冲掉（纪律页）
 
-STATUS=待批 A（D343 恢复后；**只交稿**；本窗**不**关观察、**不**改 ×0.97、**不**开 K3；OPS 落字另号）· 2026-10-09 · 策划（执行手起草）
+STATUS=**已批 A · 批 M · D344**（防冲纪律 + OPS 已落 · **批 A ≠ 改默认 true ≠ 关窗 ≠ 开 K3** · 观察续）· 2026-10-09 · 总控批注 · 上游 tip `7c9b8ddd`
 
 > **一句话：** 观察真源在 **`plugins/CoreRpg/ember-v1*.yml`**；`src/main/resources` 是打包默认。荐 **方案 M**：钉死**禁止 src→live 整份覆盖**、保护键、同步方向只许 live→resources、部署前核对。**批 A ≠ 改默认 true。**
 
@@ -57,6 +57,7 @@ STATUS=待批 A（D343 恢复后；**只交稿**；本窗**不**关观察、**�
 | `cp`/`rsync`/`git checkout --` **resources → plugins/CoreRpg/ember-v1*.yml** | 改 live 后 **同提交** 把 live **拷回** resources（满足 `bundledConfigsMatchLive`） |
 | 以「单测红了」为由整份用 src 盖 live | 单测红：先查是否 live 有意超前；再 live→src，**勿** src→live |
 | 部署脚本静默覆盖上述保护键 | 部署 checklist 显式 diff 保护键 |
+| **主工作区** `git checkout` / `switch` / `pull` 会改写已跟踪的 live yml（D343） | 观察期**禁主仓切分支**；K3 离线用**独立 worktree**；live 两文件观察期 `skip-worktree` |
 | 本页授权改 ×0.97 / 关观察 / 开 K3 | — |
 
 ### 2.4 同步与部署前核对（可执行）
@@ -68,15 +69,17 @@ STATUS=待批 A（D343 恢复后；**只交稿**；本窗**不**关观察、**�
 | C3 | 热更/换 jar 后 | 只读复检保护键（可套 D342 R1/R2）；**勿**为「对齐」再盖 live |
 | C4 | 发现 live 已被冲 | **停**；对照 `/workspace/tmp/d343-pin/` 或 D335/D325 备份；**另签**后再恢复；记 STATUS（范式 D342/D343） |
 
-### 2.5 OPS 小对齐规格（批后另号落字 · 本窗只定文）
+### 2.5 OPS 小对齐规格（D344 已落字）
 
-建议写入 [`OPS-ember-six-slot-migration.md`](../ops/OPS-ember-six-slot-migration.md) 新小节 **「观察期 yml 真源与防冲」**：
+写入 [`OPS-ember-six-slot-migration.md`](../ops/OPS-ember-six-slot-migration.md) 小节 **「观察期 yml 真源与防冲」**（D344）：
 
 1. 重申真源=plugins；resources≠可覆盖源。  
 2. 粘贴 §2.2 保护键表 + 当前钉死值。  
 3. 明文禁止 resources→plugins；允许方向 live→resources。  
 4. 指向 D342 红停报 / D343 恢复 / pin 路径作前车。  
-5. 文首 jar tip 若与进程漂移：以进程为准，旁注即可（对齐 D342 R4），**勿**用旧 jar 名当覆盖借口。
+5. 文首 jar tip 若与进程漂移：以进程为准，旁注即可（对齐 D342 R4），**勿**用旧 jar 名当覆盖借口。  
+6. **总控加注（必须）：** 除 resources→plugins 外，主工作区 `git checkout` / `switch` 因 `plugins/CoreRpg/ember-v1*.yml` **被 git 跟踪**也会整份盖 live（D343：21:00、21:03）。观察期：**主工作区禁切分支**；K3 离线只用**独立 worktree**。  
+7. **总控加注（必须）：** 观察期对 live `plugins/CoreRpg/ember-v1.yml` / `ember-v1-runs.yml` 设 `git update-index --skip-worktree`（钉仓后设回）；要改并 commit 时先 `--no-skip-worktree`，提交后再设回。**skip-worktree ≠ 取消跟踪**，只防本机工作区被 checkout 静默冲掉。
 
 ### 2.6 验收（docs 落字号）
 
@@ -111,11 +114,11 @@ STATUS=待批 A（D343 恢复后；**只交稿**；本窗**不**关观察、**�
 
 ## §4 批注栏
 
-- [ ] **批 A：采纳方案 M（防冲纪律 + OPS 规格）** → OPS 另号落字  
+- [x] **批 A：采纳方案 M（防冲纪律 + OPS 规格）** → OPS D344 已落字（总控已批 · D344）  
 - [ ] 升级 L（授权插件号做覆盖守卫代码）  
 - [ ] 否决 / 改派  
 
-**签字：** ________（总控）
+**总控批注（2026-10-09 · D344）：** **批 A · 采纳方案 M**。真源=`plugins/CoreRpg`；禁 resources→live；保护键三 true + bv62；同步只许 live→resources。**加注：** 主工作区因 live yml **被 git 跟踪**，`checkout`/`switch` 亦可整份盖 live（D343 21:00/21:03）——观察期**禁主仓切分支**；K3 离线只用独立 worktree；live 两文件观察期 **`skip-worktree`**（改仓时先解再钉回）。**批 A ≠ 改默认 true ≠ 关观察 ≠ 开 K3**；×0.97 / 三开关真值本号不拧。OPS 防冲小节同号落字。
 
 ---
 
@@ -124,5 +127,6 @@ STATUS=待批 A（D343 恢复后；**只交稿**；本窗**不**关观察、**�
 | 日期 | 事件 | 谁 |
 |------|------|-----|
 | 2026-10-09 | 初稿 · 待批 A · 荐 M · 上游 D342 红 / D343 恢复 | 策划执行手 |
+| 2026-10-09 | **D344** · 总控批 A·M；OPS 防冲小节落字；加注禁主仓切分支 + skip-worktree；**批 A ≠ 改默认 true ≠ 关窗** | 总控 |
 
-*live yml 防冲 · 待批 A · 荐 M · 禁 src→live · 只许 live→resources · 勿关窗 · 零 live 玩法。*
+*live yml 防冲 · 已批 A·M·D344 · 禁 src→live · 禁主仓切分支 · skip-worktree · 只许 live→resources · 勿关窗 · 零改默认 true。*

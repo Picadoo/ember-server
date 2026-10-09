@@ -72,6 +72,55 @@ gear:
 - **备份路径：** `/workspace/tmp/d325-bv62-backup-20261008173047/`（D325 live 备份）。触发红线（双计减伤、B/H 漂移、迁移回归、跨服复制等）时按观察结案回滚，勿手删 `p1-six` / 标签。
 - **K3：** T0‴ 已签 PASS，**施工 / 部署等绿出口**；本手册不授权观察期部署 K3。
 
+### 1.5 观察期 yml 真源与防冲（D344）
+
+> 规格真源：[`DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md`](../design/DESIGN-ember-six-slot-live-yml-protect-2026-10-09.md)（**已批 A·M·D344**）。**批 A ≠ 改代码默认 true ≠ 关观察 ≠ 开 K3。**
+
+#### 真源
+
+| 路径 | 观察期角色 |
+|------|------------|
+| `plugins/CoreRpg/ember-v1.yml` · `ember-v1-runs.yml`（及同族 live） | **运行真源** |
+| `CoreRpg/src/main/resources/ember-v1*.yml` | 打包/单测默认；**不得**反向覆盖 live |
+| jar 内 resources | 仅当插件目录**缺文件**时由 `saveResource(..., false)` 抽出——**已存在 live 禁止当「对齐」覆写** |
+
+#### 保护键（缺一即事故）
+
+| 键 | 观察钉死（当前） | 冲丢表现 |
+|----|------------------|----------|
+| `gear.six_slot.enabled` | **true** | 护甲路径关 |
+| `gear.six_slot.migrate` | **true** | 迁移停 |
+| `gear.six_slot.set_bonus` | **true** | Stage2 减伤关 |
+| `balance_version`（runs） | **62** | bv 回落（曾见 60） |
+| `gear.six_slot.k3_refine` | **关/缺省** | 若被误开 → 违 D341 |
+
+#### 禁止 / 允许
+
+| 禁止（观察期） | 允许 |
+|----------------|------|
+| `cp` / `rsync` / `git checkout --` **resources → plugins/CoreRpg/ember-v1*.yml** | 改 live 后 **同提交** 把 live **拷回** resources（满足 `bundledConfigsMatchLive`） |
+| 以「单测红了」为由整份用 src 盖 live | 单测红：先查是否 live 有意超前；再 live→src，**勿** src→live |
+| **主工作区** `git checkout` / `switch` / 会改写已跟踪 live yml 的操作 | 观察期**禁主仓切分支**；K3 离线只用**独立 worktree** |
+| 部署脚本静默覆盖保护键 | 部署前显式 `diff`/`rg` 保护键 |
+
+#### skip-worktree（观察期必做）
+
+live 两文件已被 git 跟踪；主仓 `checkout`/`switch` 会整份盖工作区（D343：21:00、21:03）。观察期须：
+
+```bash
+git update-index --skip-worktree -- plugins/CoreRpg/ember-v1.yml plugins/CoreRpg/ember-v1-runs.yml
+```
+
+- 要改并 **commit** 保护键时：先 `git update-index --no-skip-worktree -- <同上>` → add/commit → **再设回 skip-worktree**。
+- `skip-worktree` **≠** 取消跟踪；只防本机工作区被切分支静默冲掉。钉仓真值仍以 `origin/main` 上的保护键为准（D343 钉仓 `c9888b3a`）。
+
+#### 前车与核对
+
+- D342 预检 **R1+R2 红**：21:00:03 live 被替换为与 git resources 同文 → 六槽段消失、`balance_version`→60。  
+- D343 已恢复三 true + bv62；pin `/workspace/tmp/d343-pin/`；备份 `/workspace/tmp/d335-backup-20261009195542/`。  
+- 发现 live 已被冲：**停**；对照 pin/备份；**另签**后再恢复；记 STATUS。  
+- 文首 jar tip 若与进程漂移：以进程为准，旁注即可（D342 R4），**勿**用旧 jar 名当覆盖借口。
+
 ---
 
 ## 2. 禁止事项
