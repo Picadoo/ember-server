@@ -1,11 +1,12 @@
-# D396 · 短征三本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊）
-# 日帽同屏：挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum）；假平面/金额对齐见 D394–D395。
-# 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|sx02|sx03。
+# D397 · 短征四本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊 · sx04 烬井螺旋）
+# 日帽同屏：sx01–sx03 挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum）；sx04 day_line 键未 live → 注释预留，禁假写个人 n/3。
+# 入口：冒险页「短征」/ 枢纽半指 → 本菜单；进本 command: corerpg p1 enter sx01|sx02|sx03|sx04。
 # 禁：教玩家手打 /dp start；假宣传旧日常窟开放；抬日表文案；假写个人日帽数字。
-# 键（jar 1.65.108-d395 · tip ee765f56）：
+# 键（jar 1.65.108-d395 · tip ee765f56 · 仅 sx01–sx03）：
 #   %corerpg_p1_sx01_day_line% / %corerpg_p1_sx02_day_line% / %corerpg_p1_sx03_day_line%
 #   可选 %corerpg_p1_sx_day_left_sum% · %corerpg_p1_sx0N_day% / day_left
-# 挂点：A/C/E 主 lore + 灰态 · I 说明；update:20。
+# 预留（键未 live · 勿挂）：%corerpg_p1_sx04_day_line% · 合计扩第四本
+# 挂点：A/C/E/G 主 lore + 灰态 · I 说明；update:20。
 
 Title: '§6短征 · 选本'
 
@@ -23,13 +24,13 @@ Layout:
   - '#########'
   - '#  I  S #'
   - '# A C E #'
-  - '#  B    #'
+  - '# G  B  #'
   - '####Z####'
 
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
-    - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 · Q01 后 · 各体力30 · 日有奖帽分开计'
+    - 'tell: §e短征选本：§f烬门哨岗 / 锈灯栈道 / 霜雾闸廊 / 烬井螺旋 · Q01 后 · 各体力30 · 日有奖帽分开计'
     - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
 
 Icons:
@@ -46,7 +47,7 @@ Icons:
       lore:
         - ''
         - '§7独立短本（§f不是§7旧日常窟）'
-        - '§7三本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊'
+        - '§7四本并列：§f烬门哨岗 §7/ §f锈灯栈道 §7/ §f霜雾闸廊 §7/ §f烬井螺旋'
         - '§7各三房 · 约 5～8 分钟手感 · 终厅可读可躲'
         - '§7通关有奖：§f币80 + 碎片4 + 骨尘3 §7→ 仓库 → 工坊花'
         - '§7生涯首通另加薄包（各本略异）'
@@ -54,7 +55,9 @@ Icons:
         - '§e烬门 · %corerpg_p1_sx01_day_line%'
         - '§e锈灯 · %corerpg_p1_sx02_day_line%'
         - '§e霜雾 · %corerpg_p1_sx03_day_line%'
-        - '§7三本今日剩余有奖合计：§f%corerpg_p1_sx_day_left_sum%'
+        # 预留（键未 live）：§e烬井 · %corerpg_p1_sx04_day_line%
+        - '§e烬井 · §7日有奖帽最多 3（与前三本分开 · 计数键另号）'
+        - '§7前三本今日剩余有奖合计：§f%corerpg_p1_sx_day_left_sum% §8（合计扩第四本另号）'
         - '§8不发主线装备/徽记/签名（首航）'
         - ''
         - '§8旧日常窟仍收起 · 勿找 ember_daily'
@@ -197,6 +200,53 @@ Icons:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'command: corerpg p1 enter sx03'
+        - close
+
+  G:
+    icons:
+      - condition: 'check papi %corerpg_p1_q01done% < 1'
+        priority: 1
+        display:
+          material: gray dye
+          name: '§7烬井螺旋 §8（需本人 Q01 首通）'
+          lore:
+            - ''
+            - '§c未解锁：先通主线 Q01 灰烬庭院'
+            - '§7解锁后：井口台→螺旋下井→炉心 · 体力 30（与前三本分开）'
+            # 预留（键未 live）：§e%corerpg_p1_sx04_day_line%
+            - '§7日有奖帽最多 3（计数键另号）'
+      - condition: 'check papi %corerpg_stamina% < 30'
+        priority: 2
+        display:
+          material: iron bars
+          name: '§7烬井螺旋 §8（体力不足）'
+          lore:
+            - ''
+            - '§c需要 §e30 §c体力 · 当前 §f%corerpg_stamina%'
+            # 预留（键未 live）：§e%corerpg_p1_sx04_day_line%
+            - '§7日有奖帽最多 3（与前三本分开 · 计数键另号）'
+            - '§7挂机/补给后再来 · 勿假开'
+    update: 20
+    display:
+      material: magma cream
+      name: '§6烬井螺旋 §7· 短征 sx04'
+      lore:
+        - ''
+        - '§7解锁：§a已通 Q01'
+        - '§7消耗：§e30 体力'
+        # 预留（键未 live）：§e%corerpg_p1_sx04_day_line% §8（与前三本分开计）
+        - '§e日有奖帽最多 3 §8（与前三本分开 · 计数键另号 · 第 4+ 次无结算）'
+        - '§d名片：§f井心喷焰/灰柱 · 踏上井沿或拉开'
+        - '§b本间：§f井口台 → 螺旋下井 → 井底炉心'
+        - '§7通关：币80 + 碎片4 + 骨尘3（S43）'
+        - '§7生涯首通另加：币150 + 碎片6 + 胚料1'
+        - ''
+        - '§e➥ §f左键：进本（队长点）'
+        - '§8进本键另号就绪前服务端会拒（预期）'
+    actions:
+      left:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 enter sx04'
         - close
 
   B:
