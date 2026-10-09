@@ -10,14 +10,15 @@ import java.util.Set;
  * Bukkit-free so unit tests pin which section answers each key. Sections:
  * {@link CorePapiAccount} (account / quest / mail / guild / cash), {@link CorePapiKit} (flex + skill kit),
  * {@link CorePapiProgress} (level / talent / vip / gate_), {@link CorePapiStamina} (S0 stamina),
- * {@code p1_} → {@code EmberRunService.placeholder} ({@code town.sunshine.corerpg.p1.EmberRunPapi}).
+ * {@code p1_} → {@code EmberRunService.placeholder} ({@code town.sunshine.corerpg.p1.EmberRunPapi}),
+ * {@link CorePapiPet} (pet_* read-only · D384).
  * The pre-D240 chain had no overlapping keys, so routing order only matters for {@code p1_} / {@code gate_} prefixes.
  */
 public final class CorePapi {
 
     private CorePapi() {}
 
-    public enum Section { ACCOUNT, CASH, KIT, PROGRESS, GATE, P1, STAMINA, NONE }
+    public enum Section { ACCOUNT, CASH, KIT, PROGRESS, GATE, P1, STAMINA, PET, NONE }
 
     static final Set<String> ACCOUNT = set("coin", "quest", "quest_objective", "quest_chapter", "signed", "activity",
             "abyss_used", "calamity_next", "covenant", "guildboss_pass", "mail_unread");
@@ -33,6 +34,9 @@ public final class CorePapi {
             "stamina_cost_daily", "stamina_cost_weekly", "stamina_cost_abyss", "stamina_cost_elite", "stamina_cost_raid",
             "stamina_reset", "stamina_credit_weekly", "stamina_credit_elite", "stamina_credit_raid",
             "stamina_blocked_weekly", "stamina_blocked_raid", "stamina_blocked_elite");
+    /** D384 pet level / feed display (read-only). */
+    static final Set<String> PET = set("pet_active_id", "pet_active_name", "pet_level", "pet_max_level",
+            "pet_level_line", "pet_feed_cost", "pet_feed_hint", "pet_power_bonus", "pet_unlocked_count");
 
     /** key is already lower-cased. Never null. */
     public static Section route(String key) {
@@ -44,6 +48,7 @@ public final class CorePapi {
         if (key.startsWith("gate_")) return Section.GATE;
         if (CASH.contains(key)) return Section.CASH;
         if (STAMINA.contains(key)) return Section.STAMINA;
+        if (PET.contains(key)) return Section.PET;
         return Section.NONE;
     }
 

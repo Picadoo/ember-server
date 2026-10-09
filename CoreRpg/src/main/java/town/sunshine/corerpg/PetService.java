@@ -160,6 +160,11 @@ public final class PetService implements Listener {
         return feedCostBase + (L - 1) * feedCostPerLevel;
     }
 
+    /** Configured feed.max_level (read-only for PAPI). */
+    public int getFeedMaxLevel() {
+        return feedMaxLevel;
+    }
+
     public void start() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
         restartFollowTask();

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 /**
  * PlaceholderAPI identifier {@code corerpg}. D240 / ARCH S3-11: thin dispatcher — {@link CorePapi#route} picks the
  * section; bodies live in {@link CorePapiAccount} / {@link CorePapiKit} / {@link CorePapiProgress} /
- * {@link CorePapiStamina}; {@code p1_} goes to {@code EmberRunService.placeholder} (sections in {@code EmberRunPapi}).
+ * {@link CorePapiStamina} / {@link CorePapiPet}; {@code p1_} goes to {@code EmberRunService.placeholder} (sections in {@code EmberRunPapi}).
  * Same keys and values as before; unknown keys still return {@code null}.
  */
 public final class CoreRpgExpansion extends PlaceholderExpansion {
@@ -33,6 +33,7 @@ public final class CoreRpgExpansion extends PlaceholderExpansion {
                 return r == null ? "" : r.placeholder(player, key.substring(3));
             }
             case STAMINA: return CorePapiStamina.resolve(plugin.getStaminaService(), data, key);
+            case PET: return CorePapiPet.resolve(plugin.getPetService(), data, key);
             default: return null;
         }
     }

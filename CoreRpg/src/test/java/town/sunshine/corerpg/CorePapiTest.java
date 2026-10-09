@@ -55,6 +55,9 @@ public final class CorePapiTest {
         assertEquals(KIT, CorePapi.route("kit_charge"));
         assertEquals(PROGRESS, CorePapi.route("level"));
         assertEquals(STAMINA, CorePapi.route("stamina_blocked_raid"));
+        assertEquals(PET, CorePapi.route("pet_level"));
+        assertEquals(PET, CorePapi.route("pet_feed_hint"));
+        assertEquals(PET, CorePapi.route("pet_unlocked_count"));
         assertEquals(P1, CorePapi.route("p1_q01_state"));
         assertEquals(P1, CorePapi.route("p1_"));
         assertEquals(GATE, CorePapi.route("gate_elite"));
@@ -63,6 +66,16 @@ public final class CorePapiTest {
         assertEquals(NONE, CorePapi.route("stamina_nosuch"));
         assertEquals(NONE, CorePapi.route("p1"));
         assertEquals(NONE, CorePapi.route(null));
+    }
+
+    /** D384: pet_* keys route to PET; do not steal p1_/gate_/ember_level. */
+    @Test public void petKeysRoute() {
+        for (String k : CorePapi.PET) assertEquals(k, PET, CorePapi.route(k));
+        assertEquals(9, CorePapi.PET.size());
+        assertEquals(PROGRESS, CorePapi.route("ember_level")); // character level ≠ pet
+        assertEquals(NONE, CorePapi.route("pet"));
+        assertEquals(NONE, CorePapi.route("pet_nosuch"));
+        assertEquals(P1, CorePapi.route("p1_pet_level")); // p1_ prefix wins; not a pet key
     }
 
     /** Non-p1 %corerpg_*% keys used by live configs all resolve to a section. */
