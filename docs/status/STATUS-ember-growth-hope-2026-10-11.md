@@ -764,3 +764,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D2046–D2059 affix lock loop (jar 1.65.502-d2046)
 - RESEARCH Tempering/PoE lock · EmberRerollLoop + ForgeGoal.LOCK=8
 - Zero C11/pity invent; not status remain twin
+
+## D2060 post-lock-loop scan
+- Affix lock path near-sat as real loop; stop twinning surfaces
