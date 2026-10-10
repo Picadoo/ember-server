@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 套装身法对称（烬爆/承烬 · skill-kit S3a · 拟→D434）
 
-STATUS=**已批 A · 方案 M · D434 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-set-step-symmetry-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-set-step-symmetry-need-design-2026-10-10.md) · backlog `B-set-step-symmetry` · STATUS [`STATUS-ember-set-step-symmetry-d434-2026-10-10.md`](../status/STATUS-ember-set-step-symmetry-d434-2026-10-10.md) · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠天赋/灰印 ≠sx20**
+STATUS=**已批 A · 方案 M · D434 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-set-step-symmetry-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-set-step-symmetry-need-design-2026-10-10.md) · backlog `B-set-step-symmetry` · STATUS [`STATUS-ember-set-step-symmetry-d434-2026-10-10.md`](../status/STATUS-ember-set-step-symmetry-d434-2026-10-10.md) · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠天赋/灰印 ≠sx20**
 
 **上游：** D433 PASS（薄诚实收束）· skill-kit S1/S2 已落（烬突/三形状/火痕/后撤）· 守招 D301 已另轨 · Stage2 观察至 **≥17:40 CST**。
 
@@ -56,4 +56,9 @@ STATUS=**已批 A · 方案 M · D434 · 施工中** · 2026-10-10 · tip [`STAT
 - FlexSkillService：接线钩子（效用数值等 S0 锁）  
 - tools/p1sim：键位与首轮探针
 
-*D434 · 已批 A·M · 首刀 jar 1.65.136-d434 live；S0 全表另补。*
+*D434 · PASS · jar 1.65.137-d434 · S0 报告已落 · 承护抗性闸 · COORD DONE。*
+
+## 5. S0 结果（不调参）
+
+见 [`out-skillkit-d434-set-step.md`](../../tools/p1sim/out-skillkit-d434-set-step.md)。承护 Resist I 超预算 → live 关药效；改设计见拟 D435。
+

@@ -278,7 +278,7 @@ public final class SkillService implements Listener {
         else if (stepVar == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
             ignite = back ? " · 起跳缓速 I 1.5s" : " · 落点缓速 I 1.5s";
         else if (stepVar == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
-            ignite = " · 自身抗性 I 2s";
+            ignite = " · 承护（抗性 S0 暂缓）";
         String distNote = back ? "后撤 4 格" : "前冲 5 格";
         player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " " + stepName
                 + " · 14 秒 · " + distNote + ignite);

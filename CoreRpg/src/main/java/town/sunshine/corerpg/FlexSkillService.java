@@ -385,14 +385,15 @@ public final class FlexSkillService implements Listener {
         return true;
     }
 
-    /** D434 承护步: self Resistance I (P1 only). */
+    /**
+     * D434 承护步: S0 ❌ (+8.3pp) — combat Resist I disabled (display name kept).
+     * Redesign utility in D435; do not retune 0.20×2s into the ±2 corridor.
+     */
     private boolean applyChenghuIfActive(Player player, Location at) {
         if (player == null || at == null || at.getWorld() == null) return false;
-        if (!town.sunshine.corerpg.p1.EmberMode.isP1(player)) return false;
         if (stepVariantOf(player) != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) return false;
-        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,
-                town.sunshine.corerpg.p1.EmberSkillKit.STEP_RESIST_TICKS, 0, false, true), true);
-        at.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, at.clone().add(0, 0.4, 0), 12, 0.3, 0.2, 0.3, 0.0);
+        // identity particles only (hub + P1); no Resist I until S0 redesign PASS
+        at.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, at.clone().add(0, 0.4, 0), 8, 0.25, 0.15, 0.25, 0.0);
         return true;
     }
 
@@ -411,7 +412,7 @@ public final class FlexSkillService implements Listener {
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
             return back ? " · 起跳缓速 I 1.5s" : " · 落点缓速 I 1.5s";
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
-            return " · 自身抗性 I 2s";
+            return " · 承护（抗性 S0 暂缓）";
         return " · 无伤害";
     }
 
@@ -421,7 +422,7 @@ public final class FlexSkillService implements Listener {
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
             return back ? ChatColor.GRAY + " · 起跳缓速" : ChatColor.GRAY + " · 落点缓速";
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
-            return ChatColor.GRAY + " · 承护抗性";
+            return ChatColor.GRAY + " · 承护（抗性暂缓）";
         return "";
     }
 

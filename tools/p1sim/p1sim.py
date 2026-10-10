@@ -385,8 +385,9 @@ def spread_burn(owner, mobs, t):
 #                      the first n alive (boss × kit_dash_boss)
 #                      kit_mark_cd / kit_mark_delay / kit_mark_boss    灰印: front target's next attack pushed back by
 #                      delay s (boss: × kit_mark_boss) — the Slowness I model; no damage
-#   身法 (sneak+Q):    kit_step_cd / kit_step_n / kit_step_cost        火痕步 (焚烬 only): on cd ignite the first n alive
-#                      with the 焚烬 burn ×1.0 (C4); the step costs cost × one swing period
+#   身法 (sneak+Q):    kit_step_cd / kit_step_n / kit_step_cost / kit_step_set(1scorch/2burst/3sustain)
+#                      火痕 (scorch, default): ignite first n · 爆闪 (burst): kit_step_mark_secs + kit_step_slow
+#                      承护 (sustain): kit_step_resist + kit_step_resist_secs · cost × swing period
 #   shared cooldowns (S0 recommendation, WoW 1.12 shocks-style): kit_sec_shared = the 副招 spends the 烬斩 charge (8 s,
 #                      no own cd; 灰印 then only on boss fights); kit_q_shared = 守招 uses 身法's cooldown → while it is
 #                      down boss telegraphs keep only kit_q_keep × tele_bonus (default 0: no step to dodge with),
@@ -555,16 +556,47 @@ def _sec_cost(owner, t, period):
 
 
 def kit_step(owner, alive, t, period):
-    """火痕步 on cooldown (焚烬 only): ignite the first n alive; returns the swing delay it costs."""
+    """身法步 on CD: family via kit_step_set (default scorch=火痕 ignite).
+    burst: Slow-I window on first n (kit_step_mark_secs / kit_step_slow).
+    sustain: self resist window (kit_step_resist / kit_step_resist_secs).
+    Returns swing delay cost."""
     st = owner.st
     sc = gm(st, 'kit_step_cd', 0.0)
-    if sc <= 0 or st['set'] != 'scorch' or t < getattr(owner, 'step_ready', -1.0):
+    if sc <= 0 or t < getattr(owner, 'step_ready', -1.0):
+        return 0.0
+    mods = st.get('mods') or {}
+    # kit_step_set numeric (growth.combine floatifies): 1=scorch 2=burst 3=sustain; default 1
+    fam_id = int(float(mods['kit_step_set'])) if 'kit_step_set' in mods else 1
+    need = {1: 'scorch', 2: 'burst', 3: 'sustain'}.get(fam_id, 'scorch')
+    if st['set'] != need:
         return 0.0
     owner.step_ready = t + sc
-    for m in alive[:int(gm(st, 'kit_step_n', 2))]:
-        ignite(owner, m, t, 1.0)
+    n = int(gm(st, 'kit_step_n', 2))
+    resist = gm(st, 'kit_step_resist', 0.0)
+    mark_secs = gm(st, 'kit_step_mark_secs', 0.0)
+    heal_pct = gm(st, 'kit_step_heal_pct', 0.0)
+    next_taken = gm(st, 'kit_step_next_taken', 0.0)
+    if heal_pct > 0:
+        heal = heal_pct * st['H']
+        owner.hp = min(st['H'], owner.hp + heal)
+        if owner.rec is not None:
+            owner.rec['heal_step'] = owner.rec.get('heal_step', 0.0) + heal
+            owner.rec['n_step_heal'] = owner.rec.get('n_step_heal', 0) + 1
+    elif next_taken > 0:
+        owner.step_next_taken = next_taken  # consume on next hurt
+    elif resist > 0:
+        owner.step_resist_until = t + gm(st, 'kit_step_resist_secs', 2.0)
+        owner.step_resist = resist
+    elif mark_secs > 0:
+        slow = gm(st, 'kit_step_slow', 0.2)
+        for m in alive[:n]:
+            m['ash_until'] = t + mark_secs
+            m['ash_slow'] = slow
+    else:
+        for m in alive[:n]:
+            ignite(owner, m, t, 1.0)
     if owner.rec is not None:
-        owner.rec['n_step'] += 1
+        owner.rec['n_step'] = owner.rec.get('n_step', 0) + 1
     return gm(st, 'kit_step_cost', 0.5) * period
 
 
@@ -731,6 +763,13 @@ class Fight:
                     rec['shield_abs'] += a
             else:
                 self.shield = 0.0
+        if self.t < getattr(self, 'step_resist_until', -1.0):  # D434 承护步: Resist I window
+            r = float(getattr(self, 'step_resist', 0.0) or 0.0)
+            if r > 0:
+                if rec is not None:
+                    rec['step_resist_abs'] = rec.get('step_resist_abs', 0.0) + dmg * r
+                    rec['n_step_resist'] = rec.get('n_step_resist', 0) + 1
+                dmg *= (1.0 - r)
         self.hp -= dmg
         self.taken += dmg
         self.nhit += 1

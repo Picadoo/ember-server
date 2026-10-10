@@ -247,8 +247,20 @@ CANDS_ASH_T0B = {
     'A2_imprint_B_ap': ('q02', 'any', 'T0b·灰印 B cd18 下击推迟0.25s·乱按',
                        {'kit_ash_cd': 18, 'kit_ash_defer': 0.25}),
 }
+
+# D434 套装身法对称 S0（live 钉死 · 不调参）: 火痕 F14c0n1 对照 · 爆闪 SlowI 1.5s · 承护 ResistI 20%×2s
+STEP_FIRE = M(STEP, {'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 1})
+STEP_BAO = {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 2,
+            'kit_step_mark_secs': 1.5, 'kit_step_slow': 0.2}
+STEP_CHENG = {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3,
+              'kit_step_resist': 0.20, 'kit_step_resist_secs': 2.0}
+CANDS_D434 = {
+    'F14c0n1_d434': ('q05', 'scorch', '身法·火痕步 对照（点1 无额外耗时）', STEP_FIRE),
+    'B14c0': ('q05', 'burst', '身法·爆闪步 缓速I 1.5s', STEP_BAO),
+    'S14c0': ('q05', 'sustain', '身法·承护步 抗性I 20%×2s', STEP_CHENG),
+}
 ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,
-           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B)
+           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435)
 
 
 def fams(c):
@@ -353,7 +365,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B, 'd434': CANDS_D434, 'd435': CANDS_D435}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return
