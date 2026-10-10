@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 套装触发可读短闪（D439）
 
-STATUS=**已批 A · 方案 M · D439 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-set-proc-readable-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-set-proc-readable-need-design-2026-10-10.md) · backlog `B-set-proc-readable` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠sx ≠改套装倍率/阈值表**
+STATUS=**已批 A · 方案 M · D439 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-set-proc-readable-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-set-proc-readable-need-design-2026-10-10.md) · backlog `B-set-proc-readable` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠sx ≠改套装倍率/阈值表**
 
 **上游：** D434–D436 / D438 套装身份 PASS · D437 HOLD。
 
@@ -25,4 +25,11 @@ STATUS=**已批 A · 方案 M · D439 · 施工中** · 2026-10-10 · tip [`STAT
 
 定位 `EmberSetService` / combat 触发点 → 短闪钩 → jar → FreshQ 冒烟。
 
-*D439 · 已批 A·M · 施工中。*
+*D439 · PASS · jar 1.65.141 · COORD DONE。*
+
+## 3. 装车
+
+- `flashProc`：ActionBar + Spigot ACTION_BAR + subtitle（1.5s）
+- 触发：EXPLODE / HEAL / IGNITE（含续燃）
+- 将满：`count` 且 counter == every−1
+

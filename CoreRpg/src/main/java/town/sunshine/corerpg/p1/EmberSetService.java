@@ -63,6 +63,8 @@ public final class EmberSetService implements Listener {
         long spreadCdUntil; // D141 燎原 icd
         boolean restored;
         boolean hudShown;
+        /** D439: monotonic ms until proc ActionBar flash yields to normal hud */
+        long procFlashUntil;
     }
 
     public EmberSetService(CoreRpgPlugin plugin, EmberLoadoutService loadouts, EmberCombatListener combat) {
@@ -135,7 +137,11 @@ public final class EmberSetService implements Listener {
         EmberLoadout l = loadouts.get(p);
         Outcome o = s.engine.onHit(h, now, l.b, EmberHeal.maxHp(p));
         if (!h.cancelled && h.finalDamage > 0) s.engine.touch(now);
-        if (o.counted) showHud(p, s, now);
+        if (o.counted) {
+            showHud(p, s, now);
+            // D439: one-away-from-proc readable (no table change)
+            if (o.trigger == Trigger.NONE && "count".equals(o.reason)) maybeFlashAlmost(p, s, o);
+        }
         if (o.trigger == Trigger.NONE) return;
         execute(p, le, o, l.b);
     }
@@ -179,7 +185,9 @@ public final class EmberSetService implements Listener {
             double got = EmberHeal.heal(p, o.amount, String.format(Locale.ROOT, "炽愈 %.2f%%×H",
                     EmberSetRules.sustainPct(s.engine.awakening()) * 100));
             if (got <= 0) EmberDamageTrace.set(p, String.format(Locale.ROOT, "炽愈触发（满血，+0；6s 冷却照常开始）"));
-            showHud(p, s, now());
+            flashProc(p, s, ChatColor.GREEN + "炽愈！" + ChatColor.GRAY + (got > 0
+                    ? String.format(Locale.ROOT, " +%.1f", got) : "（满血）"));
+            p.getWorld().spawnParticle(Particle.HEART, p.getLocation().add(0, 1.2, 0), 6, 0.35, 0.25, 0.35, 0.0);
             return;
         }
         // damage triggers run one tick later, outside the damage event that caused them
@@ -208,6 +216,9 @@ public final class EmberSetService implements Listener {
         EmberDamageTrace.set(p, String.format(Locale.ROOT, "焚烬%s %s：每跳 %.2f（快照），燃烧中 %d 目标",
                 refresh ? "续燃(只延长结束时间)" : "点燃", le.getName(), burn == null ? perTick : burn.perTick, s.engine.burns().size()));
         le.getWorld().spawnParticle(Particle.FLAME, le.getLocation().add(0, 1, 0), 12, 0.3, 0.5, 0.3, 0.01);
+        // D439 readable: 燃层 ignite / refresh
+        flashProc(p, s, ChatColor.GOLD + (refresh ? "焚烬续燃" : "焚烬点燃")
+                + ChatColor.GRAY + " · 燃烧 " + s.engine.burns().size() + " 目标");
     }
 
     private void explode(Player p, Session s, LivingEntity main, Location center, double amount, double r) {
@@ -233,6 +244,7 @@ public final class EmberSetService implements Listener {
             EmberCombatListener.dealP1(p, le, amount, Kind.EXPLOSION, tag);
         }
         EmberDamageTrace.set(p, String.format(Locale.ROOT, "%s 半径 %.1f，%d/%d 目标：%s", tag, r, pick.size(), cand.size(), names.toString().trim()));
+        flashProc(p, s, ChatColor.RED + "烬爆！" + ChatColor.GRAY + " · 命中 " + pick.size());
     }
 
     private double b(Player p) { return loadouts.get(p).b; }
@@ -299,6 +311,7 @@ public final class EmberSetService implements Listener {
     }
 
     private void showHud(Player p, Session s, long now) {
+        if (now < s.procFlashUntil) return; // D439 proc flash owns ActionBar briefly
         EmberSupplyService sup = plugin.getEmberSupplies();
         String hint = sup == null ? null : sup.lowHpHint(p); // new-player polish: low HP → how to drink (wins over the set line)
         String hud = hint != null ? hint : s.engine.hud(now);
@@ -308,6 +321,47 @@ public final class EmberSetService implements Listener {
         } else if (s.hudShown) {
             p.sendActionBar("");
             s.hudShown = false;
+        }
+    }
+
+    /** D439: short ActionBar flash on set proc / almost-ready (no multiplier change). */
+    private void flashProc(Player p, Session s, String msg) {
+        if (p == null || s == null || msg == null || msg.isEmpty()) return;
+        long until = now() + 1500L;
+        s.procFlashUntil = until;
+        try { p.sendActionBar(msg); } catch (Throwable ignored) { }
+        try {
+            p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                    net.md_5.bungee.api.chat.TextComponent.fromLegacyText(msg));
+        } catch (Throwable ignored) { }
+        // subtitle short flash (readable even when ActionBar packet is missed by some clients)
+        try { p.sendTitle("", msg, 5, 25, 8); } catch (Throwable ignored) { }
+        s.hudShown = true;
+        final UUID id = p.getUniqueId();
+        final long token = until;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Session ss = sessions.get(id);
+            Player pp = Bukkit.getPlayer(id);
+            if (ss == null || pp == null || !pp.isOnline()) return;
+            if (ss.procFlashUntil != token) return; // newer flash won
+            ss.procFlashUntil = 0L;
+            showHud(pp, ss, now());
+        }, 30L);
+    }
+
+    /** D439: ActionBar when counter is one hit from trigger (burst/sustain/scorch). */
+    private void maybeFlashAlmost(Player p, Session s, Outcome o) {
+        String fam = s.engine.family();
+        int ev = s.engine.every();
+        if (ev <= 1) return;
+        int c = o.counter;
+        if (c != ev - 1) return;
+        if ("burst".equals(fam)) {
+            flashProc(p, s, ChatColor.YELLOW + "烬爆将满 " + c + "/" + ev);
+        } else if ("sustain".equals(fam)) {
+            flashProc(p, s, ChatColor.YELLOW + "炽愈将满 " + c + "/" + ev);
+        } else if ("scorch".equals(fam)) {
+            flashProc(p, s, ChatColor.YELLOW + "焚烬将满 " + c + "/" + ev);
         }
     }
 
