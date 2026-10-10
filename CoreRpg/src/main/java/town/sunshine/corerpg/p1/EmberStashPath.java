@@ -111,6 +111,10 @@ public final class EmberStashPath {
                 Map<String, Long> moved = v.depositAll(p);
                 if (!moved.isEmpty())
                     p.sendMessage(EmberRunService.P + "§a存仓·自动 §7材料 " + moved.size() + " 种已入库");
+                else if (v.backpackHasStashable(p)) { // D803 vault full
+                    p.sendMessage(EmberRunService.P + "§e存仓·自动 §7仓库装不下 · 去工坊腾仓");
+                    EmberDelivery.offerForgeSpace(p, "auto-stash-full");
+                }
             }
             return;
         }

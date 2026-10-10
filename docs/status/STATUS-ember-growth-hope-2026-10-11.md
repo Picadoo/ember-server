@@ -314,3 +314,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D802 SHIP · jar 1.65.367-d802
 - maybeLockCue rising-edge after soft prefer
+
+## D803–D804 SHIP · jar 1.65.368-d803
+- Auto-stash full → forge; featured enter offerPick

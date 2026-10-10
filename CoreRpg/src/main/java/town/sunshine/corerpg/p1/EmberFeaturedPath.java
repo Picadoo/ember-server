@@ -186,6 +186,7 @@ public final class EmberFeaturedPath {
         int id = get(d);
         if (!valid(id)) {
             p.sendMessage(EmberRunService.P + "§7未选精选路径 · /corerpg p1 featurepath");
+            offerPick(p, featuredLabelLive(p)); // D804
             return;
         }
         String line = "§b精选路径 · 本局 §f" + label(id);
