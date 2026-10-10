@@ -250,7 +250,7 @@ maps:
     tier: 1
     drop_label: T1
     content_version: v1
-    map_version: ember_daily_v1@d15-2026-10-02
+    map_version: ember_daily_v1@d450
     requires: ""
     unlocks: q02
     first_clear: {choice: charm, tier: 1}
@@ -319,7 +319,7 @@ maps:
     tier: 1
     drop_label: T1
     content_version: v1
-    map_version: ember_daily_ash_v1@d15-2026-10-02
+    map_version: ember_daily_ash_v1@d450
     requires: q01
     unlocks: q03
     # E-review #6 (balance_version 15): the Q02 first clear is one free targeted exchange — a T1 standard piece of the
@@ -391,7 +391,7 @@ maps:
     tier: 1
     drop_label: T1
     content_version: v1
-    map_version: ember_daily_crypt_v1@d15-2026-10-02
+    map_version: ember_daily_crypt_v1@d450
     requires: q02
     unlocks: q04
     first_clear: {shard: 30, core: 4, coin: 600}
