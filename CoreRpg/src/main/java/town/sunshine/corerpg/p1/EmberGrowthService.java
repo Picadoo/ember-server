@@ -2200,6 +2200,7 @@ public final class EmberGrowthService implements Listener {
                         if (q != null) {
                             q.sendMessage(P + "§a转化完成：§f" + planned.shortLabel()
                                     + " §7· 强化+0 · 本周已用 §f" + (usedNow + 1) + "/" + EmberConvertRules.WEEKLY_CAP);
+                            EmberConvertLoop.afterConvert(q, nd, toFam, before.enhance > 0); // D474
                             openMenu(q, "ember_p1_convert");
                         }
                     });

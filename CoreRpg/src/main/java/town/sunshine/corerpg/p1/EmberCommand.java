@@ -455,6 +455,16 @@ public final class EmberCommand {
             s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
             return true;
         }
+        if ("convertloop".equals(sub)) { // D474 admin smoke: replay convert success chase
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            String fam = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "scorch";
+            if (!EmberRunRules.validFamily(fam)) fam = "scorch";
+            PlayerData d = runs != null ? runs.dataOf(p.getUniqueId()) : null;
+            EmberConvertLoop.afterConvert(p, d, fam, true);
+            return true;
+        }
         if ("shortspend".equals(sub)) { // D473 admin smoke: replay short settle forge-chase cue
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

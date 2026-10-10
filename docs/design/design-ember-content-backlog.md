@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-convert-complete-loop`（已批 A · 方案 M · D474 · **PASS** · jar 1.65.165-d474 · 转化完成强化追花 · ≠改价）
 - `B-short-spend-forge-btn`（已批 A · 方案 M · D473 · **PASS** · jar 1.65.164-d473 · 短征结算去工坊可点 · ≠改日帽）
 - `B-chase-imprint-complete`（已批 A · 方案 M · D472 · **PASS** · jar 1.65.163-d472 · 追烙烙印完成闭环 · ≠改价）
 - `B-brand-craft-pin-loop`（已批 A · 方案 M · D471 · **PASS** · jar 1.65.162-d471 · 烙纹合成→定向闭环 · ≠改价）
