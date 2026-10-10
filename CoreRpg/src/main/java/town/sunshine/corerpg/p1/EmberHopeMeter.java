@@ -311,4 +311,19 @@ public final class EmberHopeMeter {
         return "§e双签希望 · " + line;
     }
 
+
+    /** D638–D640: path hope wrappers. */
+    public static String brandHope(String line) {
+        if (line == null || line.isEmpty()) return "§8烙纹希望 · 未选路径";
+        return "§e烙纹希望 · " + line;
+    }
+    public static String echoHope(String line) {
+        if (line == null || line.isEmpty()) return "§8余响希望 · 未开启";
+        return "§e余响希望 · " + line;
+    }
+    public static String convertHope(String line) {
+        if (line == null || line.isEmpty()) return "§8转化希望 · 未选目标";
+        return "§e转化希望 · " + line;
+    }
+
 }

@@ -94,9 +94,9 @@ public final class EmberRunPapi {
         if ("bounty".equals(key) || "bounty_hope".equals(key) || "featured_hope".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("dual_lead".equals(key) || "dual_lead_line".equals(key) || "dual_hope".equals(key)) return Section.LOADOUT; // D466/D636
-        if ("brand_path".equals(key) || "brand_path_line".equals(key)) return Section.LOADOUT; // D467
-        if ("echo_path".equals(key) || "echo_path_line".equals(key)) return Section.LOADOUT; // D468
-        if ("convert_path".equals(key) || "convert_path_line".equals(key)) return Section.LOADOUT; // D469
+        if ("brand_path".equals(key) || "brand_path_line".equals(key) || "brand_hope".equals(key)) return Section.LOADOUT; // D467/D638
+        if ("echo_path".equals(key) || "echo_path_line".equals(key) || "echo_hope".equals(key)) return Section.LOADOUT; // D468
+        if ("convert_path".equals(key) || "convert_path_line".equals(key) || "convert_hope".equals(key)) return Section.LOADOUT; // D469
         if ("route_pri".equals(key) || "route_sec".equals(key) || "route_hope".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306/D635
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
@@ -120,7 +120,8 @@ public final class EmberRunPapi {
         return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key)
                 || "set_focus".equals(key) || "set_focus_line".equals(key)
                 || "dual_lead".equals(key) || "dual_lead_line".equals(key) || "dual_hope".equals(key)
-                || "brand_path".equals(key) || "brand_path_line".equals(key)
+                || "brand_path".equals(key) || "brand_path_line".equals(key) || "brand_hope".equals(key)
+                || "echo_hope".equals(key) || "convert_hope".equals(key)
                 || "echo_path".equals(key) || "echo_path_line".equals(key)
                 || "convert_path".equals(key) || "convert_path_line".equals(key) || "stats".equals(key)
                 || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)
@@ -660,21 +661,30 @@ public final class EmberRunPapi {
                 return glance;
             }
             case "brand_path":
-            case "brand_path_line": { // D467 brand playstyle path
+            case "brand_path_line":
+            case "brand_hope": { // D467/D638
                 PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
-                return EmberBrandPath.glance(EmberBrandPath.get(pd));
+                String g = EmberBrandPath.glance(EmberBrandPath.get(pd));
+                if ("brand_hope".equals(key)) return EmberHopeMeter.brandHope(g);
+                return g;
             }
             case "echo_path":
-            case "echo_path_line": { // D468 echo residual path
+            case "echo_path_line":
+            case "echo_hope": { // D468/D639
                 PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
                 boolean un = pd != null && runs.progressFlag(pd, EmberEchoPath.UNLOCK);
-                return EmberEchoPath.glance(EmberEchoPath.get(pd), un);
+                String g = EmberEchoPath.glance(EmberEchoPath.get(pd), un);
+                if ("echo_hope".equals(key)) return EmberHopeMeter.echoHope(g);
+                return g;
             }
             case "convert_path":
-            case "convert_path_line": { // D469 convert destination path
+            case "convert_path_line":
+            case "convert_hope": { // D469 convert destination path
                 PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
                 int sf = EmberSetFocus.get(pd);
-                return EmberConvertPath.glance(EmberConvertPath.get(pd), EmberSetFocus.familyKey(sf), runs.target(pd));
+                String g = EmberConvertPath.glance(EmberConvertPath.get(pd), EmberSetFocus.familyKey(sf), runs.target(pd));
+                if ("convert_hope".equals(key)) return EmberHopeMeter.convertHope(g);
+                return g;
             }
             case "set_run": { // D457 enter-run style line (also for menus)
                 EmberItemData[] worn = l.armorCopy();

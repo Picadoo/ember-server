@@ -31,3 +31,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D635 route_hope
 - D636 dual_hope
 - D637 dash path particles + ActionBar
+
+## D638–D640 SHIP · jar 1.65.311-d638 · 2026-10-11
+- D638 brand_hope · D639 echo_hope · D640 convert_hope
