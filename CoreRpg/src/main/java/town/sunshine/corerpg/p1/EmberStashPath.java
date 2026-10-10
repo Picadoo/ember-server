@@ -117,6 +117,7 @@ public final class EmberStashPath {
         if (shouldMute(path)) return;
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包有可存材料 ",
                 new String[]{"[一键存入]", "/corerpg p1 stash", "材料→仓库 · 城内兼存装备", "GREEN"},
+                new String[]{"[工坊腾仓]", "/corerpg p1 forge", "仓满时花材料", "GOLD"}, // D796
                 new String[]{"[改路径]", "/corerpg p1 stashpath", "自动/提醒/静默", "GRAY"});
     }
 

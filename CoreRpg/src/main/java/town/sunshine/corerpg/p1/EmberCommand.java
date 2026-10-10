@@ -3760,7 +3760,8 @@ public final class EmberCommand {
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
             boolean unlocked = EmberSkillKit.shapeUnlocked(d, runs);
             if (args.length < 3) {
-                p.sendMessage(P + EmberShapePath.glance(EmberShapePath.get(d), unlocked));
+                boolean locked = d.periodCount(EmberSkillKit.C_SHAPE_MANUAL, "all") > 0;
+                p.sendMessage(P + EmberShapePath.glance(EmberShapePath.get(d), unlocked, locked));
                 if (!unlocked) { p.sendMessage(P + "§c烬斩符文需本人首通 Q04。"); return true; }
                 EmberShapePath.offerPick(p);
                 return true;

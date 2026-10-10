@@ -88,9 +88,15 @@ public final class EmberShapePath {
     }
 
     public static String glance(int id, boolean unlocked) {
+        return glance(id, unlocked, false);
+    }
+
+    /** D797: locked=true when C_SHAPE_MANUAL set. */
+    public static String glance(int id, boolean unlocked, boolean locked) {
         if (!unlocked) return "§8符文路径：首通 Q04 后可选";
         if (!valid(id)) return "§8符文路径：未选 · /corerpg p1 shapepath";
-        return "§e符文路径：§f" + label(id) + " §8· " + tip(id);
+        String base = "§e符文路径：§f" + label(id) + " §8· " + tip(id);
+        return locked ? base + " §a· 已锁定" : base + " §8· 可锁定防软切";
     }
 
     public static String enterCmd(int id) {

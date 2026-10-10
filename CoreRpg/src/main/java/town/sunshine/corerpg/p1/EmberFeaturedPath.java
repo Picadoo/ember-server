@@ -218,6 +218,10 @@ public final class EmberFeaturedPath {
                 new String[]{enterLabel(id, mapKey), cmd, tip(id), "GREEN"},
                 new String[]{"[换路径]", "/corerpg p1 featurepath", "挑战/普通", "AQUA"},
                 new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "GRAY"});
+        // D795: weekly goal focus chase if pinned to featured
+        CoreRpgPlugin pl = plugin();
+        if (pl != null && pl.getEmberRuns() != null)
+            EmberGoalPath.maybeGlance(p, pl.getEmberRuns(), "featured");
     }
 
     private static String featuredLabelLive(Player p) {

@@ -305,3 +305,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D791 season goal claim next + pending cue
 - D792 stash/backpack full → forge buttons
 - D793 shapepath lock after soft-prefer
+
+## D794–D797 SHIP · jar 1.65.365-d794
+- D794–D797 polish featured/goal/stash/shape

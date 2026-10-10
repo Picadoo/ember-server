@@ -496,7 +496,8 @@ public final class EmberSettleService {
                 p.sendMessage(EmberRunService.P + "§e精选周帽已满 §8· "
                         + (EmberChallengePath.valid(cpath) ? EmberChallengePath.label(cpath) : "未选硬本路径"));
                 try { p.sendActionBar("§e精选周帽已满"); } catch (Throwable ignored) { }
-                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：",
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：", // D794
+                        new String[]{"[换精选路径]", "/corerpg p1 featurepath", "挑战/普通精选", "GOLD"},
                         new String[]{"[换硬本路径]", "/corerpg p1 challengepath", "改挑战/普通偏好", "AQUA"},
                         new String[]{"[冒险页]", "/ember_p1_adventure", "换图继续", "GREEN"});
             }
