@@ -661,3 +661,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1665–D1678 ARCH SHIP · jar 1.65.472-d1665
 - Friend/Mentor/Party path remain AB
+
+## D1679–D1696 ARCH SHIP · jar 1.65.473-d1679
+- NX2 vault/gearlib capacity honesty AB

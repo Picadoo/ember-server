@@ -111,6 +111,9 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
     }
 
     /** id → amount, whitelisted ids first in whitelist order, then anything else left from the legacy warehouse */
+    /** D1681: distinct material kinds in vault. */
+    public int kindsCount(UUID id) { return all(id).size(); }
+
     public Map<String, Long> all(UUID id) {
         Map<String, Long> out = new java.util.LinkedHashMap<String, Long>();
         PlayerData d = data(id);
@@ -336,19 +339,23 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
         Map<String, Long> moved = new java.util.LinkedHashMap<String, Long>();
         if (!enabled()) return moved;
         ItemStack[] st = p.getInventory().getStorageContents();
+        int blocked = 0;
         for (int i = 0; i < st.length; i++) {
             ItemStack x = st[i];
             if (x == null || x.getType() == Material.AIR) continue;
             String id = ni().getNiId(x);
             if (id == null || !accepts(id)) continue;
             long put = add(p, id, x.getAmount());
-            if (put <= 0) continue;
+            if (put <= 0) { blocked++; continue; } // D1682 at per-id cap
             if (put >= x.getAmount()) p.getInventory().setItem(i, null);
             else { x.setAmount((int) (x.getAmount() - put)); p.getInventory().setItem(i, x); }
             moved.merge(id, put, Long::sum);
             audit(p, id, put, EmberVaultLog.STASH);
         }
         if (!moved.isEmpty()) p.updateInventory();
+        if (blocked > 0 && p != null) {
+            try { p.sendActionBar("§e材料仓 · §f" + blocked + " 格装不下（达种上限）"); } catch (Throwable ignored) { }
+        }
         return moved;
     }
 

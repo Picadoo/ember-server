@@ -93,6 +93,15 @@ public final class EmberGearLib implements Listener {
     public int minFree() { return cfg("storage.gearlib.auto_stash_below_free", 4); }
     public int undoMinutes() { return cfg("storage.gearlib.undo_minutes", 10); }
 
+    /** D1681: empty hotbar+backpack slots. */
+    public static int freeBackpackSlots(Player p) {
+        if (p == null) return 0;
+        int n = 0;
+        for (ItemStack x : p.getInventory().getStorageContents())
+            if (x == null || x.getType() == Material.AIR) n++;
+        return n;
+    }
+
     private PlayerData data(UUID id) { try { return plugin.getDataStore().get(id); } catch (RuntimeException e) { return null; } }
 
     public int mode(Player p) {
@@ -407,8 +416,9 @@ public final class EmberGearLib implements Listener {
     private void report(Player p, List<String> mats, int gear, String gateMsg) {
         if (mats.isEmpty() && gear == 0) {
             boolean stashable = vault() != null && vault().backpackHasStashable(p);
-            if (stashable) { // D792 warehouse likely full for those ids
+            if (stashable) { // D792 / D1682 warehouse likely full for those ids
                 p.sendMessage(PV + ChatColor.YELLOW + "材料仓装不下（或已满），背包仍有可存材料 · 去工坊花掉或稍后再试");
+                try { p.sendActionBar("§e材料仓 · 装不下 · 花料腾容"); } catch (Throwable ignored) { }
                 EmberDelivery.offerForgeSpace(p, "vault-full");
             } else {
                 p.sendMessage(PV + "背包里没有可存的材料或装备" + (gateMsg != null ? "（装备：" + gateMsg + "）" : "")
@@ -418,7 +428,12 @@ public final class EmberGearLib implements Listener {
             p.sendMessage(PV + ChatColor.GREEN + "一键存入：" + (mats.isEmpty() ? "" : "材料 " + String.join("、", mats))
                 + (gear > 0 ? (mats.isEmpty() ? "" : "；") + "装备 " + gear + " 件 → 装备库" : "")
                 + (gateMsg != null && !"仅材料".equals(gateMsg) ? ChatColor.GRAY + "（装备没存：" + gateMsg + "）" : ""));
-            try { p.sendActionBar("§a存仓 · §f" + (mats.isEmpty() ? "" : "料 ") + (gear > 0 ? gear + "装" : "好")); } catch (Throwable ignored) { }
+            try {
+                int libN = count(p.getUniqueId());
+                p.sendActionBar("§a存仓 · §f" + (mats.isEmpty() ? "" : "料 ")
+                        + (gear > 0 ? gear + "装" : "好")
+                        + " §8· 库" + libN + "件 · 空" + freeBackpackSlots(p) + "格");
+            } catch (Throwable ignored) { }
             // D831/D883 next
             int junk = countPathJunk(p);
             ConfirmTokens.sendButtons(p, PV + "§7存仓下一环：",
@@ -805,7 +820,16 @@ public final class EmberGearLib implements Listener {
                 for (int i = 3; i < args.length; i++) { if ("confirm".equalsIgnoreCase(args[i])) go = true; else if (args[i].startsWith("tok:")) tok = args[i].substring(4); }
                 return bulk(p, go, tok);
             }
-            if ("mode".equals(a)) { setMode(p, EmberStorageRules.nextStashMode(mode(p))); p.sendMessage(P + "新装备自动入库：" + EmberStorageRules.stashModeName(mode(p))); return true; }
+            if ("mode".equals(a)) { // D1683
+                setMode(p, EmberStorageRules.nextStashMode(mode(p)));
+                int m = mode(p);
+                int free = freeBackpackSlots(p);
+                String thr = EmberStorageRules.stashThresholdRemain(m, free, minFree());
+                p.sendMessage(P + "新装备自动入库：" + EmberStorageRules.stashModeName(m) + " §8· " + thr);
+                try { p.sendActionBar("§e装库自动 · §f" + EmberStorageRules.stashModeName(m) + " §8· " + thr); }
+                catch (Throwable ignored) { }
+                return true;
+            }
             final String op = opener;
             reload(p, () -> openLib(p, op, 0));
             return true;
@@ -818,11 +842,19 @@ public final class EmberGearLib implements Listener {
         String hold = EmberAssetGuard.hold(p);
         if (hold != null) { p.sendMessage(PV + ChatColor.RED + hold); return; }
         long got = vault().withdraw(p, niId, n);
-        if (got < 0) p.sendMessage(PV + ChatColor.RED + "背包满了");
-        else if (got == 0 && vault().bound(p.getUniqueId(), niId) > 0)
+        if (got < 0) {
+            p.sendMessage(PV + ChatColor.RED + "背包满了 · 空出格子再取");
+            try { p.sendActionBar("§e取出 · 背包满 · 空" + freeBackpackSlots(p) + "格"); } catch (Throwable ignored) { }
+        } else if (got == 0 && vault().bound(p.getUniqueId(), niId) > 0)
             p.sendMessage(PV + ChatColor.YELLOW + "这些 " + plugin.getNiBridge().displayName(niId) + " 是挂机庭的账号绑定战利品：不能取出，锻造 / 强化 / 洗练时直接从仓库扣。");
         else if (got == 0) p.sendMessage(PV + "仓库里没有 " + plugin.getNiBridge().displayName(niId));
-        else p.sendMessage(PV + ChatColor.GREEN + "取出 " + plugin.getNiBridge().displayName(niId) + " ×" + got + ChatColor.GRAY + "（库存 " + vault().amount(p.getUniqueId(), niId) + "）");
+        else {
+            long left = vault().amount(p.getUniqueId(), niId);
+            p.sendMessage(PV + ChatColor.GREEN + "取出 " + plugin.getNiBridge().displayName(niId) + " ×" + got
+                    + ChatColor.GRAY + "（库存 " + left + "）");
+            try { p.sendActionBar("§a取出 · §f" + plugin.getNiBridge().displayName(niId) + "×" + got + " §8· 库余" + left); }
+            catch (Throwable ignored) { }
+        }
     }
 
     // ================================================================== GUI (chest pages; every click is cancelled)
@@ -891,6 +923,17 @@ public final class EmberGearLib implements Listener {
         inv.setItem(53, icon(Material.BOOK, 0, "§7说明", "§7仓库：每种材料一格，数量近无限，不用解锁",
                 "§7装备库：装备存在数据库里，库里的不能用也不会丢", "§7分解后 " + undoMinutes() + " 分钟内可在装备库撤销"));
         p.openInventory(inv);
+        // D1681 NX2 capacity glance
+        int free = freeBackpackSlots(p);
+        String thr = EmberStorageRules.stashThresholdRemain(mode, free, minFree());
+        int kinds = v == null ? 0 : v.all(p.getUniqueId()).size();
+        try {
+            p.sendActionBar("§3仓库 · 料种§f" + kinds + " §7· 装库§f" + n
+                    + " §8· 空" + free + "格 · " + thr);
+        } catch (Throwable ignored) { }
+        p.sendMessage(PV + "§7容量：材料种 §f" + kinds + " §7· 装备库 §f" + n + " 件（无格上限）"
+                + " §8· 背包空 §f" + free + " §7· 自动装：" + EmberStorageRules.stashModeName(mode)
+                + " · " + thr);
     }
 
     private ItemStack gearIcon(Player p, Entry e) {
@@ -942,6 +985,14 @@ public final class EmberGearLib implements Listener {
                 "§7锁定 / 收藏 / 装备中 / 有投入(强化·精工·成色卓越+/词条) / 非掉落 / T0 跳过", "§7点了先在聊天里列出清单，再点确认", "§e右键：撤销最近的分解（" + undoMinutes() + " 分钟内）"));
         inv.setItem(53, icon(Material.PAPER, 0, "§f下一页", "§7第 " + (pg + 1) + " / " + pages + " 页"));
         p.openInventory(inv);
+        try { // D1681
+            int total = entries(id).size();
+            int leftPages = Math.max(0, pages - pg - 1);
+            p.sendActionBar("§b装备库 · §f" + view.size() + "/" + total + "件"
+                    + " §7· 页" + (pg + 1) + "/" + pages
+                    + (leftPages > 0 ? " §8· 还差" + leftPages + "页" : " §a· 末页")
+                    + " §8· 可分解" + bulk.size());
+        } catch (Throwable ignored) { }
         if (pg == 0) { // D714 set completion chase once on first page
             PlayerData d = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
             EmberLoadout lo = loadouts == null ? null : loadouts.refresh(p);

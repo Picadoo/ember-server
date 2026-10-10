@@ -47,6 +47,29 @@ public final class EmberStorageRules {
         return mode == STASH_ALWAYS ? "总是" : mode == STASH_OFF ? "关闭" : "背包快满时";
     }
 
+    /** D1680: room under VAULT_CAP (Bukkit-free). */
+    public static long vaultRoom(long have) {
+        long h = Math.max(0, have);
+        return h >= VAULT_CAP ? 0 : VAULT_CAP - h;
+    }
+
+    /**
+     * D1680: auto-stash threshold remain for STASH_LOW — how many free slots until trigger.
+     * Null when mode always/off or already triggering.
+     */
+    public static String stashThresholdRemain(int mode, int freeSlots, int minFree) {
+        if (mode == STASH_ALWAYS) return "总是入库";
+        if (mode == STASH_OFF) return "关闭入库";
+        if (freeSlots < 0) freeSlots = 0;
+        if (minFree < 1) minFree = 1;
+        if (freeSlots <= 0 || freeSlots < minFree)
+            return "已触快满（空" + freeSlots + "/" + minFree + "）";
+        int left = freeSlots - (minFree - 1);
+        // slots until freeSlots < minFree i.e. need freeSlots to drop to minFree-1
+        int until = freeSlots - minFree + 1;
+        return "空" + freeSlots + "格 · 再少" + until + "格触快满";
+    }
+
     public static int nextStashMode(int mode) { return mode == STASH_LOW ? STASH_ALWAYS : mode == STASH_ALWAYS ? STASH_OFF : STASH_LOW; }
 
     // ------------------------------------------------------------------ gear library filters

@@ -190,4 +190,13 @@ public class EmberStorageRulesTest {
         assertFalse(EmberStorageRules.libDupEligible(null, target, false));
     }
 
+
+    @Test public void stashThresholdRemainAndVaultRoom() {
+        assertEquals(0L, EmberStorageRules.vaultRoom(EmberStorageRules.VAULT_CAP));
+        assertTrue(EmberStorageRules.vaultRoom(0) > 0);
+        assertTrue(EmberStorageRules.stashThresholdRemain(EmberStorageRules.STASH_ALWAYS, 10, 4).contains("总是"));
+        assertTrue(EmberStorageRules.stashThresholdRemain(EmberStorageRules.STASH_OFF, 10, 4).contains("关闭"));
+        assertTrue(EmberStorageRules.stashThresholdRemain(EmberStorageRules.STASH_LOW, 2, 4).contains("触快满"));
+        assertTrue(EmberStorageRules.stashThresholdRemain(EmberStorageRules.STASH_LOW, 10, 4).contains("再少"));
+    }
 }
