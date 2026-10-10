@@ -690,3 +690,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1786–D1799 SHIP · jar 1.65.480-d1786
 - bulkDone + batch-undo remain AB
+
+## D1800–D1813 SHIP · jar 1.65.481-d1800
+- gearlib withdraw full/success capacity AB

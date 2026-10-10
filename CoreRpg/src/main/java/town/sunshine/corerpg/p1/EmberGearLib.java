@@ -321,7 +321,11 @@ public final class EmberGearLib implements Listener {
         final Entry e = find(id, uid);
         if (e == null) { p.sendMessage(P + ChatColor.RED + "装备库里没有这件（可能刚取出）"); return; }
         if (busy.contains(uid)) { p.sendMessage(P + "这件正在处理中"); return; }
-        if (p.getInventory().firstEmpty() < 0) { p.sendMessage(P + ChatColor.RED + "背包满了，空出一格再取"); return; }
+        if (p.getInventory().firstEmpty() < 0) {
+            p.sendMessage(P + ChatColor.RED + "背包满了，空出一格再取");
+            try { p.sendActionBar("§e取装 · 背包满 · 空" + freeBackpackSlots(p) + "格"); } catch (Throwable ignored) { } // D1800
+            return;
+        }
         final EmberItemData after = e.d.withRev(e.d.rev + 1);
         final ItemStack fresh = loadouts.items().create(after);
         if (fresh == null) { p.sendMessage(P + ChatColor.RED + "物品生成失败（NI 模板或签名密钥不可用），没有取出"); return; }
@@ -345,6 +349,10 @@ public final class EmberGearLib implements Listener {
                         if (!q.isOnline()) return;
                         loadouts.refresh(q);
                         q.sendMessage(P + ChatColor.GREEN + "已取出 " + after.shortLabel());
+                        try {
+                            q.sendActionBar("§a取装 · §f" + after.shortLabel()
+                                    + " §8· 库余" + count(id) + " · 空" + freeBackpackSlots(q) + "格");
+                        } catch (Throwable ignored) { }
                         q.playSound(q.getLocation(), Sound.ENTITY_ITEM_PICKUP, 0.6f, 1.0f);
                         if (q.getOpenInventory().getTopInventory().getHolder() instanceof Holder) openLib(q, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).opener, ((Holder) q.getOpenInventory().getTopInventory().getHolder()).page);
                     });
