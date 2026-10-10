@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D415 · 挂机战况挂仓差 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx11）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D415** · tip `34a1366d` · 指针 DESIGN [`DESIGN-ember-afk-status-mat-gap-2026-10-10.md`](../design/DESIGN-ember-afk-status-mat-gap-2026-10-10.md) · W1a 必做 · W1b 同批 · 零 jar · 零改产量/UpgradeRules · ≠sx11 · **施工中** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D415** · tip `34a1366d` · 指针 DESIGN [`DESIGN-ember-afk-status-mat-gap-2026-10-10.md`](../design/DESIGN-ember-afk-status-mat-gap-2026-10-10.md) · 施工 STATUS [`STATUS-ember-afk-status-mat-gap-d415-2026-10-10.md`](STATUS-ember-afk-status-mat-gap-d415-2026-10-10.md) · W1a/W1b 菜单 tip `85e8d28a` · **零 jar** · **挂盘已落** · **未派测** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3 ≠交 sx11**。下文为交稿原文，保留备查。
 >
 > **【D415 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx11** · **≠ stage 脏 runtime**
 >
 > **上游结案：** 总控【催 D415 tip】· D413/D414 jar 已交（live 1.65.121-d414）；D413 薄抽与 D414 挂盘并行 → 请交**下一内容号 tip**（短征/挂机资源环/日更乐趣；**sx11 等 D414 PASS**）。禁 Pack6/天赋/灰印/抬日表/开 gate_daily/动 Stage2。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D415** · **施工中** · docs-only  
-**硬规格（已批 A · 方案 M · D415 · 施工中）：** [`DESIGN-ember-afk-status-mat-gap-2026-10-10.md`](../design/DESIGN-ember-afk-status-mat-gap-2026-10-10.md) · backlog `B-afk-status-mat-gap`（**已批/施工中**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D415** · **挂盘已落** · docs-only  
+**硬规格（已批 A · 方案 M · D415 · 挂盘已落）：** [`DESIGN-ember-afk-status-mat-gap-2026-10-10.md`](../design/DESIGN-ember-afk-status-mat-gap-2026-10-10.md) · backlog `B-afk-status-mat-gap`（**已批·挂盘已落**） · STATUS [`STATUS-ember-afk-status-mat-gap-d415-2026-10-10.md`](STATUS-ember-afk-status-mat-gap-d415-2026-10-10.md)  
 **打开理由：** D404 仓余额/代表档还差键 **已 live** 且挂在配方速览（spot PASS）；挂机战况 I **仍无**仓内现有/还差——坐庭必须点「去哪花→速览」才知「我还差啥」。D404§5.4 / D405§5 / D408§6 / D409§6 / D411§5 / D413§5 **明文后置**「仓差挂进挂机战况主块」。sx11 禁交；D404–D414（仓差速览主交付/remain/首通/sx07–sx10/满额短征追/有奖花材追/next_farm/ActionBar）禁复述为主债。
 
 ---
@@ -79,3 +79,5 @@
 | 2026-10-10 | **旁注已关** · 总控批 A·M · D415 · 设计待批关闭 · W1a 必做 · W1b 同批 · 零 jar · 零改产量/UpgradeRules · ≠sx11 · **施工中** |
 
 | 2026-10-10 | **已批 A · 方案 M · D415** · 旁注已关 · 挂盘已落 · STATUS-ember-afk-status-mat-gap-d415 · 零 jar · 未派测 |
+
+| 2026-10-10 | **挂盘已落** · STATUS-ember-afk-status-mat-gap-d415 · menu tip `85e8d28a` · 零 jar · 未派测 |
