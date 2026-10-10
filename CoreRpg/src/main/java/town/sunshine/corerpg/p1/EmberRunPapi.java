@@ -137,7 +137,10 @@ public final class EmberRunPapi {
                 || "held_is_armor".equals(key)
                 // D601 hope meters: enhance pity glance (worn + held)
                 || "enhance_blade_pity".equals(key) || "enhance_charm_pity".equals(key)
-                || "held_enhance_pity".equals(key);
+                || "held_enhance_pity".equals(key)
+                // D602 quality hope meters
+                || "quality_blade_hope".equals(key) || "quality_charm_hope".equals(key)
+                || "held_quality_hope".equals(key);
     }
 
     /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
@@ -647,6 +650,15 @@ public final class EmberRunPapi {
                 EmberItemData hd = heldTrusted(p);
                 if (hd == null) return EmberHopeMeter.emptySlot("手持");
                 return EmberHopeMeter.enhance(hd);
+            }
+            case "quality_blade_hope": // D602
+                return l.blade == null ? EmberHopeMeter.emptySlot("刃") : EmberHopeMeter.quality(l.blade);
+            case "quality_charm_hope": // D602
+                return l.charm == null ? EmberHopeMeter.emptySlot("护符") : EmberHopeMeter.quality(l.charm);
+            case "held_quality_hope": { // D602 forge preview
+                EmberItemData hq = heldTrusted(p);
+                if (hq == null) return EmberHopeMeter.emptySlot("手持");
+                return EmberHopeMeter.quality(hq);
             }
             case "held_enhance_cost": return heldForgeLine(p, "enhance");
             case "held_enhance_lack": return heldForgeLack(p, "enhance");

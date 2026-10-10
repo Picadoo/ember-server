@@ -3,13 +3,16 @@ package town.sunshine.corerpg.p1;
 import java.util.Locale;
 
 /**
- * D601: unified visible hope meters for enhance + reroll pity.
- * Display only — does not change RATE / MAX_TRIES / affix pity math.
+ * D601/D602: unified visible hope meters for enhance + reroll pity + quality bypass.
+ * Display only — does not change RATE / MAX_TRIES / affix pity / qualityCost / drop weights.
  */
 public final class EmberHopeMeter {
 
     public static final String READY_ENHANCE = "下次必成";
     public static final String READY_REROLL = "这次必出上限档";
+
+    /** Workshop deterministic quality cap (卓越). 极品 is drop-only. */
+    public static final int QUALITY_FORGE_CAP = 2;
 
     private EmberHopeMeter() {}
 
@@ -47,5 +50,27 @@ public final class EmberHopeMeter {
         int need = EmberUpgradeRules.maxTries(d.enhance + 1);
         int cur = EmberUpgradeRules.attemptNo(d);
         return glance(cur, need, READY_ENHANCE);
+    }
+
+    /**
+     * D602: quality deterministic-bypass hope meter.
+     * Workshop can raise 标准→精良→卓越 ({@link #QUALITY_FORGE_CAP}); 极品 drop-only.
+     * Progress cur = min(quality, cap) / need = cap; next step names the guaranteed target.
+     */
+    public static String quality(EmberItemData d) {
+        if (d == null) return emptySlot("无件");
+        if (d.isArmor()) return emptySlot("甲看掉落");
+        int q = Math.max(0, d.quality);
+        int cur = Math.min(q, QUALITY_FORGE_CAP);
+        int need = QUALITY_FORGE_CAP;
+        if (q >= 3) return String.format(Locale.ROOT, "§a成色 %d/%d · 已满极品", need, need);
+        if (q >= QUALITY_FORGE_CAP) {
+            return String.format(Locale.ROOT, "§7成色 %d/%d · 工坊顶 · 极品仅掉落", need, need);
+        }
+        // next guaranteed workshop step
+        String next = EmberItemData.qualityName(q + 1);
+        EmberUpgradeRules.Cost c = EmberUpgradeRules.qualityCost(q);
+        String cost = c == null ? "" : " · " + EmberGearNextHint.costShort(c);
+        return String.format(Locale.ROOT, "§a成色 %d/%d · 下次确定升%s%s", cur, need, next, cost);
     }
 }

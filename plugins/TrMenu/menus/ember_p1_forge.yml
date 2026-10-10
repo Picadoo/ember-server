@@ -222,8 +222,9 @@ Icons:
       material: gold nugget
       name: '§e成色 · 预览'
       lore:
-        - '§7标准→精良→卓越：每档成长 +4%（极品 +12%，只从掉落获得）'
+        - '§7标准→精良→卓越：材料确定升一档（极品只从掉落）'
         - '§8强化一档 +4%～8%，通常先强化更划算'
+        - '§e希望表盘：§f%corerpg_p1_held_quality_hope%'
         - ''
         - '§e手持件：§f%corerpg_p1_held_next_q%'
         - '§c%corerpg_p1_held_quality_lack%'
@@ -251,6 +252,7 @@ Icons:
       material: gold nugget
       name: '§e成色 · 确认'
       lore:
+        - '§e希望表盘：§f%corerpg_p1_held_quality_hope%'
         - '§e手持件：§f%corerpg_p1_held_next_q%'
         - '§c%corerpg_p1_held_quality_lack%'
         - '§8与预览一致'
