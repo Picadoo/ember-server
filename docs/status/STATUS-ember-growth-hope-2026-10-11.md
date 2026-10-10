@@ -538,3 +538,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1191–D1198 ARCH SHIP · jar 1.65.433-d1191
 - SinkGlance BRAND goal shard lack; ARCH health tests PASS
+
+## D1199–D1206 ARCH SHIP · jar 1.65.434-d1199
+- SinkGlance ROLL matCost lack; quality/refine/upgrade ActionBar 确定成功

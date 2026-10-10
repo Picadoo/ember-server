@@ -49,6 +49,10 @@ public final class EmberSinkGlance {
             if (goal == EmberForgeGoal.REFINE) {
                 cost = EmberUpgradeRules.refineCost(d.craft);
                 focus = "精工";
+            } else if (goal == EmberForgeGoal.ROLL) {
+                focus = "随机锻";
+                // D1200: ordinary roll matCost（非 floor · 禁 K3）
+                cost = EmberForgeRollRules.matCost();
             } else if (goal == EmberForgeGoal.BRAND) {
                 focus = "烙纹";
                 // D1192: craftShards mirror · 非 K3

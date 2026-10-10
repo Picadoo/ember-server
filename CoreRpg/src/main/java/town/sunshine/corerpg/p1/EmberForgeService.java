@@ -403,8 +403,9 @@ public final class EmberForgeService implements Listener {
             List<String> lack = lacking(p, plan.cost);
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";
             String cmd = "/corerpg p1 " + ("quality".equals(kind) ? "refine quality" : kind) + " confirm";
-            try { // D850
-                p.sendActionBar("§e预览 · §f" + kind + " §7· " + plan.cost.label());
+            try { // D850 / D1201 确定成功 honesty
+                String kn = "quality".equals(kind) ? "成色" : "upgrade".equals(kind) ? "升阶" : "精工";
+                p.sendActionBar("§a确定成功 · §f" + kn + " §7· " + plan.cost.label());
             } catch (Throwable ignored) { }
             if (!lack.isEmpty()) {
                 p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
