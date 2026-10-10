@@ -44,3 +44,6 @@ cp -a plugins/DungeonPlus/map/ember_abyss \
 ## 禁
 
 空板 PASS · 覆盖其它 `ember_*` map 不备份 · 长期共用 `ember_short_sx01..08` 目录交差 · 放开旧日常 map 当短征 · 抬挂机表当奖励 · 纯换皮宣称第九条短征完工 · 把本债写成「sx05 连续窄桥」无离散跳石 · 连续窄桥假渡渠
+
+## D444
+- 跳石≥3 · `@d444`

@@ -68,7 +68,7 @@ EmberSx08Warden:
   # R3 Boss 上层守吏 · LayerCast 层间砸落/扫层斩可读可躲；对照 sx07 Warden HP180；未抬过日更 Boss 210
   Type: ZOMBIE
   Display: '&c上层守吏'
-  Health: 180
+  Health: 240
   Damage: 3
   Options:
     MovementSpeed: 0.2
@@ -83,6 +83,6 @@ EmberSx08Warden:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
-  - skill{s=EmberSx08LayerCast} @self ~onTimer:80
+  - skill{s=EmberSx08LayerCast} @self ~onTimer:70
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

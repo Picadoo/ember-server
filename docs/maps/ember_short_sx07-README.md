@@ -44,3 +44,6 @@ cp -a plugins/DungeonPlus/map/ember_daily_tide_v1 \
 ## 禁
 
 空板 PASS · 覆盖其它 `ember_*` map 不备份 · 长期共用 `ember_short_sx01..06` 目录交差 · 放开旧日常 map 当短征 · 抬挂机表当奖励 · 纯换皮宣称第七条短征完工 · 把本债写成「断塔日常重开」
+
+## D444
+- 塔升≥2层 · `@d444`

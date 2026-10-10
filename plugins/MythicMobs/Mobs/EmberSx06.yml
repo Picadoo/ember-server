@@ -68,7 +68,7 @@ EmberSx06Warden:
   # R3 Boss 环心守吏 · RingCast 环扫斩/向心拉扯可读可躲；对照 sx05 Warden HP180；未抬过日更 Boss 210
   Type: ZOMBIE
   Display: '&c环心守吏'
-  Health: 180
+  Health: 240
   Damage: 3
   Options:
     MovementSpeed: 0.2
@@ -83,6 +83,6 @@ EmberSx06Warden:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
-  - skill{s=EmberSx06RingCast} @self ~onTimer:80
+  - skill{s=EmberSx06RingCast} @self ~onTimer:70
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5
