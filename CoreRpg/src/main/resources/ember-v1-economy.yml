@@ -366,7 +366,14 @@ sinks:
   # D429 烙纹
   C20:
     shard: 40
-  C21: {}
+  # D991 Stage1 C21 brand pin (T1–T3; matches EmberBrandRules / growth forge.brand)
+  C21:
+    "t1.brand": 2
+    "t1.coin": 300
+    "t2.brand": 4
+    "t2.coin": 600
+    "t3.brand": 6
+    "t3.coin": 1000
   # D430 随机锻造
   C22:
     marks: 8

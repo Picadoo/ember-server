@@ -454,3 +454,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D981–D990 ARCH SHIP · jar 1.65.411-d981
 - Stage1 C11 reroll base + C08 abyss fee/fee_mark_coin ← amount(); growth/runs yml stay mirrors; nums unchanged
+
+## D991–D995 ARCH SHIP · jar 1.65.412-d991
+- Stage1 C21 brand pin ← amount(); nums unchanged

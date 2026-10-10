@@ -371,7 +371,10 @@ public final class EmberEconomy {
             .acc(Account.GACHA_TICKET).model(OUT).done(); // D244 (G10): registered, tags only
         // D429 烙纹：合成吃碎片；定向吃币（烙纹 NI 另扣，记 GEAR 账户口径）
         sink("C20", "烙纹合成", "EmberBrandRules.CRAFT_SHARDS", Period.NONE).acc(SHARD).model(FULL).g("shard", 40).done();
-        sink("C21", "烙纹定向", "EmberBrandRules pin_coin/pin_brand", Period.NONE).acc(COIN, GEAR).model(FULL).done();
+        sink("C21", "烙纹定向", "EmberBrandRules pin_coin/pin_brand", Period.NONE).acc(COIN, GEAR).model(FULL)
+            .g("t1.brand", 2).g("t1.coin", 300)
+            .g("t2.brand", 4).g("t2.coin", 600)
+            .g("t3.brand", 6).g("t3.coin", 1000).done();
         sink("C22", "随机锻造", "EmberForgeRollRules", Period.NONE).acc(MARK, BLANK, COIN).model(FULL)
             .g("marks", 8).g("blank", 4).g("coin", 500).done();
         sink("C23", "每周转化", "EmberConvertRules", Period.WEEK).acc(BLANK, COIN).keys("p4_conv").model(FULL)

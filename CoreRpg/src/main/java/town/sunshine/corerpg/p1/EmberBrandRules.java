@@ -18,17 +18,17 @@ public final class EmberBrandRules {
     /** 每件锻造次数上限（洗练与定向共用已用计数） */
     public static final int MAX_CHARGES = 13;
     /** T0 不开定向；T1/T2/T3 */
-    private static final int[] PIN_BRANDS = {0, 2, 4, 6};
-    private static final int[] PIN_COINS = {0, 300, 600, 1000};
+    private static final int[] PIN_BRANDS = {0, 2, 4, 6}; // golden mirror
+    private static final int[] PIN_COINS = {0, 300, 600, 1000}; // golden mirror
 
     public static int pinBrands(int tier) {
         if (tier < 1 || tier > 3) return -1;
-        return PIN_BRANDS[tier];
+        return EmberEconomy.amount("C21", "t" + tier + ".brand"); // D993
     }
 
     public static int pinCoins(int tier) {
         if (tier < 1 || tier > 3) return -1;
-        return PIN_COINS[tier];
+        return EmberEconomy.amount("C21", "t" + tier + ".coin"); // D993
     }
 
     public static int chargesLeft(int used) {

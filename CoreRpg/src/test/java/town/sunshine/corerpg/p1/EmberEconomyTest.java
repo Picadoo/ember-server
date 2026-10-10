@@ -1033,6 +1033,17 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void brandPinSinkMatchesRules() {
+        // D994 / Stage1 C21
+        assertEquals(2, EmberBrandRules.pinBrands(1));
+        assertEquals(300, EmberBrandRules.pinCoins(1));
+        assertEquals(6, EmberBrandRules.pinBrands(3));
+        assertEquals(1000, EmberBrandRules.pinCoins(3));
+        assertEquals(-1, EmberBrandRules.pinBrands(0));
+        assertEquals(EmberEconomy.amount("C21", "t2.brand"), EmberBrandRules.pinBrands(2));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");
