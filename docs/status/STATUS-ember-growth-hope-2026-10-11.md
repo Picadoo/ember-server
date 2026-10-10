@@ -377,3 +377,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D858–D859 SHIP · jar 1.65.387-d858
 - Guild info next; forge open goal glance
+
+## D860 SHIP · jar 1.65.388-d860
+- Pet dismiss → re-summon

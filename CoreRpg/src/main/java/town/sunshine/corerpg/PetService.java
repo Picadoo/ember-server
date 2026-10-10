@@ -577,6 +577,9 @@ public final class PetService implements Listener {
         }
         removeEntity(p.getUniqueId(), true);
         p.sendMessage(PREFIX + ChatColor.GRAY + "使魔已收回。");
+        ConfirmTokens.sendButtons(p, PREFIX + "§7：", // D860
+                new String[]{"[再出战]", "/corerpg pet summon", "重新召唤", "GREEN"},
+                new String[]{"[喂养]", "/corerpg pet feed 3", "魂尘升级", "GOLD"});
         if (plugin.getLadderService() != null) {
             plugin.getLadderService().recomputePower(p);
         }
