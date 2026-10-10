@@ -87,7 +87,8 @@ public final class EmberGemSocket {
         String gemId = EmberGemPath.gemId(code);
         NiBridge ni = plugin.getNiBridge();
         if (ni == null || !ni.consumeExact(p, gemId, 1)) {
-            p.sendMessage(P + "背包缺少 " + EmberItemData.gemName(code));
+            int have = ni == null ? 0 : ni.countInInventory(p, gemId);
+            p.sendMessage(P + "缺少 " + EmberItemData.gemName(code) + " §7（背包+仓 §f" + have + "§7）· 先合成或通关保底"); // D686
             return true;
         }
         int s0 = hole == 0 ? code : d.sock0;

@@ -31,7 +31,7 @@ Layout:
 
 Events:
   Open:
-    - 'tell: §e本图身份：§f偏向装族+签名+徽记 · §6普通/挑战首通保底本图族件 · §f每局必掉1装 · 差装可分解养工坊 · §a通关不锁掉落'
+    - 'tell: §e本图身份：§f偏向装族+签名+徽记 · §e进图提示下一件追 · §6普通/挑战首通保底本图族件 · §f每局必掉1装 · 差装可分解养工坊 · §a通关不锁掉落'
     - 'tell: §e图身份板：§f%corerpg_p1_mapid_board%'
     - 'command: corerpg p1 setfocus nudge'
     - 'sound: BLOCK_CHEST_OPEN-1-0'

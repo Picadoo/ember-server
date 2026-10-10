@@ -101,3 +101,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D681 sink glance follows forge goal
 - D682 map-farm chase hit on settle
 - D683 gem list hole ActionBar
+
+## D684–D686 SHIP · jar 1.65.324-d684 · 2026-10-11
+- D684 gem craft have/need
+- D685 adventure map-farm hint
+- D686 gem insert have count

@@ -88,15 +88,19 @@ public final class EmberGemAcquire {
         NiBridge ni = plugin.getNiBridge();
         if (ni == null) { p.sendMessage(P + "§cNI 未就绪"); return true; }
         // check mats
-        if (ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD) < cost.shards
-                || ni.countInInventory(p, EmberUpgradeRules.MAT_BONE) < cost.bone) {
-            p.sendMessage(P + "§c缺少材料：碎片×" + cost.shards + " + 骨尘×" + cost.bone + " + 币 " + cost.coins);
+        int haveS = ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD);
+        int haveB = ni.countInInventory(p, EmberUpgradeRules.MAT_BONE);
+        if (haveS < cost.shards || haveB < cost.bone) {
+            // D684: sink visibility — show have/need (vault+inv via ExtraSource)
+            p.sendMessage(P + "§c合成缺料：碎 §f" + haveS + "/" + cost.shards
+                    + " §c骨 §f" + haveB + "/" + cost.bone + " §c币 §f" + cost.coins
+                    + " §8（仓+背包合计）");
             return true;
         }
         PlayerData d = plugin.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(P + "§c数据未就绪"); return true; }
         if (d.getCoin() < cost.coins) {
-            p.sendMessage(P + "§c币不足（需要 " + cost.coins + "）");
+            p.sendMessage(P + "§c币不足：§f" + d.getCoin() + "/" + cost.coins + " §8（合成消耗）");
             return true;
         }
         if (!ni.consumeExact(p, EmberUpgradeRules.MAT_SHARD, cost.shards)
