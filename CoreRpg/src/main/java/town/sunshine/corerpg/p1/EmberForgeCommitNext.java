@@ -129,4 +129,24 @@ public final class EmberForgeCommitNext {
         send3(p, EmberRunService.P + "§7胚料下一环：", a, b, c);
     }
 
+
+    /** After gear delivery into backpack: commit first craft on that piece. */
+    public static void afterGearDeliver(Player p, EmberItemData piece) {
+        String[] a = enhance();
+        String[] b = quality(piece);
+        if (b == null) b = refine(piece);
+        if (b == null) b = lock(piece);
+        send3(p, EmberRunService.P + "§7到账下一环：", a, b, setchase());
+    }
+
+    /** Set formed / focus complete: enhance then craft or gem. */
+    public static void afterSetReady(Player p, EmberItemData held, String title) {
+        String[] a = enhance();
+        String[] b = quality(held);
+        if (b == null) b = refine(held);
+        if (b == null) b = new String[]{"[镶嵌]", "/corerpg p1 gem list", "嵌空孔", "LIGHT_PURPLE"};
+        send3(p, title == null ? EmberRunService.P + "§7成套下一环：" : title, a, b,
+                new String[]{"[镶嵌]", "/corerpg p1 gem list", "嵌空孔", "AQUA"});
+    }
+
 }

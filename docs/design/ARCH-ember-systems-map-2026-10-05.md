@@ -424,3 +424,6 @@ Swap winner + blank held piece-aware via EmberForgeCommitNext.
 
 ### RI · roll/imprint/variety commit (D2113–D2126)
 ForgeRoll quality; imprint worn enhance; Variety held piece-aware.
+
+### DS · deliver/setchase commit (D2127–D2140)
+Gear deliver + set formed/complete → EmberForgeCommitNext.

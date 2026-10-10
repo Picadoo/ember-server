@@ -786,3 +786,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - Zero yield/price invent
 ## D2113–D2126 · 随机锻/烙印/花样承诺槽 · jar 1.65.508-d2126
 - ForgeRoll +成色; imprint worn→enhance; Variety held craft
+## D2127–D2140 · 到账/成套承诺槽 · jar 1.65.509-d2140
+- gear deliver → afterGearDeliver; set formed/齐套 → afterSetReady

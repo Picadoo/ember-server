@@ -210,6 +210,7 @@ public final class EmberDelivery {
             PlayerData pd = pd2(id);
             if (pd != null) { pd.addPeriodCount(mk, "1", 1); plugin.getDataStore().save(id, pd); }
             tell(p, ChatColor.GREEN + "到账 " + row.data.shortLabel() + " → 背包" + ChatColor.GRAY + "（" + why(d) + "）");
+            try { EmberForgeCommitNext.afterGearDeliver(p, row.data); } catch (Throwable ignored) { } // D2128
             ack(p, d, unmark, next);
         });
     }

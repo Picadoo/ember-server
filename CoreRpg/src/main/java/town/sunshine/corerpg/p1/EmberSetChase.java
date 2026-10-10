@@ -152,12 +152,8 @@ public final class EmberSetChase {
         boolean awkUp = after.awakening > prevAwk;
         if (!formed && !awkUp) return;
         tell(p, d, after);
-        if (formed) { // D872
-            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7成套成型 · 下一步：",
-                    new String[]{"[工坊]", "/corerpg p1 forge", "强化同族", "GOLD"},
-                    new String[]{"[镶嵌]", "/corerpg p1 gem list", "嵌空孔", "GREEN"},
-                    new String[]{"[设焦点]", "/corerpg p1 setfocus",
-                            d != null && EmberSetFocus.valid(EmberSetFocus.get(d)) ? "已设可改" : "定追击方向", "AQUA"});
+        if (formed) { // D872 / D2129 piece-aware
+            EmberForgeCommitNext.afterSetReady(p, null, EmberRunService.P + "§7成套成型 · 同件下一槽：");
         } else if (d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) {
             p.sendMessage(EmberRunService.P + "§7可设套装焦点：/corerpg p1 setfocus");
         }
@@ -172,10 +168,7 @@ public final class EmberSetChase {
         if (fk != null && fk.equals(lo.activeSet)) { // D744
             try { p.sendActionBar("§a成套追 · 焦点已齐 · §f" + lo.setLabel()); } catch (Throwable ignored) { }
             // D863 meaty next
-            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7成套已齐 · 下一步：",
-                    new String[]{"[工坊]", "/corerpg p1 forge", "强化同族", "GOLD"},
-                    new String[]{"[镶嵌]", "/corerpg p1 gem list", "嵌空孔", "GREEN"},
-                    new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷同族图", "AQUA"});
+            EmberForgeCommitNext.afterSetReady(p, null, EmberRunService.P + "§7成套已齐 · 同件下一槽：");
         }
     }
 
