@@ -2134,10 +2134,12 @@ public final class EmberRunService implements Listener {
         if (acqStamp) EmberSigStampDry.onHit(d); // D690 clear dry
         if (!got.isEmpty() && !quietDeliver) {
             p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7到账下一环：", // D922
-                    new String[]{"[一键存入]", "/corerpg p1 stash", "料/装入库", "GREEN"},
-                    new String[]{"[工坊]", "/corerpg p1 forge", "花材料", "GOLD"},
-                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
+            if (!changed.isEmpty()) { // D927 only real ledger rows (not miss-only)
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7到账下一环：", // D922
+                        new String[]{"[一键存入]", "/corerpg p1 stash", "料/装入库", "GREEN"},
+                        new String[]{"[工坊]", "/corerpg p1 forge", "花材料", "GOLD"},
+                        new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
+            }
         }
         if (!relLines.isEmpty() && !quietDeliver) { // D299 W1c：相对穿着一行（并列 D295 摘要，不改破绽语义）
             for (String rel : relLines) p.sendMessage(P + "§7" + rel);

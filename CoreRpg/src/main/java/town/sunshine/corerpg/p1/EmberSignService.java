@@ -552,10 +552,10 @@ public final class EmberSignService implements Listener {
         else
             p.sendMessage(PO + "§7今日在线档已领完 · 明天 0 点重置");
         p.sendMessage(PO + EmberOnlinePath.glance(EmberOnlinePath.get(d), true));
-        ConfirmTokens.sendButtons(p, PO + "§7下一步：",
-                new String[]{"[签到页]", "/corerpg p1 sign menu", "看进度", "AQUA"},
+        ConfirmTokens.sendButtons(p, PO + "§7下一步：", // D930
                 new String[]{"[工坊]", "/corerpg p1 forge", "花币/材料", "GOLD"},
-                new String[]{"[换领取方式]", "/corerpg p1 onlinepath", "自动/提醒/静默", "GRAY"});
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"},
+                new String[]{"[签到页]", "/corerpg p1 sign menu", "看进度", "GREEN"});
     }
 
     // ---------------------------------------------------------------- activity (any real input; never position-only movement)

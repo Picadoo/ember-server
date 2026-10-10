@@ -417,3 +417,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D921–D926 SHIP · jar 1.65.400-d921
 - Signpath; deliver stash/forge; makeup setchase; full-pack claim+stash
 - Hope-loop surface saturated; next prefer ARCH thin debt or critical-path polish only
+
+## D927–D932 SHIP · jar 1.65.401-d927
+- Deliver buttons gated to real ledger rows; onlinepath/claim forge; ARCH S2 note
+- Next: ARCH thin (S2 inventory) or critical-path only — hope surface saturated

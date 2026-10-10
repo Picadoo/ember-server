@@ -156,10 +156,10 @@ public final class EmberOnlinePath {
         flush(p);
         p.sendMessage(P + "§a在线 → §f" + label(id) + " §7· " + tip(id));
         // D826 claim if ready
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D928
                 new String[]{"[一键领取]", "/corerpg p1 sign online claim", "领已达标档", "GREEN"},
-                new String[]{"[签到·在线]", "/corerpg p1 sign menu", "看时长与领取", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 onlinepath", "重选", "GRAY"});
+                new String[]{"[工坊]", "/corerpg p1 forge", "花时长奖", "GOLD"},
+                new String[]{"[签到·在线]", "/corerpg p1 sign menu", "看时长", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {
