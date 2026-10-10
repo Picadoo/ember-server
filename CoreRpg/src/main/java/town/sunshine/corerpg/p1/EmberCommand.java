@@ -455,6 +455,24 @@ public final class EmberCommand {
             s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
             return true;
         }
+        if ("mapenter".equals(sub)) { // D477 admin smoke: map-enter ActionBar sample
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            String kind = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "main";
+            String name = "主线样例";
+            String mode = EmberMapEnterFeel.modeTag(false, false, null, false, false, 0);
+            if ("echo".equals(kind)) { name = "残响样例"; mode = EmberMapEnterFeel.modeTag(false, true, "echo", false, false, 0); }
+            else if ("outpost".equals(kind)) { name = "前哨样例"; mode = EmberMapEnterFeel.modeTag(false, true, "outpost", false, false, 0); }
+            else if ("raid".equals(kind)) { name = "团本样例"; mode = EmberMapEnterFeel.modeTag(false, false, null, true, false, 0); }
+            else if ("short".equals(kind)) { name = "短征样例"; mode = EmberMapEnterFeel.modeTag(true, false, null, false, false, 0); }
+            else if ("abyss".equals(kind)) { name = "深渊样例"; mode = EmberMapEnterFeel.modeTag(false, false, null, false, true, 3); }
+            else if ("challenge".equals(kind)) { name = "挑战样例"; mode = EmberMapEnterFeel.modeTag(false, false, null, false, true, 0); }
+            String msg = EmberMapEnterFeel.line(name, mode);
+            EmberMapEnterFeel.flashLine(p, msg);
+            p.sendMessage(P + "§8mapenter sample · " + msg);
+            return true;
+        }
         if ("parryready".equals(sub)) { // D476 admin smoke: schedule parry CD-ready ActionBar
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

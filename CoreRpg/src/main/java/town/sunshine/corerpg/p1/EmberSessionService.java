@@ -297,6 +297,12 @@ public final class EmberSessionService {
             return;
         }
         if (EmberRunSession.PREPARE.equals(s.state)) s.state = EmberRunSession.ENTERED;
+        // D477: map-enter ActionBar for each committed player (before opening tellRun)
+        EmberRunMaps.MapDef enterFeelMap = runs.maps().byKey(s.mapKey);
+        for (UUID cu : s.committed) {
+            Player cp = Bukkit.getPlayer(cu);
+            if (cp != null && cp.isOnline()) EmberMapEnterFeel.flash(cp, enterFeelMap, s);
+        }
         // A18: party HP multiplier locked now for the whole run
         s.partySize = s.committed.size();
         EmberRunMaps maps = runs.maps();
