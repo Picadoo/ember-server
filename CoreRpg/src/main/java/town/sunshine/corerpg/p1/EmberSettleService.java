@@ -403,6 +403,10 @@ public final class EmberSettleService {
                     idp.sendMessage(EmberRunService.P + "§6图身份首通 · §f" + m.name + " §7保底 §e" + fam + " · " + slot
                             + " §8（本图特色件，可见追）");
                     try { idp.sendActionBar("§6图身份 · §f" + fam + " §7首通保底"); } catch (Throwable ignored) { }
+                    ConfirmTokens.sendButtons(idp, EmberRunService.P + "§7下一步：", // D673
+                            new String[]{"[工坊]", "/corerpg p1 forge", "养成特色件", "GOLD"},
+                            new String[]{"[装备页]", "/ember_p1_gear", "穿上同族", "AQUA"},
+                            new String[]{"[冒险页]", "/ember_p1_adventure", "下一张图", "GREEN"});
                 }
             }
         }
@@ -452,6 +456,13 @@ public final class EmberSettleService {
         if (p != null && p.isOnline() && s.abyss > 0) {
             p.sendMessage(EmberRunService.P + "§5深渊第 " + s.abyss + " 层 已完整通关" + (newBest ? " §a· 新纪录，开放第 " + runs.abyssMaxStart(pd) + " 层" : "")
                     + " §7（下一层需重新确认与付费：冒险页 → 深渊）");
+            if (newBest) { // D675
+                try { p.sendActionBar("§5深渊新纪录 · §f第 " + s.abyss + " 层"); } catch (Throwable ignored) { }
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：",
+                        new String[]{"[深渊页]", "/ember_p1_abyss", "冲下一层", "LIGHT_PURPLE"},
+                        new String[]{"[冒险页]", "/ember_p1_adventure", "回冒险", "GREEN"},
+                        new String[]{"[工坊]", "/corerpg p1 forge", "花层奖", "GOLD"});
+            }
             // D649: first clear of layer 1 — gift was free fee; celebrate once on rising best
             if (newBest && s.abyss == 1) {
                 p.sendMessage(EmberRunService.P + "§5首层礼兑现 · §f第 1 层免费通关 §a· 第 2 层已开放");

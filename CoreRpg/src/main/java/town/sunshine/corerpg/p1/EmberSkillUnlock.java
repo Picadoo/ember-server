@@ -63,6 +63,8 @@ public final class EmberSkillUnlock {
         String line = unlockLine(mapKey);
         if (line == null) return;
         String P = EmberRunService.P;
+        String sn = shortName(mapKey);
+        try { p.sendActionBar("§6新技能 · §f" + (sn == null ? "解锁" : sn)); } catch (Throwable ignored) { } // D674
         ConfirmTokens.sendButton(p, P + "§6新技能解锁：§e" + line + " ",
                 "[打开技能组]", "trmenu open ember_skill_kit",
                 "查看按键 / 符文 / 身法 / 套装差");

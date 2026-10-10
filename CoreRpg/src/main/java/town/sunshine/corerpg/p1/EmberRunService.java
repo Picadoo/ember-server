@@ -3139,6 +3139,13 @@ public final class EmberRunService implements Listener {
         d.addPeriodCount(C_TARGET, "all", idx - d.periodCount(C_TARGET, "all"));
         plugin.getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(P + "§a掉落目标族已设为 " + (idx == 0 ? "无（按本的偏向族掉落）" : EmberItemData.familyName(f)) + " §7· 下次入场生效");
+        if (idx != 0) { // D676
+            try { p.sendActionBar("§a掉落目标 · §f" + EmberItemData.familyName(f)); } catch (Throwable ignored) { }
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[冒险页]", "/ember_p1_adventure", "进图刷同族", "GREEN"},
+                    new String[]{"[套装焦点]", "/corerpg p1 setfocus " + f, "玩法焦点对齐", "GOLD"},
+                    new String[]{"[稍后再说]", null, "下次入场生效", "GRAY"});
+        }
         return true;
     }
 

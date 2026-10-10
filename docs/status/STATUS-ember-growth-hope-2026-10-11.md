@@ -84,3 +84,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D670 2pc soft-prefer next buttons
 - D671 challenge FC next buttons
 - D672 raid FC next buttons
+
+## D673–D676 SHIP · jar 1.65.321-d673 · 2026-10-11
+- D673 FC map-identity next buttons
+- D674 skill unlock ActionBar
+- D675 abyss newBest buttons
+- D676 loot target set feel
