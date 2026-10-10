@@ -1,3 +1,4 @@
+# D616: Open/目标族区挂 mapid_board 图身份一览
 # D610: 每图希望行 mapid_q0N（本图身份·图鉴进度·不锁通关）
 # D456: 签名获取半行 %corerpg_p1_sig_acq% · 未出仍拿徽记 · 零改掉率
 # 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q07 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领 + 挑战版入口（§18.1，本人首通 Q07 后开放）。
@@ -31,6 +32,7 @@ Layout:
 Events:
   Open:
     - 'tell: §e本图身份：§f偏向装族+签名+徽记 · 每局必掉1装 · 差装可分解养工坊 · §a通关不锁掉落'
+    - 'tell: §e图身份板：§f%corerpg_p1_mapid_board%'
     - 'command: corerpg p1 setfocus nudge'
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §8短征：本页「烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣」（Q01后 · 各体力30 · 日有奖帽分开）'
@@ -610,6 +612,7 @@ Icons:
       lore:
         - '§7之后入场的局：焚烬约 60%'
         - '§7剩下的大多是这张图的偏向族（每张图「偏向」一行）'
+        - '§e图身份：§f%corerpg_p1_mapid_board%'
         - '§8入场时快照，局内改不影响本局'
     actions:
       all:
@@ -637,14 +640,27 @@ Icons:
       all:
         - 'command: corerpg p1 target sustain'
   n:
+    update: 40
     display:
       material: paper
-      name: '§7目标族 · 不指定'
+      name: '§e图身份板 · 哪里刷什么'
       lore:
-        - '§7本图偏向族 50%，另两族各 25%'
+        - '§7目标族不指定时：本图偏向 50%，另两族各 25%'
+        - ''
+        - '§e图身份一览：'
+        - '§f%corerpg_p1_mapid_board%'
+        - ''
+        - '§7每图还有 mapid 希望行（图鉴进度）'
+        - '§a每局必掉1装 · 差装可分解 · 通关不锁掉落'
+        - ''
+        - '§e➥ §f左键：目标族·不指定'
+        - '§e➥ §f右键：打开装备图录（哪里刷什么）'
     actions:
-      all:
+      left:
         - 'command: corerpg p1 target none'
+      right:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_codex_gear'
 
   M:
     display:

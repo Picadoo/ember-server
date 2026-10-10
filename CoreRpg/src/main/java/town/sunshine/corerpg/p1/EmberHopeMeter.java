@@ -176,4 +176,22 @@ public final class EmberHopeMeter {
         return glance(Math.max(0, marks), Math.max(1, need), "Shift解锁调律");
     }
 
+
+    /**
+     * D616: one-line Q01–Q07 loot-identity board (readable bias). Zero drop-rate change.
+     */
+    public static String mapGearBoard(EmberRunMaps maps) {
+        if (maps == null) return "§8图身份未载入";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= 7; i++) {
+            String k = String.format(Locale.ROOT, "q0%d", i);
+            EmberRunMaps.MapDef lm = maps.byKey(k);
+            if (lm == null) continue;
+            if (sb.length() > 0) sb.append(" §8· ");
+            sb.append("§e").append(k.toUpperCase(Locale.ROOT)).append("§f ")
+                    .append(EmberRunMaps.lootLabel(lm));
+        }
+        return sb.length() == 0 ? "§8无主线偏向" : sb.toString();
+    }
+
 }

@@ -89,7 +89,7 @@ public final class EmberRunPapi {
         if (key.startsWith("shop")) return Section.COSMETIC; // shop* and shop_* (old: two checks, both cosmetics)
         if (key.startsWith("fest_")) return Section.FESTIVAL;
         if ("title".equals(key) || "honors".equals(key)) return Section.COSMETIC;
-        if (key.startsWith("loot_") || key.startsWith("mapid_")) return Section.ROTATION;
+        if (key.startsWith("loot_") || key.startsWith("mapid_") || "mapid_board".equals(key)) return Section.ROTATION;
         if ("abyss_best".equals(key)) return Section.ABYSS;
         if ("bounty".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
@@ -525,6 +525,9 @@ public final class EmberRunPapi {
             EmberRunMaps.MapDef lm = maps.byKey(key.substring(5));
             if (lm == null) lm = maps.raids.get(key.substring(5));
             return EmberRunMaps.lootLabel(lm) + runs.lootOdds(d, lm);
+        }
+        if ("mapid_board".equals(key)) { // D616 readable bias board
+            return EmberHopeMeter.mapGearBoard(maps);
         }
         if (key.startsWith("mapid_")) { // D610 map gear-identity hope
             EmberRunMaps.MapDef lm = maps.byKey(key.substring(6));

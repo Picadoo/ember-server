@@ -126,4 +126,9 @@ public class EmberHopeMeterTest {
         assertTrue(EmberHopeMeter.attuneUnlock(10, 10).contains("Shift解锁调律"));
     }
 
+    @Test
+    public void mapGearBoard_nullMaps() {
+        assertTrue(EmberHopeMeter.mapGearBoard(null).contains("未载入"));
+    }
+
 }
