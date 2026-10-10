@@ -474,3 +474,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - C17 life offer/cook/repair ← amount()+spendCoin; C19 Stage0 DESIGN (no gacha change); Stage1 COMPLETE
 
 ## D1029 ARCH docs · Counters recheck PASS post-Stage1
+
+## D1030–D1038 ARCH SHIP · jar 1.65.417-d1030
+- Health: economy bv 89 (=runs); affix-table re-export; LedgerGlance.claimable excludes ST_AWAIT

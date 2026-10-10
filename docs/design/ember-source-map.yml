@@ -24,7 +24,7 @@
 
 version: 1
 balance_version: 89
-built_against: "1.65.416-d1016.local (D1016–D1028 C17+C19 Stage0; Stage1 COMPLETE)"
+built_against: "1.65.417-d1030.local (D1030–D1038 source-map/ledger health: economy bv89 + claimable)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 

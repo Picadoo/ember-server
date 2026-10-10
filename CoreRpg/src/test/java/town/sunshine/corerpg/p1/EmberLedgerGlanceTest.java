@@ -20,4 +20,9 @@ public class EmberLedgerGlanceTest {
         assertTrue(s.contains("待领"));
         assertTrue(s.contains("/corerpg p1 claim"));
     }
+
+    @Test
+    public void claimableNullSafe() {
+        assertEquals(0, EmberLedgerGlance.claimable(null, null));
+    }
 }

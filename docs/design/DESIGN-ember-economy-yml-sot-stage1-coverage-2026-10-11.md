@@ -32,4 +32,8 @@
 
 1. source-map / ledger 健康扫  
 2. p1sim modelGaps **stub 政策文档**（仍不假 FULL）  
-3. C19 仅当 CoreGacha 同读 API 就绪再 tip  
+3. C19 仅当 CoreGacha 同读 API 就绪再 tip
+
+## D1031 追记
+
+`ember-v1-economy.yml` / `ECONOMY_BV` 对齐 runs **bv89**（先前停在 60，p1sim rules.validate 红）。金额未改。

@@ -129,8 +129,7 @@ public final class EmberClaimPath {
     public static void settleDeliver(Player p, PlayerData d, EmberRunService runs) {
         if (p == null || runs == null) return;
         if (shouldHoldSettle(d)) {
-            int n = runs.store().ledger(p.getUniqueId()).open().size();
-            // D940 unified glance + settle context
+            int n = EmberLedgerGlance.claimable(runs, p.getUniqueId()); // D1034
             p.sendMessage(EmberRunService.P + "§e补领·暂存 §7本局奖励先挂账 · " + EmberLedgerGlance.line(n));
             ConfirmTokens.sendButtons(p, EmberRunService.P,
                     new String[]{"[补领]", "/corerpg p1 claim", "领取暂存奖励", "GREEN"},

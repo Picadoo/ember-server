@@ -482,10 +482,8 @@ public final class EmberRunPapi {
         if (key.startsWith("marks_t")) {
             try { return String.valueOf(runs.marks(d, Integer.parseInt(key.substring(7)))); } catch (NumberFormatException e) { return "0"; }
         }
-        if ("pending".equals(key)) { // D93: a first-clear choice waiting for a click is not "stuck in storage"
-            int n = 0;
-            for (EmberRunRules.Row r : runs.store().ledger(p.getUniqueId()).open()) if (!EmberRunRules.ST_AWAIT.equals(r.status)) n++;
-            return String.valueOf(n);
+        if ("pending".equals(key)) { // D93 / D1034: exclude await_choice; LedgerGlance.claimable
+            return String.valueOf(EmberLedgerGlance.claimable(runs, p.getUniqueId()));
         }
         if ("active".equals(key)) return EmberMode.active() ? "yes" : "no";
         if (key.startsWith("passd_")) { // D174 stage 2b: entries sharing one DP hall dungeon check the pass by dungeon

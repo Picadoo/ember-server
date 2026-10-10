@@ -13,6 +13,19 @@ public final class EmberLedgerGlance {
     private EmberLedgerGlance() {}
 
     /** Bukkit-free line. */
+    /**
+     * D1033: rows players can claim now — open minus first-clear {@link EmberRunRules#ST_AWAIT}
+     * (same filter as {@code %corerpg_p1_pending%}).
+     */
+    public static int claimable(EmberRunService runs, java.util.UUID u) {
+        if (runs == null || runs.store() == null || u == null) return 0;
+        int n = 0;
+        for (EmberRunRules.Row r : runs.store().ledger(u).open()) {
+            if (!EmberRunRules.ST_AWAIT.equals(r.status)) n++;
+        }
+        return n;
+    }
+
     public static String line(int open) {
         if (open <= 0) return "§8补领：无待领";
         return "§e补领·暂存：有 §f" + open + " §e项待领 · /corerpg p1 claim";
@@ -29,7 +42,7 @@ public final class EmberLedgerGlance {
     /** After path set — show open count if any. */
     public static void tellIfAny(Player p, EmberRunService runs) {
         if (p == null || runs == null || runs.store() == null) return;
-        int n = runs.store().ledger(p.getUniqueId()).open().size();
+        int n = claimable(runs, p.getUniqueId());
         if (n > 0) tellPending(p, n);
     }
 
