@@ -1752,6 +1752,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D598 | CoreRpg **1.65.289-d598** / bv 未抬 | 成长花样·急清路径 **PASS**：`EmberHurryPath` auto/ask/mute · ≠改伤害/CD/掉落表 ≠AFK ≠K3 ≠sx20 ≠组合粘性 ≠外观 ≠宝石/票族/分解/focus/doom/nest/save/sequel/bait/slip/crash/bolt/shift双胞 ≠工坊花法 ≠同族 HUD ≠入场cue · 冒烟 见 STATUS · `B-hurry-path` · `029eb5ae` · STATUS `STATUS-ember-hurry-path-d598-2026-10-10.md`。 |
 | D599 | CoreRpg **1.65.290-d599** / bv 未抬 | 成长花样·备药路径 **PASS**：`EmberStockPath` auto/ask/mute · ≠改伤害/CD/掉落表 ≠AFK ≠K3 ≠sx20 ≠组合粘性 ≠外观 ≠宝石/票族/分解/hurry/focus/doom/nest/save/sequel/bait/slip/crash/bolt双胞 ≠工坊花法 ≠同族 HUD ≠入场cue · 冒烟 见 STATUS · `B-stock-path` · `93473432` · STATUS `STATUS-ember-stock-path-d599-2026-10-10.md`。 |
 | D600 | CoreRpg **1.65.291-d600** / bv 未抬 | 成长花样·预警路径 **PASS**：`EmberAlertPath` auto/ask/mute · ≠改伤害/CD/掉落表 ≠AFK ≠K3 ≠sx20 ≠组合粘性 ≠外观 ≠宝石/票族/分解/stock/hurry/focus/doom/nest/save/sequel/bait/slip/crash双胞 ≠工坊花法 ≠同族 HUD ≠入场cue · 冒烟 见 STATUS · `B-alert-path` · `40960b73` · STATUS `STATUS-ember-alert-path-d600-2026-10-10.md`。 |
+| GemS1 | CoreRpg **1.65.292-gem-s1** / bv 未抬 | P1 孔位数据 Stage1 **PASS**：`EmberItemData` v3 sock0/sock1 · HMAC/NBT/MySQL · lore 占位 · ≠EmberFormula/掉落/旧 socket · `17d33bfd` · STATUS `STATUS-ember-p1-socket-gems-2026-10-11.md`。 |
+
+| D601 | CoreRpg **1.65.293-d601** / bv 未抬 | 希望表盘 A1 **PASS**：`EmberHopeMeter` 统一强化+洗练 pity glance（n/N·下次必成）· ≠改 RATE/MAX_TRIES/pity 数学 ≠伤乘 ≠AFK ≠K3 ≠sx20 ≠公式宝石 · 冒烟 HopeQ601 · `f65e586a` · STATUS `STATUS-ember-growth-hope-d601-2026-10-11.md`。 |
+| D602 | CoreRpg **1.65.294-d602** / bv 未抬 | 希望表盘 A2 成色旁路 **PASS**：工坊成色 0/2 进度可见（标准→稀有→史诗已保底）· ≠改 qualityCost/掉落权重/sock ≠伤乘 · `87014de2` · STATUS `STATUS-ember-growth-hope-d602-2026-10-11.md`。 |
+| D603 | CoreRpg **1.65.295-d603** / bv 未抬 | 希望表盘 A3 精工旁路 **PASS**：精工 cur/3 + 下次% 可见（0→6% 已保底）· ≠改 refineCost/sock ≠伤乘 · `614f6fae` · STATUS `STATUS-ember-growth-hope-d603-2026-10-11.md`。 |
+| D604 | CoreRpg **1.65.296-d604** / bv 未抬 | 希望表盘 A4 签名追迹 **PASS**：印记 n/5 并入 HopeMeter · hub/sig/gear 可见 · ≠改 STAMP_RATE/IMPRINT/首通门闩 ≠伤乘 · `988aa4c3` · STATUS `STATUS-ember-growth-hope-d604-2026-10-11.md`。 |
+| D605 | CoreRpg **1.65.297-d606** / bv 未抬（与 D606 同船） | 技能希望 B0 套装差 p1sim **PASS**：`CANDS_D605` n=1500 vs D_ctrl · 无 skill_mult 抬 · `tools/p1sim/out-skill-hope-d605.md` · `553ce75f`。 |
+| D606 | CoreRpg **1.65.297-d606** / bv 未抬 | 技能希望里程碑文案 **PASS**：`EmberSkillUnlock.setForkHope` Q02/Q04/Q05 + kit/hub 展示 · 零伤乘 · `553ce75f` · DESIGN `DESIGN-ember-skill-hope-milestone-copy-2026-10-11.md`。 |
+| D607 | CoreRpg **1.65.298-d607** / bv 未抬 | 烬斩形状分叉 S0 Stage1 **SHIP**：套装→推荐形状 焚扇/爆直/承环 · 成套软设一次（`p1_shape_manual`）· kit/TrMenu/解锁行 · 零 skill_mult · Gem S2 p1sim 预算 FAIL（公式未接；`/corerpg p1 gem` 仅数据孔）· 冒烟 ShapeQ607 · `9fa8f651` · DESIGN `DESIGN-ember-skill-shape-fork-s0-2026-10-11.md` · STATUS `STATUS-ember-growth-hope-2026-10-11.md`。 |
 
 
 
