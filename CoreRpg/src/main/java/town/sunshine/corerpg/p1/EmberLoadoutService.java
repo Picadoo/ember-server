@@ -382,6 +382,50 @@ public final class EmberLoadoutService implements Listener {
     }
 
     /** D120: select a charm by uid (auto-equip of a better charm, the [换上] button) */
+    /** D551: hub — bag has a trusted charm that raises whole-loadout H vs current selection. */
+    public boolean needsCharm(Player p) {
+        return bestCharmUpgrade(p) != null;
+    }
+
+    /** Best bag charm uid to select, or null. Town/hub only. */
+    public String bestCharmUpgrade(Player p) {
+        if (p == null || p.isDead()) return null;
+        if (!EmberMode.active()) return null;
+        if (EmberMode.isP1World(p.getWorld())) return null;
+        if (plugin.getQuestService() != null && plugin.getQuestService().isInstanceWorld(p.getWorld())) return null;
+        EmberLoadout cur = refresh(p);
+        EmberItemData selected = cur.charm;
+        double baseH = cur.h;
+        String bestUid = null;
+        double bestH = baseH;
+        for (ItemStack it : p.getInventory().getContents()) {
+            if (it == null || !items.hasData(it)) continue;
+            EmberItems.Read r = items.read(it);
+            if (r == null || !r.ok() || r.data == null || !r.data.isCharm()) continue;
+            if (dbCheck(p, r.data) != null) continue;
+            if (selected != null && selected.uid.equals(r.data.uid)) continue;
+            EmberLoadout trial;
+            if (cur.sixSlot()) {
+                trial = EmberLoadout.compute(EmberMode.tables(), cur.blade, r.data, cur.level, cur.festHp, cur.festDef, cur.armorCopy());
+            } else {
+                trial = EmberLoadout.compute(EmberMode.tables(), cur.blade, r.data, cur.level, cur.festHp, cur.festDef);
+            }
+            if (trial.h > bestH + 1e-6) {
+                bestH = trial.h;
+                bestUid = r.data.uid;
+            }
+        }
+        return bestUid;
+    }
+
+    /** D551: select the best bag charm. Returns true when selection changed. */
+    public boolean pathSelectBestCharm(Player p) {
+        String uid = bestCharmUpgrade(p);
+        if (uid == null) return false;
+        selectCharmUid(p, uid);
+        return true;
+    }
+
     public void selectCharmUid(Player p, String uid) {
         state(p.getUniqueId()).charmUid = uid;
         saveState(p);

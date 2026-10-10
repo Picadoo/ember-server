@@ -268,6 +268,53 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("charmpath".equals(sub) || "护符路径".equals(sub)) { // D551 charm select path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCharmPath.glance(EmberCharmPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c护符路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberCharmPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c护符路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberCharmPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberCharmPath.get(d);
+                    if (EmberCharmPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCharmPath.label(cur) + " · 改路径再 /corerpg p1 charmpath");
+                    else EmberCharmPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberCharmPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 charmpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberCharmPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("charmpick".equals(sub) && args.length == 2) { // D551 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (loadouts == null) { p.sendMessage(P + "装配服务未加载"); return true; }
+            if (!loadouts.pathSelectBestCharm(p)) p.sendMessage(P + "无法选符（已是最好/副本内）");
+            else {
+                EmberLoadout cur = loadouts.refresh(p);
+                p.sendMessage(P + "§a护符·手点 §7已选定 §f" + (cur.charm == null ? "护符" : cur.charm.shortLabel()));
+            }
+            return true;
+        }
         if ("grippath".equals(sub) || "握刃路径".equals(sub)) { // D550 combat grip path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1183,6 +1230,27 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("charmseed".equals(sub)) { // D551 admin smoke: better charm in bag, keep weaker selected
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null || loadouts == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberLoadout cur = loadouts.refresh(t);
+            String keepUid = cur.charm == null ? null : cur.charm.uid;
+            EmberItemData d = EmberItemData.create("sustain", "charm", 2, 1, 0, 0, true, "admin")
+                    .withOrigin(EmberProvenance.forAdmin("charmseed", System.currentTimeMillis()));
+            String bad = d.validate();
+            if (bad != null) { s.sendMessage(P + "§c护符参数无效: " + bad); return true; }
+            org.bukkit.inventory.ItemStack item = loadouts.items().create(d);
+            if (item == null) { s.sendMessage(P + "§c生成护符失败（NI）"); return true; }
+            loadouts.remember(d, t.getUniqueId());
+            java.util.Map<Integer, org.bukkit.inventory.ItemStack> left = t.getInventory().addItem(item);
+            for (org.bukkit.inventory.ItemStack drop : left.values()) t.getWorld().dropItemNaturally(t.getLocation(), drop);
+            if (keepUid != null) loadouts.selectCharmUid(t, keepUid); // keep weaker selected so upgrade is visible
+            else loadouts.clearCharm(t);
+            s.sendMessage(P + "已发 T2 护符到背包并保持旧选定 → " + t.getName());
+            EmberCharmPath.maybeAfterProgress(t);
             return true;
         }
         if ("gripseed".equals(sub)) { // D550 admin smoke: temp P1 + unarmed with blade in bag
