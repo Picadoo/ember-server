@@ -60,3 +60,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D654 raid first-clear map-identity
 - D655 flex step set-variant trails
 - D656 swap/dismantle ActionBar + undo button
+
+## D657–D660 SHIP · jar 1.65.317-d657 · 2026-10-11
+- D657 raid weekly clear feel
+- D658 quality/refine spend loops
+- D659 slash shape land burst
+- D660 forge-goal enhance/refine/brand complete

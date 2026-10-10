@@ -666,11 +666,13 @@ public final class EmberForgeService implements Listener {
                     EmberForgeFeel.flash(q, kind, note); // D475 forge result ActionBar
                     if ("enhance".equals(kind)) EmberForgeMatReady.afterEnhance(q); // D478 clear mat-ready latch
                     if ("enhance".equals(kind)) {
-                        EmberEnhanceLoop.afterEnhance(q, list); // D485 enhance branch chase
+                        EmberEnhanceLoop.afterEnhance(q, plugin.getDataStore().get(id), list); // D485/D660 enhance branch chase
                         EmberEnhanceUndo.afterCommit(q, list, cost); // D614 fail soft-undo window
                     }
                     if ("swap".equals(kind)) EmberSwapLoop.afterSwap(q, list); // D484 free-swap spend chase
                     if ("upgrade".equals(kind)) EmberUpgradeLoop.afterUpgrade(q, list); // D487 upgrade→power chase
+                    if ("quality".equals(kind)) EmberQualityLoop.afterQuality(q, list); // D658
+                    if ("refine".equals(kind)) EmberRefineLoop.afterRefine(q, plugin.getDataStore().get(id), list); // D658/D660
                     for (TxnItem t : list) if (t.after != null) q.sendMessage(P + "现在: " + preview(t.after));
                     q.playSound(q.getLocation(), Sound.BLOCK_ANVIL_USE, 0.7f, 1.2f);
                     loadouts.refresh(q);

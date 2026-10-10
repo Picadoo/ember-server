@@ -635,6 +635,42 @@ public final class SkillService implements Listener {
             geo = "§e扇形 · 前方扇面";
         if (sh.sigOverride) geo = "§6签名覆盖 · " + sh.label;
         try { player.sendActionBar(geo + " §8· §f" + sh.label); } catch (Throwable ignored) { }
+        spawnShapeLandBurst(player, sh); // D659 Stage2 land feel · zero skill_mult
+    }
+
+    /** D659: brief land burst matching slash shape geometry. */
+    private void spawnShapeLandBurst(Player player, town.sunshine.corerpg.p1.EmberSkillKit.Shape sh) {
+        if (player == null || sh == null || player.getWorld() == null) return;
+        org.bukkit.Location base = player.getLocation().clone().add(0, 0.3, 0);
+        org.bukkit.util.Vector look = player.getLocation().getDirection().setY(0);
+        if (look.lengthSquared() < 1e-6) look = new org.bukkit.util.Vector(0, 0, 1);
+        look.normalize();
+        try {
+            if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE) {
+                for (int i = 1; i <= 6; i++) {
+                    org.bukkit.Location at = base.clone().add(look.clone().multiply(i * (sh.range / 6.0)));
+                    player.getWorld().spawnParticle(org.bukkit.Particle.CRIT, at, 4, 0.05, 0.05, 0.05, 0.01);
+                }
+            } else if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_RING) {
+                double r = Math.max(1.5, Math.min(sh.range, 3.5));
+                for (int i = 0; i < 12; i++) {
+                    double a = Math.PI * 2 * i / 12.0;
+                    org.bukkit.Location at = base.clone().add(Math.cos(a) * r, 0.1, Math.sin(a) * r);
+                    player.getWorld().spawnParticle(org.bukkit.Particle.SPELL_WITCH, at, 2, 0.02, 0.02, 0.02, 0);
+                }
+            } else {
+                double half = Math.toRadians(Math.max(sh.arc, 110.0) / 2.0);
+                for (int i = -4; i <= 4; i++) {
+                    double a = half * i / 4.0;
+                    double cos = Math.cos(a), sin = Math.sin(a);
+                    double lx = look.getX(), lz = look.getZ();
+                    org.bukkit.util.Vector v = new org.bukkit.util.Vector(lx * cos - lz * sin, 0, lx * sin + lz * cos)
+                            .multiply(Math.min(sh.range, 3.5));
+                    org.bukkit.Location at = base.clone().add(v);
+                    player.getWorld().spawnParticle(org.bukkit.Particle.CRIT_MAGIC, at, 3, 0.05, 0.05, 0.05, 0.01);
+                }
+            }
+        } catch (Throwable ignored) { }
     }
 
     /**

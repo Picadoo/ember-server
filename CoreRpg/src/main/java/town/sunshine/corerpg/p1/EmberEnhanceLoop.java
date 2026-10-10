@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import town.sunshine.corerpg.ConfirmTokens;
+import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberItemStore.TxnItem;
 
 /**
@@ -18,10 +19,24 @@ public final class EmberEnhanceLoop {
 
     /** After forge {@code enhance} commit OK (success or fail both chase). */
     public static void afterEnhance(Player p, List<TxnItem> list) {
+        afterEnhance(p, null, list);
+    }
+
+    public static void afterEnhance(Player p, PlayerData d, List<TxnItem> list) {
         if (p == null) return;
         boolean won = leveled(list);
         String P = EmberRunService.P;
         celebrate(p, list, won);
+        boolean goalHit = won && d != null && EmberForgeGoal.get(d) == EmberForgeGoal.ENHANCE;
+        if (goalHit) { // D660
+            p.sendMessage(P + "§a本周工坊目标完成：§f强化+1");
+            try { p.sendActionBar("§a工坊目标 · 强化完成"); } catch (Throwable ignored) { }
+            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选精工/烙纹/转化…", "GREEN"},
+                    new String[]{"[再强化]", "/corerpg p1 enhance", "手持件再冲一档", "GOLD"},
+                    new String[]{"[去成色]", "/corerpg p1 quality", "成色预览", "AQUA"});
+            return;
+        }
         if (won) {
             p.sendMessage(P + "§e强化成功 §7· 选下一步花法（不改强化价/成色/精工价）：");
             ConfirmTokens.sendButtons(p, P,

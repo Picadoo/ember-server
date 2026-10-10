@@ -337,7 +337,15 @@ public final class EmberSettleService {
             EmberRunRules.Row r = l.record(s.runId, g.key, g.encode(), st, now, created);
             if (created[0]) changed.add(r);
             if (created[0] && "rot_mark".equals(g.key)) pd.addPeriodCount(EmberRunService.C_ROTATION, week, 1); // counted once per run (ledger key)
-            EmberRaidService.applyClearCount(pd, m, week, g.key, created[0]); // P2-5 weekly cap (P2-6: per cap_group), D233
+            boolean raidMoved = EmberRaidService.applyClearCount(pd, m, week, g.key, created[0]); // P2-5 weekly cap (P2-6: per cap_group), D233
+            if (raidMoved && m.raid) {
+                Player rp = Bukkit.getPlayer(u);
+                if (rp != null && rp.isOnline()) {
+                    int used = EmberRaidService.weekCount(pd, m, week);
+                    boolean wasFc = EmberCosmetics.raidClears(pd, m.key) <= 1; // onRaidClear may not have run yet
+                    EmberRaidLoop.afterWeeklyClear(rp, m, used, m.weeklyCap, wasFc);
+                }
+            }
             if (created[0] && "fc_sigmark".equals(g.key)) pd.addPeriodCount(EmberSignature.C_FC + m.key, "all", 1); // D174: once per map
         }
         if (fresh) pd.addPeriodCount(EmberRunService.C_BOUNTY, bDay, bountyW);
