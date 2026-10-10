@@ -1,3 +1,4 @@
+# D458: 洗练入口保底一眼 pity · 零改 pity 数学
 # D457: 本局套装 cue %corerpg_p1_set_run% · 零改套装数值
 # 余烬 v1 (P1) 装备页 — 策划书 §19.1「装备页显示主手、已选护符、套装是否激活、觉醒档以及下一次突破缺哪项；
 #   背包中的非生效装备应明确标注」+ §19.2（实际基础属性 = 统一公式输出）。B2.174。
@@ -261,6 +262,7 @@ Icons:
       lore:
         - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
         - '§7护符：%corerpg_p1_reroll_charm_cur%'
+        - '§7保底：刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
         - '§7重复件（或碎片）+ 币洗一次，档位不超过成色上限'
         - '§8小加成，不是变强：4 档定身纹 ≈ Q07 重砸每次少挨 0.7'
         - ''

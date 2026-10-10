@@ -1868,8 +1868,16 @@ public final class EmberGrowthService implements Listener {
         if (slot == null) return "";
         String k = key.substring(slot.length() + 1);
         EmberItemData t = target(p, slot);
-        if (t == null) return "item".equals(k) ? ("charm".equals(slot) ? "§8还没有选定的护符" : "§8主手没有余烬刃（拿在主手再打开）") : "";
+        if (t == null) {
+            if ("item".equals(k)) return "charm".equals(slot) ? "§8还没有选定的护符" : "§8主手没有余烬刃（拿在主手再打开）";
+            if ("pity".equals(k)) return EmberRerollPity.emptySlot("charm".equals(slot) ? "护符" : "刃"); // D458
+            return "";
+        }
         if ("item".equals(k)) return "§f" + t.shortLabel();
+        if ("pity".equals(k)) { // D458 one-glance before eligible gate; math unchanged
+            if (EmberAffix.eligible(t) != null) return EmberRerollPity.emptySlot("不可洗");
+            return EmberRerollPity.glance(afPityOf(d, t), reroll.pity);
+        }
         if (EmberAffix.eligible(t) != null) return "cur".equals(k) ? "§8" + EmberAffix.eligible(t) : "";
         if ("cur".equals(k)) return "§7词条：" + affixText(affixOf(d, t), t.quality);
         if ("cap".equals(k)) {

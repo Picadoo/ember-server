@@ -152,7 +152,7 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_afk'
   # D141–D143 成长（D147：天赋 / 勋记 / 洗练合成一格；装备页的三个入口保留，各页返回键回到这里）
-  # D452：成长格诚实互指工坊四选择（烙纹定向 D429 / 随机锻造 D430 / 每周转化 D431 / 词条洗练+锁定保类型 D148·D451）
+  # D458：洗练保底一眼 pity · D452：成长格诚实互指工坊四选择（烙纹定向 D429 / 随机锻造 D430 / 每周转化 D431 / 词条洗练+锁定保类型 D148·D451）
   T:
     update: 20
     display:
@@ -162,6 +162,7 @@ Icons:
         - '§7天赋：%corerpg_p1_spec_pts%'
         - '§7勋记：%corerpg_p1_honor_n%'
         - '§7洗练：刃 %corerpg_p1_reroll_blade_cur% §7· 护符 %corerpg_p1_reroll_charm_cur%'
+        - '§7保底：刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
         - ''
         - '§d工坊四选择：§f烙纹定向 · 随机锻造 · 每周转化 · 词条洗练'
         - '§8（锁定保类型 = D148 · 工坊底栏也能进 · 材料换手感分叉）'
