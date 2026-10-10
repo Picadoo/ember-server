@@ -53,18 +53,38 @@ public final class EmberBrandLoop {
 
     /** Pin success feel: ActionBar only (chat already has 定向完成 detail). */
     public static void afterPin(Player p, String affixName) {
-        afterPin(p, affixName, null);
+        afterPin(p, affixName, null, 0, 0);
     }
 
     /** D2088: piece-aware commit next after pin. */
     public static void afterPin(Player p, String affixName, EmberItemData after) {
+        afterPin(p, affixName, after, 0, 0);
+    }
+
+    /**
+     * D2182: if charges remain and brandpath set, prefer re-pin on same path.
+     * Zero MAX_CHARGES / pin price change.
+     */
+    public static void afterPin(Player p, String affixName, EmberItemData after, int chargesLeft, int brandPathId) {
         if (p == null) return;
         String name = affixName == null || affixName.isEmpty() ? "烙纹" : affixName;
-        String line = "§6烙纹 · §f" + name + " §a定向完成";
+        String line = "§6烙纹 · §f" + name + " §a定向完成"
+                + (chargesLeft > 0 ? (" §7· 剩 §f" + chargesLeft + "§7 次") : "");
         try {
             p.sendActionBar(line);
         } catch (Throwable ignored) { }
-        EmberForgeCommitNext.afterPowerReset(p, after, EmberRunService.P + "§7烙纹下一环：");
+        String title = EmberRunService.P + "§7烙纹下一环：";
+        if (chargesLeft > 0 && EmberBrandPath.valid(brandPathId)) {
+            String[] a = new String[]{EmberBrandPath.pinLabel(brandPathId), EmberBrandPath.pinCmd(brandPathId),
+                    EmberBrandPath.tip(brandPathId) + " · 剩" + chargesLeft, "LIGHT_PURPLE"};
+            String[] b = EmberForgeCommitNext.enhance();
+            String[] c = EmberForgeCommitNext.quality(after);
+            if (c == null) c = EmberForgeCommitNext.refine(after);
+            if (c == null) c = EmberForgeCommitNext.setchase();
+            EmberForgeCommitNext.send3(p, title, a, b, c);
+            return;
+        }
+        EmberForgeCommitNext.afterPowerReset(p, after, title);
     }
 
     /** Pure: craft-follow button priority label for tests. */

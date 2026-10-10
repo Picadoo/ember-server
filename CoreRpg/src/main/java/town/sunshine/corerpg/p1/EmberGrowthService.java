@@ -2409,7 +2409,9 @@ public final class EmberGrowthService implements Listener {
                             q.sendMessage(P + "§a定向完成：" + affixText(enc, t.quality)
                                     + " §7· 锻造次数剩余 §f" + EmberBrandRules.chargesLeft(afcUsed(nd, after))
                                     + "/" + EmberBrandRules.MAX_CHARGES);
-                            EmberBrandLoop.afterPin(q, want.name, after); // D2088 piece-aware
+                            int pinLeft = EmberBrandRules.chargesLeft(afcUsed(nd, after));
+                            int bpath = EmberBrandPath.get(nd);
+                            EmberBrandLoop.afterPin(q, want.name, after, pinLeft, bpath); // D2182 re-pin
                             openMenu(q, "ember_p1_brand");
                         }
                     });

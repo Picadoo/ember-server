@@ -436,3 +436,6 @@ BlankLoop.afterTenths when armor dismantle pays only tenths.
 
 ### SS · space/stamp commit (D2169–D2180)
 offerForgeSpace + stampHit → enhance.
+
+### BR · brand re-pin (D2181–D2192)
+afterPin prefers path re-pin when charges remain.

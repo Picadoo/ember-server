@@ -795,3 +795,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - BlankLoop.afterTenths + ForgeService wire when blanks=0
 ## D2169–D2180 · 仓满/追烙命中承诺槽 · jar 1.65.512-d2180
 - offerForgeSpace enhance; stampHit enhance
+## D2181–D2192 · 烙纹再定向承诺 · jar 1.65.513-d2192
+- afterPin chargesLeft+path → re-pin primary
