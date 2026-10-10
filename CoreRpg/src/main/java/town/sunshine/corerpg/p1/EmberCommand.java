@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("snappath".equals(sub) || "断链路径".equals(sub)) return snapPathCmd(s, args); // D574
+        if ("snap".equals(sub) && args.length == 2) return snapGoCmd(s); // D574
         if ("veilpath".equals(sub) || "避毒路径".equals(sub)) return veilPathCmd(s, args); // D573
         if ("veil".equals(sub) && args.length == 2) return veilGoCmd(s); // D573
         if ("sidesteppath".equals(sub) || "闪冲路径".equals(sub)) return sidestepPathCmd(s, args); // D572
@@ -1695,6 +1697,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("snapseed".equals(sub)) return snapSeedCmd(s, args); // D574
         if ("veilseed".equals(sub)) return veilSeedCmd(s, args); // D573
         if ("sidestepseed".equals(sub)) return sidestepSeedCmd(s, args); // D572
         if ("dodgeseed".equals(sub)) return dodgeSeedCmd(s, args); // D571
@@ -5193,6 +5196,62 @@ public final class EmberCommand {
             EmberVeilPath.maybeProbe(t);
             s.sendMessage(P + "已触发避毒路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingVenom(t) ? "（有毒）" : "（无毒）"));
+            return true;
+    }
+
+    private boolean snapPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSnapPath.glance(EmberSnapPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c断链路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSnapPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c断链路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSnapPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSnapPath.get(d);
+                    if (EmberSnapPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSnapPath.label(cur) + " · 改路径再 /corerpg p1 snappath");
+                    else EmberSnapPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSnapPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 snappath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSnapPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean snapGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathSnapChain(p)) p.sendMessage(P + "无法断链（无火链/已在链外/未进本）");
+            else p.sendMessage(P + "§a断链·手点 §7已拉开火链");
+            return true;
+    }
+
+    private boolean snapSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSnapPath.maybeProbe(t);
+            s.sendMessage(P + "已触发断链路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingFirechain(t) ? "（有链）" : "（无链）"));
             return true;
     }
 }

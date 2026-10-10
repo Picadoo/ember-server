@@ -507,6 +507,61 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D574: any firechain tether (smoke warn or live burn) is linked. */
+    boolean hasPendingFirechain() {
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"firechain".equals(t.affix)) continue;
+            if (t.chainTo == null || t.le == null || t.chainTo.le == null) continue;
+            if (t.le.isDead() || t.chainTo.le.isDead()) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** D574: pull a committed player off the nearest firechain segment. */
+    boolean pathSnapChain(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingFirechain()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Variety v = svc.maps() == null ? null : svc.maps().variety;
+        if (v == null) return false;
+        Tracked best = null;
+        Location aBest = null, bBest = null;
+        double bestD = Double.MAX_VALUE;
+        Location pl = p.getLocation();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"firechain".equals(t.affix)) continue;
+            Tracked q = t.chainTo;
+            if (q == null || t.le == null || q.le == null || t.le.isDead() || q.le.isDead()) continue;
+            Location a = t.le.getLocation(), b = q.le.getLocation();
+            if (!chainTouches(a, b, v.chainLinkWidth + 1.0, pl)) continue; // near or on the tether
+            double mx = (a.getX() + b.getX()) * 0.5, mz = (a.getZ() + b.getZ()) * 0.5;
+            double d = (pl.getX() - mx) * (pl.getX() - mx) + (pl.getZ() - mz) * (pl.getZ() - mz);
+            if (d < bestD) { bestD = d; best = t; aBest = a; bBest = b; }
+        }
+        if (best == null || aBest == null || bBest == null) return false;
+        double dx = bBest.getX() - aBest.getX(), dz = bBest.getZ() - aBest.getZ();
+        Vector along = new Vector(dx, 0, dz);
+        Vector side;
+        if (along.lengthSquared() < 1e-6) {
+            side = new Vector(1, 0, 0);
+        } else {
+            along.normalize();
+            side = new Vector(-along.getZ(), 0, along.getX());
+            if (side.lengthSquared() < 1e-6) side = new Vector(1, 0, 0);
+            else side.normalize();
+        }
+        Vector from = new Vector(pl.getX() - aBest.getX(), 0, pl.getZ() - aBest.getZ());
+        if (from.dot(side) < 0) side.multiply(-1);
+        double safe = v.chainLinkWidth * 0.5 + 2.5;
+        Location to = new Location(w, pl.getX() + side.getX() * safe, pl.getY(), pl.getZ() + side.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.45f);
+        return true;
+    }
+
     /** D573: any venom cross warn still armed (not yet landed). */
     boolean hasPendingVenom() {
         long now = System.currentTimeMillis();
@@ -1382,6 +1437,7 @@ final class EmberRunDirector {
                 t.chainTo = best;
                 t.chainLiveAt = AffixFirechain.liveAt(now, v);
                 svc.log().info(String.format(Locale.ROOT, "[P1 run] %s firechain link %s", s.runId, best.role));
+                EmberSnapPath.maybeAfterLink(s); // D574
                 return;
             }
             Location a = t.le.getLocation(), b = q.le.getLocation();
