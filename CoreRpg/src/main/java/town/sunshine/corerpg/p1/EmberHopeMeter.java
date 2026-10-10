@@ -155,4 +155,25 @@ public final class EmberHopeMeter {
         return glance(cur, need, "下次掉落至少精良");
     }
 
+
+    /**
+     * D615: imprint spend hope — marks have/need + coin gate. Zero price change.
+     */
+    public static String imprintSpend(int marks, int need, int coinHave, int coinNeed) {
+        int m = Math.max(0, marks), n = Math.max(1, need);
+        String markLine = glance(m, n, "徽记够·可烙");
+        boolean coinOk = coinHave >= coinNeed;
+        String coinLine = coinOk
+                ? String.format(Locale.ROOT, "§a币够 §f%d§7/§f%d", coinNeed, coinNeed)
+                : String.format(Locale.ROOT, "§c币差 §f%d§7/§f%d", Math.max(0, coinHave), coinNeed);
+        return markLine + " §8· " + coinLine;
+    }
+
+    /**
+     * D615: attune unlock hope — marks have/need toward Shift-unlock. Zero ALT_MARKS change.
+     */
+    public static String attuneUnlock(int marks, int need) {
+        return glance(Math.max(0, marks), Math.max(1, need), "Shift解锁调律");
+    }
+
 }

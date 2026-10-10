@@ -1,3 +1,4 @@
+# D615: 希望 · 烙印花费 / 调律解锁表盘
 # D604: 希望表盘追烙 n/5 · D464: 追烙路径 /corerpg p1 sig chase · 零改烙印价/掉率
 # D456: 获取半行 acq · D455: Open 半行「战斗触发抬头短闪签名名」· 零改数值
 # D174 第 1.5 阶段 · 签名传奇页（docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §2.4）
@@ -69,6 +70,8 @@ Icons:
         - '§7来源：首通后普通重打这张图 → 每局 1 枚首领徽记，基础掉落 12% 是签名件'
         - '%corerpg_p1_sig_acq%'
         - '§e希望表盘 · 追烙：§f%corerpg_p1_sig_chase_hope%'
+        - '§e希望 · 烙印花费：§f%corerpg_p1_sig_imprint_hope%'
+        - '§e希望 · 调律解锁：§f%corerpg_p1_sig_attune_hope%'
         - '§7烬炉烙印：5 枚这张图的徽记 + 300×阶级 币，把签名烙到自己的件上（不锁通关）'
         - '§e刃签名可覆盖烬斩符文：§fL07 直线 · L09 环斩 · L13 蓄力环斩'
         - '§8形状预览 / 二选一 → 右下「技能组」'

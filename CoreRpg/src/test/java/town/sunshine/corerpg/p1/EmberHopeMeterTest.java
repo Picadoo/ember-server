@@ -113,4 +113,17 @@ public class EmberHopeMeterTest {
         assertTrue(s.contains("每局1装"));
     }
 
+    @Test
+    public void imprint_attune_spend_hope() {
+        String mid = EmberHopeMeter.imprintSpend(2, 5, 100, 300);
+        assertTrue(mid.contains("/5"));
+        assertTrue(mid.contains("币"));
+        String ready = EmberHopeMeter.imprintSpend(5, 5, 300, 300);
+        assertTrue(ready.contains("5/5"));
+        assertTrue(ready.contains("徽记够"));
+        String a = EmberHopeMeter.attuneUnlock(3, 10);
+        assertTrue(a.contains("3") && a.contains("10"));
+        assertTrue(EmberHopeMeter.attuneUnlock(10, 10).contains("Shift解锁调律"));
+    }
+
 }

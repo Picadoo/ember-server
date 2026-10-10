@@ -1328,6 +1328,31 @@ public final class EmberGrowthService implements Listener {
         if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
         if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
         if ("chase".equals(key) || "chase_line".equals(key) || "chase_hope".equals(key)) return EmberSigChase.glance(d); // D464/D604
+        if ("imprint_hope".equals(key)) { // D615 spend hope for chase target (or tip if none)
+            EmberSignature.Def cd = EmberSigChase.get(d);
+            if (cd == null) return "§8追烙未选 · /corerpg p1 sig chase";
+            int marks = d.periodCount(EmberSignature.C_MARK + cd.map, "all");
+            EmberLoadout loImp = runs.loadouts().get(p);
+            EmberItemData worn = loImp == null ? null : ("blade".equals(cd.slot) ? loImp.blade : loImp.charm);
+            int tier = worn != null && worn.tier >= 1 ? worn.tier : 1;
+            int coinNeed = EmberSignature.imprintCoin(tier);
+            return EmberHopeMeter.imprintSpend(marks, EmberSignature.IMPRINT_MARKS, d.getCoin(), coinNeed);
+        }
+        if ("attune_hope".equals(key)) { // D615 attune unlock hope
+            EmberSignature.Def cd = EmberSigChase.get(d);
+            if (cd == null) {
+                int bestM = 0;
+                for (EmberSignature.Def sd : EmberSignature.DEFS) {
+                    if (EmberSignature.alt(sd) == null) continue;
+                    int mk = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+                    if (mk > bestM) bestM = mk;
+                }
+                return EmberHopeMeter.attuneUnlock(bestM, EmberSignature.ALT_MARKS) + " §8· 选追烙后更准";
+            }
+            if (EmberSignature.alt(cd) == null) return "§8追烙签名无调律版";
+            int marks = d.periodCount(EmberSignature.C_MARK + cd.map, "all");
+            return EmberHopeMeter.attuneUnlock(marks, EmberSignature.ALT_MARKS) + " §7· " + cd.map.toUpperCase(java.util.Locale.ROOT);
+        }
         if ("marks".equals(key)) {
             StringBuilder sb = new StringBuilder("§7首领徽记：");
             for (String mk : EmberSignature.maps()) {

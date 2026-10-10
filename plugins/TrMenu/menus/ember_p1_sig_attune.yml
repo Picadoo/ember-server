@@ -25,6 +25,8 @@ Layout:
 
 Events:
   Open:
+    - 'tell: §e调律解锁希望：§f%corerpg_p1_sig_attune_hope%'
+    - 'tell: §7满 10 徽记 Shift 确定解锁（一次永久 · 不改价）'
     - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.4'
 
 Icons:
@@ -40,6 +42,7 @@ Icons:
       name: '§d签名调律 · 说明'
       lore:
         - '%corerpg_p1_sig_alt_head%'
+        - '§e希望 · 解锁：§f%corerpg_p1_sig_attune_hope%'
         - '%corerpg_p1_sig_marks%'
         - ''
         - '§7好处不变，只换代价那一半；同一件签名同时只有一个版本生效'

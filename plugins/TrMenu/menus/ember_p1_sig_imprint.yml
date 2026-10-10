@@ -23,6 +23,8 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
+    - 'tell: §e烙印花费希望：§f%corerpg_p1_sig_imprint_hope%'
+    - 'tell: §7徽记满+币够 → 点确认确定花（不改价）'
 
 Icons:
   '#':
@@ -75,6 +77,7 @@ Icons:
       material: blaze powder
       name: '§6确认烙印'
       lore:
+        - '§e希望：§f%corerpg_p1_sig_imprint_hope%'
         - '%corerpg_p1_sig_p_cost%'
         - '%corerpg_p1_sig_p_warn%'
         - '%corerpg_p1_sig_p_check%'
