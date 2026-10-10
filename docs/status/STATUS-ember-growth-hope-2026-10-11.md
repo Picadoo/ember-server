@@ -383,3 +383,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D861–D865 SHIP · jar 1.65.389-d861
 - Gem insert/remove next; setchase complete next; undo mismatch; S1 counter register
+
+## D866–D870 SHIP · jar 1.65.390-d866
+- Undo empty/expire polish; setchase focus; ARCH note; offerEquip mapfarm

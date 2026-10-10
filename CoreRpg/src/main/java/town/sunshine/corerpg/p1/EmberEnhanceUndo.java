@@ -130,8 +130,10 @@ public final class EmberEnhanceUndo {
             LAST.remove(id, cur);
             q.sendMessage(EmberRunService.P + "§8强化失败撤销窗已过 · 下次失败仍有 60 秒");
             try { q.sendActionBar("§8失败撤销窗已过"); } catch (Throwable ignored) { }
-            ConfirmTokens.sendButton(q, EmberRunService.P + "§7：", // D829
-                    "[再强化]", "/corerpg p1 enhance", "手持同件继续");
+            ConfirmTokens.sendButtons(q, EmberRunService.P + "§7：", // D829/D869
+                    new String[]{"[再强化]", "/corerpg p1 enhance", "手持同件继续", "GREEN"},
+                    new String[]{"[成色预览]", "/corerpg p1 quality", "换花法", "GOLD"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "总页", "GRAY"});
         }, delayTicks);
     }
 

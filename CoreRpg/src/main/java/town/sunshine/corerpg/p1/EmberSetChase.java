@@ -70,9 +70,10 @@ public final class EmberSetChase {
         if (p == null || cand == null || cand.uid == null) return;
         String P = EmberRunService.P;
         String slot = cand.isCharm() ? "护符" : "刃";
-        ConfirmTokens.sendButton(p, P + "§7成套追换上：",
-                "[换上" + slot + "]", "/corerpg p1 equip " + cand.uid,
-                cand.shortLabel() + " · 焦点成套");
+        ConfirmTokens.sendButtons(p, P + "§7成套追换上：", // D870
+                new String[]{"[换上" + slot + "]", "/corerpg p1 equip " + cand.uid,
+                        cand.shortLabel() + " · 焦点成套", "GREEN"},
+                new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷同族补件", "AQUA"});
         try { p.sendActionBar("§e成套追 · 可换上 §f" + EmberItemData.familyName(cand.family) + slot); }
         catch (Throwable ignored) { }
     }
@@ -140,6 +141,10 @@ public final class EmberSetChase {
         PlayerData d = runs.dataOf(p.getUniqueId());
         EmberLoadout lo = loadouts.refresh(p);
         tell(p, d, lo, loadouts); // D741
+        if (d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) { // D867
+            ConfirmTokens.sendButton(p, P + "§7未设焦点：",
+                    "[选套装焦点]", "/corerpg p1 setfocus", "定成套追方向");
+        }
         return true;
     }
 }
