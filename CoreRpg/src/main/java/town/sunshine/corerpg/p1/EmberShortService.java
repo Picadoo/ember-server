@@ -119,6 +119,21 @@ public final class EmberShortService {
                 p.sendMessage(P() + "§e短征通关 §7· " + EmberShortRules.rewardLine(m.key)
                         + (r.firstClearPaidNow ? " §a（含生涯首通包）" : "")
                         + " §7· " + EmberShortRules.dayLine(r.rewardedAfter, dailyCap(m)));
+                try { p.sendActionBar("§e短征 · 日奖 " + r.rewardedAfter + "/" + dailyCap(m)); } catch (Throwable ignored) { }
+                // D878 day-reward next (FC branch may add more)
+                int left = dailyCap(m) - r.rewardedAfter;
+                if (left > 0) {
+                    town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P() + "§7短征下一环：",
+                            new String[]{"[再进·" + m.key.toUpperCase() + "]", "/corerpg p1 enter " + m.key,
+                                    "本日还可领 " + left + " 次", "GREEN"},
+                            new String[]{"[工坊]", "/corerpg p1 forge", "花短征料", "GOLD"},
+                            new String[]{"[短征路径]", "/corerpg p1 shortpath", "改追首通/日奖", "AQUA"});
+                } else {
+                    town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P() + "§7本日短征日奖已满：",
+                            new String[]{"[工坊]", "/corerpg p1 forge", "花材料", "GOLD"},
+                            new String[]{"[冒险页]", "/ember_p1_adventure", "换内容", "GREEN"},
+                            new String[]{"[短征路径]", "/corerpg p1 shortpath", "改追", "GRAY"});
+                }
                 if (r.firstClearPaidNow) { // D697/D743 FC claim → next
                     p.sendMessage(P() + "§a生涯首通包已入账 §7· 材料进仓");
                     try { p.sendActionBar("§a首通包已入账"); } catch (Throwable ignored) { }

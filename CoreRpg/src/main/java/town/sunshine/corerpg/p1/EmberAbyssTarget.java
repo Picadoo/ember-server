@@ -119,6 +119,11 @@ public final class EmberAbyssTarget {
         runs.plugin().getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(P + glance(d, best));
         try { p.sendActionBar("§e层目标 · §f" + floor); } catch (Throwable ignored) { }
+        // D873 enter chase
+        town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7冲目标：",
+                new String[]{"[进深渊]", "/corerpg p1 abyss next", "冲第 " + floor + " 层", "GREEN"},
+                new String[]{"[冒险页]", "/ember_p1_adventure", "看深渊入口", "AQUA"},
+                new String[]{"[改目标]", "/corerpg p1 abysstarget", "重设层", "GRAY"});
         return true;
     }
 

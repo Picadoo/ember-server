@@ -1358,10 +1358,11 @@ public final class EmberGrowthService implements Listener {
             if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
             // D651 attune unlock spend complete UX
             try { p.sendActionBar("§d调律解锁 · §f" + sd.name); } catch (Throwable ignored) { }
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：",
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：", // D874
                     new String[]{"[切回原版]", "/corerpg p1 sig attune " + sd.id, "随时切换代价", "AQUA"},
                     new String[]{"[去烙印]", "/corerpg p1 sig pick " + sd.id, "徽记够可烙到件上", "GOLD"},
-                    new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴", "GRAY"});
+                    new String[]{"[工坊]", "/corerpg p1 forge", "养成手持", "GREEN"},
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装焦点", "YELLOW"});
             EmberSigChase.maybeReadyCue(p, d); // D769 imprint ready after attune spend
 
         } else {
@@ -1370,6 +1371,10 @@ public final class EmberGrowthService implements Listener {
             runs.flushData(p.getUniqueId());
             plugin.getLogger().info("[P1 sig] " + p.getName() + " attune " + sd.id + " → " + (nowAlt ? "alt" : "original"));
             p.sendMessage(P + "§6" + sd.name + " §7现在用" + (nowAlt ? "§d调律版" : "§a原版") + "§7（代价：" + EmberSignature.badOf(sd, nowAlt) + "）· 下一局起生效");
+            try { p.sendActionBar((nowAlt ? "§d调律版 · §f" : "§a原版 · §f") + sd.name); } catch (Throwable ignored) { }
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7：", // D874 toggle
+                    new String[]{"[再切换]", "/corerpg p1 sig attune " + sd.id, "换代价", "AQUA"},
+                    new String[]{"[冒险]", "/ember_p1_adventure", "下一局生效", "GREEN"});
         }
         openMenu(p, SIG_ALT_MENU);
         return true;

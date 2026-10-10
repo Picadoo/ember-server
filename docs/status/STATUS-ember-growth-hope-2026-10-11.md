@@ -389,3 +389,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D871–D872 SHIP · jar 1.65.391-d871
 - Gem unlock gate → enhance; set formed next loop
+
+## D873–D878 SHIP · jar 1.65.392-d873
+- Abyss target enter; attune next; gem craft lack; setfocus mapfarm; matready setchase; short day next

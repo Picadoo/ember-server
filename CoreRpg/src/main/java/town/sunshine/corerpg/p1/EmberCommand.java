@@ -4048,9 +4048,9 @@ public final class EmberCommand {
                     else if (id == EmberSetFocus.BURST) p.sendActionBar("§c烬爆焦点 · 爆闪步/爆发");
                     else p.sendActionBar("§a炽愈焦点 · 承护步/续航");
                 } catch (Throwable ignored) { }
-                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                        new String[]{"[冒险页]", "/ember_p1_adventure", "打同族图", "GREEN"},
-                        new String[]{"[技能组]", "trmenu open ember_skill_kit", "看套装身法", "GOLD"},
+                town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：", // D876
+                        new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷同族补件", "GREEN"},
+                        new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GOLD"},
                         new String[]{"[工坊]", "/corerpg p1 forge", "养同族件", "AQUA"});
                 // optional: align loot target button
                 String loot = runs.target(d);

@@ -1,5 +1,7 @@
 package town.sunshine.corerpg.p1;
 
+import town.sunshine.corerpg.ConfirmTokens;
+
 import java.util.Locale;
 
 import org.bukkit.entity.Player;
@@ -97,12 +99,19 @@ public final class EmberGemAcquire {
             p.sendMessage(P + "§c合成缺料：碎 §f" + haveS + "/" + cost.shards
                     + " §c骨 §f" + haveB + "/" + cost.bone + " §c币 §f" + cost.coins
                     + " §8（仓+背包合计）");
+            ConfirmTokens.sendButtons(p, P + "§7补料：", // D875
+                    new String[]{"[冒险刷料]", "/ember_p1_adventure", "图装/材料本", "GREEN"},
+                    new String[]{"[一键存入]", "/corerpg p1 stash", "仓里可能有", "AQUA"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "看消耗", "GOLD"});
             return true;
         }
         PlayerData d = plugin.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(P + "§c数据未就绪"); return true; }
         if (d.getCoin() < cost.coins) {
             p.sendMessage(P + "§c币不足：§f" + d.getCoin() + "/" + cost.coins + " §8（合成消耗）");
+            ConfirmTokens.sendButtons(p, P + "§7补币：", // D875 coin
+                    new String[]{"[冒险]", "/ember_p1_adventure", "刷币/卖装", "GREEN"},
+                    new String[]{"[工坊分解]", "/corerpg p1 forge", "拆件换钱", "GOLD"});
             return true;
         }
         if (!ni.consumeExact(p, EmberUpgradeRules.MAT_SHARD, cost.shards)
