@@ -248,6 +248,39 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("shapepath".equals(sub) || "符文路径".equals(sub)) { // D490 slash-shape combat path (changes play)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = EmberSkillKit.shapeUnlocked(d, runs);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberShapePath.glance(EmberShapePath.get(d), unlocked));
+                if (!unlocked) { p.sendMessage(P + "§c烬斩符文需本人首通 Q04。"); return true; }
+                EmberShapePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c烬斩符文需本人首通 Q04。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberShapePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberShapePath.get(d);
+                    if (EmberShapePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberShapePath.label(cur) + " · 改路径再 /corerpg p1 shapepath");
+                    else EmberShapePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberShapePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 shapepath <fan|line|ring|clear>");
+                return true;
+            }
+            EmberShapePath.applyAndReply(p, id);
+            return true;
+        }
         if ("featurepath".equals(sub) || "精选路径".equals(sub)) { // D488 featured map identity path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
