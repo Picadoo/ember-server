@@ -43,4 +43,10 @@ public class EmberKitEnterUnlockTest {
         assertEquals(5.0, EmberSkillKit.sigShieldSecs(5.0, false), 1e-9);
         assertEquals(6.25, EmberSkillKit.sigShieldSecs(5.0, true), 1e-9);
     }
+
+    @Test
+    public void parrySyncConstants() {
+        assertEquals(24, EmberSkillKit.PARRY_SYNC_SLOW_TICKS);
+        assertEquals(0.00625, EmberSkillKit.PARRY_SYNC_HEAL_PCT, 1e-9);
+    }
 }

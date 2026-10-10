@@ -1,18 +1,18 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.523-d2316.local**
-- D2289–D2316 real behavioral (kit enter unlocks + set×shape dash/step/shield)
+- jar **1.65.524-d2328.local**
+- D2289–D2328 real behavioral
 
-## Shipped this window
-- D2289–D2304: Q02/Q03/Q05/Q07 first-enter → dash/parry/step/attune (OR clear)
-- D2292: set×shape step land Slow+4t / heal×1.25
-- D2305–D2306: set×shape dash land + sig shield secs×1.25 (zero skill_mult)
+## Shipped
+- D2289–D2304: Q02/Q03/Q05/Q07 first-enter kit unlocks
+- D2292/D2305: set×shape step+dash land (Slow+4t / heal×1.25)
+- D2306: sig shield secs×1.25 when synced
+- D2318–D2319: parry sync Slow+heal · dodge_heal×1.25
 - Talent **HOLD** · ConfirmTokens/remain **STOP**
 
-## Next open
-- More signature playstyle without dmg multi (beyond shield secs)
+## Next
+- More signature playstyle without dmg multi
 - Talent only if p1sim sidegrade
-- No ConfirmTokens/remain/status twins
 
-Updated 2026-10-11 07:53 CST
+Updated 2026-10-11 07:55 CST

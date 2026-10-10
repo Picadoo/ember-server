@@ -146,16 +146,42 @@ public final class EmberParry implements Listener {
                 "D301 %s flat×%.2fB(%.2f)=%.2f", EmberSkillKit.DISPLAY_PARRY,
                 EmberSkillKit.PARRY_FLAT_MULT, lo == null ? 0.0 : lo.b, flat);
         EmberCombatListener.dealP1(player, boss, flat, EmberSetEngine.Kind.SKILL, tag);
+        String syncTip = applyParrySetSync(player, boss, lo == null ? "none" : lo.activeSet);
         player.getWorld().spawnParticle(Particle.CRIT_MAGIC, boss.getLocation().add(0, 1.2, 0), 18, 0.4, 0.5, 0.4, 0.02);
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_ANVIL_LAND, 0.55f, 1.6f);
         player.sendMessage(P + ChatColor.GREEN + EmberSkillKit.DISPLAY_PARRY + "成功 · 反打 "
                 + ChatColor.WHITE + String.format(java.util.Locale.ROOT, "%.0f", flat)
-                + ChatColor.GRAY + "（预警伤仍生效 · CD " + EmberSkillKit.PARRY_CD_SECONDS + "s）");
+                + ChatColor.GRAY + "（预警伤仍生效 · CD " + EmberSkillKit.PARRY_CD_SECONDS + "s）"
+                + (syncTip != null ? ChatColor.GRAY + syncTip : ""));
         try { // D666 play feel · zero CD/flat change
-            player.sendActionBar("§a招架成功 · §f反打 " + String.format(java.util.Locale.ROOT, "%.0f", flat));
+            player.sendActionBar("§a招架成功 · §f反打 " + String.format(java.util.Locale.ROOT, "%.0f", flat)
+                    + (syncTip != null ? "§7" + syncTip : ""));
         } catch (Throwable ignored) { }
     }
 
+
+
+    /** D2318: set-shape sync land on parry (Slow / micro-heal · zero flat). */
+    private String applyParrySetSync(Player player, LivingEntity boss, String fam) {
+        try {
+            PlayerData d = plugin.getDataStore().get(player.getUniqueId());
+            int sid = EmberSkillKit.shapeId(d, plugin.getEmberRuns());
+            if (!EmberSkillKit.setShapeSynced(fam, sid)) return null;
+            if (boss != null && boss.isValid() && !boss.isDead()) {
+                boss.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                        org.bukkit.potion.PotionEffectType.SLOW,
+                        EmberSkillKit.PARRY_SYNC_SLOW_TICKS, 0, false, true), true);
+            }
+            if ("sustain".equals(fam) && EmberMode.isP1(player)) {
+                double heal = Math.max(0.5, player.getMaxHealth() * EmberSkillKit.PARRY_SYNC_HEAL_PCT);
+                player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
+                return " · 形同缓速·微疗";
+            }
+            return " · 形同缓速";
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
 
     /** D476 ActionBar line when parry independent CD ends. */
     public static String readyActionBar() {

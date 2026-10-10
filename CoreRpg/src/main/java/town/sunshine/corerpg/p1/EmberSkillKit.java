@@ -72,6 +72,11 @@ public final class EmberSkillKit {
     public static final long PARRY_WINDOW_MS = 450L;
     /** Flat retaliate multiplier × blade B on successful parry (tele still lands). */
     public static final double PARRY_FLAT_MULT = 0.45;
+    /** D2318: set-shape sync Slow on parry success (zero flat change). */
+    public static final int PARRY_SYNC_SLOW_TICKS = 24;
+    /** D2318: sustain micro-heal on parry when synced. */
+    public static final double PARRY_SYNC_HEAL_PCT = 0.005 * 1.25;
+
     public static final String DISPLAY_PARRY = "余烬招架";
 
     /** D607 shape-fork S0: set soft-preferred 烬斩 shape (geometry only · zero skill_mult). */

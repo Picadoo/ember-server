@@ -267,6 +267,7 @@ public final class EmberGrowthService implements Listener {
             Long cd = dodgeHealCd.get(p.getUniqueId());
             if (cd == null || now >= cd) {
                 dodgeHealCd.put(p.getUniqueId(), now + (long) (m.get("dodge_icd") * 1000));
+                if (shapeSyncedFor(p)) heal *= 1.25; // D2319 set×shape · zero skill_mult
                 EmberHeal.heal(p, heal * EmberHeal.maxHp(p), "D141 踏步回气 " + pct(heal));
                 if (!flashSigOwned(p, "dodge_heal", "躲开回气")) {
                     // talent-only path keeps a thin ActionBar (was silent)
