@@ -36,9 +36,18 @@ public final class EmberRunRules {
     public static int baseXp() { return EmberEconomy.amount("S01", "xp"); }
     public static int baseMark() { return EmberEconomy.amount("S01", "mark"); }
     /** §9.3 extra event payouts */
-    public static final int TREASURE_COIN = 100;
+    public static final int TREASURE_COIN = 100; // golden mirror; prefer treasureCoin()
     public static final int ELITE_SHARD = 10;
     public static final int ELITE_CORE = 1;
+
+    /** D1074: S02 treasure-mob coin from economy yml SoT. */
+    public static int treasureCoin() { return EmberEconomy.amount("S02", "coin"); }
+
+    /** D1074: S03 elite shard from economy yml SoT. */
+    public static int eliteShard() { return EmberEconomy.amount("S03", "shard"); }
+
+    /** D1074: S03 elite core from economy yml SoT. */
+    public static int eliteCore() { return EmberEconomy.amount("S03", "core"); }
     /**
      * P2-1 weekly challenge rotation (docs/design/design-ember-v1.1-P2-draft.md §3): one of the seven challenge maps is featured
      * each Monday-based week (Asia/Shanghai); its first rotation.weekly_cap challenge clears per character and week add
@@ -129,8 +138,15 @@ public final class EmberRunRules {
     public static final int CHALLENGE_TIER = 3;
     /** §5.2 精工 0/2/4/6 % */
     public static final int[] CRAFT_WEIGHTS = {70, 20, 9, 1};
-    /** §9.3 none / treasure mob / reward elite / extra chest */
+    /** §9.3 none / treasure mob / reward elite / extra chest — last slot = S34.chest_weight golden 5 */
     public static final int[] EXTRA_WEIGHTS = {70, 15, 10, 5};
+
+    /** D1076: live extra weights; chest slot from S34 SoT (nums identical). */
+    public static int[] extraWeights() {
+        int[] w = EXTRA_WEIGHTS.clone();
+        w[Extra.CHEST.ordinal()] = EmberEconomy.amount("S34", "chest_weight");
+        return w;
+    }
     /** §7.5 / A18 party HP: 1 + 0.65 (n − 1), n = 1..3, locked at start */
     public static final double HP_PER_EXTRA = 0.65;
     public static final int PARTY_MAX = 3;
@@ -177,7 +193,7 @@ public final class EmberRunRules {
         return sb.toString();
     }
 
-    public static Extra rollExtra(double u) { return Extra.values()[pick(EXTRA_WEIGHTS, u)]; }
+    public static Extra rollExtra(double u) { return Extra.values()[pick(extraWeights(), u)]; } // D1076
 
     public static boolean validFamily(String f) {
         for (String x : FAMILIES) if (x.equals(f)) return true;
@@ -552,11 +568,11 @@ public final class EmberRunRules {
         if (in.extraDone) {
             switch (in.extra) {
                 case TREASURE:
-                    out.add(new Grant("extra_treasure_coin", Kind.COIN, null, EmberEconomy.amount("S02", "coin"), null));
+                    out.add(new Grant("extra_treasure_coin", Kind.COIN, null, treasureCoin(), null));
                     break;
                 case ELITE:
-                    out.add(new Grant("extra_elite_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, EmberEconomy.amount("S03", "shard"), null));
-                    out.add(new Grant("extra_elite_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, EmberEconomy.amount("S03", "core"), null));
+                    out.add(new Grant("extra_elite_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, eliteShard(), null));
+                    out.add(new Grant("extra_elite_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, eliteCore(), null));
                     break;
                 case CHEST:
                     out.add(item(in, "extra_chest_item")); // same tier, same target pool (E04: never above the map tier)

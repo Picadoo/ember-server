@@ -1146,6 +1146,17 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void treasureEliteHelpersMatchS02S03() {
+        // D1077 Stage2-E
+        assertEquals(EmberRunRules.TREASURE_COIN, EmberRunRules.treasureCoin());
+        assertEquals(EmberRunRules.ELITE_SHARD, EmberRunRules.eliteShard());
+        assertEquals(EmberRunRules.ELITE_CORE, EmberRunRules.eliteCore());
+        assertEquals(EmberRunRules.EXTRA_WEIGHTS[EmberRunRules.Extra.CHEST.ordinal()],
+                EmberRunRules.extraWeights()[EmberRunRules.Extra.CHEST.ordinal()]);
+        assertEquals(5, EmberEconomy.amount("S34", "chest_weight"));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

@@ -1502,7 +1502,7 @@ public final class EmberRunService implements Listener {
                         : ("「" + tw.name + "」");
                 String hint = tw.hint + (tw.alt != null ? " §7· " + tw.alt.hint : "");
                 tellRun(s, "§e额外事件：奖励精英" + title + "§7· " + hint
-                        + " · 击败 → §f碎片 +" + EmberRunRules.ELITE_SHARD + " §7+ §f核心 +" + EmberRunRules.ELITE_CORE);
+                        + " · 击败 → §f碎片 +" + EmberRunRules.eliteShard() + " §7+ §f核心 +" + EmberRunRules.eliteCore());
                 EmberHuntPath.maybeAfterSpawn(s); // D559 elite
                 return;
             }

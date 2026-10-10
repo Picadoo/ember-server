@@ -1,6 +1,6 @@
 # DESIGN · Stage2 全量发放 yml 真源搬家 · Stage0 盘点（2026-10-11 · D1040）
 
-> **状态：A+B+C+D 已落地；数值不变（AFK 层表未抬）。**  
+> **状态：A–E 已落地（含 S02/S03/S34）；数值不变（AFK 层表未抬）。**  
 > **上游：** Stage1 COMPLETE（sink `amount()`）；Stage0 经济价目盘点 D942；健康扫 D1030–D1038。  
 > **本窗：** 列出 **发放（source / grant）** 仍散落在 Java 常量 / 业务 yml / 运行时 Grant 表的位点，分级 **safe / review / unsafe**，供以后 Stage2 切片施工。
 
@@ -88,3 +88,7 @@
 | 对象 | **sink** 价 / 扣款 | **source** 发放量 |
 | 状态 | COMPLETE | Stage0 本文 |
 
+
+
+## D1073–D1082 Stage2-E
+S02/S03 helpers + S34 chest_weight in extraWeights(); settle already amount.

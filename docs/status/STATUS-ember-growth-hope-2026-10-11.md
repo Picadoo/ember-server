@@ -489,3 +489,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1063–D1072 ARCH SHIP · jar 1.65.420-d1063
 - Stage2-D: Codex stageCoin + AFK S22 caps SoT; AFK tier tables untouched
+
+## D1073–D1082 ARCH SHIP · jar 1.65.421-d1073
+- Stage2-E: treasureCoin/elite*/extraWeights chest SoT
