@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-posture-path`（已批 A · 方案 M · D495 · **PASS** · jar 1.65.186-d495 · 姿态突进/守势/清杂一次写符文+身法 · ≠同族 HUD ≠工坊/入场cue）
 - `B-flex-path`（已批 A · 方案 M · D494 · **PASS** · jar 1.65.185-d494 · 轻技装配开/关真改潜行+Q · ≠同族 HUD ≠工坊/入场cue）
 - `B-family-path`（已批 A · 方案 M · D493 · **PASS** · jar 1.65.184-d493 · 套装打法焚烬/烬爆/炽愈同步焦点+掉落 · ≠同族 HUD ≠工坊/入场cue）
 - `B-attune-path`（已批 A · 方案 M · D492 · **PASS** · jar 1.65.183-d492 · 签名调律原版/调律真改模组 · ≠同族 HUD ≠工坊/入场cue）

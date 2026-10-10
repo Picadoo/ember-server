@@ -1121,6 +1121,7 @@ public final class EmberRunService implements Listener {
                             if ("q04".equals(g.id)) EmberEchoPath.scheduleOffer(p); // D468 residual weekly path
                             if ("q04".equals(g.id)) EmberShapePath.scheduleOfferAfterQ04(p); // D490 slash shape combat path
                             if ("q05".equals(g.id)) EmberStepPath.scheduleOfferAfterQ05(p); // D491 step-dir combat path
+                            if ("q05".equals(g.id)) EmberPosturePath.scheduleOfferAfterQ05(p); // D495 posture combat path
                             if ("q06".equals(g.id)) EmberPledgePath.scheduleOfferAfterQ06(p); // D481 pledge combat path
                         }
                     }

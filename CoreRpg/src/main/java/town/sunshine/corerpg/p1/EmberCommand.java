@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("posturepath".equals(sub) || "姿态路径".equals(sub)) { // D495 combat posture (shape+step together)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = EmberSkillKit.shapeUnlocked(d, runs) && EmberSkillKit.stepVariantUnlocked(d, runs);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberPosturePath.glance(EmberPosturePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c姿态需本人首通 Q04（符文）与 Q05（身法）。");
+                    return true;
+                }
+                EmberPosturePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c姿态需本人首通 Q04 与 Q05。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberPosturePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberPosturePath.get(d);
+                    if (EmberPosturePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPosturePath.label(cur) + " · 改路径再 /corerpg p1 posturepath");
+                    else EmberPosturePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberPosturePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 posturepath <strike|guard|sweep|clear>");
+                return true;
+            }
+            EmberPosturePath.applyAndReply(p, id);
+            return true;
+        }
         if ("flexpath".equals(sub) || "轻技路径".equals(sub)) { // D494 flex equip combat path (changes sneak+Q)
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
