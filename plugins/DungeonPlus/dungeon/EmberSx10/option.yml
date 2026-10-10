@@ -1,0 +1,26 @@
+# D414 骨架 · 短征 sx10 烬闸递室（EmberSx10）— 与 EmberSx09 同构：DP 只建实例，不刷怪不发奖。
+# 地图：ember_short_sx10（本地自 ember_raid 拷贝（与 config 登记一致）；烬闸递室主题 WE 另号）
+# 进入：只经 CoreRpg（菜单 / corerpg p1 enter sx10）→ 预留体力 30 → 发 P1 通行证再 dp start-console。
+# 房间/门/首领/S49 结算由 CoreRpg（ember-v1-runs.yml short.sx10）；结束走 ember_p1_complete / ember_p1_fail。
+# 首航硬提醒：short.sx10 须含 rooms×3+boss（防 D391 FAIL）。
+# MM：闸卫/闸室弩/末室守吏 + EmberSx10…Cast → 怪物号并行；本壳不假造完整 MM 波次。
+# 禁：连续霜雾廊复读 sx03；同高假「过闸无室」；跳石/错层/塔升/环廊/风廊气质当主识别。
+
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx10} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx10%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入烬闸递室（体力与解锁由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e烬闸递室 §7· 短征 · 外闸庭→递闸密封室→末室终厅；清房闯闸换室，击败末室守吏后统一结算} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+
+dungeon-area: []
+
+# 结算由 CoreRpg（S49）；禁本文件发旧币表
+dungeon-reward-script: []

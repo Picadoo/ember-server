@@ -338,3 +338,20 @@ EmberSx09CanalCast:
   - effect:particles{p=cloud;amount=32;hSpread=5;ySpread=0.8;speed=0} @Self
   - effect:particles{p=lava;amount=18;hSpread=5;ySpread=1;speed=0} @Self
   - effect:particles{p=crit;amount=20;hSpread=5;ySpread=0.5;speed=0.02} @Self
+
+# --- 短征 sx10 · 烬闸递室 Boss 闸心压浪/扫室斩（可躲；无 SLOW；范式 CanalCast / SentryCast）---
+# 对照：EmberSx09CanalCast / EmberSx01SentryCast；主题「闸心压浪」：cloud+crit 闸心/室缘 + lava 烬感；结算 r5
+# 1.12.2 粒子：cloud + lava + crit（禁无效粒子）；message 标明退进室侧龛或回撤闸后
+EmberSx10GateCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&6【烬闸】&f闸心压浪——&7退进室侧龛或回撤闸后！"} @PlayersInRadius{r=24}
+  - effect:particles{p=cloud;amount=40;hSpread=4.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=20;hSpread=2.2;ySpread=1.6;speed=0} @Self
+  - effect:particles{p=crit;amount=28;hSpread=5;ySpread=0.5;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.5} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=cloud;amount=32;hSpread=5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=18;hSpread=5;ySpread=1;speed=0} @Self
+  - effect:particles{p=crit;amount=22;hSpread=5;ySpread=0.5;speed=0.02} @Self

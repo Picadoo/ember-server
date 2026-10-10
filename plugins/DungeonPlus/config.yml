@@ -215,6 +215,9 @@ dungeon-pre-folder:
   # D412 短征 sx09 · 烬渠跳石（map 本地骨架自 ember_abyss；进本键/MM/S48 另号；禁连续窄桥复读 sx05）
   ember_short_sx09:
     "EmberSx09": 1
+  # D414 短征 sx10 · 烬闸递室（map 本地骨架自 ember_raid；进本键/MM/S49 另号；禁连续霜雾廊复读 sx03）
+  ember_short_sx10:
+    "EmberSx10": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:
