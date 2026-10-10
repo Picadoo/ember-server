@@ -72,6 +72,19 @@ public final class EmberCommand {
             if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "转化服务未加载"); return true; }
             return EmberGrowthService.get().convertCommand((Player) s, args);
         }
+        if ("modepath".equals(sub) || "进阶路径".equals(sub)) { // D462 admin/smoke: force mode first-path pick
+            if (s instanceof Player && !s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+            String map = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+            Player t = args.length >= 4 ? Bukkit.getPlayerExact(args[3]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            if (!EmberModePath.isModeUnlockMap(map)) {
+                s.sendMessage(P + "用法：/corerpg p1 modepath <q04|q05|q06> [玩家]");
+                return true;
+            }
+            EmberModePath.forceOffer(t, map);
+            s.sendMessage(P + "已向 " + t.getName() + " 弹出 " + map.toUpperCase(Locale.ROOT) + " 进阶路径点选");
+            return true;
+        }
         if ("forgegoal".equals(sub) || "工坊目标".equals(sub)) { // D461 forge craft-goal path pick
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

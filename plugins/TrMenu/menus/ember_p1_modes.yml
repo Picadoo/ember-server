@@ -1,3 +1,4 @@
+# D462: 首通 Q04/Q05/Q06 会聊天弹出进阶路径点选 · 零改模式数值
 # D174 第 2b 阶段 · 进阶模式页（docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §4 Q04 / Q05 / Q06）
 # 三个模式各由一张主线图的首通打开：首领残响（Q04，厅扩至 Q01–Q07 / D227）、连战·前哨（Q05）、自选誓约（Q06）。
 # 文字 / 状态来自 PAPI（%corerpg_p1_pledge_*% …），菜单不自己算；按钮只调 /corerpg p1 的子命令，资格全在服务端校验。
@@ -25,6 +26,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'tell: §8首通 Q04/Q05/Q06 会聊天弹出进阶路径点选（残响/前哨/誓约）'
 
 Icons:
   '#':

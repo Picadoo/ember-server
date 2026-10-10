@@ -109,6 +109,7 @@ public final class EmberCounters {
         px("p1_unlock_", "EmberRunService", A, PR, NV, "map unlocks granted by settlement / admin");
         x("p1_target", "EmberForgeService", A, SE, OW, "current forge target");
         x("p1_slash_shape", "SkillService", A, SE, OW, "D211 烬斩符文 0=fan 1=line 2=ring (Q04+); signature shape overrides");
+        px("p1_mode_path_offered_", "EmberModePath", A, PR, NV, "D462 Q04/Q05/Q06 first-path pick latch");
         x("p1_forge_goal", "EmberForgeGoal", A, SE, OW, "D461 weekly forge craft-goal id 0=none 1=enh 2=ref 3=brand 4=roll 5=convert");
         x("p1_forge_goal_offer", "EmberForgeGoal", W, CL, RL, "D461 once-per-week offer latch @rotationWeekKey");
         x("p1_shape_pick_offered", "EmberSkillUnlock", A, PR, NV, "D460 Q04 first-pick latch (buttons sent once)");

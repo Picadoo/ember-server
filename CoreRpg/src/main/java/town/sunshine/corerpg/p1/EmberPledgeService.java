@@ -175,7 +175,11 @@ public final class EmberPledgeService {
             p.sendMessage(P() + (nowOn ? "§d已挂上誓约「" + pick.name + "」§7" + pick.text : "§7已取消誓约「" + pick.name + "」") + " · " + head(d));
             return true;
         }
-        p.sendMessage(P() + "用法：/corerpg p1 pledge（打开誓约页）· toggle <规则> · off · list");
+        if ("pick".equals(op) && args.length > 3 && "both".equalsIgnoreCase(args[3])) {
+            EmberModePath.pickBoth(p);
+            return true;
+        }
+        p.sendMessage(P() + "用法：/corerpg p1 pledge（打开誓约页）· toggle <规则> · off · list · pick both");
         return true;
     }
 
