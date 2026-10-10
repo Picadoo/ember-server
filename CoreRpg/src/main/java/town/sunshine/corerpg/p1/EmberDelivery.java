@@ -257,7 +257,7 @@ public final class EmberDelivery {
             p.sendActionBar("§c空间不足 · §7空" + free + "格 · 去工坊腾仓");
         } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§7仓满：",
-                new String[]{"[工坊]", "/corerpg p1 forge", "强化/洗练花材料", "GOLD"},
+                EmberForgeCommitNext.enhance(),
                 new String[]{"[分解·手点]", "/corerpg p1 scrap", "未强化差装→材料", "RED"},
                 new String[]{"[一键存入]", "/corerpg p1 stash", "再试仓库", "AQUA"});
     }

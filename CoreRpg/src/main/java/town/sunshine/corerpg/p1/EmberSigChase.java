@@ -248,9 +248,9 @@ public final class EmberSigChase {
         String P = EmberRunService.P;
         p.sendMessage(P + "§6追烙掉落命中：§f" + label(sd) + " §a· 签名件已到账");
         try { p.sendActionBar("§6追烙命中 · §f" + sd.name); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D915
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D915 / D2171
                 new String[]{"[去烙印同款]", "/corerpg p1 sig pick " + sd.id, "徽记够可烙到穿着件", "GOLD"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "养成到账件", "GREEN"},
+                EmberForgeCommitNext.enhance(),
                 new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
         return true;
     }
