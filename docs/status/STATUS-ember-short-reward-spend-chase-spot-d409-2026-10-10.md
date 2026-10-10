@@ -53,7 +53,7 @@
 
 | 项 | 值 |
 |----|-----|
-| 本 STATUS tip | （push 后填） |
+| 本 STATUS tip | **`8773b3ae`** |
 | 菜单上游 tip | **`1c782cbc`** |
 | jar 上游 tip | **`20cd1318`** |
 | DESIGN / 勾毕 | **`9a22f1a0`** / **`feb70949`** |
