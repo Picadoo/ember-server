@@ -464,6 +464,13 @@ public final class EmberSeason {
         p.sendMessage(P + "§8首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算；毕业那周的委托目标按剩下的天数算（周六毕业要 2 天，周日 1 天）");
         List<String> shown = new ArrayList<String>(GOALS);
         shown.addAll(OPTIONAL);
+        // D521: pin sticky weekly-goal focus to the top
+        String focus = EmberGoalPath.focusGoal(EmberGoalPath.get(d));
+        if (focus != null && shown.contains(focus)) {
+            shown.remove(focus);
+            shown.add(0, focus);
+            p.sendMessage(P + EmberGoalPath.glance(EmberGoalPath.get(d), true));
+        }
         for (String g : shown) {
             if (target(g) <= 0) continue;
             boolean done = progress(d, g) >= target(d, g);

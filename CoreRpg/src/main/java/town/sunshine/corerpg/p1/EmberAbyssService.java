@@ -184,6 +184,7 @@ public final class EmberAbyssService {
         long seed = runs.nextSeed();
         EmberRunMaps.MapDef m = maps.abyssMap(seed);
         if (m == null) { leader.sendMessage(P() + "深渊未配置。"); return true; }
+        EmberGoalPath.maybeGlance(leader, runs, "abyss"); // D521 weekly goal focus
         return runs.enterAbyssSegment(leader, m.key, tier, seed);
     }
 

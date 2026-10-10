@@ -557,6 +557,11 @@ public final class EmberRunService implements Listener {
         final EmberEntryService.Admit a = entry.admit(leader, mapKey, ch, abyss);
         if (a == null) return true;
         if (entry.readinessHold(leader, a.map, a.party, ch, abyss)) return true;
+        if (abyss <= 0 && a.map != null) {
+            if (a.map.raid) EmberGoalPath.maybeGlance(leader, this, "raid"); // D521
+            else if (a.map.key != null && a.map.key.equals(featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()))))
+                EmberGoalPath.maybeGlance(leader, this, "featured"); // D521
+        }
         return session.start(leader, a, ch, abyss, presetSeed);
     }
 
@@ -1147,6 +1152,7 @@ public final class EmberRunService implements Listener {
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberFeePath.scheduleOfferAfterQ07(p); // D511 abyss fee pay path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRecruitPath.scheduleOfferAfterQ07(p); // D513 recruit accept path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberChallengePath.scheduleOfferAfterQ07(p); // D519 challenge prefer path
+                        if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberGoalPath.scheduleOfferAfterQ07(p); // D521 weekly goal focus path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAbyssPath.scheduleOfferAfterQ07(p); // D486 abyss push/farm path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAttunePath.scheduleOfferAfterQ07(p); // D492 attune combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberTunePath.scheduleOfferAfterQ07(p); // D498 tune combat path
