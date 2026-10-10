@@ -507,3 +507,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1121–D1128 ARCH SHIP · jar 1.65.426-d1121
 - Stage2-J: S20/S21 bounty amounts ← economy SoT
+
+## D1129 docs · Stage2 safe sweep COMPLETE (review/unsafe skipped)
