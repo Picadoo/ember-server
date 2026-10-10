@@ -807,3 +807,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - EmberAfkGearFeel rising-edge · 零日表/ConfirmTokens
 ## D2241–D2250 · 挂机偏弱+阵亡提示 · jar 1.65.518-d2250
 - maybeWeakCue · 零抬表/ConfirmTokens
+## D2251–D2264 · 套装形状同步几何 · jar 1.65.519-d2264
+- 2pc prefer shape match → hitbox bump · 零 skill_mult · 非按钮/remain
+- Talent row1 仍 HOLD；K3 banned

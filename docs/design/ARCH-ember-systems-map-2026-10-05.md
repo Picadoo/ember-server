@@ -446,3 +446,6 @@ Skill set-fork / SigFeel / talent row1 HOLD / AFK gear-in-combat 已评估。
 
 ### AG · afk gear-stable feel (D2229–D2240)
 够稳上升沿短闪 · 不抬表。
+
+### SG · set-shape-sync geometry (D2251–D2264)
+2pc + preferred shape match → LINE/RING/FAN geometry bump (zero skill_mult). Talent HOLD; K3 banned.

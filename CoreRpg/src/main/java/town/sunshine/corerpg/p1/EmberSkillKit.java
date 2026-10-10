@@ -304,6 +304,26 @@ public final class EmberSkillKit {
      * Defaults match ember-v1.yml skill.* when mode is null.
      */
     public static Shape resolve(Player player, PlayerData d, EmberRunService runs, EmberMode mode, EmberGrowth.Mods gmods) {
+        String activeSet = null;
+        if (player != null) {
+            try {
+                org.bukkit.plugin.Plugin raw = org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+                if (raw instanceof town.sunshine.corerpg.CoreRpgPlugin) {
+                    EmberLoadoutService ls = ((town.sunshine.corerpg.CoreRpgPlugin) raw).getEmberLoadouts();
+                    EmberLoadout lo = ls == null ? null : ls.get(player);
+                    if (lo != null) activeSet = lo.activeSet;
+                }
+            } catch (Throwable ignored) { }
+        }
+        return resolve(player, d, runs, mode, gmods, activeSet);
+    }
+
+    /**
+     * D2252: when 2pc activeSet preferred shape matches rune, widen geometry (zero skill_mult).
+     * Signature override path unchanged.
+     */
+    public static Shape resolve(Player player, PlayerData d, EmberRunService runs, EmberMode mode,
+                                EmberGrowth.Mods gmods, String activeSetFamily) {
         double baseRange = mode == null ? 3.5 : mode.d("skill.radius", 3.5);
         double baseArc = mode == null ? 100.0 : mode.d("skill.arc_degrees", 100.0);
         int baseMax = Math.max(1, mode == null ? 5 : mode.i("skill.max_targets", 5));
@@ -325,17 +345,34 @@ public final class EmberSkillKit {
             return new Shape(shapeId(d, runs), range, arc, line, max, true, label);
         }
         int id = shapeId(d, runs);
-        // D642 Stage2: more distinct hitboxes (geometry only · zero skill_mult)
+        return geometryFor(id, baseRange, baseArc, baseMax, setShapeSynced(activeSetFamily, id));
+    }
+
+    /** Pure: 2pc family prefers this rune shape. */
+    public static boolean setShapeSynced(String activeSetFamily, int shapeId) {
+        if (activeSetFamily == null || activeSetFamily.isEmpty() || "none".equals(activeSetFamily)) return false;
+        if (!EmberRunRules.validFamily(activeSetFamily)) return false;
+        return preferredShape(activeSetFamily) == shapeId;
+    }
+
+    /**
+     * D642 + D2252 geometry for a known rune id (tests unlock-bypass).
+     * Zero skill_mult.
+     */
+    public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync) {
         if (id == SHAPE_LINE) {
-            // longer + tighter corridor poke
-            return new Shape(id, Math.max(baseRange, 6.0), baseArc, 6.0, 0.7, 3, false, shapeName(id));
+            double lw = setSync ? 0.95 : 0.7;
+            int max = setSync ? 4 : 3;
+            return new Shape(id, Math.max(baseRange, 6.0), baseArc, 6.0, lw, max, false, shapeName(id));
         }
         if (id == SHAPE_RING) {
-            // slightly larger ring, can clip one more when surrounded
-            return new Shape(id, 3.5, 360.0, 0, 0.0, 4, false, shapeName(id));
+            double range = setSync ? 3.9 : 3.5;
+            int max = setSync ? 5 : 4;
+            return new Shape(id, range, 360.0, 0, 0.0, max, false, shapeName(id));
         }
-        // fan: slightly wider cone, keep base range / cap
-        return new Shape(SHAPE_FAN, baseRange, Math.max(baseArc, 110.0), 0, 0.0, baseMax, false, shapeName(SHAPE_FAN));
+        double arc = Math.max(baseArc, 110.0);
+        if (setSync) arc += 12.0;
+        return new Shape(SHAPE_FAN, baseRange, arc, 0, 0.0, baseMax, false, shapeName(SHAPE_FAN));
     }
 
     /** True when the player is inside a P1 dungeon instance (shape swap forbidden — X1). Hub / AFK are OK. */
