@@ -32,6 +32,7 @@ Layout:
 
 Events:
   Open:
+    - 'command: corerpg p1 setchase'
     # D680: sink glance also via /corerpg p1 forge entry; reinforce here
     - 'tell: §e消耗一瞥：§f手持件看强化/成色/精工本次费用 · 缺料半行在聊天（开菜单前已刷）'
     - 'tell: §8烙纹路径 %corerpg_p1_brand_path%'

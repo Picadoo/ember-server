@@ -166,3 +166,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D719–D720 SHIP · jar 1.65.336-d719 · 2026-10-11
 - D719 abyss target next suggest
 - D720 short enter unpaid count
+
+## D721–D722 SHIP · TrMenu hot · 2026-10-11
+- D721 adventure Open setchase
+- D722 forge Open setchase
+（YAML 热更 · jar 仍 1.65.336-d719）
