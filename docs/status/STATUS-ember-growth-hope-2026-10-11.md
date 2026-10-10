@@ -595,3 +595,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1361–D1374 ARCH SHIP · jar 1.65.451-d1361
 - Codex progressRemain + claim AB; map nextMissing; setfocus gap AB; mapfarm identity board
+
+## D1375–D1386 ARCH SHIP · jar 1.65.452-d1375
+- Codex register → progressRemain AB; SetChase focusCodexRemain

@@ -27,6 +27,28 @@ public final class EmberSetChase {
         return "§e" + b.toString();
     }
 
+    /**
+     * D1377: focus-family codex remain (T1–T3 blade+charm) — display only.
+     */
+    public static String focusCodexRemain(PlayerData d) {
+        if (d == null) return "";
+        String fk = EmberSetFocus.familyKey(EmberSetFocus.get(d));
+        if (fk == null) return "";
+        int miss = 0;
+        String first = null;
+        for (int t = 1; t <= 3; t++) {
+            for (String slot : new String[] {"blade", "charm"}) {
+                if (!EmberCodex.has(d, EmberCodex.key(fk, slot, t))) {
+                    miss++;
+                    if (first == null)
+                        first = "T" + t + " " + EmberItemData.familyName(fk) + EmberItemData.slotName(slot);
+                }
+            }
+        }
+        if (miss == 0) return "焦点图鉴 · " + EmberItemData.familyName(fk) + " T1–T3 齐";
+        return "焦点图鉴 · " + EmberItemData.familyName(fk) + " 还差" + miss + "种 · 先 " + first;
+    }
+
     public static String focusGap(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null) return "";
         int focus = EmberSetFocus.get(d);
@@ -102,6 +124,8 @@ public final class EmberSetChase {
         if (next != null && !next.isEmpty()) p.sendMessage(P + "§7" + next);
         String gap = focusGap(d, lo);
         if (gap != null && !gap.isEmpty()) p.sendMessage(P + gap);
+        String fcr = focusCodexRemain(d);
+        if (fcr != null && !fcr.isEmpty()) p.sendMessage(P + "§7" + fcr);
         try { // D1340: meaty focus gap on AB（非 PAPI twin）
             if (!"none".equals(lo.activeSet))
                 p.sendActionBar("§e成套 · §f" + lo.setLabel());

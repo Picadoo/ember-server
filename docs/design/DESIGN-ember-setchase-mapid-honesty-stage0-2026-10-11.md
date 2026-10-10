@@ -20,5 +20,7 @@
 | MI3 | 图身份下一缺件 | EmberMapIdentity.nextMissing | **D1363–** |
 | SC3 | 设焦点后 AB=缺口 | setfocus → stripSection(focusGap) | **D1365–** |
 | MF1 | mapfarm 无记录时身份板 | 主线 Q 身份一瞥 | **D1367–** |
+| CD2 | 登记 rising-edge 剩余 | LoadoutService.codex | **D1375–** |
+| SC4 | 焦点族图鉴缺件 | focusCodexRemain | **D1377–** |
 
 不改套装战力、掉率、通关闸。

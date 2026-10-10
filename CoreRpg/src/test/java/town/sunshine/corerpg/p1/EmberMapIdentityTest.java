@@ -17,4 +17,8 @@ public class EmberMapIdentityTest {
         assertFalse(out.contains("§f"));
         assertFalse(out.contains("§7"));
     }
+
+    @Test public void focusCodexRemain_noFocus() {
+        assertEquals("", EmberSetChase.focusCodexRemain(null));
+    }
 }
