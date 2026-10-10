@@ -507,6 +507,60 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D573: any venom cross warn still armed (not yet landed). */
+    boolean hasPendingVenom() {
+        long now = System.currentTimeMillis();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"venom".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** D573: pull a committed player off the nearest venom cross. */
+    boolean pathVeilVenom(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingVenom()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Variety v = svc.maps() == null ? null : svc.maps().variety;
+        if (v == null) return false;
+        long now = System.currentTimeMillis();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        Location pl = p.getLocation();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"venom".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            EmberRunMaps.Skill arm = venomSkill(t, v);
+            Vector[] dirs = venomDirs(t.venomDiag);
+            if (!venomHits(arm, t.affixOrigin, dirs, pl)) continue;
+            double d = t.affixOrigin.distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location o = best.affixOrigin;
+        double dx = pl.getX() - o.getX(), dz = pl.getZ() - o.getZ();
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        Vector dir;
+        if (dist < 0.15) {
+            // on center: diagonal away from + or x arms
+            dir = best.venomDiag ? new Vector(1, 0, 0) : new Vector(1, 0, 1);
+            if (dir.lengthSquared() > 1e-6) dir.normalize();
+        } else {
+            dir = new Vector(dx, 0, dz).normalize();
+        }
+        double safe = v.venomArm + 2.0;
+        Location to = new Location(w, o.getX() + dir.getX() * safe, pl.getY(), o.getZ() + dir.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.65f);
+        return true;
+    }
+
     /** D572: any charge strip warn still armed (not yet landed). */
     boolean hasPendingCharge() {
         long now = System.currentTimeMillis();
@@ -1228,6 +1282,7 @@ final class EmberRunDirector {
             o.setY(Math.floor(o.getY()));
             t.affixOrigin = o;
             t.affixAt = AffixCycle.after(now, v.venomWarn);
+            EmberVeilPath.maybeAfterVenom(s); // D573
             return;
         }
         if ("jailer".equals(t.affix)) {

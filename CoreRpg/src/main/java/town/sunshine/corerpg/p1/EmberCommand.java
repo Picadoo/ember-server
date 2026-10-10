@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("veilpath".equals(sub) || "避毒路径".equals(sub)) return veilPathCmd(s, args); // D573
+        if ("veil".equals(sub) && args.length == 2) return veilGoCmd(s); // D573
         if ("sidesteppath".equals(sub) || "闪冲路径".equals(sub)) return sidestepPathCmd(s, args); // D572
         if ("sidestep".equals(sub) && args.length == 2) return sidestepGoCmd(s); // D572
         if ("dodgepath".equals(sub) || "闪榴路径".equals(sub)) return dodgePathCmd(s, args); // D571
@@ -1693,6 +1695,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("veilseed".equals(sub)) return veilSeedCmd(s, args); // D573
         if ("sidestepseed".equals(sub)) return sidestepSeedCmd(s, args); // D572
         if ("dodgeseed".equals(sub)) return dodgeSeedCmd(s, args); // D571
         if ("freeseed".equals(sub)) return freeSeedCmd(s, args); // D570
@@ -5134,6 +5137,62 @@ public final class EmberCommand {
             EmberSidestepPath.maybeProbe(t);
             s.sendMessage(P + "已触发闪冲路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingCharge(t) ? "（有冲）" : "（无冲）"));
+            return true;
+    }
+
+    private boolean veilPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberVeilPath.glance(EmberVeilPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c避毒路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberVeilPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c避毒路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberVeilPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberVeilPath.get(d);
+                    if (EmberVeilPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberVeilPath.label(cur) + " · 改路径再 /corerpg p1 veilpath");
+                    else EmberVeilPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberVeilPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 veilpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberVeilPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean veilGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathVeilVenom(p)) p.sendMessage(P + "无法避毒（无毒十字/已在臂外/未进本）");
+            else p.sendMessage(P + "§a避毒·手点 §7已拉开毒十字");
+            return true;
+    }
+
+    private boolean veilSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberVeilPath.maybeProbe(t);
+            s.sendMessage(P + "已触发避毒路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingVenom(t) ? "（有毒）" : "（无毒）"));
             return true;
     }
 }
