@@ -1109,6 +1109,7 @@ public final class EmberRunService implements Listener {
                             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新模式：§e" + mode + " ", "[打开进阶模式]", "/corerpg p1 modes", "首领残响 / 连战·前哨 / 自选誓约");
                             p.sendMessage(P + "§7不用打命令：主菜单 → 冒险 → 进阶模式");
                             EmberModePath.scheduleOffer(p, g.id); // D462 path pick ~2s later
+                            if ("q04".equals(g.id)) EmberEchoPath.scheduleOffer(p); // D468 residual weekly path
                         }
                     }
                     done = true;

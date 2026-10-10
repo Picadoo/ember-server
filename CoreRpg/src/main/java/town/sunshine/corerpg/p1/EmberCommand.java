@@ -85,6 +85,53 @@ public final class EmberCommand {
             s.sendMessage(P + "已向 " + t.getName() + " 弹出 " + map.toUpperCase(Locale.ROOT) + " 进阶路径点选");
             return true;
         }
+        if ("echopath".equals(sub) || "残响路径".equals(sub)) { // D468 echo residual weekly path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, EmberEchoPath.UNLOCK);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberEchoPath.glance(EmberEchoPath.get(d), unlocked));
+                if (unlocked) EmberEchoPath.forceOffer(p);
+                else p.sendMessage(P + "§7首通 Q04 后可选本周残响追哪只首领");
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c需本人首通 Q04（首领残响）"); return true; }
+                String week = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(java.time.ZoneId.of("Asia/Shanghai")));
+                boolean offered = EmberEchoPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberEchoPath.get(d);
+                    if (EmberEchoPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberEchoPath.label(cur) + " · 改路径再 /corerpg p1 echopath");
+                    else EmberEchoPath.forceOffer(p);
+                }
+                return true;
+            }
+            int id = EmberEchoPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 echopath <q01..q07|clear>");
+                return true;
+            }
+            if (id != EmberEchoPath.NONE && !unlocked) {
+                p.sendMessage(P + "§c需本人首通 Q04 后才能选残响路径");
+                return true;
+            }
+            boolean ch = EmberEchoPath.set(d, id);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            if (id == EmberEchoPath.NONE) p.sendMessage(P + "已取消残响路径");
+            else {
+                p.sendMessage(P + "§a残响路径 → §f" + EmberEchoPath.label(id) + "§7（" + EmberEchoPath.tip(id) + "）"
+                        + (ch ? "" : " §8· 已是该路径"));
+                p.sendMessage(P + EmberEchoPath.glance(id, true));
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
+                        "[去残响·Q0" + id + "]", "/corerpg p1 rush " + EmberEchoPath.mapKey(id) + " go",
+                        "不耗体力 · 周池有奖徽记");
+            }
+            return true;
+        }
         if ("brandpath".equals(sub) || "烙纹路径".equals(sub)) { // D467 brand playstyle path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

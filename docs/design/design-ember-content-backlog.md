@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-echo-path`（已批 A · 方案 M · D468 · **PASS** · jar 1.65.159-d468 · 残响周追路径 · ≠改表）
 - `B-brand-path`（已批 A · 方案 M · D467 · **PASS** · jar 1.65.158-d467 · 烙纹玩法路径三选一 · ≠改价）
 - `B-dual-lead`（已批 A · 方案 M · D466 · **PASS** · jar 1.65.157-d466 · Q03 双签首开路径 · ≠改数值）
 - `B-set-focus`（已批 A · 方案 M · D465 · **PASS** · jar 1.65.156-d465 · 套装周焦点三选一 · ≠改数值）

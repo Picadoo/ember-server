@@ -95,6 +95,7 @@ public final class EmberRunPapi {
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("dual_lead".equals(key) || "dual_lead_line".equals(key)) return Section.LOADOUT; // D466
         if ("brand_path".equals(key) || "brand_path_line".equals(key)) return Section.LOADOUT; // D467
+        if ("echo_path".equals(key) || "echo_path_line".equals(key)) return Section.LOADOUT; // D468
         if ("route_pri".equals(key) || "route_sec".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
@@ -118,7 +119,8 @@ public final class EmberRunPapi {
         return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key)
                 || "set_focus".equals(key) || "set_focus_line".equals(key)
                 || "dual_lead".equals(key) || "dual_lead_line".equals(key)
-                || "brand_path".equals(key) || "brand_path_line".equals(key) || "stats".equals(key)
+                || "brand_path".equals(key) || "brand_path_line".equals(key)
+                || "echo_path".equals(key) || "echo_path_line".equals(key) || "stats".equals(key)
                 || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)
                 // D299 再刷短反馈：装备页近档 + 工坊手持近档
                 || "blade_next_q".equals(key) || "blade_next_c".equals(key)
@@ -596,6 +598,12 @@ public final class EmberRunPapi {
             case "brand_path_line": { // D467 brand playstyle path
                 PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
                 return EmberBrandPath.glance(EmberBrandPath.get(pd));
+            }
+            case "echo_path":
+            case "echo_path_line": { // D468 echo residual path
+                PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                boolean un = pd != null && runs.progressFlag(pd, EmberEchoPath.UNLOCK);
+                return EmberEchoPath.glance(EmberEchoPath.get(pd), un);
             }
             case "set_run": { // D457 enter-run style line (also for menus)
                 EmberItemData[] worn = l.armorCopy();

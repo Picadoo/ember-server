@@ -25,6 +25,8 @@ Layout:
 
 Events:
   Open:
+    - 'tell: §e残响路径：§f%corerpg_p1_echo_path% §8· /corerpg p1 echopath'
+    - 'command: corerpg p1 echopath nudge'
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §8首通 Q04/Q05/Q06 会聊天弹出进阶路径点选（残响/前哨/誓约）'
 
