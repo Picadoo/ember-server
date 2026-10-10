@@ -315,6 +315,65 @@ public final class PetService implements Listener {
         return true;
     }
 
+
+    /** D528: true when unlocked pet can level with inventory dust. */
+    public boolean canFeed(Player p) {
+        if (p == null || !enabled || !feedEnabled || niBridge == null) return false;
+        PlayerData data = dataStore.get(p.getUniqueId());
+        if (data == null) return false;
+        java.util.List<String> unlocked = data.getPetsUnlocked();
+        if (unlocked == null || unlocked.isEmpty()) return false;
+        String id = data.getActivePet();
+        if (id == null || id.isEmpty() || !data.isPetUnlocked(id)) id = unlocked.get(unlocked.size() - 1);
+        int level = data.getPetLevel(id);
+        if (level >= feedMaxLevel) return false;
+        int cost = feedCostFor(level);
+        if (cost <= 0) cost = 1;
+        return niBridge.countInInventory(p, feedItem) >= cost;
+    }
+
+    /** D528: feed up to maxLevels; returns levels gained (messages on gain). */
+    public int tryFeedActive(Player p, int maxLevels) {
+        if (p == null || !enabled || !feedEnabled || maxLevels <= 0) return 0;
+        PlayerData data = dataStore.get(p.getUniqueId());
+        if (data == null) return 0;
+        java.util.List<String> unlocked = data.getPetsUnlocked();
+        if (unlocked == null || unlocked.isEmpty()) return 0;
+        String id = data.getActivePet();
+        if (id == null || id.isEmpty() || !data.isPetUnlocked(id)) id = unlocked.get(unlocked.size() - 1);
+        PetDef def = pets.get(id);
+        String display = def != null ? def.display : id;
+        int level = data.getPetLevel(id);
+        if (level >= feedMaxLevel) return 0;
+        int from = level;
+        int consumed = 0;
+        int gained = 0;
+        for (int i = 0; i < maxLevels && level < feedMaxLevel; i++) {
+            int cost = feedCostFor(level);
+            if (cost <= 0) cost = 1;
+            if (niBridge == null || niBridge.countInInventory(p, feedItem) < cost) break;
+            if (!consumeFeedPreferHand(p, cost)) break;
+            consumed += cost;
+            level++;
+            gained++;
+            data.setPetLevel(id, level);
+        }
+        if (gained <= 0) return 0;
+        if (data.getActivePet() == null || data.getActivePet().isEmpty()) data.setActivePet(id);
+        dataStore.flushMutation(p.getUniqueId());
+        p.sendMessage(PREFIX + ChatColor.GREEN + "消耗魂尘×" + consumed
+                + ChatColor.GRAY + " · " + display
+                + ChatColor.WHITE + " Lv." + from + "→" + level);
+        if (plugin.getLadderService() != null) plugin.getLadderService().recomputePower(p);
+        return gained;
+    }
+
+    /** D528 admin smoke: give feed dust into backpack. */
+    public boolean adminGiveFeedDust(Player p, int n) {
+        if (p == null || niBridge == null || n <= 0) return false;
+        return niBridge.giveNiItem(p, feedItem, n);
+    }
+
     public void cmdRoot(CommandSender sender, String[] args) {
         if (!enabled) {
             sender.sendMessage(PREFIX + ChatColor.RED + "使魔系统未启用。");
