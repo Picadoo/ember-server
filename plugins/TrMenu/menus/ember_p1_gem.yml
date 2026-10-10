@@ -1,0 +1,272 @@
+# D609 · P1 宝石页（Stage4）· 只调 /corerpg p1 gem · 永不 legacy ember_socket
+# 入口：工坊「去镶嵌」、/ember_p1_gem
+
+Title: '§5余烬 · P1 宝石'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_gem'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 300
+
+Layout:
+  - '###H#P###'
+  - '#abcdefg#'
+  - '#0123ijkl#'
+  - '#4567mnop#'
+  - '#R#Z#L#X#'
+
+Events:
+  Open:
+    - 'sound: BLOCK_NOTE_PLING-1-0.9'
+    - 'tell: §e手持刃/符看孔 · 背包备好石 · 希望保底 %corerpg_p1_gem_pity_hope%'
+    - 'command: corerpg p1 gem pity'
+
+Icons:
+  '#':
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  H:
+    update: 20
+    display:
+      material: nether star
+      name: '§e希望 · 通关保底'
+      lore:
+        - ''
+        - '§f%corerpg_p1_gem_pity_hope%'
+        - '§7Q01–Q07 通关累计 · 满 5 发 1 石'
+        - '§8偏好：/corerpg p1 gempath'
+        - ''
+        - '§e➥ §f刷新保底提示'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'command: corerpg p1 gem pity'
+
+  P:
+    update: 20
+    display:
+      material: book
+      name: '§6说明 · 孔与战斗'
+      lore:
+        - ''
+        - '§7刃 2 孔（第 2 孔强化≥5）· 符 1 孔（强化≥3）'
+        - '§7锋利：刃 T2+ 才计入攻 · 稳/汲/疾全程'
+        - '§7合成：碎片×8 + 骨尘×4 + 币 40'
+        - '§8不走旧镶嵌页 · 不抬战斗 flat'
+        - ''
+        - '§e➥ §f手持件 list'
+    actions:
+      all:
+        - 'command: corerpg p1 gem list'
+
+  # —— 合成四石 ——
+  a:
+    display:
+      material: blaze powder
+      name: '§c合成 · 锋利石'
+      lore: ['', '§7碎8+骨4+币40 → 锋利', '', '§e➥ §f确定合成']
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
+        - 'command: corerpg p1 gem craft sharp'
+  b:
+    display:
+      material: iron ingot
+      name: '§b合成 · 稳固石'
+      lore: ['', '§7碎8+骨4+币40 → 稳固', '', '§e➥ §f确定合成']
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
+        - 'command: corerpg p1 gem craft steady'
+  c:
+    display:
+      material: ghast tear
+      name: '§d合成 · 汲取石'
+      lore: ['', '§7碎8+骨4+币40 → 汲取', '', '§e➥ §f确定合成']
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
+        - 'command: corerpg p1 gem craft drain'
+  d:
+    display:
+      material: feather
+      name: '§a合成 · 疾风石'
+      lore: ['', '§7碎8+骨4+币40 → 疾风', '', '§e➥ §f确定合成']
+    actions:
+      all:
+        - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
+        - 'command: corerpg p1 gem craft gale'
+
+  e:
+    display:
+      material: paper
+      name: '§7合成说明'
+      lore:
+        - ''
+        - '§7上面四格：确定合成指定石'
+        - '§7材料：碎片×8 + 骨尘×4 + 币 40'
+        - '§8挂机庭产碎/骨 · 不抬 AFK 表'
+
+  f:
+    display:
+      material: stained glass pane
+      name: '§8 '
+  g:
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  # —— 孔0 镶入 ——
+  '0':
+    display:
+      material: diamond sword
+      name: '§6孔0 · 镶锋利'
+      lore: ['', '§7手持刃/符 · 背包有锋利石', '§8孔0：刃即开 / 符需强化≥3', '', '§e➥ §f镶入孔0']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 0 sharp'
+  '1':
+    display:
+      material: iron sword
+      name: '§6孔0 · 镶稳固'
+      lore: ['', '§7手持刃/符 · 背包有稳固石', '', '§e➥ §f镶入孔0']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 0 steady'
+  '2':
+    display:
+      material: golden sword
+      name: '§6孔0 · 镶汲取'
+      lore: ['', '§7手持刃/符 · 背包有汲取石', '', '§e➥ §f镶入孔0']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 0 drain'
+  '3':
+    display:
+      material: wooden sword
+      name: '§6孔0 · 镶疾风'
+      lore: ['', '§7手持刃/符 · 背包有疾风石', '', '§e➥ §f镶入孔0']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 0 gale'
+
+  i:
+    display:
+      material: barrier
+      name: '§c拆 · 孔0'
+      lore: ['', '§7拆下手持件孔0 的石（返还）', '', '§c➥ §f拆除']
+    actions:
+      all:
+        - 'command: corerpg p1 gem remove 0'
+  j:
+    display:
+      material: stained glass pane
+      name: '§8 '
+  k:
+    display:
+      material: stained glass pane
+      name: '§8 '
+  l:
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  # —— 孔1 镶入（仅刃） ——
+  '4':
+    display:
+      material: diamond
+      name: '§e孔1 · 镶锋利'
+      lore: ['', '§7仅刃 · 强化≥5 解锁', '', '§e➥ §f镶入孔1']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 1 sharp'
+  '5':
+    display:
+      material: iron ingot
+      name: '§e孔1 · 镶稳固'
+      lore: ['', '§7仅刃 · 强化≥5', '', '§e➥ §f镶入孔1']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 1 steady'
+  '6':
+    display:
+      material: gold ingot
+      name: '§e孔1 · 镶汲取'
+      lore: ['', '§7仅刃 · 强化≥5', '', '§e➥ §f镶入孔1']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 1 drain'
+  '7':
+    display:
+      material: coal
+      name: '§e孔1 · 镶疾风'
+      lore: ['', '§7仅刃 · 强化≥5', '', '§e➥ §f镶入孔1']
+    actions:
+      all:
+        - 'command: corerpg p1 gem insert 1 gale'
+
+  m:
+    display:
+      material: barrier
+      name: '§c拆 · 孔1'
+      lore: ['', '§7拆下手持刃孔1 的石（返还）', '', '§c➥ §f拆除']
+    actions:
+      all:
+        - 'command: corerpg p1 gem remove 1'
+  n:
+    display:
+      material: stained glass pane
+      name: '§8 '
+  o:
+    display:
+      material: stained glass pane
+      name: '§8 '
+  p:
+    display:
+      material: stained glass pane
+      name: '§8 '
+
+  R:
+    display:
+      material: arrow
+      name: '§7返回 P1 工坊'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-0'
+        - 'menu: ember_p1_forge'
+
+  Z:
+    display:
+      material: compass
+      name: '§7返回旧锻炉'
+    actions:
+      all:
+        - 'menu: ember_forge'
+
+  L:
+    update: 40
+    display:
+      material: emerald
+      name: '§a刷新 list'
+      lore:
+        - ''
+        - '§7聊天打印手持孔位 + 保底'
+        - '§f%corerpg_p1_gem_pity_hope%'
+    actions:
+      all:
+        - 'command: corerpg p1 gem list'
+
+  X:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all:
+        - 'close'

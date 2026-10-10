@@ -61,9 +61,8 @@ Icons:
       lore: ['', '§7P1 孔石（刃/符）', '§e希望保底：§f%corerpg_p1_gem_pity_hope%', '§7合成：碎8+骨4+币40', '§8不走旧镶嵌页', '', '§e➥ §f/corerpg p1 gem']
     actions:
       all:
-        - 'tell: §eP1 宝石：list / craft <石> / pity'
-        - 'tell: §7希望保底 %corerpg_p1_gem_pity_hope%'
-        - 'command: corerpg p1 gem list'
+        - 'sound: BLOCK_NOTE_PLING-1-1'
+        - 'menu: ember_p1_gem'
   P:
     display:
       material: flint
