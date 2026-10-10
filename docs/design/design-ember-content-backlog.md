@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-glow-path`（已批 A · 方案 M · D534 · **PASS** · jar 1.65.225-d534 · 辉光自动/提醒/静默真改主城刃辉光 · ≠称号/足迹双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-ping-path`（已批 A · 方案 M · D533 · **PASS** · jar 1.65.224-d533 · 上线敞开/汇总/静拒真改好友上线感知 · ≠好友/组队/盟约双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-title-path`（已批 A · 方案 M · D532 · **PASS** · jar 1.65.223-d532 · 称号自动/提醒/静默真改名牌身份 · ≠足迹粒子双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-junk-path`（已批 A · 方案 M · D531 · **PASS** · jar 1.65.222-d531 · 清库自动/提醒/静默真改装备库垃圾→胚料 · ≠存仓/胚花法双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）

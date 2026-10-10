@@ -195,6 +195,48 @@ public final class EmberCosmetics implements Listener {
         d.addPeriodCount(name, cur, -d.periodCount(name, cur));
     }
 
+    /** D534: first owned glow not currently selected, or null. */
+    public Cosmetic firstUnequippedGlow(PlayerData d) {
+        if (d == null) return null;
+        int best = runs.abyssBest(d);
+        String cur = selected(d, Kind.GLOW);
+        if (cur == null || cur.isEmpty()) {
+            for (Cosmetic c : SHOP) if (c.kind == Kind.GLOW && earned(d, best, c)) return c;
+            for (Cosmetic c : ALL) if (c.kind == Kind.GLOW && earned(d, best, c)) return c;
+            return null;
+        }
+        return null;
+    }
+
+    /** D534: wear glow id if owned; true when selection changed. */
+    public boolean wearGlow(Player p, PlayerData d, String id) {
+        if (p == null || d == null || id == null) return false;
+        Cosmetic c = byId(id);
+        if (c == null || c.kind != Kind.GLOW) return false;
+        if (!earned(d, runs.abyssBest(d), c)) return false;
+        String cur = selected(d, Kind.GLOW);
+        if (id.equals(cur)) return false;
+        select(d, Kind.GLOW, id);
+        runs.flushData(p.getUniqueId());
+        p.sendMessage(P + "已装上辉光「" + c.label + "§7」");
+        return true;
+    }
+
+    /** D534 admin smoke: grant shop glow + clear selection. */
+    public boolean adminGrantGlow(Player p, PlayerData d, String id) {
+        if (d == null) return false;
+        Cosmetic c = byId(id);
+        if (c == null || c.kind != Kind.GLOW || !c.shop()) return false;
+        if (!bought(d, c)) d.addPeriodCount(C_BOUGHT + c.id, "all", 1);
+        String cur = selected(d, Kind.GLOW);
+        if (cur != null && !cur.isEmpty()) {
+            String name = selName(Kind.GLOW);
+            d.addPeriodCount(name, cur, -d.periodCount(name, cur));
+        }
+        if (p != null) runs.flushData(p.getUniqueId());
+        return true;
+    }
+
     /** D529: first owned trail not currently selected, or null. */
     public Cosmetic firstUnequippedTrail(PlayerData d) {
         if (d == null) return null;

@@ -1169,6 +1169,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberJunkPath.scheduleOfferAfterQ01(p); // D531 junk path
                         if ("q01".equals(g.id)) EmberTitlePath.scheduleOfferAfterQ01(p); // D532 title path
                         if ("q01".equals(g.id)) EmberPingPath.scheduleOfferAfterQ01(p); // D533 ping path
+                        if ("q01".equals(g.id)) EmberGlowPath.scheduleOfferAfterQ01(p); // D534 glow path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

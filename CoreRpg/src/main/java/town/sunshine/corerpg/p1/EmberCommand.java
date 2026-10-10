@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("glowpath".equals(sub) || "辉光路径".equals(sub)) { // D534 cosmetic glow wear path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberGlowPath.glance(EmberGlowPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c辉光路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberGlowPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c辉光路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberGlowPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberGlowPath.get(d);
+                    if (EmberGlowPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGlowPath.label(cur) + " · 改路径再 /corerpg p1 glowpath");
+                    else EmberGlowPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberGlowPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 glowpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberGlowPath.applyAndReply(p, id);
+            return true;
+        }
         if ("pingpath".equals(sub) || "上线路径".equals(sub) || "提醒路径".equals(sub)) { // D533 friend online ping
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -454,6 +490,19 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("glowseed".equals(sub)) { // D534 admin smoke: grant glow_ember + clear selection
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            EmberCosmetics cos = runs.cosmetics();
+            if (cos == null) { s.sendMessage(P + "外观服务未加载"); return true; }
+            if (!cos.adminGrantGlow(t, d, "glow_ember")) { s.sendMessage(P + "授予辉光失败"); return true; }
+            s.sendMessage(P + "已授予 " + t.getName() + " 余烬辉光（可测辉光路径）");
+            EmberGlowPath.maybeAfterProgress(t, cos);
             return true;
         }
         if ("titleseed".equals(sub)) { // D532 admin smoke: clear title selection so path can fill q01
