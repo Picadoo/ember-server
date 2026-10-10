@@ -1265,6 +1265,7 @@ public final class EmberGrowthService implements Listener {
             return "§7签名调律：§a已开放 §7· 已解锁调律版 §f" + un + "§7/" + EmberSignature.ALTS.size();
         }
         if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
+        if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
         if ("marks".equals(key)) {
             StringBuilder sb = new StringBuilder("§7首领徽记：");
             for (String mk : EmberSignature.maps()) {

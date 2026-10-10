@@ -964,6 +964,7 @@ public final class EmberRunService implements Listener {
         // cr_p1_item + NBT, inside the signed data) — no p1_sig_ counter. SIG rows settle after the ITEM rows below.
         Map<String, Integer> sigFor = new HashMap<String, Integer>();
         java.util.Set<String> itemOpen = new java.util.HashSet<String>(), stamped = new java.util.HashSet<String>(), itemsGiven = new java.util.HashSet<String>();
+        boolean acqRepeatMark = false; String acqMarkMap = null; boolean acqStamp = false; // D456 sig acquisition clarity
         List<EmberRunRules.Row> sigRows = new ArrayList<EmberRunRules.Row>();
         for (EmberRunRules.Row r : open) {
             EmberRunRules.Grant g = EmberRunRules.Grant.decode(r.key, r.result);
@@ -1091,6 +1092,7 @@ public final class EmberRunService implements Listener {
                     else if (cr == EmberEconomy.Credit.UNTAGGED)
                         log().info("[P1 run] untagged insignia row " + r.runId + "/" + g.key + " " + g.id + " " + g.amount + " for " + p.getName());
                     got.add(g.id.toUpperCase(Locale.ROOT) + " 首领徽记 " + g.amount + "（共 " + d.periodCount(EmberSignature.C_MARK + g.id, "all") + "）");
+                    if (EmberSigAcq.isRepeatMarkKey(r.key)) { acqRepeatMark = true; acqMarkMap = g.id; } // D456
                     if ("fc_sigmark".equals(r.key)) { // D174: the first clear of a signature map also announces its new unlock
                         String un = EmberSignature.IMPRINT_UNLOCK.equals(g.id) ? "烬炉烙印（用徽记把签名烙到自己的件上）"
                                 : EmberSignature.DUAL_UNLOCK.equals(g.id) ? "双签名（刃 + 护符两条签名同时生效）"
@@ -1148,6 +1150,7 @@ public final class EmberRunService implements Listener {
             }
             EmberGrowthService.markSeen(d, sd); // stage 1.5 codex 「获得过」
             got.add("§6签名传奇！§e" + sd.name + "§f（" + sd.kindText() + "，" + sd.boss + "）");
+            acqStamp = true; // D456
             log().info("[P1 sig] " + p.getName() + " stamp " + uid + " " + sd.id + " (" + r.runId + ", " + how + ")");
             r.status = EmberRunRules.ST_DELIVERED; r.updated = now; changed.add(r);
         }
@@ -1166,6 +1169,8 @@ public final class EmberRunService implements Listener {
             plugin.getDataStore().flushMutation(u);
         }
         tidyHotbar(p, hbEmpty);
+        if (acqRepeatMark && !acqStamp && !quietDeliver) // D456: miss clarity (no STAMP_RATE raise)
+            got.add(EmberSigAcq.missLine(acqMarkMap));
         if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (!relLines.isEmpty() && !quietDeliver) { // D299 W1c：相对穿着一行（并列 D295 摘要，不改破绽语义）
             for (String rel : relLines) p.sendMessage(P + "§7" + rel);
