@@ -678,3 +678,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1740–D1753 SHIP · jar 1.65.477-d1740
 - AfkForgePath AB uses suggestLine (no AFK table change)
+
+## D1754–D1767 SHIP · jar 1.65.478-d1754
+- vault auto toggle AB; empowerment scan Stage0 COMPLETE

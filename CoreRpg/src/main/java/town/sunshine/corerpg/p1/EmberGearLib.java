@@ -815,7 +815,15 @@ public final class EmberGearLib implements Listener {
             return true;
         }
         if ("vault".equals(sub) || "仓库".equals(sub)) {
-            if ("auto".equals(a)) { boolean on = vault() != null && vault().toggleAuto(p); p.sendMessage(PV + "材料自动入库：" + (on ? "§a开" : "§c关")); return true; }
+            if ("auto".equals(a)) { // D1754
+                boolean on = vault() != null && vault().toggleAuto(p);
+                p.sendMessage(PV + "材料自动入库：" + (on ? "§a开" : "§c关"));
+                try {
+                    p.sendActionBar(on ? "§a材料自动入库 · 开 · 捡料直进仓"
+                            : "§e材料自动入库 · 关 · 料进背包");
+                } catch (Throwable ignored) { }
+                return true;
+            }
             if ("take".equals(a) && args.length >= 5) {
                 long n; try { n = Long.parseLong(args[4]); } catch (NumberFormatException e) { n = 64; }
                 takeMat(p, args[3], n);
