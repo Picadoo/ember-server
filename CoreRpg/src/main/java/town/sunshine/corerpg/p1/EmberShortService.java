@@ -130,6 +130,7 @@ public final class EmberShortService {
                     } else if (next == null) {
                         p.sendMessage(P() + "§7短征首通已清 · 可改 /corerpg p1 shortpath day");
                     }
+                    p.sendMessage(P() + EmberShortPath.unpaidFcLine(runs, pd)); // D715
                 }
                 // D409 W1a + D473: vault→forge chase tell + clickable [去工坊] + ActionBar
                 String chase = EmberShortRules.spendChaseTell(r.rewardedAfter, dailyCap(m));

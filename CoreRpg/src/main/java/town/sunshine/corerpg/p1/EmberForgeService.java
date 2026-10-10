@@ -279,6 +279,7 @@ public final class EmberForgeService implements Listener {
         EmberItemData d = it.data;
         if (!snap.uid.equals(d.uid) || d.enhance != snap.enhance || d.pity != snap.pityAfter) {
             p.sendMessage(P + ChatColor.RED + "手持件与可撤销记录不符（可能已再强化或换件）");
+            try { p.sendActionBar("§c请手持刚才失败那件再撤"); } catch (Throwable ignored) { } // D716
             return true;
         }
         // restore pity via copy (enhance unchanged)

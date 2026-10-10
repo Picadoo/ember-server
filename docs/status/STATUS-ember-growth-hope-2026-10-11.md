@@ -157,3 +157,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D713 event_soft_hope PAPI
 - D714 adventure Open event/drop hope tells
 - D715 skill kit parry D666 ActionBar tell
+
+## D715–D717 SHIP · jar 1.65.334-d715 · 2026-10-11
+- D715 event_soft_hope PAPI
+- D716 adventure Open event/drop hope tells
+- D717 skill kit parry D666 ActionBar tell
