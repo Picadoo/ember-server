@@ -290,7 +290,7 @@ sources:
     period: week
     content: [q01, q02, q03, q04, q05, q06]
     grant_keys: [rot_mark]
-    economy_keys: [S11.weekly_cap]
+    economy_keys: [S11.mark, S11.weekly_cap]
     counters: [p2_rotation, p1_mark_t]
     config: ["ember-v1-economy.yml#sources.S11", "ember-v1-runs.yml#rotation.normal_bonus_marks"]
     code: ["p1/EmberSettleService.java#\"rot_mark\""]

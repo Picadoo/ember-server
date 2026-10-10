@@ -2899,6 +2899,8 @@ public final class EmberRunService implements Listener {
     }
 
     public static int deathRefundMax() {
+        // D1113 Stage2-I: S15 SoT (identical to death_refund.max_potions)
+        try { return EmberEconomy.amount("S15", "max_potions"); } catch (RuntimeException ignored) {}
         EmberMode m = EmberMode.get();
         return m == null ? 5 : m.i("death_refund.max_potions", 5);
     }

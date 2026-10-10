@@ -501,3 +501,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1101–D1108 ARCH SHIP · jar 1.65.424-d1101
 - Stage2-H: rotation S10 mark/weekly_cap SoT
+
+## D1109–D1120 ARCH SHIP · jar 1.65.425-d1109
+- Stage2-I: S11/S12 + S14 fail rate + S15/S35 potions; AFK tiers untouched

@@ -134,7 +134,7 @@ public final class EmberEconomy {
         src("S10", "精选周挑战加印", "ember-v1-runs.yml rotation", Period.WEEK).acc(MARK).keys("p2_rotation", "p1_mark_t").model(FULL)
             .g("mark", 1).g("weekly_cap", 3).done();
         src("S11", "精选周普通重打加印", "ember-v1-runs.yml rotation.normal_bonus_marks", Period.WEEK).acc(MARK)
-            .keys("p2_rotation", "p1_mark_t").model(FULL).g("weekly_cap", 3).done();
+            .keys("p2_rotation", "p1_mark_t").model(FULL).g("mark", 1).g("weekly_cap", 3).done();
         src("S12", "团本结算", "ember-v1-runs.yml raids.* + raid_item", Period.WEEK).acc(GEAR, MARK).keys("p2_raid_", "p1_mark_t").model(FULL)
             .g("weekly_cap", 3).done();
         src("S13", "深渊层结算", "ember-v1-runs.yml abyss", Period.RUN).acc(COIN, SHARD, BONE, CORE, XP, MARK, GEAR)

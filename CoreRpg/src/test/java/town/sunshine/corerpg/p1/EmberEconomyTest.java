@@ -199,6 +199,7 @@ public class EmberEconomyTest {
         }
         eq("S10", "mark", num(y, "rotation.bonus_marks"));
         eq("S10", "weekly_cap", num(y, "rotation.weekly_cap"));
+        eq("S11", "mark", num(y, "rotation.normal_bonus_marks"));
         eq("S11", "weekly_cap", num(y, "rotation.weekly_cap"));
         Map<String, Object> raids = (Map<String, Object>) at(y, "raids");
         for (Map.Entry<String, Object> e : raids.entrySet()) {
@@ -1182,6 +1183,20 @@ public class EmberEconomyTest {
         assertEquals(1, EmberEconomy.amount("S10", "mark"));
         assertEquals(3, EmberEconomy.amount("S10", "weekly_cap"));
         assertEquals(3, EmberEconomy.amount("S11", "weekly_cap"));
+    }
+
+    @Test
+    public void s11S12AndSafeLeftovers() {
+        // D1115 Stage2-I
+        assertEquals(1, EmberEconomy.amount("S11", "mark"));
+        assertEquals(3, EmberEconomy.amount("S11", "weekly_cap"));
+        assertEquals(3, EmberEconomy.amount("S12", "weekly_cap"));
+        assertEquals(0.5, EmberEconomy.amountDouble("S14", "rate"), 1e-12);
+        assertEquals(5, EmberEconomy.amount("S15", "max_potions"));
+        assertEquals(5, EmberEconomy.amount("S35", "potions"));
+        assertEquals(2, EmberEconomy.amount("S35", "pieces"));
+        assertEquals(EmberEconomy.amount("S15", "max_potions"), EmberRunService.deathRefundMax());
+        assertEquals(EmberEconomy.amount("S35", "potions"), EmberSupplyService.starterPotions());
     }
 
     @Test

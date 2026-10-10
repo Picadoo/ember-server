@@ -1,6 +1,6 @@
 # DESIGN · Stage2 全量发放 yml 真源搬家 · Stage0 盘点（2026-10-11 · D1040）
 
-> **状态：Stage2 A–G COMPLETE；数值不变（AFK 层表未抬）。**  
+> **状态：Stage2 A–I COMPLETE（含 S11/S12 + S14/S15/S35）；数值不变（AFK 层表未抬）。**  
 > **上游：** Stage1 COMPLETE（sink `amount()`）；Stage0 经济价目盘点 D942；健康扫 D1030–D1038。  
 > **本窗：** 列出 **发放（source / grant）** 仍散落在 Java 常量 / 业务 yml / 运行时 Grant 表的位点，分级 **safe / review / unsafe**，供以后 Stage2 切片施工。
 
@@ -55,10 +55,10 @@
 | `EmberSignature.CLEAR_MARKS` → S08 | 1 | S08 已有 insignia/stamp 语义 | **safe** 切片 B：`clearMarks()`←amount |
 | `EmberSignature.FC_MARKS` → S07 | 3 | S07.insignia:3 | **safe** 切片 B |
 | `EmberRunRules.BASE_*` | 镜像 S01 | 已 amount | **safe** 切片 A：常量改委托或删死引用 |
-| 短征 S40–S58 clear/fc | runs `short:` + economy 叶子 | 多已登记 | **review** 确认 Grant 构建是否全读表 |
+| 短征 S40–S58 clear/fc | runs `short:` + economy 叶子 | 多已登记 | **done** 切片 C |
 | 深渊/挑战结算 | 走 S01 + 品质表 | — | **safe-infra** |
-| AFK S22 | ember-v1.yml afk | 有 golden | **review** 双源 |
-| 图录 S33 / 宝箱 S34 / 起步 S35 | 标签+部分叶子 | — | **review** |
+| AFK S22 | ember-v1.yml afk | 有 golden | **done** 切片 D（仅帽；层表未抬） |
+| 图录 S33 / 宝箱 S34 / 起步 S35 | 标签+部分叶子 | — | **done** D/E/I |
 | Mail/Arena/Cash/Auction/Forge(旧) | 非 P1 / LegacyGate | — | **unsafe** 本 Stage2 不做 |
 
 ### 2.3 明确不做
@@ -101,3 +101,6 @@ S06 first_clear pin via s06Amount; Stage2 grant SoT slices A–G done.
 
 ## D1101–D1108 Stage2-H
 S10 rotation bonus_marks/weekly_cap pin.
+
+## D1109–D1120 Stage2-I
+S11.mark + normalBonus; S12 raid weeklyCap; S14 rate; S15/S35 potions.

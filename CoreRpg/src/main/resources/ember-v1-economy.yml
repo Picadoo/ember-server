@@ -41,7 +41,7 @@ sources:
   S10:
     mark: 1
     weekly_cap: 3
-  S11: { weekly_cap: 3 }
+  S11: { mark: 1, weekly_cap: 3 }  # D1110 normal_bonus_marks
   S12: { weekly_cap: 3 }
   S14:
     rate: 0.5

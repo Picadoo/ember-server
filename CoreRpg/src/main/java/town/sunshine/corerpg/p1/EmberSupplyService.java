@@ -40,7 +40,11 @@ public final class EmberSupplyService implements Listener {
     private static EmberMode mode() { return EmberMode.get(); }
     /** D215 / ARCH S2-2 C14: price is the EmberEconomy golden (pinned to shop.heal_potion.price in tests). */
     public static int price() { return Math.max(1, EmberEconomy.amount("C14", "coin")); }
-    public static int starterPotions() { return mode() == null ? 5 : Math.max(0, mode().i("starter.heal_potions", 5)); }
+    public static int starterPotions() {
+        // D1114 Stage2-I: S35 SoT (identical to starter.heal_potions)
+        try { return EmberEconomy.amount("S35", "potions"); } catch (RuntimeException ignored) {}
+        return mode() == null ? 5 : Math.max(0, mode().i("starter.heal_potions", 5));
+    }
     static String potionId() {
         List<String> l = mode() == null ? null : mode().list("heal_potion.items");
         return l == null || l.isEmpty() ? "potion_ember_heal" : l.get(0);

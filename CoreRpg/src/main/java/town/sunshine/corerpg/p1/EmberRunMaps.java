@@ -302,7 +302,12 @@ public final class EmberRunMaps {
             partyMin = (int) num(m.get("party_min"), -1);
             partyMax = (int) num(m.get("party_max"), -1);
             cost = (int) num(m.get("cost"), -1);
-            weeklyCap = (int) num(m.get("weekly_cap"), 0);
+            int wc = (int) num(m.get("weekly_cap"), 0);
+            // D1111 Stage2-I: raid maps (r0x) pin weekly_cap to S12 SoT
+            if (wc > 0 && key.length() >= 2 && key.charAt(0) == 'r' && Character.isDigit(key.charAt(1))) {
+                try { wc = EmberEconomy.amount("S12", "weekly_cap"); } catch (RuntimeException ignored) {}
+            }
+            weeklyCap = wc;
             capGroup = str(m.get("cap_group"), "");
             hpPerMember = num(m.get("hp_per_member"), -1);
             dmgPerMember = num(m.get("dmg_per_member"), 0);
@@ -1096,7 +1101,10 @@ public final class EmberRunMaps {
         balanceVersion = (int) num(root.get("balance_version"), 1);
         ruleVersion = str(root.get("rule_version"), "g04-1") + "/b" + balanceVersion;
         cost = EmberEconomy.amount("C01", "stamina"); // D996; runs.yml cost stays mirror
-        failRefund = Math.max(0.0, Math.min(1.0, num(root.get("fail_refund"), 0)));
+        double fr = Math.max(0.0, Math.min(1.0, num(root.get("fail_refund"), 0)));
+        // D1112 Stage2-I: pin fail_refund rate to S14 SoT
+        try { fr = EmberEconomy.amountDouble("S14", "rate"); } catch (RuntimeException ignored) {}
+        failRefund = Math.max(0.0, Math.min(1.0, fr));
         partyMin = (int) num(root.get("party_min"), 1);
         partyMax = (int) num(root.get("party_max"), 3);
         passSeconds = (int) num(root.get("pass_seconds"), 30);
@@ -1109,6 +1117,7 @@ public final class EmberRunMaps {
         try {
             rbm = EmberEconomy.amount("S10", "mark");
             rwc = EmberEconomy.amount("S10", "weekly_cap");
+            rnb = EmberEconomy.amount("S11", "mark"); // D1110
         } catch (RuntimeException ignored) {}
         rotationBonusMarks = rbm;
         rotationWeeklyCap = rwc;
