@@ -2,6 +2,8 @@ package town.sunshine.corerpg.p1;
 
 import java.util.Locale;
 
+import town.sunshine.corerpg.PlayerData;
+
 /**
  * D601–D604: hope meters for enhance / reroll / quality / refine / sig-chase.
  * Display only — does not change RATE / MAX_TRIES / affix pity / qualityCost / refineCost / STAMP_RATE / IMPRINT_* / drop weights / clear gates.
@@ -117,4 +119,32 @@ public final class EmberHopeMeter {
     public static String gemPity(int cur, int need) {
         return glance(cur, need, "下一通关得石");
     }
+
+    /**
+     * D610: map gear-identity chase (图身份 · 图鉴进度). Never gates clears; never changes drop rates.
+     * need = map tier × 2 (blade+charm) for {@code lootFamily}; have = codex registered.
+     */
+    public static String mapGearIdentity(EmberRunMaps.MapDef lm, PlayerData pd) {
+        if (lm == null) return "§8本图身份未登记 · 每局仍必掉1装 · 不锁通关";
+        if (lm.lootFamily == null || lm.lootFamily.isEmpty()) {
+            return "§8本图无装备偏向 · §a每局1装·差装可分解·不锁通关";
+        }
+        int tier = 1;
+        String dl = lm.dropLabel == null ? "" : lm.dropLabel.trim().toUpperCase(Locale.ROOT);
+        if (dl.startsWith("T") && dl.length() >= 2) {
+            try { tier = Math.max(1, Math.min(3, Integer.parseInt(dl.substring(1, 2)))); } catch (NumberFormatException ignored) {}
+        }
+        int have = 0, need = 0;
+        for (int t = 1; t <= tier; t++) {
+            for (String slot : new String[] {"blade", "charm"}) {
+                need++;
+                if (pd != null && EmberCodex.has(pd, EmberCodex.key(lm.lootFamily, slot, t))) have++;
+            }
+        }
+        String label = EmberRunMaps.lootLabel(lm);
+        String head = have >= need ? "§a" : "§e";
+        return String.format(Locale.ROOT, "%s本图身份 · §f%s · 图鉴 %d/%d · §a每局1装·差装可分解·不锁通关",
+                head, label, have, need);
+    }
+
 }

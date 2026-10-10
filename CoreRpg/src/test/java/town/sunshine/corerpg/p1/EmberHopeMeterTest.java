@@ -90,4 +90,27 @@ public class EmberHopeMeterTest {
         assertTrue(ready.contains("不锁通关"));
         assertTrue(EmberHopeMeter.sigChase(null, 0).contains("未选"));
     }
+    @Test
+    public void mapGearIdentity_nullMap() {
+        String s = EmberHopeMeter.mapGearIdentity(null, null);
+        assertTrue(s.contains("不锁通关"));
+    }
+
+    @Test
+    public void mapGearIdentity_familyProgress() {
+        java.util.Map<String, Object> m = new java.util.HashMap<String, Object>();
+        m.put("name", "灰坡");
+        m.put("tier", 1);
+        m.put("drop_label", "T1");
+        java.util.Map<String, Object> loot = new java.util.HashMap<String, Object>();
+        loot.put("family", EmberRunRules.FAMILIES[0]);
+        loot.put("slot", "blade");
+        m.put("loot", loot);
+        EmberRunMaps.MapDef d = new EmberRunMaps.MapDef("q01", m);
+        String s = EmberHopeMeter.mapGearIdentity(d, null);
+        assertTrue(s.contains("图鉴 0/2"));
+        assertTrue(s.contains("不锁通关"));
+        assertTrue(s.contains("每局1装"));
+    }
+
 }

@@ -1,3 +1,4 @@
+# D610: 每图希望行 mapid_q0N（本图身份·图鉴进度·不锁通关）
 # D456: 签名获取半行 %corerpg_p1_sig_acq% · 未出仍拿徽记 · 零改掉率
 # 余烬 v1 (P1) 冒险页 — 书 §19.1：主线本 Q01–Q07 的解锁状态 / 消耗 / 掉落阶 / 用途 + 掉落目标族 + 印记 / 首通自选 / 补领 + 挑战版入口（§18.1，本人首通 Q07 后开放）。
 # 只转发到 CoreRpg 命令；解锁、体力、队伍校验全在服务端（锁定的本点了只会提示原因）。
@@ -29,6 +30,7 @@ Layout:
 
 Events:
   Open:
+    - 'tell: §e本图身份：§f偏向装族+签名+徽记 · 每局必掉1装 · 差装可分解养工坊 · §a通关不锁掉落'
     - 'command: corerpg p1 setfocus nudge'
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §8短征：本页「烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣」（Q01后 · 各体力30 · 日有奖帽分开）'
@@ -320,6 +322,7 @@ Icons:
         - '§7消耗：§e%corerpg_p1_q01_cost%'
         - '§7掉落：§f%corerpg_p1_q01_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q01%'
+        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q01%'
         - '§7用途：§f%corerpg_p1_q01_purpose%'
         - '§7首通：§f%corerpg_p1_q01_fc%'
         - '§d名片：§f学预警 · 重斩落空破绽'
@@ -346,6 +349,7 @@ Icons:
         - '§7消耗：§e%corerpg_p1_q02_cost%'
         - '§7掉落：§f%corerpg_p1_q02_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q02%'
+        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q02%'
         - '§7用途：§f%corerpg_p1_q02_purpose%'
         - '§7首通：§f%corerpg_p1_q02_fc%'
         - '§d名片：§f冲撞引墙'
@@ -372,6 +376,7 @@ Icons:
         - '§7消耗：§e%corerpg_p1_q03_cost%'
         - '§7掉落：§f%corerpg_p1_q03_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q03%'
+        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q03%'
         - '§7用途：§f%corerpg_p1_q03_purpose%'
         - '§7首通：§f%corerpg_p1_q03_fc%'
         - '§d名片：§f召唤压力 + 双签名门槛'
@@ -398,6 +403,7 @@ Icons:
         - '§7消耗：§e%corerpg_p1_q04_cost%'
         - '§7掉落：§f%corerpg_p1_q04_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q04%'
+        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q04%'
         - '§7用途：§f%corerpg_p1_q04_purpose%'
         - '§7首通：§f%corerpg_p1_q04_fc%'
         - '§d名片：§f落差 / 冲击圈走位'
@@ -424,6 +430,7 @@ Icons:
         - '§7消耗：§e%corerpg_p1_q05_cost%'
         - '§7掉落：§f%corerpg_p1_q05_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q05%'
+        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q05%'
         - '§7用途：§f%corerpg_p1_q05_purpose%'
         - '§7首通：§f%corerpg_p1_q05_fc%'
         - '§d名片：§f斧刃横扫 · 团本同源'
@@ -451,6 +458,7 @@ Icons:
         - '§7消耗：§e%corerpg_p1_q06_cost%'
         - '§7掉落：§f%corerpg_p1_q06_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q06%'
+        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q06%'
         - '§7用途：§f%corerpg_p1_q06_purpose%'
         - '§7首通：§f%corerpg_p1_q06_fc%'
         - '§d名片：§f半血破招（霜潮汲取）'
@@ -477,6 +485,7 @@ Icons:
         - '§7消耗：§e%corerpg_p1_q07_cost%'
         - '§7掉落：§f%corerpg_p1_q07_tier%'
         - '§7偏向：§f%corerpg_p1_loot_q07%'
+        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q07%'
         - '§7用途：§f%corerpg_p1_q07_purpose%'
         - '§7首通：§f%corerpg_p1_q07_fc%'
         - '§d名片：§f冲撞撞墙 + 炉心破招'

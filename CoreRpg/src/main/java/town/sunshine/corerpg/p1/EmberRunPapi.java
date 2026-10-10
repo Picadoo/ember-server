@@ -29,7 +29,7 @@ public final class EmberRunPapi {
         GROWTH,
         /** forge_t2 / forge_t3 / challenge / q07done / q0Ndone */
         GATE,
-        /** featured / featured_key / modifier / rule_ / bounty / loot_ */
+        /** featured / featured_key / modifier / rule_ / bounty / loot_ / mapid_ */
         ROTATION,
         /** top_abyss_N / top_featured_N */
         BOARD,
@@ -89,7 +89,7 @@ public final class EmberRunPapi {
         if (key.startsWith("shop")) return Section.COSMETIC; // shop* and shop_* (old: two checks, both cosmetics)
         if (key.startsWith("fest_")) return Section.FESTIVAL;
         if ("title".equals(key) || "honors".equals(key)) return Section.COSMETIC;
-        if (key.startsWith("loot_")) return Section.ROTATION;
+        if (key.startsWith("loot_") || key.startsWith("mapid_")) return Section.ROTATION;
         if ("abyss_best".equals(key)) return Section.ABYSS;
         if ("bounty".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
@@ -524,6 +524,11 @@ public final class EmberRunPapi {
             EmberRunMaps.MapDef lm = maps.byKey(key.substring(5));
             if (lm == null) lm = maps.raids.get(key.substring(5));
             return EmberRunMaps.lootLabel(lm) + runs.lootOdds(d, lm);
+        }
+        if (key.startsWith("mapid_")) { // D610 map gear-identity hope
+            EmberRunMaps.MapDef lm = maps.byKey(key.substring(6));
+            if (lm == null) lm = maps.raids.get(key.substring(6));
+            return EmberHopeMeter.mapGearIdentity(lm, d);
         }
         if ("bounty".equals(key)) return runs.bountyLabel(d); // P2-7 %corerpg_p1_bounty%
         return String.valueOf(runs.featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()))); // featured_key
