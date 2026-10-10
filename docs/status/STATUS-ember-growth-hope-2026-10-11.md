@@ -436,3 +436,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D952–D956 ARCH SHIP · jar 1.65.406-d952
 - Stage1 thin: C22 forge-roll + C23 convert ← amount(); numbers unchanged
+
+## D957–D961 ARCH SHIP · jar 1.65.407-d957
+- Stage1 thin: C12 imprint + C13 attune ← amount(); numbers unchanged; modelGaps stay NONE

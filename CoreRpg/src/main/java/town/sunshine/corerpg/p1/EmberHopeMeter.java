@@ -102,7 +102,7 @@ public final class EmberHopeMeter {
      */
     public static String sigChase(EmberSignature.Def def, int marks) {
         if (def == null) return "§8追烙未选 · /corerpg p1 sig chase";
-        int need = EmberSignature.IMPRINT_MARKS;
+        int need = EmberSignature.imprintMarks();
         int m = Math.max(0, marks);
         String who = def.id + " " + def.name;
         String map = def.map == null ? "?" : def.map.toUpperCase(Locale.ROOT);

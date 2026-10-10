@@ -80,7 +80,7 @@ public final class EmberSigChase {
 
     public static String tip(EmberSignature.Def def) {
         if (def == null) return "点选一条签名当追烙目标";
-        return "回 " + def.map.toUpperCase(Locale.ROOT) + " 刷徽记 · " + EmberSignature.IMPRINT_MARKS + " 枚可烙";
+        return "回 " + def.map.toUpperCase(Locale.ROOT) + " 刷徽记 · " + EmberSignature.imprintMarks() + " 枚可烙";
     }
 
     /** Progress / ready line — D604 hope-meter style (still imprint-ready when full). */
@@ -100,7 +100,7 @@ public final class EmberSigChase {
         EmberSignature.Def def = get(d);
         if (def == null || mapKey == null || !def.map.equalsIgnoreCase(mapKey)) return "";
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        int need = EmberSignature.IMPRINT_MARKS;
+        int need = EmberSignature.imprintMarks();
         if (marks >= need) return " §a· 追烙 " + def.id + " 已够烙";
         return String.format(Locale.ROOT, " §8· 追烙 %s %d/%d", def.id, marks, need);
     }
@@ -123,7 +123,7 @@ public final class EmberSigChase {
         d.addPeriodCount(C_OFFERED, "all", 1);
         flush(p);
         String P = EmberRunService.P;
-        p.sendMessage(P + "§e选一条签名当追烙目标（刷对应图徽记 · " + EmberSignature.IMPRINT_MARKS + " 枚可烙）：");
+        p.sendMessage(P + "§e选一条签名当追烙目标（刷对应图徽记 · " + EmberSignature.imprintMarks() + " 枚可烙）：");
         ConfirmTokens.sendButtons(p, P,
                 new String[]{"[L01 残门焚斧]", "/corerpg p1 sig chase L01", tip(EmberSignature.byId("L01")), "GOLD"},
                 new String[]{"[L02 门楼余烬]", "/corerpg p1 sig chase L02", tip(EmberSignature.byId("L02")), "AQUA"},
@@ -193,7 +193,7 @@ public final class EmberSigChase {
         String P = EmberRunService.P;
         int left = d == null ? 0 : d.periodCount(EmberSignature.C_MARK + sd.map, "all");
         p.sendMessage(P + "§7烙印花费闭环 · 剩 §f" + left + " §7枚 " + sd.map.toUpperCase(java.util.Locale.ROOT) + " 徽记"
-                + (left >= EmberSignature.IMPRINT_MARKS ? " §a· 还可再烙" : ""));
+                + (left >= EmberSignature.imprintMarks() ? " §a· 还可再烙" : ""));
         java.util.List<String[]> btns = new java.util.ArrayList<String[]>();
         if (!worn) {
             btns.add(new String[]{"[去装备页]", "/corerpg p1 gear", "穿上/选定后签名才生效", "GOLD"});
@@ -240,7 +240,7 @@ public final class EmberSigChase {
             return false;
         }
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        int need = EmberSignature.IMPRINT_MARKS;
+        int need = EmberSignature.imprintMarks();
         int latched = d.periodCount(C_READY, "all");
         if (marks < need) {
             if (latched > 0) clearReadyLatch(d);
@@ -257,7 +257,7 @@ public final class EmberSigChase {
         try { p.sendActionBar(line.replace("§a", "§a").replace("§7", "§7")); } catch (Throwable ignored) { }
         ConfirmTokens.sendButton(p, P + "§7下一步：", // D753 one-click when no overwrite needed
                 "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",
-                EmberSignature.IMPRINT_MARKS + " 枚徽记 · 烙到穿着" + EmberItemData.slotName(def.slot) + "（无覆盖则直接花）");
+                EmberSignature.imprintMarks() + " 枚徽记 · 烙到穿着" + EmberItemData.slotName(def.slot) + "（无覆盖则直接花）");
         return true;
     }
 

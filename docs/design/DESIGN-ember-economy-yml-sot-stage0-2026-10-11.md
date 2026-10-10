@@ -39,7 +39,7 @@
 | 工坊强化/升阶/精工/成色价 | `EmberUpgradeRules` + growth/forge 常量 | C03–C06 | yml 叶子 + `amount` 双读；forge 读表 | 中（路径多） |
 | 深渊层费 | `ember-v1-runs.yml` abyss | C08 | mirror 进 economy 或 `$ref` | 中 |
 | 洗练价 | EmberPay / growth | C11 | 同上 | 中 |
-| 烙印 / 调律 | EmberSignature 常量 | C12 / C13 | 同上 | 低–中 |
+| 烙印 / 调律 | EmberSignature 常量 | C12 / C13 | 同上 | 低–中 | → **D957–D961 已切** |
 | 烙纹合成/定向 | EmberBrandRules | C20 / C21 | 已有 C20.shard；定向币补叶 | 低 |
 | 随机锻 / 转化 | ForgeRoll / ConvertRules | C22 / C23 | 已有叶子；确认 Java 读表 | 低 |
 | 宝石合成 | EmberGemAcquire.CRAFT_* | **C24** | D935/D941 已登记+钉测；下一刀可让 craft 扣料也读 amount | 低 |
@@ -69,7 +69,7 @@
 
 ## 4. Stage1 建议切片（以后开窗）
 
-1. **最低风险：** C20/C22/C23/C24 Java 扣款路径确认只读 `amount()`（已有叶子）。 → **D948–D951 已切 C20/C24**；**D952–D956 已切 C22/C23**（数值不变）。  
+1. **最低风险：** C20/C22/C23/C24 Java 扣款路径确认只读 `amount()`（已有叶子）。 → **D948–D951 C20/C24**；**D952–D956 C22/C23**；**D957–D961 C12/C13**（数值不变）。  
 2. **中：** C03–C06 工坊价 mirror → economy + UpgradeRules 双读。  
 3. **后：** C08/C11/C12/C13；短征数量 mirror。  
 每刀：`EmberEconomyTest` 金样 + p1sim 逐位 + 短冒烟；**bv 仅当数字变才动**（本搬家 bv 不变）。

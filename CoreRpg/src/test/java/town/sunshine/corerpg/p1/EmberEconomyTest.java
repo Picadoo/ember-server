@@ -944,6 +944,22 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void imprintSinkMatchesSignature() {
+        // D960 / Stage1 C12
+        assertEquals(EmberSignature.IMPRINT_MARKS, EmberEconomy.amount("C12", "insignia"));
+        assertEquals(EmberSignature.IMPRINT_COIN_PER_TIER, EmberEconomy.amount("C12", "coin_per_tier"));
+        assertEquals(EmberSignature.IMPRINT_MARKS, EmberSignature.imprintMarks());
+        assertEquals(900, EmberSignature.imprintCoin(3));
+    }
+
+    @Test
+    public void attuneSinkMatchesSignature() {
+        // D960 / Stage1 C13
+        assertEquals(EmberSignature.ALT_MARKS, EmberEconomy.amount("C13", "insignia"));
+        assertEquals(EmberSignature.ALT_MARKS, EmberSignature.altMarks());
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

@@ -30,7 +30,10 @@ public final class EmberSignature {
     public static final String C_MARK = "p1_sigmark_";   // + map key, period all: 首领徽记 count
     public static final String C_FC = "p1_sigfc_";       // + map key, period all: 1 = first-clear insignia paid (once per map, not per content version)
     public static final double STAMP_RATE = 0.12;
-    public static final int CLEAR_MARKS = 1, FC_MARKS = 3, IMPRINT_MARKS = 5, IMPRINT_COIN_PER_TIER = 300;
+    public static final int CLEAR_MARKS = 1, FC_MARKS = 3, IMPRINT_MARKS = 5, IMPRINT_COIN_PER_TIER = 300; // golden mirrors
+
+    /** D957: C12 insignia from economy yml SoT. */
+    public static int imprintMarks() { return EmberEconomy.amount("C12", "insignia"); }
     public static final String IMPRINT_UNLOCK = "q02", DUAL_UNLOCK = "q03";
 
     public static final class Def {
@@ -111,7 +114,10 @@ public final class EmberSignature {
     /** + Def.id, period all: 1 = the 调律 version is unlocked (permanent, paid once) */
     public static final String C_ALTU = "p1_sigaltu_";
     public static final String ALT_UNLOCK = "q07";
-    public static final int ALT_MARKS = 10;
+    public static final int ALT_MARKS = 10; // golden mirror
+
+    /** D958: C13 insignia from economy yml SoT. */
+    public static int altMarks() { return EmberEconomy.amount("C13", "insignia"); }
 
     /** the 调律 version of a signature: same benefit, another cost (full key set, mirrors tools/p1sim/mainline.py ALTS) */
     public static final class Alt {
@@ -153,7 +159,7 @@ public final class EmberSignature {
         if (alt(d) == null) return d.name + " 没有调律版";
         if (!q07) return "首通 " + ALT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放签名调律";
         if (!mapCleared) return "先首通 " + d.map.toUpperCase(Locale.ROOT) + " 才能调律它的签名";
-        if (!unlocked && marks < ALT_MARKS) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + ALT_MARKS + "）";
+        if (!unlocked && marks < altMarks()) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + altMarks() + "）";
         return null;
     }
 
@@ -228,7 +234,7 @@ public final class EmberSignature {
         return out;
     }
 
-    public static int imprintCoin(int tier) { return IMPRINT_COIN_PER_TIER * Math.max(1, tier); }
+    public static int imprintCoin(int tier) { return EmberEconomy.amount("C12", "coin_per_tier") * Math.max(1, tier); }
 
     /** 烬炉烙印 precheck; null = ok */
     public static String imprintCheck(Def d, EmberItemData target, boolean imprintUnlocked, boolean mapCleared, int marks, int coin, int current) {
@@ -239,7 +245,7 @@ public final class EmberSignature {
         if (target.tier < 1) return "T0 起步件不能烙印";
         if (!fits(d, target.slot, target.family)) return d.name + " 只能烙在" + d.kindText() + "上";
         if (current == d.code) return "这件已经是 " + d.name;
-        if (marks < IMPRINT_MARKS) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + IMPRINT_MARKS + "）";
+        if (marks < imprintMarks()) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + imprintMarks() + "）";
         if (coin < imprintCoin(target.tier)) return "余烬币不够（需 " + imprintCoin(target.tier) + "）";
         return null;
     }
