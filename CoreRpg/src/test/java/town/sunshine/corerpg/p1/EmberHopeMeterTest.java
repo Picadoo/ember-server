@@ -77,4 +77,17 @@ public class EmberHopeMeterTest {
         assertTrue(c3.contains("3/3"));
         assertTrue(c3.contains("已满"));
     }
+
+    @Test public void sig_chase_hope_progress() {
+        EmberSignature.Def d = EmberSignature.byId("L01");
+        String mid = EmberHopeMeter.sigChase(d, 2);
+        assertTrue(mid.contains("2/5"));
+        assertTrue(mid.contains("不锁通关"));
+        assertFalse(mid.contains("5/5"));
+        String ready = EmberHopeMeter.sigChase(d, 5);
+        assertTrue(ready.contains("5/5"));
+        assertTrue(ready.contains("满可烙印"));
+        assertTrue(ready.contains("不锁通关"));
+        assertTrue(EmberHopeMeter.sigChase(null, 0).contains("未选"));
+    }
 }

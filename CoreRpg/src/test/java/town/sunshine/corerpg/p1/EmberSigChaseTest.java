@@ -7,8 +7,12 @@ public class EmberSigChaseTest {
         assertEquals("L02", EmberSigChase.parse("l02").id);
         String mid = EmberSigChase.progressLine(EmberSignature.byId("L01"), 2);
         assertTrue(mid.contains("L01"));
-        assertTrue(mid.contains("2"));
-        assertTrue(EmberSigChase.progressLine(EmberSignature.byId("L01"), 5).contains("就绪"));
+        assertTrue(mid.contains("2/5"));
+        assertTrue(mid.contains("不锁通关"));
+        String ready = EmberSigChase.progressLine(EmberSignature.byId("L01"), 5);
+        assertTrue(ready.contains("5/5"));
+        assertTrue(ready.contains("满可烙印"));
+        assertTrue(ready.contains("不锁通关"));
         assertEquals("L01 残门焚斧", EmberSigChase.label(EmberSignature.byId("L01")));
     }
 }

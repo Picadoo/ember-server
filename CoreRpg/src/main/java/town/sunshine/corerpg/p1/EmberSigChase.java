@@ -15,7 +15,8 @@ import town.sunshine.corerpg.PlayerData;
  * D464: signature imprint-chase path pick — commit which Lxx you farm marks to imprint.
  * D470: rising-edge imprint-ready cue when chase marks hit threshold.
  * D472: imprint-complete feel + chase-close offer (acquisition loop close).
- * Zero STAMP_RATE / imprint price / ALTS change.
+ * D604: hope-meter style via EmberHopeMeter.sigChase.
+ * Zero STAMP_RATE / imprint price / ALTS / clear-gate change.
  */
 public final class EmberSigChase {
 
@@ -82,21 +83,14 @@ public final class EmberSigChase {
         return "回 " + def.map.toUpperCase(Locale.ROOT) + " 刷徽记 · " + EmberSignature.IMPRINT_MARKS + " 枚可烙";
     }
 
-    /** Progress / ready line using current map insignia count. */
+    /** Progress / ready line — D604 hope-meter style (still imprint-ready when full). */
     public static String progressLine(EmberSignature.Def def, int marks) {
-        if (def == null) return "§8追烙：未选 · /corerpg p1 sig chase";
-        int need = EmberSignature.IMPRINT_MARKS;
-        int m = Math.max(0, marks);
-        if (m >= need)
-            return String.format(Locale.ROOT, "§a追烙就绪：§f%s §7· %s 徽记 §a%d/%d §7· 去烙印",
-                    label(def), def.map.toUpperCase(Locale.ROOT), need, need);
-        return String.format(Locale.ROOT, "§e追烙：§f%s §7· %s 徽记 §f%d§7/%d",
-                label(def), def.map.toUpperCase(Locale.ROOT), m, need);
+        return EmberHopeMeter.sigChase(def, marks);
     }
 
     public static String glance(PlayerData d) {
         EmberSignature.Def def = get(d);
-        if (def == null) return "§8追烙：未选";
+        if (def == null) return EmberHopeMeter.sigChase(null, 0);
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
         return progressLine(def, marks);
     }

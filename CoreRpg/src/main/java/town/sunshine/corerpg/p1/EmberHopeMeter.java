@@ -3,8 +3,8 @@ package town.sunshine.corerpg.p1;
 import java.util.Locale;
 
 /**
- * D601–D603: hope meters for enhance / reroll / quality / refine.
- * Display only — does not change RATE / MAX_TRIES / affix pity / qualityCost / refineCost / drop weights.
+ * D601–D604: hope meters for enhance / reroll / quality / refine / sig-chase.
+ * Display only — does not change RATE / MAX_TRIES / affix pity / qualityCost / refineCost / STAMP_RATE / IMPRINT_* / drop weights / clear gates.
  */
 public final class EmberHopeMeter {
 
@@ -91,5 +91,22 @@ public final class EmberHopeMeter {
         String cost = c == null ? "" : " · " + EmberGearNextHint.costShort(c);
         int nextPct = (craft + 1) * 2;
         return String.format(Locale.ROOT, "§a精工 %d/%d · 下次确定升%d%%%s", cur, need, nextPct, cost);
+    }
+
+    /**
+     * D604: signature imprint-chase hope meter (徽记 → 烙印兑换).
+     * {@code need} = {@link EmberSignature#IMPRINT_MARKS}; full = deterministic imprint available.
+     * Never gates dungeon clears.
+     */
+    public static String sigChase(EmberSignature.Def def, int marks) {
+        if (def == null) return "§8追烙未选 · /corerpg p1 sig chase";
+        int need = EmberSignature.IMPRINT_MARKS;
+        int m = Math.max(0, marks);
+        String who = def.id + " " + def.name;
+        String map = def.map == null ? "?" : def.map.toUpperCase(Locale.ROOT);
+        if (m >= need) {
+            return String.format(Locale.ROOT, "§a追烙就绪 %d/%d · %s · %s 满可烙印（不锁通关）", need, need, who, map);
+        }
+        return String.format(Locale.ROOT, "§e追烙 %d/%d · %s · %s 徽记 · 满可烙印（不锁通关）", m, need, who, map);
     }
 }

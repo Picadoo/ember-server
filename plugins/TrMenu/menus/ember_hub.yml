@@ -166,6 +166,8 @@ Icons:
         - '§e希望表盘 · 成色：§7刃 %corerpg_p1_quality_blade_hope% §7· 护符 %corerpg_p1_quality_charm_hope%'
         - '§e希望表盘 · 精工：§7刃 %corerpg_p1_refine_blade_hope% §7· 护符 %corerpg_p1_refine_charm_hope%'
         - '§e希望表盘 · 洗练：§7刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
+        - '§e希望表盘 · 追烙：§f%corerpg_p1_sig_chase_hope%'
+        - '§8追烙满 5 徽记可烙印 · 签名不锁通关'
         - ''
         - '§d工坊四选择：§f烙纹定向 · 随机锻造 · 每周转化 · 词条洗练'
         - '§e本周工坊目标：§f%corerpg_p1_forge_goal_line%'
