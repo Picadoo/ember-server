@@ -137,7 +137,7 @@ public final class EmberSettleService {
             if (pg != null) grants.add(pg);
         }
         if (sigFc && m != null)
-            grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.FC_MARKS, null));
+            grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.fcMarks(), null));
         if (varietyEligible)
             grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, affixDone, affixShard, eventDone, eventCore, eventKind));
         if (bountyPaid != null) grants.addAll(bountyPaid);
@@ -296,7 +296,7 @@ public final class EmberSettleService {
             if (pg != null) grants.add(pg);
         }
         final boolean sigFc = sigRun && in.firstClear != null && pd.periodCount(EmberSignature.C_FC + m.key, "all") <= 0;
-        if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.FC_MARKS, null));
+        if (sigFc) grants.add(new EmberRunRules.Grant("fc_sigmark", EmberRunRules.Kind.SIGMARK, m.key, EmberSignature.fcMarks(), null));
         if (!s.challenge && s.abyss == 0 && !m.raid) // D138 repeat-run variety (rolled only when every member had the first clear)
             grants.addAll(EmberRunRules.varietyGrants(in.firstClear != null, s.affixDone, runs.maps().variety.affixShard, s.eventDone, runs.maps().variety.eventCore, s.eventKind));
         EmberRunRules.Ledger l = runs.store().ledger(u);

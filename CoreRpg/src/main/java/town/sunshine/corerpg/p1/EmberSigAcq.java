@@ -13,7 +13,7 @@ public final class EmberSigAcq {
     private EmberSigAcq() {}
 
     public static int ratePct() {
-        return (int) Math.round(EmberSignature.STAMP_RATE * 100.0);
+        return (int) Math.round(EmberSignature.stampRate() * 100.0);
     }
 
     /**

@@ -1481,7 +1481,7 @@ public class EmberShortRulesTest {
             assertNotNull(m);
             assertEquals(3, m.rooms.size());
             assertEquals("EmberSx16Warden", m.boss.mm);
-            assertEquals(160.0, m.boss.hp, 0.1);
+            assertEquals(240.0, m.boss.hp, 0.1); // D442 Cast HP; D1051 test align
         }
     }
 
@@ -1526,7 +1526,7 @@ public class EmberShortRulesTest {
             assertNotNull(m);
             assertEquals(3, m.rooms.size());
             assertEquals("EmberSx17Warden", m.boss.mm);
-            assertEquals(160.0, m.boss.hp, 0.1);
+            assertEquals(240.0, m.boss.hp, 0.1); // D442 Cast HP; D1051 test align
         }
     }
 
@@ -1571,7 +1571,7 @@ public class EmberShortRulesTest {
             assertNotNull(m);
             assertEquals(3, m.rooms.size());
             assertEquals("EmberSx18Warden", m.boss.mm);
-            assertEquals(160.0, m.boss.hp, 0.1);
+            assertEquals(240.0, m.boss.hp, 0.1); // D442 Cast HP; D1051 test align
         }
     }
 
@@ -1616,7 +1616,7 @@ public class EmberShortRulesTest {
             assertNotNull(m);
             assertEquals(3, m.rooms.size());
             assertEquals("EmberSx19Warden", m.boss.mm);
-            assertEquals(160.0, m.boss.hp, 0.1);
+            assertEquals(240.0, m.boss.hp, 0.1); // D442 Cast HP; D1051 test align
         }
     }
 }

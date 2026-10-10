@@ -13,8 +13,13 @@ public final class EmberSigStampDry {
     /** Period all: consecutive repeat-clear stamp misses (cleared on stamp hit). */
     public static final String C_DRY = "p1_sig_stamp_dry";
 
-    /** Expected clears at STAMP_RATE for half-line (ceil 1/rate). */
+    /** Expected clears at STAMP_RATE for half-line (ceil 1/rate). Golden mirror. */
     public static final int EXPECT_CLEARS = (int) Math.ceil(1.0 / EmberSignature.STAMP_RATE);
+
+    /** D1054: live rate from economy SoT. */
+    public static int expectClears() {
+        return (int) Math.ceil(1.0 / EmberSignature.stampRate());
+    }
 
     private EmberSigStampDry() {}
 
@@ -39,7 +44,7 @@ public final class EmberSigStampDry {
         if (n <= 0) return "";
         return String.format(Locale.ROOT,
                 " §8· 签名连空 §f%d§8 局（约%d%% · 期望~%d局 · 烙印可保底）",
-                n, EmberSigAcq.ratePct(), EXPECT_CLEARS);
+                n, EmberSigAcq.ratePct(), expectClears());
     }
 
     public static String glance(PlayerData d) {

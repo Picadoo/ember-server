@@ -35,7 +35,7 @@ public final class EmberShortService {
     }
 
     int dailyCap(EmberRunMaps.MapDef m) {
-        return m != null && m.shortDailyCap > 0 ? m.shortDailyCap : EmberShortRules.DAILY_CAP;
+        return m != null && m.shortDailyCap > 0 ? m.shortDailyCap : EmberShortRules.dailyCap(m != null ? m.key : EmberShortRules.KEY); // D1057
     }
 
     /** D391: Q01 首通门闩（日帽不挡进本）。 */
@@ -53,7 +53,7 @@ public final class EmberShortService {
         String mapKey = m != null && m.key != null ? m.key : EmberShortRules.KEY;
         final boolean fresh = l.get(runId, EmberShortRules.gClearCoin(mapKey)) == null
                 && l.get(runId, EmberShortRules.gPractice(mapKey)) == null;
-        int cap = m != null && m.shortDailyCap > 0 ? m.shortDailyCap : EmberShortRules.DAILY_CAP;
+        int cap = m != null && m.shortDailyCap > 0 ? m.shortDailyCap : EmberShortRules.dailyCap(m != null ? m.key : EmberShortRules.KEY);
         String claim = m != null && m.shortClaim != null && !m.shortClaim.isEmpty() ? m.shortClaim : EmberShortRules.CLAIM;
         String ver = m != null && m.contentVersion != null ? m.contentVersion : "v1";
         List<EmberRunRules.Grant> grants = fresh

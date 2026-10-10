@@ -1164,8 +1164,8 @@ public final class EmberGrowthService implements Listener {
                 else p.sendMessage(line);
             }
         }
-        p.sendMessage(P + "§7来源：已首通的图普通重打每局 +1 徽记，基础掉落 " + Math.round(EmberSignature.STAMP_RATE * 100) + "% 是这张图的签名件；首通给 "
-                + EmberSignature.FC_MARKS + " 枚。" + (imp ? "" : "§8烬炉烙印在首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放。"));
+        p.sendMessage(P + "§7来源：已首通的图普通重打每局 +1 徽记，基础掉落 " + Math.round(EmberSignature.stampRate() * 100) + "% 是这张图的签名件；首通给 "
+                + EmberSignature.fcMarks() + " 枚。" + (imp ? "" : "§8烬炉烙印在首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放。"));
         return true;
     }
 
@@ -1513,9 +1513,9 @@ public final class EmberGrowthService implements Listener {
             if (!EmberSignature.hasMap(mk)) return "";
             List<EmberSignature.Def> l = EmberSignature.forMap(mk);
             if (key.startsWith("mn_")) return "§6" + mapLabel(mk) + " §7· " + l.get(0).boss;
-            if (!runs.progressFlag(d, mk)) return "§8还没首通：首通后重打掉它的签名件 + 首领徽记（首通给 " + EmberSignature.FC_MARKS + " 枚）";
-            return "§7首领徽记 §f" + d.periodCount(EmberSignature.C_MARK + mk, "all") + " §7枚 · 普通重打每局 +" + EmberSignature.CLEAR_MARKS
-                    + "，基础掉落 " + Math.round(EmberSignature.STAMP_RATE * 100) + "% 是签名件";
+            if (!runs.progressFlag(d, mk)) return "§8还没首通：首通后重打掉它的签名件 + 首领徽记（首通给 " + EmberSignature.fcMarks() + " 枚）";
+            return "§7首领徽记 §f" + d.periodCount(EmberSignature.C_MARK + mk, "all") + " §7枚 · 普通重打每局 +" + EmberSignature.clearMarks()
+                    + "，基础掉落 " + Math.round(EmberSignature.stampRate() * 100) + "% 是签名件";
         }
         if ("blade_t".equals(key) || "charm_t".equals(key)) {
             String slot = key.substring(0, 5);

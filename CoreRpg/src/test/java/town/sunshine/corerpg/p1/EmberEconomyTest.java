@@ -1109,6 +1109,33 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void sigMarksMatchS07S08() {
+        // D1055 / Stage2-B
+        assertEquals(EmberSignature.FC_MARKS, EmberSignature.fcMarks());
+        assertEquals(EmberSignature.CLEAR_MARKS, EmberSignature.clearMarks());
+        assertEquals(EmberSignature.STAMP_RATE, EmberSignature.stampRate(), 1e-12);
+        assertEquals(EmberEconomy.amount("S07", "insignia"), EmberSignature.fcMarks());
+        assertEquals(EmberEconomy.amount("S08", "insignia"), EmberSignature.clearMarks());
+        assertEquals(EmberEconomy.amountDouble("S08", "stamp_rate"), EmberSignature.stampRate(), 1e-12);
+        assertEquals(0, (int) Math.round(EmberEconomy.amountDouble("S08", "stamp_rate") * 0)); // sanity int path
+    }
+
+    @Test
+    public void shortGrantsMatchEconomyLeaves() {
+        // D1058 / Stage2-C — sample sx01/S40 + sx19/S58; daily_cap
+        assertEquals(EmberShortRules.DAILY_CAP, EmberShortRules.dailyCap("sx01"));
+        assertEquals(3, EmberEconomy.amount("S40", "daily_cap"));
+        assertEquals(80, EmberEconomy.amount("S40", "clear.coin"));
+        assertEquals(200, EmberEconomy.amount("S40", "fc.coin"));
+        assertEquals(80, EmberEconomy.amount("S58", "clear.coin"));
+        java.util.List<EmberRunRules.Grant> g = EmberShortRules.settleGrants("sx01", 0, 3, false);
+        java.util.Map<String, Integer> by = new java.util.HashMap<String, Integer>();
+        for (EmberRunRules.Grant x : g) by.put(x.key, x.amount);
+        assertEquals(Integer.valueOf(80), by.get(EmberShortRules.gClearCoin("sx01")));
+        assertEquals(Integer.valueOf(200), by.get(EmberShortRules.gFcCoin("sx01")));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

@@ -449,6 +449,13 @@ public final class EmberEconomy {
      * Call {@link #loadEconomyYml} (or rely on classpath auto-load) before first use.
      */
     public static int amount(String id, String key) {
+        return (int) Math.round(amountDouble(id, key));
+    }
+
+    /**
+     * D1052: same dual-assert as {@link #amount} but keeps fractional goldens (e.g. S08.stamp_rate).
+     */
+    public static double amountDouble(String id, String key) {
         ensureClasspathEconomyYml();
         double golden = require(id).golden(key);
         if (!ymlOk) {
@@ -461,7 +468,7 @@ public final class EmberEconomy {
         if (Math.abs(y.doubleValue() - golden) > 1e-9) {
             throw new IllegalStateException(id + "." + key + ": yml " + y + " != golden " + golden);
         }
-        return (int) Math.round(y.doubleValue());
+        return y.doubleValue();
     }
 
     /** Row by id, or throw. */

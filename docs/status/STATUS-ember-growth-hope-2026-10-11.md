@@ -483,3 +483,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1045–D1050 ARCH SHIP · jar 1.65.418-d1045
 - Stage2 slice A: BASE_* helpers ← amount(S01); settle+forge sources; nums unchanged; B/C/D not started
+
+## D1051–D1062 ARCH SHIP · jar 1.65.419-d1051
+- Stage2-B: S07/S08 insignia+stampRate; Stage2-C: short dailyCap; nums unchanged; D skipped

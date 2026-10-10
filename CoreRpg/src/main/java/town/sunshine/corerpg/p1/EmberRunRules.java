@@ -354,7 +354,7 @@ public final class EmberRunRules {
     public static List<Grant> signatureGrants(String map, SettleInput in, Grant base) {
         List<Grant> out = new ArrayList<Grant>(2);
         if (!EmberSignature.hasMap(map)) return out;
-        out.add(new Grant("sig_mark", Kind.SIGMARK, map, EmberSignature.CLEAR_MARKS, null));
+        out.add(new Grant("sig_mark", Kind.SIGMARK, map, EmberSignature.clearMarks(), null)); // D1054
         if (base != null && base.kind == Kind.ITEM && base.item != null && base.item.tier >= 1) {
             double u = new Random(subSeed(in.seed, in.player, in.runId, "sig_stamp")).nextDouble();
             EmberSignature.Def d = EmberSignature.rollStamp(map, base.item.slot, base.item.family, u);

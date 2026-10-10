@@ -35,7 +35,13 @@ public final class EmberShortRules {
 
     public static final String KEY = "sx01";
     public static final String CLAIM = "p1_sx01_day";
-    public static final int DAILY_CAP = 3;
+    public static final int DAILY_CAP = 3; // golden mirror; prefer dailyCap(mapKey)
+
+    /** D1056: per-short daily rewarded-clear cap from economy yml SoT. */
+    public static int dailyCap(String mapKey) {
+        return EmberEconomy.amount(economyId(mapKey), "daily_cap");
+    }
+
     public static final int COST = 30;
     public static final String REQUIRES = "q01";
 
@@ -149,7 +155,7 @@ public final class EmberShortRules {
         return "有奖通关：币 " + EmberEconomy.amount(econ, "clear.coin")
                 + " + 碎片 " + EmberEconomy.amount(econ, "clear.shard")
                 + " + 骨尘 " + EmberEconomy.amount(econ, "clear.bone")
-                + " · 日有奖帽 " + DAILY_CAP
+                + " · 日有奖帽 " + dailyCap(key)
                 + " · 首通另加币 " + EmberEconomy.amount(econ, "fc.coin")
                 + " + 碎片 " + EmberEconomy.amount(econ, "fc.shard")
                 + " + 胚料 " + EmberEconomy.amount(econ, "fc.blank");

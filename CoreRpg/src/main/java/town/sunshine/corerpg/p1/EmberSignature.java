@@ -29,8 +29,17 @@ public final class EmberSignature {
     public static final String C_SIG = "p1_sig_";        // + item uid, period all: Def.code (0 = none)
     public static final String C_MARK = "p1_sigmark_";   // + map key, period all: 首领徽记 count
     public static final String C_FC = "p1_sigfc_";       // + map key, period all: 1 = first-clear insignia paid (once per map, not per content version)
-    public static final double STAMP_RATE = 0.12;
+    public static final double STAMP_RATE = 0.12; // golden mirror; prefer stampRate()
     public static final int CLEAR_MARKS = 1, FC_MARKS = 3, IMPRINT_MARKS = 5, IMPRINT_COIN_PER_TIER = 300; // golden mirrors
+
+    /** D1053: S07 first-clear insignia from economy yml SoT. */
+    public static int fcMarks() { return EmberEconomy.amount("S07", "insignia"); }
+
+    /** D1053: S08 repeat-clear insignia from economy yml SoT. */
+    public static int clearMarks() { return EmberEconomy.amount("S08", "insignia"); }
+
+    /** D1053: S08 stamp rate (fractional) from economy yml SoT. */
+    public static double stampRate() { return EmberEconomy.amountDouble("S08", "stamp_rate"); }
 
     /** D957: C12 insignia from economy yml SoT. */
     public static int imprintMarks() { return EmberEconomy.amount("C12", "insignia"); }
@@ -200,8 +209,9 @@ public final class EmberSignature {
     /** settlement stamp: {@code u} in [0,1) from the run seed; below {@link #STAMP_RATE} one of the fitting ones (uniform) */
     public static Def rollStamp(String map, String slot, String family, double u) {
         List<Def> l = stampable(map, slot, family);
-        if (l.isEmpty() || !(u >= 0.0) || u >= STAMP_RATE) return null;
-        int i = (int) Math.floor(u / STAMP_RATE * l.size());
+        double rate = stampRate(); // D1054
+        if (l.isEmpty() || !(u >= 0.0) || u >= rate) return null;
+        int i = (int) Math.floor(u / rate * l.size());
         return l.get(Math.max(0, Math.min(l.size() - 1, i)));
     }
 
