@@ -298,6 +298,7 @@
 | 2026-10-11 | D948–D961：yml-SoT **Stage1 薄切** C20/C24→C22/C23→C12/C13 读 `amount()`（数值不变；modelGaps 不假 FULL）。 |
 | 2026-10-11 | D942–D947：yml 真源搬家 **Stage0 盘点** [`DESIGN-ember-economy-yml-sot-stage0-2026-10-11.md`](DESIGN-ember-economy-yml-sot-stage0-2026-10-11.md)（不开大搬家）；`EmberLedgerGlance.bagFull`；modelGaps **禁止假 FULL stub**。 |
 | 2026-10-11 | D933–D940（CoreRpg 1.65.402）：S2 健康盘点 — 工坊缺料文案读 S01；**C24** 宝石合成 + spendCoin；**S60** admin smoke coin（NONE）；Growth admin seed `econ-ok`；source-map bv89；bundled ember-v1.yml 同步 live；`EmberLedgerGlance` 统一待领提示。数量不变。 |
+| 2026-10-11 | D1571–D1604：生活帽/账本补领 AB + 备药缺币 AB（C14/C17 数量不变）。 |
 | 2026-10-06 | D229（CoreRpg 1.65.55 / bv58）：S2-9 — 深渊层结算 SourceId 与 S01 分开（`sourceForGrant(base_*, <map>a<n>-…)` → S13；数量仍读 S01 BASE_*）；§6.4 vault 写入扫描（`autoDeposit` / `creditBound` / `credit` / `EmberVault.get().give`，例外行 `econ-ok:`）。数量不变。 |
 | 2026-10-06 | D242（ARCH S4-1，文档 + 测试；CoreRpg 不发版 / 1.65.67 / bv58）：装备结构权威文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读来源表 `ember-source-map.yml`（S01–S32 / LS1–LS5 / C01–C18 + 未登记 X01 图录币 · X02 起步包 · X03 管理员发放），`EmberSourceMapTest` 防漂移。本表文案修：S06 Q02 = 自选族 × 部位、S08 12% 仅适配时、S13 无无尽层、C13 调律 6 件。缺口 G1–G11 见新文档 §8。 |
 | 2026-10-06 | D243（ARCH S4-2，CoreRpg 1.65.68 / bv58）：登记 S33 图录阶段奖励 / S34 宝箱额外装备（从 S01 拆出）/ S35 起步包，数量不变只加标签（`EmberEconomy` S01–S35、E1 yml 加块、图录币走 `grantCoin(S33)`）；S09 加 `per_rule` 键（值 1）；OP `givedup` 改 `source=admin`。p1sim 经 `ember-source-map.yml` 计入 S33 / S35（21 格 A/B 全部 ±2pp 内）。 |

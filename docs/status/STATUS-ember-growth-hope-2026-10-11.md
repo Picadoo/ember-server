@@ -643,3 +643,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1571–D1588 ARCH SHIP · jar 1.65.466-d1571
 - Life weekly/daily/level gate AB; show 还差次数; LedgerGlance/claim AB; anvil success
+
+## D1589–D1604 ARCH SHIP · jar 1.65.467-d1589
+- Supply topUp lack AB; ClaimPath AB; life buy weekly/daily remain on success

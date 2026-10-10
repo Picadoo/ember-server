@@ -17,5 +17,7 @@
 | LF6 | 周/日帽·等级闸 AB | buy fail |
 | LF7 | show 还差次数 | offer 行 |
 | LG1 | 账本补领 AB | LedgerGlance/claim |
+| SU1 | 备药缺币/满格 | Supply topUp |
+| CP1 | 补领路径 AB | ClaimPath |
 
 不改产量、价格表、AFK。

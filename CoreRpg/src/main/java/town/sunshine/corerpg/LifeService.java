@@ -445,7 +445,21 @@ public final class LifeService implements Listener {
         }
         p.sendMessage(ChatColor.GREEN + "[生活] " + ChatColor.stripColor(o.name) + " → " + ChatColor.WHITE + String.join("，", got)
                 + (o.coin > 0 ? ChatColor.GRAY + "（-" + o.coin + " 币）" : ""));
-        try { p.sendActionBar("§a生活 · §f" + ChatColor.stripColor(o.name)); } catch (Throwable ignored) { }
+        try {
+            String bar = "§a生活 · §f" + ChatColor.stripColor(o.name);
+            if (o.weekly > 0) {
+                int wHave = d.periodCount("life_" + o.id, wk);
+                int wLeft = Math.max(0, o.weekly - wHave);
+                if (wLeft > 0) bar += " §8· 本周还差" + wLeft + "次";
+                else bar += " §8· 本周满";
+            } else if (o.daily > 0) {
+                int dHave = d.periodCount("life_" + o.id, td);
+                int dLeft = Math.max(0, o.daily - dHave);
+                if (dLeft > 0) bar += " §8· 今日还差" + dLeft + "次";
+                else bar += " §8· 今日满";
+            }
+            p.sendActionBar(bar);
+        } catch (Throwable ignored) { }
         addXp(p, o.xp);
         if (BREW_OFFER_ID.equals(o.id)) // D844
             town.sunshine.corerpg.p1.EmberBrewPath.afterBrew(p);

@@ -205,6 +205,12 @@ public final class EmberClaimPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a补领 → §f" + label(id) + " §7· " + tip(id));
+        int n = EmberLedgerGlance.claimable(runs, p.getUniqueId());
+        try { // D1591
+            p.sendActionBar(n > 0
+                    ? ("§e补领路径 · §f" + label(id) + " §8· 暂存" + n)
+                    : ("§a补领路径 · §f" + label(id) + " §7· 无暂存"));
+        } catch (Throwable ignored) { }
         EmberLedgerGlance.tellIfAny(p, runs); // D940
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D918
                 new String[]{"[补领]", "/corerpg p1 claim", "领取暂存", "AQUA"},

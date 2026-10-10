@@ -133,17 +133,30 @@ public final class EmberSupplyService implements Listener {
         PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
         int coins = pd == null ? 0 : pd.getCoin();
         int price = price();
-        int n = affordable(need, coins, price, freeSlots(p));
-        if (n <= 0) return 0;
+        int slots = freeSlots(p);
+        int n = affordable(need, coins, price, slots);
+        if (n <= 0) { // D1590 lack honesty
+            if (price > 0 && coins < price)
+                try { p.sendActionBar("§e备药 · 还差币 §f" + (price - coins)); } catch (Throwable ignored) { }
+            else if (slots <= 0)
+                try { p.sendActionBar("§e备药 · 背包满"); } catch (Throwable ignored) { }
+            return 0;
+        }
         if (pd == null || !EmberEconomy.spendCoin(pd, "C14", n * price)) return 0;
         int got = give(p, n, src == null || src.isEmpty() ? "prep" : src);
-        if (got < n) pd.addCoin((n - got) * price);
+        if (got < n) pd.addCoin((n - got) * price); // econ-ok: partial give refund
         plugin.getDataStore().flushMutation(p.getUniqueId());
         if (got > 0) {
             plugin.getLogger().info("[P1 supply] prep " + p.getName() + " top-up +" + got + " → " + countHealPotions(p)
                     + " (spent " + (got * price) + " coin)");
             p.sendMessage(P + ChatColor.GREEN + "备药自动补货 ×" + got + "，花费 " + (got * price) + " 余烬币（现有 "
                     + countHealPotions(p) + " 瓶 · 剩余 " + pd.getCoin() + " 币）");
+            int still = Math.max(0, target - countHealPotions(p));
+            try {
+                p.sendActionBar(still > 0
+                        ? ("§a备药 · +" + got + " §8· 还差" + still)
+                        : ("§a备药 · +" + got + " · 达标"));
+            } catch (Throwable ignored) { }
         }
         return got;
     }
