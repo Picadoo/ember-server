@@ -1,4 +1,4 @@
-**- B-forge-brand-playstyle（待批 A · tip 打开 · 拟 · 荐方案 M · 烬砧烙纹定向·词条类型自选·战斗手感分叉 · ≠sx20 ≠抬日表 ≠开天赋/灰印/K3）**
+**- B-forge-brand-playstyle（已批 A · 方案 M · D429 · **已批·施工中**）**
 # 余烬 · 额度内内容 / 可维护性 Backlog
 
 

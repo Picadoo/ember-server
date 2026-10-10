@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 烬砧烙纹定向（词条类型自选 · 战斗手感分叉）
 
-STATUS=**待批 A · 方案 M 主推 · 拟 D429** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md) · backlog `B-forge-brand-playstyle`（**待批 A**）· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx20 ≠复述短征装配线 ≠开天赋一排 ≠开灰印续跑**
+STATUS=**已批 A · 方案 M · D429 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md) · backlog `B-forge-brand-playstyle`（**已批·施工中**）· STATUS [`STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md`](../status/STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md)· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx20 ≠复述短征装配线 ≠开天赋一排 ≠开灰印续跑**
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常。**
 
@@ -33,9 +33,9 @@ STATUS=**待批 A · 方案 M 主推 · 拟 D429** · 2026-10-10 · tip [`STATUS
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（烙纹定向首落地窗 · 词条类型自选）
-- [ ] 否决 A / L / W
-- [ ] 批注：
+- [x] **方案 M**（烙纹定向首落地窗 · 词条类型自选）
+- [x] 否决 A / L / W
+- [x] 批注：总控 **已批 A · 方案 M · D429** · 2026-10-10 11:36 CST · 价锁定 **40 碎片=1 烙纹** · 定向价对齐 D167（T1/2/3：2/4/6 烙纹 + 300/600/1000 币）· 次数上限 13 · ≠抬日表 ≠关观察 ≠sx20 ≠天赋/灰印 ≠改 enhance 价
 
 ---
 
@@ -84,3 +84,4 @@ STATUS=**待批 A · 方案 M 主推 · 拟 D429** · 2026-10-10 · tip [`STATUS
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D429 · 上游 D428 PASS · 短征链暂停 · 用户定义玩法=能力/花样途径 |
 
 *D429 · 烙纹定向成长花样 · 待批 A·方案 M · ≠sx20 ≠抬日表 ≠关观察。*
+| 2026-10-10 | 总控 **已批 A · 方案 M · D429** · 价锁 40 碎片=1 · tip→已批·施工中 |

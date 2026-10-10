@@ -1,11 +1,13 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D429 · 成长花样 · 烬砧烙纹定向 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R）
 
-> **【拟 D429 · STATUS=待批 A · 荐方案 M】** tip+DESIGN docs-only · **零 jar** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx20**
+> **旁注（已关）· 2026-10-10：** 总控 **已批 A · 方案 M · D429** · 40碎片=1烙纹 · 定向 T1/2/3=2/4/6烙纹+300/600/1000币 · 次数13 · **已批·施工中** · STATUS [`STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md`](STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md)。
+
+> **【D429 · 已批 A · 方案 M】** tip+DESIGN **已批·施工中** · STATUS [`STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md`](STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md) · **≠关观察** · **≠抬日表** · **≠开 R/K3** · **≠sx20** · **≠天赋/灰印**
 
 > **上游结案：** D428 sx19 PASS（jar 1.65.130-d428 bv83）→ **短征装配线暂停**（菜单 19 槽偏挤 · 用户改点「能力提升/花样途径」）。Stage2 观察照续（≥**2026-10-10 17:40 CST**）。
 
 **日期：** 2026-10-10  
-**硬规格：** [`DESIGN-ember-forge-brand-playstyle-2026-10-10.md`](../design/DESIGN-ember-forge-brand-playstyle-2026-10-10.md) · backlog `B-forge-brand-playstyle`（待批）  
+**硬规格：** [`DESIGN-ember-forge-brand-playstyle-2026-10-10.md`](../design/DESIGN-ember-forge-brand-playstyle-2026-10-10.md) · backlog `B-forge-brand-playstyle`（**已批·施工中**）  
 **打开理由：** 短征 sx01–sx19 已可达且菜单偏挤；下一真增量=**用现有材料换战斗手感分叉**（烙纹钉死词条类型），对齐交接优先「挂机资源环加厚 / 有趣系统」，**不是**又一本 sxNN。
 
 **荐方案 M：** 烙纹定向首落地窗（类型自选 · 档位随机 · 次数有限 · 不抬 AFK 表）。锚点 D167 烬砧设计切片。  
@@ -18,3 +20,4 @@
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D429 · 上游 D428 PASS · 短征链停 |
 
 *选题成长花样·烙纹定向 · tip 打开 · 待批 A·荐 M · 拟 D429 · ≠关观察。*
+| 2026-10-10 | 总控批 A·M · 旁注已关 · tip→已批·施工中 |
