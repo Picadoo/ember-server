@@ -332,6 +332,7 @@ final class EmberRunDirector {
             if (lim > 10 && now >= eventStart + (lim - 10) * 1000L) {
                 eventWarned = true;
                 svc.tellRun(s, "§b" + EmberRunMaps.Variety.eventLabel(kind) + " §7还剩 §e10 秒");
+                EmberHurryPath.maybeAfterHurry(s); // D598
             }
         }
         // room cleared → door, event, next
@@ -508,6 +509,47 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D598: variety event countdown has flashed the 10s warning and is still live. */
+    boolean hasPendingHurry() {
+        if (s == null || !eventWarned || eventStart <= 0 || eventFailed || s.eventDone) return false;
+        if (activeRoom == null || !activeRoom.equals(s.eventRoom)) return false;
+        String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+        int lim = svc.maps() == null ? 0 : svc.maps().variety.eventLimit(kind);
+        return lim > 10;
+    }
+
+    /** D598: warp a committed player to the event objective for the last 10s push. */
+    boolean pathHurrySpot(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingHurry()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+        if ("crystal".equals(kind) && pathSmashCrystal(p)) return true;
+        if ("hold".equals(kind) && pathHoldCenter(p)) return true;
+        if ("relay".equals(kind) && pathRelayNext(p)) return true;
+        // timed (and fallback): nearest living event-room mob
+        if (s.eventRoom == null) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (t.varietyEscort) continue;
+            if (!s.eventRoom.equals(t.roomId)) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location at = best.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.65f);
+        return true;
     }
 
     /** D597: any living variety affix elite still up. */

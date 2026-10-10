@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D598: last-10s variety event push. */
+    public boolean hasPendingHurry(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingHurry() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathHurrySpot(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathHurrySpot(p);
+    }
+
     /** D597: warp to nearest living variety affix elite. */
     public boolean hasPendingFocus(Player p) {
         if (p == null) return false;
@@ -1959,6 +1975,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberNestPath.scheduleOfferAfterQ01(p); // D595 nest path
                         if ("q01".equals(g.id)) EmberDoomPath.scheduleOfferAfterQ01(p); // D596 doom path
                         if ("q01".equals(g.id)) EmberFocusPath.scheduleOfferAfterQ01(p); // D597 focus path
+                        if ("q01".equals(g.id)) EmberHurryPath.scheduleOfferAfterQ01(p); // D598 hurry path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

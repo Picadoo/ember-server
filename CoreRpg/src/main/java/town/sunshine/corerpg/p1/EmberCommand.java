@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("hurrypath".equals(sub) || "急清路径".equals(sub)) return hurryPathCmd(s, args); // D598
+        if ("hurry".equals(sub) && args.length == 2) return hurryGoCmd(s); // D598
         if ("focuspath".equals(sub) || "集火路径".equals(sub)) return focusPathCmd(s, args); // D597
         if ("focus".equals(sub) && args.length == 2) return focusGoCmd(s); // D597
         if ("doompath".equals(sub) || "灾临路径".equals(sub)) return doomPathCmd(s, args); // D596
@@ -1743,6 +1745,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("hurryseed".equals(sub)) return hurrySeedCmd(s, args); // D598
         if ("focusseed".equals(sub)) return focusSeedCmd(s, args); // D597
         if ("doomseed".equals(sub)) return doomSeedCmd(s, args); // D596
         if ("nestseed".equals(sub)) return nestSeedCmd(s, args); // D595
@@ -6609,6 +6612,62 @@ public final class EmberCommand {
             EmberFocusPath.maybeProbe(t);
             s.sendMessage(P + "已触发集火路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingFocus(t) ? "（有词缀）" : "（无词缀）"));
+            return true;
+    }
+
+    private boolean hurryPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberHurryPath.glance(EmberHurryPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c急清路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberHurryPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c急清路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberHurryPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberHurryPath.get(d);
+                    if (EmberHurryPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberHurryPath.label(cur) + " · 改路径再 /corerpg p1 hurrypath");
+                    else EmberHurryPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberHurryPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 hurrypath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberHurryPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean hurryGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathHurrySpot(p)) p.sendMessage(P + "无法急清（无10秒预警/事件已结束/未进本）");
+            else p.sendMessage(P + "§a急清·手点 §7已冲向事件目标");
+            return true;
+    }
+
+    private boolean hurrySeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberHurryPath.maybeProbe(t);
+            s.sendMessage(P + "已触发急清路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingHurry(t) ? "（有急清）" : "（无急清）"));
             return true;
     }
 }
