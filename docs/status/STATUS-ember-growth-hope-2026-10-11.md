@@ -757,3 +757,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D2024–D2037 skill kit chargeCdLine + ARCH green (jar 1.65.500-d2024)
 - kit充能带形状半行; Counters/SourceMap PASS; SF4 still banned
+
+## D2038–D2045 status chase imprint button (jar 1.65.501-d2038)
+- 可烙 → one-click imprint on status

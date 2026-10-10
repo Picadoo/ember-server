@@ -4422,10 +4422,20 @@ public final class EmberCommand {
                                 s.sendMessage(P + tn);
                         } catch (Throwable ignored) { }
                     }
-                    // D1997 SC1: non-hope sig chase remain
+                    // D1997 SC1 / D2038: chase remain + one-click when ready
                     String chaseG = EmberSigChase.statusGlance(pd);
-                    if (chaseG != null && !chaseG.isEmpty())
+                    if (chaseG != null && !chaseG.isEmpty()) {
                         s.sendMessage(P + "§e" + chaseG);
+                        EmberSignature.Def cdef = EmberSigChase.get(pd);
+                        if (cdef != null && chaseG.contains("可烙")) {
+                            try {
+                                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7追烙够料：",
+                                        "[一键烙印·" + cdef.id + "]",
+                                        "/corerpg p1 sig imprint " + cdef.id + " go",
+                                        EmberSignature.imprintMarks() + " 枚徽记烙到穿着");
+                            } catch (Throwable ignored) { }
+                        }
+                    }
                     try {
                         String ab;
                         if (chaseG != null && !chaseG.isEmpty()
