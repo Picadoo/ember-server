@@ -23,6 +23,7 @@ Events:
     - 'tell: §e今天：§f%corerpg_p1_route_pri%'
     - 'tell: §8%corerpg_p1_route_sec%'
     - 'tell: §8旁轨：生活·使魔 / 工坊见「今天该打哪」'
+    - 'tell: §8成长：天赋/勋记/洗练 · 工坊四选择（烙纹/随机锻/转化/洗练）见成长格 Shift+右键'
     - 'tell: §8短征：冒险页「烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣」（Q01后）'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
@@ -151,21 +152,26 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_afk'
   # D141–D143 成长（D147：天赋 / 勋记 / 洗练合成一格；装备页的三个入口保留，各页返回键回到这里）
+  # D452：成长格诚实互指工坊四选择（烙纹定向 D429 / 随机锻造 D430 / 每周转化 D431 / 词条洗练+锁定保类型 D148·D451）
   T:
     update: 20
     display:
       material: enchanted book
-      name: '§6成长 · 天赋 / 勋记 / 洗练'
+      name: '§6成长 · 天赋 / 勋记 / 洗练 · 工坊'
       lore:
         - '§7天赋：%corerpg_p1_spec_pts%'
         - '§7勋记：%corerpg_p1_honor_n%'
         - '§7洗练：刃 %corerpg_p1_reroll_blade_cur% §7· 护符 %corerpg_p1_reroll_charm_cur%'
         - ''
-        - '§7三样都是打法取舍和小加成，不是变强；装备的阶、成色、强化才是主线'
+        - '§d工坊四选择：§f烙纹定向 · 随机锻造 · 每周转化 · 词条洗练'
+        - '§8（锁定保类型 = D148 · 工坊底栏也能进 · 材料换手感分叉）'
+        - ''
+        - '§7天赋/勋记/洗练是打法取舍和小加成，不是变强；装备的阶、成色、强化才是主线'
+        - '§7工坊四选择 = 成长花样侧轨（不涨永久乘区）'
         - ''
         - '§8第 2 排天赋 / 猎缀类词条：仅主线重打词缀精英'
         - '§e推荐打法：§7旁格「机动/站桩/压上」标签页'
-        - '§e➥ §f左键：天赋 · 右键：勋记 · Shift+左键：洗练'
+        - '§e➥ §f左键：天赋 · 右键：勋记 · Shift+左键：洗练 · Shift+右键：工坊四选择'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -179,6 +185,9 @@ Icons:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - close
         - 'command: corerpg p1 reroll from hub'
+      shift_right:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_forge'
   # D291 推荐打法（§3.3-2 认知标签）
   B:
     display:

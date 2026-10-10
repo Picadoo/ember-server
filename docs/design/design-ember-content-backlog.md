@@ -989,3 +989,4 @@
 - `B-forge-quality-gamble`（**关闭** · 重叠 D430 PASS · tip 已关；洗练保类型 = **D148 LIVE** · 工坊入口 **D451**）
 - `B-mainline-q01-q03-visual-d450`（已批 A·M · D450 · **落地** · Q01–03 轻视觉 · map `@d450`）
 - `B-forge-reroll-entry`（已批 A·M · D451 · **落地** · 工坊挂洗练+锁定保类型说明 · jar 1.65.145-d451 · ≠改洗练价）
+- `B-hub-growth-forge-four`（已批 A·M · D452 · **落地** · hub 成长格点名工坊四选择 + Shift+右键进工坊 · TrMenu-only · ≠改价/jar）
