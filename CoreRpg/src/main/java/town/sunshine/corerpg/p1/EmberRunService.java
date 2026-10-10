@@ -2055,7 +2055,7 @@ public final class EmberRunService implements Listener {
                     s.sendMessage(P + "没有可领取的暂存奖励。");
                 return true;
             case "enter":
-                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx12> [challenge]"); return true; }
+                if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx13> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)
                 return tryEnter((Player) s, args[2].toLowerCase(Locale.ROOT), args.length >= 4 && isChallengeWord(args[3]));
             case "abyss": return cmdAbyss(s, args);

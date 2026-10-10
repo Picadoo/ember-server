@@ -194,6 +194,15 @@ sources:
     "fc.shard": 6
     "fc.blank": 1
     daily_cap: 3
+  # D421 短征 sx13（S52）：有奖同量级；首通略薄 60/6/1；日帽独立（p1sim 另号）
+  S52:
+    "clear.coin": 80
+    "clear.shard": 4
+    "clear.bone": 3
+    "fc.coin": 60
+    "fc.shard": 6
+    "fc.blank": 1
+    daily_cap: 3
 
 sinks:
   C01: { stamina: 30 }
