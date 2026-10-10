@@ -1605,6 +1605,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D451 | CoreRpg **1.65.145-d451** / bv 未抬 | 成长花样·工坊挂词条洗练入口 **PASS**：底栏 W→`reroll from forge`；返回「返回工坊」；文案明示普通洗 vs **D148 锁定保类型**；**关闭**误 tip「洗练保类型另开」。**零改** lock_shard/coin/词条池/EmberSetRules。STATUS `STATUS-ember-forge-reroll-entry-d451-2026-10-10.md` · DESIGN `DESIGN-ember-forge-reroll-entry-playstyle-2026-10-10.md`。 |
 | D452 | TrMenu-only（live 仍 **1.65.145-d451**）/ bv 未抬 | 成长花样·枢纽成长格诚实互指工坊四选择 **PASS**：name/lore 点名烙纹定向/随机锻造/每周转化/词条洗练；Shift+右键→`ember_p1_forge`；Open tell 半行；**零改** lock/价/EmberSetRules/AFK/sx/Stage2。STATUS `STATUS-ember-hub-growth-forge-four-d452-2026-10-10.md` · DESIGN `DESIGN-ember-hub-growth-forge-four-playstyle-2026-10-10.md`。 |
 | D453 | docs-only（live 仍 **1.65.145-d451** / bv**89**）| Stage2 满窗绿出口 **观察结束 · 维持现态**：S0 17:40:25 CST；G1–G5 勾满；M1–M9 指 D327；R0–R10 只读复跑无回滚红；**未**关 Stage1 · **未**开 K3 · **未**改 ×0.97/`set_bonus`。STATUS `STATUS-ember-stage2-green-exit-signoff-d453-2026-10-10.md` · 模板 D338 / 启动 D367。 |
+| D454 | CoreRpg **1.65.146-d454** / bv 未抬 | 成长花样·挂机装效澄清 vs 推荐 **PASS**：**≠抬** AFK tier/daily_kills。STATUS `STATUS-ember-afk-gear-eff-d454-2026-10-10.md`（若缺见 backlog `B-afk-gear-eff`）· commit `7de80e40`。 |
+| D455 | CoreRpg **1.65.147-d455** / bv 未抬 | 成长花样·签名触发短闪 + 进本身份 **PASS**：**≠改** ALTS/掉率。STATUS 见 backlog `B-sig-feel-flash` · commits `86aba088`/`5cc02bc5`。 |
+| D456 | CoreRpg **1.65.148-d456** / bv 未抬 | 成长花样·签名获取清晰（未掉提示）**PASS**：**≠抬** stamp-rate。`B-sig-acq-clarity` · `e7224042`。 |
+| D457 | CoreRpg **1.65.149-d457** / bv 未抬 | 成长花样·套装/4pc 进本 cue **PASS**：**≠改**套装数值。`B-set-enter-cue` · `d127052f`。 |
+| D458 | CoreRpg **1.65.150-d458** / bv 未抬 | 成长花样·洗练保底一眼 **PASS**：**≠改** pity 数学。`B-reroll-pity-glance` · `7cb3c7f0`。 |
+| D459 | CoreRpg **1.65.151-d459** / bv 未抬 | 成长花样·技能首通解锁宣告 **PASS**：**≠改** skill_mult/CD。`B-skill-unlock-cue` · `195f8c3a`。 |
+| D460 | CoreRpg **1.65.152-d460** / bv 未抬 | 成长花样·技能首点选（Q04 符文三选一 / Q05 身法二选一）**PASS**：**≠改**数值。`B-skill-first-pick` · `5477ffb5`。 |
+| D461 | CoreRpg **1.65.153-d461** / bv 未抬 | 成长花样·工坊周目标五选一（AFK→forge 路径）**PASS**：**≠抬** AFK。`B-forge-craft-goal` · `13bf0b6a` · 冒烟 FreshQ992。 |
+| D462 | CoreRpg **1.65.154-d462** / bv 未抬 | 成长花样·模式路径点选（Q04 残响 / Q05 前哨 / Q06 誓约）**PASS**（live jar 已装；docs 可能另号收尾）。`B-mode-path-pick`。 |
+| D463 | TrMenu-only（live 仍 **1.65.154-d462**）/ bv 未抬 | 短征选页 YAML 修复 **PASS**：`ember_p1_short.yml` sx14–19 lore 缩进金字塔清零 +「十九本并列」补全六本真名；`yaml.safe_load` OK；`trmenu reload`；冒烟 FreshQ993+ 开页。**≠sx20 ≠抬AFK ≠K3 ≠聚火 ≠bv ≠EmberSetRules ≠skill_mult**。STATUS `STATUS-ember-short-menu-yaml-d463-2026-10-10.md` · DESIGN `DESIGN-ember-short-menu-yaml-fix-2026-10-10.md` · tip 已关。 |
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
