@@ -96,6 +96,9 @@ public final class CalamityService implements Listener {
     private boolean bossSpawnedThisWindow;
     private boolean bossKilledThisWindow;
     private final Set<String> announcedPre = new HashSet<String>();
+    /** D600: last pre-announce wall-clock + minutes (for Alert path). */
+    private long lastPreAt;
+    private int lastPreMinutes;
     /** Players who dealt damage to the calamity boss since the last open/settlement (spec §3: A/B need damage). */
     private final Set<UUID> damagers = new HashSet<UUID>();
 
@@ -204,6 +207,14 @@ public final class CalamityService implements Listener {
         return new Location(w, x + 0.5, y, z + 0.5);
     }
 
+    /** D600: a pre-announce fired within the last 2 minutes. */
+    public boolean hasRecentPre() {
+        return lastPreAt > 0L && System.currentTimeMillis() - lastPreAt < 120_000L;
+    }
+
+    /** D600: minutes shown on the last pre-announce (0 if none). */
+    public int lastPreMinutes() { return lastPreMinutes; }
+
     /** D596: seconds left in the open window (0 if closed). */
     public int windowSecondsLeft() {
         if (!windowOpen || windowEndEpochMs <= 0L) return 0;
@@ -263,6 +274,9 @@ public final class CalamityService implements Listener {
                     String key = slot + ":" + pre;
                     if (announcedPre.add(key)) {
                         broadcast(messagePre.replace("{minutes}", String.valueOf(pre)));
+                        lastPreAt = System.currentTimeMillis();
+                        lastPreMinutes = pre;
+                        town.sunshine.corerpg.p1.EmberAlertPath.maybeAfterAlert(pre); // D600
                         saveState();
                     }
                 }

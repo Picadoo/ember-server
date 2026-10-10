@@ -701,6 +701,31 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D600: calamity pre-announce recent; player free to early-stand at altar. */
+    public boolean hasPendingAlert(Player p) {
+        if (p == null) return false;
+        CoreRpgPlugin pl = plugin();
+        if (pl == null || pl.getCalamityService() == null) return false;
+        if (!pl.getCalamityService().hasRecentPre()) return false;
+        if (openSessionOf(p.getUniqueId()) != null) return false;
+        return pl.getCalamityService().altarLocation() != null;
+    }
+
+    public boolean pathAlertAltar(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingAlert(p)) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        CoreRpgPlugin pl = plugin();
+        if (pl == null || pl.getCalamityService() == null) return false;
+        org.bukkit.Location to = pl.getCalamityService().altarLocation();
+        if (to == null) return false;
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        p.getWorld().playSound(to, org.bukkit.Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.5f);
+        return true;
+    }
+
     /** D599: pre-boss heal-potion stock check. */
     public boolean hasPendingStock(Player p) {
         if (p == null) return false;
@@ -1993,6 +2018,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberFocusPath.scheduleOfferAfterQ01(p); // D597 focus path
                         if ("q01".equals(g.id)) EmberHurryPath.scheduleOfferAfterQ01(p); // D598 hurry path
                         if ("q01".equals(g.id)) EmberStockPath.scheduleOfferAfterQ01(p); // D599 stock path
+                        if ("q01".equals(g.id)) EmberAlertPath.scheduleOfferAfterQ01(p); // D600 alert path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
