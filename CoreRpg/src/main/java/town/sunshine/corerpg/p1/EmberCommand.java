@@ -85,6 +85,63 @@ public final class EmberCommand {
             s.sendMessage(P + "已向 " + t.getName() + " 弹出 " + map.toUpperCase(Locale.ROOT) + " 进阶路径点选");
             return true;
         }
+        if ("convertpath".equals(sub) || "转化路径".equals(sub)) { // D469 convert destination-family path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            if (args.length < 3) {
+                int sf = EmberSetFocus.get(d);
+                p.sendMessage(P + EmberConvertPath.glance(EmberConvertPath.get(d),
+                        EmberSetFocus.familyKey(sf), runs.target(d)));
+                EmberConvertPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                String week = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(java.time.ZoneId.of("Asia/Shanghai")));
+                boolean offered = EmberConvertPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberConvertPath.get(d);
+                    if (EmberConvertPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberConvertPath.label(cur) + " · 改路径再 /corerpg p1 convertpath");
+                    else EmberConvertPath.offerPick(p);
+                }
+                return true;
+            }
+            if ("sync".equalsIgnoreCase(args[2]) || "对齐焦点".equals(args[2])) {
+                int sf = EmberSetFocus.get(d);
+                String fk = EmberSetFocus.familyKey(sf);
+                if (fk == null) { p.sendMessage(P + "§c请先设套装焦点 /corerpg p1 setfocus"); return true; }
+                int id = EmberConvertPath.parse(fk);
+                EmberConvertPath.set(d, id);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                p.sendMessage(P + "§a转化路径已对齐套装焦点 → §f" + EmberConvertPath.label(id));
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
+                        "[去转化成" + EmberConvertPath.label(id) + "]", "/corerpg p1 convert " + fk,
+                        "手持刃/护符后确认（周 1 次）");
+                return true;
+            }
+            int id = EmberConvertPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 convertpath <scorch|burst|sustain|clear|sync>");
+                return true;
+            }
+            boolean ch = EmberConvertPath.set(d, id);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            if (id == EmberConvertPath.NONE) p.sendMessage(P + "已取消转化路径");
+            else {
+                String fk = EmberConvertPath.familyKey(id);
+                int sf = EmberSetFocus.get(d);
+                p.sendMessage(P + "§a转化路径 → §f" + EmberConvertPath.label(id) + "§7（" + EmberConvertPath.tip(id) + "）"
+                        + (ch ? "" : " §8· 已是该路径"));
+                p.sendMessage(P + EmberConvertPath.glance(id, EmberSetFocus.familyKey(sf), runs.target(d)));
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
+                        "[去转化成" + EmberConvertPath.label(id) + "]", "/corerpg p1 convert " + fk,
+                        "手持刃/护符后确认（周 1 次）");
+            }
+            return true;
+        }
         if ("echopath".equals(sub) || "残响路径".equals(sub)) { // D468 echo residual weekly path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

@@ -32,6 +32,7 @@ Layout:
 Events:
   Open:
     - 'tell: §8烙纹路径 %corerpg_p1_brand_path%'
+    - 'tell: §8转化路径 %corerpg_p1_convert_path%'
     - 'sound: BLOCK_ANVIL_LAND-1-0.6'
     - 'tell: §8缺料？点「材料哪来」回挂机庭 · 产→仓→本页花'
     - 'tell: §8未持件也能看费用：点「配方速览」'

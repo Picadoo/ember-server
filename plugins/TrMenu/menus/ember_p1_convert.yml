@@ -18,6 +18,8 @@ Layout:
 
 Events:
   Open:
+    - 'tell: §e转化路径：§f%corerpg_p1_convert_path% §8· /corerpg p1 convertpath'
+    - 'command: corerpg p1 convertpath nudge'
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
     - 'tell: §8手持刃/护符 · 每周 1 次 · 成色截卓越 · 强化归零 · uid 不变'
 
