@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx17（烬潮回廊 · P1 可达 + 薄经济 S56）
 
-STATUS=**已批 A · 方案 M · D426 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx17-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx17-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx17`（**已批·施工中**）· STATUS [`STATUS-ember-short-dungeon-sx17-d426-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx17-d426-2026-10-10.md)· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D425 ≠纯换皮**
+STATUS=**已批 A · 方案 M · D426 · 已落地 PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx17-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx17-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx17`（**已批·已落地 PASS**）· STATUS [`STATUS-ember-short-dungeon-sx17-d426-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx17-d426-2026-10-10.md)· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D425 ≠纯换皮**
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常。**
 
@@ -20,3 +20,4 @@ STATUS=**已批 A · 方案 M · D426 · 施工中** · 2026-10-10 · tip [`STAT
 
 *D426 · 短征 sx17 烬潮回廊 · 待批 A·方案 M 主推 · ≠关观察 ≠抬日表。*
 | 2026-10-10 | 总控 **已批 A · 方案 M · D426** · 勾选旁注 · tip→已批·施工中 |
+| 2026-10-10 | 抽测 PASS · jar 1.65.128-d426 bv81 · settle day=1/3 · 无 Watchdog |
