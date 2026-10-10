@@ -99,6 +99,7 @@ public final class EmberCommand {
                 int sf = EmberSetFocus.get(d);
                 p.sendMessage(P + EmberConvertPath.glance(EmberConvertPath.get(d),
                         EmberSetFocus.familyKey(sf), runs.target(d)));
+                p.sendMessage(P + EmberConvertPath.weekLine(d)); // D732
                 EmberConvertPath.offerPick(p);
                 return true;
             }
@@ -106,6 +107,7 @@ public final class EmberCommand {
                 String week = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(java.time.ZoneId.of("Asia/Shanghai")));
                 boolean offered = EmberConvertPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                p.sendMessage(P + EmberConvertPath.weekLine(d)); // D732 nudge
                 if (!offered) {
                     int cur = EmberConvertPath.get(d);
                     if (EmberConvertPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberConvertPath.label(cur) + " · 改路径再 /corerpg p1 convertpath");

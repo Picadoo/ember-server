@@ -84,7 +84,18 @@ public final class EmberConvertPath {
         return "§e转化路径：§f" + focus + extra;
     }
 
-    public static void offerPick(Player p) {
+    
+    /** D732: week convert remain line. */
+    public static String weekLine(PlayerData d) {
+        if (d == null) return "§8本周转化：—";
+        String week = town.sunshine.corerpg.DailyService.weekId();
+        int used = d.periodCount(EmberConvertRules.C_CONV, week);
+        int left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
+        if (left <= 0) return "§a本周转化环已完成 §8· 下周重置";
+        return "§e本周转化剩余：§f" + left + "/" + EmberConvertRules.WEEKLY_CAP;
+    }
+
+public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选本周转化目标族（周 1 次跨族 · 可随时改 · 异于套装焦点/掉落）：");

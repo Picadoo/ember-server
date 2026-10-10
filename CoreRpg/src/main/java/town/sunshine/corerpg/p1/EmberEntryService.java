@@ -337,6 +337,15 @@ public final class EmberEntryService {
             EmberFestival festival = runs.festival();
             return "§c国庆活动本 §6" + m.name + " §7正在创建实例……（不耗体力 · 今日第 " + (festival.entriesToday(runs.dataOf(p.getUniqueId())) + 1) + "/" + festival.dailyEntries + " 次）";
         }
-        return "§e" + (m.raid ? "团本 " : "") + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + cost + "）";
+        String base = "§e" + (m.raid ? "团本 " : "") + m.key.toUpperCase(Locale.ROOT) + " " + m.name + (challenge ? " §c挑战版" : "") + " §7正在创建实例……（已预留体力 " + cost + "）";
+        // D733: challenge path glance on mainline (not raid)
+        if (!m.raid && abyss <= 0) {
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            int path = EmberChallengePath.get(d);
+            if (EmberChallengePath.valid(path)) {
+                base += challenge ? " §c· 硬本路径" : " §a· 硬本路径·普";
+            }
+        }
+        return base;
     }
 }

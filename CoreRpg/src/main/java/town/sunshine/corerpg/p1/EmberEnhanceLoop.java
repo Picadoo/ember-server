@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import town.sunshine.corerpg.ConfirmTokens;
+import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberItemStore.TxnItem;
 
@@ -27,6 +28,7 @@ public final class EmberEnhanceLoop {
         boolean won = leveled(list);
         String P = EmberRunService.P;
         celebrate(p, list, won);
+        if (won) maybeGemHoleChase(p, d, list); // D731
         boolean goalHit = won && d != null && EmberForgeGoal.get(d) == EmberForgeGoal.ENHANCE;
         if (goalHit) { // D660
             p.sendMessage(P + "§a本周工坊目标完成：§f强化+1");
@@ -83,6 +85,39 @@ public final class EmberEnhanceLoop {
         if (p == null) return;
         if (won) afterEnhance(p, nullWon());
         else afterEnhance(p, nullFail());
+    }
+
+
+    /** D731: if enhance just unlocked a socket, chase gem insert (P1 · no legacy socket). */
+    static void maybeGemHoleChase(Player p, PlayerData d, List<TxnItem> list) {
+        if (p == null || list == null) return;
+        for (TxnItem t : list) {
+            if (t == null || t.before == null || t.after == null) continue;
+            if (t.after.enhance <= t.before.enhance) continue;
+            int hole = -1;
+            for (int i = 0; i < t.after.sockMax(); i++) {
+                if (t.after.sockUnlocked(i) && !t.before.sockUnlocked(i) && t.after.sockAt(i) == 0) {
+                    hole = i; break;
+                }
+            }
+            if (hole < 0) continue;
+            p.sendMessage(P() + "§a新孔解锁 · §f孔" + hole + " §7· 可嵌宝石");
+            try { p.sendActionBar("§a新孔 · §f" + hole + " §7· 镶嵌追"); } catch (Throwable ignored) { }
+            CoreRpgPlugin pl = plugin();
+            if (pl == null) return;
+            int path = EmberGemPath.get(d);
+            if (!EmberGemPath.valid(path)) path = EmberGemPath.SHARP;
+            EmberLoadoutService lo = pl.getEmberRuns() == null ? null : pl.getEmberRuns().loadouts();
+            EmberGemInsertChase.afterAcquire(p, path, lo, pl);
+            return;
+        }
+    }
+
+    private static String P() { return EmberRunService.P; }
+
+    private static CoreRpgPlugin plugin() {
+        org.bukkit.plugin.Plugin pl = org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+        return pl instanceof CoreRpgPlugin ? (CoreRpgPlugin) pl : null;
     }
 
     static boolean leveled(List<TxnItem> list) {

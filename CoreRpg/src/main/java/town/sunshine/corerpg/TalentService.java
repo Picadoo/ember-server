@@ -382,10 +382,33 @@ public final class TalentService {
         try { // D730 ActionBar only — no button twin
             player.sendActionBar("§a天赋解锁 · §f" + ChatColor.stripColor(def.display) + " §7· 余 " + left);
         } catch (Throwable ignored) { }
+        String next = nextUnlockableHint(data, tree); // D734
+        if (next != null) player.sendMessage(ChatColor.GRAY + "  下一可点：" + next);
         if ("skill".equalsIgnoreCase(def.type) && def.skillId != null) {
             player.sendMessage(ChatColor.LIGHT_PURPLE + "  [技能占位] skill_id=" + def.skillId
                     + ChatColor.DARK_GRAY + "（未接 MM 释放）");
         }
+    }
+
+
+    /** D734: one next unlockable node display (no button). */
+    String nextUnlockableHint(PlayerData data, String tree) {
+        if (data == null || tree == null) return null;
+        Map<String, NodeDef> nodes = trees.get(tree.toLowerCase(java.util.Locale.ROOT));
+        if (nodes == null) nodes = trees.get(tree);
+        if (nodes == null) return null;
+        int avail = data.getTalentPointsAvailable();
+        for (NodeDef n : nodes.values()) {
+            if (data.hasTalentNode(n.id)) continue;
+            if (n.cost > avail) continue;
+            boolean ok = true;
+            for (String req : n.requires) {
+                if (!data.hasTalentNode(req)) { ok = false; break; }
+            }
+            if (!ok) continue;
+            return ChatColor.stripColor(n.display) + "（" + n.id + " · " + n.cost + "点）";
+        }
+        return null;
     }
 
     public void cmdReset(Player player) {

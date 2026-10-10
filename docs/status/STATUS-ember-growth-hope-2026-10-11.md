@@ -190,3 +190,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D728 weekly convert loop complete + path remain
 - D729 challenge path enter/apply clarity
 - D730 talent unlock ActionBar only
+
+## D731–D734 SHIP · jar 1.65.340-d731 · 2026-10-11
+- D731 enhance unlock hole → gem insert chase
+- D732 convertpath week remain
+- D733 enter line challenge path tag
+- D734 talent next unlockable hint
