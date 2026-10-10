@@ -361,6 +361,7 @@ public final class SkillService implements Listener {
             town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(player.getUniqueId());
             st.skillCdUntil = System.currentTimeMillis() + cd * 1000L;
             ls.saveState(player);
+            town.sunshine.corerpg.p1.EmberSlashReady.arm(player, st.skillCdUntil); // D479
         }
         if (changed) {
             player.sendMessage(PREFIX + ChatColor.GREEN + "烬斩符文 → "
@@ -586,6 +587,7 @@ public final class SkillService implements Listener {
         double charge = variant ? gmods.get("skill_charge") : 0.0;
         st.skillCdUntil = now + cd * 1000L;
         ls.saveState(player);
+        town.sunshine.corerpg.p1.EmberSlashReady.arm(player, st.skillCdUntil); // D479 shared charge ready
         if (charge > 0) {
             final java.util.UUID id = player.getUniqueId();
             final town.sunshine.corerpg.p1.EmberGrowth.Mods fMods = gmods;
@@ -637,6 +639,7 @@ public final class SkillService implements Listener {
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
         st.skillCdUntil = now + cd * 1000L;
         ls.saveState(player);
+        town.sunshine.corerpg.p1.EmberSlashReady.arm(player, st.skillCdUntil); // D479 shared charge ready
 
         double b = ls.get(player).b;
         double base = town.sunshine.corerpg.p1.EmberFormula.skill(town.sunshine.corerpg.p1.EmberMode.tables(), b);

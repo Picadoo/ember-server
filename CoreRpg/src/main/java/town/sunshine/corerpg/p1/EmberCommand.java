@@ -455,6 +455,18 @@ public final class EmberCommand {
             s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
             return true;
         }
+        if ("slashready".equals(sub)) { // D479 admin smoke: shared 烬斩 charge CD-ready ActionBar
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            int sec = 1;
+            if (args.length >= 3) {
+                try { sec = Integer.parseInt(args[2]); } catch (NumberFormatException e) { sec = 1; }
+            }
+            EmberSlashReady.adminArmSeconds(p, sec);
+            p.sendMessage(P + "§8slashready · CD " + Math.max(0, Math.min(60, sec)) + "s 后 ActionBar: " + EmberSlashReady.readyActionBar());
+            return true;
+        }
         if ("matready".equals(sub)) { // D478 admin smoke: forge mat-ready rising-edge sample / live check
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
