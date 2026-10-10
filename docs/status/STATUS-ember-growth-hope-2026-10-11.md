@@ -803,3 +803,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - RESEARCH 非按钮轴；MI soft SetFocus；零 ConfirmTokens / 通关门 / 掉率
 ## D2219–D2228 · 图身份软定掉落目标 · jar 1.65.516-d2228
 - soft-focus 时 p1_target=0 → 同步 loot family
+## D2229–D2240 · 挂机装效够稳短闪 · jar 1.65.517-d2240
+- EmberAfkGearFeel rising-edge · 零日表/ConfirmTokens

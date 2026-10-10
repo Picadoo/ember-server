@@ -443,3 +443,6 @@ afterPin prefers path re-pin when charges remain.
 ### MI · map-identity soft-focus (D2205–D2218)
 图鉴齐且无焦点 → 软定 SetFocus（对标 D607 形状软推）。非通关门 · 零 ConfirmTokens · 零掉率。
 Skill set-fork / SigFeel / talent row1 HOLD / AFK gear-in-combat 已评估。
+
+### AG · afk gear-stable feel (D2229–D2240)
+够稳上升沿短闪 · 不抬表。

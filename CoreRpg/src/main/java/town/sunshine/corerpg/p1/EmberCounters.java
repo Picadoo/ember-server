@@ -499,6 +499,7 @@ public final class EmberCounters {
         // D865 ARCH S1 counter coverage (growth-hope + residual)
         x("p1_abyss_layer_target", "EmberAbyssTarget", A, SE, OW, "D694 abyss next-layer target");
         x("p1_afk_forge_path_told", "EmberAfkForgePath", A, HI, OW, "AFK forge path tip latch");
+        px("p1_afk_gear_stable_t", "EmberAfkGearFeel", D, HI, OW, "D2230 AFK gear-stable rising-edge latch per tier@day");
         x("p1_forge_mat_ready", "EmberForgeMatReady", A, HI, OW, "D478 enhance mat-ready latch = target enhance");
         x("p1_shape_manual", "EmberSkillKit", A, SE, OW, "D793 player locked shape; soft prefer skips");
         x("p1_sig_stamp_dry", "EmberSigStampDry", A, HI, OW, "sig stamp dry tip latch");
