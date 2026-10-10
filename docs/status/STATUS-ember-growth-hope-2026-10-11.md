@@ -15,3 +15,6 @@
 
 ## D616
 `mapid_board` + 冒险 Open/目标族·图身份板 · 零改掉率
+
+## D617
+`kit_next_hope` / `kit_set_hope` · 技能组 Open · 零改 skill_mult/CD

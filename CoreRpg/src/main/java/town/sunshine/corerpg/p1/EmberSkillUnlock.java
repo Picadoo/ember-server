@@ -152,4 +152,42 @@ public final class EmberSkillUnlock {
         if (pl instanceof town.sunshine.corerpg.CoreRpgPlugin)
             ((town.sunshine.corerpg.CoreRpgPlugin) pl).getDataStore().flushMutation(p.getUniqueId());
     }
+
+    /**
+     * D617: next skill-unlock milestone hope (display only).
+     * Order: Q02 烬突 → Q03 招架 → Q04 符文 → Q05 身法.
+     */
+    public static String nextHope(PlayerData d, EmberRunService runs) {
+        if (d == null || runs == null) return "§8技能希望未载入";
+        String[][] chain = new String[][] {
+                { EmberSkillKit.UNLOCK_DASH, "Q02" },
+                { EmberSkillKit.UNLOCK_PARRY, "Q03" },
+                { EmberSkillKit.UNLOCK_SHAPE, "Q04" },
+                { EmberSkillKit.UNLOCK_STEP, "Q05" },
+        };
+        for (String[] row : chain) {
+            String map = row[0];
+            if (runs.firstClearedKey(d, map)) continue;
+            String name = shortName(map);
+            String line = unlockLine(map);
+            return "§e下一技能 · §f" + name + " §7需首通 " + row[1] + " §8· " + (line == null ? "" : line);
+        }
+        return "§a技能里程碑已齐 · 认套装差 / 形状 / 身法";
+    }
+
+    /**
+     * D617: worn-family set-fork + preferred-shape hope (display only · zero skill_mult).
+     */
+    public static String setHope(EmberLoadout lo) {
+        if (lo == null || lo.blade == null) return "§8拿手持刃看套装差与推荐形状";
+        String fam = lo.blade.family;
+        String shape = EmberSkillKit.preferredShapeLabel(fam);
+        String fork;
+        if ("scorch".equals(fam)) fork = "焚：扇形推荐 · 点燃/火痕";
+        else if ("burst".equals(fam)) fork = "爆：直线推荐 · 缓速/闪";
+        else if ("sustain".equals(fam)) fork = "承：环斩推荐 · 微疗/护";
+        else fork = "认族套装差";
+        return "§e套装手感 · §f" + EmberItemData.familyName(fam) + " §7→ 形状 §f" + shape + " §8· " + fork;
+    }
+
 }

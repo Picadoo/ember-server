@@ -6,6 +6,8 @@ import town.sunshine.corerpg.p1.EmberLoadoutService;
 import town.sunshine.corerpg.p1.EmberRunService;
 import town.sunshine.corerpg.p1.EmberParry;
 import town.sunshine.corerpg.p1.EmberSkillKit;
+import town.sunshine.corerpg.p1.EmberSkillUnlock;
+import town.sunshine.corerpg.p1.EmberLoadout;
 
 /** D240 / ARCH S3-11: %corerpg_*% flex skill + skill kit section (moved verbatim from CoreRpgExpansion). */
 final class CorePapiKit {
@@ -84,6 +86,15 @@ final class CorePapiKit {
             if (parry == null) return "就绪";
             int left = parry.cdLeftSeconds(player.getUniqueId());
             return left > 0 ? ("冷却 " + left + "s") : "就绪";
+        }
+        if ("kit_next_hope".equals(key)) { // D617 next unlock milestone
+            EmberRunService runs = plugin.getEmberRuns();
+            return EmberSkillUnlock.nextHope(data, runs);
+        }
+        if ("kit_set_hope".equals(key)) { // D617 worn set-fork + preferred shape
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            EmberLoadout lo = ls == null ? null : ls.get(player);
+            return EmberSkillUnlock.setHope(lo);
         }
         return null;
     }
