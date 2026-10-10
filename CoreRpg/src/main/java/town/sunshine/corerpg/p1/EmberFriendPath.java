@@ -172,8 +172,9 @@ public final class EmberFriendPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a好友 → §f" + label(id) + " §7· " + tip(id));
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D828
                 new String[]{"[好友]", "/corerpg friend", "看列表 / 加好友", "AQUA"},
+                new String[]{"[组队招募]", "/corerpg p1 recruit", "拉人开本", "GREEN"},
                 new String[]{"[换一条]", "/corerpg p1 friendpath", "重选", "GRAY"});
     }
 

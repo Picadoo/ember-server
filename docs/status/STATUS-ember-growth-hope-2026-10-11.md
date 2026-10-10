@@ -347,3 +347,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D826–D827 SHIP · jar 1.65.377-d826
 - Onlinepath claim btn; raidpath week remain on set
+
+## D828–D829 SHIP · jar 1.65.378-d828
+- Friend/mentor path + recruit; undo expire → re-enhance
