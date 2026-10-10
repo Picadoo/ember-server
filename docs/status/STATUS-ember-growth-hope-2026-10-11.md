@@ -780,3 +780,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - QualityLoop / RefineLoop / BrandLoop.afterPin(+piece) / ConvertLoop(+piece) / Gem insert → commit next
 - Zero price invent · not status remain twin
 
+## D2099–D2112 · 互换/分解承诺槽 · jar 1.65.507-d2112
+- SwapLoop winner → enhance/quality/refine
+- BlankLoop held → quality/refine/upgrade (胚料同花)
+- Zero yield/price invent
+

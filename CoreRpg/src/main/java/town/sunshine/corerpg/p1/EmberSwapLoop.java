@@ -4,12 +4,11 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.p1.EmberItemStore.TxnItem;
 
 /**
- * D484: free enhance-swap → spend/chase acquisition loop.
- * Chat buttons only — no ActionBar HUD family. Zero enhance math / pity / price change.
+ * D484 / D2100: free enhance-swap → piece-aware commit on winner.
+ * Zero enhance math / pity / price change.
  */
 public final class EmberSwapLoop {
 
@@ -18,25 +17,21 @@ public final class EmberSwapLoop {
     /** After successful forge {@code swap} commit. */
     public static void afterSwap(Player p, List<TxnItem> list) {
         if (p == null) return;
-        String winner = winnerHint(list);
+        EmberItemData winner = winnerAfter(list);
+        String winnerHint = winner == null ? "" : winner.shortLabel() + " +" + winner.enhance;
         String P = EmberRunService.P;
-        p.sendMessage(P + "§e强化已互换" + (winner.isEmpty() ? "" : " §7· 高强化在 " + winner)
-                + " §7· 选下一步（不改强化价/保底）：");
-        try { p.sendActionBar("§e互换完成 · §f选下一步"); } catch (Throwable ignored) { } // D656
-        ConfirmTokens.sendButtons(p, P, // D885
-                new String[]{"[去强化]", "/corerpg p1 enhance", "手持件继续强化预览", "GREEN"},
-                new String[]{"[成套追]", "/corerpg p1 setchase", "换上高强件", "GOLD"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
+        p.sendMessage(P + "§e强化已互换" + (winnerHint.isEmpty() ? "" : " §7· 高强化在 " + winnerHint)
+                + " §7· 承诺同件下一槽（不改强化价/保底）：");
+        try { p.sendActionBar("§e互换 · §f同件下一槽"); } catch (Throwable ignored) { }
+        EmberForgeCommitNext.afterSwapWinner(p, winner);
     }
 
-    /** Admin smoke: same button set without a live txn. */
     public static void afterSwap(Player p) {
         afterSwap(p, null);
     }
 
-    /** Prefer the piece that ended with higher enhance. */
-    static String winnerHint(List<TxnItem> list) {
-        if (list == null || list.isEmpty()) return "";
+    static EmberItemData winnerAfter(List<TxnItem> list) {
+        if (list == null || list.isEmpty()) return null;
         EmberItemData best = null;
         int bestE = -1;
         for (TxnItem t : list) {
@@ -46,11 +41,16 @@ public final class EmberSwapLoop {
                 best = t.after;
             }
         }
-        return best == null ? "" : best.shortLabel() + " +" + bestE;
+        return best;
+    }
+
+    static String winnerHint(List<TxnItem> list) {
+        EmberItemData best = winnerAfter(list);
+        return best == null ? "" : best.shortLabel() + " +" + best.enhance;
     }
 
     public static String followHint() {
-        return "[去强化]|[装备页]|[工坊]";
+        return "[去强化]|[去成色]|[成套追]";
     }
 
     public static String chatLine() {

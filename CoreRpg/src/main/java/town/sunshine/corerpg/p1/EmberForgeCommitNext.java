@@ -100,4 +100,33 @@ public final class EmberForgeCommitNext {
         if (b == null) b = new String[]{"[宝石 list]", "/corerpg p1 gem list", "看孔位", "AQUA"};
         send3(p, EmberRunService.P + "§7镶嵌下一环：", a, b, setchase());
     }
+
+    /** After enhance-swap: push the high-enhance winner into craft slots. */
+    public static void afterSwapWinner(Player p, EmberItemData winner) {
+        String[] a = enhance();
+        String[] b = quality(winner);
+        if (b == null) b = refine(winner);
+        if (b == null) b = lock(winner);
+        send3(p, EmberRunService.P + "§7互换下一环：", a, b, setchase());
+    }
+
+    /**
+     * After dismantle blanks: spend blanks on held piece — quality/refine/upgrade order.
+     * {@code held} may be null → generic upgrade/brand.
+     */
+    public static void afterBlanks(Player p, EmberItemData held) {
+        String[] a = quality(held);
+        if (a == null) a = refine(held);
+        if (a == null) a = new String[]{"[去升阶]", "/corerpg p1 upgrade", "手持件升阶（花胚料）", "GREEN"};
+        String[] b = refine(held);
+        if (b == null || (a != null && a[1].equals(b[1]))) {
+            b = new String[]{"[去升阶]", "/corerpg p1 upgrade", "手持件升阶（花胚料）", "GOLD"};
+        }
+        if (a[1].equals(b[1])) {
+            b = new String[]{"[去烙纹合成]", "/corerpg p1 brand craft", "碎片→烙纹", "GOLD"};
+        }
+        String[] c = new String[]{"[撤销分解]", "/corerpg p1 undo", "窗口内可找回", "YELLOW"};
+        send3(p, EmberRunService.P + "§7胚料下一环：", a, b, c);
+    }
+
 }

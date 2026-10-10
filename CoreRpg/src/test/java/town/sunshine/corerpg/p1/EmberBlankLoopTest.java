@@ -5,6 +5,6 @@ public class EmberBlankLoopTest {
     @Test public void lines() {
         assertTrue(EmberBlankLoop.chatLine(3).contains("胚料 ×3"));
         assertTrue(EmberBlankLoop.followHint().contains("去升阶"));
-        assertTrue(EmberBlankLoop.followHint().contains("烙纹合成"));
+        assertTrue(EmberBlankLoop.followHint().contains("成色") || EmberBlankLoop.followHint().contains("精工"));
     }
 }

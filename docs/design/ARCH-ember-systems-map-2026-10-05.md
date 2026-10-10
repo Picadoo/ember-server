@@ -418,3 +418,6 @@ flowchart LR
 
 ### CN · forge commit-next (D2085–D2098)
 `EmberForgeCommitNext` wires Quality/Refine/BrandPin/Convert/GemInsert to piece-aware ConfirmTokens (same spirit as RL/UL/EL). Zero price invent.
+
+### SB · swap/blank commit (D2099–D2112)
+Swap winner + blank held piece-aware via EmberForgeCommitNext.
