@@ -3608,6 +3608,9 @@ public final class EmberRunService implements Listener {
                 p.sendMessage(P + "待选：" + r.key.substring(3, 6).toUpperCase(Locale.ROOT) + " T" + (g == null ? 1 : g.amount) + " 标准"
                         + EmberItemData.slotName(g == null ? "blade" : g.id));
             }
+            try { // D1857
+                p.sendActionBar("§e首通自选 · 待领 §f" + waiting.size() + " §7项 · 点按钮领取");
+            } catch (Throwable ignored) { }
             if (!fixed) return true;
             String t = target(data(p.getUniqueId()));
             familyButtons(p, P + "点一个族领取" + (t == null ? "（会同时设为掉落目标族）" : "（目标族 " + EmberItemData.familyName(t) + "，选同族才能成套）") + "：", "/corerpg p1 firstclear");

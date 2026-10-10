@@ -702,3 +702,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1842–D1855 SHIP · jar 1.65.484-d1842
 - forgeroll remainLine have/need AB; marks bag remain AB; EM1-B still blocked
+
+## D1856–D1869 SHIP · jar 1.65.485-d1856
+- firstclear pending count AB; post-forgeroll Stage0
