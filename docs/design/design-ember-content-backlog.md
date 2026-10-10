@@ -964,7 +964,7 @@
 - `B-forge-random-roll`（D430 **PASS** · jar 1.65.132-d430）
 - `B-forge-weekly-convert`（D431 **PASS** · jar 1.65.133-d431）
 - `B-counterplay-flash`（已批 A · 方案 M · D440 · **HOLD** · 薄反馈暂停）
-- `B-short-map-sx14-sx15-real`（已批 A · 方案 M · D441 · **已批·施工** · sx14折角+sx15螺旋真地图+Cast可读）
+- `B-short-map-sx14-sx15-real`（已批 A · 方案 M · D441 · **PASS** · sx14折角+sx15螺旋真地图+Cast可读）
 - `B-set-hud-polish`（已批 A · 方案 M · D442 · **已批·待施工** · D439 短闪后 HUD 交接抛光 · ≠改倍率）
 - `B-set-proc-readable`（已批 A · 方案 M · D439 · **PASS** · jar 1.65.141 · COORD DONE）
 - `B-slash-set-identity`（已批 A · 方案 M · D438 · **PASS** · jar 1.65.140 · COORD DONE）

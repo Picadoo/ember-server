@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 破招/破绽成功短闪（D440）
 
-STATUS=**已批 A · 方案 M · D440 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-counterplay-flash-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-counterplay-flash-need-design-2026-10-10.md) · backlog `B-counterplay-flash` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠sx ≠改 boss 招 dmg/warn/break_hp**
+STATUS=**已批 A · 方案 M · D440 · HOLD** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-counterplay-flash-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-counterplay-flash-need-design-2026-10-10.md) · backlog `B-counterplay-flash` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠sx ≠改 boss 招 dmg/warn/break_hp**
 
 **上游：** D439 套装触发可读 PASS。
 
@@ -25,4 +25,4 @@ STATUS=**已批 A · 方案 M · D440 · 施工中** · 2026-10-10 · tip [`STAT
 
 `EmberRunDirector` / counterplay 成功分支 → 短闪 → 冒烟。
 
-*D440 · 已批 A·M · 施工中。*
+*D440 · HOLD · 薄反馈暂停 · 主线 D441。*

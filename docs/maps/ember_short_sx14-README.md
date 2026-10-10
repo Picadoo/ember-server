@@ -6,3 +6,9 @@
 - **禁复读：** 线性 sx01 · 环廊 sx06 · 对廊 sx11 · 转枢 sx12 · 衡梁 sx13 · 递闸/跳石/错层/塔升/风廊/霜雾廊气质。
 - **出生暂写：** `0,64,5`（与 short.sx14 spawn 对齐）；Boss 垫须有侧龛/侧台供躲 Cast。
 - **仓/play 无 WorldEdit/FAWE** → 主题换皮另号进服 WE。
+
+## D441 真地图（2026-10-10）
+- **D441 真地形：** 强制折角 ≥3 · 角点 (22,31)(36,31)(36,44)(22,44) · 裂隙缝岩浆/铁栏 · 裂冠侧龛
+- **重建：** `python tools/p1map/d441_build_sx14_sx15_terrain.py`（需 venv: nbt + anvil-parser）
+- **map_version：** `ember_short_sx14@d441`
+- **禁** `git add -f` 本目录。

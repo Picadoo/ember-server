@@ -66,10 +66,10 @@ EmberSx14Elite:
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
 
 EmberSx14Warden:
-  # R3 Boss 裂冠守吏 · RiftCast 裂扫斩/折角压浪可读可躲；对照 sx12 Warden HP180；未抬过日更 Boss 210
+  # R3 Boss 裂冠守吏 · RiftCast 裂扫斩/折角压浪可读可躲；对照 sx12 Warden；D441 HP240 Cast可读；未抬过日更 Boss 210
   Type: ZOMBIE
   Display: '&c裂冠守吏'
-  Health: 180
+  Health: 240
   Damage: 3
   Options:
     MovementSpeed: 0.2
@@ -84,6 +84,6 @@ EmberSx14Warden:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
-  - skill{s=EmberSx14RiftCast} @self ~onTimer:80
+  - skill{s=EmberSx14RiftCast} @self ~onTimer:70
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

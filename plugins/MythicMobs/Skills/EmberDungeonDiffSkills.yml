@@ -411,33 +411,37 @@ EmberSx13BalanceCast:
 # 对照：EmberSx13BalanceCast；主题「裂扫斩」：crit 裂隙折角条 + cloud 裂缝压浪 + lava 烬感；结算 r5
 # 1.12.2 粒子：crit + cloud + lava；message 标明退进裂冠侧龛或已过折角侧台
 EmberSx14RiftCast:
+  # D441 Cast 可读：预警粒子加浓 · delay 25→30 · 结算伤 1.2→0.85（防烟测秒杀；不改奖励表）
   Cooldown: 8
   Skills:
-  - message{m="&6【烬裂】&f裂扫斩——&7退进裂冠侧龛或已过折角侧台！"} @PlayersInRadius{r=24}
-  - effect:particles{p=crit;amount=44;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=36;hSpread=4;ySpread=0.7;speed=0} @Self
-  - effect:particles{p=lava;amount=18;hSpread=2.5;ySpread=1.2;speed=0} @Self
-  - effect:sound{s=minecart.base;volume=0.7;pitch=0.42} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+  - message{m="&6【烬裂】&f裂扫斩——&7退进裂冠侧龛或已过折角侧台！"} @PlayersInRadius{r=28}
+  - effect:particles{p=crit;amount=72;hSpread=6.5;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=56;hSpread=5;ySpread=0.9;speed=0} @Self
+  - effect:particles{p=lava;amount=28;hSpread=3;ySpread=1.4;speed=0} @Self
+  - effect:particles{p=flame;amount=40;hSpread=5;ySpread=0.6;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.38} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=48;hSpread=6;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=36;hSpread=5.5;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=lava;amount=20;hSpread=5;ySpread=1;speed=0} @Self
 
 # --- 短征 sx15 · 烬旋坡廊 Boss 旋扫斩/坡心压浪 ---
 EmberSx15SpiralCast:
+  # D441 Cast 可读：预警加浓 · delay 30 · 伤 0.85
   Cooldown: 8
   Skills:
-  - message{m="&6【烬旋】&f旋扫斩——&7退进旋冠侧龛或已过坡段内侧台！"} @PlayersInRadius{r=24}
-  - effect:particles{p=crit;amount=44;hSpread=5.5;ySpread=0.5;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=36;hSpread=4;ySpread=0.8;speed=0} @Self
-  - effect:particles{p=lava;amount=18;hSpread=2.5;ySpread=1.2;speed=0} @Self
-  - effect:sound{s=minecart.base;volume=0.7;pitch=0.40} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+  - message{m="&6【烬旋】&f旋扫斩——&7退进旋冠侧龛或已过坡段内侧台！"} @PlayersInRadius{r=28}
+  - effect:particles{p=crit;amount=72;hSpread=6.5;ySpread=0.6;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=56;hSpread=5;ySpread=1.0;speed=0} @Self
+  - effect:particles{p=lava;amount=28;hSpread=3;ySpread=1.4;speed=0} @Self
+  - effect:particles{p=flame;amount=40;hSpread=5;ySpread=0.7;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.36} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=48;hSpread=6;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=36;hSpread=5.5;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=lava;amount=20;hSpread=5;ySpread=1;speed=0} @Self
 
 # --- 短征 sx16 · 烬影叠廊 Boss 影扫斩/叠影压浪（短 delay·轻粒子·防 Watchdog）---
 EmberSx16ShadowCast:
