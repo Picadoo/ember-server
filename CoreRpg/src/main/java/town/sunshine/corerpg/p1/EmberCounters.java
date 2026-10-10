@@ -109,6 +109,8 @@ public final class EmberCounters {
         px("p1_unlock_", "EmberRunService", A, PR, NV, "map unlocks granted by settlement / admin");
         x("p1_target", "EmberForgeService", A, SE, OW, "current forge target");
         x("p1_slash_shape", "SkillService", A, SE, OW, "D211 烬斩符文 0=fan 1=line 2=ring (Q04+); signature shape overrides");
+        x("p1_dual_lead", "EmberDualLead", A, SE, OW, "D466 dual-sig path 0=none 1=blade 2=charm 3=both");
+        x("p1_dual_lead_offer", "EmberDualLead", A, CL, RL, "D466 once latch after Q03 dual unlock");
         x("p1_set_focus", "EmberSetFocus", A, SE, OW, "D465 set-family focus 0=none 1=scorch 2=burst 3=sustain");
         x("p1_set_focus_offer", "EmberSetFocus", W, CL, RL, "D465 once-per-week offer latch @rotationWeekKey");
         x("p1_sig_chase", "EmberSigChase", A, SE, OW, "D464 imprint chase Def.code 0=none 1..15=L01..L15");

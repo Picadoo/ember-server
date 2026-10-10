@@ -1103,6 +1103,7 @@ public final class EmberRunService implements Listener {
                         town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新解锁：§e" + un + " ", "[打开签名页]", "/corerpg p1 sig menu", "签名图鉴、首领徽记、烙印、开关签名");
                         p.sendMessage(P + "§7不用打命令：主菜单 → 装备 → 签名传奇"); // stage 1.5 one-line hint
                         if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberSigChase.scheduleImprintOffer(p); // D464
+                        if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         String mode = modeUnlock(g.id); // D174 stage 2b: Q04 / Q05 / Q06 first clears also open a mode
                         if (mode != null) {
                             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新模式：§e" + mode + " ", "[打开进阶模式]", "/corerpg p1 modes", "首领残响 / 连战·前哨 / 自选誓约");

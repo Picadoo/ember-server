@@ -30,6 +30,7 @@ Layout:
 
 Events:
   Open:
+    - 'tell: §e双签路径：§f%corerpg_p1_dual_lead% §8· /corerpg p1 duallead'
     - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.2'
     - 'tell: §8战斗中签名触发会抬头短闪名字（躲开回气/借势/点燃/护盾/传火）'
 

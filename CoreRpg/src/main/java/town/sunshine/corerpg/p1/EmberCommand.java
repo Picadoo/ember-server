@@ -85,6 +85,45 @@ public final class EmberCommand {
             s.sendMessage(P + "已向 " + t.getName() + " 弹出 " + map.toUpperCase(Locale.ROOT) + " 进阶路径点选");
             return true;
         }
+        if ("duallead".equals(sub) || "双签路径".equals(sub)) { // D466 dual-sig first-path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean dual = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberDualLead.glance(EmberDualLead.get(d), dual));
+                if (dual) EmberDualLead.forceOffer(p);
+                else p.sendMessage(P + "§7首通 Q03 后可选刃优先 / 护符优先 / 两条都开");
+                return true;
+            }
+            if ("offer".equalsIgnoreCase(args[2]) || "nudge".equalsIgnoreCase(args[2])) {
+                if (!dual) { p.sendMessage(P + "§c需本人首通 Q03（双签名）"); return true; }
+                EmberDualLead.forceOffer(p);
+                return true;
+            }
+            int id = EmberDualLead.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 duallead <blade|charm|both|clear|offer>");
+                return true;
+            }
+            if (id != EmberDualLead.NONE && !dual) {
+                p.sendMessage(P + "§c需本人首通 Q03 后才能开双签路径");
+                return true;
+            }
+            EmberDualLead.apply(d, id);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            if (id == EmberDualLead.NONE) p.sendMessage(P + "已清除双签路径偏好（开关槽位未改）");
+            else {
+                boolean bOff = d.periodCount(EmberGrowthService.C_SIGOFF + "blade", "all") > 0;
+                boolean cOff = d.periodCount(EmberGrowthService.C_SIGOFF + "charm", "all") > 0;
+                p.sendMessage(P + "§a双签路径 → §f" + EmberDualLead.label(id) + "§7（" + EmberDualLead.tip(id) + "）");
+                p.sendMessage(P + EmberDualLead.glance(id, true)
+                        + " §8· 刃" + (bOff ? "关" : "开") + " · 护符" + (cOff ? "关" : "开"));
+            }
+            return true;
+        }
         if ("setfocus".equals(sub) || "套装焦点".equals(sub)) { // D465 set-family playstyle focus
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
