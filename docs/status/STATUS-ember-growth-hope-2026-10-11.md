@@ -664,3 +664,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1679–D1696 ARCH SHIP · jar 1.65.473-d1679
 - NX2 vault/gearlib capacity honesty AB
+
+## D1697–D1710 SHIP · jar 1.65.474-d1697
+- Armor claim/equip capacity AB (待领/换装还差)
+## D1711 ARCH NX3
+- EmberSourceMapTest + EmberCountersTest PASS; C15/C16 still paused

@@ -474,6 +474,16 @@ public final class EmberSixSlotService implements Listener {
         if (r[0] == 0 && r[1] == 0) p.sendMessage(P + "没有待领物品。");
         else if (r[1] == 0) p.sendMessage(P + "已领取 " + r[0] + " 件，放进了背包。");
         else p.sendMessage(P + "已领取 " + r[0] + " 件；背包满了，还有 " + r[1] + " 件留在待领里，腾出空位再来。");
+        try { // D1698 NX armor claim remain
+            int free = EmberGearLib.freeBackpackSlots(p);
+            int left = stashCount(p.getUniqueId());
+            if (r[0] == 0 && r[1] == 0)
+                p.sendActionBar("§7待领 · 空 · 背包空" + free + "格");
+            else if (left > 0)
+                p.sendActionBar("§e待领 · 领" + r[0] + " · 还留" + left + " · 空" + free + "格");
+            else
+                p.sendActionBar("§a待领 · 领" + r[0] + " · 清 · 空" + free + "格");
+        } catch (Throwable ignored) { }
         loadouts.markDirty(p);
     }
 
@@ -525,6 +535,13 @@ public final class EmberSixSlotService implements Listener {
         if (swapIn(p, slot, pick.piece.uid)) {
             p.sendMessage(P + "已换上" + EmberSixSlot.slotLabel(slot) + "：" + pick.piece.shortLabel() + "（" + EmberSixRank.deltaText(pick.delta) + "）。");
             loadouts.markDirty(p);
+            try { // D1699
+                EmberSixRank.View v2 = view(p);
+                int left = EmberSixRank.allPlan(v2).size();
+                p.sendActionBar("§a换装 · §f" + EmberSixSlot.slotLabel(slot)
+                        + " §7" + EmberSixRank.deltaText(pick.delta)
+                        + (left > 0 ? (" §8· 还差" + left + "部位可换") : " §a· 四部位最优"));
+            } catch (Throwable ignored) { }
         }
     }
 
@@ -581,6 +598,12 @@ public final class EmberSixSlotService implements Listener {
         for (int i : todo) if (swapIn(p, i, v.best[i].piece.uid)) n++;
         loadouts.markDirty(p);
         p.sendMessage(P + "已换上 " + n + " 件护甲。");
+        try { // D1699
+            EmberSixRank.View v2 = view(p);
+            int left = EmberSixRank.allPlan(v2).size();
+            p.sendActionBar("§a全换 · §f" + n + "件"
+                    + (left > 0 ? (" §8· 还差" + left + "部位") : " §a· 四部位最优"));
+        } catch (Throwable ignored) { }
     }
 
     /** backpack piece {@code uid} ↔ armor slot: one swap, the old piece takes the freed backpack slot (no loss, no copy) */
