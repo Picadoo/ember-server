@@ -540,10 +540,24 @@ public final class EmberRunService implements Listener {
      * {@link EmberSessionService} (D237 / ARCH S3-8). Settlement lives in {@link EmberSettleService} (D238).
      */
     private boolean enter(final Player leader, String mapKey, final boolean challenge, final int abyss, long presetSeed) {
-        final EmberEntryService.Admit a = entry.admit(leader, mapKey, challenge, abyss);
+        boolean ch = challenge;
+        if (abyss <= 0) { // D519 sticky challenge preference on cleared mainline
+            EmberRunMaps.MapDef md = maps.byKey(mapKey);
+            PlayerData ld = dataOf(leader.getUniqueId());
+            if (md != null && !md.raid && !md.event && !md.rush && !md.shortExpedition && ld != null) {
+                boolean want = EmberChallengePath.resolve(challenge, EmberChallengePath.get(ld),
+                        progressFlag(ld, md.key), challengeOpen(ld)); // fact = cleared (paid package not required)
+                if (want != challenge) {
+                    ch = want;
+                    leader.sendMessage(P + (ch ? "§c硬本·偏挑战 §7已改为挑战版进本" : "§a硬本·偏普通 §7已改为普通版进本")
+                            + " §8· /corerpg p1 challengepath");
+                } else ch = want;
+            }
+        }
+        final EmberEntryService.Admit a = entry.admit(leader, mapKey, ch, abyss);
         if (a == null) return true;
-        if (entry.readinessHold(leader, a.map, a.party, challenge, abyss)) return true;
-        return session.start(leader, a, challenge, abyss, presetSeed);
+        if (entry.readinessHold(leader, a.map, a.party, ch, abyss)) return true;
+        return session.start(leader, a, ch, abyss, presetSeed);
     }
 
     /** package: DP create failed / nobody entered — {@link EmberSessionService} (D237). */
@@ -1131,6 +1145,7 @@ public final class EmberRunService implements Listener {
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberFailPath.scheduleOfferAfterQ07(p); // D507 fail stamina refund path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberFeePath.scheduleOfferAfterQ07(p); // D511 abyss fee pay path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRecruitPath.scheduleOfferAfterQ07(p); // D513 recruit accept path
+                        if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberChallengePath.scheduleOfferAfterQ07(p); // D519 challenge prefer path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAbyssPath.scheduleOfferAfterQ07(p); // D486 abyss push/farm path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAttunePath.scheduleOfferAfterQ07(p); // D492 attune combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberTunePath.scheduleOfferAfterQ07(p); // D498 tune combat path

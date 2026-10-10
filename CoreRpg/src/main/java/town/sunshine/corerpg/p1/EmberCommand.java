@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("challengepath".equals(sub) || "硬本路径".equals(sub) || "挑战路径".equals(sub)) { // D519 cleared-map challenge preference
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q07");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberChallengePath.glance(EmberChallengePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c硬本路径需本人首通 Q07。");
+                    return true;
+                }
+                EmberChallengePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c硬本路径需本人首通 Q07。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberChallengePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberChallengePath.get(d);
+                    if (EmberChallengePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberChallengePath.label(cur) + " · 改路径再 /corerpg p1 challengepath");
+                    else EmberChallengePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberChallengePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 challengepath <prefer|easy|follow|clear>");
+                return true;
+            }
+            EmberChallengePath.applyAndReply(p, id);
+            return true;
+        }
         if ("onlinepath".equals(sub) || "在线路路径".equals(sub) || "在线路径".equals(sub)) { // D518 online milestone claim path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
