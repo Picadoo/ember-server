@@ -971,7 +971,7 @@
 - `B-short-map-sx04-sx09-d444`（已批 A · 方案 M · D444 · **落地** · sx04 Cast+settle PASS + sx05–09真地图）
 - `B-short-map-sx10-sx13-d446`（已批 A · 方案 M · D446 · **落地** · sx10–13真地图 Cast+settle PASS）
 - `B-set-hud-polish`（已批 A · 方案 M · D444 · **PASS** · jar 1.65.142-d444 · tip 误标 D442 已更正 · COORD DONE）
-- `B-growth-feel-residual`（已批 A · 方案 M · D445 · **docs-only** · 技能落点确认短闪 · tip 已关 · 施工另开 · ≠sx20 ≠改套装倍率表）
+- `B-growth-feel-residual`（已批 A · 方案 M · D445 · **PASS** · jar 1.65.143-d445 · 技能落点确认短闪 · tip 已关 · ≠sx20 ≠改套装倍率表）
 - `B-set-proc-readable`（已批 A · 方案 M · D439 · **PASS** · jar 1.65.141 · COORD DONE）
 - `B-slash-set-identity`（已批 A · 方案 M · D438 · **PASS** · jar 1.65.140 · COORD DONE）
 - `B-gather-set-identity`（已批 A · 方案 M · D437 · **HOLD** · 聚火不复活）

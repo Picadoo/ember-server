@@ -1,8 +1,8 @@
 # 余烬 · 成长花样 · 战斗手感残余（D445）
 
-STATUS=**已批 A · 方案 M · D445 · docs-only（本号不装 jar）** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-growth-feel-residual-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-growth-feel-residual-need-design-2026-10-10.md) · backlog `B-growth-feel-residual` · **≠sx20 同构 ≠改套装倍率/every/ICD ≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠复活聚火 ≠开天赋一排 ≠开灰印续跑 ≠开 K3**
+STATUS=**已批 A · 方案 M · D445 · 施工 PASS · jar 1.65.143-d445** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-growth-feel-residual-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-growth-feel-residual-need-design-2026-10-10.md) · backlog `B-growth-feel-residual` · **≠sx20 同构 ≠改套装倍率/every/ICD ≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠复活聚火 ≠开天赋一排 ≠开灰印续跑 ≠开 K3**
 
-> **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 部署。** 本号只交 DESIGN + 源表行 + tip 关闭；施工另开 COORD（拟 jar **1.65.143-d445**）。
+> **批 A 已落施工。** jar **1.65.143-d445** · STATUS [`STATUS-ember-skill-hit-flash-d445-2026-10-10.md`](../status/STATUS-ember-skill-hit-flash-d445-2026-10-10.md)。**≠关观察 ≠抬日表 ≠sx20 ≠复活聚火 ≠解 D440。**
 
 **上游：** D444 套装 HUD 短闪抛光 PASS（jar **1.65.142-d444**，本 routine 负责上线）· D439 套装触发可读 PASS · D440 破招短闪 **HOLD** · D429 烙纹定向 PASS · 用户方向：停同构短征装配，转**能力成长 / 战斗手感**（工坊锻造选择 + 技能手感）。
 
@@ -87,4 +87,4 @@ STATUS=**已批 A · 方案 M · D445 · docs-only（本号不装 jar）** · 20
 | 刷屏 | 硬防抖；精英群攻只闪一次/窗 |
 | 误当数值 Buff | 文案禁止「伤害提升」字样；QA 对照表零改 |
 
-*D445 · 已批 A·方案 M · docs-only · 施工另开。*
+*D445 · 已批 A·方案 M · 施工 PASS · jar 1.65.143-d445。*

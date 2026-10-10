@@ -662,6 +662,7 @@ public final class SkillService implements Listener {
 
         spawnParticles(from.clone().add(0, 0.2, 0), "FLAME", 12);
         player.teleport(dest);
+        maybeFlashDashLand(player); // D445 烬突落地 (成功位移；前方受阻路径不进此分支)
         spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 18);
         playSound(dest, "ENTITY_ENDERDRAGON_FLAP");
 
@@ -746,6 +747,11 @@ public final class SkillService implements Listener {
     /** D174 stage 3: uuid → wind-up end (ms) of a charged 烬斩 (L13); melee is cancelled until then */
     private static final Map<java.util.UUID, Long> CHARGING = new java.util.concurrent.ConcurrentHashMap<java.util.UUID, Long>();
 
+    /** D445: last skill hit-confirm flash time (ms) per player — shared slash/dash debounce. */
+    private final Map<java.util.UUID, Long> lastSkillHitFlashAt = new java.util.concurrent.ConcurrentHashMap<java.util.UUID, Long>();
+    /** D445: debounce ≥0.4s between skill-confirm flashes. */
+    static final long SKILL_HIT_FLASH_DEBOUNCE_MS = 400L;
+
     public static boolean isCharging(java.util.UUID id) {
         Long u = id == null ? null : CHARGING.get(id);
         if (u == null) return false;
@@ -820,12 +826,60 @@ public final class SkillService implements Listener {
             town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;
         }
         applySlashSetIdentity(player, hit);
+        maybeFlashSlashHit(player, hit.size()); // D445 烬斩命中
         if (look2 != null) {
             playSound(player.getLocation(), look2.sound);
             spawnParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, 20);
         }
     }
 
+
+    /**
+     * D445 pure: flash 烬斩命中 when ≥1 valid target was damaged and debounce elapsed.
+     * Multi-hit in the same window → once (caller passes total hit count).
+     */
+    static boolean shouldFlashSlashHit(int hitCount, long lastFlashAt, long nowMs) {
+        if (hitCount < 1) return false;
+        if (lastFlashAt > 0L && nowMs - lastFlashAt < SKILL_HIT_FLASH_DEBOUNCE_MS) return false;
+        return true;
+    }
+
+    /**
+     * D445 pure: flash 烬突落地 only when displacement finished successfully.
+     * Cancelled / blocked (「前方受阻」) → false.
+     */
+    static boolean shouldFlashDashLand(boolean displacementOk) {
+        return displacementOk;
+    }
+
+    /** D445: ActionBar 烬斩命中 — yields to set proc flash via EmberSetService. */
+    private void maybeFlashSlashHit(Player player, int hitCount) {
+        if (player == null) return;
+        long now = System.currentTimeMillis();
+        Long prev = lastSkillHitFlashAt.get(player.getUniqueId());
+        long lastAt = prev == null ? 0L : prev.longValue();
+        if (!shouldFlashSlashHit(hitCount, lastAt, now)) return;
+        town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
+        if (sets == null) return;
+        if (sets.flashSkillConfirm(player, ChatColor.GOLD + "烬斩命中")) {
+            lastSkillHitFlashAt.put(player.getUniqueId(), Long.valueOf(now));
+        }
+    }
+
+    /** D445: ActionBar 烬突落地 after successful dash teleport. */
+    private void maybeFlashDashLand(Player player) {
+        if (player == null || !shouldFlashDashLand(true)) return;
+        long now = System.currentTimeMillis();
+        Long prev = lastSkillHitFlashAt.get(player.getUniqueId());
+        long lastAt = prev == null ? 0L : prev.longValue();
+        // reuse slash debounce so slash+dash do not double-spam the bar
+        if (!shouldFlashSlashHit(1, lastAt, now)) return;
+        town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
+        if (sets == null) return;
+        if (sets.flashSkillConfirm(player, ChatColor.AQUA + "烬突落地")) {
+            lastSkillHitFlashAt.put(player.getUniqueId(), Long.valueOf(now));
+        }
+    }
 
     private String slashSetTip(Player player) {
         town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();

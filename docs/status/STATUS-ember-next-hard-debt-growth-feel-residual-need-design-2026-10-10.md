@@ -2,7 +2,7 @@
 
 > **旁注（已关）· 2026-10-10：** 总控 **已批 A · 方案 M · D445** · 技能落点确认短闪 · **≠sx20 同构** · **≠改套装倍率/every/ICD** · **≠守招** · **≠抬日表** · **≠关 Stage2（＜17:40）** · **≠复活聚火** · D440 另号 HOLD。
 
-> **【D445 · 已批 A · 方案 M】** docs-only 本号 · 施工另 COORD · 拟 jar **1.65.143-d445** · DESIGN [`DESIGN-ember-growth-feel-residual-2026-10-10.md`](../design/DESIGN-ember-growth-feel-residual-2026-10-10.md)
+> **【D445 · 已批 A · 方案 M · 施工 PASS】** jar **1.65.143-d445** · DESIGN [`DESIGN-ember-growth-feel-residual-2026-10-10.md`](../design/DESIGN-ember-growth-feel-residual-2026-10-10.md) · STATUS [`STATUS-ember-skill-hit-flash-d445-2026-10-10.md`](STATUS-ember-skill-hit-flash-d445-2026-10-10.md)
 
 **上游：** D444 PASS jar 1.65.142-d444 · D439 PASS · D440 HOLD  
 **backlog：** `B-growth-feel-residual`

@@ -71,6 +71,8 @@ public final class EmberSetService implements Listener {
         int lastAlmostCounter = -1;
         /** D444: almost-ready debounce — when we last flashed */
         long lastAlmostAt;
+        /** D445: skill confirm flash owns ActionBar briefly (below proc) */
+        long skillFeelUntil;
     }
 
     /** D444: almost-ready debounce window (ms); pure helper for unit tests. */
@@ -85,6 +87,50 @@ public final class EmberSetService implements Listener {
     static boolean shouldFlashAlmost(int counter, int every, int lastAlmostCounter, long lastAlmostAt, long now) {
         if (every <= 1 || counter != every - 1) return false;
         if (lastAlmostCounter == counter && now - lastAlmostAt < ALMOST_DEBOUNCE_MS) return false;
+        return true;
+    }
+
+    /** D445: skill hit-confirm ActionBar window (ms); ≤1.2s, ActionBar-only. */
+    public static final long SKILL_FLASH_MS = 1200L;
+
+    /** D445: true while a set proc / almost-ready flash owns the ActionBar. */
+    public boolean isProcFlashActive(Player p) {
+        if (p == null) return false;
+        Session s = sessions.get(p.getUniqueId());
+        if (s == null) return false;
+        return now() < s.procFlashUntil;
+    }
+
+    /**
+     * D445: short ActionBar skill-confirm flash (烬斩命中 / 烬突落地).
+     * Yields when set proc flash owns the bar — does not steal true-proc readability.
+     * @return true if the flash was shown
+     */
+    public boolean flashSkillConfirm(Player p, String msg) {
+        if (p == null || msg == null || msg.isEmpty()) return false;
+        Session s = session(p);
+        long t = now();
+        // yield to set true-proc / almost-ready / forced handback (D445 priority below set)
+        if (t < s.procFlashUntil || t < s.forceHudUntil) return false;
+        long until = t + SKILL_FLASH_MS;
+        s.skillFeelUntil = until;
+        try { p.sendActionBar(msg); } catch (Throwable ignored) { }
+        try {
+            p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
+                    net.md_5.bungee.api.chat.TextComponent.fromLegacyText(msg));
+        } catch (Throwable ignored) { }
+        // ActionBar-only — no subtitle (noise budget vs D444 true-proc)
+        s.hudShown = true;
+        final UUID id = p.getUniqueId();
+        final long token = until;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            Session ss = sessions.get(id);
+            Player pp = Bukkit.getPlayer(id);
+            if (ss == null || pp == null || !pp.isOnline()) return;
+            if (ss.skillFeelUntil != token) return; // newer skill/set flash won
+            ss.skillFeelUntil = 0L;
+            showHud(pp, ss, now());
+        }, Math.max(1L, SKILL_FLASH_MS / 50L));
         return true;
     }
 
@@ -333,6 +379,7 @@ public final class EmberSetService implements Listener {
 
     private void showHud(Player p, Session s, long now) {
         if (now < s.procFlashUntil) return; // D439 proc flash owns ActionBar briefly
+        if (now < s.skillFeelUntil) return; // D445 skill confirm owns ActionBar briefly
         EmberSupplyService sup = plugin.getEmberSupplies();
         String hint = sup == null ? null : sup.lowHpHint(p); // new-player polish: low HP → how to drink (wins over the set line)
         boolean force = now < s.forceHudUntil;
@@ -476,6 +523,16 @@ public final class EmberSetService implements Listener {
     }
 
     /** onDisable: copy every session's remaining cooldowns into the states before they are saved. */
+
+    /** D445: set proc / almost-ready / forceHud currently owns ActionBar — skill feel must yield. */
+    public boolean isSetHudOwned(Player p, long nowMs) {
+        if (p == null) return false;
+        Session s = sessions.get(p.getUniqueId());
+        if (s == null) return false;
+        long now = nowMs > 0 ? nowMs : now();
+        return now < s.procFlashUntil || now < s.forceHudUntil;
+    }
+
     public void flushAll() {
         for (UUID id : new ArrayList<UUID>(sessions.keySet())) persist(id, false);
         stop();
