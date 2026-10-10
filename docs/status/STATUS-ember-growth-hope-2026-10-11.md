@@ -235,3 +235,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D755 raid enteringLine path tag
 - D756 imprint go overwrite → preview
 - D757 enhance hole craft if no gem
+
+## D758–D760 SHIP · jar 1.65.349-d758 · 2026-10-11
+- D758 raid week-full path glance
+- D759 sig menu ready one-click cue
+- D760 gem menu enhance-hole tell

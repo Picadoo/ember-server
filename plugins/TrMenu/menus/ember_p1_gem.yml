@@ -30,6 +30,7 @@ Events:
     - 'tell: §e合成→镶嵌：§f点合成后聊天出嵌孔按钮 · 手持刃/符 /corerpg p1 gem list · §c永不旧 socket'
     - 'command: corerpg p1 gem pity'
     - 'command: corerpg p1 gem list'
+    - 'tell: §e强化开孔/空孔：§f强化升档后聊天出镶嵌追 · 有石一键嵌 · 无石点合成'
 
 Icons:
   '#':
