@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx15（烬旋坡廊 · P1 可达 + 薄经济 S54）
 
-STATUS=**待批 A · 荐方案 M · 拟 D424** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx15-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx15-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx15`（待批）· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D423 ≠纯换皮当主债 ≠仓差/remain/ActionBar/next_farm/选页仓差/工坊 remain/工坊 next_farm/冒险页合计/十四本规格空转当主债**
+STATUS=**已批 A · 方案 M · D424 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx15-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx15-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx15`（**已批·施工中**）· STATUS [`STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md)· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D423 ≠纯换皮当主债 ≠仓差/remain/ActionBar/next_farm/选页仓差/工坊 remain/工坊 next_farm/冒险页合计/十四本规格空转当主债**
 
 > **一句话玩家价值：** 今天在短征页除了前十四本，还能再点进第十五条 **坡门庭→绕心螺旋坡（须沿中空天井绕心螺旋坡道完成≥2整圈上升才到旋冠入口；真有可读螺旋坡面+栏杆+中空天井，禁直线爬塔复读 sx07、禁竖井复读 sx04、禁平环复读 sx06、禁折角裂隙复读 sx14、禁衡梁/转枢/对廊/递闸/跳石/错层/风廊/霜雾廊气质）→旋冠终厅**、主题与走位都不同的 5～8 分钟短本；日有奖帽独立，材料仍进仓去工坊——**继续拉长可刷内容量**。
 
@@ -55,9 +55,9 @@ STATUS=**待批 A · 荐方案 M · 拟 D424** · 2026-10-10 · tip [`STATUS-emb
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（短征 sx15 烬旋坡廊全规格；见 §2）
-- [ ] 否决 A（假挂/只口号）/ L（复述·抬表）/ W（假开/换皮/开 R·K3）
-- [ ] 批注：________________
+- [x] **方案 M**（短征 sx15 烬旋坡廊全规格；见 §2）
+- [x] 否决 A（假挂/只口号）/ L（复述·抬表）/ W（假开/换皮/开 R·K3）
+- [x] 批注：总控 **已批 A · 方案 M · D424** · 2026-10-10 10:31 CST · 有奖 80/4/3 · 首通 40/6/1 · 体力 30 · p1_sx15_day×3 · 十五本选页 · 首航 rooms×3+boss · 绕心螺旋坡 ≥2 整圈 · Cast 旋扫斩/坡心压浪 · **≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常**
 
 ---
 
@@ -102,3 +102,4 @@ STATUS=**待批 A · 荐方案 M · 拟 D424** · 2026-10-10 · tip [`STATUS-emb
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D424 · 上游 D423 PASS · 主题钉绕心螺旋坡「烬旋坡廊」· 薄表 S54 有奖80/4/3 · 首通40/6/1 |
+| 2026-10-10 | 总控 **已批 A · 方案 M · D424** · 勾选旁注 · tip→已批·施工中 · 见 STATUS-ember-short-dungeon-sx15-d424 |
