@@ -1,10 +1,12 @@
 # 余烬 · 短征选页挂仓差（短征×日更·产→花决策面 · ≠抬日表 · ≠sx11）
 
-STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-select-mat-gap-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-select-mat-gap-need-design-2026-10-10.md) · backlog `B-short-select-mat-gap`（**待批**）· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx11 ≠复述 D373–D415 ≠改 daily_kills/afk.tiers/UpgradeRules/日帽 ≠重开速览/战况仓差/remain/ActionBar/next_farm/短征链规格为主债**
+STATUS=**已批 A · 方案 M · D416** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-select-mat-gap-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-select-mat-gap-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-short-select-mat-gap`（**已批/施工中**）· **施工中** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx11 ≠复述 D373–D415 ≠改 daily_kills/afk.tiers/UpgradeRules/日帽 ≠重开速览/战况仓差/remain/ActionBar/next_farm/短征链规格为主债**
 
 > **一句话玩家价值：** 打开短征选本就能看见「仓里有多少碎/骨/核/胚」与「强化+1 / 升阶 T2 还差多少」——刷本途中同屏知还差啥、何时去花；**不**抬产量、**不**交 sx11、**不**重开挂机战况/配方速览仓差为主交付。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx11。**
+>
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（短征选页挂 vault+recipe_gap）；否决 A/L/W；W1a 必做、W1b 同批；零 jar；满态保留 D409 追工坊；零改产量/日帽/UpgradeRules；≠sx11；**施工中**。
 
 ---
 
@@ -53,9 +55,9 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-sel
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 选页挂仓差必做 + W1b Open 半行可选同批；见 §2）
-- [ ] 否决 A（只口号）/ L（抬表·改价·全档引擎）/ W（sx11/复述/假写）
-- [ ] 批注：________________
+- [x] **方案 M**（W1a 选页挂仓差必做 + W1b Open 半行同批；见 §2）
+- [x] 否决 A（只口号）/ L（抬表·改价·全档引擎）/ W（sx11/复述/假写）
+- [x] 批注：总控批 A·M · 2026-10-10 · D416 · W1a 必做 · W1b 同批 · 零 jar · 满态保留 D409 追工坊 · 零改产量/日帽/UpgradeRules · ≠sx11 · **施工中**
 
 ---
 
@@ -161,7 +163,8 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-sel
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题短征选页挂仓差（短征×资源环对称断点）· ≠sx11 |
+| 2026-10-10 | **已批 A · 方案 M · D416** · 总控批注勾选 · W1a 必做 · W1b 同批 · 零 jar · 满态保留 D409 追工坊 · 零改产量/日帽/UpgradeRules · ≠sx11 · **施工中** |
 
 ---
 
-*D416 · 短征选页挂仓差 · 待批 A·荐方案 M · ≠关观察 ≠抬日表 ≠sx11。*
+*D416 · 短征选页挂仓差 · 已批 A·方案 M · 施工中 · ≠关观察 ≠抬日表 ≠sx11。*
