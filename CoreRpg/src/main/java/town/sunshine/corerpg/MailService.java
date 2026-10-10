@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.storage.MysqlStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -167,8 +168,12 @@ public final class MailService {
             return;
         }
         if ("delete".equals(sub) || "del".equals(sub)) {
+            if (args.length >= 3 && "all".equalsIgnoreCase(args[2])) {
+                cmdDeleteAll(p); // D830
+                return;
+            }
             if (args.length < 3) {
-                p.sendMessage(PREFIX + ChatColor.YELLOW + "/corerpg mail delete <id>");
+                p.sendMessage(PREFIX + ChatColor.YELLOW + "/corerpg mail delete <id|all>");
                 return;
             }
             cmdDelete(p, parseId(args[2]));
@@ -218,7 +223,10 @@ public final class MailService {
                     + m.title + " " + att);
             shown++;
         }
-        p.sendMessage(ChatColor.DARK_GRAY + "  /corerpg mail read|claim|delete <id> · claim all");
+        p.sendMessage(ChatColor.DARK_GRAY + "  /corerpg mail read|claim|delete <id|all>");
+        ConfirmTokens.sendButtons(p, PREFIX + "§7批量：", // D830
+                new String[]{"[一键领取]", "/corerpg mail claim all", "领全部附件", "GREEN"},
+                new String[]{"[清已领]", "/corerpg mail delete all", "删可删邮件", "GRAY"});
     }
 
     private void cmdRead(Player p, int id) {
@@ -280,11 +288,39 @@ public final class MailService {
         int n = claimAllAttachments(p);
         if (n == 0) {
             p.sendMessage(PREFIX + ChatColor.YELLOW + "没有可领取的附件。");
+            ConfirmTokens.sendButtons(p, PREFIX + "§7：",
+                    new String[]{"[收件箱]", "/corerpg mail", "看列表", "AQUA"},
+                    new String[]{"[清已领]", "/corerpg mail delete all", "删已领邮件腾位", "GRAY"});
         } else {
-            // D646: claim-all acquisition feel (zero attachment table change)
+            // D646/D830: claim-all acquisition feel (zero attachment table change)
             p.sendMessage(PREFIX + ChatColor.GREEN + "一键领取完成：§f" + n + ChatColor.GREEN + " 封附件入账。");
             try { p.sendActionBar(ChatColor.GREEN + "邮件领取 · §f" + n + " §a封"); } catch (Throwable ignored) { }
+            ConfirmTokens.sendButtons(p, PREFIX + "§7下一步：",
+                    new String[]{"[一键存入]", "/corerpg p1 stash", "材料/装备入库", "GREEN"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "花附件", "GOLD"},
+                    new String[]{"[清已领]", "/corerpg mail delete all", "腾收件箱", "GRAY"});
         }
+    }
+
+    /** D830: delete every claimable-empty (canDelete) mail. */
+    private void cmdDeleteAll(Player p) {
+        List<MailMessage> list = loadInbox(p.getUniqueId());
+        int n = 0;
+        List<MailMessage> keep = new ArrayList<MailMessage>();
+        for (MailMessage m : list) {
+            if (m.canDelete()) { n++; continue; }
+            keep.add(m);
+        }
+        if (n == 0) {
+            p.sendMessage(PREFIX + ChatColor.YELLOW + "没有可删的已领/无附件邮件。");
+            return;
+        }
+        saveInbox(p.getUniqueId(), keep);
+        p.sendMessage(PREFIX + ChatColor.GREEN + "已清理 §f" + n + ChatColor.GREEN + " 封 · 剩 §f" + keep.size());
+        try { p.sendActionBar("§a邮件清理 · §f" + n + " §a封"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, PREFIX + "§7：",
+                new String[]{"[收件箱]", "/corerpg mail", "看剩余", "AQUA"},
+                new String[]{"[一键领取]", "/corerpg mail claim all", "领剩余附件", "GREEN"});
     }
 
     /** D523: unclaimed attachment count. */

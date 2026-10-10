@@ -88,6 +88,19 @@ public final class EmberBrewPath {
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
 
+
+    /** D832: after successful brew — next loop. */
+    public static void afterBrew(Player p) {
+        if (p == null) return;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a熬药完成 · 回复药已入账");
+        try { p.sendActionBar("§a熬药 · 完成"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[再熬一瓶]", "/corerpg p1 brew", "材料够再熬", "GREEN"},
+                new String[]{"[冒险]", "/ember_p1_adventure", "带药开刷", "AQUA"},
+                new String[]{"[改熬药路径]", "/corerpg p1 brewpath", "自动/提醒", "GRAY"});
+    }
+
     public static void maybeAfterProgress(Player p) {
         if (p == null) return;
         PlayerData d = dataOf(p);
@@ -97,7 +110,7 @@ public final class EmberBrewPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (life.pathBrewHeal(p)) {
-                p.sendMessage(EmberRunService.P + "§a熬药·自动 §7已熬制回复药");
+                afterBrew(p); // D832
             }
             return;
         }

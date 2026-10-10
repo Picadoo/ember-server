@@ -69,6 +69,17 @@ public final class EmberMapFarmCue {
      * D687: after settle deliver — refresh chase vs worn (may have changed).
      * Quiet if map has no identity; no button twin.
      */
+
+    /** D833: after map-family hit — forge / equip / next enter. */
+    public static void afterHit(Player p, EmberRunMaps.MapDef m) {
+        if (p == null || m == null) return;
+        String P = EmberRunService.P;
+        ConfirmTokens.sendButtons(p, P + "§7图装追到 · 下一步：",
+                new String[]{"[工坊]", "/corerpg p1 forge", "强化/精工新装", "GOLD"},
+                new String[]{"[换装]", "/corerpg p1 equip", "穿上同族", "GREEN"},
+                new String[]{"[再进本图]", "/corerpg p1 enter " + m.key, "继续刷同族", "AQUA"});
+    }
+
     public static void afterSettle(Player p, EmberRunMaps.MapDef m, EmberLoadout lo) {
         if (p == null || m == null) return;
         if (m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
@@ -114,6 +125,14 @@ public final class EmberMapFarmCue {
                     : "§e下一件 · §7本图装";
             p.sendActionBar(shortBar);
         } catch (Throwable ignored) { }
+        // D833 re-farm same map
+        if (mapFam != null && EmberRunRules.validFamily(mapFam)) {
+            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：",
+                    new String[]{"[再进·" + (m.name != null ? m.name : m.key) + "]", "/corerpg p1 enter " + m.key,
+                            "刷同族 " + EmberItemData.familyName(mapFam), "GREEN"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "强化现穿", "GOLD"},
+                    new String[]{"[换装]", "/corerpg p1 equip", "套装追击", "AQUA"});
+        }
     }
 
 

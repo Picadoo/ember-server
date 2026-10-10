@@ -88,6 +88,19 @@ public final class EmberCookPath {
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
 
+
+    /** D832: after successful cook — next loop. */
+    public static void afterCook(Player p, int n) {
+        if (p == null || n <= 0) return;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a烹饪完成 · §f" + n + " §a份入账");
+        try { p.sendActionBar("§a烹饪 · §f" + n); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[再烤]", "/corerpg p1 cook", "继续烤鱼", "GREEN"},
+                new String[]{"[冒险]", "/ember_p1_adventure", "带粮开刷", "AQUA"},
+                new String[]{"[改烹饪路径]", "/corerpg p1 cookpath", "自动/提醒", "GRAY"});
+    }
+
     public static void maybeAfterProgress(Player p) {
         if (p == null) return;
         PlayerData d = dataOf(p);
@@ -100,7 +113,7 @@ public final class EmberCookPath {
         int path = get(d);
         if (shouldAuto(path)) {
             int ok = life.pathCook(p);
-            if (ok > 0) p.sendMessage(EmberRunService.P + "§a代烤·自动 §7已烤 §f" + ok + " §7条 → 炭烤鱼");
+            if (ok > 0) afterCook(p, ok); // D832
             return;
         }
         if (shouldMute(path)) return;

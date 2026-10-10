@@ -532,6 +532,7 @@ public final class EmberSettleService {
                             EmberLoadout hitLo = runs.loadouts().get(p);
                             EmberSetChase.tell(p, pd, hitLo, runs.loadouts());
                         }
+                        EmberMapFarmCue.afterHit(p, m); // D833
                         break;
                     }
                 }

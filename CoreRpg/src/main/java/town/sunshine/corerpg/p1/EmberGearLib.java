@@ -380,6 +380,29 @@ public final class EmberGearLib implements Listener {
         });
     }
 
+    /** D831: materials only (no gearlib). */
+    public void depositMatsOnly(final Player p, final Runnable done) {
+        String hold = EmberAssetGuard.hold(p);
+        if (hold != null) { p.sendMessage(PV + ChatColor.RED + hold); if (done != null) done.run(); return; }
+        Map<String, Long> mats = vault() == null ? new HashMap<String, Long>() : vault().depositAll(p);
+        final List<String> parts = new ArrayList<String>();
+        for (Map.Entry<String, Long> m : mats.entrySet()) parts.add(plugin.getNiBridge().displayName(m.getKey()) + " ×" + m.getValue());
+        report(p, parts, 0, "仅材料");
+        if (done != null) done.run();
+    }
+
+    /** D831: current lib filter glance. */
+    public void tellFilter(Player p) {
+        if (p == null) return;
+        Filter f = filter(p.getUniqueId());
+        p.sendMessage(PV + "§e装备库筛选：§f" + f.label());
+        try { p.sendActionBar("§e筛选 · §f" + f.label()); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, PV + "§7：",
+                new String[]{"[开装备库]", "/corerpg p1 gearlib", "页内点图标改筛选", "AQUA"},
+                new String[]{"[一键存入]", "/corerpg p1 stash", "材料+装备", "GREEN"},
+                new String[]{"[仅存材料]", "/corerpg p1 stash mats", "不碰装备", "GOLD"});
+    }
+
     private void report(Player p, List<String> mats, int gear, String gateMsg) {
         if (mats.isEmpty() && gear == 0) {
             boolean stashable = vault() != null && vault().backpackHasStashable(p);
@@ -390,9 +413,18 @@ public final class EmberGearLib implements Listener {
                 p.sendMessage(PV + "背包里没有可存的材料或装备" + (gateMsg != null ? "（装备：" + gateMsg + "）" : "")
                         + "。快捷栏、手上的刃和已选的护符不会被存走。");
             }
-        } else p.sendMessage(PV + ChatColor.GREEN + "一键存入：" + (mats.isEmpty() ? "" : "材料 " + String.join("、", mats))
+        } else {
+            p.sendMessage(PV + ChatColor.GREEN + "一键存入：" + (mats.isEmpty() ? "" : "材料 " + String.join("、", mats))
                 + (gear > 0 ? (mats.isEmpty() ? "" : "；") + "装备 " + gear + " 件 → 装备库" : "")
-                + (gateMsg != null ? ChatColor.GRAY + "（装备没存：" + gateMsg + "）" : ""));
+                + (gateMsg != null && !"仅材料".equals(gateMsg) ? ChatColor.GRAY + "（装备没存：" + gateMsg + "）" : ""));
+            try { p.sendActionBar("§a存仓 · §f" + (mats.isEmpty() ? "" : "料 ") + (gear > 0 ? gear + "装" : "好")); } catch (Throwable ignored) { }
+            // D831 next
+            int junk = countPathJunk(p);
+            ConfirmTokens.sendButtons(p, PV + "§7下一步：",
+                    new String[]{"[工坊]", "/corerpg p1 forge", "花材料", "GOLD"},
+                    new String[]{"[装备库]", "/corerpg p1 gearlib", junk > 0 ? ("筛选·可分解 " + junk) : "看筛选", "AQUA"},
+                    new String[]{"[仅存材料]", "/corerpg p1 stash mats", "下次只存料", "GRAY"});
+        }
     }
 
     // ================================================================== flags + bulk dismantle
@@ -734,7 +766,19 @@ public final class EmberGearLib implements Listener {
         String a = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
         String opener = args.length >= 4 && "from".equals(a) ? args[3] : null;
         if ("undo".equals(sub)) return undo(p, args);
-        if ("stash".equals(sub) || "存入".equals(sub)) { depositAll(p, null); return true; }
+        if ("stash".equals(sub) || "存入".equals(sub)) {
+            String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+            if ("mats".equals(op) || "材料".equals(op) || "mat".equals(op)) { // D831
+                depositMatsOnly(p, null);
+                return true;
+            }
+            if ("filter".equals(op) || "筛选".equals(op)) {
+                tellFilter(p);
+                return true;
+            }
+            depositAll(p, null);
+            return true;
+        }
         if ("vault".equals(sub) || "仓库".equals(sub)) {
             if ("auto".equals(a)) { boolean on = vault() != null && vault().toggleAuto(p); p.sendMessage(PV + "材料自动入库：" + (on ? "§a开" : "§c关")); return true; }
             if ("take".equals(a) && args.length >= 5) {

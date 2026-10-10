@@ -350,3 +350,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D828–D829 SHIP · jar 1.65.378-d828
 - Friend/mentor path + recruit; undo expire → re-enhance
+
+## D830–D833 SHIP · jar 1.65.379-d830
+- Mail claim/delete all next; stash mats+filter; brew/cook after; map farm hit/reenter
