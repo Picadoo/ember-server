@@ -96,7 +96,7 @@ public final class EmberRushService {
     }
 
     /** D144: chain boss {@code done} (0-based) fell; heal everyone standing, say who is next. */
-    void onStage(EmberRunDirector d, int done, EmberRunMaps.Boss was, EmberRunMaps.Boss next, long secs) {
+    void onStage(EmberRunDirector d, int done, EmberRunMaps.Boss was, EmberRunMaps.Boss next, long secs, double breakSecs) {
         EmberRunSession s = d.s;
         int healed = 0;
         for (UUID u : s.committed) {
@@ -118,7 +118,8 @@ public final class EmberRushService {
             }
             healed++;
         }
-        runs.tellRun(s, "§a" + was.name + " 倒下 §7（" + (done + 1) + "/" + d.def.chain.size() + "，" + secs + " 秒）· 休息 " + Math.round(d.def.rushBreak)
+        double showBreak = breakSecs > 0 ? breakSecs : d.def.rushBreak;
+        runs.tellRun(s, "§a" + was.name + " 倒下 §7（" + (done + 1) + "/" + d.def.chain.size() + "，" + secs + " 秒）· 休息 " + Math.round(showBreak)
                 + " 秒，站着的人回复 " + Math.round(d.def.rushHeal * 100) + "% 生命 · 下一个：§c" + next.name);
         log().info("[P1 run] " + s.runId + " rush stage " + (done + 1) + " " + was.name + " down after " + secs + " s, healed " + healed);
     }

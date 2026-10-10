@@ -877,8 +877,8 @@ public final class EmberRunService implements Listener {
 
     void onRushStart(EmberRunSession s, EmberRunMaps.MapDef m, EmberRunMaps.Boss first) { rush.onStart(s, m, first); }
 
-    void onRushStage(EmberRunDirector d, int done, EmberRunMaps.Boss was, EmberRunMaps.Boss next, long secs) {
-        rush.onStage(d, done, was, next, secs);
+    void onRushStage(EmberRunDirector d, int done, EmberRunMaps.Boss was, EmberRunMaps.Boss next, long secs, double breakSecs) {
+        rush.onStage(d, done, was, next, secs, breakSecs);
     }
 
     /** D144 烬核同心: a clean 烬核 stack (called by the director; counted at the raid settlement, once per run) */
@@ -1133,6 +1133,7 @@ public final class EmberRunService implements Listener {
                             EmberModePath.scheduleOffer(p, g.id); // D462 path pick ~2s later
                             if ("q04".equals(g.id)) EmberEchoPath.scheduleOffer(p); // D468 residual weekly path
                             if ("q04".equals(g.id)) EmberRestPath.scheduleOfferAfterQ04(p); // D509 rush rest heal path
+                            if ("q04".equals(g.id)) EmberBreakPath.scheduleOfferAfterQ04(p); // D510 rush break timing path
                             if ("q04".equals(g.id)) EmberShapePath.scheduleOfferAfterQ04(p); // D490 slash shape combat path
                             if ("q05".equals(g.id)) EmberStepPath.scheduleOfferAfterQ05(p); // D491 step-dir combat path
                             if ("q05".equals(g.id)) EmberPosturePath.scheduleOfferAfterQ05(p); // D495 posture combat path

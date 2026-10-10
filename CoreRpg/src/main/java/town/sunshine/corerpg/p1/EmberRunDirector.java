@@ -1670,8 +1670,16 @@ final class EmberRunDirector {
             lastRevDone = false;
             cleanupMobs();
             long secs = bossSpawnedAt > 0 ? (System.currentTimeMillis() - bossSpawnedAt) / 1000L : 0;
-            bossAt = System.currentTimeMillis() + (long) (def.rushBreak * 1000);
-            svc.onRushStage(this, done, was, bossDef(), secs);
+            // D510: party-leader break path clamps between-boss rest (never above table)
+            PlayerData ld = s.leader == null ? null : svc.dataOf(s.leader);
+            int bpath = EmberBreakPath.get(ld);
+            double br = EmberBreakPath.effectiveBreak(bpath, def.rushBreak);
+            bossAt = System.currentTimeMillis() + (long) (br * 1000);
+            if (EmberBreakPath.valid(bpath) && br != def.rushBreak) {
+                svc.log().info("[P1 run] " + s.runId + " breakpath " + EmberBreakPath.key(bpath)
+                        + " break " + def.rushBreak + "→" + br);
+            }
+            svc.onRushStage(this, done, was, bossDef(), secs, br);
             return false;
         }
         if (t.boss()) {
