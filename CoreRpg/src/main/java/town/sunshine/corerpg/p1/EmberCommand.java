@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("pingpath".equals(sub) || "上线路径".equals(sub) || "提醒路径".equals(sub)) { // D533 friend online ping
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberPingPath.glance(EmberPingPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c上线路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberPingPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c上线路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberPingPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberPingPath.get(d);
+                    if (EmberPingPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPingPath.label(cur) + " · 改路径再 /corerpg p1 pingpath");
+                    else EmberPingPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberPingPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 pingpath <open|gate|busy|clear>");
+                return true;
+            }
+            EmberPingPath.applyAndReply(p, id);
+            return true;
+        }
         if ("titlepath".equals(sub) || "称号路径".equals(sub)) { // D532 cosmetic title wear path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

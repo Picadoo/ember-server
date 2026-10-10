@@ -60,6 +60,32 @@ public final class FriendService {
     public boolean isEnabled() { return enabled; }
     public int getMaxFriends() { return maxFriends; }
 
+    /** D533: whether {@code name} is on this player's friend list (ignore case). */
+    public boolean isFriendOf(PlayerData self, String name) {
+        if (self == null || name == null || name.isEmpty()) return false;
+        return findIgnoreCase(self.getFriends(), name) != null;
+    }
+
+    /** D533: names of currently online friends. */
+    public java.util.List<String> onlineFriendNames(PlayerData self) {
+        java.util.List<String> out = new java.util.ArrayList<String>();
+        if (self == null) return out;
+        for (String fn : self.getFriends()) {
+            if (fn == null || fn.isEmpty()) continue;
+            org.bukkit.entity.Player o = org.bukkit.Bukkit.getPlayerExact(fn);
+            if (o == null) {
+                // try ignore-case online match
+                for (org.bukkit.entity.Player p : org.bukkit.Bukkit.getOnlinePlayers()) {
+                    if (p.getName().equalsIgnoreCase(fn)) { o = p; break; }
+                }
+            }
+            if (o != null && o.isOnline()) out.add(o.getName());
+        }
+        java.util.Collections.sort(out, String.CASE_INSENSITIVE_ORDER);
+        return out;
+    }
+
+
     public void cmdRoot(CommandSender sender, String[] args) {
         if (!enabled) {
             sender.sendMessage(PREFIX + ChatColor.RED + "好友系统未启用。");
