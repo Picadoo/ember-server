@@ -268,6 +268,57 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("trailpath".equals(sub) || "足迹路径".equals(sub)) { // D529 cosmetic trail wear path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberTrailPath.glance(EmberTrailPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c足迹路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberTrailPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c足迹路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberTrailPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberTrailPath.get(d);
+                    if (EmberTrailPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberTrailPath.label(cur) + " · 改路径再 /corerpg p1 trailpath");
+                    else EmberTrailPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberTrailPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 trailpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("trailseed".equals(sub)) { // D529 admin smoke: grant trail_ash + honor path
+            if (s instanceof Player && !s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            if (runs == null || runs.cosmetics() == null) { s.sendMessage(P + "外观服务未加载"); return true; }
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            // clear current trail so path can fill
+            String cur = EmberCosmetics.selected(d, EmberCosmetics.Kind.TRAIL);
+            if (cur != null) d.addPeriodCount("p2_trailsel", cur, -d.periodCount("p2_trailsel", cur));
+            if (!runs.cosmetics().adminGrantTrail(t, d, "trail_ash")) { s.sendMessage(P + "授予足迹失败"); return true; }
+            s.sendMessage(P + "已为 " + t.getName() + " 授予足迹·灰烬（未装）");
+            EmberTrailPath.maybeAfterProgress(t, runs.cosmetics());
+            return true;
+        }
         if ("feedpath".equals(sub) || "喂养路径".equals(sub)) { // D528 familiar feed path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

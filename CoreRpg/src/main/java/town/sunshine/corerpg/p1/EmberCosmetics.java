@@ -159,6 +159,44 @@ public final class EmberCosmetics implements Listener {
 
     public static boolean bought(PlayerData d, Cosmetic c) { return d != null && c != null && c.shop() && d.periodCount(C_BOUGHT + c.id, "all") > 0; }
 
+    /** D529: first owned trail not currently selected, or null. */
+    public Cosmetic firstUnequippedTrail(PlayerData d) {
+        if (d == null) return null;
+        int best = runs.abyssBest(d);
+        String cur = selected(d, Kind.TRAIL);
+        if (cur == null || cur.isEmpty()) {
+            for (Cosmetic c : ALL) if (c.kind == Kind.TRAIL && earned(d, best, c)) return c;
+            for (Cosmetic c : SHOP) if (c.kind == Kind.TRAIL && earned(d, best, c)) return c;
+            return null;
+        }
+        return null; // already wearing something — path only auto-fills empty
+    }
+
+    /** D529: wear trail id if earned; true when selection changed. */
+    public boolean wearTrail(Player p, PlayerData d, String id) {
+        if (p == null || d == null || id == null) return false;
+        Cosmetic c = byId(id);
+        if (c == null || c.kind != Kind.TRAIL) return false;
+        if (!earned(d, runs.abyssBest(d), c)) return false;
+        String cur = selected(d, Kind.TRAIL);
+        if (id.equals(cur)) return false;
+        select(d, Kind.TRAIL, id);
+        runs.flushData(p.getUniqueId());
+        p.sendMessage(P + "已装上足迹「" + c.label + "§7」");
+        return true;
+    }
+
+    /** D529 admin smoke: grant shop trail ownership without paying. */
+    public boolean adminGrantTrail(Player p, PlayerData d, String id) {
+        if (d == null) return false;
+        Cosmetic c = byId(id);
+        if (c == null || c.kind != Kind.TRAIL || !c.shop()) return false;
+        if (!bought(d, c)) d.addPeriodCount(C_BOUGHT + c.id, "all", 1);
+        if (p != null) runs.flushData(p.getUniqueId());
+        return true;
+    }
+
+
     private static String selName(Kind k) {
         switch (k) {
             case TITLE: return C_SEL_TITLE;
@@ -225,6 +263,7 @@ public final class EmberCosmetics implements Listener {
         if (n == 1 && p != null && p.isOnline()) {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
                 p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
+            EmberTrailPath.maybeAfterProgress(p, this); // D529
         }
         if (raidClears(d, "r01") + raidClears(d, "r02") + raidClears(d, "r03") == 10 && p != null && p.isOnline())
             p.sendMessage(P + "§d获得称号「" + byId(RAIDS10).label + "§d」§7（团本累计 10 次，只做展示）");
