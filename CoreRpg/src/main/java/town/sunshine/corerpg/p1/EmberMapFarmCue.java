@@ -180,6 +180,22 @@ public final class EmberMapFarmCue {
         ConfirmTokens.sendButton(p, EmberRunService.P + "§7登出恢复：",
                 label, cmd,
                 "继续刷 " + EmberItemData.familyName(m.lootFamily) + " 图装");
+        // D770: if focus matches resume family, surface equip chase
+        if (mapFamEqualsFocus(d, m.lootFamily)) {
+            Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+            if (pl instanceof CoreRpgPlugin) {
+                EmberRunService runs = ((CoreRpgPlugin) pl).getEmberRuns();
+                if (runs != null && runs.loadouts() != null)
+                    EmberSetChase.tell(p, d, lo, runs.loadouts());
+            }
+        }
+    }
+
+    static boolean mapFamEqualsFocus(PlayerData d, String mapFam) {
+        if (d == null || mapFam == null) return false;
+        int focus = EmberSetFocus.get(d);
+        String fk = EmberSetFocus.familyKey(focus);
+        return mapFam.equals(fk);
     }
 
     private static PlayerData dataOf(Player p) {

@@ -1099,6 +1099,23 @@ public final class EmberGrowthService implements Listener {
                     p.sendMessage(P + "§7调律：追烙签名徽记满 " + EmberSignature.ALT_MARKS + " 且未解锁时出一键");
                 return true;
             }
+            if ("seed".equalsIgnoreCase(args[3]) && p.hasPermission("corerpg.admin")) { // D772 smoke
+                EmberSignature.Def def = pickAttuneReady(d);
+                if (def == null) def = EmberSigChase.get(d);
+                if (def == null || EmberSignature.alt(def) == null) {
+                    p.sendMessage(P + "§c先 /corerpg p1 sig chase <有调律的Lxx>");
+                    return true;
+                }
+                int need = EmberSignature.ALT_MARKS;
+                int cur = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+                if (cur < need) d.addPeriodCount(EmberSignature.C_MARK + def.map, "all", need - cur);
+                int ar = d.periodCount(C_ATTUNE_READY, "all");
+                if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
+                plugin.getDataStore().flushMutation(p.getUniqueId());
+                p.sendMessage(P + "§8admin seed：§f" + def.map + " 徽记 → " + need + " · " + def.id);
+                maybeAttuneReadyCue(p, d);
+                return true;
+            }
             return sigAttune(p, d, args[3], args.length >= 5 && "unlock".equalsIgnoreCase(args[4]));
         }
         if ("pick".equals(op)) return sigPick(p, d, args.length >= 4 ? args[3] : null);

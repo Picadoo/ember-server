@@ -255,3 +255,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D767 challenge enterCue
 - D768 resume enter challenge when PREFER
 - D769 imprint ready after attune unlock
+
+## D770–D772 SHIP · jar 1.65.353-d770
+- D770 resume → setchase equip when focus matches
+- D771 featured challenge + hard-path glance
+- D772 admin attune seed
