@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("gatepath".equals(sub) || "开门路径".equals(sub)) { // D556 door-breath gate path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberGatePath.glance(EmberGatePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c开门路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberGatePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c开门路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberGatePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberGatePath.get(d);
+                    if (EmberGatePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGatePath.label(cur) + " · 改路径再 /corerpg p1 gatepath");
+                    else EmberGatePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberGatePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 gatepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberGatePath.applyAndReply(p, id);
+            return true;
+        }
+        if ("gate".equals(sub) && args.length == 2) { // D556 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathForceOpenDoor(p)) p.sendMessage(P + "无法开门（无缓开中的门扇/未进本）");
+            else p.sendMessage(P + "§a开门·手点 §7已开启门扇");
+            return true;
+        }
         if ("packpath".equals(sub) || "腾包路径".equals(sub)) { // D555 mid-run pack relief path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1404,6 +1448,15 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("gateseed".equals(sub)) { // D556 admin smoke: probe gate path
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberGatePath.maybeProbe(t);
+            s.sendMessage(P + "已触发开门路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingDoor(t) ? "（有缓开门）" : "（无缓开门）"));
             return true;
         }
         if ("packseed".equals(sub)) { // D555 admin smoke: temp P1 + fill bag + shards then probe

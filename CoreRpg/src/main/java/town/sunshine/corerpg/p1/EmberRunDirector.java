@@ -501,6 +501,21 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D556: true while a door_delay breath is waiting. */
+    boolean hasPendingDoor() {
+        return doorPending != null && doorOpenAt > 0;
+    }
+
+    /** D556: open the pending door immediately (AUTO / ASK). */
+    boolean pathForceOpenDoor() {
+        if (!hasPendingDoor()) return false;
+        EmberRunMaps.Room r = doorPending;
+        doorPending = null;
+        doorOpenAt = 0;
+        openDoorNow(r);
+        return true;
+    }
+
     private void roomCleared(EmberRunMaps.Room r) {
         activeRoom = null;
         if (r == null) return;
@@ -547,6 +562,7 @@ final class EmberRunDirector {
                 doorPending = r;
                 doorOpenAt = System.currentTimeMillis() + (long) (r.doorDelay * 1000.0);
                 svc.tellRun(s, "§7门扇缓缓开启…");
+                EmberGatePath.maybeAfterPending(s); // D556
             } else {
                 openDoorNow(r);
             }
