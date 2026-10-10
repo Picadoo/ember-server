@@ -1,5 +1,8 @@
 package town.sunshine.corerpg;
 
+import town.sunshine.corerpg.p1.EmberFeedPath;
+import town.sunshine.corerpg.p1.EmberPetPath;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -550,6 +553,7 @@ public final class PetService implements Listener {
         activeEntities.put(p.getUniqueId(), stand.getUniqueId());
         p.sendMessage(PREFIX + ChatColor.GREEN + "出战 " + def.display
                 + ChatColor.GRAY + " · /corerpg pet dismiss 收回");
+        EmberPetPath.afterSummon(p); // D846
         if (plugin.getLadderService() != null) {
             plugin.getLadderService().recomputePower(p);
         }
@@ -643,6 +647,7 @@ public final class PetService implements Listener {
         p.sendMessage(PREFIX + ChatColor.GREEN + "消耗魂尘×" + consumed
                 + ChatColor.GRAY + " · " + display
                 + ChatColor.WHITE + " Lv." + from + "→" + level);
+        EmberFeedPath.afterFeed(p, gained); // D847
         if (plugin.getLadderService() != null) {
             plugin.getLadderService().recomputePower(p);
         }

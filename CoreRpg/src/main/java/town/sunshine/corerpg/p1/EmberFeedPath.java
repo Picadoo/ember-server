@@ -87,6 +87,19 @@ public final class EmberFeedPath {
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
 
+
+    /** D847: after successful feed — next loop. */
+    public static void afterFeed(Player p, int levels) {
+        if (p == null || levels <= 0) return;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a喂养完成 · 升 §f" + levels + " §a级");
+        try { p.sendActionBar("§a喂养 · §f+" + levels); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[再喂]", "/corerpg pet feed 3", "继续魂尘", "GREEN"},
+                new String[]{"[出战]", "/corerpg pet summon", "召出使魔", "AQUA"},
+                new String[]{"[改喂养路径]", "/corerpg p1 feedpath", "自动/提醒", "GRAY"});
+    }
+
     public static void maybeAfterJoin(Player p, PetService pets) {
         if (p == null || pets == null) return;
         PlayerData d = dataOf(p);
@@ -95,7 +108,7 @@ public final class EmberFeedPath {
         int path = get(d);
         if (shouldAuto(path)) {
             int n = pets.tryFeedActive(p, 3);
-            if (n > 0) p.sendMessage(EmberRunService.P + "§a喂养·自动 §7升 " + n + " 级");
+            if (n > 0) afterFeed(p, n); // D847
             return;
         }
         if (shouldMute(path)) return;

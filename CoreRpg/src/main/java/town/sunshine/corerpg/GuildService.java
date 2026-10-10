@@ -586,6 +586,9 @@ public final class GuildService {
                             + ChatColor.GRAY + " 邀请你加入盟约 §f" + g.name + " ",
                     new String[]{"[同意]", "/corerpg guild accept", "加入盟约", "GREEN"},
                     new String[]{"[拒绝]", "/corerpg guild deny", "拒绝这条邀请", "RED"});
+            // D848
+            if (td != null && !EmberGuildPath.valid(EmberGuildPath.get(td)))
+                target.sendMessage(PREFIX + "§7可设盟约路径：/corerpg p1 guildpath（敞开/审核/静拒）");
         }
     }
 
@@ -630,6 +633,7 @@ public final class GuildService {
         data.setGuildId(g.id);
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(PREFIX + ChatColor.GREEN + "已加入盟约 §f" + g.name);
+        EmberGuildPath.afterJoin(p, g.name); // D848
         notifyOnlineMembers(g, ChatColor.GRAY + p.getName() + " 加入了盟约。", p.getUniqueId());
     }
 

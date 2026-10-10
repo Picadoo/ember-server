@@ -90,6 +90,23 @@ public final class EmberGuildPath {
     public static boolean shouldAutoDeny(int path) { return path == BUSY; }
     public static boolean shouldAutoDeny(PlayerData d) { return shouldAutoDeny(get(d)); }
 
+
+    /** D848: after successful guild join — next loop. */
+    public static void afterJoin(Player p, String guildName) {
+        if (p == null) return;
+        String P = EmberRunService.P;
+        String who = guildName == null ? "盟约" : guildName;
+        PlayerData d = dataOf(p);
+        int id = get(d);
+        p.sendMessage(P + "§a已入盟 · §f" + who
+                + (valid(id) ? " §8· " + label(id) : " §7· /corerpg p1 guildpath"));
+        try { p.sendActionBar("§a盟约 · §f" + who); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[盟约信息]", "/corerpg guild info", "看成员/贡献", "AQUA"},
+                new String[]{"[周常Boss]", "/corerpg guild boss", "盟约周本", "GREEN"},
+                new String[]{"[改盟约路径]", "/corerpg p1 guildpath", "敞开/审核/静拒", "GRAY"});
+    }
+
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;

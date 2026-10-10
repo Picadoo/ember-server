@@ -89,6 +89,21 @@ public final class EmberPetPath {
     public static boolean shouldMute(int path) { return path == MUTE; }
 
     /** After join — honor path when player has unlocked pets. */
+
+    /** D846: after successful summon — next loop. */
+    public static void afterSummon(Player p) {
+        if (p == null) return;
+        String P = EmberRunService.P;
+        PlayerData d = dataOf(p);
+        p.sendMessage(P + "§a使魔已出战"
+                + (d != null && valid(get(d)) ? " §8· " + label(get(d)) : ""));
+        try { p.sendActionBar("§a使魔 · 出战"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[喂养]", "/corerpg pet feed 3", "魂尘升级", "GREEN"},
+                new String[]{"[冒险]", "/ember_p1_adventure", "带使魔开刷", "AQUA"},
+                new String[]{"[改使魔路径]", "/corerpg p1 petpath", "自动/提醒", "GRAY"});
+    }
+
     public static void maybeAfterJoin(Player p, PetService pets) {
         if (p == null || pets == null) return;
         PlayerData d = dataOf(p);
@@ -98,7 +113,7 @@ public final class EmberPetPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (pets.trySummonActive(p))
-                p.sendMessage(EmberRunService.P + "§a使魔·自动 §7已出战");
+                afterSummon(p); // D846
             return;
         }
         if (shouldMute(path)) return;

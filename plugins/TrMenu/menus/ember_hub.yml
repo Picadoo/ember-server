@@ -31,6 +31,9 @@ Events:
     - 'command: corerpg p1 stashpath'
     - 'command: corerpg p1 brewpath'
     - 'command: corerpg p1 cookpath'
+    - 'command: corerpg p1 petpath'
+    - 'command: corerpg p1 feedpath'
+    - 'command: corerpg p1 guildpath'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:

@@ -322,18 +322,33 @@ public final class EmberForgeService implements Listener {
         int max = EmberUpgradeRules.maxTries(target);
         if (!go) {
             boolean sure = EmberUpgradeRules.guaranteed(d);
-            p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + Math.round(EmberUpgradeRules.rate(target) * 100)
-                    + "%  本档第 " + EmberUpgradeRules.attemptNo(d) + "/" + max + " 次" + (sure ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY : ""));
+            int ratePct = (int) Math.round(EmberUpgradeRules.rate(target) * 100);
+            int attempt = EmberUpgradeRules.attemptNo(d);
+            p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + ratePct
+                    + "%  本档第 " + attempt + "/" + max + " 次" + (sure ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY : ""));
             if (sure) {
                 p.sendMessage(P + ChatColor.GREEN + "下次必成已就绪 · 点确认即可升档（不改保底规则）");
                 try { p.sendActionBar("§a下次必成 · 确认即升 +" + target); } catch (Throwable ignored) { }
+            } else { // D849
+                try { p.sendActionBar("§e强化预览 · §f+" + d.enhance + "→+" + target
+                        + " §7· " + ratePct + "% · 第" + attempt + "/" + max); } catch (Throwable ignored) { }
             }
             p.sendMessage(P + "每次消耗: " + c.cost.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
             warnT0(p, d);
             List<String> lack = lacking(p, c.cost);
-            if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
-            town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", "[确认强化]", "/corerpg p1 enhance confirm",
-                    "强化手持装备一次（扣上面的材料）"); // D95: no typed command
+            if (!lack.isEmpty()) {
+                p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
+                String src = sources(lack);
+                if (src != null) p.sendMessage(P + src);
+                ConfirmTokens.sendButtons(p, P + "§7材料不够：",
+                        new String[]{"[冒险刷料]", "/ember_p1_adventure", "图装/材料本", "GREEN"},
+                        new String[]{"[仓库]", "/corerpg p1 vault", "看材料仓", "AQUA"});
+            } else {
+                ConfirmTokens.sendButtons(p, P + "手里拿着这件再点：", // D849
+                        new String[]{"[确认强化]", "/corerpg p1 enhance confirm", "扣材料强化一次", "GREEN"},
+                        new String[]{"[成色预览]", "/corerpg p1 quality", "先看成色", "GOLD"},
+                        new String[]{"[精工预览]", "/corerpg p1 refine", "先看精工", "AQUA"});
+            }
             EmberEnhanceUndo.forgeGlance(p); // D717 preview while fail-undo open
             return true;
         }
@@ -370,10 +385,24 @@ public final class EmberForgeService implements Listener {
             if (it.data.tier == 1 && !"upgrade".equals(kind)) // D101 (midgame #4)
                 p.sendMessage(P + ChatColor.YELLOW + "T1 到 Q04 之后多半会被 T2 替换；想留着就用升阶（升阶会保留成色和精工）。");
             List<String> lack = lacking(p, plan.cost);
-            if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";
-            town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", label,
-                    "/corerpg p1 " + ("quality".equals(kind) ? "refine quality" : kind) + " confirm", "按上面的预览执行（扣上面的材料）"); // D95
+            String cmd = "/corerpg p1 " + ("quality".equals(kind) ? "refine quality" : kind) + " confirm";
+            try { // D850
+                p.sendActionBar("§e预览 · §f" + kind + " §7· " + plan.cost.label());
+            } catch (Throwable ignored) { }
+            if (!lack.isEmpty()) {
+                p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack));
+                String src = sources(lack);
+                if (src != null) p.sendMessage(P + src);
+                ConfirmTokens.sendButtons(p, P + "§7材料不够：",
+                        new String[]{"[冒险刷料]", "/ember_p1_adventure", "开本", "GREEN"},
+                        new String[]{"[仓库]", "/corerpg p1 vault", "看仓", "AQUA"});
+            } else {
+                ConfirmTokens.sendButtons(p, P + "手里拿着这件再点：",
+                        new String[]{label, cmd, "按上面的预览执行", "GREEN"},
+                        new String[]{"[强化预览]", "/corerpg p1 enhance", "看强化", "GOLD"},
+                        new String[]{"[工坊]", "/corerpg p1 forge", "总页", "GRAY"});
+            }
             return true;
         }
         String r = rid != null ? rid : kind + ":" + it.data.uid + ":" + it.data.rev;

@@ -365,3 +365,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D845 SHIP · jar 1.65.383-d845
 - Chat stash filter cycle
+
+## D846–D851 SHIP · jar 1.65.384-d846
+- Pet/feed/guild after loops; forge preview ActionBar+sibling; hub Open
