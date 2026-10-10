@@ -42,6 +42,25 @@ public final class EmberGemAcquire {
         return EmberHopeMeter.gemPity(pity(d), PITY_NEED);
     }
 
+    /** D1258: clears remaining until gem (incl. current progress already counted). */
+    public static int clearsLeft(int cur) {
+        int c = Math.max(0, cur);
+        if (c >= PITY_NEED) return 0;
+        return PITY_NEED - c;
+    }
+
+    /** D1258: non-hope remain — {@code 通关保底 2/5 · 再通关3次得石}. */
+    public static String remainLine(int cur) {
+        int c = Math.max(0, cur);
+        if (c >= PITY_NEED) return "通关保底已满 · 下次通关得石";
+        int left = clearsLeft(c);
+        return "通关保底 " + c + "/" + PITY_NEED + " · 再通关" + left + "次得石";
+    }
+
+    public static String remainLine(PlayerData d) {
+        return remainLine(pity(d));
+    }
+
     /** True for Q01–Q07 mainline maps (normal or challenge); excludes raid / abyss / event / short. */
     public static boolean countsForPity(EmberRunMaps.MapDef m, EmberRunSession s) {
         if (m == null || s == null) return false;
@@ -61,7 +80,12 @@ public final class EmberGemAcquire {
         d.addPeriodCount(C_PITY, "all", 1);
         int cur = pity(d);
         if (cur < PITY_NEED) {
-            if (p.isOnline()) p.sendMessage(P + "§7宝石希望 " + EmberHopeMeter.gemPity(cur, PITY_NEED));
+            // D1259: remain honesty（非 hope celebration）
+            if (p.isOnline()) {
+                String rem = remainLine(cur);
+                p.sendMessage(P + "§7宝石 · §f" + rem);
+                try { p.sendActionBar("§e宝石 · §f" + rem); } catch (Throwable ignored) { }
+            }
             return false;
         }
         // grant

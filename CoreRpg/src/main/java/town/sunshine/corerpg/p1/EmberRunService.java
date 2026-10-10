@@ -3382,6 +3382,10 @@ public final class EmberRunService implements Listener {
                     + (cost.bone > 0 ? " + " + cost.bone + " 骨尘" : "") + " + " + cost.coins + " 币");
             p.sendMessage(P + (floor ? EmberForgeRollRules.oddsLineFloor() : EmberForgeRollRules.oddsLine()));
             p.sendMessage(P + "§7产物：指定族部位 · " + (floor ? "成色≥精良" : "成色随机") + " · 精工随机 · +0 · 词条空 · 出不了极品");
+            try { // D1267 deterministic path AB（非 K3）
+                p.sendActionBar(floor ? "§6下限锻预览 · §f成色≥精良 · 确认扣料"
+                        : "§d随机锻预览 · §f成色随机 · 可改下限");
+            } catch (Throwable ignored) { }
             String base = "/corerpg p1 forgeroll " + fam + " " + slot + " " + tier;
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
                     new String[]{"[确认锻造]", base + (floor ? " floor" : "") + " confirm",

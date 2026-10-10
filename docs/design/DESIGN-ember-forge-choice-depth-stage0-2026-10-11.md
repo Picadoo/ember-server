@@ -35,6 +35,8 @@
 | **W-up** | SinkGlance 升阶近档 | upgradeLine | **D1223– SHIP** |
 | **W-fail2** | afterEnhance 失败保底剩余 | EnhanceLoop | **D1231– SHIP** |
 | **W-reroll** | 洗练档位保底剩余诚实 | EmberRerollPity.remainLine | **D1247– SHIP** · 无新 hope PAPI |
+| **W-gem** | 宝石通关保底剩余 | GemAcquire.remainLine | **D1257– SHIP** |
+| **W-roll-ab** | 随机锻预览 AB | cmdForgeRoll | **D1267– SHIP** |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 

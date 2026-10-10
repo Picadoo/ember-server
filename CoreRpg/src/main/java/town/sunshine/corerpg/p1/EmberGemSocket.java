@@ -29,7 +29,7 @@ public final class EmberGemSocket {
         }
         if ("pity".equals(sub) || "希望".equals(sub)) {
             PlayerData d = plugin == null || plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
-            p.sendMessage(P + "宝石通关保底：" + EmberGemAcquire.hopeLine(d)
+            p.sendMessage(P + "宝石通关保底：§f" + EmberGemAcquire.remainLine(d)
                     + " §8· 合成：碎片×" + EmberGemAcquire.CRAFT_SHARD + "+骨尘×" + EmberGemAcquire.CRAFT_BONE
                     + "+币" + EmberGemAcquire.CRAFT_COIN);
             return true;
@@ -45,7 +45,7 @@ public final class EmberGemSocket {
             p.sendMessage(P + "请手持已签名的余烬刃/护符（或 /corerpg p1 gem pity 看保底）");
             if (plugin != null && plugin.getDataStore() != null) {
                 PlayerData d = plugin.getDataStore().get(p.getUniqueId());
-                p.sendMessage(P + "§e希望 · 宝石通关保底：" + EmberGemAcquire.hopeLine(d));
+                p.sendMessage(P + "§e宝石通关保底：§f" + EmberGemAcquire.remainLine(d));
             }
             return true;
         }
@@ -62,7 +62,7 @@ public final class EmberGemSocket {
         p.sendMessage(P + "§8锋利战斗：刃 T2+ 才计入 · 稳/汲/疾全程 · 不走旧 /corerpg socket");
         if (plugin != null && plugin.getDataStore() != null) {
             PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
-            p.sendMessage(P + "§e希望 · 宝石通关保底：" + EmberGemAcquire.hopeLine(pd));
+            p.sendMessage(P + "§e宝石通关保底：§f" + EmberGemAcquire.remainLine(pd));
             p.sendMessage(P + "§7合成：/corerpg p1 gem craft <sharp|steady|drain|gale> · 碎"
                     + EmberGemAcquire.CRAFT_SHARD + "+骨" + EmberGemAcquire.CRAFT_BONE + "+币" + EmberGemAcquire.CRAFT_COIN);
         }

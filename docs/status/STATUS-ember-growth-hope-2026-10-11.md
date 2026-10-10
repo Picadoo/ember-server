@@ -559,3 +559,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1247–D1256 ARCH SHIP · jar 1.65.440-d1247
 - Reroll pity remain honesty (remainLine); soft 「希望·」on forced; no new hope PAPI; pity math unchanged
+
+## D1257–D1266 ARCH SHIP · jar 1.65.441-d1257
+- Gem clear pity remainLine; drop 希望 celebration on clear progress
+
+## D1267–D1270 ARCH SHIP · same jar 1.65.441-d1257
+- forgeroll preview ActionBar ordinary/floor
