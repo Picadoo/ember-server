@@ -23,7 +23,7 @@
 # Behaviour-neutral: nothing in CoreRpg reads this file. Update it in the same commit as any new source / key / map.
 
 version: 1
-balance_version: 78
+balance_version: 79
 built_against: "CoreRpg 1.65.70 (D245)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
@@ -119,6 +119,7 @@ content:
   sx12: {mode: short, tier: 1, name: 烬枢转厅, boss: "EmberSx12Warden", sources: [S51], config: ["ember-v1-runs.yml#short.sx12"]}
   sx13: {mode: short, tier: 1, name: 烬衡悬梁, boss: "EmberSx13Warden", sources: [S52], config: ["ember-v1-runs.yml#short.sx13"]}
   sx14: {mode: short, tier: 1, name: 烬裂折廊, boss: "EmberSx14Warden", sources: [S53], config: ["ember-v1-runs.yml#short.sx14"]}
+  sx15: {mode: short, tier: 1, name: 烬旋坡廊, boss: "EmberSx15Warden", sources: [S54], config: ["ember-v1-runs.yml#short.sx15"]}
   afk_t1: {mode: afk, name: 灰坡, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t2: {mode: afk, name: 荒原, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t3: {mode: afk, name: 焦土, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
@@ -823,6 +824,22 @@ sources:
     code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx14_clear_\")"]
     config: ["ember-v1-runs.yml#short.sx14", "ember-v1-economy.yml#sources.S53"]
     notes: "D423 批 A·M；有奖同量级；首通更薄 50/6/1；p1sim 另号；地图 WE / TrMenu / MM 并行；日帽 PAPI 扩第十四本；sx_fc_* 扩扫 sx14；不抬 afk.tiers / daily_kills；不放开 gate_daily"
+  S54:
+    name: 短征通关（sx15 · 烬旋坡廊）
+    econ_row: S54
+    status: live
+    pays: [coin, shard, bone, blank]
+    period: day
+    content: [sx15]
+    drop_table: "rewarded clear (≤3/day Asia/Shanghai p1_sx15_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 40 + shard 6 + blank 1; after daily cap: 0 (sx15_practice marker)"
+    runtime_keys: true
+    grant_keys: [sx15_clear_coin, sx15_clear_shard, sx15_clear_bone, sx15_fc_coin, sx15_fc_shard, sx15_fc_blank, sx15_practice]
+    economy_keys: [S54.clear.coin, S54.clear.shard, S54.clear.bone, S54.fc.coin, S54.fc.shard, S54.fc.blank, S54.daily_cap]
+    counters: [p1_sx15_day]
+    code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx15_clear_\")"]
+    config: ["ember-v1-runs.yml#short.sx15", "ember-v1-economy.yml#sources.S54"]
+    notes: "D424 批 A·M；有奖同量级；首通更薄 40/6/1；p1sim 另号；地图 WE pending；日帽扩第十五本；不抬 afk；不放 gate_daily"
+
 
 
 

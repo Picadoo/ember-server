@@ -1,7 +1,7 @@
 {
   "generated_by": "CoreRpg/src/test/java/town/sunshine/corerpg/p1/EmberAffixExportTest.java",
   "note": "GENERATED — do not edit. Re-export: cd CoreRpg && mvn -o test -Dtest=EmberAffixExportTest -Daffix.export=write",
-  "balance_version": 78,
+  "balance_version": 79,
   "grace_s": 1.5,
   "affixes": {
     "blazing": {
