@@ -699,3 +699,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1828–D1841 SHIP · jar 1.65.483-d1828
 - MapCardCue methodLine chat (no AB; card is chat-only)
+
+## D1842–D1855 SHIP · jar 1.65.484-d1842
+- forgeroll remainLine have/need AB; marks bag remain AB; EM1-B still blocked

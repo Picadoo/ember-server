@@ -3326,17 +3326,30 @@ public final class EmberRunService implements Listener {
             p.sendMessage(P + "T2 定向锻造：" + (progressFlag(d, "q04") ? "§a已开放" : "§7需本人首通 Q04")
                     + " §7· T3：" + (progressFlag(d, "q07") ? "§a已开放" : "§7需本人首通 Q07"));
             boolean any = false;
+            int need = EmberRunRules.marksPerExchange();
+            int bestGap = Integer.MAX_VALUE; int bestT = 1; int bestHave = 0;
             for (int t = 3; t >= 1; t--) { // D88: clickable exchange rows instead of a typed command
                 int have = marks(d, t);
                 if (t > 1 && !progressFlag(d, EmberRunRules.directedForgeFlag(t))) continue;
-                if (have < EmberRunRules.marksPerExchange()) {
-                    if (have > 0) p.sendMessage(P + "§7T" + t + "：还差 " + (EmberRunRules.marksPerExchange() - have) + " 枚可兑换一件");
+                int gap = Math.max(0, need - have);
+                if (gap < bestGap) { bestGap = gap; bestT = t; bestHave = have; }
+                if (have < need) {
+                    if (have > 0) p.sendMessage(P + "§7T" + t + "：还差 " + gap + " 枚可兑换一件");
                     continue;
                 }
                 any = true;
                 exchangeButtons(p, t);
             }
             if (!any) p.sendMessage(P + "§7每局首领结算给 1 枚同阶印记，攒够 8 枚这里会出现兑换按钮。");
+            try { // D1846 marks bag remain AB
+                if (any)
+                    p.sendActionBar("§a印记 · 可兑 · T" + bestT + " §f" + bestHave + "/" + need);
+                else if (bestGap < Integer.MAX_VALUE)
+                    p.sendActionBar("§e印记 · T" + bestT + " §f" + bestHave + "/" + need
+                            + " §8· 还差" + bestGap);
+                else
+                    p.sendActionBar("§7印记 · T1 " + marks(d, 1) + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3));
+            } catch (Throwable ignored) { }
             return true;
         }
         if (blocksLegacy(p.getWorld())) { p.sendMessage(P + "出本后再兑换。"); return true; }
@@ -3459,18 +3472,39 @@ public final class EmberRunService implements Listener {
         }
         boolean gate = tier <= 1 || progressFlag(d, EmberRunRules.directedForgeFlag(tier));
         String refuse = EmberForgeRollRules.refusal(marks(d, tier), tier, fam, slot, gate);
-        if (refuse != null) { p.sendMessage(P + ChatColor.RED + refuse); return true; }
+        if (refuse != null) {
+            p.sendMessage(P + ChatColor.RED + refuse);
+            try { // D1844
+                int haveM = marks(d, tier);
+                int needM = EmberForgeRollRules.marks();
+                int gap = Math.max(0, needM - haveM);
+                p.sendActionBar(gap > 0
+                        ? ("§c随机锻 · 还差印 §f" + gap + " §7(T" + tier + ")")
+                        : ("§c随机锻 · §f" + refuse));
+            } catch (Throwable ignored) { }
+            return true;
+        }
         String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         if (!confirm) {
             EmberUpgradeRules.Cost cost = floor ? EmberForgeRollRules.matCostFloor() : EmberForgeRollRules.matCost();
+            int haveM = marks(d, tier);
+            int haveBlank = 0, haveBone = 0;
+            try {
+                if (plugin.getNiBridge() != null) {
+                    haveBlank = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
+                    haveBone = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BONE);
+                }
+            } catch (Throwable ignored) { }
+            int haveCoin = d.getCoin();
+            String rem = EmberForgeRollRules.remainLine(haveM, haveBlank, haveBone, haveCoin, floor);
             p.sendMessage(P + (floor ? "§6随机锻造·成色下限" : "§6随机锻造") + " · T" + tier + " " + label);
             p.sendMessage(P + "花费：§f" + EmberForgeRollRules.marks() + " 枚 T" + tier + " 印记 + " + cost.blanks + " 胚料"
                     + (cost.bone > 0 ? " + " + cost.bone + " 骨尘" : "") + " + " + cost.coins + " 币");
+            p.sendMessage(P + "§7库存：§f" + rem);
             p.sendMessage(P + (floor ? EmberForgeRollRules.oddsLineFloor() : EmberForgeRollRules.oddsLine()));
             p.sendMessage(P + "§7产物：指定族部位 · " + (floor ? "成色≥精良" : "成色随机") + " · 精工随机 · +0 · 词条空 · 出不了极品");
-            try { // D1267 deterministic path AB（非 K3）
-                p.sendActionBar(floor ? "§6下限锻预览 · §f成色≥精良 · 确认扣料"
-                        : "§d随机锻预览 · §f成色随机 · 可改下限");
+            try { // D1267 / D1844 have-need AB（非 K3）
+                p.sendActionBar((floor ? "§6下限锻 · §f" : "§d随机锻 · §f") + rem);
             } catch (Throwable ignored) { }
             String base = "/corerpg p1 forgeroll " + fam + " " + slot + " " + tier;
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
@@ -3517,6 +3551,12 @@ public final class EmberRunService implements Listener {
                                     qq.sendMessage(P + "§a随机锻造完成" + (floor ? "§6·下限" : "") + "：§fT" + tier + " " + label
                                             + " §7· 成色§f" + EmberItemData.qualityName(q)
                                             + " §7· 精工§f" + (craft * 2) + "%§7 · +0 · 词条空");
+                                    try { // D1844
+                                        PlayerData qd = data(id);
+                                        int leftM = qd == null ? 0 : marks(qd, tier);
+                                        qq.sendActionBar("§a随机锻完成 · §fT" + tier + " " + label
+                                                + " §8· 印余" + leftM);
+                                    } catch (Throwable ignored) { }
                                     EmberGearLib gl = EmberGearLib.get();
                                     if (gl != null) gl.delivery().kick(qq);
                                     EmberForgeRollLoop.afterRoll(qq, dataOf(id), fam, slot, tier, floor); // D661/D1166

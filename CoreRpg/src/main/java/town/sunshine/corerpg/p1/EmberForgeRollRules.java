@@ -67,6 +67,31 @@ public final class EmberForgeRollRules {
         return w.length - 1;
     }
 
+    /**
+     * D1843: display-only cost remain (Bukkit-free).
+     * {@code 印记3/8 · 胚2/4 · 币500/500 · 还差印5胚2} or {@code 料够}.
+     */
+    public static String remainLine(int haveM, int haveBlank, int haveBone, int haveCoin, boolean floor) {
+        EmberUpgradeRules.Cost c = floor ? matCostFloor() : matCost();
+        int needM = marks();
+        int gM = Math.max(0, needM - Math.max(0, haveM));
+        int gB = Math.max(0, c.blanks - Math.max(0, haveBlank));
+        int gBone = Math.max(0, c.bone - Math.max(0, haveBone));
+        int gC = Math.max(0, c.coins - Math.max(0, haveCoin));
+        StringBuilder sb = new StringBuilder();
+        sb.append("印记").append(Math.max(0, haveM)).append("/").append(needM);
+        sb.append(" · 胚").append(Math.max(0, haveBlank)).append("/").append(c.blanks);
+        if (c.bone > 0) sb.append(" · 骨").append(Math.max(0, haveBone)).append("/").append(c.bone);
+        sb.append(" · 币").append(Math.max(0, haveCoin)).append("/").append(c.coins);
+        if (gM + gB + gBone + gC == 0) return sb.append(" · 料够").toString();
+        sb.append(" · 还差");
+        if (gM > 0) sb.append("印").append(gM);
+        if (gB > 0) sb.append("胚").append(gB);
+        if (gBone > 0) sb.append("骨").append(gBone);
+        if (gC > 0) sb.append("币").append(gC);
+        return sb.toString();
+    }
+
     /** null = ok */
     public static String refusal(int haveMarks, int tier, String fam, String slot, boolean gateOpen) {
         if (!"blade".equals(slot) && !"charm".equals(slot)) return "部位只能是 blade 或 charm（本窗不开护甲）";

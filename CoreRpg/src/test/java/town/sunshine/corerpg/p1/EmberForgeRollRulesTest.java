@@ -34,4 +34,14 @@ public class EmberForgeRollRulesTest {
     @Test public void refusalArmorAndBadTier() {
         assertTrue(EmberForgeRollRules.refusal(8, 1, "scorch", "helm", true).contains("blade"));
     }
+
+    @Test public void remainLineGapsAndOk() {
+        String lack = EmberForgeRollRules.remainLine(0, 0, 0, 0, false);
+        assertTrue(lack.contains("还差"));
+        assertTrue(lack.contains("印记"));
+        String ok = EmberForgeRollRules.remainLine(99, 99, 99, 99999, false);
+        assertTrue(ok.contains("料够"));
+        String floor = EmberForgeRollRules.remainLine(8, 0, 0, 0, true);
+        assertTrue(floor.contains("还差") || floor.contains("料够"));
+    }
 }
