@@ -1,6 +1,6 @@
 # DESIGN · Stage2 全量发放 yml 真源搬家 · Stage0 盘点（2026-10-11 · D1040）
 
-> **状态：Stage2 A–I COMPLETE（含 S11/S12 + S14/S15/S35）；数值不变（AFK 层表未抬）。**  
+> **状态：Stage2 A–J COMPLETE；safe 扫完；review/unsafe 未开；数值不变（AFK 层表未抬）。**  
 > **上游：** Stage1 COMPLETE（sink `amount()`）；Stage0 经济价目盘点 D942；健康扫 D1030–D1038。  
 > **本窗：** 列出 **发放（source / grant）** 仍散落在 Java 常量 / 业务 yml / 运行时 Grant 表的位点，分级 **safe / review / unsafe**，供以后 Stage2 切片施工。
 
@@ -107,3 +107,6 @@ S11.mark + normalBonus; S12 raid weeklyCap; S14 rate; S15/S35 potions.
 
 ## D1121–D1128 Stage2-J
 S20 daily bounty + S21 variety coin SoT pin.
+
+### Safe sweep note (D1128)
+Remaining DESIGN rows marked **review** (S16–S19/S27/season/rush badges) or **unsafe** (legacy) — skipped per Stage2 gate.
