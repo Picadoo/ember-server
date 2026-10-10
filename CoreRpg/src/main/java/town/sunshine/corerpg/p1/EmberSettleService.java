@@ -355,6 +355,8 @@ public final class EmberSettleService {
         }
         if (newBest && runs.cosmetics() != null) runs.cosmetics().onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
         if (growth != null && gp != null) growth.refreshHonors(gp); // D142: one-time unlock notice
+        // D608 gem Stage3 clear-pity (Q01–Q07 only · no AFK/MM raise)
+        if (gp != null && gp.isOnline()) EmberGemAcquire.onClear(gp, pd, m, s, runs.plugin());
         if (runs.leaderboard() != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records
             String nm = Bukkit.getOfflinePlayer(u).getName();
             if (s.abyss > 0) runs.leaderboard().abyssBest(u, nm, runs.abyssBest(pd));

@@ -2,9 +2,9 @@
 
 | Stage | 状态 |
 |-------|------|
-| 1 数据 sock0/1 | PASS `17d33bfd` |
-| 2 公式 + 预算 | **PASS 收紧2** · jar `1.65.299-gem-s2` · sharp +0.1 帽0.2 T2+ · steady +0.1 帽0.2 · drain/gale 既有帽 |
-| 3 获取经济 | tip 待开 |
-| 4 UI | `/corerpg p1 gem` 已船 · 禁 legacy socket |
+| 1 数据 | PASS |
+| 2 公式 | PASS jar 1.65.299-gem-s2 |
+| 3 获取 | **SHIP D608** jar 1.65.300-d608 · 通关保底 5 + 碎骨合成 · hope `gem_pity_hope` |
+| 4 UI | tip 下一：TrMenu 镶嵌页（仍禁 legacy socket） |
 
-预算文档：`tools/p1sim/out-gem-stage2-budget-2026-10-11.md`
+硬禁：AFK/sx20/K3 / 抬 flat / legacy socket / 主线 MM 掉石

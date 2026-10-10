@@ -143,7 +143,9 @@ public final class EmberRunPapi {
                 || "held_quality_hope".equals(key)
                 // D603 refine hope meters
                 || "refine_blade_hope".equals(key) || "refine_charm_hope".equals(key)
-                || "held_refine_hope".equals(key);
+                || "held_refine_hope".equals(key)
+                // D608 gem clear-pity hope
+                || "gem_pity_hope".equals(key);
     }
 
     /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
@@ -671,6 +673,10 @@ public final class EmberRunPapi {
                 EmberItemData hr = heldTrusted(p);
                 if (hr == null) return EmberHopeMeter.emptySlot("手持");
                 return EmberHopeMeter.refine(hr);
+            }
+            case "gem_pity_hope": { // D608
+                PlayerData gd = runs.plugin().getDataStore().get(p.getUniqueId());
+                return EmberGemAcquire.hopeLine(gd);
             }
             case "held_enhance_cost": return heldForgeLine(p, "enhance");
             case "held_enhance_lack": return heldForgeLack(p, "enhance");

@@ -109,4 +109,12 @@ public final class EmberHopeMeter {
         }
         return String.format(Locale.ROOT, "§e追烙 %d/%d · %s · %s 徽记 · 满可烙印（不锁通关）", m, need, who, map);
     }
+
+    /**
+     * D608: gem clear-pity hope (通关保底 → 下一颗石).
+     * {@code need} = {@link EmberGemAcquire#PITY_NEED}; full = next clear grants a gem.
+     */
+    public static String gemPity(int cur, int need) {
+        return glance(cur, need, "下一通关得石");
+    }
 }

@@ -5,9 +5,10 @@ import org.bukkit.inventory.ItemStack;
 
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.NiBridge;
+import town.sunshine.corerpg.PlayerData;
 
 /**
- * Gem Stage2: P1-only insert/remove on held blade/charm. Never calls legacy {@code /corerpg socket}.
+ * Gem Stage2/3: P1 insert/remove/craft/pity on held blade/charm. Never legacy {@code /corerpg socket}.
  */
 public final class EmberGemSocket {
 
@@ -18,18 +19,33 @@ public final class EmberGemSocket {
     public static boolean cmd(Player p, String[] args, EmberLoadoutService loadouts, CoreRpgPlugin plugin) {
         if (p == null || loadouts == null) return true;
         String sub = args.length >= 3 ? args[2].toLowerCase(java.util.Locale.ROOT) : "list";
-        if ("list".equals(sub) || "ls".equals(sub) || "info".equals(sub)) return list(p, loadouts);
+        if ("list".equals(sub) || "ls".equals(sub) || "info".equals(sub)) return list(p, loadouts, plugin);
         if ("insert".equals(sub) || "in".equals(sub) || "镶".equals(sub)) return insert(p, args, loadouts, plugin);
         if ("remove".equals(sub) || "rm".equals(sub) || "拆".equals(sub)) return remove(p, args, loadouts, plugin);
-        p.sendMessage(P + "用法：/corerpg p1 gem list | insert <孔0|1> <sharp|steady|drain|gale> | remove <孔>");
+        if ("craft".equals(sub) || "合成".equals(sub)) {
+            String g = args.length >= 4 ? args[3] : "";
+            return EmberGemAcquire.craft(p, g, loadouts, plugin);
+        }
+        if ("pity".equals(sub) || "希望".equals(sub)) {
+            PlayerData d = plugin == null || plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+            p.sendMessage(P + "宝石通关保底：" + EmberGemAcquire.hopeLine(d)
+                    + " §8· 合成：碎片×" + EmberGemAcquire.CRAFT_SHARD + "+骨尘×" + EmberGemAcquire.CRAFT_BONE
+                    + "+币" + EmberGemAcquire.CRAFT_COIN);
+            return true;
+        }
+        p.sendMessage(P + "用法：/corerpg p1 gem list|craft <石>|pity|insert|remove");
         return true;
     }
 
-    static boolean list(Player p, EmberLoadoutService loadouts) {
+    static boolean list(Player p, EmberLoadoutService loadouts, CoreRpgPlugin plugin) {
         ItemStack hand = p.getInventory().getItemInMainHand();
         EmberItems.Read r = loadouts.items().read(hand);
         if (r == null || !r.ok()) {
-            p.sendMessage(P + "请手持已签名的余烬刃/护符");
+            p.sendMessage(P + "请手持已签名的余烬刃/护符（或 /corerpg p1 gem pity 看保底）");
+            if (plugin != null && plugin.getDataStore() != null) {
+                PlayerData d = plugin.getDataStore().get(p.getUniqueId());
+                p.sendMessage(P + "§e希望 · 宝石通关保底：" + EmberGemAcquire.hopeLine(d));
+            }
             return true;
         }
         EmberItemData d = r.data;
@@ -37,6 +53,12 @@ public final class EmberGemSocket {
         p.sendMessage(P + d.shortLabel() + " · " + (line == null ? "无孔" : line));
         p.sendMessage(P + "§7镶嵌：/corerpg p1 gem insert <孔> <sharp|steady|drain|gale> · 拆：remove <孔>");
         p.sendMessage(P + "§8锋利战斗：刃 T2+ 才计入 · 稳/汲/疾全程 · 不走旧 /corerpg socket");
+        if (plugin != null && plugin.getDataStore() != null) {
+            PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+            p.sendMessage(P + "§e希望 · 宝石通关保底：" + EmberGemAcquire.hopeLine(pd));
+            p.sendMessage(P + "§7合成：/corerpg p1 gem craft <sharp|steady|drain|gale> · 碎"
+                    + EmberGemAcquire.CRAFT_SHARD + "+骨" + EmberGemAcquire.CRAFT_BONE + "+币" + EmberGemAcquire.CRAFT_COIN);
+        }
         return true;
     }
 
