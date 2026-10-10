@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("stockpath".equals(sub) || "备药路径".equals(sub)) return stockPathCmd(s, args); // D599
+        if ("stock".equals(sub) && args.length == 2) return stockGoCmd(s); // D599
         if ("hurrypath".equals(sub) || "急清路径".equals(sub)) return hurryPathCmd(s, args); // D598
         if ("hurry".equals(sub) && args.length == 2) return hurryGoCmd(s); // D598
         if ("focuspath".equals(sub) || "集火路径".equals(sub)) return focusPathCmd(s, args); // D597
@@ -1745,6 +1747,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("stockseed".equals(sub)) return stockSeedCmd(s, args); // D599
         if ("hurryseed".equals(sub)) return hurrySeedCmd(s, args); // D598
         if ("focusseed".equals(sub)) return focusSeedCmd(s, args); // D597
         if ("doomseed".equals(sub)) return doomSeedCmd(s, args); // D596
@@ -6668,6 +6671,65 @@ public final class EmberCommand {
             EmberHurryPath.maybeProbe(t);
             s.sendMessage(P + "已触发急清路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingHurry(t) ? "（有急清）" : "（无急清）"));
+            return true;
+    }
+
+    private boolean stockPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberStockPath.glance(EmberStockPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c备药路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberStockPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c备药路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberStockPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberStockPath.get(d);
+                    if (EmberStockPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStockPath.label(cur) + " · 改路径再 /corerpg p1 stockpath");
+                    else EmberStockPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberStockPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 stockpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberStockPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean stockGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            int n = EmberStockPath.countPots(p);
+            EmberStockPath.tellStock(p, n);
+            if (!runs.pathStockCheck(p)) p.sendMessage(P + "§7（首领厅未预备时也可手核；进本预备后自动/提醒会再刷）");
+            else p.sendMessage(P + "§a备药·手点 §7已核对");
+            return true;
+    }
+
+    private boolean stockSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberStockPath.maybeProbe(t);
+            s.sendMessage(P + "已触发备药路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingStock(t) ? "（厅预备）" : "（厅未预备）")
+                    + " 药=" + EmberStockPath.countPots(t));
             return true;
     }
 }

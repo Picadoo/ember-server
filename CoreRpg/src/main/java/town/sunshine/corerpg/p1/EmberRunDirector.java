@@ -511,6 +511,19 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D599: boss arm timer running (pre-boss stock check window). */
+    boolean hasPendingStock() {
+        return bossAt > 0 && boss == null && !bossDead;
+    }
+
+    /** D599: report heal-potion stock for a committed player (true if checked). */
+    boolean pathStockCheck(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingStock()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        return true; // count + tell live in EmberStockPath
+    }
+
     /** D598: variety event countdown has flashed the 10s warning and is still live. */
     boolean hasPendingHurry() {
         if (s == null || !eventWarned || eventStart <= 0 || eventFailed || s.eventDone) return false;
@@ -1944,6 +1957,7 @@ final class EmberRunDirector {
             svc.tellRun(s, bossDef().waitInArea ? "§c" + bossDef().name + " §7在前方首领厅等候，走进大厅即现身"
                     : "§c" + bossDef().name + " §7即将在大厅中央现身（1.5 秒）");
             svc.tellRun(s, EmberRunRules.PRE_BOSS_HINT); // D166 (real-gear kite playtest: Q04 boss lost after the potions ran out)
+            EmberStockPath.maybeAfterStock(s); // D599
             EmberCallPath.maybeAfterArmed(s); // D557
         }
     }
