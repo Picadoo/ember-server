@@ -1,12 +1,12 @@
 # 余烬 · 工坊速览挂 remain/eta（挂机资源环⑦ · 花侧时间锚 · ≠抬日表 · ≠sx12）
 
-STATUS=**已批 A · 方案 M · D418** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-recipes-remain-eta-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-recipes-remain-eta-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-forge-recipes-remain-eta`（**已批/施工中**）· **施工已派** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx12 ≠复述 D373–D417 ≠改 daily_kills/afk.tiers/UpgradeRules ≠重开仓差面/菜单 remain/ActionBar/next_farm/短征链为主债**
+STATUS=**已批 A · 方案 M · D418** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-recipes-remain-eta-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-recipes-remain-eta-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-forge-recipes-remain-eta`（**已批·挂盘已落**）· STATUS [`STATUS-ember-forge-recipes-remain-eta-menu-d418-2026-10-10.md`](../status/STATUS-ember-forge-recipes-remain-eta-menu-d418-2026-10-10.md) · 旁注 [`STATUS-ember-forge-recipes-remain-eta-d418-2026-10-10.md`](../status/STATUS-ember-forge-recipes-remain-eta-d418-2026-10-10.md) · **挂盘已落** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx12 ≠复述 D373–D417 ≠改 daily_kills/afk.tiers/UpgradeRules ≠重开仓差面/菜单 remain/ActionBar/next_farm/短征链为主债**
 
 > **一句话玩家价值：** 打开配方速览就能看见「今日挂机还差几只 · 约几分钟满」（或已满）——对照仓差决定现在花还是再回挂；**不**抬产量、**不**交 sx12、**不**重开挂机 remain/ActionBar 为主交付。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx12。**
 >
-> **总控批 A·M · 2026-10-10：** 采纳方案 M（速览挂 remain_line）；否决 A/L/W；W1a 必做、W1b 可选同批；零 jar；零抬日表；≠sx12 ≠关观察；**施工已派**。
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（速览挂 remain_line）；否决 A/L/W；W1a 必做、W1b 可选同批；零 jar；零抬日表；≠sx12 ≠关观察；**挂盘已落** · 未派测。
 
 ---
 
@@ -59,7 +59,7 @@ STATUS=**已批 A · 方案 M · D418** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a 速览挂 remain 必做 + W1b 回挂机/Open 半行可选同批；见 §2）
 - [x] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx12/复述/假写）
-- [x] 批注：总控批 A·M · 2026-10-10 · D418 · W1a 必做 · W1b 可选同批 · 零 jar · 零抬日表 · ≠sx12 ≠关观察 · **施工已派**
+- [x] 批注：总控批 A·M · D418 · W1a+W1b 同批 · 零 jar · 钉死 A 格 · 零改产量/tiers · ≠sx12 · **挂盘已落** · 未派测
 
 ---
 
@@ -161,7 +161,8 @@ STATUS=**已批 A · 方案 M · D418** · 2026-10-10 · tip [`STATUS-ember-next
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题工坊速览挂 remain/eta（兑现 D416§5.5 后置 · 挂机资源环⑦）· ≠sx12 |
 | 2026-10-10 | **已批 A · 方案 M · D418** · 总控批注勾选 · W1a 必做 · W1b 可选同批 · 零 jar · 零抬日表 · ≠sx12 ≠关观察 · **施工已派** |
+| 2026-10-10 | **挂盘已落** · 菜单 STATUS-ember-forge-recipes-remain-eta-menu-d418 · A/V/Open · 零 jar · trmenu reload PASS · 未派测 |
 
 ---
 
-*D418 · 工坊速览挂 remain/eta · 已批 A·方案 M · 施工已派 · ≠关观察 ≠抬日表 ≠sx12。*
+*D418 · 工坊速览挂 remain/eta · 已批 A·方案 M · 挂盘已落 · ≠关观察 ≠抬日表 ≠sx12。*
