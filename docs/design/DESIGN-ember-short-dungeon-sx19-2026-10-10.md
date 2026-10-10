@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx19（烬弦共鸣 · P1 可达 + 薄经济 S58）
 
-STATUS=**待批 A · 方案 M 主推 · 拟 D428** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx19-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx19-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx19`（**待批 A**）· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D427 ≠纯换皮**
+STATUS=**已批 A · 方案 M · D428 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx19-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx19-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx19`（**已批·施工中**）· STATUS [`STATUS-ember-short-dungeon-sx19-d428-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx19-d428-2026-10-10.md)· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D427 ≠纯换皮**
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常。**
 
@@ -10,12 +10,13 @@ STATUS=**待批 A · 方案 M 主推 · 拟 D428** · 2026-10-10 · tip [`STATUS
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（短征 sx19 烬弦共鸣全规格）
-- [ ] 否决 A / L / W
-- [ ] 批注：
+- [x] **方案 M**（短征 sx19 烬弦共鸣全规格）
+- [x] 否决 A / L / W
+- [x] 批注：总控 **已批 A · 方案 M · D428** · 2026-10-10 11:11 CST · S58 80/4/3 · 首通18/6/1 · 体力30 · p1_sx19_day×3 · 十九本 · rooms×3+boss · ≥2弦振节点 · Cast 弦扫斩/共鸣压浪（delay≤15轻粒子）· TrMenu 19 槽偏挤（仅记 STATUS 不改版）· ≠关观察 ≠抬日表 ≠开 R/K3
 
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D428 · 上游 D427 PASS · 薄表 S58 有奖80/4/3 · 首通18/6/1 |
 
 *D428 · 短征 sx19 烬弦共鸣 · 待批 A·方案 M 主推 · ≠关观察 ≠抬日表。*
+| 2026-10-10 | 总控 **已批 A · 方案 M · D428** · 勾选旁注 · tip→已批·施工中 |
