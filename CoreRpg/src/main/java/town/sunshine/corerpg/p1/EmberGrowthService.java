@@ -1357,8 +1357,17 @@ public final class EmberGrowthService implements Listener {
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         if (!un) {
             if (!unlock) {
+                // D1297: marks gap honesty（非 hope PAPI）
+                int needA = EmberSignature.altMarks();
+                int gapA = Math.max(0, needA - marks);
                 p.sendMessage(P + "§d签名调律 §7· " + sd.name + "：调律版代价「" + EmberSignature.alt(sd).bad + "」（原版「" + sd.bad + "」，好处不变）");
-                p.sendMessage(P + "§e解锁要 " + EmberSignature.altMarks() + " 枚 " + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）· 在调律页 Shift+点击解锁，之后永久、随时切换");
+                p.sendMessage(P + "§e解锁要 " + needA + " 枚 " + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）"
+                        + (gapA > 0 ? " §c· 还差 " + gapA : " §a· 够")
+                        + " §7· 在调律页 Shift+点击解锁，之后永久、随时切换");
+                try {
+                    p.sendActionBar(gapA == 0 ? "§d调律解锁 · 徽记够"
+                            : ("§e调律解锁 · 还差徽记 §f" + gapA));
+                } catch (Throwable ignored) { }
                 return true;
             }
             String hold = EmberAssetGuard.hold(p);
@@ -2376,6 +2385,16 @@ public final class EmberGrowthService implements Listener {
         int coins = EmberConvertRules.coins(t.tier);
         int qAfter = EmberConvertRules.qualityAfter(t.quality);
         if (!confirm) {
+            // D1296: weekly remain + mat gap honesty（非 K3）
+            int weekLeft = EmberConvertRules.WEEKLY_CAP - used;
+            int haveBlank = 0;
+            try {
+                if (plugin.getNiBridge() != null)
+                    haveBlank = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
+            } catch (Throwable ignored) { }
+            int haveCoin = d.getCoin();
+            int gapB = Math.max(0, blanks - haveBlank);
+            int gapC = Math.max(0, coins - haveCoin);
             p.sendMessage(P + "§6每周转化 · " + t.shortLabel());
             int path = EmberConvertPath.get(d); // D728
             String pathFam = EmberConvertPath.familyKey(path);
@@ -2384,16 +2403,28 @@ public final class EmberGrowthService implements Listener {
                 p.sendMessage(P + "§e转化环：§f" + EmberConvertPath.label(path) + hit);
             }
             p.sendMessage(P + "目标族：§f" + EmberItemData.familyName(toFam)
-                    + " §7· 本周剩余 §f" + (EmberConvertRules.WEEKLY_CAP - used) + "/" + EmberConvertRules.WEEKLY_CAP);
+                    + " §7· 本周剩余 §f" + weekLeft + "/" + EmberConvertRules.WEEKLY_CAP);
             p.sendMessage(P + "成色：§f" + EmberItemData.qualityName(t.quality) + " §7→ §f" + EmberItemData.qualityName(qAfter)
                     + (t.quality > EmberConvertRules.QUALITY_CAP ? " §c（极品截到卓越）" : "")
                     + " §7· 强化 §f+" + t.enhance + " §7→ §f+0");
             p.sendMessage(P + "保留：精工/词条/保底/锻造次数 · uid 不变");
-            p.sendMessage(P + "花费：§f" + blanks + " 胚料 + " + coins + " 余烬币");
+            p.sendMessage(P + "花费：§f胚 " + haveBlank + "/" + blanks + " §7+ §f币 " + haveCoin + "/" + coins
+                    + (gapB + gapC > 0 ? (" §c· 还差"
+                        + (gapB > 0 ? " 胚" + gapB : "")
+                        + (gapC > 0 ? " 币" + gapC : "")) : " §a· 料够"));
             if (t.enhance > 0) p.sendMessage(P + "§e提示：可先用工坊「互换」挪走强化再转化");
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
-                    new String[]{"[确认转化]", "/corerpg p1 convert " + toFam + " confirm", "扣胚料与币，改族", "GREEN"},
-                    new String[]{"[回转化页]", "/corerpg p1 convert menu", "不扣", "GRAY"});
+            try {
+                String ab = "§e转化 · 周余 §f" + weekLeft;
+                if (gapB + gapC > 0) ab += " §c· 缺料";
+                else ab += " §a· 料够";
+                p.sendActionBar(ab);
+            } catch (Throwable ignored) { }
+            java.util.List<String[]> btns = new java.util.ArrayList<String[]>();
+            btns.add(new String[]{"[确认转化]", "/corerpg p1 convert " + toFam + " confirm", "扣胚料与币，改族", "GREEN"});
+            if (t.enhance > 0)
+                btns.add(new String[]{"[先互换强化]", "/corerpg p1 swap", "把强化挪走再转", "GOLD"});
+            btns.add(new String[]{"[回转化页]", "/corerpg p1 convert menu", "不扣", "GRAY"});
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btns.toArray(new String[0][]));
             return true;
         }
         if (gate(p)) return true;

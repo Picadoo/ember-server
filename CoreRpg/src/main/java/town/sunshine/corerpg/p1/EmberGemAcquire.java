@@ -121,10 +121,15 @@ public final class EmberGemAcquire {
         int haveS = ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD);
         int haveB = ni.countInInventory(p, EmberUpgradeRules.MAT_BONE);
         if (haveS < cost.shards || haveB < cost.bone) {
-            // D684: sink visibility — show have/need (vault+inv via ExtraSource)
+            // D684 / D1299: sink visibility + AB
             p.sendMessage(P + "§c合成缺料：碎 §f" + haveS + "/" + cost.shards
                     + " §c骨 §f" + haveB + "/" + cost.bone + " §c币 §f" + cost.coins
                     + " §8（仓+背包合计）");
+            try {
+                int gS = Math.max(0, cost.shards - haveS);
+                int gB = Math.max(0, cost.bone - haveB);
+                p.sendActionBar("§c宝石合成缺料 · 碎差" + gS + " 骨差" + gB);
+            } catch (Throwable ignored) { }
             ConfirmTokens.sendButtons(p, P + "§7补料：", // D875
                     new String[]{"[冒险刷料]", "/ember_p1_adventure", "图装/材料本", "GREEN"},
                     new String[]{"[一键存入]", "/corerpg p1 stash", "仓里可能有", "AQUA"},
@@ -135,6 +140,7 @@ public final class EmberGemAcquire {
         if (d == null) { p.sendMessage(P + "§c数据未就绪"); return true; }
         if (d.getCoin() < cost.coins) {
             p.sendMessage(P + "§c币不足：§f" + d.getCoin() + "/" + cost.coins + " §8（合成消耗）");
+            try { p.sendActionBar("§c宝石合成 · 还差币 §f" + (cost.coins - d.getCoin())); } catch (Throwable ignored) { }
             ConfirmTokens.sendButtons(p, P + "§7补币：", // D875 coin
                     new String[]{"[冒险]", "/ember_p1_adventure", "刷币/卖装", "GREEN"},
                     new String[]{"[工坊分解]", "/corerpg p1 forge", "拆件换钱", "GOLD"});
@@ -164,6 +170,7 @@ public final class EmberGemAcquire {
             return true;
         }
         p.sendMessage(P + "§a合成成功：§f" + EmberItemData.gemName(code) + " §7（碎" + cost.shards + "+骨" + cost.bone + "+币" + cost.coins + "）");
+        try { p.sendActionBar("§a宝石合成 · §f" + EmberItemData.gemName(code)); } catch (Throwable ignored) { }
         EmberGemInsertChase.afterAcquire(p, code, loadouts, plugin); // D727 chase empty hole (replaces fixed 孔0 twin)
         return true;
     }

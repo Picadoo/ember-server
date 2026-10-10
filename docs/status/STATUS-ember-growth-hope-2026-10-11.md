@@ -574,3 +574,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1287–D1294 ARCH SHIP · jar 1.65.444-d1287
 - Brand craft shard have/need + AB
+
+## D1295–D1308 ARCH SHIP · jar 1.65.445-d1295
+- Convert mat/week gap; attune marks gap; upgrade lack AB; gem craft AB

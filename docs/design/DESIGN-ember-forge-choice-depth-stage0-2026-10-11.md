@@ -39,6 +39,10 @@
 | **W-roll-ab** | 随机锻预览 AB | cmdForgeRoll | **D1267– SHIP** |
 | **W-imprint** | 烙印徽记缺口 AB | imprint preview | **D1279– SHIP** |
 | **W-brandcraft** | 烙纹合成缺碎 | brandCraft have/need | **D1287– SHIP** |
+| **W-convert2** | 转化缺料+周余+互换 | convertHeld | **D1295– SHIP** |
+| **W-attune** | 调律解锁徽记缺口 | sigAttune | **D1297– SHIP** |
+| **W-up2** | 升阶/成色/精工缺料 AB | ForgeService.simple | **D1298– SHIP** |
+| **W-gemcraft** | 宝石合成缺料/成功 AB | GemAcquire.craft | **D1299– SHIP** |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 
