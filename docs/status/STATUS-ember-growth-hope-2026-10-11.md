@@ -50,3 +50,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D648 challenge first-clear map-identity base_item
 - D649 abyss L1 gift visible (entry+settle+menu)
 - D650 dash set-distinct trail particles
+
+## D651–D652 SHIP · jar 1.65.315-d651 · 2026-10-11
+- D651 attune unlock spend complete UX
+- D652 imprint menu spend-loop tell

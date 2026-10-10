@@ -1251,6 +1251,12 @@ public final class EmberGrowthService implements Listener {
             plugin.getLogger().info("[P1 sig] " + p.getName() + " attune unlock " + sd.id + " (-" + EmberSignature.ALT_MARKS + " " + sd.map + " marks, saved=" + saved + ")");
             p.sendMessage(P + "§a调律版已解锁：§6" + sd.name + " §7现在用调律版（代价：" + EmberSignature.alt(sd).bad + "）· 剩 "
                     + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记" + (saved ? "" : " §e（存档稍后重试）"));
+            // D651 attune unlock spend complete UX
+            try { p.sendActionBar("§d调律解锁 · §f" + sd.name); } catch (Throwable ignored) { }
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[切回原版]", "/corerpg p1 sig attune " + sd.id, "随时切换代价", "AQUA"},
+                    new String[]{"[去烙印]", "/corerpg p1 sig pick " + sd.id, "徽记够可烙到件上", "GOLD"},
+                    new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴", "GRAY"});
         } else {
             boolean nowAlt = !sigAlt(d, sd);
             d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", (nowAlt ? 1 : 0) - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));
