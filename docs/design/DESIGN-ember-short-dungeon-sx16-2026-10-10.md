@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx16（烬影叠廊 · P1 可达 + 薄经济 S55）
 
-STATUS=**待批 A · 方案 M 主推 · 拟 D425** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx16-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx16-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx16`（**待批 A**）· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D424 ≠纯换皮**
+STATUS=**已批 A · 方案 M · D425 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx16-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx16-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx16`（**已批·施工中**）· STATUS [`STATUS-ember-short-dungeon-sx16-d425-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx16-d425-2026-10-10.md)· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D424 ≠纯换皮**
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常。**
 
@@ -10,12 +10,13 @@ STATUS=**待批 A · 方案 M 主推 · 拟 D425** · 2026-10-10 · tip [`STATUS
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（短征 sx16 烬影叠廊全规格）
-- [ ] 否决 A / L / W
-- [ ] 批注：
+- [x] **方案 M**（短征 sx16 烬影叠廊全规格）
+- [x] 否决 A / L / W
+- [x] 批注：总控 **已批 A · 方案 M · D425** · 2026-10-10 10:44 CST · S55 80/4/3 · 首通30/6/1 · 体力30 · p1_sx16_day×3 · 十六本 · rooms×3+boss · ≥3影墙侧穿 · Cast 影扫斩/叠影压浪（短预警轻粒子防 Watchdog）· ≠关观察 ≠抬日表 ≠开 R/K3
 
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D425 · 上游 D424 PASS · 薄表 S55 有奖80/4/3 · 首通30/6/1 |
 
 *D425 · 短征 sx16 烬影叠廊 · 待批 A·方案 M 主推 · ≠关观察 ≠抬日表。*
+| 2026-10-10 | 总控 **已批 A · 方案 M · D425** · 勾选旁注 · tip→已批·施工中 |
