@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D418 · 工坊速览挂 remain/eta · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx12）
 
-> **【D418 · STATUS=待批 A · 方案 M 主推】** tip+DESIGN **待批 A** · docs-only · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx12** · **≠ stage 脏 runtime**
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D418** · tip `9559ea01` · 指针 DESIGN [`DESIGN-ember-forge-recipes-remain-eta-2026-10-10.md`](../design/DESIGN-ember-forge-recipes-remain-eta-2026-10-10.md) · W1a 必做 · W1b 可选同批 · 零 jar · 零抬日表 · ≠sx12 ≠关观察 · **施工已派** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。下文为交稿原文，保留备查。
+>
+> **【D418 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · **施工已派** · **零 jar** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx12** · **≠ stage 脏 runtime**
 >
 > **上游结案：** 总控【催 D418 tip】· D417 sx11 已落地（键 `2ba2233d` · MM `1b81b415` · 骨架 `f58c88d3` · 挂盘 `a0b94b7d` · jar 1.65.122-d417 bv75），全链路抽测已派 → 请交**下一内容号 tip**（挂机资源环加厚 / 短征乐趣 / 有趣系统；**sx12 等 D417 PASS**）。禁 Pack6/天赋/灰印/抬日表/开 gate_daily/动 Stage2。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **打开 · STATUS=待批 A** · docs-only  
-**硬规格（待批 A · 荐方案 M）：** [`DESIGN-ember-forge-recipes-remain-eta-2026-10-10.md`](../design/DESIGN-ember-forge-recipes-remain-eta-2026-10-10.md) · backlog `B-forge-recipes-remain-eta`（**待批 A**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D418** · **施工已派** · docs-only  
+**硬规格（已批 A · 方案 M · D418 · 施工已派）：** [`DESIGN-ember-forge-recipes-remain-eta-2026-10-10.md`](../design/DESIGN-ember-forge-recipes-remain-eta-2026-10-10.md) · backlog `B-forge-recipes-remain-eta`（**已批/施工中**）  
 **打开理由：** D405 `remain_line` / `remain` / `eta_min` **已 live**，挂在挂机战况与 ActionBar；工坊配方速览（花侧）已有仓差与静态「打满约」对照，**仍无个人今日还差/约满**——缺料回挂时看不见「今天还差几只、约几分钟满」。D416§5.5 **明文后置**「工坊速览挂 remain/eta（花侧时间锚）」。sx12 禁交；D404–D417（仓差速览/战况/选页 · remain 菜单/ActionBar · 首通 · sx07–sx11 · 满额短征追 · 有奖花材追 · next_farm）禁复述为主债。
 
 ---
@@ -66,7 +68,7 @@
 
 ---
 
-*选题工坊速览挂 remain/eta · tip 打开 · STATUS=待批 A · 荐方案 M · 拟 D418 · ≠关观察 ≠抬挂机表 ≠sx12。*
+*选题工坊速览挂 remain/eta · tip 旁注已关 · 已批 A·M · D418 · 设计待批关闭 · 施工已派 · ≠关观察 ≠抬挂机表 ≠sx12。*
 
 ---
 
@@ -75,3 +77,4 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题工坊速览挂 remain/eta（兑现 D416§5.5 后置 · 挂机资源环⑦）· DESIGN 待批 A·荐 M · ≠sx12 |
+| 2026-10-10 | **旁注已关** · 总控批 A·M · D418 · 设计待批关闭 · W1a 必做 · W1b 可选同批 · 零 jar · 零抬日表 · ≠sx12 ≠关观察 · **施工已派** |
