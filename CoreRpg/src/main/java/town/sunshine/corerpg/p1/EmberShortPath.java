@@ -235,6 +235,9 @@ public final class EmberShortPath {
         p.sendMessage(P + "§a短征路径 → §f" + label(id) + " §7· " + tip(id));
         p.sendMessage(P + unpaidFcLine(runs, d)); // D710
         EmberRunMaps.MapDef next = resolve(runs, d, id);
+        if (id == FC && next != null) { // D746 claim-next clarity
+            p.sendMessage(P + "§a首通追 · 下一本可领：§f" + next.key.toUpperCase(Locale.ROOT));
+        }
         p.sendMessage(P + resolveLine(next));
         try { // D703
             if (next != null) p.sendActionBar("§e短征追 · §f" + next.key.toUpperCase(Locale.ROOT));

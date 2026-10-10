@@ -211,3 +211,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D741 setchase bag equip [换上]
 - D742 abysstarget next + button
 - D743 short FC claim → next enter (no sig twin)
+
+## D744–D746 SHIP · jar 1.65.344-d744 · 2026-10-11
+- D744 afterEquip focus aligned bar
+- D745 abysstarget open next buttons
+- D746 shortpath FC claim-next line

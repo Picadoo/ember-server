@@ -81,6 +81,18 @@ public final class EmberAbyssTarget {
         if (args.length < 3) {
             p.sendMessage(P + glance(d, best));
             p.sendMessage(P + "用法：/corerpg p1 abysstarget <1-" + MAX + "|next|clear>");
+            int t = get(d);
+            if (t <= 0 && best >= 0) { // D745
+                int n = Math.min(MAX, Math.max(1, best + 1));
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7设目标：",
+                        "[目标第" + n + "层]", "/corerpg p1 abysstarget " + n,
+                        "冲纪录对照");
+            } else if (t > 0 && best >= t) {
+                int n = Math.min(MAX, best + 1);
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一档：",
+                        "[目标第" + n + "层]", "/corerpg p1 abysstarget next",
+                        "抬到 " + n);
+            }
             return true;
         }
         String raw = args[2];

@@ -120,7 +120,11 @@ public final class EmberSetChase {
     public static void afterEquip(Player p, PlayerData d, EmberLoadoutService loadouts) {
         if (p == null || loadouts == null) return;
         EmberLoadout lo = loadouts.refresh(p);
+        String fk = d == null ? null : EmberSetFocus.familyKey(EmberSetFocus.get(d));
         tell(p, d, lo, loadouts);
+        if (fk != null && fk.equals(lo.activeSet)) { // D744
+            try { p.sendActionBar("§a成套追 · 焦点已齐 · §f" + lo.setLabel()); } catch (Throwable ignored) { }
+        }
     }
 
     public static boolean cmd(CommandSender s, String[] args, EmberRunService runs, EmberLoadoutService loadouts) {
