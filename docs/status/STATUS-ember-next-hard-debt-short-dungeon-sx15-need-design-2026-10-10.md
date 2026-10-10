@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D424 · 短征 sx15 · 烬旋坡廊 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D424** · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx15-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx15-2026-10-10.md) · 首航 rooms×3+boss · S54 80/4/3 · 首通40/6/1 · 体力30 · p1_sx15_day×3 · 十五本选页 · 真绕心螺旋坡≥2整圈 · **已批·施工中** · STATUS [`STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md) · ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D424** · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx15-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx15-2026-10-10.md) · 首航 rooms×3+boss · S54 80/4/3 · 首通40/6/1 · 体力30 · p1_sx15_day×3 · 十五本选页 · 真绕心螺旋坡≥2整圈 · **已批·已落地 PASS** · STATUS [`STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md) · ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常。下文为交稿原文，保留备查。
 
-> **【D424 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批·施工中** · STATUS [`STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md) · **零 jar（本策划号；施工另号/同窗总控）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D423 / 冒险页合计 / 仓差 / remain / ActionBar / next_farm**
+> **【D424 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批·已落地 PASS** · STATUS [`STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md) · **零 jar（本策划号；施工另号/同窗总控）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D423 / 冒险页合计 / 仓差 / remain / ActionBar / next_farm**
 
 > **上游结案：** 总控 routine-1017 · D423 sx14 PASS（jar 1.65.125-d423 bv78 · spot `/workspace/tmp/d423-sx14-spot/`）→ **sx15 闸开**；honesty/展示波 exhausted（D382）——**禁**复述仓差/remain/ActionBar/冒险页合计为主债。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
 **本窗性质：** tip **旁注已关 · 已批 A · 方案 M · D424 · 施工中** · docs-only · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
-**硬规格（荐 M · 拟 D424）：** [`DESIGN-ember-short-dungeon-sx15-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx15-2026-10-10.md) · backlog `B-short-dungeon-sx15`（**已批·施工中**）· STATUS [`STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md)  
+**硬规格（荐 M · 拟 D424）：** [`DESIGN-ember-short-dungeon-sx15-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx15-2026-10-10.md) · backlog `B-short-dungeon-sx15`（**已批·已落地 PASS**）· STATUS [`STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-d424-2026-10-10.md)  
 **打开理由：** 短征十四本（sx01–sx14）已可达且 D423 全链路 PASS；下一真增量=**第十五条**同范式、**坡门庭→绕心螺旋坡（≥2整圈）→旋冠终厅**新结构维的短本，继续拉日刷内容量。交替范式本窗取**短本**（展示薄债面 exhausted，勿硬凑 honesty 复述）。
 
 ---
@@ -73,3 +73,4 @@
 |----|-----|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D424 · 上游 D423 PASS · 主题钉绕心螺旋坡「烬旋坡廊」· 薄表 S54 有奖80/4/3 · 首通40/6/1 |
 | 2026-10-10 | 总控批 A·M · 旁注已关 · tip→已批·施工中 · 见 STATUS-ember-short-dungeon-sx15-d424 |
+| 2026-10-10 | **已批 A · 方案 M · D424** · 全链路抽测 PASS · 键 `7d2d1c0f` · MM `614f54f1` · 菜单 `efbaa173` · jar 1.65.126-d424 bv79 · spot [`STATUS-ember-short-dungeon-sx15-spot-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-spot-d424-2026-10-10.md) |

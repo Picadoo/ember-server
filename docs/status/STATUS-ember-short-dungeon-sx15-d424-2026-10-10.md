@@ -2,7 +2,7 @@
 
 **日期：** 2026-10-10（上海时间）  
 **上游：** tip [`STATUS-ember-next-hard-debt-short-dungeon-sx15-need-design-2026-10-10.md`](STATUS-ember-next-hard-debt-short-dungeon-sx15-need-design-2026-10-10.md) · DESIGN [`DESIGN-ember-short-dungeon-sx15-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx15-2026-10-10.md) · 旁注批 A 已关  
-**裁决：** **已批 A · 批 M · D424** · 总控采纳方案 M（P1 短征 sx15 烬旋坡廊）· tip 旁注已关 · backlog → **已批·施工中** · **≠关观察** · **≠抬 afk.tiers/daily_kills** · **≠放开 gate_daily** · **≠开 R / K3** · **本号启动施工**  
+**裁决：** **已批 A · 批 M · D424** · 总控采纳方案 M（P1 短征 sx15 烬旋坡廊）· tip 旁注已关 · backlog → **已批·已落地 PASS** · **≠关观察** · **≠抬 afk.tiers/daily_kills** · **≠放开 gate_daily** · **≠开 R / K3** · **本号施工完成 · 抽测 PASS**  
 **版本：** docs 批 A + 施工 · jar **1.65.126-d424** bv**79** · Stage2 / ×0.97 / afk **未动**
 
 ## 人话
@@ -27,3 +27,8 @@
 ---
 
 *D424 批 A·M · 短征 sx15 烬旋坡廊 · 施工中 · ≠关观察≠抬日表。*
+
+
+## 抽测
+
+见 [`STATUS-ember-short-dungeon-sx15-spot-d424-2026-10-10.md`](STATUS-ember-short-dungeon-sx15-spot-d424-2026-10-10.md)。
