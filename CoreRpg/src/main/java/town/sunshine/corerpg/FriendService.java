@@ -1,5 +1,7 @@
 package town.sunshine.corerpg;
 
+import town.sunshine.corerpg.p1.EmberFriendPath;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -224,6 +226,11 @@ public final class FriendService {
             p.sendMessage(PREFIX + ChatColor.RED + "对方开启了隐私，拒收陌生人好友申请。");
             return;
         }
+        // D516 friend path BUSY: refuse without leaving pending
+        if (EmberFriendPath.shouldAutoDeny(other)) {
+            p.sendMessage(PREFIX + ChatColor.RED + "对方开启了好友·静拒，暂不接受申请。");
+            return;
+        }
         if (containsIgnoreCase(self.getPendingOut(), canon)) {
             p.sendMessage(PREFIX + ChatColor.YELLOW + "已向对方发出申请，等待确认。");
             return;
@@ -242,9 +249,24 @@ public final class FriendService {
         p.sendMessage(PREFIX + ChatColor.GREEN + "已向 §f" + canon + ChatColor.GREEN + " 发出好友申请。");
         Player online = Bukkit.getPlayer(targetOff.getUniqueId());
         if (online != null && online.isOnline()) {
-            ConfirmTokens.sendButtons(online, PREFIX + ChatColor.YELLOW + p.getName() + ChatColor.GRAY + " 申请加好友 ",
-                    new String[]{"[同意]", "/corerpg friend accept " + p.getName(), "成为好友", "GREEN"},
-                    new String[]{"[拒绝]", "/corerpg friend deny " + p.getName(), "拒绝这条申请", "RED"}); // D100
+            if (EmberFriendPath.shouldAutoAccept(other)) {
+                final Player recipient = online;
+                final String fromName = p.getName();
+                final UUID fromId = p.getUniqueId();
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    if (!recipient.isOnline()) return;
+                    PlayerData rec = dataStore.get(recipient.getUniqueId());
+                    PlayerData from = dataStore.get(fromId);
+                    if (rec == null || from == null) return;
+                    if (!EmberFriendPath.shouldAutoAccept(rec)) return;
+                    acceptPair(recipient, rec, fromId, from, fromName);
+                    recipient.sendMessage(PREFIX + ChatColor.GREEN + "好友·敞开 §7已自动同意 §f" + fromName);
+                }, 5L);
+            } else {
+                ConfirmTokens.sendButtons(online, PREFIX + ChatColor.YELLOW + p.getName() + ChatColor.GRAY + " 申请加好友 ",
+                        new String[]{"[同意]", "/corerpg friend accept " + p.getName(), "成为好友", "GREEN"},
+                        new String[]{"[拒绝]", "/corerpg friend deny " + p.getName(), "拒绝这条申请", "RED"}); // D100
+            }
         }
     }
 
