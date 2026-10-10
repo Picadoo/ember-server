@@ -1,0 +1,9 @@
+# D424 · EmberSx15 怪组空壳
+# EmberSx15Guard 坡门卫 / Crossbow 坡廊弩 / Elite 坡廊督卫 / Warden 旋冠守吏 · SpiralCast
+groups:
+  default:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

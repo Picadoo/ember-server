@@ -423,3 +423,18 @@ EmberSx14RiftCast:
   - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
   - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
   - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+
+# --- 短征 sx15 · 烬旋坡廊 Boss 旋扫斩/坡心压浪 ---
+EmberSx15SpiralCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&6【烬旋】&f旋扫斩——&7退进旋冠侧龛或已过坡段内侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=44;hSpread=5.5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=36;hSpread=4;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=lava;amount=18;hSpread=2.5;ySpread=1.2;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.40} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self

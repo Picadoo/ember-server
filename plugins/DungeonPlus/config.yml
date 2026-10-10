@@ -227,7 +227,8 @@ dungeon-pre-folder:
   # D421 短征 sx13 · 烬衡悬梁（map 本地骨架自 ember_raid；进本键/MM/S52 另号；禁窄桥/跳石/转枢/递闸复读）
   ember_short_sx13:
     "EmberSx13": 1,
-    "EmberSx14": 1
+    "EmberSx14": 1,
+    "EmberSx15": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

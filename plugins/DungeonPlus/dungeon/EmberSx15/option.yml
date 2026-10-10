@@ -1,0 +1,22 @@
+# D424 骨架 · 短征 sx15 烬旋坡廊（EmberSx15）— DP 只建实例，不刷怪不发奖。
+# 地图：ember_short_sx15（本地骨架；绕心螺旋坡 ≥2整圈 WE 另号）
+# 进入：corerpg p1 enter sx15 → 体力 30 → 通行证 → dp start-console。
+# 首航硬提醒：short.sx15 须含 rooms×3+boss。
+# 禁：竖井复读 sx04；塔升复读 sx07；平环复读 sx06；折角裂隙复读 sx14；衡梁/转枢/对廊/递闸/跳石等。
+
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx15} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx15%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入烬旋坡廊（体力与解锁由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e烬旋坡廊 §7· 短征 · 坡门庭→绕心螺旋坡→旋冠终厅；沿螺旋坡完成≥2整圈后击败旋冠守吏，统一结算} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+
+dungeon-area: []
+dungeon-reward-script: []
