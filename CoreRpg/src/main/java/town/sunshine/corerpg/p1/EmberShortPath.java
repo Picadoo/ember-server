@@ -83,6 +83,22 @@ public final class EmberShortPath {
         return "§e短征路径：§f" + label(id) + " §8· " + tip(id);
     }
 
+    /** D710: count unlocked shorts with unpaid career first-clear. */
+    public static int countUnpaidFc(EmberRunService runs, PlayerData d) {
+        if (runs == null || d == null) return 0;
+        int n = 0;
+        for (EmberRunMaps.MapDef m : orderedShorts(runs.maps())) {
+            if (unlocked(runs, d, m) && unpaidFc(d, m)) n++;
+        }
+        return n;
+    }
+
+    public static String unpaidFcLine(EmberRunService runs, PlayerData d) {
+        int n = countUnpaidFc(runs, d);
+        if (n <= 0) return "§7短征首通包：已清";
+        return "§e未领首通包：§f" + n + " 本";
+    }
+
     static boolean unlocked(EmberRunService runs, PlayerData d, EmberRunMaps.MapDef m) {
         if (runs == null || d == null || m == null || !m.shortExpedition) return false;
         String req = m.requires == null || m.requires.isEmpty() ? EmberShortRules.REQUIRES : m.requires;
@@ -217,6 +233,7 @@ public final class EmberShortPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a短征路径 → §f" + label(id) + " §7· " + tip(id));
+        p.sendMessage(P + unpaidFcLine(runs, d)); // D710
         EmberRunMaps.MapDef next = resolve(runs, d, id);
         p.sendMessage(P + resolveLine(next));
         try { // D703

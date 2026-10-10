@@ -46,6 +46,11 @@ public final class EmberAbyssTarget {
         if (enteringFloor >= t) line = "§a层目标 · 本局 §f" + enteringFloor + " §a≥ 目标 " + t;
         else line = "§e层目标 §f" + t + " §7· 本局 §f" + enteringFloor + " §7· 最高 " + best;
         p.sendMessage(EmberRunService.P + line);
+        // D709: target above what this entry can reach (best+1 typically)
+        int canOpen = best + 1;
+        if (t > canOpen && enteringFloor < t) {
+            p.sendMessage(EmberRunService.P + "§7目标高于当前可开（可开至 §f" + canOpen + "§7）· 先冲纪录再抬目标");
+        }
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
     }
 

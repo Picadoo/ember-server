@@ -4479,6 +4479,10 @@ public final class EmberCommand {
                 : Boolean.TRUE.equals(pv[1]) ? v.setLabel() + "（配 " + v.blade.shortLabel() + "，手持该刃时生效）" : v.setLabel();
         s.sendMessage(P + "已选定护符 " + (l.charm == null ? "(暂未生效: " + String.join("; ", loadouts.notes(p)) + ")" : l.charm.shortLabel())
                 + " · 套装: " + set);
+        if (runs != null) { // D708
+            PlayerData cd = runs.dataOf(p.getUniqueId());
+            EmberSetChase.tell(p, cd, l);
+        }
         return true;
     }
 

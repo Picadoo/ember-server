@@ -139,3 +139,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D705 adventure abysstarget
 - D706 short shortpath
 - D707 enhance undo empty ActionBar
+
+## D708–D710 SHIP · jar 1.65.331-d708 · 2026-10-11
+- D708 charm→setchase
+- D709 abyss target above openable
+- D710 unpaid FC count
