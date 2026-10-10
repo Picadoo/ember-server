@@ -341,3 +341,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D822–D823 SHIP · jar 1.65.375-d822
 - Raid path-hit re-enter; undo mid button
+
+## D824–D825 SHIP · jar 1.65.376-d824
+- Sign menu online progress; friend list mentor accept

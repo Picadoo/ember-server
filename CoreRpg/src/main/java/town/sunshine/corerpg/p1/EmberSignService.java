@@ -467,6 +467,25 @@ public final class EmberSignService implements Listener {
 
     /** D805: login rising-edge if any milestone claimable today. */
 
+
+    /** D824: short online progress for hub/sign Open. */
+    public String onlineProgressLine(Player p) {
+        if (p == null || !onlineP1()) return "";
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return "";
+        String day = DailyService.today();
+        int mins = minutesToday(d), claimed = d.periodCount(C_OCLAIM, day);
+        Milestone next = null, claimable = null;
+        for (int i = 0; i < milestones.size(); i++) {
+            int st = milestoneState(mins, claimed, i, milestones.get(i).min);
+            if (st == 1 && claimable == null) claimable = milestones.get(i);
+            if (st == 0 && next == null) next = milestones.get(i);
+        }
+        if (claimable != null) return "§a在线可领 · §f" + claimable.min + " 分档 · " + claimable.r.label();
+        if (next != null) return "§e在线进度 · §f" + mins + "/" + next.min + " 分钟";
+        return "§7今日在线档已领完 · §f" + mins + " 分";
+    }
+
     /** D820: login rising-edge when makeup is ready. */
     public void maybeMakeupCue(Player p) {
         if (p == null || !signP1()) return;
@@ -633,6 +652,13 @@ public final class EmberSignService implements Listener {
     }
 
     public void openMenu(Player p) {
+        if (p != null) { // D824ab
+            String line = onlineProgressLine(p);
+            if (line != null && !line.isEmpty()) {
+                p.sendMessage(PO + line);
+                try { p.sendActionBar(line); } catch (Throwable ignored) { }
+            }
+        }
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (p.isOnline()) Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "trmenu open " + MENU + " " + p.getName());
         });

@@ -197,7 +197,10 @@ public final class FriendService {
         if (mentor != null && !mentor.isEmpty()) {
             p.sendMessage(ChatColor.GOLD + "  师徒: §f" + mentor);
         } else if (data.getMentorPending() != null && !data.getMentorPending().isEmpty()) {
-            p.sendMessage(ChatColor.YELLOW + "  师徒待确认: §f" + data.getMentorPending());
+            // D825 one-click mentor accept/deny on list
+            ConfirmTokens.sendButtons(p, ChatColor.YELLOW + "  师徒待确认: §f" + data.getMentorPending() + " ",
+                    new String[]{"[同意师徒]", "/corerpg friend mentor accept", "结成师徒", "GREEN"},
+                    new String[]{"[拒绝]", "/corerpg friend mentor break", "取消申请", "RED"});
         }
         ConfirmTokens.sendButtons(p, ChatColor.DARK_GRAY + "  ",
                 new String[]{"[加好友]", "/corerpg friend addlist", "列出在线玩家，点名字发申请", "GREEN"});
