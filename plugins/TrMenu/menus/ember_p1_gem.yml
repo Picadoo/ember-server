@@ -1,3 +1,4 @@
+# D678: craft→insert path · never legacy socket
 # D622: 材料持有 + 合成希望半行（零改合成价/flat）
 # D609 · P1 宝石页（Stage4）· 只调 /corerpg p1 gem · 永不 legacy ember_socket
 # 入口：工坊「去镶嵌」、/ember_p1_gem
@@ -26,6 +27,7 @@ Events:
     - 'sound: BLOCK_NOTE_PLING-1-0.9'
     - 'tell: §e手持刃/符看孔 · 背包备好石 · 希望保底 %corerpg_p1_gem_pity_hope%'
     - 'tell: §7仓内：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone% · 币看背包 · 合成碎8+骨4+币40'
+    - 'tell: §e合成→镶嵌：§f点合成后聊天出嵌孔按钮 · 手持刃/符 /corerpg p1 gem list · §c永不旧 socket'
     - 'command: corerpg p1 gem pity'
 
 Icons:
@@ -75,7 +77,7 @@ Icons:
     display:
       material: blaze powder
       name: '§c合成 · 锋利石'
-      lore: ['', '§7碎8+骨4+币40 → 锋利', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '', '§e➥ §f确定合成']
+      lore: ['', '§7碎8+骨4+币40 → 锋利', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
@@ -84,7 +86,7 @@ Icons:
     display:
       material: iron ingot
       name: '§b合成 · 稳固石'
-      lore: ['', '§7碎8+骨4+币40 → 稳固', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '', '§e➥ §f确定合成']
+      lore: ['', '§7碎8+骨4+币40 → 稳固', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
@@ -93,7 +95,7 @@ Icons:
     display:
       material: ghast tear
       name: '§d合成 · 汲取石'
-      lore: ['', '§7碎8+骨4+币40 → 汲取', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '', '§e➥ §f确定合成']
+      lore: ['', '§7碎8+骨4+币40 → 汲取', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'
@@ -102,7 +104,7 @@ Icons:
     display:
       material: feather
       name: '§a合成 · 疾风石'
-      lore: ['', '§7碎8+骨4+币40 → 疾风', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '', '§e➥ §f确定合成']
+      lore: ['', '§7碎8+骨4+币40 → 疾风', '§7仓：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%', '§8仓+背包合计够才能成（含自动仓）', '', '§e➥ §f确定合成']
     actions:
       all:
         - 'sound: BLOCK_ANVIL_USE-0.5-1.2'

@@ -727,6 +727,7 @@ public final class SkillService implements Listener {
             town.sunshine.corerpg.p1.EmberLoadoutService lsDash = plugin.getEmberLoadouts();
             if (lsDash != null) dashFam = lsDash.get(player).activeSet;
         } catch (Throwable ignored) { }
+        spawnDashGroundTelegraph(from, dest, dashFam); // D677 副招施放前路径预示 · zero skill_mult
         spawnDashSetTrail(from, dest, dashFam);
         player.teleport(dest);
         maybeFlashDashLand(player); // D445 烬突落地 (成功位移；前方受阻路径不进此分支)
@@ -1182,6 +1183,22 @@ public final class SkillService implements Listener {
 
 
 
+
+
+    /** D677: 烬突 cast-time ground path telegraph (second-active feel vs F shapes). Zero damage/CD. */
+    private void spawnDashGroundTelegraph(Location from, Location dest, String fam) {
+        if (from == null || dest == null || from.getWorld() == null) return;
+        Particle tip = Particle.SMOKE_NORMAL;
+        if ("burst".equals(fam)) tip = Particle.CRIT_MAGIC;
+        else if ("sustain".equals(fam)) tip = Particle.SPELL_WITCH;
+        else if ("scorch".equals(fam)) tip = Particle.FLAME;
+        try {
+            for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
+                from.getWorld().spawnParticle(tip, sample.clone().add(0, 0.12, 0), 2, 0.04, 0.01, 0.04, 0.0);
+                from.getWorld().spawnParticle(Particle.CRIT, sample.clone().add(0, 0.08, 0), 1, 0.02, 0.0, 0.02, 0.0);
+            }
+        } catch (Throwable ignored) { }
+    }
 
     /** D650: dash path particles by set family — zero skill_mult / CD / damage. */
     private void spawnDashSetTrail(Location from, Location dest, String fam) {

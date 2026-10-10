@@ -184,7 +184,7 @@ public final class EmberGemPath {
         p.sendMessage(P + "§a宝石 → §f" + label(id) + " §7· " + tip(id));
         maybeAfterProgress(p);
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[镶嵌]", "/corerpg socket", "看孔位", "GOLD"},
+                new String[]{"[宝石页]", "/ember_p1_gem", "合成/镶嵌 · 不走旧 socket", "GOLD"},
                 new String[]{"[换一条]", "/corerpg p1 gempath", "重选", "GRAY"});
     }
 

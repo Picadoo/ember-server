@@ -4,6 +4,8 @@ import java.util.Locale;
 
 import org.bukkit.entity.Player;
 
+import town.sunshine.corerpg.ConfirmTokens;
+
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.NiBridge;
 import town.sunshine.corerpg.PlayerData;
@@ -115,6 +117,12 @@ public final class EmberGemAcquire {
             return true;
         }
         p.sendMessage(P + "§a合成成功：§f" + EmberItemData.gemName(code) + " §7（碎" + cost.shards + "+骨" + cost.bone + "+币" + cost.coins + "）");
+        // D678: craft → insert path (UI polish · zero craft price / gem flat)
+        try { p.sendActionBar("§a合成 · §f" + EmberItemData.gemName(code) + " §7· 手持件镶嵌"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7镶嵌：",
+                new String[]{"[手持 list]", "/corerpg p1 gem list", "看孔位与已嵌", "GOLD"},
+                new String[]{"[嵌孔0]", "/corerpg p1 gem insert 0 " + EmberGemPath.key(code), "刃/符第1孔", "GREEN"},
+                new String[]{"[宝石页]", "/ember_p1_gem", "继续合成", "AQUA"});
         return true;
     }
 }

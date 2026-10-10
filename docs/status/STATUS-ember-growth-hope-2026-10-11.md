@@ -90,3 +90,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D674 skill unlock ActionBar
 - D675 abyss newBest buttons
 - D676 loot target set feel
+
+## D677–D680 SHIP · jar 1.65.322-d677 · 2026-10-11
+- D677 烬突地面路径预示（副招 vs F）
+- D678 宝石 UI：禁旧 socket · 合成→镶嵌
+- D679 入场下一件追（非 PAPI）
+- D680 工坊消耗一瞥（非 PAPI twin）
