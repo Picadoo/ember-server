@@ -374,3 +374,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D855–D857 SHIP · jar 1.65.386-d855
 - Guild create loop; pet list glance; mat-ready enhance preview
+
+## D858–D859 SHIP · jar 1.65.387-d858
+- Guild info next; forge open goal glance

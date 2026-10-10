@@ -4067,8 +4067,12 @@ public final class EmberCommand {
         if ("forge".equals(sub) || "工坊".equals(sub) || "workshop".equals(sub)) { // D473 open forge menu
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
-            EmberSinkGlance.tellHeld(p, forge, loadouts, runs == null ? null : runs.dataOf(p.getUniqueId())); // D680/D681
+            PlayerData fd = runs == null ? null : runs.dataOf(p.getUniqueId());
+            EmberSinkGlance.tellHeld(p, forge, loadouts, fd); // D680/D681
             EmberEnhanceUndo.forgeGlance(p); // D694
+            if (fd != null) { // D859
+                p.sendMessage(P + EmberForgeGoal.glance(EmberForgeGoal.get(fd), ""));
+            }
             // D853 held preview shortcuts
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7手持预览：",
                     new String[]{"[强化预览]", "/corerpg p1 enhance", "看成功率/保底", "GREEN"},

@@ -446,6 +446,14 @@ public final class GuildService {
             p.sendMessage(ChatColor.GRAY + "  干部: §f" + sb);
         }
         p.sendMessage(ChatColor.DARK_GRAY + "  invite|leave|kick|donate <niId> <amt>|boss");
+        if (memberView) { // D858
+            PlayerData pd = dataStore.get(p.getUniqueId());
+            p.sendMessage(PREFIX + EmberGuildPath.glance(EmberGuildPath.get(pd), true));
+            ConfirmTokens.sendButtons(p, PREFIX + "§7：",
+                    new String[]{"[周常Boss]", "/corerpg guild boss", "开盟约周本", "GREEN"},
+                    new String[]{"[邀请]", "/corerpg friend", "从好友拉人", "AQUA"},
+                    new String[]{"[盟约路径]", "/corerpg p1 guildpath", "邀请处理", "GRAY"});
+        }
     }
 
     private void cmdCreate(Player p, String rawName) {
