@@ -263,6 +263,58 @@ public final class PetService implements Listener {
         return null;
     }
 
+    /** D525: unlocked pet count. */
+    public int unlockedCount(Player p) {
+        if (p == null) return 0;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        return d == null ? 0 : d.getPetsUnlocked().size();
+    }
+
+    public boolean isSpawned(Player p) {
+        return p != null && activeEntities.containsKey(p.getUniqueId());
+    }
+
+    /** D525: summon active/last unlocked pet; true when entity spawned this call. */
+    public boolean trySummonActive(Player p) {
+        if (p == null || !enabled) return false;
+        if (isSpawned(p)) return false;
+        PlayerData data = dataStore.get(p.getUniqueId());
+        if (data == null) return false;
+        String id = data.getActivePet();
+        if (id == null || id.isEmpty()) {
+            java.util.List<String> unlocked = data.getPetsUnlocked();
+            if (unlocked.isEmpty()) return false;
+            id = unlocked.get(unlocked.size() - 1);
+        }
+        if (!data.isPetUnlocked(id)) return false;
+        PetDef def = pets.get(id);
+        if (def == null) return false;
+        data.setActivePet(id);
+        dataStore.flushMutation(p.getUniqueId());
+        removeEntity(p.getUniqueId(), false);
+        ArmorStand stand = spawnStand(p, def);
+        if (stand == null) return false;
+        activeEntities.put(p.getUniqueId(), stand.getUniqueId());
+        p.sendMessage(PREFIX + ChatColor.GREEN + "出战 " + def.display
+                + ChatColor.GRAY + " · /corerpg pet dismiss 收回");
+        if (plugin.getLadderService() != null) plugin.getLadderService().recomputePower(p);
+        return true;
+    }
+
+    /** D525 admin smoke: unlock without egg. */
+    public boolean adminUnlock(Player p, String id) {
+        if (p == null) return false;
+        id = resolvePetId(id);
+        PetDef def = pets.get(id);
+        if (def == null) return false;
+        PlayerData data = dataStore.get(p.getUniqueId());
+        if (data == null) return false;
+        if (!data.isPetUnlocked(id)) data.unlockPet(id);
+        data.setActivePet(id);
+        dataStore.flushMutation(p.getUniqueId());
+        return true;
+    }
+
     public void cmdRoot(CommandSender sender, String[] args) {
         if (!enabled) {
             sender.sendMessage(PREFIX + ChatColor.RED + "使魔系统未启用。");

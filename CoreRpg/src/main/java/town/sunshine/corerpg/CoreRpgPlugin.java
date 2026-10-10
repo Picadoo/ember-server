@@ -823,6 +823,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
                 if (jp.isOnline()) town.sunshine.corerpg.p1.EmberMailPath.maybeAfterMail(jp, mailService); // D523
             }, 90L);
         }
+        if (petService != null) {
+            final Player pp = player;
+            getServer().getScheduler().runTaskLater(this, () -> {
+                if (pp.isOnline()) town.sunshine.corerpg.p1.EmberPetPath.maybeAfterJoin(pp, petService); // D525
+            }, 100L);
+        }
     }
 
     @EventHandler

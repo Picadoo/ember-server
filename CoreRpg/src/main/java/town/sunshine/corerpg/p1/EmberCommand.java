@@ -268,6 +268,54 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("petpath".equals(sub) || "使魔路径".equals(sub)) { // D525 familiar summon path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberPetPath.glance(EmberPetPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c使魔路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberPetPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c使魔路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberPetPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberPetPath.get(d);
+                    if (EmberPetPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPetPath.label(cur) + " · 改路径再 /corerpg p1 petpath");
+                    else EmberPetPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberPetPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 petpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberPetPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("petseed".equals(sub)) { // D525 admin smoke: unlock ashling without egg
+            if (s instanceof Player && !s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            town.sunshine.corerpg.PetService pets = runs == null ? null : runs.plugin().getPetService();
+            if (pets == null) { s.sendMessage(P + "使魔服务未加载"); return true; }
+            String id = args.length >= 4 ? args[3] : "ashling";
+            if (!pets.adminUnlock(t, id)) { s.sendMessage(P + "解锁失败（未知 id？）"); return true; }
+            s.sendMessage(P + "已为 " + t.getName() + " 解锁使魔 " + id);
+            EmberPetPath.maybeAfterJoin(t, pets);
+            return true;
+        }
         if ("mentorpath".equals(sub) || "师徒路径".equals(sub)) { // D524 mentor-request accept path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
