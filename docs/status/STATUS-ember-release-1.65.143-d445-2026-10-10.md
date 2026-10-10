@@ -1,10 +1,10 @@
-# 发布 · CoreRpg 1.65.143-d445 · 技能落点确认短闪 · LIVE
+# 发布 · CoreRpg 1.65.143-d445
 
-**日：** 2026-10-10 · **债：** D445 · **backlog：** B-growth-feel-residual  
-**内容：** 烬斩命中 / 烬突落地 ActionBar 短闪；防抖 400ms；让位套装 HUD。  
-**禁改：** skill_mult/CD · EmberSetRules · Stage2 · AFK · sx · 聚火  
-**测：** SkillHitFlashTest OK · FreshQ971 PASS=7/0  
-**前置：** 1.65.142-d444  
-**上线：** 2026-10-10 ~15:17 CST · Enabling `v1.65.143-d445.local` · SEVERE0
+**日期：** 2026-10-10 15:17 CST  
+**内容：** D445 技能落点确认短闪（烬斩命中 / 烬突落地）  
+**测：** SkillHitFlashTest 5/0 · EmberSetEngineTest 21/0 · FreshQ972/969 冒烟 PASS  
+**bv：** 未抬  
+**MySQL×2 · SEVERE0 · PID 186108**  
+**禁：** Stage2＜17:40 · AFK · sx20 · 聚火 · K3 · D440  
 
-*LIVE*
+*见 STATUS-ember-skill-hit-flash-d445-2026-10-10.md*
