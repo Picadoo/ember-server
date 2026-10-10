@@ -547,3 +547,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1215–D1222 ARCH SHIP · jar 1.65.436-d1215
 - SinkGlance CONVERT tier cost lack honesty
+
+## D1223–D1230 ARCH SHIP · jar 1.65.437-d1223
+- SinkGlance upgrade near-cost line

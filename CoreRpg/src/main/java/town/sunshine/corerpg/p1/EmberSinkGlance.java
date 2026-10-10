@@ -40,6 +40,9 @@ public final class EmberSinkGlance {
         if (q != null && !q.isEmpty()) bits.add(q);
         String c = EmberGearNextHint.craftLine(d);
         if (c != null && !c.isEmpty()) bits.add(c);
+        // D1224: 升阶费用近档（gateOk=true 只示费用；闸文案仍走升阶预览）
+        String up = EmberGearNextHint.upgradeLine(d, true);
+        if (up != null && !up.isEmpty() && !up.startsWith("已是") && !up.startsWith("T0")) bits.add("升阶 " + up);
 
         int goal = EmberForgeGoal.get(pd);
         String lack = "";

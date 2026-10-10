@@ -32,6 +32,7 @@
 | **W-brand** | SinkGlance 烙纹目标缺碎 | craftShards Cost | **D1191– SHIP** |
 | **W-roll** | SinkGlance 随机锻缺料 + 确定成功AB | matCost + simple AB | **D1199– SHIP** |
 | **W-convert** | SinkGlance 转化缺料 | ConvertRules.cost | **D1215– SHIP** |
+| **W-up** | SinkGlance 升阶近档 | upgradeLine | **D1223– SHIP** |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 
