@@ -175,6 +175,25 @@ public final class EmberChallengePath {
                 new String[]{"[换一条]", "/corerpg p1 challengepath", "重选", "GRAY"});
     }
 
+
+    /** D762: after challenge clear — path glance (not PAPI twin). */
+    public static void afterSettle(Player p, PlayerData d, boolean challenge, boolean challengeFirst) {
+        if (p == null || !challenge) return;
+        int id = get(d);
+        if (!valid(id)) {
+            if (challengeFirst)
+                p.sendMessage(EmberRunService.P + "§7可设硬本路径：/corerpg p1 challengepath");
+            return;
+        }
+        String line = challengeFirst
+                ? "§c硬本路径 · 挑战首通 §8· " + label(id)
+                : "§c硬本路径 · 挑战入账 §8· " + label(id);
+        p.sendMessage(EmberRunService.P + line);
+        if (!challengeFirst) {
+            try { p.sendActionBar(line); } catch (Throwable ignored) { }
+        }
+    }
+
     private static PlayerData dataOf(Player p) {
         CoreRpgPlugin pl = plugin();
         return pl == null || p == null ? null : pl.getDataStore().get(p.getUniqueId());

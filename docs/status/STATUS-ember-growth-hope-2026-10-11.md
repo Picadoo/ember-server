@@ -240,3 +240,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D758 raid week-full path glance
 - D759 sig menu ready one-click cue
 - D760 gem menu enhance-hole tell
+
+## D761–D763 SHIP · jar 1.65.350-d761
+- D761 attune one-click when ready (`maybeAttuneReadyCue` + TrMenu Open ready)
+- D762 challenge path settle glance (`EmberChallengePath.afterSettle`)
+- D763 map gear farm resume after logout (`C_RESUME_MAP` + join cue)

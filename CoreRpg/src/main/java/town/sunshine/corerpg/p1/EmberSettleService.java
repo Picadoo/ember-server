@@ -370,7 +370,8 @@ public final class EmberSettleService {
             }
         }
         if (fresh && runs.season() != null && s.coreClean.contains(u)) runs.season().addGoal(u, pd, "core", 1); // D144 烬核同心 (optional goal)
-        if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0) {
+        boolean chalFirstNow = s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0;
+        if (chalFirstNow) {
             pd.addPeriodCount(EmberGrowthService.C_CHAL + m.key, "all", 1); // D141: challenge first clear per map (talent point / honors)
             // D648: visible challenge-FC acquisition feel
             Player chp = Bukkit.getPlayer(u);
@@ -385,6 +386,11 @@ public final class EmberSettleService {
                         new String[]{"[冒险页]", "/ember_p1_adventure", "下一张挑战", "GREEN"},
                         new String[]{"[装备页]", "/ember_p1_gear", "穿上同族", "AQUA"});
             }
+        }
+        if (s.challenge && s.abyss == 0) { // D762
+            Player chp2 = Bukkit.getPlayer(u);
+            if (chp2 != null && chp2.isOnline())
+                EmberChallengePath.afterSettle(chp2, pd, true, chalFirstNow);
         }
         if (in.firstClear != null) {
             boolean skillNew = !EmberFirstClear.fact(pd, m.key); // D459: announce only on first fact write

@@ -814,6 +814,8 @@ public final class EmberGrowthService implements Listener {
     static final String C_SIGSEEN = "p1_sigseen_";
     /** D297 W1c: week key already showed attune confirm (period = ISO week) */
     static final String C_ATTUNE_PROMPT = "p1_attuneprompt";
+    /** D761: latched Def.code for attune-ready one-click cue */
+    static final String C_ATTUNE_READY = "p1_sig_attune_ready";
     public static final String SIG_RUN_CONFIRM = "ember_p1_sig_runconfirm";
     /** pending enter after confirm: {mapKey, "1"|"0" challenge} */
     private final Map<UUID, String[]> pendingEnter = new ConcurrentHashMap<UUID, String[]>();
@@ -1014,6 +1016,7 @@ public final class EmberGrowthService implements Listener {
             else if (!"menu".equals(op)) SFROM.remove(p.getUniqueId()); // "menu" = back from the imprint page: keep the opener
             p.sendMessage(P + EmberSigStampDry.glance(d)); // D693 dry glance · not PAPI
             EmberSigChase.maybeReadyCue(p, d); // D759 one-click imprint when marks ready
+            maybeAttuneReadyCue(p, d); // D761
             openMenu(p, SIG_MENU);
             return true;
         }
@@ -1076,6 +1079,7 @@ public final class EmberGrowthService implements Listener {
                     + (ch ? "" : " §8· 已是该目标"));
             p.sendMessage(P + EmberSigChase.glance(d));
             EmberSigChase.maybeReadyCue(p, d); // D470: already enough marks → imprint button
+            maybeAttuneReadyCue(p, d); // D761
             return true;
         }
         if ("toggle".equals(op)) return sigToggle(p, d, lo, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "");
@@ -1083,7 +1087,18 @@ public final class EmberGrowthService implements Listener {
             return sigRunConfirm(p, d, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "go");
         }
         if ("attune".equals(op) || "调律".equals(op)) { // stage 3: bare = the 调律 page; <Lxx> = switch; <Lxx> unlock = pay 10 insignia
-            if (args.length < 4) { openMenu(p, SIG_ALT_MENU); return true; }
+            if (args.length < 4) {
+                maybeAttuneReadyCue(p, d); // D761 attune page
+                openMenu(p, SIG_ALT_MENU);
+                return true;
+            }
+            if ("ready".equalsIgnoreCase(args[3]) || "cue".equalsIgnoreCase(args[3])) { // D761 TrMenu Open
+                int ar = d.periodCount(C_ATTUNE_READY, "all");
+                if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
+                if (!maybeAttuneReadyCue(p, d))
+                    p.sendMessage(P + "§7调律：追烙签名徽记满 " + EmberSignature.ALT_MARKS + " 且未解锁时出一键");
+                return true;
+            }
             return sigAttune(p, d, args[3], args.length >= 5 && "unlock".equalsIgnoreCase(args[4]));
         }
         if ("pick".equals(op)) return sigPick(p, d, args.length >= 4 ? args[3] : null);
@@ -1240,6 +1255,40 @@ public final class EmberGrowthService implements Listener {
     }
 
     /**
+     * D761: rising-edge attune unlock ready (chase target, marks ≥ ALT_MARKS, not unlocked, Q07 done).
+     * One-click → sig attune &lt;id&gt; unlock. Zero ALT_MARKS / PAPI twin.
+     */
+    public boolean maybeAttuneReadyCue(Player p, PlayerData d) {
+        if (p == null || d == null) return false;
+        if (!runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return false;
+        EmberSignature.Def def = EmberSigChase.get(d);
+        if (def == null || EmberSignature.alt(def) == null) return false;
+        if (altUnlocked(d, def)) {
+            int latched = d.periodCount(C_ATTUNE_READY, "all");
+            if (latched > 0) { d.addPeriodCount(C_ATTUNE_READY, "all", -latched); runs.flushData(p.getUniqueId()); }
+            return false;
+        }
+        int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+        if (marks < EmberSignature.ALT_MARKS) {
+            int latched = d.periodCount(C_ATTUNE_READY, "all");
+            if (latched > 0) { d.addPeriodCount(C_ATTUNE_READY, "all", -latched); runs.flushData(p.getUniqueId()); }
+            return false;
+        }
+        int latched = d.periodCount(C_ATTUNE_READY, "all");
+        if (latched == def.code) return false;
+        d.addPeriodCount(C_ATTUNE_READY, "all", def.code - latched);
+        runs.flushData(p.getUniqueId());
+        String line = "§d调律就绪 · §f" + def.id + " " + def.name + " §7· 徽记 §f"
+                + marks + "/" + EmberSignature.ALT_MARKS;
+        p.sendMessage(P + line);
+        try { p.sendActionBar(line); } catch (Throwable ignored) { }
+        town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7一键：",
+                "[一键调律·" + def.id + "]", "/corerpg p1 sig attune " + def.id + " unlock",
+                EmberSignature.ALT_MARKS + " 枚徽记解锁调律版（永久）");
+        return true;
+    }
+
+    /**
      * D174 stage 3 签名调律 (Q07): unlock (once, {@link EmberSignature#ALT_MARKS} insignia of the signature's map, one checked
      * save) or switch the version in effect. Town only (same gate as 烙印 / 开关); the next run uses the new version.
      */
@@ -1266,6 +1315,9 @@ public final class EmberGrowthService implements Listener {
             plugin.getLogger().info("[P1 sig] " + p.getName() + " attune unlock " + sd.id + " (-" + EmberSignature.ALT_MARKS + " " + sd.map + " marks, saved=" + saved + ")");
             p.sendMessage(P + "§a调律版已解锁：§6" + sd.name + " §7现在用调律版（代价：" + EmberSignature.alt(sd).bad + "）· 剩 "
                     + d.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记" + (saved ? "" : " §e（存档稍后重试）"));
+            // D761 clear attune-ready latch
+            int ar = d.periodCount(C_ATTUNE_READY, "all");
+            if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
             // D651 attune unlock spend complete UX
             try { p.sendActionBar("§d调律解锁 · §f" + sd.name); } catch (Throwable ignored) { }
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：",

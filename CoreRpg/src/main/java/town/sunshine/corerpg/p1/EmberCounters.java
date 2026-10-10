@@ -120,6 +120,7 @@ public final class EmberCounters {
         x("p1_set_focus", "EmberSetFocus", A, SE, OW, "D465 set-family focus 0=none 1=scorch 2=burst 3=sustain");
         x("p1_set_focus_offer", "EmberSetFocus", W, CL, RL, "D465 once-per-week offer latch @rotationWeekKey");
         x("p1_sig_chase_ready", "EmberSigChase", A, SE, OW, "D470 ready-cue latch = Def.code while marks≥need");
+        x("p1_sig_attune_ready", "EmberGrowthService", A, SE, OW, "D761 attune-ready latch = Def.code while marks≥ALT_MARKS");
         x("p1_sig_chase", "EmberSigChase", A, SE, OW, "D464 imprint chase Def.code 0=none 1..15=L01..L15");
         x("p1_sig_chase_offered", "EmberSigChase", A, PR, NV, "D464 imprint-unlock first-pick latch");
         px("p1_mode_path_offered_", "EmberModePath", A, PR, NV, "D462 Q04/Q05/Q06 first-path pick latch");
@@ -292,6 +293,8 @@ public final class EmberCounters {
         x("p1_sign_path", "EmberSignPath", A, PR, NV, "D520 sign auto/ask/mute");
         px("p1_sign_path_offer", "EmberSignPath", A, PR, NV, "D520 weekly offer latch");
         x("p1_challenge_path", "EmberChallengePath", A, PR, NV, "D519 challenge prefer/easy/follow");
+        x("p1_map_farm_resume", "EmberMapFarmCue", A, SE, OW, "D763 last farm map code for logout resume");
+        x("p1_map_farm_resume_lat", "EmberMapFarmCue", A, SE, OW, "D763 join resume cue latch = map code");
         px("p1_challenge_path_offer", "EmberChallengePath", A, PR, NV, "D519 weekly offer latch");
         x("p1_online_path", "EmberOnlinePath", A, PR, NV, "D518 online auto/ask/mute");
         px("p1_online_path_offer", "EmberOnlinePath", A, PR, NV, "D518 weekly offer latch");

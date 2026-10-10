@@ -1925,6 +1925,7 @@ public final class EmberRunService implements Listener {
                     got.add(g.id.toUpperCase(Locale.ROOT) + " 首领徽记 " + g.amount + "（共 " + d.periodCount(EmberSignature.C_MARK + g.id, "all") + "）");
                     if (EmberSigAcq.isRepeatMarkKey(r.key)) { acqRepeatMark = true; acqMarkMap = g.id; } // D456
                     EmberSigChase.maybeReadyCue(p, d); // D470 rising-edge imprint-ready
+                    if (EmberGrowthService.get() != null) EmberGrowthService.get().maybeAttuneReadyCue(p, d); // D761
                     EmberForgeMatReady.maybeReadyCue(p); // D478 forge mat-ready
                     if ("fc_sigmark".equals(r.key)) { // D174: the first clear of a signature map also announces its new unlock
                         String un = EmberSignature.IMPRINT_UNLOCK.equals(g.id) ? "烬炉烙印（用徽记把签名烙到自己的件上）"
@@ -2579,6 +2580,10 @@ public final class EmberRunService implements Listener {
             if (blocksLegacy(p.getWorld())) return;
             EmberClaimPath.maybeAmbientDeliver(p, EmberRunService.this); // D515 claim path
             starterKit(p);
+            // D763 map gear farm resume after logout
+            PlayerData jd = data(p.getUniqueId());
+            EmberLoadout jlo = loadouts.get(p);
+            EmberMapFarmCue.maybeResumeAfterJoin(p, jd, jlo, maps);
         }, 60L);
     }
 

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
 
@@ -70,6 +71,8 @@ public final class EmberMapFarmCue {
     public static void afterSettle(Player p, EmberRunMaps.MapDef m, EmberLoadout lo) {
         if (p == null || m == null) return;
         if (m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
+        PlayerData pd = dataOf(p);
+        if (pd != null) remember(pd, m); // D763
         cue(p, m, lo);
     }
 
@@ -110,6 +113,68 @@ public final class EmberMapFarmCue {
                     : "§e下一件 · §7本图装";
             p.sendActionBar(shortBar);
         } catch (Throwable ignored) { }
+    }
+
+
+    /** D763: encoded last farm map for logout resume (1=q01…7=q07; 101+=sx). */
+    public static final String C_RESUME_MAP = "p1_map_farm_resume";
+    public static final String C_RESUME_LAT = "p1_map_farm_resume_lat";
+
+    static int encodeMap(String key) {
+        if (key == null) return 0;
+        if (key.length() == 3 && key.charAt(0) == 'q') {
+            try { int n = Integer.parseInt(key.substring(1)); return n >= 1 && n <= 7 ? n : 0; }
+            catch (NumberFormatException e) { return 0; }
+        }
+        if (key.startsWith("sx") && key.length() >= 4) {
+            try { int n = Integer.parseInt(key.substring(2)); return n > 0 ? 100 + n : 0; }
+            catch (NumberFormatException e) { return 0; }
+        }
+        return 0;
+    }
+
+    static String decodeMap(int code) {
+        if (code >= 1 && code <= 7) return "q0" + code;
+        if (code > 100) {
+            int n = code - 100;
+            return n < 10 ? "sx0" + n : "sx" + n;
+        }
+        return null;
+    }
+
+    /** Remember last map with loot identity (settle / enter). */
+    public static void remember(PlayerData d, EmberRunMaps.MapDef m) {
+        if (d == null || m == null) return;
+        if (m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
+        int code = encodeMap(m.key);
+        if (code <= 0) return;
+        int cur = d.periodCount(C_RESUME_MAP, "all");
+        if (cur == code) return;
+        d.addPeriodCount(C_RESUME_MAP, "all", code - cur);
+        // clear latch so next join can cue again
+        int lat = d.periodCount(C_RESUME_LAT, "all");
+        if (lat != 0) d.addPeriodCount(C_RESUME_LAT, "all", -lat);
+    }
+
+    /**
+     * D763: after login (hub) — one resume cue for last farm map + enter button.
+     * Rising edge per remember cycle (latched to map code).
+     */
+    public static void maybeResumeAfterJoin(Player p, PlayerData d, EmberLoadout lo, EmberRunMaps maps) {
+        if (p == null || d == null || maps == null) return;
+        if (maps.byWorld(p.getWorld().getName()) != null) return; // still in an instance
+        int code = d.periodCount(C_RESUME_MAP, "all");
+        String key = decodeMap(code);
+        if (key == null) return;
+        int lat = d.periodCount(C_RESUME_LAT, "all");
+        if (lat == code) return;
+        EmberRunMaps.MapDef m = maps.byKey(key);
+        if (m == null || m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
+        d.addPeriodCount(C_RESUME_LAT, "all", code - lat);
+        cue(p, m, lo);
+        ConfirmTokens.sendButton(p, EmberRunService.P + "§7登出恢复：",
+                "[再进·" + m.key.toUpperCase() + "]", "/corerpg p1 enter " + m.key,
+                "继续刷 " + EmberItemData.familyName(m.lootFamily) + " 图装");
     }
 
     private static PlayerData dataOf(Player p) {
