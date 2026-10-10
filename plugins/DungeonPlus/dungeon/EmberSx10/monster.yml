@@ -1,6 +1,7 @@
 # D414 骨架 · EmberSx10 怪组空壳（刷怪/波次由 CoreRpg rooms + MM；禁 DP wave 自驱 · D391 FAIL）
-# MM 意向（怪物号并行）：EmberSx10Guard 闸卫 / EmberSx10Crossbow 闸室弩 / EmberSx10Elite 闸室督卫 / EmberSx10Warden 末室守吏
-# Cast：EmberSx10GateCast（闸心压浪/扫室斩）— 若怪物已入仓则本注释对齐其 id；本窗未假造完整 MM。
+# MM 已入仓 tip `efb26b5d` · STATUS-ember-short-sx10-mm：
+#   EmberSx10Guard 闸卫 / EmberSx10Crossbow 闸室弩 / EmberSx10Elite 闸室督卫 / EmberSx10Warden 末室守吏
+# Cast：EmberSx10GateCast（闸心压浪/扫室斩）— 本注释对齐；本壳仍空 groups（禁 DP wave 自驱）。
 groups:
   default:
   - monster: []

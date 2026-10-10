@@ -3,7 +3,7 @@
 # 进入：只经 CoreRpg（菜单 / corerpg p1 enter sx10）→ 预留体力 30 → 发 P1 通行证再 dp start-console。
 # 房间/门/首领/S49 结算由 CoreRpg（ember-v1-runs.yml short.sx10）；结束走 ember_p1_complete / ember_p1_fail。
 # 首航硬提醒：short.sx10 须含 rooms×3+boss（防 D391 FAIL）。
-# MM：闸卫/闸室弩/末室守吏 + EmberSx10…Cast → 怪物号并行；本壳不假造完整 MM 波次。
+# MM：已入仓 tip `efb26b5d` · Guard/Crossbow/Elite/Warden + EmberSx10GateCast；本壳不假造完整 MM 波次。
 # 禁：连续霜雾廊复读 sx03；同高假「过闸无室」；跳石/错层/塔升/环廊/风廊气质当主识别。
 
 dungeon-init-script:

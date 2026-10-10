@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D414 · 短征 sx10 · 烬闸递室 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D414** · tip `e052caa9` · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx10-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx10-2026-10-10.md) · 首航 rooms×3+boss · S49 80/4/3 · 首通90/6/1 · 体力30 · p1_sx10_day×3 · 十本选页 · 真≥3重闸密封递室禁霜雾廊换皮 · **施工中** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常**。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D414** · tip `e052caa9` · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx10-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx10-2026-10-10.md) · 施工 STATUS [`STATUS-ember-short-dungeon-sx10-d414-2026-10-10.md`](STATUS-ember-short-dungeon-sx10-d414-2026-10-10.md) · 首航 rooms×3+boss · S49 80/4/3 · 首通90/6/1 · 体力30 · p1_sx10_day×3 · 十本选页 · 真≥3重闸密封递室禁霜雾廊换皮 · **骨架已落**（map raid 壳 + DP EmberSx10 + V=sx10 · day_line/fc 注释预留）· **未派测** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常**。下文为交稿原文，保留备查。
 >
-> **【D414 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D413 / ActionBar remain / 仓差 / next_farm / 九本规格空转**
+> **【D414 · 已批 A · 方案 M · 骨架已落】** tip+DESIGN **已批 · 设计待批关闭** · **已批·施工中·骨架已落** · **零 jar（本骨架号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D413 / ActionBar remain / 仓差 / next_farm / 九本规格空转** · **未派测**
 >
 > **上游结案：** 总控【D412 PASS · sx10 闸开】spot `06c74505` → **现可选题含 sx10**；D413 ActionBar remain **施工中**（禁复述当本债主交付）。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D414** · **施工中** · docs-only · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
-**硬规格（已批 A · 方案 M · D414 · 施工中）：** [`DESIGN-ember-short-dungeon-sx10-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx10-2026-10-10.md) · backlog `B-short-dungeon-sx10`（**已批/施工中**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D414** · **骨架已落** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 方案 M · D414 · 骨架已落）：** [`DESIGN-ember-short-dungeon-sx10-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx10-2026-10-10.md) · backlog `B-short-dungeon-sx10`（**已批·施工中·骨架已落**） · STATUS [`STATUS-ember-short-dungeon-sx10-d414-2026-10-10.md`](STATUS-ember-short-dungeon-sx10-d414-2026-10-10.md)  
 **打开理由：** 短征九本（sx01–sx09）已可达且 D412 全链路 PASS；下一真增量=**第十条**同范式、**外闸庭→递闸密封室→末室终厅**新结构维的短本，继续拉日刷内容量。
 
 ---
@@ -64,7 +64,7 @@
 
 ---
 
-*选题短征 sx10 烬闸递室 · tip 旁注已关 · 已批 A·M · D414 · 设计待批关闭 · 施工中 · ≠关观察 ≠抬挂机表 ≠假开旧日常。*
+*选题短征 sx10 烬闸递室 · tip 旁注已关 · 已批 A·M · D414 · 设计待批关闭 · 骨架已落 · 未派测 · ≠关观察 ≠抬挂机表 ≠假开旧日常。*
 
 ---
 
@@ -72,3 +72,4 @@
 
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D414 · 上游 D412 PASS @`06c74505` · D413 施工中 · 主题钉密封递闸「烬闸递室」· 薄表 S49 有奖80/4/3 · 首通90/6/1 |
 | 2026-10-10 | **已批 A · 方案 M · D414** · 旁注已关 · 设计待批关闭 · 施工中 · 总控批注：首航 rooms×3+boss · S49 80/4/3 · 首通90/6/1 · 体力30 · p1_sx10_day×3 · 十本选页 · 真≥3重闸密封递室禁霜雾廊换皮 |
+| 2026-10-10 | **骨架已落** · STATUS-ember-short-dungeon-sx10-d414 · map raid 壳本地 + 十本选页 V=sx10 + DP EmberSx10 · day_line/fc 注释预留 · 未派测 |

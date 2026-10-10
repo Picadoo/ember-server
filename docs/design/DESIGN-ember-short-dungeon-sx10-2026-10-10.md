@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx10（烬闸递室 · P1 可达 + 薄经济 S49）
 
-STATUS=**已批 A · 方案 M · D414** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx10-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx10-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-short-dungeon-sx10`（**已批/施工中**）· **施工中** · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D413 ≠纯换皮当主债 ≠ sx01–sx09 主规格空转 ≠ ActionBar remain 复述**
+STATUS=**已批 A · 方案 M · D414 · 骨架已落** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx10-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx10-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-short-dungeon-sx10`（**已批·施工中·骨架已落**）· STATUS [`STATUS-ember-short-dungeon-sx10-d414-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx10-d414-2026-10-10.md) · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D413 ≠纯换皮当主债 ≠ sx01–sx09 主规格空转 ≠ ActionBar remain 复述**
 
 > **一句话玩家价值：** 今天在短征页除了烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石，还能再点进第十条 **外闸庭→递闸密封室（须过重闸进下一室）→末室终厅、必须闯闸换室、主题与走位都不同** 的 5～8 分钟短本；日有奖帽独立计算，材料仍进仓去工坊——**继续拉长可刷内容量**，不靠重开旧日常、也不抬挂机日表。
 >
@@ -62,7 +62,7 @@ STATUS=**已批 A · 方案 M · D414** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（短征 sx10 烬闸递室全规格 · W1a–W1 经济/菜单切片见 §2）
 - [x] 否决 A（假挂无本）/ L（挂机或刚落系统复述当主债）/ W（空转/假开旧日常/抬日表）
-- [x] 批注：总控批 A·M · 2026-10-10 · D414 · 首航 rooms×3+boss · S49 80/4/3 · 首通90/6/1 · 体力30 · p1_sx10_day×3 · 十本选页 · 真≥3重闸密封递室禁霜雾廊换皮 · **施工中** · ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常 ≠开 gate_daily
+- [x] 批注：总控批 A·M · 2026-10-10 · D414 · 首航 rooms×3+boss · S49 80/4/3 · 首通90/6/1 · 体力30 · p1_sx10_day×3 · 十本选页 · 真≥3重闸密封递室禁霜雾廊换皮 · **骨架已落**（map raid 壳 + 十本选页 V=sx10 + DP EmberSx10 · day_line/fc 注释预留 · 未派测）· ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常 ≠开 gate_daily
 
 ---
 
@@ -258,3 +258,4 @@ STATUS=**已批 A · 方案 M · D414** · 2026-10-10 · tip [`STATUS-ember-next
 |----|------|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D414 · 上游 D412 PASS @`06c74505` · D413 施工中 · 主题钉密封递闸「烬闸递室」· 薄表 S49 有奖80/4/3 · 首通90/6/1 |
 | 2026-10-10 | **已批 A · 方案 M · D414** · 总控批注勾选 · 首航 rooms×3+boss · S49 80/4/3 · 首通90/6/1 · 体力30 · p1_sx10_day×3 · 十本选页 · 真≥3重闸密封递室禁霜雾廊换皮 · **施工中** · ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常 |
+| 2026-10-10 | **骨架已落** · 地图+十本选页 STATUS-ember-short-dungeon-sx10-d414 · map `ember_raid`→`ember_short_sx10` 本地 · DP EmberSx10 · V=sx10 · day_line/fc 注释预留 · hub/adventure 半指递闸 · 未派测 |
