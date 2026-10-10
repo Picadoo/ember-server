@@ -109,6 +109,8 @@ public final class EmberCounters {
         px("p1_unlock_", "EmberRunService", A, PR, NV, "map unlocks granted by settlement / admin");
         x("p1_target", "EmberForgeService", A, SE, OW, "current forge target");
         x("p1_slash_shape", "SkillService", A, SE, OW, "D211 烬斩符文 0=fan 1=line 2=ring (Q04+); signature shape overrides");
+        x("p1_shape_pick_offered", "EmberSkillUnlock", A, PR, NV, "D460 Q04 first-pick latch (buttons sent once)");
+        x("p1_step_pick_offered", "EmberSkillUnlock", A, PR, NV, "D460 Q05 first-pick latch (buttons sent once)");
         x("p1_step_dir", "FlexSkillService", A, SE, OW, "D219 身法方向 0=前冲 1=后撤 (Q01+; shares 14s CD; 火痕·后撤 ignites takeoff)");
         x("p1_starter", "EmberRunService", A, CL, NV, "starter pack claimed");
         x("p1_six_mig", "EmberSixMigration", A, CL, NV, "D318 six-slot migration done flag (record file plugins/CoreRpg/p1-six/<uuid>.yml, not the PlayerData blob)");

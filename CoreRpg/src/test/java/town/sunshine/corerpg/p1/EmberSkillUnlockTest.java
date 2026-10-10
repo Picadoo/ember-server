@@ -10,5 +10,7 @@ public class EmberSkillUnlockTest {
         assertNull(EmberSkillUnlock.unlockLine("q01"));
         assertNull(EmberSkillUnlock.unlockLine("q07"));
         assertEquals("烬突", EmberSkillUnlock.shortName("q02"));
+        assertEquals("p1_shape_pick_offered", EmberSkillUnlock.C_SHAPE_OFFERED);
+        assertEquals("p1_step_pick_offered", EmberSkillUnlock.C_STEP_OFFERED);
     }
 }

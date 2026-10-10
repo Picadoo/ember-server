@@ -176,7 +176,27 @@ public final class EmberCommand {
             if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
             if (EmberSkillUnlock.unlockLine(map) == null) { s.sendMessage(P + "用法：/corerpg p1 skillcue <q02|q03|q04|q05> [玩家]"); return true; }
             EmberSkillUnlock.announce(t, map);
-            s.sendMessage(P + "已向 " + t.getName() + " 宣告 " + EmberSkillUnlock.shortName(map));
+            s.sendMessage(P + "已向 " + t.getName() + " 宣告 " + EmberSkillUnlock.shortName(map)
+                    + (EmberSkillKit.UNLOCK_SHAPE.equals(map) || EmberSkillKit.UNLOCK_STEP.equals(map)
+                            ? " §7· 玩法选择约 2 秒后弹出" : ""));
+            return true;
+        }
+        if ("skillpick".equals(sub)) { // D460 admin smoke: force shape/step first-pick buttons
+            if (s instanceof Player && !s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+            String kind = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+            Player t = args.length >= 4 ? Bukkit.getPlayerExact(args[3]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            if ("shape".equals(kind) || "符文".equals(kind)) {
+                EmberSkillUnlock.forceOfferShape(t);
+                s.sendMessage(P + "已向 " + t.getName() + " 强制弹出符文三选一");
+                return true;
+            }
+            if ("step".equals(kind) || "dir".equals(kind) || "身法".equals(kind)) {
+                EmberSkillUnlock.forceOfferStep(t);
+                s.sendMessage(P + "已向 " + t.getName() + " 强制弹出身法方向二选一");
+                return true;
+            }
+            s.sendMessage(P + "用法：/corerpg p1 skillpick <shape|step> [玩家]");
             return true;
         }
         return help(s);
