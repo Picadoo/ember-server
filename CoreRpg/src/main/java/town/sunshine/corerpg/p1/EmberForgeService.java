@@ -118,6 +118,22 @@ public final class EmberForgeService implements Listener {
 
     public static void helpLines(CommandSender s) {
         s.sendMessage(P + "锻造请用工坊菜单（主菜单「工坊」或找锻炉师 · 烬砧）：手持余烬刃或护符，先点预览，再点聊天里的确认按钮。");
+        // D1873 GS2 forgegoal glance（确定工艺入口 · 非 K3）
+        if (s instanceof Player) {
+            Player p = (Player) s;
+            try {
+                CoreRpgPlugin pl = (CoreRpgPlugin) org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+                if (pl != null && pl.getDataStore() != null) {
+                    PlayerData d = pl.getDataStore().get(p.getUniqueId());
+                    int gid = EmberForgeGoal.get(d);
+                    String g = EmberForgeGoal.glance(gid, null);
+                    s.sendMessage(P + g);
+                    if (!EmberForgeGoal.valid(gid))
+                        s.sendMessage(P + "§7选目标：/corerpg p1 forgegoal · 材料永远能喂确定养成（随机锻是旁路）");
+                    try { p.sendActionBar("§e工坊 · §f" + EmberForgeGoal.label(gid)); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "可选 rid:<请求ID> 用于重放保护；/corerpg p1 sync 按 DB 同步背包内 P1 装备");
     }
 

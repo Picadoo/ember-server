@@ -4394,6 +4394,30 @@ public final class EmberCommand {
                 s.sendMessage(P + l.nextAwakeningHint());
                 if (runs != null) runs.routeCommand(p); // D120: cheapest real route + buttons
                 s.sendMessage(P + l.setProgress());
+                // D1872 GS1 skill/talent path clarity（展示 only · 非 hope PAPI）
+                if (runs != null) {
+                    PlayerData pd = runs.dataOf(p.getUniqueId());
+                    String sk = EmberSkillUnlock.nextHope(pd, runs);
+                    if (sk != null && !sk.isEmpty()) s.sendMessage(P + sk);
+                    boolean shapeOn = EmberSkillKit.shapeUnlocked(pd, runs);
+                    int sid = EmberSkillKit.shapeId(pd, runs);
+                    String shapeLine = shapeOn
+                            ? ("§e烬斩符文 · §f" + EmberSkillKit.shapeName(sid)
+                                + (pd != null && pd.periodCount(EmberSkillKit.C_SHAPE_MANUAL, "all") > 0
+                                    ? " §8· 已自选" : " §8· 软推荐可改"))
+                            : "§7烬斩符文 · 首通 Q04 解锁三选一";
+                    s.sendMessage(P + shapeLine);
+                    String setH = EmberSkillUnlock.setHope(l);
+                    if (setH != null && !setH.isEmpty()) s.sendMessage(P + setH);
+                    boolean dual = runs.firstClearedKey(pd, "q03");
+                    s.sendMessage(P + EmberDualLead.glance(EmberDualLead.get(pd), dual));
+                    try {
+                        String ab = (sk != null && sk.contains("下一技能"))
+                                ? sk.replaceAll("§.", "")
+                                : (shapeOn ? ("符文 " + EmberSkillKit.shapeName(sid)) : "技能里程碑");
+                        p.sendActionBar("§e成长 · §f" + ab);
+                    } catch (Throwable ignored) { }
+                }
                 if (admin) s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "没有有效的余烬刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));

@@ -708,3 +708,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1870 ARCH
 - EmberSourceMapTest + EmberCountersTest PASS (live jar still 1.65.485-d1856)
+
+## D1871–D1884 SHIP · jar 1.65.486-d1871
+- Stage0 skill-talent-clarity; status skill/shape/setHope/duallead; forge help forgegoal
