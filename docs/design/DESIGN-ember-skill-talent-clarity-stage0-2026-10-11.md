@@ -1,6 +1,6 @@
 # Stage0 · 技能/天赋/工坊路径清晰 · 2026-10-11
 
-> **状态：** Stage0 COMPLETE · 已批 A · 方案 M · **D1871–**  
+> **状态：** Stage0 **NEAR-SAT** · 已批 A · 方案 M · **D1871–D1898 SHIP** · GS3 推迟  
 > **上游：** `RESEARCH-ember-growth-hope-reference` §2.3 学招里程碑 · §2.2 PoE 确定工艺  
 > **禁：** EM1-B · K3 · SF4 · skill_mult · hope PAPI twin · clear-gate · drop · 永久伤乘
 
