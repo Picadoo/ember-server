@@ -15,6 +15,18 @@ public final class EmberSetChase {
 
     private EmberSetChase() {}
 
+    /** Strip § codes for ActionBar half-lines that already carry color. */
+    static String stripSection(String s) {
+        if (s == null || s.isEmpty()) return "";
+        StringBuilder b = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (c == '§' && i + 1 < s.length()) { i++; continue; }
+            b.append(c);
+        }
+        return "§e" + b.toString();
+    }
+
     public static String focusGap(PlayerData d, EmberLoadout lo) {
         if (d == null || lo == null) return "";
         int focus = EmberSetFocus.get(d);
@@ -90,11 +102,11 @@ public final class EmberSetChase {
         if (next != null && !next.isEmpty()) p.sendMessage(P + "§7" + next);
         String gap = focusGap(d, lo);
         if (gap != null && !gap.isEmpty()) p.sendMessage(P + gap);
-        try {
+        try { // D1340: meaty focus gap on AB（非 PAPI twin）
             if (!"none".equals(lo.activeSet))
                 p.sendActionBar("§e成套 · §f" + lo.setLabel());
             else if (gap != null && !gap.isEmpty())
-                p.sendActionBar("§e成套追 · §f焦点未齐");
+                p.sendActionBar(stripSection(gap));
             else
                 p.sendActionBar("§e成套 · §7未成套");
         } catch (Throwable ignored) { }

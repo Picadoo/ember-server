@@ -2287,19 +2287,41 @@ public final class EmberGrowthService implements Listener {
         EmberAffix.Def want = reroll.def(affixId);
         int left = EmberBrandRules.chargesLeft(used);
         if (!confirm) {
+            // D1343: brand/coin have-need honesty
+            int haveBrand = 0;
+            try {
+                if (plugin.getNiBridge() != null)
+                    haveBrand = plugin.getNiBridge().countInInventory(p, EmberBrandRules.MAT_BRAND);
+            } catch (Throwable ignored) { }
+            int haveCoin = d.getCoin();
+            int gapBrand = Math.max(0, brands - haveBrand);
+            int gapCoin = Math.max(0, coins - haveCoin);
             p.sendMessage(P + "§6烙纹定向 · " + t.shortLabel());
             p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 锻造次数剩余 §f" + left + "/" + EmberBrandRules.MAX_CHARGES);
             p.sendMessage(P + "写入类型：§b" + want.name + " §7（档位仍随机，成色上限截断）");
-            p.sendMessage(P + "花费：§f" + brands + " 烙纹 + " + coins + " 余烬币");
-            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
-                    new String[]{"[确认定向]", "/corerpg p1 brand pin " + slot + " " + affixId + " confirm", "扣烙纹与币，写入「" + want.name + "」", "GREEN"},
-                    new String[]{"[回烙纹页]", "/corerpg p1 brand menu", "不扣", "GRAY"});
+            p.sendMessage(P + "花费：§f烙纹 " + haveBrand + "/" + brands + " §7+ §f币 " + haveCoin + "/" + coins
+                    + (gapBrand + gapCoin > 0 ? (" §c· 还差"
+                        + (gapBrand > 0 ? " 烙纹" + gapBrand : "")
+                        + (gapCoin > 0 ? " 币" + gapCoin : "")) : " §a· 料够"));
+            try {
+                if (gapBrand > 0) p.sendActionBar("§e定向 · 还差烙纹 §f" + gapBrand);
+                else if (gapCoin > 0) p.sendActionBar("§e定向 · 还差币 §f" + gapCoin);
+                else p.sendActionBar("§a定向 · 料够 · 次数余" + left);
+            } catch (Throwable ignored) { }
+            java.util.List<String[]> btns = new java.util.ArrayList<String[]>();
+            btns.add(new String[]{"[确认定向]", "/corerpg p1 brand pin " + slot + " " + affixId + " confirm", "扣烙纹与币，写入「" + want.name + "」", "GREEN"});
+            if (gapBrand > 0)
+                btns.add(new String[]{"[先合成烙纹]", "/corerpg p1 brand craft", "碎片→烙纹", "GOLD"});
+            btns.add(new String[]{"[回烙纹页]", "/corerpg p1 brand menu", "不扣", "GRAY"});
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btns.toArray(new String[0][]));
             return true;
         }
         if (gate(p)) return true;
         town.sunshine.corerpg.NiBridge ni = plugin.getNiBridge();
         if (ni.countInInventory(p, EmberBrandRules.MAT_BRAND) < brands) {
-            p.sendMessage(P + "§c烙纹不足（需要 " + brands + "，可先合成）");
+            int hb = ni.countInInventory(p, EmberBrandRules.MAT_BRAND);
+            p.sendMessage(P + "§c烙纹不足（有 " + hb + "/" + brands + "，可先合成）");
+            try { p.sendActionBar("§c定向缺烙纹 · §f" + hb + "/" + brands); } catch (Throwable ignored) { }
             return true;
         }
         final EmberPay pay = EmberPay.get();

@@ -586,3 +586,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1333–D1338 ARCH SHIP · jar 1.65.448-d1333
 - Swap preview ActionBar enhance exchange honesty
+
+## D1339–D1352 ARCH SHIP · jar 1.65.449-d1339
+- SetChase focus-gap AB; MapIdentity remain on mapfarm cue; brandPin have/need

@@ -104,6 +104,11 @@ public final class EmberMapFarmCue {
         int we = worn == null ? 0 : worn.enhance;
         String line = nextLine(mapFam, mapSlot, wornFam, wornSlot, wt, we);
         p.sendMessage(EmberRunService.P + line);
+        // D1342: map identity remain（非 hope PAPI）
+        PlayerData idPd = dataOf(p);
+        String idRem = EmberMapIdentity.remainLine(m, idPd);
+        p.sendMessage(EmberRunService.P + "§7" + idRem);
+        try { p.sendActionBar("§e图装 · §f" + idRem); } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：", // D914
                 new String[]{"[强化预览]", "/corerpg p1 enhance", "手持同族冲档", "GREEN"},
                 new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GOLD"},
