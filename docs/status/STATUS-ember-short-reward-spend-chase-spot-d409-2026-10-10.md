@@ -50,7 +50,7 @@
 
 | 项 | 值 |
 |----|-----|
-| 本 STATUS tip | **`25c58406`** |
+| 本 STATUS tip | **`4371fa5f`** |
 | 上游 PARTIAL tip | **`8773b3ae`** |
 | 菜单上游 tip | **`1c782cbc`** |
 | jar 上游 tip | **`20cd1318`** |
