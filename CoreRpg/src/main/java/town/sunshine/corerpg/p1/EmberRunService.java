@@ -1106,6 +1106,7 @@ public final class EmberRunService implements Listener {
                         p.sendMessage(P + "§7不用打命令：主菜单 → 装备 → 签名传奇"); // stage 1.5 one-line hint
                         if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberSigChase.scheduleImprintOffer(p); // D464
                         if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberCounterPath.scheduleOfferAfterQ02(p); // D480 Q02 wall awareness
+                        if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberSpicePath.scheduleOfferAfterQ02(p); // D500 spice encounter path
                         if ("q01".equals(g.id)) EmberFeaturedPath.scheduleOfferAfterQ01(p); // D488 featured map identity path
                         if ("q01".equals(g.id)) EmberFamilyPath.scheduleOfferAfterQ01(p); // D493 family combat path
                         if ("q01".equals(g.id)) EmberFlexPath.scheduleOfferAfterQ01(p); // D494 flex equip combat path

@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("spicepath".equals(sub) || "花样路径".equals(sub)) { // D500 spice encounter bias (variety roll)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSpicePath.glance(EmberSpicePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c花样路径需本人首通 Q02。");
+                    return true;
+                }
+                EmberSpicePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c花样路径需本人首通 Q02。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSpicePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSpicePath.get(d);
+                    if (EmberSpicePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSpicePath.label(cur) + " · 改路径再 /corerpg p1 spicepath");
+                    else EmberSpicePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSpicePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 spicepath <blaze|control|objective|clear>");
+                return true;
+            }
+            EmberSpicePath.applyAndReply(p, id);
+            return true;
+        }
         if ("stridepath".equals(sub) || "步态路径".equals(sub)) { // D499 stride path (flex + step together)
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

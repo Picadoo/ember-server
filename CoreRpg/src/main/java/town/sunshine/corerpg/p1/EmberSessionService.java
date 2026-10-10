@@ -7,6 +7,7 @@ import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.StaminaService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -219,7 +220,22 @@ public final class EmberSessionService {
                     runs.log().info("[P1 run] " + s.runId + " variety forced " + force + " (admin test)");
                     forcedVariety = null;
                 }
-                stampVariety(s, applyForcedVariety(rolled, force));
+                String[] v = applyForcedVariety(rolled, force);
+                // D500: party-leader spice bias (skip when admin force won — force stays absolute)
+                if (force == null) {
+                    PlayerData ld = runs.dataOf(leader.getUniqueId());
+                    int spice = EmberSpicePath.get(ld);
+                    if (EmberSpicePath.valid(spice)) {
+                        String[] biased = EmberSpicePath.applyBias(v, spice, maps.variety.affixes, maps.variety.events,
+                                EmberRunRules.subSeed(s.seed, "spice"));
+                        if (!Arrays.equals(v, biased)) {
+                            runs.log().info("[P1 run] " + s.runId + " spice " + EmberSpicePath.key(spice)
+                                    + " " + v[1] + "/" + v[3] + " → " + biased[1] + "/" + biased[3]);
+                            v = biased;
+                        }
+                    }
+                }
+                stampVariety(s, v);
             }
         }
         for (Player p : party) {
