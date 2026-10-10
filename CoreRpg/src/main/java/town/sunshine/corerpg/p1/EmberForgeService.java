@@ -707,10 +707,10 @@ public final class EmberForgeService implements Listener {
 
     private boolean flag(CommandSender s, String[] args) {
         if (!s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
-        if (args.length < 4) { s.sendMessage(P + "/corerpg p1 flag <玩家> <q04|q06|q07> [clear] — 首通标记桩"); return true; }
+        if (args.length < 4) { s.sendMessage(P + "/corerpg p1 flag <玩家> <q01|q04|q06|q07> [clear] — 首通标记桩"); return true; }
         Player t = Bukkit.getPlayerExact(args[2]);
         String f = args[3].toLowerCase(Locale.ROOT);
-        if (t == null || !("q04".equals(f) || "q06".equals(f) || "q07".equals(f))) { s.sendMessage(P + "玩家需在线，标记只能是 q04/q06/q07"); return true; }
+        if (t == null || !("q01".equals(f) || "q04".equals(f) || "q06".equals(f) || "q07".equals(f))) { s.sendMessage(P + "玩家需在线，标记只能是 q01/q04/q06/q07"); return true; }
         PlayerData pd = plugin.getDataStore().get(t.getUniqueId());
         if (pd == null) { s.sendMessage(P + "玩家数据未加载"); return true; }
         boolean clear = args.length >= 5 && "clear".equalsIgnoreCase(args[4]);
