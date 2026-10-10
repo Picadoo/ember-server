@@ -510,6 +510,53 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D592: boss cast armed for whiff (someone was inside when warn began). */
+    boolean hasPendingBait() {
+        return pendingArmed && pending != null && pending.whiffStun > 0
+                && pendingAt > System.currentTimeMillis()
+                && lockOrigin != null && lockDir != null;
+    }
+
+    /** D592: pull a committed player still inside the pending telegraph out to finish the dodge. */
+    boolean pathBaitOut(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingBait()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location pl = p.getLocation();
+        if (!inShape(pending, lockOrigin, lockDir, pl)) return false;
+        Location to;
+        if ("circle".equals(pending.type)) {
+            Vector away = new Vector(pl.getX() - lockOrigin.getX(), 0, pl.getZ() - lockOrigin.getZ());
+            if (away.lengthSquared() < 1e-6) away = new Vector(1, 0, 0);
+            else away.normalize();
+            double safe = Math.max(3.0, pending.radius + 2.5);
+            to = lockOrigin.clone().add(away.multiply(safe));
+            to.setY(pl.getY());
+        } else {
+            Vector dir = lockDir.clone();
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+            else dir.normalize();
+            Vector side = new Vector(-dir.getZ(), 0, dir.getX());
+            if (side.lengthSquared() < 1e-6) side = new Vector(1, 0, 0);
+            else side.normalize();
+            Vector from = new Vector(pl.getX() - lockOrigin.getX(), 0, pl.getZ() - lockOrigin.getZ());
+            if (from.dot(side) < 0) side.multiply(-1);
+            double safe = Math.max(2.5, pending.width * 0.5 + 2.5);
+            to = new Location(w, pl.getX() + side.getX() * safe, pl.getY(), pl.getZ() + side.getZ() * safe);
+            // if still in strip, push farther
+            if (inShape(pending, lockOrigin, lockDir, to)) {
+                to = new Location(w, pl.getX() + side.getX() * (safe + 2.0), pl.getY(), pl.getZ() + side.getZ() * (safe + 2.0));
+            }
+        }
+        to.setYaw(pl.getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 2.05f);
+        return true;
+    }
+
     /** D591: any Extra.ELITE light-move telegraph still winding up. */
     boolean hasPendingSlip() {
         long now = System.currentTimeMillis();
@@ -3156,6 +3203,7 @@ final class EmberRunDirector {
         if (sk.share) EmberSoakPath.maybeAfterSoak(s); // D584
         if (breakNeed > 0) EmberPressPath.maybeAfterPress(s); // D581
         if (pendingCrash) EmberCrashPath.maybeAfterCrash(s); // D590
+        if (pendingArmed) EmberBaitPath.maybeAfterBait(s); // D592
     }
 
     /** D193 破招: a channel is armed (need > 0) and the party's damage since its warning began reached the need. */
