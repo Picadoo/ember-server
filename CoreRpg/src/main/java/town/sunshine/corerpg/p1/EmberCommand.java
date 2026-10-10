@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("focuspath".equals(sub) || "集火路径".equals(sub)) return focusPathCmd(s, args); // D597
+        if ("focus".equals(sub) && args.length == 2) return focusGoCmd(s); // D597
         if ("doompath".equals(sub) || "灾临路径".equals(sub)) return doomPathCmd(s, args); // D596
         if ("doom".equals(sub) && args.length == 2) return doomGoCmd(s); // D596
         if ("nestpath".equals(sub) || "卡点路径".equals(sub)) return nestPathCmd(s, args); // D595
@@ -1741,6 +1743,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("focusseed".equals(sub)) return focusSeedCmd(s, args); // D597
         if ("doomseed".equals(sub)) return doomSeedCmd(s, args); // D596
         if ("nestseed".equals(sub)) return nestSeedCmd(s, args); // D595
         if ("saveseed".equals(sub)) return saveSeedCmd(s, args); // D594
@@ -6550,6 +6553,62 @@ public final class EmberCommand {
             EmberDoomPath.maybeProbe(t);
             s.sendMessage(P + "已触发灾临路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingDoom(t) ? "（窗开可奔）" : "（窗关/在本中）"));
+            return true;
+    }
+
+    private boolean focusPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberFocusPath.glance(EmberFocusPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c集火路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberFocusPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c集火路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberFocusPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberFocusPath.get(d);
+                    if (EmberFocusPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFocusPath.label(cur) + " · 改路径再 /corerpg p1 focuspath");
+                    else EmberFocusPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberFocusPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 focuspath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberFocusPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean focusGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathFocusElite(p)) p.sendMessage(P + "无法集火（无词缀精英/未进本）");
+            else p.sendMessage(P + "§a集火·手点 §7已传至词缀精英");
+            return true;
+    }
+
+    private boolean focusSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberFocusPath.maybeProbe(t);
+            s.sendMessage(P + "已触发集火路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingFocus(t) ? "（有词缀）" : "（无词缀）"));
             return true;
     }
 }
