@@ -438,6 +438,48 @@ public final class StaminaService implements Listener {
         }
     }
 
+    /** D539: count stamina potion NI in storage (30 + 45). */
+    public int countPathPotions(Player p) {
+        if (p == null || ni == null) return 0;
+        return ni.countInInventoryOnly(p, POTION_NI_ID) + ni.countInInventoryOnly(p, POTION_NI_ID_45);
+    }
+
+    /** True when current stamina is below one daily-run cost (needs a dose to enter stock dailies). */
+    public boolean needsDose(PlayerData data) {
+        if (data == null) return false;
+        ensure(data);
+        return data.getStamina() < costOf("daily");
+    }
+
+    /**
+     * D539: drink one backpack stamina potion (prefer 45 then 30). Respects potion_daily_cap.
+     * Returns stamina applied, or 0 if none / cap / missing.
+     */
+    public int pathDrinkOne(Player p) {
+        if (p == null || ni == null) return 0;
+        PlayerData data = dataStore.get(p.getUniqueId());
+        if (data == null) return 0;
+        ensure(data);
+        String id = null;
+        int amount = 0;
+        if (ni.countInInventoryOnly(p, POTION_NI_ID_45) > 0) {
+            id = POTION_NI_ID_45;
+            amount = potionAmountOf(id);
+        } else if (ni.countInInventoryOnly(p, POTION_NI_ID) > 0) {
+            id = POTION_NI_ID;
+            amount = potionAmountOf(id);
+        }
+        if (id == null || amount <= 0) return 0;
+        if (data.getPotionStaminaToday() + amount > potionDailyCap) return 0;
+        if (!ni.consumeExact(p, id, 1)) return 0;
+        if (!addPotionStamina(p, data, amount)) {
+            // refund bottle on rare race
+            ni.giveNiItem(p, id, 1);
+            return 0;
+        }
+        return amount;
+    }
+
     /** Grant potion NI or fallback direct stamina (shop). NI path does NOT pre-count potionStaminaToday. */
     public boolean grantPotionOrStamina(Player player, int packs) {
         if (player == null || packs <= 0) return false;

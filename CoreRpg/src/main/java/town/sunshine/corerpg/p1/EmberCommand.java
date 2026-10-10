@@ -268,6 +268,55 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("dosepath".equals(sub) || "补体路径".equals(sub)) { // D539 stamina potion dose path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberDosePath.glance(EmberDosePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c补体路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberDosePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c补体路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberDosePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberDosePath.get(d);
+                    if (EmberDosePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDosePath.label(cur) + " · 改路径再 /corerpg p1 dosepath");
+                    else EmberDosePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberDosePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 dosepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberDosePath.applyAndReply(p, id);
+            return true;
+        }
+        if ("dose".equals(sub)) { // D539 ASK button: drink one stamina potion
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.StaminaService st = runs == null ? null : runs.plugin().getStaminaService();
+            if (st == null) { p.sendMessage(P + "体力服务未加载"); return true; }
+            int got = st.pathDrinkOne(p);
+            if (got <= 0) p.sendMessage(P + "无法喝药（无药、已满日上限、或体力服务忙）");
+            else {
+                PlayerData d = runs.dataOf(p.getUniqueId());
+                p.sendMessage(P + "§a补体·手点 §7+" + got + " §7（现 " + st.getStamina(d) + "/" + st.resolveMax(d) + "）");
+            }
+            return true;
+        }
         if ("scrappath".equals(sub) || "分解路径".equals(sub)) { // D538 legacy scrap path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -644,6 +693,20 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("doseseed".equals(sub)) { // D539 admin smoke: low stamina + potion
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.StaminaService st = runs.plugin().getStaminaService();
+            if (st == null) { s.sendMessage(P + "体力服务未加载"); return true; }
+            st.cmdRoot(s, new String[]{"stamina", "set", t.getName(), "5"});
+            if (!st.grantPotionNi(t, town.sunshine.corerpg.StaminaService.POTION_NI_ID, 1)) {
+                s.sendMessage(P + "发放体力药失败"); return true;
+            }
+            s.sendMessage(P + "已设体力=5 并发药 ×1 → " + t.getName());
+            EmberDosePath.maybeAfterProgress(t);
             return true;
         }
         if ("scrapseed".equals(sub)) { // D538 admin smoke: give enhance-0 charm into backpack
