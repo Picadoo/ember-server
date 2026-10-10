@@ -381,6 +381,7 @@ def spread_burn(owner, mobs, t):
 #                      no set counter):
 #                      kit_gather_cd / kit_gather_plus / kit_gather_secs   聚火: trash only (no boss in the fight),
 #                      >= 3 alive; for secs 烬斩 / 烬爆 catch +plus (cap 5) and one more melee body engages (the cost)
+#                      D437 set id: kit_gather_ignite / kit_gather_mark_secs+slow / kit_gather_heal_pct (禁改 plus)
 #                      kit_dash_cd / kit_dash_mult / kit_dash_n / kit_dash_boss   烬突: >= 2 non-boss alive; mult × B to
 #                      the first n alive (boss × kit_dash_boss)
 #                      D436 set id: kit_dash_ignite (scorch) / kit_dash_pulse (burst ×B) / kit_dash_heal_pct (sustain)
@@ -507,9 +508,28 @@ def kit_sec(owner, alive, t, boss):
     if gm(st, 'kit_gather_cd', 0.0) > 0:
         if boss is None and len(alive) >= 3 and t >= getattr(owner, 'gather_until', -1.0):
             owner.gather_until = t + gm(st, 'kit_gather_secs', 4.0)
-            for m in alive[:min(5, owner.kn.skill_hits)]:
+            n_hit = min(5, owner.kn.skill_hits)
+            hit = alive[:n_hit]
+            for m in hit:
                 if gm(st, 'kit_gather_mult', 0.0) > 0:  # the pull pulse itself (× B, no crit)
                     owner.hit(m, gm(st, 'kit_gather_mult', 0.0) * st['B'] * dmult(st, m, t, owner), 'dash')
+            # D437 set identity (禁改 plus 主表；落点轻尾)
+            ig = gm(st, 'kit_gather_ignite', 0.0)
+            if ig > 0 and st['set'] == 'scorch':
+                for m in hit[:3]:
+                    ignite(owner, m, t, ig)
+            mark = gm(st, 'kit_gather_mark_secs', 0.0)
+            if mark > 0 and st['set'] == 'burst':
+                slow = gm(st, 'kit_gather_slow', 0.15)
+                for m in hit[:3]:
+                    m['ash_until'] = t + mark
+                    m['ash_slow'] = slow
+            heal = gm(st, 'kit_gather_heal_pct', 0.0)
+            if heal > 0 and st['set'] == 'sustain':
+                h = heal * st['H']
+                owner.hp = min(st['H'], owner.hp + h)
+                if rec is not None:
+                    rec['heal_gather'] = rec.get('heal_gather', 0.0) + h
             if rec is not None:
                 rec['n_gather'] += 1
             return True
@@ -579,6 +599,29 @@ def _sec_cost(owner, t, period):
     c = gm(owner.st, 'kit_sec_cost', 0.0)
     return None if c <= 0 else t + c * period
 
+
+
+def kit_slash_flavor(owner, hit, t):
+    """D438 烬斩套装落点（禁改 skill_mult）。hit = list of mobs just struck by 烬斩."""
+    st = owner.st
+    if not hit or not st.get('mods'):
+        return
+    ig = gm(st, 'kit_slash_ignite', 0.0)
+    if ig > 0 and st['set'] == 'scorch':
+        for m in hit[:3]:
+            ignite(owner, m, t, ig)
+    mark = gm(st, 'kit_slash_mark_secs', 0.0)
+    if mark > 0 and st['set'] == 'burst':
+        slow = gm(st, 'kit_slash_slow', 0.15)
+        for m in hit[:3]:
+            m['ash_until'] = t + mark
+            m['ash_slow'] = slow
+    heal = gm(st, 'kit_slash_heal_pct', 0.0)
+    if heal > 0 and st['set'] == 'sustain':
+        h = heal * st['H']
+        owner.hp = min(st['H'], owner.hp + h)
+        if owner.rec is not None:
+            owner.rec['heal_slash'] = owner.rec.get('heal_slash', 0.0) + h
 
 def kit_step(owner, alive, t, period):
     """身法步 on CD: family via kit_step_set (default scorch=火痕 ignite).
@@ -973,8 +1016,11 @@ class Fight:
                     elif st.get('mods') and 'skill_var' in st['mods']:
                         next_swing = skill_variant(self, alive, t, next_swing)
                     else:
-                        for m in alive[:getattr(self, '_sh', kn.skill_hits)]:
+                        _hit = alive[:getattr(self, '_sh', kn.skill_hits)]
+                        for m in _hit:
                             self.hit(m, cfg['skill_mult'] * st['B'] * dmult(st, m, t, self), 'skill')
+                        if st.get('mods') and any(k.startswith('kit_slash_') for k in st['mods']):
+                            kit_slash_flavor(self, _hit, t)
                     next_skill = t + cfg['skill_cd']
                 self._nsk = next_skill
                 bev = cfg['burst_every'] + int(gm(st, 'burst_every', 0))

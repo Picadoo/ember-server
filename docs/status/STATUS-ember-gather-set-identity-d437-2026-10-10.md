@@ -1,7 +1,10 @@
-# 状态 · D437：聚火套装身份批 A·M
+# 状态 · D437：聚火套装身份 **HOLD**
 
-**裁决：** **已批 A · 批 M · D437** · **已批·施工中**（S0 优先）  
-**上游：** D436 PASS jar 1.65.139  
-**禁：** 改聚火主表 · 守招 · 抬日表 · Stage2＜17:40 关窗 · sx
+**日期：** 2026-10-10  
+**裁决：** **已批 A · 批 M · D437 · HOLD**（S0 FAIL · 不装）  
+**S0：** [`out-skillkit-d437-gather.md`](../../tools/p1sim/out-skillkit-d437-gather.md)  
+**要点：** 焚无过线（ig012 maxΔ+14）；爆 G_sl15 ✅ / 承仅 h002 ✅；母体 G_ctrl vs 烬突 mean clear −16pp（空洞非空廊）→ **不复活聚火**  
+**处置：** docs + p1sim only · 下档 **D438 烬斩套装落点**（已批 A·M · 施工中）  
+**下一档：** [`STATUS-ember-slash-set-identity-d438-2026-10-10.md`](STATUS-ember-slash-set-identity-d438-2026-10-10.md)
 
-*D437 施工中*
+*D437 HOLD · COORD DONE*

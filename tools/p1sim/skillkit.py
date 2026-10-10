@@ -291,8 +291,40 @@ CANDS_D436 = {
     'D_h002': ('q02', 'sustain', '烬突·承 疗 0.002H', M(DASH_LIVE, {'kit_dash_heal_pct': 0.002})),
     'D_h010': ('q02', 'sustain', '烬突·承 疗 0.010H', M(DASH_LIVE, {'kit_dash_heal_pct': 0.010})),
 }
+
+# D437 聚火套装身份：对照 = 共享充能 + plus0（无捕数主表）+ 可选微脉冲；flavor 另加
+# 上游 skill-kit 删聚火 → 本轮重开条件：须相对 G_ctrl 与 D_ctrl(烬突) 皆不空廊
+G_CTRL = M(GATHER, SEC, {'kit_gather_plus': 0, 'kit_gather_secs': 6, 'kit_gather_mult': 0.0})
+G_PULSE = M(G_CTRL, {'kit_gather_mult': 0.35})  # 弱脉冲探路
+CANDS_D437 = {
+    'G_ctrl_scorch': ('q02', 'scorch', '对照·聚火 plus0 无身份', G_CTRL),
+    'G_ctrl_burst': ('q02', 'burst', '对照·聚火 plus0 无身份', G_CTRL),
+    'G_ctrl_sustain': ('q02', 'sustain', '对照·聚火 plus0 无身份', G_CTRL),
+    'D_ctrl_b': ('q02', 'burst', '对照·烬突 DS15', M(DASH, SEC, {'kit_dash_mult': 1.5})),
+    'G_ig012': ('q02', 'scorch', '聚火·焚 点燃×0.12', M(G_CTRL, {'kit_gather_ignite': 0.12})),
+    'G_ig025': ('q02', 'scorch', '聚火·焚 点燃×0.25', M(G_CTRL, {'kit_gather_ignite': 0.25})),
+    'G_sl15': ('q02', 'burst', '聚火·爆 缓速1.5s', M(G_CTRL, {'kit_gather_mark_secs': 1.5, 'kit_gather_slow': 0.15})),
+    'G_sl10': ('q02', 'burst', '聚火·爆 缓速1.0s', M(G_CTRL, {'kit_gather_mark_secs': 1.0, 'kit_gather_slow': 0.12})),
+    'G_h005': ('q02', 'sustain', '聚火·承 疗0.005H', M(G_CTRL, {'kit_gather_heal_pct': 0.005})),
+    'G_h002': ('q02', 'sustain', '聚火·承 疗0.002H', M(G_CTRL, {'kit_gather_heal_pct': 0.002})),
+    'G_p035_ig': ('q02', 'scorch', '聚火·0.35B脉冲+点燃0.12', M(G_PULSE, {'kit_gather_ignite': 0.12})),
+    'G_p035_sl': ('q02', 'burst', '聚火·0.35B脉冲+缓速1.0s', M(G_PULSE, {'kit_gather_mark_secs': 1.0, 'kit_gather_slow': 0.12})),
+    'G_p035_h': ('q02', 'sustain', '聚火·0.35B脉冲+疗0.005', M(G_PULSE, {'kit_gather_heal_pct': 0.005})),
+}
+
+# D438 烬斩套装落点（相对 base；禁改 skill_mult）
+CANDS_D438 = {
+    'S_ig012': ('q01', 'scorch', '烬斩·焚 点燃×0.12', {'kit_slash_ignite': 0.12}),
+    'S_ig025': ('q01', 'scorch', '烬斩·焚 点燃×0.25', {'kit_slash_ignite': 0.25}),
+    'S_sl15': ('q01', 'burst', '烬斩·爆 缓速1.5s', {'kit_slash_mark_secs': 1.5, 'kit_slash_slow': 0.15}),
+    'S_sl10': ('q01', 'burst', '烬斩·爆 缓速1.0s', {'kit_slash_mark_secs': 1.0, 'kit_slash_slow': 0.12}),
+    'S_sl08': ('q01', 'burst', '烬斩·爆 缓速0.8s', {'kit_slash_mark_secs': 0.8, 'kit_slash_slow': 0.12}),
+    'S_h005': ('q01', 'sustain', '烬斩·承 疗0.005H', {'kit_slash_heal_pct': 0.005}),
+    'S_h002': ('q01', 'sustain', '烬斩·承 疗0.002H', {'kit_slash_heal_pct': 0.002}),
+    'S_h003': ('q01', 'sustain', '烬斩·承 疗0.003H', {'kit_slash_heal_pct': 0.003}),
+}
 ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,
-           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435, **CANDS_D436)
+           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435, **CANDS_D436, **CANDS_D437, **CANDS_D438)
 
 
 def fams(c):
@@ -397,7 +429,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B, 'd434': CANDS_D434, 'd435': CANDS_D435, 'd436': CANDS_D436}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B, 'd434': CANDS_D434, 'd435': CANDS_D435, 'd436': CANDS_D436, 'd437': CANDS_D437, 'd438': CANDS_D438}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return
