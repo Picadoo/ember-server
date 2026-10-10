@@ -1110,6 +1110,7 @@ public final class EmberRunService implements Listener {
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAbyssPath.scheduleOfferAfterQ07(p); // D486 abyss push/farm path
+                        if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAttunePath.scheduleOfferAfterQ07(p); // D492 attune combat path
                         String mode = modeUnlock(g.id); // D174 stage 2b: Q04 / Q05 / Q06 first clears also open a mode
                         if (mode != null) {
                             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新模式：§e" + mode + " ", "[打开进阶模式]", "/corerpg p1 modes", "首领残响 / 连战·前哨 / 自选誓约");

@@ -248,6 +248,39 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("attunepath".equals(sub) || "调律路径".equals(sub)) { // D492 signature attune combat path (changes play)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, EmberSignature.ALT_UNLOCK);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberAttunePath.glance(EmberAttunePath.get(d), unlocked));
+                if (!unlocked) { p.sendMessage(P + "§c签名调律需本人首通 Q07。"); return true; }
+                EmberAttunePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c签名调律需本人首通 Q07。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberAttunePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberAttunePath.get(d);
+                    if (EmberAttunePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberAttunePath.label(cur) + " · 改路径再 /corerpg p1 attunepath");
+                    else EmberAttunePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberAttunePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 attunepath <origin|alt|clear>");
+                return true;
+            }
+            EmberAttunePath.applyAndReply(p, id);
+            return true;
+        }
         if ("steppath".equals(sub) || "身法路径".equals(sub)) { // D491 step-dir combat path (changes play)
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
