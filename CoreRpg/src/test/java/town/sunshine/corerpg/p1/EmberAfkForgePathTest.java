@@ -16,4 +16,9 @@ public class EmberAfkForgePathTest {
         String s = EmberAfkForgePath.suggestLine(0, 20, 20, 2000, EmberForgeGoal.QUALITY);
         assertTrue(s.contains("成色"));
     }
+    @Test public void preferGemWhenGoal() {
+        EmberUpgradeRules.Cost c = EmberGemAcquire.craftCost();
+        String s = EmberAfkForgePath.suggestLine(c.shards, c.bone, 0, c.coins, EmberForgeGoal.GEM);
+        assertTrue(s.contains("宝石"));
+    }
 }

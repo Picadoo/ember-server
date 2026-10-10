@@ -25,6 +25,13 @@ public final class EmberAfkForgePath {
             if (blank >= 1 && bone >= 2) return "§a挂机日满 · 胚/骨够精工 · /corerpg p1 refine";
             return "§e挂机日满 · 精工还差料 · 胚§f" + blank + " §7骨§f" + bone + " §7· /corerpg p1 forge";
         }
+        if (forgeGoal == EmberForgeGoal.GEM) {
+            EmberUpgradeRules.Cost gc = EmberGemAcquire.craftCost();
+            if (shard >= gc.shards && bone >= gc.bone && coin >= gc.coins)
+                return "§a挂机日满 · 料够合成宝石 · /corerpg p1 gem craft sharp";
+            return "§e挂机日满 · 宝石还差料 · 碎§f" + shard + " §7骨§f" + bone
+                    + " §7币§f" + coin + " §7· /ember_p1_gem";
+        }
         if (forgeGoal == EmberForgeGoal.QUALITY) {
             // D1932: mirror qualityCost(0) thresholds loosely for suggest (display only)
             EmberUpgradeRules.Cost qc = EmberUpgradeRules.qualityCost(0);

@@ -171,6 +171,15 @@ public final class EmberGemAcquire {
         }
         p.sendMessage(P + "§a合成成功：§f" + EmberItemData.gemName(code) + " §7（碎" + cost.shards + "+骨" + cost.bone + "+币" + cost.coins + "）");
         try { p.sendActionBar("§a宝石合成 · §f" + EmberItemData.gemName(code)); } catch (Throwable ignored) { }
+        // D1984 FG-G3: weekly forgegoal GEM complete
+        if (EmberForgeGoal.get(d) == EmberForgeGoal.GEM) {
+            p.sendMessage(P + "§a本周工坊目标完成：§f宝石合成");
+            try { p.sendActionBar("§a工坊目标 · 宝石完成"); } catch (Throwable ignored) { }
+            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/成色…", "GREEN"},
+                    new String[]{"[再合成]", "/corerpg p1 gem craft " + EmberGemPath.key(code), "同款再做", "LIGHT_PURPLE"},
+                    new String[]{"[去镶嵌]", "/ember_p1_gem", "空孔镶石", "AQUA"});
+        }
         EmberGemInsertChase.afterAcquire(p, code, loadouts, plugin); // D727 chase empty hole (replaces fixed 孔0 twin)
         return true;
     }

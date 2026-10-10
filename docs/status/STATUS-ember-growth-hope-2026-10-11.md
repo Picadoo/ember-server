@@ -741,3 +741,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1980 post-held-upgrade scan (jar 1.65.495-d1980)
 - Surface near-sat; EM1-B/K3/SF4/pity invent still blocked
+
+## D1981–D1994 forgegoal GEM (jar 1.65.496-d1981)
+- FG-G: 宝石合成 weekly goal id=7; gap/PAPI/craft goalHit/Afk
+- Zero C24/flat change

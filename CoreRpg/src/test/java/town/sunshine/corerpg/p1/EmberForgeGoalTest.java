@@ -17,5 +17,9 @@ public class EmberForgeGoalTest {
         assertTrue(EmberForgeGoal.gapLine(EmberForgeGoal.QUALITY, "", "", "", "", "", "胚差2·骨差0·币差0").contains("胚差2"));
         assertTrue(EmberForgeGoal.glance(EmberForgeGoal.BRAND, "还差").contains("合成烙纹"));
         assertTrue(EmberForgeGoal.valid(EmberForgeGoal.QUALITY));
+        assertEquals(EmberForgeGoal.GEM, EmberForgeGoal.parse("宝石"));
+        assertEquals("宝石合成", EmberForgeGoal.label(EmberForgeGoal.GEM));
+        assertTrue(EmberForgeGoal.gapLine(EmberForgeGoal.GEM, "", "", "", "", "", null, "碎差0·骨差0·币差0").contains("已够"));
+        assertTrue(EmberForgeGoal.valid(EmberForgeGoal.GEM));
     }
 }

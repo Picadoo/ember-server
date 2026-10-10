@@ -403,3 +403,6 @@ flowchart LR
 
 ### FG-Q forgegoal QUALITY (D1928+)
 - Weekly craft-goal id=6 成色升档; deterministic C06 path first-class. Zero price invent.
+
+### FG-G forgegoal GEM (D1981+)
+- Weekly craft-goal id=7 宝石合成; deterministic C24. Zero flat invent.
