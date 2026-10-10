@@ -5,6 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.StaminaService;
 
@@ -360,6 +362,10 @@ public final class EmberSettleService {
                     rp.sendMessage(EmberRunService.P + "§d团本首通 · §f" + m.name + " §7保底 §e" + fam
                             + " §8（团本图身份）");
                     try { rp.sendActionBar("§d团本首通 · §f" + fam + " §7保底"); } catch (Throwable ignored) { }
+                    ConfirmTokens.sendButtons(rp, EmberRunService.P + "§7下一步：", // D672
+                            new String[]{"[工坊]", "/corerpg p1 forge", "养成团本件", "GOLD"},
+                            new String[]{"[赛季页]", "/ember_p1_season", "团本周目标", "LIGHT_PURPLE"},
+                            new String[]{"[冒险页]", "/ember_p1_adventure", "下一团本", "GREEN"});
                 }
             }
         }
@@ -374,6 +380,10 @@ public final class EmberSettleService {
                 chp.sendMessage(EmberRunService.P + "§c挑战首通 · §f" + m.name + " §7保底 §e" + fam
                         + " §8（挑战图身份 · 专精点进度）");
                 try { chp.sendActionBar("§c挑战首通 · §f" + fam + " §7保底"); } catch (Throwable ignored) { }
+                ConfirmTokens.sendButtons(chp, EmberRunService.P + "§7下一步：", // D671
+                        new String[]{"[工坊]", "/corerpg p1 forge", "养成这件", "GOLD"},
+                        new String[]{"[冒险页]", "/ember_p1_adventure", "下一张挑战", "GREEN"},
+                        new String[]{"[装备页]", "/ember_p1_gear", "穿上同族", "AQUA"});
             }
         }
         if (in.firstClear != null) {

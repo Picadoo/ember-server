@@ -78,3 +78,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D666 parry success ActionBar
 - D667 week-goal complete buttons
 - D668 week-goal progress ActionBar
+
+## D669–D672 SHIP · jar 1.65.320-d669 · 2026-10-11
+- D669 honor unlock buttons
+- D670 2pc soft-prefer next buttons
+- D671 challenge FC next buttons
+- D672 raid FC next buttons

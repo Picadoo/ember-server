@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import town.sunshine.corerpg.ConfirmTokens;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -509,6 +511,11 @@ public final class EmberGrowthService implements Listener {
             d.addPeriodCount(C_HONOR_SEEN + id, "all", 1);
             EmberGrowth.Honor h = honors.byId(id);
             p.sendMessage(P + "§6获得余烬勋记「" + h.name + "」§7— " + h.desc + " §8（账号永久，/corerpg p1 honor 查看）");
+            try { p.sendActionBar("§6勋记解锁 · §f" + h.name); } catch (Throwable ignored) { } // D669
+            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[勋记页]", "/ember_p1_honor", "看效果与进度", "GOLD"},
+                    new String[]{"[冒险页]", "/ember_p1_adventure", "继续推进条件", "GREEN"},
+                    new String[]{"[稍后再说]", null, "账号永久", "GRAY"});
             plugin.getLogger().info("[P1 growth] " + p.getName() + " honor " + id);
         }
     }

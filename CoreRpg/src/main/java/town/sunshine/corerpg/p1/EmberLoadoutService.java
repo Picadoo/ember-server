@@ -2,6 +2,8 @@ package town.sunshine.corerpg.p1;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import town.sunshine.corerpg.ConfirmTokens;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -212,7 +214,11 @@ public final class EmberLoadoutService implements Listener {
                 String lab = EmberSkillKit.preferredShapeLabel(l.activeSet);
                 p.sendMessage(EmberRunService.P + "§e套装推荐烬斩形状：§f" + lab
                         + " §7（可随时 /corerpg skill shape 换 · Stage2 命中差已拉开）");
-                try { p.sendActionBar("§e烬斩形状 · §f" + lab); } catch (Throwable ignored) { } // D642 soft cue
+                try { p.sendActionBar("§e成套 · 烬斩 §f" + lab); } catch (Throwable ignored) { } // D642/D670
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：",
+                        new String[]{"[进冒险体感]", "/ember_p1_adventure", "进图试形状", "GREEN"},
+                        new String[]{"[符文路径]", "/corerpg p1 shapepath", "锁定路径", "AQUA"},
+                        new String[]{"[技能组]", "trmenu open ember_skill_kit", "看按键", "GOLD"});
             }
         }
         return l;
