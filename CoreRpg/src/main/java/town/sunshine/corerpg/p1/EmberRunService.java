@@ -2132,13 +2132,21 @@ public final class EmberRunService implements Listener {
             got.add(miss);
         }
         if (acqStamp) EmberSigStampDry.onHit(d); // D690 clear dry
-        if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
+        if (!got.isEmpty() && !quietDeliver) {
+            p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7到账下一环：", // D922
+                    new String[]{"[一键存入]", "/corerpg p1 stash", "料/装入库", "GREEN"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "花材料", "GOLD"},
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
+        }
         if (!relLines.isEmpty() && !quietDeliver) { // D299 W1c：相对穿着一行（并列 D295 摘要，不改破绽语义）
             for (String rel : relLines) p.sendMessage(P + "§7" + rel);
         }
         sendUpgradeAsks(p); // D120
-        if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后点：",
-                "[补领]", "/corerpg p1 claim", "领取暂存的奖励（装备页也有「补领」）"); // D95
+        if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后：", // D925
+                new String[]{"[补领]", "/corerpg p1 claim", "领取暂存", "YELLOW"},
+                new String[]{"[一键存入]", "/corerpg p1 stash", "腾背包", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花料腾格", "GOLD"});
         if (choices > 0) choiceButtons(p, open);
         return changed.size();
     }

@@ -413,3 +413,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D915–D920 SHIP · jar 1.65.399-d915
 - Stamp hit forge; goalpath afterSet; bounty/claim next; hope-loop surface largely saturated — prefer ARCH thin or critical-path polish next
+
+## D921–D926 SHIP · jar 1.65.400-d921
+- Signpath; deliver stash/forge; makeup setchase; full-pack claim+stash
+- Hope-loop surface saturated; next prefer ARCH thin debt or critical-path polish only

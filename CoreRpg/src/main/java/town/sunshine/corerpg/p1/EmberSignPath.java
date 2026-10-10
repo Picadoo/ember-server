@@ -155,9 +155,11 @@ public final class EmberSignPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a签到 → §f" + label(id) + " §7· " + tip(id));
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        try { p.sendActionBar("§e签到路径 · §f" + label(id)); } catch (Throwable ignored) { } // D924
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D921
                 new String[]{"[签到页]", "/corerpg p1 sign menu", "打开签到 · 在线", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 signpath", "重选", "GRAY"});
+                new String[]{"[一键签到]", "/corerpg p1 sign claim", "领今日", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花奖励", "GOLD"});
     }
 
     private static PlayerData dataOf(Player p) {

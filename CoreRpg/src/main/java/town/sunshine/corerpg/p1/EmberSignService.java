@@ -388,10 +388,10 @@ public final class EmberSignService implements Listener {
                 + " §8（本月补签 " + d.periodCount(C_SMK, mon) + "/" + makeupPerMonth + "）");
         try { p.sendActionBar("§a补签 · 本月第 " + n + " 次"); } catch (Throwable ignored) { }
         // D821
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D923
                 new String[]{"[在线奖励]", "/corerpg p1 sign online claim", "领时长档", "GREEN"},
                 new String[]{"[工坊]", "/corerpg p1 forge", "花奖励", "GOLD"},
-                new String[]{"[签到页]", "/corerpg p1 sign menu", "看月历", "AQUA"});
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
     }
 
     // ---------------------------------------------------------------- 在线时长
