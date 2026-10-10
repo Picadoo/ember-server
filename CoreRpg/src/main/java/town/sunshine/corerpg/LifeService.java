@@ -111,6 +111,16 @@ public final class LifeService implements Listener {
             }
             consumables.put(k, cn);
         }
+        // D1019: C17 amounts from economy yml SoT (life.yml stays mirror)
+        cookCoinEach = town.sunshine.corerpg.p1.EmberEconomy.amount("C17", "cook.coin_each");
+        repairFee = town.sunshine.corerpg.p1.EmberEconomy.amount("C17", "fees.repair");
+        for (Offer of : offers.values()) {
+            try {
+                of.coin = town.sunshine.corerpg.p1.EmberEconomy.amount("C17", of.id + ".coin");
+            } catch (IllegalArgumentException ignored) {
+                // offer without economy leaf keeps life.yml coin
+            }
+        }
         plugin.getLogger().info("Life: " + offers.size() + " offers, " + consumables.size() + " consumables");
     }
 
@@ -268,7 +278,11 @@ public final class LifeService implements Listener {
             p.sendMessage(ChatColor.RED + "[铁砧] 修理手续费 " + repairFee + " 余烬币，你只有 " + d.getCoin() + "。");
             return;
         }
-        d.takeCoin(repairFee);
+        if (!town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", repairFee)) {
+            e.setCancelled(true);
+            p.sendMessage(ChatColor.RED + "[铁砧] 扣币失败");
+            return;
+        } // D1020
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GRAY + "[铁砧] 修理手续费 -" + repairFee + " 余烬币");
     }
@@ -342,10 +356,15 @@ public final class LifeService implements Listener {
             if (have < e.getValue()) { p.sendMessage(ChatColor.RED + "[生活] 材料不足：" + ni.displayName(e.getKey()) + " " + have + "/" + e.getValue()); return false; }
         }
         if (d.getCoin() < o.coin) { p.sendMessage(ChatColor.RED + "[生活] 余烬币不足：需要 " + o.coin + "，拥有 " + d.getCoin()); return false; }
+        if (o.coin > 0 && !town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", o.coin)) {
+            p.sendMessage(ChatColor.RED + "[生活] 扣币失败"); return false;
+        } // D1020: coin before mats
         for (Map.Entry<String, Integer> e : o.inputs.entrySet()) {
-            if (!ni.consumeExact(p, e.getKey(), e.getValue())) { p.sendMessage(ChatColor.RED + "[生活] 扣除失败"); return false; }
+            if (!ni.consumeExact(p, e.getKey(), e.getValue())) {
+                if (o.coin > 0) d.addCoin(o.coin); // econ-ok: mat fail refund
+                p.sendMessage(ChatColor.RED + "[生活] 扣除失败"); return false;
+            }
         }
-        if (o.coin > 0) d.takeCoin(o.coin);
         if (o.weekly > 0) d.addPeriodCount("life_" + o.id, wk, 1);
         if (o.daily > 0) d.addPeriodCount("life_" + o.id, td, 1);
         List<String> got = new ArrayList<String>();
@@ -522,10 +541,21 @@ public final class LifeService implements Listener {
             int left = total;
             for (Map.Entry<String, Integer> e : take.entrySet()) { int u = Math.min(left, e.getValue()); e.setValue(u); left -= u; }
         }
+        int cookFee = fee; // matches adjusted total
+        if (cookFee > 0 && !town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", cookFee)) {
+            p.sendMessage(ChatColor.RED + "[生活] 扣币失败"); return;
+        } // D1020: coin before mats
         int cooked = 0;
         for (Map.Entry<String, Integer> e : take.entrySet()) if (e.getValue() > 0 && ni.consumeExact(p, e.getKey(), e.getValue())) cooked += e.getValue();
-        if (cooked <= 0) return;
-        d.takeCoin(cooked * cookCoinEach);
+        if (cooked <= 0) {
+            if (cookFee > 0) d.addCoin(cookFee); // econ-ok: cook abort refund
+            return;
+        }
+        if (cooked < total && cookFee > 0) {
+            int back = (total - cooked) * cookCoinEach;
+            if (back > 0) d.addCoin(back); // econ-ok: partial cook refund
+            cookFee = cooked * cookCoinEach;
+        }
         ni.giveNiItem(p, cookOutput, cooked);
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GREEN + "[生活] 烤好了 " + ni.displayName(cookOutput) + "×" + cooked + ChatColor.GRAY + "（-" + cooked * cookCoinEach + " 币）");

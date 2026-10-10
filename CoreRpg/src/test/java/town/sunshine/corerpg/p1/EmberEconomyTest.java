@@ -1081,6 +1081,17 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void lifeSinkMatchesC17() {
+        // D1021 — model stays NONE
+        assertEquals(40, EmberEconomy.amount("C17", "bread.coin"));
+        assertEquals(60, EmberEconomy.amount("C17", "rod.coin"));
+        assertEquals(300, EmberEconomy.amount("C17", "stable_charm.coin"));
+        assertEquals(1, EmberEconomy.amount("C17", "cook.coin_each"));
+        assertEquals(20, EmberEconomy.amount("C17", "fees.repair"));
+        assertEquals(EmberEconomy.Model.NONE, EmberEconomy.byId("C17").model);
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

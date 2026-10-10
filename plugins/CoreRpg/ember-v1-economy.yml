@@ -348,6 +348,21 @@ sinks:
     "r01.stamina": 50
     "r02.stamina": 50
     "r03.stamina": 50
+  # D1017 Stage1 C17 life offers/cook/repair (matches life.yml; model NONE)
+  C17:
+    "cook.coin_each": 1
+    "fees.repair": 20
+    "bread.coin": 40
+    "rod.coin": 60
+    "heal_potion.coin": 10
+    "reforge_stone.coin": 30
+    "stable_charm.coin": 300
+    "soul_dust.coin": 5
+    "soul_dust_bone.coin": 5
+    "pet_ashling.coin": 600
+    "pet_cinder.coin": 600
+    "offhand_ward.coin": 80
+    "offhand_vita.coin": 80
   C01: { stamina: 30 }
   C07: { marks: 8 }
   C09:

@@ -24,7 +24,7 @@
 
 version: 1
 balance_version: 89
-built_against: "1.65.415-d1011.local (D1011–D1014 Stage1 C18)"
+built_against: "1.65.416-d1016.local (D1016–D1028 C17+C19 Stage0; Stage1 COMPLETE)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 
@@ -960,7 +960,7 @@ sinks:
   C14: {econ_row: C14, name: 回复药购买, takes: [coin], economy_keys: [C14.coin], config: ["ember-v1-economy.yml#sinks.C14", "ember-v1.yml#shop.heal_potion.price"]}
   C15: {econ_row: C15, name: 外观商店（暂停）, takes: [coin, badge, mark, cosmetic], code: ["p1/EmberCosmetics.java#C_BOUGHT"]}
   C16: {econ_row: C16, name: 扭蛋兑券（暂停）, takes: [coin, badge, gacha_ticket]}
-  C17: {econ_row: C17, name: 生活 offer, takes: [coin, core, life_item], config: ["life.yml#offers"], notes: "D244: offers also eat life items (fish / junk / relic / pearl / soul dust) — see stocks.life_item"}
+  C17: {econ_row: C17, name: 生活 offer, takes: [coin, core, life_item], config: ["life.yml#offers"], notes: "D244: offers also eat life items (fish / junk / relic / pearl / soul dust) — see stocks.life_item", economy_keys: [C17.cook.coin_each, C17.fees.repair, C17.bread.coin, C17.rod.coin, C17.heal_potion.coin, C17.reforge_stone.coin, C17.stable_charm.coin, C17.soul_dust.coin, C17.soul_dust_bone.coin, C17.pet_ashling.coin, C17.pet_cinder.coin, C17.offhand_ward.coin, C17.offhand_vita.coin]}
   C18: {econ_row: C18, name: 国庆商店, takes: [fest_coin, coin, badge], economy_keys: [C18.charm_event, C18.trail_event, C18.after_coin, C18.after_badge, C18.memo, C18.badge_rate, C18.badge_cap], config: ["ember-v1-economy.yml#sinks.C18", "ember-v1-festival.yml#charm"]}
   C20: {econ_row: C20, name: 烙纹合成, takes: [shard], economy_keys: [C20.shard], config: ["ember-v1-economy.yml#sinks.C20", "ember-v1-growth.yml#forge.brand"], code: ["p1/EmberBrandRules.java#CRAFT_SHARDS", "p1/EmberGrowthService.java#brandCraft"]}
   C23: {econ_row: C23, name: 每周转化, takes: [blank, coin], economy_keys: [C23.blank_t1, C23.blank_t2, C23.blank_t3, C23.coin_t1, C23.coin_t2, C23.coin_t3], config: ["ember-v1-economy.yml#sinks.C23"], code: ["p1/EmberConvertRules.java", "p1/EmberGrowthService.java#convertHeld"]}

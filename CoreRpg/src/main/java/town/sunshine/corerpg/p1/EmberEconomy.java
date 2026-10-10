@@ -364,7 +364,20 @@ public final class EmberEconomy {
         sink("C14", "回复药购买", "ember-v1.yml shop.heal_potion.price", Period.NONE).acc(COIN).model(FULL).g("coin", 10).done();
         sink("C15", "外观商店（暂停）", "EmberCosmetics", Period.NONE).acc(COIN, BADGE, MARK, Account.COSMETIC).keys("p2_cosbuy_").model(OUT).done();
         sink("C16", "扭蛋兑券（暂停）", "CoreGacha exchange", Period.DAY).acc(COIN, BADGE, Account.GACHA_TICKET).model(NONE).done();
-        sink("C17", "生活 offer", "life.yml", Period.DAY).acc(COIN, CORE, Account.LIFE_ITEM).keys("life_").model(NONE).done(); // D244: offers eat life items too
+        sink("C17", "生活 offer", "life.yml", Period.DAY).acc(COIN, CORE, Account.LIFE_ITEM).keys("life_").model(NONE) // D244; D1018 amounts SoT, still NONE
+            .g("cook.coin_each", 1)
+            .g("fees.repair", 20)
+            .g("bread.coin", 40)
+            .g("rod.coin", 60)
+            .g("heal_potion.coin", 10)
+            .g("reforge_stone.coin", 30)
+            .g("stable_charm.coin", 300)
+            .g("soul_dust.coin", 5)
+            .g("soul_dust_bone.coin", 5)
+            .g("pet_ashling.coin", 600)
+            .g("pet_cinder.coin", 600)
+            .g("offhand_ward.coin", 80)
+            .g("offhand_vita.coin", 80).done();
         sink("C18", "国庆商店", "ember-v1-festival.yml shop", Period.EVENT).acc(Account.FEST_COIN, COIN, BADGE).model(PART)
             .g("charm_event", 60).g("trail_event", 30).g("after_coin", 15000).g("after_badge", 300)
             .g("memo", 120).g("badge_rate", 5).g("badge_cap", 40).done();
