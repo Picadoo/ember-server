@@ -763,6 +763,12 @@ class Fight:
                     rec['shield_abs'] += a
             else:
                 self.shield = 0.0
+        nt = getattr(self, 'step_next_taken', None)
+        if nt is not None:  # D435: one-shot next-hit taken mult
+            self.step_next_taken = None
+            dmg *= float(nt)
+            if rec is not None:
+                rec['n_step_next'] = rec.get('n_step_next', 0) + 1
         if self.t < getattr(self, 'step_resist_until', -1.0):  # D434 承护步: Resist I window
             r = float(getattr(self, 'step_resist', 0.0) or 0.0)
             if r > 0:

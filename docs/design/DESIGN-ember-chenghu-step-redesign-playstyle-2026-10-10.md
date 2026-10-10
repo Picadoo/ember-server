@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 承护步改效用（D435）
 
-STATUS=**已批 A · 方案 M · D435 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-chenghu-step-redesign-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-chenghu-step-redesign-need-design-2026-10-10.md) · backlog `B-chenghu-step-redesign` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠拧回 D434 的 0.20×2s 抗性**
+STATUS=**已批 A · 方案 M · D435 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-chenghu-step-redesign-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-chenghu-step-redesign-need-design-2026-10-10.md) · backlog `B-chenghu-step-redesign` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠拧回 D434 的 0.20×2s 抗性**
 
 **上游：** D434 PASS · S0 承护 Resist I ❌（+8.3pp）· live 抗性已关 · 展示名「承护步」保留。
 
@@ -39,4 +39,4 @@ STATUS=**已批 A · 方案 M · D435 · 施工中** · 2026-10-10 · tip [`STAT
 - 报告 `out-skillkit-d435-chenghu.md`  
 - PASS 后才开 FlexSkillService 药效
 
-*D435 · 已批 A·M · S0 施工中。*
+*D435 · PASS · jar 1.65.138 · C_heal005。*

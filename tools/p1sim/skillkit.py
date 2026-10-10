@@ -259,6 +259,16 @@ CANDS_D434 = {
     'B14c0': ('q05', 'burst', '身法·爆闪步 缓速I 1.5s', STEP_BAO),
     'S14c0': ('q05', 'sustain', '身法·承护步 抗性I 20%×2s', STEP_CHENG),
 }
+# D435 承护改效用 S0（禁回潮 resist 0.20×2s）
+CANDS_D435 = {
+    'C_heal04': ('q05', 'sustain', '承护·落点疗 0.04H', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_heal_pct': 0.04}),
+    'C_heal02': ('q05', 'sustain', '承护·落点疗 0.02H', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_heal_pct': 0.02}),
+    'C_heal005': ('q05', 'sustain', '承护·落点疗 0.005H', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_heal_pct': 0.005}),
+    'C_once07': ('q05', 'sustain', '承护·下次受伤×0.7', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_next_taken': 0.7}),
+    'C_once05': ('q05', 'sustain', '承护·下次受伤×0.5', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_next_taken': 0.5}),
+    'C_once09': ('q05', 'sustain', '承护·下次受伤×0.9', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_next_taken': 0.9}),
+    'C_once085': ('q05', 'sustain', '承护·下次受伤×0.85', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_next_taken': 0.85}),
+}
 ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,
            **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435)
 

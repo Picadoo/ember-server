@@ -48,7 +48,9 @@ public final class EmberSkillKit {
     /** D434 爆闪步: Slow I duration ticks (1.5s). */
     public static final int STEP_SLOW_TICKS = 30;
     /** D434 承护步: Damage Resistance I ticks (2s). */
-    public static final int STEP_RESIST_TICKS = 40;
+    public static final int STEP_RESIST_TICKS = 40; // D434 S0 ❌ — unused live
+    /** D435 S0 🟡 C_heal005 */
+    public static final double STEP_HEAL_PCT = 0.005;
     public static final int STEP_VARIANT_PLAIN = 0;
     public static final int STEP_VARIANT_HUOHEN = 1;
     public static final int STEP_VARIANT_BAOSHAN = 2;

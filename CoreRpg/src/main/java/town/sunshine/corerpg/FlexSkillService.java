@@ -386,14 +386,17 @@ public final class FlexSkillService implements Listener {
     }
 
     /**
-     * D434 承护步: S0 ❌ (+8.3pp) — combat Resist I disabled (display name kept).
-     * Redesign utility in D435; do not retune 0.20×2s into the ±2 corridor.
+     * D435 承护步: S0 🟡 C_heal005 — land heal 0.5% max HP (not Resist I).
+     * P1 only. Hub cast still shows name / tip.
      */
     private boolean applyChenghuIfActive(Player player, Location at) {
         if (player == null || at == null || at.getWorld() == null) return false;
         if (stepVariantOf(player) != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) return false;
-        // identity particles only (hub + P1); no Resist I until S0 redesign PASS
-        at.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, at.clone().add(0, 0.4, 0), 8, 0.25, 0.15, 0.25, 0.0);
+        if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
+            double heal = Math.max(0.5, player.getMaxHealth() * 0.005);
+            player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
+        }
+        at.getWorld().spawnParticle(Particle.HEART, at.clone().add(0, 0.5, 0), 4, 0.2, 0.15, 0.2, 0.0);
         return true;
     }
 
@@ -412,7 +415,7 @@ public final class FlexSkillService implements Listener {
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
             return back ? " · 起跳缓速 I 1.5s" : " · 落点缓速 I 1.5s";
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
-            return " · 承护（抗性 S0 暂缓）";
+            return " · 落点微疗 0.5%H";
         return " · 无伤害";
     }
 
@@ -422,7 +425,7 @@ public final class FlexSkillService implements Listener {
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
             return back ? ChatColor.GRAY + " · 起跳缓速" : ChatColor.GRAY + " · 落点缓速";
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
-            return ChatColor.GRAY + " · 承护（抗性暂缓）";
+            return ChatColor.GRAY + " · 承护微疗";
         return "";
     }
 
