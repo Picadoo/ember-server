@@ -294,6 +294,10 @@ public final class FriendService {
                 ConfirmTokens.sendButtons(online, PREFIX + ChatColor.YELLOW + p.getName() + ChatColor.GRAY + " 申请加好友 ",
                         new String[]{"[同意]", "/corerpg friend accept " + p.getName(), "成为好友", "GREEN"},
                         new String[]{"[拒绝]", "/corerpg friend deny " + p.getName(), "拒绝这条申请", "RED"}); // D100
+                // D811 path glance / offer if unset
+                PlayerData od = dataStore.get(online.getUniqueId());
+                if (od != null && !EmberFriendPath.valid(EmberFriendPath.get(od)))
+                    online.sendMessage(PREFIX + "§7可设好友路径：/corerpg p1 friendpath（敞开/审核/静拒）");
             }
         }
     }

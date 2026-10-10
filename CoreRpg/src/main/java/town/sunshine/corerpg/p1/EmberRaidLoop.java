@@ -39,7 +39,8 @@ public final class EmberRaidLoop {
                     new String[]{"[换团本路径]", "/corerpg p1 raidpath", "下周焦点", "AQUA"});
         } else {
             String line = "§d团本入账 · §f" + name + " §7本周 §e" + used + "/" + cap
-                    + (firstClear ? " §a· 首通" : "");
+                    + (firstClear ? " §a· 首通" : "")
+                    + (used == cap - 1 ? " §e· 下周额度前最后 1 次" : ""); // D810
             try { p.sendActionBar(line); } catch (Throwable ignored) { }
             p.sendMessage(P + line + " §8（通关才扣周次数）");
             // D807 next-loop while week cap remains

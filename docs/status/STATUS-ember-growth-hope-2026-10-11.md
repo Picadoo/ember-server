@@ -323,3 +323,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - Friend/mentor afterBound next loop
 - Raid week clear next enter/recruit
 - Enhance undo late/expire + undo→re-enhance
+
+## D809–D812 SHIP · jar 1.65.370-d809
+- Menu onlinepath; raid near-cap; friend path tip; undo+forge btn

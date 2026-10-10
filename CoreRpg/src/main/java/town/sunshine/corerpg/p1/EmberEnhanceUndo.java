@@ -62,9 +62,10 @@ public final class EmberEnhanceUndo {
         try { // D694
             p.sendActionBar("§e强化失败可撤 · §f" + sec + "s §7· /corerpg p1 enhance undo");
         } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7误点可撤（" + sec + " 秒内 · 仅失败）：",
+        ConfirmTokens.sendButtons(p, P + "§7误点可撤（" + sec + " 秒内 · 仅失败）：", // D812
                 new String[]{"[撤销本次失败]", "/corerpg p1 enhance undo",
-                        "退回材料 · pity 回滚 · 剩余约 " + sec + "s", "YELLOW"});
+                        "退回材料 · pity 回滚 · 剩余约 " + sec + "s", "YELLOW"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "稍后再撤也可开页", "GRAY"});
         scheduleMidRemind(p, s); // D713
         scheduleLateRemind(p, s); // D808 ~10s left
         scheduleExpire(p, s); // D808
