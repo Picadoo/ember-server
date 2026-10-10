@@ -231,6 +231,16 @@ public final class EmberSkillKit {
         return setShapeSync ? baseSecs * 1.25 : baseSecs;
     }
 
+    /** D2342: dash path hit radius when set-shape synced. */
+    public static double dashHitRadius(boolean setShapeSync) {
+        return setShapeSync ? DASH_HIT_RADIUS + 0.20 : DASH_HIT_RADIUS;
+    }
+
+    /** D2343: parry window ms when set-shape synced. */
+    public static long parryWindowMs(boolean setShapeSync) {
+        return setShapeSync ? PARRY_WINDOW_MS + 50L : PARRY_WINDOW_MS;
+    }
+
     public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_STEP_ENTER, "all") > 0) return true;

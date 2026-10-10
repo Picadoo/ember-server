@@ -58,7 +58,15 @@ public final class EmberParry implements Listener {
         if (player == null || boss == null || !player.isOnline()) return;
         PlayerData d = plugin.getDataStore().get(player.getUniqueId());
         if (!EmberSkillKit.parryUnlocked(d, plugin.getEmberRuns())) return;
-        long until = System.currentTimeMillis() + EmberSkillKit.PARRY_WINDOW_MS;
+        boolean syncWin = false;
+        try {
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            EmberLoadout lo = ls == null ? null : ls.get(player);
+            String fam = lo == null ? "none" : lo.activeSet;
+            int sid = EmberSkillKit.shapeId(d, plugin.getEmberRuns());
+            syncWin = EmberSkillKit.setShapeSynced(fam, sid);
+        } catch (Throwable ignored) { }
+        long until = System.currentTimeMillis() + EmberSkillKit.parryWindowMs(syncWin);
         windowUntil.put(player.getUniqueId(), until);
         windowBoss.put(player.getUniqueId(), boss.getUniqueId());
     }

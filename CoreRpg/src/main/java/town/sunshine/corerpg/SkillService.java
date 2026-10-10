@@ -740,9 +740,16 @@ public final class SkillService implements Listener {
         double base = town.sunshine.corerpg.p1.EmberFormula.skill(town.sunshine.corerpg.p1.EmberMode.tables(), b);
         town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
         java.util.LinkedHashSet<LivingEntity> hitSet = new java.util.LinkedHashSet<LivingEntity>();
+        boolean dashSyncR = false;
+        try {
+            town.sunshine.corerpg.p1.EmberLoadoutService lsR = plugin.getEmberLoadouts();
+            String famR = lsR == null ? "none" : lsR.get(player).activeSet;
+            dashSyncR = dashShapeSynced(player, famR);
+        } catch (Throwable ignored) { }
+        double dashR = town.sunshine.corerpg.p1.EmberSkillKit.dashHitRadius(dashSyncR);
         for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
             if (sample.getWorld() == null) continue;
-            double r = town.sunshine.corerpg.p1.EmberSkillKit.DASH_HIT_RADIUS;
+            double r = dashR;
             for (Entity e : sample.getWorld().getNearbyEntities(sample, r, r, r)) {
                 if (!isMonsterTarget(player, e)) continue;
                 if (e.getLocation().distanceSquared(sample) > r * r) continue;

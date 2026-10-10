@@ -57,4 +57,12 @@ public class EmberKitEnterUnlockTest {
         assertFalse(EmberSkillKit.markPledgeEnter(d));
         assertTrue(EmberSkillKit.pledgeUnlocked(d, null));
     }
+
+    @Test
+    public void dashRadiusAndParryWindowSync() {
+        assertEquals(1.25, EmberSkillKit.dashHitRadius(false), 1e-9);
+        assertEquals(1.45, EmberSkillKit.dashHitRadius(true), 1e-9);
+        assertEquals(450L, EmberSkillKit.parryWindowMs(false));
+        assertEquals(500L, EmberSkillKit.parryWindowMs(true));
+    }
 }
