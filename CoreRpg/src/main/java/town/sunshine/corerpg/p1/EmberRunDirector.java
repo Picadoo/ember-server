@@ -510,6 +510,29 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D587: boss is in post-skill recover window (收招). */
+    boolean hasPendingGap() {
+        if (boss == null || boss.le == null || boss.le.isDead()) return false;
+        if (pending != null) return false; // still casting
+        long now = System.currentTimeMillis();
+        return recoverUntil > now;
+    }
+
+    /** D587: warp a committed player next to the boss during recover gap. */
+    boolean pathGapBoss(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingGap()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location at = boss.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.8f);
+        return true;
+    }
+
     /** D586: boss half-HP phase has started and boss still alive. */
     boolean hasPendingPhase() {
         return phaseTold && boss != null && boss.le != null && !boss.le.isDead();
@@ -2755,6 +2778,7 @@ final class EmberRunDirector {
                 EmberRunMaps.Skill done = pending;
                 pending = null;
                 recoverUntil = now + (long) ((Double.isNaN(done.recover) ? b.recover : done.recover) * 1000);
+                if (recoverUntil > now) EmberGapPath.maybeAfterGap(s); // D587
                 if (done.follow != null && ratio < done.follow.below) {
                     follow = done.follow;
                     followStart = now + (long) (done.follow.delay * 1000);

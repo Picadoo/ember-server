@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("gappath".equals(sub) || "收招路径".equals(sub)) return gapPathCmd(s, args); // D587
+        if ("gap".equals(sub) && args.length == 2) return gapGoCmd(s); // D587
         if ("phasepath".equals(sub) || "半血路径".equals(sub)) return phasePathCmd(s, args); // D586
         if ("phase".equals(sub) && args.length == 2) return phaseGoCmd(s); // D586
         if ("wavepath".equals(sub) || "增援路径".equals(sub)) return wavePathCmd(s, args); // D585
@@ -1721,6 +1723,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("gapseed".equals(sub)) return gapSeedCmd(s, args); // D587
         if ("phaseseed".equals(sub)) return phaseSeedCmd(s, args); // D586
         if ("waveseed".equals(sub)) return waveSeedCmd(s, args); // D585
         if ("soakseed".equals(sub)) return soakSeedCmd(s, args); // D584
@@ -5960,6 +5963,62 @@ public final class EmberCommand {
             EmberPhasePath.maybeProbe(t);
             s.sendMessage(P + "已触发半血路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingPhase(t) ? "（已半血）" : "（未半血）"));
+            return true;
+    }
+
+    private boolean gapPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberGapPath.glance(EmberGapPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c收招路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberGapPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c收招路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberGapPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberGapPath.get(d);
+                    if (EmberGapPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGapPath.label(cur) + " · 改路径再 /corerpg p1 gappath");
+                    else EmberGapPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberGapPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 gappath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberGapPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean gapGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathGapBoss(p)) p.sendMessage(P + "无法抓空窗（无收招/未进本）");
+            else p.sendMessage(P + "§a收招·手点 §7已传至首领");
+            return true;
+    }
+
+    private boolean gapSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberGapPath.maybeProbe(t);
+            s.sendMessage(P + "已触发收招路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingGap(t) ? "（有收招）" : "（无收招）"));
             return true;
     }
 }
