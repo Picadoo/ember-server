@@ -374,7 +374,7 @@ maps:
       wait_in_area: true
       skills:
         - {type: circle, name: 砸地, every: 13.0, warn: 1.2, radius: 3, ahead: 2, dmg: 18, whiff_stun: 0.5,  # D140 9→12.5; D173 12.5→13.0 (+焦冲); D192 落空破绽 0.5 s
-           follow: {type: cone, name: 横扫, below: 0.5, delay: 2.0, warn: 1.1,  # D449 readability angle: 80, range: 3, dmg: 10, light: true}}
+           follow: {type: cone, name: 横扫, below: 0.5, delay: 2.0, warn: 1.1, angle: 80, distance: 3, dmg: 10, light: true}}  # D449 readability
         - {type: line, name: 骨刺, every: 14, warn: 1.2, length: 6, width: 2, dmg: 10, light: true}  # D140 new move
         - {type: charge, name: 焦冲, every: 18, warn: 1.4, length: 6, width: 3, dmg: 7, light: true, below: 0.5, wall_stun: 1.5}  # D173 Pack 2 half-HP; D188 撞墙破绽 1.5 s
     event:
