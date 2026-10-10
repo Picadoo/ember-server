@@ -510,6 +510,57 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D589: any room caster arming 誓印直线. */
+    boolean hasPendingBolt() {
+        long now = System.currentTimeMillis();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !t.caster() || t.le == null || t.le.isDead()) continue;
+            if (t.castAt <= 0 || now >= t.castAt) continue;
+            if (t.castOrigin == null || t.castDir == null) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** D589: pull a committed player sideways out of the nearest caster line. */
+    boolean pathBoltOut(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingBolt()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        long now = System.currentTimeMillis();
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        EmberRunMaps.Skill bestSk = null;
+        for (Tracked t : mobs.values()) {
+            if (t == null || !t.caster() || t.le == null || t.le.isDead()) continue;
+            if (t.castAt <= 0 || now >= t.castAt) continue;
+            if (t.castOrigin == null || t.castDir == null) continue;
+            EmberRunMaps.Skill sk = casterSkill(t);
+            if (!inShape(sk, t.castOrigin, t.castDir, pl)) continue;
+            double d = t.castOrigin.distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; bestSk = sk; }
+        }
+        if (best == null || bestSk == null) return false;
+        Vector dir = best.castDir.clone();
+        dir.setY(0);
+        if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+        else dir.normalize();
+        Vector side = new Vector(-dir.getZ(), 0, dir.getX());
+        if (side.lengthSquared() < 1e-6) side = new Vector(1, 0, 0);
+        else side.normalize();
+        Location o = best.castOrigin;
+        Vector from = new Vector(pl.getX() - o.getX(), 0, pl.getZ() - o.getZ());
+        if (from.dot(side) < 0) side.multiply(-1);
+        double safe = Math.max(2.0, bestSk.width * 0.5 + 2.0);
+        Location to = new Location(w, pl.getX() + side.getX() * safe, pl.getY(), pl.getZ() + side.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.9f);
+        return true;
+    }
+
     /** D588: shifted second-band telegraph armed (左侧安全). */
     boolean hasPendingShift() {
         return pending != null && lockOrigin != null && lockDir != null
@@ -3226,6 +3277,7 @@ final class EmberRunDirector {
         t.castOrigin = t.le.getLocation().clone();
         t.castAt = now + (long) (t.def.warn * 1000);
         t.le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (t.def.warn * 20) + 4, 10, false, false), true);
+        EmberBoltPath.maybeAfterBolt(s); // D589
     }
 
     private EmberRunMaps.Skill casterSkill(Tracked t) {
