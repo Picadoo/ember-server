@@ -155,7 +155,9 @@ public final class EmberOnlinePath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a在线 → §f" + label(id) + " §7· " + tip(id));
+        // D826 claim if ready
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[一键领取]", "/corerpg p1 sign online claim", "领已达标档", "GREEN"},
                 new String[]{"[签到·在线]", "/corerpg p1 sign menu", "看时长与领取", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 onlinepath", "重选", "GRAY"});
     }

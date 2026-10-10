@@ -156,9 +156,15 @@ public final class EmberRaidPath {
         }
         set(d, id);
         flush(p);
-        p.sendMessage(P + "§a团本路径 → §f" + label(id) + " §7· " + tip(id));
-        try { // D752
-            p.sendActionBar("§e团本路径 · §f" + label(id));
+        String weekLine = ""; // D827
+        EmberRunMaps.MapDef m = pl.getEmberRuns().maps().byKey(mapKey(id));
+        if (m != null && m.weeklyCap > 0) {
+            int used = EmberRaidService.weekCount(d, m, EmberPlayfeelTelemetry.weekKey());
+            weekLine = " §8· 本周 " + used + "/" + m.weeklyCap;
+        }
+        p.sendMessage(P + "§a团本路径 → §f" + label(id) + " §7· " + tip(id) + weekLine);
+        try {
+            p.sendActionBar("§e团本路径 · §f" + label(id) + weekLine);
         } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{enterLabel(id), enterCmd(id), "开团本（3～5 人 · 共享周帽）", "GREEN"},

@@ -344,3 +344,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D824–D825 SHIP · jar 1.65.376-d824
 - Sign menu online progress; friend list mentor accept
+
+## D826–D827 SHIP · jar 1.65.377-d826
+- Onlinepath claim btn; raidpath week remain on set
