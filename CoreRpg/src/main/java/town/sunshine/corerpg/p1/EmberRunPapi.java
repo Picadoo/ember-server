@@ -217,7 +217,7 @@ public final class EmberRunPapi {
 
     /** D432 %corerpg_p1_forge_gap_roll% — 随机锻胚/币差（4 胚 + 500 币）. */
     static String forgeGapRoll(long blankHave, long coinHave) {
-        return "胚差" + recipeGap(EmberForgeRollRules.BLANKS, blankHave) + "·币差" + recipeGap(EmberForgeRollRules.COINS, coinHave);
+        return "胚差" + recipeGap(EmberForgeRollRules.blanks(), blankHave) + "·币差" + recipeGap(EmberForgeRollRules.coins(), coinHave);
     }
 
     /**

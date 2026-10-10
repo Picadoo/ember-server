@@ -921,6 +921,29 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void forgeRollSinkMatchesRules() {
+        // D955 / Stage1 C22
+        assertEquals(EmberForgeRollRules.MARKS, EmberEconomy.amount("C22", "marks"));
+        assertEquals(EmberForgeRollRules.BLANKS, EmberEconomy.amount("C22", "blank"));
+        assertEquals(EmberForgeRollRules.COINS, EmberEconomy.amount("C22", "coin"));
+        assertEquals(EmberForgeRollRules.MARKS, EmberForgeRollRules.marks());
+        assertEquals(EmberForgeRollRules.BLANKS, EmberForgeRollRules.blanks());
+        assertEquals(EmberForgeRollRules.COINS, EmberForgeRollRules.coins());
+    }
+
+    @Test
+    public void convertSinkMatchesRules() {
+        // D955 / Stage1 C23
+        for (int t = 1; t <= 3; t++) {
+            assertEquals("blank t" + t, EmberEconomy.amount("C23", "blank_t" + t), EmberConvertRules.blanks(t));
+            assertEquals("coin t" + t, EmberEconomy.amount("C23", "coin_t" + t), EmberConvertRules.coins(t));
+        }
+        assertEquals(2, EmberConvertRules.blanks(1));
+        assertEquals(300, EmberConvertRules.coins(1));
+        assertEquals(1000, EmberConvertRules.coins(3));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

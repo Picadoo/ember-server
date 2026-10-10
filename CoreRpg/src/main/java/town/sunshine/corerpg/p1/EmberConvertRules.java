@@ -14,12 +14,13 @@ public final class EmberConvertRules {
 
     public static int blanks(int tier) {
         if (tier < 1 || tier > 3) return -1;
-        return BLANKS[tier];
+        // D953: C23 blank_tN from economy yml SoT (BLANKS[] golden mirror)
+        return EmberEconomy.amount("C23", "blank_t" + tier);
     }
 
     public static int coins(int tier) {
         if (tier < 1 || tier > 3) return -1;
-        return COINS[tier];
+        return EmberEconomy.amount("C23", "coin_t" + tier);
     }
 
     public static EmberUpgradeRules.Cost cost(int tier) {

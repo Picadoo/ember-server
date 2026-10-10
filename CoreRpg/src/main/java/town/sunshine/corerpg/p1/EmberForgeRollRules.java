@@ -9,16 +9,25 @@ import java.util.Random;
 public final class EmberForgeRollRules {
     private EmberForgeRollRules() {}
 
-    public static final int MARKS = EmberRunRules.MARKS_PER_EXCHANGE; // 8
-    public static final int BLANKS = 4;
-    public static final int COINS = 500;
+    public static final int MARKS = EmberRunRules.MARKS_PER_EXCHANGE; // 8 golden mirror
+    public static final int BLANKS = 4; // golden mirror
+    public static final int COINS = 500; // golden mirror
     /** 成色：标准/精良/卓越/极品 — 极品硬 0 */
     public static final int[] QUALITY_W = {70, 23, 7, 0};
     /** 精工 0..3 */
     public static final int[] CRAFT_W = {70, 20, 9, 1};
 
+    /** D952: C22 marks from economy yml SoT. */
+    public static int marks() { return EmberEconomy.amount("C22", "marks"); }
+
+    /** D952: C22 blank from economy yml SoT. */
+    public static int blanks() { return EmberEconomy.amount("C22", "blank"); }
+
+    /** D952: C22 coin from economy yml SoT. */
+    public static int coins() { return EmberEconomy.amount("C22", "coin"); }
+
     public static EmberUpgradeRules.Cost matCost() {
-        return new EmberUpgradeRules.Cost(0, 0, BLANKS, 0, COINS);
+        return new EmberUpgradeRules.Cost(0, 0, blanks(), 0, coins());
     }
 
     public static int rollQuality(Random rng) {

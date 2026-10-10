@@ -433,3 +433,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D948–D951 ARCH SHIP · jar 1.65.405-d948
 - Stage1 thin: C24 craftCost + C20 craftShards ← amount(); EconomyTest pins; numbers unchanged
+
+## D952–D956 ARCH SHIP · jar 1.65.406-d952
+- Stage1 thin: C22 forge-roll + C23 convert ← amount(); numbers unchanged

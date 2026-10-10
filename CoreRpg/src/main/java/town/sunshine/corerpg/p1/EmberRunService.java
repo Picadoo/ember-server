@@ -3331,7 +3331,7 @@ public final class EmberRunService implements Listener {
         if (d == null) { p.sendMessage(P + "数据还没加载好"); return true; }
         if (args.length < 5) {
             p.sendMessage(P + "用法：/corerpg p1 forgeroll <scorch|burst|sustain> <blade|charm> <1-3> [confirm]");
-            p.sendMessage(P + "花费：" + EmberForgeRollRules.MARKS + " 枚印记 + " + EmberForgeRollRules.BLANKS + " 胚料 + " + EmberForgeRollRules.COINS + " 币");
+            p.sendMessage(P + "花费：" + EmberForgeRollRules.marks() + " 枚印记 + " + EmberForgeRollRules.blanks() + " 胚料 + " + EmberForgeRollRules.coins() + " 币");
             p.sendMessage(P + EmberForgeRollRules.oddsLine());
             return true;
         }
@@ -3346,7 +3346,7 @@ public final class EmberRunService implements Listener {
         String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         if (!confirm) {
             p.sendMessage(P + "§6随机锻造 · T" + tier + " " + label);
-            p.sendMessage(P + "花费：§f" + EmberForgeRollRules.MARKS + " 枚 T" + tier + " 印记 + " + EmberForgeRollRules.BLANKS + " 胚料 + " + EmberForgeRollRules.COINS + " 币");
+            p.sendMessage(P + "花费：§f" + EmberForgeRollRules.marks() + " 枚 T" + tier + " 印记 + " + EmberForgeRollRules.blanks() + " 胚料 + " + EmberForgeRollRules.coins() + " 币");
             p.sendMessage(P + EmberForgeRollRules.oddsLine());
             p.sendMessage(P + "§7产物：指定族部位 · 成色/精工随机 · +0 · 词条空 · 出不了极品");
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
@@ -3369,7 +3369,7 @@ public final class EmberRunService implements Listener {
         final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, q, craft, 0, 0, true, "drop",
                 EmberItemData.DATA_VERSION, 0, 0, 0, 0, 0, EmberProvenance.forForgeRoll(rid, System.currentTimeMillis()));
         final EmberPay.Price price = EmberPay.Price.of(EmberForgeRollRules.matCost())
-                .plus(EmberPay.Price.marks(tier, EmberForgeRollRules.MARKS)).at("C22");
+                .plus(EmberPay.Price.marks(tier, EmberForgeRollRules.marks())).at("C22");
         final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         pay.pay(p, rid, price, "随机锻造没完成，退回", null, () ->
                 loadouts.store().commitCreate(rid, "forge_roll", id, item, price.json(),
