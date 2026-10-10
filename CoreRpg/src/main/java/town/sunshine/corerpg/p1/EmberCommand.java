@@ -248,6 +248,44 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("bountypath".equals(sub) || "委托路径".equals(sub) || "花样委托路径".equals(sub)) { // D508 variety bounty path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q02");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBountyPath.glance(EmberBountyPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c委托路径需本人首通 Q02。");
+                    return true;
+                }
+                String vb = runs.varietyBountyLine(d);
+                if (vb != null && !vb.isEmpty()) p.sendMessage(P + "§7今日花样委托：§f" + vb);
+                EmberBountyPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c委托路径需本人首通 Q02。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBountyPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBountyPath.get(d);
+                    if (EmberBountyPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBountyPath.label(cur) + " · 改路径再 /corerpg p1 bountypath");
+                    else EmberBountyPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBountyPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 bountypath <affix|event|both|clear>");
+                return true;
+            }
+            EmberBountyPath.applyAndReply(p, id);
+            return true;
+        }
         if ("failpath".equals(sub) || "败退路径".equals(sub) || "退体路径".equals(sub)) { // D507 fail stamina refund path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

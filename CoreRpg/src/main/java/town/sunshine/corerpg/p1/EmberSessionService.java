@@ -256,6 +256,17 @@ public final class EmberSessionService {
                             v = placed;
                         }
                     }
+                    // D508: bounty path ensures preferred variety outcome for D144 花样委托
+                    int bounty = EmberBountyPath.get(ld);
+                    if (EmberBountyPath.valid(bounty) && bounty != EmberBountyPath.BOTH) {
+                        String[] ensured = EmberBountyPath.applyEnsure(v, bounty, maps.variety.affixes, maps.variety.events,
+                                EmberRunRules.subSeed(s.seed, "bounty"));
+                        if (!Arrays.equals(v, ensured)) {
+                            runs.log().info("[P1 run] " + s.runId + " bountypath " + EmberBountyPath.key(bounty)
+                                    + " " + v[1] + "/" + v[3] + " → " + ensured[1] + "/" + ensured[3]);
+                            v = ensured;
+                        }
+                    }
                 }
                 stampVariety(s, v);
             }
