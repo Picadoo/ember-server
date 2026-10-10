@@ -414,6 +414,7 @@ public final class EmberSettleService {
                 if (p.isOnline()) EmberRodPath.maybeAfterProgress(p); // D545 rod path
                 if (p.isOnline()) EmberBrewPath.maybeAfterProgress(p); // D546 brew path
                 if (p.isOnline()) EmberBreadPath.maybeAfterProgress(p); // D547 bread path
+                if (p.isOnline()) EmberArmorPath.maybeAfterProgress(p); // D549 armor path
             }, 40L);
             if (in.firstClear != null && runs.maps().challenge != null && m.key.equals(runs.maps().challenge.requires)) endOfP1(p);
         }

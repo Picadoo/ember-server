@@ -528,6 +528,32 @@ public final class EmberSixSlotService implements Listener {
         }
     }
 
+    /** D549: backpack has at least one strictly better armor piece to wear (town / hub). */
+    public boolean needsArmor(Player p) {
+        if (p == null || !EmberSixSlot.enabled()) return false;
+        if (EmberMode.isP1World(p.getWorld())) return false;
+        if (plugin.getQuestService() != null && plugin.getQuestService().isInstanceWorld(p.getWorld())) return false;
+        EmberSixRank.View v = view(p);
+        return !EmberSixRank.allPlan(v).isEmpty();
+    }
+
+    /** D549: equip every better piece once (no double-confirm). Returns how many slots swapped. */
+    public int pathEquipAll(Player p) {
+        if (p == null || !needsArmor(p)) return 0;
+        EmberSixRank.View v = view(p);
+        List<Integer> todo = EmberSixRank.allPlan(v);
+        if (todo.isEmpty()) return 0;
+        allPending.remove(p.getUniqueId());
+        viewCache.remove(p.getUniqueId());
+        int n = 0;
+        for (int i : todo) {
+            if (v.best[i] == null) continue;
+            if (swapIn(p, i, v.best[i].piece.uid)) n++;
+        }
+        if (n > 0) loadouts.markDirty(p);
+        return n;
+    }
+
     void equipAll(Player p, boolean confirm) {
         EmberSixRank.View v = view(p);
         List<Integer> todo = EmberSixRank.allPlan(v);

@@ -268,6 +268,52 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("armorpath".equals(sub) || "护甲路径".equals(sub)) { // D549 six-slot armor equip path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberArmorPath.glance(EmberArmorPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c护甲路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberArmorPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c护甲路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberArmorPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberArmorPath.get(d);
+                    if (EmberArmorPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberArmorPath.label(cur) + " · 改路径再 /corerpg p1 armorpath");
+                    else EmberArmorPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberArmorPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 armorpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberArmorPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("armorwear".equals(sub) && args.length == 2) { // D549 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            EmberSixSlotService six = EmberSixSlotService.get();
+            if (six == null) { p.sendMessage(P + "护甲服务未加载"); return true; }
+            int n = six.pathEquipAll(p);
+            if (n <= 0) p.sendMessage(P + "无法换甲（已是最好/副本内/六槽关）");
+            else p.sendMessage(P + "§a护甲·手点 §7已换上 ×" + n);
+            return true;
+        }
         if ("sippath".equals(sub) || "喝药路径".equals(sub)) { // D548 combat sip path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1093,6 +1139,37 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("armorseed".equals(sub)) { // D549 admin smoke: better chest in bag
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null || loadouts == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            if (!EmberSixSlot.enabled()) { s.sendMessage(P + "§c六槽未开"); return true; }
+            // Clear worn chest so backpack T2 is strictly better (migration may already mirror charm kit).
+            org.bukkit.inventory.ItemStack[] wornArmor = t.getInventory().getArmorContents();
+            int chestBi = EmberSixSlot.toArmorContents(1);
+            if (chestBi >= 0 && chestBi < wornArmor.length) {
+                org.bukkit.inventory.ItemStack oldChest = wornArmor[chestBi];
+                wornArmor[chestBi] = null;
+                t.getInventory().setArmorContents(wornArmor);
+                if (oldChest != null && oldChest.getType() != org.bukkit.Material.AIR) {
+                    java.util.Map<Integer, org.bukkit.inventory.ItemStack> spill = t.getInventory().addItem(oldChest);
+                    for (org.bukkit.inventory.ItemStack drop : spill.values()) t.getWorld().dropItemNaturally(t.getLocation(), drop);
+                }
+                loadouts.markDirty(t);
+            }
+            EmberItemData d = EmberItemData.create("sustain", "chest", 2, 1, 0, 0, true, "admin")
+                    .withOrigin(EmberProvenance.forAdmin("armorseed", System.currentTimeMillis()));
+            String bad = d.validate();
+            if (bad != null) { s.sendMessage(P + "§c护甲参数无效: " + bad); return true; }
+            org.bukkit.inventory.ItemStack item = loadouts.items().create(d);
+            if (item == null) { s.sendMessage(P + "§c生成护甲失败（NI）"); return true; }
+            loadouts.remember(d, t.getUniqueId());
+            java.util.Map<Integer, org.bukkit.inventory.ItemStack> left = t.getInventory().addItem(item);
+            for (org.bukkit.inventory.ItemStack drop : left.values()) t.getWorld().dropItemNaturally(t.getLocation(), drop);
+            s.sendMessage(P + "已卸胸甲并发 T2 胸甲到背包 → " + t.getName());
+            EmberArmorPath.maybeAfterProgress(t);
             return true;
         }
         if ("sipseed".equals(sub)) { // D548 admin smoke: temp P1 scope + low HP + pot
