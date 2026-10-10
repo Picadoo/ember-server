@@ -1193,6 +1193,8 @@ public final class EmberGrowthService implements Listener {
                         String off = sigWhy(x, l2, sd.slot);
                         if (off != null) q.sendMessage(P + "§e注意：现在不生效——" + off);
                     }
+                    // D647 imprint spend complete UX (always)
+                    EmberSigChase.afterSpendComplete(q, x, sd, worn, sigOff(x, sd.slot), closed);
                 }), err -> { impBusy.remove(t.uid); if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有烙印：" + err); });
         return true;
     }

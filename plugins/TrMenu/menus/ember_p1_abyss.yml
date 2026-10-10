@@ -42,6 +42,7 @@ Icons:
       lore:
         - ''
         - '%corerpg_p1_abyss_hope%'
+        - '§a首层礼：第 1 层层费免费 · 强度=挑战版'
         - '§a浅渊 §7L1–3 · 近挑战强度 · 层费低/免'
         - '§e中渊 §7L4–7 · 成色右移 · 层费抬升 · §c深渊 §7L8–10 · 顶压 + 高费'
         - '§7体力：§f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8（每层 30）'

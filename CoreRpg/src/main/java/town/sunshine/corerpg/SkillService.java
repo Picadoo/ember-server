@@ -685,16 +685,22 @@ public final class SkillService implements Listener {
             }
         });
 
-        spawnParticles(from.clone().add(0, 0.2, 0), "FLAME", 12);
-        // D637: path trail feel (geometry only · zero skill_mult)
-        for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
-            spawnParticles(sample.clone().add(0, 0.25, 0), "CRIT_MAGIC", 4);
-            spawnParticles(sample.clone().add(0, 0.25, 0), "SMOKE_NORMAL", 2);
-        }
+        // D650: set-bound dash trail (feel only · zero skill_mult) — replaces D637 uniform trail
+        String dashFam = null;
+        try {
+            town.sunshine.corerpg.p1.EmberLoadoutService lsDash = plugin.getEmberLoadouts();
+            if (lsDash != null) dashFam = lsDash.get(player).activeSet;
+        } catch (Throwable ignored) { }
+        spawnDashSetTrail(from, dest, dashFam);
         player.teleport(dest);
         maybeFlashDashLand(player); // D445 烬突落地 (成功位移；前方受阻路径不进此分支)
-        spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 18);
-        try { player.sendActionBar("§b烬突 · 直线冲刺"); } catch (Throwable ignored) { }
+        spawnDashSetLand(dest, dashFam);
+        try {
+            if ("burst".equals(dashFam)) player.sendActionBar("§b烬突 · 爆发缓速轨");
+            else if ("sustain".equals(dashFam)) player.sendActionBar("§a烬突 · 承伤微疗轨");
+            else if ("scorch".equals(dashFam)) player.sendActionBar("§6烬突 · 焚烬点燃轨");
+            else player.sendActionBar("§b烬突 · 直线冲刺");
+        } catch (Throwable ignored) { }
         playSound(dest, "ENTITY_ENDERDRAGON_FLAP");
 
         String prevTag = town.sunshine.corerpg.p1.EmberCombatListener.internalTag;
@@ -1139,6 +1145,36 @@ public final class SkillService implements Listener {
     }
 
 
+
+
+    /** D650: dash path particles by set family — zero skill_mult / CD / damage. */
+    private void spawnDashSetTrail(Location from, Location dest, String fam) {
+        if (from == null || dest == null) return;
+        String a = "FLAME", b = "SMOKE_NORMAL";
+        int na = 4, nb = 2;
+        if ("burst".equals(fam)) { a = "CRIT_MAGIC"; b = "CRIT"; na = 5; nb = 3; }
+        else if ("sustain".equals(fam)) { a = "HEART"; b = "SPELL_WITCH"; na = 3; nb = 2; }
+        else if ("scorch".equals(fam)) { a = "FLAME"; b = "LAVA"; na = 5; nb = 2; }
+        spawnParticles(from.clone().add(0, 0.2, 0), a, 12);
+        for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
+            spawnParticles(sample.clone().add(0, 0.25, 0), a, na);
+            spawnParticles(sample.clone().add(0, 0.25, 0), b, nb);
+        }
+    }
+
+    private void spawnDashSetLand(Location dest, String fam) {
+        if (dest == null) return;
+        if ("burst".equals(fam)) {
+            spawnParticles(dest.clone().add(0, 0.2, 0), "CRIT_MAGIC", 22);
+            spawnParticles(dest.clone().add(0, 0.3, 0), "CRIT", 10);
+        } else if ("sustain".equals(fam)) {
+            spawnParticles(dest.clone().add(0, 0.2, 0), "HEART", 8);
+            spawnParticles(dest.clone().add(0, 0.4, 0), "VILLAGER_HAPPY", 10);
+        } else {
+            spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 18);
+            if ("scorch".equals(fam)) spawnParticles(dest.clone().add(0, 0.3, 0), "LAVA", 6);
+        }
+    }
 
     /** D632: cast-time ground telegraph by shape — fan cone sparks, line trail, ring circle. No damage change. */
     private void spawnShapeGroundTelegraph(Player player, town.sunshine.corerpg.p1.EmberSkillKit.Shape sh) {

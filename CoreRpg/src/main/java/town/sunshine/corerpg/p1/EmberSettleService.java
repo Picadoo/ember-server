@@ -245,6 +245,9 @@ public final class EmberSettleService {
         in.extraDone = s.extraDone;
         // §18.1: challenge runs never carry the first-clear package (first clears are per map + content version, normal)
         in.firstClear = s.challenge || m.raid || runs.firstCleared(pd, m) ? null : m.firstClear;
+        // D648: first challenge clear of this map (talent C_CHAL rising edge) → map-identity base_item
+        in.challengeFirst = s.challenge && s.abyss == 0 && !m.raid
+                && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") <= 0;
         if (m.raid && runs.maps().challenge != null) in.qualityWeights = runs.maps().challenge.quality; // P2-5: no exclusive drop table
         if (s.challenge && runs.maps().challenge != null) in.qualityWeights = runs.maps().challenge.quality;
         EmberRunMaps.AbyssTier abT = s.abyss > 0 ? runs.maps().abyssTier(s.abyss) : null;
@@ -338,8 +341,18 @@ public final class EmberSettleService {
         if (fresh) pd.addPeriodCount(EmberRunService.C_BOUNTY, bDay, bountyW);
         if (fresh && m.raid && runs.cosmetics() != null) runs.cosmetics().onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
         if (fresh && runs.season() != null && s.coreClean.contains(u)) runs.season().addGoal(u, pd, "core", 1); // D144 烬核同心 (optional goal)
-        if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0)
+        if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0) {
             pd.addPeriodCount(EmberGrowthService.C_CHAL + m.key, "all", 1); // D141: challenge first clear per map (talent point / honors)
+            // D648: visible challenge-FC acquisition feel
+            Player chp = Bukkit.getPlayer(u);
+            if (chp != null && chp.isOnline()) {
+                String fam = (in.loot != null && EmberRunRules.validFamily(in.loot.family))
+                        ? EmberItemData.familyName(in.loot.family) : "本图偏向族";
+                chp.sendMessage(EmberRunService.P + "§c挑战首通 · §f" + m.name + " §7保底 §e" + fam
+                        + " §8（挑战图身份 · 专精点进度）");
+                try { chp.sendActionBar("§c挑战首通 · §f" + fam + " §7保底"); } catch (Throwable ignored) { }
+            }
+        }
         if (in.firstClear != null) {
             boolean skillNew = !EmberFirstClear.fact(pd, m.key); // D459: announce only on first fact write
             EmberFirstClear.record(pd, m.key, m.contentVersion); // §9.4 + D205: package once per content version; fact @all never deleted
@@ -406,6 +419,11 @@ public final class EmberSettleService {
         if (p != null && p.isOnline() && s.abyss > 0) {
             p.sendMessage(EmberRunService.P + "§5深渊第 " + s.abyss + " 层 已完整通关" + (newBest ? " §a· 新纪录，开放第 " + runs.abyssMaxStart(pd) + " 层" : "")
                     + " §7（下一层需重新确认与付费：冒险页 → 深渊）");
+            // D649: first clear of layer 1 — gift was free fee; celebrate once on rising best
+            if (newBest && s.abyss == 1) {
+                p.sendMessage(EmberRunService.P + "§5首层礼兑现 · §f第 1 层免费通关 §a· 第 2 层已开放");
+                try { p.sendActionBar("§5首层礼 · §a已兑现"); } catch (Throwable ignored) { }
+            }
         }
         if (p != null && p.isOnline() && rotation) {
             p.sendMessage(EmberRunService.P + "§b本周精选" + (s.challenge ? "挑战" : "重打") + " §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + rotMarks

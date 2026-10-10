@@ -185,6 +185,11 @@ public final class EmberAbyssService {
         EmberRunMaps.MapDef m = maps.abyssMap(seed);
         if (m == null) { leader.sendMessage(P() + "深渊未配置。"); return true; }
         EmberGoalPath.maybeGlance(leader, runs, "abyss"); // D521 weekly goal focus
+        // D649: first-layer gift visible at entry (fee table already 0 · no price change)
+        if (tier == 1 && best(runs.dataOf(leader.getUniqueId())) <= 0) {
+            leader.sendMessage(P() + "§5首层礼 · §f第 1 层层费免费 §7· 强度=挑战版 · 打通开放第 2 层");
+            try { leader.sendActionBar("§5首层礼 · §f层费免费"); } catch (Throwable ignored) { }
+        }
         return runs.enterAbyssSegment(leader, m.key, tier, seed);
     }
 
@@ -250,6 +255,6 @@ public final class EmberAbyssService {
         String st = t.index <= best(d) ? "§a已通关" : t.index <= maxStart(d) ? "§e可开" : "§8未开放";
         return "§d第 " + t.index + " 层 " + st + " §7· 生命 ×" + String.format(Locale.ROOT, "%.2f", t.hp) + " 伤害 ×"
                 + String.format(Locale.ROOT, "%.2f", t.dmg) + " · 掉落成色 " + EmberRunService.qualityLabel(t.quality) + " · 费 " + t.fee + " 币"
-                + (t.index == 1 ? " §8（= 挑战版强度：挑战版能过就能下）" : t.index == maps.abyss.size() ? " §8（两件 T3 +10、卓越以上再来）" : "");
+                + (t.index == 1 ? " §a· 首层礼：层费免费 §8（= 挑战版强度）" : t.index == maps.abyss.size() ? " §8（两件 T3 +10、卓越以上再来）" : "");
     }
 }

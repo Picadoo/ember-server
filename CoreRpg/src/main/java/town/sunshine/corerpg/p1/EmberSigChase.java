@@ -177,11 +177,36 @@ public final class EmberSigChase {
         if (p != null) flush(p);
         String P = EmberRunService.P;
         p.sendMessage(P + "§a追烙完成：§f" + label(sd) + " §7· 已烙上，可换下一条");
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[换追烙]", "/corerpg p1 sig chase offer", "点下一条签名", "GOLD"},
-                new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴 / 开关", "AQUA"},
-                new String[]{"[稍后再说]", null, "随时 /corerpg p1 sig chase", "GRAY"});
         return true;
+    }
+
+    /**
+     * D647: imprint spend complete UX — always after successful pay (chase may or may not close).
+     * Zero imprint price / mark table change.
+     * @param worn true if the imprinted piece is currently equipped in its slot
+     * @param sigOff true if that slot's signature toggle is off
+     * @param chaseClosed whether {@link #afterImprint} closed the chase
+     */
+    public static void afterSpendComplete(Player p, PlayerData d, EmberSignature.Def sd,
+                                          boolean worn, boolean sigOff, boolean chaseClosed) {
+        if (p == null || sd == null) return;
+        String P = EmberRunService.P;
+        int left = d == null ? 0 : d.periodCount(EmberSignature.C_MARK + sd.map, "all");
+        p.sendMessage(P + "§7烙印花费闭环 · 剩 §f" + left + " §7枚 " + sd.map.toUpperCase(java.util.Locale.ROOT) + " 徽记"
+                + (left >= EmberSignature.IMPRINT_MARKS ? " §a· 还可再烙" : ""));
+        java.util.List<String[]> btns = new java.util.ArrayList<String[]>();
+        if (!worn) {
+            btns.add(new String[]{"[去装备页]", "/corerpg p1 gear", "穿上/选定后签名才生效", "GOLD"});
+        } else if (sigOff) {
+            btns.add(new String[]{"[打开签名]", "/corerpg p1 sig toggle " + sd.slot, "槽位签名已关 · 点开", "YELLOW"});
+        }
+        if (chaseClosed) {
+            btns.add(new String[]{"[换追烙]", "/corerpg p1 sig chase offer", "点下一条签名", "AQUA"});
+        } else {
+            btns.add(new String[]{"[追烙进度]", "/corerpg p1 sig chase", "看徽记与下一条", "AQUA"});
+        }
+        btns.add(new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴 / 开关", "GRAY"});
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", btns.toArray(new String[0][]));
     }
 
     /** Pure: whether imprint of {@code sd} should close chase {@code chase}. */

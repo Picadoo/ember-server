@@ -44,3 +44,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D644 FC map-identity forces slot when declared
 - D645 soft-prefer mirrors shapepath (no manual latch)
 - D646 mail claim-all ActionBar feel
+
+## D647–D650 SHIP · jar 1.65.314-d647 · 2026-10-11
+- D647 imprint spend complete UX (equip/toggle/chase buttons)
+- D648 challenge first-clear map-identity base_item
+- D649 abyss L1 gift visible (entry+settle+menu)
+- D650 dash set-distinct trail particles

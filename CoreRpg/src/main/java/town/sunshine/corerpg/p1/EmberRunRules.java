@@ -489,6 +489,8 @@ public final class EmberRunRules {
         public boolean sixArmor;
         /** D318: this clear is the Q01 first clear with the switch on → four T1 starter armor pieces of the target family */
         public boolean sixStarter;
+        /** D648: first challenge clear of this map → guarantee map loot identity on base_item */
+        public boolean challengeFirst;
     }
 
     /** D318: ledger key of the per-clear armor drop (REG S39) */
@@ -714,9 +716,15 @@ public final class EmberRunRules {
                 && in.loot != null && validFamily(in.loot.family);
     }
 
+    /** D648: first challenge clear of a map — same map-identity guarantee as normal FC. */
+    public static boolean challengeFirstMapIdentity(SettleInput in, String key) {
+        return in != null && "base_item".equals(key) && in.challengeFirst
+                && in.loot != null && validFamily(in.loot.family);
+    }
+
     private static Grant item(SettleInput in, String key) {
         Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
-        ItemRoll roll = firstClearMapIdentity(in, key)
+        ItemRoll roll = (firstClearMapIdentity(in, key) || challengeFirstMapIdentity(in, key))
                 ? rollFirstClearMapIdentity(in.tier, in.loot, r, in.qualityWeights)
                 : rollItem(in.tier, in.target, r, in.qualityWeights, in.loot);
         return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, roll);
