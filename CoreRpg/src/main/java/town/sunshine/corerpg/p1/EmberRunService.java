@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D570: strip jailer root. */
+    public boolean hasJailerRoot(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasJailerRoot(p) && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathFreeJailer(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathFreeJailer(p);
+    }
+
     /** D569: warp into live breach circle. */
     public boolean hasBreachCircle(Player p) {
         if (p == null) return false;
@@ -1476,6 +1492,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberBeaconPath.scheduleOfferAfterQ01(p); // D567 beacon path
                         if ("q01".equals(g.id)) EmberRelayPath.scheduleOfferAfterQ01(p); // D568 relay path
                         if ("q01".equals(g.id)) EmberBreachPath.scheduleOfferAfterQ01(p); // D569 breach path
+                        if ("q01".equals(g.id)) EmberFreePath.scheduleOfferAfterQ01(p); // D570 free path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("freepath".equals(sub) || "解锢路径".equals(sub)) return freePathCmd(s, args); // D570
+        if ("free".equals(sub) && args.length == 2) return freeGoCmd(s); // D570
         if ("breachpath".equals(sub) || "裂隙路径".equals(sub)) return breachPathCmd(s, args); // D569
         if ("breach".equals(sub) && args.length == 2) return breachGoCmd(s); // D569
         if ("relaypath".equals(sub) || "传火路径".equals(sub)) return relayPathCmd(s, args); // D568
@@ -1687,6 +1689,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("freeseed".equals(sub)) return freeSeedCmd(s, args); // D570
         if ("breachseed".equals(sub)) return breachSeedCmd(s, args); // D569
         if ("relayseed".equals(sub)) return relaySeedCmd(s, args); // D568
         if ("beaconseed".equals(sub)) return beaconSeedCmd(s, args); // D567
@@ -4951,6 +4954,68 @@ public final class EmberCommand {
             EmberBreachPath.maybeProbe(t);
             s.sendMessage(P + "已触发裂隙路径探测 → " + t.getName()
                     + (runs != null && runs.hasBreachCircle(t) ? "（有圈）" : "（无圈）"));
+            return true;
+    }
+
+    private boolean freePathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberFreePath.glance(EmberFreePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c解锢路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberFreePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c解锢路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberFreePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberFreePath.get(d);
+                    if (EmberFreePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFreePath.label(cur) + " · 改路径再 /corerpg p1 freepath");
+                    else EmberFreePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberFreePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 freepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberFreePath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean freeGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            boolean ok = runs.pathFreeJailer(p) || EmberFreePath.freeLocal(p);
+            if (!ok) p.sendMessage(P + "无法解锢（无禁锢定身）");
+            else p.sendMessage(P + "§a解锢·手点 §7已解除禁锢定身");
+            return true;
+    }
+
+    private boolean freeSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            int ticks = 60;
+            t.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SLOW, ticks, EmberFreePath.JAILER_SLOW_AMP, false, true), true);
+            t.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.JUMP, ticks, EmberFreePath.JAILER_JUMP_AMP, false, false), true);
+            EmberFreePath.maybeProbe(t);
+            s.sendMessage(P + "已施加禁锢形定身并触发解锢路径 → " + t.getName()
+                    + (EmberFreePath.hasLocalJailer(t) || (runs != null && runs.hasJailerRoot(t)) ? "（仍定身）" : "（已解/无）"));
             return true;
     }
 }

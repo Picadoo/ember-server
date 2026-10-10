@@ -507,6 +507,31 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D570: jailer root (JUMP 128 + SLOW 6) is active on player. */
+    boolean hasJailerRoot(Player p) {
+        if (p == null) return false;
+        for (PotionEffect cur : p.getActivePotionEffects()) {
+            if (cur.getType().equals(PotionEffectType.JUMP) && cur.getAmplifier() == 128) return true;
+        }
+        return false;
+    }
+
+    /** D570: strip jailer root from a committed player. */
+    boolean pathFreeJailer(Player p) {
+        if (p == null || !p.isOnline() || s == null || !s.open()) return false;
+        if (!s.committed.contains(p.getUniqueId())) return false;
+        if (!hasJailerRoot(p)) return false;
+        p.removePotionEffect(PotionEffectType.JUMP);
+        // jailer pairs JUMP 128 with SLOW amp 6 — strip that amp only if present
+        for (PotionEffect cur : p.getActivePotionEffects()) {
+            if (cur.getType().equals(PotionEffectType.SLOW) && cur.getAmplifier() == 6) {
+                p.removePotionEffect(PotionEffectType.SLOW);
+                break;
+            }
+        }
+        return true;
+    }
+
     /** D569: breach circle still open. */
     boolean hasBreachCircle() {
         return breachCenter != null && s != null && "breach".equals(s.eventKind);
@@ -1110,6 +1135,7 @@ final class EmberRunDirector {
                             p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, ticks, 6, false, true), true);
                             p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, ticks, 128, false, false), true);
                             p.sendMessage("§5「禁锢」§7你被定住 " + fmt(v.jailerRoot) + " 秒");
+                            EmberFreePath.maybeAfterJailer(p); // D570
                             rooted++;
                         }
                     }
