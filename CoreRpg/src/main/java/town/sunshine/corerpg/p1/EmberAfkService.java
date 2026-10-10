@@ -335,6 +335,35 @@ public final class EmberAfkService implements Listener {
         return "还差 " + remain + " 只 · 约 " + etaMinText(remain, kph) + " 分钟满";
     }
 
+    /**
+     * D413 W1a: unfilled fight ActionBar = existing tier/card/today/kph (+ optional deathTail)
+     * + {@code · } + remainLine. Does <b>not</b> promise「保证分钟满」.
+     */
+    static String fightActionBar(String tierName, String card, int kills, int daily, long kphRounded,
+                                 String deathTail, int remain, double kph) {
+        String death = deathTail == null ? "" : deathTail;
+        return "§6挂机 §f" + tierName + " §7· §d" + card + " §7· 今日 §f" + kills + "/" + daily
+                + " §7只 · §f" + kphRounded + " §7只/小时" + death
+                + " §7· §e" + remainLine(remain, kph);
+    }
+
+    /**
+     * D413 W1b: short-chase half for cap ActionBar.
+     * sum≤0 → empty (do not append); stamina&lt;30 → 「短征需30体力」; else 「短征还可追 · 剩余有奖 N」.
+     */
+    static String capShortChase(int shortDayLeftSum, int stamina) {
+        if (shortDayLeftSum <= 0) return "";
+        if (stamina < 30) return "§c短征需30体力";
+        return "§d短征还可追 · 剩余有奖 " + shortDayLeftSum;
+    }
+
+    /** D413 W1b: D285 base + optional short chase (preserves「去冒险」). */
+    static String capActionBar(int daily, int shortDayLeftSum, int stamina) {
+        String base = capActionBar(daily);
+        String chase = capShortChase(shortDayLeftSum, stamina);
+        return chase.isEmpty() ? base : base + " · " + chase;
+    }
+
 
     /**
      * D411 W1a: layer-gap short mat for next_farm (灰坡→荒原=核心碎片; 荒原→焦土=胚料; 焦土→烬原=最高档).
@@ -517,12 +546,13 @@ public final class EmberAfkService implements Listener {
                 }
             }
         }
-        if (ticks % 40 == 0) { // live ActionBar: tier · card · today's kills / cap · kill speed (D305 W1a card half-line)
+        if (ticks % 40 == 0) { // live ActionBar + D413 W1a remain_line mirror (~2s)
             long ms = Math.max(60000L, now - f.startMs);
             double kphNow = f.sessKills * 3600000.0 / ms;
-            String bar = "§6挂机 §f" + t.name + " §7· §d" + cardTag(t.n) + " §7· 今日 §f" + d.periodCount(C_KILL, day) + "/" + dailyKills
-                    + " §7只 · §f" + Math.round(kphNow) + " §7只/小时"
-                    + (f.deaths.isEmpty() ? "" : " §c· 阵亡 " + f.deaths.size() + "/" + deathStop);
+            int killsNow = d.periodCount(C_KILL, day);
+            String deathTail = f.deaths.isEmpty() ? "" : " §c· 阵亡 " + f.deaths.size() + "/" + deathStop;
+            String bar = fightActionBar(t.name, cardTag(t.n), killsNow, dailyKills, Math.round(kphNow), deathTail,
+                    remainKills(killsNow, dailyKills), kphNow);
             p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(bar));
             maybeUpgradeHint(p, f, d, t, kphNow); // D305 W1b · once / fight · hot-offable
         }
@@ -930,15 +960,46 @@ public final class EmberAfkService implements Listener {
         p.sendMessage(P + upgradeHintText());
     }
 
-    /** D285: remind capped players still standing in AFK to spend stamina on adventure. */
+    /** D285 + D413 W1b: capped ActionBar; append short-chase when remaining rewarded shorts &gt; 0. */
     private void flashCapBar(Player p) {
         if (ticks % 40 != 0 || p == null) return;
         PlayerData d = data(p.getUniqueId());
         if (d == null || dailyKills <= 0 || d.periodCount(C_KILL, DailyService.today()) < dailyKills) return;
+        int shortLeft = shortDayLeftSum(d);
+        int stamina = 0;
+        try {
+            town.sunshine.corerpg.StaminaService st = plugin.getStaminaService();
+            if (st != null) stamina = st.getStamina(d);
+        } catch (Throwable ignored) { }
         try {
             p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
-                    new net.md_5.bungee.api.chat.TextComponent(capActionBar(dailyKills)));
+                    new net.md_5.bungee.api.chat.TextComponent(capActionBar(dailyKills, shortLeft, stamina)));
         } catch (Throwable ignored) { }
+    }
+
+    /** D413 W1b: sum of remaining rewarded short clears today (sx_day_left_sum). Package-private helpers OK. */
+    private int shortDayLeftSum(PlayerData d) {
+        if (d == null) return 0;
+        int sum = 0;
+        try {
+            EmberRunService runs = plugin.getEmberRuns();
+            EmberRunMaps maps = runs == null ? null : runs.maps();
+            EmberShortService shortEx = runs == null ? null : runs.shortExpedition();
+            String day = DailyService.today();
+            for (String mk : EmberShortRules.SHORT_KEYS) {
+                int n;
+                int cap = EmberShortRules.DAILY_CAP;
+                EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(mk);
+                if (shortEx != null && m != null) {
+                    n = shortEx.rewardedToday(d, m);
+                    cap = shortEx.dailyCap(m);
+                } else {
+                    n = Math.max(0, d.periodCount(EmberShortRules.claimKey(mk), day));
+                }
+                sum += EmberShortRules.dayLeft(n, cap);
+            }
+        } catch (Throwable ignored) { }
+        return sum;
     }
 
     private String statusWord(Player p, PlayerData d) {

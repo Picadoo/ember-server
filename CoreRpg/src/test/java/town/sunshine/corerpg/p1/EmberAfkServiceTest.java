@@ -177,6 +177,43 @@ public class EmberAfkServiceTest {
 
 
 
+
+    /** D413 W1a/W1b ActionBar remain + short chase — STATUS-nailed; no「保证分钟满」; 去冒险 preserved. */
+    @Test public void actionBarRemain_D413_W1aW1b() {
+        // W1a fight bar keeps layer/today/kph and appends remain_line
+        String fight = EmberAfkService.fightActionBar("灰坡", "入门稳挂", 1200, 2400, 1800L, "", 1200, 1800);
+        assertTrue(fight.contains("灰坡"));
+        assertTrue(fight.contains("1200/2400"));
+        assertTrue(fight.contains("1800"));
+        assertTrue(fight.contains("还差 1200 只"));
+        assertTrue(fight.contains("约 40 分钟满"));
+        assertFalse("禁保证分钟满", fight.contains("保证"));
+        String noKph = EmberAfkService.fightActionBar("灰坡", "入门稳挂", 2000, 2400, 0L, "", 400, 0);
+        assertTrue(noKph.contains("还差 400 只 · 开打后估时"));
+        String withDeath = EmberAfkService.fightActionBar("灰坡", "入门稳挂", 100, 2400, 600L,
+                " §c· 阵亡 1/3", 2300, 600);
+        assertTrue(withDeath.contains("阵亡 1/3"));
+        assertTrue(withDeath.contains("还差 2300"));
+        // W1b cap: base preserved; chase when sum>0 & stamina≥30; stamina低诚实
+        assertEquals("", EmberAfkService.capShortChase(0, 90));
+        assertEquals("§d短征还可追 · 剩余有奖 5", EmberAfkService.capShortChase(5, 90));
+        assertEquals("§c短征需30体力", EmberAfkService.capShortChase(5, 29));
+        assertEquals("§c短征需30体力", EmberAfkService.capShortChase(1, 0));
+        String capped = EmberAfkService.capActionBar(2400, 5, 90);
+        assertTrue(capped.contains("去冒险"));
+        assertTrue(capped.contains("短征还可追"));
+        assertTrue(capped.contains("剩余有奖 5"));
+        String lowSta = EmberAfkService.capActionBar(2400, 3, 10);
+        assertTrue(lowSta.contains("去冒险"));
+        assertTrue(lowSta.contains("短征需30体力"));
+        assertFalse(lowSta.contains("短征还可追"));
+        String noLeft = EmberAfkService.capActionBar(2400, 0, 90);
+        assertEquals(EmberAfkService.capActionBar(2400), noLeft); // no chase when sum 0
+        // zero改日顶
+        assertEquals(2400, afk().getInt("daily_kills"));
+    }
+
+
     /** D411 next_farm — STATUS-nailed state machine; upgrade_hint off → 可试 degrades to 未打稳. */
     @Test public void nextFarm_D411_stateMachine() {
         // 1 full
