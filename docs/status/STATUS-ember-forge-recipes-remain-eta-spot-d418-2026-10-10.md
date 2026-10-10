@@ -50,4 +50,4 @@ afk.tiers / daily_kills · Stage2 三开关 / ×0.97 · gate_daily · K3 · 关�
 
 ---
 
-*D418Spot · PASS · tip `9cfe956c`(+`28346bd4`) · 证据 `/workspace/tmp/d418-forge-remain-spot/` · ≠关观察 · checked 2026-10-10 09:34 CST。*
+*D418Spot · PASS · tip `9cfe956c`(+`28346bd4`) · STATUS `55800f20` · 证据 `/workspace/tmp/d418-forge-remain-spot/` · ≠关观察 · checked 2026-10-10 09:34 CST。*
