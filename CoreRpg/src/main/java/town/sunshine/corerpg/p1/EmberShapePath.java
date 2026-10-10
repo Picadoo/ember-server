@@ -149,6 +149,35 @@ public final class EmberShapePath {
     }
 
 
+
+    /**
+     * D802: if soft-preferred (path set, not manual) — one rising-edge lock button.
+     * Latched via period C_LOCK_CUE.
+     */
+    public static final String C_LOCK_CUE = "p1_shape_lock_cue";
+
+    public static boolean maybeLockCue(Player p, PlayerData d) {
+        if (p == null || d == null) return false;
+        if (d.periodCount(EmberSkillKit.C_SHAPE_MANUAL, "all") > 0) {
+            int lat = d.periodCount(C_LOCK_CUE, "all");
+            if (lat > 0) { d.addPeriodCount(C_LOCK_CUE, "all", -lat); flush(p); }
+            return false;
+        }
+        int id = get(d);
+        if (!valid(id)) return false;
+        int lat = d.periodCount(C_LOCK_CUE, "all");
+        if (lat == id) return false;
+        d.addPeriodCount(C_LOCK_CUE, "all", id - lat);
+        flush(p);
+        String lab = label(id);
+        p.sendMessage(EmberRunService.P + "§e符文未锁定 · §f" + lab + " §7· 换套装可能软切");
+        try { p.sendActionBar("§e符文 · 可锁定 §f" + lab); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButton(p, EmberRunService.P + "§7：",
+                "[锁定符文·" + lab + "]", "/corerpg p1 shapepath lock",
+                "停止随套装软切几何");
+        return true;
+    }
+
     /** D793: lock current soft-preferred shape as manual (stops set-family soft flip). */
     public static void lockCurrent(Player p) {
         if (p == null) return;
@@ -167,6 +196,8 @@ public final class EmberShapePath {
         EmberSkillKit.markShapeManual(d);
         // ensure path mirrors locked geometry
         mirrorSoftPrefer(d, sid);
+        int lc = d.periodCount(C_LOCK_CUE, "all");
+        if (lc > 0) d.addPeriodCount(C_LOCK_CUE, "all", -lc);
         flush(p);
         String lab = EmberSkillKit.shapeName(sid);
         p.sendMessage(EmberRunService.P + "§a符文已锁定：§f" + lab + " §7· 换套装不再软切（仍可 /corerpg p1 shapepath 手改）");

@@ -311,3 +311,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D798–D801 SHIP · jar 1.65.366-d798
 - Menu Open wires + featured settle offerPick
+
+## D802 SHIP · jar 1.65.367-d802
+- maybeLockCue rising-edge after soft prefer

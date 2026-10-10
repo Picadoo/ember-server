@@ -3763,7 +3763,8 @@ public final class EmberCommand {
                 boolean locked = d.periodCount(EmberSkillKit.C_SHAPE_MANUAL, "all") > 0;
                 p.sendMessage(P + EmberShapePath.glance(EmberShapePath.get(d), unlocked, locked));
                 if (!unlocked) { p.sendMessage(P + "§c烬斩符文需本人首通 Q04。"); return true; }
-                EmberShapePath.offerPick(p);
+                if (!EmberShapePath.maybeLockCue(p, d))
+                    EmberShapePath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {

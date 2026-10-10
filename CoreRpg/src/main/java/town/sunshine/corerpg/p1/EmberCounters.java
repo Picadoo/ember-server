@@ -352,6 +352,7 @@ public final class EmberCounters {
         px("p1_attune_path_offer", "EmberAttunePath", A, PR, NV, "D492 weekly offer latch");
         x("p1_step_path", "EmberStepPath", A, PR, NV, "D491 step path forward/back");
         px("p1_step_path_offer", "EmberStepPath", A, PR, NV, "D491 weekly offer latch");
+        x("p1_shape_lock_cue", "EmberShapePath", A, SE, OW, "D802 lock-cue latch = path id");
         x("p1_shape_path", "EmberShapePath", A, PR, NV, "D490 slash shape path fan/line/ring");
         px("p1_shape_path_offer", "EmberShapePath", A, PR, NV, "D490 weekly offer latch");
         x("p1_featured_path", "EmberFeaturedPath", A, PR, NV, "D488 featured path challenge/normal");
