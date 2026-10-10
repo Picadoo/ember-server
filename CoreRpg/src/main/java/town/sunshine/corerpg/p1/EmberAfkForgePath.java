@@ -52,7 +52,7 @@ public final class EmberAfkForgePath {
         int coin = d.getCoin();
         String line = suggestLine(shard, bone, blank, coin, EmberForgeGoal.get(d));
         p.sendMessage(EmberRunService.P + line);
-        try { p.sendActionBar("§a挂机日满 · 去工坊花料"); } catch (Throwable ignored) { }
+        try { p.sendActionBar(line); } catch (Throwable ignored) { } // D1741 same remain line
         return true;
     }
 

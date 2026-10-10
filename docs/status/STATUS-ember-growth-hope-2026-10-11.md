@@ -675,3 +675,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1726–D1739 SHIP · jar 1.65.476-d1726
 - GearLib bulk dismantle preview AB; post-capacity Stage0 near-sat
+
+## D1740–D1753 SHIP · jar 1.65.477-d1740
+- AfkForgePath AB uses suggestLine (no AFK table change)
