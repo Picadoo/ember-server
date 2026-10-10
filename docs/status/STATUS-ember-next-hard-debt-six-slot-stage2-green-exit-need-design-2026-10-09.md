@@ -50,3 +50,5 @@
 ---
 
 *选题 H · 荐 M · 零 live · 不代替绿出口签字。*
+
+> **满窗签字（D453 · 2026-10-10 17:40 CST）：** 另号 [`STATUS-ember-stage2-green-exit-signoff-d453-2026-10-10.md`](STATUS-ember-stage2-green-exit-signoff-d453-2026-10-10.md) 已勾 §2.4 **观察结束 · 维持现态** · 关观察 ≠ 关 Stage1 · 未开 K3。

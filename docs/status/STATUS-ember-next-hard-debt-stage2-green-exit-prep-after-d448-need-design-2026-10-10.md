@@ -1,15 +1,12 @@
-> **旁注（已关）· 2026-10-10：** 满窗绿出已落 **D453 PASS** · 见 `STATUS-ember-stage2-green-exit-d453-2026-10-10.md`。
+# 状态 · 下一档硬债（Stage2 绿退准备）· **已关**
 
-# 状态 · 下一档硬债（拟 · Stage2 绿退准备 · 文档-only · 待窗）
-
-> **旁注（开窗）· 2026-10-10：** D448 破招短闪 LIVE 后，下一刀**不是** sx20 / 聚火 / K3。残留 §5 工坊成色赌已由 **D430** 落地；本 tip 只盯 **Stage2 绿退准备（文档）**，墙钟 **≥17:40 CST** 才可碰观察关口。
-
-> **【拟 · 文档-only】** **≠关观察（＜17:40）≠抬日表 ≠sx20 ≠复活聚火 ≠开 K3 ≠改套装倍率**
-
-**上游：** D448 PASS · Stage2 仍在观察 · 既有 tip [`STATUS-ember-next-hard-debt-six-slot-stage2-green-exit-need-design-2026-10-09.md`](STATUS-ember-next-hard-debt-six-slot-stage2-green-exit-need-design-2026-10-09.md)
+> **关闭 · 2026-10-10 17:40 CST：** 满窗绿出口另号 **D453** 已签 **观察结束 · 维持现态**。  
+> 真源：[`STATUS-ember-stage2-green-exit-signoff-d453-2026-10-10.md`](STATUS-ember-stage2-green-exit-signoff-d453-2026-10-10.md)  
+> **≠** 关 Stage1 · **≠** 开 K3 · **≠** 改 ×0.97 / set_bonus。
 
 | 日 | 事 |
 |----|-----|
-| 2026-10-10 15:48 | D448 后开窗 · 等 ≥17:40 |
+| 2026-10-10 15:48 | tip 开窗 · 等 ≥17:40 |
+| 2026-10-10 17:40 | D453 签字 · tip 关闭 |
 
-*观察轨 · 文档准备 · 禁提前关。*
+*观察轨 · 已绿出 · tip 关闭。*
