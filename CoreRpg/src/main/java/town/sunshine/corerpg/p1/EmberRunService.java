@@ -2168,6 +2168,12 @@ public final class EmberRunService implements Listener {
             miss += EmberSigChase.missAppend(d, acqMarkMap); // D464
             miss += EmberSigStampDry.missAppend(d); // D690
             got.add(miss);
+            // D1998 SC2: chase remain AB (non-hope; no dry twin)
+            try {
+                String cg = EmberSigChase.statusGlance(d);
+                if (cg != null && !cg.isEmpty())
+                    p.sendActionBar("§e" + cg);
+            } catch (Throwable ignored) { }
         }
         if (acqStamp) EmberSigStampDry.onHit(d); // D690 clear dry
         if (!got.isEmpty() && !quietDeliver) {

@@ -406,3 +406,6 @@ flowchart LR
 
 ### FG-G forgegoal GEM (D1981+)
 - Weekly craft-goal id=7 宝石合成; deterministic C24. Zero flat invent.
+
+### SC sig-chase honesty leftover (D1996+)
+- status/settle/enter wire remainLine (non-hope). No STAMP_RATE / dry twin.

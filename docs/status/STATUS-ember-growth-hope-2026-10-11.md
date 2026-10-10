@@ -748,3 +748,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1995 post-FG-G scan
 - Forge deterministic path surface near-sat (GS3/FG-Q/FH/FG-G)
+
+## D1996–D2009 sig chase honesty leftover (jar 1.65.498-d1996)
+- status/settle AB/map-enter remainLine; no dry twin / hope PAPI

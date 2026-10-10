@@ -98,6 +98,21 @@ public final class EmberSigChase {
         return "追烙 " + def.id + " · 徽记 " + m + "/" + need + " · 还差" + gap;
     }
 
+    /** D1997: status/settle/enter glance — empty when no chase (caller skips). */
+    public static String statusGlance(PlayerData d) {
+        EmberSignature.Def def = get(d);
+        if (def == null) return "";
+        int marks = d == null ? 0 : d.periodCount(EmberSignature.C_MARK + def.map, "all");
+        return remainLine(def, marks);
+    }
+
+    /** True when chase targets this map key (q01…). */
+    public static boolean chaseMap(PlayerData d, String mapKey) {
+        EmberSignature.Def def = get(d);
+        if (def == null || mapKey == null) return false;
+        return mapKey.equalsIgnoreCase(def.map);
+    }
+
     public static String glance(PlayerData d) {
         EmberSignature.Def def = get(d);
         if (def == null) return EmberHopeMeter.sigChase(null, 0);

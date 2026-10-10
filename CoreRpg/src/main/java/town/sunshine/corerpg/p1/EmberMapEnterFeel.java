@@ -68,6 +68,14 @@ public final class EmberMapEnterFeel {
             if (meth != null && !meth.isEmpty()) {
                 try { p.sendMessage(EmberRunService.P + "§7" + meth); } catch (Throwable ignored) { }
             }
+            // D1999 SC3: chase map match → remain half-line (non-hope)
+            if (pd != null && m.key != null && EmberSigChase.chaseMap(pd, m.key)) {
+                String cg = EmberSigChase.statusGlance(pd);
+                if (cg != null && !cg.isEmpty()) {
+                    try { p.sendMessage(EmberRunService.P + "§e" + cg); } catch (Throwable ignored) { }
+                    msg = msg + " §8· §e追烙";
+                }
+            }
         }
         try { p.sendActionBar(msg); } catch (Throwable ignored) { }
         try {

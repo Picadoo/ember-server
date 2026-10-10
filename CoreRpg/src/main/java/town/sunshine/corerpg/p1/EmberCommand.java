@@ -4417,10 +4417,19 @@ public final class EmberCommand {
                             s.sendMessage(P + "§e专精 · §7" + gs.pointsLine(pd).replaceAll("§.", ""));
                         } catch (Throwable ignored) { }
                     }
+                    // D1997 SC1: non-hope sig chase remain
+                    String chaseG = EmberSigChase.statusGlance(pd);
+                    if (chaseG != null && !chaseG.isEmpty())
+                        s.sendMessage(P + "§e" + chaseG);
                     try {
-                        String ab = (sk != null && sk.contains("下一技能"))
-                                ? sk.replaceAll("§.", "")
-                                : (shapeOn ? ("符文 " + EmberSkillKit.shapeName(sid)) : "技能里程碑");
+                        String ab;
+                        if (chaseG != null && !chaseG.isEmpty()
+                                && (chaseG.contains("还差") || chaseG.contains("可烙")))
+                            ab = chaseG;
+                        else if (sk != null && sk.contains("下一技能"))
+                            ab = sk.replaceAll("§.", "");
+                        else
+                            ab = shapeOn ? ("符文 " + EmberSkillKit.shapeName(sid)) : "技能里程碑";
                         p.sendActionBar("§e成长 · §f" + ab);
                     } catch (Throwable ignored) { }
                 }
