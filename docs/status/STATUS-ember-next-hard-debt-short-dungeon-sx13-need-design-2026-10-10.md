@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D421 · 短征 sx13 · 烬衡悬梁 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R）
 
-> **【D421 · 已批 A · 方案 M · 旁注已关】** tip+DESIGN **批 A 关闭 · 已批·施工中·骨架启动** · STATUS [`STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md`](STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md) · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D420 / 工坊 next_farm / 仓差 / remain / ActionBar / 十二本规格空转**
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D421** · tip `d61e0d88` · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx13-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx13-2026-10-10.md) · 首航 rooms×3+boss · S52 80/4/3 · 首通60/6/1 · 体力30 · p1_sx13_day×3 · 十三本选页 · 真配重衡梁禁窄桥/跳石/转枢等换皮 · **已落地测中**（键 `2688b0b2` · MM `0ecf4134` · 骨架 `77c06810` · 挂盘 `94c826e2` · jar 1.65.124-d421 bv77 · 全链路抽测已派）· 策划本号关闭设计待批 · ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常。下文为交稿原文，保留备查。
+
+> **【D421 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批·已落地测中** · STATUS [`STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md`](STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md) · **零 jar（本策划号；施工/落地另号已派）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D420 / 工坊 next_farm / 仓差 / remain / ActionBar / 十二本规格空转**
 
 > **上游结案：** 总控【催 D421 tip】· D419 sx12 PASS @`a1f0c809`（jar 1.65.123-d419 bv76）→ **sx13 闸开**；D420 工坊 next_farm 薄抽并行——**禁**复述为主债。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 已批 A·M · D421 · 施工中·骨架启动** · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
-**硬规格（已批 A · 方案 M · D421）：** [`DESIGN-ember-short-dungeon-sx13-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx13-2026-10-10.md) · backlog `B-short-dungeon-sx13`（**已批·施工中·骨架启动**）· STATUS [`STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md`](STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md)  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D421** · **已落地测中** · docs-only · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 方案 M · D421 · 已落地测中）：** [`DESIGN-ember-short-dungeon-sx13-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx13-2026-10-10.md) · backlog `B-short-dungeon-sx13`（**已批·已落地测中**）· STATUS [`STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md`](STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md)  
 **打开理由：** 短征十二本（sx01–sx12）已可达且 D419 全链路 PASS；下一真增量=**第十三条**同范式、**衡门庭→悬梁衡廊（须过≥3道配重衡梁）→衡冠终厅**新结构维的短本，继续拉日刷内容量。
 
 ---
@@ -61,7 +63,7 @@
 
 ---
 
-*选题短征 sx13 烬衡悬梁 · tip 旁注已关 · 已批 A·M · D421 · 施工中·骨架启动 · ≠关观察 ≠抬挂机表 ≠假开旧日常。*
+*选题短征 sx13 烬衡悬梁 · tip 旁注已关 · 已批 A·M · D421 · 设计待批关闭 · 已落地测中 · ≠关观察 ≠抬挂机表 ≠假开旧日常。*
 
 ---
 
@@ -71,3 +73,4 @@
 |----|-----|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D421 · 上游 D419 PASS @`a1f0c809` · D420 薄抽并行 · 主题钉配重衡梁「烬衡悬梁」· 薄表 S52 有奖80/4/3 · 首通60/6/1 |
 | 2026-10-10 | 总控批 A·M · 旁注已关 · tip→已批·施工中·骨架启动 · 见 STATUS-ember-short-dungeon-sx13-d421 |
+| 2026-10-10 | **已批 A · 方案 M · D421** · 策划勾选旁注定稿 · 设计待批关闭 · **已落地测中** · 全链路抽测已派 · 键 `2688b0b2` · MM `0ecf4134` · 骨架 `77c06810` · 挂盘 `94c826e2` · jar 1.65.124-d421 bv77 · ≠关观察 ≠抬日表 |
