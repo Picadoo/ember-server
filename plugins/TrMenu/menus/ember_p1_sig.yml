@@ -1,3 +1,4 @@
+# D455: Open 半行「战斗触发抬头短闪签名名」· 零改数值
 # D174 第 1.5 阶段 · 签名传奇页（docs/design/DESIGN-ember-mainline-unlocks-2026-10-04.md §2.4）
 # 图鉴（每个首领两件：获得过 / 还没获得 / 未解锁 + 效果 + 代价）· 正在用的两件上的签名（点击开关）· 点一条签名 → 烬炉烙印页。
 # 文字 / 状态全部来自 PAPI %corerpg_p1_sig_*%（EmberGrowthService.sigPapi），菜单不自己算；按钮只调 /corerpg p1 sig 的子命令。

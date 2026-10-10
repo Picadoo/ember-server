@@ -487,6 +487,8 @@ public final class EmberSetService implements Listener {
                 s.spreadCdUntil = now() + (long) (s.engine.tune().spreadIcd * 1000);
                 EmberDamageTrace.set(p, "燎原：燃烧转移到 " + best.getName());
                 best.getWorld().spawnParticle(Particle.FLAME, best.getLocation().add(0, 1, 0), 10, 0.3, 0.5, 0.3, 0.01);
+                EmberGrowthService g = EmberGrowthService.get(); // D455 sig feel if L01 owns burn_spread
+                if (g != null) g.flashSigOwned(p, "burn_spread", "燃烧传火");
             }
         }
     }

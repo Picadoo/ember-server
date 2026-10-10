@@ -820,6 +820,7 @@ public final class SkillService implements Listener {
                     if (le.isDead() || !le.isValid()) continue;
                     if (sets.skillIgnite(player, le, gmods.get("skill_burn"))) lit++;
                 }
+                if (lit > 0 && gsv != null) gsv.flashSigOwned(player, "skill_ignite", "烬斩点燃 ×" + lit); // D455
                 gsv.giveSkillShield(player, gmods, hit.size());
             }
         } finally {

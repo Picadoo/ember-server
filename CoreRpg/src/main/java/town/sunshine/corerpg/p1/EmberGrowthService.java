@@ -214,6 +214,37 @@ public final class EmberGrowthService implements Listener {
         return r; // share: the weight / share_taken are applied where the circle lands (EmberRunDirector)
     }
 
+    /**
+     * D455: if an active worn signature owns {@code modKey}, ActionBar-confirm with its name.
+     * Yields to set proc HUD via {@link EmberSetService#flashSkillConfirm}. Zero power.
+     */
+    public boolean flashSigOwned(Player p, String modKey, String verb) {
+        if (p == null || modKey == null) return false;
+        PlayerData d = data(p.getUniqueId());
+        EmberLoadout lo = runs.loadouts() == null ? null : runs.loadouts().get(p);
+        EmberSignature.Def sd = EmberSigFeel.owner(signatures(d, lo), modKey);
+        if (sd == null) return false;
+        long now = System.currentTimeMillis();
+        if (!EmberSigFeel.allow(p.getUniqueId(), modKey + ":" + verb, now)) return false;
+        String msg = EmberSigFeel.procLine(sd, verb);
+        EmberSetService sets = plugin.getEmberSets();
+        if (sets != null) return sets.flashSkillConfirm(p, msg);
+        try { p.sendActionBar(msg); } catch (Throwable ignored) { }
+        return true;
+    }
+
+    /** D455: one-shot run-start identity line (chat) when player has active signatures. */
+    public void announceSigFeel(Player p) {
+        if (p == null) return;
+        PlayerData d = data(p.getUniqueId());
+        EmberLoadout lo = runs.loadouts() == null ? null : runs.loadouts().get(p);
+        String line = EmberSigFeel.runLine(signatures(d, lo));
+        if (line == null || line.isEmpty()) return;
+        p.sendMessage(P + line);
+        EmberSetService sets = plugin.getEmberSets();
+        if (sets != null) sets.flashSkillConfirm(p, line);
+    }
+
     /** A boss telegraph landed and missed this player (in range, outside the shape). */
     public void onDodge(Player p) {
         EmberGrowth.Mods m = mods(p);
@@ -225,14 +256,20 @@ public final class EmberGrowthService implements Listener {
             p.sendActionBar(ChatColor.GOLD + "躲开了！" + String.format(Locale.ROOT, "%.0f", secs) + " 秒内伤害 +" + pct(m.get("dodge_dmg") - 1));
         }
         int db = (int) Math.round(m.get("dodge_burst"));
-        if (db > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, db))
-            p.sendActionBar(ChatColor.GOLD + "借势！烬爆计数 +" + db);
+        if (db > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, db)) {
+            if (!flashSigOwned(p, "dodge_burst", "借势 · 烬爆 +" + db))
+                p.sendActionBar(ChatColor.GOLD + "借势！烬爆计数 +" + db);
+        }
         double heal = m.get("dodge_heal");
         if (heal > 0) {
             Long cd = dodgeHealCd.get(p.getUniqueId());
             if (cd == null || now >= cd) {
                 dodgeHealCd.put(p.getUniqueId(), now + (long) (m.get("dodge_icd") * 1000));
                 EmberHeal.heal(p, heal * EmberHeal.maxHp(p), "D141 踏步回气 " + pct(heal));
+                if (!flashSigOwned(p, "dodge_heal", "躲开回气")) {
+                    // talent-only path keeps a thin ActionBar (was silent)
+                    try { p.sendActionBar(ChatColor.GREEN + "躲开回气 +" + pct(heal)); } catch (Throwable ignored) { }
+                }
             }
         }
     }
@@ -241,8 +278,10 @@ public final class EmberGrowthService implements Listener {
     public void onTeleHit(Player p) {
         EmberGrowth.Mods m = mods(p);
         int hb = (int) Math.round(m.get("hit_burst"));
-        if (hb > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, hb))
-            p.sendActionBar(ChatColor.GOLD + "反震！烬爆计数 +" + hb);
+        if (hb > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, hb)) {
+            if (!flashSigOwned(p, "hit_burst", "反震 · 烬爆 +" + hb))
+                p.sendActionBar(ChatColor.GOLD + "反震！烬爆计数 +" + hb);
+        }
     }
 
     public double potionMult(Player p) { return mods(p).get("potion"); }
@@ -277,7 +316,9 @@ public final class EmberGrowthService implements Listener {
         double keep = cur != null && now < cur[1] ? cur[0] : 0;
         double got = Math.max(keep, Math.min(n * per * h, cap));
         shield.put(p.getUniqueId(), new double[]{got, now + (long) (secs * 1000)});
-        p.sendActionBar(ChatColor.AQUA + "霜封护盾 " + String.format(Locale.ROOT, "%.1f", got) + "（" + String.format(Locale.ROOT, "%.0f", secs) + " 秒）");
+        String shVerb = "护盾 " + String.format(Locale.ROOT, "%.1f", got) + "（" + String.format(Locale.ROOT, "%.0f", secs) + " 秒）";
+        if (!flashSigOwned(p, "skill_shield", shVerb))
+            p.sendActionBar(ChatColor.AQUA + "霜封护盾 " + String.format(Locale.ROOT, "%.1f", got) + "（" + String.format(Locale.ROOT, "%.0f", secs) + " 秒）");
         return got;
     }
 
@@ -303,6 +344,7 @@ public final class EmberGrowthService implements Listener {
         cache.remove(u); dodgeUntil.remove(u); dodgeHealCd.remove(u); pendingRoll.remove(u); rerollBusy.remove(u);
         SPICK.remove(u); SFROM.remove(u); shield.remove(u); // D174 stage 1.5 / 2a
         pendingEnter.remove(u); // D297 W1c
+        EmberSigFeel.clear(u); // D455
     }
 
     // ------------------------------------------------------------------ commands
