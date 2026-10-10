@@ -23,3 +23,6 @@ TrMenu `ember_p1_gem` · forge/p1_forge 入口 · 永不 legacy socket · 无抬
 
 ## D612 / P5
 挂机庭 Open+战况+去哪花：挂机在养手持（强化/成色/精工希望）· **零改 AFK 产量**
+
+## D613
+装备页希望表盘补挂 drop_q/gem；分解预览差装→胚→养 · 零改数值
