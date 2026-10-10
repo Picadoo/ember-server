@@ -313,4 +313,39 @@ public class EmberSetEngineTest {
         hit(e, 4);
         assertTrue(e.hud(1000).startsWith("烬爆 0/5 · 冷却 2.0s"));
     }
+
+    // ---------------------------------------------------------------- D444 HUD polish (debounce + forced idle line)
+    @Test public void almostReadyDebounce_oncePerApproach_D444() {
+        int every = 5;
+        int almost = every - 1;
+        assertTrue(EmberSetService.shouldFlashAlmost(almost, every, -1, 0L, 1000L));
+        // same counter within debounce window → skip
+        assertFalse(EmberSetService.shouldFlashAlmost(almost, every, almost, 1000L, 1000L + 2000L));
+        // after debounce window → allow again
+        assertTrue(EmberSetService.shouldFlashAlmost(almost, every, almost, 1000L, 1000L + EmberSetService.ALMOST_DEBOUNCE_MS));
+        // not almost-ready → never
+        assertFalse(EmberSetService.shouldFlashAlmost(almost - 1, every, -1, 0L, 5000L));
+        assertFalse(EmberSetService.shouldFlashAlmost(every, every, -1, 0L, 5000L));
+        assertFalse(EmberSetService.shouldFlashAlmost(almost, 1, -1, 0L, 5000L));
+    }
+
+    @Test public void forcedIdleHudLine_afterProc_D444() {
+        EmberSetEngine e = engine("burst", 1);
+        assertNull("idle without force", e.hud(0));
+        assertEquals("烬爆 0/5", e.hud(0, true));
+        // after a full proc cycle, counter is 0 with CD — force still shows line
+        for (int i = 0; i < 5; i++) hit(e, i * 100);
+        assertEquals(0, e.counter());
+        String forced = e.hud(500, true);
+        assertNotNull(forced);
+        assertTrue(forced.startsWith("烬爆 0/5"));
+        // scorch idle force
+        EmberSetEngine s = engine("scorch", 1);
+        assertEquals("焚烬 0/3", s.hud(0, true));
+        EmberSetEngine u = engine("sustain", 1);
+        assertEquals("炽愈 0/5", u.hud(0, true));
+        // none stays null even when forced
+        EmberSetEngine n = engine("none", 0);
+        assertNull(n.hud(0, true));
+    }
 }

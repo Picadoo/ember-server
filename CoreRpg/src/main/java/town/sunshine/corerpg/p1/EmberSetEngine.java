@@ -251,6 +251,14 @@ public final class EmberSetEngine {
 
     /** ActionBar text, e.g. 「烬爆 4/5 · 冷却 1.8s」; null when there is nothing worth showing. */
     public String hud(long now) {
+        return hud(now, false);
+    }
+
+    /**
+     * D444: when {@code forceIdle}, still render {@code family counter/every} (+ CD/burn suffixes)
+     * even if the set is idle at 0/every — used for post-proc HUD handback after a short flash.
+     */
+    public String hud(long now, boolean forceIdle) {
         if ("none".equals(family)) return null;
         String name = EmberItemData.familyName(family);
         StringBuilder sb = new StringBuilder(name).append(' ').append(counter).append('/').append(every());
@@ -258,6 +266,6 @@ public final class EmberSetEngine {
         if (cd > 0) sb.append(" · 冷却 ").append(String.format(java.util.Locale.ROOT, "%.1f", cd / 1000.0)).append('s');
         if ("scorch".equals(family) && !burns.isEmpty()) sb.append(" · 燃烧 ").append(burns.size()).append(" 目标");
         boolean idle = counter == 0 && cd == 0 && burns.isEmpty();
-        return idle ? null : sb.toString();
+        return idle && !forceIdle ? null : sb.toString();
     }
 }

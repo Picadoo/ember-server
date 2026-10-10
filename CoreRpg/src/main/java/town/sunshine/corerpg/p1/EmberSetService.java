@@ -65,6 +65,27 @@ public final class EmberSetService implements Listener {
         boolean hudShown;
         /** D439: monotonic ms until proc ActionBar flash yields to normal hud */
         long procFlashUntil;
+        /** D444: after flash ends, force idle 0/every set line for a short handback */
+        long forceHudUntil;
+        /** D444: almost-ready debounce — last counter we flashed for */
+        int lastAlmostCounter = -1;
+        /** D444: almost-ready debounce — when we last flashed */
+        long lastAlmostAt;
+    }
+
+    /** D444: almost-ready debounce window (ms); pure helper for unit tests. */
+    static final long ALMOST_DEBOUNCE_MS = 2500L;
+    /** D444: post-proc forced HUD handback (ms). */
+    static final long FORCE_HUD_MS = 2000L;
+
+    /**
+     * D444: whether to flash almost-ready for this counter approach.
+     * Flash once per approach to {@code every-1}; skip same counter within {@link #ALMOST_DEBOUNCE_MS}.
+     */
+    static boolean shouldFlashAlmost(int counter, int every, int lastAlmostCounter, long lastAlmostAt, long now) {
+        if (every <= 1 || counter != every - 1) return false;
+        if (lastAlmostCounter == counter && now - lastAlmostAt < ALMOST_DEBOUNCE_MS) return false;
+        return true;
     }
 
     public EmberSetService(CoreRpgPlugin plugin, EmberLoadoutService loadouts, EmberCombatListener combat) {
@@ -314,7 +335,8 @@ public final class EmberSetService implements Listener {
         if (now < s.procFlashUntil) return; // D439 proc flash owns ActionBar briefly
         EmberSupplyService sup = plugin.getEmberSupplies();
         String hint = sup == null ? null : sup.lowHpHint(p); // new-player polish: low HP → how to drink (wins over the set line)
-        String hud = hint != null ? hint : s.engine.hud(now);
+        boolean force = now < s.forceHudUntil;
+        String hud = hint != null ? hint : s.engine.hud(now, force); // D444: force idle 0/every after flash
         if (hud != null) {
             p.sendActionBar(hint != null ? hud : ChatColor.GOLD + hud);
             s.hudShown = true;
@@ -324,8 +346,12 @@ public final class EmberSetService implements Listener {
         }
     }
 
-    /** D439: short ActionBar flash on set proc / almost-ready (no multiplier change). */
+    /** D439/D444: short ActionBar flash on set proc (subtitle) / almost-ready (ActionBar only). */
     private void flashProc(Player p, Session s, String msg) {
+        flashProc(p, s, msg, true);
+    }
+
+    private void flashProc(Player p, Session s, String msg, boolean withSubtitle) {
         if (p == null || s == null || msg == null || msg.isEmpty()) return;
         long until = now() + 1500L;
         s.procFlashUntil = until;
@@ -334,8 +360,10 @@ public final class EmberSetService implements Listener {
             p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR,
                     net.md_5.bungee.api.chat.TextComponent.fromLegacyText(msg));
         } catch (Throwable ignored) { }
-        // subtitle short flash (readable even when ActionBar packet is missed by some clients)
-        try { p.sendTitle("", msg, 5, 25, 8); } catch (Throwable ignored) { }
+        // D444: subtitle for real proc only — almost-ready stays ActionBar-only to cut spam
+        if (withSubtitle) {
+            try { p.sendTitle("", msg, 5, 25, 8); } catch (Throwable ignored) { }
+        }
         s.hudShown = true;
         final UUID id = p.getUniqueId();
         final long token = until;
@@ -345,24 +373,35 @@ public final class EmberSetService implements Listener {
             if (ss == null || pp == null || !pp.isOnline()) return;
             if (ss.procFlashUntil != token) return; // newer flash won
             ss.procFlashUntil = 0L;
+            // D444: hand back to set line even when idle 0/every (else ActionBar goes blank)
+            ss.forceHudUntil = now() + FORCE_HUD_MS;
             showHud(pp, ss, now());
         }, 30L);
     }
 
-    /** D439: ActionBar when counter is one hit from trigger (burst/sustain/scorch). */
+    /** D439/D444: ActionBar when counter is one hit from trigger; debounced once per approach. */
     private void maybeFlashAlmost(Player p, Session s, Outcome o) {
         String fam = s.engine.family();
         int ev = s.engine.every();
-        if (ev <= 1) return;
         int c = o.counter;
-        if (c != ev - 1) return;
-        if ("burst".equals(fam)) {
-            flashProc(p, s, ChatColor.YELLOW + "烬爆将满 " + c + "/" + ev);
-        } else if ("sustain".equals(fam)) {
-            flashProc(p, s, ChatColor.YELLOW + "炽愈将满 " + c + "/" + ev);
-        } else if ("scorch".equals(fam)) {
-            flashProc(p, s, ChatColor.YELLOW + "焚烬将满 " + c + "/" + ev);
+        long now = now();
+        // left almost-ready → clear debounce so the next approach can flash
+        if (c != ev - 1) {
+            if (s.lastAlmostCounter == ev - 1) s.lastAlmostCounter = -1;
+            return;
         }
+        if (!shouldFlashAlmost(c, ev, s.lastAlmostCounter, s.lastAlmostAt, now)) return;
+        s.lastAlmostCounter = c;
+        s.lastAlmostAt = now;
+        String msg = null;
+        if ("burst".equals(fam)) {
+            msg = ChatColor.YELLOW + "烬爆将满 " + c + "/" + ev;
+        } else if ("sustain".equals(fam)) {
+            msg = ChatColor.YELLOW + "炽愈将满 " + c + "/" + ev;
+        } else if ("scorch".equals(fam)) {
+            msg = ChatColor.YELLOW + "焚烬将满 " + c + "/" + ev;
+        }
+        if (msg != null) flashProc(p, s, msg, false); // D444: no subtitle for almost-ready
     }
 
     // ------------------------------------------------------------------ clears / persistence
