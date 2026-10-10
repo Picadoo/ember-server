@@ -160,10 +160,10 @@ public final class EmberForgeService implements Listener {
     /** D934 / ARCH S2: amounts from EmberEconomy S01 (yml SoT) — no hardcoded 24/6/300. */
     private String sources(List<String> lack) {
         java.util.LinkedHashSet<String> out = new java.util.LinkedHashSet<String>();
-        int shard = EmberEconomy.amount("S01", "shard");
-        int bone = EmberEconomy.amount("S01", "bone");
-        int core = EmberEconomy.amount("S01", "core");
-        int coin = EmberEconomy.amount("S01", "coin");
+        int shard = EmberRunRules.baseShard(); // D1047
+        int bone = EmberRunRules.baseBone();
+        int core = EmberRunRules.baseCore();
+        int coin = EmberRunRules.baseCoin();
         for (String l : lack) {
             String n = l.replaceAll("§.", "");
             if (n.contains("胚料")) out.add("胚料：分解多余的掉落件（T1/T2/T3 = 1/2/3 个）· Q04、Q05、Q07 首通");

@@ -1,6 +1,6 @@
 # DESIGN · Stage2 全量发放 yml 真源搬家 · Stage0 盘点（2026-10-11 · D1040）
 
-> **状态：文档 only · 不改数值 · 不开大搬家。**  
+> **状态：切片 A 已落地 D1045–D1050；B/C/D 未开。数值不变。**  
 > **上游：** Stage1 COMPLETE（sink `amount()`）；Stage0 经济价目盘点 D942；健康扫 D1030–D1038。  
 > **本窗：** 列出 **发放（source / grant）** 仍散落在 Java 常量 / 业务 yml / 运行时 Grant 表的位点，分级 **safe / review / unsafe**，供以后 Stage2 切片施工。
 
@@ -72,7 +72,7 @@
 
 ## 3. 建议切片顺序（以后开窗，每刀零改数值）
 
-1. **A** — `BASE_*` 与 S01 金样单一真相（委托 `amount` 或测试钉死未使用）。  
+1. **A** — `BASE_*` 与 S01 金样单一真相（委托 `amount` 或测试钉死未使用）。 → **D1045–D1050 已切** `baseCoin()`…`baseMark()`。  
 2. **B** — S07/S08 徽记 `FC_MARKS`/`CLEAR_MARKS` ← `amount`（与 Stage1 imprint 同型）。  
 3. **C** — 短征 clear/fc Grant 全路径审计 → 缺则补读表。  
 4. **D** — AFK/图录/赛季 badge 双源策略文档后再动。  

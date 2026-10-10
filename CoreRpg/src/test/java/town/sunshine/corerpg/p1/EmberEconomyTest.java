@@ -1092,6 +1092,23 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void baseHelpersMatchS01Golden() {
+        // D1048 / Stage2 slice A — helpers ≡ BASE_* ≡ amount(S01)
+        assertEquals(EmberRunRules.BASE_COIN, EmberRunRules.baseCoin());
+        assertEquals(EmberRunRules.BASE_SHARD, EmberRunRules.baseShard());
+        assertEquals(EmberRunRules.BASE_BONE, EmberRunRules.baseBone());
+        assertEquals(EmberRunRules.BASE_CORE, EmberRunRules.baseCore());
+        assertEquals(EmberRunRules.BASE_XP, EmberRunRules.baseXp());
+        assertEquals(EmberRunRules.BASE_MARK, EmberRunRules.baseMark());
+        assertEquals(EmberEconomy.amount("S01", "coin"), EmberRunRules.baseCoin());
+        assertEquals(EmberEconomy.amount("S01", "shard"), EmberRunRules.baseShard());
+        assertEquals(EmberEconomy.amount("S01", "bone"), EmberRunRules.baseBone());
+        assertEquals(EmberEconomy.amount("S01", "core"), EmberRunRules.baseCore());
+        assertEquals(EmberEconomy.amount("S01", "xp"), EmberRunRules.baseXp());
+        assertEquals(EmberEconomy.amount("S01", "mark"), EmberRunRules.baseMark());
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

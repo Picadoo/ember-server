@@ -480,3 +480,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1039–D1044 ARCH docs · jar unchanged 1.65.417-d1030
 - No one-file thin left (S0-9/六槽 HOLD). Stage2 grant SoT Stage0 inventory. modelGaps policy tip (still NONE).
+
+## D1045–D1050 ARCH SHIP · jar 1.65.418-d1045
+- Stage2 slice A: BASE_* helpers ← amount(S01); settle+forge sources; nums unchanged; B/C/D not started

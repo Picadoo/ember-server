@@ -20,12 +20,21 @@ public final class EmberRunRules {
 
     // ------------------------------------------------------------------ §9.1 numbers
 
+    /** Golden mirrors for S01; prefer {@link #baseCoin()} etc. (Stage2 slice A / D1046). */
     public static final int BASE_COIN = 300;
     public static final int BASE_SHARD = 24;
     public static final int BASE_BONE = 6;
     public static final int BASE_CORE = 2;
     public static final int BASE_XP = 120;
     public static final int BASE_MARK = 1;
+
+    /** D1046: S01 clear baseline from economy yml SoT. */
+    public static int baseCoin() { return EmberEconomy.amount("S01", "coin"); }
+    public static int baseShard() { return EmberEconomy.amount("S01", "shard"); }
+    public static int baseBone() { return EmberEconomy.amount("S01", "bone"); }
+    public static int baseCore() { return EmberEconomy.amount("S01", "core"); }
+    public static int baseXp() { return EmberEconomy.amount("S01", "xp"); }
+    public static int baseMark() { return EmberEconomy.amount("S01", "mark"); }
     /** §9.3 extra event payouts */
     public static final int TREASURE_COIN = 100;
     public static final int ELITE_SHARD = 10;
@@ -527,13 +536,13 @@ public final class EmberRunRules {
     public static List<Grant> settle(SettleInput in) {
         if (in == null || !in.bossKilled) return Collections.emptyList();
         List<Grant> out = new ArrayList<Grant>();
-        // D215 / ARCH S2-2: S01–S03 amounts come from EmberEconomy (golden pinned to BASE_* / TREASURE_* / ELITE_*)
-        out.add(new Grant("base_coin", Kind.COIN, null, EmberEconomy.amount("S01", "coin"), null));
-        out.add(new Grant("base_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, EmberEconomy.amount("S01", "shard"), null));
-        out.add(new Grant("base_bone", Kind.MAT, EmberUpgradeRules.MAT_BONE, EmberEconomy.amount("S01", "bone"), null));
-        out.add(new Grant("base_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, EmberEconomy.amount("S01", "core"), null));
-        out.add(new Grant("base_xp", Kind.XP, null, EmberEconomy.amount("S01", "xp"), null));
-        out.add(new Grant("base_mark", Kind.MARK, String.valueOf(in.tier), EmberEconomy.amount("S01", "mark"), null));
+        // D215 / D1047 Stage2-A: S01 via base*() helpers (= amount SoT; BASE_* golden mirrors)
+        out.add(new Grant("base_coin", Kind.COIN, null, baseCoin(), null));
+        out.add(new Grant("base_shard", Kind.MAT, EmberUpgradeRules.MAT_SHARD, baseShard(), null));
+        out.add(new Grant("base_bone", Kind.MAT, EmberUpgradeRules.MAT_BONE, baseBone(), null));
+        out.add(new Grant("base_core", Kind.MAT, EmberUpgradeRules.MAT_CORE, baseCore(), null));
+        out.add(new Grant("base_xp", Kind.XP, null, baseXp(), null));
+        out.add(new Grant("base_mark", Kind.MARK, String.valueOf(in.tier), baseMark(), null));
         out.add(item(in, "base_item"));
         if (in.sixArmor) { // D318 六槽 T1-7 (switch on, modelled full clear only)
             Random ar = new Random(subSeed(in.seed, in.player, in.runId, G_SIX_ARMOR));
