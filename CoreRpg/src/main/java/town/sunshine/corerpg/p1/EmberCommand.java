@@ -4022,6 +4022,7 @@ public final class EmberCommand {
                         + (ch ? "" : " §8· 已是该焦点"));
                 EmberLoadout lo = runs.loadouts() != null ? runs.loadouts().get(p) : null;
                 p.sendMessage(P + EmberSetFocus.glance(id, lo == null ? "none" : lo.activeSet, lo == null ? 0 : lo.awakening, runs.target(d)));
+                if (lo != null) EmberSetChase.tell(p, d, lo); // D701
                 try { // D665
                     if (id == EmberSetFocus.SCORCH) p.sendActionBar("§6焚烬焦点 · 火痕步/点燃");
                     else if (id == EmberSetFocus.BURST) p.sendActionBar("§c烬爆焦点 · 爆闪步/爆发");

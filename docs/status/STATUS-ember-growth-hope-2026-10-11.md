@@ -128,3 +128,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D698 abyss menu abysstarget glance
 - D699 short enter FC chase hint
 - D700 gear setchase
+
+## D701–D703 SHIP · jar 1.65.329-d701 · 2026-10-11
+- D701 setfocus → setchase tell
+- D702 abysspath → layer target glance
+- D703 shortpath → ActionBar next map

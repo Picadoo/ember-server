@@ -219,6 +219,10 @@ public final class EmberShortPath {
         p.sendMessage(P + "§a短征路径 → §f" + label(id) + " §7· " + tip(id));
         EmberRunMaps.MapDef next = resolve(runs, d, id);
         p.sendMessage(P + resolveLine(next));
+        try { // D703
+            if (next != null) p.sendActionBar("§e短征追 · §f" + next.key.toUpperCase(Locale.ROOT));
+            else p.sendActionBar("§7短征追 · 本路径暂无下一本");
+        } catch (Throwable ignored) { }
         if (next != null) {
             String cmd = "/corerpg p1 enter " + next.key;
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
