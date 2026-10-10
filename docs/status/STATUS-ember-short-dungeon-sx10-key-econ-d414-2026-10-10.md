@@ -35,9 +35,9 @@ afk.tiers / daily_kills · gate_daily · 观察三开关 / ×0.97 · K3 · 主�
 
 | 项 | 值 |
 |----|-----|
-| tip | _(commit 后填)_ |
+| tip | `9c8fb353` |
 | jar | `CoreRpg-1.65.121-d414.local.jar` |
-| sha256 | _(装服后填)_ |
+| sha256 | `cbcfb4c02e27b7ec4c571e8d7b7de90c6f5ac096c0aa15516e95c06f8526153e` |
 | Enabling | `CoreRpg v1.65.121-d414.local` |
 | 最终 play | **以本 jar 为准**（含 D413 ActionBar feat） |
 
