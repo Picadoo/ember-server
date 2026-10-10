@@ -501,6 +501,33 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D558: true if any cleared-room passage link is available. */
+    boolean hasOpenLinks() {
+        if (def == null || def.links == null || s == null) return false;
+        for (EmberRunMaps.Link k : def.links) {
+            if (k.after != null && s.cleared.contains(k.after) && k.to != null) return true;
+        }
+        return false;
+    }
+
+    /** D558: teleport one player through links opened by {@code afterRoom} (null = any open). */
+    boolean pathTakeLinks(Player p, String afterRoom) {
+        if (p == null || !p.isOnline() || def == null || def.links == null || s == null) return false;
+        if (!s.committed.contains(p.getUniqueId()) || !s.open()) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        boolean any = false;
+        for (EmberRunMaps.Link k : def.links) {
+            if (k.after == null || k.to == null) continue;
+            if (afterRoom != null && !afterRoom.equals(k.after)) continue;
+            if (!s.cleared.contains(k.after)) continue;
+            p.teleport(new Location(w, k.to.x + 0.5, k.to.y, k.to.z + 0.5, k.yaw, 0f));
+            w.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.8f, 1.2f);
+            if (!k.label.isEmpty()) p.sendMessage("§7" + k.label);
+            any = true;
+        }
+        return any;
+    }
+
     /** D557: boss arm timer running, not yet spawned. */
     boolean hasPendingCall() {
         return bossAt > 0 && boss == null && !bossDead;
@@ -579,7 +606,12 @@ final class EmberRunDirector {
                 openDoorNow(r);
             }
         }
-        for (EmberRunMaps.Link k : def.links) if (k.after.equals(r.id)) svc.tellRun(s, "§7通道已开启：" + k.label);
+        boolean linkOpened = false;
+        for (EmberRunMaps.Link k : def.links) if (k.after.equals(r.id)) {
+            svc.tellRun(s, "§7通道已开启：" + k.label);
+            linkOpened = true;
+        }
+        if (linkOpened) EmberLinkPath.maybeAfterOpen(s, r.id); // D558
         if (r.id.equals(def.eventAfter)) spawnExtra();
         boolean last = next >= def.rooms.size();
         svc.onRoomCleared(s, r, last);

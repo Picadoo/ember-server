@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("linkpath".equals(sub) || "跃迁路径".equals(sub)) { // D558 passage-link path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberLinkPath.glance(EmberLinkPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c跃迁路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberLinkPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c跃迁路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberLinkPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberLinkPath.get(d);
+                    if (EmberLinkPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberLinkPath.label(cur) + " · 改路径再 /corerpg p1 linkpath");
+                    else EmberLinkPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberLinkPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 linkpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberLinkPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("link".equals(sub) && args.length == 2) { // D558 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathTakeLinks(p, null)) p.sendMessage(P + "无法跃迁（无已开通道/未进本）");
+            else p.sendMessage(P + "§a跃迁·手点 §7已传送");
+            return true;
+        }
         if ("callpath".equals(sub) || "召战路径".equals(sub)) { // D557 boss-call path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1492,6 +1536,15 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("linkseed".equals(sub)) { // D558 admin smoke: probe link path
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberLinkPath.maybeProbe(t);
+            s.sendMessage(P + "已触发跃迁路径探测 → " + t.getName()
+                    + (runs != null && runs.hasOpenLinks(t) ? "（有通道）" : "（无通道）"));
             return true;
         }
         if ("callseed".equals(sub)) { // D557 admin smoke: probe call path

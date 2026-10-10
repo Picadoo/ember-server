@@ -700,6 +700,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D558: take open passage links for a committed player. */
+    public boolean hasOpenLinks(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasOpenLinks() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathTakeLinks(Player p, String afterRoom) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathTakeLinks(p, afterRoom);
+    }
+
     /** D557: force-spawn an armed boss for a committed player. */
     public boolean hasPendingCall(Player p) {
         if (p == null) return false;
@@ -1272,6 +1288,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberPackPath.scheduleOfferAfterQ01(p); // D555 pack path
                         if ("q01".equals(g.id)) EmberGatePath.scheduleOfferAfterQ01(p); // D556 gate path
                         if ("q01".equals(g.id)) EmberCallPath.scheduleOfferAfterQ01(p); // D557 call path
+                        if ("q01".equals(g.id)) EmberLinkPath.scheduleOfferAfterQ01(p); // D558 link path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
