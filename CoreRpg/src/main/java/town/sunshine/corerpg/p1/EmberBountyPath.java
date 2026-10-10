@@ -199,9 +199,10 @@ public final class EmberBountyPath {
         p.sendMessage(P + "§a委托 → §f" + label(id) + " §7· " + tip(id));
         String vb = runs.varietyBountyLine(d);
         if (vb != null && !vb.isEmpty()) p.sendMessage(P + "§7今日花样委托：§f" + vb);
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[打开冒险]", "/corerpg p1 runs", "重打已通主线本推进委托（队长）", "GREEN"},
-                new String[]{"[换一条]", "/corerpg p1 bountypath", "重选", "GRAY"});
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D917
+                new String[]{"[打开冒险]", "/ember_p1_adventure", "重打主线推委托", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花委托料", "GOLD"},
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
     }
 
     private static PlayerData dataOf(Player p) {

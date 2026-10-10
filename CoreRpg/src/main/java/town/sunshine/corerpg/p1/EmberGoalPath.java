@@ -150,9 +150,9 @@ public final class EmberGoalPath {
             break;
         }
         if (next != null) {
-            ConfirmTokens.sendButtons(p, P + "§7周标下一环：",
+            ConfirmTokens.sendButtons(p, P + "§7周标下一环：", // D919
                     new String[]{"[打开·" + EmberSeason.goalName(next) + "]", EmberSeason.goalOpen(next), "继续该目标", "GREEN"},
-                    new String[]{"[换周标]", "/corerpg p1 goalpath", "改焦点", "AQUA"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "花料养成", "GOLD"},
                     new String[]{"[赛季页]", "/ember_p1_season", "进度总览", "LIGHT_PURPLE"});
         } else {
             ConfirmTokens.sendButtons(p, P + "§7周标：",
@@ -161,7 +161,28 @@ public final class EmberGoalPath {
         }
     }
 
-    public static void offerPick(Player p) {
+    
+    /** D916: after goalpath set. */
+    public static void afterSet(Player p, int id, boolean changed) {
+        if (p == null || !valid(id)) return;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a周标路径 → §f" + label(id) + "§7（" + tip(id) + "）"
+                + (changed ? "" : " §8· 已是该路径"));
+        try { p.sendActionBar("§e周标 · §f" + label(id)); } catch (Throwable ignored) { }
+        String focus = focusGoal(id);
+        if (focus != null) {
+            ConfirmTokens.sendButtons(p, P + "§7周标下一环：",
+                    new String[]{"[打开·" + EmberSeason.goalName(focus) + "]", EmberSeason.goalOpen(focus), tip(id), "GREEN"},
+                    new String[]{"[赛季页]", "/ember_p1_season", "进度总览", "LIGHT_PURPLE"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "养成", "GOLD"});
+        } else {
+            ConfirmTokens.sendButtons(p, P + "§7：",
+                    new String[]{"[赛季页]", "/ember_p1_season", "随意推进", "GREEN"},
+                    new String[]{"[冒险]", "/ember_p1_adventure", "开刷", "AQUA"});
+        }
+    }
+
+public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选本周目标焦点（改追猎 · 可随时改 · 不改徽奖励）：");
@@ -222,9 +243,8 @@ public final class EmberGoalPath {
             offerPick(p);
             return;
         }
-        set(d, id);
+        boolean ch = set(d, id);
         flush(p);
-        p.sendMessage(P + "§a周标 → §f" + label(id) + " §7· " + tip(id));
         EmberSeason season = runs.season();
         if (season != null && season.goalsOn()) {
             String g = focusGoal(id);
@@ -233,9 +253,7 @@ public final class EmberGoalPath {
                 if (line != null) p.sendMessage(P + line);
             }
         }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[周目标]", "/corerpg p1 goals", "看本周进度", "AQUA"},
-                new String[]{"[换一条]", "/corerpg p1 goalpath", "重选", "GRAY"});
+        afterSet(p, id, ch); // D916
     }
 
     private static PlayerData dataOf(Player p) {

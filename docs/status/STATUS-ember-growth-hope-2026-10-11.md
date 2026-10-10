@@ -410,3 +410,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D909–D914 SHIP · jar 1.65.398-d909
 - Mapfarm/brew/cook/friend/mentor next; mapfarm settle enhance
+
+## D915–D920 SHIP · jar 1.65.399-d915
+- Stamp hit forge; goalpath afterSet; bounty/claim next; hope-loop surface largely saturated — prefer ARCH thin or critical-path polish next
