@@ -1050,6 +1050,25 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void raidStaminaSinkMatchesC02() {
+        // D1003
+        assertEquals(50, EmberEconomy.amount("C02", "r01.stamina"));
+        assertEquals(50, EmberEconomy.amount("C02", "r02.stamina"));
+        assertEquals(50, EmberEconomy.amount("C02", "r03.stamina"));
+    }
+
+    @Test
+    public void talentSinksMatchGrowthMirror() {
+        // D1006 / Stage1 C09 C10 — dual-source OK
+        assertEquals(800, EmberEconomy.amount("C09", "row1.coin"));
+        assertEquals(2000, EmberEconomy.amount("C09", "row2.coin"));
+        assertEquals(4000, EmberEconomy.amount("C09", "row3.coin"));
+        assertEquals(2000, EmberEconomy.amount("C10", "respec_coin"));
+        assertEquals(0, EmberGrowth.respecCost(null, 0));
+        assertEquals(2000, EmberGrowth.respecCost(null, 1));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

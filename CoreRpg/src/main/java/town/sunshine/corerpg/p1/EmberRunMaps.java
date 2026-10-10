@@ -1254,6 +1254,10 @@ public final class EmberRunMaps {
     public int partyMin(MapDef m) { return m != null && m.partyMin > 0 ? m.partyMin : partyMin; }
     public int partyMax(MapDef m) { return m != null && m.partyMax > 0 ? m.partyMax : partyMax; }
     public int cost(MapDef m) {
+        if (m != null && m.raid) {
+            // D1002: C02 per-raid stamina from economy yml SoT (runs.yml cost stays mirror)
+            return EmberEconomy.amount("C02", m.key + ".stamina");
+        }
         if (m != null && (m.event || m.rush)) return Math.max(0, m.cost); // D139 / D144: 0 = free (not the file default)
         return m != null && m.cost > 0 ? m.cost : cost;
     }

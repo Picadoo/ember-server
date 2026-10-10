@@ -343,6 +343,11 @@ sinks:
     fee_t8: 400
     fee_t9: 440
     fee_t10: 480
+  # D1000 Stage1 C02 raid stamina (matches ember-v1-runs.yml raids.*.cost)
+  C02:
+    "r01.stamina": 50
+    "r02.stamina": 50
+    "r03.stamina": 50
   C01: { stamina: 30 }
   C07: { marks: 8 }
   C09:

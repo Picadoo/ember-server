@@ -189,7 +189,17 @@ public final class EmberGrowth {
     }
 
     /** First respec free, then {@code respecCoin} each time. */
-    public static int respecCost(Talents t, int resetsUsed) { return resetsUsed <= 0 ? 0 : t.respecCoin; }
+    public static int respecCost(Talents t, int resetsUsed) {
+        if (resetsUsed <= 0) return 0;
+        // D1005: C10 from economy yml SoT (growth.yml respec_coin stays mirror)
+        return EmberEconomy.amount("C10", "respec_coin");
+    }
+
+    /** D1005: C09 learn coin from economy yml SoT (growth.yml rows[].coin stays mirror). */
+    public static int learnCoin(Row r) {
+        if (r == null || r.row < 1 || r.row > 3) return r == null ? 0 : r.coin;
+        return EmberEconomy.amount("C09", "row" + r.row + ".coin");
+    }
 
     // ------------------------------------------------------------------ honors (D142)
 
@@ -256,11 +266,16 @@ public final class EmberGrowth {
         List<PointSrc> pts = new ArrayList<PointSrc>();
         for (Map<?, ?> x : maps(m.get("points"))) pts.add(new PointSrc(s(x, "id"), s(x, "kind"), s(x, "arg"), s(x, "name")));
         List<Row> rows = new ArrayList<Row>();
-        for (Map<?, ?> x : maps(m.get("rows"))) rows.add(new Row(i(x, "row"), s(x, "name"), i(x, "points"), i(x, "coin"), s(x, "theme")));
+        for (Map<?, ?> x : maps(m.get("rows"))) {
+            int row = i(x, "row");
+            int coin = (row >= 1 && row <= 3) ? EmberEconomy.amount("C09", "row" + row + ".coin") : i(x, "coin"); // D1005
+            rows.add(new Row(row, s(x, "name"), i(x, "points"), coin, s(x, "theme")));
+        }
         List<Node> nodes = new ArrayList<Node>();
         for (Map<?, ?> x : maps(m.get("nodes"))) nodes.add(new Node(s(x, "id"), i(x, "row"), s(x, "name"), s(x, "family"), s(x, "set"),
                 mods(x.get("mods")), s(x, "good"), s(x, "bad"), s(x, "fit")));
-        return new Talents(i(m, "respec_coin"), Collections.unmodifiableList(pts), Collections.unmodifiableList(rows), Collections.unmodifiableList(nodes));
+        int respec = EmberEconomy.amount("C10", "respec_coin"); // D1005
+        return new Talents(respec, Collections.unmodifiableList(pts), Collections.unmodifiableList(rows), Collections.unmodifiableList(nodes));
     }
 
     static List<Map<?, ?>> maps(Object o) {

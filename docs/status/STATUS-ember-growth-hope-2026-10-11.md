@@ -460,3 +460,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D996–D998 ARCH SHIP · jar 1.65.413-d996
 - Stage1 C01 default stamina cost ← amount(); nums unchanged
+
+## D999–D1010 ARCH SHIP · jar 1.65.414-d999
+- Stage1 C02 raid stamina + C09/C10 talent learn/respec ← amount(); dual-source mirrors OK; nums unchanged

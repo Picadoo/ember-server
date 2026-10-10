@@ -301,7 +301,8 @@ public final class EmberEconomy {
         old("LS5", "scrap / reforge / 旧 enhance", "CoreRpgPlugin legacyRouteRefused").model(OUT).done();
         // §3 sinks
         sink("C01", "进主线 / 挑战", "ember-v1-runs.yml cost", Period.RUN).acc(STA).model(FULL).g("stamina", 30).done();
-        sink("C02", "进团本", "ember-v1-runs.yml raids.*.cost", Period.RUN).acc(STA).keys("p2_raid_").model(FULL).done();
+        sink("C02", "进团本", "ember-v1-runs.yml raids.*.cost", Period.RUN).acc(STA).keys("p2_raid_").model(FULL)
+            .g("r01.stamina", 50).g("r02.stamina", 50).g("r03.stamina", 50).done();
         sink("C03", "强化", "EmberUpgradeRules", Period.NONE).acc(SHARD, CORE, COIN).model(FULL)
             .g("1.shard", 4)
             .g("1.core", 0)

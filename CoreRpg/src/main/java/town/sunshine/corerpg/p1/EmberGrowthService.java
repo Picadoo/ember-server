@@ -385,7 +385,7 @@ public final class EmberGrowthService implements Listener {
         if (why != null) { p.sendMessage(P + "§c" + why); return true; }
         EmberGrowth.Row r = talents.row(n.row);
         boolean learn = !learned(d, n.id);
-        int coin = learn ? r.coin : 0;
+        int coin = learn ? EmberGrowth.learnCoin(r) : 0; // D1005
         if (learn && !confirm) {
             if (d.getCoin() < coin) { p.sendMessage(P + "§c学会「" + n.name + "」要 " + coin + " 余烬币，现有 " + d.getCoin()); return true; }
             p.sendMessage(P + "§6学会并点上「" + n.name + "」§7：占 " + r.points + " 专精点 + 一次性 " + coin + " 余烬币（以后重置再点不收币）");
