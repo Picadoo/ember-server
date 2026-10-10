@@ -1336,6 +1336,8 @@ public final class EmberGrowthService implements Listener {
                     new String[]{"[切回原版]", "/corerpg p1 sig attune " + sd.id, "随时切换代价", "AQUA"},
                     new String[]{"[去烙印]", "/corerpg p1 sig pick " + sd.id, "徽记够可烙到件上", "GOLD"},
                     new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴", "GRAY"});
+            EmberSigChase.maybeReadyCue(p, d); // D769 imprint ready after attune spend
+
         } else {
             boolean nowAlt = !sigAlt(d, sd);
             d.addPeriodCount(EmberSignature.C_ALT + sd.id, "all", (nowAlt ? 1 : 0) - d.periodCount(EmberSignature.C_ALT + sd.id, "all"));

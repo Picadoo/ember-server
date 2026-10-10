@@ -383,6 +383,7 @@ public final class EmberSessionService {
                 PlayerData cpd = runs.dataOf(cu);
                 if (cpd != null) { EmberMapFarmCue.remember(cpd, enterFeelMap); runs.flushData(cu); } // D763/D765
                 EmberMapFarmCue.cue(cp, enterFeelMap, lo); // D679 next chase piece
+                if (cpd != null) EmberChallengePath.enterCue(cp, cpd, s.challenge); // D767
             }
         }
         // A18: party HP multiplier locked now for the whole run

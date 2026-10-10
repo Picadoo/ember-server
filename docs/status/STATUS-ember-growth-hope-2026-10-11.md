@@ -250,3 +250,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D764 challenge settle next-loop buttons (PREFER)
 - D765 map farm resume counter flush
 - D766 attune ready: chase-first else first eligible alt
+
+## D767–D769 SHIP · jar 1.65.352-d767
+- D767 challenge enterCue
+- D768 resume enter challenge when PREFER
+- D769 imprint ready after attune unlock

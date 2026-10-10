@@ -176,6 +176,20 @@ public final class EmberChallengePath {
     }
 
 
+
+    /** D767: challenge session enter — path glance (mirror raid enterCue). */
+    public static void enterCue(Player p, PlayerData d, boolean challenge) {
+        if (p == null || d == null || !challenge) return;
+        int id = get(d);
+        if (!valid(id)) {
+            p.sendMessage(EmberRunService.P + "§7未选硬本路径 · /corerpg p1 challengepath");
+            return;
+        }
+        String line = "§c硬本路径 · 本局挑战 §8· " + label(id);
+        p.sendMessage(EmberRunService.P + line);
+        try { p.sendActionBar(line); } catch (Throwable ignored) { }
+    }
+
     /** D762/D764: after challenge clear — path glance + next challenge enter when PREFER. */
     public static void afterSettle(Player p, PlayerData d, boolean challenge, boolean challengeFirst, String mapKey) {
         if (p == null || !challenge) return;

@@ -173,8 +173,12 @@ public final class EmberMapFarmCue {
         d.addPeriodCount(C_RESUME_LAT, "all", code - lat);
         flush(p); // D765
         cue(p, m, lo);
+        // D768: if hard-path prefers challenge, resume into challenge
+        boolean chal = EmberChallengePath.get(d) == EmberChallengePath.PREFER;
+        String cmd = "/corerpg p1 enter " + m.key + (chal ? " challenge" : "");
+        String label = "[再进·" + m.key.toUpperCase() + (chal ? "·挑战" : "") + "]";
         ConfirmTokens.sendButton(p, EmberRunService.P + "§7登出恢复：",
-                "[再进·" + m.key.toUpperCase() + "]", "/corerpg p1 enter " + m.key,
+                label, cmd,
                 "继续刷 " + EmberItemData.familyName(m.lootFamily) + " 图装");
     }
 
