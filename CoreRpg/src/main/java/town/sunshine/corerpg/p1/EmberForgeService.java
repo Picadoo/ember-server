@@ -607,6 +607,7 @@ public final class EmberForgeService implements Listener {
                 plugin.getLogger().info("[" + EmberMode.MODE_ID + "] forge " + kind + " " + rid + " " + id + " ok: " + note + " cost " + (costJson != null ? costJson : cost.json()));
                 if (q != null) {
                     q.sendMessage(P + ChatColor.GREEN + note);
+                    EmberForgeFeel.flash(q, kind, note); // D475 forge result ActionBar
                     for (TxnItem t : list) if (t.after != null) q.sendMessage(P + "现在: " + preview(t.after));
                     q.playSound(q.getLocation(), Sound.BLOCK_ANVIL_USE, 0.7f, 1.2f);
                     loadouts.refresh(q);

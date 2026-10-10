@@ -455,6 +455,21 @@ public final class EmberCommand {
             s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
             return true;
         }
+        if ("forgefeel".equals(sub)) { // D475 admin smoke: ActionBar forge result samples
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            String kind = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "enhance";
+            String note = "enhance".equals(kind) ? "强化成功 +2 → +3（本档第 1/3 次）"
+                    : "refine".equals(kind) ? "精工 0% → 2%（确定成功，成色不变）"
+                    : "quality".equals(kind) ? "成色 标准 → 精良"
+                    : "upgrade".equals(kind) ? "升阶 T1 → T2"
+                    : "强化失败，保持 +2（本档已失败 1 次，最多再 2 次必成）";
+            if ("fail".equals(kind)) { kind = "enhance"; note = "强化失败，保持 +2（本档已失败 1 次，最多再 2 次必成）"; }
+            EmberForgeFeel.flash(p, kind, note);
+            p.sendMessage(P + "§8forgefeel sample · " + EmberForgeFeel.line(kind, note));
+            return true;
+        }
         if ("convertloop".equals(sub)) { // D474 admin smoke: replay convert success chase
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
