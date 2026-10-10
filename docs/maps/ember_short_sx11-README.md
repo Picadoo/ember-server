@@ -2,7 +2,7 @@
 
 **日期：** 2026-10-10 Asia/Shanghai  
 **规格：** [`DESIGN-ember-short-dungeon-sx11-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx11-2026-10-10.md) §2.5  
-**STATUS：** [`STATUS-ember-short-sx11-mm-2026-10-10.md`](../status/STATUS-ember-short-sx11-mm-2026-10-10.md)
+**STATUS：** [`STATUS-ember-short-dungeon-sx11-d417-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx11-d417-2026-10-10.md) · MM [`STATUS-ember-short-sx11-mm-2026-10-10.md`](../status/STATUS-ember-short-sx11-mm-2026-10-10.md)
 
 ## 惯例（查证）
 
@@ -12,7 +12,7 @@
 | Git | **整目录 gitignore**（Release assets）；**禁止** `git add -f` |
 | 登记 | `plugins/DungeonPlus/config.yml` → map 名 ↔ dungeon id |
 | 本壳 | `plugins/DungeonPlus/dungeon/EmberSx11/option.yml` · `$setmap{name=…}` + `$setspawn` |
-| 模板选择 | 本号用 `ember_raid`（与 sx10 同模板源，本地独立文件夹；**禁止**长期共用 `ember_short_sx01..10` 目录交差） |
+| 模板选择 | 本号用 `ember_raid`（本地**独立**文件夹；与 sx10 同模板源仅占位，**须** WE 重切对称双廊；**禁止**长期共用 `ember_short_sx01..10` 目录交差；**禁**环廊/递闸/霜雾廊/跳石/错层/塔升/风廊气质复读） |
 
 ## 本号动作
 
