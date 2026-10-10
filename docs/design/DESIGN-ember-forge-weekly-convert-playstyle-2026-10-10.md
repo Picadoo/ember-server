@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 烬砧每周转化（跨族底子 · D431）
 
-STATUS=**已批 A · 方案 M · D431 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-weekly-convert-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-weekly-convert-need-design-2026-10-10.md) · backlog `B-forge-weekly-convert`（**已批·施工中**）· STATUS [`STATUS-ember-forge-weekly-convert-d431-2026-10-10.md`](../status/STATUS-ember-forge-weekly-convert-d431-2026-10-10.md) · **≠关观察 ≠抬日表 ≠sx20 ≠天赋/灰印 ≠改 enhance 价 ≠复述烙纹/随机锻造**
+STATUS=**已批 A · 方案 M · D431 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-weekly-convert-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-weekly-convert-need-design-2026-10-10.md) · backlog `B-forge-weekly-convert`（**已批·施工中**）· STATUS [`STATUS-ember-forge-weekly-convert-d431-2026-10-10.md`](../status/STATUS-ember-forge-weekly-convert-d431-2026-10-10.md) · **≠关观察 ≠抬日表 ≠sx20 ≠天赋/灰印 ≠改 enhance 价 ≠复述烙纹/随机锻造**
 
 **上游：** D430 随机锻造 PASS（jar 1.65.132-d430）· Stage2 观察至 **≥17:40 CST**。
 
@@ -43,3 +43,4 @@ STATUS=**已批 A · 方案 M · D431 · 施工中** · 2026-10-10 · tip [`STAT
 | 2026-10-10 | 总控批 A·M · 自 D167§3.5 补全 · 施工 |
 
 *D431 · 每周转化 · 已批 A·M · 施工中。*
+| 2026-10-10 | **D431 PASS** jar 1.65.133-d431 · FreshQ872/873 |

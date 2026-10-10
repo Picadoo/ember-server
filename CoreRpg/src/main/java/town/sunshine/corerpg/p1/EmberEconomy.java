@@ -329,6 +329,8 @@ public final class EmberEconomy {
         sink("C21", "烙纹定向", "EmberBrandRules pin_coin/pin_brand", Period.NONE).acc(COIN, GEAR).model(FULL).done();
         sink("C22", "随机锻造", "EmberForgeRollRules", Period.NONE).acc(MARK, BLANK, COIN).model(FULL)
             .g("marks", 8).g("blank", 4).g("coin", 500).done();
+        sink("C23", "每周转化", "EmberConvertRules", Period.WEEK).acc(BLANK, COIN).keys("p4_conv").model(FULL)
+            .g("blank_t1", 2).g("blank_t2", 4).g("blank_t3", 6).g("coin_t1", 300).g("coin_t2", 600).g("coin_t3", 1000).done();
     }
 
     private EmberEconomy() {}

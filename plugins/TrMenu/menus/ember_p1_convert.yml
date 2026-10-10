@@ -1,0 +1,67 @@
+# D431 每周转化：手持刃/护符 → 选目标族 → 命令确认
+Title: '§6余烬 · 每周转化'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_convert'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####N####'
+  - '#123######'
+  - '####RB###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
+    - 'tell: §8手持刃/护符 · 每周 1 次 · 成色截卓越 · 强化归零 · uid 不变'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+  N:
+    display:
+      material: book
+      name: '§6每周转化 · 说明'
+      lore:
+        - '§7把手持件转到另一族（同部位同阶）'
+        - '§7成色最高卓越（极品截断）· 强化归零'
+        - '§7精工/词条/次数保留 · 每周 1 次'
+        - '§7价 T1/T2/T3：2/4/6 胚料 + 300/600/1000 币'
+  '1':
+    display:
+      material: blaze powder
+      name: '§c转到 · 焚烬'
+    actions:
+      all: [close, 'command: corerpg p1 convert scorch']
+  '2':
+    display:
+      material: magma cream
+      name: '§6转到 · 烬爆'
+    actions:
+      all: [close, 'command: corerpg p1 convert burst']
+  '3':
+    display:
+      material: slime ball
+      name: '§a转到 · 承烬'
+    actions:
+      all: [close, 'command: corerpg p1 convert sustain']
+  R:
+    display:
+      material: arrow
+      name: '§7返回工坊'
+    actions:
+      all: ['menu: ember_p1_forge']
+  B:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all: [close]

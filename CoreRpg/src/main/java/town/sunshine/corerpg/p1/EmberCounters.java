@@ -158,6 +158,7 @@ public final class EmberCounters {
         px("p4_afp_", "EmberGrowthService", A, IT, NV, "LEGACY item reroll pity by uid — migrated to EmberItemData.afPity / cr_p1_item.af_pity (S1-4 done, D208); read only for v1 items");
         px("p4_rrn_", "EmberPayRules", A, IT, NV, "LEGACY paid reroll sequence by uid — migrated to EmberItemData.rerollN / cr_p1_item.reroll_n (S1-4 done, D208); read only for v1 items");
         px("p4_rro_", "EmberPayRules", A, TX, ZR, "LEGACY reroll paid, result pending (n*2+lock) — never written since D208 (the roll commits in the cr_p1_txn row with the payment); recoverRolls still settles old ones");
+        x("p4_conv", "EmberGrowthService", LW, CL, RL, "D431 weekly family convert (DailyService.weekId)");
         // 2.4 season (EmberSeason)
         px("p3_goal_", "EmberSeason", W, PR, RL, "weekly goal progress");
         px("p3_goalpay_", "EmberSeason", W, CL, RL, "weekly goal paid (+ goal id | all)");

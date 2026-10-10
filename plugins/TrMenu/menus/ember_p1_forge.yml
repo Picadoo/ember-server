@@ -367,6 +367,21 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_forgeroll'
+  # D431: 每周转化
+  V:
+    display:
+      material: ender pearl
+      name: '§6每周转化'
+      lore:
+        - ''
+        - '§7跨族改底 · 每周 1 次'
+        - '§7成色截卓越 · 强化归零'
+        - ''
+        - '§e➥ §f打开转化页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_convert'
   # D429: 烙纹定向（词条类型自选）
   G:
     display:

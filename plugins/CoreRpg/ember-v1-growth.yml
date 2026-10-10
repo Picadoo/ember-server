@@ -194,3 +194,10 @@ forge:
     coin: 500
     quality: [70, 23, 7, 0]
     craft: [70, 20, 9, 1]
+
+  # D431 每周转化（刃/护符；成色截卓越；强化归零；周帽 1）
+  convert:
+    weekly: 1
+    quality_cap: 2
+    blank: [0, 2, 4, 6]
+    coin: [0, 300, 600, 1000]

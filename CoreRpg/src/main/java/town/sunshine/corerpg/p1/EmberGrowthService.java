@@ -2002,6 +2002,94 @@ public final class EmberGrowthService implements Listener {
     }
 
 
+
+    // ------------------------------------------------------------------ D431 weekly convert
+
+    /** /corerpg p1 convert <fam> [confirm] — held blade/charm → other family; weekly cap 1 */
+    public boolean convertCommand(Player p, String[] args) {
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
+        String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if (op.isEmpty() || "menu".equals(op)) { openMenu(p, "ember_p1_convert"); return true; }
+        if ("scorch".equals(op) || "burst".equals(op) || "sustain".equals(op)) {
+            boolean confirm = args.length >= 4 && "confirm".equalsIgnoreCase(args[args.length - 1]);
+            return convertHeld(p, d, op, confirm);
+        }
+        p.sendMessage(P + "用法：/corerpg p1 convert <scorch|burst|sustain> [confirm]（手持刃/护符）");
+        return true;
+    }
+
+    private EmberItemData heldGear(Player p) {
+        org.bukkit.inventory.ItemStack st = p.getInventory().getItemInMainHand();
+        if (st == null || !runs.loadouts().items().hasData(st)) return null;
+        EmberItems.Read r = runs.loadouts().items().read(st);
+        if (r == null || !r.ok() || r.data == null) return null;
+        if (!"blade".equals(r.data.slot) && !"charm".equals(r.data.slot)) return null;
+        return r.data;
+    }
+
+    private boolean convertHeld(Player p, PlayerData d, String toFam, boolean confirm) {
+        EmberItemData t = heldGear(p);
+        String week = town.sunshine.corerpg.DailyService.weekId();
+        int used = d.periodCount(EmberConvertRules.C_CONV, week);
+        String flag = EmberRunRules.directedForgeFlag(t == null ? 1 : t.tier);
+        boolean gate = t == null || t.tier <= 1 || (flag == null) || runs.progressFlag(d, flag);
+        String refuse = EmberConvertRules.refusal(t, toFam, used, gate);
+        if (refuse != null) { p.sendMessage(P + "§c" + refuse); return true; }
+        int blanks = EmberConvertRules.blanks(t.tier);
+        int coins = EmberConvertRules.coins(t.tier);
+        int qAfter = EmberConvertRules.qualityAfter(t.quality);
+        if (!confirm) {
+            p.sendMessage(P + "§6每周转化 · " + t.shortLabel());
+            p.sendMessage(P + "目标族：§f" + EmberItemData.familyName(toFam)
+                    + " §7· 本周剩余 §f" + (EmberConvertRules.WEEKLY_CAP - used) + "/" + EmberConvertRules.WEEKLY_CAP);
+            p.sendMessage(P + "成色：§f" + EmberItemData.qualityName(t.quality) + " §7→ §f" + EmberItemData.qualityName(qAfter)
+                    + (t.quality > EmberConvertRules.QUALITY_CAP ? " §c（极品截到卓越）" : "")
+                    + " §7· 强化 §f+" + t.enhance + " §7→ §f+0");
+            p.sendMessage(P + "保留：精工/词条/保底/锻造次数 · uid 不变");
+            p.sendMessage(P + "花费：§f" + blanks + " 胚料 + " + coins + " 余烬币");
+            if (t.enhance > 0) p.sendMessage(P + "§e提示：可先用工坊「互换」挪走强化再转化");
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
+                    new String[]{"[确认转化]", "/corerpg p1 convert " + toFam + " confirm", "扣胚料与币，改族", "GREEN"},
+                    new String[]{"[回转化页]", "/corerpg p1 convert menu", "不扣", "GRAY"});
+            return true;
+        }
+        if (gate(p)) return true;
+        final EmberPay pay = EmberPay.get();
+        if (pay == null) { p.sendMessage(P + "§c支付服务未就绪"); return true; }
+        final UUID id = p.getUniqueId();
+        final String rid = "fconv:" + t.uid.substring(0, Math.min(8, t.uid.length())) + ":"
+                + Long.toString(System.currentTimeMillis(), 36);
+        final EmberItemData planned = EmberConvertRules.plan(t, toFam).withRev(t.rev + 1);
+        final EmberPay.Price price = EmberPay.Price.of(EmberConvertRules.cost(t.tier)).at("C23");
+        final EmberItemData before = t;
+        final int usedNow = used;
+        pay.pay(p, rid, price, "转化没完成，退回", null, () -> {
+            commitOnItem(id, "forge_conv", rid, java.util.Collections.singletonList(new EmberItemStore.TxnItem(before, planned, null)),
+                    price.json(), "每周转化 " + before.shortLabel() + " → " + EmberItemData.familyName(toFam), ok -> {
+                        if (!ok) {
+                            pay.release(id, rid);
+                            Player q = Bukkit.getPlayer(id);
+                            if (q != null) q.sendMessage(P + "§c转化未写入，材料退回");
+                            return;
+                        }
+                        pay.settled(id, rid);
+                        PlayerData nd = data(id);
+                        if (nd != null) {
+                            nd.addPeriodCount(EmberConvertRules.C_CONV, week, 1);
+                            runs.flushData(id);
+                        }
+                        Player q = Bukkit.getPlayer(id);
+                        if (q != null) {
+                            q.sendMessage(P + "§a转化完成：§f" + planned.shortLabel()
+                                    + " §7· 强化+0 · 本周已用 §f" + (usedNow + 1) + "/" + EmberConvertRules.WEEKLY_CAP);
+                            openMenu(q, "ember_p1_convert");
+                        }
+                    });
+        }, err -> { if (p.isOnline()) p.sendMessage(P + "§c没有转化：" + err); });
+        return true;
+    }
+
     // ------------------------------------------------------------------ admin
 
     public Map<String, Object> debug(Player p) {
