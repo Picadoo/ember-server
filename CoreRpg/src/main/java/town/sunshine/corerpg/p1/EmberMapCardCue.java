@@ -54,6 +54,16 @@ public final class EmberMapCardCue {
             } catch (Throwable ignored) { }
         }
         p.sendMessage(EmberRunService.P + line);
+        // D1829 EM1-A
+        try {
+            CoreRpgPlugin pl = (CoreRpgPlugin) org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+            if (pl != null && pl.getDataStore() != null && m != null) {
+                town.sunshine.corerpg.PlayerData pd = pl.getDataStore().get(p.getUniqueId());
+                String meth = EmberMapIdentity.methodLine(m, pd);
+                if (meth != null && !meth.isEmpty())
+                    p.sendMessage(EmberRunService.P + "§7" + meth); // chat only — MapCardCue bans AB HUD
+            }
+        } catch (Throwable ignored) { }
     }
 
     /** Admin smoke: cue from map key flags. */

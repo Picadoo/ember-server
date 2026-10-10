@@ -696,3 +696,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1814–D1827 SHIP · jar 1.65.482-d1814
 - EM1 Stage0 COMPLETE; EM1-A methodLine SHIP; EM1-B BLOCKED (no invent)
+
+## D1828–D1841 SHIP · jar 1.65.483-d1828
+- MapCardCue methodLine chat (no AB; card is chat-only)
