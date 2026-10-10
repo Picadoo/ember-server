@@ -700,6 +700,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D559: warp to live treasure/elite side extra. */
+    public boolean hasHuntExtra(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasHuntExtra() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathHuntExtra(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathHuntExtra(p);
+    }
+
     /** D558: take open passage links for a committed player. */
     public boolean hasOpenLinks(Player p) {
         if (p == null) return false;
@@ -805,11 +821,14 @@ public final class EmberRunService implements Listener {
                 String hint = tw.hint + (tw.alt != null ? " §7· " + tw.alt.hint : "");
                 tellRun(s, "§e额外事件：奖励精英" + title + "§7· " + hint
                         + " · 击败 → §f碎片 +" + EmberRunRules.ELITE_SHARD + " §7+ §f核心 +" + EmberRunRules.ELITE_CORE);
+                EmberHuntPath.maybeAfterSpawn(s); // D559 elite
                 return;
             }
         }
         tellRun(s, "§6侧边出现了「" + s.extra.label + "」§7（可跳过；奖励记为待结算，击败首领才发放）");
         if (s.extra == EmberRunRules.Extra.CHEST) EmberChestPath.maybeAfterSpawn(s); // D553
+        if (s.extra == EmberRunRules.Extra.TREASURE || s.extra == EmberRunRules.Extra.ELITE)
+            EmberHuntPath.maybeAfterSpawn(s); // D559
     }
 
     void onExtraDone(EmberRunSession s) {
@@ -1289,6 +1308,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberGatePath.scheduleOfferAfterQ01(p); // D556 gate path
                         if ("q01".equals(g.id)) EmberCallPath.scheduleOfferAfterQ01(p); // D557 call path
                         if ("q01".equals(g.id)) EmberLinkPath.scheduleOfferAfterQ01(p); // D558 link path
+                        if ("q01".equals(g.id)) EmberHuntPath.scheduleOfferAfterQ01(p); // D559 hunt path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

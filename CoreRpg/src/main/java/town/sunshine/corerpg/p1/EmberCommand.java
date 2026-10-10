@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("huntpath".equals(sub) || "猎侧路径".equals(sub)) { // D559 side-extra hunt path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberHuntPath.glance(EmberHuntPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c猎侧路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberHuntPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c猎侧路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberHuntPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberHuntPath.get(d);
+                    if (EmberHuntPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberHuntPath.label(cur) + " · 改路径再 /corerpg p1 huntpath");
+                    else EmberHuntPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberHuntPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 huntpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberHuntPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("hunt".equals(sub) && args.length == 2) { // D559 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathHuntExtra(p)) p.sendMessage(P + "无法猎侧（无侧边宝藏/精英/未进本）");
+            else p.sendMessage(P + "§a猎侧·手点 §7已传至侧边");
+            return true;
+        }
         if ("linkpath".equals(sub) || "跃迁路径".equals(sub)) { // D558 passage-link path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1536,6 +1580,15 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("huntseed".equals(sub)) { // D559 admin smoke: probe hunt path
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberHuntPath.maybeProbe(t);
+            s.sendMessage(P + "已触发猎侧路径探测 → " + t.getName()
+                    + (runs != null && runs.hasHuntExtra(t) ? "（有侧边）" : "（无侧边）"));
             return true;
         }
         if ("linkseed".equals(sub)) { // D558 admin smoke: probe link path

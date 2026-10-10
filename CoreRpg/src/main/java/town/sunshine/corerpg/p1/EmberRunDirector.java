@@ -501,6 +501,31 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D559: side extra (treasure/elite) is live and hunt-able. */
+    boolean hasHuntExtra() {
+        if (s == null || !s.open() || s.extraDone) return false;
+        if (s.extra != EmberRunRules.Extra.TREASURE && s.extra != EmberRunRules.Extra.ELITE) return false;
+        if (def == null || def.eventAnchor == null || !extraSpawned) return false;
+        if (extraMob != null) {
+            Tracked t = mobs.get(extraMob);
+            if (t != null && t.le != null && !t.le.isDead()) return true;
+            return false;
+        }
+        return true;
+    }
+
+    /** D559: warp a committed player to the side-extra anchor. */
+    boolean pathHuntExtra(Player p) {
+        if (p == null || !p.isOnline() || !hasHuntExtra()) return false;
+        if (!s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Pt a = def.eventAnchor;
+        Location to = new Location(w, a.x + 0.5, a.y, a.z + 0.5, p.getLocation().getYaw(), 0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.6f, 1.4f);
+        return true;
+    }
+
     /** D558: true if any cleared-room passage link is available. */
     boolean hasOpenLinks() {
         if (def == null || def.links == null || s == null) return false;
