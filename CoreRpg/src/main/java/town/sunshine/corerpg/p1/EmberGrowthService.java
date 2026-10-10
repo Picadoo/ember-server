@@ -2215,7 +2215,18 @@ public final class EmberGrowthService implements Listener {
     private boolean brandCraft(Player p, PlayerData d, boolean confirm) {
         int need = EmberBrandRules.craftShards(); // D949
         if (!confirm) {
-            p.sendMessage(P + "§6烙纹合成：§f" + need + " 余烬碎片 §7→ §f1 余烬烙纹");
+            int have = 0;
+            try {
+                if (plugin.getNiBridge() != null)
+                    have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_SHARD);
+            } catch (Throwable ignored) { }
+            int gap = Math.max(0, need - have);
+            p.sendMessage(P + "§6烙纹合成：§f" + need + " 余烬碎片 §7→ §f1 余烬烙纹 §8· 有 §f" + have
+                    + (gap > 0 ? " §c· 还差 " + gap : " §a· 够"));
+            try { // D1288
+                p.sendActionBar(gap == 0 ? "§a烙纹合成 · 碎片够"
+                        : ("§e烙纹合成 · 还差碎 §f" + gap));
+            } catch (Throwable ignored) { }
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
                     new String[]{"[确认合成]", "/corerpg p1 brand craft confirm", "扣 " + need + " 碎片，得 1 烙纹", "GREEN"},
                     new String[]{"[打开烙纹页]", "/corerpg p1 brand menu", "回菜单", "GRAY"});

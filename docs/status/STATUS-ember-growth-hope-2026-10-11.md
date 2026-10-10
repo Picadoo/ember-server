@@ -571,3 +571,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1279–D1286 ARCH SHIP · jar 1.65.443-d1279
 - Imprint preview marks-gap ActionBar
+
+## D1287–D1294 ARCH SHIP · jar 1.65.444-d1287
+- Brand craft shard have/need + AB
