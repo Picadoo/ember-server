@@ -1681,7 +1681,11 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D527 | CoreRpg **1.65.218-d527** / bv 未抬 | 成长花样·盟约路径 **PASS**：`EmberGuildPath` open/gate/busy 盟约邀请策略 · **≠招募/好友/师徒双胞** · 冒烟 FreshQ1064 · `B-guild-path` · `0a03258a` · STATUS `STATUS-ember-guild-path-d527-2026-10-10.md`。 |
 | D528 | CoreRpg **1.65.219-d528** / bv 未抬 | 成长花样·喂养路径 **PASS**：`EmberFeedPath` auto/ask/mute 使魔灵尘升级 · **≠使魔出战双胞** · 冒烟 FreshQ1065 · `B-feed-path` · `fa40155f` · STATUS `STATUS-ember-feed-path-d528-2026-10-10.md`。 |
 | D529 | CoreRpg **1.65.220-d529** / bv 未抬 | 成长花样·足迹路径 **PASS**：`EmberTrailPath` auto/ask/mute 足迹装扮 · **≠使魔/喂养双胞** · 冒烟 FreshQ1066 · `B-trail-path` · `b08086fb` · STATUS `STATUS-ember-trail-path-d529-2026-10-10.md`。 |
-| D530 | CoreRpg **1.65.221-d530** / bv 未抬 | 成长花样·组队路径 **PASS**：`EmberPartyPath` open/gate/busy 好友组队邀请策略 · **≠招募/好友/盟约双胞** · 冒烟 FreshQ1067 · `B-party-path` · STATUS `STATUS-ember-party-path-d530-2026-10-10.md`。 |
+| D530 | CoreRpg **1.65.221-d530** / bv 未抬 | 成长花样·组队路径 **PASS**：`EmberPartyPath` open/gate/busy 好友组队邀请策略 · **≠招募/好友/盟约双胞** · 冒烟 FreshQ1067 · `B-party-path` · `52bf1776` · STATUS `STATUS-ember-party-path-d530-2026-10-10.md`。 |
+| D531 | CoreRpg **1.65.222-d531** / bv 未抬 | 成长花样·清库路径 **PASS**：`EmberJunkPath` auto/ask/mute 装备库垃圾→胚料 · **≠存仓/胚花法双胞** · 冒烟 FreshQ1068 · `B-junk-path` · `968bdc81` · STATUS `STATUS-ember-junk-path-d531-2026-10-10.md`。 |
+| D532 | CoreRpg **1.65.223-d532** / bv 未抬 | 成长花样·称号路径 **PASS**：`EmberTitlePath` auto/ask/mute 已获称号装配 · **≠足迹双胞** · 冒烟 FreshQ1069 · `B-title-path` · `129f7a4b` · STATUS `STATUS-ember-title-path-d532-2026-10-10.md`。 |
+| D533 | CoreRpg **1.65.224-d533** / bv 未抬 | 成长花样·上线路径 **PASS**：`EmberPingPath` open/gate/busy 好友上线感知 · **≠好友申请/组队/盟约双胞** · 冒烟 FreshQ1070 · `B-ping-path` · `f2fd2915` · STATUS `STATUS-ember-ping-path-d533-2026-10-10.md`。 |
+| D534 | CoreRpg **1.65.225-d534** / bv 未抬 | 成长花样·辉光路径 **PASS**：`EmberGlowPath` auto/ask/mute 主城刃辉光装配 · **≠称号/足迹双胞** · 冒烟 FreshQ1071 · `B-glow-path` · `dc1c0bac` · STATUS `STATUS-ember-glow-path-d534-2026-10-10.md`。 |
 
 
 
