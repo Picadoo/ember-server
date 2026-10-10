@@ -205,6 +205,8 @@ public final class EmberChallengePath {
             line = "§c硬本路径 · 挑战首通 §8· " + label(id);
         else if (id == EASY)
             line = "§a硬本路径 · 挑战局入账（偏好普通） §8· " + label(id);
+        else if (id == FOLLOW)
+            line = "§b硬本路径 · 挑战局入账（随令） §8· " + label(id);
         else
             line = "§c硬本路径 · 挑战入账 §8· " + label(id);
         p.sendMessage(EmberRunService.P + line);

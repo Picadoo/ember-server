@@ -268,3 +268,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D776 SHIP · TrMenu gear.yml
 - Fixed broken lore quotes; menu loads (77)
+
+## D777–D779 SHIP · jar 1.65.355-d777
+- D777 mapfarm resume cmd + adventure Open
+- D778 attune go button
+- D779 FOLLOW settle wording

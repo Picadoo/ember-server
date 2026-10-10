@@ -47,6 +47,9 @@ public final class EmberCommand {
         String sub = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "status";
         if ("abysstarget".equals(sub) || "深渊目标".equals(sub))
             return EmberAbyssTarget.cmd(s, args, runs);
+        if ("mapfarm".equals(sub) || "图装追".equals(sub) || "farmresume".equals(sub)) { // D777
+            return EmberMapFarmCue.cmd(s, args, runs);
+        }
         if ("setchase".equals(sub) || "成套追".equals(sub))
             return EmberSetChase.cmd(s, args, runs, loadouts);
         if ("status".equals(sub)) return status(s);

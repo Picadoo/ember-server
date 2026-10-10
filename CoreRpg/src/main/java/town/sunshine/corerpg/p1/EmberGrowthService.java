@@ -1312,7 +1312,7 @@ public final class EmberGrowthService implements Listener {
         p.sendMessage(P + line);
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
         town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7一键：",
-                "[一键调律·" + def.id + "]", "/corerpg p1 sig attune " + def.id + " unlock",
+                "[一键调律·" + def.id + "]", "/corerpg p1 sig attune " + def.id + " go",
                 EmberSignature.ALT_MARKS + " 枚徽记解锁调律版（永久）");
         return true;
     }

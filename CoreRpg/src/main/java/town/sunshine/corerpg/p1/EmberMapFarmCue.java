@@ -1,6 +1,7 @@
 package town.sunshine.corerpg.p1;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -160,16 +161,16 @@ public final class EmberMapFarmCue {
      * D763: after login (hub) — one resume cue for last farm map + enter button.
      * Rising edge per remember cycle (latched to map code).
      */
-    public static void maybeResumeAfterJoin(Player p, PlayerData d, EmberLoadout lo, EmberRunMaps maps) {
-        if (p == null || d == null || maps == null) return;
-        if (maps.byWorld(p.getWorld().getName()) != null) return; // still in an instance
+    public static boolean maybeResumeAfterJoin(Player p, PlayerData d, EmberLoadout lo, EmberRunMaps maps) {
+        if (p == null || d == null || maps == null) return false;
+        if (maps.byWorld(p.getWorld().getName()) != null) return false; // still in an instance
         int code = d.periodCount(C_RESUME_MAP, "all");
         String key = decodeMap(code);
-        if (key == null) return;
+        if (key == null) return false;
         int lat = d.periodCount(C_RESUME_LAT, "all");
-        if (lat == code) return;
+        if (lat == code) return false;
         EmberRunMaps.MapDef m = maps.byKey(key);
-        if (m == null || m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
+        if (m == null || m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return false;
         d.addPeriodCount(C_RESUME_LAT, "all", code - lat);
         flush(p); // D765
         cue(p, m, lo);
@@ -189,6 +190,7 @@ public final class EmberMapFarmCue {
                     EmberSetChase.tell(p, d, lo, runs.loadouts());
             }
         }
+        return true;
     }
 
     static boolean mapFamEqualsFocus(PlayerData d, String mapFam) {
@@ -196,6 +198,39 @@ public final class EmberMapFarmCue {
         int focus = EmberSetFocus.get(d);
         String fk = EmberSetFocus.familyKey(focus);
         return mapFam.equals(fk);
+    }
+
+
+    /** D777: /corerpg p1 mapfarm [resume] — show/resume last farm map chase. */
+    public static boolean cmd(CommandSender s, String[] args, EmberRunService runs) {
+        if (!(s instanceof Player)) { s.sendMessage(EmberRunService.P + "仅玩家可用"); return true; }
+        Player p = (Player) s;
+        PlayerData d = dataOf(p);
+        if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return true; }
+        EmberLoadout lo = runs.loadouts() == null ? null : runs.loadouts().get(p);
+        String op = args.length >= 3 ? args[2].toLowerCase() : "resume";
+        if ("clear".equals(op) || "none".equals(op)) {
+            int cur = d.periodCount(C_RESUME_MAP, "all");
+            if (cur > 0) d.addPeriodCount(C_RESUME_MAP, "all", -cur);
+            int lat = d.periodCount(C_RESUME_LAT, "all");
+            if (lat != 0) d.addPeriodCount(C_RESUME_LAT, "all", -lat);
+            flush(p);
+            p.sendMessage(EmberRunService.P + "已清空图装追恢复");
+            return true;
+        }
+        // force re-cue: clear latch
+        int lat = d.periodCount(C_RESUME_LAT, "all");
+        if (lat != 0) d.addPeriodCount(C_RESUME_LAT, "all", -lat);
+        flush(p);
+        if (!maybeResumeAfterJoin(p, d, lo, runs.maps())) {
+            int code = d.periodCount(C_RESUME_MAP, "all");
+            String key = decodeMap(code);
+            if (key == null)
+                p.sendMessage(EmberRunService.P + "§7尚无图装追记录 · 进有族偏向的主线图后会记住");
+            else
+                p.sendMessage(EmberRunService.P + "§7图装追 · 上次 §f" + key.toUpperCase() + " §8（本图无偏向或已提示过）");
+        }
+        return true;
     }
 
     private static PlayerData dataOf(Player p) {
