@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D583: warp to nearest shield-affix elite to focus tanky target. */
+    public boolean hasPendingShell(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingShell() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathShellElite(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathShellElite(p);
+    }
+
     /** D582: warp to nearest split-add after split elite dies. */
     public boolean hasPendingClone(Player p) {
         if (p == null) return false;
@@ -1697,6 +1713,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberCutPath.scheduleOfferAfterQ01(p); // D580 cut path
                         if ("q01".equals(g.id)) EmberPressPath.scheduleOfferAfterQ01(p); // D581 press path
                         if ("q01".equals(g.id)) EmberClonePath.scheduleOfferAfterQ01(p); // D582 clone path
+                        if ("q01".equals(g.id)) EmberShellPath.scheduleOfferAfterQ01(p); // D583 shell path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

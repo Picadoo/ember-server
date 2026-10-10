@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("shellpath".equals(sub) || "铁壁路径".equals(sub)) return shellPathCmd(s, args); // D583
+        if ("shell".equals(sub) && args.length == 2) return shellGoCmd(s); // D583
         if ("clonepath".equals(sub) || "分身路径".equals(sub)) return clonePathCmd(s, args); // D582
         if ("clone".equals(sub) && args.length == 2) return cloneGoCmd(s); // D582
         if ("presspath".equals(sub) || "压伤路径".equals(sub)) return pressPathCmd(s, args); // D581
@@ -1713,6 +1715,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("shellseed".equals(sub)) return shellSeedCmd(s, args); // D583
         if ("cloneseed".equals(sub)) return cloneSeedCmd(s, args); // D582
         if ("pressseed".equals(sub)) return pressSeedCmd(s, args); // D581
         if ("cutseed".equals(sub)) return cutSeedCmd(s, args); // D580
@@ -5724,6 +5727,62 @@ public final class EmberCommand {
             EmberClonePath.maybeProbe(t);
             s.sendMessage(P + "已触发分身路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingClone(t) ? "（有分身）" : "（无分身）"));
+            return true;
+    }
+
+    private boolean shellPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberShellPath.glance(EmberShellPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c铁壁路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberShellPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c铁壁路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberShellPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberShellPath.get(d);
+                    if (EmberShellPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberShellPath.label(cur) + " · 改路径再 /corerpg p1 shellpath");
+                    else EmberShellPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberShellPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 shellpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberShellPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean shellGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathShellElite(p)) p.sendMessage(P + "无法集火（无铁壁精英/未进本）");
+            else p.sendMessage(P + "§a铁壁·手点 §7已传至铁壁精英");
+            return true;
+    }
+
+    private boolean shellSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberShellPath.maybeProbe(t);
+            s.sendMessage(P + "已触发铁壁路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingShell(t) ? "（有铁壁）" : "（无铁壁）"));
             return true;
     }
 }

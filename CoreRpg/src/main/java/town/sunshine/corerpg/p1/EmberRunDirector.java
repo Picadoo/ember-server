@@ -510,6 +510,40 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D583: any living shield-affix elite still up. */
+    boolean hasPendingShell() {
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if ("shield".equals(t.affix)) return true;
+        }
+        return false;
+    }
+
+    /** D583: warp a committed player next to the nearest living shield elite. */
+    boolean pathShellElite(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingShell()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (!"shield".equals(t.affix)) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location at = best.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.6f);
+        return true;
+    }
+
     /** D582: any living split-add still up. */
     boolean hasPendingClone() {
         for (Tracked t : mobs.values()) {
@@ -1498,6 +1532,7 @@ final class EmberRunDirector {
         t.le.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 20 * 600, 0, false, false), true);
         String how = EmberAffixes.how(t.affix, v);
         svc.tellRun(s, "§6词缀精英「" + tag + "」§7出现：" + how + " · 击败 → 结算时 §f余烬碎片 +" + v.affixShard);
+        if ("shield".equals(t.affix)) EmberShellPath.maybeAfterShell(s); // D583
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s %s affix %s on %s hp=%.0f", s.runId, t.roomId, t.affix, t.role, t.le.getMaxHealth()));
     }
 
