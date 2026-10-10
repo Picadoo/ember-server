@@ -86,6 +86,8 @@ public final class EmberEnhanceUndo {
             if (left <= 0) return;
             try { q.sendActionBar("§e失败仍可撤 · §f" + left + "s §7· /corerpg p1 enhance undo"); }
             catch (Throwable ignored) { }
+            ConfirmTokens.sendButton(q, EmberRunService.P + "§e中途提醒：", // D823
+                    "[撤销本次失败]", "/corerpg p1 enhance undo", "还剩约 " + left + "s");
         }, 30L * 20L);
     }
 

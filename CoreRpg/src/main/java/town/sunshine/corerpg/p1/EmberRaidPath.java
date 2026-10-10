@@ -203,6 +203,20 @@ public final class EmberRaidPath {
         if (mk == null || !mk.equalsIgnoreCase(mapKey)) return;
         p.sendMessage(EmberRunService.P + "§a团本路径达成：§f" + label(id));
         try { p.sendActionBar("§a团本路径 · 达成"); } catch (Throwable ignored) { }
+        // D822 path-hit next (RaidLoop may also offer; rising path-only)
+        String week = EmberPlayfeelTelemetry.weekKey();
+        CoreRpgPlugin pl = plugin();
+        if (pl != null && pl.getEmberRuns() != null) {
+            EmberRunMaps.MapDef m = pl.getEmberRuns().maps().byKey(mapKey);
+            if (m != null && m.weeklyCap > 0) {
+                int used = EmberRaidService.weekCount(d, m, week);
+                if (used < m.weeklyCap) {
+                    ConfirmTokens.sendButtons(p, EmberRunService.P + "§7路径团本再开：",
+                            new String[]{enterLabel(id), enterCmd(id), "剩 " + (m.weeklyCap - used) + " 次", "GREEN"},
+                            new String[]{"[换路径]", "/corerpg p1 raidpath", "改焦点", "GRAY"});
+                }
+            }
+        }
     }
 
     private static PlayerData dataOf(Player p) {

@@ -338,3 +338,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D820–D821 SHIP · jar 1.65.374-d820
 - Makeup join cue (day latch); makeup success next
+
+## D822–D823 SHIP · jar 1.65.375-d822
+- Raid path-hit re-enter; undo mid button
