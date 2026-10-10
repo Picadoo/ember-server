@@ -316,6 +316,13 @@ public final class EmberCommand {
             }
             return true;
         }
+        if ("forge".equals(sub) || "工坊".equals(sub) || "workshop".equals(sub)) { // D473 open forge menu
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(),
+                    "trmenu open ember_p1_forge " + p.getName());
+            return true;
+        }
         if ("forgegoal".equals(sub) || "工坊目标".equals(sub)) { // D461 forge craft-goal path pick
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -446,6 +453,20 @@ public final class EmberCommand {
             if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
             double got = EmberHeal.full(t, "管理员 /corerpg p1 heal");
             s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
+            return true;
+        }
+        if ("shortspend".equals(sub)) { // D473 admin smoke: replay short settle forge-chase cue
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            int after = 3, cap = 3;
+            String chase = EmberShortRules.spendChaseTell(after, cap);
+            p.sendMessage(P + chase);
+            try { p.sendActionBar(EmberShortRules.spendChaseActionBar(after, cap)); } catch (Throwable ignored) { }
+            town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
+                    EmberShortRules.spendChaseButtonLabel(),
+                    EmberShortRules.spendChaseButtonCmd(),
+                    EmberShortRules.spendChaseButtonHover());
             return true;
         }
         if ("skillcue".equals(sub)) { // D459 admin smoke: replay skill-unlock announce

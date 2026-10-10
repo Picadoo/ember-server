@@ -2,6 +2,8 @@ package town.sunshine.corerpg.p1;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.DailyService;
 import town.sunshine.corerpg.PlayerData;
 
@@ -117,8 +119,15 @@ public final class EmberShortService {
                 p.sendMessage(P() + "§e短征通关 §7· " + EmberShortRules.rewardLine(m.key)
                         + (r.firstClearPaidNow ? " §a（含生涯首通包）" : "")
                         + " §7· " + EmberShortRules.dayLine(r.rewardedAfter, dailyCap(m)));
-                // D409 W1a: vault→forge chase; optional day-full half when this map cap hit
-                p.sendMessage(P() + EmberShortRules.spendChaseTell(r.rewardedAfter, dailyCap(m)));
+                // D409 W1a + D473: vault→forge chase tell + clickable [去工坊] + ActionBar
+                String chase = EmberShortRules.spendChaseTell(r.rewardedAfter, dailyCap(m));
+                p.sendMessage(P() + chase);
+                try { p.sendActionBar(EmberShortRules.spendChaseActionBar(r.rewardedAfter, dailyCap(m))); }
+                catch (Throwable ignored) { }
+                ConfirmTokens.sendButton(p, P() + "§7下一步：",
+                        EmberShortRules.spendChaseButtonLabel(),
+                        EmberShortRules.spendChaseButtonCmd(),
+                        EmberShortRules.spendChaseButtonHover());
             } else if (r.fresh) {
                 p.sendMessage(P() + "§e短征通关（无奖）§7· " + EmberShortRules.dayLine(before, dailyCap(m))
                         + " · 0 点重置有奖次数");

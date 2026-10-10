@@ -207,6 +207,15 @@ public final class EmberShortRules {
         return spendChaseLine() + spendChaseDayFullHalf(rewardedAfter, dailyCap);
     }
 
+    /** D473: clickable forge chase after rewarded short settle. */
+    public static String spendChaseButtonLabel() { return "[去工坊]"; }
+    public static String spendChaseButtonCmd() { return "/corerpg p1 forge"; }
+    public static String spendChaseButtonHover() { return "强化 / 精工 / 成色 · 材料已在仓"; }
+    public static String spendChaseActionBar(int rewardedAfter, int dailyCap) {
+        String t = spendChaseTell(rewardedAfter, dailyCap);
+        return t == null || t.isEmpty() ? "§7材料已进仓 · 去工坊" : t;
+    }
+
     /** Claim counter id for a short map key ({@code p1_sx01_day} …). */
     public static String claimKey(String mapKey) {
         if (mapKey == null || mapKey.isEmpty()) return CLAIM;
