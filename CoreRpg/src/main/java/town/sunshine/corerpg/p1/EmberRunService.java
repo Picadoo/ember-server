@@ -790,7 +790,9 @@ public final class EmberRunService implements Listener {
             Player p = Bukkit.getPlayer(u);
             if (p == null || !p.isOnline()) continue;
             p.sendMessage(P + ChatColor.RED + "本局失败：" + why + (back > 0
-                    ? EmberSettleService.failRefundGrantedSuffix(back, EmberSettleService.failRefundPct(maps.failRefund), s.abyss > 0)
+                    ? EmberSettleService.failRefundGrantedSuffix(back, EmberSettleService.failRefundPct(
+                            EmberFailPath.effectiveShare(EmberFailPath.get(dataOf(u)), maps.failRefund)), s.abyss > 0)
+                    : back == EmberFailPath.RESULT_SKIP ? EmberFailPath.skipSuffix()
                     : back == 0 ? EmberSettleService.failRefundAlreadyUsedSuffix()
                     : EmberSettleService.failRefundIneligibleSuffix()));
         }
@@ -1119,6 +1121,7 @@ public final class EmberRunService implements Listener {
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
+                        if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberFailPath.scheduleOfferAfterQ07(p); // D507 fail stamina refund path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAbyssPath.scheduleOfferAfterQ07(p); // D486 abyss push/farm path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAttunePath.scheduleOfferAfterQ07(p); // D492 attune combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberTunePath.scheduleOfferAfterQ07(p); // D498 tune combat path

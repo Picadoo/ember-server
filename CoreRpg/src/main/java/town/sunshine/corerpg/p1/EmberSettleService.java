@@ -159,10 +159,15 @@ public final class EmberSettleService {
     }
 
     int failRefund(UUID u, EmberRunSession s) {
+        double table = runs.maps().failRefund;
+        if (table <= 0) return -1;
+        PlayerData pd = runs.dataOf(u);
+        int path = EmberFailPath.get(pd);
+        double share = EmberFailPath.effectiveShare(path, table);
         Integer c = s.cost.get(u);
-        int back = EmberRunRules.failRefundAmount(c == null ? 0 : c, runs.maps().failRefund);
+        int back = EmberRunRules.failRefundAmount(c == null ? 0 : c, share);
         StaminaService st = runs.plugin().getStaminaService();
-        if (back <= 0 || st == null) return -1;
+        if (st == null) return -1;
         EmberRunRules.Ledger l = runs.store().ledger(u);
         EmberRunRules.Row cost = l.get(s.runId, "cost");
         if (cost == null || EmberRunRules.ST_RELEASED.equals(cost.status)) return -1;
@@ -175,8 +180,14 @@ public final class EmberSettleService {
             return 0;
         }
         runs.store().saveLedger(u, Collections.singletonList(r));
-        st.releaseFlat(u, back);
-        runs.log().info("[P1 run] fail refund " + u + " " + day + " run " + s.runId + ": " + back + " stamina (cost " + c + ")");
+        if (back > 0) st.releaseFlat(u, back);
+        if (EmberFailPath.valid(path) && share != table) {
+            runs.log().info("[P1 run] failpath " + EmberFailPath.key(path) + " " + u
+                    + " share " + table + "→" + share + " back " + back);
+        } else {
+            runs.log().info("[P1 run] fail refund " + u + " " + day + " run " + s.runId + ": " + back + " stamina (cost " + c + ")");
+        }
+        if (path == EmberFailPath.SKIP && back == 0) return EmberFailPath.RESULT_SKIP;
         return back;
     }
 
