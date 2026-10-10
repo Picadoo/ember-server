@@ -510,6 +510,26 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D586: boss half-HP phase has started and boss still alive. */
+    boolean hasPendingPhase() {
+        return phaseTold && boss != null && boss.le != null && !boss.le.isDead();
+    }
+
+    /** D586: warp a committed player next to the boss after half-HP phase. */
+    boolean pathPhaseBoss(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingPhase()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location at = boss.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.75f);
+        return true;
+    }
+
     /** D585: any living boss half-HP add still up. */
     boolean hasPendingWave() {
         for (Tracked t : mobs.values()) {
@@ -2703,6 +2723,7 @@ final class EmberRunDirector {
             svc.tellRun(s, halfHpTellLine()); // D303 raid / D304 story
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss half-HP phase at %.0f%%", s.runId, ratio * 100));
             svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
+            EmberPhasePath.maybeAfterPhase(s); // D586
         }
         // §13 adds: once at 50 % after a 1 s warning
         if (b.adds != null && !addsDone && ratio <= b.adds.atHp) {
@@ -2759,6 +2780,7 @@ final class EmberRunDirector {
             svc.tellRun(s, halfHpTellLine()); // D303 raid / D304 story
             svc.log().info(String.format(Locale.ROOT, "[P1 run] %s boss phase 2 at %.0f%% (%s)", s.runId, ratio * 100, b.skills.get(due).name));
             svc.onBossPhase(s, RevivePoint.HALF_HP); // D106 raid revive point
+            EmberPhasePath.maybeAfterPhase(s); // D586
         }
         double lrh = svc.maps().raidLastReviveHp; // D118: armed at <= lrh with someone down, once per raid
         if (lrh > 0 && !lastRevDone && svc.isRaid(s) && lastPhase() && ratio <= lrh) {

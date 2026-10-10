@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("phasepath".equals(sub) || "半血路径".equals(sub)) return phasePathCmd(s, args); // D586
+        if ("phase".equals(sub) && args.length == 2) return phaseGoCmd(s); // D586
         if ("wavepath".equals(sub) || "增援路径".equals(sub)) return wavePathCmd(s, args); // D585
         if ("wave".equals(sub) && args.length == 2) return waveGoCmd(s); // D585
         if ("soakpath".equals(sub) || "分摊路径".equals(sub)) return soakPathCmd(s, args); // D584
@@ -1719,6 +1721,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("phaseseed".equals(sub)) return phaseSeedCmd(s, args); // D586
         if ("waveseed".equals(sub)) return waveSeedCmd(s, args); // D585
         if ("soakseed".equals(sub)) return soakSeedCmd(s, args); // D584
         if ("shellseed".equals(sub)) return shellSeedCmd(s, args); // D583
@@ -5901,6 +5904,62 @@ public final class EmberCommand {
             EmberWavePath.maybeProbe(t);
             s.sendMessage(P + "已触发增援路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingWave(t) ? "（有援兵）" : "（无援兵）"));
+            return true;
+    }
+
+    private boolean phasePathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberPhasePath.glance(EmberPhasePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c半血路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberPhasePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c半血路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberPhasePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberPhasePath.get(d);
+                    if (EmberPhasePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPhasePath.label(cur) + " · 改路径再 /corerpg p1 phasepath");
+                    else EmberPhasePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberPhasePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 phasepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberPhasePath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean phaseGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathPhaseBoss(p)) p.sendMessage(P + "无法加压（未进半血/无首领/未进本）");
+            else p.sendMessage(P + "§a半血·手点 §7已传至首领");
+            return true;
+    }
+
+    private boolean phaseSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberPhasePath.maybeProbe(t);
+            s.sendMessage(P + "已触发半血路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingPhase(t) ? "（已半血）" : "（未半血）"));
             return true;
     }
 }
