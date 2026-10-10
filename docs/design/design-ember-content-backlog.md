@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-blank-spend-loop`（已批 A · 方案 M · D482 · **PASS** · jar 1.65.173-d482 · 胚料花法闭环 · ≠同族 HUD ≠周路径）
 - `B-pledge-path`（已批 A · 方案 M · D481 · **PASS** · jar 1.65.172-d481 · 誓约路径 lean/reverse/both · ≠同族 HUD）
 - `B-counter-path`（已批 A · 方案 M · D480 · **PASS** · jar 1.65.171-d480 · 破绽路径三选一 · ≠同族 HUD）
 - `B-slash-cd-ready`（已批 A · 方案 M · D479 · **PASS** · jar 1.65.170-d479 · 烬斩充能就绪 · ≠改 CD · 镜像 D476）

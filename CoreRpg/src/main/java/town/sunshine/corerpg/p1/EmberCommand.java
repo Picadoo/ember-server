@@ -248,6 +248,17 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("blankloop".equals(sub)) { // D482 admin smoke: dismantle→blank spend chase buttons
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            int n = 2;
+            if (args.length >= 3) {
+                try { n = Integer.parseInt(args[2]); } catch (NumberFormatException e) { n = 2; }
+            }
+            EmberBlankLoop.afterDismantle(p, Math.max(1, Math.min(99, n)));
+            return true;
+        }
         if ("pledgepath".equals(sub) || "誓约路径".equals(sub)) { // D481 self-pledge combat path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
