@@ -450,3 +450,15 @@ EmberSx16ShadowCast:
   - delay 15
   - damage{amount=1.0} @PlayersInRadius{r=4.5}
   - effect:particles{p=crit;amount=12;hSpread=4;ySpread=0.3;speed=0.01} @Self
+
+# --- 短征 sx17 · 烬潮回廊 Boss 潮扫斩/回潮压浪（短 delay·轻粒子·防 Watchdog）---
+EmberSx17TideCast:
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬潮】&f潮扫斩——&7退进潮冠侧龛或落潮侧台！"} @PlayersInRadius{r=20}
+  - effect:particles{p=waterdrop;amount=16;hSpread=4;ySpread=0.3;speed=0.01} @Self
+  - effect:particles{p=cloud;amount=10;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.5;pitch=0.5} @Self
+  - delay 15
+  - damage{amount=1.0} @PlayersInRadius{r=4.5}
+  - effect:particles{p=waterdrop;amount=10;hSpread=4;ySpread=0.3;speed=0.01} @Self

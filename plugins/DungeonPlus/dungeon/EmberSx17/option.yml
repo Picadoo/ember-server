@@ -1,0 +1,15 @@
+# D426 · EmberSx17 烬潮回廊 idle DP
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx17} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx17%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入烬潮回廊} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e烬潮回廊 §7· 潮门庭→回廊潮道→潮冠终厅；经≥2段潮汐时窗侧穿后击败潮冠守吏} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+dungeon-area: []
+dungeon-reward-script: []
