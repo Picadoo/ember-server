@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-map-card-cue`（已批 A · 方案 M · D489 · **PASS** · jar 1.65.180-d489 · 入场名片聊天钉 · ≠同族 HUD ≠工坊花法）
 - `B-featured-path`（已批 A · 方案 M · D488 · **PASS** · jar 1.65.179-d488 · 精选图身份挑战/普通 · ≠同族 HUD ≠工坊花法）
 - `B-upgrade-spend-loop`（已批 A · 方案 M · D487 · **PASS** · jar 1.65.178-d487 · 升阶战力花法追击 · ≠同族 HUD ≠周路径）
 - `B-abyss-path`（已批 A · 方案 M · D486 · **PASS** · jar 1.65.177-d486 · 深渊冲层/刷层路径 · ≠同族 HUD）

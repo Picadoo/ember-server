@@ -676,6 +676,31 @@ public final class EmberCommand {
             EmberForgeMatReady.adminSample(p, from, to);
             return true;
         }
+        if ("mapcard".equals(sub)) { // D489 admin smoke: map-enter chat 名片+loot (no ActionBar)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            String key = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "q01";
+            boolean challenge = args.length >= 4 && "challenge".equalsIgnoreCase(args[3]);
+            int abyss = 0;
+            if (args.length >= 4) {
+                try { abyss = Integer.parseInt(args[3]); } catch (NumberFormatException ignored) { }
+            }
+            EmberRunMaps.MapDef m = runs.maps().byKey(key);
+            if (m == null) {
+                // sample without MapDef
+                String mode = challenge ? "挑战" : (abyss > 0 ? "深渊" + abyss : "主线");
+                String msg = EmberMapCardCue.chatLine(key.toUpperCase(Locale.ROOT) + " 样例", mode, "样例名片", "不偏向");
+                p.sendMessage(P + msg);
+                p.sendMessage(P + "§8mapcard sample · unknown key " + key);
+                return true;
+            }
+            EmberMapCardCue.cueSample(p, m, challenge, abyss);
+            p.sendMessage(P + "§8mapcard · " + EmberMapCardCue.followHint() + " · " + key
+                    + (challenge ? " challenge" : "") + (abyss > 0 ? " abyss" + abyss : ""));
+            return true;
+        }
         if ("mapenter".equals(sub)) { // D477 admin smoke: map-enter ActionBar sample
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

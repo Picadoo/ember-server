@@ -302,6 +302,7 @@ public final class EmberSessionService {
         for (UUID cu : s.committed) {
             Player cp = Bukkit.getPlayer(cu);
             if (cp != null && cp.isOnline()) EmberMapEnterFeel.flash(cp, enterFeelMap, s);
+            if (cp != null && cp.isOnline()) EmberMapCardCue.cue(cp, enterFeelMap, s); // D489 chat 名片+loot
         }
         // A18: party HP multiplier locked now for the whole run
         s.partySize = s.committed.size();
