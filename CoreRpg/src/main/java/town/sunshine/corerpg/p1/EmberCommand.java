@@ -4038,10 +4038,44 @@ public final class EmberCommand {
             }
             return true;
         }
+                if ("abysstarget".equals(sub) || "深渊目标".equals(sub)) { // D696 layer target
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            int best = runs.abyssBest(d);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberAbyssTarget.glance(d, best));
+                p.sendMessage(P + "用法：/corerpg p1 abysstarget <1-" + EmberAbyssTarget.MAX + "|clear>");
+                return true;
+            }
+            String raw = args[2];
+            if ("clear".equalsIgnoreCase(raw) || "none".equalsIgnoreCase(raw) || "取消".equals(raw)) {
+                EmberAbyssTarget.set(d, 0);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                p.sendMessage(P + "已清空深渊层目标");
+                return true;
+            }
+            int floor;
+            try { floor = Integer.parseInt(raw); } catch (NumberFormatException e) {
+                p.sendMessage(P + "层数须为 1～" + EmberAbyssTarget.MAX); return true;
+            }
+            if (floor < 1 || floor > EmberAbyssTarget.MAX) {
+                p.sendMessage(P + "层数须为 1～" + EmberAbyssTarget.MAX); return true;
+            }
+            EmberAbyssTarget.set(d, floor);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            p.sendMessage(P + EmberAbyssTarget.glance(d, best));
+            try { p.sendActionBar("§e层目标 · §f" + floor); } catch (Throwable ignored) { }
+            return true;
+        }
+
         if ("forge".equals(sub) || "工坊".equals(sub) || "workshop".equals(sub)) { // D473 open forge menu
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
             EmberSinkGlance.tellHeld(p, forge, loadouts, runs == null ? null : runs.dataOf(p.getUniqueId())); // D680/D681
+            EmberEnhanceUndo.forgeGlance(p); // D694
             org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(),
                     "trmenu open ember_p1_forge " + p.getName());
             return true;

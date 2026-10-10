@@ -56,9 +56,24 @@ public final class EmberEnhanceUndo {
                 t.after.rev, cost, System.currentTimeMillis());
         LAST.put(p.getUniqueId(), s);
         String P = EmberRunService.P;
-        ConfirmTokens.sendButtons(p, P + "§7误点可撤（60 秒内 · 仅失败）：",
+        int sec = remainSec(s, System.currentTimeMillis());
+        try { // D694
+            p.sendActionBar("§e强化失败可撤 · §f" + sec + "s §7· /corerpg p1 enhance undo");
+        } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7误点可撤（" + sec + " 秒内 · 仅失败）：",
                 new String[]{"[撤销本次失败]", "/corerpg p1 enhance undo",
-                        "退回材料 · pity 回滚 · 强化等级不变", "YELLOW"});
+                        "退回材料 · pity 回滚 · 剩余约 " + sec + "s", "YELLOW"});
+    }
+
+    /** D694: open-forge glance if undo window still open. */
+    public static void forgeGlance(Player p) {
+        if (p == null) return;
+        Snap s = peek(p.getUniqueId());
+        if (s == null) return;
+        int sec = remainSec(s, System.currentTimeMillis());
+        if (sec <= 0) { LAST.remove(p.getUniqueId(), s); return; }
+        p.sendMessage(EmberRunService.P + "§e仍可撤销强化失败 · §f约 " + sec + "s §7· /corerpg p1 enhance undo");
+        try { p.sendActionBar("§e失败可撤 · §f" + sec + "s"); } catch (Throwable ignored) { }
     }
 
     public static Snap peek(UUID id) { return id == null ? null : LAST.get(id); }

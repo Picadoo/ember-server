@@ -185,6 +185,8 @@ public final class EmberAbyssService {
         EmberRunMaps.MapDef m = maps.abyssMap(seed);
         if (m == null) { leader.sendMessage(P() + "深渊未配置。"); return true; }
         EmberGoalPath.maybeGlance(leader, runs, "abyss"); // D521 weekly goal focus
+        PlayerData enterPd = runs.dataOf(leader.getUniqueId());
+        EmberAbyssTarget.enterCue(leader, enterPd, tier, best(enterPd)); // D696
         // D649: first-layer gift visible at entry (fee table already 0 · no price change)
         if (tier == 1 && best(runs.dataOf(leader.getUniqueId())) <= 0) {
             leader.sendMessage(P() + "§5首层礼 · §f第 1 层层费免费 §7· 强度=挑战版 · 打通开放第 2 层");

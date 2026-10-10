@@ -117,3 +117,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D691 imprint page dry-streak note
 - D692 skill kit dash telegraph lore
 - D693 sig menu chat dry glance
+
+## D694–D697 SHIP · jar 1.65.327-d694 · 2026-10-11
+- D694 enhance-fail undo countdown + forge glance
+- D695 set completion chase on 2pc/awk
+- D696 abyss layer target
+- D697 short FC next map after first-clear pack

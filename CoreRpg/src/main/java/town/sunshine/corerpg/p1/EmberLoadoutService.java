@@ -199,12 +199,19 @@ public final class EmberLoadoutService implements Listener {
         cache.put(p.getUniqueId(), l);
         notes.put(p.getUniqueId(), why);
         String mainUid = blade == null ? null : blade.uid;
+        String prevSet = st.activeSet;
+        int prevAwk = st.awakening;
         boolean setChanged = !eq(st.activeSet, l.activeSet);
         boolean changed = !eq(st.mainhandUid, mainUid) || setChanged || st.awakening != l.awakening;
         st.mainhandUid = mainUid;
         st.activeSet = l.activeSet;
         st.awakening = l.awakening;
         if (changed && EmberMode.isP1(p)) saveState(p);
+        // D695 set completion chase on form / awakening bump
+        if ((setChanged || prevAwk != l.awakening) && EmberMode.isP1(p)) {
+            PlayerData pdChase = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+            EmberSetChase.maybeAfterSetChange(p, pdChase, prevSet, prevAwk, l);
+        }
         // D607 shape-fork S0: soft-prefer set shape when 2pc forms (zero skill_mult)
         if (setChanged && !"none".equals(l.activeSet)) {
             PlayerData pd = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());

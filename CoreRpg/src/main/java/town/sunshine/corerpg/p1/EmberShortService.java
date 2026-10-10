@@ -119,6 +119,18 @@ public final class EmberShortService {
                 p.sendMessage(P() + "§e短征通关 §7· " + EmberShortRules.rewardLine(m.key)
                         + (r.firstClearPaidNow ? " §a（含生涯首通包）" : "")
                         + " §7· " + EmberShortRules.dayLine(r.rewardedAfter, dailyCap(m)));
+                if (r.firstClearPaidNow) { // D697 next unpaid FC
+                    int path = EmberShortPath.get(pd);
+                    if (path == EmberShortPath.NONE) path = EmberShortPath.FC;
+                    EmberRunMaps.MapDef next = EmberShortPath.resolve(runs, pd, path == EmberShortPath.DAY ? EmberShortPath.FC : path);
+                    if (next != null && !next.key.equals(m.key)) {
+                        String n = next.name == null || next.name.isEmpty() ? next.key : next.name;
+                        p.sendMessage(P() + "§a下一首通短征：§f" + next.key.toUpperCase() + " " + n);
+                        try { p.sendActionBar("§a下一首通 · §f" + next.key.toUpperCase()); } catch (Throwable ignored) { }
+                    } else if (next == null) {
+                        p.sendMessage(P() + "§7短征首通已清 · 可改 /corerpg p1 shortpath day");
+                    }
+                }
                 // D409 W1a + D473: vault→forge chase tell + clickable [去工坊] + ActionBar
                 String chase = EmberShortRules.spendChaseTell(r.rewardedAfter, dailyCap(m));
                 p.sendMessage(P() + chase);
