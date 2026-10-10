@@ -1,0 +1,92 @@
+p1_six_mig: 1
+done_at: 1791648748
+seq: 0
+pieces:
+  '0':
+    uid: 694ad08b179a4baa9af25ecd265546b4
+    ni: ember_v1_t0_head
+    fam: none
+    slot: head
+    tier: 0
+    q: 0
+    craft: 0
+    enh: 0
+    pity: 0
+    bound: 1
+    src: migrate
+    ver: 2
+    rev: 0
+    af: 0
+    afp: 0
+    sigc: 0
+    rrn: 0
+    om: migrate
+    os: X04
+    or: six:1791648748
+    ot: 1791648748
+  '1':
+    uid: 2db2de63b5034d7985c7f8da157708bd
+    ni: ember_v1_t0_chest
+    fam: none
+    slot: chest
+    tier: 0
+    q: 0
+    craft: 0
+    enh: 0
+    pity: 0
+    bound: 1
+    src: migrate
+    ver: 2
+    rev: 0
+    af: 0
+    afp: 0
+    sigc: 0
+    rrn: 0
+    om: migrate
+    os: X04
+    or: six:1791648748
+    ot: 1791648748
+  '2':
+    uid: d4831f13e8fc469580dc37de24c751e1
+    ni: ember_v1_t0_legs
+    fam: none
+    slot: legs
+    tier: 0
+    q: 0
+    craft: 0
+    enh: 0
+    pity: 0
+    bound: 1
+    src: migrate
+    ver: 2
+    rev: 0
+    af: 0
+    afp: 0
+    sigc: 0
+    rrn: 0
+    om: migrate
+    os: X04
+    or: six:1791648748
+    ot: 1791648748
+  '3':
+    uid: e0ce5e81532646b8ba816b9e15e1e886
+    ni: ember_v1_t0_boots
+    fam: none
+    slot: boots
+    tier: 0
+    q: 0
+    craft: 0
+    enh: 0
+    pity: 0
+    bound: 1
+    src: migrate
+    ver: 2
+    rev: 0
+    af: 0
+    afp: 0
+    sigc: 0
+    rrn: 0
+    om: migrate
+    os: X04
+    or: six:1791648748
+    ot: 1791648748

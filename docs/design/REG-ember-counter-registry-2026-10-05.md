@@ -206,3 +206,7 @@
 前缀包含豁免补：`p1_codex_`↔path、`p1_sig_`↔chase/attune/stamp_dry、`p1_pledge_`↔path。
 
 物品键集（`Family.item()`）现含 `p4_afc_`（D429 工坊词条充能 by uid）。
+
+## 维护注 · D896（2026-10-11）
+
+D873–D890 / D891–D895 成长希望环未新增计数器字面量；覆盖率仍以 `EmberCountersTest` + 本表为准，新键随 ship 登记（S1 债：随新键维护，非另开大项）。

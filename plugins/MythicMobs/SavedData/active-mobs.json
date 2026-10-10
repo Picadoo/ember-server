@@ -1,3 +1,410 @@
 {
-  "persistentMobs": {}
+  "persistentMobs": {
+    "b841f45c-8a1a-47ab-9b7b-039b10b85316": {
+      "uuid": "b841f45c-8a1a-47ab-9b7b-039b10b85316",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_988D8B28"
+        },
+        "x": 30.5,
+        "y": 64.0,
+        "z": 44.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 2372,
+      "lastSeen": 1791106826104,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "eb1294e4-dab5-48e2-ae0a-c2d70c82d2dc": {
+      "uuid": "eb1294e4-dab5-48e2-ae0a-c2d70c82d2dc",
+      "mobType": "EmberQ01Treasure",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_988D8B28"
+        },
+        "x": 24.5,
+        "y": 64.0,
+        "z": 39.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 2371,
+      "lastSeen": 1791106826110,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "a8614f49-8ad5-4f19-a5f3-c2a67b517d24": {
+      "uuid": "a8614f49-8ad5-4f19-a5f3-c2a67b517d24",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_988D8B28"
+        },
+        "x": 24.5,
+        "y": 64.0,
+        "z": 44.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 2372,
+      "lastSeen": 1791106826104,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "030e751d-4d82-4f4f-958e-23e358fd91ab": {
+      "uuid": "030e751d-4d82-4f4f-958e-23e358fd91ab",
+      "mobType": "EmberQ01Treasure",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_BBD2F87D"
+        },
+        "x": 54.5,
+        "y": 64.0,
+        "z": 38.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 95,
+      "lastSeen": 1791617315170,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "66309940-df53-44db-9981-8e84adb4f565": {
+      "uuid": "66309940-df53-44db-9981-8e84adb4f565",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_988D8B28"
+        },
+        "x": 36.5,
+        "y": 64.0,
+        "z": 44.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 2372,
+      "lastSeen": 1791106826104,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "ec01f0c3-6f20-4636-b7ef-df23a27ee98a": {
+      "uuid": "ec01f0c3-6f20-4636-b7ef-df23a27ee98a",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_0EE2E0A8"
+        },
+        "x": 0.5,
+        "y": 64.0,
+        "z": 29.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 905,
+      "lastSeen": 1791107220052,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "627cdd8d-e82f-4c2b-ab7d-6d61d56444bd": {
+      "uuid": "627cdd8d-e82f-4c2b-ab7d-6d61d56444bd",
+      "mobType": "EmberQ03Boss",
+      "spawnLocation": {
+        "world": {
+          "name": "world"
+        },
+        "x": 5000.0,
+        "y": 101.0,
+        "z": 5003.0,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 473,
+      "lastSeen": 1790871870243,
+      "displayName": null,
+      "level": 28.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 2,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "e4a31df0-cdf0-4061-b734-9d18ebb384ed": {
+      "uuid": "e4a31df0-cdf0-4061-b734-9d18ebb384ed",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_1F59252C"
+        },
+        "x": 0.5,
+        "y": 65.0,
+        "z": 12.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 425,
+      "lastSeen": 1790874229490,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "3df7fe35-36a2-48ff-892f-8c33b8b30ea1": {
+      "uuid": "3df7fe35-36a2-48ff-892f-8c33b8b30ea1",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_0EE2E0A8"
+        },
+        "x": -5.5,
+        "y": 64.0,
+        "z": 29.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 905,
+      "lastSeen": 1791107220051,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "2f886618-c4b9-4e48-94c8-f52759fe4e85": {
+      "uuid": "2f886618-c4b9-4e48-94c8-f52759fe4e85",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_1F59252C"
+        },
+        "x": -4.5,
+        "y": 65.0,
+        "z": 8.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 425,
+      "lastSeen": 1790874229491,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "5342bbfa-2ab2-4d1a-9879-c247d77ec46a": {
+      "uuid": "5342bbfa-2ab2-4d1a-9879-c247d77ec46a",
+      "mobType": "EmberQ01Ranged",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_1F59252C"
+        },
+        "x": 0.5,
+        "y": 65.0,
+        "z": 10.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 425,
+      "lastSeen": 1790874229491,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "f0e53549-c407-4791-ac86-561f915c4a23": {
+      "uuid": "f0e53549-c407-4791-ac86-561f915c4a23",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_0EE2E0A8"
+        },
+        "x": 9.5,
+        "y": 64.0,
+        "z": 28.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 905,
+      "lastSeen": 1791107220050,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "afc1439d-49a3-413a-89f6-6eab974091a5": {
+      "uuid": "afc1439d-49a3-413a-89f6-6eab974091a5",
+      "mobType": "EmberQ01Melee",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_1F59252C"
+        },
+        "x": 5.5,
+        "y": 65.0,
+        "z": 8.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 425,
+      "lastSeen": 1790874229491,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    },
+    "fefab3ff-fed5-47fe-9502-38f0832c370f": {
+      "uuid": "fefab3ff-fed5-47fe-9502-38f0832c370f",
+      "mobType": "EmberQ01Ranged",
+      "spawnLocation": {
+        "world": {
+          "name": "dungeon_EmberQ01_0EE2E0A8"
+        },
+        "x": 6.5,
+        "y": 64.0,
+        "z": 29.5,
+        "yaw": 0.0,
+        "pitch": 0.0
+      },
+      "cooldowns": {},
+      "variables": {
+        "entries": {}
+      },
+      "aliveTime": 905,
+      "lastSeen": 1791107220052,
+      "displayName": null,
+      "level": 1.0,
+      "globalCooldown": 0,
+      "stance": "default",
+      "lastSignal": "",
+      "playerKills": 0,
+      "owner": null,
+      "spawnerName": null,
+      "faction": null
+    }
+  }
 }

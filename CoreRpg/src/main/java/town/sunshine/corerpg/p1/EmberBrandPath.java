@@ -98,7 +98,22 @@ public final class EmberBrandPath {
     }
 
     /** Once per ISO week when unset. */
-    public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
+    
+    /** D892: after brandpath set. */
+    public static void afterSet(Player p, int id, boolean changed) {
+        if (p == null || !valid(id)) return;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a烙纹路径 → §f" + label(id) + "§7（" + tip(id) + "）"
+                + (changed ? "" : " §8· 已是该路径"));
+        p.sendMessage(P + glance(id));
+        try { p.sendActionBar("§6烙纹路径 · §f" + label(id)); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7烙纹下一环：",
+                new String[]{pinLabel(id), pinCmd(id), "预览定向（不扣料直到确认）", "GREEN"},
+                new String[]{"[合成烙纹]", "/corerpg p1 brand craft", "碎→烙纹", "GOLD"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
+    }
+
+public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
         if (p == null || d == null || week == null || week.isEmpty()) return false;
         if (valid(get(d))) return false;
         if (d.periodCount(C_OFFER, week) > 0) return false;

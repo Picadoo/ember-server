@@ -219,11 +219,11 @@ public final class EmberChallengePath {
         // D764/D780: next-loop when prefer-challenge (skip first-clear — D671 already buttons)
         if (!challengeFirst && id == PREFER && mapKey != null && !mapKey.isEmpty()) {
             String mk = mapKey.toLowerCase(Locale.ROOT);
-            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7硬本下一环：",
+            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7硬本下一环：", // D894
                     new String[]{"[再挑战·" + mk.toUpperCase(Locale.ROOT) + "]",
                             "/corerpg p1 enter " + mk + " challenge", "同图挑战再刷", "RED"},
-                    new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "GREEN"},
-                    new String[]{"[换路径]", "/corerpg p1 challengepath", "改偏好", "GRAY"});
+                    new String[]{"[工坊]", "/corerpg p1 forge", "花挑战料", "GOLD"},
+                    new String[]{"[图装追]", "/corerpg p1 mapfarm", "补同族", "AQUA"});
         }
     }
 

@@ -398,3 +398,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D885–D890 SHIP · jar 1.65.394-d885
 - Swap/enhance setchase; convertpath buttons; honor forge; reroll install/keep-new next
+
+## D891–D896 SHIP · jar 1.65.395-d891
+- Echo/Brand afterSet; shape lock; challenge forge; gempath mapfarm; REG S1 note

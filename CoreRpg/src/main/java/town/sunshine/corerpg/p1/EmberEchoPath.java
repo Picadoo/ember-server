@@ -101,7 +101,23 @@ public final class EmberEchoPath {
                 new String[]{"[打开残响厅]", "/corerpg p1 modes", "七图选厅", "GRAY"});
     }
 
-    public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
+    
+    /** D891: after echopath set — glance + enter/forge. */
+    public static void afterSet(Player p, int id, boolean changed) {
+        if (p == null || !valid(id)) return;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a残响路径 → §f" + label(id) + "§7（" + tip(id) + "）"
+                + (changed ? "" : " §8· 已是该路径"));
+        p.sendMessage(P + glance(id, true));
+        try { p.sendActionBar("§e残响 · §f" + label(id)); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7残响下一环：",
+                new String[]{"[去残响·Q0" + id + "]", "/corerpg p1 rush " + mapKey(id) + " go",
+                        "不耗体力 · 周池有奖徽记", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花徽记烙印", "GOLD"},
+                new String[]{"[追烙]", "/corerpg p1 sig chase", "设烙印目标", "AQUA"});
+    }
+
+public static boolean maybeOfferWeekly(Player p, PlayerData d, String week) {
         if (p == null || d == null || week == null || week.isEmpty()) return false;
         if (valid(get(d))) return false;
         if (d.periodCount(C_OFFER, week) > 0) return false;

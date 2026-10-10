@@ -1,0 +1,40 @@
+{
+  "equipment": {},
+  "isDie": false,
+  "isNitwit": false,
+  "moveSpeed": 0.2,
+  "isNameTagVisible": true,
+  "isCollision": true,
+  "glowingColor": "WHITE",
+  "canSeeInvisible": false,
+  "visibleDistance": -1.0,
+  "visibleAfterLoaded": true,
+  "modelEngineName": "",
+  "passengers": [],
+  "controller": [],
+  "clientPosition": {
+    "world": "ember_hub",
+    "x": -14.5,
+    "y": 58.0,
+    "z": 110.5,
+    "yaw": 90.0,
+    "pitch": 0.0
+  },
+  "entityType": "VILLAGER",
+  "persistentTag": {},
+  "metadata": {
+    "isCustomNameVisible": true,
+    "customName": "§e门吏 · 灰钥"
+  },
+  "metadataMask": {},
+  "uniqueId": "afb3525a-19c1-40e8-a76e-f394c7e0bad9",
+  "id": "ember_dungeon_clerk",
+  "position": {
+    "world": "ember_hub",
+    "x": -14.5,
+    "y": 58.0,
+    "z": 110.5,
+    "yaw": 90.0,
+    "pitch": 0.0
+  }
+}

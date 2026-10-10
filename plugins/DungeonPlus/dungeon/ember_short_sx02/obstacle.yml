@@ -1,0 +1,7 @@
+obstacles:
+  #默认障碍组
+  default:
+      #障碍物数据
+    - obstacle-block: []
+      #障碍组触发时执行
+      action-script: []

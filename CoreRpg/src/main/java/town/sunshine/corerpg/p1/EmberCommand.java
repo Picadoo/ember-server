@@ -181,14 +181,7 @@ public final class EmberCommand {
             boolean ch = EmberEchoPath.set(d, id);
             runs.plugin().getDataStore().flushMutation(p.getUniqueId());
             if (id == EmberEchoPath.NONE) p.sendMessage(P + "已取消残响路径");
-            else {
-                p.sendMessage(P + "§a残响路径 → §f" + EmberEchoPath.label(id) + "§7（" + EmberEchoPath.tip(id) + "）"
-                        + (ch ? "" : " §8· 已是该路径"));
-                p.sendMessage(P + EmberEchoPath.glance(id, true));
-                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
-                        "[去残响·Q0" + id + "]", "/corerpg p1 rush " + EmberEchoPath.mapKey(id) + " go",
-                        "不耗体力 · 周池有奖徽记");
-            }
+            else EmberEchoPath.afterSet(p, id, ch); // D891
             return true;
         }
         if ("brandpath".equals(sub) || "烙纹路径".equals(sub)) { // D467 brand playstyle path
@@ -221,14 +214,7 @@ public final class EmberCommand {
             boolean ch = EmberBrandPath.set(d, id);
             runs.plugin().getDataStore().flushMutation(p.getUniqueId());
             if (id == EmberBrandPath.NONE) p.sendMessage(P + "已取消烙纹路径");
-            else {
-                p.sendMessage(P + "§a烙纹路径 → §f" + EmberBrandPath.label(id) + "§7（" + EmberBrandPath.tip(id) + "）"
-                        + (ch ? "" : " §8· 已是该路径"));
-                p.sendMessage(P + EmberBrandPath.glance(id));
-                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
-                        EmberBrandPath.pinLabel(id), EmberBrandPath.pinCmd(id),
-                        "预览定向（不扣料直到确认）");
-            }
+            else EmberBrandPath.afterSet(p, id, ch); // D892
             return true;
         }
         if ("counterpath".equals(sub) || "破绽路径".equals(sub)) { // D480 counterplay combat path

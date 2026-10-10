@@ -202,9 +202,10 @@ public final class EmberShapePath {
         String lab = EmberSkillKit.shapeName(sid);
         p.sendMessage(EmberRunService.P + "§a符文已锁定：§f" + lab + " §7· 换套装不再软切（仍可 /corerpg p1 shapepath 手改）");
         try { p.sendActionBar("§a符文锁定 · §f" + lab); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7：",
+        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7：", // D893
                 new String[]{"[进冒险]", "/ember_p1_adventure", "体感锁定几何", "GREEN"},
-                new String[]{"[换符文]", "/corerpg p1 shapepath", "手动改", "GRAY"});
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装试几何", "GOLD"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "AQUA"});
     }
 
     public static void applyAndReply(Player p, int id) {

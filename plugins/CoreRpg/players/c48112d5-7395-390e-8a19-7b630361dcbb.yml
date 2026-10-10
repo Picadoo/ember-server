@@ -2,17 +2,20 @@ coin: 85
 lastSignDate: ''
 activity: 0
 activityClaimed: []
-bountyId: crypt_sweep
+bountyId: ''
 bountyProgress: 0
 bountyClaimed: false
 killsToday: 0
-playMinutesToday: 2
-lastActivityDate: '2026-09-13'
+playMinutesToday: 0
+lastActivityDate: '2026-10-10'
 activityFromKills: 0
 activityFromOnline: 0
 abyssUsedToday: 0
+calamityChestDate: ''
+raidRingWeek: ''
 covenant: none
 covenantChosenAt: ''
+flex_skill_id: none
 talentPointsEarned: 9
 talentPointsSpent: 0
 talentNodes: []
@@ -22,15 +25,52 @@ ember_crystal_cash: 0
 crystalCash: 0
 emberLevel: 10
 monthlyCard: false
+seasonPassPaid: false
 monthlyExpireDate: ''
 monthlyLastGrantDate: ''
+staminaInitialized: false
+stamina: 0
+staminaBank: 0
+staminaResetDate: ''
+potionStaminaToday: 0
+weeklyGrantCreditWeekId: ''
+weeklyGrantCreditWeekly: 0
+weeklyGrantCreditElite: 0
+weeklyGrantCreditRaid: 0
 dailyTicketsGranted: 3
 dailyTicketsBought: 0
 dailyEntriesUsed: 0
 dailyCashResetDate: '2026-09-13'
 dailyFreeGranted: true
 weeklyTicketGrantWeekId: 2026-W37
+raidTicketGrantWeekId: ''
+eliteTicketGrantWeekId: ''
+starterReissueDate: ''
+lootWeekMarks: ''
 abyssTicketGrantDate: '2026-09-13'
+weeklyTicketsGranted: 0
+weeklyTicketsBought: 0
+weeklyTicketShopWeekId: ''
+vipTier: 0
+vipDailyClaimDate: ''
+passFreeClaimDate: ''
+killLevelsDate: ''
+killLevelsToday: 0
+passXp: 0
+passXpDate: ''
+passXpToday: 0
+emberXp: 0
+emberXpDate: ''
+questChapter: 0
+questStep: 0
+questCount: 0
+questDone: false
+emberXpKillToday: 0
+emberXpCombatToday: 0
+passSeasonId: ''
+passFreeClaimedLevel: 0
+passPaidClaimedLevel: 0
+vipToppedUp: 0
 friends: []
 pendingIn: []
 pendingOut: []
@@ -48,6 +88,13 @@ lastKnownName: ArenaB
 petsUnlocked: []
 activePet: ''
 petLevels: {}
+counters:
+  p1_codex_none_blade_t0@all: 1
+  p1_codex_none_charm_t0@all: 1
+  p1_codex_scorch_blade_t1@all: 1
+  p1_codex_scorch_charm_t1@all: 1
+  p1_codex_burst_blade_t1@all: 1
+  p1_codex_path@all: 1
 guildId: ''
 guildDonateDate: ''
 guildDonateToday: 0
@@ -58,3 +105,5 @@ arenaWins: 3
 arenaLosses: 1
 arenaDailyClaimDate: ''
 arenaQueueMode: ''
+warehouseSlotsUnlocked: 8
+warehouseJson: '[]'

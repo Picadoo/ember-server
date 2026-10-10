@@ -17,70 +17,70 @@ boards:
 snapshot:
   power:
     '1':
-      name: ElB182437
-      value: 257
-      uuid: 0af6230f-8ade-34e2-a4aa-384bfb1d3db3
+      name: BalRA1087a
+      value: 183
+      uuid: 88b96595-d420-3850-bc35-5b525f8a4cbd
     '2':
-      name: ElC444c
-      value: 257
-      uuid: a6b4146a-1b5e-32ba-8043-a5b782a320f3
+      name: BalRA1087c
+      value: 183
+      uuid: 7c92aff1-90ae-3039-833e-f12f18e8a1ee
     '3':
-      name: ElD184540
-      value: 257
-      uuid: 5edce18f-19a6-365b-bba1-10cd94fc8da1
+      name: BalRA1451b
+      value: 183
+      uuid: 972db162-a040-3253-a30b-54f117bcd6c0
     '4':
-      name: ElD185857
-      value: 257
-      uuid: 01eb5468-a0d9-3dca-8a90-92bc27610290
+      name: BalRA1594a
+      value: 183
+      uuid: fc94a0a1-99a9-352e-b373-489e11e3c2bb
     '5':
-      name: ElE4e928
-      value: 257
-      uuid: 8dbaee8d-1cee-3335-840f-f0fc47461499
+      name: BalRA1594b
+      value: 183
+      uuid: 69fb4136-afae-3850-ac9b-db8132706e83
     '6':
-      name: ElF8838
-      value: 257
-      uuid: bbd15a9c-6108-3b88-83c9-cb30f4fa987a
+      name: BalRA4816a
+      value: 183
+      uuid: 8e9f660f-15a0-30c6-adcc-066265d8b0b9
     '7':
-      name: ElOk1344
-      value: 257
-      uuid: 0f92c444-0a38-3063-8eff-eba984fc9e0f
+      name: BalRA4816c
+      value: 183
+      uuid: 42f860af-6751-39d1-a088-ddd52260b247
     '8':
-      name: ElB182262
-      value: 254
-      uuid: cac40a6b-66db-3daa-9e4f-ef230b2af2c8
+      name: BalRA6983b
+      value: 183
+      uuid: c2f22cc6-6409-3b24-8dce-e5b448cfd71b
     '9':
-      name: Atk2_4288
-      value: 225
-      uuid: 737ac435-7e9a-3908-bee2-f2de40ef056d
+      name: BalRA6983c
+      value: 183
+      uuid: 11021eca-5450-314e-8a8a-a31c810b2f69
     '10':
-      name: Atk43_5102
-      value: 225
-      uuid: 814c7dbf-9034-30f1-9391-ff93014943aa
+      name: BalRA7192a
+      value: 183
+      uuid: 1283ef40-c597-350a-90ad-6f6e4151ad36
   abyss:
     '1':
-      name: Ab9x3744
-      value: 12
-      uuid: e7a3dfa5-e41f-38d6-89ed-60b6a5f5c2cd
-    '2':
       name: AbyssBot3
       value: 12
       uuid: 41fc0ac1-fbb4-3ccd-a993-41454e28966b
+    '2':
+      name: AbA926
+      value: 8
+      uuid: 6556499e-7389-3b6c-ab0f-a45322eff6c7
     '3':
-      name: Atk2_4288
-      value: 12
-      uuid: 737ac435-7e9a-3908-bee2-f2de40ef056d
+      name: AbB926
+      value: 8
+      uuid: 156ee898-4fad-312e-9aff-6c71591233a0
     '4':
-      name: Atk43_5102
-      value: 12
-      uuid: 814c7dbf-9034-30f1-9391-ff93014943aa
+      name: BalAB1800a
+      value: 8
+      uuid: 54c68924-f27b-3db8-a26d-b2799c978e33
     '5':
-      name: Atk43b_8302
-      value: 12
-      uuid: 6f744a62-f1b1-3fc8-8004-88a3e12c15d2
+      name: BalAB8708a
+      value: 8
+      uuid: bfd25551-98bd-33d8-bdf2-86b010a2f9cb
   speed:
     '1':
       name: RpgBot
       value: 95
       uuid: 148ec8b6-253f-36f4-bcd7-bf2395b8df80
-  updated: 2026-09-27 21:40
-  weekId: 2026-W39
+  updated: 2026-10-11 04:49
+  weekId: 2026-W41

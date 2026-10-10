@@ -1,0 +1,20 @@
+groups:
+  #默认怪物组
+  default:
+    #怪物数据
+  - monster: []
+    #条件
+    #condition: []
+    #条件
+    condition:
+      #击杀符合 mobname 列表内怪物名的怪物，击杀数合满足 amount 则达成条件
+      - "$kill-any{mobname=AAA,BBB,CCC;amount=2} @system"
+      #击杀符合 mobname 怪物名的怪物，击杀数达到 amount 则达成条件
+      - "$kill{mobname=AAA;amount=2} @system"
+    #怪物组触发时执行
+    start: []
+    #条件达成是触发
+    end: []
+    #地牢启动时自动运行怪物组,默认关闭
+    #关闭状态下想要通过 MonsterGroup 脚本进行启动
+    auto-start: false
