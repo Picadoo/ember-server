@@ -4427,6 +4427,31 @@ public final class EmberCommand {
                 if (admin) s.sendMessage(P + String.format(Locale.ROOT, "生命 %.2f / %.2f", p.getHealth(), EmberHeal.maxHp(p)));
                 s.sendMessage(P + "主手: " + (l.blade == null ? "没有有效的余烬刃" : l.blade.shortLabel())
                         + "  护符: " + (l.charm == null ? "未选定/无效" : l.charm.shortLabel()));
+                // D1957 FH leftover: held/mainblade next deterministic forge step
+                try {
+                    EmberItemData focus = null;
+                    org.bukkit.inventory.ItemStack mh = p.getInventory().getItemInMainHand();
+                    if (mh != null && loadouts.items().hasData(mh)) {
+                        EmberItems.Read rr = loadouts.items().read(mh);
+                        if (rr != null && rr.ok()) focus = rr.data;
+                    }
+                    if (focus == null) focus = l.blade;
+                    long shard = 0, blank = 0, bone = 0;
+                    town.sunshine.corerpg.CoreRpgPlugin pl =
+                            (town.sunshine.corerpg.CoreRpgPlugin) Bukkit.getPluginManager().getPlugin("CoreRpg");
+                    if (pl != null && pl.getNiBridge() != null) {
+                        shard = pl.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_SHARD);
+                        blank = pl.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
+                        bone = pl.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BONE);
+                    }
+                    PlayerData pdCoin = runs != null ? runs.dataOf(p.getUniqueId()) : null;
+                    long coin = pdCoin == null ? 0L : Math.max(0L, pdCoin.getCoin());
+                    String hn = EmberForgeHeldNext.line(focus, new EmberForgeHeldNext.Mats(shard, blank, bone, coin));
+                    if (hn != null && !hn.isEmpty()) {
+                        s.sendMessage(P + "§7" + hn);
+                        try { p.sendActionBar("§e" + hn); } catch (Throwable ignored) { }
+                    }
+                } catch (Throwable ignored) { }
                 EmberFestival fest = EmberFestival.get(); // D139 festival charm slot
                 if (fest != null && runs != null && fest.worn(runs.dataOf(p.getUniqueId())))
                     s.sendMessage(P + "活动护符: §c" + fest.charmName + "§7（佩戴中" + (l.festHp > 0 || l.festDef > 0

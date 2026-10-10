@@ -731,3 +731,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1942–D1955 forge held-next (jar 1.65.492-d1942)
 - EmberForgeHeldNext + forge helpLines AB/chat
+
+## D1956–D1965 status held-next (jar 1.65.493-d1956)
+- status board + AB reuse EmberForgeHeldNext
