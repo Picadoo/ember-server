@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("slippath".equals(sub) || "闪招路径".equals(sub)) return slipPathCmd(s, args); // D591
+        if ("slip".equals(sub) && args.length == 2) return slipGoCmd(s); // D591
         if ("crashpath".equals(sub) || "撞墙路径".equals(sub)) return crashPathCmd(s, args); // D590
         if ("crash".equals(sub) && args.length == 2) return crashGoCmd(s); // D590
         if ("boltpath".equals(sub) || "闪线路径".equals(sub)) return boltPathCmd(s, args); // D589
@@ -1729,6 +1731,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("slipseed".equals(sub)) return slipSeedCmd(s, args); // D591
         if ("crashseed".equals(sub)) return crashSeedCmd(s, args); // D590
         if ("boltseed".equals(sub)) return boltSeedCmd(s, args); // D589
         if ("shiftseed".equals(sub)) return shiftSeedCmd(s, args); // D588
@@ -6196,6 +6199,62 @@ public final class EmberCommand {
             EmberCrashPath.maybeProbe(t);
             s.sendMessage(P + "已触发撞墙路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingCrash(t) ? "（将撞墙）" : "（无撞墙）"));
+            return true;
+    }
+
+    private boolean slipPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSlipPath.glance(EmberSlipPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c闪招路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSlipPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c闪招路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSlipPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSlipPath.get(d);
+                    if (EmberSlipPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSlipPath.label(cur) + " · 改路径再 /corerpg p1 slippath");
+                    else EmberSlipPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSlipPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 slippath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSlipPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean slipGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathSlipOut(p)) p.sendMessage(P + "无法闪招（无精英轻招/未在预警内/未进本）");
+            else p.sendMessage(P + "§a闪招·手点 §7已侧移出精英轻招");
+            return true;
+    }
+
+    private boolean slipSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSlipPath.maybeProbe(t);
+            s.sendMessage(P + "已触发闪招路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingSlip(t) ? "（有轻招）" : "（无轻招）"));
             return true;
     }
 }

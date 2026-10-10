@@ -510,6 +510,68 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D591: any Extra.ELITE light-move telegraph still winding up. */
+    boolean hasPendingSlip() {
+        long now = System.currentTimeMillis();
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.twist == null || t.le == null || t.le.isDead()) continue;
+            if (t.castAt <= 0 || now >= t.castAt) continue;
+            if (t.castOrigin == null || t.castDir == null) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** D591: pull a committed player out of the nearest elite light-move shape. */
+    boolean pathSlipOut(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingSlip()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        long now = System.currentTimeMillis();
+        Location pl = p.getLocation();
+        Tracked best = null;
+        EmberRunMaps.Skill bestSk = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.twist == null || t.le == null || t.le.isDead()) continue;
+            if (t.castAt <= 0 || now >= t.castAt) continue;
+            if (t.castOrigin == null || t.castDir == null) continue;
+            EmberRunMaps.Skill sk = (t.twistUseAlt && t.twistAlt != null) ? t.twistAlt : t.twist;
+            EmberRunMaps.Skill drawn = twistDrawn(t, sk);
+            if (!inShape(drawn, t.castOrigin, t.castDir, pl)) continue;
+            double d = t.castOrigin.distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; bestSk = drawn; }
+        }
+        if (best == null || bestSk == null) return false;
+        Location to;
+        if ("circle".equals(bestSk.type)) {
+            Vector away = new Vector(pl.getX() - best.castOrigin.getX(), 0, pl.getZ() - best.castOrigin.getZ());
+            if (away.lengthSquared() < 1e-6) away = new Vector(1, 0, 0);
+            else away.normalize();
+            double safe = Math.max(3.0, bestSk.radius + 2.5);
+            to = best.castOrigin.clone().add(away.multiply(safe));
+            to.setY(pl.getY());
+        } else {
+            Vector dir = best.castDir.clone();
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+            else dir.normalize();
+            Vector side = new Vector(-dir.getZ(), 0, dir.getX());
+            if (side.lengthSquared() < 1e-6) side = new Vector(1, 0, 0);
+            else side.normalize();
+            Vector from = new Vector(pl.getX() - best.castOrigin.getX(), 0, pl.getZ() - best.castOrigin.getZ());
+            if (from.dot(side) < 0) side.multiply(-1);
+            double safe = Math.max(2.5, bestSk.width * 0.5 + 2.5);
+            to = new Location(w, pl.getX() + side.getX() * safe, pl.getY(), pl.getZ() + side.getZ() * safe);
+        }
+        to.setYaw(pl.getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 2.0f);
+        return true;
+    }
+
     /** D590: boss charge armed that will crash into a wall. */
     boolean hasPendingCrash() {
         return pendingCrash && pending != null && pending.wallStun > 0
@@ -3286,6 +3348,7 @@ final class EmberRunDirector {
         face.setDirection(dir);
         t.le.teleport(face);
         t.le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
+        EmberSlipPath.maybeAfterSlip(s); // D591
     }
 
     /** charge strip clipped to clearRun (B2.165); other shapes unchanged */
