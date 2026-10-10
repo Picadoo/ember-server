@@ -2,6 +2,7 @@ package town.sunshine.corerpg.p1;
 
 import java.util.List;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import town.sunshine.corerpg.ConfirmTokens;
@@ -9,7 +10,7 @@ import town.sunshine.corerpg.p1.EmberItemStore.TxnItem;
 
 /**
  * D485: enhance commit → forge-branch spend chase (continue / quality / refine).
- * Chat buttons only — no ActionBar HUD family. Zero enhance rate / pity / price change.
+ * D614: 下次必成 / 保底必成 celebration (ActionBar + chat). Zero enhance rate / pity / price change.
  */
 public final class EmberEnhanceLoop {
 
@@ -20,6 +21,7 @@ public final class EmberEnhanceLoop {
         if (p == null) return;
         boolean won = leveled(list);
         String P = EmberRunService.P;
+        celebrate(p, list, won);
         if (won) {
             p.sendMessage(P + "§e强化成功 §7· 选下一步花法（不改强化价/成色/精工价）：");
             ConfirmTokens.sendButtons(p, P,
@@ -34,6 +36,30 @@ public final class EmberEnhanceLoop {
                     new String[]{"[去成色]", "/corerpg p1 quality", "先投成色", "GOLD"},
                     new String[]{"[去精工]", "/corerpg p1 refine", "先投精工", "AQUA"},
                     new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GRAY"});
+        }
+    }
+
+    /** D614: pity-ready / pity-win ActionBar + chat. */
+    static void celebrate(Player p, List<TxnItem> list, boolean won) {
+        if (p == null || list == null) return;
+        for (TxnItem t : list) {
+            if (t == null || t.before == null || t.after == null) continue;
+            String P = EmberRunService.P;
+            if (won && EmberUpgradeRules.guaranteed(t.before)) {
+                String msg = "§a保底必成 · §f+" + t.before.enhance + " → +" + t.after.enhance;
+                try { p.sendActionBar(msg); } catch (Throwable ignored) { }
+                p.sendMessage(P + msg);
+                try { p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f); } catch (Throwable ignored) { }
+                return;
+            }
+            if (!won && EmberUpgradeRules.guaranteed(t.after)) {
+                int max = EmberUpgradeRules.maxTries(t.after.enhance + 1);
+                String msg = "§a下次必成 · §f保底 " + t.after.pity + "/" + max;
+                try { p.sendActionBar(msg); } catch (Throwable ignored) { }
+                p.sendMessage(P + msg + " §7· 再点一次确认强化即可升档");
+                try { p.playSound(p.getLocation(), Sound.BLOCK_NOTE_PLING, 1f, 1.6f); } catch (Throwable ignored) { }
+                return;
+            }
         }
     }
 
@@ -55,7 +81,6 @@ public final class EmberEnhanceLoop {
 
     private static List<TxnItem> nullWon() { return null; }
     private static List<TxnItem> nullFail() {
-        // empty non-null → leveled=false
         return java.util.Collections.emptyList();
     }
 

@@ -99,6 +99,12 @@ public final class EmberForgeService implements Listener {
         String gate = gate(p);
         if (gate != null) { p.sendMessage(P + ChatColor.RED + gate); return true; }
         if ("swap".equals(op)) return swap(p, target, go, rid);
+        if ("enhance".equals(op)) {
+            for (int i = 2; i < args.length; i++) {
+                String l = args[i].toLowerCase(Locale.ROOT);
+                if ("undo".equals(l) || "撤销".equals(l) || "撤".equals(l)) return enhanceUndo(p);
+            }
+        }
         Slot it = held(p);
         if (it.error != null) { p.sendMessage(P + ChatColor.RED + it.error); return true; }
         if ("enhance".equals(op)) return enhance(p, it, go, rid);
@@ -257,6 +263,50 @@ public final class EmberForgeService implements Listener {
                 : String.format(Locale.ROOT, "%s · 生命 +%.1f（成长 ×%.2f）", d.shortLabel(), t.charmH(d.tier) * g, g);
     }
 
+
+    /** D614: undo last failed enhance within 60s — refund mats, roll pity back. Success never undoable. */
+    private boolean enhanceUndo(Player p) {
+        EmberEnhanceUndo.Snap snap = EmberEnhanceUndo.takeIfOpen(p.getUniqueId());
+        if (snap == null) {
+            p.sendMessage(P + ChatColor.RED + "没有可撤销的强化失败（仅失败后 60 秒内，成功不可撤）");
+            return true;
+        }
+        String gate = gate(p);
+        if (gate != null) { p.sendMessage(P + ChatColor.RED + gate); return true; }
+        Slot it = held(p);
+        if (it.error != null) { p.sendMessage(P + ChatColor.RED + "请手持刚才失败的那件再撤销：" + it.error); return true; }
+        EmberItemData d = it.data;
+        if (!snap.uid.equals(d.uid) || d.enhance != snap.enhance || d.pity != snap.pityAfter) {
+            p.sendMessage(P + ChatColor.RED + "手持件与可撤销记录不符（可能已再强化或换件）");
+            return true;
+        }
+        // restore pity via copy (enhance unchanged)
+        EmberItemData restored = EmberUpgradeRules.copy(d, d.tier, d.quality, d.craft, d.enhance, snap.pityBefore, d.bound);
+        // keep affix/sig via fold path — copy() already preserves keys through EmberItemData ctor in UpgradeRules
+        final Cost refundCost = snap.cost;
+        final String rid = "enhundo:" + d.uid + ":" + d.rev + ":" + snap.at;
+        if (replayed(p, rid)) return true;
+        if (!EmberEnhanceUndo.consume(p.getUniqueId(), snap)) {
+            p.sendMessage(P + ChatColor.RED + "撤销已失效");
+            return true;
+        }
+        commit(p, "enhance_undo", rid, Cost.NONE, Arrays.asList(new TxnItem(d, restored, null)),
+                "撤销强化失败 · pity " + snap.pityAfter + "→" + snap.pityBefore + " · 退回 " + refundCost.label(),
+                null, ok -> {
+                    if (Boolean.TRUE.equals(ok)) {
+                        giveBack(p, refundCost.materials(), refundCost.coins);
+                        p.sendMessage(P + ChatColor.GREEN + "已撤销本次强化失败，材料已退回 · 保底计数恢复");
+                        try { p.sendActionBar("§a已撤销强化失败 · 材料退回"); } catch (Throwable ignored) { }
+                        loadouts.refresh(p);
+                    } else {
+                        // put snap back if commit failed
+                        EmberEnhanceUndo.putBack(snap);
+                        p.sendMessage(P + ChatColor.RED + "撤销未完成，记录仍保留（若仍在窗内可再试）");
+                    }
+                });
+        return true;
+    }
+
     private boolean enhance(Player p, Slot it, boolean go, String rid) {
         EmberItemData d = it.data;
         Plan c = EmberUpgradeRules.enhanceCheck(d);
@@ -264,8 +314,13 @@ public final class EmberForgeService implements Listener {
         int target = d.enhance + 1;
         int max = EmberUpgradeRules.maxTries(target);
         if (!go) {
+            boolean sure = EmberUpgradeRules.guaranteed(d);
             p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + Math.round(EmberUpgradeRules.rate(target) * 100)
-                    + "%  本档第 " + EmberUpgradeRules.attemptNo(d) + "/" + max + " 次" + (EmberUpgradeRules.guaranteed(d) ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY : ""));
+                    + "%  本档第 " + EmberUpgradeRules.attemptNo(d) + "/" + max + " 次" + (sure ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY : ""));
+            if (sure) {
+                p.sendMessage(P + ChatColor.GREEN + "下次必成已就绪 · 点确认即可升档（不改保底规则）");
+                try { p.sendActionBar("§a下次必成 · 确认即升 +" + target); } catch (Throwable ignored) { }
+            }
             p.sendMessage(P + "每次消耗: " + c.cost.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
             warnT0(p, d);
             List<String> lack = lacking(p, c.cost);
@@ -610,7 +665,10 @@ public final class EmberForgeService implements Listener {
                     q.sendMessage(P + ChatColor.GREEN + note);
                     EmberForgeFeel.flash(q, kind, note); // D475 forge result ActionBar
                     if ("enhance".equals(kind)) EmberForgeMatReady.afterEnhance(q); // D478 clear mat-ready latch
-                    if ("enhance".equals(kind)) EmberEnhanceLoop.afterEnhance(q, list); // D485 enhance branch chase
+                    if ("enhance".equals(kind)) {
+                        EmberEnhanceLoop.afterEnhance(q, list); // D485 enhance branch chase
+                        EmberEnhanceUndo.afterCommit(q, list, cost); // D614 fail soft-undo window
+                    }
                     if ("swap".equals(kind)) EmberSwapLoop.afterSwap(q, list); // D484 free-swap spend chase
                     if ("upgrade".equals(kind)) EmberUpgradeLoop.afterUpgrade(q, list); // D487 upgrade→power chase
                     for (TxnItem t : list) if (t.after != null) q.sendMessage(P + "现在: " + preview(t.after));

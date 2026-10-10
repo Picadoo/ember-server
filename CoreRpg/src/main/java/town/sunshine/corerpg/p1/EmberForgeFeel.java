@@ -17,8 +17,12 @@ public final class EmberForgeFeel {
         if (note == null || note.isEmpty()) return "";
         String k = kind == null ? "" : kind.toLowerCase(Locale.ROOT);
         if ("enhance".equals(k)) {
+            if (note.contains("保底") && (note.startsWith("强化成功") || note.contains("强化成功")))
+                return "§a工坊 · §f保底必成 §7· " + trimNote(note);
             if (note.startsWith("强化成功") || note.contains("强化成功"))
                 return "§a工坊 · §f强化成功 §7· " + trimNote(note);
+            if (note.contains("最多再 0 次必成") || note.contains("下次必成"))
+                return "§a工坊 · §f下次必成 §7· " + trimNote(note);
             if (note.startsWith("强化失败") || note.contains("强化失败"))
                 return "§e工坊 · §f强化失败 §7· " + trimNote(note);
             return "§6工坊 · §f强化 §7· " + trimNote(note);
