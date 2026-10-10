@@ -532,7 +532,18 @@ public final class EmberSignService implements Listener {
         if (pay.isEmpty()) {
             Milestone next = null;
             for (int i = 0; i < milestones.size(); i++) if (milestoneState(mins, claimed, i, milestones.get(i).min) == 0) { next = milestones.get(i); break; }
-            p.sendMessage(PO + (next == null ? "今天的在线奖励都领完了 · 明天 0 点重置" : "还没到：今日有效在线 " + mins + "/" + next.min + " 分钟"));
+            if (next == null) {
+                p.sendMessage(PO + "今天的在线奖励都领完了 · 明天 0 点重置");
+                try { p.sendActionBar("§a在线档 · 今日已领完"); } catch (Throwable ignored) { }
+            } else {
+                int left = Math.max(0, next.min - mins);
+                p.sendMessage(PO + "还没到：今日有效在线 " + mins + "/" + next.min + " 分钟"
+                        + (left > 0 ? " §8· 还差 " + left + " 分" : ""));
+                try { // D1453
+                    p.sendActionBar("§e在线 · §f" + mins + "/" + next.min + " 分"
+                            + (left > 0 ? " §8· 还差" + left : ""));
+                } catch (Throwable ignored) { }
+            }
             return;
         }
         d.addPeriodCount(C_OCLAIM, day, add);
@@ -547,10 +558,18 @@ public final class EmberSignService implements Listener {
         int claimed2 = d.periodCount(C_OCLAIM, day);
         for (int i = 0; i < milestones.size(); i++)
             if (milestoneState(mins, claimed2, i, milestones.get(i).min) == 0) { next = milestones.get(i); break; }
-        if (next != null)
-            p.sendMessage(PO + "§7下一档：§f" + mins + "/" + next.min + " 分钟 §8· " + next.r.label());
-        else
+        if (next != null) {
+            int left2 = Math.max(0, next.min - mins);
+            p.sendMessage(PO + "§7下一档：§f" + mins + "/" + next.min + " 分钟"
+                    + (left2 > 0 ? " §8· 还差 " + left2 + " 分" : "")
+                    + " §8· " + next.r.label());
+            try {
+                p.sendActionBar("§a已领 · 下一档 §f" + mins + "/" + next.min
+                        + (left2 > 0 ? " §8· 还差" + left2 : ""));
+            } catch (Throwable ignored) { }
+        } else {
             p.sendMessage(PO + "§7今日在线档已领完 · 明天 0 点重置");
+        }
         p.sendMessage(PO + EmberOnlinePath.glance(EmberOnlinePath.get(d), true));
         ConfirmTokens.sendButtons(p, PO + "§7下一步：", // D930
                 new String[]{"[工坊]", "/corerpg p1 forge", "花币/材料", "GOLD"},

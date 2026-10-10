@@ -156,8 +156,13 @@ public final class EmberAbyssPath {
         int maxStart = abyss.maxStart(d);
         p.sendMessage(P + "§a深渊路径 → §f" + label(id) + " §7· " + tip(id)
                 + " §8（最高通关 " + best + " · 可开至 " + maxStart + "）");
-        // D702 layer target glance (no new button twin if already has enter)
-        p.sendMessage(P + EmberAbyssTarget.glance(d, best));
+        // D702 / D1452 layer target glance
+        String gl = EmberAbyssTarget.glance(d, best);
+        p.sendMessage(P + gl);
+        try {
+            p.sendActionBar(gl.contains("还差") || gl.contains("已达成")
+                    ? gl : ("§e深渊 · §f" + label(id) + " §7· 最高" + best));
+        } catch (Throwable ignored) { }
         if (EmberAbyssTarget.get(d) <= 0) {
             p.sendMessage(P + "§7可设层目标：/corerpg p1 abysstarget <层>");
         }

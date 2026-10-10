@@ -18,5 +18,7 @@ setchase-mapid（SC/MI/CD）已近饱和。精选入场、周目标进度、觉�
 | HN1 | 勋记下一缺 AB | honor list |
 | DP1 | 日委路径 AB | DailyPath glance/settle |
 | FP1 | 套装打法图身份 | FamilyPath afterSet |
+| AB1 | 深渊路径 AB | AbyssPath apply |
+| ON1 | 在线档还差分 | Sign claimOnline |
 
 不改奖励数、周帽、掉率、通关闸。
