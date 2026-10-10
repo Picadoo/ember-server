@@ -76,6 +76,8 @@ public final class EmberSkillKit {
 
     /** D607 shape-fork S0: set soft-preferred 烬斩 shape (geometry only · zero skill_mult). */
     public static final String C_SHAPE_MANUAL = "p1_shape_manual"; // 1 = player picked; soft prefer skips
+    /** D2278: entered Q04 at least once (shape unlock without clear-gate). */
+    public static final String C_SHAPE_ENTER = "p1_shape_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -124,7 +126,17 @@ public final class EmberSkillKit {
     }
 
     public static boolean shapeUnlocked(PlayerData d, EmberRunService runs) {
-        return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_SHAPE);
+        if (d == null) return false;
+        if (d.periodCount(C_SHAPE_ENTER, "all") > 0) return true; // D2278 first-enter
+        return runs != null && runs.firstClearedKey(d, UNLOCK_SHAPE);
+    }
+
+    /** Rising-edge: mark Q04 entered → shape unlocked without clear. @return true if newly set */
+    public static boolean markShapeEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_SHAPE_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_SHAPE_ENTER, "all", 1);
+        return true;
     }
 
     public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {

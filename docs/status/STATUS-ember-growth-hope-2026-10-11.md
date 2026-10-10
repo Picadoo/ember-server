@@ -812,3 +812,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - Talent row1 仍 HOLD；K3 banned
 ## D2265–D2276 · 套装形状同步落点 · jar 1.65.520-d2276
 - 形同：缓速+4ticks / 微疗×1.25 · 零 skill_mult
+## D2277–D2288 · Q04 首进解锁符文 · jar 1.65.521-d2288
+- shapeUnlocked = enter latch OR first clear · 非通关门

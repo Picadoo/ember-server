@@ -53,6 +53,15 @@ public final class EmberMapEnterFeel {
     /** D1397: optional PlayerData → append map-identity nextMissing（不锁通关）. */
     public static void flash(Player p, EmberRunMaps.MapDef m, EmberRunSession s, town.sunshine.corerpg.PlayerData pd) {
         if (p == null) return;
+        // D2279: Q04 first enter unlocks 烬斩符文 (non-clear-gate)
+        if (pd != null && m != null && "q04".equalsIgnoreCase(m.key)) {
+            if (EmberSkillKit.markShapeEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a烬斩符文已解锁 · §f扇/直/环 §7（首进 Q04 · 不锁通关 · /corerpg skill shape）");
+                    p.sendActionBar("§a符文解锁 · §f/corerpg skill shape");
+                } catch (Throwable ignored) { }
+            }
+        }
         boolean ch = s != null && s.challenge;
         int ab = s == null ? 0 : s.abyss;
         String msg = line(m, ch, ab);

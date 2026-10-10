@@ -450,3 +450,6 @@ Skill set-fork / SigFeel / talent row1 HOLD / AFK gear-in-combat 已评估。
 ### SG · set-shape-sync geometry (D2251–D2264)
 2pc + preferred shape match → LINE/RING/FAN geometry bump (zero skill_mult). Talent HOLD; K3 banned.
 - SG land: synced burst slow +4t / sustain heal ×1.25 (D2265–).
+
+### SU · shape unlock first-enter (D2277–D2288)
+Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
