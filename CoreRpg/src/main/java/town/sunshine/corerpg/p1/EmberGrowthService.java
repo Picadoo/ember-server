@@ -2409,7 +2409,7 @@ public final class EmberGrowthService implements Listener {
                             q.sendMessage(P + "§a定向完成：" + affixText(enc, t.quality)
                                     + " §7· 锻造次数剩余 §f" + EmberBrandRules.chargesLeft(afcUsed(nd, after))
                                     + "/" + EmberBrandRules.MAX_CHARGES);
-                            EmberBrandLoop.afterPin(q, want.name); // D471 pin feel
+                            EmberBrandLoop.afterPin(q, want.name, after); // D2088 piece-aware
                             openMenu(q, "ember_p1_brand");
                         }
                     });
@@ -2536,7 +2536,7 @@ public final class EmberGrowthService implements Listener {
                         if (q != null) {
                             q.sendMessage(P + "§a转化完成：§f" + planned.shortLabel()
                                     + " §7· 强化+0 · 本周已用 §f" + (usedNow + 1) + "/" + EmberConvertRules.WEEKLY_CAP);
-                            EmberConvertLoop.afterConvert(q, nd, toFam, before.enhance > 0); // D474
+                            EmberConvertLoop.afterConvert(q, nd, toFam, before.enhance > 0, planned); // D2089
                             openMenu(q, "ember_p1_convert");
                         }
                     });

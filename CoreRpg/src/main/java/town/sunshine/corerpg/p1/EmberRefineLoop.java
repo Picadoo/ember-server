@@ -9,7 +9,7 @@ import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberItemStore.TxnItem;
 
 /**
- * D658/D660: refine spend chase + forge-goal REFINE complete. Zero refine rate / price.
+ * D658/D660 / D2087: refine → piece-aware commit next. Zero refine price.
  */
 public final class EmberRefineLoop {
 
@@ -18,6 +18,7 @@ public final class EmberRefineLoop {
     public static void afterRefine(Player p, PlayerData d, List<TxnItem> list) {
         if (p == null) return;
         String P = EmberRunService.P;
+        EmberItemData after = firstAfter(list);
         boolean goalHit = d != null && EmberForgeGoal.get(d) == EmberForgeGoal.REFINE;
         if (goalHit) {
             p.sendMessage(P + "§a本周工坊目标完成：§f精工+1");
@@ -25,18 +26,24 @@ public final class EmberRefineLoop {
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/烙纹/转化…", "GREEN"},
                     new String[]{"[再精工]", "/corerpg p1 refine", "同件再投", "AQUA"},
-                    new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GOLD"});
+                    EmberForgeCommitNext.enhance());
             return;
         }
         String rh = refineHint(list);
-        p.sendMessage(P + "§e精工已投入" + (rh.isEmpty() ? "" : " §7· " + rh) + " §7· 选下一步（不改精工价）：");
-        try { // D1322
-            p.sendActionBar(rh.isEmpty() ? "§e精工完成 · §f选下一步" : ("§e精工 · §f" + rh));
+        p.sendMessage(P + "§e精工已投入" + (rh.isEmpty() ? "" : " §7· " + rh)
+                + " §7· 承诺同件下一槽（不改精工价）：");
+        try {
+            p.sendActionBar(rh.isEmpty() ? "§e精工 · §f同件下一槽" : ("§e精工 · §f" + rh));
         } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P, // D884
-                new String[]{"[再精工]", "/corerpg p1 refine", "同件再投", "AQUA"},
-                new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GREEN"},
-                new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"});
+        EmberForgeCommitNext.afterRefine(p, after);
+    }
+
+    static EmberItemData firstAfter(List<TxnItem> list) {
+        if (list == null) return null;
+        for (TxnItem t : list) {
+            if (t != null && t.after != null) return t.after;
+        }
+        return null;
     }
 
     static String refineHint(List<TxnItem> list) {

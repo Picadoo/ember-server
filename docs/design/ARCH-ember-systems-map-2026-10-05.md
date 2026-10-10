@@ -415,3 +415,6 @@ flowchart LR
 
 ### UL upgrade-commit loop (D2061+)
 - Piece-aware next after upgrade; forgegoal UPGRADE=9. Zero upgradeCost change.
+
+### CN · forge commit-next (D2085–D2098)
+`EmberForgeCommitNext` wires Quality/Refine/BrandPin/Convert/GemInsert to piece-aware ConfirmTokens (same spirit as RL/UL/EL). Zero price invent.

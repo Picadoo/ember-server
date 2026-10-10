@@ -19,6 +19,11 @@ public final class EmberConvertLoop {
      * @param hadEnhance whether piece had enhance&gt;0 before convert (now 0)
      */
     public static void afterConvert(Player p, PlayerData d, String toFam, boolean hadEnhance) {
+        afterConvert(p, d, toFam, hadEnhance, null);
+    }
+
+    /** D2089: optional after piece for commit-next. */
+    public static void afterConvert(Player p, PlayerData d, String toFam, boolean hadEnhance, EmberItemData after) {
         if (p == null || toFam == null) return;
         String famName = EmberItemData.familyName(toFam);
         String feel = "§a转化 · §f" + famName + " §7完成";
@@ -45,20 +50,21 @@ public final class EmberConvertLoop {
             }
         }
 
-        // enhance wiped — chase forge; optional align setfocus
+        // enhance wiped — piece-aware enhance commit; optional align setfocus
         if (goalHit) {
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[去工坊强化]", "/corerpg p1 forge",
-                            hadEnhance ? "强化已归零 · 去重新强化" : "去工坊继续养成", "GOLD"},
+                    EmberForgeCommitNext.enhance(),
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/精工/烙纹…", "GREEN"},
                     new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
                             "套装焦点也设成" + famName, "AQUA"});
         } else {
+            String[] b = EmberForgeCommitNext.quality(after);
+            if (b == null) b = EmberForgeCommitNext.refine(after);
+            if (b == null) b = new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
+                    "套装焦点也设成" + famName, "AQUA"};
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                    new String[]{"[去工坊强化]", "/corerpg p1 forge",
-                            hadEnhance ? "强化已归零 · 去重新强化" : "去工坊继续养成", "GOLD"},
-                    new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
-                            "套装焦点也设成" + famName, "AQUA"},
+                    EmberForgeCommitNext.enhance(),
+                    b,
                     new String[]{"[转化页]", "/corerpg p1 convert menu", "看本周剩余", "GRAY"});
         }
     }

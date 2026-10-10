@@ -9,8 +9,7 @@ import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberItemStore.TxnItem;
 
 /**
- * D658: quality spend → next forge chase.
- * D1931 FG-Q3: forge-goal QUALITY complete (mirrors RefineLoop). Zero quality rate / price change.
+ * D658 / D2087: quality spend → piece-aware commit next. Zero quality price change.
  */
 public final class EmberQualityLoop {
 
@@ -19,6 +18,7 @@ public final class EmberQualityLoop {
     public static void afterQuality(Player p, PlayerData d, List<TxnItem> list) {
         if (p == null) return;
         String P = EmberRunService.P;
+        EmberItemData after = firstAfter(list);
         boolean goalHit = d != null && EmberForgeGoal.get(d) == EmberForgeGoal.QUALITY;
         if (goalHit) {
             p.sendMessage(P + "§a本周工坊目标完成：§f成色升档");
@@ -26,19 +26,27 @@ public final class EmberQualityLoop {
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/精工/烙纹…", "GREEN"},
                     new String[]{"[再成色]", "/corerpg p1 quality", "同件再投", "YELLOW"},
-                    new String[]{"[去精工]", "/corerpg p1 refine", "成色后精工", "AQUA"});
+                    EmberForgeCommitNext.refine(after) != null
+                            ? EmberForgeCommitNext.refine(after)
+                            : EmberForgeCommitNext.enhance());
             return;
         }
         String hint = winnerHint(list);
         p.sendMessage(P + "§e成色已投入" + (hint.isEmpty() ? "" : " §7· " + hint)
-                + " §7· 选下一步（不改成色价）：");
+                + " §7· 承诺同件下一槽（不改成色价）：");
         try {
-            p.sendActionBar(hint.isEmpty() ? "§e成色完成 · §f选下一步" : ("§e成色 · §f" + hint));
+            p.sendActionBar(hint.isEmpty() ? "§e成色 · §f同件下一槽" : ("§e成色 · §f" + hint));
         } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P,
-                new String[]{"[去精工]", "/corerpg p1 refine", "精工预览", "AQUA"},
-                new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GREEN"},
-                new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"});
+        boolean canAgain = after != null && EmberUpgradeRules.qualityCost(after.quality) != null;
+        EmberForgeCommitNext.afterQuality(p, after, canAgain);
+    }
+
+    static EmberItemData firstAfter(List<TxnItem> list) {
+        if (list == null) return null;
+        for (TxnItem t : list) {
+            if (t != null && t.after != null) return t.after;
+        }
+        return null;
     }
 
     static String winnerHint(List<TxnItem> list) {

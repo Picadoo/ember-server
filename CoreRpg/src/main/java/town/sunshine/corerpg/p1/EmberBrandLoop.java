@@ -53,17 +53,18 @@ public final class EmberBrandLoop {
 
     /** Pin success feel: ActionBar only (chat already has 定向完成 detail). */
     public static void afterPin(Player p, String affixName) {
+        afterPin(p, affixName, null);
+    }
+
+    /** D2088: piece-aware commit next after pin. */
+    public static void afterPin(Player p, String affixName, EmberItemData after) {
         if (p == null) return;
         String name = affixName == null || affixName.isEmpty() ? "烙纹" : affixName;
         String line = "§6烙纹 · §f" + name + " §a定向完成";
         try {
             p.sendActionBar(line);
         } catch (Throwable ignored) { }
-        String P = EmberRunService.P;
-        ConfirmTokens.sendButtons(p, P + "§7烙纹下一环：", // D879
-                new String[]{"[去强化]", "/corerpg p1 enhance", "词条落了继续养成", "GREEN"},
-                new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口件", "GOLD"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
+        EmberForgeCommitNext.afterPowerReset(p, after, EmberRunService.P + "§7烙纹下一环：");
     }
 
     /** Pure: craft-follow button priority label for tests. */

@@ -773,3 +773,10 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D2075–D2084 enhance piece-aware next (jar 1.65.505-d2075)
 - won path: quality/refine/lock by piece
+
+## D2085–D2098 · QC/烙纹/转化/镶嵌承诺槽 · jar 1.65.506-d2098
+- RESEARCH + Stage0 CN1–CN5
+- `EmberForgeCommitNext` shared piece-aware buttons
+- QualityLoop / RefineLoop / BrandLoop.afterPin(+piece) / ConvertLoop(+piece) / Gem insert → commit next
+- Zero price invent · not status remain twin
+
