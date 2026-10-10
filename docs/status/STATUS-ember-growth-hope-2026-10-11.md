@@ -332,3 +332,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D815–D817 SHIP · jar 1.65.372-d815
 - Adventure onlinepath; friend list path glance; forgeGlance undo btn
+
+## D818–D819 SHIP · jar 1.65.373-d818
+- Sign success next loop; join one-click sign

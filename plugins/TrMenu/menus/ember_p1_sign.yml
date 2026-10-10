@@ -20,6 +20,7 @@ Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'command: corerpg p1 onlinepath'
+    - 'command: corerpg p1 signpath'
 Icons:
   '#':
     display:

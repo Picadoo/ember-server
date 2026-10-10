@@ -297,8 +297,15 @@ public final class EmberSignService implements Listener {
         String got = grant(p, d, SIGN_RUN + mon, "n" + n, rewardFor(n));
         plugin.getLogger().info("[P1 sign] " + p.getName() + " sign " + DailyService.today() + " -> n=" + n + " " + rewardFor(n).label());
         p.sendMessage(P + "§a签到成功 · 本月第 " + n + " 次：§f" + got);
+        try { p.sendActionBar("§a签到 · 本月第 " + n + " 次"); } catch (Throwable ignored) { }
         Reward next = rewardFor(n + 1);
         if (n < 28) p.sendMessage(P + "§7下一次（第 " + (n + 1) + " 次）：" + next.label() + nextBig(n));
+        // D818 next loop
+        p.sendMessage(P + EmberSignPath.glance(EmberSignPath.get(d), true));
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[在线奖励]", "/corerpg p1 sign online claim", "领时长档", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花奖励", "GOLD"},
+                new String[]{"[签到页]", "/corerpg p1 sign menu", "看月历", "AQUA"});
     }
 
     private String nextBig(int n) {
@@ -560,8 +567,10 @@ public final class EmberSignService implements Listener {
             }
             if (EmberSignPath.shouldMute(d)) return;
             int n = count(mask) + 1;
-            ConfirmTokens.sendButton(p, P + "§e今天还没签到 §7· 本月第 " + n + " 次：§f" + rewardFor(n).label() + " ", "[去签到]",
-                    "/corerpg p1 sign menu", "打开签到 · 在线页（点格子签到）");
+            ConfirmTokens.sendButtons(p, P + "§e今天还没签到 §7· 本月第 " + n + " 次：§f" + rewardFor(n).label() + " ", // D819
+                    new String[]{"[一键签到]", "/corerpg p1 sign claim", "立刻签", "GREEN"},
+                    new String[]{"[签到页]", "/corerpg p1 sign menu", "看月历", "AQUA"});
+
             p.sendMessage(P + "§7不用打命令：主菜单 → §f签到 · 在线");
         }, 100L);
     }
