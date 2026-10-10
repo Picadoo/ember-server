@@ -486,3 +486,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1051–D1062 ARCH SHIP · jar 1.65.419-d1051
 - Stage2-B: S07/S08 insignia+stampRate; Stage2-C: short dailyCap; nums unchanged; D skipped
+
+## D1063–D1072 ARCH SHIP · jar 1.65.420-d1063
+- Stage2-D: Codex stageCoin + AFK S22 caps SoT; AFK tier tables untouched

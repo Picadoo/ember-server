@@ -1136,6 +1136,16 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void codexStageCoinMatchS33() {
+        // D1067 Stage2-D
+        for (int i = 0; i < EmberCodex.STAGE_AT.length; i++) {
+            assertEquals(EmberCodex.STAGE_COIN[i], EmberCodex.stageCoin(i));
+        }
+        assertEquals(2400, EmberEconomy.amount("S22", "daily_kills"));
+        assertEquals(1200, EmberEconomy.amount("S22", "offline_max_kills"));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

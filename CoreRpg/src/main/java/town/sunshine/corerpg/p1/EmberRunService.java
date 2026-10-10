@@ -1726,7 +1726,7 @@ public final class EmberRunService implements Listener {
                 sb.append(EmberCodex.has(d, e.key()) ? "§a" : "§8").append(e.label()).append(' ');
             p.sendMessage(P + sb.toString().trim());
             for (int i = 0; i < EmberCodex.STAGE_AT.length; i++)
-                p.sendMessage(P + "§7集齐 " + EmberCodex.STAGE_AT[i] + " 种：余烬币 " + EmberCodex.STAGE_COIN[i] + " · " + EmberCodex.stageLabel(d, i));
+                p.sendMessage(P + "§7集齐 " + EmberCodex.STAGE_AT[i] + " 种：余烬币 " + EmberCodex.stageCoin(i) + " · " + EmberCodex.stageLabel(d, i));
             StringBuilder lo = new StringBuilder(); // P2-9 (D81) where to farm what
             for (EmberRunMaps.MapDef m : maps.maps.values()) lo.append(lo.length() == 0 ? "" : " · ").append(m.key.toUpperCase(Locale.ROOT)).append(' ').append(EmberRunMaps.lootLabel(m));
             p.sendMessage(P + "§6掉落偏向 §7" + lo + "（目标族仍至少 60%；挑战 / 深渊同图同偏向）");
@@ -1749,8 +1749,8 @@ public final class EmberRunService implements Listener {
         UUID u = p.getUniqueId();
         for (int i : can) {
             d.addPeriodCount(EmberCodex.C_CLAIM + i, "all", 1);
-            ledgerRow(u, EmberCodex.LEDGER_RUN, "stage" + i, "coin:" + EmberCodex.STAGE_COIN[i], EmberRunRules.ST_PENDING);
-            log().info("[P1 codex] " + p.getName() + " stage " + EmberCodex.STAGE_AT[i] + " -> coin " + EmberCodex.STAGE_COIN[i]);
+            ledgerRow(u, EmberCodex.LEDGER_RUN, "stage" + i, "coin:" + EmberCodex.stageCoin(i), EmberRunRules.ST_PENDING);
+            log().info("[P1 codex] " + p.getName() + " stage " + EmberCodex.STAGE_AT[i] + " -> coin " + EmberCodex.stageCoin(i));
         }
         plugin.getDataStore().flushMutation(u);
         deliver(p);

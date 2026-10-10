@@ -24,7 +24,17 @@ public final class EmberCodex {
     /** D42: thresholds (registered entries) and their one-time coin rewards. D243: registered as economy row S33
      *  (at5/at10/at15/at20.coin, dual-asserted by EmberEconomyTest); the ledger coin is tagged S33 on delivery. */
     public static final int[] STAGE_AT = {5, 10, 15, 20};
-    public static final int[] STAGE_COIN = {200, 400, 600, 1000};
+    public static final int[] STAGE_COIN = {200, 400, 600, 1000}; // golden mirrors; prefer stageCoin(i)
+
+    private static final String[] STAGE_COIN_KEYS = {"at5.coin", "at10.coin", "at15.coin", "at20.coin"};
+
+    /** D1064: S33 stage coin from economy yml SoT (nums identical to STAGE_COIN). */
+    public static int stageCoin(int stage) {
+        if (stage < 0 || stage >= STAGE_COIN_KEYS.length) {
+            throw new IllegalArgumentException("codex stage " + stage);
+        }
+        return EmberEconomy.amount("S33", STAGE_COIN_KEYS[stage]);
+    }
 
     public static final class Entry {
         public final String family, slot;

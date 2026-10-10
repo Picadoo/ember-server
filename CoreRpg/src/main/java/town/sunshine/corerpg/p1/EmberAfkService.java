@@ -155,6 +155,11 @@ public final class EmberAfkService implements Listener {
             world = s.getString("world", "ember_afk");
             legacyPayouts = s.getBoolean("legacy_payouts", false);
             dailyKills = Math.max(0, s.getInt("daily_kills", 2400));
+            // D1066 Stage2-D: pin caps to economy SoT (identical nums; never raise tables)
+            try {
+                dailyKills = EmberEconomy.amount("S22", "daily_kills");
+                // offline max applied below after off block parse
+            } catch (RuntimeException ignored) { /* yml golden mismatch → keep section */ }
             settleEvery = Math.max(1, s.getInt("settle_every", 100));
             ConfigurationSection c = s.getConfigurationSection("combat");
             if (c != null) {
@@ -172,6 +177,7 @@ public final class EmberAfkService implements Listener {
             if (o != null) {
                 offRatio = Math.max(0, Math.min(1, o.getDouble("ratio", 0.25)));
                 offMax = Math.max(0, o.getInt("max_kills", 1200));
+                try { offMax = EmberEconomy.amount("S22", "offline_max_kills"); } catch (RuntimeException ignored) {}
                 offHours = Math.max(0, o.getInt("max_hours", 12));
                 offMinFight = Math.max(1, o.getInt("min_fight_minutes", 5));
             ConfigurationSection feel = s.getConfigurationSection("feel");
