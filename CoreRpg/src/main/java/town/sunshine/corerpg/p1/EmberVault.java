@@ -321,6 +321,17 @@ public final class EmberVault implements Listener, NiBridge.ExtraSource {
      * Every whitelisted stack in the backpack + hotbar (not armor / off hand) → warehouse. Returns id → amount moved.
      * Works anywhere (putting materials away never helps a fight).
      */
+    /** D526: true when storage has any vault-whitelisted stack. */
+    public boolean backpackHasStashable(Player p) {
+        if (p == null || !enabled()) return false;
+        for (ItemStack x : p.getInventory().getStorageContents()) {
+            if (x == null || x.getType() == Material.AIR) continue;
+            String id = ni().getNiId(x);
+            if (id != null && accepts(id)) return true;
+        }
+        return false;
+    }
+
     public Map<String, Long> depositAll(Player p) {
         Map<String, Long> moved = new java.util.LinkedHashMap<String, Long>();
         if (!enabled()) return moved;

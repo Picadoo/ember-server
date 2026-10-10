@@ -403,6 +403,9 @@ public final class EmberSettleService {
             if (!feel.isEmpty()) p.sendMessage(EmberRunService.P + feel);
             EmberClaimPath.settleDeliver(p, pd, runs); // D515 claim path
             EmberCodexPath.maybeAfterProgress(p, runs); // D522 codex path
+            Bukkit.getScheduler().runTaskLater(runs.plugin(), () -> {
+                if (p.isOnline()) EmberStashPath.maybeAfterProgress(p); // D526 stash path
+            }, 40L);
             if (in.firstClear != null && runs.maps().challenge != null && m.key.equals(runs.maps().challenge.requires)) endOfP1(p);
         }
         // D298 W1a(+R): playfeel telemetry — clear path (vbMoved = variety bounty progress)

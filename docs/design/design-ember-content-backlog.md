@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-stash-path`（已批 A · 方案 M · D526 · **PASS** · jar 1.65.217-d526 · 存仓自动/提醒/静默真改背包落点 · ≠补领/vault toggle/glib mode 双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-pet-path`（已批 A · 方案 M · D525 · **PASS** · jar 1.65.216-d525 · 使魔自动/提醒/静默真改进服出战 · ≠社交/邮件双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-mentor-path`（已批 A · 方案 M · D524 · **PASS** · jar 1.65.215-d524 · 师徒敞开/审核/静拒真改结成 · ≠好友/招募双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-mail-path`（已批 A · 方案 M · D523 · **PASS** · jar 1.65.214-d523 · 邮件自动/提醒/静默真改附件领奖 · ≠补领/签到/图录双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
