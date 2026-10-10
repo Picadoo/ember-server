@@ -177,3 +177,12 @@ reroll:
       - {id: c_tele, code: 4, name: "定身纹", key: taken_tele, desc: "受到首领预警招伤害", values: [0.995, 0.99, 0.985, 0.98]}
       - {id: c_share, code: 6, name: "分核纹", key: share_taken, desc: "烬核自己那份", values: [0.99, 0.98, 0.97, 0.96]}
       - {id: c_affix, code: 7, name: "抗缀纹", key: taken_affix, desc: "受到词缀精英伤害", note: "仅主线重打词缀精英", values: [0.96, 0.92, 0.88, 0.84]}
+
+# D429 烙纹定向（批 A·M · 切片自 D167；不抬 AFK；不改 enhance 价）
+forge:
+  brand:
+    craft: {shard: 40}   # 40 碎片 → 1 mat_ember_brand
+    pin_brand: [0, 2, 4, 6]   # T0 不开；T1/T2/T3
+    pin_coin: [0, 300, 600, 1000]
+  charges:
+    max: 13

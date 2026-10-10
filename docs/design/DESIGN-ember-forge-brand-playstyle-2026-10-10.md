@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 烬砧烙纹定向（词条类型自选 · 战斗手感分叉）
 
-STATUS=**已批 A · 方案 M · D429 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md) · backlog `B-forge-brand-playstyle`（**已批·施工中**）· STATUS [`STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md`](../status/STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md)· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx20 ≠复述短征装配线 ≠开天赋一排 ≠开灰印续跑**
+STATUS=**已批 A · 方案 M · D429 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-brand-playstyle-need-design-2026-10-10.md) · backlog `B-forge-brand-playstyle`（**已批·施工中**）· STATUS [`STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md`](../status/STATUS-ember-forge-brand-playstyle-d429-2026-10-10.md)· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx20 ≠复述短征装配线 ≠开天赋一排 ≠开灰印续跑**
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常。**
 
@@ -85,3 +85,4 @@ STATUS=**已批 A · 方案 M · D429 · 施工中** · 2026-10-10 · tip [`STAT
 
 *D429 · 烙纹定向成长花样 · 待批 A·方案 M · ≠sx20 ≠抬日表 ≠关观察。*
 | 2026-10-10 | 总控 **已批 A · 方案 M · D429** · 价锁 40 碎片=1 · tip→已批·施工中 |
+| 2026-10-10 | **D429 PASS** jar 1.65.131-d429 · 合成+定向+次数+TrMenu · 证据 /tmp/d429-brand-spot |

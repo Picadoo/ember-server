@@ -63,6 +63,10 @@ public final class EmberCommand {
             if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "洗练服务未加载"); return true; }
             return EmberGrowthService.get().rerollCommand((Player) s, args);
         }
+        if ("brand".equals(sub) || "烙纹".equals(sub)) { // D429 烙纹定向
+            if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "烙纹服务未加载"); return true; }
+            return EmberGrowthService.get().brandCommand((Player) s, args);
+        }
         if ("honor".equals(sub) || "勋记".equals(sub)) { // D142 余烬勋记
             if (args.length >= 3 && "test".equalsIgnoreCase(args[2])) { // admin test hook (10-04): grant / clear honor conditions
                 if (!s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }

@@ -321,6 +321,9 @@ public final class EmberEconomy {
             .g("memo", 120).g("badge_rate", 5).g("badge_cap", 40).done();
         sink("C19", "扭蛋抽取（耗券，CoreGacha）", "plugins/CoreGacha/gacha.yml cost_per_pull / daily_pull_cap", Period.DAY)
             .acc(Account.GACHA_TICKET).model(OUT).done(); // D244 (G10): registered, tags only
+        // D429 烙纹：合成吃碎片；定向吃币（烙纹 NI 另扣，记 GEAR 账户口径）
+        sink("C20", "烙纹合成", "EmberBrandRules.CRAFT_SHARDS", Period.NONE).acc(SHARD).model(FULL).g("shard", 40).done();
+        sink("C21", "烙纹定向", "EmberBrandRules pin_coin/pin_brand", Period.NONE).acc(COIN, GEAR).model(FULL).done();
     }
 
     private EmberEconomy() {}
@@ -616,6 +619,7 @@ public final class EmberEconomy {
         if (EmberUpgradeRules.MAT_CORE.equals(matId)) return Account.CORE;
         if (EmberUpgradeRules.MAT_BONE.equals(matId)) return Account.BONE;
         if (EmberUpgradeRules.MAT_BLANK.equals(matId)) return Account.BLANK;
+        if (EmberBrandRules.MAT_BRAND.equals(matId)) return Account.GEAR; // D429 烙纹
         return null;
     }
 

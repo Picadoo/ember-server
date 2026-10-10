@@ -24,7 +24,7 @@ Layout:
   - '# e u r #'
   - '# Q S D #'
   - '# q s d #'
-  - '# A P bB#'
+  - '#AGP bB#'
 # D100 (review #10): every confirm sits directly under its preview (same column); 分解 confirms in chat (one-shot token)
 
 Events:
@@ -351,6 +351,22 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_afk'
+  # D429: 烙纹定向（词条类型自选）
+  G:
+    display:
+      material: blaze powder
+      name: '§6烙纹定向'
+      lore:
+        - ''
+        - '§7用余烬烙纹写入§f指定词条类型'
+        - '§7档位仍随机 · 每件锻造次数 13'
+        - '§740 碎片 → 1 烙纹 · 不抬挂机表'
+        - ''
+        - '§e➥ §f打开烙纹工坊'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_brand'
   # D398: 配方速览（静态阶梯 · 未持件可读）
   P:
     display:

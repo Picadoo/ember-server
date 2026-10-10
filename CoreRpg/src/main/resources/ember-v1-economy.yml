@@ -275,6 +275,10 @@ sinks:
     memo: 120
     badge_rate: 5
     badge_cap: 40
+  # D429 烙纹
+  C20:
+    shard: 40
+  C21: {}
 
 # Caps mirrored from source goldens (S22 AFK) for REG §4 readability.
 caps:

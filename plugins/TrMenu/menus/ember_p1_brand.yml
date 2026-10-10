@@ -1,0 +1,131 @@
+# D429 烙纹定向：合成烙纹 + 选件选类型确认（命令二次确认）
+# 入口：工坊 G · /ember_p1_brand · /corerpg p1 brand menu
+
+Title: '§6余烬 · 烙纹定向'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_brand'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####N####'
+  - '#C#######'
+  - '#1#2#####'
+  - '#3#4#5###'
+  - '####bB###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ANVIL_LAND-0.4-1.4'
+    - 'tell: §8先合成烙纹，再点类型 → 聊天栏确认（扣次数 1）'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+
+  N:
+    display:
+      material: book
+      name: '§6烙纹定向 · 说明'
+      lore:
+        - '§7用「余烬烙纹」把指定词条类型写入正在用的刃/护符'
+        - '§7档位仍按成色随机（保底与洗练共用）'
+        - '§7每件锻造次数 13（洗练与定向共用）'
+        - '§7合成：40 余烬碎片 → 1 烙纹'
+        - '§7定向价 T1/T2/T3：2/4/6 烙纹 + 300/600/1000 币'
+        - '§8不抬挂机日表 · 不改强化价'
+
+  C:
+    display:
+      material: redstone
+      name: '§e合成烙纹'
+      lore:
+        - '§740 余烬碎片 → 1 余烬烙纹'
+        - ''
+        - '§e➥ §f点击：聊天栏确认合成'
+    actions:
+      all:
+        - 'sound: UI_BUTTON_CLICK-1-1'
+        - close
+        - 'command: corerpg p1 brand craft'
+
+  # blade types: b_affix 猎缀, b_set 余烬
+  '1':
+    display:
+      material: iron sword
+      name: '§6刃 · 猎缀纹'
+      lore:
+        - '§7对词缀精英伤害'
+        - '§e➥ §f点击预览定向'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 brand pin blade b_affix'
+  '2':
+    display:
+      material: blaze powder
+      name: '§6刃 · 余烬纹'
+      lore:
+        - '§7套装事件伤害'
+        - '§e➥ §f点击预览定向'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 brand pin blade b_set'
+  # charm: c_tele 定身, c_share 分核, c_affix 抗缀
+  '3':
+    display:
+      material: ender eye
+      name: '§6护符 · 定身纹'
+      lore:
+        - '§7受到首领预警招伤害'
+        - '§e➥ §f点击预览定向'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 brand pin charm c_tele'
+  '4':
+    display:
+      material: magma cream
+      name: '§6护符 · 分核纹'
+      lore:
+        - '§7烬核自己那份'
+        - '§e➥ §f点击预览定向'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 brand pin charm c_share'
+  '5':
+    display:
+      material: shield
+      name: '§6护符 · 抗缀纹'
+      lore:
+        - '§7受到词缀精英伤害'
+        - '§e➥ §f点击预览定向'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 brand pin charm c_affix'
+
+  b:
+    display:
+      material: arrow
+      name: '§7返回工坊'
+    actions:
+      all:
+        - 'menu: ember_p1_forge'
+  B:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all:
+        - close

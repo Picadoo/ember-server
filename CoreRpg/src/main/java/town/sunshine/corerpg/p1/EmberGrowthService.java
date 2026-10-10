@@ -658,6 +658,8 @@ public final class EmberGrowthService implements Listener {
     // D208 (ARCH S1-4): legacy only — the affix and its pity are EmberItemData.affix / afPity on v2 items (EmberItemKeys)
     static final String C_AF = "p4_af_";    // + item uid, period all: affix code * 10 + tier (0 = empty)
     static final String C_AFP = "p4_afp_";  // + item uid, period all: tries in a row below the quality cap (pity)
+    /** D429: forge charges used (+ item uid, period all); left = 13 - used */
+    static final String C_AFC = "p4_afc_";
     public static final String REROLL_MENU = "ember_p1_reroll";
     private static final Map<UUID, String> RFROM = new ConcurrentHashMap<UUID, String>();
     /** uuid → {item uid, slot, encoded candidate, old encoded} — the roll waiting for 保留新 / 保留旧 (not chosen = old) */
@@ -1549,6 +1551,10 @@ public final class EmberGrowthService implements Listener {
             return true;
         }
         if (gate(p)) return true;
+        if (EmberBrandRules.chargesLeft(afcUsed(d, t)) <= 0) {
+            p.sendMessage(P + "§c锻造次数已用完，只能换底子（洗练与烙纹定向共用）");
+            return true;
+        }
         final UUID id = p.getUniqueId();
         if (d.periodCount(EmberPayRules.C_RRO + t.uid, "all") > 0) { recoverRolls(p, 0); p.sendMessage(P + "§c这件上一次洗练已付款、结果还在处理（几秒后自动出结果）"); return true; } // pre-1.65.42 owed roll
         final EmberPay pay = EmberPay.get();
@@ -1680,6 +1686,7 @@ public final class EmberGrowthService implements Listener {
         plugin.getLogger().info("[P1 growth] " + (p == null ? id.toString() : p.getName()) + " reroll " + t.uid + " " + rid + " " + paid + " → " + r.id + " t" + r.tier
                 + (pl.lock ? " (lock)" : "") + (r.forced ? " (pity)" : "") + " pity " + pl.pity + "→" + r.pityAfter + " n=" + pl.after.rerollN + " rev=" + pl.after.rev
                 + (pl.old == 0 ? " installed" : " candidate") + (recovered ? " (recovered at join)" : "") + (p == null ? " (owner offline, on the item)" : ""));
+        if (!recovered) afcBump(id, data(id), t); // D429: 洗练与定向共用锻造次数
         if (p == null) return;
         int quality = t.quality;
         if (recovered) p.sendMessage(P + "§e上次洗练（掉线 / 重启前已付款）的结果：");
@@ -1848,6 +1855,152 @@ public final class EmberGrowthService implements Listener {
         for (double v : df.values) l.add(EmberGrowth.signedPct(v));
         return l;
     }
+
+
+    // ------------------------------------------------------------------ D429 brand pin / craft
+
+    public int afcUsed(PlayerData d, EmberItemData it) {
+        if (d == null || it == null) return 0;
+        return d.periodCount(C_AFC + it.uid, "all");
+    }
+
+    void afcBump(UUID id, PlayerData d, EmberItemData it) {
+        if (d == null || it == null) return;
+        d.addPeriodCount(C_AFC + it.uid, "all", 1);
+        runs.flushData(id);
+    }
+
+    /** /corerpg p1 brand | craft [confirm] | pin <blade|charm> <affixId> [confirm] | menu */
+    public boolean brandCommand(Player p, String[] args) {
+        if (reroll == null) { p.sendMessage(P + "词条表未加载，烙纹不可用"); return true; }
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
+        String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+        if (op.isEmpty() || "menu".equals(op)) { openMenu(p, "ember_p1_brand"); return true; }
+        if ("craft".equals(op) || "合成".equals(op)) return brandCraft(p, d, args.length >= 4 && "confirm".equalsIgnoreCase(args[args.length - 1]));
+        if ("pin".equals(op) || "定向".equals(op)) {
+            if (args.length < 5) {
+                p.sendMessage(P + "用法：/corerpg p1 brand pin <blade|charm> <词条id> [confirm]");
+                return true;
+            }
+            boolean confirm = "confirm".equalsIgnoreCase(args[args.length - 1]);
+            return brandPin(p, d, args[3].toLowerCase(Locale.ROOT), args[4], confirm);
+        }
+        p.sendMessage(P + "用法：/corerpg p1 brand craft|pin|menu");
+        return true;
+    }
+
+    private boolean brandCraft(Player p, PlayerData d, boolean confirm) {
+        int need = EmberBrandRules.CRAFT_SHARDS;
+        if (!confirm) {
+            p.sendMessage(P + "§6烙纹合成：§f" + need + " 余烬碎片 §7→ §f1 余烬烙纹");
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
+                    new String[]{"[确认合成]", "/corerpg p1 brand craft confirm", "扣 " + need + " 碎片，得 1 烙纹", "GREEN"},
+                    new String[]{"[打开烙纹页]", "/corerpg p1 brand menu", "回菜单", "GRAY"});
+            return true;
+        }
+        if (gate(p)) return true;
+        final EmberPay pay = EmberPay.get();
+        if (pay == null) { p.sendMessage(P + "§c支付服务未就绪"); return true; }
+        final UUID id = p.getUniqueId();
+        final String rid = "brandcraft:" + id + ":" + System.currentTimeMillis();
+        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(need, 0, 0, 0, 0)).at("C20");
+        pay.pay(p, rid, price, "烙纹合成没完成，退回碎片", null, () -> {
+            boolean ok = plugin.getNiBridge().giveNiItem(p, EmberBrandRules.MAT_BRAND, 1);
+            if (!ok) {
+                pay.release(id, rid);
+                if (p.isOnline()) p.sendMessage(P + "§c烙纹发放失败，碎片已退回");
+                return;
+            }
+            pay.settled(id, rid);
+            if (p.isOnline()) p.sendMessage(P + "§a已合成 §f余烬烙纹 ×1 §7（花费 " + need + " 碎片）");
+            openMenu(p, "ember_p1_brand");
+        }, err -> { if (p.isOnline()) p.sendMessage(P + "§c没有合成：" + err); });
+        return true;
+    }
+
+    private boolean brandPin(Player p, PlayerData d, String slot, String affixId, boolean confirm) {
+        if (!"blade".equals(slot) && !"charm".equals(slot)) {
+            p.sendMessage(P + "部位只能是 blade 或 charm");
+            return true;
+        }
+        EmberItemData t = target(p, slot);
+        if (t == null) {
+            p.sendMessage(P + "§c" + ("charm".equals(slot) ? "还没有选定的护符" : "主手没有余烬刃"));
+            return true;
+        }
+        String whyElig = EmberAffix.eligible(t);
+        if (whyElig != null) { p.sendMessage(P + "§c" + whyElig); return true; }
+        int used = afcUsed(d, t);
+        String refuse = EmberBrandRules.pinRefusal(t.tier, used, affixId, reroll, t.slot);
+        if (refuse != null) { p.sendMessage(P + "§c" + refuse); return true; }
+        int brands = EmberBrandRules.pinBrands(t.tier);
+        int coins = EmberBrandRules.pinCoins(t.tier);
+        EmberAffix.Def want = reroll.def(affixId);
+        int left = EmberBrandRules.chargesLeft(used);
+        if (!confirm) {
+            p.sendMessage(P + "§6烙纹定向 · " + t.shortLabel());
+            p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 锻造次数剩余 §f" + left + "/" + EmberBrandRules.MAX_CHARGES);
+            p.sendMessage(P + "写入类型：§b" + want.name + " §7（档位仍随机，成色上限截断）");
+            p.sendMessage(P + "花费：§f" + brands + " 烙纹 + " + coins + " 余烬币");
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
+                    new String[]{"[确认定向]", "/corerpg p1 brand pin " + slot + " " + affixId + " confirm", "扣烙纹与币，写入「" + want.name + "」", "GREEN"},
+                    new String[]{"[回烙纹页]", "/corerpg p1 brand menu", "不扣", "GRAY"});
+            return true;
+        }
+        if (gate(p)) return true;
+        town.sunshine.corerpg.NiBridge ni = plugin.getNiBridge();
+        if (ni.countInInventory(p, EmberBrandRules.MAT_BRAND) < brands) {
+            p.sendMessage(P + "§c烙纹不足（需要 " + brands + "，可先合成）");
+            return true;
+        }
+        final EmberPay pay = EmberPay.get();
+        if (pay == null) { p.sendMessage(P + "§c支付服务未就绪"); return true; }
+        final UUID id = p.getUniqueId();
+        final int n = EmberItemKeys.rerollN(d, t) + 1;
+        final String rid = "brandpin:" + t.uid + ":" + n + ":" + System.currentTimeMillis();
+        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(0, 0, 0, 0, coins)).at("C21");
+        if (!ni.consumeExact(p, EmberBrandRules.MAT_BRAND, brands)) {
+            p.sendMessage(P + "§c烙纹扣除失败");
+            return true;
+        }
+        pay.pay(p, rid, price, "烙纹定向没完成，退回币", null, () -> {
+            EmberAffix.Roll r = EmberAffix.roll(reroll, t.slot, t.quality, afPityOf(d, t),
+                    new java.util.Random(EmberPayRules.seed(salt(), id.toString(), rid)), affixId);
+            if (r == null) {
+                ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brands);
+                pay.release(id, rid);
+                if (p.isOnline()) p.sendMessage(P + "§c词条池异常，已退回");
+                return;
+            }
+            int enc = EmberAffix.encode(reroll.def(r.id), r.tier);
+            final EmberItemData after = next(d, t, enc, r.pityAfter, sigOf(d, t), n);
+            commitOnItem(id, "brandpin", rid, java.util.Collections.singletonList(new EmberItemStore.TxnItem(t, after, null)),
+                    price.json(), "烙纹定向 " + t.shortLabel() + " → " + r.id + " t" + r.tier, ok -> {
+                        if (!ok) {
+                            ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brands);
+                            pay.release(id, rid);
+                            if (p.isOnline()) p.sendMessage(P + "§c定向未写入，材料与币退回");
+                            return;
+                        }
+                        pay.settled(id, rid);
+                        PlayerData nd = data(id);
+                        afcBump(id, nd, after);
+                        Player q = Bukkit.getPlayer(id);
+                        if (q != null) {
+                            q.sendMessage(P + "§a定向完成：" + affixText(enc, t.quality)
+                                    + " §7· 锻造次数剩余 §f" + EmberBrandRules.chargesLeft(afcUsed(nd, after))
+                                    + "/" + EmberBrandRules.MAX_CHARGES);
+                            openMenu(q, "ember_p1_brand");
+                        }
+                    });
+        }, err -> {
+            ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brands);
+            if (p.isOnline()) p.sendMessage(P + "§c没有定向：" + err + "（烙纹已退回）");
+        });
+        return true;
+    }
+
 
     // ------------------------------------------------------------------ admin
 

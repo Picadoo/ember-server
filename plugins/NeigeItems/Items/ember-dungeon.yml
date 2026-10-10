@@ -8,6 +8,14 @@ mat_ember_shard:
   lore:
     - '&8余烬地窟掉落 · 基础材料'
 
+mat_ember_brand:
+  material: BLAZE_POWDER
+  name: '&6余烬烙纹'
+  lore:
+    - '&8烬砧材料 · 定向写入一种词条'
+    - '&7工坊：40 碎片 → 1 烙纹'
+    - '&7定向：指定类型 · 档位仍随机'
+
 mat_ember_bone_dust:
   material: SULPHUR
   name: '&7余烬骨尘'
