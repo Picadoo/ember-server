@@ -610,3 +610,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1423–D1436 ARCH SHIP · jar 1.65.456-d1423
 - GoalPath remain AB; honor next-missing AB
+
+## D1437–D1450 ARCH SHIP · jar 1.65.457-d1437
+- DailyPath AB; FamilyPath map suggest + awaken AB

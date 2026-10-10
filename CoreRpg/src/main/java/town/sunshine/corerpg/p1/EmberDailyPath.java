@@ -115,7 +115,10 @@ public final class EmberDailyPath {
         List<EmberRunRules.BountyTier> tiers = runs.bountyTiers();
         int done = d.periodCount(EmberRunService.C_BOUNTY, DailyService.today());
         String line = chaseLine(path, tiers, done);
-        if (line != null) p.sendMessage(EmberRunService.P + line);
+        if (line != null) {
+            p.sendMessage(EmberRunService.P + line);
+            try { p.sendActionBar(line); } catch (Throwable ignored) { } // D1438
+        }
     }
 
     /** Settle hook: path chase after stock daily bounty line. */
@@ -123,7 +126,10 @@ public final class EmberDailyPath {
                                        List<EmberRunRules.BountyTier> tiers, int bountyN) {
         if (p == null || d == null || runs == null) return;
         String line = chaseLine(get(d), tiers, bountyN);
-        if (line != null) p.sendMessage(EmberRunService.P + line);
+        if (line != null) {
+            p.sendMessage(EmberRunService.P + line);
+            try { p.sendActionBar(line); } catch (Throwable ignored) { } // D1438
+        }
     }
 
     public static void offerPick(Player p) {

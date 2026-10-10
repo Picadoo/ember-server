@@ -177,10 +177,29 @@ public final class EmberFamilyPath {
         } else {
             p.sendMessage(P + "§7还未成套 · " + EmberItemData.familyBlurb(fam));
         }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[冒险页]", "/corerpg p1 runs", "看掉落偏向", "GREEN"},
-                new String[]{"[转化路径]", "/corerpg p1 convertpath " + fam, "跨族转化瞄这族", "GOLD"},
-                new String[]{"[换一条]", "/corerpg p1 familypath", "重选", "GRAY"});
+        // D1439: AB remain + map suggest（不锁通关）
+        try {
+            if (lo != null && fam.equals(lo.activeSet))
+                p.sendActionBar("§a打法=成套 · §f" + label(id) + " §7· " + lo.awakeningRemain());
+            else {
+                String mk = EmberMapIdentity.suggestMapForFamily(runs.maps(), fam);
+                p.sendActionBar("§e打法 · §f" + label(id)
+                        + (mk == null ? "" : " §8· 刷 §f" + mk.toUpperCase(java.util.Locale.ROOT)));
+            }
+        } catch (Throwable ignored) { }
+        String mk2 = EmberMapIdentity.suggestMapForFamily(runs.maps(), fam);
+        if (mk2 != null && (lo == null || !fam.equals(lo.activeSet))) {
+            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[进·" + mk2.toUpperCase(java.util.Locale.ROOT) + "]",
+                            "/corerpg p1 enter " + mk2, "偏向 " + label(id), "GREEN"},
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "缺口一览", "AQUA"},
+                    new String[]{"[换一条]", "/corerpg p1 familypath", "重选", "GRAY"});
+        } else {
+            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[工坊]", "/corerpg p1 forge", "觉醒下一档", "GOLD"},
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "缺口一览", "AQUA"},
+                    new String[]{"[换一条]", "/corerpg p1 familypath", "重选", "GRAY"});
+        }
     }
 
     static void setLootTarget(PlayerData d, String fam) {

@@ -16,5 +16,7 @@ setchase-mapid（SC/MI/CD）已近饱和。精选入场、周目标进度、觉�
 | GP1 | 周标 chase 还差 | GoalPath.chaseLine |
 | GP2 | glance/afterSet AB | maybeGlance / afterSet |
 | HN1 | 勋记下一缺 AB | honor list |
+| DP1 | 日委路径 AB | DailyPath glance/settle |
+| FP1 | 套装打法图身份 | FamilyPath afterSet |
 
 不改奖励数、周帽、掉率、通关闸。
