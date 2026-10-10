@@ -438,3 +438,15 @@ EmberSx15SpiralCast:
   - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
   - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
   - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+
+# --- 短征 sx16 · 烬影叠廊 Boss 影扫斩/叠影压浪（短 delay·轻粒子·防 Watchdog）---
+EmberSx16ShadowCast:
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬影】&f影扫斩——&7退进影冠侧龛或已过影墙侧台！"} @PlayersInRadius{r=20}
+  - effect:particles{p=crit;amount=18;hSpread=4;ySpread=0.3;speed=0.01} @Self
+  - effect:particles{p=cloud;amount=12;hSpread=3;ySpread=0.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.5;pitch=0.55} @Self
+  - delay 15
+  - damage{amount=1.0} @PlayersInRadius{r=4.5}
+  - effect:particles{p=crit;amount=12;hSpread=4;ySpread=0.3;speed=0.01} @Self

@@ -1,0 +1,7 @@
+groups:
+  default:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

@@ -1,0 +1,15 @@
+# D425 · EmberSx16 烬影叠廊 idle DP
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx16} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx16%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入烬影叠廊} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e烬影叠廊 §7· 影门庭→叠影廊→影冠终厅；经≥3段影墙侧穿后击败影冠守吏} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+dungeon-area: []
+dungeon-reward-script: []
