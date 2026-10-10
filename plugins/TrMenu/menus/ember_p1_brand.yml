@@ -22,6 +22,8 @@ Layout:
 
 Events:
   Open:
+    - 'tell: §e烙纹路径：§f%corerpg_p1_brand_path% §8· /corerpg p1 brandpath'
+    - 'command: corerpg p1 brandpath nudge'
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.4'
     - 'tell: §8先合成烙纹，再点类型 → 聊天栏确认（扣次数 1）'
 

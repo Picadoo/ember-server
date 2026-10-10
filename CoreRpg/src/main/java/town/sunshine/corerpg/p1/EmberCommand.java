@@ -85,6 +85,46 @@ public final class EmberCommand {
             s.sendMessage(P + "已向 " + t.getName() + " 弹出 " + map.toUpperCase(Locale.ROOT) + " 进阶路径点选");
             return true;
         }
+        if ("brandpath".equals(sub) || "烙纹路径".equals(sub)) { // D467 brand playstyle path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBrandPath.glance(EmberBrandPath.get(d)));
+                EmberBrandPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                String week = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(java.time.ZoneId.of("Asia/Shanghai")));
+                boolean offered = EmberBrandPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBrandPath.get(d);
+                    if (EmberBrandPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBrandPath.label(cur) + " · 改路径再 /corerpg p1 brandpath");
+                    else EmberBrandPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBrandPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 brandpath <hunt|ember|bind|clear>");
+                return true;
+            }
+            boolean ch = EmberBrandPath.set(d, id);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            if (id == EmberBrandPath.NONE) p.sendMessage(P + "已取消烙纹路径");
+            else {
+                p.sendMessage(P + "§a烙纹路径 → §f" + EmberBrandPath.label(id) + "§7（" + EmberBrandPath.tip(id) + "）"
+                        + (ch ? "" : " §8· 已是该路径"));
+                p.sendMessage(P + EmberBrandPath.glance(id));
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
+                        EmberBrandPath.pinLabel(id), EmberBrandPath.pinCmd(id),
+                        "预览定向（不扣料直到确认）");
+            }
+            return true;
+        }
         if ("duallead".equals(sub) || "双签路径".equals(sub)) { // D466 dual-sig first-path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

@@ -94,6 +94,7 @@ public final class EmberRunPapi {
         if ("bounty".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("dual_lead".equals(key) || "dual_lead_line".equals(key)) return Section.LOADOUT; // D466
+        if ("brand_path".equals(key) || "brand_path_line".equals(key)) return Section.LOADOUT; // D467
         if ("route_pri".equals(key) || "route_sec".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
@@ -116,7 +117,8 @@ public final class EmberRunPapi {
     static boolean isLoadoutKey(String key) {
         return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key)
                 || "set_focus".equals(key) || "set_focus_line".equals(key)
-                || "dual_lead".equals(key) || "dual_lead_line".equals(key) || "stats".equals(key)
+                || "dual_lead".equals(key) || "dual_lead_line".equals(key)
+                || "brand_path".equals(key) || "brand_path_line".equals(key) || "stats".equals(key)
                 || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)
                 // D299 再刷短反馈：装备页近档 + 工坊手持近档
                 || "blade_next_q".equals(key) || "blade_next_c".equals(key)
@@ -589,6 +591,11 @@ public final class EmberRunPapi {
                 PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
                 boolean dual = pd != null && runs.progressFlag(pd, EmberSignature.DUAL_UNLOCK);
                 return EmberDualLead.glance(EmberDualLead.get(pd), dual);
+            }
+            case "brand_path":
+            case "brand_path_line": { // D467 brand playstyle path
+                PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                return EmberBrandPath.glance(EmberBrandPath.get(pd));
             }
             case "set_run": { // D457 enter-run style line (also for menus)
                 EmberItemData[] worn = l.armorCopy();
