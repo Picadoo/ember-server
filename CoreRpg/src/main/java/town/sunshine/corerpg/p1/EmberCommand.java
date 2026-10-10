@@ -229,6 +229,25 @@ public final class EmberCommand {
             }
             return true;
         }
+        if ("counterpath".equals(sub) || "破绽路径".equals(sub)) { // D480 counterplay combat path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCounterPath.glance(EmberCounterPath.get(d)));
+                EmberCounterPath.offerPick(p);
+                return true;
+            }
+            int id = EmberCounterPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 counterpath <wall|whiff|break|clear>");
+                return true;
+            }
+            EmberCounterPath.applyAndReply(p, id);
+            return true;
+        }
         if ("duallead".equals(sub) || "双签路径".equals(sub)) { // D466 dual-sig first-path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
