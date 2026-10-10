@@ -240,6 +240,9 @@ public final class EmberShortPath {
             if (next != null) p.sendActionBar("§e短征追 · §f" + next.key.toUpperCase(Locale.ROOT));
             else p.sendActionBar("§7短征追 · 本路径暂无下一本");
         } catch (Throwable ignored) { }
+        if (next == null && id == FC) { // D724
+            p.sendMessage(P + "§7首通已清 · 可改 /corerpg p1 shortpath day");
+        }
         if (next != null) {
             String cmd = "/corerpg p1 enter " + next.key;
             ConfirmTokens.sendButtons(p, P + "§7下一步：",

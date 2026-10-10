@@ -54,6 +54,9 @@ public final class EmberSetChase {
         boolean awkUp = after.awakening > prevAwk;
         if (!formed && !awkUp) return;
         tell(p, d, after);
+        if (formed && d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) { // D723
+            p.sendMessage(EmberRunService.P + "§7可设套装焦点：/corerpg p1 setfocus");
+        }
     }
     public static boolean cmd(CommandSender s, String[] args, EmberRunService runs, EmberLoadoutService loadouts) {
         String P = EmberRunService.P;

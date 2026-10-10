@@ -171,3 +171,12 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D721 adventure Open setchase
 - D722 forge Open setchase
 （YAML 热更 · jar 仍 1.65.336-d719）
+
+## D723–D724 SHIP · jar 1.65.337-d723 · 2026-10-11
+- D723 2pc → suggest setfocus if unset
+- D724 shortpath FC empty → suggest day
+
+## D723–D725 SHIP · jar 1.65.337-d723 · 2026-10-11
+- D723 PAPI event_soft_hope ← EmberEventSoftPity.hope
+- D724 adventure Open: event soft-pity + drop_q_hope
+- D725 skill kit parry ActionBar pointer (D666)
