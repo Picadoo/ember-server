@@ -89,6 +89,8 @@ public final class EmberDelivery {
         if (again.remove(id)) { kick(p); return; }
         if (left[0] > 0) retryLater(p);
         runAfters(id);
+        // D478: mat/coin delivery may have crossed enhance afford threshold
+        try { EmberForgeMatReady.maybeReadyCue(p); } catch (Throwable ignored) { }
     }
 
     private void runAfters(UUID id) {

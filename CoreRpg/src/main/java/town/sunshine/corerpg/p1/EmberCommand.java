@@ -455,6 +455,22 @@ public final class EmberCommand {
             s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
             return true;
         }
+        if ("matready".equals(sub)) { // D478 admin smoke: forge mat-ready rising-edge sample / live check
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!p.hasPermission("corerpg.admin")) { p.sendMessage(P + "需要管理员"); return true; }
+            if (args.length >= 3 && "live".equalsIgnoreCase(args[2])) {
+                boolean hit = EmberForgeMatReady.maybeReadyCue(p);
+                p.sendMessage(P + "§8matready live · " + (hit ? "rising-edge fired" : "no cue (held/afford/latch)"));
+                return true;
+            }
+            int from = 2, to = 3;
+            if (args.length >= 4) {
+                try { from = Integer.parseInt(args[2]); to = Integer.parseInt(args[3]); } catch (NumberFormatException ignored) { }
+            }
+            EmberForgeMatReady.adminSample(p, from, to);
+            return true;
+        }
         if ("mapenter".equals(sub)) { // D477 admin smoke: map-enter ActionBar sample
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
