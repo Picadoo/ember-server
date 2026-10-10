@@ -582,6 +582,7 @@ Icons:
       lore:
         - ''
         - '%corerpg_p1_raid_hope%'
+        - '%corerpg_p1_sx_fc_hope%'
         - '§7状态：§f%corerpg_p1_raid_r01%'
         - '§d名片：§f冲撞撞墙破绽'
         - '§b本间：§f三房推进 · 半血增援'

@@ -685,9 +685,15 @@ public final class SkillService implements Listener {
         });
 
         spawnParticles(from.clone().add(0, 0.2, 0), "FLAME", 12);
+        // D637: path trail feel (geometry only · zero skill_mult)
+        for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
+            spawnParticles(sample.clone().add(0, 0.25, 0), "CRIT_MAGIC", 4);
+            spawnParticles(sample.clone().add(0, 0.25, 0), "SMOKE_NORMAL", 2);
+        }
         player.teleport(dest);
         maybeFlashDashLand(player); // D445 烬突落地 (成功位移；前方受阻路径不进此分支)
         spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 18);
+        try { player.sendActionBar("§b烬突 · 直线冲刺"); } catch (Throwable ignored) { }
         playSound(dest, "ENTITY_ENDERDRAGON_FLAP");
 
         String prevTag = town.sunshine.corerpg.p1.EmberCombatListener.internalTag;

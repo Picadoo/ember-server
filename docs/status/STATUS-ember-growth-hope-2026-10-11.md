@@ -24,3 +24,10 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D630 vault_hope
 - D631 honor_hope
 - D632 slash ground telegraph by shape
+
+## D633–D637 SHIP · jar 1.65.310-d633 · 2026-10-11
+- D633 codex_hope
+- D634 sx_fc_hope
+- D635 route_hope
+- D636 dual_hope
+- D637 dash path particles + ActionBar

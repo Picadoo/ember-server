@@ -93,18 +93,18 @@ public final class EmberRunPapi {
         if ("abyss_best".equals(key) || "abyss_hope".equals(key)) return Section.ABYSS;
         if ("bounty".equals(key) || "bounty_hope".equals(key) || "featured_hope".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
-        if ("dual_lead".equals(key) || "dual_lead_line".equals(key)) return Section.LOADOUT; // D466
+        if ("dual_lead".equals(key) || "dual_lead_line".equals(key) || "dual_hope".equals(key)) return Section.LOADOUT; // D466/D636
         if ("brand_path".equals(key) || "brand_path_line".equals(key)) return Section.LOADOUT; // D467
         if ("echo_path".equals(key) || "echo_path_line".equals(key)) return Section.LOADOUT; // D468
         if ("convert_path".equals(key) || "convert_path_line".equals(key)) return Section.LOADOUT; // D469
-        if ("route_pri".equals(key) || "route_sec".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306
+        if ("route_pri".equals(key) || "route_sec".equals(key) || "route_hope".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306/D635
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
         if ("abyss_state".equals(key) || key.startsWith("abyss_t")) return Section.ABYSS;
         if ("recruits".equals(key) || "failrefund".equals(key)) return Section.ENTRY;
         if ("featured_key".equals(key)) return Section.ROTATION;
         if ("awaken_route".equals(key) || isLoadoutKey(key)) return Section.LOADOUT;
-        if (key.startsWith("codex")) return Section.CODEX;
+        if (key.startsWith("codex") || "codex_hope".equals(key)) return Section.CODEX;
         if (key.startsWith("armor_")) return Section.ARMOR; // D318 (no earlier prefix matches "armor")
         if (isShortDayKey(key)) return Section.SHORT; // D395 short day-cap (before map tail sx0N_*)
         if (isVaultKey(key)) return Section.VAULT; // D404 vault / recipe gap (before map tail)
@@ -119,7 +119,7 @@ public final class EmberRunPapi {
     static boolean isLoadoutKey(String key) {
         return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key)
                 || "set_focus".equals(key) || "set_focus_line".equals(key)
-                || "dual_lead".equals(key) || "dual_lead_line".equals(key)
+                || "dual_lead".equals(key) || "dual_lead_line".equals(key) || "dual_hope".equals(key)
                 || "brand_path".equals(key) || "brand_path_line".equals(key)
                 || "echo_path".equals(key) || "echo_path_line".equals(key)
                 || "convert_path".equals(key) || "convert_path_line".equals(key) || "stats".equals(key)
@@ -154,7 +154,7 @@ public final class EmberRunPapi {
     static boolean isShortDayKey(String key) {
         if (key == null) return false;
         if ("sx_day_left_sum".equals(key)) return true;
-        if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key)) return true; // D406
+        if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key) || "sx_fc_hope".equals(key)) return true; // D406/D634
         // sxNN_day | sxNN_day_line | sxNN_day_left  (map key length 4: sx01..sx19..)
         if (key.length() < 8 || !key.startsWith("sx")) return false;
         int us = key.indexOf('_');
@@ -326,7 +326,7 @@ public final class EmberRunPapi {
      */
     private String shortDay(PlayerData d, String key, EmberRunMaps maps) {
         EmberShortService shortEx = runs.shortExpedition();
-        if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key)) { // D406 optional aggregate
+        if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key) || "sx_fc_hope".equals(key)) { // D406/D634
             int unpaid = 0;
             for (String mk : EmberShortRules.SHORT_KEYS) {
                 EmberRunMaps.MapDef m = maps == null ? null : maps.byKey(mk);
@@ -334,6 +334,7 @@ public final class EmberRunPapi {
             }
             unpaid = EmberShortRules.fcLeft(unpaid);
             if ("sx_fc_left".equals(key)) return String.valueOf(unpaid);
+            if ("sx_fc_hope".equals(key)) return EmberHopeMeter.sxFcHope(unpaid);
             return EmberShortRules.fcPendingLine(unpaid);
         }
         if ("sx_day_left_sum".equals(key)) {
@@ -492,6 +493,7 @@ public final class EmberRunPapi {
         }
         if ("featured_left".equals(key)) return String.valueOf(runs.featuredLeft(d)); // D306
         if ("route_pri".equals(key) || "route_sec".equals(key)) return routeLine(p, d, key); // D306 hub daily routing
+        if ("route_hope".equals(key)) return EmberHopeMeter.routeHope(runs.nextStep(d, p == null ? null : p.getUniqueId())); // D635
         if ("next".equals(key)) return runs.nextStep(d, p.getUniqueId()); // new-player polish %corerpg_p1_next%
         if ("recruits".equals(key)) return runs.recruitsLabel(); // E-review #5
         return runs.failRefundLabel(p.getUniqueId()); // failrefund · D128
@@ -649,10 +651,13 @@ public final class EmberRunPapi {
                 return EmberSetFocus.glance(fid, l.activeSet, l.awakening, runs.target(pd));
             }
             case "dual_lead":
-            case "dual_lead_line": { // D466 dual-sig path
+            case "dual_lead_line":
+            case "dual_hope": { // D466 dual-sig path · D636 hope
                 PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
                 boolean dual = pd != null && runs.progressFlag(pd, EmberSignature.DUAL_UNLOCK);
-                return EmberDualLead.glance(EmberDualLead.get(pd), dual);
+                String glance = EmberDualLead.glance(EmberDualLead.get(pd), dual);
+                if ("dual_hope".equals(key)) return EmberHopeMeter.dualHope(glance);
+                return glance;
             }
             case "brand_path":
             case "brand_path_line": { // D467 brand playstyle path
@@ -813,6 +818,20 @@ public final class EmberRunPapi {
         EmberLoadoutService ls = runs.plugin().getEmberLoadouts();
         if (ls != null) ls.backfillCodex(p);
         if ("codex_count".equals(key)) return EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size();
+        if ("codex_hope".equals(key)) { // D633
+            int have = EmberCodex.count(d), total = EmberCodex.ENTRIES.size();
+            String next = null;
+            java.util.List<Integer> claimable = EmberCodex.claimable(d);
+            if (!claimable.isEmpty()) next = "阶段可领 · " + EmberCodex.stageLabel(d, claimable.get(0));
+            else {
+                for (int i = 0; i < EmberCodex.STAGE_AT.length; i++) {
+                    if (EmberCodex.claimed(d, i)) continue;
+                    next = EmberCodex.stageLabel(d, i);
+                    break;
+                }
+            }
+            return EmberHopeMeter.codexHope(have, total, next);
+        }
         if (key.startsWith("codex_stage_")) {
             try {
                 int i = Integer.parseInt(key.substring(12));

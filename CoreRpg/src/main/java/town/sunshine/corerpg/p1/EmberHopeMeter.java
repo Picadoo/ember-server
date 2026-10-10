@@ -284,4 +284,31 @@ public final class EmberHopeMeter {
         return String.format(Locale.ROOT, "§e勋记希望 · %d/%d · 下一：%s", earned, total, c);
     }
 
+
+    /** D633: codex hope. */
+    public static String codexHope(int have, int total, String nextStage) {
+        if (total <= 0) return "§8图录希望 · 未配置";
+        if (have >= total) return String.format(Locale.ROOT, "§a图录希望 · %d/%d · 已齐", have, total);
+        String n = nextStage == null || nextStage.isEmpty() ? "继续收集" : nextStage;
+        return String.format(Locale.ROOT, "§e图录希望 · %d/%d · %s", have, total, n);
+    }
+
+    /** D634: short-expedition first-clear hope. */
+    public static String sxFcHope(int unpaid) {
+        if (unpaid <= 0) return "§a短征希望 · 首通奖励已齐";
+        return String.format(Locale.ROOT, "§e短征希望 · 还有 §f%d§e 张首通未领", unpaid);
+    }
+
+    /** D635: today route hope. */
+    public static String routeHope(String next) {
+        if (next == null || next.isEmpty()) return "§8今日希望 · 暂无下一步";
+        return "§e今日希望 · " + next;
+    }
+
+    /** D636: dual signature path hope. */
+    public static String dualHope(String line) {
+        if (line == null || line.isEmpty()) return "§8双签希望 · 未开启";
+        return "§e双签希望 · " + line;
+    }
+
 }

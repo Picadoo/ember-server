@@ -40,6 +40,7 @@ Icons:
       material: book and quill
       name: '§6图录 · 装备 §f%corerpg_p1_codex_count%'
       lore:
+        - '%corerpg_p1_codex_hope%'
         - '§7第一次拿到某种刃或护符就登记（放进背包即可）'
         - '§7升阶后的新阶级也算一种'
         - '§7测试发放的装备不算'
