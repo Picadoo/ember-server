@@ -1,6 +1,6 @@
 # DESIGN · 成套追 / 图身份诚实 Stage0 · 2026-10-11
 
-> **状态：** Stage0 + **D1339– / D1361– SHIP** · 已批 A · 方案 M  
+> **状态：** Stage0 + **D1339– / D1395– SHIP** · 已批 A · 方案 M  
 > **硬禁：** 无 K3/SF4 / hope celebration PAPI / 锁通关 / 改掉率 / skill_mult
 
 ## 问题
@@ -23,5 +23,8 @@
 | CD2 | 登记 rising-edge 剩余 | LoadoutService.codex | **D1375–** |
 | SC4 | 焦点族图鉴缺件 | focusCodexRemain | **D1377–** |
 | SC5 | 缺件→进偏向图 | suggestMapForFamily | **D1387–** |
+| AW1 | 成套追觉醒缺口 AB | nextAwakeningHint 短行 | **D1395–** |
+| MI4 | 入场图身份半行 | MapEnterFeel + remain/nextMissing | **D1397–** |
+| TG1 | 掉落目标族 vs 焦点对齐 | target 预览 | **D1399–** |
 
 不改套装战力、掉率、通关闸。

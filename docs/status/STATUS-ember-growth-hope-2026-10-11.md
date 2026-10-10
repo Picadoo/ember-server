@@ -601,3 +601,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1387–D1394 ARCH SHIP · jar 1.65.453-d1387
 - setchase → enter focus-family map when codex missing
+
+## D1395–D1408 ARCH SHIP · jar 1.65.454-d1395
+- Awakening AB on setchase; enter feel map-identity; target↔focus align honesty

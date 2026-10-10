@@ -376,7 +376,7 @@ public final class EmberSessionService {
         EmberRunMaps.MapDef enterFeelMap = runs.maps().byKey(s.mapKey);
         for (UUID cu : s.committed) {
             Player cp = Bukkit.getPlayer(cu);
-            if (cp != null && cp.isOnline()) EmberMapEnterFeel.flash(cp, enterFeelMap, s);
+            if (cp != null && cp.isOnline()) EmberMapEnterFeel.flash(cp, enterFeelMap, s, runs.dataOf(cp.getUniqueId()));
             if (cp != null && cp.isOnline()) {
                 EmberMapCardCue.cue(cp, enterFeelMap, s); // D489 chat 名片+loot
                 EmberLoadout lo = runs.loadouts() == null ? null : runs.loadouts().get(cp);

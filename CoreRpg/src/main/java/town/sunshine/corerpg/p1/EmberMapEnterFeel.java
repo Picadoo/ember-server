@@ -47,10 +47,26 @@ public final class EmberMapEnterFeel {
     }
 
     public static void flash(Player p, EmberRunMaps.MapDef m, EmberRunSession s) {
+        flash(p, m, s, null);
+    }
+
+    /** D1397: optional PlayerData → append map-identity nextMissing（不锁通关）. */
+    public static void flash(Player p, EmberRunMaps.MapDef m, EmberRunSession s, town.sunshine.corerpg.PlayerData pd) {
         if (p == null) return;
         boolean ch = s != null && s.challenge;
         int ab = s == null ? 0 : s.abyss;
         String msg = line(m, ch, ab);
+        if (m != null && m.lootFamily != null && !m.lootFamily.isEmpty() && ab == 0 && !ch
+                && (s == null || (!s.challenge && s.abyss == 0))) {
+            String miss = EmberMapIdentity.nextMissing(m, pd);
+            if (miss != null && !miss.isEmpty() && !miss.contains("已齐"))
+                msg = msg + " §8· §f" + miss;
+            else {
+                String rem = EmberMapIdentity.remainLine(m, pd);
+                if (rem != null && rem.contains("齐"))
+                    msg = msg + " §a· 身份齐";
+            }
+        }
         try { p.sendActionBar(msg); } catch (Throwable ignored) { }
         try {
             p.playSound(p.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.4f, 1.2f);

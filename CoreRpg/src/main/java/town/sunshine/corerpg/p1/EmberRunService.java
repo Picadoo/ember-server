@@ -3201,6 +3201,25 @@ public final class EmberRunService implements Listener {
         if (args.length < 3) {
             String t = target(d);
             p.sendMessage(P + "当前掉落目标族：" + (t == null ? "未选择（每本按偏向族 50%，另两族各 25%）" : EmberItemData.familyName(t) + "（每本约 60% 掉这族，冒险页每本写了实际概率）") /* D100: real odds (D98 lootOdds) */);
+            // D1398: focus vs loot-target align honesty
+            int focus = EmberSetFocus.get(d);
+            String fk = EmberSetFocus.familyKey(focus);
+            if (fk == null)
+                p.sendMessage(P + "§7套装焦点未选 · 可 /corerpg p1 setfocus 定玩法族");
+            else if (t == null)
+                p.sendMessage(P + "§e焦点是 §f" + EmberSetFocus.label(focus) + " §7· 掉落目标未对齐");
+            else if (fk.equals(t))
+                p.sendMessage(P + "§a掉落目标与套装焦点同为 §f" + EmberItemData.familyName(t));
+            else
+                p.sendMessage(P + "§e掉落目标 §f" + EmberItemData.familyName(t)
+                        + " §7≠ 焦点 §f" + EmberSetFocus.label(focus) + " §8· 可对齐成套");
+            try {
+                if (fk != null && t != null && fk.equals(t))
+                    p.sendActionBar("§a目标=焦点 · §f" + EmberItemData.familyName(t));
+                else if (fk != null)
+                    p.sendActionBar("§e目标族 · 焦点§f" + EmberSetFocus.label(focus)
+                            + (t == null ? " §7· 掉落未选" : " §7≠ §f" + EmberItemData.familyName(t)));
+            } catch (Throwable ignored) { }
             familyButtons(p, P + "点一个族设为目标（之后入场的局生效）：", "/corerpg p1 target");
             return true;
         }
@@ -3211,8 +3230,18 @@ public final class EmberRunService implements Listener {
         d.addPeriodCount(C_TARGET, "all", idx - d.periodCount(C_TARGET, "all"));
         plugin.getDataStore().flushMutation(p.getUniqueId());
         p.sendMessage(P + "§a掉落目标族已设为 " + (idx == 0 ? "无（按本的偏向族掉落）" : EmberItemData.familyName(f)) + " §7· 下次入场生效");
-        if (idx != 0) { // D676
-            try { p.sendActionBar("§a掉落目标 · §f" + EmberItemData.familyName(f)); } catch (Throwable ignored) { }
+        if (idx != 0) { // D676 / D1398
+            String fk2 = EmberSetFocus.familyKey(EmberSetFocus.get(d));
+            boolean aligned = fk2 != null && fk2.equals(f);
+            if (fk2 != null && !aligned)
+                p.sendMessage(P + "§e套装焦点仍是 §f" + EmberSetFocus.label(EmberSetFocus.get(d))
+                        + " §7· 点下方可对齐玩法焦点");
+            try {
+                p.sendActionBar(aligned
+                        ? ("§a目标=焦点 · §f" + EmberItemData.familyName(f))
+                        : ("§a掉落目标 · §f" + EmberItemData.familyName(f)
+                            + (fk2 == null ? "" : " §7≠焦点")));
+            } catch (Throwable ignored) { }
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：", // D903/D908
                     new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷同族补件", "GREEN"},
                     new String[]{"[套装焦点]", "/corerpg p1 setfocus " + f, "玩法焦点对齐", "GOLD"},

@@ -126,10 +126,14 @@ public final class EmberSetChase {
         if (gap != null && !gap.isEmpty()) p.sendMessage(P + gap);
         String fcr = focusCodexRemain(d);
         if (fcr != null && !fcr.isEmpty()) p.sendMessage(P + "§7" + fcr);
-        try { // D1340: meaty focus gap on AB（非 PAPI twin）
-            if (!"none".equals(lo.activeSet))
-                p.sendActionBar("§e成套 · §f" + lo.setLabel());
-            else if (gap != null && !gap.isEmpty())
+        try { // D1340 / D1396: gap or awakening remain
+            if (!"none".equals(lo.activeSet)) {
+                String awk = lo.nextAwakeningHint();
+                if (awk != null && awk.startsWith("已达"))
+                    p.sendActionBar("§a成套 · §f" + lo.setLabel() + " §7· 满觉醒");
+                else
+                    p.sendActionBar("§e成套 · §f" + lo.setLabel() + " §7· " + awk);
+            } else if (gap != null && !gap.isEmpty())
                 p.sendActionBar(stripSection(gap));
             else
                 p.sendActionBar("§e成套 · §7未成套");
