@@ -95,10 +95,10 @@ public final class EmberBrewPath {
         String P = EmberRunService.P;
         p.sendMessage(P + "§a熬药完成 · 回复药已入账");
         try { p.sendActionBar("§a熬药 · 完成"); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D910
                 new String[]{"[再熬一瓶]", "/corerpg p1 brew", "材料够再熬", "GREEN"},
-                new String[]{"[冒险]", "/ember_p1_adventure", "带药开刷", "AQUA"},
-                new String[]{"[改熬药路径]", "/corerpg p1 brewpath", "自动/提醒", "GRAY"});
+                new String[]{"[进冒险]", "/ember_p1_adventure", "带药开刷", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花料养成", "GOLD"});
     }
 
     public static void maybeAfterProgress(Player p) {

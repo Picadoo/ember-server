@@ -95,10 +95,10 @@ public final class EmberCookPath {
         String P = EmberRunService.P;
         p.sendMessage(P + "§a烹饪完成 · §f" + n + " §a份入账");
         try { p.sendActionBar("§a烹饪 · §f" + n); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D911
                 new String[]{"[再烤]", "/corerpg p1 cook", "继续烤鱼", "GREEN"},
-                new String[]{"[冒险]", "/ember_p1_adventure", "带粮开刷", "AQUA"},
-                new String[]{"[改烹饪路径]", "/corerpg p1 cookpath", "自动/提醒", "GRAY"});
+                new String[]{"[进冒险]", "/ember_p1_adventure", "带粮开刷", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花料养成", "GOLD"});
     }
 
     public static void maybeAfterProgress(Player p) {

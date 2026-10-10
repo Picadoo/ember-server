@@ -74,9 +74,9 @@ public final class EmberMapFarmCue {
     public static void afterHit(Player p, EmberRunMaps.MapDef m) {
         if (p == null || m == null) return;
         String P = EmberRunService.P;
-        ConfirmTokens.sendButtons(p, P + "§7图装追到 · 下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7图装追到 · 下一步：", // D909
                 new String[]{"[工坊]", "/corerpg p1 forge", "强化/精工新装", "GOLD"},
-                new String[]{"[换装]", "/corerpg p1 equip", "穿上同族", "GREEN"},
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GREEN"},
                 new String[]{"[再进本图]", "/corerpg p1 enter " + m.key, "继续刷同族", "AQUA"});
     }
 
@@ -104,6 +104,10 @@ public final class EmberMapFarmCue {
         int we = worn == null ? 0 : worn.enhance;
         String line = nextLine(mapFam, mapSlot, wornFam, wornSlot, wt, we);
         p.sendMessage(EmberRunService.P + line);
+        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：", // D914
+                new String[]{"[强化预览]", "/corerpg p1 enhance", "手持同族冲档", "GREEN"},
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GOLD"},
+                new String[]{"[再进]", "/corerpg p1 enter " + m.key, "继续刷", "AQUA"});
         // D704: if set focus matches map family, append set-completion gap (no button)
         PlayerData pd = dataOf(p);
         if (pd != null && lo != null && mapFam != null && EmberRunRules.validFamily(mapFam)) {

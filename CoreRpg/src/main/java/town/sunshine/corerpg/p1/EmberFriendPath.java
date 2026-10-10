@@ -104,10 +104,10 @@ public final class EmberFriendPath {
         p.sendMessage(P + "§a好友已结 · §f" + who
                 + (valid(id) ? " §8· " + label(id) : " §7· /corerpg p1 friendpath"));
         try { p.sendActionBar("§a好友 · §f" + who); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D912
                 new String[]{"[组队招募]", "/corerpg p1 recruit", "拉人开本", "GREEN"},
-                new String[]{"[冒险页]", "/ember_p1_adventure", "一起刷", "AQUA"},
-                new String[]{"[改好友路径]", "/corerpg p1 friendpath", "敞开/审核/静拒", "GRAY"});
+                new String[]{"[进冒险]", "/ember_p1_adventure", "一起刷", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "GOLD"});
     }
 
     public static void offerPick(Player p) {

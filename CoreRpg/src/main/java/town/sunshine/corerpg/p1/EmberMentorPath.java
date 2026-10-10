@@ -101,10 +101,10 @@ public final class EmberMentorPath {
         p.sendMessage(P + "§a师徒已结 · §f" + who
                 + (valid(id) ? " §8· " + label(id) : " §7· /corerpg p1 mentorpath"));
         try { p.sendActionBar("§a师徒 · §f" + who); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D913
                 new String[]{"[组队招募]", "/corerpg p1 recruit", "带徒开本", "GREEN"},
-                new String[]{"[冒险页]", "/ember_p1_adventure", "一起刷", "AQUA"},
-                new String[]{"[改师徒路径]", "/corerpg p1 mentorpath", "敞开/审核/静拒", "GRAY"});
+                new String[]{"[进冒险]", "/ember_p1_adventure", "一起刷", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "GOLD"});
     }
 
     public static void offerPick(Player p) {

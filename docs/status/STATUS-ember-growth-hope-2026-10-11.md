@@ -407,3 +407,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D903–D908 SHIP · jar 1.65.397-d903
 - Target mapfarm; forgegoal afterSet; pet/feed/guild next
+
+## D909–D914 SHIP · jar 1.65.398-d909
+- Mapfarm/brew/cook/friend/mentor next; mapfarm settle enhance
