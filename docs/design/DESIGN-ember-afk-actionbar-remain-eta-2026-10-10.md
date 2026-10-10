@@ -1,10 +1,12 @@
 # 余烬 · 挂机 ActionBar 镜像 remain/eta（挂机资源环抬头体感 · ≠抬日表 · ≠sx10）
 
-STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-actionbar-remain-eta-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-actionbar-remain-eta-need-design-2026-10-10.md) · backlog `B-afk-actionbar-remain-eta`（**待批**）· **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx10 ≠复述 D373–D412 ≠改 daily_kills/afk.tiers ≠重开菜单 remain 主交付 ≠仓差挂战况当主债**
+STATUS=**已批 A · 方案 M · D413** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-actionbar-remain-eta-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-actionbar-remain-eta-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-actionbar-remain-eta`（**已批/施工中**）· **施工中** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx10 ≠复述 D373–D412 ≠改 daily_kills/afk.tiers ≠重开菜单 remain 主交付 ≠仓差挂战况当主债**
 
 > **一句话玩家价值：** 挂机自动打时抬头就能看见「还差 X 只 · 约 Y 分钟满」——坐庭不用开菜单也知还要坐多久；满额可选叠「短征还可追」；**不**抬产量、**不**交 sx10。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx10。**
+>
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（未满 ActionBar 叠 remain_line + 满额短征半句同批）；否决 A/L/W；W1a 必做、W1b 同批、W1c Open 可选；零改产量/tiers/Stage2；≠sx10；**施工中**。
 
 ---
 
@@ -55,9 +57,9 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-actio
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 未满 ActionBar 叠 remain_line 必做 + W1b 满额短征半句可选同批；见 §2）
-- [ ] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx10/仓差主债/复述）
-- [ ] 批注：（总控填）
+- [x] **方案 M**（W1a 未满 ActionBar 叠 remain_line 必做 + W1b 满额短征半句同批；见 §2）
+- [x] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx10/仓差主债/复述）
+- [x] 批注：总控批 A·M · 2026-10-10 · D413 · W1a 必做 · W1b 同批 · W1c Open 可选 · 零改产量/tiers/Stage2 · ≠sx10 · **施工中**
 
 ---
 
@@ -150,7 +152,8 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-actio
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机 ActionBar 镜像 remain/eta（兑现 D405/D408/D411 后置）· ≠sx10 |
+| 2026-10-10 | **已批 A · 方案 M · D413** · 总控批注勾选 · W1a 必做 · W1b 同批 · W1c Open 可选 · 零改产量/tiers/Stage2 · ≠sx10 · **施工中** |
 
 ---
 
-*D413 · 挂机 ActionBar 镜像 remain/eta · 待批 A · 荐方案 M · ≠关观察 ≠抬日表 ≠sx10。*
+*D413 · 挂机 ActionBar 镜像 remain/eta · 已批 A·方案 M · 施工中 · ≠关观察 ≠抬日表 ≠sx10。*

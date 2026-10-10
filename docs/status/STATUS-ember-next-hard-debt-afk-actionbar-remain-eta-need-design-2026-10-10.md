@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D413 · 挂机 ActionBar 镜像 remain/eta · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx10）
 
-> **【D413 · 待批 A · 荐方案 M】** tip+DESIGN **已交 · 等总控批 A** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx10** · **≠ stage 脏 runtime**
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D413** · tip `17cb56d0` · 指针 DESIGN [`DESIGN-ember-afk-actionbar-remain-eta-2026-10-10.md`](../design/DESIGN-ember-afk-actionbar-remain-eta-2026-10-10.md) · W1a 必做 · W1b 同批 · W1c Open 可选 · 零改产量/tiers/Stage2 · ≠sx10 · **施工中** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。下文为交稿原文，保留备查。
+>
+> **【D413 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx10** · **≠ stage 脏 runtime**
 >
 > **上游结案：** 总控【催 D413 tip】· D411 菜单已落 `e87433db`，薄抽已派；D412 挂盘并行 → 请交**下一内容号 tip**（短征/挂机资源环/日更乐趣；**sx10 等 D412 PASS**）。禁 Pack6/天赋/灰印/抬日表/开 gate_daily/动 Stage2。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **待批 A** · docs-only  
-**硬规格（待批 A · 荐方案 M · D413）：** [`DESIGN-ember-afk-actionbar-remain-eta-2026-10-10.md`](../design/DESIGN-ember-afk-actionbar-remain-eta-2026-10-10.md) · backlog `B-afk-actionbar-remain-eta`（**待批**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D413** · **施工中** · docs-only  
+**硬规格（已批 A · 方案 M · D413 · 施工中）：** [`DESIGN-ember-afk-actionbar-remain-eta-2026-10-10.md`](../design/DESIGN-ember-afk-actionbar-remain-eta-2026-10-10.md) · backlog `B-afk-actionbar-remain-eta`（**已批/施工中**）  
 **打开理由：** D405 已把 `remain`/`eta_min`/`remain_line` 挂进战况菜单，但挂机自动战斗时抬头 ActionBar **仍只报**「层名·今日 n/2400·只/小时」——**无**还差只数、**无**约满分钟；坐庭必须开菜单才知「还要坐多久」。D405§5.2 / D408§6 / D411§5 明文后置 ActionBar 镜像。sx10 禁交；D404–D412 禁复述。
 
 ---
@@ -66,7 +68,7 @@
 
 ---
 
-*选题挂机 ActionBar 镜像 remain/eta · tip 待批 A · 荐方案 M · D413 · ≠关观察 ≠抬挂机表 ≠sx10。*
+*选题挂机 ActionBar 镜像 remain/eta · tip 旁注已关 · 已批 A·方案 M · D413 · 设计待批关闭 · 施工中 · ≠关观察 ≠抬挂机表 ≠sx10。*
 
 ---
 
@@ -75,3 +77,4 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机 ActionBar 镜像 remain/eta（兑现 D405/D408/D411 后置）· ≠sx10 |
+| 2026-10-10 | **旁注已关** · 总控批 A·M · D413 · 设计待批关闭 · W1a 必做 · W1b 同批 · W1c Open 可选 · 零改产量/tiers/Stage2 · ≠sx10 · **施工中** |
