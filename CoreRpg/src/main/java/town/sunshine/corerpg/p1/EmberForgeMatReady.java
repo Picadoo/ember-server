@@ -105,9 +105,10 @@ public final class EmberForgeMatReady {
         String line = chatLine(label, data.enhance, target);
         p.sendMessage(P + line);
         try { p.sendActionBar(actionBar(data.enhance, target)); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[去工坊强化]", "/corerpg p1 forge", "打开工坊强化手持件", "GREEN"},
-                new String[]{"[稍后再说]", null, "材料仍在，随时工坊强化", "GRAY"});
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D857
+                new String[]{"[强化预览]", "/corerpg p1 enhance", "看成功率/保底再确认", "GREEN"},
+                new String[]{"[去工坊]", "/corerpg p1 forge", "打开工坊页", "GOLD"},
+                new String[]{"[稍后再说]", null, "材料仍在", "GRAY"});
         return true;
     }
 

@@ -524,7 +524,10 @@ public final class GuildService {
         p.sendMessage(PREFIX + ChatColor.GREEN + "盟约 §f" + name
                 + ChatColor.GREEN + " 已创建！"
                 + ChatColor.GRAY + "（消耗 " + paid + "）");
-        p.sendMessage(ChatColor.DARK_GRAY + "  /corerpg guild invite <玩家> · donate …");
+        EmberGuildPath.afterJoin(p, name); // D855 create = join loop
+        ConfirmTokens.sendButtons(p, PREFIX + "§7拉人：",
+                new String[]{"[邀请列表]", "/corerpg friend", "好友可邀", "GREEN"},
+                new String[]{"[用法]", "/corerpg guild invite", "invite <名>", "GRAY"});
     }
 
     private void cmdInvite(Player p, String targetName) {

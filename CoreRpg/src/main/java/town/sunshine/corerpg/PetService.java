@@ -1,5 +1,7 @@
 package town.sunshine.corerpg;
 
+import town.sunshine.corerpg.ConfirmTokens;
+
 import town.sunshine.corerpg.p1.EmberFeedPath;
 import town.sunshine.corerpg.p1.EmberPetPath;
 
@@ -457,6 +459,13 @@ public final class PetService implements Listener {
         }
         p.sendMessage(ChatColor.DARK_GRAY + "  /corerpg pet summon [id] · dismiss · unlock <id> · feed");
         p.sendMessage(ChatColor.DARK_GRAY + "  偏外观 · 不卖满级战力宠 · 属性≤战力展示 5%");
+        // D856
+        p.sendMessage(PREFIX + EmberPetPath.glance(EmberPetPath.get(data), true));
+        p.sendMessage(PREFIX + EmberFeedPath.glance(EmberFeedPath.get(data), true));
+        ConfirmTokens.sendButtons(p, PREFIX + "§7：",
+                new String[]{"[出战]", "/corerpg pet summon", "召出选定", "GREEN"},
+                new String[]{"[喂养]", "/corerpg pet feed 3", "魂尘升级", "GOLD"},
+                new String[]{"[使魔路径]", "/corerpg p1 petpath", "进服出战", "AQUA"});
     }
 
     private void cmdUnlock(Player p, String id) {
