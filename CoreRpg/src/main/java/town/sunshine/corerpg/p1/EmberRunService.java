@@ -1121,6 +1121,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberRefundPath.scheduleOfferAfterQ01(p); // D505 death refund path
                         if ("q01".equals(g.id)) EmberBarPath.scheduleOfferAfterQ01(p); // D512 potion hotbar path
                         if ("q01".equals(g.id)) EmberDailyPath.scheduleOfferAfterQ01(p); // D514 daily bounty path
+                        if ("q01".equals(g.id)) EmberClaimPath.scheduleOfferAfterQ01(p); // D515 claim deliver path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
@@ -1605,7 +1606,7 @@ public final class EmberRunService implements Listener {
         if (m == null) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 if (!p.isOnline() || blocksLegacy(p.getWorld())) return;
-                deliver(p);
+                EmberClaimPath.maybeAmbientDeliver(p, EmberRunService.this); // D515 claim path
                 starterKit(p);
             }, 20L);
         }
@@ -1657,7 +1658,7 @@ public final class EmberRunService implements Listener {
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             if (!p.isOnline() || blocksLegacy(p.getWorld())) return;
-            deliver(p);
+            EmberClaimPath.maybeAmbientDeliver(p, EmberRunService.this); // D515 claim path
             starterKit(p);
         }, 60L);
     }
