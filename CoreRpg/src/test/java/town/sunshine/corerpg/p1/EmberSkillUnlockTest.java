@@ -13,4 +13,14 @@ public class EmberSkillUnlockTest {
         assertEquals("p1_shape_pick_offered", EmberSkillUnlock.C_SHAPE_OFFERED);
         assertEquals("p1_step_pick_offered", EmberSkillUnlock.C_STEP_OFFERED);
     }
+
+    @Test public void set_fork_hope_d606() {
+        assertTrue(EmberSkillUnlock.setForkHope("q02").contains("烬突"));
+        assertTrue(EmberSkillUnlock.setForkHope("q02").contains("焚"));
+        assertTrue(EmberSkillUnlock.setForkHope("q04").contains("烬斩"));
+        assertTrue(EmberSkillUnlock.setForkHope("q05").contains("身法"));
+        assertTrue(EmberSkillUnlock.setForkHope("q05").contains("火痕"));
+        assertNull(EmberSkillUnlock.setForkHope("q03"));
+        assertNull(EmberSkillUnlock.setForkHope("q01"));
+    }
 }

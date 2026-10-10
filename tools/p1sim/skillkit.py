@@ -325,8 +325,20 @@ CANDS_D438 = {
     'S_h002': ('q01', 'sustain', '烬斩·承 疗0.002H', {'kit_slash_heal_pct': 0.002}),
     'S_h003': ('q01', 'sustain', '烬斩·承 疗0.003H', {'kit_slash_heal_pct': 0.003}),
 }
+# D605 希望环 Stage B1：live 套装分叉叠乘回归（D434+D436+D438 定稿值 · 禁抬 skill_mult）
+# 相对 base；可达格从 Q05 起（身法分叉门槛）；单件 PASS 锚点一并复核
+H_SCORCH = M(DASH_LIVE, {'kit_dash_ignite': 0.12}, STEP_FIRE)
+H_BURST = M(DASH_LIVE, {'kit_dash_mark_secs': 1.5, 'kit_dash_slow': 0.15}, STEP_BAO,
+            {'kit_slash_mark_secs': 1.0, 'kit_slash_slow': 0.12})
+H_SUSTAIN = M(DASH_LIVE, {'kit_dash_heal_pct': 0.005}, {'kit_slash_heal_pct': 0.002})
+CANDS_D605 = {
+    'H_live_scorch': ('q05', 'scorch', '叠乘·焚 烬突点燃0.12+火痕', H_SCORCH),
+    'H_live_burst': ('q05', 'burst', '叠乘·爆 烬突缓1.5+爆闪+烬斩缓1.0', H_BURST),
+    'H_live_sustain': ('q05', 'sustain', '叠乘·承 烬突疗0.005+烬斩疗0.002', H_SUSTAIN),
+}
+
 ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,
-           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435, **CANDS_D436, **CANDS_D437, **CANDS_D438)
+           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435, **CANDS_D436, **CANDS_D437, **CANDS_D438, **CANDS_D605)
 
 
 def fams(c):
@@ -431,7 +443,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B, 'd434': CANDS_D434, 'd435': CANDS_D435, 'd436': CANDS_D436, 'd437': CANDS_D437, 'd438': CANDS_D438}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B, 'd434': CANDS_D434, 'd435': CANDS_D435, 'd436': CANDS_D436, 'd437': CANDS_D437, 'd438': CANDS_D438, 'd605': CANDS_D605, 'hope': CANDS_D605}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return

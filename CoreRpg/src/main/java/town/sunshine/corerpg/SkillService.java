@@ -257,6 +257,9 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberSkillKit.Shape sh = town.sunshine.corerpg.p1.EmberSkillKit.resolve(
                 player, data, runs, town.sunshine.corerpg.p1.EmberMode.get(), gmods);
         player.sendMessage(PREFIX + ChatColor.GOLD + "余烬技能组");
+        // D606: set-fork hope glance (display only)
+        player.sendMessage(ChatColor.YELLOW + "  希望·套装差" + ChatColor.GRAY
+                + " 焚点燃 / 爆缓速 / 承微疗 · F·烬突·身法各有差（不改倍率）");
         player.sendMessage(ChatColor.GRAY + "  余烬充能（烬斩 / 烬突共用）· " + charge);
         String slashHint = slashSetTip(player);
         player.sendMessage(ChatColor.YELLOW + "  F" + ChatColor.GRAY + " 烬斩 · 形状 "

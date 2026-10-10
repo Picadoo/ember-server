@@ -10,7 +10,7 @@ import town.sunshine.corerpg.PlayerData;
 /**
  * D459: first-clear skill unlock path feel.
  * D460: on Q04/Q05 unlock, offer a one-shot playstyle pick (符文三选一 / 身法方向二选一).
- * Zero skill power / CD table / gate-map change.
+ * D606: hope-ring Stage B2 — milestone lines name each set's F/副招/身法 fork (zero skill_mult / CD).
  */
 public final class EmberSkillUnlock {
 
@@ -34,6 +34,21 @@ public final class EmberSkillUnlock {
         return null;
     }
 
+    /**
+     * D606: one-line set-fork hope under the unlock announce.
+     * Names how 焚/爆/承 differ on this unlock — display only.
+     */
+    public static String setForkHope(String mapKey) {
+        if (mapKey == null) return null;
+        if (EmberSkillKit.UNLOCK_DASH.equals(mapKey))
+            return "§e套装差：§7烬突落地 · 焚点燃 / 爆缓速 / 承微疗（不改 1.5B）";
+        if (EmberSkillKit.UNLOCK_SHAPE.equals(mapKey))
+            return "§e套装差：§7烬斩落点 · 爆缓速 / 承微疗 / 焚仅余烬展示（形状三选一）";
+        if (EmberSkillKit.UNLOCK_STEP.equals(mapKey))
+            return "§e套装差：§7身法 · 焚火痕点燃 / 爆闪缓速 / 承护微疗（两件套自动）";
+        return null;
+    }
+
     public static String shortName(String mapKey) {
         if (EmberSkillKit.UNLOCK_DASH.equals(mapKey)) return "烬突";
         if (EmberSkillKit.UNLOCK_PARRY.equals(mapKey)) return "余烬招架";
@@ -50,8 +65,10 @@ public final class EmberSkillUnlock {
         String P = EmberRunService.P;
         ConfirmTokens.sendButton(p, P + "§6新技能解锁：§e" + line + " ",
                 "[打开技能组]", "trmenu open ember_skill_kit",
-                "查看按键 / 符文 / 身法");
+                "查看按键 / 符文 / 身法 / 套装差");
         p.sendMessage(P + "§7不用打命令：主菜单 → 技能组");
+        String hope = setForkHope(mapKey);
+        if (hope != null) p.sendMessage(P + hope);
         if (EmberSkillKit.UNLOCK_SHAPE.equals(mapKey)) scheduleShapePick(p);
         if (EmberSkillKit.UNLOCK_STEP.equals(mapKey)) scheduleStepPick(p);
     }
