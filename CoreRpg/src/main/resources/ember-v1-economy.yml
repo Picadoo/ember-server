@@ -229,6 +229,14 @@ sources:
     "fc.shard": 6
     "fc.blank": 1
     daily_cap: 3
+  S56:
+    "clear.coin": 80
+    "clear.shard": 4
+    "clear.bone": 3
+    "fc.coin": 25
+    "fc.shard": 6
+    "fc.blank": 1
+    daily_cap: 3
 
 sinks:
   C01: { stamina: 30 }

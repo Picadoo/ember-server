@@ -273,6 +273,11 @@ public final class EmberEconomy {
             .keys("p1_sx16_day").ledger("sx16_clear_", "sx16_fc_", "sx16_practice").model(FULL)
             .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
             .g("fc.coin", 30).g("fc.shard", 6).g("fc.blank", 1).g("daily_cap", 3).done();
+        // D426 短征 sx17：有奖同量级；首通更薄 25/6/1；日帽独立 p1_sx17_day；p1sim 另号。
+        src("S56", "短征通关（sx17）", "EmberShortRules / ember-v1-runs.yml short.sx17", Period.DAY).acc(COIN, SHARD, BONE, BLANK)
+            .keys("p1_sx17_day").ledger("sx17_clear_", "sx17_fc_", "sx17_practice").model(FULL)
+            .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
+            .g("fc.coin", 25).g("fc.shard", 6).g("fc.blank", 1).g("daily_cap", 3).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -410,6 +415,7 @@ public final class EmberEconomy {
         if ("six_armor".equals(key)) return "S39"; // D318 六槽: per-clear armor drop (switch default off)
         if (key.startsWith("sx05_clear_") || key.startsWith("sx05_fc_") || "sx05_practice".equals(key)) return "S44"; // D400 sx05
         if (key.startsWith("sx06_clear_") || key.startsWith("sx06_fc_") || "sx06_practice".equals(key)) return "S45"; // D403 sx06
+        if (key.startsWith("sx17_clear_") || key.startsWith("sx17_fc_") || "sx17_practice".equals(key)) return "S56"; // D426 sx17
         if (key.startsWith("sx16_clear_") || key.startsWith("sx16_fc_") || "sx16_practice".equals(key)) return "S55"; // D425 sx16
         if (key.startsWith("sx15_clear_") || key.startsWith("sx15_fc_") || "sx15_practice".equals(key)) return "S54"; // D424 sx15
         if (key.startsWith("sx14_clear_") || key.startsWith("sx14_fc_") || "sx14_practice".equals(key)) return "S53"; // D423 sx14

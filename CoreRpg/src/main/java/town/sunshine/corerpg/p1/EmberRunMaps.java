@@ -279,7 +279,7 @@ public final class EmberRunMaps {
         public String rushMode = "rush", rushLabel = "余烬连战", rushClaim = "p4_rush_claim";
         public int rushWeekly = 1, rushMarkTier = 3, rushSig;
         public boolean mainRush() { return "rush".equals(rushMode); }
-        /** D391–D425 短征（runs yml {@code short:}）：P1 原生短本，日有奖帽，结算走 S40–S55 */
+        /** D391–D426 短征（runs yml {@code short:}）：P1 原生短本，日有奖帽，结算走 S40–S56 */
         public boolean shortExpedition;
         public int shortDailyCap;
         public String shortClaim = "";
@@ -596,7 +596,7 @@ public final class EmberRunMaps {
     public final Map<String, MapDef> events;
     /** D144 余烬连战 (runs yml `rush:`), keyed like maps (rush) */
     public final Map<String, MapDef> rush;
-    /** D391–D421 短征 (runs yml `short:`), keyed like maps (sx01..sx16) */
+    /** D391–D421 短征 (runs yml `short:`), keyed like maps (sx01..sx17) */
     public final Map<String, MapDef> shortMaps;
     /** P2-9 (D81) loot bias weights; P2-9 (D82) raid_item quality floor */
     public final double lootOwnFamily, lootMapShare, lootSlotWeight;
@@ -1198,7 +1198,7 @@ public final class EmberRunMaps {
         d.shortExpedition = true;
         d.shortDailyCap = (int) num(m.get("daily_reward_cap"), EmberShortRules.DAILY_CAP);
         d.shortClaim = str(m.get("claim"), EmberShortRules.CLAIM);
-        // reward / first_clear amounts live in EmberEconomy S40–S55; yml mirrors for readability / source-map
+        // reward / first_clear amounts live in EmberEconomy S40–S56; yml mirrors for readability / source-map
         return d;
     }
 
