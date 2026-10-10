@@ -186,3 +186,11 @@ forge:
     pin_coin: [0, 300, 600, 1000]
   charges:
     max: 13
+
+  # D430 随机锻造（刃/护符；极品成色权重 0）
+  roll:
+    marks: 8
+    blank: 4
+    coin: 500
+    quality: [70, 23, 7, 0]
+    craft: [70, 20, 9, 1]

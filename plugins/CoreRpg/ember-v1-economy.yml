@@ -253,6 +253,7 @@ sources:
     "fc.shard": 6
     "fc.blank": 1
     daily_cap: 3
+  S59: {}
 
 sinks:
   C01: { stamina: 30 }
@@ -279,6 +280,11 @@ sinks:
   C20:
     shard: 40
   C21: {}
+  # D430 随机锻造
+  C22:
+    marks: 8
+    blank: 4
+    coin: 500
 
 # Caps mirrored from source goldens (S22 AFK) for REG §4 readability.
 caps:

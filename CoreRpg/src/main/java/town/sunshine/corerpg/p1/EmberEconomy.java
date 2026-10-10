@@ -288,6 +288,9 @@ public final class EmberEconomy {
             .keys("p1_sx19_day").ledger("sx19_clear_", "sx19_fc_", "sx19_practice").model(FULL)
             .g("clear.coin", 80).g("clear.shard", 4).g("clear.bone", 3)
             .g("fc.coin", 18).g("fc.shard", 6).g("fc.blank", 1).g("daily_cap", 3).done();
+        // D430 随机锻造产出
+        src("S59", "随机锻造产出", "EmberForgeRollRules / EmberRunService forgeRoll", Period.NONE).acc(GEAR)
+            .keys("p1_mark_t").ledger("forge_roll").model(FULL).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -324,6 +327,8 @@ public final class EmberEconomy {
         // D429 烙纹：合成吃碎片；定向吃币（烙纹 NI 另扣，记 GEAR 账户口径）
         sink("C20", "烙纹合成", "EmberBrandRules.CRAFT_SHARDS", Period.NONE).acc(SHARD).model(FULL).g("shard", 40).done();
         sink("C21", "烙纹定向", "EmberBrandRules pin_coin/pin_brand", Period.NONE).acc(COIN, GEAR).model(FULL).done();
+        sink("C22", "随机锻造", "EmberForgeRollRules", Period.NONE).acc(MARK, BLANK, COIN).model(FULL)
+            .g("marks", 8).g("blank", 4).g("coin", 500).done();
     }
 
     private EmberEconomy() {}

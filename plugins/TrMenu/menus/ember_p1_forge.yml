@@ -24,7 +24,7 @@ Layout:
   - '# e u r #'
   - '# Q S D #'
   - '# q s d #'
-  - '#AGP bB#'
+  - '#FGP bB#'
 # D100 (review #10): every confirm sits directly under its preview (same column); 分解 confirms in chat (one-shot token)
 
 Events:
@@ -351,6 +351,22 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_afk'
+  # D430: 随机锻造（印记+胚料+币 · 出不了极品）
+  F:
+    display:
+      material: anvil
+      name: '§6随机锻造'
+      lore:
+        - ''
+        - '§78 印记 + 4 胚料 + 500 币'
+        - '§7成色/精工随机 · §c出不了极品'
+        - '§7想稳就兑换；想赌就锻造'
+        - ''
+        - '§e➥ §f打开随机锻造页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'menu: ember_p1_forgeroll'
   # D429: 烙纹定向（词条类型自选）
   G:
     display:

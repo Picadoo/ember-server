@@ -81,15 +81,15 @@ public class EmberEconomyTest {
     @Test
     public void idsAreCompleteAndOrdered() {
         List<String> want = new ArrayList<String>();
-        for (int i = 1; i <= 58; i++) want.add(String.format("S%02d", i)); // D428: S58; D423: S53; D421: S52 short sx13; D419: S51 short sx12; D417: S50 short sx11; D414: S49; D412: S48; D410: S47; D407: S46; D403: S45; D400: S44; D397: S43; D393: S42; D392: S41; D391: S40; D318: S39; D243: S33–S35; D244: S36–S38
+        for (int i = 1; i <= 59; i++) want.add(String.format("S%02d", i)); // D430: S59; D428: S58; D423: S53; D421: S52 short sx13; D419: S51 short sx12; D417: S50 short sx11; D414: S49; D412: S48; D410: S47; D407: S46; D403: S45; D400: S44; D397: S43; D393: S42; D392: S41; D391: S40; D318: S39; D243: S33–S35; D244: S36–S38
         for (int i = 1; i <= 5; i++) want.add("LS" + i);
-        for (int i = 1; i <= 21; i++) want.add(String.format("C%02d", i)); // D244 C19 + D429 C20/C21 brand
+        for (int i = 1; i <= 22; i++) want.add(String.format("C%02d", i)); // D430 C22 + D429 C20/C21
         List<String> got = new ArrayList<String>();
         for (EmberEconomy.Row r : EmberEconomy.all()) got.add(r.id);
         assertEquals(want, got);
-        assertEquals(58, EmberEconomy.sources().size());
+        assertEquals(59, EmberEconomy.sources().size());
         assertEquals(5, EmberEconomy.legacySources().size());
-        assertEquals(21, EmberEconomy.sinks().size());
+        assertEquals(22, EmberEconomy.sinks().size());
         for (EmberEconomy.Row r : EmberEconomy.all()) {
             assertFalse(r.id + " name", r.name.isEmpty());
             assertFalse(r.id + " owner", r.owner.isEmpty());

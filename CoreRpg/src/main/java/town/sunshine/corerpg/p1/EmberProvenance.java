@@ -15,7 +15,7 @@ public final class EmberProvenance {
     private EmberProvenance() {}
 
     public static final String MAP_FORGE = "forge", MAP_ADMIN = "admin";
-    public static final String SRC_MARK_REDEEM = "S28", SRC_ADMIN = "X03", SRC_UNKNOWN = "X00";
+    public static final String SRC_MARK_REDEEM = "S28", SRC_FORGE_ROLL = "S59", SRC_ADMIN = "X03", SRC_UNKNOWN = "X00";
 
     /** REG source of an ITEM reward row ({@code key} = ledger reward key, {@code runId} = ledger run id) */
     public static String itemSource(String key, String runId) {
@@ -39,6 +39,11 @@ public final class EmberProvenance {
     /** provenance of an 8-mark redemption ({@code rid} = the payment request id) */
     public static EmberItemData.Origin forRedeem(String rid, long nowMs) {
         return EmberItemData.Origin.of(MAP_FORGE, SRC_MARK_REDEEM, rid, nowMs / 1000L);
+    }
+
+    /** D430 provenance of a random forge roll */
+    public static EmberItemData.Origin forForgeRoll(String rid, long nowMs) {
+        return EmberItemData.Origin.of(MAP_FORGE, SRC_FORGE_ROLL, rid, nowMs / 1000L);
     }
 
     /** provenance of an OP test piece ({@code how} = give / givedup) */

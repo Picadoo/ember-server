@@ -45,6 +45,11 @@ public final class EmberPayRules {
         return "redeem:" + owner.toString().substring(0, 8) + ":" + Long.toString(now, 36) + ":" + Integer.toString(Math.abs(rnd) % 46656, 36);
     }
 
+    /** D430: random forge request id (≤64) */
+    public static String forgeRollRid(UUID owner, long now, int rnd) {
+        return "froll:" + owner.toString().substring(0, 8) + ":" + Long.toString(now, 36) + ":" + Integer.toString(Math.abs(rnd) % 46656, 36);
+    }
+
     public static boolean markItem(String item) { return item != null && MARK_ITEM.matcher(item).matches(); }
 
     public static String markCounter(String item) { return MARK_COUNTER + item.substring(1); }

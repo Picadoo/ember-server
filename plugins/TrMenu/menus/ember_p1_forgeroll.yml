@@ -1,0 +1,100 @@
+# D430 随机锻造：选族选部位 → 命令预览确认
+Title: '§6余烬 · 随机锻造'
+
+Bindings:
+  Commands:
+    - '(?i)ember_p1_forgeroll'
+
+Options:
+  Arguments: false
+  Default-Layout: 0
+  Hide-Player-Inventory: false
+  Min-Click-Delay: 400
+
+Layout:
+  - '####N####'
+  - '#123######'
+  - '#456######'
+  - '####RB###'
+
+Events:
+  Open:
+    - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
+    - 'tell: §88 印记+4胚料+500币 · 成色标准70%/精良23%/卓越7% · 出不了极品'
+
+Icons:
+  '#':
+    display:
+      material: gray stained glass pane
+      name: '§8'
+  N:
+    display:
+      material: book
+      name: '§6随机锻造 · 说明'
+      lore:
+        - '§7与兑换同印记数，再加胚料和币赌成色/精工'
+        - '§7极品只能从掉落来 · 锻造权重 0'
+        - '§7产物 +0、词条空；新件锻造次数满 13'
+        - '§8门槛同印记兑换（T2 需 Q04、T3 需 Q07）'
+  '1':
+    display:
+      material: blaze powder
+      name: '§c焚烬 · 刃 T1'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll scorch blade 1'
+  '2':
+    display:
+      material: magma cream
+      name: '§6烬爆 · 刃 T1'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll burst blade 1'
+  '3':
+    display:
+      material: slime ball
+      name: '§a承烬 · 刃 T1'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll sustain blade 1'
+  '4':
+    display:
+      material: ender eye
+      name: '§c焚烬 · 护符 T1'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll scorch charm 1'
+  '5':
+    display:
+      material: prismarine shard
+      name: '§6烬爆 · 护符 T1'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll burst charm 1'
+  '6':
+    display:
+      material: emerald
+      name: '§a承烬 · 护符 T1'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll sustain charm 1'
+  R:
+    display:
+      material: arrow
+      name: '§7返回工坊'
+    actions:
+      all:
+        - 'menu: ember_p1_forge'
+  B:
+    display:
+      material: barrier
+      name: '§c关闭'
+    actions:
+      all:
+        - close

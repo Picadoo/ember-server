@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 烬砧随机锻造（成色/精工赌一手 · D430）
 
-STATUS=**已批 A · 方案 M · D430 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-random-roll-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-random-roll-need-design-2026-10-10.md) · backlog `B-forge-random-roll`（**已批·施工中**）· STATUS [`STATUS-ember-forge-random-roll-d430-2026-10-10.md`](../status/STATUS-ember-forge-random-roll-d430-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R/K3 ≠sx20 ≠天赋/灰印 ≠改 enhance 价 ≠复述烙纹定向**
+STATUS=**已批 A · 方案 M · D430 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-random-roll-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-random-roll-need-design-2026-10-10.md) · backlog `B-forge-random-roll`（**已批·施工中**）· STATUS [`STATUS-ember-forge-random-roll-d430-2026-10-10.md`](../status/STATUS-ember-forge-random-roll-d430-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R/K3 ≠sx20 ≠天赋/灰印 ≠改 enhance 价 ≠复述烙纹定向**
 
 > **批 A ≠ 关观察 ≠ 抬日表。**
 
@@ -56,3 +56,4 @@ STATUS=**已批 A · 方案 M · D430 · 施工中** · 2026-10-10 · tip [`STAT
 | 2026-10-10 | 总控批 A·M · 从 D167 §3.2 补全 · 澄清新件不扣次数 · 施工 |
 
 *D430 · 随机锻造 · 已批 A·M · 施工中。*
+| 2026-10-10 | **D430 PASS** jar 1.65.132-d430 · FreshQ871 · 证据 /tmp/d430-forgeroll-spot |
