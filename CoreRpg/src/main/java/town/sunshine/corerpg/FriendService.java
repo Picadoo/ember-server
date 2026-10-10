@@ -1,6 +1,7 @@
 package town.sunshine.corerpg;
 
 import town.sunshine.corerpg.p1.EmberFriendPath;
+import town.sunshine.corerpg.p1.EmberMentorPath;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -486,6 +487,11 @@ public final class FriendService {
             p.sendMessage(PREFIX + ChatColor.RED + "对方已有师徒关系。");
             return;
         }
+        // D524 mentor path BUSY: refuse without leaving pending
+        if (EmberMentorPath.shouldAutoDeny(other)) {
+            p.sendMessage(PREFIX + ChatColor.RED + "对方开启了师徒·静拒，暂不接受申请。");
+            return;
+        }
         self.setMentorPending(canon);
         other.setMentorPending(p.getName());
         dataStore.flushMutation(p.getUniqueId());
@@ -493,8 +499,36 @@ public final class FriendService {
         p.sendMessage(PREFIX + ChatColor.GOLD + "已向 §f" + canon + ChatColor.GOLD + " 发出师徒申请。");
         Player online = Bukkit.getPlayer(off.getUniqueId());
         if (online != null && online.isOnline()) {
-            online.sendMessage(PREFIX + ChatColor.GOLD + p.getName()
-                    + ChatColor.GRAY + " 申请结成师徒 · /corerpg friend mentor accept");
+            if (EmberMentorPath.shouldAutoAccept(other)) {
+                final Player recipient = online;
+                final String fromName = p.getName();
+                final UUID fromId = p.getUniqueId();
+                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                    if (!recipient.isOnline()) return;
+                    PlayerData rec = dataStore.get(recipient.getUniqueId());
+                    PlayerData from = dataStore.get(fromId);
+                    if (rec == null || from == null) return;
+                    if (!EmberMentorPath.shouldAutoAccept(rec)) return;
+                    String pend = rec.getMentorPending();
+                    if (pend == null || !fromName.equalsIgnoreCase(pend)) return;
+                    if (rec.getMentorName() != null && !rec.getMentorName().isEmpty()) return;
+                    rec.setMentorName(fromName);
+                    rec.setMentorPending("");
+                    from.setMentorName(recipient.getName());
+                    from.setMentorPending("");
+                    dataStore.flushMutation(recipient.getUniqueId());
+                    dataStore.flushMutation(fromId);
+                    recipient.sendMessage(PREFIX + ChatColor.GOLD + "师徒·敞开 §7已自动与 §f" + fromName + ChatColor.GOLD + " 结成师徒。");
+                    Player fromOnline = Bukkit.getPlayer(fromId);
+                    if (fromOnline != null && fromOnline.isOnline()) {
+                        fromOnline.sendMessage(PREFIX + ChatColor.GOLD + recipient.getName() + " 已接受师徒绑定。");
+                    }
+                }, 5L);
+            } else {
+                ConfirmTokens.sendButtons(online, PREFIX + ChatColor.GOLD + p.getName() + ChatColor.GRAY + " 申请结成师徒 ",
+                        new String[]{"[同意]", "/corerpg friend mentor accept", "结成师徒", "GREEN"},
+                        new String[]{"[拒绝]", "/corerpg friend mentor break", "取消这条申请", "RED"});
+            }
         }
     }
 
