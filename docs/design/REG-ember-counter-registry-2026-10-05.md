@@ -210,3 +210,7 @@
 ## 维护注 · D896（2026-10-11）
 
 D873–D890 / D891–D895 成长希望环未新增计数器字面量；覆盖率仍以 `EmberCountersTest` + 本表为准，新键随 ship 登记（S1 债：随新键维护，非另开大项）。
+
+### D967 · 2026-10-11 再验
+
+`EmberCountersTest` PASS after D942–D965（yml-SoT Stage0/1 + ledger glance）。无新 `p1_` / `p4_` 计数器字面量需登记。

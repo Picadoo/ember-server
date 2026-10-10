@@ -442,3 +442,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D962–D965 ARCH SHIP · jar 1.65.408-d962
 - C07 marksPerExchange←amount; source-map built_against; REG Stage1 note; C03–C06 deferred (no yml leaves)
+
+## D966–D968 ARCH SHIP · jar 1.65.408-d962 (docs; no jar bump)
+- Stage1b DESIGN for C03–C06/C11 yml leaf schema (docs only); EmberCountersTest recheck PASS
