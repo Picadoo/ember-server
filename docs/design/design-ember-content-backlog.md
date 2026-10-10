@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-afk-gear-eff`（已批 A · 方案 M · D454 · **PASS** · jar 1.65.146-d454 · 装效澄清 · ≠抬日表）
 - `B-afk-forge-gap`（已批 A · 方案 M · D432 · **PASS** · jar 1.65.134-d432）
 
 - `B-mainline-q01-q07-map-audit-d447`（已批 A·M · D447 · **落地** · 审计 PASS · 无需重建）

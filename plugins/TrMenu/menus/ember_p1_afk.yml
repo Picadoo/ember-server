@@ -1,3 +1,4 @@
+# D454: 装效澄清 gear_you / gear_eff(_tN) · 相对推荐装 · 零改产量
 # D383: 战况今日软目标 + 层差一览 + 层格相对多养 + 去哪花旁文案（零改产量）
 # D405: 战况软目标块 +还差/约满（remain_line live · tip 7123d944 · 零改产量）
 # D408: 满额 F 双路径（左冒险 D285 / 右短征选页）+ Open/I 满额半行 · 体力<30 诚实 tell · 零改产量
@@ -60,6 +61,8 @@ Icons:
         - '§d挂满可追短征 · 今日剩余有奖 §f%corerpg_p1_sx_day_left_sum%'
         # D415 W1a：D404 live 仓差（禁假写固定余额；禁暗示挂满必够升阶）
         - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
+        - '%corerpg_p1_afk_gear_you%'
+        - '%corerpg_p1_afk_gear_eff%'
         - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
         - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
         # D432：烬砧仓差（烙纹/随机锻/转化 · 不抬挂机产量）
@@ -220,6 +223,7 @@ Icons:
         - '§7怪：生命 160 · 攻击 1.5（3 只一波，只打你）'
         - '§7打满 2400 只：60 币 · 10 经验 · 2 碎片 · 2 骨尘'
         - '§7推荐：首通 Q01 拿到一件 T1 就能稳挂'
+        - '%corerpg_p1_afk_gear_eff_t1%'
         - ''
         - '§e➥ §f点击传送，到了就自动开打'
     actions:
@@ -257,6 +261,7 @@ Icons:
         - '§7怪：生命 280 · 攻击 3.5（3 只一波，只打你）'
         - '§7打满 2400 只：80 币 · 15 经验 · 3 碎片 · 3 骨尘 · 1 核心碎片'
         - '§7推荐：约攻击 30 / 生命 85（Q03 首通时的装备）'
+        - '%corerpg_p1_afk_gear_eff_t2%'
         - ''
         - '§e➥ §f点击传送，到了就自动开打'
     actions:
@@ -294,6 +299,7 @@ Icons:
         - '§7怪：生命 480 · 攻击 5.5（3 只一波，只打你）'
         - '§7打满 2400 只：100 币 · 20 经验 · 3 碎片 · 4 骨尘 · 1 核心碎片 · 1 胚料'
         - '§7推荐：约攻击 50 / 生命 145（T2 强化后）'
+        - '%corerpg_p1_afk_gear_eff_t3%'
         - ''
         - '§e➥ §f点击传送，到了就自动开打'
     actions:
@@ -331,6 +337,7 @@ Icons:
         - '§7怪：生命 720 · 攻击 9（3 只一波，只打你）'
         - '§7打满 2400 只：120 币 · 25 经验 · 4 碎片 · 5 骨尘 · 2 核心碎片 · 1 胚料'
         - '§7推荐：约攻击 70 / 生命 200（T3 装备）· 刚首通 Q07 时多半扛不住'
+        - '%corerpg_p1_afk_gear_eff_t4%'
         - ''
         - '§e➥ §f点击传送，到了就自动开打'
     actions:

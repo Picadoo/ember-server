@@ -1012,6 +1012,15 @@ public final class EmberAfkService implements Listener {
         return inWorld(p) ? "§e待机" : "§7进入挂机庭自动开打";
     }
 
+    /** D454: loadout ATK/HP vs soft recommend for tier (no AFK table raise). */
+    private String gearEffFor(Player p, int tier) {
+        EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls == null || p == null) return EmberAfkGearEff.line(0, 0, tier);
+        EmberLoadout l = ls.get(p);
+        if (l == null) return EmberAfkGearEff.line(0, 0, tier);
+        return EmberAfkGearEff.line(l.b, l.h, tier);
+    }
+
     public String papi(Player p, PlayerData d, String key) {
         if (d == null) return "";
         String day = DailyService.today();
@@ -1059,6 +1068,19 @@ public final class EmberAfkService implements Listener {
             case "remain": return String.valueOf(remainKills(kills, dailyKills)); // D405 numeric; full=0
             case "eta_min": return etaMinText(remainKills(kills, dailyKills), kph); // D405
             case "remain_line": return remainLine(remainKills(kills, dailyKills), kph); // D405 optional
+            case "gear_you": {
+                EmberLoadoutService ls = plugin.getEmberLoadouts();
+                EmberLoadout l = ls == null ? null : ls.get(p);
+                return l == null ? EmberAfkGearEff.youLine(0, 0) : EmberAfkGearEff.youLine(l.b, l.h);
+            }
+            case "gear_eff": {
+                int tn = cur == null ? 0 : cur.n;
+                return gearEffFor(p, tn);
+            }
+            case "gear_eff_t1": return gearEffFor(p, 1);
+            case "gear_eff_t2": return gearEffFor(p, 2);
+            case "gear_eff_t3": return gearEffFor(p, 3);
+            case "gear_eff_t4": return gearEffFor(p, 4);
             case "next_farm": { // D411 W1a personalized next-tier farm half-line
                 boolean capped = dailyKills > 0 && kills >= dailyKills;
                 Tier next = cur == null ? null : tier(cur.n + 1);
