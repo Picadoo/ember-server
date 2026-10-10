@@ -1,0 +1,11 @@
+# D417 骨架 · EmberSx11 怪组空壳（刷怪/波次由 CoreRpg rooms + MM；禁 DP wave 自驱 · D391 FAIL）
+# MM 本号入仓 · STATUS-ember-short-sx11-mm：
+#   EmberSx11Guard 对廊卫 / EmberSx11Crossbow 侧廊弩 / EmberSx11Elite 镜廊督卫 / EmberSx11Warden 合镜守吏
+# Cast：EmberSx11MirrorCast（镜面扫线/对折斩）— 本注释对齐；本壳仍空 groups（禁 DP wave 自驱）。
+groups:
+  default:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false

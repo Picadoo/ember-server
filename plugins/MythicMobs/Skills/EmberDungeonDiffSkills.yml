@@ -355,3 +355,20 @@ EmberSx10GateCast:
   - effect:particles{p=cloud;amount=32;hSpread=5;ySpread=0.6;speed=0} @Self
   - effect:particles{p=lava;amount=18;hSpread=5;ySpread=1;speed=0} @Self
   - effect:particles{p=crit;amount=22;hSpread=5;ySpread=0.5;speed=0.02} @Self
+
+# --- 短征 sx11 · 烬镜对廊 Boss 镜面扫线/对折斩（可躲；无 SLOW；范式 GateCast / SentryCast）---
+# 对照：EmberSx10GateCast / EmberSx01SentryCast；主题「镜面扫线」：crit+cloud 中轴/双廊镜像 + lava 烬感；结算 r5
+# 1.12.2 粒子：crit + cloud + lava（禁无效粒子）；message 标明退进合镜侧龛或回撤侧廊末端
+EmberSx11MirrorCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&6【烬镜】&f镜面扫线——&7退进合镜侧龛或回撤侧廊！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=36;hSpread=5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=32;hSpread=4.5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=18;hSpread=2.2;ySpread=1.4;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.55} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=28;hSpread=5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
