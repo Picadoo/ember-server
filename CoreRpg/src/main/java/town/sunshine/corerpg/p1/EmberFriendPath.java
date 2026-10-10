@@ -172,6 +172,11 @@ public final class EmberFriendPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a好友 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1666
+            java.util.List<String> fr = d.getFriends();
+            int n = fr == null ? 0 : fr.size();
+            p.sendActionBar("§e好友 · §f" + label(id) + " §7· 列表 §f" + n);
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D828
                 new String[]{"[好友]", "/corerpg friend", "看列表 / 加好友", "AQUA"},
                 new String[]{"[组队招募]", "/corerpg p1 recruit", "拉人开本", "GREEN"},

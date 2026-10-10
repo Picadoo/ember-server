@@ -169,6 +169,18 @@ public final class EmberMentorPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a师徒 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1668
+            String mentor = d.getMentorName();
+            String pend = d.getMentorPending();
+            if (mentor != null && !mentor.isEmpty())
+                p.sendActionBar("§e师徒 · §f" + label(id) + " §7· 师父 §f" + mentor);
+            else if (pend != null && !pend.isEmpty())
+                p.sendActionBar("§e师徒 · §f" + label(id) + " §8· 待处理 §f" + pend);
+            else
+                p.sendActionBar("§e师徒 · §f" + label(id) + " §7· 未结对");
+        } catch (Throwable ignored) {
+            try { p.sendActionBar("§e师徒 · §f" + label(id)); } catch (Throwable ignored2) { }
+        }
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D828
                 new String[]{"[好友]", "/corerpg friend", "看师徒栏", "AQUA"},
                 new String[]{"[组队招募]", "/corerpg p1 recruit", "带徒开本", "GREEN"},

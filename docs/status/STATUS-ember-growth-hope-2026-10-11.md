@@ -658,3 +658,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1647–D1664 ARCH SHIP · jar 1.65.471-d1647
 - Stage0 post-life COMPLETE; guild/pet have-need remain AB
+
+## D1665–D1678 ARCH SHIP · jar 1.65.472-d1665
+- Friend/Mentor/Party path remain AB

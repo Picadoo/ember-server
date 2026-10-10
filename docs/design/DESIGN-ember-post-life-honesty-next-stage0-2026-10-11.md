@@ -14,6 +14,7 @@
 | GP3 | 创建费不足 AB | coin/crystal gap |
 | PP1 | 使魔路径 AB | 解锁数·魂尘下一档 |
 | PP2 | pet list/feed/unlock 还差 | 尘/蛋 have-need |
+| FP1 | 好友/师徒/组队路径 AB | Friend/Mentor/Party |
 | NX2 | 装备库容量（后窗） | GearLib 已有部分 → 暂缓 |
 | NX3 | ARCH | SourceMap 绿 · C15/C16 暂停 |
 

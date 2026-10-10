@@ -159,6 +159,7 @@ public final class EmberPartyPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a组队 → §f" + label(id) + " §7· " + tip(id));
+        try { p.sendActionBar("§e组队 · §f" + label(id)); } catch (Throwable ignored) { } // D1668
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[好友]", "/corerpg friend", "邀请好友组队", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 partypath", "重选", "GRAY"});

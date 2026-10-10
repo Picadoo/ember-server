@@ -157,7 +157,14 @@ public final class FriendService {
                 return a.compareToIgnoreCase(b);
             }
         });
-        p.sendMessage(PREFIX + ChatColor.YELLOW + "好友 §f" + friends.size() + "/" + maxFriends);
+        int fLeft = Math.max(0, maxFriends - friends.size());
+        p.sendMessage(PREFIX + ChatColor.YELLOW + "好友 §f" + friends.size() + "/" + maxFriends
+                + (fLeft > 0 ? ChatColor.GRAY + " · 还差格" + fLeft : ChatColor.GRAY + " · 满员"));
+        try { // D1667
+            p.sendActionBar(fLeft > 0
+                    ? ("§e好友 · §f" + friends.size() + "/" + maxFriends + " §8· 还差格" + fLeft)
+                    : ("§a好友 · 满员 §f" + friends.size()));
+        } catch (Throwable ignored) { }
         p.sendMessage(PREFIX + EmberFriendPath.glance(EmberFriendPath.get(data), true)); // D816
         int mid = EmberMentorPath.get(data);
         if (EmberMentorPath.valid(mid) || (data.getMentorName() != null && !data.getMentorName().isEmpty()))
@@ -249,6 +256,7 @@ public final class FriendService {
             return;
         }
         if (self.getFriends().size() >= maxFriends) {
+            try { p.sendActionBar("§e好友 · 己方满员"); } catch (Throwable ignored) { }
             p.sendMessage(PREFIX + ChatColor.RED + "好友已满（" + maxFriends + "）。");
             return;
         }
