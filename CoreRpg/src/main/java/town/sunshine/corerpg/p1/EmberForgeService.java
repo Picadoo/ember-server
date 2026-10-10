@@ -419,10 +419,17 @@ public final class EmberForgeService implements Listener {
             List<String> lack = lacking(p, plan.cost);
             String label = "upgrade".equals(kind) ? "[确认升阶]" : "quality".equals(kind) ? "[确认成色]" : "[确认精工]";
             String cmd = "/corerpg p1 " + ("quality".equals(kind) ? "refine quality" : kind) + " confirm";
-            // D1298: upgrade/quality/refine gap AB when lacking
+            // D1298 / D1916 GS3 dial on quality/refine
             try {
                 String kn = "quality".equals(kind) ? "成色" : "upgrade".equals(kind) ? "升阶" : "精工";
-                if (!lack.isEmpty()) {
+                if ("quality".equals(kind) || "refine".equals(kind)) {
+                    String dial = EmberQualityCraftDial.previewLine(it.data, "quality".equals(kind));
+                    p.sendMessage(P + "§7" + dial);
+                    if (!lack.isEmpty())
+                        p.sendActionBar("§c" + kn + " · §f" + dial + " §c· 缺料");
+                    else
+                        p.sendActionBar("§a" + dial + " §7· " + plan.cost.label());
+                } else if (!lack.isEmpty()) {
                     p.sendActionBar("§c" + kn + "缺料 · §f" + lack.get(0)
                             + (lack.size() > 1 ? "…" : ""));
                 } else {

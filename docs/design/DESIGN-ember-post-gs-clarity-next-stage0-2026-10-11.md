@@ -10,3 +10,6 @@
 | NX-ARCH | C15/C16 | 暂停 |
 
 下码窗：开 GS3 必须单独 tip→批；否则 ARCH 薄绿复核。禁硬禁同前。
+
+## Update D1914+
+GS3 opened as **display-only dial**; pity invent remains BLOCKED. See DESIGN-ember-gs3-quality-craft-dial-stage0.

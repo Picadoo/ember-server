@@ -20,3 +20,6 @@
 
 ## 批注
 - [x] 总控批 A · 方案 M · 2026-10-11
+
+## GS3 resolution (D1914+)
+Opened as display-only certainty dial (no math). Pity invent BLOCKED. See DESIGN-ember-gs3-quality-craft-dial-stage0.

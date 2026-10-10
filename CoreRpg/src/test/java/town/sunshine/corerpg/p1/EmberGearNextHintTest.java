@@ -16,18 +16,18 @@ public class EmberGearNextHintTest {
     }
 
     @Test public void qualityLine_stepsAndMax() {
-        assertEquals("成色 标准 → 精良（胚8 骨8 币800）", EmberGearNextHint.qualityLine(blade(0, 0)));
-        assertEquals("成色 精良 → 卓越（胚16 骨16 币1600）", EmberGearNextHint.qualityLine(blade(1, 0)));
-        assertEquals("成色 卓越 → 极品仅掉落", EmberGearNextHint.qualityLine(blade(2, 0)));
+        assertEquals("成色 标准 → 精良（胚8 骨8 币800·确定） · 表盘0/2", EmberGearNextHint.qualityLine(blade(0, 0)));
+        assertEquals("成色 精良 → 卓越（胚16 骨16 币1600·确定） · 表盘1/2", EmberGearNextHint.qualityLine(blade(1, 0)));
+        assertEquals("成色 卓越 → 极品仅掉落 · 表盘2/2", EmberGearNextHint.qualityLine(blade(2, 0)));
         assertEquals("成色 极品 · 已满", EmberGearNextHint.qualityLine(blade(3, 0)));
         assertEquals("", EmberGearNextHint.qualityLine(null));
     }
 
     @Test public void craftLine_stepsAndMax() {
-        assertEquals("精工 0% → 2%（胚3 骨5 币300）", EmberGearNextHint.craftLine(blade(0, 0)));
-        assertEquals("精工 2% → 4%（胚6 骨10 币600）", EmberGearNextHint.craftLine(blade(0, 1)));
-        assertEquals("精工 4% → 6%（胚12 骨20 币1200）", EmberGearNextHint.craftLine(blade(0, 2)));
-        assertEquals("精工 6% · 已满", EmberGearNextHint.craftLine(blade(0, 3)));
+        assertEquals("精工 0% → 2%（胚3 骨5 币300·确定） · 表盘0/3", EmberGearNextHint.craftLine(blade(0, 0)));
+        assertEquals("精工 2% → 4%（胚6 骨10 币600·确定） · 表盘1/3", EmberGearNextHint.craftLine(blade(0, 1)));
+        assertEquals("精工 4% → 6%（胚12 骨20 币1200·确定） · 表盘2/3", EmberGearNextHint.craftLine(blade(0, 2)));
+        assertEquals("精工 6% · 已满 · 表盘3/3", EmberGearNextHint.craftLine(blade(0, 3)));
     }
 
     @Test public void relative_silenceWhenSame() {

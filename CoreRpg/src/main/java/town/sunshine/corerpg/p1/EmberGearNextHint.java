@@ -38,12 +38,14 @@ public final class EmberGearNextHint {
         if (d == null) return "";
         String cur = EmberItemData.qualityName(d.quality);
         Cost c = EmberUpgradeRules.qualityCost(d.quality);
+        // D1917 GS3-C: append certainty dial fraction
+        String dial = " · 表盘" + EmberQualityCraftDial.qualityStep(d.quality) + "/" + EmberQualityCraftDial.qualityMax();
         if (c != null && d.quality < 2) {
-            return "成色 " + cur + " → " + EmberItemData.qualityName(d.quality + 1) + "（" + costShort(c) + "）";
+            return "成色 " + cur + " → " + EmberItemData.qualityName(d.quality + 1) + "（" + costShort(c) + "·确定）" + dial;
         }
-        if (d.quality == 2) return "成色 " + cur + " → 极品仅掉落";
+        if (d.quality == 2) return "成色 " + cur + " → 极品仅掉落" + dial;
         if (d.quality >= 3) return "成色 " + cur + " · 已满";
-        return "成色 " + cur;
+        return "成色 " + cur + dial;
     }
 
     /**
@@ -52,8 +54,10 @@ public final class EmberGearNextHint {
     public static String craftLine(EmberItemData d) {
         if (d == null) return "";
         Cost c = EmberUpgradeRules.refineCost(d.craft);
-        if (c == null) return "精工 " + craftPct(d.craft) + " · 已满";
-        return "精工 " + craftPct(d.craft) + " → " + craftPct(d.craft + 1) + "（" + costShort(c) + "）";
+        String dial = " · 表盘" + EmberQualityCraftDial.craftStep(d.craft) + "/" + EmberQualityCraftDial.craftMax();
+        if (c == null) return "精工 " + craftPct(d.craft) + " · 已满" + dial;
+        return "精工 " + craftPct(d.craft) + " → " + craftPct(d.craft + 1)
+                + "（" + costShort(c) + "·确定）" + dial;
     }
 
     /**

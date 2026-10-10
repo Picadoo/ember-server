@@ -720,3 +720,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1913 DOC
 - post-GS Stage0 scan: GS3 still deferred; EM1-B blocked; surface near-sat
+
+## D1914–D1927 GS3 成色/精工确定表盘 (jar 1.65.490-d1914)
+- GS3-A/B/C SHIP display-only dial; GS3-PITY BLOCKED (no invent pity math)
+- Live: EmberQualityCraftDial + forge simple + GearNextHint 表盘N/M
