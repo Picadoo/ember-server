@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-tune-path`（已批 A · 方案 M · D498 · **PASS** · jar 1.65.189-d498 · 签律锋刃/护符/双签一次写双签槽+调律侧 · ≠同族 HUD ≠工坊/入场cue）
 - `B-seal-path`（已批 A · 方案 M · D497 · **PASS** · jar 1.65.188-d497 · 纹印猎缀/余烬/定身一次写烙纹+双签槽 · ≠同族 HUD ≠工坊花料/入场cue）
 - `B-trial-path`（已批 A · 方案 M · D496 · **PASS** · jar 1.65.187-d496 · 试炼稳慎/猛开/加压一次写誓约+破绽 · ≠同族 HUD ≠工坊/入场cue）
 - `B-posture-path`（已批 A · 方案 M · D495 · **PASS** · jar 1.65.186-d495 · 姿态突进/守势/清杂一次写符文+身法 · ≠同族 HUD ≠工坊/入场cue）
