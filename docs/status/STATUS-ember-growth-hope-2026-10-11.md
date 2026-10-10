@@ -265,3 +265,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D773 leave-instance hub map farm resume
 - D774 EASY path settle wording
 - D775 attune go=unlock
+
+## D776 SHIP · TrMenu gear.yml
+- Fixed broken lore quotes; menu loads (77)
