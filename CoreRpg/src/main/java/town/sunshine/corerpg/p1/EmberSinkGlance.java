@@ -51,6 +51,8 @@ public final class EmberSinkGlance {
                 focus = "精工";
             } else if (goal == EmberForgeGoal.BRAND) {
                 focus = "烙纹";
+                // D1192: craftShards mirror · 非 K3
+                cost = new EmberUpgradeRules.Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0);
             } else {
                 EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(d);
                 if (plan != null && plan.ok()) cost = plan.cost;

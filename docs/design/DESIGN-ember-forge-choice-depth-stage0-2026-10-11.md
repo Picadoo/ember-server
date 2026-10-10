@@ -29,6 +29,7 @@
 | **K2b** | 下限可发现性 | TrMenu 下两排 + forge_gap_roll_floor + afterRoll 稳线按钮 | **D1163– SHIP** · 禁 K3 |
 | **W-pity** | 稳线保底/缺料诚实 | enhanceLine + SinkGlance + TrMenu 改名 | **D1173– SHIP** · 无新 hope PAPI |
 | **W-fail** | 失败后保底剩余 | EnhanceUndo ActionBar + glance | **D1183– SHIP** |
+| **W-brand** | SinkGlance 烙纹目标缺碎 | craftShards Cost | **D1191– SHIP** |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 

@@ -535,3 +535,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1183–D1190 ARCH SHIP · jar 1.65.432-d1183
 - Enhance fail ActionBar/forgeGlance 「含下次≤N次必成」; pity→保底计数 copy
+
+## D1191–D1198 ARCH SHIP · jar 1.65.433-d1191
+- SinkGlance BRAND goal shard lack; ARCH health tests PASS
