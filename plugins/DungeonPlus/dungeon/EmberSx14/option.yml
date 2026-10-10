@@ -1,0 +1,26 @@
+# D423 骨架 · 短征 sx14 烬裂折廊（EmberSx14）— 与 EmberSx13 同构：DP 只建实例，不刷怪不发奖。
+# 地图：ember_short_sx14（本地骨架另号；烬裂折廊主题 WE 另号 · ≥3强制折角裂隙廊）
+# 进入：只经 CoreRpg（菜单 / corerpg p1 enter sx14）→ 预留体力 30 → 发 P1 通行证再 dp start-console。
+# 房间/门/首领/S53 结算由 CoreRpg（ember-v1-runs.yml short.sx14）；结束走 ember_p1_complete / ember_p1_fail。
+# 首航硬提醒：short.sx14 须含 rooms×3+boss（防 D391 FAIL）。
+# MM：另号 · Guard/Crossbow/Elite/Warden + EmberSx14RiftCast；本壳不假造完整 MM 波次。
+# 禁：线性复读 sx01；环廊复读 sx06；对廊复读 sx11；转枢复读 sx12；衡梁复读 sx13；递闸/跳石/错层/塔升/风廊/霜雾廊气质当主识别。
+
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx14} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx14%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入烬裂折廊（体力与解锁由 CoreRpg 校验）} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e烬裂折廊 §7· 短征 · 裂门庭→折裂廊→裂冠终厅；经强制折角裂隙廊后击败裂冠守吏，统一结算} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+
+dungeon-area: []
+
+# 结算由 CoreRpg（S53）；禁本文件发旧币表
+dungeon-reward-script: []

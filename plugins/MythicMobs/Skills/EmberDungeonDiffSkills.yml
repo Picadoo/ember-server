@@ -406,3 +406,20 @@ EmberSx13BalanceCast:
   - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
   - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
   - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+
+# --- 短征 sx14 · 烬裂折廊 Boss 裂扫斩/折角压浪（可躲；无 SLOW；范式 BalanceCast / PivotCast）---
+# 对照：EmberSx13BalanceCast；主题「裂扫斩」：crit 裂隙折角条 + cloud 裂缝压浪 + lava 烬感；结算 r5
+# 1.12.2 粒子：crit + cloud + lava；message 标明退进裂冠侧龛或已过折角侧台
+EmberSx14RiftCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&6【烬裂】&f裂扫斩——&7退进裂冠侧龛或已过折角侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=44;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=36;hSpread=4;ySpread=0.7;speed=0} @Self
+  - effect:particles{p=lava;amount=18;hSpread=2.5;ySpread=1.2;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.42} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self

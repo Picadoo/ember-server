@@ -1,0 +1,11 @@
+# D423 骨架 · EmberSx14 怪组空壳（刷怪/波次由 CoreRpg rooms + MM；禁 DP wave 自驱 · D391 FAIL）
+# MM 另号：
+#   EmberSx14Guard 裂门卫 / EmberSx14Crossbow 折廊弩 / EmberSx14Elite 折廊督卫 / EmberSx14Warden 裂冠守吏
+# Cast：EmberSx14RiftCast（裂扫斩/折角压浪）— 本注释对齐；本壳仍空 groups（禁 DP wave 自驱）。
+groups:
+  default:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false
