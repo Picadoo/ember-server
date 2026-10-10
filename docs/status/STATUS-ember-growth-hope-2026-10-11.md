@@ -550,3 +550,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1223–D1230 ARCH SHIP · jar 1.65.437-d1223
 - SinkGlance upgrade near-cost line
+
+## D1231–D1238 ARCH SHIP · jar 1.65.438-d1231
+- EnhanceLoop fail message remain-until-sure

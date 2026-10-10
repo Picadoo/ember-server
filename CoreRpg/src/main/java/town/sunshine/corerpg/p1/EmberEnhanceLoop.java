@@ -46,7 +46,19 @@ public final class EmberEnhanceLoop {
                     new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"},
                     new String[]{"[去成色]", "/corerpg p1 quality", "成色预览", "AQUA"});
         } else {
-            p.sendMessage(P + "§e强化未升档 §7· 材料已扣 · 选下一步（不改保底规则）：");
+            // D1232: fail remain honesty（非 celebration twin）
+            String rem = "";
+            if (list != null) {
+                for (TxnItem ti : list) {
+                    if (ti == null || ti.after == null) continue;
+                    int u = EmberGearNextHint.enhanceAttemptsUntilSure(ti.after);
+                    rem = u <= 1 ? "下次必成" : ("含下次≤" + u + "次必成");
+                    break;
+                }
+            }
+            p.sendMessage(P + "§e强化未升档 §7· 材料已扣"
+                    + (rem.isEmpty() ? "" : (" · §f" + rem))
+                    + " §7· 选下一步（不改保底规则）：");
             ConfirmTokens.sendButtons(p, P, // D886
                     new String[]{"[再试一次]", "/corerpg p1 enhance", "同件再强化（保底累计）", "GREEN"},
                     new String[]{"[成套追]", "/corerpg p1 setchase", "换件再冲", "GOLD"},
