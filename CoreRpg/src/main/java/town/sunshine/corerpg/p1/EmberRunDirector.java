@@ -510,6 +510,26 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D584: boss share-soak circle currently armed. */
+    boolean hasPendingSoak() {
+        return pending != null && pending.share && lockOrigin != null
+                && boss != null && boss.le != null && !boss.le.isDead();
+    }
+
+    /** D584: warp a committed player into the share circle center. */
+    boolean pathSoakIn(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingSoak()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location to = lockOrigin.clone();
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.65f);
+        return true;
+    }
+
     /** D583: any living shield-affix elite still up. */
     boolean hasPendingShell() {
         for (Tracked t : mobs.values()) {
@@ -2874,6 +2894,7 @@ final class EmberRunDirector {
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
         // D304 W1a: cast-start ActionBar each cast (chat kept); charge 0-cell already returned above
         flashActionBar(EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share));
+        if (sk.share) EmberSoakPath.maybeAfterSoak(s); // D584
         if (breakNeed > 0) EmberPressPath.maybeAfterPress(s); // D581
     }
 

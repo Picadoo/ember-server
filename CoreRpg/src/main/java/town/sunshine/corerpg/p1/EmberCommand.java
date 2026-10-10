@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("soakpath".equals(sub) || "分摊路径".equals(sub)) return soakPathCmd(s, args); // D584
+        if ("soak".equals(sub) && args.length == 2) return soakGoCmd(s); // D584
         if ("shellpath".equals(sub) || "铁壁路径".equals(sub)) return shellPathCmd(s, args); // D583
         if ("shell".equals(sub) && args.length == 2) return shellGoCmd(s); // D583
         if ("clonepath".equals(sub) || "分身路径".equals(sub)) return clonePathCmd(s, args); // D582
@@ -1715,6 +1717,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("soakseed".equals(sub)) return soakSeedCmd(s, args); // D584
         if ("shellseed".equals(sub)) return shellSeedCmd(s, args); // D583
         if ("cloneseed".equals(sub)) return cloneSeedCmd(s, args); // D582
         if ("pressseed".equals(sub)) return pressSeedCmd(s, args); // D581
@@ -5783,6 +5786,62 @@ public final class EmberCommand {
             EmberShellPath.maybeProbe(t);
             s.sendMessage(P + "已触发铁壁路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingShell(t) ? "（有铁壁）" : "（无铁壁）"));
+            return true;
+    }
+
+    private boolean soakPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSoakPath.glance(EmberSoakPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c分摊路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSoakPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c分摊路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSoakPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSoakPath.get(d);
+                    if (EmberSoakPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSoakPath.label(cur) + " · 改路径再 /corerpg p1 soakpath");
+                    else EmberSoakPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSoakPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 soakpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSoakPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean soakGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathSoakIn(p)) p.sendMessage(P + "无法进圈（无分摊蓄力/未进本）");
+            else p.sendMessage(P + "§a分摊·手点 §7已传入分摊圈");
+            return true;
+    }
+
+    private boolean soakSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSoakPath.maybeProbe(t);
+            s.sendMessage(P + "已触发分摊路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingSoak(t) ? "（有分摊）" : "（无分摊）"));
             return true;
     }
 }
