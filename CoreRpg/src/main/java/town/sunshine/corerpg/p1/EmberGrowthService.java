@@ -1037,6 +1037,13 @@ public final class EmberGrowthService implements Listener {
                     p.sendMessage(P + EmberSigChase.glance(d));
                 return true;
             }
+            if ("complete".equalsIgnoreCase(raw) && p.hasPermission("corerpg.admin")) { // D472 smoke: pretend imprint closed chase
+                EmberSignature.Def def = EmberSigChase.get(d);
+                if (def == null) { p.sendMessage(P + "§c先设追烙"); return true; }
+                EmberSigChase.afterImprint(p, d, def);
+                plugin.getDataStore().flushMutation(p.getUniqueId());
+                return true;
+            }
             EmberSignature.Def def = EmberSigChase.parse(raw);
             if (def == null) {
                 p.sendMessage(P + "用法：/corerpg p1 sig chase <L01…L15|clear>");
@@ -1162,8 +1169,11 @@ public final class EmberGrowthService implements Listener {
                             + " (-" + EmberSignature.IMPRINT_MARKS + " " + sd.map + " marks, -" + coin + " coin, via " + via + ", item rev " + after.rev + ", " + rid + ", saved=" + saved + ")");
                     if (q == null || x == null) return;
                     q.sendMessage(P + "§a烙印完成：§f" + t.shortLabel() + " §7→ §6" + sd.name + "§7（剩 " + x.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记）");
-                    EmberSigChase.clearReadyLatch(x); // D470: allow re-cue if still ≥5
-                    EmberSigChase.maybeReadyCue(q, x);
+                    boolean closed = EmberSigChase.afterImprint(q, x, sd); // D472 feel + chase close
+                    if (!closed) {
+                        EmberSigChase.clearReadyLatch(x); // D470: allow re-cue if still ≥5
+                        EmberSigChase.maybeReadyCue(q, x);
+                    }
                     EmberLoadout l2 = runs.loadouts().get(q);
                     boolean worn = "blade".equals(sd.slot) ? l2.blade != null && l2.blade.uid.equals(t.uid) : l2.charm != null && l2.charm.uid.equals(t.uid);
                     if (!worn) q.sendMessage(P + "§e注意：这件现在没在用（选定 / 手持后才生效）");

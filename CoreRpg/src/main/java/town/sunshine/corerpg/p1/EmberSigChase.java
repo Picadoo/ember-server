@@ -13,7 +13,8 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D464: signature imprint-chase path pick — commit which Lxx you farm marks to imprint.
- * D470: rising-edge imprint-ready cue when chase marks hit threshold (acquisition loop close).
+ * D470: rising-edge imprint-ready cue when chase marks hit threshold.
+ * D472: imprint-complete feel + chase-close offer (acquisition loop close).
  * Zero STAMP_RATE / imprint price / ALTS change.
  */
 public final class EmberSigChase {
@@ -166,6 +167,34 @@ public final class EmberSigChase {
      * announce ready + [去烙印] button. Clears latch when under threshold.
      * @return true if a rising-edge cue was shown
      */
+
+    /**
+     * D472: after successful imprint — ActionBar feel; if chase matched, clear chase and offer next.
+     * @return true if chase was closed as complete
+     */
+    public static boolean afterImprint(Player p, PlayerData d, EmberSignature.Def sd) {
+        if (p == null || sd == null) return false;
+        String feel = "§d签名烙印 · §f" + sd.name + " §a完成";
+        try { p.sendActionBar(feel); } catch (Throwable ignored) { }
+        EmberSignature.Def chase = get(d);
+        if (chase == null || chase.code != sd.code) return false;
+        clear(d); // closes chase after successful imprint of target
+        clearReadyLatch(d);
+        if (p != null) flush(p);
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a追烙完成：§f" + label(sd) + " §7· 已烙上，可换下一条");
+        ConfirmTokens.sendButtons(p, P,
+                new String[]{"[换追烙]", "/corerpg p1 sig chase offer", "点下一条签名", "GOLD"},
+                new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴 / 开关", "AQUA"},
+                new String[]{"[稍后再说]", null, "随时 /corerpg p1 sig chase", "GRAY"});
+        return true;
+    }
+
+    /** Pure: whether imprint of {@code sd} should close chase {@code chase}. */
+    public static boolean closesChase(EmberSignature.Def chase, EmberSignature.Def sd) {
+        return chase != null && sd != null && chase.code == sd.code;
+    }
+
     public static boolean maybeReadyCue(Player p, PlayerData d) {
         if (p == null || d == null) return false;
         EmberSignature.Def def = get(d);
