@@ -268,6 +268,52 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("bitepath".equals(sub) || "果腹路径".equals(sub)) { // D544 food bite path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBitePath.glance(EmberBitePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c果腹路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberBitePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c果腹路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBitePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBitePath.get(d);
+                    if (EmberBitePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBitePath.label(cur) + " · 改路径再 /corerpg p1 bitepath");
+                    else EmberBitePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBitePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 bitepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberBitePath.applyAndReply(p, id);
+            return true;
+        }
+        if ("bite".equals(sub) && args.length == 2) { // D544 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.LifeService life = runs == null ? null : runs.plugin().getLifeService();
+            if (life == null) { p.sendMessage(P + "生活服务未加载"); return true; }
+            int ok = life.pathBiteOne(p);
+            if (ok <= 0) p.sendMessage(P + "无法果腹（无烤鱼或已饱）");
+            else p.sendMessage(P + "§a果腹·手点 §7饱食 " + p.getFoodLevel() + "/20");
+            return true;
+        }
         if ("cookpath".equals(sub) || "代烤路径".equals(sub)) { // D543 life cook path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -867,6 +913,22 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("biteseed".equals(sub)) { // D544 admin smoke: grilled fish + low hunger
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.LifeService life = runs.plugin().getLifeService();
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs.plugin();
+            String food = life == null ? "food_ember_grilled_fish" : life.cookOutputId();
+            if (plg.getNiBridge() == null || !plg.getNiBridge().giveNiItem(t, food, 2)) {
+                s.sendMessage(P + "发放烤鱼失败"); return true;
+            }
+            t.setFoodLevel(8);
+            t.setSaturation(0f);
+            s.sendMessage(P + "已发放烤鱼×2 · 饱食=8 → " + t.getName());
+            EmberBitePath.maybeAfterProgress(t);
             return true;
         }
         if ("cookseed".equals(sub)) { // D543 admin smoke: give raw fish + coin

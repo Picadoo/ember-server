@@ -358,6 +358,38 @@ public final class LifeService implements Listener {
         return true;
     }
 
+    /** D544: grilled food NI id used by bite path. */
+    public String cookOutputId() { return cookOutput; }
+
+    /** D544: count grilled food in backpack. */
+    public int countPathFood(Player p) {
+        if (p == null || ni == null || cookOutput == null) return 0;
+        return ni.countInInventoryOnly(p, cookOutput);
+    }
+
+    public static final int BITE_HUNGER_NEED = 14;
+    public static final int BITE_RESTORE = 5;
+
+    public boolean needsBite(Player p) {
+        if (p == null) return false;
+        return p.getFoodLevel() < BITE_HUNGER_NEED && countPathFood(p) > 0;
+    }
+
+    /**
+     * D544: eat one grilled fish from backpack. Restores hunger (combat sustain). Returns 1 if eaten.
+     */
+    public int pathBiteOne(Player p) {
+        if (p == null || ni == null) return 0;
+        if (p.getFoodLevel() >= 20) return 0;
+        if (countPathFood(p) <= 0) return 0;
+        if (!ni.consumeExact(p, cookOutput, 1)) return 0;
+        int fl = Math.min(20, p.getFoodLevel() + BITE_RESTORE);
+        p.setFoodLevel(fl);
+        float sat = Math.min(20f, p.getSaturation() + BITE_RESTORE);
+        p.setSaturation(sat);
+        return 1;
+    }
+
     /** D543: count cookable fish units in backpack (capped by cookMax). */
     public int countPathCook(Player p) {
         if (p == null || ni == null) return 0;
