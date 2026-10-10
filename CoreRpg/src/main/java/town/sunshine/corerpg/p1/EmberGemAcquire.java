@@ -29,7 +29,9 @@ public final class EmberGemAcquire {
     private EmberGemAcquire() {}
 
     public static Cost craftCost() {
-        return new Cost(CRAFT_SHARD, 0, 0, CRAFT_BONE, CRAFT_COIN);
+        // D948: craft amounts from economy yml SoT (CRAFT_* stay golden mirrors for tests)
+        return new Cost(EmberEconomy.amount("C24", "shard"), 0, 0,
+                EmberEconomy.amount("C24", "bone"), EmberEconomy.amount("C24", "coin"));
     }
 
     public static int pity(PlayerData d) {

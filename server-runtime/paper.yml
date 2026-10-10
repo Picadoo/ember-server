@@ -68,6 +68,7 @@ world-settings:
     remove-corrupt-tile-entities: false
     use-chunk-inhabited-timer: true
     queue-light-updates: false
+    portal-search-radius: 128
     falling-block-height-nerf: 0
     tnt-entity-height-nerf: 0
     water-over-lava-flow-speed: 5
@@ -120,7 +121,6 @@ world-settings:
     despawn-ranges:
       soft: 32
       hard: 128
-    portal-search-radius: 128
     keep-spawn-loaded-range: 4
     auto-save-interval: -1
     nether-ceiling-void-damage: false

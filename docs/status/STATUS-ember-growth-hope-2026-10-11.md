@@ -430,3 +430,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D942–D947 ARCH SHIP · jar 1.65.404-d942
 - yml-SoT Stage0 inventory DESIGN (no mass rewrite); LedgerGlance.bagFull; glance unit test; modelGaps no fake FULL
+
+## D948–D951 ARCH SHIP · jar 1.65.405-d948
+- Stage1 thin: C24 craftCost + C20 craftShards ← amount(); EconomyTest pins; numbers unchanged

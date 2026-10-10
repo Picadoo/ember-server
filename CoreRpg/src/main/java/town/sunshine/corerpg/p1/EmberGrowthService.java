@@ -2193,7 +2193,7 @@ public final class EmberGrowthService implements Listener {
     }
 
     private boolean brandCraft(Player p, PlayerData d, boolean confirm) {
-        int need = EmberBrandRules.CRAFT_SHARDS;
+        int need = EmberBrandRules.craftShards(); // D949
         if (!confirm) {
             p.sendMessage(P + "§6烙纹合成：§f" + need + " 余烬碎片 §7→ §f1 余烬烙纹");
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,

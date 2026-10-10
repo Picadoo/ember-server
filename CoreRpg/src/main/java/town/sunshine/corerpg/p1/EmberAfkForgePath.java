@@ -26,9 +26,9 @@ public final class EmberAfkForgePath {
             return "§e挂机日满 · 精工还差料 · 胚§f" + blank + " §7骨§f" + bone + " §7· /corerpg p1 forge";
         }
         if (forgeGoal == EmberForgeGoal.BRAND) {
-            if (shard >= EmberBrandRules.CRAFT_SHARDS)
+            if (shard >= EmberBrandRules.craftShards())
                 return "§a挂机日满 · 碎够合成烙纹 · /corerpg p1 brand craft";
-            return "§e挂机日满 · 烙纹还差碎 §f" + Math.max(0, EmberBrandRules.CRAFT_SHARDS - shard)
+            return "§e挂机日满 · 烙纹还差碎 §f" + Math.max(0, EmberBrandRules.craftShards() - shard)
                     + " §7· /corerpg p1 brand menu";
         }
         if (shard >= 12) return "§a挂机日满 · 碎片够强化 · /corerpg p1 enhance";

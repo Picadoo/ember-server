@@ -210,9 +210,9 @@ public final class EmberRunPapi {
         return "胚差" + recipeGap(bl, blankHave) + "·骨差" + recipeGap(bo, boneHave);
     }
 
-    /** D432 %corerpg_p1_forge_gap_brand% — 烙纹合成碎差（镜像 EmberBrandRules.CRAFT_SHARDS=40）. */
+    /** D432 %corerpg_p1_forge_gap_brand% — 烙纹合成碎差（镜像 EmberBrandRules.craftShards()=40）. */
     static String forgeGapBrand(long shardHave) {
-        return String.valueOf(recipeGap(EmberBrandRules.CRAFT_SHARDS, shardHave));
+        return String.valueOf(recipeGap(EmberBrandRules.craftShards(), shardHave));
     }
 
     /** D432 %corerpg_p1_forge_gap_roll% — 随机锻胚/币差（4 胚 + 500 币）. */

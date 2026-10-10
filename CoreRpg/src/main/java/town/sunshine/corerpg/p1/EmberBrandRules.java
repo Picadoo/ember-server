@@ -9,7 +9,12 @@ public final class EmberBrandRules {
 
     public static final String MAT_BRAND = "mat_ember_brand";
     /** 40 余烬碎片 → 1 烙纹（D167 / 批 A 锁定） */
-    public static final int CRAFT_SHARDS = 40;
+    public static final int CRAFT_SHARDS = 40; // golden mirror; prefer craftShards()
+
+    /** D949: C20 shard cost from economy yml SoT. */
+    public static int craftShards() {
+        return EmberEconomy.amount("C20", "shard");
+    }
     /** 每件锻造次数上限（洗练与定向共用已用计数） */
     public static final int MAX_CHARGES = 13;
     /** T0 不开定向；T1/T2/T3 */
