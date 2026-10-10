@@ -628,3 +628,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1507–D1514 ARCH health · jar still 1.65.461-d1493
 - EmberCounters/Formula/Loadout/SourceMap/Economy tests PASS (no code change)
+
+## D1515–D1528 ARCH SHIP · jar 1.65.462-d1515
+- cmdRuns + joinLines skill next remain (chat/AB, not PAPI)

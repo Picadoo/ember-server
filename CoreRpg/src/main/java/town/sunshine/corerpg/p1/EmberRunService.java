@@ -3802,6 +3802,12 @@ public final class EmberRunService implements Listener {
             EmberRunDirector dd = cur.world == null ? null : byWorld.get(cur.world);
             p.sendMessage(P + "当前局 " + cur.runId + " · " + cur.state + (dd == null ? "" : " · " + dd.describe()));
         }
+        // D1516: 下一技能里程碑（chat/AB · 非 hope PAPI twin）
+        String sk = EmberSkillUnlock.nextHope(d, this);
+        if (sk != null && !sk.isEmpty()) {
+            p.sendMessage(P + sk);
+            try { p.sendActionBar(sk); } catch (Throwable ignored) { }
+        }
         if (admin) p.sendMessage(P + "§8admin: /corerpg p1 runs list | unlock | firstclear | starter");
         return true;
     }
@@ -3874,6 +3880,9 @@ public final class EmberRunService implements Listener {
         } else {
             out.add("§6§l[余烬服] §e欢迎回来 · 下一步：§f" + ChatColor.stripColor(nextStep(d)));
             out.add("§7本周精选 §f" + featuredShort() + "§7 · 右键门吏 · 灰钥或点下面的 [冒险页] 进本");
+            String sk2 = EmberSkillUnlock.nextHope(d, this); // D1517
+            if (sk2 != null && !sk2.isEmpty() && !sk2.contains("已齐"))
+                out.add("§7" + sk2);
         }
         return out;
     }
