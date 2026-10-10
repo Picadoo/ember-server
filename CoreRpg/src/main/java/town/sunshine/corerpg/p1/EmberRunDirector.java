@@ -507,6 +507,58 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D575: any arcane beam warn still armed (not yet spinning). */
+    boolean hasPendingArcane() {
+        long now = System.currentTimeMillis();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"arcane".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue; // spinning already
+            return true;
+        }
+        return false;
+    }
+
+    /** D575: pull a committed player outside the nearest arcane warn radius. */
+    boolean pathSpinOut(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingArcane()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Variety v = svc.maps() == null ? null : svc.maps().variety;
+        if (v == null) return false;
+        long now = System.currentTimeMillis();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        Location pl = p.getLocation();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"arcane".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            double d = t.affixOrigin.distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location o = best.affixOrigin;
+        double dx = pl.getX() - o.getX(), dz = pl.getZ() - o.getZ();
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        double safe = v.arcaneLength + 2.0;
+        if (dist >= safe) return false; // already clear of beam reach
+        Vector dir;
+        if (dist < 0.15) {
+            // on pivot: step opposite mid-sweep
+            double mid = best.arcaneStart + (best.arcaneSign >= 0 ? 1 : -1) * AffixArcane.sweepRad(v) / 2.0;
+            dir = new Vector(Math.cos(mid + Math.PI), 0, Math.sin(mid + Math.PI));
+        } else {
+            dir = new Vector(dx, 0, dz).normalize();
+        }
+        Location to = new Location(w, o.getX() + dir.getX() * safe, pl.getY(), o.getZ() + dir.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.5f);
+        return true;
+    }
+
     /** D574: any firechain tether (smoke warn or live burn) is linked. */
     boolean hasPendingFirechain() {
         for (Tracked t : mobs.values()) {
@@ -1417,6 +1469,7 @@ final class EmberRunDirector {
             t.arcaneHit.clear();
             t.affixAt = AffixCycle.after(now, v.arcaneWarn);
             w.playSound(o, Sound.BLOCK_NOTE_PLING, 0.6f, 0.8f);
+            EmberSpinPath.maybeAfterArcane(s); // D575
             return;
         }
         if ("firechain".equals(t.affix)) {

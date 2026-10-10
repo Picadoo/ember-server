@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("spinpath".equals(sub) || "避旋路径".equals(sub)) return spinPathCmd(s, args); // D575
+        if ("spin".equals(sub) && args.length == 2) return spinGoCmd(s); // D575
         if ("snappath".equals(sub) || "断链路径".equals(sub)) return snapPathCmd(s, args); // D574
         if ("snap".equals(sub) && args.length == 2) return snapGoCmd(s); // D574
         if ("veilpath".equals(sub) || "避毒路径".equals(sub)) return veilPathCmd(s, args); // D573
@@ -1697,6 +1699,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("spinseed".equals(sub)) return spinSeedCmd(s, args); // D575
         if ("snapseed".equals(sub)) return snapSeedCmd(s, args); // D574
         if ("veilseed".equals(sub)) return veilSeedCmd(s, args); // D573
         if ("sidestepseed".equals(sub)) return sidestepSeedCmd(s, args); // D572
@@ -5252,6 +5255,62 @@ public final class EmberCommand {
             EmberSnapPath.maybeProbe(t);
             s.sendMessage(P + "已触发断链路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingFirechain(t) ? "（有链）" : "（无链）"));
+            return true;
+    }
+
+    private boolean spinPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSpinPath.glance(EmberSpinPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c避旋路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSpinPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c避旋路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSpinPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSpinPath.get(d);
+                    if (EmberSpinPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSpinPath.label(cur) + " · 改路径再 /corerpg p1 spinpath");
+                    else EmberSpinPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSpinPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 spinpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSpinPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean spinGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathSpinOut(p)) p.sendMessage(P + "无法避旋（无旋光预警/已在圈外/未进本）");
+            else p.sendMessage(P + "§a避旋·手点 §7已退到扫弧外");
+            return true;
+    }
+
+    private boolean spinSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSpinPath.maybeProbe(t);
+            s.sendMessage(P + "已触发避旋路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingArcane(t) ? "（有旋）" : "（无旋）"));
             return true;
     }
 }
