@@ -214,3 +214,7 @@ D873–D890 / D891–D895 成长希望环未新增计数器字面量；覆盖率
 ### D967 · 2026-10-11 再验
 
 `EmberCountersTest` PASS after D942–D965（yml-SoT Stage0/1 + ledger glance）。无新 `p1_` / `p4_` 计数器字面量需登记。
+
+### D1029 · 2026-10-11 再验（Stage1 收口后）
+
+`EmberCountersTest` PASS after D1016–D1028（C17 spendCoin；无新计数器键）。

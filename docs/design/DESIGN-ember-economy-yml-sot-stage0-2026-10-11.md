@@ -1,6 +1,6 @@
 # DESIGN · 经济 yml 真源搬家 · Stage0 盘点（2026-10-11 · D942）
 
-> **状态：文档 only · 不改数值 · 不开大搬家。**  
+> **状态：Stage0 盘点已落实；Stage1 读表 **COMPLETE**（D1023 / D1016–D1028）。大搬家仍不开。**  
 > **上游：** ARCH §S2；`DESIGN-ember-v1-economy-yml-2026-10-06.md`（E1 SoT D224 / E3 p1sim D225）；`REG-ember-source-sink-cap-2026-10-05.md`；D933–D941 健康窗。  
 > **本窗产出：** 下一刀「全量发放/价目收进 economy yml」的**范围清单与禁区**，供以后开 Stage1 时照单施工。
 

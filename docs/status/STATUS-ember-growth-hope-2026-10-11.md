@@ -472,3 +472,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1016–D1028 ARCH SHIP · jar 1.65.416-d1016
 - C17 life offer/cook/repair ← amount()+spendCoin; C19 Stage0 DESIGN (no gacha change); Stage1 COMPLETE
+
+## D1029 ARCH docs · Counters recheck PASS post-Stage1
