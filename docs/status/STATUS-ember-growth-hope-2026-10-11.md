@@ -619,3 +619,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1465–D1478 ARCH SHIP · jar 1.65.459-d1465
 - MapCardCue nextMissing; ShortPath FC remain count AB
+
+## D1479–D1492 ARCH SHIP · jar 1.65.460-d1479
+- firstclear empty → focus/target align + chase buttons

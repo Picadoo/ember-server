@@ -138,4 +138,11 @@ public class EmberLoadoutTest {
         assertEquals("已达 觉醒III（最高）",
                 EmberLoadout.compute(t, blade("burst", 3, 0, 0, 9), charm("burst", 3, 0, 0, 9), 20).nextAwakeningHint());
     }
+
+    @Test public void awakeningRemainShort() {
+        assertEquals("觉醒满",
+                EmberLoadout.compute(t, blade("burst", 3, 0, 0, 9), charm("burst", 3, 0, 0, 9), 20).awakeningRemain());
+        EmberLoadout l = EmberLoadout.compute(t, blade("scorch", 2, 0, 0, 6), charm("scorch", 2, 0, 0, 5), 20);
+        assertEquals("觉醒II 缺：护符 +5→+6", l.awakeningRemain());
+    }
 }

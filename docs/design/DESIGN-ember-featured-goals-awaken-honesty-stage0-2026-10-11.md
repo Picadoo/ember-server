@@ -22,5 +22,6 @@ setchase-mapid（SC/MI/CD）已近饱和。精选入场、周目标进度、觉�
 | ON1 | 在线档还差分 | Sign claimOnline |
 | MC1 | 入场名片缺件 | MapCardCue |
 | SX1 | 短征首通还差 | ShortPath AB |
+| FC1 | 首通空态对齐 | cmdFirstClear |
 
 不改奖励数、周帽、掉率、通关闸。

@@ -3508,7 +3508,28 @@ public final class EmberRunService implements Listener {
         EmberRunRules.Ledger l = store.ledger(p.getUniqueId());
         List<EmberRunRules.Row> waiting = new ArrayList<EmberRunRules.Row>();
         for (EmberRunRules.Row r : l.open()) if (EmberRunRules.ST_AWAIT.equals(r.status)) waiting.add(r);
-        if (waiting.isEmpty()) { p.sendMessage(P + "没有待领取的首通自选。"); return true; }
+        if (waiting.isEmpty()) { // D1480
+            p.sendMessage(P + "没有待领取的首通自选。");
+            PlayerData d0 = data(p.getUniqueId());
+            String t0 = target(d0);
+            int focus = EmberSetFocus.get(d0);
+            String fk = EmberSetFocus.familyKey(focus);
+            if (fk != null && t0 != null && fk.equals(t0))
+                p.sendMessage(P + "§a掉落目标=焦点 §f" + EmberItemData.familyName(t0) + " §7· 可刷图凑件");
+            else if (fk != null)
+                p.sendMessage(P + "§e焦点 §f" + EmberSetFocus.label(focus)
+                        + (t0 == null ? " §7· 掉落未选" : " §7≠ 掉落 §f" + EmberItemData.familyName(t0)));
+            try {
+                p.sendActionBar(fk != null && t0 != null && fk.equals(t0)
+                        ? ("§a首通空 · 目标=焦点 §f" + EmberItemData.familyName(t0))
+                        : "§7首通空 · 无待领");
+            } catch (Throwable ignored) { }
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "缺口一览", "AQUA"},
+                    new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷同族", "GREEN"},
+                    new String[]{"[掉落目标]", "/corerpg p1 target", "对齐焦点", "GOLD"});
+            return true;
+        }
         if (args.length < 3) {
             boolean fixed = false;
             for (EmberRunRules.Row r : waiting) {
