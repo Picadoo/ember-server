@@ -404,6 +404,11 @@ public final class EmberGrowthService implements Listener {
         plugin.getLogger().info("[P1 growth] " + p.getName() + " picked " + n.id + (coin > 0 ? " (learned, " + coin + " coin)" : ""));
         String gated = n.activeWith(runs.loadouts().get(p).activeSet) ? "" : " §e（要穿" + EmberItemData.familyName(n.set) + "套才生效）";
         p.sendMessage(P + "§a已点上「" + n.name + "」§7（第 " + n.row + " 排 · " + r.name + "）" + gated);
+        try { p.sendActionBar("§a天赋 · §f" + n.name); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7天赋下一环：", // D900
+                new String[]{"[成套追]", "/corerpg p1 setfocus", "穿对套生效", "GOLD"},
+                new String[]{"[进冒险]", "/ember_p1_adventure", "体感天赋", "GREEN"},
+                new String[]{"[天赋页]", "/corerpg p1 spec", "再点一排", "AQUA"});
         openMenu(p, MENU);
         return true;
     }
@@ -430,6 +435,11 @@ public final class EmberGrowthService implements Listener {
         runs.flushData(p.getUniqueId());
         plugin.getLogger().info("[P1 growth] " + p.getName() + " respec #" + (used + 1) + " cost " + cost);
         p.sendMessage(P + "§a天赋已重置§7（专精点全退" + (cost > 0 ? "，扣 " + cost + " 币" : "，这次免费") + "）");
+        try { p.sendActionBar("§e天赋已重置 · 专精点退回"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7重置下一环：", // D901
+                new String[]{"[再点天赋]", "/corerpg p1 spec", "重配三排", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花币养成", "GOLD"},
+                new String[]{"[冒险]", "/ember_p1_adventure", "先刷再点", "AQUA"});
         openMenu(p, MENU);
         return true;
     }

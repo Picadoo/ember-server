@@ -401,3 +401,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D891–D896 SHIP · jar 1.65.395-d891
 - Echo/Brand afterSet; shape lock; challenge forge; gempath mapfarm; REG S1 note
+
+## D897–D902 SHIP · jar 1.65.396-d897
+- Raid forge; skill shape/dir next; talent pick/reset next; S1 counters recheck

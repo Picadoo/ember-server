@@ -373,15 +373,19 @@ public final class SkillService implements Listener {
             ls.saveState(player);
             town.sunshine.corerpg.p1.EmberSlashReady.arm(player, st.skillCdUntil); // D479
         }
+        String sn = town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id);
         if (changed) {
-            player.sendMessage(PREFIX + ChatColor.GREEN + "烬斩符文 → "
-                    + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
+            player.sendMessage(PREFIX + ChatColor.GREEN + "烬斩符文 → " + sn
                     + ChatColor.GRAY + " · 充能转满（" + cd + "s）");
         } else {
-            player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 "
-                    + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
+            player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 " + sn
                     + ChatColor.GRAY + " · 充能仍转满（" + cd + "s）");
         }
+        try { player.sendActionBar("§e烬斩 · §f" + sn); } catch (Throwable ignored) { }
+        town.sunshine.corerpg.ConfirmTokens.sendButtons(player, PREFIX + "§7下一步：", // D898
+                new String[]{"[进冒险]", "/ember_p1_adventure", "体感符文", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "GOLD"},
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装试几何", "AQUA"});
     }
 
     /** D219: /corerpg skill dir <forward|back> — hub only; puts 身法 on full CD. */
@@ -417,15 +421,19 @@ public final class SkillService implements Listener {
             if (def != null) cd = Math.max(0, def.cooldownSeconds);
             flex.putEquippedOnFullCooldown(player);
         }
+        String dn = town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id);
         if (changed) {
-            player.sendMessage(PREFIX + ChatColor.GREEN + "身法方向 → "
-                    + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id)
+            player.sendMessage(PREFIX + ChatColor.GREEN + "身法方向 → " + dn
                     + ChatColor.GRAY + " · 身法冷却转满（" + cd + "s）");
         } else {
-            player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 "
-                    + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id)
+            player.sendMessage(PREFIX + ChatColor.YELLOW + "已是 " + dn
                     + ChatColor.GRAY + " · 身法冷却仍转满（" + cd + "s）");
         }
+        try { player.sendActionBar("§e身法 · §f" + dn); } catch (Throwable ignored) { }
+        town.sunshine.corerpg.ConfirmTokens.sendButtons(player, PREFIX + "§7下一步：", // D899
+                new String[]{"[进冒险]", "/ember_p1_adventure", "体感身法", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "GOLD"},
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换套装身法", "AQUA"});
     }
 
     public void cmdInfo(Player player) {

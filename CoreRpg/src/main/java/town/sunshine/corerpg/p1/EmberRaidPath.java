@@ -217,9 +217,10 @@ public final class EmberRaidPath {
             if (m != null && m.weeklyCap > 0) {
                 int used = EmberRaidService.weekCount(d, m, week);
                 if (used < m.weeklyCap) {
-                    ConfirmTokens.sendButtons(p, EmberRunService.P + "§7路径团本再开：",
+                    ConfirmTokens.sendButtons(p, EmberRunService.P + "§7路径团本再开：", // D897
                             new String[]{enterLabel(id), enterCmd(id), "剩 " + (m.weeklyCap - used) + " 次", "GREEN"},
-                            new String[]{"[换路径]", "/corerpg p1 raidpath", "改焦点", "GRAY"});
+                            new String[]{"[工坊]", "/corerpg p1 forge", "花团本料", "GOLD"},
+                            new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "AQUA"});
                 }
             }
         }
