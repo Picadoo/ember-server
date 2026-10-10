@@ -133,6 +133,19 @@ public final class EmberRecruitService {
             if (EmberRunBridges.hasTeam(p)) { p.sendMessage(P() + ChatColor.RED + "你已经在一支队伍里了，先退出再申请。"); return true; }
             // E-review #5: DP's own line already carries [同意] [拒绝] — no second [同意] from us
             p.performCommand("dungeon-team request join " + l.getName());
+            // D513: leader recruit path OPEN → auto-accept shortly
+            PlayerData ld = runs.dataOf(l.getUniqueId());
+            if (EmberRecruitPath.shouldAutoAccept(ld)) {
+                final Player leader = l;
+                final String applicant = p.getName();
+                Bukkit.getScheduler().runTaskLater(runs.plugin(), () -> {
+                    if (!leader.isOnline()) return;
+                    if (!EmberRunBridges.teamLeader(leader)) return;
+                    if (EmberRunBridges.hasTeam(Bukkit.getPlayerExact(applicant))) return;
+                    leader.performCommand("dungeon-team request accept " + applicant);
+                    leader.sendMessage(P() + "§a招募·敞开 §7已自动同意 §f" + applicant);
+                }, 8L);
+            }
             return true;
         }
         if (args.length >= 3 && "list".equalsIgnoreCase(args[2])) { show(p, true); return true; }
@@ -219,6 +232,7 @@ public final class EmberRecruitService {
         if (!p.isOnline()) return;
         PlayerData d = runs.dataOf(p.getUniqueId());
         if (!runs.progressFlag(d, "q07") || live().isEmpty()) return;
+        if (EmberRecruitPath.shouldMuteLoginBoard(d)) return; // D513 mute path
         show(p, false);
     }
 

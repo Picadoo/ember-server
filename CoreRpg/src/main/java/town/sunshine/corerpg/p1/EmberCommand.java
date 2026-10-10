@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("recruitpath".equals(sub) || "招募路径".equals(sub)) { // D513 raid recruit accept path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q07");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberRecruitPath.glance(EmberRecruitPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c招募路径需本人首通 Q07。");
+                    return true;
+                }
+                EmberRecruitPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c招募路径需本人首通 Q07。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberRecruitPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberRecruitPath.get(d);
+                    if (EmberRecruitPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRecruitPath.label(cur) + " · 改路径再 /corerpg p1 recruitpath");
+                    else EmberRecruitPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberRecruitPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 recruitpath <open|gate|mute|clear>");
+                return true;
+            }
+            EmberRecruitPath.applyAndReply(p, id);
+            return true;
+        }
         if ("barpath".equals(sub) || "药栏路径".equals(sub)) { // D512 potion hotbar fill path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
