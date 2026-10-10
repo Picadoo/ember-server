@@ -268,6 +268,52 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("cookpath".equals(sub) || "代烤路径".equals(sub)) { // D543 life cook path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCookPath.glance(EmberCookPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c代烤路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberCookPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c代烤路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberCookPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberCookPath.get(d);
+                    if (EmberCookPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCookPath.label(cur) + " · 改路径再 /corerpg p1 cookpath");
+                    else EmberCookPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberCookPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 cookpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberCookPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("cook".equals(sub) && args.length == 2) { // D543 ASK button (not /corerpg life cook)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.LifeService life = runs == null ? null : runs.plugin().getLifeService();
+            if (life == null) { p.sendMessage(P + "生活服务未加载"); return true; }
+            int ok = life.pathCook(p);
+            if (ok <= 0) p.sendMessage(P + "无法代烤（无生鱼、缺币、或在副本内）");
+            else p.sendMessage(P + "§a代烤·手点 §7已烤 §f" + ok + " §7条 → 炭烤鱼");
+            return true;
+        }
         if ("makeuppath".equals(sub) || "补签路径".equals(sub)) { // D542 sign makeup path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -821,6 +867,20 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("cookseed".equals(sub)) { // D543 admin smoke: give raw fish + coin
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs.plugin();
+            if (plg.getNiBridge() == null || !plg.getNiBridge().giveNiItem(t, "fish_ember_cod", 3)) {
+                s.sendMessage(P + "发放生鱼失败"); return true;
+            }
+            PlayerData pd = plg.getDataStore().get(t.getUniqueId());
+            if (pd != null) { pd.addCoin(20); plg.getDataStore().flushMutation(t.getUniqueId()); }
+            s.sendMessage(P + "已发放生鱼×3 → " + t.getName());
+            EmberCookPath.maybeAfterProgress(t);
             return true;
         }
         if ("makeupseed".equals(sub)) { // D542 admin smoke: force makeup-eligible state

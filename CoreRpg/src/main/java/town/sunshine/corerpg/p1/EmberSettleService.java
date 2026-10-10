@@ -409,6 +409,7 @@ public final class EmberSettleService {
                 if (p.isOnline()) EmberScrapPath.maybeAfterProgress(p); // D538 scrap path
                 if (p.isOnline()) EmberDosePath.maybeAfterProgress(p); // D539 dose path
                 if (p.isOnline()) EmberBankPath.maybeAfterProgress(p); // D540 bank path
+                if (p.isOnline()) EmberCookPath.maybeAfterProgress(p); // D543 cook path
             }, 40L);
             if (in.firstClear != null && runs.maps().challenge != null && m.key.equals(runs.maps().challenge.requires)) endOfP1(p);
         }

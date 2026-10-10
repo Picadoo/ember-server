@@ -901,6 +901,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             getServer().getScheduler().runTaskLater(this, () -> {
                 if (mkp.isOnline()) town.sunshine.corerpg.p1.EmberMakeupPath.maybeAfterProgress(mkp); // D542
             }, 160L);
+        {
+            final Player ckp = player;
+            getServer().getScheduler().runTaskLater(this, () -> {
+                if (ckp.isOnline()) town.sunshine.corerpg.p1.EmberCookPath.maybeAfterProgress(ckp); // D543
+            }, 165L);
+        }
         }
         }
         }

@@ -358,6 +358,31 @@ public final class LifeService implements Listener {
         return true;
     }
 
+    /** D543: count cookable fish units in backpack (capped by cookMax). */
+    public int countPathCook(Player p) {
+        if (p == null || ni == null) return 0;
+        int total = 0;
+        for (String in : cookInputs) {
+            int have = ni.countInInventory(p, in);
+            if (have > 0) total += have;
+            if (total >= cookMax) return cookMax;
+        }
+        return total;
+    }
+
+    /** D543: path AUTO/ASK — cook fish → food (town-safe; skips P1 run worlds). Returns cooked count. */
+    public int pathCook(Player p) {
+        if (p == null) return 0;
+        if (town.sunshine.corerpg.p1.EmberMode.active() && town.sunshine.corerpg.p1.EmberMode.isP1World(p.getWorld())) return 0;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        if (d == null) return 0;
+        int before = countPathCook(p);
+        if (before <= 0) return 0;
+        cook(p, d);
+        int after = countPathCook(p);
+        return Math.max(0, before - after);
+    }
+
     private void cook(Player p, PlayerData d) {
         int total = 0;
         Map<String, Integer> take = new LinkedHashMap<String, Integer>();
