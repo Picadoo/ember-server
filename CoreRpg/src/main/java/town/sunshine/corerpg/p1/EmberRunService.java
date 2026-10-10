@@ -701,6 +701,20 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D563: short Strength on boss stagger / break. */
+    public static final int BURST_TICKS = 20 * 3; // 3s
+
+    public boolean pathBurst(Player p) {
+        if (p == null || !p.isOnline()) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                org.bukkit.potion.PotionEffectType.INCREASE_DAMAGE, BURST_TICKS, 0, false, false), true);
+        return true;
+    }
+
     /** D562: short Speed after a non-final room clear. */
     public static final int RALLY_TICKS = 20 * 4; // 4s
 
@@ -1359,6 +1373,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberDuckPath.scheduleOfferAfterQ01(p); // D560 duck path
                         if ("q01".equals(g.id)) EmberThawPath.scheduleOfferAfterQ01(p); // D561 thaw path
                         if ("q01".equals(g.id)) EmberRallyPath.scheduleOfferAfterQ01(p); // D562 rally path
+                        if ("q01".equals(g.id)) EmberBurstPath.scheduleOfferAfterQ01(p); // D563 burst path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

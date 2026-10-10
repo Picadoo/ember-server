@@ -2216,6 +2216,7 @@ final class EmberRunDirector {
         svc.tellRun(s, "§a破招！§c" + bossDef().name + " §7的「" + sk.name + "」被打断"
                 + (ms > 0 ? " §e踉跄 " + fmt(sk.breakStun) + " 秒 §7· 趁现在输出" : ""));
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s break %s %.0f/%.0f stun %.1fs", s.runId, sk.name, done, need, sk.breakStun));
+        EmberBurstPath.maybeAfterStagger(s); // D563
         flashCounterplaySuccess(CounterplayKind.BREAK);
     }
 
@@ -2245,6 +2246,7 @@ final class EmberRunDirector {
         w.playSound(at, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.8f, 0.6f);
         svc.tellRun(s, "§a落空！§c" + bossDef().name + " §e踉跄 " + fmt(done.whiffStun) + " 秒 §7· 破绽，趁现在输出");
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s whiff stun %s %.1fs", s.runId, done.name, done.whiffStun));
+        EmberBurstPath.maybeAfterStagger(s); // D563
         flashCounterplaySuccess(CounterplayKind.WHIFF);
     }
 
@@ -2259,6 +2261,7 @@ final class EmberRunDirector {
         w.playSound(at, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.7f);
         svc.tellRun(s, "§a撞墙！§c" + bossDef().name + " §e眩晕 " + fmt(done.wallStun) + " 秒 §7· 破绽，趁现在输出");
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s wall stun %s %.1fs", s.runId, done.name, done.wallStun));
+        EmberBurstPath.maybeAfterStagger(s); // D563
         flashCounterplaySuccess(CounterplayKind.WALL);
     }
 
