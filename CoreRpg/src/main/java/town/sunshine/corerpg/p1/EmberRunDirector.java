@@ -501,6 +501,35 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D561: player currently carries frost-affix slow. */
+    boolean hasFrostSlow(Player p) {
+        if (p == null || svc.maps() == null) return false;
+        EmberRunMaps.Variety v = svc.maps().variety;
+        if (v == null) return false;
+        for (PotionEffect cur : p.getActivePotionEffects()) {
+            if (cur.getType().equals(PotionEffectType.SLOW)
+                    && AffixFrost.ownSlow(cur.getAmplifier(), cur.getDuration(), v)) return true;
+        }
+        return false;
+    }
+
+    /** D561: strip frost-affix slow from a committed player. */
+    boolean pathThawFrost(Player p) {
+        if (p == null || !p.isOnline() || s == null || !s.open()) return false;
+        if (!s.committed.contains(p.getUniqueId())) return false;
+        if (svc.maps() == null) return false;
+        EmberRunMaps.Variety v = svc.maps().variety;
+        if (v == null) return false;
+        for (PotionEffect cur : p.getActivePotionEffects()) {
+            if (cur.getType().equals(PotionEffectType.SLOW)
+                    && AffixFrost.ownSlow(cur.getAmplifier(), cur.getDuration(), v)) {
+                p.removePotionEffect(PotionEffectType.SLOW);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** D560: molten corpse blast is armed and not yet landed. */
     boolean hasPendingMolten() {
         return moltenOrigin != null && moltenWarnAt > 0 && moltenBoomAt > System.currentTimeMillis();
@@ -869,6 +898,7 @@ final class EmberRunDirector {
                 if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
                 if (AffixFrost.inAura(p.getLocation().distanceSquared(c), v)) {
                     p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, AffixFrost.slowTicks(v), v.frostAmplifier, false, true), true);
+                    EmberThawPath.maybeAfterFrost(p); // D561
                 } else {
                     for (PotionEffect cur : p.getActivePotionEffects()) {
                         if (cur.getType().equals(PotionEffectType.SLOW) && AffixFrost.ownSlow(cur.getAmplifier(), cur.getDuration(), v)) {

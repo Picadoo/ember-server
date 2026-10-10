@@ -268,6 +268,51 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("thawpath".equals(sub) || "解冻路径".equals(sub)) { // D561 frost-thaw path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberThawPath.glance(EmberThawPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c解冻路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberThawPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c解冻路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberThawPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberThawPath.get(d);
+                    if (EmberThawPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberThawPath.label(cur) + " · 改路径再 /corerpg p1 thawpath");
+                    else EmberThawPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberThawPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 thawpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberThawPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("thaw".equals(sub) && args.length == 2) { // D561 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            boolean ok = runs.pathThawFrost(p) || EmberThawPath.thawLocal(p);
+            if (!ok) p.sendMessage(P + "无法解冻（无寒霜减速）");
+            else p.sendMessage(P + "§a解冻·手点 §7已解除寒霜减速");
+            return true;
+        }
         if ("duckpath".equals(sub) || "闪爆路径".equals(sub)) { // D560 molten-blast duck path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1624,6 +1669,20 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("thawseed".equals(sub)) { // D561 admin smoke: apply frost-shaped slow then probe
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberRunMaps.Variety v = EmberThawPath.variety();
+            int amp = v == null ? 1 : v.frostAmplifier;
+            int ticks = v == null ? 100 : town.sunshine.corerpg.p1.encounter.AffixFrost.slowTicks(v);
+            t.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                    org.bukkit.potion.PotionEffectType.SLOW, ticks, amp, false, true), true);
+            EmberThawPath.maybeProbe(t);
+            s.sendMessage(P + "已施加寒霜形减速并触发解冻路径 → " + t.getName()
+                    + (EmberThawPath.hasLocalFrost(t) || (runs != null && runs.hasFrostSlow(t)) ? "（仍减速）" : "（已解/无）"));
             return true;
         }
         if ("duckseed".equals(sub)) { // D560 admin smoke: probe duck path
