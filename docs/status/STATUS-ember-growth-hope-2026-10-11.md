@@ -770,3 +770,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D2061–D2074 upgrade commit loop (jar 1.65.504-d2061)
 - UpgradeLoop piece-aware next + ForgeGoal.UPGRADE=9
+
+## D2075–D2084 enhance piece-aware next (jar 1.65.505-d2075)
+- won path: quality/refine/lock by piece

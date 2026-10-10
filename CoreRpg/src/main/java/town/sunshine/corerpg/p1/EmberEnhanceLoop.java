@@ -40,11 +40,14 @@ public final class EmberEnhanceLoop {
             return;
         }
         if (won) {
-            p.sendMessage(P + "§e强化成功 §7· 选下一步花法（不改强化价/成色/精工价）：");
-            ConfirmTokens.sendButtons(p, P, // D886
+            p.sendMessage(P + "§e强化成功 §7· 承诺同件下一槽（不改强化/成色/精工价）：");
+            EmberItemData after = firstAfter(list);
+            // D2076: piece-aware quality/refine (same spirit as UpgradeLoop)
+            String[] b = nextCraftBtn(after);
+            String[] c = nextCraftBtn2(after);
+            ConfirmTokens.sendButtons(p, P + "§7强化下一环：",
                     new String[]{"[再强化]", "/corerpg p1 enhance", "手持件再冲一档", "GREEN"},
-                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"},
-                    new String[]{"[去成色]", "/corerpg p1 quality", "成色预览", "AQUA"});
+                    b, c);
         } else {
             // D1232: fail remain honesty（非 celebration twin）
             String rem = "";
@@ -150,6 +153,35 @@ public final class EmberEnhanceLoop {
         return pl instanceof CoreRpgPlugin ? (CoreRpgPlugin) pl : null;
     }
 
+
+    static EmberItemData firstAfter(List<TxnItem> list) {
+        if (list == null) return null;
+        for (TxnItem t : list) {
+            if (t != null && t.after != null) return t.after;
+        }
+        return null;
+    }
+
+    /** Prefer quality, else refine, else setchase. */
+    static String[] nextCraftBtn(EmberItemData after) {
+        if (after != null && EmberUpgradeRules.qualityCost(after.quality) != null)
+            return new String[]{"[去成色]", "/corerpg p1 quality", "确定升成色", "YELLOW"};
+        if (after != null && EmberUpgradeRules.refineCost(after.craft) != null)
+            return new String[]{"[去精工]", "/corerpg p1 refine", "确定升精工", "AQUA"};
+        return new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"};
+    }
+
+    static String[] nextCraftBtn2(EmberItemData after) {
+        boolean q = after != null && EmberUpgradeRules.qualityCost(after.quality) != null;
+        boolean r = after != null && EmberUpgradeRules.refineCost(after.craft) != null;
+        if (q && r)
+            return new String[]{"[去精工]", "/corerpg p1 refine", "成色后可精工", "AQUA"};
+        if (q || r)
+            return new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"};
+        String sl = after != null && "charm".equals(after.slot) ? "charm" : "blade";
+        return new String[]{"[锁定洗练]", "/corerpg p1 reroll " + sl + " shard lock", "词条冲档", "BLUE"};
+    }
+
     static boolean leveled(List<TxnItem> list) {
         if (list == null) return true; // admin default = success set
         for (TxnItem t : list) {
@@ -165,7 +197,7 @@ public final class EmberEnhanceLoop {
     }
 
     public static String followHint(boolean won) {
-        return won ? "[再强化]|[去成色]|[去精工]" : "[再试一次]|[去成色]|[去精工]";
+        return won ? "[再强化]|[去成色]|[去精工]|[锁定洗练]" : "[再试一次]|[去成色]|[去精工]";
     }
 
     public static String chatLine(boolean won) {
