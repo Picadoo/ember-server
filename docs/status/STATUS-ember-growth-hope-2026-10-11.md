@@ -705,3 +705,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1856–D1869 SHIP · jar 1.65.485-d1856
 - firstclear pending count AB; post-forgeroll Stage0
+
+## D1870 ARCH
+- EmberSourceMapTest + EmberCountersTest PASS (live jar still 1.65.485-d1856)
