@@ -1663,6 +1663,17 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D509 | CoreRpg **1.65.200-d509** / bv 未抬 | 成长花样·连战休整路径 **PASS**：`EmberRestPath` full/light/bare 阶段回血 clamp · **≠抬 heal 表** · 冒烟 FreshQ1045 · `B-rest-path` · `58e5af2b` · STATUS `STATUS-ember-rest-path-d509-2026-10-10.md`。 |
 | D510 | CoreRpg **1.65.201-d510** / bv 未抬 | 成长花样·连战间歇路径 **PASS**：`EmberBreakPath` full/short/snap 间歇秒 clamp · **≠抬 break 表 · ≠D509 双胞** · 冒烟 FreshQ1046 · `B-break-path` · `c2a43085` · STATUS `STATUS-ember-break-path-d510-2026-10-10.md`。 |
 | D511 | CoreRpg **1.65.202-d511** / bv 未抬 | 成长花样·深渊层费路径 **PASS**：`EmberFeePath` coin/mark/auto 支付偏好 · **≠改费用表** · 冒烟 FreshQ1047 · `B-fee-path` · `3e1dc95c` · STATUS `STATUS-ember-fee-path-d511-2026-10-10.md`。 |
+| D512 | CoreRpg **1.65.203-d512** / bv 未抬 | 成长花样·药栏路径 **PASS**：`EmberBarPath` right/left/key5 药水热栏落点 · **≠备药双胞** · 冒烟 FreshQ1048b · `B-bar-path` · `f09f301c` · STATUS `STATUS-ember-bar-path-d512-2026-10-10.md`。 |
+| D513 | CoreRpg **1.65.204-d513** / bv 未抬 | 成长花样·招募路径 **PASS**：`EmberRecruitPath` open/gate/mute 团本同意策略 · **≠ModePath双胞** · 冒烟 FreshQ1049a · `B-recruit-path` · `a2453872` · STATUS `STATUS-ember-recruit-path-d513-2026-10-10.md`。 |
+| D514 | CoreRpg **1.65.205-d514** / bv 未抬 | 成长花样·日委路径 **PASS**：`EmberDailyPath` light/full/flex 清委追猎 · **≠短本/花样委托双胞** · 冒烟 FreshQ1050 · `B-daily-path` · `c935e741` · STATUS `STATUS-ember-daily-path-d514-2026-10-10.md`。 |
+| D515 | CoreRpg **1.65.206-d515** / bv 未抬 | 成长花样·补领路径 **PASS**：`EmberClaimPath` auto/hold/brief 到账时机 · **≠日委/仓库双胞** · 冒烟 FreshQ1051 · `B-claim-path` · `693cedad` · STATUS `STATUS-ember-claim-path-d515-2026-10-10.md`。 |
+| D516 | CoreRpg **1.65.207-d516** / bv 未抬 | 成长花样·好友路径 **PASS**：`EmberFriendPath` open/gate/busy 申请策略 · **≠招募双胞** · 冒烟 FreshQ1052a · `B-friend-path` · `0d3caee7` · STATUS `STATUS-ember-friend-path-d516-2026-10-10.md`。 |
+| D517 | CoreRpg **1.65.208-d517** / bv 未抬 | 成长花样·换装路径 **PASS**：`EmberEquipPath` keep/quick/bold 自动换装 · **≠补领/工坊双胞** · 冒烟 FreshQ1053 · `B-equip-path` · `9e7aa8be` · STATUS `STATUS-ember-equip-path-d517-2026-10-10.md`。 |
+| D518 | CoreRpg **1.65.209-d518** / bv 未抬 | 成长花样·在线路路径 **PASS**：`EmberOnlinePath` auto/ask/mute 里程碑领奖 · **≠补领双胞 ≠AFK速率** · 冒烟 FreshQ1054 · `B-online-path` · `c7716652` · STATUS `STATUS-ember-online-path-d518-2026-10-10.md`。 |
+| D519 | CoreRpg **1.65.210-d519** / bv 未抬 | 成长花样·硬本路径 **PASS**：`EmberChallengePath` prefer/easy/follow 已通图默认 · **≠精选双胞** · 冒烟 FreshQ1055b · `B-challenge-path` · `f7f3016c` · STATUS `STATUS-ember-challenge-path-d519-2026-10-10.md`。 |
+| D520 | CoreRpg **1.65.211-d520** / bv 未抬 | 成长花样·签到路径 **PASS**：`EmberSignPath` auto/ask/mute 上线签到 · **≠在线路双胞** · 冒烟 FreshQ1056 · `B-sign-path` · `6a4f40c0` · STATUS `STATUS-ember-sign-path-d520-2026-10-10.md`。 |
+| D521 | CoreRpg **1.65.212-d521** / bv 未抬 | 成长花样·周标路径 **PASS**：`EmberGoalPath` featured/abyss/raid/bounty 周焦点 · **≠日委/精选/短本双胞** · 冒烟 FreshQ1057 · `B-goal-path` · `0bab4faf` · STATUS `STATUS-ember-goal-path-d521-2026-10-10.md`。 |
+| D522 | CoreRpg **1.65.213-d522** / bv 未抬 | 成长花样·图录路径 **PASS**：`EmberCodexPath` auto/ask/mute 图录阶段领奖 · **≠签到/在线/补领双胞** · 冒烟 FreshQ1059 · `B-codex-path` · `a877887c` · STATUS `STATUS-ember-codex-path-d522-2026-10-10.md`。 |
 
 
 

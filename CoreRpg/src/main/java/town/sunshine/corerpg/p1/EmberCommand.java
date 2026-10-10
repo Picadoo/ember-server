@@ -248,6 +248,62 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("codexseed".equals(sub)) { // D522 admin smoke: register 5 drop entries so stage-5 is claimable
+            if (s instanceof Player && !s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            if (runs == null) { s.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            String[][] kinds = new String[][] {
+                {"none","blade","0"}, {"none","charm","0"},
+                {"scorch","blade","1"}, {"scorch","charm","1"}, {"burst","blade","1"}
+            };
+            int n = 0;
+            for (String[] k : kinds) {
+                if (EmberCodex.register(d, k[0], k[1], Integer.parseInt(k[2]), "drop")) n++;
+            }
+            runs.plugin().getDataStore().flushMutation(t.getUniqueId());
+            s.sendMessage(P + "已为 " + t.getName() + " 登记图录 +" + n + "（现 " + EmberCodex.count(d) + "/20，可领 " + EmberCodex.claimable(d).size() + " 档）");
+            EmberCodexPath.maybeAfterProgress(t, runs);
+            return true;
+        }
+        if ("codexpath".equals(sub) || "图录路径".equals(sub)) { // D522 equipment-codex stage claim path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCodexPath.glance(EmberCodexPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c图录路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberCodexPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c图录路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberCodexPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberCodexPath.get(d);
+                    if (EmberCodexPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCodexPath.label(cur) + " · 改路径再 /corerpg p1 codexpath");
+                    else EmberCodexPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberCodexPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 codexpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberCodexPath.applyAndReply(p, id);
+            return true;
+        }
         if ("goalpath".equals(sub) || "周标路径".equals(sub)) { // D521 weekly season-goal focus path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

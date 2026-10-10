@@ -392,9 +392,12 @@ public final class EmberLoadoutService implements Listener {
     private void codex(Player p, EmberItemData d) {
         PlayerData pd;
         try { pd = plugin.getDataStore().get(p.getUniqueId()); } catch (Throwable t) { return; }
-        if (pd != null && EmberCodex.register(pd, d) && d.tier > 0) // D99: the two starter pieces register silently
+        if (pd != null && EmberCodex.register(pd, d) && d.tier > 0) { // D99: the two starter pieces register silently
             p.sendMessage("§6[图录] §f登记 T" + d.tier + " " + EmberItemData.familyName(d.tier == 0 ? "none" : d.family)
                     + EmberItemData.slotName(d.slot) + " §7（" + EmberCodex.count(pd) + "/" + EmberCodex.ENTRIES.size() + "，主菜单 图录 → 装备图鉴）");
+            EmberRunService runs = plugin.getEmberRuns();
+            if (runs != null) EmberCodexPath.maybeAfterProgress(p, runs); // D522
+        }
     }
 
     /** B2.180: once per server session, register every kind the player ever owned (DB rows), quietly. */

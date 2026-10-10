@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-codex-path`（已批 A · 方案 M · D522 · **PASS** · jar 1.65.213-d522 · 图录自动/提醒/静默真改阶段领奖 · ≠签到/在线/补领双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-goal-path`（已批 A · 方案 M · D521 · **PASS** · jar 1.65.212-d521 · 周标精选/深渊/团本/委托焦点真改追猎 · ≠日委/精选/短本双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-sign-path`（已批 A · 方案 M · D520 · **PASS** · jar 1.65.211-d520 · 签到自动/提醒/静默真改上线签 · ≠在线路双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-challenge-path`（已批 A · 方案 M · D519 · **PASS** · jar 1.65.210-d519 · 硬本偏挑战/偏普通/随令真改进本默认 · ≠精选双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）

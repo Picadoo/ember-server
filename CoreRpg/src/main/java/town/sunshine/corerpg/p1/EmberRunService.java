@@ -935,18 +935,30 @@ public final class EmberRunService implements Listener {
             for (EmberRunMaps.MapDef m : maps.maps.values()) lo.append(lo.length() == 0 ? "" : " · ").append(m.key.toUpperCase(Locale.ROOT)).append(' ').append(EmberRunMaps.lootLabel(m));
             p.sendMessage(P + "§6掉落偏向 §7" + lo + "（目标族仍至少 60%；挑战 / 深渊同图同偏向）");
             p.sendMessage(P + "§6团本额外装备 §7按你的目标族（没选就按团本偏向族），成色至少精良 · 荣誉 " + (cosmetics == null ? "—" : cosmetics.earnedCount(d) + "/" + EmberCosmetics.ALL.size()) + "（主菜单「赛季 · 排行 · 周目标」）");
+            EmberCodexPath.maybeAfterProgress(p, this); // D522 tip/auto when viewing
             return true;
         }
         java.util.List<Integer> can = EmberCodex.claimable(d);
         if (can.isEmpty()) { p.sendMessage(P + "§7没有可领取的图录阶段奖励（" + EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size() + "）"); return true; }
+        claimCodexStages(p);
+        return true;
+    }
+
+    /** D522: claim every claimable codex stage into the ledger and deliver; returns how many stages. */
+    int claimCodexStages(Player p) {
+        PlayerData d = data(p.getUniqueId());
+        if (d == null) return 0;
+        java.util.List<Integer> can = EmberCodex.claimable(d);
+        if (can.isEmpty()) return 0;
         UUID u = p.getUniqueId();
         for (int i : can) {
-            d.addPeriodCount(EmberCodex.C_CLAIM + i, "all", 1); // the counter is the once-only guard (ledger rows get pruned)
+            d.addPeriodCount(EmberCodex.C_CLAIM + i, "all", 1);
             ledgerRow(u, EmberCodex.LEDGER_RUN, "stage" + i, "coin:" + EmberCodex.STAGE_COIN[i], EmberRunRules.ST_PENDING);
             log().info("[P1 codex] " + p.getName() + " stage " + EmberCodex.STAGE_AT[i] + " -> coin " + EmberCodex.STAGE_COIN[i]);
         }
+        plugin.getDataStore().flushMutation(u);
         deliver(p);
-        return true;
+        return can.size();
     }
 
     // ------------------------------------------------------------------ delivery (E10: retry the original result)
@@ -1145,6 +1157,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberEquipPath.scheduleOfferAfterQ01(p); // D517 equip auto path
                         if ("q01".equals(g.id)) EmberOnlinePath.scheduleOfferAfterQ01(p); // D518 online claim path
                         if ("q01".equals(g.id)) EmberSignPath.scheduleOfferAfterQ01(p); // D520 sign-in path
+                        if ("q01".equals(g.id)) EmberCodexPath.scheduleOfferAfterQ01(p); // D522 codex stage path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
@@ -1683,7 +1696,9 @@ public final class EmberRunService implements Listener {
             }, 25L);
         }
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
-            if (!p.isOnline() || blocksLegacy(p.getWorld())) return;
+            if (!p.isOnline()) return;
+            EmberCodexPath.maybeAfterProgress(p, EmberRunService.this); // D522 hub-ok (not gated by legacy)
+            if (blocksLegacy(p.getWorld())) return;
             EmberClaimPath.maybeAmbientDeliver(p, EmberRunService.this); // D515 claim path
             starterKit(p);
         }, 60L);
