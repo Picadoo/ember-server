@@ -27,6 +27,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'command: corerpg p1 goalpath'
 
 Icons:
   '#':

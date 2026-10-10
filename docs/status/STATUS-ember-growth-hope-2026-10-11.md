@@ -308,3 +308,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D794–D797 SHIP · jar 1.65.365-d794
 - D794–D797 polish featured/goal/stash/shape
+
+## D798–D801 SHIP · jar 1.65.366-d798
+- Menu Open wires + featured settle offerPick

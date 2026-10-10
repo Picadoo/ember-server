@@ -204,6 +204,7 @@ public final class EmberFeaturedPath {
         int id = get(d);
         if (!valid(id)) {
             p.sendMessage(EmberRunService.P + "§7可设精选路径：/corerpg p1 featurepath");
+            offerPick(p, featuredLabelLive(p)); // D801
             return;
         }
         boolean match = (id == CHALLENGE && challenge) || (id == NORMAL && !challenge);

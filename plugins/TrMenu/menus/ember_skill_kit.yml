@@ -36,6 +36,7 @@ Events:
     - 'tell: §a招架成功会闪 ActionBar「招架成功 · 反打」§8（D666 · 不改 CD）'
     - 'command: corerpg skill kit'
     - 'tell: §8首通 Q02/Q03/Q04/Q05 会聊天宣告新技能（烬突/招架/符文/身法）'
+    - 'command: corerpg p1 shapepath'
     - 'tell: §8首通 Q04/Q05 还会弹出符文三选一 / 身法方向二选一（玩法侧移）'
     - 'tell: §e技能希望：§f%corerpg_kit_next_hope%'
     - 'tell: §e套装手感：§f%corerpg_kit_set_hope%'

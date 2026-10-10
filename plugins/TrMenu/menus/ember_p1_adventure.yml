@@ -44,6 +44,8 @@ Events:
     - 'command: corerpg p1 setchase'
     - 'command: corerpg p1 challengepath'
     - 'command: corerpg p1 raidpath'
+    - 'command: corerpg p1 featurepath'
+    - 'command: corerpg p1 goalpath'
     - 'command: corerpg p1 mapfarm resume'
 
 Icons:
