@@ -1018,6 +1018,25 @@ public final class EmberGrowthService implements Listener {
                 EmberSigChase.forceOffer(p);
                 return true;
             }
+            if ("seed".equalsIgnoreCase(raw) && p.hasPermission("corerpg.admin")) { // D470 smoke: pad chase map marks to need
+                EmberSignature.Def def = EmberSigChase.get(d);
+                if (def == null) { p.sendMessage(P + "§c先 /corerpg p1 sig chase L01"); return true; }
+                int need = EmberSignature.IMPRINT_MARKS;
+                int cur = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+                if (cur < need) d.addPeriodCount(EmberSignature.C_MARK + def.map, "all", need - cur);
+                EmberSigChase.clearReadyLatch(d);
+                plugin.getDataStore().flushMutation(p.getUniqueId());
+                p.sendMessage(P + "§8admin seed：§f" + def.map + " 徽记 → " + need);
+                EmberSigChase.maybeReadyCue(p, d);
+                return true;
+            }
+            if ("ready".equalsIgnoreCase(raw)) { // D470: re-show ready cue if eligible (clears latch)
+                EmberSigChase.clearReadyLatch(d);
+                plugin.getDataStore().flushMutation(p.getUniqueId());
+                if (!EmberSigChase.maybeReadyCue(p, d))
+                    p.sendMessage(P + EmberSigChase.glance(d));
+                return true;
+            }
             EmberSignature.Def def = EmberSigChase.parse(raw);
             if (def == null) {
                 p.sendMessage(P + "用法：/corerpg p1 sig chase <L01…L15|clear>");
@@ -1028,6 +1047,7 @@ public final class EmberGrowthService implements Listener {
             p.sendMessage(P + "§a追烙 → §f" + EmberSigChase.label(def) + "§7（" + EmberSigChase.tip(def) + "）"
                     + (ch ? "" : " §8· 已是该目标"));
             p.sendMessage(P + EmberSigChase.glance(d));
+            EmberSigChase.maybeReadyCue(p, d); // D470: already enough marks → imprint button
             return true;
         }
         if ("toggle".equals(op)) return sigToggle(p, d, lo, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "");
@@ -1142,6 +1162,8 @@ public final class EmberGrowthService implements Listener {
                             + " (-" + EmberSignature.IMPRINT_MARKS + " " + sd.map + " marks, -" + coin + " coin, via " + via + ", item rev " + after.rev + ", " + rid + ", saved=" + saved + ")");
                     if (q == null || x == null) return;
                     q.sendMessage(P + "§a烙印完成：§f" + t.shortLabel() + " §7→ §6" + sd.name + "§7（剩 " + x.periodCount(EmberSignature.C_MARK + sd.map, "all") + " 枚徽记）");
+                    EmberSigChase.clearReadyLatch(x); // D470: allow re-cue if still ≥5
+                    EmberSigChase.maybeReadyCue(q, x);
                     EmberLoadout l2 = runs.loadouts().get(q);
                     boolean worn = "blade".equals(sd.slot) ? l2.blade != null && l2.blade.uid.equals(t.uid) : l2.charm != null && l2.charm.uid.equals(t.uid);
                     if (!worn) q.sendMessage(P + "§e注意：这件现在没在用（选定 / 手持后才生效）");

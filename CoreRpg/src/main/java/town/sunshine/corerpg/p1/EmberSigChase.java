@@ -13,12 +13,15 @@ import town.sunshine.corerpg.PlayerData;
 
 /**
  * D464: signature imprint-chase path pick — commit which Lxx you farm marks to imprint.
+ * D470: rising-edge imprint-ready cue when chase marks hit threshold (acquisition loop close).
  * Zero STAMP_RATE / imprint price / ALTS change.
  */
 public final class EmberSigChase {
 
     public static final String C_CHASE = "p1_sig_chase";
     public static final String C_OFFERED = "p1_sig_chase_offered";
+    /** Def.code latched after ready cue; cleared when marks drop below need or chase clears. */
+    public static final String C_READY = "p1_sig_chase_ready";
 
     private EmberSigChase() {}
 
@@ -41,7 +44,14 @@ public final class EmberSigChase {
         int cur = d.periodCount(C_CHASE, "all");
         if (cur <= 0) return false;
         d.addPeriodCount(C_CHASE, "all", -cur);
+        clearReadyLatch(d);
         return true;
+    }
+
+    static void clearReadyLatch(PlayerData d) {
+        if (d == null) return;
+        int r = d.periodCount(C_READY, "all");
+        if (r > 0) d.addPeriodCount(C_READY, "all", -r);
     }
 
     public static EmberSignature.Def parse(String raw) {
@@ -148,6 +158,41 @@ public final class EmberSigChase {
         ConfirmTokens.sendButtons(p, P, btns);
         if (opts.size() > 5)
             p.sendMessage(P + "§8更多：/corerpg p1 sig chase L03…L15");
+    }
+
+    
+    /**
+     * D470: if chase target has enough marks and we have not yet told for this Def.code,
+     * announce ready + [去烙印] button. Clears latch when under threshold.
+     * @return true if a rising-edge cue was shown
+     */
+    public static boolean maybeReadyCue(Player p, PlayerData d) {
+        if (p == null || d == null) return false;
+        EmberSignature.Def def = get(d);
+        if (def == null) {
+            clearReadyLatch(d);
+            return false;
+        }
+        int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+        int need = EmberSignature.IMPRINT_MARKS;
+        int latched = d.periodCount(C_READY, "all");
+        if (marks < need) {
+            if (latched > 0) clearReadyLatch(d);
+            return false;
+        }
+        if (latched == def.code) return false; // already told for this chase
+        // rising edge (or chase switched onto an already-ready target)
+        int delta = def.code - latched;
+        d.addPeriodCount(C_READY, "all", delta);
+        flush(p);
+        String P = EmberRunService.P;
+        String line = progressLine(def, marks);
+        p.sendMessage(P + line);
+        try { p.sendActionBar(line.replace("§a", "§a").replace("§7", "§7")); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButton(p, P + "§7下一步：",
+                "[去烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id,
+                EmberSignature.IMPRINT_MARKS + " 枚徽记可烙到穿着/" + EmberItemData.slotName(def.slot));
+        return true;
     }
 
     public static void forceOffer(Player p) {

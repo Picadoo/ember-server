@@ -1095,6 +1095,7 @@ public final class EmberRunService implements Listener {
                         log().info("[P1 run] untagged insignia row " + r.runId + "/" + g.key + " " + g.id + " " + g.amount + " for " + p.getName());
                     got.add(g.id.toUpperCase(Locale.ROOT) + " 首领徽记 " + g.amount + "（共 " + d.periodCount(EmberSignature.C_MARK + g.id, "all") + "）");
                     if (EmberSigAcq.isRepeatMarkKey(r.key)) { acqRepeatMark = true; acqMarkMap = g.id; } // D456
+                    EmberSigChase.maybeReadyCue(p, d); // D470 rising-edge imprint-ready
                     if ("fc_sigmark".equals(r.key)) { // D174: the first clear of a signature map also announces its new unlock
                         String un = EmberSignature.IMPRINT_UNLOCK.equals(g.id) ? "烬炉烙印（用徽记把签名烙到自己的件上）"
                                 : EmberSignature.DUAL_UNLOCK.equals(g.id) ? "双签名（刃 + 护符两条签名同时生效）"

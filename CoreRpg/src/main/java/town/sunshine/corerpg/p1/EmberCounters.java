@@ -119,6 +119,7 @@ public final class EmberCounters {
         x("p1_dual_lead_offer", "EmberDualLead", A, CL, RL, "D466 once latch after Q03 dual unlock");
         x("p1_set_focus", "EmberSetFocus", A, SE, OW, "D465 set-family focus 0=none 1=scorch 2=burst 3=sustain");
         x("p1_set_focus_offer", "EmberSetFocus", W, CL, RL, "D465 once-per-week offer latch @rotationWeekKey");
+        x("p1_sig_chase_ready", "EmberSigChase", A, SE, OW, "D470 ready-cue latch = Def.code while marks≥need");
         x("p1_sig_chase", "EmberSigChase", A, SE, OW, "D464 imprint chase Def.code 0=none 1..15=L01..L15");
         x("p1_sig_chase_offered", "EmberSigChase", A, PR, NV, "D464 imprint-unlock first-pick latch");
         px("p1_mode_path_offered_", "EmberModePath", A, PR, NV, "D462 Q04/Q05/Q06 first-path pick latch");
