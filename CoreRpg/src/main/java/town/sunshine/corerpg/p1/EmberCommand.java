@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("roompath".equals(sub) || "房序路径".equals(sub)) { // D506 variety room-order path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q02");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberRoomPath.glance(EmberRoomPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c房序路径需本人首通 Q02。");
+                    return true;
+                }
+                EmberRoomPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c房序路径需本人首通 Q02。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberRoomPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberRoomPath.get(d);
+                    if (EmberRoomPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRoomPath.label(cur) + " · 改路径再 /corerpg p1 roompath");
+                    else EmberRoomPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberRoomPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 roompath <front|mid|back|clear>");
+                return true;
+            }
+            EmberRoomPath.applyAndReply(p, id);
+            return true;
+        }
         if ("refundpath".equals(sub) || "倒退路径".equals(sub) || "退药路径".equals(sub)) { // D505 death refund path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

@@ -246,6 +246,16 @@ public final class EmberSessionService {
                             v = biased;
                         }
                     }
+                    // D506: room-order path remaps affix/event rooms (kinds untouched)
+                    int room = EmberRoomPath.get(ld);
+                    if (EmberRoomPath.valid(room)) {
+                        String[] placed = EmberRoomPath.applyBias(v, room);
+                        if (!Arrays.equals(v, placed)) {
+                            runs.log().info("[P1 run] " + s.runId + " roompath " + EmberRoomPath.key(room)
+                                    + " " + v[0] + "/" + v[2] + " → " + placed[0] + "/" + placed[2]);
+                            v = placed;
+                        }
+                    }
                 }
                 stampVariety(s, v);
             }

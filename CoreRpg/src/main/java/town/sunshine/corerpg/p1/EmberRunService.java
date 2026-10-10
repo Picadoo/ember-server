@@ -1107,6 +1107,7 @@ public final class EmberRunService implements Listener {
                         if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberSigChase.scheduleImprintOffer(p); // D464
                         if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberCounterPath.scheduleOfferAfterQ02(p); // D480 Q02 wall awareness
                         if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberSpicePath.scheduleOfferAfterQ02(p); // D500 spice encounter path
+                        if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberRoomPath.scheduleOfferAfterQ02(p); // D506 variety room path
                         if ("q01".equals(g.id)) EmberFeaturedPath.scheduleOfferAfterQ01(p); // D488 featured map identity path
                         if ("q01".equals(g.id)) EmberFamilyPath.scheduleOfferAfterQ01(p); // D493 family combat path
                         if ("q01".equals(g.id)) EmberFlexPath.scheduleOfferAfterQ01(p); // D494 flex equip combat path
