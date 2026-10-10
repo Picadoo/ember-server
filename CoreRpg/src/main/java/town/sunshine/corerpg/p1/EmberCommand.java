@@ -248,6 +248,39 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("raidpath".equals(sub) || "团本路径".equals(sub)) { // D483 raid focus combat path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q07");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberRaidPath.glance(EmberRaidPath.get(d), unlocked));
+                if (!unlocked) { p.sendMessage(P + "§c团本需本人首通 Q07 断塔回廊。"); return true; }
+                EmberRaidPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c团本需本人首通 Q07 断塔回廊。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberRaidPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberRaidPath.get(d);
+                    if (EmberRaidPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRaidPath.label(cur) + " · 改路径再 /corerpg p1 raidpath");
+                    else EmberRaidPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberRaidPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 raidpath <r01|r02|r03|clear>");
+                return true;
+            }
+            EmberRaidPath.applyAndReply(p, id);
+            return true;
+        }
         if ("blankloop".equals(sub)) { // D482 admin smoke: dismantle→blank spend chase buttons
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
