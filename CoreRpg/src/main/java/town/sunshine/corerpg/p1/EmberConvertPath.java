@@ -95,6 +95,30 @@ public final class EmberConvertPath {
         return "§e本周转化剩余：§f" + left + "/" + EmberConvertRules.WEEKLY_CAP;
     }
 
+
+    /** D728/D887: after convertpath set — glance + week remain + next buttons. */
+    public static void afterSet(Player p, PlayerData d, int id, boolean changed, int setFocusId, String lootTarget) {
+        if (p == null || !valid(id)) return;
+        String P = EmberRunService.P;
+        String fk = familyKey(id);
+        p.sendMessage(P + "§a转化路径 → §f" + label(id) + "§7（" + tip(id) + "）"
+                + (changed ? "" : " §8· 已是该路径"));
+        p.sendMessage(P + glance(id, EmberSetFocus.familyKey(setFocusId), lootTarget));
+        p.sendMessage(P + weekLine(d));
+        int left = 0;
+        if (d != null) {
+            String week = town.sunshine.corerpg.DailyService.weekId();
+            int used = d.periodCount(EmberConvertRules.C_CONV, week);
+            left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
+        }
+        try { p.sendActionBar("§e转化环 · 余 §f" + left); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7转化环：", // D887
+                new String[]{"[去转化成" + label(id) + "]", "/corerpg p1 convert " + fk,
+                        "手持刃/护符后确认（周 1 次）", "GREEN"},
+                new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷同族料/件", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "转化页在工坊", "GOLD"});
+    }
+
 public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;

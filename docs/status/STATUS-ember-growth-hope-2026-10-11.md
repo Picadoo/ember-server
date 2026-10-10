@@ -395,3 +395,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D879–D884 SHIP · jar 1.65.393-d879
 - Brand pin next; upgrade setchase; featured forge/mapfarm; season all-clear; stash enhance; quality/refine setchase
+
+## D885–D890 SHIP · jar 1.65.394-d885
+- Swap/enhance setchase; convertpath buttons; honor forge; reroll install/keep-new next

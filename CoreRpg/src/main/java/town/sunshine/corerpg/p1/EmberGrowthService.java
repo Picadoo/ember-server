@@ -512,10 +512,10 @@ public final class EmberGrowthService implements Listener {
             EmberGrowth.Honor h = honors.byId(id);
             p.sendMessage(P + "§6获得余烬勋记「" + h.name + "」§7— " + h.desc + " §8（账号永久，/corerpg p1 honor 查看）");
             try { p.sendActionBar("§6勋记解锁 · §f" + h.name); } catch (Throwable ignored) { } // D669
-            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+            ConfirmTokens.sendButtons(p, P + "§7下一步：", // D888
                     new String[]{"[勋记页]", "/ember_p1_honor", "看效果与进度", "GOLD"},
-                    new String[]{"[冒险页]", "/ember_p1_adventure", "继续推进条件", "GREEN"},
-                    new String[]{"[稍后再说]", null, "账号永久", "GRAY"});
+                    new String[]{"[工坊]", "/corerpg p1 forge", "用勋记加成养成", "AQUA"},
+                    new String[]{"[冒险页]", "/ember_p1_adventure", "继续推进条件", "GREEN"});
             plugin.getLogger().info("[P1 growth] " + p.getName() + " honor " + id);
         }
     }
@@ -1967,6 +1967,11 @@ public final class EmberGrowthService implements Listener {
         if (pl.old == 0) {
             pendingRoll.remove(id);
             p.sendMessage(P + "§a词条槽原来是空的，直接装上了");
+            try { p.sendActionBar("§a词条装上 · §f继续养成"); } catch (Throwable ignored) { }
+            ConfirmTokens.sendButtons(p, P + "§7洗练下一环：", // D889
+                    new String[]{"[去强化]", "/corerpg p1 enhance", "词条落了冲强化", "GREEN"},
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "GOLD"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
         } else {
             pendingRoll.put(id, new Object[]{t.uid, t.slot, pl.enc, pl.old, quality});
             p.sendMessage(P + "原来：" + affixText(pl.old, quality));
@@ -2057,8 +2062,14 @@ public final class EmberGrowthService implements Listener {
                     Player x = Bukkit.getPlayer(id);
                     plugin.getLogger().info("[P1 growth] " + (x == null ? id.toString() : x.getName()) + " reroll keep new " + uid + " " + old + "→" + enc + (ok ? " rev " + after.rev : " NOT committed"));
                     if (x == null) return;
-                    if (ok) x.sendMessage(P + "§a已换成：" + affixText(enc, q));
-                    else x.sendMessage(P + "§c没换成（物品刚被改过或数据库暂时写不进去），原来的词条不变");
+                    if (ok) {
+                        x.sendMessage(P + "§a已换成：" + affixText(enc, q));
+                        try { x.sendActionBar("§a保留新词条 · §f继续养成"); } catch (Throwable ignored) { }
+                        ConfirmTokens.sendButtons(x, P + "§7洗练下一环：", // D890
+                                new String[]{"[去强化]", "/corerpg p1 enhance", "词条定了冲强化", "GREEN"},
+                                new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "GOLD"},
+                                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
+                    } else x.sendMessage(P + "§c没换成（物品刚被改过或数据库暂时写不进去），原来的词条不变");
                     openMenu(x, REROLL_MENU);
                 });
         return true;

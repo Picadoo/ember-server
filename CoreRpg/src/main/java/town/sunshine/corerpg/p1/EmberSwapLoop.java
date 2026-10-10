@@ -23,11 +23,10 @@ public final class EmberSwapLoop {
         p.sendMessage(P + "§e强化已互换" + (winner.isEmpty() ? "" : " §7· 高强化在 " + winner)
                 + " §7· 选下一步（不改强化价/保底）：");
         try { p.sendActionBar("§e互换完成 · §f选下一步"); } catch (Throwable ignored) { } // D656
-        ConfirmTokens.sendButtons(p, P,
+        ConfirmTokens.sendButtons(p, P, // D885
                 new String[]{"[去强化]", "/corerpg p1 enhance", "手持件继续强化预览", "GREEN"},
-                new String[]{"[装备页]", "/ember_p1_gear", "换上/查看套装", "GOLD"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"},
-                new String[]{"[稍后再说]", null, "强化已在两件上", "GRAY"});
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换上高强件", "GOLD"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
     }
 
     /** Admin smoke: same button set without a live txn. */

@@ -140,20 +140,7 @@ public final class EmberCommand {
             runs.plugin().getDataStore().flushMutation(p.getUniqueId());
             if (id == EmberConvertPath.NONE) p.sendMessage(P + "已取消转化路径");
             else {
-                String fk = EmberConvertPath.familyKey(id);
-                int sf = EmberSetFocus.get(d);
-                p.sendMessage(P + "§a转化路径 → §f" + EmberConvertPath.label(id) + "§7（" + EmberConvertPath.tip(id) + "）"
-                        + (ch ? "" : " §8· 已是该路径"));
-                p.sendMessage(P + EmberConvertPath.glance(id, EmberSetFocus.familyKey(sf), runs.target(d)));
-                String week = town.sunshine.corerpg.DailyService.weekId(); // D728
-                int used = d.periodCount(EmberConvertRules.C_CONV, week);
-                int left = Math.max(0, EmberConvertRules.WEEKLY_CAP - used);
-                p.sendMessage(P + "§e本周转化剩余：§f" + left + "/" + EmberConvertRules.WEEKLY_CAP
-                        + (left <= 0 ? " §8· 环已完成，下周再转" : " §7· 手持异族件转化即闭环"));
-                try { p.sendActionBar("§e转化环 · 余 §f" + left); } catch (Throwable ignored) { }
-                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7下一步：",
-                        "[去转化成" + EmberConvertPath.label(id) + "]", "/corerpg p1 convert " + fk,
-                        "手持刃/护符后确认（周 1 次）");
+                EmberConvertPath.afterSet(p, d, id, ch, EmberSetFocus.get(d), runs.target(d)); // D887
             }
             return true;
         }
