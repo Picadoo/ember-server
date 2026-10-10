@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import town.sunshine.corerpg.PlayerData;
 
 import java.util.Locale;
 import java.util.Map;
@@ -70,6 +71,40 @@ public final class EmberCommand {
         if ("convert".equals(sub) || "转化".equals(sub)) { // D431 每周转化
             if (!(s instanceof Player) || EmberGrowthService.get() == null) { s.sendMessage(P + "转化服务未加载"); return true; }
             return EmberGrowthService.get().convertCommand((Player) s, args);
+        }
+        if ("forgegoal".equals(sub) || "工坊目标".equals(sub)) { // D461 forge craft-goal path pick
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            if (args.length < 3) {
+                int cur = EmberForgeGoal.get(d);
+                p.sendMessage(P + EmberForgeGoal.glance(cur, ""));
+                EmberForgeGoal.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                String week = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(java.time.ZoneId.of("Asia/Shanghai")));
+                boolean offered = EmberForgeGoal.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberForgeGoal.get(d);
+                    if (EmberForgeGoal.valid(cur)) p.sendMessage(P + "§7当前：" + EmberForgeGoal.label(cur) + " · 改目标再 /corerpg p1 forgegoal");
+                }
+                return true;
+            }
+            int id = EmberForgeGoal.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 forgegoal <enhance|refine|brand|roll|convert|clear>");
+                return true;
+            }
+            boolean ch = EmberForgeGoal.set(d, id);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            if (id == EmberForgeGoal.NONE) p.sendMessage(P + "已取消工坊目标");
+            else p.sendMessage(P + "§a工坊目标 → §f" + EmberForgeGoal.label(id)
+                    + "§7（" + EmberForgeGoal.tip(id) + "）" + (ch ? "" : " §8· 已是该目标"));
+            return true;
         }
         if ("honor".equals(sub) || "勋记".equals(sub)) { // D142 余烬勋记
             if (args.length >= 3 && "test".equalsIgnoreCase(args[2])) { // admin test hook (10-04): grant / clear honor conditions

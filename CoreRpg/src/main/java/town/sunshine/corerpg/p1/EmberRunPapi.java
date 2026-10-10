@@ -148,7 +148,8 @@ public final class EmberRunPapi {
         return "vault_shard".equals(key) || "vault_bone".equals(key) || "vault_core".equals(key) || "vault_blank".equals(key)
                 || "recipe_gap_enhance1".equals(key) || "recipe_gap_upgrade_t2".equals(key) || "recipe_gap_refine1".equals(key)
                 || "forge_gap_brand".equals(key) || "forge_gap_roll".equals(key) || "forge_gap_convert".equals(key)
-                || "forge_gap_pin".equals(key);
+                || "forge_gap_pin".equals(key)
+                || "forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key);
     }
 
     /** D404: gap = max(0, need − have); Bukkit-free. */
@@ -374,6 +375,21 @@ public final class EmberRunPapi {
             EmberItemData held = p == null ? null : heldTrusted(p);
             int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
             return forgeGapPin(tier, brandCount(p), coin);
+        }
+        // D461 forge craft-goal path
+        if ("forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key)) {
+            int gid = EmberForgeGoal.get(pd);
+            EmberItemData held = p == null ? null : heldTrusted(p);
+            int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
+            String enh = recipeGapEnhance1(shard);
+            String ref = recipeGapRefine1(blank, bone);
+            String br = forgeGapBrand(shard);
+            String ro = forgeGapRoll(blank, coin);
+            String cv = forgeGapConvert(tier, blank, coin);
+            String gap = EmberForgeGoal.gapLine(gid, enh, ref, br, ro, cv);
+            if ("forge_goal".equals(key)) return EmberForgeGoal.label(gid);
+            if ("forge_goal_gap".equals(key)) return gap;
+            return EmberForgeGoal.glance(gid, gap);
         }
         return "";
     }

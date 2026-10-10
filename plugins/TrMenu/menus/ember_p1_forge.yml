@@ -1,3 +1,4 @@
+# D461: 工坊周目标路径点选（forgegoal）· 零改价/AFK表
 # 余烬 锻造菜单桩 — 只转发到 /corerpg p1 命令；预览在聊天栏，执行需二次点击"确认"按钮。
 # 旧 ember_enhance / ember_forge / ember_disassemble 菜单不变（旧物品仍走旧强化）。
 # 打开：/ember_p1_forge、主菜单「工坊」或装备页（B2.174）。互换确认按钮 B2.176（§19.1 不需要手打命令）
@@ -35,6 +36,8 @@ Events:
     - 'tell: §8未持件也能看费用：点「配方速览」'
     - 'tell: §8挂机仓差→烙纹/随机锻/转化见配方速览与挂机战况'
     - 'tell: §8词条洗练（普通随机 / Shift 锁定保类型只重抽档）在本页「洗练」'
+    - 'tell: §e本周工坊目标：§f%corerpg_p1_forge_goal_line%'
+    - 'command: corerpg p1 forgegoal nudge'
 
 Icons:
   '#':

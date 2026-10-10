@@ -31,6 +31,7 @@ Events:
     - 'tell: §8战况有下一层养签'
     - 'tell: §8抬头可见还差/约满'
     - 'tell: §8战况可看仓内还差'
+    - 'tell: §8工坊目标 %corerpg_p1_forge_goal_line% · /corerpg p1 forgegoal'
 Icons:
   '#':
     display:

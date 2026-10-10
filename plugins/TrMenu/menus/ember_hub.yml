@@ -165,6 +165,7 @@ Icons:
         - '§7保底：刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
         - ''
         - '§d工坊四选择：§f烙纹定向 · 随机锻造 · 每周转化 · 词条洗练'
+        - '§e本周工坊目标：§f%corerpg_p1_forge_goal_line%'
         - '§8（锁定保类型 = D148 · 工坊底栏也能进 · 材料换手感分叉）'
         - ''
         - '§7天赋/勋记/洗练是打法取舍和小加成，不是变强；装备的阶、成色、强化才是主线'
