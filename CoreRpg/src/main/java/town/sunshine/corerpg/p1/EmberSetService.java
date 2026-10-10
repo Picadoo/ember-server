@@ -106,6 +106,28 @@ public final class EmberSetService implements Listener {
      * Yields when set proc flash owns the bar — does not steal true-proc readability.
      * @return true if the flash was shown
      */
+    /**
+     * D457: run-start set / four-piece playstyle cue. Zero power / set_bonus change.
+     */
+    public void announceSetFeel(Player p) {
+        if (p == null) return;
+        EmberLoadout l = loadouts == null ? null : loadouts.get(p);
+        if (l == null || l.activeSet == null || "none".equals(l.activeSet)) return;
+        int armorN = 0;
+        boolean armorOn = false;
+        EmberItemData[] worn = l.armorCopy();
+        if (worn == null) worn = new EmberItemData[4];
+        Object[] sp = EmberSixRank.setProgress(l.blade, l.charm, worn);
+        if (sp != null) {
+            armorN = sp[1] == null ? 0 : ((Integer) sp[1]).intValue();
+            armorOn = Boolean.TRUE.equals(sp[3]);
+        }
+        String line = EmberSetFeel.runLine(l.activeSet, l.awakening, armorN, armorOn);
+        if (line == null || line.isEmpty()) return;
+        p.sendMessage(ChatColor.GOLD + "[余烬] " + line);
+        flashSkillConfirm(p, line);
+    }
+
     public boolean flashSkillConfirm(Player p, String msg) {
         if (p == null || msg == null || msg.isEmpty()) return false;
         Session s = session(p);

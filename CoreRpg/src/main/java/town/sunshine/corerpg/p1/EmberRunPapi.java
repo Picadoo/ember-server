@@ -112,7 +112,7 @@ public final class EmberRunPapi {
     }
 
     static boolean isLoadoutKey(String key) {
-        return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "stats".equals(key)
+        return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key) || "stats".equals(key)
                 || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)
                 // D299 再刷短反馈：装备页近档 + 工坊手持近档
                 || "blade_next_q".equals(key) || "blade_next_c".equals(key)
@@ -558,6 +558,15 @@ public final class EmberRunPapi {
         switch (key) {
             case "awaken": return l.setLabel();
             case "set_progress": return l.setProgress();
+            case "set_run": { // D457 enter-run style line (also for menus)
+                EmberItemData[] worn = l.armorCopy();
+                if (worn == null) worn = new EmberItemData[4];
+                Object[] sp = EmberSixRank.setProgress(l.blade, l.charm, worn);
+                int n = sp == null || sp[1] == null ? 0 : ((Integer) sp[1]).intValue();
+                boolean on = sp != null && Boolean.TRUE.equals(sp[3]);
+                String line = EmberSetFeel.runLine(l.activeSet, l.awakening, n, on);
+                return line == null || line.isEmpty() ? "§8未成套" : line;
+            }
             // B2.174 §19.1 装备页: actual B / H / D (formula output, §19.2), main hand + selected charm
             case "stats": return statsLine(l.b, l.h, l.d, l.m, l.level);
             case "ehp": return String.format(Locale.ROOT, "%.0f", l.ehp());

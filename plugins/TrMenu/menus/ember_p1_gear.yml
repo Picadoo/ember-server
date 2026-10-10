@@ -1,3 +1,4 @@
+# D457: 本局套装 cue %corerpg_p1_set_run% · 零改套装数值
 # 余烬 v1 (P1) 装备页 — 策划书 §19.1「装备页显示主手、已选护符、套装是否激活、觉醒档以及下一次突破缺哪项；
 #   背包中的非生效装备应明确标注」+ §19.2（实际基础属性 = 统一公式输出）。B2.174。
 # 数值全部来自 CoreRpg 占位符 %corerpg_p1_*%（与 /corerpg p1 status 同一份 EmberLoadout），菜单不自己算。
@@ -131,6 +132,7 @@ Icons:
       name: '§6成套进度'
       lore:
         - '§f%corerpg_p1_set_progress%'
+        - '%corerpg_p1_set_run%'
         - '§8护甲四件套：§f%corerpg_p1_armor_set%'
         - ''
         - '§8刃·护符终点 = 同族 T3 两件 +9（觉醒 III）'

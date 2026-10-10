@@ -754,6 +754,8 @@ public final class EmberRunService implements Listener {
             else p.sendMessage(P + "§7回复药在快捷栏第 5–9 格：按数字键切过去，按住右键喝（回复 20%，15 秒冷却）");
             EmberGrowthService g = EmberGrowthService.get(); // D455 本局签名一眼
             if (g != null) g.announceSigFeel(p);
+            EmberSetService sets = plugin.getEmberSets(); // D457 本局套装/四件套 cue
+            if (sets != null) sets.announceSetFeel(p);
         }
     }
 
