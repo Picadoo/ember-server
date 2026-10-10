@@ -805,3 +805,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - soft-focus 时 p1_target=0 → 同步 loot family
 ## D2229–D2240 · 挂机装效够稳短闪 · jar 1.65.517-d2240
 - EmberAfkGearFeel rising-edge · 零日表/ConfirmTokens
+## D2241–D2250 · 挂机偏弱+阵亡提示 · jar 1.65.518-d2250
+- maybeWeakCue · 零抬表/ConfirmTokens

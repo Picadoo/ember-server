@@ -562,11 +562,14 @@ public final class EmberAfkService implements Listener {
                     remainKills(killsNow, dailyKills), kphNow);
             p.spigot().sendMessage(net.md_5.bungee.api.ChatMessageType.ACTION_BAR, new net.md_5.bungee.api.chat.TextComponent(bar));
             maybeUpgradeHint(p, f, d, t, kphNow); // D305 W1b · once / fight · hot-offable
-            try { // D2231 gear-stable rising-edge (zero table / ConfirmTokens)
+            try { // D2231/D2242 gear-stable / weak cues (zero table / ConfirmTokens)
                 EmberLoadoutService ls2 = plugin.getEmberLoadouts();
                 EmberLoadout lo = ls2 == null ? null : ls2.get(p);
-                if (lo != null && EmberAfkGearFeel.maybeStableCue(p, d, t.n, lo.b, lo.h))
-                    plugin.getDataStore().flushMutation(p.getUniqueId());
+                if (lo != null) {
+                    boolean fired = EmberAfkGearFeel.maybeStableCue(p, d, t.n, lo.b, lo.h);
+                    fired |= EmberAfkGearFeel.maybeWeakCue(p, d, t.n, lo.b, lo.h, f.deaths.size());
+                    if (fired) plugin.getDataStore().flushMutation(p.getUniqueId());
+                }
             } catch (Throwable ignored) { }
         }
         if (now - f.minuteStart >= 60000L) { // measured rate (for offline credit)

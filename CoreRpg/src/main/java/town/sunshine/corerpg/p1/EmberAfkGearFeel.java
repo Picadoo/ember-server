@@ -32,4 +32,24 @@ public final class EmberAfkGearFeel {
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
         return true;
     }
+
+    public static final String C_WEAK = "p1_afk_gear_weak_t";
+
+    /**
+     * Rising-edge when band is 偏弱 and fight already has ≥2 deaths — suggest forge, no teleport / table.
+     */
+    public static boolean maybeWeakCue(Player p, PlayerData d, int tier, double atk, double hp, int deaths) {
+        if (p == null || d == null || tier < 1 || tier > 4 || deaths < 2) return false;
+        if (!"偏弱".equals(EmberAfkGearEff.band(atk, hp, tier))) return false;
+        String day = DailyService.today();
+        String key = C_WEAK + tier;
+        if (d.periodCount(key, day) > 0) return false;
+        d.addPeriodCount(key, day, 1);
+        String line = "§c挂机装效 · §fT" + tier + " 偏弱 §7· 阵亡" + deaths
+                + " · 去工坊强化后再挂（不改日表）";
+        p.sendMessage(EmberRunService.P + line);
+        try { p.sendActionBar(line); } catch (Throwable ignored) { }
+        return true;
+    }
+
 }
