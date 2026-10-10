@@ -1652,6 +1652,17 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D498 | CoreRpg **1.65.189-d498** / bv 未抬 | 成长花样·签律路径 **PASS**：`EmberTunePath` sharp/ward/full（duallead+attune）· 冒烟 FreshQ1033 · **真改打法** · `B-tune-path` · `c6decab9` · STATUS `STATUS-ember-tune-path-d498-2026-10-10.md`。 |
 | D499 | CoreRpg **1.65.190-d499** / bv 未抬 | 成长花样·步态路径 **PASS**：`EmberStridePath` push/bail/bare（flex+step）· 冒烟 FreshQ1034 · **真改打法** · `B-stride-path` · `62d4a447` · STATUS `STATUS-ember-stride-path-d499-2026-10-10.md`。 |
 | D500 | CoreRpg **1.65.191-d500** / bv 未抬 | 成长花样·花样遭遇路径 **PASS**：`EmberSpicePath` blaze/control/objective 真写 D138 variety 卷轴 · **≠组合粘性路径** · 单测 5/5 · 冒烟 FreshQ1035 · `B-spice-path` · `d417bef6` · STATUS `STATUS-ember-spice-path-d500-2026-10-10.md`。 |
+| D501 | CoreRpg **1.65.192-d501** / bv 未抬 | 成长花样·加料路径 **PASS**：`EmberExtraPath` treasure/elite/chest 真写 §9.3 Extra · **≠D500 花样双胞** · 冒烟 FreshQ1036 · `B-extra-path` · `6b906304` · STATUS `STATUS-ember-extra-path-d501-2026-10-10.md`。 |
+| D502 | CoreRpg **1.65.193-d502** / bv 未抬 | 成长花样·备药路径 **PASS**：`EmberPrepPath` light/full/bare 进本前自动补回复药 · **≠改药价** · 冒烟 FreshQ1037 · `B-prep-path` · `4246cf78` · STATUS `STATUS-ember-prep-path-d502-2026-10-10.md`。 |
+| D503 | CoreRpg **1.65.194-d503** / bv 未抬 | 成长花样·短征追猎路径 **PASS**：`EmberShortPath` fc/day/late resolve · **≠抬日表** · 冒烟 FreshQ1038 · `B-short-path` · `6bd882e8` · STATUS `STATUS-ember-short-path-d503-2026-10-10.md`。 |
+| D504 | CoreRpg **1.65.195-d504** / bv 未抬 | 成长花样·精英变招路径 **PASS**：`EmberTwistPath` primary/alt/rotate · **≠改伤害表** · 冒烟 FreshQ1039/1040 · `B-twist-path` · `33b4ab9c` · STATUS `STATUS-ember-twist-path-d504-2026-10-10.md`。 |
+| D505 | CoreRpg **1.65.196-d505** / bv 未抬 | 成长花样·倒下退药路径 **PASS**：`EmberRefundPath` full/light/bare clamp · **≠抬退药表** · 冒烟 FreshQ1041 · `B-refund-path` · `8b1f6ed0` · STATUS `STATUS-ember-refund-path-d505-2026-10-10.md`。 |
+| D506 | CoreRpg **1.65.197-d506** / bv 未抬 | 成长花样·房序路径 **PASS**：`EmberRoomPath` front/mid/back 落房 remap · **≠改种类/rate** · 冒烟 FreshQ1042 · `B-room-path` · `50d8fa75` · STATUS `STATUS-ember-room-path-d506-2026-10-10.md`。 |
+| D507 | CoreRpg **1.65.198-d507** / bv 未抬 | 成长花样·败退路径 **PASS**：`EmberFailPath` keep/light/skip 退体 clamp · **≠抬 fail_refund** · 冒烟 FreshQ1043 · `B-fail-path` · `a6f9e1f9` · STATUS `STATUS-ember-fail-path-d507-2026-10-10.md`。 |
+| D508 | CoreRpg **1.65.199-d508** / bv 未抬 | 成长花样·花样委托路径 **PASS**：`EmberBountyPath` affix/event/both ensure · **≠改委托奖励表** · 冒烟 FreshQ1044 · `B-bounty-path` · `a05ff332` · STATUS `STATUS-ember-bounty-path-d508-2026-10-10.md`。 |
+| D509 | CoreRpg **1.65.200-d509** / bv 未抬 | 成长花样·连战休整路径 **PASS**：`EmberRestPath` full/light/bare 阶段回血 clamp · **≠抬 heal 表** · 冒烟 FreshQ1045 · `B-rest-path` · `58e5af2b` · STATUS `STATUS-ember-rest-path-d509-2026-10-10.md`。 |
+| D510 | CoreRpg **1.65.201-d510** / bv 未抬 | 成长花样·连战间歇路径 **PASS**：`EmberBreakPath` full/short/snap 间歇秒 clamp · **≠抬 break 表 · ≠D509 双胞** · 冒烟 FreshQ1046 · `B-break-path` · `c2a43085` · STATUS `STATUS-ember-break-path-d510-2026-10-10.md`。 |
+| D511 | CoreRpg **1.65.202-d511** / bv 未抬 | 成长花样·深渊层费路径 **PASS**：`EmberFeePath` coin/mark/auto 支付偏好 · **≠改费用表** · 冒烟 FreshQ1047 · `B-fee-path` · `3e1dc95c` · STATUS `STATUS-ember-fee-path-d511-2026-10-10.md`。 |
 
 
 
