@@ -3290,6 +3290,7 @@ public final class EmberCommand {
                     p.sendMessage(P + "§c短征路径需本人首通 Q01。");
                     return true;
                 }
+                p.sendMessage(P + EmberShortPath.unpaidFcLine(runs, d)); // D711
                 EmberRunMaps.MapDef next = EmberShortPath.resolve(runs, d, EmberShortPath.get(d));
                 if (next != null) p.sendMessage(P + EmberShortPath.resolveLine(next));
                 EmberShortPath.offerPick(p);

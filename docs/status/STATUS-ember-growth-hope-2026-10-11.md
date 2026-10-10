@@ -144,3 +144,12 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D708 charm→setchase
 - D709 abyss target above openable
 - D710 unpaid FC count
+
+## D711–D712 SHIP · jar 1.65.332-d711 · 2026-10-11
+- D711 shortpath unpaid count on open
+- D712 abyss newBest suggest target if unset
+
+## D711–D713 SHIP · jar 1.65.332-d711 · 2026-10-11
+- D711 event_soft_hope PAPI
+- D712 adventure Open event/drop hope tells
+- D713 skill kit parry D666 ActionBar tell

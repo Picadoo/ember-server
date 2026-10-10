@@ -469,6 +469,9 @@ public final class EmberSettleService {
                 try { p.sendActionBar("§5首层礼 · §a已兑现"); } catch (Throwable ignored) { }
             }
             if (newBest) EmberAbyssTarget.afterBest(p, pd, s.abyss); // D696
+            if (newBest && EmberAbyssTarget.get(pd) <= 0) { // D712
+                p.sendMessage(EmberRunService.P + "§7可设深渊层目标：/corerpg p1 abysstarget " + (s.abyss + 1));
+            }
         }
         if (p != null && p.isOnline() && rotation) {
             p.sendMessage(EmberRunService.P + "§b本周精选" + (s.challenge ? "挑战" : "重打") + " §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + rotMarks
