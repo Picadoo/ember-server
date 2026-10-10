@@ -619,9 +619,14 @@ public final class EmberGearLib implements Listener {
             if (!p.isOnline()) return;
             if ("batch".equals(want)) { undoBatch(p, rows, args.length >= 4 ? args[3] : null); return; }
             if (want == null) {
-                if (rows.isEmpty()) { p.sendMessage(P + "最近 " + mins + " 分钟没有可撤销的分解（洗练吃掉的重复件不能撤销）"); return; }
+                if (rows.isEmpty()) {
+                    p.sendMessage(P + "最近 " + mins + " 分钟没有可撤销的分解（洗练吃掉的重复件不能撤销）");
+                    try { p.sendActionBar("§7撤销窗 · 空 · " + mins + "分钟内无件"); } catch (Throwable ignored) { } // D1769
+                    return;
+                }
                 p.sendMessage(P + "最近 " + mins + " 分钟分解的装备共 " + rows.size() + " 件" + (rows.size() > 20 ? "，下面显示最近 20 件" : "")
                         + "（撤销要退回当时给的胚料，物品回到装备库）：");
+                try { p.sendActionBar("§e撤销窗 · §f" + rows.size() + "件可撤 · " + mins + "分钟内"); } catch (Throwable ignored) { }
                 Map<String, Integer> batches = new java.util.LinkedHashMap<String, Integer>();
                 for (LibRow r : rows) { String b = EmberStorageRules.batchOf(r.note); if (b != null) batches.merge(b, 1, Integer::sum); }
                 for (Map.Entry<String, Integer> b : batches.entrySet()) if (b.getValue() > 1)
@@ -642,7 +647,11 @@ public final class EmberGearLib implements Listener {
             if (busy.contains(d.uid)) return;
             final int y = EmberUpgradeRules.dismantleYield(d);
             int have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
-            if (have < y) { p.sendMessage(P + ChatColor.RED + "撤销要退回胚料 ×" + y + "，背包 + 仓库只有 " + have); return; }
+            if (have < y) {
+                p.sendMessage(P + ChatColor.RED + "撤销要退回胚料 ×" + y + "，背包 + 仓库只有 " + have);
+                try { p.sendActionBar("§c撤销 · 还差胚 §f" + (y - have)); } catch (Throwable ignored) { } // D1769
+                return;
+            }
             EmberPay pay = EmberPay.get();
             if (pay == null) { p.sendMessage(P + ChatColor.RED + "撤销暂不可用（服务未就绪）"); return; }
             busy.add(d.uid);
@@ -661,7 +670,10 @@ public final class EmberGearLib implements Listener {
                             store().saveLibFlags(d.uid, id, false, false, t);
                             replace(id, d.uid, new Entry(d.withRev(d.rev + 1), false, false, t));
                             plugin.getLogger().info("[P1 gearlib] undo dismantle " + id + " " + d.uid.substring(0, 8) + " blanks paid " + y);
-                            if (q != null) q.sendMessage(P + ChatColor.GREEN + "已撤销：" + d.shortLabel() + " 回到装备库（主菜单 仓库 → 装备库）" + ChatColor.GRAY + "，胚料 ×" + y + " 已扣");
+                            if (q != null) {
+                                q.sendMessage(P + ChatColor.GREEN + "已撤销：" + d.shortLabel() + " 回到装备库（主菜单 仓库 → 装备库）" + ChatColor.GRAY + "，胚料 ×" + y + " 已扣");
+                                try { q.sendActionBar("§a撤销 · §f" + d.shortLabel() + " → 库 · 胚−" + y); } catch (Throwable ignored) { }
+                            }
                         } else {
                             pay.release(id, rid); // not committed → the blanks taken up front come back once
                             if (q != null) q.sendMessage(P + ChatColor.RED + "没有撤销（" + res.status + ": " + res.detail + "），胚料 ×" + y + " 会退回");

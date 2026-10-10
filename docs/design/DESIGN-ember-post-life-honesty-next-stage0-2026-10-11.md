@@ -15,7 +15,7 @@
 | PP1 | 使魔路径 AB | 解锁数·魂尘下一档 |
 | PP2 | pet list/feed/unlock 还差 | 尘/蛋 have-need |
 | FP1 | 好友/师徒/组队路径 AB | Friend/Mentor/Party |
-| NX2 | 装备库/材料仓容量诚实 | **D1679– SHIP** 件数·空格·快满阈·取出满包 |
+| NX2 | 装备库/材料仓容量诚实 | **D1679– DONE** (+护甲待领/补领/批量/撤销 扩扫) |
 | NX3 | ARCH | SourceMap/Counters 绿复核 D1711 · C15/C16 暂停 |
 
 不改贡献率、Boss 消耗、魂尘表、使魔展示伤。

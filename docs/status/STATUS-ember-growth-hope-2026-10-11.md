@@ -681,3 +681,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1754–D1767 SHIP · jar 1.65.478-d1754
 - vault auto toggle AB; empowerment scan Stage0 COMPLETE
+
+## D1768–D1781 SHIP · jar 1.65.479-d1768
+- gearlib undo window remain AB
