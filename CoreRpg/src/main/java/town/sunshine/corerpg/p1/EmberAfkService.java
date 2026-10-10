@@ -496,6 +496,7 @@ public final class EmberAfkService implements Listener {
         if (d == null) return;
         String day = DailyService.today();
         if (d.periodCount(C_KILL, day) >= dailyKills) {
+            EmberAfkForgePath.maybeTell(p, d, plugin.getNiBridge(), EmberVault.get()); // D688
             stop(p, f, capStopText(dailyKills));
             return;
         }
@@ -789,6 +790,7 @@ public final class EmberAfkService implements Listener {
         if (p != null && p.isOnline()) {
             rs.deliverQuiet(p);
             p.sendMessage(P + (note == null ? "" : note) + "§a挂机战利品到账：" + sb + " §8· 今日 " + kill + "/" + dailyKills + " 只");
+            if (kill >= dailyKills) EmberAfkForgePath.maybeTell(p, d, plugin.getNiBridge(), EmberVault.get()); // D688
         }
     }
 

@@ -501,6 +501,13 @@ public final class EmberSettleService {
             if (!feel.isEmpty()) p.sendMessage(EmberRunService.P + feel);
             EmberClaimPath.settleDeliver(p, pd, runs); // D515 claim path
             EmberCodexPath.maybeAfterProgress(p, runs); // D522 codex path
+            // D687: after deliver, refresh chase vs worn (1 tick so bag/loadout settle)
+            final EmberRunMaps.MapDef farmMap = m;
+            Bukkit.getScheduler().runTaskLater(runs.plugin(), () -> {
+                if (!p.isOnline()) return;
+                EmberLoadout lo2 = runs.loadouts() == null ? null : runs.loadouts().refresh(p);
+                EmberMapFarmCue.afterSettle(p, farmMap, lo2);
+            }, 5L);
             Bukkit.getScheduler().runTaskLater(runs.plugin(), () -> {
                 if (p.isOnline()) EmberStashPath.maybeAfterProgress(p); // D526 stash path
                 if (p.isOnline()) EmberJunkPath.maybeAfterProgress(p); // D531 junk path

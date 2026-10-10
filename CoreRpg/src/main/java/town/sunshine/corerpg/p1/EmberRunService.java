@@ -2111,10 +2111,13 @@ public final class EmberRunService implements Listener {
         }
         tidyHotbar(p, hbEmpty);
         if (acqRepeatMark && !acqStamp && !quietDeliver) { // D456: miss clarity (no STAMP_RATE raise)
+            EmberSigStampDry.onMiss(d); // D690 dry streak
             String miss = EmberSigAcq.missLine(acqMarkMap);
             miss += EmberSigChase.missAppend(d, acqMarkMap); // D464
+            miss += EmberSigStampDry.missAppend(d); // D690
             got.add(miss);
         }
+        if (acqStamp) EmberSigStampDry.onHit(d); // D690 clear dry
         if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (!relLines.isEmpty() && !quietDeliver) { // D299 W1c：相对穿着一行（并列 D295 摘要，不改破绽语义）
             for (String rel : relLines) p.sendMessage(P + "§7" + rel);

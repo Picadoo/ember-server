@@ -58,6 +58,16 @@ public final class EmberMapFarmCue {
         return "§a图装追到：§f" + fam + " · " + slot + " §7· 本图偏向命中";
     }
 
+    /**
+     * D687: after settle deliver — refresh chase vs worn (may have changed).
+     * Quiet if map has no identity; no button twin.
+     */
+    public static void afterSettle(Player p, EmberRunMaps.MapDef m, EmberLoadout lo) {
+        if (p == null || m == null) return;
+        if (m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
+        cue(p, m, lo);
+    }
+
     public static void cue(Player p, EmberRunMaps.MapDef m, EmberLoadout lo) {
         if (p == null || m == null) return;
         String mapFam = m.lootFamily;

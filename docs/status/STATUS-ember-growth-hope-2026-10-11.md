@@ -106,3 +106,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D684 gem craft have/need
 - D685 adventure map-farm hint
 - D686 gem insert have count
+
+## D687–D690 SHIP · jar 1.65.325-d687 · 2026-10-11
+- D687 chase refresh after settle
+- D688 AFK day-full → forge path from mats
+- D689 skill kit Stage2 geometry clarity
+- D690 sig stamp dry-streak on settle (no rate change)

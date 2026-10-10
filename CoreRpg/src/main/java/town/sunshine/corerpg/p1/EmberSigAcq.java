@@ -1,5 +1,7 @@
 package town.sunshine.corerpg.p1;
 
+import town.sunshine.corerpg.PlayerData;
+
 import java.util.Locale;
 
 /**
@@ -30,6 +32,15 @@ public final class EmberSigAcq {
         return String.format(Locale.ROOT,
                 "§8重打：每局徽记 + 约%d%% 签名；未出仍拿徽记，烙印可保底",
                 ratePct());
+    }
+
+    /** D690: menuLine + dry glance when player data available. */
+    public static String menuLine(PlayerData d) {
+        String base = menuLine();
+        if (d == null) return base;
+        int n = EmberSigStampDry.get(d);
+        if (n <= 0) return base;
+        return base + " §e· 连空" + n + "局";
     }
 
     /** True when this ledger key is the repeat-clear insignia grant (not first-clear fc_sigmark). */

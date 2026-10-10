@@ -1,3 +1,4 @@
+# D689: Stage2 geometry numbers on shape preview icons
 # D617: Open/此刻状态挂下一技能希望 + 套装手感（零改系数）
 # D460: 首通 Q04/Q05 聊天三选一/二选一 · D459: 首通解锁技能会聊天宣告 + 本页 Open 半行互指 · 零改技能数值
 # D211 · 余烬技能组 S1（烬斩 / 烬突 / 烬斩符文）
@@ -28,6 +29,7 @@ Events:
   Open:
     - 'sound: BLOCK_NOTE_PLING-1-0.8'
     - 'tell: §e每 8 秒二选一：§fF 烬斩 §7/ §f潜行+F 烬突 §8（共享充能 · 挂机不自动烬突）'
+    - 'tell: §bStage2 几何：§f扇≥110° · 直线6格半宽0.7 · 环3.5格最多4'
     - 'tell: §7当前 §f%corerpg_kit_shape% §7· 身法 §f%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
     - 'tell: §b守招 §f%corerpg_kit_parry_name% §7· 解锁 §f%corerpg_kit_parry_unlock% §7· %corerpg_kit_parry_cd%'
     - 'command: corerpg skill kit'
@@ -171,7 +173,7 @@ Icons:
       lore:
         - ''
         - '§6预览（出本切换）'
-        - '§f  正前扇面 §e100° §f· 半径 §e3.5 §f格 · 最多 §e5'
+        - '§f  正前扇面 §e≥110° §f· 半径 §e3.5 §f格 · 最多 §e5 §8（Stage2）'
         - '§7适合：贴脸清小群'
         - ''
         - '§e套装推荐：§7焚扇 / 爆直 / 承环（成套软设 · 可换）'
@@ -195,7 +197,7 @@ Icons:
       lore:
         - ''
         - '§6预览（出本切换）'
-        - '§f  正前一条线 §e5 §f格（宽 1）· 最多 §e3'
+        - '§f  正前穿刺 §e6 §f格 · 半宽 §e0.7 §f· 最多 §e3 §8（Stage2）'
         - '§7适合：走廊点名 / 窄道'
         - '§8（几何同签名 L07 · 烙上则覆盖符文）'
         - ''
@@ -218,7 +220,7 @@ Icons:
       lore:
         - ''
         - '§6预览（出本切换）'
-        - '§f  身边一圈半径 §e3 §f格 · 最多 §e3'
+        - '§f  身边一圈半径 §e3.5 §f格 · 最多 §e4 §8（Stage2）'
         - '§7适合：被围时清身'
         - '§8（几何同签名 L09 · 烙上则覆盖符文）'
         - '§8L13 蓄力环斩另见签名页（Q07 · 覆盖本符文）'
