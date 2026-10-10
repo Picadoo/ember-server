@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D581: warp to boss during break channel to pile interrupt damage. */
+    public boolean hasPendingPress(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingPress() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathPressBoss(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathPressBoss(p);
+    }
+
     /** D580: warp to regen-channeling elite to interrupt heal. */
     public boolean hasPendingCut(Player p) {
         if (p == null) return false;
@@ -1663,6 +1679,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberCleanPath.scheduleOfferAfterQ01(p); // D578 clean path
                         if ("q01".equals(g.id)) EmberRushPath.scheduleOfferAfterQ01(p); // D579 rush path
                         if ("q01".equals(g.id)) EmberCutPath.scheduleOfferAfterQ01(p); // D580 cut path
+                        if ("q01".equals(g.id)) EmberPressPath.scheduleOfferAfterQ01(p); // D581 press path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

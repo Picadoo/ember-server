@@ -510,6 +510,28 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D581: boss cast armed with a break-damage channel. */
+    boolean hasPendingPress() {
+        return boss != null && boss.le != null && !boss.le.isDead()
+                && pending != null && breakNeed > 0
+                && !broken(breakNeed, breakDone);
+    }
+
+    /** D581: warp a committed player next to the boss to pile break damage. */
+    boolean pathPressBoss(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingPress()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location at = boss.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.5f);
+        return true;
+    }
+
     /** D580: any regen elite currently channeling interrupt window. */
     boolean hasPendingCut() {
         for (Tracked t : mobs.values()) {
@@ -2782,6 +2804,7 @@ final class EmberRunDirector {
         svc.tellRun(s, "§c" + bossDef().name + " §e蓄力「" + sk.name + "」§7— " + who + "（" + sk.warn + " 秒）");
         // D304 W1a: cast-start ActionBar each cast (chat kept); charge 0-cell already returned above
         flashActionBar(EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share));
+        if (breakNeed > 0) EmberPressPath.maybeAfterPress(s); // D581
     }
 
     /** D193 破招: a channel is armed (need > 0) and the party's damage since its warning began reached the need. */
