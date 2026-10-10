@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("equippath".equals(sub) || "换装路径".equals(sub)) { // D517 better-piece equip path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberEquipPath.glance(EmberEquipPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c换装路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberEquipPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c换装路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberEquipPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberEquipPath.get(d);
+                    if (EmberEquipPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberEquipPath.label(cur) + " · 改路径再 /corerpg p1 equippath");
+                    else EmberEquipPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberEquipPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 equippath <keep|quick|bold|clear>");
+                return true;
+            }
+            EmberEquipPath.applyAndReply(p, id);
+            return true;
+        }
         if ("friendpath".equals(sub) || "好友路径".equals(sub)) { // D516 friend-request accept path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

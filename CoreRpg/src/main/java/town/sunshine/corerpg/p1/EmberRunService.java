@@ -1123,6 +1123,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberDailyPath.scheduleOfferAfterQ01(p); // D514 daily bounty path
                         if ("q01".equals(g.id)) EmberClaimPath.scheduleOfferAfterQ01(p); // D515 claim deliver path
                         if ("q01".equals(g.id)) EmberFriendPath.scheduleOfferAfterQ01(p); // D516 friend accept path
+                        if ("q01".equals(g.id)) EmberEquipPath.scheduleOfferAfterQ01(p); // D517 equip auto path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
@@ -1471,6 +1472,7 @@ public final class EmberRunService implements Listener {
         c = EmberRunRules.bestCandidate(EmberMode.tables(), fresh, bagPieces(p), a, "none".equals(set) ? null : set, lv);
         String from = c == fresh ? "" : "背包里的 " + c.shortLabel() + " 比新拿到的更好，";
         int v = EmberRunRules.upgradeVerdict(EmberMode.tables(), c, a, set, lv);
+        v = EmberEquipPath.adjust(v, dataOf(p.getUniqueId())); // D517 equip path
         if (v == EmberRunRules.UP_NONE) return null;
         if (v == EmberRunRules.UP_AUTO) {
             String where = equipPiece(p, c, a);
