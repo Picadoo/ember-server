@@ -745,3 +745,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1981–D1994 forgegoal GEM (jar 1.65.496-d1981)
 - FG-G: 宝石合成 weekly goal id=7; gap/PAPI/craft goalHit/Afk
 - Zero C24/flat change
+
+## D1995 post-FG-G scan
+- Forge deterministic path surface near-sat (GS3/FG-Q/FH/FG-G)
