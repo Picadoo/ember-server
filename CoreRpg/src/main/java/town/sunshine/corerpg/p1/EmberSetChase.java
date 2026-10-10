@@ -186,6 +186,15 @@ public final class EmberSetChase {
         if (d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) { // D867
             ConfirmTokens.sendButton(p, P + "§7未设焦点：",
                     "[选套装焦点]", "/corerpg p1 setfocus", "定成套追方向");
+        } else if (d != null && runs != null && runs.maps() != null) { // D1387
+            String fk = EmberSetFocus.familyKey(EmberSetFocus.get(d));
+            String mk = EmberMapIdentity.suggestMapForFamily(runs.maps(), fk);
+            String fcr = focusCodexRemain(d);
+            if (mk != null && fcr != null && fcr.contains("还差")) {
+                ConfirmTokens.sendButton(p, P + "§7刷焦点图鉴：",
+                        "[进·" + mk.toUpperCase() + "]", "/corerpg p1 enter " + mk,
+                        "本图偏向 " + EmberItemData.familyName(fk) + " · 不锁通关");
+            }
         }
         return true;
     }

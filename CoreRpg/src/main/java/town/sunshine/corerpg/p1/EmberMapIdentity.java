@@ -60,4 +60,16 @@ public final class EmberMapIdentity {
         }
         return "本图身份图鉴已齐";
     }
+
+    /** First mainline Q-map whose lootFamily matches (for focus farm tip). */
+    public static String suggestMapForFamily(EmberRunMaps maps, String family) {
+        if (maps == null || family == null || family.isEmpty()) return null;
+        for (EmberRunMaps.MapDef md : maps.maps.values()) {
+            if (md == null || md.raid || md.event || md.rush || md.shortExpedition) continue;
+            String k = md.key == null ? "" : md.key.toLowerCase(java.util.Locale.ROOT);
+            if (!k.startsWith("q0") || k.length() != 3) continue;
+            if (family.equals(md.lootFamily)) return md.key;
+        }
+        return null;
+    }
 }

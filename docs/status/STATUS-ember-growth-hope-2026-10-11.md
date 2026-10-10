@@ -598,3 +598,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1375–D1386 ARCH SHIP · jar 1.65.452-d1375
 - Codex register → progressRemain AB; SetChase focusCodexRemain
+
+## D1387–D1394 ARCH SHIP · jar 1.65.453-d1387
+- setchase → enter focus-family map when codex missing

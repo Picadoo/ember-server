@@ -22,5 +22,6 @@
 | MF1 | mapfarm 无记录时身份板 | 主线 Q 身份一瞥 | **D1367–** |
 | CD2 | 登记 rising-edge 剩余 | LoadoutService.codex | **D1375–** |
 | SC4 | 焦点族图鉴缺件 | focusCodexRemain | **D1377–** |
+| SC5 | 缺件→进偏向图 | suggestMapForFamily | **D1387–** |
 
 不改套装战力、掉率、通关闸。
