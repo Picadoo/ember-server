@@ -16,7 +16,7 @@
 
 | ID | 项 | 风险 | 态 |
 |----|----|------|----|
-| **EM1-A** | `EmberMapIdentity.methodLine`：合成**已有**路径（图身份缺件 · 焦点对齐 · Q宝石保底）→ mapfarm/入场 AB | 低 · 纯展示 · 无数值 | **本窗 SHIP** |
+| **EM1-A** | methodLine → mapfarm/enter/mapcard | 低 · 纯展示 | **D1814–D1841 SHIP** · near-sat |
 | **EM1-B** | 每图一条**新**农场方法（新怪/新房间/新掉落池） | 高 · 易发明 · 须对照表+owner+可能 p1sim | **BLOCKED** 设计歧义 |
 | **EM1-C** | 词缀精英手感伤乘/新行为 | 高 · 永久伤乘/variety 表 | **BANNED** 本窗 |
 | **EM1-D** | SF4 形微疗缓 | 已 **BANNED** | 禁 |
