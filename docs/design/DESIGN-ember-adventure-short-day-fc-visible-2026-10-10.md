@@ -1,6 +1,6 @@
 # 余烬 · 冒险页短征入口数字化（日帽合计 + 首通合计 · 短征×日更决策面 · ≠抬日表 · ≠sx14）
 
-STATUS=**待批 A · 荐方案 M · 拟 D422** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-adventure-short-day-fc-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-adventure-short-day-fc-visible-need-design-2026-10-10.md) · backlog `B-adventure-short-day-fc-visible`（**待批 A**） · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx14 ≠复述 D373–D421 ≠改 daily_kills/afk.tiers/日帽/S40–S52/首通包 ≠重开选页日帽·首通主交付/仓差/remain/ActionBar/next_farm/工坊链为主债**
+STATUS=**已批 A · 方案 M · D422** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-adventure-short-day-fc-visible-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-adventure-short-day-fc-visible-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-adventure-short-day-fc-visible`（**已批·挂盘已落**）· STATUS [`STATUS-ember-adventure-short-day-fc-visible-d422-2026-10-10.md`](../status/STATUS-ember-adventure-short-day-fc-visible-d422-2026-10-10.md) · **挂盘已落** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx14 ≠复述 D373–D421 ≠改 daily_kills/afk.tiers/日帽/S40–S52/首通包 ≠重开选页日帽·首通主交付/仓差/remain/ActionBar/next_farm/工坊链为主债**
 
 > **一句话玩家价值：** 打开冒险页看短征入口就能看见「今日剩余有奖 N」与「生涯首通未领 M 本」——决定现在追短征还是先挂机/花材；**不**抬产量、**不**交 sx14、**不**重开选页日帽/首通为主交付。
 
@@ -55,9 +55,9 @@ STATUS=**待批 A · 荐方案 M · 拟 D422** · 2026-10-10 · tip [`STATUS-emb
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 冒险 H 挂日帽合计+首通合计必做 + W1b Open 半行可选同批；见 §2）
-- [ ] 否决 A（只口号）/ L（抬表·改包·假承诺）/ W（sx14/复述/假写）
-- [ ] 批注：________________________________
+- [x] **方案 M**（W1a 冒险 H 挂日帽合计+首通合计必做 + W1b Open 半行可选同批；见 §2）
+- [x] 否决 A（只口号）/ L（抬表·改包·假承诺）/ W（sx14/复述/假写）
+- [x] 批注：总控批 A·M · D422 · W1a+W1b
 
 ---
 
@@ -165,7 +165,8 @@ STATUS=**待批 A · 荐方案 M · 拟 D422** · 2026-10-10 · tip [`STATUS-emb
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题冒险页短征入口数字化（兑现 D420§5.4 后置 · 短征×日更决策面）· ≠sx14 |
+| 2026-10-10 | 总控批 A·M · D422 · W1a+W1b · 挂盘已落 · 未派测 |
 
 ---
 
-*D422 · 冒险页短征入口数字化 · 待批 A · 荐方案 M · ≠关观察 ≠抬日表 ≠sx14。*
+*D422 · 冒险页短征入口数字化 · 已批 A·方案 M · 挂盘已落 · ≠关观察 ≠抬日表 ≠sx14 · 未派测。*

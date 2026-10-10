@@ -1,10 +1,10 @@
-# 状态 · 下一档硬债选定 · 需策划（拟 D422 · 冒险页短征入口数字化 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx14）
+# 状态 · 下一档硬债选定 · 需策划（拟 D422 · 冒险页短征入口数字化 · **旁注已关 · 批 A·M · 挂盘已落** · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx14）
 
 > **上游结案：** 总控【催 D422 tip】· D421 sx13 已落地（键 `2688b0b2` · MM `0ecf4134` · 骨架 `77c06810` · 挂盘 `94c826e2` · jar 1.65.124-d421 bv77），全链路抽测已派 → 请交**下一内容号 tip**（挂机资源环加厚 / 短征乐趣 / 有趣系统；**sx14 等 D421 PASS**）。禁 Pack6/天赋/灰印/抬日表/开 gate_daily/动 Stage2。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **打开 · STATUS=待批 A · 荐方案 M · 拟 D422** · docs-only  
-**硬规格（待批 A · 荐方案 M · 拟 D422）：** [`DESIGN-ember-adventure-short-day-fc-visible-2026-10-10.md`](../design/DESIGN-ember-adventure-short-day-fc-visible-2026-10-10.md) · backlog `B-adventure-short-day-fc-visible`（**待批 A**）  
+**本窗性质：** tip **旁注已关 · 批 A·M · 设计待批关闭 · 挂盘已落** · 拟 D422  
+**硬规格（已批 A · 方案 M · D422 · 挂盘已落）：** [`DESIGN-ember-adventure-short-day-fc-visible-2026-10-10.md`](../design/DESIGN-ember-adventure-short-day-fc-visible-2026-10-10.md) · backlog `B-adventure-short-day-fc-visible`（**已批·挂盘已落**） · 旁注 [`STATUS-ember-adventure-short-day-fc-visible-d422-2026-10-10.md`](STATUS-ember-adventure-short-day-fc-visible-d422-2026-10-10.md)  
 **打开理由：** 枢纽「今日可追」已挂 `sx_day_left_sum`；短征选页已挂 day_line / fc / fc_left；**冒险页短征入口 H 仍只有静态口号**（「日有奖帽分开」「选本页可见生涯首通」）——**无**今日剩余有奖数字、**无**首通未领合计。D420§5.4 **明文后置**「冒险页短征入口数字化（日帽/首通合计）」；本号升主合法。sx14 禁交；D404–D421（仓差/remain/ActionBar/next_farm/选页仓差/工坊 remain·next_farm/sx07–sx13/满额追/花材追）禁复述为主债。
 
 ---
@@ -66,7 +66,7 @@
 
 ---
 
-*选题冒险页短征入口数字化 · tip 打开 · STATUS=待批 A · 荐方案 M · 拟 D422 · ≠关观察 ≠抬挂机表 ≠sx14。*
+*选题冒险页短征入口数字化 · tip 旁注已关 · 批 A·M · 挂盘已落 · 拟 D422 · ≠关观察 ≠抬挂机表 ≠sx14 · 未派测。*
 
 ---
 
@@ -75,3 +75,4 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D422 · 上游 D421 落地抽测中 · 兑现 D420§5.4 后置 · ≠sx14 |
+| 2026-10-10 | 总控批 A·M · 旁注已关 · 挂盘已落 · 未派测 |
