@@ -167,8 +167,8 @@ Icons:
       material: blaze powder
       name: '§6精工 · 预览'
       lore:
-        - '§7让这件的成长 +2%/档（0→2%→4%→6%）'
-        - '§7确定成功'
+        - '§7让这件的成长 +2%/档（0→2%→4%→6%）：材料确定升'
+        - '§e希望表盘：§f%corerpg_p1_held_refine_hope%'
         - ''
         - '§e手持件：§f%corerpg_p1_held_next_c%'
         - '§c%corerpg_p1_held_refine_lack%'
@@ -196,6 +196,7 @@ Icons:
       material: blaze powder
       name: '§6精工 · 确认'
       lore:
+        - '§e希望表盘：§f%corerpg_p1_held_refine_hope%'
         - '§e手持件：§f%corerpg_p1_held_next_c%'
         - '§c%corerpg_p1_held_refine_lack%'
         - '§8与预览一致'

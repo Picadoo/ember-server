@@ -164,6 +164,7 @@ Icons:
         - '§7洗练：刃 %corerpg_p1_reroll_blade_cur% §7· 护符 %corerpg_p1_reroll_charm_cur%'
         - '§e希望表盘 · 强化：§7刃 %corerpg_p1_enhance_blade_pity% §7· 护符 %corerpg_p1_enhance_charm_pity%'
         - '§e希望表盘 · 成色：§7刃 %corerpg_p1_quality_blade_hope% §7· 护符 %corerpg_p1_quality_charm_hope%'
+        - '§e希望表盘 · 精工：§7刃 %corerpg_p1_refine_blade_hope% §7· 护符 %corerpg_p1_refine_charm_hope%'
         - '§e希望表盘 · 洗练：§7刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
         - ''
         - '§d工坊四选择：§f烙纹定向 · 随机锻造 · 每周转化 · 词条洗练'

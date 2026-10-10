@@ -3,8 +3,8 @@ package town.sunshine.corerpg.p1;
 import java.util.Locale;
 
 /**
- * D601/D602: unified visible hope meters for enhance + reroll pity + quality bypass.
- * Display only — does not change RATE / MAX_TRIES / affix pity / qualityCost / drop weights.
+ * D601–D603: hope meters for enhance / reroll / quality / refine.
+ * Display only — does not change RATE / MAX_TRIES / affix pity / qualityCost / refineCost / drop weights.
  */
 public final class EmberHopeMeter {
 
@@ -72,5 +72,24 @@ public final class EmberHopeMeter {
         EmberUpgradeRules.Cost c = EmberUpgradeRules.qualityCost(q);
         String cost = c == null ? "" : " · " + EmberGearNextHint.costShort(c);
         return String.format(Locale.ROOT, "§a成色 %d/%d · 下次确定升%s%s", cur, need, next, cost);
+    }
+
+    /**
+     * D603: refine deterministic-bypass hope meter.
+     * Workshop raises craft 0→1→2→3 (0%→2%→4%→6%); always succeeds when paid.
+     */
+    public static String refine(EmberItemData d) {
+        if (d == null) return emptySlot("无件");
+        if (d.isArmor()) return emptySlot("甲看掉落");
+        int craft = Math.max(0, d.craft);
+        int need = EmberTables.MAX_CRAFT;
+        int cur = Math.min(craft, need);
+        if (craft >= need) {
+            return String.format(Locale.ROOT, "§a精工 %d/%d · 已满 6%%", need, need);
+        }
+        EmberUpgradeRules.Cost c = EmberUpgradeRules.refineCost(craft);
+        String cost = c == null ? "" : " · " + EmberGearNextHint.costShort(c);
+        int nextPct = (craft + 1) * 2;
+        return String.format(Locale.ROOT, "§a精工 %d/%d · 下次确定升%d%%%s", cur, need, nextPct, cost);
     }
 }

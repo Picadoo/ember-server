@@ -1,6 +1,6 @@
 # STATUS · 希望感成长环 · 2026-10-11
 
-STATUS=**D602 A2 PASS · 续 D603** · CST 2026-10-11  
+STATUS=**D603 A3 PASS · D604 tip 已开** · CST 2026-10-11  
 TRIGGER=服主「好好策划然后一直做；一直变强；不要看不到希望；靠运气挫败」  
 RESEARCH=`docs/design/RESEARCH-ember-growth-hope-reference-2026-10-11.md`  
 DESIGN=`docs/design/DESIGN-ember-growth-hope-loop-2026-10-11.md`  
@@ -33,7 +33,7 @@ SKILL=`docs/design/DESIGN-ember-skill-kit-2026-10-06.md`
 |----|-----|-------|------|------|
 | 1 | **D601** | A1 | 强化+洗练希望表盘统一 | **PASS** |
 | 2 | **D602** | A2 | 成色确定旁路 + 可见计数 | **PASS** jar 1.65.294 |
-| 3 | **D603** | A3 | 精工确定旁路 + 可见计数 | 待 |
+| 3 | **D603** | A3 | 精工确定旁路 + 可见计数 | **PASS** jar 1.65.295 |
 | 4 | **D604** | A4 | 地图徽记/签名 chase 进度条 | 待 |
 | 5–9 | D605–D609 | B/C | 技能分叉 / 孔石公式 | 待；孔石 Stage1 并行 |
 
@@ -43,3 +43,5 @@ SKILL=`docs/design/DESIGN-ember-skill-kit-2026-10-06.md`
 
 
 详 D602：[`STATUS-ember-growth-hope-d602-2026-10-11.md`](STATUS-ember-growth-hope-d602-2026-10-11.md)
+
+详 D603：[`STATUS-ember-growth-hope-d603-2026-10-11.md`](STATUS-ember-growth-hope-d603-2026-10-11.md)

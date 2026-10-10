@@ -13,6 +13,10 @@ public class EmberHopeMeterTest {
         return new EmberItemData(EmberItemData.newUid(), "ember_v1_burst_blade_t2", "burst", "blade", 2, q, 0, 0, 0, false, "drop", 1, 0);
     }
 
+    private static EmberItemData bladeC(int craft) {
+        return new EmberItemData(EmberItemData.newUid(), "ember_v1_burst_blade_t2", "burst", "blade", 2, 0, craft, 0, 0, false, "drop", 1, 0);
+    }
+
     @Test public void glance_shared_style() {
         assertTrue(EmberHopeMeter.glance(2, 5, EmberHopeMeter.READY_ENHANCE).contains("2"));
         assertTrue(EmberHopeMeter.glance(2, 5, EmberHopeMeter.READY_ENHANCE).contains("/5"));
@@ -56,5 +60,21 @@ public class EmberHopeMeterTest {
         assertFalse(q2.contains("确定升"));
         String q3 = EmberHopeMeter.quality(bladeQ(3));
         assertTrue(q3.contains("已满极品"));
+    }
+
+    @Test public void refine_forge_bypass_progress() {
+        String c0 = EmberHopeMeter.refine(bladeC(0));
+        assertTrue(c0.contains("0/3"));
+        assertTrue(c0.contains("确定升2%"));
+        assertTrue(c0.contains("胚3"));
+        String c1 = EmberHopeMeter.refine(bladeC(1));
+        assertTrue(c1.contains("1/3"));
+        assertTrue(c1.contains("确定升4%"));
+        String c2 = EmberHopeMeter.refine(bladeC(2));
+        assertTrue(c2.contains("2/3"));
+        assertTrue(c2.contains("确定升6%"));
+        String c3 = EmberHopeMeter.refine(bladeC(3));
+        assertTrue(c3.contains("3/3"));
+        assertTrue(c3.contains("已满"));
     }
 }
