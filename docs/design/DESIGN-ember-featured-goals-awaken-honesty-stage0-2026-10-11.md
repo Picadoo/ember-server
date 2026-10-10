@@ -23,5 +23,6 @@ setchase-mapid（SC/MI/CD）已近饱和。精选入场、周目标进度、觉�
 | MC1 | 入场名片缺件 | MapCardCue |
 | SX1 | 短征首通还差 | ShortPath AB |
 | FC1 | 首通空态对齐 | cmdFirstClear |
+| RT1 | 突破路线 AB | routeCommand |
 
 不改奖励数、周帽、掉率、通关闸。

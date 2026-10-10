@@ -622,3 +622,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1479–D1492 ARCH SHIP · jar 1.65.460-d1479
 - firstclear empty → focus/target align + chase buttons
+
+## D1493–D1506 ARCH SHIP · jar 1.65.461-d1493
+- routeCommand AB awakeningRemain + first breakthrough line

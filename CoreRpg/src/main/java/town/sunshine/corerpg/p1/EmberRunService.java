@@ -2414,7 +2414,21 @@ public final class EmberRunService implements Listener {
     /** D120: /corerpg p1 route — the breakthrough routes with buttons */
     public boolean routeCommand(Player p) {
         List<String[]> btn = new ArrayList<String[]>();
-        for (String line : breakthroughRoutes(p, btn)) p.sendMessage(P + "§b下一次突破 §7" + line);
+        List<String> lines = breakthroughRoutes(p, btn);
+        for (String line : lines) p.sendMessage(P + "§b下一次突破 §7" + line);
+        // D1494: AB remain（觉醒短行 + 首条突破半行）
+        try {
+            EmberLoadout lo = loadouts.refresh(p);
+            String awk = lo == null ? "" : lo.awakeningRemain();
+            String first = lines.isEmpty() ? "" : lines.get(0).replaceAll("§.", "");
+            if (first.length() > 28) first = first.substring(0, 28) + "…";
+            if (awk != null && !awk.isEmpty() && !"觉醒满".equals(awk))
+                p.sendActionBar("§b突破 · §f" + awk + (first.isEmpty() ? "" : " §8· " + first));
+            else if (!first.isEmpty())
+                p.sendActionBar("§b突破 · §f" + first);
+            else
+                p.sendActionBar("§a突破 · 觉醒满");
+        } catch (Throwable ignored) { }
         if (!btn.isEmpty()) town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
         return true;
     }
