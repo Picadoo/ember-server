@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-rest-path`（已批 A · 方案 M · D509 · **PASS** · jar 1.65.200-d509 · 连战满休/轻休/不休真钳阶段回血 · ≠倒退/败退双胞 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-bounty-path`（已批 A · 方案 M · D508 · **PASS** · jar 1.65.199-d508 · 花样委托词缀/事件/双追缺则补 · ≠D500风味 ≠D506落房 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-fail-path`（已批 A · 方案 M · D507 · **PASS** · jar 1.65.198-d507 · 挑战深渊失败满退/轻退/不退真钳退体 · ≠D505倒退药 ≠组合粘性 ≠同族 HUD ≠工坊/入场cue）
 - `B-room-path`（已批 A · 方案 M · D506 · **PASS** · jar 1.65.197-d506 · 花样前/中/后房真改落房 · ≠D500种类偏好 ≠组合粘性 ≠倒退/备药/短征/变招双胞 ≠同族 HUD ≠工坊/入场cue）

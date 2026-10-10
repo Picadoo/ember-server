@@ -103,9 +103,19 @@ public final class EmberRushService {
             Player p = Bukkit.getPlayer(u);
             if (p == null || !p.isOnline() || p.isDead() || s.died.contains(u) || !p.getWorld().equals(d.w)) continue;
             double max = EmberHeal.maxHp(p);
-            p.setHealth(Math.max(1.0, Math.min(max, p.getHealth() + max * d.def.rushHeal)));
-            EmberHeal.rebase(p); // sanctioned HP change (B2.144 guard)
+            // D509: per-player rest path clamps between-boss heal (never above table)
+            PlayerData pd = runs.dataOf(u);
+            int rpath = EmberRestPath.get(pd);
+            double heal = EmberRestPath.effectiveHeal(rpath, d.def.rushHeal);
+            if (heal > 0) {
+                p.setHealth(Math.max(1.0, Math.min(max, p.getHealth() + max * heal)));
+                EmberHeal.rebase(p); // sanctioned HP change (B2.144 guard)
+            }
             p.setFireTicks(0);
+            if (EmberRestPath.valid(rpath) && heal != d.def.rushHeal) {
+                log().info("[P1 run] " + s.runId + " restpath " + EmberRestPath.key(rpath) + " " + p.getName()
+                        + " heal " + d.def.rushHeal + "→" + heal);
+            }
             healed++;
         }
         runs.tellRun(s, "§a" + was.name + " 倒下 §7（" + (done + 1) + "/" + d.def.chain.size() + "，" + secs + " 秒）· 休息 " + Math.round(d.def.rushBreak)

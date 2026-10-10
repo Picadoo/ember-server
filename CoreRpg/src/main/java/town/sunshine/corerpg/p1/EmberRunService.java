@@ -1132,6 +1132,7 @@ public final class EmberRunService implements Listener {
                             p.sendMessage(P + "§7不用打命令：主菜单 → 冒险 → 进阶模式");
                             EmberModePath.scheduleOffer(p, g.id); // D462 path pick ~2s later
                             if ("q04".equals(g.id)) EmberEchoPath.scheduleOffer(p); // D468 residual weekly path
+                            if ("q04".equals(g.id)) EmberRestPath.scheduleOfferAfterQ04(p); // D509 rush rest heal path
                             if ("q04".equals(g.id)) EmberShapePath.scheduleOfferAfterQ04(p); // D490 slash shape combat path
                             if ("q05".equals(g.id)) EmberStepPath.scheduleOfferAfterQ05(p); // D491 step-dir combat path
                             if ("q05".equals(g.id)) EmberPosturePath.scheduleOfferAfterQ05(p); // D495 posture combat path
