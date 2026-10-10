@@ -610,6 +610,7 @@ public final class EmberForgeService implements Listener {
                     q.sendMessage(P + ChatColor.GREEN + note);
                     EmberForgeFeel.flash(q, kind, note); // D475 forge result ActionBar
                     if ("enhance".equals(kind)) EmberForgeMatReady.afterEnhance(q); // D478 clear mat-ready latch
+                    if ("enhance".equals(kind)) EmberEnhanceLoop.afterEnhance(q, list); // D485 enhance branch chase
                     if ("swap".equals(kind)) EmberSwapLoop.afterSwap(q, list); // D484 free-swap spend chase
                     for (TxnItem t : list) if (t.after != null) q.sendMessage(P + "现在: " + preview(t.after));
                     q.playSound(q.getLocation(), Sound.BLOCK_ANVIL_USE, 0.7f, 1.2f);

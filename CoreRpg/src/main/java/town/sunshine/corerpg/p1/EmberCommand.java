@@ -281,6 +281,18 @@ public final class EmberCommand {
             EmberRaidPath.applyAndReply(p, id);
             return true;
         }
+        if ("enhanceloop".equals(sub)) { // D485 admin smoke: enhance → forge-branch spend chase
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            boolean won = true;
+            if (args.length >= 3) {
+                String a = args[2].toLowerCase(Locale.ROOT);
+                if ("fail".equals(a) || "miss".equals(a) || "失败".equals(a)) won = false;
+            }
+            EmberEnhanceLoop.afterEnhance(p, won);
+            p.sendMessage(P + "§8enhanceloop · " + EmberEnhanceLoop.followHint(won));
+            return true;
+        }
         if ("swaploop".equals(sub)) { // D484 admin smoke: free enhance-swap → spend chase buttons
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
