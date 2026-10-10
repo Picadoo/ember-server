@@ -386,6 +386,12 @@ public final class EmberSignService implements Listener {
         plugin.getLogger().info("[P1 sign] " + p.getName() + " makeup " + mon + "-" + miss + " -> n=" + n);
         p.sendMessage(P + "§a补签 " + now.getMonthValue() + " 月 " + miss + " 日 · 本月第 " + n + " 次：§f" + got
                 + " §8（本月补签 " + d.periodCount(C_SMK, mon) + "/" + makeupPerMonth + "）");
+        try { p.sendActionBar("§a补签 · 本月第 " + n + " 次"); } catch (Throwable ignored) { }
+        // D821
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[在线奖励]", "/corerpg p1 sign online claim", "领时长档", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花奖励", "GOLD"},
+                new String[]{"[签到页]", "/corerpg p1 sign menu", "看月历", "AQUA"});
     }
 
     // ---------------------------------------------------------------- 在线时长
@@ -460,6 +466,16 @@ public final class EmberSignService implements Listener {
 
 
     /** D805: login rising-edge if any milestone claimable today. */
+
+    /** D820: login rising-edge when makeup is ready. */
+    public void maybeMakeupCue(Player p) {
+        if (p == null || !signP1()) return;
+        if (!isMakeupReady(p)) return;
+        ConfirmTokens.sendButtons(p, P + "§e可补签 · 缺签格子可补 ",
+                new String[]{"[一键补签]", "/corerpg p1 sign makeup", "补最早缺签", "GREEN"},
+                new String[]{"[签到页]", "/corerpg p1 sign menu", "看月历", "AQUA"});
+    }
+
     public void maybeClaimableCue(Player p) {
         if (p == null || !onlineP1()) return;
         PlayerData d = data(p.getUniqueId());
@@ -557,6 +573,7 @@ public final class EmberSignService implements Listener {
                 maybeClaimableCue(p); // D805
             }
             if (!signP1()) return;
+            maybeMakeupCue(p); // D820
             LocalDate now = today();
             int mask = d.periodCount(C_SMASK, month(now));
             if (signedOn(mask, now.getDayOfMonth())) return;

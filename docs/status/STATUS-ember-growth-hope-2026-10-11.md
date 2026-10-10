@@ -335,3 +335,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D818–D819 SHIP · jar 1.65.373-d818
 - Sign success next loop; join one-click sign
+
+## D820–D821 SHIP · jar 1.65.374-d820
+- Makeup join cue (day latch); makeup success next
