@@ -544,3 +544,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1207–D1214 ARCH SHIP · jar 1.65.435-d1207
 - Skill slash-miss shape ActionBar (display only · not SF4 / not skill_mult)
+
+## D1215–D1222 ARCH SHIP · jar 1.65.436-d1215
+- SinkGlance CONVERT tier cost lack honesty

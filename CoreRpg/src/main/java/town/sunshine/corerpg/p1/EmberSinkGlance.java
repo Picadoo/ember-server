@@ -53,6 +53,10 @@ public final class EmberSinkGlance {
                 focus = "随机锻";
                 // D1200: ordinary roll matCost（非 floor · 禁 K3）
                 cost = EmberForgeRollRules.matCost();
+            } else if (goal == EmberForgeGoal.CONVERT) {
+                focus = "转化";
+                // D1216: weekly convert cost by held tier
+                if (d.tier >= 1 && d.tier <= 3) cost = EmberConvertRules.cost(d.tier);
             } else if (goal == EmberForgeGoal.BRAND) {
                 focus = "烙纹";
                 // D1192: craftShards mirror · 非 K3
