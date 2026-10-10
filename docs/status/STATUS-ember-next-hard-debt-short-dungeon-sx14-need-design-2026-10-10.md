@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D423 · 短征 sx14 · 烬裂折廊 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D423** · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx14-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx14-2026-10-10.md) · 首航 rooms×3+boss · S53 80/4/3 · 首通50/6/1 · 体力30 · p1_sx14_day×3 · 十四本选页 · 真强制折角裂隙廊禁线性/环/对廊/转枢/衡梁等换皮 · **已批·施工中** · STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md) · 策划本号关闭设计待批 · ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D423** · 指针 DESIGN [`DESIGN-ember-short-dungeon-sx14-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx14-2026-10-10.md) · 首航 rooms×3+boss · S53 80/4/3 · 首通50/6/1 · 体力30 · p1_sx14_day×3 · 十四本选页 · 真强制折角裂隙廊禁线性/环/对廊/转枢/衡梁等换皮 · **已批·已落地 PASS** · STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md) · 策划本号关闭设计待批 · ≠关观察 ≠抬日表 ≠开 R/K3 ≠假开旧日常。下文为交稿原文，保留备查。
 
-> **【D423 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批·施工中** · STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md) · **零 jar（本策划号；施工另号/同窗总控）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D422 / 冒险页合计 / 仓差 / remain / ActionBar / 十三本规格空转**
+> **【D423 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批·已落地 PASS** · STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md) · **零 jar（本策划号；施工另号/同窗总控）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠纯换皮当主债** · **≠ stage 脏 runtime** · **≠复述 D373–D422 / 冒险页合计 / 仓差 / remain / ActionBar / 十三本规格空转**
 
 > **上游结案：** 总控【催 D423 tip】· D421 sx13 PASS @`c622e124`（jar 1.65.124-d421 bv77）→ **sx14 闸开**；D422 冒险页合计薄抽并行——**禁**复述为主债。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D423** · **已批·施工中** · docs-only · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
-**硬规格（已批 A · 方案 M · D423 · 施工中）：** [`DESIGN-ember-short-dungeon-sx14-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx14-2026-10-10.md) · backlog `B-short-dungeon-sx14`（**已批·施工中**）· STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md)  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D423** · **已批·已落地 PASS** · docs-only · **≠关观察** · **≠开闸** · **≠开 `k3_refine`** · **≠抬挂机日表** · **≠ stage 脏 runtime**  
+**硬规格（已批 A · 方案 M · D423 · 施工中）：** [`DESIGN-ember-short-dungeon-sx14-2026-10-10.md`](../design/DESIGN-ember-short-dungeon-sx14-2026-10-10.md) · backlog `B-short-dungeon-sx14`（**已批·已落地 PASS**）· STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md)  
 **打开理由：** 短征十三本（sx01–sx13）已可达且 D421 全链路 PASS；下一真增量=**第十四条**同范式、**裂门庭→折裂廊（须经≥3道强制折角裂隙廊段）→裂冠终厅**新结构维的短本，继续拉日刷内容量。
 
 ---
@@ -73,3 +73,4 @@
 |----|-----|
 | 2026-10-10 | 初稿 · tip 打开 · 待批 A·荐 M · 拟 D423 · 上游 D421 PASS @`c622e124` · D422 薄抽并行 · 主题钉强制折角裂隙廊「烬裂折廊」· 薄表 S53 有奖80/4/3 · 首通50/6/1 |
 | 2026-10-10 | 总控批 A·M · 旁注已关 · tip→已批·施工中 · 见 STATUS-ember-short-dungeon-sx14-d423 |
+| 2026-10-10 | **已批 A · 方案 M · D423** · 全链路抽测 PASS · 键 `24dbbcc9` · MM `163d9051` · 菜单 `1c8c8619` · jar 1.65.125-d423 bv78 · spot [`STATUS-ember-short-dungeon-sx14-spot-d423-2026-10-10.md`](STATUS-ember-short-dungeon-sx14-spot-d423-2026-10-10.md) · ≠关观察 ≠抬日表 |
