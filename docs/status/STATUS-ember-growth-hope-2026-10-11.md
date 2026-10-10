@@ -669,3 +669,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - Armor claim/equip capacity AB (待领/换装还差)
 ## D1711 ARCH NX3
 - EmberSourceMapTest + EmberCountersTest PASS; C15/C16 still paused
+
+## D1712–D1725 SHIP · jar 1.65.475-d1712
+- Delivery finish/offerForgeSpace/deliver cmd capacity AB

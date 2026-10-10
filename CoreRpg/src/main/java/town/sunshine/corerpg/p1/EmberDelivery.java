@@ -89,6 +89,13 @@ public final class EmberDelivery {
         inflight.remove(id);
         if (again.remove(id)) { kick(p); return; }
         if (left[0] > 0) retryLater(p);
+        try { // D1713
+            int free = EmberGearLib.freeBackpackSlots(p);
+            if (left[0] > 0)
+                p.sendActionBar("§e到账 · 还留§f" + left[0] + "笔 §8· 空" + free + "格 · 腾仓再补领");
+            else
+                p.sendActionBar("§a到账 · 清 §8· 空" + free + "格");
+        } catch (Throwable ignored) { }
         runAfters(id);
         // D478: mat/coin delivery may have crossed enhance afford threshold
         try { EmberForgeMatReady.maybeReadyCue(p); } catch (Throwable ignored) { }
@@ -242,8 +249,12 @@ public final class EmberDelivery {
 
     /** D792: backpack/warehouse full → forge path to free space (spend mats / dismantle). */
     static void offerForgeSpace(Player p, String why) {
+        // D1715 free-slot glance before buttons
         if (p == null) return;
-        try { p.sendActionBar("§c空间不足 · §7去工坊腾仓"); } catch (Throwable ignored) { }
+        try {
+            int free = EmberGearLib.freeBackpackSlots(p);
+            p.sendActionBar("§c空间不足 · §7空" + free + "格 · 去工坊腾仓");
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§7仓满：",
                 new String[]{"[工坊]", "/corerpg p1 forge", "强化/洗练花材料", "GOLD"},
                 new String[]{"[分解·手点]", "/corerpg p1 scrap", "未强化差装→材料", "RED"},

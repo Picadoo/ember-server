@@ -774,8 +774,11 @@ public final class EmberGearLib implements Listener {
         if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
         Player p = (Player) s;
         if (!EmberMode.active()) { p.sendMessage(P + "P1 模式未开启"); return true; }
-        if ("deliver".equals(sub)) { // D162: retry owed deliveries now (backpack was full, warehouse at the cap …)
+        if ("deliver".equals(sub)) { // D162 / D1714
             p.sendMessage(P + "正在核对待到账的物品…");
+            try {
+                p.sendActionBar("§e补领 · 核对中 · 空" + freeBackpackSlots(p) + "格");
+            } catch (Throwable ignored) { }
             delivery.onJoin(p);
             return true;
         }
