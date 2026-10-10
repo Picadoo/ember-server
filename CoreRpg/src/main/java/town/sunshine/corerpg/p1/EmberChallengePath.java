@@ -166,6 +166,10 @@ public final class EmberChallengePath {
             else if (id == EASY) p.sendActionBar("§a硬本路径 · 偏普通");
             else p.sendActionBar("§b硬本路径 · 随令");
         } catch (Throwable ignored) { }
+        // D740: clarity example
+        if (id == PREFER) p.sendMessage(P + "§7例：已首通图进本默认挑战版（指令写普通可覆盖）");
+        else if (id == EASY) p.sendMessage(P + "§7例：已首通图进本默认普通版（指令写挑战可覆盖）");
+        else p.sendMessage(P + "§7例：完全按进本指令，不自动改版");
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[打开冒险]", "/ember_p1_adventure", "进已首通图试默认", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 challengepath", "重选", "GRAY"});

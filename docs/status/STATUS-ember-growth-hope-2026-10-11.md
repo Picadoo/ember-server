@@ -202,3 +202,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D736 convert afterConvert weekLine
 - D737 challenge path unset hint on enter
 - D738 talent info next unlockable
+
+## D739–D740 SHIP · jar 1.65.342-d739 · 2026-10-11
+- D739 insert lack → craft button
+- D740 challengepath example line

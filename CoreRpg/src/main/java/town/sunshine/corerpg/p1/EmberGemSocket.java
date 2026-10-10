@@ -3,6 +3,7 @@ package town.sunshine.corerpg.p1;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.NiBridge;
 import town.sunshine.corerpg.PlayerData;
@@ -90,6 +91,9 @@ public final class EmberGemSocket {
         if (ni == null || !ni.consumeExact(p, gemId, 1)) {
             int have = ni == null ? 0 : ni.countInInventory(p, gemId);
             p.sendMessage(P + "缺少 " + EmberItemData.gemName(code) + " §7（背包+仓 §f" + have + "§7）· 先合成或通关保底"); // D686
+            ConfirmTokens.sendButton(p, P + "§7获取：", // D739
+                    "[合成" + EmberItemData.gemName(code) + "]", "/corerpg p1 gem craft " + EmberGemPath.key(code),
+                    "碎+骨+币合成 · 不走旧 socket");
             return true;
         }
         int s0 = hole == 0 ? code : d.sock0;
