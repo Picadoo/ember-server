@@ -1,6 +1,6 @@
 # DESIGN · 生活/烹饪剩余诚实 Stage0 · 2026-10-11
 
-> **状态：** Stage0 + **D1543– SHIP** · 已批 A · 方案 M  
+> **状态：** Stage0 + **D1543– / D1571– SHIP** · 已批 A · 方案 M  
 > **硬禁：** 无 K3/SF4 / hope PAPI / AFK raise / 改掉率 / skill_mult
 
 ## 问题
@@ -14,5 +14,8 @@
 | LF3 | 饱食/就绪下一餐 | 非战斗表 · 仅展示 |
 | LF4 | 生活经验还差 | addXp/show AB |
 | LF5 | 铁砧还差币 | anvil take |
+| LF6 | 周/日帽·等级闸 AB | buy fail |
+| LF7 | show 还差次数 | offer 行 |
+| LG1 | 账本补领 AB | LedgerGlance/claim |
 
 不改产量、价格表、AFK。

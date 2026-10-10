@@ -640,3 +640,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1557–D1570 ARCH SHIP · jar 1.65.465-d1557
 - Life XP remain AB; anvil coin gap AB
+
+## D1571–D1588 ARCH SHIP · jar 1.65.466-d1571
+- Life weekly/daily/level gate AB; show 还差次数; LedgerGlance/claim AB; anvil success

@@ -301,6 +301,7 @@ public final class LifeService implements Listener {
         } // D1020
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GRAY + "[铁砧] 修理手续费 -" + repairFee + " 余烬币");
+        try { p.sendActionBar("§a铁砧 · 修理 -" + repairFee + "币"); } catch (Throwable ignored) { } // D1575
     }
 
     // ---------------- command ----------------
@@ -363,19 +364,48 @@ public final class LifeService implements Listener {
             for (Map.Entry<String, Integer> e : o.inputs.entrySet()) cost.add(ni.displayName(e.getKey()) + "×" + e.getValue());
             if (o.coin > 0) cost.add(o.coin + " 币");
             sb.append(cost.isEmpty() ? "免费" : String.join(" + ", cost));
-            if (o.weekly > 0) sb.append(ChatColor.DARK_GRAY).append(" · 本周 ").append(d.periodCount("life_" + o.id, DailyService.weekId())).append("/").append(o.weekly);
-            if (o.daily > 0) sb.append(ChatColor.DARK_GRAY).append(" · 今日 ").append(d.periodCount("life_" + o.id, DailyService.today())).append("/").append(o.daily);
-            if (o.lifeLevel > lv) sb.append(ChatColor.RED).append(" · 需生活 Lv.").append(o.lifeLevel);
+            if (o.weekly > 0) {
+                int wHave = d.periodCount("life_" + o.id, DailyService.weekId());
+                int wLeft = Math.max(0, o.weekly - wHave);
+                sb.append(ChatColor.DARK_GRAY).append(" · 本周 ").append(wHave).append("/").append(o.weekly)
+                        .append(wLeft > 0 ? " · 还差" + wLeft + "次" : " · 满");
+            }
+            if (o.daily > 0) {
+                int dHave = d.periodCount("life_" + o.id, DailyService.today());
+                int dLeft = Math.max(0, o.daily - dHave);
+                sb.append(ChatColor.DARK_GRAY).append(" · 今日 ").append(dHave).append("/").append(o.daily)
+                        .append(dLeft > 0 ? " · 还差" + dLeft + "次" : " · 满");
+            }
+            if (o.lifeLevel > lv) sb.append(ChatColor.RED).append(" · 需生活 Lv.").append(o.lifeLevel)
+                    .append(" · 还差").append(o.lifeLevel - lv).append("级");
             p.sendMessage(sb.toString());
         }
         p.sendMessage(ChatColor.GRAY + " /corerpg life buy <项目> [次数] · /corerpg life cook · 钓竿在补给处购买，水边抛竿钓鱼升生活等级");
     }
 
     private boolean buy(Player p, PlayerData d, Offer o, boolean verbose) {
-        if (o.lifeLevel > lifeLevel(d)) { if (verbose) p.sendMessage(ChatColor.RED + "[生活] 需要生活 Lv." + o.lifeLevel + "（钓鱼/烹饪/熬药升级）"); return false; }
+        if (o.lifeLevel > lifeLevel(d)) {
+            if (verbose) {
+                int haveLv = lifeLevel(d);
+                p.sendMessage(ChatColor.RED + "[生活] 需要生活 Lv." + o.lifeLevel + "（钓鱼/烹饪/熬药升级）· 现 Lv." + haveLv
+                        + " · 还差 " + (o.lifeLevel - haveLv) + " 级");
+                try { // D1572
+                    p.sendActionBar("§e生活 · 需 Lv." + o.lifeLevel + " §8· 现" + haveLv);
+                } catch (Throwable ignored) { }
+            }
+            return false;
+        }
         String wk = DailyService.weekId(), td = DailyService.today();
-        if (o.weekly > 0 && d.periodCount("life_" + o.id, wk) >= o.weekly) { p.sendMessage(ChatColor.RED + "[生活] 本周次数已用完（" + o.weekly + "）。"); return false; }
-        if (o.daily > 0 && d.periodCount("life_" + o.id, td) >= o.daily) { p.sendMessage(ChatColor.RED + "[生活] 今日次数已用完（" + o.daily + "）。"); return false; }
+        if (o.weekly > 0 && d.periodCount("life_" + o.id, wk) >= o.weekly) {
+            p.sendMessage(ChatColor.RED + "[生活] 本周次数已用完（" + o.weekly + "）。");
+            try { p.sendActionBar("§e生活 · 本周帽满 · " + o.id); } catch (Throwable ignored) { }
+            return false;
+        }
+        if (o.daily > 0 && d.periodCount("life_" + o.id, td) >= o.daily) {
+            p.sendMessage(ChatColor.RED + "[生活] 今日次数已用完（" + o.daily + "）。");
+            try { p.sendActionBar("§e生活 · 今日帽满 · " + o.id); } catch (Throwable ignored) { }
+            return false;
+        }
         for (Map.Entry<String, Integer> e : o.inputs.entrySet()) {
             int have = ni.countInInventory(p, e.getKey());
             if (have < e.getValue()) {

@@ -3098,12 +3098,27 @@ public final class EmberRunService implements Listener {
             case "forgeroll":
             case "随机锻造": return cmdForgeRoll(s, args);
             case "firstclear": return cmdFirstClear(s, args);
-            case "claim":
+            case "claim": { // D1574
                 if (!(s instanceof Player)) return true;
-                if (blocksLegacy(((Player) s).getWorld())) { s.sendMessage(P + "出本后再领取。"); return true; }
-                if (deliver((Player) s) == 0 && store.ledger(((Player) s).getUniqueId()).open().isEmpty()) // B2.138
+                Player cp = (Player) s;
+                if (blocksLegacy(cp.getWorld())) { s.sendMessage(P + "出本后再领取。"); return true; }
+                int got = deliver(cp);
+                int left = EmberLedgerGlance.claimable(this, cp.getUniqueId());
+                if (got == 0 && left == 0 && store.ledger(cp.getUniqueId()).open().isEmpty()) {
                     s.sendMessage(P + "没有可领取的暂存奖励。");
+                    try { cp.sendActionBar("§7补领 · 无待领"); } catch (Throwable ignored) { }
+                } else if (got > 0) {
+                    try {
+                        cp.sendActionBar(left > 0
+                                ? ("§a补领 · §f" + got + " 项 §8· 还剩" + left)
+                                : ("§a补领 · §f" + got + " 项 · 清完"));
+                    } catch (Throwable ignored) { }
+                } else if (left > 0) {
+                    s.sendMessage(P + EmberLedgerGlance.line(left) + " §7（背包可能满 / 需出本）");
+                    try { cp.sendActionBar("§e补领 · 仍有 §f" + left + " 项"); } catch (Throwable ignored) { }
+                }
                 return true;
+            }
             case "enter":
                 if (!(s instanceof Player) || args.length < 3) { s.sendMessage(P + "/corerpg p1 enter <q01..q07|sx01..sx19> [challenge]"); return true; }
                 if (args.length >= 4 && "force".equalsIgnoreCase(args[args.length - 1])) entry.markForced(((Player) s).getUniqueId()); // D96 (D235 → EmberEntryService)

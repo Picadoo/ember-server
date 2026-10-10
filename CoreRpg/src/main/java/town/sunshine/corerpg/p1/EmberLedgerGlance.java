@@ -36,6 +36,9 @@ public final class EmberLedgerGlance {
         if (p == null || open <= 0) return;
         String P = EmberRunService.P;
         p.sendMessage(P + line(open));
+        try { // D1574
+            p.sendActionBar("§e补领 · §f" + open + " 项待领");
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButton(p, P, "[补领]", "/corerpg p1 claim", "领取暂存奖励");
     }
 
@@ -53,6 +56,7 @@ public final class EmberLedgerGlance {
     public static void bagFull(Player p, int waiting) {
         if (p == null || waiting <= 0) return;
         String P = EmberRunService.P;
+        try { p.sendActionBar("§e背包满 · §f" + waiting + " 项暂存"); } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + org.bukkit.ChatColor.YELLOW + waiting
                         + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后：",
                 new String[]{"[补领]", "/corerpg p1 claim", "领取暂存", "YELLOW"},
