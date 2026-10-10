@@ -166,7 +166,7 @@ public final class EmberSignature {
     public static String attuneCheck(Def d, boolean q07, boolean mapCleared, boolean unlocked, int marks) {
         if (d == null) return "没有这条签名";
         if (alt(d) == null) return d.name + " 没有调律版";
-        if (!q07) return "首通 " + ALT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放签名调律";
+        if (!q07) return "首进或首通 " + ALT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放签名调律";
         if (!mapCleared) return "先首通 " + d.map.toUpperCase(Locale.ROOT) + " 才能调律它的签名";
         if (!unlocked && marks < altMarks()) return d.map.toUpperCase(Locale.ROOT) + " 首领徽记不够（" + marks + "/" + altMarks() + "）";
         return null;

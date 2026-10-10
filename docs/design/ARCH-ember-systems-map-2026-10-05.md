@@ -453,3 +453,8 @@ Skill set-fork / SigFeel / talent row1 HOLD / AFK gear-in-combat 已评估。
 
 ### SU · shape unlock first-enter (D2277–D2288)
 Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
+
+## KE/SG+ · D2289–D2316
+- Kit enter: Q02 dash / Q03 parry / Q05 step / Q07 attune (enter OR clear)
+- set×shape land: slash+step+dash Slow/heal; sig shield secs×1.25
+- Talent HOLD · no skill_mult

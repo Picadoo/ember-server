@@ -148,8 +148,8 @@ public final class EmberAttunePath {
         }
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!pl.getEmberRuns().progressFlag(d, EmberSignature.ALT_UNLOCK)) {
-            p.sendMessage(EmberRunService.P + "§c签名调律需本人首通 Q07。");
+        if (!EmberSkillKit.attuneUnlocked(d, pl.getEmberRuns())) {
+            p.sendMessage(EmberRunService.P + "§c签名调律需本人首进或首通 Q07。");
             return;
         }
         if (EmberSkillKit.inDungeon(p, pl.getEmberRuns())) {

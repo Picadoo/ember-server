@@ -423,8 +423,9 @@ public final class FlexSkillService implements Listener {
         LivingEntity target = nearestEnemy(player, at,
                 town.sunshine.corerpg.p1.EmberSkillKit.STEP_IGNITE_RADIUS);
         if (target == null) return true;
+        boolean sync = stepShapeSynced(player);
         target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
-                town.sunshine.corerpg.p1.EmberSkillKit.STEP_SLOW_TICKS, 0, false, true), true);
+                town.sunshine.corerpg.p1.EmberSkillKit.stepLandSlowTicks(sync), 0, false, true), true);
         at.getWorld().spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 0.3, 0), 16, 0.35, 0.2, 0.35, 0.02);
         return true;
     }
@@ -437,7 +438,9 @@ public final class FlexSkillService implements Listener {
         if (player == null || at == null || at.getWorld() == null) return false;
         if (stepVariantOf(player) != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) return false;
         if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
-            double heal = Math.max(0.5, player.getMaxHealth() * 0.005);
+            boolean sync = stepShapeSynced(player);
+            double heal = Math.max(0.5, player.getMaxHealth()
+                    * town.sunshine.corerpg.p1.EmberSkillKit.stepLandHealPct(sync));
             player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
         }
         at.getWorld().spawnParticle(Particle.HEART, at.clone().add(0, 0.5, 0), 4, 0.2, 0.15, 0.2, 0.0);
@@ -471,6 +474,23 @@ public final class FlexSkillService implements Listener {
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
             return ChatColor.GRAY + " · 承护微疗";
         return "";
+    }
+
+
+    /** D2292: set-shape sync for step land (zero skill_mult). */
+    private boolean stepShapeSynced(Player player) {
+        if (player == null) return false;
+        try {
+            PlayerData data = dataStore.get(player.getUniqueId());
+            town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+            town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+            town.sunshine.corerpg.p1.EmberLoadout lo = ls == null ? null : ls.get(player);
+            String fam = lo == null ? "none" : lo.activeSet;
+            int sid = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
+            return town.sunshine.corerpg.p1.EmberSkillKit.setShapeSynced(fam, sid);
+        } catch (Throwable ignored) {
+            return false;
+        }
     }
 
     private LivingEntity nearestEnemy(Player player, Location at, double radius) {

@@ -78,6 +78,14 @@ public final class EmberSkillKit {
     public static final String C_SHAPE_MANUAL = "p1_shape_manual"; // 1 = player picked; soft prefer skips
     /** D2278: entered Q04 at least once (shape unlock without clear-gate). */
     public static final String C_SHAPE_ENTER = "p1_shape_enter";
+    /** D2290: entered Q02 → 烬突 without clear-gate. */
+    public static final String C_DASH_ENTER = "p1_dash_enter";
+    /** D2290: entered Q03 → 招架 without clear-gate. */
+    public static final String C_PARRY_ENTER = "p1_parry_enter";
+    /** D2290: entered Q05 → 身法变体 without clear-gate. */
+    public static final String C_STEP_ENTER = "p1_step_enter";
+    /** D2293: entered Q07 → 调律 without clear-gate. */
+    public static final String C_ATTUNE_ENTER = "p1_attune_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -122,7 +130,9 @@ public final class EmberSkillKit {
     private EmberSkillKit() {}
 
     public static boolean dashUnlocked(PlayerData d, EmberRunService runs) {
-        return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_DASH);
+        if (d == null) return false;
+        if (d.periodCount(C_DASH_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, UNLOCK_DASH);
     }
 
     public static boolean shapeUnlocked(PlayerData d, EmberRunService runs) {
@@ -139,13 +149,78 @@ public final class EmberSkillKit {
         return true;
     }
 
+    public static boolean markDashEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_DASH_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_DASH_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean markParryEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_PARRY_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_PARRY_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean markStepEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_STEP_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_STEP_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean markAttuneEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_ATTUNE_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_ATTUNE_ENTER, "all", 1);
+        return true;
+    }
+
+    /** D2293: Q07 clear OR first-enter unlocks attune. */
+    public static boolean attuneUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_ATTUNE_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, EmberSignature.ALT_UNLOCK);
+    }
+
+    /** D2292: step land slow ticks (synced with set-shape). */
+    public static int stepLandSlowTicks(boolean setShapeSync) {
+        return STEP_SLOW_TICKS + (setShapeSync ? 4 : 0);
+    }
+
+    /** D2292: chenghu land heal fraction. */
+    public static double stepLandHealPct(boolean setShapeSync) {
+        return setShapeSync ? 0.005 * 1.25 : 0.005;
+    }
+
+    /** D2305: dash land slow (synced). */
+    public static int dashLandSlowTicks(boolean setShapeSync) {
+        return DASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0);
+    }
+
+    /** D2305: dash land heal fraction. */
+    public static double dashLandHealPct(boolean setShapeSync) {
+        return setShapeSync ? DASH_HEAL_PCT * 1.25 : DASH_HEAL_PCT;
+    }
+
+    /** D2306: signature skill_shield duration secs (synced · zero skill_mult). */
+    public static double sigShieldSecs(double baseSecs, boolean setShapeSync) {
+        if (baseSecs <= 0) baseSecs = 5.0;
+        return setShapeSync ? baseSecs * 1.25 : baseSecs;
+    }
+
     public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {
-        return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_STEP);
+        if (d == null) return false;
+        if (d.periodCount(C_STEP_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, UNLOCK_STEP);
     }
 
     /** D301: 余烬招架 after first-clear Q03. */
     public static boolean parryUnlocked(PlayerData d, EmberRunService runs) {
-        return d != null && runs != null && runs.firstClearedKey(d, UNLOCK_PARRY);
+        if (d == null) return false;
+        if (d.periodCount(C_PARRY_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, UNLOCK_PARRY);
     }
 
     /** Flat retaliate amount for a successful parry (0 if B ≤ 0). */

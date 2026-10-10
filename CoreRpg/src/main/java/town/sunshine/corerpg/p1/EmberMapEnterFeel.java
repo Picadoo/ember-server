@@ -53,14 +53,27 @@ public final class EmberMapEnterFeel {
     /** D1397: optional PlayerData → append map-identity nextMissing（不锁通关）. */
     public static void flash(Player p, EmberRunMaps.MapDef m, EmberRunSession s, town.sunshine.corerpg.PlayerData pd) {
         if (p == null) return;
-        // D2279: Q04 first enter unlocks 烬斩符文 (non-clear-gate)
-        if (pd != null && m != null && "q04".equalsIgnoreCase(m.key)) {
-            if (EmberSkillKit.markShapeEnter(pd)) {
-                try {
+        // D2279/D2291: Q0x first-enter kit unlocks (non-clear-gate)
+        if (pd != null && m != null && m.key != null) {
+            String k = m.key.toLowerCase(java.util.Locale.ROOT);
+            try {
+                if ("q02".equals(k) && EmberSkillKit.markDashEnter(pd)) {
+                    p.sendMessage(EmberRunService.P + "§a烬突已解锁 · §f潜行+F §7（首进 Q02 · 不锁通关）");
+                    p.sendActionBar("§a烬突解锁 · §f潜行+F");
+                } else if ("q03".equals(k) && EmberSkillKit.markParryEnter(pd)) {
+                    p.sendMessage(EmberRunService.P + "§a余烬招架已解锁 · §fQ §7（首进 Q03 · 不锁通关）");
+                    p.sendActionBar("§a招架解锁 · §fQ");
+                } else if ("q04".equals(k) && EmberSkillKit.markShapeEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a烬斩符文已解锁 · §f扇/直/环 §7（首进 Q04 · 不锁通关 · /corerpg skill shape）");
                     p.sendActionBar("§a符文解锁 · §f/corerpg skill shape");
-                } catch (Throwable ignored) { }
-            }
+                } else if ("q05".equals(k) && EmberSkillKit.markStepEnter(pd)) {
+                    p.sendMessage(EmberRunService.P + "§a身法变体已解锁 · §f套装踏步 §7（首进 Q05 · 不锁通关）");
+                    p.sendActionBar("§a身法解锁 · §f两件套自动变");
+                } else if ("q07".equals(k) && EmberSkillKit.markAttuneEnter(pd)) {
+                    p.sendMessage(EmberRunService.P + "§a签名调律已开放 · §f/corerpg p1 attunepath §7（首进 Q07 · 不锁通关）");
+                    p.sendActionBar("§a调律开放 · §fattunepath");
+                }
+            } catch (Throwable ignored) { }
         }
         boolean ch = s != null && s.challenge;
         int ab = s == null ? 0 : s.abyss;

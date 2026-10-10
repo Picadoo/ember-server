@@ -802,6 +802,18 @@ public final class SkillService implements Listener {
                 + (famHint != null ? ChatColor.GRAY + famHint : ""));
     }
 
+
+    /** D2305: set-shape sync for dash land. */
+    private boolean dashShapeSynced(Player player, String fam) {
+        try {
+            int sid = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(
+                    dataStore.get(player.getUniqueId()), plugin.getEmberRuns());
+            return town.sunshine.corerpg.p1.EmberSkillKit.setShapeSynced(fam, sid);
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     /**
      * D436: set-bound dash land effects. Does not change DS15 base mult / CD / target cap.
      * @return tip fragment or null
@@ -811,6 +823,7 @@ public final class SkillService implements Listener {
         if (ls == null) return null;
         String fam = ls.get(player).activeSet;
         if (fam == null || "none".equals(fam)) return null;
+        boolean sync = dashShapeSynced(player, fam);
         if ("scorch".equals(fam)) {
             town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
             if (sets != null && hitCount > 0 && town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
@@ -820,11 +833,11 @@ public final class SkillService implements Listener {
                             town.sunshine.corerpg.p1.EmberSkillKit.DASH_IGNITE_SCALE);
                 }
             }
-            return " · 烬途点燃";
+            return sync ? " · 烬途点燃·形同" : " · 烬途点燃";
         }
         if ("burst".equals(fam)) {
             if (hitCount > 0 && town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
-                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.DASH_BURST_SLOW_TICKS;
+                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.dashLandSlowTicks(sync);
                 int lim = Math.min(hitCount, town.sunshine.corerpg.p1.EmberSkillKit.DASH_MAX_TARGETS);
                 for (int i = 0; i < lim; i++) {
                     ordered.get(i).addPotionEffect(new org.bukkit.potion.PotionEffect(
@@ -832,16 +845,16 @@ public final class SkillService implements Listener {
                 }
                 spawnParticles(player.getLocation().clone().add(0, 0.3, 0), "CRIT", 10);
             }
-            return " · 烬途缓速";
+            return sync ? " · 烬途缓速·形同" : " · 烬途缓速";
         }
         if ("sustain".equals(fam)) {
             if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
                 double heal = Math.max(0.5, player.getMaxHealth()
-                        * town.sunshine.corerpg.p1.EmberSkillKit.DASH_HEAL_PCT);
+                        * town.sunshine.corerpg.p1.EmberSkillKit.dashLandHealPct(sync));
                 player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
                 spawnParticles(player.getLocation().clone().add(0, 0.5, 0), "HEART", 3);
             }
-            return " · 烬途微疗";
+            return sync ? " · 烬途微疗·形同" : " · 烬途微疗";
         }
         return null;
     }

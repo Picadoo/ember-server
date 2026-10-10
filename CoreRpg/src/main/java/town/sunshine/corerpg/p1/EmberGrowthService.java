@@ -308,11 +308,27 @@ public final class EmberGrowthService implements Listener {
      * 烬斩 hit {@code n} targets: shield = skill_shield × H per target, capped at skill_shield_max × H, for skill_shield_secs;
      * does not stack (keeps the larger of the still-active one and the new one; p1sim skill_variant).
      */
+
+    /** D2306: loadout set × current shape sync (zero skill_mult). */
+    private boolean shapeSyncedFor(Player p) {
+        if (p == null) return false;
+        try {
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            EmberLoadout lo = ls == null ? null : ls.get(p);
+            String fam = lo == null ? "none" : lo.activeSet;
+            PlayerData d = plugin.getDataStore().get(p.getUniqueId());
+            return EmberSkillKit.setShapeSynced(fam, EmberSkillKit.shapeId(d, runs));
+        } catch (Throwable ignored) {
+            return false;
+        }
+    }
+
     public double giveSkillShield(Player p, EmberGrowth.Mods m, int n) {
         double per = m.get("skill_shield");
         if (p == null || per <= 0 || n <= 0) return 0;
         double h = EmberHeal.maxHp(p), cap = (m.get("skill_shield_max") > 0 ? m.get("skill_shield_max") : per) * h;
         double secs = m.get("skill_shield_secs") > 0 ? m.get("skill_shield_secs") : 5.0;
+        secs = EmberSkillKit.sigShieldSecs(secs, shapeSyncedFor(p));
         long now = System.currentTimeMillis();
         double[] cur = shield.get(p.getUniqueId());
         double keep = cur != null && now < cur[1] ? cur[0] : 0;
@@ -1393,7 +1409,7 @@ public final class EmberGrowthService implements Listener {
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后再调律（副本里不能改）"); return true; }
         boolean un = altUnlocked(d, sd);
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
-        String why = EmberSignature.attuneCheck(sd, runs.progressFlag(d, EmberSignature.ALT_UNLOCK), runs.progressFlag(d, sd.map), un, marks);
+        String why = EmberSignature.attuneCheck(sd, EmberSkillKit.attuneUnlocked(d, runs), runs.progressFlag(d, sd.map), un, marks);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         if (!un) {
             if (!unlock) {
