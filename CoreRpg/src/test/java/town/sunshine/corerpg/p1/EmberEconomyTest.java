@@ -986,6 +986,30 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void upgradeRefineQualitySinksMatchRules() {
+        // D979 / Stage1b C04–C06
+        EmberUpgradeRules.Cost u1 = EmberUpgradeRules.upgradeCost(1);
+        assertNotNull(u1);
+        assertEquals(60, u1.shards); assertEquals(12, u1.cores); assertEquals(6, u1.blanks); assertEquals(1500, u1.coins);
+        EmberUpgradeRules.Cost u2 = EmberUpgradeRules.upgradeCost(2);
+        assertNotNull(u2);
+        assertEquals(60, u2.shards); assertEquals(15, u2.cores); assertEquals(1800, u2.coins);
+        org.junit.Assert.assertNull(EmberUpgradeRules.upgradeCost(3));
+
+        EmberUpgradeRules.Cost r0 = EmberUpgradeRules.refineCost(0);
+        assertEquals(3, r0.blanks); assertEquals(5, r0.bone); assertEquals(300, r0.coins);
+        EmberUpgradeRules.Cost r2 = EmberUpgradeRules.refineCost(2);
+        assertEquals(12, r2.blanks); assertEquals(20, r2.bone); assertEquals(1200, r2.coins);
+        org.junit.Assert.assertNull(EmberUpgradeRules.refineCost(3));
+
+        EmberUpgradeRules.Cost q0 = EmberUpgradeRules.qualityCost(0);
+        assertEquals(8, q0.blanks); assertEquals(8, q0.bone); assertEquals(800, q0.coins);
+        EmberUpgradeRules.Cost q1 = EmberUpgradeRules.qualityCost(1);
+        assertEquals(16, q1.blanks); assertEquals(1600, q1.coins);
+        org.junit.Assert.assertNull(EmberUpgradeRules.qualityCost(2));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

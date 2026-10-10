@@ -290,6 +290,35 @@ sinks:
     "10.shard": 72
     "10.core": 6
     "10.coin": 1080
+  # D974 Stage1b C04 upgrade (from tier)
+  C04:
+    "t1.shard": 60
+    "t1.core": 12
+    "t1.blank": 6
+    "t1.coin": 1500
+    "t2.shard": 60
+    "t2.core": 15
+    "t2.blank": 6
+    "t2.coin": 1800
+  # D975 Stage1b C05 refine (from craft)
+  C05:
+    "c0.blank": 3
+    "c0.bone": 5
+    "c0.coin": 300
+    "c1.blank": 6
+    "c1.bone": 10
+    "c1.coin": 600
+    "c2.blank": 12
+    "c2.bone": 20
+    "c2.coin": 1200
+  # D976 Stage1b C06 quality (from quality)
+  C06:
+    "q0.blank": 8
+    "q0.bone": 8
+    "q0.coin": 800
+    "q1.blank": 16
+    "q1.bone": 16
+    "q1.coin": 1600
   C01: { stamina: 30 }
   C07: { marks: 8 }
   C09:

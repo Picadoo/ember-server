@@ -333,9 +333,16 @@ public final class EmberEconomy {
             .g("10.shard", 72)
             .g("10.core", 6)
             .g("10.coin", 1080).done();
-        sink("C04", "升阶", "EmberUpgradeRules", Period.NONE).acc(SHARD, CORE, BLANK, COIN).model(FULL).done();
-        sink("C05", "精工", "EmberUpgradeRules", Period.NONE).acc(BLANK, BONE, COIN).model(FULL).done();
-        sink("C06", "成色", "EmberUpgradeRules", Period.NONE).acc(BLANK, BONE, COIN).model(FULL).done();
+        sink("C04", "升阶", "EmberUpgradeRules", Period.NONE).acc(SHARD, CORE, BLANK, COIN).model(FULL)
+            .g("t1.shard", 60).g("t1.core", 12).g("t1.blank", 6).g("t1.coin", 1500)
+            .g("t2.shard", 60).g("t2.core", 15).g("t2.blank", 6).g("t2.coin", 1800).done();
+        sink("C05", "精工", "EmberUpgradeRules", Period.NONE).acc(BLANK, BONE, COIN).model(FULL)
+            .g("c0.blank", 3).g("c0.bone", 5).g("c0.coin", 300)
+            .g("c1.blank", 6).g("c1.bone", 10).g("c1.coin", 600)
+            .g("c2.blank", 12).g("c2.bone", 20).g("c2.coin", 1200).done();
+        sink("C06", "成色", "EmberUpgradeRules", Period.NONE).acc(BLANK, BONE, COIN).model(FULL)
+            .g("q0.blank", 8).g("q0.bone", 8).g("q0.coin", 800)
+            .g("q1.blank", 16).g("q1.bone", 16).g("q1.coin", 1600).done();
         sink("C07", "8 印记兑换", "EmberRunRules.MARKS_PER_EXCHANGE", Period.NONE).acc(MARK).keys("p1_mark_t").model(FULL).g("marks", 8).done();
         sink("C08", "深渊层费", "ember-v1-runs.yml abyss", Period.RUN).acc(COIN, MARK).model(FULL).done();
         sink("C09", "天赋学习", "ember-v1-growth.yml talents", Period.ALL).acc(COIN).keys("p4_spec_learn_").model(FULL)

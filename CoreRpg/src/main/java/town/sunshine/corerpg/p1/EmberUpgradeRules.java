@@ -186,8 +186,16 @@ public final class EmberUpgradeRules {
     }
 
     public static Cost upgradeCost(int tier) {
-        if (tier == 1) return new Cost(60, 12, 6, 0, 1500);
-        if (tier == 2) return new Cost(60, 15, 6, 0, 1800); // D104 (b13): halved — was 120/30/12/3600, about twice an 8-mark exchange + free swap
+        // D977: C04 from economy yml SoT
+        if (tier == 1 || tier == 2) {
+            String k = "t" + tier + ".";
+            return new Cost(
+                    EmberEconomy.amount("C04", k + "shard"),
+                    EmberEconomy.amount("C04", k + "core"),
+                    EmberEconomy.amount("C04", k + "blank"),
+                    0,
+                    EmberEconomy.amount("C04", k + "coin"));
+        }
         return null;
     }
 
@@ -205,10 +213,13 @@ public final class EmberUpgradeRules {
     // ------------------------------------------------------------------ §5.3 craft (精工) and quality (成色)
 
     public static Cost refineCost(int craft) {
-        if (craft == 0) return new Cost(0, 0, 3, 5, 300);
-        if (craft == 1) return new Cost(0, 0, 6, 10, 600);
-        if (craft == 2) return new Cost(0, 0, 12, 20, 1200);
-        return null;
+        // D977: C05 from economy yml SoT
+        if (craft < 0 || craft > 2) return null;
+        String k = "c" + craft + ".";
+        return new Cost(0, 0,
+                EmberEconomy.amount("C05", k + "blank"),
+                EmberEconomy.amount("C05", k + "bone"),
+                EmberEconomy.amount("C05", k + "coin"));
     }
 
     public static Plan refine(EmberItemData d) {
@@ -221,9 +232,13 @@ public final class EmberUpgradeRules {
     }
 
     public static Cost qualityCost(int q) {
-        if (q == 0) return new Cost(0, 0, 8, 8, 800);
-        if (q == 1) return new Cost(0, 0, 16, 16, 1600);
-        return null;
+        // D977: C06 from economy yml SoT
+        if (q < 0 || q > 1) return null;
+        String k = "q" + q + ".";
+        return new Cost(0, 0,
+                EmberEconomy.amount("C06", k + "blank"),
+                EmberEconomy.amount("C06", k + "bone"),
+                EmberEconomy.amount("C06", k + "coin"));
     }
 
     public static Plan quality(EmberItemData d) {

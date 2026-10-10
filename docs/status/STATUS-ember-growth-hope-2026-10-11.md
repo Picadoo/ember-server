@@ -448,3 +448,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D969–D973 ARCH SHIP · jar 1.65.409-d969
 - Stage1b C03 enhance costs → economy yml + enhanceCost←amount(); numbers unchanged
+
+## D974–D980 ARCH SHIP · jar 1.65.410-d974
+- Stage1b C04–C06 upgrade/refine/quality ← amount(); numbers unchanged

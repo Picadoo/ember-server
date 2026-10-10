@@ -24,7 +24,7 @@
 
 version: 1
 balance_version: 89
-built_against: "1.65.409-d969.local (D969–D973 Stage1b C03 enhance amount)"
+built_against: "1.65.410-d974.local (D974–D980 Stage1b C04–C06)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 
@@ -947,9 +947,9 @@ sinks:
   C01: {econ_row: C01, name: 进主线 / 挑战 / 深渊段（体力）, takes: [stamina], ledger_keys: [cost, refund], economy_keys: [C01.stamina], config: ["ember-v1-economy.yml#sinks.C01", "ember-v1-runs.yml#cost"], code: ["p1/EmberSessionService.java#\"cost\""]}
   C02: {econ_row: C02, name: 进团本（体力 50）, takes: [stamina], config: ["ember-v1-runs.yml#raids.r01.cost"], code: ["p1/EmberRaidService.java#C_RAID"]}
   C03: {econ_row: C03, name: 强化, takes: [shard, core, coin], economy_keys: [C03.1.shard, C03.1.core, C03.1.coin, C03.2.shard, C03.2.core, C03.2.coin, C03.3.shard, C03.3.core, C03.3.coin, C03.4.shard, C03.4.core, C03.4.coin, C03.5.shard, C03.5.core, C03.5.coin, C03.6.shard, C03.6.core, C03.6.coin, C03.7.shard, C03.7.core, C03.7.coin, C03.8.shard, C03.8.core, C03.8.coin, C03.9.shard, C03.9.core, C03.9.coin, C03.10.shard, C03.10.core, C03.10.coin], config: ["ember-v1-economy.yml#sinks.C03"], code: ["p1/EmberUpgradeRules.java#enhanceCost", "p1/EmberEconomy.java#case \"enhance\": return \"C03\""]}
-  C04: {econ_row: C04, name: 升阶, takes: [shard, core, blank, coin], code: ["p1/EmberUpgradeRules.java#public static Cost upgradeCost(int tier)"]}
-  C05: {econ_row: C05, name: 精工, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"refine\": return \"C05\""]}
-  C06: {econ_row: C06, name: 成色, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"quality\": return \"C06\""]}
+  C04: {econ_row: C04, name: 升阶, takes: [shard, core, blank, coin], code: ["p1/EmberUpgradeRules.java#public static Cost upgradeCost(int tier)"], economy_keys: [C04.t1.shard, C04.t1.core, C04.t1.blank, C04.t1.coin, C04.t2.shard, C04.t2.core, C04.t2.blank, C04.t2.coin], config: ["ember-v1-economy.yml#sinks.C04"]}
+  C05: {econ_row: C05, name: 精工, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"refine\": return \"C05\""], economy_keys: [C05.c0.blank, C05.c0.bone, C05.c0.coin, C05.c1.blank, C05.c1.bone, C05.c1.coin, C05.c2.blank, C05.c2.bone, C05.c2.coin], config: ["ember-v1-economy.yml#sinks.C05"]}
+  C06: {econ_row: C06, name: 成色, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"quality\": return \"C06\""], economy_keys: [C06.q0.blank, C06.q0.bone, C06.q0.coin, C06.q1.blank, C06.q1.bone, C06.q1.coin], config: ["ember-v1-economy.yml#sinks.C06"]}
   C07: {econ_row: C07, name: 8 印记兑换（付印记）, takes: [mark], economy_keys: [C07.marks], config: ["ember-v1-economy.yml#sinks.C07"], code: ["p1/EmberRunService.java#EmberEconomy.spendMark(d, \"C07\""]}
   C08: {econ_row: C08, name: 深渊层费（币 / 超额 T3 印记）, takes: [coin, mark], ledger_keys: [cost_coin, refund_coin], config: ["ember-v1-runs.yml#abyss.fee_mark_coin"], code: ["p1/EmberAbyssService.java#EmberEconomy.spendCoin(pd, \"C08\""]}
   C09: {econ_row: C09, name: 天赋学习, takes: [coin], economy_keys: [C09.row1.coin, C09.row2.coin, C09.row3.coin], config: ["ember-v1-economy.yml#sinks.C09", "ember-v1-growth.yml#talents.rows"]}
