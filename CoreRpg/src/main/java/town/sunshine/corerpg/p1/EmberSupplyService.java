@@ -103,6 +103,47 @@ public final class EmberSupplyService implements Listener {
         return given;
     }
 
+    /** Count heal potions in storage (hotbar + backpack). */
+    public int countHealPotions(Player p) {
+        if (p == null) return 0;
+        int n = 0;
+        ItemStack[] c = p.getInventory().getStorageContents();
+        for (ItemStack s : c) {
+            if (s == null || !isHealPotion(s)) continue;
+            n += Math.max(1, s.getAmount());
+        }
+        return n;
+    }
+
+    /**
+     * D502: buy bound heal potions up to {@code target} total owned (shop rules: town only, C14 coin).
+     * Returns how many newly given. No-op when target≤0, in P1 world, or already at/above target.
+     */
+    public int topUpTo(Player p, int target, String src) {
+        if (p == null || target <= 0) return 0;
+        if (!EmberMode.active()) return 0;
+        if (EmberMode.isP1World(p.getWorld())) return 0;
+        int have = countHealPotions(p);
+        int need = target - have;
+        if (need <= 0) return 0;
+        PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
+        int coins = pd == null ? 0 : pd.getCoin();
+        int price = price();
+        int n = affordable(need, coins, price, freeSlots(p));
+        if (n <= 0) return 0;
+        if (pd == null || !EmberEconomy.spendCoin(pd, "C14", n * price)) return 0;
+        int got = give(p, n, src == null || src.isEmpty() ? "prep" : src);
+        if (got < n) pd.addCoin((n - got) * price);
+        plugin.getDataStore().flushMutation(p.getUniqueId());
+        if (got > 0) {
+            plugin.getLogger().info("[P1 supply] prep " + p.getName() + " top-up +" + got + " → " + countHealPotions(p)
+                    + " (spent " + (got * price) + " coin)");
+            p.sendMessage(P + ChatColor.GREEN + "备药自动补货 ×" + got + "，花费 " + (got * price) + " 余烬币（现有 "
+                    + countHealPotions(p) + " 瓶 · 剩余 " + pd.getCoin() + " 币）");
+        }
+        return got;
+    }
+
     /** First empty hotbar index from the right (8 → 1); -1 when none. */
     static int emptyHotbar(Player p) {
         for (int i = 8; i >= 1; i--) {

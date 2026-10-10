@@ -255,6 +255,8 @@ public final class EmberSessionService {
             String t = runs.target(runs.dataOf(p.getUniqueId()));
             s.target.put(p.getUniqueId(), t == null ? "" : t);
         }
+        // D502: per-player potion prep top-up while still in town (before stamina reserve / DP)
+        for (Player p : party) EmberPrepPath.maybeTopUpBeforeRun(p, runs);
         // reserve
         List<Player> reserved = new ArrayList<Player>();
         for (Player p : party) {

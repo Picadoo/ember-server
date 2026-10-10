@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-prep-path`（已批 A · 方案 M · D502 · **PASS** · jar 1.65.193-d502 · 备药轻/满/不备进本前自动补回复药 · ≠组合粘性 ≠卷轴偏好 ≠同族 HUD ≠工坊/入场cue）
 - `B-extra-path`（已批 A · 方案 M · D501 · **PASS** · jar 1.65.192-d501 · 加料猎宝/精英/宝箱真写 Extra 卷轴 · ≠组合粘性 ≠D500花样 ≠同族 HUD ≠工坊/入场cue）
 - `B-spice-path`（已批 A · 方案 M · D500 · **PASS** · jar 1.65.191-d500 · 花样火力/控场/目标真写 variety 卷轴 · ≠组合粘性路径 ≠同族 HUD ≠工坊/入场cue）
 - `B-stride-path`（已批 A · 方案 M · D499 · **PASS** · jar 1.65.190-d499 · 步态突进/后撤/卸轻技一次写轻技+身法 · ≠同族 HUD ≠工坊/入场cue）
