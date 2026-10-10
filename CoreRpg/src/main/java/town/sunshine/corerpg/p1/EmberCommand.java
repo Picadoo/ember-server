@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("beaconpath".equals(sub) || "护灯路径".equals(sub)) return beaconPathCmd(s, args); // D567
+        if ("beacon".equals(sub) && args.length == 2) return beaconGoCmd(s); // D567
         if ("holdpath".equals(sub) || "占点路径".equals(sub)) return holdPathCmd(s, args); // D566
         if ("hold".equals(sub) && args.length == 2) return holdGoCmd(s); // D566
         if ("guardpath".equals(sub) || "护兔路径".equals(sub)) return guardPathCmd(s, args); // D565
@@ -1681,6 +1683,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("beaconseed".equals(sub)) return beaconSeedCmd(s, args); // D567
         if ("holdseed".equals(sub)) return holdSeedCmd(s, args); // D566
         if ("guardseed".equals(sub)) return guardSeedCmd(s, args); // D565
         if ("smashseed".equals(sub)) return smashSeedCmd(s, args); // D564
@@ -4774,6 +4777,62 @@ public final class EmberCommand {
             EmberHoldPath.maybeProbe(t);
             s.sendMessage(P + "已触发占点路径探测 → " + t.getName()
                     + (runs != null && runs.hasHoldCircle(t) ? "（有圈）" : "（无圈）"));
+            return true;
+    }
+
+    private boolean beaconPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBeaconPath.glance(EmberBeaconPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c护灯路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberBeaconPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c护灯路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBeaconPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBeaconPath.get(d);
+                    if (EmberBeaconPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBeaconPath.label(cur) + " · 改路径再 /corerpg p1 beaconpath");
+                    else EmberBeaconPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBeaconPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 beaconpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberBeaconPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean beaconGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathBeaconGuard(p)) p.sendMessage(P + "无法护灯（无护灯/未进本）");
+            else p.sendMessage(P + "§a护灯·手点 §7已传至灯旁");
+            return true;
+    }
+
+    private boolean beaconSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberBeaconPath.maybeProbe(t);
+            s.sendMessage(P + "已触发护灯路径探测 → " + t.getName()
+                    + (runs != null && runs.hasBeaconLive(t) ? "（有灯）" : "（无灯）"));
             return true;
     }
 }

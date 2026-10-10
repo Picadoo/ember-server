@@ -457,6 +457,7 @@ final class EmberRunDirector {
             } else if ("beacon".equals(kind)) {
                 placeBeacon(r, v);
                 svc.tellRun(s, "§b护灯 §7· 清房前别让发光灯柱被砸碎 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberBeaconPath.maybeAfterBeacon(s); // D567
             } else if ("relay".equals(kind)) {
                 placeRelay(r, v);
                 svc.tellRun(s, "§b传火 §7· 按 1→2→3 点亮标记再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
@@ -502,6 +503,25 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D567: beacon still alive. */
+    boolean hasBeaconLive() {
+        return beaconLoc != null && beaconHp > 0 && s != null && "beacon".equals(s.eventKind);
+    }
+
+    /** D567: warp a committed player next to the beacon. */
+    boolean pathBeaconGuard(Player p) {
+        if (p == null || !p.isOnline() || !hasBeaconLive()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location to = beaconLoc.clone().add(1.0, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.25f);
+        return true;
     }
 
     /** D566: hold circle is active. */
