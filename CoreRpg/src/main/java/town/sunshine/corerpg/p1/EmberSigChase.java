@@ -224,6 +224,9 @@ public final class EmberSigChase {
             btns.add(new String[]{"[去装备页]", "/corerpg p1 gear", "穿上/选定后签名才生效", "GOLD"});
         } else if (sigOff) {
             btns.add(new String[]{"[打开签名]", "/corerpg p1 sig toggle " + sd.slot, "槽位签名已关 · 点开", "YELLOW"});
+        } else {
+            // D2115: worn+on → piece forge commit (not sig-dry twin)
+            btns.add(EmberForgeCommitNext.enhance());
         }
         if (chaseClosed) {
             btns.add(new String[]{"[换追烙]", "/corerpg p1 sig chase offer", "点下一条签名", "AQUA"});

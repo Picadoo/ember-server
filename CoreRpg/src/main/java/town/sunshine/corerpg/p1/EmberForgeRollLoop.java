@@ -42,9 +42,9 @@ public final class EmberForgeRollLoop {
         }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[装备库到账]", "/corerpg p1 deliver", "领进背包/库", "GOLD"},
-                new String[]{"[去强化]", "/corerpg p1 enhance", "稳线·冲强化", "GREEN"},
-                new String[]{"[去精工]", "/corerpg p1 refine", "稳线·精工", "AQUA"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GRAY"});
+                EmberForgeCommitNext.enhance(),
+                new String[]{"[去成色]", "/corerpg p1 quality", "稳线·成色", "YELLOW"},
+                new String[]{"[去精工]", "/corerpg p1 refine", "稳线·精工", "AQUA"});
     }
 
     public static String followHint(boolean goalHit) {

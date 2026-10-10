@@ -784,4 +784,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - SwapLoop winner → enhance/quality/refine
 - BlankLoop held → quality/refine/upgrade (胚料同花)
 - Zero yield/price invent
-
+## D2113–D2126 · 随机锻/烙印/花样承诺槽 · jar 1.65.508-d2126
+- ForgeRoll +成色; imprint worn→enhance; Variety held craft

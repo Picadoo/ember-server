@@ -421,3 +421,6 @@ flowchart LR
 
 ### SB · swap/blank commit (D2099–D2112)
 Swap winner + blank held piece-aware via EmberForgeCommitNext.
+
+### RI · roll/imprint/variety commit (D2113–D2126)
+ForgeRoll quality; imprint worn enhance; Variety held piece-aware.
