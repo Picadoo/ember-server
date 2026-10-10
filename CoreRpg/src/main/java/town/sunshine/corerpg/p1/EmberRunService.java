@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D585: warp to nearest boss half-HP add to clear reinforce wave. */
+    public boolean hasPendingWave(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingWave() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathWaveAdd(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathWaveAdd(p);
+    }
+
     /** D584: warp into boss share circle to soak damage together. */
     public boolean hasPendingSoak(Player p) {
         if (p == null) return false;
@@ -1731,6 +1747,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberClonePath.scheduleOfferAfterQ01(p); // D582 clone path
                         if ("q01".equals(g.id)) EmberShellPath.scheduleOfferAfterQ01(p); // D583 shell path
                         if ("q01".equals(g.id)) EmberSoakPath.scheduleOfferAfterQ01(p); // D584 soak path
+                        if ("q01".equals(g.id)) EmberWavePath.scheduleOfferAfterQ01(p); // D585 wave path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

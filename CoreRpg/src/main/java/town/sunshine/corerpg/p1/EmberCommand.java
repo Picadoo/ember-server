@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("wavepath".equals(sub) || "增援路径".equals(sub)) return wavePathCmd(s, args); // D585
+        if ("wave".equals(sub) && args.length == 2) return waveGoCmd(s); // D585
         if ("soakpath".equals(sub) || "分摊路径".equals(sub)) return soakPathCmd(s, args); // D584
         if ("soak".equals(sub) && args.length == 2) return soakGoCmd(s); // D584
         if ("shellpath".equals(sub) || "铁壁路径".equals(sub)) return shellPathCmd(s, args); // D583
@@ -1717,6 +1719,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("waveseed".equals(sub)) return waveSeedCmd(s, args); // D585
         if ("soakseed".equals(sub)) return soakSeedCmd(s, args); // D584
         if ("shellseed".equals(sub)) return shellSeedCmd(s, args); // D583
         if ("cloneseed".equals(sub)) return cloneSeedCmd(s, args); // D582
@@ -5842,6 +5845,62 @@ public final class EmberCommand {
             EmberSoakPath.maybeProbe(t);
             s.sendMessage(P + "已触发分摊路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingSoak(t) ? "（有分摊）" : "（无分摊）"));
+            return true;
+    }
+
+    private boolean wavePathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberWavePath.glance(EmberWavePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c增援路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberWavePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c增援路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberWavePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberWavePath.get(d);
+                    if (EmberWavePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberWavePath.label(cur) + " · 改路径再 /corerpg p1 wavepath");
+                    else EmberWavePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberWavePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 wavepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberWavePath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean waveGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathWaveAdd(p)) p.sendMessage(P + "无法清援（无活援兵/未进本）");
+            else p.sendMessage(P + "§a增援·手点 §7已传至近处援兵");
+            return true;
+    }
+
+    private boolean waveSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberWavePath.maybeProbe(t);
+            s.sendMessage(P + "已触发增援路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingWave(t) ? "（有援兵）" : "（无援兵）"));
             return true;
     }
 }

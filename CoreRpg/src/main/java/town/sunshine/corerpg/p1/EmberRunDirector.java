@@ -510,6 +510,40 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D585: any living boss half-HP add still up. */
+    boolean hasPendingWave() {
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if ("add".equals(t.role)) return true;
+        }
+        return false;
+    }
+
+    /** D585: warp a committed player next to the nearest living boss add. */
+    boolean pathWaveAdd(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingWave()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (!"add".equals(t.role)) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location at = best.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.7f);
+        return true;
+    }
+
     /** D584: boss share-soak circle currently armed. */
     boolean hasPendingSoak() {
         return pending != null && pending.share && lockOrigin != null
@@ -2685,6 +2719,7 @@ final class EmberRunDirector {
             if (now >= addsAt) {
                 addsAt = 0;
                 for (EmberRunMaps.Pt p : b.adds.points) spawn(def.role(b.adds.role, ch), "add", "boss", safe(p, b.at), b.area);
+                EmberWavePath.maybeAfterWave(s); // D585
             } else {
                 for (EmberRunMaps.Pt p : b.adds.points) warnCircle(new Location(w, p.x + 0.5, p.y + 0.1, p.z + 0.5), 1.0, Particle.SPELL_WITCH);
             }
