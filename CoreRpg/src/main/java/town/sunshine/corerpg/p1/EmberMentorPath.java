@@ -90,6 +90,23 @@ public final class EmberMentorPath {
     public static boolean shouldAutoDeny(int path) { return path == BUSY; }
     public static boolean shouldAutoDeny(PlayerData d) { return shouldAutoDeny(get(d)); }
 
+
+    /** D806: after successful mentor bind — path glance + next loop. */
+    public static void afterBound(Player p, String otherName) {
+        if (p == null) return;
+        PlayerData d = dataOf(p);
+        int id = get(d);
+        String P = EmberRunService.P;
+        String who = otherName == null ? "对方" : otherName;
+        p.sendMessage(P + "§a师徒已结 · §f" + who
+                + (valid(id) ? " §8· " + label(id) : " §7· /corerpg p1 mentorpath"));
+        try { p.sendActionBar("§a师徒 · §f" + who); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[组队招募]", "/corerpg p1 recruit", "带徒开本", "GREEN"},
+                new String[]{"[冒险页]", "/ember_p1_adventure", "一起刷", "AQUA"},
+                new String[]{"[改师徒路径]", "/corerpg p1 mentorpath", "敞开/审核/静拒", "GRAY"});
+    }
+
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;

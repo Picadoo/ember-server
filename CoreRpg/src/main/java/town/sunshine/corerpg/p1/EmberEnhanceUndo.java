@@ -66,6 +66,8 @@ public final class EmberEnhanceUndo {
                 new String[]{"[撤销本次失败]", "/corerpg p1 enhance undo",
                         "退回材料 · pity 回滚 · 剩余约 " + sec + "s", "YELLOW"});
         scheduleMidRemind(p, s); // D713
+        scheduleLateRemind(p, s); // D808 ~10s left
+        scheduleExpire(p, s); // D808
     }
 
     /** D713: one mid-window ActionBar if the same fail snap is still open. */
@@ -84,6 +86,48 @@ public final class EmberEnhanceUndo {
             try { q.sendActionBar("§e失败仍可撤 · §f" + left + "s §7· /corerpg p1 enhance undo"); }
             catch (Throwable ignored) { }
         }, 30L * 20L);
+    }
+
+
+    /** D808: late-window ActionBar (~10s remaining). */
+    static void scheduleLateRemind(Player p, Snap s) {
+        if (p == null || s == null) return;
+        Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+        if (pl == null) return;
+        final UUID id = p.getUniqueId();
+        long delayTicks = Math.max(1L, (WINDOW_MS - 10_000L) / 50L);
+        Bukkit.getScheduler().runTaskLater(pl, () -> {
+            Player q = Bukkit.getPlayer(id);
+            if (q == null || !q.isOnline()) return;
+            Snap cur = peek(id);
+            if (cur == null || cur.at != s.at || !cur.uid.equals(s.uid)) return;
+            int left = remainSec(cur, System.currentTimeMillis());
+            if (left <= 0 || left > 12) return;
+            try { q.sendActionBar("§c失败撤销将过 · §f" + left + "s §7· 快撤"); }
+            catch (Throwable ignored) { }
+            ConfirmTokens.sendButton(q, EmberRunService.P + "§c撤销窗将关：",
+                    "[立刻撤销]", "/corerpg p1 enhance undo", "还剩约 " + left + "s");
+        }, delayTicks);
+    }
+
+    /** D808: one expire tell when window closes unused. */
+    static void scheduleExpire(Player p, Snap s) {
+        if (p == null || s == null) return;
+        Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+        if (pl == null) return;
+        final UUID id = p.getUniqueId();
+        long delayTicks = Math.max(1L, WINDOW_MS / 50L + 5L);
+        Bukkit.getScheduler().runTaskLater(pl, () -> {
+            Player q = Bukkit.getPlayer(id);
+            if (q == null || !q.isOnline()) return;
+            Snap cur = peek(id);
+            if (cur == null) return;
+            if (cur.at != s.at || !cur.uid.equals(s.uid)) return;
+            if (cur.open(System.currentTimeMillis())) return;
+            LAST.remove(id, cur);
+            q.sendMessage(EmberRunService.P + "§8强化失败撤销窗已过 · 下次失败仍有 60 秒");
+            try { q.sendActionBar("§8失败撤销窗已过"); } catch (Throwable ignored) { }
+        }, delayTicks);
     }
 
     /** D694: open-forge glance if undo window still open. */

@@ -42,6 +42,19 @@ public final class EmberRaidLoop {
                     + (firstClear ? " §a· 首通" : "");
             try { p.sendActionBar(line); } catch (Throwable ignored) { }
             p.sendMessage(P + line + " §8（通关才扣周次数）");
+            // D807 next-loop while week cap remains
+            int path = EmberRaidPath.get(d);
+            if (EmberRaidPath.valid(path)) {
+                ConfirmTokens.sendButtons(p, P + "§7团本下一环：",
+                        new String[]{EmberRaidPath.enterLabel(path), EmberRaidPath.enterCmd(path),
+                                "再开路径团本 · 剩 " + (cap - used) + " 次", "GREEN"},
+                        new String[]{"[招募]", "/corerpg p1 recruit " + EmberRaidPath.mapKey(path), "凑人", "GOLD"},
+                        new String[]{"[换路径]", "/corerpg p1 raidpath", "改焦点", "GRAY"});
+            } else {
+                ConfirmTokens.sendButtons(p, P + "§7团本下一环：",
+                        new String[]{"[选团本路径]", "/corerpg p1 raidpath", "定本周焦点", "AQUA"},
+                        new String[]{"[冒险页]", "/ember_p1_adventure", "换内容", "GREEN"});
+            }
         }
         EmberRaidPath.afterClearHit(p, d, m.key); // D752
     }

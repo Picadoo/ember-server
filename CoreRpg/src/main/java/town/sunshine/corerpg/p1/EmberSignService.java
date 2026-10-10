@@ -443,9 +443,35 @@ public final class EmberSignService implements Listener {
                 continue;
             }
             if (EmberOnlinePath.shouldMute(d)) continue;
-            ConfirmTokens.sendButton(p, PO + "§a今日有效在线满 " + ms.min + " 分钟 · 可领：§f" + ms.r.label() + " ", "[去领取]",
-                    "/corerpg p1 sign menu", "主菜单 → 签到 · 在线");
+            // D805 one-click claim (not menu twin only)
+            ConfirmTokens.sendButtons(p, PO + "§a今日有效在线满 " + ms.min + " 分钟 · 可领：§f" + ms.r.label() + " ",
+                    new String[]{"[一键领取·" + ms.min + "分]", "/corerpg p1 sign online claim " + (i + 1),
+                            "立刻领取本档", "GREEN"},
+                    new String[]{"[签到页]", "/corerpg p1 sign menu", "看全部档位", "AQUA"});
         }
+    }
+
+
+    /** D805: login rising-edge if any milestone claimable today. */
+    public void maybeClaimableCue(Player p) {
+        if (p == null || !onlineP1()) return;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null || d.isLoadFailed()) return;
+        int ti = dayInt(today());
+        if (!rollover(p, d, ti)) return;
+        String day = DailyService.today();
+        int mins = d.periodCount(C_OMIN, day), claimed = d.periodCount(C_OCLAIM, day);
+        int first = -1;
+        for (int i = 0; i < milestones.size(); i++) {
+            if (milestoneState(mins, claimed, i, milestones.get(i).min) == 1) { first = i; break; }
+        }
+        if (first < 0) return;
+        if (EmberOnlinePath.shouldMute(d)) return;
+        if (EmberOnlinePath.shouldAutoClaim(d)) { claimOnline(p, -1); return; }
+        Milestone ms = milestones.get(first);
+        ConfirmTokens.sendButtons(p, PO + "§a有可领在线奖励 · §f" + ms.min + " 分档 ",
+                new String[]{"[一键领取]", "/corerpg p1 sign online claim", "领取全部已达标档", "GREEN"},
+                new String[]{"[签到页]", "/corerpg p1 sign menu", "查看", "AQUA"});
     }
 
     /** idx = milestone index (0-based) or -1 = every reached one */
@@ -473,6 +499,21 @@ public final class EmberSignService implements Listener {
         for (Milestone m : pay) g.add(m.min + " 分钟：" + grant(p, d, ON_RUN + day, "m" + m.min, m.r));
         plugin.getLogger().info("[P1 online] " + p.getName() + " claim " + day + " " + pay.size() + " milestone(s) at " + mins + "m");
         p.sendMessage(PO + "§a领取 · §f" + String.join("§7；§f", g));
+        try { p.sendActionBar("§a在线奖励 · 已领"); } catch (Throwable ignored) { }
+        // D805 next milestone + path
+        Milestone next = null;
+        int claimed2 = d.periodCount(C_OCLAIM, day);
+        for (int i = 0; i < milestones.size(); i++)
+            if (milestoneState(mins, claimed2, i, milestones.get(i).min) == 0) { next = milestones.get(i); break; }
+        if (next != null)
+            p.sendMessage(PO + "§7下一档：§f" + mins + "/" + next.min + " 分钟 §8· " + next.r.label());
+        else
+            p.sendMessage(PO + "§7今日在线档已领完 · 明天 0 点重置");
+        p.sendMessage(PO + EmberOnlinePath.glance(EmberOnlinePath.get(d), true));
+        ConfirmTokens.sendButtons(p, PO + "§7下一步：",
+                new String[]{"[签到页]", "/corerpg p1 sign menu", "看进度", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花币/材料", "GOLD"},
+                new String[]{"[换领取方式]", "/corerpg p1 onlinepath", "自动/提醒/静默", "GRAY"});
     }
 
     // ---------------------------------------------------------------- activity (any real input; never position-only movement)
@@ -504,7 +545,10 @@ public final class EmberSignService implements Listener {
             if (!p.isOnline()) return;
             PlayerData d = data(p.getUniqueId());
             if (d == null || d.isLoadFailed()) return;
-            if (onlineP1()) rollover(p, d, dayInt(today()));
+            if (onlineP1()) {
+                rollover(p, d, dayInt(today()));
+                maybeClaimableCue(p); // D805
+            }
             if (!signP1()) return;
             LocalDate now = today();
             int mask = d.periodCount(C_SMASK, month(now));

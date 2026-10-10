@@ -317,3 +317,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D803–D804 SHIP · jar 1.65.368-d803
 - Auto-stash full → forge; featured enter offerPick
+
+## D805–D808 SHIP · jar 1.65.369-d805
+- Online milestone one-click claim + login cue
+- Friend/mentor afterBound next loop
+- Raid week clear next enter/recruit
+- Enhance undo late/expire + undo→re-enhance

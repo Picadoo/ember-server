@@ -337,9 +337,11 @@ public final class FriendService {
         dataStore.flushMutation(p.getUniqueId());
         dataStore.flushMutation(otherId);
         p.sendMessage(PREFIX + ChatColor.GREEN + "已与 §f" + otherName + ChatColor.GREEN + " 成为好友。");
+        EmberFriendPath.afterBound(p, otherName); // D806
         Player online = Bukkit.getPlayer(otherId);
         if (online != null && online.isOnline()) {
             online.sendMessage(PREFIX + ChatColor.GREEN + p.getName() + " 已接受你的好友申请。");
+            EmberFriendPath.afterBound(online, p.getName()); // D806
         }
     }
 
@@ -508,9 +510,11 @@ public final class FriendService {
             dataStore.flushMutation(p.getUniqueId());
             dataStore.flushMutation(off.getUniqueId());
             p.sendMessage(PREFIX + ChatColor.GOLD + "已与 §f" + otherName + ChatColor.GOLD + " 结成师徒。");
+            EmberMentorPath.afterBound(p, otherName); // D806
             Player online = Bukkit.getPlayer(off.getUniqueId());
             if (online != null && online.isOnline()) {
                 online.sendMessage(PREFIX + ChatColor.GOLD + p.getName() + " 已接受师徒绑定。");
+                EmberMentorPath.afterBound(online, p.getName()); // D806
             }
             return;
         }
@@ -567,9 +571,11 @@ public final class FriendService {
                     dataStore.flushMutation(recipient.getUniqueId());
                     dataStore.flushMutation(fromId);
                     recipient.sendMessage(PREFIX + ChatColor.GOLD + "师徒·敞开 §7已自动与 §f" + fromName + ChatColor.GOLD + " 结成师徒。");
+                    EmberMentorPath.afterBound(recipient, fromName); // D806
                     Player fromOnline = Bukkit.getPlayer(fromId);
                     if (fromOnline != null && fromOnline.isOnline()) {
                         fromOnline.sendMessage(PREFIX + ChatColor.GOLD + recipient.getName() + " 已接受师徒绑定。");
+                        EmberMentorPath.afterBound(fromOnline, recipient.getName()); // D806
                     }
                 }, 5L);
             } else {

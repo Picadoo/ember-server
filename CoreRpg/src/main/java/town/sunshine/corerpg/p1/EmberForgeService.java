@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.NiBridge;
 import town.sunshine.corerpg.PlayerData;
@@ -300,6 +301,10 @@ public final class EmberForgeService implements Listener {
                         p.sendMessage(P + ChatColor.GREEN + "已撤销本次强化失败，材料已退回 · 保底计数恢复");
                         try { p.sendActionBar("§a已撤销强化失败 · 材料退回"); } catch (Throwable ignored) { }
                         loadouts.refresh(p);
+                        // D808 next enhance loop
+                        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                                new String[]{"[再强化]", "/corerpg p1 enhance", "手持同件预览", "GREEN"},
+                                new String[]{"[工坊]", "/corerpg p1 forge", "养成页", "GOLD"});
                     } else {
                         // put snap back if commit failed
                         EmberEnhanceUndo.putBack(snap);
