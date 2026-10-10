@@ -358,6 +358,33 @@ public final class LifeService implements Listener {
         return true;
     }
 
+    public static final String BREAD_OFFER_ID = "bread";
+    public static final String BREAD_NI_ID = "food_ember_bread";
+
+    /** D547: no grilled fish and no bread in bag (need hub bread pack). */
+    public boolean needsBread(Player p) {
+        if (p == null || !enabled || ni == null) return false;
+        if (plugin.getQuestService() != null && plugin.getQuestService().isInstanceWorld(p.getWorld())) return false;
+        if (town.sunshine.corerpg.p1.EmberMode.active() && town.sunshine.corerpg.p1.EmberMode.isP1World(p.getWorld())) return false;
+        Offer o = offers.get(BREAD_OFFER_ID);
+        if (o == null) return false;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        if (d == null || d.getCoin() < o.coin) return false;
+        if (countPathFood(p) > 0) return false;
+        if (ni.countInInventoryOnly(p, BREAD_NI_ID) > 0) return false;
+        return true;
+    }
+
+    /** D547: buy life offer bread once. */
+    public boolean pathBuyBread(Player p) {
+        if (p == null || !needsBread(p)) return false;
+        Offer o = offers.get(BREAD_OFFER_ID);
+        PlayerData d = dataStore.get(p.getUniqueId());
+        boolean ok = buy(p, d, o, true);
+        if (ok) dataStore.flushMutation(p.getUniqueId());
+        return ok;
+    }
+
     public static final String BREW_OFFER_ID = "heal_potion";
     public static final int BREW_POTION_NEED = 2; // brew when below this many heal pots
 

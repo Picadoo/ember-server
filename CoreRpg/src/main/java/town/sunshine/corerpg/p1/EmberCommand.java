@@ -268,6 +268,51 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("breadpath".equals(sub) || "面包路径".equals(sub)) { // D547 hub bread buy path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBreadPath.glance(EmberBreadPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c面包路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberBreadPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c面包路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBreadPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBreadPath.get(d);
+                    if (EmberBreadPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBreadPath.label(cur) + " · 改路径再 /corerpg p1 breadpath");
+                    else EmberBreadPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBreadPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 breadpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberBreadPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("bread".equals(sub) && args.length == 2) { // D547 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.LifeService life = runs == null ? null : runs.plugin().getLifeService();
+            if (life == null) { p.sendMessage(P + "生活服务未加载"); return true; }
+            if (!life.pathBuyBread(p)) p.sendMessage(P + "无法买面包（已有干粮/缺币/副本内）");
+            else p.sendMessage(P + "§a面包·手点 §7已购买");
+            return true;
+        }
         if ("brewpath".equals(sub) || "熬药路径".equals(sub)) { // D546 life brew heal path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1003,6 +1048,28 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("breadseed".equals(sub)) { // D547 admin smoke: no food + coin for bread
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.LifeService life = runs.plugin().getLifeService();
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs.plugin();
+            if (life != null && plg.getNiBridge() != null) {
+                String food = life.cookOutputId();
+                int g = plg.getNiBridge().countInInventoryOnly(t, food);
+                if (g > 0) plg.getNiBridge().consumeExact(t, food, g);
+                int b = plg.getNiBridge().countInInventoryOnly(t, town.sunshine.corerpg.LifeService.BREAD_NI_ID);
+                if (b > 0) plg.getNiBridge().consumeExact(t, town.sunshine.corerpg.LifeService.BREAD_NI_ID, b);
+            }
+            PlayerData pd = plg.getDataStore().get(t.getUniqueId());
+            if (pd != null && pd.getCoin() < 40) {
+                pd.addCoin(40 - pd.getCoin());
+                plg.getDataStore().flushMutation(t.getUniqueId());
+            }
+            s.sendMessage(P + "已清空烤鱼/面包并确保≥40币 → " + t.getName());
+            EmberBreadPath.maybeAfterProgress(t);
             return true;
         }
         if ("brewseed".equals(sub)) { // D546 admin smoke: life Lv2 + mats + low heal pots
