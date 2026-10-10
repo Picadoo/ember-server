@@ -463,3 +463,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D999–D1010 ARCH SHIP · jar 1.65.414-d999
 - Stage1 C02 raid stamina + C09/C10 talent learn/respec ← amount(); dual-source mirrors OK; nums unchanged
+
+## D1011–D1014 ARCH SHIP · jar 1.65.415-d1011
+- Stage1 C18 festival shop prices ← amount(); festival.yml mirror; model PART unchanged
+
+## D1015 ARCH docs · Stage1 amount() coverage inventory
+- See DESIGN-ember-economy-yml-sot-stage1-coverage-2026-10-11.md

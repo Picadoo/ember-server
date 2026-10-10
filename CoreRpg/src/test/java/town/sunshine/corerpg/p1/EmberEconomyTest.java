@@ -1069,6 +1069,18 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void festivalSinkMatchesC18() {
+        // D1012 — PART model stays; amounts SoT
+        assertEquals(60, EmberEconomy.amount("C18", "charm_event"));
+        assertEquals(30, EmberEconomy.amount("C18", "trail_event"));
+        assertEquals(15000, EmberEconomy.amount("C18", "after_coin"));
+        assertEquals(300, EmberEconomy.amount("C18", "after_badge"));
+        assertEquals(120, EmberEconomy.amount("C18", "memo"));
+        assertEquals(5, EmberEconomy.amount("C18", "badge_rate"));
+        assertEquals(40, EmberEconomy.amount("C18", "badge_cap"));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

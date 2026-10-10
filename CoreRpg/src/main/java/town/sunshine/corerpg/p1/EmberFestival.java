@@ -158,6 +158,14 @@ public final class EmberFestival implements Listener {
         badgeRate = (int) num(bx.get("rate"), 0);
         badgeCap = (int) num(bx.get("cap"), 0);
         trailAfter = Boolean.TRUE.equals(ex.get("trail_after"));
+        // D1011: C18 shop amounts from economy yml SoT (festival.yml stays mirror)
+        priceEvent = EmberEconomy.amount("C18", "charm_event");
+        trailPrice = EmberEconomy.amount("C18", "trail_event");
+        afterCoin = EmberEconomy.amount("C18", "after_coin");
+        afterBadge = EmberEconomy.amount("C18", "after_badge");
+        memoPrice = EmberEconomy.amount("C18", "memo");
+        badgeRate = EmberEconomy.amount("C18", "badge_rate");
+        badgeCap = EmberEconomy.amount("C18", "badge_cap");
         Map<?, ?> dr = map(root.get("drops"));
         dropChance = num(dr.get("mob_chance"), 0.25);
         dropElite = (int) num(dr.get("elite"), 2);
