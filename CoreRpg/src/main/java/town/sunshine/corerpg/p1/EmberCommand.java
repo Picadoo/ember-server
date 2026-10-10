@@ -1069,7 +1069,7 @@ public final class EmberCommand {
             town.sunshine.corerpg.LifeService life = runs == null ? null : runs.plugin().getLifeService();
             if (life == null) { p.sendMessage(P + "生活服务未加载"); return true; }
             if (!life.pathBrewHeal(p)) p.sendMessage(P + "无法熬药（等级/材料/币/已够药/副本内）");
-            else EmberBrewPath.afterBrew(p); // D832
+            // else afterBrew via LifeService.buy D844
             return true;
         }
         if ("rodpath".equals(sub) || "钓竿路径".equals(sub)) { // D545 fishing rod buy path
@@ -1206,7 +1206,7 @@ public final class EmberCommand {
             if (life == null) { p.sendMessage(P + "生活服务未加载"); return true; }
             int ok = life.pathCook(p);
             if (ok <= 0) p.sendMessage(P + "无法代烤（无生鱼、缺币、或在副本内）");
-            else EmberCookPath.afterCook(p, ok); // D832
+            // else afterCook via LifeService.cook D843
             return true;
         }
         if ("makeuppath".equals(sub) || "补签路径".equals(sub)) { // D542 sign makeup path

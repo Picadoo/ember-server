@@ -112,8 +112,7 @@ public final class EmberCookPath {
         if (n <= 0) return;
         int path = get(d);
         if (shouldAuto(path)) {
-            int ok = life.pathCook(p);
-            if (ok > 0) afterCook(p, ok); // D832
+            life.pathCook(p); // afterCook via LifeService.cook D843
             return;
         }
         if (shouldMute(path)) return;

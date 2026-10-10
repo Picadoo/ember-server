@@ -282,6 +282,12 @@ public final class MailService {
         saveInbox(p.getUniqueId(), list);
         p.sendMessage(PREFIX + ChatColor.GREEN + "已领取 #" + id + " 附件："
                 + ChatColor.WHITE + formatAttachments(m.attachments));
+        try { p.sendActionBar(ChatColor.GREEN + "邮件领取 · #" + id); } catch (Throwable ignored) { }
+        // D842
+        ConfirmTokens.sendButtons(p, PREFIX + "§7下一步：",
+                new String[]{"[一键领取]", "/corerpg mail claim all", "领剩余附件", "GREEN"},
+                new String[]{"[一键存入]", "/corerpg p1 stash", "入库", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花附件", "GOLD"});
     }
 
     private void cmdClaimAll(Player p) {

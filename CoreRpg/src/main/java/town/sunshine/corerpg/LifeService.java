@@ -356,6 +356,8 @@ public final class LifeService implements Listener {
         p.sendMessage(ChatColor.GREEN + "[生活] " + ChatColor.stripColor(o.name) + " → " + ChatColor.WHITE + String.join("，", got)
                 + (o.coin > 0 ? ChatColor.GRAY + "（-" + o.coin + " 币）" : ""));
         addXp(p, o.xp);
+        if (BREW_OFFER_ID.equals(o.id)) // D844
+            town.sunshine.corerpg.p1.EmberBrewPath.afterBrew(p);
         return true;
     }
 
@@ -528,6 +530,7 @@ public final class LifeService implements Listener {
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GREEN + "[生活] 烤好了 " + ni.displayName(cookOutput) + "×" + cooked + ChatColor.GRAY + "（-" + cooked * cookCoinEach + " 币）");
         addXp(p, cooked * cookXp);
+        town.sunshine.corerpg.p1.EmberCookPath.afterCook(p, cooked); // D843
     }
 
     // ---------------- fishing diagnostics (op) ----------------

@@ -110,7 +110,7 @@ public final class EmberBrewPath {
         int path = get(d);
         if (shouldAuto(path)) {
             if (life.pathBrewHeal(p)) {
-                afterBrew(p); // D832
+                // afterBrew via LifeService.buy D844
             }
             return;
         }
