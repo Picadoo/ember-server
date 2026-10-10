@@ -5,6 +5,7 @@
 # D333：手持甲时养成格灰显/禁命令（held_is_armor）；分解 lore 去「胚料 1/2/3」、对齐白板零头
 # D381：底栏「材料哪来·挂机庭」→ember_p1_afk（产花反向互指；零改价/产量）
 # D398：底栏「配方速览」P → ember_p1_forge_recipes（静态镜像 UpgradeRules；零改价/产量）
+# D451：底栏「词条洗练」W → 洗练页（D143/D148 锁定保类型；与烙纹/随机锻/转化并列）
 
 Title: '§6余烬 · 锻造'
 
@@ -24,7 +25,7 @@ Layout:
   - '# e u r #'
   - '# Q S D #'
   - '# q s d #'
-  - '#FGP bB#'
+  - '#FGPWbB#'
 # D100 (review #10): every confirm sits directly under its preview (same column); 分解 confirms in chat (one-shot token)
 
 Events:
@@ -33,6 +34,7 @@ Events:
     - 'tell: §8缺料？点「材料哪来」回挂机庭 · 产→仓→本页花'
     - 'tell: §8未持件也能看费用：点「配方速览」'
     - 'tell: §8挂机仓差→烙纹/随机锻/转化见配方速览与挂机战况'
+    - 'tell: §8词条洗练（普通随机 / Shift 锁定保类型只重抽档）在本页「洗练」'
 
 Icons:
   '#':
@@ -417,6 +419,27 @@ Icons:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
         - 'menu: ember_p1_forge_recipes'
+  # D451: 词条洗练（D143）· 锁定保类型 = D148 lock（本页第四选择，与烙纹/随机锻/转化并列）
+  W:
+    update: 40
+    display:
+      material: enchanting table
+      name: '§6词条洗练'
+      lore:
+        - ''
+        - '§7刃：%corerpg_p1_reroll_blade_cur%'
+        - '§7护符：%corerpg_p1_reroll_charm_cur%'
+        - ''
+        - '§f普通洗：§7本部位词条随机 · 保底只保档位'
+        - '§b锁定再洗：§7保留当前词条类型，只重抽档位'
+        - '§8（D148 · Shift+点击 / 聊天栏按钮 · 另加 lock 碎片）'
+        - '§8不涨永久乘区 · 与烙纹定向（选类型）分工：烙纹写入 / 洗练炼档'
+        - ''
+        - '§e➥ §f打开洗练页'
+    actions:
+      all:
+        - 'sound: BLOCK_NOTE_PLING-1-2'
+        - 'command: corerpg p1 reroll from forge'
   b:
     display:
       material: arrow

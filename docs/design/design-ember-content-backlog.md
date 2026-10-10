@@ -986,5 +986,6 @@
 
 - `B-mainline-q04-q07-visual-d449`（已批 A·M · D449 · **落地** · Q04–07 轻视觉 + Q02 warn1.1）
 
-- `B-forge-quality-gamble`（**关闭** · 重叠 D430 PASS · tip 已关；洗练保类型重抽另 tip）
+- `B-forge-quality-gamble`（**关闭** · 重叠 D430 PASS · tip 已关；洗练保类型 = **D148 LIVE** · 工坊入口 **D451**）
 - `B-mainline-q01-q03-visual-d450`（已批 A·M · D450 · **落地** · Q01–03 轻视觉 · map `@d450`）
+- `B-forge-reroll-entry`（已批 A·M · D451 · **落地** · 工坊挂洗练+锁定保类型说明 · jar 1.65.145-d451 · ≠改洗练价）

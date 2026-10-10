@@ -669,6 +669,7 @@ public final class EmberGrowthService implements Listener {
     static {
         REROLL_FROM.put("gear", "ember_p1_gear");
         REROLL_FROM.put("hub", "ember_hub");
+        REROLL_FROM.put("forge", "ember_p1_forge"); // D451 workshop pillar
     }
 
     public EmberAffix.Rules reroll() { return reroll; }
@@ -1477,7 +1478,7 @@ public final class EmberGrowthService implements Listener {
         return (int) Math.round(reroll.coinFor(t.tier) * mods(p).get("reroll_coin"));
     }
 
-    /** /corerpg p1 reroll [from gear|hub] | back | blade|charm dup|shard [lock] [confirm] | keep new|old */
+    /** /corerpg p1 reroll [from gear|hub|forge] | back | blade|charm dup|shard [lock] [confirm] | keep new|old */
     public boolean rerollCommand(Player p, String[] args) {
         if (reroll == null) { p.sendMessage(P + "词条洗练未配置（" + EmberGrowth.FILE + "）"); return true; }
         PlayerData d = data(p.getUniqueId());
@@ -1798,7 +1799,7 @@ public final class EmberGrowthService implements Listener {
         if (reroll == null || d == null) return "";
         if ("back".equals(key)) {
             String f = RFROM.get(p.getUniqueId());
-            return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "§7关闭";
+            return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "forge".equals(f) ? "§7返回工坊" : "§7关闭";
         }
         if ("pending".equals(key)) {
             Object[] pr = pendingRoll.get(p.getUniqueId());

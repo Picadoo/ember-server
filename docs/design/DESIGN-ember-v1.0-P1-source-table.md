@@ -1602,6 +1602,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D448 | CoreRpg **1.65.144-d448** / bv 未抬 | 成长花样·破招/破绽成功短闪 **PASS**（解 D440 HOLD）：每次成功 ActionBar（防抖 0.8s）；首次仍 D283 tip；**零改** wall_stun/whiff_stun/break_hp/dmg · EmberSetRules · skill_mult/CD · AFK · sx20 · 聚火 · K3 · Stage2。冒烟 FreshQ973 · MySQL×2 · SEVERE0 · STATUS `STATUS-ember-counterplay-flash-d448-2026-10-10.md` · DESIGN `DESIGN-ember-counterplay-flash-playstyle-2026-10-10.md` · tip 已关。 |
 | D449 | 地图叠饰（无 jar）/ bv89 · Q02 warn 1.1 | 主线 Q04–Q07 轻视觉 **PASS**：tide 海晶柱+灯 / spire 石英+荧石 / frost 浮冰+雪 / rail 圆石+红石灯；**禁**重铺地板；map_version `@d449`；冒烟 FreshQ980–984 FAIL=0。STATUS `STATUS-ember-mainline-q04-q07-visual-pass-d449-2026-10-10.md` · DESIGN `DESIGN-ember-mainline-q04-q07-visual-pass-2026-10-10.md`。 |
 | D450 | 地图叠饰（无 jar）/ bv 未抬 | 主线 Q01–Q03 轻视觉 **PASS**（收束主线视觉）：courtyard 橡木/石砖+荧石 / ash 地狱岩·红地狱砖+灯 / crypt 石砖·圆石（y59/y55）+灵魂沙·铁栅；map_version `@d450`；**关闭**误开锻造成色 tip（重叠 **D430**）；**≠** Stage2/AFK/sx20/聚火/K3。冒烟 FreshQ985+ · STATUS `STATUS-ember-mainline-q01-q03-visual-pass-d450-2026-10-10.md` · DESIGN `DESIGN-ember-mainline-q01-q03-visual-pass-2026-10-10.md`。 |
+| D451 | CoreRpg **1.65.145-d451** / bv 未抬 | 成长花样·工坊挂词条洗练入口 **PASS**：底栏 W→`reroll from forge`；返回「返回工坊」；文案明示普通洗 vs **D148 锁定保类型**；**关闭**误 tip「洗练保类型另开」。**零改** lock_shard/coin/词条池/EmberSetRules。STATUS `STATUS-ember-forge-reroll-entry-d451-2026-10-10.md` · DESIGN `DESIGN-ember-forge-reroll-entry-playstyle-2026-10-10.md`。 |
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）

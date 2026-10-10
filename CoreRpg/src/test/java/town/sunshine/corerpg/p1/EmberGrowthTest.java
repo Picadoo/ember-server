@@ -303,4 +303,11 @@ public class EmberGrowthTest {
         assertNotNull("enhanced", EmberAffix.duplicateOk(t, EmberItemData.create("burst", "blade", 2, 0, 0, 3, false, "drop"), false));
         assertNotNull("T0 has no slot", EmberAffix.eligible(EmberItemData.create("burst", "blade", 0, 0, 0, 0, false, "starter")));
     }
+    @Test
+    public void rerollFromForge_mapsToForgeMenu_D451() {
+        assertEquals("ember_p1_forge", EmberGrowthService.REROLL_FROM.get("forge"));
+        assertEquals("ember_p1_gear", EmberGrowthService.REROLL_FROM.get("gear"));
+        assertEquals("ember_hub", EmberGrowthService.REROLL_FROM.get("hub"));
+    }
+
 }
