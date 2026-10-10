@@ -328,12 +328,13 @@ public final class FlexSkillService implements Listener {
             lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
             return false;
         }
-        spawnParticles(from.clone().add(0, 0.2, 0), def.particles, 10);
+        // D655: set-variant trail feel (zero skill_mult)
+        int variant = stepVariantOf(player);
+        spawnStepVariantTrail(from, best, variant, def.particles);
         player.teleport(best);
-        spawnParticles(best.clone().add(0, 0.2, 0), def.particles, 14);
+        spawnStepVariantLand(best, variant, def.particles);
         playSound(best, def.sound);
         // Display follows Q05+set even in hub; P1-only for combat FX (火痕/爆闪/承护).
-        int variant = stepVariantOf(player);
         Location fxAt = back ? from : best;
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) {
             applyHuohenIfActive(player, fxAt);
@@ -344,7 +345,50 @@ public final class FlexSkillService implements Listener {
         }
         lastStepVariant.put(player.getUniqueId(), Integer.valueOf(variant));
         lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
+        try {
+            if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN)
+                player.sendActionBar(ChatColor.GOLD + "火痕步 · 落地点燃");
+            else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
+                player.sendActionBar(ChatColor.AQUA + "爆闪步 · 落地缓速");
+            else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
+                player.sendActionBar(ChatColor.GREEN + "承护步 · 落地微疗");
+            else
+                player.sendActionBar(ChatColor.YELLOW + (back ? "后撤踏步" : "轻技踏步"));
+        } catch (Throwable ignored) { }
         return true;
+    }
+
+
+    /** D655: flex step trail by set variant — zero skill_mult / CD / damage. */
+    private void spawnStepVariantTrail(Location from, Location dest, int variant, String base) {
+        if (from == null || dest == null) return;
+        String a = base == null || base.isEmpty() ? "CLOUD" : base;
+        String b = "SMOKE_NORMAL";
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) { a = "FLAME"; b = "LAVA"; }
+        else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) { a = "CRIT_MAGIC"; b = "CRIT"; }
+        else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) { a = "HEART"; b = "VILLAGER_HAPPY"; }
+        spawnParticles(from.clone().add(0, 0.2, 0), a, 10);
+        for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
+            spawnParticles(sample.clone().add(0, 0.25, 0), a, 3);
+            spawnParticles(sample.clone().add(0, 0.25, 0), b, 2);
+        }
+    }
+
+    private void spawnStepVariantLand(Location dest, int variant, String base) {
+        if (dest == null) return;
+        String a = base == null || base.isEmpty() ? "CLOUD" : base;
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) {
+            spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 16);
+            spawnParticles(dest.clone().add(0, 0.3, 0), "LAVA", 5);
+        } else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) {
+            spawnParticles(dest.clone().add(0, 0.2, 0), "CRIT_MAGIC", 18);
+            spawnParticles(dest.clone().add(0, 0.3, 0), "CRIT", 8);
+        } else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) {
+            spawnParticles(dest.clone().add(0, 0.2, 0), "HEART", 6);
+            spawnParticles(dest.clone().add(0, 0.4, 0), "VILLAGER_HAPPY", 8);
+        } else {
+            spawnParticles(dest.clone().add(0, 0.2, 0), a, 14);
+        }
     }
 
     /**

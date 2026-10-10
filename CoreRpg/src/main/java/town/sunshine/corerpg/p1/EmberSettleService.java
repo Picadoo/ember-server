@@ -248,11 +248,13 @@ public final class EmberSettleService {
         // D648: first challenge clear of this map (talent C_CHAL rising edge) → map-identity base_item
         in.challengeFirst = s.challenge && s.abyss == 0 && !m.raid
                 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") <= 0;
+        // D654: first clear of this raid key
+        in.raidFirst = m.raid && EmberCosmetics.raidClears(pd, m.key) <= 0;
         if (m.raid && runs.maps().challenge != null) in.qualityWeights = runs.maps().challenge.quality; // P2-5: no exclusive drop table
         if (s.challenge && runs.maps().challenge != null) in.qualityWeights = runs.maps().challenge.quality;
         EmberRunMaps.AbyssTier abT = s.abyss > 0 ? runs.maps().abyssTier(s.abyss) : null;
         if (abT != null) in.qualityWeights = abT.quality; // P2-2 tier quality table
-        in.loot = m.raid ? null : runs.maps().lootBias(m); // P2-9 (D81) map loot identity (abyss segments: the segment map)
+        in.loot = runs.maps().lootBias(m); // P2-9 (D81); D654 raid also keeps bias for first-clear slot
         if (EmberSixSlot.enabled()) { // D318 六槽 T1-7: only the clears p1sim models (normal main-story settle; no challenge / abyss / raid / event / rush)
             boolean modelled = !s.challenge && s.abyss == 0 && !m.raid && !m.event && !m.rush;
             in.sixArmor = modelled;
@@ -339,7 +341,20 @@ public final class EmberSettleService {
             if (created[0] && "fc_sigmark".equals(g.key)) pd.addPeriodCount(EmberSignature.C_FC + m.key, "all", 1); // D174: once per map
         }
         if (fresh) pd.addPeriodCount(EmberRunService.C_BOUNTY, bDay, bountyW);
-        if (fresh && m.raid && runs.cosmetics() != null) runs.cosmetics().onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
+        if (fresh && m.raid && runs.cosmetics() != null) {
+            boolean raidFc = EmberCosmetics.raidClears(pd, m.key) <= 0;
+            runs.cosmetics().onRaidClear(Bukkit.getPlayer(u), pd, m.key); // P2-9 (D83)
+            if (raidFc) {
+                Player rp = Bukkit.getPlayer(u);
+                if (rp != null && rp.isOnline()) {
+                    String fam = (m.lootFamily != null && EmberRunRules.validFamily(m.lootFamily))
+                            ? EmberItemData.familyName(m.lootFamily) : "本团偏向族";
+                    rp.sendMessage(EmberRunService.P + "§d团本首通 · §f" + m.name + " §7保底 §e" + fam
+                            + " §8（团本图身份）");
+                    try { rp.sendActionBar("§d团本首通 · §f" + fam + " §7保底"); } catch (Throwable ignored) { }
+                }
+            }
+        }
         if (fresh && runs.season() != null && s.coreClean.contains(u)) runs.season().addGoal(u, pd, "core", 1); // D144 烬核同心 (optional goal)
         if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0) {
             pd.addPeriodCount(EmberGrowthService.C_CHAL + m.key, "all", 1); // D141: challenge first clear per map (talent point / honors)

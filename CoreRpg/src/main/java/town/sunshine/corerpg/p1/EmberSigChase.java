@@ -209,6 +209,24 @@ public final class EmberSigChase {
         ConfirmTokens.sendButtons(p, P + "§7下一步：", btns.toArray(new String[0][]));
     }
 
+
+    /**
+     * D653: stamp drop hit chase — acquisition loop close without waiting for imprint marks.
+     * Zero STAMP_RATE / imprint price change.
+     */
+    public static boolean afterStampHit(Player p, PlayerData d, EmberSignature.Def sd) {
+        if (p == null || sd == null || d == null) return false;
+        if (!closesChase(get(d), sd)) return false;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§6追烙掉落命中：§f" + label(sd) + " §a· 签名件已到账");
+        try { p.sendActionBar("§6追烙命中 · §f" + sd.name); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[去烙印同款]", "/corerpg p1 sig pick " + sd.id, "徽记够可烙到穿着件", "GOLD"},
+                new String[]{"[换追烙]", "/corerpg p1 sig chase offer", "换下一条签名", "AQUA"},
+                new String[]{"[签名页]", "/corerpg p1 sig menu", "图鉴 / 开关", "GRAY"});
+        return true;
+    }
+
     /** Pure: whether imprint of {@code sd} should close chase {@code chase}. */
     public static boolean closesChase(EmberSignature.Def chase, EmberSignature.Def sd) {
         return chase != null && sd != null && chase.code == sd.code;

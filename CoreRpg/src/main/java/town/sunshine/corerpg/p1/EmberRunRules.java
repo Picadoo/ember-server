@@ -491,6 +491,8 @@ public final class EmberRunRules {
         public boolean sixStarter;
         /** D648: first challenge clear of this map → guarantee map loot identity on base_item */
         public boolean challengeFirst;
+        /** D654: first clear of this raid key → guarantee raid loot family on raid_item */
+        public boolean raidFirst;
     }
 
     /** D318: ledger key of the per-clear armor drop (REG S39) */
@@ -592,8 +594,20 @@ public final class EmberRunRules {
     public static Grant raidItem(SettleInput in, String key, String raidFamily, int qualityFloor) {
         Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
         double uf = r.nextDouble();
-        String fam = validFamily(in.target) ? in.target : validFamily(raidFamily) ? raidFamily : pickFamily(null, uf);
-        String slot = pickSlot(r.nextDouble());
+        String fam;
+        String slot;
+        // D654: first raid clear guarantees map loot-identity family (visible chase); target still wins if set
+        if (in != null && in.raidFirst && validFamily(raidFamily)) {
+            fam = validFamily(in.target) ? in.target : raidFamily;
+            if (in.loot != null && in.loot.slot != null
+                    && ("blade".equals(in.loot.slot) || "charm".equals(in.loot.slot)))
+                slot = in.loot.slot;
+            else
+                slot = pickSlot(r.nextDouble());
+        } else {
+            fam = validFamily(in.target) ? in.target : validFamily(raidFamily) ? raidFamily : pickFamily(null, uf);
+            slot = pickSlot(r.nextDouble());
+        }
         int q = Math.max(qualityFloor, pickQuality(in.qualityWeights, r.nextDouble()));
         int c = pickCraft(r.nextDouble());
         return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, new ItemRoll(fam, slot, in.tier, Math.min(3, q), c));

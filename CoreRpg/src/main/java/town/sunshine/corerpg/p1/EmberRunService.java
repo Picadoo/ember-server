@@ -2091,6 +2091,7 @@ public final class EmberRunService implements Listener {
             EmberGrowthService.markSeen(d, sd); // stage 1.5 codex 「获得过」
             got.add("§6签名传奇！§e" + sd.name + "§f（" + sd.kindText() + "，" + sd.boss + "）");
             acqStamp = true; // D456
+            EmberSigChase.afterStampHit(p, d, sd); // D653 chase stamp hit loop
             log().info("[P1 sig] " + p.getName() + " stamp " + uid + " " + sd.id + " (" + r.runId + ", " + how + ")");
             r.status = EmberRunRules.ST_DELIVERED; r.updated = now; changed.add(r);
         }

@@ -22,6 +22,7 @@ public final class EmberSwapLoop {
         String P = EmberRunService.P;
         p.sendMessage(P + "§e强化已互换" + (winner.isEmpty() ? "" : " §7· 高强化在 " + winner)
                 + " §7· 选下一步（不改强化价/保底）：");
+        try { p.sendActionBar("§e互换完成 · §f选下一步"); } catch (Throwable ignored) { } // D656
         ConfirmTokens.sendButtons(p, P,
                 new String[]{"[去强化]", "/corerpg p1 enhance", "手持件继续强化预览", "GREEN"},
                 new String[]{"[装备页]", "/ember_p1_gear", "换上/查看套装", "GOLD"},

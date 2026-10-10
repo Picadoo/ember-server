@@ -54,3 +54,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D651–D652 SHIP · jar 1.65.315-d651 · 2026-10-11
 - D651 attune unlock spend complete UX
 - D652 imprint menu spend-loop tell
+
+## D653–D656 SHIP · jar 1.65.316-d653 · 2026-10-11
+- D653 stamp chase hit → imprint offer
+- D654 raid first-clear map-identity
+- D655 flex step set-variant trails
+- D656 swap/dismantle ActionBar + undo button

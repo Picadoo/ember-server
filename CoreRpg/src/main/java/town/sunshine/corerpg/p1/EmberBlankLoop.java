@@ -17,11 +17,12 @@ public final class EmberBlankLoop {
         if (p == null || blanks <= 0) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e胚料 ×" + blanks + " §7已进仓 · 选下一步花法（不改产量/价）：");
+        try { p.sendActionBar("§e分解入账 · 胚料 ×" + blanks); } catch (Throwable ignored) { } // D656
         ConfirmTokens.sendButtons(p, P,
                 new String[]{"[去升阶]", "/corerpg p1 upgrade", "手持件升阶预览（花胚料）", "GREEN"},
                 new String[]{"[去烙纹合成]", "/corerpg p1 brand craft", "碎片→烙纹（胚料另用于升阶）", "GOLD"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"},
-                new String[]{"[稍后再说]", null, "材料仍在仓库", "GRAY"});
+                new String[]{"[撤销分解]", "/corerpg p1 undo", "窗口内可找回（退胚料）", "YELLOW"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
     }
 
     /** Admin / unit: button set label. */

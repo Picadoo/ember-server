@@ -44,4 +44,14 @@ public class EmberFirstClearMapIdTest {
         assertTrue(R.range >= 3.5);
         assertTrue(F.arc >= 110.0 - 0.01);
     }
+
+    @Test public void raidFirstForcesFamily() {
+        EmberRunRules.SettleInput in = new EmberRunRules.SettleInput();
+        in.raidFirst = true;
+        in.tier = 3;
+        in.loot = new EmberRunRules.LootBias("scorch", "charm", 0.625, 0.5, 0.7);
+        EmberRunRules.Grant g = EmberRunRules.raidItem(in, "raid_item", "scorch", 1);
+        assertEquals("scorch", g.item.family);
+        assertEquals("charm", g.item.slot);
+    }
 }
