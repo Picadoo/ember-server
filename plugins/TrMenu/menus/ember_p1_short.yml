@@ -1,3 +1,4 @@
+# D416 · 选页 I 挂 D404 vault/recipe_gap 仓差行 + Open 半行 · 零 jar · 满态不盖 D409 去工坊花
 # D414 · 短征十本选页（sx01 烬门哨岗 · sx02 锈灯栈道 · sx03 霜雾闸廊 · sx04 烬井螺旋 · sx05 裂谷风廊 · sx06 烬环廊 · sx07 烬塔回升 · sx08 错层烬庭 · sx09 烬渠跳石 · sx10 烬闸递室）
 # D409 · 日帽满（sx_day_left_sum==0）Open/I/B 追工坊（W1b/W1c）+ 可选满态右键挂机（W1d）；零改日帽/S40–S49/体力。
 # 日帽同屏：sx01–sx10 挂 %corerpg_p1_sx0N_day_line%（及 I 合计 left_sum 含第十本）；禁假写个人 n/3。
@@ -8,6 +9,7 @@
 #   %corerpg_p1_sx01_day_line% … %corerpg_p1_sx10_day_line%
 #   %corerpg_p1_sx_day_left_sum% · %corerpg_p1_sx0N_fc%（sx01–sx10）
 #   %corerpg_p1_sx_fc_left% · %corerpg_p1_sx_fc_pending_line%
+# D416 仓差（D404 live）：%corerpg_p1_vault_shard%/bone/core/blank · recipe_gap_enhance1/upgrade_t2/refine1
 # 挂点：A/C/E/G/K/M/O/Q/T/V 主 lore + 灰态 · I 说明 + Open；update:20。
 # D401：Open/I 半行「本周可选周目标·短征」；进度键 %corerpg_p1_goal_short%。
 # 金额：有奖 80/4/3 · 首通由 fc 真键显示（sx07=120/6/1 · sx08=110/6/1 · sx09=100/6/1 · sx10=90/6/1）· 体力 30 · 日帽 3 分开。
@@ -46,6 +48,8 @@ Events:
         - 'tell: §8独立短本 · 不是旧日常窟 · 奖励以结算为准 · 材料进仓去工坊 · 今日有奖见各本悬停'
     - 'tell: §8生涯首通：各本悬停可见未领/已领取 · %corerpg_p1_sx_fc_pending_line%'
     - 'tell: §8本周可选周目标·短征：赛季页可看 · 有奖通关计入 · 只发外观徽 · 不算全部完成'
+    # D416 W1b：Open 半行 · 选本说明可看仓内还差（满态/未满共用 · 不盖 D409 去工坊花）
+    - 'tell: §8选本说明可看仓内还差'
 
 Icons:
   '#':
@@ -95,6 +99,11 @@ Icons:
             - '§e错层 · %corerpg_p1_sx08_day_line%'
             - '§e烬渠 · %corerpg_p1_sx09_day_line%'
             - '§e烬闸 · %corerpg_p1_sx10_day_line%'
+            # D416 W1a：D404 live 仓差（满态不盖上方去工坊花主 CTA）
+            - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
+            - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
+            - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
+            - '§8材料进仓 · 点「去哪花」开工坊 · 不加快产量'
             - '§8不发主线装备/徽记/签名（首航）'
             - ''
             - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
@@ -138,6 +147,11 @@ Icons:
             - '§e错层 · %corerpg_p1_sx08_day_line%'
             - '§e烬渠 · %corerpg_p1_sx09_day_line%'
             - '§e烬闸 · %corerpg_p1_sx10_day_line%'
+            # D416 W1a：D404 live 仓差（满态不盖上方去工坊花主 CTA）
+            - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
+            - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
+            - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
+            - '§8材料进仓 · 点「去哪花」开工坊 · 不加快产量'
             - '§8不发主线装备/徽记/签名（首航）'
             - ''
             - '§8本周可选周目标·短征：有奖通关计入（赛季页）· 不算「全部完成」· 只发外观徽'
@@ -174,6 +188,11 @@ Icons:
         - '§e错层 · %corerpg_p1_sx08_day_line%'
         - '§e烬渠 · %corerpg_p1_sx09_day_line%'
         - '§e烬闸 · %corerpg_p1_sx10_day_line%'
+        # D416 W1a：D404 live 仓差（未满有奖分支）
+        - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
+        - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
+        - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
+        - '§8材料进仓 · 点「去哪花」开工坊 · 不加快产量'
         - '§7今日剩余有奖合计（十本）：§f%corerpg_p1_sx_day_left_sum%'
         - '§8不发主线装备/徽记/签名（首航）'
         - ''

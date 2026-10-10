@@ -1,14 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D416 · 短征选页挂仓差 · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx11）
 
-> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D416** · tip `a0e51f9f` · 指针 DESIGN [`DESIGN-ember-short-select-mat-gap-2026-10-10.md`](../design/DESIGN-ember-short-select-mat-gap-2026-10-10.md) · W1a 必做 · W1b 同批 · 零 jar · 满态保留 D409 追工坊 · 零改产量/日帽/UpgradeRules · ≠sx11 · **施工中** · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。下文为交稿原文，保留备查。
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D416** · tip `a0e51f9f` · 指针 DESIGN [`DESIGN-ember-short-select-mat-gap-2026-10-10.md`](../design/DESIGN-ember-short-select-mat-gap-2026-10-10.md) · W1a 必做 · W1b 同批 · 零 jar · 满态保留 D409 追工坊 · 零改产量/日帽/UpgradeRules · ≠sx11 · **挂盘已落** · **未派测** · 施工 STATUS [`STATUS-ember-short-select-mat-gap-d416-2026-10-10.md`](STATUS-ember-short-select-mat-gap-d416-2026-10-10.md) · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。下文为交稿原文，保留备查。
 >
-> **【D416 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批/施工中** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx11** · **≠ stage 脏 runtime**
+> **【D416 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批·挂盘已落** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx11** · **≠ stage 脏 runtime**
 >
 > **上游结案：** 总控【催 D416 tip】· D414 挂盘 `7c5e8267`、D415 `85e8d28a` 已齐，测已派 → 请交**下一内容号 tip**（短征/挂机资源环/日更乐趣；**sx11 等 D414 PASS**）。禁 Pack6/天赋/灰印/抬日表/开 gate_daily/动 Stage2。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D416** · **施工中** · docs-only  
-**硬规格（已批 A · 方案 M · D416 · 施工中）：** [`DESIGN-ember-short-select-mat-gap-2026-10-10.md`](../design/DESIGN-ember-short-select-mat-gap-2026-10-10.md) · backlog `B-short-select-mat-gap`（**已批/施工中**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D416** · **挂盘已落** · docs-only  
+**硬规格（已批 A · 方案 M · D416 · 挂盘已落）：** [`DESIGN-ember-short-select-mat-gap-2026-10-10.md`](../design/DESIGN-ember-short-select-mat-gap-2026-10-10.md) · backlog `B-short-select-mat-gap`（**已批·挂盘已落**） · STATUS [`STATUS-ember-short-select-mat-gap-d416-2026-10-10.md`](STATUS-ember-short-select-mat-gap-d416-2026-10-10.md)  
 **打开理由：** D404 仓余额/代表档还差键 **已 live**；D415 已挂进挂机战况；短征选页 `ember_p1_short` 仍只有日帽/首通/满态追工坊——**选本时看不见「仓里还差啥」**。D409 仅在 `sx_day_left_sum==0` 推工坊；未满有奖刷本时产→花决策面断。sx11 禁交；D404–D415（速览/战况仓差/remain/首通/sx07–sx10/满额短征追/有奖花材追/next_farm/ActionBar）禁复述为主债。
 
 ---
@@ -66,7 +66,7 @@
 
 ---
 
-*选题短征选页挂仓差 · tip 旁注已关 · 已批 A·方案 M · D416 · 设计待批关闭 · 施工中 · ≠关观察 ≠抬挂机表 ≠sx11。*
+*选题短征选页挂仓差 · tip 旁注已关 · 已批 A·方案 M · D416 · 设计待批关闭 · 挂盘已落 · ≠关观察 ≠抬挂机表 ≠sx11。*
 
 ---
 
@@ -76,3 +76,4 @@
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题短征选页挂仓差（短征×资源环对称断点）· DESIGN 待批 A·荐 M · ≠sx11 |
 | 2026-10-10 | **旁注已关** · 总控批 A·M · D416 · 设计待批关闭 · W1a 必做 · W1b 同批 · 零 jar · 满态保留 D409 追工坊 · 零改产量/日帽/UpgradeRules · ≠sx11 · **施工中** |
+| 2026-10-10 | **挂盘已落** · STATUS-ember-short-select-mat-gap-d416 · `ember_p1_short` I/Open · 零 jar · trmenu reload PASS · 未派测 |
