@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("streakpath".equals(sub) || "连斩路径".equals(sub)) return streakPathCmd(s, args); // D577
+        if ("streak".equals(sub) && args.length == 2) return streakGoCmd(s); // D577
         if ("blazepath".equals(sub) || "避焰路径".equals(sub)) return blazePathCmd(s, args); // D576
         if ("blaze".equals(sub) && args.length == 2) return blazeGoCmd(s); // D576
         if ("spinpath".equals(sub) || "避旋路径".equals(sub)) return spinPathCmd(s, args); // D575
@@ -1701,6 +1703,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("streakseed".equals(sub)) return streakSeedCmd(s, args); // D577
         if ("blazeseed".equals(sub)) return blazeSeedCmd(s, args); // D576
         if ("spinseed".equals(sub)) return spinSeedCmd(s, args); // D575
         if ("snapseed".equals(sub)) return snapSeedCmd(s, args); // D574
@@ -5370,6 +5373,62 @@ public final class EmberCommand {
             EmberBlazePath.maybeProbe(t);
             s.sendMessage(P + "已触发避焰路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingBlaze(t) ? "（有焰）" : "（无焰）"));
+            return true;
+    }
+
+    private boolean streakPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberStreakPath.glance(EmberStreakPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c连斩路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberStreakPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c连斩路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberStreakPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberStreakPath.get(d);
+                    if (EmberStreakPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStreakPath.label(cur) + " · 改路径再 /corerpg p1 streakpath");
+                    else EmberStreakPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberStreakPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 streakpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberStreakPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean streakGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathStreakMob(p)) p.sendMessage(P + "无法连斩（无连斩事件/无房怪/未进本）");
+            else p.sendMessage(P + "§a连斩·手点 §7已传至近处房怪");
+            return true;
+    }
+
+    private boolean streakSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberStreakPath.maybeProbe(t);
+            s.sendMessage(P + "已触发连斩路径探测 → " + t.getName()
+                    + (runs != null && runs.hasStreakLive(t) ? "（有连斩）" : "（无连斩）"));
             return true;
     }
 }

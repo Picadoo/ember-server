@@ -470,6 +470,7 @@ final class EmberRunDirector {
                 chainReset(ok, v);
                 svc.tellRun(s, "§b连斩 §7· 连续击杀 " + chainNeedNow + " 只怪，每两次击杀间隔不超过 "
                         + String.format(Locale.ROOT, "%.0f", v.chainGap) + " 秒 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberStreakPath.maybeAfterChain(s); // D577
             } else if ("unscathed".equals(kind)) {
                 unscathedReset(participantsHere().size(), v);
                 svc.tellRun(s, "§b无伤 §7· 清完这个房间时全队被怪打中不超过 " + unscathedBudgetNow + " 次 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
@@ -505,6 +506,38 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D577: chain-kill event still live and unmet. */
+    boolean hasStreakLive() {
+        return eventLive("chain") && chainNeedNow > 0 && chainBest < chainNeedNow;
+    }
+
+    /** D577: warp a committed player next to the nearest living event-room mob. */
+    boolean pathStreakMob(Player p) {
+        if (p == null || !p.isOnline() || !hasStreakLive()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        if (s.eventRoom == null) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (t.varietyEscort) continue;
+            if (!s.eventRoom.equals(t.roomId)) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location at = best.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.35f);
+        return true;
     }
 
     /** D576: any blazing circle warn still armed (not yet landed). */
