@@ -204,4 +204,17 @@ public class EmberSkillKitTest {
         assertFalse(EmberSkillKit.parryUnlocked(null, null));
     }
 
+
+    @Test
+    public void d434SetStepVariants() {
+        assertEquals("爆闪步", EmberSkillKit.stepDisplayName(EmberSkillKit.STEP_VARIANT_BAOSHAN, false));
+        assertEquals("爆闪·后撤", EmberSkillKit.stepDisplayName(EmberSkillKit.STEP_VARIANT_BAOSHAN, true));
+        assertEquals("承护步", EmberSkillKit.stepDisplayName(EmberSkillKit.STEP_VARIANT_CHENGHU, false));
+        assertEquals("承护·后撤", EmberSkillKit.stepDisplayName(EmberSkillKit.STEP_VARIANT_CHENGHU, true));
+        assertEquals(EmberSkillKit.STEP_VARIANT_PLAIN, EmberSkillKit.stepSetVariant(new PlayerData(), null, "burst"));
+        assertFalse(EmberSkillKit.baoshanActive(new PlayerData(), null, "burst"));
+        assertFalse(EmberSkillKit.chenghuActive(new PlayerData(), null, "sustain"));
+        assertEquals(30, EmberSkillKit.STEP_SLOW_TICKS);
+        assertEquals(40, EmberSkillKit.STEP_RESIST_TICKS);
+    }
 }

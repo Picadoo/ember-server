@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
  * Available from Q01 for all sets; not a set-bound variant. Shares the 14s 踏步/火痕步 CD.
  * <p>D301 / DESIGN-ember-guard-skill-pivot: 守招·余烬招架 (G2_parry_B2) — Q03 unlock, bare Q, independent CD,
  * flat ×0.45B on successful parry of a boss tele hit. No shared dash tax / slash charge / uniform red.
+ * <p>D434 / DESIGN-ember-set-step-symmetry: 爆闪步(烬爆2pc) / 承护步(承烬2pc) — Q05 + set; share 14s CD;
+ * slow I 1.5s / resist I 2s at land (or takeoff if back). ≠守招; no crit/lifesteal/set count.
  */
 public final class EmberSkillKit {
     public static final String C_SHAPE = "p1_slash_shape";
@@ -35,10 +37,22 @@ public final class EmberSkillKit {
 
     /** S0-passed 火痕步 (F14c0n1): replace 踏步, ignite 1 at landing, burn mult = set coef ×1.0. */
     public static final String HUOHEN_FAMILY = "scorch";
+    /** D434 爆闪步 family (烬爆 2pc). */
+    public static final String BAOSHAN_FAMILY = "burst";
+    /** D434 承护步 family (承烬 2pc). */
+    public static final String CHENGHU_FAMILY = "sustain";
     public static final int STEP_IGNITE_N = 1;
     public static final double STEP_BURN_MULT = 1.0;
     /** Search radius around landing/takeoff for the single ignite target (blocks). */
     public static final double STEP_IGNITE_RADIUS = 3.0;
+    /** D434 爆闪步: Slow I duration ticks (1.5s). */
+    public static final int STEP_SLOW_TICKS = 30;
+    /** D434 承护步: Damage Resistance I ticks (2s). */
+    public static final int STEP_RESIST_TICKS = 40;
+    public static final int STEP_VARIANT_PLAIN = 0;
+    public static final int STEP_VARIANT_HUOHEN = 1;
+    public static final int STEP_VARIANT_BAOSHAN = 2;
+    public static final int STEP_VARIANT_CHENGHU = 3;
     /** D219 后撤步 distance (forward 踏步 stays skills.yml 5.0). */
     public static final double BACKSTEP_DISTANCE = 4.0;
 
@@ -110,13 +124,42 @@ public final class EmberSkillKit {
         return stepVariantUnlocked(d, runs) && HUOHEN_FAMILY.equals(activeSetFamily);
     }
 
-    public static String stepDisplayName(boolean huohen) {
-        return stepDisplayName(huohen, false);
+    /** D434: 爆闪步 when Q05 + 烬爆 two-piece. */
+    public static boolean baoshanActive(PlayerData d, EmberRunService runs, String activeSetFamily) {
+        return stepVariantUnlocked(d, runs) && BAOSHAN_FAMILY.equals(activeSetFamily);
     }
 
-    /** 踏步 / 后撤步 / 火痕步 / 火痕·后撤 */
+    /** D434: 承护步 when Q05 + 承烬 two-piece. */
+    public static boolean chenghuActive(PlayerData d, EmberRunService runs, String activeSetFamily) {
+        return stepVariantUnlocked(d, runs) && CHENGHU_FAMILY.equals(activeSetFamily);
+    }
+
+    /**
+     * D434: which set step replaces plain 踏步 (mutually exclusive by activeSet).
+     * {@link #STEP_VARIANT_PLAIN}=0 · HUOHEN=1 · BAOSHAN=2 · CHENGHU=3.
+     */
+    public static int stepSetVariant(PlayerData d, EmberRunService runs, String activeSetFamily) {
+        if (!stepVariantUnlocked(d, runs) || activeSetFamily == null) return STEP_VARIANT_PLAIN;
+        if (HUOHEN_FAMILY.equals(activeSetFamily)) return STEP_VARIANT_HUOHEN;
+        if (BAOSHAN_FAMILY.equals(activeSetFamily)) return STEP_VARIANT_BAOSHAN;
+        if (CHENGHU_FAMILY.equals(activeSetFamily)) return STEP_VARIANT_CHENGHU;
+        return STEP_VARIANT_PLAIN;
+    }
+
+    public static String stepDisplayName(boolean huohen) {
+        return stepDisplayName(huohen ? STEP_VARIANT_HUOHEN : STEP_VARIANT_PLAIN, false);
+    }
+
+    /** Compat: huohen boolean → variant 0/1. */
     public static String stepDisplayName(boolean huohen, boolean backward) {
-        if (huohen) return backward ? "火痕·后撤" : "火痕步";
+        return stepDisplayName(huohen ? STEP_VARIANT_HUOHEN : STEP_VARIANT_PLAIN, backward);
+    }
+
+    /** 踏步 / 后撤 / 火痕 / 爆闪 / 承护 (+后撤变体). */
+    public static String stepDisplayName(int variant, boolean backward) {
+        if (variant == STEP_VARIANT_HUOHEN) return backward ? "火痕·后撤" : "火痕步";
+        if (variant == STEP_VARIANT_BAOSHAN) return backward ? "爆闪·后撤" : "爆闪步";
+        if (variant == STEP_VARIANT_CHENGHU) return backward ? "承护·后撤" : "承护步";
         return backward ? "后撤步" : "踏步";
     }
 

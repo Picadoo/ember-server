@@ -268,17 +268,24 @@ public final class SkillService implements Listener {
         }
         boolean stepUnlock = town.sunshine.corerpg.p1.EmberSkillKit.stepVariantUnlocked(data, runs);
         town.sunshine.corerpg.p1.EmberLoadout lo = ls == null ? null : ls.get(player);
-        boolean huohen = town.sunshine.corerpg.p1.EmberSkillKit.huohenActive(data, runs, lo == null ? "none" : lo.activeSet);
+        String fam = lo == null ? "none" : lo.activeSet;
+        int stepVar = town.sunshine.corerpg.p1.EmberSkillKit.stepSetVariant(data, runs, fam);
         boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
-        String stepName = town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen, back);
-        String ignite = huohen ? (back ? " · 起跳点燃 1（焚烬同系数）" : " · 落点点燃 1（焚烬同系数）") : "";
+        String stepName = town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(stepVar, back);
+        String ignite = "";
+        if (stepVar == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN)
+            ignite = back ? " · 起跳点燃 1（焚烬同系数）" : " · 落点点燃 1（焚烬同系数）";
+        else if (stepVar == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
+            ignite = back ? " · 起跳缓速 I 1.5s" : " · 落点缓速 I 1.5s";
+        else if (stepVar == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
+            ignite = " · 自身抗性 I 2s";
         String distNote = back ? "后撤 4 格" : "前冲 5 格";
         player.sendMessage(ChatColor.YELLOW + "  潜行+Q" + ChatColor.GRAY + " " + stepName
                 + " · 14 秒 · " + distNote + ignite);
-        if (!huohen && stepUnlock) {
-            player.sendMessage(ChatColor.DARK_GRAY + "    焚烬两件套时自动变为火痕步（方向开关仍有效）");
-        } else if (!huohen && !stepUnlock) {
-            player.sendMessage(ChatColor.DARK_GRAY + "    火痕步：首通 Q05 + 焚烬两件套");
+        if (stepVar == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_PLAIN && stepUnlock) {
+            player.sendMessage(ChatColor.DARK_GRAY + "    两件套自动变：焚烬火痕 / 烬爆爆闪 / 承烬承护");
+        } else if (stepVar == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_PLAIN && !stepUnlock) {
+            player.sendMessage(ChatColor.DARK_GRAY + "    套装身法：首通 Q05 + 对应两件套");
         }
         player.sendMessage(ChatColor.GRAY + "  身法方向：前冲 / 后撤 · 当前 "
                 + ChatColor.WHITE + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(

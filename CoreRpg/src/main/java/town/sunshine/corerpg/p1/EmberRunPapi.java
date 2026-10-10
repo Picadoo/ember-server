@@ -147,7 +147,8 @@ public final class EmberRunPapi {
         if (key == null) return false;
         return "vault_shard".equals(key) || "vault_bone".equals(key) || "vault_core".equals(key) || "vault_blank".equals(key)
                 || "recipe_gap_enhance1".equals(key) || "recipe_gap_upgrade_t2".equals(key) || "recipe_gap_refine1".equals(key)
-                || "forge_gap_brand".equals(key) || "forge_gap_roll".equals(key) || "forge_gap_convert".equals(key);
+                || "forge_gap_brand".equals(key) || "forge_gap_roll".equals(key) || "forge_gap_convert".equals(key)
+                || "forge_gap_pin".equals(key);
     }
 
     /** D404: gap = max(0, need − have); Bukkit-free. */
@@ -200,6 +201,15 @@ public final class EmberRunPapi {
         int t = (tier >= 1 && tier <= 3) ? tier : 1;
         return "胚差" + recipeGap(EmberConvertRules.blanks(t), blankHave)
                 + "·币差" + recipeGap(EmberConvertRules.coins(t), coinHave);
+    }
+
+    /** D433 %corerpg_p1_forge_gap_pin% — 定向烙纹/币差（镜像 pinBrands/pinCoins；空手 T1）. */
+    static String forgeGapPin(int tier, long brandHave, long coinHave) {
+        int t = (tier >= 1 && tier <= 3) ? tier : 1;
+        int brands = EmberBrandRules.pinBrands(t);
+        int coins = EmberBrandRules.pinCoins(t);
+        if (brands < 0) { brands = EmberBrandRules.pinBrands(1); coins = EmberBrandRules.pinCoins(1); }
+        return "烙差" + recipeGap(brands, brandHave) + "·币差" + recipeGap(coins, coinHave);
     }
 
 
@@ -360,7 +370,22 @@ public final class EmberRunPapi {
             int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
             return forgeGapConvert(tier, blank, coin);
         }
+        if ("forge_gap_pin".equals(key)) {
+            EmberItemData held = p == null ? null : heldTrusted(p);
+            int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
+            return forgeGapPin(tier, brandCount(p), coin);
+        }
         return "";
+    }
+
+    /** D433: 烙纹背包计数（与 GrowthService pin 消耗同源；烙纹不进挂机仓）. */
+    private long brandCount(Player p) {
+        if (p == null) return 0L;
+        try {
+            town.sunshine.corerpg.NiBridge ni = runs.plugin().getNiBridge();
+            if (ni == null) return 0L;
+            return Math.max(0L, ni.countInInventory(p, EmberBrandRules.MAT_BRAND));
+        } catch (RuntimeException e) { return 0L; }
     }
 
     private static long vaultCount(Player p, String niId) {

@@ -197,6 +197,14 @@ public final class EmberRunPapiTest {
         assertTrue(EmberRunPapi.isVaultKey("forge_gap_brand"));
         assertTrue(EmberRunPapi.isVaultKey("forge_gap_roll"));
         assertTrue(EmberRunPapi.isVaultKey("forge_gap_convert"));
+        // D433 pin gap
+        assertEquals("烙差2·币差300", EmberRunPapi.forgeGapPin(1, 0, 0));
+        assertEquals("烙差4·币差600", EmberRunPapi.forgeGapPin(2, 0, 0));
+        assertEquals("烙差6·币差1000", EmberRunPapi.forgeGapPin(3, 0, 0));
+        assertEquals("烙差2·币差300", EmberRunPapi.forgeGapPin(0, 0, 0));
+        assertEquals("烙差0·币差0", EmberRunPapi.forgeGapPin(1, 2, 300));
+        assertEquals("烙差1·币差100", EmberRunPapi.forgeGapPin(1, 1, 200));
+        assertTrue(EmberRunPapi.isVaultKey("forge_gap_pin"));
         // D406 short first-clear aggregate (Bukkit-free)
         assertEquals(0, EmberShortRules.fcLeft(0));
         assertEquals(10, EmberShortRules.fcLeft(10));

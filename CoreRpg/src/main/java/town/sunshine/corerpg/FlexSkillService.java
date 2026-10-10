@@ -24,6 +24,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.io.File;
 import java.io.InputStream;
@@ -41,6 +43,7 @@ import java.util.UUID;
  * D214 / skill-kit S2: when Q05 first-cleared + 焚烬 2pc, the same cast becomes 火痕步 (landing ignites 1 enemy
  * at set burn rate ×1.0). D219: skill-page 前冲/后撤 direction (4 blocks back, no dmg, shared CD; 火痕·后撤
  * ignites takeoff). AFK never auto-casts flex (X7).
+ * D434: 爆闪步(烬爆) 落点缓速 I 1.5s；承护步(承烬) 自身抗性 I 2s；共享 CD；≠守招.
  */
 public final class FlexSkillService implements Listener {
 
@@ -236,15 +239,13 @@ public final class FlexSkillService implements Listener {
         String cdRemain = remainMs > 0
                 ? ChatColor.RED + "冷却中 " + String.format("%.0f", Math.ceil(remainMs / 1000.0)) + "s"
                 : ChatColor.GREEN + "就绪";
-        boolean huohen = isHuohenActive(player);
+        int stepVar = stepVariantOf(player);
         boolean back = town.sunshine.corerpg.p1.EmberSkillKit.stepBackward(data);
         String name = (PILOT_ID.equals(def.id) || "step".equals(def.type))
-                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen, back) : def.display;
+                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(stepVar, back) : def.display;
         player.sendMessage(PREFIX + name + ChatColor.GRAY + " · " + cdRemain);
         double dist = back ? town.sunshine.corerpg.p1.EmberSkillKit.BACKSTEP_DISTANCE : def.distance;
-        String igniteNote = huohen
-                ? (back ? " · 起跳点燃 1（焚烬同系数）" : " · 落点点燃 1（焚烬同系数）")
-                : " · 无伤害";
+        String igniteNote = stepEffectNote(stepVar, back);
         player.sendMessage(ChatColor.GRAY + "  冷却 " + def.cooldownSeconds + "s · 位移约 "
                 + (int) Math.round(dist) + " 格 · 零体力" + igniteNote
                 + ChatColor.DARK_GRAY + " · 方向 "
@@ -283,24 +284,23 @@ public final class FlexSkillService implements Listener {
         }
         if (!ok) return;
         startCooldown(player.getUniqueId(), def.id, def.cooldownSeconds);
-        boolean huohen = lastCastWasHuohen(player);
+        int stepVar = lastCastWasStepVariant(player);
         boolean back = lastCastWasBack(player);
         String shown = (PILOT_ID.equals(def.id) || "step".equals(def.type) || "dash".equals(def.type))
-                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(huohen, back)
+                ? town.sunshine.corerpg.p1.EmberSkillKit.stepDisplayName(stepVar, back)
                 : ChatColor.stripColor(def.display);
-        String tip = "";
-        if (huohen) tip = back ? ChatColor.GRAY + " · 起跳点燃" : ChatColor.GRAY + " · 落点点燃";
+        String tip = stepCastTip(stepVar, back);
         player.sendMessage(PREFIX + ChatColor.GREEN + "释放 " + ChatColor.RESET + shown + tip);
     }
 
-    /** Set by {@link #castStep} when 火痕步 variant is active for the cast. */
-    private final java.util.Map<UUID, Boolean> lastHuohen = new HashMap<UUID, Boolean>();
+    /** Set by {@link #castStep}: EmberSkillKit step variant id for the cast. */
+    private final java.util.Map<UUID, Integer> lastStepVariant = new HashMap<UUID, Integer>();
     /** Set by {@link #castStep} when the cast used 后撤 direction. */
     private final java.util.Map<UUID, Boolean> lastBack = new HashMap<UUID, Boolean>();
 
-    private boolean lastCastWasHuohen(Player player) {
-        Boolean v = lastHuohen.remove(player.getUniqueId());
-        return v != null && v.booleanValue();
+    private int lastCastWasStepVariant(Player player) {
+        Integer v = lastStepVariant.remove(player.getUniqueId());
+        return v == null ? town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_PLAIN : v.intValue();
     }
 
     private boolean lastCastWasBack(Player player) {
@@ -323,7 +323,8 @@ public final class FlexSkillService implements Listener {
             String fail = from.getWorld() == null ? "无法踏步"
                     : (back ? "后方受阻，无法后撤" : "前方受阻，无法踏步");
             player.sendMessage(PREFIX + ChatColor.YELLOW + fail);
-            lastHuohen.put(player.getUniqueId(), Boolean.FALSE);
+            lastStepVariant.put(player.getUniqueId(), Integer.valueOf(
+                    town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_PLAIN));
             lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
             return false;
         }
@@ -331,13 +332,17 @@ public final class FlexSkillService implements Listener {
         player.teleport(best);
         spawnParticles(best.clone().add(0, 0.2, 0), def.particles, 14);
         playSound(best, def.sound);
-        // Display name follows unlock+焚烬 even in hub; ignite only fires in P1 worlds.
-        boolean variant = isHuohenActive(player);
-        if (variant) {
-            // D219: 火痕·后撤 ignites takeoff; forward 火痕步 still ignites landing (B-R4 / D217).
-            applyHuohenIfActive(player, back ? from : best);
+        // Display follows Q05+set even in hub; P1-only for combat FX (火痕/爆闪/承护).
+        int variant = stepVariantOf(player);
+        Location fxAt = back ? from : best;
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) {
+            applyHuohenIfActive(player, fxAt);
+        } else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) {
+            applyBaoshanIfActive(player, fxAt);
+        } else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) {
+            applyChenghuIfActive(player, fxAt);
         }
-        lastHuohen.put(player.getUniqueId(), Boolean.valueOf(variant));
+        lastStepVariant.put(player.getUniqueId(), Integer.valueOf(variant));
         lastBack.put(player.getUniqueId(), Boolean.valueOf(back));
         return true;
     }
@@ -364,6 +369,60 @@ public final class FlexSkillService implements Listener {
         sets.skillIgnite(player, target, town.sunshine.corerpg.p1.EmberSkillKit.STEP_BURN_MULT);
         at.getWorld().spawnParticle(Particle.FLAME, at.clone().add(0, 0.3, 0), 18, 0.4, 0.2, 0.4, 0.02);
         return true;
+    }
+
+    /** D434 爆闪步: Slow I on nearest enemy in radius (P1 only). */
+    private boolean applyBaoshanIfActive(Player player, Location at) {
+        if (player == null || at == null || at.getWorld() == null) return false;
+        if (!town.sunshine.corerpg.p1.EmberMode.isP1(player)) return false;
+        if (stepVariantOf(player) != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) return false;
+        LivingEntity target = nearestEnemy(player, at,
+                town.sunshine.corerpg.p1.EmberSkillKit.STEP_IGNITE_RADIUS);
+        if (target == null) return true;
+        target.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,
+                town.sunshine.corerpg.p1.EmberSkillKit.STEP_SLOW_TICKS, 0, false, true), true);
+        at.getWorld().spawnParticle(Particle.CRIT_MAGIC, at.clone().add(0, 0.3, 0), 16, 0.35, 0.2, 0.35, 0.02);
+        return true;
+    }
+
+    /** D434 承护步: self Resistance I (P1 only). */
+    private boolean applyChenghuIfActive(Player player, Location at) {
+        if (player == null || at == null || at.getWorld() == null) return false;
+        if (!town.sunshine.corerpg.p1.EmberMode.isP1(player)) return false;
+        if (stepVariantOf(player) != town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) return false;
+        player.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,
+                town.sunshine.corerpg.p1.EmberSkillKit.STEP_RESIST_TICKS, 0, false, true), true);
+        at.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, at.clone().add(0, 0.4, 0), 12, 0.3, 0.2, 0.3, 0.0);
+        return true;
+    }
+
+    private int stepVariantOf(Player player) {
+        if (player == null) return town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_PLAIN;
+        PlayerData data = dataStore.get(player.getUniqueId());
+        town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns();
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        town.sunshine.corerpg.p1.EmberLoadout lo = ls == null ? null : ls.get(player);
+        return town.sunshine.corerpg.p1.EmberSkillKit.stepSetVariant(data, runs, lo == null ? "none" : lo.activeSet);
+    }
+
+    private static String stepEffectNote(int variant, boolean back) {
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN)
+            return back ? " · 起跳点燃 1（焚烬同系数）" : " · 落点点燃 1（焚烬同系数）";
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
+            return back ? " · 起跳缓速 I 1.5s" : " · 落点缓速 I 1.5s";
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
+            return " · 自身抗性 I 2s";
+        return " · 无伤害";
+    }
+
+    private static String stepCastTip(int variant, boolean back) {
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN)
+            return back ? ChatColor.GRAY + " · 起跳点燃" : ChatColor.GRAY + " · 落点点燃";
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN)
+            return back ? ChatColor.GRAY + " · 起跳缓速" : ChatColor.GRAY + " · 落点缓速";
+        if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU)
+            return ChatColor.GRAY + " · 承护抗性";
+        return "";
     }
 
     private LivingEntity nearestEnemy(Player player, Location at, double radius) {

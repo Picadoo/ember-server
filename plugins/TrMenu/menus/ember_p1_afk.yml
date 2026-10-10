@@ -65,6 +65,7 @@ Icons:
         # D432：烬砧仓差（烙纹/随机锻/转化 · 不抬挂机产量）
         - '§d烬砧还差：§e烙纹 §7碎差 §f%corerpg_p1_forge_gap_brand% §7· §e随机锻 §7%corerpg_p1_forge_gap_roll%'
         - '§d转化 §7%corerpg_p1_forge_gap_convert% §8（手持阶；空手按T1）'
+        - '§d定向 §7%corerpg_p1_forge_gap_pin% §8（烙纹+币；空手T1）'
         - '§8细看点「去哪花」→配方速览 · 不加快产量'
         - '§7未满就继续坐 · 满了点「去冒险」/右键「短征」/「去哪花」'
         - '§7本次：%corerpg_p1_afk_session% · 速度：%corerpg_p1_afk_kph%'

@@ -21,9 +21,12 @@ final class CorePapiKit {
                     || (fs.getFlex(data.getFlexSkillId()) != null
                         && "step".equals(fs.getFlex(data.getFlexSkillId()).type));
             if (stepLike) {
-                boolean huohen = fs.isHuohenActive(player);
+                EmberRunService runs = plugin.getEmberRuns();
+                EmberLoadoutService ls = plugin.getEmberLoadouts();
+                town.sunshine.corerpg.p1.EmberLoadout lo = ls == null ? null : ls.get(player);
+                int v = EmberSkillKit.stepSetVariant(data, runs, lo == null ? "none" : lo.activeSet);
                 boolean back = EmberSkillKit.stepBackward(data);
-                return EmberSkillKit.stepDisplayName(huohen, back);
+                return EmberSkillKit.stepDisplayName(v, back);
             }
             FlexSkillService.FlexDef def = fs.getFlex(data.getFlexSkillId());
             return def == null ? data.getFlexSkillId() : ChatColor.stripColor(def.display);
@@ -50,10 +53,12 @@ final class CorePapiKit {
             return EmberSkillKit.stepVariantUnlocked(data, runs) ? "yes" : "no";
         }
         if ("kit_step".equals(key) || "kit_step_name".equals(key) || "kit_huohen".equals(key)) {
-            FlexSkillService fs = plugin.getFlexSkillService();
-            boolean huohen = fs != null && fs.isHuohenActive(player);
+            EmberRunService runs = plugin.getEmberRuns();
+            EmberLoadoutService ls = plugin.getEmberLoadouts();
+            town.sunshine.corerpg.p1.EmberLoadout lo = ls == null ? null : ls.get(player);
+            int v = EmberSkillKit.stepSetVariant(data, runs, lo == null ? "none" : lo.activeSet);
             boolean back = EmberSkillKit.stepBackward(data);
-            return EmberSkillKit.stepDisplayName(huohen, back);
+            return EmberSkillKit.stepDisplayName(v, back);
         }
         if ("kit_step_dir".equals(key) || "step_dir".equals(key)) {
             return EmberSkillKit.stepDirName(EmberSkillKit.stepDirId(data));
