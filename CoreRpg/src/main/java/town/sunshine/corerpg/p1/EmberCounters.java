@@ -125,6 +125,8 @@ public final class EmberCounters {
         px("p1_mode_path_offered_", "EmberModePath", A, PR, NV, "D462 Q04/Q05/Q06 first-path pick latch");
         x("p1_forge_goal", "EmberForgeGoal", A, SE, OW, "D461 weekly forge craft-goal id 0=none 1=enh 2=ref 3=brand 4=roll 5=convert");
         x("p1_forge_goal_offer", "EmberForgeGoal", W, CL, RL, "D461 once-per-week offer latch @rotationWeekKey");
+        x("p1_makeup_path", "EmberMakeupPath", A, PR, NV, "D542 makeup auto/ask/mute");
+        px("p1_makeup_path_offer", "EmberMakeupPath", A, PR, NV, "D542 weekly offer latch");
         x("p1_credit_path", "EmberCreditPath", A, PR, NV, "D541 credit spend/hold/ask");
         px("p1_credit_path_offer", "EmberCreditPath", A, PR, NV, "D541 weekly offer latch");
         x("p1_bank_path", "EmberBankPath", A, PR, NV, "D540 bank auto/ask/mute");

@@ -306,6 +306,59 @@ public final class EmberSignService implements Listener {
         return "";
     }
 
+    /** D542: null = makeup allowed now; else refusal reason. */
+    public String makeupWhy(Player p) {
+        PlayerData d = data(p.getUniqueId());
+        if (d == null || !signP1()) return "签到未开放";
+        LocalDate now = today();
+        int dom = now.getDayOfMonth();
+        String mon = month(now), day = DailyService.today();
+        if (d.periodCount(C_SLAST, "all") > dayInt(now)) return "服务器日期异常";
+        int mask = d.periodCount(C_SMASK, mon);
+        return makeupBlock(mask, dom, d.periodCount(C_SMK, mon), makeupPerMonth, d.periodCount(C_SMKD, day), minutesToday(d), makeupNeeds);
+    }
+
+    public boolean isMakeupReady(Player p) { return makeupWhy(p) == null; }
+
+    /**
+     * D542 admin smoke: force today signed + earliest miss + enough online minutes + clear today makeup latch.
+     * Returns false when month day==1 (no prior miss possible).
+     */
+    public boolean adminSeedMakeup(Player p) {
+        if (p == null) return false;
+        PlayerData d = data(p.getUniqueId());
+        if (d == null || !signP1()) return false;
+        LocalDate now = today();
+        int dom = now.getDayOfMonth();
+        if (dom <= 1) return false;
+        String mon = month(now), day = DailyService.today();
+        int ti = dayInt(now);
+        int mask = d.periodCount(C_SMASK, mon);
+        // ensure today signed
+        if (!signedOn(mask, dom)) {
+            d.addPeriodCount(C_SMASK, mon, bit(dom));
+            mask |= bit(dom);
+            int last = d.periodCount(C_SLAST, "all");
+            if (last < ti) d.addPeriodCount(C_SLAST, "all", ti - last);
+        }
+        // ensure day 1 missed
+        if (signedOn(mask, 1)) d.addPeriodCount(C_SMASK, mon, -bit(1));
+        // online minutes
+        int ol = d.periodCount(C_OLAST, "all");
+        if (ol != ti) {
+            d.addPeriodCount(C_OLAST, "all", ti - ol);
+            int curMin = d.periodCount(C_OMIN, day);
+            if (curMin != 0) d.addPeriodCount(C_OMIN, day, -curMin);
+        }
+        int mins = d.periodCount(C_OMIN, day);
+        if (mins < makeupNeeds) d.addPeriodCount(C_OMIN, day, makeupNeeds - mins);
+        // clear today makeup used
+        int mkd = d.periodCount(C_SMKD, day);
+        if (mkd > 0) d.addPeriodCount(C_SMKD, day, -mkd);
+        plugin.getDataStore().flushMutation(p.getUniqueId());
+        return isMakeupReady(p);
+    }
+
     public void makeup(Player p) {
         PlayerData d = data(p.getUniqueId());
         if (!ready(p, d, true)) return;

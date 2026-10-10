@@ -407,6 +407,8 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
     public TicketGrantService getTicketGrantService() { return ticketGrantService; }
     public TicketEntryService getTicketEntryService() { return ticketEntryService; }
     public StaminaService getStaminaService() { return staminaService; }
+    public town.sunshine.corerpg.p1.EmberSignService getEmberSign() { return emberSign; }
+
     public EliteService getEliteService() { return eliteService; }
     public ScrapService getScrapService() { return scrapService; }
     public MailService getMailService() { return mailService; }
@@ -894,6 +896,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
             getServer().getScheduler().runTaskLater(this, () -> {
                 if (crp.isOnline()) town.sunshine.corerpg.p1.EmberCreditPath.maybeAfterProgress(crp); // D541
             }, 155L);
+        {
+            final Player mkp = player;
+            getServer().getScheduler().runTaskLater(this, () -> {
+                if (mkp.isOnline()) town.sunshine.corerpg.p1.EmberMakeupPath.maybeAfterProgress(mkp); // D542
+            }, 160L);
+        }
         }
         }
         }
