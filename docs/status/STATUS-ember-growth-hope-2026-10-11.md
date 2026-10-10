@@ -273,3 +273,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D777 mapfarm resume cmd + adventure Open
 - D778 attune go button
 - D779 FOLLOW settle wording
+
+## D780–D781 SHIP · jar 1.65.356-d780
+- D780 no PREFER button twin on challenge FC
+- D781 hub Open mapfarm resume

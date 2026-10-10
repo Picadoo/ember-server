@@ -213,8 +213,8 @@ public final class EmberChallengePath {
         if (!challengeFirst) {
             try { p.sendActionBar(line); } catch (Throwable ignored) { }
         }
-        // D764: meaty next-loop when prefer-challenge
-        if (id == PREFER && mapKey != null && !mapKey.isEmpty()) {
+        // D764/D780: next-loop when prefer-challenge (skip first-clear — D671 already buttons)
+        if (!challengeFirst && id == PREFER && mapKey != null && !mapKey.isEmpty()) {
             String mk = mapKey.toLowerCase(Locale.ROOT);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§7硬本下一环：",
                     new String[]{"[再挑战·" + mk.toUpperCase(Locale.ROOT) + "]",
