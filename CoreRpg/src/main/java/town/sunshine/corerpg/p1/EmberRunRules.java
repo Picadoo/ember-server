@@ -700,7 +700,9 @@ public final class EmberRunRules {
     public static ItemRoll rollFirstClearMapIdentity(int tier, LootBias lb, Random r, int[] qualityWeights) {
         String fam = (lb != null && validFamily(lb.family)) ? lb.family
                 : pickFamily(null, r.nextDouble());
-        String slot = pickSlot(lb, r.nextDouble());
+        // D644: map slot identity is also guaranteed when the map declares one
+        String slot = (lb != null && lb.slot != null && ("blade".equals(lb.slot) || "charm".equals(lb.slot)))
+                ? lb.slot : pickSlot(lb, r.nextDouble());
         int q = pickQuality(qualityWeights, r.nextDouble());
         int c = pickCraft(r.nextDouble());
         return new ItemRoll(fam, slot, tier, q, c);

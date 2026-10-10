@@ -281,7 +281,9 @@ public final class MailService {
         if (n == 0) {
             p.sendMessage(PREFIX + ChatColor.YELLOW + "没有可领取的附件。");
         } else {
-            p.sendMessage(PREFIX + ChatColor.GREEN + "一键领取完成：§f" + n + ChatColor.GREEN + " 封。");
+            // D646: claim-all acquisition feel (zero attachment table change)
+            p.sendMessage(PREFIX + ChatColor.GREEN + "一键领取完成：§f" + n + ChatColor.GREEN + " 封附件入账。");
+            try { p.sendActionBar(ChatColor.GREEN + "邮件领取 · §f" + n + " §a封"); } catch (Throwable ignored) { }
         }
     }
 

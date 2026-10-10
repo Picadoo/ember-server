@@ -39,3 +39,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D641 first-clear map-bias family guarantee on base_item + settle cue
 - D642 slash shape Stage2 hitboxes (line longer/narrower, ring larger, fan wider) · no skill_mult
 - D643 forgegoal CONVERT complete celebrate after convert
+
+## D644–D646 SHIP · jar 1.65.313-d644 · 2026-10-11
+- D644 FC map-identity forces slot when declared
+- D645 soft-prefer mirrors shapepath (no manual latch)
+- D646 mail claim-all ActionBar feel

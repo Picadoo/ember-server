@@ -10,6 +10,7 @@ public class EmberFirstClearMapIdTest {
         for (int i = 0; i < 40; i++) {
             EmberRunRules.ItemRoll r = EmberRunRules.rollFirstClearMapIdentity(2, lb, new Random(i * 17L), null);
             assertEquals("scorch", r.family);
+            assertEquals("blade", r.slot);
         }
     }
 

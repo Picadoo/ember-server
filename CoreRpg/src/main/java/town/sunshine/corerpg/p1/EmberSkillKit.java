@@ -289,7 +289,9 @@ public final class EmberSkillKit {
         if (family == null || "none".equals(family)) return false;
         int want = preferredShape(family);
         if (shapeId(d, runs) == want) return false;
-        return setShape(d, want);
+        boolean changed = setShape(d, want);
+        if (changed) EmberShapePath.mirrorSoftPrefer(d, want); // D645 path glance matches geometry
+        return changed;
     }
 
     public static void markShapeManual(PlayerData d) {

@@ -47,6 +47,16 @@ public final class EmberShapePath {
         return true;
     }
 
+
+    /** D645: soft-prefer mirrors path counter without marking manual pick. */
+    public static void mirrorSoftPrefer(PlayerData d, int shapeId) {
+        if (d == null) return;
+        int path = FAN;
+        if (shapeId == EmberSkillKit.SHAPE_LINE) path = LINE;
+        else if (shapeId == EmberSkillKit.SHAPE_RING) path = RING;
+        set(d, path);
+    }
+
     public static int parse(String raw) {
         if (raw == null) return -1;
         String s = raw.toLowerCase(Locale.ROOT).trim();
