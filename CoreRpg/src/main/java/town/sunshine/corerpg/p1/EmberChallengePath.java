@@ -177,15 +177,18 @@ public final class EmberChallengePath {
 
 
 
-    /** D767: challenge session enter — path glance (mirror raid enterCue). */
+    /** D767/D788: session enter — path glance (challenge or normal under path). */
     public static void enterCue(Player p, PlayerData d, boolean challenge) {
-        if (p == null || d == null || !challenge) return;
+        if (p == null || d == null) return;
         int id = get(d);
         if (!valid(id)) {
-            p.sendMessage(EmberRunService.P + "§7未选硬本路径 · /corerpg p1 challengepath");
+            if (challenge)
+                p.sendMessage(EmberRunService.P + "§7未选硬本路径 · /corerpg p1 challengepath");
             return;
         }
-        String line = "§c硬本路径 · 本局挑战 §8· " + label(id);
+        String line = challenge
+                ? "§c硬本路径 · 本局挑战 §8· " + label(id)
+                : "§a硬本路径 · 本局普通 §8· " + label(id);
         p.sendMessage(EmberRunService.P + line);
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
     }

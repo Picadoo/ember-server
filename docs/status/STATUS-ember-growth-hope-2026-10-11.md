@@ -293,3 +293,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D787 SHIP · jar 1.65.361-d787
 - admin mapfarm seed for resume smoke
+
+## D788 SHIP · jar 1.65.362-d788
+- enterCue also on normal runs when hard-path set
