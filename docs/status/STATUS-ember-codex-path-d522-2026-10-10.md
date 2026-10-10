@@ -8,19 +8,16 @@
 
 | 项 | 内容 |
 |----|------|
-| Java | `EmberCodexPath` · claimCodexStages · join/loadout/settle · Q01 offer · `codexpath` |
-| 禁 | 未改阶段表 · 无 ActionBar · 非签到/在线/补领双胞 · 非组合粘性/入场 cue |
+| Java | `EmberCodexPath` auto/ask/mute · `claimCodexStages` · join(hub)/loadout/settle/`codex` · Q01 offer · `codexpath` · admin `codexseed` |
+| 禁 | 未改 STAGE 表 · 无 ActionBar · 非签到/在线/补领双胞 · 非组合粘性/入场 cue |
 
-## 冒烟 FreshQ1059
+## 冒烟
 
-| 路径 | 结果 |
-|------|------|
-| `/corerpg p1 codexpath` | `选图录阶段奖励领取方式` + `[自动] [提醒] [静默] [取消]` **PASS** |
-| `codexpath auto` | `图录 → 图录·自动 · 图录阶段达标时自动领取余烬币` **PASS** |
-| `codexpath ask` | `图录 → 图录·提醒 · 达标时聊天提醒，点按钮领取（默认）` **PASS** |
-| `codexpath mute` | `图录 → 图录·静默 · 达标不刷提醒；可 /corerpg p1 codex claim` **PASS** |
-| 预检 | Enabling `1.65.213-d522` · MySQL×2 · SEVERE=0 **PASS** |
+| 项 | 结果 |
+|----|------|
+| FreshQ1059 AUTO + `codexseed` | 图录·自动 已领 1 档 · 余烬币 200 · stage 5 PASS |
+| FreshQ1059a ASK + seed | 聊天 [领取图录] 按钮 PASS |
+| FreshQ1059m MUTE + seed | 仅登记、无自动/无提醒 PASS |
+| EmberCodexPathTest | PASS |
 
-单元：`EmberCodexPathTest` PASS（1/0）。
-
-*D522 · 新图录领奖打法。*
+*D522 · 新图录阶段领奖打法 · ≠ Sign/Online/Claim 双胞。*

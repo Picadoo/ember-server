@@ -1673,7 +1673,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D519 | CoreRpg **1.65.210-d519** / bv 未抬 | 成长花样·硬本路径 **PASS**：`EmberChallengePath` prefer/easy/follow 已通图默认 · **≠精选双胞** · 冒烟 FreshQ1055b · `B-challenge-path` · `f7f3016c` · STATUS `STATUS-ember-challenge-path-d519-2026-10-10.md`。 |
 | D520 | CoreRpg **1.65.211-d520** / bv 未抬 | 成长花样·签到路径 **PASS**：`EmberSignPath` auto/ask/mute 上线签到 · **≠在线路双胞** · 冒烟 FreshQ1056 · `B-sign-path` · `6a4f40c0` · STATUS `STATUS-ember-sign-path-d520-2026-10-10.md`。 |
 | D521 | CoreRpg **1.65.212-d521** / bv 未抬 | 成长花样·周标路径 **PASS**：`EmberGoalPath` featured/abyss/raid/bounty 周焦点 · **≠日委/精选/短本双胞** · 冒烟 FreshQ1057 · `B-goal-path` · `0bab4faf` · STATUS `STATUS-ember-goal-path-d521-2026-10-10.md`。 |
-| D522 | CoreRpg **1.65.213-d522** / bv 未抬 | 成长花样·图录路径 **PASS**：`EmberCodexPath` auto/ask/mute 图录阶段领奖 · **≠签到/在线/补领双胞** · 冒烟 FreshQ1059 · `B-codex-path` · `a877887c` · STATUS `STATUS-ember-codex-path-d522-2026-10-10.md`。 |
+| D522 | CoreRpg **1.65.213-d522** / bv 未抬 | 成长花样·图录路径 **PASS**：`EmberCodexPath` auto/ask/mute 图录阶段领奖 · **≠签到/在线/补领双胞** · 冒烟 FreshQ1059 · `B-codex-path` · `fed676f4` · STATUS `STATUS-ember-codex-path-d522-2026-10-10.md`。 |
 
 
 
