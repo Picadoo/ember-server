@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("cleanpath".equals(sub) || "无伤路径".equals(sub)) return cleanPathCmd(s, args); // D578
+        if ("clean".equals(sub) && args.length == 2) return cleanGoCmd(s); // D578
         if ("streakpath".equals(sub) || "连斩路径".equals(sub)) return streakPathCmd(s, args); // D577
         if ("streak".equals(sub) && args.length == 2) return streakGoCmd(s); // D577
         if ("blazepath".equals(sub) || "避焰路径".equals(sub)) return blazePathCmd(s, args); // D576
@@ -1703,6 +1705,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("cleanseed".equals(sub)) return cleanSeedCmd(s, args); // D578
         if ("streakseed".equals(sub)) return streakSeedCmd(s, args); // D577
         if ("blazeseed".equals(sub)) return blazeSeedCmd(s, args); // D576
         if ("spinseed".equals(sub)) return spinSeedCmd(s, args); // D575
@@ -5429,6 +5432,62 @@ public final class EmberCommand {
             EmberStreakPath.maybeProbe(t);
             s.sendMessage(P + "已触发连斩路径探测 → " + t.getName()
                     + (runs != null && runs.hasStreakLive(t) ? "（有连斩）" : "（无连斩）"));
+            return true;
+    }
+
+    private boolean cleanPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCleanPath.glance(EmberCleanPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c无伤路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberCleanPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c无伤路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberCleanPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberCleanPath.get(d);
+                    if (EmberCleanPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCleanPath.label(cur) + " · 改路径再 /corerpg p1 cleanpath");
+                    else EmberCleanPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberCleanPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 cleanpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberCleanPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean cleanGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathCleanSpace(p)) p.sendMessage(P + "无法无伤占位（无无伤事件/已拉开/未进本）");
+            else p.sendMessage(P + "§a无伤·手点 §7已拉开近怪占位");
+            return true;
+    }
+
+    private boolean cleanSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberCleanPath.maybeProbe(t);
+            s.sendMessage(P + "已触发无伤路径探测 → " + t.getName()
+                    + (runs != null && runs.hasCleanLive(t) ? "（有无伤）" : "（无无伤）"));
             return true;
     }
 }

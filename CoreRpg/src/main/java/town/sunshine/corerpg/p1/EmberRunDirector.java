@@ -474,6 +474,7 @@ final class EmberRunDirector {
             } else if ("unscathed".equals(kind)) {
                 unscathedReset(participantsHere().size(), v);
                 svc.tellRun(s, "§b无伤 §7· 清完这个房间时全队被怪打中不超过 " + unscathedBudgetNow + " 次 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberCleanPath.maybeAfterClean(s); // D578
             } else {
                 svc.tellRun(s, "§b限时清房 §7· " + v.eventLimit(kind) + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
             }
@@ -506,6 +507,51 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D578: unscathed event still live and not failed. */
+    boolean hasCleanLive() {
+        return eventLive("unscathed") && unscathedBudgetNow >= 0
+                && unscathedOk(unscathedTaken, unscathedBudgetNow);
+    }
+
+    /** D578: pull a committed player away from the nearest event-room mob. */
+    boolean pathCleanSpace(Player p) {
+        if (p == null || !p.isOnline() || !hasCleanLive()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        if (s.eventRoom == null) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (t.varietyEscort) continue;
+            if (!s.eventRoom.equals(t.roomId)) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location o = best.le.getLocation();
+        double dx = pl.getX() - o.getX(), dz = pl.getZ() - o.getZ();
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        double safe = 5.5;
+        if (dist >= safe) return false; // already spaced
+        Vector dir;
+        if (dist < 0.15) {
+            dir = pl.getDirection().clone();
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+            else dir.normalize();
+        } else {
+            dir = new Vector(dx, 0, dz).normalize();
+        }
+        Location to = new Location(w, o.getX() + dir.getX() * safe, pl.getY(), o.getZ() + dir.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.2f);
+        return true;
     }
 
     /** D577: chain-kill event still live and unmet. */

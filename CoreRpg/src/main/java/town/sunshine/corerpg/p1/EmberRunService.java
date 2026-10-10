@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D578: space away from nearest mob for unscathed. */
+    public boolean hasCleanLive(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasCleanLive() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathCleanSpace(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathCleanSpace(p);
+    }
+
     /** D577: warp to nearest event-room mob for chain streak. */
     public boolean hasStreakLive(Player p) {
         if (p == null) return false;
@@ -1612,6 +1628,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberSpinPath.scheduleOfferAfterQ01(p); // D575 spin path
                         if ("q01".equals(g.id)) EmberBlazePath.scheduleOfferAfterQ01(p); // D576 blaze path
                         if ("q01".equals(g.id)) EmberStreakPath.scheduleOfferAfterQ01(p); // D577 streak path
+                        if ("q01".equals(g.id)) EmberCleanPath.scheduleOfferAfterQ01(p); // D578 clean path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
