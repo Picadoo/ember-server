@@ -456,6 +456,12 @@ public final class EmberSignService implements Listener {
             LocalDate now = today();
             int mask = d.periodCount(C_SMASK, month(now));
             if (signedOn(mask, now.getDayOfMonth())) return;
+            // D520 sign path: auto / ask / mute
+            if (EmberSignPath.shouldAuto(d)) {
+                claimSign(p);
+                return;
+            }
+            if (EmberSignPath.shouldMute(d)) return;
             int n = count(mask) + 1;
             ConfirmTokens.sendButton(p, P + "§e今天还没签到 §7· 本月第 " + n + " 次：§f" + rewardFor(n).label() + " ", "[去签到]",
                     "/corerpg p1 sign menu", "打开签到 · 在线页（点格子签到）");
