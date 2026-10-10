@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("titlepath".equals(sub) || "称号路径".equals(sub)) { // D532 cosmetic title wear path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberTitlePath.glance(EmberTitlePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c称号路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberTitlePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c称号路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberTitlePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberTitlePath.get(d);
+                    if (EmberTitlePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberTitlePath.label(cur) + " · 改路径再 /corerpg p1 titlepath");
+                    else EmberTitlePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberTitlePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 titlepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberTitlePath.applyAndReply(p, id);
+            return true;
+        }
         if ("junkpath".equals(sub) || "清库路径".equals(sub)) { // D531 gearlib junk dismantle path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -382,6 +418,20 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("titleseed".equals(sub)) { // D532 admin smoke: clear title selection so path can fill q01
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            EmberCosmetics cos = runs.cosmetics();
+            if (cos == null) { s.sendMessage(P + "外观服务未加载"); return true; }
+            cos.adminClearTitle(d);
+            runs.flushData(t.getUniqueId());
+            s.sendMessage(P + "已清空 " + t.getName() + " 称号选择（可测称号路径）");
+            EmberTitlePath.maybeAfterProgress(t, cos);
             return true;
         }
         if ("junkseed".equals(sub)) { // D531 admin smoke: drop-source T1 blade into gearlib as junk

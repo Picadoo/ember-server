@@ -149,6 +149,7 @@ public final class EmberCosmetics implements Listener {
         if (p == null || !p.isOnline()) return;
         for (Cosmetic c : ALL) if (mapKey.equals(c.firstClear))
             p.sendMessage(P + "§d获得称号「" + c.label + "§d」§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
+        EmberTitlePath.maybeAfterProgress(p, this); // D532
     }
 
     public static Cosmetic byId(String id) {
@@ -158,6 +159,41 @@ public final class EmberCosmetics implements Listener {
     }
 
     public static boolean bought(PlayerData d, Cosmetic c) { return d != null && c != null && c.shop() && d.periodCount(C_BOUGHT + c.id, "all") > 0; }
+
+    /** D532: first earned title not currently selected, or null. */
+    public Cosmetic firstUnequippedTitle(PlayerData d) {
+        if (d == null) return null;
+        int best = runs.abyssBest(d);
+        String cur = selected(d, Kind.TITLE);
+        if (cur == null || cur.isEmpty()) {
+            for (Cosmetic c : ALL) if (c.kind == Kind.TITLE && earned(d, best, c)) return c;
+            return null;
+        }
+        return null; // already wearing — path only auto-fills empty
+    }
+
+    /** D532: wear title id if earned; true when selection changed. */
+    public boolean wearTitle(Player p, PlayerData d, String id) {
+        if (p == null || d == null || id == null) return false;
+        Cosmetic c = byId(id);
+        if (c == null || c.kind != Kind.TITLE) return false;
+        if (!earned(d, runs.abyssBest(d), c)) return false;
+        String cur = selected(d, Kind.TITLE);
+        if (id.equals(cur)) return false;
+        select(d, Kind.TITLE, id);
+        runs.flushData(p.getUniqueId());
+        p.sendMessage(P + "已装上称号「" + c.label + "§7」");
+        return true;
+    }
+
+    /** D532 admin smoke: clear title selection so path can auto-fill. */
+    public void adminClearTitle(PlayerData d) {
+        if (d == null) return;
+        String cur = selected(d, Kind.TITLE);
+        if (cur == null || cur.isEmpty()) return;
+        String name = selName(Kind.TITLE);
+        d.addPeriodCount(name, cur, -d.periodCount(name, cur));
+    }
 
     /** D529: first owned trail not currently selected, or null. */
     public Cosmetic firstUnequippedTrail(PlayerData d) {
@@ -264,6 +300,7 @@ public final class EmberCosmetics implements Listener {
             for (Cosmetic c : ALL) if (raid.equals(c.raid))
                 p.sendMessage(P + "§d获得" + (c.kind == Kind.TITLE ? "称号" : "足迹") + "「" + c.label + "§d」§7（只做展示，主菜单「赛季 · 排行 · 周目标」右键装上）");
             EmberTrailPath.maybeAfterProgress(p, this); // D529
+            EmberTitlePath.maybeAfterProgress(p, this); // D532
         }
         if (raidClears(d, "r01") + raidClears(d, "r02") + raidClears(d, "r03") == 10 && p != null && p.isOnline())
             p.sendMessage(P + "§d获得称号「" + byId(RAIDS10).label + "§d」§7（团本累计 10 次，只做展示）");
