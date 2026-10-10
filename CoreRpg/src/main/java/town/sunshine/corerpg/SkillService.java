@@ -914,7 +914,7 @@ public final class SkillService implements Listener {
             town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;
         }
         applySlashSetIdentity(player, hit);
-        maybeFlashSlashHit(player, hit.size()); // D445 烬斩命中
+        maybeFlashSlashHit(player, hit.size(), shapeId); // D445 / D1155 SF1–SF3
         if (look2 != null) {
             playSound(player.getLocation(), look2.sound);
             spawnShapeSlashParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, shapeId, false);
@@ -940,8 +940,8 @@ public final class SkillService implements Listener {
         return displacementOk;
     }
 
-    /** D445: ActionBar 烬斩命中 — yields to set proc flash via EmberSetService. */
-    private void maybeFlashSlashHit(Player player, int hitCount) {
+    /** D445 / D1155: ActionBar 烬斩命中 — shape fork + hit count + set fallout (zero skill_mult). */
+    private void maybeFlashSlashHit(Player player, int hitCount, int shapeId) {
         if (player == null) return;
         long now = System.currentTimeMillis();
         Long prev = lastSkillHitFlashAt.get(player.getUniqueId());
@@ -949,7 +949,13 @@ public final class SkillService implements Listener {
         if (!shouldFlashSlashHit(hitCount, lastAt, now)) return;
         town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
         if (sets == null) return;
-        if (sets.flashSkillConfirm(player, ChatColor.GOLD + "烬斩命中")) {
+        String fam = null;
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls != null) fam = ls.get(player).activeSet;
+        String msg = town.sunshine.corerpg.p1.EmberSkillFeelSf.slashConfirmWithSet(
+                shapeId, hitCount, town.sunshine.corerpg.p1.EmberSkillFeelSf.setFalloutActionHalf(fam));
+        if (msg.isEmpty()) return;
+        if (sets.flashSkillConfirm(player, ChatColor.GOLD + msg)) {
             lastSkillHitFlashAt.put(player.getUniqueId(), Long.valueOf(now));
         }
     }

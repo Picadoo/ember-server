@@ -1,6 +1,6 @@
 # DESIGN · 技能手感 Stage2 微效用 Stage0 · 2026-10-11
 
-> **状态：** Stage0 · 已批 A · 方案 M · **无码** · tip `TIP-ember-skill-feel-stage2-micro-d1148-2026-10-11.md`  
+> **状态：** Stage0 + **SF1–SF3 SHIP** · 已批 A · 方案 M · tip `TIP-ember-skill-feel-stage2-micro-d1148-2026-10-11.md`  
 > **上游：** shape-fork S0 Stage1 live · set-fork D606 · `DESIGN-ember-skill-shape-fork-s0-2026-10-11.md` Stage2 未批条
 
 ## 1. 缺口
@@ -11,9 +11,9 @@ Stage1 只做推荐形状软设；玩家仍可能觉「形状只是皮」。Stag
 
 | ID | 微效用 | 风险 |
 |----|--------|------|
-| SF1 | 命中短反馈按形状略异（已有 D445 闪；只文案分叉） | 低 · UX |
-| SF2 | 扇/直/环 对精英命中数展示差（不改伤） | 低 |
-| SF3 | 套装落点与形状同屏半行 | 低 |
+| SF1 | 命中短反馈按形状略异 | **D1153– SHIP** |
+| SF2 | 命中数 ×N 展示 | **SHIP** |
+| SF3 | 套装落点与形状同屏半行 | **SHIP** |
 | SF4 | 微缓/微疗按形状触发窗（战斗） | **高** · 须 p1sim within |
 
 ## 3. 方案 M

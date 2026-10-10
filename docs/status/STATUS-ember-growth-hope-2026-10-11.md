@@ -521,3 +521,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1140–D1152 ARCH SHIP · jar 1.65.428-d1140
 - K2: forgeroll floor (p1sim WITHIN); C22 floor leaves = C06 q0; K3 banned
 - skill Stage2 micro Stage0 docs only (no skill_mult)
+
+## D1153–D1162 ARCH SHIP · jar 1.65.429-d1153
+- SF1–SF3: shape hit flash copy + ×N + set/shape half-line; zero skill_mult; SF4 not opened

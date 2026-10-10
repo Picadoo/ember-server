@@ -183,13 +183,8 @@ public final class EmberSkillUnlock {
     public static String setHope(EmberLoadout lo) {
         if (lo == null || lo.blade == null) return "§8拿手持刃看套装差与推荐形状";
         String fam = lo.blade.family;
-        String shape = EmberSkillKit.preferredShapeLabel(fam);
-        String fork;
-        if ("scorch".equals(fam)) fork = "焚：扇形推荐 · 点燃/火痕";
-        else if ("burst".equals(fam)) fork = "爆：直线推荐 · 缓速/闪";
-        else if ("sustain".equals(fam)) fork = "承：环斩推荐 · 微疗/护";
-        else fork = "认族套装差";
-        return "§e套装手感 · §f" + EmberItemData.familyName(fam) + " §7→ 形状 §f" + shape + " §8· " + fork;
+        // D1156 SF3: 形状 + 落点同屏半行（推荐形状；零 skill_mult）
+        return "§e套装手感 · §f" + EmberItemData.familyName(fam) + " §8· " + EmberSkillFeelSf.setShapeHalf(fam);
     }
 
 }

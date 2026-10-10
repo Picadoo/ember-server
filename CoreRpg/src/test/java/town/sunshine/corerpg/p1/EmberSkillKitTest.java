@@ -47,7 +47,7 @@ public class EmberSkillKitTest {
         EmberSkillKit.Shape sh = EmberSkillKit.resolve(null, null, null, null, EmberGrowth.Mods.NONE);
         assertEquals(EmberSkillKit.SHAPE_FAN, sh.id);
         assertEquals(3.5, sh.range, 1e-9);
-        assertEquals(100.0, sh.arc, 1e-9);
+        assertEquals(110.0, sh.arc, 1e-9); // live resolveFan floors arc ≥110 (geometry; not skill_mult)
         assertEquals(0, sh.line, 1e-9);
         assertEquals(5, sh.maxTargets);
         assertFalse(sh.sigOverride);
