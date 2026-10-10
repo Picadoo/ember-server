@@ -990,3 +990,5 @@
 - `B-mainline-q01-q03-visual-d450`（已批 A·M · D450 · **落地** · Q01–03 轻视觉 · map `@d450`）
 - `B-forge-reroll-entry`（已批 A·M · D451 · **落地** · 工坊挂洗练+锁定保类型说明 · jar 1.65.145-d451 · ≠改洗练价）
 - `B-hub-growth-forge-four`（已批 A·M · D452 · **落地** · hub 成长格点名工坊四选择 + Shift+右键进工坊 · TrMenu-only · ≠改价/jar）
+
+- `B-stage2-green-exit-d453`（已批 A·M · D453 · **落地 PASS** · Stage2 结束观察·维持 · ≠关 Stage1 ≠开 K3）
