@@ -30,6 +30,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_ENCHANTMENT_TABLE_USE-0.6-1.2'
+    - 'tell: §8战斗中签名触发会抬头短闪名字（躲开回气/借势/点燃/护盾/传火）'
 
 Icons:
   '#':
