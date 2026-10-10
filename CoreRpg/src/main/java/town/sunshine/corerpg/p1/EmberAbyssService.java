@@ -187,6 +187,9 @@ public final class EmberAbyssService {
         EmberGoalPath.maybeGlance(leader, runs, "abyss"); // D521 weekly goal focus
         PlayerData enterPd = runs.dataOf(leader.getUniqueId());
         EmberAbyssTarget.enterCue(leader, enterPd, tier, best(enterPd)); // D696
+        if (enterPd != null && !EmberAbyssPath.valid(EmberAbyssPath.get(enterPd))) { // D718
+            leader.sendMessage(P() + "§7未选深渊路径 · /corerpg p1 abysspath（冲层/刷层）");
+        }
         // D649: first-layer gift visible at entry (fee table already 0 · no price change)
         if (tier == 1 && best(runs.dataOf(leader.getUniqueId())) <= 0) {
             leader.sendMessage(P() + "§5首层礼 · §f第 1 层层费免费 §7· 强度=挑战版 · 打通开放第 2 层");

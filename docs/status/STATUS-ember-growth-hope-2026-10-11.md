@@ -153,12 +153,12 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D713 enhance-fail mid-window remind
 - D714 gearlib open setchase
 
-## D713–D715 SHIP · jar 1.65.333-d713 · 2026-10-11
-- D713 event_soft_hope PAPI
-- D714 adventure Open event/drop hope tells
-- D715 skill kit parry D666 ActionBar tell
 
-## D715–D717 SHIP · jar 1.65.334-d715 · 2026-10-11
-- D715 event_soft_hope PAPI
-- D716 adventure Open event/drop hope tells
-- D717 skill kit parry D666 ActionBar tell
+
+## D717–D718 SHIP · jar 1.65.335-d717 · 2026-10-11
+- D717 enhance preview forgeGlance
+- D718 abyss enter path unset hint
+
+## D715–D716 SHIP · jar 1.65.334-d715 · 2026-10-11
+- D715 short FC settle unpaid remainder
+- D716 enhance undo hold mismatch bar

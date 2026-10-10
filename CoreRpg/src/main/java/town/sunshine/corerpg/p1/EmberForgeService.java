@@ -329,6 +329,7 @@ public final class EmberForgeService implements Listener {
             if (!lack.isEmpty()) { p.sendMessage(P + ChatColor.RED + "缺少: " + String.join("，", lack)); String src = sources(lack); if (src != null) p.sendMessage(P + src); }
             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "手里拿着这件再点：", "[确认强化]", "/corerpg p1 enhance confirm",
                     "强化手持装备一次（扣上面的材料）"); // D95: no typed command
+            EmberEnhanceUndo.forgeGlance(p); // D717 preview while fail-undo open
             return true;
         }
         String r = rid != null ? rid : "enh:" + d.uid + ":" + d.rev;
