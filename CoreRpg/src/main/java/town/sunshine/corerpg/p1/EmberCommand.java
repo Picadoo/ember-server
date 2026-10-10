@@ -1489,6 +1489,12 @@ public final class EmberCommand {
             EmberTicketPath.applyAndReply(p, id);
             return true;
         }
+        if ("gem".equals(sub) || "镶嵌".equals(sub)) { // Gem Stage2 P1 sockets — NEVER legacy /corerpg socket
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家"); return true; }
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs == null ? null : runs.plugin();
+            if (plg == null) plg = (town.sunshine.corerpg.CoreRpgPlugin) org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+            return EmberGemSocket.cmd((Player) s, args, loadouts, plg);
+        }
         if ("gempath".equals(sub) || "宝石路径".equals(sub)) { // D535 combat gem preference + auto-socket
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

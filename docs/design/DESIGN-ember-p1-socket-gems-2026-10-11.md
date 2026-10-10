@@ -167,6 +167,6 @@ p1sim 闸门（Stage2 必过）：
 
 - [x] 总控批 **A · 方案 M** · 日期 2026-10-11  
 - [x] Stage1 版本策略锁定：**A（v3）**  
-- [ ] Stage2 初值：sharp +1 / steady +1 / drain 1% / gale 2% · 或修订 ____  
+- [x] Stage2 初值：sharp +1 / steady +1 / drain 1% / gale 2% · 批 2026-10-11  
 
 **默认提案（待批）：方案 M = Stage1 走版本 A（v3）+ 上表初值；Stage2 前必须 p1sim 绿。**

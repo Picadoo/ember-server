@@ -43,7 +43,7 @@ public final class EmberSkillUnlock {
         if (EmberSkillKit.UNLOCK_DASH.equals(mapKey))
             return "§e套装差：§7烬突落地 · 焚点燃 / 爆缓速 / 承微疗（不改 1.5B）";
         if (EmberSkillKit.UNLOCK_SHAPE.equals(mapKey))
-            return "§e套装差：§7烬斩落点 · 爆缓速 / 承微疗 / 焚仅余烬展示（形状三选一）";
+            return "§e套装差：§7烬斩 · 推荐焚扇/爆直/承环 · 爆缓速/承微疗/焚余烬（可换形状）";
         if (EmberSkillKit.UNLOCK_STEP.equals(mapKey))
             return "§e套装差：§7身法 · 焚火痕点燃 / 爆闪缓速 / 承护微疗（两件套自动）";
         return null;

@@ -304,6 +304,12 @@ public final class EmberItemData {
                 affix, afPity, sigCode, rerollN, origin, newSock0, newSock1);
     }
 
+    /** Gem Stage2: socket mutate for commit (rev + 1, same as forge copy). */
+    public EmberItemData withSocketsNextRev(int newSock0, int newSock1) {
+        return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, DATA_VERSION, rev + 1,
+                affix, afPity, sigCode, rerollN, origin, newSock0, newSock1);
+    }
+
     /**
      * D245 (ARCH S4 · item provenance): which content / reward created a piece. {@code map} = map or mode id (q01…q07,
      * q03c challenge, q05a2 abyss floor, r01 raid, starter, forge, admin…), {@code src} = REG source row (S01, S06, S12,

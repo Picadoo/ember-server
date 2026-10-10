@@ -260,6 +260,12 @@ public final class SkillService implements Listener {
         // D606: set-fork hope glance (display only)
         player.sendMessage(ChatColor.YELLOW + "  希望·套装差" + ChatColor.GRAY
                 + " 焚点燃 / 爆缓速 / 承微疗 · F·烬突·身法各有差（不改倍率）");
+        String famHope = ls == null ? "none" : ls.get(player).activeSet;
+        if (famHope != null && !"none".equals(famHope)) {
+            player.sendMessage(ChatColor.YELLOW + "  希望·推荐形状" + ChatColor.GRAY + " "
+                    + town.sunshine.corerpg.p1.EmberSkillKit.preferredShapeLabel(famHope)
+                    + "（焚扇/爆直/承环 · 可换）");
+        }
         player.sendMessage(ChatColor.GRAY + "  余烬充能（烬斩 / 烬突共用）· " + charge);
         String slashHint = slashSetTip(player);
         player.sendMessage(ChatColor.YELLOW + "  F" + ChatColor.GRAY + " 烬斩 · 形状 "
@@ -355,6 +361,7 @@ public final class SkillService implements Listener {
             return;
         }
         boolean changed = town.sunshine.corerpg.p1.EmberSkillKit.setShape(data, id);
+        town.sunshine.corerpg.p1.EmberSkillKit.markShapeManual(data);
         dataStore.flushMutation(player.getUniqueId());
         // X1: swapping always puts the shared charge on full CD
         town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();

@@ -58,10 +58,11 @@ Icons:
     display:
       material: emerald
       name: '§e去镶嵌'
-      lore: ['', '§7孔石嵌入刃与护符', '', '§e➥ §f打开镶嵌']
+      lore: ['', '§7P1 孔石（刃/符）', '§8不走旧镶嵌页', '', '§e➥ §f/corerpg p1 gem']
     actions:
       all:
-        - 'menu: ember_socket'
+        - 'tell: §eP1 镶嵌：手持刃/符 §f/corerpg p1 gem list'
+        - 'command: corerpg p1 gem list'
   P:
     display:
       material: flint

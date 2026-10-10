@@ -197,11 +197,22 @@ public final class EmberLoadoutService implements Listener {
         cache.put(p.getUniqueId(), l);
         notes.put(p.getUniqueId(), why);
         String mainUid = blade == null ? null : blade.uid;
-        boolean changed = !eq(st.mainhandUid, mainUid) || !eq(st.activeSet, l.activeSet) || st.awakening != l.awakening;
+        boolean setChanged = !eq(st.activeSet, l.activeSet);
+        boolean changed = !eq(st.mainhandUid, mainUid) || setChanged || st.awakening != l.awakening;
         st.mainhandUid = mainUid;
         st.activeSet = l.activeSet;
         st.awakening = l.awakening;
         if (changed && EmberMode.isP1(p)) saveState(p);
+        // D607 shape-fork S0: soft-prefer set shape when 2pc forms (zero skill_mult)
+        if (setChanged && !"none".equals(l.activeSet)) {
+            PlayerData pd = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+            EmberRunService runs = plugin.getEmberRuns();
+            if (EmberSkillKit.maybeSoftPreferShape(pd, runs, l.activeSet) && pd != null) {
+                plugin.getDataStore().flushMutation(p.getUniqueId());
+                p.sendMessage(EmberRunService.P + "§e套装推荐烬斩形状：§f" + EmberSkillKit.preferredShapeLabel(l.activeSet)
+                        + " §7（可随时 /corerpg skill shape 换）");
+            }
+        }
         return l;
     }
 

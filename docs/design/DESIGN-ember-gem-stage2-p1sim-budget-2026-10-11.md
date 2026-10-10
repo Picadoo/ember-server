@@ -1,6 +1,6 @@
 # DESIGN · 宝石 Stage2 p1sim 预算草案（docs only · 未批施工）
 
-> **状态：** tip / 预算草案 · **禁止本档改 jar / 改公式 / 改 sock 字段语义**
+> **状态：** 已批 A·M · **p1sim FAIL（+1A 过强）** · 收紧提案 +0.25A/D 帽0.5 · **禁公式** · 见 out-gem-stage2-budget
 > **链接：** [`DESIGN-ember-p1-socket-gems-2026-10-11.md`](DESIGN-ember-p1-socket-gems-2026-10-11.md) §4 · Stage1 已船 `17d33bfd` jar `1.65.292-gem-s1`
 > **硬规则：** 无预算 PASS 不得把四石映射进 `EmberFormula`
 
@@ -41,5 +41,10 @@
 
 ## 5. 批注
 
-- [ ] 总控批 **A · 方案 M（初值如上）** · 日期 ____ · 或修订 ____
+- [x] 总控批 **A · 方案 M（初值如上）** · 日期 2026-10-11 · 总控 COORD
 - [ ] p1sim 绿表路径：`tools/p1sim/out-gem-stage2-budget-____.md`
+
+
+## 6. FAIL 记录 · 2026-10-11
+
+初值 +1A×2 / +1D 在 n=800 下 G1/G2/G5 全 ❌（最高 +19pp clear）。公式未接线。收紧见上表；绿表前禁止 `EmberLoadout`/`EmberFormula` 接线。

@@ -74,6 +74,21 @@ public final class EmberSkillKit {
     public static final double PARRY_FLAT_MULT = 0.45;
     public static final String DISPLAY_PARRY = "余烬招架";
 
+    /** D607 shape-fork S0: set soft-preferred 烬斩 shape (geometry only · zero skill_mult). */
+    public static final String C_SHAPE_MANUAL = "p1_shape_manual"; // 1 = player picked; soft prefer skips
+
+    public static int preferredShape(String family) {
+        if ("burst".equals(family)) return SHAPE_LINE;
+        if ("sustain".equals(family)) return SHAPE_RING;
+        if ("scorch".equals(family)) return SHAPE_FAN;
+        return SHAPE_FAN;
+    }
+
+    public static String preferredShapeLabel(String family) {
+        return shapeName(preferredShape(family));
+    }
+
+
     public static final int DIR_FORWARD = 0;
     public static final int DIR_BACK = 1;
 
@@ -259,6 +274,21 @@ public final class EmberSkillKit {
         }
         d.addPeriodCount(C_SHAPE, "all", id - cur);
         return true;
+    }
+
+    /** D607: soft-set preferred shape once while unlocked and player has not manually picked. */
+    public static boolean maybeSoftPreferShape(PlayerData d, EmberRunService runs, String family) {
+        if (d == null || !shapeUnlocked(d, runs)) return false;
+        if (d.periodCount(C_SHAPE_MANUAL, "all") > 0) return false;
+        if (family == null || "none".equals(family)) return false;
+        int want = preferredShape(family);
+        if (shapeId(d, runs) == want) return false;
+        return setShape(d, want);
+    }
+
+    public static void markShapeManual(PlayerData d) {
+        if (d == null) return;
+        if (d.periodCount(C_SHAPE_MANUAL, "all") <= 0) d.addPeriodCount(C_SHAPE_MANUAL, "all", 1);
     }
 
     /**
