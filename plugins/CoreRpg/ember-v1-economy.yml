@@ -319,6 +319,30 @@ sinks:
     "q1.blank": 16
     "q1.bone": 16
     "q1.coin": 1600
+  # D982 Stage1 C11 reroll base (T1–T3; honor reroll_coin still multiplies coin at pay time)
+  C11:
+    "t1.coin": 300
+    "t1.shard": 40
+    "t1.lock_shard": 40
+    "t2.coin": 600
+    "t2.shard": 80
+    "t2.lock_shard": 80
+    "t3.coin": 1000
+    "t3.shard": 120
+    "t3.lock_shard": 120
+  # D987 Stage1 C08 abyss segment fee (matches ember-v1-runs.yml abyss.tiers[].fee + fee_mark_coin)
+  C08:
+    fee_mark_coin: 200
+    fee_t1: 0
+    fee_t2: 60
+    fee_t3: 120
+    fee_t4: 180
+    fee_t5: 240
+    fee_t6: 300
+    fee_t7: 360
+    fee_t8: 400
+    fee_t9: 440
+    fee_t10: 480
   C01: { stamina: 30 }
   C07: { marks: 8 }
   C09:

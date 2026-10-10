@@ -24,7 +24,7 @@
 
 version: 1
 balance_version: 89
-built_against: "1.65.410-d974.local (D974–D980 Stage1b C04–C06)"
+built_against: "1.65.411-d981.local (D981–D990 Stage1 C11/C08)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 
@@ -951,10 +951,10 @@ sinks:
   C05: {econ_row: C05, name: 精工, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"refine\": return \"C05\""], economy_keys: [C05.c0.blank, C05.c0.bone, C05.c0.coin, C05.c1.blank, C05.c1.bone, C05.c1.coin, C05.c2.blank, C05.c2.bone, C05.c2.coin], config: ["ember-v1-economy.yml#sinks.C05"]}
   C06: {econ_row: C06, name: 成色, takes: [blank, bone, coin], code: ["p1/EmberEconomy.java#case \"quality\": return \"C06\""], economy_keys: [C06.q0.blank, C06.q0.bone, C06.q0.coin, C06.q1.blank, C06.q1.bone, C06.q1.coin], config: ["ember-v1-economy.yml#sinks.C06"]}
   C07: {econ_row: C07, name: 8 印记兑换（付印记）, takes: [mark], economy_keys: [C07.marks], config: ["ember-v1-economy.yml#sinks.C07"], code: ["p1/EmberRunService.java#EmberEconomy.spendMark(d, \"C07\""]}
-  C08: {econ_row: C08, name: 深渊层费（币 / 超额 T3 印记）, takes: [coin, mark], ledger_keys: [cost_coin, refund_coin], config: ["ember-v1-runs.yml#abyss.fee_mark_coin"], code: ["p1/EmberAbyssService.java#EmberEconomy.spendCoin(pd, \"C08\""]}
+  C08: {econ_row: C08, name: 深渊层费（币 / 超额 T3 印记）, takes: [coin, mark], ledger_keys: [cost_coin, refund_coin], config: ["ember-v1-runs.yml#abyss.fee_mark_coin"], code: ["p1/EmberAbyssService.java#EmberEconomy.spendCoin(pd, \"C08\""], economy_keys: [C08.fee_mark_coin, C08.fee_t1, C08.fee_t2, C08.fee_t3, C08.fee_t4, C08.fee_t5, C08.fee_t6, C08.fee_t7, C08.fee_t8, C08.fee_t9, C08.fee_t10]}
   C09: {econ_row: C09, name: 天赋学习, takes: [coin], economy_keys: [C09.row1.coin, C09.row2.coin, C09.row3.coin], config: ["ember-v1-economy.yml#sinks.C09", "ember-v1-growth.yml#talents.rows"]}
   C10: {econ_row: C10, name: 天赋重置, takes: [coin], economy_keys: [C10.respec_coin], config: ["ember-v1-economy.yml#sinks.C10", "ember-v1-growth.yml#talents.respec_coin"]}
-  C11: {econ_row: C11, name: 洗练（词条）, takes: [coin, shard, gear], config: ["ember-v1-growth.yml#reroll.coin", "ember-v1-growth.yml#reroll.affixes"], code: ["p1/EmberEconomy.java#case \"reroll\": return \"C11\""]}
+  C11: {econ_row: C11, name: 洗练（词条）, takes: [coin, shard, gear], config: ["ember-v1-growth.yml#reroll.coin", "ember-v1-growth.yml#reroll.affixes"], code: ["p1/EmberEconomy.java#case \"reroll\": return \"C11\""], economy_keys: [C11.t1.coin, C11.t1.shard, C11.t1.lock_shard, C11.t2.coin, C11.t2.shard, C11.t2.lock_shard, C11.t3.coin, C11.t3.shard, C11.t3.lock_shard]}
   C12: {econ_row: C12, name: 烬炉烙印, takes: [insignia, coin], economy_keys: [C12.insignia, C12.coin_per_tier], config: ["ember-v1-economy.yml#sinks.C12"], code: ["p1/EmberSignature.java#IMPRINT_MARKS = 5"]}
   C13: {econ_row: C13, name: 签名调律, takes: [insignia], economy_keys: [C13.insignia], config: ["ember-v1-economy.yml#sinks.C13"], code: ["p1/EmberSignature.java#ALT_MARKS = 10"]}
   C14: {econ_row: C14, name: 回复药购买, takes: [coin], economy_keys: [C14.coin], config: ["ember-v1-economy.yml#sinks.C14", "ember-v1.yml#shop.heal_potion.price"]}

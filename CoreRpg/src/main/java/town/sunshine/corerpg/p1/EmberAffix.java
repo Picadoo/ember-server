@@ -48,7 +48,11 @@ public final class EmberAffix {
             this.pity = pity; this.tierWeights = tierWeights; this.tierCap = tierCap; this.coin = coin; this.shard = shard; this.lockShard = lockShard; this.defs = defs;
         }
         /** D148 extra shards for a locked try (keep the affix, roll only the tier); 0 = lock not offered */
-        public int lockShardFor(int itemTier) { return lockShard.length == 0 ? 0 : lockShard[Math.max(0, Math.min(lockShard.length - 1, itemTier))]; }
+        public int lockShardFor(int itemTier) {
+            int t = Math.max(0, Math.min(Math.max(lockShard.length, 4) - 1, itemTier));
+            if (t >= 1 && t <= 3) return EmberEconomy.amount("C11", "t" + t + ".lock_shard"); // D984
+            return lockShard.length == 0 ? 0 : lockShard[Math.max(0, Math.min(lockShard.length - 1, itemTier))];
+        }
         public Def def(String id) { if (id != null) for (Def d : defs) if (d.id.equals(id)) return d; return null; }
         /** stable code stored in the player save (yml {@code code:}) */
         public Def byCode(int code) { for (Def d : defs) if (d.code == code) return d; return null; }
@@ -66,8 +70,16 @@ public final class EmberAffix {
         }
         /** highest value tier this quality can carry */
         public int cap(int quality) { return tierCap[Math.max(0, Math.min(tierCap.length - 1, quality))]; }
-        public int coinFor(int itemTier) { return coin[Math.max(0, Math.min(coin.length - 1, itemTier))]; }
-        public int shardFor(int itemTier) { return shard[Math.max(0, Math.min(shard.length - 1, itemTier))]; }
+        public int coinFor(int itemTier) {
+            int t = Math.max(0, Math.min(coin.length - 1, itemTier));
+            if (t >= 1 && t <= 3) return EmberEconomy.amount("C11", "t" + t + ".coin"); // D984
+            return coin[t];
+        }
+        public int shardFor(int itemTier) {
+            int t = Math.max(0, Math.min(shard.length - 1, itemTier));
+            if (t >= 1 && t <= 3) return EmberEconomy.amount("C11", "t" + t + ".shard"); // D984
+            return shard[t];
+        }
     }
 
     /** Result of one try: the candidate and the item's new pity counter. */

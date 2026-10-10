@@ -344,12 +344,18 @@ public final class EmberEconomy {
             .g("q0.blank", 8).g("q0.bone", 8).g("q0.coin", 800)
             .g("q1.blank", 16).g("q1.bone", 16).g("q1.coin", 1600).done();
         sink("C07", "8 印记兑换", "EmberRunRules.MARKS_PER_EXCHANGE", Period.NONE).acc(MARK).keys("p1_mark_t").model(FULL).g("marks", 8).done();
-        sink("C08", "深渊层费", "ember-v1-runs.yml abyss", Period.RUN).acc(COIN, MARK).model(FULL).done();
+        sink("C08", "深渊层费", "ember-v1-runs.yml abyss", Period.RUN).acc(COIN, MARK).model(FULL)
+            .g("fee_mark_coin", 200)
+            .g("fee_t1", 0).g("fee_t2", 60).g("fee_t3", 120).g("fee_t4", 180).g("fee_t5", 240)
+            .g("fee_t6", 300).g("fee_t7", 360).g("fee_t8", 400).g("fee_t9", 440).g("fee_t10", 480).done();
         sink("C09", "天赋学习", "ember-v1-growth.yml talents", Period.ALL).acc(COIN).keys("p4_spec_learn_").model(FULL)
             .g("row1.coin", 800).g("row2.coin", 2000).g("row3.coin", 4000).done();
         sink("C10", "天赋重置", "ember-v1-growth.yml respec_coin", Period.NONE).acc(COIN).keys("p4_spec_resets").model(PART)
             .g("respec_coin", 2000).done();
-        sink("C11", "洗练", "EmberGrowthService / EmberPayRules", Period.NONE).acc(COIN, SHARD, GEAR).model(FULL).done();
+        sink("C11", "洗练", "EmberGrowthService / EmberPayRules", Period.NONE).acc(COIN, SHARD, GEAR).model(FULL)
+            .g("t1.coin", 300).g("t1.shard", 40).g("t1.lock_shard", 40)
+            .g("t2.coin", 600).g("t2.shard", 80).g("t2.lock_shard", 80)
+            .g("t3.coin", 1000).g("t3.shard", 120).g("t3.lock_shard", 120).done();
         sink("C12", "烬炉烙印", "EmberSignature.IMPRINT_*", Period.NONE).acc(INS, COIN).keys("p1_sigmark_").model(NONE)
             .g("insignia", 5).g("coin_per_tier", 300).done();
         sink("C13", "签名调律", "EmberSignature.ALT_MARKS", Period.ALL).acc(INS).keys("p1_sigmark_", "p1_sigaltu_").model(NONE)

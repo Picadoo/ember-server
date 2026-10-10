@@ -533,7 +533,8 @@ public final class EmberRunMaps {
             this.index = index;
             hp = num(m.get("hp"), 1.0);
             dmg = num(m.get("dmg"), 1.0);
-            fee = (int) num(m.get("fee"), 0);
+            // D988: C08 fee from economy yml SoT (runs.yml fee stays mirror)
+            fee = EmberEconomy.amount("C08", "fee_t" + index);
             int[] q = EmberRunRules.CHALLENGE_QUALITY_WEIGHTS.clone();
             if (m.get("quality") instanceof List && ((List<?>) m.get("quality")).size() == 4)
                 for (int i = 0; i < 4; i++) q[i] = (int) num(((List<?>) m.get("quality")).get(i), q[i]);
@@ -1121,7 +1122,7 @@ public final class EmberRunMaps {
         challenge = root.get("challenge") instanceof Map ? new Challenge((Map<?, ?>) root.get("challenge")) : null;
         Map<?, ?> ab = root.get("abyss") instanceof Map ? (Map<?, ?>) root.get("abyss") : Collections.emptyMap();
         abyssRequires = str(ab.get("requires"), "q07");
-        abyssFeeMarkCoin = Math.max(0, (int) num(ab.get("fee_mark_coin"), 0));
+        abyssFeeMarkCoin = EmberEconomy.amount("C08", "fee_mark_coin"); // D988
         List<AbyssTier> at = new ArrayList<AbyssTier>();
         List<Challenge> ac = new ArrayList<Challenge>();
         if (challenge != null && ab.get("tiers") instanceof List) for (Object o : (List<?>) ab.get("tiers")) {
