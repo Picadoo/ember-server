@@ -687,3 +687,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1782–D1785 DOC · live still 1.65.479-d1768
 - EM1 research notes only (no jar bump); next code needs EM1 plan after refs
+
+## D1786–D1799 SHIP · jar 1.65.480-d1786
+- bulkDone + batch-undo remain AB

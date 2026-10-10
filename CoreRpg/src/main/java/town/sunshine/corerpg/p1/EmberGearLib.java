@@ -603,6 +603,9 @@ public final class EmberGearLib implements Listener {
         if (blanks > 0) delivery.kick(q);
         plugin.getLogger().info("[P1 gearlib] bulk dismantle " + q.getName() + " " + n + " pieces → blanks " + blanks);
         q.sendMessage(P + ChatColor.GREEN + "已分解 " + n + " 件 → 胚料 ×" + blanks + ChatColor.GRAY + "（" + undoMinutes() + " 分钟内可撤销）");
+        try { // D1786
+            q.sendActionBar("§a批量分解 · §f" + n + "件 → 胚×" + blanks + " §8· " + undoMinutes() + "分钟可撤");
+        } catch (Throwable ignored) { }
         q.playSound(q.getLocation(), Sound.BLOCK_ANVIL_USE, 0.6f, 1.2f);
     }
 
@@ -690,13 +693,21 @@ public final class EmberGearLib implements Listener {
         if (b == null) for (LibRow r : rows) { b = EmberStorageRules.batchOf(r.note); if (b != null) break; }
         final List<LibRow> pick = new ArrayList<LibRow>();
         if (b != null) for (LibRow r : rows) if (b.equals(EmberStorageRules.batchOf(r.note)) && !busy.contains(r.data.uid)) pick.add(r);
-        if (pick.isEmpty()) { p.sendMessage(P + ChatColor.RED + "没有可整批撤销的批量分解（超过 " + undoMinutes() + " 分钟、已撤销，或是单件分解）"); return; }
+        if (pick.isEmpty()) {
+            p.sendMessage(P + ChatColor.RED + "没有可整批撤销的批量分解（超过 " + undoMinutes() + " 分钟、已撤销，或是单件分解）");
+            try { p.sendActionBar("§7整批撤销 · 无可撤批次"); } catch (Throwable ignored) { } // D1786
+            return;
+        }
         String g = gate(p);
         if (g != null) { p.sendMessage(P + ChatColor.RED + g); return; }
         int need = 0;
         for (LibRow r : pick) need += EmberUpgradeRules.dismantleYield(r.data);
         int have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_BLANK);
-        if (have < need) { p.sendMessage(P + ChatColor.RED + "整批撤销要退回胚料 ×" + need + "，背包 + 仓库只有 " + have + "（可以一件一件撤销）"); return; }
+        if (have < need) {
+            p.sendMessage(P + ChatColor.RED + "整批撤销要退回胚料 ×" + need + "，背包 + 仓库只有 " + have + "（可以一件一件撤销）");
+            try { p.sendActionBar("§c整批撤销 · 还差胚 §f" + (need - have)); } catch (Throwable ignored) { }
+            return;
+        }
         final EmberPay pay = EmberPay.get();
         if (pay == null) { p.sendMessage(P + ChatColor.RED + "撤销暂不可用（服务未就绪）"); return; }
         final UUID id = p.getUniqueId();
@@ -726,8 +737,11 @@ public final class EmberGearLib implements Listener {
                             if (--left[0] == 0) {
                                 Player q = Bukkit.getPlayer(id);
                                 plugin.getLogger().info("[P1 gearlib] batch undo " + id + " " + ok[0] + "/" + pick.size() + " pieces, blanks paid " + needF + ", refunded " + refund[0]);
-                                if (q != null) q.sendMessage(P + ChatColor.GREEN + "已整批撤销 " + ok[0] + " 件，回到装备库" + ChatColor.GRAY + "，胚料 ×" + (needF - refund[0]) + " 已扣"
+                                if (q != null) {
+                                    q.sendMessage(P + ChatColor.GREEN + "已整批撤销 " + ok[0] + " 件，回到装备库" + ChatColor.GRAY + "，胚料 ×" + (needF - refund[0]) + " 已扣"
                                         + (refund[0] > 0 ? ChatColor.RED + "（" + (pick.size() - ok[0]) + " 件没撤成，这几件的胚料 ×" + refund[0] + " 会退回）" : ""));
+                                    try { q.sendActionBar("§a整批撤销 · §f" + ok[0] + "件 → 库"); } catch (Throwable ignored) { }
+                                }
                             }
                         });
             }
