@@ -11,7 +11,7 @@
 
 | ID | 项 | 风险 | 态 |
 |----|----|------|----|
-| **GS1** | status：nextHope+形状+setHope+duallead+专精点 | 低 · 纯展示 | **D1871–D1898 SHIP** |
+| **GS1** | status + kit/route/join leftovers | 低 · 纯展示 | **D1871–D1912 SHIP** |
 | **GS2** | ForgeService.helpLines / forge 入口附 forgegoal glance | 低 | **本窗 SHIP** |
 | **GS3** | 成色/精工可见保底表盘 | 中 · 可能要数值/UI | **推迟**（另 tip+可能 p1sim） |
 | **GS4** | EM1-B 每图新农场 | 高 | **BLOCKED** |

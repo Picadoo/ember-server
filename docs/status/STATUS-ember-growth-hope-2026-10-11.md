@@ -714,3 +714,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1885–D1898 SHIP · jar 1.65.487-d1885
 - status talent pointsLine
+
+## D1899–D1912 SHIP · jar 1.65.489-d1899
+- GS leftovers: kit nextHope AB, route/join skill clarity, 希望→手感 copy; GS3 still deferred

@@ -1,6 +1,6 @@
 # Open 指向 D666 (D730) 招架成功 ActionBar（零改 CD/coef）
 # D689: Stage2 geometry numbers on shape preview icons
-# D617: Open/此刻状态挂下一技能希望 + 套装手感（零改系数）
+# D617/D1899: Open 下一技能 + 套装手感（零改系数 · 非新 PAPI）
 # D460: 首通 Q04/Q05 聊天三选一/二选一 · D459: 首通解锁技能会聊天宣告 + 本页 Open 半行互指 · 零改技能数值
 # D211 · 余烬技能组 S1（烬斩 / 烬突 / 烬斩符文）
 # D214 · S2 火痕步 · D434 爆闪/承护对称（烬爆/承烬 2pc + Q05）
@@ -38,7 +38,7 @@ Events:
     - 'tell: §8首通 Q02/Q03/Q04/Q05 会聊天宣告新技能（烬突/招架/符文/身法）'
     - 'command: corerpg p1 shapepath'
     - 'tell: §8首通 Q04/Q05 还会弹出符文三选一 / 身法方向二选一（玩法侧移）'
-    - 'tell: §e技能希望：§f%corerpg_kit_next_hope%'
+    - 'tell: §e下一技能：§f%corerpg_kit_next_hope%'
     - 'tell: §e套装手感：§f%corerpg_kit_set_hope%'
 
 Icons:

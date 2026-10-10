@@ -2429,6 +2429,12 @@ public final class EmberRunService implements Listener {
             else
                 p.sendActionBar("§a突破 · 觉醒满");
         } catch (Throwable ignored) { }
+        // D1901 KL2 skill path clarity on route
+        PlayerData rd = data(p.getUniqueId());
+        String skR = EmberSkillUnlock.nextHope(rd, this);
+        if (skR != null && !skR.isEmpty() && !skR.contains("已齐")) {
+            p.sendMessage(P + skR);
+        }
         if (!btn.isEmpty()) town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btn.toArray(new String[0][]));
         return true;
     }
@@ -3934,6 +3940,13 @@ public final class EmberRunService implements Listener {
             out.add("§6§l[余烬服] §e欢迎回来 · 本周精选 §f" + featuredLabel(d));
             out.add("§7" + EmberSeason.abyssMine(abyssBest(d)) + "（可开第 1～" + abyssMaxStart(d) + " 层）"
                     + (season != null && season.goalsOn() ? "§7 · " + goalsShort(d) : ""));
+            // D1902 KL4 late skill/shape glance（非 hope PAPI）
+            String skL = EmberSkillUnlock.nextHope(d, this);
+            if (skL != null && !skL.isEmpty()) out.add("§7" + skL);
+            boolean shapeOn = EmberSkillKit.shapeUnlocked(d, this);
+            if (shapeOn)
+                out.add("§7烬斩符文 · §f" + EmberSkillKit.shapeName(EmberSkillKit.shapeId(d, this))
+                        + " §8· /corerpg skill kit");
             out.add("§7外观商店：点下面的 [外观商店]（或主菜单「赛季 · 排行 · 周目标」→ 外观商店）；余烬徽、余烬币或多出来的印记都能付，只做展示");
         } else {
             out.add("§6§l[余烬服] §e欢迎回来 · 下一步：§f" + ChatColor.stripColor(nextStep(d)));

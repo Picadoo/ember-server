@@ -257,14 +257,20 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberSkillKit.Shape sh = town.sunshine.corerpg.p1.EmberSkillKit.resolve(
                 player, data, runs, town.sunshine.corerpg.p1.EmberMode.get(), gmods);
         player.sendMessage(PREFIX + ChatColor.GOLD + "余烬技能组");
-        // D606: set-fork hope glance (display only)
-        player.sendMessage(ChatColor.YELLOW + "  希望·套装差" + ChatColor.GRAY
+        // D1900: set-fork glance（display only · 去「希望·」celebration 口吻）
+        player.sendMessage(ChatColor.YELLOW + "  手感·套装差" + ChatColor.GRAY
                 + " 焚点燃 / 爆缓速 / 承微疗 · F·烬突·身法各有差（不改倍率）");
         String famHope = ls == null ? "none" : ls.get(player).activeSet;
         if (famHope != null && !"none".equals(famHope)) {
-            player.sendMessage(ChatColor.YELLOW + "  希望·推荐形状" + ChatColor.GRAY + " "
+            player.sendMessage(ChatColor.YELLOW + "  手感·推荐形状" + ChatColor.GRAY + " "
                     + town.sunshine.corerpg.p1.EmberSkillKit.preferredShapeLabel(famHope)
                     + "（焚扇/爆直/承环 · 可换）");
+        }
+        // D1900 KL1 nextHope Java chat+AB（非新 PAPI twin）
+        String nh = town.sunshine.corerpg.p1.EmberSkillUnlock.nextHope(data, runs);
+        if (nh != null && !nh.isEmpty()) {
+            player.sendMessage(PREFIX + nh);
+            try { player.sendActionBar(nh); } catch (Throwable ignored) { }
         }
         player.sendMessage(ChatColor.GRAY + "  余烬充能（烬斩 / 烬突共用）· " + charge);
         String slashHint = slashSetTip(player);
@@ -330,6 +336,11 @@ public final class SkillService implements Listener {
         } else {
             player.sendMessage(ChatColor.DARK_GRAY + "  守招·余烬招架 · 首通 Q03 后解锁（单按 Q）");
         }
+        if (nh == null || nh.isEmpty() || nh.contains("已齐")) {
+            try {
+                player.sendActionBar("§a技能组 · §f" + sh.label + " §8· " + charge.replaceAll("§.", ""));
+            } catch (Throwable ignored) { }
+        }
     }
 
     /** D211: /corerpg skill shape <fan|line|ring> — hub only; puts 烬斩 on full CD (X1). */
@@ -350,9 +361,10 @@ public final class SkillService implements Listener {
         }
         if (raw == null || raw.isEmpty()) {
             int id = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
-            player.sendMessage(PREFIX + "当前烬斩符文：" + ChatColor.WHITE
-                    + town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id)
+            String sn = town.sunshine.corerpg.p1.EmberSkillKit.shapeName(id);
+            player.sendMessage(PREFIX + "当前烬斩符文：" + ChatColor.WHITE + sn
                     + ChatColor.GRAY + " · 用法 /corerpg skill shape <fan|line|ring>");
+            try { player.sendActionBar("§e符文 · §f" + sn + " §8· fan/line/ring"); } catch (Throwable ignored) { } // D1903
             return;
         }
         int id = town.sunshine.corerpg.p1.EmberSkillKit.parseShape(raw);
@@ -402,9 +414,10 @@ public final class SkillService implements Listener {
         }
         if (raw == null || raw.isEmpty()) {
             int id = town.sunshine.corerpg.p1.EmberSkillKit.stepDirId(data);
-            player.sendMessage(PREFIX + "当前身法方向：" + ChatColor.WHITE
-                    + town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id)
+            String dn = town.sunshine.corerpg.p1.EmberSkillKit.stepDirName(id);
+            player.sendMessage(PREFIX + "当前身法方向：" + ChatColor.WHITE + dn
                     + ChatColor.GRAY + " · 用法 /corerpg skill dir <forward|back>");
+            try { player.sendActionBar("§e身法 · §f" + dn + " §8· forward/back"); } catch (Throwable ignored) { }
             return;
         }
         int id = town.sunshine.corerpg.p1.EmberSkillKit.parseStepDir(raw);
