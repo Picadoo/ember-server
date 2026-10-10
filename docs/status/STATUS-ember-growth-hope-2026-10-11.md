@@ -751,3 +751,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1996–D2009 sig chase honesty leftover (jar 1.65.498-d1996)
 - status/settle AB/map-enter remainLine; no dry twin / hope PAPI
+
+## D2010–D2023 talent path clarity leftover (jar 1.65.499-d2010)
+- nextHope「专精下一」; status mounts nextHope

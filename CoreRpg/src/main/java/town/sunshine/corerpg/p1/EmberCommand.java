@@ -4415,6 +4415,11 @@ public final class EmberCommand {
                     if (gs != null && pd != null && gs.talents() != null) {
                         try {
                             s.sendMessage(P + "§e专精 · §7" + gs.pointsLine(pd).replaceAll("§.", ""));
+                            // D2012 TL2: next spend glance
+                            String tn = EmberGrowth.nextHope(gs.talents(), gs.picks(pd),
+                                    gs.pointsEarned(pd), pd.getCoin());
+                            if (tn != null && !tn.isEmpty())
+                                s.sendMessage(P + tn);
                         } catch (Throwable ignored) { }
                     }
                     // D1997 SC1: non-hope sig chase remain

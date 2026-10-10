@@ -174,18 +174,18 @@ public final class EmberGrowth {
             Node sample = nodes.get(0);
             String why = canPick(t, picks, sample.id, pointsEarned);
             if (why != null && why.contains("先点第")) {
-                return "§e天赋希望 · §f先点第 " + (r.row - 1) + " 排";
+                return "§e专精下一 · §f先点第 " + (r.row - 1) + " 排";
             }
             int free = pointsEarned - pointsUsed(t, picks);
             if (free < r.points) {
-                return String.format(java.util.Locale.ROOT, "§e天赋希望 · §f第%d排「%s」§7差 §f%d§7 点（空%d/要%d）",
+                return String.format(java.util.Locale.ROOT, "§e专精下一 · §f第%d排「%s」§7差 §f%d§7 点（空%d/要%d）",
                         r.row, r.name, r.points - free, Math.max(0, free), r.points);
             }
             // if any node learned, coin may be 0 for that pick — still show learn cost for unlearned
-            return String.format(java.util.Locale.ROOT, "§e天赋希望 · §f第%d排「%s」§7可点 · §f%d§7点 + §f%d§7币学会（有§f%d§7）",
+            return String.format(java.util.Locale.ROOT, "§e专精下一 · §f第%d排「%s」§7可点 · §f%d§7点 + §f%d§7币学会（有§f%d§7）",
                     r.row, r.name, r.points, r.coin, Math.max(0, coin));
         }
-        return "§a天赋希望 · 各排已点满 · 换点请重置";
+        return "§a专精下一 · 各排已点满 · 换点请重置";
     }
 
     /** First respec free, then {@code respecCoin} each time. */
