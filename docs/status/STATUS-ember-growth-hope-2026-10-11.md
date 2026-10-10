@@ -649,3 +649,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1605–D1618 ARCH SHIP · jar 1.65.468-d1605
 - Stamina show/potion cap remain AB; BankPath bank balance AB
+
+## D1619–D1632 ARCH SHIP · jar 1.65.469-d1619
+- StashPath AB; life honesty near-sat note; ARCH health recheck

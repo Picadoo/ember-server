@@ -188,6 +188,12 @@ public final class EmberStashPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a存仓 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1620
+            int pending = EmberLedgerGlance.claimable(runs, p.getUniqueId());
+            p.sendActionBar(pending > 0
+                    ? ("§e存仓 · §f" + label(id) + " §8· 暂存" + pending)
+                    : ("§a存仓 · §f" + label(id)));
+        } catch (Throwable ignored) { }
         if (id == AUTO) maybeAfterProgress(p);
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D835
                 new String[]{"[一键存入]", "/corerpg p1 stash", "材料+装备", "GREEN"},
