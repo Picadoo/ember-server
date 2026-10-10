@@ -8,7 +8,7 @@
 
 ## 人话
 
-批了「烬闸递室」第十条短征规格。仓里已有十本选页和 DP 本壳；地图在磁盘上从 **团本白盒**（`ember_raid`）复制了一份（**非** sx01–sx09 已占的 daily_v1/rail/frost/ash/crypt/spire/tide/elite/abyss 同观感），外闸庭/递闸密封室/末室终厅还要等 WorldEdit。进本命令、通关发奖（S49）、日帽键 `%corerpg_p1_sx10_day_line%` / 首通 `%corerpg_p1_sx10_fc%` **注释预留**——并行插件号接着挂。选页第十格 V=sx10；禁假写个人 n/3；禁连续霜雾廊复读 sx03。
+批了「烬闸递室」第十条短征规格。仓里已有十本选页和 DP 本壳；地图在磁盘上从 **团本白盒**（`ember_raid`）复制了一份（**非** sx01–sx09 已占的 daily_v1/rail/frost/ash/crypt/spire/tide/elite/abyss 同观感），外闸庭/递闸密封室/末室终厅还要等 WorldEdit。进本命令、通关发奖（S49）、日帽键 `%corerpg_p1_sx10_day_line%` / 首通 `%corerpg_p1_sx10_fc%` **键 live tip `9c8fb353` · 菜单挂盘已落**。选页第十格 V=sx10；禁假写个人 n/3；禁连续霜雾廊复读 sx03。
 
 ## 拆号（并行）
 
@@ -17,8 +17,8 @@
 | **地图号** | `ember_short_sx10` 外闸庭/递闸密封室/末室烬台 + 出生/Boss 坐标 | **本地骨架已启**：`cp -a ember_raid → ember_short_sx10`（~2.9M）；说明见 [`docs/maps/ember_short_sx10-README.md`](../maps/ember_short_sx10-README.md) | **阻塞 WE**：仓/play **无** WorldEdit/FAWE jar；**禁** `git add -f` map。烬闸主题换皮 → 地图岗进服 WE 另号 |
 | **MM 号** | 闸卫/闸室弩/末室守吏 + `EmberSx10…Cast` | **并行已交** tip `efb26b5d`（本号 DP 注释对齐；不重交 MM） | GateCast 已就绪 |
 | **DP+键号** | `EmberSx10` option/monster + `ember-v1-runs` `sx10`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **壳已落**（与 MM 号同构 @`efb26b5d`/本菜单号注释对齐）+ `config.yml` 登记；**键/S49/rooms 未接** | 插件号并行 |
-| **插件日帽/首通号** | `%corerpg_p1_sx10_day_line%` / `_fc` + 合计扩第十本 | **注释预留**（菜单 I/V 诚实「键号另挂」；禁假写 n/3） | 键号落地后挂盘另号 |
-| **菜单号** | `ember_p1_short` 十本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M/O/Q/T 保留 · **V=sx10** · adventure `H` + Open · hub Open/冒险格半指含「递闸」· **day_line/fc 注释预留** | sx01–sx10 选页真键（进本命令）；全链路另派 |
+| **插件日帽/首通号** | `%corerpg_p1_sx10_day_line%` / `_fc` + 合计扩第十本 | **键 live** tip `9c8fb353` · jar `1.65.121-d414` bv74 | 菜单挂盘见 dayline STATUS |
+| **菜单号** | `ember_p1_short` 十本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M/O/Q/T/**V** · adventure `H` + Open · hub「递闸」· **day_line/fc 挂盘已落**（[`STATUS-ember-short-sx10-dayline-d414-2026-10-10.md`](STATUS-ember-short-sx10-dayline-d414-2026-10-10.md)） | 全链路另派 |
 | **经济号** | S49 发放 + REG/Economy/source-map +（荐）p1sim | **未动** | 另号金样；草案 80币+4碎+3骨尘；首通另加 90/6/1；**禁**抬挂机表 |
 
 ## 地图进度（诚实）
@@ -36,10 +36,10 @@
 
 | 文件 | 落盘 |
 |------|------|
-| `plugins/TrMenu/menus/ember_p1_short.yml` | **是**（十本选页 A/C/E/G/K/M/O/Q/T/**V**；sx10 day_line/fc **注释预留**） |
+| `plugins/TrMenu/menus/ember_p1_short.yml` | **是**（十本选页 A/C/E/G/K/M/O/Q/T/**V**；sx10 day_line/fc **挂盘已落** tip `9c8fb353`） |
 | `ember_p1_adventure.yml` Layout+`H`+Open | **是**（半指含递闸/烬闸） |
 | `ember_hub.yml` Open/冒险半指 | **是** |
-| trmenu reload | **PASS** · `良好 \| 73 个菜单已加载 (85 ms)`（**08:08:21 CST**） |
+| trmenu reload | **PASS** · 骨架 `85 ms` @08:08:21 · 挂盘 `良好 \| 73 个菜单已加载 (133 ms)`（**08:45:17 CST**） |
 | DP `EmberSx10` | **PASS** · 导入/初始化完毕（**08:08:26–08:08:27 CST**）；map `ember_short_sx10` 导入成功 |
 
 ## 验收对照（骨架窗 ≠ 非整本 PASS）
@@ -50,10 +50,10 @@
 | V2 sx01–sx09 仍可进 · 旧日常仍关 | **PASS（纪律）** | 本号未改 gate_daily / EmberDaily*；前九本进本键保留 |
 | V3 密封递闸+Cast+非空板 | **PARTIAL** | 地图非空板本地有；Cast/MM **已入仓** @`efb26b5d`；主题 WE **未**；**禁**连续霜雾廊 |
 | V4 经济+未抬日表 | **PASS（纪律）** | 零改 afk.tiers/daily_kills；S49 未接线 |
-| V5 日帽诚实分开 | **PASS（菜单纪律）** | V/I 注释预留；禁假写 n/3；合计文案已写「十本」 |
+| V5 日帽诚实分开 | **PASS（菜单纪律）** | V/I 真键；禁假写 n/3；合计文案「十本」 |
 | V6 S49 登记 | **PENDING** | 经济另号 |
 | V7 rooms×3+boss | **PENDING** | 键号首航硬提醒；本号未写 runs |
-| V8 选页挂 day_line/fc | **PENDING（注释预留）** | 键号另挂后再挂盘 |
+| V8 选页挂 day_line/fc | **PASS（菜单）** | 见 dayline STATUS · tip `9c8fb353` |
 
 ## 改动清单（本号 · 入仓）
 
@@ -63,7 +63,7 @@
 | 本 STATUS + `docs/maps/ember_short_sx10-README.md` | 拆号 · 地图进度 · WE 阻塞 |
 | `plugins/DungeonPlus/dungeon/EmberSx10/{option,monster,obstacle}.yml` | DP 轻量壳 |
 | `plugins/DungeonPlus/config.yml` | 登记 `ember_short_sx10`→`EmberSx10` |
-| `plugins/TrMenu/menus/ember_p1_short.yml` | 十本选页 + sx10 day_line/fc **注释预留** |
+| `plugins/TrMenu/menus/ember_p1_short.yml` | 十本选页 + sx10 day_line/fc **挂盘已落** |
 | `ember_p1_adventure.yml` / `ember_hub.yml` | 入口半指含递闸 |
 | `plugins/DungeonPlus/map/ember_short_sx10/**` | **仅本地** · **未 stage**（gitignore） |
 | jar / ember-v1.yml / afk / MM | **未 stage / 未改 jar/afk/Stage2** |
