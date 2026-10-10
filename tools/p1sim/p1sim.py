@@ -383,6 +383,7 @@ def spread_burn(owner, mobs, t):
 #                      >= 3 alive; for secs 烬斩 / 烬爆 catch +plus (cap 5) and one more melee body engages (the cost)
 #                      kit_dash_cd / kit_dash_mult / kit_dash_n / kit_dash_boss   烬突: >= 2 non-boss alive; mult × B to
 #                      the first n alive (boss × kit_dash_boss)
+#                      D436 set id: kit_dash_ignite (scorch) / kit_dash_pulse (burst ×B) / kit_dash_heal_pct (sustain)
 #                      kit_mark_cd / kit_mark_delay / kit_mark_boss    灰印: front target's next attack pushed back by
 #                      delay s (boss: × kit_mark_boss) — the Slowness I model; no damage
 #   身法 (sneak+Q):    kit_step_cd / kit_step_n / kit_step_cost / kit_step_set(1scorch/2burst/3sustain)
@@ -514,9 +515,33 @@ def kit_sec(owner, alive, t, boss):
             return True
     elif gm(st, 'kit_dash_cd', 0.0) > 0:
         if len(nb) >= 2:
-            for m in alive[:int(gm(st, 'kit_dash_n', 3))]:
+            n = int(gm(st, 'kit_dash_n', 3))
+            hit = alive[:n]
+            for m in hit:
                 k = gm(st, 'kit_dash_boss', 0.5) if m['role'] == 'boss' else 1.0
                 owner.hit(m, gm(st, 'kit_dash_mult', 0.5) * k * st['B'] * dmult(st, m, t, owner), 'dash')
+            # D436 set identity (additive; base mult unchanged)
+            ig = gm(st, 'kit_dash_ignite', 0.0)
+            if ig > 0 and st['set'] == 'scorch':
+                for m in hit:
+                    ignite(owner, m, t, ig)
+            pulse = gm(st, 'kit_dash_pulse', 0.0)
+            if pulse > 0 and st['set'] == 'burst':
+                for m in hit:
+                    k = gm(st, 'kit_dash_boss', 0.5) if m['role'] == 'boss' else 1.0
+                    owner.hit(m, pulse * k * st['B'] * dmult(st, m, t, owner), 'dash')
+            mark = gm(st, 'kit_dash_mark_secs', 0.0)
+            if mark > 0 and st['set'] == 'burst':
+                slow = gm(st, 'kit_dash_slow', 0.15)
+                for m in hit:
+                    m['ash_until'] = t + mark
+                    m['ash_slow'] = slow
+            heal = gm(st, 'kit_dash_heal_pct', 0.0)
+            if heal > 0 and st['set'] == 'sustain':
+                h = heal * st['H']
+                owner.hp = min(st['H'], owner.hp + h)
+                if rec is not None:
+                    rec['heal_dash'] = rec.get('heal_dash', 0.0) + h
             if rec is not None:
                 rec['n_dash'] += 1
             return True

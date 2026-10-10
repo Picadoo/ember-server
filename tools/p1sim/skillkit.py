@@ -269,8 +269,30 @@ CANDS_D435 = {
     'C_once09': ('q05', 'sustain', '承护·下次受伤×0.9', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_next_taken': 0.9}),
     'C_once085': ('q05', 'sustain', '承护·下次受伤×0.85', {'kit_step_cd': 14, 'kit_step_cost': 0, 'kit_step_n': 1, 'kit_step_set': 3, 'kit_step_next_taken': 0.85}),
 }
+
+# D436 烬突套装身份 S0：对照 = live DS15（共享烬斩 1.5B×3）；flavor 另加，不改倍率表
+DASH_LIVE = M(DASH, SEC, {'kit_dash_mult': 1.5})
+CANDS_D436 = {
+    'D_ctrl_scorch': ('q02', 'scorch', '对照·烬突 DS15 无身份', DASH_LIVE),
+    'D_ctrl_burst': ('q02', 'burst', '对照·烬突 DS15 无身份', DASH_LIVE),
+    'D_ctrl_sustain': ('q02', 'sustain', '对照·烬突 DS15 无身份', DASH_LIVE),
+    'D_ig025': ('q02', 'scorch', '烬突·焚 点燃×0.25', M(DASH_LIVE, {'kit_dash_ignite': 0.25})),
+    'D_ig05': ('q02', 'scorch', '烬突·焚 点燃×0.5', M(DASH_LIVE, {'kit_dash_ignite': 0.5})),
+    'D_ig012': ('q02', 'scorch', '烬突·焚 点燃×0.12', M(DASH_LIVE, {'kit_dash_ignite': 0.12})),
+    'D_sl10': ('q02', 'burst', '烬突·爆 缓速窗1.0s', M(DASH_LIVE, {'kit_dash_mark_secs': 1.0, 'kit_dash_slow': 0.15})),
+    'D_sl15': ('q02', 'burst', '烬突·爆 缓速窗1.5s', M(DASH_LIVE, {'kit_dash_mark_secs': 1.5, 'kit_dash_slow': 0.15})),
+    'D_sl08': ('q02', 'burst', '烬突·爆 缓速窗0.8s', M(DASH_LIVE, {'kit_dash_mark_secs': 0.8, 'kit_dash_slow': 0.12})),
+    'D_p005': ('q02', 'burst', '烬突·爆 脉冲 0.05B', M(DASH_LIVE, {'kit_dash_pulse': 0.05})),
+    'D_p008': ('q02', 'burst', '烬突·爆 脉冲 0.08B', M(DASH_LIVE, {'kit_dash_pulse': 0.08})),
+    'D_p010': ('q02', 'burst', '烬突·爆 脉冲 0.10B', M(DASH_LIVE, {'kit_dash_pulse': 0.10})),
+    'D_p015': ('q02', 'burst', '烬突·爆 脉冲 0.15B', M(DASH_LIVE, {'kit_dash_pulse': 0.15})),
+    'D_p025': ('q02', 'burst', '烬突·爆 脉冲 0.25B', M(DASH_LIVE, {'kit_dash_pulse': 0.25})),
+    'D_h005': ('q02', 'sustain', '烬突·承 疗 0.005H', M(DASH_LIVE, {'kit_dash_heal_pct': 0.005})),
+    'D_h002': ('q02', 'sustain', '烬突·承 疗 0.002H', M(DASH_LIVE, {'kit_dash_heal_pct': 0.002})),
+    'D_h010': ('q02', 'sustain', '烬突·承 疗 0.010H', M(DASH_LIVE, {'kit_dash_heal_pct': 0.010})),
+}
 ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,
-           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435)
+           **CANDS_PARRY, **CANDS_PARRY_T0B, **CANDS_ASH_T0, **CANDS_ASH_T0B, **CANDS_D434, **CANDS_D435, **CANDS_D436)
 
 
 def fams(c):
@@ -375,7 +397,7 @@ def main():
     if cmd == 'run':
         n = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
         out = sys.argv[3] if len(sys.argv) > 3 else '/tmp/sk/run.pkl'
-        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B, 'd434': CANDS_D434, 'd435': CANDS_D435}.get(os.environ.get('SK_ROUND'), CANDS))
+        ids = sys.argv[4].split(',') if len(sys.argv) > 4 else list({'2': CANDS2, '3': CANDS3, '4': CANDS4, '5': CANDS5, 's0b': CANDS_S0B, 's0b1': CANDS_S0B, 's0b2': CANDS_S0B2, 's0b3': CANDS_S0B3, 's0b4': CANDS_S0B4, 'parry': CANDS_PARRY, 'parry_t0b': CANDS_PARRY_T0B, 'ash': CANDS_ASH_T0, 'ash_t0': CANDS_ASH_T0, 'ash_t0b': CANDS_ASH_T0B, 'd434': CANDS_D434, 'd435': CANDS_D435, 'd436': CANDS_D436}.get(os.environ.get('SK_ROUND'), CANDS))
         os.makedirs(os.path.dirname(out), exist_ok=True)
         run({i: ALL[i] for i in ids}, n, out)
         return

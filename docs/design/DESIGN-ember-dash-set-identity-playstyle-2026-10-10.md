@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 烬突套装身份（D436）
 
-STATUS=**已批 A · 方案 M · D436 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-dash-set-identity-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-dash-set-identity-need-design-2026-10-10.md) · backlog `B-dash-set-identity` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠sx**
+STATUS=**已批 A · 方案 M · D436 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-dash-set-identity-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-dash-set-identity-need-design-2026-10-10.md) · backlog `B-dash-set-identity` · **≠守招 ≠抬日表 ≠关 Stage2（＜17:40）≠sx**
 
 **上游：** D434 身法对称 PASS · D435 承护微疗 PASS。
 
@@ -25,4 +25,9 @@ STATUS=**已批 A · 方案 M · D436 · 施工中** · 2026-10-10 · tip [`STAT
 
 p1sim `kit_dash_*` 套装分支草案 · 报告 `out-skillkit-d436-dash.md` · 过线再 jar。
 
-*D436 · 已批 A·M · S0 待跑。*
+*D436 · PASS · jar 1.65.139 · COORD DONE。*
+
+## 3. S0 定稿
+
+见 [`out-skillkit-d436-dash.md`](../../tools/p1sim/out-skillkit-d436-dash.md)。伤脉冲否决；爆改缓速窗。
+

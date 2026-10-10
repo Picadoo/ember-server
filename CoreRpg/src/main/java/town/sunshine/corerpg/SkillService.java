@@ -262,7 +262,15 @@ public final class SkillService implements Listener {
                 + ChatColor.WHITE + sh.label
                 + (sh.sigOverride ? ChatColor.DARK_GRAY + "（签名覆盖符文）" : ""));
         if (dash) {
-            player.sendMessage(ChatColor.YELLOW + "  潜行+F" + ChatColor.GRAY + " 烬突 · 冲 4 格 · 最多 3 个各 1.5B（首领×0.5）· 花掉本次充能");
+            String dashId = "";
+            town.sunshine.corerpg.p1.EmberLoadoutService _ls = plugin.getEmberLoadouts();
+            if (_ls != null) {
+                String sf = _ls.get(player).activeSet;
+                if ("scorch".equals(sf)) dashId = " · 烬途点燃";
+                else if ("burst".equals(sf)) dashId = " · 烬途缓速";
+                else if ("sustain".equals(sf)) dashId = " · 烬途微疗";
+            }
+            player.sendMessage(ChatColor.YELLOW + "  潜行+F" + ChatColor.GRAY + " 烬突 · 冲 4 格 · 最多 3 个各 1.5B（首领×0.5）· 花掉本次充能" + dashId);
         } else {
             player.sendMessage(ChatColor.DARK_GRAY + "  潜行+F 烬突 · 首通 Q02 后解锁（此前仍放烬斩）");
         }
@@ -670,8 +678,55 @@ public final class SkillService implements Listener {
         } finally {
             town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;
         }
+        // D436 set identity (S0 ✅/🟡): scorch ignite×0.12 · burst Slow I 1.5s · sustain heal 0.5%H
+        String famHint = applyDashSetIdentity(player, ordered, n);
         player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬突"
-                + (n > 0 ? ChatColor.GRAY + " · 命中 " + n : ChatColor.DARK_GRAY + " · 未命中"));
+                + (n > 0 ? ChatColor.GRAY + " · 命中 " + n : ChatColor.DARK_GRAY + " · 未命中")
+                + (famHint != null ? ChatColor.GRAY + famHint : ""));
+    }
+
+    /**
+     * D436: set-bound dash land effects. Does not change DS15 base mult / CD / target cap.
+     * @return tip fragment or null
+     */
+    private String applyDashSetIdentity(Player player, List<LivingEntity> ordered, int hitCount) {
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls == null) return null;
+        String fam = ls.get(player).activeSet;
+        if (fam == null || "none".equals(fam)) return null;
+        if ("scorch".equals(fam)) {
+            town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
+            if (sets != null && hitCount > 0 && town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
+                int lim = Math.min(hitCount, town.sunshine.corerpg.p1.EmberSkillKit.DASH_MAX_TARGETS);
+                for (int i = 0; i < lim; i++) {
+                    sets.skillIgnite(player, ordered.get(i),
+                            town.sunshine.corerpg.p1.EmberSkillKit.DASH_IGNITE_SCALE);
+                }
+            }
+            return " · 烬途点燃";
+        }
+        if ("burst".equals(fam)) {
+            if (hitCount > 0 && town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
+                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.DASH_BURST_SLOW_TICKS;
+                int lim = Math.min(hitCount, town.sunshine.corerpg.p1.EmberSkillKit.DASH_MAX_TARGETS);
+                for (int i = 0; i < lim; i++) {
+                    ordered.get(i).addPotionEffect(new org.bukkit.potion.PotionEffect(
+                            org.bukkit.potion.PotionEffectType.SLOW, ticks, 0, false, true), true);
+                }
+                spawnParticles(player.getLocation().clone().add(0, 0.3, 0), "CRIT", 10);
+            }
+            return " · 烬途缓速";
+        }
+        if ("sustain".equals(fam)) {
+            if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
+                double heal = Math.max(0.5, player.getMaxHealth()
+                        * town.sunshine.corerpg.p1.EmberSkillKit.DASH_HEAL_PCT);
+                player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
+                spawnParticles(player.getLocation().clone().add(0, 0.5, 0), "HEART", 3);
+            }
+            return " · 烬途微疗";
+        }
+        return null;
     }
 
     /** D211: AFK / menus — resolve the effective 烬斩 shape for this player right now. */

@@ -34,6 +34,10 @@ public final class EmberSkillKit {
     public static final double DASH_BOSS_MULT = 0.5;
     /** Hit radius around the dash path (blocks). */
     public static final double DASH_HIT_RADIUS = 1.25;
+    /** D436 S0 ✅ 烬突套装身份 */
+    public static final double DASH_IGNITE_SCALE = 0.12;
+    public static final int DASH_BURST_SLOW_TICKS = 30; // 1.5s Slow I
+    public static final double DASH_HEAL_PCT = 0.005;
 
     /** S0-passed 火痕步 (F14c0n1): replace 踏步, ignite 1 at landing, burn mult = set coef ×1.0. */
     public static final String HUOHEN_FAMILY = "scorch";
