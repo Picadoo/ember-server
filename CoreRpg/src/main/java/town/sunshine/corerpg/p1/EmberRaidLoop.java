@@ -35,7 +35,7 @@ public final class EmberRaidLoop {
             p.sendMessage(P + EmberRaidPath.glance(EmberRaidPath.get(d), true)); // D758
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
                     new String[]{"[冒险页]", "/ember_p1_adventure", "主线/挑战/深渊", "GREEN"},
-                    new String[]{"[工坊]", "/corerpg p1 forge", "花掉落材料", "GOLD"},
+                    EmberForgeCommitNext.enhance(),
                     new String[]{"[换团本路径]", "/corerpg p1 raidpath", "下周焦点", "AQUA"});
         } else {
             String line = "§d团本入账 · §f" + name + " §7本周 §e" + used + "/" + cap

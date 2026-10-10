@@ -74,9 +74,10 @@ public final class EmberMapFarmCue {
     public static void afterHit(Player p, EmberRunMaps.MapDef m) {
         if (p == null || m == null) return;
         String P = EmberRunService.P;
-        ConfirmTokens.sendButtons(p, P + "§7图装追到 · 下一步：", // D909
-                new String[]{"[工坊]", "/corerpg p1 forge", "强化/精工新装", "GOLD"},
-                new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GREEN"},
+        // D2142 piece-aware commit (no remainLine twin)
+        EmberForgeCommitNext.send3(p, P + "§7图装追到 · 同件下一槽：",
+                EmberForgeCommitNext.enhance(),
+                new String[]{"[去成色]", "/corerpg p1 quality", "新装成色", "YELLOW"},
                 new String[]{"[再进本图]", "/corerpg p1 enter " + m.key, "继续刷同族", "AQUA"});
     }
 
@@ -145,8 +146,8 @@ public final class EmberMapFarmCue {
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：",
                     new String[]{"[再进·" + (m.name != null ? m.name : m.key) + "]", "/corerpg p1 enter " + m.key,
                             "刷同族 " + EmberItemData.familyName(mapFam), "GREEN"},
-                    new String[]{"[工坊]", "/corerpg p1 forge", "强化现穿", "GOLD"},
-                    new String[]{"[换装]", "/corerpg p1 equip", "套装追击", "AQUA"});
+                    EmberForgeCommitNext.enhance(),
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "AQUA"});
         }
     }
 
@@ -301,7 +302,7 @@ public final class EmberMapFarmCue {
                 else p.sendMessage(EmberRunService.P + "§7图装追 · 上次 §f" + key.toUpperCase());
                 ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：",
                         new String[]{"[再进·" + key.toUpperCase() + "]", "/corerpg p1 enter " + key, "继续刷", "GREEN"},
-                        new String[]{"[工坊]", "/corerpg p1 forge", "强化", "GOLD"},
+                        EmberForgeCommitNext.enhance(),
                         new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "AQUA"});
             }
         }

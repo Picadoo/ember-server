@@ -427,3 +427,6 @@ ForgeRoll quality; imprint worn enhance; Variety held piece-aware.
 
 ### DS · deliver/setchase commit (D2127–D2140)
 Gear deliver + set formed/complete → EmberForgeCommitNext.
+
+### MR · mapfarm/raid commit (D2141–D2154)
+MapFarmCue + RaidLoop week-full → piece enhance. Commit-slot NEAR-SAT.

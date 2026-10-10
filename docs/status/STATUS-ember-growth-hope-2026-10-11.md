@@ -788,3 +788,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - ForgeRoll +成色; imprint worn→enhance; Variety held craft
 ## D2127–D2140 · 到账/成套承诺槽 · jar 1.65.509-d2140
 - gear deliver → afterGearDeliver; set formed/齐套 → afterSetReady
+## D2141–D2154 · 图装/团本承诺槽 · jar 1.65.510-d2154
+- MapFarmCue afterHit/cue/resume → enhance/成色; RaidLoop 周满→enhance
+- forge commit-slot NEAR-SAT scan doc
