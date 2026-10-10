@@ -246,16 +246,19 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
         town.sunshine.corerpg.p1.EmberPlayerState st = ls == null ? null : ls.state(player.getUniqueId());
         long now = System.currentTimeMillis();
-        long left = st == null ? 0 : Math.max(0, st.skillCdUntil - now);
-        String charge = left > 0
-                ? ChatColor.RED + "充能中 " + (int) Math.ceil(left / 1000.0) + "s"
-                : ChatColor.GREEN + "就绪";
         boolean dash = town.sunshine.corerpg.p1.EmberSkillKit.dashUnlocked(data, runs);
         boolean shapes = town.sunshine.corerpg.p1.EmberSkillKit.shapeUnlocked(data, runs);
         town.sunshine.corerpg.p1.EmberGrowthService gsv = town.sunshine.corerpg.p1.EmberGrowthService.get();
         town.sunshine.corerpg.p1.EmberGrowth.Mods gmods = gsv == null ? town.sunshine.corerpg.p1.EmberGrowth.Mods.NONE : gsv.mods(player);
         town.sunshine.corerpg.p1.EmberSkillKit.Shape sh = town.sunshine.corerpg.p1.EmberSkillKit.resolve(
                 player, data, runs, town.sunshine.corerpg.p1.EmberMode.get(), gmods);
+        long left = st == null ? 0 : Math.max(0, st.skillCdUntil - now);
+        // D2025 SF-K1: shape + charge (display only · not SF4)
+        int secLeft = (int) Math.ceil(left / 1000.0);
+        int shapeIdKit = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(data, runs);
+        String charge = left > 0
+                ? ChatColor.RED + town.sunshine.corerpg.p1.EmberSkillFeelSf.chargeCdLine(shapeIdKit, secLeft)
+                : ChatColor.GREEN + "就绪";
         player.sendMessage(PREFIX + ChatColor.GOLD + "余烬技能组");
         // D1900: set-fork glance（display only · 去「希望·」celebration 口吻）
         player.sendMessage(ChatColor.YELLOW + "  手感·套装差" + ChatColor.GRAY

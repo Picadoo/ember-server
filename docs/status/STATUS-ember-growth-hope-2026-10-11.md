@@ -754,3 +754,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D2010–D2023 talent path clarity leftover (jar 1.65.499-d2010)
 - nextHope「专精下一」; status mounts nextHope
+
+## D2024–D2037 skill kit chargeCdLine + ARCH green (jar 1.65.500-d2024)
+- kit充能带形状半行; Counters/SourceMap PASS; SF4 still banned
