@@ -268,6 +268,51 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("brewpath".equals(sub) || "熬药路径".equals(sub)) { // D546 life brew heal path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBrewPath.glance(EmberBrewPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c熬药路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberBrewPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c熬药路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBrewPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBrewPath.get(d);
+                    if (EmberBrewPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBrewPath.label(cur) + " · 改路径再 /corerpg p1 brewpath");
+                    else EmberBrewPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBrewPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 brewpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberBrewPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("brew".equals(sub) && args.length == 2) { // D546 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.LifeService life = runs == null ? null : runs.plugin().getLifeService();
+            if (life == null) { p.sendMessage(P + "生活服务未加载"); return true; }
+            if (!life.pathBrewHeal(p)) p.sendMessage(P + "无法熬药（等级/材料/币/已够药/副本内）");
+            else p.sendMessage(P + "§a熬药·手点 §7完成");
+            return true;
+        }
         if ("rodpath".equals(sub) || "钓竿路径".equals(sub)) { // D545 fishing rod buy path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -958,6 +1003,34 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("brewseed".equals(sub)) { // D546 admin smoke: life Lv2 + mats + low heal pots
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs.plugin();
+            PlayerData pd = plg.getDataStore().get(t.getUniqueId());
+            if (pd == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            int xp = pd.periodCount("life_xp", "all");
+            if (xp < 20) pd.addPeriodCount("life_xp", "all", 20 - xp);
+            if (pd.getCoin() < 10) pd.addCoin(10 - pd.getCoin());
+            plg.getDataStore().flushMutation(t.getUniqueId());
+            // strip heal potions so needsBrew sees low count
+            EmberSupplyService supply = plg.getEmberSupplies();
+            if (supply != null && plg.getNiBridge() != null) {
+                org.bukkit.inventory.ItemStack[] cont = t.getInventory().getContents();
+                for (int i = 0; i < cont.length; i++) {
+                    if (cont[i] != null && supply.isHealPotion(cont[i])) t.getInventory().setItem(i, null);
+                }
+            }
+            if (plg.getNiBridge() == null
+                    || !plg.getNiBridge().giveNiItem(t, "fish_ember_puffer", 1)
+                    || !plg.getNiBridge().giveNiItem(t, "fish_ember_cod", 2)) {
+                s.sendMessage(P + "发放熬药材料失败"); return true;
+            }
+            s.sendMessage(P + "已注入熬药条件（Lv≥2·材料·低药）→ " + t.getName());
+            EmberBrewPath.maybeAfterProgress(t);
             return true;
         }
         if ("rodseed".equals(sub)) { // D545 admin smoke: ensure no rod + coin for buy

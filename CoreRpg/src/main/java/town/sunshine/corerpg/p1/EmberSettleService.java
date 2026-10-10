@@ -412,6 +412,7 @@ public final class EmberSettleService {
                 if (p.isOnline()) EmberCookPath.maybeAfterProgress(p); // D543 cook path
                 if (p.isOnline()) EmberBitePath.maybeAfterProgress(p); // D544 bite path
                 if (p.isOnline()) EmberRodPath.maybeAfterProgress(p); // D545 rod path
+                if (p.isOnline()) EmberBrewPath.maybeAfterProgress(p); // D546 brew path
             }, 40L);
             if (in.firstClear != null && runs.maps().challenge != null && m.key.equals(runs.maps().challenge.requires)) endOfP1(p);
         }

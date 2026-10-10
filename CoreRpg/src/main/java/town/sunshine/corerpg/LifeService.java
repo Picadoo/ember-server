@@ -358,6 +358,42 @@ public final class LifeService implements Listener {
         return true;
     }
 
+    public static final String BREW_OFFER_ID = "heal_potion";
+    public static final int BREW_POTION_NEED = 2; // brew when below this many heal pots
+
+    /** D546: can brew heal potion now (town, level, mats, coin, under potion count). */
+    public boolean needsBrew(Player p) {
+        if (p == null || !enabled || ni == null) return false;
+        if (plugin.getQuestService() != null && plugin.getQuestService().isInstanceWorld(p.getWorld())) return false;
+        if (town.sunshine.corerpg.p1.EmberMode.active() && town.sunshine.corerpg.p1.EmberMode.isP1World(p.getWorld())) return false;
+        Offer o = offers.get(BREW_OFFER_ID);
+        if (o == null) return false;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        if (d == null) return false;
+        if (lifeLevel(d) < o.lifeLevel) return false;
+        if (d.getCoin() < o.coin) return false;
+        town.sunshine.corerpg.p1.EmberSupplyService supply = plugin.getEmberSupplies();
+        int pots = supply == null ? 0 : supply.countHealPotions(p);
+        if (pots >= BREW_POTION_NEED) return false;
+        for (Map.Entry<String, Integer> e : o.inputs.entrySet()) {
+            if (ni.countInInventory(p, e.getKey()) < e.getValue()) return false;
+        }
+        String wk = DailyService.weekId(), td = DailyService.today();
+        if (o.weekly > 0 && d.periodCount("life_" + o.id, wk) >= o.weekly) return false;
+        if (o.daily > 0 && d.periodCount("life_" + o.id, td) >= o.daily) return false;
+        return true;
+    }
+
+    /** D546: brew one heal potion via life offer. */
+    public boolean pathBrewHeal(Player p) {
+        if (p == null || !needsBrew(p)) return false;
+        Offer o = offers.get(BREW_OFFER_ID);
+        PlayerData d = dataStore.get(p.getUniqueId());
+        boolean ok = buy(p, d, o, true);
+        if (ok) dataStore.flushMutation(p.getUniqueId());
+        return ok;
+    }
+
     public static final String ROD_NI_ID = "tool_ember_rod";
     public static final String ROD_OFFER_ID = "rod";
 
