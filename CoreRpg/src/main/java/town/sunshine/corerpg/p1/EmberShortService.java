@@ -153,8 +153,19 @@ public final class EmberShortService {
         int n = rewardedToday(d, m);
         int cap = dailyCap(m);
         boolean pays = EmberShortRules.paysReward(n, cap);
-        return "§e短征 " + m.key.toUpperCase(Locale.ROOT) + " " + m.name
+        String base = "§e短征 " + m.key.toUpperCase(Locale.ROOT) + " " + m.name
                 + " §7正在创建实例……（已预留体力 " + cost
                 + " · " + (pays ? "§a今日有奖 " + n + "/" + cap + "§7" : "§e今日有奖已满，本局无结算包§7") + "）";
+        // D699: if chasing FC and this map unpaid, or show path next
+        int path = EmberShortPath.get(d);
+        if (path == EmberShortPath.FC || path == EmberShortPath.LATE) {
+            boolean unpaid = EmberShortPath.unpaidFc(d, m);
+            if (unpaid) base += " §a· 本局首通追";
+            else {
+                EmberRunMaps.MapDef next = EmberShortPath.resolve(runs, d, EmberShortPath.FC);
+                if (next != null) base += " §8· 下一首通 " + next.key.toUpperCase(Locale.ROOT);
+            }
+        }
+        return base;
     }
 }

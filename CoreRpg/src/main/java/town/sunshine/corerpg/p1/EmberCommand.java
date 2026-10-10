@@ -45,6 +45,10 @@ public final class EmberCommand {
 
     public boolean cmd(CommandSender s, String[] args) {
         String sub = args.length >= 2 ? args[1].toLowerCase(Locale.ROOT) : "status";
+        if ("abysstarget".equals(sub) || "深渊目标".equals(sub))
+            return EmberAbyssTarget.cmd(s, args, runs);
+        if ("setchase".equals(sub) || "成套追".equals(sub))
+            return EmberSetChase.cmd(s, args, runs, loadouts);
         if ("status".equals(sub)) return status(s);
         if ("charm".equals(sub)) return charm(s, args);
         if ("inspect".equals(sub)) return inspect(s);
@@ -4036,38 +4040,6 @@ public final class EmberCommand {
                             "约六成掉该族 · 可另改");
                 }
             }
-            return true;
-        }
-                if ("abysstarget".equals(sub) || "深渊目标".equals(sub)) { // D696 layer target
-            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
-            Player p = (Player) s;
-            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
-            PlayerData d = runs.dataOf(p.getUniqueId());
-            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            int best = runs.abyssBest(d);
-            if (args.length < 3) {
-                p.sendMessage(P + EmberAbyssTarget.glance(d, best));
-                p.sendMessage(P + "用法：/corerpg p1 abysstarget <1-" + EmberAbyssTarget.MAX + "|clear>");
-                return true;
-            }
-            String raw = args[2];
-            if ("clear".equalsIgnoreCase(raw) || "none".equalsIgnoreCase(raw) || "取消".equals(raw)) {
-                EmberAbyssTarget.set(d, 0);
-                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
-                p.sendMessage(P + "已清空深渊层目标");
-                return true;
-            }
-            int floor;
-            try { floor = Integer.parseInt(raw); } catch (NumberFormatException e) {
-                p.sendMessage(P + "层数须为 1～" + EmberAbyssTarget.MAX); return true;
-            }
-            if (floor < 1 || floor > EmberAbyssTarget.MAX) {
-                p.sendMessage(P + "层数须为 1～" + EmberAbyssTarget.MAX); return true;
-            }
-            EmberAbyssTarget.set(d, floor);
-            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
-            p.sendMessage(P + EmberAbyssTarget.glance(d, best));
-            try { p.sendActionBar("§e层目标 · §f" + floor); } catch (Throwable ignored) { }
             return true;
         }
 

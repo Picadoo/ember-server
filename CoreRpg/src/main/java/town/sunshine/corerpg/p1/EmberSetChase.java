@@ -1,5 +1,6 @@
 package town.sunshine.corerpg.p1;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import town.sunshine.corerpg.PlayerData;
@@ -54,4 +55,15 @@ public final class EmberSetChase {
         if (!formed && !awkUp) return;
         tell(p, d, after);
     }
+    public static boolean cmd(CommandSender s, String[] args, EmberRunService runs, EmberLoadoutService loadouts) {
+        String P = EmberRunService.P;
+        if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+        Player p = (Player) s;
+        if (runs == null || loadouts == null) { p.sendMessage(P + "服务未加载"); return true; }
+        PlayerData d = runs.dataOf(p.getUniqueId());
+        EmberLoadout lo = loadouts.refresh(p);
+        tell(p, d, lo);
+        return true;
+    }
+
 }

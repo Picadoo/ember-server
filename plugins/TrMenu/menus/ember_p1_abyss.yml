@@ -26,6 +26,8 @@ Layout:
 
 Events:
   Open:
+    - 'tell: §e层目标：§f/corerpg p1 abysstarget <层> §8（冲纪录对照）'
+    - 'command: corerpg p1 abysstarget'
     - 'sound: BLOCK_CHEST_OPEN-1-0'
 
 Icons:

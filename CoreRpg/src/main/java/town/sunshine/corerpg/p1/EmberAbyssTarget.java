@@ -1,5 +1,6 @@
 package town.sunshine.corerpg.p1;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import town.sunshine.corerpg.PlayerData;
@@ -59,4 +60,38 @@ public final class EmberAbyssTarget {
             p.sendMessage(EmberRunService.P + glance(d, newBest));
         }
     }
+    public static boolean cmd(CommandSender s, String[] args, EmberRunService runs) {
+        String P = EmberRunService.P;
+        if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+        Player p = (Player) s;
+        if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+        PlayerData d = runs.dataOf(p.getUniqueId());
+        if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+        int best = runs.abyssBest(d);
+        if (args.length < 3) {
+            p.sendMessage(P + glance(d, best));
+            p.sendMessage(P + "用法：/corerpg p1 abysstarget <1-" + MAX + "|clear>");
+            return true;
+        }
+        String raw = args[2];
+        if ("clear".equalsIgnoreCase(raw) || "none".equalsIgnoreCase(raw) || "取消".equals(raw)) {
+            set(d, 0);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            p.sendMessage(P + "已清空深渊层目标");
+            return true;
+        }
+        int floor;
+        try { floor = Integer.parseInt(raw); } catch (NumberFormatException e) {
+            p.sendMessage(P + "层数须为 1～" + MAX); return true;
+        }
+        if (floor < 1 || floor > MAX) {
+            p.sendMessage(P + "层数须为 1～" + MAX); return true;
+        }
+        set(d, floor);
+        runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+        p.sendMessage(P + glance(d, best));
+        try { p.sendActionBar("§e层目标 · §f" + floor); } catch (Throwable ignored) { }
+        return true;
+    }
+
 }

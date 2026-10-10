@@ -25,6 +25,11 @@ Layout:
   - '#h H q f#'
   - '#OEbABZX#'
 
+Events:
+  Open:
+    - 'tell: §e成套追：§f进度与下一觉醒缺项见聊天'
+    - 'command: corerpg p1 setchase'
+
 Icons:
   '#':
     display:

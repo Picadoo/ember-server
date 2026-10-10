@@ -123,3 +123,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D695 set completion chase on 2pc/awk
 - D696 abyss layer target
 - D697 short FC next map after first-clear pack
+
+## D698–D700 SHIP · jar 1.65.328-d698 · 2026-10-11
+- D698 abyss menu abysstarget glance
+- D699 short enter FC chase hint
+- D700 gear setchase
