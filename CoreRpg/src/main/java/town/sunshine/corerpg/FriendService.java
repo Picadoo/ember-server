@@ -158,6 +158,10 @@ public final class FriendService {
             }
         });
         p.sendMessage(PREFIX + ChatColor.YELLOW + "好友 §f" + friends.size() + "/" + maxFriends);
+        p.sendMessage(PREFIX + EmberFriendPath.glance(EmberFriendPath.get(data), true)); // D816
+        int mid = EmberMentorPath.get(data);
+        if (EmberMentorPath.valid(mid) || (data.getMentorName() != null && !data.getMentorName().isEmpty()))
+            p.sendMessage(PREFIX + EmberMentorPath.glance(mid, true));
         if (friends.isEmpty()) {
             ConfirmTokens.sendButtons(p, ChatColor.GRAY + "  （空）· ",
                     new String[]{"[看在线玩家，点名字加好友]", "/corerpg friend addlist", "列出在线玩家", "GREEN"});

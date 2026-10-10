@@ -144,6 +144,8 @@ public final class EmberEnhanceUndo {
         }
         p.sendMessage(EmberRunService.P + "§e仍可撤销强化失败 · §f约 " + sec + "s §7· /corerpg p1 enhance undo");
         try { p.sendActionBar("§e失败可撤 · §f" + sec + "s"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButton(p, EmberRunService.P + "§7：", // D817
+                "[撤销本次失败]", "/corerpg p1 enhance undo", "退回材料 · 约 " + sec + "s");
     }
 
     public static Snap peek(UUID id) { return id == null ? null : LAST.get(id); }

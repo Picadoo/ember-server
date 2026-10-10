@@ -329,3 +329,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D813–D814 SHIP · jar 1.65.371-d813
 - Mentor path tip; raid enterCue week remain
+
+## D815–D817 SHIP · jar 1.65.372-d815
+- Adventure onlinepath; friend list path glance; forgeGlance undo btn
