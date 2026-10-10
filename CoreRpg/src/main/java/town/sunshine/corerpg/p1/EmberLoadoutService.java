@@ -304,6 +304,55 @@ public final class EmberLoadoutService implements Listener {
         return new Object[] { EmberLoadout.compute(EmberMode.tables(), blade, cur.charm, level, cur.festHp, cur.festDef), Boolean.TRUE };
     }
 
+    /** D550: in P1 world, main hand is not a trusted blade but inventory has one. */
+    public boolean needsGrip(Player p) {
+        if (p == null || p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) return false;
+        if (!EmberMode.active() || !EmberMode.isP1World(p.getWorld())) return false;
+        ItemStack main = p.getInventory().getItemInMainHand();
+        if (main != null && items.hasData(main)) {
+            EmberItems.Read r = items.read(main);
+            if (r != null && r.ok() && r.data != null && r.data.isBlade() && dbCheck(p, r.data) == null) return false;
+        }
+        return findGripBladeSlot(p) >= 0;
+    }
+
+    /** Storage slot index of preferred grip blade, or -1. */
+    int findGripBladeSlot(Player p) {
+        if (p == null) return -1;
+        PlayerInventory inv = p.getInventory();
+        ItemStack[] st = inv.getStorageContents();
+        String prefer = state(p.getUniqueId()).mainhandUid;
+        int fallback = -1;
+        for (int i = 0; i < st.length; i++) {
+            ItemStack s = st[i];
+            if (s == null || !items.hasData(s)) continue;
+            EmberItems.Read r = items.read(s);
+            if (r == null || !r.ok() || r.data == null || !r.data.isBlade()) continue;
+            if (dbCheck(p, r.data) != null) continue;
+            if (prefer != null && prefer.equals(r.data.uid)) return i;
+            if (fallback < 0) fallback = i;
+        }
+        return fallback;
+    }
+
+    /** D550: put a trusted blade into main hand (swap with current main). */
+    public boolean pathGripBlade(Player p) {
+        if (p == null || !needsGrip(p)) return false;
+        int from = findGripBladeSlot(p);
+        if (from < 0) return false;
+        PlayerInventory inv = p.getInventory();
+        ItemStack[] st = inv.getStorageContents();
+        ItemStack bladeStack = st[from] == null ? null : st[from].clone();
+        if (bladeStack == null) return false;
+        ItemStack main = inv.getItemInMainHand();
+        st[from] = (main == null || main.getType() == org.bukkit.Material.AIR) ? null : main.clone();
+        inv.setStorageContents(st);
+        inv.setItemInMainHand(bladeStack);
+        markDirty(p);
+        refresh(p);
+        return true;
+    }
+
     public String selectCharm(Player p, ItemStack held) {
         EmberItems.Read r = items.read(held);
         if (r == null) return "手持物品不是 P1 物品";

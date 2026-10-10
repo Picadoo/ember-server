@@ -234,6 +234,7 @@ public final class EmberSupplyService implements Listener {
         if (bottle) {
             // empty bottle may remain from vanilla consume; programmatic take skips glass — fine for bound NI
         }
+        EmberGripPath.maybeAfterProgress(p); // D550 after sip
         return true;
     }
 

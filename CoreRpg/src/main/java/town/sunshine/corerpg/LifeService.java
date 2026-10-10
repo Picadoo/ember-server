@@ -234,6 +234,7 @@ public final class LifeService implements Listener {
                     if (!p.isOnline()) return;
                     town.sunshine.corerpg.p1.EmberHeal.heal(p, pct * town.sunshine.corerpg.p1.EmberHeal.maxHp(p), "D03 回复药 " + Math.round(pct * 100) + "%");
                     if (bottle) takeBottle(p);
+                    town.sunshine.corerpg.p1.EmberGripPath.maybeAfterProgress(p); // D550 grip after drink
                 }
             });
             return true;

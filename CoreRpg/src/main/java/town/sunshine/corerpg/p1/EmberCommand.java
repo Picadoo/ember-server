@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("grippath".equals(sub) || "握刃路径".equals(sub)) { // D550 combat grip path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberGripPath.glance(EmberGripPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c握刃路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberGripPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c握刃路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberGripPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberGripPath.get(d);
+                    if (EmberGripPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGripPath.label(cur) + " · 改路径再 /corerpg p1 grippath");
+                    else EmberGripPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberGripPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 grippath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberGripPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("grip".equals(sub) && args.length == 2) { // D550 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (loadouts == null) { p.sendMessage(P + "装配服务未加载"); return true; }
+            if (!loadouts.pathGripBlade(p)) p.sendMessage(P + "无法握刃（已持刃/无刃/不在副本）");
+            else p.sendMessage(P + "§a握刃·手点 §7已收回");
+            return true;
+        }
         if ("armorpath".equals(sub) || "护甲路径".equals(sub)) { // D549 six-slot armor equip path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1139,6 +1183,44 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("gripseed".equals(sub)) { // D550 admin smoke: temp P1 + unarmed with blade in bag
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null || loadouts == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberMode mode = EmberMode.get();
+            String wn = t.getWorld().getName();
+            boolean added = false;
+            if (mode != null && !EmberMode.isP1World(t.getWorld())) {
+                mode.addWorld(wn);
+                added = true;
+            }
+            org.bukkit.inventory.ItemStack main = t.getInventory().getItemInMainHand();
+            boolean moved = false;
+            if (main != null && main.getType() != org.bukkit.Material.AIR) {
+                java.util.Map<Integer, org.bukkit.inventory.ItemStack> left = t.getInventory().addItem(main.clone());
+                if (left.isEmpty()) {
+                    t.getInventory().setItemInMainHand(null);
+                    moved = true;
+                } else {
+                    org.bukkit.inventory.ItemStack[] st = t.getInventory().getStorageContents();
+                    for (int i = 0; i < st.length; i++) {
+                        if (st[i] == null || st[i].getType() == org.bukkit.Material.AIR) {
+                            st[i] = main.clone();
+                            t.getInventory().setStorageContents(st);
+                            t.getInventory().setItemInMainHand(null);
+                            moved = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            loadouts.markDirty(t);
+            EmberGripPath.maybeAfterProgress(t);
+            if (added && mode != null) mode.removeWorld(wn);
+            s.sendMessage(P + "已让主手空出并触发握刃路径 → " + t.getName()
+                    + (moved ? "" : "（主本已空）") + (added ? "（临时标记世界）" : ""));
             return true;
         }
         if ("armorseed".equals(sub)) { // D549 admin smoke: better chest in bag

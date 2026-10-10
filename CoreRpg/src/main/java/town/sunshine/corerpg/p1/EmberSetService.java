@@ -405,6 +405,7 @@ public final class EmberSetService implements Listener {
         if (now < s.skillFeelUntil) return; // D445 skill confirm owns ActionBar briefly
         EmberSupplyService sup = plugin.getEmberSupplies();
         EmberSipPath.maybeAfterLowHp(p); // D548 combat sip path
+        EmberGripPath.maybeAfterProgress(p); // D550 combat grip path
         String hint = sup == null ? null : sup.lowHpHint(p); // new-player polish: low HP → how to drink (wins over the set line)
         PlayerData sipd = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
         if (hint != null && EmberSipPath.suppressLowHpBar(sipd)) hint = null; // D548 MUTE
