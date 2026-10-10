@@ -1,0 +1,89 @@
+# 短征 sx12 · 烬枢转厅（EmberSx12）— MythicMobs 4.11 / MC 1.12.2
+# 依据：docs/design/DESIGN-ember-short-dungeon-sx12-2026-10-10.md §2.2/§2.4（批 A·M · D419）
+# 对照源：EmberSx11（数值同档枢转厅主题差异）+ EmberSx11MirrorCast / EmberSx01SentryCast 范式
+# 三房：R1 入枢卫+侧厢弩 · R2 精英 · R3 Boss+PivotCast；刷点坐标沿用 Q01/sx01–sx11 惯例（见 STATUS）
+# 键名对齐 short.sx12：Guard / Crossbow（设计「侧厢枢侍」远程；1.12 BOW）/ Elite / Warden
+# 禁：改旧七线 Daily；禁改 sx01–sx11；禁复读环廊/对廊/递闸/霜雾廊/跳石/错层/塔升/风廊气质；首航不发装备/徽记
+# 新 MM id，禁复用 EmberSx01–11 本壳
+
+EmberSx12Guard:
+  # R1 近战入枢庭卫 · 对照 sx11 Guard 48/4
+  Type: ZOMBIE
+  Display: '&c入枢卫'
+  Health: 48
+  Damage: 4
+  Options:
+    MovementSpeed: 0.23
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - LEATHER_CHESTPLATE CHEST
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.15
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath
+
+EmberSx12Crossbow:
+  # R1 远程侧厢弩 · 1.12 用 BOW；键名 Crossbow 对齐设计「侧厢枢侍」与 short.sx12 ranged
+  Type: SKELETON
+  Display: '&c侧厢弩'
+  Health: 32
+  Damage: 4
+  Options:
+    MovementSpeed: 0.26
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    PreventSunburn: true
+  Equipment:
+  - LEATHER_HELMET HEAD
+  - BOW HAND
+  Skills:
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.12
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_bone_dust 1"} @Self ~onDeath
+
+EmberSx12Elite:
+  # R2 精英枢厢督卫 · 对照 sx11 Elite 120/3；设计 R2「途中每厢 1 波」
+  Type: HUSK
+  Display: '&c枢厢督卫'
+  Health: 120
+  Damage: 3
+  Options:
+    MovementSpeed: 0.21
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.4
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - CHAINMAIL_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.6
+
+EmberSx12Warden:
+  # R3 Boss 枢冠守吏 · PivotCast 枢扫斩/转面压浪可读可躲；对照 sx11 Warden HP180；未抬过日更 Boss 210
+  Type: ZOMBIE
+  Display: '&c枢冠守吏'
+  Health: 180
+  Damage: 3
+  Options:
+    MovementSpeed: 0.2
+    AlwaysShowName: true
+    PreventOtherDrops: true
+    PreventRandomEquipment: true
+    KnockbackResistance: 0.55
+    PreventSunburn: true
+  Equipment:
+  - IRON_HELMET HEAD
+  - IRON_CHESTPLATE CHEST
+  Skills:
+  - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
+  - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
+  - skill{s=EmberSx12PivotCast} @self ~onTimer:80
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
+  - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

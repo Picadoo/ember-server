@@ -221,6 +221,9 @@ dungeon-pre-folder:
   # D417 短征 sx11 · 烬镜对廊（map 本地骨架自 ember_raid；进本键/MM/S50 另号；禁单廊/环走/递闸复读）
   ember_short_sx11:
     "EmberSx11": 1
+  # D419 短征 sx12 · 烬枢转厅（map 本地骨架自 ember_raid；进本键/MM/S51 另号；禁环廊/对廊/递闸/霜雾廊复读）
+  ember_short_sx12:
+    "EmberSx12": 1
   ember_weekly:
     "EmberWeekly": 1
   ember_elite:

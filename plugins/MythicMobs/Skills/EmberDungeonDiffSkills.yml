@@ -372,3 +372,20 @@ EmberSx11MirrorCast:
   - effect:particles{p=crit;amount=28;hSpread=5;ySpread=0.5;speed=0.02} @Self
   - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
   - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+
+# --- 短征 sx12 · 烬枢转厅 Boss 枢扫斩/转面压浪（可躲；无 SLOW；范式 MirrorCast / SentryCast）---
+# 对照：EmberSx11MirrorCast / EmberSx01SentryCast；主题「枢扫斩」：crit 扇扫 + cloud 中枢转心 + lava 烬感；结算 r5
+# 1.12.2 粒子：crit + cloud + lava（禁无效粒子）；message 标明退进已对齐侧厢龛或枢冠侧台
+EmberSx12PivotCast:
+  Cooldown: 8
+  Skills:
+  - message{m="&6【烬枢】&f枢扫斩——&7退进侧厢龛或枢冠侧台！"} @PlayersInRadius{r=24}
+  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=36;hSpread=3.5;ySpread=0.8;speed=0} @Self
+  - effect:particles{p=lava;amount=16;hSpread=2;ySpread=1.5;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.7;pitch=0.48} @Self
+  - delay 25
+  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=30;hSpread=5;ySpread=0.5;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
+  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self

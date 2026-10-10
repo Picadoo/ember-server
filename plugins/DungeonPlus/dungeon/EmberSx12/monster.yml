@@ -1,0 +1,11 @@
+# D419 骨架 · EmberSx12 怪组空壳（刷怪/波次由 CoreRpg rooms + MM；禁 DP wave 自驱 · D391 FAIL）
+# MM 本号入仓 · STATUS-ember-short-sx12-mm：
+#   EmberSx12Guard 入枢卫 / EmberSx12Crossbow 侧厢弩 / EmberSx12Elite 枢厢督卫 / EmberSx12Warden 枢冠守吏
+# Cast：EmberSx12PivotCast（枢扫斩/转面压浪）— 本注释对齐；本壳仍空 groups（禁 DP wave 自驱）。
+groups:
+  default:
+  - monster: []
+    condition: []
+    start: []
+    end: []
+    auto-start: false
