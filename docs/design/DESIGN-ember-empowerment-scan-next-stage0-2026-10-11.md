@@ -18,3 +18,14 @@
 | EM4 | ARCH C15/C16 | 暂停 | 暂停 |
 
 本批 **D1754** 仅落文档；EM3 可薄诚实若存在 have/need 缺口。
+
+
+## EM1 研究笔记（未写码）
+
+对照方向（连续赋能 / 图本身份，非掉率）：
+- **Path of Exile**：league mechanic = 本图额外获取路径（不是全局掉率乘区）；余烬对位 = 每图 Q0x 自有「农场身份」玩法钩，不叠 clear-gate。
+- **Diablo IV seasonal**：主题活动环 + 可见进度条；对位 = 已有 goals/featured/awaken remain，勿再 PAPI twin。
+- **Monster Hunter**：部位破坏 / 素材表可见；对位 = 已有 vault/gearlib/forge 缺料 AB。
+- **禁止落地本批**：发明新战斗乘区、抬 AFK、抬 drop、hope celebration。
+
+下批若开 EM1：先写「参考对照表 + 每图一条方法」再 tip→批→ship；本批停在扫描。

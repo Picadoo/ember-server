@@ -684,3 +684,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1768–D1781 SHIP · jar 1.65.479-d1768
 - gearlib undo window remain AB
+
+## D1782–D1785 DOC · live still 1.65.479-d1768
+- EM1 research notes only (no jar bump); next code needs EM1 plan after refs
