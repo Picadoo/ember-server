@@ -2,6 +2,7 @@ package town.sunshine.corerpg;
 
 import town.sunshine.corerpg.p1.EmberFriendPath;
 import town.sunshine.corerpg.p1.EmberMentorPath;
+import town.sunshine.corerpg.p1.EmberPartyPath;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -384,9 +385,30 @@ public final class FriendService {
             p.sendMessage(PREFIX + ChatColor.RED + match + " 不在线。");
             return;
         }
+        PlayerData td = dataStore.get(online.getUniqueId());
+        // D530 party path BUSY: refuse before DP invite
+        if (EmberPartyPath.shouldAutoDeny(td)) {
+            p.sendMessage(PREFIX + ChatColor.RED + "对方开启了组队·静拒，暂不接受组队邀请。");
+            return;
+        }
         // D100: a real DungeonPlus invite (DP sends the invitee a clickable join line); create the team first if needed
         if (!town.sunshine.corerpg.p1.EmberRunBridges.hasTeam(p)) p.performCommand("dungeon-team create");
         p.performCommand("dungeon-team invite " + match);
+        if (EmberPartyPath.shouldAutoAccept(td)) {
+            final Player invitee = online;
+            final String leader = p.getName();
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!invitee.isOnline()) return;
+                PlayerData rec = dataStore.get(invitee.getUniqueId());
+                if (rec == null || !EmberPartyPath.shouldAutoAccept(rec)) return;
+                EmberPartyPath.tryAutoAcceptInvite(invitee, leader);
+            }, 8L);
+        } else {
+            ConfirmTokens.sendButtons(online, PREFIX + ChatColor.AQUA + p.getName()
+                            + ChatColor.GRAY + " 邀请你组队 ",
+                    new String[]{"[入队]", "/dungeon-team request accept " + p.getName(), "接受组队邀请", "GREEN"},
+                    new String[]{"[改路径]", "/corerpg p1 partypath", "自动/审核/静拒", "GRAY"});
+        }
     }
 
     private void cmdMentor(Player p, String[] args) {

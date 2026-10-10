@@ -1674,6 +1674,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D520 | CoreRpg **1.65.211-d520** / bv 未抬 | 成长花样·签到路径 **PASS**：`EmberSignPath` auto/ask/mute 上线签到 · **≠在线路双胞** · 冒烟 FreshQ1056 · `B-sign-path` · `6a4f40c0` · STATUS `STATUS-ember-sign-path-d520-2026-10-10.md`。 |
 | D521 | CoreRpg **1.65.212-d521** / bv 未抬 | 成长花样·周标路径 **PASS**：`EmberGoalPath` featured/abyss/raid/bounty 周焦点 · **≠日委/精选/短本双胞** · 冒烟 FreshQ1057 · `B-goal-path` · `0bab4faf` · STATUS `STATUS-ember-goal-path-d521-2026-10-10.md`。 |
 | D522 | CoreRpg **1.65.213-d522** / bv 未抬 | 成长花样·图录路径 **PASS**：`EmberCodexPath` auto/ask/mute 图录阶段领奖 · **≠签到/在线/补领双胞** · 冒烟 FreshQ1059 · `B-codex-path` · `fed676f4` · STATUS `STATUS-ember-codex-path-d522-2026-10-10.md`。 |
+| D523 | CoreRpg **1.65.214-d523** / bv 未抬 | 成长花样·邮件路径 **PASS**：`EmberMailPath` auto/ask/mute 系统邮件附件领取 · **≠签到/在线/补领双胞** · 冒烟 FreshQ1060 · `B-mail-path` · `e04e2d57` · STATUS `STATUS-ember-mail-path-d523-2026-10-10.md`。 |
+| D524 | CoreRpg **1.65.215-d524** / bv 未抬 | 成长花样·师徒路径 **PASS**：`EmberMentorPath` open/gate/busy 师徒申请策略 · **≠招募/好友双胞** · 冒烟 FreshQ1061 · `B-mentor-path` · `2d85dfe0` · STATUS `STATUS-ember-mentor-path-d524-2026-10-10.md`。 |
+| D525 | CoreRpg **1.65.216-d525** / bv 未抬 | 成长花样·使魔路径 **PASS**：`EmberPetPath` auto/ask/mute 上线出战 · **≠喂养/足迹双胞** · 冒烟 FreshQ1062 · `B-pet-path` · `cd73831d` · STATUS `STATUS-ember-pet-path-d525-2026-10-10.md`。 |
+| D526 | CoreRpg **1.65.217-d526** / bv 未抬 | 成长花样·存仓路径 **PASS**：`EmberStashPath` auto/ask/mute 背包材料入库 · **≠补领双胞** · 冒烟 FreshQ1063 · `B-stash-path` · `76f10ebc` · STATUS `STATUS-ember-stash-path-d526-2026-10-10.md`。 |
+| D527 | CoreRpg **1.65.218-d527** / bv 未抬 | 成长花样·盟约路径 **PASS**：`EmberGuildPath` open/gate/busy 盟约邀请策略 · **≠招募/好友/师徒双胞** · 冒烟 FreshQ1064 · `B-guild-path` · `0a03258a` · STATUS `STATUS-ember-guild-path-d527-2026-10-10.md`。 |
+| D528 | CoreRpg **1.65.219-d528** / bv 未抬 | 成长花样·喂养路径 **PASS**：`EmberFeedPath` auto/ask/mute 使魔灵尘升级 · **≠使魔出战双胞** · 冒烟 FreshQ1065 · `B-feed-path` · `fa40155f` · STATUS `STATUS-ember-feed-path-d528-2026-10-10.md`。 |
+| D529 | CoreRpg **1.65.220-d529** / bv 未抬 | 成长花样·足迹路径 **PASS**：`EmberTrailPath` auto/ask/mute 足迹装扮 · **≠使魔/喂养双胞** · 冒烟 FreshQ1066 · `B-trail-path` · `b08086fb` · STATUS `STATUS-ember-trail-path-d529-2026-10-10.md`。 |
+| D530 | CoreRpg **1.65.221-d530** / bv 未抬 | 成长花样·组队路径 **PASS**：`EmberPartyPath` open/gate/busy 好友组队邀请策略 · **≠招募/好友/盟约双胞** · 冒烟 FreshQ1067 · `B-party-path` · STATUS `STATUS-ember-party-path-d530-2026-10-10.md`。 |
 
 
 
