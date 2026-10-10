@@ -584,7 +584,12 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(player.getUniqueId());
         long now = System.currentTimeMillis();
         if (st.skillCdUntil > now) {
-            player.sendMessage(PREFIX + ChatColor.RED + "烬斩冷却中，剩余 " + (int) Math.ceil((st.skillCdUntil - now) / 1000.0) + "s");
+            int secLeft = (int) Math.ceil((st.skillCdUntil - now) / 1000.0);
+            int shCd = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(dataStore.get(player.getUniqueId()),
+                    plugin.getEmberRuns());
+            String cdLine = town.sunshine.corerpg.p1.EmberSkillFeelSf.chargeCdLine(shCd, secLeft);
+            player.sendMessage(PREFIX + ChatColor.RED + cdLine);
+            try { player.sendActionBar(ChatColor.RED + cdLine); } catch (Throwable ignored) { }
             return;
         }
         // D174 signature + D211 rune shapes (EmberSkillKit.resolve: signature line/ring/charge overrides the chosen rune)
@@ -693,7 +698,12 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberPlayerState st = ls.state(player.getUniqueId());
         long now = System.currentTimeMillis();
         if (st.skillCdUntil > now) {
-            player.sendMessage(PREFIX + ChatColor.RED + "余烬充能中，剩余 " + (int) Math.ceil((st.skillCdUntil - now) / 1000.0) + "s");
+            int secLeftD = (int) Math.ceil((st.skillCdUntil - now) / 1000.0);
+            int shCdD = town.sunshine.corerpg.p1.EmberSkillKit.shapeId(dataStore.get(player.getUniqueId()),
+                    plugin.getEmberRuns());
+            String cdLineD = town.sunshine.corerpg.p1.EmberSkillFeelSf.chargeCdLine(shCdD, secLeftD);
+            player.sendMessage(PREFIX + ChatColor.RED + "烬突 · " + cdLineD);
+            try { player.sendActionBar(ChatColor.RED + "烬突 · " + cdLineD); } catch (Throwable ignored) { }
             return;
         }
         Location from = player.getLocation();

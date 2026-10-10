@@ -42,4 +42,9 @@ public class EmberSkillFeelSfTest {
     @Test public void dashBlocked_label() {
         assertEquals("烬突受阻", EmberSkillFeelSf.dashBlocked());
     }
+
+    @Test public void chargeCdLine_shape() {
+        assertEquals("扇形充能 3s", EmberSkillFeelSf.chargeCdLine(EmberSkillKit.SHAPE_FAN, 3));
+        assertEquals("直线充能 0s", EmberSkillFeelSf.chargeCdLine(EmberSkillKit.SHAPE_LINE, 0));
+    }
 }

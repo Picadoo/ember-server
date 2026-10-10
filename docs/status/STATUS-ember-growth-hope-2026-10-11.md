@@ -565,3 +565,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1267–D1270 ARCH SHIP · same jar 1.65.441-d1257
 - forgeroll preview ActionBar ordinary/floor
+
+## D1271–D1278 ARCH SHIP · jar 1.65.442-d1271
+- Skill charge CD chat/AB with shape short (not SF4)

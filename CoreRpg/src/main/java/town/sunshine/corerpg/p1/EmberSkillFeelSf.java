@@ -36,6 +36,12 @@ public final class EmberSkillFeelSf {
         return "烬突受阻";
     }
 
+    /** D1272: charge CD line with shape short (display only). */
+    public static String chargeCdLine(int shapeId, int secLeft) {
+        int s = Math.max(0, secLeft);
+        return shapeShort(shapeId) + "充能 " + s + "s";
+    }
+
     /**
      * SF1–SF3: confirm + optional set-fallout half (e.g. {@code " · 烬刃余烬"}).
      */
