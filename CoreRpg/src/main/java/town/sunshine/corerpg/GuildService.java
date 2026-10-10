@@ -8,6 +8,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import town.sunshine.corerpg.storage.MysqlStorage;
+import town.sunshine.corerpg.ConfirmTokens;
+import town.sunshine.corerpg.p1.EmberGuildPath;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -345,6 +347,10 @@ public final class GuildService {
             cmdAccept(p);
             return;
         }
+        if ("deny".equals(sub) || "refuse".equals(sub) || "拒绝".equals(sub)) { // D527
+            cmdDenyInvite(p);
+            return;
+        }
         if ("leave".equals(sub)) {
             cmdLeave(p);
             return;
@@ -553,12 +559,44 @@ public final class GuildService {
             p.sendMessage(PREFIX + ChatColor.RED + target.getName() + " 已有盟约。");
             return;
         }
+        // D527 guild path BUSY: refuse without pending
+        if (EmberGuildPath.shouldAutoDeny(td)) {
+            p.sendMessage(PREFIX + ChatColor.RED + "对方开启了盟约·静拒，暂不接受邀请。");
+            return;
+        }
         pendingInvites.put(target.getUniqueId(), g.id);
         p.sendMessage(PREFIX + ChatColor.GREEN + "已邀请 §f" + target.getName()
                 + ChatColor.GREEN + " 加入 §f" + g.name);
-        target.sendMessage(PREFIX + ChatColor.YELLOW + p.getName()
-                + ChatColor.GRAY + " 邀请你加入盟约 §f" + g.name
-                + ChatColor.GRAY + " · /corerpg guild accept");
+        if (EmberGuildPath.shouldAutoAccept(td)) {
+            final Player invitee = target;
+            final String gName = g.name;
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (!invitee.isOnline()) return;
+                PlayerData rec = dataStore.get(invitee.getUniqueId());
+                if (rec == null || !EmberGuildPath.shouldAutoAccept(rec)) return;
+                if (rec.getGuildId() != null && !rec.getGuildId().isEmpty()) return;
+                String gid = pendingInvites.get(invitee.getUniqueId());
+                if (gid == null || !gid.equals(g.id)) return;
+                // reuse accept logic via command path
+                invitee.performCommand("corerpg guild accept");
+                invitee.sendMessage(PREFIX + ChatColor.GOLD + "盟约·敞开 §7已自动加入 §f" + gName);
+            }, 5L);
+        } else {
+            ConfirmTokens.sendButtons(target, PREFIX + ChatColor.YELLOW + p.getName()
+                            + ChatColor.GRAY + " 邀请你加入盟约 §f" + g.name + " ",
+                    new String[]{"[同意]", "/corerpg guild accept", "加入盟约", "GREEN"},
+                    new String[]{"[拒绝]", "/corerpg guild deny", "拒绝这条邀请", "RED"});
+        }
+    }
+
+    /** D527: clear pending guild invite without joining. */
+    private void cmdDenyInvite(Player p) {
+        String gid = pendingInvites.remove(p.getUniqueId());
+        if (gid == null || gid.isEmpty()) {
+            p.sendMessage(PREFIX + ChatColor.YELLOW + "没有待处理的盟约邀请。");
+            return;
+        }
+        p.sendMessage(PREFIX + ChatColor.GRAY + "已拒绝盟约邀请。");
     }
 
     private void cmdAccept(Player p) {

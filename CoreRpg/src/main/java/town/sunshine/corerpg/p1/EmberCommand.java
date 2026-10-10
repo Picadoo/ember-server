@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("guildpath".equals(sub) || "盟约路径".equals(sub)) { // D527 guild-invite accept path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberGuildPath.glance(EmberGuildPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c盟约路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberGuildPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c盟约路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberGuildPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberGuildPath.get(d);
+                    if (EmberGuildPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGuildPath.label(cur) + " · 改路径再 /corerpg p1 guildpath");
+                    else EmberGuildPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberGuildPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 guildpath <open|gate|busy|clear>");
+                return true;
+            }
+            EmberGuildPath.applyAndReply(p, id);
+            return true;
+        }
         if ("stashpath".equals(sub) || "存仓路径".equals(sub)) { // D526 backpack stash path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
