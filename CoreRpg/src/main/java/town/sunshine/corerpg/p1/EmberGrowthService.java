@@ -596,6 +596,15 @@ public final class EmberGrowthService implements Listener {
         if (honors == null || d == null) return "";
         List<String> e = honorsEarned(p.getUniqueId(), d);
         if ("n".equals(key)) return "§7已得 §f" + e.size() + "§7/" + honors.list.size();
+        if ("hope".equals(key)) { // D631
+            String next = null;
+            for (EmberGrowth.Honor h : honors.list) {
+                if (e.contains(h.id)) continue;
+                next = condText(h);
+                break;
+            }
+            return EmberHopeMeter.honorHope(e.size(), honors.list.size(), next);
+        }
         if ("back".equals(key)) {
             String f = HFROM.get(p.getUniqueId());
             return "gear".equals(f) ? "§7返回装备页" : "hub".equals(f) ? "§7返回主菜单" : "spec".equals(f) ? "§7返回天赋页" : "§7关闭";

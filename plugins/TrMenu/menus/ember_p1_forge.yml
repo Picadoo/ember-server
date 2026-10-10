@@ -40,6 +40,8 @@ Events:
     - 'tell: §8挂机仓差→烙纹/随机锻/转化见配方速览与挂机战况'
     - 'tell: §8词条洗练（普通随机 / Shift 锁定保类型只重抽档）在本页「洗练」'
     - 'tell: §e本周工坊目标：§f%corerpg_p1_forge_goal_line%'
+    - 'tell: §e%corerpg_p1_forge_goal_hope%'
+    - 'tell: §e%corerpg_p1_vault_hope%'
     - 'tell: §e掉落成色希望：§f%corerpg_p1_drop_q_hope%'
     - 'command: corerpg p1 forgegoal nudge'
 

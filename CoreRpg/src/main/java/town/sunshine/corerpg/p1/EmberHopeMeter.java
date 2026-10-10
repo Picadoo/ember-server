@@ -254,4 +254,34 @@ public final class EmberHopeMeter {
                 Math.max(0, stored), Math.max(0, junk), Math.max(0, undoMin));
     }
 
+
+    /** D628: weekly forge goal hope. */
+    public static String forgeGoalHope(String label, String gap) {
+        if (label == null || label.isEmpty() || label.contains("未选"))
+            return "§8工坊希望 · 未选目标 · /corerpg p1 forgegoal";
+        String g = gap == null ? "" : gap;
+        return String.format(Locale.ROOT, "§e工坊希望 · §f%s §8· %s", label, g);
+    }
+
+    /** D629: stamina hope — how many daily runs left. */
+    public static String staminaHope(int cur, int max, int dailyCost) {
+        if (dailyCost <= 0) return String.format(Locale.ROOT, "§e体力希望 · %d/%d", cur, max);
+        int runs = Math.max(0, cur) / dailyCost;
+        if (runs <= 0) return String.format(Locale.ROOT, "§c体力希望 · %d/%d · 不够一场日常", Math.max(0, cur), max);
+        return String.format(Locale.ROOT, "§e体力希望 · %d/%d · 约还能打 §f%d§e 场日常", Math.max(0, cur), max, runs);
+    }
+
+    /** D630: vault mat hope — shortest gap line. */
+    public static String vaultHope(String shortestGap) {
+        if (shortestGap == null || shortestGap.isEmpty()) return "§a材料希望 · 强化/精工材料够";
+        return "§e材料希望 · " + shortestGap;
+    }
+
+    /** D631: next honor hope. */
+    public static String honorHope(int earned, int total, String nextCond) {
+        if (earned >= total && total > 0) return String.format(Locale.ROOT, "§a勋记希望 · %d/%d · 已齐", earned, total);
+        String c = nextCond == null || nextCond.isEmpty() ? "下一勋记" : nextCond;
+        return String.format(Locale.ROOT, "§e勋记希望 · %d/%d · 下一：%s", earned, total, c);
+    }
+
 }

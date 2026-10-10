@@ -34,7 +34,8 @@ public final class CorePapi {
     static final Set<String> STAMINA = set("stamina", "stamina_max", "stamina_bank",
             "stamina_cost_daily", "stamina_cost_weekly", "stamina_cost_abyss", "stamina_cost_elite", "stamina_cost_raid",
             "stamina_reset", "stamina_credit_weekly", "stamina_credit_elite", "stamina_credit_raid",
-            "stamina_blocked_weekly", "stamina_blocked_raid", "stamina_blocked_elite");
+            "stamina_blocked_weekly", "stamina_blocked_raid", "stamina_blocked_elite",
+            "stamina_hope");
     /** D384 pet level / feed display (read-only). */
     static final Set<String> PET = set("pet_active_id", "pet_active_name", "pet_level", "pet_max_level",
             "pet_level_line", "pet_feed_cost", "pet_feed_hint", "pet_power_bonus", "pet_unlocked_count");

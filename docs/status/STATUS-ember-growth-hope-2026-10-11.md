@@ -17,3 +17,10 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D625 raid_hope weekly used/cap
 - D626 gearlib_hope stored/junk/undo
 - D627 slash shape particles (fan/line/ring) · no skill_mult
+
+## D628–D632 SHIP · jar 1.65.309-d628 · 2026-10-11
+- D628 forge_goal_hope
+- D629 stamina_hope
+- D630 vault_hope
+- D631 honor_hope
+- D632 slash ground telegraph by shape

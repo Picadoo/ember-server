@@ -37,6 +37,7 @@ Icons:
       name: '§6余烬勋记 %corerpg_p1_honor_n%'
       lore:
         - ''
+        - '%corerpg_p1_honor_hope%'
         - '§7现在的效果合计：'
         - '%corerpg_p1_honor_total%'
         - ''

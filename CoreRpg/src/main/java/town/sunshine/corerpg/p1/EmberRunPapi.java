@@ -172,7 +172,8 @@ public final class EmberRunPapi {
                 || "recipe_gap_enhance1".equals(key) || "recipe_gap_upgrade_t2".equals(key) || "recipe_gap_refine1".equals(key)
                 || "forge_gap_brand".equals(key) || "forge_gap_roll".equals(key) || "forge_gap_convert".equals(key)
                 || "forge_gap_pin".equals(key)
-                || "forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key);
+                || "forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key)
+                || "forge_goal_hope".equals(key) || "vault_hope".equals(key);
     }
 
     /** D404: gap = max(0, need − have); Bukkit-free. */
@@ -400,7 +401,8 @@ public final class EmberRunPapi {
             return forgeGapPin(tier, brandCount(p), coin);
         }
         // D461 forge craft-goal path
-        if ("forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key)) {
+        if ("forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key)
+                || "forge_goal_hope".equals(key)) {
             int gid = EmberForgeGoal.get(pd);
             EmberItemData held = p == null ? null : heldTrusted(p);
             int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
@@ -412,7 +414,20 @@ public final class EmberRunPapi {
             String gap = EmberForgeGoal.gapLine(gid, enh, ref, br, ro, cv);
             if ("forge_goal".equals(key)) return EmberForgeGoal.label(gid);
             if ("forge_goal_gap".equals(key)) return gap;
+            if ("forge_goal_hope".equals(key)) return EmberHopeMeter.forgeGoalHope(EmberForgeGoal.label(gid), gap);
             return EmberForgeGoal.glance(gid, gap);
+        }
+        if ("vault_hope".equals(key)) { // D630
+            EmberUpgradeRules.Cost ec = EmberUpgradeRules.enhanceCost(0);
+            int enhNeed = ec == null ? 0 : ec.shards;
+            long enhShort = Math.max(0L, enhNeed - shard);
+            EmberUpgradeRules.Cost rc = EmberUpgradeRules.refineCost(0);
+            int blNeed = rc == null ? 0 : rc.blanks, boNeed = rc == null ? 0 : rc.bone;
+            long blShort = Math.max(0L, blNeed - blank), boShort = Math.max(0L, boNeed - bone);
+            if (enhShort > 0) return EmberHopeMeter.vaultHope("强化还差碎片 ×" + enhShort);
+            if (blShort > 0 || boShort > 0)
+                return EmberHopeMeter.vaultHope("精工还差胚 ×" + blShort + " · 骨 ×" + boShort);
+            return EmberHopeMeter.vaultHope(null);
         }
         return "";
     }

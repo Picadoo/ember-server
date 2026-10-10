@@ -10,6 +10,9 @@ final class CorePapiStamina {
         if (st == null) return null;
         if ("stamina".equals(key)) return String.valueOf(st.getStamina(d));
         if ("stamina_max".equals(key)) return String.valueOf(st.getMax(d));
+        if ("stamina_hope".equals(key)) { // D629
+            return town.sunshine.corerpg.p1.EmberHopeMeter.staminaHope(st.getStamina(d), st.getMax(d), st.costOf("daily"));
+        }
         if ("stamina_bank".equals(key)) { st.ensure(d); return String.valueOf(d.getStaminaBank()); }
         if ("stamina_cost_daily".equals(key)) return String.valueOf(st.costOf("daily"));
         if ("stamina_cost_weekly".equals(key)) return String.valueOf(st.costOf("weekly"));

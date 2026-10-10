@@ -598,6 +598,7 @@ public final class SkillService implements Listener {
         st.skillCdUntil = now + cd * 1000L;
         ls.saveState(player);
         town.sunshine.corerpg.p1.EmberSlashReady.arm(player, st.skillCdUntil); // D479 shared charge ready
+        spawnShapeGroundTelegraph(player, sh); // D632 geometry feel · zero skill_mult
         if (charge > 0) {
             final java.util.UUID id = player.getUniqueId();
             final town.sunshine.corerpg.p1.EmberGrowth.Mods fMods = gmods;
@@ -1125,6 +1126,47 @@ public final class SkillService implements Listener {
         return left;
     }
 
+
+
+    /** D632: cast-time ground telegraph by shape — fan cone sparks, line trail, ring circle. No damage change. */
+    private void spawnShapeGroundTelegraph(Player player, town.sunshine.corerpg.p1.EmberSkillKit.Shape sh) {
+        if (player == null || sh == null || player.getWorld() == null) return;
+        Location base = player.getLocation().clone().add(0, 0.15, 0);
+        org.bukkit.util.Vector look = player.getLocation().getDirection().clone();
+        look.setY(0);
+        if (look.lengthSquared() < 1.0e-6) look = new org.bukkit.util.Vector(0, 0, 1);
+        look.normalize();
+        org.bukkit.World w = player.getWorld();
+        try {
+            if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE) {
+                for (int i = 1; i <= 6; i++) {
+                    Location p = base.clone().add(look.clone().multiply(i * 0.55));
+                    w.spawnParticle(Particle.CRIT_MAGIC, p, 3, 0.05, 0.02, 0.05, 0.0);
+                }
+            } else if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_RING) {
+                for (int a = 0; a < 16; a++) {
+                    double rad = Math.toRadians(a * 22.5);
+                    Location p = base.clone().add(Math.cos(rad) * 1.6, 0, Math.sin(rad) * 1.6);
+                    w.spawnParticle(Particle.SMOKE_NORMAL, p, 2, 0.02, 0.02, 0.02, 0.0);
+                }
+            } else {
+                // fan: three rays at -40/0/+40
+                for (int deg : new int[]{-40, 0, 40}) {
+                    org.bukkit.util.Vector dir = rotateY(look, deg);
+                    for (int i = 1; i <= 4; i++) {
+                        Location p = base.clone().add(dir.clone().multiply(i * 0.7));
+                        w.spawnParticle(Particle.FLAME, p, 2, 0.04, 0.02, 0.04, 0.0);
+                    }
+                }
+            }
+        } catch (Throwable ignored) { }
+    }
+
+    private static org.bukkit.util.Vector rotateY(org.bukkit.util.Vector v, double deg) {
+        double rad = Math.toRadians(deg);
+        double c = Math.cos(rad), s = Math.sin(rad);
+        return new org.bukkit.util.Vector(v.getX() * c - v.getZ() * s, 0, v.getX() * s + v.getZ() * c);
+    }
 
     /** D627: shape feel particles — fan=crit sparks wide, line=crit narrow dense, ring=smoke+crit circle. Zero skill_mult. */
     private void spawnShapeSlashParticles(Location loc, String base, int shapeId, boolean onTarget) {
