@@ -39,10 +39,10 @@
 | 工坊强化/升阶/精工/成色价 | `EmberUpgradeRules` + growth/forge 常量 | C03–C06 | yml 叶子 + `amount` 双读；forge 读表 | 中（路径多） |
 | 深渊层费 | `ember-v1-runs.yml` abyss | C08 | mirror 进 economy 或 `$ref` | 中 |
 | 洗练价 | EmberPay / growth | C11 | 同上 | 中 |
-| 烙印 / 调律 | EmberSignature 常量 | C12 / C13 | 同上 | 低–中 | → **D957–D961 已切** |
-| 烙纹合成/定向 | EmberBrandRules | C20 / C21 | 已有 C20.shard；定向币补叶 | 低 |
-| 随机锻 / 转化 | ForgeRoll / ConvertRules | C22 / C23 | 已有叶子；确认 Java 读表 | 低 |
-| 宝石合成 | EmberGemAcquire.CRAFT_* | **C24** | D935/D941 已登记+钉测；下一刀可让 craft 扣料也读 amount | 低 |
+| 烙印 / 调律 | EmberSignature 常量 | C12 / C13 | **D957–D961 已切** `imprintMarks`/`altMarks`/`imprintCoin` | 低 |
+| 烙纹合成/定向 | EmberBrandRules | C20 / C21 | **D949 已切** C20 `craftShards`；C21 仍空叶 | 低 |
+| 随机锻 / 转化 | ForgeRoll / ConvertRules | C22 / C23 | **D952–D956 已切** | 低 |
+| 宝石合成 | EmberGemAcquire.CRAFT_* | **C24** | **D935/D941/D948 已切** craftCost←amount | 低 |
 | 天赋学/重置 | growth yml | C09 / C10 | 已部分钉；统一只读 economy | 低 |
 | 国庆店 | festival yml | C18 | PARTIAL；化妆品窗前不动大表 | 低（HOLD 感） |
 | 短征 S40–S58 | ShortRules / runs yml | S40–S58 | 标签行已有；数量若硬编码则 mirror | 中 |

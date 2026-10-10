@@ -439,3 +439,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D957–D961 ARCH SHIP · jar 1.65.407-d957
 - Stage1 thin: C12 imprint + C13 attune ← amount(); numbers unchanged; modelGaps stay NONE
+
+## D962–D965 ARCH SHIP · jar 1.65.408-d962
+- C07 marksPerExchange←amount; source-map built_against; REG Stage1 note; C03–C06 deferred (no yml leaves)

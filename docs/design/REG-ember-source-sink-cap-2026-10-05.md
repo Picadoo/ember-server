@@ -278,6 +278,7 @@
 | 2026-10-06 | D226（p1sim + 文档；CoreRpg 不动 / bv57）：R1-sim 徽记 what-if A/B/C（`insignia.py --whatif`）；W30 对照 `out-insignia-r1-*.md`；**推荐 B**（残响厅扩 Q05–Q07、共用周帽）；本表 S09/S23/C12 **只改措辞**对齐代码（不改发放逻辑 / 数量）。 |
 | 2026-10-06 | D227（CoreRpg 1.65.53 / bv58）：S18 残响厅扩 echo_q05–q07，共用 `p4_echo_claim`=3、`S18.insignia`=2 **数量不变**（只改可领图集合 / retarget）；本表 S18 行同步。 |
 | 2026-10-06 | D228（CoreRpg 1.65.54 / bv58）：S2-8 — `grantInsignia` / `grantBadge`；账本 MARK / SIGMARK 行经 `creditMarkLedger` / `creditInsigniaLedger`（sig_mark S08、fc_sigmark S07、pledge_sigmark S09、raid_mark S12、rot_mark S10/S11、rush_mark S16/S17、rush_sig_* S17/S18；未知键 untagged 照发）；连战徽 S16 / 周目标徽 S19 / 国庆兑换徽 S27 走 grantBadge；§6.4 扫描扩到 `p1_mark_t` / `p1_sigmark_` / `p3_badge` 直写 + `grantFlatEmberXp`。数量不变。 |
+| 2026-10-11 | D948–D961：yml-SoT **Stage1 薄切** C20/C24→C22/C23→C12/C13 读 `amount()`（数值不变；modelGaps 不假 FULL）。 |
 | 2026-10-11 | D942–D947：yml 真源搬家 **Stage0 盘点** [`DESIGN-ember-economy-yml-sot-stage0-2026-10-11.md`](DESIGN-ember-economy-yml-sot-stage0-2026-10-11.md)（不开大搬家）；`EmberLedgerGlance.bagFull`；modelGaps **禁止假 FULL stub**。 |
 | 2026-10-11 | D933–D940（CoreRpg 1.65.402）：S2 健康盘点 — 工坊缺料文案读 S01；**C24** 宝石合成 + spendCoin；**S60** admin smoke coin（NONE）；Growth admin seed `econ-ok`；source-map bv89；bundled ember-v1.yml 同步 live；`EmberLedgerGlance` 统一待领提示。数量不变。 |
 | 2026-10-06 | D229（CoreRpg 1.65.55 / bv58）：S2-9 — 深渊层结算 SourceId 与 S01 分开（`sourceForGrant(base_*, <map>a<n>-…)` → S13；数量仍读 S01 BASE_*）；§6.4 vault 写入扫描（`autoDeposit` / `creditBound` / `credit` / `EmberVault.get().give`，例外行 `econ-ok:`）。数量不变。 |

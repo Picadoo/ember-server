@@ -24,7 +24,7 @@
 
 version: 1
 balance_version: 89
-built_against: "CoreRpg 1.65.70 (D245)"
+built_against: "1.65.407-d957.local (D962 C07 helper; Stage1 C12–C24 amount reads)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 

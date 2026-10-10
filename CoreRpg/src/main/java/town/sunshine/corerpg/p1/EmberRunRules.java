@@ -54,7 +54,10 @@ public final class EmberRunRules {
     }
 
     /** §9.1 forge marks: 8 same-tier marks → one standard item of a chosen family + slot */
-    public static final int MARKS_PER_EXCHANGE = 8;
+    public static final int MARKS_PER_EXCHANGE = 8; // golden mirror; prefer marksPerExchange()
+
+    /** D962: C07 marks from economy yml SoT. */
+    public static int marksPerExchange() { return EmberEconomy.amount("C07", "marks"); }
 
     /** F-review #1 (D120): auto-equip verdicts for a new piece against the active piece of the same slot */
     public static final int UP_NONE = 0, UP_AUTO = 1, UP_ASK = 2, UP_ASK_SWAP = 3;
@@ -788,7 +791,7 @@ public final class EmberRunRules {
         if (!"blade".equals(slot) && !"charm".equals(slot)) return "部位无效";
         if (markTier < 1 || markTier > EmberTables.MAX_TIER) return "印记阶无效";
         if (wantTier != markTier) return "T" + markTier + " 印记只能兑换 T" + markTier + " 装备（升阶走配方）";
-        if (haveOfTier < MARKS_PER_EXCHANGE) return "T" + markTier + " 印记不足（" + haveOfTier + "/" + MARKS_PER_EXCHANGE + "）";
+        if (haveOfTier < marksPerExchange()) return "T" + markTier + " 印记不足（" + haveOfTier + "/" + marksPerExchange() + "）";
         return null;
     }
 

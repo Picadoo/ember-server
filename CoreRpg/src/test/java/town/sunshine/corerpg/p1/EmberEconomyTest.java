@@ -960,6 +960,13 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void marksPerExchangeMatchesC07() {
+        // D962
+        assertEquals(EmberRunRules.MARKS_PER_EXCHANGE, EmberEconomy.amount("C07", "marks"));
+        assertEquals(EmberRunRules.MARKS_PER_EXCHANGE, EmberRunRules.marksPerExchange());
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

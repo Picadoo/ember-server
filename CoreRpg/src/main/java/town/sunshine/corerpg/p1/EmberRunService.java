@@ -2350,7 +2350,7 @@ public final class EmberRunService implements Listener {
             int t = needT;
             boolean open = t == 1 || progressFlag(d, EmberRunRules.directedForgeFlag(t));
             int have = marks(d, t);
-            if (open && have >= EmberRunRules.MARKS_PER_EXCHANGE && !"none".equals(fam)) {
+            if (open && have >= EmberRunRules.marksPerExchange() && !"none".equals(fam)) {
                 out.add(want + "§a用 8 枚 T" + t + " 印记兑换§7（有 " + have + " 枚）" + (x != null && x.enhance > 0 ? "，再免费互换 +" + x.enhance : ""));
                 if (buttons != null) buttons.add(new String[]{"[兑换 T" + t + " " + famName + nm + "]", "/corerpg p1 marks exchange " + fam + " " + slot + " " + t, "先预览，再点确认", "AQUA"});
                 continue;
@@ -3231,8 +3231,8 @@ public final class EmberRunService implements Listener {
             for (int t = 3; t >= 1; t--) { // D88: clickable exchange rows instead of a typed command
                 int have = marks(d, t);
                 if (t > 1 && !progressFlag(d, EmberRunRules.directedForgeFlag(t))) continue;
-                if (have < EmberRunRules.MARKS_PER_EXCHANGE) {
-                    if (have > 0) p.sendMessage(P + "§7T" + t + "：还差 " + (EmberRunRules.MARKS_PER_EXCHANGE - have) + " 枚可兑换一件");
+                if (have < EmberRunRules.marksPerExchange()) {
+                    if (have > 0) p.sendMessage(P + "§7T" + t + "：还差 " + (EmberRunRules.marksPerExchange() - have) + " 枚可兑换一件");
                     continue;
                 }
                 any = true;
@@ -3250,13 +3250,13 @@ public final class EmberRunService implements Listener {
                 progressFlag(d, EmberRunRules.directedForgeFlag(tier)));
         if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
         if (args.length < 7 || !"confirm".equalsIgnoreCase(args[6])) { // D88: preview + confirm button (8 marks are not refunded)
-            net.md_5.bungee.api.chat.TextComponent msg = new net.md_5.bungee.api.chat.TextComponent(P + "用 " + EmberRunRules.MARKS_PER_EXCHANGE
+            net.md_5.bungee.api.chat.TextComponent msg = new net.md_5.bungee.api.chat.TextComponent(P + "用 " + EmberRunRules.marksPerExchange()
                     + " 枚 T" + tier + " 印记兑换 T" + tier + " " + EmberItemData.familyName(fam) + EmberItemData.slotName(slot) + "（标准、+0、绑定）？ ");
             net.md_5.bungee.api.chat.TextComponent ok = new net.md_5.bungee.api.chat.TextComponent("§a§l[确认兑换]");
             ok.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND,
                     "/corerpg p1 marks exchange " + fam + " " + slot + " " + tier + " confirm"));
             ok.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-                    new net.md_5.bungee.api.chat.ComponentBuilder("§7扣 " + EmberRunRules.MARKS_PER_EXCHANGE + " 枚，不退").create()));
+                    new net.md_5.bungee.api.chat.ComponentBuilder("§7扣 " + EmberRunRules.marksPerExchange() + " 枚，不退").create()));
             msg.addExtra(ok);
             p.spigot().sendMessage(msg);
             exchangeCompare(p, fam, slot, tier); // D104 (midgame #3)
@@ -3271,7 +3271,7 @@ public final class EmberRunService implements Listener {
         String uid = EmberRunRules.rewardUid(rnd.nextLong(), p.getUniqueId().toString(), run, "mark_item");
         ledgerRow(p.getUniqueId(), run, "mark_item", "item:" + uid + ":" + fam + ":" + slot + ":" + tier + ":0:0", EmberRunRules.ST_PENDING);
         plugin.getDataStore().flushMutation(p.getUniqueId());
-        p.sendMessage(P + "§a已用 " + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记兑换 " + EmberItemData.familyName(fam)
+        p.sendMessage(P + "§a已用 " + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记兑换 " + EmberItemData.familyName(fam)
                 + EmberItemData.slotName(slot) + "（剩余 " + marks(d, tier) + "）");
         deliver(p);
         return true;
@@ -3296,7 +3296,7 @@ public final class EmberRunService implements Listener {
         final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         pay.pay(p, rid, price, "兑换没完成，退回印记", null, () ->
                 loadouts.store().commitCreate(rid, "mark_redeem", id, item, price.json(),
-                        "印记兑换 T" + tier + " " + label + "（" + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记）",
+                        "印记兑换 T" + tier + " " + label + "（" + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记）",
                         java.util.Arrays.asList(EmberItemStore.Owed.gear(uid, "印记兑换 T" + tier + " " + label)), res -> {
                             redeemBusy.remove(id);
                             Player q = Bukkit.getPlayer(id);
@@ -3305,7 +3305,7 @@ public final class EmberRunService implements Listener {
                                 log().info("[P1 run] " + id + " mark redeem " + rid + " T" + tier + " " + fam + " " + slot + " → " + uid);
                                 if (q != null) {
                                     PlayerData qd = data(id);
-                                    q.sendMessage(P + "§a已用 " + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记兑换 " + label
+                                    q.sendMessage(P + "§a已用 " + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记兑换 " + label
                                             + "（剩余 " + (qd == null ? "?" : String.valueOf(marks(qd, tier))) + "）");
                                     EmberGearLib gl = EmberGearLib.get();
                                     if (gl != null) gl.delivery().kick(q);
@@ -3313,7 +3313,7 @@ public final class EmberRunService implements Listener {
                             } else {
                                 pay.release(id, rid); // not committed → the 8 marks come back once
                                 log().warning("[P1 run] " + id + " mark redeem " + rid + " not committed: " + res.status + " " + res.detail);
-                                if (q != null) q.sendMessage(P + ChatColor.RED + "兑换没完成（" + res.status + "），" + EmberRunRules.MARKS_PER_EXCHANGE + " 枚 T" + tier + " 印记会退回");
+                                if (q != null) q.sendMessage(P + ChatColor.RED + "兑换没完成（" + res.status + "），" + EmberRunRules.marksPerExchange() + " 枚 T" + tier + " 印记会退回");
                             }
                         }),
                 err -> { redeemBusy.remove(id); if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有兑换：" + err); });
