@@ -495,3 +495,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1083–D1090 ARCH SHIP · jar 1.65.422-d1083
 - Stage2-F: variety affixShard/eventCore ← S04/S05 SoT
+
+## D1091–D1100 ARCH SHIP · jar 1.65.423-d1091
+- Stage2-G S06 first_clear SoT; Stage2 A–G COMPLETE

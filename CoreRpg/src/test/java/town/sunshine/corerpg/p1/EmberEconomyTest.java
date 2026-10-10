@@ -1166,6 +1166,17 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void firstClearS06Leaves() {
+        // D1093 Stage2-G
+        assertEquals(30, EmberEconomy.amount("S06", "q03.shard"));
+        assertEquals(600, EmberEconomy.amount("S06", "q03.coin"));
+        assertEquals(2100, EmberEconomy.amount("S06", "q04.coin"));
+        assertEquals(20, EmberEconomy.amount("S06", "q05.bone"));
+        assertEquals(1200, EmberEconomy.amount("S06", "q06.coin"));
+        assertEquals(1800, EmberEconomy.amount("S06", "q07.coin"));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

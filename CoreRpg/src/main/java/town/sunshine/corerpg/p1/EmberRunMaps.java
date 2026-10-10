@@ -312,9 +312,14 @@ public final class EmberRunMaps {
             bRef = num(m.get("b_ref"), 12);
             spawn = pt(m.get("spawn"));
             Map<?, ?> fc = m.get("first_clear") instanceof Map ? (Map<?, ?>) m.get("first_clear") : Collections.emptyMap();
+            // D1092 Stage2-G: pin S06 leaves when present (q03–q07); else keep runs.yml
             firstClear = new EmberRunRules.FirstClear(key, fc.get("choice") == null ? null : String.valueOf(fc.get("choice")),
-                    (int) num(fc.get("tier"), tier), (int) num(fc.get("shard"), 0), (int) num(fc.get("core"), 0),
-                    (int) num(fc.get("coin"), 0), (int) num(fc.get("bone"), 0), (int) num(fc.get("blank"), 0),
+                    (int) num(fc.get("tier"), tier),
+                    s06Amount(key, "shard", (int) num(fc.get("shard"), 0)),
+                    s06Amount(key, "core", (int) num(fc.get("core"), 0)),
+                    s06Amount(key, "coin", (int) num(fc.get("coin"), 0)),
+                    s06Amount(key, "bone", (int) num(fc.get("bone"), 0)),
+                    s06Amount(key, "blank", (int) num(fc.get("blank"), 0)),
                     unlocks.isEmpty() ? null : unlocks);
             Map<String, Role> r = new LinkedHashMap<String, Role>();
             if (m.get("mobs") instanceof Map) {
@@ -1279,6 +1284,16 @@ public final class EmberRunMaps {
     public static double dmgFactor(MapDef m, int n) {
         if (m == null || m.dmgPerMember <= 0) return 1.0;
         return 1.0 + m.dmgPerMember * (Math.max(1, Math.min(m.partyMax > 0 ? m.partyMax : n, n)) - 1);
+    }
+
+    /** D1092: S06 first-clear leaf or fallback when this map has no economy key. */
+    private static int s06Amount(String mapKey, String leaf, int fallback) {
+        if (mapKey == null || leaf == null) return fallback;
+        try {
+            return EmberEconomy.amount("S06", mapKey + "." + leaf);
+        } catch (RuntimeException e) {
+            return fallback;
+        }
     }
 
     public static EmberRunMaps parse(Map<?, ?> root) { return new EmberRunMaps(root == null ? Collections.emptyMap() : root); }

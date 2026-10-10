@@ -41,3 +41,6 @@
 ## D1031 追记
 
 `ember-v1-economy.yml` / `ECONOMY_BV` 对齐 runs **bv89**（先前停在 60，p1sim rules.validate 红）。金额未改。
+
+## Stage2 COMPLETE (D1091–D1100)
+A BASE_* · B S07/S08 · C short · D AFK帽/图录 · E S02/S03/S34 · F S04/S05 · G S06.
