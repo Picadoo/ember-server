@@ -130,11 +130,43 @@ public final class EmberForgeService implements Listener {
                     s.sendMessage(P + g);
                     if (!EmberForgeGoal.valid(gid))
                         s.sendMessage(P + "§7选目标：/corerpg p1 forgegoal · 材料永远能喂确定养成（随机锻是旁路）");
-                    try { p.sendActionBar("§e工坊 · §f" + EmberForgeGoal.label(gid)); } catch (Throwable ignored) { }
+                    // D1944 FH2: held next deterministic step (display)
+                    String heldNext = heldNextLine(p, pl, d);
+                    if (heldNext != null) {
+                        s.sendMessage(P + "§7" + heldNext);
+                        try { p.sendActionBar("§e" + heldNext); } catch (Throwable ignored) { }
+                    } else {
+                        try { p.sendActionBar("§e工坊 · §f" + EmberForgeGoal.label(gid)); } catch (Throwable ignored) { }
+                    }
                 }
             } catch (Throwable ignored) { }
         }
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "可选 rid:<请求ID> 用于重放保护；/corerpg p1 sync 按 DB 同步背包内 P1 装备");
+    }
+
+    /** D1944 FH2: read-only held next; skips full trust gate (glance only). */
+    private static String heldNextLine(Player p, CoreRpgPlugin pl, PlayerData d) {
+        if (p == null || pl == null) return null;
+        try {
+            EmberItemData data = null;
+            EmberLoadoutService lo = pl.getEmberLoadouts();
+            ItemStack st = p.getInventory().getItemInMainHand();
+            if (lo != null && st != null && lo.items().hasData(st)) {
+                EmberItems.Read r = lo.items().read(st);
+                if (r != null && r.ok()) data = r.data;
+            }
+            long shard = 0, blank = 0, bone = 0;
+            NiBridge ni = pl.getNiBridge();
+            if (ni != null) {
+                shard = ni.countInInventory(p, EmberUpgradeRules.MAT_SHARD);
+                blank = ni.countInInventory(p, EmberUpgradeRules.MAT_BLANK);
+                bone = ni.countInInventory(p, EmberUpgradeRules.MAT_BONE);
+            }
+            long coin = d == null ? 0L : Math.max(0L, d.getCoin());
+            return EmberForgeHeldNext.line(data, new EmberForgeHeldNext.Mats(shard, blank, bone, coin));
+        } catch (Throwable ignored) {
+            return null;
+        }
     }
 
     private boolean help(Player p) { helpLines(p); return true; }

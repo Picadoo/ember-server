@@ -728,3 +728,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1928–D1941 forgegoal QUALITY (jar 1.65.491-d1928)
 - FG-Q: 成色升档 as weekly forgegoal id=6; gap/PAPI/QualityLoop/AfkForgePath
 - No C06 price change; no pity invent
+
+## D1942–D1955 forge held-next (jar 1.65.492-d1942)
+- EmberForgeHeldNext + forge helpLines AB/chat
