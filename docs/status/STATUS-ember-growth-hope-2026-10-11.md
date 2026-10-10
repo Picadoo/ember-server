@@ -277,3 +277,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D780–D781 SHIP · jar 1.65.356-d780
 - D780 no PREFER button twin on challenge FC
 - D781 hub Open mapfarm resume
+
+## D782 SHIP · jar 1.65.357-d782
+- Featured rotation week-full → challengepath / adventure buttons

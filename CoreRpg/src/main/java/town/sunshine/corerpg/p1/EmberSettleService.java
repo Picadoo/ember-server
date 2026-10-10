@@ -480,13 +480,25 @@ public final class EmberSettleService {
             }
         }
         if (p != null && p.isOnline() && rotation) {
+            int rotNow = pd.periodCount(EmberRunService.C_ROTATION, week);
+            int rotCap = runs.maps().rotationWeeklyCap;
             p.sendMessage(EmberRunService.P + "§b本周精选" + (s.challenge ? "挑战" : "重打") + " §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + rotMarks
-                    + "§7（本周 " + pd.periodCount(EmberRunService.C_ROTATION, week) + "/" + runs.maps().rotationWeeklyCap + "）");
+                    + "§7（本周 " + rotNow + "/" + rotCap + "）");
             // D771: hard-path glance when featured challenge hit
             if (s.challenge) {
                 int cpath = EmberChallengePath.get(pd);
                 if (EmberChallengePath.valid(cpath))
                     p.sendMessage(EmberRunService.P + "§c硬本路径 · 精选挑战入账 §8· " + EmberChallengePath.label(cpath));
+            }
+            // D782: week-full → path glance + change (mirror raid D758)
+            if (rotCap > 0 && rotNow >= rotCap) {
+                int cpath = EmberChallengePath.get(pd);
+                p.sendMessage(EmberRunService.P + "§e精选周帽已满 §8· "
+                        + (EmberChallengePath.valid(cpath) ? EmberChallengePath.label(cpath) : "未选硬本路径"));
+                try { p.sendActionBar("§e精选周帽已满"); } catch (Throwable ignored) { }
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：",
+                        new String[]{"[换硬本路径]", "/corerpg p1 challengepath", "改挑战/普通偏好", "AQUA"},
+                        new String[]{"[冒险页]", "/ember_p1_adventure", "换图继续", "GREEN"});
             }
         }
         if (p != null && p.isOnline() && vbMoved) { // D144 / D292
