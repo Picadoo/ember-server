@@ -397,10 +397,11 @@ public final class EmberGearLib implements Listener {
         Filter f = filter(p.getUniqueId());
         p.sendMessage(PV + "§e装备库筛选：§f" + f.label());
         try { p.sendActionBar("§e筛选 · §f" + f.label()); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, PV + "§7：",
-                new String[]{"[开装备库]", "/corerpg p1 gearlib", "页内点图标改筛选", "AQUA"},
-                new String[]{"[一键存入]", "/corerpg p1 stash", "材料+装备", "GREEN"},
-                new String[]{"[仅存材料]", "/corerpg p1 stash mats", "不碰装备", "GOLD"});
+        ConfirmTokens.sendButtons(p, PV + "§7切筛选：",
+                new String[]{"[成色]", "/corerpg p1 stash filter quality", "循环成色", "YELLOW"},
+                new String[]{"[套装族]", "/corerpg p1 stash filter family", "循环族", "AQUA"},
+                new String[]{"[部位]", "/corerpg p1 stash filter slot", "刃/护符", "GREEN"},
+                new String[]{"[开装备库]", "/corerpg p1 gearlib", "页内改", "GRAY"});
     }
 
     private void report(Player p, List<String> mats, int gear, String gateMsg) {
@@ -773,6 +774,13 @@ public final class EmberGearLib implements Listener {
                 return true;
             }
             if ("filter".equals(op) || "筛选".equals(op)) {
+                String what = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
+                Filter f = filter(p.getUniqueId());
+                if ("quality".equals(what) || "成色".equals(what)) f.cycleQuality(); // D845
+                else if ("family".equals(what) || "族".equals(what) || "套装".equals(what)) f.cycleFamily();
+                else if ("slot".equals(what) || "部位".equals(what)) f.cycleSlot();
+                else if ("tier".equals(what) || "阶".equals(what)) f.cycleTier();
+                else if ("sort".equals(what) || "排序".equals(what)) f.cycleSort();
                 tellFilter(p);
                 return true;
             }
