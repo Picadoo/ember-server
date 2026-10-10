@@ -297,18 +297,23 @@ public final class StaminaService implements Listener {
         PlayerData data = dataStore.get(player.getUniqueId());
         ensure(data);
         int cost = costOf(kind);
+        // D541: HOLD skips free credit while stamina can pay; still uses credit as rescue when broke
+        boolean preferCredit = town.sunshine.corerpg.p1.EmberCreditPath.shouldUseCredit(
+                town.sunshine.corerpg.p1.EmberCreditPath.get(data));
+        boolean broke = cost > 0 && data.getStamina() < cost;
+        boolean useCredit = preferCredit || broke;
         // weekly grant credit (account, not NI)
-        if (kind == TicketEntryService.Kind.WEEKLY && data.getWeeklyGrantCreditWeekly() > 0) {
+        if (useCredit && kind == TicketEntryService.Kind.WEEKLY && data.getWeeklyGrantCreditWeekly() > 0) {
             data.setWeeklyGrantCreditWeekly(data.getWeeklyGrantCreditWeekly() - 1);
             dataStore.flushMutation(player.getUniqueId());
             return new ConsumeResult(true, true, 0, null);
         }
-        if (kind == TicketEntryService.Kind.ELITE && data.getWeeklyGrantCreditElite() > 0) {
+        if (useCredit && kind == TicketEntryService.Kind.ELITE && data.getWeeklyGrantCreditElite() > 0) {
             data.setWeeklyGrantCreditElite(data.getWeeklyGrantCreditElite() - 1);
             dataStore.flushMutation(player.getUniqueId());
             return new ConsumeResult(true, true, 0, null);
         }
-        if (kind == TicketEntryService.Kind.RAID && data.getWeeklyGrantCreditRaid() > 0) {
+        if (useCredit && kind == TicketEntryService.Kind.RAID && data.getWeeklyGrantCreditRaid() > 0) {
             data.setWeeklyGrantCreditRaid(data.getWeeklyGrantCreditRaid() - 1);
             dataStore.flushMutation(player.getUniqueId());
             return new ConsumeResult(true, true, 0, null);

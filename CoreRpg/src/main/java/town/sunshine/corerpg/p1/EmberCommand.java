@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("creditpath".equals(sub) || "周免路径".equals(sub)) { // D541 weekly free-entry credit path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCreditPath.glance(EmberCreditPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c周免路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberCreditPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c周免路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberCreditPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberCreditPath.get(d);
+                    if (EmberCreditPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCreditPath.label(cur) + " · 改路径再 /corerpg p1 creditpath");
+                    else EmberCreditPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberCreditPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 creditpath <spend|hold|ask|clear>");
+                return true;
+            }
+            EmberCreditPath.applyAndReply(p, id);
+            return true;
+        }
         if ("bankpath".equals(sub) || "取银路径".equals(sub)) { // D540 stamina bank draw path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -741,6 +777,40 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("creditseed".equals(sub)) { // D541 admin smoke: ensure weekly credit + tip/probe
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.StaminaService st = runs.plugin().getStaminaService();
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (st == null || d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            st.ensure(d);
+            if (d.getWeeklyGrantCreditWeekly() <= 0) d.setWeeklyGrantCreditWeekly(1);
+            // ensure stamina can pay weekly so HOLD probe spends stamina not credit
+            st.cmdRoot(s, new String[]{"stamina", "set", t.getName(), "90"});
+            runs.plugin().getDataStore().flushMutation(t.getUniqueId());
+            s.sendMessage(P + "已确保周本免费×" + d.getWeeklyGrantCreditWeekly() + " · 体力满 → " + t.getName());
+            EmberCreditPath.maybeAfterProgress(t);
+            return true;
+        }
+        if ("creditprobe".equals(sub)) { // D541 admin: simulate weekly enter consume + refund
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.StaminaService st = runs.plugin().getStaminaService();
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (st == null || d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            int beforeCredit = d.getWeeklyGrantCreditWeekly();
+            int beforeSta = st.getStamina(d);
+            town.sunshine.corerpg.StaminaService.ConsumeResult r = st.consumeForEnter(t, town.sunshine.corerpg.TicketEntryService.Kind.WEEKLY);
+            if (!r.ok) { s.sendMessage(P + "探测失败: " + r.failMessage); return true; }
+            st.refundEnter(t, town.sunshine.corerpg.TicketEntryService.Kind.WEEKLY, r);
+            s.sendMessage(P + "探测周本进场 → " + (r.usedCredit ? "用了免费抵扣" : ("扣体力×" + r.cost))
+                    + " · 路径 " + EmberCreditPath.label(EmberCreditPath.get(d))
+                    + " · 前信用 " + beforeCredit + " 体力 " + beforeSta);
+            t.sendMessage(P + "§7周免探测：" + (r.usedCredit ? "§a用了免费抵扣" : ("§e扣体力×" + r.cost)) + " §8（已退回）");
             return true;
         }
         if ("bankseed".equals(sub)) { // D540 admin smoke: low stamina + bank stock
