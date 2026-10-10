@@ -108,10 +108,12 @@ public final class EmberMapFarmCue {
         PlayerData idPd = dataOf(p);
         String idRem = EmberMapIdentity.remainLine(m, idPd);
         String miss = EmberMapIdentity.nextMissing(m, idPd);
+        String method = EmberMapIdentity.methodLine(m, idPd); // D1816 EM1-A
         p.sendMessage(EmberRunService.P + "§7" + idRem
                 + (miss.isEmpty() ? "" : (" §8· §f" + miss)));
+        p.sendMessage(EmberRunService.P + "§7" + method);
         try {
-            p.sendActionBar("§e图装 · §f" + (miss.isEmpty() || miss.contains("已齐") ? idRem : miss));
+            p.sendActionBar("§e图装 · §f" + method);
         } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：", // D914
                 new String[]{"[强化预览]", "/corerpg p1 enhance", "手持同族冲档", "GREEN"},
@@ -287,7 +289,7 @@ public final class EmberMapFarmCue {
                         if (!k.startsWith("q0") || k.length() != 3) continue;
                         if (md.lootFamily == null) continue;
                         p.sendMessage(EmberRunService.P + "§8· §f" + k.toUpperCase()
-                                + " §7" + EmberMapIdentity.remainLine(md, d));
+                                + " §7" + EmberMapIdentity.methodLine(md, d));
                         if (++shown >= 7) break;
                     }
                 }

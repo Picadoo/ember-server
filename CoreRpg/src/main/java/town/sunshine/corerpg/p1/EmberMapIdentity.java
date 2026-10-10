@@ -61,6 +61,39 @@ public final class EmberMapIdentity {
         return "本图身份图鉴已齐";
     }
 
+    /** D1815 EM1-A: compose existing acquisition paths for this map (display only). */
+    public static String methodLine(EmberRunMaps.MapDef lm, PlayerData pd) {
+        if (lm == null) return "本图方法 · 未登记 · 每局1装不锁通关";
+        StringBuilder sb = new StringBuilder("本图方法");
+        String miss = nextMissing(lm, pd);
+        if (miss != null && !miss.isEmpty() && !miss.contains("已齐")) {
+            sb.append(" · ").append(miss.replace("下一缺 · ", "刷"));
+        } else if (lm.lootFamily != null && !lm.lootFamily.isEmpty()) {
+            sb.append(" · 身份齐·刷分解/成套");
+        } else {
+            sb.append(" · 无装偏向·刷分解料");
+        }
+        if (pd != null && lm.lootFamily != null && EmberRunRules.validFamily(lm.lootFamily)) {
+            int focus = EmberSetFocus.get(pd);
+            String fk = EmberSetFocus.familyKey(focus);
+            if (lm.lootFamily.equals(fk)) sb.append(" · 对焦点");
+        }
+        if (mainlineQ(lm) && pd != null) {
+            String gem = EmberGemAcquire.remainLine(pd);
+            if (gem != null && !gem.isEmpty())
+                sb.append(" · ").append(gem.replace("通关保底 ", "宝石"));
+        }
+        sb.append(" · 不锁通关");
+        return sb.toString();
+    }
+
+    /** Mainline Q01–Q07 key (gem pity maps); ignores run session. */
+    public static boolean mainlineQ(EmberRunMaps.MapDef m) {
+        if (m == null || m.raid || m.event || m.rush || m.shortExpedition) return false;
+        String k = m.key == null ? "" : m.key.toLowerCase(java.util.Locale.ROOT);
+        return k.startsWith("q0") && k.length() == 3;
+    }
+
     /** First mainline Q-map whose lootFamily matches (for focus farm tip). */
     public static String suggestMapForFamily(EmberRunMaps maps, String family) {
         if (maps == null || family == null || family.isEmpty()) return null;

@@ -58,13 +58,15 @@ public final class EmberMapEnterFeel {
         String msg = line(m, ch, ab);
         if (m != null && m.lootFamily != null && !m.lootFamily.isEmpty() && ab == 0 && !ch
                 && (s == null || (!s.challenge && s.abyss == 0))) {
+            // D1816 EM1-A: short miss/齐 on AB; full methodLine once in chat (display only)
+            String meth = EmberMapIdentity.methodLine(m, pd);
             String miss = EmberMapIdentity.nextMissing(m, pd);
             if (miss != null && !miss.isEmpty() && !miss.contains("已齐"))
                 msg = msg + " §8· §f" + miss;
-            else {
-                String rem = EmberMapIdentity.remainLine(m, pd);
-                if (rem != null && rem.contains("齐"))
-                    msg = msg + " §a· 身份齐";
+            else if (meth != null && (meth.contains("身份齐") || meth.contains("齐·")))
+                msg = msg + " §a· 身份齐";
+            if (meth != null && !meth.isEmpty()) {
+                try { p.sendMessage(EmberRunService.P + "§7" + meth); } catch (Throwable ignored) { }
             }
         }
         try { p.sendActionBar(msg); } catch (Throwable ignored) { }

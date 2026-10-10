@@ -693,3 +693,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1800–D1813 SHIP · jar 1.65.481-d1800
 - gearlib withdraw full/success capacity AB
+
+## D1814–D1827 SHIP · jar 1.65.482-d1814
+- EM1 Stage0 COMPLETE; EM1-A methodLine SHIP; EM1-B BLOCKED (no invent)

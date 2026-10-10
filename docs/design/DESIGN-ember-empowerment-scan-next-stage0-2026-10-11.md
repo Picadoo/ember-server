@@ -12,7 +12,7 @@
 ## 候选（需研究，本批不写码）
 | ID | 候选 | 参考向 | 风险 |
 |----|------|--------|------|
-| EM1 | Q01–Q07 图本农场身份加深（方法多样性） | PoE league mechanic / D4 seasonal | 易发明 → 先对照 |
+| EM1 | 图本赋能 | **EM1-A SHIP** methodLine · **EM1-B BLOCKED** | 见 DESIGN-ember-em1-map-empowerment |
 | EM2 | 短征/深渊节奏可见性再扫 | 已有 Abyss/ShortPath | 近饱和 |
 | EM3 | 拍卖/交易路径诚实 | EmberDealPath **AB ban** · skip | 跳过 |
 | EM4 | ARCH C15/C16 | 暂停 | 暂停 |
