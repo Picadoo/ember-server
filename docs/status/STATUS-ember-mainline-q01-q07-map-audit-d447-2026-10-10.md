@@ -34,8 +34,8 @@
 
 | 债 | 说明 |
 |----|------|
-| `B-mainline-q-map-visual-pass` | q04–q07 MCA 偏薄：视觉「庭院/塔/霜/轨」独立验收（对照 `design-ember-daily-maps-p4.md` 禁换皮）|
-| `B-q02-sweep-warn-readability` | 横扫 warn 0.9→≥1.0 另 COORD（零经济意图需批）|
+| `B-mainline-q-map-visual-pass` | → **D449** 轻视觉点缀 PASS |
+| `B-q02-sweep-warn-readability` | → **D449** warn 1.1 |
 
 ## Stage2
 

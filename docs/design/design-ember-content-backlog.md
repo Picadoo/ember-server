@@ -983,3 +983,7 @@
 
 - `B-mainline-q01-q07-map-audit-d447`（已批 A·M · D447 · **落地** · 审计 PASS · 无需重建）
 - `B-mainline-q-map-visual-pass`（债 · q04–q07 视觉独立验收 · 非壳）
+
+- `B-mainline-q04-q07-visual-d449`（已批 A·M · D449 · **落地** · Q04–07 轻视觉 + Q02 warn1.1）
+
+- `B-forge-quality-gamble`（待批 A · 荐方案 M · 拟 D450 · tip 打开 · 工坊成色/洗练赌档 · ≠sx20 ≠薄 HUD）
