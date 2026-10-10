@@ -23,6 +23,8 @@ public final class EmberForgeGoal {
     public static final int BRAND = 3;
     public static final int ROLL = 4;
     public static final int CONVERT = 5;
+    /** D1929 FG-Q: quality forge as first-class weekly goal (deterministic C06). */
+    public static final int QUALITY = 6;
 
     private EmberForgeGoal() {}
 
@@ -33,7 +35,7 @@ public final class EmberForgeGoal {
     }
 
     public static boolean valid(int id) {
-        return id == ENHANCE || id == REFINE || id == BRAND || id == ROLL || id == CONVERT;
+        return id == ENHANCE || id == REFINE || id == BRAND || id == ROLL || id == CONVERT || id == QUALITY;
     }
 
     public static boolean set(PlayerData d, int id) {
@@ -54,6 +56,7 @@ public final class EmberForgeGoal {
         if ("brand".equals(s) || "烙纹".equals(s) || "3".equals(s)) return BRAND;
         if ("roll".equals(s) || "随机".equals(s) || "随机锻".equals(s) || "4".equals(s)) return ROLL;
         if ("convert".equals(s) || "转化".equals(s) || "5".equals(s)) return CONVERT;
+        if ("quality".equals(s) || "成色".equals(s) || "q".equals(s) || "6".equals(s)) return QUALITY;
         return -1;
     }
 
@@ -63,6 +66,7 @@ public final class EmberForgeGoal {
         if (id == BRAND) return "合成烙纹";
         if (id == ROLL) return "旁路·随机锻";
         if (id == CONVERT) return "每周转化";
+        if (id == QUALITY) return "成色升档";
         return "未选";
     }
 
@@ -72,12 +76,19 @@ public final class EmberForgeGoal {
         if (id == BRAND) return "挂机攒碎片 → 合成烙纹";
         if (id == ROLL) return "旁路：攒胚料+币 → 随机锻（主养仍强化/成色）";
         if (id == CONVERT) return "攒胚料+币 → 改族（周 1 次）";
+        if (id == QUALITY) return "挂机攒胚/骨/币 → 工坊成色（确定成功）";
         return "点选一条工坊路径当本周目标";
     }
 
     /** Gap line for the pinned goal (mirrors existing recipe/forge gap strings). */
     public static String gapLine(int id, String enhanceGap, String refineGap, String brandGap,
                                  String rollGap, String convertGap) {
+        return gapLine(id, enhanceGap, refineGap, brandGap, rollGap, convertGap, null);
+    }
+
+    /** D1930: qualityGap form 胚差N·骨差M·币差K (mirrors qualityCost). */
+    public static String gapLine(int id, String enhanceGap, String refineGap, String brandGap,
+                                 String rollGap, String convertGap, String qualityGap) {
         if (id == ENHANCE) {
             int g = parseIntSafe(enhanceGap);
             return g <= 0 ? "§a已够碎片 · 去工坊强化" : "§7还差碎片 §f" + g;
@@ -97,6 +108,10 @@ public final class EmberForgeGoal {
         if (id == CONVERT) {
             if (convertGap == null || convertGap.isEmpty()) return "§8—";
             return readyRollOrConvert(convertGap) ? "§a已够料 · 去转化" : "§7" + convertGap;
+        }
+        if (id == QUALITY) {
+            if (qualityGap == null || qualityGap.isEmpty()) return "§8—";
+            return readyQuality(qualityGap) ? "§a已够料 · 去工坊成色" : "§7" + qualityGap;
         }
         return "§8未选工坊目标";
     }
@@ -132,6 +147,10 @@ public final class EmberForgeGoal {
             a = new String[]{"[随机锻]", "/corerpg p1 forgeroll", tip(ROLL), "GREEN"};
             b = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GOLD"};
             c = new String[]{"[装备库]", "/corerpg p1 deliver", "领件", "AQUA"};
+        } else if (id == QUALITY) {
+            a = new String[]{"[去成色]", "/corerpg p1 quality", tip(QUALITY), "GREEN"};
+            b = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GOLD"};
+            c = new String[]{"[去精工]", "/corerpg p1 refine", "成色后精工", "AQUA"};
         } else { // CONVERT
             a = new String[]{"[去转化]", "/corerpg p1 convert menu", tip(CONVERT), "GREEN"};
             b = new String[]{"[转化路径]", "/corerpg p1 convertpath", "对齐目标族", "GOLD"};
@@ -146,6 +165,7 @@ public static void offerPick(Player p) {
         p.sendMessage(P + "§e选一条本周工坊路径（可随时改 · 挂机对着攒）：");
         ConfirmTokens.sendButtons(p, P,
                 new String[]{"[强化+1]", "/corerpg p1 forgegoal enhance", tip(ENHANCE), "GOLD"},
+                new String[]{"[成色升档]", "/corerpg p1 forgegoal quality", tip(QUALITY), "YELLOW"},
                 new String[]{"[精工+1]", "/corerpg p1 forgegoal refine", tip(REFINE), "AQUA"},
                 new String[]{"[合成烙纹]", "/corerpg p1 forgegoal brand", tip(BRAND), "RED"},
                 new String[]{"[随机锻]", "/corerpg p1 forgegoal roll", tip(ROLL), "LIGHT_PURPLE"},
@@ -170,6 +190,11 @@ public static void offerPick(Player p) {
     static boolean readyRefine(String gap) {
         // form 胚差N·骨差M
         return gap.contains("胚差0") && gap.contains("骨差0");
+    }
+
+    /** D1930: quality gap 胚差N·骨差M·币差K */
+    static boolean readyQuality(String gap) {
+        return gap.contains("胚差0") && gap.contains("骨差0") && gap.contains("币差0");
     }
 
     static boolean readyRollOrConvert(String gap) {

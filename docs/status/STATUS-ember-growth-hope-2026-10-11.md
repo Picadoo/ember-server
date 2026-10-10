@@ -724,3 +724,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1914–D1927 GS3 成色/精工确定表盘 (jar 1.65.490-d1914)
 - GS3-A/B/C SHIP display-only dial; GS3-PITY BLOCKED (no invent pity math)
 - Live: EmberQualityCraftDial + forge simple + GearNextHint 表盘N/M
+
+## D1928–D1941 forgegoal QUALITY (jar 1.65.491-d1928)
+- FG-Q: 成色升档 as weekly forgegoal id=6; gap/PAPI/QualityLoop/AfkForgePath
+- No C06 price change; no pity invent

@@ -758,7 +758,7 @@ public final class EmberForgeService implements Listener {
                     }
                     if ("swap".equals(kind)) EmberSwapLoop.afterSwap(q, list); // D484 free-swap spend chase
                     if ("upgrade".equals(kind)) EmberUpgradeLoop.afterUpgrade(q, list); // D487 upgrade→power chase
-                    if ("quality".equals(kind)) EmberQualityLoop.afterQuality(q, list); // D658
+                    if ("quality".equals(kind)) EmberQualityLoop.afterQuality(q, plugin.getDataStore().get(id), list); // D658/D1931
                     if ("refine".equals(kind)) EmberRefineLoop.afterRefine(q, plugin.getDataStore().get(id), list); // D658/D660
                     for (TxnItem t : list) if (t.after != null) q.sendMessage(P + "现在: " + preview(t.after));
                     q.playSound(q.getLocation(), Sound.BLOCK_ANVIL_USE, 0.7f, 1.2f);

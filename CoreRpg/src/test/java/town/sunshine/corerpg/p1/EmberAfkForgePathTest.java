@@ -12,4 +12,8 @@ public class EmberAfkForgePathTest {
         String s = EmberAfkForgePath.suggestLine(15, 0, 0, 0, EmberForgeGoal.NONE);
         assertTrue(s.contains("强化"));
     }
+    @Test public void preferQualityWhenGoal() {
+        String s = EmberAfkForgePath.suggestLine(0, 20, 20, 2000, EmberForgeGoal.QUALITY);
+        assertTrue(s.contains("成色"));
+    }
 }

@@ -25,6 +25,17 @@ public final class EmberAfkForgePath {
             if (blank >= 1 && bone >= 2) return "§a挂机日满 · 胚/骨够精工 · /corerpg p1 refine";
             return "§e挂机日满 · 精工还差料 · 胚§f" + blank + " §7骨§f" + bone + " §7· /corerpg p1 forge";
         }
+        if (forgeGoal == EmberForgeGoal.QUALITY) {
+            // D1932: mirror qualityCost(0) thresholds loosely for suggest (display only)
+            EmberUpgradeRules.Cost qc = EmberUpgradeRules.qualityCost(0);
+            int needB = qc == null ? 8 : qc.blanks;
+            int needO = qc == null ? 8 : qc.bone;
+            int needC = qc == null ? 800 : qc.coins;
+            if (blank >= needB && bone >= needO && coin >= needC)
+                return "§a挂机日满 · 料够成色 · /corerpg p1 quality";
+            return "§e挂机日满 · 成色还差料 · 胚§f" + blank + " §7骨§f" + bone
+                    + " §7币§f" + coin + " §7· /corerpg p1 quality";
+        }
         if (forgeGoal == EmberForgeGoal.BRAND) {
             if (shard >= EmberBrandRules.craftShards())
                 return "§a挂机日满 · 碎够合成烙纹 · /corerpg p1 brand craft";

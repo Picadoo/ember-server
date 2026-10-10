@@ -4084,7 +4084,7 @@ public final class EmberCommand {
             }
             int id = EmberForgeGoal.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 forgegoal <enhance|refine|brand|roll|convert|clear>");
+                p.sendMessage(P + "用法：/corerpg p1 forgegoal <enhance|quality|refine|brand|roll|convert|clear>");
                 return true;
             }
             boolean ch = EmberForgeGoal.set(d, id);

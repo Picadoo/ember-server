@@ -400,3 +400,6 @@ flowchart LR
 
 ### GS3 (2026-10-11 D1914+)
 - **SHIP** display-only quality/craft certainty dial (`EmberQualityCraftDial`); **BLOCKED** inventing quality pity RNG.
+
+### FG-Q forgegoal QUALITY (D1928+)
+- Weekly craft-goal id=6 成色升档; deterministic C06 path first-class. Zero price invent.
