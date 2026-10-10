@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("shiftpath".equals(sub) || "侧安路径".equals(sub)) return shiftPathCmd(s, args); // D588
+        if ("shift".equals(sub) && args.length == 2) return shiftGoCmd(s); // D588
         if ("gappath".equals(sub) || "收招路径".equals(sub)) return gapPathCmd(s, args); // D587
         if ("gap".equals(sub) && args.length == 2) return gapGoCmd(s); // D587
         if ("phasepath".equals(sub) || "半血路径".equals(sub)) return phasePathCmd(s, args); // D586
@@ -1723,6 +1725,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("shiftseed".equals(sub)) return shiftSeedCmd(s, args); // D588
         if ("gapseed".equals(sub)) return gapSeedCmd(s, args); // D587
         if ("phaseseed".equals(sub)) return phaseSeedCmd(s, args); // D586
         if ("waveseed".equals(sub)) return waveSeedCmd(s, args); // D585
@@ -6019,6 +6022,62 @@ public final class EmberCommand {
             EmberGapPath.maybeProbe(t);
             s.sendMessage(P + "已触发收招路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingGap(t) ? "（有收招）" : "（无收招）"));
+            return true;
+    }
+
+    private boolean shiftPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberShiftPath.glance(EmberShiftPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c侧安路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberShiftPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c侧安路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberShiftPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberShiftPath.get(d);
+                    if (EmberShiftPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberShiftPath.label(cur) + " · 改路径再 /corerpg p1 shiftpath");
+                    else EmberShiftPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberShiftPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 shiftpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberShiftPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean shiftGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathShiftSafe(p)) p.sendMessage(P + "无法侧安（无二段右移/未进本）");
+            else p.sendMessage(P + "§a侧安·手点 §7已传到左侧安全区");
+            return true;
+    }
+
+    private boolean shiftSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberShiftPath.maybeProbe(t);
+            s.sendMessage(P + "已触发侧安路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingShift(t) ? "（有二段）" : "（无二段）"));
             return true;
     }
 }

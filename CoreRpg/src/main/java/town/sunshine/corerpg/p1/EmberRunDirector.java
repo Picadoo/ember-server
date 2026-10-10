@@ -510,6 +510,33 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D588: shifted second-band telegraph armed (左侧安全). */
+    boolean hasPendingShift() {
+        return pending != null && lockOrigin != null && lockDir != null
+                && !Double.isNaN(pending.shift) && pending.shift > 0
+                && boss != null && boss.le != null && !boss.le.isDead();
+    }
+
+    /** D588: warp a committed player to the left-safe side of the shifted band. */
+    boolean pathShiftSafe(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingShift()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Vector left = rightOf(lockDir).clone().multiply(-1);
+        left.setY(0);
+        if (left.lengthSquared() < 1e-6) left = new Vector(0, 0, 1);
+        else left.normalize();
+        double dist = 5.0;
+        Location to = lockOrigin.clone().add(left.multiply(dist));
+        to.setY(p.getLocation().getY());
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.85f);
+        return true;
+    }
+
     /** D587: boss is in post-skill recover window (收招). */
     boolean hasPendingGap() {
         if (boss == null || boss.le == null || boss.le.isDead()) return false;
@@ -2885,6 +2912,7 @@ final class EmberRunDirector {
         le.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, (int) (sk.warn * 20) + 6, 10, false, false), true);
         w.playSound(le.getLocation(), Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1.0f, 0.7f);
         svc.tellRun(s, "§c" + bossDef().name + " §e第二段「" + sk.name + "」§7— 右移 " + fmt(sk.shift) + " 格 · 左侧安全（" + sk.warn + " 秒）");
+        EmberShiftPath.maybeAfterShift(s); // D588
     }
 
     /** challenge overrides hook (§18.1); normal runs use the table value. */

@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D588: warp to left-safe side of shifted second-band telegraph. */
+    public boolean hasPendingShift(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingShift() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathShiftSafe(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathShiftSafe(p);
+    }
+
     /** D587: warp to boss during post-skill recover gap. */
     public boolean hasPendingGap(Player p) {
         if (p == null) return false;
@@ -1782,6 +1798,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberWavePath.scheduleOfferAfterQ01(p); // D585 wave path
                         if ("q01".equals(g.id)) EmberPhasePath.scheduleOfferAfterQ01(p); // D586 phase path
                         if ("q01".equals(g.id)) EmberGapPath.scheduleOfferAfterQ01(p); // D587 gap path
+                        if ("q01".equals(g.id)) EmberShiftPath.scheduleOfferAfterQ01(p); // D588 shift path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
