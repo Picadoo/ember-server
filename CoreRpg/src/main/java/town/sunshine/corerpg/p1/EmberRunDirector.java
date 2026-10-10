@@ -507,6 +507,57 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D572: any charge strip warn still armed (not yet landed). */
+    boolean hasPendingCharge() {
+        long now = System.currentTimeMillis();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"charge".equals(t.affix)) continue;
+            if (t.affixOrigin == null || t.affixDir == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** D572: pull a committed player sideways out of the nearest charge strip. */
+    boolean pathSidestepCharge(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingCharge()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Variety v = svc.maps() == null ? null : svc.maps().variety;
+        if (v == null) return false;
+        long now = System.currentTimeMillis();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        Location pl = p.getLocation();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"charge".equals(t.affix)) continue;
+            if (t.affixOrigin == null || t.affixDir == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            EmberRunMaps.Skill sk = chargeSkill(t, v, t.affixDir);
+            if (!inShape(sk, t.affixOrigin, t.affixDir, pl)) continue;
+            double d = t.affixOrigin.distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Vector dir = best.affixDir.clone().normalize();
+        // perpendicular horizontal
+        Vector side = new Vector(-dir.getZ(), 0, dir.getX());
+        if (side.lengthSquared() < 1e-6) side = new Vector(1, 0, 0);
+        else side.normalize();
+        // pick the side farther from strip centerline projection
+        Location o = best.affixOrigin;
+        Vector from = new Vector(pl.getX() - o.getX(), 0, pl.getZ() - o.getZ());
+        if (from.dot(side) < 0) side.multiply(-1);
+        double safe = v.chargeWidth * 0.5 + 2.0;
+        Location to = new Location(w, pl.getX() + side.getX() * safe, pl.getY(), pl.getZ() + side.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.7f);
+        return true;
+    }
+
     /** D571: any mortar warn circle still armed (not yet landed). */
     boolean hasPendingMortar() {
         long now = System.currentTimeMillis();
@@ -1106,6 +1157,7 @@ final class EmberRunDirector {
             t.affixOrigin = o;
             t.affixDir = dir;
             t.affixAt = AffixCycle.after(now, v.chargeWarn);
+            EmberSidestepPath.maybeAfterCharge(s); // D572
             return;
         }
         if ("frost".equals(t.affix)) {

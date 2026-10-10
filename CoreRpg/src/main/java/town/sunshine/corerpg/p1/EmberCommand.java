@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("sidesteppath".equals(sub) || "闪冲路径".equals(sub)) return sidestepPathCmd(s, args); // D572
+        if ("sidestep".equals(sub) && args.length == 2) return sidestepGoCmd(s); // D572
         if ("dodgepath".equals(sub) || "闪榴路径".equals(sub)) return dodgePathCmd(s, args); // D571
         if ("dodge".equals(sub) && args.length == 2) return dodgeGoCmd(s); // D571
         if ("freepath".equals(sub) || "解锢路径".equals(sub)) return freePathCmd(s, args); // D570
@@ -1691,6 +1693,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("sidestepseed".equals(sub)) return sidestepSeedCmd(s, args); // D572
         if ("dodgeseed".equals(sub)) return dodgeSeedCmd(s, args); // D571
         if ("freeseed".equals(sub)) return freeSeedCmd(s, args); // D570
         if ("breachseed".equals(sub)) return breachSeedCmd(s, args); // D569
@@ -5075,6 +5078,62 @@ public final class EmberCommand {
             EmberDodgePath.maybeProbe(t);
             s.sendMessage(P + "已触发闪榴路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingMortar(t) ? "（有榴）" : "（无榴）"));
+            return true;
+    }
+
+    private boolean sidestepPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSidestepPath.glance(EmberSidestepPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c闪冲路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSidestepPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c闪冲路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSidestepPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSidestepPath.get(d);
+                    if (EmberSidestepPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSidestepPath.label(cur) + " · 改路径再 /corerpg p1 sidesteppath");
+                    else EmberSidestepPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSidestepPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 sidesteppath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSidestepPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean sidestepGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathSidestepCharge(p)) p.sendMessage(P + "无法闪冲（无冲锋条/已在条外/未进本）");
+            else p.sendMessage(P + "§a闪冲·手点 §7已侧移出冲锋条");
+            return true;
+    }
+
+    private boolean sidestepSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSidestepPath.maybeProbe(t);
+            s.sendMessage(P + "已触发闪冲路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingCharge(t) ? "（有冲）" : "（无冲）"));
             return true;
     }
 }
