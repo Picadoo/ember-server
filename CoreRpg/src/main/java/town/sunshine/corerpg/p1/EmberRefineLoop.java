@@ -30,11 +30,10 @@ public final class EmberRefineLoop {
         }
         p.sendMessage(P + "§e精工已投入 §7· 选下一步（不改精工价）：");
         try { p.sendActionBar("§e精工完成 · §f选下一步"); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P,
+        ConfirmTokens.sendButtons(p, P, // D884
                 new String[]{"[再精工]", "/corerpg p1 refine", "同件再投", "AQUA"},
                 new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GREEN"},
-                new String[]{"[去成色]", "/corerpg p1 quality", "成色预览", "GOLD"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GRAY"});
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"});
     }
 
     public static String followHint(boolean goalHit) {

@@ -22,11 +22,11 @@ public final class EmberUpgradeLoop {
         String P = EmberRunService.P;
         p.sendMessage(P + "§e升阶完成" + (piece.isEmpty() ? "" : " §7· " + piece)
                 + " §7· 选下一步把战力做实（不改升阶价/胚料产量）：");
+        try { p.sendActionBar("§e升阶完成 · §f继续养成"); } catch (Throwable ignored) { } // D880
         ConfirmTokens.sendButtons(p, P,
                 new String[]{"[去强化]", "/corerpg p1 enhance", "同件继续强化（强化轨保留）", "GREEN"},
-                new String[]{"[装备页]", "/ember_p1_gear", "换上/看套装", "GOLD"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"},
-                new String[]{"[稍后再说]", null, "升阶已落账", "GRAY"});
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GOLD"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
     }
 
     /** Admin smoke. */

@@ -216,10 +216,10 @@ public final class EmberFeaturedPath {
         p.sendMessage(EmberRunService.P + line);
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
         String cmd = enterCmd(id, mapKey);
-        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7精选下一环：",
+        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7精选下一环：", // D881
                 new String[]{enterLabel(id, mapKey), cmd, tip(id), "GREEN"},
-                new String[]{"[换路径]", "/corerpg p1 featurepath", "挑战/普通", "AQUA"},
-                new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "GRAY"});
+                new String[]{"[工坊]", "/corerpg p1 forge", "花精选料", "GOLD"},
+                new String[]{"[图装追]", "/corerpg p1 mapfarm", "补同族件", "AQUA"});
         // D795: weekly goal focus chase if pinned to featured
         CoreRpgPlugin pl = plugin();
         if (pl != null && pl.getEmberRuns() != null)

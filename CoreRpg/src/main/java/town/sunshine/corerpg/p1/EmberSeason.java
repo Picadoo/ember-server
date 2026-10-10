@@ -466,6 +466,10 @@ public final class EmberSeason {
                 if (p != null) {
                     p.sendMessage(P + "§d本周目标全部完成！§7余烬徽 +" + b + "（共 " + badges(d) + "）");
                     try { p.sendActionBar("§d本周目标全清 · 余烬徽 +" + b); } catch (Throwable ignored) { }
+                    ConfirmTokens.sendButtons(p, P + "§7全清下一步：", // D882
+                            new String[]{"[外观店]", "/corerpg p1 cosmetic", "花余烬徽", "LIGHT_PURPLE"},
+                            new String[]{"[冒险]", "/ember_p1_adventure", "继续刷", "GREEN"},
+                            new String[]{"[工坊]", "/corerpg p1 forge", "养成", "GOLD"});
                 }
             }
             Bukkit.getLogger().info("[P1 goals] " + u + " " + g + " done " + wk);

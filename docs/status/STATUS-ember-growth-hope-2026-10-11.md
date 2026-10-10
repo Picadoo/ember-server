@@ -392,3 +392,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D873–D878 SHIP · jar 1.65.392-d873
 - Abyss target enter; attune next; gem craft lack; setfocus mapfarm; matready setchase; short day next
+
+## D879–D884 SHIP · jar 1.65.393-d879
+- Brand pin next; upgrade setchase; featured forge/mapfarm; season all-clear; stash enhance; quality/refine setchase

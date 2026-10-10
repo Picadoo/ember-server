@@ -21,11 +21,10 @@ public final class EmberQualityLoop {
         p.sendMessage(P + "§e成色已投入" + (hint.isEmpty() ? "" : " §7· " + hint)
                 + " §7· 选下一步（不改成色价）：");
         try { p.sendActionBar("§e成色完成 · §f选下一步"); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P,
+        ConfirmTokens.sendButtons(p, P, // D884
                 new String[]{"[去精工]", "/corerpg p1 refine", "精工预览", "AQUA"},
-                new String[]{"[再成色]", "/corerpg p1 quality", "同件再投", "GOLD"},
                 new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GREEN"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GRAY"});
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"});
     }
 
     static String winnerHint(List<TxnItem> list) {

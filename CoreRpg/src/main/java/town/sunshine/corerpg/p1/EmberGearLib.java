@@ -419,12 +419,12 @@ public final class EmberGearLib implements Listener {
                 + (gear > 0 ? (mats.isEmpty() ? "" : "；") + "装备 " + gear + " 件 → 装备库" : "")
                 + (gateMsg != null && !"仅材料".equals(gateMsg) ? ChatColor.GRAY + "（装备没存：" + gateMsg + "）" : ""));
             try { p.sendActionBar("§a存仓 · §f" + (mats.isEmpty() ? "" : "料 ") + (gear > 0 ? gear + "装" : "好")); } catch (Throwable ignored) { }
-            // D831 next
+            // D831/D883 next
             int junk = countPathJunk(p);
-            ConfirmTokens.sendButtons(p, PV + "§7下一步：",
-                    new String[]{"[工坊]", "/corerpg p1 forge", "花材料", "GOLD"},
-                    new String[]{"[装备库]", "/corerpg p1 gearlib", junk > 0 ? ("筛选·可分解 " + junk) : "看筛选", "AQUA"},
-                    new String[]{"[仅存材料]", "/corerpg p1 stash mats", "下次只存料", "GRAY"});
+            ConfirmTokens.sendButtons(p, PV + "§7存仓下一环：",
+                    new String[]{"[工坊]", "/corerpg p1 forge", "花料养成", "GOLD"},
+                    new String[]{"[强化预览]", "/corerpg p1 enhance", "料够可强化", "GREEN"},
+                    new String[]{"[装备库]", "/corerpg p1 gearlib", junk > 0 ? ("筛选·可分解 " + junk) : "看筛选", "AQUA"});
         }
     }
 
