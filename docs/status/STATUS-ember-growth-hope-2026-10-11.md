@@ -528,3 +528,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1163–D1172 ARCH SHIP · jar 1.65.430-d1163
 - K2b: forgeroll floor TrMenu + gap_roll_floor (recipe not hope); afterRoll→稳线
 - SlashReady: shape short in ready cue (not SF4); K3/SF4 banned
+
+## D1173–D1182 ARCH SHIP · jar 1.65.431-d1173
+- Workshop pity/gap honesty: enhanceLine ≤N次必成; SinkGlance quality/refine lack; TrMenu 保底进度 rename
+- No new hope PAPI; K3/SF4 banned

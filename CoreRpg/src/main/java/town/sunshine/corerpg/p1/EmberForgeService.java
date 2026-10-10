@@ -338,14 +338,16 @@ public final class EmberForgeService implements Listener {
             boolean sure = EmberUpgradeRules.guaranteed(d);
             int ratePct = (int) Math.round(EmberUpgradeRules.rate(target) * 100);
             int attempt = EmberUpgradeRules.attemptNo(d);
-            p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + ratePct
-                    + "%  本档第 " + attempt + "/" + max + " 次" + (sure ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY : ""));
+            // D1175 pity honesty（聊天/ActionBar · 非 hope PAPI）
+            String pityChat = sure ? ChatColor.GREEN + "（本次必成）" + ChatColor.GRAY
+                    : "  本档第 " + attempt + "/" + max + " 次 · 含本次≤" + EmberGearNextHint.enhanceAttemptsUntilSure(d) + " 次必成";
+            p.sendMessage(P + "强化预览: +" + d.enhance + " → +" + target + "  成功率 " + ratePct + "%" + pityChat);
             if (sure) {
                 p.sendMessage(P + ChatColor.GREEN + "下次必成已就绪 · 点确认即可升档（不改保底规则）");
                 try { p.sendActionBar("§a下次必成 · 确认即升 +" + target); } catch (Throwable ignored) { }
-            } else { // D849
-                try { p.sendActionBar("§e强化预览 · §f+" + d.enhance + "→+" + target
-                        + " §7· " + ratePct + "% · 第" + attempt + "/" + max); } catch (Throwable ignored) { }
+            } else { // D849 / D1175
+                try { p.sendActionBar("§e强化 · §f+" + d.enhance + "→+" + target
+                        + " §7· " + ratePct + "% · ≤" + EmberGearNextHint.enhanceAttemptsUntilSure(d) + "次必成"); } catch (Throwable ignored) { }
             }
             p.sendMessage(P + "每次消耗: " + c.cost.label() + "  · 失败不降级、不爆装，失败计数保存在本物品");
             warnT0(p, d);

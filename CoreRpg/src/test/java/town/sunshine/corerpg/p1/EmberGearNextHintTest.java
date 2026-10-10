@@ -50,9 +50,11 @@ public class EmberGearNextHintTest {
     }
 
     @Test public void enhanceLine_stepsAndPity() {
-        assertEquals("+0→+1 · 碎片4 币40 · 100%（1/1必成）", EmberGearNextHint.enhanceLine(bladeEnh(0, 0)));
-        assertEquals("+3→+4 · 碎片12 币120 · 85%（1/3）", EmberGearNextHint.enhanceLine(bladeEnh(3, 0)));
-        assertEquals("+3→+4 · 碎片12 币120 · 85%（3/3必成）", EmberGearNextHint.enhanceLine(bladeEnh(3, 2)));
+        assertEquals("+0→+1 · 碎片4 币40 · 100%（本次必成）", EmberGearNextHint.enhanceLine(bladeEnh(0, 0)));
+        assertEquals("+3→+4 · 碎片12 币120 · 85%（第1/3 · 含本次≤3次必成）", EmberGearNextHint.enhanceLine(bladeEnh(3, 0)));
+        assertEquals("+3→+4 · 碎片12 币120 · 85%（本次必成）", EmberGearNextHint.enhanceLine(bladeEnh(3, 2)));
+        assertEquals(3, EmberGearNextHint.enhanceAttemptsUntilSure(bladeEnh(3, 0)));
+        assertEquals(1, EmberGearNextHint.enhanceAttemptsUntilSure(bladeEnh(3, 2)));
         assertTrue(EmberGearNextHint.enhanceLine(bladeEnh(10, 0)).contains("已是"));
     }
 

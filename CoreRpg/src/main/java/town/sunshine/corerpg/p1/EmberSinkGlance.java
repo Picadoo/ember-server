@@ -49,12 +49,25 @@ public final class EmberSinkGlance {
             if (goal == EmberForgeGoal.REFINE) {
                 cost = EmberUpgradeRules.refineCost(d.craft);
                 focus = "精工";
+            } else if (goal == EmberForgeGoal.BRAND) {
+                focus = "烙纹";
             } else {
                 EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(d);
                 if (plan != null && plan.ok()) cost = plan.cost;
                 focus = goal == EmberForgeGoal.ENHANCE ? "强化(目标)" : "强化";
             }
             if (cost != null) lack = EmberGearNextHint.lackHalf(forge.lackingFor(p, cost));
+            // D1176: always surface 成色/精工缺料 honesty（稳线 · 非 K3）
+            EmberUpgradeRules.Cost qc = EmberUpgradeRules.qualityCost(d.quality);
+            if (qc != null) {
+                String ql = EmberGearNextHint.lackHalf(forge.lackingFor(p, qc));
+                if (!ql.isEmpty()) bits.add("成色升" + ql);
+            }
+            EmberUpgradeRules.Cost rc = EmberUpgradeRules.refineCost(d.craft);
+            if (rc != null && goal != EmberForgeGoal.REFINE) {
+                String rl = EmberGearNextHint.lackHalf(forge.lackingFor(p, rc));
+                if (!rl.isEmpty()) bits.add("精工" + rl);
+            }
         }
         String goalTag = EmberForgeGoal.valid(goal) ? " §8（目标:" + EmberForgeGoal.label(goal) + "）" : "";
         p.sendMessage(P + "§e消耗一瞥 · §f" + d.shortLabel() + " §7｜ "

@@ -68,10 +68,22 @@ public final class EmberGearNextHint {
         int pct = (int) Math.round(EmberUpgradeRules.rate(t) * 100);
         int n = EmberUpgradeRules.attemptNo(d);
         int max = EmberUpgradeRules.maxTries(t);
-        String pity = EmberUpgradeRules.guaranteed(d)
-                ? n + "/" + max + "必成"
-                : n + "/" + max;
+        // D1174: pity clarity — 含本次最多 max-pity 次内必成（失败不掉级）
+        String pity;
+        if (EmberUpgradeRules.guaranteed(d)) {
+            pity = "本次必成";
+        } else {
+            int incl = Math.max(1, max - d.pity);
+            pity = "第" + n + "/" + max + " · 含本次≤" + incl + "次必成";
+        }
         return "+" + d.enhance + "→+" + t + " · " + costShort(c.cost) + " · " + pct + "%（" + pity + "）";
+    }
+
+    /** D1174 pure: remaining attempts incl. current until pity guarantee. */
+    public static int enhanceAttemptsUntilSure(EmberItemData d) {
+        if (d == null || d.enhance >= EmberTables.MAX_ENHANCE) return 0;
+        int max = EmberUpgradeRules.maxTries(d.enhance + 1);
+        return Math.max(0, max - d.pity);
     }
 
     /**
