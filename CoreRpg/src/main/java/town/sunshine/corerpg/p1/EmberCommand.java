@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("crashpath".equals(sub) || "撞墙路径".equals(sub)) return crashPathCmd(s, args); // D590
+        if ("crash".equals(sub) && args.length == 2) return crashGoCmd(s); // D590
         if ("boltpath".equals(sub) || "闪线路径".equals(sub)) return boltPathCmd(s, args); // D589
         if ("bolt".equals(sub) && args.length == 2) return boltGoCmd(s); // D589
         if ("shiftpath".equals(sub) || "侧安路径".equals(sub)) return shiftPathCmd(s, args); // D588
@@ -1727,6 +1729,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("crashseed".equals(sub)) return crashSeedCmd(s, args); // D590
         if ("boltseed".equals(sub)) return boltSeedCmd(s, args); // D589
         if ("shiftseed".equals(sub)) return shiftSeedCmd(s, args); // D588
         if ("gapseed".equals(sub)) return gapSeedCmd(s, args); // D587
@@ -6137,6 +6140,62 @@ public final class EmberCommand {
             EmberBoltPath.maybeProbe(t);
             s.sendMessage(P + "已触发闪线路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingBolt(t) ? "（有直线）" : "（无直线）"));
+            return true;
+    }
+
+    private boolean crashPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCrashPath.glance(EmberCrashPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c撞墙路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberCrashPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c撞墙路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberCrashPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberCrashPath.get(d);
+                    if (EmberCrashPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCrashPath.label(cur) + " · 改路径再 /corerpg p1 crashpath");
+                    else EmberCrashPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberCrashPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 crashpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberCrashPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean crashGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathCrashReady(p)) p.sendMessage(P + "无法备破（无撞墙冲撞/未进本）");
+            else p.sendMessage(P + "§a撞墙·手点 §7已站首领旁备破");
+            return true;
+    }
+
+    private boolean crashSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberCrashPath.maybeProbe(t);
+            s.sendMessage(P + "已触发撞墙路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingCrash(t) ? "（将撞墙）" : "（无撞墙）"));
             return true;
     }
 }

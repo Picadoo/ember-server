@@ -510,6 +510,43 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D590: boss charge armed that will crash into a wall. */
+    boolean hasPendingCrash() {
+        return pendingCrash && pending != null && pending.wallStun > 0
+                && boss != null && boss.le != null && !boss.le.isDead()
+                && lockDir != null && lockOrigin != null;
+    }
+
+    /** D590: warp beside the boss off the charge strip to prepare for wall-stun DPS. */
+    boolean pathCrashReady(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingCrash()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Vector dir = lockDir.clone();
+        dir.setY(0);
+        if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+        else dir.normalize();
+        Vector side = new Vector(-dir.getZ(), 0, dir.getX());
+        if (side.lengthSquared() < 1e-6) side = new Vector(1, 0, 0);
+        else side.normalize();
+        double off = Math.max(3.0, pending.width * 0.5 + 2.5);
+        Location base = boss.le.getLocation();
+        Location a = base.clone().add(side.clone().multiply(off));
+        Location b = base.clone().add(side.clone().multiply(-off));
+        Location to = a;
+        if (inShape(pending, lockOrigin, lockDir, a) && !inShape(pending, lockOrigin, lockDir, b)) to = b;
+        else if (inShape(pending, lockOrigin, lockDir, a) && inShape(pending, lockOrigin, lockDir, b)) {
+            // both still in strip — push farther
+            to = base.clone().add(side.clone().multiply(off + 2.0));
+        }
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.95f);
+        return true;
+    }
+
     /** D589: any room caster arming 誓印直线. */
     boolean hasPendingBolt() {
         long now = System.currentTimeMillis();
@@ -3056,6 +3093,7 @@ final class EmberRunDirector {
         flashActionBar(EmberCounterplay.castStartBar(sk.name, sk.type, sk.warn, sk.wallStun, sk.whiffStun, breakNeed, sk.share));
         if (sk.share) EmberSoakPath.maybeAfterSoak(s); // D584
         if (breakNeed > 0) EmberPressPath.maybeAfterPress(s); // D581
+        if (pendingCrash) EmberCrashPath.maybeAfterCrash(s); // D590
     }
 
     /** D193 破招: a channel is armed (need > 0) and the party's damage since its warning began reached the need. */

@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D590: warp beside boss off charge strip when wall-crash is armed. */
+    public boolean hasPendingCrash(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingCrash() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathCrashReady(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathCrashReady(p);
+    }
+
     /** D589: warp sideways out of room-caster 誓印直线. */
     public boolean hasPendingBolt(Player p) {
         if (p == null) return false;
@@ -1816,6 +1832,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberGapPath.scheduleOfferAfterQ01(p); // D587 gap path
                         if ("q01".equals(g.id)) EmberShiftPath.scheduleOfferAfterQ01(p); // D588 shift path
                         if ("q01".equals(g.id)) EmberBoltPath.scheduleOfferAfterQ01(p); // D589 bolt path
+                        if ("q01".equals(g.id)) EmberCrashPath.scheduleOfferAfterQ01(p); // D590 crash path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
