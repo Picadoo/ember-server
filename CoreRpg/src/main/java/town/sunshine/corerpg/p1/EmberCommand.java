@@ -4411,6 +4411,12 @@ public final class EmberCommand {
                     if (setH != null && !setH.isEmpty()) s.sendMessage(P + setH);
                     boolean dual = runs.firstClearedKey(pd, "q03");
                     s.sendMessage(P + EmberDualLead.glance(EmberDualLead.get(pd), dual));
+                    EmberGrowthService gs = EmberGrowthService.get();
+                    if (gs != null && pd != null && gs.talents() != null) {
+                        try {
+                            s.sendMessage(P + "§e专精 · §7" + gs.pointsLine(pd).replaceAll("§.", ""));
+                        } catch (Throwable ignored) { }
+                    }
                     try {
                         String ab = (sk != null && sk.contains("下一技能"))
                                 ? sk.replaceAll("§.", "")

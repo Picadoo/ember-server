@@ -711,3 +711,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1871–D1884 SHIP · jar 1.65.486-d1871
 - Stage0 skill-talent-clarity; status skill/shape/setHope/duallead; forge help forgegoal
+
+## D1885–D1898 SHIP · jar 1.65.487-d1885
+- status talent pointsLine
