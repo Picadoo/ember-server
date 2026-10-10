@@ -1,4 +1,4 @@
-# D430 随机锻造：选族选部位 → 命令预览确认
+# D430 / D1164 K2b: 随机锻造 + 成色下限可发现
 Title: '§6余烬 · 随机锻造'
 
 Bindings:
@@ -15,14 +15,17 @@ Layout:
   - '####N####'
   - '#123######'
   - '#456######'
-  - '####RB###'
+  - '#abc######'
+  - '#def######'
+  - '###LRB###'
 
 Events:
   Open:
     - 'sound: BLOCK_ANVIL_LAND-0.4-1.2'
     - 'tell: §6旁路赌线§7 · 主养请回工坊强化/成色/精工'
-    - 'tell: §e成色下限：§f命令加 floor§7（再扣胚8+骨8+币800）→ 必≥精良；预览里可点「改下限锻」'
+    - 'tell: §e上两排普通锻 · 下两排§f成色下限§7（再扣胚8+骨8+币800 → 必≥精良）'
     - 'tell: §88 印记+4胚料+500币 · 成色标准70%/精良23%/卓越7% · 出不了极品'
+    - 'tell: §c普通还差：§f%corerpg_p1_forge_gap_roll% §8· 下限还差：§f%corerpg_p1_forge_gap_roll_floor%'
 
 Icons:
   '#':
@@ -35,11 +38,11 @@ Icons:
       name: '§6旁路 · 随机锻造说明'
       lore:
         - '§8这是赌线旁路 · 确定变强走工坊强化/成色/精工'
-        - '§7与兑换同印记数，再加胚料和币赌成色/精工'
+        - '§7普通：8 印记 + 4 胚 + 500 币'
+        - '§e下限：§7再加 8 胚 + 8 骨 + 800 币 → 成色必≥精良'
         - '§7极品只能从掉落来 · 锻造权重 0'
-        - '§7产物 +0、词条空；新件锻造次数满 13'
-        - '§8门槛同印记兑换（T2 需 Q04、T3 需 Q07）'
-        - '§c还差：§f%corerpg_p1_forge_gap_roll% §8（胚4·币500）'
+        - '§c普通差：§f%corerpg_p1_forge_gap_roll%'
+        - '§c下限差：§f%corerpg_p1_forge_gap_roll_floor%'
   '1':
     display:
       material: blaze powder
@@ -88,6 +91,77 @@ Icons:
       all:
         - close
         - 'command: corerpg p1 forgeroll sustain charm 1'
+  a:
+    display:
+      material: gold nugget
+      name: '§e下限·焚刃 T1'
+      lore:
+        - '§7成色必≥精良 · 加扣胚8+骨8+币800'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll scorch blade 1 floor'
+  b:
+    display:
+      material: gold nugget
+      name: '§e下限·爆刃 T1'
+      lore:
+        - '§7成色必≥精良 · 加扣胚8+骨8+币800'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll burst blade 1 floor'
+  c:
+    display:
+      material: gold nugget
+      name: '§e下限·承刃 T1'
+      lore:
+        - '§7成色必≥精良 · 加扣胚8+骨8+币800'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll sustain blade 1 floor'
+  d:
+    display:
+      material: gold ingot
+      name: '§e下限·焚符 T1'
+      lore:
+        - '§7成色必≥精良 · 加扣胚8+骨8+币800'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll scorch charm 1 floor'
+  e:
+    display:
+      material: gold ingot
+      name: '§e下限·爆符 T1'
+      lore:
+        - '§7成色必≥精良 · 加扣胚8+骨8+币800'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll burst charm 1 floor'
+  f:
+    display:
+      material: gold ingot
+      name: '§e下限·承符 T1'
+      lore:
+        - '§7成色必≥精良 · 加扣胚8+骨8+币800'
+    actions:
+      all:
+        - close
+        - 'command: corerpg p1 forgeroll sustain charm 1 floor'
+  L:
+    display:
+      material: paper
+      name: '§e成色下限说明'
+      lore:
+        - '§7下两排 = floor 模式'
+        - '§7总价 ≥ 兑换+成色升精良（p1sim WITHIN）'
+        - '§8主养仍走工坊稳线强化/精工'
+    actions:
+      all:
+        - 'tell: §e下限：§f必精良+ · 再扣胚8+骨8+币800 · 仍出不了极品'
   R:
     display:
       material: arrow

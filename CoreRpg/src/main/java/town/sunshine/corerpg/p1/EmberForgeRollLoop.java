@@ -14,13 +14,18 @@ public final class EmberForgeRollLoop {
     private EmberForgeRollLoop() {}
 
     public static void afterRoll(Player p, PlayerData d, String fam, String slot, int tier) {
+        afterRoll(p, d, fam, slot, tier, false);
+    }
+
+    /** D1166: floor success still points at 稳线强化（非 K3 forgegoal 菜单债）. */
+    public static void afterRoll(Player p, PlayerData d, String fam, String slot, int tier, boolean floor) {
         if (p == null) return;
         String P = EmberRunService.P;
         String famName = fam == null ? "?" : EmberItemData.familyName(fam);
         String slotName = "charm".equals(slot) ? "护符" : "刃";
         boolean goalHit = d != null && EmberForgeGoal.get(d) == EmberForgeGoal.ROLL;
         if (goalHit) {
-            p.sendMessage(P + "§a本周工坊目标完成：§f随机锻造 → T" + tier + " " + famName + " " + slotName);
+            p.sendMessage(P + "§a本周工坊目标完成：§f随机锻造" + (floor ? "·下限" : "") + " → T" + tier + " " + famName + " " + slotName);
             try { p.sendActionBar("§a工坊目标 · 随机锻完成"); } catch (Throwable ignored) { }
             ConfirmTokens.sendButtons(p, P + "§7下一步：",
                     new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/精工/转化…", "GREEN"},
@@ -29,12 +34,16 @@ public final class EmberForgeRollLoop {
                             "套装焦点→" + famName, "AQUA"});
             return;
         }
-        try { p.sendActionBar("§d随机锻完成 · §fT" + tier + " " + famName); } catch (Throwable ignored) { }
+        try {
+            p.sendActionBar((floor ? "§e下限锻完成" : "§d随机锻完成") + " · §fT" + tier + " " + famName);
+        } catch (Throwable ignored) { }
+        if (floor) {
+            p.sendMessage(P + "§7旁路下限已出件 · §a下一刀走稳线：到手后强化/精工");
+        }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[装备库到账]", "/corerpg p1 deliver", "领进背包/库", "GOLD"},
-                new String[]{"[去强化]", "/corerpg p1 enhance", "到手后冲强化", "GREEN"},
-                new String[]{"[对齐套装]", "/corerpg p1 setfocus " + (fam == null ? "burst" : fam),
-                        "套装焦点→" + famName, "AQUA"},
+                new String[]{"[去强化]", "/corerpg p1 enhance", "稳线·冲强化", "GREEN"},
+                new String[]{"[去精工]", "/corerpg p1 refine", "稳线·精工", "AQUA"},
                 new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GRAY"});
     }
 

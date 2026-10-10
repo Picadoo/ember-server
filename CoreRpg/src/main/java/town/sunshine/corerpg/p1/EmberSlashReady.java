@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 import town.sunshine.corerpg.CoreRpgPlugin;
+import town.sunshine.corerpg.PlayerData;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,11 +24,22 @@ public final class EmberSlashReady {
     private EmberSlashReady() {}
 
     public static String readyActionBar() {
-        return "§a充能 · §f烬斩 §a就绪";
+        return readyActionBar(null);
+    }
+
+    /** D1167: optional shape short (扇形/直线/环斩) — display only · not SF4. */
+    public static String readyActionBar(String shapeShort) {
+        if (shapeShort == null || shapeShort.isEmpty()) return "§a充能 · §f烬斩 §a就绪";
+        return "§a充能 · §f" + shapeShort + "烬斩 §a就绪";
     }
 
     public static String readyChat() {
-        return "烬斩充能就绪";
+        return readyChat(null);
+    }
+
+    public static String readyChat(String shapeShort) {
+        if (shapeShort == null || shapeShort.isEmpty()) return "烬斩充能就绪";
+        return shapeShort + "烬斩充能就绪";
     }
 
     /** Schedule ready cue for the shared skill charge ending at {@code untilMs}. */
@@ -79,8 +91,16 @@ public final class EmberSlashReady {
                 // skip if charge was re-armed past this schedule (early-tick safe)
                 if (st != null && st.skillCdUntil > untilMs) return;
                 if (!force && !EmberMode.isP1(q)) return;
-                try { q.sendActionBar(readyActionBar()); } catch (Throwable ignored) { }
-                q.sendMessage(P + ChatColor.GREEN + readyChat());
+                String shapeShort = null;
+                try {
+                    PlayerData pd = pl.getDataStore() == null ? null : pl.getDataStore().get(id);
+                    EmberRunService runs = pl.getEmberRuns();
+                    if (pd != null && runs != null) {
+                        shapeShort = EmberSkillFeelSf.shapeShort(EmberSkillKit.shapeId(pd, runs));
+                    }
+                } catch (Throwable ignored) { }
+                try { q.sendActionBar(readyActionBar(shapeShort)); } catch (Throwable ignored) { }
+                q.sendMessage(P + ChatColor.GREEN + readyChat(shapeShort));
                 try {
                     q.playSound(q.getLocation(), Sound.BLOCK_NOTE_PLING, 0.35f, 1.8f);
                 } catch (Throwable ignored) { }

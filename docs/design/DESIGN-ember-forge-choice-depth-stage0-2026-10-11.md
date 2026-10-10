@@ -1,6 +1,6 @@
 # DESIGN · 工坊选择深度 Stage0 · 2026-10-11
 
-> **状态：** Stage0 + **K1 SHIP** · 已批 A · 方案 M · tip `TIP-ember-arch-health-forge-choice-d1130-d1138-2026-10-11.md`  
+> **状态：** Stage0 + K1/K2/**K2b SHIP** · 已批 A · 方案 M · tip `TIP-ember-arch-health-forge-choice-d1130-d1138-2026-10-11.md`  
 > **硬禁：** 无 K3/AFK 抬/sx20/legacy socket/gem flat/skill_mult/sticky · 无 hope PAPI/sig-dry · 无新永久伤乘 · 不改 D430 权表除非另批 p1sim
 
 ## 0. 一句话
@@ -26,6 +26,7 @@
 |----|------|----------|------|
 | **K1** | 工坊/Hub 入口稳线与赌线权重同级，「先赌」误导 | **诚实入口** | UX only · 零经济 · **D1139 SHIP** |
 | **K2** | 随机锻无「加料买下限」 | `forgeroll … floor` + C06.q0 加扣 | **D1140– SHIP** · out-forgeroll-floor-d1141 WITHIN |
+| **K2b** | 下限可发现性 | TrMenu 下两排 + forge_gap_roll_floor + afterRoll 稳线按钮 | **D1163– SHIP** · 禁 K3 |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 

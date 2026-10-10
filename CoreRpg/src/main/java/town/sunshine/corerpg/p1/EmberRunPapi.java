@@ -172,7 +172,7 @@ public final class EmberRunPapi {
         if (key == null) return false;
         return "vault_shard".equals(key) || "vault_bone".equals(key) || "vault_core".equals(key) || "vault_blank".equals(key)
                 || "recipe_gap_enhance1".equals(key) || "recipe_gap_upgrade_t2".equals(key) || "recipe_gap_refine1".equals(key)
-                || "forge_gap_brand".equals(key) || "forge_gap_roll".equals(key) || "forge_gap_convert".equals(key)
+                || "forge_gap_brand".equals(key) || "forge_gap_roll".equals(key) || "forge_gap_roll_floor".equals(key) || "forge_gap_convert".equals(key)
                 || "forge_gap_pin".equals(key)
                 || "forge_goal".equals(key) || "forge_goal_gap".equals(key) || "forge_goal_line".equals(key)
                 || "forge_goal_hope".equals(key) || "vault_hope".equals(key);
@@ -218,6 +218,14 @@ public final class EmberRunPapi {
     /** D432 %corerpg_p1_forge_gap_roll% — 随机锻胚/币差（4 胚 + 500 币）. */
     static String forgeGapRoll(long blankHave, long coinHave) {
         return "胚差" + recipeGap(EmberForgeRollRules.blanks(), blankHave) + "·币差" + recipeGap(EmberForgeRollRules.coins(), coinHave);
+    }
+
+    /** D1165 %corerpg_p1_forge_gap_roll_floor% — 下限锻胚/骨/币差（配方差 · 非 hope）. */
+    static String forgeGapRollFloor(long blankHave, long boneHave, long coinHave) {
+        EmberUpgradeRules.Cost c = EmberForgeRollRules.matCostFloor();
+        return "胚差" + recipeGap(c.blanks, blankHave)
+                + "·骨差" + recipeGap(c.bone, boneHave)
+                + "·币差" + recipeGap(c.coins, coinHave);
     }
 
     /**
@@ -393,6 +401,7 @@ public final class EmberRunPapi {
         // D432 烬砧仓差（镜像 Brand/Roll/Convert 价；不抬 AFK 表）
         if ("forge_gap_brand".equals(key)) return forgeGapBrand(shard);
         if ("forge_gap_roll".equals(key)) return forgeGapRoll(blank, coin);
+        if ("forge_gap_roll_floor".equals(key)) return forgeGapRollFloor(blank, bone, coin);
         if ("forge_gap_convert".equals(key)) {
             EmberItemData held = p == null ? null : heldTrusted(p);
             int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;

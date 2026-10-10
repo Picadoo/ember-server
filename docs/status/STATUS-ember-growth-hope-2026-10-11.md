@@ -524,3 +524,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1153–D1162 ARCH SHIP · jar 1.65.429-d1153
 - SF1–SF3: shape hit flash copy + ×N + set/shape half-line; zero skill_mult; SF4 not opened
+
+## D1163–D1172 ARCH SHIP · jar 1.65.430-d1163
+- K2b: forgeroll floor TrMenu + gap_roll_floor (recipe not hope); afterRoll→稳线
+- SlashReady: shape short in ready cue (not SF4); K3/SF4 banned
