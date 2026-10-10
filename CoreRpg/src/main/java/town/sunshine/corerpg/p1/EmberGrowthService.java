@@ -1012,6 +1012,7 @@ public final class EmberGrowthService implements Listener {
             String from = "from".equals(op) && args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
             if (SIG_FROM.containsKey(from)) SFROM.put(p.getUniqueId(), from);
             else if (!"menu".equals(op)) SFROM.remove(p.getUniqueId()); // "menu" = back from the imprint page: keep the opener
+            p.sendMessage(P + EmberSigStampDry.glance(d)); // D693 dry glance · not PAPI
             openMenu(p, SIG_MENU);
             return true;
         }

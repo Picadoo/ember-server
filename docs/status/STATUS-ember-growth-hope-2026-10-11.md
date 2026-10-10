@@ -112,3 +112,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D688 AFK day-full → forge path from mats
 - D689 skill kit Stage2 geometry clarity
 - D690 sig stamp dry-streak on settle (no rate change)
+
+## D691–D693 SHIP · jar 1.65.326-d691 · 2026-10-11
+- D691 imprint page dry-streak note
+- D692 skill kit dash telegraph lore
+- D693 sig menu chat dry glance
