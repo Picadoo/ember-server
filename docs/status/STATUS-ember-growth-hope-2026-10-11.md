@@ -583,3 +583,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1321–D1332 ARCH SHIP · jar 1.65.447-d1321
 - Quality/refine result AB; drop quality remain on settle; dismantle preview AB
+
+## D1333–D1338 ARCH SHIP · jar 1.65.448-d1333
+- Swap preview ActionBar enhance exchange honesty

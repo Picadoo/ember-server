@@ -620,6 +620,9 @@ public final class EmberForgeService implements Listener {
             p.sendMessage(P + "  " + a.data.shortLabel() + "  →  +" + plan.a.enhance + "（失败计数 " + plan.a.pity + "）");
             p.sendMessage(P + "  " + b.data.shortLabel() + "  →  +" + plan.b.enhance + "（失败计数 " + plan.b.pity + "）");
             p.sendMessage(P + ChatColor.YELLOW + "两件都会绑定；成色/精工/家族/阶级不变。");
+            try { // D1334
+                p.sendActionBar("§b互换预览 · §f+" + a.data.enhance + "↔+" + b.data.enhance + " §a· 免费确定");
+            } catch (Throwable ignored) { }
             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "确认无误再点：", "[确认互换]",
                     confirmCmd, "交换两件的强化等级和失败计数，两件都会绑定"); // D95
             return true;
