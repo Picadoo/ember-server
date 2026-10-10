@@ -589,3 +589,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1339–D1352 ARCH SHIP · jar 1.65.449-d1339
 - SetChase focus-gap AB; MapIdentity remain on mapfarm cue; brandPin have/need
+
+## D1353–D1360 ARCH SHIP · jar 1.65.450-d1353
+- Marks exchange have/need AB; SigChase remainLine on ready cue

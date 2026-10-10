@@ -88,6 +88,16 @@ public final class EmberSigChase {
         return EmberHopeMeter.sigChase(def, marks);
     }
 
+    /** D1355: non-hope remain toward imprint（聊天可并行 hope glance）. */
+    public static String remainLine(EmberSignature.Def def, int marks) {
+        if (def == null) return "未选追烙目标 · /corerpg p1 sig chase";
+        int need = EmberSignature.imprintMarks();
+        int m = Math.max(0, marks);
+        int gap = Math.max(0, need - m);
+        if (gap == 0) return "追烙 " + def.id + " · 徽记够 · 可烙";
+        return "追烙 " + def.id + " · 徽记 " + m + "/" + need + " · 还差" + gap;
+    }
+
     public static String glance(PlayerData d) {
         EmberSignature.Def def = get(d);
         if (def == null) return EmberHopeMeter.sigChase(null, 0);
@@ -254,7 +264,9 @@ public final class EmberSigChase {
         String P = EmberRunService.P;
         String line = progressLine(def, marks);
         p.sendMessage(P + line);
-        try { p.sendActionBar(line.replace("§a", "§a").replace("§7", "§7")); } catch (Throwable ignored) { }
+        String rem = remainLine(def, marks);
+        p.sendMessage(P + "§7" + rem);
+        try { p.sendActionBar("§e" + rem); } catch (Throwable ignored) { }
         ConfirmTokens.sendButton(p, P + "§7下一步：", // D753 one-click when no overwrite needed
                 "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",
                 EmberSignature.imprintMarks() + " 枚徽记 · 烙到穿着" + EmberItemData.slotName(def.slot) + "（无覆盖则直接花）");

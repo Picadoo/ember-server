@@ -3274,13 +3274,25 @@ public final class EmberRunService implements Listener {
                 progressFlag(d, EmberRunRules.directedForgeFlag(tier)));
         if (err != null) { p.sendMessage(P + ChatColor.RED + err); return true; }
         if (args.length < 7 || !"confirm".equalsIgnoreCase(args[6])) { // D88: preview + confirm button (8 marks are not refunded)
-            net.md_5.bungee.api.chat.TextComponent msg = new net.md_5.bungee.api.chat.TextComponent(P + "用 " + EmberRunRules.marksPerExchange()
+            // D1354: have/need honesty
+            int needM = EmberRunRules.marksPerExchange();
+            int haveM = marks(d, tier);
+            int gapM = Math.max(0, needM - haveM);
+            p.sendMessage(P + "§6印记兑换 · T" + tier + " " + EmberItemData.familyName(fam) + EmberItemData.slotName(slot)
+                    + " §7· 印记 §f" + haveM + "/" + needM
+                    + (gapM > 0 ? " §c· 还差 " + gapM : " §a· 够")
+                    + " §8（标准+0绑定）");
+            try {
+                p.sendActionBar(gapM == 0 ? "§a印记兑换 · 料够 · 确认"
+                        : ("§e印记兑换 · 还差 §f" + gapM + " 枚"));
+            } catch (Throwable ignored) { }
+            net.md_5.bungee.api.chat.TextComponent msg = new net.md_5.bungee.api.chat.TextComponent(P + "用 " + needM
                     + " 枚 T" + tier + " 印记兑换 T" + tier + " " + EmberItemData.familyName(fam) + EmberItemData.slotName(slot) + "（标准、+0、绑定）？ ");
             net.md_5.bungee.api.chat.TextComponent ok = new net.md_5.bungee.api.chat.TextComponent("§a§l[确认兑换]");
             ok.setClickEvent(new net.md_5.bungee.api.chat.ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND,
                     "/corerpg p1 marks exchange " + fam + " " + slot + " " + tier + " confirm"));
             ok.setHoverEvent(new net.md_5.bungee.api.chat.HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-                    new net.md_5.bungee.api.chat.ComponentBuilder("§7扣 " + EmberRunRules.marksPerExchange() + " 枚，不退").create()));
+                    new net.md_5.bungee.api.chat.ComponentBuilder("§7扣 " + needM + " 枚，不退").create()));
             msg.addExtra(ok);
             p.spigot().sendMessage(msg);
             exchangeCompare(p, fam, slot, tier); // D104 (midgame #3)

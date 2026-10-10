@@ -13,5 +13,7 @@
 | MI1 | 图身份剩余非 hope 文案 | `EmberMapIdentity.remainLine` |
 | MI2 | mapfarm/cue 刷身份剩余 | 聊天+AB |
 | BP1 | 烙纹定向 have/need | brandPin 预览 |
+| MX1 | 印记兑换 have/need | marks exchange | **D1353– SHIP** |
+| SC2 | 追烙徽记剩余 | SigChase.remainLine | **D1355– SHIP** |
 
 不改套装战力、掉率、通关闸。
