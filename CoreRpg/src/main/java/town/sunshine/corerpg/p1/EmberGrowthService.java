@@ -327,9 +327,11 @@ public final class EmberGrowthService implements Listener {
     public double giveSkillShield(Player p, EmberGrowth.Mods m, int n) {
         double per = m.get("skill_shield");
         if (p == null || per <= 0 || n <= 0) return 0;
-        double h = EmberHeal.maxHp(p), cap = (m.get("skill_shield_max") > 0 ? m.get("skill_shield_max") : per) * h;
+        boolean syncSh = shapeSyncedFor(p);
+        double h = EmberHeal.maxHp(p), cap = (m.get("skill_shield_max") > 0 ? m.get("skill_shield_max") : per) * h
+                * EmberSkillKit.sigShieldMaxMult(syncSh);
         double secs = m.get("skill_shield_secs") > 0 ? m.get("skill_shield_secs") : 5.0;
-        secs = EmberSkillKit.sigShieldSecs(secs, shapeSyncedFor(p));
+        secs = EmberSkillKit.sigShieldSecs(secs, syncSh);
         long now = System.currentTimeMillis();
         double[] cur = shield.get(p.getUniqueId());
         double keep = cur != null && now < cur[1] ? cur[0] : 0;

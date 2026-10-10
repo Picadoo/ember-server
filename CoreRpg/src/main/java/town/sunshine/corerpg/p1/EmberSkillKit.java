@@ -241,6 +241,17 @@ public final class EmberSkillKit {
         return setShapeSync ? PARRY_WINDOW_MS + 50L : PARRY_WINDOW_MS;
     }
 
+    /** D2366: signature skill_charge wind-up secs (synced · faster cast · zero skill_mult). */
+    public static double sigChargeSecs(double baseSecs, boolean setShapeSync) {
+        if (baseSecs <= 0) return baseSecs;
+        return setShapeSync ? baseSecs * 0.8 : baseSecs;
+    }
+
+    /** D2367: signature skill_shield_max multiplier when synced. */
+    public static double sigShieldMaxMult(boolean setShapeSync) {
+        return setShapeSync ? 1.25 : 1.0;
+    }
+
     public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_STEP_ENTER, "all") > 0) return true;

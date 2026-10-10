@@ -65,4 +65,12 @@ public class EmberKitEnterUnlockTest {
         assertEquals(450L, EmberSkillKit.parryWindowMs(false));
         assertEquals(500L, EmberSkillKit.parryWindowMs(true));
     }
+
+    @Test
+    public void sigChargeAndShieldMaxSync() {
+        assertEquals(0.5, EmberSkillKit.sigChargeSecs(0.5, false), 1e-9);
+        assertEquals(0.4, EmberSkillKit.sigChargeSecs(0.5, true), 1e-9);
+        assertEquals(1.0, EmberSkillKit.sigShieldMaxMult(false), 1e-9);
+        assertEquals(1.25, EmberSkillKit.sigShieldMaxMult(true), 1e-9);
+    }
 }

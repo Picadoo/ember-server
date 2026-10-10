@@ -625,6 +625,13 @@ public final class SkillService implements Listener {
         // D174 stage 3 L13 炉锁巨锤 (p1sim skill_variant skill_charge): wind-up — the CD starts now, the hit lands after
         // skill_charge seconds on whoever is in the shape then; no melee meanwhile (EmberCombatListener.onMelee cancels)
         double charge = variant ? gmods.get("skill_charge") : 0.0;
+        if (charge > 0) {
+            try {
+                String famC = ls.get(player).activeSet;
+                if (dashShapeSynced(player, famC)) // D2366 set×shape · shorter wind-up
+                    charge = town.sunshine.corerpg.p1.EmberSkillKit.sigChargeSecs(charge, true);
+            } catch (Throwable ignored) { }
+        }
         st.skillCdUntil = now + cd * 1000L;
         ls.saveState(player);
         town.sunshine.corerpg.p1.EmberSlashReady.arm(player, st.skillCdUntil); // D479 shared charge ready
