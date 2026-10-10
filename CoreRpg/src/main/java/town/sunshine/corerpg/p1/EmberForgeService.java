@@ -163,7 +163,12 @@ public final class EmberForgeService implements Listener {
                 bone = ni.countInInventory(p, EmberUpgradeRules.MAT_BONE);
             }
             long coin = d == null ? 0L : Math.max(0L, d.getCoin());
-            return EmberForgeHeldNext.line(data, new EmberForgeHeldNext.Mats(shard, blank, bone, coin));
+            boolean gateOk = true;
+            if (data != null && d != null) {
+                String flag = EmberUpgradeRules.upgradeFlag(data.tier);
+                gateOk = flag == null || EmberFirstClear.fact(d, flag);
+            }
+            return EmberForgeHeldNext.line(data, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk);
         } catch (Throwable ignored) {
             return null;
         }

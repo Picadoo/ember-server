@@ -4446,7 +4446,12 @@ public final class EmberCommand {
                     }
                     PlayerData pdCoin = runs != null ? runs.dataOf(p.getUniqueId()) : null;
                     long coin = pdCoin == null ? 0L : Math.max(0L, pdCoin.getCoin());
-                    String hn = EmberForgeHeldNext.line(focus, new EmberForgeHeldNext.Mats(shard, blank, bone, coin));
+                    boolean gateOk = true;
+                    if (focus != null && pdCoin != null) {
+                        String flag = EmberUpgradeRules.upgradeFlag(focus.tier);
+                        gateOk = flag == null || EmberFirstClear.fact(pdCoin, flag);
+                    }
+                    String hn = EmberForgeHeldNext.line(focus, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk);
                     if (hn != null && !hn.isEmpty()) {
                         s.sendMessage(P + "§7" + hn);
                         try { p.sendActionBar("§e" + hn); } catch (Throwable ignored) { }

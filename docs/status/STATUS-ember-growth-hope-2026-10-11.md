@@ -734,3 +734,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1956–D1965 status held-next (jar 1.65.493-d1956)
 - status board + AB reuse EmberForgeHeldNext
+
+## D1966–D1979 SourceMap绿 + HeldNext升阶 (jar 1.65.494-d1966)
+- SourceMap/Counters PASS
+- HeldNext includes upgrade with gateOk

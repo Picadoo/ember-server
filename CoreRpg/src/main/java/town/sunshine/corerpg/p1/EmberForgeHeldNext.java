@@ -36,11 +36,17 @@ public final class EmberForgeHeldNext {
         return s;
     }
 
+    /** Convenience: assume upgrade gate open for glance. */
+    public static String line(EmberItemData d, Mats m) {
+        return line(d, m, true);
+    }
+
     /**
      * One-glance next step for held blade/charm.
-     * {@code 下一确定 · 成色表盘 0/2 · 料够 · /corerpg p1 quality}
+     * Affordable order: quality → refine → enhance → upgrade.
+     * {@code gateOk} = first-clear for upgradeFlag(tier).
      */
-    public static String line(EmberItemData d, Mats m) {
+    public static String line(EmberItemData d, Mats m, boolean gateOk) {
         if (d == null) return "下一确定 · 空手 · 手持刃/护符";
         if (m == null) m = new Mats(0, 0, 0, 0);
 
@@ -48,16 +54,17 @@ public final class EmberForgeHeldNext {
         Cost r = EmberUpgradeRules.refineCost(d.craft);
         EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(d);
         Cost e = (enh != null && enh.ok()) ? enh.cost : null;
+        Cost u = EmberUpgradeRules.upgradeCost(d.tier);
 
-        // Affordable deterministic first: quality → refine → enhance
         if (q != null && canPay(q, m))
             return "下一确定 · " + EmberQualityCraftDial.qualityDial(d) + " · 料够 · /corerpg p1 quality";
         if (r != null && canPay(r, m))
             return "下一确定 · " + EmberQualityCraftDial.craftDial(d) + " · 料够 · /corerpg p1 refine";
         if (e != null && canPay(e, m))
             return "下一确定 · " + EmberGearNextHint.enhanceLine(d) + " · 料够 · /corerpg p1 enhance";
+        if (u != null && gateOk && canPay(u, m))
+            return "下一确定 · " + EmberGearNextHint.upgradeLine(d, true) + " · 料够 · /corerpg p1 upgrade";
 
-        // Nearest gap among available ladders
         long best = Long.MAX_VALUE / 4;
         String pick = null;
         if (q != null) {
@@ -72,13 +79,23 @@ public final class EmberForgeHeldNext {
             long g = shortfall(e, m);
             if (g < best) { best = g; pick = "强化 · " + EmberGearNextHint.enhanceLine(d) + " · 还差料 · /corerpg p1 enhance"; }
         }
+        if (u != null) {
+            long g = shortfall(u, m);
+            // gate closed still surfaces honesty via upgradeLine
+            if (g < best || (!gateOk && pick == null)) {
+                best = Math.min(best, g);
+                pick = "升阶 · " + EmberGearNextHint.upgradeLine(d, gateOk)
+                        + (gateOk && g > 0 ? " · 还差料" : "")
+                        + " · /corerpg p1 upgrade";
+            }
+        }
         if (pick != null) return "下一确定 · " + pick;
 
-        // All capped
         String qDone = EmberQualityCraftDial.qualityDial(d);
         String cDone = EmberQualityCraftDial.craftDial(d);
-        if (e == null)
+        if (e == null && u == null)
             return "下一确定 · 手持满档 · " + qDone + " · " + cDone;
-        return "下一确定 · " + EmberGearNextHint.enhanceLine(d);
+        if (e != null) return "下一确定 · " + EmberGearNextHint.enhanceLine(d);
+        return "下一确定 · " + EmberGearNextHint.upgradeLine(d, gateOk);
     }
 }

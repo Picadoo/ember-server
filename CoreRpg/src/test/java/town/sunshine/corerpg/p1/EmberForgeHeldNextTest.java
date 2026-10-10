@@ -29,4 +29,15 @@ public class EmberForgeHeldNextTest {
         assertTrue(line.contains("下一确定"));
         assertTrue(line.contains("还差料") || line.contains("料够"));
     }
+
+    @Test public void upgradeWhenOthersFullAndAffordable() {
+        // q2 craft3 enhance max → only upgrade left if T1
+        EmberItemData d = new EmberItemData("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                EmberItemData.templateId("scorch", "blade", 1), "scorch", "blade", 1, 2, 3,
+                EmberTables.MAX_ENHANCE, 0, true, "drop", 1, 1);
+        EmberUpgradeRules.Cost u = EmberUpgradeRules.upgradeCost(1);
+        assertNotNull(u);
+        String line = EmberForgeHeldNext.line(d, new EmberForgeHeldNext.Mats(u.shards, u.blanks, u.bone, u.coins), true);
+        assertTrue(line.contains("升阶") || line.contains("upgrade") || line.contains("T1"));
+    }
 }
