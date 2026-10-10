@@ -91,6 +91,20 @@ public final class EmberPetPath {
     /** After join — honor path when player has unlocked pets. */
 
     /** D846: after successful summon — next loop. */
+
+    /** D854: after unlock egg — summon/feed next. */
+    public static void afterUnlock(Player p, String display) {
+        if (p == null) return;
+        String P = EmberRunService.P;
+        String name = display == null ? "使魔" : display;
+        p.sendMessage(P + "§a解锁使魔 · §f" + name);
+        try { p.sendActionBar("§a使魔解锁 · §f" + name); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[出战]", "/corerpg pet summon", "立刻出战", "GREEN"},
+                new String[]{"[喂养]", "/corerpg pet feed 3", "魂尘升级", "GOLD"},
+                new String[]{"[使魔路径]", "/corerpg p1 petpath", "进服自动出战", "GRAY"});
+    }
+
     public static void afterSummon(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
@@ -186,8 +200,9 @@ public final class EmberPetPath {
         p.sendMessage(P + "§a使魔 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO && pl.getPetService() != null)
             maybeAfterJoin(p, pl.getPetService());
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[使魔]", "/corerpg pet", "看列表", "AQUA"},
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D852
+                new String[]{"[出战]", "/corerpg pet summon", "召出使魔", "GREEN"},
+                new String[]{"[喂养]", "/corerpg pet feed 3", "魂尘升级", "GOLD"},
                 new String[]{"[换一条]", "/corerpg p1 petpath", "重选", "GRAY"});
     }
 

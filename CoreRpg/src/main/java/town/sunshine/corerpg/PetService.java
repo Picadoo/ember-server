@@ -492,6 +492,7 @@ public final class PetService implements Listener {
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(PREFIX + ChatColor.GREEN + "解锁成功 " + def.display
                 + ChatColor.GRAY + "（消耗蛋×1 · 可免费 summon）");
+        EmberPetPath.afterUnlock(p, def.display); // D854
         if (plugin.getLadderService() != null) {
             plugin.getLadderService().recomputePower(p);
         }
@@ -537,6 +538,7 @@ public final class PetService implements Listener {
             data.unlockPet(id);
             p.sendMessage(PREFIX + ChatColor.GREEN + "首次出战解锁 " + def.display
                     + ChatColor.GRAY + "（消耗蛋×1）");
+            // continue to summon; afterSummon at end
         }
 
         data.setActivePet(id);

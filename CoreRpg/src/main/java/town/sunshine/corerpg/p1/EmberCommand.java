@@ -4069,6 +4069,11 @@ public final class EmberCommand {
             Player p = (Player) s;
             EmberSinkGlance.tellHeld(p, forge, loadouts, runs == null ? null : runs.dataOf(p.getUniqueId())); // D680/D681
             EmberEnhanceUndo.forgeGlance(p); // D694
+            // D853 held preview shortcuts
+            town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7手持预览：",
+                    new String[]{"[强化预览]", "/corerpg p1 enhance", "看成功率/保底", "GREEN"},
+                    new String[]{"[成色预览]", "/corerpg p1 quality", "看成色", "GOLD"},
+                    new String[]{"[精工预览]", "/corerpg p1 refine", "看精工", "AQUA"});
             org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(),
                     "trmenu open ember_p1_forge " + p.getName());
             return true;

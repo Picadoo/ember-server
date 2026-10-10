@@ -368,3 +368,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D846–D851 SHIP · jar 1.65.384-d846
 - Pet/feed/guild after loops; forge preview ActionBar+sibling; hub Open
+
+## D852–D854 SHIP · jar 1.65.385-d852
+- Path apply next; forge open preview btns; pet unlock next

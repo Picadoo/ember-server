@@ -181,8 +181,9 @@ public final class EmberFeedPath {
         p.sendMessage(P + "§a喂养 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO && pl.getPetService() != null)
             maybeAfterJoin(p, pl.getPetService());
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[使魔]", "/corerpg pet", "看等级", "AQUA"},
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D852
+                new String[]{"[喂养]", "/corerpg pet feed 3", "立刻喂", "GREEN"},
+                new String[]{"[出战]", "/corerpg pet summon", "召出使魔", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 feedpath", "重选", "GRAY"});
     }
 
