@@ -160,6 +160,27 @@ public final class PetService implements Listener {
     }
 
     /** Dust cost to go from {@code level} to level+1. */
+    /** D1650: next feed have/need line (display). */
+    public String feedRemainLine(Player p) {
+        if (p == null || !enabled || !feedEnabled || niBridge == null) return "§8使魔喂养未开";
+        PlayerData data = dataStore.get(p.getUniqueId());
+        if (data == null) return "§8数据未就绪";
+        java.util.List<String> unlocked = data.getPetsUnlocked();
+        if (unlocked == null || unlocked.isEmpty()) return "§e使魔 · 未解锁 · 持蛋 unlock";
+        String id = data.getActivePet();
+        if (id == null || id.isEmpty() || !data.isPetUnlocked(id)) id = unlocked.get(unlocked.size() - 1);
+        int level = data.getPetLevel(id);
+        if (level >= feedMaxLevel) return "§a使魔 · Lv." + level + " · 满级";
+        int cost = feedCostFor(level);
+        int have = niBridge.countInInventory(p, feedItem);
+        int gap = Math.max(0, cost - have);
+        PetDef def = pets.get(id);
+        String name = def != null ? def.display : id;
+        return gap > 0
+                ? ("§e使魔 · §f" + name + " Lv." + level + " §8· 尘 " + have + "/" + cost + " · 还差" + gap)
+                : ("§a使魔 · §f" + name + " Lv." + level + " §7· 尘够升");
+    }
+
     public int feedCostFor(int level) {
         int L = Math.max(1, level);
         return feedCostBase + (L - 1) * feedCostPerLevel;
@@ -438,6 +459,9 @@ public final class PetService implements Listener {
         boolean spawned = activeEntities.containsKey(p.getUniqueId());
         p.sendMessage(PREFIX + ChatColor.YELLOW + "已解锁 §f" + unlocked.size()
                 + ChatColor.GRAY + " · 出战上限 " + maxActive);
+        String rem = feedRemainLine(p);
+        p.sendMessage(PREFIX + rem);
+        try { p.sendActionBar(rem); } catch (Throwable ignored) { } // D1650
         if (unlocked.isEmpty()) {
             p.sendMessage(ChatColor.GRAY + "  （空）· 持蛋 /corerpg pet unlock <id> 或 summon");
         } else {
@@ -489,7 +513,8 @@ public final class PetService implements Listener {
         }
         if (niBridge == null || niBridge.countInInventory(p, id) < 1) {
             p.sendMessage(PREFIX + ChatColor.RED + "需要持有使魔蛋: " + def.display
-                    + ChatColor.DARK_GRAY + " (" + id + ")");
+                    + ChatColor.DARK_GRAY + " (" + id + ") · 还差蛋×1");
+            try { p.sendActionBar("§e使魔 · 还差蛋 §f" + def.display); } catch (Throwable ignored) { }
             return;
         }
         if (!niBridge.consumeExact(p, id, 1)) {
@@ -603,6 +628,7 @@ public final class PetService implements Listener {
         List<String> unlocked = data.getPetsUnlocked();
         if (unlocked == null || unlocked.isEmpty()) {
             p.sendMessage(PREFIX + ChatColor.RED + "没有已解锁的使魔。");
+            try { p.sendActionBar("§e使魔 · 未解锁 · 持蛋 unlock"); } catch (Throwable ignored) { }
             return;
         }
         String id = data.getActivePet();
@@ -616,6 +642,7 @@ public final class PetService implements Listener {
         if (level >= feedMaxLevel) {
             p.sendMessage(PREFIX + ChatColor.RED + display + ChatColor.RED
                     + " 已达最高等级 Lv." + feedMaxLevel);
+            try { p.sendActionBar("§a使魔 · 满级 Lv." + feedMaxLevel); } catch (Throwable ignored) { }
             return;
         }
 
@@ -628,8 +655,11 @@ public final class PetService implements Listener {
             // prefer main hand dust, else whole inventory via NiBridge
             if (niBridge == null || niBridge.countInInventory(p, feedItem) < cost) {
                 if (gained == 0) {
+                    int have = niBridge == null ? 0 : niBridge.countInInventory(p, feedItem);
+                    int gap = cost - have;
                     p.sendMessage(PREFIX + ChatColor.RED + "没有足够的魂尘（需要 "
-                            + cost + "×" + feedItem + "）。");
+                            + cost + "×" + feedItem + " · 有 " + have + " · 还差" + gap + "）。");
+                    try { p.sendActionBar("§e使魔 · 还差魂尘 §f" + gap); } catch (Throwable ignored) { }
                 }
                 break;
             }
@@ -661,6 +691,11 @@ public final class PetService implements Listener {
         p.sendMessage(PREFIX + ChatColor.GREEN + "消耗魂尘×" + consumed
                 + ChatColor.GRAY + " · " + display
                 + ChatColor.WHITE + " Lv." + from + "→" + level);
+        try {
+            String rem = feedRemainLine(p);
+            p.sendActionBar(rem.contains("满级") ? ("§a使魔 · Lv." + level + " · 满级")
+                    : ("§a使魔 · Lv." + from + "→" + level + " §8· " + rem.replaceAll("§.", "")));
+        } catch (Throwable ignored) { }
         EmberFeedPath.afterFeed(p, gained); // D847
         if (plugin.getLadderService() != null) {
             plugin.getLadderService().recomputePower(p);

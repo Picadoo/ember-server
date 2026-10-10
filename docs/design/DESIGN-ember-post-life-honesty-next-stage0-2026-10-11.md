@@ -1,13 +1,20 @@
 # DESIGN · 生活诚实后下一窗 Stage0 · 2026-10-11
 
-> **状态：** Stage0 草案 · 生活/账本/补给/体力面近饱和后  
-> **硬禁：** 无 K3/SF4 / hope PAPI / AFK raise / 锁通关 / 改掉率 / skill_mult
+> **状态：** Stage0 **COMPLETE** · 已批 A · 方案 M · **D1647– SHIP**  
+> **硬禁：** 无 K3/SF4 / hope PAPI / AFK raise / 锁通关 / 改掉率 / skill_mult / 永久战力乘
 
-## 候选（薄 · 待 tip 批）
-| ID | 项 | 备注 |
+## 问题
+生活/账本/补给/体力诚实近饱和。盟约邀请/贡献/周 Boss、使魔解锁/喂养仍缺 have/need/remain 肉感。
+
+## 方案 M（薄 · 零永久战力表）
+| ID | 项 | 改动 |
 |----|----|------|
-| NX1 | 盟约/使魔路径剩余 AB | 同路径族模式 |
-| NX2 | 装备库筛选/容量剩余 | GearLib 已有部分 |
-| NX3 | ARCH 无更多一文件债 | SourceMap/Economy 绿；C15/C16 仍暂停 |
+| GP1 | 盟约路径 AB | 待邀/在盟贡献 vs Boss |
+| GP2 | guild info/donate/boss 还差 | 日捐帽·贡献·周次 |
+| GP3 | 创建费不足 AB | coin/crystal gap |
+| PP1 | 使魔路径 AB | 解锁数·魂尘下一档 |
+| PP2 | pet list/feed/unlock 还差 | 尘/蛋 have-need |
+| NX2 | 装备库容量（后窗） | GearLib 已有部分 → 暂缓 |
+| NX3 | ARCH | SourceMap 绿 · C15/C16 暂停 |
 
-优先肉感获取澄清；不重开 hope celebration。
+不改贡献率、Boss 消耗、魂尘表、使魔展示伤。

@@ -198,6 +198,14 @@ public final class EmberPetPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a使魔 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1651
+            PetService pets = pl.getPetService();
+            if (pets != null) {
+                String rem = pets.feedRemainLine(p);
+                p.sendActionBar("§e路径 · §f" + label(id) + " §8· " + rem.replaceAll("§.", ""));
+            } else
+                p.sendActionBar("§e使魔 · §f" + label(id));
+        } catch (Throwable ignored) { }
         if (id == AUTO && pl.getPetService() != null)
             maybeAfterJoin(p, pl.getPetService());
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D852

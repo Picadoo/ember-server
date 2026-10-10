@@ -93,7 +93,14 @@ public final class EmberFeedPath {
         if (p == null || levels <= 0) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§a喂养完成 · 升 §f" + levels + " §a级");
-        try { p.sendActionBar("§a喂养 · §f+" + levels); } catch (Throwable ignored) { }
+        try {
+            CoreRpgPlugin pl = plugin();
+            PetService pets = pl == null ? null : pl.getPetService();
+            if (pets != null)
+                p.sendActionBar("§a喂养 · §f+" + levels + " §8· " + pets.feedRemainLine(p).replaceAll("§.", ""));
+            else
+                p.sendActionBar("§a喂养 · §f+" + levels);
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D906
                 new String[]{"[再喂]", "/corerpg pet feed 3", "继续魂尘", "GREEN"},
                 new String[]{"[进冒险]", "/ember_p1_adventure", "带使魔刷", "AQUA"},
@@ -179,6 +186,14 @@ public final class EmberFeedPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a喂养 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1652
+            PetService pets = pl.getPetService();
+            if (pets != null)
+                p.sendActionBar("§e喂养路径 · §f" + label(id) + " §8· "
+                        + pets.feedRemainLine(p).replaceAll("§.", ""));
+            else
+                p.sendActionBar("§e喂养 · §f" + label(id));
+        } catch (Throwable ignored) { }
         if (id == AUTO && pl.getPetService() != null)
             maybeAfterJoin(p, pl.getPetService());
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D852

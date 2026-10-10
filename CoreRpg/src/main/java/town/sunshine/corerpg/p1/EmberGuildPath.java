@@ -169,6 +169,20 @@ public final class EmberGuildPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a盟约 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1649
+            town.sunshine.corerpg.GuildService gs = pl.getGuildService();
+            String pend = gs == null ? null : gs.pendingInviteGuildName(p.getUniqueId());
+            int contrib = gs == null ? 0 : gs.contributionOf(p.getUniqueId());
+            int need = gs == null ? 0 : gs.bossContributionNeed();
+            if (pend != null)
+                p.sendActionBar("§e盟约 · §f" + label(id) + " §8· 待邀 §f" + pend);
+            else if (need > 0 && contrib < need)
+                p.sendActionBar("§e盟约 · §f" + label(id) + " §8· Boss贡献还差 §f" + (need - contrib));
+            else if (d.getGuildId() != null && !d.getGuildId().isEmpty())
+                p.sendActionBar("§a盟约 · §f" + label(id) + " §7· 贡献 §f" + contrib);
+            else
+                p.sendActionBar("§e盟约 · §f" + label(id) + " §7· 未入盟");
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D852
                 new String[]{"[盟约]", "/corerpg guild", "看信息", "AQUA"},
                 new String[]{"[周常Boss]", "/corerpg guild boss", "开周本", "GREEN"},

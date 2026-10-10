@@ -312,6 +312,25 @@ public final class GuildService {
         return g;
     }
 
+    /** D1648: pending invite guild display name, or null. */
+    public String pendingInviteGuildName(UUID u) {
+        if (u == null) return null;
+        String gid = pendingInvites.get(u);
+        if (gid == null || gid.isEmpty()) return null;
+        Guild g = byId.get(gid);
+        return g == null ? null : g.name;
+    }
+
+    /** D1648: personal contribution toward weekly boss. */
+    public int contributionOf(UUID u) {
+        Guild g = getPlayerGuild(u);
+        return g == null ? 0 : contribOf(g, u);
+    }
+
+    public int bossContributionNeed() { return bossContributionCost; }
+    public int bossWeeklyCap() { return bossWeeklyLimit; }
+    public int dailyDonateCapValue() { return dailyDonateCap; }
+
     public void cmdRoot(CommandSender sender, String[] args) {
         if (!enabled) {
             sender.sendMessage(PREFIX + ChatColor.RED + "盟约系统未启用。");
@@ -388,11 +407,13 @@ public final class GuildService {
                     + createCoinCost + " 币 或 " + createCrystalCost + " 晶钻）");
             p.sendMessage(ChatColor.DARK_GRAY + "  invite|accept|leave|kick|donate|info|boss");
             String pend = pendingInvites.get(p.getUniqueId());
+            // D1648 pending remain cue below when printed
             if (pend != null) {
                 Guild pg = byId.get(pend);
                 if (pg != null) {
                     p.sendMessage(ChatColor.AQUA + "  待接受邀请: §f" + pg.name
                             + ChatColor.GRAY + " · /corerpg guild accept");
+                    try { p.sendActionBar("§e盟约 · 待邀 §f" + pg.name); } catch (Throwable ignored) { }
                 }
             }
             return;
@@ -433,9 +454,19 @@ public final class GuildService {
             PlayerData data = dataStore.get(p.getUniqueId());
             ensureDonateDaily(data);
             int mine = contribOf(g, p.getUniqueId());
+            int donateLeft = Math.max(0, dailyDonateCap - data.getGuildDonateToday());
+            int bossGap = Math.max(0, bossContributionCost - mine);
             p.sendMessage(ChatColor.GRAY + "  我的贡献 §f" + mine
                     + ChatColor.GRAY + " · 今日捐献 §f" + data.getGuildDonateToday()
-                    + "/" + dailyDonateCap);
+                    + "/" + dailyDonateCap
+                    + (donateLeft > 0 ? " · 还差帽" + donateLeft : " · 日帽满")
+                    + (bossGap > 0 ? ChatColor.DARK_GRAY + " · Boss还差贡献" + bossGap
+                            : ChatColor.DARK_GRAY + " · Boss贡献够"));
+            try { // D1648
+                p.sendActionBar(bossGap > 0
+                        ? ("§e盟约 · 贡献 §f" + mine + "/" + bossContributionCost + " §8· 还差" + bossGap)
+                        : ("§a盟约 · 贡献够Boss · 日捐 §f" + data.getGuildDonateToday() + "/" + dailyDonateCap));
+            } catch (Throwable ignored) { }
         }
         if (!g.officers.isEmpty()) {
             StringBuilder sb = new StringBuilder();
@@ -491,10 +522,16 @@ public final class GuildService {
         } else if (data.getCoin() >= createCoinCost) {
             payCoin = true;
         } else {
+            int gapCoin = Math.max(0, createCoinCost - data.getCoin());
+            int gapCry = Math.max(0, createCrystalCost - data.getCrystalCash());
             p.sendMessage(PREFIX + ChatColor.RED + "创建费不足：需要 "
                     + createCoinCost + " 币 或 " + createCrystalCost + " 晶钻"
                     + ChatColor.GRAY + "（币 " + data.getCoin()
-                    + " · 晶钻 " + data.getCrystalCash() + "）");
+                    + " · 晶钻 " + data.getCrystalCash()
+                    + " · 还差币" + gapCoin + "/钻" + gapCry + "）");
+            try { // D1648 GP3
+                p.sendActionBar("§e建盟 · 还差币 §f" + gapCoin + " §7或钻 §f" + gapCry);
+            } catch (Throwable ignored) { }
             return;
         }
         if (payCoin) {
@@ -791,6 +828,7 @@ public final class GuildService {
         int room = dailyDonateCap - data.getGuildDonateToday();
         if (room <= 0) {
             p.sendMessage(PREFIX + ChatColor.RED + "今日贡献已达上限（" + dailyDonateCap + "）。");
+            try { p.sendActionBar("§e捐献 · 今日帽满"); } catch (Throwable ignored) { }
             return;
         }
         // contrib = floor(amt / rate); need at least 1 contrib
@@ -804,8 +842,10 @@ public final class GuildService {
         int take = gain * rate.intValue();
         if (niBridge == null || niBridge.countInInventory(p, niId) < take) {
             int have = niBridge == null ? 0 : niBridge.countInInventory(p, niId);
+            int gap = take - have;
             p.sendMessage(PREFIX + ChatColor.RED + "背包材料不足: " + niId
-                    + " 需要 ×" + take + ChatColor.GRAY + "（有 " + have + "）");
+                    + " 需要 ×" + take + ChatColor.GRAY + "（有 " + have + " · 还差" + gap + "）");
+            try { p.sendActionBar("§e捐献 · 还差 §f" + niId + "×" + gap); } catch (Throwable ignored) { }
             return;
         }
         if (!niBridge.consumeExact(p, niId, take)) {
@@ -824,12 +864,22 @@ public final class GuildService {
         g.dirty = true;
         saveGuild(g);
 
+        int donateLeft = Math.max(0, dailyDonateCap - data.getGuildDonateToday());
+        int after = prev + gain;
+        int bossGap = Math.max(0, bossContributionCost - after);
         p.sendMessage(PREFIX + ChatColor.GREEN + "捐献成功！"
                 + ChatColor.GRAY + " 消耗 " + niId + " ×" + take
                 + ChatColor.GREEN + " → 贡献 +" + gain
                 + ChatColor.GRAY + "（今日 " + data.getGuildDonateToday()
-                + "/" + dailyDonateCap + " · 个人累计 "
-                + (prev + gain) + "）");
+                + "/" + dailyDonateCap
+                + (donateLeft > 0 ? " · 还差帽" + donateLeft : " · 日帽满")
+                + " · 个人累计 " + after
+                + (bossGap > 0 ? " · Boss还差" + bossGap : " · Boss贡献够") + "）");
+        try { // D1648
+            p.sendActionBar(bossGap > 0
+                    ? ("§a捐献 +" + gain + " §8· Boss还差 §f" + bossGap)
+                    : ("§a捐献 +" + gain + " · Boss贡献够"));
+        } catch (Throwable ignored) { }
     }
 
     private void cmdBoss(Player p) {
@@ -853,13 +903,16 @@ public final class GuildService {
             p.sendMessage(PREFIX + ChatColor.RED + "本周盟 Boss 次数已用尽（"
                     + data.getGuildBossUsed() + "/" + bossWeeklyLimit
                     + ChatColor.GRAY + " · 周 " + week + "）");
+            try { p.sendActionBar("§e盟Boss · 本周帽满"); } catch (Throwable ignored) { }
             return;
         }
         int mine = contribOf(g, p.getUniqueId());
         if (mine < bossContributionCost) {
+            int gap = bossContributionCost - mine;
             p.sendMessage(PREFIX + ChatColor.RED + "贡献不足：需要 §f" + bossContributionCost
                     + ChatColor.RED + "，当前 §f" + mine
-                    + ChatColor.GRAY + "（donate 材料换贡献）");
+                    + ChatColor.GRAY + " · 还差 §f" + gap + "（donate 材料换贡献）");
+            try { p.sendActionBar("§e盟Boss · 贡献还差 §f" + gap); } catch (Throwable ignored) { }
             return;
         }
         // 1.4.9: DP team — only the leader may start; collect members for the one-time pass
@@ -892,9 +945,16 @@ public final class GuildService {
         // {player} template → run from console (DP start-console); legacy template → as the player
         final boolean asConsole = tpl.contains("{player}");
         final String cmd = tpl.replace("{player}", p.getName()).replace("{dungeon}", bossDungeonId);
+        int weekLeft = Math.max(0, bossWeeklyLimit - data.getGuildBossUsed());
         p.sendMessage(PREFIX + ChatColor.GREEN + "已消耗贡献 §f" + bossContributionCost
                 + ChatColor.GREEN + " · 启动 §f" + bossDungeonId
-                + ChatColor.GRAY + "（本周 " + data.getGuildBossUsed() + "/" + bossWeeklyLimit + "）");
+                + ChatColor.GRAY + "（本周 " + data.getGuildBossUsed() + "/" + bossWeeklyLimit
+                + (weekLeft > 0 ? " · 还差" + weekLeft + "次" : " · 帽满") + "）");
+        try {
+            p.sendActionBar(weekLeft > 0
+                    ? ("§a盟Boss · 开 · 本周还差 §f" + weekLeft)
+                    : ("§a盟Boss · 开 · 本周帽满"));
+        } catch (Throwable ignored) { }
         long exp = System.currentTimeMillis() + BOSS_PASS_MS;
         for (UUID u : party) bossPass.put(u, Long.valueOf(exp));
         boolean ok;
