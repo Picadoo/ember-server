@@ -484,6 +484,18 @@ public final class EmberSettleService {
         if (p != null && p.isOnline() && fresh) // D514 daily clear-bounty path chase
             EmberDailyPath.tellAfterSettle(p, pd, runs, tiers, bountyN);
         if (p != null && p.isOnline()) {
+            // D682: map-farm chase hit when a grant item family matches map loot identity
+            if (m.lootFamily != null) {
+                for (EmberRunRules.Grant g : grants) {
+                    if (g == null || g.item == null) continue;
+                    String hit = EmberMapFarmCue.hitLine(m.lootFamily, g.item.family, g.item.slot);
+                    if (hit != null) {
+                        p.sendMessage(EmberRunService.P + hit);
+                        try { p.sendActionBar("§a图装追到 · §f" + EmberItemData.familyName(g.item.family)); } catch (Throwable ignored) { }
+                        break;
+                    }
+                }
+            }
             String feel = playfeelSummary(s.wallHits, s.whiffHits, s.breakHits,
                     s.affixDone, s.affix, !s.eventRoom.isEmpty(), s.eventDone, s.eventKind);
             if (!feel.isEmpty()) p.sendMessage(EmberRunService.P + feel);

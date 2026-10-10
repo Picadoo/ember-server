@@ -50,6 +50,14 @@ public final class EmberMapFarmCue {
         return null;
     }
 
+    /** D682: settle delivery matched map family — chase hit (no button twin). */
+    public static String hitLine(String mapFam, String dropFam, String dropSlot) {
+        if (mapFam == null || dropFam == null || !mapFam.equals(dropFam)) return null;
+        String fam = EmberItemData.familyName(dropFam);
+        String slot = dropSlot == null ? "装" : EmberItemData.slotName(dropSlot);
+        return "§a图装追到：§f" + fam + " · " + slot + " §7· 本图偏向命中";
+    }
+
     public static void cue(Player p, EmberRunMaps.MapDef m, EmberLoadout lo) {
         if (p == null || m == null) return;
         String mapFam = m.lootFamily;

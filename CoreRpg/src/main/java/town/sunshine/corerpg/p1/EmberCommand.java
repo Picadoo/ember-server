@@ -4041,7 +4041,7 @@ public final class EmberCommand {
         if ("forge".equals(sub) || "工坊".equals(sub) || "workshop".equals(sub)) { // D473 open forge menu
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
-            EmberSinkGlance.tellHeld(p, forge, loadouts); // D680 sink visibility
+            EmberSinkGlance.tellHeld(p, forge, loadouts, runs == null ? null : runs.dataOf(p.getUniqueId())); // D680/D681
             org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(),
                     "trmenu open ember_p1_forge " + p.getName());
             return true;

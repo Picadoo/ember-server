@@ -6,16 +6,21 @@ import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import town.sunshine.corerpg.PlayerData;
+
 /**
- * D680: economy sink visibility — one forge glance for held piece costs/lacking.
+ * D680/D681: economy sink visibility — forge glance for held piece.
  * Not a PAPI hope-meter twin. Zero price / AFK / yield change.
  */
 public final class EmberSinkGlance {
 
     private EmberSinkGlance() {}
 
-    /** Open-forge / command glance. */
     public static void tellHeld(Player p, EmberForgeService forge, EmberLoadoutService loadouts) {
+        tellHeld(p, forge, loadouts, null);
+    }
+
+    public static void tellHeld(Player p, EmberForgeService forge, EmberLoadoutService loadouts, PlayerData pd) {
         if (p == null) return;
         String P = EmberRunService.P;
         ItemStack hand = p.getInventory().getItemInMainHand();
@@ -35,19 +40,29 @@ public final class EmberSinkGlance {
         if (q != null && !q.isEmpty()) bits.add(q);
         String c = EmberGearNextHint.craftLine(d);
         if (c != null && !c.isEmpty()) bits.add(c);
+
+        int goal = EmberForgeGoal.get(pd);
         String lack = "";
+        String focus = "强化";
         if (forge != null) {
-            EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(d);
-            if (plan != null && plan.ok() && plan.cost != null) {
-                lack = EmberGearNextHint.lackHalf(forge.lackingFor(p, plan.cost));
+            EmberUpgradeRules.Cost cost = null;
+            if (goal == EmberForgeGoal.REFINE) {
+                cost = EmberUpgradeRules.refineCost(d.craft);
+                focus = "精工";
+            } else {
+                EmberUpgradeRules.Plan plan = EmberUpgradeRules.enhanceCheck(d);
+                if (plan != null && plan.ok()) cost = plan.cost;
+                focus = goal == EmberForgeGoal.ENHANCE ? "强化(目标)" : "强化";
             }
+            if (cost != null) lack = EmberGearNextHint.lackHalf(forge.lackingFor(p, cost));
         }
+        String goalTag = EmberForgeGoal.valid(goal) ? " §8（目标:" + EmberForgeGoal.label(goal) + "）" : "";
         p.sendMessage(P + "§e消耗一瞥 · §f" + d.shortLabel() + " §7｜ "
                 + String.join(" §8·§7 ", bits)
-                + (lack.isEmpty() ? "" : " §c" + lack));
+                + (lack.isEmpty() ? "" : " §c" + lack) + goalTag);
         try {
-            p.sendActionBar("§e消耗 · §f" + d.shortLabel()
-                    + (lack.isEmpty() ? " §a料够开强化" : " §c" + lack));
+            p.sendActionBar("§e消耗 · §f" + focus
+                    + (lack.isEmpty() ? " §a料够" : " §c" + lack));
         } catch (Throwable ignored) { }
     }
 

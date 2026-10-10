@@ -52,6 +52,11 @@ public final class EmberGemSocket {
         String line = d.socketLoreLine();
         p.sendMessage(P + d.shortLabel() + " · " + (line == null ? "无孔" : line));
         p.sendMessage(P + "§7镶嵌：/corerpg p1 gem insert <孔> <sharp|steady|drain|gale> · 拆：remove <孔>");
+        try { // D683 hole glance
+            String h0 = d.sockUnlocked(0) ? (d.sockAt(0) == 0 ? "空" : EmberItemData.gemName(d.sockAt(0))) : "锁";
+            String h1 = d.sockUnlocked(1) ? (d.sockAt(1) == 0 ? "空" : EmberItemData.gemName(d.sockAt(1))) : "锁";
+            p.sendActionBar("§5孔0 §f" + h0 + " §8· §5孔1 §f" + h1);
+        } catch (Throwable ignored) { }
         p.sendMessage(P + "§8锋利战斗：刃 T2+ 才计入 · 稳/汲/疾全程 · 不走旧 /corerpg socket");
         if (plugin != null && plugin.getDataStore() != null) {
             PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
