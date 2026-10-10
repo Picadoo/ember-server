@@ -1805,9 +1805,15 @@ public final class EmberGrowthService implements Listener {
         String mode = (dup ? "dup" : "shard") + (lock ? " lock" : "");
         if (!confirm) {
             p.sendMessage(P + "§6词条洗练 · " + t.shortLabel());
-            p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality) + "最高 §f" + cap + " §7档 · 保底 §f" + pity + "/" + reroll.pity
+            // D1249: pity remain honesty（非 hope PAPI twin）
+            String rem = EmberRerollPity.remainLine(pity, reroll.pity);
+            p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality)
+                    + "最高 §f" + cap + " §7档 · §f" + rem
                     + (pity >= reroll.pity ? " §a（这次必出 " + cap + " 档）" : ""));
-            if (pity >= reroll.pity) { try { p.sendActionBar("§a这次必出上限档 · 确认即洗"); } catch (Throwable ignored) { } }
+            try {
+                if (pity >= reroll.pity) p.sendActionBar("§a这次必出上限档 · 确认即洗");
+                else p.sendActionBar("§e洗练 · §f" + rem);
+            } catch (Throwable ignored) { }
             p.sendMessage(P + "§7花费预览：§f" + ((dup ? "重复件" : (shard + " 碎片")) + (lock ? " +锁" + lockShard + "碎" : "") + " + " + coin + " 币"));
             p.sendMessage(P + "档位概率：" + oddsText(cap));
             p.sendMessage(P + (lock ? "§a锁定词条：§f" + cur.name + " §7不变，只重抽档位" : "词条：本部位 " + reroll.pool(slot).size() + " 个里随机（保底只保档位，不保词条）"));
@@ -1965,14 +1971,19 @@ public final class EmberGrowthService implements Listener {
         if (p == null) return;
         int quality = t.quality;
         if (recovered) p.sendMessage(P + "§e上次洗练（掉线 / 重启前已付款）的结果：");
-        p.sendMessage(P + "§6洗练结果：" + affixText(pl.enc, quality) + (r.forced ? " §a（保底）" : "") + " §7· 保底 " + r.pityAfter + "/" + reroll.pity);
+        // D1250: remain honesty · drop 「希望·」celebration twin wording
+        String afterRem = EmberRerollPity.afterRemainLine(r.pityAfter, reroll.pity);
+        p.sendMessage(P + "§6洗练结果：" + affixText(pl.enc, quality) + (r.forced ? " §a（保底）" : "")
+                + " §7· " + (afterRem.isEmpty() ? ("保底 " + r.pityAfter + "/" + reroll.pity) : afterRem));
         if (r.forced) {
             try { p.sendActionBar("§a保底出档 · §f" + affixText(pl.enc, quality)); } catch (Throwable ignored) { }
-            p.sendMessage(P + "§a希望 · 保底出档（不改 pity 数学）");
+            p.sendMessage(P + "§a保底出档（只保档位 · 不改 pity 数学）");
             try { p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.3f); } catch (Throwable ignored) { }
         } else if (r.pityAfter >= reroll.pity) {
             try { p.sendActionBar("§a下次洗练必出上限档"); } catch (Throwable ignored) { }
-            p.sendMessage(P + "§a希望 · 下次洗练必出上限档");
+            p.sendMessage(P + "§a下次洗练必出上限档");
+        } else if (!afterRem.isEmpty()) {
+            try { p.sendActionBar("§e洗练 · §f" + afterRem); } catch (Throwable ignored) { }
         }
         if (pl.old == 0) {
             pendingRoll.remove(id);
@@ -2132,7 +2143,9 @@ public final class EmberGrowthService implements Listener {
         if ("cur".equals(k)) return "§7词条：" + affixText(affixOf(d, t), t.quality);
         if ("cap".equals(k)) {
             int pity = afPityOf(d, t);
-            return "§7成色" + EmberItemData.qualityName(t.quality) + " · 最高 §f" + reroll.cap(t.quality) + " §7档 · 保底 §f" + pity + "/" + reroll.pity;
+            // D1249: remainLine on existing cap placeholder（非新 hope PAPI）
+            return "§7成色" + EmberItemData.qualityName(t.quality) + " · 最高 §f" + reroll.cap(t.quality)
+                    + " §7档 · §f" + EmberRerollPity.remainLine(pity, reroll.pity);
         }
         if ("dup".equals(k)) {
             if (findDup(p, d, t) >= 0) return "§a背包里有重复件 §7+ " + rerollCoin(p, t) + " 币";

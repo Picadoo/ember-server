@@ -556,3 +556,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1239–D1246 ARCH SHIP · jar 1.65.439-d1239
 - Dash-blocked ActionBar (not SF4)
+
+## D1247–D1256 ARCH SHIP · jar 1.65.440-d1247
+- Reroll pity remain honesty (remainLine); soft 「希望·」on forced; no new hope PAPI; pity math unchanged
