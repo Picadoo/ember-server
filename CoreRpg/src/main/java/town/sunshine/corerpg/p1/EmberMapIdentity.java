@@ -1,12 +1,18 @@
 package town.sunshine.corerpg.p1;
 
+import org.bukkit.entity.Player;
+
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D1341: map gear-identity remain (图鉴 have/need) — display only.
+ * D1341: map gear-identity remain (图鉴 have/need) — display only for remain lines.
+ * D2206: soft SetFocus when identity completes (non-clear-gate unlock · zero ConfirmTokens).
  * Never gates clears; never changes drop rates. Not a hope PAPI twin.
  */
 public final class EmberMapIdentity {
+
+    /** Per-family latch: soft-focus already applied once for this loot family. */
+    public static final String C_SOFT = "p1_map_id_soft_";
 
     private EmberMapIdentity() {}
 
@@ -104,5 +110,47 @@ public final class EmberMapIdentity {
             if (family.equals(md.lootFamily)) return md.key;
         }
         return null;
+    }
+
+    /**
+     * D2206: after a new codex register — if some mainline Q identity for {@code family}
+     * is now complete and SetFocus is unset, soft-set focus to that family.
+     * Zero clear-gate / drop / ConfirmTokens. Returns true when soft-set applied.
+     */
+    public static boolean maybeSoftFocusAfterCodex(Player p, PlayerData d, String family, EmberRunMaps maps) {
+        if (p == null || d == null || family == null || family.isEmpty()) return false;
+        if (!EmberRunRules.validFamily(family)) return false;
+        if (EmberSetFocus.valid(EmberSetFocus.get(d))) return false;
+        String latch = C_SOFT + family;
+        if (d.periodCount(latch, "all") > 0) return false;
+        if (maps == null || maps.maps == null) return false;
+        EmberRunMaps.MapDef done = null;
+        for (EmberRunMaps.MapDef md : maps.maps.values()) {
+            if (!mainlineQ(md)) continue;
+            if (!family.equals(md.lootFamily)) continue;
+            int[] hn = haveNeed(md, d);
+            if (hn[1] > 0 && hn[0] >= hn[1]) {
+                done = md;
+                break;
+            }
+        }
+        if (done == null) return false;
+        int focusId = EmberSetFocus.parse(family);
+        if (!EmberSetFocus.valid(focusId)) return false;
+        if (!EmberSetFocus.set(d, focusId)) return false;
+        d.addPeriodCount(latch, "all", 1);
+        String famName = EmberItemData.familyName(family);
+        String mapName = done.name == null ? done.key : done.name;
+        String line = "§a图身份齐 · §f" + mapName + " §7→ 软定套装焦点 §f" + famName
+                + " §8（可随时 /corerpg p1 setfocus 改 · 不锁通关）";
+        p.sendMessage(EmberRunService.P + line);
+        try { p.sendActionBar("§a图鉴齐 · 焦点 §f" + famName); } catch (Throwable ignored) { }
+        return true;
+    }
+
+    /** Pure: whether identity for map is complete. */
+    public static boolean identityComplete(EmberRunMaps.MapDef lm, PlayerData pd) {
+        int[] hn = haveNeed(lm, pd);
+        return hn[1] > 0 && hn[0] >= hn[1];
     }
 }

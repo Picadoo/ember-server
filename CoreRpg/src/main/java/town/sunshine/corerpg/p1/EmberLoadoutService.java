@@ -520,6 +520,10 @@ public final class EmberLoadoutService implements Listener {
             try { p.sendActionBar("§e图录 · §f" + rem); } catch (Throwable ignored) { }
             EmberRunService runs = plugin.getEmberRuns();
             if (runs != null) EmberCodexPath.maybeAfterProgress(p, runs); // D522
+            try { // D2207 map-identity soft focus (no ConfirmTokens)
+                if (EmberMapIdentity.maybeSoftFocusAfterCodex(p, pd, d.family, runs == null ? null : runs.maps()))
+                    plugin.getDataStore().flushMutation(p.getUniqueId());
+            } catch (Throwable ignored) { }
         }
     }
 

@@ -265,9 +265,15 @@ public final class EmberGearLib implements Listener {
         loadouts.rememberRow(d.uid, id, d.rev, "stored");
         if (cache.containsKey(id)) replace(id, d.uid, new Entry(d, false, false, now));
         PlayerData pd = data(id);
-        if (pd != null && EmberCodex.register(pd, d) && d.tier > 0)
+        if (pd != null && EmberCodex.register(pd, d) && d.tier > 0) {
             p.sendMessage("§6[图录] §f登记 T" + d.tier + " " + EmberItemData.familyName(d.family) + EmberItemData.slotName(d.slot)
                     + " §7（" + EmberCodex.count(pd) + "/" + EmberCodex.ENTRIES.size() + "）");
+            try { // D2207 map-identity soft focus
+                EmberRunService runs = plugin.getEmberRuns();
+                EmberMapIdentity.maybeSoftFocusAfterCodex(p, pd, d.family, runs == null ? null : runs.maps());
+                plugin.getDataStore().flushMutation(id);
+            } catch (Throwable ignored) { }
+        }
         plugin.getLogger().info("[P1 gearlib] auto-stash " + p.getName() + " " + d.uid.substring(0, 8) + " " + d.shortLabel());
         return true;
     }

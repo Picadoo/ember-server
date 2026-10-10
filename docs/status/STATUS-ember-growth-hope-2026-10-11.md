@@ -799,3 +799,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - afterPin chargesLeft+path → re-pin primary
 ## D2193–D2204 · 强化失败/拆石承诺 · jar 1.65.514-d2204
 - Enhance fail → quality/refine; gem remove → enhance
+## D2205–D2218 · 图身份齐→软定套装焦点 · jar 1.65.515-d2218
+- RESEARCH 非按钮轴；MI soft SetFocus；零 ConfirmTokens / 通关门 / 掉率
