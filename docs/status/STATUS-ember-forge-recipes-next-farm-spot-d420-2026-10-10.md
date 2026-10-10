@@ -49,4 +49,4 @@ afk.tiers / daily_kills · Stage2 三开关 / ×0.97 · gate_daily · K3 · 关�
 
 ---
 
-*D420Spot · PASS · tip `fae2b9e3` · STATUS `TBD` · 证据 `/workspace/tmp/d420-forge-next-farm-spot/` · ≠关观察 · checked 2026-10-10 09:41 CST。*
+*D420Spot · PASS · tip `fae2b9e3` · STATUS `fd9cb126` · 证据 `/workspace/tmp/d420-forge-next-farm-spot/` · ≠关观察 · checked 2026-10-10 09:41 CST。*
