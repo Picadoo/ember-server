@@ -42,6 +42,7 @@ Icons:
         - '§7合成：40 余烬碎片 → 1 烙纹'
         - '§7定向价 T1/T2/T3：2/4/6 烙纹 + 300/600/1000 币'
         - '§8不抬挂机日表 · 不改强化价'
+        - '§c仓差：§f碎差 %corerpg_p1_forge_gap_brand% §8（合成需×40）'
 
   C:
     display:
@@ -51,6 +52,7 @@ Icons:
         - '§740 余烬碎片 → 1 余烬烙纹'
         - ''
         - '§e➥ §f点击：聊天栏确认合成'
+        - '§c还差：§f碎差 %corerpg_p1_forge_gap_brand%（需×40）'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'

@@ -1,6 +1,6 @@
 # 余烬 · 成长花样 · 挂机→烬砧仓差诚实环（D432）
 
-STATUS=**已批 A · 方案 M · D432 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-forge-gap-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-forge-gap-need-design-2026-10-10.md) · backlog `B-afk-forge-gap`（**已批·施工中**）· STATUS [`STATUS-ember-afk-forge-gap-d432-2026-10-10.md`](../status/STATUS-ember-afk-forge-gap-d432-2026-10-10.md) · **≠关观察 ≠抬日表 ≠sx20 ≠天赋/灰印 ≠改价**
+STATUS=**已批 A · 方案 M · D432 · PASS** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-forge-gap-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-forge-gap-need-design-2026-10-10.md) · backlog `B-afk-forge-gap`（**已批·施工中**）· STATUS [`STATUS-ember-afk-forge-gap-d432-2026-10-10.md`](../status/STATUS-ember-afk-forge-gap-d432-2026-10-10.md) · **≠关观察 ≠抬日表 ≠sx20 ≠天赋/灰印 ≠改价**
 
 **上游：** D431 每周转化 PASS（jar 1.65.133-d431）· Stage2 观察至 **≥17:40 CST**。
 
@@ -39,4 +39,4 @@ STATUS=**已批 A · 方案 M · D432 · 施工中** · 2026-10-10 · tip [`STAT
 2. 存入材料后差变小。  
 3. 零改 afk yml 产量键。  
 
-*D432 · 已批 A·M · 施工中。*
+*D432 · PASS · jar 1.65.134-d432。*

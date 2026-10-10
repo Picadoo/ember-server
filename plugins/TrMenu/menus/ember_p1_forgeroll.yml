@@ -36,6 +36,7 @@ Icons:
         - '§7极品只能从掉落来 · 锻造权重 0'
         - '§7产物 +0、词条空；新件锻造次数满 13'
         - '§8门槛同印记兑换（T2 需 Q04、T3 需 Q07）'
+        - '§c还差：§f%corerpg_p1_forge_gap_roll% §8（胚4·币500）'
   '1':
     display:
       material: blaze powder

@@ -142,11 +142,12 @@ public final class EmberRunPapi {
         return "day".equals(rest) || "day_line".equals(rest) || "day_left".equals(rest);
     }
 
-    /** D404: vault_shard|bone|core|blank · recipe_gap_enhance1|upgrade_t2|refine1. */
+    /** D404: vault_* / recipe_gap_* · D432 forge_gap_brand|roll|convert. */
     static boolean isVaultKey(String key) {
         if (key == null) return false;
         return "vault_shard".equals(key) || "vault_bone".equals(key) || "vault_core".equals(key) || "vault_blank".equals(key)
-                || "recipe_gap_enhance1".equals(key) || "recipe_gap_upgrade_t2".equals(key) || "recipe_gap_refine1".equals(key);
+                || "recipe_gap_enhance1".equals(key) || "recipe_gap_upgrade_t2".equals(key) || "recipe_gap_refine1".equals(key)
+                || "forge_gap_brand".equals(key) || "forge_gap_roll".equals(key) || "forge_gap_convert".equals(key);
     }
 
     /** D404: gap = max(0, need − have); Bukkit-free. */
@@ -180,6 +181,27 @@ public final class EmberRunPapi {
         int bl = c == null ? 0 : c.blanks, bo = c == null ? 0 : c.bone;
         return "胚差" + recipeGap(bl, blankHave) + "·骨差" + recipeGap(bo, boneHave);
     }
+
+    /** D432 %corerpg_p1_forge_gap_brand% — 烙纹合成碎差（镜像 EmberBrandRules.CRAFT_SHARDS=40）. */
+    static String forgeGapBrand(long shardHave) {
+        return String.valueOf(recipeGap(EmberBrandRules.CRAFT_SHARDS, shardHave));
+    }
+
+    /** D432 %corerpg_p1_forge_gap_roll% — 随机锻胚/币差（4 胚 + 500 币）. */
+    static String forgeGapRoll(long blankHave, long coinHave) {
+        return "胚差" + recipeGap(EmberForgeRollRules.BLANKS, blankHave) + "·币差" + recipeGap(EmberForgeRollRules.COINS, coinHave);
+    }
+
+    /**
+     * D432 %corerpg_p1_forge_gap_convert% — 转化胚/币差。
+     * {@code tier} 1–3 from held piece; else T1 defaults.
+     */
+    static String forgeGapConvert(int tier, long blankHave, long coinHave) {
+        int t = (tier >= 1 && tier <= 3) ? tier : 1;
+        return "胚差" + recipeGap(EmberConvertRules.blanks(t), blankHave)
+                + "·币差" + recipeGap(EmberConvertRules.coins(t), coinHave);
+    }
+
 
     /** D144 余烬连战 menu line (weekly reward still open vs. practice only). */
     static String rushLine(boolean pays) {
@@ -313,14 +335,16 @@ public final class EmberRunPapi {
     }
 
     /**
-     * D404 %corerpg_p1_vault_*% / recipe_gap_* — read-only EmberVault.count (仓内含绑定) + UpgradeRules 镜像 gap.
-     * Empty / vault absent → {@code 0} / 拼接零差. Does not change UpgradeRules / vault whitelist.
+     * D404 %corerpg_p1_vault_*% / recipe_gap_* · D432 forge_gap_* — read-only vault + 镜像价 gap.
+     * Empty / vault absent → {@code 0} / 拼接零差. Does not change UpgradeRules / AFK tables.
      */
     private String vault(Player p, String key) {
         long shard = vaultCount(p, EmberUpgradeRules.MAT_SHARD);
         long bone = vaultCount(p, EmberUpgradeRules.MAT_BONE);
         long core = vaultCount(p, EmberUpgradeRules.MAT_CORE);
         long blank = vaultCount(p, EmberUpgradeRules.MAT_BLANK);
+        PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+        long coin = pd == null ? 0L : Math.max(0L, pd.getCoin());
         if ("vault_shard".equals(key)) return String.valueOf(shard);
         if ("vault_bone".equals(key)) return String.valueOf(bone);
         if ("vault_core".equals(key)) return String.valueOf(core);
@@ -328,6 +352,14 @@ public final class EmberRunPapi {
         if ("recipe_gap_enhance1".equals(key)) return recipeGapEnhance1(shard);
         if ("recipe_gap_upgrade_t2".equals(key)) return recipeGapUpgradeT2(shard, core, blank);
         if ("recipe_gap_refine1".equals(key)) return recipeGapRefine1(blank, bone);
+        // D432 烬砧仓差（镜像 Brand/Roll/Convert 价；不抬 AFK 表）
+        if ("forge_gap_brand".equals(key)) return forgeGapBrand(shard);
+        if ("forge_gap_roll".equals(key)) return forgeGapRoll(blank, coin);
+        if ("forge_gap_convert".equals(key)) {
+            EmberItemData held = p == null ? null : heldTrusted(p);
+            int tier = (held != null && held.tier >= 1 && held.tier <= 3) ? held.tier : 1;
+            return forgeGapConvert(tier, blank, coin);
+        }
         return "";
     }
 

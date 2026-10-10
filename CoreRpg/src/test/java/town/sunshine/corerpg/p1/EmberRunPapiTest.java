@@ -182,6 +182,21 @@ public final class EmberRunPapiTest {
         assertEquals("胚差3·骨差5", EmberRunPapi.recipeGapRefine1(0, 0));
         assertEquals("胚差0·骨差0", EmberRunPapi.recipeGapRefine1(3, 5));
         assertEquals("胚差1·骨差2", EmberRunPapi.recipeGapRefine1(2, 3));
+        // D432 forge gaps (mirror Brand/Roll/Convert; no AFK table raise)
+        assertEquals("40", EmberRunPapi.forgeGapBrand(0));
+        assertEquals("0", EmberRunPapi.forgeGapBrand(40));
+        assertEquals("15", EmberRunPapi.forgeGapBrand(25));
+        assertEquals("胚差4·币差500", EmberRunPapi.forgeGapRoll(0, 0));
+        assertEquals("胚差0·币差0", EmberRunPapi.forgeGapRoll(4, 500));
+        assertEquals("胚差1·币差100", EmberRunPapi.forgeGapRoll(3, 400));
+        assertEquals("胚差2·币差300", EmberRunPapi.forgeGapConvert(1, 0, 0));
+        assertEquals("胚差4·币差600", EmberRunPapi.forgeGapConvert(2, 0, 0));
+        assertEquals("胚差6·币差1000", EmberRunPapi.forgeGapConvert(3, 0, 0));
+        assertEquals("胚差2·币差300", EmberRunPapi.forgeGapConvert(0, 0, 0)); // invalid → T1
+        assertEquals("胚差0·币差0", EmberRunPapi.forgeGapConvert(1, 2, 300));
+        assertTrue(EmberRunPapi.isVaultKey("forge_gap_brand"));
+        assertTrue(EmberRunPapi.isVaultKey("forge_gap_roll"));
+        assertTrue(EmberRunPapi.isVaultKey("forge_gap_convert"));
         // D406 short first-clear aggregate (Bukkit-free)
         assertEquals(0, EmberShortRules.fcLeft(0));
         assertEquals(10, EmberShortRules.fcLeft(10));
