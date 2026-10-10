@@ -1,6 +1,6 @@
 # DESIGN · 生活/烹饪剩余诚实 Stage0 · 2026-10-11
 
-> **状态：** Stage0 草案 · 待 tip 批 · **D1543+ 可开**  
+> **状态：** Stage0 + **D1543– SHIP** · 已批 A · 方案 M  
 > **硬禁：** 无 K3/SF4 / hope PAPI / AFK raise / 改掉率 / skill_mult
 
 ## 问题

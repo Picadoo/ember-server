@@ -353,9 +353,25 @@ public final class LifeService implements Listener {
         if (o.daily > 0 && d.periodCount("life_" + o.id, td) >= o.daily) { p.sendMessage(ChatColor.RED + "[生活] 今日次数已用完（" + o.daily + "）。"); return false; }
         for (Map.Entry<String, Integer> e : o.inputs.entrySet()) {
             int have = ni.countInInventory(p, e.getKey());
-            if (have < e.getValue()) { p.sendMessage(ChatColor.RED + "[生活] 材料不足：" + ni.displayName(e.getKey()) + " " + have + "/" + e.getValue()); return false; }
+            if (have < e.getValue()) {
+                int gap = e.getValue() - have;
+                p.sendMessage(ChatColor.RED + "[生活] 材料不足：" + ni.displayName(e.getKey()) + " " + have + "/" + e.getValue()
+                        + " §8· 还差 " + gap);
+                try { // D1544
+                    p.sendActionBar("§e生活 · 还差 §f" + ni.displayName(e.getKey()) + "×" + gap);
+                } catch (Throwable ignored) { }
+                return false;
+            }
         }
-        if (d.getCoin() < o.coin) { p.sendMessage(ChatColor.RED + "[生活] 余烬币不足：需要 " + o.coin + "，拥有 " + d.getCoin()); return false; }
+        if (d.getCoin() < o.coin) {
+            int gapC = o.coin - d.getCoin();
+            p.sendMessage(ChatColor.RED + "[生活] 余烬币不足：需要 " + o.coin + "，拥有 " + d.getCoin()
+                    + " §8· 还差 " + gapC);
+            try { // D1545
+                p.sendActionBar("§e生活 · 还差币 §f" + gapC);
+            } catch (Throwable ignored) { }
+            return false;
+        }
         if (o.coin > 0 && !town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", o.coin)) {
             p.sendMessage(ChatColor.RED + "[生活] 扣币失败"); return false;
         } // D1020: coin before mats
@@ -374,6 +390,7 @@ public final class LifeService implements Listener {
         }
         p.sendMessage(ChatColor.GREEN + "[生活] " + ChatColor.stripColor(o.name) + " → " + ChatColor.WHITE + String.join("，", got)
                 + (o.coin > 0 ? ChatColor.GRAY + "（-" + o.coin + " 币）" : ""));
+        try { p.sendActionBar("§a生活 · §f" + ChatColor.stripColor(o.name)); } catch (Throwable ignored) { }
         addXp(p, o.xp);
         if (BREW_OFFER_ID.equals(o.id)) // D844
             town.sunshine.corerpg.p1.EmberBrewPath.afterBrew(p);
@@ -532,11 +549,19 @@ public final class LifeService implements Listener {
             int use = Math.min(have, cookMax - total);
             if (use > 0) { take.put(in, use); total += use; }
         }
-        if (total == 0) { p.sendMessage(ChatColor.RED + "[生活] 背包里没有可烤的鱼（鳕鱼/鲑鱼）。拿钓竿去水边钓吧。"); return; }
+        if (total == 0) {
+            p.sendMessage(ChatColor.RED + "[生活] 背包里没有可烤的鱼（鳕鱼/鲑鱼）。拿钓竿去水边钓吧。");
+            try { p.sendActionBar("§e烹饪 · 缺鱼 · 去钓"); } catch (Throwable ignored) { }
+            return;
+        }
         int fee = total * cookCoinEach;
         if (d.getCoin() < fee) {
             total = cookCoinEach > 0 ? d.getCoin() / cookCoinEach : total;
-            if (total <= 0) { p.sendMessage(ChatColor.RED + "[生活] 余烬币不足（每条 " + cookCoinEach + " 币）"); return; }
+            if (total <= 0) {
+                p.sendMessage(ChatColor.RED + "[生活] 余烬币不足（每条 " + cookCoinEach + " 币）");
+                try { p.sendActionBar("§e烹饪 · 还差币 §f" + cookCoinEach); } catch (Throwable ignored) { }
+                return;
+            }
             fee = total * cookCoinEach;
             int left = total;
             for (Map.Entry<String, Integer> e : take.entrySet()) { int u = Math.min(left, e.getValue()); e.setValue(u); left -= u; }
@@ -559,6 +584,7 @@ public final class LifeService implements Listener {
         ni.giveNiItem(p, cookOutput, cooked);
         dataStore.flushMutation(p.getUniqueId());
         p.sendMessage(ChatColor.GREEN + "[生活] 烤好了 " + ni.displayName(cookOutput) + "×" + cooked + ChatColor.GRAY + "（-" + cooked * cookCoinEach + " 币）");
+        try { p.sendActionBar("§a烹饪 · §f烤好×" + cooked); } catch (Throwable ignored) { }
         addXp(p, cooked * cookXp);
         town.sunshine.corerpg.p1.EmberCookPath.afterCook(p, cooked); // D843
     }
