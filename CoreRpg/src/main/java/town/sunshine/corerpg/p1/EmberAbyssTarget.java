@@ -43,7 +43,8 @@ public final class EmberAbyssTarget {
         int t = get(d);
         if (t <= 0) return;
         String line;
-        if (enteringFloor >= t) line = "§a层目标 · 本局 §f" + enteringFloor + " §a≥ 目标 " + t;
+        if (enteringFloor == t) line = "§c冲目标层 · 本局 §f" + t; // D748
+        else if (enteringFloor > t) line = "§a层目标 · 本局 §f" + enteringFloor + " §a≥ 目标 " + t;
         else line = "§e层目标 §f" + t + " §7· 本局 §f" + enteringFloor + " §7· 最高 " + best;
         p.sendMessage(EmberRunService.P + line);
         // D709: target above what this entry can reach (best+1 typically)

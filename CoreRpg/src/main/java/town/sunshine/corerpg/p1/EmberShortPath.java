@@ -96,7 +96,18 @@ public final class EmberShortPath {
     public static String unpaidFcLine(EmberRunService runs, PlayerData d) {
         int n = countUnpaidFc(runs, d);
         if (n <= 0) return "§7短征首通包：已清";
-        return "§e未领首通包：§f" + n + " 本";
+        // D749: list up to 3 unpaid keys
+        StringBuilder sb = new StringBuilder("§e未领首通包：§f").append(n).append(" 本");
+        if (runs != null && d != null) {
+            int shown = 0;
+            for (EmberRunMaps.MapDef m : orderedShorts(runs.maps())) {
+                if (!unlocked(runs, d, m) || !unpaidFc(d, m)) continue;
+                sb.append(shown == 0 ? " §8· " : " ").append(m.key.toUpperCase(Locale.ROOT));
+                if (++shown >= 3) break;
+            }
+            if (n > 3) sb.append("…");
+        }
+        return sb.toString();
     }
 
     static boolean unlocked(EmberRunService runs, PlayerData d, EmberRunMaps.MapDef m) {

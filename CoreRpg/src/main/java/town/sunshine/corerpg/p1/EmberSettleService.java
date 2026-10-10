@@ -511,6 +511,8 @@ public final class EmberSettleService {
                 if (!p.isOnline()) return;
                 EmberLoadout lo2 = runs.loadouts() == null ? null : runs.loadouts().refresh(p);
                 EmberMapFarmCue.afterSettle(p, farmMap, lo2);
+                if (runs.loadouts() != null) // D747 setchase equip after deliver
+                    EmberSetChase.afterEquip(p, pd, runs.loadouts());
             }, 5L);
             Bukkit.getScheduler().runTaskLater(runs.plugin(), () -> {
                 if (p.isOnline()) EmberStashPath.maybeAfterProgress(p); // D526 stash path

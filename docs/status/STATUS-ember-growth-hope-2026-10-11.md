@@ -216,3 +216,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D744 afterEquip focus aligned bar
 - D745 abysstarget open next buttons
 - D746 shortpath FC claim-next line
+
+## D747–D749 SHIP · jar 1.65.345-d747 · 2026-10-11
+- D747 settle afterEquip setchase
+- D748 abyss enter 冲目标层
+- D749 unpaid FC key list
