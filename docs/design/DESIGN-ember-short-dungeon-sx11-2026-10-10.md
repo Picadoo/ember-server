@@ -217,8 +217,8 @@ STATUS=**已批 A · 方案 M · D417** · 2026-10-10 · tip [`STATUS-ember-next
 
 ## 6. 后置（非本窗）
 
-1. sx12（须本债 PASS 后再议）  
-2. 工坊速览挂 remain/eta（D416§5 · 另号）  
+1. sx12（D419 tip 已交 · 待批 A · 烬枢转厅）  
+2. 工坊速览挂 remain/eta（D418 施工并行）  
 3. ActionBar 叠仓差半句（过长另证）  
 4. 全档强化动态还差引擎（过厚另签）
 
