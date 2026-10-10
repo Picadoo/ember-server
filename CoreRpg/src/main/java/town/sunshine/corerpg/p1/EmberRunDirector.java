@@ -507,6 +507,65 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D571: any mortar warn circle still armed (not yet landed). */
+    boolean hasPendingMortar() {
+        long now = System.currentTimeMillis();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"mortar".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** Nearest armed mortar warn origin, or null. */
+    private Location nearestMortarOrigin(Location from) {
+        if (from == null) return null;
+        long now = System.currentTimeMillis();
+        Location best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"mortar".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            double d = t.affixOrigin.distanceSquared(from);
+            if (d < bestD) { bestD = d; best = t.affixOrigin; }
+        }
+        return best;
+    }
+
+    /** D571: pull a committed player out of the nearest mortar warn circle. */
+    boolean pathDodgeMortar(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingMortar()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Variety v = svc.maps() == null ? null : svc.maps().variety;
+        double r = v == null ? 2.5 : v.mortarRadius;
+        Location o = nearestMortarOrigin(p.getLocation());
+        if (o == null) return false;
+        Location pl = p.getLocation();
+        double dx = pl.getX() - o.getX(), dz = pl.getZ() - o.getZ();
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        double safe = r + 2.0;
+        if (dist >= safe) return false;
+        Vector dir;
+        if (dist < 0.15) {
+            dir = pl.getDirection().clone();
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+            else dir.normalize();
+        } else {
+            dir = new Vector(dx, 0, dz).normalize();
+        }
+        Location to = new Location(w, o.getX() + dir.getX() * safe, pl.getY(), o.getZ() + dir.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.55f);
+        return true;
+    }
+
     /** D570: jailer root (JUMP 128 + SLOW 6) is active on player. */
     boolean hasJailerRoot(Player p) {
         if (p == null) return false;
@@ -1086,6 +1145,7 @@ final class EmberRunDirector {
             if (feet == null) return;
             t.affixOrigin = feet;
             t.affixAt = AffixCycle.after(now, v.mortarWarn);
+            EmberDodgePath.maybeAfterMortar(s); // D571
             return;
         }
         if ("venom".equals(t.affix)) {

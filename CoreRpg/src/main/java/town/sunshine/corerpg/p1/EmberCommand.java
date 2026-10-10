@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("dodgepath".equals(sub) || "闪榴路径".equals(sub)) return dodgePathCmd(s, args); // D571
+        if ("dodge".equals(sub) && args.length == 2) return dodgeGoCmd(s); // D571
         if ("freepath".equals(sub) || "解锢路径".equals(sub)) return freePathCmd(s, args); // D570
         if ("free".equals(sub) && args.length == 2) return freeGoCmd(s); // D570
         if ("breachpath".equals(sub) || "裂隙路径".equals(sub)) return breachPathCmd(s, args); // D569
@@ -1689,6 +1691,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("dodgeseed".equals(sub)) return dodgeSeedCmd(s, args); // D571
         if ("freeseed".equals(sub)) return freeSeedCmd(s, args); // D570
         if ("breachseed".equals(sub)) return breachSeedCmd(s, args); // D569
         if ("relayseed".equals(sub)) return relaySeedCmd(s, args); // D568
@@ -5016,6 +5019,62 @@ public final class EmberCommand {
             EmberFreePath.maybeProbe(t);
             s.sendMessage(P + "已施加禁锢形定身并触发解锢路径 → " + t.getName()
                     + (EmberFreePath.hasLocalJailer(t) || (runs != null && runs.hasJailerRoot(t)) ? "（仍定身）" : "（已解/无）"));
+            return true;
+    }
+
+    private boolean dodgePathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberDodgePath.glance(EmberDodgePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c闪榴路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberDodgePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c闪榴路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberDodgePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberDodgePath.get(d);
+                    if (EmberDodgePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDodgePath.label(cur) + " · 改路径再 /corerpg p1 dodgepath");
+                    else EmberDodgePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberDodgePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 dodgepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberDodgePath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean dodgeGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathDodgeMortar(p)) p.sendMessage(P + "无法闪榴（无榴弹预警/已在圈外/未进本）");
+            else p.sendMessage(P + "§a闪榴·手点 §7已拉出榴弹圈");
+            return true;
+    }
+
+    private boolean dodgeSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberDodgePath.maybeProbe(t);
+            s.sendMessage(P + "已触发闪榴路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingMortar(t) ? "（有榴）" : "（无榴）"));
             return true;
     }
 }
