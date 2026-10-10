@@ -287,6 +287,24 @@ public class EmberSetEngineTest {
                 new EmberSetEngine.Candidate("near", 3, 2.9)), 3.0).size());
     }
 
+    // ---------------------------------------------------------------- D439 almost-ready counter (UI hook precondition)
+    @Test public void almostReadyCounterIsEveryMinusOne_reasonCount_D439() {
+        for (String fam : Arrays.asList("burst", "sustain", "scorch")) {
+            EmberSetEngine e = engine(fam, 1);
+            int ev = e.every();
+            assertTrue(fam + " every>1", ev > 1);
+            long t = 0;
+            Outcome last = null;
+            for (int i = 0; i < ev - 1; i++) {
+                last = hit(e, t += 100);
+                assertEquals(fam + " pre-proc", Trigger.NONE, last.trigger);
+                assertEquals(fam + " reason", "count", last.reason);
+            }
+            assertEquals(fam + " almost", ev - 1, last.counter);
+            assertEquals(fam + " engine", ev - 1, e.counter());
+        }
+    }
+
     @Test public void hudText() {
         EmberSetEngine e = engine("burst", 1);
         assertNull(e.hud(0));
