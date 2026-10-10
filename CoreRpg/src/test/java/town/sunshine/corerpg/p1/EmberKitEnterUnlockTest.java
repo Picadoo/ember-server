@@ -49,4 +49,12 @@ public class EmberKitEnterUnlockTest {
         assertEquals(24, EmberSkillKit.PARRY_SYNC_SLOW_TICKS);
         assertEquals(0.00625, EmberSkillKit.PARRY_SYNC_HEAL_PCT, 1e-9);
     }
+
+    @Test
+    public void pledgeEnterOnce() {
+        PlayerData d = new PlayerData();
+        assertTrue(EmberSkillKit.markPledgeEnter(d));
+        assertFalse(EmberSkillKit.markPledgeEnter(d));
+        assertTrue(EmberSkillKit.pledgeUnlocked(d, null));
+    }
 }

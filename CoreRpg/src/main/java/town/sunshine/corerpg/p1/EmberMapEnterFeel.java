@@ -69,6 +69,9 @@ public final class EmberMapEnterFeel {
                 } else if ("q05".equals(k) && EmberSkillKit.markStepEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a身法变体已解锁 · §f套装踏步 §7（首进 Q05 · 不锁通关）");
                     p.sendActionBar("§a身法解锁 · §f两件套自动变");
+                } else if ("q06".equals(k) && EmberSkillKit.markPledgeEnter(pd)) {
+                    p.sendMessage(EmberRunService.P + "§a誓约/试炼路径已开放 · §f/corerpg p1 pledgepath §7（首进 Q06 · 不锁通关）");
+                    p.sendActionBar("§a誓约开放 · §fpledgepath");
                 } else if ("q07".equals(k) && EmberSkillKit.markAttuneEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a签名调律已开放 · §f/corerpg p1 attunepath §7（首进 Q07 · 不锁通关）");
                     p.sendActionBar("§a调律开放 · §fattunepath");

@@ -90,7 +90,7 @@ public final class EmberTrialPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8试炼路径：首通 Q06 后可选（需自选誓约）";
+        if (!unlocked) return "§8试炼路径：首进或首通 Q06 后可选（需自选誓约）";
         if (!valid(id)) return "§8试炼路径：未选 · /corerpg p1 trialpath";
         return "§e试炼路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -147,8 +147,8 @@ public final class EmberTrialPath {
         }
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!pl.getEmberRuns().progressFlag(d, EmberPledgeService.UNLOCK)) {
-            p.sendMessage(EmberRunService.P + "§c试炼需本人首通 Q06 霜封哨所（自选誓约解锁）。");
+        if (!EmberSkillKit.pledgeUnlocked(d, pl.getEmberRuns())) {
+            p.sendMessage(EmberRunService.P + "§c试炼需本人首进或首通 Q06 霜封哨所（自选誓约解锁）。");
             return;
         }
         String P = EmberRunService.P;

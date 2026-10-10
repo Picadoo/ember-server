@@ -1,18 +1,16 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.524-d2328.local**
-- D2289–D2328 real behavioral
+- jar **1.65.525-d2340.local**
+- D2289–D2340 real behavioral
 
 ## Shipped
-- D2289–D2304: Q02/Q03/Q05/Q07 first-enter kit unlocks
-- D2292/D2305: set×shape step+dash land (Slow+4t / heal×1.25)
-- D2306: sig shield secs×1.25 when synced
-- D2318–D2319: parry sync Slow+heal · dodge_heal×1.25
-- Talent **HOLD** · ConfirmTokens/remain **STOP**
+- Kit enter: Q02 dash / Q03 parry / Q04 shape / Q05 step / Q06 pledge·trial / Q07 attune
+- set×shape: slash+step+dash land Slow/heal; parry Slow; dodge_heal×1.25; sig shield secs×1.25
+- Talent **HOLD** · ConfirmTokens/remain **STOP** · zero skill_mult
 
 ## Next
-- More signature playstyle without dmg multi
-- Talent only if p1sim sidegrade
+- Signature playstyle without dmg multi (more)
+- Talent only if p1sim
 
-Updated 2026-10-11 07:55 CST
+Updated 2026-10-11 07:56 CST

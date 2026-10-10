@@ -64,7 +64,7 @@ public final class EmberPledgePath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8誓约路径：首通 Q06 后可选";
+        if (!unlocked) return "§8誓约路径：首进/首通 Q06 后可选";
         if (!valid(id)) return "§8誓约路径：未选 · /corerpg p1 pledgepath";
         return "§e誓约路径：§f" + label(id) + " §8· " + tip(id);
     }
@@ -133,8 +133,8 @@ public final class EmberPledgePath {
         }
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!pl.getEmberRuns().progressFlag(d, EmberPledgeService.UNLOCK)) {
-            p.sendMessage(EmberRunService.P + "§c自选誓约需本人首通 Q06 霜封哨所。");
+        if (!EmberSkillKit.pledgeUnlocked(d, pl.getEmberRuns())) {
+            p.sendMessage(EmberRunService.P + "§c自选誓约需本人首进或首通 Q06 霜封哨所。");
             return;
         }
         List<String> pool = new ArrayList<String>();

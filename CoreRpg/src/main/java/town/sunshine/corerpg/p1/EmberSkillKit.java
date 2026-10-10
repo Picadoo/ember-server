@@ -91,6 +91,8 @@ public final class EmberSkillKit {
     public static final String C_STEP_ENTER = "p1_step_enter";
     /** D2293: entered Q07 → 调律 without clear-gate. */
     public static final String C_ATTUNE_ENTER = "p1_attune_enter";
+    /** D2330: entered Q06 → pledge/trial without clear-gate. */
+    public static final String C_PLEDGE_ENTER = "p1_pledge_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -180,6 +182,20 @@ public final class EmberSkillKit {
         if (d.periodCount(C_ATTUNE_ENTER, "all") > 0) return false;
         d.addPeriodCount(C_ATTUNE_ENTER, "all", 1);
         return true;
+    }
+
+    public static boolean markPledgeEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_PLEDGE_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_PLEDGE_ENTER, "all", 1);
+        return true;
+    }
+
+    /** D2330: Q06 clear OR first-enter unlocks pledge/trial paths. */
+    public static boolean pledgeUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_PLEDGE_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, EmberPledgeService.UNLOCK);
     }
 
     /** D2293: Q07 clear OR first-enter unlocks attune. */

@@ -129,7 +129,7 @@ public final class EmberPledgeService {
      */
     String sessionKey(Player leader, EmberRunMaps.MapDef m, List<Player> party) {
         PlayerData d = runs.dataOf(leader.getUniqueId());
-        if (d == null || !runs.progressFlag(d, UNLOCK) || !EmberSignature.hasMap(m.key)) return null;
+        if (d == null || !EmberSkillKit.pledgeUnlocked(d, runs) || !EmberSignature.hasMap(m.key)) return null;
         List<EmberRunMaps.Modifier> l = pledged(d);
         if (l.isEmpty()) return null;
         for (Player p : party) if (!runs.firstCleared(runs.dataOf(p.getUniqueId()), m)) {
@@ -156,7 +156,7 @@ public final class EmberPledgeService {
                 p.sendMessage(P() + (isOn(d, m.id) ? "§a● " : "§8○ ") + "§f" + m.name + " §7" + m.text);
             return true;
         }
-        if (!runs.progressFlag(d, UNLOCK)) { p.sendMessage(P() + ChatColor.RED + "自选誓约需本人首通 Q06 霜封哨所。"); return true; }
+        if (!EmberSkillKit.pledgeUnlocked(d, runs)) { p.sendMessage(P() + ChatColor.RED + "自选誓约需本人首进或首通 Q06 霜封哨所。"); return true; }
         if ("off".equals(op)) {
             List<String> pool = new ArrayList<String>();
             for (EmberRunMaps.Modifier m : maps.pledgePool()) pool.add(m.id);
@@ -188,7 +188,7 @@ public final class EmberPledgeService {
         if (d == null) return "";
         EmberRunMaps maps = runs.maps();
         if ("head".equals(k)) return head(d);
-        if ("ok".equals(k)) return runs.progressFlag(d, UNLOCK) ? "1" : "0";
+        if ("ok".equals(k)) return EmberSkillKit.pledgeUnlocked(d, runs) ? "1" : "0";
         if (k.length() > 2 && k.charAt(1) == '_') {
             EmberRunMaps.Modifier m = null;
             for (EmberRunMaps.Modifier x : maps.pledgePool()) if (x.id.equals(k.substring(2))) m = x;
@@ -206,7 +206,7 @@ public final class EmberPledgeService {
 
     String head(PlayerData d) {
         List<EmberRunMaps.Modifier> l = pledged(d);
-        if (!runs.progressFlag(d, UNLOCK)) return "§8首通 Q06 后开放";
+        if (!EmberSkillKit.pledgeUnlocked(d, runs)) return "§8首进/首通 Q06 后开放";
         if (l.isEmpty()) return "§7现在没挂规则（重打按原样）";
         StringBuilder b = new StringBuilder();
         for (EmberRunMaps.Modifier m : l) b.append(b.length() == 0 ? "" : "+").append(m.name);
