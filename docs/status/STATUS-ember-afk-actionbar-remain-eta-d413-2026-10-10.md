@@ -2,7 +2,7 @@
 
 **日期：** 2026-10-10（上海时间）  
 **上游：** 总控派单 · DESIGN tip [`17cb56d0`](../design/DESIGN-ember-afk-actionbar-remain-eta-2026-10-10.md)  
-**裁决：** **本号交** 未满 ActionBar 叠 remain_line + 满额 ActionBar 短征半句 + 单测 + 装 play · **W1c Open 菜单另号** · **未动** daily_kills / afk.tiers / Stage2 三开关 / gate_daily / ×0.97 · **≠sx10**
+**裁决：** **本号交** 未满 ActionBar 叠 remain_line + 满额 ActionBar 短征半句 + 单测 + 装 play · **W1c Open 菜单同批已落** · **未动** daily_kills / afk.tiers / Stage2 三开关 / gate_daily / ×0.97 · **≠sx10**
 
 ## 本号范围
 
@@ -11,7 +11,7 @@
 | W1a 未满 ActionBar | `fightActionBar` 末尾 ` · ` + `remainLine`（D405 口径）；保留层名/今日/kph/阵亡 | — |
 | W1b 满额 ActionBar | `capActionBar(daily, shortLeft, stamina)`；`sx_day_left_sum`>0 且 stamina≥30 →「短征还可追 · 剩余有奖 N」；stamina&lt;30 →「短征需30体力」；sum=0 不叠 | — |
 | 刷新 | 仍 ticks%40（~2s） | — |
-| W1c Open tell | — | TrMenu 可选另号 |
+| W1c Open tell | — | **同批已落** · `ember_p1_afk` Open +「抬头可见还差/约满」· 不重开 remain 主块 |
 
 ## 不动
 
@@ -37,4 +37,4 @@ daily_kills / afk.tiers / 离线% · Stage2 三开关 / ×0.97 · gate_daily · 
 
 ## 下一号
 
-D414 sx10 键+S49（同批顺序）；W1c Open 可选另号。
+D414 sx10 键+S49 已交；W1c Open 菜单半行同批已落（dayline 菜单号）。

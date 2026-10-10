@@ -59,7 +59,7 @@ STATUS=**已批 A · 方案 M · D413** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a 未满 ActionBar 叠 remain_line 必做 + W1b 满额短征半句同批；见 §2）
 - [x] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx10/仓差主债/复述）
-- [x] 批注：总控批 A·M · 2026-10-10 · D413 · W1a 必做 · W1b 同批 · W1c Open 可选 · 零改产量/tiers/Stage2 · ≠sx10 · **施工中**
+- [x] 批注：总控批 A·M · 2026-10-10 · D413 · W1a 必做 · W1b 同批 · W1c Open 可选 · 零改产量/tiers/Stage2 · ≠sx10 · **W1a/W1b tip `cd9a19f2` · W1c 菜单半行已落**
 
 ---
 

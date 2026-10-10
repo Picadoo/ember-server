@@ -3,6 +3,8 @@
 # D408: 满额 F 双路径（左冒险 D285 / 右短征选页）+ Open/I 满额半行 · 体力<30 诚实 tell · 零改产量
 # D408-fix: W1c 右键改嵌套单条件 stamina+deny（删 and 独立档）· FAIL f45cc48f
 # D411: 战况 I +下一层养签 next_farm（remain_line 下）+ Open 半行 · 零改产量/tiers · 保留 D383 静态层差
+# D413: Open +半行「抬头可见还差/约满」（ActionBar W1a/W1b live tip cd9a19f2）· 不重开菜单 remain 主块 · 零改产量
+# D415: 战况 I 挂 D404 vault/recipe_gap 仓差行 + Open/去哪花半行 · 零 jar · 保留 remain/next_farm/层差/短征剩余
 # P1 挂机庭 · 自动战斗（D177 rev 2，DESIGN-ember-afk-p1-2026-10-04.md）— CoreRpg EmberAfkService + AfkTierService（复用 ember_afk 世界）
 # 站在已解锁的层里角色自己打本层的个人怪：自动普攻 + 冷却好自动烬斩 + 战利品直接进账（材料进仓库）；击杀速度和能扛住哪层看装备
 # 四层按主线首通开放：灰坡 Q01 · 荒原 Q03 · 焦土 Q05 · 烬原深处 Q07；每日 2400 只封顶（在线 + 离线），离线按实测速度 × 25%、最多 1200 只
@@ -26,6 +28,8 @@ Events:
     - 'tell: §8满后体力还能去冒险 · 也可追短征（选本页）'
     - 'tell: §8战况可看还差/约满 · 今日软目标·层差一览'
     - 'tell: §8战况有下一层养签'
+    - 'tell: §8抬头可见还差/约满'
+    - 'tell: §8战况可看仓内还差'
 Icons:
   '#':
     display:
@@ -54,6 +58,11 @@ Icons:
         # D411 W1b：挂 next_farm（键 live tip 3c59bab5 · jar 1.65.119-d411）· 禁假写固定层名当个人态
         - '§6下一层养签：%corerpg_p1_afk_next_farm%'
         - '§d挂满可追短征 · 今日剩余有奖 §f%corerpg_p1_sx_day_left_sum%'
+        # D415 W1a：D404 live 仓差（禁假写固定余额；禁暗示挂满必够升阶）
+        - '§e仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone% §7· §f核%corerpg_p1_vault_core% §7· §f胚%corerpg_p1_vault_blank%'
+        - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
+        - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
+        - '§8细看点「去哪花」→配方速览 · 不加快产量'
         - '§7未满就继续坐 · 满了点「去冒险」/右键「短征」/「去哪花」'
         - '§7本次：%corerpg_p1_afk_session% · 速度：%corerpg_p1_afk_kph%'
         - '§7每小时战利品：%corerpg_p1_afk_loot%'
@@ -137,6 +146,7 @@ Icons:
 # D381: 去哪花 lore +半行「工坊内可回本庭」（反向互指；不重做主格）
 # D398: 去哪花 +半行「工坊有配方速览看 ×N」
 # D404: 去哪花 +半行「配方速览可看仓内还差」
+# D415 W1b: 去哪花半行诚实「战况/速览均可看仓差」
   S:
     display:
       material: anvil
@@ -154,7 +164,7 @@ Icons:
         - ''
         - '§e➥ §f打开工坊花材料'
         - '§7工坊有「配方速览」看 ×N（未持件也能看）'
-        - '§7配方速览可看仓内还差'
+        - '§7战况/速览均可看仓差'
         - '§7例：灰坡约 2 打满日 ≈ 强化 +1 碎片（按现网日表）'
         - '§7旁格「材料仓库」可查仓'
         - '§8工坊内可回本庭（材料哪来）'

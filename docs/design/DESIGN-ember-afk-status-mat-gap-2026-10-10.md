@@ -1,6 +1,6 @@
 # 余烬 · 挂机战况挂仓差（挂机资源环⑥ · ≠抬日表 · ≠sx11）
 
-STATUS=**已批 A · 方案 M · D415** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-status-mat-gap-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-status-mat-gap-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-status-mat-gap`（**已批/施工中**）· **施工中** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx11 ≠复述 D373–D414 ≠改 daily_kills/afk.tiers/UpgradeRules ≠重开配方速览/remain/ActionBar/next_farm/短征链为主债**
+STATUS=**已批 A · 方案 M · D415** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-afk-status-mat-gap-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-afk-status-mat-gap-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-afk-status-mat-gap`（**已批·挂盘已落**）· STATUS [`STATUS-ember-afk-status-mat-gap-d415-2026-10-10.md`](../status/STATUS-ember-afk-status-mat-gap-d415-2026-10-10.md) · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx11 ≠复述 D373–D414 ≠改 daily_kills/afk.tiers/UpgradeRules ≠重开配方速览/remain/ActionBar/next_farm/短征链为主债**
 
 > **一句话玩家价值：** 打开挂机庭战况就能看见「仓里有多少碎/骨/核/胚」与「强化+1 / 升阶 T2 还差多少」——坐着攒材时同屏知还差啥、何时去花；**不**抬产量、**不**交 sx11、**不**重开配方速览为主交付。
 
@@ -58,7 +58,7 @@ STATUS=**已批 A · 方案 M · D415** · 2026-10-10 · tip [`STATUS-ember-next
 
 - [x] **方案 M**（W1a 战况挂仓差必做 + W1b Open/去哪花半行同批；见 §2）
 - [x] 否决 A（只口号）/ L（抬表·改价·全档引擎）/ W（sx11/复述/假写）
-- [x] 批注：总控批 A·M · 2026-10-10 · D415 · W1a 必做 · W1b 同批 · 零 jar · 零改产量/UpgradeRules · ≠sx11 · **施工中**
+- [x] 批注：总控批 A·M · 2026-10-10 · D415 · W1a 必做 · W1b 同批 · 零 jar · 零改产量/UpgradeRules · ≠sx11 · **挂盘已落** · 未派测
 
 ---
 
@@ -157,7 +157,8 @@ STATUS=**已批 A · 方案 M · D415** · 2026-10-10 · tip [`STATUS-ember-next
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题挂机战况挂仓差（兑现 D404§5.4 后置）· ≠sx11 |
-| 2026-10-10 | **已批 A · 方案 M · D415** · 总控批注勾选 · W1a 必做 · W1b 同批 · 零 jar · 零改产量/UpgradeRules · ≠sx11 · **施工中** |
+| 2026-10-10 | **已批 A · 方案 M · D415** · 总控批注勾选 · W1a 必做 · W1b 同批 · 零 jar · 零改产量/UpgradeRules · ≠sx11 · **挂盘已落** · 未派测 |
+| 2026-10-10 | **挂盘已落** · STATUS-ember-afk-status-mat-gap-d415 · `ember_p1_afk` I/Open/去哪花 · 零 jar · 未派测 |
 
 ---
 
