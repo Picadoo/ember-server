@@ -399,6 +399,9 @@ sinks:
     marks: 8
     blank: 4
     coin: 500
+    "floor.blank": 8   # D1142 K2 = C06 q0（标准→精良）全价加扣
+    "floor.bone": 8
+    "floor.coin": 800
   # D431 每周转化（按阶 golden；实扣随件阶）
   C23:
     blank_t1: 2

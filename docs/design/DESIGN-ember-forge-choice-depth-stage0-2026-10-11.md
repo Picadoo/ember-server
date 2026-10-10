@@ -25,7 +25,7 @@
 | ID | 缺口 | 建议切片 | 风险 |
 |----|------|----------|------|
 | **K1** | 工坊/Hub 入口稳线与赌线权重同级，「先赌」误导 | **诚实入口** | UX only · 零经济 · **D1139 SHIP** |
-| **K2** | 随机锻无「加料买下限」 | 可选 `forgeroll … floor`：多扣胚料/币 → 成色 ≥ 精良；须 p1sim ±2pp | 经济 · **另批** |
+| **K2** | 随机锻无「加料买下限」 | `forgeroll … floor` + C06.q0 加扣 | **D1140– SHIP** · out-forgeroll-floor-d1141 WITHIN |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 

@@ -517,3 +517,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1130–D1139 ARCH SHIP · jar 1.65.427-d1130
 - D1130–D1138: Counters/Formula/Loadout PASS; RESEARCH+DESIGN Stage0 forge choice
 - D1139 K1: 稳线/旁路诚实入口（TrMenu+hub+cmd；零经济；无新 PAPI）
+
+## D1140–D1152 ARCH SHIP · jar 1.65.428-d1140
+- K2: forgeroll floor (p1sim WITHIN); C22 floor leaves = C06 q0; K3 banned
+- skill Stage2 micro Stage0 docs only (no skill_mult)

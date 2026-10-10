@@ -30,8 +30,25 @@ public final class EmberForgeRollRules {
         return new EmberUpgradeRules.Cost(0, 0, blanks(), 0, coins());
     }
 
+    /** D1142 K2: base + C06 q0 full surcharge (floor.blank/bone/coin). */
+    public static int floorBlank() { return EmberEconomy.amount("C22", "floor.blank"); }
+    public static int floorBone() { return EmberEconomy.amount("C22", "floor.bone"); }
+    public static int floorCoin() { return EmberEconomy.amount("C22", "floor.coin"); }
+
+    public static EmberUpgradeRules.Cost matCostFloor() {
+        return new EmberUpgradeRules.Cost(0, 0, blanks() + floorBlank(), floorBone(), coins() + floorCoin());
+    }
+
+    /** Quality weights with 标准 removed (极品仍 0). */
+    public static final int[] QUALITY_W_FLOOR = {0, 23, 7, 0};
+
     public static int rollQuality(Random rng) {
         return weighted(QUALITY_W, rng);
+    }
+
+    /** D1142: roll among ≥精良 only. */
+    public static int rollQualityFloor(Random rng) {
+        return weighted(QUALITY_W_FLOOR, rng);
     }
 
     public static int rollCraft(Random rng) {
@@ -56,7 +73,13 @@ public final class EmberForgeRollRules {
         String err = EmberRunRules.exchangeCheck(haveMarks, tier, tier, fam, slot, gateOpen);
         if (err != null) return err;
         if (QUALITY_W.length != 4 || QUALITY_W[3] != 0) return "成色表损坏：极品权重必须为 0";
+        if (QUALITY_W_FLOOR.length != 4 || QUALITY_W_FLOOR[0] != 0 || QUALITY_W_FLOOR[3] != 0) return "下限成色表损坏";
         return null;
+    }
+
+    public static String oddsLineFloor() {
+        return "下限成色：§f必精良§7 · 精良 " + QUALITY_W_FLOOR[1] + " · 卓越 " + QUALITY_W_FLOOR[2]
+                + "（重归一；极品 0）· 加扣胚" + floorBlank() + "+骨" + floorBone() + "+币" + floorCoin();
     }
 
     public static String oddsLine() {

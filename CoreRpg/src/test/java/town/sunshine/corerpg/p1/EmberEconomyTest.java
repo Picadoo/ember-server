@@ -1209,6 +1209,24 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void forgeRollFloorLeaves() {
+        // D1145 K2
+        assertEquals(8, EmberEconomy.amount("C22", "floor.blank"));
+        assertEquals(8, EmberEconomy.amount("C22", "floor.bone"));
+        assertEquals(800, EmberEconomy.amount("C22", "floor.coin"));
+        assertEquals(EmberEconomy.amount("C06", "q0.blank"), EmberEconomy.amount("C22", "floor.blank"));
+        EmberUpgradeRules.Cost c = EmberForgeRollRules.matCostFloor();
+        assertEquals(4 + 8, c.blanks);
+        assertEquals(8, c.bone);
+        assertEquals(500 + 800, c.coins);
+        java.util.Random r = new java.util.Random(42);
+        for (int i = 0; i < 200; i++) {
+            int q = EmberForgeRollRules.rollQualityFloor(r);
+            assertTrue("floor q=" + q, q >= 1 && q <= 2);
+        }
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

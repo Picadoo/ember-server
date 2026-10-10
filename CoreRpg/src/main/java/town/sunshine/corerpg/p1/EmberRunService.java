@@ -3172,7 +3172,7 @@ public final class EmberRunService implements Listener {
         s.sendMessage(P + "/corerpg enter q01..q07 challenge — 挑战版（本人首通 Q07 后开放；T3 掉落与印记，敌人更强）");
         s.sendMessage(P + "/corerpg p1 target <scorch|burst|sustain|none> — 掉落目标族（入场时快照）");
         s.sendMessage(P + "/corerpg p1 marks [exchange <族> <blade|charm> [阶]] — 8 枚同阶印记换标准件");
-        s.sendMessage(P + "/corerpg p1 forgeroll <族> <blade|charm> <阶> — 随机锻造（8印记+4胚料+500币，出不了极品）");
+        s.sendMessage(P + "/corerpg p1 forgeroll <族> <blade|charm> <阶> [floor] — 随机锻造（出不了极品；floor=成色下限加料）");
         s.sendMessage(P + "/corerpg p1 firstclear <族> — 领取首通自选 · /corerpg p1 claim — 补领暂存奖励");
         s.sendMessage(P + "/corerpg p1 shop [buy [n]] — 补给商：回复药 " + EmberSupplyService.price() + " 余烬币/瓶（绑定，城内购买）");
         if (s.hasPermission("corerpg.admin")) s.sendMessage(P + "/corerpg p1 audit [玩家] · audit restore <玩家> <uid前缀> — 物品与 DB 对账 / 补发");
@@ -3345,7 +3345,7 @@ public final class EmberRunService implements Listener {
     }
 
 
-    /** D430: /corerpg p1 forgeroll <fam> <blade|charm> [tier] [confirm] — 8 marks + 4 blank + 500 coin → random quality/craft piece */
+    /** D430 / D1142: forgeroll [floor] — base or 成色下限（加扣 C06 q0） */
     private final java.util.Set<UUID> forgeRollBusy = java.util.Collections.newSetFromMap(new java.util.concurrent.ConcurrentHashMap<UUID, Boolean>());
 
     private boolean cmdForgeRoll(CommandSender s, String[] args) {
@@ -3354,45 +3354,64 @@ public final class EmberRunService implements Listener {
         PlayerData d = data(p.getUniqueId());
         if (d == null) { p.sendMessage(P + "数据还没加载好"); return true; }
         if (args.length < 5) {
-            p.sendMessage(P + "用法：/corerpg p1 forgeroll <scorch|burst|sustain> <blade|charm> <1-3> [confirm]");
+            p.sendMessage(P + "用法：/corerpg p1 forgeroll <族> <blade|charm> <1-3> [floor] [confirm]");
             p.sendMessage(P + "花费：" + EmberForgeRollRules.marks() + " 枚印记 + " + EmberForgeRollRules.blanks() + " 胚料 + " + EmberForgeRollRules.coins() + " 币");
             p.sendMessage(P + EmberForgeRollRules.oddsLine());
+            p.sendMessage(P + "§6下限 floor：§7再加胚" + EmberForgeRollRules.floorBlank() + "+骨" + EmberForgeRollRules.floorBone()
+                    + "+币" + EmberForgeRollRules.floorCoin() + " → 成色必≥精良（" + EmberForgeRollRules.oddsLineFloor() + "）");
             return true;
         }
         String fam = args[2].toLowerCase(Locale.ROOT);
         String slot = args[3].toLowerCase(Locale.ROOT);
         int tier;
         try { tier = Integer.parseInt(args[4]); } catch (NumberFormatException e) { p.sendMessage(P + "阶：1–3"); return true; }
-        boolean confirm = args.length >= 6 && "confirm".equalsIgnoreCase(args[args.length - 1]);
+        boolean floor = false, confirm = false;
+        for (int i = 5; i < args.length; i++) {
+            String a = args[i].toLowerCase(Locale.ROOT);
+            if ("confirm".equals(a)) confirm = true;
+            else if ("floor".equals(a) || "下限".equals(a) || "精良保".equals(a)) floor = true;
+        }
         boolean gate = tier <= 1 || progressFlag(d, EmberRunRules.directedForgeFlag(tier));
         String refuse = EmberForgeRollRules.refusal(marks(d, tier), tier, fam, slot, gate);
         if (refuse != null) { p.sendMessage(P + ChatColor.RED + refuse); return true; }
         String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         if (!confirm) {
-            p.sendMessage(P + "§6随机锻造 · T" + tier + " " + label);
-            p.sendMessage(P + "花费：§f" + EmberForgeRollRules.marks() + " 枚 T" + tier + " 印记 + " + EmberForgeRollRules.blanks() + " 胚料 + " + EmberForgeRollRules.coins() + " 币");
-            p.sendMessage(P + EmberForgeRollRules.oddsLine());
-            p.sendMessage(P + "§7产物：指定族部位 · 成色/精工随机 · +0 · 词条空 · 出不了极品");
+            EmberUpgradeRules.Cost cost = floor ? EmberForgeRollRules.matCostFloor() : EmberForgeRollRules.matCost();
+            p.sendMessage(P + (floor ? "§6随机锻造·成色下限" : "§6随机锻造") + " · T" + tier + " " + label);
+            p.sendMessage(P + "花费：§f" + EmberForgeRollRules.marks() + " 枚 T" + tier + " 印记 + " + cost.blanks + " 胚料"
+                    + (cost.bone > 0 ? " + " + cost.bone + " 骨尘" : "") + " + " + cost.coins + " 币");
+            p.sendMessage(P + (floor ? EmberForgeRollRules.oddsLineFloor() : EmberForgeRollRules.oddsLine()));
+            p.sendMessage(P + "§7产物：指定族部位 · " + (floor ? "成色≥精良" : "成色随机") + " · 精工随机 · +0 · 词条空 · 出不了极品");
+            String base = "/corerpg p1 forgeroll " + fam + " " + slot + " " + tier;
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
-                    new String[]{"[确认锻造]", "/corerpg p1 forgeroll " + fam + " " + slot + " " + tier + " confirm", "扣印记/胚料/币，随机成色精工", "GREEN"},
+                    new String[]{"[确认锻造]", base + (floor ? " floor" : "") + " confirm",
+                            floor ? "扣料·成色必精良+" : "扣印记/胚料/币，随机成色精工", "GREEN"},
+                    new String[]{floor ? "[改普通锻]" : "[改下限锻]", base + (floor ? "" : " floor"),
+                            floor ? "不加料下限" : "加料保精良", "GOLD"},
                     new String[]{"[取消]", "/corerpg p1 forgeroll", "不扣", "GRAY"});
             return true;
         }
         final EmberPay pay = EmberPay.get();
         if (pay == null) { p.sendMessage(P + "§c支付服务未就绪"); return true; }
-        return forgeRollDurable(p, pay, fam, slot, tier);
+        return forgeRollDurable(p, pay, fam, slot, tier, floor);
     }
 
     private boolean forgeRollDurable(final Player p, final EmberPay pay, final String fam, final String slot, final int tier) {
+        return forgeRollDurable(p, pay, fam, slot, tier, false);
+    }
+
+    private boolean forgeRollDurable(final Player p, final EmberPay pay, final String fam, final String slot, final int tier, final boolean floor) {
         final UUID id = p.getUniqueId();
         if (!forgeRollBusy.add(id)) { p.sendMessage(P + "§c上一次随机锻造还在处理"); return true; }
         final String rid = EmberPayRules.forgeRollRid(id, System.currentTimeMillis(), rnd.nextInt(46656));
-        final int q = EmberForgeRollRules.rollQuality(new java.util.Random(EmberPayRules.seed(rid.hashCode(), id.toString(), rid)));
+        final int q = floor
+                ? EmberForgeRollRules.rollQualityFloor(new java.util.Random(EmberPayRules.seed(rid.hashCode(), id.toString(), rid)))
+                : EmberForgeRollRules.rollQuality(new java.util.Random(EmberPayRules.seed(rid.hashCode(), id.toString(), rid)));
         final int craft = EmberForgeRollRules.rollCraft(new java.util.Random(EmberPayRules.seed(rid.hashCode() ^ 0x9e3779b9L, id.toString(), rid + ":c")));
         final String uid = EmberRunRules.rewardUid(rnd.nextLong(), id.toString(), rid, "forge_roll");
         final EmberItemData item = new EmberItemData(uid, EmberItemData.templateId(fam, slot, tier), fam, slot, tier, q, craft, 0, 0, true, "drop",
                 EmberItemData.DATA_VERSION, 0, 0, 0, 0, 0, EmberProvenance.forForgeRoll(rid, System.currentTimeMillis()));
-        final EmberPay.Price price = EmberPay.Price.of(EmberForgeRollRules.matCost())
+        final EmberPay.Price price = EmberPay.Price.of(floor ? EmberForgeRollRules.matCostFloor() : EmberForgeRollRules.matCost())
                 .plus(EmberPay.Price.marks(tier, EmberForgeRollRules.marks())).at("C22");
         final String label = EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
         pay.pay(p, rid, price, "随机锻造没完成，退回", null, () ->
@@ -3405,7 +3424,7 @@ public final class EmberRunService implements Listener {
                                 pay.settled(id, rid);
                                 log().info("[P1 run] " + id + " forge_roll " + rid + " T" + tier + " " + fam + " " + slot + " q=" + q + " c=" + craft + " → " + uid);
                                 if (qq != null) {
-                                    qq.sendMessage(P + "§a随机锻造完成：§fT" + tier + " " + label
+                                    qq.sendMessage(P + "§a随机锻造完成" + (floor ? "§6·下限" : "") + "：§fT" + tier + " " + label
                                             + " §7· 成色§f" + EmberItemData.qualityName(q)
                                             + " §7· 精工§f" + (craft * 2) + "%§7 · +0 · 词条空");
                                     EmberGearLib gl = EmberGearLib.get();

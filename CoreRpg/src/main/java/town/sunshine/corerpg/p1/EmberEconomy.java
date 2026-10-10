@@ -389,8 +389,9 @@ public final class EmberEconomy {
             .g("t1.brand", 2).g("t1.coin", 300)
             .g("t2.brand", 4).g("t2.coin", 600)
             .g("t3.brand", 6).g("t3.coin", 1000).done();
-        sink("C22", "随机锻造", "EmberForgeRollRules", Period.NONE).acc(MARK, BLANK, COIN).model(FULL)
-            .g("marks", 8).g("blank", 4).g("coin", 500).done();
+        sink("C22", "随机锻造", "EmberForgeRollRules", Period.NONE).acc(MARK, BLANK, BONE, COIN).model(FULL)
+            .g("marks", 8).g("blank", 4).g("coin", 500)
+            .g("floor.blank", 8).g("floor.bone", 8).g("floor.coin", 800).done(); // D1142 K2
         sink("C23", "每周转化", "EmberConvertRules", Period.WEEK).acc(BLANK, COIN).keys("p4_conv").model(FULL)
             .g("blank_t1", 2).g("blank_t2", 4).g("blank_t3", 6).g("coin_t1", 300).g("coin_t2", 600).g("coin_t3", 1000).done();
         sink("C24", "宝石合成", "EmberGemAcquire.CRAFT_*", Period.NONE).acc(SHARD, BONE, COIN).model(FULL)
