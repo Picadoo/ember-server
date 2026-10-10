@@ -134,6 +134,7 @@ Icons:
       lore:
         - '§f%corerpg_p1_set_progress%'
         - '%corerpg_p1_set_run%'
+        - '§e焦点：§f%corerpg_p1_set_focus%'
         - '§8护甲四件套：§f%corerpg_p1_armor_set%'
         - ''
         - '§8刃·护符终点 = 同族 T3 两件 +9（觉醒 III）'

@@ -29,6 +29,7 @@ Layout:
 
 Events:
   Open:
+    - 'command: corerpg p1 setfocus nudge'
     - 'sound: BLOCK_CHEST_OPEN-1-0'
     - 'tell: §8短征：本页「烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣」（Q01后 · 各体力30 · 日有奖帽分开）'
     - 'tell: §8短征入口可看今日剩余有奖/首通未领'

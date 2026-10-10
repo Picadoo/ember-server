@@ -85,6 +85,54 @@ public final class EmberCommand {
             s.sendMessage(P + "已向 " + t.getName() + " 弹出 " + map.toUpperCase(Locale.ROOT) + " 进阶路径点选");
             return true;
         }
+        if ("setfocus".equals(sub) || "套装焦点".equals(sub)) { // D465 set-family playstyle focus
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            if (args.length < 3) {
+                EmberLoadout lo = runs.loadouts() != null ? runs.loadouts().get(p) : null;
+                String active = lo == null ? "none" : lo.activeSet;
+                int awk = lo == null ? 0 : lo.awakening;
+                p.sendMessage(P + EmberSetFocus.glance(EmberSetFocus.get(d), active, awk, runs.target(d)));
+                EmberSetFocus.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                String week = EmberRunRules.rotationWeekKey(java.time.LocalDate.now(java.time.ZoneId.of("Asia/Shanghai")));
+                boolean offered = EmberSetFocus.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSetFocus.get(d);
+                    if (EmberSetFocus.valid(cur)) p.sendMessage(P + "§7当前焦点：" + EmberSetFocus.label(cur) + " · 改焦点再 /corerpg p1 setfocus");
+                }
+                return true;
+            }
+            int id = EmberSetFocus.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 setfocus <scorch|burst|sustain|clear>");
+                return true;
+            }
+            boolean ch = EmberSetFocus.set(d, id);
+            runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+            if (id == EmberSetFocus.NONE) p.sendMessage(P + "已取消套装焦点");
+            else {
+                p.sendMessage(P + "§a套装焦点 → §f" + EmberSetFocus.label(id) + "§7（" + EmberSetFocus.tip(id) + "）"
+                        + (ch ? "" : " §8· 已是该焦点"));
+                EmberLoadout lo = runs.loadouts() != null ? runs.loadouts().get(p) : null;
+                p.sendMessage(P + EmberSetFocus.glance(id, lo == null ? "none" : lo.activeSet, lo == null ? 0 : lo.awakening, runs.target(d)));
+                // optional: align loot target button
+                String loot = runs.target(d);
+                String fk = EmberSetFocus.familyKey(id);
+                if (fk != null && (loot == null || !fk.equals(loot))) {
+                    town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7掉落目标族还可对齐：",
+                            "[掉落也设成" + EmberSetFocus.label(id) + "]", "/corerpg p1 target " + fk,
+                            "约六成掉该族 · 可另改");
+                }
+            }
+            return true;
+        }
         if ("forgegoal".equals(sub) || "工坊目标".equals(sub)) { // D461 forge craft-goal path pick
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

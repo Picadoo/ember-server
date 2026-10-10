@@ -92,6 +92,7 @@ public final class EmberRunPapi {
         if (key.startsWith("loot_")) return Section.ROTATION;
         if ("abyss_best".equals(key)) return Section.ABYSS;
         if ("bounty".equals(key)) return Section.ROTATION;
+        if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("route_pri".equals(key) || "route_sec".equals(key) || "featured_left".equals(key)) return Section.ENTRY; // D306
         if ("next".equals(key)) return Section.ENTRY;
         if (key.startsWith("raid_")) return Section.RAID;
@@ -112,7 +113,8 @@ public final class EmberRunPapi {
     }
 
     static boolean isLoadoutKey(String key) {
-        return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key) || "stats".equals(key)
+        return "awaken".equals(key) || "awaken_next".equals(key) || "set_progress".equals(key) || "set_run".equals(key)
+                || "set_focus".equals(key) || "set_focus_line".equals(key) || "stats".equals(key)
                 || "ehp".equals(key) || "blade".equals(key) || "charm".equals(key)
                 // D299 再刷短反馈：装备页近档 + 工坊手持近档
                 || "blade_next_q".equals(key) || "blade_next_c".equals(key)
@@ -574,6 +576,12 @@ public final class EmberRunPapi {
         switch (key) {
             case "awaken": return l.setLabel();
             case "set_progress": return l.setProgress();
+            case "set_focus":
+            case "set_focus_line": { // D465 set-family playstyle focus
+                PlayerData pd = p == null ? null : runs.plugin().getDataStore().get(p.getUniqueId());
+                int fid = EmberSetFocus.get(pd);
+                return EmberSetFocus.glance(fid, l.activeSet, l.awakening, runs.target(pd));
+            }
             case "set_run": { // D457 enter-run style line (also for menus)
                 EmberItemData[] worn = l.armorCopy();
                 if (worn == null) worn = new EmberItemData[4];
