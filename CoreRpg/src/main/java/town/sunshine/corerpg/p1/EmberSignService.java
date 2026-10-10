@@ -371,13 +371,27 @@ public final class EmberSignService implements Listener {
             if (!rollover(p, d, ti)) continue;
             boolean ex = p.getWorld() != null && excluded.contains(p.getWorld().getName().toLowerCase(Locale.ROOT));
             if (!counts(ex, autoCombat(p), lastAct.get(p.getUniqueId()), now, idleMinutes)) continue;
+            int before = d.periodCount(C_OMIN, day);
             int m = d.addPeriodCount(C_OMIN, day, 1);
-            for (int i = 0; i < milestones.size(); i++) {
-                Milestone ms = milestones.get(i);
-                if (ms.min == m && milestoneState(m, d.periodCount(C_OCLAIM, day), i, ms.min) == 1)
-                    ConfirmTokens.sendButton(p, PO + "§a今日有效在线满 " + m + " 分钟 · 可领：§f" + ms.r.label() + " ", "[去领取]",
-                            "/corerpg p1 sign menu", "主菜单 → 签到 · 在线");
+            notifyOnlineMilestones(p, d, day, before, m); // D518 online path
+        }
+    }
+
+
+    /** D518: milestones newly crossed in (before, after] — honor online path auto/ask/mute. */
+    void notifyOnlineMilestones(Player p, PlayerData d, String day, int before, int after) {
+        if (p == null || d == null || day == null || after <= before) return;
+        for (int i = 0; i < milestones.size(); i++) {
+            Milestone ms = milestones.get(i);
+            if (ms.min <= before || ms.min > after) continue;
+            if (milestoneState(after, d.periodCount(C_OCLAIM, day), i, ms.min) != 1) continue;
+            if (EmberOnlinePath.shouldAutoClaim(d)) {
+                claimOnline(p, i);
+                continue;
             }
+            if (EmberOnlinePath.shouldMute(d)) continue;
+            ConfirmTokens.sendButton(p, PO + "§a今日有效在线满 " + ms.min + " 分钟 · 可领：§f" + ms.r.label() + " ", "[去领取]",
+                    "/corerpg p1 sign menu", "主菜单 → 签到 · 在线");
         }
     }
 
@@ -460,8 +474,11 @@ public final class EmberSignService implements Listener {
             int add;
             try { add = Integer.parseInt(args[4]); } catch (NumberFormatException e) { s.sendMessage(PO + "分钟须为整数"); return true; }
             if (!rollover(t, d, dayInt(today()))) { s.sendMessage(PO + "时钟异常"); return true; }
-            int m = d.addPeriodCount(C_OMIN, DailyService.today(), add);
+            String day = DailyService.today();
+            int before = d.periodCount(C_OMIN, day);
+            int m = d.addPeriodCount(C_OMIN, day, add);
             plugin.getDataStore().flushMutation(t.getUniqueId());
+            notifyOnlineMilestones(t, d, day, before, m); // D518: same path as tick
             plugin.getLogger().info("[P1 online] TEST " + s.getName() + " +" + add + "m -> " + t.getName() + " " + m + "m");
             s.sendMessage(PO + t.getName() + " 今日有效在线 = " + m + " 分钟（测试）");
             return true;
