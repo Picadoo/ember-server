@@ -27,6 +27,24 @@ public final class EmberDropQualityPity {
         return EmberHopeMeter.dropQuality(get(d), NEED);
     }
 
+    /** D1323: non-hope remain — 标准连 drop toward 精良 soft floor. */
+    public static int clearsLeft(int cur) {
+        int c = Math.max(0, cur);
+        if (c >= NEED) return 0;
+        return NEED - c;
+    }
+
+    public static String remainLine(int cur) {
+        int c = Math.max(0, cur);
+        if (c >= NEED) return "成色软保底已满 · 下次主线装必≥精良";
+        int left = clearsLeft(c);
+        return "成色软保底 " + c + "/" + NEED + " · 再连出标准" + left + "次触发精良底";
+    }
+
+    public static String remainLine(PlayerData d) {
+        return remainLine(get(d));
+    }
+
     /**
      * Apply to mainline settle grants: only {@code base_item}. Mutates list entries when floor triggers.
      * @return true when this clear consumed a ready pity (forced floor)

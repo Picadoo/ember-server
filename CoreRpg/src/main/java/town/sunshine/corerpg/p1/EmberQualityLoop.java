@@ -20,7 +20,9 @@ public final class EmberQualityLoop {
         String hint = winnerHint(list);
         p.sendMessage(P + "§e成色已投入" + (hint.isEmpty() ? "" : " §7· " + hint)
                 + " §7· 选下一步（不改成色价）：");
-        try { p.sendActionBar("§e成色完成 · §f选下一步"); } catch (Throwable ignored) { }
+        try { // D1322
+            p.sendActionBar(hint.isEmpty() ? "§e成色完成 · §f选下一步" : ("§e成色 · §f" + hint));
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P, // D884
                 new String[]{"[去精工]", "/corerpg p1 refine", "精工预览", "AQUA"},
                 new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GREEN"},

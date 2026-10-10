@@ -460,6 +460,7 @@ public final class EmberForgeService implements Listener {
                     + (blanks > 0 ? "，这次凑满 → 胚料 ×" + blanks : "") + "）");
             else
             p.sendMessage(P + "分解 " + it.data.shortLabel() + " → 胚料 ×" + blanks + "（不退强化材料与金币，物品永久销毁）");
+            try { p.sendActionBar("§c分解预览 · §f得胚×" + blanks); } catch (Throwable ignored) { } // D1324
             if (it.data.isBlade() && onlyBlade(p, it.index))
                 p.sendMessage(P + ChatColor.RED + "⚠ 这是你背包里唯一的余烬刃，分解后副本里将没有可用武器");
             if (it.data.enhance > 0 || it.data.quality >= 1 || it.data.craft > 0) { // D96: invested / good items get a louder warning

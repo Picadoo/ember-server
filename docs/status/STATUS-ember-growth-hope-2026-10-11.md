@@ -580,3 +580,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1309–D1320 ARCH SHIP · jar 1.65.446-d1309
 - Imprint coin gap; gem insert AB; convert refuse AB; upgrade done AB with piece
+
+## D1321–D1332 ARCH SHIP · jar 1.65.447-d1321
+- Quality/refine result AB; drop quality remain on settle; dismantle preview AB

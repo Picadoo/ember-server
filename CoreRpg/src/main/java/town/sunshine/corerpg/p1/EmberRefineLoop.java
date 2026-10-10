@@ -28,12 +28,24 @@ public final class EmberRefineLoop {
                     new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GOLD"});
             return;
         }
-        p.sendMessage(P + "§e精工已投入 §7· 选下一步（不改精工价）：");
-        try { p.sendActionBar("§e精工完成 · §f选下一步"); } catch (Throwable ignored) { }
+        String rh = refineHint(list);
+        p.sendMessage(P + "§e精工已投入" + (rh.isEmpty() ? "" : " §7· " + rh) + " §7· 选下一步（不改精工价）：");
+        try { // D1322
+            p.sendActionBar(rh.isEmpty() ? "§e精工完成 · §f选下一步" : ("§e精工 · §f" + rh));
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P, // D884
                 new String[]{"[再精工]", "/corerpg p1 refine", "同件再投", "AQUA"},
                 new String[]{"[去强化]", "/corerpg p1 enhance", "强化预览", "GREEN"},
                 new String[]{"[成套追]", "/corerpg p1 setchase", "换装继续", "GOLD"});
+    }
+
+    static String refineHint(List<TxnItem> list) {
+        if (list == null) return "";
+        for (TxnItem t : list) {
+            if (t == null || t.after == null) continue;
+            return t.after.shortLabel() + " 精工" + (t.after.craft * 2) + "%";
+        }
+        return "";
     }
 
     public static String followHint(boolean goalHit) {

@@ -263,8 +263,9 @@ public final class EmberSettleService {
             in.sixStarter = modelled && in.firstClear != null && "q01".equals(m.key);
         }
         List<EmberRunRules.Grant> grants = new ArrayList<EmberRunRules.Grant>(EmberRunRules.settle(in));
+        boolean dropQForced = false;
         if (EmberDropQualityPity.applicable(s, m)) { // D611 drop quality pity · mainline base_item only
-            EmberDropQualityPity.applyToGrants(pd, grants);
+            dropQForced = EmberDropQualityPity.applyToGrants(pd, grants);
         }
         // P2-1 weekly challenge rotation: featured map, first 3 challenge clears of the week → +1 mark of the run tier
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
@@ -433,6 +434,17 @@ public final class EmberSettleService {
         }
         // D608 gem Stage3 clear-pity (Q01–Q07 only · no AFK/MM raise)
         if (gp != null && gp.isOnline()) EmberGemAcquire.onClear(gp, pd, m, s, runs.plugin());
+        // D1323: drop quality soft-floor remain（非 hope celebration PAPI）
+        if (gp != null && gp.isOnline() && EmberDropQualityPity.applicable(s, m)) {
+            if (dropQForced) {
+                gp.sendMessage(EmberRunService.P + "§a成色软保底触发 · §f本次主线装≥精良");
+                try { gp.sendActionBar("§a成色软保底 · §f精良底"); } catch (Throwable ignored) { }
+            } else {
+                String rem = EmberDropQualityPity.remainLine(pd);
+                gp.sendMessage(EmberRunService.P + "§7掉落成色 · §f" + rem);
+                try { gp.sendActionBar("§e掉落成色 · §f" + rem); } catch (Throwable ignored) { }
+            }
+        }
         if (runs.leaderboard() != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records
             String nm = Bukkit.getOfflinePlayer(u).getName();
             if (s.abyss > 0) runs.leaderboard().abyssBest(u, nm, runs.abyssBest(pd));

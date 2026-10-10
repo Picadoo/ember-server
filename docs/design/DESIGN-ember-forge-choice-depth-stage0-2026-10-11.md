@@ -45,6 +45,8 @@
 | **W-gemcraft** | 宝石合成缺料/成功 AB | GemAcquire.craft | **D1299– SHIP** |
 | **W-imprint2** | 烙印币缺口 | imprint preview | **D1310– SHIP** |
 | **W-gemins** | 镶嵌缺石/孔锁 AB | GemSocket.insert | **D1311– SHIP** |
+| **W-dropq** | 掉落成色软保底剩余 | DropQualityPity.remainLine | **D1323– SHIP** |
+| **W-qrab** | 成色/精工结果 AB | Quality/RefineLoop | **D1322– SHIP** |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 
