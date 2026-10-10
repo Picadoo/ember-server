@@ -498,3 +498,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1091–D1100 ARCH SHIP · jar 1.65.423-d1091
 - Stage2-G S06 first_clear SoT; Stage2 A–G COMPLETE
+
+## D1101–D1108 ARCH SHIP · jar 1.65.424-d1101
+- Stage2-H: rotation S10 mark/weekly_cap SoT

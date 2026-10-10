@@ -1177,6 +1177,14 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void rotationS10Match() {
+        // D1103 Stage2-H
+        assertEquals(1, EmberEconomy.amount("S10", "mark"));
+        assertEquals(3, EmberEconomy.amount("S10", "weekly_cap"));
+        assertEquals(3, EmberEconomy.amount("S11", "weekly_cap"));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

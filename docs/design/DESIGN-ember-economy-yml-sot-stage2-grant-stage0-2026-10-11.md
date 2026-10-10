@@ -98,3 +98,6 @@ S04/S05 Variety pin + helpers; nums identical.
 
 ## D1091–D1100 Stage2-G + COMPLETE
 S06 first_clear pin via s06Amount; Stage2 grant SoT slices A–G done.
+
+## D1101–D1108 Stage2-H
+S10 rotation bonus_marks/weekly_cap pin.

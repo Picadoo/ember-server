@@ -1102,9 +1102,17 @@ public final class EmberRunMaps {
         passSeconds = (int) num(root.get("pass_seconds"), 30);
         worldPrefix = str(root.get("world_prefix"), "dungeon_EmberQ0");
         Map<?, ?> rot = root.get("rotation") instanceof Map ? (Map<?, ?>) root.get("rotation") : java.util.Collections.emptyMap();
-        rotationBonusMarks = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
-        rotationWeeklyCap = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
-        rotationNormalBonusMarks = Math.max(0, (int) num(rot.get("normal_bonus_marks"), 0));
+        int rbm = Math.max(0, (int) num(rot.get("bonus_marks"), 0));
+        int rwc = Math.max(0, (int) num(rot.get("weekly_cap"), 0));
+        int rnb = Math.max(0, (int) num(rot.get("normal_bonus_marks"), 0));
+        // D1102 Stage2-H: pin challenge rotation caps to S10 SoT (identical nums)
+        try {
+            rbm = EmberEconomy.amount("S10", "mark");
+            rwc = EmberEconomy.amount("S10", "weekly_cap");
+        } catch (RuntimeException ignored) {}
+        rotationBonusMarks = rbm;
+        rotationWeeklyCap = rwc;
+        rotationNormalBonusMarks = rnb;
         Map<?, ?> sea = root.get("season") instanceof Map ? (Map<?, ?>) root.get("season") : Collections.emptyMap();
         seasonAnchor = str(sea.get("anchor"), "2026-09-28");
         seasonWeeks = Math.max(1, (int) num(sea.get("weeks"), 4));
