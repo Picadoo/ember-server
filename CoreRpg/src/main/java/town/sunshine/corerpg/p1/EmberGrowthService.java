@@ -2044,13 +2044,13 @@ public final class EmberGrowthService implements Listener {
         if (pl.old == 0) {
             pendingRoll.remove(id);
             p.sendMessage(P + "§a词条槽原来是空的，直接装上了");
-            try { p.sendActionBar("§a词条装上 · §f继续养成"); } catch (Throwable ignored) { }
-            ConfirmTokens.sendButtons(p, P + "§7洗练下一环：", // D889
-                    new String[]{"[去强化]", "/corerpg p1 enhance", "词条落了冲强化", "GREEN"},
-                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "GOLD"},
-                    new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
+            // D2048 RL1: lock-loop next (not status twin)
+            EmberAffix.Def installed = EmberAffix.decodeDef(reroll, pl.enc);
+            boolean canLock = canLockAgain(p, data(id), t, installed);
+            String an = installed == null ? "" : installed.name;
+            EmberRerollLoop.afterSettled(p, data(id), t.slot, pl.lock, an, canLock);
         } else {
-            pendingRoll.put(id, new Object[]{t.uid, t.slot, pl.enc, pl.old, quality});
+            pendingRoll.put(id, new Object[]{t.uid, t.slot, pl.enc, pl.old, quality, pl.lock});
             p.sendMessage(P + "原来：" + affixText(pl.old, quality));
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
                     new String[]{"[保留新]", "/corerpg p1 reroll keep new", "换成：" + affixText(pl.enc, quality).replaceAll("§.", ""), "GREEN"},
@@ -2123,6 +2123,17 @@ public final class EmberGrowthService implements Listener {
         }
     }
 
+
+    /** D2048: lock offered when pool allows + below quality cap (mirrors preview gates). */
+    boolean canLockAgain(Player p, PlayerData d, EmberItemData t, EmberAffix.Def cur) {
+        if (reroll == null || t == null || cur == null || !cur.rollable) return false;
+        int lockShard = reroll.lockShardFor(t.tier);
+        if (lockShard <= 0) return false;
+        int cap = reroll.cap(t.quality);
+        int tier = Math.min(EmberAffix.decodeTier(affixOf(d, t)), cap);
+        return tier < cap;
+    }
+
     private boolean keep(Player p, PlayerData d, boolean takeNew) {
         Object[] pr = pendingRoll.remove(p.getUniqueId());
         if (pr == null) { p.sendMessage(P + "没有待选的洗练结果"); return true; }
@@ -2141,11 +2152,12 @@ public final class EmberGrowthService implements Listener {
                     if (x == null) return;
                     if (ok) {
                         x.sendMessage(P + "§a已换成：" + affixText(enc, q));
-                        try { x.sendActionBar("§a保留新词条 · §f继续养成"); } catch (Throwable ignored) { }
-                        ConfirmTokens.sendButtons(x, P + "§7洗练下一环：", // D890
-                                new String[]{"[去强化]", "/corerpg p1 enhance", "词条定了冲强化", "GREEN"},
-                                new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "GOLD"},
-                                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"});
+                        PlayerData xd = data(id);
+                        EmberItemData now = target(x, slot);
+                        EmberAffix.Def nd = EmberAffix.decodeDef(reroll, enc);
+                        boolean locked = pr.length > 5 && Boolean.TRUE.equals(pr[5]);
+                        boolean canLock = canLockAgain(x, xd, now != null ? now : after, nd);
+                        EmberRerollLoop.afterSettled(x, xd, slot, locked, nd == null ? "" : nd.name, canLock);
                     } else x.sendMessage(P + "§c没换成（物品刚被改过或数据库暂时写不进去），原来的词条不变");
                     openMenu(x, REROLL_MENU);
                 });

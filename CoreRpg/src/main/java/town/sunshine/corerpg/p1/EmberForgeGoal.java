@@ -27,6 +27,8 @@ public final class EmberForgeGoal {
     public static final int QUALITY = 6;
     /** D1982 FG-G: gem craft weekly goal (deterministic C24). */
     public static final int GEM = 7;
+    /** D2049 RL2: lock-reroll weekly goal (keep affix, roll tier · C11). */
+    public static final int LOCK = 8;
 
     private EmberForgeGoal() {}
 
@@ -37,7 +39,7 @@ public final class EmberForgeGoal {
     }
 
     public static boolean valid(int id) {
-        return id == ENHANCE || id == REFINE || id == BRAND || id == ROLL || id == CONVERT || id == QUALITY || id == GEM;
+        return id == ENHANCE || id == REFINE || id == BRAND || id == ROLL || id == CONVERT || id == QUALITY || id == GEM || id == LOCK;
     }
 
     public static boolean set(PlayerData d, int id) {
@@ -60,6 +62,7 @@ public final class EmberForgeGoal {
         if ("convert".equals(s) || "转化".equals(s) || "5".equals(s)) return CONVERT;
         if ("quality".equals(s) || "成色".equals(s) || "q".equals(s) || "6".equals(s)) return QUALITY;
         if ("gem".equals(s) || "宝石".equals(s) || "7".equals(s)) return GEM;
+        if ("lock".equals(s) || "锁定".equals(s) || "锁定洗".equals(s) || "8".equals(s)) return LOCK;
         return -1;
     }
 
@@ -71,6 +74,7 @@ public final class EmberForgeGoal {
         if (id == CONVERT) return "每周转化";
         if (id == QUALITY) return "成色升档";
         if (id == GEM) return "宝石合成";
+        if (id == LOCK) return "锁定冲档";
         return "未选";
     }
 
@@ -82,23 +86,29 @@ public final class EmberForgeGoal {
         if (id == CONVERT) return "攒胚料+币 → 改族（周 1 次）";
         if (id == QUALITY) return "挂机攒胚/骨/币 → 工坊成色（确定成功）";
         if (id == GEM) return "挂机攒碎/骨/币 → 确定合成宝石";
+        if (id == LOCK) return "挂机攒碎片 → 锁定词条只冲档（D148）";
         return "点选一条工坊路径当本周目标";
     }
 
     /** Gap line for the pinned goal (mirrors existing recipe/forge gap strings). */
     public static String gapLine(int id, String enhanceGap, String refineGap, String brandGap,
                                  String rollGap, String convertGap) {
-        return gapLine(id, enhanceGap, refineGap, brandGap, rollGap, convertGap, null, null);
+        return gapLine(id, enhanceGap, refineGap, brandGap, rollGap, convertGap, null, null, null);
     }
 
     public static String gapLine(int id, String enhanceGap, String refineGap, String brandGap,
                                  String rollGap, String convertGap, String qualityGap) {
-        return gapLine(id, enhanceGap, refineGap, brandGap, rollGap, convertGap, qualityGap, null);
+        return gapLine(id, enhanceGap, refineGap, brandGap, rollGap, convertGap, qualityGap, null, null);
     }
 
-    /** D1930/D1983: qualityGap 胚差N·骨差M·币差K; gemGap 碎差N·骨差M·币差K. */
     public static String gapLine(int id, String enhanceGap, String refineGap, String brandGap,
                                  String rollGap, String convertGap, String qualityGap, String gemGap) {
+        return gapLine(id, enhanceGap, refineGap, brandGap, rollGap, convertGap, qualityGap, gemGap, null);
+    }
+
+    /** qualityGap / gemGap / lockGap（锁洗碎差，镜像 C11 shard+lock_shard）. */
+    public static String gapLine(int id, String enhanceGap, String refineGap, String brandGap,
+                                 String rollGap, String convertGap, String qualityGap, String gemGap, String lockGap) {
         if (id == ENHANCE) {
             int g = parseIntSafe(enhanceGap);
             return g <= 0 ? "§a已够碎片 · 去工坊强化" : "§7还差碎片 §f" + g;
@@ -126,6 +136,15 @@ public final class EmberForgeGoal {
         if (id == GEM) {
             if (gemGap == null || gemGap.isEmpty()) return "§8—";
             return readyGem(gemGap) ? "§a已够料 · 去合成宝石" : "§7" + gemGap;
+        }
+        if (id == LOCK) {
+            if (lockGap == null || lockGap.isEmpty()) return "§8—";
+            int g = parseIntSafe(lockGap.replace("碎差", "").split("·")[0]);
+            // also accept plain int
+            if (lockGap.startsWith("碎差")) {
+                return readyLock(lockGap) ? "§a已够碎 · 去锁定洗练" : "§7" + lockGap;
+            }
+            return g <= 0 ? "§a已够碎 · 去锁定洗练" : "§7还差碎片 §f" + g;
         }
         return "§8未选工坊目标";
     }
@@ -169,6 +188,10 @@ public final class EmberForgeGoal {
             a = new String[]{"[合成宝石]", "/corerpg p1 gem craft sharp", tip(GEM), "GREEN"};
             b = new String[]{"[宝石页]", "/ember_p1_gem", "选类型", "GOLD"};
             c = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"};
+        } else if (id == LOCK) {
+            a = new String[]{"[锁定洗练]", "/corerpg p1 reroll from forge", tip(LOCK), "GREEN"};
+            b = new String[]{"[洗练页]", "/corerpg p1 reroll", "看词条/锁", "GOLD"};
+            c = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"};
         } else { // CONVERT
             a = new String[]{"[去转化]", "/corerpg p1 convert menu", tip(CONVERT), "GREEN"};
             b = new String[]{"[转化路径]", "/corerpg p1 convertpath", "对齐目标族", "GOLD"};
@@ -185,6 +208,7 @@ public static void offerPick(Player p) {
                 new String[]{"[强化+1]", "/corerpg p1 forgegoal enhance", tip(ENHANCE), "GOLD"},
                 new String[]{"[成色升档]", "/corerpg p1 forgegoal quality", tip(QUALITY), "YELLOW"},
                 new String[]{"[宝石合成]", "/corerpg p1 forgegoal gem", tip(GEM), "LIGHT_PURPLE"},
+                new String[]{"[锁定冲档]", "/corerpg p1 forgegoal lock", tip(LOCK), "BLUE"},
                 new String[]{"[精工+1]", "/corerpg p1 forgegoal refine", tip(REFINE), "AQUA"},
                 new String[]{"[合成烙纹]", "/corerpg p1 forgegoal brand", tip(BRAND), "RED"},
                 new String[]{"[随机锻]", "/corerpg p1 forgegoal roll", tip(ROLL), "LIGHT_PURPLE"},
@@ -219,6 +243,10 @@ public static void offerPick(Player p) {
     /** D1983: gem gap 碎差N·骨差M·币差K */
     static boolean readyGem(String gap) {
         return gap.contains("碎差0") && gap.contains("骨差0") && gap.contains("币差0");
+    }
+
+    static boolean readyLock(String gap) {
+        return gap.contains("碎差0") && gap.contains("币差0");
     }
 
     static boolean readyRollOrConvert(String gap) {

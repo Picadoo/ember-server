@@ -409,3 +409,6 @@ flowchart LR
 
 ### SC sig-chase honesty leftover (D1996+)
 - status/settle/enter wire remainLine (non-hope). No STAMP_RATE / dry twin.
+
+### RL affix-lock loop (D2046+)
+- EmberRerollLoop + forgegoal LOCK=8; Tempering-style; zero C11 change.

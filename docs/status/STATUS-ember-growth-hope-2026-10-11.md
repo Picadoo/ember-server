@@ -760,3 +760,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D2038–D2045 status chase imprint button (jar 1.65.501-d2038)
 - 可烙 → one-click imprint on status
+
+## D2046–D2059 affix lock loop (jar 1.65.502-d2046)
+- RESEARCH Tempering/PoE lock · EmberRerollLoop + ForgeGoal.LOCK=8
+- Zero C11/pity invent; not status remain twin

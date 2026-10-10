@@ -25,6 +25,15 @@ public final class EmberAfkForgePath {
             if (blank >= 1 && bone >= 2) return "§a挂机日满 · 胚/骨够精工 · /corerpg p1 refine";
             return "§e挂机日满 · 精工还差料 · 胚§f" + blank + " §7骨§f" + bone + " §7· /corerpg p1 forge";
         }
+        if (forgeGoal == EmberForgeGoal.LOCK) {
+            // D2050: rough T1 lock cost display (shard+lock_shard)
+            EmberGrowthService gs = EmberGrowthService.get();
+            EmberAffix.Rules rr = gs == null ? null : gs.reroll();
+            int need = rr == null ? 20 : (rr.shardFor(1) + rr.lockShardFor(1));
+            if (shard >= need) return "§a挂机日满 · 碎够锁定洗 · /corerpg p1 reroll from forge";
+            return "§e挂机日满 · 锁定洗还差碎 §f" + Math.max(0, need - shard)
+                    + " §7· /corerpg p1 reroll";
+        }
         if (forgeGoal == EmberForgeGoal.GEM) {
             EmberUpgradeRules.Cost gc = EmberGemAcquire.craftCost();
             if (shard >= gc.shards && bone >= gc.bone && coin >= gc.coins)

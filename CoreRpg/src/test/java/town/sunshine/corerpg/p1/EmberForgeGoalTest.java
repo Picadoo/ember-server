@@ -21,5 +21,9 @@ public class EmberForgeGoalTest {
         assertEquals("宝石合成", EmberForgeGoal.label(EmberForgeGoal.GEM));
         assertTrue(EmberForgeGoal.gapLine(EmberForgeGoal.GEM, "", "", "", "", "", null, "碎差0·骨差0·币差0").contains("已够"));
         assertTrue(EmberForgeGoal.valid(EmberForgeGoal.GEM));
+        assertEquals(EmberForgeGoal.LOCK, EmberForgeGoal.parse("锁定"));
+        assertEquals("锁定冲档", EmberForgeGoal.label(EmberForgeGoal.LOCK));
+        assertTrue(EmberForgeGoal.gapLine(EmberForgeGoal.LOCK, "", "", "", "", "", null, null, "碎差0·币差0").contains("已够"));
+        assertTrue(EmberForgeGoal.valid(EmberForgeGoal.LOCK));
     }
 }
