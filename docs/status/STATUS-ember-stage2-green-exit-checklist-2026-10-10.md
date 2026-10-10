@@ -16,9 +16,9 @@
 | 1 | 墙钟 ≥17:40 CST | `date` 确认 |
 | 2 | play/login/waterfall 仍在线 | `scripts/console.sh play list` |
 | 3 | Stage2 观察通道未关 | 不主动 stop 观察任务 |
-| 4 | 近期短征烟雾无灾难 FAIL | D444 sx04–09 PASS；D446 sx10–13 Cast+settle PASS |
-| 5 | 地图链债务 | sx01–19 真地图已落（D441–D446）；无 MISSING 短征模板 |
-| 6 | 成长债另号 | D440 HOLD counterplay；D445 docs-only 技能落点短闪（未装 jar） |
+| 4 | 近期短征烟雾无灾难 FAIL | D444–D446 短征 PASS；D449 Q04–07 / D450 Q01–03 视觉 PASS |
+| 5 | 地图链债务 | sx01–19 真地图已落；Q01–07 视觉 D449+D450；无 MISSING |
+| 6 | 成长债另号 | D445 技能落点 LIVE；D448 破招闪 PASS；锻造成色 tip 关（叠 D430） |
 | 7 | LIVE jar / skip-worktree | 勿误提交 skip-worktree live yml |
 | 8 | 绿出 STATUS | 到点另写 STATUS-ember-stage2-green-exit-…（本清单只是预备） |
 
