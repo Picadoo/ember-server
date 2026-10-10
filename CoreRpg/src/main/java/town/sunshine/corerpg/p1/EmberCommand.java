@@ -268,6 +268,54 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("bankpath".equals(sub) || "取银路径".equals(sub)) { // D540 stamina bank draw path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBankPath.glance(EmberBankPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c取银路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberBankPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c取银路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBankPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBankPath.get(d);
+                    if (EmberBankPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBankPath.label(cur) + " · 改路径再 /corerpg p1 bankpath");
+                    else EmberBankPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBankPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 bankpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberBankPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("bank".equals(sub) && args.length == 2) { // D540 ASK button: draw stamina bank
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.StaminaService st = runs == null ? null : runs.plugin().getStaminaService();
+            if (st == null) { p.sendMessage(P + "体力服务未加载"); return true; }
+            int got = st.pathDrawBank(p);
+            PlayerData d = runs == null ? null : runs.dataOf(p.getUniqueId());
+            if (got <= 0) p.sendMessage(P + "无法取银（银行空、或当前已够日常消耗）");
+            else p.sendMessage(P + "§a取银·手点 §7+" + got + " §7（现 " + st.getStamina(d) + "/" + st.resolveMax(d)
+                    + " · 银行 " + (d == null ? 0 : d.getStaminaBank()) + "）");
+            return true;
+        }
         if ("dosepath".equals(sub) || "补体路径".equals(sub)) { // D539 stamina potion dose path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -693,6 +741,20 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("bankseed".equals(sub)) { // D540 admin smoke: low stamina + bank stock
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.StaminaService st = runs.plugin().getStaminaService();
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (st == null || d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            st.cmdRoot(s, new String[]{"stamina", "set", t.getName(), "5"});
+            d.setStaminaBank(40);
+            runs.plugin().getDataStore().flushMutation(t.getUniqueId());
+            s.sendMessage(P + "已设体力=5 · 银行=40 → " + t.getName());
+            EmberBankPath.maybeAfterProgress(t);
             return true;
         }
         if ("doseseed".equals(sub)) { // D539 admin smoke: low stamina + potion

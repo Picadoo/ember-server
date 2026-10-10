@@ -480,6 +480,36 @@ public final class StaminaService implements Listener {
         return amount;
     }
 
+    /** D540: bank has draw available while current stamina is below one daily-run cost. */
+    public boolean needsBankDraw(PlayerData data) {
+        if (data == null) return false;
+        ensure(data);
+        return data.getStamina() < costOf("daily") && data.getStaminaBank() > 0;
+    }
+
+    /**
+     * D540: move stamina from bank → current up to daily cost (or bank empty).
+     * Returns amount drawn. Mid-day only path — day reset already auto-fills.
+     */
+    public int pathDrawBank(Player p) {
+        if (p == null) return 0;
+        PlayerData data = dataStore.get(p.getUniqueId());
+        if (data == null) return 0;
+        ensure(data);
+        int cur = data.getStamina();
+        int bank = data.getStaminaBank();
+        int daily = costOf("daily");
+        if (bank <= 0 || cur >= daily) return 0;
+        int need = daily - cur;
+        int take = Math.min(need, bank);
+        if (take <= 0) return 0;
+        data.setStamina(cur + take);
+        data.setStaminaBank(bank - take);
+        dataStore.flushMutation(p.getUniqueId());
+        return take;
+    }
+
+
     /** Grant potion NI or fallback direct stamina (shop). NI path does NOT pre-count potionStaminaToday. */
     public boolean grantPotionOrStamina(Player player, int packs) {
         if (player == null || packs <= 0) return false;
