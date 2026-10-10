@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * D391–D412 短征（DESIGN short-dungeon）：Bukkit-free 日帽 / 首通 / 结算包。
+ * D391–D414 短征（DESIGN short-dungeon）：Bukkit-free 日帽 / 首通 / 结算包。
  * <ul>
  *   <li>sx01 → S40：有奖 币80+碎片4+骨尘3；首通另加 200/8/胚料1</li>
  *   <li>sx02 → S41：有奖同 S40 量级；首通略薄 180/6/胚料1</li>
@@ -17,6 +17,7 @@ import java.util.Locale;
  *   <li>sx07 → S46：有奖同量级；首通略薄 120/6/胚料1</li>
  *   <li>sx08 → S47：有奖同量级；首通略薄 110/6/胚料1</li>
  *   <li>sx09 → S48：有奖同量级；首通略薄 100/6/胚料1</li>
+ *   <li>sx10 → S49：有奖同量级；首通略薄 90/6/胚料1</li>
  *   <li>日帽后（第 4+ 次）：仍可进本（体力照扣），结算包为空</li>
  * </ul>
  * 金额与 {@link EmberEconomy} / {@code ember-v1-economy.yml} 金样对齐；p1sim 模型另号。
@@ -40,8 +41,9 @@ public final class EmberShortRules {
 
     private EmberShortRules() {}
 
-    /** Economy source id for a short map key (sx01→S40 … sx09→S48). */
+    /** Economy source id for a short map key (sx01→S40 … sx10→S49). */
     public static String economyId(String mapKey) {
+        if (mapKey != null && mapKey.equalsIgnoreCase("sx10")) return "S49";
         if (mapKey != null && mapKey.equalsIgnoreCase("sx09")) return "S48";
         if (mapKey != null && mapKey.equalsIgnoreCase("sx08")) return "S47";
         if (mapKey != null && mapKey.equalsIgnoreCase("sx07")) return "S46";
@@ -84,7 +86,7 @@ public final class EmberShortRules {
 
     /**
      * Build settlement grants for one clear.
-     * @param mapKey short map key (sx01 / sx02 / sx03 / sx04 / sx05 / sx06 / sx07 / sx08 / sx09 / …)
+     * @param mapKey short map key (sx01 / sx02 / sx03 / sx04 / sx05 / sx06 / sx07 / sx08 / sx09 / sx10 / …)
      * @param rewardedToday already-paid rewarded clears today (before this settle)
      * @param firstClearPaid whether the career first-clear package was already paid
      */
@@ -147,19 +149,19 @@ public final class EmberShortRules {
         return Math.max(0, Math.max(0, dailyCap) - Math.max(0, rewardedToday));
     }
 
-    /** Canonical short expedition keys (sx01–sx09). D406/D407/D410/D412 fc aggregate scan order. */
-    public static final String[] SHORT_KEYS = {"sx01", "sx02", "sx03", "sx04", "sx05", "sx06", "sx07", "sx08", "sx09"};
+    /** Canonical short expedition keys (sx01–sx10). D406/D407/D410/D412/D414 fc aggregate scan order. */
+    public static final String[] SHORT_KEYS = {"sx01", "sx02", "sx03", "sx04", "sx05", "sx06", "sx07", "sx08", "sx09", "sx10"};
 
-    /** D406/D412 %corerpg_p1_sx_fc_left%: unpaid first-clear count clamped to 0..9. */
+    /** D406/D414 %corerpg_p1_sx_fc_left%: unpaid first-clear count clamped to 0..10. */
     public static int fcLeft(int unpaidCount) {
         int n = Math.max(0, unpaidCount);
         return n > SHORT_KEYS.length ? SHORT_KEYS.length : n;
     }
 
-    /** D406/D412 optional %corerpg_p1_sx_fc_pending_line%. */
+    /** D406/D414 optional %corerpg_p1_sx_fc_pending_line%. */
     public static String fcPendingLine(int unpaidCount) {
         int n = fcLeft(unpaidCount);
-        if (n <= 0) return "九本首通已齐";
+        if (n <= 0) return "十本首通已齐";
         return "还有 " + n + " 本生涯首通未领";
     }
 

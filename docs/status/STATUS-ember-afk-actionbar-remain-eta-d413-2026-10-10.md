@@ -30,9 +30,9 @@ daily_kills / afk.tiers / 离线% · Stage2 三开关 / ×0.97 · gate_daily · 
 
 | 项 | 值 |
 |----|-----|
-| tip | `7d5d4bfb` |
+| tip | `cd9a19f2` |
 | jar | `CoreRpg-1.65.120-d413.local.jar` |
-| sha256 |  |
+| sha256 | `01dee759375f51635e2a51a77bfde66d0997650100cab527ea296437de4c680d` |
 | Enabling | `CoreRpg v1.65.120-d413.local` |
 
 ## 下一号

@@ -132,10 +132,12 @@ public final class EmberRunPapi {
         if (key == null) return false;
         if ("sx_day_left_sum".equals(key)) return true;
         if ("sx_fc_left".equals(key) || "sx_fc_pending_line".equals(key)) return true; // D406
-        // sx0N_day | sx0N_day_line | sx0N_day_left  (map key length 4: sx01..)
-        if (key.length() < 8 || !key.startsWith("sx0")) return false;
+        // sxNN_day | sxNN_day_line | sxNN_day_left  (map key length 4: sx01..sx10..)
+        if (key.length() < 8 || !key.startsWith("sx")) return false;
         int us = key.indexOf('_');
         if (us != 4) return false;
+        char a = key.charAt(2), b = key.charAt(3);
+        if (a < '0' || a > '9' || b < '0' || b > '9') return false;
         String rest = key.substring(5);
         return "day".equals(rest) || "day_line".equals(rest) || "day_left".equals(rest);
     }
