@@ -161,10 +161,11 @@ public final class EmberShortService {
         int path = EmberShortPath.get(d);
         if (path == EmberShortPath.FC || path == EmberShortPath.LATE) {
             boolean unpaid = EmberShortPath.unpaidFc(d, m);
-            if (unpaid) base += " §a· 本局首通追";
+            int left = EmberShortPath.countUnpaidFc(runs, d); // D720
+            if (unpaid) base += " §a· 本局首通追 §8· 余 " + left;
             else {
                 EmberRunMaps.MapDef next = EmberShortPath.resolve(runs, d, EmberShortPath.FC);
-                if (next != null) base += " §8· 下一首通 " + next.key.toUpperCase(Locale.ROOT);
+                if (next != null) base += " §8· 下一首通 " + next.key.toUpperCase(Locale.ROOT) + " · 余 " + left;
             }
         }
         return base;

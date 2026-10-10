@@ -162,3 +162,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D715–D716 SHIP · jar 1.65.334-d715 · 2026-10-11
 - D715 short FC settle unpaid remainder
 - D716 enhance undo hold mismatch bar
+
+## D719–D720 SHIP · jar 1.65.336-d719 · 2026-10-11
+- D719 abyss target next suggest
+- D720 short enter unpaid count

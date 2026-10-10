@@ -60,6 +60,8 @@ public final class EmberAbyssTarget {
         if (t <= 0) return;
         if (newBest >= t) {
             p.sendMessage(EmberRunService.P + "§a深渊层目标达成：§f" + t + " §7· 可改 /corerpg p1 abysstarget");
+            int next = Math.min(MAX, newBest + 1);
+            p.sendMessage(EmberRunService.P + "§7下一目标可设：/corerpg p1 abysstarget " + next); // D719
             try { p.sendActionBar("§a层目标达成 · §f" + t); } catch (Throwable ignored) { }
         } else {
             p.sendMessage(EmberRunService.P + glance(d, newBest));
