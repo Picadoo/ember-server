@@ -1,6 +1,6 @@
 name: CoreRpg
 main: town.sunshine.corerpg.CoreRpgPlugin
-version: 1.65.254-d563.local
+version: 1.65.255-d564.local
 author: sunshine-town
 description: 余烬 RPG — 币/签到/活跃/悬赏/强化/镶嵌/分解/重铸/灾厄/精英试炼/誓约/天赋/技能/晶钻商城/月卡/体力/邮寄/好友/设置/天梯/使魔/盟约/竞技/寄售/材料仓 + 记分板/刷怪
 softdepend: [MythicMobs, NeigeItems, PlaceholderAPI, Adyeshach]

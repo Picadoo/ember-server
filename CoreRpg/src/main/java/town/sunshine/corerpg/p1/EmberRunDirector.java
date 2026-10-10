@@ -445,6 +445,7 @@ final class EmberRunDirector {
             if ("crystal".equals(kind)) {
                 placeCrystals(r, v.crystalCount);
                 svc.tellRun(s, "§b砸余烬晶 §7· 砸掉本房 " + v.crystalCount + " 块发光晶再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberSmashPath.maybeAfterPlace(s); // D564
             } else if ("escort".equals(kind)) {
                 spawnEscort(r, v);
                 svc.tellRun(s, "§b护宝兔 §7· 清房前别让发光小兔倒下 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
@@ -499,6 +500,35 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D564: variety crystals still standing. */
+    boolean hasSmashCrystals() {
+        return crystalBlocks != null && !crystalBlocks.isEmpty();
+    }
+
+    /** D564: warp a committed player to the nearest remaining crystal. */
+    boolean pathSmashCrystal(Player p) {
+        if (p == null || !p.isOnline() || !hasSmashCrystals()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location best = null;
+        double bestD = Double.MAX_VALUE;
+        Location pl = p.getLocation();
+        for (Location c : crystalBlocks) {
+            if (c == null || c.getWorld() == null) continue;
+            if (c.getBlock().getType() != Material.SEA_LANTERN) continue;
+            double dsq = c.distanceSquared(pl);
+            if (dsq < bestD) { bestD = dsq; best = c; }
+        }
+        if (best == null) return false;
+        Location to = best.clone().add(0.5, 0, 0.5);
+        to.setYaw(pl.getYaw());
+        to.setPitch(pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.5f);
+        return true;
     }
 
     /** D561: player currently carries frost-affix slow. */

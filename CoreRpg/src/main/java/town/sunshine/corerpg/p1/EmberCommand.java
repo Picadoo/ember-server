@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("smashpath".equals(sub) || "砸晶路径".equals(sub)) { // D564 crystal-smash path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSmashPath.glance(EmberSmashPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c砸晶路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSmashPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c砸晶路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSmashPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSmashPath.get(d);
+                    if (EmberSmashPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSmashPath.label(cur) + " · 改路径再 /corerpg p1 smashpath");
+                    else EmberSmashPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSmashPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 smashpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSmashPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("smash".equals(sub) && args.length == 2) { // D564 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathSmashCrystal(p)) p.sendMessage(P + "无法砸晶（无余烬晶/未进本）");
+            else p.sendMessage(P + "§a砸晶·手点 §7已传至余烬晶");
+            return true;
+        }
         if ("burstpath".equals(sub) || "破绽路径".equals(sub)) { // D563 boss-stagger burst path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1759,6 +1803,15 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("smashseed".equals(sub)) { // D564 admin smoke: probe smash path
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSmashPath.maybeProbe(t);
+            s.sendMessage(P + "已触发砸晶路径探测 → " + t.getName()
+                    + (runs != null && runs.hasSmashCrystals(t) ? "（有晶）" : "（无晶）"));
             return true;
         }
         if ("burstseed".equals(sub)) { // D563 admin smoke: probe burst path
