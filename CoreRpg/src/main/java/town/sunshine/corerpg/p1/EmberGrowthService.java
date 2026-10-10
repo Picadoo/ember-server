@@ -1196,9 +1196,16 @@ public final class EmberGrowthService implements Listener {
         }
         EmberSignature.Def old = EmberSignature.byCode(cur);
         if (!go) {
-            p.sendMessage(P + "烬炉烙印：把 §6" + sd.name + " §7烙到 §f" + t.shortLabel() + " §7· 花 " + EmberSignature.imprintMarks() + " 枚 "
-                    + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）+ " + coin + " 余烬币");
+            int needM = EmberSignature.imprintMarks();
+            int gapM = Math.max(0, needM - marks);
+            p.sendMessage(P + "烬炉烙印：把 §6" + sd.name + " §7烙到 §f" + t.shortLabel() + " §7· 花 " + needM + " 枚 "
+                    + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）+ " + coin + " 余烬币"
+                    + (gapM > 0 ? " §c· 还差徽记 " + gapM : " §a· 徽记够"));
             if (old != null) p.sendMessage(P + ChatColor.RED + "⚠ 这件现在的签名「" + old.name + "」会被覆盖，不能取回");
+            try { // D1280
+                p.sendActionBar(gapM == 0 ? "§a烙印 · 徽记够 · 确认"
+                        : ("§e烙印 · 还差徽记 §f" + gapM));
+            } catch (Throwable ignored) { }
             String tk = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1sig", fp);
             town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "确认：", "[确认烙印]", "/corerpg p1 sig imprint " + sd.id + " confirm tok:" + tk,
                     sd.name + "：" + sd.good + "\n代价：" + sd.bad);

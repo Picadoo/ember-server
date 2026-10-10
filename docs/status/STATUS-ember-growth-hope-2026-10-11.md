@@ -568,3 +568,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1271–D1278 ARCH SHIP · jar 1.65.442-d1271
 - Skill charge CD chat/AB with shape short (not SF4)
+
+## D1279–D1286 ARCH SHIP · jar 1.65.443-d1279
+- Imprint preview marks-gap ActionBar
