@@ -477,6 +477,7 @@ final class EmberRunDirector {
                 EmberCleanPath.maybeAfterClean(s); // D578
             } else {
                 svc.tellRun(s, "§b限时清房 §7· " + v.eventLimit(kind) + " 秒内清完这个房间 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberRushPath.maybeAfterRush(s); // D579
             }
             // D296 W1c: per-run first event-room ActionBar short name (chat still fires every time)
             if (!s.eventHudShown) {
@@ -507,6 +508,41 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D579: timed-clear event still live and unmet. */
+    boolean hasRushLive() {
+        if (s == null || eventStart <= 0 || eventFailed || s.eventDone) return false;
+        if (activeRoom == null || !activeRoom.equals(s.eventRoom)) return false;
+        String kind = s.eventKind == null || s.eventKind.isEmpty() ? "timed" : s.eventKind;
+        return "timed".equals(kind);
+    }
+
+    /** D579: warp a committed player next to the nearest living event-room mob for timed clear. */
+    boolean pathRushMob(Player p) {
+        if (p == null || !p.isOnline() || !hasRushLive()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        if (s.eventRoom == null) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (t.varietyEscort) continue;
+            if (!s.eventRoom.equals(t.roomId)) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location at = best.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.4f);
+        return true;
     }
 
     /** D578: unscathed event still live and not failed. */

@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("rushpath".equals(sub) || "限时路径".equals(sub)) return rushPathCmd(s, args); // D579
+        if ("rush".equals(sub) && args.length == 2) return rushGoCmd(s); // D579
         if ("cleanpath".equals(sub) || "无伤路径".equals(sub)) return cleanPathCmd(s, args); // D578
         if ("clean".equals(sub) && args.length == 2) return cleanGoCmd(s); // D578
         if ("streakpath".equals(sub) || "连斩路径".equals(sub)) return streakPathCmd(s, args); // D577
@@ -1705,6 +1707,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("rushseed".equals(sub)) return rushSeedCmd(s, args); // D579
         if ("cleanseed".equals(sub)) return cleanSeedCmd(s, args); // D578
         if ("streakseed".equals(sub)) return streakSeedCmd(s, args); // D577
         if ("blazeseed".equals(sub)) return blazeSeedCmd(s, args); // D576
@@ -5488,6 +5491,62 @@ public final class EmberCommand {
             EmberCleanPath.maybeProbe(t);
             s.sendMessage(P + "已触发无伤路径探测 → " + t.getName()
                     + (runs != null && runs.hasCleanLive(t) ? "（有无伤）" : "（无无伤）"));
+            return true;
+    }
+
+    private boolean rushPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberRushPath.glance(EmberRushPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c限时路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberRushPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c限时路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberRushPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberRushPath.get(d);
+                    if (EmberRushPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRushPath.label(cur) + " · 改路径再 /corerpg p1 rushpath");
+                    else EmberRushPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberRushPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 rushpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberRushPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean rushGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathRushMob(p)) p.sendMessage(P + "无法限时冲（无限时清房/无怪/未进本）");
+            else p.sendMessage(P + "§a限时·手点 §7已传至近处房怪");
+            return true;
+    }
+
+    private boolean rushSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberRushPath.maybeProbe(t);
+            s.sendMessage(P + "已触发限时路径探测 → " + t.getName()
+                    + (runs != null && runs.hasRushLive(t) ? "（有限时）" : "（无限时）"));
             return true;
     }
 }
