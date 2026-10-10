@@ -277,6 +277,25 @@ public final class MailService {
     }
 
     private void cmdClaimAll(Player p) {
+        int n = claimAllAttachments(p);
+        if (n == 0) {
+            p.sendMessage(PREFIX + ChatColor.YELLOW + "没有可领取的附件。");
+        } else {
+            p.sendMessage(PREFIX + ChatColor.GREEN + "一键领取完成：§f" + n + ChatColor.GREEN + " 封。");
+        }
+    }
+
+    /** D523: unclaimed attachment count. */
+    public int countClaimable(UUID uuid) {
+        if (uuid == null) return 0;
+        int n = 0;
+        for (MailMessage m : loadInbox(uuid)) if (m.hasAttachment() && !m.claimed) n++;
+        return n;
+    }
+
+    /** D523: claim every unclaimed attachment; returns how many mails claimed. Silent on zero. */
+    public int claimAllAttachments(Player p) {
+        if (p == null) return 0;
         List<MailMessage> list = loadInbox(p.getUniqueId());
         int n = 0;
         for (MailMessage m : list) {
@@ -290,11 +309,7 @@ public final class MailService {
             n++;
         }
         if (n > 0) saveInbox(p.getUniqueId(), list);
-        if (n == 0) {
-            p.sendMessage(PREFIX + ChatColor.YELLOW + "没有可领取的附件。");
-        } else {
-            p.sendMessage(PREFIX + ChatColor.GREEN + "一键领取完成：§f" + n + ChatColor.GREEN + " 封。");
-        }
+        return n;
     }
 
     private void cmdDelete(Player p, int id) {
@@ -351,6 +366,7 @@ public final class MailService {
         if (online != null && online.isOnline()) {
             online.sendMessage(PREFIX + ChatColor.YELLOW + "收到新邮件：§f" + tpl.title
                     + ChatColor.GRAY + " · /corerpg mail");
+            town.sunshine.corerpg.p1.EmberMailPath.maybeAfterMail(online, this); // D523
         }
     }
 

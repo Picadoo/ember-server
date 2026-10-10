@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("mailpath".equals(sub) || "邮件路径".equals(sub)) { // D523 system-mail attachment claim path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberMailPath.glance(EmberMailPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c邮件路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberMailPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c邮件路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberMailPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberMailPath.get(d);
+                    if (EmberMailPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberMailPath.label(cur) + " · 改路径再 /corerpg p1 mailpath");
+                    else EmberMailPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberMailPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 mailpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberMailPath.applyAndReply(p, id);
+            return true;
+        }
         if ("codexpath".equals(sub) || "图录路径".equals(sub)) { // D522 equipment-codex stage claim path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

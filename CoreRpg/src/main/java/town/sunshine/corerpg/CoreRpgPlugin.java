@@ -817,6 +817,12 @@ public final class CoreRpgPlugin extends JavaPlugin implements Listener {
         }, 10L);
         if (questService != null) questService.onJoin(player);
         if (abyssSettleService != null) abyssSettleService.onPlayerJoin(player); // B2.140 relog grace / payout
+        if (mailService != null) {
+            final Player jp = player;
+            getServer().getScheduler().runTaskLater(this, () -> {
+                if (jp.isOnline()) town.sunshine.corerpg.p1.EmberMailPath.maybeAfterMail(jp, mailService); // D523
+            }, 90L);
+        }
     }
 
     @EventHandler
