@@ -108,7 +108,9 @@ public final class EmberGoalPath {
         if (focusGoal(path) == null || target <= 0) return null;
         if (progress >= target) return "§a周标焦点达标 ✔ §7（" + label(path) + "）";
         String gn = goalName == null ? focusGoal(path) : goalName;
-        return "§e周标焦点 §f" + progress + "/" + target + " §7· " + gn + "（" + label(path) + "）";
+        int left = target - progress;
+        return "§e周标焦点 §f" + progress + "/" + target + " §8· 还差" + left
+                + " §7· " + gn + "（" + label(path) + "）";
     }
 
     public static void maybeGlance(Player p, EmberRunService runs, String activity) {
@@ -122,7 +124,10 @@ public final class EmberGoalPath {
         if (season == null || !season.goalsOn()) return;
         int t = season.target(d, g);
         String line = chaseLine(path, season.progress(d, g), t, EmberSeason.goalName(g));
-        if (line != null) p.sendMessage(EmberRunService.P + line);
+        if (line != null) {
+            p.sendMessage(EmberRunService.P + line);
+            try { p.sendActionBar(line); } catch (Throwable ignored) { } // D1425
+        }
     }
 
 
@@ -168,8 +173,24 @@ public final class EmberGoalPath {
         String P = EmberRunService.P;
         p.sendMessage(P + "§a周标路径 → §f" + label(id) + "§7（" + tip(id) + "）"
                 + (changed ? "" : " §8· 已是该路径"));
-        try { p.sendActionBar("§e周标 · §f" + label(id)); } catch (Throwable ignored) { }
         String focus = focusGoal(id);
+        try {
+            CoreRpgPlugin pl = plugin();
+            if (focus != null && pl != null && pl.getEmberRuns() != null
+                    && pl.getEmberRuns().season() != null) {
+                EmberSeason season = pl.getEmberRuns().season();
+                PlayerData d = pl.getEmberRuns().dataOf(p.getUniqueId());
+                if (d != null && season.goalsOn()) {
+                    int t = season.target(d, focus);
+                    int prog = season.progress(d, focus);
+                    String cl = chaseLine(id, prog, t, EmberSeason.goalName(focus));
+                    if (cl != null) p.sendActionBar(cl);
+                    else p.sendActionBar("§e周标 · §f" + label(id));
+                } else p.sendActionBar("§e周标 · §f" + label(id));
+            } else p.sendActionBar("§e周标 · §f" + label(id));
+        } catch (Throwable ignored) {
+            try { p.sendActionBar("§e周标 · §f" + label(id)); } catch (Throwable ignored2) { }
+        }
         if (focus != null) {
             ConfirmTokens.sendButtons(p, P + "§7周标下一环：",
                     new String[]{"[打开·" + EmberSeason.goalName(focus) + "]", EmberSeason.goalOpen(focus), tip(id), "GREEN"},

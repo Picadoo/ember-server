@@ -558,8 +558,22 @@ public final class EmberGrowthService implements Listener {
             PlayerData d = data(p.getUniqueId());
             if (honors == null || d == null) { p.sendMessage(P + "余烬勋记未配置"); return true; }
             List<String> e = honorsEarned(p.getUniqueId(), d);
-            p.sendMessage(P + "§6余烬勋记 §7" + e.size() + "/" + honors.list.size());
-            for (EmberGrowth.Honor h : honors.list) p.sendMessage(P + (e.contains(h.id) ? "§a✔ " : "§8✘ ") + h.name + " §7— " + h.desc);
+            int left = honors.list.size() - e.size();
+            p.sendMessage(P + "§6余烬勋记 §7" + e.size() + "/" + honors.list.size()
+                    + (left > 0 ? " §8· 还差 " + left : " §a· 全得"));
+            String nextName = null;
+            for (EmberGrowth.Honor h : honors.list) {
+                boolean got = e.contains(h.id);
+                p.sendMessage(P + (got ? "§a✔ " : "§8✘ ") + h.name + " §7— " + h.desc);
+                if (!got && nextName == null) nextName = h.name;
+            }
+            try { // D1426 chat/AB remain · 非 hope PAPI twin
+                if (nextName != null)
+                    p.sendActionBar("§6勋记 · §f" + e.size() + "/" + honors.list.size()
+                            + " §8· 下一缺 §f" + nextName);
+                else
+                    p.sendActionBar("§a勋记 · 全得");
+            } catch (Throwable ignored) { }
             return true;
         } else {
             HFROM.remove(p.getUniqueId());

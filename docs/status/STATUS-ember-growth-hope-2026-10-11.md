@@ -607,3 +607,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1409–D1422 ARCH SHIP · jar 1.65.455-d1409
 - Pivot featured/goals/awaken honesty; goals remain; feature enterCue; awakeningRemain
+
+## D1423–D1436 ARCH SHIP · jar 1.65.456-d1423
+- GoalPath remain AB; honor next-missing AB

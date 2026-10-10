@@ -13,5 +13,8 @@ setchase-mapid（SC/MI/CD）已近饱和。精选入场、周目标进度、觉�
 | FG2 | 精选入场附地图身份缺 | enterCue + MapIdentity |
 | AW2 | 觉醒短剩余 helper | EmberLoadout.awakeningRemain |
 | AW3 | 成套完成→觉醒工坊钮 | setchase ConfirmTokens |
+| GP1 | 周标 chase 还差 | GoalPath.chaseLine |
+| GP2 | glance/afterSet AB | maybeGlance / afterSet |
+| HN1 | 勋记下一缺 AB | honor list |
 
 不改奖励数、周帽、掉率、通关闸。
