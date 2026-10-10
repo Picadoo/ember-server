@@ -1626,6 +1626,33 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D472 | CoreRpg **1.65.163-d472** / bv 未抬 | 成长花样·追烙烙印完成闭环 **PASS**：imprint 后清 chase+[换追烙] · 收口 D470 · **≠改**烙印价/AFK · 非周路径点选。冒烟 FreshQ1004 · `B-chase-imprint-complete` · `41be5255` · STATUS `STATUS-ember-chase-imprint-complete-d472-2026-10-10.md`。 |
 | D473 | CoreRpg **1.65.164-d473** / bv 未抬 | 成长花样·短征结算去工坊可点 **PASS**：有奖短征 settle AB+[去工坊]→`/corerpg p1 forge` · 收口 D409 · **≠改**日帽/产量/AFK · 非路径点选。冒烟 FreshQ1005 · `B-short-spend-forge-btn` · `7a188ef7` · STATUS `STATUS-ember-short-spend-forge-btn-d473-2026-10-10.md`。 |
 | D474 | CoreRpg **1.65.165-d474** / bv 未抬 | 成长花样·转化完成→强化追花 **PASS**：`EmberConvertLoop` · convert 成功 AB+[去工坊强化] · path-hit · **≠改**转化价/周帽/AFK。冒烟 FreshQ1006 · `B-convert-complete-loop` · `d9887818` · STATUS `STATUS-ember-convert-complete-loop-d474-2026-10-10.md`。路径一览 board 因号冲突另开。 |
+| D475 | CoreRpg **1.65.166-d475** / bv 未抬 | 成长花样·工坊结果 ActionBar 可感 **PASS**：强化/精炼/成色结果短闪 · **≠改**率/价。`B-forge-result-feel` · `14e21f95` · STATUS `STATUS-ember-forge-result-feel-d475-2026-10-10.md`。 |
+| D476 | CoreRpg **1.65.167-d476** / bv 未抬 | 成长花样·招架 CD 就绪上升沿 **PASS**：独立招架充能就绪 ActionBar · **≠改** CD。`B-parry-cd-ready` · `3c166287` · STATUS `STATUS-ember-parry-cd-ready-d476-2026-10-10.md`。 |
+| D477 | CoreRpg **1.65.168-d477** / bv 未抬 | 成长花样·地图入场 ActionBar **PASS**：run commit 入场短闪 · **≠改**体力。`B-map-enter-cue` · `7b631bb3` · STATUS `STATUS-ember-map-enter-cue-d477-2026-10-10.md`。 |
+| D478 | CoreRpg **1.65.169-d478** / bv 未抬 | 成长花样·工坊强化材料就绪上升沿 **PASS**：材料够时 cue · **≠改**率。`B-forge-mat-ready` · `9771125f` · STATUS `STATUS-ember-forge-mat-ready-d478-2026-10-10.md`。 |
+| D479 | CoreRpg **1.65.170-d479** / bv 未抬 | 成长花样·烬斩共用充能就绪上升沿 **PASS**：slash/dash 充能就绪 · 镜像 D476 · **≠改** CD。`B-slash-cd-ready` · `dbc520db` · STATUS `STATUS-ember-slash-cd-ready-d479-2026-10-10.md`。 |
+| D480 | CoreRpg **1.65.171-d480** / bv 未抬 | 成长花样·破绽玩法路径 **PASS**：`EmberCounterPath` wall/whiff/break · **≠同族 HUD**。冒烟见 STATUS · `B-counter-path` · `63a193f4` · STATUS `STATUS-ember-counter-path-d480-2026-10-10.md`。 |
+| D481 | CoreRpg **1.65.172-d481** / bv 未抬 | 成长花样·自选誓约玩法路径 **PASS**：`EmberPledgePath` lean/reverse/both · **≠改**誓约表。`B-pledge-path` · `11ca1e81` · STATUS `STATUS-ember-pledge-path-d481-2026-10-10.md`。 |
+| D482 | CoreRpg **1.65.173-d482** / bv 未抬 | 成长花样·分解胚料花法闭环 **PASS**：`EmberBlankLoop` 升级/烙纹/工坊追 · **≠改**分解表。`B-blank-spend-loop` · `b27721f9` · STATUS `STATUS-ember-blank-spend-loop-d482-2026-10-10.md`。 |
+| D483 | CoreRpg **1.65.174-d483** / bv 未抬 | 成长花样·团本周焦点路径 **PASS**：`EmberRaidPath` R01/R02/R03 · 冒烟 FreshQ1017 · `B-raid-path` · `ecde19dd` · STATUS `STATUS-ember-raid-path-d483-2026-10-10.md`。 |
+| D484 | CoreRpg **1.65.175-d484** / bv 未抬 | 成长花样·免费互换强化花法追击 **PASS**：`EmberSwapLoop` · 冒烟 FreshQ1018 · `B-swap-loop` · `08d4cf9c` · STATUS `STATUS-ember-swap-loop-d484-2026-10-10.md`。 |
+| D485 | CoreRpg **1.65.176-d485** / bv 未抬 | 成长花样·强化花法分支追击 **PASS**：`EmberEnhanceLoop` · 冒烟 FreshQ1019 · `B-enhance-loop` · `368f4d98` · STATUS `STATUS-ember-enhance-loop-d485-2026-10-10.md`。 |
+| D486 | CoreRpg **1.65.177-d486** / bv 未抬 | 成长花样·深渊冲层/刷层路径 **PASS**：`EmberAbyssPath` push/farm · 冒烟 FreshQ1020 · `B-abyss-path` · `e43ba2e6` · STATUS `STATUS-ember-abyss-path-d486-2026-10-10.md`。 |
+| D487 | CoreRpg **1.65.178-d487** / bv 未抬 | 成长花样·升阶战力花法追击 **PASS**：`EmberUpgradeLoop` · 冒烟 FreshQ1021 · `B-upgrade-loop` · `45f3a052` · STATUS `STATUS-ember-upgrade-loop-d487-2026-10-10.md`。 |
+| D488 | CoreRpg **1.65.179-d488** / bv 未抬 | 成长花样·本周精选图身份路径 **PASS**：`EmberFeaturedPath` challenge/normal · 冒烟 FreshQ1023 · `B-featured-path` · `e0095886` · STATUS `STATUS-ember-featured-path-d488-2026-10-10.md`。 |
+| D489 | CoreRpg **1.65.180-d489** / bv 未抬 | 成长花样·入场名片聊天钉 **PASS**：`EmberMapCardCue` · 冒烟 FreshQ1024 · `B-map-card-cue` · `d6ccba08` · STATUS `STATUS-ember-map-card-cue-d489-2026-10-10.md`。 |
+| D490 | CoreRpg **1.65.181-d490** / bv 未抬 | 成长花样·烬斩符文战斗路径 **PASS**：`EmberShapePath` fan/line/ring · 冒烟 FreshQ1025 · **真改打法** · `B-shape-path` · `eeb8f645` · STATUS `STATUS-ember-shape-path-d490-2026-10-10.md`。 |
+| D491 | CoreRpg **1.65.182-d491** / bv 未抬 | 成长花样·身法方向战斗路径 **PASS**：`EmberStepPath` forward/back · 冒烟 FreshQ1026 · **真改打法** · `B-step-path` · `16c531ee` · STATUS `STATUS-ember-step-path-d491-2026-10-10.md`。 |
+| D492 | CoreRpg **1.65.183-d492** / bv 未抬 | 成长花样·签名调律战斗路径 **PASS**：`EmberAttunePath` origin/alt · 冒烟 FreshQ1027 · **真改打法** · `B-attune-path` · `47a125e9` · STATUS `STATUS-ember-attune-path-d492-2026-10-10.md`。 |
+| D493 | CoreRpg **1.65.184-d493** / bv 未抬 | 成长花样·套装打法路径 **PASS**：`EmberFamilyPath` focus+loot+step · 冒烟 FreshQ1028 · **真改打法** · `B-family-path` · `8c5c3cc7` · STATUS `STATUS-ember-family-path-d493-2026-10-10.md`。 |
+| D494 | CoreRpg **1.65.185-d494** / bv 未抬 | 成长花样·轻技装配战斗路径 **PASS**：`EmberFlexPath` on/off · 冒烟 FreshQ1029 · **真改打法** · `B-flex-path` · `9048cff2` · STATUS `STATUS-ember-flex-path-d494-2026-10-10.md`。 |
+| D495 | CoreRpg **1.65.186-d495** / bv 未抬 | 成长花样·战斗姿态路径 **PASS**：`EmberPosturePath` strike/guard/sweep（shape+step）· 冒烟 FreshQ1030 · **真改打法** · `B-posture-path` · `aa2e470a` · STATUS `STATUS-ember-posture-path-d495-2026-10-10.md`。 |
+| D496 | CoreRpg **1.65.187-d496** / bv 未抬 | 成长花样·试炼路径 **PASS**：`EmberTrialPath` cautious/aggressive/pressure · 冒烟 FreshQ1031 · **真改打法** · `B-trial-path` · `b6f8cf99` · STATUS `STATUS-ember-trial-path-d496-2026-10-10.md`。 |
+| D497 | CoreRpg **1.65.188-d497** / bv 未抬 | 成长花样·纹印路径 **PASS**：`EmberSealPath` hunt/ember/bind（brand+duallead）· 冒烟 FreshQ1032 · **真改打法** · `B-seal-path` · `50b46b9c` · STATUS `STATUS-ember-seal-path-d497-2026-10-10.md`。 |
+| D498 | CoreRpg **1.65.189-d498** / bv 未抬 | 成长花样·签律路径 **PASS**：`EmberTunePath` sharp/ward/full（duallead+attune）· 冒烟 FreshQ1033 · **真改打法** · `B-tune-path` · `c6decab9` · STATUS `STATUS-ember-tune-path-d498-2026-10-10.md`。 |
+| D499 | CoreRpg **1.65.190-d499** / bv 未抬 | 成长花样·步态路径 **PASS**：`EmberStridePath` push/bail/bare（flex+step）· 冒烟 FreshQ1034 · **真改打法** · `B-stride-path` · `62d4a447` · STATUS `STATUS-ember-stride-path-d499-2026-10-10.md`。 |
+| D500 | CoreRpg **1.65.191-d500** / bv 未抬 | 成长花样·花样遭遇路径 **PASS**：`EmberSpicePath` blaze/control/objective 真写 D138 variety 卷轴 · **≠组合粘性路径** · 单测 5/5 · 冒烟 FreshQ1035 · `B-spice-path` · `d417bef6` · STATUS `STATUS-ember-spice-path-d500-2026-10-10.md`。 |
+
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
