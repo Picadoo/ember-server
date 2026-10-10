@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("refundpath".equals(sub) || "倒退路径".equals(sub) || "退药路径".equals(sub)) { // D505 death refund path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberRefundPath.glance(EmberRefundPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c倒退路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberRefundPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c倒退路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberRefundPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberRefundPath.get(d);
+                    if (EmberRefundPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRefundPath.label(cur) + " · 改路径再 /corerpg p1 refundpath");
+                    else EmberRefundPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberRefundPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 refundpath <full|light|bare|clear>");
+                return true;
+            }
+            EmberRefundPath.applyAndReply(p, id);
+            return true;
+        }
         if ("twistpath".equals(sub) || "变招路径".equals(sub)) { // D504 elite twist path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

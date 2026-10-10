@@ -1114,6 +1114,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberPrepPath.scheduleOfferAfterQ01(p); // D502 potion prep path
                         if ("q01".equals(g.id)) EmberShortPath.scheduleOfferAfterQ01(p); // D503 short chase path
                         if ("q01".equals(g.id)) EmberTwistPath.scheduleOfferAfterQ01(p); // D504 elite twist path
+                        if ("q01".equals(g.id)) EmberRefundPath.scheduleOfferAfterQ01(p); // D505 death refund path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
@@ -1961,11 +1962,18 @@ public final class EmberRunService implements Listener {
      * same day, a relog, a restart or a duplicate death event pays nothing more. The row is delivered in town.
      */
     private void deathRefund(Player p, EmberRunSession s) {
-        int max = deathRefundMax();
-        if (max <= 0) return;
+        int tableMax = deathRefundMax();
+        PlayerData pd = dataOf(p.getUniqueId());
+        int path = EmberRefundPath.get(pd);
+        int max = EmberRefundPath.effectiveMax(path, tableMax);
+        if (tableMax <= 0) return; // table off → feature off (path cannot raise)
         UUID u = p.getUniqueId();
         Integer used = s.potions.get(u);
         int n = EmberRunRules.deathRefundCount(used == null ? 0 : used, max);
+        if (EmberRefundPath.valid(path) && max != tableMax) {
+            log().info("[P1 run] death refund path " + EmberRefundPath.key(path) + " " + p.getName()
+                    + " max " + tableMax + "→" + max);
+        }
         if (n == 0 && raidRun(s)) return; // F-review #7: a raid fall with nothing to refund says nothing and keeps today's refund
         String day = town.sunshine.corerpg.DailyService.today();
         EmberRunRules.Ledger l = store.ledger(u);
