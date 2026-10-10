@@ -1625,7 +1625,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D471 | CoreRpg **1.65.162-d471** / bv 未抬 | 成长花样·烙纹合成→定向获取环 **PASS**：`EmberBrandLoop` craft/pin 钩 · ActionBar · **≠改**合成/定向价 · 非周路径点选。冒烟 FreshQ1003 · `B-brand-craft-pin-loop` · `f1ac25f9` · STATUS `STATUS-ember-brand-craft-pin-loop-d471-2026-10-10.md`。 |
 | D472 | CoreRpg **1.65.163-d472** / bv 未抬 | 成长花样·追烙烙印完成闭环 **PASS**：imprint 后清 chase+[换追烙] · 收口 D470 · **≠改**烙印价/AFK · 非周路径点选。冒烟 FreshQ1004 · `B-chase-imprint-complete` · `41be5255` · STATUS `STATUS-ember-chase-imprint-complete-d472-2026-10-10.md`。 |
 | D473 | CoreRpg **1.65.164-d473** / bv 未抬 | 成长花样·短征结算去工坊可点 **PASS**：有奖短征 settle AB+[去工坊]→`/corerpg p1 forge` · 收口 D409 · **≠改**日帽/产量/AFK · 非路径点选。冒烟 FreshQ1005 · `B-short-spend-forge-btn` · `7a188ef7` · STATUS `STATUS-ember-short-spend-forge-btn-d473-2026-10-10.md`。 |
-| D474 | CoreRpg **1.65.165-d474**（并行工位认领 · 施工中；live 仍 **1.65.164-d473**）/ bv 未抬 | 成长花样·转化完成→强化追花 **WIP/认领**：`EmberConvertLoop` · convert 成功 feel+去强化 · **≠改**转化价/周帽。路径一览 board（原 COORD 目标）因号冲突 **stand down**，另开。tip `STATUS-ember-convert-complete-loop-d474-2026-10-10.md` · DESIGN `DESIGN-ember-convert-complete-loop-playstyle-2026-10-10.md` · backlog `B-convert-complete-loop`。 |
+| D474 | CoreRpg **1.65.165-d474** / bv 未抬 | 成长花样·转化完成→强化追花 **PASS**：`EmberConvertLoop` · convert 成功 AB+[去工坊强化] · path-hit · **≠改**转化价/周帽/AFK。冒烟 FreshQ1006 · `B-convert-complete-loop` · `d9887818` · STATUS `STATUS-ember-convert-complete-loop-d474-2026-10-10.md`。路径一览 board 因号冲突另开。 |
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
