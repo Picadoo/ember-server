@@ -529,7 +529,11 @@ public final class EmberGearLib implements Listener {
         StringBuilder fp = new StringBuilder();
         for (Entry e : take) fp.append(e.d.uid).append(':').append(e.d.rev).append(',');
         String fps = Integer.toHexString(fp.toString().hashCode());
-        if (take.isEmpty()) { p.sendMessage(P + "当前筛选（" + f.label() + "）里没有可分解的件（锁定、收藏、有投入、非掉落件、T0 都不分解）"); return true; }
+        if (take.isEmpty()) {
+            p.sendMessage(P + "当前筛选（" + f.label() + "）里没有可分解的件（锁定、收藏、有投入、非掉落件、T0 都不分解）");
+            try { p.sendActionBar("§7批量分解 · 无可拆 · 筛：" + f.label()); } catch (Throwable ignored) { } // D1726
+            return true;
+        }
         if (go) {
             String bad = ConfirmTokens.consume(p, "glibbulk", tok, fps);
             if (bad != null) { p.sendMessage(P + ChatColor.RED + bad + "（列表有变化时请重新点批量分解）"); go = false; }
@@ -539,6 +543,11 @@ public final class EmberGearLib implements Listener {
             int enh = EmberStorageRules.enhancedCount(take);
             p.sendMessage(P + "批量分解（筛选：" + f.label() + "）：" + ChatColor.WHITE + take.size() + ChatColor.GRAY + " 件 → 胚料 ×"
                     + EmberStorageRules.blanksOf(take) + " · 按成色：" + ChatColor.WHITE + byQ + ChatColor.GRAY + " · 其中强化过 " + (enh > 0 ? ChatColor.RED : ChatColor.WHITE) + enh + ChatColor.GRAY + " 件");
+            try { // D1726 FC2
+                int blanks = EmberStorageRules.blanksOf(take);
+                p.sendActionBar("§e批量分解 · §f" + take.size() + "件 → 胚×" + blanks
+                        + (enh > 0 ? (" §c含强化" + enh) : "") + " §8· 确认按钮");
+            } catch (Throwable ignored) { }
             // 1.64.1: the pieces kept back for having investment come first, in red, with the reason
             Set<String> aff = affixUids(p, view), eq = equipped(p);
             List<String> kept = new ArrayList<String>();

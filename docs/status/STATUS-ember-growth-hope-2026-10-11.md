@@ -672,3 +672,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1712–D1725 SHIP · jar 1.65.475-d1712
 - Delivery finish/offerForgeSpace/deliver cmd capacity AB
+
+## D1726–D1739 SHIP · jar 1.65.476-d1726
+- GearLib bulk dismantle preview AB; post-capacity Stage0 near-sat

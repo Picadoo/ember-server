@@ -64,8 +64,7 @@ public final class EmberStorageRules {
         if (minFree < 1) minFree = 1;
         if (freeSlots <= 0 || freeSlots < minFree)
             return "已触快满（空" + freeSlots + "/" + minFree + "）";
-        int left = freeSlots - (minFree - 1);
-        // slots until freeSlots < minFree i.e. need freeSlots to drop to minFree-1
+        // slots until freeSlots < minFree
         int until = freeSlots - minFree + 1;
         return "空" + freeSlots + "格 · 再少" + until + "格触快满";
     }
