@@ -328,7 +328,7 @@
 - ~~**B2.77 CoreRpg `progress.yml` 战令注释「付费轨累计日票 ×5」**~~ → **PASS · 勾销**（设计 `65a16bc` · 批准 `d579edf` · 插件 `6cb958e` · 测 `fc171a2` · close 本提交；报告 `docs/status/STATUS-ember-progress-pass-ticket-comment-copy-test.md`；下一窗升 **B2.78**；**勿宣称 B0.1 已清**）
 - ~~**B2.78 CoreRpg `cash.yml` `daily.free_tickets` 行内「停发日票」注释**~~ → **PASS · 勾销**（设计 `8146e9c` · 批准 `811984d` · 插件 `b531320` · 测 `e9a3cf0`/`095639e` · close 本提交；报告 `docs/status/STATUS-ember-cash-free-tickets-comment-copy-test.md`；下一窗升 **B2.79**；**勿宣称 B0.1 已清**）
 - ~~**B2.79 CoreRpg `cash.yml` Stage 4.4「不进商城日票池」注释**~~ → **PASS · 勾销**（设计 `f6c7eb7` · 批准 `358a306` · 插件 `8919053` · 测 `a20689f`/`483f627` · close 本提交；报告 `docs/status/STATUS-ember-cash-elite-ticket-pool-comment-copy-test.md`；下一窗升 **B2.80**；**勿宣称 B0.1 已清**）
-- ~~**B2.80 CoreRpg `players/_schema-example.yml` 分区注释「日票硬顶」**~~ → **PASS · 勾销**（设计 `6a9070e` · 批准 `a046b99` · 插件 `5a8e340` · 测 `b289812`/`d46303c` · close 本提交；报告 `docs/status/STATUS-ember-schema-ticket-cap-comment-copy-test.md`；下一窗升 **B2.81**；**勿宣称 B0.1 已清**）
+- ~~**B2.80 CoreRpg `players/_schema-example.yml` 分区注释「日票硬顶」**~~ → **PASS · 勾销**（设计 `6a9070e` · 批准 `a046b99` · 插件 `5a8e340` · 测 `b289812`/`d46403c` · close 本提交；报告 `docs/status/STATUS-ember-schema-ticket-cap-comment-copy-test.md`；下一窗升 **B2.81**；**勿宣称 B0.1 已清**）
 - ~~**B2.81 CoreRpg `mail.yml` `event_box` body**~~ → **PASS · 勾销**（设计 `85291bf` · 批准 `30b739b` · 插件 `699a7cb` · 测 `50ca64f` · close 本提交；报告 `docs/status/STATUS-ember-mail-event-box-body-copy-test.md`；下一窗升 **B2.82**；**勿宣称 B0.1 已清**）
 - ~~**B2.82 CoreRpg `cash.yml` `daily` 段注释「日本/发票」**~~ → **PASS · 勾销**（设计 `af9d95d` · 批准 `efecbc6` · 插件 `a7cadbd` · 测 `195033a` · close 本提交；报告 `docs/status/STATUS-ember-cash-daily-section-comment-copy-test.md`；下一窗升 **B2.83**；**勿宣称 B0.1 已清**）
 - ~~**B2.83 CoreRpg `players/_schema-example.yml` `dailyTicketsGranted` 行内「今日已发票」**~~ → **PASS · 勾销**（设计 `1da0023` · 批准 `81ce2be` · 插件 `37e5170` · 测 `8799866` · close 本提交；报告 `docs/status/STATUS-ember-schema-daily-tickets-granted-comment-copy-test.md`；下一窗升 **B2.84**；**勿宣称 B0.1 已清**）
@@ -460,7 +460,7 @@
 - ~~**B2.77**~~ → progress.yml 战令注释「日票 ×5」 **PASS · 勾销**（测 `fc171a2` · close 本提交）。
 - ~~**B2.78**~~ → cash.yml `daily.free_tickets`「停发日票」注释 **PASS · 勾销**（测 `e9a3cf0`/`095639e` · close 本提交）。
 - ~~**B2.79**~~ → cash.yml Stage 4.4「不进商城日票池」注释 **PASS · 勾销**（测 `a20689f`/`483f627` · close 本提交）。
-- ~~**B2.80**~~ → schema「日票硬顶」分区注释 **PASS · 勾销**（测 `b289812`/`d46303c` · close 本提交）。
+- ~~**B2.80**~~ → schema「日票硬顶」分区注释 **PASS · 勾销**（测 `b289812`/`d46403c` · close 本提交）。
 - ~~**B2.81**~~ → mail `event_box` body **PASS · 勾销**（测 `50ca64f` · close 本提交）。
 - ~~**B2.82**~~ → cash `daily` 段注释「日本/发票」 **PASS · 勾销**（测 `195033a` · close 本提交）。
 - ~~**B2.83**~~ → schema `dailyTicketsGranted` 行内「今日已发票」 **PASS · 勾销**（测 `8799866` · close 本提交）。
@@ -742,7 +742,7 @@
 | **B2.77** | progress.yml 战令注释 | 日票×5→遗留票物备忘 | **PASS · 勾销**（测 `fc171a2` · close 本提交） |
 | **B2.78** | cash.yml free_tickets 注释 | 停发日票→遗留票物备忘 | **PASS · 勾销**（测 `e9a3cf0`/`095639e` · close 本提交） |
 | **B2.79** | cash.yml elite 周票注释 | 日票池→遗留票物备忘 | **PASS · 勾销**（测 `a20689f`/`483f627` · close 本提交） |
-| **B2.80** | schema 日票硬顶分区注释 | 日票硬顶→遗留票物备忘 | **PASS · 勾销**（测 `b289812`/`d46303c` · close 本提交） |
+| **B2.80** | schema 日票硬顶分区注释 | 日票硬顶→遗留票物备忘 | **PASS · 勾销**（测 `b289812`/`d46403c` · close 本提交） |
 | **B2.81** | mail `event_box` body | 极简→维护备忘 | **PASS · 勾销**（测 `50ca64f` · close 本提交） |
 | **B2.82** | cash.yml daily 段注释 | 日本/发票→遗留票物/体力口径维护备忘 | **PASS · 勾销**（测 `195033a` · close 本提交） |
 | **B2.83** | schema dailyTicketsGranted 行内 | 今日已发票→遗留票物/体力口径维护备忘 | **PASS · 勾销**（测 `8799866` · close 本提交） |
@@ -900,7 +900,7 @@
 - ~~CoreRpg `progress.yml` 战令注释「付费轨累计日票 ×5」~~ → **B2.77 PASS · 勾销**（测 `fc171a2`）；progress 战令日票注释本轨归零
 - ~~CoreRpg `cash.yml` `daily.free_tickets`「停发日票」注释~~ → **B2.78 PASS · 勾销**（测 `e9a3cf0`/`095639e`）；free_tickets 停发日票本轨归零
 - ~~CoreRpg `cash.yml` Stage 4.4「不进商城日票池」注释~~ → **B2.79 PASS · 勾销**（测 `a20689f`/`483f627`）；cash elite 日票池注释本轨归零
-- ~~CoreRpg `players/_schema-example.yml` 分区注释「日票硬顶」~~ → **B2.80 PASS · 勾销**（测 `b289812`/`d46303c`）；schema 日票硬顶注释本轨归零
+- ~~CoreRpg `players/_schema-example.yml` 分区注释「日票硬顶」~~ → **B2.80 PASS · 勾销**（测 `b289812`/`d46403c`）；schema 日票硬顶注释本轨归零
 - ~~CoreRpg `mail.yml` `event_box` body~~ → **B2.81 PASS · 勾销**（测 `50ca64f`）；mail event_box body 本轨归零
 - ~~CoreRpg `cash.yml` `daily` 段注释「日本/发票」~~ → **B2.82 PASS · 勾销**（测 `195033a`）；cash daily 段注释本轨归零
 - ~~CoreRpg `players/_schema-example.yml` `dailyTicketsGranted` 行内「今日已发票」~~ → **B2.83 PASS · 勾销**（测 `8799866`）；schema dailyTicketsGranted 本轨归零
@@ -979,8 +979,9 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-sig-chase`（已批 A · 方案 M · D464 · **PASS** · jar 1.65.155-d464 · 签名追烙路径点选 · ≠抬掉率）
 - `B-mode-path-pick`（已批 A · 方案 M · D462 · **PASS** · jar 1.65.154-d462 · Q04残响/Q05前哨/Q06誓约点选）
-- `B-short-menu-yaml`（已批 A · 方案 M · D463 · **PASS** · TrMenu-only · ember_p1_short YAML 缩进修复+十九本并列诚实 · ≠sx20）
+- `B-short-menu-yaml`（已批 A · 方案 M · D464 · **PASS** · TrMenu-only · ember_p1_short YAML 缩进修复+十九本并列诚实 · ≠sx20）
 - `B-forge-craft-goal`（已批 A · 方案 M · D461 · **PASS** · jar 1.65.153-d461 · 工坊周目标五选一 · ≠抬AFK）
 - `B-skill-first-pick`（已批 A · 方案 M · D460 · **PASS** · jar 1.65.152-d460 · Q04符文三选一/Q05身法二选一 · ≠改数值）
 - `B-skill-unlock-cue`（已批 A · 方案 M · D459 · **PASS** · jar 1.65.151-d459 · 技能首通解锁宣告 · ≠改数值）

@@ -1102,6 +1102,7 @@ public final class EmberRunService implements Listener {
                                 : "签名传奇（重打这张图掉它首领的签名件和徽记）";
                         town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新解锁：§e" + un + " ", "[打开签名页]", "/corerpg p1 sig menu", "签名图鉴、首领徽记、烙印、开关签名");
                         p.sendMessage(P + "§7不用打命令：主菜单 → 装备 → 签名传奇"); // stage 1.5 one-line hint
+                        if (EmberSignature.IMPRINT_UNLOCK.equals(g.id)) EmberSigChase.scheduleImprintOffer(p); // D464
                         String mode = modeUnlock(g.id); // D174 stage 2b: Q04 / Q05 / Q06 first clears also open a mode
                         if (mode != null) {
                             town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§6新模式：§e" + mode + " ", "[打开进阶模式]", "/corerpg p1 modes", "首领残响 / 连战·前哨 / 自选誓约");
@@ -1172,8 +1173,11 @@ public final class EmberRunService implements Listener {
             plugin.getDataStore().flushMutation(u);
         }
         tidyHotbar(p, hbEmpty);
-        if (acqRepeatMark && !acqStamp && !quietDeliver) // D456: miss clarity (no STAMP_RATE raise)
-            got.add(EmberSigAcq.missLine(acqMarkMap));
+        if (acqRepeatMark && !acqStamp && !quietDeliver) { // D456: miss clarity (no STAMP_RATE raise)
+            String miss = EmberSigAcq.missLine(acqMarkMap);
+            miss += EmberSigChase.missAppend(d, acqMarkMap); // D464
+            got.add(miss);
+        }
         if (!got.isEmpty() && !quietDeliver) p.sendMessage(P + "§a结算到账：§f" + String.join("§7、§f", got));
         if (!relLines.isEmpty() && !quietDeliver) { // D299 W1c：相对穿着一行（并列 D295 摘要，不改破绽语义）
             for (String rel : relLines) p.sendMessage(P + "§7" + rel);

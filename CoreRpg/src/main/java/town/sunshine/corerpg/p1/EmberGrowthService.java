@@ -1001,6 +1001,35 @@ public final class EmberGrowthService implements Listener {
             if (menu != null) openMenu(p, menu);
             return true;
         }
+        if ("chase".equals(op) || "追烙".equals(op)) { // D464 imprint-chase path
+            if (args.length < 4) {
+                p.sendMessage(P + EmberSigChase.glance(d));
+                EmberSigChase.offerPick(p, d, runs);
+                return true;
+            }
+            String raw = args[3];
+            if ("clear".equalsIgnoreCase(raw) || "none".equalsIgnoreCase(raw) || "off".equalsIgnoreCase(raw) || "取消".equals(raw)) {
+                EmberSigChase.clear(d);
+                plugin.getDataStore().flushMutation(p.getUniqueId());
+                p.sendMessage(P + "已取消追烙目标");
+                return true;
+            }
+            if ("offer".equalsIgnoreCase(raw) || "nudge".equalsIgnoreCase(raw)) {
+                EmberSigChase.forceOffer(p);
+                return true;
+            }
+            EmberSignature.Def def = EmberSigChase.parse(raw);
+            if (def == null) {
+                p.sendMessage(P + "用法：/corerpg p1 sig chase <L01…L15|clear>");
+                return true;
+            }
+            boolean ch = EmberSigChase.set(d, def);
+            plugin.getDataStore().flushMutation(p.getUniqueId());
+            p.sendMessage(P + "§a追烙 → §f" + EmberSigChase.label(def) + "§7（" + EmberSigChase.tip(def) + "）"
+                    + (ch ? "" : " §8· 已是该目标"));
+            p.sendMessage(P + EmberSigChase.glance(d));
+            return true;
+        }
         if ("toggle".equals(op)) return sigToggle(p, d, lo, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "");
         if ("runconfirm".equals(op) || "进本确认".equals(op)) { // D297 W1c
             return sigRunConfirm(p, d, args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "go");
@@ -1266,6 +1295,7 @@ public final class EmberGrowthService implements Listener {
         }
         if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
         if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
+        if ("chase".equals(key) || "chase_line".equals(key)) return EmberSigChase.glance(d); // D464
         if ("marks".equals(key)) {
             StringBuilder sb = new StringBuilder("§7首领徽记：");
             for (String mk : EmberSignature.maps()) {
