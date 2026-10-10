@@ -268,6 +268,49 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("packpath".equals(sub) || "腾包路径".equals(sub)) { // D555 mid-run pack relief path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberPackPath.glance(EmberPackPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c腾包路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberPackPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c腾包路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberPackPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberPackPath.get(d);
+                    if (EmberPackPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberPackPath.label(cur) + " · 改路径再 /corerpg p1 packpath");
+                    else EmberPackPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberPackPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 packpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberPackPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("pack".equals(sub) && args.length == 2) { // D555 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!EmberPackPath.pathPackClick(p)) p.sendMessage(P + "无法腾包（需在本内且背包有可存材料）");
+            else p.sendMessage(P + "§a腾包·手点 §7已入库腾格");
+            return true;
+        }
         if ("flepath".equals(sub) || "fleepath".equals(sub) || "撤离路径".equals(sub)) { // D554 post-fall flee path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1361,6 +1404,42 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("packseed".equals(sub)) { // D555 admin smoke: temp P1 + fill bag + shards then probe
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberMode mode = EmberMode.get();
+            String wn = t.getWorld().getName();
+            boolean added = false;
+            if (mode != null && !EmberMode.isP1World(t.getWorld())) {
+                mode.addWorld(wn);
+                added = true;
+            }
+            // fill storage until <=1 empty, leave room for shards
+            org.bukkit.inventory.PlayerInventory inv = t.getInventory();
+            org.bukkit.inventory.ItemStack filler = new org.bukkit.inventory.ItemStack(org.bukkit.Material.COBBLESTONE, 64);
+            int empty = EmberPackPath.emptyStorage(t);
+            while (empty > EmberPackPath.TIGHT_SLOTS) {
+                java.util.HashMap<Integer, org.bukkit.inventory.ItemStack> left = inv.addItem(filler.clone());
+                if (!left.isEmpty()) break;
+                empty = EmberPackPath.emptyStorage(t);
+            }
+            if (runs.plugin().getNiBridge() != null)
+                runs.plugin().getNiBridge().giveNiItem(t, EmberUpgradeRules.MAT_SHARD, 8);
+            // ensure tight after shard give
+            empty = EmberPackPath.emptyStorage(t);
+            while (empty > EmberPackPath.TIGHT_SLOTS) {
+                java.util.HashMap<Integer, org.bukkit.inventory.ItemStack> left = inv.addItem(filler.clone());
+                if (!left.isEmpty()) break;
+                empty = EmberPackPath.emptyStorage(t);
+            }
+            EmberPackPath.maybeProbe(t);
+            if (added && mode != null) mode.removeWorld(wn);
+            s.sendMessage(P + "已塞满并触发腾包路径 → " + t.getName()
+                    + " 空格=" + EmberPackPath.emptyStorage(t)
+                    + (added ? "（临时标记世界）" : ""));
             return true;
         }
         if ("fleeseed".equals(sub)) { // D554 admin smoke: probe flee path

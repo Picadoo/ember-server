@@ -700,6 +700,17 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D555: after pickup, free bag slots mid-run when pack path wants it. */
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPackPickup(org.bukkit.event.entity.EntityPickupItemEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        final Player p = (Player) e.getEntity();
+        if (!EmberPackPath.inPackWorld(p)) return;
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (p.isOnline()) EmberPackPath.maybeAfterPressure(p);
+        }, 2L);
+    }
+
     /** D554: non-raid fallen member may leave via flee path (AUTO / ASK). */
     public boolean canFleeLeave(Player p) {
         if (p == null) return false;
@@ -1226,6 +1237,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberSightPath.scheduleOfferAfterQ01(p); // D552 sight path
                         if ("q01".equals(g.id)) EmberChestPath.scheduleOfferAfterQ01(p); // D553 chest path
                         if ("q01".equals(g.id)) EmberFleePath.scheduleOfferAfterQ01(p); // D554 flee path
+                        if ("q01".equals(g.id)) EmberPackPath.scheduleOfferAfterQ01(p); // D555 pack path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
