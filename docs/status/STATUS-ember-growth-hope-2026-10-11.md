@@ -356,3 +356,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D834–D838 SHIP · jar 1.65.380-d834
 - Mail/stash path next; menu Open; mail auto next; mapfarm reenter
+
+## D839–D841 SHIP · jar 1.65.381-d839
+- Hub brew/cook Open; stash ASK mats; gearlib filter glance

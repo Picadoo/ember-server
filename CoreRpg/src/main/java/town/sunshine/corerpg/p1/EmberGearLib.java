@@ -938,6 +938,9 @@ public final class EmberGearLib implements Listener {
             PlayerData d = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
             EmberLoadout lo = loadouts == null ? null : loadouts.refresh(p);
             if (lo != null) EmberSetChase.tell(p, d, lo, loadouts); // D741
+            // D841 filter glance
+            p.sendMessage(PV + "§7筛选：§f" + f.label() + " §8· 底栏可改");
+            try { p.sendActionBar("§e筛选 · §f" + f.label()); } catch (Throwable ignored) { }
         }
     }
 
