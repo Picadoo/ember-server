@@ -462,3 +462,15 @@ EmberSx17TideCast:
   - delay 15
   - damage{amount=1.0} @PlayersInRadius{r=4.5}
   - effect:particles{p=waterdrop;amount=10;hSpread=4;ySpread=0.3;speed=0.01} @Self
+
+# --- 短征 sx18 · 烬晶折棱 Boss 晶扫斩/折棱压浪（短 delay·轻粒子·防 Watchdog）---
+EmberSx18PrismCast:
+  Cooldown: 10
+  Skills:
+  - message{m="&6【烬晶】&f晶扫斩——&7退进晶冠侧龛或已过折棱侧台！"} @PlayersInRadius{r=20}
+  - effect:particles{p=crit;amount=16;hSpread=4;ySpread=0.3;speed=0.01} @Self
+  - effect:particles{p=fireworkSpark;amount=8;hSpread=3;ySpread=0.3;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.5;pitch=0.65} @Self
+  - delay 15
+  - damage{amount=1.0} @PlayersInRadius{r=4.5}
+  - effect:particles{p=crit;amount=10;hSpread=4;ySpread=0.3;speed=0.01} @Self

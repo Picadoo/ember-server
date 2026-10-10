@@ -1,0 +1,15 @@
+# D427 · EmberSx18 烬晶折棱 idle DP
+dungeon-init-script:
+  - "$setmap{name=ember_short_sx18} @init"
+  - "$setspawn{location=0,64,5} @init"
+  - "$setting{break=false;place=false;pvp=false;mode=ADVENTURE} @init"
+  - "$revive-setting{revive=false;number=0;death-location=true} @init"
+dungeon-start:
+  condition:
+    - "$team-condition{team=true;min=1;max=1;message=§c短征人数 1，当前 (<size>)} @system"
+    - "$js-condition{text='%corerpg_p1_pass_sx18%'=='yes';message=§c请从 §e短征 · 选本 §c菜单进入烬晶折棱} @system"
+  action-script:
+    - "$message{type=text;text=§6[余烬] §e烬晶折棱 §7· 晶门庭→折棱廊→晶冠终厅；经≥3段晶棱折角侧穿后击败晶冠守吏} @dungeon"
+    - "$teleport{location=0,64,5;defspawn=true} @player"
+dungeon-area: []
+dungeon-reward-script: []
