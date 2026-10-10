@@ -314,6 +314,15 @@ public final class EmberCommand {
             EmberRaidPath.applyAndReply(p, id);
             return true;
         }
+        if ("upgradeloop".equals(sub)) { // D487 admin smoke: upgrade → power spend chase
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            int n = 1;
+            if (args.length >= 3) try { n = Math.max(1, Integer.parseInt(args[2])); } catch (NumberFormatException ignored) {}
+            for (int i = 0; i < Math.min(3, n); i++) EmberUpgradeLoop.afterUpgrade(p);
+            p.sendMessage(P + "§8upgradeloop · " + EmberUpgradeLoop.followHint());
+            return true;
+        }
         if ("enhanceloop".equals(sub)) { // D485 admin smoke: enhance → forge-branch spend chase
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

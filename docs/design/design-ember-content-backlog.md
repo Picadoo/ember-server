@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-upgrade-spend-loop`（已批 A · 方案 M · D487 · **PASS** · jar 1.65.178-d487 · 升阶战力花法追击 · ≠同族 HUD ≠周路径）
 - `B-abyss-path`（已批 A · 方案 M · D486 · **PASS** · jar 1.65.177-d486 · 深渊冲层/刷层路径 · ≠同族 HUD）
 - `B-enhance-spend-loop`（已批 A · 方案 M · D485 · **PASS** · jar 1.65.176-d485 · 强化花法分支追击 · ≠同族 HUD ≠周路径）
 - `B-swap-spend-loop`（已批 A · 方案 M · D484 · **PASS** · jar 1.65.175-d484 · 免费互换强化花法追击 · ≠同族 HUD）
