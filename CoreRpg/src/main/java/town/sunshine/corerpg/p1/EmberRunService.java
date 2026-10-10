@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D568: warp to next unlit relay marker. */
+    public boolean hasRelayNext(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasRelayNext() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathRelayNext(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathRelayNext(p);
+    }
+
     /** D567: warp next to live beacon. */
     public boolean hasBeaconLive(Player p) {
         if (p == null) return false;
@@ -1442,6 +1458,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberGuardPath.scheduleOfferAfterQ01(p); // D565 guard path
                         if ("q01".equals(g.id)) EmberHoldPath.scheduleOfferAfterQ01(p); // D566 hold path
                         if ("q01".equals(g.id)) EmberBeaconPath.scheduleOfferAfterQ01(p); // D567 beacon path
+                        if ("q01".equals(g.id)) EmberRelayPath.scheduleOfferAfterQ01(p); // D568 relay path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

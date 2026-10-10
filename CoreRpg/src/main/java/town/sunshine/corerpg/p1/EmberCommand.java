@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("relaypath".equals(sub) || "传火路径".equals(sub)) return relayPathCmd(s, args); // D568
+        if ("relay".equals(sub) && args.length == 2) return relayGoCmd(s); // D568
         if ("beaconpath".equals(sub) || "护灯路径".equals(sub)) return beaconPathCmd(s, args); // D567
         if ("beacon".equals(sub) && args.length == 2) return beaconGoCmd(s); // D567
         if ("holdpath".equals(sub) || "占点路径".equals(sub)) return holdPathCmd(s, args); // D566
@@ -1683,6 +1685,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("relayseed".equals(sub)) return relaySeedCmd(s, args); // D568
         if ("beaconseed".equals(sub)) return beaconSeedCmd(s, args); // D567
         if ("holdseed".equals(sub)) return holdSeedCmd(s, args); // D566
         if ("guardseed".equals(sub)) return guardSeedCmd(s, args); // D565
@@ -4833,6 +4836,62 @@ public final class EmberCommand {
             EmberBeaconPath.maybeProbe(t);
             s.sendMessage(P + "已触发护灯路径探测 → " + t.getName()
                     + (runs != null && runs.hasBeaconLive(t) ? "（有灯）" : "（无灯）"));
+            return true;
+    }
+
+    private boolean relayPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberRelayPath.glance(EmberRelayPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c传火路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberRelayPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c传火路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberRelayPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberRelayPath.get(d);
+                    if (EmberRelayPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRelayPath.label(cur) + " · 改路径再 /corerpg p1 relaypath");
+                    else EmberRelayPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberRelayPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 relaypath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberRelayPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean relayGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathRelayNext(p)) p.sendMessage(P + "无法传火（无下一标记/未进本）");
+            else p.sendMessage(P + "§a传火·手点 §7已传至下一标记");
+            return true;
+    }
+
+    private boolean relaySeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberRelayPath.maybeProbe(t);
+            s.sendMessage(P + "已触发传火路径探测 → " + t.getName()
+                    + (runs != null && runs.hasRelayNext(t) ? "（有标）" : "（无标）"));
             return true;
     }
 }

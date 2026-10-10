@@ -461,6 +461,7 @@ final class EmberRunDirector {
             } else if ("relay".equals(kind)) {
                 placeRelay(r, v);
                 svc.tellRun(s, "§b传火 §7· 按 1→2→3 点亮标记再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberRelayPath.maybeAfterRelay(s); // D568
             } else if ("breach".equals(kind)) {
                 placeBreach(r, v);
                 svc.tellRun(s, "§b裂隙 §7· 紫圈会慢慢收拢，在圈里杀怪能把它撑开；清房时圈没合上 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
@@ -503,6 +504,26 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D568: next relay marker still unlit. */
+    boolean hasRelayNext() {
+        return s != null && "relay".equals(s.eventKind)
+                && !relayLocs.isEmpty() && relayNext >= 0 && relayNext < relayLocs.size();
+    }
+
+    /** D568: warp a committed player to the next relay to light. */
+    boolean pathRelayNext(Player p) {
+        if (p == null || !p.isOnline() || !hasRelayNext()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location to = relayLocs.get(relayNext).clone();
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.35f);
+        return true;
     }
 
     /** D567: beacon still alive. */
