@@ -1727,6 +1727,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D573 | CoreRpg **1.65.264-d573** / bv 未抬 | 成长花样·避毒路径 **PASS**：`EmberVeilPath` auto/ask/mute · ≠改伤害/CD/掉落表 ≠AFK ≠K3 ≠sx20 ≠组合粘性 ≠外观 ≠宝石/票族/分解/sidestep/dodge/free/breach/relay/beacon/hold/guard/smash/burst双胞 ≠工坊花法 ≠同族 HUD ≠入场cue · 冒烟 见 STATUS · `B-veil-path` · `1bdce879` · STATUS `STATUS-ember-veil-path-d573-2026-10-10.md`。 |
 | D574 | CoreRpg **1.65.265-d574** / bv 未抬 | 成长花样·断链路径 **PASS**：`EmberSnapPath` auto/ask/mute · ≠改伤害/CD/掉落表 ≠AFK ≠K3 ≠sx20 ≠组合粘性 ≠外观 ≠宝石/票族/分解/veil/sidestep/dodge/free/breach/relay/beacon/hold/guard/smash双胞 ≠工坊花法 ≠同族 HUD ≠入场cue · 冒烟 见 STATUS · `B-snap-path` · `fc663b7b` · STATUS `STATUS-ember-snap-path-d574-2026-10-10.md`。 |
 | D575 | CoreRpg **1.65.266-d575** / bv 未抬 | 成长花样·避旋路径 **PASS**：`EmberSpinPath` auto/ask/mute · ≠改伤害/CD/掉落表 ≠AFK ≠K3 ≠sx20 ≠组合粘性 ≠外观 ≠宝石/票族/分解/snap/veil/sidestep/dodge/free/breach/relay/beacon/hold/guard双胞 ≠工坊花法 ≠同族 HUD ≠入场cue · 冒烟 见 STATUS · `B-spin-path` · `59be34d1` · STATUS `STATUS-ember-spin-path-d575-2026-10-10.md`。 |
+| D576 | CoreRpg **1.65.267-d576** / bv 未抬 | 成长花样·避焰路径 **PASS**：`EmberBlazePath` auto/ask/mute · ≠改伤害/CD/掉落表 ≠AFK ≠K3 ≠sx20 ≠组合粘性 ≠外观 ≠宝石/票族/分解/spin/snap/veil/sidestep/dodge/free/breach/relay/beacon/hold双胞 ≠工坊花法 ≠同族 HUD ≠入场cue · 冒烟 见 STATUS · `B-blaze-path` · `5a07b9e5` · STATUS `STATUS-ember-blaze-path-d576-2026-10-10.md`。 |
 
 
 
