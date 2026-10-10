@@ -256,6 +256,9 @@ public final class EmberSettleService {
             in.sixStarter = modelled && in.firstClear != null && "q01".equals(m.key);
         }
         List<EmberRunRules.Grant> grants = new ArrayList<EmberRunRules.Grant>(EmberRunRules.settle(in));
+        if (EmberDropQualityPity.applicable(s, m)) { // D611 drop quality pity · mainline base_item only
+            EmberDropQualityPity.applyToGrants(pd, grants);
+        }
         // P2-1 weekly challenge rotation: featured map, first 3 challenge clears of the week → +1 mark of the run tier
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
         String week = EmberRunRules.rotationWeekKey(today);

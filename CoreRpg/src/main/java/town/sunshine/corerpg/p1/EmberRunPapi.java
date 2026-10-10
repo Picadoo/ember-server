@@ -145,7 +145,8 @@ public final class EmberRunPapi {
                 || "refine_blade_hope".equals(key) || "refine_charm_hope".equals(key)
                 || "held_refine_hope".equals(key)
                 // D608 gem clear-pity hope
-                || "gem_pity_hope".equals(key);
+                || "gem_pity_hope".equals(key)
+                || "drop_q_hope".equals(key);
     }
 
     /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
@@ -682,6 +683,10 @@ public final class EmberRunPapi {
             case "gem_pity_hope": { // D608
                 PlayerData gd = runs.plugin().getDataStore().get(p.getUniqueId());
                 return EmberGemAcquire.hopeLine(gd);
+            }
+            case "drop_q_hope": { // D611
+                PlayerData dq = runs.plugin().getDataStore().get(p.getUniqueId());
+                return EmberDropQualityPity.hope(dq);
             }
             case "held_enhance_cost": return heldForgeLine(p, "enhance");
             case "held_enhance_lack": return heldForgeLack(p, "enhance");

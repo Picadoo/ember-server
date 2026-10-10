@@ -6,18 +6,17 @@
 | D607 | 形状分叉 | PASS 1.65.298 |
 | Gem S2 / C1 | 公式 | PASS 1.65.299 |
 | D608 / C2 | 宝石获取保底+合成 | SHIP 1.65.300-d608 |
-| D609 / C3 | 宝石 TrMenu UI | **SHIP** `0b3f4359` · `ember_p1_gem.yml` |
-| D610 / P4 | 地图装备身份可见 chase | **SHIP** 1.65.301-d610 · live SEVERE0 |
+| D609 / C3 | 宝石 TrMenu UI | SHIP `0b3f4359` · `ember_p1_gem.yml` |
+| D610 / P4 | 地图装备身份可见 chase | SHIP 1.65.301-d610 |
+| D611 | 掉落成色 pity（主线至少精良） | **SHIP** 1.65.302-d611 · live SEVERE0 |
 
 ## D609
-
-- `ember_p1_gem.yml`：pity / craft×4 / insert 孔0·1 / remove / list
-- forge S + p1_forge m → menu · 永不 legacy socket · 无抬 flat
+TrMenu `ember_p1_gem` · forge/p1_forge 入口 · 永不 legacy socket · 无抬 flat
 
 ## D610
+`mapid_q0N` 图鉴 have/need · 冒险希望行 · 不锁通关
 
-- `EmberHopeMeter.mapGearIdentity` + PAPI `%corerpg_p1_mapid_q0N%`
-- 冒险页每图希望行 + Open 半行「每局1装·不锁通关」
-- 不改掉率 / AFK / 通关门
+## D611
+主线普通 `base_item`：连续标准×5 → 下次至少精良；极品仍惊喜；`%corerpg_p1_drop_q_hope%`
 
-下一：掉落成色 pity（若仍开）或其他希望债。
+下一：P5 AFK→工坊「挂机在养这件」UI 明示，或其他希望债。

@@ -147,4 +147,12 @@ public final class EmberHopeMeter {
                 head, label, have, need);
     }
 
+
+    /**
+     * D611: drop-quality pity hope (连续标准 → 下次至少精良). Never forces 极品.
+     */
+    public static String dropQuality(int cur, int need) {
+        return glance(cur, need, "下次掉落至少精良");
+    }
+
 }
