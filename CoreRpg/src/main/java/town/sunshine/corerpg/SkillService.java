@@ -258,9 +258,11 @@ public final class SkillService implements Listener {
                 player, data, runs, town.sunshine.corerpg.p1.EmberMode.get(), gmods);
         player.sendMessage(PREFIX + ChatColor.GOLD + "余烬技能组");
         player.sendMessage(ChatColor.GRAY + "  余烬充能（烬斩 / 烬突共用）· " + charge);
+        String slashHint = slashSetTip(player);
         player.sendMessage(ChatColor.YELLOW + "  F" + ChatColor.GRAY + " 烬斩 · 形状 "
                 + ChatColor.WHITE + sh.label
-                + (sh.sigOverride ? ChatColor.DARK_GRAY + "（签名覆盖符文）" : ""));
+                + (sh.sigOverride ? ChatColor.DARK_GRAY + "（签名覆盖符文）" : "")
+                + (slashHint != null ? ChatColor.GRAY + slashHint : ""));
         if (dash) {
             String dashId = "";
             town.sunshine.corerpg.p1.EmberLoadoutService _ls = plugin.getEmberLoadouts();
@@ -602,10 +604,13 @@ public final class SkillService implements Listener {
             }, Math.max(1L, Math.round(charge * 20.0)));
             return;
         }
-        landEmberSlash(player, ls, slashTargets(player, fRange, fArc, fLine), fMax, gmods, variant, gsv);
+        List<LivingEntity> landed = slashTargets(player, fRange, fArc, fLine);
+        landEmberSlash(player, ls, landed, fMax, gmods, variant, gsv);
         String tip = sh.sigOverride || sh.id != town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_FAN
                 ? "释放 烬斩（" + sh.label + "）" : "释放 烬斩";
-        player.sendMessage(PREFIX + ChatColor.GREEN + tip);
+        String slashId = slashSetTip(player);
+        player.sendMessage(PREFIX + ChatColor.GREEN + tip
+                + (slashId != null ? ChatColor.GRAY + slashId : ""));
     }
 
     /**
@@ -788,10 +793,10 @@ public final class SkillService implements Listener {
         SkillDef look2 = getSkill("ember_blaze_slash");
         String prevTag = town.sunshine.corerpg.p1.EmberCombatListener.internalTag;
         town.sunshine.corerpg.p1.EmberCombatListener.internalTag = String.format(java.util.Locale.ROOT, "A12 烬斩 1.5×B(%.2f)=%.2f", b, dmg);
+        List<LivingEntity> hit = new ArrayList<LivingEntity>();
         try {
             int n = 0;
             int igniteN = variant && gmods.get("skill_ignite") > 0 ? (int) Math.round(gmods.get("skill_ignite_n") > 0 ? gmods.get("skill_ignite_n") : 5) : 0;
-            List<LivingEntity> hit = new ArrayList<LivingEntity>();
             for (LivingEntity le : targets) {
                 if (n++ >= maxTargets) break;
                 town.sunshine.corerpg.p1.EmberCombatListener.dealP1(player, le, dmg,
@@ -814,10 +819,59 @@ public final class SkillService implements Listener {
         } finally {
             town.sunshine.corerpg.p1.EmberCombatListener.internalTag = prevTag;
         }
+        applySlashSetIdentity(player, hit);
         if (look2 != null) {
             playSound(player.getLocation(), look2.sound);
             spawnParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, 20);
         }
+    }
+
+
+    private String slashSetTip(Player player) {
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls == null) return null;
+        String fam = ls.get(player).activeSet;
+        if ("scorch".equals(fam)) return " · 烬刃余烬";
+        if ("burst".equals(fam)) return " · 烬刃缓速";
+        if ("sustain".equals(fam)) return " · 烬刃微疗";
+        return null;
+    }
+    /**
+     * D438: 烬斩套装落点 — burst Slow I 1.0s · sustain heal 0.2%H · scorch particles only (S0 ignite ❌).
+     */
+    private String applySlashSetIdentity(Player player, List<LivingEntity> hit) {
+        town.sunshine.corerpg.p1.EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls == null || hit == null) return null;
+        String fam = ls.get(player).activeSet;
+        if (fam == null || "none".equals(fam)) return null;
+        if ("scorch".equals(fam)) {
+            if (!hit.isEmpty()) {
+                spawnParticles(hit.get(0).getLocation().add(0, 1.0, 0), "FLAME", 8);
+            }
+            return " · 烬刃余烬";
+        }
+        if ("burst".equals(fam)) {
+            if (town.sunshine.corerpg.p1.EmberMode.isP1(player) && !hit.isEmpty()) {
+                int ticks = town.sunshine.corerpg.p1.EmberSkillKit.SLASH_BURST_SLOW_TICKS;
+                int lim = Math.min(hit.size(), 3);
+                for (int i = 0; i < lim; i++) {
+                    hit.get(i).addPotionEffect(new org.bukkit.potion.PotionEffect(
+                            org.bukkit.potion.PotionEffectType.SLOW, ticks, 0, false, true), true);
+                }
+                spawnParticles(player.getLocation().clone().add(0, 0.3, 0), "CRIT", 8);
+            }
+            return " · 烬刃缓速";
+        }
+        if ("sustain".equals(fam)) {
+            if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
+                double heal = Math.max(0.25, player.getMaxHealth()
+                        * town.sunshine.corerpg.p1.EmberSkillKit.SLASH_HEAL_PCT);
+                player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
+                spawnParticles(player.getLocation().clone().add(0, 0.5, 0), "HEART", 2);
+            }
+            return " · 烬刃微疗";
+        }
+        return null;
     }
 
     private boolean castAshMark(Player player, SkillDef def) {

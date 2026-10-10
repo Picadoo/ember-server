@@ -314,6 +314,8 @@ CANDS_D437 = {
 
 # D438 烬斩套装落点（相对 base；禁改 skill_mult）
 CANDS_D438 = {
+    'S_ig005': ('q01', 'scorch', '烬斩·焚 点燃×0.05', {'kit_slash_ignite': 0.05}),
+    'S_ig008': ('q01', 'scorch', '烬斩·焚 点燃×0.08', {'kit_slash_ignite': 0.08}),
     'S_ig012': ('q01', 'scorch', '烬斩·焚 点燃×0.12', {'kit_slash_ignite': 0.12}),
     'S_ig025': ('q01', 'scorch', '烬斩·焚 点燃×0.25', {'kit_slash_ignite': 0.25}),
     'S_sl15': ('q01', 'burst', '烬斩·爆 缓速1.5s', {'kit_slash_mark_secs': 1.5, 'kit_slash_slow': 0.15}),

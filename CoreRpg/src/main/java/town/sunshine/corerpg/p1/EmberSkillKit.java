@@ -38,6 +38,9 @@ public final class EmberSkillKit {
     public static final double DASH_IGNITE_SCALE = 0.12;
     public static final int DASH_BURST_SLOW_TICKS = 30; // 1.5s Slow I
     public static final double DASH_HEAL_PCT = 0.005;
+    /** D438 S0 ✅/🟡 烬斩套装落点（焚点燃空廊→仅展示） */
+    public static final int SLASH_BURST_SLOW_TICKS = 20; // 1.0s Slow I
+    public static final double SLASH_HEAL_PCT = 0.002;
 
     /** S0-passed 火痕步 (F14c0n1): replace 踏步, ignite 1 at landing, burn mult = set coef ×1.0. */
     public static final String HUOHEN_FAMILY = "scorch";
