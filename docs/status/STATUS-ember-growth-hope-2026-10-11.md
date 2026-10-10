@@ -20,3 +20,6 @@ TrMenu `ember_p1_gem` · forge/p1_forge 入口 · 永不 legacy socket · 无抬
 主线普通 `base_item`：连续标准×5 → 下次至少精良；极品仍惊喜；`%corerpg_p1_drop_q_hope%`
 
 下一：P5 AFK→工坊「挂机在养这件」UI 明示，或其他希望债。
+
+## D612 / P5
+挂机庭 Open+战况+去哪花：挂机在养手持（强化/成色/精工希望）· **零改 AFK 产量**

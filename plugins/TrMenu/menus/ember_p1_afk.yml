@@ -1,3 +1,4 @@
+# D612: 战况/Open 挂「挂机在养手持」希望表盘（held_*_hope · 零改产量）
 # D454: 装效澄清 gear_you / gear_eff(_tN) · 相对推荐装 · 零改产量
 # D383: 战况今日软目标 + 层差一览 + 层格相对多养 + 去哪花旁文案（零改产量）
 # D405: 战况软目标块 +还差/约满（remain_line live · tip 7123d944 · 零改产量）
@@ -32,6 +33,7 @@ Events:
     - 'tell: §8抬头可见还差/约满'
     - 'tell: §8战况可看仓内还差'
     - 'tell: §8工坊目标 %corerpg_p1_forge_goal_line% · /corerpg p1 forgegoal'
+    - 'tell: §e挂机在养手持：§f%corerpg_p1_held_enhance_pity% §7· §f%corerpg_p1_held_quality_hope% §7· §f%corerpg_p1_held_refine_hope%'
 Icons:
   '#':
     display:
@@ -66,6 +68,12 @@ Icons:
         - '%corerpg_p1_afk_gear_eff%'
         - '§c还差：§e强化+1 §7碎差 §f%corerpg_p1_recipe_gap_enhance1% §7· §e升阶T2 §7%corerpg_p1_recipe_gap_upgrade_t2%'
         - '§6精工0→1 §7%corerpg_p1_recipe_gap_refine1%'
+        - ''
+        - '§e挂机在养手持（工坊确定档）'
+        - '§7强化：%corerpg_p1_held_enhance_pity%'
+        - '§7成色：%corerpg_p1_held_quality_hope%'
+        - '§7精工：%corerpg_p1_held_refine_hope%'
+        - '§8空手则提示无件 · 不加快挂机产量'
         # D432：烬砧仓差（烙纹/随机锻/转化 · 不抬挂机产量）
         - '§d烬砧还差：§e烙纹 §7碎差 §f%corerpg_p1_forge_gap_brand% §7· §e随机锻 §7%corerpg_p1_forge_gap_roll%'
         - '§d转化 §7%corerpg_p1_forge_gap_convert% §8（手持阶；空手按T1）'
@@ -170,6 +178,8 @@ Icons:
         - '§8魂尘≠挂机 · 生活·钓鱼兑换'
         - '§7今日条未满先攒 · 满了来这花 / 或去冒险'
         - ''
+        - '§e挂机在养手持：§f%corerpg_p1_held_enhance_pity%'
+        - '§7成色 §f%corerpg_p1_held_quality_hope% §7· 精工 §f%corerpg_p1_held_refine_hope%'
         - '§e➥ §f打开工坊花材料'
         - '§7工坊有「配方速览」看 ×N（未持件也能看）'
         - '§7战况/速览均可看仓差'
