@@ -119,11 +119,17 @@ public final class EmberGemAcquire {
             p.sendMessage(P + "§c扣除材料失败");
             return true;
         }
-        d.addCoin(-cost.coins);
+        // D935 / ARCH S2: C24 gem craft coin sink
+        if (!EmberEconomy.spendCoin(d, "C24", cost.coins)) {
+            ni.giveNiItem(p, EmberUpgradeRules.MAT_SHARD, cost.shards);
+            ni.giveNiItem(p, EmberUpgradeRules.MAT_BONE, cost.bone);
+            p.sendMessage(P + "§c扣币失败，材料已退");
+            return true;
+        }
         plugin.getDataStore().flushMutation(p.getUniqueId());
         String gemId = EmberGemPath.gemId(code);
         if (!ni.giveNiItem(p, gemId, 1)) {
-            // refund
+            // refund mats + coin (refund allowlisted file — D935)
             ni.giveNiItem(p, EmberUpgradeRules.MAT_SHARD, cost.shards);
             ni.giveNiItem(p, EmberUpgradeRules.MAT_BONE, cost.bone);
             d.addCoin(cost.coins);

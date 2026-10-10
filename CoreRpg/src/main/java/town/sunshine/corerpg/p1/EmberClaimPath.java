@@ -119,12 +119,7 @@ public final class EmberClaimPath {
         if (p == null || runs == null) return;
         PlayerData d = runs.dataOf(p.getUniqueId());
         if (shouldHoldAmbient(d)) {
-            int n = runs.store().ledger(p.getUniqueId()).open().size();
-            if (n > 0) {
-                p.sendMessage(EmberRunService.P + "§7补领·暂存：有 §f" + n + " §7项待领 · /corerpg p1 claim");
-                ConfirmTokens.sendButtons(p, EmberRunService.P,
-                        new String[]{"[补领]", "/corerpg p1 claim", "领取暂存奖励", "GREEN"});
-            }
+            EmberLedgerGlance.tellIfAny(p, runs); // D940
             return;
         }
         runs.deliver(p);
@@ -135,9 +130,8 @@ public final class EmberClaimPath {
         if (p == null || runs == null) return;
         if (shouldHoldSettle(d)) {
             int n = runs.store().ledger(p.getUniqueId()).open().size();
-            p.sendMessage(EmberRunService.P + "§e补领·暂存 §7本局奖励先挂账"
-                    + (n > 0 ? "（现有 §f" + n + " §7项）" : "")
-                    + " · 点补领或 /corerpg p1 claim");
+            // D940 unified glance + settle context
+            p.sendMessage(EmberRunService.P + "§e补领·暂存 §7本局奖励先挂账 · " + EmberLedgerGlance.line(n));
             ConfirmTokens.sendButtons(p, EmberRunService.P,
                     new String[]{"[补领]", "/corerpg p1 claim", "领取暂存奖励", "GREEN"},
                     new String[]{"[改路径]", "/corerpg p1 claimpath", "自动/暂存/静默", "GRAY"});
@@ -212,6 +206,7 @@ public final class EmberClaimPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a补领 → §f" + label(id) + " §7· " + tip(id));
+        EmberLedgerGlance.tellIfAny(p, runs); // D940
         ConfirmTokens.sendButtons(p, P + "§7下一步：", // D918
                 new String[]{"[补领]", "/corerpg p1 claim", "领取暂存", "AQUA"},
                 new String[]{"[一键存入]", "/corerpg p1 stash", "料/装入库", "GREEN"},

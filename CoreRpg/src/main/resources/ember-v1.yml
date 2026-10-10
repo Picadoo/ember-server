@@ -5,6 +5,7 @@
 # 运行期可用 /corerpg p1 enable|disable|world add <世界> 临时切换（不写回本文件，重启后恢复）。
 enabled: true
 
+
 scope:
   # 精确世界名（不区分大小写）
   # D177 rev 2：挂机庭自动战斗用真实 P1 属性（普攻公式 / ×M / P1 生命层 / 关自然回血）

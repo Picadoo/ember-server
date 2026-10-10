@@ -1065,7 +1065,7 @@ public final class EmberGrowthService implements Listener {
                 if (def == null) { p.sendMessage(P + "§c先 /corerpg p1 sig chase L01"); return true; }
                 int need = EmberSignature.IMPRINT_MARKS;
                 int cur = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-                if (cur < need) d.addPeriodCount(EmberSignature.C_MARK + def.map, "all", need - cur);
+                if (cur < need) d.addPeriodCount(EmberSignature.C_MARK + def.map, "all", need - cur); // econ-ok: admin seed smoke
                 EmberSigChase.clearReadyLatch(d);
                 plugin.getDataStore().flushMutation(p.getUniqueId());
                 p.sendMessage(P + "§8admin seed：§f" + def.map + " 徽记 → " + need);
@@ -1126,7 +1126,7 @@ public final class EmberGrowthService implements Listener {
                 }
                 int need = EmberSignature.ALT_MARKS;
                 int cur = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-                if (cur < need) d.addPeriodCount(EmberSignature.C_MARK + def.map, "all", need - cur);
+                if (cur < need) d.addPeriodCount(EmberSignature.C_MARK + def.map, "all", need - cur); // econ-ok: admin seed smoke
                 int ar = d.periodCount(C_ATTUNE_READY, "all");
                 if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
                 plugin.getDataStore().flushMutation(p.getUniqueId());

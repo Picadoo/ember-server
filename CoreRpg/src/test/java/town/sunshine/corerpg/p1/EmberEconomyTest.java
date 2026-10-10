@@ -81,15 +81,15 @@ public class EmberEconomyTest {
     @Test
     public void idsAreCompleteAndOrdered() {
         List<String> want = new ArrayList<String>();
-        for (int i = 1; i <= 59; i++) want.add(String.format("S%02d", i)); // D430: S59; D428: S58; D423: S53; D421: S52 short sx13; D419: S51 short sx12; D417: S50 short sx11; D414: S49; D412: S48; D410: S47; D407: S46; D403: S45; D400: S44; D397: S43; D393: S42; D392: S41; D391: S40; D318: S39; D243: S33–S35; D244: S36–S38
+        for (int i = 1; i <= 60; i++) want.add(String.format("S%02d", i)); // D937: S60; D430: S59; D428: S58; D423: S53; D421: S52 short sx13; D419: S51 short sx12; D417: S50 short sx11; D414: S49; D412: S48; D410: S47; D407: S46; D403: S45; D400: S44; D397: S43; D393: S42; D392: S41; D391: S40; D318: S39; D243: S33–S35; D244: S36–S38
         for (int i = 1; i <= 5; i++) want.add("LS" + i);
-        for (int i = 1; i <= 23; i++) want.add(String.format("C%02d", i)); // D431 C23 + D430 C22
+        for (int i = 1; i <= 24; i++) want.add(String.format("C%02d", i)); // D935 C24; D431 C23 + D430 C22
         List<String> got = new ArrayList<String>();
         for (EmberEconomy.Row r : EmberEconomy.all()) got.add(r.id);
         assertEquals(want, got);
-        assertEquals(59, EmberEconomy.sources().size());
+        assertEquals(60, EmberEconomy.sources().size());
         assertEquals(5, EmberEconomy.legacySources().size());
-        assertEquals(23, EmberEconomy.sinks().size());
+        assertEquals(24, EmberEconomy.sinks().size());
         for (EmberEconomy.Row r : EmberEconomy.all()) {
             assertFalse(r.id + " name", r.name.isEmpty());
             assertFalse(r.id + " owner", r.owner.isEmpty());
@@ -263,7 +263,7 @@ public class EmberEconomyTest {
     public void modelGapsArePinned() {
         // REG §5: the S2 work list. Closing a gap (adding it to p1sim / p2econ) or adding an unmodelled source must
         // update this list, the REG table and the source-table D row together.
-        assertEquals(Arrays.asList("S07", "S08", "S09", "S16", "S17", "S18", "S27", "S30", "S31", "S32", "S36", "S37", "S39",
+        assertEquals(Arrays.asList("S07", "S08", "S09", "S16", "S17", "S18", "S27", "S30", "S31", "S32", "S36", "S37", "S39", "S60",
                 "C10", "C12", "C13", "C16", "C17", "C18"), EmberEconomy.modelGaps());
         // insignia: every source and both sinks are outside the offline sim today (REG §4 / §5 gap 1)
         for (EmberEconomy.Row r : EmberEconomy.touching(EmberEconomy.Account.INSIGNIA))
@@ -430,7 +430,8 @@ public class EmberEconomyTest {
                 "EmberDelivery.java",      // A01 durable txn apply
                 "EmberForgeService.java",  // legacy YAML giveBack (MySQL uses EmberPay)
                 "EmberRunService.java",    // deliver unrouted fallback
-                "EmberAbyssService.java"   // C08 abyss fee release (D231)
+                "EmberAbyssService.java",  // C08 abyss fee release (D231)
+                "EmberGemAcquire.java"    // D935 C24 craft fail-refund coin
         ));
         Path root = Paths.get("src/main/java/town/sunshine/corerpg/p1");
         List<String> hits = new ArrayList<String>();

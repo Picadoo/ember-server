@@ -421,3 +421,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D927–D932 SHIP · jar 1.65.401-d927
 - Deliver buttons gated to real ledger rows; onlinepath/claim forge; ARCH S2 note
 - Next: ARCH thin (S2 inventory) or critical-path only — hope surface saturated
+
+## D933–D940 ARCH S2 SHIP · jar 1.65.402-d933
+- Inventory REG; forge sources←S01; C24 gem craft + S60 admin smoke; econ-ok seeds; source-map bv89; ledger glance

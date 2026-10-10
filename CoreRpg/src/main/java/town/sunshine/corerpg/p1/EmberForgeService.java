@@ -157,15 +157,20 @@ public final class EmberForgeService implements Listener {
     // ================================================================== payment
 
     /** D96: where a missing forge input comes from (first-week players did not know where 胚料 / 核心 drop). */
+    /** D934 / ARCH S2: amounts from EmberEconomy S01 (yml SoT) — no hardcoded 24/6/300. */
     private String sources(List<String> lack) {
         java.util.LinkedHashSet<String> out = new java.util.LinkedHashSet<String>();
+        int shard = EmberEconomy.amount("S01", "shard");
+        int bone = EmberEconomy.amount("S01", "bone");
+        int core = EmberEconomy.amount("S01", "core");
+        int coin = EmberEconomy.amount("S01", "coin");
         for (String l : lack) {
             String n = l.replaceAll("§.", "");
             if (n.contains("胚料")) out.add("胚料：分解多余的掉落件（T1/T2/T3 = 1/2/3 个）· Q04、Q05、Q07 首通");
-            else if (n.contains("核心")) out.add("核心碎片：每局通关 2 · Q03、Q04、Q06、Q07 首通");
-            else if (n.contains("骨尘")) out.add("骨尘：每局通关 6 · Q05 首通 20");
-            else if (n.contains("碎片")) out.add("碎片：每局通关 24 · 每日委托第 3 局 +6");
-            else if (n.contains("余烬币")) out.add("余烬币：每局通关 300 · 每日委托 · 首通");
+            else if (n.contains("核心")) out.add("核心碎片：每局通关 " + core + " · Q03、Q04、Q06、Q07 首通");
+            else if (n.contains("骨尘")) out.add("骨尘：每局通关 " + bone + " · Q05 首通 20");
+            else if (n.contains("碎片")) out.add("碎片：每局通关 " + shard + " · 每日委托第 3 局 +6");
+            else if (n.contains("余烬币")) out.add("余烬币：每局通关 " + coin + " · 每日委托 · 首通");
         }
         return out.isEmpty() ? null : "§8来源：" + String.join("；", out);
     }

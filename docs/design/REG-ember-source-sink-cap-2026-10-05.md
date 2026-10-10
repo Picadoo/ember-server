@@ -288,3 +288,15 @@
 - **D426（2026-10-10）**：新增 **S56 短征通关（sx17）** — 有奖同量级 · 首通更薄 25/6/1 · 日帽 `p1_sx17_day`；Cast 短预警轻粒子；不抬挂机、不放 gate_daily。
 - **D427（2026-10-10）**：新增 **S57 短征通关（sx18）** — 有奖同量级 · 首通更薄 20/6/1 · 日帽 `p1_sx18_day`；Cast 短预警轻粒子；不抬挂机、不放 gate_daily。
 - **D428（2026-10-10）**：新增 **S58 短征通关（sx19）** — 有奖同量级 · 首通更薄 18/6/1 · 日帽 `p1_sx19_day`；Cast 短预警轻粒子；不抬挂机、不放 gate_daily。
+
+## S2 健康盘点 · D933（2026-10-11）
+
+`EmberEconomyTest` + `EmberSourceMapTest` 实测缺口（hope D873–D932 未加 SourceId，但路径债仍在）：
+
+1. **工坊缺料来源文案**仍硬编码 S01 数量 → D934 改读 `EmberEconomy.amount("S01", …)`。
+2. **宝石合成**直写 `addCoin` 且无 sink → D935 登记 **C24**（碎/骨/币）+ `spendCoin`；失败退币文件进 refund allowlist。
+3. **admin smoke** 徽记直写 / 币直写 → D936 `econ-ok`；D937 **S60** admin smoke coin（`model NONE`，p1sim 不建模）。
+4. **ember-source-map.yml** `balance_version` 落后 runs 89；bundled `ember-v1.yml` 与 live 漂移 → D938–D939。
+5. **账本待领**提示不统一 → D940 `EmberLedgerGlance`。
+
+数值零变；C15/C16 仍暂停。

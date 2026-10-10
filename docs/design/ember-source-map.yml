@@ -23,7 +23,7 @@
 # Behaviour-neutral: nothing in CoreRpg reads this file. Update it in the same commit as any new source / key / map.
 
 version: 1
-balance_version: 83
+balance_version: 89
 built_against: "CoreRpg 1.65.70 (D245)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
@@ -941,6 +941,7 @@ legacy:
 
 # ---------------------------------------------------------------------------------------------------- sinks
   S59: {econ_row: S59, name: 随机锻造产出, pays: [gear], code: ["p1/EmberRunService.java#forgeRollDurable"]}
+  S60: {econ_row: S60, name: 管理烟测补币, pays: [coin], economy_keys: [S60.coin], config: ["ember-v1-economy.yml#sources.S60"], code: ["p1/EmberCommand.java#EmberEconomy.grantCoin(pd, \"S60\""]}
 
 sinks:
   C01: {econ_row: C01, name: 进主线 / 挑战 / 深渊段（体力）, takes: [stamina], ledger_keys: [cost, refund], economy_keys: [C01.stamina], config: ["ember-v1-economy.yml#sinks.C01", "ember-v1-runs.yml#cost"], code: ["p1/EmberSessionService.java#\"cost\""]}
@@ -963,6 +964,7 @@ sinks:
   C18: {econ_row: C18, name: 国庆商店, takes: [fest_coin, coin, badge], economy_keys: [C18.charm_event, C18.trail_event, C18.after_coin, C18.after_badge, C18.memo, C18.badge_rate, C18.badge_cap], config: ["ember-v1-economy.yml#sinks.C18", "ember-v1-festival.yml#charm"]}
   C20: {econ_row: C20, name: 烙纹合成, takes: [shard], economy_keys: [C20.shard], config: ["ember-v1-economy.yml#sinks.C20", "ember-v1-growth.yml#forge.brand"], code: ["p1/EmberBrandRules.java#CRAFT_SHARDS", "p1/EmberGrowthService.java#brandCraft"]}
   C23: {econ_row: C23, name: 每周转化, takes: [blank, coin], economy_keys: [C23.blank_t1, C23.blank_t2, C23.blank_t3, C23.coin_t1, C23.coin_t2, C23.coin_t3], config: ["ember-v1-economy.yml#sinks.C23"], code: ["p1/EmberConvertRules.java", "p1/EmberGrowthService.java#convertHeld"]}
+  C24: {econ_row: C24, name: 宝石合成, takes: [shard, bone, coin], economy_keys: [C24.shard, C24.bone, C24.coin], config: ["ember-v1-economy.yml#sinks.C24"], code: ["p1/EmberGemAcquire.java#spendCoin(d, \"C24\""]}
   C22: {econ_row: C22, name: 随机锻造, takes: [mark, blank, coin], economy_keys: [C22.marks, C22.blank, C22.coin], config: ["ember-v1-economy.yml#sinks.C22"], code: ["p1/EmberForgeRollRules.java", "p1/EmberRunService.java#cmdForgeRoll"]}
   C21: {econ_row: C21, name: 烙纹定向, takes: [coin, gear], config: ["ember-v1-growth.yml#forge.brand", "ember-v1-economy.yml#sinks.C21"], code: ["p1/EmberBrandRules.java#pinBrands", "p1/EmberGrowthService.java#brandPin"]}
   C19: {econ_row: C19, name: 扭蛋抽取（耗券）, takes: [gacha_ticket], config: ["../CoreGacha/gacha.yml#cost_per_pull", "../CoreGacha/gacha.yml#daily_pull_cap"], notes: "D244 (G10): 1 ticket / pull, ≤ 50 pulls / day. Registered, tags only"}

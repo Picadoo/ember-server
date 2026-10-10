@@ -291,6 +291,8 @@ public final class EmberEconomy {
         // D430 随机锻造产出
         src("S59", "随机锻造产出", "EmberForgeRollRules / EmberRunService forgeRoll", Period.NONE).acc(GEAR)
             .keys("p1_mark_t").ledger("forge_roll").model(FULL).done();
+        // D937 / ARCH S2: admin smoke coin top-up (p1sim NONE — not modeled)
+        src("S60", "管理烟测补币", "EmberCommand *seed admin", Period.NONE).acc(COIN).model(NONE).g("coin", 1).done();
         // §2.5 legacy sources — closed by S0-1…S0-5 while P1 is on (must stay 0 for non-OP players)
         old("LS1", "/dp start · /corerpg enter 旧本", "CoreRpgExpansion gate / TicketEntryService").keys("abyss_run_floor").model(OUT).done();
         old("LS2", "竞技场对战币 / 日箱", "ArenaService + ArenaCoinRules").keys("arena_coin_matches").model(OUT).done();
@@ -331,6 +333,8 @@ public final class EmberEconomy {
             .g("marks", 8).g("blank", 4).g("coin", 500).done();
         sink("C23", "每周转化", "EmberConvertRules", Period.WEEK).acc(BLANK, COIN).keys("p4_conv").model(FULL)
             .g("blank_t1", 2).g("blank_t2", 4).g("blank_t3", 6).g("coin_t1", 300).g("coin_t2", 600).g("coin_t3", 1000).done();
+        sink("C24", "宝石合成", "EmberGemAcquire.CRAFT_*", Period.NONE).acc(SHARD, BONE, COIN).model(FULL)
+                .g("shard", 8).g("bone", 4).g("coin", 40).done();
     }
 
     private EmberEconomy() {}

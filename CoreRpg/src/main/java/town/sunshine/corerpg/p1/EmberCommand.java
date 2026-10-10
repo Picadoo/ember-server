@@ -2048,7 +2048,7 @@ public final class EmberCommand {
             }
             PlayerData pd = plg.getDataStore().get(t.getUniqueId());
             if (pd != null && pd.getCoin() < 40) {
-                pd.addCoin(40 - pd.getCoin());
+                EmberEconomy.grantCoin(pd, "S60", 40 - pd.getCoin()); // D937 admin smoke
                 plg.getDataStore().flushMutation(t.getUniqueId());
             }
             s.sendMessage(P + "已清空烤鱼/面包并确保≥40币 → " + t.getName());
@@ -2064,7 +2064,7 @@ public final class EmberCommand {
             if (pd == null) { s.sendMessage(P + "数据未就绪"); return true; }
             int xp = pd.periodCount("life_xp", "all");
             if (xp < 20) pd.addPeriodCount("life_xp", "all", 20 - xp);
-            if (pd.getCoin() < 10) pd.addCoin(10 - pd.getCoin());
+            if (pd.getCoin() < 10) EmberEconomy.grantCoin(pd, "S60", 10 - pd.getCoin()); // D937
             plg.getDataStore().flushMutation(t.getUniqueId());
             // strip heal potions so needsBrew sees low count
             EmberSupplyService supply = plg.getEmberSupplies();
@@ -2095,7 +2095,7 @@ public final class EmberCommand {
             }
             PlayerData pd = plg.getDataStore().get(t.getUniqueId());
             if (pd != null && pd.getCoin() < 60) {
-                pd.addCoin(60 - pd.getCoin());
+                EmberEconomy.grantCoin(pd, "S60", 60 - pd.getCoin()); // D937 admin smoke
                 plg.getDataStore().flushMutation(t.getUniqueId());
             }
             s.sendMessage(P + "已清空钓竿并确保≥60币 → " + t.getName());
@@ -2127,7 +2127,7 @@ public final class EmberCommand {
                 s.sendMessage(P + "发放生鱼失败"); return true;
             }
             PlayerData pd = plg.getDataStore().get(t.getUniqueId());
-            if (pd != null) { pd.addCoin(20); plg.getDataStore().flushMutation(t.getUniqueId()); }
+            if (pd != null) { EmberEconomy.grantCoin(pd, "S60", 20); plg.getDataStore().flushMutation(t.getUniqueId()); } // D937
             s.sendMessage(P + "已发放生鱼×3 → " + t.getName());
             EmberCookPath.maybeAfterProgress(t);
             return true;
