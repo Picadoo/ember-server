@@ -326,3 +326,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D809–D812 SHIP · jar 1.65.370-d809
 - Menu onlinepath; raid near-cap; friend path tip; undo+forge btn
+
+## D813–D814 SHIP · jar 1.65.371-d813
+- Mentor path tip; raid enterCue week remain

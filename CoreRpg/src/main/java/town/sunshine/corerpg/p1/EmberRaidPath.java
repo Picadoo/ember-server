@@ -173,6 +173,7 @@ public final class EmberRaidPath {
         int id = get(d);
         if (!valid(id)) {
             p.sendMessage(EmberRunService.P + "§7未选团本路径 · /corerpg p1 raidpath");
+            offerPick(p); // D814
             return;
         }
         String mk = mapKey(id);
@@ -180,6 +181,16 @@ public final class EmberRaidPath {
         String line = hit
                 ? "§a团本路径 · 本局 §f" + label(id)
                 : "§e团本路径 §f" + label(id) + " §7· 本局 §f" + mapKey.toUpperCase(Locale.ROOT);
+        // D814 week remain glance
+        String week = EmberPlayfeelTelemetry.weekKey();
+        CoreRpgPlugin pl = plugin();
+        if (pl != null && pl.getEmberRuns() != null) {
+            EmberRunMaps.MapDef m = pl.getEmberRuns().maps().byKey(mapKey);
+            if (m != null && m.weeklyCap > 0) {
+                int used = EmberRaidService.weekCount(d, m, week);
+                line += " §8· 周 " + used + "/" + m.weeklyCap;
+            }
+        }
         p.sendMessage(EmberRunService.P + line);
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
     }

@@ -586,6 +586,10 @@ public final class FriendService {
                 ConfirmTokens.sendButtons(online, PREFIX + ChatColor.GOLD + p.getName() + ChatColor.GRAY + " 申请结成师徒 ",
                         new String[]{"[同意]", "/corerpg friend mentor accept", "结成师徒", "GREEN"},
                         new String[]{"[拒绝]", "/corerpg friend mentor break", "取消这条申请", "RED"});
+                // D813
+                PlayerData md = dataStore.get(online.getUniqueId());
+                if (md != null && !EmberMentorPath.valid(EmberMentorPath.get(md)))
+                    online.sendMessage(PREFIX + "§7可设师徒路径：/corerpg p1 mentorpath（敞开/审核/静拒）");
             }
         }
     }
