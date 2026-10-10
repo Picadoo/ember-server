@@ -501,6 +501,18 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D557: boss arm timer running, not yet spawned. */
+    boolean hasPendingCall() {
+        return bossAt > 0 && boss == null && !bossDead;
+    }
+
+    /** D557: spawn the armed boss immediately (AUTO / ASK). */
+    boolean pathCallBoss() {
+        if (!hasPendingCall()) return false;
+        spawnBoss(System.currentTimeMillis());
+        return boss != null;
+    }
+
     /** D556: true while a door_delay breath is waiting. */
     boolean hasPendingDoor() {
         return doorPending != null && doorOpenAt > 0;
@@ -576,6 +588,7 @@ final class EmberRunDirector {
             svc.tellRun(s, bossDef().waitInArea ? "§c" + bossDef().name + " §7在前方首领厅等候，走进大厅即现身"
                     : "§c" + bossDef().name + " §7即将在大厅中央现身（1.5 秒）");
             svc.tellRun(s, EmberRunRules.PRE_BOSS_HINT); // D166 (real-gear kite playtest: Q04 boss lost after the potions ran out)
+            EmberCallPath.maybeAfterArmed(s); // D557
         }
     }
 
