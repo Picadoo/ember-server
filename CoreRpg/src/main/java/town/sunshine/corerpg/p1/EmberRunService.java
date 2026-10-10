@@ -3198,6 +3198,7 @@ public final class EmberRunService implements Listener {
         if (where == null) { p.sendMessage(P + "§c放不进快捷栏，手动拿到主手即可"); return true; }
         p.sendMessage(P + "§a已换上 " + c.shortLabel() + "§7（" + where + "）" + (a != null && a.enhance > c.enhance
                 ? " · 原来那件 +" + a.enhance + "，工坊「互换」可免费挪过来" : ""));
+        EmberSetChase.afterEquip(p, data(p.getUniqueId()), loadouts); // D741
         return true;
     }
 

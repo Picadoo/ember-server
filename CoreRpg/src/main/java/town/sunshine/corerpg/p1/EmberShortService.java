@@ -119,14 +119,19 @@ public final class EmberShortService {
                 p.sendMessage(P() + "§e短征通关 §7· " + EmberShortRules.rewardLine(m.key)
                         + (r.firstClearPaidNow ? " §a（含生涯首通包）" : "")
                         + " §7· " + EmberShortRules.dayLine(r.rewardedAfter, dailyCap(m)));
-                if (r.firstClearPaidNow) { // D697 next unpaid FC
+                if (r.firstClearPaidNow) { // D697/D743 FC claim → next
+                    p.sendMessage(P() + "§a生涯首通包已入账 §7· 材料进仓");
+                    try { p.sendActionBar("§a首通包已入账"); } catch (Throwable ignored) { }
                     int path = EmberShortPath.get(pd);
                     if (path == EmberShortPath.NONE) path = EmberShortPath.FC;
                     EmberRunMaps.MapDef next = EmberShortPath.resolve(runs, pd, path == EmberShortPath.DAY ? EmberShortPath.FC : path);
                     if (next != null && !next.key.equals(m.key)) {
                         String n = next.name == null || next.name.isEmpty() ? next.key : next.name;
                         p.sendMessage(P() + "§a下一首通短征：§f" + next.key.toUpperCase() + " " + n);
-                        try { p.sendActionBar("§a下一首通 · §f" + next.key.toUpperCase()); } catch (Throwable ignored) { }
+                        town.sunshine.corerpg.ConfirmTokens.sendButton(p, P() + "§7领下一本：",
+                                "[进" + next.key.toUpperCase() + "]",
+                                "/corerpg p1 enter " + next.key,
+                                "下一本未领首通 · " + n);
                     } else if (next == null) {
                         p.sendMessage(P() + "§7短征首通已清 · 可改 /corerpg p1 shortpath day");
                     }

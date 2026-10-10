@@ -206,3 +206,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D739–D740 SHIP · jar 1.65.342-d739 · 2026-10-11
 - D739 insert lack → craft button
 - D740 challengepath example line
+
+## D741–D743 SHIP · jar 1.65.343-d741 · 2026-10-11
+- D741 setchase bag equip [换上]
+- D742 abysstarget next + button
+- D743 short FC claim → next enter (no sig twin)

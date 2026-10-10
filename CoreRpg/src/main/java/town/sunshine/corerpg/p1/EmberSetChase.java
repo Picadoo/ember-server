@@ -2,12 +2,14 @@ package town.sunshine.corerpg.p1;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.PlayerData;
 
 /**
- * D695: set completion chase — progress + next awakening + focus gap.
- * Zero set power / AFK / drop change. Chat+ActionBar only — no button twin.
+ * D695/D741: set completion chase — progress + next awakening + focus gap + bag equip.
+ * Zero set power / AFK / drop change. At most one [换上] button — no celebration twin.
  */
 public final class EmberSetChase {
 
@@ -29,7 +31,57 @@ public final class EmberSetChase {
         return "§e成套追 · 焦点§f" + EmberSetFocus.label(focus) + " §7· " + need;
     }
 
+    /**
+     * D741: bag piece that closes focus gap (prefer charm if charm wrong/missing, else blade).
+     * Bukkit inventory scan; null if none.
+     */
+    public static EmberItemData findEquipCandidate(Player p, PlayerData d, EmberLoadout lo, EmberLoadoutService loadouts) {
+        if (p == null || d == null || lo == null || loadouts == null) return null;
+        String fk = EmberSetFocus.familyKey(EmberSetFocus.get(d));
+        if (fk == null) return null;
+        if (fk.equals(lo.activeSet)) return null;
+        boolean needCharm = lo.charm == null || !fk.equals(lo.charm.family);
+        boolean needBlade = lo.blade == null || !fk.equals(lo.blade.family);
+        EmberItemData bestCharm = null, bestBlade = null;
+        for (ItemStack it : p.getInventory().getContents()) {
+            if (it == null || !loadouts.items().hasData(it)) continue;
+            EmberItems.Read r = loadouts.items().read(it);
+            if (r == null || !r.ok() || r.data == null) continue;
+            EmberItemData x = r.data;
+            if (!fk.equals(x.family)) continue;
+            if (x.isCharm() && needCharm) {
+                if (lo.charm != null && lo.charm.uid.equals(x.uid)) continue;
+                if (bestCharm == null || x.tier > bestCharm.tier
+                        || (x.tier == bestCharm.tier && x.enhance > bestCharm.enhance))
+                    bestCharm = x;
+            } else if (x.isBlade() && needBlade) {
+                if (lo.blade != null && lo.blade.uid.equals(x.uid)) continue;
+                if (bestBlade == null || x.tier > bestBlade.tier
+                        || (x.tier == bestBlade.tier && x.enhance > bestBlade.enhance))
+                    bestBlade = x;
+            }
+        }
+        if (needCharm && bestCharm != null) return bestCharm;
+        if (needBlade && bestBlade != null) return bestBlade;
+        return null;
+    }
+
+    public static void offerEquip(Player p, EmberItemData cand) {
+        if (p == null || cand == null || cand.uid == null) return;
+        String P = EmberRunService.P;
+        String slot = cand.isCharm() ? "护符" : "刃";
+        ConfirmTokens.sendButton(p, P + "§7成套追换上：",
+                "[换上" + slot + "]", "/corerpg p1 equip " + cand.uid,
+                cand.shortLabel() + " · 焦点成套");
+        try { p.sendActionBar("§e成套追 · 可换上 §f" + EmberItemData.familyName(cand.family) + slot); }
+        catch (Throwable ignored) { }
+    }
+
     public static void tell(Player p, PlayerData d, EmberLoadout lo) {
+        tell(p, d, lo, null);
+    }
+
+    public static void tell(Player p, PlayerData d, EmberLoadout lo, EmberLoadoutService loadouts) {
         if (p == null || lo == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e" + lo.setProgress());
@@ -45,6 +97,11 @@ public final class EmberSetChase {
             else
                 p.sendActionBar("§e成套 · §7未成套");
         } catch (Throwable ignored) { }
+        // D741 equip flow
+        if (loadouts != null) {
+            EmberItemData cand = findEquipCandidate(p, d, lo, loadouts);
+            if (cand != null) offerEquip(p, cand);
+        }
     }
 
     /** Rising-edge when 2pc forms or awakening bumps. */
@@ -54,10 +111,18 @@ public final class EmberSetChase {
         boolean awkUp = after.awakening > prevAwk;
         if (!formed && !awkUp) return;
         tell(p, d, after);
-        if (formed && d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) { // D723
+        if (formed && d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) {
             p.sendMessage(EmberRunService.P + "§7可设套装焦点：/corerpg p1 setfocus");
         }
     }
+
+    /** After equip/charm — refresh chase with equip button if still gapped. */
+    public static void afterEquip(Player p, PlayerData d, EmberLoadoutService loadouts) {
+        if (p == null || loadouts == null) return;
+        EmberLoadout lo = loadouts.refresh(p);
+        tell(p, d, lo, loadouts);
+    }
+
     public static boolean cmd(CommandSender s, String[] args, EmberRunService runs, EmberLoadoutService loadouts) {
         String P = EmberRunService.P;
         if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
@@ -65,8 +130,7 @@ public final class EmberSetChase {
         if (runs == null || loadouts == null) { p.sendMessage(P + "服务未加载"); return true; }
         PlayerData d = runs.dataOf(p.getUniqueId());
         EmberLoadout lo = loadouts.refresh(p);
-        tell(p, d, lo);
+        tell(p, d, lo, loadouts); // D741
         return true;
     }
-
 }

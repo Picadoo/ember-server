@@ -886,7 +886,7 @@ public final class EmberGearLib implements Listener {
         if (pg == 0) { // D714 set completion chase once on first page
             PlayerData d = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
             EmberLoadout lo = loadouts == null ? null : loadouts.refresh(p);
-            if (lo != null) EmberSetChase.tell(p, d, lo);
+            if (lo != null) EmberSetChase.tell(p, d, lo, loadouts); // D741
         }
     }
 

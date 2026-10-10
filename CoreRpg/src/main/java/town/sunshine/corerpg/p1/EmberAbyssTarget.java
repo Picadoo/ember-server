@@ -63,6 +63,9 @@ public final class EmberAbyssTarget {
             int next = Math.min(MAX, newBest + 1);
             p.sendMessage(EmberRunService.P + "§7下一目标可设：/corerpg p1 abysstarget " + next); // D719
             try { p.sendActionBar("§a层目标达成 · §f" + t); } catch (Throwable ignored) { }
+            town.sunshine.corerpg.ConfirmTokens.sendButton(p, EmberRunService.P + "§7下一档：", // D742
+                    "[目标第" + next + "层]", "/corerpg p1 abysstarget " + next,
+                    "把层目标抬到 " + next);
         } else {
             p.sendMessage(EmberRunService.P + glance(d, newBest));
         }
@@ -77,7 +80,7 @@ public final class EmberAbyssTarget {
         int best = runs.abyssBest(d);
         if (args.length < 3) {
             p.sendMessage(P + glance(d, best));
-            p.sendMessage(P + "用法：/corerpg p1 abysstarget <1-" + MAX + "|clear>");
+            p.sendMessage(P + "用法：/corerpg p1 abysstarget <1-" + MAX + "|next|clear>");
             return true;
         }
         String raw = args[2];
@@ -88,8 +91,13 @@ public final class EmberAbyssTarget {
             return true;
         }
         int floor;
-        try { floor = Integer.parseInt(raw); } catch (NumberFormatException e) {
-            p.sendMessage(P + "层数须为 1～" + MAX); return true;
+        if ("next".equalsIgnoreCase(raw) || "下一".equals(raw) || "+".equals(raw)) { // D742
+            int cur = get(d);
+            floor = cur > 0 && cur > best ? Math.min(MAX, cur + 1) : Math.min(MAX, Math.max(1, best + 1));
+        } else {
+            try { floor = Integer.parseInt(raw); } catch (NumberFormatException e) {
+                p.sendMessage(P + "层数须为 1～" + MAX + " 或 next"); return true;
+            }
         }
         if (floor < 1 || floor > MAX) {
             p.sendMessage(P + "层数须为 1～" + MAX); return true;

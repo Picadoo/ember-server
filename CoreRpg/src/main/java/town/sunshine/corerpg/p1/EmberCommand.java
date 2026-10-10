@@ -4031,7 +4031,7 @@ public final class EmberCommand {
                         + (ch ? "" : " §8· 已是该焦点"));
                 EmberLoadout lo = runs.loadouts() != null ? runs.loadouts().get(p) : null;
                 p.sendMessage(P + EmberSetFocus.glance(id, lo == null ? "none" : lo.activeSet, lo == null ? 0 : lo.awakening, runs.target(d)));
-                if (lo != null) EmberSetChase.tell(p, d, lo); // D701
+                if (lo != null) EmberSetChase.tell(p, d, lo, loadouts); // D701/D741
                 try { // D665
                     if (id == EmberSetFocus.SCORCH) p.sendActionBar("§6焚烬焦点 · 火痕步/点燃");
                     else if (id == EmberSetFocus.BURST) p.sendActionBar("§c烬爆焦点 · 爆闪步/爆发");
@@ -4490,7 +4490,7 @@ public final class EmberCommand {
                 + " · 套装: " + set);
         if (runs != null) { // D708
             PlayerData cd = runs.dataOf(p.getUniqueId());
-            EmberSetChase.tell(p, cd, l);
+            EmberSetChase.tell(p, cd, l, loadouts); // D741
         }
         return true;
     }
