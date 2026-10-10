@@ -1,6 +1,11 @@
 package town.sunshine.corerpg.p1;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+
+import town.sunshine.corerpg.CoreRpgPlugin;
+import town.sunshine.corerpg.PlayerData;
 
 /**
  * D679: map gear farm loop — one chat line naming the next chase piece vs worn.
@@ -84,11 +89,29 @@ public final class EmberMapFarmCue {
         int we = worn == null ? 0 : worn.enhance;
         String line = nextLine(mapFam, mapSlot, wornFam, wornSlot, wt, we);
         p.sendMessage(EmberRunService.P + line);
+        // D704: if set focus matches map family, append set-completion gap (no button)
+        PlayerData pd = dataOf(p);
+        if (pd != null && lo != null && mapFam != null && EmberRunRules.validFamily(mapFam)) {
+            String fk = EmberSetFocus.familyKey(EmberSetFocus.get(pd));
+            if (mapFam.equals(fk)) {
+                String gap = EmberSetChase.focusGap(pd, lo);
+                if (gap != null && !gap.isEmpty()) p.sendMessage(EmberRunService.P + gap);
+                else if (!"none".equals(lo.activeSet) && mapFam.equals(lo.activeSet))
+                    p.sendMessage(EmberRunService.P + "§7" + lo.nextAwakeningHint());
+            }
+        }
         try {
             String shortBar = mapFam != null && EmberRunRules.validFamily(mapFam)
                     ? "§e下一件 · §f" + EmberItemData.familyName(mapFam)
                     : "§e下一件 · §7本图装";
             p.sendActionBar(shortBar);
         } catch (Throwable ignored) { }
+    }
+
+    private static PlayerData dataOf(Player p) {
+        if (p == null) return null;
+        Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+        if (!(pl instanceof CoreRpgPlugin)) return null;
+        return ((CoreRpgPlugin) pl).getDataStore().get(p.getUniqueId());
     }
 }

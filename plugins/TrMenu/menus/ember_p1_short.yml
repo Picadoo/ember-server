@@ -39,6 +39,7 @@ Layout:
 Events:
   Open:
     - 'sound: BLOCK_CHEST_OPEN-1-0'
+    - 'command: corerpg p1 shortpath'
     # D409 W1b：日帽合计满 → 满态 Open；未满保持现网选本句（真键 sx_day_left_sum · 禁假写固定 N）
     - condition: 'check papi %corerpg_p1_sx_day_left_sum% <= 0'
       priority: 1

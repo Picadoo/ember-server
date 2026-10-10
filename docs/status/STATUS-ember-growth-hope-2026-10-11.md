@@ -133,3 +133,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D701 setfocus → setchase tell
 - D702 abysspath → layer target glance
 - D703 shortpath → ActionBar next map
+
+## D704–D707 SHIP · jar 1.65.330-d704 · 2026-10-11
+- D704 map farm cue + set focus gap
+- D705 adventure abysstarget
+- D706 short shortpath
+- D707 enhance undo empty ActionBar

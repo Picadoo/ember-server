@@ -269,6 +269,7 @@ public final class EmberForgeService implements Listener {
         EmberEnhanceUndo.Snap snap = EmberEnhanceUndo.takeIfOpen(p.getUniqueId());
         if (snap == null) {
             p.sendMessage(P + ChatColor.RED + "没有可撤销的强化失败（仅失败后 60 秒内，成功不可撤）");
+            try { p.sendActionBar("§c无失败撤销窗 · 成功强化不可撤"); } catch (Throwable ignored) { } // D707
             return true;
         }
         String gate = gate(p);
