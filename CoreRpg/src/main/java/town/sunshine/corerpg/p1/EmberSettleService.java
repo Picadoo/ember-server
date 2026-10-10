@@ -501,6 +501,12 @@ public final class EmberSettleService {
                         new String[]{"[冒险页]", "/ember_p1_adventure", "换图继续", "GREEN"});
             }
         }
+        // D790 weekly featured settle path
+        if (p != null && p.isOnline() && s.abyss == 0 && !m.raid) {
+            String feat = runs.featured(today);
+            if (feat != null && feat.equalsIgnoreCase(m.key))
+                EmberFeaturedPath.afterSettle(p, pd, true, s.challenge, rotation, m.key);
+        }
         if (p != null && p.isOnline() && vbMoved) { // D144 / D292
             p.sendMessage(EmberRunService.P + varietyBountyTip(vbDone, runs.varietyBountyLine(pd)));
             EmberVarietyLoop.afterVarietyDone(p, vbDone); // D662

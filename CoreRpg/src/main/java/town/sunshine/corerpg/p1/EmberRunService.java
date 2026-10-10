@@ -3478,7 +3478,11 @@ public final class EmberRunService implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoinRecruits(org.bukkit.event.player.PlayerJoinEvent e) {
         final Player p = e.getPlayer();
-        if (season != null) Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) season.apply(p); }, 60L); // D116
+        if (season != null) Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline()) return;
+            season.maybePendingClaimCue(p); // D791
+            season.apply(p);
+        }, 60L); // D116
         Bukkit.getScheduler().runTaskLater(plugin, () -> recruit.onJoinShow(p), 100L);
     }
 

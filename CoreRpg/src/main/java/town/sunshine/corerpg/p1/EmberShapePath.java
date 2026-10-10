@@ -142,6 +142,34 @@ public final class EmberShapePath {
         Bukkit.getScheduler().runTaskLater(pl, r, 75L);
     }
 
+
+    /** D793: lock current soft-preferred shape as manual (stops set-family soft flip). */
+    public static void lockCurrent(Player p) {
+        if (p == null) return;
+        CoreRpgPlugin pl = plugin();
+        if (pl == null || pl.getEmberRuns() == null) {
+            p.sendMessage(EmberRunService.P + "主线本服务未加载");
+            return;
+        }
+        PlayerData d = pl.getDataStore().get(p.getUniqueId());
+        if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
+        if (!EmberSkillKit.shapeUnlocked(d, pl.getEmberRuns())) {
+            p.sendMessage(EmberRunService.P + "§c烬斩符文需本人首通 Q04。");
+            return;
+        }
+        int sid = EmberSkillKit.shapeId(d, pl.getEmberRuns());
+        EmberSkillKit.markShapeManual(d);
+        // ensure path mirrors locked geometry
+        mirrorSoftPrefer(d, sid);
+        flush(p);
+        String lab = EmberSkillKit.shapeName(sid);
+        p.sendMessage(EmberRunService.P + "§a符文已锁定：§f" + lab + " §7· 换套装不再软切（仍可 /corerpg p1 shapepath 手改）");
+        try { p.sendActionBar("§a符文锁定 · §f" + lab); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7：",
+                new String[]{"[进冒险]", "/ember_p1_adventure", "体感锁定几何", "GREEN"},
+                new String[]{"[换符文]", "/corerpg p1 shapepath", "手动改", "GRAY"});
+    }
+
     public static void applyAndReply(Player p, int id) {
         if (p == null) return;
         CoreRpgPlugin pl = plugin();

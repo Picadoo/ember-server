@@ -178,6 +178,48 @@ public final class EmberFeaturedPath {
                 new String[]{"[换一条]", "/corerpg p1 featurepath", "重选", "GRAY"});
     }
 
+
+    /** D790: enter featured map — path glance. */
+    public static void enterCue(Player p, PlayerData d, String mapKey, String featuredKey) {
+        if (p == null || d == null || mapKey == null || featuredKey == null) return;
+        if (!mapKey.equalsIgnoreCase(featuredKey)) return;
+        int id = get(d);
+        if (!valid(id)) {
+            p.sendMessage(EmberRunService.P + "§7未选精选路径 · /corerpg p1 featurepath");
+            return;
+        }
+        String line = "§b精选路径 · 本局 §f" + label(id);
+        p.sendMessage(EmberRunService.P + line);
+        try { p.sendActionBar(line); } catch (Throwable ignored) { }
+    }
+
+    /**
+     * D790: after featured-map clear — path glance + next enter when path set.
+     * @param featured true when this run map is this week's featured
+     * @param rotation true when this clear counted toward weekly rotation marks
+     */
+    public static void afterSettle(Player p, PlayerData d, boolean featured, boolean challenge, boolean rotation,
+                                   String mapKey) {
+        if (p == null || !featured || mapKey == null) return;
+        int id = get(d);
+        if (!valid(id)) {
+            p.sendMessage(EmberRunService.P + "§7可设精选路径：/corerpg p1 featurepath");
+            return;
+        }
+        boolean match = (id == CHALLENGE && challenge) || (id == NORMAL && !challenge);
+        String line = match
+                ? "§b精选路径 · 入账 §8· " + label(id)
+                : "§e精选路径 §f" + label(id) + " §7· 本局" + (challenge ? "挑战" : "普通");
+        if (rotation) line += " §8· 周帽印记";
+        p.sendMessage(EmberRunService.P + line);
+        try { p.sendActionBar(line); } catch (Throwable ignored) { }
+        String cmd = enterCmd(id, mapKey);
+        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7精选下一环：",
+                new String[]{enterLabel(id, mapKey), cmd, tip(id), "GREEN"},
+                new String[]{"[换路径]", "/corerpg p1 featurepath", "挑战/普通", "AQUA"},
+                new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "GRAY"});
+    }
+
     private static String featuredLabelLive(Player p) {
         CoreRpgPlugin pl = plugin();
         if (pl == null || pl.getEmberRuns() == null || p == null) return "本周精选";

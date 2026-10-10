@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.EmberItemStore.Delivery;
@@ -152,7 +153,7 @@ public final class EmberDelivery {
         } else if (!applied) {
             EmberVault v = EmberVault.get();
             if (d.amount > 0) {
-                if (v == null || !v.credit(p, d.item, d.amount)) { keep(d, "warehouse full / disabled", left, next); tell(p, "仓库放不下 " + name + " ×" + d.amount + "，腾出空间后 /corerpg p1 deliver 领取"); return; } // econ-ok: durable delivery apply (ledger already granted)
+                if (v == null || !v.credit(p, d.item, d.amount)) { keep(d, "warehouse full / disabled", left, next); tell(p, "仓库放不下 " + name + " ×" + d.amount + "，腾出空间后 /corerpg p1 deliver 领取"); offerForgeSpace(p, "warehouse"); return; } // econ-ok: durable delivery apply (ledger already granted)
                 tell(p, ChatColor.GREEN + "到账 " + name + " ×" + d.amount + " → 仓库" + ChatColor.GRAY + "（" + why(d) + "）");
             } else if (d.amount < 0) {
                 long want = -d.amount, got = v != null ? v.debit(p, d.item, want) : plugin.getNiBridge().consume(p, d.item, (int) want);
@@ -193,7 +194,7 @@ public final class EmberDelivery {
                 return;
             }
             if (holds(p, d.item)) { ack(p, d, unmark, next); return; }
-            if (p.getInventory().firstEmpty() < 0) { keep(d, "backpack full", left, next); tell(p, ChatColor.RED + "背包满了，" + row.data.shortLabel() + " 还没到账：腾出 1 格后 /corerpg p1 deliver（或下次进服自动到账）"); return; }
+            if (p.getInventory().firstEmpty() < 0) { keep(d, "backpack full", left, next); tell(p, ChatColor.RED + "背包满了，" + row.data.shortLabel() + " 还没到账：腾出 1 格后 /corerpg p1 deliver（或下次进服自动到账）"); offerForgeSpace(p, "backpack"); return; }
             ItemStack st = loadouts.items().create(row.data);
             if (st == null) { keep(d, "stack create failed", left, next); return; }
             loadouts.remember(row.data, p.getUniqueId());
@@ -239,5 +240,15 @@ public final class EmberDelivery {
 
     private static String why(Delivery d) { return d.note == null ? d.request : d.note; }
 
-    private static void tell(Player p, String m) { if (p != null && p.isOnline()) p.sendMessage(P + m); }
+    /** D792: backpack/warehouse full → forge path to free space (spend mats / dismantle). */
+    static void offerForgeSpace(Player p, String why) {
+        if (p == null) return;
+        try { p.sendActionBar("§c空间不足 · §7去工坊腾仓"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7仓满：",
+                new String[]{"[工坊]", "/corerpg p1 forge", "强化/洗练花材料", "GOLD"},
+                new String[]{"[分解·手点]", "/corerpg p1 scrap", "未强化差装→材料", "RED"},
+                new String[]{"[一键存入]", "/corerpg p1 stash", "再试仓库", "AQUA"});
+    }
+
+    private void tell(Player p, String m) { if (p != null && p.isOnline()) p.sendMessage(P + m); }
 }

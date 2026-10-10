@@ -381,9 +381,16 @@ public final class EmberGearLib implements Listener {
     }
 
     private void report(Player p, List<String> mats, int gear, String gateMsg) {
-        if (mats.isEmpty() && gear == 0) p.sendMessage(PV + "背包里没有可存的材料或装备" + (gateMsg != null ? "（装备：" + gateMsg + "）" : "")
-                + "。快捷栏、手上的刃和已选的护符不会被存走。");
-        else p.sendMessage(PV + ChatColor.GREEN + "一键存入：" + (mats.isEmpty() ? "" : "材料 " + String.join("、", mats))
+        if (mats.isEmpty() && gear == 0) {
+            boolean stashable = vault() != null && vault().backpackHasStashable(p);
+            if (stashable) { // D792 warehouse likely full for those ids
+                p.sendMessage(PV + ChatColor.YELLOW + "材料仓装不下（或已满），背包仍有可存材料 · 去工坊花掉或稍后再试");
+                EmberDelivery.offerForgeSpace(p, "vault-full");
+            } else {
+                p.sendMessage(PV + "背包里没有可存的材料或装备" + (gateMsg != null ? "（装备：" + gateMsg + "）" : "")
+                        + "。快捷栏、手上的刃和已选的护符不会被存走。");
+            }
+        } else p.sendMessage(PV + ChatColor.GREEN + "一键存入：" + (mats.isEmpty() ? "" : "材料 " + String.join("、", mats))
                 + (gear > 0 ? (mats.isEmpty() ? "" : "；") + "装备 " + gear + " 件 → 装备库" : "")
                 + (gateMsg != null ? ChatColor.GRAY + "（装备没存：" + gateMsg + "）" : ""));
     }

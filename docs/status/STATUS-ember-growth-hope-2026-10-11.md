@@ -299,3 +299,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D789 SHIP · jar 1.65.363-d789
 - Map farm hit → setchase equip tell
+
+## D790–D793 SHIP · jar 1.65.364-d790
+- D790 FeaturedPath enter/settle
+- D791 season goal claim next + pending cue
+- D792 stash/backpack full → forge buttons
+- D793 shapepath lock after soft-prefer

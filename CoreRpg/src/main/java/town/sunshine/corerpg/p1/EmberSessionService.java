@@ -384,6 +384,10 @@ public final class EmberSessionService {
                 if (cpd != null) { EmberMapFarmCue.remember(cpd, enterFeelMap); runs.flushData(cu); } // D763/D765
                 EmberMapFarmCue.cue(cp, enterFeelMap, lo); // D679 next chase piece
                 if (cpd != null) EmberChallengePath.enterCue(cp, cpd, s.challenge); // D767
+                if (cpd != null && enterFeelMap != null) {
+                    String feat = runs.featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()));
+                    EmberFeaturedPath.enterCue(cp, cpd, enterFeelMap.key, feat); // D790
+                }
             }
         }
         // A18: party HP multiplier locked now for the whole run

@@ -328,6 +328,25 @@ public final class EmberSeason {
         return null;
     }
 
+    /** D791: true if season awards waiting. */
+    public boolean hasPending(UUID u) {
+        if (u == null) return false;
+        synchronized (this) {
+            List<String> l = pending.get(u.toString());
+            return l != null && !l.isEmpty();
+        }
+    }
+
+    /** D791: login glance before apply — one Rising-edge button to open season page (apply still auto). */
+    public void maybePendingClaimCue(Player p) {
+        if (p == null || !hasPending(p.getUniqueId())) return;
+        p.sendMessage(P + "§d赛季奖励待领 · §7登录后自动到账（名牌/称号）");
+        try { p.sendActionBar("§d赛季奖励 · 待领"); } catch (Throwable ignored) { }
+        ConfirmTokens.sendButtons(p, P + "§7：",
+                new String[]{"[赛季页]", "/ember_p1_season", "查看并装上", "LIGHT_PURPLE"},
+                new String[]{"[外观]", "/corerpg p1 cosmetic", "管理展示", "GOLD"});
+    }
+
     /** hand out pending season awards (login, or right after the season settles) */
     public void apply(Player p) {
         List<String> l;
@@ -437,10 +456,7 @@ public final class EmberSeason {
                 p.sendMessage(P + "§a周目标完成：" + goalName(g) + " §7· 余烬徽 +" + pay + "（共 " + badges(d) + "，外观商店用）· 本周 "
                         + goalsDone(d) + "/" + goalCount());
                 try { p.sendActionBar("§a周目标完成 · §f" + goalName(g)); } catch (Throwable ignored) { } // D667
-                ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                        new String[]{"[赛季页]", "/ember_p1_season", "周目标/外观店", "LIGHT_PURPLE"},
-                        new String[]{"[冒险页]", "/ember_p1_adventure", "继续推进", "GREEN"},
-                        new String[]{"[稍后再说]", null, "徽已入账", "GRAY"});
+                EmberGoalPath.afterGoalDone(p, this, d, g); // D791 claim path next
             }
             if (goalsDone(d) >= goalCount() && d.periodCount(C_GOALPAY + "all", wk) == 0) {
                 d.addPeriodCount(C_GOALPAY + "all", wk, 1);

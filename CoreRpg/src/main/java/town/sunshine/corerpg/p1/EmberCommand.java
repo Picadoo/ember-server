@@ -3777,9 +3777,13 @@ public final class EmberCommand {
                 }
                 return true;
             }
+            if ("lock".equalsIgnoreCase(args[2]) || "锁定".equals(args[2])) { // D793
+                EmberShapePath.lockCurrent(p);
+                return true;
+            }
             int id = EmberShapePath.parse(args[2]);
             if (id < 0) {
-                p.sendMessage(P + "用法：/corerpg p1 shapepath <fan|line|ring|clear>");
+                p.sendMessage(P + "用法：/corerpg p1 shapepath <fan|line|ring|clear|lock>");
                 return true;
             }
             EmberShapePath.applyAndReply(p, id);

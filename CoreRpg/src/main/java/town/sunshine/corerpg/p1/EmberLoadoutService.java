@@ -222,10 +222,10 @@ public final class EmberLoadoutService implements Listener {
                 p.sendMessage(EmberRunService.P + "§e套装推荐烬斩形状：§f" + lab
                         + " §7（可随时 /corerpg skill shape 换 · Stage2 命中差已拉开）");
                 try { p.sendActionBar("§e成套 · 烬斩 §f" + lab); } catch (Throwable ignored) { } // D642/D670
-                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：",
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：", // D793 lock after prefer
+                        new String[]{"[锁定符文·" + lab + "]", "/corerpg p1 shapepath lock", "不再随套装软切", "LIGHT_PURPLE"},
                         new String[]{"[进冒险体感]", "/ember_p1_adventure", "进图试形状", "GREEN"},
-                        new String[]{"[符文路径]", "/corerpg p1 shapepath", "锁定路径", "AQUA"},
-                        new String[]{"[技能组]", "trmenu open ember_skill_kit", "看按键", "GOLD"});
+                        new String[]{"[符文路径]", "/corerpg p1 shapepath", "换几何", "AQUA"});
             }
         }
         return l;

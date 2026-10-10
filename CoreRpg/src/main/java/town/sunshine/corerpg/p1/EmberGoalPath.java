@@ -125,6 +125,42 @@ public final class EmberGoalPath {
         if (line != null) p.sendMessage(EmberRunService.P + line);
     }
 
+
+    /**
+     * D791: after a weekly goal pays — path glance + open next incomplete goal.
+     * Zero reward table change.
+     */
+    public static void afterGoalDone(Player p, EmberSeason season, PlayerData d, String doneGoal) {
+        if (p == null || season == null || d == null) return;
+        int path = get(d);
+        String focus = focusGoal(path);
+        String P = EmberRunService.P;
+        if (focus != null && focus.equals(doneGoal)) {
+            p.sendMessage(P + "§a周标焦点达标 · §f" + label(path));
+            try { p.sendActionBar("§a周标焦点 · 达标"); } catch (Throwable ignored) { }
+        }
+        // next incomplete main goal open
+        String next = null;
+        for (String g : EmberSeason.GOALS) {
+            if (g.equals(doneGoal)) continue;
+            int tgt = season.target(d, g);
+            if (tgt <= 0) continue;
+            if (season.progress(d, g) >= tgt) continue;
+            next = g;
+            break;
+        }
+        if (next != null) {
+            ConfirmTokens.sendButtons(p, P + "§7周标下一环：",
+                    new String[]{"[打开·" + EmberSeason.goalName(next) + "]", EmberSeason.goalOpen(next), "继续该目标", "GREEN"},
+                    new String[]{"[换周标]", "/corerpg p1 goalpath", "改焦点", "AQUA"},
+                    new String[]{"[赛季页]", "/ember_p1_season", "进度总览", "LIGHT_PURPLE"});
+        } else {
+            ConfirmTokens.sendButtons(p, P + "§7周标：",
+                    new String[]{"[赛季页]", "/ember_p1_season", "本周进度", "LIGHT_PURPLE"},
+                    new String[]{"[外观店]", "/corerpg p1 cosmetic", "花余烬徽", "GOLD"});
+        }
+    }
+
     public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
