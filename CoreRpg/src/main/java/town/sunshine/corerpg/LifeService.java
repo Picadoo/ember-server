@@ -358,6 +358,30 @@ public final class LifeService implements Listener {
         return true;
     }
 
+    public static final String ROD_NI_ID = "tool_ember_rod";
+    public static final String ROD_OFFER_ID = "rod";
+
+    /** D545: true when backpack has no fishing rod. */
+    public boolean needsRod(Player p) {
+        if (p == null || ni == null) return false;
+        return ni.countInInventoryOnly(p, ROD_NI_ID) <= 0;
+    }
+
+    /** D545: buy life offer "rod" once (town only). Returns true on success. */
+    public boolean pathBuyRod(Player p) {
+        if (p == null || !enabled) return false;
+        if (plugin.getQuestService() != null && plugin.getQuestService().isInstanceWorld(p.getWorld())) return false;
+        if (town.sunshine.corerpg.p1.EmberMode.active() && town.sunshine.corerpg.p1.EmberMode.isP1World(p.getWorld())) return false;
+        Offer o = offers.get(ROD_OFFER_ID);
+        if (o == null) return false;
+        PlayerData d = dataStore.get(p.getUniqueId());
+        if (d == null) return false;
+        if (!needsRod(p)) return false;
+        boolean ok = buy(p, d, o, true);
+        if (ok) dataStore.flushMutation(p.getUniqueId());
+        return ok;
+    }
+
     /** D544: grilled food NI id used by bite path. */
     public String cookOutputId() { return cookOutput; }
 

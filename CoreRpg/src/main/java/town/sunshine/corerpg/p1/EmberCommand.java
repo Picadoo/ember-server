@@ -268,6 +268,51 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("rodpath".equals(sub) || "钓竿路径".equals(sub)) { // D545 fishing rod buy path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberRodPath.glance(EmberRodPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c钓竿路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberRodPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c钓竿路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberRodPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberRodPath.get(d);
+                    if (EmberRodPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberRodPath.label(cur) + " · 改路径再 /corerpg p1 rodpath");
+                    else EmberRodPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberRodPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 rodpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberRodPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("rod".equals(sub) && args.length == 2) { // D545 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.LifeService life = runs == null ? null : runs.plugin().getLifeService();
+            if (life == null) { p.sendMessage(P + "生活服务未加载"); return true; }
+            if (!life.pathBuyRod(p)) p.sendMessage(P + "无法买钓竿（已有/缺币/副本内）");
+            else p.sendMessage(P + "§a钓竿·手点 §7已购买余烬钓竿");
+            return true;
+        }
         if ("bitepath".equals(sub) || "果腹路径".equals(sub)) { // D544 food bite path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -913,6 +958,25 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("rodseed".equals(sub)) { // D545 admin smoke: ensure no rod + coin for buy
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.LifeService life = runs.plugin().getLifeService();
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs.plugin();
+            if (life != null && plg.getNiBridge() != null) {
+                int have = plg.getNiBridge().countInInventoryOnly(t, town.sunshine.corerpg.LifeService.ROD_NI_ID);
+                if (have > 0) plg.getNiBridge().consumeExact(t, town.sunshine.corerpg.LifeService.ROD_NI_ID, have);
+            }
+            PlayerData pd = plg.getDataStore().get(t.getUniqueId());
+            if (pd != null && pd.getCoin() < 60) {
+                pd.addCoin(60 - pd.getCoin());
+                plg.getDataStore().flushMutation(t.getUniqueId());
+            }
+            s.sendMessage(P + "已清空钓竿并确保≥60币 → " + t.getName());
+            EmberRodPath.maybeAfterProgress(t);
             return true;
         }
         if ("biteseed".equals(sub)) { // D544 admin smoke: grilled fish + low hunger
