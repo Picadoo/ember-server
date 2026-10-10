@@ -701,6 +701,29 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D596: calamity window open and player free to warp to altar. */
+    public boolean hasPendingDoom(Player p) {
+        if (p == null) return false;
+        CoreRpgPlugin pl = plugin();
+        if (pl == null || pl.getCalamityService() == null) return false;
+        if (!pl.getCalamityService().isWindowOpen()) return false;
+        if (openSessionOf(p.getUniqueId()) != null) return false; // mid-run: do not yank
+        return pl.getCalamityService().altarLocation() != null;
+    }
+
+    public boolean pathDoomAltar(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingDoom(p)) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        org.bukkit.Location to = plugin().getCalamityService().altarLocation();
+        if (to == null) return false;
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        p.getWorld().playSound(to, org.bukkit.Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.6f);
+        return true;
+    }
+
     /** D595: stand on half-HP add spawn warn before adds land. */
     public boolean hasPendingNest(Player p) {
         if (p == null) return false;
@@ -1918,6 +1941,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberSequelPath.scheduleOfferAfterQ01(p); // D593 sequel path
                         if ("q01".equals(g.id)) EmberSavePath.scheduleOfferAfterQ01(p); // D594 save path
                         if ("q01".equals(g.id)) EmberNestPath.scheduleOfferAfterQ01(p); // D595 nest path
+                        if ("q01".equals(g.id)) EmberDoomPath.scheduleOfferAfterQ01(p); // D596 doom path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

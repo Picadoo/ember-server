@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("doompath".equals(sub) || "灾临路径".equals(sub)) return doomPathCmd(s, args); // D596
+        if ("doom".equals(sub) && args.length == 2) return doomGoCmd(s); // D596
         if ("nestpath".equals(sub) || "卡点路径".equals(sub)) return nestPathCmd(s, args); // D595
         if ("nest".equals(sub) && args.length == 2) return nestGoCmd(s); // D595
         if ("savepath".equals(sub) || "终救路径".equals(sub)) return savePathCmd(s, args); // D594
@@ -1739,6 +1741,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("doomseed".equals(sub)) return doomSeedCmd(s, args); // D596
         if ("nestseed".equals(sub)) return nestSeedCmd(s, args); // D595
         if ("saveseed".equals(sub)) return saveSeedCmd(s, args); // D594
         if ("sequelseed".equals(sub)) return sequelSeedCmd(s, args); // D593
@@ -6491,6 +6494,62 @@ public final class EmberCommand {
             EmberNestPath.maybeProbe(t);
             s.sendMessage(P + "已触发卡点路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingNest(t) ? "（有卡点）" : "（无卡点）"));
+            return true;
+    }
+
+    private boolean doomPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberDoomPath.glance(EmberDoomPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c灾临路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberDoomPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c灾临路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberDoomPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberDoomPath.get(d);
+                    if (EmberDoomPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDoomPath.label(cur) + " · 改路径再 /corerpg p1 doompath");
+                    else EmberDoomPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberDoomPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 doompath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberDoomPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean doomGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathDoomAltar(p)) p.sendMessage(P + "无法奔赴（灾厄未开窗/在副本中/祭坛世界未加载）");
+            else p.sendMessage(P + "§a灾临·手点 §7已传到灾厄祭坛");
+            return true;
+    }
+
+    private boolean doomSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberDoomPath.maybeProbe(t);
+            s.sendMessage(P + "已触发灾临路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingDoom(t) ? "（窗开可奔）" : "（窗关/在本中）"));
             return true;
     }
 }

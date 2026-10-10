@@ -197,6 +197,20 @@ public final class CalamityService implements Listener {
     /** Public for menus: current public window is OPEN. */
     public boolean isWindowOpen() { return windowOpen; }
 
+    /** D596: calamity boss altar (null if world unloaded). */
+    public org.bukkit.Location altarLocation() {
+        World w = Bukkit.getWorld(worldName);
+        if (w == null) return null;
+        return new Location(w, x + 0.5, y, z + 0.5);
+    }
+
+    /** D596: seconds left in the open window (0 if closed). */
+    public int windowSecondsLeft() {
+        if (!windowOpen || windowEndEpochMs <= 0L) return 0;
+        long ms = windowEndEpochMs - System.currentTimeMillis();
+        return ms <= 0 ? 0 : (int) ((ms + 999) / 1000);
+    }
+
     public boolean isGateMvtpOnMenu() { return gateMvtpOnMenu; }
 
     public String nextWindowLabel() {
@@ -334,6 +348,7 @@ public final class CalamityService implements Listener {
         bossKilledThisWindow = false;
         damagers.clear();
         broadcast(messageOpen);
+        town.sunshine.corerpg.p1.EmberDoomPath.maybeAfterOpen(); // D596
         if (!bossSpawnedThisWindow) {
             doSpawn();
             bossSpawnedThisWindow = true;
