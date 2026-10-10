@@ -644,6 +644,7 @@ public final class EmberRunService implements Listener {
         } else {
             tellRun(s, "§a" + r.label + " 已清空" + (r.door != null ? " · 门已打开" : "") + (last ? "" : ""));
         }
+        if (!last) EmberRallyPath.maybeAfterClear(s); // D562
     }
 
     void onBossSpawned(EmberRunSession s, EmberRunMaps.Boss b) {
@@ -699,6 +700,20 @@ public final class EmberRunService implements Listener {
 
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
+
+    /** D562: short Speed after a non-final room clear. */
+    public static final int RALLY_TICKS = 20 * 4; // 4s
+
+    public boolean pathRally(Player p) {
+        if (p == null || !p.isOnline()) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                org.bukkit.potion.PotionEffectType.SPEED, RALLY_TICKS, 0, false, false), true);
+        return true;
+    }
 
     /** D561: strip frost slow / probe. */
     public boolean hasFrostSlow(Player p) {
@@ -1343,6 +1358,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberHuntPath.scheduleOfferAfterQ01(p); // D559 hunt path
                         if ("q01".equals(g.id)) EmberDuckPath.scheduleOfferAfterQ01(p); // D560 duck path
                         if ("q01".equals(g.id)) EmberThawPath.scheduleOfferAfterQ01(p); // D561 thaw path
+                        if ("q01".equals(g.id)) EmberRallyPath.scheduleOfferAfterQ01(p); // D562 rally path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
