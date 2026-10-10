@@ -532,3 +532,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1173–D1182 ARCH SHIP · jar 1.65.431-d1173
 - Workshop pity/gap honesty: enhanceLine ≤N次必成; SinkGlance quality/refine lack; TrMenu 保底进度 rename
 - No new hope PAPI; K3/SF4 banned
+
+## D1183–D1190 ARCH SHIP · jar 1.65.432-d1183
+- Enhance fail ActionBar/forgeGlance 「含下次≤N次必成」; pity→保底计数 copy

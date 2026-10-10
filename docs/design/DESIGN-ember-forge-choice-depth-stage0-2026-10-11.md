@@ -28,6 +28,7 @@
 | **K2** | 随机锻无「加料买下限」 | `forgeroll … floor` + C06.q0 加扣 | **D1140– SHIP** · out-forgeroll-floor-d1141 WITHIN |
 | **K2b** | 下限可发现性 | TrMenu 下两排 + forge_gap_roll_floor + afterRoll 稳线按钮 | **D1163– SHIP** · 禁 K3 |
 | **W-pity** | 稳线保底/缺料诚实 | enhanceLine + SinkGlance + TrMenu 改名 | **D1173– SHIP** · 无新 hope PAPI |
+| **W-fail** | 失败后保底剩余 | EnhanceUndo ActionBar + glance | **D1183– SHIP** |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 

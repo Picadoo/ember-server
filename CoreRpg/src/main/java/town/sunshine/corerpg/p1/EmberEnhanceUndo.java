@@ -60,11 +60,14 @@ public final class EmberEnhanceUndo {
         String P = EmberRunService.P;
         int sec = remainSec(s, System.currentTimeMillis());
         try { // D694
-            p.sendActionBar("§e强化失败可撤 · §f" + sec + "s §7· /corerpg p1 enhance undo");
+            // D1184: remaining until sure after this fail (t.after already has pity+1)
+            int until = EmberGearNextHint.enhanceAttemptsUntilSure(t.after);
+            String rem = until <= 1 ? "下次必成" : ("含下次≤" + until + "次必成");
+            p.sendActionBar("§e强化失败可撤 · §f" + sec + "s §7· " + rem);
         } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7误点可撤（" + sec + " 秒内 · 仅失败）：", // D812
                 new String[]{"[撤销本次失败]", "/corerpg p1 enhance undo",
-                        "退回材料 · pity 回滚 · 剩余约 " + sec + "s", "YELLOW"},
+                        "退回材料 · 保底计数回滚 · 剩余约 " + sec + "s", "YELLOW"},
                 new String[]{"[工坊]", "/corerpg p1 forge", "稍后再撤也可开页", "GRAY"});
         scheduleMidRemind(p, s); // D713
         scheduleLateRemind(p, s); // D808 ~10s left
@@ -84,7 +87,10 @@ public final class EmberEnhanceUndo {
             if (cur == null || cur != s && (cur.at != s.at || !cur.uid.equals(s.uid))) return;
             int left = remainSec(cur, System.currentTimeMillis());
             if (left <= 0) return;
-            try { q.sendActionBar("§e失败仍可撤 · §f" + left + "s §7· /corerpg p1 enhance undo"); }
+            int maxM = EmberUpgradeRules.maxTries(cur.enhance + 1);
+            int untilM = Math.max(0, maxM - cur.pityAfter);
+            String remM = untilM <= 1 ? "下次必成" : ("含下次≤" + untilM + "次必成");
+            try { q.sendActionBar("§e失败仍可撤 · §f" + left + "s §7· " + remM); }
             catch (Throwable ignored) { }
             ConfirmTokens.sendButton(q, EmberRunService.P + "§e中途提醒：", // D823
                     "[撤销本次失败]", "/corerpg p1 enhance undo", "还剩约 " + left + "s");
@@ -148,8 +154,12 @@ public final class EmberEnhanceUndo {
             try { p.sendActionBar("§8失败撤销窗已过"); } catch (Throwable ignored) { }
             return;
         }
-        p.sendMessage(EmberRunService.P + "§e仍可撤销强化失败 · §f约 " + sec + "s §7· /corerpg p1 enhance undo");
-        try { p.sendActionBar("§e失败可撤 · §f" + sec + "s"); } catch (Throwable ignored) { }
+        // D1184: Snap has enhance + pityAfter after fail
+        int max = EmberUpgradeRules.maxTries(s.enhance + 1);
+        int untilG = Math.max(0, max - s.pityAfter);
+        String remG = untilG <= 1 ? "下次必成" : ("含下次≤" + untilG + "次必成");
+        p.sendMessage(EmberRunService.P + "§e仍可撤销强化失败 · §f约 " + sec + "s §7· " + remG);
+        try { p.sendActionBar("§e失败可撤 · §f" + sec + "s §7· " + remG); } catch (Throwable ignored) { }
         ConfirmTokens.sendButton(p, EmberRunService.P + "§7：", // D817
                 "[撤销本次失败]", "/corerpg p1 enhance undo", "退回材料 · 约 " + sec + "s");
     }
