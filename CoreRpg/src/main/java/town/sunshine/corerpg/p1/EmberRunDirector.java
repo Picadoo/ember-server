@@ -1617,9 +1617,17 @@ final class EmberRunDirector {
                     if (s.extra == EmberRunRules.Extra.ELITE && svc.maps() != null) {
                         EmberRunMaps.EliteTwists.Twist tw = svc.maps().eliteTwists.forMap(def.key);
                         if (tw != null) {
-                            t.twist = tw.skill(t.atk);
-                            if (tw.alt != null) t.twistAlt = tw.alt.skill(t.atk);
+                            // D504: party-leader twist path picks primary / alt / rotate
+                            PlayerData ld = s.leader == null ? null : svc.dataOf(s.leader);
+                            int tpath = EmberTwistPath.get(ld);
+                            EmberRunMaps.Skill[] sk = EmberTwistPath.applySkills(tw, t.atk, tpath);
+                            t.twist = sk[0];
+                            t.twistAlt = sk[1];
                             t.twistUseAlt = false;
+                            if (EmberTwistPath.valid(tpath)) {
+                                svc.log().info("[P1 run] " + s.runId + " twistpath " + EmberTwistPath.key(tpath)
+                                        + " elite " + (t.twistAlt != null ? "rotate" : "single"));
+                            }
                             t.nextCast = System.currentTimeMillis() + (long) (svc.maps().eliteTwists.openDelay * 1000);
                         }
                     }
