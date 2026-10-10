@@ -61,7 +61,7 @@ public final class EmberForgeGoal {
         if (id == ENHANCE) return "强化+1";
         if (id == REFINE) return "精工+1";
         if (id == BRAND) return "合成烙纹";
-        if (id == ROLL) return "随机锻造";
+        if (id == ROLL) return "旁路·随机锻";
         if (id == CONVERT) return "每周转化";
         return "未选";
     }
@@ -70,7 +70,7 @@ public final class EmberForgeGoal {
         if (id == ENHANCE) return "挂机攒碎片 → 工坊强化";
         if (id == REFINE) return "挂机攒胚料/骨尘 → 工坊精工";
         if (id == BRAND) return "挂机攒碎片 → 合成烙纹";
-        if (id == ROLL) return "攒胚料+币 → 随机锻一件";
+        if (id == ROLL) return "旁路：攒胚料+币 → 随机锻（主养仍强化/成色）";
         if (id == CONVERT) return "攒胚料+币 → 改族（周 1 次）";
         return "点选一条工坊路径当本周目标";
     }

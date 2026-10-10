@@ -14,7 +14,7 @@ npcs:
     yaw: 90.0
     # D64: P1 默认模式 → 工坊（主线本装备）；旧 ember_forge 不再对玩家开放
     action: p1_forge
-    tell: '§6烬砧：§f手持刃或护符，在工坊里强化、升阶、精工。材料从主线本来。'
+    tell: '§6烬砧：§f手持刃或护符 → §a稳线强化/成色/精工§f；§6随机锻是旁路赌成色。§7材料主线/挂机来。'
     menu: ember_p1_forge
     open_menu: true
   ember_enchanter:

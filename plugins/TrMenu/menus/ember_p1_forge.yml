@@ -1,3 +1,4 @@
+# D1139 K1: 稳线/旁路诚实入口（零经济）
 # D461: 工坊周目标路径点选（forgegoal）· 零改价/AFK表
 # 余烬 锻造菜单桩 — 只转发到 /corerpg p1 命令；预览在聊天栏，执行需二次点击"确认"按钮。
 # 旧 ember_enhance / ember_forge / ember_disassemble 菜单不变（旧物品仍走旧强化）。
@@ -34,6 +35,7 @@ Events:
   Open:
     - 'command: corerpg p1 setchase'
     # D680: sink glance also via /corerpg p1 forge entry; reinforce here
+    - 'tell: §a稳线：§f强化 / 成色 / 精工 / 烙纹定向（材料→确定一步）§8 · §6旁路：§7随机锻（赌成色/精工，出不了极品）'
     - 'tell: §e消耗一瞥：§f手持件看强化/成色/精工本次费用 · 缺料半行在聊天（开菜单前已刷）'
     - 'tell: §8烙纹路径 %corerpg_p1_brand_path%'
     - 'tell: §8转化路径 %corerpg_p1_convert_path%'
@@ -376,12 +378,13 @@ Icons:
   F:
     display:
       material: anvil
-      name: '§6随机锻造'
+      name: '§6旁路 · 随机锻造'
       lore:
         - ''
+        - '§8旁路赌线 · 主养仍用上方强化/成色/精工'
         - '§78 印记 + 4 胚料 + 500 币'
         - '§7成色/精工随机 · §c出不了极品'
-        - '§7想稳就兑换；想赌就锻造'
+        - '§7想稳：强化/成色升档或印记兑换'
         - ''
         - '§e➥ §f打开随机锻造页'
     actions:

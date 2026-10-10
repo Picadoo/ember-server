@@ -4043,6 +4043,8 @@ public final class EmberCommand {
             PlayerData fd = runs == null ? null : runs.dataOf(p.getUniqueId());
             EmberSinkGlance.tellHeld(p, forge, loadouts, fd); // D680/D681
             EmberEnhanceUndo.forgeGlance(p); // D694
+            // D1139 K1: 稳线/旁路诚实（零经济；非 PAPI）
+            p.sendMessage(P + "§a稳线：§f强化/成色/精工/烙纹定向 §8· §6旁路：§7随机锻（赌成色，出不了极品）");
             if (fd != null) { // D859
                 p.sendMessage(P + EmberForgeGoal.glance(EmberForgeGoal.get(fd), ""));
             }

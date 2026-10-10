@@ -509,3 +509,11 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - Stage2-J: S20/S21 bounty amounts ← economy SoT
 
 ## D1129 docs · Stage2 safe sweep COMPLETE (review/unsafe skipped)
+
+## D1130–D1138 ARCH · docs · jar still 1.65.426-d1121
+- Thin: Counters/Formula/Loadout tests PASS; Stage2 review/unsafe skipped
+- Design-first: RESEARCH + DESIGN Stage0 forge choice depth (K1 UX next; K2 needs p1sim; no skill Stage2 this window)
+
+## D1130–D1139 ARCH SHIP · jar 1.65.427-d1130
+- D1130–D1138: Counters/Formula/Loadout PASS; RESEARCH+DESIGN Stage0 forge choice
+- D1139 K1: 稳线/旁路诚实入口（TrMenu+hub+cmd；零经济；无新 PAPI）
