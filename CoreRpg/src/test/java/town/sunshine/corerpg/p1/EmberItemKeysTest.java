@@ -54,7 +54,7 @@ public class EmberItemKeysTest {
         PlayerData pd = legacy(it.uid);
         pd.addPeriodCount(EmberPayRules.C_RRO + it.uid, "all", 15); // a pending legacy roll is NOT an item key
         EmberItemData f = EmberItemKeys.fold(pd, it);
-        assertEquals(2, f.version);
+        assertEquals(EmberItemData.DATA_VERSION, f.version);
         assertNull(f.validate());
         assertEquals(52, f.affix); assertEquals(4, f.afPity); assertEquals(3, f.sigCode); assertEquals(7, f.rerollN);
         assertEquals(it.rev, f.rev);
@@ -74,7 +74,7 @@ public class EmberItemKeysTest {
 
     @Test public void foldOfAPieceWithoutCountersIsZeroV2() {
         EmberItemData f = EmberItemKeys.fold(new PlayerData(), v1());
-        assertEquals(2, f.version);
+        assertEquals(EmberItemData.DATA_VERSION, f.version);
         assertEquals(0, f.affix + f.afPity + f.sigCode + f.rerollN);
     }
 

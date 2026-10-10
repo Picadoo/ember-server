@@ -62,7 +62,7 @@ public class EmberItemDataTest {
         assertNotNull(new EmberItemData(d.uid, d.ni, d.family, d.slot, 2, 1, 2, 11, 0, true, "admin", 1, 0).validate());
         assertNotNull(new EmberItemData(d.uid, d.ni, d.family, d.slot, 2, 1, 2, 6, 13, true, "admin", 1, 0).validate());
         assertNotNull(new EmberItemData(d.uid, d.ni, d.family, d.slot, 2, 1, 2, 6, 0, true, "lore", 1, 0).validate());
-        assertNotNull(new EmberItemData(d.uid, d.ni, d.family, d.slot, 2, 1, 2, 6, 0, true, "admin", 3, 0).validate()); // D208: v1 + v2 valid
+        assertNotNull(new EmberItemData(d.uid, d.ni, d.family, d.slot, 2, 1, 2, 6, 0, true, "admin", 4, 0).validate()); // V1..DATA_VERSION valid
         assertNotNull(new EmberItemData(d.uid, d.ni, d.family, d.slot, 2, 1, 2, 6, 0, true, "admin", 0, 0).validate());
         assertNotNull(new EmberItemData(d.uid, d.ni, d.family, d.slot, 2, 1, 2, 6, 0, true, "admin", 1, -1).validate());
         // NI id must be the template of family/slot/tier: a T2 blade claiming T3 numbers is rejected
@@ -145,24 +145,34 @@ public class EmberItemDataTest {
     }
 
     @Test public void v2CarriesAndSignsTheItemKeys() {
+        EmberItemData v2 = new EmberItemData(v1().uid, v1().ni, "burst", "blade", 2, 1, 2, 6, 0, true, "admin", 2, 4, 52, 4, 3, 7);
+        assertEquals(2, v2.version);
+        assertTrue(v2.itemKeys());
+        assertNull(v2.validate());
+        assertTrue(v2.canonical().startsWith("v2|"));
+        assertTrue(v2.canonical().endsWith("|admin|4|52|4|3|7"));
+        assertFalse(v2.toMap().containsKey("sk0"));
+        assertTrue(EmberItemData.fromMap(v2.toMap()).verify(KEY, v2.sign(KEY)));
+
         EmberItemData b = v1().withItemKeys(52, 4, 3, 7).withRev(4);
-        assertEquals(2, b.version);
+        assertEquals(EmberItemData.DATA_VERSION, b.version);
         assertTrue(b.itemKeys());
         assertNull(b.validate());
-        assertTrue(b.canonical().startsWith("v2|"));
-        assertTrue(b.canonical().endsWith("|admin|4|52|4|3|7"));
+        assertTrue(b.canonical().startsWith("v3|"));
+        assertTrue(b.canonical().endsWith("|admin|4|52|4|3|7|sk:0,0"));
         EmberItemData back = EmberItemData.fromMap(b.toMap());
         assertEquals(b, back);
         assertEquals(52, back.affix); assertEquals(4, back.afPity); assertEquals(3, back.sigCode); assertEquals(7, back.rerollN);
+        assertEquals(0, back.sock0); assertEquals(0, back.sock1);
         String sig = b.sign(KEY);
         assertTrue(back.verify(KEY, sig));
-        for (String k : new String[]{"af", "afp", "sigc", "rrn"}) { // every item key is covered by the HMAC
+        for (String k : new String[]{"af", "afp", "sigc", "rrn", "sk0", "sk1"}) {
             Map<String, Object> m = new HashMap<String, Object>(b.toMap());
             m.put(k, ((Integer) m.get(k)) + 1);
             assertFalse(k, EmberItemData.fromMap(m).verify(KEY, sig));
         }
         Map<String, Object> m = new HashMap<String, Object>(b.toMap());
-        m.put("ver", 1); m.remove("af"); m.remove("afp"); m.remove("sigc"); m.remove("rrn"); // downgrade to v1 to drop keys
+        m.put("ver", 1); m.remove("af"); m.remove("afp"); m.remove("sigc"); m.remove("rrn"); m.remove("sk0"); m.remove("sk1");
         assertFalse(EmberItemData.fromMap(m).verify(KEY, sig));
         assertFalse(v1().verify(KEY, sig));
     }
@@ -182,5 +192,72 @@ public class EmberItemDataTest {
         assertEquals(52, b.withSig(5).affix);
         // the forge copy keeps the keys and the version
         assertEquals(b.affix, EmberUpgradeRules.copy(b, b.tier, b.quality, b.craft, b.enhance + 1, b.pity, b.bound).affix);
+    }
+
+
+    // ------------------------------------------------------------------ Gem Stage1: sockets on DATA_VERSION 3
+
+    @Test public void socketRoundTripAndUnlock() {
+        EmberItemData blade = sample().withSockets(EmberItemData.SOCK_SHARP, EmberItemData.SOCK_STEADY);
+        assertEquals(EmberItemData.DATA_VERSION, blade.version);
+        assertNull(blade.validate());
+        assertEquals(2, blade.sockMax());
+        assertTrue(blade.sockUnlocked(0));
+        assertTrue(blade.sockUnlocked(1));
+        assertEquals("孔：〔锋利石〕 〔稳固石〕", blade.socketLoreLine());
+        EmberItemData back = EmberItemData.fromMap(blade.toMap());
+        assertEquals(blade, back);
+        assertEquals(EmberItemData.SOCK_SHARP, back.sock0);
+        assertEquals(EmberItemData.SOCK_STEADY, back.sock1);
+        String sig = blade.sign(KEY);
+        assertTrue(back.verify(KEY, sig));
+        Map<String, Object> m = new HashMap<String, Object>(blade.toMap());
+        m.put("sk0", EmberItemData.SOCK_GALE);
+        assertFalse(EmberItemData.fromMap(m).verify(KEY, sig));
+    }
+
+    @Test public void v2ReadsAsEmptySocketsAndKeepsOldSignature() {
+        EmberItemData v2 = new EmberItemData(sample().uid, sample().ni, "burst", "blade", 2, 1, 2, 6, 0, true, "admin", 2, 0, 52, 1, 3, 2);
+        assertNull(v2.validate());
+        assertEquals(0, v2.sock0);
+        assertFalse(v2.toMap().containsKey("sk0"));
+        String old = hmac(v2.canonical());
+        assertTrue(v2.verify(KEY, old));
+        assertTrue(EmberItemData.fromMap(v2.toMap()).verify(KEY, old));
+        assertNotNull(new EmberItemData(v2.uid, v2.ni, v2.family, v2.slot, v2.tier, v2.quality, v2.craft, v2.enhance, v2.pity, v2.bound,
+                v2.source, 2, 0, 0, 0, 0, 0, EmberItemData.Origin.NONE, 1, 0).validate());
+    }
+
+    @Test public void forgeCopyKeepsGems() {
+        EmberItemData d = sample().withSockets(EmberItemData.SOCK_DRAIN, EmberItemData.SOCK_GALE);
+        EmberItemData up = EmberUpgradeRules.copy(d, d.tier, d.quality, d.craft, d.enhance + 1, 0, d.bound);
+        assertEquals(d.sock0, up.sock0);
+        assertEquals(d.sock1, up.sock1);
+        assertEquals(d.origin, up.origin);
+        assertTrue(up.verify(KEY, up.sign(KEY)));
+    }
+
+    @Test public void charmAndArmorSocketRules() {
+        EmberItemData charmLow = EmberItemData.create("scorch", "charm", 1, 0, 0, 2, true, "drop");
+        assertEquals(1, charmLow.sockMax());
+        assertFalse(charmLow.sockUnlocked(0));
+        assertEquals("孔：〔锁〕", charmLow.socketLoreLine());
+        EmberItemData charmOk = EmberItemData.create("scorch", "charm", 1, 0, 0, 3, true, "drop").withSockets(EmberItemData.SOCK_STEADY, 0);
+        assertTrue(charmOk.sockUnlocked(0));
+        assertEquals("孔：〔稳固石〕", charmOk.socketLoreLine());
+        EmberItemData armor = EmberItemData.create("burst", "head", 1, 0, 0, 0, true, "drop");
+        assertEquals(0, armor.sockMax());
+        assertNull(armor.socketLoreLine());
+        EmberItemData bladeLow = EmberItemData.create("burst", "blade", 1, 0, 0, 4, true, "drop");
+        assertTrue(bladeLow.sockUnlocked(0));
+        assertFalse(bladeLow.sockUnlocked(1));
+        assertEquals("孔：〔空〕 〔锁〕", bladeLow.socketLoreLine());
+    }
+
+    @Test public void withItemKeysPreservesSockets() {
+        EmberItemData d = sample().withSockets(1, 2).withItemKeys(10, 0, 0, 1);
+        assertEquals(1, d.sock0);
+        assertEquals(2, d.sock1);
+        assertEquals(10, d.affix);
     }
 }

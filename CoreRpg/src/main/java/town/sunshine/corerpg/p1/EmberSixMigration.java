@@ -232,7 +232,7 @@ public final class EmberSixMigration<S> {
     /** the same piece under a new uid (re-issue of a piece that left the player before the commit) */
     static EmberItemData reissue(EmberItemData d, String uid) {
         return new EmberItemData(uid, d.ni, d.family, d.slot, d.tier, d.quality, d.craft, d.enhance, d.pity, d.bound, d.source,
-                d.version, d.rev, d.affix, d.afPity, d.sigCode, d.rerollN, d.origin);
+                d.version, d.rev, d.affix, d.afPity, d.sigCode, d.rerollN, d.origin, d.sock0, d.sock1);
     }
 
     public Outcome run() {

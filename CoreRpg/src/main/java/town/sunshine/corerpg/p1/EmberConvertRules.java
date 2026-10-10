@@ -50,6 +50,6 @@ public final class EmberConvertRules {
         int q = qualityAfter(it.quality);
         return new EmberItemData(it.uid, EmberItemData.templateId(toFam, it.slot, it.tier), toFam, it.slot, it.tier,
                 q, it.craft, 0, it.pity, true, it.source, it.version, it.rev,
-                it.affix, it.afPity, it.sigCode, it.rerollN, it.origin);
+                it.affix, it.afPity, it.sigCode, it.rerollN, it.origin, it.sock0, it.sock1);
     }
 }

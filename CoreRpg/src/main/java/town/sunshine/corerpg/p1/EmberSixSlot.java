@@ -84,7 +84,7 @@ public final class EmberSixSlot {
     /**
      * Which worn pieces count (spec §3.3 T1: "只认本人绑定 v2 P1 甲，其余当空"). {@code verified[i]} = the stack in armor slot
      * i read ok + signed + trusted (DB owner / rev / state, done by the caller); null = empty / not a P1 piece / not trusted.
-     * A piece counts only when it is armor of exactly that slot, bound, data version 2, its uid is neither the blade nor the
+     * A piece counts only when it is armor of exactly that slot, bound, data version ≥ 2, its uid is neither the blade nor the
      * charm and appears once in the whole inventory ({@code uidCount}). Everything else is treated as an empty slot (q0 f0).
      */
     public static EmberItemData[] wornPieces(EmberItemData[] verified, EmberItemData blade, EmberItemData charm,
@@ -95,7 +95,7 @@ public final class EmberSixSlot {
         for (int i = 0; i < 4 && i < verified.length; i++) {
             EmberItemData d = verified[i];
             if (d == null || !d.isArmor() || EmberItemData.armorIndex(d.slot) != i) continue;
-            if (!d.bound || d.version < EmberItemData.DATA_VERSION) continue;
+            if (!d.bound || d.version < EmberItemData.V2) continue; // v2+; do not compare to DATA_VERSION (v3 sockets)
             if ((blade != null && d.uid.equals(blade.uid)) || (charm != null && d.uid.equals(charm.uid))) continue;
             Integer c = uidCount == null ? null : uidCount.get(d.uid);
             if (c != null && c > 1) continue;

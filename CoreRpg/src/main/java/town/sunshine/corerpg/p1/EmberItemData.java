@@ -30,15 +30,26 @@ import java.util.regex.Pattern;
  * optional: an item without it (every item made before 1.65.70, OP test items made by older builds) keeps exactly its old
  * canonical shape and signature. When present it is appended to {@link #canonical()} (HMAC), never changes after creation,
  * and every copy ({@link #withRev}, {@link #withItemKeys}, forge {@code EmberUpgradeRules.copy}) keeps it. Not shown in lore.</p>
+ *
+ * <p>Gem Stage1 (P1 socket data · 2026-10-11): data version 3 also carries two gem socket codes ({@code sock0}/{@code sock1},
+ * NBT {@code sk0}/{@code sk1}, column {@code cr_p1_item.sock0/sock1}, canonical {@code |sk:a,b}). Codes: 0 empty, 1 sharp,
+ * 2 steady, 3 drain, 4 gale. Unlock by enhance is derived (blade 2 @ ≥0/≥5, charm 1 @ ≥3, armor 0) — not stored.
+ * A version 1 or 2 item still verifies with its old canonical shape and is read as empty sockets. Forge copy keeps gems.
+ * No combat apply in Stage1.</p>
  */
 public final class EmberItemData {
 
     public static final String NBT_KEY = "ember_v1";
-    public static final int DATA_VERSION = 2;
+    public static final int DATA_VERSION = 3;
     /** D208: the pre-item-keys shape (no affix / pity / signature / reroll sequence on the item) */
     public static final int V1 = 1;
+    /** D208: item keys (+ optional D245 origin); no socket codes in canonical / NBT */
+    public static final int V2 = 2;
     public static final int MAX_AFFIX = 9999, MAX_AF_PITY = 999, MAX_SIG = 999;
     public static final int MAX_PITY = 12; // §6.1 largest 本档最多尝试 (+10: 12)
+    /** Gem Stage1: sock code 0=empty … 4=gale */
+    public static final int MAX_SOCK_GEM = 4;
+    public static final int SOCK_EMPTY = 0, SOCK_SHARP = 1, SOCK_STEADY = 2, SOCK_DRAIN = 3, SOCK_GALE = 4;
 
     public static final Set<String> FAMILIES = Collections.unmodifiableSet(new HashSet<String>(Arrays.asList("scorch", "burst", "sustain", "none")));
     /** D318 六槽 T1: the four armor slots (head / chest / legs / boots, this order everywhere in P1 code) */
@@ -72,6 +83,10 @@ public final class EmberItemData {
     public final int rerollN;
     /** D245: where the piece came from ({@link Origin#NONE} = not recorded: older items) */
     public final Origin origin;
+    /** Gem Stage1 (v3 only; always 0 on v1/v2): socket 0 gem code */
+    public final int sock0;
+    /** Gem Stage1: socket 1 gem code (blade 2nd hole; unused on charm/armor) */
+    public final int sock1;
 
     public EmberItemData(String uid, String ni, String family, String slot, int tier, int quality, int craft,
                          int enhance, int pity, boolean bound, String source, int version, int rev) {
@@ -84,15 +99,24 @@ public final class EmberItemData {
         this(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, version, rev, affix, afPity, sigCode, rerollN, Origin.NONE);
     }
 
-    /** D245: with provenance */
+    /** D245: with provenance (empty sockets) */
     public EmberItemData(String uid, String ni, String family, String slot, int tier, int quality, int craft,
                          int enhance, int pity, boolean bound, String source, int version, int rev,
                          int affix, int afPity, int sigCode, int rerollN, Origin origin) {
+        this(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, version, rev,
+                affix, afPity, sigCode, rerollN, origin, 0, 0);
+    }
+
+    /** Gem Stage1: with provenance + socket codes */
+    public EmberItemData(String uid, String ni, String family, String slot, int tier, int quality, int craft,
+                         int enhance, int pity, boolean bound, String source, int version, int rev,
+                         int affix, int afPity, int sigCode, int rerollN, Origin origin, int sock0, int sock1) {
         this.origin = origin == null ? Origin.NONE : origin;
         this.uid = uid; this.ni = ni; this.family = family; this.slot = slot; this.tier = tier;
         this.quality = quality; this.craft = craft; this.enhance = enhance; this.pity = pity;
         this.bound = bound; this.source = source; this.version = version; this.rev = rev;
         this.affix = affix; this.afPity = afPity; this.sigCode = sigCode; this.rerollN = rerollN;
+        this.sock0 = sock0; this.sock1 = sock1;
     }
 
     /** D208: the item keys live on the item (v2); false = read them from the legacy PlayerData counters */
@@ -125,13 +149,16 @@ public final class EmberItemData {
     /** @return null when valid, else the first reason it is not trustworthy */
     public String validate() {
         if (uid == null || !UID.matcher(uid).matches()) return "bad uid";
-        if (version != V1 && version != DATA_VERSION) return "unsupported version " + version;
+        if (version < V1 || version > DATA_VERSION) return "unsupported version " + version;
         if (version == V1 && (affix != 0 || afPity != 0 || sigCode != 0 || rerollN != 0)) return "v1 carries item keys";
         if (affix < 0 || affix > MAX_AFFIX) return "bad affix " + affix;
         if (afPity < 0 || afPity > MAX_AF_PITY) return "bad affix pity " + afPity;
         if (sigCode < 0 || sigCode > MAX_SIG) return "bad signature " + sigCode;
         if (rerollN < 0) return "bad reroll sequence " + rerollN;
         if (version == V1 && origin.present()) return "v1 carries origin";
+        if (version < 3 && (sock0 != 0 || sock1 != 0)) return "v" + version + " carries sockets";
+        if (sock0 < 0 || sock0 > MAX_SOCK_GEM) return "bad sock0 " + sock0;
+        if (sock1 < 0 || sock1 > MAX_SOCK_GEM) return "bad sock1 " + sock1;
         String ob = origin.validate();
         if (ob != null) return ob;
         if (!SLOTS.contains(slot)) return "bad slot " + slot;
@@ -157,7 +184,9 @@ public final class EmberItemData {
                 + craft + "|" + enhance + "|" + pity + "|" + (bound ? 1 : 0) + "|" + source + "|" + rev;
         if (version < 2) return base;
         String v2 = base + "|" + affix + "|" + afPity + "|" + sigCode + "|" + rerollN;
-        return origin.present() ? v2 + "|o:" + origin.packed() : v2; // D245: items without provenance keep their old shape
+        // Gem Stage1: sk before optional origin so older provenance endsWith(|o:…) tests still hold on v3
+        String mid = version >= 3 ? v2 + "|sk:" + sock0 + "," + sock1 : v2;
+        return origin.present() ? mid + "|o:" + origin.packed() : mid; // D245: items without provenance keep their old shape
     }
 
     /** HMAC-SHA256 over {@link #canonical()}, first 128 bits as lowercase hex. */
@@ -206,6 +235,10 @@ public final class EmberItemData {
             m.put("afp", afPity);
             m.put("sigc", sigCode);
             m.put("rrn", rerollN);
+            if (version >= 3) { // Gem Stage1: v2 NBT stays byte-identical
+                m.put("sk0", sock0);
+                m.put("sk1", sock1);
+            }
             if (origin.present()) { // D245
                 m.put("om", origin.map);
                 m.put("os", origin.src);
@@ -221,7 +254,8 @@ public final class EmberItemData {
         if (m == null) return null;
         return new EmberItemData(str(m, "uid"), str(m, "ni"), str(m, "fam"), str(m, "slot"), num(m, "tier"),
                 num(m, "q"), num(m, "craft"), num(m, "enh"), num(m, "pity"), num(m, "bound") != 0, str(m, "src"),
-                num(m, "ver"), num(m, "rev"), opt(m, "af"), opt(m, "afp"), opt(m, "sigc"), opt(m, "rrn"), originOf(m));
+                num(m, "ver"), num(m, "rev"), opt(m, "af"), opt(m, "afp"), opt(m, "sigc"), opt(m, "rrn"), originOf(m),
+                opt(m, "sk0"), opt(m, "sk1"));
     }
 
     /** D245: none of om / os / or / ot → {@link Origin#NONE}; otherwise read as stored (garbled values fail validate) */
@@ -249,19 +283,25 @@ public final class EmberItemData {
     /** same data and version (the gear library moves rows without touching the item keys) */
     public EmberItemData withRev(int newRev) {
         return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, version, newRev,
-                affix, afPity, sigCode, rerollN, origin);
+                affix, afPity, sigCode, rerollN, origin, sock0, sock1);
     }
 
-    /** D208: same piece as version 2 with these item keys (rev unchanged; the caller bumps it in the transaction) */
+    /** D208: same piece as current DATA_VERSION with these item keys (rev unchanged; the caller bumps it in the transaction). Keeps sockets. */
     public EmberItemData withItemKeys(int newAffix, int newAfPity, int newSig, int newRerollN) {
         return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, DATA_VERSION, rev,
-                newAffix, newAfPity, newSig, newRerollN, origin);
+                newAffix, newAfPity, newSig, newRerollN, origin, sock0, sock1);
     }
 
-    /** D245: the same piece (version 2) with this provenance — only for a piece being created (never re-stamps a known one) */
+    /** D245: the same piece (DATA_VERSION) with this provenance — only for a piece being created (never re-stamps a known one). Keeps sockets. */
     public EmberItemData withOrigin(Origin o) {
         return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, DATA_VERSION, rev,
-                affix, afPity, sigCode, rerollN, o);
+                affix, afPity, sigCode, rerollN, o, sock0, sock1);
+    }
+
+    /** Gem Stage1: same piece as DATA_VERSION with these socket codes (rev unchanged; caller bumps in the transaction) */
+    public EmberItemData withSockets(int newSock0, int newSock1) {
+        return new EmberItemData(uid, ni, family, slot, tier, quality, craft, enhance, pity, bound, source, DATA_VERSION, rev,
+                affix, afPity, sigCode, rerollN, origin, newSock0, newSock1);
     }
 
     /**
@@ -361,6 +401,52 @@ public final class EmberItemData {
             case 3: return "极品";
             default: return "标准";
         }
+    }
+
+    // ------------------------------------------------------------------ Gem Stage1 socket helpers (pure; no combat)
+
+    /** blade 2 / charm 1 / armor 0 */
+    public int sockMax() {
+        if (isBlade()) return 2;
+        if (isCharm()) return 1;
+        return 0;
+    }
+
+    /** Unlock by enhance: blade hole0 ≥0, hole1 ≥5; charm hole0 ≥3; armor none. */
+    public boolean sockUnlocked(int index) {
+        if (index < 0 || index >= sockMax()) return false;
+        if (isBlade()) return index == 0 ? enhance >= 0 : enhance >= 5;
+        if (isCharm()) return enhance >= 3;
+        return false;
+    }
+
+    public int sockAt(int index) {
+        if (index == 0) return sock0;
+        if (index == 1) return sock1;
+        return 0;
+    }
+
+    public static String gemName(int code) {
+        switch (code) {
+            case SOCK_SHARP: return "锋利石";
+            case SOCK_STEADY: return "稳固石";
+            case SOCK_DRAIN: return "汲取石";
+            case SOCK_GALE: return "疾风石";
+            default: return "空";
+        }
+    }
+
+    /** Display-only lore fragment; null when this slot has no sockets (armor). */
+    public String socketLoreLine() {
+        int max = sockMax();
+        if (max <= 0) return null;
+        StringBuilder sb = new StringBuilder("孔：");
+        for (int i = 0; i < max; i++) {
+            if (i > 0) sb.append(' ');
+            if (!sockUnlocked(i)) sb.append("〔锁〕");
+            else sb.append('〔').append(gemName(sockAt(i))).append('〕');
+        }
+        return sb.toString();
     }
 
     public String shortLabel() {

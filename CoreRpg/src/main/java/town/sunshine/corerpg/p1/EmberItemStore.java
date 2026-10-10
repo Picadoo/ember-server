@@ -246,6 +246,9 @@ public final class EmberItemStore {
                 addColumnIfMissing(c, "cr_p1_item", "reroll_n", "INT NOT NULL DEFAULT 0");
                 // D245 (ARCH S4): item provenance map|src|run|at ('' = not recorded: every row made before 1.65.70)
                 addColumnIfMissing(c, "cr_p1_item", "origin", "VARCHAR(128) NOT NULL DEFAULT ''");
+                // Gem Stage1: socket codes (0 empty … 4 gale); missing on older DBs
+                addColumnIfMissing(c, "cr_p1_item", "sock0", "TINYINT NOT NULL DEFAULT 0");
+                addColumnIfMissing(c, "cr_p1_item", "sock1", "TINYINT NOT NULL DEFAULT 0");
                 schemaOk = true;
                 plugin.getLogger().info("[" + EmberMode.MODE_ID + "] MySQL tables cr_p1_item / cr_p1_loadout / cr_p1_txn / cr_p1_run / cr_p1_reward / cr_p1_gearlib / cr_p1_delivery ready");
             } catch (Throwable t) {
@@ -272,8 +275,8 @@ public final class EmberItemStore {
 
     /** D208: the item-key columns of cr_p1_item, in {@link #setKeys} order */
     static final String KEY_COLS = "affix,af_pity,sig_code,reroll_n";
-    /** D245: INSERT column list = the item keys + provenance, in {@link #setInsertKeys} order */
-    static final String INSERT_KEY_COLS = KEY_COLS + ",origin";
+    /** D245 + Gem Stage1: INSERT column list = item keys + provenance + sockets, in {@link #setInsertKeys} order */
+    static final String INSERT_KEY_COLS = KEY_COLS + ",origin,sock0,sock1";
 
     /** binds affix, af_pity, sig_code, reroll_n from {@code i}; returns the next index */
     static int setKeys(PreparedStatement ps, int i, EmberItemData d) throws SQLException {
@@ -281,10 +284,12 @@ public final class EmberItemStore {
         return i;
     }
 
-    /** D245: {@link #setKeys} + origin (packed, '' when not recorded); returns the next index */
+    /** D245 + Gem Stage1: {@link #setKeys} + origin + sock0/sock1; returns the next index */
     static int setInsertKeys(PreparedStatement ps, int i, EmberItemData d) throws SQLException {
         i = setKeys(ps, i, d);
         ps.setString(i++, d.origin.packed());
+        ps.setInt(i++, d.sock0);
+        ps.setInt(i++, d.sock1);
         return i;
     }
 
@@ -351,7 +356,7 @@ public final class EmberItemStore {
             try (Connection c = plugin.getMysqlStorage().getConnection()) {
                 try (PreparedStatement ps = c.prepareStatement(
                         "INSERT IGNORE INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at," + INSERT_KEY_COLS + ")"
-                                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
+                                + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)")) {
                     bindItem(ps, d, owner, "active", System.currentTimeMillis());
                     ps.executeUpdate();
                 }
@@ -372,18 +377,19 @@ public final class EmberItemStore {
         long now = System.currentTimeMillis();
         try (PreparedStatement ps = c.prepareStatement(
                 "INSERT INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at," + INSERT_KEY_COLS + ")"
-                        + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                        + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
                         + " ON DUPLICATE KEY UPDATE owner_uuid=VALUES(owner_uuid),ni_id=VALUES(ni_id),family=VALUES(family),slot=VALUES(slot),"
                         + "tier=VALUES(tier),quality=VALUES(quality),craft=VALUES(craft),enhance=VALUES(enhance),pity=VALUES(pity),"
                         + "bound=VALUES(bound),source=VALUES(source),data_version=VALUES(data_version),rev=VALUES(rev),state=VALUES(state),"
                         + "updated_at=VALUES(updated_at),affix=VALUES(affix),af_pity=VALUES(af_pity),sig_code=VALUES(sig_code),reroll_n=VALUES(reroll_n),"
+                        + "sock0=VALUES(sock0),sock1=VALUES(sock1),"
                         + ORIGIN_KEEP)) {
             bindItem(ps, d, owner, state, now);
             ps.executeUpdate();
         }
     }
 
-    /** the 22 values of the cr_p1_item insert column list (item_uid … updated_at + INSERT_KEY_COLS) */
+    /** the 24 values of the cr_p1_item insert column list (item_uid … updated_at + INSERT_KEY_COLS) */
     private static void bindItem(PreparedStatement ps, EmberItemData d, UUID owner, String state, long now) throws SQLException {
         int i = 1;
         ps.setString(i++, d.uid);
@@ -798,7 +804,7 @@ public final class EmberItemStore {
             }
             try (PreparedStatement ps = c.prepareStatement(
                     "INSERT INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at," + INSERT_KEY_COLS + ")"
-                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'stored',?,?,?,?,?,?,?)")) {
+                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'stored',?,?,?,?,?,?,?,?,?)")) {
                 int i = 1;
                 ps.setString(i++, d.uid); ps.setString(i++, owner.toString()); ps.setString(i++, d.ni); ps.setString(i++, d.family);
                 ps.setString(i++, d.slot); ps.setInt(i++, d.tier); ps.setInt(i++, d.quality); ps.setInt(i++, d.craft);
@@ -875,7 +881,7 @@ public final class EmberItemStore {
                 EmberItemData d = it.after;
                 try (PreparedStatement ps = c.prepareStatement(
                         "UPDATE cr_p1_item SET ni_id=?,family=?,slot=?,tier=?,quality=?,craft=?,enhance=?,pity=?,bound=?,rev=?,updated_at=?,"
-                                + "data_version=?,affix=?,af_pity=?,sig_code=?,reroll_n=?,origin=IF(?<>'',?,origin) WHERE item_uid=? AND rev=?")) {
+                                + "data_version=?,affix=?,af_pity=?,sig_code=?,reroll_n=?,origin=IF(?<>'',?,origin),sock0=?,sock1=? WHERE item_uid=? AND rev=?")) {
                     int i = 1;
                     ps.setString(i++, d.ni); ps.setString(i++, d.family); ps.setString(i++, d.slot);
                     ps.setInt(i++, d.tier); ps.setInt(i++, d.quality); ps.setInt(i++, d.craft);
@@ -883,6 +889,7 @@ public final class EmberItemStore {
                     ps.setInt(i++, d.rev); ps.setLong(i++, now);
                     ps.setInt(i++, d.version); i = setKeys(ps, i, d); // D208: v1 → v2 fold, item keys
                     ps.setString(i++, d.origin.packed()); ps.setString(i++, d.origin.packed()); // D245: never wiped
+                    ps.setInt(i++, d.sock0); ps.setInt(i++, d.sock1); // Gem Stage1
                     ps.setString(i++, it.before.uid); ps.setInt(i, it.before.rev);
                     n = ps.executeUpdate();
                 }
@@ -1128,7 +1135,7 @@ public final class EmberItemStore {
             }
             try (PreparedStatement ps = c.prepareStatement(
                     "INSERT INTO cr_p1_item (item_uid,owner_uuid,ni_id,family,slot,tier,quality,craft,enhance,pity,bound,source,data_version,rev,state,created_at,updated_at," + INSERT_KEY_COLS + ")"
-                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'active',?,?,?,?,?,?,?)")) {
+                            + " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,'active',?,?,?,?,?,?,?,?,?)")) {
                 int i = 1;
                 ps.setString(i++, d.uid); ps.setString(i++, owner.toString()); ps.setString(i++, d.ni); ps.setString(i++, d.family);
                 ps.setString(i++, d.slot); ps.setInt(i++, d.tier); ps.setInt(i++, d.quality); ps.setInt(i++, d.craft);
@@ -1200,7 +1207,8 @@ public final class EmberItemStore {
                     if (rs.next()) {
                         EmberItemData d = new EmberItemData(uid, rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4),
                                 rs.getInt(5), rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9) != 0, rs.getString(10),
-                                rs.getInt(11), rs.getInt(12), rs.getInt(15), rs.getInt(16), rs.getInt(17), rs.getInt(18), origin(rs, 19));
+                                rs.getInt(11), rs.getInt(12), rs.getInt(15), rs.getInt(16), rs.getInt(17), rs.getInt(18), origin(rs, 19),
+                                rs.getInt(20), rs.getInt(21));
                         row = new FullRow(d, rs.getString(13), rs.getString(14));
                     }
                 }
@@ -1282,7 +1290,7 @@ public final class EmberItemStore {
             final List<LibRow> out = new java.util.ArrayList<LibRow>();
             try (PreparedStatement ps = c.prepareStatement("SELECT i.item_uid,i.ni_id,i.family,i.slot,i.tier,i.quality,i.craft,i.enhance,i.pity,"
                     + "i.bound,i.source,i.data_version,i.rev,i.state,COALESCE(g.locked,0),COALESCE(g.fav,0),COALESCE(g.stored_at,i.updated_at),i.updated_at,"
-                    + "i.affix,i.af_pity,i.sig_code,i.reroll_n,i.origin FROM cr_p1_item i LEFT JOIN cr_p1_gearlib g ON g.item_uid=i.item_uid WHERE i.owner_uuid=? AND i.state=? AND i.updated_at>=?")) {
+                    + "i.affix,i.af_pity,i.sig_code,i.reroll_n,i.origin,i.sock0,i.sock1 FROM cr_p1_item i LEFT JOIN cr_p1_gearlib g ON g.item_uid=i.item_uid WHERE i.owner_uuid=? AND i.state=? AND i.updated_at>=?")) {
                 ps.setString(1, owner.toString());
                 ps.setString(2, state);
                 ps.setLong(3, since);
@@ -1290,7 +1298,7 @@ public final class EmberItemStore {
                     while (rs.next()) {
                         EmberItemData d = new EmberItemData(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5),
                                 rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10) != 0, rs.getString(11), rs.getInt(12), rs.getInt(13),
-                                rs.getInt(19), rs.getInt(20), rs.getInt(21), rs.getInt(22), origin(rs, 23));
+                                rs.getInt(19), rs.getInt(20), rs.getInt(21), rs.getInt(22), origin(rs, 23), rs.getInt(24), rs.getInt(25));
                         out.add(new LibRow(d, rs.getString(14), rs.getInt(15) != 0, rs.getInt(16) != 0, rs.getLong(17), rs.getLong(18)));
                     }
                 }
@@ -1323,7 +1331,7 @@ public final class EmberItemStore {
         run("recent dismantles " + owner, c -> {
             final List<LibRow> out = new java.util.ArrayList<LibRow>();
             try (PreparedStatement ps = c.prepareStatement("SELECT i.item_uid,i.ni_id,i.family,i.slot,i.tier,i.quality,i.craft,i.enhance,i.pity,"
-                    + "i.bound,i.source,i.data_version,i.rev,i.state,t.created_at,t.note,i.affix,i.af_pity,i.sig_code,i.reroll_n,i.origin FROM cr_p1_txn t JOIN cr_p1_item i ON i.item_uid=t.uid_a"
+                    + "i.bound,i.source,i.data_version,i.rev,i.state,t.created_at,t.note,i.affix,i.af_pity,i.sig_code,i.reroll_n,i.origin,i.sock0,i.sock1 FROM cr_p1_txn t JOIN cr_p1_item i ON i.item_uid=t.uid_a"
                     + " WHERE t.owner_uuid=? AND t.kind IN ('dismantle','glibdis') AND t.created_at>=? AND i.state='dismantled'"
                     + " AND i.owner_uuid=? ORDER BY t.created_at DESC LIMIT 500")) {
                 ps.setString(1, owner.toString());
@@ -1333,7 +1341,7 @@ public final class EmberItemStore {
                     while (rs.next()) {
                         EmberItemData d = new EmberItemData(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5),
                                 rs.getInt(6), rs.getInt(7), rs.getInt(8), rs.getInt(9), rs.getInt(10) != 0, rs.getString(11), rs.getInt(12), rs.getInt(13),
-                                rs.getInt(17), rs.getInt(18), rs.getInt(19), rs.getInt(20), origin(rs, 21));
+                                rs.getInt(17), rs.getInt(18), rs.getInt(19), rs.getInt(20), origin(rs, 21), rs.getInt(22), rs.getInt(23));
                         LibRow lr = new LibRow(d, rs.getString(14), false, false, rs.getLong(15), rs.getLong(15));
                         lr.note = rs.getString(16);
                         out.add(lr);

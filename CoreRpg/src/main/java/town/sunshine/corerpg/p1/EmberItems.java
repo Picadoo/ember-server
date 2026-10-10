@@ -164,6 +164,8 @@ public final class EmberItems {
             lore.add(ChatColor.GRAY + String.format(Locale.ROOT, "生命 +%.1f · 防御 %.0f（成长 ×%.2f）", t.charmH(d.tier) * g, t.charmD(d.tier), g));
             lore.add(ChatColor.DARK_GRAY + "放在背包里生效（只算选定的一件；第一件自动选定，换件：手持它点装备页「已选护符」）");
         }
+        String sockLine = d.socketLoreLine(); // Gem Stage1: display-only placeholder (no combat)
+        if (sockLine != null) lore.add(ChatColor.DARK_AQUA + sockLine);
         lore.add(ChatColor.DARK_GRAY + (d.bound ? "绑定" : "未绑定") + " · " + EmberCompare.sourceName(d.source)); // D99: uid only via admin inspect
         meta.setLore(lore);
         item.setItemMeta(meta);
