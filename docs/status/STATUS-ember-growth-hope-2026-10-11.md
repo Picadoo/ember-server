@@ -738,3 +738,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D1966–D1979 SourceMap绿 + HeldNext升阶 (jar 1.65.494-d1966)
 - SourceMap/Counters PASS
 - HeldNext includes upgrade with gateOk
+
+## D1980 post-held-upgrade scan (jar 1.65.495-d1980)
+- Surface near-sat; EM1-B/K3/SF4/pity invent still blocked

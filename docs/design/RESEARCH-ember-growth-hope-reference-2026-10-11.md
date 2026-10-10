@@ -23,7 +23,7 @@
 
 - 连续未出目标档时，权重或保底触发；**计数对玩家可读**（或至少「这次必出」提示）。
 - Ember 已有：强化 `MAX_TRIES` 保底、洗练 `EmberAffix.pity`、D458 洗练保底一眼。
-- **缺口：** 成色升档、精工升档、地图徽记/签名 chase **缺统一可见表盘**；玩家体感仍是「运气墙」。
+- **缺口（部分已补 2026-10-11）：** 成色/精工 **确定表盘** SHIP（GS3 dial D1914 + forgegoal QUALITY D1928 + HeldNext D1942）；**不发明**成色掉落 pity。地图徽记/签名 chase 已有 remain/hope（禁 sig dry twin）。
 
 ### 2.2 Path of Exile · Deterministic crafts
 
