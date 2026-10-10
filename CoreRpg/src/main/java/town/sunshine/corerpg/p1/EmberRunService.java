@@ -344,7 +344,21 @@ public final class EmberRunService implements Listener {
     /** P2-7 (D79): ember-v1.yml bounty.daily */
     public List<EmberRunRules.BountyTier> bountyTiers() {
         EmberMode mode = EmberMode.get();
-        return EmberRunRules.bountyTiers(mode == null ? null : mode.config().getMapList("bounty.daily"));
+        List<EmberRunRules.BountyTier> raw = EmberRunRules.bountyTiers(mode == null ? null : mode.config().getMapList("bounty.daily"));
+        // D1122 Stage2-J: pin known clears to S20 SoT (identical nums)
+        List<EmberRunRules.BountyTier> out = new ArrayList<EmberRunRules.BountyTier>();
+        for (EmberRunRules.BountyTier t : raw) {
+            int coin = t.coin, shard = t.shard, bone = t.bone, core = t.core;
+            try {
+                if (t.clears == 1) coin = EmberEconomy.amount("S20", "c1.coin");
+                if (t.clears == 3) {
+                    coin = EmberEconomy.amount("S20", "c3.coin");
+                    shard = EmberEconomy.amount("S20", "c3.shard");
+                }
+            } catch (RuntimeException ignored) {}
+            out.add(new EmberRunRules.BountyTier(t.clears, coin, shard, bone, core));
+        }
+        return out;
     }
 
     /** New-player polish: the one next thing to do on the main line (first map not yet first-cleared), then the late game. */
@@ -472,7 +486,15 @@ public final class EmberRunService implements Listener {
     /** D144 花样委托 tiers (ember-v1.yml bounty.variety) */
     public List<EmberRunRules.VarietyBounty> varietyBounties() {
         EmberMode mode = EmberMode.get();
-        return EmberRunRules.varietyBounties(mode == null ? null : mode.config().getMapList("bounty.variety"));
+        List<EmberRunRules.VarietyBounty> raw = EmberRunRules.varietyBounties(mode == null ? null : mode.config().getMapList("bounty.variety"));
+        // D1123 Stage2-J: pin coin to S21 SoT (identical nums)
+        List<EmberRunRules.VarietyBounty> out = new ArrayList<EmberRunRules.VarietyBounty>();
+        for (EmberRunRules.VarietyBounty b : raw) {
+            int coin = b.coin;
+            try { coin = EmberEconomy.amount("S21", "coin"); } catch (RuntimeException ignored) {}
+            out.add(new EmberRunRules.VarietyBounty(b.kind, b.count, coin, b.shard));
+        }
+        return out;
     }
 
     /** D147 (review 10-04 #8): settlement label prefix for extra material rows, so they read as what paid them */

@@ -504,3 +504,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1109–D1120 ARCH SHIP · jar 1.65.425-d1109
 - Stage2-I: S11/S12 + S14 fail rate + S15/S35 potions; AFK tiers untouched
+
+## D1121–D1128 ARCH SHIP · jar 1.65.426-d1121
+- Stage2-J: S20/S21 bounty amounts ← economy SoT

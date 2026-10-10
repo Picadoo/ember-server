@@ -104,3 +104,6 @@ S10 rotation bonus_marks/weekly_cap pin.
 
 ## D1109–D1120 Stage2-I
 S11.mark + normalBonus; S12 raid weeklyCap; S14 rate; S15/S35 potions.
+
+## D1121–D1128 Stage2-J
+S20 daily bounty + S21 variety coin SoT pin.

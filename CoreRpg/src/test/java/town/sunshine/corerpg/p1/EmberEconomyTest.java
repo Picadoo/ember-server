@@ -1200,6 +1200,15 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void s20S21BountyLeaves() {
+        // D1124 Stage2-J
+        assertEquals(30, EmberEconomy.amount("S20", "c1.coin"));
+        assertEquals(60, EmberEconomy.amount("S20", "c3.coin"));
+        assertEquals(6, EmberEconomy.amount("S20", "c3.shard"));
+        assertEquals(20, EmberEconomy.amount("S21", "coin"));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");
