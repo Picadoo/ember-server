@@ -12,5 +12,7 @@
 | LF1 | cook 缺料/币 AB | LifeService cook preview |
 | LF2 | buy 还差币 | buy confirm AB |
 | LF3 | 饱食/就绪下一餐 | 非战斗表 · 仅展示 |
+| LF4 | 生活经验还差 | addXp/show AB |
+| LF5 | 铁砧还差币 | anvil take |
 
 不改产量、价格表、AFK。

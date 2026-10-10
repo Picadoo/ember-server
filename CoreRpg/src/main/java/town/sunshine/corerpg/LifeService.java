@@ -151,7 +151,20 @@ public final class LifeService implements Listener {
         int before = lifeLevel(d);
         d.addPeriodCount("life_xp", "all", n);
         int after = lifeLevel(d);
-        if (after > before) p.sendMessage(ChatColor.GREEN + "[生活] 生活等级提升 → Lv." + after + ChatColor.GRAY + "（解锁更多补给配方，/corerpg life）");
+        if (after > before) {
+            p.sendMessage(ChatColor.GREEN + "[生活] 生活等级提升 → Lv." + after + ChatColor.GRAY + "（解锁更多补给配方，/corerpg life）");
+            try { p.sendActionBar("§a生活 · Lv." + after); } catch (Throwable ignored) { }
+        } else {
+            int need = lifeXpNext(d);
+            int xp = lifeXp(d);
+            if (need > 0) {
+                int left = Math.max(0, need - xp);
+                try { // D1557
+                    p.sendActionBar("§e生活 · Lv." + after + " §f" + xp + "/" + need
+                            + (left > 0 ? " §8· 还差" + left : ""));
+                } catch (Throwable ignored) { }
+            }
+        }
     }
 
     // ---------------- events ----------------
@@ -275,7 +288,10 @@ public final class LifeService implements Listener {
         PlayerData d = dataStore.get(p.getUniqueId());
         if (d.getCoin() < repairFee) {
             e.setCancelled(true);
-            p.sendMessage(ChatColor.RED + "[铁砧] 修理手续费 " + repairFee + " 余烬币，你只有 " + d.getCoin() + "。");
+            int gap = repairFee - d.getCoin();
+            p.sendMessage(ChatColor.RED + "[铁砧] 修理手续费 " + repairFee + " 余烬币，你只有 " + d.getCoin()
+                    + " · 还差 " + gap + "。");
+            try { p.sendActionBar("§e铁砧 · 还差币 §f" + gap); } catch (Throwable ignored) { }
             return;
         }
         if (!town.sunshine.corerpg.p1.EmberEconomy.spendCoin(d, "C17", repairFee)) {
@@ -328,8 +344,17 @@ public final class LifeService implements Listener {
     private void show(Player p, PlayerData d) {
         int lv = lifeLevel(d);
         int next = lv < levelXp.length ? levelXp[lv] : -1;
-        p.sendMessage(ChatColor.GOLD + "—— 枢纽补给 · 生活 ——" + ChatColor.GRAY + "  生活 Lv." + lv + "（经验 " + lifeXp(d)
-                + (next > 0 ? "/" + next : "") + "）  余烬币 " + ChatColor.GOLD + d.getCoin());
+        int xp = lifeXp(d);
+        int leftXp = next > 0 ? Math.max(0, next - xp) : 0;
+        p.sendMessage(ChatColor.GOLD + "—— 枢纽补给 · 生活 ——" + ChatColor.GRAY + "  生活 Lv." + lv + "（经验 " + xp
+                + (next > 0 ? "/" + next + (leftXp > 0 ? " · 还差 " + leftXp : "") : "") + "）  余烬币 " + ChatColor.GOLD + d.getCoin());
+        try { // D1557
+            if (next > 0)
+                p.sendActionBar("§6生活 · Lv." + lv + " §f" + xp + "/" + next
+                        + (leftXp > 0 ? " §8· 还差" + leftXp : " §a· 可升"));
+            else
+                p.sendActionBar("§a生活 · Lv." + lv + " · 满级");
+        } catch (Throwable ignored) { }
         p.sendMessage(ChatColor.YELLOW + " cook" + ChatColor.GRAY + " — 代烤鱼：鳕鱼/鲑鱼 → 炭烤余烬鱼，每条 " + cookCoinEach + " 币");
         for (Offer o : offers.values()) {
             StringBuilder sb = new StringBuilder();
