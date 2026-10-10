@@ -248,6 +248,39 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("abysspath".equals(sub) || "深渊路径".equals(sub)) { // D486 abyss push/farm combat path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.abyss() != null && runs.abyss().open(d);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberAbyssPath.glance(EmberAbyssPath.get(d), unlocked));
+                if (!unlocked) { p.sendMessage(P + "§c深渊需本人首通 Q07 断塔回廊。"); return true; }
+                EmberAbyssPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c深渊需本人首通 Q07 断塔回廊。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberAbyssPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberAbyssPath.get(d);
+                    if (EmberAbyssPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberAbyssPath.label(cur) + " · 改路径再 /corerpg p1 abysspath");
+                    else EmberAbyssPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberAbyssPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 abysspath <push|farm|clear>");
+                return true;
+            }
+            EmberAbyssPath.applyAndReply(p, id);
+            return true;
+        }
         if ("raidpath".equals(sub) || "团本路径".equals(sub)) { // D483 raid focus combat path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
