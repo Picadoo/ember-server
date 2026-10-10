@@ -92,12 +92,16 @@ public final class EmberMapFarmCue {
         // D704: if set focus matches map family, append set-completion gap (no button)
         PlayerData pd = dataOf(p);
         if (pd != null && lo != null && mapFam != null && EmberRunRules.validFamily(mapFam)) {
-            String fk = EmberSetFocus.familyKey(EmberSetFocus.get(pd));
+            int focus = EmberSetFocus.get(pd);
+            String fk = EmberSetFocus.familyKey(focus);
             if (mapFam.equals(fk)) {
                 String gap = EmberSetChase.focusGap(pd, lo);
                 if (gap != null && !gap.isEmpty()) p.sendMessage(EmberRunService.P + gap);
                 else if (!"none".equals(lo.activeSet) && mapFam.equals(lo.activeSet))
                     p.sendMessage(EmberRunService.P + "§7" + lo.nextAwakeningHint());
+            } else if (!EmberSetFocus.valid(focus)) { // D725
+                p.sendMessage(EmberRunService.P + "§7本图族可作焦点：/corerpg p1 setfocus "
+                        + EmberSetFocus.parseKey(mapFam));
             }
         }
         try {

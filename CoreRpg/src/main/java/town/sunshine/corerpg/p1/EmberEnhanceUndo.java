@@ -92,7 +92,11 @@ public final class EmberEnhanceUndo {
         Snap s = peek(p.getUniqueId());
         if (s == null) return;
         int sec = remainSec(s, System.currentTimeMillis());
-        if (sec <= 0) { LAST.remove(p.getUniqueId(), s); return; }
+        if (sec <= 0) { // D726
+            LAST.remove(p.getUniqueId(), s);
+            try { p.sendActionBar("§8失败撤销窗已过"); } catch (Throwable ignored) { }
+            return;
+        }
         p.sendMessage(EmberRunService.P + "§e仍可撤销强化失败 · §f约 " + sec + "s §7· /corerpg p1 enhance undo");
         try { p.sendActionBar("§e失败可撤 · §f" + sec + "s"); } catch (Throwable ignored) { }
     }

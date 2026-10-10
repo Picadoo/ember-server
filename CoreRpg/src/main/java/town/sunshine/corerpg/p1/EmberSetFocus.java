@@ -59,6 +59,13 @@ public final class EmberSetFocus {
         return null;
     }
 
+    /** D725: map/loot family → setfocus arg (same tokens). */
+    public static String parseKey(String family) {
+        if (family == null) return "scorch";
+        if ("scorch".equals(family) || "burst".equals(family) || "sustain".equals(family)) return family;
+        return "scorch";
+    }
+
     public static String label(int id) {
         String f = familyKey(id);
         return f == null ? "未选" : EmberItemData.familyName(f);
