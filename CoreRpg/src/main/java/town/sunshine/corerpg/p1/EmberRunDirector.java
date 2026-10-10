@@ -510,6 +510,35 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D594: last-phase extra revive countdown armed (raid only). */
+    boolean hasPendingSave() {
+        return lastRevAt > 0 && !lastRevDone
+                && System.currentTimeMillis() < lastRevAt
+                && boss != null && boss.le != null && !boss.le.isDead()
+                && s != null && !s.died.isEmpty();
+    }
+
+    /** D594: pull a living committed player beside the boss to receive revived teammates. */
+    boolean pathSaveReady(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingSave()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (s.died.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location base = boss.le.getLocation();
+        Location pl = p.getLocation();
+        Vector away = new Vector(pl.getX() - base.getX(), 0, pl.getZ() - base.getZ());
+        if (away.lengthSquared() < 1e-6) away = new Vector(1, 0, 0);
+        else away.normalize();
+        Location to = base.clone().add(away.multiply(2.5));
+        to.setY(pl.getY());
+        to.setYaw(pl.getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.7f);
+        return true;
+    }
+
     /** D593: boss has a follow-up skill queued (delay not yet elapsed). */
     boolean hasPendingSequel() {
         return follow != null && System.currentTimeMillis() < followStart
@@ -3091,6 +3120,7 @@ final class EmberRunDirector {
             if (lastRevAt == 0L && !s.died.isEmpty()) {
                 lastRevAt = now + (long) (svc.maps().raidReviveDelay * 1000);
                 svc.tellRun(s, "§e首领只剩 " + Math.round(lrh * 100) + "% 生命§7：倒下的队友约 " + Math.round(svc.maps().raidReviveDelay) + " 秒后再复活一次（本局仅此一次）");
+                EmberSavePath.maybeAfterSave(s); // D594
             }
             if (lastRevAt > 0 && now >= lastRevAt) {
                 lastRevDone = true;
