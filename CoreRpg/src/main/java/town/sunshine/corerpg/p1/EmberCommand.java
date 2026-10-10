@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("guardpath".equals(sub) || "护兔路径".equals(sub)) { // D565 escort-guard path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberGuardPath.glance(EmberGuardPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c护兔路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberGuardPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c护兔路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberGuardPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberGuardPath.get(d);
+                    if (EmberGuardPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGuardPath.label(cur) + " · 改路径再 /corerpg p1 guardpath");
+                    else EmberGuardPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberGuardPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 guardpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberGuardPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("guard".equals(sub) && args.length == 2) { // D565 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathGuardEscort(p)) p.sendMessage(P + "无法护兔（无护宝兔/未进本）");
+            else p.sendMessage(P + "§a护兔·手点 §7已传至护宝兔旁");
+            return true;
+        }
         if ("smashpath".equals(sub) || "砸晶路径".equals(sub)) { // D564 crystal-smash path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1803,6 +1847,15 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("guardseed".equals(sub)) { // D565 admin smoke: probe guard path
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberGuardPath.maybeProbe(t);
+            s.sendMessage(P + "已触发护兔路径探测 → " + t.getName()
+                    + (runs != null && runs.hasGuardEscort(t) ? "（有兔）" : "（无兔）"));
             return true;
         }
         if ("smashseed".equals(sub)) { // D564 admin smoke: probe smash path

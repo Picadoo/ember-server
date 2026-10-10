@@ -449,6 +449,7 @@ final class EmberRunDirector {
             } else if ("escort".equals(kind)) {
                 spawnEscort(r, v);
                 svc.tellRun(s, "§b护宝兔 §7· 清房前别让发光小兔倒下 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberGuardPath.maybeAfterEscort(s); // D565
             } else if ("hold".equals(kind)) {
                 placeHold(r, v);
                 svc.tellRun(s, "§b占点 §7· 站进发光圈攒满进度再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
@@ -500,6 +501,29 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D565: escort rabbit still alive. */
+    boolean hasGuardEscort() {
+        if (escortId == null) return false;
+        Tracked t = mobs.get(escortId);
+        return t != null && t.varietyEscort && t.le != null && !t.le.isDead();
+    }
+
+    /** D565: warp a committed player next to the escort rabbit. */
+    boolean pathGuardEscort(Player p) {
+        if (p == null || !p.isOnline() || !hasGuardEscort()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Tracked t = mobs.get(escortId);
+        Location at = t.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.3f);
+        return true;
     }
 
     /** D564: variety crystals still standing. */
