@@ -8,7 +8,7 @@
 
 ## 人话
 
-批了「烬衡悬梁」第十三条短征规格。仓里已有十三本选页；地图在磁盘上从 **团本白盒**（`ember_raid`）复制了一份（**本地独立文件夹**；主题须 WE 重切衡门庭/悬梁衡廊（≥3配重衡梁）/衡冠，禁窄桥/跳石/转枢/递闸/对廊等气质复读）。进本命令、通关发奖（S52）、日帽键 `%corerpg_p1_sx13_day_line%` / 首通 `%corerpg_p1_sx13_fc%` **注释预留**（键号另挂；禁假写 n/3）。选页第十三格 **W=sx13**。
+批了「烬衡悬梁」第十三条短征规格。仓里已有十三本选页；地图在磁盘上从 **团本白盒**（`ember_raid`）复制了一份（**本地独立文件夹**；主题须 WE 重切衡门庭/悬梁衡廊（≥3配重衡梁）/衡冠，禁窄桥/跳石/转枢/递闸/对廊等气质复读）。进本命令、通关发奖（S52）、日帽键 `%corerpg_p1_sx13_day_line%` / 首通 `%corerpg_p1_sx13_fc%` **挂盘已落**（键 tip `2688b0b2` · jar `1.65.124-d421` bv77）。选页第十三格 **W=sx13**。
 
 ## 拆号（并行）
 
@@ -17,8 +17,8 @@
 | **地图号** | `ember_short_sx13` 衡门庭/悬梁衡廊/衡冠烬台 + 出生/Boss 坐标 | **本地骨架已启**：`cp -a ember_raid → ember_short_sx13`（~2.9M）；说明见 [`docs/maps/ember_short_sx13-README.md`](../maps/ember_short_sx13-README.md) | **阻塞 WE**：仓/play **无** WorldEdit/FAWE jar；**禁** `git add -f` map。烬衡主题换皮 → 地图岗进服 WE 另号 |
 | **MM 号** | 衡门卫/梁廊衡侍/衡冠守吏 + `EmberSx13…Cast` | **本号不写** | 另号 |
 | **DP+键号** | `EmberSx13` option/monster + `ember-v1-runs` `sx13`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **本号不写** | 插件号并行 |
-| **插件日帽/首通号** | `%corerpg_p1_sx13_day_line%` / `_fc` + 合计扩第十三本 | **注释预留**（键号另挂） | 键 live 后同批挂盘 |
-| **菜单号** | `ember_p1_short` 十三本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M/O/Q/T/V/X/Y/**W** · adventure `H` + Open · hub「衡梁」· **day_line/fc 注释预留** | 键号齐后挂盘；全链路另派 |
+| **插件日帽/首通号** | `%corerpg_p1_sx13_day_line%` / `_fc` + 合计扩第十三本 | **键 live** tip `2688b0b2` · jar `1.65.124-d421` bv77 | 菜单挂盘见 dayline STATUS |
+| **菜单号** | `ember_p1_short` 十三本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M/O/Q/T/V/X/Y/**W** · adventure `H` + Open · hub「衡梁」· **day_line/fc 挂盘已落**（[`STATUS-ember-short-sx13-dayline-d421-2026-10-10.md`](STATUS-ember-short-sx13-dayline-d421-2026-10-10.md)） | 全链路另派 |
 | **经济号** | S52 发放 + REG/Economy/source-map +（荐）p1sim | **未动** | 另号金样；草案 80币+4碎+3骨尘；首通另加 60/6/1；**禁**抬挂机表 |
 
 ## 地图进度（诚实）
@@ -36,7 +36,7 @@
 
 | 文件 | 落盘 |
 |------|------|
-| `plugins/TrMenu/menus/ember_p1_short.yml` | **是**（十三本选页 A/C/E/G/K/M/O/Q/T/V/X/Y/**W**；sx13 day_line/fc **注释预留**） |
+| `plugins/TrMenu/menus/ember_p1_short.yml` | **是**（十三本选页 A/C/E/G/K/M/O/Q/T/V/X/Y/**W**；sx13 day_line/fc **挂盘已落** tip `2688b0b2`） |
 | `ember_p1_adventure.yml` Layout+`H`+Open | **是**（半指含衡梁/烬衡） |
 | `ember_hub.yml` Open/冒险半指 | **是** |
 | trmenu reload | **PASS** · `良好 \| 73 个菜单已加载 (104 ms)`（**09:47:22 CST**） |
@@ -50,10 +50,10 @@
 | V2 sx01–sx12 仍可进 · 旧日常仍关 | **PASS（纪律）** | 本号未改 gate_daily / EmberDaily*；前十二本进本键保留 |
 | V3 悬梁衡廊+Cast+非空板 | **PARTIAL** | 地图非空板本地有；Cast/MM **未**；主题 WE **未**；**禁**窄桥/跳石/转枢/递闸/对廊复读 |
 | V4 经济+未抬日表 | **PASS（纪律）** | 零改 afk.tiers/daily_kills；S52 未接线 |
-| V5 日帽诚实分开 | **PASS（菜单纪律）** | W/I 预留；禁假写 n/3；合计文案「十三本合计键另挂」 |
+| V5 日帽诚实分开 | **PASS（菜单纪律）** | W/I 真键；禁假写 n/3；合计文案「十三本」 |
 | V6 S52 登记 | **PENDING** | 经济另号 |
 | V7 rooms×3+boss | **PENDING** | 键号首航硬提醒；本号未写 runs |
-| V8 选页挂 day_line/fc | **PENDING（预留）** | 键号另挂后挂盘 |
+| V8 选页挂 day_line/fc | **PASS（菜单）** | 见 dayline STATUS · tip `2688b0b2` |
 
 ## 改动清单（本号 · 入仓）
 
@@ -61,7 +61,7 @@
 |------|------|
 | DESIGN / tip / backlog | 勾批 A·M · tip 关 · **已批·施工中·骨架启动** |
 | 本 STATUS + `docs/maps/ember_short_sx13-README.md` | 拆号 · 地图进度 · WE 阻塞 · STATUS 指针 |
-| `plugins/TrMenu/menus/ember_p1_short.yml` | 十三本选页 W=sx13 + sx13 day_line/fc **注释预留** |
+| `plugins/TrMenu/menus/ember_p1_short.yml` | 十三本选页 W=sx13 + sx13 day_line/fc **挂盘已落** |
 | `ember_p1_adventure.yml` / `ember_hub.yml` | 入口半指含衡梁 |
 | `plugins/DungeonPlus/map/ember_short_sx13/**` | **仅本地** · **未 stage**（gitignore） |
 | jar / MM / DP / ember-v1.yml / afk | **未 stage / 未改** |
