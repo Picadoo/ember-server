@@ -452,8 +452,10 @@ public final class EmberSettleService {
             p.sendMessage(EmberRunService.P + "§b本周精选" + (s.challenge ? "挑战" : "重打") + " §f" + m.name + "§b：额外 T" + s.tier + " 锻造印记 +" + rotMarks
                     + "§7（本周 " + pd.periodCount(EmberRunService.C_ROTATION, week) + "/" + runs.maps().rotationWeeklyCap + "）");
         }
-        if (p != null && p.isOnline() && vbMoved) // D144 / D292
+        if (p != null && p.isOnline() && vbMoved) { // D144 / D292
             p.sendMessage(EmberRunService.P + varietyBountyTip(vbDone, runs.varietyBountyLine(pd)));
+            EmberVarietyLoop.afterVarietyDone(p, vbDone); // D662
+        }
         if (p != null && p.isOnline() && fresh && !tiers.isEmpty()) {
             p.sendMessage(EmberRunService.P + "§e每日委托 §7" + (bountyW > 1 ? "§7团本算 " + bountyW + " 局 · " : "") + (bountyPaid.isEmpty() ? "" : "§a完成第 " + bountyN + " 局档 §7· ")
                     + EmberRunRules.bountyLine(tiers, bountyN));

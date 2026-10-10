@@ -3346,6 +3346,7 @@ public final class EmberRunService implements Listener {
                                             + " §7· 精工§f" + (craft * 2) + "%§7 · +0 · 词条空");
                                     EmberGearLib gl = EmberGearLib.get();
                                     if (gl != null) gl.delivery().kick(qq);
+                                    EmberForgeRollLoop.afterRoll(qq, dataOf(id), fam, slot, tier); // D661/D664
                                 }
                             } else {
                                 pay.release(id, rid);

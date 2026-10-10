@@ -66,3 +66,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D658 quality/refine spend loops
 - D659 slash shape land burst
 - D660 forge-goal enhance/refine/brand complete
+
+## D661–D664 SHIP · jar 1.65.318-d661 · 2026-10-11
+- D661 forge-roll ROLL goal complete
+- D662 variety bounty done buttons
+- D663 shapepath Stage2 ActionBar
+- D664 roll → deliver / setfocus chase

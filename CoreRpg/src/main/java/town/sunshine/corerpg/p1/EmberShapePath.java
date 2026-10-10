@@ -175,6 +175,11 @@ public final class EmberShapePath {
         flush(p);
         applyShape(p, toShapeId(id));
         p.sendMessage(P + "§a符文路径 → §f" + label(id) + " §7· " + tip(id) + " §8（已写入烬斩几何）");
+        try { // D663 Stage2 feel cue
+            if (id == LINE) p.sendActionBar("§b直线穿刺 · 正前 6格窄道");
+            else if (id == RING) p.sendActionBar("§d原地环斩 · 身边 3.5格");
+            else p.sendActionBar("§e扇形 · 前方宽扇 ≥110°");
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{enterLabel(id), enterCmd(id), "进图体感这种几何", "GREEN"},
                 new String[]{"[技能组]", "trmenu open ember_skill_kit", "看按键与符文", "GOLD"},
