@@ -280,3 +280,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D782 SHIP · jar 1.65.357-d782
 - Featured rotation week-full → challengepath / adventure buttons
+
+## D783 SHIP · jar 1.65.358-d783
+- Resume without setfocus → setfocus button for map family

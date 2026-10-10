@@ -189,6 +189,13 @@ public final class EmberMapFarmCue {
                 if (runs != null && runs.loadouts() != null)
                     EmberSetChase.tell(p, d, lo, runs.loadouts());
             }
+        } else if (!EmberSetFocus.valid(EmberSetFocus.get(d))) { // D783
+            p.sendMessage(EmberRunService.P + "§7本图族可作焦点：/corerpg p1 setfocus "
+                    + EmberSetFocus.parseKey(m.lootFamily));
+            ConfirmTokens.sendButton(p, EmberRunService.P + "§7：",
+                    "[设焦点·" + EmberItemData.familyName(m.lootFamily) + "]",
+                    "/corerpg p1 setfocus " + EmberSetFocus.parseKey(m.lootFamily),
+                    "成套追跟本图族");
         }
         return true;
     }
