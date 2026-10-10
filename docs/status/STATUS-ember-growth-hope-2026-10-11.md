@@ -457,3 +457,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D991–D995 ARCH SHIP · jar 1.65.412-d991
 - Stage1 C21 brand pin ← amount(); nums unchanged
+
+## D996–D998 ARCH SHIP · jar 1.65.413-d996
+- Stage1 C01 default stamina cost ← amount(); nums unchanged

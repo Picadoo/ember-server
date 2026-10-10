@@ -1044,6 +1044,12 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void staminaSinkMatchesC01() {
+        // D997
+        assertEquals(30, EmberEconomy.amount("C01", "stamina"));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

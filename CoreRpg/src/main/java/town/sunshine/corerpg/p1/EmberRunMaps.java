@@ -1083,7 +1083,7 @@ public final class EmberRunMaps {
         version = (int) num(root.get("version"), 1);
         balanceVersion = (int) num(root.get("balance_version"), 1);
         ruleVersion = str(root.get("rule_version"), "g04-1") + "/b" + balanceVersion;
-        cost = (int) num(root.get("cost"), 30);
+        cost = EmberEconomy.amount("C01", "stamina"); // D996; runs.yml cost stays mirror
         failRefund = Math.max(0.0, Math.min(1.0, num(root.get("fail_refund"), 0)));
         partyMin = (int) num(root.get("party_min"), 1);
         partyMax = (int) num(root.get("party_max"), 3);

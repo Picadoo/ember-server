@@ -24,7 +24,7 @@
 
 version: 1
 balance_version: 89
-built_against: "1.65.412-d991.local (D991–D995 Stage1 C21)"
+built_against: "1.65.413-d996.local (D996–D998 Stage1 C01)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
 
