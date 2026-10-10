@@ -186,6 +186,57 @@ public final class EmberSupplyService implements Listener {
     }
     static final double LOW_HP = 0.40;
 
+    /** D548: low HP in P1 world, heal pot ready (not on CD / capped), has pot. */
+    public boolean needsSip(Player p) {
+        if (p == null || p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) return false;
+        if (!EmberMode.active() || !EmberMode.isP1World(p.getWorld())) return false;
+        double max = EmberHeal.maxHp(p);
+        if (max <= 0 || p.getHealth() / max >= LOW_HP) return false;
+        if (potionSlot(p) < 0) return false;
+        EmberLoadoutService ls = plugin.getEmberLoadouts();
+        if (ls != null && ls.state(p.getUniqueId()).healCdUntil > System.currentTimeMillis()) return false;
+        EmberRunService rc = plugin.getEmberRuns();
+        if (rc != null && rc.potionCapped(p.getUniqueId())) return false;
+        return true;
+    }
+
+    /** D548: consume one heal potion and apply percent heal (same rules as drink). */
+    public boolean pathSipOne(Player p) {
+        if (p == null || !needsSip(p)) return false;
+        ItemStack[] c = p.getInventory().getStorageContents();
+        int idx = -1;
+        for (int i = 0; i < c.length; i++) {
+            if (isHealPotion(c[i])) { idx = i; break; }
+        }
+        if (idx < 0) return false;
+        ItemStack stack = c[idx];
+        boolean bottle = stack.getType() == org.bukkit.Material.POTION;
+        if (stack.getAmount() <= 1) {
+            c[idx] = null;
+        } else {
+            stack.setAmount(stack.getAmount() - 1);
+            c[idx] = stack;
+        }
+        p.getInventory().setStorageContents(c);
+        EmberLoadoutService ls = plugin.getEmberLoadouts();
+        EmberMode mode = EmberMode.get();
+        long now = System.currentTimeMillis();
+        if (ls != null && mode != null) {
+            EmberPlayerState st = ls.state(p.getUniqueId());
+            st.healCdUntil = now + Math.max(0, mode.i("heal_potion.cooldown_seconds", 15)) * 1000L;
+            ls.saveState(p);
+        }
+        EmberRunService runs = plugin.getEmberRuns();
+        if (runs != null) runs.notePotion(p);
+        EmberGrowthService growth = EmberGrowthService.get();
+        double pct = (mode == null ? 0.20 : mode.d("heal_potion.percent", 0.20)) * (growth == null ? 1.0 : growth.potionMult(p));
+        EmberHeal.heal(p, pct * EmberHeal.maxHp(p), "D548 自动喝药 " + Math.round(pct * 100) + "%");
+        if (bottle) {
+            // empty bottle may remain from vanilla consume; programmatic take skips glass — fine for bound NI
+        }
+        return true;
+    }
+
     /** The hint for a P1 player right now (the set HUD shows it instead of its own line). */
     public String lowHpHint(Player p) {
         if (p == null || p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR || !EmberMode.isP1World(p.getWorld())) return null; // D106: not while watching

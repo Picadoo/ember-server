@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitTask;
 import town.sunshine.corerpg.CoreRpgPlugin;
+import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.QuestService;
 import town.sunshine.corerpg.SkillService;
 import town.sunshine.corerpg.p1.EmberSetEngine.Hit;
@@ -403,7 +404,10 @@ public final class EmberSetService implements Listener {
         if (now < s.procFlashUntil) return; // D439 proc flash owns ActionBar briefly
         if (now < s.skillFeelUntil) return; // D445 skill confirm owns ActionBar briefly
         EmberSupplyService sup = plugin.getEmberSupplies();
+        EmberSipPath.maybeAfterLowHp(p); // D548 combat sip path
         String hint = sup == null ? null : sup.lowHpHint(p); // new-player polish: low HP → how to drink (wins over the set line)
+        PlayerData sipd = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+        if (hint != null && EmberSipPath.suppressLowHpBar(sipd)) hint = null; // D548 MUTE
         boolean force = now < s.forceHudUntil;
         String hud = hint != null ? hint : s.engine.hud(now, force); // D444: force idle 0/every after flash
         if (hud != null) {

@@ -268,6 +268,51 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("sippath".equals(sub) || "喝药路径".equals(sub)) { // D548 combat sip path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSipPath.glance(EmberSipPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c喝药路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSipPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c喝药路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSipPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSipPath.get(d);
+                    if (EmberSipPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSipPath.label(cur) + " · 改路径再 /corerpg p1 sippath");
+                    else EmberSipPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSipPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 sippath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSipPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("sip".equals(sub) && args.length == 2) { // D548 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            EmberSupplyService sup = runs == null ? null : runs.plugin().getEmberSupplies();
+            if (sup == null) { p.sendMessage(P + "补给服务未加载"); return true; }
+            if (!sup.pathSipOne(p)) p.sendMessage(P + "无法喝药（生命够/无药/冷却中/不在副本）");
+            else p.sendMessage(P + "§a喝药·手点 §7已喝");
+            return true;
+        }
         if ("breadpath".equals(sub) || "面包路径".equals(sub)) { // D547 hub bread buy path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1048,6 +1093,36 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("sipseed".equals(sub)) { // D548 admin smoke: temp P1 scope + low HP + pot
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSupplyService sup = runs.plugin().getEmberSupplies();
+            EmberMode mode = EmberMode.get();
+            String wn = t.getWorld().getName();
+            boolean added = false;
+            if (mode != null && !EmberMode.isP1World(t.getWorld())) {
+                mode.addWorld(wn);
+                added = true;
+            }
+            if (sup != null && sup.countHealPotions(t) < 1) {
+                int g = sup.give(t, 1, "sipseed");
+                if (g < 1) s.sendMessage(P + "§c发药失败");
+            }
+            double max = EmberHeal.maxHp(t);
+            if (max > 1) t.setHealth(Math.max(1.0, max * 0.30));
+            EmberLoadoutService ls = runs.plugin().getEmberLoadouts();
+            if (ls != null) {
+                EmberPlayerState st = ls.state(t.getUniqueId());
+                st.healCdUntil = 0L;
+                ls.saveState(t);
+            }
+            EmberSipPath.maybeAfterLowHp(t);
+            if (added && mode != null) mode.removeWorld(wn);
+            s.sendMessage(P + "已灌药+压血至约30%并触发喝药路径 → " + t.getName()
+                    + (added ? "（临时标记世界）" : ""));
             return true;
         }
         if ("breadseed".equals(sub)) { // D547 admin smoke: no food + coin for bread
