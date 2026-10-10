@@ -1776,6 +1776,25 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D618–D622 | CoreRpg **1.65.307-d618** / bv 未抬 | 希望批 **SHIP**：天赋下一/洗练庆祝/委托·精选希望/烬斩形状电报/宝石页材料 UX · `53069550`。 |
 | D623† | CoreRpg **1.65.308-d623** / bv 未抬 | growth-hope 签到/在线/深渊/团本/装备库希望+形状粒子（标签复用 D623–D627）· `3951dd7f`。**≠房间事件软保底**。 |
 | D623 | CoreRpg **1.65.312-d623** / bv 未抬 | 房间事件软保底 W2a **SHIP**：`EmberEventSoftPity` · `p1_ev_dry` NEED=1 · Session ensure + Settle onSettle · 禁叠第二事件/挑战·首通·团本·连战·深渊 · mustfeel R · STATUS `STATUS-ember-room-event-soft-pity-d623-2026-10-11.md`。 |
+| D628–D632 | CoreRpg **1.65.309-d628** / bv 未抬 | growth-hope **SHIP**：forge/stamina/vault/honor meters + slash ground telegraph · `259734ab` · STATUS `STATUS-ember-growth-hope-2026-10-11.md`。 |
+| D633–D637 | CoreRpg **1.65.310-d633** / bv 未抬 | growth-hope **SHIP**：codex/sx_fc/route/dual meters + dash path feel · `fd102ee8`。 |
+| D638–D640 | CoreRpg **1.65.311-d638** / bv 未抬 | growth-hope **SHIP**：brand/echo/convert path hope · `791281a4`。 |
+| D641–D643 | CoreRpg **1.65.312-d641** / bv 未抬 | acquisition/play feel **SHIP**：FC map-identity · Stage2 hitboxes · convert goal loop · `efbf8598`。 |
+| D644–D646 | CoreRpg **1.65.313-d644** / bv 未抬 | play feel **SHIP**：FC slot lock · soft-prefer↔shapepath · mail claim-all · `81c65cba`。 |
+| D647–D650 | CoreRpg **1.65.314-d647** / bv 未抬 | acquisition/play feel **SHIP**：imprint spend UX · challenge FC identity · abyss L1 gift · dash set trails · `8097414c`。 |
+| D651–D652 | CoreRpg **1.65.315-d651** / bv 未抬 | attune unlock spend UX + imprint spend-loop tell **SHIP** · `57cc5475`。 |
+| D653–D656 | CoreRpg **1.65.316-d653** / bv 未抬 | real loops **SHIP**：stamp chase → imprint · raid FC identity · flex trails · swap/dismantle UX · `d36f5536`。 |
+| D657–D660 | CoreRpg **1.65.317-d657** / bv 未抬 | raid weekly / quality-refine / slash land / forge-goal completes **SHIP** · `a8a76a40`。 |
+| D661–D664 | CoreRpg **1.65.318-d661** / bv 未抬 | forge-roll / variety done / shapepath Stage2 / roll chase **SHIP** · `08e7850a`。 |
+| D665–D668 | CoreRpg **1.65.319-d665** / bv 未抬 | setfocus / parry bar / week-goal UX **SHIP** · `9882dd2c`。 |
+| D669–D672 | CoreRpg **1.65.320-d669** / bv 未抬 | honor unlock / 2pc soft-prefer / challenge·raid FC next **SHIP** · `2e82a73b`。 |
+| D673–D676 | CoreRpg **1.65.321-d673** / bv 未抬 | FC identity buttons / skill unlock / abyss newBest / loot target **SHIP** · `0f61469d`。 |
+| D677–D680 | CoreRpg **1.65.322-d677** / bv 未抬 | 烬突地面预示 / gem UI 禁旧 socket / 入场追 / 工坊消耗一瞥 **SHIP** · `af36038a`。 |
+| D681–D683 | CoreRpg **1.65.323-d681** / bv 未抬 | sink glance / map-farm settle / gem hole ActionBar **SHIP** · `38f034e5`。 |
+| D684–D686 | CoreRpg **1.65.324-d684** / bv 未抬 | gem craft have-need / adventure map-farm hint / gem insert count **SHIP** · `b9535aa6`。 |
+| D687–D690 | CoreRpg **1.65.325-d687** / bv 未抬 | chase refresh / AFK→forge / kit Stage2 clarity / sig stamp dry **SHIP** · `fd122031`。 |
+| D691–D693 | CoreRpg **1.65.326-d691** / bv 未抬 | imprint dry note / kit dash lore / sig dry glance **SHIP** · `5abb59c2`。 |
+| D694–D697 | CoreRpg **1.65.327-d694** / bv 未抬 | enhance-fail undo / set chase / abyss target / short FC next **SHIP** · `eb1e7fce`。 |
 
 
 
