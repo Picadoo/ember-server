@@ -72,7 +72,7 @@ public final class EmberMapFarmCue {
         if (p == null || m == null) return;
         if (m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
         PlayerData pd = dataOf(p);
-        if (pd != null) remember(pd, m); // D763
+        if (pd != null) { remember(pd, m); flush(p); } // D763/D765
         cue(p, m, lo);
     }
 
@@ -171,6 +171,7 @@ public final class EmberMapFarmCue {
         EmberRunMaps.MapDef m = maps.byKey(key);
         if (m == null || m.lootFamily == null || !EmberRunRules.validFamily(m.lootFamily)) return;
         d.addPeriodCount(C_RESUME_LAT, "all", code - lat);
+        flush(p); // D765
         cue(p, m, lo);
         ConfirmTokens.sendButton(p, EmberRunService.P + "§7登出恢复：",
                 "[再进·" + m.key.toUpperCase() + "]", "/corerpg p1 enter " + m.key,
@@ -182,5 +183,13 @@ public final class EmberMapFarmCue {
         Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
         if (!(pl instanceof CoreRpgPlugin)) return null;
         return ((CoreRpgPlugin) pl).getDataStore().get(p.getUniqueId());
+    }
+
+    /** D765: persist resume counters. */
+    private static void flush(Player p) {
+        if (p == null) return;
+        Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");
+        if (pl instanceof CoreRpgPlugin)
+            ((CoreRpgPlugin) pl).getDataStore().flushMutation(p.getUniqueId());
     }
 }

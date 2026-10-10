@@ -1254,6 +1254,24 @@ public final class EmberGrowthService implements Listener {
         return true;
     }
 
+
+    /** D766: chase first, else first unlocked-map alt with marks ≥ ALT_MARKS. */
+    private EmberSignature.Def pickAttuneReady(PlayerData d) {
+        EmberSignature.Def chase = EmberSigChase.get(d);
+        if (chase != null && EmberSignature.alt(chase) != null && !altUnlocked(d, chase)
+                && runs.progressFlag(d, chase.map)
+                && d.periodCount(EmberSignature.C_MARK + chase.map, "all") >= EmberSignature.ALT_MARKS)
+            return chase;
+        for (EmberSignature.Def sd : EmberSignature.DEFS) {
+            if (EmberSignature.alt(sd) == null) continue;
+            if (altUnlocked(d, sd)) continue;
+            if (!runs.progressFlag(d, sd.map)) continue;
+            if (d.periodCount(EmberSignature.C_MARK + sd.map, "all") < EmberSignature.ALT_MARKS) continue;
+            return sd;
+        }
+        return null;
+    }
+
     /**
      * D761: rising-edge attune unlock ready (chase target, marks ≥ ALT_MARKS, not unlocked, Q07 done).
      * One-click → sig attune &lt;id&gt; unlock. Zero ALT_MARKS / PAPI twin.
@@ -1261,19 +1279,13 @@ public final class EmberGrowthService implements Listener {
     public boolean maybeAttuneReadyCue(Player p, PlayerData d) {
         if (p == null || d == null) return false;
         if (!runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return false;
-        EmberSignature.Def def = EmberSigChase.get(d);
-        if (def == null || EmberSignature.alt(def) == null) return false;
-        if (altUnlocked(d, def)) {
+        EmberSignature.Def def = pickAttuneReady(d);
+        if (def == null) {
             int latched = d.periodCount(C_ATTUNE_READY, "all");
             if (latched > 0) { d.addPeriodCount(C_ATTUNE_READY, "all", -latched); runs.flushData(p.getUniqueId()); }
             return false;
         }
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
-        if (marks < EmberSignature.ALT_MARKS) {
-            int latched = d.periodCount(C_ATTUNE_READY, "all");
-            if (latched > 0) { d.addPeriodCount(C_ATTUNE_READY, "all", -latched); runs.flushData(p.getUniqueId()); }
-            return false;
-        }
         int latched = d.periodCount(C_ATTUNE_READY, "all");
         if (latched == def.code) return false;
         d.addPeriodCount(C_ATTUNE_READY, "all", def.code - latched);

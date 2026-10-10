@@ -381,7 +381,7 @@ public final class EmberSessionService {
                 EmberMapCardCue.cue(cp, enterFeelMap, s); // D489 chat 名片+loot
                 EmberLoadout lo = runs.loadouts() == null ? null : runs.loadouts().get(cp);
                 PlayerData cpd = runs.dataOf(cu);
-                if (cpd != null) EmberMapFarmCue.remember(cpd, enterFeelMap); // D763
+                if (cpd != null) { EmberMapFarmCue.remember(cpd, enterFeelMap); runs.flushData(cu); } // D763/D765
                 EmberMapFarmCue.cue(cp, enterFeelMap, lo); // D679 next chase piece
             }
         }

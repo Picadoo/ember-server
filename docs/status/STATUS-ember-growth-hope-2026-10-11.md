@@ -245,3 +245,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D761 attune one-click when ready (`maybeAttuneReadyCue` + TrMenu Open ready)
 - D762 challenge path settle glance (`EmberChallengePath.afterSettle`)
 - D763 map gear farm resume after logout (`C_RESUME_MAP` + join cue)
+
+## D764–D766 SHIP · jar 1.65.351-d764
+- D764 challenge settle next-loop buttons (PREFER)
+- D765 map farm resume counter flush
+- D766 attune ready: chase-first else first eligible alt

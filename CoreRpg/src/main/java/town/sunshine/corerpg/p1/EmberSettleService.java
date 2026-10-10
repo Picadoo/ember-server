@@ -390,7 +390,7 @@ public final class EmberSettleService {
         if (s.challenge && s.abyss == 0) { // D762
             Player chp2 = Bukkit.getPlayer(u);
             if (chp2 != null && chp2.isOnline())
-                EmberChallengePath.afterSettle(chp2, pd, true, chalFirstNow);
+                EmberChallengePath.afterSettle(chp2, pd, true, chalFirstNow, m.key);
         }
         if (in.firstClear != null) {
             boolean skillNew = !EmberFirstClear.fact(pd, m.key); // D459: announce only on first fact write

@@ -176,8 +176,8 @@ public final class EmberChallengePath {
     }
 
 
-    /** D762: after challenge clear — path glance (not PAPI twin). */
-    public static void afterSettle(Player p, PlayerData d, boolean challenge, boolean challengeFirst) {
+    /** D762/D764: after challenge clear — path glance + next challenge enter when PREFER. */
+    public static void afterSettle(Player p, PlayerData d, boolean challenge, boolean challengeFirst, String mapKey) {
         if (p == null || !challenge) return;
         int id = get(d);
         if (!valid(id)) {
@@ -191,6 +191,15 @@ public final class EmberChallengePath {
         p.sendMessage(EmberRunService.P + line);
         if (!challengeFirst) {
             try { p.sendActionBar(line); } catch (Throwable ignored) { }
+        }
+        // D764: meaty next-loop when prefer-challenge
+        if (id == PREFER && mapKey != null && !mapKey.isEmpty()) {
+            String mk = mapKey.toLowerCase(Locale.ROOT);
+            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7硬本下一环：",
+                    new String[]{"[再挑战·" + mk.toUpperCase(Locale.ROOT) + "]",
+                            "/corerpg p1 enter " + mk + " challenge", "同图挑战再刷", "RED"},
+                    new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "GREEN"},
+                    new String[]{"[换路径]", "/corerpg p1 challengepath", "改偏好", "GRAY"});
         }
     }
 
