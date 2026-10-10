@@ -12,6 +12,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.event.inventory.InventoryType;
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.PlayerData;
@@ -24,6 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * After Q03 first-clear, bare Q (drop) binds to parry instead of discard.
  * Boss tele land opens a short window; press in-window → flat ×0.45B to that boss (tele damage still lands).
  * Independent CD; no shared dash tax / slash charge / uniform taken_red.
+ * <p>D476: rising-edge ActionBar when independent CD ends (combat ready feel; CD length unchanged).
  */
 public final class EmberParry implements Listener {
 
@@ -37,6 +39,8 @@ public final class EmberParry implements Listener {
     private final ConcurrentHashMap<UUID, UUID> windowBoss = new ConcurrentHashMap<UUID, UUID>();
     /** player → parry CD end epoch ms */
     private final ConcurrentHashMap<UUID, Long> cdUntil = new ConcurrentHashMap<UUID, Long>();
+    /** D476: scheduled CD-ready ActionBar task id per player */
+    private final ConcurrentHashMap<UUID, Integer> readyTask = new ConcurrentHashMap<UUID, Integer>();
 
     public EmberParry(CoreRpgPlugin plugin) {
         this.plugin = plugin;
@@ -98,6 +102,7 @@ public final class EmberParry implements Listener {
         UUID id = e.getPlayer().getUniqueId();
         windowUntil.remove(id);
         windowBoss.remove(id);
+        cancelReadyTask(id);
         // keep cdUntil so a quick reconnect cannot bypass a fresh CD mid-fight
     }
 
@@ -117,7 +122,7 @@ public final class EmberParry implements Listener {
         if (!inWindow) {
             if (inRun) {
                 // Match T0b: outside-window press burns independent CD, no utility
-                cdUntil.put(id, now + EmberSkillKit.PARRY_CD_MS);
+                armCd(player, now + EmberSkillKit.PARRY_CD_MS); // D476 ready cue
                 player.sendMessage(P + ChatColor.YELLOW + EmberSkillKit.DISPLAY_PARRY
                         + "空按 · 窗外无效（独立冷却 " + EmberSkillKit.PARRY_CD_SECONDS + "s）");
             } else {
@@ -127,7 +132,7 @@ public final class EmberParry implements Listener {
         }
         windowUntil.remove(id);
         windowBoss.remove(id);
-        cdUntil.put(id, now + EmberSkillKit.PARRY_CD_MS);
+        armCd(player, now + EmberSkillKit.PARRY_CD_MS); // D476 ready cue
 
         LivingEntity boss = resolveBoss(player, bossId);
         EmberLoadoutService ls = plugin.getEmberLoadouts();
@@ -146,6 +151,68 @@ public final class EmberParry implements Listener {
         player.sendMessage(P + ChatColor.GREEN + EmberSkillKit.DISPLAY_PARRY + "成功 · 反打 "
                 + ChatColor.WHITE + String.format(java.util.Locale.ROOT, "%.0f", flat)
                 + ChatColor.GRAY + "（预警伤仍生效 · CD " + EmberSkillKit.PARRY_CD_SECONDS + "s）");
+    }
+
+
+    /** D476 ActionBar line when parry independent CD ends. */
+    public static String readyActionBar() {
+        return "§a守招 · §f" + EmberSkillKit.DISPLAY_PARRY + " §a就绪";
+    }
+
+    /**
+     * Start / refresh independent CD and schedule a one-shot ready ActionBar (D476).
+     * Does not change {@link EmberSkillKit#PARRY_CD_MS}.
+     */
+    void armCd(Player player, long untilMs) {
+        if (player == null) return;
+        UUID id = player.getUniqueId();
+        cdUntil.put(id, untilMs);
+        scheduleReadyCue(player, untilMs, false);
+    }
+
+    /** Admin smoke: arm a short CD then fire the same rising-edge cue (skips unlock gate). */
+    public void adminArmCdSeconds(Player player, int seconds) {
+        if (player == null) return;
+        int sec = Math.max(0, Math.min(60, seconds));
+        long until = System.currentTimeMillis() + sec * 1000L;
+        cdUntil.put(player.getUniqueId(), until);
+        scheduleReadyCue(player, until, true);
+    }
+
+    private void cancelReadyTask(UUID id) {
+        Integer tid = readyTask.remove(id);
+        if (tid != null) {
+            try { Bukkit.getScheduler().cancelTask(tid.intValue()); } catch (Throwable ignored) { }
+        }
+    }
+
+    private void scheduleReadyCue(final Player player, final long untilMs, final boolean force) {
+        if (player == null) return;
+        final UUID id = player.getUniqueId();
+        cancelReadyTask(id);
+        long delayMs = Math.max(0L, untilMs - System.currentTimeMillis());
+        long delayTicks = Math.max(1L, (delayMs + 49L) / 50L);
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+            @Override public void run() {
+                readyTask.remove(id);
+                Player q = Bukkit.getPlayer(id);
+                if (q == null || !q.isOnline()) return;
+                Long u = cdUntil.get(id);
+                // only skip if CD was re-armed past this schedule (avoid early-tick race vs untilMs)
+                if (u != null && u.longValue() > untilMs) return;
+                if (!force) {
+                    PlayerData d = plugin.getDataStore().get(id);
+                    if (!EmberSkillKit.parryUnlocked(d, plugin.getEmberRuns())) return;
+                }
+                try { q.sendActionBar(readyActionBar()); } catch (Throwable ignored) { }
+                // chat echo once so combat ready is not ActionBar-only (and smokeable)
+                q.sendMessage(P + ChatColor.GREEN + EmberSkillKit.DISPLAY_PARRY + "就绪");
+                try {
+                    q.playSound(q.getLocation(), Sound.BLOCK_NOTE_PLING, 0.35f, 1.6f);
+                } catch (Throwable ignored) { }
+            }
+        }, delayTicks);
+        readyTask.put(id, Integer.valueOf(task.getTaskId()));
     }
 
     private static LivingEntity resolveBoss(Player player, UUID bossId) {
