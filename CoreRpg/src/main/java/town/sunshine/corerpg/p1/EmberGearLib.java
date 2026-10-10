@@ -883,6 +883,11 @@ public final class EmberGearLib implements Listener {
                 "§7锁定 / 收藏 / 装备中 / 有投入(强化·精工·成色卓越+/词条) / 非掉落 / T0 跳过", "§7点了先在聊天里列出清单，再点确认", "§e右键：撤销最近的分解（" + undoMinutes() + " 分钟内）"));
         inv.setItem(53, icon(Material.PAPER, 0, "§f下一页", "§7第 " + (pg + 1) + " / " + pages + " 页"));
         p.openInventory(inv);
+        if (pg == 0) { // D714 set completion chase once on first page
+            PlayerData d = plugin.getDataStore() == null ? null : plugin.getDataStore().get(p.getUniqueId());
+            EmberLoadout lo = loadouts == null ? null : loadouts.refresh(p);
+            if (lo != null) EmberSetChase.tell(p, d, lo);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

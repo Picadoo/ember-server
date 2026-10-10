@@ -149,7 +149,11 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D711 shortpath unpaid count on open
 - D712 abyss newBest suggest target if unset
 
-## D711–D713 SHIP · jar 1.65.332-d711 · 2026-10-11
-- D711 event_soft_hope PAPI
-- D712 adventure Open event/drop hope tells
-- D713 skill kit parry D666 ActionBar tell
+## D713–D714 SHIP · jar 1.65.333-d713 · 2026-10-11
+- D713 enhance-fail mid-window remind
+- D714 gearlib open setchase
+
+## D713–D715 SHIP · jar 1.65.333-d713 · 2026-10-11
+- D713 event_soft_hope PAPI
+- D714 adventure Open event/drop hope tells
+- D715 skill kit parry D666 ActionBar tell
