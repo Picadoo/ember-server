@@ -34,6 +34,7 @@ public final class EmberConvertLoop {
             p.sendMessage(P + "§a本周转化环完成 · §7强化已归零可去工坊 · 下周可再转");
             try { p.sendActionBar("§a转化环 · 本周完成"); } catch (Throwable ignored) { }
         }
+        p.sendMessage(P + EmberConvertPath.weekLine(d)); // D736 always show remain/done
 
         // D643: weekly forge-goal CONVERT complete loop (acquisition feel · zero price/cap change)
         boolean goalHit = EmberForgeGoal.get(d) == EmberForgeGoal.CONVERT;

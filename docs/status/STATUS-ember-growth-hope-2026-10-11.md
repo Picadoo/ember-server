@@ -196,3 +196,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D732 convertpath week remain
 - D733 enter line challenge path tag
 - D734 talent next unlockable hint
+
+## D735–D738 SHIP · jar 1.65.341-d735 · 2026-10-11
+- D735 gem menu Open list chase
+- D736 convert afterConvert weekLine
+- D737 challenge path unset hint on enter
+- D738 talent info next unlockable

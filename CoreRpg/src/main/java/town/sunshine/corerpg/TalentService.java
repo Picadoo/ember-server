@@ -324,6 +324,8 @@ public final class TalentService {
         } else {
             player.sendMessage(ChatColor.YELLOW + "  状态：未解锁");
         }
+        String next = nextUnlockableHint(data, tree); // D738
+        if (next != null) player.sendMessage(ChatColor.GRAY + "  下一可点：" + next);
     }
 
     public void cmdUnlock(Player player, String nodeId) {

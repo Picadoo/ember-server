@@ -556,10 +556,13 @@ public final class EmberRunService implements Listener {
                     } catch (Throwable ignored) { }
                 } else {
                     ch = want;
-                    if (EmberChallengePath.valid(EmberChallengePath.get(ld))) {
+                    int cp = EmberChallengePath.get(ld);
+                    if (EmberChallengePath.valid(cp)) {
                         try {
                             leader.sendActionBar(ch ? "§c硬本 · 挑战" : "§a硬本 · 普通");
                         } catch (Throwable ignored) { }
+                    } else if (progressFlag(ld, md.key) && challengeOpen(ld)) { // D737
+                        leader.sendMessage(P + "§7未选硬本路径 · /corerpg p1 challengepath（偏挑战/普通/随令）");
                     }
                 }
             }

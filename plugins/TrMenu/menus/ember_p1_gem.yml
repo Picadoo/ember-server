@@ -29,6 +29,7 @@ Events:
     - 'tell: §7仓内：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone% · 币看背包 · 合成碎8+骨4+币40'
     - 'tell: §e合成→镶嵌：§f点合成后聊天出嵌孔按钮 · 手持刃/符 /corerpg p1 gem list · §c永不旧 socket'
     - 'command: corerpg p1 gem pity'
+    - 'command: corerpg p1 gem list'
 
 Icons:
   '#':
