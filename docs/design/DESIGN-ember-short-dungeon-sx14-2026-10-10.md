@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx14（烬裂折廊 · P1 可达 + 薄经济 S53）
 
-STATUS=**已批 A · 方案 M · D423 · 施工中** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx14-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx14-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx14`（**已批·施工中**）· STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md) · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D422 ≠纯换皮当主债 ≠仓差/remain/ActionBar/next_farm/选页仓差/工坊 remain/工坊 next_farm/冒险页合计/十三本规格空转当主债**
+STATUS=**已批 A · 方案 M · D423 · PASS · 已上线** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx14-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx14-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx14`（**PASS·已上线**）· STATUS [`STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx14-d423-2026-10-10.md) · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D422 ≠纯换皮当主债 ≠仓差/remain/ActionBar/next_farm/选页仓差/工坊 remain/工坊 next_farm/冒险页合计/十三本规格空转当主债**
 
 > **一句话玩家价值：** 今天在短征页除了烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁，还能再点进第十四条 **裂门庭→折裂廊（须经≥3道强制折角裂隙廊段）→裂冠终厅、主题与走位都不同** 的 5～8 分钟短本；日有奖帽独立计算，材料仍进仓去工坊——**继续拉长可刷内容量**，不靠重开旧日常、也不抬挂机日表。
 
