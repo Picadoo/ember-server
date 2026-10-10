@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("ticketpath".equals(sub) || "旧票路径".equals(sub)) { // D536 legacy ticket→stamina path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberTicketPath.glance(EmberTicketPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c旧票路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberTicketPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c旧票路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberTicketPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberTicketPath.get(d);
+                    if (EmberTicketPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberTicketPath.label(cur) + " · 改路径再 /corerpg p1 ticketpath");
+                    else EmberTicketPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberTicketPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 ticketpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberTicketPath.applyAndReply(p, id);
+            return true;
+        }
         if ("gempath".equals(sub) || "宝石路径".equals(sub)) { // D535 combat gem preference + auto-socket
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -526,6 +562,18 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("ticketseed".equals(sub)) { // D536 admin smoke: give convertible daily ticket
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs.plugin();
+            if (plg == null || plg.getNiBridge() == null) { s.sendMessage(P + "NI 未就绪"); return true; }
+            String tid = "ticket_ember_daily";
+            if (!plg.getNiBridge().giveNiItem(t, tid, 1)) { s.sendMessage(P + "发放旧票失败"); return true; }
+            s.sendMessage(P + "已发放 " + tid + " ×1 → " + t.getName());
+            EmberTicketPath.maybeAfterProgress(t);
             return true;
         }
         if ("gemseed".equals(sub)) { // D535 admin smoke: legacy socketable blade in hand + preferred gem

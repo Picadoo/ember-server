@@ -378,6 +378,14 @@ public final class StaminaService implements Listener {
         dataStore.flushMutation(player.getUniqueId());
     }
 
+    /** D536: how many convertible legacy tickets are in the backpack. */
+    public int countConvertibleTickets(Player player) {
+        if (player == null || ni == null) return 0;
+        int n = 0;
+        for (String id : ticketConvert.keySet()) n += Math.max(0, ni.countInInventory(player, id));
+        return n;
+    }
+
     /** Convert all old tickets in inventory. Returns stamina gained. */
     public int convertInventoryTickets(Player player, boolean announce) {
         if (player == null || ni == null) return 0;
