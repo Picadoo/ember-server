@@ -334,6 +334,10 @@ public final class EmberSessionService {
         for (Player p : party) {
             runs.putPass(p.getUniqueId(), m.key, until);
             p.sendMessage(P() + entry.enteringLine(p, m, at, abyss, challenge, cost)); // D235 → EmberEntryService
+            if (m.raid) { // D752
+                PlayerData rd = runs.dataOf(p.getUniqueId());
+                EmberRaidPath.enterCue(p, rd, m.key);
+            }
         }
         boolean ok = runs.plugin().getTicketEntryService() != null
                 && runs.plugin().getTicketEntryService().dispatchStart(leader, m.dungeon);

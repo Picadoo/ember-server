@@ -157,10 +157,41 @@ public final class EmberRaidPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a团本路径 → §f" + label(id) + " §7· " + tip(id));
+        try { // D752
+            p.sendActionBar("§e团本路径 · §f" + label(id));
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{enterLabel(id), enterCmd(id), "开团本（3～5 人 · 共享周帽）", "GREEN"},
                 new String[]{"[招募]", "/corerpg p1 recruit " + mapKey(id), "发招募", "GOLD"},
                 new String[]{"[换一条]", "/corerpg p1 raidpath", "重选", "GRAY"});
+    }
+
+
+    /** D752: enter/settle path clarity. */
+    public static void enterCue(Player p, PlayerData d, String mapKey) {
+        if (p == null || d == null || mapKey == null) return;
+        int id = get(d);
+        if (!valid(id)) {
+            p.sendMessage(EmberRunService.P + "§7未选团本路径 · /corerpg p1 raidpath");
+            return;
+        }
+        String mk = mapKey(id);
+        boolean hit = mk != null && mk.equalsIgnoreCase(mapKey);
+        String line = hit
+                ? "§a团本路径 · 本局 §f" + label(id)
+                : "§e团本路径 §f" + label(id) + " §7· 本局 §f" + mapKey.toUpperCase(Locale.ROOT);
+        p.sendMessage(EmberRunService.P + line);
+        try { p.sendActionBar(line); } catch (Throwable ignored) { }
+    }
+
+    public static void afterClearHit(Player p, PlayerData d, String mapKey) {
+        if (p == null || d == null || mapKey == null) return;
+        int id = get(d);
+        if (!valid(id)) return;
+        String mk = mapKey(id);
+        if (mk == null || !mk.equalsIgnoreCase(mapKey)) return;
+        p.sendMessage(EmberRunService.P + "§a团本路径达成：§f" + label(id));
+        try { p.sendActionBar("§a团本路径 · 达成"); } catch (Throwable ignored) { }
     }
 
     private static PlayerData dataOf(Player p) {

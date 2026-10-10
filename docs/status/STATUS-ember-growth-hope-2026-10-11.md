@@ -225,3 +225,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D750–D751 SHIP · jar 1.65.346-d750 · 2026-10-11
 - D750 setfocus tell via runs.loadouts
 - D751 shortpath nudge unpaid list
+
+## D752–D754 SHIP · jar 1.65.347-d752 · 2026-10-11
+- D752 raid path enter/clear clarity
+- D753 imprint one-click go when no overwrite
+- D754 enhance empty-socket gem chase

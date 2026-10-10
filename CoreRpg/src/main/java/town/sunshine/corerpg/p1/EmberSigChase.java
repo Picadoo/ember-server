@@ -255,9 +255,9 @@ public final class EmberSigChase {
         String line = progressLine(def, marks);
         p.sendMessage(P + line);
         try { p.sendActionBar(line.replace("§a", "§a").replace("§7", "§7")); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButton(p, P + "§7下一步：",
-                "[去烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id,
-                EmberSignature.IMPRINT_MARKS + " 枚徽记可烙到穿着/" + EmberItemData.slotName(def.slot));
+        ConfirmTokens.sendButton(p, P + "§7下一步：", // D753 one-click when no overwrite needed
+                "[一键烙印·" + def.id + "]", "/corerpg p1 sig imprint " + def.id + " go",
+                EmberSignature.IMPRINT_MARKS + " 枚徽记 · 烙到穿着" + EmberItemData.slotName(def.slot) + "（无覆盖则直接花）");
         return true;
     }
 

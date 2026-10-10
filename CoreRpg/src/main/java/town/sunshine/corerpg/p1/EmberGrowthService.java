@@ -1131,7 +1131,10 @@ public final class EmberGrowthService implements Listener {
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         int coin = EmberSignature.imprintCoin(t.tier);
         String fp = t.uid + "|" + sd.id + "|" + cur;
-        boolean go = "confirm".equalsIgnoreCase(args.length >= 5 ? args[4] : "");
+        String arg4 = args.length >= 5 ? args[4] : "";
+        boolean go = "confirm".equalsIgnoreCase(arg4);
+        // D753: one-click when ready and not overwriting an existing signature
+        if (!go && "go".equalsIgnoreCase(arg4) && cur == 0) go = true;
         if (go && cur > 0) { // overwriting a signature destroys it → the one-shot token from the preview (like 分解)
             String tok = args.length >= 6 && args[5].startsWith("tok:") ? args[5].substring(4) : "";
             String bad = town.sunshine.corerpg.ConfirmTokens.consume(p, "p1sig", tok, fp);

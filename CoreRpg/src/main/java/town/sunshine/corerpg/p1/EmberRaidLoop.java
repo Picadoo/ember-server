@@ -36,6 +36,13 @@ public final class EmberRaidLoop {
             try { p.sendActionBar(line); } catch (Throwable ignored) { }
             p.sendMessage(P + line + " §8（通关才扣周次数）");
         }
+        PlayerData d = null;
+        try {
+            org.bukkit.plugin.Plugin pl = org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+            if (pl instanceof town.sunshine.corerpg.CoreRpgPlugin)
+                d = ((town.sunshine.corerpg.CoreRpgPlugin) pl).getDataStore().get(p.getUniqueId());
+        } catch (Throwable ignored) { }
+        EmberRaidPath.afterClearHit(p, d, m.key); // D752
     }
 
     public static String chatLine(int used, int cap) {

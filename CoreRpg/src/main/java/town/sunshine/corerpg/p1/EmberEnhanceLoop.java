@@ -88,21 +88,28 @@ public final class EmberEnhanceLoop {
     }
 
 
-    /** D731: if enhance just unlocked a socket, chase gem insert (P1 · no legacy socket). */
+    /** D731/D754: after enhance win — new unlock or any empty unlocked hole → gem insert chase. */
     static void maybeGemHoleChase(Player p, PlayerData d, List<TxnItem> list) {
         if (p == null || list == null) return;
         for (TxnItem t : list) {
             if (t == null || t.before == null || t.after == null) continue;
             if (t.after.enhance <= t.before.enhance) continue;
-            int hole = -1;
+            int holeNew = -1;
             for (int i = 0; i < t.after.sockMax(); i++) {
                 if (t.after.sockUnlocked(i) && !t.before.sockUnlocked(i) && t.after.sockAt(i) == 0) {
-                    hole = i; break;
+                    holeNew = i; break;
                 }
             }
+            int holeEmpty = EmberGemInsertChase.firstEmptyHole(t.after); // D754
+            int hole = holeNew >= 0 ? holeNew : holeEmpty;
             if (hole < 0) continue;
-            p.sendMessage(P() + "§a新孔解锁 · §f孔" + hole + " §7· 可嵌宝石");
-            try { p.sendActionBar("§a新孔 · §f" + hole + " §7· 镶嵌追"); } catch (Throwable ignored) { }
+            if (holeNew >= 0) {
+                p.sendMessage(P() + "§a新孔解锁 · §f孔" + holeNew + " §7· 可嵌宝石");
+                try { p.sendActionBar("§a新孔 · §f" + holeNew + " §7· 镶嵌追"); } catch (Throwable ignored) { }
+            } else {
+                p.sendMessage(P() + "§e空孔可嵌 · §f孔" + holeEmpty + " §7· 强化后镶嵌追");
+                try { p.sendActionBar("§e空孔 · §f" + holeEmpty + " §7· 镶嵌追"); } catch (Throwable ignored) { }
+            }
             CoreRpgPlugin pl = plugin();
             if (pl == null) return;
             int path = EmberGemPath.get(d);
