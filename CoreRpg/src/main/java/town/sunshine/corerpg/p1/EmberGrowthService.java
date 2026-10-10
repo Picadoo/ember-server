@@ -2017,8 +2017,10 @@ public final class EmberGrowthService implements Listener {
                 return;
             }
             pay.settled(id, rid);
-            if (p.isOnline()) p.sendMessage(P + "§a已合成 §f余烬烙纹 ×1 §7（花费 " + need + " 碎片）");
-            openMenu(p, "ember_p1_brand");
+            if (p.isOnline()) {
+                p.sendMessage(P + "§a已合成 §f余烬烙纹 ×1 §7（花费 " + need + " 碎片）");
+                EmberBrandLoop.afterCraft(p, data(id)); // D471 craft→pin loop
+            }
         }, err -> { if (p.isOnline()) p.sendMessage(P + "§c没有合成：" + err); });
         return true;
     }
@@ -2095,6 +2097,7 @@ public final class EmberGrowthService implements Listener {
                             q.sendMessage(P + "§a定向完成：" + affixText(enc, t.quality)
                                     + " §7· 锻造次数剩余 §f" + EmberBrandRules.chargesLeft(afcUsed(nd, after))
                                     + "/" + EmberBrandRules.MAX_CHARGES);
+                            EmberBrandLoop.afterPin(q, want.name); // D471 pin feel
                             openMenu(q, "ember_p1_brand");
                         }
                     });
