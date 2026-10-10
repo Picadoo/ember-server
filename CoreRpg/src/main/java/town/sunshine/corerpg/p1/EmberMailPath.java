@@ -176,6 +176,14 @@ public final class EmberMailPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a邮件 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1634
+            int claimable = 0;
+            if (pl.getMailService() != null)
+                claimable = pl.getMailService().countClaimable(p.getUniqueId());
+            p.sendActionBar(claimable > 0
+                    ? ("§e邮件 · §f" + label(id) + " §8· 可领" + claimable)
+                    : ("§a邮件 · §f" + label(id) + " §7· 无可领"));
+        } catch (Throwable ignored) { }
         if (id == AUTO && pl.getMailService() != null)
             maybeAfterMail(p, pl.getMailService());
         ConfirmTokens.sendButtons(p, P + "§7下一步：",

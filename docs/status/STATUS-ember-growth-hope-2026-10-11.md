@@ -652,3 +652,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1619–D1632 ARCH SHIP · jar 1.65.469-d1619
 - StashPath AB; life honesty near-sat note; ARCH health recheck
+
+## D1633–D1646 ARCH SHIP · jar 1.65.470-d1633
+- MailPath claimable AB; FeePath coin AB

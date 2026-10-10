@@ -154,6 +154,9 @@ public final class EmberFeePath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a层费 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1635
+            p.sendActionBar("§e层费 · §f" + label(id) + " §7· 币 §f" + d.getCoin());
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[深渊]", "/corerpg p1 abyss", "进层时按偏好扣费", "GREEN"},
                 new String[]{"[换一条]", "/corerpg p1 feepath", "重选", "GRAY"});
