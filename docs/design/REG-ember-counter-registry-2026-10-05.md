@@ -189,3 +189,20 @@
 | 节日 | 5 |
 | 旧系统 | 11 |
 | **合计** | **81**（P1 70 + 旧 11；配置里可新增的 `p4_*` 连战认领键不单列） |
+
+## D865 · 覆盖率补登记（2026-10-11）
+
+`EmberCountersTest.everyCounterLiteralIsRegistered` 缺项补入 `EmberCounters`：
+
+| 键 | 系统 | 说明 |
+|----|------|------|
+| `p1_abyss_layer_target` | EmberAbyssTarget | 深渊层目标 |
+| `p1_afk_forge_path_told` | EmberAfkForgePath | AFK 工坊路径提示闩 |
+| `p1_forge_mat_ready` | EmberForgeMatReady | 强化材料就绪闩 |
+| `p1_shape_manual` | EmberSkillKit | 符文形状手动锁定 |
+| `p1_sig_stamp_dry` | EmberSigStampDry | 烙印干提示闩 |
+| `p4_afc_`* | EmberGrowthService | 词条相关 uid 闩 |
+
+前缀包含豁免补：`p1_codex_`↔path、`p1_sig_`↔chase/attune/stamp_dry、`p1_pledge_`↔path。
+
+物品键集（`Family.item()`）现含 `p4_afc_`（D429 工坊词条充能 by uid）。

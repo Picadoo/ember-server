@@ -85,6 +85,15 @@ public final class EmberCounters {
      */
     public static final List<String[]> PREFIX_EXEMPT = Collections.unmodifiableList(java.util.Arrays.asList(
         new String[] {"p1_codex_", "p1_codex_stage_"},
+        new String[] {"p1_codex_", "p1_codex_path"}, // D865 path sticky keys under codex prefix
+        new String[] {"p1_codex_", "p1_codex_path_offer"},
+        new String[] {"p1_sig_", "p1_sig_chase"},
+        new String[] {"p1_sig_", "p1_sig_chase_offered"},
+        new String[] {"p1_sig_", "p1_sig_chase_ready"},
+        new String[] {"p1_sig_", "p1_sig_attune_ready"},
+        new String[] {"p1_sig_", "p1_sig_stamp_dry"},
+        new String[] {"p1_pledge_", "p1_pledge_path"},
+        new String[] {"p1_pledge_", "p1_pledge_path_offer"},
         new String[] {"afk_", "afk_coin"},
         new String[] {"life_", "life_xp"}));
 
@@ -486,6 +495,15 @@ public final class EmberCounters {
         px("p3_fest_charmon_", "EmberFestival", A, SE, ZR, "festival charm worn");
         px("p3_fest_trail_", "EmberFestival", A, PR, NV, "festival trail (cosmetic, paused)");
         px("p3_fest_xbadge_", "EmberFestival", A, CL, NV, "badge conversion done for the event");
+
+        // D865 ARCH S1 counter coverage (growth-hope + residual)
+        x("p1_abyss_layer_target", "EmberAbyssTarget", A, SE, OW, "D694 abyss next-layer target");
+        x("p1_afk_forge_path_told", "EmberAfkForgePath", A, HI, OW, "AFK forge path tip latch");
+        x("p1_forge_mat_ready", "EmberForgeMatReady", A, HI, OW, "D478 enhance mat-ready latch = target enhance");
+        x("p1_shape_manual", "EmberSkillKit", A, SE, OW, "D793 player locked shape; soft prefer skips");
+        x("p1_sig_stamp_dry", "EmberSigStampDry", A, HI, OW, "sig stamp dry tip latch");
+        px("p4_afc_", "EmberGrowthService", A, IT, NV, "affix craft/commit latch by uid");
+
         // 3. legacy (S0 gates keep them unwritten while P1 is on, except life_)
         add("afk_", true, "CoreRpgPlugin/AfkTierService", D, CL, RL, true, false, "legacy kill drops per item (+ afk_coin)");
         add("afk_coin", false, "CoreRpgPlugin/AfkTierService", D, CL, RL, true, false, "legacy kill coin cap");

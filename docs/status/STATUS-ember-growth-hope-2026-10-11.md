@@ -380,3 +380,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D860 SHIP · jar 1.65.388-d860
 - Pet dismiss → re-summon
+
+## D861–D865 SHIP · jar 1.65.389-d861
+- Gem insert/remove next; setchase complete next; undo mismatch; S1 counter register

@@ -104,7 +104,23 @@ public final class EmberGemSocket {
             return true;
         }
         p.sendMessage(P + "已镶入 " + EmberItemData.gemName(code) + " → 孔" + hole);
-        try { p.sendActionBar("§a镶嵌 · §f" + EmberItemData.gemName(code) + " → 孔" + hole); } catch (Throwable ignored) { } // D727
+        try { p.sendActionBar("§a镶嵌 · §f" + EmberItemData.gemName(code) + " → 孔" + hole); } catch (Throwable ignored) { }
+        // D861 next hole / forge / set
+        EmberItems.Read afterR = loadouts.items().read(p.getInventory().getItemInMainHand());
+        EmberItemData after = afterR != null && afterR.ok() ? afterR.data : null;
+        int next = after == null ? -1 : EmberGemInsertChase.firstEmptyHole(after);
+        if (next >= 0) {
+            ConfirmTokens.sendButtons(p, P + "§7下一孔：",
+                    new String[]{"[嵌孔" + next + "]", "/corerpg p1 gem insert " + next + " " + EmberGemPath.key(code),
+                            "同石再嵌空孔", "GREEN"},
+                    new String[]{"[宝石列表]", "/corerpg p1 gem list", "看背包石", "AQUA"},
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装焦点", "GOLD"});
+        } else {
+            ConfirmTokens.sendButtons(p, P + "§7孔已满 · 下一步：",
+                    new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "GREEN"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "强化/精工", "GOLD"},
+                    new String[]{"[冒险]", "/ember_p1_adventure", "刷图", "AQUA"});
+        }
         return true;
     }
 
@@ -134,6 +150,12 @@ public final class EmberGemSocket {
         NiBridge ni = plugin.getNiBridge();
         if (ni != null) ni.giveNiItem(p, gemId, 1);
         p.sendMessage(P + "已拆下 " + EmberItemData.gemName(code) + "（已返还）");
+        try { p.sendActionBar("§e拆石 · §f孔" + hole + " 空"); } catch (Throwable ignored) { }
+        // D862 re-insert chase
+        ConfirmTokens.sendButtons(p, P + "§7可再嵌：",
+                new String[]{"[嵌回孔" + hole + "]", "/corerpg p1 gem insert " + hole + " " + EmberGemPath.key(code),
+                        "嵌回刚拆的石", "GREEN"},
+                new String[]{"[宝石列表]", "/corerpg p1 gem list", "换石", "AQUA"});
         return true;
     }
 

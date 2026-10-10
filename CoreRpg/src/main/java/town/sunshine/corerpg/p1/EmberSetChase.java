@@ -124,6 +124,11 @@ public final class EmberSetChase {
         tell(p, d, lo, loadouts);
         if (fk != null && fk.equals(lo.activeSet)) { // D744
             try { p.sendActionBar("§a成套追 · 焦点已齐 · §f" + lo.setLabel()); } catch (Throwable ignored) { }
+            // D863 meaty next
+            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7成套已齐 · 下一步：",
+                    new String[]{"[工坊]", "/corerpg p1 forge", "强化同族", "GOLD"},
+                    new String[]{"[镶嵌]", "/corerpg p1 gem list", "嵌空孔", "GREEN"},
+                    new String[]{"[图装追]", "/corerpg p1 mapfarm", "刷同族图", "AQUA"});
         }
     }
 

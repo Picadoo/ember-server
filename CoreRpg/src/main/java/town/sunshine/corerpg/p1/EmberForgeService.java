@@ -280,7 +280,13 @@ public final class EmberForgeService implements Listener {
         EmberItemData d = it.data;
         if (!snap.uid.equals(d.uid) || d.enhance != snap.enhance || d.pity != snap.pityAfter) {
             p.sendMessage(P + ChatColor.RED + "手持件与可撤销记录不符（可能已再强化或换件）");
-            try { p.sendActionBar("§c请手持刚才失败那件再撤"); } catch (Throwable ignored) { } // D716
+            p.sendMessage(P + "§7请换回失败那件（uid …" + snap.uid.substring(Math.max(0, snap.uid.length() - 6))
+                    + " · +" + snap.enhance + "）再 /corerpg p1 enhance undo"); // D864
+            try { p.sendActionBar("§c换回失败件再撤 · …" + snap.uid.substring(Math.max(0, snap.uid.length() - 6))); }
+            catch (Throwable ignored) { }
+            ConfirmTokens.sendButtons(p, P + "§7：",
+                    new String[]{"[再试撤销]", "/corerpg p1 enhance undo", "手持正确后再点", "YELLOW"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "开页找件", "GRAY"});
             return true;
         }
         // restore pity via copy (enhance unchanged)
