@@ -209,6 +209,18 @@ public final class EmberSessionService {
             runs.log().info("[P1 run] " + s.runId + " extra forced " + s.extra.id + " → " + forcedExtra.id + " (admin test)");
             s.extra = forcedExtra;
             forcedExtra = null;
+        } else {
+            // D501: party-leader extra path bias (admin force still absolute)
+            PlayerData ld = runs.dataOf(leader.getUniqueId());
+            int extraPath = EmberExtraPath.get(ld);
+            if (EmberExtraPath.valid(extraPath)) {
+                EmberRunRules.Extra before = s.extra;
+                s.extra = EmberExtraPath.applyBias(s.extra, extraPath);
+                if (before != s.extra) {
+                    runs.log().info("[P1 run] " + s.runId + " extrapath " + EmberExtraPath.key(extraPath)
+                            + " " + before.id + " → " + s.extra.id);
+                }
+            }
         }
         if (varietyEligible(challenge, abyss, m.raid, m.rush, maps.variety.on())) { // D138: repeat-run variety, first clears stay canonical
             boolean all = true;

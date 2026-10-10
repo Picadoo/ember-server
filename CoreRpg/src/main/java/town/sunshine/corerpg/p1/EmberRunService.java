@@ -1110,6 +1110,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberFeaturedPath.scheduleOfferAfterQ01(p); // D488 featured map identity path
                         if ("q01".equals(g.id)) EmberFamilyPath.scheduleOfferAfterQ01(p); // D493 family combat path
                         if ("q01".equals(g.id)) EmberFlexPath.scheduleOfferAfterQ01(p); // D494 flex equip combat path
+                        if ("q01".equals(g.id)) EmberExtraPath.scheduleOfferAfterQ01(p); // D501 extra (treasure/elite/chest) path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
