@@ -178,9 +178,9 @@ public final class EmberMapFarmCue {
         boolean chal = EmberChallengePath.get(d) == EmberChallengePath.PREFER;
         String cmd = "/corerpg p1 enter " + m.key + (chal ? " challenge" : "");
         String label = "[再进·" + m.key.toUpperCase() + (chal ? "·挑战" : "") + "]";
-        ConfirmTokens.sendButton(p, EmberRunService.P + "§7登出恢复：",
-                label, cmd,
-                "继续刷 " + EmberItemData.familyName(m.lootFamily) + " 图装");
+        ConfirmTokens.sendButtons(p, EmberRunService.P + "§7登出恢复：", // D785
+                new String[]{label, cmd, "继续刷 " + EmberItemData.familyName(m.lootFamily) + " 图装", "GREEN"},
+                new String[]{"[清恢复]", "/corerpg p1 mapfarm clear", "忘掉上次图", "GRAY"});
         // D770: if focus matches resume family, surface equip chase
         if (mapFamEqualsFocus(d, m.lootFamily)) {
             Plugin pl = Bukkit.getPluginManager().getPlugin("CoreRpg");

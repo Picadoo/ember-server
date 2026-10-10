@@ -1242,6 +1242,7 @@ public final class EmberGrowthService implements Listener {
                     }
                     // D647 imprint spend complete UX (always)
                     EmberSigChase.afterSpendComplete(q, x, sd, worn, sigOff(x, sd.slot), closed);
+                    maybeAttuneReadyCue(q, x); // D784 attune one-click if marks still enough
                 }), err -> { impBusy.remove(t.uid); if (p.isOnline()) p.sendMessage(P + ChatColor.RED + "没有烙印：" + err); });
         return true;
     }

@@ -283,3 +283,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D783 SHIP · jar 1.65.358-d783
 - Resume without setfocus → setfocus button for map family
+
+## D784–D785 SHIP · jar 1.65.359-d784
+- D784 imprint → attune ready cue
+- D785 resume clear button
