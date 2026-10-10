@@ -8,7 +8,7 @@
 
 ## 人话
 
-批了「烬镜对廊」第十一条短征规格。仓里已有十一本选页和 DP 本壳；地图在磁盘上从 **团本白盒**（`ember_raid`）复制了一份（**本地独立文件夹**；主题须 WE 重切对称双廊，禁环廊/递闸/霜雾廊/跳石/错层/塔升/风廊气质复读），对廊前厅/左右双廊/合镜终厅还要等 WorldEdit。进本命令、通关发奖（S50）、日帽键 `%corerpg_p1_sx11_day_line%` / 首通 `%corerpg_p1_sx11_fc%` **注释预留**（键号另挂）。选页第十一格 X=sx11；禁假写个人 n/3。
+批了「烬镜对廊」第十一条短征规格。仓里已有十一本选页和 DP 本壳；地图在磁盘上从 **团本白盒**（`ember_raid`）复制了一份（**本地独立文件夹**；主题须 WE 重切对称双廊，禁环廊/递闸/霜雾廊/跳石/错层/塔升/风廊气质复读），对廊前厅/左右双廊/合镜终厅还要等 WorldEdit。进本命令、通关发奖（S50）、日帽键 `%corerpg_p1_sx11_day_line%` / 首通 `%corerpg_p1_sx11_fc%` **挂盘已落**（键 tip `2ba2233d`）。选页第十一格 X=sx11；禁假写个人 n/3。
 
 ## 拆号（并行）
 
@@ -17,8 +17,8 @@
 | **地图号** | `ember_short_sx11` 对廊前厅/左右双廊/合镜烬台 + 出生/Boss 坐标 | **本地骨架已启**：`cp -a ember_raid → ember_short_sx11`（~2.9M）；说明见 [`docs/maps/ember_short_sx11-README.md`](../maps/ember_short_sx11-README.md) | **阻塞 WE**：仓/play **无** WorldEdit/FAWE jar；**禁** `git add -f` map。烬镜主题换皮 → 地图岗进服 WE 另号 |
 | **MM 号** | 对廊卫/侧廊弩/镜廊督卫/合镜守吏 + `EmberSx11…MirrorCast` | **并行已交** tip `1b81b415`（本号 DP 注释对齐；不重交 MM） | MirrorCast 已就绪 |
 | **DP+键号** | `EmberSx11` option/monster + `ember-v1-runs` `sx11`（**须 rooms×3+boss**）+ `p1 enter` + 体力30 + 日帽 | **壳已落**（与 MM 号同构 @`1b81b415`/本菜单号注释对齐）+ `config.yml` 登记；**键/S50/rooms 未接** | 插件号并行 |
-| **插件日帽/首通号** | `%corerpg_p1_sx11_day_line%` / `_fc` + 合计扩第十一本 | **未装** · 菜单**注释预留** | 键 live 后挂盘另号 |
-| **菜单号** | `ember_p1_short` 十一本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M/O/Q/T/V/**X** · adventure `H` + Open · hub「镜廊」· day_line/fc **注释预留** | 全链路另派 |
+| **插件日帽/首通号** | `%corerpg_p1_sx11_day_line%` / `_fc` + 合计扩第十一本 | **键 live** tip `2ba2233d` · jar `1.65.122-d417` bv75 | 菜单挂盘见 dayline STATUS |
+| **菜单号** | `ember_p1_short` 十一本选页 + hub/adventure 半指 | **已落**：Title「短征 · 选本」· A/C/E/G/K/M/O/Q/T/V/**X** · adventure `H` + Open · hub「镜廊」· **day_line/fc 挂盘已落**（[`STATUS-ember-short-sx11-dayline-d417-2026-10-10.md`](STATUS-ember-short-sx11-dayline-d417-2026-10-10.md)） | 全链路另派 |
 | **经济号** | S50 发放 + REG/Economy/source-map +（荐）p1sim | **未动** | 另号金样；草案 80币+4碎+3骨尘；首通另加 80/6/1；**禁**抬挂机表 |
 
 ## 地图进度（诚实）
@@ -36,10 +36,10 @@
 
 | 文件 | 落盘 |
 |------|------|
-| `plugins/TrMenu/menus/ember_p1_short.yml` | **是**（十一本选页 A/C/E/G/K/M/O/Q/T/V/**X**；sx11 day_line/fc **注释预留**） |
+| `plugins/TrMenu/menus/ember_p1_short.yml` | **是**（十一本选页 A/C/E/G/K/M/O/Q/T/V/**X**；sx11 day_line/fc **挂盘已落** tip `2ba2233d`） |
 | `ember_p1_adventure.yml` Layout+`H`+Open | **是**（半指含镜廊/烬镜） |
 | `ember_hub.yml` Open/冒险半指 | **是** |
-| trmenu reload | **PASS** · `良好 \| 73 个菜单已加载 (207 ms)`（**09:08:56 CST**） |
+| trmenu reload | **PASS** · 骨架 `207 ms` @09:08:56 · 挂盘 `良好 \| 73 个菜单已加载 (115 ms)`（**09:10:24 CST**） |
 | DP `EmberSx11` | **PASS（MM 号）** · tip `1b81b415`；map `ember_short_sx11` 本地已有 |
 
 ## 验收对照（骨架窗 ≠ 非整本 PASS）
@@ -53,7 +53,7 @@
 | V5 日帽诚实分开 | **PASS（菜单纪律）** | X/I 预留；禁假写 n/3；合计文案「十一本合计键另挂」 |
 | V6 S50 登记 | **PENDING** | 经济另号 |
 | V7 rooms×3+boss | **PENDING** | 键号首航硬提醒；本号未写 runs |
-| V8 选页挂 day_line/fc | **PENDING（注释预留）** | 真键另挂后挂盘 |
+| V8 选页挂 day_line/fc | **PASS（菜单）** | 见 dayline STATUS · tip `2ba2233d` |
 
 ## 改动清单（本号 · 入仓）
 
@@ -61,7 +61,7 @@
 |------|------|
 | DESIGN / tip / backlog | 勾批 A·M · tip 关 · **已批·施工中·骨架已落** |
 | 本 STATUS + `docs/maps/ember_short_sx11-README.md` | 拆号 · 地图进度 · WE 阻塞 · STATUS 指针 |
-| `plugins/TrMenu/menus/ember_p1_short.yml` | 十一本选页 X=sx11 + day_line/fc 注释预留 |
+| `plugins/TrMenu/menus/ember_p1_short.yml` | 十一本选页 X=sx11 + sx11 day_line/fc **挂盘已落** |
 | `ember_p1_adventure.yml` / `ember_hub.yml` | 入口半指含镜廊 |
 | `plugins/DungeonPlus/map/ember_short_sx11/**` | **仅本地** · **未 stage**（gitignore；MM 号已拷） |
 | DP EmberSx11 / MM / config.yml | **本号不重交**（已 @`1b81b415`） |
