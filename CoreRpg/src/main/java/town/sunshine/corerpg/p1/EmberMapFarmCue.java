@@ -216,6 +216,18 @@ public final class EmberMapFarmCue {
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return true; }
         EmberLoadout lo = runs.loadouts() == null ? null : runs.loadouts().get(p);
         String op = args.length >= 3 ? args[2].toLowerCase() : "resume";
+        if ("seed".equals(op) && p.hasPermission("corerpg.admin")) { // D787 smoke
+            String mk = args.length >= 4 ? args[3].toLowerCase() : "q01";
+            EmberRunMaps.MapDef md = runs.maps() == null ? null : runs.maps().byKey(mk);
+            if (md == null) { p.sendMessage(EmberRunService.P + "§c未知图 " + mk); return true; }
+            remember(d, md);
+            int lat = d.periodCount(C_RESUME_LAT, "all");
+            if (lat != 0) d.addPeriodCount(C_RESUME_LAT, "all", -lat);
+            flush(p);
+            p.sendMessage(EmberRunService.P + "§8admin seed resume → " + mk);
+            maybeResumeAfterJoin(p, d, lo, runs.maps());
+            return true;
+        }
         if ("clear".equals(op) || "none".equals(op)) {
             int cur = d.periodCount(C_RESUME_MAP, "all");
             if (cur > 0) d.addPeriodCount(C_RESUME_MAP, "all", -cur);
