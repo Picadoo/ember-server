@@ -109,7 +109,12 @@ public final class EmberUpgradeRules {
     public static Cost enhanceCost(int currentEnh) {
         int t = currentEnh + 1;
         if (t < 1 || t > EmberTables.MAX_ENHANCE) return null;
-        return new Cost(SHARDS[t], CORES[t], 0, 0, COINS[t]);
+        // D971: C03 amounts from economy yml SoT (SHARDS/CORES/COINS arrays remain golden mirrors)
+        return new Cost(
+                EmberEconomy.amount("C03", t + ".shard"),
+                EmberEconomy.amount("C03", t + ".core"),
+                0, 0,
+                EmberEconomy.amount("C03", t + ".coin"));
     }
 
     /** Pre-roll check: everything that can refuse an attempt without touching RNG. */

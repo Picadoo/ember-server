@@ -258,6 +258,38 @@ sources:
   S60: { coin: 1 }
 
 sinks:
+  # D969 Stage1b C03 enhance (target level 1..10; matches EmberUpgradeRules arrays)
+  C03:
+    "1.shard": 4
+    "1.core": 0
+    "1.coin": 40
+    "2.shard": 6
+    "2.core": 0
+    "2.coin": 60
+    "3.shard": 8
+    "3.core": 0
+    "3.coin": 80
+    "4.shard": 12
+    "4.core": 0
+    "4.coin": 120
+    "5.shard": 16
+    "5.core": 1
+    "5.coin": 180
+    "6.shard": 22
+    "6.core": 1
+    "6.coin": 260
+    "7.shard": 30
+    "7.core": 2
+    "7.coin": 380
+    "8.shard": 40
+    "8.core": 3
+    "8.coin": 540
+    "9.shard": 54
+    "9.core": 4
+    "9.coin": 760
+    "10.shard": 72
+    "10.core": 6
+    "10.coin": 1080
   C01: { stamina: 30 }
   C07: { marks: 8 }
   C09:

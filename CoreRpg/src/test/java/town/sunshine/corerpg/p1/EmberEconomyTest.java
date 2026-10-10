@@ -967,6 +967,25 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void enhanceSinkMatchesUpgradeRules() {
+        // D972 / Stage1b C03 — every target level matches UpgradeRules arrays
+        int[] shards = {0, 4, 6, 8, 12, 16, 22, 30, 40, 54, 72};
+        int[] cores = {0, 0, 0, 0, 0, 1, 1, 2, 3, 4, 6};
+        int[] coins = {0, 40, 60, 80, 120, 180, 260, 380, 540, 760, 1080};
+        for (int lv = 1; lv <= 10; lv++) {
+            assertEquals("shard " + lv, shards[lv], EmberEconomy.amount("C03", lv + ".shard"));
+            assertEquals("core " + lv, cores[lv], EmberEconomy.amount("C03", lv + ".core"));
+            assertEquals("coin " + lv, coins[lv], EmberEconomy.amount("C03", lv + ".coin"));
+            EmberUpgradeRules.Cost c = EmberUpgradeRules.enhanceCost(lv - 1);
+            assertNotNull(c);
+            assertEquals(shards[lv], c.shards);
+            assertEquals(cores[lv], c.cores);
+            assertEquals(coins[lv], c.coins);
+        }
+        org.junit.Assert.assertNull(EmberUpgradeRules.enhanceCost(10));
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

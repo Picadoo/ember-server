@@ -302,7 +302,37 @@ public final class EmberEconomy {
         // §3 sinks
         sink("C01", "进主线 / 挑战", "ember-v1-runs.yml cost", Period.RUN).acc(STA).model(FULL).g("stamina", 30).done();
         sink("C02", "进团本", "ember-v1-runs.yml raids.*.cost", Period.RUN).acc(STA).keys("p2_raid_").model(FULL).done();
-        sink("C03", "强化", "EmberUpgradeRules", Period.NONE).acc(SHARD, CORE, COIN).model(FULL).done();
+        sink("C03", "强化", "EmberUpgradeRules", Period.NONE).acc(SHARD, CORE, COIN).model(FULL)
+            .g("1.shard", 4)
+            .g("1.core", 0)
+            .g("1.coin", 40)
+            .g("2.shard", 6)
+            .g("2.core", 0)
+            .g("2.coin", 60)
+            .g("3.shard", 8)
+            .g("3.core", 0)
+            .g("3.coin", 80)
+            .g("4.shard", 12)
+            .g("4.core", 0)
+            .g("4.coin", 120)
+            .g("5.shard", 16)
+            .g("5.core", 1)
+            .g("5.coin", 180)
+            .g("6.shard", 22)
+            .g("6.core", 1)
+            .g("6.coin", 260)
+            .g("7.shard", 30)
+            .g("7.core", 2)
+            .g("7.coin", 380)
+            .g("8.shard", 40)
+            .g("8.core", 3)
+            .g("8.coin", 540)
+            .g("9.shard", 54)
+            .g("9.core", 4)
+            .g("9.coin", 760)
+            .g("10.shard", 72)
+            .g("10.core", 6)
+            .g("10.coin", 1080).done();
         sink("C04", "升阶", "EmberUpgradeRules", Period.NONE).acc(SHARD, CORE, BLANK, COIN).model(FULL).done();
         sink("C05", "精工", "EmberUpgradeRules", Period.NONE).acc(BLANK, BONE, COIN).model(FULL).done();
         sink("C06", "成色", "EmberUpgradeRules", Period.NONE).acc(BLANK, BONE, COIN).model(FULL).done();

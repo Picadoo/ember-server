@@ -445,3 +445,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D966–D968 ARCH SHIP · jar 1.65.408-d962 (docs; no jar bump)
 - Stage1b DESIGN for C03–C06/C11 yml leaf schema (docs only); EmberCountersTest recheck PASS
+
+## D969–D973 ARCH SHIP · jar 1.65.409-d969
+- Stage1b C03 enhance costs → economy yml + enhanceCost←amount(); numbers unchanged
