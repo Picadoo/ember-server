@@ -43,6 +43,8 @@
 | **W-attune** | 调律解锁徽记缺口 | sigAttune | **D1297– SHIP** |
 | **W-up2** | 升阶/成色/精工缺料 AB | ForgeService.simple | **D1298– SHIP** |
 | **W-gemcraft** | 宝石合成缺料/成功 AB | GemAcquire.craft | **D1299– SHIP** |
+| **W-imprint2** | 烙印币缺口 | imprint preview | **D1310– SHIP** |
+| **W-gemins** | 镶嵌缺石/孔锁 AB | GemSocket.insert | **D1311– SHIP** |
 | **K3** | 目标路径与材料缺口未闭环到「下一稳线按钮」 | 已有 afterSet；补工坊菜单一行 gap→confirm | 薄 UX |
 | **K4** | 技能 Stage2 微效用 | **本 DESIGN 不做**；见 shape-fork Stage2 指针 | 战斗 |
 

@@ -1198,13 +1198,17 @@ public final class EmberGrowthService implements Listener {
         if (!go) {
             int needM = EmberSignature.imprintMarks();
             int gapM = Math.max(0, needM - marks);
+            int haveCoin = d.getCoin();
+            int gapCoin = Math.max(0, coin - haveCoin);
             p.sendMessage(P + "烬炉烙印：把 §6" + sd.name + " §7烙到 §f" + t.shortLabel() + " §7· 花 " + needM + " 枚 "
-                    + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）+ " + coin + " 余烬币"
-                    + (gapM > 0 ? " §c· 还差徽记 " + gapM : " §a· 徽记够"));
+                    + sd.map.toUpperCase(Locale.ROOT) + " 首领徽记（有 " + marks + "）+ 币 §f" + haveCoin + "/" + coin
+                    + (gapM > 0 ? " §c· 还差徽记 " + gapM : " §a· 徽记够")
+                    + (gapCoin > 0 ? " §c· 还差币 " + gapCoin : ""));
             if (old != null) p.sendMessage(P + ChatColor.RED + "⚠ 这件现在的签名「" + old.name + "」会被覆盖，不能取回");
-            try { // D1280
-                p.sendActionBar(gapM == 0 ? "§a烙印 · 徽记够 · 确认"
-                        : ("§e烙印 · 还差徽记 §f" + gapM));
+            try { // D1280 / D1310
+                if (gapM > 0) p.sendActionBar("§e烙印 · 还差徽记 §f" + gapM);
+                else if (gapCoin > 0) p.sendActionBar("§e烙印 · 还差币 §f" + gapCoin);
+                else p.sendActionBar("§a烙印 · 料够 · 确认");
             } catch (Throwable ignored) { }
             String tk = town.sunshine.corerpg.ConfirmTokens.issue(p, "p1sig", fp);
             town.sunshine.corerpg.ConfirmTokens.sendClick(p, P + "确认：", "[确认烙印]", "/corerpg p1 sig imprint " + sd.id + " confirm tok:" + tk,
@@ -2380,7 +2384,13 @@ public final class EmberGrowthService implements Listener {
         String flag = EmberRunRules.directedForgeFlag(t == null ? 1 : t.tier);
         boolean gate = t == null || t.tier <= 1 || (flag == null) || runs.progressFlag(d, flag);
         String refuse = EmberConvertRules.refusal(t, toFam, used, gate);
-        if (refuse != null) { p.sendMessage(P + "§c" + refuse); return true; }
+        if (refuse != null) {
+            p.sendMessage(P + "§c" + refuse);
+            try { // D1312
+                p.sendActionBar("§c转化不可 · §f" + refuse);
+            } catch (Throwable ignored) { }
+            return true;
+        }
         int blanks = EmberConvertRules.blanks(t.tier);
         int coins = EmberConvertRules.coins(t.tier);
         int qAfter = EmberConvertRules.qualityAfter(t.quality);

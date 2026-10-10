@@ -577,3 +577,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1295–D1308 ARCH SHIP · jar 1.65.445-d1295
 - Convert mat/week gap; attune marks gap; upgrade lack AB; gem craft AB
+
+## D1309–D1320 ARCH SHIP · jar 1.65.446-d1309
+- Imprint coin gap; gem insert AB; convert refuse AB; upgrade done AB with piece

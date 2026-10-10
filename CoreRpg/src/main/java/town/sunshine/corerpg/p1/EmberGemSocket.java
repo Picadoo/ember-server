@@ -86,6 +86,7 @@ public final class EmberGemSocket {
         EmberItemData d = r.data;
         if (!d.sockUnlocked(hole)) {
             p.sendMessage(P + "该孔未解锁（刃第二孔需强化≥5 · 护符孔需强化≥3）");
+            try { p.sendActionBar("§c孔未解锁 · 先强化开孔"); } catch (Throwable ignored) { } // D1311
             ConfirmTokens.sendButtons(p, P + "§7去解锁：", // D871
                     new String[]{"[强化预览]", "/corerpg p1 enhance", "手持冲强化开孔", "GREEN"},
                     new String[]{"[工坊]", "/corerpg p1 forge", "养成页", "GOLD"});
@@ -97,6 +98,7 @@ public final class EmberGemSocket {
         if (ni == null || !ni.consumeExact(p, gemId, 1)) {
             int have = ni == null ? 0 : ni.countInInventory(p, gemId);
             p.sendMessage(P + "缺少 " + EmberItemData.gemName(code) + " §7（背包+仓 §f" + have + "§7）· 先合成或通关保底"); // D686
+            try { p.sendActionBar("§c缺石 · §f" + EmberItemData.gemName(code) + " §7有" + have); } catch (Throwable ignored) { } // D1311
             ConfirmTokens.sendButton(p, P + "§7获取：", // D739
                     "[合成" + EmberItemData.gemName(code) + "]", "/corerpg p1 gem craft " + EmberGemPath.key(code),
                     "碎+骨+币合成 · 不走旧 socket");
