@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("blazepath".equals(sub) || "避焰路径".equals(sub)) return blazePathCmd(s, args); // D576
+        if ("blaze".equals(sub) && args.length == 2) return blazeGoCmd(s); // D576
         if ("spinpath".equals(sub) || "避旋路径".equals(sub)) return spinPathCmd(s, args); // D575
         if ("spin".equals(sub) && args.length == 2) return spinGoCmd(s); // D575
         if ("snappath".equals(sub) || "断链路径".equals(sub)) return snapPathCmd(s, args); // D574
@@ -1699,6 +1701,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("blazeseed".equals(sub)) return blazeSeedCmd(s, args); // D576
         if ("spinseed".equals(sub)) return spinSeedCmd(s, args); // D575
         if ("snapseed".equals(sub)) return snapSeedCmd(s, args); // D574
         if ("veilseed".equals(sub)) return veilSeedCmd(s, args); // D573
@@ -5311,6 +5314,62 @@ public final class EmberCommand {
             EmberSpinPath.maybeProbe(t);
             s.sendMessage(P + "已触发避旋路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingArcane(t) ? "（有旋）" : "（无旋）"));
+            return true;
+    }
+
+    private boolean blazePathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBlazePath.glance(EmberBlazePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c避焰路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberBlazePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c避焰路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBlazePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBlazePath.get(d);
+                    if (EmberBlazePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBlazePath.label(cur) + " · 改路径再 /corerpg p1 blazepath");
+                    else EmberBlazePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBlazePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 blazepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberBlazePath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean blazeGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathBlazeOut(p)) p.sendMessage(P + "无法避焰（无焰圈预警/已在圈外/未进本）");
+            else p.sendMessage(P + "§a避焰·手点 §7已拉出焰圈");
+            return true;
+    }
+
+    private boolean blazeSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberBlazePath.maybeProbe(t);
+            s.sendMessage(P + "已触发避焰路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingBlaze(t) ? "（有焰）" : "（无焰）"));
             return true;
     }
 }

@@ -507,6 +507,58 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D576: any blazing circle warn still armed (not yet landed). */
+    boolean hasPendingBlaze() {
+        long now = System.currentTimeMillis();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"blazing".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /** D576: pull a committed player out of the nearest blazing warn circle. */
+    boolean pathBlazeOut(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingBlaze()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Variety v = svc.maps() == null ? null : svc.maps().variety;
+        double r = v == null ? 2.5 : v.blazeRadius;
+        long now = System.currentTimeMillis();
+        Location best = null;
+        double bestD = Double.MAX_VALUE;
+        Location pl = p.getLocation();
+        for (Tracked t : mobs.values()) {
+            if (t == null || !"blazing".equals(t.affix)) continue;
+            if (t.affixOrigin == null || !AffixCycle.armed(t.affixAt)) continue;
+            if (AffixCycle.lands(now, t.affixAt)) continue;
+            double d = t.affixOrigin.distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t.affixOrigin; }
+        }
+        if (best == null) return false;
+        double dx = pl.getX() - best.getX(), dz = pl.getZ() - best.getZ();
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        double safe = r + 2.0;
+        if (dist >= safe) return false;
+        Vector dir;
+        if (dist < 0.15) {
+            dir = pl.getDirection().clone();
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+            else dir.normalize();
+        } else {
+            dir = new Vector(dx, 0, dz).normalize();
+        }
+        Location to = new Location(w, best.getX() + dir.getX() * safe, pl.getY(), best.getZ() + dir.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.4f);
+        return true;
+    }
+
     /** D575: any arcane beam warn still armed (not yet spinning). */
     boolean hasPendingArcane() {
         long now = System.currentTimeMillis();
@@ -1271,6 +1323,7 @@ final class EmberRunDirector {
             if (!AffixCycle.ready(now, t.affixNext) || nearest(t.le.getLocation(), AffixBlazing.ENGAGE) == null) return;
             t.affixOrigin = t.le.getLocation().clone();
             t.affixAt = AffixCycle.after(now, v.blazeWarn);
+            EmberBlazePath.maybeAfterBlaze(s); // D576
             return;
         }
         if ("regen".equals(t.affix)) {
