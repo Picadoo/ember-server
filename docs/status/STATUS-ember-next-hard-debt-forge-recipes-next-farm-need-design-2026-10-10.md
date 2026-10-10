@@ -1,12 +1,14 @@
 # 状态 · 下一档硬债选定 · 需策划（拟 D420 · 工坊速览回挂机挂 next_farm · docs-only · ≠关观察 · ≠抬日表 · ≠开 R · ≠sx13）
 
-> **【D420 · STATUS=待批 A · 荐方案 M】** tip+DESIGN **待批** · **零 jar（本策划号）** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx13** · **≠ stage 脏 runtime**
+> **旁注（已关 · 设计待批关闭）· 2026-10-10：** 总控 **已批 A · 方案 M · D420** · tip `d5846638` · 指针 DESIGN [`DESIGN-ember-forge-recipes-next-farm-2026-10-10.md`](../design/DESIGN-ember-forge-recipes-next-farm-2026-10-10.md) · W1a 必做 · W1b 同批 · 钉死 V · 零 jar · 零改产量/tiers · ≠sx13 · **挂盘已落** · **未派测** · 旁注 [`STATUS-ember-forge-recipes-next-farm-d420-2026-10-10.md`](STATUS-ember-forge-recipes-next-farm-d420-2026-10-10.md) · 施工 STATUS [`STATUS-ember-forge-recipes-next-farm-menu-d420-2026-10-10.md`](STATUS-ember-forge-recipes-next-farm-menu-d420-2026-10-10.md) · 策划本号关闭设计待批 · **≠关观察 ≠抬日表 ≠开 R/K3**。下文为交稿原文，保留备查。
+>
+> **【D420 · 已批 A · 方案 M】** tip+DESIGN **已批 · 设计待批关闭** · **已批·挂盘已落** · **零 jar** · **≠关观察** · **≠抬挂机日表** · **≠开样本 R** · **≠开 K3** · **≠假开旧日常** · **≠交 sx13** · **≠ stage 脏 runtime**
 >
 > **上游结案：** 总控【催 D420 tip】· D419 sx12 已落地（键 `86744492` · MM `08c06d03` · 骨架 `9825b9f6` · 挂盘 `4dae0da4` · jar 1.65.123-d419 bv76），全链路抽测已派 → 请交**下一内容号 tip**（挂机资源环加厚 / 短征乐趣 / 有趣系统；**sx13 等 D419 PASS**）。禁 Pack6/天赋/灰印/抬日表/开 gate_daily/动 Stage2。Stage2 观察照续（≥**2026-10-10 17:40 CST**，**≠关窗 ≠改×0.97**）。
 
 **日期：** 2026-10-10（上海时间）  
-**本窗性质：** tip **打开 · STATUS=待批 A** · docs-only  
-**硬规格（待批 A · 荐方案 M · 拟 D420）：** [`DESIGN-ember-forge-recipes-next-farm-2026-10-10.md`](../design/DESIGN-ember-forge-recipes-next-farm-2026-10-10.md) · backlog `B-forge-recipes-next-farm`（**待批 A**）  
+**本窗性质：** tip **旁注已关 · 设计待批关闭** · **已批 A · 方案 M · D420** · **挂盘已落** · docs-only  
+**硬规格（已批 A · 方案 M · D420 · 挂盘已落）：** [`DESIGN-ember-forge-recipes-next-farm-2026-10-10.md`](../design/DESIGN-ember-forge-recipes-next-farm-2026-10-10.md) · backlog `B-forge-recipes-next-farm`（**已批·挂盘已落**） · 旁注 [`STATUS-ember-forge-recipes-next-farm-d420-2026-10-10.md`](STATUS-ember-forge-recipes-next-farm-d420-2026-10-10.md) · STATUS [`STATUS-ember-forge-recipes-next-farm-menu-d420-2026-10-10.md`](STATUS-ember-forge-recipes-next-farm-menu-d420-2026-10-10.md)  
 **打开理由：** D411 `next_farm` **已 live**，挂在挂机战况；D418 花侧 A 已挂 `remain_line`——缺料回挂时看得见「还差多久」，**仍看不见「回哪一层养」**。D418§5.3 **明文后置**「速览挂 next_farm」；本号挂在稀疏的「回挂机庭」V（**不**塞进已满的 A 格），解「过密」顾虑。sx13 禁交；D404–D419（仓差/remain/ActionBar/首通/sx07–sx12/满额追/花材追/next_farm 战况主交付/工坊 remain）禁复述为主债。
 
 ---
@@ -68,7 +70,7 @@
 
 ---
 
-*选题工坊速览回挂机挂 next_farm · tip 打开 · STATUS=待批 A · 荐 M · 拟 D420 · ≠关观察 ≠抬挂机表 ≠sx13。*
+*选题工坊速览回挂机挂 next_farm · tip 旁注已关 · 已批 A·M · D420 · 挂盘已落 · ≠关观察 ≠抬挂机表 ≠sx13 · 未派测。*
 
 ---
 
@@ -77,3 +79,4 @@
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · tip 打开 · 选题工坊速览回挂机挂 next_farm（兑现 D418§5.3 后置 · 挂机资源环⑧ · 挂 V 解过密）· DESIGN 待批 A·荐 M · ≠sx13 |
+| 2026-10-10 | 总控 · **已批 A·M · D420** · 旁注已关 · 挂盘已落 · 未派测 |

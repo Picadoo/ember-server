@@ -1,10 +1,12 @@
 # 余烬 · 工坊速览回挂机挂 next_farm（挂机资源环⑧ · 花侧养签锚 · ≠抬日表 · ≠sx13）
 
-STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-recipes-next-farm-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-recipes-next-farm-need-design-2026-10-10.md) · backlog `B-forge-recipes-next-farm` · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx13 ≠复述 D373–D419 ≠改 daily_kills/afk.tiers/UpgradeRules ≠重开仓差面/菜单 remain/ActionBar/战况 next_farm/短征链为主债**
+STATUS=**已批 A · 方案 M · D420** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-recipes-next-farm-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-forge-recipes-next-farm-need-design-2026-10-10.md)（**旁注已关 · 设计待批关闭**）· backlog `B-forge-recipes-next-farm`（**已批·挂盘已落**）· STATUS [`STATUS-ember-forge-recipes-next-farm-menu-d420-2026-10-10.md`](../status/STATUS-ember-forge-recipes-next-farm-menu-d420-2026-10-10.md) · 旁注 [`STATUS-ember-forge-recipes-next-farm-d420-2026-10-10.md`](../status/STATUS-ember-forge-recipes-next-farm-d420-2026-10-10.md) · **挂盘已落** · **≠关观察 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠交 sx13 ≠复述 D373–D419 ≠改 daily_kills/afk.tiers/UpgradeRules ≠重开仓差面/菜单 remain/ActionBar/战况 next_farm/短征链为主债**
 
 > **一句话玩家价值：** 缺料点「回挂机庭」就能看见「下一层养签」——对照今日还差决定回挂坐哪层；**不**抬产量、**不**交 sx13、**不**重开战况 next_farm 为主交付。
 
 > **批 A ≠ 施工 ≠ 关观察 ≠ 抬日表 ≠ 开 R ≠ 开 K3 ≠ 假开旧日常 ≠ 交 sx13。**
+>
+> **总控批 A·M · 2026-10-10：** 采纳方案 M（回挂机 V 挂 next_farm）；否决 A/L/W；W1a 必做、W1b 可选同批；钉死 V；零 jar；零抬日表；≠sx13 ≠关观察；**挂盘已落** · 未派测。
 
 ---
 
@@ -56,9 +58,9 @@ STATUS=**待批 A** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-forge-rec
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（W1a 回挂机 V 挂 next_farm 必做 + W1b Open 半行可选同批；见 §2）
-- [ ] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx13/复述/假写/塞 A）
-- [ ] 批注：________________（总控填 · 建议钉死 V 格 · 零 jar · 零改产量/tiers · ≠sx13）
+- [x] **方案 M**（W1a 回挂机 V 挂 next_farm 必做 + W1b Open 半行可选同批；见 §2）
+- [x] 否决 A（只口号）/ L（抬表·假承诺）/ W（sx13/复述/假写/塞 A）
+- [x] 批注：总控批 A·M · D420 · 钉死 V · W1a+W1b 同批 · 零 jar · 零改产量/tiers · ≠sx13 · **挂盘已落** · 未派测
 
 ---
 
@@ -159,7 +161,8 @@ A 格 `remain_line` + 静态打满对照 **保留**；本债补的是 **回挂�
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题工坊速览回挂机挂 next_farm（兑现 D418§5.3 后置 · 挂机资源环⑧ · 挂 V 解过密）· ≠sx13 |
+| 2026-10-10 | 总控 · **已批 A·M · D420** · 钉死 V · W1a+W1b 同批 · 挂盘已落 · 未派测 |
 
 ---
 
-*D420 · 工坊速览回挂机挂 next_farm · 待批 A·荐方案 M · ≠关观察 ≠抬日表 ≠sx13。*
+*D420 · 工坊速览回挂机挂 next_farm · 已批 A·方案 M · 挂盘已落 · ≠关观察 ≠抬日表 ≠sx13 · 未派测。*

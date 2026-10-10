@@ -1,6 +1,7 @@
 # D398 · 工坊配方速览（静态镜像 EmberUpgradeRules · ≠改价 ≠抬日表）
 # D404 · 仓内现有 / 代表档还差（PAPI live · tip a6385f12 · jar 1.65.113-d404.local）
 # D418 · 花侧时间锚：A 挂 remain_line（W1a）· V/Open 半行（W1b）· 零 jar · ≠抬日表
+# D420 · 花侧养签锚：V 挂 next_farm（W1a）· Open 半行（W1b）· 零 jar · ≠抬日表 · 钉死 V 勿与 A 抢长块
 # 入口：ember_p1_forge「配方速览」P 格 · 挂机「去哪花」半行指本页
 # 数字照抄 DESIGN-ember-afk-forge-recipe-visible §2.2；日后改表须同步 lore，本窗禁改 Java。
 Title: '§6工坊 · 配方速览'
@@ -29,6 +30,7 @@ Events:
     - 'tell: §8数字镜像工坊规则 · 手持件费用仍以本页预览为准'
     - 'tell: §8仓内现有/还差按真仓 PAPI · 不假写余额 · 不加快产量'
     - 'tell: §8速览可看今日还差/约满（挂机打满对照格）'
+    - 'tell: §8回挂机庭可看下一层养签'
 
 Icons:
   '#':
@@ -152,6 +154,9 @@ Icons:
         - '§7缺料？回挂机庭坐满日量'
         - '§7日顶仍 2400 · 魂尘≠挂机'
         - '§8速览可看今日还差/约满'
+        - ''
+        - '§6下一层养签：%corerpg_p1_afk_next_farm%'
+        - '§8对照今日还差回挂坐哪层 · 不加快产量 · 换层仍点挂机庭上排'
         - ''
         - '§e➥ §f打开挂机庭'
     actions:
