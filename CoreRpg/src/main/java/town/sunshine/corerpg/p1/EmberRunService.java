@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D566: warp into live hold circle. */
+    public boolean hasHoldCircle(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasHoldCircle() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathHoldCenter(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathHoldCenter(p);
+    }
+
     /** D565: warp next to live escort rabbit. */
     public boolean hasGuardEscort(Player p) {
         if (p == null) return false;
@@ -1408,6 +1424,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberBurstPath.scheduleOfferAfterQ01(p); // D563 burst path
                         if ("q01".equals(g.id)) EmberSmashPath.scheduleOfferAfterQ01(p); // D564 smash path
                         if ("q01".equals(g.id)) EmberGuardPath.scheduleOfferAfterQ01(p); // D565 guard path
+                        if ("q01".equals(g.id)) EmberHoldPath.scheduleOfferAfterQ01(p); // D566 hold path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path

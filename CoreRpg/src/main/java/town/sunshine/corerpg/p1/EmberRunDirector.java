@@ -453,6 +453,7 @@ final class EmberRunDirector {
             } else if ("hold".equals(kind)) {
                 placeHold(r, v);
                 svc.tellRun(s, "§b占点 §7· 站进发光圈攒满进度再清完 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberHoldPath.maybeAfterHold(s); // D566
             } else if ("beacon".equals(kind)) {
                 placeBeacon(r, v);
                 svc.tellRun(s, "§b护灯 §7· 清房前别让发光灯柱被砸碎 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
@@ -501,6 +502,25 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D566: hold circle is active. */
+    boolean hasHoldCircle() {
+        return holdCenter != null && s != null && "hold".equals(s.eventKind);
+    }
+
+    /** D566: warp a committed player into the hold circle. */
+    boolean pathHoldCenter(Player p) {
+        if (p == null || !p.isOnline() || !hasHoldCircle()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location to = holdCenter.clone();
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.2f);
+        return true;
     }
 
     /** D565: escort rabbit still alive. */
