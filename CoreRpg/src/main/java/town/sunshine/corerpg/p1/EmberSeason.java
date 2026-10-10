@@ -474,8 +474,13 @@ public final class EmberSeason {
             }
             Bukkit.getLogger().info("[P1 goals] " + u + " " + g + " done " + wk);
         } else if (p != null) {
-            p.sendMessage(P + "§7周目标：" + goalName(g) + " §f" + after + "/" + t);
-            try { p.sendActionBar("§7周目标 · §f" + goalName(g) + " §e" + after + "/" + t); } catch (Throwable ignored) { } // D668
+            int left = t - after;
+            p.sendMessage(P + "§7周目标：" + goalName(g) + " §f" + after + "/" + t
+                    + (left > 0 ? " §8· 还差 " + left : ""));
+            try { // D1410
+                p.sendActionBar("§7周目标 · §f" + goalName(g) + " §e" + after + "/" + t
+                        + (left > 0 ? " §8· 还差" + left : ""));
+            } catch (Throwable ignored) { }
         }
     }
 
@@ -483,7 +488,10 @@ public final class EmberSeason {
         int t = target(d, g);
         if (t <= 0) return "";
         int v = Math.min(t, progress(d, g));
-        return (v >= t ? "§a✔ " : "§e") + goalName(g) + " §f" + v + "/" + t + (t < target(g) ? " §8（毕业这周按剩下的天数）" : "") + (v >= t ? "" : " §7· 完成得 " + maps().goalReward + " 余烬徽");
+        return (v >= t ? "§a✔ " : "§e") + goalName(g) + " §f" + v + "/" + t
+                + (v >= t ? "" : " §8· 还差 " + (t - v))
+                + (t < target(g) ? " §8（毕业这周按剩下的天数）" : "")
+                + (v >= t ? "" : " §7· 完成得 " + maps().goalReward + " 余烬徽");
     }
 
     /** /corerpg p1 goals: progress + one [打开] button per open goal */
@@ -492,7 +500,15 @@ public final class EmberSeason {
         if (!goalsOn()) { p.sendMessage(P + "周目标未开放。"); return true; }
         LocalDate t = today();
         int left = (int) (7 - (t.getDayOfWeek().getValue() - 1));
-        p.sendMessage(P + "§6本周目标§7（周一 0 点刷新，还剩 " + left + " 天）· 完成 " + goalsDone(d) + "/" + goalCount() + " · 余烬徽 §f" + badges(d));
+        int gd = goalsDone(d), gc = goalCount(), gLeft = Math.max(0, gc - gd);
+        p.sendMessage(P + "§6本周目标§7（周一 0 点刷新，还剩 " + left + " 天）· 完成 " + gd + "/" + gc
+                + (gLeft > 0 ? " §8· 还差 " + gLeft + " 项" : " §a· 全清")
+                + " · 余烬徽 §f" + badges(d));
+        try { // D1410 board remain
+            p.sendActionBar(gLeft > 0
+                    ? ("§6周目标 · §f" + gd + "/" + gc + " §8· 还差" + gLeft)
+                    : ("§a周目标 · 全清 · 徽 §f" + badges(d)));
+        } catch (Throwable ignored) { }
         if (!runs.progressFlag(d, "q07")) { p.sendMessage(P + "§8首通 Q07 后才计数（挑战版、深渊、团本都在 Q07 之后）。"); return true; }
         p.sendMessage(P + "§8首通 Q07 后才计数；首通 Q07 当天已做满的每日委托也算；毕业那周的委托目标按剩下的天数算（周六毕业要 2 天，周日 1 天）");
         List<String> shown = new ArrayList<String>(GOALS);

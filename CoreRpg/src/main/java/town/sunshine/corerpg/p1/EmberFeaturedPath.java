@@ -190,6 +190,16 @@ public final class EmberFeaturedPath {
             return;
         }
         String line = "§b精选路径 · 本局 §f" + label(id);
+        // D1411: map-identity nextMissing when featured map known
+        CoreRpgPlugin pl = plugin();
+        if (pl != null && pl.getEmberRuns() != null) {
+            EmberRunMaps.MapDef md = pl.getEmberRuns().maps().byKey(mapKey);
+            if (md != null) {
+                String miss = EmberMapIdentity.nextMissing(md, d);
+                if (miss != null && !miss.isEmpty() && !miss.contains("已齐"))
+                    line = line + " §8· §f" + miss;
+            }
+        }
         p.sendMessage(EmberRunService.P + line);
         try { p.sendActionBar(line); } catch (Throwable ignored) { }
     }

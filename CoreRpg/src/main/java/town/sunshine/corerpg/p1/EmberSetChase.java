@@ -128,8 +128,8 @@ public final class EmberSetChase {
         if (fcr != null && !fcr.isEmpty()) p.sendMessage(P + "§7" + fcr);
         try { // D1340 / D1396: gap or awakening remain
             if (!"none".equals(lo.activeSet)) {
-                String awk = lo.nextAwakeningHint();
-                if (awk != null && awk.startsWith("已达"))
+                String awk = lo.awakeningRemain(); // D1412
+                if ("觉醒满".equals(awk))
                     p.sendActionBar("§a成套 · §f" + lo.setLabel() + " §7· 满觉醒");
                 else
                     p.sendActionBar("§e成套 · §f" + lo.setLabel() + " §7· " + awk);
@@ -199,6 +199,11 @@ public final class EmberSetChase {
                         "[进·" + mk.toUpperCase() + "]", "/corerpg p1 enter " + mk,
                         "本图偏向 " + EmberItemData.familyName(fk) + " · 不锁通关");
             }
+        }
+        // D1412: 成套未满觉醒 → 工坊强化路径
+        if (!"none".equals(lo.activeSet) && lo.awakening < 3) {
+            ConfirmTokens.sendButton(p, P + "§7觉醒下一档：",
+                    "[工坊]", "/corerpg p1 forge", lo.awakeningRemain());
         }
         return true;
     }

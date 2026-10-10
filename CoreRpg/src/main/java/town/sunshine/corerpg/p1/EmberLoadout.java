@@ -129,6 +129,16 @@ public final class EmberLoadout {
      * §19.1 "下一次突破缺哪项": what the equipped pair still lacks for the next awakening (§4.3: I = same family both
      * ≥ T1; II = both ≥ T2 and both ≥ +6; III = both ≥ T3 and both ≥ +9). Pure text, no rule of its own.
      */
+    /** D1412: short remain for AB（非 PAPI）. */
+    public String awakeningRemain() {
+        String h = nextAwakeningHint();
+        if (h == null || h.isEmpty()) return "";
+        if (h.startsWith("已达")) return "觉醒满";
+        // strip long prefixes for AB
+        if (h.startsWith("下一档 ")) return h.substring("下一档 ".length());
+        return h;
+    }
+
     public String nextAwakeningHint() {
         if (blade == null) return "觉醒I 缺：主手拿一把余烬刃";
         if (charm == null) return "觉醒I 缺：选定护符（/corerpg p1 charm）";
