@@ -94,10 +94,10 @@ public final class EmberFeedPath {
         String P = EmberRunService.P;
         p.sendMessage(P + "§a喂养完成 · 升 §f" + levels + " §a级");
         try { p.sendActionBar("§a喂养 · §f+" + levels); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D906
                 new String[]{"[再喂]", "/corerpg pet feed 3", "继续魂尘", "GREEN"},
-                new String[]{"[出战]", "/corerpg pet summon", "召出使魔", "AQUA"},
-                new String[]{"[改喂养路径]", "/corerpg p1 feedpath", "自动/提醒", "GRAY"});
+                new String[]{"[进冒险]", "/ember_p1_adventure", "带使魔刷", "AQUA"},
+                new String[]{"[成套追]", "/corerpg p1 setchase", "换装", "GOLD"});
     }
 
     public static void maybeAfterJoin(Player p, PetService pets) {

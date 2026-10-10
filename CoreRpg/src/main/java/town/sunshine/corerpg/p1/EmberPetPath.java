@@ -112,10 +112,10 @@ public final class EmberPetPath {
         p.sendMessage(P + "§a使魔已出战"
                 + (d != null && valid(get(d)) ? " §8· " + label(get(d)) : ""));
         try { p.sendActionBar("§a使魔 · 出战"); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D905
                 new String[]{"[喂养]", "/corerpg pet feed 3", "魂尘升级", "GREEN"},
                 new String[]{"[冒险]", "/ember_p1_adventure", "带使魔开刷", "AQUA"},
-                new String[]{"[改使魔路径]", "/corerpg p1 petpath", "自动/提醒", "GRAY"});
+                new String[]{"[工坊]", "/corerpg p1 forge", "养成后再打", "GOLD"});
     }
 
     public static void maybeAfterJoin(Player p, PetService pets) {

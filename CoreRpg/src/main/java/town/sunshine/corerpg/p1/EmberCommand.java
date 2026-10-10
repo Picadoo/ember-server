@@ -4085,8 +4085,7 @@ public final class EmberCommand {
             boolean ch = EmberForgeGoal.set(d, id);
             runs.plugin().getDataStore().flushMutation(p.getUniqueId());
             if (id == EmberForgeGoal.NONE) p.sendMessage(P + "已取消工坊目标");
-            else p.sendMessage(P + "§a工坊目标 → §f" + EmberForgeGoal.label(id)
-                    + "§7（" + EmberForgeGoal.tip(id) + "）" + (ch ? "" : " §8· 已是该目标"));
+            else EmberForgeGoal.afterSet(p, id, ch); // D904
             return true;
         }
         if ("honor".equals(sub) || "勋记".equals(sub)) { // D142 余烬勋记

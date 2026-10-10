@@ -404,3 +404,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D897–D902 SHIP · jar 1.65.396-d897
 - Raid forge; skill shape/dir next; talent pick/reset next; S1 counters recheck
+
+## D903–D908 SHIP · jar 1.65.397-d903
+- Target mapfarm; forgegoal afterSet; pet/feed/guild next

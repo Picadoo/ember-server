@@ -107,7 +107,40 @@ public final class EmberForgeGoal {
     }
 
     /** Chat path pick (real choice). */
-    public static void offerPick(Player p) {
+    
+    /** D904: after forgegoal set — next spend button. */
+    public static void afterSet(Player p, int id, boolean changed) {
+        if (p == null || !valid(id)) return;
+        String P = EmberRunService.P;
+        p.sendMessage(P + "§a工坊目标 → §f" + label(id) + "§7（" + tip(id) + "）"
+                + (changed ? "" : " §8· 已是该目标"));
+        try { p.sendActionBar("§e工坊目标 · §f" + label(id)); } catch (Throwable ignored) { }
+        String[] a, b, c;
+        if (id == ENHANCE) {
+            a = new String[]{"[去强化]", "/corerpg p1 enhance", tip(ENHANCE), "GREEN"};
+            b = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GOLD"};
+            c = new String[]{"[成套追]", "/corerpg p1 setchase", "换装再强", "AQUA"};
+        } else if (id == REFINE) {
+            a = new String[]{"[去精工]", "/corerpg p1 refine", tip(REFINE), "GREEN"};
+            b = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GOLD"};
+            c = new String[]{"[去成色]", "/corerpg p1 quality", "先投成色", "AQUA"};
+        } else if (id == BRAND) {
+            a = new String[]{"[合成烙纹]", "/corerpg p1 brand craft", tip(BRAND), "GREEN"};
+            b = new String[]{"[烙纹页]", "/corerpg p1 brand menu", "定向", "GOLD"};
+            c = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"};
+        } else if (id == ROLL) {
+            a = new String[]{"[随机锻]", "/corerpg p1 forgeroll", tip(ROLL), "GREEN"};
+            b = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GOLD"};
+            c = new String[]{"[装备库]", "/corerpg p1 deliver", "领件", "AQUA"};
+        } else { // CONVERT
+            a = new String[]{"[去转化]", "/corerpg p1 convert menu", tip(CONVERT), "GREEN"};
+            b = new String[]{"[转化路径]", "/corerpg p1 convertpath", "对齐目标族", "GOLD"};
+            c = new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "AQUA"};
+        }
+        ConfirmTokens.sendButtons(p, P + "§7工坊目标下一环：", a, b, c);
+    }
+
+public static void offerPick(Player p) {
         if (p == null) return;
         String P = EmberRunService.P;
         p.sendMessage(P + "§e选一条本周工坊路径（可随时改 · 挂机对着攒）：");

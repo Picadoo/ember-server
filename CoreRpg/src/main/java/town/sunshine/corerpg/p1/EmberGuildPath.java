@@ -101,10 +101,10 @@ public final class EmberGuildPath {
         p.sendMessage(P + "§a已入盟 · §f" + who
                 + (valid(id) ? " §8· " + label(id) : " §7· /corerpg p1 guildpath"));
         try { p.sendActionBar("§a盟约 · §f" + who); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[盟约信息]", "/corerpg guild info", "看成员/贡献", "AQUA"},
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D907
                 new String[]{"[周常Boss]", "/corerpg guild boss", "盟约周本", "GREEN"},
-                new String[]{"[改盟约路径]", "/corerpg p1 guildpath", "敞开/审核/静拒", "GRAY"});
+                new String[]{"[进冒险]", "/ember_p1_adventure", "开刷贡献", "AQUA"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "养成", "GOLD"});
     }
 
     public static void offerPick(Player p) {
