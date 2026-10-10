@@ -4016,8 +4016,11 @@ public final class EmberCommand {
                 p.sendMessage(P + EmberSetFocus.glance(id, lo == null ? "none" : lo.activeSet, lo == null ? 0 : lo.awakening, runs.target(d)));
                 EmberLoadoutService los = loadouts != null ? loadouts : (runs.loadouts());
                 if (lo != null) EmberSetChase.tell(p, d, lo, los); // D701/D741/D750
-                try { // D665
-                    if (id == EmberSetFocus.SCORCH) p.sendActionBar("§6焚烬焦点 · 火痕步/点燃");
+                try { // D665 / D1365: prefer focus-gap AB when set not complete
+                    String gap = lo == null ? "" : EmberSetChase.focusGap(d, lo);
+                    if (gap != null && !gap.isEmpty())
+                        p.sendActionBar(EmberSetChase.stripSection(gap));
+                    else if (id == EmberSetFocus.SCORCH) p.sendActionBar("§6焚烬焦点 · 火痕步/点燃");
                     else if (id == EmberSetFocus.BURST) p.sendActionBar("§c烬爆焦点 · 爆闪步/爆发");
                     else p.sendActionBar("§a炽愈焦点 · 承护步/续航");
                 } catch (Throwable ignored) { }

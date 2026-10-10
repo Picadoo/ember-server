@@ -107,8 +107,12 @@ public final class EmberMapFarmCue {
         // D1342: map identity remain（非 hope PAPI）
         PlayerData idPd = dataOf(p);
         String idRem = EmberMapIdentity.remainLine(m, idPd);
-        p.sendMessage(EmberRunService.P + "§7" + idRem);
-        try { p.sendActionBar("§e图装 · §f" + idRem); } catch (Throwable ignored) { }
+        String miss = EmberMapIdentity.nextMissing(m, idPd);
+        p.sendMessage(EmberRunService.P + "§7" + idRem
+                + (miss.isEmpty() ? "" : (" §8· §f" + miss)));
+        try {
+            p.sendActionBar("§e图装 · §f" + (miss.isEmpty() || miss.contains("已齐") ? idRem : miss));
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：", // D914
                 new String[]{"[强化预览]", "/corerpg p1 enhance", "手持同族冲档", "GREEN"},
                 new String[]{"[成套追]", "/corerpg p1 setchase", "换上缺口", "GOLD"},
@@ -272,8 +276,22 @@ public final class EmberMapFarmCue {
         if (!maybeResumeAfterJoin(p, d, lo, runs.maps())) {
             int code = d.periodCount(C_RESUME_MAP, "all");
             String key = decodeMap(code);
-            if (key == null)
+            if (key == null) {
                 p.sendMessage(EmberRunService.P + "§7尚无图装追记录 · 进有族偏向的主线图后会记住");
+                // D1366: mainline identity board（不锁通关）
+                if (runs.maps() != null) {
+                    int shown = 0;
+                    for (EmberRunMaps.MapDef md : runs.maps().maps.values()) {
+                        if (md == null || md.raid || md.event || md.rush || md.shortExpedition) continue;
+                        String k = md.key == null ? "" : md.key.toLowerCase();
+                        if (!k.startsWith("q0") || k.length() != 3) continue;
+                        if (md.lootFamily == null) continue;
+                        p.sendMessage(EmberRunService.P + "§8· §f" + k.toUpperCase()
+                                + " §7" + EmberMapIdentity.remainLine(md, d));
+                        if (++shown >= 7) break;
+                    }
+                }
+            }
             else {
                 // D838 still offer re-enter + chase glance
                 EmberRunMaps.MapDef md = runs.maps() == null ? null : runs.maps().byKey(key);

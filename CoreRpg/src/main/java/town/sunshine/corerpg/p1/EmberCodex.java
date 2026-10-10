@@ -103,4 +103,24 @@ public final class EmberCodex {
         int n = count(pd);
         return n >= STAGE_AT[stage] ? "§e可领取" : "§7还差 " + (STAGE_AT[stage] - n) + " 种";
     }
+
+    /**
+     * D1362: meaty progress toward next stage coin claim — display only, never combat.
+     */
+    public static String progressRemain(PlayerData pd) {
+        int n = count(pd);
+        int total = size();
+        java.util.List<Integer> can = claimable(pd);
+        if (!can.isEmpty()) {
+            int i = can.get(0);
+            return "图录 " + n + "/" + total + " · 可领集齐" + STAGE_AT[i] + "（币" + stageCoin(i) + "）"
+                    + (can.size() > 1 ? " · 另有" + (can.size() - 1) + "档待领" : "");
+        }
+        for (int i = 0; i < STAGE_AT.length; i++) {
+            if (claimed(pd, i)) continue;
+            int need = STAGE_AT[i];
+            return "图录 " + n + "/" + total + " · 距集齐" + need + "还差" + Math.max(0, need - n) + "种";
+        }
+        return "图录 " + n + "/" + total + " · 阶段奖励已全领";
+    }
 }

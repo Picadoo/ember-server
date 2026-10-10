@@ -41,4 +41,23 @@ public final class EmberMapIdentity {
             return "图身份 " + label + " · 图鉴 " + have + "/" + need + " · 齐 · 每局1装不锁通关";
         return "图身份 " + label + " · 图鉴 " + have + "/" + need + " · 还差" + gap + "件 · 每局1装不锁通关";
     }
+
+    /** First missing codex piece for this map identity (blade then charm, low tier first). */
+    public static String nextMissing(EmberRunMaps.MapDef lm, PlayerData pd) {
+        if (lm == null || lm.lootFamily == null || lm.lootFamily.isEmpty()) return "";
+        int tier = 1;
+        String dl = lm.dropLabel == null ? "" : lm.dropLabel.trim().toUpperCase(java.util.Locale.ROOT);
+        if (dl.startsWith("T") && dl.length() >= 2) {
+            try { tier = Math.max(1, Math.min(3, Integer.parseInt(dl.substring(1, 2)))); }
+            catch (NumberFormatException ignored) {}
+        }
+        String fam = lm.lootFamily;
+        for (int t = 1; t <= tier; t++) {
+            for (String slot : new String[] {"blade", "charm"}) {
+                if (pd == null || !EmberCodex.has(pd, EmberCodex.key(fam, slot, t)))
+                    return "下一缺 · T" + t + " " + EmberItemData.familyName(fam) + EmberItemData.slotName(slot);
+            }
+        }
+        return "本图身份图鉴已齐";
+    }
 }

@@ -1742,13 +1742,21 @@ public final class EmberRunService implements Listener {
         if (ls != null) { ls.backfillCodex(p); ls.refresh(p); }
         boolean claim = args.length >= 3 && "claim".equalsIgnoreCase(args[2]);
         if (!claim) {
+            String rem = EmberCodex.progressRemain(d);
             p.sendMessage(P + "§6图录 · 装备 §f" + EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size() + " §7（只做展示，不加属性）");
+            p.sendMessage(P + "§e" + rem);
+            try { p.sendActionBar("§e图录 · §f" + rem); } catch (Throwable ignored) { } // D1362
             StringBuilder sb = new StringBuilder();
             for (EmberCodex.Entry e : EmberCodex.ENTRIES)
                 sb.append(EmberCodex.has(d, e.key()) ? "§a" : "§8").append(e.label()).append(' ');
             p.sendMessage(P + sb.toString().trim());
             for (int i = 0; i < EmberCodex.STAGE_AT.length; i++)
                 p.sendMessage(P + "§7集齐 " + EmberCodex.STAGE_AT[i] + " 种：余烬币 " + EmberCodex.stageCoin(i) + " · " + EmberCodex.stageLabel(d, i));
+            java.util.List<Integer> can = EmberCodex.claimable(d);
+            if (!can.isEmpty()) {
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7阶段币可领：",
+                        "[领取图录奖励]", "/corerpg p1 codex claim", "一次性币 · 不加战斗属性");
+            }
             StringBuilder lo = new StringBuilder(); // P2-9 (D81) where to farm what
             for (EmberRunMaps.MapDef m : maps.maps.values()) lo.append(lo.length() == 0 ? "" : " · ").append(m.key.toUpperCase(Locale.ROOT)).append(' ').append(EmberRunMaps.lootLabel(m));
             p.sendMessage(P + "§6掉落偏向 §7" + lo + "（目标族仍至少 60%；挑战 / 深渊同图同偏向）");
@@ -1757,8 +1765,16 @@ public final class EmberRunService implements Listener {
             return true;
         }
         java.util.List<Integer> can = EmberCodex.claimable(d);
-        if (can.isEmpty()) { p.sendMessage(P + "§7没有可领取的图录阶段奖励（" + EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size() + "）"); return true; }
-        claimCodexStages(p);
+        if (can.isEmpty()) {
+            p.sendMessage(P + "§7没有可领取的图录阶段奖励（" + EmberCodex.count(d) + "/" + EmberCodex.ENTRIES.size() + "）");
+            try { p.sendActionBar("§7图录 · §f" + EmberCodex.progressRemain(d)); } catch (Throwable ignored) { }
+            return true;
+        }
+        int n = claimCodexStages(p);
+        if (n > 0) {
+            p.sendMessage(P + "§a图录阶段已领 · §f" + n + " 档");
+            try { p.sendActionBar("§a图录领取 · §f" + EmberCodex.progressRemain(d)); } catch (Throwable ignored) { }
+        }
         return true;
     }
 

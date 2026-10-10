@@ -592,3 +592,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1353–D1360 ARCH SHIP · jar 1.65.450-d1353
 - Marks exchange have/need AB; SigChase remainLine on ready cue
+
+## D1361–D1374 ARCH SHIP · jar 1.65.451-d1361
+- Codex progressRemain + claim AB; map nextMissing; setfocus gap AB; mapfarm identity board

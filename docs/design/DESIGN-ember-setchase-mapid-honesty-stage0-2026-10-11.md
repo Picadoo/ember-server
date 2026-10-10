@@ -1,6 +1,6 @@
 # DESIGN · 成套追 / 图身份诚实 Stage0 · 2026-10-11
 
-> **状态：** Stage0 + **D1339– SHIP** · 已批 A · 方案 M  
+> **状态：** Stage0 + **D1339– / D1361– SHIP** · 已批 A · 方案 M  
 > **硬禁：** 无 K3/SF4 / hope celebration PAPI / 锁通关 / 改掉率 / skill_mult
 
 ## 问题
@@ -15,5 +15,10 @@
 | BP1 | 烙纹定向 have/need | brandPin 预览 |
 | MX1 | 印记兑换 have/need | marks exchange | **D1353– SHIP** |
 | SC2 | 追烙徽记剩余 | SigChase.remainLine | **D1355– SHIP** |
+
+| CD1 | 图录阶段剩余 | EmberCodex.progressRemain | **D1361–** |
+| MI3 | 图身份下一缺件 | EmberMapIdentity.nextMissing | **D1363–** |
+| SC3 | 设焦点后 AB=缺口 | setfocus → stripSection(focusGap) | **D1365–** |
+| MF1 | mapfarm 无记录时身份板 | 主线 Q 身份一瞥 | **D1367–** |
 
 不改套装战力、掉率、通关闸。
