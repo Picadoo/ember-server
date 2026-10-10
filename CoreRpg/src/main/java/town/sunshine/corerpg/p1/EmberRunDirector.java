@@ -501,6 +501,41 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D560: molten corpse blast is armed and not yet landed. */
+    boolean hasPendingMolten() {
+        return moltenOrigin != null && moltenWarnAt > 0 && moltenBoomAt > System.currentTimeMillis();
+    }
+
+    /** D560: pull a committed player out of the molten blast radius. */
+    boolean pathDuckBlast(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingMolten()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Variety v = svc.maps() == null ? null : svc.maps().variety;
+        double r = v == null ? 2.5 : v.moltenRadius;
+        Location o = moltenOrigin;
+        Location pl = p.getLocation();
+        double dx = pl.getX() - o.getX(), dz = pl.getZ() - o.getZ();
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        double safe = r + 2.0;
+        if (dist >= safe) return false; // already clear
+        Vector dir;
+        if (dist < 0.15) {
+            dir = pl.getDirection().clone();
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+            else dir.normalize();
+        } else {
+            dir = new Vector(dx, 0, dz).normalize();
+        }
+        Location to = new Location(w, o.getX() + dir.getX() * safe, pl.getY(), o.getZ() + dir.getZ() * safe,
+                pl.getYaw(), pl.getPitch());
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.6f);
+        return true;
+    }
+
     /** D559: side extra (treasure/elite) is live and hunt-able. */
     boolean hasHuntExtra() {
         if (s == null || !s.open() || s.extraDone) return false;
@@ -1142,6 +1177,7 @@ final class EmberRunDirector {
         moltenWarnAt = AffixMolten.warnAt(now, v);
         moltenBoomAt = AffixMolten.boomAt(moltenWarnAt, v);
         svc.tellRun(s, "§c亡爆 §7· 尸体要炸，退后！");
+        EmberDuckPath.maybeAfterMolten(s); // D560
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s molten scheduled at %.1f %.1f %.1f",
                 s.runId, at.getX(), at.getY(), at.getZ()));
     }

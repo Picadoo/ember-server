@@ -700,6 +700,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D560: pull out of an armed molten blast. */
+    public boolean hasPendingMolten(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingMolten() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathDuckBlast(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathDuckBlast(p);
+    }
+
     /** D559: warp to live treasure/elite side extra. */
     public boolean hasHuntExtra(Player p) {
         if (p == null) return false;
@@ -1309,6 +1325,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberCallPath.scheduleOfferAfterQ01(p); // D557 call path
                         if ("q01".equals(g.id)) EmberLinkPath.scheduleOfferAfterQ01(p); // D558 link path
                         if ("q01".equals(g.id)) EmberHuntPath.scheduleOfferAfterQ01(p); // D559 hunt path
+                        if ("q01".equals(g.id)) EmberDuckPath.scheduleOfferAfterQ01(p); // D560 duck path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
