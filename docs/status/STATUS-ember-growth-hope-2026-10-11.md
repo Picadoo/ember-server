@@ -230,3 +230,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D752 raid path enter/clear clarity
 - D753 imprint one-click go when no overwrite
 - D754 enhance empty-socket gem chase
+
+## D755–D757 SHIP · jar 1.65.348-d755 · 2026-10-11
+- D755 raid enteringLine path tag
+- D756 imprint go overwrite → preview
+- D757 enhance hole craft if no gem

@@ -115,7 +115,20 @@ public final class EmberEnhanceLoop {
             int path = EmberGemPath.get(d);
             if (!EmberGemPath.valid(path)) path = EmberGemPath.SHARP;
             EmberLoadoutService lo = pl.getEmberRuns() == null ? null : pl.getEmberRuns().loadouts();
-            EmberGemInsertChase.afterAcquire(p, path, lo, pl);
+            // D757: if no path gem in bag, point craft; else insert chase
+            String gid = EmberGemPath.gemId(path);
+            town.sunshine.corerpg.NiBridge ni = pl.getNiBridge();
+            int have = (ni == null || gid == null) ? 0 : ni.countInInventory(p, gid);
+            if (have <= 0) {
+                p.sendMessage(P() + "§7空孔待命 · 背包无 §f" + EmberItemData.gemName(path)
+                        + " §7· /corerpg p1 gem craft " + EmberGemPath.key(path));
+                town.sunshine.corerpg.ConfirmTokens.sendButton(p, P() + "§7获取：",
+                        "[合成" + EmberItemData.gemName(path) + "]",
+                        "/corerpg p1 gem craft " + EmberGemPath.key(path),
+                        "碎+骨+币 · 不走旧 socket");
+            } else {
+                EmberGemInsertChase.afterAcquire(p, path, lo, pl);
+            }
             return;
         }
     }
