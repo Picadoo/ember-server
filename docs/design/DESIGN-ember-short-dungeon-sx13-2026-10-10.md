@@ -1,6 +1,6 @@
 # 余烬 · 短征 sx13（烬衡悬梁 · P1 可达 + 薄经济 S52）
 
-STATUS=**待批 A · 方案 M 主推 · 拟 D421** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx13-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx13-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx13`（**待批 A**）· **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D420 ≠纯换皮当主债 ≠仓差/remain/ActionBar/next_farm/选页仓差/工坊 remain/工坊 next_farm/十二本规格空转当主债**
+STATUS=**已批 A · 方案 M · D421** · 2026-10-10 · tip [`STATUS-ember-next-hard-debt-short-dungeon-sx13-need-design-2026-10-10.md`](../status/STATUS-ember-next-hard-debt-short-dungeon-sx13-need-design-2026-10-10.md) · backlog `B-short-dungeon-sx13`（**已批·施工中·骨架启动**）· STATUS [`STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md`](../status/STATUS-ember-short-dungeon-sx13-d421-2026-10-10.md) · **≠关观察 ≠开闸 ≠抬日表 ≠开 R ≠开 K3 ≠假开旧日常 ≠复述 D373–D420 ≠纯换皮当主债 ≠仓差/remain/ActionBar/next_farm/选页仓差/工坊 remain/工坊 next_farm/十二本规格空转当主债**
 
 > **一句话玩家价值：** 今天在短征页除了烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅，还能再点进第十三条 **衡门庭→悬梁衡廊（须过≥3道配重衡梁）→衡冠终厅、主题与走位都不同** 的 5～8 分钟短本；日有奖帽独立计算，材料仍进仓去工坊——**继续拉长可刷内容量**，不靠重开旧日常、也不抬挂机日表。
 
@@ -55,9 +55,9 @@ STATUS=**待批 A · 方案 M 主推 · 拟 D421** · 2026-10-10 · tip [`STATUS
 
 ### 批 A 勾选（总控填）
 
-- [ ] **方案 M**（短征 sx13 烬衡悬梁全规格；见 §2）
-- [ ] 否决 A（假挂/只口号）/ L（复述·抬表）/ W（假开/换皮/开 R·K3）
-- [ ] 批注：
+- [x] **方案 M**（短征 sx13 烬衡悬梁全规格；见 §2）
+- [x] 否决 A（假挂/只口号）/ L（复述·抬表）/ W（假开/换皮/开 R·K3）
+- [x] 批注：总控批 A·M · D421 · 三路并行（地图∥键号∥MM；本号骨架）
 
 ---
 
@@ -224,7 +224,8 @@ STATUS=**待批 A · 方案 M 主推 · 拟 D421** · 2026-10-10 · tip [`STATUS
 | 日 | 事 |
 |----|-----|
 | 2026-10-10 | 策划 · 初稿 STATUS=**待批 A** · 荐 M · 选题短征 sx13 烬衡悬梁（配重衡梁·悬梁衡廊新结构维）· 薄表 S52 有奖80/4/3 · 首通60/6/1 · 上游 D419 PASS @`a1f0c809` · D420 薄抽并行勿复述 |
+| 2026-10-10 | 总控批 A·M · D421 · tip→已批·施工中·骨架启动 · 三路并行 |
 
 ---
 
-*D421 · 短征 sx13 烬衡悬梁 · 待批 A·方案 M 主推 · ≠关观察 ≠抬日表 ≠假开旧日常。*
+*D421 · 短征 sx13 烬衡悬梁 · 已批 A·M · 骨架施工中 · ≠关观察 ≠抬日表 ≠假开旧日常。*
