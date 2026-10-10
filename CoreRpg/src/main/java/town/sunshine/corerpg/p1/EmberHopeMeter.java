@@ -215,4 +215,43 @@ public final class EmberHopeMeter {
         return String.format(Locale.ROOT, "§e精选印记 %d/%d · 还剩 %d 次多发印记", used, cap, left);
     }
 
+
+    /** D623: sign-in hope — next slot of the month. */
+    public static String signHope(boolean signedToday, int count, String nextReward) {
+        String rw = nextReward == null || nextReward.isEmpty() ? "奖励" : nextReward;
+        if (signedToday) return String.format(Locale.ROOT, "§a签到希望 · 已签 §f%d§a 次 · 明天第 §f%d§a 次 · %s", count, count + 1, rw);
+        return String.format(Locale.ROOT, "§e签到希望 · 今天第 §f%d§e 次 · %s", count + 1, rw);
+    }
+
+    /** D623: online milestone hope. */
+    public static String onlineHope(int mins, int nextMin, String rewardHint) {
+        if (nextMin <= 0) return String.format(Locale.ROOT, "§a在线希望 · 今日 %d 分 · 档位已齐", Math.max(0, mins));
+        int left = Math.max(0, nextMin - Math.max(0, mins));
+        String rw = rewardHint == null || rewardHint.isEmpty() ? "下一档" : rewardHint;
+        return String.format(Locale.ROOT, "§e在线希望 · %d/%d 分 · 还差 %d · %s", Math.max(0, mins), nextMin, left, rw);
+    }
+
+    /** D624: abyss progress + next fee. */
+    public static String abyssHope(int best, int maxStart, int nextFee, boolean canAfford) {
+        if (maxStart <= 0) return "§8深渊希望 · 未开放";
+        String fee = nextFee <= 0 ? "免费" : (nextFee + " 币");
+        String pay = nextFee <= 0 ? "" : (canAfford ? " §a费用够" : " §c费用不足");
+        if (best >= maxStart && best > 0)
+            return String.format(Locale.ROOT, "§a深渊希望 · 最高 §f%d§a · 可开 §f%d§a · 下层 %s%s", best, maxStart, fee, pay);
+        return String.format(Locale.ROOT, "§e深渊希望 · 最高 §f%d§e · 可开 §f%d§e · 下层 %s%s", best, maxStart, fee, pay);
+    }
+
+    /** D625: raid weekly hope. */
+    public static String raidHope(int used, int cap) {
+        if (cap <= 0) return "§8团本希望 · 本周无次数帽";
+        if (used >= cap) return String.format(Locale.ROOT, "§a团本希望 · %d/%d · 本周已满（失败不扣）", cap, cap);
+        return String.format(Locale.ROOT, "§e团本希望 · %d/%d · 还剩 %d 次通关名额", used, cap, cap - used);
+    }
+
+    /** D626: gearlib inventory hope. */
+    public static String gearlibHope(int stored, int junk, int undoMin) {
+        return String.format(Locale.ROOT, "§e装备库希望 · 库存 §f%d§e · 可批量 junk §f%d§e · 分解撤销 %d 分",
+                Math.max(0, stored), Math.max(0, junk), Math.max(0, undoMin));
+    }
+
 }

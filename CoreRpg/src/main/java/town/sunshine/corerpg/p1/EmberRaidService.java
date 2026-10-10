@@ -200,6 +200,17 @@ public final class EmberRaidService {
 
     /** P2-5 %corerpg_p1_raid_&lt;key&gt;% */
     String papi(PlayerData d, String raidKey) {
+        if ("hope".equals(raidKey)) { // D625 %corerpg_p1_raid_hope%
+            EmberRunMaps.MapDef pick = null;
+            for (EmberRunMaps.MapDef m : runs.maps().raids.values()) {
+                if (m == null || m.weeklyCap <= 0) continue;
+                pick = m;
+                break;
+            }
+            if (pick == null) return EmberHopeMeter.raidHope(0, 0);
+            int used = week(d, pick);
+            return EmberHopeMeter.raidHope(used, pick.weeklyCap);
+        }
         EmberRunMaps.MapDef rm = runs.maps().raids.get(raidKey);
         return rm == null ? "" : label(d, rm);
     }

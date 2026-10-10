@@ -37,7 +37,8 @@ Icons:
       material: iron sword
       name: '§6主手 · 刃'
       lore:
-        - '§f%corerpg_p1_blade%'
+        - '§f%corerpg_p1_blade%
+        - '%corerpg_p1_gearlib_hope%''
         - '§7%corerpg_p1_blade_next_q%'
         - '§7%corerpg_p1_blade_next_c%'
         - ''

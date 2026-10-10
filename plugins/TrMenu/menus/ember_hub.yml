@@ -339,6 +339,7 @@ Icons:
       lore:
         - ''
         - '§7Q07 首通后的长线挑战：§f%corerpg_p1_abyss_state%'
+        - '%corerpg_p1_abyss_hope%'
         - '§7每层 = 随机一张主线图打一局 · 十层封顶 · 每层单独付费与结算'
         - ''
         - '§e➥ §f打开深渊选层'
@@ -360,6 +361,7 @@ Icons:
       name: '§6团本 · R01–R03（3～5 人）'
       lore:
         - ''
+        - '%corerpg_p1_raid_hope%'
         - '§7锈轨矿道·团：§f%corerpg_p1_raid_r01%'
         - '§7霜封哨所·团：§f%corerpg_p1_raid_r02%'
         - '§7断塔回廊·团：§f%corerpg_p1_raid_r03%'
@@ -439,6 +441,7 @@ Icons:
         - ''
         - '§7材料仓库 · 无格子上限，打副本自动入库'
         - '§7装备库 · 背包满时新装备自动存入'
+        - '%corerpg_p1_gearlib_hope%'
         - '§8强化/升阶直接扣仓库里的材料'
         - '§8一键存入 · 筛选 · 批量分解（可撤销）'
         - ''

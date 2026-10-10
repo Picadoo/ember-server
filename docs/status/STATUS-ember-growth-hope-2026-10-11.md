@@ -10,3 +10,10 @@
 | D622 | 宝石获取 UX（仓材料） | **SHIP** TrMenu |
 
 live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
+
+## D623–D627 SHIP · jar 1.65.308-d623 · 2026-10-11
+- D623 sign_hope / online_hope
+- D624 abyss_hope (best/max + fee afford)
+- D625 raid_hope weekly used/cap
+- D626 gearlib_hope stored/junk/undo
+- D627 slash shape particles (fan/line/ring) · no skill_mult

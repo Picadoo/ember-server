@@ -606,6 +606,8 @@ public final class EmberSignService implements Listener {
                 return why == null ? "§a可补签 " + now.getMonthValue() + " 月 " + miss + " 日（第 " + (n + 1) + " 次 · " + rewardFor(n + 1).label() + "）" : "§7" + why;
             }
             case "missed": { int c = 0; for (int i = 1; i < dom; i++) if (!signedOn(mask, i)) c++; return String.valueOf(c); }
+            case "hope": // D623
+                return EmberHopeMeter.signHope(signedToday, n, rewardFor(n + 1).label());
             default: return "";
         }
     }
@@ -642,6 +644,13 @@ public final class EmberSignService implements Listener {
                 for (int i = 0; i < milestones.size(); i++)
                     if (milestoneState(mins, claimed, i, milestones.get(i).min) == 0) return "§7下一档 " + milestones.get(i).min + " 分钟 · 还差 " + (milestones.get(i).min - mins) + " 分钟";
                 return "§a今天的档位都到了";
+            }
+            case "hope": { // D623
+                for (int i = 0; i < milestones.size(); i++) {
+                    if (milestoneState(mins, claimed, i, milestones.get(i).min) == 0)
+                        return EmberHopeMeter.onlineHope(mins, milestones.get(i).min, milestones.get(i).r.label());
+                }
+                return EmberHopeMeter.onlineHope(mins, 0, "档位已齐");
             }
             default: return "";
         }

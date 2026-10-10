@@ -611,13 +611,13 @@ public final class SkillService implements Listener {
                 if (!player.isOnline() || player.isDead() || !town.sunshine.corerpg.p1.EmberMode.isP1(player)) return;
                 List<LivingEntity> t2 = slashTargets(player, fRange, fArc, fLine);
                 if (t2.isEmpty()) { player.sendMessage(PREFIX + ChatColor.YELLOW + "烬斩蓄力落空（范围里没有目标了）"); return; }
-                landEmberSlash(player, ls, t2, fMax, fMods, true, gsv);
+                landEmberSlash(player, ls, t2, fMax, fMods, true, gsv, sh.id);
                 player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩（蓄力）");
             }, Math.max(1L, Math.round(charge * 20.0)));
             return;
         }
         List<LivingEntity> landed = slashTargets(player, fRange, fArc, fLine);
-        landEmberSlash(player, ls, landed, fMax, gmods, variant, gsv);
+        landEmberSlash(player, ls, landed, fMax, gmods, variant, gsv, sh.id);
         String tip = sh.sigOverride || sh.id != town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_FAN
                 ? "释放 烬斩（" + sh.label + "）" : "释放 烬斩";
         String slashId = slashSetTip(player);
@@ -813,7 +813,7 @@ public final class SkillService implements Listener {
     }
 
     private void landEmberSlash(Player player, town.sunshine.corerpg.p1.EmberLoadoutService ls, List<LivingEntity> targets, int maxTargets,
-                                town.sunshine.corerpg.p1.EmberGrowth.Mods gmods, boolean variant, town.sunshine.corerpg.p1.EmberGrowthService gsv) {
+                                town.sunshine.corerpg.p1.EmberGrowth.Mods gmods, boolean variant, town.sunshine.corerpg.p1.EmberGrowthService gsv, int shapeId) {
         Location eye = player.getEyeLocation();
         Vector look = eye.getDirection().normalize();
         double b = ls.get(player).b;
@@ -832,7 +832,7 @@ public final class SkillService implements Listener {
                         town.sunshine.corerpg.p1.EmberSetEngine.Kind.SKILL,
                         town.sunshine.corerpg.p1.EmberCombatListener.internalTag);
                 hit.add(le);
-                if (look2 != null) spawnParticles(le.getLocation().add(0, 1, 0), look2.particles, 12);
+                if (look2 != null) spawnShapeSlashParticles(le.getLocation().add(0, 1, 0), look2.particles, shapeId, true);
             }
             if (variant && gsv != null) {
                 // L08 潮蚀护符: ignite the first skill_ignite_n targets still alive (焚烬 only); L11 霜封长刀 / L14 炉芯护符: shield per target hit
@@ -853,7 +853,7 @@ public final class SkillService implements Listener {
         maybeFlashSlashHit(player, hit.size()); // D445 烬斩命中
         if (look2 != null) {
             playSound(player.getLocation(), look2.sound);
-            spawnParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, 20);
+            spawnShapeSlashParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, shapeId, false);
         }
     }
 
@@ -1123,6 +1123,27 @@ public final class SkillService implements Listener {
             return 0L;
         }
         return left;
+    }
+
+
+    /** D627: shape feel particles — fan=crit sparks wide, line=crit narrow dense, ring=smoke+crit circle. Zero skill_mult. */
+    private void spawnShapeSlashParticles(Location loc, String base, int shapeId, boolean onTarget) {
+        if (loc == null || loc.getWorld() == null) return;
+        String name = base == null || base.isEmpty() ? "CRIT" : base;
+        int n;
+        if (shapeId == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE) {
+            n = onTarget ? 8 : 28;
+            spawnParticles(loc, name, n);
+            spawnParticles(loc, "CRIT_MAGIC", onTarget ? 4 : 10);
+        } else if (shapeId == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_RING) {
+            n = onTarget ? 10 : 24;
+            spawnParticles(loc, name, n);
+            spawnParticles(loc, "SMOKE_NORMAL", onTarget ? 6 : 16);
+        } else {
+            n = onTarget ? 12 : 20;
+            spawnParticles(loc, name, n);
+            if (!onTarget) spawnParticles(loc, "FLAME", 8);
+        }
     }
 
     private void spawnParticles(Location loc, String name, int count) {

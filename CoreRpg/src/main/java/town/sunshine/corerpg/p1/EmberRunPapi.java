@@ -90,7 +90,7 @@ public final class EmberRunPapi {
         if (key.startsWith("fest_")) return Section.FESTIVAL;
         if ("title".equals(key) || "honors".equals(key)) return Section.COSMETIC;
         if (key.startsWith("loot_") || key.startsWith("mapid_") || "mapid_board".equals(key)) return Section.ROTATION;
-        if ("abyss_best".equals(key)) return Section.ABYSS;
+        if ("abyss_best".equals(key) || "abyss_hope".equals(key)) return Section.ABYSS;
         if ("bounty".equals(key) || "bounty_hope".equals(key) || "featured_hope".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("dual_lead".equals(key) || "dual_lead_line".equals(key)) return Section.LOADOUT; // D466
@@ -146,7 +146,8 @@ public final class EmberRunPapi {
                 || "held_refine_hope".equals(key)
                 // D608 gem clear-pity hope
                 || "gem_pity_hope".equals(key)
-                || "drop_q_hope".equals(key);
+                || "drop_q_hope".equals(key)
+                || "gearlib_hope".equals(key);
     }
 
     /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
@@ -591,6 +592,15 @@ public final class EmberRunPapi {
 
     private String abyss(PlayerData d, String key, EmberRunMaps maps) {
         if ("abyss_best".equals(key)) return String.valueOf(runs.abyssBest(d)); // P2-2
+        if ("abyss_hope".equals(key)) { // D624
+            if (maps.abyss.isEmpty() || !runs.abyssOpen(d)) return EmberHopeMeter.abyssHope(0, 0, 0, false);
+            int best = runs.abyssBest(d);
+            int max = runs.abyssMaxStart(d);
+            EmberRunMaps.AbyssTier next = maps.abyssTier(max);
+            int fee = next == null ? 0 : next.fee;
+            boolean afford = fee <= 0 || d.getCoin() >= fee || runs.feeMarks(d, fee) > 0;
+            return EmberHopeMeter.abyssHope(best, max, fee, afford);
+        }
         if ("abyss_state".equals(key)) {
             boolean configured = !maps.abyss.isEmpty();
             boolean open = configured && runs.abyssOpen(d);
@@ -703,6 +713,13 @@ public final class EmberRunPapi {
             case "drop_q_hope": { // D611
                 PlayerData dq = runs.plugin().getDataStore().get(p.getUniqueId());
                 return EmberDropQualityPity.hope(dq);
+            }
+            case "gearlib_hope": { // D626
+                EmberGearLib gl = EmberGearLib.get();
+                if (gl == null || !gl.usable()) return EmberHopeMeter.gearlibHope(0, 0, 0);
+                int stored = gl.count(p.getUniqueId());
+                int junk = gl.countPathJunk(p);
+                return EmberHopeMeter.gearlibHope(stored, junk, gl.undoMinutes());
             }
             case "held_enhance_cost": return heldForgeLine(p, "enhance");
             case "held_enhance_lack": return heldForgeLack(p, "enhance");
