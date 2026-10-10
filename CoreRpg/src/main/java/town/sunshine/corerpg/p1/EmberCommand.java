@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("stridepath".equals(sub) || "步态路径".equals(sub)) { // D499 stride path (flex + step together)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01") && EmberSkillKit.stepVariantUnlocked(d, runs);
+            if (args.length < 3) {
+                p.sendMessage(P + EmberStridePath.glance(EmberStridePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c步态需本人首通 Q01（轻技）与 Q05（身法）。");
+                    return true;
+                }
+                EmberStridePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c步态需本人首通 Q01 与 Q05。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberStridePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberStridePath.get(d);
+                    if (EmberStridePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberStridePath.label(cur) + " · 改路径再 /corerpg p1 stridepath");
+                    else EmberStridePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberStridePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 stridepath <push|bail|bare|clear>");
+                return true;
+            }
+            EmberStridePath.applyAndReply(p, id);
+            return true;
+        }
         if ("tunepath".equals(sub) || "签律路径".equals(sub)) { // D498 tune path (duallead + attune together)
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
