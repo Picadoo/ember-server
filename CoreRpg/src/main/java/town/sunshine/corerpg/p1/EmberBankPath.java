@@ -174,6 +174,12 @@ public final class EmberBankPath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a取银 → §f" + label(id) + " §7· " + tip(id));
+        try { // D1608
+            StaminaService st = stamina();
+            int bank = 0;
+            if (st != null && d != null) bank = d.getStaminaBank();
+            p.sendActionBar("§e取银 · §f" + label(id) + " §7· 银行 §f" + bank);
+        } catch (Throwable ignored) { }
         if (id == AUTO) maybeAfterProgress(p);
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[体力]", "/corerpg stamina", "看当前/银行", "AQUA"},

@@ -19,5 +19,7 @@
 | LG1 | 账本补领 AB | LedgerGlance/claim |
 | SU1 | 备药缺币/满格 | Supply topUp |
 | CP1 | 补领路径 AB | ClaimPath |
+| ST1 | 体力药帽还差 | StaminaService |
+| BK1 | 取银路径银行数 | BankPath |
 
 不改产量、价格表、AFK。

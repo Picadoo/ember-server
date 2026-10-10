@@ -646,3 +646,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1589–D1604 ARCH SHIP · jar 1.65.467-d1589
 - Supply topUp lack AB; ClaimPath AB; life buy weekly/daily remain on success
+
+## D1605–D1618 ARCH SHIP · jar 1.65.468-d1605
+- Stamina show/potion cap remain AB; BankPath bank balance AB

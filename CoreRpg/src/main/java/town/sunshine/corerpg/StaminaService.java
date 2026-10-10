@@ -249,16 +249,29 @@ public final class StaminaService implements Listener {
         if (player == null || data == null || amount <= 0) return false;
         ensure(data);
         if (data.getPotionStaminaToday() + amount > potionDailyCap) {
-            player.sendMessage(ChatColor.RED + "[体力] 今日药剂回体已达上限 " + potionDailyCap);
+            int room = Math.max(0, potionDailyCap - data.getPotionStaminaToday());
+            player.sendMessage(ChatColor.RED + "[体力] 今日药剂回体已达上限 " + potionDailyCap
+                    + (room > 0 ? " · 还可 " + room : " · 已满"));
+            try { // D1607
+                player.sendActionBar(room > 0
+                        ? ("§e体力药 · 今日还可 §f" + room)
+                        : ("§e体力药 · 今日帽满"));
+            } catch (Throwable ignored) { }
             return false;
         }
         int applied = addStamina(data, amount, true);
         data.setPotionStaminaToday(data.getPotionStaminaToday() + amount);
         dataStore.flushMutation(player.getUniqueId());
+        int potLeft = Math.max(0, potionDailyCap - data.getPotionStaminaToday());
         player.sendMessage(ChatColor.GREEN + "[体力] 回复 +" + applied
                 + ChatColor.GRAY + "（当前 " + data.getStamina() + "/" + resolveMax(data)
                 + (data.getStaminaBank() > 0 ? " · 银行 " + data.getStaminaBank() : "")
-                + " · 药剂今日 " + data.getPotionStaminaToday() + "/" + potionDailyCap + "）");
+                + " · 药剂今日 " + data.getPotionStaminaToday() + "/" + potionDailyCap
+                + (potLeft > 0 ? " · 还差帽" + potLeft : " · 帽满") + "）");
+        try {
+            player.sendActionBar("§a体力 · +" + applied + " §f" + data.getStamina() + "/" + resolveMax(data)
+                    + (potLeft > 0 ? " §8· 药帽还差" + potLeft : ""));
+        } catch (Throwable ignored) { }
         // Under-cap use always succeeds even if current+bank already full (amount still counted)
         return true;
     }
@@ -573,7 +586,11 @@ public final class StaminaService implements Listener {
         ensure(data);
         if (data.getPotionStaminaToday() + amount > potionDailyCap) {
             e.setCancelled(true);
-            p.sendMessage(ChatColor.RED + "[体力] 今日药剂回体已达上限 " + potionDailyCap);
+            int room = Math.max(0, potionDailyCap - data.getPotionStaminaToday());
+            p.sendMessage(ChatColor.RED + "[体力] 今日药剂回体已达上限 " + potionDailyCap
+                    + (room > 0 ? " · 还可 " + room : " · 已满"));
+            try { p.sendActionBar(room > 0 ? ("§e体力药 · 今日还可 §f" + room) : "§e体力药 · 今日帽满"); }
+            catch (Throwable ignored) { }
             return;
         }
         // Allow vanilla consume (1 bottle), then apply stamina + strip leftover glass bottle
@@ -690,11 +707,19 @@ public final class StaminaService implements Listener {
     public void show(Player player) {
         PlayerData data = dataStore.get(player.getUniqueId());
         ensure(data);
+        int max = resolveMax(data);
+        int potLeft = Math.max(0, potionDailyCap - data.getPotionStaminaToday());
         player.sendMessage(ChatColor.GOLD + "[体力] "
                 + ChatColor.WHITE + data.getStamina() + ChatColor.GRAY + "/"
-                + ChatColor.WHITE + resolveMax(data)
+                + ChatColor.WHITE + max
                 + ChatColor.DARK_GRAY + " · 银行 " + data.getStaminaBank()
-                + " · 药剂今日 " + data.getPotionStaminaToday() + "/" + potionDailyCap);
+                + " · 药剂今日 " + data.getPotionStaminaToday() + "/" + potionDailyCap
+                + (potLeft > 0 ? " · 还差帽" + potLeft : " · 帽满"));
+        try { // D1606
+            player.sendActionBar("§6体力 · §f" + data.getStamina() + "/" + max
+                    + " §7银" + data.getStaminaBank()
+                    + (potLeft > 0 ? " §8· 药帽还差" + potLeft : " §a· 药帽满"));
+        } catch (Throwable ignored) { }
         player.sendMessage(ChatColor.GRAY + "  消耗 日常" + costOf("daily")
                 + " · 周" + costOf("weekly")
                 + " · 精英" + costOf("elite")
