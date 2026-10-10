@@ -281,6 +281,15 @@ public final class EmberCommand {
             EmberRaidPath.applyAndReply(p, id);
             return true;
         }
+        if ("swaploop".equals(sub)) { // D484 admin smoke: free enhance-swap → spend chase buttons
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            int n = 1;
+            if (args.length >= 3) try { n = Math.max(1, Integer.parseInt(args[2])); } catch (NumberFormatException ignored) {}
+            for (int i = 0; i < Math.min(3, n); i++) EmberSwapLoop.afterSwap(p);
+            p.sendMessage(P + "§8swaploop · " + EmberSwapLoop.followHint());
+            return true;
+        }
         if ("blankloop".equals(sub)) { // D482 admin smoke: dismantle→blank spend chase buttons
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
