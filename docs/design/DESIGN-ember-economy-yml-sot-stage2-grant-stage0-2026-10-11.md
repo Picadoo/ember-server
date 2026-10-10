@@ -92,3 +92,6 @@
 
 ## D1073–D1082 Stage2-E
 S02/S03 helpers + S34 chest_weight in extraWeights(); settle already amount.
+
+## D1083–D1090 Stage2-F
+S04/S05 Variety pin + helpers; nums identical.

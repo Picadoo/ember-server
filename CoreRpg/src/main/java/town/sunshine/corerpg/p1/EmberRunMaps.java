@@ -672,8 +672,15 @@ public final class EmberRunMaps {
             }
             if (ev.isEmpty() && eventRate > 0) ev.add("timed"); // D138 compat: no events list → timed only
             events = Collections.unmodifiableList(ev);
-            affixShard = Math.max(0, (int) num(m.get("affix_shard"), 0));
-            eventCore = Math.max(0, (int) num(m.get("event_core"), 0));
+            int as = Math.max(0, (int) num(m.get("affix_shard"), 0));
+            int ec = Math.max(0, (int) num(m.get("event_core"), 0));
+            // D1084 Stage2-F: pin to economy SoT (identical to runs.yml; dual-assert via amount)
+            try {
+                as = EmberEconomy.amount("S04", "shard");
+                ec = EmberEconomy.amount("S05", "core");
+            } catch (RuntimeException ignored) { /* keep section */ }
+            affixShard = as;
+            eventCore = ec;
             eventSecs = Math.max(5, (int) num(m.get("event_secs"), 30));
             Map<?, ?> bz = m.get("blazing") instanceof Map ? (Map<?, ?>) m.get("blazing") : Collections.emptyMap();
             blazeEvery = Math.max(1.0, num(bz.get("every"), 3.0));

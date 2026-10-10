@@ -1157,6 +1157,15 @@ public class EmberEconomyTest {
     }
 
     @Test
+    public void affixEventMatchS04S05() {
+        // D1086 Stage2-F
+        assertEquals(2, EmberRunRules.affixShard());
+        assertEquals(1, EmberRunRules.eventCore());
+        assertEquals(EmberEconomy.amount("S04", "shard"), EmberRunRules.affixShard());
+        assertEquals(EmberEconomy.amount("S05", "core"), EmberRunRules.eventCore());
+    }
+
+    @Test
     public void p1AccountCounterWritesAreEconomyOrTagged() throws Exception {
         java.util.regex.Pattern write = java.util.regex.Pattern.compile(
                 "addPeriodCount\\([^;]*(C_MARK|MARK_COUNTER|INSIGNIA_COUNTER|C_BADGE|BADGE_COUNTER|\"p1_mark_t|\"p1_sigmark_|\"p3_badge)");

@@ -492,3 +492,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1073–D1082 ARCH SHIP · jar 1.65.421-d1073
 - Stage2-E: treasureCoin/elite*/extraWeights chest SoT
+
+## D1083–D1090 ARCH SHIP · jar 1.65.422-d1083
+- Stage2-F: variety affixShard/eventCore ← S04/S05 SoT

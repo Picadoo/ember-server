@@ -48,6 +48,12 @@ public final class EmberRunRules {
 
     /** D1074: S03 elite core from economy yml SoT. */
     public static int eliteCore() { return EmberEconomy.amount("S03", "core"); }
+
+    /** D1085: S04 variety affix shard from economy yml SoT. */
+    public static int affixShard() { return EmberEconomy.amount("S04", "shard"); }
+
+    /** D1085: S05 variety event core from economy yml SoT. */
+    public static int eventCore() { return EmberEconomy.amount("S05", "core"); }
     /**
      * P2-1 weekly challenge rotation (docs/design/design-ember-v1.1-P2-draft.md §3): one of the seven challenge maps is featured
      * each Monday-based week (Asia/Shanghai); its first rotation.weekly_cap challenge clears per character and week add
