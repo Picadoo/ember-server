@@ -700,6 +700,26 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D553: open pending extra chest for a committed player (AUTO / ASK button). */
+    public boolean pathOpenExtraChest(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.chest == null || d.s == null || !d.s.open()) return false;
+        if (d.s.extra != EmberRunRules.Extra.CHEST || d.s.extraDone) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        org.bukkit.block.Block b = d.chest.getBlock();
+        if (b == null || b.getType() != org.bukkit.Material.ENDER_CHEST) return false;
+        return d.clickChest(b);
+    }
+
+    public boolean hasPendingExtraChest(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.chest == null || d.s == null || !d.s.open()) return false;
+        if (d.s.extra != EmberRunRules.Extra.CHEST || d.s.extraDone) return false;
+        return d.s.committed.contains(p.getUniqueId());
+    }
+
     void onExtraSpawned(EmberRunSession s) {
         // D182: reward elite announces its fixed light move (dodge hint + same 10+1 rewards)
         if (s.extra == EmberRunRules.Extra.ELITE && maps != null) {
@@ -715,6 +735,7 @@ public final class EmberRunService implements Listener {
             }
         }
         tellRun(s, "§6侧边出现了「" + s.extra.label + "」§7（可跳过；奖励记为待结算，击败首领才发放）");
+        if (s.extra == EmberRunRules.Extra.CHEST) EmberChestPath.maybeAfterSpawn(s); // D553
     }
 
     void onExtraDone(EmberRunSession s) {
@@ -1188,6 +1209,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberGripPath.scheduleOfferAfterQ01(p); // D550 grip path
                         if ("q01".equals(g.id)) EmberCharmPath.scheduleOfferAfterQ01(p); // D551 charm path
                         if ("q01".equals(g.id)) EmberSightPath.scheduleOfferAfterQ01(p); // D552 sight path
+                        if ("q01".equals(g.id)) EmberChestPath.scheduleOfferAfterQ01(p); // D553 chest path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
