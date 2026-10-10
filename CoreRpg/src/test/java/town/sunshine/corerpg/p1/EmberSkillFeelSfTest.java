@@ -38,4 +38,8 @@ public class EmberSkillFeelSfTest {
         assertEquals("直线烬斩落空", EmberSkillFeelSf.slashMiss(EmberSkillKit.SHAPE_LINE));
         assertEquals("环斩烬斩落空", EmberSkillFeelSf.slashMiss(EmberSkillKit.SHAPE_RING));
     }
+
+    @Test public void dashBlocked_label() {
+        assertEquals("烬突受阻", EmberSkillFeelSf.dashBlocked());
+    }
 }

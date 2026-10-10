@@ -700,6 +700,9 @@ public final class SkillService implements Listener {
         Location dest = town.sunshine.corerpg.p1.EmberDash.tryDash(player, town.sunshine.corerpg.p1.EmberSkillKit.DASH_DISTANCE);
         if (dest == null) {
             player.sendMessage(PREFIX + ChatColor.YELLOW + "前方受阻，无法烬突");
+            try { // D1241
+                player.sendActionBar(ChatColor.GRAY + town.sunshine.corerpg.p1.EmberSkillFeelSf.dashBlocked());
+            } catch (Throwable ignored) { }
             return;
         }
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));

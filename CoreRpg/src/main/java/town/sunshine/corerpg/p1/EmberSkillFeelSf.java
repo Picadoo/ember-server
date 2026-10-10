@@ -31,6 +31,11 @@ public final class EmberSkillFeelSf {
         return shapeShort(shapeId) + "烬斩落空";
     }
 
+    /** D1240: 烬突受阻（展示 only）. */
+    public static String dashBlocked() {
+        return "烬突受阻";
+    }
+
     /**
      * SF1–SF3: confirm + optional set-fallout half (e.g. {@code " · 烬刃余烬"}).
      */

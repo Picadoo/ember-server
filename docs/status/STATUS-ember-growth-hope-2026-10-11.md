@@ -553,3 +553,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1231–D1238 ARCH SHIP · jar 1.65.438-d1231
 - EnhanceLoop fail message remain-until-sure
+
+## D1239–D1246 ARCH SHIP · jar 1.65.439-d1239
+- Dash-blocked ActionBar (not SF4)

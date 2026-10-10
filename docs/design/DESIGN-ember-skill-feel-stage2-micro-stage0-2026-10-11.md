@@ -16,6 +16,7 @@ Stage1 只做推荐形状软设；玩家仍可能觉「形状只是皮」。Stag
 | SF3 | 套装落点与形状同屏半行 | **SHIP** |
 | SF4 | 微缓/微疗按形状触发窗（战斗） | **高** · 须 p1sim within · **BANNED** |
 | SF-miss | 落空形状 ActionBar | **低** · 展示 only · **D1207 SHIP** |
+| SF-dashblock | 烬突受阻 ActionBar | **低** · **D1239 SHIP** |
 
 ## 3. 方案 M
 
