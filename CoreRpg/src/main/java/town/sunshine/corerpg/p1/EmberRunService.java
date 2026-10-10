@@ -1123,6 +1123,7 @@ public final class EmberRunService implements Listener {
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberFailPath.scheduleOfferAfterQ07(p); // D507 fail stamina refund path
+                        if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberFeePath.scheduleOfferAfterQ07(p); // D511 abyss fee pay path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAbyssPath.scheduleOfferAfterQ07(p); // D486 abyss push/farm path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberAttunePath.scheduleOfferAfterQ07(p); // D492 attune combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberTunePath.scheduleOfferAfterQ07(p); // D498 tune combat path

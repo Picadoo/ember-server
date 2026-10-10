@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("feepath".equals(sub) || "层费路径".equals(sub)) { // D511 abyss fee pay path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q07");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberFeePath.glance(EmberFeePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c层费路径需本人首通 Q07。");
+                    return true;
+                }
+                EmberFeePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c层费路径需本人首通 Q07。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberFeePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberFeePath.get(d);
+                    if (EmberFeePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFeePath.label(cur) + " · 改路径再 /corerpg p1 feepath");
+                    else EmberFeePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberFeePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 feepath <coin|mark|auto|clear>");
+                return true;
+            }
+            EmberFeePath.applyAndReply(p, id);
+            return true;
+        }
         if ("breakpath".equals(sub) || "间歇路径".equals(sub)) { // D510 rush break timing path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

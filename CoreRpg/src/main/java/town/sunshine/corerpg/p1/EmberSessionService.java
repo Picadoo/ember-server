@@ -293,7 +293,12 @@ public final class EmberSessionService {
             final int pfee = at == null ? 0 : runs.feeFor(p, at.fee); // D142 深渊行者: own fee per player
             if (at != null && pfee > 0) { // P2-2: the segment fee rides with the stamina reservation (D231 → EmberAbyssService)
                 PlayerData pd = runs.dataOf(p.getUniqueId());
-                EmberAbyssService.FeeSpendResult spent = EmberAbyssService.applyFeeSpend(pd, pfee, maps.abyssFeeMarkCoin);
+                int feePath = EmberFeePath.get(pd);
+                EmberAbyssService.FeeSpendResult spent = EmberAbyssService.applyFeeSpend(pd, pfee, maps.abyssFeeMarkCoin, feePath);
+                if (spent.ok && EmberFeePath.valid(feePath) && EmberFeePath.preferMark(feePath) && spent.marksSpent > 0) {
+                    runs.log().info("[P1 run] " + s.runId + " feepath mark " + p.getName() + " marks " + spent.marksSpent);
+                }
+
                 if (!spent.ok) {
                     for (Player q : reserved) release(s, q.getUniqueId(), "预留失败回滚");
                     for (Player q : party) q.sendMessage(P() + ChatColor.RED + feeShortPartyText(p.getName(), pfee));

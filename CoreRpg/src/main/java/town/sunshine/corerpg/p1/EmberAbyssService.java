@@ -97,9 +97,26 @@ public final class EmberAbyssService {
      *         on the session for refund (0 when marks paid); ledgerResult is the {@code cost_coin} row payload
      */
     public static FeeSpendResult applyFeeSpend(PlayerData pd, int fee, int feeMarkCoin) {
+        return applyFeeSpend(pd, fee, feeMarkCoin, EmberFeePath.NONE);
+    }
+
+    /**
+     * D511: {@code feePath} {@link EmberFeePath#MARK} tries surplus T3 marks before coin;
+     * {@link EmberFeePath#COIN}/{@link EmberFeePath#AUTO}/{@link EmberFeePath#NONE} keep stock (coin when affordable).
+     */
+    public static FeeSpendResult applyFeeSpend(PlayerData pd, int fee, int feeMarkCoin, int feePath) {
         if (pd == null || fee <= 0) return FeeSpendResult.none();
+        int owned = pd.periodCount(EmberEconomy.MARK_COUNTER + "3", "all");
+        boolean markFirst = EmberFeePath.preferMark(feePath);
+        if (markFirst) {
+            int fm = feeMarks(owned, fee, feeMarkCoin, EmberCosmetics.MARK_RESERVE);
+            if (fm > 0 && EmberEconomy.spendMark(pd, "C08", 3, fm)) {
+                return new FeeSpendResult(true, 0, fm, "mark:3:" + fm);
+            }
+        }
+        // stock / coin-first / mark fallback
         int fm = pd.getCoin() < fee
-                ? feeMarks(pd.periodCount(EmberEconomy.MARK_COUNTER + "3", "all"), fee, feeMarkCoin, EmberCosmetics.MARK_RESERVE)
+                ? feeMarks(owned, fee, feeMarkCoin, EmberCosmetics.MARK_RESERVE)
                 : 0;
         if (fm > 0 && EmberEconomy.spendMark(pd, "C08", 3, fm)) {
             return new FeeSpendResult(true, 0, fm, "mark:3:" + fm);
