@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("cutpath".equals(sub) || "打断路径".equals(sub)) return cutPathCmd(s, args); // D580
+        if ("cut".equals(sub) && args.length == 2) return cutGoCmd(s); // D580
         if ("rushpath".equals(sub) || "限时路径".equals(sub)) return rushPathCmd(s, args); // D579
         if ("rush".equals(sub) && args.length == 2) return rushGoCmd(s); // D579
         if ("cleanpath".equals(sub) || "无伤路径".equals(sub)) return cleanPathCmd(s, args); // D578
@@ -1707,6 +1709,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("cutseed".equals(sub)) return cutSeedCmd(s, args); // D580
         if ("rushseed".equals(sub)) return rushSeedCmd(s, args); // D579
         if ("cleanseed".equals(sub)) return cleanSeedCmd(s, args); // D578
         if ("streakseed".equals(sub)) return streakSeedCmd(s, args); // D577
@@ -5547,6 +5550,62 @@ public final class EmberCommand {
             EmberRushPath.maybeProbe(t);
             s.sendMessage(P + "已触发限时路径探测 → " + t.getName()
                     + (runs != null && runs.hasRushLive(t) ? "（有限时）" : "（无限时）"));
+            return true;
+    }
+
+    private boolean cutPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberCutPath.glance(EmberCutPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c打断路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberCutPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c打断路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberCutPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberCutPath.get(d);
+                    if (EmberCutPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberCutPath.label(cur) + " · 改路径再 /corerpg p1 cutpath");
+                    else EmberCutPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberCutPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 cutpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberCutPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean cutGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathCutRegen(p)) p.sendMessage(P + "无法打断（无再生读条/未进本）");
+            else p.sendMessage(P + "§a打断·手点 §7已传至再生精英");
+            return true;
+    }
+
+    private boolean cutSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberCutPath.maybeProbe(t);
+            s.sendMessage(P + "已触发打断路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingCut(t) ? "（有再生读条）" : "（无再生读条）"));
             return true;
     }
 }

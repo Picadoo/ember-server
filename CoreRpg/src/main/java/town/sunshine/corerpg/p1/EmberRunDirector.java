@@ -510,6 +510,41 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D580: any regen elite currently channeling interrupt window. */
+    boolean hasPendingCut() {
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (!"regen".equals(t.affix)) continue;
+            if (t.regenWindowEnd > 0) return true;
+        }
+        return false;
+    }
+
+    /** D580: warp a committed player next to the nearest regen-channeling elite. */
+    boolean pathCutRegen(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingCut()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (!"regen".equals(t.affix) || t.regenWindowEnd <= 0) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location at = best.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.45f);
+        return true;
+    }
+
     /** D579: timed-clear event still live and unmet. */
     boolean hasRushLive() {
         if (s == null || eventStart <= 0 || eventFailed || s.eventDone) return false;
@@ -1463,6 +1498,7 @@ final class EmberRunDirector {
             t.regenWindowEnd = AffixRegen.windowEnd(now, v);
             t.regenHurt = 0;
             svc.tellRun(s, "§6「再生」§7读条中 · 猛打可打断");
+            EmberCutPath.maybeAfterCut(s); // D580
             return;
         }
         if ("charge".equals(t.affix)) {
