@@ -416,6 +416,53 @@ public final class EmberGearLib implements Listener {
 
     private Filter filter(UUID id) { Filter f = filters.get(id); if (f == null) { f = new Filter(); filters.put(id, f); } return f; }
 
+    /** D531: count safe gearlib junk under current filter (hub-gated). */
+    public int countPathJunk(Player p) {
+        if (p == null || !usable()) return 0;
+        if (gate(p) != null) return 0;
+        ensureLoaded(p);
+        UUID id = p.getUniqueId();
+        Filter f = filter(id);
+        List<Entry> view = EmberStorageRules.view(new ArrayList<Entry>(entries(id)), f);
+        return EmberStorageRules.bulkDismantle(view, equipped(p), affixUids(p, view)).size();
+    }
+
+    /** D531: path AUTO — bulk dismantle without confirm token (same safety filters as GUI bulk). */
+    public void pathBulkJunk(Player p) {
+        if (p == null || !usable()) return;
+        String g = gate(p);
+        if (g != null) { p.sendMessage(P + ChatColor.RED + g); return; }
+        final UUID id = p.getUniqueId();
+        ensureLoaded(p);
+        Filter f = filter(id);
+        List<Entry> view = EmberStorageRules.view(new ArrayList<Entry>(entries(id)), f);
+        final List<Entry> take = EmberStorageRules.bulkDismantle(view, equipped(p), affixUids(p, view));
+        if (take.isEmpty()) return;
+        final String batch = Long.toString(System.currentTimeMillis(), 36);
+        final int[] left = {take.size()}, okN = {0}, blanks = {0};
+        for (final Entry e : take) {
+            if (busy.contains(e.d.uid)) { if (--left[0] == 0) bulkDone(id, okN[0], blanks[0]); continue; }
+            busy.add(e.d.uid);
+            final int y = EmberUpgradeRules.dismantleYield(e.d);
+            store().commitTxn("glibdis:" + e.d.uid + ":" + e.d.rev, "glibdis", id, Arrays.asList(new TxnItem(e.d, null, "dismantled", "stored")),
+                    null, "清库路径分解 " + e.d.shortLabel() + " → 胚料×" + y + " [批 " + batch + "]",
+                    y > 0 ? Arrays.asList(EmberItemStore.Owed.mat(EmberUpgradeRules.MAT_BLANK, y, "分解 " + e.d.shortLabel())) : null, res -> {
+                        busy.remove(e.d.uid);
+                        if (res.status == TxnStatus.OK) {
+                            okN[0]++; blanks[0] += y;
+                            loadouts.rememberRow(e.d.uid, id, e.d.rev + 1, "dismantled");
+                            replace(id, e.d.uid, null);
+                        }
+                        if (--left[0] == 0) {
+                            bulkDone(id, okN[0], blanks[0]);
+                            Player q = Bukkit.getPlayer(id);
+                            if (q != null && okN[0] > 0)
+                                q.sendMessage(EmberRunService.P + "§a清库·自动 §7已分解 §f" + okN[0] + " §7件 → 胚料 ×" + blanks[0]);
+                        }
+                    });
+        }
+    }
+
     private boolean bulk(final Player p, boolean go, String tok) {
         String g = gate(p);
         if (g != null) { p.sendMessage(P + ChatColor.RED + g); return true; }

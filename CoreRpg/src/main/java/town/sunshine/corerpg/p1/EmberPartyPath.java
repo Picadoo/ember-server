@@ -90,10 +90,10 @@ public final class EmberPartyPath {
     public static boolean shouldAutoDeny(int path) { return path == BUSY; }
     public static boolean shouldAutoDeny(PlayerData d) { return shouldAutoDeny(get(d)); }
 
-    /** Invitee-side: try accept leader invite via DP request accept. */
+    /** Invitee-side: try accept leader invite via DP request join. */
     public static void tryAutoAcceptInvite(Player invitee, String leaderName) {
         if (invitee == null || leaderName == null || leaderName.isEmpty()) return;
-        invitee.performCommand("dungeon-team request accept " + leaderName);
+        invitee.performCommand("dungeon-team request join " + leaderName);
         invitee.sendMessage(EmberRunService.P + "§a组队·敞开 §7已自动接受 §f" + leaderName + " §7的组队邀请");
     }
 

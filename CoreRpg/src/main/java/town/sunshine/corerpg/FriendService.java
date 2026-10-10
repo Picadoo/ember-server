@@ -406,7 +406,7 @@ public final class FriendService {
         } else {
             ConfirmTokens.sendButtons(online, PREFIX + ChatColor.AQUA + p.getName()
                             + ChatColor.GRAY + " 邀请你组队 ",
-                    new String[]{"[入队]", "/dungeon-team request accept " + p.getName(), "接受组队邀请", "GREEN"},
+                    new String[]{"[入队]", "/dungeon-team request join " + p.getName(), "接受组队邀请", "GREEN"},
                     new String[]{"[改路径]", "/corerpg p1 partypath", "自动/审核/静拒", "GRAY"});
         }
     }

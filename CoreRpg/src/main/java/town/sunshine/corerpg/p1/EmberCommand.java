@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("junkpath".equals(sub) || "清库路径".equals(sub)) { // D531 gearlib junk dismantle path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberJunkPath.glance(EmberJunkPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c清库路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberJunkPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c清库路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberJunkPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberJunkPath.get(d);
+                    if (EmberJunkPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberJunkPath.label(cur) + " · 改路径再 /corerpg p1 junkpath");
+                    else EmberJunkPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberJunkPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 junkpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberJunkPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("junk".equals(sub)) { // D531 ASK button: path-driven bulk junk
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            EmberGearLib glib = EmberGearLib.get();
+            if (glib == null || !glib.usable()) { p.sendMessage(P + "装备库未就绪"); return true; }
+            glib.pathBulkJunk(p);
+            return true;
+        }
         if ("partypath".equals(sub) || "组队路径".equals(sub)) { // D530 dungeon-team invite accept path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -338,6 +382,29 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("junkseed".equals(sub)) { // D531 admin smoke: drop-source T1 blade into gearlib as junk
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberGearLib glib = EmberGearLib.get();
+            if (glib == null || !glib.usable() || loadouts == null) { s.sendMessage(P + "装备库未就绪"); return true; }
+            if (!NmsNbt.isReady()) { s.sendMessage(P + "NBT 桥不可用"); return true; }
+            EmberItemData d = EmberItemData.create("scorch", "blade", 1, 0, 0, 0, true, "drop")
+                    .withOrigin(EmberProvenance.forAdmin("junkseed", System.currentTimeMillis()));
+            String bad = d.validate();
+            if (bad != null) { s.sendMessage(P + "参数无效: " + bad); return true; }
+            if (!glib.autoStash(t, d, 0, false, true)) {
+                // fallback: hand out then depositAll
+                org.bukkit.inventory.ItemStack item = loadouts.items().create(d);
+                if (item == null) { s.sendMessage(P + "生成失败"); return true; }
+                loadouts.remember(d, t.getUniqueId());
+                t.getInventory().addItem(item);
+                glib.depositAll(t, () -> {});
+            }
+            s.sendMessage(P + "已注入清库测试件 T1 余烬刃 → " + t.getName() + " 装备库");
+            EmberJunkPath.maybeAfterProgress(t);
             return true;
         }
         if ("trailseed".equals(sub)) { // D529 admin smoke: grant trail_ash + honor path
