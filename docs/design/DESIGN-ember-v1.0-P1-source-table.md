@@ -1686,6 +1686,7 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D532 | CoreRpg **1.65.223-d532** / bv 未抬 | 成长花样·称号路径 **PASS**：`EmberTitlePath` auto/ask/mute 已获称号装配 · **≠足迹双胞** · 冒烟 FreshQ1069 · `B-title-path` · `129f7a4b` · STATUS `STATUS-ember-title-path-d532-2026-10-10.md`。 |
 | D533 | CoreRpg **1.65.224-d533** / bv 未抬 | 成长花样·上线路径 **PASS**：`EmberPingPath` open/gate/busy 好友上线感知 · **≠好友申请/组队/盟约双胞** · 冒烟 FreshQ1070 · `B-ping-path` · `f2fd2915` · STATUS `STATUS-ember-ping-path-d533-2026-10-10.md`。 |
 | D534 | CoreRpg **1.65.225-d534** / bv 未抬 | 成长花样·辉光路径 **PASS**：`EmberGlowPath` auto/ask/mute 主城刃辉光装配 · **≠称号/足迹双胞** · 冒烟 FreshQ1071 · `B-glow-path` · `dc1c0bac` · STATUS `STATUS-ember-glow-path-d534-2026-10-10.md`。 |
+| D535 | CoreRpg **1.65.226-d535** / bv 未抬 | 成长花样·宝石路径 **PASS**：`EmberGemPath` sharp/steady/drain/gale 空孔偏好镶嵌 · **≠外观装扮/工坊花法双胞** · 冒烟 FreshQ1073 · `B-gem-path` · `f35b225d` · STATUS `STATUS-ember-gem-path-d535-2026-10-10.md`。 |
 
 
 
