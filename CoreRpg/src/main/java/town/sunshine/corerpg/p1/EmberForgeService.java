@@ -794,7 +794,7 @@ public final class EmberForgeService implements Listener {
                         EmberEnhanceUndo.afterCommit(q, list, cost); // D614 fail soft-undo window
                     }
                     if ("swap".equals(kind)) EmberSwapLoop.afterSwap(q, list); // D484 free-swap spend chase
-                    if ("upgrade".equals(kind)) EmberUpgradeLoop.afterUpgrade(q, list); // D487 upgrade→power chase
+                    if ("upgrade".equals(kind)) EmberUpgradeLoop.afterUpgrade(q, plugin.getDataStore().get(id), list); // D487/D2062
                     if ("quality".equals(kind)) EmberQualityLoop.afterQuality(q, plugin.getDataStore().get(id), list); // D658/D1931
                     if ("refine".equals(kind)) EmberRefineLoop.afterRefine(q, plugin.getDataStore().get(id), list); // D658/D660
                     for (TxnItem t : list) if (t.after != null) q.sendMessage(P + "现在: " + preview(t.after));

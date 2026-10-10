@@ -25,6 +25,17 @@ public final class EmberAfkForgePath {
             if (blank >= 1 && bone >= 2) return "§a挂机日满 · 胚/骨够精工 · /corerpg p1 refine";
             return "§e挂机日满 · 精工还差料 · 胚§f" + blank + " §7骨§f" + bone + " §7· /corerpg p1 forge";
         }
+        if (forgeGoal == EmberForgeGoal.UPGRADE) {
+            EmberUpgradeRules.Cost uc = EmberUpgradeRules.upgradeCost(1);
+            int needS = uc == null ? 60 : uc.shards;
+            int needC = uc == null ? 12 : uc.cores;
+            int needB = uc == null ? 6 : uc.blanks;
+            // bone/coin unused; suggest uses shard as primary signal + blank
+            if (shard >= needS && blank >= needB)
+                return "§a挂机日满 · 料够升阶 · /corerpg p1 upgrade";
+            return "§e挂机日满 · 升阶还差料 · 碎§f" + shard + " §7胚§f" + blank
+                    + " §7· /corerpg p1 forge";
+        }
         if (forgeGoal == EmberForgeGoal.LOCK) {
             // D2050: rough T1 lock cost display (shard+lock_shard)
             EmberGrowthService gs = EmberGrowthService.get();

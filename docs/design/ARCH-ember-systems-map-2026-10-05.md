@@ -412,3 +412,6 @@ flowchart LR
 
 ### RL affix-lock loop (D2046+)
 - EmberRerollLoop + forgegoal LOCK=8; Tempering-style; zero C11 change.
+
+### UL upgrade-commit loop (D2061+)
+- Piece-aware next after upgrade; forgegoal UPGRADE=9. Zero upgradeCost change.

@@ -456,7 +456,8 @@ public final class EmberRunPapi {
             String gg = recipeGapGemCraft(shard, bone, coin);
             EmberGrowthService gsL = EmberGrowthService.get();
             String lg = recipeGapLock(shard, coin, gsL == null ? null : gsL.reroll());
-            String gap = EmberForgeGoal.gapLine(gid, enh, ref, br, ro, cv, qg, gg, lg);
+            String ug = recipeGapUpgradeT2(shard, core, blank);
+            String gap = EmberForgeGoal.gapLine(gid, enh, ref, br, ro, cv, qg, gg, lg, ug);
             if ("forge_goal".equals(key)) return EmberForgeGoal.label(gid);
             if ("forge_goal_gap".equals(key)) return gap;
             if ("forge_goal_hope".equals(key)) return EmberHopeMeter.forgeGoalHope(EmberForgeGoal.label(gid), gap);

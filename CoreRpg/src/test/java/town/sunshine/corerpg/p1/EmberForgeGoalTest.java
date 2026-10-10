@@ -25,5 +25,9 @@ public class EmberForgeGoalTest {
         assertEquals("锁定冲档", EmberForgeGoal.label(EmberForgeGoal.LOCK));
         assertTrue(EmberForgeGoal.gapLine(EmberForgeGoal.LOCK, "", "", "", "", "", null, null, "碎差0·币差0").contains("已够"));
         assertTrue(EmberForgeGoal.valid(EmberForgeGoal.LOCK));
+        assertEquals(EmberForgeGoal.UPGRADE, EmberForgeGoal.parse("升阶"));
+        assertEquals("升阶冲战力", EmberForgeGoal.label(EmberForgeGoal.UPGRADE));
+        assertTrue(EmberForgeGoal.gapLine(EmberForgeGoal.UPGRADE, "", "", "", "", "", null, null, null, "碎差0·核差0·胚差0").contains("已够"));
+        assertTrue(EmberForgeGoal.valid(EmberForgeGoal.UPGRADE));
     }
 }
