@@ -95,7 +95,7 @@ public final class EmberSupplyService implements Listener {
             if (freeSlots(p) <= 0) break;
             ItemStack s = boundPotion(src);
             if (s == null) break;
-            int hb = emptyHotbar(p);
+            int hb = emptyHotbarFor(p);
             if (hb >= 0) p.getInventory().setItem(hb, s);
             else if (!p.getInventory().addItem(s).isEmpty()) break;
             given++;
@@ -144,13 +144,15 @@ public final class EmberSupplyService implements Listener {
         return got;
     }
 
-    /** First empty hotbar index from the right (8 → 1); -1 when none. */
+    /** First empty hotbar index from the right (8 → 1); -1 when none. Stock order. */
     static int emptyHotbar(Player p) {
-        for (int i = 8; i >= 1; i--) {
-            ItemStack s = p.getInventory().getItem(i);
-            if (s == null || s.getType() == org.bukkit.Material.AIR) return i;
-        }
-        return -1;
+        return EmberBarPath.emptyHotbar(p, EmberBarPath.RIGHT);
+    }
+
+    /** D512: honor sticky bar path when choosing potion hotbar slot. */
+    int emptyHotbarFor(Player p) {
+        PlayerData d = plugin.getDataStore().get(p.getUniqueId());
+        return EmberBarPath.emptyHotbar(p, EmberBarPath.get(d));
     }
 
     boolean isHealPotion(ItemStack s) {
