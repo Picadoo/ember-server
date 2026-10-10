@@ -2526,6 +2526,10 @@ public final class EmberRunService implements Listener {
                 if (!p.isOnline() || blocksLegacy(p.getWorld())) return;
                 EmberClaimPath.maybeAmbientDeliver(p, EmberRunService.this); // D515 claim path
                 starterKit(p);
+                // D773: leave-instance → hub also resumes map farm chase
+                PlayerData wd = data(p.getUniqueId());
+                EmberLoadout wlo = loadouts.get(p);
+                EmberMapFarmCue.maybeResumeAfterJoin(p, wd, wlo, maps);
             }, 20L);
         }
     }

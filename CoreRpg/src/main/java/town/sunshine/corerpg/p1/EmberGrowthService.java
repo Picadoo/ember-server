@@ -1116,7 +1116,7 @@ public final class EmberGrowthService implements Listener {
                 maybeAttuneReadyCue(p, d);
                 return true;
             }
-            return sigAttune(p, d, args[3], args.length >= 5 && "unlock".equalsIgnoreCase(args[4]));
+            return sigAttune(p, d, args[3], args.length >= 5 && ("unlock".equalsIgnoreCase(args[4]) || "go".equalsIgnoreCase(args[4]))); // D775 go=unlock
         }
         if ("pick".equals(op)) return sigPick(p, d, args.length >= 4 ? args[3] : null);
         if ("target".equals(op)) {

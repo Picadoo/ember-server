@@ -199,9 +199,14 @@ public final class EmberChallengePath {
                 p.sendMessage(EmberRunService.P + "§7可设硬本路径：/corerpg p1 challengepath");
             return;
         }
-        String line = challengeFirst
-                ? "§c硬本路径 · 挑战首通 §8· " + label(id)
-                : "§c硬本路径 · 挑战入账 §8· " + label(id);
+        // D774: EASY path still acknowledges challenge clear (path preference ≠ this run)
+        String line;
+        if (challengeFirst)
+            line = "§c硬本路径 · 挑战首通 §8· " + label(id);
+        else if (id == EASY)
+            line = "§a硬本路径 · 挑战局入账（偏好普通） §8· " + label(id);
+        else
+            line = "§c硬本路径 · 挑战入账 §8· " + label(id);
         p.sendMessage(EmberRunService.P + line);
         if (!challengeFirst) {
             try { p.sendActionBar(line); } catch (Throwable ignored) { }

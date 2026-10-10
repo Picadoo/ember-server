@@ -260,3 +260,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D770 resume → setchase equip when focus matches
 - D771 featured challenge + hard-path glance
 - D772 admin attune seed
+
+## D773–D775 SHIP · jar 1.65.354-d773
+- D773 leave-instance hub map farm resume
+- D774 EASY path settle wording
+- D775 attune go=unlock
