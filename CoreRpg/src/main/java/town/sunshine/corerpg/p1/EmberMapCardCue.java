@@ -2,6 +2,8 @@ package town.sunshine.corerpg.p1;
 
 import org.bukkit.entity.Player;
 
+import town.sunshine.corerpg.CoreRpgPlugin;
+
 /**
  * D489: map-enter chat cue — 名片 + loot identity (map quality feel).
  * Chat only — not ActionBar HUD family. Zero stamina / fee / drop / AFK / sx change.
@@ -38,7 +40,20 @@ public final class EmberMapCardCue {
         if (p == null) return;
         boolean ch = s != null && s.challenge;
         int ab = s == null ? 0 : s.abyss;
-        p.sendMessage(EmberRunService.P + chatLine(m, ch, ab));
+        String line = chatLine(m, ch, ab);
+        // D1466: append nextMissing when identity incomplete（chat · 非 PAPI）
+        if (m != null && ab == 0 && !ch) {
+            try {
+                CoreRpgPlugin pl = (CoreRpgPlugin) org.bukkit.Bukkit.getPluginManager().getPlugin("CoreRpg");
+                if (pl != null && pl.getDataStore() != null) {
+                    town.sunshine.corerpg.PlayerData pd = pl.getDataStore().get(p.getUniqueId());
+                    String miss = EmberMapIdentity.nextMissing(m, pd);
+                    if (miss != null && !miss.isEmpty() && !miss.contains("已齐"))
+                        line = line + " §8· §f" + miss;
+                }
+            } catch (Throwable ignored) { }
+        }
+        p.sendMessage(EmberRunService.P + line);
     }
 
     /** Admin smoke: cue from map key flags. */
