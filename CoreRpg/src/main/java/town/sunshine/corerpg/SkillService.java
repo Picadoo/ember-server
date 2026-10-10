@@ -623,6 +623,16 @@ public final class SkillService implements Listener {
         String slashId = slashSetTip(player);
         player.sendMessage(PREFIX + ChatColor.GREEN + tip
                 + (slashId != null ? ChatColor.GRAY + slashId : ""));
+        // D621: shape feel telegraph (geometry only · zero skill_mult)
+        String geo;
+        if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE)
+            geo = "§b直线 · 正前穿刺";
+        else if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_RING)
+            geo = "§d环斩 · 身边一圈";
+        else
+            geo = "§e扇形 · 前方扇面";
+        if (sh.sigOverride) geo = "§6签名覆盖 · " + sh.label;
+        try { player.sendActionBar(geo + " §8· §f" + sh.label); } catch (Throwable ignored) { }
     }
 
     /**

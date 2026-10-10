@@ -644,6 +644,9 @@ public final class EmberGrowthService implements Listener {
     public String papi(Player p, PlayerData d, String key) {
         if (talents == null || d == null) return "";
         if ("pts".equals(key)) return "§7" + pointsLine(d);
+        if ("next_hope".equals(key)) { // D618
+            return EmberGrowth.nextHope(talents, picks(d), pointsEarned(d), d.getCoin());
+        }
         if (key.startsWith("src_")) {
             int i;
             try { i = Integer.parseInt(key.substring(4)); } catch (NumberFormatException e) { return ""; }
@@ -1665,6 +1668,8 @@ public final class EmberGrowthService implements Listener {
             p.sendMessage(P + "§6词条洗练 · " + t.shortLabel());
             p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 成色" + EmberItemData.qualityName(t.quality) + "最高 §f" + cap + " §7档 · 保底 §f" + pity + "/" + reroll.pity
                     + (pity >= reroll.pity ? " §a（这次必出 " + cap + " 档）" : ""));
+            if (pity >= reroll.pity) { try { p.sendActionBar("§a这次必出上限档 · 确认即洗"); } catch (Throwable ignored) { } }
+            p.sendMessage(P + "§7花费预览：§f" + ((dup ? "重复件" : (shard + " 碎片")) + (lock ? " +锁" + lockShard + "碎" : "") + " + " + coin + " 币"));
             p.sendMessage(P + "档位概率：" + oddsText(cap));
             p.sendMessage(P + (lock ? "§a锁定词条：§f" + cur.name + " §7不变，只重抽档位" : "词条：本部位 " + reroll.pool(slot).size() + " 个里随机（保底只保档位，不保词条）"));
             String dupWhere = !dup ? "" : di >= 0 ? " §a（背包）" : libDup != null ? " §a（装备库）"
@@ -1822,6 +1827,14 @@ public final class EmberGrowthService implements Listener {
         int quality = t.quality;
         if (recovered) p.sendMessage(P + "§e上次洗练（掉线 / 重启前已付款）的结果：");
         p.sendMessage(P + "§6洗练结果：" + affixText(pl.enc, quality) + (r.forced ? " §a（保底）" : "") + " §7· 保底 " + r.pityAfter + "/" + reroll.pity);
+        if (r.forced) {
+            try { p.sendActionBar("§a保底出档 · §f" + affixText(pl.enc, quality)); } catch (Throwable ignored) { }
+            p.sendMessage(P + "§a希望 · 保底出档（不改 pity 数学）");
+            try { p.playSound(p.getLocation(), org.bukkit.Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.3f); } catch (Throwable ignored) { }
+        } else if (r.pityAfter >= reroll.pity) {
+            try { p.sendActionBar("§a下次洗练必出上限档"); } catch (Throwable ignored) { }
+            p.sendMessage(P + "§a希望 · 下次洗练必出上限档");
+        }
         if (pl.old == 0) {
             pendingRoll.remove(id);
             p.sendMessage(P + "§a词条槽原来是空的，直接装上了");

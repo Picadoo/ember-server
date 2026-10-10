@@ -91,7 +91,7 @@ public final class EmberRunPapi {
         if ("title".equals(key) || "honors".equals(key)) return Section.COSMETIC;
         if (key.startsWith("loot_") || key.startsWith("mapid_") || "mapid_board".equals(key)) return Section.ROTATION;
         if ("abyss_best".equals(key)) return Section.ABYSS;
-        if ("bounty".equals(key)) return Section.ROTATION;
+        if ("bounty".equals(key) || "bounty_hope".equals(key) || "featured_hope".equals(key)) return Section.ROTATION;
         if ("set_focus".equals(key) || "set_focus_line".equals(key)) return Section.LOADOUT; // D465
         if ("dual_lead".equals(key) || "dual_lead_line".equals(key)) return Section.LOADOUT; // D466
         if ("brand_path".equals(key) || "brand_path_line".equals(key)) return Section.LOADOUT; // D467
@@ -535,6 +535,19 @@ public final class EmberRunPapi {
             return EmberHopeMeter.mapGearIdentity(lm, d);
         }
         if ("bounty".equals(key)) return runs.bountyLabel(d); // P2-7 %corerpg_p1_bounty%
+        if ("bounty_hope".equals(key)) { // D620
+            java.util.List<EmberRunRules.BountyTier> tiers = runs.bountyTiers();
+            int done = d.periodCount(EmberRunService.C_BOUNTY, town.sunshine.corerpg.DailyService.today());
+            for (EmberRunRules.BountyTier bt : tiers) {
+                if (bt.clears > done) return EmberHopeMeter.bountyHope(done, bt.clears, bt.rewardText());
+            }
+            return EmberHopeMeter.bountyHope(done, 0, "已全部完成");
+        }
+        if ("featured_hope".equals(key)) { // D620
+            int left = runs.featuredLeft(d);
+            int cap = runs.maps() == null ? 0 : runs.maps().rotationWeeklyCap;
+            return EmberHopeMeter.featuredHope(left, cap);
+        }
         return String.valueOf(runs.featured(java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone()))); // featured_key
     }
 

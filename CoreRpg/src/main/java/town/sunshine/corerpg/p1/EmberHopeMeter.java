@@ -194,4 +194,25 @@ public final class EmberHopeMeter {
         return sb.length() == 0 ? "§8无主线偏向" : sb.toString();
     }
 
+
+    /**
+     * D620: daily bounty hope — clears toward next tier. Zero reward-table change.
+     * {@code nextNeed} = next tier clears threshold; {@code done} = today's settled clears.
+     */
+    public static String bountyHope(int done, int nextNeed, String rewardHint) {
+        if (nextNeed <= 0) return "§a日委托 · 已全部完成";
+        int d = Math.max(0, done), n = Math.max(1, nextNeed);
+        String hint = rewardHint == null || rewardHint.isEmpty() ? "下一档奖励" : rewardHint;
+        if (d >= n) return String.format(Locale.ROOT, "§a日委托 %d/%d · %s", n, n, hint);
+        return String.format(Locale.ROOT, "§e日委托 %d/%d · 再通关 %d 局 → %s", d, n, n - d, hint);
+    }
+
+    /** D620: weekly featured imprint bonus hope. */
+    public static String featuredHope(int left, int cap) {
+        if (cap <= 0) return "§8本周精选印记奖励未开放";
+        int used = Math.max(0, cap - Math.max(0, left));
+        if (left <= 0) return String.format(Locale.ROOT, "§a精选印记 %d/%d · 本周已领满", cap, cap);
+        return String.format(Locale.ROOT, "§e精选印记 %d/%d · 还剩 %d 次多发印记", used, cap, left);
+    }
+
 }

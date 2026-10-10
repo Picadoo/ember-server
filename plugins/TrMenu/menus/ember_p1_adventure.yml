@@ -82,6 +82,8 @@ Icons:
       lore:
         - ''
         - '§7状态：§f%corerpg_p1_bounty%'
+        - '§e希望：§f%corerpg_p1_bounty_hope%'
+        - '§e精选印记：§f%corerpg_p1_featured_hope%'
         - '§7当天第 1 局结算通关：30 余烬币'
         - '§7当天第 3 局结算通关：60 余烬币 + 余烬碎片 ×6'
         - '§7主线 / 挑战 / 深渊每层都算 1 局，团本算 2 局，失败不算'
