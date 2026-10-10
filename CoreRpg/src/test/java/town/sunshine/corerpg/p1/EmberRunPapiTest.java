@@ -46,11 +46,11 @@ public final class EmberRunPapiTest {
         r(LOADOUT, "awaken_route", "awaken", "awaken_next", "set_progress", "stats", "ehp", "blade", "charm", "blade_next_q", "blade_next_c", "charm_next_q", "charm_next_c", "held_next_q", "held_next_c", "held_enhance_cost", "held_enhance_lack", "held_upgrade_cost", "held_upgrade_lack", "held_refine_lack", "held_quality_lack", "held_swap_cost", "held_dismantle_yield", "held_is_armor");
         r(CODEX, "codex_count", "codex_stage_0", "codex_burst_blade_t1", "codexx");
         r(ARMOR, "armor_on", "armor_head", "armor_chest_cand", "armor_legs_delta", "armor_boots_fam", "armor_set", "armor_set_active", "armor_set_busy", "armor_sa", "armor_sb", "armor_all", "armor_stash_line"); // D318 + D335 sa/sb
-        r(SHORT, "sx01_day", "sx02_day", "sx03_day", "sx04_day", "sx05_day", "sx06_day", "sx07_day", "sx08_day", "sx09_day", "sx10_day", "sx11_day", "sx12_day", "sx13_day", "sx14_day", "sx15_day", "sx16_day", "sx17_day", "sx01_day_line", "sx02_day_line", "sx03_day_line", "sx04_day_line", "sx05_day_line", "sx06_day_line", "sx07_day_line", "sx08_day_line", "sx09_day_line", "sx10_day_line", "sx11_day_line", "sx12_day_line", "sx13_day_line", "sx14_day_line", "sx15_day_line", "sx16_day_line", "sx17_day_line",
-                "sx01_day_left", "sx02_day_left", "sx03_day_left", "sx04_day_left", "sx05_day_left", "sx06_day_left", "sx07_day_left", "sx08_day_left", "sx09_day_left", "sx10_day_left", "sx11_day_left", "sx12_day_left", "sx13_day_left", "sx14_day_left", "sx15_day_left", "sx16_day_left", "sx17_day_left", "sx_day_left_sum",
+        r(SHORT, "sx01_day", "sx02_day", "sx03_day", "sx04_day", "sx05_day", "sx06_day", "sx07_day", "sx08_day", "sx09_day", "sx10_day", "sx11_day", "sx12_day", "sx13_day", "sx14_day", "sx15_day", "sx16_day", "sx17_day", "sx18_day", "sx01_day_line", "sx02_day_line", "sx03_day_line", "sx04_day_line", "sx05_day_line", "sx06_day_line", "sx07_day_line", "sx08_day_line", "sx09_day_line", "sx10_day_line", "sx11_day_line", "sx12_day_line", "sx13_day_line", "sx14_day_line", "sx15_day_line", "sx16_day_line", "sx17_day_line", "sx18_day_line",
+                "sx01_day_left", "sx02_day_left", "sx03_day_left", "sx04_day_left", "sx05_day_left", "sx06_day_left", "sx07_day_left", "sx08_day_left", "sx09_day_left", "sx10_day_left", "sx11_day_left", "sx12_day_left", "sx13_day_left", "sx14_day_left", "sx15_day_left", "sx16_day_left", "sx17_day_left", "sx18_day_left", "sx_day_left_sum",
                 "sx_fc_left", "sx_fc_pending_line"); // D395+…+D412+D414
         r(VAULT, "vault_shard", "vault_bone", "vault_core", "vault_blank", "recipe_gap_enhance1", "recipe_gap_upgrade_t2", "recipe_gap_refine1"); // D404
-        r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx01_fc", "sx02_fc", "sx03_fc", "sx04_fc", "sx05_fc", "sx06_fc", "sx07_fc", "sx08_fc", "sx09_fc", "sx10_fc", "sx11_fc", "sx12_fc", "sx13_fc", "sx14_fc", "sx15_fc", "sx16_fc", "sx17_fc"); // D406…D426 seventeen _fc → MAP
+        r(MAP, "q01_state", "q07_fc", "r01_name", "q01_nosuch", "nosuch", "", null, "sx01_state", "sx02_open", "sx01_fc", "sx02_fc", "sx03_fc", "sx04_fc", "sx05_fc", "sx06_fc", "sx07_fc", "sx08_fc", "sx09_fc", "sx10_fc", "sx11_fc", "sx12_fc", "sx13_fc", "sx14_fc", "sx15_fc", "sx16_fc", "sx17_fc", "sx18_fc"); // D406…D427 eighteen _fc → MAP
     }
 
     /** Order pins where a later check shares a prefix with an earlier one (old first-match must win). */
@@ -192,9 +192,10 @@ public final class EmberRunPapiTest {
         assertEquals(15, EmberShortRules.fcLeft(15));
         assertEquals(16, EmberShortRules.fcLeft(16));
         assertEquals(17, EmberShortRules.fcLeft(17));
-        assertEquals(17, EmberShortRules.fcLeft(99));
+        assertEquals(18, EmberShortRules.fcLeft(18));
+        assertEquals(18, EmberShortRules.fcLeft(99));
         assertEquals(3, EmberShortRules.fcLeft(3));
-        assertEquals("十七本首通已齐", EmberShortRules.fcPendingLine(0));
+        assertEquals("十八本首通已齐", EmberShortRules.fcPendingLine(0));
         assertEquals("还有 1 本生涯首通未领", EmberShortRules.fcPendingLine(1));
         assertEquals("还有 10 本生涯首通未领", EmberShortRules.fcPendingLine(10));
         assertEquals("还有 12 本生涯首通未领", EmberShortRules.fcPendingLine(12));
@@ -203,6 +204,7 @@ public final class EmberRunPapiTest {
         assertEquals("还有 15 本生涯首通未领", EmberShortRules.fcPendingLine(15));
         assertEquals("还有 16 本生涯首通未领", EmberShortRules.fcPendingLine(16));
         assertEquals("还有 17 本生涯首通未领", EmberShortRules.fcPendingLine(17));
+        assertEquals("还有 18 本生涯首通未领", EmberShortRules.fcPendingLine(18));
     }
 
     /** EmberRunService keeps only a one-line delegate; no section body is left behind. */

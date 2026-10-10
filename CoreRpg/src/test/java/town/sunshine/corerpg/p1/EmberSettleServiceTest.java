@@ -207,7 +207,7 @@ public final class EmberSettleServiceTest {
 
     @Test public void bundledBalanceVersion_unchanged() {
         EmberRunMaps maps = bundled();
-        assertEquals(81, maps.balanceVersion);
+        assertEquals(82, maps.balanceVersion);
         assertEquals(30, maps.cost);
         assertEquals(0.5, maps.failRefund, 1e-9);
     }
