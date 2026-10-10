@@ -897,6 +897,16 @@ public class EmberEconomyTest {
         assertEquals(null, EmberEconomy.sourceForRushMode("nope"));
     }
 
+    @Test
+    public void gemCraftSinkMatchesAcquireConstants() {
+        // D941 / ARCH S2: C24 goldens ↔ EmberGemAcquire.CRAFT_*
+        assertEquals(EmberGemAcquire.CRAFT_SHARD, EmberEconomy.amount("C24", "shard"));
+        assertEquals(EmberGemAcquire.CRAFT_BONE, EmberEconomy.amount("C24", "bone"));
+        assertEquals(EmberGemAcquire.CRAFT_COIN, EmberEconomy.amount("C24", "coin"));
+        assertEquals("C24", EmberEconomy.byId("C24").id);
+        assertTrue(EmberEconomy.byId("C24").sink);
+    }
+
     /**
      * D228 (REG §6.4 second cut): no direct write of the mark / insignia / badge account counters and no
      * {@code grantFlatEmberXp} in {@code p1/} outside EmberEconomy unless the line carries an {@code econ-ok:} reason

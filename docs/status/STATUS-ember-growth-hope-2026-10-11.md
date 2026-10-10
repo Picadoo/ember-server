@@ -424,3 +424,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D933–D940 ARCH S2 SHIP · jar 1.65.402-d933
 - Inventory REG; forge sources←S01; C24 gem craft + S60 admin smoke; econ-ok seeds; source-map bv89; ledger glance
+
+## D941 ARCH S2 SHIP · jar 1.65.403-d941
+- C24 golden ↔ GemAcquire.CRAFT_*; REG changelog
