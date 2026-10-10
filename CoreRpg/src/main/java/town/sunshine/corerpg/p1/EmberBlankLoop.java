@@ -29,6 +29,31 @@ public final class EmberBlankLoop {
         EmberForgeCommitNext.afterBlanks(p, held);
     }
 
+
+    /**
+     * D2156: armor dismantle paid only tenths (no whole blank yet).
+     * Show progress toward next blank + piece-aware spend if blanks already in vault.
+     * Zero tenths table change.
+     */
+    public static void afterTenths(Player p, int tenthsNow, int gained) {
+        if (p == null || gained <= 0) return;
+        String P = EmberRunService.P;
+        int show = tenthsNow % 10;
+        int need = show == 0 ? 10 : (10 - show);
+        p.sendMessage(P + "§e护甲零头 §f0." + show + " §7/ 1.0 §8（+" + gained + " · 满 10 出 1 胚）"
+                + " §7· 再攒 §f0." + need);
+        try {
+            p.sendActionBar("§e零头 · §f0." + show + "/1.0 §7· +" + gained);
+        } catch (Throwable ignored) { }
+        EmberItemData held = heldGear(p);
+        String[] a = new String[]{"[再分解]", "/corerpg p1 scrap", "继续攒零头", "YELLOW"};
+        String[] b = EmberForgeCommitNext.quality(held);
+        if (b == null) b = EmberForgeCommitNext.refine(held);
+        if (b == null) b = new String[]{"[去升阶]", "/corerpg p1 upgrade", "有整胚再升阶", "GOLD"};
+        EmberForgeCommitNext.send3(p, P + "§7零头下一环：", a, b,
+                new String[]{"[工坊]", "/corerpg p1 forge", "工坊总页", "GRAY"});
+    }
+
     static EmberItemData heldGear(Player p) {
         if (p == null) return null;
         try {

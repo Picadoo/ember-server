@@ -430,3 +430,6 @@ Gear deliver + set formed/complete → EmberForgeCommitNext.
 
 ### MR · mapfarm/raid commit (D2141–D2154)
 MapFarmCue + RaidLoop week-full → piece enhance. Commit-slot NEAR-SAT.
+
+### AT · armor tenths commit (D2155–D2168)
+BlankLoop.afterTenths when armor dismantle pays only tenths.

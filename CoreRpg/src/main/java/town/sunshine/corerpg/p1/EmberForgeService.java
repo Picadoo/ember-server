@@ -783,6 +783,14 @@ public final class EmberForgeService implements Listener {
                     else if (q != null && gl() != null) gl().delivery().kick(q); // D162: blanks = delivery row of the same txn
                     if (q != null) EmberVault.savePlayerFile(q);
                     if (q != null && blanks > 0) EmberBlankLoop.afterDismantle(q, blanks); // D482 blank spend chase
+                    else if (q != null && pd != null && pd.length > 2) { // D2157 armor tenths-only chase
+                        int gained = (Integer) pd[2];
+                        if (gained > 0) {
+                            PlayerData tpd2 = plugin.getDataStore().get(id);
+                            int now = tpd2 == null ? 0 : tpd2.periodCount(C_BLANK_TENTHS, "all");
+                            EmberBlankLoop.afterTenths(q, now, gained);
+                        }
+                    }
                 }
                 plugin.getLogger().info("[" + EmberMode.MODE_ID + "] forge " + kind + " " + rid + " " + id + " ok: " + note + " cost " + (costJson != null ? costJson : cost.json()));
                 if (q != null) {

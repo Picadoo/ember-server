@@ -791,3 +791,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D2141–D2154 · 图装/团本承诺槽 · jar 1.65.510-d2154
 - MapFarmCue afterHit/cue/resume → enhance/成色; RaidLoop 周满→enhance
 - forge commit-slot NEAR-SAT scan doc
+## D2155–D2168 · 护甲零头承诺环 · jar 1.65.511-d2168
+- BlankLoop.afterTenths + ForgeService wire when blanks=0
