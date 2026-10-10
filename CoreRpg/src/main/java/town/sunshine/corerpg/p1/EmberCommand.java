@@ -3317,6 +3317,7 @@ public final class EmberCommand {
                         p.sendMessage(P + EmberShortPath.resolveLine(next));
                     } else EmberShortPath.offerPick(p);
                 }
+                p.sendMessage(P + EmberShortPath.unpaidFcLine(runs, d)); // D751
                 return true;
             }
             int id = EmberShortPath.parse(args[2]);
@@ -4031,7 +4032,8 @@ public final class EmberCommand {
                         + (ch ? "" : " §8· 已是该焦点"));
                 EmberLoadout lo = runs.loadouts() != null ? runs.loadouts().get(p) : null;
                 p.sendMessage(P + EmberSetFocus.glance(id, lo == null ? "none" : lo.activeSet, lo == null ? 0 : lo.awakening, runs.target(d)));
-                if (lo != null) EmberSetChase.tell(p, d, lo, loadouts); // D701/D741
+                EmberLoadoutService los = loadouts != null ? loadouts : (runs.loadouts());
+                if (lo != null) EmberSetChase.tell(p, d, lo, los); // D701/D741/D750
                 try { // D665
                     if (id == EmberSetFocus.SCORCH) p.sendActionBar("§6焚烬焦点 · 火痕步/点燃");
                     else if (id == EmberSetFocus.BURST) p.sendActionBar("§c烬爆焦点 · 爆闪步/爆发");

@@ -221,3 +221,7 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D747 settle afterEquip setchase
 - D748 abyss enter 冲目标层
 - D749 unpaid FC key list
+
+## D750–D751 SHIP · jar 1.65.346-d750 · 2026-10-11
+- D750 setfocus tell via runs.loadouts
+- D751 shortpath nudge unpaid list
