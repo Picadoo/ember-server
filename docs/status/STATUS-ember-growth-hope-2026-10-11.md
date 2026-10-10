@@ -625,3 +625,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1493–D1506 ARCH SHIP · jar 1.65.461-d1493
 - routeCommand AB awakeningRemain + first breakthrough line
+
+## D1507–D1514 ARCH health · jar still 1.65.461-d1493
+- EmberCounters/Formula/Loadout/SourceMap/Economy tests PASS (no code change)
