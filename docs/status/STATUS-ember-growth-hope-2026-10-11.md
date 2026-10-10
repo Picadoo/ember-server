@@ -801,3 +801,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - Enhance fail → quality/refine; gem remove → enhance
 ## D2205–D2218 · 图身份齐→软定套装焦点 · jar 1.65.515-d2218
 - RESEARCH 非按钮轴；MI soft SetFocus；零 ConfirmTokens / 通关门 / 掉率
+## D2219–D2228 · 图身份软定掉落目标 · jar 1.65.516-d2228
+- soft-focus 时 p1_target=0 → 同步 loot family

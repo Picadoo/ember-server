@@ -139,9 +139,16 @@ public final class EmberMapIdentity {
         if (!EmberSetFocus.valid(focusId)) return false;
         if (!EmberSetFocus.set(d, focusId)) return false;
         d.addPeriodCount(latch, "all", 1);
+        // D2220: soft loot target only when unset (FamilyPath mirror · no ConfirmTokens)
+        boolean lootSoft = false;
+        if (d.periodCount(EmberRunService.C_TARGET, "all") == 0) {
+            EmberFamilyPath.setLootTarget(d, family);
+            lootSoft = d.periodCount(EmberRunService.C_TARGET, "all") > 0;
+        }
         String famName = EmberItemData.familyName(family);
         String mapName = done.name == null ? done.key : done.name;
         String line = "§a图身份齐 · §f" + mapName + " §7→ 软定套装焦点 §f" + famName
+                + (lootSoft ? " §7+ 掉落目标" : "")
                 + " §8（可随时 /corerpg p1 setfocus 改 · 不锁通关）";
         p.sendMessage(EmberRunService.P + line);
         try { p.sendActionBar("§a图鉴齐 · 焦点 §f" + famName); } catch (Throwable ignored) { }
