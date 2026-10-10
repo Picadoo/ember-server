@@ -32,4 +32,10 @@ public class EmberSkillFeelSfTest {
         assertTrue(su.contains("环"));
         assertTrue(EmberSkillFeelSf.slashConfirmWithSet(0, 1, " · 烬刃余烬").endsWith("烬刃余烬"));
     }
+
+    @Test public void slashMiss_shapeOnly() {
+        assertEquals("扇形烬斩落空", EmberSkillFeelSf.slashMiss(EmberSkillKit.SHAPE_FAN));
+        assertEquals("直线烬斩落空", EmberSkillFeelSf.slashMiss(EmberSkillKit.SHAPE_LINE));
+        assertEquals("环斩烬斩落空", EmberSkillFeelSf.slashMiss(EmberSkillKit.SHAPE_RING));
+    }
 }

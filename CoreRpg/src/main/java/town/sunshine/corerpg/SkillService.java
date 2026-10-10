@@ -915,6 +915,7 @@ public final class SkillService implements Listener {
         }
         applySlashSetIdentity(player, hit);
         maybeFlashSlashHit(player, hit.size(), shapeId); // D445 / D1155 SF1–SF3
+        if (hit.isEmpty()) maybeFlashSlashMiss(player, shapeId); // D1209
         if (look2 != null) {
             playSound(player.getLocation(), look2.sound);
             spawnShapeSlashParticles(eye.clone().add(look.clone().multiply(1.5)), look2.particles, shapeId, false);
@@ -956,6 +957,21 @@ public final class SkillService implements Listener {
                 shapeId, hitCount, town.sunshine.corerpg.p1.EmberSkillFeelSf.setFalloutActionHalf(fam));
         if (msg.isEmpty()) return;
         if (sets.flashSkillConfirm(player, ChatColor.GOLD + msg)) {
+            lastSkillHitFlashAt.put(player.getUniqueId(), Long.valueOf(now));
+        }
+    }
+
+    /** D1209: ActionBar 烬斩落空 — shape only · same debounce · zero combat. */
+    private void maybeFlashSlashMiss(Player player, int shapeId) {
+        if (player == null) return;
+        long now = System.currentTimeMillis();
+        Long prev = lastSkillHitFlashAt.get(player.getUniqueId());
+        long lastAt = prev == null ? 0L : prev.longValue();
+        if (!shouldFlashSlashHit(1, lastAt, now)) return;
+        town.sunshine.corerpg.p1.EmberSetService sets = plugin.getEmberSets();
+        if (sets == null) return;
+        String msg = town.sunshine.corerpg.p1.EmberSkillFeelSf.slashMiss(shapeId);
+        if (sets.flashSkillConfirm(player, ChatColor.GRAY + msg)) {
             lastSkillHitFlashAt.put(player.getUniqueId(), Long.valueOf(now));
         }
     }

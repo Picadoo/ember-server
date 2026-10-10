@@ -26,6 +26,11 @@ public final class EmberSkillFeelSf {
         return s;
     }
 
+    /** D1208: 落空反馈（展示 only · 非 SF4）. */
+    public static String slashMiss(int shapeId) {
+        return shapeShort(shapeId) + "烬斩落空";
+    }
+
     /**
      * SF1–SF3: confirm + optional set-fallout half (e.g. {@code " · 烬刃余烬"}).
      */

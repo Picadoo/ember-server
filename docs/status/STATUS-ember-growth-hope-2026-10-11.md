@@ -541,3 +541,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1199–D1206 ARCH SHIP · jar 1.65.434-d1199
 - SinkGlance ROLL matCost lack; quality/refine/upgrade ActionBar 确定成功
+
+## D1207–D1214 ARCH SHIP · jar 1.65.435-d1207
+- Skill slash-miss shape ActionBar (display only · not SF4 / not skill_mult)
