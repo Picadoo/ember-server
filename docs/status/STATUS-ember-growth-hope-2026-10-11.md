@@ -296,3 +296,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D788 SHIP · jar 1.65.362-d788
 - enterCue also on normal runs when hard-path set
+
+## D789 SHIP · jar 1.65.363-d789
+- Map farm hit → setchase equip tell

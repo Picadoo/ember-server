@@ -520,6 +520,11 @@ public final class EmberSettleService {
                     if (hit != null) {
                         p.sendMessage(EmberRunService.P + hit);
                         try { p.sendActionBar("§a图装追到 · §f" + EmberItemData.familyName(g.item.family)); } catch (Throwable ignored) { }
+                        // D789: farm hit → equip chase if focus/loadout gap
+                        if (runs.loadouts() != null) {
+                            EmberLoadout hitLo = runs.loadouts().get(p);
+                            EmberSetChase.tell(p, pd, hitLo, runs.loadouts());
+                        }
                         break;
                     }
                 }
