@@ -1,4 +1,4 @@
-# Open 挂 event_soft_hope (pending D#) + drop_q_hope（零改掉率）
+# Open 挂 event_soft_hope (D729) + drop_q_hope（零改掉率）
 # D616: Open/目标族区挂 mapid_board 图身份一览
 # D610: 每图希望行 mapid_q0N（本图身份·图鉴进度·不锁通关）
 # D456: 签名获取半行 %corerpg_p1_sig_acq% · 未出仍拿徽记 · 零改掉率
@@ -42,6 +42,7 @@ Events:
     - 'tell: §8短征入口可看今日剩余有奖/首通未领'
     - 'command: corerpg p1 abysstarget'
     - 'command: corerpg p1 setchase'
+    - 'command: corerpg p1 challengepath'
 
 Icons:
   # D421 短征入口 → ember_p1_short 十九本选页（烬门/锈灯/霜雾/烬井/裂谷/烬环/烬塔/错层/跳石/递闸/镜廊/枢厅/衡梁）

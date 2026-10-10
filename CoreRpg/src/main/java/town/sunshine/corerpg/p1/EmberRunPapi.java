@@ -148,6 +148,7 @@ public final class EmberRunPapi {
                 // D608 gem clear-pity hope
                 || "gem_pity_hope".equals(key)
                 || "drop_q_hope".equals(key)
+                || "event_soft_hope".equals(key) // D728
                 || "gearlib_hope".equals(key);
     }
 
@@ -743,6 +744,10 @@ public final class EmberRunPapi {
             case "drop_q_hope": { // D611
                 PlayerData dq = runs.plugin().getDataStore().get(p.getUniqueId());
                 return EmberDropQualityPity.hope(dq);
+            }
+            case "event_soft_hope": { // D728
+                PlayerData es = runs.plugin().getDataStore().get(p.getUniqueId());
+                return EmberEventSoftPity.hope(es);
             }
             case "gearlib_hope": { // D626
                 EmberGearLib gl = EmberGearLib.get();

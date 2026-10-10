@@ -1,3 +1,4 @@
+# Open 指向 D666 (D730) 招架成功 ActionBar（零改 CD/coef）
 # D689: Stage2 geometry numbers on shape preview icons
 # D617: Open/此刻状态挂下一技能希望 + 套装手感（零改系数）
 # D460: 首通 Q04/Q05 聊天三选一/二选一 · D459: 首通解锁技能会聊天宣告 + 本页 Open 半行互指 · 零改技能数值
@@ -32,6 +33,7 @@ Events:
     - 'tell: §bStage2 几何：§f扇≥110° · 直线6格半宽0.7 · 环3.5格最多4'
     - 'tell: §7当前 §f%corerpg_kit_shape% §7· 身法 §f%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
     - 'tell: §b守招 §f%corerpg_kit_parry_name% §7· 解锁 §f%corerpg_kit_parry_unlock% §7· %corerpg_kit_parry_cd%'
+    - 'tell: §a招架成功会闪 ActionBar「招架成功 · 反打」§8（D666 · 不改 CD）'
     - 'command: corerpg skill kit'
     - 'tell: §8首通 Q02/Q03/Q04/Q05 会聊天宣告新技能（烬突/招架/符文/身法）'
     - 'tell: §8首通 Q04/Q05 还会弹出符文三选一 / 身法方向二选一（玩法侧移）'
@@ -309,6 +311,7 @@ Icons:
         - '§e怎么用'
         - '§7  首领预警§f砸中你§7后约半秒内再按 Q'
         - '§7  成功：对首领反打 §f0.45B §7（预警伤仍生效）'
+        - '§a成功瞬间 ActionBar 一闪「招架成功 · 反打」§8（D666 手感 · 零改数值）'
         - ''
         - '§a好：对齐落地窗口赚反打'
         - '§c坏：窗外乱按白丢独立 CD'

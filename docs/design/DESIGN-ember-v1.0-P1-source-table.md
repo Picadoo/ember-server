@@ -1795,10 +1795,17 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D687–D690 | CoreRpg **1.65.325-d687** / bv 未抬 | chase refresh / AFK→forge / kit Stage2 clarity / sig stamp dry **SHIP** · `fd122031`。 |
 | D691–D693 | CoreRpg **1.65.326-d691** / bv 未抬 | imprint dry note / kit dash lore / sig dry glance **SHIP** · `5abb59c2`。 |
 | D694–D697 | CoreRpg **1.65.327-d694** / bv 未抬 | enhance-fail undo / set chase / abyss target / short FC next **SHIP** · `eb1e7fce`。 |
+| D698–D700 | CoreRpg **1.65.328-d698** / bv 未抬 | abyss target menu / short FC enter / gear setchase **SHIP** · `54cc598b`。 |
+| D701–D703 | CoreRpg **1.65.329-d701** / bv 未抬 | setfocus setchase / abysspath layer / shortpath ActionBar **SHIP** · `eeb85b91`。 |
+| D704–D707 | CoreRpg **1.65.330-d704** / bv 未抬 | map farm+setfocus / adventure·short Open / undo empty bar **SHIP** · `9c30ee46`。 |
+| D708–D710 | CoreRpg **1.65.331-d708** / bv 未抬 | charm setchase / abyss above openable / unpaid FC **SHIP** · `67c19beb`。 |
+| D711–D712 | CoreRpg **1.65.332-d711** / bv 未抬 | shortpath unpaid glance / abyss newBest suggest **SHIP** · `4f94c2b5`。 |
+| D713–D714 | CoreRpg **1.65.333-d713** / bv 未抬 | enhance-fail mid remind / gearlib open setchase **SHIP** · `065d2f96`。 |
 
 
 
 
+| D728–D730 | CoreRpg **1.65.339-d728** / bv 未抬 | 事件软保底 PAPI + 冒险/技能组希望可见 **SHIP**：`event_soft_hope`←`EmberEventSoftPity.hope` · adventure Open soft-pity+drop_q · skill kit 招架 D666 指针 · 零改掉率/CD · tip `TIP-ember-growth-hope-d728-d730-2026-10-11.md`。 |
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）
 
 | 项 | 内容 |
