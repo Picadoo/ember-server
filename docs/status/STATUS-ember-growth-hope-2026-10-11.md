@@ -631,3 +631,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1515–D1528 ARCH SHIP · jar 1.65.462-d1515
 - cmdRuns + joinLines skill next remain (chat/AB, not PAPI)
+
+## D1529–D1542 ARCH SHIP · jar 1.65.463-d1529
+- specRemainCue empty pts AB + nextHope chat

@@ -358,7 +358,12 @@ public final class EmberGrowthService implements Listener {
         if (d == null) { p.sendMessage(P + "数据还没加载好，稍后再试"); return true; }
         String op = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
         boolean confirm = args.length >= 5 && "confirm".equalsIgnoreCase(args[4]) || args.length >= 4 && "confirm".equalsIgnoreCase(args[args.length - 1]);
-        if (op.isEmpty()) { FROM.remove(p.getUniqueId()); openMenu(p, MENU); return true; }
+        if (op.isEmpty()) { // D1530
+            FROM.remove(p.getUniqueId());
+            specRemainCue(p, d);
+            openMenu(p, MENU);
+            return true;
+        }
         if ("from".equals(op)) {
             String from = args.length >= 4 ? args[3].toLowerCase(Locale.ROOT) : "";
             if (FROM_MENUS.containsKey(from)) FROM.put(p.getUniqueId(), from); else FROM.remove(p.getUniqueId());
@@ -370,7 +375,7 @@ public final class EmberGrowthService implements Listener {
             if (menu != null) openMenu(p, menu);
             return true;
         }
-        if ("list".equals(op)) { list(p, d); return true; }
+        if ("list".equals(op)) { list(p, d); specRemainCue(p, d); return true; }
         if ("pick".equals(op) && args.length >= 4) return pick(p, d, args[3], confirm);
         if ("reset".equals(op)) return reset(p, d, confirm);
         p.sendMessage(P + "用法：/corerpg p1 spec（打开天赋页）");
@@ -462,6 +467,23 @@ public final class EmberGrowthService implements Listener {
             String cur = picks.get(r.row);
             p.sendMessage(P + "第 " + r.row + " 排「" + r.name + "」：" + (cur == null ? "§8空" : "§a" + talents.node(cur).name));
         }
+    }
+
+    /** D1530: 空点 / 下一可点（chat+AB · 非新 PAPI twin）. */
+    private void specRemainCue(Player p, PlayerData d) {
+        if (p == null || d == null || talents == null) return;
+        int earned = pointsEarned(d), used = EmberGrowth.pointsUsed(talents, picks(d));
+        int empty = Math.max(0, earned - used);
+        String next = EmberGrowth.nextHope(talents, picks(d), earned, d.getCoin());
+        if (next != null && !next.isEmpty()) p.sendMessage(P + next);
+        try {
+            if (empty > 0)
+                p.sendActionBar("§6专精 · 空 §f" + empty + " §7· " + pointsLine(d).replaceAll("§.", ""));
+            else if (earned >= talents.maxPoints())
+                p.sendActionBar("§a专精 · 点满");
+            else
+                p.sendActionBar("§e专精 · 已用满现有点 · 再赚点");
+        } catch (Throwable ignored) { }
     }
 
     void openMenu(Player p, String menu) {

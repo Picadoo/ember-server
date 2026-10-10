@@ -25,5 +25,6 @@ setchase-mapid（SC/MI/CD）已近饱和。精选入场、周目标进度、觉�
 | FC1 | 首通空态对齐 | cmdFirstClear |
 | RT1 | 突破路线 AB | routeCommand |
 | SK1 | 下一技能剩余 | runs/join · SkillUnlock.nextHope |
+| SP1 | 专精空点 AB | specRemainCue |
 
 不改奖励数、周帽、掉率、通关闸。
