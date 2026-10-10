@@ -810,3 +810,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D2251–D2264 · 套装形状同步几何 · jar 1.65.519-d2264
 - 2pc prefer shape match → hitbox bump · 零 skill_mult · 非按钮/remain
 - Talent row1 仍 HOLD；K3 banned
+## D2265–D2276 · 套装形状同步落点 · jar 1.65.520-d2276
+- 形同：缓速+4ticks / 微疗×1.25 · 零 skill_mult

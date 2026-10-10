@@ -359,6 +359,16 @@ public final class EmberSkillKit {
      * D642 + D2252 geometry for a known rune id (tests unlock-bypass).
      * Zero skill_mult.
      */
+
+    /** D2266: burst land slow ticks (base or +4 when set-shape synced). */
+    public static int slashLandSlowTicks(boolean setShapeSync) {
+        return SLASH_BURST_SLOW_TICKS + (setShapeSync ? 4 : 0);
+    }
+
+    /** D2266: sustain land heal pct (×1.25 when synced). */
+    public static double slashLandHealPct(boolean setShapeSync) {
+        return setShapeSync ? SLASH_HEAL_PCT * 1.25 : SLASH_HEAL_PCT;
+    }
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync) {
         if (id == SHAPE_LINE) {
             double lw = setSync ? 0.95 : 0.7;
