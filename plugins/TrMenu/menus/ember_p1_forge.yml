@@ -54,6 +54,7 @@ Icons:
       lore:
         - '§7手持刃或护符；+1~+3 必成，之后按次数保底'
         - '§7失败不降级、不爆装'
+        - '§e希望表盘：§f%corerpg_p1_held_enhance_pity%'
         - ''
         - '§e本次：§f%corerpg_p1_held_enhance_cost%'
         - '§c%corerpg_p1_held_enhance_lack%'
@@ -83,6 +84,7 @@ Icons:
       material: redstone
       name: '§c强化 · 确认一次'
       lore:
+        - '§e希望表盘：§f%corerpg_p1_held_enhance_pity%'
         - '§e本次：§f%corerpg_p1_held_enhance_cost%'
         - '§c%corerpg_p1_held_enhance_lack%'
         - '§8与预览一致'

@@ -263,7 +263,8 @@ Icons:
       lore:
         - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
         - '§7护符：%corerpg_p1_reroll_charm_cur%'
-        - '§7保底：刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
+        - '§e希望 · 强化：§7刃 %corerpg_p1_enhance_blade_pity% §7· 护符 %corerpg_p1_enhance_charm_pity%'
+        - '§e希望 · 洗练：§7刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
         - '§7重复件（或碎片）+ 币洗一次，档位不超过成色上限'
         - '§8小加成，不是变强：4 档定身纹 ≈ Q07 重砸每次少挨 0.7'
         - ''

@@ -134,7 +134,10 @@ public final class EmberRunPapi {
                 || "held_refine_lack".equals(key) || "held_quality_lack".equals(key)
                 || "held_swap_cost".equals(key) || "held_dismantle_yield".equals(key)
                 // D333 工坊手持甲菜单闸：主手可信 P1 甲 → 1，否则 0
-                || "held_is_armor".equals(key);
+                || "held_is_armor".equals(key)
+                // D601 hope meters: enhance pity glance (worn + held)
+                || "enhance_blade_pity".equals(key) || "enhance_charm_pity".equals(key)
+                || "held_enhance_pity".equals(key);
     }
 
     /** D395 day-cap + D406 fc aggregate (not per-map fields; sx0N_fc stays MAP). */
@@ -636,6 +639,15 @@ public final class EmberRunPapi {
             case "held_next_q": return heldNext(p, true);
             case "held_next_c": return heldNext(p, false);
             // D307 W1a/b：工坊本次费用 / 缺料 / 互换免费 / 分解得胚
+            case "enhance_blade_pity": // D601
+                return l.blade == null ? EmberHopeMeter.emptySlot("刃") : EmberHopeMeter.enhance(l.blade);
+            case "enhance_charm_pity": // D601
+                return l.charm == null ? EmberHopeMeter.emptySlot("护符") : EmberHopeMeter.enhance(l.charm);
+            case "held_enhance_pity": { // D601 forge preview
+                EmberItemData hd = heldTrusted(p);
+                if (hd == null) return EmberHopeMeter.emptySlot("手持");
+                return EmberHopeMeter.enhance(hd);
+            }
             case "held_enhance_cost": return heldForgeLine(p, "enhance");
             case "held_enhance_lack": return heldForgeLack(p, "enhance");
             case "held_upgrade_cost": return heldForgeLine(p, "upgrade");

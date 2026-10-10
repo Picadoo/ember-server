@@ -46,7 +46,7 @@ Icons:
         - '§7档位最高 = 成色：标准 1 · 精良 2 · 卓越 3 · 极品 4'
         - '%corerpg_p1_reroll_odds%'
         - '§7保底：连续 5 次没出到上限档，第 6 次必出上限档'
-        - '§7刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
+        - '§e希望表盘 · 洗练：§7刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
         - '§7        （词条仍随机：刃 2 选 1、护符 3 选 1；锁定时就是锁定的那个）'
         - '§b锁定词条：§7Shift+点击，保留当前词条只重抽档位，'
         - '§7        另加一份碎片（T1 40 / T2 80 / T3 120）'

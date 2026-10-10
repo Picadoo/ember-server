@@ -1,6 +1,6 @@
 # DESIGN · 余烬希望感成长环（连续变强）· 2026-10-11
 
-> **状态：** 设计 only · **禁止本档写 jar / 改表 / 改线上经济**  
+> **状态：** 已批 A·M · Stage A1 = D601 PASS jar 1.65.293-d601 · 见 STATUS · 2026-10-11  
 > **研究：** [`RESEARCH-ember-growth-hope-reference-2026-10-11.md`](RESEARCH-ember-growth-hope-reference-2026-10-11.md)  
 > **STATUS tip：** [`STATUS-ember-growth-hope-2026-10-11.md`](../status/STATUS-ember-growth-hope-2026-10-11.md)  
 > **孔石联动：** [`DESIGN-ember-p1-socket-gems-2026-10-11.md`](DESIGN-ember-p1-socket-gems-2026-10-11.md)  
@@ -154,7 +154,7 @@
 
 ## 6. 批注栏
 
-- [ ] 总控批 **A · 方案 M**（本文件即方案 M）· 日期 ____  
+- [x] 总控批 **A · 方案 M**（本文件即方案 M）· 日期 2026-10-11 · commit 2252058b  
 - [ ] Stage A 成色旁路选型：确定升一档消耗 ____ / 或 pity 次数 ____  
 - [ ] Stage B 三套分叉短表锁定  
 - [ ] Stage C 跟孔石 Stage1 完成态再开 D607  
