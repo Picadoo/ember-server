@@ -62,9 +62,13 @@ public final class EmberEnhanceLoop {
             p.sendMessage(P + "§e强化未升档 §7· 材料已扣"
                     + (rem.isEmpty() ? "" : (" · §f" + rem))
                     + " §7· 选下一步（不改保底规则）：");
-            ConfirmTokens.sendButtons(p, P, // D886
+            EmberItemData failAfter = firstAfter(list);
+            String[] b = EmberForgeCommitNext.quality(failAfter);
+            if (b == null) b = EmberForgeCommitNext.refine(failAfter);
+            if (b == null) b = new String[]{"[成套追]", "/corerpg p1 setchase", "换件再冲", "GOLD"};
+            ConfirmTokens.sendButtons(p, P, // D886 / D2194
                     new String[]{"[再试一次]", "/corerpg p1 enhance", "同件再强化（保底累计）", "GREEN"},
-                    new String[]{"[成套追]", "/corerpg p1 setchase", "换件再冲", "GOLD"},
+                    b,
                     new String[]{"[去精工]", "/corerpg p1 refine", "先投精工", "AQUA"});
         }
     }

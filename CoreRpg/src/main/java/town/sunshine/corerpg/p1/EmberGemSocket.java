@@ -151,6 +151,7 @@ public final class EmberGemSocket {
         ConfirmTokens.sendButtons(p, P + "§7可再嵌：",
                 new String[]{"[嵌回孔" + hole + "]", "/corerpg p1 gem insert " + hole + " " + EmberGemPath.key(code),
                         "嵌回刚拆的石", "GREEN"},
+                EmberForgeCommitNext.enhance(),
                 new String[]{"[宝石列表]", "/corerpg p1 gem list", "换石", "AQUA"});
         return true;
     }

@@ -797,3 +797,5 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - offerForgeSpace enhance; stampHit enhance
 ## D2181–D2192 · 烙纹再定向承诺 · jar 1.65.513-d2192
 - afterPin chargesLeft+path → re-pin primary
+## D2193–D2204 · 强化失败/拆石承诺 · jar 1.65.514-d2204
+- Enhance fail → quality/refine; gem remove → enhance
