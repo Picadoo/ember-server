@@ -510,6 +510,40 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D582: any living split-add still up. */
+    boolean hasPendingClone() {
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (t.splitAdd) return true;
+        }
+        return false;
+    }
+
+    /** D582: warp a committed player next to the nearest living split-add. */
+    boolean pathCloneAdd(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingClone()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location pl = p.getLocation();
+        Tracked best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Tracked t : mobs.values()) {
+            if (t == null || t.le == null || t.le.isDead()) continue;
+            if (!t.splitAdd) continue;
+            double d = t.le.getLocation().distanceSquared(pl);
+            if (d < bestD) { bestD = d; best = t; }
+        }
+        if (best == null) return false;
+        Location at = best.le.getLocation();
+        Location to = at.clone().add(1.2, 0, 0);
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.55f);
+        return true;
+    }
+
     /** D581: boss cast armed with a break-damage channel. */
     boolean hasPendingPress() {
         return boss != null && boss.le != null && !boss.le.isDead()
@@ -1918,6 +1952,7 @@ final class EmberRunDirector {
             n++;
         }
         svc.tellRun(s, "§6「分裂」§7精英裂成了 " + n + " 个分身！");
+        if (n > 0) EmberClonePath.maybeAfterClone(s); // D582
     }
 
     // ------------------------------------------------------------------ D171 crystal / escort helpers
