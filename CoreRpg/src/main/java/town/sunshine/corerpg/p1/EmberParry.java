@@ -151,6 +151,9 @@ public final class EmberParry implements Listener {
         player.sendMessage(P + ChatColor.GREEN + EmberSkillKit.DISPLAY_PARRY + "成功 · 反打 "
                 + ChatColor.WHITE + String.format(java.util.Locale.ROOT, "%.0f", flat)
                 + ChatColor.GRAY + "（预警伤仍生效 · CD " + EmberSkillKit.PARRY_CD_SECONDS + "s）");
+        try { // D666 play feel · zero CD/flat change
+            player.sendActionBar("§a招架成功 · §f反打 " + String.format(java.util.Locale.ROOT, "%.0f", flat));
+        } catch (Throwable ignored) { }
     }
 
 

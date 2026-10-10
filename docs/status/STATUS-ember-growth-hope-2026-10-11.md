@@ -72,3 +72,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 - D662 variety bounty done buttons
 - D663 shapepath Stage2 ActionBar
 - D664 roll → deliver / setfocus chase
+
+## D665–D668 SHIP · jar 1.65.319-d665 · 2026-10-11
+- D665 setfocus ActionBar + next buttons
+- D666 parry success ActionBar
+- D667 week-goal complete buttons
+- D668 week-goal progress ActionBar

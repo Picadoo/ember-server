@@ -19,6 +19,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import town.sunshine.corerpg.ConfirmTokens;
+
 import town.sunshine.corerpg.PlayerData;
 
 /**
@@ -431,18 +433,29 @@ public final class EmberSeason {
             int pay = maps().goalReward;
             if (pay > 0 && !EmberEconomy.grantBadge(d, "S19", pay)) // D228 / ARCH S2-8
                 Bukkit.getLogger().warning("[P1 goals] economy grantBadge refused S19 " + pay + " for " + u);
-            if (p != null) p.sendMessage(P + "§a周目标完成：" + goalName(g) + " §7· 余烬徽 +" + pay + "（共 " + badges(d) + "，外观商店用）· 本周 "
-                    + goalsDone(d) + "/" + goalCount());
+            if (p != null) {
+                p.sendMessage(P + "§a周目标完成：" + goalName(g) + " §7· 余烬徽 +" + pay + "（共 " + badges(d) + "，外观商店用）· 本周 "
+                        + goalsDone(d) + "/" + goalCount());
+                try { p.sendActionBar("§a周目标完成 · §f" + goalName(g)); } catch (Throwable ignored) { } // D667
+                ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                        new String[]{"[赛季页]", "/ember_p1_season", "周目标/外观店", "LIGHT_PURPLE"},
+                        new String[]{"[冒险页]", "/ember_p1_adventure", "继续推进", "GREEN"},
+                        new String[]{"[稍后再说]", null, "徽已入账", "GRAY"});
+            }
             if (goalsDone(d) >= goalCount() && d.periodCount(C_GOALPAY + "all", wk) == 0) {
                 d.addPeriodCount(C_GOALPAY + "all", wk, 1);
                 int b = maps().goalBonus;
                 if (b > 0 && !EmberEconomy.grantBadge(d, "S19", b)) // D228 / ARCH S2-8
                     Bukkit.getLogger().warning("[P1 goals] economy grantBadge refused S19 bonus " + b + " for " + u);
-                if (p != null) p.sendMessage(P + "§d本周目标全部完成！§7余烬徽 +" + b + "（共 " + badges(d) + "）");
+                if (p != null) {
+                    p.sendMessage(P + "§d本周目标全部完成！§7余烬徽 +" + b + "（共 " + badges(d) + "）");
+                    try { p.sendActionBar("§d本周目标全清 · 余烬徽 +" + b); } catch (Throwable ignored) { }
+                }
             }
             Bukkit.getLogger().info("[P1 goals] " + u + " " + g + " done " + wk);
         } else if (p != null) {
             p.sendMessage(P + "§7周目标：" + goalName(g) + " §f" + after + "/" + t);
+            try { p.sendActionBar("§7周目标 · §f" + goalName(g) + " §e" + after + "/" + t); } catch (Throwable ignored) { } // D668
         }
     }
 
