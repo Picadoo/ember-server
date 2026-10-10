@@ -468,6 +468,45 @@ public final class EnhanceService {
                 + ChatColor.DARK_GRAY + "（仅测试）");
     }
 
+    /**
+     * D535 gem path: if main-hand P1/legacy gear has an empty unlocked socket and {@code gemId}
+     * is in the backpack, insert it. Returns true when a socket was filled.
+     */
+    public boolean tryPathSocket(Player p, String gemId) {
+        if (p == null || gemId == null || gemId.isEmpty() || !gemIds.contains(gemId)) return false;
+        ItemStack stack = hand(p);
+        if (stack == null || stack.getType() == Material.AIR) return false;
+        String gearId = resolveGearId(stack);
+        if (gearId == null) return false;
+        int level = GearLore.readEnhance(stack);
+        SocketDef def = socketDef(gearId);
+        String[] socks = currentSockets(stack, gearId, level);
+        int idx = GearLore.firstEmptyUnlocked(socks);
+        if (idx < 0) return false;
+        if (uniqueGemIds) {
+            for (String s : socks) if (gemId.equals(s)) return false;
+        }
+        if (ni.countInInventory(p, gemId) < 1) return false;
+        if (!ni.consumeExact(p, gemId, 1)) return false;
+        socks[idx] = gemId;
+        writeState(stack, gearId, level, socks);
+        setHand(p, stack);
+        p.sendMessage(ChatColor.GREEN + "[镶嵌] 已嵌入孔" + (idx + 1) + " → " + gemId);
+        return true;
+    }
+
+    /** D535: true when hand gear has an empty unlocked socket. */
+    public boolean hasEmptyUnlockedSocket(Player p) {
+        if (p == null) return false;
+        ItemStack stack = hand(p);
+        if (stack == null || stack.getType() == Material.AIR) return false;
+        String gearId = resolveGearId(stack);
+        if (gearId == null) return false;
+        int level = GearLore.readEnhance(stack);
+        String[] socks = currentSockets(stack, gearId, level);
+        return GearLore.firstEmptyUnlocked(socks) >= 0;
+    }
+
     public void cmdSocketList(Player p) {
         ItemStack stack = hand(p);
         if (stack == null || stack.getType() == Material.AIR) {

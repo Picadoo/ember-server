@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("gempath".equals(sub) || "宝石路径".equals(sub)) { // D535 combat gem preference + auto-socket
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberGemPath.glance(EmberGemPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c宝石路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberGemPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c宝石路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberGemPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberGemPath.get(d);
+                    if (EmberGemPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberGemPath.label(cur) + " · 改路径再 /corerpg p1 gempath");
+                    else EmberGemPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberGemPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 gempath <sharp|steady|drain|gale|clear>");
+                return true;
+            }
+            EmberGemPath.applyAndReply(p, id);
+            return true;
+        }
         if ("glowpath".equals(sub) || "辉光路径".equals(sub)) { // D534 cosmetic glow wear path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -490,6 +526,24 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("gemseed".equals(sub)) { // D535 admin smoke: legacy socketable blade in hand + preferred gem
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            String gem = args.length >= 4 ? args[3] : EmberGemPath.GEM_SHARP;
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            if (EmberGemPath.parse(gem) > 0) gem = EmberGemPath.gemId(EmberGemPath.parse(gem));
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs == null ? null : runs.plugin();
+            if (plg == null || plg.getNiBridge() == null) { s.sendMessage(P + "NI 未就绪"); return true; }
+            // Enhance/socket whitelist uses legacy gear_ember_blade (P1 ember_v1_* has no GearLore sockets)
+            org.bukkit.inventory.ItemStack blade = plg.getNiBridge().createNiItem("gear_ember_blade");
+            if (blade == null) { s.sendMessage(P + "无法生成 gear_ember_blade"); return true; }
+            t.getInventory().setItemInMainHand(blade);
+            t.updateInventory();
+            if (!plg.getNiBridge().giveNiItem(t, gem, 1)) { s.sendMessage(P + "发放宝石失败: " + gem); return true; }
+            s.sendMessage(P + "已发放 socket 刃 + " + gem + " ×1 → " + t.getName());
+            EmberGemPath.maybeAfterProgress(t);
             return true;
         }
         if ("glowseed".equals(sub)) { // D534 admin smoke: grant glow_ember + clear selection
