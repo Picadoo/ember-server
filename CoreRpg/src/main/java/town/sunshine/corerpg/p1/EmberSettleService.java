@@ -395,6 +395,8 @@ public final class EmberSettleService {
             p.sendMessage(EmberRunService.P + "§e每日委托 §7" + (bountyW > 1 ? "§7团本算 " + bountyW + " 局 · " : "") + (bountyPaid.isEmpty() ? "" : "§a完成第 " + bountyN + " 局档 §7· ")
                     + EmberRunRules.bountyLine(tiers, bountyN));
         }
+        if (p != null && p.isOnline() && fresh) // D514 daily clear-bounty path chase
+            EmberDailyPath.tellAfterSettle(p, pd, runs, tiers, bountyN);
         if (p != null && p.isOnline()) {
             String feel = playfeelSummary(s.wallHits, s.whiffHits, s.breakHits,
                     s.affixDone, s.affix, !s.eventRoom.isEmpty(), s.eventDone, s.eventKind);

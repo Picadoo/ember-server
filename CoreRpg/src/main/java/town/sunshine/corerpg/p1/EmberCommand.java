@@ -248,6 +248,42 @@ public final class EmberCommand {
             EmberCounterPath.applyAndReply(p, id);
             return true;
         }
+        if ("dailypath".equals(sub) || "日委路径".equals(sub)) { // D514 daily clear-bounty chase path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberDailyPath.glance(EmberDailyPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c日委路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberDailyPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c日委路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberDailyPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberDailyPath.get(d);
+                    if (EmberDailyPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDailyPath.label(cur) + " · 改路径再 /corerpg p1 dailypath");
+                    else EmberDailyPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberDailyPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 dailypath <light|full|flex|clear>");
+                return true;
+            }
+            EmberDailyPath.applyAndReply(p, id);
+            return true;
+        }
         if ("recruitpath".equals(sub) || "招募路径".equals(sub)) { // D513 raid recruit accept path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;

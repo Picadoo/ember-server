@@ -278,6 +278,7 @@ public final class EmberSessionService {
         }
         // D502: per-player potion prep top-up while still in town (before stamina reserve / DP)
         for (Player p : party) EmberPrepPath.maybeTopUpBeforeRun(p, runs);
+        for (Player p : party) EmberDailyPath.maybeGlanceBeforeRun(p, runs); // D514 daily path
         // reserve
         List<Player> reserved = new ArrayList<Player>();
         for (Player p : party) {
