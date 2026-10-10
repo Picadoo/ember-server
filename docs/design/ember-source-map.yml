@@ -23,7 +23,7 @@
 # Behaviour-neutral: nothing in CoreRpg reads this file. Update it in the same commit as any new source / key / map.
 
 version: 1
-balance_version: 82
+balance_version: 83
 built_against: "CoreRpg 1.65.70 (D245)"
 code_root: CoreRpg/src/main/java/town/sunshine/corerpg/
 config_root: plugins/CoreRpg/
@@ -123,6 +123,7 @@ content:
   sx16: {mode: short, tier: 1, name: 烬影叠廊, boss: "EmberSx16Warden", sources: [S55], config: ["ember-v1-runs.yml#short.sx16"]}
   sx17: {mode: short, tier: 1, name: 烬潮回廊, boss: "EmberSx17Warden", sources: [S56], config: ["ember-v1-runs.yml#short.sx17"]}
   sx18: {mode: short, tier: 1, name: 烬晶折棱, boss: "EmberSx18Warden", sources: [S57], config: ["ember-v1-runs.yml#short.sx18"]}
+  sx19: {mode: short, tier: 1, name: 烬弦共鸣, boss: "EmberSx19Warden", sources: [S58], config: ["ember-v1-runs.yml#short.sx19"]}
   afk_t1: {mode: afk, name: 灰坡, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t2: {mode: afk, name: 荒原, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
   afk_t3: {mode: afk, name: 焦土, sources: [S22], config: ["ember-v1.yml#afk.tiers"]}
@@ -887,6 +888,22 @@ sources:
     code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx18_clear_\")"]
     config: ["ember-v1-runs.yml#short.sx18", "ember-v1-economy.yml#sources.S57"]
     notes: "D427 批 A·M；首通更薄 20/6/1；Cast 短预警轻粒子；不抬 afk；不放 gate_daily"
+  S58:
+    name: 短征通关（sx19 · 烬弦共鸣）
+    econ_row: S58
+    status: live
+    pays: [coin, shard, bone, blank]
+    period: day
+    content: [sx19]
+    drop_table: "rewarded clear (≤3/day p1_sx19_day): coin 80 + shard 4 + bone 3; career first clear once: +coin 18 + shard 6 + blank 1; after daily cap: 0"
+    runtime_keys: true
+    grant_keys: [sx19_clear_coin, sx19_clear_shard, sx19_clear_bone, sx19_fc_coin, sx19_fc_shard, sx19_fc_blank, sx19_practice]
+    economy_keys: [S58.clear.coin, S58.clear.shard, S58.clear.bone, S58.fc.coin, S58.fc.shard, S58.fc.blank, S58.daily_cap]
+    counters: [p1_sx19_day]
+    code: ["p1/EmberShortRules.java#economyId", "p1/EmberShortService.java#applyGrants", "p1/EmberEconomy.java#startsWith(\"sx19_clear_\")"]
+    config: ["ember-v1-runs.yml#short.sx19", "ember-v1-economy.yml#sources.S58"]
+    notes: "D428 批 A·M；首通更薄 18/6/1；Cast 短预警轻粒子；不抬 afk；不放 gate_daily"
+
 
 
 
