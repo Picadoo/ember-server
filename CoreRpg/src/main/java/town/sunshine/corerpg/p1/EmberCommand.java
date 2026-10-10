@@ -169,6 +169,16 @@ public final class EmberCommand {
             s.sendMessage(P + String.format(Locale.ROOT, "%s +%.2f → %.2f / %.2f", t.getName(), got, t.getHealth(), EmberHeal.maxHp(t)));
             return true;
         }
+        if ("skillcue".equals(sub)) { // D459 admin smoke: replay skill-unlock announce
+            if (s instanceof Player && !s.hasPermission("corerpg.admin")) { s.sendMessage(ChatColor.RED + "需要 corerpg.admin"); return true; }
+            String map = args.length >= 3 ? args[2].toLowerCase(Locale.ROOT) : "";
+            Player t = args.length >= 4 ? Bukkit.getPlayerExact(args[3]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "玩家不在线"); return true; }
+            if (EmberSkillUnlock.unlockLine(map) == null) { s.sendMessage(P + "用法：/corerpg p1 skillcue <q02|q03|q04|q05> [玩家]"); return true; }
+            EmberSkillUnlock.announce(t, map);
+            s.sendMessage(P + "已向 " + t.getName() + " 宣告 " + EmberSkillUnlock.shortName(map));
+            return true;
+        }
         return help(s);
     }
 

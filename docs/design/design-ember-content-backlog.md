@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-skill-unlock-cue`（已批 A · 方案 M · D459 · **PASS** · jar 1.65.151-d459 · 技能首通解锁宣告 · ≠改数值）
 - `B-reroll-pity-glance`（已批 A · 方案 M · D458 · **PASS** · jar 1.65.150-d458 · 洗练保底一眼 · ≠改 pity 数学）
 - `B-set-enter-cue`（已批 A · 方案 M · D457 · **PASS** · jar 1.65.149-d457 · 套装进本 cue · ≠改套装数值）
 - `B-sig-acq-clarity`（已批 A · 方案 M · D456 · **PASS** · jar 1.65.148-d456 · 签名获取清晰 · ≠抬掉率）

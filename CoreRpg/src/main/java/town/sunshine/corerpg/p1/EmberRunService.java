@@ -2616,9 +2616,12 @@ public final class EmberRunService implements Listener {
             if (t == null || m == null) { s.sendMessage(P + "玩家不在线或地图未知"); return true; }
             PlayerData d = data(t.getUniqueId());
             boolean clear = args.length >= 6 && "clear".equalsIgnoreCase(args[5]);
+            boolean skillCue = !clear && !EmberFirstClear.fact(d, m.key); // D459 smoke/admin: announce on rising edge
             EmberFirstClear.setBoth(d, m.key, m.contentVersion, !clear); // D205: fact @all + package @ver
             plugin.getDataStore().flushMutation(t.getUniqueId());
-            s.sendMessage(P + t.getName() + " " + m.key + "@" + m.contentVersion + " first_clear=" + !clear);
+            if (skillCue) EmberSkillUnlock.announce(t, m.key);
+            s.sendMessage(P + t.getName() + " " + m.key + "@" + m.contentVersion + " first_clear=" + !clear
+                    + (skillCue && EmberSkillUnlock.unlockLine(m.key) != null ? " §a· 技能解锁已宣告" : ""));
             return true;
         }
         if (admin && "starter".equals(op) && args.length >= 4) {

@@ -1,3 +1,4 @@
+# D459: 首通解锁技能会聊天宣告 + 本页 Open 半行互指 · 零改技能数值
 # D211 · 余烬技能组 S1（烬斩 / 烬突 / 烬斩符文）
 # D214 · S2 火痕步 · D434 爆闪/承护对称（烬爆/承烬 2pc + Q05）
 # D219 · 身法方向 前冲/后撤（Q01起，出本切换，身法 CD 转满）
@@ -28,6 +29,7 @@ Events:
     - 'tell: §7当前 §f%corerpg_kit_shape% §7· 身法 §f%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
     - 'tell: §b守招 §f%corerpg_kit_parry_name% §7· 解锁 §f%corerpg_kit_parry_unlock% §7· %corerpg_kit_parry_cd%'
     - 'command: corerpg skill kit'
+    - 'tell: §8首通 Q02/Q03/Q04/Q05 会聊天宣告新技能（烬突/招架/符文/身法）'
 
 Icons:
   '#':

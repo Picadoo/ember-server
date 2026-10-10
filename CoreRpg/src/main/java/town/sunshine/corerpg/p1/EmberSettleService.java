@@ -327,8 +327,13 @@ public final class EmberSettleService {
         if (s.challenge && s.abyss == 0 && pd.periodCount(EmberGrowthService.C_CHAL + m.key, "all") == 0)
             pd.addPeriodCount(EmberGrowthService.C_CHAL + m.key, "all", 1); // D141: challenge first clear per map (talent point / honors)
         if (in.firstClear != null) {
+            boolean skillNew = !EmberFirstClear.fact(pd, m.key); // D459: announce only on first fact write
             EmberFirstClear.record(pd, m.key, m.contentVersion); // §9.4 + D205: package once per content version; fact @all never deleted
             if (runs.cosmetics() != null) runs.cosmetics().onFirstClear(Bukkit.getPlayer(u), m.key); // D103 milestone titles
+            if (skillNew) {
+                Player skp = Bukkit.getPlayer(u);
+                if (skp != null && skp.isOnline()) EmberSkillUnlock.announce(skp, m.key);
+            }
         }
         boolean newBest = false;
         int oldBest = runs.abyssBest(pd);
