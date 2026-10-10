@@ -112,7 +112,13 @@ public final class EmberSetChase {
         boolean awkUp = after.awakening > prevAwk;
         if (!formed && !awkUp) return;
         tell(p, d, after);
-        if (formed && d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) {
+        if (formed) { // D872
+            ConfirmTokens.sendButtons(p, EmberRunService.P + "§7成套成型 · 下一步：",
+                    new String[]{"[工坊]", "/corerpg p1 forge", "强化同族", "GOLD"},
+                    new String[]{"[镶嵌]", "/corerpg p1 gem list", "嵌空孔", "GREEN"},
+                    new String[]{"[设焦点]", "/corerpg p1 setfocus",
+                            d != null && EmberSetFocus.valid(EmberSetFocus.get(d)) ? "已设可改" : "定追击方向", "AQUA"});
+        } else if (d != null && !EmberSetFocus.valid(EmberSetFocus.get(d))) {
             p.sendMessage(EmberRunService.P + "§7可设套装焦点：/corerpg p1 setfocus");
         }
     }

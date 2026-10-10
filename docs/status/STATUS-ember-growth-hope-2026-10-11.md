@@ -386,3 +386,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D866–D870 SHIP · jar 1.65.390-d866
 - Undo empty/expire polish; setchase focus; ARCH note; offerEquip mapfarm
+
+## D871–D872 SHIP · jar 1.65.391-d871
+- Gem unlock gate → enhance; set formed next loop

@@ -84,7 +84,13 @@ public final class EmberGemSocket {
         EmberItems.Read r = loadouts.items().read(hand);
         if (r == null || !r.ok()) { p.sendMessage(P + "请手持已签名的余烬刃/护符"); return true; }
         EmberItemData d = r.data;
-        if (!d.sockUnlocked(hole)) { p.sendMessage(P + "该孔未解锁（刃第二孔需强化≥5 · 护符孔需强化≥3）"); return true; }
+        if (!d.sockUnlocked(hole)) {
+            p.sendMessage(P + "该孔未解锁（刃第二孔需强化≥5 · 护符孔需强化≥3）");
+            ConfirmTokens.sendButtons(p, P + "§7去解锁：", // D871
+                    new String[]{"[强化预览]", "/corerpg p1 enhance", "手持冲强化开孔", "GREEN"},
+                    new String[]{"[工坊]", "/corerpg p1 forge", "养成页", "GOLD"});
+            return true;
+        }
         if (d.sockAt(hole) != 0) { p.sendMessage(P + "该孔已有石，先 remove"); return true; }
         String gemId = EmberGemPath.gemId(code);
         NiBridge ni = plugin.getNiBridge();
