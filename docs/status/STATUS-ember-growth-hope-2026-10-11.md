@@ -477,3 +477,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1030–D1038 ARCH SHIP · jar 1.65.417-d1030
 - Health: economy bv 89 (=runs); affix-table re-export; LedgerGlance.claimable excludes ST_AWAIT
+
+## D1039–D1044 ARCH docs · jar unchanged 1.65.417-d1030
+- No one-file thin left (S0-9/六槽 HOLD). Stage2 grant SoT Stage0 inventory. modelGaps policy tip (still NONE).

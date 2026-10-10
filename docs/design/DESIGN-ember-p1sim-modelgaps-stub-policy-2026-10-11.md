@@ -14,3 +14,7 @@
 ## 现状指针
 
 见 `EmberEconomyTest` modelGaps pin；REG §5；Stage0 §3。
+
+## D1041 追记
+
+Stage1 后再次确认：徽记 / 生活等仍在 modelGaps；`amount()` 读表不改变本政策。tip：`TIP-ember-p1sim-modelgaps-policy-d1041-2026-10-11.md`。

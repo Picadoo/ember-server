@@ -28,6 +28,10 @@
 
 **COMPLETE（P1 CoreRpg-owned golden sinks）。** C17 已 D1017–D1020 读表（model 仍 NONE）。
 
+## Stage2（D1040）
+
+发放真源 Stage0：[`DESIGN-ember-economy-yml-sot-stage2-grant-stage0-2026-10-11.md`](DESIGN-ember-economy-yml-sot-stage2-grant-stage0-2026-10-11.md)。大搬家未开。
+
 ## 下一 ARCH 薄债（Stage1 后）
 
 1. source-map / ledger 健康扫  
