@@ -510,6 +510,37 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D595: boss half-HP add spawn warn still ticking (adds not yet spawned). */
+    boolean hasPendingNest() {
+        return addsAt > 0 && System.currentTimeMillis() < addsAt
+                && boss != null && boss.le != null && !boss.le.isDead()
+                && bossDef() != null && bossDef().adds != null
+                && bossDef().adds.points != null && !bossDef().adds.points.isEmpty();
+    }
+
+    /** D595: pull a committed player onto the nearest add spawn warn circle. */
+    boolean pathNestSpot(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingNest()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location pl = p.getLocation();
+        EmberRunMaps.Pt best = null;
+        double bestD = Double.MAX_VALUE;
+        for (EmberRunMaps.Pt pt : bossDef().adds.points) {
+            if (pt == null) continue;
+            double d = pl.distanceSquared(new Location(w, pt.x + 0.5, pt.y, pt.z + 0.5));
+            if (d < bestD) { bestD = d; best = pt; }
+        }
+        if (best == null) return false;
+        Location to = new Location(w, best.x + 0.5, best.y, best.z + 0.5);
+        to.setYaw(pl.getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.75f);
+        return true;
+    }
+
     /** D594: last-phase extra revive countdown armed (raid only). */
     boolean hasPendingSave() {
         return lastRevAt > 0 && !lastRevDone
@@ -3066,6 +3097,7 @@ final class EmberRunDirector {
                 svc.tellRun(s, addCue);
             }
             svc.onBossPhase(s, RevivePoint.ADDS_PHASE); // D106 raid revive point
+            EmberNestPath.maybeAfterNest(s); // D595
         }
         if (addsAt > 0) {
             if (now >= addsAt) {

@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("nestpath".equals(sub) || "卡点路径".equals(sub)) return nestPathCmd(s, args); // D595
+        if ("nest".equals(sub) && args.length == 2) return nestGoCmd(s); // D595
         if ("savepath".equals(sub) || "终救路径".equals(sub)) return savePathCmd(s, args); // D594
         if ("save".equals(sub) && args.length == 2) return saveGoCmd(s); // D594
         if ("sequelpath".equals(sub) || "续招路径".equals(sub)) return sequelPathCmd(s, args); // D593
@@ -1737,6 +1739,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("nestseed".equals(sub)) return nestSeedCmd(s, args); // D595
         if ("saveseed".equals(sub)) return saveSeedCmd(s, args); // D594
         if ("sequelseed".equals(sub)) return sequelSeedCmd(s, args); // D593
         if ("baitseed".equals(sub)) return baitSeedCmd(s, args); // D592
@@ -6432,6 +6435,62 @@ public final class EmberCommand {
             EmberSavePath.maybeProbe(t);
             s.sendMessage(P + "已触发终救路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingSave(t) ? "（有终救）" : "（无终救）"));
+            return true;
+    }
+
+    private boolean nestPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberNestPath.glance(EmberNestPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c卡点路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberNestPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c卡点路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberNestPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberNestPath.get(d);
+                    if (EmberNestPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberNestPath.label(cur) + " · 改路径再 /corerpg p1 nestpath");
+                    else EmberNestPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberNestPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 nestpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberNestPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean nestGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathNestSpot(p)) p.sendMessage(P + "无法卡点（无增援预警/已生成/未进本）");
+            else p.sendMessage(P + "§a卡点·手点 §7已站到增援生成点");
+            return true;
+    }
+
+    private boolean nestSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberNestPath.maybeProbe(t);
+            s.sendMessage(P + "已触发卡点路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingNest(t) ? "（有卡点）" : "（无卡点）"));
             return true;
     }
 }
