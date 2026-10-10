@@ -101,12 +101,18 @@ public final class EmberSkillKit {
         public final double range;
         public final double arc;
         public final double line;      // >0 → narrow line (L07)
+        public final double lineWidth; // D642: perpendicular half-width for line (blocks); 0 = unused
         public final int maxTargets;
         public final boolean sigOverride;
         public final String label;
 
         Shape(int id, double range, double arc, double line, int maxTargets, boolean sigOverride, String label) {
+            this(id, range, arc, line, line > 0 ? 1.0 : 0.0, maxTargets, sigOverride, label);
+        }
+
+        Shape(int id, double range, double arc, double line, double lineWidth, int maxTargets, boolean sigOverride, String label) {
             this.id = id; this.range = range; this.arc = arc; this.line = line;
+            this.lineWidth = lineWidth;
             this.maxTargets = maxTargets; this.sigOverride = sigOverride; this.label = label;
         }
     }
@@ -317,15 +323,17 @@ public final class EmberSkillKit {
             return new Shape(shapeId(d, runs), range, arc, line, max, true, label);
         }
         int id = shapeId(d, runs);
+        // D642 Stage2: more distinct hitboxes (geometry only · zero skill_mult)
         if (id == SHAPE_LINE) {
-            // = L07
-            return new Shape(id, Math.max(baseRange, 5.0), baseArc, 5.0, 3, false, shapeName(id));
+            // longer + tighter corridor poke
+            return new Shape(id, Math.max(baseRange, 6.0), baseArc, 6.0, 0.7, 3, false, shapeName(id));
         }
         if (id == SHAPE_RING) {
-            // = L09
-            return new Shape(id, 3.0, 360.0, 0, 3, false, shapeName(id));
+            // slightly larger ring, can clip one more when surrounded
+            return new Shape(id, 3.5, 360.0, 0, 0.0, 4, false, shapeName(id));
         }
-        return new Shape(SHAPE_FAN, baseRange, baseArc, 0, baseMax, false, shapeName(SHAPE_FAN));
+        // fan: slightly wider cone, keep base range / cap
+        return new Shape(SHAPE_FAN, baseRange, Math.max(baseArc, 110.0), 0, 0.0, baseMax, false, shapeName(SHAPE_FAN));
     }
 
     /** True when the player is inside a P1 dungeon instance (shape swap forbidden — X1). Hub / AFK are OK. */

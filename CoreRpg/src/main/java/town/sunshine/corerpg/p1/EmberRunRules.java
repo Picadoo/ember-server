@@ -693,9 +693,31 @@ public final class EmberRunRules {
         return "今日委托已全部完成（通关 " + done + " 局）· 明天 0 点刷新";
     }
 
+    /**
+     * D641: first-clear mainline {@code base_item} guarantees the map loot-identity family (visible chase).
+     * Slot still uses map bias weights when present. Quality/craft unchanged. Repeat clears keep biased roll.
+     */
+    public static ItemRoll rollFirstClearMapIdentity(int tier, LootBias lb, Random r, int[] qualityWeights) {
+        String fam = (lb != null && validFamily(lb.family)) ? lb.family
+                : pickFamily(null, r.nextDouble());
+        String slot = pickSlot(lb, r.nextDouble());
+        int q = pickQuality(qualityWeights, r.nextDouble());
+        int c = pickCraft(r.nextDouble());
+        return new ItemRoll(fam, slot, tier, q, c);
+    }
+
+    /** True when D641 guarantee applies (first clear + map has a loot family). */
+    public static boolean firstClearMapIdentity(SettleInput in, String key) {
+        return in != null && "base_item".equals(key) && in.firstClear != null
+                && in.loot != null && validFamily(in.loot.family);
+    }
+
     private static Grant item(SettleInput in, String key) {
         Random r = new Random(subSeed(in.seed, in.player, in.runId, key));
-        return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, rollItem(in.tier, in.target, r, in.qualityWeights, in.loot));
+        ItemRoll roll = firstClearMapIdentity(in, key)
+                ? rollFirstClearMapIdentity(in.tier, in.loot, r, in.qualityWeights)
+                : rollItem(in.tier, in.target, r, in.qualityWeights, in.loot);
+        return new Grant(key, Kind.ITEM, rewardUid(in.seed, in.player, in.runId, key), 1, roll);
     }
 
     /** First-clear free choice → the bound standard quest item (q0, craft 0, +0). */

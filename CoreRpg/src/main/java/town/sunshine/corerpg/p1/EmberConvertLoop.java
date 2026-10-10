@@ -32,13 +32,29 @@ public final class EmberConvertLoop {
             p.sendMessage(P + "§a转化路径达成：§f" + famName + " §7· 本周转到目标族了");
         }
 
+        // D643: weekly forge-goal CONVERT complete loop (acquisition feel · zero price/cap change)
+        boolean goalHit = EmberForgeGoal.get(d) == EmberForgeGoal.CONVERT;
+        if (goalHit) {
+            p.sendMessage(P + "§a本周工坊目标完成：§f每周转化 → " + famName);
+            try { p.sendActionBar("§a工坊目标 · 转化完成"); } catch (Throwable ignored) { }
+        }
+
         // enhance wiped — chase forge; optional align setfocus
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[去工坊强化]", "/corerpg p1 forge",
-                        hadEnhance ? "强化已归零 · 去重新强化" : "去工坊继续养成", "GOLD"},
-                new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
-                        "套装焦点也设成" + famName, "AQUA"},
-                new String[]{"[转化页]", "/corerpg p1 convert menu", "看本周剩余", "GRAY"});
+        if (goalHit) {
+            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[去工坊强化]", "/corerpg p1 forge",
+                            hadEnhance ? "强化已归零 · 去重新强化" : "去工坊继续养成", "GOLD"},
+                    new String[]{"[换下周目标]", "/corerpg p1 forgegoal", "选强化/精工/烙纹…", "GREEN"},
+                    new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
+                            "套装焦点也设成" + famName, "AQUA"});
+        } else {
+            ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                    new String[]{"[去工坊强化]", "/corerpg p1 forge",
+                            hadEnhance ? "强化已归零 · 去重新强化" : "去工坊继续养成", "GOLD"},
+                    new String[]{"[对齐套装焦点]", "/corerpg p1 setfocus " + toFam,
+                            "套装焦点也设成" + famName, "AQUA"},
+                    new String[]{"[转化页]", "/corerpg p1 convert menu", "看本周剩余", "GRAY"});
+        }
     }
 
     /** Pure: path celebration when convert dest matches convertpath. */

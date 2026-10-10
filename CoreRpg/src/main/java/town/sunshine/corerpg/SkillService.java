@@ -587,8 +587,9 @@ public final class SkillService implements Listener {
                 player, dataStore.get(player.getUniqueId()), plugin.getEmberRuns(), mode, gmods);
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
         final double fRange = sh.range, fArc = sh.arc, fLine = sh.line;
+        final double fLineW = sh.lineWidth > 0 ? sh.lineWidth : 1.0;
         final int fMax = sh.maxTargets;
-        if (slashTargets(player, fRange, fArc, fLine).isEmpty()) {
+        if (slashTargets(player, fRange, fArc, fLine, fLineW).isEmpty()) {
             player.sendMessage(PREFIX + ChatColor.YELLOW + "附近没有目标");
             return;
         }
@@ -610,14 +611,14 @@ public final class SkillService implements Listener {
                 Long u = CHARGING.get(id);
                 if (u != null && u == until) CHARGING.remove(id);
                 if (!player.isOnline() || player.isDead() || !town.sunshine.corerpg.p1.EmberMode.isP1(player)) return;
-                List<LivingEntity> t2 = slashTargets(player, fRange, fArc, fLine);
+                List<LivingEntity> t2 = slashTargets(player, fRange, fArc, fLine, fLineW);
                 if (t2.isEmpty()) { player.sendMessage(PREFIX + ChatColor.YELLOW + "烬斩蓄力落空（范围里没有目标了）"); return; }
                 landEmberSlash(player, ls, t2, fMax, fMods, true, gsv, sh.id);
                 player.sendMessage(PREFIX + ChatColor.GREEN + "释放 烬斩（蓄力）");
             }, Math.max(1L, Math.round(charge * 20.0)));
             return;
         }
-        List<LivingEntity> landed = slashTargets(player, fRange, fArc, fLine);
+        List<LivingEntity> landed = slashTargets(player, fRange, fArc, fLine, fLineW);
         landEmberSlash(player, ls, landed, fMax, gmods, variant, gsv, sh.id);
         String tip = sh.sigOverride || sh.id != town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_FAN
                 ? "释放 烬斩（" + sh.label + "）" : "释放 烬斩";
@@ -792,9 +793,14 @@ public final class SkillService implements Listener {
 
     /** 烬斩 targets in the shape, sorted by distance then entity id (the cap is applied when landing) */
     private List<LivingEntity> slashTargets(Player player, double range, double arc, double line) {
+        return slashTargets(player, range, arc, line, 1.0);
+    }
+
+    private List<LivingEntity> slashTargets(Player player, double range, double arc, double line, double lineWidth) {
         Location eye = player.getEyeLocation();
         Vector look = eye.getDirection().normalize();
         double cosHalf = Math.cos(Math.toRadians(Math.max(1.0, arc) / 2.0));
+        double halfW = lineWidth > 0 ? lineWidth : 1.0;
         List<LivingEntity> targets = new ArrayList<LivingEntity>();
         final Map<LivingEntity, Double> distOf = new HashMap<LivingEntity, Double>();
         for (Entity e : player.getNearbyEntities(range, range, range)) {
@@ -803,9 +809,9 @@ public final class SkillService implements Listener {
             Vector to = le.getEyeLocation().toVector().subtract(eye.toVector());
             double dist = to.length();
             if (dist > range || dist < 0.05) continue;
-            if (line > 0) { // narrow line: in front, within 1.0 block of the look ray
+            if (line > 0) { // D642: narrow line — width from shape
                 double along = look.dot(to);
-                if (along <= 0 || to.clone().subtract(look.clone().multiply(along)).length() > 1.0) continue;
+                if (along <= 0 || to.clone().subtract(look.clone().multiply(along)).length() > halfW) continue;
             } else if (arc < 360.0 && look.dot(to.normalize()) < cosHalf) continue;
             targets.add(le);
             distOf.put(le, dist);

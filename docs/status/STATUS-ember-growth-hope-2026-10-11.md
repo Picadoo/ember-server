@@ -34,3 +34,8 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D638–D640 SHIP · jar 1.65.311-d638 · 2026-10-11
 - D638 brand_hope · D639 echo_hope · D640 convert_hope
+
+## D641–D643 SHIP · jar 1.65.312-d641 · 2026-10-11
+- D641 first-clear map-bias family guarantee on base_item + settle cue
+- D642 slash shape Stage2 hitboxes (line longer/narrower, ring larger, fan wider) · no skill_mult
+- D643 forgegoal CONVERT complete celebrate after convert

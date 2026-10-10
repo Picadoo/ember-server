@@ -209,8 +209,10 @@ public final class EmberLoadoutService implements Listener {
             EmberRunService runs = plugin.getEmberRuns();
             if (EmberSkillKit.maybeSoftPreferShape(pd, runs, l.activeSet) && pd != null) {
                 plugin.getDataStore().flushMutation(p.getUniqueId());
-                p.sendMessage(EmberRunService.P + "§e套装推荐烬斩形状：§f" + EmberSkillKit.preferredShapeLabel(l.activeSet)
-                        + " §7（可随时 /corerpg skill shape 换）");
+                String lab = EmberSkillKit.preferredShapeLabel(l.activeSet);
+                p.sendMessage(EmberRunService.P + "§e套装推荐烬斩形状：§f" + lab
+                        + " §7（可随时 /corerpg skill shape 换 · Stage2 命中差已拉开）");
+                try { p.sendActionBar("§e烬斩形状 · §f" + lab); } catch (Throwable ignored) { } // D642 soft cue
             }
         }
         return l;
