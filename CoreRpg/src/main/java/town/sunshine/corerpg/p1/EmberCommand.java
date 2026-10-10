@@ -268,6 +268,49 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("sightpath".equals(sub) || "夜视路径".equals(sub)) { // D552 dungeon sight path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSightPath.glance(EmberSightPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c夜视路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSightPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c夜视路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSightPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSightPath.get(d);
+                    if (EmberSightPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSightPath.label(cur) + " · 改路径再 /corerpg p1 sightpath");
+                    else EmberSightPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSightPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 sightpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSightPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("sight".equals(sub) && args.length == 2) { // D552 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (!EmberSightPath.pathApplySight(p)) p.sendMessage(P + "无法开夜视（已有/不在副本）");
+            else p.sendMessage(P + "§a夜视·手点 §7已开启");
+            return true;
+        }
         if ("charmpath".equals(sub) || "护符路径".equals(sub)) { // D551 charm select path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1230,6 +1273,24 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("sightseed".equals(sub)) { // D552 admin smoke: temp P1 + clear NV
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberMode mode = EmberMode.get();
+            String wn = t.getWorld().getName();
+            boolean added = false;
+            if (mode != null && !EmberMode.isP1World(t.getWorld())) {
+                mode.addWorld(wn);
+                added = true;
+            }
+            t.removePotionEffect(org.bukkit.potion.PotionEffectType.NIGHT_VISION);
+            EmberSightPath.maybeAfterProgress(t);
+            if (added && mode != null) mode.removeWorld(wn);
+            s.sendMessage(P + "已清夜视并触发夜视路径 → " + t.getName()
+                    + (added ? "（临时标记世界）" : ""));
             return true;
         }
         if ("charmseed".equals(sub)) { // D551 admin smoke: better charm in bag, keep weaker selected
