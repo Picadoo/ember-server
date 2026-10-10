@@ -717,3 +717,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D1899–D1912 SHIP · jar 1.65.489-d1899
 - GS leftovers: kit nextHope AB, route/join skill clarity, 希望→手感 copy; GS3 still deferred
+
+## D1913 DOC
+- post-GS Stage0 scan: GS3 still deferred; EM1-B blocked; surface near-sat
