@@ -221,11 +221,14 @@ def stats(cfg, blade, charm, level, ctx=None, armor=None):
         H *= mods.get('max_hp', 1.0)
     # Gem Stage2 (opt-in): flat A/D outside growth bracket; absent keys = bit-identical
     if mods:
+        min_t = int(float(mods.get('gem_min_tier', 0) or 0))
+        tier_ok = blade.get('tier', 0) >= min_t and (charm is None or charm.get('tier', 0) >= min_t or min_t <= 0)
+        # if gem_min_tier set, require blade tier (weapon A) / charm tier (for D) separately below
         ga = float(mods.get('gem_flat_a', 0) or 0)
-        if ga:
+        if ga and blade.get('tier', 0) >= min_t:
             B += min(ga, float(mods.get('gem_cap_a', 2) or 2))
         gd = float(mods.get('gem_flat_d', 0) or 0)
-        if gd:
+        if gd and (charm is None or charm.get('tier', 0) >= min_t):
             dd = dd + min(gd, float(mods.get('gem_cap_d', 2) or 2))
     M = max(cfg['def_floor'], cfg['def_k'] / (cfg['def_k'] + dd + (FEST['def'] if FEST else 0)))
     out = {'B': B, 'H': H, 'M': M, 'set': fam, 'awk': awk}

@@ -18,7 +18,7 @@ import rules
 PATH = os.path.join(p1config.ROOT, 'CoreRpg/src/main/resources/ember-v1-growth.yml')
 ADD = {'dodge_secs', 'dodge_heal', 'dodge_icd', 'burn_ticks', 'burst_every', 'sustain_every', 'shard_bonus', 'burn_spread', 'dodge_burst', 'spread_icd', 'hit_burst', 'gem_flat_a', 'gem_flat_d', 'gem_cap_a', 'gem_cap_d'}
 ADD_MAX = {'dodge_secs'}
-ADD_MIN = {'dodge_icd', 'spread_icd', 'gem_cap_a', 'gem_cap_d'}
+ADD_MIN = {'dodge_icd', 'spread_icd', 'gem_cap_a', 'gem_cap_d', 'gem_min_tier'}
 SHARE_W = 'share_w'  # additive over the base 1 (share_w: 2 = one extra portion)
 
 

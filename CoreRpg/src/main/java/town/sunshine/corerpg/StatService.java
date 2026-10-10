@@ -29,6 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import town.sunshine.corerpg.p1.EmberLoadout;
 import town.sunshine.corerpg.p1.EmberLoadoutService;
+import town.sunshine.corerpg.p1.EmberGems;
 import town.sunshine.corerpg.p1.EmberMode;
 
 import java.io.File;
@@ -372,7 +373,12 @@ public final class StatService implements Listener {
             ai.setBaseValue(want);
             if (p.getHealth() > want) p.setHealth(want);
         }
-        if (Math.abs(p.getWalkSpeed() - 0.2f) > 0.0005) p.setWalkSpeed(0.2f);
+        float baseWalk = 0.2f;
+        double ms = EmberGems.moveSpeedPct(l.blade, l.charm);
+        float wantWalk = (float) (baseWalk * (1.0 + ms));
+        if (wantWalk > baseWalk * (1.0 + EmberGems.CAP_MOVE_SPEED) + 1e-4)
+            wantWalk = (float) (baseWalk * (1.0 + EmberGems.CAP_MOVE_SPEED));
+        if (Math.abs(p.getWalkSpeed() - wantWalk) > 0.0005) p.setWalkSpeed(wantWalk);
         AttributeInstance as = p.getAttribute(Attribute.GENERIC_ATTACK_SPEED);
         if (as != null) {
             for (org.bukkit.attribute.AttributeModifier am : new ArrayList<org.bukkit.attribute.AttributeModifier>(as.getModifiers())) {

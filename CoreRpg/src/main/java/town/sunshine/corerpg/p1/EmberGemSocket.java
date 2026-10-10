@@ -36,7 +36,7 @@ public final class EmberGemSocket {
         String line = d.socketLoreLine();
         p.sendMessage(P + d.shortLabel() + " · " + (line == null ? "无孔" : line));
         p.sendMessage(P + "§7镶嵌：/corerpg p1 gem insert <孔> <sharp|steady|drain|gale> · 拆：remove <孔>");
-        p.sendMessage(P + "§8不走旧 /corerpg socket");
+        p.sendMessage(P + "§8锋利战斗：刃 T2+ 才计入 · 稳/汲/疾全程 · 不走旧 /corerpg socket");
         return true;
     }
 

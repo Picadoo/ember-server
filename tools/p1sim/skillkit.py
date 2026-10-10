@@ -341,10 +341,13 @@ CANDS_D605 = {
 # Gem Stage2 p1sim 预算（DESIGN-ember-gem-stage2-p1sim-budget · 已批 A·M）
 # flat 在括号外；drain/gale 战斗未接线 → 等同 base（G3/G4 验恒等）
 CANDS_GEM = {
-    # FAIL 后收紧：+0.25/石 · 帽 0.5
-    'G1_sharp2': ('q01', 'any', '双锋 flatA+0.5 帽0.5', {'gem_flat_a': 0.5, 'gem_cap_a': 0.5}),
-    'G2_steady1': ('q01', 'any', '稳固 flatD+0.25 帽0.5', {'gem_flat_d': 0.25, 'gem_cap_d': 0.5}),
-    'G5_full': ('q01', 'any', '双锋+稳 A+0.5 D+0.25', {'gem_flat_a': 0.5, 'gem_cap_a': 0.5, 'gem_flat_d': 0.25, 'gem_cap_d': 0.5}),
+    # 收紧2 方案 M：+0.1/石 帽 0.3；效用优先 + T2+ 备选
+    'G1_sharp2': ('q01', 'any', '双锋 A+0.2 帽0.3', {'gem_flat_a': 0.2, 'gem_cap_a': 0.3}),
+    'G1_sharp3': ('q01', 'any', '理论三锋 A+0.3 帽0.3', {'gem_flat_a': 0.3, 'gem_cap_a': 0.3}),
+    'G2_steady1': ('q01', 'any', '稳 D+0.1 帽0.3', {'gem_flat_d': 0.1, 'gem_cap_d': 0.3}),
+    'G2_steady3': ('q01', 'any', '稳满 D+0.3 帽0.3', {'gem_flat_d': 0.3, 'gem_cap_d': 0.3}),
+    'G5_full': ('q01', 'any', '双锋+稳 A+0.2 D+0.1', {'gem_flat_a': 0.2, 'gem_cap_a': 0.3, 'gem_flat_d': 0.1, 'gem_cap_d': 0.3}),
+    'G1_t2only': ('q01', 'any', '双锋A+0.2 仅T2+', {'gem_flat_a': 0.2, 'gem_cap_a': 0.3, 'gem_min_tier': 2}),
 }
 
 ALL = dict(CANDS, **CANDS2, **CANDS3, **CANDS4, **CANDS5, **CANDS_S0B, **CANDS_S0B2, **CANDS_S0B3, **CANDS_S0B4,

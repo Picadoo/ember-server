@@ -97,11 +97,13 @@ public final class EmberLoadout {
         int awk = "none".equals(set) ? 0 : awakening(blade, charm);
         double b = blade == null ? EmberFormula.baseAttack(t, -1, 0, 0, 0, level)
                 : EmberFormula.baseAttack(t, blade.tier, blade.quality, blade.craft, blade.enhance, level);
+        b += EmberGems.flatA(blade, charm); // Gem Stage2 PASS: flat A outside bracket (T2+ sharp)
         double h0 = charm == null ? EmberFormula.baseHp(t, -1, 0, 0, 0, level)
                 : EmberFormula.baseHp(t, charm.tier, charm.quality, charm.craft, charm.enhance, level);
         h0 += festHp;
         double h = EmberFormula.maxHp(t, h0, "sustain".equals(set));
-        double d = EmberFormula.defense(t, charm == null ? -1 : charm.tier) + festDef;
+        double d = EmberFormula.defense(t, charm == null ? -1 : charm.tier) + festDef
+                + EmberGems.flatD(blade, charm);
         double m = EmberFormula.mitigation(t, d);
         return new EmberLoadout(blade, charm, level, set, awk, b, h0, h, d, m, festHp, festDef);
     }

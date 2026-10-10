@@ -208,6 +208,11 @@ public final class EmberCombatListener implements Listener {
             return;
         }
         e.setDamage(dmg);
+        // Gem Stage2: basic-hit life steal only (skills never · D06)
+        double ls = EmberGems.lifeStealPct(l.blade, l.charm);
+        if (ls > 0 && dmg > 0 && !est.unreliable) {
+            EmberHeal.heal(p, dmg * ls, "gem-drain");
+        }
         boolean valid = !est.unreliable && c >= t.critMinCharge;
         Swing sw = new Swing(++rootSeq, c, crit, valid, now);
         lastSwing.put(p.getUniqueId(), sw);
