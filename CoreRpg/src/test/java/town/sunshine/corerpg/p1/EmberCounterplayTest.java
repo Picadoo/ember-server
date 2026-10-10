@@ -164,4 +164,19 @@ public class EmberCounterplayTest {
         assertTrue(s.noteCounterplay(CounterplayKind.BREAK));
         assertEquals(1, s.breakHits);
     }
+
+    @Test public void successFlash_D448_shortVerbs() {
+        assertTrue(EmberCounterplay.successFlash(CounterplayKind.WALL).contains("撞墙破绽"));
+        assertTrue(EmberCounterplay.successFlash(CounterplayKind.WHIFF).contains("落空破绽"));
+        assertTrue(EmberCounterplay.successFlash(CounterplayKind.BREAK).contains("破招成功"));
+        assertEquals("", EmberCounterplay.successFlash(null));
+    }
+
+    @Test public void shouldFlashSuccess_D448_debounce() {
+        assertTrue(EmberCounterplay.shouldFlashSuccess(0L, 1000L));
+        long t0 = 10_000L;
+        assertFalse(EmberCounterplay.shouldFlashSuccess(t0, t0 + 799L));
+        assertTrue(EmberCounterplay.shouldFlashSuccess(t0, t0 + 800L));
+        assertEquals(800L, EmberCounterplay.SUCCESS_FLASH_DEBOUNCE_MS);
+    }
 }

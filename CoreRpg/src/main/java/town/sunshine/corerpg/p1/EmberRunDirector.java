@@ -133,6 +133,7 @@ final class EmberRunDirector {
     private boolean pendingCrash;        // D188 撞墙破绽: the pending charge was cut short by a real wall
     private boolean pendingArmed;        // D192 落空破绽: someone stood inside the pending telegraph when its warning began
     private long stunUntil;              // D188: boss stunned (no skills, no melee) until this
+    private long lastCounterplayFlashAt; // D448: debounce clock for every-success ActionBar (0 = never)
     private double breakNeed;            // D193 破招: player damage needed to break the pending channel (0 = none armed)
     private double breakDone;            // D193: player damage dealt to the boss since that channel's warning began
     private long breakBarAt;             // D193: next action-bar progress line
@@ -2002,6 +2003,22 @@ final class EmberRunDirector {
         }
     }
 
+    /**
+     * D448 / D283: first success of each kind → ActionBar+subtitle tip; later successes → ActionBar only
+     * (debounce ≥ {@link EmberCounterplay#SUCCESS_FLASH_DEBOUNCE_MS}). Always notes the counterplay hit.
+     */
+    private void flashCounterplaySuccess(CounterplayKind k) {
+        boolean first = s.noteCounterplay(k);
+        long now = System.currentTimeMillis();
+        if (first) {
+            flashCounterplayTip(EmberCounterplay.firstFlash(k));
+            lastCounterplayFlashAt = now;
+        } else if (EmberCounterplay.shouldFlashSuccess(lastCounterplayFlashAt, now)) {
+            flashActionBar(EmberCounterplay.successFlash(k));
+            lastCounterplayFlashAt = now;
+        }
+    }
+
     private void breakBar() {
         int pct = (int) Math.min(100, Math.floor(100.0 * breakDone / breakNeed));
         String bar = "§b破招 §f" + pct + "% §7（" + Math.round(breakDone) + " / " + Math.round(breakNeed) + "）";
@@ -2031,7 +2048,7 @@ final class EmberRunDirector {
         svc.tellRun(s, "§a破招！§c" + bossDef().name + " §7的「" + sk.name + "」被打断"
                 + (ms > 0 ? " §e踉跄 " + fmt(sk.breakStun) + " 秒 §7· 趁现在输出" : ""));
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s break %s %.0f/%.0f stun %.1fs", s.runId, sk.name, done, need, sk.breakStun));
-        if (s.noteCounterplay(CounterplayKind.BREAK)) flashCounterplayTip(EmberCounterplay.firstFlash(CounterplayKind.BREAK));
+        flashCounterplaySuccess(CounterplayKind.BREAK);
     }
 
     /** D192 落空破绽: armed at warn start (someone inside) and the hit landed on nobody → the boss staggers. */
@@ -2060,7 +2077,7 @@ final class EmberRunDirector {
         w.playSound(at, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 0.8f, 0.6f);
         svc.tellRun(s, "§a落空！§c" + bossDef().name + " §e踉跄 " + fmt(done.whiffStun) + " 秒 §7· 破绽，趁现在输出");
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s whiff stun %s %.1fs", s.runId, done.name, done.whiffStun));
-        if (s.noteCounterplay(CounterplayKind.WHIFF)) flashCounterplayTip(EmberCounterplay.firstFlash(CounterplayKind.WHIFF));
+        flashCounterplaySuccess(CounterplayKind.WHIFF);
     }
 
     /** D188 撞墙破绽: rooted, no skill and no melee for {@code done.wallStun} s; a queued follow-up waits until it ends. */
@@ -2074,7 +2091,7 @@ final class EmberRunDirector {
         w.playSound(at, Sound.BLOCK_ANVIL_LAND, 0.8f, 0.7f);
         svc.tellRun(s, "§a撞墙！§c" + bossDef().name + " §e眩晕 " + fmt(done.wallStun) + " 秒 §7· 破绽，趁现在输出");
         svc.log().info(String.format(Locale.ROOT, "[P1 run] %s wall stun %s %.1fs", s.runId, done.name, done.wallStun));
-        if (s.noteCounterplay(CounterplayKind.WALL)) flashCounterplayTip(EmberCounterplay.firstFlash(CounterplayKind.WALL));
+        flashCounterplaySuccess(CounterplayKind.WALL);
     }
 
     /** D188: this director's boss is in its wall-crash stun right now (its melee is cancelled). */

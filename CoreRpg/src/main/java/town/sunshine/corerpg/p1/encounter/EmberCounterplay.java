@@ -210,6 +210,26 @@ public final class EmberCounterplay {
         }
     }
 
+    /** D448: debounce between every-success ActionBar flashes (ms). First-of-kind still uses D283 tip. */
+    public static final long SUCCESS_FLASH_DEBOUNCE_MS = 800L;
+
+    /**
+     * D448: short ActionBar verb on every counterplay success (same copy as {@link #firstFlash}).
+     * Empty when {@code k} is null.
+     */
+    public static String successFlash(CounterplayKind k) {
+        return firstFlash(k);
+    }
+
+    /**
+     * D448: whether an every-success flash may fire now.
+     * {@code lastFlashAtMs == 0} always allows (no prior flash this director).
+     */
+    public static boolean shouldFlashSuccess(long lastFlashAtMs, long nowMs) {
+        if (lastFlashAtMs == 0L) return true;
+        return nowMs - lastFlashAtMs >= SUCCESS_FLASH_DEBOUNCE_MS;
+    }
+
     /** log / chat kind label for unit tests */
     public static String kindOf(EmberRunMaps.Skill sk) {
         if (hasWall(sk)) return CounterplayKind.WALL.name();
