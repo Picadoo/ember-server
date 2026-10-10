@@ -700,6 +700,21 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D554: non-raid fallen member may leave via flee path (AUTO / ASK). */
+    public boolean canFleeLeave(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (d.def != null && d.def.raid) return false; // D106 double-confirm stays
+        return d.s.died.contains(p.getUniqueId()) && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathFleeLeave(Player p) {
+        if (!canFleeLeave(p)) return false;
+        p.performCommand("dp leave");
+        return true;
+    }
+
     /** D553: open pending extra chest for a committed player (AUTO / ASK button). */
     public boolean pathOpenExtraChest(Player p) {
         if (p == null) return false;
@@ -1210,6 +1225,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberCharmPath.scheduleOfferAfterQ01(p); // D551 charm path
                         if ("q01".equals(g.id)) EmberSightPath.scheduleOfferAfterQ01(p); // D552 sight path
                         if ("q01".equals(g.id)) EmberChestPath.scheduleOfferAfterQ01(p); // D553 chest path
+                        if ("q01".equals(g.id)) EmberFleePath.scheduleOfferAfterQ01(p); // D554 flee path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
@@ -2112,6 +2128,7 @@ public final class EmberRunService implements Listener {
                 if (raidRun(rs) && rs.open() && rs.died.contains(p.getUniqueId())) { watchTeammate(p, rs, false); return; } // onDeath tells
                 p.setGameMode(GameMode.SPECTATOR);
                 p.sendMessage(P + "你已倒下：本局观战等待队友（仍保留本次结算资格）。");
+                EmberFleePath.maybeAfterFall(p); // D554
             }
         }, 2L);
     }

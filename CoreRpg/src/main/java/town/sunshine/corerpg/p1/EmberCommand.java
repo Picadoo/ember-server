@@ -268,6 +268,50 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("flepath".equals(sub) || "fleepath".equals(sub) || "撤离路径".equals(sub)) { // D554 post-fall flee path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberFleePath.glance(EmberFleePath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c撤离路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberFleePath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c撤离路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberFleePath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberFleePath.get(d);
+                    if (EmberFleePath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberFleePath.label(cur) + " · 改路径再 /corerpg p1 flepath");
+                    else EmberFleePath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberFleePath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 flepath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberFleePath.applyAndReply(p, id);
+            return true;
+        }
+        if ("flee".equals(sub) && args.length == 2) { // D554 ASK button
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathFleeLeave(p)) p.sendMessage(P + "无法离本（非倒下/团本需双确认/未进本）");
+            else p.sendMessage(P + "§a撤离·手点 §7已离本");
+            return true;
+        }
         if ("chestpath".equals(sub) || "开箱路径".equals(sub)) { // D553 extra chest open path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -1317,6 +1361,15 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("fleeseed".equals(sub)) { // D554 admin smoke: probe flee path
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberFleePath.maybeProbe(t);
+            s.sendMessage(P + "已触发撤离路径探测 → " + t.getName()
+                    + (runs != null && runs.canFleeLeave(t) ? "（可离本）" : "（无倒下态）"));
             return true;
         }
         if ("chestseed".equals(sub)) { // D553 admin smoke: probe chest path (live open if pending)
