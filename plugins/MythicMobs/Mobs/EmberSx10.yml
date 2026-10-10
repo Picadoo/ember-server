@@ -68,7 +68,7 @@ EmberSx10Warden:
   # R3 Boss 末室守吏 · GateCast 闸心压浪/扫室斩可读可躲；对照 sx09 Warden HP180；未抬过日更 Boss 210
   Type: ZOMBIE
   Display: '&c末室守吏'
-  Health: 180
+  Health: 240
   Damage: 3
   Options:
     MovementSpeed: 0.2
@@ -83,6 +83,6 @@ EmberSx10Warden:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
-  - skill{s=EmberSx10GateCast} @self ~onTimer:80
+  - skill{s=EmberSx10GateCast} @self ~onTimer:70
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

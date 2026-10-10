@@ -350,69 +350,65 @@ EmberSx09CanalCast:
 # 对照：EmberSx09CanalCast / EmberSx01SentryCast；主题「闸心压浪」：cloud+crit 闸心/室缘 + lava 烬感；结算 r5
 # 1.12.2 粒子：cloud + lava + crit（禁无效粒子）；message 标明退进室侧龛或回撤闸后
 EmberSx10GateCast:
+  # D446 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&6【烬闸】&f闸心压浪——&7退进室侧龛或回撤闸后！"} @PlayersInRadius{r=24}
-  - effect:particles{p=cloud;amount=40;hSpread=4.5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=20;hSpread=2.2;ySpread=1.6;speed=0} @Self
-  - effect:particles{p=crit;amount=28;hSpread=5;ySpread=0.5;speed=0.02} @Self
-  - effect:sound{s=minecart.base;volume=0.7;pitch=0.5} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=cloud;amount=32;hSpread=5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=18;hSpread=5;ySpread=1;speed=0} @Self
-  - effect:particles{p=crit;amount=22;hSpread=5;ySpread=0.5;speed=0.02} @Self
+  - message{m="&8【密封闸】&f闸心压浪——&7退进室侧龛或回撤上一道闸！"} @PlayersInRadius{r=28}
+  - effect:particles{p=crit;amount=72;hSpread=6;ySpread=0.6;speed=0.03} @Self
+  - effect:particles{p=smoke;amount=56;hSpread=5;ySpread=0.8;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.55} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=48;hSpread=6;ySpread=0.4;speed=0.02} @Self
+
 
 # --- 短征 sx11 · 烬镜对廊 Boss 镜面扫线/对折斩（可躲；无 SLOW；范式 GateCast / SentryCast）---
 # 对照：EmberSx10GateCast / EmberSx01SentryCast；主题「镜面扫线」：crit+cloud 中轴/双廊镜像 + lava 烬感；结算 r5
 # 1.12.2 粒子：crit + cloud + lava（禁无效粒子）；message 标明退进合镜侧龛或回撤侧廊末端
 EmberSx11MirrorCast:
+  # D446 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&6【烬镜】&f镜面扫线——&7退进合镜侧龛或回撤侧廊！"} @PlayersInRadius{r=24}
-  - effect:particles{p=crit;amount=36;hSpread=5;ySpread=0.5;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=32;hSpread=4.5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=18;hSpread=2.2;ySpread=1.4;speed=0} @Self
-  - effect:sound{s=minecart.base;volume=0.7;pitch=0.55} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=crit;amount=28;hSpread=5;ySpread=0.5;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+  - message{m="&5【合镜】&f镜面扫线——&7退进合镜侧龛或回撤侧廊！"} @PlayersInRadius{r=28}
+  - effect:particles{p=crit;amount=72;hSpread=6.5;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=spell_witch;amount=48;hSpread=5;ySpread=0.7;speed=0.02} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.75} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=48;hSpread=6;ySpread=0.4;speed=0.02} @Self
+
 
 # --- 短征 sx12 · 烬枢转厅 Boss 枢扫斩/转面压浪（可躲；无 SLOW；范式 MirrorCast / SentryCast）---
 # 对照：EmberSx11MirrorCast / EmberSx01SentryCast；主题「枢扫斩」：crit 扇扫 + cloud 中枢转心 + lava 烬感；结算 r5
 # 1.12.2 粒子：crit + cloud + lava（禁无效粒子）；message 标明退进已对齐侧厢龛或枢冠侧台
 EmberSx12PivotCast:
+  # D446 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&6【烬枢】&f枢扫斩——&7退进侧厢龛或枢冠侧台！"} @PlayersInRadius{r=24}
-  - effect:particles{p=crit;amount=40;hSpread=5;ySpread=0.5;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=36;hSpread=3.5;ySpread=0.8;speed=0} @Self
-  - effect:particles{p=lava;amount=16;hSpread=2;ySpread=1.5;speed=0} @Self
-  - effect:sound{s=minecart.base;volume=0.7;pitch=0.48} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=crit;amount=30;hSpread=5;ySpread=0.5;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+  - message{m="&a【环枢】&f枢扫斩——&7退进已对齐侧厢龛或枢冠侧台！"} @PlayersInRadius{r=28}
+  - effect:particles{p=crit;amount=72;hSpread=6;ySpread=0.6;speed=0.03} @Self
+  - effect:particles{p=happyVillager;amount=48;hSpread=5;ySpread=0.8;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.65} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=48;hSpread=6;ySpread=0.4;speed=0.02} @Self
+
 
 # --- 短征 sx13 · 烬衡悬梁 Boss 衡扫斩/倾梁压浪（可躲；无 SLOW；范式 PivotCast / SentryCast）---
 # 对照：EmberSx12PivotCast / EmberSx01SentryCast；主题「衡扫斩」：crit 倾梁条 + cloud 配重倾势 + lava 烬感；结算 r5
 # 1.12.2 粒子：crit + cloud + lava（禁无效粒子）；message 标明退进衡冠侧龛或已过衡梁侧台
 EmberSx13BalanceCast:
+  # D446 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&6【烬衡】&f衡扫斩——&7退进衡冠侧龛或已过衡梁侧台！"} @PlayersInRadius{r=24}
-  - effect:particles{p=crit;amount=42;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=34;hSpread=4;ySpread=0.7;speed=0} @Self
-  - effect:particles{p=lava;amount=18;hSpread=2.5;ySpread=1.2;speed=0} @Self
-  - effect:sound{s=minecart.base;volume=0.7;pitch=0.45} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=crit;amount=32;hSpread=5.5;ySpread=0.4;speed=0.02} @Self
-  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.6;speed=0} @Self
-  - effect:particles{p=lava;amount=14;hSpread=5;ySpread=1;speed=0} @Self
+  - message{m="&6【衡梁】&f衡扫斩——&7退进衡冠侧龛或已过衡梁侧台！"} @PlayersInRadius{r=28}
+  - effect:particles{p=crit;amount=72;hSpread=6.5;ySpread=0.5;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=56;hSpread=5;ySpread=0.7;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.5} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=crit;amount=48;hSpread=6;ySpread=0.4;speed=0.02} @Self
+
 
 # --- 短征 sx14 · 烬裂折廊 Boss 裂扫斩/折角压浪（可躲；无 SLOW；范式 BalanceCast / PivotCast）---
 # 对照：EmberSx13BalanceCast；主题「裂扫斩」：crit 裂隙折角条 + cloud 裂缝压浪 + lava 烬感；结算 r5

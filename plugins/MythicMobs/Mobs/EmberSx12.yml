@@ -69,7 +69,7 @@ EmberSx12Warden:
   # R3 Boss 枢冠守吏 · PivotCast 枢扫斩/转面压浪可读可躲；对照 sx11 Warden HP180；未抬过日更 Boss 210
   Type: ZOMBIE
   Display: '&c枢冠守吏'
-  Health: 180
+  Health: 240
   Damage: 3
   Options:
     MovementSpeed: 0.2
@@ -84,6 +84,6 @@ EmberSx12Warden:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
-  - skill{s=EmberSx12PivotCast} @self ~onTimer:80
+  - skill{s=EmberSx12PivotCast} @self ~onTimer:70
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5

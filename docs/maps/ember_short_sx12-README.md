@@ -43,3 +43,6 @@ cp -a plugins/DungeonPlus/map/ember_raid \
 ## 禁
 
 空板 PASS · 覆盖其它 `ember_*` map 不备份 · 长期共用 `ember_short_sx01..11` 目录交差 · 放开旧日常 map 当短征 · 抬挂机表当奖励 · 纯换皮宣称第十二条短征完工 · 把本债写成「环廊 / 对廊 / 递闸 / 霜雾廊 / 跳石 / 错层 / 塔升 / 风廊」· **`git add -f` map**
+
+## D446
+- 环枢侧厢≥2 · `@d446`
