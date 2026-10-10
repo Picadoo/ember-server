@@ -196,63 +196,72 @@ EmberCryptOathCast:
 # --- 短征 sx01 · 烬门哨岗 Boss 哨长读条（可躲；无 SLOW；范式 FrostNova）---
 # 对照：EmberFrostNovaCast / EmberYardPulseCast；主题粒子 flame（烬门）
 EmberSx01SentryCast:
+  # D443 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&6【烬门】&f哨长蓄力——&7拉开！"} @PlayersInRadius{r=24}
-  - effect:particles{p=flame;amount=36;hSpread=4;ySpread=0.8;speed=0} @Self
-  - effect:particles{p=crit;amount=18;hSpread=3;ySpread=0.5;speed=0.02} @Self
-  - effect:sound{s=minecart.base;volume=0.6;pitch=0.75} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=flame;amount=28;hSpread=5;ySpread=0.6;speed=0.01} @Self
+  - message{m="&6【烬门】&f哨长蓄力——&7拉开！"} @PlayersInRadius{r=28}
+  - effect:particles{p=flame;amount=72;hSpread=6;ySpread=0.9;speed=0.02} @Self
+  - effect:particles{p=crit;amount=48;hSpread=5;ySpread=0.6;speed=0.03} @Self
+  - effect:particles{p=cloud;amount=36;hSpread=5;ySpread=0.7;speed=0} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.7} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=48;hSpread=6;ySpread=0.6;speed=0.02} @Self
+
 
 # --- 短征 sx02 · 锈灯栈道 Boss 灯塔扫线落点（可躲；无 SLOW；范式 FrostNova）---
 # 对照：EmberSx01SentryCast / EmberFrostNovaCast；主题「扫线→落点圈」：蓄力宽幅粒子示扫线，结算 r5 落点圈
 # 1.12.2 粒子：flame + lava + crit（禁无效粒子）
 EmberSx02BeaconCast:
+  # D443 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&e【锈灯】&f灯塔扫线落点——&7侧移拉开！"} @PlayersInRadius{r=24}
-  - effect:particles{p=flame;amount=18;hSpread=1.2;ySpread=0.4;speed=0} @Self
-  - effect:particles{p=lava;amount=14;hSpread=2.8;ySpread=0.3;speed=0} @Self
-  - effect:particles{p=crit;amount=22;hSpread=4.5;ySpread=0.5;speed=0.02} @Self
-  - effect:sound{s=minecart.base;volume=0.65;pitch=0.85} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=flame;amount=30;hSpread=5;ySpread=0.6;speed=0.02} @Self
-  - effect:particles{p=lava;amount=18;hSpread=5;ySpread=0.4;speed=0} @Self
+  - message{m="&e【锈灯】&f灯塔扫线落点——&7侧移拉开！"} @PlayersInRadius{r=28}
+  - effect:particles{p=flame;amount=56;hSpread=2;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=lava;amount=40;hSpread=4;ySpread=0.5;speed=0} @Self
+  - effect:particles{p=crit;amount=56;hSpread=6;ySpread=0.6;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.8} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=flame;amount=48;hSpread=6;ySpread=0.6;speed=0.02} @Self
+  - effect:particles{p=lava;amount=28;hSpread=5;ySpread=0.5;speed=0} @Self
+
 
 # --- 短征 sx03 · 霜雾闸廊 Boss 霜雾楔/冻圈（可躲；轻 SLOW 对齐 FrostNova）---
 # 对照：EmberFrostNovaCast / EmberSx02BeaconCast；主题「雾楔→冻圈」：cloud 雾压 + crit 落点；结算 r5 + 轻减速
 # 1.12.2 粒子：cloud + crit（禁无效粒子）
 EmberSx03FrostCast:
+  # D443 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&b【霜雾】&f霜雾楔冻圈——&7侧移拉开！"} @PlayersInRadius{r=24}
-  - effect:particles{p=cloud;amount=40;hSpread=4;ySpread=1;speed=0} @Self
-  - effect:particles{p=crit;amount=22;hSpread=3.5;ySpread=0.6;speed=0.02} @Self
-  - effect:sound{s=minecart.base;volume=0.6;pitch=0.7} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
+  - message{m="&b【霜雾】&f霜雾楔冻圈——&7侧移拉开！"} @PlayersInRadius{r=28}
+  - effect:particles{p=cloud;amount=72;hSpread=6;ySpread=1.1;speed=0} @Self
+  - effect:particles{p=crit;amount=48;hSpread=5;ySpread=0.7;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.65} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
   - potion{type=SLOW;duration=40;level=0} @PlayersInRadius{r=5}
-  - effect:particles{p=cloud;amount=28;hSpread=5;ySpread=0.8;speed=0} @Self
-  - effect:particles{p=crit;amount=24;hSpread=5;ySpread=0.6;speed=0.02} @Self
+  - effect:particles{p=cloud;amount=48;hSpread=6;ySpread=0.9;speed=0} @Self
+  - effect:particles{p=crit;amount=36;hSpread=5;ySpread=0.6;speed=0.02} @Self
+
 
 # --- 短征 sx04 · 烬井螺旋 Boss 井心喷涌/灰柱（可躲；无 SLOW；范式 AshBurst / SentryCast）---
 # 对照：EmberAshBurstCast / EmberSx01SentryCast；主题「井心喷焰」：lava+flame 竖柱蓄力 + crit 环示意；结算 r5
 # 1.12.2 粒子：lava + flame + crit（禁无效粒子）；message 标明踏上井沿或拉开
 EmberSx04FurnaceCast:
+  # D443 Cast 可读
   Cooldown: 8
   Skills:
-  - message{m="&c【烬井】&f井心喷焰——&7踏上井沿或拉开！"} @PlayersInRadius{r=24}
-  - effect:particles{p=lava;amount=28;hSpread=1.5;ySpread=2.2;speed=0} @Self
-  - effect:particles{p=flame;amount=36;hSpread=2;ySpread=2.5;speed=0.01} @Self
-  - effect:particles{p=crit;amount=20;hSpread=4;ySpread=0.6;speed=0.02} @Self
-  - effect:sound{s=minecart.base;volume=0.7;pitch=0.5} @Self
-  - delay 25
-  - damage{amount=1.2} @PlayersInRadius{r=5}
-  - effect:particles{p=lava;amount=24;hSpread=5;ySpread=1.2;speed=0} @Self
-  - effect:particles{p=flame;amount=32;hSpread=5;ySpread=0.8;speed=0.02} @Self
+  - message{m="&c【烬井】&f井心喷焰——&7踏上井沿或拉开！"} @PlayersInRadius{r=28}
+  - effect:particles{p=lava;amount=56;hSpread=2;ySpread=2.5;speed=0} @Self
+  - effect:particles{p=flame;amount=72;hSpread=3;ySpread=2.8;speed=0.02} @Self
+  - effect:particles{p=crit;amount=48;hSpread=5;ySpread=0.7;speed=0.03} @Self
+  - effect:sound{s=minecart.base;volume=0.9;pitch=0.45} @Self
+  - delay 30
+  - damage{amount=0.85} @PlayersInRadius{r=5}
+  - effect:particles{p=lava;amount=40;hSpread=6;ySpread=1.2;speed=0} @Self
+  - effect:particles{p=flame;amount=48;hSpread=6;ySpread=0.9;speed=0.02} @Self
+
 
 # --- 短征 sx05 · 裂谷风廊 Boss 风剪条/侧风斩（可躲；无 SLOW；范式 SentryCast / FurnaceCast）---
 # 对照：EmberSx01SentryCast / EmberSx04FurnaceCast；主题「风剪条」：cloud 桥面风压 + crit 条带 + explode 侧斩示意；结算 r5

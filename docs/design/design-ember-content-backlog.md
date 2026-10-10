@@ -966,7 +966,10 @@
 - `B-counterplay-flash`（已批 A · 方案 M · D440 · **HOLD** · 薄反馈暂停）
 - `B-short-map-sx14-sx15-real`（已批 A · 方案 M · D441 · **PASS** · sx14折角+sx15螺旋真地图+Cast可读）
 - `B-short-map-sx16-sx19-real`（已批 A · 方案 M · D442 · **PASS** · sx16–19 真地图+Cast可读）
-- `B-set-hud-polish`（已批 A · 方案 M · D442 · **已批·待施工** · D439 短闪后 HUD 交接抛光 · ≠改倍率）
+- `B-short-map-sx01-sx04-real`（已批 A · 方案 M · D443 · **PASS** · 审计sx01–13 + 重建sx01–04）
+- `B-short-map-sx05-sx13-real`（债 · 磁盘 MISSING · 待 D444+）
+- `B-set-hud-polish`（已批 A · 方案 M · D444 · **PASS** · jar 1.65.142-d444 · tip 误标 D442 已更正 · COORD DONE）
+- `B-growth-feel-residual`（债 · tip 待开 · 成长战斗手感残余 · ≠sx20 同构 ≠改套装倍率表）
 - `B-set-proc-readable`（已批 A · 方案 M · D439 · **PASS** · jar 1.65.141 · COORD DONE）
 - `B-slash-set-identity`（已批 A · 方案 M · D438 · **PASS** · jar 1.65.140 · COORD DONE）
 - `B-gather-set-identity`（已批 A · 方案 M · D437 · **HOLD** · 聚火不复活）

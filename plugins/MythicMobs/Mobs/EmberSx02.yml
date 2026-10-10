@@ -67,7 +67,7 @@ EmberSx02Warden:
   # R3 Boss 灯塔守吏 · Cast 可读扫线落点；对照 sx01 Warden HP180；未抬过日更 Boss 210
   Type: ZOMBIE
   Display: '&e灯塔守吏'
-  Health: 180
+  Health: 240
   Damage: 3
   Options:
     MovementSpeed: 0.2
@@ -82,6 +82,6 @@ EmberSx02Warden:
   Skills:
   - command{c="corerpg mmxp <caster.uuid> elite"} @Self ~onDeath
   - skill{s=EmberDailySoftHit} @target ~onAttack 0.18
-  - skill{s=EmberSx02BeaconCast} @self ~onTimer:80
+  - skill{s=EmberSx02BeaconCast} @self ~onTimer:70
   - command{c="corerpg mmgive <caster.uuid> mat_ember_core_fragment 1"} @Self ~onDeath
   - command{c="corerpg mmgive <caster.uuid> mat_ember_shard 1"} @Self ~onDeath 0.5
