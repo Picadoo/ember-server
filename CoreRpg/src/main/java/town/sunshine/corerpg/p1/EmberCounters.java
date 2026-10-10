@@ -214,6 +214,7 @@ public final class EmberCounters {
         x("p1_sx11_day", "EmberShortService", D, CL, RL, "short expedition sx11 rewarded clears today (S50)");
         x("p1_sx12_day", "EmberShortService", D, CL, RL, "short expedition sx12 rewarded clears today (S51)");
         x("p1_sx13_day", "EmberShortService", D, CL, RL, "short expedition sx13 rewarded clears today (S52)");
+        x("p1_sx14_day", "EmberShortService", D, CL, RL, "short expedition sx14 rewarded clears today (S53)");
         px("p3_fest_entry_", "EmberFestival", D, CL, RL, "festival runs today");
         px("p3_fest_charm_", "EmberFestival", A, PR, NV, "festival charm owned");
         px("p3_fest_charmon_", "EmberFestival", A, SE, ZR, "festival charm worn");
@@ -310,7 +311,7 @@ public final class EmberCounters {
         if (claim.indexOf('@') >= 0) return "claim counter " + claim + " must not contain '@'";
         Family f = lookup(claim);
         if (f == null) return null; // new config claim: allowed, EmberCountersTest asks for a registry row before release
-        if (f.category == Category.CLAIM && f.period == Period.PWEEK && (f.config || f.key.equals("p4_rush_claim"))) return null;
+        if (f.category == Category.CLAIM && (f.period == Period.PWEEK || f.period == Period.DAY) && (f.config || f.key.equals("p4_rush_claim") || f.key.startsWith("p1_sx"))) return null;
         return "claim counter " + claim + " collides with registered family " + f;
     }
 }

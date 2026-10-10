@@ -229,7 +229,7 @@ public class EmberGrowthTest {
         assertEquals(0.80, ab.mods.get("dmg_affix_blazing"), 1e-9);
         assertEquals(0.80, ab.mods.get("dmg_affix_split"), 1e-9);
         assertFalse("no flat dmg_affix on 破甲", ab.mods.containsKey("dmg_affix"));
-        assertTrue("row-2 text says 仅主线重打生效", ab.good.contains("仅主线重打生效"));
+        assertTrue("row-2 text says 仅主线重打词缀精英", ab.good.contains("仅主线重打词缀精英"));
 
         EmberGrowth.Mods only = EmberGrowth.Mods.combine(java.util.Arrays.asList(ab.mods));
         assertEquals(160.0, 100 * EmberGrowthService.classMult(only, "affix", "shield"), 1e-9);
@@ -268,8 +268,8 @@ public class EmberGrowthTest {
         EmberGrowth.Mods crushOnly = EmberGrowth.Mods.combine(java.util.Arrays.asList(crush.mods));
         assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "affix", "shield"), 1e-9);
         assertEquals(130.0, 100 * EmberGrowthService.classMult(crushOnly, "split", null), 1e-9);
-        for (EmberGrowth.Node n : tal.nodes) if (n.row == 2) assertTrue(n.id + " good text: 仅主线重打生效", n.good.contains("仅主线重打生效"));
-        assertTrue(tal.row(2).theme.contains("仅主线重打生效"));
+        for (EmberGrowth.Node n : tal.nodes) if (n.row == 2) assertTrue(n.id + " good text: 仅主线重打词缀精英", n.good.contains("仅主线重打词缀精英"));
+        assertTrue(tal.row(2).theme.contains("仅主线重打词缀精英"));
     }
 
     @Test public void splitAffixRetiredFromPool_D165() {
@@ -286,9 +286,9 @@ public class EmberGrowthTest {
         for (int i = 0; i < 3000; i++) assertNotEquals("never rolled", "b_split", EmberAffix.roll(r, "blade", 3, i % 6, rng).id);
         for (int i = 0; i < 500; i++) assertNotEquals("lock on a retired affix = a normal roll", "b_split", EmberAffix.roll(r, "blade", 3, 0, rng, "b_split").id);
         // D166 scope notes
-        assertTrue(r.def("b_affix").text(1).contains("仅主线重打生效"));
-        assertTrue(r.def("c_affix").text(1).contains("仅主线重打生效"));
-        assertTrue(gone.text(1).contains("仅主线重打生效"));
+        assertTrue(r.def("b_affix").text(1).contains("仅主线重打词缀精英"));
+        assertTrue(r.def("c_affix").text(1).contains("仅主线重打词缀精英"));
+        assertTrue(gone.text(1).contains("仅主线重打词缀精英"));
         assertEquals("no note on the general ones", "", r.def("b_set").note);
     }
 

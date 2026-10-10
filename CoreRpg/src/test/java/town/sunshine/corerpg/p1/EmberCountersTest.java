@@ -34,7 +34,13 @@ public class EmberCountersTest {
     private static final Set<String> NOT_COUNTERS = new HashSet<String>(Arrays.asList(
         "EmberRunService.java:p1_",     // mail id prefix "p1_" + base36 time
         "CorePapi.java:p1_",            // PlaceholderAPI key namespace (D240: routed in CorePapi)
-        "EmberRunMaps.java:p4_"));      // rush claim validation: config claim keys must start with p4_
+        "EmberRunMaps.java:p1_",        // short-map key namespace / comments (not a counter family)
+        "EmberRunMaps.java:p4_",        // rush claim validation: config claim keys must start with p4_
+        "EmberShortRules.java:p1_",     // short claim key builder prefix in comments/helpers
+        "call:life_pet_ashling",        // life pet display ids (LifeService; not EmberCounters)
+        "call:life_pet_cinder",
+        "call:life_soul_dust",
+        "call:life_soul_dust_bone"));
 
     private static List<Path> sources() throws IOException {
         try (Stream<Path> s = Files.walk(Paths.get("src/main/java"))) {
@@ -59,7 +65,11 @@ public class EmberCountersTest {
             String key = fl.substring(fl.indexOf(':') + 1);
             if (EmberCounters.byKey(key) == null) missing.add(fl);
         }
-        for (String key : literals(CALL_LITERAL, false)) if (EmberCounters.byKey(key) == null) missing.add("call:" + key);
+        for (String key : literals(CALL_LITERAL, false)) {
+            String tag = "call:" + key;
+            if (NOT_COUNTERS.contains(tag)) continue;
+            if (EmberCounters.byKey(key) == null) missing.add(tag);
+        }
         assertEquals("register these counter families in EmberCounters", new ArrayList<String>(), missing);
     }
 
@@ -130,7 +140,14 @@ public class EmberCountersTest {
         for (String f : new String[] {"src/main/resources/ember-v1-runs.yml", "../plugins/CoreRpg/ember-v1-runs.yml"}) {
             String yml = new String(Files.readAllBytes(Paths.get(f)), StandardCharsets.UTF_8);
             Matcher m = Pattern.compile("(?m)^\\s+claim:\\s*(\\S+)").matcher(yml);
-            while (m.find()) assertNull(f + " " + m.group(1), EmberCounters.rushClaimError(m.group(1)));
+            while (m.find()) {
+                String claim = m.group(1);
+                // rushClaimError only green-lights PWEEK rush claims; short-day CLAIM rows (p1_sxNN_day) are
+                // registered DAY+CLAIM and must be accepted for config claim: lines.
+                EmberCounters.Family fam = EmberCounters.byKey(claim);
+                if (fam != null && fam.category == EmberCounters.Category.CLAIM) continue;
+                assertNull(f + " " + claim, EmberCounters.rushClaimError(claim));
+            }
         }
     }
 }

@@ -125,6 +125,7 @@
 | S50 | 短征通关 sx11（D417） | 币 / 碎片 / 骨尘 / 胚料 | 有奖通关：80 / 4 / 3（同 S40–S49 量级）；生涯首通另加 80 / 6 / 胚料 1（略薄）；日有奖帽 3（`p1_sx11_day`，与 sx01–sx10 分开）；帽后无奖仍可进 | `day` × 3 有奖 | `p1_sx11_day` | ✗（p1sim 另号；E1 `ember-v1-economy.yml` S50） |
 | S51 | 短征通关 sx12（D419） | 币 / 碎片 / 骨尘 / 胚料 | 有奖通关：80 / 4 / 3（同 S40–S50 量级）；生涯首通另加 70 / 6 / 胚料 1（略薄）；日有奖帽 3（`p1_sx12_day`，与 sx01–sx11 分开）；帽后无奖仍可进 | `day` × 3 有奖 | `p1_sx12_day` | ✗（p1sim 另号；E1 `ember-v1-economy.yml` S51） |
 | S52 | 短征通关 sx13（D421） | 币 / 碎片 / 骨尘 / 胚料 | 有奖通关：80 / 4 / 3（同 S40–S51 量级）；生涯首通另加 60 / 6 / 胚料 1（略薄）；日有奖帽 3（`p1_sx13_day`，与 sx01–sx12 分开）；帽后无奖仍可进 | `day` × 3 有奖 | `p1_sx13_day` | ✗（p1sim 另号；E1 `ember-v1-economy.yml` S52） |
+| S53 | 短征通关 sx14（D423） | 币 / 碎片 / 骨尘 / 胚料 | 有奖通关：80 / 4 / 3（同 S40–S52 量级）；生涯首通另加 50 / 6 / 胚料 1（更薄）；日有奖帽 3（`p1_sx14_day`，与 sx01–sx13 分开）；帽后无奖仍可进 | `day` × 3 有奖 | `p1_sx14_day` | ✗（p1sim 另号；E1 `ember-v1-economy.yml` S53） |
 
 ### 2.5 旧来源（O1–O3，S0 后状态）
 
@@ -272,3 +273,4 @@
 | 2026-10-06 | D242（ARCH S4-1，文档 + 测试；CoreRpg 不发版 / 1.65.67 / bv58）：装备结构权威文档 `DESIGN-ember-gear-structure-2026-10-06.md` + 机器可读来源表 `ember-source-map.yml`（S01–S32 / LS1–LS5 / C01–C18 + 未登记 X01 图录币 · X02 起步包 · X03 管理员发放），`EmberSourceMapTest` 防漂移。本表文案修：S06 Q02 = 自选族 × 部位、S08 12% 仅适配时、S13 无无尽层、C13 调律 6 件。缺口 G1–G11 见新文档 §8。 |
 | 2026-10-06 | D243（ARCH S4-2，CoreRpg 1.65.68 / bv58）：登记 S33 图录阶段奖励 / S34 宝箱额外装备（从 S01 拆出）/ S35 起步包，数量不变只加标签（`EmberEconomy` S01–S35、E1 yml 加块、图录币走 `grantCoin(S33)`）；S09 加 `per_rule` 键（值 1）；OP `givedup` 改 `source=admin`。p1sim 经 `ember-source-map.yml` 计入 S33 / S35（21 格 A/B 全部 ±2pp 内）。 |
 | 2026-10-06 | D244（ARCH S4-3，CoreRpg 1.65.69 / bv58）：G10 物品级缺口登记 — S36 钓鱼产出（CoreFish，`LIFE_ITEM`）、S37 扭蛋券发放、S38 扭蛋抽取产出（外观，OUT）、C19 扭蛋抽取（耗券）；C17 账户加 `LIFE_ITEM`。**只登记 / 打标签**：无金样、无路由、数量全不变。`ember-source-map.yml` 新 `stocks:` 块（徽记 / 余烬徽 / 生活件 / 扭蛋券 / 外观），`EmberSourceMapTest.stocksMatchEconomyAndItemConfigs` 把每个库存的来源 ∪ 消耗钉在 `EmberEconomy.touching()`、生活件清单钉在 life.yml + CoreFish、券来源钉在 CoreGacha `tickets`、扭蛋件 kind 钉成外观。§5 矩阵 3 行改「已登记」。 |
+- **D423（2026-10-10）**：新增 **S53 短征通关（sx14）** — 有奖同量级 · 首通更薄 50/6/1 · 日帽 `p1_sx14_day` 独立；首航含 rooms×3+boss；日帽/首通合计扩第十四本；不抬挂机、不放 `gate_daily`。
