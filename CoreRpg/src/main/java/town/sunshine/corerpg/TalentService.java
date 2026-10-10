@@ -379,6 +379,9 @@ public final class TalentService {
         player.sendMessage(ChatColor.GREEN + "[天赋] 解锁："
                 + ChatColor.stripColor(def.display) + "（" + def.id + "）剩余 " + left + " 点");
         player.sendMessage(ChatColor.GRAY + "  效果：" + formatStats(def));
+        try { // D730 ActionBar only — no button twin
+            player.sendActionBar("§a天赋解锁 · §f" + ChatColor.stripColor(def.display) + " §7· 余 " + left);
+        } catch (Throwable ignored) { }
         if ("skill".equalsIgnoreCase(def.type) && def.skillId != null) {
             player.sendMessage(ChatColor.LIGHT_PURPLE + "  [技能占位] skill_id=" + def.skillId
                     + ChatColor.DARK_GRAY + "（未接 MM 释放）");

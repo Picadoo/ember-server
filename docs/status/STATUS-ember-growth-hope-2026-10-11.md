@@ -184,3 +184,9 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D725–D726 SHIP · jar 1.65.338-d725 · 2026-10-11
 - D725 map farm suggest setfocus
 - D726 undo window expired bar
+
+## D727–D730 SHIP · jar 1.65.339-d727 · 2026-10-11
+- D727 gem insert chase from pity/craft/path (no legacy socket)
+- D728 weekly convert loop complete + path remain
+- D729 challenge path enter/apply clarity
+- D730 talent unlock ActionBar only

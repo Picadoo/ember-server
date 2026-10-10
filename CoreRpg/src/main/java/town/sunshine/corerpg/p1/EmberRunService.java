@@ -551,7 +551,17 @@ public final class EmberRunService implements Listener {
                     ch = want;
                     leader.sendMessage(P + (ch ? "§c硬本·偏挑战 §7已改为挑战版进本" : "§a硬本·偏普通 §7已改为普通版进本")
                             + " §8· /corerpg p1 challengepath");
-                } else ch = want;
+                    try { // D729
+                        leader.sendActionBar(ch ? "§c硬本路径 · 挑战版" : "§a硬本路径 · 普通版");
+                    } catch (Throwable ignored) { }
+                } else {
+                    ch = want;
+                    if (EmberChallengePath.valid(EmberChallengePath.get(ld))) {
+                        try {
+                            leader.sendActionBar(ch ? "§c硬本 · 挑战" : "§a硬本 · 普通");
+                        } catch (Throwable ignored) { }
+                    }
+                }
             }
         }
         final EmberEntryService.Admit a = entry.admit(leader, mapKey, ch, abyss);

@@ -30,13 +30,18 @@ public final class EmberConvertLoop {
         boolean pathHit = pathFam != null && pathFam.equals(toFam);
         if (pathHit) {
             p.sendMessage(P + "§a转化路径达成：§f" + famName + " §7· 本周转到目标族了");
+            // D728: weekly convert loop complete (path + spend)
+            p.sendMessage(P + "§a本周转化环完成 · §7强化已归零可去工坊 · 下周可再转");
+            try { p.sendActionBar("§a转化环 · 本周完成"); } catch (Throwable ignored) { }
         }
 
         // D643: weekly forge-goal CONVERT complete loop (acquisition feel · zero price/cap change)
         boolean goalHit = EmberForgeGoal.get(d) == EmberForgeGoal.CONVERT;
         if (goalHit) {
             p.sendMessage(P + "§a本周工坊目标完成：§f每周转化 → " + famName);
-            try { p.sendActionBar("§a工坊目标 · 转化完成"); } catch (Throwable ignored) { }
+            if (!pathHit) {
+                try { p.sendActionBar("§a工坊目标 · 转化完成"); } catch (Throwable ignored) { }
+            }
         }
 
         // enhance wiped — chase forge; optional align setfocus

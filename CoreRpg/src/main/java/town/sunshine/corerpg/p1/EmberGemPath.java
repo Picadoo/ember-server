@@ -8,7 +8,6 @@ import org.bukkit.plugin.Plugin;
 
 import town.sunshine.corerpg.ConfirmTokens;
 import town.sunshine.corerpg.CoreRpgPlugin;
-import town.sunshine.corerpg.EnhanceService;
 import town.sunshine.corerpg.PlayerData;
 
 /**
@@ -109,14 +108,11 @@ public final class EmberGemPath {
         if (d == null) return;
         int path = get(d);
         if (!valid(path)) return;
-        String gid = gemId(path);
         CoreRpgPlugin pl = plugin();
-        if (pl == null || pl.getEnhanceService() == null) return;
-        EnhanceService enh = pl.getEnhanceService();
-        if (!enh.hasEmptyUnlockedSocket(p)) return;
-        if (enh.tryPathSocket(p, gid)) {
-            p.sendMessage(EmberRunService.P + "§a宝石路径 §7已按「" + label(path) + "」镶嵌");
-        }
+        if (pl == null) return;
+        // D727: P1 insert chase (no legacy /corerpg socket)
+        EmberLoadoutService lo = pl.getEmberRuns() == null ? null : pl.getEmberRuns().loadouts();
+        EmberGemInsertChase.afterAcquire(p, path, lo, pl);
     }
 
     public static void offerPick(Player p) {

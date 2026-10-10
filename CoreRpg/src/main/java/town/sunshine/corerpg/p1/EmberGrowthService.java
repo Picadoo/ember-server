@@ -2221,6 +2221,12 @@ public final class EmberGrowthService implements Listener {
         int qAfter = EmberConvertRules.qualityAfter(t.quality);
         if (!confirm) {
             p.sendMessage(P + "§6每周转化 · " + t.shortLabel());
+            int path = EmberConvertPath.get(d); // D728
+            String pathFam = EmberConvertPath.familyKey(path);
+            if (pathFam != null) {
+                String hit = pathFam.equals(toFam) ? " §a· 命中路径" : " §8· 路径是 " + EmberItemData.familyName(pathFam);
+                p.sendMessage(P + "§e转化环：§f" + EmberConvertPath.label(path) + hit);
+            }
             p.sendMessage(P + "目标族：§f" + EmberItemData.familyName(toFam)
                     + " §7· 本周剩余 §f" + (EmberConvertRules.WEEKLY_CAP - used) + "/" + EmberConvertRules.WEEKLY_CAP);
             p.sendMessage(P + "成色：§f" + EmberItemData.qualityName(t.quality) + " §7→ §f" + EmberItemData.qualityName(qAfter)

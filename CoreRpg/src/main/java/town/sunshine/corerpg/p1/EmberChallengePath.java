@@ -161,6 +161,11 @@ public final class EmberChallengePath {
         set(d, id);
         flush(p);
         p.sendMessage(P + "§a硬本 → §f" + label(id) + " §7· " + tip(id));
+        try { // D729
+            if (id == PREFER) p.sendActionBar("§c硬本路径 · 偏挑战");
+            else if (id == EASY) p.sendActionBar("§a硬本路径 · 偏普通");
+            else p.sendActionBar("§b硬本路径 · 随令");
+        } catch (Throwable ignored) { }
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
                 new String[]{"[打开冒险]", "/ember_p1_adventure", "进已首通图试默认", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 challengepath", "重选", "GRAY"});

@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import org.bukkit.entity.Player;
 
-import town.sunshine.corerpg.ConfirmTokens;
 
 import town.sunshine.corerpg.CoreRpgPlugin;
 import town.sunshine.corerpg.NiBridge;
@@ -71,8 +70,11 @@ public final class EmberGemAcquire {
         int now = pity(d);
         if (now > 0) d.addPeriodCount(C_PITY, "all", -now);
         if (p.isOnline()) {
-            if (ok) p.sendMessage(P + "§a宝石保底！§f" + EmberItemData.gemName(code) + " §7×1（通关 " + PITY_NEED + " 次）· " + hopeLine(d));
-            else p.sendMessage(P + "§c保底石发放失败（NI）· 计数已重置，请联系管理");
+            if (ok) {
+                p.sendMessage(P + "§a宝石保底！§f" + EmberItemData.gemName(code) + " §7×1（通关 " + PITY_NEED + " 次）");
+                EmberLoadoutService lo = plugin.getEmberRuns() == null ? null : plugin.getEmberRuns().loadouts();
+                EmberGemInsertChase.afterAcquire(p, code, lo, plugin); // D727
+            } else p.sendMessage(P + "§c保底石发放失败（NI）· 计数已重置，请联系管理");
         }
         return ok;
     }
@@ -121,12 +123,7 @@ public final class EmberGemAcquire {
             return true;
         }
         p.sendMessage(P + "§a合成成功：§f" + EmberItemData.gemName(code) + " §7（碎" + cost.shards + "+骨" + cost.bone + "+币" + cost.coins + "）");
-        // D678: craft → insert path (UI polish · zero craft price / gem flat)
-        try { p.sendActionBar("§a合成 · §f" + EmberItemData.gemName(code) + " §7· 手持件镶嵌"); } catch (Throwable ignored) { }
-        ConfirmTokens.sendButtons(p, P + "§7镶嵌：",
-                new String[]{"[手持 list]", "/corerpg p1 gem list", "看孔位与已嵌", "GOLD"},
-                new String[]{"[嵌孔0]", "/corerpg p1 gem insert 0 " + EmberGemPath.key(code), "刃/符第1孔", "GREEN"},
-                new String[]{"[宝石页]", "/ember_p1_gem", "继续合成", "AQUA"});
+        EmberGemInsertChase.afterAcquire(p, code, loadouts, plugin); // D727 chase empty hole (replaces fixed 孔0 twin)
         return true;
     }
 }

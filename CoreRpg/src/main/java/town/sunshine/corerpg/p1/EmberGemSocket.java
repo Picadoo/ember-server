@@ -57,6 +57,7 @@ public final class EmberGemSocket {
             String h1 = d.sockUnlocked(1) ? (d.sockAt(1) == 0 ? "空" : EmberItemData.gemName(d.sockAt(1))) : "锁";
             p.sendActionBar("§5孔0 §f" + h0 + " §8· §5孔1 §f" + h1);
         } catch (Throwable ignored) { }
+        EmberGemInsertChase.listHint(p, d, plugin); // D727
         p.sendMessage(P + "§8锋利战斗：刃 T2+ 才计入 · 稳/汲/疾全程 · 不走旧 /corerpg socket");
         if (plugin != null && plugin.getDataStore() != null) {
             PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
@@ -99,6 +100,7 @@ public final class EmberGemSocket {
             return true;
         }
         p.sendMessage(P + "已镶入 " + EmberItemData.gemName(code) + " → 孔" + hole);
+        try { p.sendActionBar("§a镶嵌 · §f" + EmberItemData.gemName(code) + " → 孔" + hole); } catch (Throwable ignored) { } // D727
         return true;
     }
 
