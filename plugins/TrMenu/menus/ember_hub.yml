@@ -27,6 +27,8 @@ Events:
     - 'tell: §8短征：冒险页「烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣」（Q01后）'
     - 'command: corerpg p1 mapfarm resume'
     - 'command: corerpg p1 onlinepath'
+    - 'command: corerpg p1 mailpath'
+    - 'command: corerpg p1 stashpath'
   Close:
     - 'sound: BLOCK_CHEST_CLOSE-1-0'
 Icons:

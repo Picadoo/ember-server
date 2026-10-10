@@ -188,8 +188,10 @@ public final class EmberStashPath {
         flush(p);
         p.sendMessage(P + "§a存仓 → §f" + label(id) + " §7· " + tip(id));
         if (id == AUTO) maybeAfterProgress(p);
-        ConfirmTokens.sendButtons(p, P + "§7下一步：",
-                new String[]{"[仓库]", "/corerpg p1 vault", "看材料仓", "AQUA"},
+        ConfirmTokens.sendButtons(p, P + "§7下一步：", // D835
+                new String[]{"[一键存入]", "/corerpg p1 stash", "材料+装备", "GREEN"},
+                new String[]{"[仅存材料]", "/corerpg p1 stash mats", "不碰装备", "GOLD"},
+                new String[]{"[筛选]", "/corerpg p1 stash filter", "装备库筛选", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 stashpath", "重选", "GRAY"});
     }
 

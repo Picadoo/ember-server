@@ -98,7 +98,14 @@ public final class EmberMailPath {
         int path = get(d);
         if (shouldAuto(path)) {
             int n = mail.claimAllAttachments(p);
-            if (n > 0) p.sendMessage(EmberRunService.P + "§a邮件·自动 §7已领 " + n + " 封附件");
+            if (n > 0) {
+                p.sendMessage(EmberRunService.P + "§a邮件·自动 §7已领 " + n + " 封附件");
+                // D837 next loop like claim-all
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7下一步：",
+                        new String[]{"[一键存入]", "/corerpg p1 stash", "材料/装备入库", "GREEN"},
+                        new String[]{"[工坊]", "/corerpg p1 forge", "花附件", "GOLD"},
+                        new String[]{"[清已领]", "/corerpg mail delete all", "腾收件箱", "GRAY"});
+            }
             return;
         }
         if (shouldMute(path)) return;
@@ -172,6 +179,7 @@ public final class EmberMailPath {
         if (id == AUTO && pl.getMailService() != null)
             maybeAfterMail(p, pl.getMailService());
         ConfirmTokens.sendButtons(p, P + "§7下一步：",
+                new String[]{"[一键领取]", "/corerpg mail claim all", "领全部附件", "GREEN"}, // D834
                 new String[]{"[邮箱]", "/corerpg mail", "看收件箱", "AQUA"},
                 new String[]{"[换一条]", "/corerpg p1 mailpath", "重选", "GRAY"});
     }

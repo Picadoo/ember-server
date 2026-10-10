@@ -265,8 +265,16 @@ public final class EmberMapFarmCue {
             String key = decodeMap(code);
             if (key == null)
                 p.sendMessage(EmberRunService.P + "§7尚无图装追记录 · 进有族偏向的主线图后会记住");
-            else
-                p.sendMessage(EmberRunService.P + "§7图装追 · 上次 §f" + key.toUpperCase() + " §8（本图无偏向或已提示过）");
+            else {
+                // D838 still offer re-enter + chase glance
+                EmberRunMaps.MapDef md = runs.maps() == null ? null : runs.maps().byKey(key);
+                if (md != null) cue(p, md, lo);
+                else p.sendMessage(EmberRunService.P + "§7图装追 · 上次 §f" + key.toUpperCase());
+                ConfirmTokens.sendButtons(p, EmberRunService.P + "§7图装下一环：",
+                        new String[]{"[再进·" + key.toUpperCase() + "]", "/corerpg p1 enter " + key, "继续刷", "GREEN"},
+                        new String[]{"[工坊]", "/corerpg p1 forge", "强化", "GOLD"},
+                        new String[]{"[冒险页]", "/ember_p1_adventure", "换图", "AQUA"});
+            }
         }
         return true;
     }

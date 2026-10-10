@@ -353,3 +353,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D830–D833 SHIP · jar 1.65.379-d830
 - Mail claim/delete all next; stash mats+filter; brew/cook after; map farm hit/reenter
+
+## D834–D838 SHIP · jar 1.65.380-d834
+- Mail/stash path next; menu Open; mail auto next; mapfarm reenter
