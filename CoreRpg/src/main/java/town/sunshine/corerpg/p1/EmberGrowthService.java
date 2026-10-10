@@ -647,6 +647,14 @@ public final class EmberGrowthService implements Listener {
         Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) refreshHonors(p); }, 100L);
         // D172: a reroll paid before a disconnect / crash — after EmberDelivery has reconciled the refund holds
         Bukkit.getScheduler().runTaskLater(plugin, () -> { if (p.isOnline()) recoverRolls(p, 0); }, 120L);
+        // D786: login rising-edge imprint/attune ready (after hub settle)
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline()) return;
+            PlayerData d = data(p.getUniqueId());
+            if (d == null) return;
+            EmberSigChase.maybeReadyCue(p, d);
+            maybeAttuneReadyCue(p, d);
+        }, 140L);
     }
 
     // ------------------------------------------------------------------ placeholders (%corerpg_p1_spec_*%)

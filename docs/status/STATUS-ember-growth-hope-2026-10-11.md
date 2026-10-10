@@ -287,3 +287,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 ## D784–D785 SHIP · jar 1.65.359-d784
 - D784 imprint → attune ready cue
 - D785 resume clear button
+
+## D786 SHIP · jar 1.65.360-d786
+- Login imprint/attune ready cues
