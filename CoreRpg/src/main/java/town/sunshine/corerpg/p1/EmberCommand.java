@@ -268,6 +268,42 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("dealpath".equals(sub) || "成交路径".equals(sub)) { // D537 auction deal notify path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberDealPath.glance(EmberDealPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c成交路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberDealPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c成交路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberDealPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberDealPath.get(d);
+                    if (EmberDealPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberDealPath.label(cur) + " · 改路径再 /corerpg p1 dealpath");
+                    else EmberDealPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberDealPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 dealpath <open|gate|busy|clear>");
+                return true;
+            }
+            EmberDealPath.applyAndReply(p, id);
+            return true;
+        }
         if ("ticketpath".equals(sub) || "旧票路径".equals(sub)) { // D536 legacy ticket→stamina path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -562,6 +598,18 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("dealseed".equals(sub)) { // D537 admin smoke: queue pending auction digest
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            PlayerData d = runs.dataOf(t.getUniqueId());
+            if (d == null) { s.sendMessage(P + "数据未就绪"); return true; }
+            EmberDealPath.adminSeedPending(d, 1, 42);
+            runs.plugin().getDataStore().flushMutation(t.getUniqueId());
+            s.sendMessage(P + "已注入待汇总成交 1 笔 · 实收 42 → " + t.getName());
+            EmberDealPath.maybeDigestOnJoin(t);
             return true;
         }
         if ("ticketseed".equals(sub)) { // D536 admin smoke: give convertible daily ticket

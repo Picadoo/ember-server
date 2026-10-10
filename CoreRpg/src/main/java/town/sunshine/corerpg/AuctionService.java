@@ -540,13 +540,10 @@ public final class AuctionService {
                 + ChatColor.YELLOW + " · 花费 " + L.price + " 币"
                 + ChatColor.GRAY + "（余额 " + buyer.getCoin() + "）");
 
+        // D537 deal path: live / queue digest / mute
         Player sellerOnline = Bukkit.getPlayer(L.sellerUuid);
-        if (sellerOnline != null && sellerOnline.isOnline()) {
-            sellerOnline.sendMessage(PREFIX + ChatColor.GREEN + "寄售 #" + id + " 已成交"
-                    + ChatColor.YELLOW + " · 实收 " + receive + " 币"
-                    + ChatColor.DARK_GRAY + "（税 " + pctLabel() + "，标价 " + L.price + "）"
-                    + ChatColor.GRAY + " · 买家 " + p.getName());
-        }
+        town.sunshine.corerpg.p1.EmberDealPath.onSold(L.sellerUuid, sellerOnline, id, receive,
+                p.getName(), pctLabel(), L.price);
     }
 
     private void cmdCancel(Player p, int id) {
