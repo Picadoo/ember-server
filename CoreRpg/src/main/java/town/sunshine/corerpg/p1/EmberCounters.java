@@ -376,6 +376,8 @@ public final class EmberCounters {
         x("p4_rush", "EmberRushService", W, ST, RL, "rush attempts (stat only since D160)");
         // D296 W1b account first-of-kind event teach
         px("p1_evteach_", "EmberEventTeach", A, HI, NV, "D296 room-event kind first flash (@all)");
+        // D623 W2a room-event soft pity dry streak
+        x("p1_ev_dry", "EmberEventSoftPity", A, ST, OW, "D623 variety eventRoom dry streak (@all)");
         // D297 W1c weekly attune confirm shown
         x("p1_attuneprompt", "EmberGrowthService", LW, HI, RL, "D297 weekly attune enter confirm shown");
         // D298 playfeel telemetry (STAT · PWEEK · design §3)

@@ -1762,6 +1762,22 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | D606 | CoreRpg **1.65.297-d606** / bv 未抬 | 技能希望里程碑文案 **PASS**：`EmberSkillUnlock.setForkHope` Q02/Q04/Q05 + kit/hub 展示 · 零伤乘 · `553ce75f` · DESIGN `DESIGN-ember-skill-hope-milestone-copy-2026-10-11.md`。 |
 | D607 | CoreRpg **1.65.298-d607** / bv 未抬 | 烬斩形状分叉 S0 Stage1 **SHIP**：套装→推荐形状 焚扇/爆直/承环 · 成套软设一次（`p1_shape_manual`）· kit/TrMenu/解锁行 · 零 skill_mult · Gem S2 p1sim 预算 FAIL（公式未接；`/corerpg p1 gem` 仅数据孔）· 冒烟 ShapeQ607 · `9fa8f651` · DESIGN `DESIGN-ember-skill-shape-fork-s0-2026-10-11.md` · STATUS `STATUS-ember-growth-hope-2026-10-11.md`。 |
 
+| GemS2 | CoreRpg **1.65.299-gem-s2** / bv 未抬 | P1 宝石 Stage2 **PASS**：公式 +0.1 A/D 帽 · T2+ sharp · loadout 接线 · ≠伤乘抬 · `0c9602ec` · STATUS `STATUS-ember-p1-socket-gems-2026-10-11.md`。 |
+| D608 | CoreRpg **1.65.300-d608** / bv 未抬 | 宝石 Stage3 通关保底+合成希望 **SHIP**：clear-pity 5 · craft hope · 无 flat 抬 · `c85739ab`。 |
+| D609 | CoreRpg **1.65.300-d608** / bv 未抬 | 宝石 Stage4 TrMenu UI **SHIP**：`ember_p1_gem` craft/insert · 仍禁 legacy socket · 与 D608 同船后补 UI · `0b3f4359`。 |
+| D610 | CoreRpg **1.65.301-d610** / bv 未抬 | 本图装备身份希望表盘 **SHIP**：`mapid_q0N` · `2f83522d`。 |
+| D611 | CoreRpg **1.65.302-d611** / bv 未抬 | 主线掉落成色软保底 **SHIP**：连续标准→下次至少精良 · `EmberDropQualityPity` · `79b5a5c4`（D612/D613 同船续）。 |
+| D612 | CoreRpg **1.65.302-d611** / bv 未抬 | 挂机菜单展示手持希望表盘 **SHIP**：`88612743`。 |
+| D613 | CoreRpg **1.65.302-d611** / bv 未抬 | 装备希望拨盘+分解喂养文案 **SHIP**：`62c6d6a1`。 |
+| D614 | CoreRpg **1.65.303-d614** / bv 未抬 | 强化保底就绪庆祝+失败软撤销 **SHIP**：`c59c1410`。 |
+| D615 | CoreRpg **1.65.304-d615** / bv 未抬 | 烙印/调律花费希望表盘 **SHIP**：`89e6dcba`。 |
+| D616 | CoreRpg **1.65.305-d616** / bv 未抬 | 本图掉落偏向看板 **SHIP**：`mapid_board` · `de4fde43`。 |
+| D617 | CoreRpg **1.65.306-d617** / bv 未抬 | 技能下一解锁+套装感希望表盘 **SHIP**：`84c9f177`。 |
+| D618–D622 | CoreRpg **1.65.307-d618** / bv 未抬 | 希望批 **SHIP**：天赋下一/洗练庆祝/委托·精选希望/烬斩形状电报/宝石页材料 UX · `53069550`。 |
+| D623† | CoreRpg **1.65.308-d623** / bv 未抬 | growth-hope 签到/在线/深渊/团本/装备库希望+形状粒子（标签复用 D623–D627）· `3951dd7f`。**≠房间事件软保底**。 |
+| D623 | CoreRpg **1.65.312-d623** / bv 未抬 | 房间事件软保底 W2a **SHIP**：`EmberEventSoftPity` · `p1_ev_dry` NEED=1 · Session ensure + Settle onSettle · 禁叠第二事件/挑战·首通·团本·连战·深渊 · mustfeel R · STATUS `STATUS-ember-room-event-soft-pity-d623-2026-10-11.md`。 |
+
+
 
 
 ### 13.78 余烬连战：失败不限次数重试，每周首通领奖（CoreRpg 1.65.0，D160，2026-10-04）

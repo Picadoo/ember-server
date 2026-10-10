@@ -64,6 +64,12 @@
 | **W2a · 软保底** | 账户：连续 **1** 次合格局 `eventRoom` 空 → 下一合格局 **强制** `eventRate` 视为 1.0（kind/房仍 `subSeed` 定） | 禁止保底叠出第二事件；禁止挑战/首通保底 |
 | **W2b · 中段房偏好** | `roll` 事件房权重：r2 > r1 ≈ r3（例 2:1:1），让「本局中段」更易撞事件 | 禁止双事件房；禁止与词缀房强制错开到改掉落 |
 
+
+
+### 3.2.1 D623 SHIP（2026-10-11）
+
+**W2a 软保底已上线**（CoreRpg **1.65.312-d623**）：`EmberEventSoftPity` · `p1_ev_dry@all` · NEED=1 · Session `ensureEvent`（`subSeed(…,"evpity")`）· Settle `onSettle`。**W2b 未做。** 禁 Pack6 / 叠第二事件 / 挑战·首通·团本·连战·深渊保底。详见 `STATUS-ember-room-event-soft-pity-d623-2026-10-11.md`。
+
 ### 3.3 可选轻量 · 方案 W（权重，仍 9 kind）
 
 等权下 `timed`（限时清房）行为差最弱。可选：

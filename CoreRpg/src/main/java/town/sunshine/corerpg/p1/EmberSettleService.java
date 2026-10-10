@@ -348,6 +348,17 @@ public final class EmberSettleService {
                 Player skp = Bukkit.getPlayer(u);
                 if (skp != null && skp.isOnline()) EmberSkillUnlock.announce(skp, m.key);
             }
+            // D641: first-clear map-identity piece is guaranteed — one visible line (not a PAPI twin)
+            if (in.loot != null && EmberRunRules.validFamily(in.loot.family)) {
+                Player idp = Bukkit.getPlayer(u);
+                if (idp != null && idp.isOnline()) {
+                    String fam = EmberItemData.familyName(in.loot.family);
+                    String slot = in.loot.slot == null ? "刃/护符" : EmberItemData.slotName(in.loot.slot);
+                    idp.sendMessage(EmberRunService.P + "§6图身份首通 · §f" + m.name + " §7保底 §e" + fam + " · " + slot
+                            + " §8（本图特色件，可见追）");
+                    try { idp.sendActionBar("§6图身份 · §f" + fam + " §7首通保底"); } catch (Throwable ignored) { }
+                }
+            }
         }
         boolean newBest = false;
         int oldBest = runs.abyssBest(pd);
@@ -358,6 +369,12 @@ public final class EmberSettleService {
         }
         if (newBest && runs.cosmetics() != null) runs.cosmetics().onAbyssBest(Bukkit.getPlayer(u), oldBest, s.abyss); // P2-9 (D83)
         if (growth != null && gp != null) growth.refreshHonors(gp); // D142: one-time unlock notice
+        // D623 W2a soft pity: variety-eligible repeat settle updates dry streak
+        boolean varietyEligibleSettle = s.varietyRolled && in.firstClear == null
+                && !s.challenge && s.abyss == 0 && !m.raid && !m.rush && !m.event;
+        if (fresh && varietyEligibleSettle) {
+            EmberEventSoftPity.onSettle(pd, true, s.eventRoom != null && !s.eventRoom.isEmpty());
+        }
         // D608 gem Stage3 clear-pity (Q01–Q07 only · no AFK/MM raise)
         if (gp != null && gp.isOnline()) EmberGemAcquire.onClear(gp, pd, m, s, runs.plugin());
         if (runs.leaderboard() != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records

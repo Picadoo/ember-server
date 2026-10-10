@@ -92,6 +92,7 @@ public final class EmberSessionService {
         s.affix = v[1];
         s.eventRoom = v[2];
         s.eventKind = v.length > 3 && v[3] != null ? v[3] : (!v[2].isEmpty() ? "timed" : "");
+        s.varietyRolled = true; // D623 soft pity eligibility
     }
 
     static String abyssFeeMarkText(int pfee, int marksSpent, int markCoin, int marksLeft) {
@@ -265,6 +266,18 @@ public final class EmberSessionService {
                             runs.log().info("[P1 run] " + s.runId + " bountypath " + EmberBountyPath.key(bounty)
                                     + " " + v[1] + "/" + v[3] + " → " + ensured[1] + "/" + ensured[3]);
                             v = ensured;
+                        }
+                    }
+                    // D623 W2a soft pity: dry streak → force eventRate=1.0 (kind/room from subSeed)
+                    PlayerData pityLd = ld;
+                    if (EmberEventSoftPity.get(pityLd) >= EmberEventSoftPity.NEED) {
+                        String beforeEr = v[2] == null ? "" : v[2];
+                        String beforeEk = v.length > 3 && v[3] != null ? v[3] : "";
+                        if (EmberEventSoftPity.ensureEvent(v, maps.variety.events,
+                                EmberRunRules.subSeed(s.seed, "evpity"))) {
+                            runs.log().info("[P1 run] " + s.runId + " evpity soft-force "
+                                    + beforeEr + "/" + beforeEk + " → " + v[2] + "/" + v[3]
+                                    + " (dry=" + EmberEventSoftPity.get(pityLd) + ")");
                         }
                     }
                 }

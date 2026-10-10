@@ -64,6 +64,8 @@ public final class EmberRunSession {
     /** D138/D171 repeat-run variety fixed at entry ("" = none): affixed elite room + type, event room + kind; done flags */
     public String affixRoom = "", affix = "", eventRoom = "", eventKind = "";
     public boolean affixDone, eventDone;
+    /** D623: variety block stamped this run (empty event still counts for soft pity) */
+    public boolean varietyRolled;
     /** D296 W1c: ActionBar short name already shown this run (transient) */
     public transient boolean eventHudShown;
     public final Set<UUID> acted = new LinkedHashSet<UUID>();
@@ -155,6 +157,7 @@ public final class EmberRunSession {
         m.put("extra", extra.id);
         m.put("extra_done", extraDone);
         if (!affix.isEmpty()) { m.put("affix", affix); m.put("affix_room", affixRoom); m.put("affix_done", affixDone); }
+        if (varietyRolled) m.put("variety_rolled", true);
         if (!eventRoom.isEmpty()) {
             m.put("event_room", eventRoom); m.put("event_done", eventDone);
             if (eventKind != null && !eventKind.isEmpty()) m.put("event_kind", eventKind);
@@ -215,6 +218,8 @@ public final class EmberRunSession {
         s.eventKind = m.get("event_kind") == null ? "" : String.valueOf(m.get("event_kind"));
         if (!s.eventRoom.isEmpty() && s.eventKind.isEmpty()) s.eventKind = "timed"; // D138 saves
         s.eventDone = Boolean.TRUE.equals(m.get("event_done"));
+        s.varietyRolled = Boolean.TRUE.equals(m.get("variety_rolled"))
+                || !s.affix.isEmpty() || !s.eventRoom.isEmpty(); // legacy saves: any variety stamp
         readIds(m.get("acted"), s.acted);
         readIds(m.get("died"), s.died);
         if (m.get("potions") instanceof Map) for (Map.Entry<?, ?> e : ((Map<?, ?>) m.get("potions")).entrySet()) {
