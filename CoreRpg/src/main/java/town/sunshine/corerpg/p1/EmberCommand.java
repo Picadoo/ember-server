@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("sequelpath".equals(sub) || "续招路径".equals(sub)) return sequelPathCmd(s, args); // D593
+        if ("sequel".equals(sub) && args.length == 2) return sequelGoCmd(s); // D593
         if ("baitpath".equals(sub) || "诱空路径".equals(sub)) return baitPathCmd(s, args); // D592
         if ("bait".equals(sub) && args.length == 2) return baitGoCmd(s); // D592
         if ("slippath".equals(sub) || "闪招路径".equals(sub)) return slipPathCmd(s, args); // D591
@@ -1733,6 +1735,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("sequelseed".equals(sub)) return sequelSeedCmd(s, args); // D593
         if ("baitseed".equals(sub)) return baitSeedCmd(s, args); // D592
         if ("slipseed".equals(sub)) return slipSeedCmd(s, args); // D591
         if ("crashseed".equals(sub)) return crashSeedCmd(s, args); // D590
@@ -6314,6 +6317,62 @@ public final class EmberCommand {
             EmberBaitPath.maybeProbe(t);
             s.sendMessage(P + "已触发诱空路径探测 → " + t.getName()
                     + (runs != null && runs.hasPendingBait(t) ? "（有诱空）" : "（无诱空）"));
+            return true;
+    }
+
+    private boolean sequelPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberSequelPath.glance(EmberSequelPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c续招路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberSequelPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c续招路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberSequelPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberSequelPath.get(d);
+                    if (EmberSequelPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberSequelPath.label(cur) + " · 改路径再 /corerpg p1 sequelpath");
+                    else EmberSequelPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberSequelPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 sequelpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberSequelPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean sequelGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathSequelReady(p)) p.sendMessage(P + "无法续招预站（无排队续招/未进本）");
+            else p.sendMessage(P + "§a续招·手点 §7已按续招形状预站");
+            return true;
+    }
+
+    private boolean sequelSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberSequelPath.maybeProbe(t);
+            s.sendMessage(P + "已触发续招路径探测 → " + t.getName()
+                    + (runs != null && runs.hasPendingSequel(t) ? "（有续招）" : "（无续招）"));
             return true;
     }
 }

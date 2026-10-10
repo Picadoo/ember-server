@@ -510,6 +510,61 @@ final class EmberRunDirector {
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
     }
 
+    /** D593: boss has a follow-up skill queued (delay not yet elapsed). */
+    boolean hasPendingSequel() {
+        return follow != null && System.currentTimeMillis() < followStart
+                && boss != null && boss.le != null && !boss.le.isDead();
+    }
+
+    /** D593: pre-position a committed player for the queued follow-up shape. */
+    boolean pathSequelReady(Player p) {
+        if (p == null || !p.isOnline() || !hasPendingSequel()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Skill sk = follow;
+        Location base = boss.le.getLocation();
+        Location pl = p.getLocation();
+        Location to;
+        if (sk.share || ("circle".equals(sk.type) && sk.share)) {
+            // soak-style: stand on boss feet for share follow
+            to = base.clone();
+            to.setY(pl.getY());
+        } else if ("circle".equals(sk.type)) {
+            Vector away = new Vector(pl.getX() - base.getX(), 0, pl.getZ() - base.getZ());
+            if (away.lengthSquared() < 1e-6) away = new Vector(1, 0, 0);
+            else away.normalize();
+            double safe = Math.max(3.0, sk.radius + 2.5);
+            to = base.clone().add(away.multiply(safe));
+            to.setY(pl.getY());
+        } else {
+            // charge / line / default: stand beside boss off likely forward
+            Vector dir;
+            if (lockDir != null) {
+                dir = lockDir.clone();
+            } else {
+                dir = pl.toVector().subtract(base.toVector());
+            }
+            dir.setY(0);
+            if (dir.lengthSquared() < 1e-6) dir = new Vector(1, 0, 0);
+            else dir.normalize();
+            Vector side = new Vector(-dir.getZ(), 0, dir.getX());
+            if (side.lengthSquared() < 1e-6) side = new Vector(1, 0, 0);
+            else side.normalize();
+            double off = Math.max(3.0, sk.width * 0.5 + 2.5);
+            Location a = base.clone().add(side.clone().multiply(off));
+            Location b = base.clone().add(side.clone().multiply(-off));
+            // pick the side closer to the player
+            to = a.distanceSquared(pl) <= b.distanceSquared(pl) ? a : b;
+            to.setY(pl.getY());
+        }
+        to.setYaw(pl.getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.85f);
+        return true;
+    }
+
     /** D592: boss cast armed for whiff (someone was inside when warn began). */
     boolean hasPendingBait() {
         return pendingArmed && pending != null && pending.whiffStun > 0
@@ -3006,6 +3061,7 @@ final class EmberRunDirector {
                 if (done.follow != null && ratio < done.follow.below) {
                     follow = done.follow;
                     followStart = now + (long) (done.follow.delay * 1000);
+                    EmberSequelPath.maybeAfterSequel(s); // D593
                 }
                 if (pendingCrash && done.wallStun > 0 && !le.isDead()) wallStun(done, now, le);
                 else if (whiffs(pendingArmed, landed, done) && !le.isDead()) whiffStun(done, now, le);

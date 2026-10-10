@@ -701,6 +701,22 @@ public final class EmberRunService implements Listener {
     /** /corerpg p1 watch — delegated to {@link EmberRaidService} (D233). */
     private boolean cmdWatch(CommandSender sender) { return raid.cmdWatch(sender); }
 
+    /** D593: pre-position for queued boss follow-up. */
+    public boolean hasPendingSequel(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        return d != null && d.hasPendingSequel() && d.s != null && d.s.open()
+                && d.s.committed.contains(p.getUniqueId());
+    }
+
+    public boolean pathSequelReady(Player p) {
+        if (p == null) return false;
+        EmberRunDirector d = byWorld.get(p.getWorld().getName());
+        if (d == null || d.s == null || !d.s.open()) return false;
+        if (!d.s.committed.contains(p.getUniqueId())) return false;
+        return d.pathSequelReady(p);
+    }
+
     /** D592: warp out of boss telegraph when whiff is armed. */
     public boolean hasPendingBait(Player p) {
         if (p == null) return false;
@@ -1867,6 +1883,7 @@ public final class EmberRunService implements Listener {
                         if ("q01".equals(g.id)) EmberCrashPath.scheduleOfferAfterQ01(p); // D590 crash path
                         if ("q01".equals(g.id)) EmberSlipPath.scheduleOfferAfterQ01(p); // D591 slip path
                         if ("q01".equals(g.id)) EmberBaitPath.scheduleOfferAfterQ01(p); // D592 bait path
+                        if ("q01".equals(g.id)) EmberSequelPath.scheduleOfferAfterQ01(p); // D593 sequel path
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberDualLead.scheduleOffer(p); // D466
                         if (EmberSignature.DUAL_UNLOCK.equals(g.id)) EmberSealPath.scheduleOfferAfterQ03(p); // D497 seal combat path
                         if (EmberSignature.ALT_UNLOCK.equals(g.id)) EmberRaidPath.scheduleOfferAfterQ07(p); // D483 raid focus path
