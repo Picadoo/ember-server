@@ -427,3 +427,6 @@ live SEVERE0 · 无 K3/AFK/sx20/legacy socket/gem flat/sticky
 
 ## D941 ARCH S2 SHIP · jar 1.65.403-d941
 - C24 golden ↔ GemAcquire.CRAFT_*; REG changelog
+
+## D942–D947 ARCH SHIP · jar 1.65.404-d942
+- yml-SoT Stage0 inventory DESIGN (no mass rewrite); LedgerGlance.bagFull; glance unit test; modelGaps no fake FULL

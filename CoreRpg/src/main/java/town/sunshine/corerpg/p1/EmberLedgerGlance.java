@@ -32,4 +32,18 @@ public final class EmberLedgerGlance {
         int n = runs.store().ledger(p.getUniqueId()).open().size();
         if (n > 0) tellPending(p, n);
     }
+
+    /**
+     * D944: inventory full — rows stayed in ledger. Same claim/stash/forge next as deliver waiting.
+     * Zero grant change.
+     */
+    public static void bagFull(Player p, int waiting) {
+        if (p == null || waiting <= 0) return;
+        String P = EmberRunService.P;
+        ConfirmTokens.sendButtons(p, P + org.bukkit.ChatColor.YELLOW + waiting
+                        + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后：",
+                new String[]{"[补领]", "/corerpg p1 claim", "领取暂存", "YELLOW"},
+                new String[]{"[一键存入]", "/corerpg p1 stash", "腾背包", "GREEN"},
+                new String[]{"[工坊]", "/corerpg p1 forge", "花料腾格", "GOLD"});
+    }
 }

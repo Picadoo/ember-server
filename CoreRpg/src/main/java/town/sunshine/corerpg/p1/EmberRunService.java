@@ -2145,10 +2145,7 @@ public final class EmberRunService implements Listener {
             for (String rel : relLines) p.sendMessage(P + "§7" + rel);
         }
         sendUpgradeAsks(p); // D120
-        if (waiting > 0) town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + ChatColor.YELLOW + waiting + " 项奖励因背包已满暂存（结果已锁定，不会重抽）。空出格子后：", // D925
-                new String[]{"[补领]", "/corerpg p1 claim", "领取暂存", "YELLOW"},
-                new String[]{"[一键存入]", "/corerpg p1 stash", "腾背包", "GREEN"},
-                new String[]{"[工坊]", "/corerpg p1 forge", "花料腾格", "GOLD"});
+        if (waiting > 0) EmberLedgerGlance.bagFull(p, waiting); // D925/D944
         if (choices > 0) choiceButtons(p, open);
         return changed.size();
     }
