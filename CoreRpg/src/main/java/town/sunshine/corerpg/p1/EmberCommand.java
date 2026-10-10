@@ -268,6 +268,52 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("scrappath".equals(sub) || "分解路径".equals(sub)) { // D538 legacy scrap path
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberScrapPath.glance(EmberScrapPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c分解路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberScrapPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c分解路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberScrapPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberScrapPath.get(d);
+                    if (EmberScrapPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberScrapPath.label(cur) + " · 改路径再 /corerpg p1 scrappath");
+                    else EmberScrapPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberScrapPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 scrappath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberScrapPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("scrap".equals(sub) && args.length == 2) { // D538 ASK button: path-driven backpack scrap (not /corerpg scrap)
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            town.sunshine.corerpg.ScrapService scrap = runs == null ? null : runs.plugin().getScrapService();
+            if (scrap == null || !scrap.isEnabled()) { p.sendMessage(P + "分解未启用"); return true; }
+            int ok = scrap.pathBulkScrap(p);
+            if (ok <= 0) p.sendMessage(P + "没有可分解的未强化旧刃/护符（或只剩最后一把武器）");
+            else p.sendMessage(P + "§a分解·手点 §7已分解 §f" + ok + " §7件 → 材料");
+            return true;
+        }
         if ("dealpath".equals(sub) || "成交路径".equals(sub)) { // D537 auction deal notify path
             if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
             Player p = (Player) s;
@@ -598,6 +644,18 @@ public final class EmberCommand {
                 return true;
             }
             EmberTrailPath.applyAndReply(p, id);
+            return true;
+        }
+        if ("scrapseed".equals(sub)) { // D538 admin smoke: give enhance-0 charm into backpack
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null || runs == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            town.sunshine.corerpg.CoreRpgPlugin plg = runs.plugin();
+            if (plg.getNiBridge() == null || !plg.getNiBridge().giveNiItem(t, "gear_ember_charm", 1)) {
+                s.sendMessage(P + "发放护符失败"); return true;
+            }
+            s.sendMessage(P + "已发放 gear_ember_charm ×1 → " + t.getName());
+            EmberScrapPath.maybeAfterProgress(t);
             return true;
         }
         if ("dealseed".equals(sub)) { // D537 admin smoke: queue pending auction digest

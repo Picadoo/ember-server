@@ -239,6 +239,87 @@ public final class ScrapService {
         p.updateInventory();
     }
 
+    /** D538: count backpack scrap-whitelist gear with enhance 0 (safe path junk; never last weapon). */
+    public int countPathScrap(Player p) {
+        if (p == null || !enabled) return 0;
+        ItemStack[] c = p.getInventory().getStorageContents();
+        if (c == null) return 0;
+        int weapons = countWeapons(p);
+        int n = 0;
+        for (int i = 0; i < c.length; i++) {
+            ItemStack s = c[i];
+            if (!isPathScrapable(s, weapons)) continue;
+            n += Math.max(1, s.getAmount());
+            // if this slot is a weapon, pretend weapons drops for subsequent (count only)
+            if (isWeaponStack(s)) weapons--;
+        }
+        return n;
+    }
+
+    /** D538: path AUTO — scrap enhance-0 whitelist gear in backpack (skip last weapon). */
+    public int pathBulkScrap(Player p) {
+        if (p == null || !enabled) return 0;
+        ItemStack[] c = p.getInventory().getStorageContents();
+        if (c == null) return 0;
+        int ok = 0;
+        // iterate high→low so indices stay stable as we clear
+        for (int i = c.length - 1; i >= 0; i--) {
+            ItemStack s = c[i];
+            int weapons = countWeapons(p);
+            if (!isPathScrapable(s, weapons)) continue;
+            String gearId = resolveGearId(s);
+            GearScrap gs = scrapByGear.get(gearId);
+            if (gs == null) continue;
+            int enhance = GearLore.readEnhance(s);
+            int amt = Math.max(1, s.getAmount());
+            // scrap one unit at a time from this slot
+            for (int u = 0; u < amt; u++) {
+                weapons = countWeapons(p);
+                ItemStack cur = p.getInventory().getItem(i);
+                if (!isPathScrapable(cur, weapons)) break;
+                gearId = resolveGearId(cur);
+                gs = scrapByGear.get(gearId);
+                if (gs == null) break;
+                enhance = GearLore.readEnhance(cur);
+                Map<String, Integer> grants = computeGrants(gs, enhance, true);
+                int left = cur.getAmount();
+                if (left <= 1) p.getInventory().setItem(i, null);
+                else { cur.setAmount(left - 1); p.getInventory().setItem(i, cur); }
+                for (Map.Entry<String, Integer> e : grants.entrySet()) {
+                    int n = e.getValue().intValue();
+                    if (n > 0) ni.giveNiItem(p, e.getKey(), n);
+                }
+                ok++;
+            }
+        }
+        if (ok > 0) p.updateInventory();
+        return ok;
+    }
+
+    private boolean isPathScrapable(ItemStack s, int weaponsNow) {
+        if (s == null || s.getType() == Material.AIR) return false;
+        String gearId = resolveGearId(s);
+        if (gearId == null) return false;
+        if (scrapByGear.get(gearId) == null) return false;
+        if (GearLore.readEnhance(s) != 0) return false;
+        if (isWeaponStack(s) && weaponsNow <= 1) return false;
+        return true;
+    }
+
+    private static boolean isWeaponStack(ItemStack s) {
+        if (s == null || s.getType() == Material.AIR) return false;
+        return ConfirmTokens.isWeapon(s);
+    }
+
+    private static int countWeapons(Player p) {
+        int n = 0;
+        ItemStack[] c = p.getInventory().getStorageContents();
+        if (c != null) for (ItemStack s : c) if (isWeaponStack(s)) n += Math.max(1, s.getAmount());
+        if (isWeaponStack(p.getInventory().getItemInOffHand())) n += Math.max(1, p.getInventory().getItemInOffHand().getAmount());
+        return n;
+    }
+
+
     /** Preview only (no confirm button) — kept for callers of the old signature. */
     public void cmdScrap(Player p, boolean infoOnly) { cmdScrap(p, infoOnly ? "info" : "preview", null); }
 

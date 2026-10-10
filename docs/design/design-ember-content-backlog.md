@@ -979,6 +979,7 @@
 - `B-chenghu-step-redesign`（已批 A · 方案 M · D435 · **PASS** · jar 1.65.138 · C_heal005 微疗）
 - `B-set-step-symmetry`（已批 A · 方案 M · D434 · **PASS** · jar 1.65.137 · 承护抗性闸 · COORD DONE）
 - `B-brand-pin-gap`（已批 A · 方案 M · D433 · **PASS** · jar 1.65.135-d433）
+- `B-scrap-path`（已批 A · 方案 M · D538 · **PASS** · jar 1.65.229-d538 · 背包旧件自动/提醒/静默真改材料获取 · ≠清库/成交/旧票/宝石/外观双胞 ≠组合粘性 ≠工坊花法 ≠同族 HUD ≠入场cue）
 - `B-deal-path`（已批 A · 方案 M · D537 · **PASS** · jar 1.65.228-d537 · 寄售成交敞开/汇总/静拒真改经济感知 · ≠外观/宝石/旧票双胞 ≠组合粘性 ≠工坊花法 ≠同族 HUD ≠入场cue）
 - `B-ticket-path`（已批 A · 方案 M · D536 · **PASS** · jar 1.65.227-d536 · 旧票自动/提醒/静默真改旧票→体力 · ≠外观/宝石双胞 ≠组合粘性 ≠工坊花法 ≠同族 HUD ≠入场cue）
 - `B-gem-path`（已批 A · 方案 M · D535 · **PASS** · jar 1.65.226-d535 · 宝石锋刃/稳御/汲魂/疾风真改战斗镶嵌+经济 · ≠外观装扮 ≠组合粘性 ≠工坊花法双胞 ≠同族 HUD ≠入场cue）

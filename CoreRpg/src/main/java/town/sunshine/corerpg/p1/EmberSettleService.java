@@ -406,6 +406,7 @@ public final class EmberSettleService {
             Bukkit.getScheduler().runTaskLater(runs.plugin(), () -> {
                 if (p.isOnline()) EmberStashPath.maybeAfterProgress(p); // D526 stash path
                 if (p.isOnline()) EmberJunkPath.maybeAfterProgress(p); // D531 junk path
+                if (p.isOnline()) EmberScrapPath.maybeAfterProgress(p); // D538 scrap path
             }, 40L);
             if (in.firstClear != null && runs.maps().challenge != null && m.key.equals(runs.maps().challenge.requires)) endOfP1(p);
         }
