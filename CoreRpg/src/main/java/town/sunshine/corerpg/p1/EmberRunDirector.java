@@ -465,6 +465,7 @@ final class EmberRunDirector {
             } else if ("breach".equals(kind)) {
                 placeBreach(r, v);
                 svc.tellRun(s, "§b裂隙 §7· 紫圈会慢慢收拢，在圈里杀怪能把它撑开；清房时圈没合上 → 结算时 §f余烬核心碎片 +" + v.eventCore + " §7（可选）");
+                EmberBreachPath.maybeAfterBreach(s); // D569
             } else if ("chain".equals(kind)) {
                 chainReset(ok, v);
                 svc.tellRun(s, "§b连斩 §7· 连续击杀 " + chainNeedNow + " 只怪，每两次击杀间隔不超过 "
@@ -504,6 +505,25 @@ final class EmberRunDirector {
         if (r == null || r.door == null) return;
         setBox(r.door, Material.AIR, Material.IRON_FENCE);
         w.playSound(center(r.door), Sound.BLOCK_IRON_DOOR_OPEN, 1.0f, 0.8f);
+    }
+
+    /** D569: breach circle still open. */
+    boolean hasBreachCircle() {
+        return breachCenter != null && s != null && "breach".equals(s.eventKind);
+    }
+
+    /** D569: warp a committed player into the breach circle. */
+    boolean pathBreachCenter(Player p) {
+        if (p == null || !p.isOnline() || !hasBreachCircle()) return false;
+        if (s == null || !s.open() || !s.committed.contains(p.getUniqueId())) return false;
+        if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        Location to = breachCenter.clone();
+        to.setYaw(p.getLocation().getYaw());
+        to.setPitch(0f);
+        p.setFallDistance(0f);
+        p.teleport(to);
+        w.playSound(to, Sound.ENTITY_ENDERMEN_TELEPORT, 0.5f, 1.15f);
+        return true;
     }
 
     /** D568: next relay marker still unlit. */

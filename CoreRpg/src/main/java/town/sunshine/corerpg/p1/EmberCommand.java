@@ -268,6 +268,8 @@ public final class EmberCommand {
             EmberCodexPath.maybeAfterProgress(t, runs);
             return true;
         }
+        if ("breachpath".equals(sub) || "裂隙路径".equals(sub)) return breachPathCmd(s, args); // D569
+        if ("breach".equals(sub) && args.length == 2) return breachGoCmd(s); // D569
         if ("relaypath".equals(sub) || "传火路径".equals(sub)) return relayPathCmd(s, args); // D568
         if ("relay".equals(sub) && args.length == 2) return relayGoCmd(s); // D568
         if ("beaconpath".equals(sub) || "护灯路径".equals(sub)) return beaconPathCmd(s, args); // D567
@@ -1685,6 +1687,7 @@ public final class EmberCommand {
             EmberTrailPath.applyAndReply(p, id);
             return true;
         }
+        if ("breachseed".equals(sub)) return breachSeedCmd(s, args); // D569
         if ("relayseed".equals(sub)) return relaySeedCmd(s, args); // D568
         if ("beaconseed".equals(sub)) return beaconSeedCmd(s, args); // D567
         if ("holdseed".equals(sub)) return holdSeedCmd(s, args); // D566
@@ -4892,6 +4895,62 @@ public final class EmberCommand {
             EmberRelayPath.maybeProbe(t);
             s.sendMessage(P + "已触发传火路径探测 → " + t.getName()
                     + (runs != null && runs.hasRelayNext(t) ? "（有标）" : "（无标）"));
+            return true;
+    }
+
+    private boolean breachPathCmd(CommandSender s, String[] args) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            PlayerData d = runs.dataOf(p.getUniqueId());
+            if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
+            boolean unlocked = runs.progressFlag(d, "q01");
+            if (args.length < 3) {
+                p.sendMessage(P + EmberBreachPath.glance(EmberBreachPath.get(d), unlocked));
+                if (!unlocked) {
+                    p.sendMessage(P + "§c裂隙路径需本人首通 Q01。");
+                    return true;
+                }
+                EmberBreachPath.offerPick(p);
+                return true;
+            }
+            if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
+                if (!unlocked) { p.sendMessage(P + "§c裂隙路径需本人首通 Q01。"); return true; }
+                String week = EmberPlayfeelTelemetry.weekKey();
+                boolean offered = EmberBreachPath.maybeOfferWeekly(p, d, week);
+                runs.plugin().getDataStore().flushMutation(p.getUniqueId());
+                if (!offered) {
+                    int cur = EmberBreachPath.get(d);
+                    if (EmberBreachPath.valid(cur)) p.sendMessage(P + "§7当前：" + EmberBreachPath.label(cur) + " · 改路径再 /corerpg p1 breachpath");
+                    else EmberBreachPath.offerPick(p);
+                }
+                return true;
+            }
+            int id = EmberBreachPath.parse(args[2]);
+            if (id < 0) {
+                p.sendMessage(P + "用法：/corerpg p1 breachpath <auto|ask|mute|clear>");
+                return true;
+            }
+            EmberBreachPath.applyAndReply(p, id);
+            return true;
+    }
+
+    private boolean breachGoCmd(CommandSender s) {
+            if (!(s instanceof Player)) { s.sendMessage(P + "仅玩家可用"); return true; }
+            Player p = (Player) s;
+            if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
+            if (!runs.pathBreachCenter(p)) p.sendMessage(P + "无法裂隙（无紫圈/未进本）");
+            else p.sendMessage(P + "§a裂隙·手点 §7已传入紫圈");
+            return true;
+    }
+
+    private boolean breachSeedCmd(CommandSender s, String[] args) {
+            if (!s.hasPermission("corerpg.admin")) { s.sendMessage(P + "需要 corerpg.admin"); return true; }
+            Player t = args.length >= 3 ? Bukkit.getPlayerExact(args[2]) : (s instanceof Player ? (Player) s : null);
+            if (t == null) { s.sendMessage(P + "找不到玩家"); return true; }
+            EmberBreachPath.maybeProbe(t);
+            s.sendMessage(P + "已触发裂隙路径探测 → " + t.getName()
+                    + (runs != null && runs.hasBreachCircle(t) ? "（有圈）" : "（无圈）"));
             return true;
     }
 }
