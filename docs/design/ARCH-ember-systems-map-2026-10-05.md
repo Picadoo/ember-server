@@ -631,3 +631,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D11937–D12000: LockFlatRefund + GemHoleSwap + MapIdentityBone. STOP densify those + lock-farm-reso / gemswap-craftpath-mapwear + priors. Talent HOLD. Six-slot HOLD.
 - D12001–D12064: LockMidFloor + GemRemovePathSync + MapCodexShard. STOP densify those + lockflat-gemholeswap-mapid + priors. Talent HOLD. Six-slot HOLD.
 - D12065–D12128: LockCapRefund + GemHoleSeatPathSync + MapCodexClaimBone. STOP densify those + lockmid-gemrmpath-mapcodex + priors. Talent HOLD. Six-slot HOLD.
+- D12129–D12192: MapFarmMissShard + MapStashPinBone + GemInsertPathDefault. STOP densify those + lockcap-gemseatpath-codexclaim + priors. Talent HOLD. Six-slot HOLD.

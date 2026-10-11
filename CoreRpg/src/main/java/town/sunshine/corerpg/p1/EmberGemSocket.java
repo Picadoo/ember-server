@@ -71,16 +71,28 @@ public final class EmberGemSocket {
     }
 
     static boolean insert(Player p, String[] args, EmberLoadoutService loadouts, CoreRpgPlugin plugin) {
-        if (args.length < 5) {
-            p.sendMessage(P + "用法：/corerpg p1 gem insert <孔0|1> <sharp|steady|drain|gale>");
+        if (args.length < 4) {
+            p.sendMessage(P + "用法：/corerpg p1 gem insert <孔0|1> [sharp|steady|drain|gale]");
             return true;
         }
         int hole;
         try { hole = Integer.parseInt(args[3]); } catch (NumberFormatException e) {
             p.sendMessage(P + "孔号须为 0 或 1"); return true;
         }
-        int code = EmberGemPath.parse(args[4]);
-        if (code <= 0) { p.sendMessage(P + "未知宝石：" + args[4]); return true; }
+        PlayerData pathPd = plugin != null && plugin.getDataStore() != null ? plugin.getDataStore().get(p.getUniqueId()) : null;
+        int code = 0;
+        if (args.length >= 5) {
+            code = EmberGemPath.parse(args[4]);
+            if (code <= 0) { p.sendMessage(P + "未知宝石：" + args[4]); return true; }
+        } else {
+            code = EmberGemInsertPathDefault.resolve(pathPd); // D12177
+            if (code <= 0) {
+                p.sendMessage(P + "用法：/corerpg p1 gem insert <孔0|1> <sharp|steady|drain|gale>（或先设宝石路径）");
+                return true;
+            }
+            EmberGemInsertPathDefault.consume(pathPd);
+            p.sendMessage(P + "§7路径默认镶嵌 · §f" + EmberGemPath.label(code) + " §8（今日一次）");
+        }
         ItemStack hand = p.getInventory().getItemInMainHand();
         EmberItems.Read r = loadouts.items().read(hand);
         if (r == null || !r.ok()) { p.sendMessage(P + "请手持已签名的余烬刃/护符"); return true; }

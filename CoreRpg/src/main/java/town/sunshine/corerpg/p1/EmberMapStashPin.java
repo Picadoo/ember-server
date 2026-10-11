@@ -51,6 +51,8 @@ public final class EmberMapStashPin {
         if (pin == null) return false;
         EmberGearLib lib = EmberGearLib.get();
         if (lib == null || !lib.usable()) return false;
-        return lib.pinMapFilter(p, pin);
+        if (!lib.pinMapFilter(p, pin)) return false;
+        try { EmberMapStashPinBone.maybeGift(p, d); } catch (Throwable ignored) { } // D12161
+        return true;
     }
 }

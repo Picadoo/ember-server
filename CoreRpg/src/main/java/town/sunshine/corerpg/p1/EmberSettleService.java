@@ -834,10 +834,12 @@ public final class EmberSettleService {
         if (p != null && p.isOnline()) {
             // D682: map-farm chase hit when a grant item family matches map loot identity
             if (m.lootFamily != null) {
+                boolean farmHit = false;
                 for (EmberRunRules.Grant g : grants) {
                     if (g == null || g.item == null) continue;
                     String hit = EmberMapFarmCue.hitLine(m.lootFamily, g.item.family, g.item.slot);
                     if (hit != null) {
+                        farmHit = true;
                         p.sendMessage(EmberRunService.P + hit);
                         try { p.sendActionBar("§a图装追到 · §f" + EmberItemData.familyName(g.item.family)); } catch (Throwable ignored) { }
                         try { EmberMapFarmHitBone.maybeGift(p, pd); } catch (Throwable ignored) { } // D11841
@@ -849,6 +851,9 @@ public final class EmberSettleService {
                         EmberMapFarmCue.afterHit(p, m); // D833
                         break;
                     }
+                }
+                if (!farmHit) {
+                    try { EmberMapFarmMissShard.maybeGift(p, pd); } catch (Throwable ignored) { } // D12129
                 }
             }
             String feel = playfeelSummary(s.wallHits, s.whiffHits, s.breakHits,
