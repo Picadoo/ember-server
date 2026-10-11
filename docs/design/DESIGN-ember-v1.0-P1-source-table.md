@@ -2070,3 +2070,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 裁决 | 新增 `server-runtime/restart-on-crash.sh`（login 镜像）：立刻 `exit 0`，后台等至多 120s 至旧 pid 消失且端口空闲 → `rm -f server.pid` → `./start.sh auto`；`spigot.yml` `restart-script: ./restart-on-crash.sh` |
 | 版本 | scripts/docs only（jar 不变；live 仍 1.65.723-d12194.local） |
 | 文档 | `docs/status/STATUS-ember-play-crash-restart-d12195-2026-10-11.md` |
+
+### 13.104 Play Watchdog 拉起 + restart 加固（D12196，2026-10-11）
+
+| 项 | 值 |
+|----|----|
+| 现场 | 14:07 Watchdog；旧 JVM 仍用 `./start.sh`；play+login 双死 |
+| 拉起 | play+login JDK8；CoreRpg 1.65.723-d12194.local；MySQL×2；SEVERE 0 |
+| 加固 | `setsid nohup ./_restart_waiter.sh`（play 25567 / login 25566） |
+| jar | 未改 |
+| STATUS | `docs/status/STATUS-ember-play-crash-restart-d12196-2026-10-11.md` |
+

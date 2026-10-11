@@ -10,3 +10,5 @@
 
 **验证：** 外层脚本 return 0 / 0s；live play PID 未因本改动重启（下次崩溃/开机生效）。  
 **禁：** tip-twin densify · Six-slot · Talent · p1sim · 改 config 密码
+
+**后续（D12196）：** 14:07 Watchdog 时 JVM 仍持启动时旧 `restart-script: ./start.sh`（D12195 改文件后未重启）。已人工拉起并加固为 `setsid nohup ./_restart_waiter.sh`。
