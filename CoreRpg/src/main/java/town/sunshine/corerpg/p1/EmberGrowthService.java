@@ -1645,6 +1645,7 @@ public final class EmberGrowthService implements Listener {
             if (ar > 0) d.addPeriodCount(C_ATTUNE_READY, "all", -ar);
             // D651 attune unlock spend complete UX
             try { p.sendActionBar("§d调律解锁 · §f" + sd.name); } catch (Throwable ignored) { }
+            try { EmberAttuneUnlockWinBone.maybeGift(p, d); } catch (Throwable ignored) { } // D11425
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P + "§7下一步：", // D874
                     new String[]{"[切回原版]", "/corerpg p1 sig attune " + sd.id, "随时切换代价", "AQUA"},
                     new String[]{"[去烙印]", "/corerpg p1 sig pick " + sd.id, "徽记够可烙到件上", "GOLD"},

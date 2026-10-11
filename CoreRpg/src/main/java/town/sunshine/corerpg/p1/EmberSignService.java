@@ -298,6 +298,7 @@ public final class EmberSignService implements Listener {
         plugin.getLogger().info("[P1 sign] " + p.getName() + " sign " + DailyService.today() + " -> n=" + n + " " + rewardFor(n).label());
         p.sendMessage(P + "§a签到成功 · 本月第 " + n + " 次：§f" + got);
         try { p.sendActionBar("§a签到 · 本月第 " + n + " 次"); } catch (Throwable ignored) { }
+        try { EmberSignWinShard.maybeGift(p, d); } catch (Throwable ignored) { } // D11457
         Reward next = rewardFor(n + 1);
         if (n < 28) p.sendMessage(P + "§7下一次（第 " + (n + 1) + " 次）：" + next.label() + nextBig(n));
         // D818 next loop

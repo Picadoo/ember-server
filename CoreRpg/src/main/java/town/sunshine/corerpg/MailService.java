@@ -283,6 +283,10 @@ public final class MailService {
         p.sendMessage(PREFIX + ChatColor.GREEN + "已领取 #" + id + " 附件："
                 + ChatColor.WHITE + formatAttachments(m.attachments));
         try { p.sendActionBar(ChatColor.GREEN + "邮件领取 · #" + id); } catch (Throwable ignored) { }
+        try {
+            PlayerData pd = dataStore.get(p.getUniqueId());
+            town.sunshine.corerpg.p1.EmberMailClaimWinBlank.maybeGift(p, pd); // D11473
+        } catch (Throwable ignored) { }
         // D842
         ConfirmTokens.sendButtons(p, PREFIX + "§7下一步：",
                 new String[]{"[一键领取]", "/corerpg mail claim all", "领剩余附件", "GREEN"},
@@ -301,6 +305,10 @@ public final class MailService {
             // D646/D830: claim-all acquisition feel (zero attachment table change)
             p.sendMessage(PREFIX + ChatColor.GREEN + "一键领取完成：§f" + n + ChatColor.GREEN + " 封附件入账。");
             try { p.sendActionBar(ChatColor.GREEN + "邮件领取 · §f" + n + " §a封"); } catch (Throwable ignored) { }
+            try {
+                PlayerData pd = dataStore.get(p.getUniqueId());
+                town.sunshine.corerpg.p1.EmberMailClaimWinBlank.maybeGift(p, pd); // D11473
+            } catch (Throwable ignored) { }
             ConfirmTokens.sendButtons(p, PREFIX + "§7下一步：",
                     new String[]{"[一键存入]", "/corerpg p1 stash", "材料/装备入库", "GREEN"},
                     new String[]{"[工坊]", "/corerpg p1 forge", "花附件", "GOLD"},
