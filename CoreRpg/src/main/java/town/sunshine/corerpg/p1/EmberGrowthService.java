@@ -747,6 +747,10 @@ public final class EmberGrowthService implements Listener {
             maybeAttuneReadyCue(p, d);
             EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().get(p);
             EmberSigChase.maybeHeldReadyTip(p, d, lo); // D3937
+            EmberForgeMatReady.maybeQuietReadyTip(p);
+            EmberForgeSinkQuiet.maybeQuietTips(p);
+            maybeAttuneQuietTip(p, d);
+            EmberCodexQuiet.maybeQuietTip(p, d);
         }, 140L);
     }
 
@@ -762,6 +766,9 @@ public final class EmberGrowthService implements Listener {
             EmberLoadout lo = runs == null || runs.loadouts() == null ? null : runs.loadouts().refresh(p);
             EmberSigChase.maybeHeldReadyTip(p, d, lo);
             EmberForgeMatReady.maybeQuietReadyTip(p); // D3977 no ConfirmTokens
+            EmberForgeSinkQuiet.maybeQuietTips(p); // D4009 quality/refine
+            maybeAttuneQuietTip(p, d); // D4033
+            EmberCodexQuiet.maybeQuietTip(p, d); // D4049
         });
     }
 
@@ -932,6 +939,8 @@ public final class EmberGrowthService implements Listener {
     static final String C_ATTUNE_PROMPT = "p1_attuneprompt";
     /** D761: latched Def.code for attune-ready one-click cue */
     static final String C_ATTUNE_READY = "p1_sig_attune_ready";
+    /** D4033: quiet attune tip latch (no ConfirmTokens) */
+    static final String C_ATTUNE_QUIET = "p1_sig_attune_quiet";
     public static final String SIG_RUN_CONFIRM = "ember_p1_sig_runconfirm";
     /** pending enter after confirm: {mapKey, "1"|"0" challenge} */
     private final Map<UUID, String[]> pendingEnter = new ConcurrentHashMap<UUID, String[]>();
@@ -1442,6 +1451,31 @@ public final class EmberGrowthService implements Listener {
         town.sunshine.corerpg.ConfirmTokens.sendButton(p, P + "§7一键：",
                 "[一键调律·" + def.id + "]", "/corerpg p1 sig attune " + def.id + " go",
                 EmberSignature.altMarks() + " 枚徽记解锁调律版（永久）");
+        return true;
+    }
+
+    /**
+     * D4033: attune-ready quiet tip (no ConfirmTokens). Separate latch from button cue.
+     */
+    public boolean maybeAttuneQuietTip(Player p, PlayerData d) {
+        if (p == null || d == null) return false;
+        if (!runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return false;
+        EmberSignature.Def def = pickAttuneReady(d);
+        if (def == null) {
+            int latched = d.periodCount(C_ATTUNE_QUIET, "all");
+            if (latched > 0) { d.addPeriodCount(C_ATTUNE_QUIET, "all", -latched); runs.flushData(p.getUniqueId()); }
+            return false;
+        }
+        int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+        int latched = d.periodCount(C_ATTUNE_QUIET, "all");
+        if (latched == def.code) return false;
+        d.addPeriodCount(C_ATTUNE_QUIET, "all", def.code - latched);
+        runs.flushData(p.getUniqueId());
+        String line = "§d调律可解锁 · §f" + def.id + " " + def.name + " §7· 徽记 §f"
+                + marks + "/" + EmberSignature.altMarks()
+                + " §8· /corerpg p1 sig attune " + def.id;
+        p.sendMessage(P + line);
+        try { p.sendActionBar("§d调律就绪 · §f" + def.id + " §7无按钮"); } catch (Throwable ignored) { }
         return true;
     }
 

@@ -249,6 +249,41 @@ public final class EmberSigChase {
         if (p != null) flush(p);
         String P = EmberRunService.P;
         p.sendMessage(P + "§a追烙完成：§f" + label(sd) + " §7· 已烙上，可换下一条");
+        maybePinNextUnderMark(p, d); // D4065 non-Path chain
+        return true;
+    }
+
+    /**
+     * D4065: after chase imprint closes — pin next under-mark sig (any cleared map) + stash origin.
+     * Zero STAMP_RATE / ConfirmTokens.
+     */
+    public static boolean maybePinNextUnderMark(Player p, PlayerData d) {
+        if (p == null || d == null) return false;
+        if (get(d) != null) return false;
+        CoreRpgPlugin pl = plugin();
+        EmberRunService runs = pl == null ? null : pl.getEmberRuns();
+        if (runs == null) return false;
+        int need = EmberSignature.imprintMarks();
+        EmberSignature.Def pick = null;
+        for (EmberSignature.Def def : EmberSignature.DEFS) {
+            if (def == null) continue;
+            if (!runs.progressFlag(d, def.map)) continue;
+            int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
+            if (marks >= need) continue;
+            pick = def;
+            break;
+        }
+        if (pick == null) return false;
+        if (!set(d, pick)) return false;
+        flush(p);
+        EmberGearLib lib = EmberGearLib.get();
+        if (lib != null && lib.usable() && EmberMapStashPin.unlocked(d, runs)) {
+            lib.pinMapFilter(p, pick.map);
+        }
+        String rem = remainLine(pick, d.periodCount(EmberSignature.C_MARK + pick.map, "all"));
+        p.sendMessage(EmberRunService.P + "§e下一追烙已钉 · §f" + label(pick)
+                + " §7· " + rem + " §8· 出处筛 " + pick.map.toUpperCase(java.util.Locale.ROOT));
+        try { p.sendActionBar("§e下一追烙 · §f" + pick.id + " §7" + pick.map.toUpperCase(java.util.Locale.ROOT)); } catch (Throwable ignored) { }
         return true;
     }
 

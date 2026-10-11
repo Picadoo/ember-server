@@ -157,6 +157,7 @@ public final class EmberCounters {
         x("p1_sig_chase_ready", "EmberSigChase", A, SE, OW, "D470 ready-cue latch = Def.code while marks≥need");
         x("p1_sig_chase_held_tip", "EmberSigChase", A, SE, OW, "D3937 held same-slot imprint tip latch = Def.code");
         x("p1_sig_attune_ready", "EmberGrowthService", A, SE, OW, "D761 attune-ready latch = Def.code while marks≥ALT_MARKS");
+        x("p1_sig_attune_quiet", "EmberGrowthService", A, SE, OW, "D4033 attune quiet tip latch = Def.code");
         x("p1_sig_chase", "EmberSigChase", A, SE, OW, "D464 imprint chase Def.code 0=none 1..15=L01..L15");
         x("p1_sig_chase_offered", "EmberSigChase", A, PR, NV, "D464 imprint-unlock first-pick latch");
         px("p1_mode_path_offered_", "EmberModePath", A, PR, NV, "D462 Q04/Q05/Q06 first-path pick latch");
@@ -324,6 +325,7 @@ public final class EmberCounters {
         px("p1_mail_path_offer", "EmberMailPath", A, PR, NV, "D523 weekly offer latch");
         x("p1_codex_path", "EmberCodexPath", A, PR, NV, "D522 codex auto/ask/mute");
         px("p1_codex_path_offer", "EmberCodexPath", A, PR, NV, "D522 weekly offer latch");
+        x("p1_codex_claim_quiet", "EmberCodex", A, SE, OW, "D4049 claimable quiet tip bitmask");
         x("p1_goal_path", "EmberGoalPath", A, PR, NV, "D521 goal featured/abyss/raid/bounty/flex");
         px("p1_goal_path_offer", "EmberGoalPath", A, PR, NV, "D521 weekly offer latch");
         x("p1_sign_path", "EmberSignPath", A, PR, NV, "D520 sign auto/ask/mute");
@@ -530,6 +532,8 @@ public final class EmberCounters {
         px("p1_afk_gear_weak_t", "EmberAfkGearFeel", D, HI, OW, "D2242 AFK gear-weak+deaths latch per tier@day");
         x("p1_forge_mat_ready", "EmberForgeMatReady", A, HI, OW, "D478 enhance mat-ready latch = target enhance");
         x("p1_forge_mat_quiet", "EmberForgeMatReady", A, HI, OW, "D3977 quiet held mat tip latch = target enhance");
+        x("p1_forge_quality_quiet", "EmberForgeSinkQuiet", A, HI, OW, "D4009 quality quiet latch = next quality");
+        x("p1_forge_refine_quiet", "EmberForgeSinkQuiet", A, HI, OW, "D4009 refine quiet latch = next craft");
         x("p1_shape_manual", "EmberSkillKit", A, SE, OW, "D793 player locked shape; soft prefer skips");
         x("p1_sig_stamp_dry", "EmberSigStampDry", A, HI, OW, "sig stamp dry tip latch");
         px("p4_afc_", "EmberGrowthService", A, IT, NV, "affix craft/commit latch by uid");

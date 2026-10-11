@@ -19,6 +19,7 @@ public final class EmberCodex {
 
     public static final String C_ENTRY = "p1_codex_";       // p1_codex_<family>_<slot>_t<tier>@all = 1
     public static final String C_CLAIM = "p1_codex_stage_";  // p1_codex_stage_<n>@all = 1 once claimed
+    public static final String C_CLAIM_QUIET = "p1_codex_claim_quiet"; // D4049 bitmask of tipped stages
     public static final String LEDGER_RUN = "codex";
 
     /** D42: thresholds (registered entries) and their one-time coin rewards. D243: registered as economy row S33
@@ -123,4 +124,27 @@ public final class EmberCodex {
         }
         return "图录 " + n + "/" + total + " · 阶段奖励已全领";
     }
+    /** D4049: bitmask of stages already quiet-tipped. */
+    public static int quietMask(PlayerData pd) {
+        return pd == null ? 0 : pd.periodCount(C_CLAIM_QUIET, "all");
+    }
+
+    public static void markQuietStage(PlayerData pd, int stage) {
+        if (pd == null || stage < 0 || stage > 30) return;
+        int cur = quietMask(pd);
+        int bit = 1 << stage;
+        if ((cur & bit) != 0) return;
+        pd.addPeriodCount(C_CLAIM_QUIET, "all", bit);
+    }
+
+    public static boolean stageQuietTold(PlayerData pd, int stage) {
+        return (quietMask(pd) & (1 << stage)) != 0;
+    }
+
+    /** First claimable stage not yet quiet-tipped; -1 if none. */
+    public static int nextQuietClaimable(PlayerData pd) {
+        for (int i : claimable(pd)) if (!stageQuietTold(pd, i)) return i;
+        return -1;
+    }
+
 }

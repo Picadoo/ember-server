@@ -511,3 +511,5 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Sig chase enter pin D3881–D3912: auto-chase under-mark sig on map enter (non-Path)
 - Held ready tip D3937–D3976: imprint-ready same-slot one-shot (no ConfirmTokens)
 - Forge mat quiet D3977–D4008: held enhance-ready chat+AB no ConfirmTokens
+- Quiet economy NEAR-SAT D4009–D4064 (quality/refine/attune/codex quiet)
+- Imprint next map pin D4065–D4096
