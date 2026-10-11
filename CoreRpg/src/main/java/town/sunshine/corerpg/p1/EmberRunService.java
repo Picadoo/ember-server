@@ -1853,6 +1853,7 @@ public boolean pathForceOpenDoor(Player p) {
         }
         plugin.getDataStore().flushMutation(u);
         deliver(p);
+        try { EmberMapCodexClaimBone.maybeGift(p, d); } catch (Throwable ignored) { } // D12113
         return can.size();
     }
 

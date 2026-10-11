@@ -2343,6 +2343,7 @@ public final class EmberGrowthService implements Listener {
         try {
             PlayerData pdFlat = data(id);
             EmberLockFlatRefund.maybeRefund(p, pdFlat, pl.lock, pl.old, pl.enc, quality, reroll); // D11937
+            EmberLockCapRefund.maybeRefund(p, pdFlat, pl.lock, pl.old, pl.enc, quality, reroll); // D12065
         } catch (Throwable ignored) { }
         if (r.forced) {
             try { p.sendActionBar("§a保底出档 · §f" + affixText(pl.enc, quality)); } catch (Throwable ignored) { }
