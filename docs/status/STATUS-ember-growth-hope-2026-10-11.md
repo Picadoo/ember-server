@@ -1,3 +1,6 @@
+Live jar: **1.65.647-d7456.local** · D7393–D7456 BossSpawnBrace + BossPotGift
+Prior: RoomClearHeal+BurnSpread
+
 Live jar: **1.65.646-d7392.local** · D7329–D7392 RoomClearHeal + BurnSpreadBoost
 Prior: ShieldFirst/ParrySlash/Huohen/StepBlock/ArmorTenths
 

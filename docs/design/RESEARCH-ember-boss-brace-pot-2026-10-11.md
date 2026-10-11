@@ -1,0 +1,3 @@
+# RESEARCH · BossSpawnBrace + BossPotGift · 2026-10-11
+Outside RoomClear/BurnSpread/ShieldFirst…
+Continuous: 首领现身抗性I 2s（本局一次）。Less despair: 空瓶对峙赠回复药×1（本日一次）。

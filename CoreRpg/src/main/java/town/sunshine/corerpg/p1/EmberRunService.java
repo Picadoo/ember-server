@@ -706,6 +706,16 @@ public final class EmberRunService implements Listener {
             tellRun(s, "§c首领 " + b.name + (s.challenge ? "（挑战）" : "") + " §7现身 · 招式都有预警，看清地面火线再躲");
         }
         reviveFallen(s, RevivePoint.BOSS_SPAWN); // D106
+        try { // D7393 / D7425 boss spawn brace + empty-pot gift
+            EmberBossSpawnBrace.maybeBrace(s);
+            for (UUID u : s.committed) {
+                if (s.left.contains(u)) continue;
+                Player bp = Bukkit.getPlayer(u);
+                if (bp == null || !bp.isOnline()) continue;
+                PlayerData bpd = data(u);
+                EmberBossPotGift.maybeGift(bp, bpd, plugin);
+            }
+        } catch (Throwable ignored) { }
     }
 
     // ------------------------------------------------------------------ D106 raid falls — logic in EmberRaidService (D233 / ARCH S3-4)
