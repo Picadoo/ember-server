@@ -496,3 +496,7 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Chest/Hunt · D2769–D2800
 - Enter unlock; Chest AUTO 4t; Hunt AUTO 3t + face elite
 - No Speed/Resist assist land twin
+
+## Stash / Mode×Room · D2817–D2848
+- Stash enter + instance mats-only AUTO
+- Mode-hard preferred room Night Vision 3s

@@ -170,6 +170,25 @@ public final class EmberRoomPath {
         } catch (Throwable ignored) { }
     }
 
+    /**
+     * D2833: rush / abyss / reverse-pledge → mode-hard preferred room (Night Vision, not Resist twin).
+     */
+    public static boolean modeHardSession(EmberRunSession s, PlayerData leaderData, EmberRunService runs) {
+        if (s == null) return false;
+        if (s.abyss > 0) return true;
+        if (s.mapKey != null) {
+            String k = s.mapKey.toLowerCase(java.util.Locale.ROOT);
+            if (k.contains("echo") || k.contains("outpost") || k.startsWith("rush")) return true;
+        }
+        if (runs != null && runs.maps() != null && s.mapKey != null) {
+            try {
+                EmberRunMaps.MapDef m = runs.maps().byKey(s.mapKey);
+                if (m != null && m.rush) return true;
+            } catch (Throwable ignored) { }
+        }
+        return leaderData != null && EmberPledgeService.isOn(leaderData, "reverse");
+    }
+
     public static void pulsePreferredRoom(EmberRunSession s, EmberRunMaps.Room r, EmberRunService runs) {
         if (s == null || r == null || runs == null || r.id == null) return;
         try {
@@ -202,6 +221,12 @@ public final class EmberRoomPath {
                         p.addPotionEffect(new org.bukkit.potion.PotionEffect(
                                 org.bukkit.potion.PotionEffectType.DAMAGE_RESISTANCE, 30, 0, false, true), true);
                         try { p.sendActionBar("§c硬本优房 · §fResist I 1.5s"); } catch (Throwable ignored) { }
+                    }
+                    // D2833: Mode×Room — Night Vision 3s (visibility, not Speed/Resist twin)
+                    if (modeHardSession(s, ld, runs)) {
+                        p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                                org.bukkit.potion.PotionEffectType.NIGHT_VISION, 60, 0, false, true), true);
+                        try { p.sendActionBar("§d进阶优房 · §fNight Vision 3s"); } catch (Throwable ignored) { }
                     }
                     p.sendActionBar("§a优房 · §f" + label(path));
                 } catch (Throwable ignored) { }

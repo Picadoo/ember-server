@@ -2424,18 +2424,18 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, "q01");
+            boolean unlocked = EmberSkillKit.stashPathUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberStashPath.glance(EmberStashPath.get(d), unlocked));
                 if (!unlocked) {
-                    p.sendMessage(P + "§c存仓路径需本人首通 Q01。");
+                    p.sendMessage(P + "§c存仓路径需本人首进或首通 Q01。");
                     return true;
                 }
                 EmberStashPath.offerPick(p);
                 return true;
             }
             if ("nudge".equalsIgnoreCase(args[2]) || "offer".equalsIgnoreCase(args[2])) {
-                if (!unlocked) { p.sendMessage(P + "§c存仓路径需本人首通 Q01。"); return true; }
+                if (!unlocked) { p.sendMessage(P + "§c存仓路径需本人首进或首通 Q01。"); return true; }
                 String week = EmberPlayfeelTelemetry.weekKey();
                 boolean offered = EmberStashPath.maybeOfferWeekly(p, d, week);
                 runs.plugin().getDataStore().flushMutation(p.getUniqueId());

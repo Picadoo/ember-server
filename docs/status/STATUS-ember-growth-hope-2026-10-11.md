@@ -1,15 +1,13 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.553-d2816.local**
-- D2769–D2816 Chest/Hunt **NEAR-SAT**
+- jar **1.65.554-d2848.local**
+- D2817–D2848 Stash / Mode×Room
 
-## Summary
-| 轴 | 行为 |
-|----|------|
-| Chest | Q01 首进 · AUTO 4t 开箱 · 仅一人 AUTO · ASK CD 5s |
-| Hunt | Q01 首进 · AUTO 3t · 朝向精英 + 贴脸 1.2 · ASK CD 5s |
+## Shipped
+- Stash: Q01 enter · ASK CD 5s · AUTO instance mats-only / hub full
+- Mode×Room: rush/abyss/reverse + preferred → Night Vision 3s
 
-无 Speed/Resist land twin. Talent HOLD. Next: Stash / Mode×Room.
+No Chest/Hunt/Link/Flee/Gate/Call/Pack Speed-Resist twin. Talent HOLD.
 
-Updated 2026-10-11 08:35 CST
+Updated 2026-10-11 08:37 CST

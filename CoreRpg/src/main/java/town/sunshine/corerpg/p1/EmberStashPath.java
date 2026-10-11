@@ -80,13 +80,32 @@ public final class EmberStashPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8存仓路径：首通 Q01 后可选";
+        if (!unlocked) return "§8存仓路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8存仓路径：未选 · /corerpg p1 stashpath";
         return "§e存仓路径：§f" + label(id) + " §8· " + tip(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
+
+    private static final long ASK_COOLDOWN_MS = 8000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 5000L;
+    private static final java.util.Map<java.util.UUID, Long> lastAsk =
+            new java.util.concurrent.ConcurrentHashMap<java.util.UUID, Long>();
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
+    /** D2819: true when in dungeon/instance — AUTO stores mats only (not gear). */
+    public static boolean inInstanceWorld(Player p) {
+        if (p == null) return false;
+        if (EmberMode.isP1World(p.getWorld())) return true;
+        return EmberRunService.blocksLegacy(p.getWorld());
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
 
     /** Peek whether backpack has vault-accepted mats (gear peek is optional / hub). */
     public static boolean hasStashableMats(Player p) {
@@ -105,13 +124,24 @@ public final class EmberStashPath {
         if (!mats) return; // keep tip cheap; gear-only left for manual stash
         int path = get(d);
         if (shouldAuto(path)) {
-            if (glib != null) {
+            // D2819: instance → mats only; hub → full one-click (gear+mats)
+            if (inInstanceWorld(p)) {
+                if (v != null) {
+                    Map<String, Long> moved = v.depositAll(p);
+                    if (!moved.isEmpty())
+                        p.sendMessage(EmberRunService.P + "§a存仓·自动 §7材料 " + moved.size() + " 种已入库（本内）");
+                    else if (v.backpackHasStashable(p)) {
+                        p.sendMessage(EmberRunService.P + "§e存仓·自动 §7仓库装不下 · 去工坊腾仓");
+                        EmberDelivery.offerForgeSpace(p, "auto-stash-full");
+                    }
+                }
+            } else if (glib != null) {
                 glib.depositAll(p, () -> p.sendMessage(EmberRunService.P + "§a存仓·自动 §7已一键存入"));
             } else if (v != null) {
                 Map<String, Long> moved = v.depositAll(p);
                 if (!moved.isEmpty())
                     p.sendMessage(EmberRunService.P + "§a存仓·自动 §7材料 " + moved.size() + " 种已入库");
-                else if (v.backpackHasStashable(p)) { // D803 vault full
+                else if (v.backpackHasStashable(p)) {
                     p.sendMessage(EmberRunService.P + "§e存仓·自动 §7仓库装不下 · 去工坊腾仓");
                     EmberDelivery.offerForgeSpace(p, "auto-stash-full");
                 }
@@ -119,6 +149,10 @@ public final class EmberStashPath {
             return;
         }
         if (shouldMute(path)) return;
+        long now = System.currentTimeMillis();
+        Long last = lastAsk.get(p.getUniqueId());
+        if (last != null && now - last < askCooldownMs(path)) return;
+        lastAsk.put(p.getUniqueId(), now);
         ConfirmTokens.sendButtons(p, EmberRunService.P + "§e背包有可存材料 ",
                 new String[]{"[一键存入]", "/corerpg p1 stash", "材料→仓库 · 城内兼存装备", "GREEN"},
                 new String[]{"[仅存材料]", "/corerpg p1 stash mats", "不碰装备", "GOLD"}, // D840
@@ -170,8 +204,8 @@ public final class EmberStashPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c存仓路径需本人首通 Q01。");
+        if (!EmberSkillKit.stashPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c存仓路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

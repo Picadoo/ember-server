@@ -117,6 +117,8 @@ public final class EmberSkillKit {
     public static final String C_CHEST_ENTER = "p1_chest_enter";
     /** D2785: entered Q01 → hunt path without clear-gate. */
     public static final String C_HUNT_ENTER = "p1_hunt_enter";
+    /** D2818: entered Q01 → stash path without clear-gate. */
+    public static final String C_STASH_ENTER = "p1_stash_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -364,6 +366,19 @@ public final class EmberSkillKit {
     public static boolean huntPathUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_HUNT_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markStashEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_STASH_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_STASH_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean stashPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_STASH_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, "q01");
     }
 
