@@ -274,8 +274,12 @@ public final class EmberSettleService {
         }
         List<EmberRunRules.Grant> grants = new ArrayList<EmberRunRules.Grant>(EmberRunRules.settle(in));
         boolean dropQForced = false;
+        boolean dropCForced = false;
         if (EmberDropQualityPity.applicable(s, m)) { // D611 drop quality pity · mainline base_item only
             dropQForced = EmberDropQualityPity.applyToGrants(pd, grants);
+        }
+        if (EmberDropCraftPity.applicable(s, m)) { // D6817 craft pity · orthogonal to quality
+            dropCForced = EmberDropCraftPity.applyToGrants(pd, grants);
         }
         // P2-1 weekly challenge rotation: featured map, first 3 challenge clears of the week → +1 mark of the run tier
         java.time.LocalDate today = java.time.LocalDate.now(town.sunshine.corerpg.DailyService.zone());
@@ -468,6 +472,12 @@ public final class EmberSettleService {
                 String rem = EmberDropQualityPity.remainLine(pd);
                 gp.sendMessage(EmberRunService.P + "§7掉落成色 · §f" + rem);
                 try { gp.sendActionBar("§e掉落成色 · §f" + rem); } catch (Throwable ignored) { }
+            }
+        }
+        if (gp != null && gp.isOnline() && EmberDropCraftPity.applicable(s, m)) { // D6817
+            if (dropCForced) {
+                gp.sendMessage(EmberRunService.P + "§a精工软保底触发 · §f本次主线装≥精工1");
+                try { gp.sendActionBar("§a精工软保底 · §f精工1底"); } catch (Throwable ignored) { }
             }
         }
         if (runs.leaderboard() != null && (s.abyss > 0 || fresh)) { // P2-10 (D84); abyss: idempotent, also lists older records

@@ -1,3 +1,6 @@
+Live jar: **1.65.638-d6880.local** · D6817–D6880 DropCraftPity
+Prior: 1.65.637 DashStepLink · 1.65.636 LockNear+ParryMiss
+
 Live jar: **1.65.637-d6816.local** · D6753–D6816 DashStepLink
 Prior: 1.65.636-d6752 LockNearCap + ParryMissBreak
 

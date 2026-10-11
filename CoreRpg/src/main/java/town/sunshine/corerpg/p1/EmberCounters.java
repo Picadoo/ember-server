@@ -296,6 +296,7 @@ public final class EmberCounters {
         x("p1_ticket_path", "EmberTicketPath", A, PR, NV, "D536 ticket auto/ask/mute");
         px("p1_ticket_path_offer", "EmberTicketPath", A, PR, NV, "D536 weekly offer latch");
         x("p1_drop_q_pity", "EmberDropQualityPity", A, ST, OW, "D611 mainline base_item quality pity");
+        x("p1_drop_c_pity", "EmberDropCraftPity", A, ST, OW, "D6817 mainline base_item craft pity");
         x("p1_gem_clear_pity", "EmberGemAcquire", A, ST, OW, "D608 gem clear pity");
         x("p1_gem_path", "EmberGemPath", A, PR, NV, "D535 gem sharp/steady/drain/gale");
         px("p1_gem_path_offer", "EmberGemPath", A, PR, NV, "D535 weekly offer latch");
