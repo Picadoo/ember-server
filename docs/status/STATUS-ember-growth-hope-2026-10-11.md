@@ -1,3 +1,6 @@
+Live jar: **1.65.682-d9696.local** · D9633–D9696 DismantleYieldBoost + UndoWindowSoft + DeathRefundBoost
+Prior: ForgeCost softs
+
 Live jar: **1.65.681-d9632.local** · D9569–D9632 EnhanceCostSoft + UpgradeCostSoft + RefineCostSoft
 Prior: LifeLevel/ShortEnter/CustomDot
 

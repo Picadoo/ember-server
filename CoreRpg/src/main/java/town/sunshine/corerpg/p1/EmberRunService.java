@@ -3052,6 +3052,13 @@ public boolean pathForceOpenDoor(Player p) {
         PlayerData pd = dataOf(p.getUniqueId());
         int path = EmberRefundPath.get(pd);
         int max = EmberRefundPath.effectiveMax(path, tableMax);
+        try {
+            int boosted = EmberDeathRefundBoost.applyMax(pd, max); // D9681
+            if (boosted > max) {
+                max = boosted;
+                p.sendMessage(P + "§a倒下退药加码 · 上限 +" + EmberDeathRefundBoost.BONUS + "（今日一次）");
+            }
+        } catch (Throwable ignored) { }
         if (tableMax <= 0) return; // table off → feature off (path cannot raise)
         UUID u = p.getUniqueId();
         Integer used = s.potions.get(u);

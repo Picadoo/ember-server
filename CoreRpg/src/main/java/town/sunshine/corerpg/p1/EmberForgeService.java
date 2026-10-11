@@ -569,6 +569,19 @@ public final class EmberForgeService implements Listener {
         int haveT = tpd == null ? 0 : tpd.periodCount(C_BLANK_TENTHS, "all");
         int[] tp = EmberUpgradeRules.addTenths(haveT, tenths);
         int blanks = armor ? tp[0] : EmberUpgradeRules.dismantleYield(it.data);
+        if (!armor && blanks > 0) {
+            try {
+                PlayerData pdY = plugin.getDataStore().get(p.getUniqueId());
+                int boosted = EmberDismantleYieldBoost.apply(pdY, blanks, go); // D9633
+                if (boosted > blanks) {
+                    blanks = boosted;
+                    if (go) {
+                        p.sendMessage(P + "§a分解增产 · 胚 +1（今日一次）");
+                        try { p.sendActionBar("§a分解增产"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
+        }
         // B2.137: destroying needs the one-shot token from a preview (clickable [确认分解]), bound to uid+rev+slot
         String fp = it.data.uid + "|" + it.data.rev + "|" + it.index;
         if (go) {

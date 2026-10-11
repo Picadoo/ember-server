@@ -665,7 +665,20 @@ public final class EmberGearLib implements Listener {
     // ================================================================== soft undo of a dismantle
 
     public boolean undo(final Player p, String[] args) {
-        final int mins = undoMinutes();
+        int baseMins = undoMinutes();
+        try {
+            PlayerData pdU = plugin.getDataStore().get(p.getUniqueId());
+            boolean first = EmberUndoWindowSoft.ready(pdU);
+            int soft = EmberUndoWindowSoft.apply(pdU, baseMins); // D9665
+            if (soft > baseMins) {
+                baseMins = soft;
+                if (first) {
+                    p.sendMessage(P + "§a撤销窗加长 · +" + EmberUndoWindowSoft.EXTRA_MIN + " 分钟（今日）");
+                    try { p.sendActionBar("§a撤销窗加长"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final int mins = baseMins;
         if (mins <= 0) { p.sendMessage(P + "撤销分解已关闭"); return true; }
         if (!store().usable()) { p.sendMessage(P + ChatColor.RED + "需要 MySQL"); return true; }
         final UUID id = p.getUniqueId();
