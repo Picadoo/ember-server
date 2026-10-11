@@ -335,6 +335,24 @@ public final class EmberSettleService {
                     try { tip.sendActionBar("§a首通空白纸加码"); } catch (Throwable ignored) { }
                 }
             }
+            if (EmberFcShardBoost.apply(pd, grants)) { // D10465
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a首通加码 · 碎片 +" + EmberFcShardBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a首通碎片加码"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberFcCoreBoost.apply(pd, grants)) { // D10481
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a首通加码 · 核心 +" + EmberFcCoreBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a首通核心加码"); } catch (Throwable ignored) { }
+                }
+            }
+            if (EmberFcCoinBoost.apply(pd, grants)) { // D10497
+                if (tip != null && tip.isOnline()) {
+                    tip.sendMessage(EmberRunService.P + "§a首通加码 · 余烬币 +" + EmberFcCoinBoost.BONUS + "（今日一次）");
+                    try { tip.sendActionBar("§a首通币加码"); } catch (Throwable ignored) { }
+                }
+            }
         } catch (Throwable ignored) { }
         boolean dropQForced = false;
         boolean dropCForced = false;
