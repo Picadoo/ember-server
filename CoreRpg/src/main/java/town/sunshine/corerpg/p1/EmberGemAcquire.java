@@ -197,6 +197,7 @@ public final class EmberGemAcquire {
         p.sendMessage(P + "§a合成成功：§f" + EmberItemData.gemName(code) + " §7（碎" + cost.shards + "+骨" + cost.bone + "+币" + cost.coins + "）");
         try { p.sendActionBar("§a宝石合成 · §f" + EmberItemData.gemName(code)); } catch (Throwable ignored) { }
         try { EmberGemCraftShardRefund.maybeRefund(p, d, ni); } catch (Throwable ignored) { } // D8385
+        try { EmberGemCraftPathSync.maybeSync(p, d, code); } catch (Throwable ignored) { } // D11905
         // D1984 FG-G3: weekly forgegoal GEM complete
         if (EmberForgeGoal.get(d) == EmberForgeGoal.GEM) {
             p.sendMessage(P + "§a本周工坊目标完成：§f宝石合成");

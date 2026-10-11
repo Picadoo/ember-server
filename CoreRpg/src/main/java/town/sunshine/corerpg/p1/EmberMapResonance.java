@@ -64,6 +64,7 @@ public final class EmberMapResonance {
         d.addPeriodCount(key, "all", 1);
         boolean day = false;
         try { day = EmberMapResonanceDayBoost.maybeLatch(d); } catch (Throwable ignored) { } // D11857
+        try { EmberMapOriginWearBone.maybeGift(p, d, lo, mapKey); } catch (Throwable ignored) { } // D11921
         p.sendMessage(EmberRunService.P + "§a图源共鸣 · §f" + base.toUpperCase(Locale.ROOT)
                 + " §7· 本图掉落件加宽烬斩（零伤乘）"
                 + (day ? " §a· 今日共鸣加宽已开" : ""));

@@ -93,7 +93,18 @@ public final class EmberGemSocket {
                     new String[]{"[工坊]", "/corerpg p1 forge", "养成页", "GOLD"});
             return true;
         }
-        if (d.sockAt(hole) != 0) { p.sendMessage(P + "该孔已有石，先 remove"); return true; }
+        int prevCode = d.sockAt(hole);
+        PlayerData swapPd = holePd;
+        boolean swap = false;
+        if (prevCode != 0) {
+            if (swapPd != null && EmberGemSwapSoft.ready(swapPd)) {
+                swap = true;
+            } else {
+                p.sendMessage(P + "该孔已有石，先 remove"
+                        + (EmberGemSwapSoft.usedToday(swapPd) ? " §8（今日换石已用）" : ""));
+                return true;
+            }
+        }
         String gemId = EmberGemPath.gemId(code);
         NiBridge ni = plugin.getNiBridge();
         if (ni == null || !ni.consumeExact(p, gemId, 1)) {
@@ -112,7 +123,19 @@ public final class EmberGemSocket {
             p.sendMessage(P + "§c写入失败，已退回宝石");
             return true;
         }
-        p.sendMessage(P + "已镶入 " + EmberItemData.gemName(code) + " → 孔" + hole);
+        if (swap) {
+            try {
+                EmberGemSwapSoft.consume(swapPd);
+                String oldId = EmberGemPath.gemId(prevCode);
+                if (oldId != null) ni.giveNiItem(p, oldId, 1);
+                p.sendMessage(P + "§a换石 · 卸下 §f" + EmberItemData.gemName(prevCode)
+                        + " §a· 镶入 §f" + EmberItemData.gemName(code) + " §7→ 孔" + hole + " §a（今日一次）");
+            } catch (Throwable ignored) {
+                p.sendMessage(P + "已镶入 " + EmberItemData.gemName(code) + " → 孔" + hole);
+            }
+        } else {
+            p.sendMessage(P + "已镶入 " + EmberItemData.gemName(code) + " → 孔" + hole);
+        }
         try { p.sendActionBar("§a镶嵌 · §f" + EmberItemData.gemName(code) + " → 孔" + hole); } catch (Throwable ignored) { }
         try {
             PlayerData pd = plugin.getDataStore().get(p.getUniqueId());
