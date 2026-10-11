@@ -168,7 +168,8 @@ public final class EmberForgeService implements Listener {
                 String flag = EmberUpgradeRules.upgradeFlag(data.tier);
                 gateOk = flag == null || EmberFirstClear.fact(d, flag);
             }
-            return EmberForgeHeldNext.line(data, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk);
+            int goal = d == null ? EmberForgeGoal.NONE : EmberForgeGoal.get(d);
+            return EmberForgeHeldNext.line(data, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk, goal);
         } catch (Throwable ignored) {
             return null;
         }

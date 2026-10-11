@@ -38,15 +38,20 @@ public final class EmberForgeHeldNext {
 
     /** Convenience: assume upgrade gate open for glance. */
     public static String line(EmberItemData d, Mats m) {
-        return line(d, m, true);
+        return line(d, m, true, EmberForgeGoal.NONE);
+    }
+
+    public static String line(EmberItemData d, Mats m, boolean gateOk) {
+        return line(d, m, gateOk, EmberForgeGoal.NONE);
     }
 
     /**
      * One-glance next step for held blade/charm.
-     * Affordable order: quality → refine → enhance → upgrade.
+     * Affordable order: quality → refine → enhance → upgrade;
+     * D2434: when forgeGoal is CONVERT/BRAND, those deterministic sinks surface first if payable.
      * {@code gateOk} = first-clear for upgradeFlag(tier).
      */
-    public static String line(EmberItemData d, Mats m, boolean gateOk) {
+    public static String line(EmberItemData d, Mats m, boolean gateOk, int forgeGoal) {
         if (d == null) return "下一确定 · 空手 · 手持刃/护符";
         if (m == null) m = new Mats(0, 0, 0, 0);
 
@@ -55,6 +60,14 @@ public final class EmberForgeHeldNext {
         EmberUpgradeRules.Plan enh = EmberUpgradeRules.enhanceCheck(d);
         Cost e = (enh != null && enh.ok()) ? enh.cost : null;
         Cost u = EmberUpgradeRules.upgradeCost(d.tier);
+        Cost conv = EmberConvertRules.cost(d.tier);
+        Cost brand = new Cost(EmberBrandRules.craftShards(), 0, 0, 0, 0);
+
+        // D2434 forge determinism: goal-locked sinks first when payable (not K3 / not pity)
+        if (forgeGoal == EmberForgeGoal.CONVERT && conv != null && canPay(conv, m))
+            return "下一确定 · 跨族转化 · 料够 · /corerpg p1 convert";
+        if (forgeGoal == EmberForgeGoal.BRAND && canPay(brand, m))
+            return "下一确定 · 合成烙纹 · 料够 · /corerpg p1 brand craft";
 
         if (q != null && canPay(q, m))
             return "下一确定 · " + EmberQualityCraftDial.qualityDial(d) + " · 料够 · /corerpg p1 quality";
@@ -87,6 +100,20 @@ public final class EmberForgeHeldNext {
                 pick = "升阶 · " + EmberGearNextHint.upgradeLine(d, gateOk)
                         + (gateOk && g > 0 ? " · 还差料" : "")
                         + " · /corerpg p1 upgrade";
+            }
+        }
+        if (forgeGoal == EmberForgeGoal.CONVERT && conv != null) {
+            long g = shortfall(conv, m);
+            if (g < best || pick == null) {
+                best = g;
+                pick = "跨族转化 · 还差料 · /corerpg p1 convert";
+            }
+        }
+        if (forgeGoal == EmberForgeGoal.BRAND) {
+            long g = shortfall(brand, m);
+            if (g < best || pick == null) {
+                best = g;
+                pick = "合成烙纹 · 还差碎 · /corerpg p1 brand craft";
             }
         }
         if (pick != null) return "下一确定 · " + pick;

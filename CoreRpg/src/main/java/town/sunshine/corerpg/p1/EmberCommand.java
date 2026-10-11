@@ -4475,7 +4475,8 @@ public final class EmberCommand {
                         String flag = EmberUpgradeRules.upgradeFlag(focus.tier);
                         gateOk = flag == null || EmberFirstClear.fact(pdCoin, flag);
                     }
-                    String hn = EmberForgeHeldNext.line(focus, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk);
+                    int goal = pdCoin == null ? EmberForgeGoal.NONE : EmberForgeGoal.get(pdCoin);
+                    String hn = EmberForgeHeldNext.line(focus, new EmberForgeHeldNext.Mats(shard, blank, bone, coin), gateOk, goal);
                     if (hn != null && !hn.isEmpty()) {
                         s.sendMessage(P + "§7" + hn);
                         try { p.sendActionBar("§e" + hn); } catch (Throwable ignored) { }
