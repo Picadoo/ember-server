@@ -348,6 +348,11 @@ public final class FlexSkillService implements Listener {
         player.teleport(best);
         spawnStepVariantLand(best, variant, def.particles);
         playSound(best, def.sound);
+        try {
+            best.getWorld().playSound(best,
+                    town.sunshine.corerpg.p1.EmberStepFeel.landExtraSound(variant),
+                    0.4f, town.sunshine.corerpg.p1.EmberStepFeel.landPitch(variant, back));
+        } catch (Throwable ignored) { }
         // Display follows Q05+set even in hub; P1-only for combat FX (火痕/爆闪/承护).
         Location fxAt = back ? from : best;
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) {
@@ -373,7 +378,7 @@ public final class FlexSkillService implements Listener {
     }
 
 
-    /** D655: flex step trail by set variant — zero skill_mult / CD / damage. */
+    /** D655/D3617: flex step trail — denser + FOOTSTEP midline (not dash twin). */
     private void spawnStepVariantTrail(Location from, Location dest, int variant, String base) {
         if (from == null || dest == null) return;
         String a = base == null || base.isEmpty() ? "CLOUD" : base;
@@ -381,10 +386,15 @@ public final class FlexSkillService implements Listener {
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) { a = "FLAME"; b = "LAVA"; }
         else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) { a = "CRIT_MAGIC"; b = "CRIT"; }
         else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) { a = "HEART"; b = "VILLAGER_HAPPY"; }
-        spawnParticles(from.clone().add(0, 0.2, 0), a, 10);
+        int na = town.sunshine.corerpg.p1.EmberStepFeel.trailPrimary(variant);
+        int nb = town.sunshine.corerpg.p1.EmberStepFeel.trailSecondary(variant);
+        int head = town.sunshine.corerpg.p1.EmberStepFeel.trailHead(variant);
+        spawnParticles(from.clone().add(0, 0.2, 0), a, head);
         for (Location sample : town.sunshine.corerpg.p1.EmberDash.pathSamples(from, dest)) {
-            spawnParticles(sample.clone().add(0, 0.25, 0), a, 3);
-            spawnParticles(sample.clone().add(0, 0.25, 0), b, 2);
+            spawnParticles(sample.clone().add(0, 0.25, 0), a, na);
+            spawnParticles(sample.clone().add(0, 0.25, 0), b, nb);
+            spawnParticles(sample.clone().add(0, 0.05, 0), "FOOTSTEP",
+                    town.sunshine.corerpg.p1.EmberStepFeel.footprintPerSample());
         }
     }
 
@@ -392,16 +402,16 @@ public final class FlexSkillService implements Listener {
         if (dest == null) return;
         String a = base == null || base.isEmpty() ? "CLOUD" : base;
         if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_HUOHEN) {
-            spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 16);
-            spawnParticles(dest.clone().add(0, 0.3, 0), "LAVA", 5);
+            spawnParticles(dest.clone().add(0, 0.2, 0), "FLAME", 18);
+            spawnParticles(dest.clone().add(0, 0.3, 0), "LAVA", 6);
         } else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_BAOSHAN) {
-            spawnParticles(dest.clone().add(0, 0.2, 0), "CRIT_MAGIC", 18);
-            spawnParticles(dest.clone().add(0, 0.3, 0), "CRIT", 8);
+            spawnParticles(dest.clone().add(0, 0.2, 0), "CRIT_MAGIC", 20);
+            spawnParticles(dest.clone().add(0, 0.3, 0), "CRIT", 10);
         } else if (variant == town.sunshine.corerpg.p1.EmberSkillKit.STEP_VARIANT_CHENGHU) {
-            spawnParticles(dest.clone().add(0, 0.2, 0), "HEART", 6);
-            spawnParticles(dest.clone().add(0, 0.4, 0), "VILLAGER_HAPPY", 8);
+            spawnParticles(dest.clone().add(0, 0.2, 0), "HEART", 8);
+            spawnParticles(dest.clone().add(0, 0.4, 0), "VILLAGER_HAPPY", 10);
         } else {
-            spawnParticles(dest.clone().add(0, 0.2, 0), a, 14);
+            spawnParticles(dest.clone().add(0, 0.2, 0), a, 16);
         }
     }
 

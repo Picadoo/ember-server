@@ -1407,7 +1407,7 @@ public final class SkillService implements Listener {
         } catch (Throwable ignored) { }
     }
 
-    /** D632: cast-time ground telegraph by shape — fan cone sparks, line trail, ring circle. No damage change. */
+    /** D632/D3641: cast-time ground telegraph denser + shape cast sfx (not Boss telegraph / Shape-native land). */
     private void spawnShapeGroundTelegraph(Player player, town.sunshine.corerpg.p1.EmberSkillKit.Shape sh) {
         if (player == null || sh == null || player.getWorld() == null) return;
         Location base = player.getLocation().clone().add(0, 0.15, 0);
@@ -1416,28 +1416,35 @@ public final class SkillService implements Listener {
         if (look.lengthSquared() < 1.0e-6) look = new org.bukkit.util.Vector(0, 0, 1);
         look.normalize();
         org.bukkit.World w = player.getWorld();
+        int pp = town.sunshine.corerpg.p1.EmberSlashCastFeel.particlesPerPoint(sh.id);
         try {
             if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE) {
-                for (int i = 1; i <= 6; i++) {
-                    Location p = base.clone().add(look.clone().multiply(i * 0.55));
-                    w.spawnParticle(Particle.CRIT_MAGIC, p, 3, 0.05, 0.02, 0.05, 0.0);
+                int n = town.sunshine.corerpg.p1.EmberSlashCastFeel.lineSamples();
+                for (int i = 1; i <= n; i++) {
+                    Location p = base.clone().add(look.clone().multiply(i * (sh.range > 0 ? sh.range / n : 0.55)));
+                    w.spawnParticle(Particle.CRIT_MAGIC, p, pp, 0.05, 0.02, 0.05, 0.0);
                 }
             } else if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_RING) {
-                for (int a = 0; a < 16; a++) {
-                    double rad = Math.toRadians(a * 22.5);
-                    Location p = base.clone().add(Math.cos(rad) * 1.6, 0, Math.sin(rad) * 1.6);
-                    w.spawnParticle(Particle.SMOKE_NORMAL, p, 2, 0.02, 0.02, 0.02, 0.0);
+                int pts = town.sunshine.corerpg.p1.EmberSlashCastFeel.ringPoints();
+                double r = Math.max(1.4, Math.min(sh.range > 0 ? sh.range * 0.45 : 1.6, 2.2));
+                for (int a = 0; a < pts; a++) {
+                    double rad = Math.toRadians(a * (360.0 / pts));
+                    Location p = base.clone().add(Math.cos(rad) * r, 0, Math.sin(rad) * r);
+                    w.spawnParticle(Particle.SMOKE_NORMAL, p, pp, 0.02, 0.02, 0.02, 0.0);
                 }
             } else {
-                // fan: three rays at -40/0/+40
-                for (int deg : new int[]{-40, 0, 40}) {
+                int depth = town.sunshine.corerpg.p1.EmberSlashCastFeel.fanDepth();
+                for (int deg : town.sunshine.corerpg.p1.EmberSlashCastFeel.fanDegrees()) {
                     org.bukkit.util.Vector dir = rotateY(look, deg);
-                    for (int i = 1; i <= 4; i++) {
-                        Location p = base.clone().add(dir.clone().multiply(i * 0.7));
-                        w.spawnParticle(Particle.FLAME, p, 2, 0.04, 0.02, 0.04, 0.0);
+                    for (int i = 1; i <= depth; i++) {
+                        Location p = base.clone().add(dir.clone().multiply(i * 0.65));
+                        w.spawnParticle(Particle.FLAME, p, pp, 0.04, 0.02, 0.04, 0.0);
                     }
                 }
             }
+            w.playSound(player.getLocation(),
+                    town.sunshine.corerpg.p1.EmberSlashCastFeel.castSound(sh.id),
+                    0.45f, town.sunshine.corerpg.p1.EmberSlashCastFeel.castPitch(sh.id));
         } catch (Throwable ignored) { }
     }
 
