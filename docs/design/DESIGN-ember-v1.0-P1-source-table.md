@@ -2406,3 +2406,14 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack21.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack21-d12225-2026-10-12.md` |
 
+### 13.134 Affix Pack 22 掠斩/泥潭（CoreRpg 1.65.744，D12226，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12226 |
+| jar | CoreRpg **1.65.744-d12226.local** |
+| balance_version | 108 → **109** |
+| 行为 | 词缀池 44→46：+`gleam` 掠斩 / `bog` 泥潭；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack22-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack22.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack22-d12226-2026-10-12.md` |
