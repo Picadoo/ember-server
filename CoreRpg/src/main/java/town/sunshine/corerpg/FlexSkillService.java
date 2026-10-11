@@ -455,8 +455,13 @@ public final class FlexSkillService implements Listener {
         if (town.sunshine.corerpg.p1.EmberMode.isP1(player)) {
             boolean sync = stepShapeSynced(player);
             boolean posture = stepPostureAligned(player);
+            String mapKey = null;
+            try {
+                town.sunshine.corerpg.p1.EmberRunService runsH = plugin.getEmberRuns();
+                mapKey = runsH == null ? null : runsH.activeMapKey(player);
+            } catch (Throwable ignored) { }
             double heal = Math.max(0.5, player.getMaxHealth()
-                    * town.sunshine.corerpg.p1.EmberSkillKit.stepLandHealPct(sync, posture));
+                    * town.sunshine.corerpg.p1.EmberSkillKit.stepLandHealPct(sync, posture, mapKey));
             player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + heal));
         }
         at.getWorld().spawnParticle(Particle.HEART, at.clone().add(0, 0.5, 0), 4, 0.2, 0.15, 0.2, 0.0);

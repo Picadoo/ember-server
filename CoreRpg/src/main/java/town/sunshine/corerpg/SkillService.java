@@ -628,8 +628,11 @@ public final class SkillService implements Listener {
         if (charge > 0) {
             try {
                 String famC = ls.get(player).activeSet;
-                if (dashShapeSynced(player, famC)) // D2366 set×shape · shorter wind-up
-                    charge = town.sunshine.corerpg.p1.EmberSkillKit.sigChargeSecs(charge, true);
+                boolean syncC = dashShapeSynced(player, famC); // D2366 set×shape · shorter wind-up
+                String mapC = null;
+                town.sunshine.corerpg.p1.EmberRunService runsC = plugin.getEmberRuns();
+                mapC = runsC == null ? null : runsC.activeMapKey(player);
+                charge = town.sunshine.corerpg.p1.EmberSkillKit.sigChargeSecs(charge, syncC, mapC);
             } catch (Throwable ignored) { }
         }
         st.skillCdUntil = now + cd * 1000L;

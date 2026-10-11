@@ -498,8 +498,15 @@ public final class EmberSkillKit {
 
     /** D2474: ×1.1 when posture aligned. */
     public static double stepLandHealPct(boolean setShapeSync, boolean postureAligned) {
+        return stepLandHealPct(setShapeSync, postureAligned, null);
+    }
+
+    /** D3177: Q06 kit identity — step land heal ×1.08 (pledge endure; not Shape-native). */
+    public static double stepLandHealPct(boolean setShapeSync, boolean postureAligned, String mapKey) {
         double v = setShapeSync ? 0.005 * 1.25 : 0.005;
-        return postureAligned ? v * 1.1 : v;
+        if (postureAligned) v *= 1.1;
+        if (mapKey != null && "q06".equalsIgnoreCase(mapKey)) v *= 1.08;
+        return v;
     }
 
     /** D2475: step travel distance; posture-aligned footwork stretch. */
@@ -590,8 +597,15 @@ public final class EmberSkillKit {
 
     /** D2366: signature skill_charge wind-up secs (synced · faster cast · zero skill_mult). */
     public static double sigChargeSecs(double baseSecs, boolean setShapeSync) {
+        return sigChargeSecs(baseSecs, setShapeSync, null);
+    }
+
+    /** D3178: Q07 kit identity — signature charge ×0.92 (attune feel; zero skill_mult). */
+    public static double sigChargeSecs(double baseSecs, boolean setShapeSync, String mapKey) {
         if (baseSecs <= 0) return baseSecs;
-        return setShapeSync ? baseSecs * 0.8 : baseSecs;
+        double v = setShapeSync ? baseSecs * 0.8 : baseSecs;
+        if (mapKey != null && "q07".equalsIgnoreCase(mapKey)) v *= 0.92;
+        return v;
     }
 
     /** D2367: signature skill_shield_max multiplier when synced. */
@@ -961,10 +975,11 @@ public final class EmberSkillKit {
     public static Shape geometryFor(int id, double baseRange, double baseArc, int baseMax, boolean setSync, boolean roomShape, String mapKey) {
         boolean bonus = setSync && roomShape;
         boolean q04 = mapKey != null && "q04".equalsIgnoreCase(mapKey);
+        boolean q01 = mapKey != null && "q01".equalsIgnoreCase(mapKey);
         if (id == SHAPE_LINE) {
             double lw = setSync ? 0.95 : 0.7;
             int max = setSync ? 4 : 3;
-            double range = Math.max(baseRange, 6.0) + (bonus ? 0.35 : 0) + (q04 ? 0.2 : 0);
+            double range = Math.max(baseRange, 6.0) + (bonus ? 0.35 : 0) + (q04 ? 0.2 : 0) + (q01 ? 0.15 : 0);
             return new Shape(id, range, baseArc, 6.0, lw, max, false, shapeName(id));
         }
         if (id == SHAPE_RING) {
@@ -976,7 +991,8 @@ public final class EmberSkillKit {
         if (setSync) arc += 12.0;
         if (bonus) arc += 8.0;
         if (q04) arc += 4.0;
-        return new Shape(SHAPE_FAN, baseRange, arc, 0, 0.0, baseMax, false, shapeName(SHAPE_FAN));
+        int fanMax = baseMax + (q01 ? 1 : 0); // D3153 Q01 clear trash
+        return new Shape(SHAPE_FAN, baseRange, arc, 0, 0.0, fanMax, false, shapeName(SHAPE_FAN));
     }
 
     /** True when the player is inside a P1 dungeon instance (shape swap forbidden — X1). Hub / AFK are OK. */
