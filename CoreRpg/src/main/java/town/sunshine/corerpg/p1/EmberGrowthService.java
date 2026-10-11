@@ -752,6 +752,14 @@ public final class EmberGrowthService implements Listener {
             maybeAttuneQuietTip(p, d);
             EmberCodexQuiet.maybeQuietTip(p, d);
         }, 140L);
+        // D4577: marks awaken-gap auto after delivery settle
+        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+            if (!p.isOnline()) return;
+            PlayerData d = data(p.getUniqueId());
+            if (d == null || runs == null) return;
+            EmberLoadoutService lo = runs.loadouts();
+            try { EmberMarksBreak.maybeScan(p, d, lo, runs); } catch (Throwable ignored) { }
+        }, 160L);
     }
 
     /** D3957: switch hotbar onto same-slot chase piece → one-shot tip (no ConfirmTokens). */

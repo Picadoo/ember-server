@@ -3389,6 +3389,9 @@ public boolean pathForceOpenDoor(Player p) {
         Player p = (Player) s;
         PlayerData d = data(p.getUniqueId());
         if (args.length < 3 || !"exchange".equalsIgnoreCase(args[2])) {
+            try { // D4577 hub/marks page re-scan awaken-gap auto
+                EmberMarksBreak.maybeScan(p, d, loadouts, this);
+            } catch (Throwable ignored) { }
             p.sendMessage(P + "锻造印记（账户绑定）：T1 " + marks(d, 1) + " · T2 " + marks(d, 2) + " · T3 " + marks(d, 3));
             p.sendMessage(P + "8 枚同阶印记 → 指定族+部位的同阶标准件（成色标准、精工 0、+0）");
             p.sendMessage(P + "T2 定向锻造：" + (progressFlag(d, "q04") ? "§a已开放" : "§7需本人首通 Q04")

@@ -20,14 +20,30 @@ public class EmberMarksBreakTest {
     }
 
     @Test
-    public void pickSlotPrefersLaggard() {
+    public void pickSlotMissingCharm() {
+        EmberItemData blade = EmberItemData.create("scorch", "blade", 1, 1, 0, 0, true, "drop");
+        EmberLoadout lo = EmberLoadout.compute(EmberTables.defaults(), blade, null, 20);
+        assertEquals("charm", EmberMarksBreak.pickSlot(lo));
+    }
+
+    @Test
+    public void pickSlotTierLagNotEnhanceOnly() {
         EmberItemData blade = EmberItemData.create("scorch", "blade", 2, 1, 0, 6, true, "drop");
         EmberItemData charm = EmberItemData.create("scorch", "charm", 1, 1, 0, 6, true, "drop");
         EmberLoadout lo = EmberLoadout.compute(EmberTables.defaults(), blade, charm, 20);
-        assertEquals("scorch", lo.activeSet);
-        assertEquals(1, lo.awakening); // min tier 1
-        // next need T2 — charm is T1 lagging
-        assertEquals("charm", EmberMarksBreak.pickSlot(lo));
+        assertEquals(1, lo.awakening);
+        assertEquals("charm", EmberMarksBreak.pickSlot(lo)); // T1 charm lags T2
+    }
+
+    @Test
+    public void pickSlotNullWhenOnlyEnhanceLags() {
+        // both T2, enhance below II floor but tier OK for needT=2 → don't redeem
+        EmberItemData blade = EmberItemData.create("burst", "blade", 2, 1, 0, 3, true, "drop");
+        EmberItemData charm = EmberItemData.create("burst", "charm", 2, 1, 0, 3, true, "drop");
+        EmberLoadout lo = EmberLoadout.compute(EmberTables.defaults(), blade, charm, 20);
+        assertEquals(1, lo.awakening); // min enh 3 < 6 → still I? tier>=1 → I
+        // needTier(1)=2, both tier>=2 → pickSlotForTier returns null
+        assertNull(EmberMarksBreak.pickSlotForTier(lo, 2));
     }
 
     @Test
