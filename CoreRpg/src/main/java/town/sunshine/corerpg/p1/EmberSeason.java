@@ -384,11 +384,20 @@ public final class EmberSeason {
      */
     public int target(PlayerData d, String goal) {
         int t = target(goal);
-        if (t <= 0 || d == null || !"bounty".equals(goal)) return t;
-        int gd = d.periodCount(C_GRAD, "all");
-        if (gd <= 0) return t;
-        LocalDate g = LocalDate.ofEpochDay(gd);
-        return weekKey(g).equals(weekKey(today())) ? proratedTarget(t, g.getDayOfWeek().getValue()) : t;
+        if (t <= 0 || d == null) return t;
+        if ("bounty".equals(goal)) {
+            int gd = d.periodCount(C_GRAD, "all");
+            if (gd > 0) {
+                LocalDate g = LocalDate.ofEpochDay(gd);
+                if (weekKey(g).equals(weekKey(today())))
+                    t = proratedTarget(t, g.getDayOfWeek().getValue());
+            }
+        }
+        try {
+            int soft = EmberWeeklyGoalTargetSoft.softTarget(d, t); // D10033
+            if (soft < t) t = soft;
+        } catch (Throwable ignored) { }
+        return t;
     }
 
     /** D134: days from the graduation weekday (1 = Monday … 7 = Sunday) to Sunday, inclusive, capped by the target */
@@ -440,7 +449,29 @@ public final class EmberSeason {
 
     /** settlement hook: n more toward goal g this week; pays when it completes */
     void addGoal(UUID u, PlayerData d, String g, int n) {
-        int t = target(d, g);
+        int baseT = target(g);
+        if (d != null && "bounty".equals(g)) {
+            int gd = d.periodCount(C_GRAD, "all");
+            if (gd > 0) {
+                LocalDate grad = LocalDate.ofEpochDay(gd);
+                if (weekKey(grad).equals(weekKey(today())))
+                    baseT = proratedTarget(baseT, grad.getDayOfWeek().getValue());
+            }
+        }
+        int t = baseT;
+        try {
+            int soft = EmberWeeklyGoalTargetSoft.softTarget(d, baseT); // D10033
+            if (soft < baseT) {
+                t = soft;
+                if (EmberWeeklyGoalTargetSoft.consume(d)) {
+                    Player tip = Bukkit.getPlayer(u);
+                    if (tip != null) {
+                        tip.sendMessage(P + "§a周目标减负 · 需求 −1（本周一次 · " + goalName(g) + "）");
+                        try { tip.sendActionBar("§a周目标减负"); } catch (Throwable ignored) { }
+                    }
+                }
+            }
+        } catch (Throwable ignored) { }
         if (d == null || t <= 0 || n <= 0 || !EmberSkillKit.endgameUnlocked(d, runs)) return;
         String wk = weekKey(today());
         int before = d.periodCount(C_GOAL + g, wk);
@@ -450,6 +481,16 @@ public final class EmberSeason {
         if (after >= t && d.periodCount(C_GOALPAY + g, wk) == 0) {
             d.addPeriodCount(C_GOALPAY + g, wk, 1);
             int pay = maps().goalReward;
+            try {
+                int boosted = EmberWeeklyGoalRewardBoost.applyPay(d, pay); // D10017
+                if (boosted > pay) {
+                    pay = boosted;
+                    if (p != null) {
+                        p.sendMessage(P + "§a周目标加码 · 余烬徽 +" + EmberWeeklyGoalRewardBoost.BONUS + "（本周一次）");
+                        try { p.sendActionBar("§a周目标加码"); } catch (Throwable ignored) { }
+                    }
+                }
+            } catch (Throwable ignored) { }
             if (pay > 0 && !EmberEconomy.grantBadge(d, "S19", pay)) // D228 / ARCH S2-8
                 Bukkit.getLogger().warning("[P1 goals] economy grantBadge refused S19 " + pay + " for " + u);
             if (p != null) {

@@ -337,7 +337,20 @@ public final class EmberSettleService {
         final boolean fresh = l.get(s.runId, "base_coin") == null;
         final String bDay = town.sunshine.corerpg.DailyService.today();
         final List<EmberRunRules.BountyTier> tiers = runs.bountyTiers();
-        final int bountyW = m.raid ? 2 : 1; // D105: a raid clear (50 stamina) counts as 2 runs toward the daily bounty
+        int bountyW = m.raid ? 2 : 1; // D105: a raid clear (50 stamina) counts as 2 runs toward the daily bounty
+        try {
+            if (fresh) {
+                int softW = EmberBountyWeightBoost.apply(pd, bountyW, m.raid); // D10049
+                if (softW > bountyW) {
+                    bountyW = softW;
+                    Player bp = Bukkit.getPlayer(u);
+                    if (bp != null && bp.isOnline()) {
+                        bp.sendMessage(EmberRunService.P + "§a委托加码 · 本局算 " + bountyW + " 局（今日一次）");
+                        try { bp.sendActionBar("§a委托加码"); } catch (Throwable ignored) { }
+                    }
+                }
+            }
+        } catch (Throwable ignored) { }
         final int bountyPrev = fresh ? pd.periodCount(EmberRunService.C_BOUNTY, bDay) : 0;
         final int bountyN = fresh ? bountyPrev + bountyW : 0;
         List<EmberRunRules.Grant> bountyPaid = fresh ? EmberRunRules.bountyGrants(tiers, bountyPrev, bountyN) : Collections.<EmberRunRules.Grant>emptyList();

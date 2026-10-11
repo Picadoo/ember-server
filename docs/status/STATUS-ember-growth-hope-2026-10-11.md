@@ -1,3 +1,6 @@
+Live jar: **1.65.688-d10080.local** · D10017–D10080 WeeklyGoalRewardBoost + WeeklyGoalTargetSoft + BountyWeightBoost
+Prior: RollFloor/ImprintMark/FestBadge
+
 Live jar: **1.65.687-d10016.local** · D9953–D10016 ForgeRollFloorSoft + ImprintMarkSoft + FestBadgeSoft
 Prior: ForgeRollCost/Quality/LockShard
 
