@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11 + D12216 Pack 12 + D12217 Pack 13 + D12218 Pack 14 + D12219 Pack 15 + D12220 Pack 16 + D12221 Pack 17 + D12222 Pack 18. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11 + D12216 Pack 12 + D12217 Pack 13 + D12218 Pack 14 + D12219 Pack 15 + D12220 Pack 16 + D12221 Pack 17 + D12222 Pack 18 + D12223 Pack 19. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova", "shear", "brace", "hook", "skew", "fan", "sink", "crest", "pond", "edge", "well"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova", "shear", "brace", "hook", "skew", "fan", "sink", "crest", "pond", "edge", "well", "seam", "mire"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -697,6 +697,9 @@ public final class EmberRunMaps {
         // D12222 edge (刃边: along-axis strip through player) / well (浅井: 0.25 elite→player circle)
         public final double edgeEvery, edgeWarn, edgeLength, edgeWidth, edgeDmg;
         public final double wellEvery, wellWarn, wellRadius, wellDmg;
+        // D12223 seam (缝斩: cardinal-snapped strip through player) / mire (泥沼: elite-feet circle)
+        public final double seamEvery, seamWarn, seamLength, seamWidth, seamDmg;
+        public final double mireEvery, mireWarn, mireRadius, mireDmg;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -971,6 +974,17 @@ public final class EmberRunMaps {
             wellWarn = Math.max(1.3, num(wel.get("warn"), 1.3));
             wellRadius = Math.max(0.5, Math.min(2.0, num(wel.get("radius"), 2.0))); // ≤ 2.0
             wellDmg = Math.max(0.0, Math.min(0.5, num(wel.get("dmg"), 0.5)));       // ≤ 0.5 atk
+            Map<?, ?> sem = m.get("seam") instanceof Map ? (Map<?, ?>) m.get("seam") : Collections.emptyMap();
+            seamEvery = Math.max(6.5, num(sem.get("every"), 6.5));       // D12223: every ≥ 6.5
+            seamWarn = Math.max(1.4, num(sem.get("warn"), 1.4));
+            seamLength = Math.max(1.0, Math.min(6.0, num(sem.get("length"), 6.0))); // ≤ 6
+            seamWidth = Math.max(0.5, Math.min(1.2, num(sem.get("width"), 1.2)));   // ≤ 1.2
+            seamDmg = Math.max(0.0, Math.min(0.55, num(sem.get("dmg"), 0.55)));     // ≤ 0.55 atk
+            Map<?, ?> mir = m.get("mire") instanceof Map ? (Map<?, ?>) m.get("mire") : Collections.emptyMap();
+            mireEvery = Math.max(7.0, num(mir.get("every"), 7.0));         // D12223: every ≥ 7
+            mireWarn = Math.max(1.3, num(mir.get("warn"), 1.3));
+            mireRadius = Math.max(0.5, Math.min(2.0, num(mir.get("radius"), 2.0))); // ≤ 2.0
+            mireDmg = Math.max(0.0, Math.min(0.5, num(mir.get("dmg"), 0.5)));       // ≤ 0.5 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -1047,6 +1061,8 @@ public final class EmberRunMaps {
             if ("pond".equals(id)) return "积潭";
             if ("edge".equals(id)) return "刃边";
             if ("well".equals(id)) return "浅井";
+            if ("seam".equals(id)) return "缝斩";
+            if ("mire".equals(id)) return "泥沼";
             return id;
         }
 

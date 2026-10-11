@@ -2368,3 +2368,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack18.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack18-d12222-2026-10-12.md` |
 
+
+
+### 13.131 Affix Pack 19 缝斩/泥沼（CoreRpg 1.65.741，D12223，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12223 |
+| jar | CoreRpg **1.65.741-d12223.local** |
+| balance_version | 105 → **106** |
+| 行为 | 词缀池 38→40：+`seam` 缝斩 / `mire` 泥沼；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack19-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack19.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack19-d12223-2026-10-12.md` |
