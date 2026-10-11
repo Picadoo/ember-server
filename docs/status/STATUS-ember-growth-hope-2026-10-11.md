@@ -1,16 +1,14 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.549-d2720.local**
-- D2673–D2720 Call/Pack + Challenge×Room **NEAR-SAT**
+- jar **1.65.550-d2752.local**
+- D2721–D2752 Link/Flee
 
-## Summary
-| 轴 | 行为 |
-|----|------|
-| Call | Q01 首进 · 召战 Speed · AUTO 3s / 手点 2s · ASK CD 5s |
-| Pack | Q01 首进 · AUTO 空格≤3 · 腾包 Speed · AUTO 1.5s · ASK CD 12s |
-| Challenge×Room | 硬本优房开局 Resist 1.5s · 清房 Speed≥3s |
+## Shipped
+- Link: Q01 enter · AUTO delay 2t · deepest-only hop · ASK CD 5s
+- Flee: Q01 enter · AUTO delay 8t (was 15)
+- **No** Speed/Resist land twin (assist-path twin STOP)
 
-Talent HOLD. Twin axes STOPPED.
+Talent HOLD.
 
-Updated 2026-10-11 08:29 CST
+Updated 2026-10-11 08:32 CST

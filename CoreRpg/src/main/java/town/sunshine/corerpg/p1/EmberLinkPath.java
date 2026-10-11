@@ -80,13 +80,29 @@ public final class EmberLinkPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8跃迁路径：首通 Q01 后可选";
+        if (!unlocked) return "§8跃迁路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8跃迁路径：未选 · /corerpg p1 linkpath";
         return "§e跃迁路径：§f" + label(id) + " §8· " + tip(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
+
+    private static final long ASK_COOLDOWN_MS = 8000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 5000L;
+    private static final java.util.Map<UUID, Long> lastAsk = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+
+    /** D2723: AUTO hops faster than legacy 5t. */
+    public static int autoDelayTicks(int path) {
+        return path == AUTO ? 2 : 5;
+    }
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
 
     /** After passage links for {@code afterRoom} are announced. */
     public static void maybeAfterOpen(EmberRunSession s, String afterRoom) {
@@ -101,15 +117,20 @@ public final class EmberLinkPath {
             if (d == null) continue;
             int path = get(d);
             if (shouldAuto(path)) {
+                final int delay = autoDelayTicks(path);
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
-                    if (runs.pathTakeLinks(p, afterRoom)) {
-                        p.sendMessage(EmberRunService.P + "§a跃迁·自动 §7已传送");
+                    if (runs.pathTakeLinks(p, afterRoom, true)) {
+                        p.sendMessage(EmberRunService.P + "§a跃迁·自动 §7已传送（深通道）");
                     }
-                }, 5L);
+                }, delay);
                 continue;
             }
             if (shouldMute(path)) continue;
+            long now = System.currentTimeMillis();
+            Long last = lastAsk.get(p.getUniqueId());
+            if (last != null && now - last < askCooldownMs(path)) continue;
+            lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e通道已开启 ",
                     new String[]{"[跃迁]", "/corerpg p1 link", "传送到下一层", "GREEN"},
                     new String[]{"[改路径]", "/corerpg p1 linkpath", "自动/提醒/静默", "GRAY"});
@@ -124,8 +145,8 @@ public final class EmberLinkPath {
         EmberRunService runs = pl == null ? null : pl.getEmberRuns();
         int path = get(d);
         if (shouldAuto(path)) {
-            if (runs != null && runs.pathTakeLinks(p, null)) {
-                p.sendMessage(EmberRunService.P + "§a跃迁·自动 §7已传送");
+            if (runs != null && runs.pathTakeLinks(p, null, true)) {
+                p.sendMessage(EmberRunService.P + "§a跃迁·自动 §7已传送（深通道）");
             } else {
                 p.sendMessage(EmberRunService.P + "§a跃迁·自动 §7待命（通道开启时自动传送）");
             }
@@ -181,8 +202,8 @@ public final class EmberLinkPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c跃迁路径需本人首通 Q01。");
+        if (!EmberSkillKit.linkPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c跃迁路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

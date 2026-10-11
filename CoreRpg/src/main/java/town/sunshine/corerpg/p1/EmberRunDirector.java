@@ -1875,18 +1875,37 @@ final class EmberRunDirector {
 
     /** D558: teleport one player through links opened by {@code afterRoom} (null = any open). */
     boolean pathTakeLinks(Player p, String afterRoom) {
+        return pathTakeLinks(p, afterRoom, false);
+    }
+
+    /**
+     * D2724: {@code deepestOnly} — only the last matching link (AUTO snappy single hop).
+     * ASK/manual keep hopping all matches when afterRoom is null.
+     */
+    boolean pathTakeLinks(Player p, String afterRoom, boolean deepestOnly) {
         if (p == null || !p.isOnline() || def == null || def.links == null || s == null) return false;
         if (!s.committed.contains(p.getUniqueId()) || !s.open()) return false;
         if (p.getGameMode() == org.bukkit.GameMode.SPECTATOR || p.isDead()) return false;
+        EmberRunMaps.Link last = null;
         boolean any = false;
         for (EmberRunMaps.Link k : def.links) {
             if (k.after == null || k.to == null) continue;
             if (afterRoom != null && !afterRoom.equals(k.after)) continue;
             if (!s.cleared.contains(k.after)) continue;
+            if (deepestOnly) {
+                last = k;
+                continue;
+            }
             p.teleport(new Location(w, k.to.x + 0.5, k.to.y, k.to.z + 0.5, k.yaw, 0f));
             w.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.8f, 1.2f);
             if (!k.label.isEmpty()) p.sendMessage("§7" + k.label);
             any = true;
+        }
+        if (deepestOnly && last != null) {
+            p.teleport(new Location(w, last.to.x + 0.5, last.to.y, last.to.z + 0.5, last.yaw, 0f));
+            w.playSound(p.getLocation(), Sound.ENTITY_ENDERMEN_TELEPORT, 0.8f, 1.2f);
+            if (!last.label.isEmpty()) p.sendMessage("§7" + last.label);
+            return true;
         }
         return any;
     }

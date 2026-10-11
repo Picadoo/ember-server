@@ -1449,11 +1449,15 @@ public boolean pathCutRegen(Player p) {
     }
 
     public boolean pathTakeLinks(Player p, String afterRoom) {
+        return pathTakeLinks(p, afterRoom, false);
+    }
+
+    public boolean pathTakeLinks(Player p, String afterRoom, boolean deepestOnly) {
         if (p == null) return false;
         EmberRunDirector d = byWorld.get(p.getWorld().getName());
         if (d == null || d.s == null || !d.s.open()) return false;
         if (!d.s.committed.contains(p.getUniqueId())) return false;
-        return d.pathTakeLinks(p, afterRoom);
+        return d.pathTakeLinks(p, afterRoom, deepestOnly);
     }
 
     /** D557: force-spawn an armed boss for a committed player. */

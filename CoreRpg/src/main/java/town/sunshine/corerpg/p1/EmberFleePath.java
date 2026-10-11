@@ -79,13 +79,21 @@ public final class EmberFleePath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8撤离路径：首通 Q01 后可选";
+        if (!unlocked) return "§8撤离路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8撤离路径：未选 · /corerpg p1 flepath";
         return "§e撤离路径：§f" + label(id) + " §8· " + tip(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
+
+    /** D2738: AUTO leaves faster than legacy 15t. */
+    public static int autoDelayTicks(int path) {
+        return path == AUTO ? 8 : 15;
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
 
     /** After spectator fall settle (non-raid). */
     public static void maybeAfterFall(Player p) {
@@ -98,12 +106,13 @@ public final class EmberFleePath {
         if (d == null) return;
         int path = get(d);
         if (shouldAuto(path)) {
+            final int delay = autoDelayTicks(path);
             Bukkit.getScheduler().runTaskLater(pl, () -> {
                 if (!p.isOnline()) return;
                 if (runs.pathFleeLeave(p)) {
                     p.sendMessage(EmberRunService.P + "§a撤离·自动 §7已离本回城");
                 }
-            }, 15L);
+            }, delay);
             return;
         }
         if (shouldMute(path)) return;
@@ -178,8 +187,8 @@ public final class EmberFleePath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c撤离路径需本人首通 Q01。");
+        if (!EmberSkillKit.fleePathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c撤离路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;

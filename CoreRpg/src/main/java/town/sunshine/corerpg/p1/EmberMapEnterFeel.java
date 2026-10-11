@@ -124,6 +124,18 @@ public final class EmberMapEnterFeel {
                 } catch (Throwable ignored) { }
                 EmberPackPath.scheduleOfferAfterEnter(p);
             }
+            if ("q01".equalsIgnoreCase(m.key) && EmberSkillKit.markLinkEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a跃迁路径已开放 · §f/corerpg p1 linkpath §7（首进 Q01）");
+                } catch (Throwable ignored) { }
+                EmberLinkPath.scheduleOfferAfterEnter(p);
+            }
+            if ("q01".equalsIgnoreCase(m.key) && EmberSkillKit.markFleeEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a撤离路径已开放 · §f/corerpg p1 flepath §7（首进 Q01）");
+                } catch (Throwable ignored) { }
+                EmberFleePath.scheduleOfferAfterEnter(p);
+            }
             // D2502: Q02 enter can unlock room even if dash latch already set
             if ("q02".equalsIgnoreCase(m.key) && EmberSkillKit.markRoomEnter(pd)) {
                 try {

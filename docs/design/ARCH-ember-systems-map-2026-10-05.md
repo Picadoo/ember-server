@@ -488,3 +488,7 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Call/Pack + Challenge×Room · D2673–D2704
 - Call/Pack enter unlock + land Speed
 - Pack AUTO earlier tight; Challenge preferred Resist
+
+## Link/Flee · D2721–D2752
+- Enter unlock; Link AUTO 2t + deepest hop; Flee AUTO 8t
+- No Speed/Resist assist-path land twin

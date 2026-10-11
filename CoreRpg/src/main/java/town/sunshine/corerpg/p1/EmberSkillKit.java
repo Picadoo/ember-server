@@ -109,6 +109,10 @@ public final class EmberSkillKit {
     public static final String C_CALL_ENTER = "p1_call_enter";
     /** D2685: entered Q01 → pack path without clear-gate. */
     public static final String C_PACK_ENTER = "p1_pack_enter";
+    /** D2722: entered Q01 → link path without clear-gate. */
+    public static final String C_LINK_ENTER = "p1_link_enter";
+    /** D2737: entered Q01 → flee path without clear-gate. */
+    public static final String C_FLEE_ENTER = "p1_flee_enter";
 
     public static int preferredShape(String family) {
         if ("burst".equals(family)) return SHAPE_LINE;
@@ -304,6 +308,32 @@ public final class EmberSkillKit {
     public static boolean packPathUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_PACK_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markLinkEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_LINK_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_LINK_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean linkPathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_LINK_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, "q01");
+    }
+
+    public static boolean markFleeEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_FLEE_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_FLEE_ENTER, "all", 1);
+        return true;
+    }
+
+    public static boolean fleePathUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_FLEE_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, "q01");
     }
 
