@@ -523,3 +523,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - ImprintBreak D4641–D4704: 追烙空签名自动烙（覆盖仍确认 · 零产量抬）
 - ImprintBreak edges D4705–D4768: 城内闸/袋内空签换上再烙/换装重扫
 - AttuneBreak D4769–D4832: 调律解锁自动（切原版仍手动；零 ALT 涨）
+- RerollPitySure D4833–D4896: 洗练保底必出预览直办（零 pity 改）

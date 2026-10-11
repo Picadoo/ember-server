@@ -2057,6 +2057,26 @@ public final class EmberGrowthService implements Listener {
                     : shard + " 余烬碎片") + (lock ? " + 锁定 " + lockShard + " 碎片" : "") + " + " + coin + " 余烬币";
             p.sendMessage(P + "花费：" + pay);
             if (dup && !haveDup) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
+            // D4833: pity-forced cap preview-do (zero pity math / pool / STAMP). Not forge ConfirmTokens densify.
+            if (pity >= reroll.pity) {
+                boolean matsOk = d.getCoin() >= coin;
+                if (!dup) {
+                    int haveSh = 0;
+                    try {
+                        if (plugin.getNiBridge() != null)
+                            haveSh = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_SHARD);
+                    } catch (Throwable ignored) { }
+                    matsOk = matsOk && haveSh >= needShard;
+                } else {
+                    matsOk = matsOk && haveDup;
+                }
+                if (matsOk) {
+                    p.sendMessage(P + "§a保底必出上限档 · 材料齐 · 预览直办（不改保底规则）");
+                    try { p.sendActionBar("§a洗练保底 · 直办上限档"); } catch (Throwable ignored) { }
+                    return reroll(p, d, slot, dup, lock, true);
+                }
+                p.sendMessage(P + "§e保底已就绪 · 材料不够仍需补齐后再洗");
+            }
             List<String[]> btn = new ArrayList<String[]>();
             btn.add(new String[]{"[确认洗练]", "/corerpg p1 reroll " + slot + " " + mode + " confirm", "扣上面的花费，" + (lock ? "锁定「" + cur.name + "」重抽档位" : "抽一次" + name + "的词条"), "GREEN"});
             if (!lock && cur != null && cur.rollable && lockShard > 0 && Math.min(EmberAffix.decodeTier(affixOf(d, t)), cap) < cap)
