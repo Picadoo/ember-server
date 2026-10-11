@@ -626,9 +626,9 @@ public final class EmberRunMaps {
      * existing reward types only (余烬碎片 / 余烬核心) at settlement.
      */
     public static final class Variety {
-        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11 + D12216 Pack 12 + D12217 Pack 13. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
+        /** D138 + D171 Pack 2 + D181 Pack 3 + D189 Pack 4 + D196 Pack 5 + D12207 Pack 6 + D12211 Pack 7 + D12212 Pack 8 + D12213 Pack 9 + D12214 Pack 10 + D12215 Pack 11 + D12216 Pack 12 + D12217 Pack 13 + D12218 Pack 14. reflect/vortex/orbiter intentionally absent. Events: D138/D171/D179 + D191 Pack 4. */
         public static final List<String> KNOWN = Collections.unmodifiableList(java.util.Arrays.asList(
-                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova"));
+                "blazing", "split", "shield", "regen", "charge", "frost", "mortar", "molten", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova", "shear", "brace"));
         public static final List<String> EVENTS = Collections.unmodifiableList(java.util.Arrays.asList(
                 "timed", "crystal", "escort", "hold", "beacon", "relay", "breach", "chain", "unscathed"));
         public final double affixRate, eventRate;
@@ -682,6 +682,9 @@ public final class EmberRunMaps {
         // D12217 lance (枪刺: thin forward strip locked at warn) / nova (新星: thin ring annulus)
         public final double lanceEvery, lanceWarn, lanceLength, lanceWidth, lanceDmg;
         public final double novaEvery, novaWarn, novaRadius, novaHalfW, novaDmg;
+        // D12218 shear (剪切: dual parallel strips) / brace (夹击: elite+player dual circles)
+        public final double shearEvery, shearWarn, shearLength, shearWidth, shearGap, shearDmg;
+        public final double braceEvery, braceWarn, braceRadius, braceDmg;
         // D171 crystal / escort / timed
         public final int crystalCount, crystalSecs, timedSecs;
         public final double escortHp;
@@ -899,6 +902,18 @@ public final class EmberRunMaps {
             novaRadius = Math.max(1.0, Math.min(3.5, num(nv.get("radius"), 3.5))); // ≤ 3.5
             novaHalfW = Math.max(0.3, Math.min(0.7, num(nv.get("half_w"), 0.7)));  // band ≤ 0.7
             novaDmg = Math.max(0.0, Math.min(0.5, num(nv.get("dmg"), 0.5)));       // ≤ 0.5 atk
+            Map<?, ?> sr = m.get("shear") instanceof Map ? (Map<?, ?>) m.get("shear") : Collections.emptyMap();
+            shearEvery = Math.max(6.5, num(sr.get("every"), 6.5));         // D12218: every ≥ 6.5
+            shearWarn = Math.max(1.4, num(sr.get("warn"), 1.4));
+            shearLength = Math.max(1.0, Math.min(6.0, num(sr.get("length"), 6.0))); // ≤ 6
+            shearWidth = Math.max(0.5, Math.min(1.2, num(sr.get("width"), 1.2)));   // ≤ 1.2
+            shearGap = Math.max(1.0, Math.min(3.0, num(sr.get("gap"), 2.0)));       // 1.0–3.0
+            shearDmg = Math.max(0.0, Math.min(0.55, num(sr.get("dmg"), 0.55)));     // ≤ 0.55 atk
+            Map<?, ?> bc = m.get("brace") instanceof Map ? (Map<?, ?>) m.get("brace") : Collections.emptyMap();
+            braceEvery = Math.max(7.0, num(bc.get("every"), 7.0));         // D12218: every ≥ 7
+            braceWarn = Math.max(1.3, num(bc.get("warn"), 1.3));
+            braceRadius = Math.max(0.5, Math.min(1.6, num(bc.get("radius"), 1.6))); // ≤ 1.6
+            braceDmg = Math.max(0.0, Math.min(0.5, num(bc.get("dmg"), 0.5)));       // ≤ 0.5 atk
             Map<?, ?> tm = m.get("timed") instanceof Map ? (Map<?, ?>) m.get("timed") : Collections.emptyMap();
             timedSecs = Math.max(5, (int) num(tm.get("secs"), eventSecs));
             Map<?, ?> cr = m.get("crystal") instanceof Map ? (Map<?, ?>) m.get("crystal") : Collections.emptyMap();
@@ -965,6 +980,8 @@ public final class EmberRunMaps {
             if ("bloom".equals(id)) return "绽放";
             if ("lance".equals(id)) return "枪刺";
             if ("nova".equals(id)) return "新星";
+            if ("shear".equals(id)) return "剪切";
+            if ("brace".equals(id)) return "夹击";
             return id;
         }
 

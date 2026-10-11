@@ -2305,3 +2305,15 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack13.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack13-d12217-2026-10-11.md` |
 
+
+### 13.126 Affix Pack 14 剪切/夹击（CoreRpg 1.65.736，D12218，2026-10-12）
+
+| 项 | 值 |
+|---|---|
+| 决策 | D12218 |
+| jar | CoreRpg **1.65.736-d12218.local** |
+| balance_version | 100 → **101** |
+| 行为 | 词缀池 28→30：+`shear` 剪切 / `brace` 夹击；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack14-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack14.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack14-d12218-2026-10-12.md` |
