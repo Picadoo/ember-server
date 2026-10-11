@@ -1,7 +1,7 @@
 {
   "generated_by": "CoreRpg/src/test/java/town/sunshine/corerpg/p1/EmberAffixExportTest.java",
   "note": "GENERATED — do not edit. Re-export: cd CoreRpg && mvn -o test -Dtest=EmberAffixExportTest -Daffix.export=write",
-  "balance_version": 89,
+  "balance_version": 90,
   "grace_s": 1.5,
   "affixes": {
     "blazing": {
@@ -139,6 +139,35 @@
       "relink_retry_s": 1.0,
       "shape": { "type": "tether", "width": 1.0, "range": 10.0 },
       "yml": { "dmg": 0.3, "range": 10, "tick": 1.0, "warn": 1.2, "width": 1.0 }
+    },
+    "hail": {
+      "family": "CIRCLE",
+      "label": "雹霰",
+      "engage": 10.0,
+      "reach": 16.0,
+      "first_arm_s": 6.5,
+      "first_hit_s": 7.7,
+      "period_s": 6.2,
+      "warn_s": 1.2,
+      "dmg_atk": 0.7,
+      "hits_per_cast": 1,
+      "pops": 3,
+      "shape": { "type": "circle", "radius": 1.5, "ahead": 0.0 },
+      "yml": { "ahead": 3.0, "count": 3, "dmg": 0.7, "every": 5.0, "radius": 1.5, "spread": 2.0, "warn": 1.2 }
+    },
+    "tether": {
+      "family": "CIRCLE",
+      "label": "牵丝",
+      "first_arm_s": 8.5,
+      "first_hit_s": 9.7,
+      "period_s": 8.2,
+      "warn_s": 1.2,
+      "dmg_atk": 0.4,
+      "hits_per_cast": 1,
+      "root_s": 0.8,
+      "pull": 0.8,
+      "shape": { "type": "circle", "radius": 1.8, "ahead": 0.0 },
+      "yml": { "dmg": 0.4, "every": 7.0, "pull": 0.8, "radius": 1.8, "root": 0.8, "warn": 1.2 }
     }
   }
 }

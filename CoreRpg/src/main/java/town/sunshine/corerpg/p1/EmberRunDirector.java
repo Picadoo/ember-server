@@ -21,7 +21,9 @@ import town.sunshine.corerpg.p1.encounter.AffixCharge;
 import town.sunshine.corerpg.p1.encounter.AffixCycle;
 import town.sunshine.corerpg.p1.encounter.AffixFirechain;
 import town.sunshine.corerpg.p1.encounter.AffixFrost;
+import town.sunshine.corerpg.p1.encounter.AffixHail;
 import town.sunshine.corerpg.p1.encounter.AffixJailer;
+import town.sunshine.corerpg.p1.encounter.AffixTether;
 import town.sunshine.corerpg.p1.encounter.AffixMolten;
 import town.sunshine.corerpg.p1.encounter.AffixMortar;
 import town.sunshine.corerpg.p1.encounter.AffixRegen;
@@ -70,7 +72,7 @@ final class EmberRunDirector {
         long castAt;
         Vector castDir;
         Location castOrigin;
-        String affix;               // D138/D171/D181/D189/D196: blazing/split/shield/regen/charge/frost/mortar/molten/venom/jailer/arcane/firechain (null = plain)
+        String affix;               // D138..D196/D12207: blazing..firechain/hail/tether (null = plain)
         boolean splitAdd;           // D141: spawned by a split elite (counts as the affixed elite for 破缀 / 守缀 / 破甲)
         boolean varietyEscort;      // D171: escort rabbit — must not pay treasure coin; excluded from room-clear count
         long affixNext, affixAt;
@@ -89,6 +91,9 @@ final class EmberRunDirector {
         Tracked chainTo;
         long chainLiveAt;
         Map<UUID, Long> chainBurnAt = new HashMap<UUID, Long>();
+        // D12207 雹霰: multi-circle origins + once-per-cast hit set
+        Location[] hailOrigins;
+        java.util.Set<UUID> hailHit = new java.util.HashSet<UUID>();
         EmberRunMaps.Skill twist;   // D182 Extra.ELITE light move (null = plain stump)
         EmberRunMaps.Skill twistAlt; // D185 Pack 2 second light move (null = Pack 1 only)
         boolean twistUseAlt;         // D185: true → fire twistAlt next
@@ -2551,6 +2556,112 @@ final class EmberRunDirector {
                 if (dmg > 0) svc.skillHit(s, p, t.le, dmg, "mob");
             }
         }
+        if ("hail".equals(t.affix)) {
+            // D12207 雹霰: cone of small circles ahead of the elite; each player hit at most once per cast
+            if (AffixCycle.armed(t.affixAt)) {
+                Location[] origins = t.hailOrigins;
+                if (origins != null) {
+                    Particle hailFx = EmberAffixTelegraph.warnParticle(t.affix);
+                    for (Location o : origins) {
+                        if (o == null) continue;
+                        warnCircle(o.clone().add(0, 0.15, 0), v.hailRadius, hailFx);
+                        warnCircle(o.clone().add(0, 0.15, 0), v.hailRadius * 0.55, Particle.WATER_SPLASH);
+                    }
+                }
+                if (AffixCycle.lands(now, t.affixAt)) {
+                    EmberRunMaps.Skill sk = hailSkill(t, v);
+                    int hit = 0;
+                    if (origins != null) {
+                        for (Location o : origins) {
+                            if (o == null) continue;
+                            w.spawnParticle(Particle.SNOWBALL, o.clone().add(0, 0.4, 0), 10, v.hailRadius * 0.4, 0.2, v.hailRadius * 0.4, 0.0);
+                            w.spawnParticle(Particle.CRIT, o.clone().add(0, 0.3, 0), 8, 0.2, 0.1, 0.2, 0.01);
+                            for (Player p : participantsHere()) {
+                                if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                                if (t.hailHit.contains(p.getUniqueId())) continue;
+                                if (!inShape(sk, o, new Vector(1, 0, 0), p.getLocation())) continue;
+                                t.hailHit.add(p.getUniqueId());
+                                if (sk.dmg > 0) svc.skillHit(s, p, t.le, sk.dmg, "mob");
+                                hit++;
+                            }
+                        }
+                    }
+                    w.playSound(t.le.getLocation(), Sound.BLOCK_GLASS_BREAK, 0.55f, 1.35f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s hail pops=%d hit=%d",
+                            s.runId, origins == null ? 0 : origins.length, hit));
+                    t.hailOrigins = null;
+                    t.hailHit.clear();
+                    t.affixAt = 0;
+                    t.affixNext = AffixCycle.after(now, v.hailEvery);
+                }
+                return;
+            }
+            if (!AffixCycle.ready(now, t.affixNext)) return;
+            Player tgt = nearest(t.le.getLocation(), AffixHail.ENGAGE);
+            if (tgt == null) return;
+            Location el = t.le.getLocation().clone();
+            el.setY(Math.floor(el.getY()));
+            t.hailOrigins = AffixHail.origins(el, tgt.getLocation(), v);
+            t.hailHit.clear();
+            t.affixOrigin = t.hailOrigins.length > 0 ? t.hailOrigins[0] : el;
+            t.affixAt = AffixCycle.after(now, v.hailWarn);
+            w.playSound(el, Sound.BLOCK_NOTE_PLING, 0.45f, 1.6f);
+            return;
+        }
+        if ("tether".equals(t.affix)) {
+            // D12207 牵丝: soft root telegraph at a random in-range player (Vortex-lite / jailer-clone)
+            if (AffixCycle.armed(t.affixAt)) {
+                Particle tetherFx = EmberAffixTelegraph.warnParticle(t.affix);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.tetherRadius, tetherFx);
+                warnCircle(t.affixOrigin.clone().add(0, 0.15, 0), v.tetherRadius * 0.5, Particle.SPELL_WITCH);
+                if (AffixCycle.lands(now, t.affixAt)) {
+                    EmberRunMaps.Skill sk = tetherSkill(t, v);
+                    int ticks = tetherRootTicks(v);
+                    int rooted = 0;
+                    for (Player p : participantsHere()) {
+                        if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                        if (!inShape(sk, t.affixOrigin, new Vector(1, 0, 0), p.getLocation())) continue;
+                        if (sk.dmg > 0) svc.skillHit(s, p, t.le, sk.dmg, "mob");
+                        // soft pull toward circle centre (no hard vacuum)
+                        if (v.tetherPull > 0 && !p.isDead()) {
+                            Vector pull = t.affixOrigin.toVector().subtract(p.getLocation().toVector());
+                            pull.setY(0);
+                            if (pull.lengthSquared() > 1e-4) {
+                                pull.normalize().multiply(Math.min(v.tetherPull, 1.2));
+                                p.setVelocity(p.getVelocity().add(pull));
+                            }
+                        }
+                        if (ticks > 0 && !p.isDead()) {
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, ticks, 6, false, true), true);
+                            p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, ticks, 128, false, false), true);
+                            p.sendMessage("§5「牵丝」§7你被轻拉定身 " + fmt(v.tetherRoot) + " 秒");
+                            rooted++;
+                        }
+                    }
+                    w.playSound(t.affixOrigin, Sound.ENTITY_ENDERMEN_TELEPORT, 0.45f, 1.5f);
+                    svc.log().info(String.format(Locale.ROOT, "[P1 run] %s tether rooted=%d", s.runId, rooted));
+                    t.affixAt = 0;
+                    t.affixNext = AffixCycle.after(now, v.tetherEvery);
+                }
+                return;
+            }
+            if (!AffixCycle.ready(now, t.affixNext)) return;
+            // random in-range participant (Vortex-lite picks a player in range, not always nearest)
+            java.util.List<Player> cand = new java.util.ArrayList<Player>();
+            Location el = t.le.getLocation();
+            double r2 = AffixTether.REACH * AffixTether.REACH;
+            for (Player p : participantsHere()) {
+                if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+                if (p.getLocation().distanceSquared(el) <= r2) cand.add(p);
+            }
+            if (cand.isEmpty()) return;
+            Player pick = cand.get((int) (Math.floorMod(System.nanoTime(), cand.size())));
+            Location feet = pick.getLocation().clone();
+            feet.setY(pick.isOnGround() ? feet.getY() : Math.floor(feet.getY()));
+            t.affixOrigin = feet;
+            t.affixAt = AffixCycle.after(now, v.tetherWarn);
+            return;
+        }
     }
 
     /** D196 旋光: beam angle (rad) {@code elapsed} s into the spin; stops at the end of the sweep. */
@@ -2637,7 +2748,16 @@ final class EmberRunDirector {
     static EmberRunMaps.Skill jailerSkill(Tracked t, EmberRunMaps.Variety v) { return AffixJailer.skill(t.atk, v); }
 
     /** D189: root length in ticks (config clamps to ≤ 1.5 s). D241: {@link AffixJailer#rootTicks}. */
-    static int jailerRootTicks(EmberRunMaps.Variety v) { return AffixJailer.rootTicks(v); }
+        static int jailerRootTicks(EmberRunMaps.Variety v) { return AffixJailer.rootTicks(v); }
+
+    /** D12207 雹霰 circle skill. */
+    static EmberRunMaps.Skill hailSkill(Tracked t, EmberRunMaps.Variety v) { return AffixHail.skill(t.atk, v); }
+
+    /** D12207 牵丝 circle skill. */
+    static EmberRunMaps.Skill tetherSkill(Tracked t, EmberRunMaps.Variety v) { return AffixTether.skill(t.atk, v); }
+
+    /** D12207 牵丝 root ticks. */
+    static int tetherRootTicks(EmberRunMaps.Variety v) { return AffixTether.rootTicks(v); }
 
     /** D138 炽热 circle. D241: {@link AffixBlazing#skill}. */
     static EmberRunMaps.Skill blazeSkill(Tracked t, EmberRunMaps.Variety v) { return AffixBlazing.skill(t.atk, v); }

@@ -161,6 +161,17 @@ public final class EmberAffixExportTest {
                 Map<String, Object> sh = new LinkedHashMap<String, Object>();
                 sh.put("type", "tether"); sh.put("width", v.chainLinkWidth); sh.put("range", v.chainLinkRange);
                 o.put("shape", sh);
+            } else if ("hail".equals(id)) {
+                EmberRunMaps.Skill k = AffixHail.skill(1.0, v);
+                o.put("engage", AffixHail.ENGAGE); o.put("reach", AffixHail.REACH);
+                periodic(o, b, v, k.warn, v.hailEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1); o.put("pops", v.hailCount);
+                o.put("shape", shape(k));
+            } else if ("tether".equals(id)) {
+                EmberRunMaps.Skill k = AffixTether.skill(1.0, v);
+                periodic(o, b, v, k.warn, v.tetherEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
+                o.put("root_s", AffixTether.rootTicks(v) / 20.0); o.put("pull", v.tetherPull); o.put("shape", shape(k));
             }
             Object raw = yml.get(id);
             Map<String, Object> in = new TreeMap<String, Object>();
@@ -229,7 +240,7 @@ public final class EmberAffixExportTest {
         Map<?, ?> yml = liveVariety();
         EmberRunMaps.Variety v = new EmberRunMaps.Variety(yml);
         Map<?, ?> aff = (Map<?, ?>) table(yml, balanceVersion()).get("affixes");
-        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain"}) {
+        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether"}) {
             List<String> log = AffixReplay.run(new PrimitiveAffixPath(), id, AffixReplay.Script.of(1L), v);
             String promote = null;
             for (String l : log) if (l.contains("PROMOTE")) { promote = l; break; }

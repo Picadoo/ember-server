@@ -63,12 +63,20 @@ def _java_const(src, name):
 
 
 def _java_cost(src, fn, arg):
-    """new Cost(shards, cores, blanks, bone, coins) inside `fn` for `if (tier == arg)`."""
+    """new Cost(shards, cores, blanks, bone, coins) inside `fn` for `if (tier == arg)`.
+    D977+: upgradeCost/refineCost pull from EmberEconomy — fall back to rules.amount C04/C05."""
     body = src[src.index(fn):]
     body = body[:body.index('\n    }')]
     m = re.search(r'==\s*' + str(arg) + r'\)\s*return new Cost\(([^)]*)\)', body)
-    v = [int(x) for x in m.group(1).split(',')]
-    return dict(shard=v[0], core=v[1], blank=v[2], bone=v[3], coin=v[4])
+    if m is not None:
+        v = [int(x) for x in m.group(1).split(',')]
+        return dict(shard=v[0], core=v[1], blank=v[2], bone=v[3], coin=v[4])
+    # D977 economy SoT (upgradeCost tier 1/2 → C04 t{n}.*)
+    if fn == 'upgradeCost' and arg in (1, 2):
+        k = 't%d.' % arg
+        return dict(shard=rules.amount('C04', k + 'shard'), core=rules.amount('C04', k + 'core'),
+                    blank=rules.amount('C04', k + 'blank'), bone=0, coin=rules.amount('C04', k + 'coin'))
+    raise ValueError('cost %s(%s) not found' % (fn, arg))
 
 
 def _table_tail(src):
