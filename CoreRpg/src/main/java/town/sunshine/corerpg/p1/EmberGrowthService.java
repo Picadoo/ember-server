@@ -2059,6 +2059,10 @@ public final class EmberGrowthService implements Listener {
             p.sendMessage(P + "§7花费预览：§f" + ((dup ? "重复件" : (shard + " 碎片")) + (lock ? " +锁" + lockShard + "碎" : "") + " + " + coin + " 币"));
             p.sendMessage(P + "档位概率：" + oddsText(cap));
             p.sendMessage(P + (lock ? "§a锁定词条：§f" + cur.name + " §7不变，只重抽档位" : "词条：本部位 " + reroll.pool(slot).size() + " 个里随机（保底只保档位，不保词条）"));
+            if (affixOf(d, t) == 0) {
+                p.sendMessage(P + "§a空槽首洗 · 档位软底 ≥§f" + EmberFirstAffixFloor.FLOOR + "§a（受成色上限截断）");
+                try { p.sendActionBar("§a首洗 · 档位软底"); } catch (Throwable ignored) { }
+            }
             if (lock && EmberLockNearCap.wouldForce(affixOf(d, t), t.quality, reroll, true)) {
                 p.sendMessage(P + "§a临上限锁洗 · 本次必出上限档（零改 pity 表）");
                 try { p.sendActionBar("§a锁洗 · 临上限必出"); } catch (Throwable ignored) { }
@@ -2140,6 +2144,7 @@ public final class EmberGrowthService implements Listener {
         EmberAffix.Roll r = EmberAffix.roll(reroll, t.slot, t.quality, pity, new java.util.Random(EmberPayRules.seed(salt(), id.toString(), rid)), lockId);
         if (r == null) return null;
         r = EmberLockNearCap.apply(r, old, t.quality, reroll, lock); // D6689
+        r = EmberFirstAffixFloor.apply(r, old, t.quality, reroll); // D6945
         int enc = EmberAffix.encode(reroll.def(r.id), r.tier);
         return new RollPlan(next(d, t, old == 0 ? enc : old, r.pityAfter, sigOf(d, t), n), r, enc, old, pity, lockId != null);
     }

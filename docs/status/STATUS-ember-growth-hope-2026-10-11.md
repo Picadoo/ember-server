@@ -1,3 +1,6 @@
+Live jar: **1.65.640-d7008.local** · D6945–D7008 FirstAffixFloor + StepSlashArm
+Prior: ChargeMiss/DropCraft/DashStep/LockNear/ParryMiss
+
 Live jar: **1.65.639-d6944.local** · D6881–D6944 ChargeMissRest
 Prior: DropCraftPity · DashStep · LockNear+ParryMiss
 

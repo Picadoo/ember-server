@@ -349,6 +349,7 @@ public final class FlexSkillService implements Listener {
         int variant = stepVariantOf(player);
         spawnStepVariantTrail(from, best, variant, def.particles);
         player.teleport(best);
+        try { town.sunshine.corerpg.p1.EmberStepSlashArm.arm(player.getUniqueId()); } catch (Throwable ignored) { } // D6977
         if (link > 0) {
             try {
                 player.sendMessage(PREFIX + "§a突→步连携 · 踏步 +" + String.format(java.util.Locale.ROOT, "%.2f", link) + " 格");

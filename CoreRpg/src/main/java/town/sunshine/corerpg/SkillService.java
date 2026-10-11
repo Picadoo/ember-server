@@ -615,13 +615,16 @@ public final class SkillService implements Listener {
         town.sunshine.corerpg.p1.EmberSkillKit.Shape sh = town.sunshine.corerpg.p1.EmberSkillKit.resolve(
                 player, dataStore.get(player.getUniqueId()), plugin.getEmberRuns(), mode, gmods);
         int cd = Math.max(0, mode.i("skill.cooldown_seconds", 8));
-        final double fRange = sh.range, fArc = sh.arc, fLine = sh.line;
+        double stepSlash = town.sunshine.corerpg.p1.EmberStepSlashArm.isArmed(player.getUniqueId())
+                ? town.sunshine.corerpg.p1.EmberStepSlashArm.BONUS : 0.0; // D6977
+        final double fRange = sh.range + stepSlash, fArc = sh.arc, fLine = sh.line;
         final double fLineW = sh.lineWidth > 0 ? sh.lineWidth : 1.0;
         final int fMax = sh.maxTargets;
         if (slashTargets(player, fRange, fArc, fLine, fLineW).isEmpty()) {
             player.sendMessage(PREFIX + ChatColor.YELLOW + "附近没有目标");
             return;
         }
+        final double stepSlashUsed = town.sunshine.corerpg.p1.EmberStepSlashArm.consume(player.getUniqueId());
         // D174 stage 3 L13 炉锁巨锤 (p1sim skill_variant skill_charge): wind-up — the CD starts now, the hit lands after
         // skill_charge seconds on whoever is in the shape then; no melee meanwhile (EmberCombatListener.onMelee cancels)
         double charge = variant ? gmods.get("skill_charge") : 0.0;
@@ -697,6 +700,12 @@ public final class SkillService implements Listener {
         String slashId = slashSetTip(player);
         player.sendMessage(PREFIX + ChatColor.GREEN + tip
                 + (slashId != null ? ChatColor.GRAY + slashId : ""));
+        if (stepSlashUsed > 0) {
+            try {
+                player.sendMessage(PREFIX + "§a步→斩连携 · 射程 +" + String.format(java.util.Locale.ROOT, "%.2f", stepSlashUsed));
+                player.sendActionBar("§a步→斩连携 · +" + String.format(java.util.Locale.ROOT, "%.2f", stepSlashUsed));
+            } catch (Throwable ignored) { }
+        }
         // D621: shape feel telegraph (geometry only · zero skill_mult)
         String geo;
         if (sh.id == town.sunshine.corerpg.p1.EmberSkillKit.SHAPE_LINE)
