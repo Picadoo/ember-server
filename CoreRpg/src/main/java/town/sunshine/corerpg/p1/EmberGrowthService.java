@@ -257,7 +257,7 @@ public final class EmberGrowthService implements Listener {
             dodgeUntil.put(p.getUniqueId(), now + (long) (secs * 1000));
             p.sendActionBar(ChatColor.GOLD + "躲开了！" + String.format(Locale.ROOT, "%.0f", secs) + " 秒内伤害 +" + pct(m.get("dodge_dmg") - 1));
         }
-        int db = (int) Math.round(m.get("dodge_burst"));
+        int db = EmberSkillKit.sigBurstPrime((int) Math.round(m.get("dodge_burst")), shapeSyncedFor(p));
         if (db > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, db)) {
             if (!flashSigOwned(p, "dodge_burst", "借势 · 烬爆 +" + db))
                 p.sendActionBar(ChatColor.GOLD + "借势！烬爆计数 +" + db);
@@ -282,7 +282,7 @@ public final class EmberGrowthService implements Listener {
     /** A boss telegraph hit this player (反震: the 烬爆 counter moves forward). */
     public void onTeleHit(Player p) {
         EmberGrowth.Mods m = mods(p);
-        int hb = (int) Math.round(m.get("hit_burst"));
+        int hb = EmberSkillKit.sigBurstPrime((int) Math.round(m.get("hit_burst")), shapeSyncedFor(p));
         if (hb > 0 && plugin.getEmberSets() != null && plugin.getEmberSets().primeBurst(p, hb)) {
             if (!flashSigOwned(p, "hit_burst", "反震 · 烬爆 +" + hb))
                 p.sendActionBar(ChatColor.GOLD + "反震！烬爆计数 +" + hb);
@@ -307,8 +307,9 @@ public final class EmberGrowthService implements Listener {
         int sustainEvery = (int) Math.round(m.get("sustain_every"));
         // D2395: if signature already shortens 炽愈, synced shaves one more hit (floor −2 total delta)
         sustainEvery = EmberSkillKit.sigSustainEvery(sustainEvery, sync);
+        int burnTicks = EmberSkillKit.sigBurnTicksExtra((int) Math.round(m.get("burn_ticks")), sync);
         return new EmberSetEngine.Tune((int) Math.round(m.get("burst_every")), sustainEvery,
-                m.get("burn_mult"), m.get("burst_mult"), m.get("sustain_mult"), (int) Math.round(m.get("burn_ticks")), m.get("burn_spread"), spreadIcd,
+                m.get("burn_mult"), m.get("burst_mult"), m.get("sustain_mult"), burnTicks, m.get("burn_spread"), spreadIcd,
                 sustainLow, (int) Math.round(m.get("sustain_low_every"))); // D174 L12 + D2379/D2382 sync
     }
 

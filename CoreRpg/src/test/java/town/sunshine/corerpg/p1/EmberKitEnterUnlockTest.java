@@ -95,4 +95,12 @@ public class EmberKitEnterUnlockTest {
         assertEquals(-2, EmberSkillKit.sigSustainEvery(-1, true));
         assertEquals(0, EmberSkillKit.sigSustainEvery(0, true));
     }
+
+    @Test
+    public void burnTicksAndBurstPrimeSync() {
+        assertEquals(2, EmberSkillKit.sigBurnTicksExtra(1, true));
+        assertEquals(0, EmberSkillKit.sigBurnTicksExtra(0, true));
+        assertEquals(2, EmberSkillKit.sigBurstPrime(1, true));
+        assertEquals(0, EmberSkillKit.sigBurstPrime(0, true));
+    }
 }

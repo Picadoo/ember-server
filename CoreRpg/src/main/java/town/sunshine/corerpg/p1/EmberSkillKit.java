@@ -309,6 +309,18 @@ public final class EmberSkillKit {
         return Math.max(-2, baseDelta - 1);
     }
 
+    /** D2406: extra burn ticks when signature already adds ticks and synced. */
+    public static int sigBurnTicksExtra(int baseExtra, boolean setShapeSync) {
+        if (!setShapeSync || baseExtra <= 0) return baseExtra;
+        return baseExtra + 1;
+    }
+
+    /** D2407: hit/dodge burst prime count when signature already primes and synced. */
+    public static int sigBurstPrime(int baseN, boolean setShapeSync) {
+        if (!setShapeSync || baseN <= 0) return baseN;
+        return baseN + 1;
+    }
+
     public static boolean stepVariantUnlocked(PlayerData d, EmberRunService runs) {
         if (d == null) return false;
         if (d.periodCount(C_STEP_ENTER, "all") > 0) return true;
