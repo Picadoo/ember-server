@@ -2317,3 +2317,16 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 设计 | `docs/design/DESIGN-ember-affix-pack14-2026-10-12.md` |
 | 门禁 | `tools/p1sim/affixpack14.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack14-d12218-2026-10-12.md` |
+
+### 13.127 Affix Pack 15 钩落/斜切（CoreRpg 1.65.737，D12219，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12219 |
+| jar | CoreRpg **1.65.737-d12219.local** |
+| balance_version | 101 → **102** |
+| 行为 | 词缀池 30→32：+`hook` 钩落 / `skew` 斜切；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack15-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack15.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack15-d12219-2026-10-12.md` |
+
