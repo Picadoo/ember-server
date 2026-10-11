@@ -2330,3 +2330,17 @@ P1 局世界（`dungeon_EmberQ0*`，已加入 `scope.world_prefixes`）里：怪
 | 门禁 | `tools/p1sim/affixpack15.py` |
 | STATUS | `docs/status/STATUS-ember-affix-pack15-d12219-2026-10-12.md` |
 
+
+
+### 13.128 Affix Pack 16 扇刃/沉渊（CoreRpg 1.65.738，D12220，2026-10-12）
+
+| 项 | 值 |
+|----|----|
+| 决策 | D12220 |
+| jar | CoreRpg **1.65.738-d12220.local** |
+| balance_version | 102 → **103** |
+| 行为 | 词缀池 32→34：+`fan` 扇刃 / `sink` 沉渊；affix_shard 仍 2 |
+| 设计 | `docs/design/DESIGN-ember-affix-pack16-2026-10-12.md` |
+| 门禁 | `tools/p1sim/affixpack16.py` |
+| STATUS | `docs/status/STATUS-ember-affix-pack16-d12220-2026-10-12.md` |
+

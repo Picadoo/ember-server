@@ -283,6 +283,18 @@ public final class EmberAffixExportTest {
                 periodic(o, b, v, k.warn, v.skewEvery);
                 o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1); o.put("strips", 2);
                 o.put("shape", shape(k));
+            } else if ("fan".equals(id)) {
+                EmberRunMaps.Skill k = AffixFan.skill(1.0, v);
+                o.put("engage", AffixFan.ENGAGE); o.put("reach", AffixFan.REACH);
+                periodic(o, b, v, k.warn, v.fanEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1); o.put("strips", 3);
+                o.put("shape", shape(k));
+            } else if ("sink".equals(id)) {
+                EmberRunMaps.Skill k = AffixSink.skill(1.0, v);
+                o.put("engage", AffixSink.ENGAGE); o.put("reach", AffixSink.REACH);
+                periodic(o, b, v, k.warn, v.sinkEvery);
+                o.put("warn_s", k.warn); o.put("dmg_atk", k.dmg); o.put("hits_per_cast", 1);
+                o.put("shape", shape(k));
             }
             Object raw = yml.get(id);
             Map<String, Object> in = new TreeMap<String, Object>();
@@ -351,7 +363,7 @@ public final class EmberAffixExportTest {
         Map<?, ?> yml = liveVariety();
         EmberRunMaps.Variety v = new EmberRunMaps.Variety(yml);
         Map<?, ?> aff = (Map<?, ?>) table(yml, balanceVersion()).get("affixes");
-        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova", "shear", "brace", "hook", "skew"}) {
+        for (String id : new String[]{"blazing", "regen", "charge", "mortar", "venom", "jailer", "arcane", "firechain", "hail", "tether", "pulse", "mines", "spore", "flank", "pierce", "scatter", "rift", "cascade", "cleave", "ripple", "mirror", "bloom", "lance", "nova", "shear", "brace", "hook", "skew", "fan", "sink"}) {
             List<String> log = AffixReplay.run(new PrimitiveAffixPath(), id, AffixReplay.Script.of(1L), v);
             String promote = null;
             for (String l : log) if (l.contains("PROMOTE")) { promote = l; break; }
