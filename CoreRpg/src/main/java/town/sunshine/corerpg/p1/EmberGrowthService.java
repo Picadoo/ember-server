@@ -2038,6 +2038,17 @@ public final class EmberGrowthService implements Listener {
         String why = EmberAffix.eligible(t);
         if (why != null) { p.sendMessage(P + "§c" + why); return true; }
         int coin = rerollCoin(p, t), shard = reroll.shardFor(t.tier);
+        try {
+            int softC = EmberRerollCoinSoft.apply(d, coin, confirm); // D9745
+            if (softC < coin) {
+                coin = softC;
+                if (confirm) {
+                    p.sendMessage(P + "§a洗练减负 · 币 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a洗练减负"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final int coinPay = coin;
         int di = dup ? findDup(p, d, t) : -1;
         EmberStorageRules.Entry libDup = (dup && di < 0) ? findLibDup(p, d, t) : null;
         boolean haveDup = di >= 0 || libDup != null;
@@ -2064,7 +2075,7 @@ public final class EmberGrowthService implements Listener {
                 if (pity >= reroll.pity) p.sendActionBar("§a这次必出上限档 · 确认即洗");
                 else p.sendActionBar("§e洗练 · §f" + rem);
             } catch (Throwable ignored) { }
-            p.sendMessage(P + "§7花费预览：§f" + ((dup ? "重复件" : (shard + " 碎片")) + (lock ? " +锁" + lockShard + "碎" : "") + " + " + coin + " 币"));
+            p.sendMessage(P + "§7花费预览：§f" + ((dup ? "重复件" : (shard + " 碎片")) + (lock ? " +锁" + lockShard + "碎" : "") + " + " + coinPay + " 币"));
             p.sendMessage(P + "档位概率：" + oddsText(cap));
             p.sendMessage(P + (lock ? "§a锁定词条：§f" + cur.name + " §7不变，只重抽档位" : "词条：本部位 " + reroll.pool(slot).size() + " 个里随机（保底只保档位，不保词条）"));
             if (affixOf(d, t) == 0) {
@@ -2078,15 +2089,15 @@ public final class EmberGrowthService implements Listener {
             String dupWhere = !dup ? "" : di >= 0 ? " §a（背包）" : libDup != null ? " §a（装备库）"
                     : " §c（背包或装备库里没有：要掉落来的、没强化 / 成色 / 精工 / 词条、未锁定/收藏的 T" + t.tier + name + "）§7";
             String pay = (dup ? "一件同部位同阶的重复件" + dupWhere
-                    : shard + " 余烬碎片") + (lock ? " + 锁定 " + lockShard + " 碎片" : "") + " + " + coin + " 余烬币";
+                    : shard + " 余烬碎片") + (lock ? " + 锁定 " + lockShard + " 碎片" : "") + " + " + coinPay + " 余烬币";
             p.sendMessage(P + "花费：" + pay);
-            if (dup && !haveDup) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coin + " 币"); return true; }
+            if (dup && !haveDup) { p.sendMessage(P + "§7没有重复件时可以改用碎片：" + (shard + (lock ? lockShard : 0)) + " 碎片 + " + coinPay + " 币"); return true; }
             // D4833/D4929: pity-forced cap preview-do (zero pity math / pool / STAMP). Not forge ConfirmTokens densify.
             if (EmberRerollSure.forced(pity, reroll.pity)) {
                 if (gate(p)) return true; // town first — avoid 直办 then fail
                 if (!EmberRerollSure.brandOk(d, t, this)) {
                     p.sendMessage(P + "§e保底已就绪 · 锻造次数已用完，换底子后再洗");
-                } else if (EmberRerollSure.matsOk(p, d, dup, haveDup, needShard, coin, plugin)) {
+                } else if (EmberRerollSure.matsOk(p, d, dup, haveDup, needShard, coinPay, plugin)) {
                     p.sendMessage(P + "§a保底必出上限档 · 材料齐 · 预览直办（不改保底规则）");
                     try { p.sendActionBar("§a洗练保底 · 直办上限档"); } catch (Throwable ignored) { }
                     return reroll(p, d, slot, dup, lock, true);
@@ -2117,7 +2128,7 @@ public final class EmberGrowthService implements Listener {
         final EmberItemData dupData = !dup ? null : di >= 0 ? runs.loadouts().items().read(p.getInventory().getItem(di)).data : libDup.d;
         final int dupIndex = di;
         final String lockPaid = lock ? " + 锁定 " + lockShard + " 碎片" : "";
-        final String paid = coin + " 币 + " + (dup ? "重复件" : shard + " 碎片") + lockPaid;
+        final String paid = coinPay + " 币 + " + (dup ? "重复件" : shard + " 碎片") + lockPaid;
         // D208 (ARCH S1-4 · REG §4-4): the durable payment path of D172, with the roll INSIDE the settling transaction.
         // Refund hold → coins / shards taken in one save → ONE item transaction (the target's new affix / pity / reroll
         // sequence on cr_p1_item + the ledger row + the void of the hold, plus the duplicate's retire when one is eaten)
@@ -2128,7 +2139,7 @@ public final class EmberGrowthService implements Listener {
         final RollPlan plan = plan(d, t, id, rid, lock, n);
         if (plan == null) { rerollBusy.remove(id); p.sendMessage(P + "§c这个部位没有词条池"); return true; }
         pendingRoll.remove(id); // an older 保留新 / 保留旧 choice is void once a new roll is paid
-        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(needShard, 0, 0, 0, coin)).at(EmberEconomy.sinkForForge("reroll")); // D218 C11
+        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(needShard, 0, 0, 0, coinPay)).at(EmberEconomy.sinkForForge("reroll")); // D218 C11
         pay.pay(p, rid, price, "洗练没完成，退回", null, () -> settleReroll(id, t, rid, dup, dupIndex, dupData, price, paid, plan),
                 err -> { rerollBusy.remove(id); if (p.isOnline()) p.sendMessage(P + "§c没有洗练：" + err); });
         return true;
@@ -2556,13 +2567,24 @@ public final class EmberGrowthService implements Listener {
 
     private boolean brandCraft(Player p, PlayerData d, boolean confirm) {
         int need = EmberBrandRules.craftShards(); // D949
+        try {
+            int soft = EmberBrandCraftSoft.apply(d, need, confirm); // D9697
+            if (soft < need) {
+                need = soft;
+                if (confirm) {
+                    p.sendMessage(P + "§a烙纹合成减负 · 碎片 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a烙纹合成减负"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final int needPay = need;
         if (!confirm) {
             int have = 0;
             try {
                 if (plugin.getNiBridge() != null)
                     have = plugin.getNiBridge().countInInventory(p, EmberUpgradeRules.MAT_SHARD);
             } catch (Throwable ignored) { }
-            int gap = Math.max(0, need - have);
+            int gap = Math.max(0, needPay - have);
             p.sendMessage(P + "§6烙纹合成：§f" + need + " 余烬碎片 §7→ §f1 余烬烙纹 §8· 有 §f" + have
                     + (gap > 0 ? " §c· 还差 " + gap : " §a· 够"));
             try { // D1288
@@ -2570,14 +2592,14 @@ public final class EmberGrowthService implements Listener {
                         : ("§e烙纹合成 · 还差碎 §f" + gap));
             } catch (Throwable ignored) { }
             // D4961: craft sure-do when shards ready (zero craftShards change)
-            if (EmberBrandSure.craftReady(have, need)) {
+            if (EmberBrandSure.craftReady(have, needPay)) {
                 if (gate(p)) return true;
                 p.sendMessage(P + "§a烙纹合成 · 碎片齐 · 预览直办（不改合成比）");
                 try { p.sendActionBar("§a烙纹合成 · 直办"); } catch (Throwable ignored) { }
                 return brandCraft(p, d, true);
             }
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P,
-                    new String[]{"[确认合成]", "/corerpg p1 brand craft confirm", "扣 " + need + " 碎片，得 1 烙纹", "GREEN"},
+                    new String[]{"[确认合成]", "/corerpg p1 brand craft confirm", "扣 " + needPay + " 碎片，得 1 烙纹", "GREEN"},
                     new String[]{"[打开烙纹页]", "/corerpg p1 brand menu", "回菜单", "GRAY"});
             return true;
         }
@@ -2586,7 +2608,7 @@ public final class EmberGrowthService implements Listener {
         if (pay == null) { p.sendMessage(P + "§c支付服务未就绪"); return true; }
         final UUID id = p.getUniqueId();
         final String rid = "brandcraft:" + id + ":" + System.currentTimeMillis();
-        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(need, 0, 0, 0, 0)).at("C20");
+        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(needPay, 0, 0, 0, 0)).at("C20");
         pay.pay(p, rid, price, "烙纹合成没完成，退回碎片", null, () -> {
             boolean ok = plugin.getNiBridge().giveNiItem(p, EmberBrandRules.MAT_BRAND, 1);
             if (!ok) {
@@ -2596,7 +2618,7 @@ public final class EmberGrowthService implements Listener {
             }
             pay.settled(id, rid);
             if (p.isOnline()) {
-                p.sendMessage(P + "§a已合成 §f余烬烙纹 ×1 §7（花费 " + need + " 碎片）");
+                p.sendMessage(P + "§a已合成 §f余烬烙纹 ×1 §7（花费 " + needPay + " 碎片）");
                 PlayerData nd = data(id);
                 if (!EmberBrandSure.maybeAutoPinAfterCraft(p, nd, EmberGrowthService.this)) // D5025
                     EmberBrandLoop.afterCraft(p, nd); // D471 craft→pin loop when no auto
@@ -2622,6 +2644,19 @@ public final class EmberGrowthService implements Listener {
         if (refuse != null) { p.sendMessage(P + "§c" + refuse); return true; }
         int brands = EmberBrandRules.pinBrands(t.tier);
         int coins = EmberBrandRules.pinCoins(t.tier);
+        try {
+            int[] soft = EmberBrandPinCostSoft.apply(d, brands, coins, confirm); // D9729
+            if (soft[0] < brands || soft[1] < coins) {
+                brands = soft[0];
+                coins = soft[1];
+                if (confirm) {
+                    p.sendMessage(P + "§a烙纹定向减负 · 花费 ×0.5（今日一次）");
+                    try { p.sendActionBar("§a烙纹定向减负"); } catch (Throwable ignored) { }
+                }
+            }
+        } catch (Throwable ignored) { }
+        final int brandsPay = brands;
+        final int coinsPay = coins;
         EmberAffix.Def want = reroll.def(affixId);
         int left = EmberBrandRules.chargesLeft(used);
         // D5025: already same type at quality cap — refuse waste (tier cannot rise)
@@ -2641,12 +2676,12 @@ public final class EmberGrowthService implements Listener {
                     haveBrand = plugin.getNiBridge().countInInventory(p, EmberBrandRules.MAT_BRAND);
             } catch (Throwable ignored) { }
             int haveCoin = d.getCoin();
-            int gapBrand = Math.max(0, brands - haveBrand);
-            int gapCoin = Math.max(0, coins - haveCoin);
+            int gapBrand = Math.max(0, brandsPay - haveBrand);
+            int gapCoin = Math.max(0, coinsPay - haveCoin);
             p.sendMessage(P + "§6烙纹定向 · " + t.shortLabel());
             p.sendMessage(P + "现在：" + affixText(affixOf(d, t), t.quality) + " §7· 锻造次数剩余 §f" + left + "/" + EmberBrandRules.MAX_CHARGES);
             p.sendMessage(P + "写入类型：§b" + want.name + " §7（档位仍随机，成色上限截断）");
-            p.sendMessage(P + "花费：§f烙纹 " + haveBrand + "/" + brands + " §7+ §f币 " + haveCoin + "/" + coins
+            p.sendMessage(P + "花费：§f烙纹 " + haveBrand + "/" + brandsPay + " §7+ §f币 " + haveCoin + "/" + coinsPay
                     + (gapBrand + gapCoin > 0 ? (" §c· 还差"
                         + (gapBrand > 0 ? " 烙纹" + gapBrand : "")
                         + (gapCoin > 0 ? " 币" + gapCoin : "")) : " §a· 料够"));
@@ -2656,7 +2691,7 @@ public final class EmberGrowthService implements Listener {
                 else p.sendActionBar("§a定向 · 料够 · 次数余" + left);
             } catch (Throwable ignored) { }
             // D4961: pin sure-do when mats ready (type chosen; tier still rolls). Zero pin price.
-            if (EmberBrandSure.pinReady(haveBrand, brands, haveCoin, coins)) {
+            if (EmberBrandSure.pinReady(haveBrand, brandsPay, haveCoin, coinsPay)) {
                 if (gate(p)) return true;
                 p.sendMessage(P + "§a烙纹定向 · 料齐 · 预览直办（不改价/次数）");
                 try { p.sendActionBar("§a定向 · 直办 · §f" + want.name); } catch (Throwable ignored) { }
@@ -2672,10 +2707,10 @@ public final class EmberGrowthService implements Listener {
         }
         if (gate(p)) return true;
         town.sunshine.corerpg.NiBridge ni = plugin.getNiBridge();
-        if (ni.countInInventory(p, EmberBrandRules.MAT_BRAND) < brands) {
+        if (ni.countInInventory(p, EmberBrandRules.MAT_BRAND) < brandsPay) {
             int hb = ni.countInInventory(p, EmberBrandRules.MAT_BRAND);
-            p.sendMessage(P + "§c烙纹不足（有 " + hb + "/" + brands + "，可先合成）");
-            try { p.sendActionBar("§c定向缺烙纹 · §f" + hb + "/" + brands); } catch (Throwable ignored) { }
+            p.sendMessage(P + "§c烙纹不足（有 " + hb + "/" + brandsPay + "，可先合成）");
+            try { p.sendActionBar("§c定向缺烙纹 · §f" + hb + "/" + brandsPay); } catch (Throwable ignored) { }
             return true;
         }
         final EmberPay pay = EmberPay.get();
@@ -2683,8 +2718,8 @@ public final class EmberGrowthService implements Listener {
         final UUID id = p.getUniqueId();
         final int n = EmberItemKeys.rerollN(d, t) + 1;
         final String rid = "brandpin:" + t.uid + ":" + n + ":" + System.currentTimeMillis();
-        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(0, 0, 0, 0, coins)).at("C21");
-        if (!ni.consumeExact(p, EmberBrandRules.MAT_BRAND, brands)) {
+        final EmberPay.Price price = EmberPay.Price.of(new EmberUpgradeRules.Cost(0, 0, 0, 0, coinsPay)).at("C21");
+        if (!ni.consumeExact(p, EmberBrandRules.MAT_BRAND, brandsPay)) {
             p.sendMessage(P + "§c烙纹扣除失败");
             return true;
         }
@@ -2692,7 +2727,7 @@ public final class EmberGrowthService implements Listener {
             EmberAffix.Roll r = EmberAffix.roll(reroll, t.slot, t.quality, afPityOf(d, t),
                     new java.util.Random(EmberPayRules.seed(salt(), id.toString(), rid)), affixId);
             if (r == null) {
-                ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brands);
+                ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brandsPay);
                 pay.release(id, rid);
                 if (p.isOnline()) p.sendMessage(P + "§c词条池异常，已退回");
                 return;
@@ -2702,7 +2737,7 @@ public final class EmberGrowthService implements Listener {
             commitOnItem(id, "brandpin", rid, java.util.Collections.singletonList(new EmberItemStore.TxnItem(t, after, null)),
                     price.json(), "烙纹定向 " + t.shortLabel() + " → " + r.id + " t" + r.tier, ok -> {
                         if (!ok) {
-                            ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brands);
+                            ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brandsPay);
                             pay.release(id, rid);
                             if (p.isOnline()) p.sendMessage(P + "§c定向未写入，材料与币退回");
                             return;
@@ -2722,7 +2757,7 @@ public final class EmberGrowthService implements Listener {
                         }
                     });
         }, err -> {
-            ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brands);
+            ni.giveNiItem(p, EmberBrandRules.MAT_BRAND, brandsPay);
             if (p.isOnline()) p.sendMessage(P + "§c没有定向：" + err + "（烙纹已退回）");
         });
         return true;

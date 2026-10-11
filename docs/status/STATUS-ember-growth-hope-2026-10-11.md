@@ -1,3 +1,6 @@
+Live jar: **1.65.683-d9760.local** · D9697–D9760 BrandCraftSoft + BrandPinCostSoft + RerollCoinSoft
+Prior: Dismantle/Undo/Death
+
 Live jar: **1.65.682-d9696.local** · D9633–D9696 DismantleYieldBoost + UndoWindowSoft + DeathRefundBoost
 Prior: ForgeCost softs
 
