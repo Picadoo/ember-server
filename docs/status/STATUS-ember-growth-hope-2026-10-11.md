@@ -1,3 +1,6 @@
+Live jar: **1.65.662-d8416.local** · D8353–D8416 PotSipBoost + GemCraftShardRefund + IframeForgive
+Prior: Fall/Split/ChalCore
+
 Live jar: **1.65.661-d8352.local** · D8289–D8352 FallDamageSoft + SplitCountSoft + ChallengeCoreBoost
 Prior: Melee/AbyssBone/ForgeBone
 

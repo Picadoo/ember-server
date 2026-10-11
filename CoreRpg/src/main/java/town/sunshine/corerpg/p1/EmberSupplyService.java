@@ -247,6 +247,15 @@ public final class EmberSupplyService implements Listener {
         if (runs != null) runs.notePotion(p);
         EmberGrowthService growth = EmberGrowthService.get();
         double pct = (mode == null ? 0.20 : mode.d("heal_potion.percent", 0.20)) * (growth == null ? 1.0 : growth.potionMult(p));
+        try {
+            PlayerData pdP = plugin.getDataStore().get(p.getUniqueId());
+            double boosted = EmberPotSipBoost.consumePct(pdP, pct); // D8353
+            if (boosted > pct) {
+                pct = boosted;
+                p.sendMessage(P + "§a首瓶加疗 · 回复 ×1.25（今日一次）");
+                try { p.sendActionBar("§a首瓶加疗"); } catch (Throwable ignored) { }
+            }
+        } catch (Throwable ignored) { }
         EmberHeal.heal(p, pct * EmberHeal.maxHp(p), "D548 自动喝药 " + Math.round(pct * 100) + "%");
         if (bottle) {
             // empty bottle may remain from vanilla consume; programmatic take skips glass — fine for bound NI

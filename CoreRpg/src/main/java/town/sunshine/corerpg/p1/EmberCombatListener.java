@@ -205,9 +205,23 @@ public final class EmberCombatListener implements Listener {
         }
         if (iframeLast.size() > 4096) iframeLast.clear();
         if (dmg <= 0) {
-            e.setCancelled(true);
-            EmberDamageTrace.note(e, raw, "P1 普攻 i-frame 内未超出 → 取消");
-            return;
+            try {
+                PlayerData pdI = plugin.getDataStore().get(p.getUniqueId());
+                double forg = EmberIframeForgive.consume(pdI, full); // D8401
+                if (forg > 0) {
+                    dmg = forg;
+                    EmberDamageTrace.note(e, raw, String.format(Locale.ROOT, "i-frame 容错 → %.2f", forg));
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a无敌帧容错 · 打出 §f35%§a（今日一次）");
+                        p.sendActionBar("§a无敌帧容错");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+            if (dmg <= 0) {
+                e.setCancelled(true);
+                EmberDamageTrace.note(e, raw, "P1 普攻 i-frame 内未超出 → 取消");
+                return;
+            }
         }
         e.setDamage(dmg);
         // D3505/D3553: set-family melee spark fan + sfx (feel only · zero skill_mult)

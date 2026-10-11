@@ -1,5 +1,7 @@
 package town.sunshine.corerpg;
 
+import town.sunshine.corerpg.PlayerData;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -251,7 +253,17 @@ public final class LifeService implements Listener {
             town.sunshine.corerpg.p1.EmberRunService runs = plugin.getEmberRuns(); // D32: count for the death refund
             if (runs != null) runs.notePotion(p);
             town.sunshine.corerpg.p1.EmberGrowthService growth = town.sunshine.corerpg.p1.EmberGrowthService.get(); // D141 talents
-            final double pct = mode.d("heal_potion.percent", 0.20) * (growth == null ? 1.0 : growth.potionMult(p));
+            double pct0 = mode.d("heal_potion.percent", 0.20) * (growth == null ? 1.0 : growth.potionMult(p));
+            try {
+                PlayerData pdP = dataStore.get(p.getUniqueId());
+                double boosted = town.sunshine.corerpg.p1.EmberPotSipBoost.consumePct(pdP, pct0); // D8353
+                if (boosted > pct0) {
+                    pct0 = boosted;
+                    p.sendMessage(ChatColor.GREEN + "[余烬] 首瓶加疗 · 回复 ×1.25（今日一次）");
+                    try { p.sendActionBar("§a首瓶加疗"); } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+            final double pct = pct0;
             plugin.getServer().getScheduler().runTask(plugin, new Runnable() {
                 @Override public void run() {
                     if (!p.isOnline()) return;
