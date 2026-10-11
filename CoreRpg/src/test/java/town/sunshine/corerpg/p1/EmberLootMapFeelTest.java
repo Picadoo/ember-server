@@ -11,4 +11,9 @@ public class EmberLootMapFeelTest {
     @Test public void pitchSpread() {
         assertTrue(EmberLootMapFeel.pitch("q01") < EmberLootMapFeel.pitch("q06"));
     }
+    @Test public void mapLabels() {
+        assertEquals("符文·试炼", EmberLootMapFeel.mapLabel("q04"));
+        assertNotNull(EmberLootMapFeel.mapLabel("q01"));
+    }
 }
+

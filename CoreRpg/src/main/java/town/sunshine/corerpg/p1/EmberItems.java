@@ -167,6 +167,8 @@ public final class EmberItems {
         String sockLine = d.socketLoreLine(); // Gem Stage1: display-only placeholder (no combat)
         if (sockLine != null) lore.add(ChatColor.DARK_AQUA + sockLine);
         lore.add(ChatColor.DARK_GRAY + (d.bound ? "绑定" : "未绑定") + " · " + EmberCompare.sourceName(d.source)); // D99: uid only via admin inspect
+        String mapLore = EmberLootMapFeel.loreLine(d); // D3785 G1 map identity · display only
+        if (mapLore != null) lore.add(mapLore);
         meta.setLore(lore);
         item.setItemMeta(meta);
     }

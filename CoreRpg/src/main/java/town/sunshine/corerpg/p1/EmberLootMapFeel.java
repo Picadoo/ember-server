@@ -30,6 +30,30 @@ public final class EmberLootMapFeel {
         return 14;
     }
 
+    /** Display-only map identity line (G1 light · not celebration). */
+    public static String mapLabel(String map) {
+        String m = map == null ? "" : map.toLowerCase();
+        if (m.startsWith("q01")) return "烬原·清杂";
+        if (m.startsWith("q02")) return "烬突·试炼";
+        if (m.startsWith("q03")) return "守招·试炼";
+        if (m.startsWith("q04")) return "符文·试炼";
+        if (m.startsWith("q05")) return "踏步·试炼";
+        if (m.startsWith("q06")) return "承护·试炼";
+        if (m.startsWith("q07")) return "签名·试炼";
+        if (m.startsWith("r0") || m.startsWith("raid")) return "团本";
+        if ("forge".equals(m)) return "工坊";
+        if ("admin".equals(m)) return "管理";
+        if (m.isEmpty() || "unknown".equals(m)) return null;
+        return m;
+    }
+
+    public static String loreLine(EmberItemData data) {
+        if (data == null || data.origin == null || !data.origin.present()) return null;
+        String lab = mapLabel(data.origin.map);
+        if (lab == null) return null;
+        return "§8出处 · §7" + lab;
+    }
+
     public static Sound landSound(String map) {
         String m = map == null ? "" : map.toLowerCase();
         if (m.startsWith("q07")) return Sound.ENTITY_PLAYER_LEVELUP;
