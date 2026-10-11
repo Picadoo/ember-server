@@ -69,6 +69,7 @@ public final class EmberEnhanceUndo {
                 new String[]{"[撤销本次失败]", "/corerpg p1 enhance undo",
                         "退回材料 · 保底计数回滚 · 剩余约 " + sec + "s", "YELLOW"},
                 new String[]{"[工坊]", "/corerpg p1 forge", "稍后再撤也可开页", "GRAY"});
+        EmberEnhancePityChase.maybeAfterFail(p, t.after, s); // D5793
         scheduleMidRemind(p, s); // D713
         scheduleLateRemind(p, s); // D808 ~10s left
         scheduleExpire(p, s); // D808

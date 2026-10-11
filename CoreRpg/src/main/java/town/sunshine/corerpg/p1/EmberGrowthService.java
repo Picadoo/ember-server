@@ -2761,6 +2761,11 @@ public final class EmberGrowthService implements Listener {
             if (t.enhance > 0)
                 btns.add(new String[]{"[先互换强化]", "/corerpg p1 swap", "把强化挪走再转", "GOLD"});
             btns.add(new String[]{"[回转化页]", "/corerpg p1 convert menu", "不扣", "GRAY"});
+            if (EmberConvertSure.eligible(t) && EmberConvertSure.matsOk(p, d, t, plugin)) { // D5857
+                p.sendMessage(P + "§a转化直办 · 强化已清且料齐（零改周帽）");
+                try { p.sendActionBar("§a转化直办"); } catch (Throwable ignored) { }
+                return convertHeld(p, d, toFam, true);
+            }
             town.sunshine.corerpg.ConfirmTokens.sendButtons(p, P, btns.toArray(new String[0][]));
             return true;
         }

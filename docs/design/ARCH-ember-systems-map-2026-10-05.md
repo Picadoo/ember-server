@@ -535,3 +535,5 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - Raid/Short enter D5409–D5472: 短征←Q01首进 · 团本←Q07首进（周帽/结算不变）
 - TalentPlaystyle D5473–D5536: 一排点选→D291 姿态/符文/身法软挂（系数 HOLD）
 - BagSeat D5665–D5728: 空刃/护符槽背包自动入座
+- EnhancePityChase D5793–D5856: 强化失败后保底追击直办（可先撤销）
+- ConvertSure D5857–D5920: 每周转化 enhance=0 料齐直办
