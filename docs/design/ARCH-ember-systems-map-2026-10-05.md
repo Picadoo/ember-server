@@ -589,3 +589,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D9249–D9312: ConvertCapSoft + ReforgeStoneSoft + MagicDotSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D9313–D9376: RaidEnterBrace + RushEnterBrace + OffhandBuySoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
 - D9377–D9440: AbyssEnterBrace + MainlineEnterBrace + StableCharmSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.
+- D9441–D9504: PetHatchSoft + FireBlockSoft + ProjectileSoft. STOP densify those + priors. Talent HOLD. Six-slot HOLD.

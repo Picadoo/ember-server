@@ -461,6 +461,34 @@ public final class EmberCombatListener implements Listener {
                 }
             } catch (Throwable ignored) { }
         }
+        if (e.getCause() == DamageCause.FIRE) {
+            try {
+                PlayerData pdFi = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberFireBlockSoft.consume(pdFi, base); // D9473
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 直火软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a直火软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a直火软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
+        if (e.getCause() == DamageCause.PROJECTILE) {
+            try {
+                PlayerData pdPr = plugin.getDataStore().get(p.getUniqueId());
+                double soft = EmberProjectileSoft.consume(pdPr, base); // D9489
+                if (soft < base) {
+                    base = soft;
+                    pipe += " · 弹射软化 ×0.5";
+                    try {
+                        p.sendMessage(EmberRunService.P + "§a弹射软化 · ×0.5（今日一次）");
+                        p.sendActionBar("§a弹射软化");
+                    } catch (Throwable ignored) { }
+                }
+            } catch (Throwable ignored) { }
+        }
         if (e.getCause() == DamageCause.STARVATION) {
             try {
                 PlayerData pdSt = plugin.getDataStore().get(p.getUniqueId());

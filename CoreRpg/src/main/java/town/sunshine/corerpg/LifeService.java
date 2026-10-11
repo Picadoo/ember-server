@@ -524,6 +524,14 @@ public final class LifeService implements Listener {
                     payCoin = soft;
                 }
             } catch (Throwable ignored) { }
+        } else if (town.sunshine.corerpg.p1.EmberPetHatchSoft.isPetOffer(o.id) && payCoin > 0) {
+            try {
+                int soft = town.sunshine.corerpg.p1.EmberPetHatchSoft.consumeCoin(d, payCoin); // D9441
+                if (soft < payCoin) {
+                    p.sendMessage(ChatColor.GREEN + "[生活] 孵宠减负 · 币 ×0.5（今日一次 · " + payCoin + "→" + soft + "）");
+                    payCoin = soft;
+                }
+            } catch (Throwable ignored) { }
         }
         if (d.getCoin() < payCoin) {
             int gapC = payCoin - d.getCoin();

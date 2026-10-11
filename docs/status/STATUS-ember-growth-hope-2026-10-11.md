@@ -1,3 +1,6 @@
+Live jar: **1.65.679-d9504.local** · D9441–D9504 PetHatchSoft + FireBlockSoft + ProjectileSoft
+Prior: Abyss/Main/Stable
+
 Live jar: **1.65.678-d9440.local** · D9377–D9440 AbyssEnterBrace + MainlineEnterBrace + StableCharmSoft
 Prior: Raid/Rush/Offhand
 
