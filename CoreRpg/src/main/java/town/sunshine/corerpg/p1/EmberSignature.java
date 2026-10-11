@@ -16,13 +16,13 @@ import java.util.Map;
  * ({@link #C_SIG} + uid = code, like the D143 affix). The numbers mirror {@code tools/p1sim/mainline.py SIGS}
  * (checked there: 42 cells alone / in every legal pair / on top of a full talent build).
  * <ul>
- *   <li>at most 2 active: the active blade's + the active charm's; before the own {@link #DUAL_UNLOCK} first clear only 1</li>
+ *   <li>at most 2 active: the active blade's + the active charm's; before {@link #DUAL_UNLOCK} first clear OR first-enter only 1</li>
  *   <li>same tag → only the blade's; same tag as a picked talent node ({@link Def#excl}) → off</li>
  *   <li>family-bound ones only while that set is active (their keys are set events anyway)</li>
  * </ul>
  * Sources: a repeat NORMAL clear of the map → 1 {@link #C_MARK} insignia + {@link #STAMP_RATE} that the base item is a
  * signature (if its slot / family fit one); the map's first clear → {@link #FC_MARKS} insignia once ({@link #C_FC});
- * 烬炉烙印 (after the own {@link #IMPRINT_UNLOCK} first clear) = {@link #IMPRINT_MARKS} insignia of that map + coins.
+ * 烬炉烙印 (after {@link #IMPRINT_UNLOCK} first clear OR first-enter) = {@link #IMPRINT_MARKS} insignia of that map + coins.
  */
 public final class EmberSignature {
 
@@ -230,7 +230,7 @@ public final class EmberSignature {
         if (!d.anyFamily() && !d.family.equals(activeSet)) return "需要" + EmberItemData.familyName(d.family) + "成套";
         if (!d.excl.isEmpty() && talentPicks != null && talentPicks.contains(d.excl)) return "与已选天赋同类，不叠加";
         if ("charm".equals(w.slot) && other != null && other.def != null && offReason(other, null, activeSet, talentPicks, true) == null) {
-            if (!dual) return "首通 " + DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后才能同时生效 2 条";
+            if (!dual) return "首进或首通 " + DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后才能同时生效 2 条";
             if (other.def.tag.equals(d.tag)) return "与刃上的签名同类，不叠加";
         }
         return null;
@@ -249,7 +249,7 @@ public final class EmberSignature {
     /** 烬炉烙印 precheck; null = ok */
     public static String imprintCheck(Def d, EmberItemData target, boolean imprintUnlocked, boolean mapCleared, int marks, int coin, int current) {
         if (d == null) return "没有这条签名";
-        if (!imprintUnlocked) return "首通 " + IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放烬炉烙印";
+        if (!imprintUnlocked) return "首进或首通 " + IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放烬炉烙印";
         if (!mapCleared) return "先首通 " + d.map.toUpperCase(Locale.ROOT) + " 才能烙印它的签名";
         if (target == null) return "没有正在用的" + ("blade".equals(d.slot) ? "刃" : "护符");
         if (target.tier < 1) return "T0 起步件不能烙印";

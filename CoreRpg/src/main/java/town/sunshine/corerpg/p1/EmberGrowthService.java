@@ -1001,7 +1001,7 @@ public final class EmberGrowthService implements Listener {
         if (d == null || lo == null) return Collections.<EmberSignature.Def>emptyList();
         EmberSignature.Worn b = wornOn(d, lo.blade), c = wornOn(d, lo.charm); // stage 1.5: menu toggle
         if ((b == null || b.def == null) && (c == null || c.def == null)) return Collections.<EmberSignature.Def>emptyList();
-        return EmberSignature.active(b, c, lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
+        return EmberSignature.active(b, c, lo.activeSet, picks(d).values(), EmberSkillKit.dualUnlocked(d, runs));
     }
 
     private String mapLabel(String key) {
@@ -1134,7 +1134,7 @@ public final class EmberGrowthService implements Listener {
         if (w.def == null) return "无";
         if (sigOff(d, slot)) return "你在签名页关掉了";
         return "blade".equals(slot) ? EmberSignature.offReason(w, null, lo.activeSet, picks(d).values(), true)
-                : EmberSignature.offReason(w, wornOn(d, lo.blade), lo.activeSet, picks(d).values(), runs.progressFlag(d, EmberSignature.DUAL_UNLOCK));
+                : EmberSignature.offReason(w, wornOn(d, lo.blade), lo.activeSet, picks(d).values(), EmberSkillKit.dualUnlocked(d, runs));
     }
 
     /**
@@ -1269,9 +1269,9 @@ public final class EmberGrowthService implements Listener {
         }
         if ("ui".equals(op)) return sigUiConfirm(p, d, lo, args.length >= 5 && "overwrite".equalsIgnoreCase(args[4]));
         if (!"list".equals(op)) { p.sendMessage(P + "用法：/corerpg p1 sig（打开签名页）· list（聊天栏图鉴）"); return true; }
-        boolean dual = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK), imp = runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+        boolean dual = EmberSkillKit.dualUnlocked(d, runs), imp = EmberSkillKit.imprintFeatureUnlocked(d, runs);
         p.sendMessage(P + "§6签名传奇§7（每张主线图首领自己的效果；同时最多 " + (dual ? 2 : 1) + " 条"
-                + (dual ? "" : "，首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条") + "；同类不叠）");
+                + (dual ? "" : "，首进或首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条") + "；同类不叠）");
         p.sendMessage(P + wornLine(d, lo, "blade"));
         p.sendMessage(P + wornLine(d, lo, "charm"));
         for (String mk : EmberSignature.maps()) {
@@ -1288,7 +1288,7 @@ public final class EmberGrowthService implements Listener {
             }
         }
         p.sendMessage(P + "§7来源：已首通的图普通重打每局 +1 徽记，基础掉落 " + Math.round(EmberSignature.stampRate() * 100) + "% 是这张图的签名件；首通给 "
-                + EmberSignature.fcMarks() + " 枚。" + (imp ? "" : "§8烬炉烙印在首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放。"));
+                + EmberSignature.fcMarks() + " 枚。" + (imp ? "" : "§8烬炉烙印在首进或首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放。"));
         return true;
     }
 
@@ -1301,7 +1301,7 @@ public final class EmberGrowthService implements Listener {
         EmberItemData t = "blade".equals(sd.slot) ? lo.blade : lo.charm;
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
         int cur = t == null ? 0 : sigOf(d, t);
-        String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+        String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); return true; }
         int coin = EmberSignature.imprintCoin(t.tier);
         String fp = t.uid + "|" + sd.id + "|" + cur;
@@ -1375,7 +1375,7 @@ public final class EmberGrowthService implements Listener {
         if (cur != 0) return false; // overwrite stays manual
         int marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
         String why = EmberSignature.imprintCheck(sd, t,
-                runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK),
+                EmberSkillKit.imprintFeatureUnlocked(d, runs),
                 runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
         if (why != null) return false;
         int coin = EmberSignature.imprintCoin(t.tier);
@@ -1637,8 +1637,8 @@ public final class EmberGrowthService implements Listener {
             p.sendMessage(P + "§7" + sd.name + "：先首通 " + mapLabel(sd.map) + " 才解锁（重打掉落 / 烙印）");
             return true;
         }
-        if (!runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK)) {
-            p.sendMessage(P + "§7烬炉烙印在首通 " + mapLabel(EmberSignature.IMPRINT_UNLOCK) + " 后开放；现在只能靠重打 " + mapLabel(sd.map) + " 掉签名件");
+        if (!EmberSkillKit.imprintFeatureUnlocked(d, runs)) {
+            p.sendMessage(P + "§7烬炉烙印在首进或首通 " + mapLabel(EmberSignature.IMPRINT_UNLOCK) + " 后开放；现在只能靠重打 " + mapLabel(sd.map) + " 掉签名件");
             return true;
         }
         SPICK.put(p.getUniqueId(), new String[]{sd.id, "worn"});
@@ -1673,7 +1673,7 @@ public final class EmberGrowthService implements Listener {
         if (inRun(p)) { p.sendMessage(P + ChatColor.RED + "请回城后烙印"); return true; }
         EmberItemData t = pickTarget(p, lo, sd, pk[1]);
         int cur = t == null ? 0 : sigOf(d, t);
-        String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map),
+        String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map),
                 d.periodCount(EmberSignature.C_MARK + sd.map, "all"), d.getCoin(), cur);
         if (why != null) { p.sendMessage(P + ChatColor.RED + why); openMenu(p, SIG_IMP_MENU); return true; }
         if (cur > 0 && !overwrite) { // the page says Shift+点击 for an overwrite; a plain click never destroys a signature
@@ -1694,12 +1694,12 @@ public final class EmberGrowthService implements Listener {
     public String sigPapi(Player p, PlayerData d, String key) {
         if (p == null || d == null) return "";
         EmberLoadout lo = runs.loadouts().get(p);
-        boolean dual = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK), imp = runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+        boolean dual = EmberSkillKit.dualUnlocked(d, runs), imp = EmberSkillKit.imprintFeatureUnlocked(d, runs);
         if ("head".equals(key)) {
             int un = 0;
             for (EmberSignature.Def sd : EmberSignature.DEFS) if (runs.progressFlag(d, sd.map)) un++;
             return "§7图鉴已解锁 §f" + un + "§7/" + EmberSignature.DEFS.size() + " §7· 同时生效最多 §f" + (dual ? 2 : 1) + " §7条"
-                    + (dual ? "" : " §8（首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条）");
+                    + (dual ? "" : " §8（首进或首通 " + EmberSignature.DUAL_UNLOCK.toUpperCase(Locale.ROOT) + " 后 2 条）");
         }
         if ("alt_head".equals(key)) { // stage 3 签名调律 page header
             if (!runs.progressFlag(d, EmberSignature.ALT_UNLOCK)) return "§8签名调律：首通 " + mapLabel(EmberSignature.ALT_UNLOCK) + " 后开放";
@@ -1707,7 +1707,7 @@ public final class EmberGrowthService implements Listener {
             for (String id : EmberSignature.ALTS.keySet()) if (altUnlocked(d, EmberSignature.byId(id))) un++;
             return "§7签名调律：§a已开放 §7· 已解锁调律版 §f" + un + "§7/" + EmberSignature.ALTS.size();
         }
-        if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
+        if ("rules".equals(key)) return imp ? "§7烬炉烙印：§a已开放 §7（点一条签名开始）" : "§7烬炉烙印：§8首进或首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
         if ("acq".equals(key) || "acq_line".equals(key)) return EmberSigAcq.menuLine(); // D456
         if ("chase".equals(key) || "chase_line".equals(key) || "chase_hope".equals(key)) return EmberSigChase.glance(d); // D464/D604
         if ("imprint_hope".equals(key)) { // D615 spend hope for chase target (or tip if none)
@@ -1781,7 +1781,7 @@ public final class EmberGrowthService implements Listener {
                 case 's': return sigStatus(d, lo, sd, cl);
                 default:
                     if (!cl) return "§8首通 " + mapLabel(sd.map) + " 后解锁：重打掉签名件和徽记";
-                    if (!imp) return "§8重打 " + sd.map.toUpperCase(Locale.ROOT) + " 有机会掉 · 烙印在首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
+                    if (!imp) return "§8重打 " + sd.map.toUpperCase(Locale.ROOT) + " 有机会掉 · 烙印在首进或首通 " + EmberSignature.IMPRINT_UNLOCK.toUpperCase(Locale.ROOT) + " 后开放";
                     return "§e➥ 点击：烙印到自己的" + EmberItemData.slotName(sd.slot) + "上 §7（" + EmberSignature.imprintMarks() + " 枚徽记 + "
                             + EmberSignature.IMPRINT_COIN_PER_TIER + "×阶级 币）";
             }
@@ -1834,7 +1834,7 @@ public final class EmberGrowthService implements Listener {
         String which = pk[1];
         EmberItemData t = pickTarget(p, lo, sd, which);
         int cur = t == null ? 0 : sigOf(d, t), marks = d.periodCount(EmberSignature.C_MARK + sd.map, "all");
-        String why = EmberSignature.imprintCheck(sd, t, runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
+        String why = EmberSignature.imprintCheck(sd, t, EmberSkillKit.imprintFeatureUnlocked(d, runs), runs.progressFlag(d, sd.map), marks, d.getCoin(), cur);
         switch (k) {
             case "name": return "§6" + sd.name + " §7（" + sd.kindText() + " · " + mapLabel(sd.map) + "）";
             case "good": return "§a得：§f" + sd.good;

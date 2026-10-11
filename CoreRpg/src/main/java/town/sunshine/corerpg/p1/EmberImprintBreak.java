@@ -60,7 +60,7 @@ public final class EmberImprintBreak {
         if (t == null) return false;
         int marks = d.periodCount(EmberSignature.C_MARK + def.map, "all");
         String why = EmberSignature.imprintCheck(def, t,
-                runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK),
+                EmberSkillKit.imprintFeatureUnlocked(d, runs),
                 runs.progressFlag(d, def.map), marks, d.getCoin(), 0);
         return why == null;
     }

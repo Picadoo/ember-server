@@ -1,4 +1,4 @@
 # STATUS · growth · 2026-10-11
-- Live: `1.65.614-d5216.local`
-- D5153–D5216 PostureGeom edges (dash/step/parry) → NEAR-SAT
-- Talent HOLD · zero skill_mult
+- Live: `1.65.615-d5280.local`
+- D5217–D5280 Imprint+Dual enter unlock (no clear-gate)
+- PostureGeom densify STOP · Talent HOLD

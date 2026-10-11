@@ -87,6 +87,21 @@ public final class EmberMapEnterFeel {
                     EmberChallengePath.scheduleOfferAfterEnter(p); // D2420
                 }
             } catch (Throwable ignored) { }
+            // D5217: Q02 enter unlocks imprint even if dash latch already set
+            if ("q02".equalsIgnoreCase(m.key) && EmberSkillKit.markImprintEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a烬炉烙印已开放 · §f/corerpg p1 sig §7（首进 Q02 · 不锁通关）");
+                    p.sendActionBar("§a烙印开放 · §f签名页");
+                } catch (Throwable ignored) { }
+                EmberSigChase.scheduleImprintOffer(p);
+            }
+            // D5217: Q03 enter unlocks dual signature even if parry latch already set
+            if ("q03".equalsIgnoreCase(m.key) && EmberSkillKit.markDualEnter(pd)) {
+                try {
+                    p.sendMessage(EmberRunService.P + "§a双签名已开放 · §f刃+护符同时生效 §7（首进 Q03 · 不锁通关）");
+                    p.sendActionBar("§a双签开放 · §f刃+符");
+                } catch (Throwable ignored) { }
+            }
             // D2516: Q01 enter unlocks press even if stride latch already set
             if ("q01".equalsIgnoreCase(m.key) && EmberSkillKit.markPressEnter(pd)) {
                 try {

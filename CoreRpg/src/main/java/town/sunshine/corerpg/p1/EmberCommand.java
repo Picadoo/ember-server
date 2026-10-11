@@ -3465,7 +3465,7 @@ public final class EmberCommand {
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
             boolean unlocked = runs.progressFlag(d, EmberSignature.ALT_UNLOCK)
-                    && runs.progressFlag(d, EmberSignature.DUAL_UNLOCK);
+                    && EmberSkillKit.dualUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberTunePath.glance(EmberTunePath.get(d), unlocked));
                 if (!unlocked) {
@@ -3501,7 +3501,7 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean unlocked = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK);
+            boolean unlocked = EmberSkillKit.dualUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberSealPath.glance(EmberSealPath.get(d), unlocked));
                 if (!unlocked) {
@@ -3954,7 +3954,7 @@ public final class EmberCommand {
             if (runs == null) { p.sendMessage(P + "主线本服务未加载"); return true; }
             PlayerData d = runs.dataOf(p.getUniqueId());
             if (d == null) { p.sendMessage(P + "数据未就绪"); return true; }
-            boolean dual = runs.progressFlag(d, EmberSignature.DUAL_UNLOCK);
+            boolean dual = EmberSkillKit.dualUnlocked(d, runs);
             if (args.length < 3) {
                 p.sendMessage(P + EmberDualLead.glance(EmberDualLead.get(d), dual));
                 if (dual) EmberDualLead.forceOffer(p);

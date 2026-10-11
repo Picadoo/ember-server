@@ -137,7 +137,7 @@ public final class EmberSealPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, EmberSignature.DUAL_UNLOCK)) {
+        if (!EmberSkillKit.dualUnlocked(d, runs)) {
             p.sendMessage(EmberRunService.P + "§c纹印需本人首通 Q03（双签名解锁）。");
             return;
         }

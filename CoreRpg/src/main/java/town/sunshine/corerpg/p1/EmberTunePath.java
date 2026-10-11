@@ -141,7 +141,7 @@ public final class EmberTunePath {
             p.sendMessage(EmberRunService.P + "§c签律需本人首通 Q07（签名调律解锁）。");
             return;
         }
-        if (!runs.progressFlag(d, EmberSignature.DUAL_UNLOCK)) {
+        if (!EmberSkillKit.dualUnlocked(d, runs)) {
             p.sendMessage(EmberRunService.P + "§c签律需本人首通 Q03（双签名解锁）。");
             return;
         }

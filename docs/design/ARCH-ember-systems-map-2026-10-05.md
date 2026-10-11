@@ -529,3 +529,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - BrandSure edges D5025–D5088: craft→path auto-pin；同类型 cap 拒
 - PostureGeom D5089–D5152: 姿态对齐烬斩几何加宽（零 skill_mult）
 - PostureGeom edges D5153–D5216: dash+0.12 / step ignite+0.35 / parry非守+25ms
+- Imprint/Dual enter D5217–D5280: Q02首进烙印 · Q03首进双签（无 clear-gate）

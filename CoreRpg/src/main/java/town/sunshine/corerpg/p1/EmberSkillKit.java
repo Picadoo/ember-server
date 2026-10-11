@@ -91,6 +91,10 @@ public final class EmberSkillKit {
     public static final String C_STEP_ENTER = "p1_step_enter";
     /** D2293: entered Q07 → 调律 without clear-gate. */
     public static final String C_ATTUNE_ENTER = "p1_attune_enter";
+    /** D5217: entered Q02 → 烬炉烙印 without clear-gate. */
+    public static final String C_IMPRINT_ENTER = "p1_imprint_enter";
+    /** D5217: entered Q03 → 双签名 without clear-gate. */
+    public static final String C_DUAL_ENTER = "p1_dual_enter";
     /** D2330: entered Q06 → pledge/trial without clear-gate. */
     public static final String C_PLEDGE_ENTER = "p1_pledge_enter";
     /** D2378: entered Q01 → stride path without clear-gate. */
@@ -219,6 +223,23 @@ public final class EmberSkillKit {
         d.addPeriodCount(C_ATTUNE_ENTER, "all", 1);
         return true;
     }
+
+    /** D5217: Q02 first-enter → imprint feature (no clear-gate). */
+    public static boolean markImprintEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_IMPRINT_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_IMPRINT_ENTER, "all", 1);
+        return true;
+    }
+
+    /** D5217: Q03 first-enter → dual signature (no clear-gate). */
+    public static boolean markDualEnter(PlayerData d) {
+        if (d == null) return false;
+        if (d.periodCount(C_DUAL_ENTER, "all") > 0) return false;
+        d.addPeriodCount(C_DUAL_ENTER, "all", 1);
+        return true;
+    }
+
 
     public static boolean markPledgeEnter(PlayerData d) {
         if (d == null) return false;
@@ -443,7 +464,7 @@ public final class EmberSkillKit {
         if (d == null) return false;
         if (d.periodCount(C_SPICE_ENTER, "all") > 0) return true;
         if (runs != null && runs.firstClearedKey(d, "q02")) return true;
-        return runs != null && runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+        return runs != null && imprintFeatureUnlocked(d, runs);
     }
 
     public static boolean markCounterEnter(PlayerData d) {
@@ -457,7 +478,7 @@ public final class EmberSkillKit {
         if (d == null) return false;
         if (d.periodCount(C_COUNTER_ENTER, "all") > 0) return true;
         if (runs != null && runs.firstClearedKey(d, "q02")) return true;
-        return runs != null && runs.progressFlag(d, EmberSignature.IMPRINT_UNLOCK);
+        return runs != null && imprintFeatureUnlocked(d, runs);
     }
 
     /** D2378: Q01 clear OR first-enter unlocks stride path (still needs Q05 step). */
@@ -479,6 +500,20 @@ public final class EmberSkillKit {
         if (d == null) return false;
         if (d.periodCount(C_ATTUNE_ENTER, "all") > 0) return true;
         return runs != null && runs.firstClearedKey(d, EmberSignature.ALT_UNLOCK);
+    }
+
+    /** D5217: Q02 clear OR first-enter unlocks 烬炉烙印. */
+    public static boolean imprintFeatureUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_IMPRINT_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, EmberSignature.IMPRINT_UNLOCK);
+    }
+
+    /** D5217: Q03 clear OR first-enter unlocks dual signature. */
+    public static boolean dualUnlocked(PlayerData d, EmberRunService runs) {
+        if (d == null) return false;
+        if (d.periodCount(C_DUAL_ENTER, "all") > 0) return true;
+        return runs != null && runs.firstClearedKey(d, EmberSignature.DUAL_UNLOCK);
     }
 
     /** D2292: step land slow ticks (synced with set-shape). */
