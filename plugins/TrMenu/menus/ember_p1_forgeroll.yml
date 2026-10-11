@@ -37,10 +37,7 @@ Icons:
       material: book
       name: '§6旁路 · 随机锻造说明'
       lore:
-        - '§8这是赌线旁路 · 确定变强走工坊强化/成色/精工'
-        - '§7普通：8 印记 + 4 胚 + 500 币'
-        - '§e下限：§7再加 8 胚 + 8 骨 + 800 币 → 成色必≥精良'
-        - '§7极品只能从掉落来 · 锻造权重 0'
+        - ''
         - '§c普通差：§f%corerpg_p1_forge_gap_roll%'
         - '§c下限差：§f%corerpg_p1_forge_gap_roll_floor%'
   '1':

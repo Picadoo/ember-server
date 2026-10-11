@@ -44,12 +44,7 @@ Icons:
         - ''
         - '§7余烬币：§f%corerpg_coin%'
         - '§7余烬徽：§f%corerpg_p1_badges% §8（周目标奖励）'
-        - '§7可用印记：§f%corerpg_p1_shopmarks% §8（每阶留 8 枚备用兑换）'
-        - '§7折算：1 徽 = 1 点 · T1 1 点 · T2 2 点 · T3 4 点 · 1 点 = 50 币'
-        - '§7辉光 / 动效不收币，其余币、徽、印记都能付 · 买一次永久有，不回收'
-        - ''
-        - '§e➥ §f左键：没有就看付款方式 / 有了就换上或取下'
-        - '§e➥ §f右键：试穿 10 秒'
+        - '§e➥ §f左：没有就看付款方式 / 有了就换上或取下 · 右：试穿 10 秒'
 
   a:
     update: 20
@@ -57,12 +52,10 @@ Icons:
       material: paper
       name: '%corerpg_p1_shopname_color_white%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_color_white%'
         - '§6%corerpg_p1_shopprice_color_white%'
-        - ''
-        - '%corerpg_p1_shop_color_white%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -79,12 +72,10 @@ Icons:
       material: gold nugget
       name: '%corerpg_p1_shopname_color_gold%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_color_gold%'
         - '§6%corerpg_p1_shopprice_color_gold%'
-        - ''
-        - '%corerpg_p1_shop_color_gold%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -101,12 +92,10 @@ Icons:
       material: prismarine shard
       name: '%corerpg_p1_shopname_color_aqua%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_color_aqua%'
         - '§6%corerpg_p1_shopprice_color_aqua%'
-        - ''
-        - '%corerpg_p1_shop_color_aqua%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -123,12 +112,10 @@ Icons:
       material: redstone
       name: '%corerpg_p1_shopname_color_red%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_color_red%'
         - '§6%corerpg_p1_shopprice_color_red%'
-        - ''
-        - '%corerpg_p1_shop_color_red%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -145,12 +132,10 @@ Icons:
       material: ender pearl
       name: '%corerpg_p1_shopname_color_purple%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_color_purple%'
         - '§6%corerpg_p1_shopprice_color_purple%'
-        - ''
-        - '%corerpg_p1_shop_color_purple%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -167,12 +152,10 @@ Icons:
       material: flint
       name: '%corerpg_p1_shopname_trail_ash%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_trail_ash%'
         - '§6%corerpg_p1_shopprice_trail_ash%'
-        - ''
-        - '%corerpg_p1_shop_trail_ash%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -189,12 +172,10 @@ Icons:
       material: glowstone dust
       name: '%corerpg_p1_shopname_trail_spark%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_trail_spark%'
         - '§6%corerpg_p1_shopprice_trail_spark%'
-        - ''
-        - '%corerpg_p1_shop_trail_spark%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -211,12 +192,10 @@ Icons:
       material: emerald
       name: '%corerpg_p1_shopname_trail_leaf%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_trail_leaf%'
         - '§6%corerpg_p1_shopprice_trail_leaf%'
-        - ''
-        - '%corerpg_p1_shop_trail_leaf%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -233,12 +212,10 @@ Icons:
       material: gold ingot
       name: '%corerpg_p1_shopname_flair_star%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_flair_star%'
         - '§6%corerpg_p1_shopprice_flair_star%'
-        - ''
-        - '%corerpg_p1_shop_flair_star%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -255,12 +232,10 @@ Icons:
       material: packed ice
       name: '%corerpg_p1_shopname_flair_snow%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_flair_snow%'
         - '§6%corerpg_p1_shopprice_flair_snow%'
-        - ''
-        - '%corerpg_p1_shop_flair_snow%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -277,12 +252,10 @@ Icons:
       material: gold helmet
       name: '%corerpg_p1_shopname_flair_crown%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_flair_crown%'
         - '§6%corerpg_p1_shopprice_flair_crown%'
-        - ''
-        - '%corerpg_p1_shop_flair_crown%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -299,12 +272,10 @@ Icons:
       material: blaze powder
       name: '%corerpg_p1_shopname_glow_ember%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_glow_ember%'
         - '§6%corerpg_p1_shopprice_glow_ember%'
-        - ''
-        - '%corerpg_p1_shop_glow_ember%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -321,12 +292,10 @@ Icons:
       material: nether star
       name: '%corerpg_p1_shopname_glow_star%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_glow_star%'
         - '§6%corerpg_p1_shopprice_glow_star%'
-        - ''
-        - '%corerpg_p1_shop_glow_star%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -343,12 +312,10 @@ Icons:
       material: magma cream
       name: '%corerpg_p1_shopname_glow_witch%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_glow_witch%'
         - '§6%corerpg_p1_shopprice_glow_witch%'
-        - ''
-        - '%corerpg_p1_shop_glow_witch%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -365,12 +332,10 @@ Icons:
       material: blaze rod
       name: '%corerpg_p1_shopname_anim_ember%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_anim_ember%'
         - '§6%corerpg_p1_shopprice_anim_ember%'
-        - ''
-        - '%corerpg_p1_shop_anim_ember%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -387,12 +352,10 @@ Icons:
       material: quartz
       name: '%corerpg_p1_shopname_anim_frost%'
       lore:
+        - ''
         - '§7%corerpg_p1_shophow_anim_frost%'
         - '§6%corerpg_p1_shopprice_anim_frost%'
-        - ''
-        - '%corerpg_p1_shop_anim_frost%'
-        - ''
-        - '§e➥ §f左键：购买 / 换上 · 右键：试穿 10 秒'
+        - '§e➥ §f左：购买 / 换上 · 右：试穿 10 秒'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'

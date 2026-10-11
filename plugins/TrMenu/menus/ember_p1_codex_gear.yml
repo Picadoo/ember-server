@@ -38,14 +38,11 @@ Icons:
     update: 40
     display:
       material: book and quill
-      name: '§6图录 · 装备 §f%corerpg_p1_codex_count%'
+      name: '§6图录'
       lore:
+        - ''
         - '%corerpg_p1_codex_hope%'
         - '§7第一次拿到某种刃或护符就登记（放进背包即可）'
-        - '§7升阶后的新阶级也算一种'
-        - '§7测试发放的装备不算'
-        - ''
-        - '§8只做展示：登记多少都不加任何属性'
 
   b:
     display:
@@ -270,19 +267,9 @@ Icons:
       material: compass
       name: '§6哪里刷什么 · 掉落偏向'
       lore:
-        - '§7每张图的随机装备偏向一族一部位'
+        - ''
         - '§7选了目标族：它约 60%（偏向它的图约 63%）'
         - '§7没选：本图偏向族 50%，另两族各 25%'
-        - ''
-        - '§fQ01 §7%corerpg_p1_loot_q01%'
-        - '§fQ02 §7%corerpg_p1_loot_q02%'
-        - '§fQ03 §7%corerpg_p1_loot_q03%'
-        - '§fQ04 §7%corerpg_p1_loot_q04%'
-        - '§fQ05 §7%corerpg_p1_loot_q05%'
-        - '§fQ06 §7%corerpg_p1_loot_q06%'
-        - '§fQ07 §7%corerpg_p1_loot_q07%'
-        - '§8挑战版 / 深渊各层同图同偏向'
-        - '§6团本额外装备：§f按你的目标族，成色至少精良'
 
   h:
     update: 40
@@ -290,17 +277,10 @@ Icons:
       material: nether star
       name: '§d荣誉 · 称号与足迹'
       lore:
-        - '§7只做展示，不加属性'
+        - ''
         - '§7已获得：§f%corerpg_p1_honors%'
         - '§7当前称号：§f%corerpg_p1_title%'
-        - ''
-        - '§3潮蚀渡者 §7首通 Q04 · §6锈轨归来 §7首通 Q07'
-        - '§9深渊初探 §7深渊第 1 层 · §5深渊行者 §7第 5 层 · §d余烬深渊之主 §7第 10 层'
-        - '§6锈轨破袭者 §7/ §b霜封守望者 §7/ §6断塔同心 §7通关团本 R01 / R02 / R03'
-        - '§7团本专属足迹：§6余烬火星 §7/ §b霜花 §7/ §6烬核余辉'
-        - '§7深渊榜首：§f%corerpg_p1_top_abyss_1%'
-        - ''
-        - '§e➥ §f左键：称号与足迹（查看与装上） · 右键：赛季 · 排行 · 周目标页'
+        - '§e➥ §f左：称号与足迹（查看与装上） · 右：赛季 · 排行 · 周目标页'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-1'

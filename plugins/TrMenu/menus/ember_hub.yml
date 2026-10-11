@@ -43,23 +43,8 @@ Icons:
           lore:
             - ''
             - '§e%corerpg_p1_route_pri%'
-            - '§8%corerpg_p1_route_sec%'
-            - ''
-            - '§7—— 今日四态 ——'
-            - '%corerpg_stamina_hope%'
-            - '%corerpg_p1_route_hope%'
-            - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 短征30 / 深渊30 / 团本50'
-            - '§b精选：§f%corerpg_p1_featured%'
-            - '§e花样：§f%corerpg_p1_vbounty%'
-            - '§a挂机：§f%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
-            - '§8体力不足：优先挂机/补给，不假开主线'
-            - ''
-            - '§d今日可追：§a钓鱼兑魂尘养使魔 · §7材料可去工坊'
-            - '§8短征需30体力 · 先挂机/补给 · 日帽见短征选本页'
-            - '§8真入口：补给·生活（兑/孵）· 工坊（花材料）'
-            - ''
-            - '§e➥ §f左键：打开挂机庭'
-            - '§e➥ §f右键：补给·生活'
+            - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8不足'
+            - '§e➥ §f左：挂机 · 右：补给'
         actions:
           left:
             - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -76,21 +61,8 @@ Icons:
           lore:
             - ''
             - '§e%corerpg_p1_route_pri%'
-            - '§8%corerpg_p1_route_sec%'
-            - ''
-            - '§7—— 今日四态 ——'
-            - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 短征30 / 深渊30 / 团本50'
-            - '§b精选：§f%corerpg_p1_featured%'
-            - '§e花样：§f%corerpg_p1_vbounty%'
-            - '§a挂机：§f满 · 去冒险 §7· 今日 %corerpg_p1_afk_today%'
-            - '§8层名片仍在挂机页（不盖过满额→冒险）'
-            - ''
-            - '§d今日可追：§e短征（有体力可打 · 今日剩余有奖 %corerpg_p1_sx_day_left_sum%）· §7工坊/生活'
-            - '§8真入口：冒险页短征选本 · 工坊（花材料）· 补给·生活'
-            - ''
-            - '§e➥ §f左键：去冒险'
-            - '§e➥ §f右键：打开工坊'
-            - '§e➥ §fShift+左键：短征选本'
+            - '§a挂机已满 · §e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+            - '§e➥ §f左：冒险 · 右：工坊 · Shift左：短征'
         actions:
           left:
             - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -107,23 +79,8 @@ Icons:
       lore:
         - ''
         - '§e%corerpg_p1_route_pri%'
-        - '§8%corerpg_p1_route_sec%'
-        - ''
-        - '§7—— 今日四态 ——'
-        - '%corerpg_stamina_hope%'
-        - '%corerpg_p1_route_hope%'
-        - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max% §8· 主线30 / 短征30 / 深渊30 / 团本50'
-        - '§b精选：§f%corerpg_p1_featured%'
-        - '§e花样：§f%corerpg_p1_vbounty%'
-        - '§a挂机：§f%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
-        - '§8推荐对齐真实体力/精选/挂机/Q07 · 未解锁不推深渊/团本'
-        - ''
-        - '§d今日可追：§e短征（冒险页 · 各30 · 日帽分开 · 今日剩余有奖 %corerpg_p1_sx_day_left_sum%）'
-        - '§7并列：生活·使魔（魂尘）· 工坊花材料'
-        - '§8真入口：短征选本 · 补给·生活（兑/孵）· 工坊（花材料）'
-        - ''
-        - '§e➥ §f左键：打开冒险页'
-        - '§e➥ §f右键：短征选本'
+        - '§e体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
+        - '§e➥ §f左：冒险 · 右：短征'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -137,19 +94,11 @@ Icons:
     update: 20
     display:
       material: clock
-      name: '§a挂机庭 · 自动战斗'
+      name: '§a挂机庭'
       lore:
         - ''
-        - '§7状态：%corerpg_p1_afk_state%'
-        - '§7今日击杀：%corerpg_p1_afk_today%'
+        - '§7%corerpg_p1_afk_state% §7· 今日 %corerpg_p1_afk_today%'
         - '§7每小时：%corerpg_p1_afk_loot%'
-        - '§7站着就自动打怪、自动放烬斩，战利品直接到账；离线按实测速度折算'
-        - '§7四层各有名片 · 打开看养什么'
-        - '§7庭内战况有今日软目标·层差一览'
-        - '§7战况可看还差/约满'
-        - '§7庭内可去工坊花材料（产→花）'
-        - '§8首通 Q01 开放 · 装备越好打得越快 · 打本永远更快'
-        - ''
         - '§e➥ §f打开挂机庭'
     actions:
       all:
@@ -161,43 +110,10 @@ Icons:
     update: 20
     display:
       material: enchanted book
-      name: '§6成长 · 天赋 / 勋记 / 洗练 · 工坊'
+      name: '§6成长'
       lore:
-        - '§7天赋：%corerpg_p1_spec_pts%'
-        - '§7勋记：%corerpg_p1_honor_n%'
-        - '§7洗练：刃 %corerpg_p1_reroll_blade_cur% §7· 护符 %corerpg_p1_reroll_charm_cur%'
-        - '§e希望表盘 · 强化：§7刃 %corerpg_p1_enhance_blade_pity% §7· 护符 %corerpg_p1_enhance_charm_pity%'
-        - '§e希望表盘 · 成色：§7刃 %corerpg_p1_quality_blade_hope% §7· 护符 %corerpg_p1_quality_charm_hope%'
-        - '§e希望表盘 · 精工：§7刃 %corerpg_p1_refine_blade_hope% §7· 护符 %corerpg_p1_refine_charm_hope%'
-        - '§e希望表盘 · 洗练：§7刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
-        - '§e希望表盘 · 追烙：§f%corerpg_p1_sig_chase_hope%'
-        - '§e希望表盘 · 宝石通关保底：§f%corerpg_p1_gem_pity_hope%'
-        - '§e希望表盘 · 掉落成色：§f%corerpg_p1_drop_q_hope%'
-        - '§e希望表盘 · 日委托：§f%corerpg_p1_bounty_hope%'
-        - '§e希望表盘 · 精选印记：§f%corerpg_p1_featured_hope%'
-        - '§8追烙满 5 徽记可烙印 · 签名不锁通关'
-        - '§e希望 · 技能套装差：§7焚/爆/承 F·烬突·身法不同（技能组页）'
-        - ''
-        - '§d工坊四选择：§f烙纹定向 · 随机锻造 · 每周转化 · 词条洗练'
-        - '§e本周工坊目标：§f%corerpg_p1_forge_goal_line%'
-        - '%corerpg_p1_forge_goal_hope%'
-        - '%corerpg_p1_dual_hope%'
-        - '%corerpg_p1_brand_hope%'
-        - '%corerpg_p1_echo_hope%'
-        - '%corerpg_p1_convert_hope%'
-        - '§e套装焦点：§f%corerpg_p1_set_focus%'
-        - '§e双签路径：§f%corerpg_p1_dual_lead%'
-        - '§e烙纹路径：§f%corerpg_p1_brand_path%'
-        - '§e残响路径：§f%corerpg_p1_echo_path%'
-        - '§e转化路径：§f%corerpg_p1_convert_path%'
-        - '§8（锁定保类型 = D148 · 工坊底栏也能进 · 材料换手感分叉）'
-        - ''
-        - '§7天赋/勋记/洗练是打法取舍和小加成，不是变强；装备的阶、成色、强化才是主线'
-        - '§7工坊四选择 = 成长花样侧轨（不涨永久乘区）'
-        - ''
-        - '§8第 2 排天赋 / 猎缀类词条：仅主线重打词缀精英'
-        - '§e推荐打法：§7旁格「机动/站桩/压上」标签页'
-        - '§e➥ §f左键：天赋 · 右键：勋记 · Shift+左键：洗练 · Shift+右键：工坊四选择'
+        - '§7天赋：%corerpg_p1_spec_pts% §7· 勋记：%corerpg_p1_honor_n%'
+        - '§e➥ §f左天赋 · 右勋记 · Shift左洗练 · Shift右工坊'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -221,10 +137,7 @@ Icons:
       name: '§e推荐打法'
       lore:
         - ''
-        - '§7机动 / 站桩 / 压上 ↔ 天赋一排目标'
-        - '§8回身斩 · 稳桩 · 踏步回气（数值弱，先认标签）'
-        - '§7可跳技能组 / 签名 / 天赋'
-        - ''
+        - '§7机动 / 站桩 / 压上'
         - '§e➥ §f打开'
     actions:
       all:
@@ -239,14 +152,10 @@ Icons:
         priority: 1
         display:
           material: firework charge
-          name: '§6国庆纪念 · 烟火符常驻商店'
+          name: '§6国庆纪念'
           lore:
             - ''
-            - '§7%corerpg_p1_fest_window% · %corerpg_p1_fest_state%'
-            - '§7「盛世烟火符」常驻出售：§f%corerpg_p1_fest_charm_price%'
-            - '§7剩下的国庆币（含仓库 §f%corerpg_p1_fest_coins%§7）：换纪念称号 / 余烬徽（有上限）/ 足迹'
-            - '§8装备页也有烟火符入口'
-            - ''
+            - '§7%corerpg_p1_fest_state% · 币 §f%corerpg_p1_fest_coins%'
             - '§e➥ §f打开活动页'
         actions:
           all:
@@ -255,13 +164,10 @@ Icons:
     update: 20
     display:
       material: firework
-      name: '§c国庆 · 烟火庙会 §6（限时）'
+      name: '§c国庆庙会'
       lore:
         - ''
-        - '§7%corerpg_p1_fest_window% · %corerpg_p1_fest_state%'
-        - '§7活动本（首通 Q04 后 · 不耗体力 · 今日 %corerpg_p1_fest_entries%）掉国庆币'
-        - '§7换「盛世烟火符」（打怪时炸开烟火）和限时足迹；通关得限时称号'
-        - ''
+        - '§7%corerpg_p1_fest_window% · 今日 %corerpg_p1_fest_entries%'
         - '§e➥ §f打开活动页'
     actions:
       all:
@@ -271,15 +177,11 @@ Icons:
     update: 20
     display:
       material: blaze rod
-      name: '§6冒险 · 主线本'
+      name: '§6冒险'
       lore:
         - ''
         - '§a下一步：§f%corerpg_p1_next%'
-        - '§7主线本 Q01–Q07：解锁状态、消耗、掉落与用途'
-        - '§7掉落目标族 · 锻造印记 · 首通自选 · 补领'
-        - '§8每次 30 体力 · 1～3 人'
-        - '§8短征：冒险页「烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣」（Q01后 · 日有奖帽分开）'
-        - ''
+        - '§8主线 / 短征 · 每次 30 体力'
         - '§e➥ §f打开冒险页'
     actions:
       all:
@@ -290,17 +192,10 @@ Icons:
     update: 20
     display:
       material: iron chestplate
-      name: '§6装备 · 主线本'
+      name: '§6装备'
       lore:
         - ''
-        - '§7主手刃、已选护符、实际属性、套装、觉醒与护甲'
-        - '§7下一次突破缺什么 · 回复药补给 · 补领'
-        - '§7签名传奇（每个首领自己的效果）· 图鉴 · 烙印'
-        - '§8套装：§f%corerpg_p1_awaken%'
-        - '§8护甲四件套：§f%corerpg_p1_armor_set%'
-        - '§7副手饰品 · 放副手槽 · 微量守势'
-        - '§8不计入主线刃/护符战力（永不进 P1 B/H）'
-        - ''
+        - '§7套装：§f%corerpg_p1_awaken% §7· 护甲：§f%corerpg_p1_armor_set%'
         - '§e➥ §f打开装备页'
     actions:
       all:
@@ -309,13 +204,10 @@ Icons:
   p:
     display:
       material: anvil
-      name: '§6工坊 · 主线本装备'
+      name: '§6工坊'
       lore:
         - ''
-        - '§7手持刃或护符：强化 / 升阶 / 精工 / 成色 / 互换 / 分解'
-        - '§8手持护甲：仅可分解（白板零头）；养成随护符'
-        - '§8先预览，再点确认'
-        - ''
+        - '§7强化 / 升阶 / 精工 / 成色'
         - '§e➥ §f打开工坊'
     actions:
       all:
@@ -329,14 +221,10 @@ Icons:
         priority: 1
         display:
           material: gray dye
-          name: '§7Q07 之后：挑战 / 深渊 / 团本'
+          name: '§7Q07 后解锁'
           lore:
             - ''
-            - '§7首通 Q07 锈轨矿道后开放：'
-            - '§7· 七图挑战版（更强的敌人，掉 T3）'
-            - '§7· 深渊 · 余烬层（十层，越深越难）'
-            - '§7· 团本三张 R01–R03（3～5 人，每周 3 次）'
-            - ''
+            - '§7挑战 / 深渊 / 团本'
             - '§a现在：§f%corerpg_p1_next%'
         actions:
           all:
@@ -344,13 +232,10 @@ Icons:
     update: 20
     display:
       material: ender eye
-      name: '§5深渊 · 余烬层'
+      name: '§5深渊'
       lore:
         - ''
-        - '§7Q07 首通后的长线挑战：§f%corerpg_p1_abyss_state%'
-        - '%corerpg_p1_abyss_hope%'
-        - '§7每层 = 随机一张主线图打一局 · 十层封顶 · 每层单独付费与结算'
-        - ''
+        - '§7%corerpg_p1_abyss_state%'
         - '§e➥ §f打开深渊选层'
     actions:
       all:
@@ -367,17 +252,12 @@ Icons:
     update: 20
     display:
       material: iron chestplate
-      name: '§6团本 · R01–R03（3～5 人）'
+      name: '§6团本'
       lore:
         - ''
-        - '%corerpg_p1_raid_hope%'
-        - '§7锈轨矿道·团：§f%corerpg_p1_raid_r01%'
-        - '§7霜封哨所·团：§f%corerpg_p1_raid_r02%'
-        - '§7断塔回廊·团：§f%corerpg_p1_raid_r03%'
-        - '§7三张合计每周 3 次 · 倒下可复活 · 人越多越稳'
-        - '§7招募中：§f%corerpg_p1_recruits%'
-        - ''
-        - '§e➥ §f打开冒险页选团本（规则 / 通关率 / 招募）'
+        - '§7R01–R03 · 3～5 人 · 每周 3 次'
+        - '§7招募：§f%corerpg_p1_recruits%'
+        - '§e➥ §f打开冒险页选团本'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -388,10 +268,8 @@ Icons:
       name: '§3图录'
       lore:
         - ''
-        - '§7主线七个首领的招式与躲法 · 装备图鉴 · 荣誉'
-        - '§8只做展示，不加属性'
-        - ''
-        - '§e➥ §f打开图录菜单'
+        - '§7首领招式 · 装备图鉴 · 荣誉'
+        - '§e➥ §f打开图录'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -406,11 +284,8 @@ Icons:
       name: '§6技能组'
       lore:
         - ''
-        - '§e每 8 秒二选一：§fF 烬斩 §7/ §f潜行+F 烬突'
-        - '§7形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir% §7· %corerpg_kit_charge%'
-        - '§8烬突 %corerpg_kit_dash_unlock% · 符文 %corerpg_kit_shape_unlock% · 火痕 %corerpg_kit_step_unlock%'
-        - ''
-        - '§e➥ §f打开技能组（出本换形状/身法）'
+        - '§7形状 §f%corerpg_kit_shape% §7· 身法 §b%corerpg_kit_step_dir%'
+        - '§e➥ §f打开技能组'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -422,11 +297,8 @@ Icons:
       name: '§a轻技'
       lore:
         - ''
-        - '§7余烬踏步：向前短位移 5 格 · 冷却 14 秒 · 无伤害'
-        - '§7随时按 §e潜行 + Q §7释放（进服已默认装配）'
-        - '§8当前 §f%corerpg_flex_skill_name%'
-        - ''
-        - '§e➥ §f左键：轻技页 · 右键：帮助 · Shift+点击：立即踏步'
+        - '§7当前 §f%corerpg_flex_skill_name% §8· 潜行+Q'
+        - '§e➥ §f左：轻技 · 右：帮助 · Shift：踏步'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -448,12 +320,7 @@ Icons:
       name: '§3仓库'
       lore:
         - ''
-        - '§7材料仓库 · 无格子上限，打副本自动入库'
-        - '§7装备库 · 背包满时新装备自动存入'
-        - '%corerpg_p1_gearlib_hope%'
-        - '§8强化/升阶直接扣仓库里的材料'
-        - '§8一键存入 · 筛选 · 批量分解（可撤销）'
-        - ''
+        - '§7材料 / 装备自动入库'
         - '§e➥ §f打开仓库'
     actions:
       all:
@@ -467,12 +334,8 @@ Icons:
       name: '§a补给 · 生活'
       lore:
         - ''
-        - '§7面包 / 钓竿 · 代烤鱼 · 用鱼熬回复药'
-        - '§7回复药也能直接买：装备页或右键补给官 · 灰粮（10 币一瓶）'
-        - '§8钓鱼 / 烹饪 / 熬药 提升生活等级'
-        - '§8可兑魂尘养使魔（旧靴/碎骨 / 孵化）'
-        - ''
-        - '§e➥ §f打开补给菜单'
+        - '§7钓鱼 · 烹饪 · 回复药 · 使魔'
+        - '§e➥ §f打开补给'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -483,10 +346,8 @@ Icons:
       name: '§b帮助'
       lore:
         - ''
-        - '§7怎么玩 · 操作 · 套装（含四件套） · 变强 · 收益与体力'
-        - '§7补给与倒下 · 七张图 · 背景（可不读）'
-        - ''
-        - '§e➥ §f打开帮助页'
+        - '§7怎么玩 · 操作 · 变强'
+        - '§e➥ §f打开帮助'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -497,10 +358,8 @@ Icons:
       name: '§f邮寄'
       lore:
         - ''
-        - '§7领取系统邮件、维护补偿和背包满时转来的结算材料'
-        - '§8奖励统一进邮箱'
-        - ''
-        - '§e➥ §f打开邮寄菜单'
+        - '§7系统邮件与补偿'
+        - '§e➥ §f打开邮寄'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -512,9 +371,8 @@ Icons:
       name: '§a好友'
       lore:
         - ''
-        - '§7好友列表与组队邀请入口'
-        - ''
-        - '§e➥ §f打开好友菜单'
+        - '§7好友与组队'
+        - '§e➥ §f打开好友'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -525,18 +383,11 @@ Icons:
     update: 40
     display:
       material: nether star
-      name: '§d赛季 · 排行 · 周目标'
+      name: '§d赛季'
       lore:
         - ''
-        - '§7%corerpg_p1_season%'
-        - '§7本周目标：§f%corerpg_p1_goals% §7· 余烬徽 §f%corerpg_p1_badges%'
-        - '§8含可选短征周目标（赛季页 · 键号后出进度）'
-        - '§7深渊榜首：§f%corerpg_p1_top_abyss_1%'
-        - '§7称号与足迹：已获得 §f%corerpg_p1_honors% §7· 当前 §f%corerpg_p1_title%'
-        - '§8只做展示，不加属性'
-        - ''
-        - '§e➥ §f左键：赛季 · 排行 · 周目标页（外观商店也在里面）'
-        - '§e➥ §f右键：称号与足迹（查看与装上）'
+        - '§7%corerpg_p1_season% §7· 徽 §f%corerpg_p1_badges%'
+        - '§e➥ §f左：赛季排行 · 右：称号足迹'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -551,10 +402,8 @@ Icons:
       name: '§7设置'
       lore:
         - ''
-        - '§7音效、提示与隐私等个人选项'
-        - '§8低优先级个人选项'
-        - ''
-        - '§e➥ §f打开设置菜单'
+        - '§7音效 · 提示 · 隐私'
+        - '§e➥ §f打开设置'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -565,15 +414,11 @@ Icons:
     update: 20
     display:
       material: ender pearl
-      name: '§d外观扭蛋 §8（只出外观）'
+      name: '§d外观扭蛋'
       lore:
         - ''
-        - '§7扭蛋券 §f%coregacha_tickets% §7· 光屑 §b%coregacha_shards% §7· 今日 %coregacha_today%'
-        - '§7称号、聊天徽记、光环、宠物、烟火 + 外观商店的件；零属性'
-        - '§7限定：%coregacha_b_name_gq26% %coregacha_b_left_gq26%'
-        - '§8券：在线 / 主线结算 / 余烬币或余烬徽兑换 · 没有充值'
-        - ''
-        - '§e➥ §f打开扭蛋页'
+        - '§7券 §f%coregacha_tickets% §7· 光屑 §b%coregacha_shards%'
+        - '§e➥ §f打开扭蛋'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -599,14 +444,12 @@ Icons:
         display:
           material: emerald
           shiny: true
-          name: '§e签到 · 在线 §6(今天还没签)'
+          name: '§e签到 · 未签'
           lore:
             - ''
             - '%corerpg_p1_sign_head%'
-            - '%corerpg_p1_sign_next%'
-            - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟 · 可领 §f%corerpg_p1_online_can% §7档'
-            - ''
-            - '§e➥ §f打开签到 · 在线'
+            - '§7在线 §f%corerpg_p1_online_min%§7分 · 可领 §f%corerpg_p1_online_can%§7档'
+            - '§e➥ §f打开签到'
         actions:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -617,11 +460,8 @@ Icons:
       lore:
         - ''
         - '%corerpg_p1_sign_head%'
-        - '%corerpg_p1_sign_next%'
-        - '§7今日有效在线 §f%corerpg_p1_online_min% §7分钟 · 可领 §f%corerpg_p1_online_can% §7档'
-        - '§8月历累计签到 · 在线 15/30/60/120 分钟 · 打本永远更快'
-        - ''
-        - '§e➥ §f打开签到 · 在线'
+        - '§7在线 §f%corerpg_p1_online_min%§7分 · 可领 §f%corerpg_p1_online_can%§7档'
+        - '§e➥ §f打开签到'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'

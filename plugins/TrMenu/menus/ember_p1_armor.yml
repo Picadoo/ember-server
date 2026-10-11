@@ -53,12 +53,9 @@ Icons:
           material: leather helmet
           name: '§6穿着 · 头盔'
           lore:
+            - ''
             - '%corerpg_p1_armor_head%'
             - '%corerpg_p1_armor_head_info%'
-            - ''
-            - '§7护甲的阶级和强化跟随已选护符'
-            - '§7成色和精工看掉落，换更好的就多一点生命'
-            - '§8也可以照旧直接拖进护甲栏'
         actions:
           all:
             - 'command: corerpg p1 armor worn head'
@@ -79,12 +76,9 @@ Icons:
           material: leather helmet
           name: '§e可换上 · 头盔'
           lore:
+            - ''
             - '%corerpg_p1_armor_head_cand%'
             - '%corerpg_p1_armor_head_cmp%'
-            - '%corerpg_p1_armor_head_delta%'
-            - '%corerpg_p1_armor_head_fam%'
-            - ''
-            - '§7换下来的那件回到背包'
             - '§e➥ §f点击换上'
         actions:
           all:
@@ -117,12 +111,9 @@ Icons:
           material: leather chestplate
           name: '§6穿着 · 胸甲'
           lore:
+            - ''
             - '%corerpg_p1_armor_chest%'
             - '%corerpg_p1_armor_chest_info%'
-            - ''
-            - '§7护甲的阶级和强化跟随已选护符'
-            - '§7成色和精工看掉落，换更好的就多一点生命'
-            - '§8也可以照旧直接拖进护甲栏'
         actions:
           all:
             - 'command: corerpg p1 armor worn chest'
@@ -143,12 +134,9 @@ Icons:
           material: leather chestplate
           name: '§e可换上 · 胸甲'
           lore:
+            - ''
             - '%corerpg_p1_armor_chest_cand%'
             - '%corerpg_p1_armor_chest_cmp%'
-            - '%corerpg_p1_armor_chest_delta%'
-            - '%corerpg_p1_armor_chest_fam%'
-            - ''
-            - '§7换下来的那件回到背包'
             - '§e➥ §f点击换上'
         actions:
           all:
@@ -181,12 +169,9 @@ Icons:
           material: leather leggings
           name: '§6穿着 · 护腿'
           lore:
+            - ''
             - '%corerpg_p1_armor_legs%'
             - '%corerpg_p1_armor_legs_info%'
-            - ''
-            - '§7护甲的阶级和强化跟随已选护符'
-            - '§7成色和精工看掉落，换更好的就多一点生命'
-            - '§8也可以照旧直接拖进护甲栏'
         actions:
           all:
             - 'command: corerpg p1 armor worn legs'
@@ -207,12 +192,9 @@ Icons:
           material: leather leggings
           name: '§e可换上 · 护腿'
           lore:
+            - ''
             - '%corerpg_p1_armor_legs_cand%'
             - '%corerpg_p1_armor_legs_cmp%'
-            - '%corerpg_p1_armor_legs_delta%'
-            - '%corerpg_p1_armor_legs_fam%'
-            - ''
-            - '§7换下来的那件回到背包'
             - '§e➥ §f点击换上'
         actions:
           all:
@@ -245,12 +227,9 @@ Icons:
           material: leather boots
           name: '§6穿着 · 靴子'
           lore:
+            - ''
             - '%corerpg_p1_armor_boots%'
             - '%corerpg_p1_armor_boots_info%'
-            - ''
-            - '§7护甲的阶级和强化跟随已选护符'
-            - '§7成色和精工看掉落，换更好的就多一点生命'
-            - '§8也可以照旧直接拖进护甲栏'
         actions:
           all:
             - 'command: corerpg p1 armor worn boots'
@@ -271,12 +250,9 @@ Icons:
           material: leather boots
           name: '§e可换上 · 靴子'
           lore:
+            - ''
             - '%corerpg_p1_armor_boots_cand%'
             - '%corerpg_p1_armor_boots_cmp%'
-            - '%corerpg_p1_armor_boots_delta%'
-            - '%corerpg_p1_armor_boots_fam%'
-            - ''
-            - '§7换下来的那件回到背包'
             - '§e➥ §f点击换上'
         actions:
           all:
@@ -310,11 +286,9 @@ Icons:
           material: enchanted book
           name: '§a四件套 · 已激活'
           lore:
+            - ''
             - '%corerpg_p1_armor_set%'
             - '§a受伤 −3%'
-            - '§7另 2 甲位可穿异族追成色'
-            - ''
-            - '§8同族刃+护符，再穿至少 2 件同族掉落阶 T2+ 护甲'
         actions:
           all:
             - 'command: corerpg p1 armor set'
@@ -324,11 +298,9 @@ Icons:
           material: book
           name: '§e四件套 · 进行中'
           lore:
+            - ''
             - '%corerpg_p1_armor_set%'
             - '§7还缺：任意同族掉落阶 T2+ 护甲'
-            - '§8F 跟随不计入；只看掉落阶那一行'
-            - ''
-            - '§8同族刃+护符，再穿至少 2 件同族掉落阶 T2+ 护甲'
         actions:
           all:
             - 'command: corerpg p1 armor set'
@@ -361,10 +333,9 @@ Icons:
           material: emerald
           name: '§a全部换上'
           lore:
-            - '%corerpg_p1_armor_all%'
             - ''
+            - '%corerpg_p1_armor_all%'
             - '§7只换比现在更好的部位，空着的也补上'
-            - '§7一样好就不动'
             - '§e➥ §f第一次点击看清单，30 秒内再点一次确认'
         actions:
           all:

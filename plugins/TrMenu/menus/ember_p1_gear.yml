@@ -42,16 +42,10 @@ Icons:
       material: iron sword
       name: '§6主手 · 刃'
       lore:
+        - ''
         - '§f%corerpg_p1_blade%'
         - '%corerpg_p1_gearlib_hope%'
-        - '§7%corerpg_p1_blade_next_q%'
-        - '§7%corerpg_p1_blade_next_c%'
-        - ''
-        - '§7只认§f主手§7那一把；背包里的其他刃§c不生效'
-        - '§7比较时看整套：换异族刃会取消套装'
-        - ''
         - '§e➥ §f点击：看手持物品的属性，以及换上后整套怎么变'
-        - '§8  （手持护符点这里 = 选定前先比较）'
     actions:
       all:
         - 'command: corerpg p1 inspect'
@@ -63,15 +57,9 @@ Icons:
       material: totem
       name: '§6已选护符'
       lore:
+        - ''
         - '§f%corerpg_p1_charm%'
         - '§7%corerpg_p1_charm_next_q%'
-        - '§7%corerpg_p1_charm_next_c%'
-        - ''
-        - '§7只认「已选」的一件；放副手不算第二份护符'
-        - '§7护符提供生命与防御；成色 / 精工 / 强化只加生命'
-        - '§8副手饰品 · 微量守势 · 不计入主线刃/护符战力'
-        - ''
-        - '§8先手持护符点「主手 · 刃」看比较（会不会取消套装）'
         - '§e➥ §f手持要用的护符，点击选定'
     actions:
       all:
@@ -84,11 +72,9 @@ Icons:
       material: paper
       name: '§e实际属性'
       lore:
+        - ''
         - '§f%corerpg_p1_stats%'
         - '§7有效生命 §f%corerpg_p1_ehp% §8（生命 ÷ 承伤倍率）'
-        - ''
-        - '§8普攻 10% 暴击 · 烬斩不暴击'
-        - ''
         - '§e➥ §f点击：聊天栏完整明细与计算公式'
     actions:
       all:
@@ -101,18 +87,9 @@ Icons:
       material: nether star
       name: '§d套装：§f%corerpg_p1_awaken%'
       lore:
-        - '§7刃与护符同族、都 ≥ T1 → 成套（只有一套生效）'
-        - '§6焚烬：每 3 次普攻点燃敌人（持续伤害），适合打首领'
-        - '§c烬爆：每 5 次普攻炸开一圈（3 格范围伤害），适合清一群'
+        - ''
         - '§a炽愈：生命 ×1.00，每 5 次普攻回最大生命 2.5%（觉醒后最多 4%，6 秒一次），最稳'
-        - ''
-        - '§7觉醒 I：同族两件 ≥ T1'
-        - '§7觉醒 II：两件都 ≥ T2 且都 ≥ +6'
-        - '§7觉醒 III：两件都 T3 且都 ≥ +9'
-        - '§8觉醒按较低那件算；只提高系数，不增加次数'
-        - ''
         - '§8护甲四件套：§f%corerpg_p1_armor_set%'
-        - '§8详情：护甲页 · 两件套已激活 + 同族掉落阶 T2+ 甲≥2'
 
   N:
     update: 20
@@ -120,12 +97,9 @@ Icons:
       material: exp bottle
       name: '§b下一次突破'
       lore:
+        - ''
         - '§f%corerpg_p1_awaken_next%'
         - '%corerpg_p1_awaken_route%'
-        - ''
-        - '§7最省的路先看：背包里更好的件（免费换上）→ 8 枚印记兑换 → 升阶'
-        - '§7强化可在工坊「互换」免费挪到新件；强化 +1~+3 必成，之后按次数保底'
-        - ''
         - '§e➥ §f点击：在聊天栏列出每件的路线（带 [换上] / [兑换] 按钮）'
     actions:
       all:
@@ -139,25 +113,18 @@ Icons:
       material: book
       name: '§6成套进度'
       lore:
+        - ''
         - '§f%corerpg_p1_set_progress%'
         - '%corerpg_p1_set_run%'
-        - '§e焦点：§f%corerpg_p1_set_focus%'
-        - '§8护甲四件套：§f%corerpg_p1_armor_set%'
-        - ''
-        - '§8刃·护符终点 = 同族 T3 两件 +9（觉醒 III）'
-        - '§8T3 两件 +10、成色卓越以上 = 基本毕业'
-        - '§8之后是追极品（只比卓越多 4% 成长）和深渊层数、称号'
 
   h:
     display:
       material: potion
       name: '§a回复药 · 买 1 瓶'
       lore:
+        - ''
         - '§7余烬回复药：回复最大生命 20%'
         - '§7所有回复药共用 15 秒冷却 · 绑定、不回售'
-        - '§7每天第一次在主线本倒下，退还该局喝掉的药（最多 5 瓶）'
-        - '§8只能在城里买（副本内不能买）'
-        - ''
         - '§e➥ §f点击购买 1 瓶（10 余烬币）'
     actions:
       all:
@@ -167,13 +134,11 @@ Icons:
     display:
       material: potion
       amount: 5
-      name: '§a回复药 · 买 5 瓶'
+      name: '§a回复药 · 买5瓶'
       lore:
-        - '§7一局普通本 60–120 秒，按冷却最多喝 4–8 瓶'
-        - '§8本周精选规则是「限药」时，精选本的重打每局最多 3 瓶'
-        - '§8（首通不受影响，主城招牌写着本周规则）'
         - ''
-        - '§e➥ §f点击购买 5 瓶（50 余烬币）'
+        - '§7普通本约喝 4–8 瓶 · 限药精选最多 3'
+        - '§e➥ §f买 5 瓶（50 币）'
     actions:
       all:
         - 'command: corerpg p1 shop buy 5'
@@ -194,7 +159,7 @@ Icons:
   f:
     display:
       material: anvil
-      name: '§6工坊 · 强化 / 升阶 / 精工 / 成色 / 互换 / 分解'
+      name: '§6工坊'
       lore:
         - '§7手持要处理的刃或护符再打开'
         - '§8手持护甲：仅可分解（白板零头）；养成随护符'
@@ -210,13 +175,10 @@ Icons:
       material: banner
       name: '§6外观商店'
       lore:
-        - '§7只做展示，不加任何属性 · 买一次永久有，不回收'
-        - '§7· 称号颜色 · 足迹 · 名牌标记：币、余烬徽或印记都能付'
-        - '§7· 刃辉光 · 称号动效：§f不收币§7，余烬徽或印记'
+        - ''
         - '§7余烬币 §f%corerpg_coin% §7· 余烬徽 §f%corerpg_p1_badges%'
         - '§7可用印记 §f%corerpg_p1_shopmarks% §8（每阶留 8 枚备用兑换）'
-        - ''
-        - '§e➥ §f打开外观商店页（点商品在页内付款，右键试穿）'
+        - '§e➥ §f外观商店页（点商品在页内付款，右键试穿）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -230,16 +192,10 @@ Icons:
       material: nether star
       name: '§6签名传奇'
       lore:
+        - ''
         - '%corerpg_p1_sig_head%'
         - '%corerpg_p1_sig_blade%'
-        - '%corerpg_p1_sig_blade_o%'
-        - '%corerpg_p1_sig_charm%'
-        - '%corerpg_p1_sig_charm_o%'
-        - '§7每个首领自己的效果 · 首领徽记 · 烬炉烙印 · 开关 · 原版/调律'
-        - '§e希望 · 追烙：§f%corerpg_p1_sig_chase_hope%'
-        - '§8满 5 徽记可烙印 · 签名不锁通关'
-        - ''
-        - '§e➥ §f打开签名页'
+        - '§e➥ §f签名页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -270,19 +226,10 @@ Icons:
       material: prismarine crystals
       name: '§6词条洗练'
       lore:
+        - ''
         - '§7主手刃：%corerpg_p1_reroll_blade_cur%'
         - '§7护符：%corerpg_p1_reroll_charm_cur%'
-        - '§e希望 · 强化：§7刃 %corerpg_p1_enhance_blade_pity% §7· 护符 %corerpg_p1_enhance_charm_pity%'
-        - '§e希望 · 成色：§7刃 %corerpg_p1_quality_blade_hope% §7· 护符 %corerpg_p1_quality_charm_hope%'
-        - '§e希望 · 精工：§7刃 %corerpg_p1_refine_blade_hope% §7· 护符 %corerpg_p1_refine_charm_hope%'
-        - '§e希望 · 洗练：§7刃 %corerpg_p1_reroll_blade_pity% §7· 护符 %corerpg_p1_reroll_charm_pity%'
-        - '§e希望 · 掉落成色：§f%corerpg_p1_drop_q_hope%'
-        - '§e希望 · 宝石通关：§f%corerpg_p1_gem_pity_hope%'
-        - '§7重复件（或碎片）+ 币洗一次，档位不超过成色上限'
-        - '§8小加成，不是变强：4 档定身纹 ≈ Q07 重砸每次少挨 0.7'
-        - ''
-        - '§e➥ §f打开洗练页'
-        - '§c猎缀/抗缀/裂身：仅主线重打词缀精英'
+        - '§e➥ §f洗练页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -299,10 +246,7 @@ Icons:
         - ''
         - '§7%corerpg_p1_fest_charm%'
         - '§f%corerpg_p1_fest_charm_effect%'
-        - '§7独立的活动护符位：不占主手和已选护符，不算套装'
-        - '§6价格：%corerpg_p1_fest_charm_price%'
-        - ''
-        - '§e➥ §f打开活动页（购买 / 佩戴 / 剩余国庆币兑换）'
+        - '§e➥ §f活动页（购买 / 佩戴 / 剩余国庆币兑换）'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -314,12 +258,10 @@ Icons:
       material: enchanted book
       name: '§6天赋专精'
       lore:
+        - ''
         - '%corerpg_p1_spec_pts%'
         - '§7三排小天赋树：首领预警 · 词缀精英 · 套装专精'
-        - '§7每个都是有得有失的取舍，不是纯加属性（打法取舍，不是变强）'
-        - ''
-        - '§e➥ §f打开天赋页'
-        - '§c第 2 排：仅主线重打词缀精英'
+        - '§e➥ §f天赋页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -329,7 +271,7 @@ Icons:
   A:
     display:
       material: blaze rod
-      name: '§6冒险 · 主线本'
+      name: '§6冒险'
       lore:
         - '§e➥ §f打开冒险页'
     actions:
@@ -366,18 +308,10 @@ Icons:
           material: iron chestplate
           name: '§6护甲'
           lore:
+            - ''
             - '%corerpg_p1_armor_head%'
             - '%corerpg_p1_armor_chest%'
-            - '%corerpg_p1_armor_legs%'
-            - '%corerpg_p1_armor_boots%'
-            - '%corerpg_p1_armor_stash_line%'
-            - ''
-            - '%corerpg_p1_armor_set%'
-            - '§a受伤 −3%'
-            - '§7另 2 甲位可穿异族追成色'
-            - ''
-            - '§7阶级和强化跟随已选护符；成色 / 精工看掉落'
-            - '§e➥ §f打开护甲页（对比后换上）'
+            - '§e➥ §f护甲页（对比后换上）'
         actions:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -388,17 +322,10 @@ Icons:
           material: iron chestplate
           name: '§6护甲'
           lore:
+            - ''
             - '%corerpg_p1_armor_head%'
             - '%corerpg_p1_armor_chest%'
-            - '%corerpg_p1_armor_legs%'
-            - '%corerpg_p1_armor_boots%'
-            - '%corerpg_p1_armor_stash_line%'
-            - ''
-            - '%corerpg_p1_armor_set%'
-            - '§7还缺：任意同族掉落阶 T2+ 护甲'
-            - ''
-            - '§7阶级和强化跟随已选护符；成色 / 精工看掉落'
-            - '§e➥ §f打开护甲页（对比后换上）'
+            - '§e➥ §f护甲页（对比后换上）'
         actions:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -423,17 +350,10 @@ Icons:
           material: iron chestplate
           name: '§6护甲'
           lore:
+            - ''
             - '%corerpg_p1_armor_head%'
             - '%corerpg_p1_armor_chest%'
-            - '%corerpg_p1_armor_legs%'
-            - '%corerpg_p1_armor_boots%'
-            - '%corerpg_p1_armor_stash_line%'
-            - ''
-            - '%corerpg_p1_armor_set%'
-            - '§8先让刃与护符同族'
-            - ''
-            - '§7阶级和强化跟随已选护符；成色 / 精工看掉落'
-            - '§e➥ §f打开护甲页（对比后换上）'
+            - '§e➥ §f护甲页（对比后换上）'
         actions:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-2'

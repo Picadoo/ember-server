@@ -47,8 +47,6 @@ Icons:
         - ''
         - '§f%corerpg_p1_gem_pity_hope%'
         - '§7Q01–Q07 通关累计 · 满 5 发 1 石'
-        - '§8偏好：/corerpg p1 gempath'
-        - ''
         - '§e➥ §f刷新保底提示'
     actions:
       all:
@@ -62,13 +60,8 @@ Icons:
       name: '§6说明 · 孔与战斗'
       lore:
         - ''
-        - '§7刃 2 孔（第 2 孔强化≥5）· 符 1 孔（强化≥3）'
-        - '§7锋利：刃 T2+ 才计入攻 · 稳/汲/疾全程'
-        - '§7合成：碎片×8 + 骨尘×4 + 币 40'
-        - '§7仓内：§f碎%corerpg_p1_vault_shard% §7· §f骨%corerpg_p1_vault_bone%'
+        - '§7仓内：碎%corerpg_p1_vault_shard% · 骨%corerpg_p1_vault_bone%'
         - '§e通关保底：§f%corerpg_p1_gem_pity_hope%'
-        - '§8不走旧镶嵌页 · 不抬战斗 flat'
-        - ''
         - '§e➥ §f手持件 list'
     actions:
       all:

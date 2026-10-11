@@ -62,14 +62,9 @@ Icons:
       material: anvil
       name: '§c强化 · 预览'
       lore:
-        - '§7手持刃或护符；+1~+3 必成，之后按次数保底'
-        - '§7失败不降级、不爆装'
-        - '§e保底进度：§f%corerpg_p1_held_enhance_pity%'
         - ''
+        - '§e保底进度：§f%corerpg_p1_held_enhance_pity%'
         - '§e本次：§f%corerpg_p1_held_enhance_cost%'
-        - '§c%corerpg_p1_held_enhance_lack%'
-        - '§8材料多从挂机进仓 · 缺料点底栏「材料哪来」'
-        - '§8与预览一致'
     actions:
       all:
         - 'command: corerpg p1 enhance'
@@ -81,10 +76,9 @@ Icons:
           material: gray stained glass pane
           name: '§8强化 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e本次：§f%corerpg_p1_held_enhance_cost%'
             - '§c%corerpg_p1_held_enhance_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -94,10 +88,9 @@ Icons:
       material: redstone
       name: '§c强化 · 确认一次'
       lore:
+        - ''
         - '§e保底进度：§f%corerpg_p1_held_enhance_pity%'
         - '§e本次：§f%corerpg_p1_held_enhance_cost%'
-        - '§c%corerpg_p1_held_enhance_lack%'
-        - '§8与预览一致'
     actions:
       all:
         - 'command: corerpg p1 enhance confirm'
@@ -108,10 +101,9 @@ Icons:
           material: gray stained glass pane
           name: '§8强化 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e本次：§f%corerpg_p1_held_enhance_cost%'
             - '§c%corerpg_p1_held_enhance_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -121,12 +113,9 @@ Icons:
       material: nether star
       name: '§d升阶 · 预览'
       lore:
-        - '§7同族 T1→T2（需首通 Q04）· T2→T3（需首通 Q07）'
-        - '§7强化/成色/精工/绑定全部保留'
         - ''
         - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
         - '§c%corerpg_p1_held_upgrade_lack%'
-        - '§8与预览一致'
     actions:
       all:
         - 'command: corerpg p1 upgrade'
@@ -137,10 +126,9 @@ Icons:
           material: gray stained glass pane
           name: '§8升阶 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
             - '§c%corerpg_p1_held_upgrade_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -164,10 +152,9 @@ Icons:
           material: gray stained glass pane
           name: '§8升阶 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e本次：§f%corerpg_p1_held_upgrade_cost%'
             - '§c%corerpg_p1_held_upgrade_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -177,12 +164,9 @@ Icons:
       material: blaze powder
       name: '§6精工 · 预览'
       lore:
+        - ''
         - '§7让这件的成长 +2%/档（0→2%→4%→6%）：材料确定升'
         - '§e精工进度：§f%corerpg_p1_held_refine_hope%'
-        - ''
-        - '§e手持件：§f%corerpg_p1_held_next_c%'
-        - '§c%corerpg_p1_held_refine_lack%'
-        - '§8与预览一致'
     actions:
       all:
         - 'command: corerpg p1 refine craft'
@@ -193,10 +177,9 @@ Icons:
           material: gray stained glass pane
           name: '§8精工 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e手持件：§f%corerpg_p1_held_next_c%'
             - '§c%corerpg_p1_held_refine_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -206,10 +189,9 @@ Icons:
       material: blaze powder
       name: '§6精工 · 确认'
       lore:
+        - ''
         - '§e精工进度：§f%corerpg_p1_held_refine_hope%'
         - '§e手持件：§f%corerpg_p1_held_next_c%'
-        - '§c%corerpg_p1_held_refine_lack%'
-        - '§8与预览一致'
     actions:
       all:
         - 'command: corerpg p1 refine craft confirm'
@@ -220,10 +202,9 @@ Icons:
           material: gray stained glass pane
           name: '§8精工 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e手持件：§f%corerpg_p1_held_next_c%'
             - '§c%corerpg_p1_held_refine_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -233,13 +214,9 @@ Icons:
       material: gold nugget
       name: '§e成色 · 预览'
       lore:
-        - '§7标准→精良→卓越：材料确定升一档（极品只从掉落）'
+        - ''
         - '§8强化一档 +4%～8%，通常先强化更划算'
         - '§e成色进度：§f%corerpg_p1_held_quality_hope%'
-        - ''
-        - '§e手持件：§f%corerpg_p1_held_next_q%'
-        - '§c%corerpg_p1_held_quality_lack%'
-        - '§8与预览一致'
     actions:
       all:
         - 'command: corerpg p1 refine quality'
@@ -250,10 +227,9 @@ Icons:
           material: gray stained glass pane
           name: '§8成色 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e手持件：§f%corerpg_p1_held_next_q%'
             - '§c%corerpg_p1_held_quality_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -263,10 +239,9 @@ Icons:
       material: gold nugget
       name: '§e成色 · 确认'
       lore:
+        - ''
         - '§e成色进度：§f%corerpg_p1_held_quality_hope%'
         - '§e手持件：§f%corerpg_p1_held_next_q%'
-        - '§c%corerpg_p1_held_quality_lack%'
-        - '§8与预览一致'
     actions:
       all:
         - 'command: corerpg p1 refine quality confirm'
@@ -277,10 +252,9 @@ Icons:
           material: gray stained glass pane
           name: '§8成色 · 不可用'
           lore:
-            - '§8护甲随护符成长；成色和精工看掉落'
+            - ''
             - '§e手持件：§f%corerpg_p1_held_next_q%'
             - '§c%corerpg_p1_held_quality_lack%'
-            - '§8甲 · K0 只能分解'
         actions:
           all:
             - 'tell: §8护甲随护符成长；成色和精工看掉落'
@@ -290,10 +264,9 @@ Icons:
       material: hopper
       name: '§b强化轨道互换 · 预览'
       lore:
-        - '§7主手与副手同部位装备互换 强化等级+失败计数'
-        - '§7两件都会绑定；副手（按 F 换手，在主城里按）'
+        - ''
         - '§e%corerpg_p1_held_swap_cost%'
-        - '§7先预览，再点下方「互换 · 确认」'
+        - '§7主手与副手同部位装备互换 强化等级+失败计数'
     actions:
       all:
         - 'command: corerpg p1 swap'
@@ -316,10 +289,9 @@ Icons:
       material: flint
       name: '§7分解 · 预览'
       lore:
-        - '§7只限普通掉落件；甲→白板胚零头（0.1×阶），攒满 1 到账'
+        - ''
         - '§e预览：§f%corerpg_p1_held_dismantle_yield%'
-        - '§a差装→胚→工坊确定养 · 通关不锁掉落'
-        - '§7预览后在聊天栏点击 §c[确认分解]§7（30 秒内有效）'
+        - '§7只限普通掉落件；甲→白板胚零头（0.1×阶），攒满 1 到账'
     actions:
       all:
         - 'command: corerpg p1 dismantle'
@@ -330,10 +302,9 @@ Icons:
       material: ender pearl
       name: '§b强化轨道互换 · 确认'
       lore:
-        - '§7主手与副手的同部位装备交换「强化等级 + 失败计数」'
-        - '§7成色 / 精工 / 家族 / 阶级不变；两件都会绑定'
+        - ''
         - '§e%corerpg_p1_held_swap_cost%'
-        - '§8与预览一致'
+        - '§7主手与副手的同部位装备交换「强化等级 + 失败计数」'
     actions:
       all:
         - 'command: corerpg p1 swap confirm'
@@ -355,10 +326,9 @@ Icons:
       material: gray dye
       name: '§7分解 · 确认在聊天栏'
       lore:
+        - ''
         - '§7点上面的预览后，聊天栏出现 §c[确认分解]'
         - '§7只限普通掉落件；首通和起步件拆不了'
-        - '§7甲为白板零头（0.1×阶），非整胚 1/2/3'
-        - '§8销毁确认仍走聊天一键（不在菜单硬点）'
   # D381: 产花反向 · 工坊→挂机庭
   A:
     display:
@@ -368,9 +338,7 @@ Icons:
         - ''
         - '§7挂机六键产 → 仓 → 本页花'
         - '§7日顶仍 2400 · 魂尘≠挂机'
-        - '§8材料账号绑定进仓后扣本页费用'
-        - ''
-        - '§e➥ §f打开挂机庭'
+        - '§e➥ §f挂机庭'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -384,11 +352,7 @@ Icons:
         - ''
         - '§8旁路赌线 · 主养仍用上方强化/成色/精工'
         - '§78 印记 + 4 胚料 + 500 币'
-        - '§7成色/精工随机 · §c出不了极品'
-        - '§7想稳：强化/成色升档或印记兑换'
-        - ''
-        - '§e页内下两排 = 成色下限'
-        - '§e➥ §f打开随机锻造页'
+        - '§e➥ §f随机锻造页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -417,9 +381,7 @@ Icons:
         - ''
         - '§7用余烬烙纹写入§f指定词条类型'
         - '§7档位仍随机 · 每件锻造次数 13'
-        - '§740 碎片 → 1 烙纹 · 不抬挂机表'
-        - ''
-        - '§e➥ §f打开烙纹工坊'
+        - '§e➥ §f烙纹工坊'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -430,13 +392,9 @@ Icons:
       material: book
       name: '§e配方速览'
       lore:
-        - '§d烬砧仓差：烙纹/随机锻/转化（D432）'
         - ''
         - '§7未持装备也能看强化/升阶/精工大概要多少'
         - '§7代表档 +1/+4/+7/+10 · 升阶/精工/成色表'
-        - '§7挂机打满「约」够哪档（按现网日表 · 不加快产量）'
-        - '§8数字镜像规则 · 真扣费仍以手持预览为准'
-        - ''
         - '§e➥ §f查看阶梯'
     actions:
       all:
@@ -452,10 +410,7 @@ Icons:
         - ''
         - '§e希望保底：§f%corerpg_p1_gem_pity_hope%'
         - '§7孔位镶拆 · 合成四石 · 通关保底'
-        - '§7碎8+骨4+币40 可合成'
-        - '§8不走旧镶嵌页 · 不抬 flat'
-        - ''
-        - '§e➥ §f打开宝石页'
+        - '§e➥ §f宝石页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -470,13 +425,7 @@ Icons:
         - ''
         - '§7刃：%corerpg_p1_reroll_blade_cur%'
         - '§7护符：%corerpg_p1_reroll_charm_cur%'
-        - ''
-        - '§f普通洗：§7本部位词条随机 · 保底只保档位'
-        - '§b锁定再洗：§7保留当前词条类型，只重抽档位'
-        - '§8（D148 · Shift+点击 / 聊天栏按钮 · 另加 lock 碎片）'
-        - '§8不涨永久乘区 · 与烙纹定向（选类型）分工：烙纹写入 / 洗练炼档'
-        - ''
-        - '§e➥ §f打开洗练页'
+        - '§e➥ §f洗练页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'

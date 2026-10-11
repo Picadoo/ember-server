@@ -64,19 +64,9 @@ Icons:
       material: nether star
       name: '§6签名传奇 · 说明'
       lore:
-        - '%corerpg_p1_sig_head%'
         - ''
-        - '§7每张主线图的首领有自己的签名效果（改打法，不加伤害倍率；都有代价）'
-        - '§7生效：正在用的刃 1 条 + 已选护符 1 条；同类不叠；和已选天赋同类的不生效'
+        - '%corerpg_p1_sig_head%'
         - '§7来源：首通后普通重打这张图 → 每局 1 枚首领徽记，基础掉落 12% 是签名件'
-        - '%corerpg_p1_sig_acq%'
-        - '§e希望表盘 · 追烙：§f%corerpg_p1_sig_chase_hope%'
-        - '§e希望 · 烙印花费：§f%corerpg_p1_sig_imprint_hope%'
-        - '§e希望 · 调律解锁：§f%corerpg_p1_sig_attune_hope%'
-        - '§7烬炉烙印：5 枚这张图的徽记 + 300×阶级 币，把签名烙到自己的件上（不锁通关）'
-        - '§e刃签名可覆盖烬斩符文：§fL07 直线 · L09 环斩 · L13 蓄力环斩'
-        - '§8形状预览 / 二选一 → 右下「技能组」'
-        - '§8签名记在你的存档上，跟着这件的编号走：升阶 / 强化 / 洗练都不丢；分解就没了'
 
   M:
     update: 20
@@ -106,11 +96,9 @@ Icons:
       material: iron sword
       name: '§6正在用的刃'
       lore:
+        - ''
         - '%corerpg_p1_sig_blade%'
         - '%corerpg_p1_sig_blade_o%'
-        - ''
-        - '%corerpg_p1_sig_blade_t%'
-        - '§8只能在城里开关'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
@@ -122,11 +110,9 @@ Icons:
       material: totem
       name: '§6已选护符'
       lore:
+        - ''
         - '%corerpg_p1_sig_charm%'
         - '%corerpg_p1_sig_charm_o%'
-        - ''
-        - '%corerpg_p1_sig_charm_t%'
-        - '§8只能在城里开关'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'
@@ -280,13 +266,10 @@ Icons:
       material: enchanted book
       name: '§d签名调律'
       lore:
+        - ''
         - '%corerpg_p1_sig_alt_head%'
-        - ''
-        - '§7Q07 解锁：有代价的签名多一个「调律版」——好处不变，换一种代价'
         - '§7每件用那张图的 10 枚徽记解锁一次（永久），之后在城里随时切换'
-        - '§7同一件签名同时只有一个版本生效；副本里不能切'
-        - ''
-        - '§e➥ 点击打开调律页'
+        - '§e➥ §f➥ 点击打开调律页'
     actions:
       all:
         - 'sound: UI_BUTTON_CLICK-1-1'

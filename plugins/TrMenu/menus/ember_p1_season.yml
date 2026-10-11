@@ -44,11 +44,7 @@ Icons:
         - ''
         - '§74 周一个赛季 · 每周一 0 点（北京时间）换周'
         - '§7季末：每榜前 3 名得赛季称号，各榜第 1 名再得 §d❖ §7名牌框'
-        - '§7赛季内通关深渊第 5 层：称号「§5赛季深潜者§7」'
-        - '§8只做展示，不加属性 · 测试号不上榜'
-        - ''
-        - '§e➥ §f左键：本周榜（聊天栏，含你的名次）'
-        - '§e➥ §f右键：赛季榜'
+        - '§e➥ §f左：本周榜（聊天栏，含你的名次） · 右：赛季榜'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -68,9 +64,6 @@ Icons:
         - ''
         - '§7余烬徽：§f%corerpg_p1_badges% §8（外观商店用，1 徽 = 1 点）'
         - '§7每完成一个 +15，全部完成再 +20'
-        - '§8周目标只给外观货币，不给币、印记或装备'
-        - '§8首通 Q07 后才计数（首通当天已做满的委托也算）'
-        - ''
         - '§e➥ §f点击：在聊天栏列出（带 [打开] 按钮）'
     actions:
       all:
@@ -148,8 +141,6 @@ Icons:
         - ''
         - '%corerpg_p1_goal_bounty%'
         - '§8首通 Q07 后才计数；当天做满委托（第 3 局档）算 1 天'
-        - '§8毕业那周按剩下的天数算（周六毕业要 2 天，周日 1 天）'
-        - ''
         - '§e➥ §f点击：打开对应页面'
     actions:
       all:
@@ -160,14 +151,11 @@ Icons:
     update: 20
     display:
       material: slime ball
-      name: '§6周目标 · 烬核同心 §8（可选）'
+      name: '§6周目标'
       lore:
         - ''
         - '%corerpg_p1_goal_core%'
-        - '§7团本断塔回廊·团（R03）里，烬核落下时§f全队站着的人都在圈里§7（至少 2 人）'
-        - '§7并且这局通关，算 1 次；同一局只算 1 次'
-        - '§8可选目标：完成也给 15 余烬徽，但不算进「全部完成」'
-        - ''
+        - '§7团本断塔回廊·团（R03）里'
         - '§e➥ §f点击：打开冒险页'
     actions:
       all:
@@ -183,10 +171,6 @@ Icons:
         - ''
         - '%corerpg_p1_goal_short%'
         - '§7五本（sx01–sx05）共用一个周进度 · 第 4+ 次无结算不计'
-        - '§8可选目标：完成也给 15 余烬徽，但不算进「全部完成」'
-        - '§8只发外观徽 · 不发币、印记或装备'
-        - '§8首通 Q07 后才计数'
-        - ''
         - '§e➥ §f点击：打开短征选本'
     actions:
       all:
@@ -200,20 +184,9 @@ Icons:
       name: '§c余烬连战最快'
       lore:
         - ''
-        - '§7本周：'
         - '§f 1. %corerpg_p1_sboard_w_time_rush_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_rush_2%'
-        - '§f 3. %corerpg_p1_sboard_w_time_rush_3%'
-        - '§7你：§f%corerpg_p1_srank_w_time_rush%'
-        - ''
-        - '§7本赛季：'
-        - '§f 1. %corerpg_p1_sboard_s_time_rush_1%'
-        - '§f 2. %corerpg_p1_sboard_s_time_rush_2%'
-        - '§f 3. %corerpg_p1_sboard_s_time_rush_3%'
-        - '§7你：§f%corerpg_p1_srank_s_time_rush%'
-        - '§8从第一个首领现身算到第三个倒下 · 每周首通领奖，之后的练习局也算成绩'
-        - ''
-        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+        - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -231,20 +204,9 @@ Icons:
       name: '§e深渊最高层'
       lore:
         - ''
-        - '§7本周：'
         - '§f 1. %corerpg_p1_sboard_w_abyss_1%'
         - '§f 2. %corerpg_p1_sboard_w_abyss_2%'
-        - '§f 3. %corerpg_p1_sboard_w_abyss_3%'
-        - '§7你：§f%corerpg_p1_srank_w_abyss%'
-        - ''
-        - '§7本赛季：'
-        - '§f 1. %corerpg_p1_sboard_s_abyss_1%'
-        - '§f 2. %corerpg_p1_sboard_s_abyss_2%'
-        - '§f 3. %corerpg_p1_sboard_s_abyss_3%'
-        - '§7你：§f%corerpg_p1_srank_s_abyss%'
-        - '§8同一层比最快通关（进第一个房间到首领倒下）'
-        - ''
-        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+        - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -262,19 +224,9 @@ Icons:
       name: '§e精选挑战通关'
       lore:
         - ''
-        - '§7本周：'
         - '§f 1. %corerpg_p1_sboard_w_featured_1%'
         - '§f 2. %corerpg_p1_sboard_w_featured_2%'
-        - '§f 3. %corerpg_p1_sboard_w_featured_3%'
-        - '§7你：§f%corerpg_p1_srank_w_featured%'
-        - ''
-        - '§7本赛季：'
-        - '§f 1. %corerpg_p1_sboard_s_featured_1%'
-        - '§f 2. %corerpg_p1_sboard_s_featured_2%'
-        - '§f 3. %corerpg_p1_sboard_s_featured_3%'
-        - '§7你：§f%corerpg_p1_srank_s_featured%'
-        - ''
-        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+        - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -292,19 +244,9 @@ Icons:
       name: '§e团本通关'
       lore:
         - ''
-        - '§7本周：'
         - '§f 1. %corerpg_p1_sboard_w_raids_1%'
         - '§f 2. %corerpg_p1_sboard_w_raids_2%'
-        - '§f 3. %corerpg_p1_sboard_w_raids_3%'
-        - '§7你：§f%corerpg_p1_srank_w_raids%'
-        - ''
-        - '§7本赛季：'
-        - '§f 1. %corerpg_p1_sboard_s_raids_1%'
-        - '§f 2. %corerpg_p1_sboard_s_raids_2%'
-        - '§f 3. %corerpg_p1_sboard_s_raids_3%'
-        - '§7你：§f%corerpg_p1_srank_s_raids%'
-        - ''
-        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+        - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -322,19 +264,9 @@ Icons:
       name: '§eR01 最快通关'
       lore:
         - ''
-        - '§7本周：'
         - '§f 1. %corerpg_p1_sboard_w_time_r01_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_r01_2%'
-        - '§f 3. %corerpg_p1_sboard_w_time_r01_3%'
-        - '§7你：§f%corerpg_p1_srank_w_time_r01%'
-        - ''
-        - '§7本赛季：'
-        - '§f 1. %corerpg_p1_sboard_s_time_r01_1%'
-        - '§f 2. %corerpg_p1_sboard_s_time_r01_2%'
-        - '§f 3. %corerpg_p1_sboard_s_time_r01_3%'
-        - '§7你：§f%corerpg_p1_srank_s_time_r01%'
-        - ''
-        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+        - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -352,19 +284,9 @@ Icons:
       name: '§eR02 最快通关'
       lore:
         - ''
-        - '§7本周：'
         - '§f 1. %corerpg_p1_sboard_w_time_r02_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_r02_2%'
-        - '§f 3. %corerpg_p1_sboard_w_time_r02_3%'
-        - '§7你：§f%corerpg_p1_srank_w_time_r02%'
-        - ''
-        - '§7本赛季：'
-        - '§f 1. %corerpg_p1_sboard_s_time_r02_1%'
-        - '§f 2. %corerpg_p1_sboard_s_time_r02_2%'
-        - '§f 3. %corerpg_p1_sboard_s_time_r02_3%'
-        - '§7你：§f%corerpg_p1_srank_s_time_r02%'
-        - ''
-        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+        - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -382,19 +304,9 @@ Icons:
       name: '§eR03 最快通关'
       lore:
         - ''
-        - '§7本周：'
         - '§f 1. %corerpg_p1_sboard_w_time_r03_1%'
         - '§f 2. %corerpg_p1_sboard_w_time_r03_2%'
-        - '§f 3. %corerpg_p1_sboard_w_time_r03_3%'
-        - '§7你：§f%corerpg_p1_srank_w_time_r03%'
-        - ''
-        - '§7本赛季：'
-        - '§f 1. %corerpg_p1_sboard_s_time_r03_1%'
-        - '§f 2. %corerpg_p1_sboard_s_time_r03_2%'
-        - '§f 3. %corerpg_p1_sboard_s_time_r03_3%'
-        - '§7你：§f%corerpg_p1_srank_s_time_r03%'
-        - ''
-        - '§e➥ §f左键：本周榜前 5 · 右键：赛季榜前 5'
+        - '§e➥ §f左：本周榜前 5 · 右：赛季榜前 5'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'

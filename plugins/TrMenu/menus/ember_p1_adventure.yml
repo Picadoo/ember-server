@@ -60,7 +60,7 @@ Icons:
         priority: 1
         display:
           material: gray dye
-          name: '§7短征 · 烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣 §8（需 Q01 首通）'
+          name: '§7短征'
           lore:
             - ''
             - '§c先通主线 Q01'
@@ -68,19 +68,12 @@ Icons:
     update: 20
     display:
       material: shield
-      name: '§6短征 · 烬门 / 锈灯 / 霜雾 / 烬井 / 裂谷 / 烬环 / 烬塔 / 错层 / 跳石 / 递闸 / 镜廊 / 枢厅 / 衡梁 / 裂廊 / 旋坡 / 影廊 / 潮廊 / 晶棱 / 弦共鸣'
+      name: '§6短征'
       lore:
         - ''
-        - '§7P1 原生短本（§f不是§7旧日常窟）'
-        - '§7烬门哨岗 · 锈灯栈道 · 霜雾闸廊 · 烬井螺旋 · 裂谷风廊 · 烬环廊 · 烬塔回升 · 错层烬庭 · 烬渠跳石 · 烬闸递室 · 烬镜对廊 · 烬枢转厅 · 烬衡悬梁 · 烬裂折廊 · 烬旋坡廊 · 烬影叠廊 · 烬潮回廊 · 烬晶折棱 · 烬弦共鸣'
-        - '§7各体力 §e30 §7· 日有奖帽分开计'
         - '§d今日剩余有奖：§f%corerpg_p1_sx_day_left_sum%'
         - '§7生涯首通未领：§f%corerpg_p1_sx_fc_left% §7本'
-        - '§8%corerpg_p1_sx_fc_pending_line%'
-        - '§8细看点进选本页 · 各本日帽分开 · 不加快产量'
-        - '§7终厅可读可躲 · 材料进仓去工坊'
-        - ''
-        - '§e➥ §f打开短征选本页'
+        - '§e➥ §f短征选本页'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -96,12 +89,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_bounty%'
         - '§e希望：§f%corerpg_p1_bounty_hope%'
-        - '§e精选印记：§f%corerpg_p1_featured_hope%'
-        - '§7当天第 1 局结算通关：30 余烬币'
-        - '§7当天第 3 局结算通关：60 余烬币 + 余烬碎片 ×6'
-        - '§7主线 / 挑战 / 深渊每层都算 1 局，团本算 2 局，失败不算'
-        - '§7每天 0 点刷新（同体力日）· 自动到账，不用领取'
-        - ''
         # D144: numbers = ember-v1.yml bounty.variety
         - '§e花样委托 §8（重打已首通的普通版时才有花样）'
         - '§7%corerpg_p1_vbounty%'
@@ -125,26 +112,11 @@ Icons:
     update: 20
     display:
       material: diamond chestplate
-      name: '§b团本 · 霜封哨所·团（3～5 人）'
+      name: '§b团本'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_raid_r02%'
-        - '§d名片：§f半血砸地破绽'
-        - '§b本间：§f三房推进 · 半血转阶段'
-        - '§7Q06 的地图 · 首领双段刀气 + 追身冲击圈；半血进入第二阶段（砸地接横扫）'
-        - '§7战斗规则不变；通关得专属称号与足迹（只做展示）'
-        - '§8族觉醒 / 护甲四件套规则同主线（见装备·帮助）'
-        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
-        - '§7倒下后观战队友；下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次；全员倒下才算失败'
-        - '§7结算同锈轨矿道·团：挑战版固定结算 + 1 件 T3（你的目标族；没选就按团本偏向族，至少精良）+ 1 枚 T3 印记'
-        - '§7与锈轨矿道·团、断塔回廊·团合计每周 3 次通关奖励（失败不算次数，体力够就能再来）'
-        - ''
-        - '§a人越多越稳：首通 Q07 后第 2 周 3 人约 5 成、5 人约 8 成能过（第 4 周 3 人约 7 成、4～5 人 9 成以上）'
-        - '§e建议队伍里有炽愈：首领半血时加怪、单下伤害高，要有人回血'
-        - '§7招募中：§f%corerpg_p1_recruits%'
-        - ''
-        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
-        - '§e➥ §f右键：全服招募（在线的已首通 Q07 玩家收到 [申请入队]；招募挂 10 分钟，之后上线的人也能看到）'
+        - '§7状态：§f%corerpg_p1_raid_r02% §7· 3～5人 · 周3次'
+        - '§e➥ §f左：开本 · 右：招募'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -165,26 +137,11 @@ Icons:
     display:
       material: golden chestplate
       shiny: true
-      name: '§6团本 · 断塔回廊·团（3～5 人）'
+      name: '§6团本'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_raid_r03%'
-        - '§d名片：§f烬核分摊'
-        - '§b本间：§f三房推进 · 全队靠拢'
-        - '§7Q05 的地图 · 首领斧刃横扫 + 径向冲击；招牌机制「烬核」：绿圈锁定一人，3 秒后圈里的人平分伤害——全队靠拢！'
-        - '§7战斗规则不变；通关得专属称号与足迹（只做展示）'
-        - '§8族觉醒 / 护甲四件套规则同主线（见装备·帮助）'
-        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
-        - '§7倒下后观战队友；下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次；全员倒下才算失败'
-        - '§7结算同锈轨矿道·团（偏向族焚烬）：挑战版固定结算 + 1 件 T3（你的目标族；没选就按团本偏向族，至少精良）+ 1 枚 T3 印记'
-        - '§7与锈轨矿道·团、霜封哨所·团合计每周 3 次通关奖励（失败不算次数，体力够就能再来）'
-        - ''
-        - '§a人越多越稳：首通 Q07 后第 2 周 3 人约 5 成、5 人约 9 成能过（第 4 周 3 人约 7 成半、4～5 人 9 成以上）'
-        - '§e建议队伍里有炽愈：首领半血时加怪、单下伤害高，要有人回血'
-        - '§7招募中：§f%corerpg_p1_recruits%'
-        - ''
-        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
-        - '§e➥ §f右键：全服招募（在线的已首通 Q07 玩家收到 [申请入队]；招募挂 10 分钟，之后上线的人也能看到）'
+        - '§7状态：§f%corerpg_p1_raid_r03% §7· 3～5人 · 周3次'
+        - '§e➥ §f左：开本 · 右：招募'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -204,22 +161,11 @@ Icons:
     update: 20
     display:
       material: blaze powder
-      name: '§c余烬连战 · 每周首领连战（1～3 人）'
+      name: '§c余烬连战'
       lore:
         - ''
-        - '§7状态：§f%corerpg_p1_rush%'
-        - '§7断塔斧卫 → 霜封统领 → 炉锁巨卫，同一个大厅连打'
-        - '§7招式和各自主线图一样，生命 ×1.7、伤害 ×1.45（组队另按人数加生命）'
-        - '§7每打倒一个休息 10 秒、站着的人回复 30% 生命 · 倒下观战，没有复活'
-        - '§e每周首通领奖，失败可无限重试；已领奖后可练习（无奖励）'
-        - '§7不耗体力 · 失败或倒下只结束这一局，不扣任何东西'
-        - '§7本周奖励：T3 印记 +1 · 余烬徽 +20 · 第一次通关得称号「§c连战不息§7」'
-        - '§8不给余烬币、装备和碎片 · 本周最快榜（练习局也算），赛季末前 3 名得「赛季疾行者」'
-        - ''
-        - '§a参考：T3 两件 +6、躲得中等的单人约 9 成能过；T3 +3 约 6 成'
-        - ''
-        - '§e➥ §f左键：开始（组队时队长点；已领奖的队员这局是练习）'
-        - '§e➥ §f右键：规则和本周最快榜（聊天栏）'
+        - '§7状态：§f%corerpg_p1_rush% §7· 不耗体力'
+        - '§e➥ §f左：开始 · 右：规则榜'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -241,11 +187,8 @@ Icons:
       name: '§d进阶模式'
       lore:
         - ''
-        - '§7首领残响 §8（Q04 首通·Q01–Q07）§7· 连战·前哨 §8（Q05 首通）§7· 自选誓约 §8（Q06 首通）'
-        - '§7重打已通的图拿首领徽记（用来烙签名）'
         - '§7自选誓约：%corerpg_p1_pledge_head%'
         - '§7残响本周 claim：§f%corerpg_p1_rush_echo_q01% §8（七首领共用 3 次）'
-        - ''
         - '§e➥ §f打开'
     actions:
       all:
@@ -258,12 +201,9 @@ Icons:
       material: glowstone dust
       name: '§e余烬体力 §f%corerpg_stamina%§7/§f%corerpg_stamina_max%'
       lore:
-        - '§a下一步：§f%corerpg_p1_next%'
         - ''
+        - '§a下一步：§f%corerpg_p1_next%'
         - '§7主线本每次 §e30 §7体力 · 每天 0 点回满'
-        - '§7开本失败退还 · 开打后离开不退'
-        - '§7只有 Boss 倒下才结算（中途离开无奖励）'
-        - '§81～3 人 · 敌人血量按开局人数锁定'
 
   # D288: 重打短目标一眼（精选剩次 / 事件池 / 誓约 / 残响 claim / 花样）
   S:
@@ -275,21 +215,7 @@ Icons:
         - ''
         - '§b本周精选：§f%corerpg_p1_featured%'
         - '§b本周规则：§f%corerpg_p1_modifier%'
-        - '§8周规则＝精选挑战 remix · 团本不受影响'
-        - '§8精选图前 3 次通关各多 1 枚印记（挑战 T3；Q01–Q06 普通重打给本图阶，共用次数）'
-        - ''
-        - '§e花样委托：§f%corerpg_p1_vbounty%'
-        - '§8枢纽「今天该打哪」有今日优先（与这边不矛盾）'
-        - '§8旁轨：生活·工坊见枢纽今日卡'
-        - '§7重打已首通普通版：词缀精英必出 · 约一半局有房间事件'
-        - '§7事件池：§f限时清房 / 砸晶 / 护宝兔 / 占点 / 护灯 / 传火 / 裂隙 / 连斩 / 无伤'
-        - '§a达标通关 → 聊天栏「花样委托 +1」· 进度同步'
-        - ''
-        - '§d誓约已选：§f%corerpg_p1_pledge_head%'
-        - '§b残响本周：§f%corerpg_p1_rush_echo_q01% §8（Q01–Q07 共用 3 次领奖）'
-        - ''
-        - '§e➥ §f左键：进阶模式（残响 / 前哨 / 誓约）'
-        - '§e➥ §f右键：挑战版（看精选图）'
+        - '§e➥ §f左：进阶模式（残响 / 前哨 / 誓约） · 右：挑战版（看精选图）'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -307,15 +233,6 @@ Icons:
         - ''
         - '§7掉落目标族：§f%corerpg_p1_target%'
         - '§7T1 锻造印记：§f%corerpg_p1_marks_t1% §7/ 8'
-        - '§7T2 锻造印记：§f%corerpg_p1_marks_t2% §7/ 8 §8（T2 定向锻造：%corerpg_p1_forge_t2%）'
-        - '§7T3 锻造印记：§f%corerpg_p1_marks_t3% §7/ 8 §8（T3 定向锻造：%corerpg_p1_forge_t3%）'
-        - '§7挑战版：§f%corerpg_p1_challenge%'
-        - '§7套装：§f%corerpg_p1_awaken%'
-        - '§7%corerpg_p1_awaken_next%'
-        - '§7%corerpg_p1_set_progress%'
-        - '§8护甲四件套：§f%corerpg_p1_armor_set%'
-        - '§7暂存待领：§f%corerpg_p1_pending% §7项'
-        - ''
         # D138: numbers = ember-v1-runs.yml variety (affix_shard / event_secs / event_core)
         - '§6重复刷图花样 §8（已首通的普通版）'
         - '§7每局 1 只发光的§6词缀精英§7：炽热/分裂/厚甲/再生/冲锋/凝霜/投弹/亡爆/毒十字/禁锢/旋光/火链'
@@ -337,18 +254,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_q01_state% %corerpg_p1_rule_q01%'
         - '§7消耗：§e%corerpg_p1_q01_cost%'
-        - '§7掉落：§f%corerpg_p1_q01_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q01%'
-        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q01%'
-        - '§7用途：§f%corerpg_p1_q01_purpose%'
-        - '§7首通：§f%corerpg_p1_q01_fc%'
-        - '§d名片：§f学预警 · 重斩落空破绽'
-        - '§e相位：§f半血 · 招式变强'
-        - '§b节奏：§f事件偏早 · 门慢半拍'
-        - '§7签名：%corerpg_p1_sig_m_q01%'
-        - '%corerpg_p1_sig_run%'
-        - '%corerpg_p1_sig_run_cost%'
-        - ''
         - '§e➥ §f点击进本（队长点；队员需各自满足条件）'
     actions:
       all:
@@ -364,18 +269,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_q02_state% %corerpg_p1_rule_q02%'
         - '§7消耗：§e%corerpg_p1_q02_cost%'
-        - '§7掉落：§f%corerpg_p1_q02_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q02%'
-        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q02%'
-        - '§7用途：§f%corerpg_p1_q02_purpose%'
-        - '§7首通：§f%corerpg_p1_q02_fc%'
-        - '§d名片：§f冲撞引墙'
-        - '§e相位：§f半血 · 招式变强'
-        - '§b节奏：§f事件居中'
-        - '§7签名：%corerpg_p1_sig_m_q02%'
-        - '%corerpg_p1_sig_run%'
-        - '%corerpg_p1_sig_run_cost%'
-        - ''
         - '§e➥ §f点击进本（需 Q01 首通）'
     actions:
       all:
@@ -391,18 +284,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_q03_state% %corerpg_p1_rule_q03%'
         - '§7消耗：§e%corerpg_p1_q03_cost%'
-        - '§7掉落：§f%corerpg_p1_q03_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q03%'
-        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q03%'
-        - '§7用途：§f%corerpg_p1_q03_purpose%'
-        - '§7首通：§f%corerpg_p1_q03_fc%'
-        - '§d名片：§f召唤压力 + 双签名门槛'
-        - '§e相位：§f半血增援 · 两侧加怪'
-        - '§b节奏：§f事件偏晚 · 门慢半拍'
-        - '§7签名：%corerpg_p1_sig_m_q03%'
-        - '%corerpg_p1_sig_run%'
-        - '%corerpg_p1_sig_run_cost%'
-        - ''
         - '§e➥ §f点击进本（需 Q02 首通）'
     actions:
       all:
@@ -418,18 +299,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_q04_state% %corerpg_p1_rule_q04%'
         - '§7消耗：§e%corerpg_p1_q04_cost%'
-        - '§7掉落：§f%corerpg_p1_q04_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q04%'
-        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q04%'
-        - '§7用途：§f%corerpg_p1_q04_purpose%'
-        - '§7首通：§f%corerpg_p1_q04_fc%'
-        - '§d名片：§f落差 / 冲击圈走位'
-        - '§e相位：§f半血 · 招式变强'
-        - '§b节奏：§f事件居中'
-        - '§7签名：%corerpg_p1_sig_m_q04%'
-        - '%corerpg_p1_sig_run%'
-        - '%corerpg_p1_sig_run_cost%'
-        - ''
         - '§e➥ §f点击进本（需 Q03 首通）'
     actions:
       all:
@@ -445,18 +314,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_q05_state% %corerpg_p1_rule_q05%'
         - '§7消耗：§e%corerpg_p1_q05_cost%'
-        - '§7掉落：§f%corerpg_p1_q05_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q05%'
-        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q05%'
-        - '§7用途：§f%corerpg_p1_q05_purpose%'
-        - '§7首通：§f%corerpg_p1_q05_fc%'
-        - '§d名片：§f斧刃横扫 · 团本同源'
-        - '§e相位：§f半血 · 招式变强'
-        - '§b节奏：§f事件偏早'
-        - '§7签名：%corerpg_p1_sig_m_q05%'
-        - '%corerpg_p1_sig_run%'
-        - '%corerpg_p1_sig_run_cost%'
-        - ''
         - '§e➥ §f点击进本（需 Q04 首通）'
     actions:
       all:
@@ -473,18 +330,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_q06_state% %corerpg_p1_rule_q06%'
         - '§7消耗：§e%corerpg_p1_q06_cost%'
-        - '§7掉落：§f%corerpg_p1_q06_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q06%'
-        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q06%'
-        - '§7用途：§f%corerpg_p1_q06_purpose%'
-        - '§7首通：§f%corerpg_p1_q06_fc%'
-        - '§d名片：§f半血破招（霜潮汲取）'
-        - '§e相位：§f半血破招 · 霜潮汲取可打断'
-        - '§b节奏：§f事件偏晚 · 门慢半拍'
-        - '§7签名：%corerpg_p1_sig_m_q06%'
-        - '%corerpg_p1_sig_run%'
-        - '%corerpg_p1_sig_run_cost%'
-        - ''
         - '§e➥ §f点击进本（需 Q05 首通）'
     actions:
       all:
@@ -500,18 +345,6 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_q07_state% %corerpg_p1_rule_q07%'
         - '§7消耗：§e%corerpg_p1_q07_cost%'
-        - '§7掉落：§f%corerpg_p1_q07_tier%'
-        - '§7偏向：§f%corerpg_p1_loot_q07%'
-        - '§e希望 · 图身份：§f%corerpg_p1_mapid_q07%'
-        - '§7用途：§f%corerpg_p1_q07_purpose%'
-        - '§7首通：§f%corerpg_p1_q07_fc%'
-        - '§d名片：§f冲撞撞墙 + 炉心破招'
-        - '§e相位：§f半血破招 · 炉心聚爆可打断'
-        - '§b节奏：§f事件居中 · 门慢半拍'
-        - '§7签名：%corerpg_p1_sig_m_q07%'
-        - '%corerpg_p1_sig_run%'
-        - '%corerpg_p1_sig_run_cost%'
-        - ''
         - '§e➥ §f点击进本（需 Q06 首通）'
     actions:
       all:
@@ -528,13 +361,8 @@ Icons:
           name: '§7Q07 之后：挑战 / 深渊 / 团本'
           lore:
             - ''
-            - '§7首通 Q07 锈轨矿道后开放：'
-            - '§7· 七图挑战版（更强的敌人，掉 T3）'
-            - '§7· 深渊 · 余烬层（十层，越深越难）'
-            - '§7· 团本三张（3～5 人，每周 3 次通关奖励，失败不算次数）'
-            - '§7· 余烬连战（每周首通领奖，失败可无限重试）'
-            - ''
             - '§a现在：§f%corerpg_p1_next%'
+            - '§7首通 Q07 锈轨矿道后开放：'
         actions:
           all:
             - 'sound: BLOCK_NOTE_PLING-1-0.6'
@@ -545,12 +373,8 @@ Icons:
       lore:
         - ''
         - '§7状态：§f%corerpg_p1_challenge%'
-        - '§7同一张图的空间与动作，敌人用统一 T3 参照（更强）'
-        - '§7掉落与印记全部 T3 · 更容易出好成色'
-        - '§7消耗同样 30 体力 · 1～3 人 · 无首通奖励'
         - '§b本周精选：§f%corerpg_p1_featured%'
-        - ''
-        - '§e➥ §f打开挑战版选图'
+        - '§e➥ §f挑战版选图'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -571,11 +395,7 @@ Icons:
         - ''
         - '§7状态：§f%corerpg_p1_abyss_state%'
         - '%corerpg_p1_abyss_hope%'
-        - '§7每层 = 随机一张主线图打一局 · 越深越难 · 十层封顶'
-        - '§7每层单独付费（30 体力 + 层费余烬币）· 打完首领才结算'
-        - '§7越深掉落成色越好（第 10 层极品掉率 12%）'
-        - ''
-        - '§e➥ §f打开深渊选层'
+        - '§e➥ §f深渊选层'
     actions:
       all:
         - 'sound: BLOCK_NOTE_PLING-1-1'
@@ -591,29 +411,11 @@ Icons:
     update: 20
     display:
       material: iron chestplate
-      name: '§6团本 · 锈轨矿道·团（3～5 人）'
+      name: '§6团本'
       lore:
         - ''
-        - '%corerpg_p1_raid_hope%'
-        - '§d团本首通保底本团偏向族件'
-        - '%corerpg_p1_sx_fc_hope%'
-        - '§7状态：§f%corerpg_p1_raid_r01%'
-        - '§d名片：§f冲撞撞墙破绽'
-        - '§b本间：§f三房推进 · 半血增援'
-        - '§7Q07 的地图与首领招式组合（重砸 / 冲撞 / 斧刃横扫 + 半血增援）'
-        - '§7与霜封哨所·团、断塔回廊·团合计每周 3 次通关奖励（失败不算次数，体力够就能再来）'
-        - '§7战斗规则不变；通关得专属称号与足迹（只做展示）'
-        - '§8族觉醒 / 护甲四件套规则同主线（见装备·帮助）'
-        - '§7人越多，敌方生命与伤害越高（倍率见开局提示）'
-        - '§7倒下后观战队友；下一个房间开打、首领转阶段时自动复活（50% 生命），首领最后 20% 生命再复活一次；全员倒下才算失败'
-        - '§7结算：挑战版固定结算 + 1 件 T3（你的目标族；没选就按团本偏向族，至少精良）+ 1 枚 T3 印记'
-        - ''
-        - '§a人越多越稳：首通 Q07 后第 2 周 3 人约 5 成、5 人约 8 成能过（第 4 周 3 人约 7 成、4～5 人 9 成以上）'
-        - '§e建议队伍里有炽愈：首领半血时加怪、单下伤害高，要有人回血'
-        - '§7招募中：§f%corerpg_p1_recruits%'
-        - ''
-        - '§e➥ §f左键：队长开本（全队需各自首通 Q07）'
-        - '§e➥ §f右键：全服招募（在线的已首通 Q07 玩家收到 [申请入队]；招募挂 10 分钟，之后上线的人也能看到）'
+        - '§7状态：§f%corerpg_p1_raid_r01% §7· 3～5人 · 周3次'
+        - '§e➥ §f左：开本 · 右：招募'
     actions:
       left:
         - 'sound: BLOCK_NOTE_PLING-1-2'
@@ -629,10 +431,9 @@ Icons:
       material: blaze powder
       name: '§6目标族 · 焚烬'
       lore:
+        - ''
         - '§7之后入场的局：焚烬约 60%'
-        - '§7剩下的大多是这张图的偏向族（每张图「偏向」一行）'
         - '§e图身份：§f%corerpg_p1_mapid_board%'
-        - '§8入场时快照，局内改不影响本局'
     actions:
       all:
         - 'command: corerpg p1 target scorch'
@@ -664,16 +465,10 @@ Icons:
       material: paper
       name: '§e图身份板 · 哪里刷什么'
       lore:
+        - ''
         - '§7目标族不指定时：本图偏向 50%，另两族各 25%'
-        - ''
-        - '§e图身份一览：'
         - '§f%corerpg_p1_mapid_board%'
-        - ''
-        - '§7每图还有 mapid 希望行（图鉴进度）'
-        - '§a每局必掉1装 · 差装可分解 · 通关不锁掉落'
-        - ''
-        - '§e➥ §f左键：目标族·不指定'
-        - '§e➥ §f右键：打开装备图录（哪里刷什么）'
+        - '§e➥ §f左：目标族·不指定 · 右：打开装备图录（哪里刷什么）'
     actions:
       left:
         - 'command: corerpg p1 target none'
@@ -686,10 +481,9 @@ Icons:
       material: nether star
       name: '§d锻造印记'
       lore:
+        - ''
         - '§7Boss 结算每局 1 枚同阶印记（账户绑定）'
         - '§78 枚同阶 → 指定族 + 部位的标准件'
-        - '§7T2 定向锻造需本人首通 Q04（T3 需 Q07）'
-        - '§8点击：聊天栏显示数量；够 8 枚时出现兑换按钮（点两下确认）'
     actions:
       all:
         - 'command: corerpg p1 marks'
@@ -699,10 +493,9 @@ Icons:
       material: book and quill
       name: '§e首通自选'
       lore:
-        - '§7Q01 首通：自选族 T1 护符 · Q02 首通：一次免费定向兑换（族和部位都自选的 T1 件）'
+        - ''
+        - '§7Q01 首通：自选族 T1 护符'
         - '§7Q03～Q07 首通为材料，直接发放（见各本「首通」）'
-        - '§8绑定 · 不可分解'
-        - '§8点击后在聊天栏点族名领取（第一次选的族也会设为目标族）'
     actions:
       all:
         - 'command: corerpg p1 firstclear'
