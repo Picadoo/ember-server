@@ -33,6 +33,7 @@ import town.sunshine.corerpg.p1.encounter.EmberBossMove;
 import town.sunshine.corerpg.p1.encounter.EmberShape;
 import town.sunshine.corerpg.p1.encounter.CounterplayKind;
 import town.sunshine.corerpg.p1.encounter.EmberCounterplay;
+import town.sunshine.corerpg.p1.encounter.EmberTelegraph;
 import town.sunshine.corerpg.p1.encounter.EmberEventTeach;
 import town.sunshine.corerpg.PlayerData;
 import town.sunshine.corerpg.p1.encounter.EmberRoomObjective;
@@ -3301,7 +3302,10 @@ final class EmberRunDirector {
             }
         }
         if (pending != null) {
-            drawShape(pending, lockOrigin, lockDir);
+            long warnMs = Math.max(1L, (long) (pending.warn * 1000));
+            double urg = EmberTelegraph.urgency(now, pendingAt, warnMs);
+            drawShape(pending, lockOrigin, lockDir, urg);
+            telegraphInsideFeel(pending, lockOrigin, lockDir, urg, now); // D3305
             if (broken(breakNeed, breakDone) && !le.isDead()) { breakCast(pending, now, le, b); return; }
             if (breakNeed > 0 && now >= breakBarAt) { breakBarAt = now + 250; breakBar(); }
             if (now >= pendingAt) {
@@ -3856,45 +3860,94 @@ final class EmberRunDirector {
     private static String fmt(double v) { return v == Math.rint(v) ? String.valueOf((int) v) : String.valueOf(v); }
 
     private void drawShape(EmberRunMaps.Skill sk, Location o, Vector dir) {
+        drawShape(sk, o, dir, 0.0);
+    }
+
+    /** D3281: urgency-aware telegraph geometry (readability · zero skill_mult / no stun twin). */
+    private void drawShape(EmberRunMaps.Skill sk, Location o, Vector dir, double urgency) {
+        if (sk == null || o == null || dir == null) return;
         double y = o.getY() + 0.15;
+        boolean share = sk.share;
+        Particle outline = EmberTelegraph.outlineParticle(sk.type, share, urgency);
+        Particle fill = EmberTelegraph.fillParticle(sk.type, share, urgency);
+        int dens = EmberTelegraph.densityMult(urgency);
         switch (sk.type) {
             case "circle": {
                 double cx = o.getX() + dir.getX() * sk.ahead, cz = o.getZ() + dir.getZ() * sk.ahead;
-                warnCircle(new Location(w, cx, y, cz), sk.radius, sk.share ? Particle.VILLAGER_HAPPY : Particle.FLAME); // D137: green = stand in it together
+                Location c = new Location(w, cx, y, cz);
+                warnCircle(c, sk.radius, outline, dens);
+                // fill: mid ring + center
+                warnCircle(c, sk.radius * 0.5, fill, 1);
+                w.spawnParticle(fill, cx, y, cz, dens, 0, 0, 0, 0);
                 break;
             }
             case "line":
             case "charge": {
                 Vector side = new Vector(-dir.getZ(), 0, dir.getX());
-                for (double a = Math.max(0, sk.stripFrom()); a <= sk.stripTo() + 1e-9; a += 0.5) {
+                double step = dens > 1 ? 0.35 : 0.5;
+                for (double a = Math.max(0, sk.stripFrom()); a <= sk.stripTo() + 1e-9; a += step) {
                     for (double sgn : new double[]{-1, 1}) {
                         Location l = o.clone().add(dir.clone().multiply(a)).add(side.clone().multiply(sgn * sk.width / 2.0));
                         l.setY(y);
-                        w.spawnParticle(Particle.FLAME, l, 1, 0, 0, 0, 0);
+                        w.spawnParticle(outline, l, dens, 0, 0, 0, 0);
                     }
+                    // fill center strip
+                    Location mid = o.clone().add(dir.clone().multiply(a));
+                    mid.setY(y);
+                    w.spawnParticle(fill, mid, 1, 0, 0, 0, 0);
                 }
                 break;
             }
             default: {
                 double half = Math.toRadians(sk.angle / 2.0);
                 double base = Math.atan2(dir.getZ(), dir.getX());
-                for (double a = -half; a <= half + 1e-9; a += half / 6) {
+                double arcStep = dens > 1 ? half / 8 : half / 6;
+                for (double a = -half; a <= half + 1e-9; a += arcStep) {
                     double ang = base + a;
                     Location l = new Location(w, o.getX() + Math.cos(ang) * sk.range, y, o.getZ() + Math.sin(ang) * sk.range);
-                    w.spawnParticle(Particle.FLAME, l, 1, 0, 0, 0, 0);
+                    w.spawnParticle(outline, l, dens, 0, 0, 0, 0);
                 }
                 for (double r = 0.5; r <= sk.range; r += 0.5) {
                     for (double sgn : new double[]{-1, 1}) {
                         double ang = base + sgn * half;
-                        w.spawnParticle(Particle.FLAME, new Location(w, o.getX() + Math.cos(ang) * r, y, o.getZ() + Math.sin(ang) * r), 1, 0, 0, 0, 0);
+                        w.spawnParticle(outline, new Location(w, o.getX() + Math.cos(ang) * r, y, o.getZ() + Math.sin(ang) * r), dens, 0, 0, 0, 0);
                     }
+                }
+                // fill mid-arc
+                double midR = sk.range * 0.55;
+                for (double a = -half; a <= half + 1e-9; a += half / 4) {
+                    double ang = base + a;
+                    w.spawnParticle(fill, new Location(w, o.getX() + Math.cos(ang) * midR, y, o.getZ() + Math.sin(ang) * midR), 1, 0, 0, 0, 0);
                 }
             }
         }
     }
 
+    /** D3305: personal inside/outside telegraph feel (ActionBar + light Slow · not boss stun). */
+    private void telegraphInsideFeel(EmberRunMaps.Skill sk, Location o, Vector dir, double urgency, long now) {
+        if (sk == null || o == null || dir == null) return;
+        int sec = EmberTelegraph.secondsLeft(now, pendingAt);
+        String label = EmberTelegraph.typeLabel(sk.type);
+        for (Player p : participantsHere()) {
+            if (p.isDead() || p.getGameMode() == org.bukkit.GameMode.SPECTATOR) continue;
+            boolean inside = inShape(sk, o, dir, p.getLocation());
+            try {
+                p.sendActionBar(EmberTelegraph.insideActionBar(inside, sec, label));
+            } catch (Throwable ignored) { }
+            if (EmberTelegraph.shouldInsideSlow(urgency, inside)) {
+                try {
+                    p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, EmberTelegraph.INSIDE_SLOW_TICKS, 0, false, false), true);
+                } catch (Throwable ignored) { }
+            }
+        }
+    }
+
     private void warnCircle(Location c, double r, Particle p) {
-        int n = Math.max(12, (int) (r * 10));
+        warnCircle(c, r, p, 1);
+    }
+
+    private void warnCircle(Location c, double r, Particle p, int dens) {
+        int n = Math.max(12, (int) (r * 10)) * Math.max(1, dens);
         for (int i = 0; i < n; i++) {
             double a = 2 * Math.PI * i / n;
             w.spawnParticle(p, c.getX() + Math.cos(a) * r, c.getY(), c.getZ() + Math.sin(a) * r, 1, 0, 0, 0, 0);
