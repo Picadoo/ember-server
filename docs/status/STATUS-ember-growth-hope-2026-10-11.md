@@ -1,15 +1,14 @@
 # STATUS · growth hope · 2026-10-11 CST
 
 ## Live
-- jar **1.65.551-d2768.local**
-- D2721–D2768 Link/Flee **NEAR-SAT**
+- jar **1.65.552-d2800.local**
+- D2769–D2800 Chest/Hunt
 
-## Summary
-| 轴 | 行为 |
-|----|------|
-| Link | Q01 首进 · AUTO 2t（优房刚清 1t）· 深通道单跳 · ASK CD 5s |
-| Flee | Q01 首进 · AUTO 8t 离本 · ASK CD 8s |
+## Shipped
+- Chest: Q01 enter · AUTO open 4t · ASK CD 5s
+- Hunt: Q01 enter · AUTO warp 3t · face elite · ASK CD 5s
+- No Speed/Resist land twin
 
-无 Speed/Resist assist land twin. Talent HOLD. Next: Chest/Hunt.
+Talent HOLD.
 
-Updated 2026-10-11 08:33 CST
+Updated 2026-10-11 08:34 CST

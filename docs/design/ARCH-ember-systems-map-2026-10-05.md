@@ -492,3 +492,7 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 ## Link/Flee · D2721–D2752
 - Enter unlock; Link AUTO 2t + deepest hop; Flee AUTO 8t
 - No Speed/Resist assist-path land twin
+
+## Chest/Hunt · D2769–D2800
+- Enter unlock; Chest AUTO 4t; Hunt AUTO 3t + face elite
+- No Speed/Resist assist land twin

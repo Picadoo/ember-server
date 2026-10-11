@@ -80,13 +80,29 @@ public final class EmberChestPath {
     }
 
     public static String glance(int id, boolean unlocked) {
-        if (!unlocked) return "§8开箱路径：首通 Q01 后可选";
+        if (!unlocked) return "§8开箱路径：首进/首通 Q01 后可选";
         if (!valid(id)) return "§8开箱路径：未选 · /corerpg p1 chestpath";
         return "§e开箱路径：§f" + label(id) + " §8· " + tip(id);
     }
 
     public static boolean shouldAuto(int path) { return path == AUTO; }
     public static boolean shouldMute(int path) { return path == MUTE; }
+
+    private static final long ASK_COOLDOWN_MS = 8000L;
+    private static final long ASK_PATH_COOLDOWN_MS = 5000L;
+    private static final java.util.Map<UUID, Long> lastAsk = new java.util.concurrent.ConcurrentHashMap<UUID, Long>();
+
+    /** D2771: AUTO opens faster than legacy 10t. */
+    public static int autoDelayTicks(int path) {
+        return path == AUTO ? 4 : 10;
+    }
+
+    static long askCooldownMs(int path) {
+        return path == ASK ? ASK_PATH_COOLDOWN_MS : ASK_COOLDOWN_MS;
+    }
+
+    public static void scheduleOfferAfterEnter(Player p) { scheduleOfferAfterQ01(p); }
+
 
     public static void maybeAfterSpawn(EmberRunSession s) {
         if (s == null || s.extra != EmberRunRules.Extra.CHEST || s.extraDone) return;
@@ -100,15 +116,20 @@ public final class EmberChestPath {
             if (d == null) continue;
             int path = get(d);
             if (shouldAuto(path)) {
+                final int delay = autoDelayTicks(path);
                 Bukkit.getScheduler().runTaskLater(pl, () -> {
                     if (!p.isOnline()) return;
                     if (runs.pathOpenExtraChest(p)) {
                         p.sendMessage(EmberRunService.P + "§a开箱·自动 §7已开启额外宝箱");
                     }
-                }, 10L);
+                }, delay);
                 continue;
             }
             if (shouldMute(path)) continue;
+            long now = System.currentTimeMillis();
+            Long last = lastAsk.get(p.getUniqueId());
+            if (last != null && now - last < askCooldownMs(path)) continue;
+            lastAsk.put(p.getUniqueId(), now);
             ConfirmTokens.sendButtons(p, EmberRunService.P + "§e侧边出现了额外宝箱 ",
                     new String[]{"[开箱]", "/corerpg p1 chestopen", "开启并记为待结算奖励", "GREEN"},
                     new String[]{"[改路径]", "/corerpg p1 chestpath", "自动/提醒/静默", "GRAY"});
@@ -180,8 +201,8 @@ public final class EmberChestPath {
         EmberRunService runs = pl.getEmberRuns();
         PlayerData d = pl.getDataStore().get(p.getUniqueId());
         if (d == null) { p.sendMessage(EmberRunService.P + "数据未就绪"); return; }
-        if (!runs.progressFlag(d, "q01")) {
-            p.sendMessage(EmberRunService.P + "§c开箱路径需本人首通 Q01。");
+        if (!EmberSkillKit.chestPathUnlocked(d, runs)) {
+            p.sendMessage(EmberRunService.P + "§c开箱路径需本人首进或首通 Q01。");
             return;
         }
         String P = EmberRunService.P;
