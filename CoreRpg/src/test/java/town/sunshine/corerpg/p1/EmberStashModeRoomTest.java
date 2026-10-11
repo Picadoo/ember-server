@@ -44,4 +44,11 @@ public class EmberStashModeRoomTest {
         s.mapKey = "q02";
         assertTrue(EmberRoomPath.modeHardSession(s, d, null));
     }
+
+    @Test
+    public void outpostHard() {
+        EmberRunSession s = new EmberRunSession();
+        s.mapKey = "outpost";
+        assertTrue(EmberRoomPath.modeHardSession(s, null, null));
+    }
 }

@@ -161,9 +161,19 @@ public final class EmberRoomPath {
                 if (s.challenge) ticks = Math.max(ticks, 60); // D2708 challenge preferred clear 3s
                 p.addPotionEffect(new org.bukkit.potion.PotionEffect(
                         org.bukkit.potion.PotionEffectType.SPEED, ticks, 0, false, true), true);
+                // D2850: Mode×Room clear — Night Vision 2s (push visibility, not Speed twin add)
+                if (modeHardSession(s, ld, runs)) {
+                    p.addPotionEffect(new org.bukkit.potion.PotionEffect(
+                            org.bukkit.potion.PotionEffectType.NIGHT_VISION, 40, 0, false, true), true);
+                }
                 try {
-                    String ab = s.challenge ? ("§c硬本优房清 · §fSpeed I " + (ticks / 20) + "s")
-                            : ("§a优房清 · §fSpeed I " + (ticks / 20) + "s");
+                    String ab;
+                    if (modeHardSession(s, ld, runs))
+                        ab = "§d进阶优房清 · §fNV 2s · Speed " + (ticks / 20) + "s";
+                    else if (s.challenge)
+                        ab = "§c硬本优房清 · §fSpeed I " + (ticks / 20) + "s";
+                    else
+                        ab = "§a优房清 · §fSpeed I " + (ticks / 20) + "s";
                     p.sendActionBar(ab);
                 } catch (Throwable ignored) { }
             }

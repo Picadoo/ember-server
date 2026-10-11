@@ -73,7 +73,7 @@ public final class EmberStashPath {
     }
 
     public static String tip(int id) {
-        if (id == AUTO) return "结算/进服时自动一键存材料（城内兼存装备）";
+        if (id == AUTO) return "结算/进服自动存：本内只存材料 · 城内材料+装备";
         if (id == ASK) return "有可存物时聊天提醒，点按钮存仓（默认）";
         if (id == MUTE) return "不刷提醒；可装备页「一键存入」";
         return "点选背包存仓节奏（改落点 · 不改掉落表）";
