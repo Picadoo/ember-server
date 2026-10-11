@@ -591,6 +591,9 @@ public final class LifeService implements Listener {
         addXp(p, o.xp);
         if (BREW_OFFER_ID.equals(o.id)) // D844
             town.sunshine.corerpg.p1.EmberBrewPath.afterBrew(p);
+        if (town.sunshine.corerpg.p1.EmberSoulDustCoinSoft.isSoulDustOffer(o.id)) {
+            try { town.sunshine.corerpg.p1.EmberSoulDustWinBlank.maybeGift(p, d); } catch (Throwable ignored) { } // D11153
+        }
         return true;
     }
 

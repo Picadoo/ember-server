@@ -390,6 +390,7 @@ public final class PetService implements Listener {
         p.sendMessage(PREFIX + ChatColor.GREEN + "消耗魂尘×" + consumed
                 + ChatColor.GRAY + " · " + display
                 + ChatColor.WHITE + " Lv." + from + "→" + level);
+        try { town.sunshine.corerpg.p1.EmberPetFeedWinBone.maybeGift(p, data); } catch (Throwable ignored) { } // D11137
         if (plugin.getLadderService() != null) plugin.getLadderService().recomputePower(p);
         return gained;
     }

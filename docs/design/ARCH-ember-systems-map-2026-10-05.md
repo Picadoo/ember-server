@@ -615,3 +615,4 @@ Q04 首进 latch → 符文可用（仍可首通）。非 clear-gate。
 - D10913–D10976: QualityWinShard + RefineWinBone + UpgradeWinCore. STOP densify those + stamp-awaken-enhancewin + priors. Talent HOLD. Six-slot HOLD.
 - D10977–D11040: RerollPityNudge + BossPotExtra + FcBoneBoost. STOP densify those + forge-win + priors. Talent HOLD. Six-slot HOLD.
 - D11041–D11104: BrandCraftWinBlank + ImprintWinShard + ConvertWinBone. STOP densify those + reroll-bosspot-fcbone + priors. Talent HOLD. Six-slot HOLD.
+- D11105–D11168: SwapWinShard + PetFeedWinBone + SoulDustWinBlank. STOP densify those + brand-imprint-convert-win + priors. Talent HOLD. Six-slot HOLD.
