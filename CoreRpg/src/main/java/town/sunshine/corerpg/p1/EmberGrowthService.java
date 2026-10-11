@@ -459,6 +459,7 @@ public final class EmberGrowthService implements Listener {
         String gated = n.activeWith(runs.loadouts().get(p).activeSet) ? "" : " §e（要穿" + EmberItemData.familyName(n.set) + "套才生效）";
         p.sendMessage(P + "§a已点上「" + n.name + "」§7（第 " + n.row + " 排 · " + r.name + "）" + gated);
         try { p.sendActionBar("§a天赋 · §f" + n.name); } catch (Throwable ignored) { }
+        EmberTalentPlaystyle.maybeAfterPick(p, d, n.id); // D5473 zero-coeff playstyle
         ConfirmTokens.sendButtons(p, P + "§7天赋下一环：", // D900
                 new String[]{"[成套追]", "/corerpg p1 setfocus", "穿对套生效", "GOLD"},
                 new String[]{"[进冒险]", "/ember_p1_adventure", "体感天赋", "GREEN"},

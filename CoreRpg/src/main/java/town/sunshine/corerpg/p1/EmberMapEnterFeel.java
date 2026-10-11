@@ -72,12 +72,14 @@ public final class EmberMapEnterFeel {
                     p.sendActionBar("§a符文+T2定向 · §fshape");
                     EmberSkillUnlock.scheduleShapePick(p); // D2354 enter pick · no ConfirmTokens twin
                     EmberModePath.scheduleOffer(p, "q04"); // D2420 enter mode variety
+                    EmberTalentPlaystyle.schedulePending(p); // D5537
                 } else if ("q05".equals(k) && EmberSkillKit.markStepEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a身法变体已解锁 · §f套装踏步 §7（首进 Q05 · 不锁通关）");
                     p.sendActionBar("§a身法解锁 · §f两件套自动变");
                     EmberSkillUnlock.scheduleStepPick(p); // D2354
                     EmberModePath.scheduleOffer(p, "q05"); // D2420
                     EmberPosturePath.scheduleOfferAfterEnter(p); // D2420 posture variety
+                    EmberTalentPlaystyle.schedulePending(p); // D5537
                 } else if ("q06".equals(k) && EmberSkillKit.markPledgeEnter(pd)) {
                     p.sendMessage(EmberRunService.P + "§a誓约/试炼路径已开放 · §f/corerpg p1 pledgepath §7（首进 Q06 · 不锁通关）");
                     p.sendActionBar("§a誓约开放 · §fpledgepath");
